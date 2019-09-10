@@ -110,8 +110,8 @@ class WorkSearchForm
 
     # - Using language IDs in "Any field" (search) or "Search within results" (filters)
     if @options[:query].present?
-      @options[:query] = @options[:query].gsub(/\blanguage_id\s*:\s*(\d+)/) do |m|
-        lang = Language.find_by(id: "#{$1}")
+      @options[:query] = @options[:query].gsub(/\blanguage_id\s*:\s*(\d+)/) do
+        lang = Language.find_by(id: Regexp.last_match[1])
         lang = Language.default if lang.blank?
         "language_id: " + lang.short
       end

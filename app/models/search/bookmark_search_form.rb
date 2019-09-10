@@ -97,8 +97,8 @@ class BookmarkSearchForm
 
     # - Using language IDs in "Any field on work" (search) or "Search within results" (filters)
     if @options[:bookmarkable_query].present?
-      @options[:bookmarkable_query] = @options[:bookmarkable_query].gsub(/\blanguage_id\s*:\s*(\d+)/) do |m|
-        lang = Language.find_by(id: "#{$1}")
+      @options[:bookmarkable_query] = @options[:bookmarkable_query].gsub(/\blanguage_id\s*:\s*(\d+)/) do
+        lang = Language.find_by(id: Regexp.last_match[1])
         lang = Language.default if lang.blank?
         "language_id: " + lang.short
       end
