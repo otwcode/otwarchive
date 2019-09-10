@@ -3,21 +3,21 @@ require "spec_helper"
 describe WorkSearchForm do
   describe "tag exclusion behavior" do
     let!(:included_work) do
-      FactoryGirl.create(:work, posted: true)
+      FactoryBot.create(:work, posted: true)
     end
 
     let!(:excluded_work) do
-      FactoryGirl.create(:work, posted: true)
+      FactoryBot.create(:work, posted: true)
     end
 
     describe "mergers" do
 
       let!(:canonical_tag) do
-        FactoryGirl.create(:tag, type: "Freeform", name: "Exclude Me", canonical: true)
+        FactoryBot.create(:tag, type: "Freeform", name: "Exclude Me", canonical: true)
       end
 
       let!(:synonym) do
-        FactoryGirl.create(:tag, type: "Freeform", name: "Excluded", canonical: false, merger: canonical_tag)
+        FactoryBot.create(:tag, type: "Freeform", name: "Excluded", canonical: false, merger: canonical_tag)
       end
 
       it "should exclude works with a given canonical tag name" do
@@ -79,7 +79,7 @@ describe WorkSearchForm do
       end
 
       let!(:grand_parent_parent_meta_tagging) do
-        FactoryGirl.create(
+        FactoryBot.create(
           :meta_tagging,
           meta_tag_id: grand_parent_tag.id,
           sub_tag_id: parent_tag.id,
@@ -88,7 +88,7 @@ describe WorkSearchForm do
       end
 
       let!(:grand_parent_child_meta_tagging) do
-        FactoryGirl.create(
+        FactoryBot.create(
           :meta_tagging,
           meta_tag_id: grand_parent_tag.id,
           sub_tag_id: child_tag.id,
@@ -97,7 +97,7 @@ describe WorkSearchForm do
       end
 
       let!(:parent_child_meta_tagging) do
-        FactoryGirl.create(
+        FactoryBot.create(
           :meta_tagging,
           meta_tag_id: parent_tag.id,
           sub_tag_id: child_tag.id,
