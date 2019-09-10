@@ -76,12 +76,33 @@ class BookmarkSearchForm
       end
     end
 
+    standardize_language_ids
+
     # If we call the form field 'notes', the parser adds html to it
     @options[:notes] = @options[:bookmark_notes]
 
     # We need to respect some options that are deliberately set to false, and
     # false.blank? is true, so we check for nil? and not blank? here.
     @searcher = BookmarkQuery.new(options.delete_if { |_, v| v.nil? })
+  end
+
+  def standardize_language_ids
+    # Maintain backward compatibility for old bookmark searches/filters:
+
+    # - Using language IDs in the "Work language" dropdown
+    if @options[:language_id].present? && @options[:language_id].to_i != 0
+      language = Language.find_by(id: options[:language_id])
+      options[:language_id] = language.short if language.present?
+    end
+
+    # - Using language IDs in "Any field on work" (search) or "Search within results" (filters)
+    if @options[:bookmarkable_query].present?
+      @options[:bookmarkable_query] = @options[:bookmarkable_query].gsub(/\blanguage_id\s*:\s*(\d+)/) do |m|
+        lang = Language.find_by(id: "#{$1}")
+        lang = Language.default if lang.blank?
+        "language_id: " + lang.short
+      end
+    end
   end
 
   def persisted?
@@ -132,7 +153,7 @@ class BookmarkSearchForm
       summary << "Type: #{self.bookmarkable_type}"
     end
     if self.language_id.present?
-      language = Language.find_by(id: self.language_id)
+      language = Language.find_by(short: self.language_id)
       if language.present?
         summary << "Work language: #{language.name}"
       end

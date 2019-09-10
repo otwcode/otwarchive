@@ -140,7 +140,7 @@ class ExternalWork < ApplicationRecord
     as_json(
       root: false,
       only: [
-        :title, :summary, :hidden_by_admin, :created_at, :language_id
+        :title, :summary, :hidden_by_admin, :created_at
       ],
       methods: [
         :posted, :restricted, :tag, :filter_ids, :rating_ids,
@@ -148,6 +148,7 @@ class ExternalWork < ApplicationRecord
         :relationship_ids, :freeform_ids, :creators, :revised_at
       ]
     ).merge(
+      language_id: language&.short,
       bookmarkable_type: "ExternalWork",
       bookmarkable_join: { name: "bookmarkable" }
     )

@@ -6,6 +6,8 @@ describe WorkSearchForm do
       FactoryBot.create(:collection, id: 1)
     end
 
+    let(:language) { create(:language, short: "ca") }
+
     let!(:work) do
       FactoryBot.create(:work,
                          title: "There and back again",
@@ -16,7 +18,7 @@ describe WorkSearchForm do
                          posted: true,
                          expected_number_of_chapters: 3,
                          complete: false,
-                         language_id: 1)
+                         language_id: Language.default.id)
     end
 
     let!(:second_work) do
@@ -27,7 +29,7 @@ describe WorkSearchForm do
                          fandom_string: "Harry Potter",
                          character_string: "Harry Potter, Ron Weasley, Hermione Granger",
                          posted: true,
-                         language_id: 2)
+                         language_id: language.id)
     end
 
     before(:each) do
@@ -116,10 +118,32 @@ describe WorkSearchForm do
     end
 
     describe "when searching by language" do
+      let(:unused_language) { create(:language, short: "tlh") }
+
       it "should only return works in that language" do
-        work_search = WorkSearchForm.new(language_id: 1)
-        expect(work_search.search_results).to include work
-        expect(work_search.search_results).not_to include second_work
+        # "Language" dropdown, with short names
+        results = WorkSearchForm.new(language_id: "ca").search_results
+        expect(results).not_to include work
+        expect(results).to include second_work
+
+        # "Language" dropdown, with IDs (backward compatibility)
+        wsf = WorkSearchForm.new(language_id: language.id)
+        expect(wsf.language_id).to eq("ca")
+        results = wsf.search_results
+        expect(results).not_to include work
+        expect(results).to include second_work
+
+        # "Any field" or "Search within results", with short names
+        results = WorkSearchForm.new(query: "language_id: ca").search_results
+        expect(results).not_to include work
+        expect(results).to include second_work
+
+        # "Any field" or "Search within results", with IDs (backward compatibility)
+        wsf = WorkSearchForm.new(query: "language_id: #{language.id} OR language_id: #{unused_language.id}")
+        expect(wsf.query).to eq("language_id: ca OR language_id: tlh")
+        results = wsf.search_results
+        expect(results).not_to include work
+        expect(results).to include second_work
       end
     end
 
