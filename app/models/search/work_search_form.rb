@@ -90,6 +90,7 @@ class WorkSearchForm
     standardize_creator_queries
     set_sorting
     clean_up_angle_brackets
+    rename_warning_field
   end
 
   # Make the creator/creators change backwards compatible
@@ -108,6 +109,12 @@ class WorkSearchForm
       next unless @options[countable].present?
       str = @options[countable]
       @options[countable] = str.gsub("&gt;", ">").gsub("&lt;", "<")
+    end
+  end
+
+  def rename_warning_field
+    if @options[:warning_ids].present?
+      @options[:archive_warning_ids] = @options.delete(:warning_ids)
     end
   end
 

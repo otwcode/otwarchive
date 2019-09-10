@@ -1,6 +1,108 @@
 require 'spec_helper'
 
 describe WorkSearchForm do
+  describe "#process_options" do
+    it "removes blank options" do
+      options = { foo: nil, bar: '', baz: false, boo: true }
+      searcher = WorkSearchForm.new(options)
+      expect(searcher.options.keys).to include(:boo)
+      expect(searcher.options.keys).not_to include(:foo, :bar, :baz)
+    end
+  end
+
+  describe "#standardize_creator_queries" do
+    it "renames old creator option" do
+      options = { query: "creator: alice" }
+      searcher = WorkSearchForm.new(options)
+      expect(searcher.options[:query]).to eq("creators: alice")
+    end
+  end
+
+  describe "#clean_up_angle_brackets" do
+    it "unescapes angle brackets for numeric and date fields" do
+      options = {
+        word_count: "&lt;2000",
+        hits: "&gt; 100",
+        kudos_count: "&gt;10",
+        comments_count: "&lt; 100",
+        bookmarks_count: "&gt;50",
+        revised_at: "&lt;1 week ago",
+        query: "a &gt; b &lt; c",
+        title: "&lt;3"
+      }
+      searcher = WorkSearchForm.new(options)
+      expect(searcher.options[:word_count]).to eq("<2000")
+      expect(searcher.options[:hits]).to eq("> 100")
+      expect(searcher.options[:kudos_count]).to eq(">10")
+      expect(searcher.options[:comments_count]).to eq("< 100")
+      expect(searcher.options[:bookmarks_count]).to eq(">50")
+      expect(searcher.options[:revised_at]).to eq("<1 week ago")
+      expect(searcher.options[:query]).to eq("a > b < c")
+      expect(searcher.options[:title]).to eq("&lt;3")
+    end
+  end
+
+  describe "#rename_warning_field" do
+    it "renames a legacy field" do
+      options = { warning_ids: [12] }
+      searcher = WorkSearchForm.new(options)
+      expect(searcher.options).not_to have_key(:warning_ids)
+      expect(searcher.options[:archive_warning_ids]).to eq([12])
+    end
+  end
+
+  describe "#set_sorting" do
+    it "does not override provided sort column" do
+      options = { sort_column: "authors_to_sort_on" }
+      searcher = WorkSearchForm.new(options)
+      expect(searcher.options[:sort_column]).to eq("authors_to_sort_on")
+    end
+    it "does not override provided sort direction" do
+      options = { sort_direction: "asc" }
+      searcher = WorkSearchForm.new(options)
+      expect(searcher.options[:sort_direction]).to eq("asc")
+    end
+    it "sorts by relevance by default" do
+      searcher = WorkSearchForm.new({})
+      expect(searcher.options[:sort_column]).to eq("_score")
+    end
+    context "when filtering" do
+      it "sorts by date" do
+        options = { faceted: true }
+        searcher = WorkSearchForm.new(options)
+        expect(searcher.options[:sort_column]).to eq("revised_at")
+      end
+    end
+    context "when viewing collected works" do
+      it "sorts by date" do
+        options = { collected: true }
+        searcher = WorkSearchForm.new(options)
+        expect(searcher.options[:sort_column]).to eq("revised_at")
+      end
+    end
+    context "when sorting by author" do
+      it "sets the sort direction to ascending" do
+        options = { sort_column: "authors_to_sort_on" }
+        searcher = WorkSearchForm.new(options)
+        expect(searcher.options[:sort_direction]).to eq("asc")
+      end
+    end
+    context "when sorting by title" do
+      it "sets the sort direction to ascending" do
+        options = { sort_column: "title_to_sort_on" }
+        searcher = WorkSearchForm.new(options)
+        expect(searcher.options[:sort_direction]).to eq("asc")
+      end
+    end
+    context "when sorting by other fields" do
+      it "sets the sort direction to descending" do
+        options = { sort_column: "word_count" }
+        searcher = WorkSearchForm.new(options)
+        expect(searcher.options[:sort_direction]).to eq("desc")
+      end
+    end
+  end
+
   describe "searching" do
     let!(:collection) do
       FactoryGirl.create(:collection, id: 1)

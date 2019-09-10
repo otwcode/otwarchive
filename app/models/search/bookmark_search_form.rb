@@ -68,20 +68,10 @@ class BookmarkSearchForm
   end
 
   def initialize(options={})
-    @options = options
-    [:date, :bookmarkable_date].each do |countable|
-      if @options[countable].present?
-        @options[countable].gsub!("&gt;", ">")
-        @options[countable].gsub!("&lt;", "<")
-      end
-    end
-
-    # If we call the form field 'notes', the parser adds html to it
-    @options[:notes] = @options[:bookmark_notes]
-
+    @options = processed_options(options)
     # We need to respect some options that are deliberately set to false, and
     # false.blank? is true, so we check for nil? and not blank? here.
-    @searcher = BookmarkQuery.new(options.delete_if { |_, v| v.nil? })
+    @searcher = BookmarkQuery.new(@options)
   end
 
   def persisted?
@@ -181,4 +171,24 @@ class BookmarkSearchForm
     'desc'
   end
 
+  private
+
+  def processed_options(opts={})
+    [:date, :bookmarkable_date].each do |countable|
+      if opts[countable].present?
+        opts[countable] = opts[countable].gsub("&gt;", ">").
+                                          gsub("&lt;", "<")
+      end
+    end
+
+    # If we call the form field 'notes', the parser adds html to it
+    opts[:notes] = opts[:bookmark_notes]
+
+    # Support legacy warning searches
+    if opts[:warning_ids].present?
+      opts[:archive_warning_ids] = opts.delete(:warning_ids)
+    end
+
+    opts.delete_if { |_, v| v.nil? }
+  end
 end
