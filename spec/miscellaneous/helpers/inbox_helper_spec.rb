@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe InboxHelper, type: :helper do
+describe InboxHelper do
 
   describe "commentable_description_link" do
     context "for Deleted Objects" do
