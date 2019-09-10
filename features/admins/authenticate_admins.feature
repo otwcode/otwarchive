@@ -23,7 +23,7 @@ Feature: Authenticate Admin Users
       And I fill in "admin_password" with "wrangulator"
       And I press "Log in as admin"
     Then I should not see "Successfully logged in"
-      And I should see "Admin user name"
+      And I should see "The password or admin user name you entered doesn't match our records"
 
   Scenario: Admin can log in
   Given I have no users
