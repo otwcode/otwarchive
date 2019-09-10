@@ -86,7 +86,7 @@ Scenario: Delete a user who has coauthored a work
     And I wait 1 second
   When I try to delete my account
   Then I should see "What do you want to do with your works?"
-  When I choose "Remove me completely as co-author"
+  When I choose "Remove me completely as co-creator"
     And I press "Save"
   Then I should see "You have successfully deleted your account"
     And a user account should not exist for "testuser"
