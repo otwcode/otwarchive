@@ -144,7 +144,7 @@ class Bookmark < ApplicationRecord
         return true if pseud.user == current_user
       else
         if self.bookmarkable_type == 'Work' || self.bookmarkable_type == 'Series' || self.bookmarkable_type == 'ExternalWork'
-          return true if self.bookmarkable.visible(current_user)
+          return true if self.bookmarkable.visible?(current_user)
         else
           return true
         end

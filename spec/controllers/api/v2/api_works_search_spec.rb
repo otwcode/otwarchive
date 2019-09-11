@@ -11,7 +11,7 @@ end
 
 describe "API v2 WorksController - Search", type: :request do
   describe "valid work URL request" do
-    work = FactoryGirl.create(:posted_work, imported_from_url: "foo")
+    work = FactoryBot.create(:posted_work, imported_from_url: "foo")
     
     it "returns 200 OK" do
       valid_params = { works: [{ original_urls: %w(bar foo) }] }

@@ -207,9 +207,9 @@
 
           <fieldset id="chapters-options">
             <dl>
-              <dt><%= ts("Chapter 1 of") %></dt>
+              <dt><%= f.label :wip_length, ts("Chapter 1 of") %></dt>
               <dd><%= f.text_field :wip_length, class: "number" %></dd>
-              <dt><%= ts("Chapter Title:") %></dt>
+              <dt><%= c.label :title, ts("Chapter Title:") %></dt>
               <dd><%= c.text_field :title, value: @chapter.title %></dd>
             </dl>
           </fieldset>

@@ -16,7 +16,7 @@ describe CollectionParticipantsController do
     end
 
     context "where the user is logged in" do
-      let(:user) { FactoryGirl.create(:user) }
+      let(:user) { FactoryBot.create(:user) }
 
       before do
         fake_login_known_user(user)
@@ -43,12 +43,12 @@ describe CollectionParticipantsController do
       end
 
       context "where there is a collection" do
-        let(:collection) { FactoryGirl.create(:collection) }
+        let(:collection) { FactoryBot.create(:collection) }
         let(:current_role) { CollectionParticipant::NONE }
 
         context "where the user is already a participant" do
           let!(:participant) do
-            FactoryGirl.create(
+            FactoryBot.create(
               :collection_participant,
               collection: collection,
               pseud: user.default_pseud,
@@ -91,9 +91,9 @@ describe CollectionParticipantsController do
   end
 
   describe "index" do
-    let(:collection) { FactoryGirl.create(:collection) }
+    let(:collection) { FactoryBot.create(:collection) }
     let(:current_role) { CollectionParticipant::NONE }
-    let(:user) { FactoryGirl.create(:user) }
+    let(:user) { FactoryBot.create(:user) }
 
     context "user is not logged in" do
       it "redirects to the index and displays an access denied message" do
@@ -104,7 +104,7 @@ describe CollectionParticipantsController do
 
     context "user is logged in" do
       let!(:participant) do
-        FactoryGirl.create(
+        FactoryBot.create(
           :collection_participant,
           collection: collection,
           pseud: user.default_pseud,
@@ -131,8 +131,8 @@ describe CollectionParticipantsController do
         context "where the collection has several participants" do
           let!(:users) do
             Array.new(3) do
-              user = FactoryGirl.create(:user)
-              FactoryGirl.create(
+              user = FactoryBot.create(:user)
+              FactoryBot.create(
                 :collection_participant,
                 collection: collection,
                 pseud: user.default_pseud
@@ -154,11 +154,11 @@ describe CollectionParticipantsController do
   end
 
   describe "update" do
-    let(:user) { FactoryGirl.create(:user) }
-    let(:collection) { FactoryGirl.create(:collection) }
+    let(:user) { FactoryBot.create(:user) }
+    let(:collection) { FactoryBot.create(:collection) }
     let(:user_role) { CollectionParticipant::NONE }
     let!(:user_participant) do
-      FactoryGirl.create(
+      FactoryBot.create(
         :collection_participant,
         pseud: user.default_pseud,
         collection: collection,
@@ -189,7 +189,7 @@ describe CollectionParticipantsController do
 
     context "where there is a participant" do
       let(:participant) do
-        FactoryGirl.create(
+        FactoryBot.create(
           :collection_participant,
           collection: user_participant.collection,
           participant_role: CollectionParticipant::NONE
@@ -227,12 +227,12 @@ describe CollectionParticipantsController do
   end
 
   describe "destroy" do
-    let(:user) { FactoryGirl.create(:user) }
+    let(:user) { FactoryBot.create(:user) }
     let(:pseud_name) { user.default_pseud.name }
-    let(:collection) { FactoryGirl.create(:collection) }
+    let(:collection) { FactoryBot.create(:collection) }
     let(:user_participant_role) { CollectionParticipant::MEMBER }
     let!(:user_participant) do
-      FactoryGirl.create(
+      FactoryBot.create(
         :collection_participant,
         pseud: user.default_pseud,
         collection: collection,
@@ -268,7 +268,7 @@ describe CollectionParticipantsController do
 
         context "where the user is trying to destroy another participant" do
           let(:other_participant) do
-            FactoryGirl.create(
+            FactoryBot.create(
               :collection_participant,
               collection: collection,
               participant_role: CollectionParticipant::MEMBER
@@ -287,9 +287,9 @@ describe CollectionParticipantsController do
 
       context "where user is a maintainer" do
         let(:user_participant_role) { CollectionParticipant::MODERATOR }
-        let(:collection) { FactoryGirl.create(:collection) }
+        let(:collection) { FactoryBot.create(:collection) }
         let(:other_participant) do
-          FactoryGirl.create(
+          FactoryBot.create(
             :collection_participant,
             collection: collection,
             participant_role: CollectionParticipant::MEMBER
@@ -323,7 +323,7 @@ describe CollectionParticipantsController do
           context "where there are other owners" do
             let!(:pseud_name) { CollectionParticipant.find(delete_participant_id.id).pseud.name }
             let!(:other_owner) do
-              FactoryGirl.create(
+              FactoryBot.create(
                 :collection_participant,
                 collection: collection,
                 participant_role: CollectionParticipant::OWNER
@@ -342,8 +342,8 @@ describe CollectionParticipantsController do
   end
 
   describe "add" do
-    let(:user) { FactoryGirl.create(:user) }
-    let(:collection) { FactoryGirl.create(:collection) }
+    let(:user) { FactoryBot.create(:user) }
+    let(:collection) { FactoryBot.create(:collection) }
     let(:participants_to_invite) { "" }
     let!(:params) do
       {
@@ -353,7 +353,7 @@ describe CollectionParticipantsController do
     end
     let(:user_participant_role) { CollectionParticipant::MEMBER }
     let!(:user_participant) do
-      FactoryGirl.create(
+      FactoryBot.create(
         :collection_participant,
         pseud: user.default_pseud,
         collection: collection,
@@ -375,7 +375,7 @@ describe CollectionParticipantsController do
     context "where the user is a maintainer" do
       let(:user_participant_role) { CollectionParticipant:: MODERATOR }
       let(:banned) { false }
-      let(:users) { Array.new(3) { FactoryGirl.create(:user, banned: banned) } }
+      let(:users) { Array.new(3) { FactoryBot.create(:user, banned: banned) } }
       let(:participants_to_invite) do
         users.map(&:default_pseud).map(&:byline).map(&:to_s).join(",")
       end
@@ -383,7 +383,7 @@ describe CollectionParticipantsController do
       context "where users to be added have already applied to the collection" do
         let!(:participants) do
           users.each do |user|
-            FactoryGirl.create(
+            FactoryBot.create(
               :collection_participant,
               collection: collection,
               pseud: user.default_pseud,

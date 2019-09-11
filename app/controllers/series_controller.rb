@@ -47,7 +47,10 @@ class SeriesController < ApplicationController
   # GET /series/1
   # GET /series/1.xml
   def show
-    @serial_works = @series.serial_works.includes(:work).where('works.posted = ?', true).references(:works).order(:position).select{ |sw| sw.work.visible(User.current_user) }
+    @serial_works = \
+      @series.serial_works.includes(:work).references(:works).
+      where(works: { posted: true }).order(:position).
+      select { |sw| sw.work.visible? }
     # sets the page title with the data for the series
     @page_title = @series.unrevealed? ? ts("Mystery Series") : get_page_title(@series.allfandoms.collect(&:name).join(', '), @series.anonymous? ? ts("Anonymous") : @series.allpseuds.collect(&:byline).join(', '), @series.title)
     if current_user.respond_to?(:subscriptions)
@@ -72,7 +75,7 @@ class SeriesController < ApplicationController
       else
         begin
           @series.remove_author(current_user)
-          flash[:notice] = ts("You have been removed as an author from the series and its works.")
+          flash[:notice] = ts("You have been removed as a creator from the series and its works.")
           redirect_to @series
         rescue Exception => error
           flash[:error] = error.message

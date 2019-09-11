@@ -33,16 +33,18 @@
       <%= ts("Current co-creators") %>
     </dt>
     <dd class="byline">
-      <ul>
-        <%= creator_form.collection_check_boxes :coauthors, approved, :id, :byline, { checked: selected.map(&:id), disabled: saved.map(&:id) } do |builder| %>
-          <li>
-            <%= builder.label do %>
-              <%= builder.check_box %>
-              <%= builder.text %>
-            <% end %>
-          </li>
-        <% end %>
-      </ul>
+      <fieldset>
+        <ul>
+          <%= creator_form.collection_check_boxes :coauthors, approved, :id, :byline, { checked: selected.map(&:id), disabled: saved.map(&:id) } do |builder| %>
+            <li>
+              <%= builder.label do %>
+                <%= builder.check_box %>
+                <%= builder.text %>
+              <% end %>
+            </li>
+          <% end %>
+        </ul>
+      </fieldset>
     </dd>
   <% end %>
 
@@ -51,16 +53,18 @@
       <%= ts("Invited co-creators") %>
     </dt>
     <dd class="byline">
-      <ul>
-        <%= creator_form.collection_check_boxes :coauthors, invited, :id, :byline, { checked: selected.map(&:id), disabled: saved.map(&:id) } do |builder| %>
-          <li>
-            <%= builder.label do %>
-              <%= builder.check_box %>
-              <%= builder.text %>
-            <% end %>
-          </li>
-        <% end %>
-      </ul>
+      <fieldset>
+        <ul>
+          <%= creator_form.collection_check_boxes :coauthors, invited, :id, :byline, { checked: selected.map(&:id), disabled: saved.map(&:id) } do |builder| %>
+            <li>
+              <%= builder.label do %>
+                <%= builder.check_box %>
+                <%= builder.text %>
+              <% end %>
+            </li>
+          <% end %>
+        </ul>
+      </fieldset>
     </dd>
   <% end %>
 

@@ -131,7 +131,7 @@ describe WorksController do
 
     context "updating creators" do
       let(:pseud_to_invite) do
-        user = FactoryGirl.create(:user)
+        user = FactoryBot.create(:user)
         user.preference.update(allow_cocreator: true)
         user.default_pseud
       end

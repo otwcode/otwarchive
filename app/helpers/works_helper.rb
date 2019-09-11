@@ -93,15 +93,8 @@ module WorksHelper
   end
 
   # Check whether this user has permission to view this work even if it's
-  # unrevealed and they're not listed as a creator:
+  # unrevealed:
   def can_see_work(work, user)
-    # Invited co-creators can also see unrevealed works, even though they're
-    # not officially listed as creators (because creators are allowed to edit,
-    # and invited co-creators aren't):
-    if work.user_has_creator_invite?(current_user)
-      return true
-    end
-
     # Moderators can see unrevealed works:
     work.collections.each do |collection|
       return true if collection.user_is_maintainer?(user)
