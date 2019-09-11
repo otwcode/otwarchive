@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe WorksHelper, type: :helper do
+describe WorksHelper do
 
   describe '#get_tweet_text' do
 
