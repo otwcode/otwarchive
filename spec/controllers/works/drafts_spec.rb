@@ -19,45 +19,62 @@ describe WorksController do
   end
 
   describe "drafts" do
-    let(:other_drafts_user) { create(:user) }
-
-    before do
-      fake_login_known_user(drafts_user)
-    end
-
-    context "no user_id" do
-      it "should redirect to the user controller and display an appropriate error message" do
+    context "when no user_id is specified" do
+      it "redirects to the user controller and display an appropriate error message" do
         get :drafts
         it_redirects_to_with_error(users_path, "Whose drafts did you want to look at?")
       end
     end
 
-    context "with a valid user_id" do
-      context "if the user_id requested doesn't belong to the current user" do
-        it "displays an error and redirects" do
-          get :drafts, params: { user_id: other_drafts_user.login }
-          it_redirects_to_with_error(user_path(drafts_user), "You can only see your own drafts, sorry!")
-        end
+    context "when logged out" do
+      before { fake_logout }
+
+      it "redirects to the login page and displays a error message" do
+        get :drafts, params: { user_id: drafts_user.login }
+        it_redirects_to_with_error(new_user_session_path,
+                                   "You can only see your own drafts, sorry!")
+      end
+    end
+
+    context "when logged in as an admin" do
+      before { fake_login_admin(create(:admin)) }
+
+      it "displays the drafts" do
+        get :drafts, params: { user_id: drafts_user.login }
+        expect(assigns[:works]).to contain_exactly(default_pseud_work,
+                                                   other_pseud_work)
+      end
+    end
+
+    context "when logged in as the user with the desired user_id" do
+      before { fake_login_known_user(drafts_user) }
+
+      it "displays no errors" do
+        get :drafts, params: { user_id: drafts_user.login }
+        expect(response).to have_http_status(200)
+        expect(flash[:error]).to be_nil
       end
 
-      context "if the user_id is that of the current user" do
-        it "should display no errors" do
-          get :drafts, params: { user_id: drafts_user.login }
-          expect(response).to have_http_status(200)
-          expect(flash[:error]).to be_nil
-        end
+      it "displays all the user's drafts if no pseud_id is specified" do
+        get :drafts, params: { user_id: drafts_user.login }
+        expect(assigns(:works)).to include(other_pseud_work)
+        expect(assigns(:works)).to include(default_pseud_work)
+      end
 
-        it "should display all the user's drafts if no pseud_id is specified" do
-          get :drafts, params: { user_id: drafts_user.login }
-          expect(assigns(:works)).to include(other_pseud_work)
-          expect(assigns(:works)).to include(default_pseud_work)
-        end
+      it "displays only the drafts for a specific pseud if a pseud_id is specified" do
+        get :drafts, params: { user_id: drafts_user.login, pseud_id: drafts_user_pseud.name }
+        expect(assigns(:works)).to include(other_pseud_work)
+        expect(assigns(:works)).not_to include(default_pseud_work)
+      end
+    end
 
-        it "should display only the drafts for a specific pseud if a pseud_id is specified" do
-          get :drafts, params: { user_id: drafts_user.login, pseud_id: drafts_user_pseud.name }
-          expect(assigns(:works)).to include(other_pseud_work)
-          expect(assigns(:works)).not_to include(default_pseud_work)
-        end
+    context "when logged in as another user" do
+      before { fake_login }
+
+      it "redirects to the current user's dashboard with an error message" do
+        get :drafts, params: { user_id: drafts_user.login }
+        it_redirects_to_with_error(user_path(User.current_user),
+                                   "You can only see your own drafts, sorry!")
       end
     end
   end

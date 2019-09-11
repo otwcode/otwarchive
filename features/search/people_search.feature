@@ -97,7 +97,7 @@ Feature: Search pseuds
       And I add the co-author "alice" to the work "Drabble Collection"
       And all indexing jobs have been run
     When I edit the work "Drabble Collection"
-      And I follow "Remove Me As Author"
+      And I follow "Remove Me As Co-Creator"
       And all indexing jobs have been run
       And I go to the search people page
       And I fill in "Fandom" with "Ghost Soup"

@@ -69,8 +69,6 @@ class ExternalWork < ApplicationRecord
     self.hidden_by_admin? ? user.kind_of?(Admin) : true
   end
 
-  alias_method :visible, :visible?
-
   # Visibility has changed, which means we need to reindex
   # the external work's bookmarker pseuds, to update their bookmark counts.
   def should_reindex_pseuds?

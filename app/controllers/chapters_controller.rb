@@ -19,7 +19,8 @@ class ChaptersController < ApplicationController
 
   # GET /work/:work_id/chapters/manage
   def manage
-    @chapters = @work.chapters_in_order(false).select(&:posted)
+    @chapters = @work.chapters_in_order(include_content: false,
+                                        include_drafts: false)
   end
 
   # GET /work/:work_id/chapters/:id
@@ -35,10 +36,11 @@ class ChaptersController < ApplicationController
     if params[:selected_id]
       redirect_to url_for(controller: :chapters, action: :show, work_id: @work.id, id: params[:selected_id]) and return
     end
-    @chapters = @work.chapters_in_order(false)
-    if !logged_in? || !current_user.is_author_of?(@work)
-      @chapters = @chapters.select(&:posted)
-    end
+    @chapters = @work.chapters_in_order(
+      include_content: false,
+      include_drafts: (logged_in_as_admin? ||
+                       @work.user_is_owner_or_invited?(current_user))
+    )
     if !@chapters.include?(@chapter)
       access_denied
     else
