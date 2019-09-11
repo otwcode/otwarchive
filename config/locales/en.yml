@@ -16,7 +16,7 @@ en:
       confirm: "Are you sure? This can't be undone!"
       options:
         keep_pseud: "Leave my pseud but attach to the orphan account"
-        orphan_pseud: "Change my pseud to 'orphan' and attach to the orphan account"
+        orphan_pseud: "Change my pseud to \"orphan\" and attach to the orphan account"
         remove: "Remove me completely as co-creator"
         delete: "Delete completely"
       co_creations:
