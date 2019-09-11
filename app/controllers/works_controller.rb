@@ -949,6 +949,7 @@ class WorksController < ApplicationController
       :words_to,
 
       archive_warning_ids: [],
+      warning_ids: [],
       category_ids: [],
       rating_ids: [],
       fandom_ids: [],

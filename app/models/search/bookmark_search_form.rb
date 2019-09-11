@@ -69,8 +69,6 @@ class BookmarkSearchForm
 
   def initialize(options={})
     @options = processed_options(options)
-    # We need to respect some options that are deliberately set to false, and
-    # false.blank? is true, so we check for nil? and not blank? here.
     @searcher = BookmarkQuery.new(@options)
   end
 
@@ -189,6 +187,8 @@ class BookmarkSearchForm
       opts[:archive_warning_ids] = opts.delete(:warning_ids)
     end
 
+    # We need to respect some options that are deliberately set to false, and
+    # false.blank? is true, so we check for nil? and not blank? here.
     opts.delete_if { |_, v| v.nil? }
   end
 end
