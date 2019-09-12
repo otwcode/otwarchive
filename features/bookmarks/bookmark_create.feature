@@ -36,7 +36,7 @@ Scenario: Create a bookmark
       And I should see "Revenge of the Sith"
     When I edit the bookmark for "Revenge of the Sith"
       And I check "bookmark_private"
-      And I press "Edit"
+      And I press "Update"
       And all indexing jobs have been run
     Then I should see "Bookmark was successfully updated"
     When I go to the bookmarks page
@@ -198,7 +198,7 @@ Scenario: bookmarks added to moderated collections appear correctly
     And I view the work "The Murder of Sherlock Holmes"
     And I follow "Edit Bookmark"
     And I fill in "bookmark_collection_names" with "jbs_greatest,beds_and_brooms,mrs_pots"
-    And I press "Edit" within "div#bookmark-form"
+    And I press "Update" within "div#bookmark-form"
     And all indexing jobs have been run
   Then I should see "Bookmark was successfully updated."
     And I should see "The collection JBs Greatest is currently moderated."
@@ -309,7 +309,7 @@ Scenario: Adding bookmarks to closed collections (Issue 3083)
     And I view the work "Sing a Song of Murder"
     And I follow "Edit Bookmark"
     And I fill in "bookmark_notes" with "This is a user editing a closed collection bookmark"
-    And I press "Edit"
+    And I press "Update"
   Then I should see "Bookmark was successfully updated."
 
 Scenario: Delete bookmarks of a work and a series

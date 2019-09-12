@@ -1,17 +1,14 @@
 require 'open3'
 
 class DownloadWriter
-  attr_reader :download, :work, :html_download
+  attr_reader :download, :work
 
   def initialize(download)
     @download = download
     @work = download.work
-    @html_download = Download.new(work, format: "html")
   end
 
   def write
-    # Create the directory
-    FileUtils.mkdir_p download.dir
     generate_html_download
     generate_ebook_download unless download.file_type == "html"
     download
@@ -21,7 +18,7 @@ class DownloadWriter
 
   # Write the HTML version
   def generate_html_download
-    return if html_download.exists?
+    return if download.exists?
 
     renderer = ApplicationController.renderer.new(
       http_host: ArchiveConfig.APP_HOST
@@ -35,9 +32,9 @@ class DownloadWriter
         chapters: download.chapters
       }
     )
-        
+
     # write to file
-    File.open(html_download.file_path, 'w:UTF-8') { |f| f.write(@html) }
+    File.open(download.html_file_path, 'w:UTF-8') { |f| f.write(@html) }
   end
 
   # transform HTML version into ebook version
@@ -74,7 +71,7 @@ class DownloadWriter
       '--disable-smart-shrinking',
       '--log-level', 'none',
       '--title', download.file_name,
-      html_download.file_path, download.file_path
+      download.html_file_path, download.file_path
     ]
   end
 
@@ -95,6 +92,9 @@ class DownloadWriter
       download.zip_path,
       download.file_path,
       '--input-encoding', 'utf-8',
+      # Prevent it from turning links to endnotes into entries for the table of
+      # contents on works with fewer than the specified number of chapters.
+      '--toc-threshold', '0',
       '--use-auto-toc',
       '--title', meta[:title],
       '--title-sort', meta[:sortable_title],
@@ -123,7 +123,7 @@ class DownloadWriter
       '--base-dir', download.assets_path,
       '--max-recursions', '0',
       '--dont-download-stylesheets',
-      "file://#{html_download.file_path}"
+      "file://#{download.html_file_path}"
     ]
   end
 
@@ -154,7 +154,7 @@ class DownloadWriter
       # it would otherwise be the work's rating, which is weird.
       tags:              "Fanworks, " + work.tags.pluck(:name).join(", "),
       pubdate:           work.revised_at.to_date.to_s,
-      summary:           work.summary,
+      summary:           work.summary.to_s,
       language:          work.language.short
     }
     if work.series.exists?

@@ -20,10 +20,10 @@ en:
       admin:
         already_authenticated: "You are already signed in."
         inactive: "Your account is not activated yet."
-        invalid: "Invalid %{authentication_keys} or password."
+        invalid: "The password or admin user name you entered doesn't match our records."
         locked: "Your account is locked."
         last_attempt: "You have one more attempt before your account is locked."
-        not_found_in_database: "Invalid %{authentication_keys} or password."
+        not_found_in_database: "The password or admin user name you entered doesn't match our records."
         timeout: "Your session expired. Please sign in again to continue."
         unauthenticated: "You need to sign in or sign up before continuing."
         unconfirmed: "You have to confirm your email address before continuing."

@@ -117,13 +117,13 @@ describe StoryParser do
     let(:location_partial_match) { "http://testme.org/welcome_to_test_vale/12345" }
 
     it "should recognise previously imported www. works" do
-      @work = FactoryGirl.create(:work, imported_from_url: location_with_www)
+      @work = FactoryBot.create(:work, imported_from_url: location_with_www)
 
       expect { @sp.check_for_previous_import(location_no_www) }.to raise_exception(StoryParser::Error)
     end
 
     it "should recognise previously imported non-www. works" do
-      @work = FactoryGirl.create(:work, imported_from_url: location_no_www)
+      @work = FactoryBot.create(:work, imported_from_url: location_no_www)
 
       expect { @sp.check_for_previous_import(location_with_www) }.to raise_exception(StoryParser::Error)
     end
@@ -145,7 +145,7 @@ describe StoryParser do
       WebMock.stub_request(:any, /url2/).
         to_return(status: 200, body: "Date: 2001-01-22 12:56\nstubbed response", headers: {})
 
-      storyparser_user = FactoryGirl.create(:user)
+      storyparser_user = FactoryBot.create(:user)
       urls = %w(http://url1 http://url2)
       work = @sp.download_and_parse_chapters_into_story(urls, { pseuds: [storyparser_user.default_pseud], do_not_set_current_author: false })
       work.save
@@ -156,7 +156,7 @@ describe StoryParser do
   end
 
   describe "#parse_common" do
-    it "should convert relative to absolute links" do
+    it "converts relative to absolute links" do
       # This one doesn't work because the sanitizer is converting the & to &amp;
       # ['http://foo.com/bar.html', 'search.php?here=is&a=query'] => 'http://foo.com/search.php?here=is&a=query',
       {
@@ -174,6 +174,14 @@ describe StoryParser do
         results = @sp.parse_common(story_in, location)
         expect(results[:chapter_attributes][:content]).to include(story_out)
       end
+    end
+
+    it "does NOT convert raw anchor links to absolute links" do
+      location = "http://external_site"
+      story_in = "<html><body><p><a href=#local>local href</p></body></html>"
+      result = @sp.parse_common(story_in, location)
+      expect(result[:chapter_attributes][:content]).not_to include(location)
+      expect(result[:chapter_attributes][:content]).to include("#local")
     end
   end
 

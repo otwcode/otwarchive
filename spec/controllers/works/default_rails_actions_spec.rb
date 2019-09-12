@@ -202,23 +202,30 @@ describe WorksController do
         post :create, params: { work: work_attributes }
       }.to_not change(Work, :count)
       expect(response).to render_template("new")
-      expect(flash[:error]).to eq "You're not allowed to use that pseud."
+      expect(assigns[:work].errors.full_messages).to \
+        include "You're not allowed to use that pseud."
     end
 
-    it "renders the co-author view if a work has invalid pseuds" do
-      allow_any_instance_of(Work).to receive(:invalid_pseuds).and_return(@user.pseuds.first)
+    it "renders new if the work has invalid pseuds" do
       work_attributes = attributes_for(:work)
+      work_attributes[:author_attributes] = { ids: @user.pseud_ids,
+                                              byline: "*impossible*" }
       post :create, params: { work: work_attributes }
-      expect(response).to render_template("_choose_coauthor")
-      allow_any_instance_of(Work).to receive(:invalid_pseuds).and_call_original
+      expect(response).to render_template("new")
+      expect(assigns[:work].errors.full_messages).to \
+        include "Invalid creator: Could not find a pseud *impossible*."
     end
 
-    it "renders the co-author view if a work has ambiguous pseuds" do
-      allow_any_instance_of(Work).to receive(:ambiguous_pseuds).and_return(@user.pseuds.first)
+    it "renders new if the work has ambiguous pseuds" do
+      create(:pseud, name: "ambiguous")
+      create(:pseud, name: "ambiguous")
       work_attributes = attributes_for(:work)
+      work_attributes[:author_attributes] = { ids: @user.pseud_ids,
+                                              byline: "ambiguous" }
       post :create, params: { work: work_attributes }
-      expect(response).to render_template("_choose_coauthor")
-      allow_any_instance_of(Work).to receive(:ambiguous_pseuds).and_call_original
+      expect(response).to render_template("new")
+      expect(assigns[:work].errors.full_messages).to \
+        include "Invalid creator: The pseud ambiguous is ambiguous."
     end
   end
 
@@ -300,16 +307,6 @@ describe WorksController do
         it "shows different results on second page" do
           get :index, params: { tag_id: @fandom.name, page: 2 }
           expect(assigns(:works).items).not_to include(@work)
-        end
-
-        it "shows results when filters are disabled" do
-          allow(controller).to receive(:fetch_admin_settings).and_return(true)
-          admin_settings = AdminSetting.new(disable_filtering: true)
-          controller.instance_variable_set("@admin_settings", admin_settings)
-          get :index, params: { tag_id: @fandom.name }
-          expect(assigns(:works)).to include(@work)
-
-          allow(controller).to receive(:fetch_admin_settings).and_call_original
         end
 
         context "with restricted works" do
@@ -413,10 +410,9 @@ describe WorksController do
 
   describe "update" do
     let(:update_user) { create(:user) }
-    let(:update_chapter) { create(:chapter) }
     let(:update_work) {
       work = create(:posted_work, authors: [update_user.default_pseud])
-      work.chapters << update_chapter
+      create(:chapter, work: work)
       work
     }
 
@@ -444,23 +440,32 @@ describe WorksController do
       allow_any_instance_of(Work).to receive(:save).and_call_original
     end
 
-    context "where the coauthor is being updated" do
-      let(:new_coauthor) { create(:user) }
-      let(:params) do
-        {
-          work: { title: "New title" },
-          pseud: { byline: new_coauthor.login },
-          id: update_work.id
-        }
+    it "updates the editor's pseuds for all chapters" do
+      new_pseud = create(:pseud, user: update_user)
+      put :update, params: { id: update_work.id, work: { author_attributes: { ids: [new_pseud.id] } } }
+      expect(update_work.pseuds.reload).to contain_exactly(new_pseud)
+      update_work.chapters.reload.each do |c|
+        expect(c.pseuds.reload).to contain_exactly(new_pseud)
       end
-      it "updates coauthors for each chapter when the work is updated" do
-        put :update, params: params
-        updated_work = Work.find(update_work.id)
-        expect(updated_work.pseuds).to include new_coauthor.default_pseud
-        updated_work.chapters.each do |c|
-          expect(c.pseuds).to include new_coauthor.default_pseud
-        end
-      end
+    end
+
+    it "allows the user to invite co-creators" do
+      co_creator = create(:user)
+      co_creator.preference.update(allow_cocreator: true)
+      put :update, params: { id: update_work.id, work: { author_attributes: { byline: co_creator.login } } }
+      expect(update_work.pseuds.reload).not_to include(co_creator.default_pseud)
+      expect(update_work.user_has_creator_invite?(co_creator)).to be_truthy
+    end
+
+    it "prevents inviting users who have disallowed co-creators" do
+      no_co_creator = create(:user)
+      no_co_creator.preference.update(allow_cocreator: false)
+      put :update, params: { id: update_work.id, work: { author_attributes: { byline: no_co_creator.login } } }
+      expect(response).to render_template :edit
+      expect(assigns[:work].errors.full_messages).to \
+        include "Invalid creator: #{no_co_creator.login} does not allow others to invite them to be a co-creator."
+      expect(update_work.pseuds.reload).not_to include(no_co_creator.default_pseud)
+      expect(update_work.user_has_creator_invite?(no_co_creator)).to be_falsey
     end
   end
 

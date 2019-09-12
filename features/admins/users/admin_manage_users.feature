@@ -10,7 +10,7 @@ Feature: Admin Actions to manage users
       | dizmo | wrangulator |
     And I have loaded the "roles" fixture
     When I am logged in as an admin
-    And I fill in "query" with "dizmo"
+    And I fill in "Name" with "dizmo"
     And I press "Find"
     Then I should see "dizmo" within "#admin_users_table"
 
@@ -55,3 +55,20 @@ Feature: Admin Actions to manage users
       And I press "Send Activation Email"
     Then I should see "Activation email sent"
       And 1 email should be delivered to "torres"
+
+  Scenario: An admin can view a user's last login date
+    Given the user "new_user" exists and is activated
+      And I am logged in as an admin
+    When I go to the abuse administration page for "new_user"
+    Then I should see "Current Login No login recorded"
+      And I should see "Previous Login No previous login recorded"
+    When time is frozen at 1/1/2019
+      And I am logged in as "new_user"
+      And I am logged out
+      And I jump in our Delorean and return to the present
+      And I am logged in as an admin
+      And I go to the abuse administration page for "new_user"
+    Then I should not see "No login recorded"
+      And I should see "2019-01-01 12:00:00 -0500 Current Login IP Address: 127.0.0.1"
+      And I should see "2019-01-01 12:00:00 -0500 Previous Login IP Address: 127.0.0.1"
+

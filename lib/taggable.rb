@@ -25,8 +25,8 @@ module Taggable
         source: :tagger,
         source_type: 'Tag',
         before_remove: :remove_filter_tagging
-      has_many :warnings,
-        -> { where("tags.type = 'Warning'") },
+      has_many :archive_warnings,
+        -> { where("tags.type = 'ArchiveWarning'") },
         through: :taggings,
         source: :tagger,
         source_type: 'Tag',
@@ -71,11 +71,11 @@ module Taggable
   def category_strings
     tag_category_string(:categories, return_array: true)
   end
-  def warning_string
-    tag_category_string(:warnings)
+  def archive_warning_string
+    tag_category_string(:archive_warnings)
   end
-  def warning_strings
-    tag_category_string(:warnings, return_array: true)
+  def archive_warning_strings
+    tag_category_string(:archive_warnings, return_array: true)
   end
   def fandom_string
     tag_category_string(:fandoms)
@@ -101,11 +101,11 @@ module Taggable
   def category_string=(tag_string)
     parse_tags(Category, tag_string)
   end
-  def warning_string=(tag_string)
-    parse_tags(Warning, tag_string)
+  def archive_warning_string=(tag_string)
+    parse_tags(ArchiveWarning, tag_string)
   end
-  def warning_strings=(array)
-    parse_tags(Warning, array)
+  def archive_warning_strings=(array)
+    parse_tags(ArchiveWarning, array)
   end
   def fandom_string=(tag_string)
     parse_tags(Fandom, tag_string)
@@ -148,8 +148,6 @@ module Taggable
           errors.add(:base, error)
         end
       end
-
-      throw :abort
     end
   end
 
@@ -175,7 +173,7 @@ module Taggable
   def parse_tags(klass, incoming_tags)
     tags = []
     self.invalid_tags ||= []
-    klass_symbol = klass.to_s.downcase.pluralize.to_sym
+    klass_symbol = klass.to_s.underscore.pluralize.to_sym
     if incoming_tags.is_a?(String)
       # Replace unicode full-width commas
       tag_array = incoming_tags.gsub(/\uff0c|\u3001/, ',').split(ArchiveConfig.DELIMITER_FOR_INPUT)
@@ -230,8 +228,8 @@ module Taggable
   def rating_ids
     filters_for_facets.select{ |t| t.type.to_s == 'Rating' }.map{ |t| t.id }
   end
-  def warning_ids
-    filters_for_facets.select{ |t| t.type.to_s == 'Warning' }.map{ |t| t.id }
+  def archive_warning_ids
+    filters_for_facets.select{ |t| t.type.to_s == 'ArchiveWarning' }.map{ |t| t.id }
   end
   def category_ids
     filters_for_facets.select{ |t| t.type.to_s == 'Category' }.map{ |t| t.id }

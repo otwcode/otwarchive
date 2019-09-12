@@ -94,7 +94,7 @@ describe WorkQuery do
   end
 
   it "should allow you to exclude works by tag ids" do
-    tag = FactoryGirl.create(:tag, name: "foobar", id: 6, canonical: true, type: 'Freeform')
+    FactoryBot.create(:tag, name: "foobar", id: 6, canonical: true, type: 'Freeform')
     q = WorkQuery.new(excluded_tag_names: "foobar")
     search_body = q.generated_query
     expect(search_body[:query][:bool][:must_not]).to include(term: { filter_ids: 6 })

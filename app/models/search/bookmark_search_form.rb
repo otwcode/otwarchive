@@ -33,7 +33,7 @@ class BookmarkSearchForm
     :relationship_ids,
     :freeform_ids,
     :rating_ids,
-    :warning_ids,
+    :archive_warning_ids,
     :category_ids,
     :bookmarkable_title,
     :bookmarkable_date,
@@ -49,11 +49,18 @@ class BookmarkSearchForm
   attr_accessor :options
 
   def self.count_for_user(user)
-    BookmarkQuery.new(user_ids: [user.id]).count
+    BookmarkQuery.new(
+      user_ids: [user.id],
+      show_private: User.current_user.is_a?(Admin) || user == User.current_user
+    ).count
   end
 
   def self.count_for_pseuds(pseuds)
-    BookmarkQuery.new(pseud_ids: pseuds.map(&:id)).count
+    BookmarkQuery.new(
+      pseud_ids: pseuds.map(&:id),
+      show_private: User.current_user.is_a?(Admin) ||
+                    pseuds.map(&:user).uniq == [User.current_user]
+    ).count
   end
 
   ATTRIBUTES.each do |filterable|
@@ -110,7 +117,7 @@ class BookmarkSearchForm
       end
     end
     all_tag_ids = []
-    [:filter_ids, :fandom_ids, :rating_ids, :category_ids, :warning_ids, :character_ids, :relationship_ids, :freeform_ids].each do |tag_ids|
+    [:filter_ids, :fandom_ids, :rating_ids, :category_ids, :archive_warning_ids, :character_ids, :relationship_ids, :freeform_ids].each do |tag_ids|
       if options[tag_ids].present?
         all_tag_ids += options[tag_ids]
       end

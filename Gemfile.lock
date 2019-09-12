@@ -24,49 +24,50 @@ GEM
   remote: https://rubygems.org/
   specs:
     aaronh-chronic (0.3.9)
-    actioncable (5.1.6.1)
-      actionpack (= 5.1.6.1)
+    actioncable (5.1.6.2)
+      actionpack (= 5.1.6.2)
       nio4r (~> 2.0)
       websocket-driver (~> 0.6.1)
-    actionmailer (5.1.6.1)
-      actionpack (= 5.1.6.1)
-      actionview (= 5.1.6.1)
-      activejob (= 5.1.6.1)
+    actionmailer (5.1.6.2)
+      actionpack (= 5.1.6.2)
+      actionview (= 5.1.6.2)
+      activejob (= 5.1.6.2)
       mail (~> 2.5, >= 2.5.4)
       rails-dom-testing (~> 2.0)
-    actionpack (5.1.6.1)
-      actionview (= 5.1.6.1)
-      activesupport (= 5.1.6.1)
+    actionpack (5.1.6.2)
+      actionview (= 5.1.6.2)
+      activesupport (= 5.1.6.2)
       rack (~> 2.0)
       rack-test (>= 0.6.3)
       rails-dom-testing (~> 2.0)
       rails-html-sanitizer (~> 1.0, >= 1.0.2)
     actionpack-page_caching (1.1.0)
       actionpack (>= 4.0.0, < 6)
-    actionview (5.1.6.1)
-      activesupport (= 5.1.6.1)
+    actionview (5.1.6.2)
+      activesupport (= 5.1.6.2)
       builder (~> 3.1)
       erubi (~> 1.4)
       rails-dom-testing (~> 2.0)
       rails-html-sanitizer (~> 1.0, >= 1.0.3)
-    activejob (5.1.6.1)
-      activesupport (= 5.1.6.1)
+    active_record_query_trace (1.6.1)
+    activejob (5.1.6.2)
+      activesupport (= 5.1.6.2)
       globalid (>= 0.3.6)
-    activemodel (5.1.6.1)
-      activesupport (= 5.1.6.1)
+    activemodel (5.1.6.2)
+      activesupport (= 5.1.6.2)
     activemodel-serializers-xml (1.0.1)
       activemodel (> 5.x)
       activerecord (> 5.x)
       activesupport (> 5.x)
       builder (~> 3.1)
-    activerecord (5.1.6.1)
-      activemodel (= 5.1.6.1)
-      activesupport (= 5.1.6.1)
+    activerecord (5.1.6.2)
+      activemodel (= 5.1.6.2)
+      activesupport (= 5.1.6.2)
       arel (~> 8.0)
     activerecord-mysql-reconnect (0.4.1)
       activerecord
       mysql2
-    activesupport (5.1.6.1)
+    activesupport (5.1.6.2)
       concurrent-ruby (~> 1.0, >= 1.0.2)
       i18n (>= 0.7, < 2)
       minitest (~> 5.1)
@@ -89,6 +90,7 @@ GEM
       aws-sdk-core (= 2.9.35)
     aws-sigv4 (1.0.0)
     bcrypt (3.1.11)
+    brakeman (3.7.2)
     builder (3.2.3)
     bullet (5.9.0)
       activesupport (>= 3.0.0)
@@ -128,7 +130,7 @@ GEM
       simplecov
       url
     coderay (1.1.1)
-    concurrent-ruby (1.1.3)
+    concurrent-ruby (1.1.5)
     connection_pool (2.2.1)
     crack (0.4.3)
       safe_yaml (~> 1.0.0)
@@ -160,10 +162,10 @@ GEM
     database_cleaner (1.5.2)
     delorean (2.1.0)
       chronic
-    devise (4.3.0)
+    devise (4.7.1)
       bcrypt (~> 3.0)
       orm_adapter (~> 0.1)
-      railties (>= 4.1.0, < 5.2)
+      railties (>= 4.1.0)
       responders
       warden (~> 1.2.3)
     devise-async (0.7.0)
@@ -183,23 +185,24 @@ GEM
     email_spec (1.6.0)
       launchy (~> 2.1)
       mail (~> 2.2)
-    erubi (1.7.1)
+    erubi (1.8.0)
     escape_utils (1.2.1)
     et-orbi (1.0.4)
       tzinfo
-    factory_girl (4.8.0)
-      activesupport (>= 3.0.0)
-    factory_girl_rails (4.8.0)
-      factory_girl (~> 4.8.0)
-      railties (>= 3.0.0)
+    factory_bot (5.0.2)
+      activesupport (>= 4.2.0)
+    factory_bot_rails (5.0.2)
+      factory_bot (~> 5.0.2)
+      railties (>= 4.2.0)
     faker (1.6.6)
       i18n (~> 0.5)
     faraday (0.13.1)
       multipart-post (>= 1.2, < 3)
     fastimage (2.1.0)
     gherkin (4.1.3)
-    globalid (0.4.1)
+    globalid (0.4.2)
       activesupport (>= 4.2.0)
+    god (0.13.7)
     hashdiff (0.3.4)
     highline (1.7.8)
     htmlentities (4.3.4)
@@ -237,7 +240,7 @@ GEM
     mime-types (2.99.3)
     mimemagic (0.3.2)
     mini_mime (1.0.1)
-    mini_portile2 (2.3.0)
+    mini_portile2 (2.4.0)
     minitest (5.11.3)
     mono_logger (1.1.0)
     multi_json (1.12.1)
@@ -256,13 +259,10 @@ GEM
     net-ssh-gateway (2.0.0)
       net-ssh (>= 4.0.0)
     netrc (0.11.0)
-    newrelic-redis (2.0.2)
-      newrelic_rpm (~> 3.11)
-      redis (< 4.0)
-    newrelic_rpm (3.18.1.330)
+    newrelic_rpm (6.4.0.356)
     nio4r (2.3.1)
-    nokogiri (1.8.5)
-      mini_portile2 (~> 2.3.0)
+    nokogiri (1.10.4)
+      mini_portile2 (~> 2.4.0)
     nokogumbo (1.4.9)
       nokogiri
     ntlm-http (0.1.1)
@@ -279,8 +279,8 @@ GEM
       json (>= 1.7, < 3)
       phraseapp-ruby (~> 1.3)
     phraseapp-ruby (1.3.3)
-    pickle (0.5.2)
-      cucumber (>= 0.8)
+    pickle (0.5.5)
+      cucumber (>= 0.8, < 4.0)
       rake
     poltergeist (1.15.0)
       capybara (~> 2.1)
@@ -295,24 +295,24 @@ GEM
       byebug (~> 9.0)
       pry (~> 0.10)
     public_suffix (3.0.3)
-    rack (2.0.6)
+    rack (2.0.7)
     rack-dev-mark (0.7.6)
       rack (>= 1.1, < 2.1)
     rack-protection (2.0.3)
       rack
     rack-test (1.1.0)
       rack (>= 1.0, < 3)
-    rails (5.1.6.1)
-      actioncable (= 5.1.6.1)
-      actionmailer (= 5.1.6.1)
-      actionpack (= 5.1.6.1)
-      actionview (= 5.1.6.1)
-      activejob (= 5.1.6.1)
-      activemodel (= 5.1.6.1)
-      activerecord (= 5.1.6.1)
-      activesupport (= 5.1.6.1)
+    rails (5.1.6.2)
+      actioncable (= 5.1.6.2)
+      actionmailer (= 5.1.6.2)
+      actionpack (= 5.1.6.2)
+      actionview (= 5.1.6.2)
+      activejob (= 5.1.6.2)
+      activemodel (= 5.1.6.2)
+      activerecord (= 5.1.6.2)
+      activesupport (= 5.1.6.2)
       bundler (>= 1.3.0)
-      railties (= 5.1.6.1)
+      railties (= 5.1.6.2)
       sprockets-rails (>= 2.0.0)
     rails-controller-testing (1.0.2)
       actionpack (~> 5.x, >= 5.0.1)
@@ -321,23 +321,23 @@ GEM
     rails-dom-testing (2.0.3)
       activesupport (>= 4.2.0)
       nokogiri (>= 1.6)
-    rails-html-sanitizer (1.0.4)
+    rails-html-sanitizer (1.2.0)
       loofah (~> 2.2, >= 2.2.2)
-    railties (5.1.6.1)
-      actionpack (= 5.1.6.1)
-      activesupport (= 5.1.6.1)
+    railties (5.1.6.2)
+      actionpack (= 5.1.6.2)
+      activesupport (= 5.1.6.2)
       method_source
       rake (>= 0.8.7)
       thor (>= 0.18.1, < 2.0)
-    raindrops (0.18.0)
-    rake (12.3.1)
+    raindrops (0.19.0)
+    rake (12.3.3)
     redis (3.3.3)
     redis-namespace (1.5.3)
       redis (~> 3.0, >= 3.0.4)
     request_store (1.3.2)
-    responders (2.4.0)
-      actionpack (>= 4.2.0, < 5.3)
-      railties (>= 4.2.0, < 5.3)
+    responders (2.4.1)
+      actionpack (>= 4.2.0, < 6.0)
+      railties (>= 4.2.0, < 6.0)
     resque (1.27.4)
       mono_logger (~> 1.0)
       multi_json (~> 1.0)
@@ -429,7 +429,7 @@ GEM
       unf_ext
     unf_ext (0.0.7.4)
     unicode (0.4.4.4)
-    unicorn (5.3.0)
+    unicorn (5.5.0)
       kgio (~> 2.6)
       raindrops (~> 0.7)
     unidecoder (1.1.2)
@@ -438,8 +438,8 @@ GEM
     vcr (3.0.3)
     vegas (0.1.11)
       rack (>= 1.0.0)
-    warden (1.2.7)
-      rack (>= 1.0)
+    warden (1.2.8)
+      rack (>= 2.0.6)
     webmock (1.24.6)
       addressable (>= 2.3.6)
       crack (>= 0.3.2)
@@ -463,6 +463,7 @@ PLATFORMS
 
 DEPENDENCIES
   actionpack-page_caching
+  active_record_query_trace (~> 1.6, >= 1.6.1)
   activemodel-serializers-xml
   activerecord-mysql-reconnect (~> 0.4.1)
   acts_as_list (~> 0.9.7)
@@ -472,6 +473,7 @@ DEPENDENCIES
   awesome_print
   aws-sdk
   bcrypt
+  brakeman (= 3.7.2)
   bullet (>= 5.7.3)
   bundler
   bundler-audit
@@ -493,12 +495,13 @@ DEPENDENCIES
   elasticsearch (>= 6.0.0)
   email_spec (= 1.6.0)
   escape_utils (= 1.2.1)
-  factory_girl (~> 4.8.0)
-  factory_girl_rails
+  factory_bot (~> 5.0.2)
+  factory_bot_rails
   faker (~> 1.6.3)
   fastimage
   gherkin
   globalize!
+  god (~> 0.13.7)
   google_visualr!
   htmlentities
   httparty
@@ -508,7 +511,6 @@ DEPENDENCIES
   mechanize
   minitest
   mysql2 (= 0.3.20)
-  newrelic-redis
   newrelic_rpm
   nokogiri (>= 1.8.5)
   nokogumbo (= 1.4.9)
@@ -519,7 +521,7 @@ DEPENDENCIES
   poltergeist
   pry-byebug
   rack-dev-mark (>= 0.7.5)
-  rails (~> 5.1)
+  rails (~> 5.1.6.2)
   rails-controller-testing
   rails-observers!
   redis (>= 3.0)
@@ -541,7 +543,7 @@ DEPENDENCIES
   transaction_isolation (= 1.0.5)
   transaction_retry
   unicode
-  unicorn (>= 5.1.0)
+  unicorn (~> 5.5)
   unidecoder
   vcr (~> 3.0, >= 3.0.1)
   webmock (~> 1.24.2)
@@ -553,4 +555,4 @@ RUBY VERSION
    ruby 2.3.4p301
 
 BUNDLED WITH
-   1.16.2
+   1.17.3

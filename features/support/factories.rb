@@ -1,2 +1,2 @@
-FactoryGirl.find_definitions
-FactoryGirl.definition_file_paths = %w(factories)
+FactoryBot.find_definitions
+FactoryBot.definition_file_paths = %w(factories)
