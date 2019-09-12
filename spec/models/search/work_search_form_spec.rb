@@ -163,6 +163,95 @@ describe WorkSearchForm do
       end
     end
 
+    describe "when searching by series title" do
+      let!(:main_series) { create(:series, title: "Persona: Dancing in Starlight", works: [work]) }
+      let!(:spinoff_series) { create(:series, title: "Persona 5", works: [second_work]) }
+      let!(:standalone_work) { create(:work) }
+
+      context "using the \"series_titles\" field" do
+        before { run_all_indexing_jobs }
+
+        it "returns only works in matching series" do
+          results = WorkSearchForm.new(series_titles: "dancing").search_results
+          expect(results).to include(work)
+          expect(results).not_to include(second_work, standalone_work)
+        end
+
+        it "returns only works in matching series with numbers in titles" do
+          results = WorkSearchForm.new(series_titles: "persona 5").search_results
+          expect(results).to include(second_work)
+          expect(results).not_to include(work, standalone_work)
+        end
+
+        it "returns all works in series for wildcard queries" do
+          results = WorkSearchForm.new(series_titles: "*").search_results
+          expect(results).to include(work, second_work)
+          expect(results).not_to include(standalone_work)
+        end
+      end
+
+      context "using the \"query\" field" do
+        before { run_all_indexing_jobs }
+
+        it "returns only works in matching series" do
+          results = WorkSearchForm.new(query: "series_titles: dancing").search_results
+          expect(results).to include(work)
+          expect(results).not_to include(second_work, standalone_work)
+        end
+
+        it "returns only works in matching series with numbers in titles" do
+          results = WorkSearchForm.new(query: "series_titles: \"persona 5\"").search_results
+          expect(results).to include(second_work)
+          expect(results).not_to include(work, standalone_work)
+        end
+
+        it "returns all works in series for wildcard queries" do
+          results = WorkSearchForm.new(query: "series_titles: *").search_results
+          expect(results).to include(work, second_work)
+          expect(results).not_to include(standalone_work)
+        end
+      end
+
+      context "after a series is renamed" do
+        before do
+          main_series.update!(title: "Megami Tensei")
+          run_all_indexing_jobs
+        end
+
+        it "returns only works in matching series" do
+          results = WorkSearchForm.new(series_titles: "megami").search_results
+          expect(results).to include(work)
+          expect(results).not_to include(second_work, standalone_work)
+        end
+      end
+
+      context "after a work is removed from a series" do
+        before do
+          work.serial_works.first.destroy!
+          run_all_indexing_jobs
+        end
+
+        it "returns only works in matching series" do
+          results = WorkSearchForm.new(series_titles: "persona").search_results
+          expect(results).to include(second_work)
+          expect(results).not_to include(work, standalone_work)
+        end
+      end
+
+      context "after a series is deleted" do
+        before do
+          spinoff_series.destroy!
+          run_all_indexing_jobs
+        end
+
+        it "returns only works in matching series" do
+          results = WorkSearchForm.new(series_titles: "persona").search_results
+          expect(results).to include(work)
+          expect(results).not_to include(second_work, standalone_work)
+        end
+      end
+    end
+
     describe "when searching by word count" do
       before(:each) do
         work.chapters.first.update_attributes(content: "This is a work with a word count of ten.", posted: true)

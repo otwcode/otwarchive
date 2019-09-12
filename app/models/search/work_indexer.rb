@@ -1,5 +1,4 @@
 class WorkIndexer < Indexer
-
   def self.klass
     "Work"
   end
@@ -25,6 +24,9 @@ class WorkIndexer < Indexer
             type: "text"
           },
           tag: {
+            type: "text"
+          },
+          series_titles: {
             type: "text"
           },
           authors_to_sort_on: {
@@ -85,7 +87,8 @@ class WorkIndexer < Indexer
         :work_types,
         :nonfiction
       ]
+    ).merge(
+      series_titles: object.series.pluck(:title)
     )
   end
-
 end
