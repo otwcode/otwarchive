@@ -82,10 +82,10 @@ module WorkStats
   # - The work is part of an unrevealed collection
   def disregard_visit?(visitor)
     ENV['REQUEST_FROM_BOT'] ||
-    self.last_visitor == visitor ||
-    User.current_user.is_a?(User) && User.current_user.is_author_of?(self) ||
-    self.hidden_by_admin? ||
-    self.in_unrevealed_collection?
+      self.last_visitor == visitor ||
+      User.current_user.is_a?(User) && User.current_user.is_author_of?(self) ||
+      self.hidden_by_admin? ||
+      self.in_unrevealed_collection?
   end
 
   protected

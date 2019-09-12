@@ -247,9 +247,9 @@ describe WorksController do
 
     context "when visited by a logged-out user" do
       it "increments the hit count" do
-        expect {
+        expect do
           get :show, params: { id: work.id }
-        }.to change { REDIS_GENERAL.get("work_stats:#{work.id}:hit_count").to_i }.by(1)
+        end.to change { REDIS_GENERAL.get("work_stats:#{work.id}:hit_count").to_i }.by(1)
       end
     end
 
@@ -257,9 +257,9 @@ describe WorksController do
       it "increments the hit count" do
         fake_login
 
-        expect {
+        expect do
           get :show, params: { id: work.id }
-        }.to change { REDIS_GENERAL.get("work_stats:#{work.id}:hit_count").to_i }.by(1)
+        end.to change { REDIS_GENERAL.get("work_stats:#{work.id}:hit_count").to_i }.by(1)
       end
     end
 
@@ -267,9 +267,9 @@ describe WorksController do
       it "does not increment the hit count" do
         fake_login_known_user(work.pseuds.first.user)
 
-        expect {
+        expect do
           get :show, params: { id: work.id }
-        }.not_to change { REDIS_GENERAL.get("work_stats:#{work.id}:hit_count").to_i }
+        end.not_to change { REDIS_GENERAL.get("work_stats:#{work.id}:hit_count").to_i }
       end
     end
 
@@ -278,9 +278,9 @@ describe WorksController do
         work.update!(in_unrevealed_collection: true)
         fake_login
 
-        expect {
+        expect do
           get :show, params: { id: work.id }
-        }.not_to change { REDIS_GENERAL.get("work_stats:#{work.id}:hit_count").to_i }
+        end.not_to change { REDIS_GENERAL.get("work_stats:#{work.id}:hit_count").to_i }
       end
     end
 
@@ -291,9 +291,9 @@ describe WorksController do
         work.update!(hidden_by_admin: true)
         fake_login_admin(admin)
 
-        expect {
+        expect do
           get :show, params: { id: work.id }
-        }.not_to change { REDIS_GENERAL.get("work_stats:#{work.id}:hit_count").to_i }
+        end.not_to change { REDIS_GENERAL.get("work_stats:#{work.id}:hit_count").to_i }
       end
     end
   end
