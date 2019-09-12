@@ -40,14 +40,32 @@ describe WorkSearchForm do
       run_all_indexing_jobs
     end
 
-    it "should find works that match" do
-      work_search = WorkSearchForm.new(query: "Hobbit")
-      expect(work_search.search_results).to include work
+    it "finds works that match" do
+      results = WorkSearchForm.new(query: "Hobbit").search_results
+      expect(results).to include work
+      expect(results).not_to include second_work
     end
 
-    it "should not find works that don't match" do
-      work_search = WorkSearchForm.new(query: "Hobbit")
-      expect(work_search.search_results).not_to include second_work
+    it "finds works with tags having numbers" do
+      work.freeform_string = "Episode: s01e01,Season/Series 01,Brooklyn 99"
+      work.save
+
+      second_work.freeform_string = "Episode: s02e01,Season/Series 99"
+      second_work.save
+
+      run_all_indexing_jobs
+
+      # The colon is a reserved character we cannot automatically escape
+      # without breaking all the hidden search operators.
+      # We just have to quote it.
+      results = WorkSearchForm.new(query: "\"Episode: s01e01\"").search_results
+      expect(results).to include work
+      expect(results).not_to include second_work
+
+      # Quote the search term since it has a space.
+      results = WorkSearchForm.new(query: "\"Season/Series 99\"").search_results
+      expect(results).not_to include work
+      expect(results).to include second_work
     end
 
     describe "when searching unposted works" do
