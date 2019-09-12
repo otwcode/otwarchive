@@ -106,7 +106,7 @@ When /^(?:|I )uncheck "([^"]*)"(?: within "([^"]*)")?$/ do |field, selector|
   end
 end
 
-When /^(?:|I )choose "(.*)"(?: within "([^"]*)")?$/ do |field, selector|
+When /^(?:|I )choose "(.*)"?$/ do |field, selector|
   with_scope(selector) do
     choose(field)
   end
