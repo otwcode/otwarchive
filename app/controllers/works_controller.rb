@@ -117,8 +117,8 @@ class WorksController < ApplicationController
       if @search.options[:excluded_tag_ids].present?
         tags = Tag.where(id: @search.options[:excluded_tag_ids])
         tags.each do |tag|
-          @facets[tag.class.to_s.downcase] ||= []
-          @facets[tag.class.to_s.downcase] << QueryFacet.new(tag.id, tag.name, 0)
+          @facets[tag.class.to_s.underscore] ||= []
+          @facets[tag.class.to_s.underscore] << QueryFacet.new(tag.id, tag.name, 0)
         end
       end
     elsif use_caching?
@@ -210,7 +210,7 @@ class WorksController < ApplicationController
       end
     end
 
-    @tag_categories_limited = Tag::VISIBLE - ['Warning']
+    @tag_categories_limited = Tag::VISIBLE - ['ArchiveWarning']
     @kudos = @work.kudos.with_pseud.includes(pseud: :user).order('created_at DESC')
 
     if current_user.respond_to?(:subscriptions)
@@ -791,7 +791,7 @@ class WorksController < ApplicationController
       error_message = 'Please add all required tags.'
       error_message << ' Fandom is missing.' if @work.fandoms.blank?
 
-      error_message << ' Warning is missing.' if @work.warnings.blank?
+      error_message << ' Warning is missing.' if @work.archive_warnings.blank?
 
       @work.errors.add(:base, error_message)
     end
@@ -878,7 +878,7 @@ class WorksController < ApplicationController
       override_tags: params[:override_tags],
       detect_tags: params[:detect_tags] == "true",
       fandom: params[:work][:fandom_string],
-      warning: params[:work][:warning_strings],
+      archive_warning: params[:work][:archive_warning_strings],
       character: params[:work][:character_string],
       rating: params[:work][:rating_string],
       relationship: params[:work][:relationship_string],
@@ -897,7 +897,7 @@ class WorksController < ApplicationController
   def work_params
     params.require(:work).permit(
       :rating_string, :fandom_string, :relationship_string, :character_string,
-      :warning_string, :category_string, :expected_number_of_chapters, :revised_at,
+      :archive_warning_string, :category_string, :expected_number_of_chapters, :revised_at,
       :freeform_string, :summary, :notes, :endnotes, :collection_names, :recipients, :wip_length,
       :backdate, :language_id, :work_skin_id, :restricted, :anon_commenting_disabled,
       :moderated_commenting_enabled, :title, :pseuds_to_add, :collections_to_add,
@@ -907,7 +907,7 @@ class WorksController < ApplicationController
       challenge_assignment_ids: [],
       challenge_claim_ids: [],
       category_string: [],
-      warning_strings: [],
+      archive_warning_strings: [],
       author_attributes: [:byline, ids: [], coauthors: []],
       series_attributes: [:id, :title],
       parent_attributes: [:url, :title, :author, :language_id, :translation],
@@ -921,9 +921,9 @@ class WorksController < ApplicationController
   def work_tag_params
     params.require(:work).permit(
       :rating_string, :fandom_string, :relationship_string, :character_string,
-      :warning_string, :category_string, :freeform_string, :language_id,
+      :archive_warning_string, :category_string, :freeform_string, :language_id,
       category_string: [],
-      warning_strings: []
+      archive_warning_strings: []
     )
   end
 
@@ -956,7 +956,7 @@ class WorksController < ApplicationController
       :words_from,
       :words_to,
 
-      warning_ids: [],
+      archive_warning_ids: [],
       category_ids: [],
       rating_ids: [],
       fandom_ids: [],

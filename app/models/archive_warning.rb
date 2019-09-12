@@ -1,4 +1,5 @@
-class Warning < Tag
+class ArchiveWarning < Tag
+
   NAME = ArchiveConfig.WARNING_CATEGORY_NAME
 
   DISPLAY_NAME_MAPPING = {
@@ -17,6 +18,10 @@ class Warning < Tag
 
   def self.warning?(warning)
     warning_tags.include? warning
+  end
+
+  def self.label_name
+    "Warnings"
   end
 
   def display_name

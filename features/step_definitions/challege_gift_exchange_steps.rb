@@ -78,7 +78,7 @@ When /^I fill in single-fandom gift exchange challenge options$/ do
   fill_in("gift_exchange_request_restriction_attributes_relationship_num_allowed", with: "3")
   fill_in("gift_exchange_request_restriction_attributes_rating_num_allowed", with: "5")
   fill_in("gift_exchange_request_restriction_attributes_category_num_allowed", with: "5")
-  fill_in("gift_exchange_request_restriction_attributes_warning_num_allowed", with: "5")
+  fill_in("gift_exchange_request_restriction_attributes_archive_warning_num_allowed", with: "5")
   fill_in("gift_exchange_request_restriction_attributes_freeform_num_allowed", with: "2")
   fill_in("gift_exchange_offer_restriction_attributes_fandom_num_required", with: "1")
   fill_in("gift_exchange_offer_restriction_attributes_fandom_num_allowed", with: "1")
@@ -87,7 +87,7 @@ When /^I fill in single-fandom gift exchange challenge options$/ do
   select("1", from: "gift_exchange_potential_match_settings_attributes_num_required_characters")
   check("gift_exchange_offer_restriction_attributes_allow_any_rating")
   check("gift_exchange_offer_restriction_attributes_allow_any_category")
-  check("gift_exchange_offer_restriction_attributes_allow_any_warning")
+  check("gift_exchange_offer_restriction_attributes_allow_any_archive_warning")
   check("gift_exchange_offer_restriction_attributes_character_restrict_to_fandom")
   check("gift_exchange_offer_restriction_attributes_relationship_restrict_to_fandom")
 end

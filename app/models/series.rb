@@ -210,7 +210,7 @@ class Series < ApplicationRecord
       only: [:title, :summary, :hidden_by_admin, :restricted, :created_at,
         :complete],
       methods: [:revised_at, :posted, :tag, :filter_ids, :rating_ids,
-        :warning_ids, :category_ids, :fandom_ids, :character_ids,
+        :archive_warning_ids, :category_ids, :fandom_ids, :character_ids,
         :relationship_ids, :freeform_ids, :pseud_ids, :creators, :language_id,
         :word_count, :work_types]
     ).merge(
@@ -252,8 +252,8 @@ class Series < ApplicationRecord
   def rating_ids
     filters_for_facets.select{ |t| t.type.to_s == 'Rating' }.map{ |t| t.id }
   end
-  def warning_ids
-    filters_for_facets.select{ |t| t.type.to_s == 'Warning' }.map{ |t| t.id }
+  def archive_warning_ids
+    filters_for_facets.select{ |t| t.type.to_s == 'ArchiveWarning' }.map{ |t| t.id }
   end
   def category_ids
     filters_for_facets.select{ |t| t.type.to_s == 'Category' }.map{ |t| t.id }

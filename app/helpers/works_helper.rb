@@ -47,11 +47,11 @@ module WorksHelper
   end
 
   # select the default warning if this is a new work
-  def check_warning(work, warning)
-    if work.nil? || work.warning_strings.empty?
+  def check_archive_warning(work, warning)
+    if work.nil? || work.archive_warning_strings.empty?
       warning.name == nil
     else
-      work.warning_strings.include?(warning.name)
+      work.archive_warning_strings.include?(warning.name)
     end
   end
 
@@ -161,7 +161,7 @@ module WorksHelper
     end
     # Create list of tags
     text << "<ul>"
-    %w(Fandom Rating Warning Category Character Relationship Freeform).each do |type|
+    %w(Fandom Rating ArchiveWarning Category Character Relationship Freeform).each do |type|
       if tags[type]
         text << "<li>#{type.constantize.label_name}: #{tags[type].map { |t| link_to_tag_works(t, full_path: true) }.join(', ')}</li>"
       end

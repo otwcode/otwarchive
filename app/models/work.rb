@@ -797,7 +797,7 @@ class Work < ApplicationRecord
       end
       result["Fandom"] ||= []
       result["Rating"] ||= []
-      result["Warning"] ||= []
+      result["ArchiveWarning"] ||= []
       result["Relationship"] ||= []
       result["Character"] ||= []
       result["Freeform"] ||= []
@@ -808,7 +808,7 @@ class Work < ApplicationRecord
   # Check to see that a work is tagged appropriately
   def has_required_tags?
     return false if self.fandom_string.blank?
-    return false if self.warning_string.blank?
+    return false if self.archive_warning_string.blank?
     return false if self.rating_string.blank?
     return true
   end
@@ -1205,7 +1205,7 @@ class Work < ApplicationRecord
       root: false,
       only: [:title, :summary, :hidden_by_admin, :restricted, :posted,
         :created_at, :revised_at, :language_id, :word_count, :complete],
-      methods: [:tag, :filter_ids, :rating_ids, :warning_ids, :category_ids,
+      methods: [:tag, :filter_ids, :rating_ids, :archive_warning_ids, :category_ids,
         :fandom_ids, :character_ids, :relationship_ids, :freeform_ids,
         :pseud_ids, :creators, :collection_ids, :work_types]
     ).merge(

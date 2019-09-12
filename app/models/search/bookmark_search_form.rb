@@ -33,7 +33,7 @@ class BookmarkSearchForm
     :relationship_ids,
     :freeform_ids,
     :rating_ids,
-    :warning_ids,
+    :archive_warning_ids,
     :category_ids,
     :bookmarkable_title,
     :bookmarkable_date,
@@ -117,7 +117,7 @@ class BookmarkSearchForm
       end
     end
     all_tag_ids = []
-    [:filter_ids, :fandom_ids, :rating_ids, :category_ids, :warning_ids, :character_ids, :relationship_ids, :freeform_ids].each do |tag_ids|
+    [:filter_ids, :fandom_ids, :rating_ids, :category_ids, :archive_warning_ids, :character_ids, :relationship_ids, :freeform_ids].each do |tag_ids|
       if options[tag_ids].present?
         all_tag_ids += options[tag_ids]
       end
