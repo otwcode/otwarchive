@@ -71,6 +71,8 @@ module WorkStats
     )
   end
 
+  private
+
   # Do not count the visit if:
   # - This is the same visitor as before
   # - The current user is a creator of this work
@@ -78,7 +80,7 @@ module WorkStats
   # (We will set this in the unicorn which serves bots, which is chosen by nginx.)
   # - The work is hidden by an admin (admins can visit it but it shouldn't count as a hit)
   # - The work is part of an unrevealed collection
-  private def disregard_visit?(visitor)
+  def disregard_visit?(visitor)
     ENV['REQUEST_FROM_BOT'] ||
     self.last_visitor == visitor ||
     User.current_user.is_a?(User) && User.current_user.is_author_of?(self) ||
