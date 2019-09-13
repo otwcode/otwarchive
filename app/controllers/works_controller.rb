@@ -15,7 +15,7 @@ class WorksController < ApplicationController
   before_action :check_visibility, only: [:show, :navigate]
 
   before_action :load_first_chapter, only: [:show, :edit, :update, :preview]
-  before_action :init_serial, only: [:edit, :update, :preview]
+  before_action :init_serial, only: [:new, :edit, :update, :preview]
 
   cache_sweeper :collection_sweeper
   cache_sweeper :feed_sweeper
