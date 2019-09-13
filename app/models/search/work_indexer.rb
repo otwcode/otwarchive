@@ -26,8 +26,8 @@ class WorkIndexer < Indexer
           tag: {
             type: "text"
           },
-          series_titles: {
-            type: "text"
+          series: {
+            type: "object"
           },
           authors_to_sort_on: {
             type: "keyword"
@@ -88,7 +88,17 @@ class WorkIndexer < Indexer
         :nonfiction
       ]
     ).merge(
-      series_titles: object.series.pluck(:title)
+      series: series_data(object)
     )
+  end
+
+  def series_data(object)
+    object.serial_works.with_title.map do |s|
+      {
+        id: s.series_id,
+        title: s.title,
+        position: s.position
+      }
+    end
   end
 end
