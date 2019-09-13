@@ -608,6 +608,9 @@ class Work < ApplicationRecord
 
   # Virtual attribute for series
   def series_attributes=(attributes)
+    if self.preview_mode
+      return
+    end
     if !attributes[:id].blank?
       old_series = Series.find(attributes[:id])
       if old_series.pseuds.none? { |pseud| pseud.user == User.current_user }

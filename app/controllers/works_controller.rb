@@ -15,6 +15,7 @@ class WorksController < ApplicationController
   before_action :check_visibility, only: [:show, :navigate]
 
   before_action :load_first_chapter, only: [:show, :edit, :update, :preview]
+  before_action :init_serial, only: [:edit, :update, :preview]
 
   cache_sweeper :collection_sweeper
   cache_sweeper :feed_sweeper
@@ -349,6 +350,15 @@ class WorksController < ApplicationController
     @work.preview_mode = !!(params[:preview_button] || params[:edit_button])
     @work.attributes = work_params
     @chapter.attributes = work_params[:chapter_attributes] if work_params[:chapter_attributes]
+    if @work.preview_mode
+      @serial.attributes = work_params[:series_attributes]
+      id = @serial.id
+      title = @serial.title
+      if !id.blank?
+        title = Series.find(id).title
+      end
+      @work.series.build(title: title, id: id)
+    end
     @work.ip_address = request.remote_ip
 
     @work.set_word_count(@work.preview_mode)
@@ -358,10 +368,7 @@ class WorksController < ApplicationController
     @work.set_challenge_claim_info
     set_work_form_fields
 
-    if params[:edit_button] || work_cannot_be_saved?
-      set_work_tag_error_messages
-      render :edit
-    elsif params[:preview_button]
+    if params[:preview_button]
       unless @work.posted?
         flash[:notice] = ts("Your changes have not been saved. Please post your work or save without posting if you want to keep them.")
       end
@@ -369,6 +376,9 @@ class WorksController < ApplicationController
       in_moderated_collection
       @preview_mode = true
       render :preview
+    elsif params[:edit_button] || work_cannot_be_saved?
+      set_work_tag_error_messages
+      render :edit
     else
       @work.posted = @chapter.posted = true if params[:post_button]
       @work.set_revised_at_by_chapter(@chapter)
@@ -776,6 +786,10 @@ class WorksController < ApplicationController
 
   def load_first_chapter
     @chapter = @work.first_chapter
+  end
+
+  def init_serial
+    @serial = Series.new
   end
 
   # Check whether we should display :new or :edit instead of previewing or

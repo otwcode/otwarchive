@@ -73,17 +73,6 @@ module WorksHelper
     end
   end
 
-  # Passes value of series ID back to form when an error occurs on posting.
-  # Thanks to the way that series_attributes= is defined, series are saved
-  # and added to the work even before the work is saved. The only time that the
-  # series isn't added is when the work is a new record, and therefore the
-  # SerialWork can't be created.
-  def work_series_id(work)
-    if work.new_record? && (series = work.series.first)
-      series.id
-    end
-  end
-
   def language_link(work)
     if work.respond_to?(:language) && work.language
       link_to work.language.name, work.language
