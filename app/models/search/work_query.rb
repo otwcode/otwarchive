@@ -240,7 +240,7 @@ class WorkQuery < Query
 
   def generate_search_text(query = '')
     search_text = query
-    [:title, :creators].each do |field|
+    %i[title creators series_titles].each do |field|
       search_text << split_query_text_words(field, options[field])
     end
     if options[:collection_ids].blank? && collected?
@@ -273,7 +273,7 @@ class WorkQuery < Query
     end
 
     if facet_tags?
-      %w(rating warning category fandom character relationship freeform).each do |facet_type|
+      %w(rating archive_warning category fandom character relationship freeform).each do |facet_type|
         aggs[facet_type] = { terms: { field: "#{facet_type}_ids" } }
       end
     end

@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe ShareHelper, type: :helper do
+describe ShareHelper do
 
   describe "get_embed_link_title" do
     context "for anonymous works" do

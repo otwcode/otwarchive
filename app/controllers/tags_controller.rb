@@ -142,6 +142,7 @@ class TagsController < ApplicationController
                 Chapter
               end
       @display_creation = model.find(params[:creation_id]) if model.is_a? Class
+
       # Tags aren't directly on series, so we need to handle them differently
       if params[:creation_type] == 'Series'
         if params[:tag_type] == 'warnings'
@@ -150,13 +151,21 @@ class TagsController < ApplicationController
           @display_tags = @display_creation.works.visible.collect(&:freeform_tags).flatten.compact.uniq.sort
         end
       else
-        tag_type = params[:tag_type]
-        if %w(warnings freeforms).include?(tag_type)
-          @display_tags = @display_creation.send(tag_type)
-        end
+        @display_tags = case params[:tag_type]
+                        when 'warnings'
+                          @display_creation.archive_warnings
+                        when 'freeforms'
+                          @display_creation.freeforms
+                        end
       end
-      @display_category = @display_tags.first.class.name.downcase.pluralize
+
+      if params[:tag_type] == 'warnings'
+        @display_category = 'warnings'
+      else
+        @display_category = @display_tags.first.class.name.tableize
+      end
     end
+
     respond_to do |format|
       format.html do
         # This is just a quick fix to avoid script barf if JavaScript is disabled

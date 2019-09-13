@@ -245,12 +245,12 @@ Given /^a set of works with various warnings for searching$/ do
 
   # Create a work for each warning
   warnings.each do |warning|
-    FactoryBot.create(:posted_work, warning_string: warning)
+    FactoryBot.create(:posted_work, archive_warning_string: warning)
   end
 
   # Create a work that uses multiple warnings
   FactoryBot.create(:posted_work,
-                     warning_string: "#{ArchiveConfig.WARNING_DEFAULT_TAG_NAME},
+                     archive_warning_string: "#{ArchiveConfig.WARNING_DEFAULT_TAG_NAME},
                                      #{ArchiveConfig.WARNING_NONE_TAG_NAME}")
 
   step %{all indexing jobs have been run}

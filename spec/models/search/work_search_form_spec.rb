@@ -42,14 +42,32 @@ describe WorkSearchForm do
       run_all_indexing_jobs
     end
 
-    it "should find works that match" do
-      work_search = WorkSearchForm.new(query: "Hobbit")
-      expect(work_search.search_results).to include work
+    it "finds works that match" do
+      results = WorkSearchForm.new(query: "Hobbit").search_results
+      expect(results).to include work
+      expect(results).not_to include second_work
     end
 
-    it "should not find works that don't match" do
-      work_search = WorkSearchForm.new(query: "Hobbit")
-      expect(work_search.search_results).not_to include second_work
+    it "finds works with tags having numbers" do
+      work.freeform_string = "Episode: s01e01,Season/Series 01,Brooklyn 99"
+      work.save
+
+      second_work.freeform_string = "Episode: s02e01,Season/Series 99"
+      second_work.save
+
+      run_all_indexing_jobs
+
+      # The colon is a reserved character we cannot automatically escape
+      # without breaking all the hidden search operators.
+      # We just have to quote it.
+      results = WorkSearchForm.new(query: "\"Episode: s01e01\"").search_results
+      expect(results).to include work
+      expect(results).not_to include second_work
+
+      # Quote the search term since it has a space.
+      results = WorkSearchForm.new(query: "\"Season/Series 99\"").search_results
+      expect(results).not_to include work
+      expect(results).to include second_work
     end
 
     describe "when searching unposted works" do
@@ -166,6 +184,95 @@ describe WorkSearchForm do
         work_search = WorkSearchForm.new(collection_ids: [1])
         expect(work_search.search_results).to include second_work
         expect(work_search.search_results).not_to include work
+      end
+    end
+
+    describe "when searching by series title" do
+      let!(:main_series) { create(:series, title: "Persona: Dancing in Starlight", works: [work]) }
+      let!(:spinoff_series) { create(:series, title: "Persona 5", works: [second_work]) }
+      let!(:standalone_work) { create(:work) }
+
+      context "using the \"series_titles\" field" do
+        before { run_all_indexing_jobs }
+
+        it "returns only works in matching series" do
+          results = WorkSearchForm.new(series_titles: "dancing").search_results
+          expect(results).to include(work)
+          expect(results).not_to include(second_work, standalone_work)
+        end
+
+        it "returns only works in matching series with numbers in titles" do
+          results = WorkSearchForm.new(series_titles: "persona 5").search_results
+          expect(results).to include(second_work)
+          expect(results).not_to include(work, standalone_work)
+        end
+
+        it "returns all works in series for wildcard queries" do
+          results = WorkSearchForm.new(series_titles: "*").search_results
+          expect(results).to include(work, second_work)
+          expect(results).not_to include(standalone_work)
+        end
+      end
+
+      context "using the \"query\" field" do
+        before { run_all_indexing_jobs }
+
+        it "returns only works in matching series" do
+          results = WorkSearchForm.new(query: "series_titles: dancing").search_results
+          expect(results).to include(work)
+          expect(results).not_to include(second_work, standalone_work)
+        end
+
+        it "returns only works in matching series with numbers in titles" do
+          results = WorkSearchForm.new(query: "series_titles: \"persona 5\"").search_results
+          expect(results).to include(second_work)
+          expect(results).not_to include(work, standalone_work)
+        end
+
+        it "returns all works in series for wildcard queries" do
+          results = WorkSearchForm.new(query: "series_titles: *").search_results
+          expect(results).to include(work, second_work)
+          expect(results).not_to include(standalone_work)
+        end
+      end
+
+      context "after a series is renamed" do
+        before do
+          main_series.update!(title: "Megami Tensei")
+          run_all_indexing_jobs
+        end
+
+        it "returns only works in matching series" do
+          results = WorkSearchForm.new(series_titles: "megami").search_results
+          expect(results).to include(work)
+          expect(results).not_to include(second_work, standalone_work)
+        end
+      end
+
+      context "after a work is removed from a series" do
+        before do
+          work.serial_works.first.destroy!
+          run_all_indexing_jobs
+        end
+
+        it "returns only works in matching series" do
+          results = WorkSearchForm.new(series_titles: "persona").search_results
+          expect(results).to include(second_work)
+          expect(results).not_to include(work, standalone_work)
+        end
+      end
+
+      context "after a series is deleted" do
+        before do
+          spinoff_series.destroy!
+          run_all_indexing_jobs
+        end
+
+        it "returns only works in matching series" do
+          results = WorkSearchForm.new(series_titles: "persona").search_results
+          expect(results).to include(work)
+          expect(results).not_to include(second_work, standalone_work)
+        end
       end
     end
 

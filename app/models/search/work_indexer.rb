@@ -24,8 +24,10 @@ class WorkIndexer < Indexer
             type: "text"
           },
           tag: {
-            type: "text",
-            analyzer: "simple"
+            type: "text"
+          },
+          series_titles: {
+            type: "text"
           },
           authors_to_sort_on: {
             type: "keyword"
@@ -64,7 +66,7 @@ class WorkIndexer < Indexer
       methods: [
         :authors_to_sort_on,
         :rating_ids,
-        :warning_ids,
+        :archive_warning_ids,
         :category_ids,
         :fandom_ids,
         :character_ids,
@@ -84,9 +86,10 @@ class WorkIndexer < Indexer
         :otp,
         :work_types,
         :nonfiction
-      ],
+      ]
     ).merge(
-      language_id: object.language&.short
+      language_id: object.language&.short,
+      series_titles: object.series.pluck(:title)
     )
   end
 end
