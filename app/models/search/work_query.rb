@@ -248,7 +248,7 @@ class WorkQuery < Query
 
   def generate_search_text(query = '')
     search_text = query
-    [:title, :creators].each do |field|
+    %i[title creators series_titles].each do |field|
       search_text << split_query_text_words(field, options[field])
     end
     if options[:collection_ids].blank? && collected?

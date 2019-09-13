@@ -39,6 +39,7 @@ class Series < ApplicationRecord
     too_long: ts("must be less than %{max} letters long.", max: ArchiveConfig.NOTES_MAX)
 
   after_save :adjust_restricted
+  after_update_commit :update_work_index
 
   scope :visible_to_registered_user, -> { where(hidden_by_admin: false).order('series.updated_at DESC') }
   scope :visible_to_all, -> { where(hidden_by_admin: false, restricted: false).order('series.updated_at DESC') }
@@ -219,6 +220,10 @@ class Series < ApplicationRecord
       bookmarkable_type: 'Series',
       bookmarkable_join: { name: "bookmarkable" }
     )
+  end
+
+  def update_work_index
+    self.works.each(&:enqueue_to_index) if saved_change_to_title?
   end
 
   def word_count
