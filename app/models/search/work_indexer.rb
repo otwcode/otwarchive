@@ -92,13 +92,12 @@ class WorkIndexer < Indexer
     )
   end
 
+  # Pluck the desired series data and then turn it back
+  # into a hash
   def series_data(object)
-    object.serial_works.with_title.map do |s|
-      {
-        id: s.series_id,
-        title: s.title,
-        position: s.position
-      }
+    series_attrs = [:id, :title, :position]
+    object.series.pluck(*series_attrs).map do |values|
+      series_attrs.zip(values).to_h
     end
   end
 end

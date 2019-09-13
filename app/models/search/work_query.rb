@@ -39,8 +39,7 @@ class WorkQuery < Query
   # In this case, name is the only text field
   def queries
     @queries = [
-      general_query,
-      series_query
+      general_query
     ].flatten.compact
   end
 
@@ -249,22 +248,16 @@ class WorkQuery < Query
     } unless query.blank?
   end
 
-  def series_query
-    return unless options[:series_titles].present?
-    {
-      query_string: {
-        query: options[:series_titles],
-        fields: ["series.title"],
-        default_operator: "AND"
-      }
-    }
-  end
-
   def generate_search_text(query = '')
     search_text = query
     %i[title creators].each do |field|
       search_text << split_query_text_words(field, options[field])
     end
+
+    if options[:series_titles].present?
+      search_text << split_query_text_words("series.title", options[:series_titles])
+    end
+
     if options[:collection_ids].blank? && collected?
       search_text << " collection_ids:*"
     end
