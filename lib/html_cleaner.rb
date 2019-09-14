@@ -155,6 +155,7 @@ module HtmlCleaner
       transformers = []
       if ArchiveConfig.FIELDS_ALLOWING_VIDEO_EMBEDS.include?(field.to_s)
         transformers << Sanitize::Transformers::ALLOW_VIDEO_EMBEDS
+        transformers << OTWSanitize::Multimedia.transformer
       end
       if ArchiveConfig.FIELDS_ALLOWING_CSS.include?(field.to_s)
         transformers << Sanitize::Transformers::ALLOW_USER_CLASSES
