@@ -2,6 +2,7 @@ require 'fileutils'
 include HtmlCleaner
 include CssCleaner
 include SkinCacheHelper
+include SkinFileHelper
 include SkinWizard
 
 class Skin < ApplicationRecord
@@ -22,9 +23,6 @@ class Skin < ApplicationRecord
   DEFAULT_ROLE = "user"
   DEFAULT_ROLES_TO_INCLUDE = %w(user override site)
   DEFAULT_MEDIA = ["all"]
-
-  SKIN_PATH = 'stylesheets/skins/'
-  SITE_SKIN_PATH = 'stylesheets/site/'
 
   belongs_to :author, class_name: 'User'
   has_many :preferences
@@ -213,7 +211,7 @@ class Skin < ApplicationRecord
     css_to_cache = ""
     last_role = ""
     file_count = 1
-    skin_dir = Skin.skins_dir + skin_dirname
+    skin_dir = skins_dir + skin_dirname
     FileUtils.mkdir_p skin_dir
     (get_all_parents + [self]).each do |next_skin|
       if next_skin.get_sheet_role != last_role
@@ -239,7 +237,7 @@ class Skin < ApplicationRecord
   end
 
   def clear_cache!
-    skin_dir = Skin.skins_dir + skin_dirname
+    skin_dir = skins_dir + skin_dirname
     FileUtils.rm_rf skin_dir # clear out old if exists
     self.cached = false
     save!
@@ -376,8 +374,8 @@ class Skin < ApplicationRecord
 
   def get_cached_style(roles_to_include)
     block = ""
-    self_skin_dir = Skin.skins_dir + self.skin_dirname
-    Skin.skin_dir_entries(self_skin_dir, /^\d+_(.*)\.css$/).each do |sub_file|
+    self_skin_dir = skins_dir + self.skin_dirname
+    skin_dir_entries(self_skin_dir, /^\d+_(.*)\.css$/).each do |sub_file|
       if sub_file.match(/^\d+_(.*)\.css$/)
         (sheet_role, sheet_media, sheet_ie_condition) = parse_sheet_role($1)
         if roles_to_include.include?(sheet_role)
@@ -393,17 +391,13 @@ class Skin < ApplicationRecord
     '<link rel="stylesheet" type="text/css" media="' + media + '" href="/' + file.gsub(/^\/*/,"") + '" />'
   end
 
-  def self.naturalized(string)
-    string.scan(/[^\d]+|[\d]+/).collect { |f| f.match(/\d+(\.\d+)?/) ? f.to_f : f }
-  end
-
   def self.load_site_css
-    Skin.skin_dir_entries(Skin.site_skins_dir, /^\d+\.\d+$/).each do |version|
-      version_dir = "#{Skin.site_skins_dir + version}/"
+    skin_dir_entries(site_skins_dir_simple, /^\d+\.\d+$/).each do |version|
+      version_dir = "#{site_skins_dir_simple + version}/"
       if File.directory?(version_dir)
         # let's load up the file
         skins = []
-        Skin.skin_dir_entries(version_dir, /^(\d+)-(.*)\.css/).each do |skin_file|
+        skin_dir_entries(version_dir, /^(\d+)-(.*)\.css/).each do |skin_file|
           filename = SITE_SKIN_PATH + version + '/' + skin_file
           skin_file.match(/^(\d+)-(.*)\.css/)
           position = $1.to_i
@@ -475,27 +469,14 @@ class Skin < ApplicationRecord
     "skin_#{self.id}_#{self.title.gsub(/[^\w]/, '_')}/".downcase
   end
 
-  def self.skins_dir
-    Rails.public_path.join(SKIN_PATH).to_s
-  end
-
-  def self.skin_dir_entries(dir, regex)
-    Dir.entries(dir).select {|f| f.match(regex)}.sort_by {|f| Skin.naturalized(f.to_s)}
-  end
-
   def self.site_skins_dir
-    Rails.public_path.join(SITE_SKIN_PATH).to_s
-  end
-
-  # Get the most recent version and find the topmost skin
-  def self.get_current_version
-    Skin.skin_dir_entries(Skin.site_skins_dir, /^\d+\.\d+$/).last
+    site_skins_dir_simple
   end
 
   def self.get_current_site_skin
-    current_version = Skin.get_current_version
-    if current_version
-      Skin.find_by(title: "Archive #{Skin.get_current_version}", official: true)
+    current = current_version
+    if current
+      Skin.find_by(title: "Archive #{current}", official: true)
     else
       nil
     end
@@ -509,11 +490,11 @@ class Skin < ApplicationRecord
 
   def self.create_default
     skin = Skin.find_or_create_by(title: "Default", css: "", public: true, role: "user")
-    current_version = Skin.get_current_version
-    if current_version
-      File.open(Skin.site_skins_dir + current_version + '/preview.png', 'rb') {|preview_file| skin.icon = preview_file}
+    current = current_version
+    if current
+      File.open(site_skins_dir_simple + current + '/preview.png', 'rb') { |preview_file| skin.icon = preview_file }
     else
-      File.open(Skin.site_skins_dir + 'preview.png', 'rb') {|preview_file| skin.icon = preview_file}
+      File.open(site_skins_dir_simple + 'preview.png', 'rb') { |preview_file| skin.icon = preview_file }
     end
     skin.official = true
     skin.save!

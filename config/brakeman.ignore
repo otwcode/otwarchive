@@ -306,46 +306,6 @@
       "note": ""
     },
     {
-      "warning_type": "File Access",
-      "warning_code": 16,
-      "fingerprint": "2e364690d2ab9df10baecbb45f323765e56cb3be095446d73b1d58740906421d",
-      "check_name": "FileAccess",
-      "message": "Model attribute used in file name",
-      "file": "app/models/skin.rb",
-      "line": 445,
-      "link": "http://brakemanscanner.org/docs/warning_types/file_access/",
-      "code": "File.open((\"#{(Skin.site_skins_dir + version)}/\" + \"preview.png\"), \"rb\")",
-      "render_path": null,
-      "location": {
-        "type": "method",
-        "class": "Skin",
-        "method": "Skin.load_site_css"
-      },
-      "user_input": "(Skin.site_skins_dir + version)",
-      "confidence": "High",
-      "note": ""
-    },
-    {
-      "warning_type": "File Access",
-      "warning_code": 16,
-      "fingerprint": "2e364690d2ab9df10baecbb45f323765e56cb3be095446d73b1d58740906421d",
-      "check_name": "FileAccess",
-      "message": "Model attribute used in file name",
-      "file": "app/models/skin.rb",
-      "line": 459,
-      "link": "http://brakemanscanner.org/docs/warning_types/file_access/",
-      "code": "File.open((\"#{(Skin.site_skins_dir + version)}/\" + \"preview.png\"), \"rb\")",
-      "render_path": null,
-      "location": {
-        "type": "method",
-        "class": "Skin",
-        "method": "Skin.load_site_css"
-      },
-      "user_input": "(Skin.site_skins_dir + version)",
-      "confidence": "High",
-      "note": ""
-    },
-    {
       "warning_type": "Cross Site Scripting",
       "warning_code": 2,
       "fingerprint": "2ee5afc33ecc2cbe4a2701405a2ceeff328eb283fbe1b646e6afdb1dd7d749fd",
@@ -576,26 +536,6 @@
       },
       "user_input": "Collection.find_by(:name => params[:collection_id]).challenge",
       "confidence": "Weak",
-      "note": ""
-    },
-    {
-      "warning_type": "File Access",
-      "warning_code": 16,
-      "fingerprint": "45047b931fdb5049a943a5fbfa62ae077a8d457db6ba924db6792fd3e404ec12",
-      "check_name": "FileAccess",
-      "message": "Model attribute used in file name",
-      "file": "app/models/skin.rb",
-      "line": 516,
-      "link": "http://brakemanscanner.org/docs/warning_types/file_access/",
-      "code": "File.open((Skin.site_skins_dir + \"preview.png\"), \"rb\")",
-      "render_path": null,
-      "location": {
-        "type": "method",
-        "class": "Skin",
-        "method": "Skin.create_default"
-      },
-      "user_input": "(Skin.site_skins_dir + \"preview.png\")",
-      "confidence": "Medium",
       "note": ""
     },
     {
@@ -1041,26 +981,6 @@
       "note": ""
     },
     {
-      "warning_type": "File Access",
-      "warning_code": 16,
-      "fingerprint": "73010ffb46c4247892a0a545a7051650a0e4df2096cc2675a1eeae825b981505",
-      "check_name": "FileAccess",
-      "message": "Model attribute used in file name",
-      "file": "app/models/skin.rb",
-      "line": 413,
-      "link": "http://brakemanscanner.org/docs/warning_types/file_access/",
-      "code": "File.open((\"#{(Skin.site_skins_dir + version)}/\" + skin_file), &:readline)",
-      "render_path": null,
-      "location": {
-        "type": "method",
-        "class": "Skin",
-        "method": "Skin.load_site_css"
-      },
-      "user_input": "(Skin.site_skins_dir + version)",
-      "confidence": "High",
-      "note": ""
-    },
-    {
       "warning_type": "Denial of Service",
       "warning_code": 76,
       "fingerprint": "77deaa30a5237709bf458d4d64dbedfebc8a669bd5c72274b2e65ba2d9d9ea92",
@@ -1331,46 +1251,6 @@
       "note": ""
     },
     {
-      "warning_type": "File Access",
-      "warning_code": 16,
-      "fingerprint": "aa30d0e2ffa912f13600be81c1bb3c346fb301a8fc1b32fa2ba7fa37317ebf3a",
-      "check_name": "FileAccess",
-      "message": "Model attribute used in file name",
-      "file": "app/models/skin.rb",
-      "line": 217,
-      "link": "http://brakemanscanner.org/docs/warning_types/file_access/",
-      "code": "FileUtils.mkdir_p((Skin.skins_dir + skin_dirname))",
-      "render_path": null,
-      "location": {
-        "type": "method",
-        "class": "Skin",
-        "method": "cache!"
-      },
-      "user_input": "(Skin.skins_dir + skin_dirname)",
-      "confidence": "Medium",
-      "note": ""
-    },
-    {
-      "warning_type": "File Access",
-      "warning_code": 16,
-      "fingerprint": "abbc37116cae8b3e7656be03fa7e63ce186aeef47f59945bf9bc24baa6007d02",
-      "check_name": "FileAccess",
-      "message": "Model attribute used in file name",
-      "file": "app/models/skin.rb",
-      "line": 243,
-      "link": "http://brakemanscanner.org/docs/warning_types/file_access/",
-      "code": "FileUtils.rm_rf((Skin.skins_dir + skin_dirname))",
-      "render_path": null,
-      "location": {
-        "type": "method",
-        "class": "Skin",
-        "method": "clear_cache!"
-      },
-      "user_input": "(Skin.skins_dir + skin_dirname)",
-      "confidence": "Medium",
-      "note": ""
-    },
-    {
       "warning_type": "Mass Assignment",
       "warning_code": 70,
       "fingerprint": "abec7d8a99c9bdc7b62ea90a3cf242e0aedd19181d1455f95bfc8a81716a6092",
@@ -1407,26 +1287,6 @@
       },
       "user_input": "Collection.find_by(:name => params[:collection_id])",
       "confidence": "Weak",
-      "note": ""
-    },
-    {
-      "warning_type": "File Access",
-      "warning_code": 16,
-      "fingerprint": "b52623066b8ea9104e3bccf90aa416a0e3b139c7521afde4f0885f45599b8f22",
-      "check_name": "FileAccess",
-      "message": "Model attribute used in file name",
-      "file": "app/models/skin.rb",
-      "line": 234,
-      "link": "http://brakemanscanner.org/docs/warning_types/file_access/",
-      "code": "File.open(((Skin.skins_dir + skin_dirname) + \"#{2}_#{(\"\" or next_skin.get_sheet_role)}.css\"), \"w\")",
-      "render_path": null,
-      "location": {
-        "type": "method",
-        "class": "Skin",
-        "method": "cache!"
-      },
-      "user_input": "((Skin.skins_dir + skin_dirname) + \"#{2}_#{(\"\" or next_skin.get_sheet_role)}.css\")",
-      "confidence": "Medium",
       "note": ""
     },
     {
@@ -1891,26 +1751,6 @@
       "note": ""
     },
     {
-      "warning_type": "File Access",
-      "warning_code": 16,
-      "fingerprint": "ed9568c987a1ed6812b3ba3a9913e154e51f052a7ff3b6281db9c272ba29b3cf",
-      "check_name": "FileAccess",
-      "message": "Model attribute used in file name",
-      "file": "app/models/skin.rb",
-      "line": 514,
-      "link": "http://brakemanscanner.org/docs/warning_types/file_access/",
-      "code": "File.open(((Skin.site_skins_dir + Skin.get_current_version) + \"/preview.png\"), \"rb\")",
-      "render_path": null,
-      "location": {
-        "type": "method",
-        "class": "Skin",
-        "method": "Skin.create_default"
-      },
-      "user_input": "((Skin.site_skins_dir + Skin.get_current_version) + \"/preview.png\")",
-      "confidence": "Medium",
-      "note": ""
-    },
-    {
       "warning_type": "Cross Site Scripting",
       "warning_code": 2,
       "fingerprint": "f263a8a3cdc2ecf851bd4e687b283d53a974ed5aab7ad1fbab371485995d8547",
@@ -1968,26 +1808,6 @@
       "note": ""
     },
     {
-      "warning_type": "File Access",
-      "warning_code": 16,
-      "fingerprint": "faabf22d5111742048c063ed229c3ea008fd4c7d14d00e5dce5fe1147fd7c12a",
-      "check_name": "FileAccess",
-      "message": "Model attribute used in file name",
-      "file": "app/models/skin.rb",
-      "line": 224,
-      "link": "http://brakemanscanner.org/docs/warning_types/file_access/",
-      "code": "File.open(((Skin.skins_dir + skin_dirname) + \"#{1}_#{\"\"}.css\"), \"w\")",
-      "render_path": null,
-      "location": {
-        "type": "method",
-        "class": "Skin",
-        "method": "cache!"
-      },
-      "user_input": "((Skin.skins_dir + skin_dirname) + \"#{1}_#{\"\"}.css\")",
-      "confidence": "Medium",
-      "note": ""
-    },
-    {
       "warning_type": "Cross Site Scripting",
       "warning_code": 2,
       "fingerprint": "fc5488b7f49a45176e39345f3f21356882a47161efadee214554e6d418edb9a0",
@@ -2007,6 +1827,6 @@
       "note": ""
     }
   ],
-  "updated": "2019-07-17 06:31:37 +0000",
+  "updated": "2019-07-22 20:30:23 +0000",
   "brakeman_version": "3.7.2"
 }
