@@ -22,8 +22,7 @@
           <dd class="<%= tag_type_css_class(type) %> tags">
             <ul class="commas">
               <% if (type == "ArchiveWarning" && hide_warnings?(work)) || (type == "Freeform" && hide_freeform?(work)) %>
-
-                <li id="work_<%= work.id %>_category_<%= type.tableize %>"><%= show_hidden_tags_link(work, type.tableize) %> </li>
+                <%= show_hidden_tag_link_list_item(work, type) %>
              <% else %>
                <%= tag_link_list(tags, link_to_works=true) %>
              <% end %>
