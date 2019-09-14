@@ -174,11 +174,13 @@ describe BookmarkSearchForm do
       expect(searcher.options).to have_key(:bar)
       expect(searcher.options).not_to have_key(:foo)
     end
+
     it "renames the notes field" do
       options = { bookmark_notes: "Mordor" }
       searcher = BookmarkSearchForm.new(options)
       expect(searcher.options[:notes]).to eq("Mordor")
     end
+
     it "unescapes angle brackets for date fields" do
       options = {
         date: "&lt;1 week ago",
@@ -190,6 +192,7 @@ describe BookmarkSearchForm do
       expect(searcher.options[:bookmarkable_date]).to eq(">1 year ago")
       expect(searcher.options[:title]).to eq("escaped &gt;.&lt; field")
     end
+
     it "renames old warning_ids fields" do
       options = { warning_ids: [13] }
       searcher = BookmarkSearchForm.new(options)

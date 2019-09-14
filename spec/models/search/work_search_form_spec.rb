@@ -57,15 +57,18 @@ describe WorkSearchForm do
       searcher = WorkSearchForm.new(options)
       expect(searcher.options[:sort_column]).to eq("authors_to_sort_on")
     end
+
     it "does not override provided sort direction" do
       options = { sort_direction: "asc" }
       searcher = WorkSearchForm.new(options)
       expect(searcher.options[:sort_direction]).to eq("asc")
     end
+
     it "sorts by relevance by default" do
       searcher = WorkSearchForm.new({})
       expect(searcher.options[:sort_column]).to eq("_score")
     end
+
     context "when filtering" do
       it "sorts by date" do
         options = { faceted: true }
@@ -73,6 +76,7 @@ describe WorkSearchForm do
         expect(searcher.options[:sort_column]).to eq("revised_at")
       end
     end
+
     context "when viewing collected works" do
       it "sorts by date" do
         options = { collected: true }
@@ -80,6 +84,7 @@ describe WorkSearchForm do
         expect(searcher.options[:sort_column]).to eq("revised_at")
       end
     end
+
     context "when sorting by author" do
       it "sets the sort direction to ascending" do
         options = { sort_column: "authors_to_sort_on" }
@@ -87,6 +92,7 @@ describe WorkSearchForm do
         expect(searcher.options[:sort_direction]).to eq("asc")
       end
     end
+
     context "when sorting by title" do
       it "sets the sort direction to ascending" do
         options = { sort_column: "title_to_sort_on" }
@@ -94,6 +100,7 @@ describe WorkSearchForm do
         expect(searcher.options[:sort_direction]).to eq("asc")
       end
     end
+
     context "when sorting by other fields" do
       it "sets the sort direction to descending" do
         options = { sort_column: "word_count" }
