@@ -284,6 +284,14 @@ class WorksController < ApplicationController
     @work = Work.new(work_params)
     @chapter = @work.first_chapter
     @chapter.attributes = work_params[:chapter_attributes] if work_params[:chapter_attributes]
+    if params[:preview_button] && work_params[:series_attributes]
+      id = work_params[:series_attributes][:id]
+      title = work_params[:series_attributes][:title]
+      if id.blank? && !title.blank?
+        id = Series.where(title: title).last.id
+      end
+      @serial.id = id
+    end
     @work.ip_address = request.remote_ip
 
     @work.set_challenge_info
@@ -350,14 +358,18 @@ class WorksController < ApplicationController
     @work.preview_mode = !!(params[:preview_button] || params[:edit_button])
     @work.attributes = work_params
     @chapter.attributes = work_params[:chapter_attributes] if work_params[:chapter_attributes]
-    if @work.preview_mode
-      @serial.attributes = work_params[:series_attributes]
-      id = @serial.id
-      title = @serial.title
-      unless id.blank?
-        title = Series.find(id).title
+    if @work.preview_mode && work_params[:series_attributes]
+      id = work_params[:series_attributes][:id]
+      title = work_params[:series_attributes][:title]
+      unless id.blank? && title.blank?
+        if id.blank?
+          id = Series.where(title: title).last.id
+        else
+          title = Series.find(id).title
+        end
+        @serial.id = id
+        @work.series.build(title: title, id: id)
       end
-      @work.series.build(title: title, id: id)
     end
     @work.ip_address = request.remote_ip
 
@@ -368,7 +380,10 @@ class WorksController < ApplicationController
     @work.set_challenge_claim_info
     set_work_form_fields
 
-    if params[:preview_button]
+    if params[:edit_button] || work_cannot_be_saved?
+      set_work_tag_error_messages
+      render :edit
+    elsif params[:preview_button]
       unless @work.posted?
         flash[:notice] = ts("Your changes have not been saved. Please post your work or save without posting if you want to keep them.")
       end
@@ -376,9 +391,6 @@ class WorksController < ApplicationController
       in_moderated_collection
       @preview_mode = true
       render :preview
-    elsif params[:edit_button] || work_cannot_be_saved?
-      set_work_tag_error_messages
-      render :edit
     else
       @work.posted = @chapter.posted = true if params[:post_button]
       @work.set_revised_at_by_chapter(@chapter)

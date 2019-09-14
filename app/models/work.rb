@@ -608,16 +608,13 @@ class Work < ApplicationRecord
 
   # Virtual attribute for series
   def series_attributes=(attributes)
-    if self.preview_mode
-      return
-    end
     if !attributes[:id].blank?
       old_series = Series.find(attributes[:id])
       if old_series.pseuds.none? { |pseud| pseud.user == User.current_user }
         errors.add(:base, ts("You can't add a work to that series."))
         return
       end
-      self.series << old_series unless (old_series.blank? || self.series.include?(old_series))
+      self.serial_works.build(series: old_series) unless (old_series.blank? || self.series.include?(old_series))
       self.adjust_series_restriction
     elsif !attributes[:title].blank?
       new_series = Series.new
@@ -629,7 +626,7 @@ class Work < ApplicationRecord
         new_series.creatorships.build(pseud: pseud)
       end
       new_series.save
-      self.series << new_series
+      self.serial_works.build(series: new_series)
     end
   end
 

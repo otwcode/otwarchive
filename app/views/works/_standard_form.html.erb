@@ -157,7 +157,7 @@
       <!-- Series checkbox (storyseriescheck) -->
       <!-- Checking this box causes the "manage series" dropdown to appear; unchecking it causes it to disappear. -->
       <dt class="serial">
-        <%= check_box_tag "series-options-show", "1", !@work.series.blank?, class: "toggle_formfield" %>
+        <%= check_box_tag "series-options-show", "1", !@work.serial_works.blank?, class: "toggle_formfield" %>
       </dt>
       <dd class="serial">
         <%= label_tag "series-options-show", ts("This work is part of a series") %>
@@ -179,17 +179,19 @@
             <% unless @serial_works.blank? || @work.new_record? %>
               <dt><%= ts("Current Series") %></dt>
               <% for serial in @serial_works %>
-                <dd>
-                  <ul class="actions" role="navigation">
-                    <li>
-                      <%= link_to serial.series.title, serial.series %>
-                    </li>
-                    <li>
-                      <%= link_to ts("Remove Work From Series"), serial_work_path(serial),
-                              method: :delete %>
-                    </li>
-                  </ul>
-                </dd>
+                <% unless serial.new_record? %>
+                  <dd>
+                    <ul class="actions" role="navigation">
+                      <li>
+                        <%= link_to serial.series.title, serial.series %>
+                      </li>
+                      <li>
+                        <%= link_to ts("Remove Work From Series"), serial_work_path(serial),
+                                method: :delete %>
+                      </li>
+                    </ul>
+                  </dd>
+                <% end %>
               <% end %>
             <% end %>
           </dl>

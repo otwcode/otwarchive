@@ -8,10 +8,10 @@ module SeriesHelper
   # this should only show prev and next works visible to the current user
   def series_data_for_work(work)
     series = if work.preview_mode
-      work.series
-    else
-      work.series.select(&:visible?)
-    end
+               work.series
+             else
+               work.series.select(&:visible?)
+             end
     series.map do |serial|
       serial_works = \
         serial.serial_works.includes(:work).references(:works).
