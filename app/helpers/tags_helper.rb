@@ -214,7 +214,7 @@ module TagsHelper
   end
 
   # Takes a tag category class name, e.g. Relationship, and returns a string.
-  # The returned string is plural and used for things other than the HTML class
+  # The returned string is plural and used for more than the HTML class
   # attribute, which is why we don't use tag_type_css_class(tag_type).
   def tag_block_class_name(category)
     if category == "ArchiveWarning"
