@@ -225,13 +225,15 @@ module TagsHelper
   end
 
   # Wraps hidden tags toggle in <li> and <strong> tags for blurbs and work meta.
+  # options[:suppress_toggle_class] is used to skip placing an HTML class on the
+  # toggle in work meta. The class will still be on the tags.
   def show_hidden_tag_link_list_item(item, category, options = {})
     item_class = item.class.to_s.underscore
     class_name = tag_block_class_name(category)
     content_tag(:li,
                 content_tag(:strong, 
                             show_hidden_tags_link(item, class_name)),
-                class: class_name,
+                class: options[:suppress_toggle_class] ? nil : class_name,
                 id: "#{item_class}_#{item.id}_category_#{class_name}")
   end
 
