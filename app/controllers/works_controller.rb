@@ -15,7 +15,7 @@ class WorksController < ApplicationController
   before_action :check_visibility, only: [:show, :navigate]
 
   before_action :load_first_chapter, only: [:show, :edit, :update, :preview]
-  before_action :init_serial, only: [:new, :edit, :update, :preview]
+  before_action :init_serial, only: [:create, :new, :edit, :update, :preview]
 
   cache_sweeper :collection_sweeper
   cache_sweeper :feed_sweeper
@@ -354,7 +354,7 @@ class WorksController < ApplicationController
       @serial.attributes = work_params[:series_attributes]
       id = @serial.id
       title = @serial.title
-      if !id.blank?
+      unless id.blank?
         title = Series.find(id).title
       end
       @work.series.build(title: title, id: id)
