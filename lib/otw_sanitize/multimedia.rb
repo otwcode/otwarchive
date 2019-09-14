@@ -17,11 +17,10 @@ module OTWSanitize
         node      = env[:node]
         node_name = env[:node_name]
 
-        if blacklisted_source?(node)
-          {}
-        else
-          sanitize_node(node)
-        end
+        return unless %w[audio video source track].include?(node_name)
+        return if blacklisted_source?(node)
+
+        sanitize_node(node)
       end
     end
 
