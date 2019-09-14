@@ -188,6 +188,18 @@ describe HtmlCleaner do
             expect(result).not_to match('https:')
           end
         end
+
+        it "allows video tags" do
+          html = "<video></video>"
+          result = sanitize_value(field, html)
+          expect(result).to match('video')
+        end
+
+        it "allows audio tags" do
+          html = "<audio></audio>"
+          result = sanitize_value(field, html)
+          expect(result).to match('audio')
+        end
       end
     end
 
@@ -195,6 +207,11 @@ describe HtmlCleaner do
       [:endnotes, :notes, :summary].each do |field|
         it "should strip iframes" do
           value = '<iframe width="560" height="315" src="//youtube.com/embed/123" frameborder="0"></iframe>'
+          result = sanitize_value(field, value)
+          expect(result).to eq("")
+        end
+        it "should strip video" do
+          value = "<video></video>"
           result = sanitize_value(field, value)
           expect(result).to eq("")
         end

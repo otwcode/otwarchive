@@ -45,6 +45,11 @@ module OTWSanitize
             'crossorigin' => 'anonymous',
             'preload'     => 'metadata'
           }
+        },
+        protocols: {
+          'video' => {
+            'poster' => ['http', 'https']
+          }
         }
       })
       { node_whitelist: [node] }

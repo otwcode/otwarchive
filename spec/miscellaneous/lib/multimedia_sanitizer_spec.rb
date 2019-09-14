@@ -52,6 +52,59 @@ describe OTWSanitize::Multimedia do
         content = Sanitize.fragment(html, config)
         expect(content).to match("flower.webm")
       end
+      it "removes unwhitelisted attributes" do
+        html = %q{
+          <video>
+            <source onerror="alert(1)">
+          </video>}
+        content = Sanitize.fragment(html, config)
+        expect(content).to match("source")
+        expect(content).not_to match("onerror")
+        expect(content).not_to match("alert")
+      end
+      it "removes javascript from poster attribute" do
+        html = %q{
+          <video poster=javascript:alert(1)>
+          </video>}
+        content = Sanitize.fragment(html, config)
+        expect(content).not_to match("poster")
+        expect(content).not_to match("javascript")
+      end
+
+      context "given a blacklisted source" do
+        before do
+          ArchiveConfig.BLACKLISTED_SRCS = ['google.com']
+        end
+        after do
+          ArchiveConfig.BLACKLISTED_SRCS = []
+        end
+
+        it "strips the source element" do
+          html = %q{
+            <video controls width="250">
+              <source src="https://google.com/flower.mp4" type="video/mp4">
+            </video>}
+          content = Sanitize.fragment(html, config)
+          expect(content).not_to match("source")
+          expect(content).not_to match("flower.mp4")
+        end
+        it "strips the video element" do
+          html = %q{
+            <video src="http://google.com/flower.mp4">
+            </video>}
+          content = Sanitize.fragment(html, config)
+          expect(content).not_to match("video")
+          expect(content).not_to match("flower.mp4")
+        end
+        it "strips the audio element" do
+          html = %q{
+            <audio src="google.com/tune.mp3">
+            </audio>}
+          content = Sanitize.fragment(html, config)
+          expect(content).not_to match("audio")
+          expect(content).not_to match("tune.mp3")
+        end
+      end
     end
   end
 end
