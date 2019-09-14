@@ -2,10 +2,10 @@
 
 require 'spec_helper'
 
-describe OTWSanitize::Multimedia do
+describe OTWSanitize::MediaSanitizer do
   describe ".transformer" do
     it "returns a callable object" do
-      transform = OTWSanitize::Multimedia.transformer
+      transform = OTWSanitize::MediaSanitizer.transformer
       expect(transform).to respond_to(:call)
     end
 
@@ -14,7 +14,7 @@ describe OTWSanitize::Multimedia do
         Sanitize::Config.merge(
           Sanitize::Config::BASIC,
           transformers: [
-            OTWSanitize::Multimedia.transformer
+            OTWSanitize::MediaSanitizer.transformer
           ]
         )
       end
