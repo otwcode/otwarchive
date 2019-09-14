@@ -1,16 +1,16 @@
 module OTWSanitize
   module Multimedia
     # Attribute whitelists
-    AUDIO_ATTRIBUTES = [
-      'class', 'controls', 'crossorigin', 'dir',
-      'loop', 'muted', 'preload', 'src', 'title'
-    ]
-    VIDEO_ATTRIBUTES = [
-      'class', 'controls', 'crossorigin', 'dir', 'height',
-      'loop', 'muted', 'poster', 'preload', 'src', 'title', 'width'
-    ]
-    SOURCE_ATTRIBUTES = ['src', 'type']
-    TRACK_ATTRIBUTES = ['default', 'kind', 'label', 'src', 'srclang']
+    AUDIO_ATTRIBUTES = %w[
+      class controls crossorigin dir
+      loop muted preload src title
+    ].freeze
+    VIDEO_ATTRIBUTES = %w[
+      class controls crossorigin dir height
+      loop muted poster preload src title width
+    ].freeze
+    SOURCE_ATTRIBUTES = %w[src type].freeze
+    TRACK_ATTRIBUTES = %w[default kind label src srclang].freeze
 
     def self.transformer
       lambda do |env|
@@ -25,8 +25,9 @@ module OTWSanitize
     end
 
     def self.sanitize_node(node)
-      Sanitize.clean_node!(node, {
-        elements: ['audio', 'video', 'source', 'track'],
+      Sanitize.clean_node!(
+        node,
+        elements: %w[audio video source track],
         attributes: {
           'audio'  => AUDIO_ATTRIBUTES,
           'video'  => VIDEO_ATTRIBUTES,
@@ -48,14 +49,12 @@ module OTWSanitize
         },
         protocols: {
           'video' => {
-            'poster' => ['http', 'https']
+            'poster' => %w[http https]
           }
         }
-      })
+      )
       { node_whitelist: [node] }
     end
-
-    private
 
     def self.blacklisted_source?(node)
       url = node['src']
@@ -65,7 +64,7 @@ module OTWSanitize
 
     def self.source_host(url)
       # Just in case we're missing a protocol
-      unless url.match /http/
+      unless url =~ /http/
         url = "https://" + url
       end
       URI(url).host
