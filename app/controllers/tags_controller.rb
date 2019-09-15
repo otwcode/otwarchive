@@ -159,6 +159,7 @@ class TagsController < ApplicationController
                         end
       end
 
+      # The string used in views/tags/show_hidden.js.erb
       if params[:tag_type] == 'warnings'
         @display_category = 'warnings'
       else

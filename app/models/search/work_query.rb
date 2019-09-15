@@ -37,7 +37,9 @@ class WorkQuery < Query
   # Combine the available queries
   # In this case, name is the only text field
   def queries
-    @queries = [general_query] unless general_query.blank? #if options[:q] || options[:query].present?
+    @queries = [
+      general_query
+    ].flatten.compact
   end
 
   def add_owner
@@ -232,7 +234,7 @@ class WorkQuery < Query
     return {
       query_string: {
         query: query,
-        fields: ["creators^5", "title^7", "endnotes", "notes", "summary", "tag"],
+        fields: ["creators^5", "title^7", "endnotes", "notes", "summary", "tag", "series.title"],
         default_operator: "AND"
       }
     } unless query.blank?
@@ -240,9 +242,14 @@ class WorkQuery < Query
 
   def generate_search_text(query = '')
     search_text = query
-    %i[title creators series_titles].each do |field|
+    %i[title creators].each do |field|
       search_text << split_query_text_words(field, options[field])
     end
+
+    if options[:series_titles].present?
+      search_text << split_query_text_words("series.title", options[:series_titles])
+    end
+
     if options[:collection_ids].blank? && collected?
       search_text << " collection_ids:*"
     end
