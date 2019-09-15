@@ -284,7 +284,7 @@ class WorksController < ApplicationController
     @work = Work.new(work_params)
     @chapter = @work.first_chapter
     @chapter.attributes = work_params[:chapter_attributes] if work_params[:chapter_attributes]
-    if params[:preview_button] && work_params[:series_attributes]
+    if work_params[:series_attributes]
       id = work_params[:series_attributes][:id]
       title = work_params[:series_attributes][:title]
       if id.blank? && !title.blank?
@@ -358,7 +358,7 @@ class WorksController < ApplicationController
     @work.preview_mode = !!(params[:preview_button] || params[:edit_button])
     @work.attributes = work_params
     @chapter.attributes = work_params[:chapter_attributes] if work_params[:chapter_attributes]
-    if @work.preview_mode && work_params[:series_attributes]
+    if work_params[:series_attributes]
       id = work_params[:series_attributes][:id]
       title = work_params[:series_attributes][:title]
       unless id.blank? && title.blank?
@@ -368,7 +368,9 @@ class WorksController < ApplicationController
           title = Series.find(id).title
         end
         @serial.id = id
-        @work.series.build(title: title, id: id)
+        if @work.preview_mode
+          @work.series.build(title: title, id: id)
+        end
       end
     end
     @work.ip_address = request.remote_ip

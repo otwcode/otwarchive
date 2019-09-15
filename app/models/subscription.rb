@@ -22,7 +22,7 @@ class Subscription < ApplicationRecord
             OR (subscribable_id IN (?) AND subscribable_type = 'Series')",
             work.id,
             work.pseuds.pluck(:user_id),
-            work.series.pluck(:id)]).
+            work.serial_works.pluck(:series_id)]).
     group(:user_id)
   }
 
