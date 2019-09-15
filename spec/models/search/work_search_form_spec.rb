@@ -193,20 +193,26 @@ describe WorkSearchForm do
       context "using the \"query\" field" do
         before { run_all_indexing_jobs }
 
+        it "works with general queries" do
+          results = WorkSearchForm.new(query: "dancing").search_results
+          expect(results).to include(work)
+          expect(results).not_to include(second_work, standalone_work)
+        end
+
         it "returns only works in matching series" do
-          results = WorkSearchForm.new(query: "series_titles: dancing").search_results
+          results = WorkSearchForm.new(query: "series.title: dancing").search_results
           expect(results).to include(work)
           expect(results).not_to include(second_work, standalone_work)
         end
 
         it "returns only works in matching series with numbers in titles" do
-          results = WorkSearchForm.new(query: "series_titles: \"persona 5\"").search_results
+          results = WorkSearchForm.new(query: "series.title: \"persona 5\"").search_results
           expect(results).to include(second_work)
           expect(results).not_to include(work, standalone_work)
         end
 
         it "returns all works in series for wildcard queries" do
-          results = WorkSearchForm.new(query: "series_titles: *").search_results
+          results = WorkSearchForm.new(query: "series.title: *").search_results
           expect(results).to include(work, second_work)
           expect(results).not_to include(standalone_work)
         end
