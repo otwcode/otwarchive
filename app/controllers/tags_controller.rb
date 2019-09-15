@@ -146,9 +146,9 @@ class TagsController < ApplicationController
       # Tags aren't directly on series, so we need to handle them differently
       if params[:creation_type] == 'Series'
         if params[:tag_type] == 'warnings'
-          @display_tags = @display_creation.works.visible.collect(&:warning_tags).flatten.compact.uniq.sort
+          @display_tags = @display_creation.works.visible.collect(&:archive_warnings).flatten.compact.uniq.sort
         else
-          @display_tags = @display_creation.works.visible.collect(&:freeform_tags).flatten.compact.uniq.sort
+          @display_tags = @display_creation.works.visible.collect(&:freeforms).flatten.compact.uniq.sort
         end
       else
         @display_tags = case params[:tag_type]

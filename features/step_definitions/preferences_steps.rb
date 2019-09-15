@@ -4,6 +4,20 @@ Given /^I set my preferences to View Full Work mode by default$/ do
   user.preference.save
 end
 
+Given(/^the user "(.*?)" disallows co-creators$/) do |login|
+  user = User.where(login: login).first
+  user = find_or_create_new_user(login, DEFAULT_PASSWORD) if user.nil?
+  user.preference.allow_cocreator = false
+  user.preference.save
+end
+
+Given(/^the user "(.*?)" allows co-creators$/) do |login|
+  user = User.where(login: login).first
+  user = find_or_create_new_user(login, DEFAULT_PASSWORD) if user.nil?
+  user.preference.allow_cocreator = true
+  user.preference.save
+end
+
 When /^I set my preferences to turn off notification emails for comments$/ do
   user = User.current_user
   user.preference.comment_emails_off = true
@@ -111,18 +125,4 @@ When /^I set my preferences to hide both warnings and freeforms$/ do
   check("preference_hide_warnings")
   check("preference_hide_freeform")
   click_button("Update")
-end
-
-Given(/^the user "(.*?)" disallows co-creators$/) do |login|
-  user = User.where(login: login).first
-  user = find_or_create_new_user(login, DEFAULT_PASSWORD) if user.nil?
-  user.preference.allow_cocreator = false
-  user.preference.save
-end
-
-Given(/^the user "(.*?)" allows co-creators$/) do |login|
-  user = User.where(login: login).first
-  user = find_or_create_new_user(login, DEFAULT_PASSWORD) if user.nil?
-  user.preference.allow_cocreator = true
-  user.preference.save
 end

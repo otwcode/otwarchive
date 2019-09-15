@@ -99,7 +99,7 @@ Given /^the user "([^"]*)" exists and has the role "([^"]*)"/ do |login, role|
   user.save
 end
 
-Given /^I am logged in as "([^"]*)" with password "([^"]*)"?$/ do |login, password|
+Given /^I am logged in as "([^"]*)" with password "([^"]*)"$/ do |login, password|
   user = find_or_create_new_user(login, password)
   step("I am logged out")
   step %{I am on the homepage}
