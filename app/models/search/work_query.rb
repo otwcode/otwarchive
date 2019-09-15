@@ -16,7 +16,6 @@ class WorkQuery < Query
   # Combine the available filters
   def filters
     add_owner
-    set_language
 
     @filters ||= (
       visibility_filters +
@@ -58,13 +57,6 @@ class WorkQuery < Query
     return unless field.present?
     options[field] ||= []
     options[field] << owner.id
-  end
-
-  def set_language
-    if options[:language_id].present? && options[:language_id].to_i == 0
-      language = Language.find_by(short: options[:language_id])
-      options[:language_id] = language.id if language.present?
-    end
   end
 
   ####################

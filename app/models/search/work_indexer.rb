@@ -57,7 +57,7 @@ class WorkIndexer < Indexer
       root: false,
       only: [
         :id, :expected_number_of_chapters, :created_at, :updated_at,
-        :major_version, :minor_version, :posted, :language_id, :restricted,
+        :major_version, :minor_version, :posted, :restricted,
         :title, :summary, :notes, :word_count, :hidden_by_admin, :revised_at,
         :title_to_sort_on, :backdate, :endnotes,
         :imported_from_url, :complete, :work_skin_id, :in_anon_collection,
@@ -88,6 +88,7 @@ class WorkIndexer < Indexer
         :nonfiction
       ]
     ).merge(
+      language_id: object.language&.short,
       series: series_data(object)
     )
   end
