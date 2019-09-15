@@ -12,11 +12,6 @@ class SerialWork < ApplicationRecord
 
   scope :in_order, -> { order(:position) }
 
-  def self.with_title
-    select("*, series.title AS title").
-    joins(:series)
-  end
-
   # If you add or remove a work from a series, make sure restricted? is still accurate
   def adjust_series_visibility
     self.series.adjust_restricted unless self.series.blank?
