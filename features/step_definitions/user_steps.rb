@@ -99,14 +99,9 @@ Given /^the user "([^"]*)" exists and has the role "([^"]*)"/ do |login, role|
   user.save
 end
 
-Given /^I am logged in as "([^"]*)" with password "([^"]*)"(?:( with preferences set to hidden warnings and additional tags))?$/ do |login, password, hidden|
+Given /^I am logged in as "([^"]*)" with password "([^"]*)"$/ do |login, password|
   user = find_or_create_new_user(login, password)
   step("I am logged out")
-  if hidden.present?
-    user.preference.hide_warnings = true
-    user.preference.hide_freeform = true
-    user.preference.save
-  end
   step %{I am on the homepage}
   find_link('login-dropdown').click
 

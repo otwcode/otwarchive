@@ -91,8 +91,10 @@ describe BookmarkSearchForm do
     end
 
     describe "searching" do
-      let(:work1) { create(:posted_work, language_id: 1) }
-      let(:work2) { create(:posted_work, language_id: 2) }
+      let(:language) { create(:language, short: "nl") }
+
+      let(:work1) { create(:posted_work, language_id: Language.default.id) }
+      let(:work2) { create(:posted_work, language_id: language.id) }
 
       let!(:bookmark1) { create(:bookmark, bookmarkable: work1) }
       let!(:bookmark2) { create(:bookmark, bookmarkable: work2) }
@@ -100,8 +102,30 @@ describe BookmarkSearchForm do
       before { run_all_indexing_jobs }
 
       context "by work language" do
+        let(:unused_language) { create(:language, short: "tlh") }
+
         it "returns work bookmarkables with specified language" do
-          results = BookmarkSearchForm.new(language_id: 2).bookmarkable_search_results
+          # "Work language" dropdown, with short names
+          results = BookmarkSearchForm.new(language_id: "nl").bookmarkable_search_results
+          expect(results).not_to include work1
+          expect(results).to include work2
+
+          # "Work language" dropdown, with IDs (backward compatibility)
+          bsf = BookmarkSearchForm.new(language_id: language.id)
+          expect(bsf.language_id).to eq("nl")
+          results = bsf.bookmarkable_search_results
+          expect(results).not_to include work1
+          expect(results).to include work2
+
+          # "Any field on work" or "Search within results", with short names
+          results = BookmarkSearchForm.new(bookmarkable_query: "language_id: nl").bookmarkable_search_results
+          expect(results).not_to include work1
+          expect(results).to include work2
+
+          # "Any field on work" or "Search within results", with IDs (backward compatibility)
+          bsf = BookmarkSearchForm.new(bookmarkable_query: "language_id: #{language.id} OR language_id: #{unused_language.id}")
+          expect(bsf.bookmarkable_query).to eq("language_id: nl OR language_id: tlh")
+          results = bsf.bookmarkable_search_results
           expect(results).not_to include work1
           expect(results).to include work2
         end

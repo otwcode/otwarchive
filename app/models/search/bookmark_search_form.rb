@@ -67,7 +67,7 @@ class BookmarkSearchForm
     define_method(filterable) { options[filterable] }
   end
 
-  def initialize(options={})
+  def initialize(options = {})
     @options = processed_options(options)
     @searcher = BookmarkQuery.new(@options)
   end
@@ -120,7 +120,7 @@ class BookmarkSearchForm
       summary << "Type: #{self.bookmarkable_type}"
     end
     if self.language_id.present?
-      language = Language.find_by(id: self.language_id)
+      language = Language.find_by(short: self.language_id)
       if language.present?
         summary << "Work language: #{language.name}"
       end
@@ -182,6 +182,8 @@ class BookmarkSearchForm
     # If we call the form field 'notes', the parser adds html to it
     opts[:notes] = opts[:bookmark_notes]
 
+    opts = standardize_language_ids(opts)
+
     # Support legacy warning searches
     if opts[:warning_ids].present?
       opts[:archive_warning_ids] = opts.delete(:warning_ids)
@@ -190,5 +192,24 @@ class BookmarkSearchForm
     # We need to respect some options that are deliberately set to false, and
     # false.blank? is true, so we check for nil? and not blank? here.
     opts.delete_if { |_, v| v.nil? }
+  end
+
+  # Maintain backward compatibility for old bookmark searches/filters:
+  def standardize_language_ids(opts)
+    # - Using language IDs in the "Work language" dropdown
+    if opts[:language_id].present? && opts[:language_id].to_i != 0
+      language = Language.find_by(id: opts[:language_id])
+      opts[:language_id] = language.short if language.present?
+    end
+
+    # - Using language IDs in "Any field on work" (search) or "Search within results" (filters)
+    if opts[:bookmarkable_query].present?
+      opts[:bookmarkable_query] = opts[:bookmarkable_query].gsub(/\blanguage_id\s*:\s*(\d+)/) do
+        lang = Language.find_by(id: Regexp.last_match[1])
+        lang = Language.default if lang.blank?
+        "language_id: " + lang.short
+      end
+    end
+    opts
   end
 end
