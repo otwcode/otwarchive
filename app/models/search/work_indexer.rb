@@ -1,4 +1,5 @@
 class WorkIndexer < Indexer
+
   def self.klass
     "Work"
   end

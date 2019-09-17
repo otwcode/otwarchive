@@ -385,6 +385,7 @@ class BookmarksController < ApplicationController
       :other_bookmark_tag_names,
       :excluded_bookmark_tag_names,
       rating_ids: [],
+      warning_ids: [], # backwards compatibility
       archive_warning_ids: [],
       category_ids: [],
       fandom_ids: [],
@@ -394,5 +395,4 @@ class BookmarksController < ApplicationController
       tag_ids: [],
     )
   end
-
 end
