@@ -96,4 +96,10 @@ form.inbox fieldset {
   clear: left;
 }
 
+/* AO3-5755: prevent reply form in inbox from jumping around when given focus in Chrome without affecting reply form on homepage */
+.inbox-show #reply-to-comment {
+  top: 0;
+  left: 0;
+}
+
 /*END== */
