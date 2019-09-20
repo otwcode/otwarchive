@@ -85,7 +85,9 @@ module OTWSanitize
 
     def blacklisted_source?
       return unless source_host
-      ArchiveConfig.BLACKLISTED_SRCS.any?{ |blocked| source_host.match(blocked) }
+      ArchiveConfig.BLACKLISTED_MULTIMEDIA_SRCS.any? do |blocked|
+        source_host.match(blocked)
+      end
     end
   end
 end

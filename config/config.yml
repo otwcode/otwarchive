@@ -287,7 +287,7 @@ FIELDS_ALLOWING_VIDEO_EMBEDS: ["content"]
 
 FIELDS_ALLOWING_CSS: ["content", "endnotes", "notes"]
 
-BLACKLISTED_SRCS: []
+BLACKLISTED_MULTIMEDIA_SRCS: []
 
 # Allowed CSS
 #
