@@ -208,13 +208,17 @@ class Series < ApplicationRecord
   def bookmarkable_json
     as_json(
       root: false,
-      only: [:title, :summary, :hidden_by_admin, :restricted, :created_at,
-        :complete],
-      methods: [:revised_at, :posted, :tag, :filter_ids, :rating_ids,
+      only: [
+        :title, :summary, :hidden_by_admin, :restricted, :created_at,
+        :complete
+      ],
+      methods: [
+        :revised_at, :posted, :tag, :filter_ids, :rating_ids,
         :archive_warning_ids, :category_ids, :fandom_ids, :character_ids,
-        :relationship_ids, :freeform_ids, :pseud_ids, :creators, :language_id,
+        :relationship_ids, :freeform_ids, :pseud_ids, :creators,
         :word_count, :work_types]
     ).merge(
+      language_id: language&.short,
       anonymous: anonymous?,
       unrevealed: unrevealed?,
       bookmarkable_type: 'Series',
@@ -231,8 +235,8 @@ class Series < ApplicationRecord
   end
 
   # FIXME: should series have their own language?
-  def language_id
-    works.first.language_id if works.present?
+  def language
+    works.first.language if works.present?
   end
 
   def posted

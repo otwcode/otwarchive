@@ -1,10 +1,121 @@
 require 'spec_helper'
 
 describe WorkSearchForm do
+  describe "#process_options" do
+    it "removes blank options" do
+      options = { foo: nil, bar: '', baz: false, boo: true }
+      searcher = WorkSearchForm.new(options)
+      expect(searcher.options.keys).to include(:boo)
+      expect(searcher.options.keys).not_to include(:foo, :bar, :baz)
+    end
+  end
+
+  describe "#standardize_creator_queries" do
+    it "renames old creator option" do
+      options = { query: "creator: alice" }
+      searcher = WorkSearchForm.new(options)
+      expect(searcher.options[:query]).to eq("creators: alice")
+    end
+  end
+
+  describe "#clean_up_angle_brackets" do
+    it "unescapes angle brackets for numeric and date fields" do
+      options = {
+        word_count: "&lt;2000",
+        hits: "&gt; 100",
+        kudos_count: "&gt;10",
+        comments_count: "&lt; 100",
+        bookmarks_count: "&gt;50",
+        revised_at: "&lt;1 week ago",
+        query: "a &gt; b &lt; c",
+        title: "&lt;3"
+      }
+      searcher = WorkSearchForm.new(options)
+      expect(searcher.options[:word_count]).to eq("<2000")
+      expect(searcher.options[:hits]).to eq("> 100")
+      expect(searcher.options[:kudos_count]).to eq(">10")
+      expect(searcher.options[:comments_count]).to eq("< 100")
+      expect(searcher.options[:bookmarks_count]).to eq(">50")
+      expect(searcher.options[:revised_at]).to eq("<1 week ago")
+      expect(searcher.options[:query]).to eq("a > b < c")
+      expect(searcher.options[:title]).to eq("&lt;3")
+    end
+  end
+
+  describe "#rename_warning_field" do
+    it "renames a legacy field" do
+      options = { warning_ids: [12] }
+      searcher = WorkSearchForm.new(options)
+      expect(searcher.options).not_to have_key(:warning_ids)
+      expect(searcher.options[:archive_warning_ids]).to eq([12])
+    end
+  end
+
+  describe "#set_sorting" do
+    it "does not override provided sort column" do
+      options = { sort_column: "authors_to_sort_on" }
+      searcher = WorkSearchForm.new(options)
+      expect(searcher.options[:sort_column]).to eq("authors_to_sort_on")
+    end
+
+    it "does not override provided sort direction" do
+      options = { sort_direction: "asc" }
+      searcher = WorkSearchForm.new(options)
+      expect(searcher.options[:sort_direction]).to eq("asc")
+    end
+
+    it "sorts by relevance by default" do
+      searcher = WorkSearchForm.new({})
+      expect(searcher.options[:sort_column]).to eq("_score")
+    end
+
+    context "when filtering" do
+      it "sorts by date" do
+        options = { faceted: true }
+        searcher = WorkSearchForm.new(options)
+        expect(searcher.options[:sort_column]).to eq("revised_at")
+      end
+    end
+
+    context "when viewing collected works" do
+      it "sorts by date" do
+        options = { collected: true }
+        searcher = WorkSearchForm.new(options)
+        expect(searcher.options[:sort_column]).to eq("revised_at")
+      end
+    end
+
+    context "when sorting by author" do
+      it "sets the sort direction to ascending" do
+        options = { sort_column: "authors_to_sort_on" }
+        searcher = WorkSearchForm.new(options)
+        expect(searcher.options[:sort_direction]).to eq("asc")
+      end
+    end
+
+    context "when sorting by title" do
+      it "sets the sort direction to ascending" do
+        options = { sort_column: "title_to_sort_on" }
+        searcher = WorkSearchForm.new(options)
+        expect(searcher.options[:sort_direction]).to eq("asc")
+      end
+    end
+
+    context "when sorting by other fields" do
+      it "sets the sort direction to descending" do
+        options = { sort_column: "word_count" }
+        searcher = WorkSearchForm.new(options)
+        expect(searcher.options[:sort_direction]).to eq("desc")
+      end
+    end
+  end
+
   describe "searching" do
     let!(:collection) do
       FactoryBot.create(:collection, id: 1)
     end
+
+    let(:language) { create(:language, short: "ca") }
 
     let!(:work) do
       FactoryBot.create(:work,
@@ -16,7 +127,7 @@ describe WorkSearchForm do
                          posted: true,
                          expected_number_of_chapters: 3,
                          complete: false,
-                         language_id: 1)
+                         language_id: Language.default.id)
     end
 
     let!(:second_work) do
@@ -27,7 +138,7 @@ describe WorkSearchForm do
                          fandom_string: "Harry Potter",
                          character_string: "Harry Potter, Ron Weasley, Hermione Granger",
                          posted: true,
-                         language_id: 2)
+                         language_id: language.id)
     end
 
     before(:each) do
@@ -134,10 +245,32 @@ describe WorkSearchForm do
     end
 
     describe "when searching by language" do
+      let(:unused_language) { create(:language, short: "tlh") }
+
       it "should only return works in that language" do
-        work_search = WorkSearchForm.new(language_id: 1)
-        expect(work_search.search_results).to include work
-        expect(work_search.search_results).not_to include second_work
+        # "Language" dropdown, with short names
+        results = WorkSearchForm.new(language_id: "ca").search_results
+        expect(results).not_to include work
+        expect(results).to include second_work
+
+        # "Language" dropdown, with IDs (backward compatibility)
+        wsf = WorkSearchForm.new(language_id: language.id)
+        expect(wsf.language_id).to eq("ca")
+        results = wsf.search_results
+        expect(results).not_to include work
+        expect(results).to include second_work
+
+        # "Any field" or "Search within results", with short names
+        results = WorkSearchForm.new(query: "language_id: ca").search_results
+        expect(results).not_to include work
+        expect(results).to include second_work
+
+        # "Any field" or "Search within results", with IDs (backward compatibility)
+        wsf = WorkSearchForm.new(query: "language_id: #{language.id} OR language_id: #{unused_language.id}")
+        expect(wsf.query).to eq("language_id: ca OR language_id: tlh")
+        results = wsf.search_results
+        expect(results).not_to include work
+        expect(results).to include second_work
       end
     end
 
@@ -193,20 +326,26 @@ describe WorkSearchForm do
       context "using the \"query\" field" do
         before { run_all_indexing_jobs }
 
+        it "works with general queries" do
+          results = WorkSearchForm.new(query: "dancing").search_results
+          expect(results).to include(work)
+          expect(results).not_to include(second_work, standalone_work)
+        end
+
         it "returns only works in matching series" do
-          results = WorkSearchForm.new(query: "series_titles: dancing").search_results
+          results = WorkSearchForm.new(query: "series.title: dancing").search_results
           expect(results).to include(work)
           expect(results).not_to include(second_work, standalone_work)
         end
 
         it "returns only works in matching series with numbers in titles" do
-          results = WorkSearchForm.new(query: "series_titles: \"persona 5\"").search_results
+          results = WorkSearchForm.new(query: "series.title: \"persona 5\"").search_results
           expect(results).to include(second_work)
           expect(results).not_to include(work, standalone_work)
         end
 
         it "returns all works in series for wildcard queries" do
-          results = WorkSearchForm.new(query: "series_titles: *").search_results
+          results = WorkSearchForm.new(query: "series.title: *").search_results
           expect(results).to include(work, second_work)
           expect(results).not_to include(standalone_work)
         end
