@@ -122,7 +122,7 @@ module OTWSanitize
         attributes: {
           'embed'  => %w[allowfullscreen height src type width],
           'object' => %w[height width],
-          'param'  => %w[name value']
+          'param'  => %w[name value]
         }
       )
 
