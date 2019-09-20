@@ -22,62 +22,55 @@ describe PseudQuery, type: :model, pseud_search: true do
       pseud_bar_2: create(:pseud, user: users[:user_bar], name: "foo"),
       pseud_aisha: create(:pseud, user: users[:user_aisha], name: "عيشة")
     }
-    PseudIndexer.index_from_db
     run_all_indexing_jobs
     pseuds
   end
 
   context "Search all fields" do
-    it "performs a case-insensitive search ('AbC' matches 'abc' first, then variations including abc)" do
+    it "performs a case-insensitive search" do
       pseud_query = PseudQuery.new(query: "AbC")
-      results = pseud_query.search_results
-      results[0].should eq(pseuds[:pseud_abc])
-      results[1].should eq(pseuds[:pseud_abc_num_2])
-      results[2].should eq(pseuds[:pseud_abc_num])
-      results[3].should eq(pseuds[:pseud_abc_d_2])
-      results[4].should eq(pseuds[:pseud_abc_d])
+      names = pseud_query.search_results.map(&:name)
+      expect(names).to include(
+        "abc", "Abc 123 Pseud", "abc123", "abc_d", "Abc_ D"
+      )
+      expect(names).not_to include("bar", "foo")
     end
 
-    it "matches a pseud with and without numbers ('abc123' matches 'abc123' first, then 'Abc 123 Pseud' and 'abc')" do
+    it "ignores numbers and underscores" do
       pseud_query = PseudQuery.new(query: "abc123")
-      results = pseud_query.search_results
-      results[0].should eq(pseuds[:pseud_abc_num])
-      results[1].should eq(pseuds[:pseud_abc_num_2])
-      results[2].should eq(pseuds[:pseud_abc])
-      results.should include(pseuds[:pseud_abc_d])
-      results.should include(pseuds[:pseud_abc_d_2])
+      names = pseud_query.search_results.map(&:name)
+      expect(names).to include(
+        "abc123", "Abc 123 Pseud", "abc", "abc_d", "Abc_ D"
+      )
+      expect(names).not_to include("bar", "foo")
     end
 
     it "matches both pseud and user ('bar' matches 'foo (bar)' and 'bar (foo)'" do
       pseud_query = PseudQuery.new(query: "bar")
       results = pseud_query.search_results
-      results[0].should eq(pseuds[:pseud_bar])
-      results[1].should eq(pseuds[:pseud_foo_2])
-      results[2].should eq(pseuds[:pseud_bar_2])
+      expect(results).to include(pseuds[:pseud_bar])
+      expect(results).to include(pseuds[:pseud_foo_2])
+      expect(results).to include(pseuds[:pseud_bar_2])
     end
   end
 
   context "Name field" do
-    it "performs a case-insensitive search ('AbC' matches 'abc' and 'abc123')" do
+    it "performs a case-insensitive search" do
       pseud_query = PseudQuery.new(name: "AbC")
-      results = pseud_query.search_results
-      results[0].should eq(pseuds[:pseud_abc])
-      results[1].should eq(pseuds[:pseud_abc_num_2])
+      names = pseud_query.search_results.map(&:name)
+      expect(names).to include("abc", "Abc 123 Pseud")
     end
 
     it "matches a pseud with and without numbers ('abc123' matches 'abc123' first, then 'Abc 123 Pseud')" do
       pseud_query = PseudQuery.new(name: "abc123")
-      results = pseud_query.search_results
-      results[0].should eq(pseuds[:pseud_abc_num])
-      results[1].should eq(pseuds[:pseud_abc_num_2])
+      names = pseud_query.search_results.map(&:name)
+      expect(names).to eq(["abc123", "Abc 123 Pseud"])
     end
 
     it "matches multiple pseuds with and without numbers ('abc123, عيشة' matches 'abc123' and 'aisha', then 'Abc 123 Pseud')" do
       pseud_query = PseudQuery.new(name: "abc123,عيشة")
-      results = pseud_query.search_results
-      results.should include(pseuds[:pseud_aisha])
-      results.should include(pseuds[:pseud_abc_num])
-      results[2].should eq(pseuds[:pseud_abc_num_2])
+      names = pseud_query.search_results.map(&:name)
+      expect(names).to include("abc123", "عيشة", "Abc 123 Pseud")
     end
   end
 end
