@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe PseudQuery, type: :model do
+describe PseudQuery, type: :model, pseud_search: true do
   let!(:pseuds) do
     users = {
       user_abc: create(:user, login: "abc"),
@@ -22,7 +22,8 @@ describe PseudQuery, type: :model do
       pseud_bar_2: create(:pseud, user: users[:user_bar], name: "foo"),
       pseud_aisha: create(:pseud, user: users[:user_aisha], name: "عيشة")
     }
-    update_and_refresh_indexes("pseud", 1)
+    PseudIndexer.index_from_db
+    run_all_indexing_jobs
     pseuds
   end
 

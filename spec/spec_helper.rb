@@ -15,9 +15,7 @@ require 'database_cleaner'
 require 'email_spec'
 
 DatabaseCleaner.start
-
 DatabaseCleaner.clean
-
 
 # Requires supporting ruby files with custom matchers and macros, etc,
 # in spec/support/ and its subdirectories.
@@ -44,6 +42,7 @@ RSpec.configure do |config|
     Rails.application.load_tasks
     DatabaseCleaner.strategy = :transaction
     DatabaseCleaner.clean
+    Indexer.all.map(&:prepare_for_testing)
   end
 
   config.before :each do
@@ -54,12 +53,26 @@ RSpec.configure do |config|
 
   config.after :each do
     DatabaseCleaner.clean
-    delete_test_indices
   end
 
   config.after :suite do
     DatabaseCleaner.clean_with :truncation
-    delete_test_indices
+  end
+
+  config.before :each, if: :bookmark_search do
+    BookmarkIndexer.prepare_for_testing
+  end
+
+  config.before :each, if: :pseud_search do
+    PseudIndexer.prepare_for_testing
+  end
+
+  config.before :each, if: :tag_search do
+    TagIndexer.prepare_for_testing
+  end
+
+  config.before :each, if: :work_search do
+    WorkIndexer.prepare_for_testing
   end
 
   # If you're not using ActiveRecord, or you'd prefer not to run each of your
@@ -108,61 +121,13 @@ def clean_the_database
   REDIS_RESQUE.flushall
   REDIS_ROLLOUT.flushall
   REDIS_AUTOCOMPLETE.flushall
-
-  ['work', 'bookmark', 'pseud', 'tag'].each do |index|
-    update_and_refresh_indexes index
-  end
-end
-
-def update_and_refresh_indexes(klass_name, shards = 5)
-  indexer_class = "#{klass_name.capitalize.constantize}Indexer".constantize
-
-  indexer_class.delete_index
-  indexer_class.create_index(shards)
-
-  if klass_name == 'bookmark'
-    bookmark_indexers = {
-      BookmarkedExternalWorkIndexer => ExternalWork,
-      BookmarkedSeriesIndexer => Series,
-      BookmarkedWorkIndexer => Work
-    }
-
-    bookmark_indexers.each do |indexer, bookmarkable|
-      indexer.new(bookmarkable.all.pluck(:id)).index_documents if bookmarkable.any?
-    end
-  end
-
-  indexer = indexer_class.new(klass_name.capitalize.constantize.all.pluck(:id))
-  indexer.index_documents if klass_name.capitalize.constantize.any?
-
-  $elasticsearch.indices.refresh(index: "ao3_test_#{klass_name}s")
-end
-
-def refresh_index_without_updating(klass_name)
-  $elasticsearch.indices.refresh(index: "ao3_test_#{klass_name}s")
 end
 
 def run_all_indexing_jobs
   %w[main background stats].each do |reindex_type|
     ScheduledReindexJob.perform reindex_type
   end
-  %w[work bookmark pseud tag].each do |index|
-    refresh_index_without_updating index
-  end
-end
-
-def delete_index(index)
-  index_name = "ao3_test_#{index}s"
-  if $elasticsearch.indices.exists? index: index_name
-    $elasticsearch.indices.delete index: index_name
-  end
-end
-
-def delete_test_indices
-  indices = $elasticsearch.indices.get_mapping.keys.select { |key| key.match("test") }
-  indices.each do |index|
-    $elasticsearch.indices.delete(index: index)
-  end
+  Indexer.all.map(&:refresh_index)
 end
 
 def get_message_part (mail, content_type)

@@ -2,7 +2,7 @@
 
 require "spec_helper"
 
-describe TagQuery do
+describe TagQuery, tag_search: true do
   context "searching tags by draft status" do
     let!(:work) do
       create(:posted_work,
@@ -20,7 +20,11 @@ describe TagQuery do
              freeform_string: "action,horror")
     end
 
-    before { run_all_indexing_jobs }
+    before(:each) {
+      # TODO: figure out why this doesn't happen automatically
+      TagIndexer.index_from_db
+      run_all_indexing_jobs
+    }
 
     it "returns tags without posted works" do
       results = TagQuery.new(type: "Fandom", has_posted_works: false).search_results.map(&:name)
@@ -100,7 +104,7 @@ describe TagQuery do
     # Make tag wrangled; it should be reindexed without using queues
     before do
       create(:common_tagging, common_tag_id: wrangled_tag.id)
-      refresh_index_without_updating "tag"
+      TagIndexer.refresh_index
     end
 
     it "matches wrangled tags" do

@@ -20,6 +20,18 @@ class Indexer
     raise "Must be defined in subclass"
   end
 
+  def self.all
+    [
+      BookmarkedExternalWorkIndexer,
+      BookmarkedSeriesIndexer,
+      BookmarkedWorkIndexer,
+      BookmarkIndexer,
+      PseudIndexer,
+      TagIndexer,
+      WorkIndexer
+    ]
+  end
+
   # Originally added to allow IndexSweeper to find the Elasticsearch document
   # ids when they do not match the associated ActiveRecord objects' ids.
   #
@@ -49,6 +61,16 @@ class Indexer
         mappings: mapping,
       }
     )
+  end
+
+  def self.prepare_for_testing
+    raise "Wrong environment for test prep!" unless Rails.env.test?
+    delete_index
+    create_index
+  end
+
+  def self.refresh_index
+    $elasticsearch.indices.refresh(index: index_name)
   end
 
   # Note that the index must exist before you can set the mapping
