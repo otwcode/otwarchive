@@ -106,6 +106,10 @@ en:
         other: "Warnings"
       work: "Work"
     attributes:
+      archive_warning:
+        name_with_colon:
+          one: "Warning:"
+          other: "Warnings:"
       category:
         name_with_colon:
           one: "Category:"
@@ -128,10 +132,6 @@ en:
         name_with_colon:
           one: "Relationship:"
           other: "Relationships:"
-      warning:
-        name_with_colon:
-          one: "Warning:"
-          other: "Warnings:"
       creatorships:
         pseud_id: "Pseud"
         base: "Invalid creator:"
