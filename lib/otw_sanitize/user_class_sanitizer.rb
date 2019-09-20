@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # allow users to specify class attributes in their html
 # scrub invalid class names
 module OTWSanitize
@@ -10,6 +12,7 @@ module OTWSanitize
 
     attr_reader :node
 
+    # Takes a Nokogiri node
     def initialize(node)
       @node = node
     end

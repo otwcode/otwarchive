@@ -1,21 +1,24 @@
+# frozen_string_literal: true
+
+# Creates a Sanitize transformer to sanitize embedded media
 module OTWSanitize
   class EmbedSanitizer
     WHITELIST_REGEXES = {
-      ao3:              /^archiveofourown\.org\//,
-      archiveorg:       /^archive\.org\//,
-      criticalcommons:  /^criticalcommons\.org\//,
-      dailymotion:      /^dailymotion\.com\//,
-      eighttracks:      /^8tracks\.com\//,
-      google:           /^google\.com\//,
-      metacafe:         /^metacafe\.com\//,
-      ning:             /^(static\.)?ning\.com\//,
-      podfic:           /^podfic\.com\//,
-      soundcloud:       /^(w\.)?soundcloud\.com\//,
-      spotify:          /^(open\.)?spotify\.com\//,
-      viddersnet:       /^vidders\.net\//,
-      viddertube:       /^viddertube\.com\//,
-      vimeo:            /^(player\.)?vimeo\.com\//,
-      youtube:          /^youtube(-nocookie)?\.com\//
+      ao3:              %r{^archiveofourown\.org/},
+      archiveorg:       %r{^archive\.org/},
+      criticalcommons:  %r{^criticalcommons\.org/},
+      dailymotion:      %r{^dailymotion\.com/},
+      eighttracks:      %r{^8tracks\.com/},
+      google:           %r{^google\.com/},
+      metacafe:         %r{^metacafe\.com/},
+      ning:             %r{^(static\.)?ning\.com/},
+      podfic:           %r{^podfic\.com/},
+      soundcloud:       %r{^(w\.)?soundcloud\.com/},
+      spotify:          %r{^(open\.)?spotify\.com/},
+      viddersnet:       %r{^vidders\.net/},
+      viddertube:       %r{^viddertube\.com/},
+      vimeo:            %r{^(player\.)?vimeo\.com/},
+      youtube:          %r{^youtube(-nocookie)?\.com/}
     }.freeze
 
     ALLOWS_FLASHVARS = %i[
@@ -28,6 +31,7 @@ module OTWSanitize
       soundcloud spotify viddertube vimeo youtube
     ].freeze
 
+    # Creates a callable transformer for the sanitizer to use
     def self.transformer
       lambda do |env|
         new(env[:node]).sanitized_node
@@ -36,6 +40,7 @@ module OTWSanitize
 
     attr_reader :node
 
+    # Takes a Nokogiri node
     def initialize(node)
       @node = node
     end
@@ -69,9 +74,11 @@ module OTWSanitize
     # <param> element whose parent is an <object>, or an embed or iframe
     def embed_node?
       (node_name == 'param' && parent_name == 'object') ||
-      %w(embed iframe).include?(node_name)
+        %w(embed iframe).include?(node_name)
     end
 
+    # Compare the url to our list of whitelisted sources
+    # and return the appropriate source symbol
     def source
       return @source if @source
       WHITELIST_REGEXES.each_pair do |name, reg|
@@ -83,6 +90,7 @@ module OTWSanitize
       @source
     end
 
+    # Get the url of the thing we're embedding and standardize it
     def source_url
       return @source_url if @source_url
       if node_name == 'param'
@@ -93,68 +101,74 @@ module OTWSanitize
         url = node['src']
       end
       # strip off optional protocol and www
-      @source_url = url&.gsub(/^(?:https?:)?\/\/(?:www\.)?/i, '')
+      protocol_regex = %r{^(?:https?:)?//(?:www\.)?}i
+      @source_url = url&.gsub(protocol_regex, '')
     end
 
     # For sites that support https, ensure we use a secure embed
     def ensure_https
-      if supports_https? && node['src'].present?
-        node['src'] = node['src'].gsub("http:", "https:")
-      end
+      return unless supports_https? && node['src'].present?
+      node['src'] = node['src'].gsub("http:", "https:")
     end
 
-    # We're now certain that this is an embed from a trusted source, but we still need to run
-    # it through a special Sanitize step to ensure that no unwanted elements or
-    # attributes that don't belong in a video embed can sneak in.
+    # We're now certain that this is an embed from a trusted source, but we
+    # still need to run it through a special Sanitize step to ensure
+    # that no unwanted elements or attributes that don't belong in
+    # a video embed can sneak in.
     def sanitize_object
-      Sanitize.clean_node!(parent, {
-        elements: ['embed', 'object', 'param'],
+      Sanitize.clean_node!(
+        parent,
+        elements: %w[embed object param],
         attributes: {
-          'embed'  => ['allowfullscreen', 'height', 'src', 'type', 'width'],
-          'object' => ['height', 'width'],
-          'param'  => ['name', 'value']
+          'embed'  => %w[allowfullscreen height src type width],
+          'object' => %w[height width],
+          'param'  => %w[name value']
         }
-      })
+      )
 
-      # disable script access and networking
-      parent['allowscriptaccess'] = 'never'
-      parent['allownetworking'] = 'internal'
-
-      parent.search("param").each do |paramnode|
-        if paramnode[:name].downcase == "allowscriptaccess"
-          paramnode.unlink
-        end
-        if paramnode[:name].downcase == "allownetworking"
-          paramnode.unlink
-        end
-      end
+      disable_scripts(parent)
 
       { node_whitelist: [node, parent] }
     end
 
     def sanitize_embed
-      Sanitize.clean_node!(node, {
-        elements: ['embed', 'iframe'],
+      Sanitize.clean_node!(
+        node,
+        elements: %w[embed iframe],
         attributes: {
-          'embed'   => %w[
+          'embed' => %w[
             allowfullscreen height src type width
           ] + optional_embed_attributes,
-          'iframe'  => %w[
+          'iframe' => %w[
             allowfullscreen frameborder height src title
             class type width
           ]
         }
-      })
+      )
 
       if node_name == 'embed'
-        # disable script access and networking
-        node['allowscriptaccess'] = 'never'
-        node['allownetworking'] = 'internal'
+        disable_scripts(node)
+
         unless allows_flashvars?
           node['flashvars'] = ""
         end
       end
-      return { node_whitelist: [node, parent] }
+      { node_whitelist: [node, parent] }
+    end
+
+    # disable script access and networking
+    def disable_scripts(embed_node)
+      embed_node['allowscriptaccess'] = 'never'
+      embed_node['allownetworking'] = 'internal'
+
+      embed_node.search("param").each do |param_node|
+        if param_node[:name].downcase == "allowscriptaccess"
+          param_node.unlink
+        end
+        if param_node[:name].downcase == "allownetworking"
+          param_node.unlink
+        end
+      end
     end
 
     def optional_embed_attributes

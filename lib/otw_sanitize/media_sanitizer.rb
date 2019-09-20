@@ -1,3 +1,6 @@
+# frozen_string_literal: true
+
+# Creates a Sanitize transformer to sanitize audio and video tags
 module OTWSanitize
   class MediaSanitizer
     # Attribute whitelists
@@ -7,8 +10,8 @@ module OTWSanitize
     ].freeze
 
     VIDEO_ATTRIBUTES = %w[
-      class controls crossorigin dir height
-      loop muted poster preload src title width
+      class controls crossorigin dir height loop
+      muted playsinline poster preload src title width
     ].freeze
 
     SOURCE_ATTRIBUTES = %w[src type].freeze
@@ -42,6 +45,7 @@ module OTWSanitize
       }
     }.freeze
 
+    # Creates a callable transformer for the sanitizer to use
     def self.transformer
       lambda do |env|
         new(env[:node]).sanitized_node
@@ -50,10 +54,12 @@ module OTWSanitize
 
     attr_reader :node
 
+    # Takes a Nokogiri node
     def initialize(node)
       @node = node
     end
 
+    # Skip if it's not media or if we don't want to whitelist it
     def sanitized_node
       return unless media_node?
       return if blacklisted_source?
@@ -71,7 +77,7 @@ module OTWSanitize
     end
 
     def source_url
-      node['src'] || ""
+      node["src"] || ""
     end
 
     def source_host
