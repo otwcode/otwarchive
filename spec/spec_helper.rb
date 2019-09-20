@@ -59,19 +59,19 @@ RSpec.configure do |config|
     DatabaseCleaner.clean_with :truncation
   end
 
-  config.before :each, if: :bookmark_search do
+  config.before :each, bookmark_search: true do
     BookmarkIndexer.prepare_for_testing
   end
 
-  config.before :each, if: :pseud_search do
+  config.before :each, pseud_search: true do
     PseudIndexer.prepare_for_testing
   end
 
-  config.before :each, if: :tag_search do
+  config.before :each, tag_search: true do
     TagIndexer.prepare_for_testing
   end
 
-  config.before :each, if: :work_search do
+  config.before :each, work_search: true do
     WorkIndexer.prepare_for_testing
   end
 
