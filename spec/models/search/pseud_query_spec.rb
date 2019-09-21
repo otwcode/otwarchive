@@ -30,9 +30,9 @@ describe PseudQuery, type: :model, pseud_search: true do
     it "performs a case-insensitive search" do
       pseud_query = PseudQuery.new(query: "AbC")
       names = pseud_query.search_results.map(&:name)
-      expect(names[0..2]).to eq([
-        "abc", "Abc 123 Pseud", "abc123"
-      ])
+      expect(names[0..2]).to eq(
+        ["abc", "Abc 123 Pseud", "abc123"]
+      )
       # these two have the same score
       expect(names).to include("abc_d", "Abc_ D")
     end
@@ -40,18 +40,18 @@ describe PseudQuery, type: :model, pseud_search: true do
     it "matches a pseud with and without numbers" do
       pseud_query = PseudQuery.new(query: "abc123")
       names = pseud_query.search_results.map(&:name)
-      expect(names[0..2]).to eq([
-        "abc123", "Abc 123 Pseud", "abc"
-      ])
+      expect(names[0..2]).to eq(
+        ["abc123", "Abc 123 Pseud", "abc"]
+      )
       expect(names).to include("abc_d", "Abc_ D")
     end
 
     it "matches both pseud and user and ranks the pseud match higher" do
       pseud_query = PseudQuery.new(query: "bar")
       bylines = pseud_query.search_results.map(&:byline)
-      expect(bylines).to eq([
-        "bar", "bar (foo)", "foo (bar)"
-      ])
+      expect(bylines).to eq(
+        ["bar", "bar (foo)", "foo (bar)"]
+      )
     end
   end
 
