@@ -136,7 +136,7 @@ Scenario: A user cannot see another user's related works page
   When I am logged in as "inspiration"
   When I go to remixer's user page
   Then I should not see "Related Works"
-  When I go to remixers's related works page
+  When I go to remixer's related works page
   # It's currently possible to access a user's related works page directly
   # Then I should see "Sorry, you don't have permission to access the page you were trying to reach."
 
@@ -371,16 +371,22 @@ Scenario: Anonymous works listed as inspiration should have links to the authors
 Scenario: When a user is notified that a co-authored work has been inspired by a work they posted,
   the e-mail should link to each author's URL instead of showing escaped HTML
   Given I have related works setup
+    And the user "misterdeejay" exists and is activated
+    And the user "misterdeejay" allows co-creators
     And I am logged in as "inspiration"
     And I post the work "Seed of an Idea"
   When I am logged in as "inspired"
     And I set up the draft "Seedling of an Idea"
-    And I add the co-author "misterdeejay"
+    And I invite the co-author "misterdeejay"
+    And I preview the work
+  Then I should not see "misterdeejay"
+    But 1 email should be delivered to "misterdeejay"
+    And the email should contain "The user inspired has invited your pseud misterdeejay to be listed as a co-creator on the following work"
+  When the user "misterdeejay" accepts all creator invites
+    And I edit the work "Seedling of an Idea"
     And I list the work "Seed of an Idea" as inspiration
     And I preview the work
     And I post the work
-  Then 1 email should be delivered to "misterdeejay"
-    And the email should contain "You have been listed as a co-creator on the following work"
   Then 1 email should be delivered to "inspiration"
     And the email should link to inspired's user url
     And the email should not contain "&lt;a href=&quot;http://archiveofourown.org/users/inspired/pseuds/inspired&quot;"

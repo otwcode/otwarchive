@@ -2,17 +2,14 @@ testuser:
   id: 1
   login: testuser
   email: test@example.com
-  activated_at: 2009-12-12 21:08:07 +00:00
-  persistence_token: foo1
+  confirmed_at: 2009-12-12 21:08:07 +00:00
 testuser2:
   id: 2
   login: testuser2
   email: test2@example.com
-  activated_at: 2009-12-12 21:08:07 +00:00
-  persistence_token: foo2
+  confirmed_at: 2009-12-12 21:08:07 +00:00
 sad_user_with_no_pseuds:
   id: 3
   login: sad_user_with_no_pseuds
   email: test3@example.com
-  activated_at: 2009-12-12 21:08:07 +00:00
-  persistence_token: foo3
+  confirmed_at: 2009-12-12 21:08:07 +00:00

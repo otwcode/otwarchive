@@ -17,14 +17,14 @@
         <%= live_validation_for_field("work_title",
               maximum_length: ArchiveConfig.TITLE_MAX,
               minimum_length: ArchiveConfig.TITLE_MIN,
-              failureMessage: ts("We need a title! (At least %{min_length} characters long, please.)",
+              failureMessage: ts("We need a title! (At least %{min_length} character long, please.)",
                 min_length: ArchiveConfig.TITLE_MIN.to_s))
         %>
         <%= generate_countdown_html("work_title", ArchiveConfig.TITLE_MAX) %>
       </dd>
 
       <!-- Add coauthors-->
-      <%= render "pseuds/byline", form: f, type: "work" %>
+      <%= render "pseuds/byline", form: f, object: @work %>
 
       <dt class="summary">
         <%= f.label :summary, ts("Summary", max: ArchiveConfig.SUMMARY_MAX.to_s) %>
@@ -121,7 +121,7 @@
                 <%= link_to_help "languages-help" %>
               </dt>
               <dd>
-                <%= p.collection_select(:language_id, Language.order(:short), :id, :name, prompt: " ") %>
+                <%= p.collection_select(:language_id, sorted_languages, :id, :name, prompt: " ") %>
               </dd>
 
               <dt class="translation"><%= p.check_box :translation %></dt>
@@ -169,11 +169,11 @@
             <%= fields_for "work[series_attributes]" do |s| %>
               <dt><%= s.label "id", ts("Choose one of your existing series:") %></dt>
               <dd>
-                <%= s.collection_select(:id, @series, :id, :title, { selected: work_series_value(:id), prompt: true }) %>
+                <%= s.collection_select(:id, @series, :id, :title, { selected: work_series_id(@work), prompt: true }) %>
               </dd>
 
               <dt><%= s.label :title, ts("Or create and use a new one:") %></dt>
-              <dd><%= s.text_field :title, value: work_series_value(:title) %></dd>
+              <dd><%= s.text_field :title %></dd>
             <% end %>
 
             <% unless @serial_works.blank? || @work.new_record? %>
@@ -207,9 +207,9 @@
 
           <fieldset id="chapters-options">
             <dl>
-              <dt><%= ts("Chapter 1 of") %></dt>
+              <dt><%= f.label :wip_length, ts("Chapter 1 of") %></dt>
               <dd><%= f.text_field :wip_length, class: "number" %></dd>
-              <dt><%= ts("Chapter Title:") %></dt>
+              <dt><%= c.label :title, ts("Chapter Title:") %></dt>
               <dd><%= c.text_field :title, value: @chapter.title %></dd>
             </dl>
           </fieldset>

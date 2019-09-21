@@ -1,13 +1,12 @@
 <% cache("tagsets_#{@tag_set_ids.join('-')}_#{@tag_sets.collect(&:updated_at).sort.last}", skip_digest: true) do %>
   <h2>
-    <%= ts("#{@tag_type.classify} Options") %>
+    <%= ts("%{tag_type} Options", tag_type: tag_type_label_name(tag_type)) %>
     <%= ts("From") %>:</h2>
     <ul class="commas">
       <% @tag_sets.each do |ts| %>
         <li><%= link_to ts.title, tag_set_path(ts) %></li>
       <% end %>
     </ul>
-
 
   <% if @tags.empty? %>
     <p class="note"><%= ts("None to list!") %></p>
