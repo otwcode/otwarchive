@@ -1,12 +1,12 @@
 source 'https://rubygems.org'
 
-ruby '2.3.4'
+ruby '2.6.3'
 
 gem 'test-unit', '~> 3.2'
 
 gem 'bundler'
 
-gem 'rails', '~> 5.1.6.2'
+gem 'rails', '~> 5.2.3'
 
 gem 'rails-observers', git: 'https://github.com/rails/rails-observers'
 gem 'actionpack-page_caching'
@@ -22,7 +22,7 @@ gem 'rails-controller-testing'
 
 # Database
 # gem 'sqlite3-ruby', require: 'sqlite3'
-gem 'mysql2', '0.3.20'
+gem 'mysql2', '0.4.4'
 
 #https://github.com/qertoip/transaction_retry
 # We don't use the isolation gem directly, but it needs to be
@@ -87,9 +87,6 @@ gem 'permit_yo'
 # http://openhood.com/rack/ruby/2010/07/15/rack-test-warning/
 gem 'escape_utils', '1.2.1'
 
-# Replaced by nativce pluck method as of Rails 4
-# gem 'valium'
-
 gem 'timeliness'
 
 # TODO: rpm_contrib is deprecated and needs to be replaced
@@ -108,7 +105,7 @@ gem 'google_visualr', git: 'https://github.com/winston/google_visualr'
 
 # Globalize for translations
 # Must use master branch and activemodel-serializers-xml for Rails 5 upgrade
-gem 'globalize', git: 'https://github.com/panorama-berlin/globalize'
+gem 'globalize', git: 'https://github.com/globalize/globalize'
 gem 'activemodel-serializers-xml'
 
 # Add a clean notifier that shows we are on dev or test
@@ -140,7 +137,7 @@ group :test do
   gem 'shoulda'
   gem 'capybara', '~> 2.16.1'
   gem 'database_cleaner', '1.5.2'
-  gem 'cucumber', '~> 2.4.0'
+  gem 'cucumber', '~> 3.0.2'
   gem 'poltergeist'
   gem 'capybara-screenshot'
   gem 'cucumber-rails', '~> 1.5', require: false
