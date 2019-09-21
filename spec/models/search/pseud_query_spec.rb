@@ -30,27 +30,28 @@ describe PseudQuery, type: :model, pseud_search: true do
     it "performs a case-insensitive search" do
       pseud_query = PseudQuery.new(query: "AbC")
       names = pseud_query.search_results.map(&:name)
-      expect(names).to include(
-        "abc", "Abc 123 Pseud", "abc123", "abc_d", "Abc_ D"
-      )
-      expect(names).not_to include("bar", "foo")
+      expect(names[0..2]).to eq([
+        "abc", "Abc 123 Pseud", "abc123"
+      ])
+      # these two have the same score
+      expect(names).to include("abc_d", "Abc_ D")
     end
 
-    it "ignores numbers and underscores" do
+    it "matches a pseud with and without numbers" do
       pseud_query = PseudQuery.new(query: "abc123")
       names = pseud_query.search_results.map(&:name)
-      expect(names).to include(
-        "abc123", "Abc 123 Pseud", "abc", "abc_d", "Abc_ D"
-      )
-      expect(names).not_to include("bar", "foo")
+      expect(names[0..2]).to eq([
+        "abc123", "Abc 123 Pseud", "abc"
+      ])
+      expect(names).to include("abc_d", "Abc_ D")
     end
 
-    it "matches both pseud and user ('bar' matches 'foo (bar)' and 'bar (foo)'" do
+    it "matches both pseud and user and ranks the pseud match higher" do
       pseud_query = PseudQuery.new(query: "bar")
-      results = pseud_query.search_results
-      expect(results).to include(pseuds[:pseud_bar])
-      expect(results).to include(pseuds[:pseud_foo_2])
-      expect(results).to include(pseuds[:pseud_bar_2])
+      bylines = pseud_query.search_results.map(&:byline)
+      expect(bylines).to eq([
+        "bar", "bar (foo)", "foo (bar)"
+      ])
     end
   end
 
@@ -58,19 +59,20 @@ describe PseudQuery, type: :model, pseud_search: true do
     it "performs a case-insensitive search" do
       pseud_query = PseudQuery.new(name: "AbC")
       names = pseud_query.search_results.map(&:name)
-      expect(names).to include("abc", "Abc 123 Pseud")
+      expect(names).to eq(["abc", "Abc 123 Pseud"])
     end
 
-    it "matches a pseud with and without numbers ('abc123' matches 'abc123' first, then 'Abc 123 Pseud')" do
+    it "matches a pseud with and without numbers" do
       pseud_query = PseudQuery.new(name: "abc123")
       names = pseud_query.search_results.map(&:name)
       expect(names).to eq(["abc123", "Abc 123 Pseud"])
     end
 
-    it "matches multiple pseuds with and without numbers ('abc123, عيشة' matches 'abc123' and 'aisha', then 'Abc 123 Pseud')" do
+    it "matches multiple pseuds with and without numbers and returns exact matches first" do
       pseud_query = PseudQuery.new(name: "abc123,عيشة")
       names = pseud_query.search_results.map(&:name)
-      expect(names).to include("abc123", "عيشة", "Abc 123 Pseud")
+      expect(names).to include("abc123", "عيشة")
+      expect(names.last).to eq("Abc 123 Pseud")
     end
   end
 end

@@ -46,7 +46,7 @@ class Indexer
     end
   end
 
-  def self.create_index(shards = 5)
+  def self.create_index(shards: 5)
     $elasticsearch.indices.create(
       index: index_name,
       body: {
@@ -66,7 +66,9 @@ class Indexer
   def self.prepare_for_testing
     raise "Wrong environment for test prep!" unless Rails.env.test?
     delete_index
-    create_index
+    # Relevance sorting is unpredictable with multiple shards
+    # and small amounts of data
+    create_index(shards: 1)
   end
 
   def self.refresh_index
