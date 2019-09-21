@@ -9,6 +9,9 @@ Bundler/OrderedGems:
 Layout/DotPosition:
   EnforcedStyle: leading
 
+Layout/IndentArray:
+  EnforcedStyle: consistent
+
 Layout/MultilineMethodCallIndentation:
   EnforcedStyle: indented
 
