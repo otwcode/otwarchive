@@ -43,7 +43,7 @@ class Collection < ApplicationRecord
   # We need to get rid of all of these if the challenge is destroyed
   after_save :clean_up_challenge
   def clean_up_challenge
-    if self.challenge.nil?
+    if self.challenge_id.nil?
       assignments.each {|assignment| assignment.destroy}
       potential_matches.each {|potential_match| potential_match.destroy}
       signups.each {|signup| signup.destroy}
