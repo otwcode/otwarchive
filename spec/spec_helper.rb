@@ -13,6 +13,7 @@ require 'rspec/rails'
 require 'factory_bot'
 require 'database_cleaner'
 require 'email_spec'
+require 'webmock/rspec'
 
 DatabaseCleaner.start
 
