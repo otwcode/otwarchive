@@ -942,7 +942,7 @@ GEM
       timecop
     cucumber-wire (0.0.1)
     dalli (2.7.10)
-    database_cleaner (1.5.2)
+    database_cleaner (1.7.0)
     delorean (2.1.0)
       chronic
     devise (4.7.1)
@@ -958,12 +958,12 @@ GEM
     docile (1.1.5)
     domain_name (0.5.20190701)
       unf (>= 0.0.5, < 1.0.0)
-    elasticsearch (7.3.0)
-      elasticsearch-api (= 7.3.0)
-      elasticsearch-transport (= 7.3.0)
-    elasticsearch-api (7.3.0)
+    elasticsearch (6.0.3)
+      elasticsearch-api (= 6.0.3)
+      elasticsearch-transport (= 6.0.3)
+    elasticsearch-api (6.0.3)
       multi_json
-    elasticsearch-transport (7.3.0)
+    elasticsearch-transport (6.0.3)
       faraday
       multi_json
     email_spec (1.6.0)
@@ -1235,10 +1235,10 @@ GEM
       rack (>= 1.0.0)
     warden (1.2.8)
       rack (>= 2.0.6)
-    webmock (1.24.6)
+    webmock (3.7.5)
       addressable (>= 2.3.6)
       crack (>= 0.3.2)
-      hashdiff
+      hashdiff (>= 0.4.0, < 2.0.0)
     webrobots (0.1.2)
     websocket-driver (0.7.1)
       websocket-extensions (>= 0.1.0)
@@ -1283,11 +1283,11 @@ DEPENDENCIES
   cucumber-rails (~> 1.5)
   cucumber-timecop
   dalli
-  database_cleaner (= 1.5.2)
+  database_cleaner (= 1.7.0)
   delorean
   devise
   devise-async
-  elasticsearch (>= 6.0.0)
+  elasticsearch (~> 6.0.0)
   email_spec (= 1.6.0)
   escape_utils (= 1.2.1)
   factory_bot (~> 5.0.2)
@@ -1341,7 +1341,7 @@ DEPENDENCIES
   unicorn (~> 5.5)
   unidecoder
   vcr (~> 3.0, >= 3.0.1)
-  webmock (~> 1.24.2)
+  webmock (~> 3.7.5)
   whenever (~> 0.6.2)
   whiny_validation
   will_paginate (>= 3.0.2)

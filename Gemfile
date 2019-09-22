@@ -65,7 +65,7 @@ gem 'resque', '>=1.14.0'
 gem 'resque_mailer'
 gem 'resque-scheduler'
 #gem 'daemon-spawn', require: 'daemon_spawn'
-gem 'elasticsearch', '>=6.0.0'
+gem 'elasticsearch', '~> 6.0.0'
 gem 'aws-sdk'
 gem 'css_parser'
 
@@ -136,7 +136,7 @@ group :test do
   gem 'pickle'
   gem 'shoulda'
   gem 'capybara', '~> 2.16.1'
-  gem 'database_cleaner', '1.5.2'
+  gem 'database_cleaner', '1.7.0'
   gem 'cucumber', '~> 3.0.2'
   gem 'poltergeist'
   gem 'capybara-screenshot'
@@ -147,7 +147,7 @@ group :test do
   gem 'faker', '~> 1.6.3'
   # Record and replay data from external URLs
   gem 'vcr', '~> 3.0', '>= 3.0.1'
-  gem 'webmock', '~> 1.24.2'
+  gem 'webmock', '~> 3.7.5'
   gem 'timecop'
   gem 'cucumber-timecop', require: false
   # Code coverage
