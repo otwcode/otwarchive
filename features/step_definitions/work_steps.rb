@@ -152,10 +152,11 @@ Given /^the work(?: "([^"]*)")? with(?: (\d+))? comments setup$/ do |title, n_co
   title ||= "Blabla"
   step %{I have a work "#{title}"}
   step %{I am logged out}
-  n_comments ||= 3
-  n_comments.to_i.times do |i|
+  n_comments = 3 if n_comments.zero?
+  n_comments.times do |i|
+    text = Faker::Lorem.paragraph
     step %{I am logged in as a random user}
-    step %{I post the comment "Keep up the good work" on the work "#{title}"}
+    step %{I post the comment "#{text}" on the work "#{title}"}
     step %{I am logged out}
   end
 end
