@@ -214,16 +214,6 @@ class CollectionItem < ApplicationRecord
     }.join(", ")
   end
 
-  def remove=(value)
-    if value == "1"
-      self.destroy
-    end
-  end
-
-  def remove
-    ""
-  end
-
   def title
     item.respond_to?(:title) ? item.title : item.bookmarkable.title
   end
