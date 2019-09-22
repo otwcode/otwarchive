@@ -165,8 +165,8 @@ Given /^the work(?: "([^"]*)")? with(?: (\d+))? bookmarks? setup$/ do |title, n_
   title ||= "Blabla"
   step %{I have a work "#{title}"}
   step %{I am logged out}
-  n_bookmarks ||= 3
-  n_bookmarks.to_i.times do |i|
+  n_bookmarks = 3 if n_bookmarks.zero?
+  n_bookmarks.times do |i|
     step %{I am logged in as a random user}
     step %{I bookmark the work "#{title}"}
     step %{I am logged out}

@@ -148,8 +148,8 @@ end
 Given /^a tag "([^\"]*)" with(?: (\d+))? comments$/ do |tagname, n_comments|
   tag = Fandom.find_or_create_by_name(tagname)
   step %{I am logged out}
-  n_comments ||= 3
-  n_comments.to_i.times do |i|
+  n_comments = 3 if n_comments.zero?
+  n_comments.times do |i|
     step %{I am logged in as a tag wrangler}
     step %{I post the comment "Comment number #{i}" on the tag "#{tagname}"}
     step %{I am logged out}
@@ -168,8 +168,8 @@ end
 Given /^a period-containing tag "([^\"]*)" with(?: (\d+))? comments$/ do |tagname, n_comments|
   tag = Fandom.find_or_create_by_name(tagname)
   step %{I am logged out}
-  n_comments ||= 3
-  n_comments.to_i.times do |i|
+  n_comments = 3 if n_comments.zero?
+  n_comments.times do |i|
     step %{I am logged in as a tag wrangler}
     step %{I post the comment "Comment number #{i}" on the period-containing tag "#{tagname}"}
     step %{I am logged out}
@@ -316,7 +316,7 @@ When /^the tag "([^"]*)" is canonized$/ do |tag|
 end
 
 When /^I make a(?: (\d+)(?:st|nd|rd|th)?)? Wrangling Guideline$/ do |n|
-  n ||= 1
+  n = 1 if n.zero?
   visit new_wrangling_guideline_path
   fill_in("Guideline text", with: "Number #{n} posted Wrangling Guideline, this is.")
   fill_in("Title", with: "Number #{n} Wrangling Guideline")
@@ -324,7 +324,7 @@ When /^I make a(?: (\d+)(?:st|nd|rd|th)?)? Wrangling Guideline$/ do |n|
 end
 
 When /^(\d+) Wrangling Guidelines? exists?$/ do |n|
-  (1..n.to_i).each do |i|
+  (1..n).each do |i|
     FactoryBot.create(:wrangling_guideline, id: i)
   end
 end
