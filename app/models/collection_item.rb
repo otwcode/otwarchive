@@ -214,6 +214,14 @@ class CollectionItem < ApplicationRecord
     }.join(", ")
   end
 
+  def remove=(value)
+    @remove = value
+  end
+
+  def remove
+    @remove || ""
+  end
+
   def title
     item.respond_to?(:title) ? item.title : item.bookmarkable.title
   end

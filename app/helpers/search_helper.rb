@@ -19,22 +19,24 @@ module SearchHelper
     if search.present? && search.query.present?
       header << "found"
     end
-    if parent
-      parent_text = case parent.class.to_s
-                    when 'Collection'
-                      "in #{link_to(parent.title, parent)}"
-                    when 'Pseud'
-                      "by #{parent.byline}"
-                    when 'User'
-                      "by #{parent.login}"
-                    end
-      if parent.is_a?(Tag)
-        header << "in #{link_to_tag_with_text(parent, parent.name)}"
-      end
-      if @fandom.present?
-        header << "in #{link_to_tag(@fandom)}"
-      end
+
+    case parent
+    when Collection
+      header << "in #{link_to(parent.title, parent)}"
+    when Pseud
+      header << "by #{parent.byline}"
+    when User
+      header << "by #{parent.login}"
     end
+
+    if parent.is_a?(Tag)
+      header << "in #{link_to_tag_with_text(parent, parent.name)}"
+    end
+
+    if @fandom.present?
+      header << "in #{link_to_tag(@fandom)}"
+    end
+
     header.join(" ").html_safe
   end
 

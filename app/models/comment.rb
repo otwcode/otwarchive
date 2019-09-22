@@ -32,7 +32,7 @@ class Comment < ApplicationRecord
   }
 
   scope :recent, lambda { |*args|  where("created_at > ?", (args.first || 1.week.ago.to_date)) }
-  scope :limited, lambda {|limit| {limit: limit.kind_of?(Fixnum) ? limit : 5} }
+  scope :limited, lambda {|limit| {limit: limit.kind_of?(Integer) ? limit : 5} }
   scope :ordered_by_date, -> { order('created_at DESC') }
   scope :top_level, -> { where("commentable_type in (?)", ["Chapter", "Bookmark"]) }
   scope :include_pseud, -> { includes(:pseud) }
