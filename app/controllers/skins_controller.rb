@@ -113,7 +113,7 @@ class SkinsController < ApplicationController
     flash[:notice] << ts("Go back or click any link to remove the skin.")
     flash[:notice] << ts("Tip: You can preview any archive page you want by tacking on '?site_skin=[skin_id]' like you can see in the url above.")
     flash[:notice] << "<a href='#{skin_path(@skin)}' class='action' role='button'>".html_safe + ts("Return To Skin To Use") + "</a>".html_safe
-    tag = FilterCount.where("public_works_count BETWEEN 10 AND 20").order("RAND()").first.filter
+    tag = FilterCount.where("public_works_count BETWEEN 10 AND 20").random_order.first.filter
     redirect_to tag_works_path(tag, site_skin: @skin.id)
   end
 

@@ -370,8 +370,8 @@ class Tag < ApplicationRecord
 
   scope :random, -> {
     (User.current_user.is_a?(Admin) || User.current_user.is_a?(User)) ?
-    visible_to_registered_user_with_count.order("RAND()") :
-    visible_to_all_with_count.order("RAND()")
+    visible_to_registered_user_with_count.random_order :
+    visible_to_all_with_count.random_order
   }
 
   scope :with_count, -> {
