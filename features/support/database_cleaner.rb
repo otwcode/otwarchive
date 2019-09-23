@@ -5,7 +5,7 @@ begin
   DatabaseCleaner.strategy = :transaction
   DatabaseCleaner.clean
 
-  Around do |scenario, block|
+  Around do |_scenario, block|
     DatabaseCleaner.cleaning(&block)
   end
 rescue NameError

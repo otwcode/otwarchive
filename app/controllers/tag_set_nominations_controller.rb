@@ -172,7 +172,7 @@ class TagSetNominationsController < ApplicationController
     end
     @nominations_count[:freeform] =  @tag_set.freeform_nominations.unreviewed.count
     more_noms = true if @nominations_count[:freeform] > @nom_limit
-    @nominations[:freeform] = (more_noms ? base_nom_query("freeform").random_order : base_nom_query("freeform").order(:tagname)) if @limit[:freeform] > 0
+    @nominations[:freeform] = (more_noms ? base_nom_query("freeform").random_order : base_nom_query("freeform").order(:tagname)) unless @limit[:freeform].zero?
 
     if more_noms
       flash[:notice] = ts("There are too many nominations to show at once, so here's a randomized selection! Additional nominations will appear after you approve or reject some.")

@@ -153,7 +153,7 @@ Given /^the work(?: "([^"]*)")? with(?: (\d+))? comments setup$/ do |title, n_co
   step %{I have a work "#{title}"}
   step %{I am logged out}
   n_comments = 3 if n_comments.zero?
-  n_comments.times do |i|
+  n_comments.times do
     text = Faker::Lorem.paragraph
     step %{I am logged in as a random user}
     step %{I post the comment "#{text}" on the work "#{title}"}
@@ -166,7 +166,7 @@ Given /^the work(?: "([^"]*)")? with(?: (\d+))? bookmarks? setup$/ do |title, n_
   step %{I have a work "#{title}"}
   step %{I am logged out}
   n_bookmarks = 3 if n_bookmarks.zero?
-  n_bookmarks.times do |i|
+  n_bookmarks.times do
     step %{I am logged in as a random user}
     step %{I bookmark the work "#{title}"}
     step %{I am logged out}

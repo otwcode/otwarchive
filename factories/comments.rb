@@ -10,6 +10,14 @@ FactoryBot.define do
     pseud
   end
 
+  factory :guest_comment, class: Comment do
+    name { Faker::Name.first_name }
+    comment_content { Faker::Lorem.sentence(25) }
+    email { Faker::Internet.email }
+    commentable_type { "Work" }
+    commentable_id { create(:work).id }
+  end
+
   factory :adminpost_comment, class: Comment do
     name { Faker::Name.first_name }
     comment_content { Faker::Lorem.sentence(25) }

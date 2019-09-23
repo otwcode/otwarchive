@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # modifying to_text_area_tag and text_area_tag to strip paragraph/br tags
 # and convert them back into newlines for editing purposes
 module ActionView
