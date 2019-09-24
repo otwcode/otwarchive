@@ -8,7 +8,7 @@
 <% tags_cache_key = Tag.tag_sets_cache_key(@tag_type, @tag_set_ids) %>
 
 <% cache("tagsets_#{ids}_#{newest_updated_at}_#{tags_cache_key}", skip_digest: true) do %>
-  <h2>
+  <h2 class="heading">
     <%= ts("%{tag_type} Options From", tag_type: tag_type_label_name(@tag_type)) %>:
   </h2>
   <ul class="commas">
