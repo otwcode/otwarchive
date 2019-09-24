@@ -484,6 +484,19 @@ class Tag < ApplicationRecord
     end
   end
 
+  def self.tag_sets_cache_key(tag_type, tag_set_ids)
+    case tag_type
+    when "fandom"
+      Fandom.joins(:set_taggings).where(set_taggings: { tag_set_id: tag_set_ids }).cache_key
+    when "character"
+      Character.joins(:set_taggings).where(set_taggings: { tag_set_id: tag_set_ids }).cache_key
+    when "relationship"
+      Relationship.joins(:set_taggings).where(set_taggings: { tag_set_id: tag_set_ids }).cache_key
+    when "freeform"
+      Freeform.joins(:set_taggings).where(set_taggings: { tag_set_id: tag_set_ids }).cache_key
+    end
+  end
+
   # gives you [parent_name, child_name], [parent_name, child_name], ...
   def self.parent_names(parent_type = 'fandom')
     joins(:parents).where("parents_tags.type = ?", parent_type.capitalize).
