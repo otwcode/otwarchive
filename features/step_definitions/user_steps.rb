@@ -9,13 +9,13 @@ Given /^I have no users$/ do
 end
 
 Given /I have an orphan account/ do
-  user = FactoryGirl.create(:user, login: 'orphan_account')
+  user = FactoryBot.create(:user, login: 'orphan_account')
   user.activate
 end
 
 Given /the following activated users? exists?/ do |table|
   table.hashes.each do |hash|
-    user = FactoryGirl.create(:user, hash)
+    user = FactoryBot.create(:user, hash)
     user.activate
     user.pseuds.first.add_to_autocomplete
     step %{confirmation emails have been delivered}
@@ -24,7 +24,7 @@ end
 
 Given /the following users exist with BCrypt encrypted passwords/ do |table|
   table.hashes.each do |hash|
-    user = FactoryGirl.create(:user, hash)
+    user = FactoryBot.create(:user, hash)
     user.activate
     user.pseuds.first.add_to_autocomplete
 
@@ -46,7 +46,7 @@ end
 
 Given /the following users exist with SHA-512 encrypted passwords/ do |table|
   table.hashes.each do |hash|
-    user = FactoryGirl.create(:user, hash)
+    user = FactoryBot.create(:user, hash)
     user.activate
     user.pseuds.first.add_to_autocomplete
 
@@ -67,16 +67,16 @@ end
 
 Given /the following activated users with private work skins/ do |table|
   table.hashes.each do |hash|
-    user = FactoryGirl.create(:user, hash)
+    user = FactoryBot.create(:user, hash)
     user.activate
-    FactoryGirl.create(:private_work_skin, author: user, title: "#{user.login.titleize}'s Work Skin")
+    FactoryBot.create(:private_work_skin, author: user, title: "#{user.login.titleize}'s Work Skin")
     step %{confirmation emails have been delivered}
   end
 end
 
 Given /the following activated tag wranglers? exists?/ do |table|
   table.hashes.each do |hash|
-    user = FactoryGirl.create(:user, hash)
+    user = FactoryBot.create(:user, hash)
     user.activate
     user.tag_wrangler = '1'
     user.pseuds.first.add_to_autocomplete
@@ -99,14 +99,9 @@ Given /^the user "([^"]*)" exists and has the role "([^"]*)"/ do |login, role|
   user.save
 end
 
-Given /^I am logged in as "([^"]*)" with password "([^"]*)"(?:( with preferences set to hidden warnings and additional tags))?$/ do |login, password, hidden|
+Given /^I am logged in as "([^"]*)" with password "([^"]*)"$/ do |login, password|
   user = find_or_create_new_user(login, password)
   step("I am logged out")
-  if hidden.present?
-    user.preference.hide_warnings = true
-    user.preference.hide_freeform = true
-    user.preference.save
-  end
   step %{I am on the homepage}
   find_link('login-dropdown').click
 
@@ -174,7 +169,7 @@ Given(/^I coauthored the work "(.*?)" as "(.*?)" with "(.*?)"$/) do |title, logi
   author1.user.preference.update(allow_cocreator: true)
   author2 = User.find_by(login: coauthor).default_pseud
   author2.user.preference.update(allow_cocreator: true)
-  work = FactoryGirl.create(:work, authors: [author1, author2], posted: true, title: title)
+  work = FactoryBot.create(:work, authors: [author1, author2], posted: true, title: title)
   work.creatorships.unapproved.each(&:accept!)
 end
 

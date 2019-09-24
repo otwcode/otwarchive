@@ -797,7 +797,7 @@ class Work < ApplicationRecord
       end
       result["Fandom"] ||= []
       result["Rating"] ||= []
-      result["Warning"] ||= []
+      result["ArchiveWarning"] ||= []
       result["Relationship"] ||= []
       result["Character"] ||= []
       result["Freeform"] ||= []
@@ -808,7 +808,7 @@ class Work < ApplicationRecord
   # Check to see that a work is tagged appropriately
   def has_required_tags?
     return false if self.fandom_string.blank?
-    return false if self.warning_string.blank?
+    return false if self.archive_warning_string.blank?
     return false if self.rating_string.blank?
     return true
   end
@@ -1100,12 +1100,11 @@ class Work < ApplicationRecord
 
   SORTED_AUTHOR_REGEX = %r{^[\+\-=_\?!'"\.\/]}
 
-  # TODO drop unused database column authors_to_sort_on
   def authors_to_sort_on
     if self.anonymous?
       "Anonymous"
     else
-      self.pseuds.map(&:name).join(",  ").downcase.gsub(SORTED_AUTHOR_REGEX, '')
+      self.pseuds.sort.map(&:name).join(",  ").downcase.gsub(SORTED_AUTHOR_REGEX, '')
     end
   end
 
@@ -1203,12 +1202,17 @@ class Work < ApplicationRecord
   def bookmarkable_json
     as_json(
       root: false,
-      only: [:title, :summary, :hidden_by_admin, :restricted, :posted,
-        :created_at, :revised_at, :language_id, :word_count, :complete],
-      methods: [:tag, :filter_ids, :rating_ids, :warning_ids, :category_ids,
+      only: [
+        :title, :summary, :hidden_by_admin, :restricted, :posted,
+        :created_at, :revised_at, :word_count, :complete
+      ],
+      methods: [
+        :tag, :filter_ids, :rating_ids, :archive_warning_ids, :category_ids,
         :fandom_ids, :character_ids, :relationship_ids, :freeform_ids,
-        :pseud_ids, :creators, :collection_ids, :work_types]
+        :pseud_ids, :creators, :collection_ids, :work_types
+      ]
     ).merge(
+      language_id: language&.short,
       anonymous: anonymous?,
       unrevealed: unrevealed?,
       bookmarkable_type: 'Work',

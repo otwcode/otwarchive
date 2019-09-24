@@ -10,7 +10,7 @@ if ENV["CI"] == "true" && ENV["TRAVIS"] == "true"
 end
 
 require 'rspec/rails'
-require 'factory_girl'
+require 'factory_bot'
 require 'database_cleaner'
 require 'email_spec'
 
@@ -23,8 +23,8 @@ DatabaseCleaner.clean
 # in spec/support/ and its subdirectories.
 Dir[Rails.root.join("spec/support/**/*.rb")].each {|f| require f}
 
-FactoryGirl.find_definitions
-FactoryGirl.definition_file_paths = %w(factories)
+FactoryBot.find_definitions
+FactoryBot.definition_file_paths = %w(factories)
 
 RSpec.configure do |config|
   config.mock_with :rspec
@@ -33,7 +33,7 @@ RSpec.configure do |config|
     c.syntax = [:should, :expect]
   end
 
-  config.include FactoryGirl::Syntax::Methods
+  config.include FactoryBot::Syntax::Methods
   config.include EmailSpec::Helpers
   config.include EmailSpec::Matchers
   config.include Devise::Test::ControllerHelpers, type: :controller
@@ -87,6 +87,9 @@ RSpec.configure do |config|
   config.infer_spec_type_from_file_location!
   config.define_derived_metadata(file_path: %r{/spec/miscellaneous/lib/tasks/}) do |metadata|
     metadata[:type] = :task
+  end
+  config.define_derived_metadata(file_path: %r{/spec/miscellaneous/helpers/}) do |metadata|
+    metadata[:type] = :helper
   end
 
   # Set default formatter to print out the description of each test as it runs

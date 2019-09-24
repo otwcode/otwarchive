@@ -86,7 +86,7 @@ describe CollectionItemsController do
 
   describe "GET #create" do
     context "creation" do
-      let (:collection) { FactoryGirl.create(:collection) }
+      let(:collection) { FactoryBot.create(:collection) }
 
       it "fails if collection names missing" do
         get :create, params: { collection_id: collection.id }
@@ -102,8 +102,8 @@ describe CollectionItemsController do
 
   describe "#destroy" do
     before(:each) do
-      @collection = FactoryGirl.create(:collection)
-      @approved_work = FactoryGirl.create(:work)
+      @collection = FactoryBot.create(:collection)
+      @approved_work = FactoryBot.create(:work)
       @approved_work.add_to_collection(@collection) && @approved_work.save
     end
 

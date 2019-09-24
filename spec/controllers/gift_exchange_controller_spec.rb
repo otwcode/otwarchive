@@ -7,7 +7,7 @@ describe Challenge::GiftExchangeController do
   include RedirectExpectationHelper
 
   before(:each) do
-    @collection = FactoryGirl.create(:collection, challenge: GiftExchange.new)
+    @collection = FactoryBot.create(:collection, challenge: GiftExchange.new)
     @collection.save
     fake_login_known_user(@collection.owners.first.user)
   end
