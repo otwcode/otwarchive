@@ -24,8 +24,8 @@ describe AdminBlacklistedEmail, :ready do
     
   context "blacklisted emails" do
     before(:each) do
-      @existing_email = FactoryGirl.create(:admin_blacklisted_email, email: "foobar@gmail.com")
-      @existing_email2 = FactoryGirl.create(:admin_blacklisted_email, email: "foo@bar.com")
+      @existing_email = FactoryBot.create(:admin_blacklisted_email, email: "foobar@gmail.com")
+      @existing_email2 = FactoryBot.create(:admin_blacklisted_email, email: "foo@bar.com")
     end
     
     it "match themselves" do

@@ -48,9 +48,10 @@ describe LocalesController do
     context "when logged in as a non-admin" do
       before { fake_login_known_user(user) }
 
-      it "redirects to the user page" do
+      it "redirects to the user page with an error" do
         put :update, params: { id: 0 }
-        it_redirects_to user_path(user)
+        it_redirects_to_with_error(user_path(user),
+                                   "Sorry, you don't have permission to access the page you were trying to reach.")
       end
     end
 
@@ -63,7 +64,7 @@ describe LocalesController do
         params = { name: "Tiếng Việt", email_enabled: true }
 
         put :update, params: { id: locale.iso, locale: params }
-        it_redirects_to_with_notice locales_path, "Your locale was successfully updated."
+        it_redirects_to_with_notice(locales_path, "Your locale was successfully updated.")
 
         locale.reload
         expect(locale.name).to eq(params[:name])
@@ -83,9 +84,10 @@ describe LocalesController do
     context "when logged in as a non-admin" do
       before { fake_login_known_user(user) }
 
-      it "redirects to the user page" do
+      it "redirects to the user page with an error" do
         post :create
-        it_redirects_to user_path(user)
+        it_redirects_to_with_error(user_path(user),
+                                   "Sorry, you don't have permission to access the page you were trying to reach.")
       end
     end
 
@@ -99,7 +101,7 @@ describe LocalesController do
         }
 
         post :create, params: { locale: params }
-        it_redirects_to_with_notice locales_path, "Locale was successfully added."
+        it_redirects_to_with_notice(locales_path, "Locale was successfully added.")
 
         locale = Locale.last
         expect(locale.iso).to eq(params[:iso])
@@ -109,7 +111,7 @@ describe LocalesController do
         expect(locale.interface_enabled).to eq(params[:interface_enabled])
       end
 
-      it "redirects to the create form if iso is missing" do
+      it "renders the create form if iso is missing" do
         params = {
           name: "Español", language_id: Language.default.id,
           email_enabled: true, interface_enabled: false,

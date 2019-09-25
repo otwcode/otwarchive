@@ -8,7 +8,7 @@ Feature: Edit Works Dates
     When "AO3-2539" is fixed
 #    Given I have loaded the fixtures
 #      And I am logged in as "testuser" with password "testuser"
-#      And all search indexes are updated
+#      And all indexing jobs have been run
 #    When I am on testuser's works page
 #    Then I should not see "less than 1 minute ago"
 #      And I should see "29 Apr 2012"
@@ -73,3 +73,13 @@ Feature: Edit Works Dates
 #    When I follow "Full-page index"
 #      Then I should see "1. Chapter 1 (1990-01-01)"
 #      And I should see "2. Chapter 2 (2013-01-16)"
+
+  Scenario: Users cannot backdate a work back to the future
+    Given it is currently 1/1/2019
+      And I am logged in as a random user
+      And I post the work "Beauty and the Beast 2077"
+    When I edit the work "Beauty and the Beast 2077"
+      And I check "Set a different publication date"
+      And I select "December" from "work_chapter_attributes_published_at_2i"
+      And I press "Post Without Preview"
+    Then I should see "Sorry! We couldn't save this work because:Publication date can't be in the future."

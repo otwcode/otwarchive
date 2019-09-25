@@ -8,8 +8,7 @@ Scenario: pseud creation and playing with the default pseud
   Then I should see "Default Pseud" within "div#main.pseuds-index"
   When I follow "Edit"
   Then I should see "You cannot change the pseud that matches your user name"
-    And the "pseud_is_default" checkbox should be checked
-    And the "pseud_is_default" checkbox should be disabled
+    And the "pseud_is_default" checkbox should be checked and disabled
   When I follow "Back To Pseuds"
     And I follow "New Pseud"
     And I fill in "Name" with "Me"
@@ -35,8 +34,7 @@ Scenario: pseud creation and playing with the default pseud
   Then the "Make this name default" checkbox should not be checked
   When I follow "Back To Pseuds"
     And I follow "edit_myself"
-  Then the "pseud_is_default" checkbox should be checked
-    And the "pseud_is_default" checkbox should be disabled
+  Then the "pseud_is_default" checkbox should be checked and disabled
 
 Scenario: Manage pseuds - add, edit
 

@@ -50,6 +50,12 @@ describe Skin do
         li.relationships + li.freeforms:before { content: 'Freeform: '; }
         li:before {content: url('http://foo.com/bullet.jpg')}",
 
+      "allows whitelisted image extensions" =>
+        ".a { background: url('http://example.com/i.jpg'); }
+        .b { background: url('http://example.com/i.jpeg'); }
+        .c { background: url('http://example.com/i.png'); }
+        .d { background: url('http://example.com/i.gif'); }",
+
       "should allow through properties that are variations on the ones in the shorthand config list" =>
         "#main ul.sorting {
           background: rgba(120,120,120,1) 5%;
@@ -215,5 +221,93 @@ describe Skin do
 
   end
 
+  describe '.approved_or_owned_by' do
+    let(:skin_owner) { FactoryBot.create(:user) }
+    let(:random_user) { FactoryBot.create(:user) }
+
+    before do
+      FactoryBot.create(:private_work_skin, author: skin_owner, title: 'Private Skin 1')
+      FactoryBot.create(:private_work_skin, author: skin_owner, title: 'Private Skin 2')
+    end
+
+    context 'no user argument given' do
+      context 'User.current_user is nil' do
+        it 'returns approved skins' do
+          allow(User).to receive(:current_user).and_return(nil)
+          expect(Skin.approved_or_owned_by.pluck(:title)).to eq(['Default'])
+        end
+      end
+
+      context 'User.current_user is not nil' do
+        context 'user does not own skins' do
+          it 'returns approved skins' do
+            allow(User).to receive(:current_user).and_return(random_user)
+            expect(Skin.approved_or_owned_by.pluck(:title)).to eq(['Default'])
+          end
+        end
+
+        context 'user owns skins' do
+          it 'returns approved and owned skins' do
+            allow(User).to receive(:current_user).and_return(skin_owner)
+            expect(Skin.approved_or_owned_by.pluck(:title)).to eq(['Default', 'Private Skin 1', 'Private Skin 2'])
+          end
+        end
+      end
+    end
+
+    context 'user argument is given' do
+      context 'user is nil' do
+        it 'returns approved skins' do
+          expect(Skin.approved_or_owned_by(nil).pluck(:title)).to eq(['Default'])
+        end
+      end
+
+      context 'user is not nil' do
+        context 'user does not own skins' do
+          it 'returns approved skins' do
+            expect(Skin.approved_or_owned_by(random_user).pluck(:title)).to eq(['Default'])
+          end
+        end
+
+        context 'user owns skins' do
+          it 'returns approved and owned skins' do
+            expect(Skin.approved_or_owned_by(skin_owner).pluck(:title)).to eq(['Default',
+                                                                               'Private Skin 1',
+                                                                               'Private Skin 2'])
+          end
+        end
+      end
+    end
+  end
+
+  describe '.approved_or_owned_by_any' do
+    let(:users) { Array.new(3) { FactoryBot.create(:user) } }
+
+    context 'users do not own skins' do
+      it 'returns approved skins' do
+        expect(Skin.approved_or_owned_by_any(users).pluck(:title)).to eq(['Default'])
+      end
+    end
+
+    context 'users own skins' do
+      before do
+        FactoryBot.create(:private_work_skin, author: users[1], title: "User 2's First Skin")
+        FactoryBot.create(:private_work_skin, author: users[1], title: "User 2's Second Skin")
+        FactoryBot.create(:private_work_skin, author: users[2], title: "User 3's Skin")
+        FactoryBot.create(:private_work_skin, title: 'Unowned Private Skin')
+      end
+
+      it 'returns approved and owned skins' do
+        expect(Skin.approved_or_owned_by_any(users).pluck(:title)).to eq(["Default",
+                                                                          "User 2's First Skin",
+                                                                          "User 2's Second Skin",
+                                                                          "User 3's Skin"])
+      end
+
+      it 'does not return unassociated private work skins' do
+        expect(Skin.approved_or_owned_by_any(users).pluck(:title)).not_to include(['Unowned Private Skin'])
+      end
+    end
+  end
 end
 

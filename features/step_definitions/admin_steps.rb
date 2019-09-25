@@ -34,7 +34,7 @@ end
 
 Given /the following admins? exists?/ do |table|
   table.hashes.each do |hash|
-    admin = FactoryGirl.create(:admin, hash)
+    FactoryBot.create(:admin, hash)
   end
 end
 
@@ -43,7 +43,7 @@ Given /^I am logged in as an admin$/ do
   step("I am logged out")
   admin = Admin.find_by(login: "testadmin")
   if admin.blank?
-    admin = FactoryGirl.create(:admin, login: "testadmin", password: "testadmin", email: "testadmin@example.org")
+    FactoryBot.create(:admin, login: "testadmin", password: "testadmin", email: "testadmin@example.org")
   end
   visit new_admin_session_path
   fill_in "Admin user name", with: "testadmin"
@@ -70,20 +70,6 @@ Given /^advanced languages$/ do
   Language.find_or_create_by(short: "FR", name: "Francais")
 end
 
-Given /^guest downloading is off$/ do
-  step("I am logged in as an admin")
-  visit(admin_settings_path)
-  check("Turn off downloading for guests")
-  click_button("Update")
-end
-
-Given /^guest downloading is on$/ do
-  step("I am logged in as an admin")
-  visit(admin_settings_path)
-  uncheck("Turn off downloading for guests")
-  click_button("Update")
-end
-
 Given /^downloads are off$/ do
   step("I am logged in as an admin")
   visit(admin_settings_path)
@@ -105,6 +91,21 @@ Given /^tag wrangling is on$/ do
   step("I uncheck \"Turn off tag wrangling for non-admins\"")
   step("I press \"Update\"")
   step("I am logged out as an admin")
+end
+
+Given /^the support form is disabled and its text field set to "Please don't contact us"$/ do
+  step("I am logged in as an admin")
+  visit(admin_settings_path)
+  check("Turn off support form")
+  fill_in(:admin_setting_disabled_support_form_text, with: "Please don't contact us")
+  click_button("Update")
+end
+
+Given /^the support form is enabled$/ do
+  step("I am logged in as an admin")
+  visit(admin_settings_path)
+  uncheck("Turn off support form")
+  click_button("Update")
 end
 
 Given /^I have posted a FAQ$/ do
@@ -179,8 +180,12 @@ end
 
 Given(/^the following language exists$/) do |table|
   table.hashes.each do |hash|
-    FactoryGirl.create(:language, hash)
+    FactoryBot.create(:language, hash)
   end
+end
+
+Given /^the abuse report will not be considered spam$/ do
+  allow(Akismetor).to receive(:spam?).and_return(false)
 end
 
 ### WHEN
@@ -193,13 +198,6 @@ When /^I fill in "([^"]*)" with "([^"]*)'s" invite code$/  do |field, login|
   user = User.find_by(login: login)
   token = user.invitations.first.token
   fill_in(field, with: token)
-end
-
-When /^I turn off guest downloading$/ do
-  step("I am logged in as an admin")
-  visit(admin_settings_path)
-  step("I check \"Turn off downloading for guests\"")
-  step("I press \"Update\"")
 end
 
 When /^I make an admin post$/ do
@@ -251,29 +249,9 @@ When /^there are (\d+) Archive FAQs$/ do |n|
   end
 end
 
-When /^I make a(?: (\d+)(?:st|nd|rd|th)?)? Admin Post$/ do |n|
-  n ||= 1
-  visit new_admin_post_path
-  fill_in("admin_post_title", with: "Amazing News #{n}")
-  fill_in("content", with: "This is the content for the #{n} Admin Post")
-  click_button("Post")
-end
-
-When /^there are (\d+) Admin Posts$/ do |n|
-  (1..n.to_i).each do |i|
-    step %{I make a #{i} Admin Post}
-  end
-end
-
 When /^(\d+) Archive FAQs? exists?$/ do |n|
   (1..n.to_i).each do |i|
-    FactoryGirl.create(:archive_faq, id: i)
-  end
-end
-
-When /^(\d+) Admin Posts? exists?$/ do |n|
-  (1..n.to_i).each do |i|
-    FactoryGirl.create(:admin_post, id: i)
+    FactoryBot.create(:archive_faq, id: i)
   end
 end
 
@@ -282,7 +260,7 @@ When /^the invite_from_queue_at is yesterday$/ do
 end
 
 When /^the check_queue rake task is run$/ do
-  AdminSetting.check_queue
+  step %{I run the rake task "invitations:check_queue"}
 end
 
 When /^I edit known issues$/ do
@@ -308,9 +286,7 @@ When /^I uncheck the "([^\"]*)" role checkbox$/ do |role|
   uncheck("user_roles_#{role_id}")
 end
 
-### THEN
-
-When (/^I make a translation of an admin post$/) do
+When (/^I make a translation of an admin post( with tags)?$/) do |with_tags|
   admin_post = AdminPost.find_by(title: "Default Admin Post")
   # If post doesn't exist, assume we want to reference a non-existent post
   admin_post_id = !admin_post.nil? ? admin_post.id : 0
@@ -319,8 +295,17 @@ When (/^I make a translation of an admin post$/) do
   fill_in("content", with: "Deutsch Woerter")
   step %{I select "Deutsch" from "Choose a language"}
   fill_in("admin_post_translated_post_id", with: admin_post_id)
+  fill_in("admin_post_tag_list", with: "quotes, futurama") if with_tags
   click_button("Post")
 end
+
+When /^I hide the work "(.*?)"$/ do |title|
+  work = Work.find_by(title: title)
+  visit work_path(work)
+  step %{I follow "Hide Work"}
+end
+
+### THEN
 
 Then (/^the translation information should still be filled in$/) do
   step %{the "admin_post_title" field should contain "Deutsch Ankuendigung"}
@@ -354,6 +339,20 @@ Then (/^I should not see a translated admin post$/) do
   step %{I should see "Deutsch Ankuendigung"}
   step %{I follow "Default Admin Post"}
   step %{I should not see "Translations: Deutsch"}
+end
+
+Then /^the work "([^\"]*)" should be hidden$/ do |work|
+  w = Work.find_by_title(work)
+  user = w.pseuds.first.user.login
+  step %{logged out users should not see the hidden work "#{work}" by "#{user}"}
+  step %{logged in users should not see the hidden work "#{work}" by "#{user}"}
+end
+
+Then /^the work "([^\"]*)" should not be hidden$/ do |work|
+  w = Work.find_by_title(work)
+  user = w.pseuds.first.user.login
+  step %{logged out users should see the unhidden work "#{work}" by "#{user}"}
+  step %{logged in users should see the unhidden work "#{work}" by "#{user}"}
 end
 
 Then /^logged out users should not see the hidden work "([^\"]*)" by "([^\"]*)"?/ do |work, user|
@@ -457,4 +456,14 @@ Then(/^I should be able to comment with the address "([^"]*)"$/) do |email|
   step %{I post the comment "I loved this" on the work "New Work" as a guest with email "#{email}"}
   step %{I should not see "has been blocked at the owner's request"}
   step %{I should see "Comment created!"}
+end
+
+Then /^the work "([^\"]*)" should be marked as spam/ do |work|
+  w = Work.find_by_title(work)
+  assert w.spam?
+end
+
+Then /^the work "([^\"]*)" should not be marked as spam/ do |work|
+  w = Work.find_by_title(work)
+  assert !w.spam?
 end

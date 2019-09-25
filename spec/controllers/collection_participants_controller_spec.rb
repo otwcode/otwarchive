@@ -7,14 +7,16 @@ describe CollectionParticipantsController do
 
   describe "join" do
     context "where user isn't logged in" do
-      it "redirects to new user session" do
+      it "redirects to new user session with error" do
         get :join, params: { collection_id: 1 }
-        it_redirects_to new_user_session_path
+        it_redirects_to_with_error(new_user_session_path,
+                                   "Sorry, you don't have permission to access the page"\
+                                   " you were trying to reach. Please log in.")
       end
     end
 
     context "where the user is logged in" do
-      let(:user) { FactoryGirl.create(:user) }
+      let(:user) { FactoryBot.create(:user) }
 
       before do
         fake_login_known_user(user)
@@ -23,7 +25,8 @@ describe CollectionParticipantsController do
       context "where there is no collection" do
         it "redirects to index and displays an error" do
           get :join, params: { collection_id: 0 }
-          it_redirects_to_with_error(root_path, "Which collection did you want to join?")
+          it_redirects_to_with_error(root_path,
+                                     "Which collection did you want to join?")
         end
 
         context "where the HTTP_REFERER is set" do
@@ -33,18 +36,19 @@ describe CollectionParticipantsController do
 
           it "navigates back to the previously viewed page" do
             get :join, params: { collection_id: 0 }
-            it_redirects_to_with_error(collections_path, "Which collection did you want to join?")
+            it_redirects_to_with_error(collections_path,
+                                       "Which collection did you want to join?")
           end
         end
       end
 
       context "where there is a collection" do
-        let(:collection) { FactoryGirl.create(:collection) }
+        let(:collection) { FactoryBot.create(:collection) }
         let(:current_role) { CollectionParticipant::NONE }
 
         context "where the user is already a participant" do
           let!(:participant) do
-            FactoryGirl.create(
+            FactoryBot.create(
               :collection_participant,
               collection: collection,
               pseud: user.default_pseud,
@@ -58,14 +62,16 @@ describe CollectionParticipantsController do
             it "approves the participant and redirects to the index" do
               get :join, params: { collection_id: collection.name }
               expect(CollectionParticipant.find(participant.id).participant_role).to eq CollectionParticipant::MEMBER
-              it_redirects_to_with_notice(root_path, "You are now a member of #{collection.title}.")
+              it_redirects_to_with_notice(root_path,
+                                          "You are now a member of #{collection.title}.")
             end
           end
 
           context "where the user is not currently invited" do
             it "redirects to the index and displays a notice that the user has already joined or applied" do
               get :join, params: { collection_id: collection.name }
-              it_redirects_to_with_notice(root_path, "You have already joined (or applied to) this collection.")
+              it_redirects_to_with_notice(root_path,
+                                          "You have already joined (or applied to) this collection.")
             end
           end
         end
@@ -76,7 +82,8 @@ describe CollectionParticipantsController do
             participant = CollectionParticipant.find_by(pseud_id: user.default_pseud.id)
             expect(participant).to be_present
             expect(participant.participant_role).to eq CollectionParticipant::NONE
-            it_redirects_to_with_notice(root_path, "You have applied to join #{collection.title}.")
+            it_redirects_to_with_notice(root_path,
+                                        "You have applied to join #{collection.title}.")
           end
         end
       end
@@ -84,9 +91,9 @@ describe CollectionParticipantsController do
   end
 
   describe "index" do
-    let(:collection) { FactoryGirl.create(:collection) }
+    let(:collection) { FactoryBot.create(:collection) }
     let(:current_role) { CollectionParticipant::NONE }
-    let(:user) { FactoryGirl.create(:user) }
+    let(:user) { FactoryBot.create(:user) }
 
     context "user is not logged in" do
       it "redirects to the index and displays an access denied message" do
@@ -97,7 +104,7 @@ describe CollectionParticipantsController do
 
     context "user is logged in" do
       let!(:participant) do
-        FactoryGirl.create(
+        FactoryBot.create(
           :collection_participant,
           collection: collection,
           pseud: user.default_pseud,
@@ -124,8 +131,8 @@ describe CollectionParticipantsController do
         context "where the collection has several participants" do
           let!(:users) do
             Array.new(3) do
-              user = FactoryGirl.create(:user)
-              FactoryGirl.create(
+              user = FactoryBot.create(:user)
+              FactoryBot.create(
                 :collection_participant,
                 collection: collection,
                 pseud: user.default_pseud
@@ -147,11 +154,11 @@ describe CollectionParticipantsController do
   end
 
   describe "update" do
-    let(:user) { FactoryGirl.create(:user) }
-    let(:collection) { FactoryGirl.create(:collection) }
+    let(:user) { FactoryBot.create(:user) }
+    let(:collection) { FactoryBot.create(:collection) }
     let(:user_role) { CollectionParticipant::NONE }
     let!(:user_participant) do
-      FactoryGirl.create(
+      FactoryBot.create(
         :collection_participant,
         pseud: user.default_pseud,
         collection: collection,
@@ -182,7 +189,7 @@ describe CollectionParticipantsController do
 
     context "where there is a participant" do
       let(:participant) do
-        FactoryGirl.create(
+        FactoryBot.create(
           :collection_participant,
           collection: user_participant.collection,
           participant_role: CollectionParticipant::NONE
@@ -220,12 +227,12 @@ describe CollectionParticipantsController do
   end
 
   describe "destroy" do
-    let(:user) { FactoryGirl.create(:user) }
+    let(:user) { FactoryBot.create(:user) }
     let(:pseud_name) { user.default_pseud.name }
-    let(:collection) { FactoryGirl.create(:collection) }
+    let(:collection) { FactoryBot.create(:collection) }
     let(:user_participant_role) { CollectionParticipant::MEMBER }
     let!(:user_participant) do
-      FactoryGirl.create(
+      FactoryBot.create(
         :collection_participant,
         pseud: user.default_pseud,
         collection: collection,
@@ -261,7 +268,7 @@ describe CollectionParticipantsController do
 
         context "where the user is trying to destroy another participant" do
           let(:other_participant) do
-            FactoryGirl.create(
+            FactoryBot.create(
               :collection_participant,
               collection: collection,
               participant_role: CollectionParticipant::MEMBER
@@ -272,7 +279,6 @@ describe CollectionParticipantsController do
 
           it "doesn't allow the destroy and redirects to the collection page" do
             delete :destroy, params: params
-            it_redirects_to collection_path(collection)
             it_redirects_to_with_error(collection_path(collection), "Sorry, you're not allowed to do that.")
             expect(CollectionParticipant.find(other_participant.id)).to be_present
           end
@@ -281,9 +287,9 @@ describe CollectionParticipantsController do
 
       context "where user is a maintainer" do
         let(:user_participant_role) { CollectionParticipant::MODERATOR }
-        let(:collection) { FactoryGirl.create(:collection) }
+        let(:collection) { FactoryBot.create(:collection) }
         let(:other_participant) do
-          FactoryGirl.create(
+          FactoryBot.create(
             :collection_participant,
             collection: collection,
             participant_role: CollectionParticipant::MEMBER
@@ -317,7 +323,7 @@ describe CollectionParticipantsController do
           context "where there are other owners" do
             let!(:pseud_name) { CollectionParticipant.find(delete_participant_id.id).pseud.name }
             let!(:other_owner) do
-              FactoryGirl.create(
+              FactoryBot.create(
                 :collection_participant,
                 collection: collection,
                 participant_role: CollectionParticipant::OWNER
@@ -336,8 +342,8 @@ describe CollectionParticipantsController do
   end
 
   describe "add" do
-    let(:user) { FactoryGirl.create(:user) }
-    let(:collection) { FactoryGirl.create(:collection) }
+    let(:user) { FactoryBot.create(:user) }
+    let(:collection) { FactoryBot.create(:collection) }
     let(:participants_to_invite) { "" }
     let!(:params) do
       {
@@ -347,7 +353,7 @@ describe CollectionParticipantsController do
     end
     let(:user_participant_role) { CollectionParticipant::MEMBER }
     let!(:user_participant) do
-      FactoryGirl.create(
+      FactoryBot.create(
         :collection_participant,
         pseud: user.default_pseud,
         collection: collection,
@@ -369,7 +375,7 @@ describe CollectionParticipantsController do
     context "where the user is a maintainer" do
       let(:user_participant_role) { CollectionParticipant:: MODERATOR }
       let(:banned) { false }
-      let(:users) { Array.new(3) { FactoryGirl.create(:user, banned: banned) } }
+      let(:users) { Array.new(3) { FactoryBot.create(:user, banned: banned) } }
       let(:participants_to_invite) do
         users.map(&:default_pseud).map(&:byline).map(&:to_s).join(",")
       end
@@ -377,7 +383,7 @@ describe CollectionParticipantsController do
       context "where users to be added have already applied to the collection" do
         let!(:participants) do
           users.each do |user|
-            FactoryGirl.create(
+            FactoryBot.create(
               :collection_participant,
               collection: collection,
               pseud: user.default_pseud,
@@ -388,7 +394,7 @@ describe CollectionParticipantsController do
 
         it "approves those users, redirects to the collection participants page and displays a notification" do
           get :add, params: params
-          it_redirects_to collection_participants_path(collection)
+          it_redirects_to_simple(collection_participants_path(collection))
           expect(flash[:notice]).to include "Members added:"
           users.each do |user|
             expect(flash[:notice]).to include user.default_pseud.byline
@@ -401,7 +407,7 @@ describe CollectionParticipantsController do
       context "where the users to be added haven't yet applied to the collection" do
         it "creates new participants with the member role and redirects" do
           get :add, params: params
-          it_redirects_to collection_participants_path(collection)
+          it_redirects_to_simple(collection_participants_path(collection))
           expect(flash[:notice]).to include "New members invited:"
           users.each do |user|
             expect(flash[:notice]).to include user.default_pseud.byline
@@ -416,7 +422,8 @@ describe CollectionParticipantsController do
 
         it "doesn't approve the member, displays an error and redirects" do
           get :add, params: params
-          it_redirects_to_with_error(collection_participants_path(collection), "#{users.last.default_pseud.name} is currently banned and cannot participate in challenges.")
+          it_redirects_to_with_error(collection_participants_path(collection),
+                                     "#{users.map(&:default_pseud).map(&:byline).to_sentence} is currently banned and cannot participate in challenges.")
           users.each do |user|
             expect(CollectionParticipant.where(pseud_id: user.default_pseud.id)).to be_empty
           end

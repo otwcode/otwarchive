@@ -218,9 +218,11 @@ module AutocompleteSource
       autocomplete_prefix + "_" + AUTOCOMPLETE_CACHE_KEY + "_" + search_param
     end
 
+    # split into words
     def autocomplete_phrase_split(string)
-      # split into words
-      string.downcase.split(/(?:\s+|\&|\/|"|\(|\)|\~|-)/) # split on one or more spaces, ampersand, slash, double quotation mark, opening parenthesis, closing parenthesis (just in case), tilde, hyphen
+      # split on one or more spaces, ampersand, slash, double quotation mark,
+      # opening parenthesis, closing parenthesis (just in case), tilde, hyphen
+      string.downcase.split(/(?:\s+|\&|\/|"|\(|\)|\~|-)/).reject(&:blank?)
     end
 
     def autocomplete_pieces(string)
