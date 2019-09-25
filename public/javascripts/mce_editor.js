@@ -2,7 +2,7 @@
 
 tinyMCE.init({
   branding: false,
-  plugins: "directionality hr image link paste tabfocus",
+  plugins: "directionality hr image link lists paste tabfocus",
   menubar: false,
   toolbar: "bold italic underline strikethrough | link unlink image | blockquote | hr | bullist numlist | alignleft aligncenter alignright alignjustify | undo redo | ltr rtl",
   
