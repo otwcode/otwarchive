@@ -5,7 +5,7 @@
 <% newest_updated_at = @tag_sets.collect(&:updated_at).sort.last %>
 
 <% # cache key for all of the sets' tags, which expires when the number of tags changes or when the most recent updated_at changes %>
-<% tags_cache_key = Tag.tag_sets_cache_key(@tag_type, @tag_set_ids) %>
+<% tags_cache_key = @tags.cache_key %>
 
 <% cache("tagsets_#{ids}_#{newest_updated_at}_#{tags_cache_key}", skip_digest: true) do %>
   <h2 class="heading">
