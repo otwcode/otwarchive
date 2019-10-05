@@ -1,4 +1,7 @@
 Before do
+  # Reset the current user:
+  User.current_user = nil
+
   # Clear Memcached
   Rails.cache.clear
 

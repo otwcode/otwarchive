@@ -43,12 +43,13 @@ end %>
 <%= t("user_mailer.chapters") %> <%= this_work.chapter_total_display %>
 <%= t("user_mailer.fandom") %> <%= this_work.fandoms.map{|f| f.name}.to_sentence %>
 <%= t("user_mailer.rating") %> <%= this_work.rating_string %>
-<%= t("user_mailer.warning") %> <%= this_work.warning_string %>
+<%= t("user_mailer.warning") %> <%= this_work.archive_warning_string %>
 <% if this_work.relationship_string && !this_work.relationship_string.blank? %><%= t("user_mailer.relationships") %> <%= this_work.relationship_string %><% end %>
 <% if this_work.character_string && !this_work.character_string.blank? %><%= t("user_mailer.characters") %> <%= this_work.character_string %><% end %>
 <% if this_work.freeform_string && !this_work.freeform_string.blank? %><%= t("user_mailer.additional_tags") %> <%= this_work.freeform_string %><% end %>
 <% if this_work.series.count > 0 %><%= t("user_mailer.series") %> <%=raw to_plain_text(series_list_for_feeds(this_work)) %><% end %>
 <% @seen[this_work.id] = true %><% end %>
+
 
 <% unless @seen_summary[this_work.id] || this_work.summary.blank? %>
 <%= t(".summary") %>

@@ -238,18 +238,55 @@ class UserMailer < BulletproofMailer::Base
 
   ### WORKS NOTIFICATIONS ###
 
-  # Sends email when a user is added as a co-author
-  def coauthor_notification(user_id, creation_id, creation_class_name)
-    @user = User.find(user_id)
-    @creation = creation_class_name.constantize.find(creation_id)
+  # Sends email when an archivist adds someone as a co-creator.
+  def creatorship_notification_archivist(creatorship_id, archivist_id)
+    @creatorship = Creatorship.find(creatorship_id)
+    @archivist = User.find(archivist_id)
+    @user = @creatorship.pseud.user
+    @creation = @creatorship.creation
     I18n.with_locale(Locale.find(@user.preference.preferred_locale).iso) do
       mail(
         to: @user.email,
-        subject: t('user_mailer.coauthor_notification.subject', app_name: ArchiveConfig.APP_SHORT_NAME)
+        subject: t("user_mailer.creatorship_notification_archivist.subject",
+                   app_name: ArchiveConfig.APP_SHORT_NAME)
       )
     end
-    ensure
-      I18n.locale = I18n.default_locale
+  ensure
+    I18n.locale = I18n.default_locale
+  end
+
+  # Sends email when a user is added as a co-creator
+  def creatorship_notification(creatorship_id, adding_user_id)
+    @creatorship = Creatorship.find(creatorship_id)
+    @adding_user = User.find(adding_user_id)
+    @user = @creatorship.pseud.user
+    @creation = @creatorship.creation
+    I18n.with_locale(Locale.find(@user.preference.preferred_locale).iso) do
+      mail(
+        to: @user.email,
+        subject: t("user_mailer.creatorship_notification.subject",
+                   app_name: ArchiveConfig.APP_SHORT_NAME)
+      )
+    end
+  ensure
+    I18n.locale = I18n.default_locale
+  end
+
+  # Sends email when a user is added as an unapproved/pending co-creator
+  def creatorship_invitation(creatorship_id, inviting_user_id)
+    @creatorship = Creatorship.find(creatorship_id)
+    @inviting_user = User.find(inviting_user_id)
+    @user = @creatorship.pseud.user
+    @creation = @creatorship.creation
+    I18n.with_locale(Locale.find(@user.preference.preferred_locale).iso) do
+      mail(
+        to: @user.email,
+        subject: t("user_mailer.creatorship_invitation.subject",
+                   app_name: ArchiveConfig.APP_SHORT_NAME)
+      )
+    end
+  ensure
+    I18n.locale = I18n.default_locale
   end
 
   # Sends emails to authors whose stories were listed as the inspiration of another work

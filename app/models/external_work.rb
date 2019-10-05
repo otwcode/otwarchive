@@ -69,8 +69,6 @@ class ExternalWork < ApplicationRecord
     self.hidden_by_admin? ? user.kind_of?(Admin) : true
   end
 
-  alias_method :visible, :visible?
-
   # Visibility has changed, which means we need to reindex
   # the external work's bookmarker pseuds, to update their bookmark counts.
   def should_reindex_pseuds?
@@ -142,14 +140,15 @@ class ExternalWork < ApplicationRecord
     as_json(
       root: false,
       only: [
-        :title, :summary, :hidden_by_admin, :created_at, :language_id
+        :title, :summary, :hidden_by_admin, :created_at
       ],
       methods: [
         :posted, :restricted, :tag, :filter_ids, :rating_ids,
-        :warning_ids, :category_ids, :fandom_ids, :character_ids,
+        :archive_warning_ids, :category_ids, :fandom_ids, :character_ids,
         :relationship_ids, :freeform_ids, :creators, :revised_at
       ]
     ).merge(
+      language_id: language&.short,
       bookmarkable_type: "ExternalWork",
       bookmarkable_join: { name: "bookmarkable" }
     )

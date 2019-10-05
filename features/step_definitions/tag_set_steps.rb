@@ -51,6 +51,7 @@ When /^I remove (.*) from the tag ?set "([^\"]*)"$/ do |tags, title|
   step %{I go to the "#{title}" tag set edit page}
   tags.scan(/the (\w+) tags "([^\"]*)"/).each do |type, scanned_tags|
     tags = scanned_tags.split(/, ?/)
+
     if type == "category" || type == "rating" || type == "warning"
       tags.each { |tag| uncheck(tag) }
     else

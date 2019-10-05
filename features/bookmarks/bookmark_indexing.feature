@@ -63,8 +63,8 @@ Feature: Bookmark Indexing
     Given a canonical fandom "Veronica Mars"
       And a canonical fandom "Veronica Mars (TV)"
       And bookmarks of external works and series tagged with the fandom tag "Veronica Mars"
-    When I am logged in as a tag wrangler
-      And I syn the tag "Veronica Mars" to "Veronica Mars (TV)"
+      And I am logged in as a tag wrangler
+    When I syn the tag "Veronica Mars" to "Veronica Mars (TV)"
       And I go to the bookmarks tagged "Veronica Mars (TV)"
     Then I should see "BookmarkedExternalWork"
       And I should see "BookmarkedSeries"
@@ -87,8 +87,8 @@ Feature: Bookmark Indexing
     Given a canonical character "Laura"
       And a canonical character "Laura Roslin"
       And bookmarks of external works and series tagged with the character tag "Laura Roslin"
-    When I am logged in as a tag wrangler
-      And I subtag the tag "Laura Roslin" to "Laura"
+      And I am logged in as a tag wrangler
+    When I subtag the tag "Laura Roslin" to "Laura"
       And I go to the bookmarks tagged "Laura"
     Then I should see "BookmarkedExternalWork"
       And I should see "BookmarkedSeries"
@@ -126,8 +126,7 @@ Feature: Bookmark Indexing
 
   Scenario: Adding a chapter to a work in a series should update the series, as
   should deleting a chapter from a work in a series
-    Given I am logged in as "creator"
-      And I have bookmarks of old series to search
+    Given I have bookmarks of old series to search
     When a chapter is added to "WIP in a Series"
       And I go to the search bookmarks page
       And I select "Series" from "Type"
@@ -149,12 +148,12 @@ Feature: Bookmark Indexing
       And a canonical character "Ellie Farlow"
       And a synonym "Miss Ellie" of the tag "Ellie Ewing"
       And bookmarks of all types tagged with the character tag "Miss Ellie"
+      And I am logged in as a tag wrangler
     When I go to the bookmarks tagged "Ellie Ewing"
     Then I should see "BookmarkedWork"
       And I should see "BookmarkedSeries"
       And I should see "BookmarkedExternalWork"
-    When I am logged in as a tag wrangler
-      And I edit the tag "Miss Ellie"
+    When I edit the tag "Miss Ellie"
       And I fill in "Synonym of" with "Ellie Farlow"
       And I press "Save changes"
       And all indexing jobs have been run

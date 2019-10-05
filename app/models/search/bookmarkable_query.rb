@@ -110,7 +110,7 @@ class BookmarkableQuery < Query
   def aggregations
     aggs = {}
 
-    %w(rating warning category fandom character relationship freeform).each do |facet_type|
+    %w(rating archive_warning category fandom character relationship freeform).each do |facet_type|
       aggs[facet_type] = {
         terms: {
           field: "#{facet_type}_ids"
@@ -190,7 +190,7 @@ class BookmarkableQuery < Query
   def bookmark_bool
     if sort_column == "created_at"
       # In this case, we need to take the max of the creation dates of our
-      # children in order to calculate the correct order. 
+      # children in order to calculate the correct order.
       make_bool(
         must: field_value_score("created_at"), # score = bookmark's created_at
         filter: [
@@ -219,7 +219,7 @@ class BookmarkableQuery < Query
   end
 
   def language_filter
-    term_filter(:language_id, options[:language_id].to_i) if options[:language_id].present?
+    term_filter(:language_id, options[:language_id]) if options[:language_id].present?
   end
 
   def filter_id_filter

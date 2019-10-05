@@ -3,19 +3,19 @@ require "spec_helper"
 describe BookmarkSearchForm do
   describe "tag exclusion behavior" do
     let!(:user) do
-      FactoryGirl.create(:user)
+      FactoryBot.create(:user)
     end
 
     let!(:included_work) do
-      FactoryGirl.create(:work, posted: true)
+      FactoryBot.create(:work, posted: true)
     end
 
     let!(:excluded_work) do
-      FactoryGirl.create(:work, posted: true)
+      FactoryBot.create(:work, posted: true)
     end
 
     let!(:included_bookmark) do
-      FactoryGirl.create(
+      FactoryBot.create(
         :bookmark,
         bookmarkable_id: included_work.id,
         pseud_id: user.default_pseud.id
@@ -23,7 +23,7 @@ describe BookmarkSearchForm do
     end
 
     let!(:excluded_bookmark) do
-      FactoryGirl.create(
+      FactoryBot.create(
         :bookmark,
         bookmarkable_id: excluded_work.id,
         pseud_id: user.default_pseud.id
@@ -32,15 +32,15 @@ describe BookmarkSearchForm do
 
     describe "mergers" do
       let!(:canonical_work_tag) do
-        FactoryGirl.create(:canonical_freeform, name: "Exclude Work Tag")
+        FactoryBot.create(:canonical_freeform, name: "Exclude Work Tag")
       end
 
       let!(:work_tag_synonym) do
-        FactoryGirl.create(:freeform, name: "Tagged Work Exclusion", merger: canonical_work_tag)
+        FactoryBot.create(:freeform, name: "Tagged Work Exclusion", merger: canonical_work_tag)
       end
 
       let!(:canonical_bookmark_tag) do
-        FactoryGirl.create(:canonical_freeform, name: "Complete")
+        FactoryBot.create(:canonical_freeform, name: "Complete")
       end
 
       it "should exclude bookmarks for works with a given canonical tag name" do

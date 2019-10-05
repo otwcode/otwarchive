@@ -44,7 +44,7 @@
         <%= style_bold(t("user_mailer.chapters")) %> <%= this_work.chapter_total_display %>
         <br><%= style_bold(t("user_mailer.fandom")) %> <%= this_work.fandoms.map{|f| style_link(f.name, fandom_url(f))}.to_sentence.html_safe %>
         <br><%= style_bold(t("user_mailer.rating")) %> <%= this_work.rating_string %>
-        <br><%= style_bold(t("user_mailer.warning")) %> <%= this_work.warning_string %>
+        <br><%= style_bold(t("user_mailer.warning")) %> <%= this_work.archive_warning_string %>
         <% if this_work.relationship_string && !this_work.relationship_string.blank? %>
           <br><%= style_bold(t("user_mailer.relationships")) %> <%= this_work.relationship_string %>
         <% end %>
