@@ -31,7 +31,7 @@ class WorkSearchForm
     :fandom_ids,
     :rating_ids,
     :category_ids,
-    :warning_ids,
+    :archive_warning_ids,
     :character_names,
     :character_ids,
     :relationship_names,
@@ -88,14 +88,35 @@ class WorkSearchForm
   def process_options
     @options.delete_if { |k, v| v == "0" || v.blank? }
     standardize_creator_queries
+    standardize_language_ids
     set_sorting
     clean_up_angle_brackets
+    rename_warning_field
   end
 
   # Make the creator/creators change backwards compatible
   def standardize_creator_queries
     return unless @options[:query].present?
     @options[:query] = @options[:query].gsub('creator:', 'creators:')
+  end
+
+  def standardize_language_ids
+    # Maintain backward compatibility for old work searches/filters:
+
+    # - Using language IDs in the "Language" dropdown
+    if @options[:language_id].present? && @options[:language_id].to_i != 0
+      language = Language.find_by(id: options[:language_id])
+      options[:language_id] = language.short if language.present?
+    end
+
+    # - Using language IDs in "Any field" (search) or "Search within results" (filters)
+    if @options[:query].present?
+      @options[:query] = @options[:query].gsub(/\blanguage_id\s*:\s*(\d+)/) do
+        lang = Language.find_by(id: Regexp.last_match[1])
+        lang = Language.default if lang.blank?
+        "language_id: " + lang.short
+      end
+    end
   end
 
   def set_sorting
@@ -108,6 +129,12 @@ class WorkSearchForm
       next unless @options[countable].present?
       str = @options[countable]
       @options[countable] = str.gsub("&gt;", ">").gsub("&lt;", "<")
+    end
+  end
+
+  def rename_warning_field
+    if @options[:warning_ids].present?
+      @options[:archive_warning_ids] = @options.delete(:warning_ids)
     end
   end
 
@@ -148,7 +175,7 @@ class WorkSearchForm
       summary << "Single Chapter"
     end
     if @options[:language_id].present?
-      language = Language.find_by(id: @options[:language_id])
+      language = Language.find_by(short: @options[:language_id])
       if language.present?
         summary << "Language: #{language.name}"
       end

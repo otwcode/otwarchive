@@ -86,61 +86,18 @@ class User < ApplicationRecord
   has_many :kudos, through: :pseuds
 
   # Nested associations through creatorships got weird after 3.0.x
+  has_many :creatorships, through: :pseuds
 
-  def works
-    Work.select("DISTINCT works.*").
-    joins("INNER JOIN `creatorships` ON `works`.`id` = `creatorships`.`creation_id`
-      INNER JOIN `pseuds` ON `creatorships`.`pseud_id` = `pseuds`.`id`").
-    where("`pseuds`.`user_id` = ? AND `creatorships`.`creation_type` = 'Work'", self.id)
-  end
+  has_many :works, -> { distinct }, through: :pseuds
+  has_many :series, -> { distinct }, through: :pseuds
+  has_many :chapters, through: :pseuds
 
-  def series
-    Series.select("DISTINCT series.*").
-    joins("INNER JOIN `creatorships` ON `series`.`id` = `creatorships`.`creation_id`
-      INNER JOIN `pseuds` ON `creatorships`.`pseud_id` = `pseuds`.`id`").
-    where("`pseuds`.`user_id` = ? AND `creatorships`.`creation_type` = 'Series'", self.id)
-  end
+  has_many :related_works, through: :works
+  has_many :parent_work_relationships, through: :works
 
-  def chapters
-    Chapter.joins("INNER JOIN `creatorships` ON `chapters`.`id` = `creatorships`.`creation_id`
-      INNER JOIN `pseuds` ON `creatorships`.`pseud_id` = `pseuds`.`id`").
-    where("`pseuds`.`user_id` = ? AND `creatorships`.`creation_type` = 'Chapter'", self.id)
-  end
-
-  def related_works
-    RelatedWork.joins("INNER JOIN `works` ON `related_works`.`parent_id` = `works`.`id`
-      AND `related_works`.`parent_type` = 'Work'
-      INNER JOIN `creatorships` ON `works`.`id` = `creatorships`.`creation_id`
-      INNER JOIN `pseuds` ON `creatorships`.`pseud_id` = `pseuds`.`id`").
-    where("`pseuds`.`user_id` = ? AND `creatorships`.`creation_type` = 'Work'", self.id)
-  end
-
-  def parent_work_relationships
-    RelatedWork.joins("INNER JOIN `works` ON `related_works`.`work_id` = `works`.`id`
-      INNER JOIN `creatorships` ON `works`.`id` = `creatorships`.`creation_id`
-      INNER JOIN `pseuds` ON `creatorships`.`pseud_id` = `pseuds`.`id`").
-    where("`pseuds`.`user_id` = ? AND `creatorships`.`creation_type` = 'Work'", self.id)
-  end
-
-  def tags
-    Tag.joins("INNER JOIN `taggings` ON `tags`.`id` = `taggings`.`tagger_id`
-      INNER JOIN `works` ON `taggings`.`taggable_id` = `works`.`id` AND `taggings`.`taggable_type` = 'Work'
-      INNER JOIN `creatorships` ON `works`.`id` = `creatorships`.`creation_id`
-      INNER JOIN `pseuds` ON `creatorships`.`pseud_id` = `pseuds`.`id`").
-    where("`pseuds`.`user_id` = ? AND `creatorships`.`creation_type` = 'Work'", self.id)
-  end
-
-  def filters
-    Tag.joins("INNER JOIN `filter_taggings` ON `tags`.`id` = `filter_taggings`.`filter_id`
-      INNER JOIN `works` ON `filter_taggings`.`filterable_id` = `works`.`id` AND `filter_taggings`.`filterable_type` = 'Work'
-      INNER JOIN `creatorships` ON `works`.`id` = `creatorships`.`creation_id`
-      INNER JOIN `pseuds` ON `creatorships`.`pseud_id` = `pseuds`.`id`").
-    where("`pseuds`.`user_id` = ? AND `creatorships`.`creation_type` = 'Work'", self.id)
-  end
-
-  def direct_filters
-    filters.where("filter_taggings.inherited = false")
-  end
+  has_many :tags, through: :works
+  has_many :filters, through: :works
+  has_many :direct_filters, through: :works
 
   has_many :bookmark_tags, through: :bookmarks, source: :tags
 
@@ -351,9 +308,13 @@ class User < ApplicationRecord
 
   # removes ALL unposted works
   def wipeout_unposted_works
-    works.where(posted: false).each do |w|
-      w.destroy
-    end
+    works.where(posted: false).destroy_all
+  end
+
+  # Removes all of the user's series that don't have any listed works.
+  def destroy_empty_series
+    series.left_joins(:serial_works).where(serial_works: { id: nil }).
+      destroy_all
   end
 
   # Retrieve the current default pseud
