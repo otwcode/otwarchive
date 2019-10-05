@@ -7,7 +7,7 @@ Feature: Create and Edit Series
   Scenario: Creator manually enters a series name to add a work to a new series when the work is first posted
     Given I am logged in as "author"
       And I set up the draft "Sweetie Belle"
-    When I fill in "work_series_attributes_title" with "Ponies"
+    When I fill in "Or create and use a new one:" with "Ponies"
     When I press "Post Without Preview"
     Then I should see "Part 1 of the Ponies series" within "div#series"
       And I should see "Part 1 of the Ponies series" within "dd.series"
@@ -18,7 +18,7 @@ Feature: Create and Edit Series
     Given I am logged in as "author"
       And I post the work "Sweetie Belle" as part of a series "Ponies"
       And I set up the draft "Starsong"
-    When I select "Ponies" from "work_series_attributes_id"
+    When I select "Ponies" from "Choose one of your existing series:"
       And I press "Post Without Preview"
     Then I should see "Part 2 of the Ponies series" within "div#series"
       And I should see "Part 2 of the Ponies series" within "dd.series"
@@ -33,7 +33,7 @@ Feature: Create and Edit Series
     When I view the series "Ponies"
     Then I should not see "Rainbow Dash"
     When I edit the work "Rainbow Dash"
-      And I select "Ponies" from "work_series_attributes_id"
+      And I select "Ponies" from "Choose one of your existing series:"
       And I press "Post Without Preview"
     Then I should see "Part 2 of the Ponies series" within "div#series"
       And I should see "Part 2 of the Ponies series" within "dd.series"
@@ -69,23 +69,21 @@ Feature: Create and Edit Series
       And I should see "I wrote this under the influence of coffee! And pink chocolate." within "dl.series"
       And I should see "Complete: No"
     When I follow "Edit Series"
-      And I check "series_complete"
+      And I check "This series is complete"
       And I press "Update"
     Then I should see "Complete: Yes"
 
-  @disable_caching
   Scenario: A work can be in two series
     Given I am logged in as "author"
       And I post the work "Sweetie Belle" as part of a series "Ponies"
       And I post the work "Rainbow Dash" as part of a series "Ponies"
     When I edit the work "Rainbow Dash"
-    Then the "series-options-show" checkbox should be checked
-      And I should see "Ponies" within "fieldset#series-options"
-    When I fill in "work_series_attributes_title" with "Black Beauty"
+    Then the "This work is part of a series" checkbox should be checked
+      And "Ponies" should be an option within "Choose one of your existing series:"
+    When I fill in "Or create and use a new one:" with "Black Beauty"
       And I press "Preview"
     Then I should see "Part 2 of the Ponies series" within "dd.series"
-    When "AO3-3455" is fixed
-      # And I should see "Part 1 of the Black Beauty series" within "dd.series"
+      And I should see "Part 1 of the Black Beauty series" within "dd.series"
     When I press "Update"
       And all indexing jobs have been run
     Then I should see "Part 1 of the Black Beauty series" within "dd.series"
@@ -97,7 +95,7 @@ Feature: Create and Edit Series
     Given I am logged in as "author"
       And I add the pseud "Pointless Pseud"
       And I set up the draft "Sweetie Belle" using the pseud "Pointless Pseud"
-    When I fill in "work_series_attributes_title" with "Ponies"
+    When I fill in "Or create and use a new one:" with "Ponies"
       And I press "Post Without Preview"
     Then I should see "Pointless Pseud"
       And I should see "Part 1 of the Ponies series" within "div#series"
@@ -125,7 +123,7 @@ Feature: Create and Edit Series
     When I view the series "Ponies"
     Then I should not see "Rainbow Dash"
     When I edit the work "Rainbow Dash"
-      And I select "Ponies" from "work_series_attributes_id"
+      And I select "Ponies" from "Choose one of your existing series:"
       And I press "Post Without Preview"
     Then I should see "Part 2 of the Ponies series" within "div#series"
       And I should see "Part 2 of the Ponies series" within "dd.series"
@@ -141,7 +139,6 @@ Feature: Create and Edit Series
       And I follow "Series (1)"
     Then the page title should include "by Pointless Pseud"
 
-  @disable_caching
   Scenario: Rename a series
     Given I am logged in as a random user
     When I add the work "WALL-E" to series "Robots"
@@ -155,8 +152,7 @@ Feature: Create and Edit Series
       And I should see "Many a Robot"
     When I view the work "WALL-E"
     Then I should see "Part 1 of the Many a Robot series" within "div#series"
-    And "AO3-3847" is fixed
-    #  And I should see "Part 1 of the Many a Robot series" within "dd.series"
+      And I should see "Part 1 of the Many a Robot series" within "dd.series"
 
   Scenario: Post Without Preview
     Given I am logged in as "whoever" with password "whatever"
@@ -233,11 +229,10 @@ Feature: Create and Edit Series
     Then I should see "Pointless Pseud"
       And I should see "Part 2 of the Ponies series"
     When I edit the work "Rainbow Dash"
-      And I fill in "work_series_attributes_title" with "Black Beauty"
+      And I fill in "Or create and use a new one:" with "Black Beauty"
       And I press "Preview"
     Then I should see "Part 2 of the Ponies series" within "dd.series"
-    When "AO3-3455" is fixed
-    # And I should see "Part 1 of the Black Beauty series" within "dd.series"
+      And I should see "Part 1 of the Black Beauty series" within "dd.series"
 
   Scenario: When editing a series, the title field should not escape HTML
     Given I am logged in as "whoever"
