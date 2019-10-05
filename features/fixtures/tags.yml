@@ -6,7 +6,7 @@ none:
   id: 2
   name: No Warnings
   canonical: true
-  type: Warning
+  type: ArchiveWarning
 fandom1:
   id: 3
   name: first fandom

@@ -127,7 +127,6 @@ gem 'rollout'
 #  Place the New Relic gem as low in the list as possible, allowing the
 #  frameworks above it to be instrumented when the gem initializes.
 gem 'newrelic_rpm'
-gem 'newrelic-redis'
 
 #   Use update memcached client with kinder, gentler I/O for Ruby
 gem 'connection_pool'
@@ -162,14 +161,15 @@ end
 
 group :test, :development do
   gem 'awesome_print'
+  gem 'brakeman', '3.7.2'
   gem 'pry-byebug'
   gem 'whiny_validation'
-  gem 'factory_girl', '~> 4.8.0'
+  gem 'factory_bot', '~> 5.0.2'
   gem 'minitest'
 end
 
 group :development do
-  gem 'factory_girl_rails'
+  gem 'factory_bot_rails'
   gem 'bundler-audit'
   gem 'active_record_query_trace', '~> 1.6', '>= 1.6.1'
 end
