@@ -296,7 +296,7 @@ GEM
       pry (~> 0.10)
     public_suffix (3.0.3)
     rack (2.0.7)
-    rack-dev-mark (0.7.6)
+    rack-dev-mark (0.7.8)
       rack (>= 1.1, < 2.1)
     rack-protection (2.0.3)
       rack
@@ -520,7 +520,7 @@ DEPENDENCIES
   pickle
   poltergeist
   pry-byebug
-  rack-dev-mark (>= 0.7.5)
+  rack-dev-mark (>= 0.7.8)
   rails (~> 5.1.6.2)
   rails-controller-testing
   rails-observers!
@@ -552,7 +552,7 @@ DEPENDENCIES
   will_paginate (>= 3.0.2)
 
 RUBY VERSION
-   ruby 2.4.5p335
+   ruby 2.6.5p114
 
 BUNDLED WITH
    1.17.3
