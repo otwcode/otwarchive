@@ -7,13 +7,13 @@ Bundler/OrderedGems:
   Enabled: false
 
 Layout/DotPosition:
-  EnforcedStyle: leading
+  EnforcedStyle: trailing
 
 Layout/IndentArray:
   EnforcedStyle: consistent
 
 Layout/MultilineMethodCallIndentation:
-  EnforcedStyle: indented
+  EnforcedStyle: aligned
 
 Layout/TrailingWhitespace:
   Enabled: false
