@@ -1,3 +1,6 @@
+rubocop:
+  version: 0.72.0
+
 ruby:
   enabled: true
   config_file: config/.rubocop.yml
