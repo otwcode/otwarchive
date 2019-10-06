@@ -77,5 +77,10 @@ module Otwarchive
 
     # Bring the log under control
     config.lograge.enabled = true
+
+    # Only send referrer information to ourselves
+    config.action_dispatch.default_headers = {
+      'Referrer-Policy' => 'same-origin'
+    }
   end
 end
