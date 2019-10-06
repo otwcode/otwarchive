@@ -445,12 +445,12 @@ Feature: Collection
     When I am logged in as "creator"
       And I set up the draft "Secret Work"
       And I fill in "Collections" with "Anonymizing,Fluffy"
-      And I press "Post Without Preview"
+      And I press "Post"
       And I go to my works page
     Then I should not see "Secret Work"
 
     When I edit the work "Secret Work"
       And I fill in "Collections" with "Holidays,Fluffy"
-      And I press "Post Without Preview"
+      And I press "Post"
       And I go to my works page
     Then I should see "Secret Work"
