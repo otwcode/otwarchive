@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-ruby '2.3.4'
+ruby '2.6.5'
 
 gem 'test-unit', '~> 3.2'
 
@@ -112,7 +112,7 @@ gem 'globalize', git: 'https://github.com/panorama-berlin/globalize'
 gem 'activemodel-serializers-xml'
 
 # Add a clean notifier that shows we are on dev or test
-gem 'rack-dev-mark', '>=0.7.5'
+gem 'rack-dev-mark', '>=0.7.8'
 
 #Phrase-app
 gem 'phraseapp-in-context-editor-ruby', '>=1.0.6'
@@ -150,7 +150,7 @@ group :test do
   gem 'faker', '~> 1.6.3'
   # Record and replay data from external URLs
   gem 'vcr', '~> 3.0', '>= 3.0.1'
-  gem 'webmock', '~> 1.24.2'
+  gem 'webmock', '~> 3.7.6'
   gem 'timecop'
   gem 'cucumber-timecop', require: false
   # Code coverage
