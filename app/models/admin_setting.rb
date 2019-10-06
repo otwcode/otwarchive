@@ -21,17 +21,16 @@ class AdminSetting < ApplicationRecord
     account_creation_enabled?: ArchiveConfig.ACCOUNT_CREATION_ENABLED,
     days_to_purge_unactivated: ArchiveConfig.DAYS_TO_PURGE_UNACTIVATED,
     suspend_filter_counts?: false,
-    disable_filtering?: false,
     enable_test_caching?: false,
     cache_expiration: 10,
     tag_wrangling_off?: false,
-    guest_downloading_off?: false,
     downloads_enabled?: true,
-    stats_updated_at: nil
+    stats_updated_at: nil,
+    disable_support_form?: false
   }.freeze
 
   def self.current
-    Rails.cache.fetch("admin_settings") { AdminSetting.first } || OpenStruct.new(DEFAULT_SETTINGS)
+    Rails.cache.fetch("admin_settings", race_condition_ttl: 10.seconds) { AdminSetting.first } || OpenStruct.new(DEFAULT_SETTINGS)
   end
 
   class << self

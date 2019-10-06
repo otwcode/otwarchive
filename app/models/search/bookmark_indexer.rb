@@ -85,13 +85,14 @@ class BookmarkIndexer < Indexer
       root: false,
       only: [
         :id, :created_at, :bookmarkable_type, :bookmarkable_id, :user_id,
-        :notes, :private, :updated_at, :hidden_by_admin, :pseud_id, :rec
+        :private, :updated_at, :hidden_by_admin, :pseud_id, :rec
       ],
       methods: [:bookmarker, :collection_ids, :with_notes, :bookmarkable_date]
     ).merge(
       user_id: object.pseud&.user_id,
       tag: tags.map(&:name),
-      tag_ids: tags.map(&:id)
+      tag_ids: tags.map(&:id),
+      notes: object.bookmarker_notes
     )
 
     unless parent_id(object.id, object).match("deleted")

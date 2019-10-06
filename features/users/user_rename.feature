@@ -120,7 +120,7 @@ Feature:
       And I press "Change User Name"
       And all indexing jobs have been run
     Then I should get confirmation that I changed my username
-    When I am on the the works page
+    When I am on the works page
     Then I should see "newusername"
       And I should see "Epic story"
       And I should not see "oldusername"

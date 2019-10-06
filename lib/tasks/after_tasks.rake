@@ -407,7 +407,7 @@ namespace :After do
 
   desc "Set initial values for sortable tag names for tags that aren't fandoms"
   task(:more_sortable_tag_names => :environment) do
-    [Category, Character, Freeform, Rating, Relationship, Warning].each do |klass|
+    [Category, Character, Freeform, Rating, Relationship, ArchiveWarning].each do |klass|
       puts "Adding sortable names for #{klass.to_s.downcase.pluralize}"
       klass.by_name.find_each(:conditions => "canonical = 1 AND sortable_name = ''") do |tag|
         tag.set_sortable_name
@@ -593,6 +593,43 @@ namespace :After do
       AsyncIndexer.index(WorkIndexer, batch.map(&:id), :background)
     end
     print("\n") && STDOUT.flush
+  end
+
+  # Usage: rake After:reset_word_counts[en]
+  desc "Reset word counts for works in the specified language"
+  task(:reset_word_counts, [:lang] => :environment) do |_t, args|
+    language = Language.find_by(short: args.lang)
+    raise "Invalid language: '#{args.lang}'" if language.nil?
+
+    works = Work.where(language: language)
+    print "Resetting word count for #{works.count} '#{language.short}' works: "
+
+    works.find_in_batches do |batch|
+      batch.each do |work|
+        work.chapters.each do |chapter|
+          chapter.content_will_change!
+          chapter.save
+        end
+        work.save
+      end
+      print(".") && STDOUT.flush
+    end
+    puts && STDOUT.flush
+  end
+
+  desc "Reveal works and creators hidden upon invitation to unrevealed or anonymous collections"
+  task(unhide_invited_works: :environment) do
+    works = Work.where("in_anon_collection IS true OR in_unrevealed_collection IS true")
+    puts "Total number of works to check: #{works.count}"
+
+    works.find_in_batches do |batch|
+      batch.each do |work|
+        work.update_anon_unrevealed
+        work.save if work.changed?
+      end
+      print(".") && STDOUT.flush
+    end
+    puts && STDOUT.flush
   end
 end # this is the end that you have to put new tasks above
 
