@@ -365,18 +365,24 @@ Feature: Prompt Meme Challenge
   Scenario: When a prompt is filled with a co-authored work, the e-mail should link to each author's URL instead of showing escaped HTML
 
   Given I have Battle 12 prompt meme fully set up
+    And I am logged in as "myname3"
+    And I go to myname3's user page
+    And I follow "Preferences"
+    And I check "Allow others to invite me to be a co-creator"
+    And I press "Update"
   When I am logged in as "myname1"
     And I sign up for Battle 12 with combination A
     And I log out
   When I am logged in as "myname2"
     And I claim a prompt from "Battle 12"
     And I start to fulfill my claim with "Co-authored Fill"
-    And I add the co-author "myname3"
+    And I invite the co-author "myname3"
   When I press "Post"
   Then 1 email should be delivered to "myname3"
-    And the email should contain "You have been listed as a co-creator on the following work"
+    And the email should contain "The user myname2 has invited your pseud myname3 to be listed as a co-creator on the following work"
     And the email should not contain "translation missing"
-  When I am logged in as "mod1"
+  When the user "myname3" accepts all co-creator invites
+    And I am logged in as "mod1"
     And I reveal the authors of the "Battle 12" challenge
     And I reveal the "Battle 12" challenge
   Then 1 email should be delivered to "myname1"

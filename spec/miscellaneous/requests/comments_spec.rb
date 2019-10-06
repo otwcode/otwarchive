@@ -5,7 +5,7 @@ def comment_attributes_guest
 end
 
 def comment_attributes_user
-  { content: "Body text of the comment", pseud_id: FactoryGirl.create(:pseud).id }
+  { content: "Body text of the comment", pseud_id: FactoryBot.create(:pseud).id }
 end
 
 # This code block is used for logged out users and logged in users, on unrestricted works
@@ -98,10 +98,10 @@ describe "Comments", type: :request do
   context "logged in users" do
     before do
       @user = create(:user)
-      visit login_path
+      visit new_user_session_path
       within("div#small_login") do
-        fill_in "User name:",with: "#{@user.login}" ,  exact: true
-        fill_in "Password", with: "password"
+        fill_in "User name or email:", with: "#{@user.login}", exact: true
+        fill_in "Password:", with: "password"
         check "Remember Me"
         click_button "Log In"
       end

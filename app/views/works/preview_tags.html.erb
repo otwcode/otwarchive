@@ -19,7 +19,7 @@
 
 <%= form_for(@work, url: { action: :update_tags }) do |form| %>
   <%= form.hidden_field :rating_string, value: "#{@work.rating_string}" %>
-  <%= form.hidden_field :warning_string, value: "#{@work.warning_string}" %>
+  <%= form.hidden_field :archive_warning_string, value: "#{@work.archive_warning_string}" %>
   <%= form.hidden_field :category_string, value: "#{@work.category_string}" %>
   <%= form.hidden_field :fandom_string, value: "#{@work.fandom_string}" %>
   <%= form.hidden_field :relationship_string, value: "#{@work.relationship_string}" %>

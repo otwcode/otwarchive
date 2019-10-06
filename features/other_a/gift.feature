@@ -195,12 +195,15 @@ Feature: Create Gifts
       And "giftee2@foo.com" should be notified by email about their gift "GiftStory1"
 
   Scenario: When a user is notified that a co-authored work has been given to them as a gift, the e-mail should link to each author's URL instead of showing escaped HTML
-    Given I add the co-author "gifter2"
+    Given I invite the co-author "gifter2"
       And I give the work to "giftee1"
-      And I post the work without preview
+      And I preview the work
     Then 1 email should be delivered to "gifter2"
-      And the email should contain "You have been listed as a co-creator on the following work"
+      And the email should contain "The user gifter has invited your pseud gifter2 to be listed as a co-creator on the following work"
       And the email should not contain "translation missing"
+    When all emails have been delivered
+      And the user "gifter2" accepts all co-creator invites
+      And I press "Post"
     Then 1 email should be delivered to "giftee1"
       And the email should link to gifter's user url
       And the email should not contain "&lt;a href=&quot;http://archiveofourown.org/users/gifter/pseuds/gifter&quot;"

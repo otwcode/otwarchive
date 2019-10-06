@@ -29,7 +29,7 @@
       <legend><%= ts("Chapter Preface") %></legend>
       <h4 class="landmark heading"><%= ts("Chapter Preface") %></h4>
       <dl>
-        <%= render "pseuds/byline", form: f, type: "chapter" %>
+        <%= render "pseuds/byline", form: f, object: @chapter %>
 
         <dt class="summary"><%= f.label :summary, ts("Chapter Summary") %></dt>
         <dd class="summary">

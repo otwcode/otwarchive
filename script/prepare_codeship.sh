@@ -27,7 +27,7 @@ cp config/redis.codeship.example config/redis.yml
 
 bundle exec rake db:create:all --trace
 bundle exec rails runner "puts \"Connecting to database version #{ActiveRecord::Base.connection.show_variable('version')}\""
-mysql -u $MYSQL_USER -p$MYSQL_PASSWORD -e  "ALTER DATABASE test$TEST_ENV_NUMBER CHARACTER SET utf8 COLLATE utf8_general_ci;"
+mysql -u $MYSQL_USER -p$MYSQL_PASSWORD -e "ALTER DATABASE test$TEST_ENV_NUMBER CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"
 bundle exec rake db:schema:load --trace
 bundle exec rake db:migrate --trace
 # sed  -e 's/ELASTICSEARCH_URL.*//' -i config/config.yml
@@ -35,7 +35,7 @@ bundle exec rake db:migrate --trace
 #sed -e 's/PRODUCTION_CACHE.*$//' -i config/config.yml
 #wget http://media.transformativeworks.org/ao3/codeship/prepare_part2.sh -O - | bash -x
 
-ES_VERSION="6.2.4"
+ES_VERSION="6.7.0"
 ES_PORT="9400"
 cd ~
 wget https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-${ES_VERSION}.zip
@@ -50,3 +50,5 @@ echo
 cd ~/clone
 echo "BCRYPT_COST: 4"  >> config/local.yml
 tail config/local.yml
+
+bash script/codeship_ebook_converters.sh

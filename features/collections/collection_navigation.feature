@@ -102,3 +102,33 @@ Feature: Basic collection navigation
 
     When I go to "MCU Party" collection's page
     Then I should see "Fandoms (1)"
+
+  Scenario: Browse tags within a collection (or not)
+    Given I have a collection "Randomness"
+      And a canonical fandom "Naruto"
+      And a canonical freeform "Crack"
+      And I am logged in
+      And I post the work "Has some tags" with fandom "Naruto" with freeform "Crack" in the collection "Randomness"
+
+    # Tag links from the work blurb in a collection should not be collection-scoped
+    When I go to "Randomness" collection's page
+      And I follow "Naruto" within "#collection-works"
+    Then I should be on the works tagged "Naruto"
+
+    # Tag links from the work meta in a collection should not be collection-scoped
+    When I go to "Randomness" collection's page
+      And I follow "Has some tags"
+      And I follow "Naruto"
+    Then I should be on the works tagged "Naruto"
+
+    # Tag links from a collection's fandoms page should be collection-scoped
+    When I go to "Randomness" collection's page
+      And I follow "Fandoms (1)"
+      And I follow "Naruto"
+    Then I should be on the works tagged "Naruto" in collection "Randomness"
+
+    # Tag links from a collection's tags page should be collection-scoped
+    When I go to "Randomness" collection's page
+      And I follow "Tags" within "#dashboard"
+      And I follow "Crack"
+    Then I should be on the works tagged "Crack" in collection "Randomness"

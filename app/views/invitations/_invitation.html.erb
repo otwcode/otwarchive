@@ -4,7 +4,7 @@
  	<dt>Invitation token</dt>
     <dd><%= invitation.token %></dd>
  	<dt>Copy link</dt>
-    <dd><% unless invitation.redeemed_at %><%= link_to "copy and use", new_user_path(:invitation_token => invitation.token) %><% end %></dd>
+    <dd><% unless invitation.redeemed_at %><%= link_to "copy and use", signup_path(:invitation_token => invitation.token) %><% end %></dd>
  	<dt>Sent to</dt>
     <% if invitation.redeemed_at %>
     <dd><%= invitation.invitee_email %></dd>
