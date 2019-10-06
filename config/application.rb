@@ -80,7 +80,12 @@ module Otwarchive
 
     # Only send referrer information to ourselves
     config.action_dispatch.default_headers = {
-      'Referrer-Policy' => 'same-origin'
+      "Referrer-Policy" => "same-origin",
+      "X-Frame-Options" => "SAMEORIGIN",
+      "X-XSS-Protection" => "1; mode=block",
+      "X-Content-Type-Options" => "nosniff",
+      "X-Download-Options" => "noopen",
+      "X-Permitted-Cross-Domain-Policies" => "none"
     }
   end
 end
