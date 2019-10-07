@@ -1,11 +1,11 @@
-= Reversi =
+# Reversi
 
 Reversi is a dark theme, with white text on a dark grey background. It has blue
 accents and branding in place of red.
 
 It consists of three skins.
 
-== Reversi - Screen ==
+## Reversi - Screen
 
 The "Reversi - Screen" skin contains the majority of styles. It is used on all
 screen sizes.
@@ -14,7 +14,7 @@ screen sizes.
 * Expand the "Advanced" section.
 * Check "Parent Only."
 
-== Reversi - Midsize ==
+## Reversi - Midsize
 
 The "Reversi - Midsize" skin contains adjustments for screens less than
 62em in width.
@@ -22,9 +22,9 @@ The "Reversi - Midsize" skin contains adjustments for screens less than
 * Use the CSS from reversi_midsize.handheld_.css.
 * Expand the "Advanced" section.
 * Check "Parent Only."
-* For "Media," check the "only screen and (max-width: 42em)" option.
+* For "Media," check the "only screen and (max-width: 62em)" option.
 
-== Reversi ==
+## Reversi
 
 The "Reversi" skin combines the other skins.
 
