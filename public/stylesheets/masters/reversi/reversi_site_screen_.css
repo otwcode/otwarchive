@@ -308,7 +308,6 @@ button,
   color: #eee;
     box-shadow: inset 0 -8px 4px #232323, inset 0 8px 7px #555;
     text-shadow: none;
-    -webkit-appearance: none;
 }
 
 .actions a:visited,
@@ -369,6 +368,13 @@ span.delete {
 .secondary {
   border-color: #555;
     box-shadow: none;
+}
+
+/* don't let iOS add its special styling for dark buttons */
+button,
+input[type="button"],
+input[type="submit"] {
+    -webkit-appearance: none;
 }
 
 /* 09-ROLES-STATES: Because span.unread, .replied, span.claimed, and .actions span.defaulted spoof .actions .current, they're in 08-ACTIONS */
