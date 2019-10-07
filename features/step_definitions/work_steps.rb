@@ -15,7 +15,7 @@ When /^I fill in the basic work information for "([^"]*)"$/ do |title|
   fill_in("Work Title", with: title)
   fill_in("content", with: DEFAULT_CONTENT)
 end
-# Here we set up a draft and can then post it as a draft, preview and post, post without preview,
+# Here we set up a draft and can then post it as a draft, preview and post, post,
 # or fill in additional information on the work form.
 # Example: I set up the draft "Foo"
 # Example: I set up the draft "Foo" with fandom "Captain America" in the collection "MCU Stories" as a gift to "Bob"
@@ -282,7 +282,7 @@ When /^I post the chaptered draft "([^"]*)"$/ do |title|
 end
 
 When /^I post the work "([^"]*)" without preview$/ do |title|
-  # we now post without preview as our default test case
+  # we now post as our default test case
   step %{I post the work "#{title}"}
 end
 
