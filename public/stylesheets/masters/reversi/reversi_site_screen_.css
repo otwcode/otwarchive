@@ -194,7 +194,11 @@ form dd.required {
     box-shadow: none;
 }
 
-.LV_invalid_field, input.LV_invalid_field:hover, input.LV_invalid_field:active, textarea.LV_invalid_field:hover, textarea.LV_invalid_field:active {
+.LV_invalid_field,
+input.LV_invalid_field:hover,
+input.LV_invalid_field:active,
+textarea.LV_invalid_field:hover,
+textarea.LV_invalid_field:active {
   border-color: #fb8080;
 }
 
@@ -215,7 +219,8 @@ li.selected {
   background: #5998D6;
 }
 
-.required .autocomplete, .autocomplete .notice {
+.required .autocomplete,
+.autocomplete .notice {
   color: #eee;
 }
 
