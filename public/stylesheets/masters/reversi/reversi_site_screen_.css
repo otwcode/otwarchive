@@ -583,7 +583,8 @@ li.comment {
   border-bottom-color: #eee;
 }
 
-.faq .example, .guideline .example {
+.faq .example,
+.guideline .example {
   border-color: #406280;
 }
 
