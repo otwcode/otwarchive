@@ -19,13 +19,13 @@
             <li>
               <%= render 'inbox/reply_button', feedback_comment: inbox_comment.feedback_comment %>
             </li>
+          <% end %>
           <li id="read_comment_form_<%= inbox_comment.feedback_comment.id %>">
             <%= render 'inbox/read_form', inbox_comment: inbox_comment, current_user: current_user %>
           </li>
           <li>
             <%= render 'inbox/delete_form', inbox_comment: inbox_comment, current_user: current_user %>
           </li>
-          <% end %>
         </ul>
       </li>
     <% end %>
