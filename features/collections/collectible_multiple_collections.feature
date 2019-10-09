@@ -40,3 +40,15 @@ Feature: Collectible items in multiple collections
     When I go to "ModeratedCollection" collection's page
     Then I should not see "RandomWork"
 
+  Scenario: Collection mod can't add an anonymous work to their collection using
+  the Add to Collections option on the work
+    Given I have the anonymous collection "AnonymousCollection"
+      And I have the collection "MyCollection"
+      And I am logged in as a random user
+      And I post the work "Some Work" to the collection "AnonymousCollection"
+    When I am logged in as the owner of "MyCollection"
+      And I view the work "Some Work"
+      And I fill in "Collection name(s):" with "MyCollection"
+      And I press "Add"
+    Then I should see "We couldn't add your submission to the following collection(s):"
+      And I should see "MyCollection, because you don't own this item and the item is anonymous."
