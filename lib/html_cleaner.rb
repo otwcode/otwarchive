@@ -135,6 +135,7 @@ module HtmlCleaner
   end
 
   def sanitize_value(field, value)
+    return value if ArchiveConfig.FIELDS_WITHOUT_SANITIZATION.include?(field.to_s)
     if ArchiveConfig.NONZERO_INTEGER_PARAMETERS.has_key?(field.to_s)
       return (value.to_i > 0) ? value.to_i : ArchiveConfig.NONZERO_INTEGER_PARAMETERS[field.to_s]
     end
@@ -404,6 +405,6 @@ module HtmlCleaner
 
   def add_break_between_paragraphs(value)
     return "" if value.blank?
-    value.gsub(/\s*<\/p>\s*<p>s*/, "</p><br /><p>")
+    value.gsub(%r{\s*</p>\s*<p>\s*}, "</p><br /><p>")
   end
 end

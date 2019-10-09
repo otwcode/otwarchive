@@ -6,7 +6,7 @@ class DeviseFailureMessageOptions < Devise::FailureApp
   def default_i18n_variables
     @default_i18n_variables ||= {
       reset_path: new_user_password_path,
-      problems_path: admin_post_path(1277),
+      problems_path: admin_post_path(12035),
       app_name: ArchiveConfig.APP_SHORT_NAME
     }
   end

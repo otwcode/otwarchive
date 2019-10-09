@@ -81,8 +81,7 @@ Feature: Archivist bulk imports
       | user1 | a@ao3.org |
     When I go to the import page
       And I import the work "http://ao3testing.dreamwidth.org/593.html" by "name1" with email "a@ao3.org" and by "name2" with email "b@ao3.org"
-    When the system processes jobs
-      Then 1 email should be delivered to "a@ao3.org"
+    Then 1 email should be delivered to "a@ao3.org"
       And 1 email should be delivered to "b@ao3.org"
 
   Scenario: Import a work for multiple authors with accounts should not display the archivist
@@ -176,7 +175,7 @@ Feature: Archivist bulk imports
       And I follow "Claim or remove your works" in the email
     Then I should see "Claiming Your Imported Works"
     And I should see "An archive including some of your work(s) has been moved to the Archive of Our Own."
-    When I press "Sign me up and give me my works! Yay!"
+    When I press "Sign me up and give me my works!"
     Then I should see "Create Account"
     When I fill in the sign up form with valid data
     And I press "Create Account"

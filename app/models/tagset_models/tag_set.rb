@@ -4,10 +4,10 @@ class TagSet < ApplicationRecord
   # a complete match is numerically represented with ALL
   ALL = -1
 
-  TAG_TYPES = %w(fandom character relationship freeform category rating warning)
+  TAG_TYPES = %w(fandom character relationship freeform category rating archive_warning)
   TAG_TYPES_INITIALIZABLE = %w(fandom character relationship freeform)
   TAG_TYPES_RESTRICTED_TO_FANDOM = %w(character relationship)
-  TAGS_AS_CHECKBOXES = %w(category rating warning)
+  TAGS_AS_CHECKBOXES = %w(category rating archive_warning)
 
   attr_accessor :from_owned_tag_set
 
@@ -198,7 +198,6 @@ class TagSet < ApplicationRecord
     ""
   end
 
-
   ### Matching
 
   # Computes the "match rank" of the two arrays. The match rank is ALL if the
@@ -219,7 +218,7 @@ class TagSet < ApplicationRecord
   # possible.)
   def tag_ids_by_type
     if @tag_ids_by_type.nil?
-      @tag_ids_by_type = tags.group_by { |tag| tag.type.downcase }
+      @tag_ids_by_type = tags.group_by { |tag| tag.type.underscore }
       @tag_ids_by_type.each_value { |tag_list| tag_list.map!(&:id) }
     end
 
