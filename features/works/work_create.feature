@@ -30,7 +30,7 @@ Feature: Create Works
     Given I am logged in as "newbie"
     When I set up the draft "All Hell Breaks Loose"
       And I fill in "content" with "Bad things happen, etc."
-      And I press "Post Without Preview"
+      And I press "Post"
     Then I should see "Work was successfully posted."
       And I should see "Bad things happen, etc."
     When I go to the works page
@@ -42,7 +42,7 @@ Feature: Create Works
     When I set up the draft "All Hell Breaks Loose"
       And I unselect "newbie" from "Creator/Pseud(s)"
       And I select "Pointless Pseud" from "Creator/Pseud(s)"
-      And I press "Post Without Preview"
+      And I press "Post"
     Then I should see "Work was successfully posted."
     When I go to the works page
     Then I should see "All Hell Breaks Loose"
@@ -245,7 +245,7 @@ Feature: Create Works
     Given I am logged in
     When I set up the draft "02138"
       And I fill in "Fandoms" with "Supernatural, Smallville"
-    When I press "Post Without Preview"
+    When I press "Post"
     Then I should see "Work was successfully posted."
       And I should see "Supernatural"
       And I should see "Smallville"
@@ -254,7 +254,7 @@ Feature: Create Works
   Scenario: test for < and > in title
     Given I am logged in
     When I set up the draft "4 > 3 and 2 < 5"
-    When I press "Post Without Preview"
+    When I press "Post"
     Then I should see "Work was successfully posted."
       And I should see "4 > 3 and 2 < 5" within "h2.title"
 
@@ -264,7 +264,7 @@ Feature: Create Works
     When I follow "Add Chapter"
       And I fill in "Chapter Title" with "This is my second chapter"
       And I fill in "content" with "Let's write another story"
-      And I press "Post Without Preview"
+      And I press "Post"
     Then I should see "Chapter 2: This is my second chapter"
       And I should see "Chapter has been posted!"
       And I should not see "This is a preview"
@@ -298,11 +298,11 @@ Feature: Create Works
       And I fill in "Fandoms" with "Dallas"
       And I fill in "Work Title" with "I Shot J.R.: Kristin's Story"
       And I fill in "content" with "It wasn't my fault, you know."
-      And I press "Post Without Preview"
+      And I press "Post"
     Then I should see "We couldn't save this work"
       And I should see "Please add all required tags. Warning is missing."
     When I check "No Archive Warnings Apply"
-      And I press "Post Without Preview"
+      And I press "Post"
     Then I should see "Work was successfully posted."
       And I should see "No Archive Warnings Apply"
       And I should not see "Author Chose Not To Use Archive Warnings"
@@ -321,7 +321,7 @@ Feature: Create Works
       And I fill in "pseud_byline" with "Me"
       And I check "This work is part of a series"
       And I fill in "Or create and use a new one:" with "My new series"
-      And I press "Post Without Preview"
+      And I press "Post"
     Then I should see "There's more than one user with the pseud Me."
       And I select "myself" from "Please choose the one you want:"
       And I press "Preview"
@@ -363,7 +363,7 @@ Feature: Create Works
       And I set up a draft "Futuristic"
     When I check "Set a different publication date"
       And I select "30" from "work[chapter_attributes][published_at(3i)]"
-      And I press "Post Without Preview"
+      And I press "Post"
     Then I should see "Publication date can't be in the future."
     When I jump in our Delorean and return to the present
 
