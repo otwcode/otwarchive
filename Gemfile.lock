@@ -296,6 +296,8 @@ GEM
       pry (~> 0.10)
     public_suffix (3.0.3)
     rack (2.0.7)
+    rack-attack (6.1.0)
+      rack (>= 1.0, < 3)
     rack-dev-mark (0.7.8)
       rack (>= 1.1, < 2.1)
     rack-protection (2.0.3)
@@ -520,6 +522,7 @@ DEPENDENCIES
   pickle
   poltergeist
   pry-byebug
+  rack-attack
   rack-dev-mark (>= 0.7.8)
   rails (~> 5.1.6.2)
   rails-controller-testing
