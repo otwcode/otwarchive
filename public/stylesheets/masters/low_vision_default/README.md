@@ -9,7 +9,7 @@ filters are max and so it puts the filters at the bottom of the page
 * Enlarges the `pre` and `textarea` text by 200% so it scales in Firefox
 * Swaps a lot of margins and padding into percentages so they don't scale up as
 much and crowd out the text
-* Takes off the header andfooter texture and makes it flat
+* Takes off the header and footer texture and makes it flat
 
 There's not a lot else done with colors/images on the grounds you're probably
 overriding in your browser.
