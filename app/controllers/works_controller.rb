@@ -350,7 +350,6 @@ class WorksController < ApplicationController
     @work.attributes = work_params
     @chapter.attributes = work_params[:chapter_attributes] if work_params[:chapter_attributes]
     @work.ip_address = request.remote_ip
-
     @work.set_word_count(@work.preview_mode)
     @work.save_parents if @work.preview_mode
 
@@ -363,7 +362,7 @@ class WorksController < ApplicationController
       render :edit
     elsif params[:preview_button]
       unless @work.posted?
-        flash[:notice] = ts("Your changes have not been saved. Please post your work or save without posting if you want to keep them.")
+        flash[:notice] = ts("Your changes have not been saved. Please post your work or save as draft if you want to keep them.")
       end
 
       in_moderated_collection
@@ -406,7 +405,7 @@ class WorksController < ApplicationController
       Work.expire_work_tag_groups_id(@work.id)
       flash[:notice] = ts('Tags were successfully updated.')
       redirect_to(@work)
-    else # Post Without Preview
+    else # Save As Draft
       @work.posted = true
       @work.minor_version = @work.minor_version + 1
       @work.save

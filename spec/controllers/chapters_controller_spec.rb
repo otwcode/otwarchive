@@ -436,7 +436,7 @@ describe ChaptersController do
         expect(assigns[:work].major_version).to eq(2)
       end
 
-      context "when the post without preview button is clicked" do
+      context "when the post button is clicked" do
         context "when the chapter and work are valid" do
           it "posts the chapter" do
             post :create, params: { work_id: work.id, chapter: @chapter_attributes, post_without_preview_button: true }
@@ -670,7 +670,7 @@ describe ChaptersController do
         end
       end
 
-      context "when the post without preview button is clicked" do
+      context "when the post button is clicked" do
         it "posts the chapter" do
           put :update, params: { work_id: work.id, id: work.chapters.first.id, chapter: @chapter_attributes, post_without_preview_button: true }
           expect(assigns[:chapter].posted).to be true
