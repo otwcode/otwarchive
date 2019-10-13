@@ -46,7 +46,6 @@ describe OTWSanitize::MediaSanitizer do
         expect(content).to match("controls=\"controls\"")
         expect(content).to match("crossorigin=\"anonymous\"")
         expect(content).to match("preload=\"metadata\"")
-        expect(content).to match("controls=\"controls\"")
       end
 
       it "allows source elements" do
@@ -59,6 +58,7 @@ describe OTWSanitize::MediaSanitizer do
         content = Sanitize.fragment(html, config)
         expect(content).to match("flower.webm")
       end
+
       it "removes unwhitelisted attributes" do
         html = "
           <video>

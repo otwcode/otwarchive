@@ -39,8 +39,12 @@ module OTWSanitize
         }
       },
       protocols: {
+        'audio' => {
+          'src'    => %w[http https]
+        },
         'video' => {
-          'poster' => %w[http https]
+          'poster' => %w[http https],
+          'src'    => %w[http https]
         }
       }
     }.freeze
