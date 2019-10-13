@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-# Creates a Sanitize transformer to sanitize embedded media
 module OTWSanitize
+  # Creates a Sanitize transformer to sanitize embedded media
   class EmbedSanitizer
     WHITELIST_REGEXES = {
       ao3:              %r{^archiveofourown\.org/},
@@ -148,10 +148,7 @@ module OTWSanitize
 
       if node_name == 'embed'
         disable_scripts(node)
-
-        unless allows_flashvars?
-          node['flashvars'] = ""
-        end
+        node['flashvars'] = "" unless allows_flashvars?
       end
       { node_whitelist: [node, parent] }
     end
@@ -162,12 +159,8 @@ module OTWSanitize
       embed_node['allownetworking'] = 'internal'
 
       embed_node.search("param").each do |param_node|
-        if param_node[:name].downcase == "allowscriptaccess"
-          param_node.unlink
-        end
-        if param_node[:name].downcase == "allownetworking"
-          param_node.unlink
-        end
+        param_node.unlink if param_node[:name].casecmp?("allowscriptaccess") ||
+                             param_node[:name].casecmp?("allownetworking")
       end
     end
 
