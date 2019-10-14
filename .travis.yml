@@ -1,5 +1,5 @@
 sudo: required
-dist: xenial
+dist: bionic
 
 language: ruby
 cache: bundler
