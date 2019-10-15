@@ -101,7 +101,7 @@ class StatsController < ApplicationController
      chm: "N,000000,0,-1,11"
     })
 
-    @chart = GoogleVisualr::Interactive::ColumnChart.new(@chart_data, title: chart_title)
+    @chart = GoogleVisualr::Interactive::ColumnChart.new(@chart_data, vAxis: { minValue: 0 }, title: chart_title)
 
   end
 
