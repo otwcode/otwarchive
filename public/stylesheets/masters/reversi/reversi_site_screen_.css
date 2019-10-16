@@ -329,6 +329,10 @@ fieldset fieldset.listbox {
   outline: none;
 }
 
+fieldset .footnote, .character_counter, #comment-field-description {
+  color:#FFF;
+}
+
 .mce-container input:focus {
   background: #F3EFEC;
 }
