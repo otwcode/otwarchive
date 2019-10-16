@@ -269,6 +269,10 @@ button,
   text-shadow: none;
 }
 
+#header .search input[type="text"] {
+  color: #FFF;
+}
+
 .actions a:hover,
 .actions input:hover,
 #dashboard a:hover,
