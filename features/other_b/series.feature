@@ -192,8 +192,8 @@ Feature: Create and Edit Series
     When the user "moon" accepts all co-creator invites
     Then "moon" should be a creator of the series "Ponies"
     When I view the series "Ponies"
-      And I follow "Remove Me As Author"
-    Then I should see "Sorry, we can't remove all authors of a work."
+      And I follow "Remove Me As Co-Creator"
+    Then I should see "Sorry, we can't remove all creators of a work."
 
   Scenario: Removing self as co-creator from co-created series
     Given basic tags
@@ -206,8 +206,8 @@ Feature: Create and Edit Series
     Then I should see "Work was successfully updated."
       And "moon" should be a creator of the series "Ponies"
       And "son" should be a creator on the series "Ponies"
-    When I follow "Remove Me As Author"
-    Then I should see "You have been removed as an author from the series and its works."
+    When I follow "Remove Me As Co-Creator"
+    Then I should see "You have been removed as a creator from the series and its works."
       And "moon" should not be the creator of the series "Ponies"
       And "son" should be a creator on the series "Ponies"
     When I go to my works page

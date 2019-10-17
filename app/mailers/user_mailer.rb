@@ -247,7 +247,7 @@ class UserMailer < BulletproofMailer::Base
     I18n.with_locale(Locale.find(@user.preference.preferred_locale).iso) do
       mail(
         to: @user.email,
-        subject: t("user_mailer.creatorship_notification.subject",
+        subject: t("user_mailer.creatorship_notification_archivist.subject",
                    app_name: ArchiveConfig.APP_SHORT_NAME)
       )
     end

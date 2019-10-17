@@ -25,8 +25,8 @@ module Taggable
         source: :tagger,
         source_type: 'Tag',
         before_remove: :remove_filter_tagging
-      has_many :warnings,
-        -> { where("tags.type = 'Warning'") },
+      has_many :archive_warnings,
+        -> { where("tags.type = 'ArchiveWarning'") },
         through: :taggings,
         source: :tagger,
         source_type: 'Tag',
@@ -71,11 +71,11 @@ module Taggable
   def category_strings
     tag_category_string(:categories, return_array: true)
   end
-  def warning_string
-    tag_category_string(:warnings)
+  def archive_warning_string
+    tag_category_string(:archive_warnings)
   end
-  def warning_strings
-    tag_category_string(:warnings, return_array: true)
+  def archive_warning_strings
+    tag_category_string(:archive_warnings, return_array: true)
   end
   def fandom_string
     tag_category_string(:fandoms)
@@ -101,11 +101,11 @@ module Taggable
   def category_string=(tag_string)
     parse_tags(Category, tag_string)
   end
-  def warning_string=(tag_string)
-    parse_tags(Warning, tag_string)
+  def archive_warning_string=(tag_string)
+    parse_tags(ArchiveWarning, tag_string)
   end
-  def warning_strings=(array)
-    parse_tags(Warning, array)
+  def archive_warning_strings=(array)
+    parse_tags(ArchiveWarning, array)
   end
   def fandom_string=(tag_string)
     parse_tags(Fandom, tag_string)
@@ -151,58 +151,6 @@ module Taggable
     end
   end
 
-  def cast_tags
-    # we combine relationship and character tags up to the limit
-    characters = self.characters.by_name || []
-    relationships = self.relationships.by_name || []
-    return [] if relationships.empty? && characters.empty?
-    canonical_relationships = Relationship.canonical.by_name.where(id: relationships.collect(&:merger_id).compact.uniq)
-    all_relationships = (relationships + canonical_relationships).flatten.uniq.compact
-
-    #relationship_characters = all_relationships.collect{|p| p.all_characters}.flatten.uniq.compact
-    relationship_characters = Character.by_relationships(all_relationships)
-    relationship_characters = (relationship_characters + relationship_characters.collect(&:mergers).flatten).compact.uniq
-
-    line_limited_tags(relationships + characters - relationship_characters)
-  end
-
-  def relationship_tags
-    taglist = self.tags.select {|t| t.is_a?(Relationship)}
-    line_limited_tags(taglist)
-  end
-
-  def character_tags
-    taglist = self.tags.select {|t| t.is_a?(Character)}
-    line_limited_tags(taglist)
-  end
-
-  def freeform_tags
-    taglist = self.tags.select {|t| t.is_a?(Freeform)}
-    line_limited_tags(taglist)
-  end
-
-  def warning_tags
-    taglist = self.tags.select {|t| t.is_a?(Warning)}
-    line_limited_tags(taglist)
-  end
-
-  def line_limited_tags(taglist)
-    taglist = taglist[0..(ArchiveConfig.TAGS_PER_LINE-1)] if taglist.size > ArchiveConfig.TAGS_PER_LINE
-    taglist
-  end
-
-  def fandom_tags
-    self.tags.select {|t| t.is_a?(Fandom)}
-  end
-
-  # for testing
-  def add_default_tags
-    self.fandom_string = "Test Fandom"
-    self.rating_string = ArchiveConfig.RATING_TEEN_TAG_NAME
-    self.warning_strings = [ArchiveConfig.WARNING_NONE_TAG_NAME]
-    self.save
-  end
-
   private
 
   # Returns a string (or array) of tag names
@@ -225,7 +173,7 @@ module Taggable
   def parse_tags(klass, incoming_tags)
     tags = []
     self.invalid_tags ||= []
-    klass_symbol = klass.to_s.downcase.pluralize.to_sym
+    klass_symbol = klass.to_s.underscore.pluralize.to_sym
     if incoming_tags.is_a?(String)
       # Replace unicode full-width commas
       tag_array = incoming_tags.gsub(/\uff0c|\u3001/, ',').split(ArchiveConfig.DELIMITER_FOR_INPUT)
@@ -280,8 +228,8 @@ module Taggable
   def rating_ids
     filters_for_facets.select{ |t| t.type.to_s == 'Rating' }.map{ |t| t.id }
   end
-  def warning_ids
-    filters_for_facets.select{ |t| t.type.to_s == 'Warning' }.map{ |t| t.id }
+  def archive_warning_ids
+    filters_for_facets.select{ |t| t.type.to_s == 'ArchiveWarning' }.map{ |t| t.id }
   end
   def category_ids
     filters_for_facets.select{ |t| t.type.to_s == 'Category' }.map{ |t| t.id }

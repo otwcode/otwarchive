@@ -7,8 +7,8 @@ class SerialWork < ApplicationRecord
   after_create :adjust_series_visibility
   after_destroy :adjust_series_visibility
   after_destroy :delete_empty_series
-  after_create :update_series_index
-  after_destroy :update_series_index
+  after_create :update_series_index, :update_work_index
+  after_destroy :update_series_index, :update_work_index
 
   scope :in_order, -> { order(:position) }
 
@@ -22,6 +22,11 @@ class SerialWork < ApplicationRecord
     if self.series.present? && self.series.serial_works.blank?
       self.series.destroy
     end
+  end
+
+  # Reindex works added to or removed from a series
+  def update_work_index
+    work&.enqueue_to_index
   end
 
   # Ensure series bookmarks are reindexed when a new work is added to a series

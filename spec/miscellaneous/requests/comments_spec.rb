@@ -5,7 +5,7 @@ def comment_attributes_guest
 end
 
 def comment_attributes_user
-  { content: "Body text of the comment", pseud_id: FactoryGirl.create(:pseud).id }
+  { content: "Body text of the comment", pseud_id: FactoryBot.create(:pseud).id }
 end
 
 # This code block is used for logged out users and logged in users, on unrestricted works

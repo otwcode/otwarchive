@@ -587,3 +587,12 @@ Feature: Gift Exchange Challenge
     Then I should see "Are you sure you want to purge all assignments for Bad Gift Exchange?"
     When I press "Yes, Purge Assignments"
     Then I should see "Assignments purged!"
+
+  Scenario: The My Assignments page that a user sees when they have multiple
+  assignments in a single exchange does not include an email link.
+    Given everyone has their assignments for "Bad Gift Exchange"
+      And I am logged in as "write_in_giver"
+      And "write_in_giver" has two pinchhit assignments in the gift exchange "Bad Gift Exchange"
+    When I go to "Bad Gift Exchange" collection's page
+      And I follow "My Assignments" within "#dashboard"
+    Then I should not see the image "src" text "/images/envelope_icon.gif"

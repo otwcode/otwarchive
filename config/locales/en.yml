@@ -6,6 +6,28 @@ en:
       emails_found:
         one: "one email found"
         other: "%{count} emails found"
+  users:
+    delete_preview:
+      heading: "What do you want to do with your works?"
+      orphan: "orphan"
+      orphaning: "orphaning"
+      submit: "Save"
+      cancel: "Cancel"
+      confirm: "Are you sure? This can't be undone!"
+      options:
+        keep_pseud: "Leave my pseud but attach to the orphan account"
+        orphan_pseud: "Change my pseud to \"orphan\" and attach to the orphan account"
+        remove: "Remove me completely as co-creator"
+        delete: "Delete completely"
+      co_creations:
+        legend: "Works You Made With Others"
+        summary: "You have %{work_count} work(s) co-created with the following users: %{co_creators}."
+        orphan_info: "You are not able to delete these as they are shared works, but you can %{orphan_link} them or remove yourself completely as a co-creator."
+      sole_creations:
+        legend: "Works and Collections You Made By Yourself"
+        works_summary: "You have %{work_count} work(s) under the following pseuds: %{pseuds}."
+        collections_summary: "You have %{collection_count} collection(s) under the following pseuds: %{pseuds}."
+        options_info: "You can delete them, but please consider %{orphaning_link} them instead!"
   errors:
     format: "%{attribute} %{message}"
     messages: &errors_messages
@@ -56,6 +78,9 @@ en:
             pseud_id:
               taken: "is already listed as a creator."
     models:
+      archive_warning:
+        one: "Warning"
+        other: "Warnings" 
       bookmark: "Bookmark"
       category:
         one: "Category"
@@ -79,11 +104,12 @@ en:
       tag:
         one: "Tag"
         other: "Tags"
-      warning:
-        one: "Warning"
-        other: "Warnings"
       work: "Work"
     attributes:
+      archive_warning:
+        name_with_colon:
+          one: "Warning:"
+          other: "Warnings:"
       category:
         name_with_colon:
           one: "Category:"
@@ -106,10 +132,6 @@ en:
         name_with_colon:
           one: "Relationship:"
           other: "Relationships:"
-      warning:
-        name_with_colon:
-          one: "Warning:"
-          other: "Warnings:"
       creatorships:
         pseud_id: "Pseud"
         base: "Invalid creator:"
@@ -201,7 +223,7 @@ en:
         part1_other: "Your work \"%{title}\" was deleted at the request of %{pseud}."
         part1_yourself: "Your work \"%{title}\" was deleted at your request."
     creatorship_notification_archivist:
-      subject: "[%{app_name}] Archivist Co-creator Notification"
+      subject: "[%{app_name}] Archivist co-creator notification"
       intro: "The user %{archivist} has added your pseud %{pseud} as a co-creator on the following %{type}:"
       explanation: "Because they are acting in their official capacity as an Open Doors archivist, they are allowed to add you without an invitation, even if you have co-creation disabled."
       html:
@@ -212,12 +234,9 @@ en:
         creation: "%{title} (%{url}) by %{pseuds}"
         remove: "If you've been added in error or don't want to be listed as a creator, you can edit the %{type} to remove yourself as creator: %{url}"
     creatorship_notification:
-      subject: "[%{app_name}] Co-creator Notification"
+      subject: "[%{app_name}] Co-creator notification"
       intro: "The user %{adding_user} has listed your pseud %{pseud} as a co-creator on the following %{type}:"
-      chapter:
-        explanation: "Because you previously co-created this work with %{adding_user}, they are allowed to add you to chapters on this work without an invitation, even if you have co-creation disabled."
-      series:
-        explanation: "Because you previously co-created one of the works in this series with %{adding_user}, they are allowed to add you to the series without an invitation, even if you have co-creation disabled."
+      explanation: "When you're a co-creator on a work, you can be added to new chapters regardless of your co-creation settings. You will also be added to any series the work is added to."
       html:
         creation: "%{creation_link} by %{pseud_links}"
         remove: "If you've been added in error or don't want to be listed as a creator, you can %{edit} to remove yourself as creator."
@@ -226,16 +245,15 @@ en:
         creation: "%{title} (%{url}) by %{pseuds}"
         remove: "If you've been added in error or don't want to be listed as a creator, you can edit the %{type} to remove yourself as creator: %{url}"
     creatorship_invitation:
-      subject: "[%{app_name}] Co-creator Invitation"
+      subject: "[%{app_name}] Co-creator invitation"
       intro: "The user %{inviting_user} has invited your pseud %{pseud} to be listed as a co-creator on the following %{type}:"
       html:
         creation: "%{creation_link} by %{pseud_links}"
-        accept: "If you wish to be listed as a co-creator on the %{type}, you can %{view} and accept the invitation from there."
-        view: "view your co-creator invitations page"
+        instructions: "You can accept or reject this invitation on your %{page_name} page."
+        page_name: "Creator Invitations"
       text:
         creation: "%{title} (%{url}) by %{pseuds}"
-        accept: "If you wish to be listed as a co-creator on the %{type}, you can view your co-creator invitations page and accept the invitation from there: %{url}"
-      reject: "If you've been added in error or don't want to be listed as a creator, you can ignore this message."
+        instructions: "You can accept or reject this invitation on your Creator Invitations page: %{url}"
     change_email:
       subject: "[%{app_name}] Email changed"
       part1: "%{login}, the email associated with your account has been changed to %{email}"

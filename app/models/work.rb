@@ -373,7 +373,7 @@ class Work < ApplicationRecord
   # need to update the chapter to add the other creators on the work.
   def remove_author(author_to_remove)
     pseuds_with_author_removed = pseuds.where.not(user_id: author_to_remove.id)
-    raise Exception.new("Sorry, we can't remove all authors of a work.") if pseuds_with_author_removed.empty?
+    raise Exception.new("Sorry, we can't remove all creators of a work.") if pseuds_with_author_removed.empty?
 
     transaction do
       chapters.each do |chapter|
@@ -388,6 +388,15 @@ class Work < ApplicationRecord
 
       creatorships.where(pseud: author_to_remove.pseuds).destroy_all
     end
+  end
+
+  # Override the default behavior so that we also check for creatorships
+  # associated with one of the chapters.
+  def user_is_owner_or_invited?(user)
+    return false unless user.is_a?(User)
+    return true if super
+
+    chapters.joins(:creatorships).merge(user.creatorships).exists?
   end
 
   def set_challenge_info
@@ -482,18 +491,14 @@ class Work < ApplicationRecord
   # VISIBILITY
   ########################################################################
 
-  def visible(current_user=User.current_user)
-    if current_user.nil? || current_user == :false
-      return self if self.posted unless self.restricted || self.hidden_by_admin
-    elsif self.posted && !self.hidden_by_admin
-      return self
-    elsif self.hidden_by_admin?
-      return self if current_user.kind_of?(Admin) || current_user.is_author_of?(self)
-    end
-  end
+  def visible?(user = User.current_user)
+    return true if user.is_a?(Admin)
 
-  def visible?(user=User.current_user)
-    self.visible(user) == self
+    if posted && !hidden_by_admin
+      user.is_a?(User) || !restricted
+    else
+      user_is_owner_or_invited?(user)
+    end
   end
 
   def unrestricted=(setting)
@@ -699,13 +704,11 @@ class Work < ApplicationRecord
     end
   end
 
-  def chapters_in_order(include_content = true)
+  def chapters_in_order(include_drafts: false, include_content: true)
     # in order
     chapters = self.chapters.order('position ASC')
-    # only posted chapters unless author
-    unless User.current_user && (User.current_user.is_a?(Admin) || User.current_user.is_author_of?(self))
-      chapters = chapters.where(posted: true)
-    end
+    # only posted chapters unless specified
+    chapters = chapters.where(posted: true) unless include_drafts
     # when doing navigation pass false as contents are not needed
     chapters = chapters.select('published_at, id, work_id, title, position, posted') unless include_content
     chapters
@@ -794,7 +797,7 @@ class Work < ApplicationRecord
       end
       result["Fandom"] ||= []
       result["Rating"] ||= []
-      result["Warning"] ||= []
+      result["ArchiveWarning"] ||= []
       result["Relationship"] ||= []
       result["Character"] ||= []
       result["Freeform"] ||= []
@@ -805,7 +808,7 @@ class Work < ApplicationRecord
   # Check to see that a work is tagged appropriately
   def has_required_tags?
     return false if self.fandom_string.blank?
-    return false if self.warning_string.blank?
+    return false if self.archive_warning_string.blank?
     return false if self.rating_string.blank?
     return true
   end
@@ -1097,12 +1100,11 @@ class Work < ApplicationRecord
 
   SORTED_AUTHOR_REGEX = %r{^[\+\-=_\?!'"\.\/]}
 
-  # TODO drop unused database column authors_to_sort_on
   def authors_to_sort_on
     if self.anonymous?
       "Anonymous"
     else
-      self.pseuds.map(&:name).join(",  ").downcase.gsub(SORTED_AUTHOR_REGEX, '')
+      self.pseuds.sort.map(&:name).join(",  ").downcase.gsub(SORTED_AUTHOR_REGEX, '')
     end
   end
 
@@ -1124,7 +1126,7 @@ class Work < ApplicationRecord
   ########################################################################
 
   def akismet_attributes
-    content = chapters_in_order.map { |c| c.content }.join
+    content = chapters_in_order(include_drafts: true).map(&:content).join
     user = users.first
     {
       comment_type: "fanwork-post",
@@ -1200,12 +1202,17 @@ class Work < ApplicationRecord
   def bookmarkable_json
     as_json(
       root: false,
-      only: [:title, :summary, :hidden_by_admin, :restricted, :posted,
-        :created_at, :revised_at, :language_id, :word_count, :complete],
-      methods: [:tag, :filter_ids, :rating_ids, :warning_ids, :category_ids,
+      only: [
+        :title, :summary, :hidden_by_admin, :restricted, :posted,
+        :created_at, :revised_at, :word_count, :complete
+      ],
+      methods: [
+        :tag, :filter_ids, :rating_ids, :archive_warning_ids, :category_ids,
         :fandom_ids, :character_ids, :relationship_ids, :freeform_ids,
-        :pseud_ids, :creators, :collection_ids, :work_types]
+        :pseud_ids, :creators, :collection_ids, :work_types
+      ]
     ).merge(
+      language_id: language&.short,
       anonymous: anonymous?,
       unrevealed: unrevealed?,
       bookmarkable_type: 'Work',

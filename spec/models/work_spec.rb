@@ -297,7 +297,7 @@ describe Work do
     let(:work) { build(:work) }
 
     context "when the pseuds start with special characters" do
-      it "should remove those characters" do
+      it "removes those characters" do
         allow(work).to receive(:pseuds).and_return [Pseud.new(name: "-jolyne")]
         expect(work.authors_to_sort_on).to eq "jolyne"
 
@@ -307,14 +307,14 @@ describe Work do
     end
 
     context "when the pseuds start with numbers" do
-      it "should not remove numbers" do
+      it "does not remove numbers" do
         allow(work).to receive(:pseuds).and_return [Pseud.new(name: "007james")]
         expect(work.authors_to_sort_on).to eq "007james"
       end
     end
 
     context "when the work is anonymous" do
-      it "should set the author sorting to Anonymous" do
+      it "returns Anonymous" do
         work.in_anon_collection = true
         allow(work).to receive(:pseuds).and_return [Pseud.new(name: "stealthy")]
         expect(work.authors_to_sort_on).to eq "Anonymous"
@@ -322,9 +322,12 @@ describe Work do
     end
 
     context "when the work has multiple pseuds" do
-      it "should combine them with commas" do
+      it "sorts them like the byline then joins them with commas" do
         allow(work).to receive(:pseuds).and_return [Pseud.new(name: "diavolo"), Pseud.new(name: "doppio")]
         expect(work.authors_to_sort_on).to eq "diavolo,  doppio"
+
+        allow(work).to receive(:pseuds).and_return [Pseud.new(name: "Tiziano"), Pseud.new(name: "squalo")]
+        expect(work.authors_to_sort_on).to eq "squalo,  tiziano"
       end
     end
   end
@@ -520,7 +523,7 @@ describe Work do
 
       it "raises an error" do
         expect { work.remove_author(to_remove) }.to raise_exception(
-          "Sorry, we can't remove all authors of a work."
+          "Sorry, we can't remove all creators of a work."
         )
       end
     end

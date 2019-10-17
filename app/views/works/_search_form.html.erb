@@ -85,7 +85,7 @@
         <%= link_to_help "work-search-language-help" %>
       </dt>
       <dd>
-        <%= f.collection_select :language_id, @languages, :id, :name, include_blank: true %>
+        <%= f.collection_select :language_id, @languages, :short, :name, include_blank: true %>
       </dd>
     </dl>
   </fieldset>
@@ -115,10 +115,10 @@
       </dt>
       <dd>
       <ul>
-          <% for tag in Warning.canonical.by_name %>
+          <% for tag in ArchiveWarning.canonical.by_name %>
             <li>
-              <%= check_box_tag "work_search[warning_ids][]", tag.id, @search.warning_ids.present? && @search.warning_ids.include?(tag.id.to_s), :id => "warning_#{tag.id}" %>
-              <%= label_tag "warning_#{tag.id}", tag.display_name %>
+              <%= check_box_tag "work_search[archive_warning_ids][]", tag.id, @search.archive_warning_ids.present? && @search.archive_warning_ids.include?(tag.id.to_s), :id => "warning_#{tag.id}" %>
+              <%= label_tag "warning_#{tag.id}", warning_display_name(tag.name) %>
             </li>
           <% end %>
         </ul>

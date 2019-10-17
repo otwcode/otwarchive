@@ -3,7 +3,7 @@ require 'spec_helper'
 describe Collection do
 
   before do
-    @collection = FactoryGirl.create(:collection)
+    @collection = FactoryBot.create(:collection)
   end
 
   describe "collections with challenges" do

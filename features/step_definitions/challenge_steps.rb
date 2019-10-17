@@ -251,6 +251,20 @@ Then /^the notification message to "([^\"]*)" should escape the ampersand$/ do |
   email.html_part.body.should_not =~ /The first thing & the second thing./
 end
 
+Then /^the notification message to "([^\"]*)" should contain the no archive warnings tag$/ do |user|
+  @user = User.find_by(login: user)
+  email = emails("to: \"#{email_for(@user.email)}\"").first
+  email.multipart?.should be == true
+
+  email.text_part.body.should =~ /Warning:/
+  email.text_part.body.should =~ /No Archive Warnings Apply/
+  email.text_part.body.should_not =~ /Name with colon/
+
+  email.html_part.body.should =~ /Warning:/
+  email.html_part.body.should =~ /No Archive Warnings Apply/
+  email.html_part.body.should_not =~ /Name with colon/
+end
+
 # Delete challenge
 
 Given /^the challenge "([^\"]*)" is deleted$/ do |challenge_title|
