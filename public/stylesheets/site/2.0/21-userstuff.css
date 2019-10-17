@@ -139,6 +139,11 @@
   border: 1px solid;
 }
 
+.userstuff img {
+  max-width: 100%;
+  height: auto;
+}
+
 /*expected behaviours, exceptioning*/
 
 /* WORK MARGINS */
