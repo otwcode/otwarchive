@@ -8,11 +8,11 @@ FactoryBot.define do
     email
 
     factory :superadmin do
-      login "superadmin"
-      password "IHaveThePower"
-      password_confirmation "IHaveThePower"
+      login { "superadmin" }
+      password { "IHaveThePower" }
+      password_confirmation { "IHaveThePower" }
       email
-      roles ["superadmin"]
+      roles { ["superadmin"] }
     end
   end
 
