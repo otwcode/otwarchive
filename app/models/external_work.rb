@@ -44,6 +44,12 @@ class ExternalWork < ApplicationRecord
     self.update_attribute(:dead, true) unless url_active?(self.url)
   end
 
+  # Allow encoded characters to display correctly in titles
+  before_save :decode_title
+  def decode_title
+    self.title = HTMLEntities.new.decode(self.title)
+  end
+
   ########################################################################
   # VISIBILITY
   ########################################################################
