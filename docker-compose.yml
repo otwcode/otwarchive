@@ -1,0 +1,41 @@
+# To execute this docker-compose yml file use `docker-compose -f <file_name> up`
+# Add the `-d` flag at the end for detached execution
+version: "3"
+services:
+  db:
+    image: mysql:5.7
+    container_name: otwa_db
+    environment:
+      - MYSQL_ROOT_PASSWORD=change_me
+    ports:
+      - "3306:3306"
+  redis:
+    image: redis:5
+    container_name: otwa_redis
+    ports:
+      - "6379:6379"
+  es:
+    image: elasticsearch:6.8.3
+    container_name: otwa_es
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+      - "9400:9400"
+  mc:
+    image: memcached:1.5
+    container_name: otwa_mc
+    ports:
+      - "11211:11211"
+  web:
+    build: .
+    container_name: otwa_web
+    command: bash -c "rm -f tmp/pids/server.pid && bundle exec rails s -p 3000 -b '0.0.0.0'"
+    volumes:
+      - .:/otwa
+    ports:
+      - "3000:3000"
+    depends_on:
+      - db
+      - redis
+      - es
+      - mc
