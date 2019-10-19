@@ -22,7 +22,7 @@ gem 'rails-controller-testing'
 
 # Database
 # gem 'sqlite3-ruby', require: 'sqlite3'
-gem 'mysql2', '0.3.20'
+gem 'mysql2', '0.5.2'
 
 #https://github.com/qertoip/transaction_retry
 # We don't use the isolation gem directly, but it needs to be
