@@ -293,6 +293,8 @@ FIELDS_ALLOWING_VIDEO_EMBEDS: ["content"]
 
 FIELDS_ALLOWING_CSS: ["content", "endnotes", "notes"]
 
+BLACKLISTED_MULTIMEDIA_SRCS: []
+
 # Allowed CSS
 #
 # *** IMPORTANT: if you edit these values please also update the css-help.html file in public/help ***
