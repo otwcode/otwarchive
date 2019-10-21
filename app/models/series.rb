@@ -141,7 +141,7 @@ class Series < ApplicationRecord
   end
 
   def expire_caches
-    # Expire cached work metas if series title changes
+    # Expire cached work blurbs and metas if series title changes
     self.works.each(&:touch) if saved_change_to_title?
   end
 

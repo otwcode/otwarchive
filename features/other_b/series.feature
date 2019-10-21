@@ -150,6 +150,10 @@ Feature: Create and Edit Series
       And I press "Update"
     Then I should see "Series was successfully updated."
       And I should see "Many a Robot"
+    # Work blurbs should be updated.
+    When I go to my user page
+    Then I should see "Part 1 of Many a Robot" within "#user-works"
+    # Work metas should be updated.
     When I view the work "WALL-E"
     Then I should see "Part 1 of the Many a Robot series" within "div#series"
       And I should see "Part 1 of the Many a Robot series" within "dd.series"
