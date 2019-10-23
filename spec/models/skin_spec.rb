@@ -164,13 +164,42 @@ describe Skin do
       expect(@skin.errors[:base].join(' ').match(/upload a screencap/)).to be_truthy
     end
 
-    it "should only allow valid media types" do
-      @skin.media = ["foobar"]
-      expect(@skin.save).not_to be_truthy
-      expect(@skin.errors[:base]).not_to be_empty
-      @skin.media = %w(screen print)
-      expect(@skin.save).to be_truthy
-      expect(@skin.errors[:base]).to be_empty
+    context "when a media query is provided" do
+      {
+        "allows all" => "all",
+        "allows screen" => "screen",
+        "allows handheld" => "handheld",
+        "allows speech" => "speech",
+        "allows print" => "print",
+        "allows braille" => "braille",
+        "allows embossed" => "embossed",
+        "allows projection" => "projection",
+        "allows tty" => "tty",
+        "allows tv" => "tv",
+        "allows only screen and (max-width: 42em)" => "only screen and (max-width: 42em)",
+        "allows only screen and (max-width: 62em)" => "only screen and (max-width: 62em)",
+        "allows (prefers-color-scheme: dark)" => "(prefers-color-scheme: dark)",
+        "allows (prefers-color-scheme: light)" => "(prefers-color-scheme: light)"
+      }.each_pair do |description, media_query|
+        it description do
+          @skin.media = [media_query]
+          expect(@skin.save).to be_truthy
+          expect(@skin.errors[:base]).to be_empty
+        end
+      end
+
+      {
+        "doesn't allow max-width that isn't whitelisted" => "only screen and (max-width: 1024px)",
+        "doesn't allow media that isn't whitelisted" => "(min-aspect-ratio: 8/5)",
+        "doesn't allow two whitelisted media combined with and instead of a comma" => "screen and (prefers-color-scheme: dark",
+        "doesn't allow combination of whitelisted media and non-whitelisted media" => "(prefers-color-scheme: dark), (monochrome)"
+      }.each_pair do |description, media_query|
+        it description do
+          @skin.media = [media_query]
+          expect(@skin.save).not_to be_truthy
+          expect(@skin.errors[:base]).not_to be_empty
+        end
+      end
     end
 
     it "should only allow valid roles" do
