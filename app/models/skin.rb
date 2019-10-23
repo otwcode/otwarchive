@@ -13,7 +13,7 @@ class Skin < ApplicationRecord
                  ]
 
   # any media types that are not a single alphanumeric word have to be specially handled in get_media_for_filename/parse_media_from_filename
-  MEDIA = %w(all screen handheld speech print braille embossed projection tty tv) + ['only screen and (max-width: 42em)'] + ['only screen and (max-width: 62em)']
+  MEDIA = %w(all screen handheld speech print braille embossed projection tty tv) + ['only screen and (max-width: 42em)', 'only screen and (max-width: 62em)', '(prefers-color-scheme: dark)', '(prefers-color-scheme: light)']
   IE_CONDITIONS = %w(IE IE5 IE6 IE7 IE8 IE9 IE8_or_lower)
   ROLES = %w(user override)
   ROLE_NAMES = {"user" => "add on to archive skin", "override" => "replace archive skin entirely"}
@@ -257,6 +257,10 @@ class Skin < ApplicationRecord
         "narrow"
       when m.match(/max-width: 62em/)
         "midsize"
+      when m.match(/prefers-color-scheme: dark/)
+        "dark"
+      when m.match(/prefers-color-scheme: light/)
+        "light"
       else
         m
       end
@@ -264,7 +268,11 @@ class Skin < ApplicationRecord
   end
 
   def parse_media_from_filename(media_string)
-    media_string.gsub(/narrow/, 'only screen and (max-width: 42em)').gsub(/midsize/, 'only screen and (max-width: 62em)').gsub('.', ', ')
+    media_string.gsub(/narrow/, 'only screen and (max-width: 42em)')
+      .gsub(/midsize/, 'only screen and (max-width: 62em)')
+      .gsub(/dark/, '(prefers-color-scheme: dark)')
+      .gsub(/light/, '(prefers-color-scheme: light)')
+      .gsub('.', ', ')
   end
 
   def parse_sheet_role(role_string)
