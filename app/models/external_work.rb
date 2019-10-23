@@ -45,9 +45,8 @@ class ExternalWork < ApplicationRecord
   end
 
   # Allow encoded characters to display correctly in titles
-  before_save :decode_title
-  def decode_title
-    self.title = HTMLEntities.new.decode(self.title)
+  def title
+    read_attribute(:title).try(:html_safe)
   end
 
   ########################################################################
