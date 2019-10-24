@@ -9,7 +9,7 @@ Bundler/OrderedGems:
 Layout/DotPosition:
   EnforcedStyle: leading
 
-Layout/IndentArray:
+Layout/IndentFirstArrayElement:
   EnforcedStyle: consistent
 
 Layout/MultilineMethodCallIndentation:
