@@ -165,23 +165,23 @@ describe Skin do
     end
 
     context "when a media query is provided" do
-      {
-        "allows all" => "all",
-        "allows screen" => "screen",
-        "allows handheld" => "handheld",
-        "allows speech" => "speech",
-        "allows print" => "print",
-        "allows braille" => "braille",
-        "allows embossed" => "embossed",
-        "allows projection" => "projection",
-        "allows tty" => "tty",
-        "allows tv" => "tv",
-        "allows only screen and (max-width: 42em)" => "only screen and (max-width: 42em)",
-        "allows only screen and (max-width: 62em)" => "only screen and (max-width: 62em)",
-        "allows (prefers-color-scheme: dark)" => "(prefers-color-scheme: dark)",
-        "allows (prefers-color-scheme: light)" => "(prefers-color-scheme: light)"
-      }.each_pair do |description, media_query|
-        it description do
+      [
+        "all",
+        "screen",
+        "handheld",
+        "speech",
+        "print",
+        "braille",
+        "embossed",
+        "projection",
+        "tty",
+        "tv",
+        "only screen and (max-width: 42em)",
+        "only screen and (max-width: 62em)",
+        "(prefers-color-scheme: dark)",
+        "(prefers-color-scheme: light)"
+      ].each do |media_query|
+        it "allows #{media_query}" do
           @skin.media = [media_query]
           expect(@skin.save).to be_truthy
           expect(@skin.errors[:base]).to be_empty
