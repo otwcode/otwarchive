@@ -454,6 +454,7 @@ class UserMailer < BulletproofMailer::Base
   # email text.
   def collection_for_email(collection_id)
     return unless @work.approved_collection_items.where(collection_id: collection_id).any?
+
     Collection.find(collection_id)
   end
 
