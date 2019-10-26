@@ -56,7 +56,7 @@ Feature: Notification emails for newly revealed collections
   When I am logged in as a random user
     And I set up the draft "Unapproved Work" to the collection "Unrevealed Moderated Collection"
     And I list the work "Inspirational Work" as inspiration
-    And I press "Post Without Preview"
+    And I press "Post"
   Then 0 emails should be delivered
   When I reveal works for "Unrevealed Moderated Collection"
   Then 1 email should be delivered to "inspiration"
@@ -71,7 +71,7 @@ Feature: Notification emails for newly revealed collections
   When I am logged in as a random user
     And I set up the draft "Rejected Work" to the collection "Unrevealed Moderated Collection"
     And I list the work "Inspirational Work" as inspiration
-    And I press "Post Without Preview"
+    And I press "Post"
   Then 0 emails should be delivered
   When I am logged in as the owner of "Unrevealed Moderated Collection"
     And I view the awaiting approval collection items page for "Unrevealed Moderated Collection"
@@ -89,7 +89,7 @@ Feature: Notification emails for newly revealed collections
   When I am logged in as a random user
     And I set up the draft "Approved Work" to the collection "Unrevealed Moderated Collection"
     And I list the work "Inspirational Work" as inspiration
-    And I press "Post Without Preview"
+    And I press "Post"
   Then 0 emails should be delivered
   When I am logged in as the owner of "Unrevealed Moderated Collection"
     And I view the awaiting approval collection items page for "Unrevealed Moderated Collection"
