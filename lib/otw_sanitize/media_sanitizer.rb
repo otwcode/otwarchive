@@ -18,7 +18,9 @@ module OTWSanitize
     TRACK_ATTRIBUTES = %w[default kind label src srclang].freeze
 
     WHITELIST_CONFIG = {
-      elements: %w[audio video source track],
+      elements: %w[
+        audio video source track
+      ] + Sanitize::Config::ARCHIVE[:elements],
       attributes: {
         'audio'  => AUDIO_ATTRIBUTES,
         'video'  => VIDEO_ATTRIBUTES,
@@ -68,7 +70,8 @@ module OTWSanitize
       return unless media_node?
       return if blacklisted_source?
 
-      Sanitize.clean_node!(node, WHITELIST_CONFIG)
+      config = Sanitize::Config.merge(Sanitize::Config::ARCHIVE, WHITELIST_CONFIG)
+      Sanitize.clean_node!(node, config)
       { node_whitelist: [node] }
     end
 
