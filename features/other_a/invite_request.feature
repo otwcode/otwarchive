@@ -83,9 +83,9 @@ Feature: Invite requests
         | user_registration_password               | password1 |
         | user_registration_password_confirmation  | password1 |
       And I press "Create Account"
-    Then I should see "Within 24 hours, you should receive an email at the address you gave us."
+    Then I should see "You should soon receive a confirmation email at the address you gave us"
       And I should see how long I have to activate my account
-      And I should see "If you don't hear from us within 24 hours"
+      And I should see "If you haven't received this email within 24 hours"
 
   Scenario: Banned users cannot access their invitations page
 
