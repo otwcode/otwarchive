@@ -726,7 +726,7 @@ tag_1063754002:
   last_wrangler_id: 
   adult: false
   id: 1063754002
-  type: Warning
+  type: ArchiveWarning
 tag_1063754050: 
   name: Farscape
   merger_id: 
@@ -1064,7 +1064,7 @@ tag_1063754009:
   last_wrangler_id: 
   adult: false
   id: 1063754009
-  type: Warning
+  type: ArchiveWarning
 tag_1063753914: 
   name: McKay/withheld
   merger_id: 
@@ -3352,7 +3352,7 @@ tag_1063753734:
   last_wrangler_id: 
   adult: false
   id: 1063753734
-  type: Warning
+  type: ArchiveWarning
 tag_1063754067: 
   name: Angel - Character
   merger_id: 
@@ -4028,7 +4028,7 @@ tag_1063753846:
   last_wrangler_id: 
   adult: false
   id: 1063753846
-  type: Warning
+  type: ArchiveWarning
 tag_1063753894: 
   name: Gwen Cooper/Toshiko Sato
   merger_id: 
@@ -5523,7 +5523,7 @@ tag_1063753741:
   last_wrangler_id: 
   adult: false
   id: 1063753741
-  type: Warning
+  type: ArchiveWarning
 tag_1063753931: 
   name: Weechesters
   merger_id: 
@@ -5562,7 +5562,7 @@ tag_1063753742:
   last_wrangler_id: 
   adult: false
   id: 1063753742
-  type: Warning
+  type: ArchiveWarning
 tag_1063753932: 
   name: wee!Dean
   merger_id: 
@@ -5640,7 +5640,7 @@ tag_1063753743:
   last_wrangler_id: 
   adult: false
   id: 1063753743
-  type: Warning
+  type: ArchiveWarning
 tag_1063753933: 
   name: silent!Dean
   merger_id: 

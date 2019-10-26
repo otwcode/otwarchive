@@ -154,10 +154,11 @@ module HtmlCleaner
       # We're allowing users to use HTML in this field
       transformers = []
       if ArchiveConfig.FIELDS_ALLOWING_VIDEO_EMBEDS.include?(field.to_s)
-        transformers << Sanitize::Transformers::ALLOW_VIDEO_EMBEDS
+        transformers << OTWSanitize::EmbedSanitizer.transformer
+        transformers << OTWSanitize::MediaSanitizer.transformer
       end
       if ArchiveConfig.FIELDS_ALLOWING_CSS.include?(field.to_s)
-        transformers << Sanitize::Transformers::ALLOW_USER_CLASSES
+        transformers << OTWSanitize::UserClassSanitizer.transformer
       end
       # Now that we know what transformers we need, let's sanitize the unfrozen value
       if ArchiveConfig.FIELDS_ALLOWING_CSS.include?(field.to_s)
@@ -405,6 +406,6 @@ module HtmlCleaner
 
   def add_break_between_paragraphs(value)
     return "" if value.blank?
-    value.gsub(/\s*<\/p>\s*<p>s*/, "</p><br /><p>")
+    value.gsub(%r{\s*</p>\s*<p>\s*}, "</p><br /><p>")
   end
 end

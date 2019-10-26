@@ -1,7 +1,7 @@
 <% # expects "assignment" %>
 <% request = assignment.request_signup || assignment.pinch_request_signup %>
 <dt>
-  <% if @collection %>
+  <% if @collection && @collection.user_is_maintainer?(current_user) %>
     <% # we're listing assignments for a mod by the assigned writer %>
     <%= challenge_assignment_byline(assignment) %> <%= challenge_assignment_email(assignment) %>
   <% else %>
@@ -16,7 +16,7 @@
      <%= link_to (assignment.creation.try(:title) || assignment.creation.class.name), assignment.creation, :class => "work" %>
    <% end %>
 
-    <% if @collection %>
+  <% if @collection && @collection.user_is_maintainer?(current_user) %>
     <% # for a mod: list recipient (and check in case there are some people without recipients) %>
     <% if request %>
       <%= ts("for") %> <%= link_to assignment.request_byline, collection_assignment_path(@collection, assignment) %>

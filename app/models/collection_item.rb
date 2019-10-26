@@ -147,7 +147,7 @@ class CollectionItem < ApplicationRecord
       end
 
       # if at least one of the owners of the items automatically approves
-      # adding or is a member of the collection, go ahead and approve by user
+      # adding, go ahead and approve by user
       if !approved_by_user?
         case item_type
         when "Work"
@@ -157,7 +157,7 @@ class CollectionItem < ApplicationRecord
         end
 
         users.each do |user|
-          if user.preference.automatically_approve_collections || (collection && collection.user_is_posting_participant?(user))
+          if user.preference.automatically_approve_collections
             # if the work is being added by a collection maintainer and at
             # least ONE of the works owners allows automatic inclusion in
             # collections, add the work to the collection
@@ -191,10 +191,9 @@ class CollectionItem < ApplicationRecord
 
   after_update :notify_of_status_change
   def notify_of_status_change
-    if saved_change_to_unrevealed?
-      # making sure notify_recipients in the work model has not already notified 
-      # the user
-      if !work.new_recipients.blank?
+    if saved_change_to_unrevealed? && item.respond_to?(:new_recipients)
+      # making sure notify_recipients in the work model has not already notified
+      if item.new_recipients.present?
         notify_of_reveal
       end
     end

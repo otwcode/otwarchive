@@ -107,7 +107,7 @@ Scenario: Translation, related work, and parent work links appear in the right p
   When I am logged in as "inspiration"
     And I edit the work "Worldbuilding"
     And I list the work "Parent Work" as inspiration
-    And I press "Post Without Preview"
+    And I press "Post"
     And a chapter is added to "Worldbuilding"
     And a draft chapter is added to "Worldbuilding"
   When I view the work "Worldbuilding"
@@ -371,16 +371,22 @@ Scenario: Anonymous works listed as inspiration should have links to the authors
 Scenario: When a user is notified that a co-authored work has been inspired by a work they posted,
   the e-mail should link to each author's URL instead of showing escaped HTML
   Given I have related works setup
+    And the user "misterdeejay" exists and is activated
+    And the user "misterdeejay" allows co-creators
     And I am logged in as "inspiration"
     And I post the work "Seed of an Idea"
   When I am logged in as "inspired"
     And I set up the draft "Seedling of an Idea"
-    And I add the co-author "misterdeejay"
+    And I invite the co-author "misterdeejay"
+    And I preview the work
+  Then I should not see "misterdeejay"
+    But 1 email should be delivered to "misterdeejay"
+    And the email should contain "The user inspired has invited your pseud misterdeejay to be listed as a co-creator on the following work"
+  When the user "misterdeejay" accepts all creator invites
+    And I edit the work "Seedling of an Idea"
     And I list the work "Seed of an Idea" as inspiration
     And I preview the work
     And I post the work
-  Then 1 email should be delivered to "misterdeejay"
-    And the email should contain "You have been listed as a co-creator on the following work"
   Then 1 email should be delivered to "inspiration"
     And the email should link to inspired's user url
     And the email should not contain "&lt;a href=&quot;http://archiveofourown.org/users/inspired/pseuds/inspired&quot;"
@@ -392,13 +398,13 @@ Scenario: When a user is notified that a co-authored work has been inspired by a
   Given I am logged in
     And I set up a draft "Inspired"
   When I list a series as inspiration
-    And I press "Post Without Preview"
+    And I press "Post"
   Then I should see "Only a link to a work can be listed as an inspiration."
 
-  Scenario: When using a URL on the site to cite a parent work, the URL must be 
+  Scenario: When using a URL on the site to cite a parent work, the URL must be
   for a work that exists
   Given I am logged in
     And I set up a draft "Inspired"
   When I list a nonexistent work as inspiration
-    And I press "Post Without Preview"
+    And I press "Post"
   Then I should see "The work you listed as an inspiration does not seem to exist."

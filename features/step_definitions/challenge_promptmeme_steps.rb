@@ -1,27 +1,27 @@
 
 Given /^I have Battle 12 prompt meme set up$/ do
   step %{I am logged in as "mod1"}
-    step "I have standard challenge tags setup"
+  step "I have standard challenge tags setup"
   step "I set up Battle 12 promptmeme collection"
 end
 
 Given /^I have Battle 12 prompt meme fully set up$/ do
   step %{I am logged in as "mod1"}
-    step "I have standard challenge tags setup"
+  step "I have standard challenge tags setup"
   step "I set up Battle 12 promptmeme collection"
   step "I fill in Battle 12 challenge options"
 end
 
 Given /^I have no-column prompt meme fully set up$/ do
   step %{I am logged in as "mod1"}
-    step "I have standard challenge tags setup"
+  step "I have standard challenge tags setup"
   step "I set up Battle 12 promptmeme collection"
   step "I fill in no-column challenge options"
 end
 
 Given /^I have single-prompt prompt meme fully set up$/ do
   step %{I am logged in as "mod1"}
-    step "I have standard challenge tags setup"
+  step "I have standard challenge tags setup"
   step "I set up Battle 12 promptmeme collection"
   step "I fill in single-prompt challenge options"
 end
