@@ -2047,7 +2047,7 @@
       "file": "app/views/users/confirmation.html.erb",
       "line": 14,
       "link": "http://brakemanscanner.org/docs/warning_types/cross_site_scripting",
-      "code": "ts(\"<strong>Important!</strong> You must verify your account within %{days_before_purge} days, or your registration will expire.\", :days_before_purge => (if AdminSetting.current.days_to_purge_unactivated? then\n  (AdminSetting.current.days_to_purge_unactivated * 7)\nelse\n  ArchiveConfig.DAYS_TO_PURGE_UNACTIVATED\nend))",
+      "code": "ts(\"<strong>Important!</strong> You must confirm your email address within %{days_before_purge}days, or your account will expire.  If this happens, you can sign up again using the same invitation.\", :days_before_purge => (if AdminSetting.current.days_to_purge_unactivated? then\n  (AdminSetting.current.days_to_purge_unactivated * 7)\nelse\n  ArchiveConfig.DAYS_TO_PURGE_UNACTIVATED\nend))",
       "render_path": [{"type":"controller","class":"Users::RegistrationsController","method":"notify_and_show_confirmation_screen","line":46,"file":"app/controllers/users/registrations_controller.rb"}],
       "location": {
         "type": "template",
