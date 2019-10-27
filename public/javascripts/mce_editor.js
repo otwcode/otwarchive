@@ -1,7 +1,8 @@
 //Init script for calling tinyMCE rich text editor: basic configuration can be done here.
 
 tinyMCE.init({
-  plugins: "directionality hr image link paste tabfocus",
+  branding: false,
+  plugins: "directionality hr image link lists paste tabfocus",
   menubar: false,
   toolbar: "bold italic underline strikethrough | link unlink image | blockquote | hr | bullist numlist | alignleft aligncenter alignright alignjustify | undo redo | ltr rtl",
   

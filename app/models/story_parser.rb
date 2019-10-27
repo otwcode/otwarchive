@@ -8,13 +8,13 @@ class StoryParser
   require 'open-uri'
   include HtmlCleaner
 
-  OPTIONAL_META = { notes: 'Note',
-                    freeform_string: 'Tag',
-                    fandom_string: 'Fandom',
-                    rating_string: 'Rating',
-                    warning_string: 'Warning',
-                    relationship_string: 'Relationship|Pairing',
-                    character_string: 'Character' }.freeze
+  OPTIONAL_META = {notes: 'Note',
+                   freeform_string: 'Tag',
+                   fandom_string: 'Fandom',
+                   rating_string: 'Rating',
+                   archive_warning_string: 'Warning',
+                   relationship_string: 'Relationship|Pairing',
+                   character_string: 'Character' }.freeze
   REQUIRED_META = { title: 'Title',
                     summary: 'Summary',
                     revised_at: 'Date|Posted|Posted on|Posted at',
@@ -346,7 +346,7 @@ class StoryParser
     # set default values for required tags
     work.fandom_string = meta_or_default(work.fandom_string, options[:fandom], ArchiveConfig.FANDOM_NO_TAG_NAME)
     work.rating_string = meta_or_default(work.rating_string, options[:rating], ArchiveConfig.RATING_DEFAULT_TAG_NAME)
-    work.warning_strings = meta_or_default(work.warning_strings, options[:warning], ArchiveConfig.WARNING_DEFAULT_TAG_NAME)
+    work.archive_warning_strings = meta_or_default(work.archive_warning_strings, options[:archive_warning], ArchiveConfig.WARNING_DEFAULT_TAG_NAME)
     work.category_string = meta_or_default(work.category_string, options[:category], [])
     work.character_string = meta_or_default(work.character_string, options[:character], [])
     work.relationship_string = meta_or_default(work.relationship_string, options[:relationship], [])
@@ -756,7 +756,7 @@ class StoryParser
     meta = {}
     metapatterns = detect_tags ? REQUIRED_META.merge(OPTIONAL_META) : REQUIRED_META
     is_tag = {}.tap do |h|
-      %w[fandom_string relationship_string freeform_string rating_string warning_string].each do |c|
+      %w[fandom_string relationship_string freeform_string rating_string archive_warning_string].each do |c|
         h[c.to_sym] = true
       end
     end
@@ -913,9 +913,9 @@ class StoryParser
   # Additional processing for meta - currently to make sure warnings
   # that aren't Archive warnings become additional tags instead
   def post_process_meta(meta)
-    if meta[:warning_string]
-      result = process_warnings(meta[:warning_string], meta[:freeform_string])
-      meta[:warning_string] = result[:warning_string]
+    if meta[:archive_warning_string]
+      result = process_warnings(meta[:archive_warning_string], meta[:freeform_string])
+      meta[:archive_warning_string] = result[:archive_warning_string]
       meta[:freeform_string] = result[:freeform_string]
     end
     meta
@@ -923,19 +923,19 @@ class StoryParser
 
   def process_warnings(warning_string, freeform_string)
     result = {
-      warning_string: warning_string,
-      freeform_string: freeform_string
+        archive_warning_string: warning_string,
+        freeform_string: freeform_string
     }
     new_warning = ''
-    result[:warning_string].split(/\s?,\s?/).each do |warning|
-      if Warning.warning? warning
+    result[:archive_warning_string].split(/\s?,\s?/).each do |warning|
+      if ArchiveWarning.warning? warning
         new_warning += ', ' unless new_warning.blank?
         new_warning += warning
       else
         result[:freeform_string] = (result[:freeform_string] || '') + ", #{warning}"
       end
     end
-    result[:warning_string] = new_warning
+    result[:archive_warning_string] = new_warning
     result
   end
 
