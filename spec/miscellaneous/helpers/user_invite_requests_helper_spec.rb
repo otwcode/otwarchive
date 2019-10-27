@@ -1,16 +1,16 @@
 require 'spec_helper'
 
-describe UserInviteRequestsHelper, type: :helper do
+describe UserInviteRequestsHelper do
 
   describe "link_to_previous_invite_requests" do
 
     before(:each) do
-      @user = FactoryGirl.create(:user)
-      @user2 = FactoryGirl.create(:user)
-      @invitation_request1 = FactoryGirl.create(:user_invite_requests, user_id: @user.id)
+      @user = FactoryBot.create(:user)
+      @user2 = FactoryBot.create(:user)
+      @invitation_request1 = FactoryBot.create(:user_invite_requests, user_id: @user.id)
       @invitation_request1.user.invitations.create
-      @invitation_request2 = FactoryGirl.create(:user_invite_requests, user_id: @user.id)
-      @invitation_request3 = FactoryGirl.create(:user_invite_requests, user_id: @user2.id)
+      @invitation_request2 = FactoryBot.create(:user_invite_requests, user_id: @user.id)
+      @invitation_request3 = FactoryBot.create(:user_invite_requests, user_id: @user2.id)
     end
 
     context "users requesting an invitations" do

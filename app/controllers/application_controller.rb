@@ -3,6 +3,11 @@ PROFILER_SESSIONS_FILE = 'used_tags.txt'
 class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception, prepend: true
   rescue_from ActionController::InvalidAuthenticityToken, with: :display_auth_error
+  rescue_from ActionController::UnknownFormat, with: :raise_not_found
+
+  def raise_not_found
+    redirect_to '/404'
+  end
 
   helper :all # include all helpers, all the time
 
@@ -456,7 +461,7 @@ public
     if model.to_s.downcase == 'work'
       allowed = ['author', 'title', 'date', 'created_at', 'word_count', 'hit_count']
     elsif model.to_s.downcase == 'tag'
-      allowed = ['name', 'created_at', 'suggested_fandoms', 'taggings_count_cache']
+      allowed = ['name', 'created_at', 'taggings_count_cache']
     elsif model.to_s.downcase == 'collection'
       allowed = ['collections.title', 'collections.created_at']
     elsif model.to_s.downcase == 'prompt'

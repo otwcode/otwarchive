@@ -407,7 +407,7 @@ namespace :After do
 
   desc "Set initial values for sortable tag names for tags that aren't fandoms"
   task(:more_sortable_tag_names => :environment) do
-    [Category, Character, Freeform, Rating, Relationship, Warning].each do |klass|
+    [Category, Character, Freeform, Rating, Relationship, ArchiveWarning].each do |klass|
       puts "Adding sortable names for #{klass.to_s.downcase.pluralize}"
       klass.by_name.find_each(:conditions => "canonical = 1 AND sortable_name = ''") do |tag|
         tag.set_sortable_name
@@ -611,6 +611,21 @@ namespace :After do
           chapter.save
         end
         work.save
+      end
+      print(".") && STDOUT.flush
+    end
+    puts && STDOUT.flush
+  end
+
+  desc "Reveal works and creators hidden upon invitation to unrevealed or anonymous collections"
+  task(unhide_invited_works: :environment) do
+    works = Work.where("in_anon_collection IS true OR in_unrevealed_collection IS true")
+    puts "Total number of works to check: #{works.count}"
+
+    works.find_in_batches do |batch|
+      batch.each do |work|
+        work.update_anon_unrevealed
+        work.save if work.changed?
       end
       print(".") && STDOUT.flush
     end

@@ -7,15 +7,12 @@ module SeriesHelper
 
   # this should only show prev and next works visible to the current user
   def series_data_for_work(work)
-    series = work.series.select { |s| s.visible?(current_user) }
+    series = work.series.select(&:visible?)
     series.map do |serial|
-      serial_works = serial.serial_works
-                           .includes(:work)
-                           .where('works.posted = ?', true)
-                           .order(:position)
-                           .references(:works)
-                           .select { |sw| sw.work.visible(current_user) }
-                           .map(&:work)
+      serial_works = \
+        serial.serial_works.includes(:work).references(:works).
+        where(works: { posted: true }).order(:position).
+        map(&:work).select(&:visible?)
       visible_position = serial_works.index(work) || serial_works.length
       unless !visible_position
         # Span used at end of previous_link and beginning of next_link to prevent extra
@@ -73,12 +70,12 @@ module SeriesHelper
     end
   end
 
-  # Generates confirmation message for 'remove me as author'
+  # Generates confirmation message for "Remove Me As Co-Creator"
   def series_removal_confirmation(series, user)
     if !(series.work_pseuds & user.pseuds).empty?
-      "You're listed as an author of works in this series. Do you want to remove yourself as an author of this series and all of its works?"
+      ts("You're listed as a creator of works in this series. Do you want to remove yourself as a creator of this series and all of its works?")
     else
-      "Are you sure you want to be removed as an author of this series?"
+      ts("Are you sure you want to be removed as a creator of this series?")
     end
   end
 

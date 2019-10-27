@@ -33,7 +33,7 @@ describe BookmarksController do
 
   describe 'edit' do
     context 'with javascript' do
-      let(:bookmark) { FactoryGirl.create(:bookmark) }
+      let(:bookmark) { FactoryBot.create(:bookmark) }
 
       it 'should render the bookmark_form_dynamic form' do
         fake_login_known_user(bookmark.pseud.user)

@@ -1,9 +1,9 @@
 <div class="tagset home">
-  
+
   <!--descriptive page name and messages-->
   <h2 class="heading"><%= ts("About %{name}", :name => @tag_set.title) %></h2>
   <!--/descriptions-->
-  
+
   <!--subnav-->
   <%= render "navigation" %>
   <!--/subnav-->
@@ -42,12 +42,13 @@
               <dd><%= @tag_set.send("#{tag_type}_nomination_limit") %></dd>
             <% end %>
           </dl>
-        <% end %>  
+        <% end %>
       </dd>
     </dl>
   </div>
 
   <% if @tag_set.visible || @tag_set.user_is_moderator?(current_user) %>
+
     <h3 class="landmark heading"><%= ts("Listing Tags") %></h3>
 
     <% tagset_cache_key = @tag_type ? "tag_set_show_#{@tag_set.tag_set_id}_#{@tag_type}" : "tag_set_show_#{@tag_set.tag_set_id}" %>

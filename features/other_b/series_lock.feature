@@ -8,7 +8,7 @@ Feature: Locked and partially locked series
     Given I am logged in as "fandomer"
       And I set up the draft "Humbug" as part of a series "Antiholidays"
       And I lock the work
-      And I press "Post Without Preview"
+      And I press "Post"
     Then I should see "Part 1 of the Antiholidays series"
     When I go to fandomer's series page
     Then I should see "Antiholidays"
