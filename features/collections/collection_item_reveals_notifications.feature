@@ -144,7 +144,7 @@ Scenario: When a gift work is in multiple unrevealed collections, gift and subsc
   When I am logged in as "creator"
     And I set up the draft "Surprise Present" as a gift for "recip"
     And I fill in "Post to Collections / Challenges" with "unrevealed_collection, hidden_collection"
-    And I press "Post Without Preview"
+    And I press "Post"
     And subscription notifications are sent
   Then 0 emails should be delivered
 
@@ -177,7 +177,7 @@ Scenario: When a prompt fill is posted to an unrevealed collection and an anonym
   When I am logged in as "creator"
     And I start to fulfill my claim with "A Work"
     And I fill in "Post to Collections / Challenges" with "anon_collection, unrevealed_prompt_meme"
-    And I press "Post Without Preview"
+    And I press "Post"
     And subscription notifications are sent
   Then 0 emails should be delivered
   
@@ -214,7 +214,7 @@ Scenario: An existing work is edited to simultaneously add a recipient and a col
   When I edit the work "Regift"
     And I fill in "Gift this work to" with "recip"
     And I fill in "Post to Collections / Challenges" with "unrevealed_collection"
-    And I press "Post Without Preview"
+    And I press "Post"
   Then 0 emails should be delivered
   
   # Reveal the work
