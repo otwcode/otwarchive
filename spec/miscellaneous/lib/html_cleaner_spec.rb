@@ -582,6 +582,21 @@ describe HtmlCleaner do
       end
     end
 
+    it "leaves audio tags alone" do
+      original = "<audio controls=\"controls\" crossorigin=\"anonymous\" preload=\"metadata\">
+  <source src=\"http://example.com/podfic.mp3\" type=\"audio/mpeg\"></source>
+  <p>Maybe you want to <a href=\"http://example.com/podfic.mp3\" rel=\"nofollow\">download this podfic instead</a>?</p>
+</audio>"
+      expect(sanitize_value(:content, original)).to eq(original)
+    end
+
+    it "leaves video tags alone" do
+      html = "<video><track>\n</track></video>"
+      result = add_paragraphs_to_text(html)
+      expect(result).not_to match("<p>")
+      expect(result).not_to match("<br")
+    end
+
     it "should not convert linebreaks after p tags" do
       result = add_paragraphs_to_text("<p>A</p>\n<p>B</p>\n\n<p>C</p>\n\n\n")
       doc = Nokogiri::HTML.fragment(result)
