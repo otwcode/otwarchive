@@ -59,6 +59,15 @@ describe OTWSanitize::MediaSanitizer do
         expect(content).to match("flower.webm")
       end
 
+      it "does not remove internal html" do
+        html = "<video>
+          <p>Follow <a href='/xyz'>my link</a></p>
+        </video>"
+        content = Sanitize.fragment(html, config)
+        expect(content).to match("<p>")
+        expect(content).to match("xyz")
+      end
+
       it "removes unwhitelisted attributes" do
         html = "
           <video>
