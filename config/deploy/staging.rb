@@ -11,7 +11,7 @@ require 'capistrano/gitflow_version'
 server "test-app13.transformativeworks.org", :app, :db
 server "test-app14.transformativeworks.org", :app
 server "test-app15.transformativeworks.org", :app, :workers, :schedulers, primary: true
-server "test-front10.transformativeworks.org", :web
+server "test-front11.transformativeworks.org", :web
 
 set :rails_env, 'staging'
 
