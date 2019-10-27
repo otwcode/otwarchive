@@ -637,6 +637,25 @@
       "note": ""
     },
     {
+      "warning_type": "Cross Site Scripting",
+      "warning_code": 2,
+      "fingerprint": "4c2812ecba16106adca83fe060ad8671affa5d656e84eab329ba363745b06fae",
+      "check_name": "CrossSiteScripting",
+      "message": "Unescaped model attribute",
+      "file": "app/views/users/confirmation.html.erb",
+      "line": 14,
+      "link": "http://brakemanscanner.org/docs/warning_types/cross_site_scripting",
+      "code": "ts(\"<strong>Important!</strong> You must confirm your email address within %{days_before_purge} days, or your account will expire. If this happens, you can sign up again using the same invitation.\", :days_before_purge => (if AdminSetting.current.days_to_purge_unactivated? then\n  (AdminSetting.current.days_to_purge_unactivated * 7)\nelse\n  ArchiveConfig.DAYS_TO_PURGE_UNACTIVATED\nend))",
+      "render_path": [{"type":"controller","class":"Users::RegistrationsController","method":"notify_and_show_confirmation_screen","line":46,"file":"app/controllers/users/registrations_controller.rb"}],
+      "location": {
+        "type": "template",
+        "template": "users/confirmation"
+      },
+      "user_input": "AdminSetting.current.days_to_purge_unactivated",
+      "confidence": "Weak",
+      "note": ""
+    },
+    {
       "warning_type": "Denial of Service",
       "warning_code": 76,
       "fingerprint": "4d73121092fa0a2969beb6a30406f1eaf92368c96a003244f8a9495a9010d1a3",
@@ -1289,25 +1308,6 @@
         "template": "works/show"
       },
       "user_input": "Work.find_by(:id => params[:id]).first_chapter",
-      "confidence": "Weak",
-      "note": ""
-    },
-    {
-      "warning_type": "Cross Site Scripting",
-      "warning_code": 2,
-      "fingerprint": "a057b1014f4e05e77f051510ec32dca14aa5d7bc12ff94e9795ace4d006ede9a",
-      "check_name": "CrossSiteScripting",
-      "message": "Unescaped model attribute",
-      "file": "app/views/users/confirmation.html.erb",
-      "line": 14,
-      "link": "http://brakemanscanner.org/docs/warning_types/cross_site_scripting",
-      "code": "ts(\"<strong>Important!</strong> You must confirm your email address within %{days_before_purge} days, or your account will expire.  If this happens, you can sign up again using the same invitation.\", :days_before_purge => (if AdminSetting.current.days_to_purge_unactivated? then\n  (AdminSetting.current.days_to_purge_unactivated * 7)\nelse\n  ArchiveConfig.DAYS_TO_PURGE_UNACTIVATED\nend))",
-      "render_path": [{"type":"controller","class":"Users::RegistrationsController","method":"notify_and_show_confirmation_screen","line":46,"file":"app/controllers/users/registrations_controller.rb"}],
-      "location": {
-        "type": "template",
-        "template": "users/confirmation"
-      },
-      "user_input": "AdminSetting.current.days_to_purge_unactivated",
       "confidence": "Weak",
       "note": ""
     },
@@ -2007,6 +2007,6 @@
       "note": ""
     }
   ],
-  "updated": "2019-10-26 19:26:19 +0000",
+  "updated": "2019-10-27 07:20:29 +0000",
   "brakeman_version": "3.7.2"
 }
