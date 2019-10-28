@@ -311,10 +311,6 @@ class UserMailer < BulletproofMailer::Base
     @work = Work.find(work_id)
     @collection = collection_for_email(collection_id)
 
-    # Bail out if the work is unrevealed
-    # We can't just do @work.unrevealed? because it might not have updated yet
-    return if @work.collection_items.where(user_approval_status: CollectionItem::APPROVED, unrevealed: true).present?
-
     I18n.with_locale(Locale.find(@user.preference.preferred_locale).iso) do
       mail(
         to: @user.email,
