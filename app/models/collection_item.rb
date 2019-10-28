@@ -191,7 +191,9 @@ class CollectionItem < ApplicationRecord
 
   after_update :notify_of_status_change
   def notify_of_status_change
-    # If the item is also in other unrevealed collections, skip notifications.
+    # We don't do notifications for bookmarks.
+    return unless item.is_a?(Work)
+    # If the work is also in other unrevealed collections, skip notifications.
     return if item.user_approved_collection_items.unrevealed.any?
 
     notify_of_reveal if saved_change_to_unrevealed?
