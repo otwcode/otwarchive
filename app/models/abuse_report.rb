@@ -14,16 +14,15 @@ class AbuseReport < ApplicationRecord
 
   validate :check_for_spam
   def check_for_spam
-    self.approved = errors.add(:base, ts("This report looks like spam to our system!")) unless check_for_spam?
+    errors.add(:base, ts("This report looks like spam to our system!")) unless check_for_spam?
   end
 
   def check_for_spam?
-    # don't check for spam while running tests or if the reporter is a logged in user with a matchin email address
-    self.approved = Rails.env.test? || logged_with_matching_email? || !Akismetor.spam?(akismet_attributes)
+    Rails.env.test? || logged_with_matching_email? || !Akismetor.spam?(akismet_attributes)
   end
 
   def logged_with_matching_email?
-    User.current_user.present? && User.current_user.email != email
+    User.current_user.present? && User.current_user.email == email
   end
 
   def akismet_attributes

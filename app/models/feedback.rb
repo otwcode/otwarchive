@@ -18,7 +18,6 @@ class Feedback < ApplicationRecord
   end
 
   def check_for_spam?
-    # don't check for spam while running tests or if the reporter is a logged in user with a matchin email address
     self.approved = Rails.env.test? || logged_with_matching_email? || !Akismetor.spam?(akismet_attributes)
   end
 
