@@ -191,13 +191,8 @@ class CollectionItem < ApplicationRecord
 
   after_update :notify_of_status_change
   def notify_of_status_change
-    unrevealed_collection_ids = item
-      .collection_items
-      .unrevealed
-      .approved_by_user
-      .pluck(:collection_id)
     # If the item is also in other unrevealed collections, skip notifications.
-    return if (unrevealed_collection_ids - [collection_id]).any?
+    return if item.user_approved_collection_items.unrevealed.any?
 
     notify_of_reveal if saved_change_to_unrevealed?
   end
