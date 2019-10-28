@@ -373,7 +373,8 @@ Scenario: Three related works are posted to an anonymous moderated collection. T
     And 0 emails should be delivered to "subscriber3"
 
   # Reveal the creator of a single work
-  When I am logged in as the owner of "Anon Collection"
+  When all emails have been delivered
+    And I am logged in as the owner of "Anon Collection"
     And I view the awaiting approval collection items page for "Anon Collection"
     And I reveal the creator of the work "Child Work 1" in the collection "Anon Collection"
     And subscription notifications are sent
