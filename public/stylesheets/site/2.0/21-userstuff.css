@@ -139,9 +139,15 @@
   border: 1px solid;
 }
 
+/* media */
+
 .userstuff img {
   max-width: 100%;
   height: auto;
+}
+
+.userstuff video {
+  max-width: 100%;
 }
 
 /*expected behaviours, exceptioning*/
