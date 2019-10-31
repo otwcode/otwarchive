@@ -72,6 +72,7 @@ module OTWSanitize
 
       config = Sanitize::Config.merge(Sanitize::Config::ARCHIVE, WHITELIST_CONFIG)
       Sanitize.clean_node!(node, config)
+      tidy_boolean_attributes(node)
       { node_whitelist: [node] }
     end
 
@@ -101,6 +102,15 @@ module OTWSanitize
       ArchiveConfig.BLACKLISTED_MULTIMEDIA_SRCS.any? do |blocked|
         source_host.match(blocked)
       end
+    end
+
+    # Sanitize outputs boolean attributes as attribute="". While this works,
+    # attribute="attribute" is more consistent with the way we handle the
+    # boolean attributes we automatically add (e.g. controls="controls").
+    def tidy_boolean_attributes(node)
+      node["default"] = "default" if node["default"]
+      node["loop"] = "loop" if node["loop"]
+      node["muted"] = "muted" if node["muted"]
     end
   end
 end
