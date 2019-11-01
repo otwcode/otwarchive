@@ -193,6 +193,8 @@ class CollectionItem < ApplicationRecord
   def notify_of_status_change
     # We don't do notifications for bookmarks.
     return unless item.is_a?(Work)
+    # This change only affects the work if the user has approved the item.
+    return unless approved_by_user?
     # If the work is also in other unrevealed collections, skip notifications.
     return if item.user_approved_collection_items.unrevealed.any?
 
