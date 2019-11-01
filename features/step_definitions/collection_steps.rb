@@ -187,11 +187,12 @@ When /^I (approve|reject) the collection item for the work "(.*?)"$/ do |action,
   click_button "Submit"
 end
 
-When /^I reveal the work "(.*?)" in the collection "(.*?)"$/ do |title, collection|
+When /^I (reveal|unreveal) the work "(.*?)" in the collection "(.*?)"$/ do |action, title, collection|
   work_id = Work.find_by(title: title).id
   collection_id = Collection.find_by(title: collection).id
   item_id = CollectionItem.find_by(item_id: work_id, item_type: "Work", collection_id: collection_id).id
-  uncheck("collection_items_#{item_id}_unrevealed")
+  uncheck("collection_items_#{item_id}_unrevealed") if action == "reveal"
+  check("collection_items_#{item_id}_unrevealed") if action == "unreveal"
   click_button "Submit"
 end
 

@@ -289,6 +289,84 @@ Scenario: A prompt fill is posted to an anonymous unrevealed collection. The mod
     And the email should not contain "Anon Unrevealed Prompt Meme"
     And 1 email should be delivered to "subscriber"
 
+##############################
+#
+# WORKS INVITED TO COLLECTIONS
+#
+##############################
+
+Scenario: A work is invited to a collection and the creator neither accepts nor rejects the invitation. The collection is then made unrevealed, as is the collection item for the work. (Because the invitation was not accepted, this does not affect the work's status.) When the moderator reveals the collection item, no subscription notifications are sent.
+  Given the collection "Future Unrevealed Collection"
+    And I am logged in as "creator"
+    And I post the work "Invited Work"
+    And "subscriber" subscribes to author "creator"
+    And I am logged in as the owner of "Future Unrevealed Collection"
+    And I add the work "Invited Work" to the collection "Future Unrevealed Collection"
+    And I set the collection "Future Unrevealed Collection" to unrevealed
+    And all emails have been delivered
+
+  # Set the collection item to unrevealed
+  When I view the invited collection items page for "Future Unrevealed Collection"
+    And I unreveal the work "Invited Work" in the collection "Future Unrevealed Collection"
+    And subscription notifications are sent
+  Then 0 emails should be delivered to "subscriber"
+
+  # Set the collection item to revealed
+  When I view the invited collection items page for "Future Unrevealed Collection"
+    And I reveal the work "Invited Work" in the collection "Future Unrevealed Collection"
+    And subscription notifications are sent
+  Then 0 emails should be delivered to "subscriber"
+
+Scenario: A gift work is invited to a collection and the creator neither accepts nor rejects the invitation. The collection is then made unrevealed, as is the collection item for the work. (Because the invitation was not accepted, this does not affect the work's status.) When the moderator reveals the collection item, no gift notifications are sent.
+  Given the collection "Future Unrevealed Collection"
+    And the user "recip" exists and is activated
+    And I am logged in as a random user
+    And I post the work "Invited Gift Work" as a gift for "recip"
+    And I am logged in as the owner of "Future Unrevealed Collection"
+    And I add the work "Invited Gift Work" to the collection "Future Unrevealed Collection"
+    And I set the collection "Future Unrevealed Collection" to unrevealed
+    And all emails have been delivered
+
+  # Set the collection item to unrevealed
+  When I view the invited collection items page for "Future Unrevealed Collection"
+    And I unreveal the work "Invited Gift Work" in the collection "Future Unrevealed Collection"
+  Then 0 emails should be delivered to "recip"
+
+  # Set the collection item to revealed
+  When I view the invited collection items page for "Future Unrevealed Collection"
+    And I reveal the work "Invited Gift Work" in the collection "Future Unrevealed Collection"
+  Then 0 emails should be delivered to "recip"
+
+Scenario: A prompt fill is invited to a collection and the creator neither accepts nor rejects the invitation. The collection is then made unrevealed, as is the collection item for the work. (Because the invitation was not accepted, this does not affect the work's status.) When the moderator reveals the collection item, no gift notifications are sent.
+  Given basic tags
+    And the prompt meme "Future Unrevealed Prompt Meme" with default settings
+    And "prompter" has submitted a prompt for "Future Unrevealed Prompt Meme"
+    And "creator" has claimed a prompt from "Future Unrevealed Prompt Meme"
+    And I am logged in as "creator"
+    And I fulfill my claim with "A Work"
+    # Remove the work from the collection so it can be invited
+    And I go to my collection items page
+    And I follow "Approved"
+    And I check "Remove"
+    And I press "Submit"
+    And all emails have been delivered
+
+  # Invite the work to the collection
+  When I am logged in as the owner of "Future Unrevealed Prompt Meme"
+    And I add the work "A Work" to the collection "Future Unrevealed Prompt Meme"
+  Then 1 email should be delivered to "creator"
+
+  # Make the collection and collection item unrevealed
+  When I set the collection "Future Unrevealed Prompt Meme" to unrevealed
+    And I view the invited collection items page for "Future Unrevealed Prompt Meme"
+    And I unreveal the work "A Work" in the collection "Future Unrevealed Prompt Meme"
+  Then 0 emails should be delivered to "prompter"
+
+  # Reveal the collection item
+  When I view the invited collection items page for "Future Unrevealed Prompt Meme"
+    And I unreveal the work "A Work" in the collection "Future Unrevealed Prompt Meme"
+  Then 0 emails should be delivered to "prompter"
+
 #################################################
 #
 # MIXED INDIVIDUAL AND COLLECTION SETTING REVEAL
