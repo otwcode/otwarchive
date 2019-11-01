@@ -191,10 +191,9 @@ class CollectionItem < ApplicationRecord
 
   after_update :notify_of_status_change
   def notify_of_status_change
-    # We don't do notifications for bookmarks.
-    return unless item.is_a?(Work)
-    # This change only affects the work if the user has approved the item.
-    return unless approved_by_user?
+    # If this isn't a work or its inclusion isn't approved by its creator, skip
+    # notifications.
+    return unless item.is_a?(Work) && approved_by_user?
     # If the work is also in other unrevealed collections, skip notifications.
     return if item.user_approved_collection_items.unrevealed.any?
 
