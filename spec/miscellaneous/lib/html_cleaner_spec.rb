@@ -584,7 +584,7 @@ describe HtmlCleaner do
 
     it "leaves audio tags alone" do
       original = "<audio controls=\"controls\" crossorigin=\"anonymous\" preload=\"metadata\">
-  <source src=\"http://example.com/podfic.mp3\" type=\"audio/mpeg\"></source>
+  <source src=\"http://example.com/podfic.mp3\" type=\"audio/mpeg\">
   <p>Maybe you want to <a href=\"http://example.com/podfic.mp3\" rel=\"nofollow\">download this podfic instead</a>?</p>
 </audio>"
       expect(sanitize_value(:content, original)).to eq(original)
