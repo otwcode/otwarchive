@@ -169,7 +169,7 @@ module HtmlCleaner
         unfrozen_value = add_paragraphs_to_text(Sanitize.clean(fix_bad_characters(unfrozen_value),
                                Sanitize::Config::ARCHIVE.merge(transformers: transformers))) unless field.to_s == "screencast"
       end
-      doc = Nokogiri::HTML::Document.new
+      doc = Nokogiri::HTML5::Document.new
       doc.encoding = "UTF-8"
       unfrozen_value = doc.fragment(unfrozen_value).to_xhtml
     else
@@ -363,7 +363,7 @@ module HtmlCleaner
     end
 
     # Adding paragraphs in place of linebreaks
-    doc = Nokogiri::HTML.fragment("<myroot>#{text}</myroot>")
+    doc = Nokogiri::HTML5.fragment("<myroot>#{text}</myroot>")
     out_html = traverse_nodes(doc.at_css("myroot"))[1]
     # Remove empty paragraphs
     out_html.gsub!(/<p>\s*?<\/p>/, "")
