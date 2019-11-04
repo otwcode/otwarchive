@@ -172,6 +172,11 @@ module HtmlCleaner
       doc = Nokogiri::HTML::Document.new
       doc.encoding = "UTF-8"
       unfrozen_value = doc.fragment(unfrozen_value).to_xhtml
+
+      # Hack! the herald angels sing
+      # TODO: AO3-5801 Switch to an HTML5 serializer that doesn't add invalid closing tags
+      # to track and source elements.
+      unfrozen_value.gsub!(/<\/(source|track)>/, "")
     else
       # clean out all tags
       unfrozen_value = Sanitize.clean(fix_bad_characters(unfrozen_value))
