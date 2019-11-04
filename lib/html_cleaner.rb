@@ -176,7 +176,7 @@ module HtmlCleaner
       # Hack! the herald angels sing
       # TODO: AO3-5801 Switch to an HTML5 serializer that doesn't add invalid closing tags
       # to track and source elements.
-      unfrozen_value.gsub!(/<\/(source|track)>/, "")
+      unfrozen_value.gsub!(%r{</(source|track)>}, "")
     else
       # clean out all tags
       unfrozen_value = Sanitize.clean(fix_bad_characters(unfrozen_value))

@@ -185,18 +185,18 @@ describe HtmlCleaner do
         end
 
         it "allows video tags" do
-          html = '''<video controls="controls" width="250" playsinline="playsinline" crossorigin="anonymous" preload="metadata">
-              <track kind="subtitles" src="http://example.com/english.vtt" srclang="en">
-              <track kind="subtitles" src="http://example.com/japanese.vtt" srclang="ja" default="default">
-            </video>'''
+          html = '<video controls="controls" width="250" playsinline="playsinline" crossorigin="anonymous" preload="metadata">\
+              <track kind="subtitles" src="http://example.com/english.vtt" srclang="en">\
+              <track kind="subtitles" src="http://example.com/japanese.vtt" srclang="ja" default="default">\
+            </video>'
           expect(sanitize_value(field, html)).to eq(html)
         end
 
         it "allows audio tags" do
-          html = '''<audio controls="controls" crossorigin="anonymous" preload="metadata" loop="loop">
-              <source src="http://example.com/podfic.mp3" type="audio/mpeg">
-              <p>Maybe you want to <a href="http://example.com/podfic.mp3" rel="nofollow">download this podfic instead</a>?</p>
-            </audio>'''
+          html = '<audio controls="controls" crossorigin="anonymous" preload="metadata" loop="loop">\
+              <source src="http://example.com/podfic.mp3" type="audio/mpeg">\
+              <p>Maybe you want to <a href="http://example.com/podfic.mp3" rel="nofollow">download this podfic instead</a>?</p>\
+            </audio>'
           expect(sanitize_value(field, html)).to eq(html)
         end
       end
