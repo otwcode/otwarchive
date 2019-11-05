@@ -7,6 +7,6 @@ phraseapp:
         file_format: yml
   pull:
     targets:
-    - file: ./confit/locales/**/<locale_name>.yml
+    - file: ./config/locales/**/<locale_name>.yml
       params:
         file_format: yml
