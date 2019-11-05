@@ -18,7 +18,7 @@ class Feedback < ApplicationRecord
   end
 
   def check_for_spam?
-    self.approved = Rails.env.test? || logged_with_matching_email? || !Akismetor.spam?(akismet_attributes)
+    self.approved = logged_with_matching_email? || !Akismetor.spam?(akismet_attributes)
   end
 
   def logged_with_matching_email?

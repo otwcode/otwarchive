@@ -18,7 +18,7 @@ class AbuseReport < ApplicationRecord
   end
 
   def check_for_spam?
-    Rails.env.test? || logged_with_matching_email? || !Akismetor.spam?(akismet_attributes)
+    logged_with_matching_email? || !Akismetor.spam?(akismet_attributes)
   end
 
   def logged_with_matching_email?
