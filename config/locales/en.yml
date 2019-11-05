@@ -1,33 +1,6 @@
 # Sample localization file for English. Add more files in this directory for other locales.
 # See http://github.com/svenfuchs/rails-i18n/tree/master/rails%2Flocale for starting points.
 en:
-  admin:
-    blacklist:
-      emails_found:
-        one: "one email found"
-        other: "%{count} emails found"
-  users:
-    delete_preview:
-      heading: "What do you want to do with your works?"
-      orphan: "orphan"
-      orphaning: "orphaning"
-      submit: "Save"
-      cancel: "Cancel"
-      confirm: "Are you sure? This can't be undone!"
-      options:
-        keep_pseud: "Leave my pseud but attach to the orphan account"
-        orphan_pseud: "Change my pseud to \"orphan\" and attach to the orphan account"
-        remove: "Remove me completely as co-creator"
-        delete: "Delete completely"
-      co_creations:
-        legend: "Works You Made With Others"
-        summary: "You have %{work_count} work(s) co-created with the following users: %{co_creators}."
-        orphan_info: "You are not able to delete these as they are shared works, but you can %{orphan_link} them or remove yourself completely as a co-creator."
-      sole_creations:
-        legend: "Works and Collections You Made By Yourself"
-        works_summary: "You have %{work_count} work(s) under the following pseuds: %{pseuds}."
-        collections_summary: "You have %{collection_count} collection(s) under the following pseuds: %{pseuds}."
-        options_info: "You can delete them, but please consider %{orphaning_link} them instead!"
   errors:
     format: "%{attribute} %{message}"
     messages: &errors_messages
