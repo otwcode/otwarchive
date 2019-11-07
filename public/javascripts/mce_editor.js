@@ -4,7 +4,7 @@ tinyMCE.init({
   branding: false,
   plugins: "directionality hr image link lists paste tabfocus",
   menubar: false,
-  toolbar: "bold italic underline strikethrough | link unlink image | blockquote | hr | bullist numlist | alignleft aligncenter alignright alignjustify | undo redo | ltr rtl | paste",
+  toolbar: "paste | bold italic underline strikethrough | link unlink image | blockquote | hr | bullist numlist | alignleft aligncenter alignright alignjustify | undo redo | ltr rtl",
   
   browser_spellcheck: true,
   
@@ -71,7 +71,7 @@ tinyMCE.init({
 
   // Options to display in the context (right-click) menu.
   // Note: image option only appears when an image is selected.
-  contextmenu: 'paste | link image | hr'
+  contextmenu: "paste | link image | hr"
 });
 
 // Require the user to turn the RTE on instead of loading automatically using selector option 
