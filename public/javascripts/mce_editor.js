@@ -3,6 +3,7 @@
 tinyMCE.init({
   branding: false,
   plugins: "directionality hr image link lists paste tabfocus",
+  contextmenu: false,
   menubar: false,
   toolbar: "paste | bold italic underline strikethrough | link unlink image | blockquote | hr | bullist numlist | alignleft aligncenter alignright alignjustify | undo redo | ltr rtl",
   
@@ -67,11 +68,7 @@ tinyMCE.init({
   // Override the list of targets provided in the link plugin. We do not allow the target attribute, so we want an empty list.
   target_list: [
     { title: 'None', value: '' }  
-  ],
-
-  // Options to display in the context (right-click) menu.
-  // Note: image option only appears when an image is selected.
-  contextmenu: "paste | link image | hr"
+  ]
 });
 
 // Require the user to turn the RTE on instead of loading automatically using selector option 
