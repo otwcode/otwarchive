@@ -1,4 +1,5 @@
 jshint:
+  config_file: .jshintrc
   ignore_file: .jshintignore
 
 rubocop:
