@@ -68,7 +68,13 @@ tinyMCE.init({
   // Override the list of targets provided in the link plugin. We do not allow the target attribute, so we want an empty list.
   target_list: [
     { title: 'None', value: '' }  
-  ]
+  ],
+
+  mobile: {
+    // As of version 5.0, TinyMCE has a very limited mobile version it inflicts on Android and iOS phones by default.
+    // This forces the desktop version. Note that this is only implicitly documented and may break.
+    theme: "silver",
+  }
 });
 
 // Require the user to turn the RTE on instead of loading automatically using selector option 
