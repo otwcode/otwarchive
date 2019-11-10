@@ -19,8 +19,8 @@ en:
       you_have: "[%{app_name}] You've got kudos!"
       html:
         left_kudos:
-          one: "%{givers_list} left kudos on <i>%{commentable_link}</i>."
-          other: "%{givers_list} left kudos on <i>%{commentable_link}</i>."
+          one: "%{givers_list} left kudos on %{commentable_link}."
+          other: "%{givers_list} left kudos on %{commentable_link}."
       text:
         left_kudos:
           one: "%{givers_list} left kudos on %{commentable_link}."
