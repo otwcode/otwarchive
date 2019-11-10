@@ -480,6 +480,7 @@ class WorksController < ApplicationController
     end
 
     options = build_options(params)
+    options[:ip_address] = request.remote_ip
 
     # now let's do the import
     if params[:import_multiple] == 'works' && @urls.length > 1
@@ -502,7 +503,6 @@ class WorksController < ApplicationController
               else
                 storyparser.download_and_parse_chapters_into_story(urls, options)
               end
-      @work.ip_address = request.remote_ip
     rescue Timeout::Error
       flash.now[:error] = ts('Import has timed out. This may be due to connectivity problems with the source site. Please try again in a few minutes, or check Known Issues to see if there are import problems with this site.')
       render(:new_import) && return
@@ -532,7 +532,7 @@ class WorksController < ApplicationController
   def import_multiple(urls, options)
     # try a multiple import
     storyparser = StoryParser.new
-    @works, failed_urls, errors = storyparser.import_from_urls(urls, request.remote_ip, options)
+    @works, failed_urls, errors = storyparser.import_from_urls(urls, options)
 
     # collect the errors neatly, matching each error to the failed url
     unless failed_urls.empty?

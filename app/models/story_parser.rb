@@ -173,11 +173,6 @@ class StoryParser
     urls.each do |url|
       begin
         work = download_and_parse_story(url, options)
-
-        if work
-          work.ip_address = remote_ip
-        end
-
         if work && work.save
           work.chapters.each(&:save)
           works << work
@@ -214,6 +209,7 @@ class StoryParser
     else
       work = download_and_parse_chaptered_story(source, location, options)
     end
+    work&.ip_address = options[:ip_address]
     work
   end
 

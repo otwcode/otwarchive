@@ -110,22 +110,20 @@ Feature: Import Works
       And I should not see "Additional Tags:"
       And I should not see "Relationship: Detected 1/Detected 2"
 
-  Scenario: Admin should see IP Address on imported work
+  Scenario: Admins see IP address on imported works
     Given I import "http://import-site-with-tags" with a mock website
       And I press "Post"
     When I am logged in as an admin
       And I go to the "Detected Title" work page
-    Then I should see "IP Address"
-      And I should not see "No address recorded"
+    Then I should see "IP Address: 127.0.0.1"
 
-  Scenario: Admin should see IP Address on imported work if posted without preview as an archivist
-    Given I start importing "http://import-site-with-tags" with a mock website
+  Scenario: Admins see IP Address on works imported without preview by an archivist
+    Given I start importing "http://import-site-with-tags" with a mock website as an archivist
       And I check "Post without previewing"
       And I press "Import"
     When I am logged in as an admin
       And I go to the "Detected Title" work page
-    Then I should see "IP Address"
-      And I should not see "No address recorded"
+    Then I should see "IP Address: 127.0.0.1"
 
   Scenario: Importing multiple works with backdating
     When I import the urls
