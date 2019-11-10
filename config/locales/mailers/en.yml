@@ -16,9 +16,6 @@ en:
 
               The Archive of Our Own is a fan-run and fan-supported archive that relies on your donations: %{donate_url}.
         sent_at: "Sent at %{sent_at}."
-        sent_by:
-          html: "Sent by <b>%{sent_by}</b>."
-          text: "Sent by %{sent_by}."
     kudos:
       guest:
         one: a guest

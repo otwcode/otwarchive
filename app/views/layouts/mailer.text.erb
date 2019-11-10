@@ -17,8 +17,3 @@ Archive of Our Own
 <%= t 'mailer.general.footer.sent_at', sent_at: yield(:sent_at).strip %>
 
 <% end %>
-<% if content_for?(:sent_by) %>
-
-<%= t 'mailer.general.footer.sent_by.text', sent_by: :sent_by %>
-
-<% end %>

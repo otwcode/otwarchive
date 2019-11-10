@@ -100,10 +100,6 @@
                           <% if content_for?(:sent_at) %>
                             <p><%= t 'mailer.general.footer.sent_at', sent_at: yield(:sent_at).strip %></p>
                           <% end %>
-
-                          <% if content_for?(:sent_by) %>
-                            <p><%= t 'mailer.general.footer.sent_by.html', sent_by: :sent_by %></p>
-                          <% end %>
 <!-- /footer -->
 
                         </div>
