@@ -11,7 +11,9 @@ Archive of Our Own
 <%= yield(:footer_note) %>
 
 <% end %>
-<%= t 'mailer.general.footer.general.text', support_url: root_url+"support", donate_url: donate_url %>
+<%= t 'mailer.general.footer.general.text.part1', support_url: root_url+"support" %>
+
+<%= t 'mailer.general.footer.general.text.part2', donate_url: donate_url %>
 <% if content_for?(:sent_at) %>
 
 <%= t 'mailer.general.footer.sent_at', sent_at: yield(:sent_at).strip %>
