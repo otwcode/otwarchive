@@ -8,13 +8,15 @@ class Query
   end
 
   def search
-    # ES UPGRADE TRANSITION #
-    # Change $new_elasticsearch to $elasticsearch
-    $new_elasticsearch.search(
-      index: index_name,
-      type: document_type,
-      body: generated_query
-    )
+    begin
+      $elasticsearch.search(
+        index: index_name,
+        type: document_type,
+        body: generated_query
+      )
+    rescue Elasticsearch::Transport::Transport::Errors::BadRequest
+      { error: "Your search failed because of a syntax error. Please try again." }
+    end
   end
 
   def search_results
@@ -24,7 +26,7 @@ class Query
 
   # Perform a count query based on the given options
   def count
-    $new_elasticsearch.count(
+    $elasticsearch.count(
       index: index_name,
       body: { query: generated_query[:query] }
     )['count']

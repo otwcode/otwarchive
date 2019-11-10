@@ -1,9 +1,6 @@
 class Tag < ApplicationRecord
 
   include ActiveModel::ForbiddenAttributesProtection
-  # ES UPGRADE TRANSITION #
-  # Remove Tire::Model::Search
-  include Tire::Model::Search
   include Searchable
   include StringCleaner
   include WorksOwner
@@ -13,7 +10,7 @@ class Tag < ApplicationRecord
   # Note: the order of this array is important.
   # It is the order that tags are shown in the header of a work
   # (banned tags are not shown)
-  TYPES = ['Rating', 'Warning', 'Category', 'Media', 'Fandom', 'Relationship', 'Character', 'Freeform', 'Banned' ]
+  TYPES = ['Rating', 'ArchiveWarning', 'Category', 'Media', 'Fandom', 'Relationship', 'Character', 'Freeform', 'Banned' ]
 
   # these tags can be filtered on
   FILTERS = TYPES - ['Banned', 'Media']
@@ -25,36 +22,19 @@ class Tag < ApplicationRecord
   # the order is important, and it is the order in which they appear in the tag wrangling interface
   USER_DEFINED = ['Fandom', 'Character', 'Relationship', 'Freeform']
 
-  # ES UPGRADE TRANSITION #
-  # Remove conditional and Tire reference
-  def self.index_name
-    if use_new_search?
-      "#{ArchiveConfig.ELASTICSEARCH_PREFIX}_#{Rails.env}_works"
-    else
-      tire.index.name
-    end
-  end
-
-  # ES UPGRADE TRANSITION #
-  # Delete this function, since it's unnecessary.
-  def self.document_type
-    "tag"
+  def self.label_name
+    to_s.pluralize
   end
 
   delegate :document_type, to: :class
-
-  # ES UPGRADE TRANSITION #
-  # Delete this function, since it's unnecessary.
-  def to_indexed_json
-    as_json.merge(tag_type: type).to_json
-  end
 
   def document_json
     TagIndexer.new({}).document(self)
   end
 
   def self.write_redis_to_database
-    REDIS_GENERAL.smembers("tag_update").each_slice(1000) do |batch|
+    batch_size = ArchiveConfig.TAG_UPDATE_BATCH_SIZE
+    REDIS_GENERAL.smembers("tag_update").each_slice(batch_size) do |batch|
       Tag.transaction do
         batch.each do |id|
           value = REDIS_GENERAL.get("tag_update_#{id}_value")
@@ -75,7 +55,7 @@ class Tag < ApplicationRecord
     # would be TAGGINGS_COUNT_MIN_TIME ( defaults to 3 minutes ) and the maximum amount of time would be
     # TAGGINGS_COUNT_MAX_TIME ( defaulting to an hour ).
     expiry_time = count / (ArchiveConfig.TAGGINGS_COUNT_CACHE_DIVISOR || 1500)
-    [[expiry_time, (ArchiveConfig.TAGGINGS_COUNT_MIN_TIME || 3)].max, (ArchiveConfig.TAGGINGS_COUNT_MAX_TIME || 60)].min
+    [[expiry_time, (ArchiveConfig.TAGGINGS_COUNT_MIN_TIME || 3)].max, (ArchiveConfig.TAGGINGS_COUNT_MAX_TIME || 50) + count % 20 ].min
   end
 
   def taggings_count_cache_key
@@ -90,8 +70,8 @@ class Tag < ApplicationRecord
 
   def taggings_count=(value)
     expiry_time = Tag.taggings_count_expiry(value)
-    # Only write to the cache if there are more than TAGGINGS_COUNT_MIN_CACHE_COUNT ( defaults to 1,000 ) uses.
-    Rails.cache.write(taggings_count_cache_key, value, race_condition_ttl: 10, expires_in: expiry_time.minutes) if value >= (ArchiveConfig.TAGGINGS_COUNT_MIN_CACHE_COUNT || 1000)
+    # Only write to the cache if there are more than a number of uses.
+    Rails.cache.write(taggings_count_cache_key, value, race_condition_ttl: 10, expires_in: expiry_time.minutes) if value >= ArchiveConfig.TAGGINGS_COUNT_MIN_CACHE_COUNT
     write_taggings_to_redis(value)
   end
 
@@ -105,7 +85,7 @@ class Tag < ApplicationRecord
 
   def update_tag_cache
     cache_read = Rails.cache.read(taggings_count_cache_key)
-    taggings_count if cache_read.nil? || (cache_read < (ArchiveConfig.TAGGINGS_COUNT_MIN_CACHE_COUNT || 1000))
+    taggings_count if cache_read.nil? || (cache_read < ArchiveConfig.TAGGINGS_COUNT_MIN_CACHE_COUNT)
   end
 
   def update_counts_cache(id)
@@ -155,7 +135,12 @@ class Tag < ApplicationRecord
   has_many :common_taggings, foreign_key: 'common_tag_id', dependent: :destroy
   has_many :child_taggings, class_name: 'CommonTagging', as: :filterable
   has_many :children, through: :child_taggings, source: :common_tag
-  has_many :parents, through: :common_taggings, source: :filterable, source_type: 'Tag', after_remove: :update_wrangler
+  has_many :parents,
+           through: :common_taggings,
+           source: :filterable,
+           source_type: 'Tag',
+           before_remove: :destroy_common_tagging,
+           after_remove: :update_wrangler
 
   has_many :meta_taggings, foreign_key: 'sub_tag_id', dependent: :destroy
   has_many :meta_tags, through: :meta_taggings, source: :meta_tag, before_remove: :update_meta_filters
@@ -165,9 +150,6 @@ class Tag < ApplicationRecord
   has_many :direct_sub_tags, -> { where('meta_taggings.direct = 1') }, through: :sub_taggings, source: :sub_tag
   has_many :taggings, as: :tagger
   has_many :works, through: :taggings, source: :taggable, source_type: 'Work'
-
-  has_many :same_work_tags, -> { distinct }, through: :works, source: :tags
-  has_many :suggested_fandoms, -> { distinct }, through: :works, source: :fandoms
 
   has_many :bookmarks, through: :taggings, source: :taggable, source_type: 'Bookmark'
   has_many :external_works, through: :taggings, source: :taggable, source_type: 'ExternalWork'
@@ -263,16 +245,28 @@ class Tag < ApplicationRecord
     end
   end
 
-  before_save :check_type_changes, if: :type_changed?
+  after_save :check_type_changes, if: :saved_change_to_type?
   def check_type_changes
-    # if the tag used to be a Fandom and is now something else, no parent type will fit, remove all parents
-    # if the tag had a type and is now an UnsortedTag, it can't be put into fandoms, so remove all parents
-    if self.type_was == "Fandom" || self.type == "UnsortedTag" && !self.type_was.nil?
-      self.parents = []
-    # if the tag has just become a Fandom, it needs the Uncategorized media added to it manually, and no other parents (the after_save hook on Fandom won't take effect, since it's not a Fandom yet)
-    elsif self.type == "Fandom" && !self.type_was.nil?
-      self.parents = [Media.uncategorized]
-    end
+    return if type_before_last_save.nil?
+
+    retyped = Tag.find(self.id)
+
+    # Clean up invalid CommonTaggings.
+    retyped.common_taggings.destroy_invalid
+    retyped.child_taggings.destroy_invalid
+
+    # If the tag has just become a Fandom, it needs the Uncategorized media
+    # added to it manually (the after_save hook on Fandom won't take effect,
+    # since it's not a Fandom yet)
+    retyped.add_media_for_uncategorized if retyped.is_a?(Fandom)
+  end
+
+  # Callback for has_many :parents.
+  # Destroy the common tagging so we trigger CommonTagging's callbacks when a
+  # parent is removed. We're specifically interested in the update_search
+  # callback that will reindex the tag and return it to the unwrangled bin.
+  def destroy_common_tagging(parent)
+    self.common_taggings.find_by(filterable_id: parent.id).try(:destroy)
   end
 
   scope :id_only, -> { select("tags.id") }
@@ -522,6 +516,10 @@ class Tag < ApplicationRecord
     saved_name.gsub('/', '*s*').gsub('&', '*a*').gsub('.', '*d*').gsub('?', '*q*').gsub('#', '*h*')
   end
 
+  def display_name
+    name
+  end
+
   ## AUTOCOMPLETE
   # set up autocomplete and override some methods
   include AutocompleteSource
@@ -648,8 +646,13 @@ class Tag < ApplicationRecord
 
   # Instance methods that are common to all subclasses (may be overridden in the subclass)
 
-  def unwrangled?
+  def unfilterable?
     !(self.canonical? || self.unwrangleable? || self.merger_id.present? || self.mergers.any?)
+  end
+
+  # Returns true if a tag has been used in posted works
+  def has_posted_works?
+    self.works.posted.any?
   end
 
   # sort tags by name
@@ -659,7 +662,7 @@ class Tag < ApplicationRecord
 
   # only allow changing the tag type for unwrangled tags not used in any tag sets or on any works
   def can_change_type?
-    self.unwrangled? && self.set_taggings.count == 0 && self.works.count == 0
+    self.unfilterable? && self.set_taggings.count == 0 && self.works.count == 0
   end
 
   # tags having their type changed need to be reloaded to be seen as an instance of the proper subclass
@@ -701,7 +704,6 @@ class Tag < ApplicationRecord
 
   # Take the most direct route from tag to pseud and queue up to reindex
   def reindex_pseuds
-    return unless $rollout.active?(:start_new_indexing)
     Creatorship.select(:id, :pseud_id).
                 joins("JOIN filter_taggings ON filter_taggings.filterable_id = creatorships.creation_id").
                 where("filter_taggings.filter_id = ? AND filter_taggings.filterable_type = 'Work' AND creatorships.creation_type = 'Work'", id).
@@ -731,7 +733,6 @@ class Tag < ApplicationRecord
 
   # Reindex all series (series_ids argument works as above)
   def reindex_all_series(series_ids = [])
-    return unless $rollout.active?(:start_new_indexing)
     if series_ids.empty?
       series_ids = all_filtered_series_ids
     end
@@ -755,7 +756,6 @@ class Tag < ApplicationRecord
 
   # Reindex all external works (external_work_ids argument works as above)
   def reindex_all_external_works(external_work_ids = [])
-    return unless $rollout.active?(:start_new_indexing)
     if external_work_ids.empty?
       external_work_ids = all_filtered_external_work_ids
     end
@@ -789,9 +789,9 @@ class Tag < ApplicationRecord
   def reindex_filtered_item(item)
     if item.is_a?(Work)
       RedisSearchIndexQueue.reindex(item, priority: :low)
-      IndexQueue.enqueue_ids(Series, item.series.pluck(:id), :background) if $rollout.active?(:start_new_indexing)
+      IndexQueue.enqueue_ids(Series, item.series.pluck(:id), :background)
     else
-      IndexQueue.enqueue_id("ExternalWork", item.id, :background) if $rollout.active?(:start_new_indexing)
+      IndexQueue.enqueue_id("ExternalWork", item.id, :background)
     end 
   end
 
@@ -827,7 +827,7 @@ class Tag < ApplicationRecord
     reindex_taggables do
       self.filter_taggings.update_all(["filter_id = ?", self.merger_id])
     end
-    self.async(:reset_filter_count)
+    reset_filter_count
   end
 
   # If a tag has a new merger, add to the filter_taggings for that merger
@@ -906,9 +906,7 @@ class Tag < ApplicationRecord
     # for filtering/searching
     async(:reindex_taggables)
 
-    tags_that_need_filter_count_reset.each do |tag_to_reset|
-      tag_to_reset.reset_filter_count
-    end
+    FilterCount.enqueue_filters(tags_that_need_filter_count_reset)
   end
 
   # Remove filter taggings for a given tag
@@ -924,9 +922,9 @@ class Tag < ApplicationRecord
         # This means we remove the old merger itself and all its meta tags unless they
         # should remain because of other existing tags of the item (or because they are
         # also meta tags of the new merger)
+        filters_to_remove = [old_filter] + old_filter.meta_tags
         items = self.works + self.external_works
         items.each do |item|
-          filters_to_remove = [old_filter] + old_filter.meta_tags
           filters_to_remove.each do |filter_to_remove|
             next unless item.filters.include?(filter_to_remove)
             # We collect all sub tags, i.e. the tags that would have the filter_to_remove as
@@ -942,7 +940,6 @@ class Tag < ApplicationRecord
             remaining_tags += [self.merger] unless self.merger.nil?
             if (remaining_tags & all_tags_with_filter_to_remove_as_meta).empty? # none of the remaining tags need filter_to_remove
               item.filter_taggings.where(filter_id: filter_to_remove).destroy_all
-              filter_to_remove.reset_filter_count
             else # we should keep filter_to_remove, but check if inheritence needs to be updated
               direct_tags_for_filter_to_remove = filter_to_remove.mergers + [filter_to_remove]
               if (remaining_tags & direct_tags_for_filter_to_remove).empty? # not tagged with filter or mergers directly
@@ -952,6 +949,8 @@ class Tag < ApplicationRecord
             end
           end
         end
+
+        FilterCount.enqueue_filters(filters_to_remove)
       else
         self.filter_taggings.destroy_all
         self.reset_filter_count
@@ -969,26 +968,12 @@ class Tag < ApplicationRecord
         reindex_filtered_item(item)
       end
     end
+
+    meta_tag.reset_filter_count
   end
 
   def reset_filter_count
-    admin_settings = Rails.cache.fetch("admin_settings") { AdminSetting.first }
-    return if admin_settings.suspend_filter_counts?
-    current_filter = filter
-    # we only need to cache values for user-defined tags
-    # because they're the only ones we access
-    return unless current_filter && Tag::USER_DEFINED.include?(current_filter.class.to_s)
-    attributes = { public_works_count: current_filter.filtered_works.posted.unhidden.unrestricted.count,
-                   unhidden_works_count: current_filter.filtered_works.posted.unhidden.count }
-    if current_filter.filter_count
-      unless current_filter.filter_count.update_attributes(attributes)
-        raise "Filter count error for #{current_filter.name}"
-      end
-    else
-      unless current_filter.create_filter_count(attributes)
-        raise "Filter count error for #{current_filter.name}"
-      end
-    end
+    FilterCount.enqueue_filter(filter)
   end
 
   #### END FILTERING ####
@@ -1020,9 +1005,8 @@ class Tag < ApplicationRecord
   end
 
   # Add a common tagging association
-  # Offloading most of the logic to the inherited tag models
   def add_association(tag)
-    self.parents << tag unless self.has_parent?(tag)
+    build_association(tag).save
   end
 
   def has_parent?(tag)
@@ -1096,6 +1080,7 @@ class Tag < ApplicationRecord
       end
     end
     meta_tag.update_works_index_timestamp!
+    FilterCount.enqueue_filters([meta_tag] + inherited_meta_tags)
   end
 
   def remove_sub_filters(sub_tag)
@@ -1125,49 +1110,83 @@ class Tag < ApplicationRecord
     favorite_tags.destroy_all
   end
 
-  attr_reader :media_string, :fandom_string, :character_string, :relationship_string, :freeform_string, :meta_tag_string, :sub_tag_string, :merger_string
+  attr_reader :meta_tag_string, :sub_tag_string, :merger_string
 
-  def add_parent_string(tag_string)
-    names = tag_string.split(',').map(&:squish)
-    names.each do |name|
-      parent = Tag.find_by_name(name)
-      if parent && parent.canonical?
-        add_association(parent)
+  # Uses the value of parent_types to determine whether the passed-in tag
+  # should be added as a parent or a child, and then generates the association
+  # (if it doesn't already exist). If it does already exist, returns the
+  # existing CommonTagging object.
+  def build_association(tag)
+    if parent_types.include?(tag&.type)
+      common_taggings.find_or_initialize_by(filterable: tag)
+    else
+      child_taggings.find_or_initialize_by(common_tag: tag)
+    end
+  end
+
+  # Splits up the passed-in string into a sequence of individual tag names,
+  # then finds (and yields) the tag for each. Used by add_association_string,
+  # meta_tag_string=, and sub_tag_string=.
+  def parse_tag_string(tag_string)
+    tag_string.split(",").map(&:squish).each do |name|
+      yield name, Tag.find_by_name(name)
+    end
+  end
+
+  # Try to create new associations with the tags of type tag_type whose names
+  # are listed in tag_string.
+  def add_association_string(tag_type, tag_string)
+    parse_tag_string(tag_string) do |name, parent|
+      prefix = "Cannot add association to '#{name}':"
+      if parent && parent.type != tag_type
+        errors.add(:base, "#{prefix} #{parent.type} added in #{tag_type} field.")
       else
-        errors.add(:base, "Cannot add association: '#{name}' tag " +
-          (parent ? "is not canonical." : "does not exist."))
+        association = build_association(parent)
+        save_and_gather_errors(association, prefix)
       end
     end
   end
 
-  def fandom_string=(tag_string); self.add_parent_string(tag_string); end
-  def media_string=(tag_string); self.add_parent_string(tag_string); end
-  def character_string=(tag_string); self.add_parent_string(tag_string); end
-  def relationship_string=(tag_string); self.add_parent_string(tag_string); end
-  def freeform_string=(tag_string); self.add_parent_string(tag_string); end
+  # Save an item to the database, if it's valid. If it's invalid, read in the
+  # error messages from the item and copy them over to this tag.
+  def save_and_gather_errors(item, prefix)
+    return unless item.new_record? || item.changed?
+    return if item.valid? && item.save
+
+    item.errors.full_messages.each do |message|
+      errors.add(:base, "#{prefix} #{message}")
+    end
+  end
+
+  # Find and destroy all invalid CommonTaggings and MetaTaggings associated
+  # with this tag.
+  def destroy_invalid_associations
+    common_taggings.destroy_invalid
+    child_taggings.destroy_invalid
+    meta_taggings.destroy_invalid
+    sub_taggings.destroy_invalid
+  end
+
+  # defines fandom_string=, media_string=, character_string=, relationship_string=, freeform_string= 
+  %w(Fandom Media Character Relationship Freeform).each do |tag_type|
+    attr_reader "#{tag_type.downcase}_string"
+
+    define_method("#{tag_type.downcase}_string=") do |tag_string|
+      add_association_string(tag_type, tag_string)
+    end
+  end
+
   def meta_tag_string=(tag_string)
-    names = tag_string.split(',').map(&:squish)
-    names.each do |name|
-      parent = self.class.find_by_name(name)
-      if parent
-        meta_tagging = self.meta_taggings.build(meta_tag: parent, direct: true)
-        unless meta_tagging.valid? && meta_tagging.save
-          self.errors.add(:base, "You attempted to create an invalid meta tagging. :(")
-        end
-      end
+    parse_tag_string(tag_string) do |name, parent|
+      meta_tagging = meta_taggings.build(meta_tag: parent, direct: true)
+      save_and_gather_errors(meta_tagging, "Invalid meta tag '#{name}':")
     end
   end
 
   def sub_tag_string=(tag_string)
-    names = tag_string.split(',').map(&:squish)
-    names.each do |name|
-      sub = self.class.find_by_name(name)
-      if sub
-        meta_tagging = sub.meta_taggings.build(meta_tag: self, direct: true)
-        unless meta_tagging.valid? && meta_tagging.save
-          self.errors.add(:base, "You attempted to create an invalid meta tagging. :(")
-        end
-      end
+    parse_tag_string(tag_string) do |name, sub|
+      sub_tagging = sub_taggings.build(sub_tag: sub, direct: true)
+      save_and_gather_errors(sub_tagging, "Invalid sub tag '#{name}':")
     end
   end
 
@@ -1259,35 +1278,57 @@ class Tag < ApplicationRecord
   ## SEARCH #######################
   #################################
 
-
-  # ES UPGRADE TRANSITION #
-  # Remove mapping block
-  mapping do
-    indexes :id,           index: :not_analyzed
-    indexes :name#,         analyzer: 'snowball', boost: 100
-    indexes :type
-    indexes :canonical,    type: :boolean
+  def unwrangled_query(tag_type, options = {})
+    self_type = %w(Character Fandom Media).include?(self.type) ? self.type.downcase : "fandom"
+    TagQuery.new(options.merge(
+      type: tag_type,
+      unwrangleable: false,
+      wrangled: false,
+      "pre_#{self_type}_ids": [self.id],
+      per_page: Tag.per_page
+    ))
   end
 
-  def self.search(options={})
-    tire.search(page: options[:page], per_page: 50, type: nil, load: true) do
-      query do
-        boolean do
-          must { string options[:name], default_operator: "AND" } if options[:name].present?
-          must { term :canonical, 'T' } if options[:canonical].present?
+  def unwrangled_tags(tag_type, options = {})
+    unwrangled_query(tag_type, options).search_results
+  end
 
-          if options[:type].present?
-            # To support the tags indexed prior to IndexSubqueue, we want to
-            # find the type either in the tag_type field or the _type field:
-            should { term '_type', options[:type].downcase }
-            should { term :tag_type, options[:type].downcase }
+  def unwrangled_tag_count(tag_type)
+    key = "unwrangled_#{tag_type}_#{self.id}_#{self.updated_at}"
+    Rails.cache.fetch(key, expires_in: 4.hours) do
+      unwrangled_query(tag_type).count
+    end
+  end
 
-            # The tire gem doesn't natively support :minimum_should_match,
-            # but elasticsearch 0.90 does, so we hack it in.
-            @value[:minimum_should_match] = 1
-          end
-        end
-      end
+  def suggested_parent_tags(parent_type, options = {})
+    limit = options[:limit] || 50
+    work_ids = works.limit(limit).pluck(:id)
+    Tag.distinct.joins(:taggings).where(
+      "tags.type" => parent_type,
+      taggings: {
+        taggable_type: 'Work',
+        taggable_id: work_ids
+      }
+    )
+  end
+
+  # For works that haven't been wrangled yet, get the fandom/character tags
+  # that are used on their works as a place to start
+  def suggested_parent_ids(parent_type)
+    return [] if !parent_types.include?(parent_type) ||
+      unwrangleable? ||
+      parents.by_type(parent_type).exists?
+
+    suggested_parent_tags(parent_type).pluck(:id, :merger_id).
+                                       flatten.compact.uniq
+  end
+
+  def queue_child_tags_for_reindex
+    all_with_child_type = Tag.where(type: child_types & Tag::USER_DEFINED)
+    works.select(:id).find_in_batches do |batch|
+      relevant_taggings = Tagging.where(taggable: batch)
+      tag_ids = all_with_child_type.joins(:taggings).merge(relevant_taggings).distinct.pluck(:id)
+      IndexQueue.enqueue_ids(Tag, tag_ids, :background)
     end
   end
 
@@ -1319,13 +1360,14 @@ class Tag < ApplicationRecord
 
     # Expire caching when a merger is added or removed
     if tag.saved_change_to_merger_id?
-      if tag.merger_id_was.present?
-        old = Tag.find(tag.merger_id_was)
+      if tag.merger_id_before_last_save.present?
+        old = Tag.find(tag.merger_id_before_last_save)
         old.update_works_index_timestamp!
       end
       if tag.merger_id.present?
         tag.merger.update_works_index_timestamp!
       end
+      async(:queue_child_tags_for_reindex)
     end
 
     # if type has changed, expire the tag's parents' children cache (it stores the children's type)
@@ -1333,6 +1375,11 @@ class Tag < ApplicationRecord
       tag.parents.each do |parent_tag|
         ActionController::Base.new.expire_fragment("views/tags/#{parent_tag.id}/children")
       end
+    end
+
+    # Reindex immediately to update the unwrangled bin.
+    if tag.saved_change_to_unwrangleable?
+      tag.reindex_document
     end
 
     update_tag_nominations(tag)

@@ -13,6 +13,7 @@ end
 # Let the test get at external sites, but stub out anything containing certain keywords
 def mock_external
   WebMock.allow_net_connect!
+
   WebMock.stub_request(:any, /import-site-with-tags/).
     to_return(status: 200,
               body:
@@ -72,7 +73,7 @@ When /^I import "(.*)"( with a mock website)?$/ do |url, mock|
   step %{I start importing "#{url}"#{mock}}
   step %{I press "Import"}
 end
-  
+
 When /^I import the urls$/ do |urls|
   step %{I set up importing}
   step %{I fill in "urls" with "#{urls}"}

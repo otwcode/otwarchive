@@ -19,10 +19,8 @@
     <dt><%= label_tag :email_confirmation, ts("Confirm New Email") %></dt>
     <dd><%= email_field_tag :email_confirmation %></dd>
 
-    <% unless @user.recently_reset? %>
-      <dt><%= label_tag :password_check, ts("Password") %></dt>
-      <dd><%= password_field_tag :password_check%></dd>
-    <% end %>
+    <dt><%= label_tag :password_check, ts("Password") %></dt>
+    <dd><%= password_field_tag :password_check %></dd>
 
     <dt class="landmark"><%= label_tag :submit, ts("Submit") %></dt>
     <dd class="submit actions">

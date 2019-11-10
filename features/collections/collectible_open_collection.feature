@@ -1,5 +1,4 @@
 @bookmarks @collections @works
-
 Feature: Collectible items
   As a user
   I want to add my items to collections
@@ -24,18 +23,6 @@ Feature: Collectible items
     Then I should see "Works (1)"
       And I should see "Blabla"
 
-  @old-search
-  Scenario: Add my bookmark to a collection
-    Given I have a bookmark for "Tundra penguins"
-    When I add my bookmark to the collection "Various_Penguins"
-    Then I should see "Added"
-    When I go to "Various Penguins" collection's page
-    Then I should see "Bookmarks (1)" within "#dashboard"
-      And I should see "Tundra penguins"
-
-  # This is the same as the test above, but with the sidebar text updated to
-  # reflect the new bookmarked item listings.
-  @new-search
   Scenario: Add my bookmark to a collection
     Given I have a bookmark for "Tundra penguins"
     When I add my bookmark to the collection "Various_Penguins"
@@ -89,4 +76,3 @@ Feature: Collectible items
     When I am logged in as the owner of "Various Penguins"
       And I view the approved collection items page for "Various Penguins"
     Then I should see "Sweater Penguins (Draft)"
-

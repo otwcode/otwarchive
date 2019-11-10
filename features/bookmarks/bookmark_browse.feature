@@ -5,7 +5,6 @@ Feature: Browse Bookmarks
 
     Given I am logged in as "ethel"
       And I add the pseud "aka"
-      And ethel can use the new search
       And I bookmark the work "Bookmarked with Default Pseud"
       And I bookmark the work "Bookmarked with Other Pseud" as "aka"
     When I go to ethel's bookmarks page

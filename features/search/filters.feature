@@ -9,7 +9,6 @@ Feature: Filters
       And a canonical fandom "Harry Potter"
       And a canonical fandom "Legend of Korra"
       And I am logged in as "meatloaf"
-      And meatloaf can use the new search
       And I post the work "A Hobbit's Meandering" with fandom "The Hobbit"
       And I post the work "Bilbo Does the Thing" with fandom "The Hobbit, Legend of Korra"
       And I post the work "Roonal Woozlib and the Ferrets of Nimh" with fandom "Harry Potter"
@@ -95,7 +94,6 @@ Feature: Filters
   @javascript
   Scenario: You can filter through a user's bookmarks using inclusion filters
     Given I am logged in as "recengine"
-      And recengine can use the new search
       And I bookmark the work "Bilbo Does the Thing"
       And I bookmark the work "A Hobbit's Meandering"
       And I bookmark the work "Roonal Woozlib and the Ferrets of Nimh"
@@ -128,7 +126,6 @@ Feature: Filters
   @javascript
   Scenario: You can filter through a user's bookmarks using exclusion filters
     Given I am logged in as "recengine"
-      And recengine can use the new search
       And I bookmark the work "Bilbo Does the Thing"
       And I bookmark the work "A Hobbit's Meandering"
       And I bookmark the work "Roonal Woozlib and the Ferrets of Nimh"
@@ -156,7 +153,6 @@ Feature: Filters
   @javascript
   Scenario: Filter a user's bookmarks by "Search within results" and "Search bookmarker's tags and notes"
     Given I am logged in as "recengine"
-      And recengine can use the new search
       And I bookmark the work "Bilbo Does the Thing" with the tags "hobbit"
       And I bookmark the work "A Hobbit's Meandering" with the tags "bilbo"
 
@@ -177,7 +173,6 @@ Feature: Filters
   @javascript
   Scenario: Filter a user's bookmarks by bookmarker's tags
     Given I am logged in as "recengine"
-      And recengine can use the new search
       And I bookmark the work "Bilbo Does the Thing" with the tags "to read,been here"
       And I bookmark the work "A Hobbit's Meandering" with the tags "to read"
       And I bookmark the work "Roonal Woozlib and the Ferrets of Nimh" with the tags "been here"
@@ -237,12 +232,50 @@ Feature: Filters
       And I should not see "A Hobbit's Meandering"
       And I should see "Roonal Woozlib and the Ferrets of Nimh"
 
+  Scenario: Filter bookmarks by a tag that appears both on bookmarked works and in bookmarker's tags
+    Given I am logged in as "recengine"
+      And I bookmark the work "Bilbo Does the Thing"
+      And I bookmark the work "Roonal Woozlib and the Ferrets of Nimh" with the tags "The Hobbit"
+
+    # Exclude a tag as a work tag but not as a bookmarker's tag
+    When I go to my bookmarks page
+    Then the "The Hobbit (1)" checkbox within "#exclude_fandom_tags" should not be checked
+      And the "The Hobbit (1)" checkbox within "#exclude_tag_tags" should not be checked
+
+    When I check "The Hobbit (1)" within "#exclude_fandom_tags"
+      And I press "Sort and Filter"
+    Then I should see "1 Bookmark by recengine"
+      And I should not see "Bilbo Does the Thing"
+      And I should see "Roonal Woozlib and the Ferrets of Nimh"
+      And the "The Hobbit (0)" checkbox within "#exclude_fandom_tags" should be checked
+      And the "The Hobbit (1)" checkbox within "#exclude_tag_tags" should not be checked
+
+    # Exclude a tag as a bookmarker's tag but not as a work tag
+    When I go to my bookmarks page
+      And I check "The Hobbit (1)" within "#exclude_tag_tags"
+      And I press "Sort and Filter"
+    Then I should see "1 Bookmark by recengine"
+      And I should see "Bilbo Does the Thing"
+      And I should not see "Roonal Woozlib and the Ferrets of Nimh"
+      And the "The Hobbit (0)" checkbox within "#exclude_tag_tags" should be checked
+      And the "The Hobbit (1)" checkbox within "#exclude_fandom_tags" should not be checked
+
+    # Exclude a tag as a bookmarker's tag AND as a work tag
+    When I go to my bookmarks page
+      And I check "The Hobbit (1)" within "#exclude_fandom_tags"
+      And I check "The Hobbit (1)" within "#exclude_tag_tags"
+      And I press "Sort and Filter"
+    Then I should see "0 Bookmarks by recengine"
+      And I should not see "Bilbo Does the Thing"
+      And I should not see "Roonal Woozlib and the Ferrets of Nimh"
+      And the "The Hobbit (0)" checkbox within "#exclude_fandom_tags" should be checked
+      And the "The Hobbit (0)" checkbox within "#exclude_tag_tags" should be checked
+
   @javascript
   Scenario: Filter a user's bookmarks by non-existent tags
     Given the tag "legend korra" does not exist
       And the tag "fun crossover" does not exist
       And I am logged in as "recengine"
-      And recengine can use the new search
       And I bookmark the work "A Hobbit's Meandering" with the tags "fun"
       And I bookmark the work "Bilbo Does the Thing" with the tags "fun little crossover"
 
@@ -274,22 +307,7 @@ Feature: Filters
       And I should see "A Hobbit's Meandering"
       And I should not see "Bilbo Does the Thing"
 
-  @javascript @old-search
-  Scenario: The filter counts should match the actual returned count
-    Given I am logged in as "meatloaf"
-      And I bookmark the work "Bilbo Does the Thing"
-      And I bookmark the work "A Hobbit's Meandering"
-      And I am logged out
-      And I am logged in as "anothermeatloaf"
-      And I bookmark the work "Bilbo Does the Thing"
-      And I bookmark the work "A Hobbit's Meandering"
-      And all indexing jobs have been run
-    When I go to the bookmarks tagged "The Hobbit"
-    Then I should see "4 Bookmarks in The Hobbit"
-    When I follow "Fandoms"
-    Then I should see "The Hobbit (4)"
-
-  @javascript @new-search
+  @javascript
   Scenario: Tag bookmark pages should display bookmarked items instead of bookmarks, and the sidebar counts should reflect that.
     Given I am logged in as "meatloaf"
       And I bookmark the work "Bilbo Does the Thing"
