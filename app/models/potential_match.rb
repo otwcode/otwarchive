@@ -226,7 +226,7 @@ public
       # but not there yet
       PotentialMatch.clear!(collection)
     else
-      ChallengeAssignment.delayed_generate(collection.id)
+      ChallengeAssignment.generate(collection)
     end
   end
 

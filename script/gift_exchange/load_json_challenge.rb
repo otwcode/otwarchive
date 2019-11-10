@@ -91,7 +91,8 @@ TagSet::TAG_TYPES.each do |type|
       old_progress = new_progress
     end
 
-    type.classify.constantize.create_canonical(name)
+    tag = type.classify.constantize.find_or_create_by_name(name)
+    tag.update_attributes(canonical: true) unless tag.canonical
   end
 end
 
@@ -125,9 +126,9 @@ def make_prompt(challenge_signup, info, prompt_type)
   end
 
   if prompt_type == 'request'
-    challenge_signup.requests << Request.create(attributes)
+    challenge_signup.requests << Request.new(attributes)
   else
-    challenge_signup.offers << Offer.create(attributes)
+    challenge_signup.offers << Offer.new(attributes)
   end
 end
 
@@ -157,5 +158,5 @@ data.each do |signup|
     make_prompt(challenge_signup, info, 'offer')
   end
 
-  challenge_signup.save!
+  challenge_signup.save!(validate: false)
 end

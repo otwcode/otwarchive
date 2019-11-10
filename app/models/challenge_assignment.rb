@@ -339,135 +339,13 @@ class ChallengeAssignment < ApplicationRecord
       return
     end
 
-    settings = collection.challenge.potential_match_settings
-
     REDIS_GENERAL.set(progress_key(collection), 1)
     ChallengeAssignment.clear!(collection)
 
-    # we sort signups into buckets based on how many potential matches they have
-    @request_match_buckets = {}
-    @offer_match_buckets = {}
-    @max_match_count = 0
-    if settings.nil? || settings.no_match_required?
-       # stuff everyone into the same bucket
-       @max_match_count = 1
-       @request_match_buckets[1] = collection.signups
-       @offer_match_buckets[1] = collection.signups
-    else
-      collection.signups.find_each do |signup|
-        next if signup.nil?
-        request_match_count = signup.request_potential_matches.count
-        @request_match_buckets[request_match_count] ||= []
-        @request_match_buckets[request_match_count] << signup
-        @max_match_count = (request_match_count > @max_match_count ? request_match_count : @max_match_count)
+    AssignmentGenerator.new(collection).generate
 
-        offer_match_count = signup.offer_potential_matches.count
-        @offer_match_buckets[offer_match_count] ||= []
-        @offer_match_buckets[offer_match_count] << signup
-        @max_match_count = (offer_match_count > @max_match_count ? offer_match_count : @max_match_count)
-      end
-    end
-
-    # now that we have the buckets, we go through assigning people in order
-    # of people with the fewest options first.
-    # (if someone has no potential matches they get a placeholder assignment with no
-    # matches.)
-    0.upto(@max_match_count) do |count|
-      if @request_match_buckets[count]
-        @request_match_buckets[count].sort_by {rand}.each do |request_signup|
-          # go through the potential matches in order from best to worst and try and assign
-          request_signup.reload
-          next if request_signup.assigned_as_request
-          ChallengeAssignment.assign_request!(collection, request_signup)
-        end
-      end
-
-      if @offer_match_buckets[count]
-        @offer_match_buckets[count].sort_by {rand}.each do |offer_signup|
-          offer_signup.reload
-          next if offer_signup.assigned_as_offer
-          ChallengeAssignment.assign_offer!(collection, offer_signup)
-        end
-      end
-    end
     REDIS_GENERAL.del(progress_key(collection))
     UserMailer.potential_match_generation_notification(collection.id).deliver
-  end
-
-  # go through the request's potential matches in order from best to worst and try and assign
-  def self.assign_request!(collection, request_signup)
-    assignment = ChallengeAssignment.new(collection: collection, request_signup: request_signup)
-    last_choice = nil
-    assigned = false
-    request_signup.request_potential_matches.sort.reverse.each do |potential_match|
-      # skip if this signup has already been assigned as an offer
-      next if potential_match.offer_signup.assigned_as_offer
-
-      # if there's a circular match let's save it as our last choice
-      if potential_match.offer_signup.assigned_as_request && !last_choice &&
-          collection.assignments.for_request_signup(potential_match.offer_signup).first.offer_signup == request_signup
-        last_choice = potential_match
-        next
-      end
-
-      # otherwise let's use it
-      assigned = ChallengeAssignment.do_assign_request!(assignment, potential_match)
-      break
-    end
-
-    if !assigned && last_choice
-      ChallengeAssignment.do_assign_request!(assignment, last_choice)
-    end
-
-    request_signup.assigned_as_request = true
-    request_signup.save!
-
-    assignment.save!
-    assignment
-  end
-
-  # go through the offer's potential matches in order from best to worst and try and assign
-  def self.assign_offer!(collection, offer_signup)
-    assignment = ChallengeAssignment.new(collection: collection, offer_signup: offer_signup)
-    last_choice = nil
-    assigned = false
-    offer_signup.offer_potential_matches.sort.reverse.each do |potential_match|
-      # skip if already assigned as a request
-      next if potential_match.request_signup.assigned_as_request
-
-      # if there's a circular match let's save it as our last choice
-      if potential_match.request_signup.assigned_as_offer && !last_choice &&
-          collection.assignments.for_offer_signup(potential_match.request_signup).first.request_signup == offer_signup
-        last_choice = potential_match
-        next
-      end
-
-      # otherwise let's use it
-      assigned = ChallengeAssignment.do_assign_offer!(assignment, potential_match)
-      break
-    end
-
-    if !assigned && last_choice
-      ChallengeAssignment.do_assign_offer!(assignment, last_choice)
-    end
-
-    offer_signup.assigned_as_offer = true
-    offer_signup.save!
-
-    assignment.save!
-    assignment
-  end
-
-  def self.do_assign_request!(assignment, potential_match)
-    assignment.offer_signup = potential_match.offer_signup
-    potential_match.offer_signup.assigned_as_offer = true
-    potential_match.offer_signup.save!
-  end
-
-  def self.do_assign_offer!(assignment, potential_match)
-    assignment.request_signup = potential_match.request_signup
-    potential_match.request_signup.assigned_as_request = true
-    potential_match.request_signup.save!
   end
 
   # clear out all previous assignments.
@@ -514,5 +392,4 @@ class ChallengeAssignment < ApplicationRecord
       end
     end
   end
-
 end

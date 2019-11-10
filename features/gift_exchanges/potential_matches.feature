@@ -1,5 +1,4 @@
-Feature:
-  Testing potential match generation.
+Feature: Potential Match Generation
 
   Scenario: Small multi-fandom exchange, only fandom tags.
 

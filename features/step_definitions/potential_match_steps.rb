@@ -109,7 +109,8 @@ Given /^the user "([^\"]*)" signs up for "([^\"]*)" with the following prompts$/
 
         tag_names = optional.split(/ *, */)
         tag_names.each do |tag_name|
-          tag = type.classify.constantize.create_canonical(tag_name)
+          tag = type.classify.constantize.find_or_create_by_name(tag_name)
+          tag.update(canonical: true) unless tag.canonical
           optional_tag_set.tags << tag
         end
       end
@@ -124,7 +125,8 @@ Given /^the user "([^\"]*)" signs up for "([^\"]*)" with the following prompts$/
       else
         tag_names = value.split(/ *, */)
         tag_names.each do |tag_name|
-          tag = type.classify.constantize.create_canonical(tag_name)
+          tag = type.classify.constantize.find_or_create_by_name(tag_name)
+          tag.update(canonical: true) unless tag.canonical
           tagset.tags << tag
         end
       end
@@ -153,7 +155,7 @@ end
 
 Then /^there should be no potential matches for "([^\"]*)"$/ do |name|
   collection = Collection.find_by(name: name)
-  collection.potential_matches.count.should == 0
+  expect(collection.potential_matches.count).to eq(0)
 end
 
 Then /^the potential matches for "([^\"]*)" should be$/ do |name, table|
@@ -168,15 +170,32 @@ Then /^the potential matches for "([^\"]*)" should be$/ do |name, table|
     [pm.request_signup.pseud.name, pm.offer_signup.pseud.name]
   end
 
-  match_names.sort!
-
   # Next extract the set of potential matches from the table.
   desired_names = []
   table.hashes.each do |hash|
     desired_names << [hash["request"], hash["offer"]]
   end
 
-  desired_names.sort!
+  expect(match_names).to contain_exactly(*desired_names)
+end
 
-  match_names.should == desired_names
+Then /^the assignments for "([^\"]*)" should be$/ do |name, table|
+  # First extract the set of assignments for the given challenge.
+  collection = Collection.find_by(name: name)
+  assignments = collection.assignments.includes(
+    request_signup: :pseud,
+    offer_signup: :pseud
+  )
+
+  assignment_names = assignments.map do |a|
+    [a.request_signup_pseud, a.offer_signup_pseud]
+  end
+
+  # Next extract the desired assignments from the table.
+  desired_names = []
+  table.hashes.each do |hash|
+    desired_names << [hash["recipient"], hash["giver"]]
+  end
+
+  expect(assignment_names).to contain_exactly(*desired_names)
 end

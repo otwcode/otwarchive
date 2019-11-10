@@ -25,6 +25,22 @@ bench = Benchmark.measure do
 end
 
 puts "Time Required: " + bench.to_s
+puts "Signups: " + count.to_s
+puts "Potential Matches: " + matches.to_s
+
+puts "Assignments With No Giver: " + \
+  collection.assignments.where(offer_signup_id: nil).count.to_s
+puts "Assignments With No Recipient: " + \
+  collection.assignments.where(request_signup_id: nil).count.to_s
+
+# Retrieve all complete assignments from the database, so that we can check for
+# "cycles" where A is assigned to B and B is assigned to A:
+pairs = collection.assignments
+  .where.not(offer_signup_id: nil)
+  .where.not(request_signup_id: nil)
+  .pluck(:offer_signup_id, :request_signup_id)
+  .map(&:sort)
+puts "Cycles: " + (pairs.size - pairs.uniq.size).to_s
 
 unless test_name.nil?
   File.open('log/benchmark.log', 'a') do |f|
