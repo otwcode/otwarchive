@@ -28,16 +28,11 @@ en:
   user_mailer:
     invite_increase_notification:
       subject: "[%{app_name}] New Invitations"
-      html:  "<p> Hi %{login}! </p>\n\
-          <p> We just wanted to let you know that you have %{total} new invitation(s), which can be used to create new accounts at the archive. You can invite a friend at %{invitation_page}. </p>\n\
-          <p> Cheers, <br> %{archive_name} </p>"
-      txt: |-
-          Hi %{login}
-          We just wanted to let you know that you have %{total} new invitation(s),
-          which can be used to create new accounts at the archive. You can invite a
-          friend at %{invitation_page}.
-          Cheers,
-          %{archive_name}
+      greeting: "Hi %{login}!"
+      body: "We just wanted to let you know that you have %{total} new invitation(s), which can be used to create new accounts at the archive. You can invite a friend at %{invitation_page}."
+      invitation_page_link_text: your invitations page
+      closing: "Cheers,"
+      signature: "%{app_short_name}"
     admin_deleted_work_notification:
       subject: "[%{app_name}] Your work has been deleted by an admin"
       hello: "Dear %{user},"

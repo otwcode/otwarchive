@@ -359,4 +359,47 @@ describe UserMailer, type: :mailer do
       end
     end
   end
+
+  describe "invite_increase_notification" do
+    let!(:user) { create(:user) }
+    let!(:total) { Faker::Number.non_zero_digit }
+
+    let(:email) { UserMailer.invite_increase_notification(user.id, total).deliver }
+
+    # Test the headers
+    it "has a valid sender" do
+      expect(email.header["From"].to_s).to eq("Archive of Our Own <#{ArchiveConfig.RETURN_ADDRESS}>")
+    end
+
+    it "has the correct subject line" do
+      expect(email.subject).to eq("[#{ArchiveConfig.APP_SHORT_NAME}] New Invitations")
+    end
+
+    # Test both body contents
+    it_behaves_like "multipart email"
+
+    describe "HTML version" do
+      it "has expected text" do
+        expect(get_message_part(email, /html/)).to include("you have #{total} new invitation(s)")
+      end
+      
+      it "does not have missing translations" do
+        expect(get_message_part(email, /html/)).not_to include("translation missing")
+      end
+      
+      it "does not have exposed HTML" do
+        expect(get_message_part(email, /html/)).not_to include("&lt;")
+      end
+    end
+
+    describe "text version" do
+      it "has expected text" do
+        expect(get_message_part(email, /plain/)).to include("you have #{total} new invitation(s)")
+      end
+      
+      it "does not have missing translations" do
+        expect(get_message_part(email, /plain/)).not_to include("translation missing")
+      end
+    end
+  end
 end
