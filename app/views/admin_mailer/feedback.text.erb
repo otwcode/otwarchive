@@ -1,19 +1,25 @@
 <% content_for :message do %>
 Here's some user feedback on the Archive!
-  Username: <%= @username.present? ? (raw @username) : "Anonymous user" %>
-  <% unless @email.blank? %>
-    Email address: <%= raw @email %>
+  Username: <%= @feedback.username.present? ? (raw @feedback.username) : "Anonymous user" %>
+  <% unless @feedback.email.blank? %>
+    Email address: <%= raw @feedback.email %>
   <% end %>
-    Language: <%= @language %>
+    Language: <%= @feedback.language %>
   <% unless ArchiveConfig.REVISION.blank? %>
     Archive revision: (rev. <%= ArchiveConfig.REVISION %>)
+  <% end %>
+  <% unless @feedback.rollout.blank? %>
+    Rollout: <%= raw @feedback.rollout %>
+  <% end %>
+  <% unless @feedback.user_agent.blank? %>
+    User agent: <%= raw @feedback.user_agent %>
   <% end %>
 
 Feedback: 
 <%= text_divider %>
 
-* <%= to_plain_text(raw @summary) %> *
-<%= to_plain_text(raw @comment) %>
+* <%= to_plain_text(raw @feedback.summary) %> *
+<%= to_plain_text(raw @feedback.comment) %>
 <% end %>
 
 <% content_for :sent_at do %><%= Time.now.to_s(:time_for_mailers) %><% end %>

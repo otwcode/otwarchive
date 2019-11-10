@@ -51,7 +51,7 @@ Feature: Admin Abuse actions
       And I should see "Suspended Permanently"
       And I should see "To the New Zealand penal colony with you."
     When I follow "Manage Users"
-      And I fill in "query" with "mrparis"
+      And I fill in "Name" with "mrparis"
       And I press "Find"
     Then I should see "1 user found"
     When I follow "Details"

@@ -432,7 +432,6 @@ Feature: Collection
     And I fill in "Fandoms" with "Stargate Atlantis"
     And I select "Not Rated" from "Rating"
     And I check "No Archive Warnings Apply"
-    And I select "myname1" from "work_author_attributes_ids_"
     And I fill in "content" with "This is an exciting story about Atlantis"
   When I press "Preview"
   Then I should see "Preview"
@@ -478,6 +477,7 @@ Feature: Collection
     And I should see "Anonymous"
     And 0 emails should be delivered
   When I press "Post"
+    And all indexing jobs have been run
   Then I should see "Work was successfully posted"
     And I should see "For myname"
     And I should see "Collections:"

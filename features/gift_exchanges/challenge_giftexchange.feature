@@ -50,13 +50,14 @@ Feature: Gift Exchange Challenge
 
   Scenario: Change timezone for a gift exchange
     Given I am logged in as "mod1"
+      And time is frozen at 1/1/2019
       And I have created the gift exchange "My Gift Exchange"
       And I am on "My Gift Exchange" gift exchange edit page
-    # Port Moresby does not do Daylight Saving Time - do not change this timezone or the test breaks at the end of DST
-    When I select "(GMT+10:00) Port Moresby" from "gift_exchange_time_zone"
-    And I submit
-      Then I should see "Challenge was successfully updated"
-      Then I should see "PGT"
+    When I select "(GMT-08:00) Pacific Time (US & Canada)" from "Time zone:"
+      And I submit
+    Then I should see "Challenge was successfully updated"
+      And I should see the correct time zone for "Pacific Time (US & Canada)"
+      And I jump in our Delorean and return to the present
 
   Scenario: Add a co-mod
     Given the following activated users exist
@@ -586,3 +587,12 @@ Feature: Gift Exchange Challenge
     Then I should see "Are you sure you want to purge all assignments for Bad Gift Exchange?"
     When I press "Yes, Purge Assignments"
     Then I should see "Assignments purged!"
+
+  Scenario: The My Assignments page that a user sees when they have multiple
+  assignments in a single exchange does not include an email link.
+    Given everyone has their assignments for "Bad Gift Exchange"
+      And I am logged in as "write_in_giver"
+      And "write_in_giver" has two pinchhit assignments in the gift exchange "Bad Gift Exchange"
+    When I go to "Bad Gift Exchange" collection's page
+      And I follow "My Assignments" within "#dashboard"
+    Then I should not see the image "src" text "/images/envelope_icon.gif"

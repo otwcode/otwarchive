@@ -15,7 +15,7 @@ When /^I fill in the basic work information for "([^"]*)"$/ do |title|
   fill_in("Work Title", with: title)
   fill_in("content", with: DEFAULT_CONTENT)
 end
-# Here we set up a draft and can then post it as a draft, preview and post, post without preview,
+# Here we set up a draft and can then post it as a draft, preview and post, post,
 # or fill in additional information on the work form.
 # Example: I set up the draft "Foo"
 # Example: I set up the draft "Foo" with fandom "Captain America" in the collection "MCU Stories" as a gift to "Bob"
@@ -70,10 +70,11 @@ When /^I post (?:a|the) work "([^"]*)"(?: with fandom "([^"]*)")?(?: with charac
   else
     # Note: this will match the above regexp and work just fine even if all the options are blank!
     step %{I set up the draft "#{title}" with fandom "#{fandom}" with character "#{character}" with second character "#{character2}" with freeform "#{freeform}" with second freeform "#{freeform2}" with category "#{category}" in collection "#{collection}" as a gift to "#{recipient}" as part of a series "#{series}" with relationship "#{relationship}" using the pseud "#{pseud}"}
-    click_button("Post Without Preview")
+    click_button("Post")
   end
-  Work.tire.index.refresh
+  step %{all indexing jobs have been run}
   Tag.write_redis_to_database
+  step %(the periodic filter count task is run)
 end
 
 # Again, same regexp, it just creates a draft and not a posted
@@ -101,7 +102,7 @@ Given(/^I have the Battle set loaded$/) do
   step %{I reveal the "Battle 12" challenge}
   step %{I am logged in as "myname4"}
   step %{the statistics_tasks rake task is run}
-  step %{the work indexes are updated}
+  step %{all indexing jobs have been run}
 end
 
 Given /^I have no works or comments$/ do
@@ -118,7 +119,7 @@ Given /^the chaptered work(?: with ([\d]+) chapters)?(?: with ([\d]+) comments?)
   (n_chapters.to_i - 1).times do |i|
     step %{I follow "Add Chapter"}
     fill_in("content", with: "Yet another chapter.")
-    click_button("Post Without Preview")
+    click_button("Post")
   end
   step %{I am logged out}
   n_comments ||= 0
@@ -126,7 +127,7 @@ Given /^the chaptered work(?: with ([\d]+) chapters)?(?: with ([\d]+) comments?)
   n_comments.to_i.times do |i|
     step %{I am logged in as a random user}
     visit work_url(work)
-    fill_in("comment[content]", with: "Bla bla")
+    fill_in("comment[comment_content]", with: "Bla bla")
     click_button("Comment")
     step %{I am logged out}
   end
@@ -208,6 +209,18 @@ Given /^there is a work "([^"]*)" in an unrevealed collection "([^"]*)"$/ do |wo
   step %{I am logged out}
 end
 
+Given /^there is a work "([^"]*)" in an anonymous collection "([^"]*)"$/ do |work, collection|
+  step %{I have the anonymous collection "#{collection}"}
+  step %{I am logged in as a random user}
+  step %{I post the work "#{work}" to the collection "#{collection}"}
+  step %{I am logged out}
+end
+
+Given /^I am logged in as the author of "([^"]*)"$/ do |work|
+  work = Work.find_by_title(work)
+  step %{I am logged in as "#{work.users.first.login}"}
+end
+
 Given /^the spam work "([^\"]*)"$/ do |work|
   step %{I have a work "#{work}"}
   step %{I am logged out}
@@ -226,13 +239,13 @@ end
 
 When /^I view the work "([^"]*)"(?: in (full|chapter-by-chapter) mode)?$/ do |work, mode|
   work = Work.find_by_title(work)
-  visit work_url(work).gsub("http://www.example.com","")
+  visit work_path(work)
   step %{I follow "Entire Work"} if mode == "full"
   step %{I follow "Chapter by Chapter"} if mode == "chapter-by-chapter"
 end
 When /^I view the work "([^"]*)" with comments$/ do |work|
   work = Work.find_by(title: work)
-  visit work_url(work, anchor: "comments", show_comments: true)
+  visit work_path(work, anchor: "comments", show_comments: true)
 end
 
 When /^I view a deleted work$/ do
@@ -259,7 +272,7 @@ When /^I post the chaptered work "([^"]*)"$/ do |title|
   fill_in("content", with: "Another Chapter.")
   click_button("Preview")
   step %{I press "Post"}
-  Work.tire.index.refresh
+  step %{all indexing jobs have been run}
   Tag.write_redis_to_database
 end
 
@@ -269,30 +282,40 @@ When /^I post the chaptered draft "([^"]*)"$/ do |title|
 end
 
 When /^I post the work "([^"]*)" without preview$/ do |title|
-  # we now post without preview as our default test case
+  # we now post as our default test case
   step %{I post the work "#{title}"}
 end
 
 When /^a chapter is added to "([^"]*)"$/ do |work_title|
   step %{a draft chapter is added to "#{work_title}"}
   click_button("Post")
-  Work.tire.index.refresh
+  step %{all indexing jobs have been run}
   Tag.write_redis_to_database
 end
 
 When /^a chapter with the co-author "([^\"]*)" is added to "([^\"]*)"$/ do |coauthor, work_title|
   step %{a chapter is set up for "#{work_title}"}
-  step %{I add the co-author "#{coauthor}"}
+  step %{I invite the co-author "#{coauthor}"}
   click_button("Post")
-  Work.tire.index.refresh
+  step %{the user "#{coauthor}" accepts all co-creator invitations}
+  step %{all indexing jobs have been run}
   Tag.write_redis_to_database
 end
 
 When /^a draft chapter is added to "([^"]*)"$/ do |work_title|
   step %{a chapter is set up for "#{work_title}"}
   step %{I press "Preview"}
-  Work.tire.index.refresh
+  step %{all indexing jobs have been run}
+
   Tag.write_redis_to_database
+end
+
+When /^I delete chapter ([\d]+) of "([^"]*)"$/ do |chapter, title|
+  step %{I edit the work "#{title}"}
+  step %{I follow "#{chapter}"}
+  step %{I follow "Delete Chapter"}
+  step %{I press "Yes, Delete Chapter"}
+  step %{all indexing jobs have been run}
 end
 
 # Posts a chapter for the current user
@@ -316,7 +339,8 @@ end
 # meant to be used in conjunction with above step
 When /^I post the(?: draft)? chapter$/ do
   click_button("Post")
-  Work.tire.index.refresh
+  step %{all indexing jobs have been run}
+
   Tag.write_redis_to_database
 end
 
@@ -395,14 +419,15 @@ When /^I edit multiple works coauthored as "(.*)" with "(.*)"$/ do |author, coau
 end
 
 When /^the purge_old_drafts rake task is run$/ do
-  Work.purge_old_drafts
+  step %{I run the rake task "work:purge_old_drafts"}
 end
 
 When /^the work "([^"]*)" was created (\d+) days ago$/ do |title, number|
   step "the draft \"#{title}\""
   work = Work.find_by(title: title)
   work.update_attribute(:created_at, number.to_i.days.ago)
-  Work.tire.index.refresh
+  step %{all indexing jobs have been run}
+
   Tag.write_redis_to_database
 end
 
@@ -414,7 +439,8 @@ When /^I post the locked work "([^"]*)"$/ do |title|
   end
   visit preview_work_url(work)
   click_button("Post")
-  Work.tire.index.refresh
+  step %{all indexing jobs have been run}
+
   Tag.write_redis_to_database
 end
 
@@ -468,16 +494,19 @@ When /^I set the publication date to today$/ do
   end
 end
 
-When /^I browse the "([^"]+)" works$/ do |tagname|
+When /^I browse the "(.*?)" works$/ do |tagname|
   tag = Tag.find_by_name(tagname)
   visit tag_works_path(tag)
-  Work.tire.index.refresh
+  step %{all indexing jobs have been run}
+
   Tag.write_redis_to_database
 end
-When /^I browse the "([^"]+)" works with an empty page parameter$/ do |tagname|
+
+When /^I browse the "(.*?)" works with page parameter "(.*?)"$/ do |tagname, page|
   tag = Tag.find_by_name(tagname)
-  visit tag_works_path(tag, page: "")
-  Work.tire.index.refresh
+  visit tag_works_path(tag, page: page)
+  step %{all indexing jobs have been run}
+
   Tag.write_redis_to_database
 end
 
@@ -487,50 +516,62 @@ When /^I delete the work "([^"]*)"$/ do |work|
   step %{I follow "Delete Work"}
   # If JavaScript is enabled, window.confirm will be used and this button will not appear
   click_button("Yes, Delete Work") unless @javascript
-  Work.tire.index.refresh
+  step %{all indexing jobs have been run}
+
   Tag.write_redis_to_database
 end
 When /^I preview the work$/ do
   click_button("Preview")
-  Work.tire.index.refresh
+  step %{all indexing jobs have been run}
+
   Tag.write_redis_to_database
 end
 When /^I update the work$/ do
   click_button("Update")
-  Work.tire.index.refresh
+  step %{all indexing jobs have been run}
+
   Tag.write_redis_to_database
 end
 When /^I post the work without preview$/ do
-  click_button "Post Without Preview"
-  Work.tire.index.refresh
+  click_button "Post"
+  step %{all indexing jobs have been run}
+
   Tag.write_redis_to_database
 end
 When /^I post the work$/ do
   click_button "Post"
-  # Work.tire.index.refresh
+  step %{all indexing jobs have been run}
 end
 When /^the statistics_tasks rake task is run$/ do
-  StatCounter.hits_to_database
-  StatCounter.stats_to_database
+  step %{I run the rake task "statistics:update_stat_counters"}
+  step %{I run the rake task "statistics:update_stats"}
 end
 
 When /^I add the co-author "([^"]*)" to the work "([^"]*)"$/ do |coauthor, work|
-  step %{I wait 1 second}
   step %{I edit the work "#{work}"}
-  step %{I add the co-author "#{coauthor}"}
+  step %{I invite the co-author "#{coauthor}"}
   step %{I post the work without preview}
+  step %{the user "#{coauthor}" accepts the creator invite for the work "#{work}"}
 end
 
-When /^I add the co-author "([^"]*)"$/ do |coauthor|
-  step %{the user "#{coauthor}" exists and is activated}
+When /^the user "([^"]*)" accepts the creator invite for the work "([^"]*)"/ do |user, work|
+  # Make sure that we don't have caching issues with the byline:
+  step %{I wait 1 second}
+  u = User.find_by(login: user)
+  w = Work.find_by(title: work)
+  w.creatorships.unapproved.for_user(u).each(&:accept!)
+end
+
+When(/^I try to invite the co-authors? "([^"]*)"$/) do |coauthor|
   check("co-authors-options-show")
   fill_in("pseud_byline", with: "#{coauthor}")
 end
 
-When /^I add the co-authors "([^"]*)" and "([^"]*)"$/ do |coauthor1, coauthor2|
-  step %{the user "#{coauthor1}" exists and is activated}
-  step %{the user "#{coauthor2}" exists and is activated}
-  fill_in("pseud_byline", with: "#{coauthor1}, #{coauthor2}")
+When /^I invite the co-authors? "([^"]*)"$/ do |coauthor|
+  coauthor.split(",").map(&:strip).reject(&:blank?).each do |user|
+    step %{the user "#{user}" allows co-creators}
+  end
+  step %{I try to invite the co-authors "#{coauthor}"}
 end
 
 When /^I give the work to "([^"]*)"$/ do |recipient|
@@ -541,7 +582,7 @@ When /^I give the work "([^"]*)" to the user "([^"]*)"$/ do |work_title, recipie
   step %{the user "#{recipient}" exists and is activated}
   visit edit_work_path(Work.find_by(title: work_title))
   fill_in("work_recipients", with: "#{recipient}")
-  click_button("Post Without Preview")
+  click_button("Post")
 end
 
 When /^I add the beginning notes "([^"]*)"$/ do |notes|
@@ -575,7 +616,7 @@ end
 
 When /^the statistics for the work "([^"]*)" are updated$/ do |title|
   step %{the statistics_tasks rake task is run}
-  step %{all search indexes are updated}
+  step %{all indexing jobs have been run}
   work = Work.find_by(title: title)
   # Touch the work to actually expire the cache
   work.touch

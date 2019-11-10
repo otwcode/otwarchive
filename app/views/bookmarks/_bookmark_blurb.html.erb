@@ -12,7 +12,7 @@
     <% bookmark_count = bookmarkable.public_bookmark_count %>
     <p class="status" title="<%= bookmark_count %> Bookmarks">
       <%= get_symbol_for_bookmark(bookmark) %>
-      <span class="count"><%= (bookmark_count < 100) ? link_to_bookmarkable_bookmarks(bookmarkable, bookmark_count.to_s) : link_to_bookmarkable_bookmarks(bookmarkable, '*') %></span>
+      <%= get_count_for_bookmark_blurb(bookmarkable) %>
     </p>
 
     <!--bookmark item module-->
