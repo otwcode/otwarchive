@@ -173,14 +173,14 @@ describe UserMailer, type: :mailer do
     describe 'HTML version' do
       it_behaves_like "a well formed HTML email"
 
-      it 'has text contents' do
+      it "has the correct content" do
         expect(get_message_part(email, /html/)).to include("like to join us, please sign up at the following address")
         expect(get_message_part(email, /html/)).to include("has invited you")
       end
     end
 
     describe 'text version' do
-      it 'says the right thing' do
+      it "has the correct content" do
         expect(get_message_part(email, /plain/)).to include("like to join us, please sign up at the following address")
         expect(get_message_part(email, /plain/)).to include("has invited you")
       end
@@ -208,14 +208,14 @@ describe UserMailer, type: :mailer do
     describe 'HTML version' do
       it_behaves_like "a well formed HTML email"
 
-      it 'has text contents' do
+      it "has the correct content" do
         expect(get_message_part(email, /html/)).to include("like to join us, please sign up at the following address")
         expect(get_message_part(email, /html/)).to include("been invited")
       end
     end
 
     describe 'text version' do
-      it 'says the right thing' do
+      it "has the correct content" do
         expect(get_message_part(email, /plain/)).to include("like to join us, please sign up at the following address")
         expect(get_message_part(email, /plain/)).to include("been invited")
       end
@@ -247,13 +247,13 @@ describe UserMailer, type: :mailer do
     describe 'HTML version' do
       it_behaves_like "a well formed HTML email"
 
-      it 'has text contents' do
+      it "has the correct content" do
         expect(get_message_part(email, /html/)).to include("You have been assigned the following request")
       end
     end
 
     describe 'text version' do
-      it 'says the right thing' do
+      it "has the correct content" do
         expect(get_message_part(email, /plain/)).to include("You have been assigned the following request")
       end
     end
@@ -282,13 +282,13 @@ describe UserMailer, type: :mailer do
     describe 'HTML version' do
       it_behaves_like "a well formed HTML email"
 
-      it 'has text contents' do
+      it "has the correct content" do
         expect(get_message_part(email, /html/)).to include("We regret to inform you that your request for 2 new invitations cannot be fulfilled at this time")
       end
     end
 
     describe 'text version' do
-      it 'says the right thing' do
+      it "has the correct content" do
         expect(get_message_part(email, /plain/)).to include("We regret to inform you that your request for 2 new invitations cannot be fulfilled at this time")
       end
     end
