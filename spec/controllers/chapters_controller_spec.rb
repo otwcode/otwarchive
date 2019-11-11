@@ -239,6 +239,13 @@ describe ChaptersController do
         get :show, params: { work_id: work.id, id: chapter.id }
         expect(assigns[:chapters]).to eq([work.chapters.first, chapter])
       end
+
+      it "does not increment the hit count" do
+        REDIS_GENERAL.set("work_stats:#{work.id}:last_visitor", nil)
+        expect {
+          get :show, params: { work_id: work.id, id: work.chapters.first.id }
+        }.not_to change { REDIS_GENERAL.get("work_stats:#{work.id}:hit_count").to_i }
+      end
     end
 
     context "when other user is logged in" do
