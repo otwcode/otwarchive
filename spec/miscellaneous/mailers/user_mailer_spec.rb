@@ -21,8 +21,8 @@ describe UserMailer, type: :mailer do
     it_behaves_like "an email with a valid sender"
 
     it 'has the correct subject line' do
-      text = "[#{ArchiveConfig.APP_SHORT_NAME}] Works uploaded"
-      expect(email.subject).to eq(text)
+      subject = "[#{ArchiveConfig.APP_SHORT_NAME}] Works uploaded"
+      expect(email).to have_subject(subject)
     end
 
     # Test both body contents
@@ -108,8 +108,8 @@ describe UserMailer, type: :mailer do
     it_behaves_like "an email with a valid sender"
 
     it 'has the correct subject line' do
-      text = "[#{ArchiveConfig.APP_SHORT_NAME}] Invitation to claim works"
-      expect(email.subject).to eq(text)
+      subject = "[#{ArchiveConfig.APP_SHORT_NAME}] Invitation to claim works"
+      expect(email).to have_subject(subject)
     end
 
     # Test both body contents
@@ -166,8 +166,8 @@ describe UserMailer, type: :mailer do
     it_behaves_like "an email with a valid sender"
 
     it 'has the correct subject line' do
-      text = "[#{ArchiveConfig.APP_SHORT_NAME}] Invitation"
-      expect(email.subject).to eq(text)
+      subject = "[#{ArchiveConfig.APP_SHORT_NAME}] Invitation"
+      expect(email).to have_subject(subject)
     end
 
     # Test both body contents
@@ -206,8 +206,8 @@ describe UserMailer, type: :mailer do
     it_behaves_like "an email with a valid sender"
 
     it 'has the correct subject line' do
-      text = "[#{ArchiveConfig.APP_SHORT_NAME}] Invitation"
-      expect(email.subject).to eq(text)
+      subject = "[#{ArchiveConfig.APP_SHORT_NAME}] Invitation"
+      expect(email).to have_subject(subject)
     end
 
     # Test both body contents
@@ -245,8 +245,8 @@ describe UserMailer, type: :mailer do
     it_behaves_like "an email with a valid sender"
 
     it 'has the correct subject line' do
-      text = "[#{ArchiveConfig.APP_SHORT_NAME}][#{collection.title}] Your Assignment!"
-      expect(email.subject).to eq(text)
+      subject = "[#{ArchiveConfig.APP_SHORT_NAME}][#{collection.title}] Your Assignment!"
+      expect(email).to have_subject(subject)
     end
 
     # Test both body contents
@@ -282,8 +282,8 @@ describe UserMailer, type: :mailer do
     it_behaves_like "an email with a valid sender"
 
     it 'has the correct subject line' do
-      text = "[#{ArchiveConfig.APP_SHORT_NAME}] Additional Invite Code Request Declined"
-      expect(email.subject).to eq(text)
+      subject = "[#{ArchiveConfig.APP_SHORT_NAME}] Additional Invite Code Request Declined"
+      expect(email).to have_subject(subject)
     end
 
     # Test both body contents
