@@ -1,7 +1,7 @@
 <% content_for :message do %>
   <p><%= t(".greeting", login: style_bold(@user.login)).html_safe %></p>
 
-  <p><%= t(".body", total: @total, invitation_page: style_link(t(".invitation_page_link_text"), user_invitations_url(@user))).html_safe %></p>
+  <p><%= t(".body", count: @total, invitation_page: style_link(t(".invitation_page_link_text"), user_invitations_url(@user))).html_safe %></p>
 
   <p>
     <%= t(".closing") %><br />

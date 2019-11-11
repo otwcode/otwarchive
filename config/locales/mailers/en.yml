@@ -29,7 +29,9 @@ en:
     invite_increase_notification:
       subject: "[%{app_name}] New Invitations"
       greeting: "Hi %{login}!"
-      body: "We just wanted to let you know that you have %{total} new invitation(s), which can be used to create new accounts at the archive. You can invite a friend at %{invitation_page}."
+      body: 
+        one: "We just wanted to let you know that you have %{count} new invitation, which can be used to create a new account at the Archive. You can invite a friend at %{invitation_page}."
+        other: "We just wanted to let you know that you have %{count} new invitations, which can be used to create new accounts at the Archive. You can invite a friend at %{invitation_page}."
       invitation_page_link_text: your invitations page
       closing: "Cheers,"
       signature: "%{app_short_name}"
