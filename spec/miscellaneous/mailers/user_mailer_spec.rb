@@ -1,4 +1,4 @@
-require 'spec_helper'
+require "spec_helper"
 
 describe UserMailer, type: :mailer do
 
@@ -12,8 +12,8 @@ describe UserMailer, type: :mailer do
     subject(:email) { UserMailer.claim_notification(author.id, [work.id, work2.id], true).deliver }
 
     # Shared content tests for both email types
-    shared_examples_for 'claim content' do
-      it 'contains the text for a claim email' do
+    shared_examples_for "claim content" do
+      it "contains the text for a claim email" do
         expect(part).to include("You're receiving this e-mail because you had works in a fanworks archive that has been imported")
       end
     end
@@ -21,7 +21,7 @@ describe UserMailer, type: :mailer do
     # Test the headers
     it_behaves_like "an email with a valid sender"
 
-    it 'has the correct subject line' do
+    it "has the correct subject line" do
       subject = "[#{ArchiveConfig.APP_SHORT_NAME}] Works uploaded"
       expect(email).to have_subject(subject)
     end
@@ -29,34 +29,34 @@ describe UserMailer, type: :mailer do
     # Test both body contents
     it_behaves_like "multipart email"
 
-    describe 'HTML version' do
+    describe "HTML version" do
       it_behaves_like "claim content" do
         let(:part) { get_message_part(email, /html/) }
       end
 
-      it 'lists the first imported work in an unordered list in the HTML body' do
-        expect(get_message_part(email, /html/)).to have_xpath('//ul/li', text: title)
+      it "lists the first imported work in an unordered list in the HTML body" do
+        expect(get_message_part(email, /html/)).to have_xpath("//ul/li", text: title)
       end
 
-      it 'lists the second imported work in an unordered list in the HTML body' do
-        expect(get_message_part(email, /html/)).to have_xpath('//ul/li', text: title2)
+      it "lists the second imported work in an unordered list in the HTML body" do
+        expect(get_message_part(email, /html/)).to have_xpath("//ul/li", text: title2)
       end
 
-      it 'only has style_to links in the HTML body' do
-        expect(get_message_part(email, /html/)).not_to have_xpath('//a[not(@style)]')
+      it "only has style_to links in the HTML body" do
+        expect(get_message_part(email, /html/)).not_to have_xpath("//a[not(@style)]")
       end
     end
 
-    describe 'text version' do
-      it_behaves_like 'claim content' do
+    describe "text version" do
+      it_behaves_like "claim content" do
         let(:part) { get_message_part(email, /plain/) }
       end
 
-      it 'lists the first imported work as plain text' do
-        expect(get_message_part(email, /plain/)).not_to have_xpath('//ul/li', text: title)
+      it "lists the first imported work as plain text" do
+        expect(get_message_part(email, /plain/)).not_to have_xpath("//ul/li", text: title)
       end
 
-      it 'lists the second imported work with a leading hyphen' do
+      it "lists the second imported work with a leading hyphen" do
         expect(email.text_part).to have_body_text("- #{title2}")
       end
     end
@@ -97,8 +97,8 @@ describe UserMailer, type: :mailer do
     subject(:email) { UserMailer.invitation_to_claim(invitation.id, archivist.login).deliver }
 
     # Shared content tests for both email types
-    shared_examples_for 'invitation to claim content' do
-      it 'contains the text for an invitation claim email' do
+    shared_examples_for "invitation to claim content" do
+      it "contains the text for an invitation claim email" do
         expect(part).to include("You're receiving this e-mail because an archive has recently been imported by")
       end
     end
@@ -106,7 +106,7 @@ describe UserMailer, type: :mailer do
     # Test the headers
     it_behaves_like "an email with a valid sender"
 
-    it 'has the correct subject line' do
+    it "has the correct subject line" do
       subject = "[#{ArchiveConfig.APP_SHORT_NAME}] Invitation to claim works"
       expect(email).to have_subject(subject)
     end
@@ -116,36 +116,36 @@ describe UserMailer, type: :mailer do
 
     it_behaves_like "a translated email"
 
-    describe 'HTML version' do
+    describe "HTML version" do
       it_behaves_like "a well formed HTML email"
 
-      it_behaves_like 'invitation to claim content' do
+      it_behaves_like "invitation to claim content" do
         let(:part) { get_message_part(email, /html/) }
       end
 
-      it 'lists the first imported work in an unordered list in the HTML body' do
-        expect(get_message_part(email, /html/)).to have_xpath('//ul/li', text: title)
+      it "lists the first imported work in an unordered list in the HTML body" do
+        expect(get_message_part(email, /html/)).to have_xpath("//ul/li", text: title)
       end
 
-      it 'lists the second imported work in an unordered list in the HTML body' do
-        expect(get_message_part(email, /html/)).to have_xpath('//ul/li', text: title2)
+      it "lists the second imported work in an unordered list in the HTML body" do
+        expect(get_message_part(email, /html/)).to have_xpath("//ul/li", text: title2)
       end
 
-      it 'only has style_to links in the HTML body' do
-        expect(get_message_part(email, /html/)).not_to have_xpath('//a[not(@style)]')
+      it "only has style_to links in the HTML body" do
+        expect(get_message_part(email, /html/)).not_to have_xpath("//a[not(@style)]")
       end
     end
 
-    describe 'text version' do
-      it_behaves_like 'invitation to claim content' do
+    describe "text version" do
+      it_behaves_like "invitation to claim content" do
         let(:part) { get_message_part(email, /plain/) }
       end
 
-      it 'lists the first imported work as plain text' do
-        expect(get_message_part(email, /plain/)).not_to have_xpath('//ul/li', text: title)
+      it "lists the first imported work as plain text" do
+        expect(get_message_part(email, /plain/)).not_to have_xpath("//ul/li", text: title)
       end
 
-      it 'lists the second imported work with a leading hyphen' do
+      it "lists the second imported work with a leading hyphen" do
         expect(email.text_part).to have_body_text("- #{title2}")
       end
     end
@@ -161,7 +161,7 @@ describe UserMailer, type: :mailer do
       # Test the headers
       it_behaves_like "an email with a valid sender"
 
-      it 'has the correct subject line' do
+      it "has the correct subject line" do
         subject = "[#{ArchiveConfig.APP_SHORT_NAME}] Invitation"
         expect(email).to have_subject(subject)
       end
@@ -171,7 +171,7 @@ describe UserMailer, type: :mailer do
 
       it_behaves_like "a translated email"
 
-      describe 'HTML version' do
+      describe "HTML version" do
         it_behaves_like "a well formed HTML email"
 
         it "has the correct content" do
@@ -180,7 +180,7 @@ describe UserMailer, type: :mailer do
         end
       end
 
-      describe 'text version' do
+      describe "text version" do
         it "has the correct content" do
           expect(email.text_part).to have_body_text("like to join us, please sign up at the following address")
           expect(email.text_part).to have_body_text("has invited you")
@@ -196,7 +196,7 @@ describe UserMailer, type: :mailer do
       # Test the headers
       it_behaves_like "an email with a valid sender"
 
-      it 'has the correct subject line' do
+      it "has the correct subject line" do
         subject = "[#{ArchiveConfig.APP_SHORT_NAME}] Invitation"
         expect(email).to have_subject(subject)
       end
@@ -206,7 +206,7 @@ describe UserMailer, type: :mailer do
 
       it_behaves_like "a translated email"
 
-      describe 'HTML version' do
+      describe "HTML version" do
         it_behaves_like "a well formed HTML email"
 
         it "has the correct content" do
@@ -215,7 +215,7 @@ describe UserMailer, type: :mailer do
         end
       end
 
-      describe 'text version' do
+      describe "text version" do
         it "has the correct content" do
           expect(email.text_part).to have_body_text("like to join us, please sign up at the following address")
           expect(email.text_part).to have_body_text("been invited")
@@ -236,7 +236,7 @@ describe UserMailer, type: :mailer do
     # Test the headers
     it_behaves_like "an email with a valid sender"
 
-    it 'has the correct subject line' do
+    it "has the correct subject line" do
       subject = "[#{ArchiveConfig.APP_SHORT_NAME}][#{collection.title}] Your Assignment!"
       expect(email).to have_subject(subject)
     end
@@ -246,7 +246,7 @@ describe UserMailer, type: :mailer do
 
     it_behaves_like "a translated email"
 
-    describe 'HTML version' do
+    describe "HTML version" do
       it_behaves_like "a well formed HTML email"
 
       it "has the correct content" do
@@ -254,7 +254,7 @@ describe UserMailer, type: :mailer do
       end
     end
 
-    describe 'text version' do
+    describe "text version" do
       it "has the correct content" do
         expect(email.text_part).to have_body_text("You have been assigned the following request")
       end
@@ -271,7 +271,7 @@ describe UserMailer, type: :mailer do
     # Test the headers
     it_behaves_like "an email with a valid sender"
 
-    it 'has the correct subject line' do
+    it "has the correct subject line" do
       subject = "[#{ArchiveConfig.APP_SHORT_NAME}] Additional Invite Code Request Declined"
       expect(email).to have_subject(subject)
     end
@@ -281,7 +281,7 @@ describe UserMailer, type: :mailer do
 
     it_behaves_like "a translated email"
 
-    describe 'HTML version' do
+    describe "HTML version" do
       it_behaves_like "a well formed HTML email"
 
       it "has the correct content" do
@@ -289,7 +289,7 @@ describe UserMailer, type: :mailer do
       end
     end
 
-    describe 'text version' do
+    describe "text version" do
       it "has the correct content" do
         expect(email.text_part).to have_body_text("We regret to inform you that your request for 2 new invitations cannot be fulfilled at this time")
       end
