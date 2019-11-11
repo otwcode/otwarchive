@@ -8,7 +8,8 @@ describe UserMailer, type: :mailer do
     let(:author) { create(:user) }
     let(:work) { create(:work, title: title, authors: [author.pseuds.first]) }
     let(:work2) { create(:work, title: title2, authors: [author.pseuds.first]) }
-    let(:email) { UserMailer.claim_notification(author.id, [work.id, work2.id], true).deliver }
+
+    subject(:email) { UserMailer.claim_notification(author.id, [work.id, work2.id], true).deliver }
 
     # Shared content tests for both email types
     shared_examples_for 'claim content' do
@@ -64,38 +65,36 @@ describe UserMailer, type: :mailer do
   describe "invitation to claim" do
     title = 'Imported Work Title'
     title2 = 'Second ' + title
-    token = 'abc123'
 
-    before(:each) do
-      @author = FactoryBot.create(:user)
-      @archivist = FactoryBot.create(:user)
-      @external_author = FactoryBot.create(:external_author)
-      @external_author_name = FactoryBot.create(:external_author_name, external_author_id: @external_author.id, name: 'External Author')
+    let(:archivist) { create(:user) }
+    let(:external_author) { create(:external_author) }
 
-      @invitation = FactoryBot.create(:invitation, token: token, external_author_id: @external_author.id)
-      @fandom1 = FactoryBot.create(:fandom)
-
-      @work = FactoryBot.create(:work, title: title, fandoms: [@fandom1], authors: [@author.pseuds.first])
-      @work2 = FactoryBot.create(:work, title: title2, fandoms: [@fandom1], authors: [@author.pseuds.first])
-      FactoryBot.create(:external_creatorship, creation_id: @work.id, external_author_name_id: @external_author_name.id)
-      FactoryBot.create(:external_creatorship, creation_id: @work2.id, external_author_name_id: @external_author_name.id)
+    let(:external_author_name) do
+      create(:external_author_name,
+        external_author_id: external_author.id,
+        name: "External Author")
     end
 
-    # before(:all) doesn't get cleaned up by database cleaner
-    after(:all) do
-      @author.destroy if @author
-      @archivist.destroy if @archivist
-      @external_author.destroy if @external_author
-      @external_author_name.destroy if @external_author_name
-
-      @invitation.destroy if @invitation
-      @fandom1.destroy if @fandom1
-
-      @work.destroy if @work
-      @work2.destroy if @work2
+    let(:invitation) do
+      create(:invitation, external_author_id: external_author.id)
     end
 
-    let(:email) { UserMailer.invitation_to_claim(@invitation.id, @archivist.login).deliver }
+    let(:work) { create(:work, title: title) }
+    let(:work2) { create(:work, title: title2) }
+
+    let!(:work_external_creatorship) do
+      create(:external_creatorship,
+        creation_id: work.id,
+        external_author_name_id: external_author_name.id)
+    end
+
+    let!(:work2_external_creatorship) do
+      create(:external_creatorship,
+        creation_id: work2.id,
+        external_author_name_id: external_author_name.id)
+    end
+
+    subject(:email) { UserMailer.invitation_to_claim(invitation.id, archivist.login).deliver }
 
     # Shared content tests for both email types
     shared_examples_for 'invitation to claim content' do
@@ -153,14 +152,10 @@ describe UserMailer, type: :mailer do
   end
   
   describe "invitation from a user request" do
-    token = 'abc123'
+    let(:user) { create(:user) }
+    let(:invitation) { create(:invitation, creator: user) }
 
-    before(:each) do
-      @user = FactoryBot.create(:user)
-      @invitation = FactoryBot.create(:invitation, token: token, creator: @user)
-    end
-
-    let(:email) { UserMailer.invitation(@invitation.id).deliver }
+    subject(:email) { UserMailer.invitation(invitation.id).deliver }
 
     # Test the headers
     it_behaves_like "an email with a valid sender"
@@ -193,14 +188,9 @@ describe UserMailer, type: :mailer do
   end
   
   describe "invitation" do
-    token = 'abc123'
+    let(:invitation) { create(:invitation) }
 
-    before(:each) do
-      @user = FactoryBot.create(:user)
-      @invitation = FactoryBot.create(:invitation, token: token)
-    end
-
-    let(:email) { UserMailer.invitation(@invitation.id).deliver }
+    subject(:email) { UserMailer.invitation(invitation.id).deliver }
 
     # Test the headers
     it_behaves_like "an email with a valid sender"
@@ -239,7 +229,7 @@ describe UserMailer, type: :mailer do
     let!(:offer) { create(:challenge_signup, collection: collection, pseud: otheruser.default_pseud) }
     let!(:open_assignment) { create(:challenge_assignment, collection: collection, offer_signup: offer) }
 
-    let(:email) { UserMailer.challenge_assignment_notification(collection.id, otheruser.id, open_assignment.id).deliver }
+    subject(:email) { UserMailer.challenge_assignment_notification(collection.id, otheruser.id, open_assignment.id).deliver }
 
     # Test the headers
     it_behaves_like "an email with a valid sender"
@@ -270,13 +260,11 @@ describe UserMailer, type: :mailer do
   end
 
   describe "invite request declined" do
-    before(:each) do
-      @user = FactoryBot.create(:user)
-      @total = 2
-      @reason = "You smell"
-    end
+    let(:user) { create(:user) }
+    let(:total) { 2 }
+    let(:reason) { "You smell" }
 
-    let(:email) { UserMailer.invite_request_declined(@user.id, @total, @reason).deliver }
+    subject(:email) { UserMailer.invite_request_declined(user.id, total, reason).deliver }
 
     # Test the headers
     it_behaves_like "an email with a valid sender"
