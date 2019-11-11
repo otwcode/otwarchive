@@ -191,3 +191,9 @@ shared_examples_for "an email with a valid sender" do
     expect(email).to deliver_from("Archive of Our Own <#{ArchiveConfig.RETURN_ADDRESS}>")
   end
 end
+
+shared_examples_for "a well formed HTML email" do
+  it "does not have exposed HTML" do
+    expect(get_message_part(email, /html/)).not_to include("&lt;")
+  end
+end

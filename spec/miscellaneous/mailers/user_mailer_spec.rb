@@ -118,6 +118,8 @@ describe UserMailer, type: :mailer do
     it_behaves_like "a translated email"
 
     describe 'HTML version' do
+      it_behaves_like "a well formed HTML email"
+
       it_behaves_like 'invitation to claim content' do
         let(:part) { get_message_part(email, /html/) }
       end
@@ -132,10 +134,6 @@ describe UserMailer, type: :mailer do
 
       it 'only has style_to links in the HTML body' do
         expect(get_message_part(email, /html/)).not_to have_xpath('//a[not(@style)]')
-      end
-
-      it 'does not have exposed HTML' do
-        expect(get_message_part(email, /html/)).not_to include("&lt;")
       end
     end
 
@@ -178,6 +176,8 @@ describe UserMailer, type: :mailer do
     it_behaves_like "a translated email"
 
     describe 'HTML version' do
+      it_behaves_like "a well formed HTML email"
+
       it 'has text contents' do
         expect(get_message_part(email, /html/)).to include("like to join us, please sign up at the following address")
         expect(get_message_part(email, /html/)).to include("has invited you")
@@ -216,13 +216,11 @@ describe UserMailer, type: :mailer do
     it_behaves_like "a translated email"
 
     describe 'HTML version' do
+      it_behaves_like "a well formed HTML email"
+
       it 'has text contents' do
         expect(get_message_part(email, /html/)).to include("like to join us, please sign up at the following address")
         expect(get_message_part(email, /html/)).to include("been invited")
-      end
-
-      it 'does not have exposed HTML' do
-        expect(get_message_part(email, /html/)).not_to include("&lt;")
       end
     end
 
@@ -257,12 +255,10 @@ describe UserMailer, type: :mailer do
     it_behaves_like "a translated email"
 
     describe 'HTML version' do
+      it_behaves_like "a well formed HTML email"
+
       it 'has text contents' do
         expect(get_message_part(email, /html/)).to include("You have been assigned the following request")
-      end
-      
-      it 'does not have exposed HTML' do
-        expect(get_message_part(email, /html/)).not_to include("&lt;")
       end
     end
 
@@ -296,12 +292,10 @@ describe UserMailer, type: :mailer do
     it_behaves_like "a translated email"
 
     describe 'HTML version' do
+      it_behaves_like "a well formed HTML email"
+
       it 'has text contents' do
         expect(get_message_part(email, /html/)).to include("We regret to inform you that your request for 2 new invitations cannot be fulfilled at this time")
-      end
-      
-      it 'does not have exposed HTML' do
-        expect(get_message_part(email, /html/)).not_to include("&lt;")
       end
     end
 
