@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe UserMailer, type: :mailer do
 
-  context "claim notification" do
+  describe "claim_notification" do
     title = Faker::Book.title
     title2 = Faker::Book.title
     let(:author) { create(:user) }
@@ -62,7 +62,7 @@ describe UserMailer, type: :mailer do
     end
   end
 
-  describe "invitation to claim" do
+  describe "invitation_to_claim" do
     title = Faker::Book.title
     title2 = Faker::Book.title
 
@@ -151,78 +151,80 @@ describe UserMailer, type: :mailer do
     end
   end
   
-  describe "invitation from a user request" do
-    let(:user) { create(:user) }
-    let(:invitation) { create(:invitation, creator: user) }
-
-    subject(:email) { UserMailer.invitation(invitation.id).deliver }
-
-    # Test the headers
-    it_behaves_like "an email with a valid sender"
-
-    it 'has the correct subject line' do
-      subject = "[#{ArchiveConfig.APP_SHORT_NAME}] Invitation"
-      expect(email).to have_subject(subject)
-    end
-
-    # Test both body contents
-    it_behaves_like "multipart email"
-
-    it_behaves_like "a translated email"
-
-    describe 'HTML version' do
-      it_behaves_like "a well formed HTML email"
-
-      it "has the correct content" do
-        expect(email.html_part).to have_body_text("like to join us, please sign up at the following address")
-        expect(email.html_part).to have_body_text("has invited you")
-      end
-    end
-
-    describe 'text version' do
-      it "has the correct content" do
-        expect(email.text_part).to have_body_text("like to join us, please sign up at the following address")
-        expect(email.text_part).to have_body_text("has invited you")
-      end
-    end
-  end
-  
   describe "invitation" do
-    let(:invitation) { create(:invitation) }
+    context "when sent by a user" do
+      let(:user) { create(:user) }
+      let(:invitation) { create(:invitation, creator: user) }
 
-    subject(:email) { UserMailer.invitation(invitation.id).deliver }
+      subject(:email) { UserMailer.invitation(invitation.id).deliver }
 
-    # Test the headers
-    it_behaves_like "an email with a valid sender"
+      # Test the headers
+      it_behaves_like "an email with a valid sender"
 
-    it 'has the correct subject line' do
-      subject = "[#{ArchiveConfig.APP_SHORT_NAME}] Invitation"
-      expect(email).to have_subject(subject)
-    end
+      it 'has the correct subject line' do
+        subject = "[#{ArchiveConfig.APP_SHORT_NAME}] Invitation"
+        expect(email).to have_subject(subject)
+      end
 
-    # Test both body contents
-    it_behaves_like "multipart email"
+      # Test both body contents
+      it_behaves_like "multipart email"
 
-    it_behaves_like "a translated email"
+      it_behaves_like "a translated email"
 
-    describe 'HTML version' do
-      it_behaves_like "a well formed HTML email"
+      describe 'HTML version' do
+        it_behaves_like "a well formed HTML email"
 
-      it "has the correct content" do
-        expect(email.html_part).to have_body_text("like to join us, please sign up at the following address")
-        expect(email.html_part).to have_body_text("been invited")
+        it "has the correct content" do
+          expect(email.html_part).to have_body_text("like to join us, please sign up at the following address")
+          expect(email.html_part).to have_body_text("has invited you")
+        end
+      end
+
+      describe 'text version' do
+        it "has the correct content" do
+          expect(email.text_part).to have_body_text("like to join us, please sign up at the following address")
+          expect(email.text_part).to have_body_text("has invited you")
+        end
       end
     end
 
-    describe 'text version' do
-      it "has the correct content" do
-        expect(email.text_part).to have_body_text("like to join us, please sign up at the following address")
-        expect(email.text_part).to have_body_text("been invited")
+    context "when sent from the queue or by an admin" do
+      let(:invitation) { create(:invitation) }
+
+      subject(:email) { UserMailer.invitation(invitation.id).deliver }
+
+      # Test the headers
+      it_behaves_like "an email with a valid sender"
+
+      it 'has the correct subject line' do
+        subject = "[#{ArchiveConfig.APP_SHORT_NAME}] Invitation"
+        expect(email).to have_subject(subject)
+      end
+
+      # Test both body contents
+      it_behaves_like "multipart email"
+
+      it_behaves_like "a translated email"
+
+      describe 'HTML version' do
+        it_behaves_like "a well formed HTML email"
+
+        it "has the correct content" do
+          expect(email.html_part).to have_body_text("like to join us, please sign up at the following address")
+          expect(email.html_part).to have_body_text("been invited")
+        end
+      end
+
+      describe 'text version' do
+        it "has the correct content" do
+          expect(email.text_part).to have_body_text("like to join us, please sign up at the following address")
+          expect(email.text_part).to have_body_text("been invited")
+        end
       end
     end
   end
 
-  describe "challenge assignment" do
+  describe "challenge_assignment_notification" do
     let!(:gift_exchange) { create(:gift_exchange) }
     let!(:collection) { create(:collection, challenge: gift_exchange, challenge_type: "GiftExchange") }
     let!(:otheruser) { create(:user) }
@@ -259,7 +261,7 @@ describe UserMailer, type: :mailer do
     end
   end
 
-  describe "invite request declined" do
+  describe "invite_request_declined" do
     let(:user) { create(:user) }
     let(:total) { 2 }
     let(:reason) { "You smell" }

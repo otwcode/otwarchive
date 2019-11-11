@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe CollectionMailer, type: :mailer do
-  describe "basic collection emails" do
+  describe "item_added_notification" do
     let(:collection) { create(:collection, email: Faker::Internet.email) } 
     let(:work) { create(:work) }
 
