@@ -14,14 +14,11 @@ class AbuseReport < ApplicationRecord
 
   validate :check_for_spam
   def check_for_spam
-    errors.add(:base, ts("This report looks like spam to our system!")) unless check_for_spam?
+    approved = logged_in_with_matching_email? || !Akismetor.spam?(akismet_attributes)
+    errors.add(:base, ts("This report looks like spam to our system!")) unless approved
   end
 
-  def check_for_spam?
-    logged_with_matching_email? || !Akismetor.spam?(akismet_attributes)
-  end
-
-  def logged_with_matching_email?
+  def logged_in_with_matching_email?
     User.current_user.present? && User.current_user.email == email
   end
 
