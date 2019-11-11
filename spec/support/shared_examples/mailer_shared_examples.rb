@@ -1,7 +1,7 @@
 shared_examples_for "multipart email" do
   it "generates a multipart message (plain text and html)" do
     expect(email.body.parts.length).to eq(2)
-    expect(email.body.parts.collect(&:content_type)).to eq(["text/plain; charset=UTF-8", "text/html; charset=UTF-8"])
+    expect(email.body.parts.map(&:content_type)).to eq(["text/plain; charset=UTF-8", "text/html; charset=UTF-8"])
   end
 end
 
