@@ -18,10 +18,7 @@ describe UserMailer, type: :mailer do
     end
 
     # Test the headers
-    it 'has a valid from line' do
-      text = "Archive of Our Own <#{ArchiveConfig.RETURN_ADDRESS}>"
-      expect(email.header['From'].to_s).to eq(text)
-    end
+    it_behaves_like "an email with a valid sender"
 
     it 'has the correct subject line' do
       text = "[#{ArchiveConfig.APP_SHORT_NAME}] Works uploaded"
@@ -108,10 +105,7 @@ describe UserMailer, type: :mailer do
     end
 
     # Test the headers
-    it 'has a valid from line' do
-      text = "Archive of Our Own <#{ArchiveConfig.RETURN_ADDRESS}>"
-      expect(email.header['From'].to_s).to eq(text)
-    end
+    it_behaves_like "an email with a valid sender"
 
     it 'has the correct subject line' do
       text = "[#{ArchiveConfig.APP_SHORT_NAME}] Invitation to claim works"
@@ -171,10 +165,7 @@ describe UserMailer, type: :mailer do
     let(:email) { UserMailer.invitation(@invitation.id).deliver }
 
     # Test the headers
-    it 'has a valid from line' do
-      text = "Archive of Our Own <#{ArchiveConfig.RETURN_ADDRESS}>"
-      expect(email.header['From'].to_s).to eq(text)
-    end
+    it_behaves_like "an email with a valid sender"
 
     it 'has the correct subject line' do
       text = "[#{ArchiveConfig.APP_SHORT_NAME}] Invitation"
@@ -212,10 +203,7 @@ describe UserMailer, type: :mailer do
     let(:email) { UserMailer.invitation(@invitation.id).deliver }
 
     # Test the headers
-    it 'has a valid from line' do
-      text = "Archive of Our Own <#{ArchiveConfig.RETURN_ADDRESS}>"
-      expect(email.header['From'].to_s).to eq(text)
-    end
+    it_behaves_like "an email with a valid sender"
 
     it 'has the correct subject line' do
       text = "[#{ArchiveConfig.APP_SHORT_NAME}] Invitation"
@@ -256,10 +244,7 @@ describe UserMailer, type: :mailer do
     let(:email) { UserMailer.challenge_assignment_notification(collection.id, otheruser.id, open_assignment.id).deliver }
 
     # Test the headers
-    it 'has a valid from line' do
-      text = "Archive of Our Own <#{ArchiveConfig.RETURN_ADDRESS}>"
-      expect(email.header['From'].to_s).to eq(text)
-    end
+    it_behaves_like "an email with a valid sender"
 
     it 'has the correct subject line' do
       text = "[#{ArchiveConfig.APP_SHORT_NAME}][#{collection.title}] Your Assignment!"
@@ -298,10 +283,7 @@ describe UserMailer, type: :mailer do
     let(:email) { UserMailer.invite_request_declined(@user.id, @total, @reason).deliver }
 
     # Test the headers
-    it 'has a valid from line' do
-      text = "Archive of Our Own <#{ArchiveConfig.RETURN_ADDRESS}>"
-      expect(email.header['From'].to_s).to eq(text)
-    end
+    it_behaves_like "an email with a valid sender"
 
     it 'has the correct subject line' do
       text = "[#{ArchiveConfig.APP_SHORT_NAME}] Additional Invite Code Request Declined"

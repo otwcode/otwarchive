@@ -9,9 +9,6 @@ describe CommentMailer, type: :mailer do
 
     let(:email) { CommentMailer.comment_sent_notification(@comment).deliver }
 
-    it "should have a valid from line" do
-      text = "From: Archive of Our Own <#{ArchiveConfig.RETURN_ADDRESS}>"
-      expect(email.encoded).to match(/#{text}/)
-    end
+    it_behaves_like "an email with a valid sender"
   end
 end

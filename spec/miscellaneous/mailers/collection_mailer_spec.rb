@@ -12,9 +12,6 @@ describe CollectionMailer, type: :mailer do
 
     let(:email) { CollectionMailer.item_added_notification(@work.id, @collection.id, "Work").deliver }
 
-    it "should have a valid from line" do
-      text = "From: Archive of Our Own <#{ArchiveConfig.RETURN_ADDRESS}>"
-      expect(email.encoded).to match(/#{text}/)
-    end
+    it_behaves_like "an email with a valid sender"
   end
 end

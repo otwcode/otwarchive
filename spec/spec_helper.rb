@@ -185,3 +185,9 @@ shared_examples_for "a translated email" do
     expect(get_message_part(email, /plain/)).not_to include("translation missing")
   end
 end
+
+shared_examples_for "an email with a valid sender" do
+  it "is delivered from Archive of Our Own <do-not-reply@example.org>" do
+    expect(email).to deliver_from("Archive of Our Own <#{ArchiveConfig.RETURN_ADDRESS}>")
+  end
+end
