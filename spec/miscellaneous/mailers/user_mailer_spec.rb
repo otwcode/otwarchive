@@ -3,8 +3,8 @@ require 'spec_helper'
 describe UserMailer, type: :mailer do
 
   context "claim notification" do
-    title = 'Imported Work Title'
-    title2 = 'Second ' + title
+    title = Faker::Book.title
+    title2 = Faker::Book.title
     let(:author) { create(:user) }
     let(:work) { create(:work, title: title, authors: [author.pseuds.first]) }
     let(:work2) { create(:work, title: title2, authors: [author.pseuds.first]) }
@@ -57,14 +57,14 @@ describe UserMailer, type: :mailer do
       end
 
       it 'lists the second imported work with a leading hyphen' do
-        expect(get_message_part(email, /plain/)).to include('- ' + title2)
+        expect(get_message_part(email, /plain/)).to include("- #{title2}")
       end
     end
   end
 
   describe "invitation to claim" do
-    title = 'Imported Work Title'
-    title2 = 'Second ' + title
+    title = Faker::Book.title
+    title2 = Faker::Book.title
 
     let(:archivist) { create(:user) }
     let(:external_author) { create(:external_author) }
@@ -146,7 +146,7 @@ describe UserMailer, type: :mailer do
       end
 
       it 'lists the second imported work with a leading hyphen' do
-        expect(get_message_part(email, /plain/)).to include(title2)
+        expect(get_message_part(email, /plain/)).to include("- #{title2}")
       end
     end
   end
