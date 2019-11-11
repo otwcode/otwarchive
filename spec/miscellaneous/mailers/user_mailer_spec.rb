@@ -71,8 +71,8 @@ describe UserMailer, type: :mailer do
 
     let(:external_author_name) do
       create(:external_author_name,
-        external_author_id: external_author.id,
-        name: "External Author")
+             external_author_id: external_author.id,
+             name: "External Author")
     end
 
     let(:invitation) do
@@ -84,14 +84,14 @@ describe UserMailer, type: :mailer do
 
     let!(:work_external_creatorship) do
       create(:external_creatorship,
-        creation_id: work.id,
-        external_author_name_id: external_author_name.id)
+             creation_id: work.id,
+             external_author_name_id: external_author_name.id)
     end
 
     let!(:work2_external_creatorship) do
       create(:external_creatorship,
-        creation_id: work2.id,
-        external_author_name_id: external_author_name.id)
+             creation_id: work2.id,
+             external_author_name_id: external_author_name.id)
     end
 
     subject(:email) { UserMailer.invitation_to_claim(invitation.id, archivist.login).deliver }
