@@ -7,11 +7,11 @@ end
 
 shared_examples_for "a translated email" do
   it "does not have missing translations in HTML version" do
-    expect(get_message_part(email, /html/)).not_to include("translation missing")
+    expect(email.html_part).not_to have_body_text("translation missing")
   end
 
   it "does not have missing translations in text version" do
-    expect(get_message_part(email, /plain/)).not_to include("translation missing")
+    expect(email.text_part).not_to have_body_text("translation missing")
   end
 end
 
@@ -23,6 +23,6 @@ end
 
 shared_examples_for "a well formed HTML email" do
   it "does not have exposed HTML" do
-    expect(get_message_part(email, /html/)).not_to include("&lt;")
+    expect(email.html_part).not_to have_body_text("&lt;")
   end
 end

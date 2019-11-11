@@ -57,7 +57,7 @@ describe UserMailer, type: :mailer do
       end
 
       it 'lists the second imported work with a leading hyphen' do
-        expect(get_message_part(email, /plain/)).to include("- #{title2}")
+        expect(email.text_part).to have_body_text("- #{title2}")
       end
     end
   end
@@ -146,7 +146,7 @@ describe UserMailer, type: :mailer do
       end
 
       it 'lists the second imported work with a leading hyphen' do
-        expect(get_message_part(email, /plain/)).to include("- #{title2}")
+        expect(email.text_part).to have_body_text("- #{title2}")
       end
     end
   end
@@ -174,15 +174,15 @@ describe UserMailer, type: :mailer do
       it_behaves_like "a well formed HTML email"
 
       it "has the correct content" do
-        expect(get_message_part(email, /html/)).to include("like to join us, please sign up at the following address")
-        expect(get_message_part(email, /html/)).to include("has invited you")
+        expect(email.html_part).to have_body_text("like to join us, please sign up at the following address")
+        expect(email.html_part).to have_body_text("has invited you")
       end
     end
 
     describe 'text version' do
       it "has the correct content" do
-        expect(get_message_part(email, /plain/)).to include("like to join us, please sign up at the following address")
-        expect(get_message_part(email, /plain/)).to include("has invited you")
+        expect(email.text_part).to have_body_text("like to join us, please sign up at the following address")
+        expect(email.text_part).to have_body_text("has invited you")
       end
     end
   end
@@ -209,15 +209,15 @@ describe UserMailer, type: :mailer do
       it_behaves_like "a well formed HTML email"
 
       it "has the correct content" do
-        expect(get_message_part(email, /html/)).to include("like to join us, please sign up at the following address")
-        expect(get_message_part(email, /html/)).to include("been invited")
+        expect(email.html_part).to have_body_text("like to join us, please sign up at the following address")
+        expect(email.html_part).to have_body_text("been invited")
       end
     end
 
     describe 'text version' do
       it "has the correct content" do
-        expect(get_message_part(email, /plain/)).to include("like to join us, please sign up at the following address")
-        expect(get_message_part(email, /plain/)).to include("been invited")
+        expect(email.text_part).to have_body_text("like to join us, please sign up at the following address")
+        expect(email.text_part).to have_body_text("been invited")
       end
     end
   end
@@ -248,13 +248,13 @@ describe UserMailer, type: :mailer do
       it_behaves_like "a well formed HTML email"
 
       it "has the correct content" do
-        expect(get_message_part(email, /html/)).to include("You have been assigned the following request")
+        expect(email.html_part).to have_body_text("You have been assigned the following request")
       end
     end
 
     describe 'text version' do
       it "has the correct content" do
-        expect(get_message_part(email, /plain/)).to include("You have been assigned the following request")
+        expect(email.text_part).to have_body_text("You have been assigned the following request")
       end
     end
   end
@@ -283,13 +283,13 @@ describe UserMailer, type: :mailer do
       it_behaves_like "a well formed HTML email"
 
       it "has the correct content" do
-        expect(get_message_part(email, /html/)).to include("We regret to inform you that your request for 2 new invitations cannot be fulfilled at this time")
+        expect(email.html_part).to have_body_text("We regret to inform you that your request for 2 new invitations cannot be fulfilled at this time")
       end
     end
 
     describe 'text version' do
       it "has the correct content" do
-        expect(get_message_part(email, /plain/)).to include("We regret to inform you that your request for 2 new invitations cannot be fulfilled at this time")
+        expect(email.text_part).to have_body_text("We regret to inform you that your request for 2 new invitations cannot be fulfilled at this time")
       end
     end
   end
