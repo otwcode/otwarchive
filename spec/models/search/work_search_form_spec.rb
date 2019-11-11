@@ -115,7 +115,7 @@ describe WorkSearchForm do
       FactoryBot.create(:collection, id: 1)
     end
 
-    let(:language) { create(:language, short: "ca") }
+    let(:language) { create(:language, short: "ptPT") }
 
     let!(:work) do
       FactoryBot.create(:work,
@@ -249,25 +249,25 @@ describe WorkSearchForm do
 
       it "should only return works in that language" do
         # "Language" dropdown, with short names
-        results = WorkSearchForm.new(language_id: "ca").search_results
+        results = WorkSearchForm.new(language_id: "ptPT").search_results
         expect(results).not_to include work
         expect(results).to include second_work
 
         # "Language" dropdown, with IDs (backward compatibility)
         wsf = WorkSearchForm.new(language_id: language.id)
-        expect(wsf.language_id).to eq("ca")
+        expect(wsf.language_id).to eq("ptPT")
         results = wsf.search_results
         expect(results).not_to include work
         expect(results).to include second_work
 
         # "Any field" or "Search within results", with short names
-        results = WorkSearchForm.new(query: "language_id: ca").search_results
+        results = WorkSearchForm.new(query: "language_id: ptPT").search_results
         expect(results).not_to include work
         expect(results).to include second_work
 
         # "Any field" or "Search within results", with IDs (backward compatibility)
         wsf = WorkSearchForm.new(query: "language_id: #{language.id} OR language_id: #{unused_language.id}")
-        expect(wsf.query).to eq("language_id: ca OR language_id: tlh")
+        expect(wsf.query).to eq("language_id: ptPT OR language_id: tlh")
         results = wsf.search_results
         expect(results).not_to include work
         expect(results).to include second_work

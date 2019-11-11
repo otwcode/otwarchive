@@ -91,7 +91,7 @@ describe BookmarkSearchForm do
     end
 
     describe "searching" do
-      let(:language) { create(:language, short: "nl") }
+      let(:language) { create(:language, short: "ptBR") }
 
       let(:work1) { create(:posted_work, language_id: Language.default.id) }
       let(:work2) { create(:posted_work, language_id: language.id) }
@@ -106,25 +106,25 @@ describe BookmarkSearchForm do
 
         it "returns work bookmarkables with specified language" do
           # "Work language" dropdown, with short names
-          results = BookmarkSearchForm.new(language_id: "nl").bookmarkable_search_results
+          results = BookmarkSearchForm.new(language_id: "ptBR").bookmarkable_search_results
           expect(results).not_to include work1
           expect(results).to include work2
 
           # "Work language" dropdown, with IDs (backward compatibility)
           bsf = BookmarkSearchForm.new(language_id: language.id)
-          expect(bsf.language_id).to eq("nl")
+          expect(bsf.language_id).to eq("ptBR")
           results = bsf.bookmarkable_search_results
           expect(results).not_to include work1
           expect(results).to include work2
 
           # "Any field on work" or "Search within results", with short names
-          results = BookmarkSearchForm.new(bookmarkable_query: "language_id: nl").bookmarkable_search_results
+          results = BookmarkSearchForm.new(bookmarkable_query: "language_id: ptBR").bookmarkable_search_results
           expect(results).not_to include work1
           expect(results).to include work2
 
           # "Any field on work" or "Search within results", with IDs (backward compatibility)
           bsf = BookmarkSearchForm.new(bookmarkable_query: "language_id: #{language.id} OR language_id: #{unused_language.id}")
-          expect(bsf.bookmarkable_query).to eq("language_id: nl OR language_id: tlh")
+          expect(bsf.bookmarkable_query).to eq("language_id: ptBR OR language_id: tlh")
           results = bsf.bookmarkable_search_results
           expect(results).not_to include work1
           expect(results).to include work2
