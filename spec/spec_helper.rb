@@ -175,3 +175,13 @@ shared_examples_for "multipart email" do
     expect(email.body.parts.collect(&:content_type)).to eq(["text/plain; charset=UTF-8", "text/html; charset=UTF-8"])
   end
 end
+
+shared_examples_for "a translated email" do
+  it "does not have missing translations in HTML version" do
+    expect(get_message_part(email, /html/)).not_to include("translation missing")
+  end
+
+  it "does not have missing translations in text version" do
+    expect(get_message_part(email, /plain/)).not_to include("translation missing")
+  end
+end

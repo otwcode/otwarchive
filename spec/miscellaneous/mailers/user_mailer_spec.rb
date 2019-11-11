@@ -121,6 +121,8 @@ describe UserMailer, type: :mailer do
     # Test both body contents
     it_behaves_like "multipart email"
 
+    it_behaves_like "a translated email"
+
     describe 'HTML version' do
       it_behaves_like 'invitation to claim content' do
         let(:part) { get_message_part(email, /html/) }
@@ -141,10 +143,6 @@ describe UserMailer, type: :mailer do
       it 'does not have exposed HTML' do
         expect(get_message_part(email, /html/)).not_to include("&lt;")
       end
-
-      it 'does not have missing translations' do
-        expect(get_message_part(email, /html/)).not_to include("translation missing")
-      end
     end
 
     describe 'text version' do
@@ -158,10 +156,6 @@ describe UserMailer, type: :mailer do
 
       it 'lists the second imported work with a leading hyphen' do
         expect(get_message_part(email, /plain/)).to include(title2)
-      end
-
-      it 'does not have missing translations' do
-        expect(get_message_part(email, /plain/)).not_to include("translation missing")
       end
     end
   end
@@ -190,14 +184,12 @@ describe UserMailer, type: :mailer do
     # Test both body contents
     it_behaves_like "multipart email"
 
+    it_behaves_like "a translated email"
+
     describe 'HTML version' do
       it 'has text contents' do
         expect(get_message_part(email, /html/)).to include("like to join us, please sign up at the following address")
         expect(get_message_part(email, /html/)).to include("has invited you")
-      end
-      
-      it 'does not have missing translations' do
-        expect(get_message_part(email, /html/)).not_to include("translation missing")
       end
     end
 
@@ -205,10 +197,6 @@ describe UserMailer, type: :mailer do
       it 'says the right thing' do
         expect(get_message_part(email, /plain/)).to include("like to join us, please sign up at the following address")
         expect(get_message_part(email, /plain/)).to include("has invited you")
-      end
-      
-      it 'does not have missing translations' do
-        expect(get_message_part(email, /plain/)).not_to include("translation missing")
       end
     end
   end
@@ -237,16 +225,14 @@ describe UserMailer, type: :mailer do
     # Test both body contents
     it_behaves_like "multipart email"
 
+    it_behaves_like "a translated email"
+
     describe 'HTML version' do
       it 'has text contents' do
         expect(get_message_part(email, /html/)).to include("like to join us, please sign up at the following address")
         expect(get_message_part(email, /html/)).to include("been invited")
       end
-      
-      it 'does not have missing translations' do
-        expect(get_message_part(email, /html/)).not_to include("translation missing")
-      end
-      
+
       it 'does not have exposed HTML' do
         expect(get_message_part(email, /html/)).not_to include("&lt;")
       end
@@ -256,10 +242,6 @@ describe UserMailer, type: :mailer do
       it 'says the right thing' do
         expect(get_message_part(email, /plain/)).to include("like to join us, please sign up at the following address")
         expect(get_message_part(email, /plain/)).to include("been invited")
-      end
-      
-      it 'does not have missing translations' do
-        expect(get_message_part(email, /plain/)).not_to include("translation missing")
       end
     end
   end
@@ -287,13 +269,11 @@ describe UserMailer, type: :mailer do
     # Test both body contents
     it_behaves_like "multipart email"
 
+    it_behaves_like "a translated email"
+
     describe 'HTML version' do
       it 'has text contents' do
         expect(get_message_part(email, /html/)).to include("You have been assigned the following request")
-      end
-      
-      it 'does not have missing translations' do
-        expect(get_message_part(email, /html/)).not_to include("translation missing")
       end
       
       it 'does not have exposed HTML' do
@@ -304,10 +284,6 @@ describe UserMailer, type: :mailer do
     describe 'text version' do
       it 'says the right thing' do
         expect(get_message_part(email, /plain/)).to include("You have been assigned the following request")
-      end
-      
-      it 'does not have missing translations' do
-        expect(get_message_part(email, /plain/)).not_to include("translation missing")
       end
     end
   end
@@ -335,13 +311,11 @@ describe UserMailer, type: :mailer do
     # Test both body contents
     it_behaves_like "multipart email"
 
+    it_behaves_like "a translated email"
+
     describe 'HTML version' do
       it 'has text contents' do
         expect(get_message_part(email, /html/)).to include("We regret to inform you that your request for 2 new invitations cannot be fulfilled at this time")
-      end
-      
-      it 'does not have missing translations' do
-        expect(get_message_part(email, /html/)).not_to include("translation missing")
       end
       
       it 'does not have exposed HTML' do
@@ -352,10 +326,6 @@ describe UserMailer, type: :mailer do
     describe 'text version' do
       it 'says the right thing' do
         expect(get_message_part(email, /plain/)).to include("We regret to inform you that your request for 2 new invitations cannot be fulfilled at this time")
-      end
-      
-      it 'does not have missing translations' do
-        expect(get_message_part(email, /plain/)).not_to include("translation missing")
       end
     end
   end
