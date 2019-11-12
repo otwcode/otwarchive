@@ -105,7 +105,7 @@ Feature: Tag wrangling: assigning wranglers, using the filters on the Wranglers 
     Then I should see "Wranglers were successfully unassigned!"
       And "Testing" should not be assigned to the wrangler "tangler"
     When I edit the tag "Testing"
-      Then I should see "Sign Up"
+    Then I should see "Sign Up"
 
   Scenario: Admin can assign a fandom to another wrangler
     Given the following activated tag wrangler exists

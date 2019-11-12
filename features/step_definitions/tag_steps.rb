@@ -398,7 +398,7 @@ Then /^I should not be able to remove the wrangler "([^\"]*)" from fandom "([^\"
   visit tag_wranglers_url
   fandom_id = Fandom.find_by(name: fandom).id
   path = "/tag_wranglers/#{wrangler}?fandom_id=#{fandom_id}"
-  page.should have_no_link("x", :href => path)
+  page.should have_no_link("x", href: path)
 end
 
 Then /^"([^\"]*)" should not be a tag wrangler$/ do |username|
