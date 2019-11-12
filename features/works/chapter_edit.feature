@@ -19,6 +19,7 @@ Feature: Edit chapters
   Then I should see "Post New Work"
   When I select "Not Rated" from "Rating"
     And I check "No Archive Warnings Apply"
+    And I select "English" from "Choose a language"
     And I fill in "Fandoms" with "New Fandom"
     And I fill in "Work Title" with "New Epic Work"
     And I fill in "content" with "Well, maybe not so epic."
@@ -176,7 +177,7 @@ Feature: Edit chapters
   Then I should see "This is a draft chapter in a posted work. It will be kept unless the work is deleted."
   When I press "Edit"
     And I fill in "content" with "Even more awesomely epic context. Plus bonus epicness"
-    And I press "Post Without Preview"
+    And I press "Post"
     Then I should see "Chapter was successfully posted."
     And I should not see "This chapter is a draft and hasn't been posted yet!"
 
@@ -199,15 +200,16 @@ Feature: Edit chapters
 
   Scenario: Create a work and add a draft chapter, edit the draft chapter, and save changes to the draft chapter without previewing or posting
   Given basic tags
-    And I am logged in as "moose" with password "muffin"  
+    And I am logged in as "moose" with password "muffin"
   When I go to the new work page
   Then I should see "Post New Work"
     And I select "General Audiences" from "Rating"
     And I check "No Archive Warnings Apply"
+    And I select "English" from "Choose a language"
     And I fill in "Fandoms" with "If You Give an X a Y"
     And I fill in "Work Title" with "If You Give Users a Draft Feature"
-    And I fill in "content" with "They will expect it to work."  
-    And I press "Post Without Preview"
+    And I fill in "content" with "They will expect it to work."
+    And I press "Post"
   When I should see "Work was successfully posted."
     And I should see "They will expect it to work."
   When I follow "Add Chapter"
@@ -217,7 +219,7 @@ Feature: Edit chapters
     And I should see "And then they will request more features for it."
   When I press "Edit"
     And I fill in "content" with "And then they will request more features for it. Like the ability to save easily."
-    And I press "Save Without Posting"
+    And I press "Save As Draft"
   Then I should see "Chapter was successfully updated."
     And I should see "This chapter is a draft and hasn't been posted yet!"
     And I should see "Like the ability to save easily."
@@ -231,20 +233,20 @@ Feature: Edit chapters
       And I select "1" from "work_chapter_attributes_published_at_3i"
       And I select "January" from "work_chapter_attributes_published_at_2i"
       And I select "1990" from "work_chapter_attributes_published_at_1i"
-      And I press "Post Without Preview"
+      And I press "Post"
     Then I should see "Published:1990-01-01"
     When I follow "Add Chapter"
       And I fill in "content" with "this is my second chapter"
       And I set the publication date to today
       And I press "Preview"
       And I should see "This is a draft"
-      And I press "Save Without Posting"
+      And I press "Save As Draft"
     Then I should not see Updated today
       And I should not see Completed today
       And I should not see "Updated" within ".work.meta .stats"
       And I should not see "Completed" within ".work.meta .stats"
     When I follow "Edit Chapter"
-      And I press "Post Without Preview"
+      And I press "Post"
       Then I should see Completed today
 
 
@@ -257,11 +259,11 @@ Feature: Edit chapters
     When I follow "Add Chapter"
       And I fill in "content" with "this is my second chapter"
       And I set the publication date to today
-      And I press "Post Without Preview"
+      And I press "Post"
     Then I should see Completed today
     When I follow "Edit"
       And I fill in "work_wip_length" with "?"
-      And I press "Post Without Preview"
+      And I press "Post"
     Then I should see Updated today
     When I post the work "A Whole New Work"
       And I go to the works page
@@ -270,7 +272,7 @@ Feature: Edit chapters
     When I follow "Add Chapter"
       And I fill in "content" with "this is my third chapter"
       And I set the publication date to today
-      And I press "Post Without Preview"
+      And I press "Post"
       And I go to the works page
     Then "First work" should appear before "A Whole New Work"
 
@@ -336,7 +338,7 @@ Feature: Edit chapters
     Then I should not see "Chapter by karma"
       And 1 email should be delivered to "sabrina"
       And the email should contain "The user karma has listed your pseud sabrina as a co-creator on the following chapter"
-      And the email should contain "Because you previously co-created this work with karma, they are allowed to add you to chapters on this work without an invitation, even if you have co-creation disabled."
+      And the email should contain "a co-creator on a work, you can be added to new chapters regardless of your co-creation settings. You will also be added to any series the work is added to."
       And the email should not contain "translation missing"
 
 
@@ -500,7 +502,7 @@ Feature: Edit chapters
       And I post the work "Futuristic"
       And a chapter is set up for "Futuristic"
     When I select "30" from "chapter[published_at(3i)]"
-      And I press "Post Without Preview"
+      And I press "Post"
     Then I should see "Publication date can't be in the future."
     When I jump in our Delorean and return to the present
 

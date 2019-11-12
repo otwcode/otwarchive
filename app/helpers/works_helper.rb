@@ -47,11 +47,11 @@ module WorksHelper
   end
 
   # select the default warning if this is a new work
-  def check_warning(work, warning)
-    if work.nil? || work.warning_strings.empty?
+  def check_archive_warning(work, warning)
+    if work.nil? || work.archive_warning_strings.empty?
       warning.name == nil
     else
-      work.warning_strings.include?(warning.name)
+      work.archive_warning_strings.include?(warning.name)
     end
   end
 
@@ -93,15 +93,8 @@ module WorksHelper
   end
 
   # Check whether this user has permission to view this work even if it's
-  # unrevealed and they're not listed as a creator:
+  # unrevealed:
   def can_see_work(work, user)
-    # Invited co-creators can also see unrevealed works, even though they're
-    # not officially listed as creators (because creators are allowed to edit,
-    # and invited co-creators aren't):
-    if work.user_has_creator_invite?(current_user)
-      return true
-    end
-
     # Moderators can see unrevealed works:
     work.collections.each do |collection|
       return true if collection.user_is_maintainer?(user)
@@ -168,7 +161,7 @@ module WorksHelper
     end
     # Create list of tags
     text << "<ul>"
-    %w(Fandom Rating Warning Category Character Relationship Freeform).each do |type|
+    %w(Fandom Rating ArchiveWarning Category Character Relationship Freeform).each do |type|
       if tags[type]
         text << "<li>#{type.constantize.label_name}: #{tags[type].map { |t| link_to_tag_works(t, full_path: true) }.join(', ')}</li>"
       end

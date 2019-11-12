@@ -167,7 +167,7 @@ Feature: Edit Multiple Works
       And the user "coauthor" allows co-creators
       And I am logged in as "lead_author"
       And I edit multiple works coauthored as "lead_author" with "coauthor"
-    When I check "Remove me as co-creator"
+    When I check "Remove Me As Co-Creator"
       And I press "Update All Works"
     Then I should see "Your edits were put through"
     When I view the work "Shared Work 1"
@@ -185,7 +185,7 @@ Feature: Edit Multiple Works
       And I select "Solo" for editing
       And I select "Shared" for editing
       And I press "Edit"
-      And I check "Remove me as co-creator"
+      And I check "Remove Me As Co-Creator"
       And I press "Update All Works"
     Then I should see "You cannot remove yourself as co-creator of the work Solo because you are the only listed creator."
     When I view the work "Solo"

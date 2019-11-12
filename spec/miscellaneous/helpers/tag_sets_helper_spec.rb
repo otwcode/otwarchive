@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe TagSetsHelper, type: :helper do
+describe TagSetsHelper do
   describe 'nomination_notes' do
     before(:each) do
       @limit = HashWithIndifferentAccess.new
@@ -87,7 +87,7 @@ describe TagSetsHelper, type: :helper do
 
   describe 'nomination_status' do
     before(:each) do
-      @nomination = FactoryGirl.create(:tag_nomination)
+      @nomination = FactoryBot.create(:tag_nomination)
     end
 
     context 'for valid nominations' do
@@ -124,7 +124,7 @@ describe TagSetsHelper, type: :helper do
         @nomination.owned_tag_set.nominated = true
         @nomination.approved = ''
         @nomination.rejected = ''
-        @tag_set = FactoryGirl.create(:owned_tag_set)
+        @tag_set = FactoryBot.create(:owned_tag_set)
         expect(helper.nomination_status(@nomination)).
           to include('unreviewed').
           and include('has not been reviewed yet and can still be changed.').
@@ -135,7 +135,7 @@ describe TagSetsHelper, type: :helper do
 
   describe 'nomination_tag_information' do
     before(:each) do
-      @nominated_tag = FactoryGirl.create(:tag_nomination)
+      @nominated_tag = FactoryBot.create(:tag_nomination)
     end
 
     context 'for valid information' do
@@ -174,7 +174,7 @@ describe TagSetsHelper, type: :helper do
         # It looks like the Fandom object is changing (being recreated) between
         # what it looks like here in this test, and when it shows up in the
         # 'nomination_tag_information' method in the tags_helper.rb file.
-        @synonym = FactoryGirl.create(:tag_nomination)
+        @synonym = FactoryBot.create(:tag_nomination)
         @synonym.synonym = true
         @synonym.canonical = false
         @nominated_tag.canonical = true
@@ -205,7 +205,7 @@ describe TagSetsHelper, type: :helper do
   describe 'tag_relation_to_list' do
     context 'for a single type of tag' do
       it 'should return a list of single-type tags' do
-        @owned_tag_set = FactoryGirl.create(:owned_tag_set)
+        @owned_tag_set = FactoryBot.create(:owned_tag_set)
         expect(helper.tag_relation_to_list(@owned_tag_set.with_type(Fandom))).
           to include("<li>#{@owned_tag_set.tags.last.name}</li>")
       end

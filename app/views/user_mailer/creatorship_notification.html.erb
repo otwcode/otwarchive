@@ -10,9 +10,11 @@
   </p>
 
   <p>
-    <%= t(".#{@creation.model_name.to_s.underscore}.explanation",
-          adding_user: @adding_user.login) %>
+    <%= t ".explanation" %>
   </p>
 
-  <p><%= t(".html.remove", edit: style_link(t(".html.edit", type: creation_type), edit_polymorphic_url(@creation))).html_safe %></p>
+  <p>
+    <%= t(".html.remove",
+    edit: style_link(t(".html.edit", type: creation_type), edit_polymorphic_url(@creation))).html_safe %>
+  </p>
 <% end %>

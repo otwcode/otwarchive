@@ -106,10 +106,8 @@ When /^(?:|I )uncheck "([^"]*)"(?: within "([^"]*)")?$/ do |field, selector|
   end
 end
 
-When /^(?:|I )choose "([^"]*)"(?: within "([^"]*)")?$/ do |field, selector|
-  with_scope(selector) do
-    choose(field)
-  end
+When /^(?:|I )choose "(.*)"$/ do |field|
+  choose(field)
 end
 
 When /^(?:|I )attach the file "([^"]*)" to "([^"]*)"(?: within "([^"]*)")?$/ do |path, field, selector|

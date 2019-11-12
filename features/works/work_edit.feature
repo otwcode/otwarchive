@@ -13,13 +13,13 @@ Feature: Edit Works
       And all indexing jobs have been run
     # This isn't my work
     When I view the work "fourth"
-    Then I should not see "Edit"  
+    Then I should not see "Edit"
     When I am on testuser's works page
     # These are my works and should all have edit links on the blurbs
     Then I should see "Edit"
     When I follow "First work"
     # This is my individual work and should have an edit link on the show page
-    Then I should see "first fandom" 
+    Then I should see "first fandom"
       And I should see "Edit"
       # make sure this tag isn't on before we add it
       And I should not see "new tag"
@@ -77,7 +77,7 @@ Feature: Edit Works
       And I follow "Edit"
       And I select "testy" from "work_author_attributes_ids"
       And I unselect "testuser" from "work_author_attributes_ids"
-      And I press "Post Without Preview"
+      And I press "Post"
     Then I should see "testy"
       And I should not see "testuser,"
 
@@ -112,10 +112,10 @@ Feature: Edit Works
       And I am logged out
     When I am logged in as "Scott"
       And I edit the work "Murder by Numbers"
-      And I press "Post Without Preview"
+      And I press "Post"
       And I should see "Work was successfully updated"
     Then I should not see "You have submitted your work to the moderated collection 'Digital Hoarders 2013'. It will not become a part of the collection until it has been approved by a moderator."
-      
+
   Scenario: Previewing edits to a posted work should not refer to the work as a draft
     Given I am logged in as "editor"
       And I post the work "Load of Typos"
@@ -158,8 +158,8 @@ Feature: Edit Works
     Then I should see "coolperson, ex_friend" within ".byline"
     When I edit the work "Shared"
       And I wait 1 second
-      And I follow "Remove Me As Author"
-    Then I should see "You have been removed as an author from the work"
+      And I follow "Remove Me As Co-Creator"
+    Then I should see "You have been removed as a creator from the work."
       And "ex_friend" should be the creator on the work "Shared"
       And "coolperson" should not be a creator on the work "Shared"
 
@@ -177,7 +177,7 @@ Feature: Edit Works
       And I should see "Coauthor's Work Skin" within "#work_work_skin_id"
       And I should not see "Random User's Work Skin" within "#work_work_skin_id"
     When I select "Coauthor's Work Skin" from "Select Work Skin"
-      And I press "Post Without Preview"
+      And I press "Post"
     Then I should see "Work was successfully updated"
 
   Scenario: A work cannot be edited to remove its fandom
@@ -186,7 +186,7 @@ Feature: Edit Works
       And I post the work "Work 1" with fandom "testing"
     When I edit the work "Work 1"
       And I fill in "Fandoms" with ""
-      And I press "Post Without Preview"
+      And I press "Post"
     Then I should see "Sorry! We couldn't save this work because:Please add all required tags. Fandom is missing."
 
   Scenario: User can cancel editing a work

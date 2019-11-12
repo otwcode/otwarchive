@@ -10,9 +10,9 @@
     </h4>
 
     <h5 class="fandoms heading">
-      <span class="landmark"><%= ts('Fandom') %>:</span>
-      <%= external_work.fandom_tags.collect{|tag| link_to_tag_works(tag) }.join(', ').html_safe %>
-      &nbsp;
+      <span class="landmark"><%= ts("Fandoms") %>:</span>
+      <% fandoms = external_work.tag_groups["Fandom"] %>
+      <%= fandoms.collect{ |tag| link_to_tag_works(tag) }.join(", ").html_safe if fandoms %>
     </h5>
     
     <p class="notice"><%= ts("This work isn't hosted on the Archive so this blurb might not be complete or accurate.") %></p>

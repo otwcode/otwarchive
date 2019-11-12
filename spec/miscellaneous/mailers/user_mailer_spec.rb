@@ -70,18 +70,18 @@ describe UserMailer, type: :mailer do
     token = 'abc123'
 
     before(:each) do
-      @author = FactoryGirl.create(:user)
-      @archivist = FactoryGirl.create(:user)
-      @external_author = FactoryGirl.create(:external_author)
-      @external_author_name = FactoryGirl.create(:external_author_name, external_author_id: @external_author.id, name: 'External Author')
+      @author = FactoryBot.create(:user)
+      @archivist = FactoryBot.create(:user)
+      @external_author = FactoryBot.create(:external_author)
+      @external_author_name = FactoryBot.create(:external_author_name, external_author_id: @external_author.id, name: 'External Author')
 
-      @invitation = FactoryGirl.create(:invitation, token: token, external_author_id: @external_author.id)
-      @fandom1 = FactoryGirl.create(:fandom)
+      @invitation = FactoryBot.create(:invitation, token: token, external_author_id: @external_author.id)
+      @fandom1 = FactoryBot.create(:fandom)
 
-      @work = FactoryGirl.create(:work, title: title, fandoms: [@fandom1], authors: [@author.pseuds.first])
-      @work2 = FactoryGirl.create(:work, title: title2, fandoms: [@fandom1], authors: [@author.pseuds.first])
-      FactoryGirl.create(:external_creatorship, creation_id: @work.id, external_author_name_id: @external_author_name.id)
-      FactoryGirl.create(:external_creatorship, creation_id: @work2.id, external_author_name_id: @external_author_name.id)
+      @work = FactoryBot.create(:work, title: title, fandoms: [@fandom1], authors: [@author.pseuds.first])
+      @work2 = FactoryBot.create(:work, title: title2, fandoms: [@fandom1], authors: [@author.pseuds.first])
+      FactoryBot.create(:external_creatorship, creation_id: @work.id, external_author_name_id: @external_author_name.id)
+      FactoryBot.create(:external_creatorship, creation_id: @work2.id, external_author_name_id: @external_author_name.id)
     end
 
     # before(:all) doesn't get cleaned up by database cleaner
@@ -170,8 +170,8 @@ describe UserMailer, type: :mailer do
     token = 'abc123'
 
     before(:each) do
-      @user = FactoryGirl.create(:user)
-      @invitation = FactoryGirl.create(:invitation, token: token, creator: @user)
+      @user = FactoryBot.create(:user)
+      @invitation = FactoryBot.create(:invitation, token: token, creator: @user)
     end
 
     let(:email) { UserMailer.invitation(@invitation.id).deliver }
@@ -217,8 +217,8 @@ describe UserMailer, type: :mailer do
     token = 'abc123'
 
     before(:each) do
-      @user = FactoryGirl.create(:user)
-      @invitation = FactoryGirl.create(:invitation, token: token)
+      @user = FactoryBot.create(:user)
+      @invitation = FactoryBot.create(:invitation, token: token)
     end
 
     let(:email) { UserMailer.invitation(@invitation.id).deliver }
@@ -314,7 +314,7 @@ describe UserMailer, type: :mailer do
 
   describe "invite request declined" do
     before(:each) do
-      @user = FactoryGirl.create(:user)
+      @user = FactoryBot.create(:user)
       @total = 2
       @reason = "You smell"
     end

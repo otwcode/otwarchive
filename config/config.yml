@@ -86,7 +86,7 @@ TITLE_MAX: 255
 TITLE_MIN: 1
 SUMMARY_MAX: 1250
 NOTES_MAX: 5000
-COMMENT_MAX: 4300
+COMMENT_MAX: 10000
 TAG_MAX: 100
 CONTENT_MIN: 10
 CONTENT_MAX: 510000
@@ -151,7 +151,6 @@ ITEMS_PER_PAGE: 25
 NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD: 5
 NUMBER_OF_ITEMS_VISIBLE_ON_HOMEPAGE: 3
 COMMENT_THREAD_MAX_DEPTH: 5
-TAGS_PER_LINE: 12
 TAGS_IN_CLOUD: 200
 TAG_LIST_LIMIT: 300
 # how many options there should be before we show a scrollable window, and how many there
@@ -160,6 +159,12 @@ OPTIONS_TO_SHOW: 3
 MAX_OPTIONS_TO_SHOW: 20
 MAX_KUDOS_TO_SHOW: 50
 MAX_FAVORITE_TAGS: 20
+
+# Used by Rack Attack, periods are measured in seconds
+RATE_LIMIT_NUMBER: 300
+RATE_LIMIT_PERIOD: 300
+RATE_LIMIT_LOGIN_ATTEMPTS: 5
+RATE_LIMIT_LOGIN_PERIOD: 20
 
 # The number of tags to show on the search page:
 TAGS_PER_SEARCH_PAGE: 50
@@ -287,6 +292,10 @@ FIELDS_ALLOWING_HTML_ENTITIES: ["title"]
 FIELDS_ALLOWING_VIDEO_EMBEDS: ["content"]
 
 FIELDS_ALLOWING_CSS: ["content", "endnotes", "notes"]
+
+# Domains that are not allowed be used as the src for audio and video HTML tags.
+# Format: ["google.com", "archiveofourown.org"]
+BLACKLISTED_MULTIMEDIA_SRCS: []
 
 # Allowed CSS
 #

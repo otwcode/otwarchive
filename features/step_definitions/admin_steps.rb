@@ -34,7 +34,7 @@ end
 
 Given /the following admins? exists?/ do |table|
   table.hashes.each do |hash|
-    admin = FactoryGirl.create(:admin, hash)
+    FactoryBot.create(:admin, hash)
   end
 end
 
@@ -43,7 +43,7 @@ Given /^I am logged in as an admin$/ do
   step("I am logged out")
   admin = Admin.find_by(login: "testadmin")
   if admin.blank?
-    admin = FactoryGirl.create(:admin, login: "testadmin", password: "testadmin", email: "testadmin@example.org")
+    FactoryBot.create(:admin, login: "testadmin", password: "testadmin", email: "testadmin@example.org")
   end
   visit new_admin_session_path
   fill_in "Admin user name", with: "testadmin"
@@ -180,7 +180,7 @@ end
 
 Given(/^the following language exists$/) do |table|
   table.hashes.each do |hash|
-    FactoryGirl.create(:language, hash)
+    FactoryBot.create(:language, hash)
   end
 end
 
@@ -251,7 +251,7 @@ end
 
 When /^(\d+) Archive FAQs? exists?$/ do |n|
   (1..n.to_i).each do |i|
-    FactoryGirl.create(:archive_faq, id: i)
+    FactoryBot.create(:archive_faq, id: i)
   end
 end
 

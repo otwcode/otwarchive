@@ -1,8 +1,8 @@
 <div class="tag tagset"><!--this is probably what we should do for each feature, reckon?-->
 
   <!--Descriptive page names, messages and instructions-->
-	<h2 class="heading"><%= ts("Review Nominations for %{title}", :title => @tag_set.title) %></h2>
-	<!--/descriptions-->
+  <h2 class="heading"><%= ts("Review Nominations for %{title}", :title => @tag_set.title) %></h2>
+  <!--/descriptions-->
 
   <!--subnav-->
   <%= render "owned_tag_sets/navigation" %>
@@ -12,18 +12,18 @@
   <ul class="notes">
     <li>You can approve (<span class="yes">+</span>) or reject (<span class="no">x</span>) nominations, or leave them for later. Once a nomination
   has been either approved or rejected, it won't appear on this page again.</li>
-  
-    <li>If you reject a fandom nomination, we will automatically reject all character and relationship nominations submitted 
+
+    <li>If you reject a fandom nomination, we will automatically reject all character and relationship nominations submitted
     for that fandom. We will <em>not</em> automatically approve character nominations.</li>
-    
+
     <li>If you approve non-canonical fandoms and characters, you will have to set up associations for them.</li>
 
     <li>Old (several months) nominations are sometimes cleared from the database. Please review
-    nominations regularly or turn them off.</li>  
+    nominations regularly or turn them off.</li>
   </ul>
 
   <%= form_for :tag_set_nominations, :url => update_multiple_tag_set_nominations_path(@tag_set), :html => { :method => :put, :class => "tagset review" } do |form| %>
-    
+
     <%= error_messages_formatted @errors %>
 
     <% @tagnames_seen = {} %>
@@ -31,7 +31,7 @@
     <% %w(cast fandom character relationship freeform).each do |tag_type| %>
       <% if @nominations[tag_type] && @nominations[tag_type].count > 0 %>
         <fieldset class="<%= tag_type %> listbox group">
-          <% heading = tag_type == "cast" ? ts("Already Approved Fandoms") : ts("#{tag_type.classify.pluralize} (%{count} left to review)", :count => @tag_set.send("#{tag_type}_nominations").unreviewed.count) %>
+          <% heading = tag_type == "cast" ? ts("Already Approved Fandoms") : ts("#{tag_type_label_name(tag_type).pluralize} (%{count} left to review)", :count => @tag_set.send("#{tag_type}_nominations").unreviewed.count) %>
           <legend><%= heading %></legend>
           <h3 class="heading"><%= heading %></h3>
           <%= check_all_none("Reject All", "Reject None", "reject") %>
@@ -52,8 +52,8 @@
     <% end %>
 
     <fieldset>
-      <p class="submit"><%= submit_tag ts("Submit") %></p>      
-    </fieldset>    
+      <p class="submit"><%= submit_tag ts("Submit") %></p>
+    </fieldset>
 
   <% end %>
   <!--/content-->

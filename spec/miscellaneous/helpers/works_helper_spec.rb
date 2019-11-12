@@ -1,11 +1,11 @@
 require 'spec_helper'
 
-describe WorksHelper, type: :helper do
+describe WorksHelper do
 
   describe '#get_tweet_text' do
 
     before(:each) do
-      @work = FactoryGirl.create(:work)
+      @work = FactoryBot.create(:work)
     end
 
     context "for an unrevealed work" do
@@ -41,7 +41,7 @@ describe WorksHelper, type: :helper do
 
   describe '#all_coauthor_skins' do
     before do
-      @users = Array.new(5) { FactoryGirl.create(:user) }
+      @users = Array.new(5) { FactoryBot.create(:user) }
       @work = create(:work, authors: @users.flat_map(&:pseuds))
     end
 
@@ -53,8 +53,8 @@ describe WorksHelper, type: :helper do
 
     context 'public work skins exist' do
       before do
-        FactoryGirl.create(:public_work_skin, title: 'Z Public Skin')
-        FactoryGirl.create(:public_work_skin, title: 'B Public Skin')
+        FactoryBot.create(:public_work_skin, title: 'Z Public Skin')
+        FactoryBot.create(:public_work_skin, title: 'B Public Skin')
       end
 
       context 'no private work skins' do
@@ -65,9 +65,9 @@ describe WorksHelper, type: :helper do
 
       context 'private work skins exist' do
         before do
-          FactoryGirl.create(:private_work_skin, title: 'A Private Skin', author: @users[3])
-          FactoryGirl.create(:private_work_skin, title: 'M Private Skin', author: @users[0])
-          FactoryGirl.create(:private_work_skin, title: 'Unowned Private Skin')
+          FactoryBot.create(:private_work_skin, title: 'A Private Skin', author: @users[3])
+          FactoryBot.create(:private_work_skin, title: 'M Private Skin', author: @users[0])
+          FactoryBot.create(:private_work_skin, title: 'Unowned Private Skin')
         end
 
         it 'returns public work skins and skins belonging to allpseuds, ordered by title' do
