@@ -223,16 +223,6 @@ Then /^(?:|I )should not see \/([^\/]*)\/(?: within "([^"]*)")?$/ do |regexp, se
   end
 end
 
-Then /^(?:|I )should not see the link "([^"]*)"(?: within "([^"]*)")?$/ do |text, selector|
-  with_scope(selector) do
-    if page.respond_to? :should
-      page.should have_no_link(text)
-    else
-      assert page.has_no_link?(text)
-    end
-  end
-end
-
 Then /"(.*)" should appear before "(.*)"/ do |first_example, second_example|
   page.body.should =~ /#{first_example}.*#{second_example}/m
 end
