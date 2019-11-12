@@ -46,7 +46,7 @@ Scenario: fandoms wrangling - syns, mergers, autocompletes, metatags
   When I go to the new work page
     And I fill in the basic work information for "Silliness"
     And I fill in "Fandoms" with "SG1, the whole Stargate franchise, Stargates SG-1"
-    And I press "Post Without Preview"
+    And I press "Post"
   Then I should see "Work was successfully posted."
 
   # editing non-canonical fandom in order to syn it to existing canonical merger

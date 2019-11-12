@@ -68,7 +68,7 @@ Scenario: relationship wrangling - syns, mergers, characters, autocompletes
     And I fill in the basic work information for "Silliness"
     And I fill in "Fandoms" with "Torchwood"
     And I fill in "Relationships" with "Janto, Jack/Ianto"
-    And I press "Post Without Preview"
+    And I press "Post"
   Then I should see "Work was successfully posted."
 
   # editing non-canonical relationship in order to syn it to existing canonical merger AND add characters

@@ -45,7 +45,7 @@ Scenario: freeforms wrangling - syns, mergers, autocompletes, metatags
     And I fill in the basic work information for "Silliness"
     And I fill in "Fandoms" with "Torchwood"
     And I fill in "Additional Tags" with "Pirate AU, Arrr-verse"
-    And I press "Post Without Preview"
+    And I press "Post"
   Then I should see "Work was successfully posted."
 
   # editing non-canonical freeform in order to syn it to existing canonical merger

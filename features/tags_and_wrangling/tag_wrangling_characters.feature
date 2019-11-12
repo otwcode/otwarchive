@@ -76,7 +76,7 @@ Scenario: character wrangling - syns, mergers, characters, autocompletes
     And I fill in the basic work information for "Silliness"
     And I fill in "Fandoms" with "Doctor Who"
     And I fill in "Characters" with "1st Doctor, One"
-    And I press "Post Without Preview"
+    And I press "Post"
   Then I should see "Work was successfully posted."
 
   # editing non-canonical character in order to syn it to existing canonical merger
