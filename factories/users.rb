@@ -38,7 +38,7 @@ FactoryBot.define do
       roles { [create(:role, name: "opendoors")] }
     end
 
-    factory :wrangler_user do
+    factory :wrangler do
       roles { [create(:role, name: "tag_wrangler")] }
     end
 
