@@ -51,4 +51,4 @@ cd ~/clone
 echo "BCRYPT_COST: 4"  >> config/local.yml
 tail config/local.yml
 
-bash script/codeship_ebook_converters.sh
+bash script/codeship/ebook_converters.sh
