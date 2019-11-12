@@ -12,9 +12,9 @@ describe UserMailer, type: :mailer do
     subject(:email) { UserMailer.claim_notification(author.id, [work.id, work2.id], true).deliver }
 
     # Shared content tests for both email types
-    shared_examples_for "claim content" do
+    shared_examples_for "a claim notification" do
       it "contains the text for a claim email" do
-        expect(part).to include("You're receiving this e-mail because you had works in a fanworks archive that has been imported")
+        expect(part).to have_body_text("You're receiving this e-mail because you had works in a fanworks archive that has been imported")
       end
     end
 
@@ -30,30 +30,30 @@ describe UserMailer, type: :mailer do
     it_behaves_like "a multipart email"
 
     describe "HTML version" do
-      it_behaves_like "claim content" do
-        let(:part) { get_message_part(email, /html/) }
+      it_behaves_like "a claim notification" do
+        let(:part) { email.html_part }
       end
 
       it "lists the first imported work in an unordered list in the HTML body" do
-        expect(get_message_part(email, /html/)).to have_xpath("//ul/li", text: title)
+        expect(email.html_part).to have_xpath("//ul/li", text: title)
       end
 
       it "lists the second imported work in an unordered list in the HTML body" do
-        expect(get_message_part(email, /html/)).to have_xpath("//ul/li", text: title2)
+        expect(email.html_part).to have_xpath("//ul/li", text: title2)
       end
 
       it "only has style_to links in the HTML body" do
-        expect(get_message_part(email, /html/)).not_to have_xpath("//a[not(@style)]")
+        expect(email.html_part).not_to have_xpath("//a[not(@style)]")
       end
     end
 
     describe "text version" do
-      it_behaves_like "claim content" do
-        let(:part) { get_message_part(email, /plain/) }
+      it_behaves_like "a claim notification" do
+        let(:part) { email.text_part }
       end
 
       it "lists the first imported work as plain text" do
-        expect(get_message_part(email, /plain/)).not_to have_xpath("//ul/li", text: title)
+        expect(email.text_part).not_to have_xpath("//ul/li", text: title)
       end
 
       it "lists the second imported work with a leading hyphen" do
@@ -97,9 +97,9 @@ describe UserMailer, type: :mailer do
     subject(:email) { UserMailer.invitation_to_claim(invitation.id, archivist.login).deliver }
 
     # Shared content tests for both email types
-    shared_examples_for "invitation to claim content" do
+    shared_examples_for "an invitation to claim content" do
       it "contains the text for an invitation claim email" do
-        expect(part).to include("You're receiving this e-mail because an archive has recently been imported by")
+        expect(part).to have_body_text("You're receiving this e-mail because an archive has recently been imported by")
       end
     end
 
@@ -117,30 +117,30 @@ describe UserMailer, type: :mailer do
     it_behaves_like "a translated email"
 
     describe "HTML version" do
-      it_behaves_like "invitation to claim content" do
-        let(:part) { get_message_part(email, /html/) }
+      it_behaves_like "an invitation to claim content" do
+        let(:part) { email.html_part }
       end
 
       it "lists the first imported work in an unordered list in the HTML body" do
-        expect(get_message_part(email, /html/)).to have_xpath("//ul/li", text: title)
+        expect(email.html_part).to have_xpath("//ul/li", text: title)
       end
 
       it "lists the second imported work in an unordered list in the HTML body" do
-        expect(get_message_part(email, /html/)).to have_xpath("//ul/li", text: title2)
+        expect(email.html_part).to have_xpath("//ul/li", text: title2)
       end
 
       it "only has style_to links in the HTML body" do
-        expect(get_message_part(email, /html/)).not_to have_xpath("//a[not(@style)]")
+        expect(email.html_part).not_to have_xpath("//a[not(@style)]")
       end
     end
 
     describe "text version" do
-      it_behaves_like "invitation to claim content" do
-        let(:part) { get_message_part(email, /plain/) }
+      it_behaves_like "an invitation to claim content" do
+        let(:part) { email.text_part }
       end
 
       it "lists the first imported work as plain text" do
-        expect(get_message_part(email, /plain/)).not_to have_xpath("//ul/li", text: title)
+        expect(email.text_part).not_to have_xpath("//ul/li", text: title)
       end
 
       it "lists the second imported work with a leading hyphen" do
