@@ -73,7 +73,7 @@ When /^I import "(.*)"( with a mock website)?$/ do |url, mock|
   step %{I start importing "#{url}"#{mock}}
   step %{I press "Import"}
 end
-  
+
 When /^I import the urls$/ do |urls|
   step %{I set up importing}
   step %{I fill in "urls" with "#{urls}"}

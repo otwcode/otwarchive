@@ -225,6 +225,7 @@ Scenario: AO3-2147 Creating a new merger to a non-can tag while adding character
   # create a relationship from posting a work as a regular user, just in case
   Given I am logged in as "writer" with password "password"
     And I follow "New Work"
+    And I select "English" from "Choose a language"
     And I fill in "Fandoms" with "Up with Testing"
     And I fill in "Work Title" with "whatever"
     And I fill in "Relationships" with "Testypants/Testyskirt"

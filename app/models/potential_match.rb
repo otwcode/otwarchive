@@ -167,7 +167,7 @@ public
                             pluck(:challenge_signup_id).compact
 
       # now add on "any" matches for the required types
-      condition = case required_types.first.downcase
+      condition = case required_types.first.underscore
                   when "fandom"
                     "any_fandom = 1"
                   when "character"
@@ -178,8 +178,8 @@ public
                     "any_relationship = 1"
                   when "category"
                     "any_category = 1"
-                  when "warning"
-                    "any_warning = 1"
+                  when "archive_warning"
+                    "any_archive_warning = 1"
                   when "freeform"
                     "any_freeform = 1"
                   else

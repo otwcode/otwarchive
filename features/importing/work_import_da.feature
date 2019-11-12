@@ -13,6 +13,7 @@ Feature: Import Works from deviantart
       And I fill in "urls" with "http://bingeling.deviantart.com/art/Flooded-45971613"
     When I press "Import"
     Then I should see "Preview"
+      # And I should see the image "src" text "https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/intermediary/f/917f216b-24af-41f8-9802-7ab80f56d2f2/drdbx9-adee7105-ed30-4e62-a66d-4f78dfa36879.jpg"
       And I should see the image "src" text "https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/917f216b-24af-41f8-9802-7ab80f56d2f2/drdbx9-adee7105-ed30-4e62-a66d-4f78dfa36879.jpg?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiJcL2ZcLzkxN2YyMTZiLTI0YWYtNDFmOC05ODAyLTdhYjgwZjU2ZDJmMlwvZHJkYng5LWFkZWU3MTA1LWVkMzAtNGU2Mi1hNjZkLTRmNzhkZmEzNjg3OS5qcGcifV1dLCJhdWQiOlsidXJuOnNlcnZpY2U6ZmlsZS5kb3dubG9hZCJdfQ.rcJ-cfuf5xgyl97ztUJVOYQ2PmHgc6P_FWCirRiUKFU"
       And I should see "Digital Art" within "dd.freeform"
       And I should see "People" within "dd.freeform"

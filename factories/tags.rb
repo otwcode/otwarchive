@@ -1,5 +1,5 @@
 require 'faker'
-FactoryGirl.define do
+FactoryBot.define do
   sequence(:tag_title) do |n|
     "Owned Tag Set #{n}"
   end
@@ -24,7 +24,7 @@ FactoryGirl.define do
 
   factory :owned_tag_set do
     title { generate(:tag_title) }
-    nominated true
+    nominated { true }
     transient do
       owned_set_taggings { [create(:owned_set_tagging)] }
       owner { create(:pseud) }
@@ -50,9 +50,9 @@ FactoryGirl.define do
   end
 
   factory :tag_nomination do
-    type 'FandomNomination'
+    type { 'FandomNomination' }
 
-    canonical true
+    canonical { true }
     association :owned_tag_set
 
     after(:build) do |nomination|
@@ -72,7 +72,7 @@ FactoryGirl.define do
     sequence(:name) { |n| "The #{n} Fandom" }
 
     factory :canonical_fandom do
-      canonical true
+      canonical { true }
     end
   end
 
@@ -80,7 +80,7 @@ FactoryGirl.define do
     sequence(:name) { |n| "Character #{n}" }
 
     factory :canonical_character do
-      canonical true
+      canonical { true }
     end
   end
 
@@ -88,7 +88,7 @@ FactoryGirl.define do
     sequence(:name) { |n| "Jane#{n}/John#{n}" }
 
     factory :canonical_relationship do
-      canonical true
+      canonical { true }
     end
   end
 
@@ -96,7 +96,7 @@ FactoryGirl.define do
     sequence(:name) { |n| "Freeform #{n}" }
 
     factory :canonical_freeform do
-      canonical true
+      canonical { true }
     end
   end
 

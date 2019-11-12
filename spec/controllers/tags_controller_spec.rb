@@ -65,15 +65,15 @@ describe TagsController do
 
   describe "mass_update" do
     before do
-      @fandom1 = FactoryGirl.create(:fandom, canonical: true)
-      @fandom2 = FactoryGirl.create(:fandom, canonical: true)
-      @fandom3 = FactoryGirl.create(:fandom, canonical: false)
+      @fandom1 = FactoryBot.create(:fandom, canonical: true)
+      @fandom2 = FactoryBot.create(:fandom, canonical: true)
+      @fandom3 = FactoryBot.create(:fandom, canonical: false)
 
-      @freeform1 = FactoryGirl.create(:freeform, canonical: false)
-      @character1 = FactoryGirl.create(:character, canonical: false)
-      @character3 = FactoryGirl.create(:character, canonical: false)
-      @character2 = FactoryGirl.create(:character, canonical: false, merger: @character3)
-      @work = FactoryGirl.create(:work,
+      @freeform1 = FactoryBot.create(:freeform, canonical: false)
+      @character1 = FactoryBot.create(:character, canonical: false)
+      @character3 = FactoryBot.create(:character, canonical: false)
+      @character2 = FactoryBot.create(:character, canonical: false, merger: @character3)
+      @work = FactoryBot.create(:work,
                                  posted: true,
                                  fandom_string: "#{@fandom1.name}",
                                  character_string: "#{@character1.name},#{@character2.name}",
@@ -155,7 +155,7 @@ describe TagsController do
   describe "reindex" do
     context "when reindexing a tag" do
       before do
-        @tag = FactoryGirl.create(:freeform)
+        @tag = FactoryBot.create(:freeform)
       end
 
       it "Only an admin can reindex a tag" do
@@ -167,7 +167,7 @@ describe TagsController do
 
   describe "feed" do
     it "You can only get a feed on Fandom, Character and Relationships" do
-      @tag = FactoryGirl.create(:banned, canonical: false)
+      @tag = FactoryBot.create(:banned, canonical: false)
       get :feed, params: { id: @tag.id, format: :atom }
       it_redirects_to(tag_works_path(tag_id: @tag.name))
     end
@@ -176,7 +176,7 @@ describe TagsController do
   describe "edit" do
     context "when editing a banned tag" do
       before do
-        @tag = FactoryGirl.create(:banned)
+        @tag = FactoryBot.create(:banned)
       end
 
       it "redirects with an error when not an admin" do

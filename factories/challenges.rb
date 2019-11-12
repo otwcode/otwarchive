@@ -1,5 +1,5 @@
 require 'faker'
-FactoryGirl.define do
+FactoryBot.define do
   factory :challenge_assignment do
     after(:build) do |assignment|
       assignment.collection_id = create(:collection, challenge: create(:gift_exchange)).id unless assignment.collection_id
@@ -9,8 +9,8 @@ FactoryGirl.define do
   end
 
   factory :challenge_signup, aliases: [:gift_exchange_signup] do
-    assigned_as_request false
-    assigned_as_offer false
+    assigned_as_request { false }
+    assigned_as_offer { false }
     after(:build) do |signup|
       signup.pseud_id = create(:pseud).id unless signup.pseud_id
       signup.collection_id = create(:collection, challenge: create(:gift_exchange)).id unless signup.collection_id
@@ -20,8 +20,8 @@ FactoryGirl.define do
   end
 
   factory :prompt_meme_signup, class: ChallengeSignup do
-    assigned_as_request false
-    assigned_as_offer false
+    assigned_as_request { false }
+    assigned_as_offer { false }
     after(:build) do |signup|
       signup.pseud_id = create(:pseud).id unless signup.pseud_id
       signup.collection_id = create(:collection, challenge: create(:prompt_meme)).id unless signup.collection_id
@@ -45,15 +45,15 @@ FactoryGirl.define do
     end
 
     trait :open do
-      signups_open_at Time.now - 1.day
-      signups_close_at Time.now + 1.day
-      signup_open true
+      signups_open_at { Time.now - 1.day }
+      signups_close_at { Time.now + 1.day }
+      signup_open { true }
     end
 
     trait :closed do
-      signups_open_at Time.now - 2.days
-      signups_close_at Time.now - 1.day
-      signup_open false
+      signups_open_at { Time.now - 2.days }
+      signups_close_at { Time.now - 1.day }
+      signup_open { false }
     end
   end
 

@@ -29,7 +29,7 @@
       "line": 14,
       "link": "http://brakemanscanner.org/docs/warning_types/dynamic_render_path/",
       "code": "render(action => (Work.find_by(:id => params[:work_id]) or Chapter.find_by(:id => params[:id]).work).chapters.find_by(:id => params[:id]), {})",
-      "render_path": [{"type":"controller","class":"ChaptersController","method":"update","line":163,"file":"app/controllers/chapters_controller.rb"}],
+      "render_path": [{"type":"controller","class":"ChaptersController","method":"update","line":154,"file":"app/controllers/chapters_controller.rb"}],
       "location": {
         "type": "template",
         "template": "chapters/preview"
@@ -67,7 +67,7 @@
       "line": 6,
       "link": "http://brakemanscanner.org/docs/warning_types/cross_site_scripting",
       "code": "strip_tags(WorkSearchForm.new((clean_work_search_params or {})).summary)",
-      "render_path": [{"type":"controller","class":"WorksController","method":"search","line":44,"file":"app/controllers/works_controller.rb"}],
+      "render_path": [{"type":"controller","class":"WorksController","method":"search","line":43,"file":"app/controllers/works_controller.rb"}],
       "location": {
         "type": "template",
         "template": "works/search_results"
@@ -86,7 +86,7 @@
       "line": 6,
       "link": "http://brakemanscanner.org/docs/warning_types/cross_site_scripting",
       "code": "ts(\"Are you sure you want to <strong><em>delete</em></strong> %{chapter_number} of %{work_title}? This will delete all comments on the chapter as well and cannot be undone!\", :chapter_number => (Work.find_by(:id => params[:work_id]) or Chapter.find_by(:id => params[:id]).work).chapters.find_by(:id => params[:id]).chapter_header, :work_title => (Work.find_by(:id => params[:work_id]) or Chapter.find_by(:id => params[:id]).work).title)",
-      "render_path": [{"type":"controller","class":"ChaptersController","method":"confirm_delete","line":221,"file":"app/controllers/chapters_controller.rb"}],
+      "render_path": [{"type":"controller","class":"ChaptersController","method":"confirm_delete","line":211,"file":"app/controllers/chapters_controller.rb"}],
       "location": {
         "type": "template",
         "template": "chapters/confirm_delete"
@@ -179,10 +179,10 @@
       "check_name": "CrossSiteScripting",
       "message": "Unescaped model attribute",
       "file": "app/views/chapters/_chapter.html.erb",
-      "line": 24,
+      "line": 30,
       "link": "http://brakemanscanner.org/docs/warning_types/cross_site_scripting",
       "code": "byline((Work.find_by(:id => params[:work_id]) or Chapter.find_by(:id => params[:id]).work).chapters.find_by(:id => params[:id]))",
-      "render_path": [{"type":"controller","class":"ChaptersController","method":"show","line":76,"file":"app/controllers/chapters_controller.rb"},{"type":"template","name":"chapters/show","line":22,"file":"app/views/chapters/show.html.erb"}],
+      "render_path": [{"type":"controller","class":"ChaptersController","method":"show","line":77,"file":"app/controllers/chapters_controller.rb"},{"type":"template","name":"chapters/show","line":28,"file":"app/views/chapters/show.html.erb"}],
       "location": {
         "type": "template",
         "template": "chapters/_chapter"
@@ -201,7 +201,7 @@
       "line": 29,
       "link": "http://brakemanscanner.org/docs/warning_types/cross_site_scripting",
       "code": "(Work.find_by(:id => params[:work_id]) or Chapter.find_by(:id => params[:id]).work).title",
-      "render_path": [{"type":"controller","class":"ChaptersController","method":"show","line":76,"file":"app/controllers/chapters_controller.rb"},{"type":"template","name":"chapters/show","line":19,"file":"app/views/chapters/show.html.erb"}],
+      "render_path": [{"type":"controller","class":"ChaptersController","method":"show","line":77,"file":"app/controllers/chapters_controller.rb"},{"type":"template","name":"chapters/show","line":25,"file":"app/views/chapters/show.html.erb"}],
       "location": {
         "type": "template",
         "template": "works/_work_header"
@@ -220,7 +220,7 @@
       "line": 4,
       "link": "http://brakemanscanner.org/docs/warning_types/cross_site_scripting",
       "code": "sanitize_field((Work.find_by(:id => params[:work_id]) or Chapter.find_by(:id => params[:id]).work), :endnotes)",
-      "render_path": [{"type":"controller","class":"ChaptersController","method":"show","line":76,"file":"app/controllers/chapters_controller.rb"},{"type":"template","name":"chapters/show","line":31,"file":"app/views/chapters/show.html.erb"}],
+      "render_path": [{"type":"controller","class":"ChaptersController","method":"show","line":77,"file":"app/controllers/chapters_controller.rb"},{"type":"template","name":"chapters/show","line":37,"file":"app/views/chapters/show.html.erb"}],
       "location": {
         "type": "template",
         "template": "works/_work_endnotes"
@@ -239,7 +239,7 @@
       "line": 32,
       "link": "http://brakemanscanner.org/docs/warning_types/cross_site_scripting",
       "code": "byline((Work.find_by(:id => params[:work_id]) or Chapter.find_by(:id => params[:id]).work))",
-      "render_path": [{"type":"controller","class":"ChaptersController","method":"show","line":76,"file":"app/controllers/chapters_controller.rb"},{"type":"template","name":"chapters/show","line":19,"file":"app/views/chapters/show.html.erb"}],
+      "render_path": [{"type":"controller","class":"ChaptersController","method":"show","line":77,"file":"app/controllers/chapters_controller.rb"},{"type":"template","name":"chapters/show","line":25,"file":"app/views/chapters/show.html.erb"}],
       "location": {
         "type": "template",
         "template": "works/_work_header"
@@ -296,7 +296,7 @@
       "line": 16,
       "link": "http://brakemanscanner.org/docs/warning_types/cross_site_scripting",
       "code": "sanitize_field(Work.find_by(:id => params[:id]).first_chapter, :content)",
-      "render_path": [{"type":"controller","class":"WorksController","method":"update","line":369,"file":"app/controllers/works_controller.rb"}],
+      "render_path": [{"type":"controller","class":"WorksController","method":"update","line":371,"file":"app/controllers/works_controller.rb"}],
       "location": {
         "type": "template",
         "template": "works/preview"
@@ -452,7 +452,7 @@
       "line": 42,
       "link": "http://brakemanscanner.org/docs/warning_types/cross_site_scripting",
       "code": "sanitize_field((Work.find_by(:id => params[:work_id]) or Chapter.find_by(:id => params[:id]).work), :summary)",
-      "render_path": [{"type":"controller","class":"ChaptersController","method":"show","line":76,"file":"app/controllers/chapters_controller.rb"},{"type":"template","name":"chapters/show","line":19,"file":"app/views/chapters/show.html.erb"}],
+      "render_path": [{"type":"controller","class":"ChaptersController","method":"show","line":77,"file":"app/controllers/chapters_controller.rb"},{"type":"template","name":"chapters/show","line":25,"file":"app/views/chapters/show.html.erb"}],
       "location": {
         "type": "template",
         "template": "works/_work_header"
@@ -468,10 +468,10 @@
       "check_name": "CrossSiteScripting",
       "message": "Unescaped model attribute",
       "file": "app/views/chapters/_chapter.html.erb",
-      "line": 63,
+      "line": 67,
       "link": "http://brakemanscanner.org/docs/warning_types/cross_site_scripting",
       "code": "sanitize_field((Work.find_by(:id => params[:work_id]) or Chapter.find_by(:id => params[:id]).work).chapters.find_by(:id => params[:id]), :content)",
-      "render_path": [{"type":"controller","class":"ChaptersController","method":"show","line":76,"file":"app/controllers/chapters_controller.rb"},{"type":"template","name":"chapters/show","line":22,"file":"app/views/chapters/show.html.erb"}],
+      "render_path": [{"type":"controller","class":"ChaptersController","method":"show","line":77,"file":"app/controllers/chapters_controller.rb"},{"type":"template","name":"chapters/show","line":28,"file":"app/views/chapters/show.html.erb"}],
       "location": {
         "type": "template",
         "template": "chapters/_chapter"
@@ -627,7 +627,7 @@
       "line": 70,
       "link": "http://brakemanscanner.org/docs/warning_types/cross_site_scripting",
       "code": "sanitize_field((Work.find_by(:id => params[:work_id]) or Chapter.find_by(:id => params[:id]).work), :notes)",
-      "render_path": [{"type":"controller","class":"ChaptersController","method":"show","line":76,"file":"app/controllers/chapters_controller.rb"},{"type":"template","name":"chapters/show","line":19,"file":"app/views/chapters/show.html.erb"},{"type":"template","name":"works/_work_header","line":49,"file":"app/views/works/_work_header.html.erb"}],
+      "render_path": [{"type":"controller","class":"ChaptersController","method":"show","line":77,"file":"app/controllers/chapters_controller.rb"},{"type":"template","name":"chapters/show","line":25,"file":"app/views/chapters/show.html.erb"},{"type":"template","name":"works/_work_header","line":49,"file":"app/views/works/_work_header.html.erb"}],
       "location": {
         "type": "template",
         "template": "works/_work_header_notes"
@@ -682,10 +682,10 @@
       "check_name": "CrossSiteScripting",
       "message": "Unescaped model attribute",
       "file": "app/views/owned_tag_sets/_show_tag_set_tags.html.erb",
-      "line": 32,
+      "line": 31,
       "link": "http://brakemanscanner.org/docs/warning_types/cross_site_scripting",
       "code": "([] or HashWithIndifferentAccess.new[:relationship].values_at(*(([] + TagSetAssociation.names_by_parent(TagSetAssociation.for_tag_set(OwnedTagSet.find_by(:id => params[:id])), tag_type).merge(Tag.names_by_parent(tag_type.classify.constantize.in_tag_set(OwnedTagSet.find_by(:id => params[:id])), \"fandom\")) do\n oldval.|(newval)\n end.keys).compact.uniq.sort do\n (a.gsub(/^(the |an |a )/, \"\") <=> b.gsub(/^(the |an |a )/, \"\"))\n end - Tag.names_by_parent(Fandom.in_tag_set(OwnedTagSet.find_by(:id => params[:id])), \"media\").values.flatten)).flatten.compact.uniq).sort do\n (a.gsub(/^(the |an |a )/, \"\") <=> b.gsub(/^(the |an |a )/, \"\"))\n end.map do\n content_tag(:li, tag)\n end.join(\"\\n\")",
-      "render_path": [{"type":"controller","class":"OwnedTagSetsController","method":"show","line":72,"file":"app/controllers/owned_tag_sets_controller.rb"},{"type":"template","name":"owned_tag_sets/show","line":55,"file":"app/views/owned_tag_sets/show.html.erb"}],
+      "render_path": [{"type":"controller","class":"OwnedTagSetsController","method":"show","line":72,"file":"app/controllers/owned_tag_sets_controller.rb"},{"type":"template","name":"owned_tag_sets/show","line":56,"file":"app/views/owned_tag_sets/show.html.erb"}],
       "location": {
         "type": "template",
         "template": "owned_tag_sets/_show_tag_set_tags"
@@ -742,7 +742,7 @@
       "line": 6,
       "link": "http://brakemanscanner.org/docs/warning_types/cross_site_scripting",
       "code": "ts(\"Edit Work Tags for %{title}\", :title => Work.find_by(:id => params[:id]).title)",
-      "render_path": [{"type":"controller","class":"WorksController","method":"edit_tags","line":337,"file":"app/controllers/works_controller.rb"}],
+      "render_path": [{"type":"controller","class":"WorksController","method":"edit_tags","line":342,"file":"app/controllers/works_controller.rb"}],
       "location": {
         "type": "template",
         "template": "works/edit_tags"
@@ -932,10 +932,10 @@
       "check_name": "CrossSiteScripting",
       "message": "Unescaped model attribute",
       "file": "app/views/chapters/_chapter.html.erb",
-      "line": 46,
+      "line": 52,
       "link": "http://brakemanscanner.org/docs/warning_types/cross_site_scripting",
       "code": "sanitize_field((Work.find_by(:id => params[:work_id]) or Chapter.find_by(:id => params[:id]).work).chapters.find_by(:id => params[:id]), :notes)",
-      "render_path": [{"type":"controller","class":"ChaptersController","method":"show","line":76,"file":"app/controllers/chapters_controller.rb"},{"type":"template","name":"chapters/show","line":22,"file":"app/views/chapters/show.html.erb"}],
+      "render_path": [{"type":"controller","class":"ChaptersController","method":"show","line":77,"file":"app/controllers/chapters_controller.rb"},{"type":"template","name":"chapters/show","line":28,"file":"app/views/chapters/show.html.erb"}],
       "location": {
         "type": "template",
         "template": "chapters/_chapter"
@@ -990,7 +990,7 @@
       "check_name": "ValidationRegex",
       "message": "Insufficient validation for 'name' using /\\p{Alnum}/. Use \\A and \\z as anchors",
       "file": "app/models/pseud.rb",
-      "line": 63,
+      "line": 67,
       "link": "http://brakemanscanner.org/docs/warning_types/format_validation/",
       "code": null,
       "render_path": null,
@@ -1109,7 +1109,7 @@
       "line": 7,
       "link": "http://brakemanscanner.org/docs/warning_types/cross_site_scripting",
       "code": "ts(\"Are you sure you want to <strong><em>delete</em></strong> \\\"%{work_title}\\\" <strong><em>permanently</em></strong>? This <strong>cannot be undone</strong>.\", :work_title => Work.find_by(:id => params[:id]).title)",
-      "render_path": [{"type":"controller","class":"WorksController","method":"confirm_delete","line":428,"file":"app/controllers/works_controller.rb"}],
+      "render_path": [{"type":"controller","class":"WorksController","method":"confirm_delete","line":429,"file":"app/controllers/works_controller.rb"}],
       "location": {
         "type": "template",
         "template": "works/confirm_delete"
@@ -1125,10 +1125,10 @@
       "check_name": "CrossSiteScripting",
       "message": "Unescaped model attribute",
       "file": "app/views/series/show.html.erb",
-      "line": 41,
+      "line": 47,
       "link": "http://brakemanscanner.org/docs/warning_types/cross_site_scripting",
       "code": "sanitize_field(Series.find_by(:id => params[:id]), :summary)",
-      "render_path": [{"type":"controller","class":"SeriesController","method":"show","line":54,"file":"app/controllers/series_controller.rb"}],
+      "render_path": [{"type":"controller","class":"SeriesController","method":"show","line":57,"file":"app/controllers/series_controller.rb"}],
       "location": {
         "type": "template",
         "template": "series/show"
@@ -1166,7 +1166,39 @@
       "line": 17,
       "link": "http://brakemanscanner.org/docs/warning_types/cross_site_scripting",
       "code": "(Work.find(params[:work_id]) or (Chapter.find(params[:chapter_id]).work or (ExternalWork.find(params[:external_work_id]) or Series.find(params[:series_id])))).fandom_tags.collect do\n link_to_tag_works(tag)\n end.join(\", \")",
-      "render_path": [{"type":"controller","class":"BookmarksController","method":"index","line":148,"file":"app/controllers/bookmarks_controller.rb"},{"type":"template","name":"bookmarks/index","line":59,"file":"app/views/bookmarks/index.html.erb"},{"type":"template","name":"bookmarks/_bookmarks","line":23,"file":"app/views/bookmarks/_bookmarks.html.erb"},{"type":"template","name":"bookmarks/_bookmarkable_blurb","line":13,"file":"app/views/bookmarks/_bookmarkable_blurb.html.erb"},{"type":"template","name":"bookmarks/_bookmark_item_module","line":3,"file":"app/views/bookmarks/_bookmark_item_module.html.erb"}],
+      "render_path": [
+        {
+          "type": "controller",
+          "class": "BookmarksController",
+          "method": "index",
+          "line": 148,
+          "file": "app/controllers/bookmarks_controller.rb"
+        },
+        {
+          "type": "template",
+          "name": "bookmarks/index",
+          "line": 59,
+          "file": "app/views/bookmarks/index.html.erb"
+        },
+        {
+          "type": "template",
+          "name": "bookmarks/_bookmarks",
+          "line": 23,
+          "file": "app/views/bookmarks/_bookmarks.html.erb"
+        },
+        {
+          "type": "template",
+          "name": "bookmarks/_bookmarkable_blurb",
+          "line": 13,
+          "file": "app/views/bookmarks/_bookmarkable_blurb.html.erb"
+        },
+        {
+          "type": "template",
+          "name": "bookmarks/_bookmark_item_module",
+          "line": 3,
+          "file": "app/views/bookmarks/_bookmark_item_module.html.erb"
+        }
+      ],
       "location": {
         "type": "template",
         "template": "external_works/_work_module"
@@ -1222,10 +1254,10 @@
       "check_name": "CrossSiteScripting",
       "message": "Unescaped model attribute",
       "file": "app/views/owned_tag_sets/_show_tag_set_tags.html.erb",
-      "line": 31,
+      "line": 30,
       "link": "http://brakemanscanner.org/docs/warning_types/cross_site_scripting",
       "code": "([] or HashWithIndifferentAccess.new[:character].values_at(*(([] + TagSetAssociation.names_by_parent(TagSetAssociation.for_tag_set(OwnedTagSet.find_by(:id => params[:id])), tag_type).merge(Tag.names_by_parent(tag_type.classify.constantize.in_tag_set(OwnedTagSet.find_by(:id => params[:id])), \"fandom\")) do\n oldval.|(newval)\n end.keys).compact.uniq.sort do\n (a.gsub(/^(the |an |a )/, \"\") <=> b.gsub(/^(the |an |a )/, \"\"))\n end - Tag.names_by_parent(Fandom.in_tag_set(OwnedTagSet.find_by(:id => params[:id])), \"media\").values.flatten)).flatten.compact.uniq).sort do\n (a.gsub(/^(the |an |a )/, \"\") <=> b.gsub(/^(the |an |a )/, \"\"))\n end.map do\n content_tag(:li, tag)\n end.join(\"\\n\")",
-      "render_path": [{"type":"controller","class":"OwnedTagSetsController","method":"show","line":72,"file":"app/controllers/owned_tag_sets_controller.rb"},{"type":"template","name":"owned_tag_sets/show","line":55,"file":"app/views/owned_tag_sets/show.html.erb"}],
+      "render_path": [{"type":"controller","class":"OwnedTagSetsController","method":"show","line":72,"file":"app/controllers/owned_tag_sets_controller.rb"},{"type":"template","name":"owned_tag_sets/show","line":56,"file":"app/views/owned_tag_sets/show.html.erb"}],
       "location": {
         "type": "template",
         "template": "owned_tag_sets/_show_tag_set_tags"
@@ -1299,7 +1331,7 @@
       "check_name": "CrossSiteScripting",
       "message": "Unescaped model attribute",
       "file": "app/views/works/show.html.erb",
-      "line": 46,
+      "line": 51,
       "link": "http://brakemanscanner.org/docs/warning_types/cross_site_scripting",
       "code": "sanitize_field(Work.find_by(:id => params[:id]).first_chapter, :content)",
       "render_path": [{"type":"controller","class":"WorksController","method":"show","line":222,"file":"app/controllers/works_controller.rb"}],
@@ -1318,10 +1350,10 @@
       "check_name": "CrossSiteScripting",
       "message": "Unescaped model attribute",
       "file": "app/views/series/show.html.erb",
-      "line": 45,
+      "line": 51,
       "link": "http://brakemanscanner.org/docs/warning_types/cross_site_scripting",
       "code": "sanitize_field(Series.find_by(:id => params[:id]), :series_notes)",
-      "render_path": [{"type":"controller","class":"SeriesController","method":"show","line":54,"file":"app/controllers/series_controller.rb"}],
+      "render_path": [{"type":"controller","class":"SeriesController","method":"show","line":57,"file":"app/controllers/series_controller.rb"}],
       "location": {
         "type": "template",
         "template": "series/show"
@@ -1609,10 +1641,10 @@
       "check_name": "CrossSiteScripting",
       "message": "Unescaped model attribute",
       "file": "app/views/chapters/_chapter.html.erb",
-      "line": 33,
+      "line": 39,
       "link": "http://brakemanscanner.org/docs/warning_types/cross_site_scripting",
       "code": "sanitize_field((Work.find_by(:id => params[:work_id]) or Chapter.find_by(:id => params[:id]).work).chapters.find_by(:id => params[:id]), :summary)",
-      "render_path": [{"type":"controller","class":"ChaptersController","method":"show","line":76,"file":"app/controllers/chapters_controller.rb"},{"type":"template","name":"chapters/show","line":22,"file":"app/views/chapters/show.html.erb"}],
+      "render_path": [{"type":"controller","class":"ChaptersController","method":"show","line":77,"file":"app/controllers/chapters_controller.rb"},{"type":"template","name":"chapters/show","line":28,"file":"app/views/chapters/show.html.erb"}],
       "location": {
         "type": "template",
         "template": "chapters/_chapter"
@@ -1650,7 +1682,7 @@
       "line": 5,
       "link": "http://brakemanscanner.org/docs/warning_types/cross_site_scripting",
       "code": "(Work.find_by(:id => params[:work_id]) or Chapter.find_by(:id => params[:id]).work).collections.unrevealed.collect do\n link_to(challenge.title, collection_path(challenge))\n end.join(\", \")",
-      "render_path": [{"type":"controller","class":"ChaptersController","method":"show","line":76,"file":"app/controllers/chapters_controller.rb"}],
+      "render_path": [{"type":"controller","class":"ChaptersController","method":"show","line":77,"file":"app/controllers/chapters_controller.rb"}],
       "location": {
         "type": "template",
         "template": "chapters/show"
@@ -1689,12 +1721,31 @@
       "line": 3,
       "link": "http://brakemanscanner.org/docs/warning_types/cross_site_scripting",
       "code": "(Work.find_by(:id => params[:work_id]) or Chapter.find_by(:id => params[:id]).work).title",
-      "render_path": [{"type":"controller","class":"ChaptersController","method":"create","line":118,"file":"app/controllers/chapters_controller.rb"}],
+      "render_path": [{"type":"controller","class":"ChaptersController","method":"create","line":114,"file":"app/controllers/chapters_controller.rb"}],
       "location": {
         "type": "template",
         "template": "chapters/new"
       },
       "user_input": "Work.find_by(:id => params[:work_id])",
+      "confidence": "Weak",
+      "note": ""
+    },
+    {
+      "warning_type": "Cross Site Scripting",
+      "warning_code": 2,
+      "fingerprint": "c9dae5fda170a2677d997e40bedbc48212381fac03785ec90837638f8bf9793e",
+      "check_name": "CrossSiteScripting",
+      "message": "Unescaped model attribute",
+      "file": "app/views/external_works/_work_module.html.erb",
+      "line": 18,
+      "link": "http://brakemanscanner.org/docs/warning_types/cross_site_scripting",
+      "code": "(Work.find(params[:work_id]) or (Chapter.find(params[:chapter_id]).work or (ExternalWork.find(params[:external_work_id]) or Series.find(params[:series_id])))).tag_groups[\"Fandom\"].collect do\n link_to_tag_works(tag)\n end.join(\", \")",
+      "render_path": [{"type":"controller","class":"BookmarksController","method":"index","line":148,"file":"app/controllers/bookmarks_controller.rb"},{"type":"template","name":"bookmarks/index","line":59,"file":"app/views/bookmarks/index.html.erb"},{"type":"template","name":"bookmarks/_bookmarks","line":23,"file":"app/views/bookmarks/_bookmarks.html.erb"},{"type":"template","name":"bookmarks/_bookmarkable_blurb","line":13,"file":"app/views/bookmarks/_bookmarkable_blurb.html.erb"},{"type":"template","name":"bookmarks/_bookmark_item_module","line":3,"file":"app/views/bookmarks/_bookmark_item_module.html.erb"}],
+      "location": {
+        "type": "template",
+        "template": "external_works/_work_module"
+      },
+      "user_input": "Work.find(params[:work_id])",
       "confidence": "Weak",
       "note": ""
     },
@@ -1747,7 +1798,7 @@
       "line": 117,
       "link": "http://brakemanscanner.org/docs/warning_types/link_to_href",
       "code": "link_to(ts(format.upcase), download_url_for_work((Work.find_by(:id => params[:work_id]) or Chapter.find_by(:id => params[:id]).work), format))",
-      "render_path": [{"type":"controller","class":"ChaptersController","method":"show","line":76,"file":"app/controllers/chapters_controller.rb"},{"type":"template","name":"chapters/show","line":19,"file":"app/views/chapters/show.html.erb"},{"type":"template","name":"works/_work_header","line":2,"file":"app/views/works/_work_header.html.erb"}],
+      "render_path": [{"type":"controller","class":"ChaptersController","method":"show","line":77,"file":"app/controllers/chapters_controller.rb"},{"type":"template","name":"chapters/show","line":25,"file":"app/views/chapters/show.html.erb"},{"type":"template","name":"works/_work_header","line":2,"file":"app/views/works/_work_header.html.erb"}],
       "location": {
         "type": "template",
         "template": "works/_work_header_navigation"
@@ -1782,10 +1833,10 @@
       "check_name": "CrossSiteScripting",
       "message": "Unescaped model attribute",
       "file": "app/views/chapters/_chapter.html.erb",
-      "line": 18,
+      "line": 24,
       "link": "http://brakemanscanner.org/docs/warning_types/cross_site_scripting",
       "code": "(Work.find_by(:id => params[:work_id]) or Chapter.find_by(:id => params[:id]).work).chapters.find_by(:id => params[:id]).title",
-      "render_path": [{"type":"controller","class":"ChaptersController","method":"show","line":76,"file":"app/controllers/chapters_controller.rb"},{"type":"template","name":"chapters/show","line":22,"file":"app/views/chapters/show.html.erb"}],
+      "render_path": [{"type":"controller","class":"ChaptersController","method":"show","line":77,"file":"app/controllers/chapters_controller.rb"},{"type":"template","name":"chapters/show","line":28,"file":"app/views/chapters/show.html.erb"}],
       "location": {
         "type": "template",
         "template": "chapters/_chapter"
@@ -1843,7 +1894,7 @@
       "line": 6,
       "link": "http://brakemanscanner.org/docs/warning_types/cross_site_scripting",
       "code": "ts(\"Are you sure you want to <strong><em>delete</em></strong> the series \\\"%{series_title}\\\"? This will not delete the individual works.\", :series_title => Series.find_by(:id => params[:id]).title)",
-      "render_path": [{"type":"controller","class":"SeriesController","method":"confirm_delete","line":156,"file":"app/controllers/series_controller.rb"}],
+      "render_path": [{"type":"controller","class":"SeriesController","method":"confirm_delete","line":137,"file":"app/controllers/series_controller.rb"}],
       "location": {
         "type": "template",
         "template": "series/confirm_delete"
@@ -1878,10 +1929,10 @@
       "check_name": "CrossSiteScripting",
       "message": "Unescaped model attribute",
       "file": "app/views/chapters/_chapter.html.erb",
-      "line": 72,
+      "line": 76,
       "link": "http://brakemanscanner.org/docs/warning_types/cross_site_scripting",
       "code": "sanitize_field((Work.find_by(:id => params[:work_id]) or Chapter.find_by(:id => params[:id]).work).chapters.find_by(:id => params[:id]), :endnotes)",
-      "render_path": [{"type":"controller","class":"ChaptersController","method":"show","line":76,"file":"app/controllers/chapters_controller.rb"},{"type":"template","name":"chapters/show","line":22,"file":"app/views/chapters/show.html.erb"}],
+      "render_path": [{"type":"controller","class":"ChaptersController","method":"show","line":77,"file":"app/controllers/chapters_controller.rb"},{"type":"template","name":"chapters/show","line":28,"file":"app/views/chapters/show.html.erb"}],
       "location": {
         "type": "template",
         "template": "chapters/_chapter"
@@ -1939,7 +1990,7 @@
       "line": 4,
       "link": "http://brakemanscanner.org/docs/warning_types/cross_site_scripting",
       "code": "ts(\"Edit Work Tags and Language for %{title}\", :title => Work.find_by(:id => params[:id]).title)",
-      "render_path": [{"type":"controller","class":"WorksController","method":"edit_tags","line":337,"file":"app/controllers/works_controller.rb"}],
+      "render_path": [{"type":"controller","class":"WorksController","method":"edit_tags","line":342,"file":"app/controllers/works_controller.rb"}],
       "location": {
         "type": "template",
         "template": "works/edit_tags"
@@ -2007,6 +2058,6 @@
       "note": ""
     }
   ],
-  "updated": "2019-07-17 06:31:37 +0000",
+  "updated": "2019-09-12 23:17:01 -0400",
   "brakeman_version": "3.7.2"
 }

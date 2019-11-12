@@ -32,7 +32,7 @@ class PromptsController < ApplicationController
 
   def load_signup
     unless @challenge_signup
-    	@challenge_signup = ChallengeSignup.in_collection(@collection).by_user(current_user).first
+      @challenge_signup = ChallengeSignup.in_collection(@collection).by_user(current_user).first
     end
     no_signup and return unless @challenge_signup
   end
@@ -190,7 +190,7 @@ class PromptsController < ApplicationController
       :any_freeform,
       :any_category,
       :any_rating,
-      :any_warning,
+      :any_archive_warning,
       tag_set_attributes: [
         :fandom_tagnames,
         :updated_at,
@@ -199,14 +199,14 @@ class PromptsController < ApplicationController
         :freeform_tagnames,
         :category_tagnames,
         :rating_tagnames,
-        :warning_tagnames,
+        :archive_warning_tagnames,
         fandom_tagnames: [],
         character_tagnames: [],
         relationship_tagnames: [],
         freeform_tagnames: [],
         category_tagnames: [],
         rating_tagnames: [],
-        warning_tagnames: []
+        archive_warning_tagnames: []
       ],
       optional_tag_set_attributes: [
         :tagnames
