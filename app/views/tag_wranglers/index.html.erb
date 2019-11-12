@@ -51,7 +51,7 @@
             ?
             -->
             <p id="wranglers-for-<%= assignments.first.id %>" title="wranglers for <%= assignments.first.id %>">
-              <% select_wranglers = logged_in_as_admin? ? @wranglers : [ @current_user ] %>
+              <% select_wranglers = logged_in_as_admin? ? @wranglers : [@current_user] %>
               <% select_tag_to_add = select_tag("assignments[#{assignments.first.id}][]", options_for_select([''] + select_wranglers.collect(&:login))) %>
               <%= select_tag_to_add %>
               <span class="action" title="add more">
