@@ -34,13 +34,10 @@
             <% unless wranglers.empty? %>
               <ul class="wranglers" role="menu">
                 <% wranglers.each do |wrangler| %>
-                  <li id="<%= wrangler %>-item-for-<%= assignments.first.id %>">
+                  <li>
                     <%= link_to wrangler, tag_wrangler_path(:id => wrangler) %>
-                    <!--BACK END PLS take off this span and give the link the class delete-->
                     <% if logged_in_as_admin? || wrangler == @current_user.login %>
-                      <span class="action" title="remove">
-                        <%= link_to 'x', tag_wrangler_path(redirect_params.merge(:id => wrangler, :fandom_id => assignments.first.id)), :method => :delete %>
-                      </span>
+                      <%= link_to 'x', tag_wrangler_path(redirect_params.merge(:id => wrangler, :fandom_id => assignments.first.id)), method: :delete, class: "delete action" %>
                     <% end %>
                   </li>
                 <% end %>

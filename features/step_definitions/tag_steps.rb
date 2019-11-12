@@ -394,10 +394,11 @@ Then /^I should not see the tag search result "([^\"]*)"(?: within "([^"]*)")?$/
     end
 end
 
-Then /^I should not be able to remove the wrangler "([^\"]*)" from fandom "([^\"]*)"$/ do |wrangler, fandomname|
+Then /^I should not be able to remove the wrangler "([^\"]*)" from fandom "([^\"]*)"$/ do |wrangler, fandom|
   visit tag_wranglers_url
-  fandom = Fandom.find_by(name: fandomname)
-  step %{I should not see the link "x" within "##{wrangler}-item-for-#{fandom.id}"}
+  fandom_id = Fandom.find_by(name: fandom).id
+  path = "/tag_wranglers/#{wrangler}?fandom_id=#{fandom_id}"
+  page.should have_no_link("x", :href => path)
 end
 
 Then /^"([^\"]*)" should not be a tag wrangler$/ do |username|
