@@ -14,14 +14,14 @@ describe "API v2 BookmarksController", type: :request do
                category_string: ["M/M"],
                relationship_string: "Starsky/Hutch",
                character_string: "Starsky,hutch",
-               notes: "<p>Notes</p>",
+               bookmarker_notes: "<p>Notes</p>",
                tag_string: "youpi",
                collection_names: "",
                private: "0",
                rec: "0" }
 
   before do
-    mock_external
+    ApiHelper.mock_external
   end
 
   after do
@@ -154,6 +154,27 @@ describe "API v2 BookmarksController", type: :request do
       bookmark_response = JSON.parse(response.body, symbolize_names: true)[:bookmarks].first
       assert_equal bookmark_response[:messages].first,
                    "This bookmark does not contain an external author name. Please specify an author."
+    end
+  end
+
+  describe "Search for bookmarks" do
+    it "does not crash if the archivist has works bookmarked" do
+      archivist = create(:archivist)
+      pseud_id = archivist.default_pseud.id
+      work = create(:work)
+      create(:bookmark, pseud_id: pseud_id, bookmarkable_id: work.id)
+      post "/api/v2/bookmarks/search",
+           params: { archivist: archivist.login,
+                     bookmarks: [ bookmark ]
+           }.to_json,
+           headers: valid_headers
+
+      bookmark_response = JSON.parse(response.body)
+      messages = bookmark_response["messages"]
+      expect(messages[0]).to_not start_with "An error occurred in the Archive code: undefined method `url' for "
+      expect(messages).to include "Successfully searched bookmarks for archivist '#{archivist.login}'"
+      expect(bookmark_response["original_url"]).to eq bookmark["id"]
+      expect(bookmark_response["bookmarks"][0]["messages"]).to include "There is no bookmark for #{archivist.login} and the URL #{bookmark[:url]}"
     end
   end
 

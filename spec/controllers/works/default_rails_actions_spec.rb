@@ -16,7 +16,8 @@ describe WorksController do
     context "when no work search parameters are given" do
       it "redirects to the login screen when no user is logged in" do
         get :clean_work_search_params, params: params
-        it_redirects_to new_user_session_path
+        it_redirects_to_with_error(new_user_session_path,
+                                   "Sorry, you don't have permission to access the page you were trying to reach. Please log in.")
       end
     end
 
@@ -164,7 +165,8 @@ describe WorksController do
   describe "new" do
     it "doesn't return the form for anyone not logged in" do
       get :new
-      it_redirects_to new_user_session_path
+      it_redirects_to_with_error(new_user_session_path,
+                                 "Sorry, you don't have permission to access the page you were trying to reach. Please log in.")
     end
 
     it "renders the form if logged in" do
@@ -180,6 +182,18 @@ describe WorksController do
       fake_login_known_user(@user)
     end
 
+    it "doesn't allow a user to create a work in a series that they don't own" do
+      @series = create(:series)
+      work_attributes = attributes_for(:work)
+      work_attributes[:series_attributes] = { id: @series.id }
+      expect {
+        post :create, params: { work: work_attributes }
+      }.not_to change { @series.works.all.count }
+      expect(response).to render_template :new
+      expect(assigns[:work].errors.full_messages).to \
+        include("You can't add a work to that series.")
+    end
+
     it "doesn't allow a user to submit only a pseud that is not theirs" do
       @user2 = create(:user)
       work_attributes = attributes_for(:work)
@@ -188,32 +202,99 @@ describe WorksController do
         post :create, params: { work: work_attributes }
       }.to_not change(Work, :count)
       expect(response).to render_template("new")
-      expect(flash[:error]).to eq "You're not allowed to use that pseud."
+      expect(assigns[:work].errors.full_messages).to \
+        include "You're not allowed to use that pseud."
     end
 
-    it "renders the co-author view if a work has invalid pseuds" do
-      allow_any_instance_of(Work).to receive(:invalid_pseuds).and_return(@user.pseuds.first)
+    it "renders new if the work has invalid pseuds" do
       work_attributes = attributes_for(:work)
+      work_attributes[:author_attributes] = { ids: @user.pseud_ids,
+                                              byline: "*impossible*" }
       post :create, params: { work: work_attributes }
-      expect(response).to render_template("_choose_coauthor")
-      allow_any_instance_of(Work).to receive(:invalid_pseuds).and_call_original
+      expect(response).to render_template("new")
+      expect(assigns[:work].errors.full_messages).to \
+        include "Invalid creator: Could not find a pseud *impossible*."
     end
 
-    it "renders the co-author view if a work has ambiguous pseuds" do
-      allow_any_instance_of(Work).to receive(:ambiguous_pseuds).and_return(@user.pseuds.first)
+    it "renders new if the work has ambiguous pseuds" do
+      create(:pseud, name: "ambiguous")
+      create(:pseud, name: "ambiguous")
       work_attributes = attributes_for(:work)
+      work_attributes[:author_attributes] = { ids: @user.pseud_ids,
+                                              byline: "ambiguous" }
       post :create, params: { work: work_attributes }
-      expect(response).to render_template("_choose_coauthor")
-      allow_any_instance_of(Work).to receive(:ambiguous_pseuds).and_call_original
+      expect(response).to render_template("new")
+      expect(assigns[:work].errors.full_messages).to \
+        include "Invalid creator: The pseud ambiguous is ambiguous."
     end
   end
 
   describe "show" do
+    let(:work) { create(:posted_work) }
+
+    before(:each) do
+      REDIS_GENERAL.set("work_stats:#{work.id}:last_visitor", nil)
+    end
+
     it "doesn't error when a work has no fandoms" do
-      work = create(:posted_work, fandoms: [])
+      work_no_fandoms = create(:posted_work, fandoms: [])
       fake_login
-      get :show, params: { id: work.id }
+
+      get :show, params: { id: work_no_fandoms.id }
+
       expect(assigns(:page_title)).to include "No fandom specified"
+    end
+
+    context "when visited by a logged-out user" do
+      it "increments the hit count" do
+        expect do
+          get :show, params: { id: work.id }
+        end.to change { REDIS_GENERAL.get("work_stats:#{work.id}:hit_count").to_i }.by(1)
+      end
+    end
+
+    context "when visited by a logged-in user who is not a (co-)creator" do
+      it "increments the hit count" do
+        fake_login
+
+        expect do
+          get :show, params: { id: work.id }
+        end.to change { REDIS_GENERAL.get("work_stats:#{work.id}:hit_count").to_i }.by(1)
+      end
+    end
+
+    context "when visited by the creator of the work" do
+      it "does not increment the hit count" do
+        fake_login_known_user(work.pseuds.first.user)
+
+        expect do
+          get :show, params: { id: work.id }
+        end.not_to change { REDIS_GENERAL.get("work_stats:#{work.id}:hit_count").to_i }
+      end
+    end
+
+    context "when the work is part of an unrevealed collection" do
+      it "does not increment the hit count" do
+        work.update!(in_unrevealed_collection: true)
+        fake_login
+
+        expect do
+          get :show, params: { id: work.id }
+        end.not_to change { REDIS_GENERAL.get("work_stats:#{work.id}:hit_count").to_i }
+      end
+    end
+
+    context "when the work is hidden by an admin" do
+      let(:admin) { create(:admin) }
+
+      it "does not increment the hit count" do
+        work.update!(hidden_by_admin: true)
+        fake_login_admin(admin)
+
+        expect do
+          get :show, params: { id: work.id }
+        end.not_to change { REDIS_GENERAL.get("work_stats:#{work.id}:hit_count").to_i }
+      end
     end
   end
 
@@ -264,7 +345,7 @@ describe WorksController do
           get :index
           expect(assigns(:works)).to include(@work)
           work2 = create(:posted_work)
-          update_and_refresh_indexes('work')
+          run_all_indexing_jobs
           get :index
           expect(assigns(:works)).not_to include(work2)
         end
@@ -274,8 +355,7 @@ describe WorksController do
         before do
           @fandom2 = create(:canonical_fandom)
           @work2 = create(:posted_work, fandom_string: @fandom2.name)
-
-          update_and_refresh_indexes('work')
+          run_all_indexing_jobs
         end
 
         it "only gets works under that tag" do
@@ -289,20 +369,10 @@ describe WorksController do
           expect(assigns(:works).items).not_to include(@work)
         end
 
-        it "shows results when filters are disabled" do
-          allow(controller).to receive(:fetch_admin_settings).and_return(true)
-          admin_settings = AdminSetting.new(disable_filtering: true)
-          controller.instance_variable_set("@admin_settings", admin_settings)
-          get :index, params: { tag_id: @fandom.name }
-          expect(assigns(:works)).to include(@work)
-
-          allow(controller).to receive(:fetch_admin_settings).and_call_original
-        end
-
         context "with restricted works" do
           before do
             @work2 = create(:posted_work, fandom_string: @fandom.name, restricted: true)
-            update_and_refresh_indexes('work')
+            run_all_indexing_jobs
           end
 
           it "shows restricted works to guests" do
@@ -369,9 +439,7 @@ describe WorksController do
       let(:pseud) { create(:pseud, user: user) }
       let!(:pseud_work) { create(:posted_work, authors: [pseud]) }
 
-      before do
-        update_and_refresh_indexes("work")
-      end
+      before { run_all_indexing_jobs }
 
       it "includes only works for that user" do
         params = { user_id: user.login }
@@ -402,15 +470,25 @@ describe WorksController do
 
   describe "update" do
     let(:update_user) { create(:user) }
-    let(:update_chapter) { create(:chapter) }
     let(:update_work) {
       work = create(:posted_work, authors: [update_user.default_pseud])
-      work.chapters << update_chapter
+      create(:chapter, work: work)
       work
     }
 
     before do
       fake_login_known_user(update_user)
+    end
+
+    it "doesn't allow the user to add a series that they don't own" do
+      @series = create(:series)
+      attrs = { series_attributes: { id: @series.id } }
+      expect {
+        put :update, params: { id: update_work.id, work: attrs }
+      }.not_to change { @series.works.all.count }
+      expect(response).to render_template :edit
+      expect(assigns[:work].errors.full_messages).to \
+        include("You can't add a work to that series.")
     end
 
     it "redirects to the edit page if the work could not be saved" do
@@ -422,23 +500,32 @@ describe WorksController do
       allow_any_instance_of(Work).to receive(:save).and_call_original
     end
 
-    context "where the coauthor is being updated" do
-      let(:new_coauthor) { create(:user) }
-      let(:params) do
-        {
-          work: { title: "New title" },
-          pseud: { byline: new_coauthor.login },
-          id: update_work.id
-        }
+    it "updates the editor's pseuds for all chapters" do
+      new_pseud = create(:pseud, user: update_user)
+      put :update, params: { id: update_work.id, work: { author_attributes: { ids: [new_pseud.id] } } }
+      expect(update_work.pseuds.reload).to contain_exactly(new_pseud)
+      update_work.chapters.reload.each do |c|
+        expect(c.pseuds.reload).to contain_exactly(new_pseud)
       end
-      it "updates coauthors for each chapter when the work is updated" do
-        put :update, params: params
-        updated_work = Work.find(update_work.id)
-        expect(updated_work.pseuds).to include new_coauthor.default_pseud
-        updated_work.chapters.each do |c|
-          expect(c.pseuds).to include new_coauthor.default_pseud
-        end
-      end
+    end
+
+    it "allows the user to invite co-creators" do
+      co_creator = create(:user)
+      co_creator.preference.update(allow_cocreator: true)
+      put :update, params: { id: update_work.id, work: { author_attributes: { byline: co_creator.login } } }
+      expect(update_work.pseuds.reload).not_to include(co_creator.default_pseud)
+      expect(update_work.user_has_creator_invite?(co_creator)).to be_truthy
+    end
+
+    it "prevents inviting users who have disallowed co-creators" do
+      no_co_creator = create(:user)
+      no_co_creator.preference.update(allow_cocreator: false)
+      put :update, params: { id: update_work.id, work: { author_attributes: { byline: no_co_creator.login } } }
+      expect(response).to render_template :edit
+      expect(assigns[:work].errors.full_messages).to \
+        include "Invalid creator: #{no_co_creator.login} does not allow others to invite them to be a co-creator."
+      expect(update_work.pseuds.reload).not_to include(no_co_creator.default_pseud)
+      expect(update_work.user_has_creator_invite?(no_co_creator)).to be_falsey
     end
   end
 
@@ -461,7 +548,7 @@ describe WorksController do
                collection_names: anonymous_collection.name)
       end
 
-      before { update_and_refresh_indexes "work" }
+      before { run_all_indexing_jobs }
 
       it "does not return anonymous works in collections for guests" do
         get :collected, params: { user_id: collected_user.login }
@@ -515,7 +602,7 @@ describe WorksController do
                fandom_string: collected_fandom.name)
       end
 
-      before { update_and_refresh_indexes "work" }
+      before { run_all_indexing_jobs }
 
       context "as a guest" do
         it "renders the empty collected form" do
@@ -567,7 +654,7 @@ describe WorksController do
                collection_names: unrevealed_collection.name)
       end
 
-      before { update_and_refresh_indexes "work" }
+      before { run_all_indexing_jobs }
 
       it "returns unrevealed works in collections for guests" do
         get :collected, params: { user_id: collected_user.login }
