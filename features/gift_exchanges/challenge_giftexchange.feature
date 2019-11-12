@@ -49,13 +49,14 @@ Feature: Gift Exchange Challenge
     Then I should see "My Gift Exchange"
 
   Scenario: Change timezone for a gift exchange
-    Given the gift exchange "My Gift Exchange" is ready for signups
-      And time is frozen at 1/1/2019
+    Given time is frozen at 1/1/2019
+      And the gift exchange "My Gift Exchange" is ready for signups
     When I go to "My Gift Exchange" gift exchange edit page
       And I select "(GMT-08:00) Pacific Time (US & Canada)" from "Time zone"
       And I submit
     Then I should see "Challenge was successfully updated"
       And I should see the correct time zone for "Pacific Time (US & Canada)"
+      And I jump in our Delorean and return to the present
 
   Scenario: Add a co-mod
     Given the following activated users exist
