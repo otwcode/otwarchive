@@ -30,7 +30,7 @@
     <% end %>
 
     <% if @collection.anonymous? %>
-      <dt><%= f.label :authors_reveal_at_string, ts("Authors revealed:")%></dt>
+      <dt><%= f.label :authors_reveal_at_string, ts("Creators revealed:")%></dt>
       <dd class="datetime"><%= f.text_field :authors_reveal_at_string , :class => 'timepicker' %></dd>
     <% end %>
   </dl>

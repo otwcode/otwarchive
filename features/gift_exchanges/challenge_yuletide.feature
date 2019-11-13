@@ -98,7 +98,7 @@ Feature: Collection
     And I should see "Sign-up Closes:" within ".collection .meta"
     And I should see "Assignments Due:" within ".collection .meta"
     And I should see "Works Revealed:" within ".collection .meta"
-    And I should see "Authors Revealed:" within ".collection .meta"
+    And I should see "Creators Revealed:" within ".collection .meta"
     And I should see "Signed up:" within ".collection .meta"
     And I should see "0" within ".collection .meta"
     And I should see "Welcome to the exchange" within "#intro"
