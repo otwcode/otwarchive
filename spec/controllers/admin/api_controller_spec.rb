@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-require 'spec_helper'
+require "spec_helper"
 
 describe Admin::ApiController do
   include LoginMacros
@@ -9,28 +9,28 @@ describe Admin::ApiController do
     let(:params) { {} }
 
     context "where there is no user or admin logged in" do
-      it "redirects to the homepage" do
+      it "redirects to the homepage with a notice" do
         get :index, params: params
-        it_redirects_to root_path
+        it_redirects_to_with_notice(root_path, "I'm sorry, only an admin can look at that area")
       end
     end
 
     context "where user is not an admin" do
-      let(:user) { FactoryGirl.create(:user) }
+      let(:user) { FactoryBot.create(:user) }
 
       before do
         fake_login_known_user(user)
       end
 
-      it "redirects to the homepage" do
+      it "redirects to the homepage with a notice" do
         get :index, params: params
-        it_redirects_to root_path
+        it_redirects_to_with_notice(root_path, "I'm sorry, only an admin can look at that area")
       end
     end
 
     context "where admin is logged in" do
       render_views
-      let(:admin) { FactoryGirl.create(:admin) }
+      let(:admin) { FactoryBot.create(:admin) }
 
       before do
         fake_login_admin(admin)
@@ -39,7 +39,7 @@ describe Admin::ApiController do
       let(:api_key_prefixes) { %w(a b c) }
       let!(:api_keys) do
         api_key_prefixes.each do |p|
-          FactoryGirl.create(:api_key, name: "#{p}_key")
+          FactoryBot.create(:api_key, name: "#{p}_key")
         end
       end
 
@@ -68,7 +68,7 @@ describe Admin::ApiController do
 
   describe "GET #new" do
     context "where an admin is logged in" do
-      let(:admin) { FactoryGirl.create(:admin) }
+      let(:admin) { FactoryBot.create(:admin) }
 
       before do
         fake_login_admin(admin)
@@ -83,7 +83,7 @@ describe Admin::ApiController do
 
   describe "POST #create" do
     context "where an admin is logged in" do
-      let(:admin) { FactoryGirl.create(:admin) }
+      let(:admin) { FactoryBot.create(:admin) }
       let(:params) { {} }
 
       before do
@@ -98,8 +98,7 @@ describe Admin::ApiController do
         it "redirects to the homepage and notifies of the success" do
           post :create, params: params
           expect(ApiKey.where(name: api_key_name)).to_not be_empty
-          it_redirects_to admin_api_index_path
-          expect(flash[:notice]).to include("New token successfully created")
+          it_redirects_to_with_notice(admin_api_index_path, "New token successfully created")
         end
       end
 
@@ -140,7 +139,7 @@ describe Admin::ApiController do
 
   describe "GET #edit" do
     context "where an admin is logged in" do
-      let(:admin) { FactoryGirl.create(:admin) }
+      let(:admin) { FactoryBot.create(:admin) }
 
       before do
         fake_login_admin(admin)
@@ -148,7 +147,7 @@ describe Admin::ApiController do
 
       context "where the api key exists" do
         render_views
-        let!(:api_key) { FactoryGirl.create(:api_key, name: "api_key") }
+        let!(:api_key) { FactoryBot.create(:api_key, name: "api_key") }
 
         it "populates the form with the api key" do
           get :edit, params: { id: api_key.id }
@@ -169,14 +168,14 @@ describe Admin::ApiController do
 
   describe "POST #update" do
     context "where an admin is logged in" do
-      let(:admin) { FactoryGirl.create(:admin) }
+      let(:admin) { FactoryBot.create(:admin) }
 
       before do
         fake_login_admin(admin)
       end
 
       context "where the api key exists" do
-        let(:api_key) { FactoryGirl.create(:api_key) }
+        let(:api_key) { FactoryBot.create(:api_key) }
         let(:new_name) { "new_name" }
         let(:params) do
           {
@@ -190,8 +189,7 @@ describe Admin::ApiController do
             expect(ApiKey.where(name: new_name)).to be_empty
             post :update, params: params
             expect(ApiKey.where(name: new_name)).to_not be_empty
-            it_redirects_to admin_api_index_path
-            expect(flash[:notice]).to include("Access token was successfully updated")
+            it_redirects_to_with_notice(admin_api_index_path, "Access token was successfully updated")
           end
         end
 
@@ -218,7 +216,7 @@ describe Admin::ApiController do
 
       context "cancel_button is true" do
         let(:api_key_id) { 123 }
-        let!(:api_key) { FactoryGirl.create(:api_key, id: api_key_id) }
+        let!(:api_key) { FactoryBot.create(:api_key, id: api_key_id) }
 
         it "redirects to index" do
           post :update, params: { id: api_key_id, cancel_button: "Cancel" }
@@ -230,7 +228,7 @@ describe Admin::ApiController do
 
   describe "POST #destroy" do
     context "where an admin is logged in" do
-      let(:admin) { FactoryGirl.create(:admin) }
+      let(:admin) { FactoryBot.create(:admin) }
 
       before do
         fake_login_admin(admin)
@@ -238,7 +236,7 @@ describe Admin::ApiController do
 
       context "where the api key exists" do
         let(:api_key_id) { 123 }
-        let!(:api_key) { FactoryGirl.create(:api_key, id: api_key_id) }
+        let!(:api_key) { FactoryBot.create(:api_key, id: api_key_id) }
 
         it "destroys the api key, then redirects to edit" do
           post :destroy, params: { id: api_key_id }

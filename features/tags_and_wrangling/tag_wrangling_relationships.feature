@@ -47,8 +47,7 @@ Scenario: relationship wrangling - syns, mergers, characters, autocompletes
   Then I should see "Hoban Washburne" within "div#parent_Character_associations_to_remove_checkboxes"
     And I should see "Zoe Washburne" within "div#parent_Character_associations_to_remove_checkboxes"
     And I should see "Wash/Zoe"
-    And the "Canonical" checkbox should be checked
-    And the "Canonical" checkbox should be disabled
+    And the "Canonical" checkbox should be checked and disabled
 
   # creating a new canonical relationship by renaming
   When I fill in "Synonym of" with "Hoban 'Wash' Washburne/Zoe Washburne"
@@ -61,14 +60,14 @@ Scenario: relationship wrangling - syns, mergers, characters, autocompletes
     And I should see "Hoban Washburne/Zoe Washburne"
     And I should see "Hoban Washburne" within "div#parent_Character_associations_to_remove_checkboxes"
     And I should see "Zoe Washburne" within "div#parent_Character_associations_to_remove_checkboxes"
-    And the "Canonical" checkbox should be checked
-    And the "Canonical" checkbox should be disabled
+    And the "Canonical" checkbox should be checked and disabled
 
   # creating non-canonical relationships from work posting
   When I am logged in as "Enigel" with password "wrangulate!"
    And I go to the new work page
     And I select "Not Rated" from "Rating"
     And I check "No Archive Warnings Apply"
+    And I select "English" from "Choose a language"
     And I fill in "Fandoms" with "Torchwood"
     And I fill in "Work Title" with "Silliness"
     And I fill in "Relationships" with "Janto, Jack/Ianto"
@@ -107,8 +106,9 @@ Scenario: relationship wrangling - syns, mergers, characters, autocompletes
   When I follow "Edit Jack Harkness/Ianto Jones"
     And I fill in "MetaTags" with "Jack Harkness/Male Character"
     And I press "Save changes"
-  Then I should see "Tag was updated"
-    But I should not see "Jack Harkness/Male Character"
+  Then I should see "Invalid meta tag 'Jack Harkness/Male Character':"
+    And I should see "Meta tag does not exist."
+    And I should not see "Jack Harkness/Male Character" within "form"
   When I follow "New Tag"
     And I fill in "Name" with "Jack Harkness/Male Character"
     And I check "Canonical"
@@ -226,6 +226,7 @@ Scenario: AO3-2147 Creating a new merger to a non-can tag while adding character
   # create a relationship from posting a work as a regular user, just in case
   Given I am logged in as "writer" with password "password"
     And I follow "New Work"
+    And I select "English" from "Choose a language"
     And I fill in "Fandoms" with "Up with Testing"
     And I fill in "Work Title" with "whatever"
     And I fill in "Relationships" with "Testypants/Testyskirt"
@@ -267,8 +268,7 @@ Scenario: AO3-2147 Creating a new merger to a non-can tag while adding character
     And I should see "Up with Testing" within "div#parent_Fandom_associations_to_remove_checkboxes"
     And I should see "Coding" within "div#parent_Fandom_associations_to_remove_checkboxes"
     And I should see "Testypants/Testyskirt"
-    And the "Canonical" checkbox should be checked
-    And the "Canonical" checkbox should be disabled
+    And the "Canonical" checkbox should be checked and disabled
 
   When I edit the tag "Testing McTestypants/Testing McTestySkirt"
     And I fill in "Synonym of" with "Dame Tester/Sir Tester"

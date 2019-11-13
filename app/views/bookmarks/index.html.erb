@@ -1,6 +1,10 @@
 <!--SEARCHBROWSE descriptive page name and system messages, descriptions, and instructions.-->
 <h2 class="heading">
-  <%= search_header @bookmarks, @search, "Bookmark", @owner %>
+  <% if @bookmarkable_items %>
+    <%= search_header @bookmarkable_items, @search, "Bookmarked Item", @owner %>
+  <% else %>
+    <%= search_header @bookmarks, @search, "Bookmark", @owner %>
+  <% end %>
 </h2>
 <!-- /descriptions-->
 
@@ -45,6 +49,8 @@
 
 <% if @bookmarks.respond_to?(:total_pages) %>
   <%= will_paginate @bookmarks %>
+<% elsif @bookmarkable_items.respond_to?(:total_pages) %>
+  <%= will_paginate @bookmarkable_items %>
 <% end %>
 
 <!--main content-->
@@ -56,12 +62,7 @@
 
 <!--filters subnav-->
 <% if @facets.present? %>
-  <% # ES UPGRADE TRANSITION # %>
-  <% if use_new_search? %>
-    <%= render "filters" %>
-  <% else %>
-    <%= render "filters_old" %>
-  <% end %>
+  <%= render "filters" %>
 <% end %>
 <!---/subnav-->
 
@@ -70,6 +71,8 @@
 <!--subnav-->
 <% if @bookmarks.respond_to?(:total_pages) %>
   <%= will_paginate @bookmarks %>
+<% elsif @bookmarkable_items.respond_to?(:total_pages) %>
+  <%= will_paginate @bookmarkable_items %>
 <% end %>
 <!-- /subnav-->
 

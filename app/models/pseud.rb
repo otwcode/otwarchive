@@ -1,8 +1,5 @@
 class Pseud < ApplicationRecord
   include ActiveModel::ForbiddenAttributesProtection
-  # ES UPGRADE TRANSITION #
-  # Remove Tire::Model::Search
-  include Tire::Model::Search
   include Searchable
   include WorksOwner
 
@@ -28,13 +25,17 @@ class Pseud < ApplicationRecord
   has_many :bookmarks, dependent: :destroy
   has_many :recs, -> { where(rec: true) }, class_name: 'Bookmark'
   has_many :comments
-  has_many :creatorships
-  has_many :works, -> { readonly(false) }, through: :creatorships, source: :creation, source_type: 'Work'
+
+  has_many :creatorships, dependent: :destroy
+  has_many :approved_creatorships, -> { Creatorship.approved }, class_name: "Creatorship"
+
+  has_many :works, through: :approved_creatorships, source: :creation, source_type: "Work"
+  has_many :chapters, through: :approved_creatorships, source: :creation, source_type: "Chapter"
+  has_many :series, through: :approved_creatorships, source: :creation, source_type: "Series"
+
   has_many :tags, through: :works
   has_many :filters, through: :works
   has_many :direct_filters, through: :works
-  has_many :chapters, -> { readonly(false) }, through: :creatorships, source: :creation, source_type: 'Chapter'
-  has_many :series, -> { readonly(false) }, through: :creatorships, source: :creation, source_type: 'Series'
   has_many :collection_participants, dependent: :destroy
   has_many :collections, through: :collection_participants
   has_many :tag_set_ownerships, dependent: :destroy
@@ -73,6 +74,7 @@ class Pseud < ApplicationRecord
 
   after_update :check_default_pseud
   after_update :expire_caches
+  after_commit :reindex_creations
 
   scope :on_works, lambda {|owned_works|
     select("DISTINCT pseuds.*").
@@ -111,30 +113,6 @@ class Pseud < ApplicationRecord
 
   scope :alphabetical, -> { order(:name) }
   scope :starting_with, lambda {|letter| where('SUBSTR(name,1,1) = ?', letter)}
-
-  scope :coauthor_of, lambda {|pseuds|
-    select("pseuds.*").
-    joins("LEFT JOIN creatorships ON creatorships.pseud_id = pseuds.id
-          LEFT JOIN creatorships c2 ON c2.creation_id = creatorships.creation_id").
-    where(["creatorships.creation_type = 'Work' AND
-          c2.creation_type = 'Work' AND
-          c2.pseud_id IN (?) AND
-          creatorships.pseud_id NOT IN (?)",
-          pseuds.collect(&:id),
-          pseuds.collect(&:id)]).
-    group("pseuds.id").
-    includes(:user)
-  }
-
-  # ES UPGRADE TRANSITION #
-  # Remove conditional and Tire reference
-  def self.index_name
-    if use_new_search?
-      "ao3_#{Rails.env}_pseuds"
-    else
-      tire.index.name
-    end
-  end
 
   def self.not_orphaned
     where("user_id != ?", User.orphan_account)
@@ -271,17 +249,20 @@ class Pseud < ApplicationRecord
   # Takes a comma-separated list of bylines
   # Returns a hash containing an array of pseuds and an array of bylines that couldn't be found
   def self.parse_bylines(list, options = {})
-    valid_pseuds, ambiguous_pseuds, failures = [], {}, []
+    valid_pseuds = []
+    ambiguous_pseuds = {}
+    failures = []
+    banned_pseuds = []
     bylines = list.split ","
     for byline in bylines
       pseuds = Pseud.parse_byline(byline, options)
-      banned_pseuds = pseuds.select { |pseud| pseud.user.banned? || pseud.user.suspended? }
-      if banned_pseuds.present?
-        pseuds = pseuds - banned_pseuds
-        banned_pseuds = banned_pseuds.map(&:byline)
-      end
       if pseuds.length == 1
-        valid_pseuds << pseuds.first
+        pseud = pseuds.first
+        if pseud.user.banned? || pseud.user.suspended?
+          banned_pseuds << pseud
+        else
+          valid_pseuds << pseud
+        end
       elsif pseuds.length > 1
         ambiguous_pseuds[pseuds.first.name] = pseuds
       else
@@ -289,10 +270,10 @@ class Pseud < ApplicationRecord
       end
     end
     {
-      pseuds: valid_pseuds,
+      pseuds: valid_pseuds.flatten.uniq,
       ambiguous_pseuds: ambiguous_pseuds,
       invalid_pseuds: failures,
-      banned_pseuds: banned_pseuds
+      banned_pseuds: banned_pseuds.flatten.uniq.map(&:byline)
     }
   end
 
@@ -347,15 +328,30 @@ class Pseud < ApplicationRecord
 
   ## END AUTOCOMPLETE
 
-  def creations
-    self.works + self.chapters + self.series
-  end
-
   def replace_me_with_default
-    self.creations.each {|creation| change_ownership(creation, self.user.default_pseud) }
-    Comment.where("pseud_id = #{self.id}").update_all("pseud_id = #{self.user.default_pseud.id}") unless self.comments.blank?
+    replacement = user.default_pseud
+
+    # We don't use change_ownership here because we want to transfer both
+    # approved and unapproved creatorships.
+    self.creatorships.includes(:creation).each do |creatorship|
+      next if creatorship.creation.nil?
+
+      existing =
+        replacement.creatorships.find_by(creation: creatorship.creation)
+
+      if existing
+        existing.update(approved: existing.approved || creatorship.approved)
+      else
+        creatorship.update(pseud: replacement)
+      end
+    end
+
+    # Update the pseud ID for all comments. Also updates the timestamp, so that
+    # the cache is invalidated and the pseud change will be visible.
+    Comment.where(pseud_id: self.id).update_all(pseud_id: replacement.id,
+                                                updated_at: Time.now)
     # NB: updates the kudos to use the new default pseud, but the cache will not expire
-    Kudo.where("pseud_id = #{self.id}").update_all("pseud_id = #{self.user.default_pseud.id}") unless self.kudos.blank?
+    Kudo.where(pseud_id: self.id).update_all(pseud_id: replacement.id)
     change_collections_membership
     change_gift_recipients
     change_challenge_participation
@@ -363,35 +359,49 @@ class Pseud < ApplicationRecord
   end
 
   # Change the ownership of a creation from one pseud to another
-  # Options: skip_series -- if you begin by changing ownership of the series, you don't
-  # want to go back up again and get stuck in a loop
   def change_ownership(creation, pseud, options={})
-    # Should only transfer creatorship if we're a co-creator.
-    if creation.pseuds.include?(self)
-      creation.pseuds.delete(self)
-      creation.pseuds << pseud unless pseud.nil? || creation.pseuds.include?(pseud)
-    end
+    transaction do
+      # Update children before updating the creation itself, since deleting
+      # creatorships from the creation will also delete them from the creation's
+      # children.
+      unless options[:skip_children]
+        children = if creation.is_a?(Work)
+                     creation.chapters
+                   elsif creation.is_a?(Series)
+                     creation.works
+                   else
+                     []
+                   end
 
-    if creation.is_a?(Work)
-      creation.chapters.each {|chapter| self.change_ownership(chapter, pseud)}
-      unless options[:skip_series]
-        for series in creation.series
-          if series.works.count > 1 && (series.works - [creation]).collect(&:pseuds).flatten.include?(self)
-            series.pseuds << pseud rescue nil
-          else
-            self.change_ownership(series, pseud)
-          end
+        children.each do |child|
+          change_ownership(child, pseud, options)
         end
       end
-      comments = creation.total_comments.where("comments.pseud_id = ?", self.id)
-      comments.each do |comment|
-        comment.update_attribute(:pseud_id, pseud.id)
+
+      # Should only add new creatorships if we're an approved co-creator.
+      if creation.creatorships.approved.where(pseud: self).exists?
+        creation.creatorships.find_or_create_by(pseud: pseud)
       end
-    elsif creation.is_a?(Series) && options[:skip_series]
-      creation.works.each {|work| self.change_ownership(work, pseud)}
+
+      # But we should delete all creatorships, even invited ones:
+      creation.creatorships.where(pseud: self).destroy_all
+
+      if creation.is_a?(Work)
+        creation.series.each do |series|
+          if series.work_pseuds.where(id: id).exists?
+            series.creatorships.find_or_create_by(pseud: pseud)
+          else
+            change_ownership(series, pseud, options.merge(skip_children: true))
+          end
+        end
+        comments = creation.total_comments.where("comments.pseud_id = ?", self.id)
+        comments.each do |comment|
+          comment.update_attribute(:pseud_id, pseud.id)
+        end
+      end
+      # make sure changes affect caching/search/author fields
+      creation.save
     end
-    # make sure changes affect caching/search/author fields
-    creation.save rescue nil
   end
 
   def change_membership(collection, new_pseud)
@@ -460,34 +470,25 @@ class Pseud < ApplicationRecord
   ## SEARCH #######################
   #################################
 
-  # ES UPGRADE TRANSITION #
-  # Remove mapping block
-  mapping do
-    indexes :name, boost: 20
-  end
-
   def collection_ids
     collections.pluck(:id)
-  end
-
-  self.include_root_in_json = false
-  def to_indexed_json
-    to_json(methods: [:user_login, :collection_ids])
   end
 
   def document_json
     PseudIndexer.new({}).document(self)
   end
 
-  def self.search(options={})
-    tire.search(page: options[:page], per_page: ArchiveConfig.ITEMS_PER_PAGE, load: true) do
-      query do
-        boolean do
-          must { string options[:query], default_operator: "AND" } if options[:query].present?
-          must { term :collection_ids, options[:collection_id] } if options[:collection_id].present?
-        end
-      end
-    end
+  def should_reindex_creations?
+    pertinent_attributes = %w[id name]
+    destroyed? || (saved_changes.keys & pertinent_attributes).present?
   end
 
+  # If the pseud gets renamed, anything indexed with the old name needs to be reindexed:
+  # works, series, bookmarks.
+  def reindex_creations
+    return unless should_reindex_creations?
+    IndexQueue.enqueue_ids(Work, works.pluck(:id), :main)
+    IndexQueue.enqueue_ids(Bookmark, bookmarks.pluck(:id), :main)
+    IndexQueue.enqueue_ids(Series, series.pluck(:id), :main)
+  end
 end

@@ -22,24 +22,26 @@
           <h4 class="heading">
             <%= ts("%{filter_action}", filter_action: filter_action.titleize) %>
           </h4>
-          <%= link_to_help "filters-#{filter_action}-tags-help" %>
+          <%= link_to_help "bookmark-filters-#{filter_action}-tags" %>
         </dt>
         <dd class="<%= filter_action %> tags group">
           <dl>
-            <% %w(rating warning category fandom character relationship freeform tag).each do |tag_type| %>
-              <dt id="toggle_<%= filter_action %>_<%= tag_type %>_tags" class="filter-toggle <%= tag_type %> tags">
+            <% %w(rating archive_warning category fandom character relationship freeform tag).each do |tag_type| %>
+              <dt id="toggle_<%= filter_action %>_<%= tag_type %>_tags" class="filter-toggle <%= tag_type_css_class(tag_type) %> tags">
                 <% # For accessibility, include filter action (e.g. Include) as landmark text %>
                 <% # The space needs to be in the landmark to keep the text aligned %>
                 <%= ts("<span class=\"landmark\">%{filter_action} </span>%{tag_type}",
                     filter_action: filter_action.titleize,
-                    tag_type: tag_type_label(tag_type)
+                    tag_type: tag_type_label_name(tag_type).pluralize
                     ).html_safe %>
               </dt>
-              <dd id="<%= filter_action %>_<%= tag_type %>_tags" class="expandable <%= tag_type %> tags">
+              <dd id="<%= filter_action %>_<%= tag_type %>_tags" class="expandable <%= tag_type_css_class(tag_type) %> tags">
                 <ul>
                   <% @facets[tag_type].each do |tag| %>
                     <li>
-                      <% next if filter_action == "include" && @search.options[:excluded_tag_ids]&.include?(tag.id.to_s) %>
+                      <% next if filter_action == "include" &&
+                          (@search.options[:excluded_tag_ids]&.include?(tag.id.to_s) ||
+                              @search.options[:excluded_bookmark_tag_ids]&.include?(tag.id.to_s)) %>
                       <%= label_tag "#{filter_action}_bookmark_search_#{tag_type}_ids_#{tag.id}" do %>
                         <% if (tag_type == "rating") && @facets[tag_type].length > 1 && filter_action == "include" %>
                           <%= radio_button_tag "#{filter_action}_bookmark_search[#{tag_type}_ids][]",
@@ -62,9 +64,16 @@
             <% end %>
             <% field_name = filter_action == "include" ? "other_tag_names" : "excluded_tag_names" %>
             <dt class="autocomplete search">
-              <%= f.label field_name, ts("Other tags to %{filter_action}", filter_action: filter_action) %>
+              <%= f.label field_name, ts("Other work tags to %{filter_action}", filter_action: filter_action) %>
             </dt>
             <dd class="autocomplete search">
+              <%= f.text_field field_name, autocomplete_options("tag") %>
+            </dd>
+            <% field_name = filter_action == "include" ? "other_bookmark_tag_names" : "excluded_bookmark_tag_names" %>
+            <dt class="bookmarker autocomplete search">
+              <%= f.label field_name, ts("Other bookmarker's tags to %{filter_action}", filter_action: filter_action) %>
+            </dt>
+            <dd class="bookmarker autocomplete search">
               <%= f.text_field field_name, autocomplete_options("tag") %>
             </dd>
           </dl>
@@ -77,14 +86,29 @@
       <dd class="more group">
         <dl>
           <dt class="search">
-            <%= f.label :query, ts("Search within results") %>
+            <%= f.label :bookmarkable_query, ts("Search within results") %>
             <%= link_to_help "bookmark-search-text-help" %>
           </dt>
           <dd class="search">
-            <%= f.text_field :query %>
+            <%= f.text_field :bookmarkable_query %>
           </dd>
 
-          <dt class="options"><%= ts("Options") %></dt>
+          <dt class="bookmarker search">
+            <%= f.label :bookmark_query, ts("Search bookmarker's tags and notes") %>
+            <%= link_to_help "bookmark-search-text-help" %>
+          </dt>
+          <dd class="bookmarker search">
+            <%= f.text_field :bookmark_query %>
+          </dd>
+
+          <dt class="language">
+            <%= f.label :language_id, ts("Work language") %>
+          </dt>
+          <dd class="language">
+            <%= f.collection_select(:language_id, Language.default_order, :short, :name, include_blank: true) %>
+          </dd>
+
+          <dt class="options"><%= ts("Bookmark types") %></dt>
           <dd class="options">
             <ul>
               <li>

@@ -51,10 +51,10 @@ Feature: Admin Actions for Works, Comments, Series, Bookmarks
       And the email should contain "deleted from the Archive by a site admin"
       And the email should not contain "translation missing"
     When I am logged out
-      And I am on regular_users's works page
+      And I am on regular_user's works page
     Then I should not see "ToS Violation"
     When I am logged in
-      And I am on regular_users's works page
+      And I am on regular_user's works page
     Then I should not see "ToS Violation"
 
   Scenario: Can hide bookmarks
@@ -93,7 +93,7 @@ Feature: Admin Actions for Works, Comments, Series, Bookmarks
       And I fill in "Additional Tags" with "Admin-Added Freeform"
       And I uncheck "M/M"
       And I check "Other"
-    When I press "Post Without Preview"
+    When I press "Post"
     Then I should not see "User-Added Fandom"
       And I should see "Admin-Added Fandom"
       And I should not see "User-Added Freeform"
@@ -223,7 +223,7 @@ Feature: Admin Actions for Works, Comments, Series, Bookmarks
       And I follow "Edit Tags and Language"
     Then I should see "Edit Work Tags and Language for "
     When I select "Deutsch" from "Choose a language"
-      And I press "Post Without Preview"
+      And I press "Post"
     Then I should see "Deutsch"
       And I should not see "English"
 

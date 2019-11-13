@@ -1,9 +1,9 @@
 require 'faker'
 
-FactoryGirl.define do
+FactoryBot.define do
   factory :comment do
     name { Faker::Name.first_name }
-    content { Faker::Lorem.sentence(25) }
+    comment_content { Faker::Lorem.sentence(25) }
     email { Faker::Internet.email }
     commentable_type { "Work" }
     commentable_id { create(:work).id }
@@ -12,7 +12,7 @@ FactoryGirl.define do
 
   factory :adminpost_comment, class: Comment do
     name { Faker::Name.first_name }
-    content { Faker::Lorem.sentence(25) }
+    comment_content { Faker::Lorem.sentence(25) }
     email { Faker::Internet.email }
     commentable_type { "AdminPost" }
     commentable_id { create(:admin_post).id }
@@ -21,7 +21,7 @@ FactoryGirl.define do
 
   factory :tag_comment, class: Comment do
     name { Faker::Name.first_name }
-    content { Faker::Lorem.sentence(25) }
+    comment_content { Faker::Lorem.sentence(25) }
     email { Faker::Internet.email }
     commentable_type { "Tag" }
     commentable_id { create(:fandom).id }
@@ -30,12 +30,12 @@ FactoryGirl.define do
 
   factory :unreviewed_comment, class: Comment do
     name { Faker::Name.first_name }
-    content { Faker::Lorem.sentence(25) }
+    comment_content { Faker::Lorem.sentence(25) }
     email { Faker::Internet.email }
     commentable_type { "Work" }
     commentable_id { create(:work, moderated_commenting_enabled: true).id }
     pseud
-    unreviewed true
+    unreviewed { true }
   end
 
   factory :inbox_comment do

@@ -1,7 +1,7 @@
 class AbuseReport < ApplicationRecord
   include ActiveModel::ForbiddenAttributesProtection
 
-  validates :email, email_veracity: { allow_blank: false }
+  validates :email, email_format: { allow_blank: false }
   validates_presence_of :language
   validates_presence_of :summary
   validates_presence_of :comment
@@ -11,6 +11,24 @@ class AbuseReport < ApplicationRecord
                                 too_long: ts('must be less than %{max}
                                              characters long.',
                                 max: ArchiveConfig.FEEDBACK_SUMMARY_MAX_DISPLAYED)
+
+  validate :check_for_spam
+  def check_for_spam
+    errors.add(:base, ts("This report looks like spam to our system!")) if Akismetor.spam?(akismet_attributes)
+  end
+
+  def akismet_attributes
+    name = username ? username : ""
+    {
+      comment_type: "contact-form",
+      key: ArchiveConfig.AKISMET_KEY,
+      blog: ArchiveConfig.AKISMET_NAME,
+      user_ip: ip_address,
+      comment_author: name,
+      comment_author_email: email,
+      comment_content: comment
+    }
+  end
 
   scope :by_date, -> { order('created_at DESC') }
 
@@ -34,8 +52,7 @@ class AbuseReport < ApplicationRecord
     end
   end
 
-  app_url_regex = Regexp.new('^https?:\/\/(www\.|insecure\.)?' +
-                             ArchiveConfig.APP_HOST, true)
+  app_url_regex = Regexp.new('^(https?:\/\/)?(www\.|(insecure\.))?(archiveofourown|ao3)\.(org|com).*', true)
   validates_format_of :url, with: app_url_regex,
                             message: ts('does not appear to be on this site.'),
                             multiline: true

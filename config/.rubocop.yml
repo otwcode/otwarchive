@@ -1,24 +1,60 @@
 # options available at https://github.com/bbatsov/rubocop/blob/master/config/default.yml
 
 AllCops:
-  TargetRubyVersion: 2.3
+  TargetRubyVersion: 2.6
 
-# stop checking quotation marks
-Style/StringLiterals:
+Bundler/OrderedGems:
   Enabled: false
 
-# stop checking line length
+Layout/DotPosition:
+  EnforcedStyle: leading
+
+Layout/IndentFirstArrayElement:
+  EnforcedStyle: consistent
+
+Layout/MultilineMethodCallIndentation:
+  EnforcedStyle: indented
+
+Layout/TrailingWhitespace:
+  Enabled: false
+
+Lint/AmbiguousRegexpLiteral:
+  Enabled: false
+
+Metrics/BlockLength:
+  Enabled: false
+
+Metrics/ClassLength:
+  Enabled: false
+
 Metrics/LineLength:
+  Enabled: false
+
+Metrics/MethodLength:
+  Enabled: false
+
+Metrics/ModuleLength:
   Enabled: false
 
 # prefer template tokens (like %{foo}) over annotated tokens (like %s)
 Style/FormatStringToken:
   EnforcedStyle: template
 
-# stop checking for trailing whitespace
-Style/TrailingWhitespace:
+Style/FrozenStringLiteralComment:
   Enabled: false
 
-# stop checking for ambiguous regexp literal
-Lint/AmbiguousRegexpLiteral:
+Style/GlobalVars:
+  AllowedVariables:
+    - $elasticsearch
+    - $rollout
+
+# stop checking if uses of "self" are redundant
+Style/RedundantSelf:
+  Enabled: false
+
+# stop checking quotation marks
+Style/StringLiterals:
+  Enabled: false
+
+Style/SymbolArray:
   Enabled: false

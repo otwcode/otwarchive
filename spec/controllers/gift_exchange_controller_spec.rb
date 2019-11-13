@@ -4,9 +4,10 @@ require 'spec_helper'
 
 describe Challenge::GiftExchangeController do
   include LoginMacros
+  include RedirectExpectationHelper
 
   before(:each) do
-    @collection = FactoryGirl.create(:collection, challenge: GiftExchange.new)
+    @collection = FactoryBot.create(:collection, challenge: GiftExchange.new)
     @collection.save
     fake_login_known_user(@collection.owners.first.user)
   end
@@ -55,12 +56,8 @@ describe Challenge::GiftExchangeController do
       expect(@collection.reload.challenge_type).to eq(nil)
     end
 
-    it "sets a flash message" do
-      expect(flash[:notice]).to eq("Challenge settings were deleted.")
-    end
-
-    it "redirects to the collection's main page" do
-      expect(response).to redirect_to(@collection)
+    it "redirects to the collection's main page with a notice" do
+      it_redirects_to_with_notice(@collection, "Challenge settings were deleted.")
     end
   end
 end

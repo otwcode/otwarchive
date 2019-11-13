@@ -21,6 +21,7 @@ Feature: Basic collection navigation
     And I fill in "Fandoms" with "New Fandom"
     And I fill in "Additional Tags" with "Free"
     And I fill in "Work Title" with "Work for my collection"
+    And I select "English" from "Choose a language"
     And I fill in "content" with "First because I'm the mod"
     And I fill in "Post to Collections / Challenges" with "my_collection"
     And I press "Preview"
@@ -38,8 +39,8 @@ Feature: Basic collection navigation
   When I follow "Works (1)"
   Then I should see "Work for my collection by mod"
     And I should see "1 Work in My Collection"
-  When I follow "Bookmarks (0)"
-  Then I should see "0 Bookmarks"
+  When I follow "Bookmarked Items" within "#dashboard"
+  Then I should see "0 Bookmarked Items"
   When I follow "Random Items"
   Then I should see "Work for my collection by mod"
   When I follow "People" within "div#dashboard"
@@ -64,7 +65,7 @@ Feature: Basic collection navigation
     And I post the work "Sesame Street" in the collection "My ABCs"
     And I edit the work "Sesame Street"
     And I fill in "Fandoms" with "A League of Their Own, Merlin, Teen Wolf, The Borgias"
-    And I press "Post Without Preview"
+    And I press "Post"
     And I go to "My ABCs" collection's page
     And I follow "Fandoms ("
   Then "The Borgias" should appear before "A League of Their Own"
@@ -76,7 +77,7 @@ Feature: Basic collection navigation
       And I have a canonical "TV Shows" fandom tag named "Steven's Universe"
       And I have a canonical "Movies" fandom tag named "High School Musical"
     When I am logged in as "Brian" with password "They called him Brian"
-      And I post the work "Stronger than you" with fandom "Steven's Universe" in the collection "We all sing together" 
+      And I post the work "Stronger than you" with fandom "Steven's Universe" in the collection "We all sing together"
       And I post the work "Breaking Free" with fandom "High School Musical" in the collection "We all sing together"
       And I go to "We all sing together" collection's page
       And I follow "Fandoms ("
@@ -102,3 +103,33 @@ Feature: Basic collection navigation
 
     When I go to "MCU Party" collection's page
     Then I should see "Fandoms (1)"
+
+  Scenario: Browse tags within a collection (or not)
+    Given I have a collection "Randomness"
+      And a canonical fandom "Naruto"
+      And a canonical freeform "Crack"
+      And I am logged in
+      And I post the work "Has some tags" with fandom "Naruto" with freeform "Crack" in the collection "Randomness"
+
+    # Tag links from the work blurb in a collection should not be collection-scoped
+    When I go to "Randomness" collection's page
+      And I follow "Naruto" within "#collection-works"
+    Then I should be on the works tagged "Naruto"
+
+    # Tag links from the work meta in a collection should not be collection-scoped
+    When I go to "Randomness" collection's page
+      And I follow "Has some tags"
+      And I follow "Naruto"
+    Then I should be on the works tagged "Naruto"
+
+    # Tag links from a collection's fandoms page should be collection-scoped
+    When I go to "Randomness" collection's page
+      And I follow "Fandoms (1)"
+      And I follow "Naruto"
+    Then I should be on the works tagged "Naruto" in collection "Randomness"
+
+    # Tag links from a collection's tags page should be collection-scoped
+    When I go to "Randomness" collection's page
+      And I follow "Tags" within "#dashboard"
+      And I follow "Crack"
+    Then I should be on the works tagged "Crack" in collection "Randomness"
