@@ -625,13 +625,13 @@ When /^I mark the work "([^"]*)" for later$/ do |work|
   Reading.update_or_create_in_database
 end
 
-When /^I follow the recent chapter link for the work "([^\"]*)"$/ do |work|
+When /^I follow the recent chapter link for the work "(.*?)"$/ do |work|
   work = Work.find_by_title(work)
   work_id = work.id.to_s
   find("#work_#{work_id} dd.chapters a").click
 end
 
-When /^the statistics for the work "([^"]*)" are updated$/ do |title|
+When /^the statistics for the work "(.*?)" are updated$/ do |title|
   step %{the statistics_tasks rake task is run}
   step %{all indexing jobs have been run}
   work = Work.find_by(title: title)
@@ -680,7 +680,7 @@ Then /^the Remove Me As Chapter Co-Creator option should not be on the ([\d]+)(?
   step %{I should not see "Remove Me As Chapter Co-Creator" within "ul#sortable_chapter_list > li:nth-of-type(#{chapter_number})"}
 end
 
-Then /^I should find myself on Chapter ([\d]+) of the work "([^\"]*)"$/ do |chapter_number, work_title|
+Then /^I should find myself on Chapter ([\d]+) of the work "(.*?)"$/ do |chapter_number, work_title|
   step %{I should see "Chapter #{chapter_number}" within "div#chapters"}
   step %{I should see "Entire Work"}
   step %{I should see "#{work_title}"}
