@@ -6,13 +6,13 @@ describe StoryParser do
   # Temporarily make the methods we want to test public
   before(:all) do
     class StoryParser
-      public :get_source_if_known, :check_for_previous_import, :parse_common
+      public :get_source_if_known, :check_for_previous_import, :parse_common, :parse_author
     end
   end
 
   after(:all) do
     class StoryParser
-      protected :get_source_if_known, :check_for_previous_import, :parse_common
+      protected :get_source_if_known, :check_for_previous_import, :parse_common, :parse_author
     end
   end
 
@@ -117,13 +117,13 @@ describe StoryParser do
     let(:location_partial_match) { "http://testme.org/welcome_to_test_vale/12345" }
 
     it "should recognise previously imported www. works" do
-      @work = FactoryGirl.create(:work, imported_from_url: location_with_www)
+      @work = FactoryBot.create(:work, imported_from_url: location_with_www)
 
       expect { @sp.check_for_previous_import(location_no_www) }.to raise_exception(StoryParser::Error)
     end
 
     it "should recognise previously imported non-www. works" do
-      @work = FactoryGirl.create(:work, imported_from_url: location_no_www)
+      @work = FactoryBot.create(:work, imported_from_url: location_no_www)
 
       expect { @sp.check_for_previous_import(location_with_www) }.to raise_exception(StoryParser::Error)
     end
@@ -145,7 +145,7 @@ describe StoryParser do
       WebMock.stub_request(:any, /url2/).
         to_return(status: 200, body: "Date: 2001-01-22 12:56\nstubbed response", headers: {})
 
-      storyparser_user = FactoryGirl.create(:user)
+      storyparser_user = FactoryBot.create(:user)
       urls = %w(http://url1 http://url2)
       work = @sp.download_and_parse_chapters_into_story(urls, { pseuds: [storyparser_user.default_pseud], do_not_set_current_author: false })
       work.save
@@ -156,7 +156,7 @@ describe StoryParser do
   end
 
   describe "#parse_common" do
-    it "should convert relative to absolute links" do
+    it "converts relative to absolute links" do
       # This one doesn't work because the sanitizer is converting the & to &amp;
       # ['http://foo.com/bar.html', 'search.php?here=is&a=query'] => 'http://foo.com/search.php?here=is&a=query',
       {
@@ -170,10 +170,44 @@ describe StoryParser do
       }.each_pair do |input, output|
         location, href = input
         story_in = '<html><body><p>here is <a href="' + href + '">a link</a>.</p></body></html>'
-        story_out = '<p>here is <a href="' + output + '">a link</a>.</p>'
+        story_out = '<p>here is <a href="' + output + '" rel="nofollow">a link</a>.</p>'
         results = @sp.parse_common(story_in, location)
         expect(results[:chapter_attributes][:content]).to include(story_out)
       end
+    end
+
+    it "does NOT convert raw anchor links to absolute links" do
+      location = "http://external_site"
+      story_in = "<html><body><p><a href=#local>local href</p></body></html>"
+      result = @sp.parse_common(story_in, location)
+      expect(result[:chapter_attributes][:content]).not_to include(location)
+      expect(result[:chapter_attributes][:content]).to include("#local")
+    end
+  end
+
+  describe "#parse_author" do
+    it "returns an external author name when a name and email are provided" do
+      results = @sp.parse_author("", "Author Name", "author@example.com")
+      expect(results.name).to eq("Author Name")
+      expect(results.external_author.email).to eq("author@example.com")
+    end
+
+    it "raises an exception when the external author name is not provided" do
+      expect {
+        @sp.parse_author("", nil, "author@example.com")
+      }.to raise_exception(StoryParser::Error) { |e| expect(e.message).to eq("No author name specified") }
+    end
+
+    it "raises an exception when the external author email is not provided" do
+      expect {
+        @sp.parse_author("", "Author Name", nil)
+      }.to raise_exception(StoryParser::Error) { |e| expect(e.message).to eq("No author email specified") }
+    end
+
+    it "raises an exception when neither the external author name nor email is provided" do
+      expect {
+        @sp.parse_author("", nil, nil)
+      }.to raise_exception(StoryParser::Error) { |e| expect(e.message).to eq("No author name specified\nNo author email specified") }
     end
   end
 
@@ -251,7 +285,7 @@ describe StoryParser do
         detect_tags: true
       }
 
-      archivist = create_archivist
+      archivist = create(:archivist)
       User.current_user = archivist
 
       WebMock.allow_net_connect!

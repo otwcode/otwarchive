@@ -8,8 +8,11 @@
   <dt>*: any characters </dt>
   <dd><kbd>book*</kbd> will find <samp>book</samp> and <samp>books</samp> and <samp>booking</samp>.</dd>
   
-  <dt>space: a space acts like AND </dt>
-  <dd><kbd>Harry Potter</kbd> will find <samp>Harry Potter</samp> and <samp>Harry James Potter</samp> but not <spam>Harry</samp>.</dd>
+  <dt>space: acts like AND for search terms in the same field of the work </dt>
+  <dd><kbd>Harry Potter</kbd> will find <samp>Harry Potter</samp> and <samp>Harry James Potter</samp> in any field, but it won't find works by a creator named <samp>Harry</samp> with the character tag <samp>Sherman Potter</samp>.</dd>
+
+  <dt>AND: searches for works which have both terms in any field </dt>
+  <dd><kbd>Harry AND Potter</kbd> will find works by a creator named <samp>Harry</samp> with the character tag <samp>Sherman Potter</samp>.</dd>
   
   <dt>||: OR (not exclusive) </dt>
   <dd><kbd>Harry || Potter</kbd> will find <samp>Harry</samp>, <samp>Harry Potter</samp>, and <samp>Potter</samp>.</dd>

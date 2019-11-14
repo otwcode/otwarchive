@@ -23,7 +23,7 @@ Feature: Tag Wrangling - special cases
   When I follow "New Tag"
     And I fill in "Name" with "România"
     And I check "Canonical"
-    And I choose "Freeform"
+    And I choose "Additional Tag"
     And I press "Create Tag"
   Then I should see "Tag was successfully created."
     But I should see "România - Freeform"
@@ -113,7 +113,7 @@ Feature: Tag Wrangling - special cases
     And I press "Preview"
     And I press "Update"
   Then I should see "Work was successfully updated"
-    And all search indexes are updated
+    And all indexing jobs have been run
   When I view the tag "Evan ?"
     And I follow "filter works"
   Then I should see "1 Work in Evan ?"

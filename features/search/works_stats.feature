@@ -68,7 +68,7 @@ Feature: Search works by stats
     Then the field labeled "Kudos" should contain "<2"
       And "Kudos" should be selected within "Sort by"
       And "Ascending" should be selected within "Sort direction"
-    When I check "Complete"
+    When I choose "Complete works only"
       And I press "Search" within "#new_work_search"
     Then I should see "You searched for: Complete kudos count: <2 sort by: kudos ascending"
       And I should see "4 Found"
@@ -79,7 +79,7 @@ Feature: Search works by stats
       And the 4th result should contain "Kudos: 1"
     When I follow "Edit Your Search"
     Then the field labeled "Kudos" should contain "<2"
-      And the "Complete" checkbox should be checked
+      And the "Complete works only" checkbox should be checked
       And "Ascending" should be selected within "Sort direction"
 
   Scenario: Search by exact number of comments
@@ -123,8 +123,8 @@ Feature: Search works by stats
       And "Comments" should be selected within "Sort by"
       And "Ascending" should be selected within "Sort direction"
 
-  Scenario: Search by < a number of comments and sort in descending order by
-  comments
+ Scenario: Search by < a number of comments and sort in descending order by
+ comments
     Given a set of works with comments for searching
     When I am on the search works page
       And I fill in "Comments" with "<20"
@@ -145,7 +145,7 @@ Feature: Search works by stats
       And "Descending" should be selected within "Sort direction"
 
   Scenario: Search by > a number of comments and sort in ascending order by
-  title using the header search
+    title using the header search
     Given a set of works with comments for searching
     When I fill in "site_search" with "comments: > 2 sort: title ascending"
       And I press "Search"

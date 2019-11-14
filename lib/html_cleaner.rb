@@ -25,7 +25,6 @@ module HtmlCleaner
       self_closing = node.children.empty?
     rescue NameError
       name = node
-      attributes ||= {}
       self_closing = false
     end
 
@@ -124,13 +123,6 @@ module HtmlCleaner
     # convert carriage returns to newlines
     text.gsub!(/\r\n?/, "\n")
 
-    # replace curlyquotes
-    # note: turns out not to be necessary?
-    # text.gsub! "\xE2\x80\x98", "'"
-    # text.gsub! "\xE2\x80\x99", "'"
-    # text.gsub! "\xE2\x80\x9C", '"'
-    # text.gsub! "\xE2\x80\x9D", '"'
-
     # argh, get rid of ____spacer____ inserts
     text.gsub! "____spacer____", ""
 
@@ -143,6 +135,7 @@ module HtmlCleaner
   end
 
   def sanitize_value(field, value)
+    return value if ArchiveConfig.FIELDS_WITHOUT_SANITIZATION.include?(field.to_s)
     if ArchiveConfig.NONZERO_INTEGER_PARAMETERS.has_key?(field.to_s)
       return (value.to_i > 0) ? value.to_i : ArchiveConfig.NONZERO_INTEGER_PARAMETERS[field.to_s]
     end
@@ -161,19 +154,29 @@ module HtmlCleaner
       # We're allowing users to use HTML in this field
       transformers = []
       if ArchiveConfig.FIELDS_ALLOWING_VIDEO_EMBEDS.include?(field.to_s)
-        transformers << Sanitize::Transformers::ALLOW_VIDEO_EMBEDS
+        transformers << OTWSanitize::EmbedSanitizer.transformer
+        transformers << OTWSanitize::MediaSanitizer.transformer
       end
       if ArchiveConfig.FIELDS_ALLOWING_CSS.include?(field.to_s)
-        transformers << Sanitize::Transformers::ALLOW_USER_CLASSES
+        transformers << OTWSanitize::UserClassSanitizer.transformer
       end
-      # the screencast field shouldn't be wrapped in <p> tags
-      unless field.to_s == "screencast"
+      # Now that we know what transformers we need, let's sanitize the unfrozen value
+      if ArchiveConfig.FIELDS_ALLOWING_CSS.include?(field.to_s)
         unfrozen_value = add_paragraphs_to_text(Sanitize.clean(fix_bad_characters(unfrozen_value),
-                               Sanitize::Config::ARCHIVE.merge(transformers: transformers)))
+                               Sanitize::Config::CSS_ALLOWED.merge(transformers: transformers)))
+      else
+        # the screencast field shouldn't be wrapped in <p> tags
+        unfrozen_value = add_paragraphs_to_text(Sanitize.clean(fix_bad_characters(unfrozen_value),
+                               Sanitize::Config::ARCHIVE.merge(transformers: transformers))) unless field.to_s == "screencast"
       end
       doc = Nokogiri::HTML::Document.new
       doc.encoding = "UTF-8"
       unfrozen_value = doc.fragment(unfrozen_value).to_xhtml
+
+      # Hack! the herald angels sing
+      # TODO: AO3-5801 Switch to an HTML5 serializer that doesn't add invalid closing tags
+      # to track and source elements.
+      unfrozen_value.gsub!(%r{</(source|track)>}, "")
     else
       # clean out all tags
       unfrozen_value = Sanitize.clean(fix_bad_characters(unfrozen_value))
@@ -220,8 +223,8 @@ module HtmlCleaner
 
   # Tags whose content we don't touch
   def dont_touch_content_tag?(tag)
-    %w(a abbr acronym address br dl h1 h2 h3 h4 h5 h6 hr img ol p
-       pre table ul).include?(tag)
+    %w(a abbr acronym address audio br dl h1 h2 h3 h4 h5 h6 hr img ol p
+       pre source table track video ul).include?(tag)
   end
 
   # Tags that don't contain content
@@ -238,14 +241,14 @@ module HtmlCleaner
 
   # Tags that can't be inside p tags
   def put_outside_p_tag?(tag)
-    %w(dl h1 h2 h3 h4 h5 h6 hr ol p pre table ul).include?(tag)
+    %w(audio dl h1 h2 h3 h4 h5 h6 hr ol p pre source table track ul video).include?(tag)
   end
 
   # Tags before and after which we don't want to convert linebreaks
   # into br's and p's
   def no_break_before_after_tag?(tag)
-    %w(blockquote br center dl div h1 h2 h3 h4 h5 h6
-       hr ol p pre table ul).include?(tag)
+    %w(audio blockquote br center dl div h1 h2 h3 h4 h5 h6
+       hr ol p pre source table track ul video).include?(tag)
   end
 
   # Traverse a Nokogiri document tree recursively in order to insert
@@ -271,7 +274,7 @@ module HtmlCleaner
       return [stack, out_html]
     end
 
-    # Don't decend into node if we don't want to touch the content of
+    # Don't descend into node if we don't want to touch the content of
     # this kind of tag
     if dont_touch_content_tag?(node.name)
       if put_inside_p_tag?(node.name) && !stack.inside_paragraph?
@@ -406,4 +409,8 @@ module HtmlCleaner
           strip
   end
 
+  def add_break_between_paragraphs(value)
+    return "" if value.blank?
+    value.gsub(%r{\s*</p>\s*<p>\s*}, "</p><br /><p>")
+  end
 end

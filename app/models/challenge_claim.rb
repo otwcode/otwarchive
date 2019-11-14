@@ -48,11 +48,19 @@ class ChallengeClaim < ApplicationRecord
   scope :order_by_date, -> { order("created_at ASC") }
 
   def self.order_by_requesting_pseud(dir="ASC")
-    joins(REQUESTING_PSEUD_JOIN).order("pseuds.name #{dir}")
+    if dir.casecmp("ASC").zero?
+      joins(REQUESTING_PSEUD_JOIN).order("pseuds.name ASC")
+    else
+      joins(REQUESTING_PSEUD_JOIN).order("pseuds.name DESC")
+    end
   end
 
   def self.order_by_offering_pseud(dir="ASC")
-    joins(CLAIMING_PSEUD_JOIN).order("pseuds.name #{dir}")
+    if dir.casecmp("ASC").zero?
+      joins(CLAIMING_PSEUD_JOIN).order("pseuds.name ASC")
+    else
+      joins(CLAIMING_PSEUD_JOIN).order("pseuds.name DESC")
+    end
   end
 
   WORKS_JOIN = "INNER JOIN works ON works.id = challenge_claims.creation_id AND challenge_claims.creation_type = 'Work'"
@@ -133,7 +141,7 @@ class ChallengeClaim < ApplicationRecord
   end
 
   def claiming_pseud
-    User.find_by(id: claiming_user_id).default_pseud
+    claiming_user.try(:default_pseud)
   end
 
   def requesting_pseud
@@ -141,7 +149,7 @@ class ChallengeClaim < ApplicationRecord
   end
 
   def claim_byline
-    User.find_by(id: claiming_user_id).default_pseud.byline
+    claiming_pseud.try(:byline) || "deleted user"
   end
 
   def request_byline
@@ -150,6 +158,10 @@ class ChallengeClaim < ApplicationRecord
 
   def user_allowed_to_destroy?(current_user)
     (self.claiming_user == current_user) || self.collection.user_is_maintainer?(current_user)
+  end
+
+  def prompt_description
+    request_prompt&.description || ""
   end
 
 end

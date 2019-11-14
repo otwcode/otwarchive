@@ -47,10 +47,7 @@ module WorkStats
   end
 
   def increment_hit_count(visitor)
-    # skip if this is the same visitor as before or if the current user is the author of this work
-    # Or the request comes from a unicorn which sets the REQUEST_FROM_BOT enviroment variable
-    # We will set this in the unicorn which servers bots, which is chosen by nginx.
-    unless ENV['REQUEST_FROM_BOT'] || self.last_visitor == visitor || (User.current_user.is_a?(User) && User.current_user.is_author_of?(self))
+    unless disregard_visit?(visitor)
       set_last_visitor(visitor)
       add_to_hit_count(1)
       REDIS_GENERAL.sadd(WORKS_TO_UPDATE_KEY, get_work_id)
@@ -69,9 +66,26 @@ module WorkStats
     counter = self.stat_counter || self.create_stat_counter
     counter.update_attributes(
       kudos_count: self.kudos.count,
-      comments_count: self.total_comments.not_deleted.count,
+      comments_count: self.count_visible_comments,
       bookmarks_count: self.bookmarks.where(private: false).count
     )
+  end
+
+  private
+
+  # Do not count the visit if:
+  # - This is the same visitor as before
+  # - The current user is a creator of this work
+  # - The request comes from a unicorn which sets the REQUEST_FROM_BOT enviroment variable
+  # (We will set this in the unicorn which serves bots, which is chosen by nginx.)
+  # - The work is hidden by an admin (admins can visit it but it shouldn't count as a hit)
+  # - The work is part of an unrevealed collection
+  def disregard_visit?(visitor)
+    ENV['REQUEST_FROM_BOT'] ||
+      self.last_visitor == visitor ||
+      User.current_user.is_a?(User) && User.current_user.is_author_of?(self) ||
+      self.hidden_by_admin? ||
+      self.in_unrevealed_collection?
   end
 
   protected

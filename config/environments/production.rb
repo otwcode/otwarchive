@@ -9,6 +9,7 @@ Otwarchive::Application.configure do
   # Full error reports are disabled and caching is turned on
   config.consider_all_requests_local       = false
   config.action_controller.perform_caching = true
+  config.action_mailer.perform_caching     = true
 
   # Specifies the header that your server uses for sending files
   # config.action_dispatch.x_sendfile_header = "X-Sendfile"
@@ -22,8 +23,9 @@ Otwarchive::Application.configure do
   # Disable IP spoofing protection
   config.action_dispatch.ip_spoofing_check = false
 
-  # See everything in the log (default is :info)
+  # See everything in the log (default is now :debug)
   # config.log_level = :debug
+  config.log_level = :info
 
   # Use a different logger for distributed setups
   # config.logger = SyslogLogger.new
@@ -67,4 +69,5 @@ Otwarchive::Application.configure do
   # :rw Retry in all SQL, but does not retry if Lost connection has happened in write SQL
   config.active_record.retry_mode = :rw
 
+  config.middleware.use Rack::Attack
 end
