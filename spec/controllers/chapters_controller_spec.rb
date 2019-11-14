@@ -235,7 +235,6 @@ describe ChaptersController do
       end
 
       it "does not increment the hit count" do
-        REDIS_GENERAL.set("work_stats:#{work.id}:last_visitor", nil)
         expect {
           get :show, params: { work_id: work.id, id: work.chapters.first.id }
         }.not_to change { REDIS_GENERAL.get("work_stats:#{work.id}:hit_count").to_i }
