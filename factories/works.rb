@@ -33,7 +33,7 @@ FactoryBot.define do
     # chapters the work should have
     factory :work_with_chapters do
       transient do
-        chapters_count 2
+        chapters_count { 2 }
       end
 
       after(:create) do |work, evaluator|
