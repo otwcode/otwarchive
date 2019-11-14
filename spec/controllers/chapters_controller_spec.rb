@@ -271,7 +271,6 @@ describe ChaptersController do
 
     context "when the chapter is the first chapter" do
       it "increases the hit count" do
-        REDIS_GENERAL.set("work_stats:#{chaptered_work.id}:last_visitor", nil)
         expect {
           get :show, params: { work_id: chaptered_work.id, id: first_chapter.id }
         }.to change { REDIS_GENERAL.get("work_stats:#{chaptered_work.id}:hit_count").to_i }.by(1)
