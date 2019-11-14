@@ -3,7 +3,7 @@ require "spec_helper"
 describe UserMailer, type: :mailer do
 
   describe "claim_notification" do
-    title = Faker::Book.title
+    title = "Façade"
     title2 = Faker::Book.title
     let(:author) { create(:user) }
     let(:work) { create(:work, title: title, authors: [author.pseuds.first]) }
@@ -34,16 +34,20 @@ describe UserMailer, type: :mailer do
         let(:part) { email.html_part }
       end
 
-      it "lists the first imported work in an unordered list in the HTML body" do
-        expect(email.html_part).to have_xpath("//ul/li", text: title)
+      it "lists the first imported work" do
+        expect(email.html_part).to have_body_text(title)
       end
 
-      it "lists the second imported work in an unordered list in the HTML body" do
-        expect(email.html_part).to have_xpath("//ul/li", text: title2)
+      it "lists the second imported work" do
+        expect(email.html_part).to have_body_text(title2)
       end
 
       it "only has style_to links in the HTML body" do
         expect(email.html_part).not_to have_xpath("//a[not(@style)]")
+      end
+
+      it "displays titles with non-ASCII characters" do
+        expect(email.text_part).to have_body_text(title)
       end
     end
 
@@ -52,12 +56,12 @@ describe UserMailer, type: :mailer do
         let(:part) { email.text_part }
       end
 
-      it "lists the first imported work as plain text" do
-        expect(email.text_part).not_to have_xpath("//ul/li", text: title)
-      end
-
       it "lists the second imported work with a leading hyphen" do
         expect(email.text_part).to have_body_text("- #{title2}")
+      end
+
+      it "displays titles with non-ASCII characters" do
+        expect(email.text_part).to have_body_text(title)
       end
     end
   end
