@@ -81,7 +81,7 @@ When /^I post (?:a|the) (?:(\d+) chapter )?work "([^"]*)"(?: with fandom "([^"]*
     (number_of_chapters.to_i - 1).times do
       step %{I follow "Add Chapter"}
       fill_in("content", with: "Yet another chapter.")
-      click_button("Post Without Preview")
+      click_button("Post")
     end
   end
   step %{all indexing jobs have been run}
