@@ -32,6 +32,8 @@ FactoryBot.define do
     # create(:work_with_chapters, chapters_count: 3) lets you specify how many
     # chapters the work should have
     factory :work_with_chapters do
+      posted { true }
+
       transient do
         chapters_count { 2 }
       end
