@@ -671,8 +671,6 @@ end
 Then /^the work "([^"]*)" should be deleted$/ do |work|
   assert !Work.where(title: work).exists?
 end
-<<<<<<< HEAD
-=======
 
 Then /^the Remove Me As Chapter Co-Creator option should be on the ([\d]+)(?:st|nd|rd|th) chapter$/ do |chapter_number|
   step %{I should see "Remove Me As Chapter Co-Creator" within "ul#sortable_chapter_list > li:nth-of-type(#{chapter_number})"}
@@ -687,4 +685,3 @@ Then /^I should find myself on Chapter ([\d]+) of the work "([^\"]*)"$/ do |chap
   step %{I should see "Entire Work"}
   step %{I should see "#{work_title}"}
 end
->>>>>>> AO3-4750
