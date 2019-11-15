@@ -7,12 +7,17 @@ describe ChaptersController do
   let(:user) { create(:user) }
   let!(:work) { create(:posted_work, authors: [user.pseuds.first]) }
   let(:unposted_work) { create(:draft, authors: [user.pseuds.first]) }
-  let(:banned_user) { create(:user, banned: true) }
-  let(:banned_users_work) { create(:posted_work, authors: [banned_user.pseuds.first]) }
   let(:chaptered_work) { create(:work_with_chapters, chapters_count: 3) }
   let(:first_chapter) { chaptered_work.first_chapter }
   let(:middle_chapter) { chaptered_work.chapters_in_order[1] }
   let(:last_chapter) { chaptered_work.last_chapter }
+
+  let(:banned_users_work) { create(:posted_work) }
+  let(:banned_user) do
+    user = banned_users_work.users.first
+    user.update(banned: true)
+    user
+  end
 
   describe "index" do
     it "redirects to work" do
