@@ -456,6 +456,11 @@ class WorksController < ApplicationController
       render(:new_import) && return
     end
 
+    if params[:language_id].empty?
+      flash.now[:error] = ts("Language cannot be blank.")
+      render(:new_import) && return
+    end
+
     importing_for_others = params[:importing_for_others] != "false" && params[:importing_for_others]
 
     # is external author information entered when import for others is not checked?
