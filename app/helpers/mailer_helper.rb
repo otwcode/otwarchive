@@ -83,4 +83,15 @@ module MailerHelper
     # ensure that the <br>s aren't escaped.
     html.split("\n").map { |line_of_text| h(line_of_text) }.join('<br>').html_safe
   end
+
+  # The title used in creatorship_notification and creatorship_invitation
+  # emails.
+  def creation_title(creation)
+    if creation.is_a?(Chapter)
+      ts("Chapter %{position} of %{title}",
+         position: creation.position, title: creation.work.title)
+    else
+      creation.title
+    end
+  end
 end # end of MailerHelper

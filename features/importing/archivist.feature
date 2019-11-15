@@ -81,8 +81,7 @@ Feature: Archivist bulk imports
       | user1 | a@ao3.org |
     When I go to the import page
       And I import the work "http://ao3testing.dreamwidth.org/593.html" by "name1" with email "a@ao3.org" and by "name2" with email "b@ao3.org"
-    When the system processes jobs
-      Then 1 email should be delivered to "a@ao3.org"
+    Then 1 email should be delivered to "a@ao3.org"
       And 1 email should be delivered to "b@ao3.org"
 
   Scenario: Import a work for multiple authors with accounts should not display the archivist
@@ -245,7 +244,7 @@ Feature: Archivist bulk imports
     Then I should see "We have notified the author(s) you imported works for. If any were missed, you can also add co-authors manually."
     When I press "Edit"
     And I fill in "work_collection_names" with "Club"
-    And I press "Post Without Preview"
+    And I press "Post"
     Then I should see "Story"
     And I should see "randomtestname"
     And I should see "Club"

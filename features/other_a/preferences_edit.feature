@@ -43,7 +43,7 @@ Feature: Edit preferences
     And I should see "Turn off the banner showing on every page."
 
 
-  Scenario: View and edit preferences - viewing history, personal details, view entire work
+  Scenario: View and edit preferences for viewing history, personal details, view entire work
 
   Given the following activated user exists
     | login         | password   |
@@ -99,318 +99,244 @@ Feature: Edit preferences
     And I follow "This has two chapters"
   Then I should not see "Secondy chapter"
 
-  Scenario: View and edit preferences - show/hide warnings and tags
+  @javascript
+  Scenario: User can hide warning and freeform tags and reveal them on a case-
+  by-case basis.
 
-  # set preference
-  Given the following activated users exist
-    | login          | password   |
-    | mywarning1     | password   |
-    | mywarning2     | password   |
-    And a fandom exists with name: "Stargate SG-1", canonical: true
-  When I am logged in as "mywarning1" with password "password"
-  When I post the work "This work has warnings and tags" with fandom "Stargate SG-1, Stargate SG-2"
-    And I follow "Edit"
-    And I check "series-options-show"
-    And I fill in "work_series_attributes_title" with "My new series"
-    And I press "Preview"
-    And I press "Update"
-  Then I should see "Work was successfully updated"
-  When I log out
-  When I am logged in as "mywarning2" with password "password"
-    And I post the work "This also has warnings and tags" with fandom "Stargate SG-1, Stargate SG-2" with freeform "Scarier"
-  When I view the work "This work has warnings and tags"
-    And I follow "Bookmark"
-    And I press "Create"
-  Then I should see "Bookmark was successfully created"
-  When I follow "This work has warnings and tags"
-    And I follow "My new series"
-    And I follow "Bookmark Series"
-    And I press "Create"
-  Then I should see "Bookmark was successfully created"
+  Given I limit myself to the Archive
+    And I am logged in as "someone_else"
+    And I post the work "Someone Else's Work" as part of a series "A Series"
+    And I am logged in as "tester"
+    And I post the work "My Work"
+    And I bookmark the work "Someone Else's Work"
 
-  # see everything on works index and show page
-  When I go to the works page
-  Then I should see "No Archive Warnings Apply"
-    And I should not see "Show warnings"
-    And I should see "Scary tag"
-    And I should not see "Show additional tags"
-  When I follow "This work has warnings and tags"
-  Then I should see "No Archive Warnings Apply" within "dl.work.meta"
-    And I should not see "Show warnings"
-    And I should see "Scary tag"
-    And I should not see "Show additional tags"
-  When I go to the works page
-    And I follow "This also has warnings and tags"
-  Then I should see "No Archive Warnings Apply" within "dl.work.meta"
-    And I should not see "Show warnings"
-    And I should see "Scarier"
-    And I should not see "Show additional tags"
-
-  # see everything on fandoms page, for both canonical and unwrangled fandoms, and bookmarks page and series page
-  When I follow "All Fandoms"
-  Then I should see "Stargate SG-1"
-    And I should see "Stargate SG-2"
-    # we are now looking at a canonical fandom tag
-  When all indexing jobs have been run
-    And I follow "Stargate SG-1"
-  Then I should see "This work has warnings and tags"
-    And I should see "This also has warnings and tags"
-    And I should see "No Archive Warnings Apply" within ".tags"
-    And I should not see "Show warnings"
-    And I should see "Scary tag"
-    And I should see "Scarier"
-    And I should not see "Show additional tags"
-    And I should see "Bookmarks" within "div.navigation.actions"
-    And I should see "Works" within "div.navigation.actions"
-  When I follow "All Fandoms"
-  # we are now looking at a non-canonical fandom tag
-    And I follow "Stargate SG-2"
-  Then I should see "This work has warnings and tags"
-    And I should see "This also has warnings and tags"
-    And I should see "No Archive Warnings Apply" within "div#main.tags-show"
-    And I should not see "Show warnings"
-    And I should see "Scary tag"
-    And I should see "Scarier"
-    And I should not see "Show additional tags"
-    And I should not see "Bookmarks" within "div.work ul.index li.own"
-    And I should not see "Works" within "div.work ul.index li.own"
-  When I follow "My new series"
-  Then I should see "This work has warnings and tags"
-    And I should not see "This also has warnings and tags"
-    And I should see "No Archive Warnings Apply" within "ul.series.work.index.group"
-    And I should not see "Show warnings"
-    And I should see "Scary tag"
-    And I should not see "Scarier"
-    And I should not see "Show additional tags"
-  # change preference to hide warnings
- When I go to mywarning2's user page
-    And I follow "Preferences"
-    And I check "Hide warnings"
-    And I press "Update"
+  # Change tester's preferences to hide warnings.
+  When I set my preferences to hide warnings
   Then I should see "Your preferences were successfully updated"
 
-  # hidden warnings on show page, except for your own works
-  When I go to the works page
-  Then I should see "No Archive Warnings Apply"
+  # Warnings are hidden on work meta, except on user's own works.
+  # We use a selector so it doesn't pick up the info in the Share box.
+  When I view the work "Someone Else's Work"
+  Then I should not see "No Archive Warnings Apply" within "dl.work.meta"
     And I should see "Show warnings"
-    And I should see "Scary tag"
-    And I should see "Scarier"
+    And I should see "Scary tag" within "dl.work.meta"
     And I should not see "Show additional tags"
-  When I follow "This work has warnings and tags"
-  Then I should not see "No Archive Warnings Apply" within "dl.work.meta.group"
-    And I should see "Show warnings"
-    And I should see "Scary tag"
-    And I should not see "Show additional tags"
-  When I go to the works page
-    And I follow "This also has warnings and tags"
-  Then I should see "No Archive Warnings Apply" within "dl.work.meta.group"
+  When I follow "Show warnings"
+  Then I should see "No Archive Warnings Apply" within "dl.work.meta"
+  When I view the work "My Work"
+  Then I should see "No Archive Warnings Apply" within "dl.work.meta"
     And I should not see "Show warnings"
-    And I should see "Scarier"
+    And I should see "Scary tag" within "dl.work.meta"
     And I should not see "Show additional tags"
 
-  # hidden warnings on fandoms page except for your own works, for both canonical and unwrangled fandoms
-  When I follow "All Fandoms"
-  Then I should see "Stargate SG-1"
-  # we're looking at a canonical tag preferences set to hide warnings
-  When I follow "Stargate SG-1"
-  Then I should see "This work has warnings and tags"
-    And I should see "This also has warnings and tags"
-    # we can see warnings on works that we created
-    And I should see "No Archive Warnings Apply" within ".own .tags"
-    # Commenting out the following line, because its impossible to get to the correct element.
-    # The functionality is being tested with the 'Show warnings' line, which lets us know that
-    # tags on works that don't belong to us are being hidden.
-    # And I should not see "No Archive Warnings Apply" within "div#main ol.work li.work ul.tags"
-    And I should see "No Archive Warnings Apply" within "div#main ol.work li.own ul.tags"
+  # Warnings are hidden in work blurbs, except on user's own works.
+  When I go to someone_else's works page
+  Then I should see "Someone Else's Work" 
+    And I should not see "No Archive Warnings Apply" within "li.warnings"
     And I should see "Show warnings"
-    And I should see "Scary tag"
-    And I should see "Scarier"
+    And I should see "Scary tag" within "li.freeforms"
     And I should not see "Show additional tags"
-  When I follow "All Fandoms"
-  # we're looking at a non-canonical tag page, preferences set to hide warnings
-    And I follow "Stargate SG-2"
-  Then I should see "This work has warnings and tags"
-    And I should see "This also has warnings and tags"
-    And I should see "No Archive Warnings Apply" within ".own .tags"
-     And I should see "Show warnings"
-  Then I should see "Scary tag"
-    And I should see "Scarier"
-    And I should not see "Show additional tags"
-    # TODO: The next two steps were only passing before Issue 3909 because it was looking at the .navigation in the blurb -- a noncanonical tag page does not have .navigation at the top (where Bookmarks and Works are for canonical tags) unless you are logged in as a wrangler so this will always fail because it cannot find a #main .navigation li
-    # And I should not see "Bookmarks" within "#main .navigation li"
-    # And I should not see "Works" within "#main .navigation li"
-  When I follow "My new series"
-  Then I should see "This work has warnings and tags"
-    And I should not see "This also has warnings and tags"
-    And I should not see "No Archive Warnings Apply" within ".tags"
-    And I should see "Show warnings"
-    And I should see "Scary tag"
-    And I should not see "Scarier"
+  When I follow "Show warnings"
+  Then I should see "No Archive Warnings Apply" within "li.warnings"
+  When I go to my works page
+  Then I should see "My Work"
+    And I should see "No Archive Warnings Apply" within "li.warnings"
+    And I should not see "Show warnings"
+    And I should see "Scary tag" within "li.freeforms"
     And I should not see "Show additional tags"
 
-  # change preference to hide freeforms
-  When I go to mywarning2's user page
-    And I follow "Preferences"
+  # Warnings are hidden in series blurbs.
+  When I go to someone_else's series page
+  Then I should see "A Series"
+    And I should not see "No Archive Warnings Apply" within "li.warnings"
+    And I should see "Show warnings"
+    And I should see "Scary tag" within "li.freeforms"
+    And I should not see "Show additional tags"
+  When I follow "Show warnings"
+  Then I should see "No Archive Warnings Apply" within "li.warnings"
+
+  # Warnings are hidden in bookmark blurbs.
+  # This is slightly excessive -- bookmarks use the work blurb -- but we'll
+  # check in case that ever changes.
+  When I go to my bookmarks page
+  Then I should see "Someone Else's Work"
+    And I should not see "No Archive Warnings Apply" within "li.warnings"
+    And I should see "Show warnings"
+    And I should see "Scary tag" within "li.freeforms"
+    And I should not see "Show additional tags"
+  When I follow "Show warnings"
+  Then I should see "No Archive Warnings Apply" within "li.warnings"
+
+  # Change tester's preferences to hide freeforms as well as warnings.
+  When I go to my preferences page
     And I check "Hide additional tags"
     And I press "Update"
   Then I should see "Your preferences were successfully updated"
 
-  # hidden both on works index and show page, except for your own works
-  When I go to the works page
-  Then I should see "No Archive Warnings Apply"
+  # Freeforms and warnings are hidden on work meta, except for user's own works.
+  When I view the work "Someone Else's Work"
+  Then I should not see "No Archive Warnings Apply" within "dl.work.meta"
     And I should see "Show warnings"
-    And I should not see "Scary tag"
-    And I should see "Scarier"
+    And I should not see "Scary tag" within "dl.work.meta"
     And I should see "Show additional tags"
-  When I follow "This work has warnings and tags"
-  Then I should not see "No Archive Warnings Apply" within ".warning"
-    And I should see "Show warnings"
-    # The following line is commented out, because the test is seeing the text that
-    # would is in the 'Share' textarea. We need to rework this so we can somehow do a 
-    # 'should not have this' UNLESS 'this'.
-    #And I should not see "Scary tag"
-    And I should see "Show additional tags"
-  When I go to the works page
-    And I follow "This also has warnings and tags"
-  Then I should see "No Archive Warnings Apply" within "dd.warning.tags"
+  When I follow "Show warnings"
+  Then I should see "No Archive Warnings Apply" within "dl.work.meta"
+    And I should not see "Scary tag" within "dl.work.meta"
+  When I follow "Show additional tags"
+  Then I should see "Scary tag" within "dl.work.meta"
+  When I view the work "My Work"
+  Then I should see "No Archive Warnings Apply" within "dl.work.meta"
     And I should not see "Show warnings"
-    And I should see "Scarier"
+    And I should see "Scary tag" within "dl.work.meta"
     And I should not see "Show additional tags"
 
-  # hidden both on fandoms page and bookmarks page, except for your own works, for both canonical and unwrangled fandoms
-  When I follow "All Fandoms"
-  Then I should see "Stargate SG-1"
-  When I follow "Stargate SG-1"
-  Then I should see "This work has warnings and tags"
-    And I should see "This also has warnings and tags"
-    And I should see "No Archive Warnings Apply" within ".own .tags"
-    # TODO: Figure out how to make this work
-    # And I should not see "No Archive Warnings Apply" within ".tags" when it's not ".own"
+  # Freeforms and warnings are hidden in work blurbs, except on user's own
+  # works.
+  When I go to someone_else's works page
+  Then I should see "Someone Else's Work" 
+    And I should not see "No Archive Warnings Apply" within "li.warnings"
     And I should see "Show warnings"
-    # TODO: Figure out how to make this work
-    And I should not see "Scary tag"
-    And I should see "Scarier"
+    And I should not see "Scary tag" within "li.freeforms"
     And I should see "Show additional tags"
-  When I follow "All Fandoms"
-  # we're looking at a non-canonical page, hiding freeforms and warnings
-    And I follow "Stargate SG-2"
-  Then I should see "This work has warnings and tags"
-    And I should see "This also has warnings and tags"
-    # Line below commented out because we're looking at two works with no way to differentiate between them
-    #And I should not see "No Archive Warnings Apply" within ".tags"
-     And I should see "Show warnings"
-  Then I should not see "Scary tag"
-    And I should see "Scarier"
-    And I should see "Show additional tags"
-    # TODO: The next two steps were only passing before Issue 3909 because it was looking at the .navigation in the blurb -- a noncanonical tag page does not have .navigation at the top (where Bookmarks and Works are for canonical tags) unless you are logged in as a wrangler so this will always fail because it cannot find a #main .navigation li
-    # And I should not see "Bookmarks" within "#main .navigation li"
-    # And I should not see "Works" within "#main .navigation li"
-  Then I should see "This work has warnings and tags"
-  When I follow "My new series"
-  Then I should see "This work has warnings and tags"
-    And I should not see "This also has warnings and tags"
-    And I should not see "No Archive Warnings Apply" within ".tags"
-    And I should see "Show warnings"
-    # Two lines below commented out because of the 'Share' textarea
-    #And I should not see "Scary tag"
-    #And I should not see "Scarier"
-    And I should see "Show additional tags"
+  When I follow "Show warnings"
+  Then I should see "No Archive Warnings Apply" within "li.warnings"
+    And I should not see "Scary tag" within "li.freeforms"
+  When I follow "Show additional tags"
+  Then I should see "Scary tag" within "li.freeforms"
+  When I go to my works page
+  Then I should see "My Work"
+    And I should see "No Archive Warnings Apply" within "li.warnings"
+    And I should not see "Show warnings"
+    And I should see "Scary tag" within "li.freeforms"
+    And I should not see "Show additional tags"
 
-  # change preference to show warnings, keep freeforms hidden
-  When I go to mywarning2's user page
-    And I follow "Preferences"
+  # Freeforms and warnings are hidden in series blurbs.
+  When I go to someone_else's series page
+  Then I should see "A Series"
+    And I should not see "No Archive Warnings Apply" within "li.warnings"
+    And I should see "Show warnings"
+    And I should not see "Scary tag" within "li.freeforms"
+    And I should see "Show additional tags"
+  When I follow "Show warnings"
+  Then I should see "No Archive Warnings Apply" within "li.warnings"
+    And I should not see "Scary tag" within "li.freeforms"
+  When I follow "Show additional tags"
+  Then I should see "Scary tag" within "li.freeforms"
+
+  # Freeforms and warnings are hidden in bookmark blurbs.
+  When I go to my bookmarks page
+  Then I should see "Someone Else's Work"
+    And I should not see "No Archive Warnings Apply" within "li.warnings"
+    And I should see "Show warnings"
+    And I should not see "Scary tag" within "li.freeforms"
+    And I should see "Show additional tags"
+  When I follow "Show warnings"
+  Then I should see "No Archive Warnings Apply" within "li.warnings"
+    And I should not see "Scary tag" within "li.freeforms"
+  When I follow "Show additional tags"
+  Then I should see "Scary tag" within "li.freeforms"
+
+  # Change tester's preferences to show warnings but keep freeforms hidden.
+  When I go to my preferences page
     And I uncheck "Hide warnings"
     And I press "Update"
   Then I should see "Your preferences were successfully updated"
 
-  # hidden only freeforms on works index and show page, except for your own works
-  When I go to the works page
-  Then I should see "No Archive Warnings Apply"
+  # Freeforms are hidden on work meta, except on user's own works.
+  When I view the work "Someone Else's Work"
+  Then I should see "No Archive Warnings Apply" within "dl.work.meta"
     And I should not see "Show warnings"
-    And I should not see "Scary tag"
-    And I should see "Scarier"
     And I should see "Show additional tags"
-  When I follow "This work has warnings and tags"
-  Then I should see "No Archive Warnings Apply" within "dd.warning.tags"
+    And I should not see "Scary tag" within "dl.work.meta"
+  When I follow "Show additional tags"
+  Then I should see "Scary tag" within "dl.work.meta"
+  When I view the work "My Work"
+  Then I should see "No Archive Warnings Apply" within "dl.work.meta"
     And I should not see "Show warnings"
-    #Commented out because of 'Share' textarea
-    #And I should not see "Scary tag"
-    And I should see "Show additional tags"
-  When I go to the works page
-    And I follow "This also has warnings and tags"
-  Then I should see "No Archive Warnings Apply" within "dd.warning.tags"
-    And I should not see "Show warnings"
-    And I should see "Scarier"
+    And I should see "Scary tag" within "dl.work.meta"
     And I should not see "Show additional tags"
 
-  # hidden only freeforms on fandoms page and bookmarks page, except for your own works, for both canonical and unwrangled fandoms
-  When I follow "All Fandoms"
-  Then I should see "Stargate SG-1"
-  When I follow "Stargate SG-1"
-  Then I should see "This work has warnings and tags"
-    And I should see "This also has warnings and tags"
-    And I should see "No Archive Warnings Apply" within ".tags"
+  # Freeforms are hidden in work blurbs, except on user's own works.
+  When I go to someone_else's works page
+  Then I should see "Someone Else's Work" 
+    And I should see "No Archive Warnings Apply" within "li.warnings"
     And I should not see "Show warnings"
-    And I should not see "Scary tag"
-    And I should see "Scarier"
+    And I should not see "Scary tag" within "li.freeforms"
     And I should see "Show additional tags"
-  When I follow "All Fandoms"
-  # we're looking at a non-canonical tag page
-    And I follow "Stargate SG-2"
-  Then I should see "This work has warnings and tags"
-    And I should see "This also has warnings and tags"
-    And I should see "No Archive Warnings Apply"
+  When I follow "Show additional tags"
+  Then I should see "Scary tag" within "li.freeforms"
+  When I go to my works page
+  Then I should see "My Work"
+    And I should see "No Archive Warnings Apply" within "li.warnings"
     And I should not see "Show warnings"
-  Then I should not see "Scary tag"
-    And I should see "Scarier"
-    And I should see "Show additional tags"
-    And I should not see "Bookmarks" within "div.work ul.index li.own"
-    And I should not see "Works" within "div.work ul.index li.own"
-  When I follow "My new series"
-  Then I should see "This work has warnings and tags"
-    And I should not see "This also has warnings and tags"
-    And I should see "No Archive Warnings Apply"
+    And I should see "Scary tag" within "li.freeforms"
+    And I should not see "Show additional tags"
+
+  # Freeforms are hidden in series blurbs.
+  When I go to someone_else's series page
+  Then I should see "A Series"
+    And I should see "No Archive Warnings Apply" within "li.warnings"
     And I should not see "Show warnings"
-    And I should not see "Scary tag"
-    And I should not see "Scarier"
+    And I should not see "Scary tag" within "li.freeforms"
     And I should see "Show additional tags"
+  When I follow "Show additional tags"
+  Then I should see "Scary tag" within "li.freeforms"
 
-  @javascript
-  Scenario: A user can see hidden tags
-    Given the following typed tags exists
-        | name                                   | type         | canonical |
-        | Cowboy Bebop                           | Fandom       | true      |
-        | Faye Valentine is a sweetie            | Freeform     | false     |
-        | Ed is a sweetie                        | Freeform     | false     |
-      And I am logged in as "first_user"
-      And I post the work "Asteroid Blues" with fandom "Cowboy Bebop" with freeform "Ed is a sweetie" with second freeform "Faye Valentine is a sweetie"
-      And I should see "Work was successfully posted."
-      And I am logged in as "second_user" with password "secure_password" with preferences set to hidden warnings and additional tags
-    When I view the work "Asteroid Blues"
-      And I follow "Show additional tags"
-    Then I should see "Additional Tags: Ed is a sweetie, Faye Valentine is a sweetie"
-     And I should not see "Show additional tags"
+  # Freeforms are hidden in bookmark blurbs.
+  When I go to my bookmarks page
+  Then I should see "Someone Else's Work"
+    And I should see "No Archive Warnings Apply" within "li.warnings"
+    And I should not see "Show warnings"
+    And I should not see "Scary tag" within "li.freeforms"
+    And I should see "Show additional tags"
+  When I follow "Show additional tags"
+  Then I should see "Scary tag" within "li.freeforms"
 
-  @javascript
-  Scenario: A user can see hidden tags on a series
+  Scenario: User can hide warning and freeform tags on work blurbs and meta with
+  JavaScript disabled, but gets an error if they attempt to reveal them.
 
-    Given the following typed tags exists
-        | name                                   | type         | canonical |
-        | Cowboy Bebop                           | Fandom       | true      |
-        | Faye Valentine is a sweetie            | Freeform     | false     |
-        | Ed is a sweetie                        | Freeform     | false     |
-      And I limit myself to the Archive
-      And I am logged in as "first_user"
-      And I post the work "Asteroid Blues" with fandom "Cowboy Bebop" with freeform "Ed is a sweetie" as part of a series "Cowboy Bebop Blues"
-      And I post the work "Wild Horses" with fandom "Cowboy Bebop" with freeform "Faye Valentine is a sweetie" as part of a series "Cowboy Bebop Blues"
-    When I am logged in as "second_user" with password "secure_password" with preferences set to hidden warnings and additional tags
-      And I go to first_user's user page
-      And I follow "Cowboy Bebop Blues"
+    Given I am logged in as "first_user"
+      And I post the work "Asteroid Blues" with fandom "Cowboy Bebop" with freeform "Ed is a sweetie"
+    When I am logged in
+      And I set my preferences to hide both warnings and freeforms
+      And I go to first_user's works page
+
+    # Check hidden tags on the blurb
     Then I should see "Asteroid Blues"
-      And I should see "Wild Horses"
+      And I should not see "No Archive Warnings Apply" within "li.warnings"
       And I should not see "Ed is a sweetie"
     When I follow "Show additional tags"
-    Then I should see "Ed is a sweetie"
-      And I should not see "No Archive Warnings Apply" within "li.warnings"
+    Then I should see "Sorry, you need to have JavaScript enabled for this."
+      And I should see "Show additional tags"
     When I follow "Show warnings"
-    Then I should see "No Archive Warnings Apply" within "li.warnings"
+    Then I should see "Sorry, you need to have JavaScript enabled for this."
+      And I should see "Show warnings"
+
+    # Check hidden tags in the meta
+    When I view the work "Asteroid Blues"
+      And I follow "Show additional tags"
+    Then I should see "Sorry, you need to have JavaScript enabled for this."
+      And I should see "Show additional tags"
+    When I follow "Show warnings"
+    Then I should see "Sorry, you need to have JavaScript enabled for this."
+      And I should see "Show warnings"
+
+  Scenario: User can hide warning and freeform tags on series blurbs with
+  JavaScript disabled, but gets an error if they attempt to reveal them.
+
+    Given I am logged in as "first_user"
+      And I post the work "Asteroid Blues" with fandom "Cowboy Bebop" with freeform "Ed is a sweetie" as part of a series "Cowboy Bebop Blues"
+      And I post the work "Wild Horses" with fandom "Cowboy Bebop" with freeform "Faye Valentine is a sweetie" as part of a series "Cowboy Bebop Blues"
+    When I am logged in
+      And I set my preferences to hide both warnings and freeforms
+      And I go to first_user's series page
+    Then I should see "Cowboy Bebop Blues"
+      And I should not see "No Archive Warnings Apply" within "li.warnings"
+      And I should not see "Ed is a sweetie"
+      And I should not see "Faye Valentine is a sweetie"
+    When I follow "Show additional tags"
+    Then I should see "Sorry, you need to have JavaScript enabled for this."
+      And I should see "Show additional tags"
+    When I follow "Show warnings"
+    Then I should see "Sorry, you need to have JavaScript enabled for this."
+      And I should see "Show warnings"

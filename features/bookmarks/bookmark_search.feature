@@ -230,13 +230,13 @@ Feature: Search Bookmarks
     Given "someuser" has bookmarks of works in various languages
     # reload search page to bring new language-id mappings for dropdown
     When I reload the page
-      And I select "English" from "Work language"
+      And I select "Deutsch" from "Work language"
       And I press "Search Bookmarks"
     Then I should see the page title "Search Bookmarks"
-      And I should see "You searched for: Work language: English"
+      And I should see "You searched for: Work language: Deutsch"
       And I should see "1 Found"
-      And I should see "english work"
-      And I should not see "german work"
+      And I should see "german work"
+      And I should not see "english work"
 
   Scenario: Inputting bad queries
   When I fill in "Any field on work" with "bad~query~~!!!"

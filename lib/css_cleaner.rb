@@ -202,7 +202,7 @@ module CssCleaner
     value_stripped = value.downcase.gsub(/(!important)/, '').strip
 
     # if it's a comma-separated set of valid values it's fine
-    return value if value_stripped =~ /^(#{VALUE_REGEX}\,?)+$/i
+    return value if value_stripped =~ /^(#{VALUE_REGEX}\,?\s*)+$/i
 
     # If it's explicitly in our keywords it's fine
     return value if value_stripped.split(',').all? {|subval| ArchiveConfig.SUPPORTED_CSS_KEYWORDS.include?(subval.strip)}

@@ -106,19 +106,15 @@ describe Skin do
                 background:-ms-linear-gradient(top,#fafafa,#ddd);
                 background:-o-linear-gradient(top,#fafafa,#ddd);
                 background:linear-gradient(top,#fafafa,#ddd);
-                color:#555 }"
+                color:#555 }",
+ 
+        "saves box shadows with multiple shadows" =>
+          "li { box-shadow: 5px 5px 5px black, inset 0 0 0 1px #dadada; }"
     }.each_pair do |condition, css|
       it condition do
         @skin.css = css
         expect(@skin.save).to be_truthy
       end
-    end
-
-    # This is verified to work in prod and staging, but not dev
-    # TODO: fix across environments?
-    xit "should save CSS3 box shadows with multiple shadows" do
-      @skin.css = "li { box-shadow: 5px 5px 5px black, inset 0 0 0 1px #dadada; }"
-      expect(@skin.save).to be_truthy
     end
 
     # bad bad bad css
@@ -222,12 +218,12 @@ describe Skin do
   end
 
   describe '.approved_or_owned_by' do
-    let(:skin_owner) { FactoryGirl.create(:user) }
-    let(:random_user) { FactoryGirl.create(:user) }
+    let(:skin_owner) { FactoryBot.create(:user) }
+    let(:random_user) { FactoryBot.create(:user) }
 
     before do
-      FactoryGirl.create(:private_work_skin, author: skin_owner, title: 'Private Skin 1')
-      FactoryGirl.create(:private_work_skin, author: skin_owner, title: 'Private Skin 2')
+      FactoryBot.create(:private_work_skin, author: skin_owner, title: 'Private Skin 1')
+      FactoryBot.create(:private_work_skin, author: skin_owner, title: 'Private Skin 2')
     end
 
     context 'no user argument given' do
@@ -281,7 +277,7 @@ describe Skin do
   end
 
   describe '.approved_or_owned_by_any' do
-    let(:users) { Array.new(3) { FactoryGirl.create(:user) } }
+    let(:users) { Array.new(3) { FactoryBot.create(:user) } }
 
     context 'users do not own skins' do
       it 'returns approved skins' do
@@ -291,10 +287,10 @@ describe Skin do
 
     context 'users own skins' do
       before do
-        FactoryGirl.create(:private_work_skin, author: users[1], title: "User 2's First Skin")
-        FactoryGirl.create(:private_work_skin, author: users[1], title: "User 2's Second Skin")
-        FactoryGirl.create(:private_work_skin, author: users[2], title: "User 3's Skin")
-        FactoryGirl.create(:private_work_skin, title: 'Unowned Private Skin')
+        FactoryBot.create(:private_work_skin, author: users[1], title: "User 2's First Skin")
+        FactoryBot.create(:private_work_skin, author: users[1], title: "User 2's Second Skin")
+        FactoryBot.create(:private_work_skin, author: users[2], title: "User 3's Skin")
+        FactoryBot.create(:private_work_skin, title: 'Unowned Private Skin')
       end
 
       it 'returns approved and owned skins' do

@@ -32,7 +32,7 @@ Given /^the basic warnings exist$/ do
   warnings = [ArchiveConfig.WARNING_DEFAULT_TAG_NAME,
               ArchiveConfig.WARNING_NONE_TAG_NAME]
   warnings.each do |warning|
-    Warning.find_or_create_by_name(warning).update(canonical: true)
+    ArchiveWarning.find_or_create_by_name(warning).update(canonical: true)
   end
 end
 
@@ -43,7 +43,7 @@ Given /^all warnings exist$/ do
               ArchiveConfig.WARNING_NONCON_TAG_NAME,
               ArchiveConfig.WARNING_CHAN_TAG_NAME]
   warnings.each do |warning|
-    Warning.find_or_create_by_name(warning).update(canonical: true)
+    ArchiveWarning.find_or_create_by_name(warning).update(canonical: true)
   end
 end
 
@@ -119,7 +119,7 @@ Given /^the tag wrangler "([^\"]*)" with password "([^\"]*)" is wrangler of "([^
   tw = User.find_by(login: user)
 
   if tw.blank?
-    tw = FactoryGirl.create(:user, {login: user, password: password})
+    tw = FactoryBot.create(:user, login: user, password: password)
     tw.activate
   else
     tw.password = password
@@ -157,10 +157,10 @@ Given /^a tag "([^\"]*)" with(?: (\d+))? comments$/ do |tagname, n_comments|
 end
 
 Given /^(?:a|the) canonical(?: "([^"]*)")? fandom "([^"]*)" with (\d+) works$/ do |media, tag_name, number_of_works|
-  fandom = FactoryGirl.create(:fandom, name: tag_name, canonical: true)
+  fandom = FactoryBot.create(:fandom, name: tag_name, canonical: true)
   fandom.add_association(Media.find_by(name: media)) if media.present?
   number_of_works.to_i.times do
-    FactoryGirl.create(:work, posted: true, fandom_string: tag_name)
+    FactoryBot.create(:work, posted: true, fandom_string: tag_name)
   end
   step %(the periodic filter count task is run)
 end
@@ -198,7 +198,7 @@ Given(/^the following typed tags exists$/) do |table|
   table.hashes.each do |hash|
     type = hash["type"].downcase.to_sym
     hash.delete("type")
-    FactoryGirl.create(type, hash)
+    FactoryBot.create(type, hash)
   end
 end
 
@@ -325,7 +325,7 @@ end
 
 When /^(\d+) Wrangling Guidelines? exists?$/ do |n|
   (1..n.to_i).each do |i|
-    FactoryGirl.create(:wrangling_guideline, id: i)
+    FactoryBot.create(:wrangling_guideline, id: i)
   end
 end
 
