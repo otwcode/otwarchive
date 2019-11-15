@@ -197,10 +197,4 @@ module WorksHelper
   def sorted_languages
     Language.default_order
   end
-  
-  def work_language_label(work)
-    text = ts("Choose a language")
-    functor = work.nil? ? method(:label_tag) : work.method(:label)
-    functor.call :language_id, text
-  end
 end

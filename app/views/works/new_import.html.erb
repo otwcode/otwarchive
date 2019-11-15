@@ -125,8 +125,18 @@
   <fieldset id="associations" role="article">
     <legend><%= ts("Associations") %></legend>
     <h3 class="landmark heading"><%= ts("Associations") %></h3>
-
-    <%= render "work_form_associations_language" %>
+    <dl>
+      <dt class="language required">
+        <%= label_tag :language_id, ts("Choose a language") + "*" %>
+        <%= link_to_help "languages-help" %>
+      </dt>
+      <dd class="language required">
+        <select id="language_id" name="language_id">
+          <option value=""><%= ts("Please select a language") %></option>
+          <%= options_from_collection_for_select(sorted_languages, :id, :name) %>
+        </select>
+      </dd>
+    </dl>
   </fieldset>
 
   <fieldset>
