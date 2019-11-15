@@ -33,10 +33,11 @@ end
 #
 # If you add to this regexp, you probably want to update all the
 # similar regexps in the I post/Given the draft/the work steps below.
-When /^I set up (?:a|the) draft "([^"]*)"(?: with fandom "([^"]*)")?(?: with character "([^"]*)")?(?: with second character "([^"]*)")?(?: with freeform "([^"]*)")?(?: with second freeform "([^"]*)")?(?: with category "([^"]*)")?(?: (?:in|to) (?:the )?collection "([^"]*)")?(?: as a gift (?:for|to) "([^"]*)")?(?: as part of a series "([^"]*)")?(?: with relationship "([^"]*)")?(?: using the pseud "([^"]*)")?$/ do |title, fandom, character, character2, freeform, freeform2, category, collection, recipient, series, relationship, pseud|
+When /^I set up (?:a|the) draft "([^"]*)"(?: with fandom "([^"]*)")?(?: with character "([^"]*)")?(?: with second character "([^"]*)")?(?: with freeform "([^"]*)")?(?: with second freeform "([^"]*)")?(?: with category "([^"]*)")?(?: with rating "([^"]*)")?(?: (?:in|to) (?:the )?collection "([^"]*)")?(?: as a gift (?:for|to) "([^"]*)")?(?: as part of a series "([^"]*)")?(?: with relationship "([^"]*)")?(?: using the pseud "([^"]*)")?$/ do |title, fandom, character, character2, freeform, freeform2, category, rating, collection, recipient, series, relationship, pseud|
   step %{basic tags}
   visit new_work_path
   step %{I fill in the basic work information for "#{title}"}
+  select(rating.blank? ? DEFAULT_RATING : rating, from: "Rating")
   check(category.blank? ? DEFAULT_CATEGORY : category)
   fill_in("Fandoms", with: (fandom.blank? ? DEFAULT_FANDOM : fandom))
   fill_in("Additional Tags", with: (freeform.blank? ? DEFAULT_FREEFORM : freeform)+(freeform2.blank? ? '' : ','+freeform2))
@@ -62,7 +63,7 @@ When /^I set up (?:a|the) draft "([^"]*)"(?: with fandom "([^"]*)")?(?: with cha
 end
 
 # This is the same regexp as above
-When /^I post (?:a|the) work "([^"]*)"(?: with fandom "([^"]*)")?(?: with character "([^"]*)")?(?: with second character "([^"]*)")?(?: with freeform "([^"]*)")?(?: with second freeform "([^"]*)")?(?: with category "([^"]*)")?(?: (?:in|to) (?:the )?collection "([^"]*)")?(?: as a gift (?:for|to) "([^"]*)")?(?: as part of a series "([^"]*)")?(?: with relationship "([^"]*)")?(?: using the pseud "([^"]*)")?$/ do |title, fandom, character, character2, freeform, freeform2, category, collection, recipient, series, relationship, pseud|
+When /^I post (?:a|the) (?:(\d+) chapter )?work "([^"]*)"(?: with fandom "([^"]*)")?(?: with character "([^"]*)")?(?: with second character "([^"]*)")?(?: with freeform "([^"]*)")?(?: with second freeform "([^"]*)")?(?: with category "([^"]*)")?(?: with rating "([^"]*)")?(?: (?:in|to) (?:the )?collection "([^"]*)")?(?: as a gift (?:for|to) "([^"]*)")?(?: as part of a series "([^"]*)")?(?: with relationship "([^"]*)")?(?: using the pseud "([^"]*)")?$/ do |number_of_chapters, title, fandom, character, character2, freeform, freeform2, category, rating, collection, recipient, series, relationship, pseud|
   # If the work is already a draft then visit the preview page and post it
   work = Work.find_by(title: title)
   if work
