@@ -44,6 +44,7 @@ Scenario: freeforms wrangling - syns, mergers, autocompletes, metatags
   When I go to the new work page
     And I select "Not Rated" from "Rating"
     And I check "No Archive Warnings Apply"
+    And I select "English" from "Choose a language"
     And I fill in "Fandoms" with "Torchwood"
     And I fill in "Work Title" with "Silliness"
     And I fill in "Additional Tags" with "Pirate AU, Arrr-verse"

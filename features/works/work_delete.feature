@@ -53,6 +53,7 @@ Feature: Delete Works
       And all emails have been delivered
       And I select "Not Rated" from "Rating"
       And I check "No Archive Warnings Apply"
+      And I select "English" from "Choose a language"
       And I check "F/M"
       And I fill in "Fandoms" with "Supernatural"
       And I fill in "Work Title" with "All Something Breaks Loose"
