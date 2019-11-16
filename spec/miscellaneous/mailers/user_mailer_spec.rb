@@ -1,361 +1,287 @@
-require 'spec_helper'
+require "spec_helper"
 
 describe UserMailer, type: :mailer do
 
-  context "claim notification" do
-    title = 'Imported Work Title'
-    title2 = 'Second ' + title
+  describe "claim_notification" do
+    title = Faker::Book.title
+    title2 = Faker::Book.title
     let(:author) { create(:user) }
     let(:work) { create(:work, title: title, authors: [author.pseuds.first]) }
     let(:work2) { create(:work, title: title2, authors: [author.pseuds.first]) }
-    let(:email) { UserMailer.claim_notification(author.id, [work.id, work2.id], true).deliver }
+
+    subject(:email) { UserMailer.claim_notification(author.id, [work.id, work2.id], true).deliver }
 
     # Shared content tests for both email types
-    shared_examples_for 'claim content' do
-      it 'contains the text for a claim email' do
-        expect(part).to include("You're receiving this e-mail because you had works in a fanworks archive that has been imported")
+    shared_examples_for "a claim notification" do
+      it "contains the text for a claim email" do
+        expect(part).to have_body_text("You're receiving this e-mail because you had works in a fanworks archive that has been imported")
       end
     end
 
     # Test the headers
-    it 'has a valid from line' do
-      text = "Archive of Our Own <#{ArchiveConfig.RETURN_ADDRESS}>"
-      expect(email.header['From'].to_s).to eq(text)
-    end
+    it_behaves_like "an email with a valid sender"
 
-    it 'has the correct subject line' do
-      text = "[#{ArchiveConfig.APP_SHORT_NAME}] Works uploaded"
-      expect(email.subject).to eq(text)
+    it "has the correct subject line" do
+      subject = "[#{ArchiveConfig.APP_SHORT_NAME}] Works uploaded"
+      expect(email).to have_subject(subject)
     end
 
     # Test both body contents
-    it_behaves_like "multipart email"
+    it_behaves_like "a multipart email"
 
-    describe 'HTML version' do
-      it_behaves_like "claim content" do
-        let(:part) { get_message_part(email, /html/) }
+    describe "HTML version" do
+      it_behaves_like "a claim notification" do
+        let(:part) { email.html_part }
       end
 
-      it 'lists the first imported work in an unordered list in the HTML body' do
-        expect(get_message_part(email, /html/)).to have_xpath('//ul/li', text: title)
+      it "lists the first imported work in an unordered list in the HTML body" do
+        expect(email.html_part).to have_xpath("//ul/li", text: title)
       end
 
-      it 'lists the second imported work in an unordered list in the HTML body' do
-        expect(get_message_part(email, /html/)).to have_xpath('//ul/li', text: title2)
+      it "lists the second imported work in an unordered list in the HTML body" do
+        expect(email.html_part).to have_xpath("//ul/li", text: title2)
       end
 
-      it 'only has style_to links in the HTML body' do
-        expect(get_message_part(email, /html/)).not_to have_xpath('//a[not(@style)]')
+      it "only has style_to links in the HTML body" do
+        expect(email.html_part).not_to have_xpath("//a[not(@style)]")
       end
     end
 
-    describe 'text version' do
-      it_behaves_like 'claim content' do
-        let(:part) { get_message_part(email, /plain/) }
+    describe "text version" do
+      it_behaves_like "a claim notification" do
+        let(:part) { email.text_part }
       end
 
-      it 'lists the first imported work as plain text' do
-        expect(get_message_part(email, /plain/)).not_to have_xpath('//ul/li', text: title)
+      it "lists the first imported work as plain text" do
+        expect(email.text_part).not_to have_xpath("//ul/li", text: title)
       end
 
-      it 'lists the second imported work with a leading hyphen' do
-        expect(get_message_part(email, /plain/)).to include('- ' + title2)
+      it "lists the second imported work with a leading hyphen" do
+        expect(email.text_part).to have_body_text("- #{title2}")
       end
     end
   end
 
-  describe "invitation to claim" do
-    title = 'Imported Work Title'
-    title2 = 'Second ' + title
-    token = 'abc123'
+  describe "invitation_to_claim" do
+    title = Faker::Book.title
+    title2 = Faker::Book.title
 
-    before(:each) do
-      @author = FactoryGirl.create(:user)
-      @archivist = FactoryGirl.create(:user)
-      @external_author = FactoryGirl.create(:external_author)
-      @external_author_name = FactoryGirl.create(:external_author_name, external_author_id: @external_author.id, name: 'External Author')
+    let(:archivist) { create(:user) }
+    let(:external_author) { create(:external_author) }
 
-      @invitation = FactoryGirl.create(:invitation, token: token, external_author_id: @external_author.id)
-      @fandom1 = FactoryGirl.create(:fandom)
-
-      @work = FactoryGirl.create(:work, title: title, fandoms: [@fandom1], authors: [@author.pseuds.first])
-      @work2 = FactoryGirl.create(:work, title: title2, fandoms: [@fandom1], authors: [@author.pseuds.first])
-      FactoryGirl.create(:external_creatorship, creation_id: @work.id, external_author_name_id: @external_author_name.id)
-      FactoryGirl.create(:external_creatorship, creation_id: @work2.id, external_author_name_id: @external_author_name.id)
+    let(:external_author_name) do
+      create(:external_author_name,
+             external_author_id: external_author.id,
+             name: "External Author")
     end
 
-    # before(:all) doesn't get cleaned up by database cleaner
-    after(:all) do
-      @author.destroy if @author
-      @archivist.destroy if @archivist
-      @external_author.destroy if @external_author
-      @external_author_name.destroy if @external_author_name
-
-      @invitation.destroy if @invitation
-      @fandom1.destroy if @fandom1
-
-      @work.destroy if @work
-      @work2.destroy if @work2
+    let(:invitation) do
+      create(:invitation, external_author_id: external_author.id)
     end
 
-    let(:email) { UserMailer.invitation_to_claim(@invitation.id, @archivist.login).deliver }
+    let(:work) { create(:work, title: title) }
+    let(:work2) { create(:work, title: title2) }
+
+    let!(:work_external_creatorship) do
+      create(:external_creatorship,
+             creation_id: work.id,
+             external_author_name_id: external_author_name.id)
+    end
+
+    let!(:work2_external_creatorship) do
+      create(:external_creatorship,
+             creation_id: work2.id,
+             external_author_name_id: external_author_name.id)
+    end
+
+    subject(:email) { UserMailer.invitation_to_claim(invitation.id, archivist.login).deliver }
 
     # Shared content tests for both email types
-    shared_examples_for 'invitation to claim content' do
-      it 'contains the text for an invitation claim email' do
-        expect(part).to include("You're receiving this e-mail because an archive has recently been imported by")
+    shared_examples_for "an invitation to claim content" do
+      it "contains the text for an invitation claim email" do
+        expect(part).to have_body_text("You're receiving this e-mail because an archive has recently been imported by")
       end
     end
 
     # Test the headers
-    it 'has a valid from line' do
-      text = "Archive of Our Own <#{ArchiveConfig.RETURN_ADDRESS}>"
-      expect(email.header['From'].to_s).to eq(text)
-    end
+    it_behaves_like "an email with a valid sender"
 
-    it 'has the correct subject line' do
-      text = "[#{ArchiveConfig.APP_SHORT_NAME}] Invitation to claim works"
-      expect(email.subject).to eq(text)
+    it "has the correct subject line" do
+      subject = "[#{ArchiveConfig.APP_SHORT_NAME}] Invitation to claim works"
+      expect(email).to have_subject(subject)
     end
 
     # Test both body contents
-    it_behaves_like "multipart email"
+    it_behaves_like "a multipart email"
 
-    describe 'HTML version' do
-      it_behaves_like 'invitation to claim content' do
-        let(:part) { get_message_part(email, /html/) }
+    it_behaves_like "a translated email"
+
+    describe "HTML version" do
+      it_behaves_like "an invitation to claim content" do
+        let(:part) { email.html_part }
       end
 
-      it 'lists the first imported work in an unordered list in the HTML body' do
-        expect(get_message_part(email, /html/)).to have_xpath('//ul/li', text: title)
+      it "lists the first imported work in an unordered list in the HTML body" do
+        expect(email.html_part).to have_xpath("//ul/li", text: title)
       end
 
-      it 'lists the second imported work in an unordered list in the HTML body' do
-        expect(get_message_part(email, /html/)).to have_xpath('//ul/li', text: title2)
+      it "lists the second imported work in an unordered list in the HTML body" do
+        expect(email.html_part).to have_xpath("//ul/li", text: title2)
       end
 
-      it 'only has style_to links in the HTML body' do
-        expect(get_message_part(email, /html/)).not_to have_xpath('//a[not(@style)]')
-      end
-
-      it 'does not have exposed HTML' do
-        expect(get_message_part(email, /html/)).not_to include("&lt;")
-      end
-
-      it 'does not have missing translations' do
-        expect(get_message_part(email, /html/)).not_to include("translation missing")
+      it "only has style_to links in the HTML body" do
+        expect(email.html_part).not_to have_xpath("//a[not(@style)]")
       end
     end
 
-    describe 'text version' do
-      it_behaves_like 'invitation to claim content' do
-        let(:part) { get_message_part(email, /plain/) }
+    describe "text version" do
+      it_behaves_like "an invitation to claim content" do
+        let(:part) { email.text_part }
       end
 
-      it 'lists the first imported work as plain text' do
-        expect(get_message_part(email, /plain/)).not_to have_xpath('//ul/li', text: title)
+      it "lists the first imported work as plain text" do
+        expect(email.text_part).not_to have_xpath("//ul/li", text: title)
       end
 
-      it 'lists the second imported work with a leading hyphen' do
-        expect(get_message_part(email, /plain/)).to include(title2)
-      end
-
-      it 'does not have missing translations' do
-        expect(get_message_part(email, /plain/)).not_to include("translation missing")
-      end
-    end
-  end
-  
-  describe "invitation from a user request" do
-    token = 'abc123'
-
-    before(:each) do
-      @user = FactoryGirl.create(:user)
-      @invitation = FactoryGirl.create(:invitation, token: token, creator: @user)
-    end
-
-    let(:email) { UserMailer.invitation(@invitation.id).deliver }
-
-    # Test the headers
-    it 'has a valid from line' do
-      text = "Archive of Our Own <#{ArchiveConfig.RETURN_ADDRESS}>"
-      expect(email.header['From'].to_s).to eq(text)
-    end
-
-    it 'has the correct subject line' do
-      text = "[#{ArchiveConfig.APP_SHORT_NAME}] Invitation"
-      expect(email.subject).to eq(text)
-    end
-
-    # Test both body contents
-    it_behaves_like "multipart email"
-
-    describe 'HTML version' do
-      it 'has text contents' do
-        expect(get_message_part(email, /html/)).to include("like to join us, please sign up at the following address")
-        expect(get_message_part(email, /html/)).to include("has invited you")
-      end
-      
-      it 'does not have missing translations' do
-        expect(get_message_part(email, /html/)).not_to include("translation missing")
-      end
-    end
-
-    describe 'text version' do
-      it 'says the right thing' do
-        expect(get_message_part(email, /plain/)).to include("like to join us, please sign up at the following address")
-        expect(get_message_part(email, /plain/)).to include("has invited you")
-      end
-      
-      it 'does not have missing translations' do
-        expect(get_message_part(email, /plain/)).not_to include("translation missing")
+      it "lists the second imported work with a leading hyphen" do
+        expect(email.text_part).to have_body_text("- #{title2}")
       end
     end
   end
   
   describe "invitation" do
-    token = 'abc123'
+    context "when sent by a user" do
+      let(:user) { create(:user) }
+      let(:invitation) { create(:invitation, creator: user) }
 
-    before(:each) do
-      @user = FactoryGirl.create(:user)
-      @invitation = FactoryGirl.create(:invitation, token: token)
-    end
+      subject(:email) { UserMailer.invitation(invitation.id).deliver }
 
-    let(:email) { UserMailer.invitation(@invitation.id).deliver }
+      # Test the headers
+      it_behaves_like "an email with a valid sender"
 
-    # Test the headers
-    it 'has a valid from line' do
-      text = "Archive of Our Own <#{ArchiveConfig.RETURN_ADDRESS}>"
-      expect(email.header['From'].to_s).to eq(text)
-    end
-
-    it 'has the correct subject line' do
-      text = "[#{ArchiveConfig.APP_SHORT_NAME}] Invitation"
-      expect(email.subject).to eq(text)
-    end
-
-    # Test both body contents
-    it_behaves_like "multipart email"
-
-    describe 'HTML version' do
-      it 'has text contents' do
-        expect(get_message_part(email, /html/)).to include("like to join us, please sign up at the following address")
-        expect(get_message_part(email, /html/)).to include("been invited")
+      it "has the correct subject line" do
+        subject = "[#{ArchiveConfig.APP_SHORT_NAME}] Invitation"
+        expect(email).to have_subject(subject)
       end
-      
-      it 'does not have missing translations' do
-        expect(get_message_part(email, /html/)).not_to include("translation missing")
+
+      # Test both body contents
+      it_behaves_like "a multipart email"
+
+      it_behaves_like "a translated email"
+
+      describe "HTML version" do
+        it "has the correct content" do
+          expect(email.html_part).to have_body_text("like to join us, please sign up at the following address")
+          expect(email.html_part).to have_body_text("has invited you")
+        end
       end
-      
-      it 'does not have exposed HTML' do
-        expect(get_message_part(email, /html/)).not_to include("&lt;")
+
+      describe "text version" do
+        it "has the correct content" do
+          expect(email.text_part).to have_body_text("like to join us, please sign up at the following address")
+          expect(email.text_part).to have_body_text("has invited you")
+        end
       end
     end
 
-    describe 'text version' do
-      it 'says the right thing' do
-        expect(get_message_part(email, /plain/)).to include("like to join us, please sign up at the following address")
-        expect(get_message_part(email, /plain/)).to include("been invited")
+    context "when sent from the queue or by an admin" do
+      let(:invitation) { create(:invitation) }
+
+      subject(:email) { UserMailer.invitation(invitation.id).deliver }
+
+      # Test the headers
+      it_behaves_like "an email with a valid sender"
+
+      it "has the correct subject line" do
+        subject = "[#{ArchiveConfig.APP_SHORT_NAME}] Invitation"
+        expect(email).to have_subject(subject)
       end
-      
-      it 'does not have missing translations' do
-        expect(get_message_part(email, /plain/)).not_to include("translation missing")
+
+      # Test both body contents
+      it_behaves_like "a multipart email"
+
+      it_behaves_like "a translated email"
+
+      describe "HTML version" do
+        it "has the correct content" do
+          expect(email.html_part).to have_body_text("like to join us, please sign up at the following address")
+          expect(email.html_part).to have_body_text("been invited")
+        end
+      end
+
+      describe "text version" do
+        it "has the correct content" do
+          expect(email.text_part).to have_body_text("like to join us, please sign up at the following address")
+          expect(email.text_part).to have_body_text("been invited")
+        end
       end
     end
   end
 
-  describe "challenge assignment" do
+  describe "challenge_assignment_notification" do
     let!(:gift_exchange) { create(:gift_exchange) }
     let!(:collection) { create(:collection, challenge: gift_exchange, challenge_type: "GiftExchange") }
     let!(:otheruser) { create(:user) }
     let!(:offer) { create(:challenge_signup, collection: collection, pseud: otheruser.default_pseud) }
     let!(:open_assignment) { create(:challenge_assignment, collection: collection, offer_signup: offer) }
 
-    let(:email) { UserMailer.challenge_assignment_notification(collection.id, otheruser.id, open_assignment.id).deliver }
+    subject(:email) { UserMailer.challenge_assignment_notification(collection.id, otheruser.id, open_assignment.id).deliver }
 
     # Test the headers
-    it 'has a valid from line' do
-      text = "Archive of Our Own <#{ArchiveConfig.RETURN_ADDRESS}>"
-      expect(email.header['From'].to_s).to eq(text)
-    end
+    it_behaves_like "an email with a valid sender"
 
-    it 'has the correct subject line' do
-      text = "[#{ArchiveConfig.APP_SHORT_NAME}][#{collection.title}] Your Assignment!"
-      expect(email.subject).to eq(text)
+    it "has the correct subject line" do
+      subject = "[#{ArchiveConfig.APP_SHORT_NAME}][#{collection.title}] Your Assignment!"
+      expect(email).to have_subject(subject)
     end
 
     # Test both body contents
-    it_behaves_like "multipart email"
+    it_behaves_like "a multipart email"
 
-    describe 'HTML version' do
-      it 'has text contents' do
-        expect(get_message_part(email, /html/)).to include("You have been assigned the following request")
-      end
-      
-      it 'does not have missing translations' do
-        expect(get_message_part(email, /html/)).not_to include("translation missing")
-      end
-      
-      it 'does not have exposed HTML' do
-        expect(get_message_part(email, /html/)).not_to include("&lt;")
+    it_behaves_like "a translated email"
+
+    describe "HTML version" do
+      it "has the correct content" do
+        expect(email.html_part).to have_body_text("You have been assigned the following request")
       end
     end
 
-    describe 'text version' do
-      it 'says the right thing' do
-        expect(get_message_part(email, /plain/)).to include("You have been assigned the following request")
-      end
-      
-      it 'does not have missing translations' do
-        expect(get_message_part(email, /plain/)).not_to include("translation missing")
+    describe "text version" do
+      it "has the correct content" do
+        expect(email.text_part).to have_body_text("You have been assigned the following request")
       end
     end
   end
 
-  describe "invite request declined" do
-    before(:each) do
-      @user = FactoryGirl.create(:user)
-      @total = 2
-      @reason = "You smell"
-    end
+  describe "invite_request_declined" do
+    let(:user) { create(:user) }
+    let(:total) { 2 }
+    let(:reason) { "You smell" }
 
-    let(:email) { UserMailer.invite_request_declined(@user.id, @total, @reason).deliver }
+    subject(:email) { UserMailer.invite_request_declined(user.id, total, reason).deliver }
 
     # Test the headers
-    it 'has a valid from line' do
-      text = "Archive of Our Own <#{ArchiveConfig.RETURN_ADDRESS}>"
-      expect(email.header['From'].to_s).to eq(text)
-    end
+    it_behaves_like "an email with a valid sender"
 
-    it 'has the correct subject line' do
-      text = "[#{ArchiveConfig.APP_SHORT_NAME}] Additional Invite Code Request Declined"
-      expect(email.subject).to eq(text)
+    it "has the correct subject line" do
+      subject = "[#{ArchiveConfig.APP_SHORT_NAME}] Additional Invite Code Request Declined"
+      expect(email).to have_subject(subject)
     end
 
     # Test both body contents
-    it_behaves_like "multipart email"
+    it_behaves_like "a multipart email"
 
-    describe 'HTML version' do
-      it 'has text contents' do
-        expect(get_message_part(email, /html/)).to include("We regret to inform you that your request for 2 new invitations cannot be fulfilled at this time")
-      end
-      
-      it 'does not have missing translations' do
-        expect(get_message_part(email, /html/)).not_to include("translation missing")
-      end
-      
-      it 'does not have exposed HTML' do
-        expect(get_message_part(email, /html/)).not_to include("&lt;")
+    it_behaves_like "a translated email"
+
+    describe "HTML version" do
+      it "has the correct content" do
+        expect(email.html_part).to have_body_text("We regret to inform you that your request for 2 new invitations cannot be fulfilled at this time")
       end
     end
 
-    describe 'text version' do
-      it 'says the right thing' do
-        expect(get_message_part(email, /plain/)).to include("We regret to inform you that your request for 2 new invitations cannot be fulfilled at this time")
-      end
-      
-      it 'does not have missing translations' do
-        expect(get_message_part(email, /plain/)).not_to include("translation missing")
+    describe "text version" do
+      it "has the correct content" do
+        expect(email.text_part).to have_body_text("We regret to inform you that your request for 2 new invitations cannot be fulfilled at this time")
       end
     end
   end

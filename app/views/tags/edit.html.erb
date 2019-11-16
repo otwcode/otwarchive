@@ -44,7 +44,7 @@
         <% if @tag.can_change_type? %>
           <%= f.select :type, options_for_select(%w(Fandom Character Relationship Freeform UnsortedTag), @tag.type.to_s) %>
         <% else %>
-          <strong><%= @tag.type %></strong>
+          <strong><%= ts("%{tag_type}", tag_type: tag_type_label_name(@tag.type.tableize)) %></strong>
         <% end %>
       </dd>
 
@@ -56,7 +56,7 @@
       <dt><%= f.label :canonical, ts('Canonical') %></dt>
       <dd>
         <%= f.check_box("canonical", :disabled => !(logged_in_as_admin? || Tag::USER_DEFINED.include?(@tag.class.name)) || !@tag.mergers.empty? || !@tag.children.empty? ) %>&nbsp;
-        <p><%= ts("This is the official name for the %{tag_class_name}", :tag_class_name => @tag.class.name) %></p>
+        <p><%= ts("This is the official name for the %{tag_type}", tag_type: tag_type_label_name(@tag.type.tableize)) %></p>
         <% if logged_in_as_admin? && Tag::USER_DEFINED.include?(@tag.class.name) && @tag.canonical? && (!@tag.mergers.empty? || !@tag.children.empty?) %>
           <p class="actions" role="navigation"><%= link_to ts('Make tag non-canonical and unhook all associations'), {:controller => :tags, :action => :update, 'tag[canonical]' => 0, :id => @tag}, :method => :put, data: {confirm: "Are you sure?"} %></p>
         <% end %>
@@ -150,8 +150,8 @@
               <% end %>
               <div title="<%= ts("add tags") %>">
                 <%= f.text_field tag_type.underscore + '_string',
-      							autocomplete_options("#{tag_type == 'Merger' ? ('noncanonical_tag?type=' + @tag.type.downcase) : (tag_type == 'SubTag' ? @tag.type.downcase : tag_type.downcase)}",
-      							:class => 'tags autocomplete') %>
+                    autocomplete_options("#{tag_type == 'Merger' ? ('noncanonical_tag?type=' + @tag.type.downcase) : (tag_type == 'SubTag' ? @tag.type.downcase : tag_type.downcase)}",
+                    :class => 'tags autocomplete') %>
               </div>
             </dd>
           <% end %>

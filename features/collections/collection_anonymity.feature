@@ -235,8 +235,9 @@ Feature: Collection
       And I add the work "Cone of Silence" to the collection "Various Penguins"
     When I edit the work "Cone of Silence"
       And I follow "2" within "div#main.works-edit.region"
-      And I add the co-author "Amos"
-      And I press "Post Without Preview"
+      And I invite the co-author "Amos"
+      And I press "Post"
+      And the user "Amos" accepts all co-creator invites
     Then the author of "Cone of Silence" should be visible to me on the work page
     When I am logged out
     Then the author of "Cone of Silence" should be hidden from me
@@ -367,7 +368,7 @@ Feature: Collection
       And I should see "Anonymous [creator]"
 
     When I press "Cancel"
-    
+
     Then I should see "The work was not updated."
 
     When I view the work "My Work"
@@ -444,12 +445,12 @@ Feature: Collection
     When I am logged in as "creator"
       And I set up the draft "Secret Work"
       And I fill in "Collections" with "Anonymizing,Fluffy"
-      And I press "Post Without Preview"
+      And I press "Post"
       And I go to my works page
     Then I should not see "Secret Work"
 
     When I edit the work "Secret Work"
       And I fill in "Collections" with "Holidays,Fluffy"
-      And I press "Post Without Preview"
+      And I press "Post"
       And I go to my works page
     Then I should see "Secret Work"
