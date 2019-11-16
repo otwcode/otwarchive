@@ -519,8 +519,6 @@ describe Tag do
 
         xit "should find all works that would need to be reindexed" do
           # get all the work ids that it would queue
-          User.current_user = create(:admin)
-
           expect(@syn_tag.all_filtered_work_ids).to eq([@syn_work.id])
           expect(@sub_tag.all_filtered_work_ids).to eq([@sub_work.id])
           expect(@canonical_tag.all_filtered_work_ids).to eq([@direct_work.id, @syn_work.id, @sub_work.id])
