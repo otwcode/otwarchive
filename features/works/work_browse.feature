@@ -43,7 +43,7 @@ Scenario: The recent chapter link should point to the last posted chapter even
 if there is a draft chapter
 
   Given I am logged in as a random user
-    And a fandom exists with name: "Canonical Fandom", canonical: true
+    And a canonical fandom "Canonical Fandom"
     And I post the 2 chapter work "My WIP" with fandom "Canonical Fandom"
   When I browse the "Canonical Fandom" works
     And I follow the recent chapter link for the work "My WIP"
@@ -58,7 +58,7 @@ content notice to visitors who are not logged in
 
   Given I am logged in as a random user
     And an adult canonical rating exists with name: "Mature"
-    And a fandom exists with name: "Canonical Fandom", canonical: true
+    And a canonical fandom "Canonical Fandom"
     And I post the 3 chapter work "WIP" with fandom "Canonical Fandom" with rating "Mature"
   When I am logged out
     And I browse the "Canonical Fandom" works
@@ -74,7 +74,7 @@ user's "Show me adult content without checking" preference
 
   Given I am logged in as a random user
     And an adult canonical rating exists with name: "Mature"
-    And a fandom exists with name: "Canonical Fandom", canonical: true
+    And a canonical fandom "Canonical Fandom"
     And I post the 2 chapter work "WIP" with fandom "Canonical Fandom" with rating "Mature"
   When I am logged in as "adultuser"
     And I set my preferences to show adult content without warning
@@ -94,7 +94,7 @@ chapter-by-chapter mode even if the logged-in user's preference is "Show the
 whole work by default"
 
   Given I am logged in as a random user
-    And a fandom exists with name: "Canonical Fandom", canonical: true
+    And a canonical fandom "Canonical Fandom"
     And I post the 2 chapter work "WIP" with fandom "Canonical Fandom" with rating "Mature"
   When I am logged in as "fullworker"
     And I set my preferences to View Full Work mode by default
