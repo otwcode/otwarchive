@@ -144,7 +144,7 @@ Feature: Import Works
     When I am logged in as an admin
       And I go to the "Untitled Imported Work" work page
     Then I should see "Chapters:2/2"
-    Then I should see "IP Address: 127.0.0.1"
+      And I should see "IP Address: 127.0.0.1"
 
   Scenario: Importing multiple works with backdating
     When I import the urls
