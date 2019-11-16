@@ -680,9 +680,3 @@ end
 Then /^the Remove Me As Chapter Co-Creator option should not be on the ([\d]+)(?:st|nd|rd|th) chapter$/ do |chapter_number|
   step %{I should not see "Remove Me As Chapter Co-Creator" within "ul#sortable_chapter_list > li:nth-of-type(#{chapter_number})"}
 end
-
-Then /^I should find myself on Chapter ([\d]+) of the work "([^\"]*)"$/ do |chapter_number, work_title|
-  step %{I should see "Chapter #{chapter_number}" within "div#chapters"}
-  step %{I should see "Entire Work"}
-  step %{I should see "#{work_title}"}
-end
