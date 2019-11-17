@@ -278,7 +278,7 @@ class ChaptersController < ApplicationController
     chapter_position.zero? ||
       chapter_position == (@work.number_of_posted_chapters - 1) &&
         (request.referer.nil? ||
-        request.referer.match(/#{chapter_path(@chapter)}/) && params[:view_adult] ||
+        request.referer.match(/#{chapter_path(@chapter)}\b/) && params[:view_adult] ||
         !request.referer.match(/#{work_path(@work)}\b/))
   end
 
