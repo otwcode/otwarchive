@@ -72,8 +72,10 @@ class ChaptersController < ApplicationController
       # if accessing the most recent chapter when you're not already on the work (e.g. if
       # you followed the recent chapter link or came from a subscription email).
       work_id = @work.id
+      chapter_id = @chapter.id
       if chapter_position == 0 || chapter_position == (@work.number_of_posted_chapters - 1) &&
                                   (request.referer.nil? ||
+                                  request.referer.match(/#{chapter_path(chapter_id)}/) && params[:view_adult] ||
                                   !request.referer.match(/#{work_path(work_id)}\b/))
         Rails.logger.debug "Chapter remote addr: #{request.remote_ip}"
         @work.increment_hit_count(request.remote_ip)
