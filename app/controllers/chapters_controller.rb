@@ -274,14 +274,12 @@ class ChaptersController < ApplicationController
   #    adult content warning
   # -- coming from anywhere else that is not the work, e.g. social media link
   def increase_work_hit_count?
-    chapter_path = chapter_path(@chapter)
-    work_path = work_path(@work)
     chapter_position = @chapters.index(@chapter)
     chapter_position.zero? ||
       chapter_position == (@work.number_of_posted_chapters - 1) &&
         (request.referer.nil? ||
-        request.referer.match(/#{chapter_path}/) && params[:view_adult] ||
-        !request.referer.match(/#{work_path}\b/))
+        request.referer.match(/#{chapter_path(@chapter)}/) && params[:view_adult] ||
+        !request.referer.match(/#{work_path(@work)}\b/))
   end
 
   private
