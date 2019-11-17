@@ -67,17 +67,7 @@ class ChaptersController < ApplicationController
       # update the history.
       Reading.update_or_create(@work, current_user) if current_user
 
-      # TEMPORARY hack-like thing to fix the fact that chaptered works weren't hit-counted
-      # or added to history at all. Increases hit count if accessing the first chapter or
-      # if accessing the most recent chapter when you're not already on the work (e.g. if
-      # you followed the recent chapter link or came from a subscription email).
-      work_id = @work.id
-      chapter_id = @chapter.id
-      if chapter_position == 0 || chapter_position == (@work.number_of_posted_chapters - 1) &&
-                                  (request.referer.nil? ||
-                                  request.referer.match(/#{chapter_path(chapter_id)}/) && params[:view_adult] ||
-                                  !request.referer.match(/#{work_path(work_id)}\b/))
-        Rails.logger.debug "Chapter remote addr: #{request.remote_ip}"
+      if increase_work_hit_count?
         @work.increment_hit_count(request.remote_ip)
       end
 
@@ -273,6 +263,25 @@ class ChaptersController < ApplicationController
       @work.update_attribute(:posted, true)
     end
     flash[:notice] = ts('Chapter has been posted!')
+  end
+
+  # TEMPORARY hack-like thing to fix the fact that chaptered works weren't
+  # hit-counted or added to history at all. Increases hit count if you are
+  # - accessing the first chapter
+  # - accessing the most recent chapter if you are
+  # -- coming without a referer, e.g. via a subscription email
+  # -- coming through the recent chapter link, but first passing through the
+  #    adult content warning
+  # -- coming from anywhere else that is not the work, e.g. social media link
+  def increase_work_hit_count?
+    work_id = @work.id
+    chapter_id = @chapter.id
+    chapter_position = @chapters.index(@chapter)
+    chapter_position == 0 ||
+      chapter_position == (@work.number_of_posted_chapters - 1) &&
+        (request.referer.nil? ||
+        request.referer.match(/#{chapter_path(chapter_id)}/) && params[:view_adult] ||
+        !request.referer.match(/#{work_path(work_id)}\b/))
   end
 
   private
