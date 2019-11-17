@@ -71,9 +71,10 @@ class ChaptersController < ApplicationController
       # or added to history at all. Increases hit count if accessing the first chapter or
       # if accessing the most recent chapter when you're not already on the work (e.g. if
       # you followed the recent chapter link or came from a subscription email).
+      work_id = @work.id
       if chapter_position == 0 || chapter_position == (@work.number_of_posted_chapters - 1) &&
                                   (request.referer.nil? ||
-                                  !request.referer.match(/#{work_path(@work)}\b/))
+                                  !request.referer.match(/#{work_path(work_id)}\b/))
         Rails.logger.debug "Chapter remote addr: #{request.remote_ip}"
         @work.increment_hit_count(request.remote_ip)
       end
