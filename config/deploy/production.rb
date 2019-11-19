@@ -11,7 +11,7 @@ server "ao3-app01.ao3.org", :app, :db, :workers, :schedulers
 server "ao3-app02.ao3.org", :app, :workers, :schedulers, primary: true
 #server "ao3-app03.ao3.org", :app, :workers, :schedulers
 server "ao3-front01.ao3.org", :web
-server "ao3-app16.ao3.org", :web
+server "ao3-app16", :web
 server "ao3-app05.ao3.org", :app
 server "ao3-app08.ao3.org", :app, :workers, :schedulers
 server "ao3-app06.ao3.org", :app
