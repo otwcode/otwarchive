@@ -57,22 +57,39 @@ RSpec.configure do |config|
 
   config.after :suite do
     DatabaseCleaner.clean_with :truncation
+    Indexer.all.map(&:delete_index)
   end
 
   config.before :each, bookmark_search: true do
     BookmarkIndexer.prepare_for_testing
   end
 
+  config.after :each, bookmark_search: true do
+    BookmarkIndexer.delete_index
+  end
+
   config.before :each, pseud_search: true do
     PseudIndexer.prepare_for_testing
+  end
+
+  config.after :each, pseud_search: true do
+    PseudIndexer.delete_index
   end
 
   config.before :each, tag_search: true do
     TagIndexer.prepare_for_testing
   end
 
+  config.after :each, tag_search: true do
+    TagIndexer.delete_index
+  end
+
   config.before :each, work_search: true do
     WorkIndexer.prepare_for_testing
+  end
+
+  config.after :each, work_search: true do
+    WorkIndexer.delete_index
   end
 
   # If you're not using ActiveRecord, or you'd prefer not to run each of your

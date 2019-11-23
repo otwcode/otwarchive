@@ -73,6 +73,11 @@ class Indexer
   end
 
   def self.refresh_index
+    # Refreshes are resource-intensive, we use them only in tests.
+    raise "Wrong environment for index refreshes!" unless Rails.env.test?
+
+    return unless $elasticsearch.indices.exists(index: index_name)
+
     $elasticsearch.indices.refresh(index: index_name)
   end
 
