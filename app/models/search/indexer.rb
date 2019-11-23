@@ -65,6 +65,7 @@ class Indexer
 
   def self.prepare_for_testing
     raise "Wrong environment for test prep!" unless Rails.env.test?
+
     delete_index
     # Relevance sorting is unpredictable with multiple shards
     # and small amounts of data
