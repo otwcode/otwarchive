@@ -363,6 +363,7 @@ When /^I start to fulfill my claim with "([^\"]*)"$/ do |title|
     step %{I fill in "Work Title" with "#{title}"}
     step %{I select "Not Rated" from "Rating"}
     step %{I check "No Archive Warnings Apply"}
+    step %{I select "English" from "Choose a language"}
     step %{I fill in "Fandom" with "Stargate Atlantis"}
     step %{I fill in "content" with "This is an exciting story about Atlantis"}
 end
@@ -386,6 +387,7 @@ When /^I fulfill my claim again$/ do
   step %{I fill in "Work Title" with "Second Story"}
     step %{I select "Not Rated" from "Rating"}
     step %{I check "No Archive Warnings Apply"}
+    step %{I select "English" from "Choose a language"}
     step %{I fill in "Fandom" with "Stargate Atlantis"}
     step %{I fill in "content" with "This is an exciting story about Atlantis"}
   step %{I press "Preview"}

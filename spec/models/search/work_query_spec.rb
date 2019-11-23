@@ -102,7 +102,7 @@ describe WorkQuery do
 
   it "should allow you to filter for works by language" do
     q = WorkQuery.new(language_id: "cy")
-    expect(q.filters).to include(term: { language_id: "cy" })
+    expect(q.filters).to include(term: { "language_id.keyword": "cy" })
   end
 
   it "should allow you to filter for works with only one chapter" do

@@ -92,6 +92,13 @@ When /^I fill in single-fandom gift exchange challenge options$/ do
   check("gift_exchange_offer_restriction_attributes_relationship_restrict_to_fandom")
 end
 
+When /^I allow warnings in my gift exchange$/ do
+  fill_in("gift_exchange_request_restriction_attributes_archive_warning_num_allowed", with: "1")
+  check("gift_exchange_request_restriction_attributes_allow_any_archive_warning")
+  fill_in("gift_exchange_offer_restriction_attributes_archive_warning_num_allowed", with: "1")
+  check("gift_exchange_offer_restriction_attributes_allow_any_archive_warning")
+end
+
 Then /^"([^\"]*)" gift exchange should be fully created$/ do |title|
   step %{I should see a create confirmation message}
   step %{"#{title}" collection exists}
@@ -307,6 +314,7 @@ When /^I start to fulfill my assignment$/ do
     step %{I fill in "Work Title" with "Fulfilled Story"}
     step %{I select "Not Rated" from "Rating"}
     step %{I check "No Archive Warnings Apply"}
+    step %{I select "English" from "Choose a language"}
     step %{I fill in "Fandom" with "Final Fantasy X"}
     step %{I fill in "content" with "This is a really cool story about Final Fantasy X"}
 end

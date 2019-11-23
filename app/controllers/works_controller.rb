@@ -123,10 +123,10 @@ class WorksController < ApplicationController
       end
     elsif use_caching?
       @works = Rails.cache.fetch('works/index/latest/v1', expires_in: 10.minutes) do
-        Work.latest.includes(:tags, :external_creatorships, :series, :language, collections: [:collection_items], pseuds: [:user]).to_a
+        Work.latest.includes(:tags, :external_creatorships, :series, :language, :approved_collections, pseuds: [:user]).to_a
       end
     else
-      @works = Work.latest.includes(:tags, :external_creatorships, :series, :language, collections: [:collection_items], pseuds: [:user]).to_a
+      @works = Work.latest.includes(:tags, :external_creatorships, :series, :language, :approved_collections, pseuds: [:user]).to_a
     end
     set_own_works
   end
@@ -350,7 +350,6 @@ class WorksController < ApplicationController
     @work.attributes = work_params
     @chapter.attributes = work_params[:chapter_attributes] if work_params[:chapter_attributes]
     @work.ip_address = request.remote_ip
-
     @work.set_word_count(@work.preview_mode)
     @work.save_parents if @work.preview_mode
 
@@ -363,7 +362,7 @@ class WorksController < ApplicationController
       render :edit
     elsif params[:preview_button]
       unless @work.posted?
-        flash[:notice] = ts("Your changes have not been saved. Please post your work or save without posting if you want to keep them.")
+        flash[:notice] = ts("Your changes have not been saved. Please post your work or save as draft if you want to keep them.")
       end
 
       in_moderated_collection
@@ -406,7 +405,7 @@ class WorksController < ApplicationController
       Work.expire_work_tag_groups_id(@work.id)
       flash[:notice] = ts('Tags were successfully updated.')
       redirect_to(@work)
-    else # Post Without Preview
+    else # Save As Draft
       @work.posted = true
       @work.minor_version = @work.minor_version + 1
       @work.save
@@ -451,9 +450,14 @@ class WorksController < ApplicationController
   def import
     # check to make sure we have some urls to work with
     @urls = params[:urls].split
-
     if @urls.empty?
       flash.now[:error] = ts('Did you want to enter a URL?')
+      render(:new_import) && return
+    end
+
+    @language_id = params[:language_id]
+    if @language_id.empty?
+      flash.now[:error] = ts("Language cannot be blank.")
       render(:new_import) && return
     end
 
