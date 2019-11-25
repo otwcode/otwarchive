@@ -29,9 +29,9 @@ puts "Signups: " + count.to_s
 puts "Potential Matches: " + matches.to_s
 
 puts "Assignments With No Giver: " + \
-  collection.assignments.where(offer_signup_id: nil).count.to_s
+     collection.assignments.where(offer_signup_id: nil).count.to_s
 puts "Assignments With No Recipient: " + \
-  collection.assignments.where(request_signup_id: nil).count.to_s
+     collection.assignments.where(request_signup_id: nil).count.to_s
 
 # Retrieve all complete assignments from the database, so that we can check for
 # "cycles" where A is assigned to B and B is assigned to A:

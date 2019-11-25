@@ -248,6 +248,10 @@ public
   end
 
   # sorting routine -- this gets used to rank the relative goodness of potential matches
+  #
+  # Used in AssignmentGenerator#load_potential_matches (to pick good matches
+  # when generating assignments) and AutocompleteController#potential_matches
+  # (in order to show the best matches first).
   include Comparable
   def <=>(other)
     return 0 if self.id == other.id

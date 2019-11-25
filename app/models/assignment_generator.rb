@@ -34,8 +34,10 @@ class AssignmentGenerator
 
     raise "Invalid assignments!" unless validate_assignments
 
-    save_assignments
-    save_placeholder_assignments
+    ChallengeAssignment.transaction do
+      save_complete_assignments
+      save_placeholder_assignments
+    end
   end
 
   private
@@ -117,17 +119,15 @@ class AssignmentGenerator
   end
 
   # Save the assignments we calculated to the database.
-  def save_assignments
+  def save_complete_assignments
     # First, build assignments for all of the signups that have been matched.
-    ChallengeAssignment.transaction do
-      @assignment_as_recipient.each_pair do |recipient, giver|
-        # This should never happen, but just in case:
-        next if recipient.nil? || giver.nil?
+    @assignment_as_recipient.each_pair do |recipient, giver|
+      # This should never happen, but just in case:
+      next if recipient.nil? || giver.nil?
 
-        ChallengeAssignment.create(collection_id: @collection.id,
-                                   request_signup_id: recipient,
-                                   offer_signup_id: giver)
-      end
+      ChallengeAssignment.create(collection_id: @collection.id,
+                                 request_signup_id: recipient,
+                                 offer_signup_id: giver)
     end
 
     # Update the challenge_signups to indicate whether they've been assigned.
@@ -149,18 +149,16 @@ class AssignmentGenerator
     unmatched_recipients = signup_ids - @assignment_as_recipient.keys
     unmatched_givers = signup_ids - @assignment_as_recipient.values
 
-    ChallengeAssignment.transaction do
-      # Add blank assignments for all of the unmatched recipients.
-      unmatched_recipients.each do |recipient|
-        ChallengeAssignment.create(collection_id: @collection.id,
-                                   request_signup_id: recipient)
-      end
+    # Add blank assignments for all of the unmatched recipients.
+    unmatched_recipients.each do |recipient|
+      ChallengeAssignment.create(collection_id: @collection.id,
+                                 request_signup_id: recipient)
+    end
 
-      # Add blank assignments for all of the unmatched givers.
-      unmatched_givers.each do |giver|
-        ChallengeAssignment.create(collection_id: @collection.id,
-                                   offer_signup_id: giver)
-      end
+    # Add blank assignments for all of the unmatched givers.
+    unmatched_givers.each do |giver|
+      ChallengeAssignment.create(collection_id: @collection.id,
+                                 offer_signup_id: giver)
     end
   end
 
