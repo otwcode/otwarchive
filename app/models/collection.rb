@@ -174,36 +174,6 @@ class Collection < ApplicationRecord
   scope :name_only, -> { select("collections.name") }
   scope :by_title, -> { order(:title) }
 
-  scope :approved, -> {
-    includes(:collection_items)
-      .where(
-        collection_items: {
-          user_approval_status: CollectionItem::APPROVED,
-          collection_approval_status: CollectionItem::APPROVED
-        }
-      )
-      .references(:collection_items)
-  }
-  scope :user_approved, -> {
-    includes(:collection_items)
-      .where(
-        collection_items: {
-          user_approval_status: CollectionItem::APPROVED
-        }
-      )
-      .references(:collection_items)
-  }
-  scope :rejected, -> {
-    includes(:collection_items)
-      .where(
-        collection_items: {
-          user_approval_status: CollectionItem::REJECTED
-        }
-      )
-      .references(:collection_items)
-  }
-
-
   before_validation :cleanup_url
   def cleanup_url
     self.header_image_url = reformat_url(self.header_image_url) if self.header_image_url
