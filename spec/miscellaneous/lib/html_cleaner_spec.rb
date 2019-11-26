@@ -845,7 +845,7 @@ describe HtmlCleaner do
       expect(doc.xpath("./p[contains(@class, 'bar')]").children.to_s.strip).to eq("foobar")
     end
 
-    it "should close unclosed inline tags before double linebreak" do
+    it "should reopen unclosed inline tags in the next paragraph" do
       html = """Here is an unclosed <em>em tag.
 
       Here is an unclosed <strong>strong tag.
@@ -854,8 +854,8 @@ describe HtmlCleaner do
 
       doc = Nokogiri::HTML.fragment(add_paragraphs_to_text(html))
       expect(doc.xpath("./p[1]/em").children.to_s.strip).to eq("em tag.")
-      expect(doc.xpath("./p[2]/strong").children.to_s.strip).to eq("strong tag.")
-      expect(doc.xpath("./p[3]").children.to_s.strip).to eq("Stuff.")
+      expect(doc.xpath("./p[2]/em/strong").children.to_s.strip).to eq("strong tag.")
+      expect(doc.xpath("./p[3]/em").children.to_s.strip).to eq("Stuff.")
     end
 
     it "should close unclosed tag withing other tag" do
