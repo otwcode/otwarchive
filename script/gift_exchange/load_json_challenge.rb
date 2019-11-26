@@ -158,5 +158,6 @@ data.each do |signup|
     make_prompt(challenge_signup, info, 'offer')
   end
 
+  # Skipping validation makes the process of creating large challenges faster:
   challenge_signup.save!(validate: false)
 end

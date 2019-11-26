@@ -76,11 +76,11 @@ class AssignmentGenerator
   def set_up_assignments
     # This table will contain a mapping from each request to the offer
     # that they've been (temporarily) assigned to.
-    @assignment_as_recipient = {}
+    @assignment_for_recipient = {}
 
     # This table will contain a mapping from each offer to the request
     # that they've been (temporarily) assigned to.
-    @assignment_as_giver = {}
+    @assignment_for_giver = {}
   end
 
   # Try to "improve" the assignments by looking for augmenting paths.
@@ -92,7 +92,7 @@ class AssignmentGenerator
     # time to use depth-first search to find as many as possible.
     @recipients_by_priority.each do |recipient|
       # We try to find a giver for each unassigned recipient.
-      next if @assignment_as_recipient[recipient]
+      next if @assignment_for_recipient[recipient]
 
       find_giver_for_recipient(distance, recipient)
     end
@@ -100,19 +100,19 @@ class AssignmentGenerator
     true
   end
 
-  # Double check that the @assignment_as_giver and @assignment_as_recipient
+  # Double check that the @assignment_for_giver and @assignment_for_recipient
   # tables are consistent with each other, and that each recipient/giver pair is
   # compatible (listed in the @potential_givers table). This should be
   # guaranteed by the algorithm, but it's nice to know that it's not going to go
   # catastrophically wrong.
   def validate_assignments
-    @assignment_as_recipient.each_pair do |recipient, giver|
-      return false unless @assignment_as_giver[giver] == recipient
+    @assignment_for_recipient.each_pair do |recipient, giver|
+      return false unless @assignment_for_giver[giver] == recipient
       return false unless @potential_givers[recipient].include?(giver)
     end
 
-    @assignment_as_giver.each_pair do |giver, recipient|
-      return false unless @assignment_as_recipient[recipient] == giver
+    @assignment_for_giver.each_pair do |giver, recipient|
+      return false unless @assignment_for_recipient[recipient] == giver
     end
 
     true
@@ -121,7 +121,7 @@ class AssignmentGenerator
   # Save the assignments we calculated to the database.
   def save_complete_assignments
     # First, build assignments for all of the signups that have been matched.
-    @assignment_as_recipient.each_pair do |recipient, giver|
+    @assignment_for_recipient.each_pair do |recipient, giver|
       # This should never happen, but just in case:
       next if recipient.nil? || giver.nil?
 
@@ -134,9 +134,9 @@ class AssignmentGenerator
     #
     # TODO: These fields are no longer used for anything. Can the columns be
     # dropped from the ChallengeSignup table?
-    ChallengeSignup.where(id: @assignment_as_recipient.keys)
+    ChallengeSignup.where(id: @assignment_for_recipient.keys)
       .update_all(assigned_as_request: true)
-    ChallengeSignup.where(id: @assignment_as_recipient.values)
+    ChallengeSignup.where(id: @assignment_for_recipient.values)
       .update_all(assigned_as_offer: true)
   end
 
@@ -146,8 +146,8 @@ class AssignmentGenerator
     # which won't be included in the @recipients_by_priority list).
     signup_ids = @collection.signups.pluck(:id)
 
-    unmatched_recipients = signup_ids - @assignment_as_recipient.keys
-    unmatched_givers = signup_ids - @assignment_as_recipient.values
+    unmatched_recipients = signup_ids - @assignment_for_recipient.keys
+    unmatched_givers = signup_ids - @assignment_for_recipient.values
 
     # Add blank assignments for all of the unmatched recipients.
     unmatched_recipients.each do |recipient|
@@ -175,7 +175,7 @@ class AssignmentGenerator
 
     # Initialize the queue with all signups that have no assigned giver.
     @recipients_by_priority.each do |recipient|
-      next if @assignment_as_recipient[recipient]
+      next if @assignment_for_recipient[recipient]
 
       queue << recipient
       distance[recipient] = 0
@@ -188,7 +188,7 @@ class AssignmentGenerator
 
       @potential_givers[recipient].each do |giver|
         # Automatically traverse the edge in the matching.
-        assignment = @assignment_as_giver[giver]
+        assignment = @assignment_for_giver[giver]
 
         # Skip if we've already traversed the assignment.
         next if distance.key?(assignment)
@@ -229,7 +229,7 @@ class AssignmentGenerator
 
     @potential_givers[recipient].each do |giver|
       # Calculate the recipient currently assigned to the giver we want.
-      assignment = @assignment_as_giver[giver]
+      assignment = @assignment_for_giver[giver]
 
       # Skip the assignment if we've already processed them.
       next unless layers.key?(assignment)
@@ -244,8 +244,8 @@ class AssignmentGenerator
       # Do the recursive call to see if it would be possible to juggle the
       # assignments to free up the giver (so that we can steal them ourselves).
       if find_giver_for_recipient(layers, assignment)
-        @assignment_as_recipient[recipient] = giver
-        @assignment_as_giver[giver] = recipient
+        @assignment_for_recipient[recipient] = giver
+        @assignment_for_giver[giver] = recipient
         layers.delete recipient
         return true
       end
@@ -270,9 +270,9 @@ class AssignmentGenerator
       next if @potential_givers[recipient].size <= 1
 
       # Skip recipients that don't have an assignment.
-      next unless (giver = @assignment_as_recipient[recipient])
+      next unless (giver = @assignment_for_recipient[recipient])
 
-      if giver == @assignment_as_giver[recipient]
+      if giver == @assignment_for_giver[recipient]
         try_remove_potential_giver(recipient)
       end
     end
@@ -282,13 +282,13 @@ class AssignmentGenerator
   # the number of unassigned participants.
   def try_remove_potential_giver(recipient)
     # Store information about the old configuration.
-    giver = @assignment_as_recipient[recipient]
+    giver = @assignment_for_recipient[recipient]
     old_givers = @potential_givers[recipient].dup
 
     # Delete the potential giver and delete the assignment.
     @potential_givers[recipient].delete(giver)
-    @assignment_as_recipient.delete(recipient)
-    @assignment_as_giver.delete(giver)
+    @assignment_for_recipient.delete(recipient)
+    @assignment_for_giver.delete(giver)
 
     # If we can find another way to assign this recipient, then we've
     # (hopefully) reduced the number of cycles by deleting that particular
@@ -300,7 +300,7 @@ class AssignmentGenerator
     # If we couldn't reassign the recipient, then the assignment that we deleted
     # is critical, and we should stop trying to delete it.
     @potential_givers[recipient] = old_givers
-    @assignment_as_recipient[recipient] = giver
-    @assignment_as_giver[giver] = recipient
+    @assignment_for_recipient[recipient] = giver
+    @assignment_for_giver[giver] = recipient
   end
 end
