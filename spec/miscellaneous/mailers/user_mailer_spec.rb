@@ -35,19 +35,15 @@ describe UserMailer, type: :mailer do
       end
 
       it "lists the first imported work" do
-        expect(email.html_part).to have_body_text(title)
+        expect(email).to have_html_body_text(title)
       end
 
       it "lists the second imported work" do
-        expect(email.html_part).to have_body_text(title2)
+        expect(email).to have_html_body_text(title2)
       end
 
       it "only has style_to links in the HTML body" do
         expect(email.html_part).not_to have_xpath("//a[not(@style)]")
-      end
-
-      it "displays titles with non-ASCII characters" do
-        expect(email.text_part).to have_body_text(title)
       end
     end
 
