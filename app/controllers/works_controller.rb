@@ -450,9 +450,14 @@ class WorksController < ApplicationController
   def import
     # check to make sure we have some urls to work with
     @urls = params[:urls].split
-
     if @urls.empty?
       flash.now[:error] = ts('Did you want to enter a URL?')
+      render(:new_import) && return
+    end
+
+    @language_id = params[:language_id]
+    if @language_id.empty?
+      flash.now[:error] = ts("Language cannot be blank.")
       render(:new_import) && return
     end
 
