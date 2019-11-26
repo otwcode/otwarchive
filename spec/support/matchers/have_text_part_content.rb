@@ -4,8 +4,8 @@ RSpec::Matchers.define :have_text_part_content do |expected_content|
   end
 
   failure_message do |email|
-    "expected to find text \"#{expected_content}\" in"
-    email.text_part.decoded
+    "expected to find text \"#{expected_content}\" in
+    #{email.text_part.decoded}"
   end
 
   description do
