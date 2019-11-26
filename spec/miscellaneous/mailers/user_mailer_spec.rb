@@ -31,7 +31,7 @@ describe UserMailer, type: :mailer do
 
     describe "HTML version" do
       it_behaves_like "a claim notification" do
-        let(:part) { email.html_part }
+        let(:part) { email.html_part.decoded }
       end
 
       it "lists the first imported work" do
@@ -49,7 +49,7 @@ describe UserMailer, type: :mailer do
 
     describe "text version" do
       it_behaves_like "a claim notification" do
-        let(:part) { email.text_part }
+        let(:part) { email.text_part.decoded }
       end
 
       it "lists the second imported work with a leading hyphen" do
@@ -118,7 +118,7 @@ describe UserMailer, type: :mailer do
 
     describe "HTML version" do
       it_behaves_like "an invitation to claim content" do
-        let(:part) { email.html_part }
+        let(:part) { email.html_part.decoded }
       end
 
       it "lists the first imported work in an unordered list in the HTML body" do
@@ -136,7 +136,7 @@ describe UserMailer, type: :mailer do
 
     describe "text version" do
       it_behaves_like "an invitation to claim content" do
-        let(:part) { email.text_part }
+        let(:part) { email.text_part.decoded }
       end
 
       it "lists the first imported work as plain text" do
