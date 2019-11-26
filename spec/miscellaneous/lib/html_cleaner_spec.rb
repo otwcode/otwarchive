@@ -855,7 +855,7 @@ describe HtmlCleaner do
       doc = Nokogiri::HTML.fragment(add_paragraphs_to_text(html))
       expect(doc.xpath("./p[1]/em").children.to_s.strip).to eq("em tag.")
       expect(doc.xpath("./p[2]/em/strong").children.to_s.strip).to eq("strong tag.")
-      expect(doc.xpath("./p[3]/em").children.to_s.strip).to eq("Stuff.")
+      expect(doc.xpath("./p[3]/em/strong").children.to_s.strip).to eq("Stuff.")
     end
 
     it "should close unclosed tag withing other tag" do
