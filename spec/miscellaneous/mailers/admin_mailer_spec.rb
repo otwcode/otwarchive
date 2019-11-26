@@ -51,21 +51,21 @@ describe AdminMailer, type: :mailer do
       end
 
       it "lists the usernames and all work titles" do
-        expect(mail.text_part).to have_body_text(/#{spam_user.login}/)
-        expect(mail.text_part).to have_body_text(/#{spam1.title}/)
-        expect(mail.text_part).to have_body_text(/#{spam2.title}/)
-        expect(mail.text_part).to have_body_text(/#{spam3.title}/)
+        expect(mail).to have_text_part_content(spam_user.login)
+        expect(mail).to have_text_part_content(spam1.title)
+        expect(mail).to have_text_part_content(spam2.title)
+        expect(mail).to have_text_part_content(spam3.title)
 
-        expect(mail.text_part).to have_body_text(/#{other_user.login}/)
-        expect(mail.text_part).to have_body_text(/#{other_spam.title}/)
+        expect(mail).to have_text_part_content(other_user.login)
+        expect(mail).to have_text_part_content(other_spam.title)
 
-        expect(mail.html_part).to have_body_text(/#{spam_user.login}/)
-        expect(mail.html_part).to have_body_text(/#{spam1.title}/)
-        expect(mail.html_part).to have_body_text(/#{spam2.title}/)
-        expect(mail.html_part).to have_body_text(/#{spam3.title}/)
+        expect(mail).to have_html_part_content(spam_user.login)
+        expect(mail).to have_html_part_content(spam1.title)
+        expect(mail).to have_html_part_content(spam2.title)
+        expect(mail).to have_html_part_content(spam3.title)
 
-        expect(mail.html_part).to have_body_text(/#{other_user.login}/)
-        expect(mail.html_part).to have_body_text(/#{other_spam.title}/)
+        expect(mail).to have_html_part_content(other_user.login)
+        expect(mail).to have_html_part_content(other_spam.title)
       end
 
       it "lists the users in the correct order" do
@@ -90,16 +90,16 @@ describe AdminMailer, type: :mailer do
           expect(mail.text_part).not_to have_body_text(/#{spam2.title}/)
           expect(mail.text_part).not_to have_body_text(/#{spam3.title}/)
 
-          expect(mail.text_part).to have_body_text(/#{other_user.login}/)
-          expect(mail.text_part).to have_body_text(/#{other_spam.title}/)
+          expect(mail).to have_text_part_content(other_user.login)
+          expect(mail).to have_text_part_content(other_spam.title)
 
           expect(mail.html_part).not_to have_body_text(/#{spam_user.login}/)
           expect(mail.html_part).not_to have_body_text(/#{spam1.title}/)
           expect(mail.html_part).not_to have_body_text(/#{spam2.title}/)
           expect(mail.html_part).not_to have_body_text(/#{spam3.title}/)
 
-          expect(mail.html_part).to have_body_text(/#{other_user.login}/)
-          expect(mail.html_part).to have_body_text(/#{other_spam.title}/)
+          expect(mail).to have_html_part_content(other_user.login)
+          expect(mail).to have_html_part_content(other_spam.title)
         end
       end
 
