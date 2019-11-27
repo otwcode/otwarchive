@@ -46,9 +46,7 @@ describe AdminMailer, type: :mailer do
         expect(email).to deliver_to ArchiveConfig.SPAM_ALERT_ADDRESS
       end
 
-      it "delivers from the correct address" do
-        expect(email).to deliver_from("Archive of Our Own <#{ArchiveConfig.RETURN_ADDRESS}>")
-      end
+      it_behaves_like "an email with a valid sender"
 
       it_behaves_like "a multipart email"
 

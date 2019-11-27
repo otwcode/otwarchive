@@ -19,13 +19,11 @@ describe AdminMailer, type: :mailer do
       expect(email).to deliver_to ArchiveConfig.ABUSE_ADDRESS
     end
 
-    it "delivers from the correct address" do
-      expect(email).to deliver_from("Archive of Our Own <#{ArchiveConfig.RETURN_ADDRESS}>")
-    end
-
     it "ccs the user who filed the report" do
       expect(email2).to deliver_to(report.email)
     end
+
+    it_behaves_like "an email with a valid sender"
 
     it_behaves_like "a multipart email"
 
