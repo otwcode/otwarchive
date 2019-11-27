@@ -2,29 +2,42 @@ require 'spec_helper'
 
 describe AdminMailer, type: :mailer do
 
-  context "feedback with email" do
-     let(:feedback) {create(:feedback)}
-     let(:mail) {AdminMailer.feedback(feedback.id)}
+  describe "feedback" do
+    let(:feedback) { create(:feedback) }
+    let(:email) { AdminMailer.feedback(feedback.id) }
 
-     it "has the correct subject" do
-       expect(mail).to have_subject "[#{ArchiveConfig.APP_SHORT_NAME}] Support - #{feedback.summary}"
-     end
+    it "has the correct subject" do
+      expect(email).to have_subject("[#{ArchiveConfig.APP_SHORT_NAME}] Support - #{feedback.summary}")
+    end
 
-     it "delivers to the correct address" do
-       expect(mail).to deliver_to ArchiveConfig.FEEDBACK_ADDRESS
-     end
+    it "delivers to the correct address" do
+      expect(email).to deliver_to(ArchiveConfig.FEEDBACK_ADDRESS)
+    end
 
-     it "delivers from the correct address" do
-       expect(mail).to deliver_from feedback.email
-     end
+    it "delivers from the correct address" do
+      expect(email).to deliver_from(feedback.email)
+    end
 
-     it "body text contains the comment" do
-       expect(mail).to have_body_text(/#{feedback.comment}/)
-     end
+    it_behaves_like "a multipart email"
 
-     it "body text contains the summary" do
-       expect(mail).to have_body_text(/#{feedback.summary}/)
-     end
+    describe "HTML email" do
+      it "contains the comment" do
+        expect(email).to have_html_part_content(feedback.comment)
+      end
 
+      it "contains the summary" do
+        expect(email).to have_html_part_content(feedback.summary)
+      end
+    end
+
+    describe "text email" do
+      it "contains the comment" do
+        expect(email).to have_text_part_content(feedback.comment)
+      end
+
+      it "contains the summary" do
+        expect(email).to have_text_part_content(feedback.summary)
+      end
+    end
   end
 end
