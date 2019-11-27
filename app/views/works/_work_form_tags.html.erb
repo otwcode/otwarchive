@@ -77,7 +77,7 @@
                          autocomplete_options("relationship_in_fandom",
                            :id => "work_relationship",
                            :title => ts('relationships'),
-                           :autocomplete_live_params => 'fandom=work_fandom') %>
+                           :"data-autocomplete-live-params" => 'fandom=work_fandom') %>
     </dd>
 
     <dt class="character" title="<%= ts('characters') %>">
@@ -89,7 +89,7 @@
                         autocomplete_options('character_in_fandom', 
                           :id => "work_character",
                           :title => ts('characters'),
-                          :autocomplete_live_params => 'fandom=work_fandom') %>
+                          :"data-autocomplete-live-params" => 'fandom=work_fandom') %>
     </dd>
 
     <dt class="freeform" title="<%= ts('additional tags') %>">

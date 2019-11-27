@@ -298,11 +298,13 @@ module ApplicationHelper
   def autocomplete_options(method, options={})
     {
       class: "autocomplete",
-      autocomplete_method: (method.is_a?(Array) ? method.to_json : "/autocomplete/#{method}"),
-      autocomplete_hint_text: ts("Start typing for suggestions!"),
-      autocomplete_no_results_text: ts("(No suggestions found)"),
-      autocomplete_min_chars: 1,
-      autocomplete_searching_text: ts("Searching...")
+      data: {
+        autocomplete_method: (method.is_a?(Array) ? method.to_json : "/autocomplete/#{method}"),
+        autocomplete_hint_text: ts("Start typing for suggestions!"),
+        autocomplete_no_results_text: ts("(No suggestions found)"),
+        autocomplete_min_chars: 1,
+        autocomplete_searching_text: ts("Searching...")
+      }
     }.merge(options)
   end
 
