@@ -237,6 +237,10 @@ class WorkSearchForm
     end
   end
 
+  # If we want to invalidate cached work counts whenever the owner (which for
+  # this method can only be a user or a pseud) has a new work, we can use
+  # "#{owner.works_index_cache_key}" instead of "#{owner.class.name.underscore}_#{owner.id}".
+  # See lib/works_owner.rb.
   def self.count_cache_key(owner)
     status = User.current_user ? 'logged_in' : 'logged_out'
     "work_count_#{owner.class.name.underscore}_#{owner.id}_#{status}"
