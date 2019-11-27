@@ -243,6 +243,9 @@ class WorkSearchForm
   end
 
   def self.count_cache_options
-    { expires_in: ArchiveConfig.SECONDS_UNTIL_DASHBOARD_COUNTS_EXPIRE.seconds }
+    {
+      expires_in: ArchiveConfig.SECONDS_UNTIL_DASHBOARD_COUNTS_EXPIRE.seconds,
+      race_condition_ttl: 10.seconds
+    }
   end
 end
