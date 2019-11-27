@@ -95,12 +95,10 @@ describe AdminMailer, type: :mailer do
       context "when there are other users to list" do
         describe "HTML version" do
           it "silently omits the missing user" do
-            decoded_html = email.html_part.decoded
-
-            expect(decoded_html).not_to include(spam_user.login)
-            expect(decoded_html).not_to include(spam1.title)
-            expect(decoded_html).not_to include(spam2.title)
-            expect(decoded_html).not_to include(spam3.title)
+            expect(email).not_to have_html_part_content(spam_user.login)
+            expect(email).not_to have_html_part_content(spam1.title)
+            expect(email).not_to have_html_part_content(spam2.title)
+            expect(email).not_to have_html_part_content(spam3.title)
 
             expect(email).to have_html_part_content(other_user.login)
             expect(email).to have_html_part_content(other_spam.title)
@@ -109,12 +107,10 @@ describe AdminMailer, type: :mailer do
 
         describe "text version" do
           it "silently omits the missing user" do
-            decoded_text = email.text_part.decoded
-
-            expect(decoded_text).not_to include(spam_user.login)
-            expect(decoded_text).not_to include(spam1.title)
-            expect(decoded_text).not_to include(spam2.title)
-            expect(decoded_text).not_to include(spam3.title)
+            expect(email).not_to have_text_part_content(spam_user.login)
+            expect(email).not_to have_text_part_content(spam1.title)
+            expect(email).not_to have_text_part_content(spam2.title)
+            expect(email).not_to have_text_part_content(spam3.title)
 
             expect(email).to have_text_part_content(other_user.login)
             expect(email).to have_text_part_content(other_spam.title)
