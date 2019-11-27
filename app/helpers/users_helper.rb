@@ -75,6 +75,7 @@ module UsersHelper
   # (The total should reflect the number of bookmarks the user can actually see.)
   def bookmarks_link(user, pseud = nil)
     return pseud_bookmarks_link(pseud) if pseud.present? && !pseud.new_record?
+
     total = BookmarkSearchForm.count_for_user(user)
     span_if_current ts('Bookmarks (%{bookmark_number})', bookmark_number: total.to_s), user_bookmarks_path(@user)
   end
@@ -88,6 +89,7 @@ module UsersHelper
   # (The total should reflect the number of works the user can actually see.)
   def works_link(user, pseud = nil)
     return pseud_works_link(pseud) if pseud.present? && !pseud.new_record?
+
     total = WorkSearchForm.count_for_user(user)
     span_if_current ts('Works (%{works_number})', works_number: total.to_s), user_works_path(@user)
   end
@@ -100,6 +102,7 @@ module UsersHelper
   # Prints link to series page with user-appropriate number of series
   def series_link(user, pseud = nil)
     return pseud_series_link(pseud) if pseud.present? && !pseud.new_record?
+
     if current_user.nil?
       total = Series.visible_to_all.exclude_anonymous.for_pseuds(user.pseuds).length
     else
