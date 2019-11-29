@@ -734,6 +734,7 @@ $.TokenList = function (input, url_or_data, settings) {
         // selected_dropdown_item = null;
         
         dropdown.hide();
+        input_box.removeAttr("aria-describedby");
         if (selected_dropdown_item) {
             $(selected_dropdown_item).removeClass(settings.classes.selectedToken);
         }
@@ -761,7 +762,9 @@ $.TokenList = function (input, url_or_data, settings) {
 
     function show_dropdown_hint () {
         if(settings.hintText) {
-            dropdown.html("<p class='notice'>"+settings.hintText+"</p>");
+            var id_for_hint = hidden_input_id + "_autocomplete_hint";
+            dropdown.html("<p class=\"notice\" id=\"" + id_for_hint + "\">" + settings.hintText + "</p>");
+            input_box.attr("aria-describedby", id_for_hint);
             show_dropdown();
         }
     }
@@ -784,6 +787,7 @@ $.TokenList = function (input, url_or_data, settings) {
     function populate_dropdown (query, results) {
         if(results && results.length) {
             dropdown.empty();
+            input_box.removeAttr("aria-describedby");
             var dropdown_ul = $("<ul>")
                 .attr({
                   "id": hidden_input_id + "_autocomplete_suggestions",
