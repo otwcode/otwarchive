@@ -2,7 +2,6 @@ require 'spec_helper'
 
 describe Feedback do
   context "when report is not spam" do
-
     # Assume all of these reports pass the spam check
     before(:each) do
       allow(Akismetor).to receive(:spam?).and_return(false)
@@ -15,7 +14,7 @@ describe Feedback do
     end
 
     context "comment missing" do
-      let(:report_without_comment) {build(:feedback, comment: nil)}
+      let(:report_without_comment) { build(:feedback, comment: nil) }
       it "is invalid" do
         expect(report_without_comment.save).to be_falsey
         expect(report_without_comment.errors[:comment]).not_to be_empty
