@@ -164,14 +164,3 @@ def delete_test_indices
     $elasticsearch.indices.delete(index: index)
   end
 end
-
-def get_message_part (mail, content_type)
-  mail.body.parts.find { |p| p.content_type.match content_type }.body.raw_source
-end
-
-shared_examples_for "multipart email" do
-  it "generates a multipart message (plain text and html)" do
-    expect(email.body.parts.length).to eq(2)
-    expect(email.body.parts.collect(&:content_type)).to eq(["text/plain; charset=UTF-8", "text/html; charset=UTF-8"])
-  end
-end

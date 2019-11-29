@@ -104,6 +104,12 @@ class Work < ApplicationRecord
     maximum: ArchiveConfig.NOTES_MAX,
     too_long: ts("must be less than %{max} characters long.", max: ArchiveConfig.NOTES_MAX)
 
+  validate :language_present_and_supported
+
+  def language_present_and_supported
+    errors.add(:base, ts("Language cannot be blank.")) if self.language.blank?
+  end
+
   # Makes sure the title has no leading spaces
   validate :clean_and_validate_title
 

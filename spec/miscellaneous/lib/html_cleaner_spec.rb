@@ -185,15 +185,19 @@ describe HtmlCleaner do
         end
 
         it "allows video tags" do
-          html = "<video></video>"
-          result = sanitize_value(field, html)
-          expect(result).to match('video')
+          html = '<video controls="controls" width="250" playsinline="playsinline" crossorigin="anonymous" preload="metadata">\
+              <track kind="subtitles" src="http://example.com/english.vtt" srclang="en">\
+              <track kind="subtitles" src="http://example.com/japanese.vtt" srclang="ja" default="default">\
+            </video>'
+          expect(sanitize_value(field, html)).to eq(html)
         end
 
         it "allows audio tags" do
-          html = "<audio></audio>"
-          result = sanitize_value(field, html)
-          expect(result).to match('audio')
+          html = '<audio controls="controls" crossorigin="anonymous" preload="metadata" loop="loop">\
+              <source src="http://example.com/podfic.mp3" type="audio/mpeg">\
+              <p>Maybe you want to <a href="http://example.com/podfic.mp3" rel="nofollow">download this podfic instead</a>?</p>\
+            </audio>'
+          expect(sanitize_value(field, html)).to eq(html)
         end
       end
     end
@@ -583,15 +587,14 @@ describe HtmlCleaner do
     end
 
     it "leaves audio tags alone" do
-      original = "<audio controls=\"controls\" crossorigin=\"anonymous\" preload=\"metadata\">
-  <source src=\"http://example.com/podfic.mp3\" type=\"audio/mpeg\"></source>
-  <p>Maybe you want to <a href=\"http://example.com/podfic.mp3\" rel=\"nofollow\">download this podfic instead</a>?</p>
-</audio>"
-      expect(sanitize_value(:content, original)).to eq(original)
+      html = "<audio><source>\n</audio>"
+      result = add_paragraphs_to_text(html)
+      expect(result).not_to match("<p>")
+      expect(result).not_to match("<br")
     end
 
     it "leaves video tags alone" do
-      html = "<video><track>\n</track></video>"
+      html = "<video><track>\n</video>"
       result = add_paragraphs_to_text(html)
       expect(result).not_to match("<p>")
       expect(result).not_to match("<br")
@@ -842,7 +845,15 @@ describe HtmlCleaner do
       expect(doc.xpath("./p[contains(@class, 'bar')]").children.to_s.strip).to eq("foobar")
     end
 
-    it "should close unclosed inline tags before double linebreak" do
+    # When we call add_paragraphs_to_text, everything gets wrapped inside myroot
+    # tags, and the closing myroot tag is treated as a mismatch for strong, ergo
+    # strong is closed on the second paragraph while the em tag remains open.
+    # In real world use, however, this content would most likely be run through
+    # Sanitize.clean first, which would close both the em and strong tags at the
+    # very end, so we wouldn't have a mismatch and the strong tag would be
+    # reopened in every paragraph, just like the em tag is. More info at:
+    # https://github.com/otwcode/otwarchive/pull/3692#issuecomment-558740913
+    it "should close mismatched tags" do
       html = """Here is an unclosed <em>em tag.
 
       Here is an unclosed <strong>strong tag.
@@ -851,11 +862,11 @@ describe HtmlCleaner do
 
       doc = Nokogiri::HTML.fragment(add_paragraphs_to_text(html))
       expect(doc.xpath("./p[1]/em").children.to_s.strip).to eq("em tag.")
-      expect(doc.xpath("./p[2]/strong").children.to_s.strip).to eq("strong tag.")
-      expect(doc.xpath("./p[3]").children.to_s.strip).to eq("Stuff.")
+      expect(doc.xpath("./p[2]/em/strong").children.to_s.strip).to eq("strong tag.")
+      expect(doc.xpath("./p[3]/em").children.to_s.strip).to eq("Stuff.")
     end
 
-    it "should close unclosed tag withing other tag" do
+    it "should close unclosed tag within other tag" do
       pending "Opened bug report with Nokogiri"
       html = "<strong><em>unclosed</strong>"
       doc = Nokogiri::HTML.fragment(add_paragraphs_to_text(html))

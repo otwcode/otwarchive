@@ -43,3 +43,8 @@ Given /^(\d+) tag(?:s)? (?:is|are) displayed per search page$/ do |per_page|
   stub_const("ArchiveConfig", OpenStruct.new(ArchiveConfig))
   ArchiveConfig.TAGS_PER_SEARCH_PAGE = per_page.to_i
 end
+
+Given /^dashboard counts expire after (\d+) seconds?$/ do |seconds|
+  stub_const("ArchiveConfig", OpenStruct.new(ArchiveConfig))
+  ArchiveConfig.SECONDS_UNTIL_DASHBOARD_COUNTS_EXPIRE = seconds.to_i
+end
