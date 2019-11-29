@@ -221,7 +221,7 @@ $.TokenList = function (input, url_or_data, settings) {
         .attr({
           "aria-autocomplete": "list",
           "aria-expanded": "true",
-          "aria-owns": hidden_input_id + "_autocomplete_suggestions",
+          "aria-owns": hidden_input_id + "_autocomplete_dropdown",
           "autocomplete": "off",
           "class": "text",
           "id": hidden_input_id + "_autocomplete",
@@ -743,6 +743,7 @@ $.TokenList = function (input, url_or_data, settings) {
 
     function show_dropdown() {
         dropdown
+            .attr("id", hidden_input_id + "_autocomplete_dropdown")
             .css({
                 position: "absolute"
                 // ,
@@ -789,10 +790,7 @@ $.TokenList = function (input, url_or_data, settings) {
             dropdown.empty();
             input_box.removeAttr("aria-describedby");
             var dropdown_ul = $("<ul>")
-                .attr({
-                  "id": hidden_input_id + "_autocomplete_suggestions",
-                  "role": "listbox"
-                })
+                .attr("role", "listbox")
                 .appendTo(dropdown)
                 .mouseover(function (event) {
                     select_dropdown_item($(event.target).closest("li"));
