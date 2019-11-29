@@ -217,9 +217,16 @@ $.TokenList = function (input, url_or_data, settings) {
 
     // Give the new input box an id attribute based on the original input box's id
     // Originally included .css({outline: "none" }), but we actually want to see an outline for accessibility reasons
-        var input_box = $("<input type=\"text\" class=\"text\" autocomplete=\"off\" role=\"combobox\" aria-expanded=\"true\" aria-autocomplete=\"list\">")
+        var input_box = $("<input>")
         .attr({
-          'id': hidden_input_id + '_autocomplete'
+          "aria-autocomplete": "list",
+          "aria-expanded": "true",
+          "aria-owns": hidden_input_id + "_autocomplete_suggestions",
+          "autocomplete": "off",
+          "class": "text",
+          "id": hidden_input_id + "_autocomplete",
+          "role": "combobox",
+          "type": "text"
         })
         .focus(function () {
             if (settings.tokenLimit === null || token_count < settings.tokenLimit) {
@@ -345,6 +352,7 @@ $.TokenList = function (input, url_or_data, settings) {
                   break;
 
                 case KEY.ESCAPE:
+                  input_box.removeAttr("aria-activedescendant");
                   hide_dropdown();
                   return true;
 
@@ -528,10 +536,10 @@ $.TokenList = function (input, url_or_data, settings) {
                 delete_token($(this).parent());
                 return false;
             });
-				// Link with a title attribute for better accessibility
+        // Link with a title attribute for better accessibility
         $("<a href=\"#\">" + settings.deleteText + "</a>")
-						.attr("title", "remove " + value)
-						.appendTo(delete_span_token);
+            .attr("title", "remove " + value)
+            .appendTo(delete_span_token);
 
         // Store data on the token
         var token_data = {"id": id, "name": value};
@@ -776,7 +784,11 @@ $.TokenList = function (input, url_or_data, settings) {
     function populate_dropdown (query, results) {
         if(results && results.length) {
             dropdown.empty();
-            var dropdown_ul = $("<ul role=\"listbox\" aria-activedescendant=\"ui-active-menuitem\">")
+            var dropdown_ul = $("<ul>")
+                .attr({
+                  "id": hidden_input_id + "_autocomplete_suggestions",
+                  "role": "listbox"
+                })
                 .appendTo(dropdown)
                 .mouseover(function (event) {
                     select_dropdown_item($(event.target).closest("li"));
@@ -789,6 +801,9 @@ $.TokenList = function (input, url_or_data, settings) {
 
             $.each(results, function(index, value) {
                 var this_li = $("<li role=\"option\">" + highlight_term(escapeHTML(value.name), query) + "</li>") // was role=\"menuitem\"
+                                  .attr({
+                                    "id": hidden_input_id + "_autocomplete_suggestion_" + index
+                                  })
                                   .appendTo(dropdown_ul);
 
                 if(index % 2) {
@@ -826,6 +841,7 @@ $.TokenList = function (input, url_or_data, settings) {
                 deselect_dropdown_item($(selected_dropdown_item));
             }
 
+            input_box.attr("aria-activedescendant", item.attr("id"));
             item.addClass(settings.classes.selectedDropdownItem);
             selected_dropdown_item = item.get(0);
         }
@@ -833,6 +849,7 @@ $.TokenList = function (input, url_or_data, settings) {
 
     // Remove highlighting from an item in the results dropdown
     function deselect_dropdown_item (item) {
+        input_box.removeAttr("aria-activedescendant");
         item.removeClass(settings.classes.selectedDropdownItem);
         selected_dropdown_item = null;
     }
