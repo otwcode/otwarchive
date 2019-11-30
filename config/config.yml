@@ -456,3 +456,7 @@ DUMP_COLLECTION_SEEDS: [
 # Check if a script is supported by the version of Ruby we use:
 # https://ruby-doc.org/core/Regexp.html#class-Regexp-label-Character+Properties
 CHARACTER_COUNT_SCRIPTS: ["Han", "Hiragana", "Katakana", "Thai"]
+
+
+WORK_SEARCH_CACHE_DURATION: <%= 30.minutes %>
+BOOKMARK_SEARCH_CACHE_DURATION: <%= 30.minutes %>
