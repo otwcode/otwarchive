@@ -8,7 +8,7 @@
           <% if nom.approved || nom.rejected %>
             <%= nom.tagname %>  <%= nomination_status(nom) %>
           <% else %>
-            <div title="<%= ts("Fandom %{index}") %>"><%= nom_form.text_field :tagname, autocomplete_options("fandom", data: { autocomplete_token_limit: 1 }, :class => "autocomplete") %></div>
+            <div title="<%= ts("Fandom %{index}") %>"><%= nom_form.text_field :tagname, autocomplete_options("fandom", data: { autocomplete_token_limit: 1 }, class: "autocomplete") %></div>
           <% end %>
         </dd>
 
