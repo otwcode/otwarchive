@@ -461,5 +461,6 @@ DUMP_COLLECTION_SEEDS: [
 CHARACTER_COUNT_SCRIPTS: ["Han", "Hiragana", "Katakana", "Thai"]
 
 
+# Cache durations for work and bookmark searches
 WORK_SEARCH_CACHE_DURATION: <%= 30.minutes %>
 BOOKMARK_SEARCH_CACHE_DURATION: <%= 30.minutes %>
