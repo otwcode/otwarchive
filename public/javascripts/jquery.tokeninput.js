@@ -802,10 +802,10 @@ $.TokenList = function (input, url_or_data, settings) {
                 .hide();
 
             $.each(results, function(index, value) {
-                var this_li = $("<li>" + highlight_term(escapeHTML(value.name), query) + "</li>") // was role=\"menuitem\"
+                var this_li = $("<li>" + highlight_term(escapeHTML(value.name), query) + "</li>")
                                   .attr({
                                     "id": hidden_input_id + "_autocomplete_suggestion_" + index,
-                                    "role": "option"
+                                    "role": "option" // was "menuitem"
                                   })
                                   .appendTo(dropdown_ul);
 
