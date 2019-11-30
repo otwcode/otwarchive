@@ -3,7 +3,7 @@
 <fieldset class="search tags">
   <legend>Search tags</legend>
   <p>
-  <%= link_to_help "tag-search-text-help" %> <%= text_field_tag "query[name]", @query[:name], :id => 'tag_search', :title => ts("Enter tags")  %>
+	<%= link_to_help "tag-search-text-help" %> <%= text_field_tag "query[name]", @query[:name], :id => 'tag_search', :title => ts("Enter tags")  %>
     <%= select_tag "query[type]", options_for_select([""] + Tag::USER_DEFINED, @query[:type]), :title => ts("Choose type") %>
     <label for="canonical" class="action">Canonical <%= check_box_tag "query[canonical]", true, @query[:canonical], :id => 'canonical' %></label>
   <span class="submit actions"><%= submit_tag ts("Search tags"), :name => nil %></span>
