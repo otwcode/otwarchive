@@ -6,7 +6,6 @@
 <!--subnav-->
 <% unless @collection %>
   <ul class="navigation actions" role="navigation">
-    <li class="search"><%= render 'tags/search_form' %></li>
     <% if logged_in? %><li><%= link_to ts("Tag Sets"), tag_sets_path %></li><% end %>
     <li><%= span_if_current(ts('Most Popular'), tags_path, params[:show].blank?) %></li>
     <li><%= span_if_current ts('Random'), tags_path(:show => "random") %></li>
@@ -15,6 +14,7 @@
 <!--/subnav-->
 
 <!--main content-->
+<p>These are some of the most popular tags used on the Archive. To find more tags, <a href="/works/search">try our tag search</a>.</p>
 <% unless @collection %>
   <h3 class="landmark heading">
     <% if params[:show] == "random" %>

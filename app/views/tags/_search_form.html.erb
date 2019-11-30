@@ -1,12 +1,50 @@
 <% @query = {} unless @query %>
 <%= form_tag url_for(:controller => 'tags', :action => 'search'), :class => 'simple search', :role => "search", :method => :get do %>
-<fieldset class="search tags">
-  <legend>Search tags</legend>
-  <p>
-	<%= link_to_help "tag-search-text-help" %> <%= text_field_tag "query[name]", @query[:name], :id => 'tag_search', :title => ts("Enter tags")  %>
-    <%= select_tag "query[type]", options_for_select([""] + Tag::USER_DEFINED, @query[:type]), :title => ts("Choose type") %>
-    <label for="canonical" class="action">Canonical <%= check_box_tag "query[canonical]", true, @query[:canonical], :id => 'canonical' %></label>
-  <span class="submit actions"><%= submit_tag ts("Search tags"), :name => nil %></span>
-</p>
-</fieldset>
+  <fieldset class="search">
+    <legend>Search tags</legend>
+    <dl>
+    <dt>
+      <label>Tag name</label> <%= link_to_help "tag-search-text-help" %>
+    </dt>
+    <dd>
+      <%= text_field_tag "query[name]", @query[:name], :id => 'tag_search'  %>
+    </dd>
+    <dt>
+      <label>Fandoms</label>
+    </dt>
+    <dd>
+      <%= text_field_tag "query[name]", @query[:name], :id => 'tag_search'  %>
+      <p class="footnote">Find tags wrangled to specific canonical fandoms.</p>
+    </dd>
+    <dt>
+      <label>Type</label>
+    </dt>
+    <dd>
+      <fieldset>
+      <ul>
+      <li><label for="canonical"><%= radio_button_tag "query[canonical]", true, @query[:canonical], :id => 'canonical' %> Fandom</label>
+      <li><label for="noncanonical"><%= radio_button_tag "query[canonical]", true, @query[:canonical], :id => 'canonical' %> Character</label>
+      <li><label for="any"><%= radio_button_tag "query[canonical]", true, @query[:canonical], :id => 'canonical' %> Relationship</label>
+      <li><label for="any"><%= radio_button_tag "query[canonical]", true, @query[:canonical], :id => 'canonical' %> Freeform</label>
+      <li><label for="any"><%= radio_button_tag "query[canonical]", true, @query[:canonical], :id => 'canonical' %> Any type</label>
+      </ul>
+      </fieldset>
+    </dd>
+    <dt>
+      <label>Wrangling status</label>
+    </dt>
+    <dd>
+      <fieldset>
+      <ul>
+      <li><label for="canonical"><%= radio_button_tag "query[canonical]", true, @query[:canonical], :id => 'canonical' %> Canonical</label>
+      <li><label for="noncanonical"><%= radio_button_tag "query[canonical]", true, @query[:canonical], :id => 'canonical' %> Non-canonical</label>
+      <li><label for="any"><%= radio_button_tag "query[canonical]", true, @query[:canonical], :id => 'canonical' %> Any status</label>
+      </ul>
+      </fieldset>
+    </dd>
+    <dt><label>Sort by</label></dt>
+    <dd><select><option selected>Name</option></select></dd>
+    </dl>
+    <p class="submit actions"><%= submit_tag ts("Search Tags"), :name => nil %></p>
+  </fieldset>
 <% end %>
