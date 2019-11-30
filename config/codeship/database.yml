@@ -4,7 +4,7 @@ development:
   encoding: utf8mb4
   collation: utf8mb4_unicode_ci
   pool: 10
-  port: 3307
+  port: 3306
   username: <%= ENV['MYSQL_USER'] %>
   password: <%= ENV['MYSQL_PASSWORD'] %>
   database: development<%= ENV['TEST_ENV_NUMBER'] %>
@@ -16,7 +16,7 @@ test:
   encoding: utf8mb4
   collation: utf8mb4_unicode_ci
   pool: 10
-  port: 3307
+  port: 3306
   username: <%= ENV['MYSQL_USER'] %>
   password: <%= ENV['MYSQL_PASSWORD'] %>
   database: test<%= ENV['TEST_ENV_NUMBER'] %>

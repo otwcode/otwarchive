@@ -293,6 +293,8 @@ FIELDS_ALLOWING_VIDEO_EMBEDS: ["content"]
 
 FIELDS_ALLOWING_CSS: ["content", "endnotes", "notes"]
 
+# Domains that are not allowed be used as the src for audio and video HTML tags.
+# Format: ["google.com", "archiveofourown.org"]
 BLACKLISTED_MULTIMEDIA_SRCS: []
 
 # Allowed CSS
@@ -384,8 +386,9 @@ HELP_DIRECTORY: '/help'
 #PRODUCTION_CACHE: "memory"
 PRODUCTION_CACHE: "memcache"
 
-# how long we cache autocomplete search results in minutes
-AUTOCOMPLETE_EXPIRATION_TIME: 10
+# TTL in seconds for cached work and bookmark counts on user/pseud dashboards.
+# Default to 20 minutes.
+SECONDS_UNTIL_DASHBOARD_COUNTS_EXPIRE: 1200
 
 # how many cache pages to expire for a tag/collection/pseud when a work is updated or deleted
 PAGES_TO_CACHE: 5

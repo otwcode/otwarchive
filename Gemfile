@@ -67,7 +67,7 @@ gem 'resque', '>=1.14.0'
 gem 'resque_mailer'
 gem 'resque-scheduler'
 #gem 'daemon-spawn', require: 'daemon_spawn'
-gem 'elasticsearch', '>=6.0.0'
+gem 'elasticsearch', '6.8.0'
 gem 'aws-sdk'
 gem 'css_parser'
 
