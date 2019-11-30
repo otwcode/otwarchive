@@ -122,7 +122,6 @@ class WorksController < ApplicationController
         end
       end
     elsif use_caching?
-
       @works = Rails.cache.fetch('works/index/latest/v1', expires_in:ArchiveConfig.WORK_SEARCH_CACHE_DURATION) do
         Work.latest.includes(:tags, :external_creatorships, :series, :language, :approved_collections, pseuds: [:user]).to_a
       end
