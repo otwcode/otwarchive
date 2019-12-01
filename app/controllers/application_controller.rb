@@ -4,7 +4,7 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception, prepend: true
   rescue_from ActionController::InvalidAuthenticityToken, with: :display_auth_error
   rescue_from ActionController::UnknownFormat, with: :raise_not_found
-  rescue_from Elasticsearch::Transport::Transport::Errors::ServiceUnavailable do |exception|
+  rescue_from Elasticsearch::Transport::Transport::Errors::ServiceUnavailable do
     head 444
   end
 
