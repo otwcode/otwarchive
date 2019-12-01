@@ -320,7 +320,8 @@ $.TokenList = function (input, url_or_data, settings) {
                         hide_dropdown();
                     } else {
                         // set a timeout just long enough to let this function finish.
-                        setTimeout(function(){do_search();}, 5);
+                        // was 5.
+                        setTimeout(function(){do_search();}, 25);
                     }
                     break;
 
@@ -359,7 +360,8 @@ $.TokenList = function (input, url_or_data, settings) {
                 default:
                     if(String.fromCharCode(event.which)) {
                         // set a timeout just long enough to let this function finish.
-                        setTimeout(function(){do_search();}, 5);
+                        // was 5.
+                        setTimeout(function(){do_search();}, 25);
                     }
                     break;
             }
