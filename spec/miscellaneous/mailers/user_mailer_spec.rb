@@ -3,7 +3,7 @@ require "spec_helper"
 describe UserMailer, type: :mailer do
 
   describe "claim_notification" do
-    title = Faker::Book.title
+    title = "Façade"
     title2 = Faker::Book.title
     let(:author) { create(:user) }
     let(:work) { create(:work, title: title, authors: [author.pseuds.first]) }
@@ -14,7 +14,7 @@ describe UserMailer, type: :mailer do
     # Shared content tests for both email types
     shared_examples_for "a claim notification" do
       it "contains the text for a claim email" do
-        expect(part).to have_body_text("You're receiving this e-mail because you had works in a fanworks archive that has been imported")
+        expect(part).to include("You're receiving this e-mail because you had works in a fanworks archive that has been imported")
       end
     end
 
@@ -31,15 +31,15 @@ describe UserMailer, type: :mailer do
 
     describe "HTML version" do
       it_behaves_like "a claim notification" do
-        let(:part) { email.html_part }
+        let(:part) { email.html_part.decoded }
       end
 
-      it "lists the first imported work in an unordered list in the HTML body" do
-        expect(email.html_part).to have_xpath("//ul/li", text: title)
+      it "lists the first imported work" do
+        expect(email).to have_html_part_content(title)
       end
 
-      it "lists the second imported work in an unordered list in the HTML body" do
-        expect(email.html_part).to have_xpath("//ul/li", text: title2)
+      it "lists the second imported work" do
+        expect(email).to have_html_part_content(title2)
       end
 
       it "only has style_to links in the HTML body" do
@@ -49,15 +49,15 @@ describe UserMailer, type: :mailer do
 
     describe "text version" do
       it_behaves_like "a claim notification" do
-        let(:part) { email.text_part }
-      end
-
-      it "lists the first imported work as plain text" do
-        expect(email.text_part).not_to have_xpath("//ul/li", text: title)
+        let(:part) { email.text_part.decoded }
       end
 
       it "lists the second imported work with a leading hyphen" do
-        expect(email.text_part).to have_body_text("- #{title2}")
+        expect(email).to have_text_part_content("- #{title2}")
+      end
+
+      it "displays titles with non-ASCII characters" do
+        expect(email).to have_text_part_content(title)
       end
     end
   end
@@ -99,7 +99,7 @@ describe UserMailer, type: :mailer do
     # Shared content tests for both email types
     shared_examples_for "an invitation to claim content" do
       it "contains the text for an invitation claim email" do
-        expect(part).to have_body_text("You're receiving this e-mail because an archive has recently been imported by")
+        expect(part).to include("You're receiving this e-mail because an archive has recently been imported by")
       end
     end
 
@@ -118,7 +118,7 @@ describe UserMailer, type: :mailer do
 
     describe "HTML version" do
       it_behaves_like "an invitation to claim content" do
-        let(:part) { email.html_part }
+        let(:part) { email.html_part.decoded }
       end
 
       it "lists the first imported work in an unordered list in the HTML body" do
@@ -136,7 +136,7 @@ describe UserMailer, type: :mailer do
 
     describe "text version" do
       it_behaves_like "an invitation to claim content" do
-        let(:part) { email.text_part }
+        let(:part) { email.text_part.decoded }
       end
 
       it "lists the first imported work as plain text" do
@@ -144,7 +144,7 @@ describe UserMailer, type: :mailer do
       end
 
       it "lists the second imported work with a leading hyphen" do
-        expect(email.text_part).to have_body_text("- #{title2}")
+        expect(email).to have_text_part_content("- #{title2}")
       end
     end
   end
@@ -171,15 +171,15 @@ describe UserMailer, type: :mailer do
 
       describe "HTML version" do
         it "has the correct content" do
-          expect(email.html_part).to have_body_text("like to join us, please sign up at the following address")
-          expect(email.html_part).to have_body_text("has invited you")
+          expect(email).to have_html_part_content("like to join us, please sign up at the following address")
+          expect(email).to have_html_part_content("has invited you")
         end
       end
 
       describe "text version" do
         it "has the correct content" do
-          expect(email.text_part).to have_body_text("like to join us, please sign up at the following address")
-          expect(email.text_part).to have_body_text("has invited you")
+          expect(email).to have_text_part_content("like to join us, please sign up at the following address")
+          expect(email).to have_text_part_content("has invited you")
         end
       end
     end
@@ -204,15 +204,15 @@ describe UserMailer, type: :mailer do
 
       describe "HTML version" do
         it "has the correct content" do
-          expect(email.html_part).to have_body_text("like to join us, please sign up at the following address")
-          expect(email.html_part).to have_body_text("been invited")
+          expect(email).to have_html_part_content("like to join us, please sign up at the following address")
+          expect(email).to have_html_part_content("been invited")
         end
       end
 
       describe "text version" do
         it "has the correct content" do
-          expect(email.text_part).to have_body_text("like to join us, please sign up at the following address")
-          expect(email.text_part).to have_body_text("been invited")
+          expect(email).to have_text_part_content("like to join us, please sign up at the following address")
+          expect(email).to have_text_part_content("been invited")
         end
       end
     end
@@ -242,13 +242,13 @@ describe UserMailer, type: :mailer do
 
     describe "HTML version" do
       it "has the correct content" do
-        expect(email.html_part).to have_body_text("You have been assigned the following request")
+        expect(email).to have_html_part_content("You have been assigned the following request")
       end
     end
 
     describe "text version" do
       it "has the correct content" do
-        expect(email.text_part).to have_body_text("You have been assigned the following request")
+        expect(email).to have_text_part_content("You have been assigned the following request")
       end
     end
   end
@@ -275,13 +275,13 @@ describe UserMailer, type: :mailer do
 
     describe "HTML version" do
       it "has the correct content" do
-        expect(email.html_part).to have_body_text("We regret to inform you that your request for 2 new invitations cannot be fulfilled at this time")
+        expect(email).to have_html_part_content("We regret to inform you that your request for 2 new invitations cannot be fulfilled at this time")
       end
     end
 
     describe "text version" do
       it "has the correct content" do
-        expect(email.text_part).to have_body_text("We regret to inform you that your request for 2 new invitations cannot be fulfilled at this time")
+        expect(email).to have_text_part_content("We regret to inform you that your request for 2 new invitations cannot be fulfilled at this time")
       end
     end
   end
