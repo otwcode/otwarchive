@@ -134,7 +134,7 @@ class BookmarksController < ApplicationController
           end
         end
       elsif use_caching?
-        @bookmarks = Rails.cache.fetch("bookmarks/index/latest/v2_true", expires_in: ArchiveConfig.BOOKMARKS_SEARCH_CACHE_DURATION) do
+        @bookmarks = Rails.cache.fetch("bookmarks/index/latest/v2_true", expires_in: ArchiveConfig.BOOKMARKS_SEARCH_CACHE_DURATION.seconds) do
           search = BookmarkSearchForm.new(show_private: false, show_restricted: false, sort_column: 'created_at')
           results = search.search_results
           flash_search_warnings(results)

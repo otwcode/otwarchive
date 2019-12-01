@@ -2,9 +2,9 @@
 # Site configuration (needed before Initializer)
 require 'ostruct'
 require 'yaml'
-hash = YAML.load(ERB.new(File.read("#{Rails.root}/config/config.yml")).result)
+hash = YAML.load_file("#{Rails.root}/config/config.yml")
 if File.exist?("#{Rails.root}/config/local.yml")
-  hash.merge! YAML.load(ERB.new(File.read("#{Rails.root}/config/local.yml")).result)
+  hash.merge! YAML.load_file("#{Rails.root}/config/local.yml")
 end
 ::ArchiveConfig = OpenStruct.new(hash)
 
