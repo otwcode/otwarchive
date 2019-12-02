@@ -224,12 +224,9 @@ $.TokenList = function (input, url_or_data, settings) {
         var input_box = $("<input>")
         .attr({
           "aria-autocomplete": "list",
-          "aria-expanded": "true",
-          "aria-owns": hidden_input_id + "_autocomplete_dropdown",
           "autocomplete": "off",
           "class": "text",
           "id": hidden_input_id + "_autocomplete",
-          "role": "combobox",
           "type": "text"
         })
         // add aria-describedby attribute from original input, if it exists.
@@ -442,6 +439,11 @@ $.TokenList = function (input, url_or_data, settings) {
     // The token holding the input box
     var input_token = $("<li />") // was role=\"menuitem\"
         .addClass(settings.classes.inputToken)
+        .attr({
+          "aria-expanded": "false",
+          "aria-owns": hidden_input_id + "_autocomplete_dropdown",
+          "role": "combobox"
+        })
         .appendTo(token_list)
         .append(input_box);
 
@@ -756,6 +758,7 @@ $.TokenList = function (input, url_or_data, settings) {
         if (selected_dropdown_item) {
             $(selected_dropdown_item).removeClass(settings.classes.selectedToken);
         }
+        input_token.attr("aria-exanded", "false");
         selected_dropdown_item = null;
     }
 
@@ -770,6 +773,8 @@ $.TokenList = function (input, url_or_data, settings) {
             })
             .css('z-index', 999)
             .show();
+        input_token
+          .attr("aria-expanded", "true");
     }
 
     function show_dropdown_searching () {
