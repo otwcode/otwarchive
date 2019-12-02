@@ -216,7 +216,8 @@ $.TokenList = function (input, url_or_data, settings) {
 
     // Change the original label's for attribute so it will match the id attribue we give the new input box
     hidden_input_label.attr({
-      'for': hidden_input_id + '_autocomplete'
+      'for': hidden_input_id + '_autocomplete',
+      'id': hidden_input_id + '_autocomplete_label'
     });
 
     // Give the new input box an id attribute based on the original input box's id
@@ -224,6 +225,7 @@ $.TokenList = function (input, url_or_data, settings) {
         var input_box = $("<input>")
         .attr({
           "aria-autocomplete": "list",
+          "aria-controls": hidden_input_id + "_autocomplete_dropdown",
           "autocomplete": "off",
           "class": "text",
           "id": hidden_input_id + "_autocomplete",
@@ -360,7 +362,6 @@ $.TokenList = function (input, url_or_data, settings) {
                   break;
 
                 case KEY.ESCAPE:
-                  input_box.removeAttr("aria-activedescendant");
                   hide_dropdown();
                   return true;
 
@@ -441,6 +442,7 @@ $.TokenList = function (input, url_or_data, settings) {
         .addClass(settings.classes.inputToken)
         .attr({
           "aria-expanded": "false",
+          "aria-haspopup": "listbox",
           "aria-owns": hidden_input_id + "_autocomplete_dropdown",
           "role": "combobox"
         })
@@ -752,6 +754,7 @@ $.TokenList = function (input, url_or_data, settings) {
             $(selected_dropdown_item).removeClass(settings.classes.selectedToken);
         }
         input_token.attr("aria-expanded", "false");
+        input_box.removeAttr("aria-activedescendant");
         selected_dropdown_item = null;
     }
 
@@ -803,7 +806,10 @@ $.TokenList = function (input, url_or_data, settings) {
         if(results && results.length) {
             dropdown.empty();
             var dropdown_ul = $("<ul>")
-                .attr("role", "listbox")
+                .attr({
+                  "aria-labelledby": hidden_input_id + '_autocomplete_label',
+                  "role": "listbox"
+                })
                 .appendTo(dropdown)
                 .mouseover(function (event) {
                     select_dropdown_item($(event.target).closest("li"));
@@ -858,6 +864,7 @@ $.TokenList = function (input, url_or_data, settings) {
             }
 
             input_box.attr("aria-activedescendant", item.attr("id"));
+            item.attr("aria-selected", "true");
             item.addClass(settings.classes.selectedDropdownItem);
             selected_dropdown_item = item.get(0);
         }
@@ -866,6 +873,7 @@ $.TokenList = function (input, url_or_data, settings) {
     // Remove highlighting from an item in the results dropdown
     function deselect_dropdown_item (item) {
         input_box.removeAttr("aria-activedescendant");
+        item.removeAttr("aria-selected");
         item.removeClass(settings.classes.selectedDropdownItem);
         selected_dropdown_item = null;
     }
