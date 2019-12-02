@@ -5,6 +5,8 @@ class ApplicationController < ActionController::Base
   rescue_from ActionController::InvalidAuthenticityToken, with: :display_auth_error
   rescue_from ActionController::UnknownFormat, with: :raise_not_found
   rescue_from Elasticsearch::Transport::Transport::Errors::ServiceUnavailable do
+    # Non-standard code used by nginx: closes a connection without sending
+    # a response header.
     head 444
   end
 
