@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require "spec_helper"
 
-describe WorksController do
+describe WorksController, work_search: true do
   include LoginMacros
   include RedirectExpectationHelper
 
