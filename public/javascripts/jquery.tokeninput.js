@@ -748,13 +748,6 @@ $.TokenList = function (input, url_or_data, settings) {
         // selected_dropdown_item = null;
         
         dropdown.hide();
-        // remove aria-describedby attribute unless there was one on the
-        // original input.
-        if (!hidden_input_describedby) {
-          input_box.removeAttr("aria-describedby");
-        } else {
-          input_box.attr("aria-describedby", hidden_input_describedby);
-        }
         if (selected_dropdown_item) {
             $(selected_dropdown_item).removeClass(settings.classes.selectedToken);
         }
@@ -786,17 +779,7 @@ $.TokenList = function (input, url_or_data, settings) {
 
     function show_dropdown_hint () {
         if(settings.hintText) {
-            var id_for_hint = hidden_input_id + "_autocomplete_hint";
-            dropdown.html("<p class=\"notice\" id=\"" + id_for_hint + "\">" + settings.hintText + "</p>");
-            // add aria-describedby attribute, allowing for the possibility
-            // there may have been one on the original input as well.
-            input_box.attr("aria-describedby", function(index, value) {
-                if (!hidden_input_describedby) {
-                  return id_for_hint;
-                } else {
-                  return hidden_input_describedby + " " + id_for_hint;
-                }
-            });
+            dropdown.html("<p class=\"notice\">"+settings.hintText+"</p>");
             show_dropdown();
         }
     }
@@ -819,13 +802,6 @@ $.TokenList = function (input, url_or_data, settings) {
     function populate_dropdown (query, results) {
         if(results && results.length) {
             dropdown.empty();
-            // add aria-describedby attribute, allowing for the possibility
-            // there may have been one on the original input as well.
-            if (!hidden_input_describedby) {
-              input_box.removeAttr("aria-describedby");
-            } else {
-              input_box.attr("aria-describedby", hidden_input_describedby);
-            };
             var dropdown_ul = $("<ul>")
                 .attr("role", "listbox")
                 .appendTo(dropdown)
