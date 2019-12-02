@@ -209,7 +209,11 @@ $.TokenList = function (input, url_or_data, settings) {
 
     // Keep a reference to the label whose for attribute that matches the original input box's id        
     var hidden_input_label = $('label[for="' + hidden_input_id + '"]');
-    
+
+    // Keep a reference to the original input box's aria-describedby attribute
+    var hidden_input_describedby = $(input)
+                                     .attr("aria-describedby");
+
     // Change the original label's for attribute so it will match the id attribue we give the new input box
     hidden_input_label.attr({
       'for': hidden_input_id + '_autocomplete'
@@ -227,6 +231,13 @@ $.TokenList = function (input, url_or_data, settings) {
           "id": hidden_input_id + "_autocomplete",
           "role": "combobox",
           "type": "text"
+        })
+        // add aria-describedby attribute from original input, if it exists.
+        .attr("aria-describedby", function() {
+          if (hidden_input_describedby) {
+            return hidden_input_describedby;
+            console.log(hidden_input_describedby);
+          }
         })
         .focus(function () {
             if (settings.tokenLimit === null || token_count < settings.tokenLimit) {
@@ -736,7 +747,13 @@ $.TokenList = function (input, url_or_data, settings) {
         // selected_dropdown_item = null;
         
         dropdown.hide();
-        input_box.removeAttr("aria-describedby");
+        // remove aria-describedby attribute unless there was one on the
+        // original input.
+        if (!hidden_input_describedby) {
+          input_box.removeAttr("aria-describedby");
+        } else {
+          input_box.attr("aria-describedby", hidden_input_describedby);
+        }
         if (selected_dropdown_item) {
             $(selected_dropdown_item).removeClass(settings.classes.selectedToken);
         }
@@ -767,7 +784,15 @@ $.TokenList = function (input, url_or_data, settings) {
         if(settings.hintText) {
             var id_for_hint = hidden_input_id + "_autocomplete_hint";
             dropdown.html("<p class=\"notice\" id=\"" + id_for_hint + "\">" + settings.hintText + "</p>");
-            input_box.attr("aria-describedby", id_for_hint);
+            // add aria-describedby attribute, allowing for the possibility
+            // there may have been one on the original input as well.
+            input_box.attr("aria-describedby", function(index, value) {
+                if (!hidden_input_describedby) {
+                  return id_for_hint;
+                } else {
+                  return hidden_input_describedby + " " + id_for_hint;
+                }
+            });
             show_dropdown();
         }
     }
@@ -790,7 +815,13 @@ $.TokenList = function (input, url_or_data, settings) {
     function populate_dropdown (query, results) {
         if(results && results.length) {
             dropdown.empty();
-            input_box.removeAttr("aria-describedby");
+            // add aria-describedby attribute, allowing for the possibility
+            // there may have been one on the original input as well.
+            if (!hidden_input_describedby) {
+              input_box.removeAttr("aria-describedby");
+            } else {
+              input_box.attr("aria-describedby", hidden_input_describedby);
+            };
             var dropdown_ul = $("<ul>")
                 .attr("role", "listbox")
                 .appendTo(dropdown)
