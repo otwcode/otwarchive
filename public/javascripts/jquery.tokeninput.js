@@ -758,7 +758,7 @@ $.TokenList = function (input, url_or_data, settings) {
         if (selected_dropdown_item) {
             $(selected_dropdown_item).removeClass(settings.classes.selectedToken);
         }
-        input_token.attr("aria-exanded", "false");
+        input_token.attr("aria-expanded", "false");
         selected_dropdown_item = null;
     }
 
