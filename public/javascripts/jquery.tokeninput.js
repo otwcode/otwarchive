@@ -236,7 +236,6 @@ $.TokenList = function (input, url_or_data, settings) {
         .attr("aria-describedby", function() {
           if (hidden_input_describedby) {
             return hidden_input_describedby;
-            console.log(hidden_input_describedby);
           }
         })
         .focus(function () {
