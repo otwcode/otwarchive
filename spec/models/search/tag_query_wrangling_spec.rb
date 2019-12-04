@@ -20,11 +20,7 @@ describe TagQuery, tag_search: true do
              freeform_string: "action,horror")
     end
 
-    before do
-      # TODO: figure out why this doesn't happen automatically
-      TagIndexer.index_from_db
-      run_all_indexing_jobs
-    end
+    before { run_all_indexing_jobs }
 
     it "returns tags without posted works" do
       results = TagQuery.new(type: "Fandom", has_posted_works: false).search_results.map(&:name)
