@@ -73,13 +73,6 @@ Before do
   Locale.set_base_locale(iso: "en", name: "English (US)", language_id: language.id)
 end
 
-After do
-  indices = $elasticsearch.indices.get_mapping.keys.select { |key| key.match("test") }
-  indices.each do |index|
-    $elasticsearch.indices.delete(index: index)
-  end
-end
-
 Before '@disable_caching' do
   ActionController::Base.perform_caching = false
 end

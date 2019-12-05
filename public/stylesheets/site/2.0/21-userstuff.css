@@ -139,6 +139,12 @@
   border: 1px solid;
 }
 
+/* media */
+
+.userstuff video {
+  max-width: 100%;
+}
+
 /*expected behaviours, exceptioning*/
 
 /* WORK MARGINS */

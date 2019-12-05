@@ -244,7 +244,7 @@ Feature: Archivist bulk imports
     Then I should see "We have notified the author(s) you imported works for. If any were missed, you can also add co-authors manually."
     When I press "Edit"
     And I fill in "work_collection_names" with "Club"
-    And I press "Post Without Preview"
+    And I press "Post"
     Then I should see "Story"
     And I should see "randomtestname"
     And I should see "Club"
@@ -254,12 +254,13 @@ Feature: Archivist bulk imports
   Scenario: Should not be able to import for others unless the box is checked
     When I go to the import page
       And I fill in "URLs*" with "http://ao3testing.dreamwidth.org/593.html"
+      And I select "English" from "Choose a language"
       And I fill in "Author Name*" with "ao3testing"
       And I fill in "Author Email Address*" with "ao3testing@example.com"
-    When I press "Import"
+      And I press "Import"
     Then I should see /You have entered an external author name or e-mail address but did not select "Import for others."/
     When I check the 1st checkbox with id matching "importing_for_others"
-    And I press "Import"
+      And I press "Import"
     Then I should see "We have notified the author(s) you imported works for. If any were missed, you can also add co-authors manually."
 
   Scenario: Archivist can't see Open Doors tools

@@ -15,9 +15,7 @@ require 'database_cleaner'
 require 'email_spec'
 
 DatabaseCleaner.start
-
 DatabaseCleaner.clean
-
 
 # Requires supporting ruby files with custom matchers and macros, etc,
 # in spec/support/ and its subdirectories.
@@ -44,6 +42,7 @@ RSpec.configure do |config|
     Rails.application.load_tasks
     DatabaseCleaner.strategy = :transaction
     DatabaseCleaner.clean
+    Indexer.all.map(&:prepare_for_testing)
   end
 
   config.before :each do
@@ -54,12 +53,43 @@ RSpec.configure do |config|
 
   config.after :each do
     DatabaseCleaner.clean
-    delete_test_indices
   end
 
   config.after :suite do
     DatabaseCleaner.clean_with :truncation
-    delete_test_indices
+    Indexer.all.map(&:delete_index)
+  end
+
+  config.before :each, bookmark_search: true do
+    BookmarkIndexer.prepare_for_testing
+  end
+
+  config.after :each, bookmark_search: true do
+    BookmarkIndexer.delete_index
+  end
+
+  config.before :each, pseud_search: true do
+    PseudIndexer.prepare_for_testing
+  end
+
+  config.after :each, pseud_search: true do
+    PseudIndexer.delete_index
+  end
+
+  config.before :each, tag_search: true do
+    TagIndexer.prepare_for_testing
+  end
+
+  config.after :each, tag_search: true do
+    TagIndexer.delete_index
+  end
+
+  config.before :each, work_search: true do
+    WorkIndexer.prepare_for_testing
+  end
+
+  config.after :each, work_search: true do
+    WorkIndexer.delete_index
   end
 
   # If you're not using ActiveRecord, or you'd prefer not to run each of your
@@ -108,70 +138,11 @@ def clean_the_database
   REDIS_RESQUE.flushall
   REDIS_ROLLOUT.flushall
   REDIS_AUTOCOMPLETE.flushall
-
-  ['work', 'bookmark', 'pseud', 'tag'].each do |index|
-    update_and_refresh_indexes index
-  end
-end
-
-def update_and_refresh_indexes(klass_name, shards = 5)
-  indexer_class = "#{klass_name.capitalize.constantize}Indexer".constantize
-
-  indexer_class.delete_index
-  indexer_class.create_index(shards)
-
-  if klass_name == 'bookmark'
-    bookmark_indexers = {
-      BookmarkedExternalWorkIndexer => ExternalWork,
-      BookmarkedSeriesIndexer => Series,
-      BookmarkedWorkIndexer => Work
-    }
-
-    bookmark_indexers.each do |indexer, bookmarkable|
-      indexer.new(bookmarkable.all.pluck(:id)).index_documents if bookmarkable.any?
-    end
-  end
-
-  indexer = indexer_class.new(klass_name.capitalize.constantize.all.pluck(:id))
-  indexer.index_documents if klass_name.capitalize.constantize.any?
-
-  $elasticsearch.indices.refresh(index: "ao3_test_#{klass_name}s")
-end
-
-def refresh_index_without_updating(klass_name)
-  $elasticsearch.indices.refresh(index: "ao3_test_#{klass_name}s")
 end
 
 def run_all_indexing_jobs
   %w[main background stats].each do |reindex_type|
     ScheduledReindexJob.perform reindex_type
   end
-  %w[work bookmark pseud tag].each do |index|
-    refresh_index_without_updating index
-  end
-end
-
-def delete_index(index)
-  index_name = "ao3_test_#{index}s"
-  if $elasticsearch.indices.exists? index: index_name
-    $elasticsearch.indices.delete index: index_name
-  end
-end
-
-def delete_test_indices
-  indices = $elasticsearch.indices.get_mapping.keys.select { |key| key.match("test") }
-  indices.each do |index|
-    $elasticsearch.indices.delete(index: index)
-  end
-end
-
-def get_message_part (mail, content_type)
-  mail.body.parts.find { |p| p.content_type.match content_type }.body.raw_source
-end
-
-shared_examples_for "multipart email" do
-  it "generates a multipart message (plain text and html)" do
-    expect(email.body.parts.length).to eq(2)
-    expect(email.body.parts.collect(&:content_type)).to eq(["text/plain; charset=UTF-8", "text/html; charset=UTF-8"])
-  end
+  Indexer.all.map(&:refresh_index)
 end

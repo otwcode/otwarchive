@@ -293,6 +293,10 @@ For practicality, /archive_faqs are also .docs and .support and have the .userst
   list-style-type: circle;
 }
 
+.faq .categories .userstuff {
+  clear: both;
+}
+
 .faq .screencast .label {
   font-weight: 700;
 }

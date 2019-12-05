@@ -54,6 +54,7 @@ Given /^I set up importing( with a mock website)?( as an archivist)?$/ do |mock,
   unless mock.blank?
     mock_external
   end
+  step %{basic languages}
   step %{basic tags}
   if is_archivist.blank?
     step %{I am logged in as a random user}
@@ -67,6 +68,7 @@ end
 When /^I start importing "(.*)"( with a mock website)?( as an archivist)?$/ do |url, mock, is_archivist|
   step %{I set up importing#{mock}#{is_archivist}}
   step %{I fill in "urls" with "#{url}"}
+  step %{I select "English" from "Choose a language"}
 end
 
 When /^I import "(.*)"( with a mock website)?$/ do |url, mock|
@@ -77,12 +79,14 @@ end
 When /^I import the urls$/ do |urls|
   step %{I set up importing}
   step %{I fill in "urls" with "#{urls}"}
+  step %{I select "English" from "Choose a language"}
   step %{I press "Import"}
 end
 
 When /^I import the urls with mock websites( as chapters)?( without preview)?$/ do |chapters, no_preview, urls|
   step %{I set up importing with a mock website}
   step %{I fill in "urls" with "#{urls}"}
+  step %{I select "English" from "Choose a language"}
   if chapters
     step %{I choose "import_multiple_chapters"}
   end
