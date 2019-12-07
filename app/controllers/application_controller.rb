@@ -7,7 +7,7 @@ class ApplicationController < ActionController::Base
   rescue_from Elasticsearch::Transport::Transport::Errors::ServiceUnavailable do
     # Non-standard code used by nginx: closes a connection without sending
     # a response header.
-    head 444
+    head 445
   end
 
   def raise_not_found
