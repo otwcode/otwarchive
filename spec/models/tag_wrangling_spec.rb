@@ -7,14 +7,14 @@ describe Tag do
 
       it "adds filters to tagged works" do
         work = create(:work, fandom_string: fandom.name)
-        fandom.update_attributes!(canonical: true)
+        fandom.update!(canonical: true)
         expect(fandom.filtered_works.reload).to include(work)
       end
 
       it "reindexes tagged works" do
         work = create(:work, fandom_string: fandom.name)
         expect do
-          fandom.update_attributes!(canonical: true)
+          fandom.update!(canonical: true)
         end.to(add_to_reindex_queue(work, :background) &
                not_add_to_reindex_queue(work, :main))
       end
@@ -25,14 +25,14 @@ describe Tag do
 
       it "removes filters from tagged works" do
         work = create(:work, fandom_string: fandom.name)
-        fandom.update_attributes!(canonical: false)
+        fandom.update!(canonical: false)
         expect(fandom.filtered_works.reload).not_to include(work)
       end
 
       it "reindexes tagged works" do
         work = create(:work, fandom_string: fandom.name)
         expect do
-          fandom.update_attributes!(canonical: false)
+          fandom.update!(canonical: false)
         end.to(add_to_reindex_queue(work, :background) &
                not_add_to_reindex_queue(work, :main))
       end
@@ -40,7 +40,7 @@ describe Tag do
       it "removes favorite tags" do
         user = create(:user)
         user.favorite_tags.create(tag: fandom)
-        fandom.update_attributes!(canonical: false)
+        fandom.update!(canonical: false)
         expect(user.favorite_tags.count).to eq 0
       end
 
@@ -48,14 +48,14 @@ describe Tag do
         let!(:synonym) { create(:fandom, merger: fandom) }
 
         it "removes the synonym's merger" do
-          fandom.update_attributes!(canonical: false)
+          fandom.update!(canonical: false)
           expect(synonym.reload.merger).to eq(nil)
           expect(fandom.reload.mergers).to eq([])
         end
 
         it "removes filters from works tagged with the synonym" do
           work = create(:work, fandom_string: synonym.name)
-          fandom.update_attributes!(canonical: false)
+          fandom.update!(canonical: false)
           expect(fandom.filtered_works.reload).not_to include(work)
         end
       end
@@ -69,21 +69,21 @@ describe Tag do
         end
 
         it "removes the meta tag relationship" do
-          fandom.update_attributes!(canonical: false)
+          fandom.update!(canonical: false)
           expect(sub.reload.meta_tags).to eq([])
           expect(fandom.reload.sub_tags).to eq([])
         end
 
         it "removes filters from works tagged with the sub tag" do
           work = create(:work, fandom_string: sub.name)
-          fandom.update_attributes!(canonical: false)
+          fandom.update!(canonical: false)
           expect(fandom.filtered_works.reload).not_to include(work)
         end
 
         it "removes filters from works tagged with the sub tag's synonym" do
           synonym = create(:fandom, merger: sub)
           work = create(:work, fandom_string: synonym.name)
-          fandom.update_attributes!(canonical: false)
+          fandom.update!(canonical: false)
           expect(fandom.filtered_works.reload).not_to include(work)
         end
       end
@@ -97,21 +97,21 @@ describe Tag do
         end
 
         it "removes the meta tag relationship" do
-          fandom.update_attributes!(canonical: false)
+          fandom.update!(canonical: false)
           expect(meta.reload.sub_tags).to eq([])
           expect(fandom.reload.meta_tags).to eq([])
         end
 
         it "removes meta filters from works tagged with the fandom" do
           work = create(:work, fandom_string: fandom.name)
-          fandom.update_attributes!(canonical: false)
+          fandom.update!(canonical: false)
           expect(meta.filtered_works.reload).not_to include(work)
         end
 
         it "removes meta filters from works tagged with the tag's synonym" do
           synonym = create(:fandom, merger: fandom)
           work = create(:work, fandom_string: synonym.name)
-          fandom.update_attributes!(canonical: false)
+          fandom.update!(canonical: false)
           expect(meta.filtered_works.reload).not_to include(work)
         end
       end
@@ -126,23 +126,23 @@ describe Tag do
 
     context "adding a synonym" do
       it "adds filters to works tagged with the synonym" do
-        synonym.update_attributes!(syn_string: fandom.name)
+        synonym.update!(syn_string: fandom.name)
         expect(fandom.filtered_works.reload).to include(work)
       end
 
       it "reindexes works tagged with the synonym" do
         expect do
-          synonym.update_attributes!(syn_string: fandom.name)
+          synonym.update!(syn_string: fandom.name)
         end.to(add_to_reindex_queue(work, :background) &
                not_add_to_reindex_queue(work, :main))
       end
 
       it "copies its parent associations" do
-        parent = create(:media, canonical: true)
+        parent = create(:media)
         synonym.add_association(parent)
         synonym.reload
 
-        synonym.update_attributes!(syn_string: fandom.name)
+        synonym.update!(syn_string: fandom.name)
 
         expect(fandom.parents.reload).to contain_exactly(parent)
         expect(synonym.parents.reload).to contain_exactly(parent)
@@ -152,7 +152,7 @@ describe Tag do
         let(:synonym) { create(:canonical_fandom) }
 
         it "changes the tag to non-canonical" do
-          synonym.update_attributes!(syn_string: fandom.name)
+          synonym.update!(syn_string: fandom.name)
           expect(synonym.reload.canonical).to be_falsey
         end
 
@@ -163,7 +163,7 @@ describe Tag do
           synonym.meta_tags << meta
           synonym.reload
 
-          synonym.update_attributes!(syn_string: fandom.name)
+          synonym.update!(syn_string: fandom.name)
 
           expect(fandom.sub_tags.reload).to contain_exactly(sub)
           expect(fandom.meta_tags.reload).to contain_exactly(meta)
@@ -172,11 +172,11 @@ describe Tag do
         end
 
         it "transfers its child associations" do
-          child = create(:character, canonical: false)
+          child = create(:character)
           synonym.add_association(child)
           synonym.reload
 
-          synonym.update_attributes!(syn_string: fandom.name)
+          synonym.update!(syn_string: fandom.name)
 
           expect(fandom.children.reload).to contain_exactly(child)
           expect(synonym.children.reload).to contain_exactly
@@ -185,7 +185,7 @@ describe Tag do
         it "transfers favorite tags" do
           user = create(:user)
           user.favorite_tags.create(tag: synonym)
-          synonym.update_attributes!(syn_string: fandom.name)
+          synonym.update!(syn_string: fandom.name)
           expect(user.favorite_tags.count).to eq 1
           expect(user.favorite_tags.reload.first.tag).to eq(fandom)
         end
@@ -194,7 +194,7 @@ describe Tag do
           user = create(:user)
           user.favorite_tags.create(tag: fandom)
           user.favorite_tags.create(tag: synonym)
-          synonym.update_attributes!(syn_string: fandom.name)
+          synonym.update!(syn_string: fandom.name)
           expect(user.favorite_tags.count).to eq 1
           expect(user.favorite_tags.reload.first.tag).to eq(fandom)
         end
@@ -208,7 +208,7 @@ describe Tag do
       it "adds filters and meta filters for the new canonical" do
         meta = create(:canonical_fandom)
         meta.sub_tags << new_fandom
-        synonym.update_attributes!(syn_string: new_fandom.name)
+        synonym.update!(syn_string: new_fandom.name)
         expect(new_fandom.filtered_works.reload).to include(work)
         expect(meta.filtered_works.reload).to include(work)
       end
@@ -216,14 +216,14 @@ describe Tag do
       it "removes filters and meta filters for the old canonical" do
         meta = create(:canonical_fandom)
         meta.sub_tags << fandom
-        synonym.update_attributes!(syn_string: new_fandom.name)
+        synonym.update!(syn_string: new_fandom.name)
         expect(fandom.filtered_works.reload).not_to include(work)
         expect(meta.filtered_works.reload).not_to include(work)
       end
 
       it "reindexes works tagged with the synonym" do
         expect do
-          synonym.update_attributes!(syn_string: new_fandom.name)
+          synonym.update!(syn_string: new_fandom.name)
         end.to(add_to_reindex_queue(work, :background) &
                not_add_to_reindex_queue(work, :main))
       end
@@ -235,14 +235,14 @@ describe Tag do
       it "removes filters and meta filters for the old canonical" do
         meta = create(:canonical_fandom)
         meta.sub_tags << fandom
-        synonym.update_attributes!(syn_string: "")
+        synonym.update!(syn_string: "")
         expect(fandom.filtered_works.reload).not_to include(work)
         expect(meta.filtered_works.reload).not_to include(work)
       end
 
       it "reindexes works tagged with the synonym" do
         expect do
-          synonym.update_attributes!(syn_string: "")
+          synonym.update!(syn_string: "")
         end.to(add_to_reindex_queue(work, :background) &
                not_add_to_reindex_queue(work, :main))
       end
