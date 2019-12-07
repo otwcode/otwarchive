@@ -13,9 +13,9 @@ class Tagging < ApplicationRecord
   after_destroy :update_filters
 
   def update_filters
-    if taggable.is_a?(Filterable)
-      taggable.update_filters
-    end
+    return unless taggable.is_a?(Filterable)
+
+    taggable.update_filters
   end
 
   def self.find_by_tag(taggable, tag)

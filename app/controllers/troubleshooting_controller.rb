@@ -96,7 +96,8 @@ class TroubleshootingController < ApplicationController
 
       if @item.nil?
         raise ActiveRecord::RecordNotFound,
-          ts("Could not find tag with name '%{name}'", name: params[:tag_id])
+              ts("Could not find tag with name '%{name}'",
+                 name: params[:tag_id])
       end
     elsif params[:work_id]
       @item = Work.find(params[:work_id])
@@ -145,7 +146,7 @@ class TroubleshootingController < ApplicationController
   # An action allowing the user to try to fix the filter count and taggings
   # count.
   def fix_counts
-    @item.filter_count.update_counts if @item.filter_count
+    @item.filter_count&.update_counts
     @item.update(taggings_count: @item.taggings.count)
     flash[:notice] << ts("Tag counts updated.")
   end

@@ -10,11 +10,11 @@ module Taggable
 
     Tag::VISIBLE.each do |type|
       has_many type.underscore.pluralize.to_sym,
-        -> { where(tags: { type: type }) },
-        through: :taggings,
-        source: :tagger,
-        source_type: 'Tag',
-        before_remove: :destroy_tagging
+               -> { where(tags: { type: type }) },
+               through: :taggings,
+               source: :tagger,
+               source_type: 'Tag',
+               before_remove: :destroy_tagging
     end
 
     after_update :reset_placeholders

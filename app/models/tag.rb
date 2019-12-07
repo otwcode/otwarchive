@@ -657,6 +657,7 @@ class Tag < ApplicationRecord
   before_update :reindex_all_for_name_or_type_change
   def reindex_all_for_name_or_type_change
     return unless name_changed? || type_changed?
+
     reindex_pseuds = (type == "Fandom") || (type_was == "Fandom")
     async_after_commit(:reindex_all, reindex_pseuds)
   end
@@ -672,18 +673,18 @@ class Tag < ApplicationRecord
     filtered_works.reindex_all
     filtered_external_works.reindex_all
 
-    Series.joins(works: :taggings).
-      merge(self.taggings).reindex_all
-    Series.joins(works: :filter_taggings).
-      merge(self.filter_taggings).reindex_all
+    Series.joins(works: :taggings)
+      .merge(self.taggings).reindex_all
+    Series.joins(works: :filter_taggings)
+      .merge(self.filter_taggings).reindex_all
 
     # We only want to reindex pseuds if this tag is a Fandom. Unfortunately, we
     # can't just check the current type, because tags can change type, and we'd
     # still need to reindex if the old type was Fandom. So we have an option to
     # control it.
     if reindex_pseuds
-      Pseud.joins(works: :filter_taggings).
-        merge(self.direct_filter_taggings).reindex_all
+      Pseud.joins(works: :filter_taggings)
+        .merge(self.direct_filter_taggings).reindex_all
     end
   end
 
@@ -716,9 +717,9 @@ class Tag < ApplicationRecord
   # their filters fixed.
   after_update :update_filters_for_canonical_or_merger_change
   def update_filters_for_canonical_or_merger_change(*)
-    if saved_change_to_canonical? || saved_change_to_merger_id?
-      async_after_commit(:update_filters_for_taggables)
-    end
+    return unless saved_change_to_canonical? || saved_change_to_merger_id?
+
+    async_after_commit(:update_filters_for_taggables)
   end
 
   # Recalculate the inherited meta tags for this tag, and once those changes
@@ -832,7 +833,7 @@ class Tag < ApplicationRecord
   before_update :update_associations_for_canonical_or_merger_change
   def update_associations_for_canonical_or_merger_change
     if (merger_id_changed? && merger_id.present?) ||
-        (canonical_changed? && !canonical?)
+       (canonical_changed? && !canonical?)
       async_after_commit(:transfer_or_remove_favorite_tags)
       async_after_commit(:transfer_or_remove_associations)
     end
@@ -841,9 +842,9 @@ class Tag < ApplicationRecord
   # Make it possible to go from a synonym to a canonical in one step.
   before_validation :reset_merger_when_becoming_canonical
   def reset_merger_when_becoming_canonical
-    if self.canonical_changed? && self.canonical?
-      self.merger_id = nil
-    end
+    return unless self.canonical_changed? && self.canonical?
+
+    self.merger_id = nil
   end
 
   # If this tag has a canonical merger, transfer associations to the merger.
@@ -852,9 +853,7 @@ class Tag < ApplicationRecord
   # parent).
   def transfer_or_remove_associations
     transaction do
-      if self.merger&.canonical?
-        add_associations_to_merger
-      end
+      add_associations_to_merger if self.merger&.canonical?
 
       self.mergers.find_each { |tag| tag.update(merger_id: nil) }
       self.child_taggings.destroy_all

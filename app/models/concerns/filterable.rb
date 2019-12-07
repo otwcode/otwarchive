@@ -11,12 +11,12 @@ module Filterable
     has_many :filters, through: :filter_taggings
 
     has_many :direct_filter_taggings,
-      -> { where(inherited: false) },
-      class_name: "FilterTagging",
-      as: :filterable
+             -> { where(inherited: false) },
+             class_name: "FilterTagging",
+             as: :filterable
     has_many :direct_filters,
-      source: :filter,
-      through: :direct_filter_taggings
+             source: :filter,
+             through: :direct_filter_taggings
 
     after_destroy :clean_up_filter_taggings
   end

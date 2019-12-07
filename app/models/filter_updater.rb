@@ -20,9 +20,7 @@ class FilterUpdater
 
     @klass = [Work, ExternalWork].find { |klass| klass.to_s == @type }
 
-    unless @klass
-      raise "FilterCalculator type '#{type}' not allowed."
-    end
+    raise "FilterUpdater type '#{type}' not allowed." unless @klass
 
     @modified = []
   end
@@ -128,7 +126,7 @@ class FilterUpdater
 
     filter_relations = [
       Tag.canonical.joins(:taggings),
-      Tag.canonical.joins(:mergers => :taggings)
+      Tag.canonical.joins(mergers: :taggings)
     ]
 
     pairs = filter_relations.flat_map do |filters|
@@ -198,6 +196,7 @@ class FilterUpdater
   # @modified.
   def update_inherited(filter_tagging, inherited)
     return if filter_tagging.inherited == inherited
+
     filter_tagging.update(inherited: inherited)
     @modified << filter_tagging
   end

@@ -13,9 +13,9 @@ class FilterTagging < ApplicationRecord
 
   after_destroy_commit :expire_caches
   def expire_caches
-    if filterable_type == "Work"
-      CacheMaster.record(filterable_id, 'tag', filter_id)
-    end
+    return unless filterable_type == "Work"
+
+    CacheMaster.record(filterable_id, 'tag', filter_id)
   end
 
   def self.update_filter_counts_since(date)
