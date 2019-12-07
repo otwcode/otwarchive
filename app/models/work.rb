@@ -838,11 +838,6 @@ class Work < ApplicationRecord
   # FILTERING CALLBACKS
   after_save :adjust_filter_counts
 
-  # Must be called before save
-  def visibility_changed?
-    self.posted_changed? || self.restricted_changed? || self.hidden_by_admin_changed?
-  end
-
   # We need to do a recount for our filters if:
   # - the work is brand new
   # - the work is posted from a draft

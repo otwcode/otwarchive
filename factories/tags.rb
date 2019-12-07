@@ -102,7 +102,7 @@ FactoryBot.define do
 
   factory :media do
     sequence(:name) { |n| "Media #{n}" }
-    canonical true
+    canonical { true }
   end
 
   factory :banned do |f|

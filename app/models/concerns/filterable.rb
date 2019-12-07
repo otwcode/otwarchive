@@ -79,8 +79,8 @@ module Filterable
     filters_for_facets.select { |t| t.type == 'Rating' }.map(&:id)
   end
 
-  def warning_ids
-    filters_for_facets.select { |t| t.type == 'Warning' }.map(&:id)
+  def archive_warning_ids
+    filters_for_facets.select { |t| t.type == 'ArchiveWarning' }.map(&:id)
   end
 
   def category_ids

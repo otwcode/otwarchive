@@ -88,7 +88,7 @@ class TroubleshootingController < ApplicationController
   end
 
   # Load the @item based on params. Results in a 404 error if the item in
-  # question can't be found, and a 500 error if there's an unknoqn type. Also
+  # question can't be found, and a 500 error if there's an unknown type. Also
   # sets the variable @allowed_actions.
   def load_item
     if params[:tag_id]
@@ -164,8 +164,7 @@ class TroubleshootingController < ApplicationController
                          "also been enqueued to have its filters fixed.")
   end
 
-  # An action allowing the user to try to delete invalid associations. Needs
-  # AO3-2452 to work properly, so it shouldn't be enabled until then.
+  # An action allowing the user to try to delete invalid associations.
   def fix_associations
     @item.async(:destroy_invalid_associations)
     flash[:notice] << ts("Tag association job enqueued.")

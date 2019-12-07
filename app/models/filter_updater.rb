@@ -54,10 +54,10 @@ class FilterUpdater
       load_info
 
       filter_taggings_by_id = FilterTagging.where(
-        filterable_type: type, filterable_id: valid_item_ids
+        filterable_type: type, filterable_id: @valid_item_ids
       ).group_by(&:filterable_id)
 
-      valid_item_ids.each do |id|
+      @valid_item_ids.each do |id|
         update_filters_for_item(id, filter_taggings_by_id[id] || [])
       end
     end
@@ -75,8 +75,8 @@ class FilterUpdater
   # as argument the ID of the item to update, and the list of filter_taggings
   # for that item.
   def update_filters_for_item(item_id, filter_taggings)
-    missing_direct = Set.new(direct_filters[item_id])
-    missing_inherited = Set.new(inherited_filters[item_id])
+    missing_direct = Set.new(@direct_filters[item_id])
+    missing_inherited = Set.new(@inherited_filters[item_id])
 
     filter_taggings.each do |ft|
       if missing_direct.delete?(ft.filter_id)
@@ -95,36 +95,36 @@ class FilterUpdater
   # Notify the filterable class about the changes that we made, so that it can
   # perform the appropriate steps to reindex everything.
   def reindex_changed
-    klass.reindex_for_filter_changes(valid_item_ids, @modified, queue)
+    klass.reindex_for_filter_changes(@valid_item_ids, @modified, queue)
   end
 
   ########################################
   # RETRIEVE INFO FROM DATABASE
   ########################################
 
-  # Calculates direct_filters, meta_tags, and inherited_filters for this batch
-  # of items.
+  # Calculates @direct_filters, @meta_tags, and @inherited_filters for this
+  # batch of items.
   def load_info
-    valid_item_ids
-    direct_filters
-    meta_tags
-    inherited_filters
+    load_valid_item_ids
+    load_direct_filters
+    load_meta_tags
+    load_inherited_filters
   end
 
-  # Restrict the IDs so that we don't try to create FilterTaggings for items
-  # that have been deleted.
-  def valid_item_ids
-    @valid_item_ids ||= klass.unscoped.where(id: ids).distinct.pluck(:id)
+  # Calculate which items exist in the database, so that we don't try to create
+  # FilterTaggings for items that have been deleted.
+  def load_valid_item_ids
+    @valid_item_ids = klass.unscoped.where(id: ids).distinct.pluck(:id)
   end
 
   # Calculates what the direct filters should be for this batch of items.
-  # Returns a hash mapping from item IDs to a list of direct filter IDs (that
-  # is, filters that the item is either directly tagged with, or tagged with
-  # one of its synonyms).
-  def direct_filters
-    return @direct_filters if @direct_filters
-
-    taggings = Tagging.where(taggable_type: type, taggable_id: valid_item_ids)
+  #
+  # Sets @direct_filters equal to a hash mapping from item IDs to a list of
+  # direct filter IDs (that is, filters that the item is either directly tagged
+  # with, or tagged with one of its synonyms). The default value for the
+  # hash is an empty list.
+  def load_direct_filters
+    taggings = Tagging.where(taggable_type: type, taggable_id: @valid_item_ids)
 
     filter_relations = [
       Tag.canonical.joins(:taggings),
@@ -138,12 +138,14 @@ class FilterUpdater
     @direct_filters = hash_from_pairs(pairs)
   end
 
-  # Calculates what all of the meta tags are for all of the filters that should
-  # appear on items in this batch.
-  def meta_tags
-    return @meta_tags if @meta_tags
+  # Reads MetaTagging info from the database for all tags included in this
+  # batch.
+  #
+  # Sets @meta_tags equal to a hash mapping from tag IDs to the tag's meta tag
+  # IDs. The default value for the hash is an empty list.
+  def load_meta_tags
+    all_filters = @direct_filters.values.flatten.uniq
 
-    all_filters = direct_filters.values.flatten.uniq
     pairs = Tag.canonical.joins(:sub_taggings).where(
       meta_taggings: { sub_tag_id: all_filters }
     ).pluck(:sub_tag_id, :meta_tag_id)
@@ -151,19 +153,16 @@ class FilterUpdater
     @meta_tags = hash_from_pairs(pairs)
   end
 
-  # Uses direct_filters and meta_tags to calculate what the inherited filters
-  # should be for each of the items in this batch.
-  def inherited_filters
-    return @inherited_filters if @inherited_filters
-
+  # Uses @direct_filters and @meta_tags to calculate what the inherited filters
+  # should be for each of the items in this batch. Creates a hash
+  # @inherited_filters mapping from item IDs to the inherited tag IDs.
+  def load_inherited_filters
     @inherited_filters = Hash.new([].freeze)
 
     @direct_filters.each_pair do |item_id, filter_ids|
-      inherited = filter_ids.flat_map { |filter_id| meta_tags[filter_id] }
+      inherited = filter_ids.flat_map { |filter_id| @meta_tags[filter_id] }
       @inherited_filters[item_id] = (inherited - filter_ids).uniq
     end
-
-    @inherited_filters
   end
 
   # Given a list of pairs of IDs, treat each pair as a (key, value) pair, and
