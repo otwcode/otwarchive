@@ -35,11 +35,17 @@ module Filterable
 
   class_methods do
     # Update the filters for all filterables in this relation.
-    def update_filters
-      batch_size = ArchiveConfig.FILTER_UPDATE_BATCH_SIZE || 100
+    def update_filters(async_update: false)
+      batch_size = ArchiveConfig.FILTER_UPDATE_BATCH_SIZE
 
       select(:id).find_in_batches(batch_size: batch_size) do |batch|
-        FilterUpdater.new(base_class, batch.map(&:id), :background).update
+        updater = FilterUpdater.new(base_class, batch.map(&:id), :background)
+
+        if async_update
+          updater.async_update
+        else
+          updater.update
+        end
 
         # Allow for progress messages in long-running updates.
         yield if block_given?

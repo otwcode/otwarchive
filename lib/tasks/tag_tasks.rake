@@ -62,8 +62,14 @@ namespace :Tag do
 
   desc "Reset filter taggings"
   task(reset_filters: :environment) do
-    Work.update_filters { print(".") && STDOUT.flush }
-    ExternalWork.update_filters { print(".") && STDOUT.flush }
+    Work.update_filters(async_update: true) do
+      print(".") && STDOUT.flush
+    end
+
+    ExternalWork.update_filters(async_update: true) do
+      print(".") && STDOUT.flush
+    end
+
     print("\n") && STDOUT.flush
   end
 

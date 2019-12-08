@@ -471,3 +471,6 @@ CHARACTER_COUNT_SCRIPTS: ["Han", "Hiragana", "Katakana", "Thai"]
 # Cache durations for work and bookmark searches (in seconds)
 SECONDS_UNTIL_WORK_INDEX_EXPIRE: 1800
 SECONDS_UNTIL_BOOKMARK_INDEX_EXPIRE: 1800
+
+# The batch size for calculating a work's filters from its tags:
+FILTER_UPDATE_BATCH_SIZE: 100

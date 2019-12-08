@@ -37,7 +37,7 @@ class FilterUpdater
   end
 
   # Perform for Resque.
-  def perform(type, ids, queue)
+  def self.perform(type, ids, queue)
     FilterUpdater.new(type, ids, queue).update
   end
 
