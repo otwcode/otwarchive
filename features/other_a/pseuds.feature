@@ -3,16 +3,16 @@ Feature: Pseuds
 
 Scenario: pseud creation and playing with the default pseud
 
-  Given I am logged in as "myself" with password "password"
+  Given I am logged in as "myself"
     And I go to myself's pseuds page
-  Then I should see "Default Pseud" within "div#main.pseuds-index"
+  Then I should see "Default Pseud"
   When I follow "Edit"
-  Then I should see "You cannot change the pseud that matches your user name"
-    And the "pseud_is_default" checkbox should be checked and disabled
+  Then I should see "You cannot change the pseud that matches your user name."
+    And the "Make this name default" checkbox should be checked and disabled
   When I follow "Back To Pseuds"
     And I follow "New Pseud"
     And I fill in "Name" with "Me"
-    And I check "pseud_is_default"
+    And I check "Make this name default"
     And I fill in "Description" with "Something's cute"
     And I press "Create"
   Then I should see "Pseud was successfully created."
@@ -21,9 +21,10 @@ Scenario: pseud creation and playing with the default pseud
     And the "Make this name default" checkbox should not be disabled
     And the "Make this name default" checkbox should be checked
   When I follow "Back To Pseuds"
-    And I follow "edit_myself"
-  Then the "pseud_is_default" checkbox should not be checked
-    And the "pseud_is_default" checkbox should not be disabled
+    # The pseud name is included in the Edit link but it is not visible in the default skin
+    And I follow "Edit myself"
+  Then the "Make this name default" checkbox should not be checked
+    And the "Make this name default" checkbox should not be disabled
   When I follow "Back To Pseuds"
     And I follow "Me"
     And I follow "Edit Pseud"
@@ -33,8 +34,8 @@ Scenario: pseud creation and playing with the default pseud
   When I follow "Edit Pseud"
   Then the "Make this name default" checkbox should not be checked
   When I follow "Back To Pseuds"
-    And I follow "edit_myself"
-  Then the "pseud_is_default" checkbox should be checked and disabled
+    And I follow "Edit myself"
+  Then the "Make this name default" checkbox should be checked and disabled
 
   # Recheck default in Me to test update path
   When I follow "Back To Pseuds"
