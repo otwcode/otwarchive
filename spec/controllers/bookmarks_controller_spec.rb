@@ -90,16 +90,6 @@ describe BookmarksController, bookmark_search: true do
       end
     end
 
-    context "when given invalid tag_id parameters" do
-      it "raises an error" do
-        params = { tag_id: "nothingness" }
-        expect { get :index, params: params }.to raise_error(
-          ActiveRecord::RecordNotFound,
-          "Couldn't find tag named 'nothingness'"
-        )
-      end
-    end
-
     context "when given tag_id parameters" do
       let(:tag) { create(:fandom) }
       let(:merger) { create(:fandom, merger_id: canonical.id) }
