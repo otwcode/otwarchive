@@ -55,7 +55,7 @@ describe BookmarksController, bookmark_search: true do
     end
 
     context "when given chapter_id parameters" do
-      it "sets the work as the bookmarkable" do
+      it "loads the work as the bookmarkable" do
         params = { chapter_id: work_bookmark.bookmarkable.chapters.first.id }
         get :index, params: params
         expect(assigns(:bookmarkable)).to eq(work_bookmark.bookmarkable)
@@ -63,7 +63,7 @@ describe BookmarksController, bookmark_search: true do
     end
 
     context "when given external_work_id parameters" do
-      it "sets the external work as the bookmarkable" do
+      it "loads the external work as the bookmarkable" do
         params = { external_work_id: external_work_bookmark.bookmarkable.id }
         get :index, params: params
         expect(assigns(:bookmarkable)).to eq(external_work_bookmark.bookmarkable)
