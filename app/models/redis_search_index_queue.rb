@@ -64,11 +64,11 @@ class RedisSearchIndexQueue
   end
 
   def self.run_work_reindex(work_id)
-    Work.find(work_id).update_index
+    Work.find(work_id).reindex_document
   end
 
   def self.run_bookmark_reindex(bookmark_id)
-    Bookmark.find(bookmark_id).update_index
+    Bookmark.find(bookmark_id).reindex_document
   end
 
 end

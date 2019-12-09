@@ -42,6 +42,8 @@ Feature: Delete Works
         | cosomeone      | cosomeone@example.org |
         | giftee         | giftee@example.org    |
         | recipient      | recipient@example.org |
+      And the user "coauthor" allows co-creators
+      And the user "cosomeone" allows co-creators
       And I have a collection "Collection 1" with name "collection1"
       And I have a collection "Collection 2" with name "collection2"
       And I am logged in as "thorough"
@@ -51,6 +53,7 @@ Feature: Delete Works
       And all emails have been delivered
       And I select "Not Rated" from "Rating"
       And I check "No Archive Warnings Apply"
+      And I select "English" from "Choose a language"
       And I check "F/M"
       And I fill in "Fandoms" with "Supernatural"
       And I fill in "Work Title" with "All Something Breaks Loose"
@@ -72,8 +75,8 @@ Feature: Delete Works
     Then I should see "Preview"
     When I press "Post"
     Then I should see "Work was successfully posted."
-      And 2 email should be delivered to "coauthor@example.org"
-      And the email should contain "You have been listed as a co-creator"
+      And 1 email should be delivered to "coauthor@example.org"
+      And the email should contain "The user thorough has invited your pseud coauthor to be listed as a co-creator"
       And 1 email should be delivered to "recipient@example.org"
       And the email should contain "A gift work has been posted for you"
     When I go to the works page
@@ -95,10 +98,14 @@ Feature: Delete Works
       And I should see "This is my endingnote"
       And I should see "Summary"
       And I should see "Have a short summary"
-      And I should see "Pseud2" within ".byline"
-      And I should see "Pseud3" within ".byline"
       And I should see "My new series"
       And I should see "Bad things happen, etc."
+      And I should see "Pseud2" within ".byline"
+      And I should see "Pseud3" within ".byline"
+      But I should not see "coauthor" within ".byline"
+    When the user "coauthor" accepts all creator invitations
+      And I view the work "All Something Breaks Loose"
+    Then I should see "coauthor" within ".byline"
     When I follow "Add Chapter"
       And I fill in "Chapter Title" with "This is my second chapter"
       And I fill in "content" with "Let's write another story"
@@ -120,18 +127,20 @@ Feature: Delete Works
       And I check "Add co-creators?"
       And I fill in "pseud_byline" with "Does_not_exist"
       And I press "Preview"
-    Then I should see "Please verify the names of your co-authors"
-      And I should see "These pseuds are invalid: Does_not_exist"
+    Then I should see "Invalid creator: Could not find a pseud Does_not_exist."
     When all emails have been delivered
       And I choose "cosomeone" from the "pseud_byline_autocomplete" autocomplete
       And I press "Preview"
       And I press "Update"
     Then I should see "Work was successfully updated"
-      And I should see "cosomeone" within ".byline"
       And I should see "coauthor" within ".byline"
       And I should see "Pseud2" within ".byline"
       And I should see "Pseud3" within ".byline"
+      But I should not see "cosomeone" within ".byline"
       And 1 email should be delivered to "cosomeone@example.org"
+    When the user "cosomeone" accepts all creator invites
+      And I view the work "All Something Breaks Loose"
+    Then I should see "cosomeone" within ".byline"
     When all emails have been delivered
       And I follow "Edit"
       And I give the work to "giftee"
@@ -153,6 +162,7 @@ Feature: Delete Works
       And I go to giftee's user page
     Then I should see "Gifts (1)"
     When I delete the work "All Something Breaks Loose"
+      And all indexing jobs have been run
     Then I should see "Your work All Something Breaks Loose was deleted."
     When I go to giftee's user page
     Then I should see "Gifts (0)"
@@ -162,7 +172,8 @@ Feature: Delete Works
     When I go to thorough's user page
     Then I should not see "All Something Breaks Loose"
     # This is correct behaviour - bookmark details are preserved even though the work is gone
-    When I go to the bookmarks page
+    Then all indexing jobs have been run
+    Then I go to the bookmarks page
     Then I should not see "All Something Breaks Loose"
     When I go to someone_else's bookmarks page
     Then I should not see "All Something Breaks Loose"
