@@ -44,6 +44,11 @@ class ExternalWork < ApplicationRecord
     self.update_attribute(:dead, true) unless url_active?(self.url)
   end
 
+  # Allow encoded characters to display correctly in titles
+  def title
+    read_attribute(:title).try(:html_safe)
+  end
+
   ########################################################################
   # VISIBILITY
   ########################################################################
