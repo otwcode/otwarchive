@@ -54,6 +54,78 @@ describe BookmarksController, bookmark_search: true do
       expect(assigns(:bookmarks)).to include(work_bookmark)
     end
 
+    context "when given chapter_id parameters" do
+      it "sets the work as the bookmarkable" do
+        params = { chapter_id: work_bookmark.bookmarkable.chapters.first.id }
+        get :index, params: params
+        expect(assigns(:bookmarkable)).to eq(work_bookmark.bookmarkable)
+      end
+    end
+
+    context "when given external_work_id parameters" do
+      it "sets the external work as the bookmarkable" do
+        params = { external_work_id: external_work_bookmark.bookmarkable.id }
+        get :index, params: params
+        expect(assigns(:bookmarkable)).to eq(external_work_bookmark.bookmarkable)
+      end
+    end
+
+    context "with user_id parameters" do
+      it "raises an error if user_id cannot be found" do
+        params = { user_id: "nobody" }
+        expect { get :index, params: params }.to raise_error(
+          ActiveRecord::RecordNotFound,
+          "Couldn't find user named 'nobody'"
+        )
+      end
+      
+      context "with valid user_id and invalid pseud_id parameters" do
+        it "raises an error if pseud_id cannot be found" do
+          params = { user_id: work_bookmark.pseud.user, pseud_id: "nobody" }
+          expect { get :index, params: params }.to raise_error(
+            ActiveRecord::RecordNotFound,
+            "Couldn't find pseud named 'nobody'"
+          )
+        end
+      end
+    end
+
+    context "when given invalid tag_id parameters" do
+      it "raises an error" do
+        params = { tag_id: "nothingness" }
+        expect { get :index, params: params }.to raise_error(
+          ActiveRecord::RecordNotFound,
+          "Couldn't find tag named 'nothingness'"
+        )
+      end
+    end
+
+    context "when given tag_id parameters" do
+      let(:tag) { create(:fandom) }
+      let(:merger) { create(:fandom, merger_id: canonical.id) }
+      let(:canonical) { create(:canonical_fandom) } 
+
+      it "raises an error if tag_id cannot be found" do
+        params = { tag_id: "nothingness" }
+        expect { get :index, params: params }.to raise_error(
+          ActiveRecord::RecordNotFound,
+          "Couldn't find tag named 'nothingness'"
+        )
+      end
+
+      it "redirects to canonical tag's bookmarks if tag_id is a synonym" do
+        params = { tag_id: merger }
+        get :index, params: params
+        expect(response).to redirect_to(tag_bookmarks_path(canonical))
+      end
+
+      it "redirects to tag page if tag_id is neither a canonical nor a synonym" do
+        params = { tag_id: tag }
+        get :index, params: params
+        expect(response).to redirect_to(tag_path(tag))
+      end
+    end
+
     describe "without caching" do
       before do
         AdminSetting.first.update_attribute(:enable_test_caching, false)
