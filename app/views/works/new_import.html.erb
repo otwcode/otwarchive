@@ -39,6 +39,16 @@
           <%= ts("URLs for existing work(s) or for the chapters of a single work; <strong>one URL per line.</strong>").html_safe %>
         </p>
       </dd>
+      <dt class="required">
+        <%= label_tag :language_id, ts("Choose a language") + "*" %>
+        <%= link_to_help "languages-help" %>
+      </dt>
+      <dd class="required">
+        <select id="language_id" name="language_id">
+          <option value=""><%= ts("Please select a language") %></option>
+          <%= options_from_collection_for_select(sorted_languages, :id, :name, @language_id) %>
+        </select>
+      </dd>
       <dt><%= label_tag "encoding", ts("Set custom encoding") %> <%= link_to_help "encoding-help" %></dt> 
       <dd><%= select_tag "encoding", options_for_select([''] + Encoding.name_list.sort) %></dd>
       <dt><%= ts("Import as") %></dt>

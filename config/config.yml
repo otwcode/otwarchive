@@ -386,8 +386,9 @@ HELP_DIRECTORY: '/help'
 #PRODUCTION_CACHE: "memory"
 PRODUCTION_CACHE: "memcache"
 
-# how long we cache autocomplete search results in minutes
-AUTOCOMPLETE_EXPIRATION_TIME: 10
+# TTL in seconds for cached work and bookmark counts on user/pseud dashboards.
+# Default to 20 minutes.
+SECONDS_UNTIL_DASHBOARD_COUNTS_EXPIRE: 1200
 
 # how many cache pages to expire for a tag/collection/pseud when a work is updated or deleted
 PAGES_TO_CACHE: 5
@@ -458,3 +459,8 @@ DUMP_COLLECTION_SEEDS: [
 # Check if a script is supported by the version of Ruby we use:
 # https://ruby-doc.org/core/Regexp.html#class-Regexp-label-Character+Properties
 CHARACTER_COUNT_SCRIPTS: ["Han", "Hiragana", "Katakana", "Thai"]
+
+
+# Cache durations for work and bookmark searches (in seconds)
+SECONDS_UNTIL_WORK_INDEX_EXPIRE: 1800
+SECONDS_UNTIL_BOOKMARK_INDEX_EXPIRE: 1800

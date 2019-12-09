@@ -100,7 +100,7 @@ class WorksController < ApplicationController
         # the subtag is for eg collections/COLL/tags/TAG
         subtag = @tag.present? && @tag != @owner ? @tag : nil
         user = logged_in? || logged_in_as_admin? ? 'logged_in' : 'logged_out'
-        @works = Rails.cache.fetch("#{@owner.works_index_cache_key(subtag)}_#{user}_page#{params[:page]}_true", expires_in: 20.minutes) do
+        @works = Rails.cache.fetch("#{@owner.works_index_cache_key(subtag)}_#{user}_page#{params[:page]}_true", expires_in: ArchiveConfig.SECONDS_UNTIL_WORK_INDEX_EXPIRE.seconds) do
           results = @search.search_results
           # calling this here to avoid frozen object errors
           results.items
@@ -122,11 +122,11 @@ class WorksController < ApplicationController
         end
       end
     elsif use_caching?
-      @works = Rails.cache.fetch('works/index/latest/v1', expires_in: 10.minutes) do
-        Work.latest.includes(:tags, :external_creatorships, :series, :language, collections: [:collection_items], pseuds: [:user]).to_a
+      @works = Rails.cache.fetch('works/index/latest/v1', expires_in: ArchiveConfig.SECONDS_UNTIL_WORK_INDEX_EXPIRE.seconds) do
+        Work.latest.includes(:tags, :external_creatorships, :series, :language, :approved_collections, pseuds: [:user]).to_a
       end
     else
-      @works = Work.latest.includes(:tags, :external_creatorships, :series, :language, collections: [:collection_items], pseuds: [:user]).to_a
+      @works = Work.latest.includes(:tags, :external_creatorships, :series, :language, :approved_collections, pseuds: [:user]).to_a
     end
     set_own_works
   end
@@ -450,9 +450,14 @@ class WorksController < ApplicationController
   def import
     # check to make sure we have some urls to work with
     @urls = params[:urls].split
-
     if @urls.empty?
       flash.now[:error] = ts('Did you want to enter a URL?')
+      render(:new_import) && return
+    end
+
+    @language_id = params[:language_id]
+    if @language_id.empty?
+      flash.now[:error] = ts("Language cannot be blank.")
       render(:new_import) && return
     end
 

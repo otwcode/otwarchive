@@ -34,6 +34,7 @@ Scenario: tag cloud should only contain top-level canonical freeforms in "No Fan
     And I go to the new work page
     And I select "Not Rated" from "Rating"
     And I check "No Archive Warnings Apply"
+    And I select "English" from "Choose a language"
     And I fill in "Fandoms" with "Firefly"
     And I fill in "Work Title" with "Silliness"
     And I fill in "Additional Tags" with "100 words, five things, objects in space, Sentient Serenity, Episode Tag, Non-canonical NoFandom, Non-canonical Fandomish, Non-canonical unwrangled, Canonical Fandomish, Canonical unwrangled"

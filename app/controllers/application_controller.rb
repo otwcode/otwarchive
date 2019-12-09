@@ -4,6 +4,12 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception, prepend: true
   rescue_from ActionController::InvalidAuthenticityToken, with: :display_auth_error
   rescue_from ActionController::UnknownFormat, with: :raise_not_found
+  rescue_from Elasticsearch::Transport::Transport::Errors::ServiceUnavailable do
+    # Non-standard code to distinguish Elasticsearch errors from standard 503s.
+    # We can't use 444 because nginx will close connections without sending
+    # response headers.
+    head 445
+  end
 
   def raise_not_found
     redirect_to '/404'
