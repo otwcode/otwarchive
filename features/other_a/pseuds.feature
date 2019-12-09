@@ -44,7 +44,7 @@ Scenario: pseud creation and playing with the default pseud
     And I press "Update"
   Then I should see "Pseud was successfully updated."
   When I follow "Edit Pseud"
-  Then the "Make this name default" checkbox should not be checked
+  Then the "Make this name default" checkbox should be checked
 
 
 Scenario: Manage pseuds - add, edit
