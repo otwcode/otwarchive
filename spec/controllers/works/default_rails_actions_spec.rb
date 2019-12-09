@@ -323,7 +323,7 @@ describe WorksController, work_search: true do
 
     describe "without caching" do
       before do
-        allow(controller).to receive(:use_caching?).and_return(false)
+        AdminSetting.first.update_attribute(:enable_test_caching, false)
       end
 
       it "returns the result with different works the second time" do
@@ -337,7 +337,7 @@ describe WorksController, work_search: true do
 
     describe "with caching" do
       before do
-        allow(controller).to receive(:use_caching?).and_return(true)
+        AdminSetting.first.update_attribute(:enable_test_caching, true)
       end
 
       context "with NO owner tag" do
