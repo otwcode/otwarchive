@@ -290,83 +290,61 @@ describe UserMailer, type: :mailer do
     let!(:user) { create(:user) }
 
     context "when 1 invitation is issued" do
-      let!(:count) { 1 }
+      let(:count) { 1 }
+
       subject(:email) { UserMailer.invite_increase_notification(user.id, count).deliver }
 
       # Test the headers
-      it "has a valid sender" do
-        expect(email.header["From"].to_s).to eq("Archive of Our Own <#{ArchiveConfig.RETURN_ADDRESS}>")
-      end
+      it_behaves_like "an email with a valid sender"
 
       it "has the correct subject line" do
         expect(email.subject).to eq("[#{ArchiveConfig.APP_SHORT_NAME}] New Invitations")
       end
 
       # Test both body contents
-      it_behaves_like "multipart email"
+      it_behaves_like "a multipart email"
+
+      it_behaves_like "a translated email"
 
       describe "HTML version" do
-        it "has expected text" do
-          expect(get_message_part(email, /html/)).to include("you have #{count} new invitation")
-        end
-      
-        it "does not have missing translations" do
-          expect(get_message_part(email, /html/)).not_to include("translation missing")
-        end
-      
-        it "does not have exposed HTML" do
-          expect(get_message_part(email, /html/)).not_to include("&lt;")
+        it "has the correct content" do
+          expect(email).to have_html_part_content("you have #{count} new invitation")
         end
       end
 
       describe "text version" do
-        it "has expected text" do
-          expect(get_message_part(email, /plain/)).to include("you have #{count} new invitation")
-        end
-      
-        it "does not have missing translations" do
-          expect(get_message_part(email, /plain/)).not_to include("translation missing")
+        it "has the correct content" do
+          expect(email).to have_text_part_content("you have #{count} new invitation")
         end
       end
     end
 
     context "when multiple invitations are issued" do
-      let!(:total) { 5 }
-      subject(:email) { UserMailer.invite_increase_notification(user.id, total).deliver }
+      let(:count) { 5 }
+
+      subject(:email) { UserMailer.invite_increase_notification(user.id, count).deliver }
 
       # Test the headers
-      it "has a valid sender" do
-        expect(email.header["From"].to_s).to eq("Archive of Our Own <#{ArchiveConfig.RETURN_ADDRESS}>")
-      end
+      it_behaves_like "an email with a valid sender"
 
       it "has the correct subject line" do
         expect(email.subject).to eq("[#{ArchiveConfig.APP_SHORT_NAME}] New Invitations")
       end
 
       # Test both body contents
-      it_behaves_like "multipart email"
+      it_behaves_like "a multipart email"
+
+      it_behaves_like "a translated email"
 
       describe "HTML version" do
-         it "has expected text" do
-          expect(get_message_part(email, /html/)).to include("you have #{total} new invitations")
-        end
-      
-        it "does not have missing translations" do
-          expect(get_message_part(email, /html/)).not_to include("translation missing")
-        end
-      
-        it "does not have exposed HTML" do
-          expect(get_message_part(email, /html/)).not_to include("&lt;")
+         it "has the correct content" do
+          expect(email).to have_html_part_content("you have #{count} new invitations")
         end
       end
 
       describe "text version" do
-        it "has expected text" do
-          expect(get_message_part(email, /plain/)).to include("you have #{total} new invitations")
-        end
-      
-        it "does not have missing translations" do
-          expect(get_message_part(email, /plain/)).not_to include("translation missing")
+        it "has the correct content" do
+          expect(email).to have_text_part_content("you have #{count} new invitations")
         end
       end
     end
