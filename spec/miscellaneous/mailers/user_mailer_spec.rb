@@ -308,13 +308,13 @@ describe UserMailer, type: :mailer do
 
       describe "HTML version" do
         it "has the correct content" do
-          expect(email).to have_html_part_content("you have #{count} new invitation")
+          expect(email).to have_html_part_content("you have #{count} new invitation, which")
         end
       end
 
       describe "text version" do
         it "has the correct content" do
-          expect(email).to have_text_part_content("you have #{count} new invitation")
+          expect(email).to have_text_part_content("you have #{count} new invitation, which")
         end
       end
     end
@@ -338,13 +338,13 @@ describe UserMailer, type: :mailer do
 
       describe "HTML version" do
         it "has the correct content" do
-          expect(email).to have_html_part_content("you have #{count} new invitations")
+          expect(email).to have_html_part_content("you have #{count} new invitations, which")
         end
       end
 
       describe "text version" do
         it "has the correct content" do
-          expect(email).to have_text_part_content("you have #{count} new invitations")
+          expect(email).to have_text_part_content("you have #{count} new invitations, which")
         end
       end
     end
