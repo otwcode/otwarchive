@@ -1,6 +1,8 @@
 en:
   mailer:
     general:
+      signature:
+        app_short_name: AO3
       footer:
         general:
           html:
@@ -34,7 +36,6 @@ en:
         other: "We just wanted to let you know that you have %{count} new invitations, which can be used to create new accounts at the Archive. You can invite a friend at %{invitation_page}."
       invitation_page_link_text: your invitations page
       closing: "Cheers,"
-      signature: "%{app_short_name}"
     admin_deleted_work_notification:
       subject: "[%{app_name}] Your work has been deleted by an admin"
       hello: "Dear %{user},"
