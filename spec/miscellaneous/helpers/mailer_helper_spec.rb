@@ -1,7 +1,6 @@
 require 'spec_helper'
 
 describe MailerHelper do
-
   describe "style_creation_link" do
     it "nests red link inside bold inside italics" do
       work = create(:posted_work)

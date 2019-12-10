@@ -337,7 +337,7 @@ describe UserMailer, type: :mailer do
       it_behaves_like "a translated email"
 
       describe "HTML version" do
-         it "has the correct content" do
+        it "has the correct content" do
           expect(email).to have_html_part_content("you have #{count} new invitations")
         end
       end
