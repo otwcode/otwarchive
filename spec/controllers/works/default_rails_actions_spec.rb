@@ -316,7 +316,7 @@ describe WorksController, work_search: true do
     end
 
     it "returns search results when given work_search parameters" do
-      params = { :work_search => { query: "fandoms: #{@fandom.name}" } }
+      params = { work_search: { query: "fandoms: #{@fandom.name}" } }
       get :index, params: params
       expect(assigns(:works)).to include(@work)
     end

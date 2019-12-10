@@ -49,7 +49,7 @@ describe BookmarksController do
     let!(:work_bookmark) { create(:bookmark) }
 
     it "returns search results when given bookmark_search parameters" do
-      params = { :bookmark_search => { bookmarkable_query: "restricted: false" } }
+      params = { bookmark_search: { bookmarkable_query: "restricted: false" } }
       get :index, params: params
       expect(assigns(:bookmarks)).to include(work_bookmark)
     end
