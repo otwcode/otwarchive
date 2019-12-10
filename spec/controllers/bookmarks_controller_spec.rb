@@ -43,16 +43,10 @@ describe BookmarksController do
     end
   end
 
-  describe "index" do
+  describe "index", bookmark_search: true do
     let!(:external_work_bookmark) { create(:external_work_bookmark) }
     let!(:series_bookmark) { create(:series_bookmark) }
     let!(:work_bookmark) { create(:bookmark) }
-
-    it "returns search results when given bookmark_search parameters" do
-      params = { bookmark_search: { bookmarkable_query: "restricted: false" } }
-      get :index, params: params
-      expect(assigns(:bookmarks)).to include(work_bookmark)
-    end
 
     context "with chapter_id parameters" do
       it "loads the work as the bookmarkable" do
@@ -158,7 +152,7 @@ describe BookmarksController do
       end
     end
 
-    context "with caching", bookmark_search: true do
+    context "with caching" do
       before do
         AdminSetting.first.update_attribute(:enable_test_caching, true)
         run_all_indexing_jobs

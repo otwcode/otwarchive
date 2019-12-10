@@ -315,12 +315,6 @@ describe WorksController, work_search: true do
       expect(assigns(:fandom)).to eq(@fandom)
     end
 
-    it "returns search results when given work_search parameters" do
-      params = { work_search: { query: "fandoms: #{@fandom.name}" } }
-      get :index, params: params
-      expect(assigns(:works)).to include(@work)
-    end
-
     describe "without caching" do
       before do
         AdminSetting.first.update_attribute(:enable_test_caching, false)
