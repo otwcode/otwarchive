@@ -15,5 +15,5 @@
     </li>
   <% end %>
   <% @bookmark ||= bookmark_if_exists(@series) %>
-  <li><%= link_to (@bookmark ? ts("Edit Series Bookmark") : ts("Bookmark Series")), "#bookmark-form", class:  "bookmark_form_placement_open" %></li>
+  <li><%= link_to (@bookmark ? ts("Edit Series Bookmark") : ts("Bookmark Series")), "#bookmark-form", class: "bookmark_form_placement_open" %></li>
 </ul>
