@@ -3,6 +3,17 @@ PROFILER_SESSIONS_FILE = 'used_tags.txt'
 class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception, prepend: true
   rescue_from ActionController::InvalidAuthenticityToken, with: :display_auth_error
+  rescue_from ActionController::UnknownFormat, with: :raise_not_found
+  rescue_from Elasticsearch::Transport::Transport::Errors::ServiceUnavailable do
+    # Non-standard code to distinguish Elasticsearch errors from standard 503s.
+    # We can't use 444 because nginx will close connections without sending
+    # response headers.
+    head 445
+  end
+
+  def raise_not_found
+    redirect_to '/404'
+  end
 
   helper :all # include all helpers, all the time
 
@@ -48,7 +59,6 @@ class ApplicationController < ActionController::Base
     end
   end
 
-  # Authlogic login helpers
   helper_method :current_user
   helper_method :current_admin
   helper_method :logged_in?
@@ -68,12 +78,12 @@ class ApplicationController < ActionController::Base
     cookies[:flash_is_set] = 1 unless flash.empty?
   end
 
-  before_action :ensure_admin_credentials
+  after_action :ensure_admin_credentials
   def ensure_admin_credentials
     if logged_in_as_admin?
       # if we are logged in as an admin and we don't have the admin_credentials
       # set then set that cookie
-      cookies[:admin_credentials] = 1 unless cookies[:admin_credentials]
+      cookies.permanent[:admin_credentials] = 1 unless cookies[:admin_credentials]
     else
       # if we are NOT logged in as an admin and we have the admin_credentials
       # set then delete that cookie
@@ -81,22 +91,29 @@ class ApplicationController < ActionController::Base
     end
   end
 
-  # So if there is not a user_credentials cookie and the user appears to be logged in then
-  # redirect to the logout page
-
+  # If there is no user_credentials cookie and the user appears to be logged in,
+  # redirect to the lost cookie page. Needs to be before the code to fix
+  # the user_credentials cookie or it won't fire.
   before_action :logout_if_not_user_credentials
-
   def logout_if_not_user_credentials
-    if logged_in? && cookies[:user_credentials].nil? && controller_name != "user_sessions"
+    if logged_in? && cookies[:user_credentials].nil? && controller_name != "sessions"
       logger.error "Forcing logout"
-      @user_session = UserSession.find
-      if @user_session
-        @user_session.destroy
-      end
+      sign_out
       redirect_to '/lost_cookie' and return
     end
   end
 
+  # The user_credentials cookie is used by nginx to figure out whether or not
+  # to cache the page, so we want to make sure that it's set when the user is
+  # logged in, and cleared when the user is logged out.
+  after_action :ensure_user_credentials
+  def ensure_user_credentials
+    if logged_in?
+      cookies.permanent[:user_credentials] = 1 unless cookies[:user_credentials]
+    else
+      cookies.delete :user_credentials unless cookies[:user_credentials].nil?
+    end
+  end
 
   # mark the flash as being set (called when flash is set)
   def set_flash_cookie(key=nil, msg=nil)
@@ -105,10 +122,6 @@ class ApplicationController < ActionController::Base
   # aliasing setflash for set_flash_cookie
   # def setflash (this is here in case someone is grepping for the definition of the method)
   alias :setflash :set_flash_cookie
-
-  def current_user
-    @current_user ||= current_user_session && current_user_session.record
-  end
 
 protected
 
@@ -119,17 +132,12 @@ protected
     end
   end
 
-  def current_user_session
-    return @current_user_session if defined?(@current_user_session)
-    @current_user_session = UserSession.find
-  end
-
   def logged_in?
-    current_user.nil? ? false : true
+    user_signed_in?
   end
 
   def logged_in_as_admin?
-    current_admin.nil? ? false : true
+    admin_signed_in?
   end
 
   def guest?
@@ -149,11 +157,7 @@ public
 
   before_action :fetch_admin_settings
   def fetch_admin_settings
-    if Rails.env.development?
-      @admin_settings = AdminSetting.first
-    else
-      @admin_settings = Rails.cache.fetch("admin_settings"){AdminSetting.first}
-    end
+    @admin_settings = AdminSetting.current
   end
 
   before_action :load_admin_banner
@@ -171,12 +175,23 @@ public
     end
   end
 
+  before_action :load_tos_popup
+  def load_tos_popup
+    # Integers only, YYYY-MM-DD format of date Board approved TOS
+    @current_tos_version = 20180523
+  end
+
   # store previous page in session to make redirecting back possible
   # if already redirected once, don't redirect again.
   before_action :store_location
   def store_location
     if session[:return_to] == "redirected"
       Rails.logger.debug "Return to back would cause infinite loop"
+      session.delete(:return_to)
+    elsif request.fullpath.length > 200
+      # Sessions are stored in cookies, which has a 4KB size limit.
+      # Don't store paths that are too long (e.g. filters with lots of exclusions).
+      # Also remove the previous stored path.
       session.delete(:return_to)
     else
       session[:return_to] = request.fullpath
@@ -200,7 +215,14 @@ public
   end
 
   def after_sign_in_path_for(resource)
-    admin_users_path
+    if resource.is_a?(Admin)
+      admin_users_path
+    else
+      back = session[:return_to]
+      session.delete(:return_to)
+
+      back || user_path(current_user)
+    end
   end
 
   def authenticate_admin!
@@ -351,7 +373,7 @@ public
   before_action :set_redirects
   def set_redirects
     @logged_in_redirect = url_for(current_user) if current_user.is_a?(User)
-    @logged_out_redirect = login_url
+    @logged_out_redirect = new_user_session_path
   end
 
   def is_registered_user?
@@ -409,7 +431,7 @@ public
   # includes a special case for restricted works and series, since we want to encourage people to sign up to read them
   def check_visibility
     if @check_visibility_of.respond_to?(:restricted) && @check_visibility_of.restricted && User.current_user.nil?
-      redirect_to login_path(restricted: true)
+      redirect_to new_user_session_path(restricted: true)
     elsif @check_visibility_of.is_a? Skin
       access_denied unless logged_in_as_admin? || current_user_owns?(@check_visibility_of) || @check_visibility_of.official?
     else
@@ -445,7 +467,7 @@ public
     if model.to_s.downcase == 'work'
       allowed = ['author', 'title', 'date', 'created_at', 'word_count', 'hit_count']
     elsif model.to_s.downcase == 'tag'
-      allowed = ['name', 'created_at', 'suggested_fandoms', 'taggings_count_cache']
+      allowed = ['name', 'created_at', 'taggings_count_cache']
     elsif model.to_s.downcase == 'collection'
       allowed = ['collections.title', 'collections.created_at']
     elsif model.to_s.downcase == 'prompt'
@@ -468,6 +490,14 @@ public
 
   def valid_sort_direction(param)
     !param.blank? && ['asc', 'desc'].include?(param.to_s.downcase)
+  end
+
+  def flash_search_warnings(result)
+    if result.respond_to?(:error) && result.error
+      flash.now[:error] = result.error
+    elsif result.respond_to?(:notice) && result.notice
+      flash.now[:notice] = result.notice
+    end
   end
 
   # Don't get unnecessary data for json requests

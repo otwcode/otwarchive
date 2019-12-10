@@ -35,7 +35,7 @@ Scenario: character wrangling - syns, mergers, characters, autocompletes
 
   # check those two created properly
   When I am on the search tags page
-    And the tag indexes are updated
+    And all indexing jobs have been run
     And I fill in "tag_search" with "Doctor"
     And I press "Search tags"
     # This part of the code is a hot mess. Capybara is returning the first instance of .canonical which contains
@@ -61,8 +61,7 @@ Scenario: character wrangling - syns, mergers, characters, autocompletes
   When I follow "Edit The First Doctor"
   Then I should see "Make tag non-canonical and unhook all associations"
     And I should see "The Doctor (1st)"
-    And the "Canonical" checkbox should be checked
-    And the "Canonical" checkbox should be disabled
+    And the "Canonical" checkbox should be checked and disabled
 
   # creating a new canonical character by renaming
   When I fill in "Synonym of" with "First Doctor"
@@ -76,6 +75,7 @@ Scenario: character wrangling - syns, mergers, characters, autocompletes
     And I go to the new work page
     And I select "Not Rated" from "Rating"
     And I check "No Archive Warnings Apply"
+    And I select "English" from "Choose a language"
     And I fill in "Fandoms" with "Doctor Who"
     And I fill in "Work Title" with "Silliness"
     And I fill in "Characters" with "1st Doctor, One"
@@ -113,8 +113,9 @@ Scenario: character wrangling - syns, mergers, characters, autocompletes
   When I follow "Edit First Doctor"
     And I fill in "MetaTags" with "The Doctor (DW)"
     And I press "Save changes"
-  Then I should see "Tag was updated"
-    But I should not see "The Doctor (DW)"
+  Then I should see "Invalid meta tag 'The Doctor (DW)':"
+    And I should see "Meta tag does not exist."
+    And I should not see "The Doctor (DW)" within "form"
   When I follow "New Tag"
     And I fill in "Name" with "The Doctor (DW)"
     And I check "Canonical"

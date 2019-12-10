@@ -2,10 +2,10 @@ require 'spec_helper'
 
 describe BookmarksController do
   include LoginMacros
+  include RedirectExpectationHelper
 
   def it_redirects_to_user_login
-    expect(response).to have_http_status(:redirect)
-    expect(response).to redirect_to new_user_session_path
+    it_redirects_to_simple new_user_session_path
   end
 
   describe 'new' do
@@ -33,7 +33,7 @@ describe BookmarksController do
 
   describe 'edit' do
     context 'with javascript' do
-      let(:bookmark) { FactoryGirl.create(:bookmark) }
+      let(:bookmark) { FactoryBot.create(:bookmark) }
 
       it 'should render the bookmark_form_dynamic form' do
         fake_login_known_user(bookmark.pseud.user)
