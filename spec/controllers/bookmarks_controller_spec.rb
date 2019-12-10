@@ -1,6 +1,6 @@
 require "spec_helper"
 
-describe BookmarksController, bookmark_search: true do
+describe BookmarksController do
   include LoginMacros
   include RedirectExpectationHelper
 
@@ -158,7 +158,7 @@ describe BookmarksController, bookmark_search: true do
       end
     end
 
-    context "with caching" do
+    context "with caching", bookmark_search: true do
       before do
         AdminSetting.first.update_attribute(:enable_test_caching, true)
         run_all_indexing_jobs
