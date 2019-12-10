@@ -43,7 +43,7 @@ describe BookmarksController do
     end
   end
 
-  describe "index", bookmark_search: true do
+  describe "index" do
     let!(:external_work_bookmark) { create(:external_work_bookmark) }
     let!(:series_bookmark) { create(:series_bookmark) }
     let!(:work_bookmark) { create(:bookmark) }
@@ -152,7 +152,7 @@ describe BookmarksController do
       end
     end
 
-    context "with caching" do
+    context "with caching", bookmark_search: true do
       before do
         AdminSetting.first.update_attribute(:enable_test_caching, true)
         run_all_indexing_jobs
