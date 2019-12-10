@@ -1,4 +1,4 @@
-require 'spec_helper'
+require "spec_helper"
 
 describe MailerHelper do
   describe "style_creation_link" do
