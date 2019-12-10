@@ -18,12 +18,12 @@ describe Tag do
       ArchiveConfig.TAGGINGS_COUNT_CACHE_DIVISOR = 2
       # Set the minimum number of uses needed for before caching is started.
       ArchiveConfig.TAGGINGS_COUNT_MIN_CACHE_COUNT = 3
-      @fandom_tag = FactoryGirl.create(:fandom)
+      @fandom_tag = FactoryBot.create(:fandom)
     end
 
     context 'without updating taggings_count_cache' do
       it 'should not cache tags which are not used much' do
-        FactoryGirl.create(:work, fandom_string: @fandom_tag.name)
+        FactoryBot.create(:work, fandom_string: @fandom_tag.name)
         @fandom_tag.reload
         expect(@fandom_tag.taggings_count_cache).to eq 0
         expect(@fandom_tag.taggings_count).to eq 1
@@ -31,12 +31,12 @@ describe Tag do
 
       it 'will start caching a when tag when that tag is used significantly' do
         (1..ArchiveConfig.TAGGINGS_COUNT_MIN_CACHE_COUNT).each do |try|
-          FactoryGirl.create(:work, fandom_string: @fandom_tag.name)
+          FactoryBot.create(:work, fandom_string: @fandom_tag.name)
           @fandom_tag.reload
           expect(@fandom_tag.taggings_count_cache).to eq 0
           expect(@fandom_tag.taggings_count).to eq try
         end
-        FactoryGirl.create(:work, fandom_string: @fandom_tag.name)
+        FactoryBot.create(:work, fandom_string: @fandom_tag.name)
         @fandom_tag.reload
         # This value should be cached and wrong
         expect(@fandom_tag.taggings_count_cache).to eq 0
@@ -46,7 +46,7 @@ describe Tag do
 
     context 'updating taggings_count_cache' do
       it 'should not cache tags which are not used much' do
-        FactoryGirl.create(:work, fandom_string: @fandom_tag.name)
+        FactoryBot.create(:work, fandom_string: @fandom_tag.name)
         Tag.write_redis_to_database
         @fandom_tag.reload
         expect(@fandom_tag.taggings_count_cache).to eq 1
@@ -55,13 +55,13 @@ describe Tag do
 
       it 'will start caching a when tag when that tag is used significantly' do
         (1..ArchiveConfig.TAGGINGS_COUNT_MIN_CACHE_COUNT).each do |try|
-          FactoryGirl.create(:work, fandom_string: @fandom_tag.name)
+          FactoryBot.create(:work, fandom_string: @fandom_tag.name)
           Tag.write_redis_to_database
           @fandom_tag.reload
           expect(@fandom_tag.taggings_count_cache).to eq try
           expect(@fandom_tag.taggings_count).to eq try
         end
-        FactoryGirl.create(:work, fandom_string: @fandom_tag.name)
+        FactoryBot.create(:work, fandom_string: @fandom_tag.name)
         Tag.write_redis_to_database
         @fandom_tag.reload
         # This value should be cached and wrong
@@ -111,7 +111,7 @@ describe Tag do
     end
 
     it "should not be valid as unsorted and unwrangleable" do
-      tag = FactoryGirl.create(:unsorted_tag)
+      tag = FactoryBot.create(:unsorted_tag)
 
       tag.unwrangleable = true
       expect(tag).not_to be_valid
@@ -121,7 +121,7 @@ describe Tag do
   context "when checking for synonym/name change" do
     context "when logged in as a regular user" do
       before(:each) do
-        User.current_user = FactoryGirl.create(:user)
+        User.current_user = FactoryBot.create(:user)
       end
 
       it "should ignore capitalisation" do
@@ -175,8 +175,8 @@ describe Tag do
       end
 
       it 'autocomplete should work' do
-        tag_character = FactoryGirl.create(:character, canonical: true, name: 'kirk')
-        tag_fandom = FactoryGirl.create(:fandom, name: 'Star Trek', canonical: true)
+        tag_character = FactoryBot.create(:character, canonical: true, name: 'kirk')
+        tag_fandom = FactoryBot.create(:fandom, name: 'Star Trek', canonical: true)
         tag_fandom.add_to_autocomplete
         results = Tag.autocomplete_fandom_lookup(term: 'ki', fandom: 'Star Trek')
         expect(results.include?("#{tag_character.id}: #{tag_character.name}")).to be_truthy
@@ -185,7 +185,7 @@ describe Tag do
 
       it 'old tag maker still works' do
         tag_adult = Rating.create_canonical('adult', true)
-        tag_normal = Warning.create_canonical('other')
+        tag_normal = ArchiveWarning.create_canonical('other')
         expect(tag_adult.name).to eq('adult')
         expect(tag_normal.name).to eq('other')
         expect(tag_adult.adult).to be_truthy
@@ -195,7 +195,7 @@ describe Tag do
 
     context "when logged in as an admin" do
       before do
-        User.current_user = FactoryGirl.create(:admin)
+        User.current_user = FactoryBot.create(:admin)
       end
 
       it "should allow any change" do
@@ -238,8 +238,8 @@ describe Tag do
     end
 
     it "is true for a tag with a Fandom parent" do
-      tag_character = FactoryGirl.create(:character, canonical: false)
-      tag_fandom = FactoryGirl.create(:fandom, canonical: true)
+      tag_character = FactoryBot.create(:character, canonical: false)
+      tag_fandom = FactoryBot.create(:fandom, canonical: true)
       tag_character.parents = [tag_fandom]
       tag_character.save
 
@@ -270,7 +270,7 @@ describe Tag do
       tag = Fandom.create(name: "Fandom")
       expect(tag.can_change_type?).to be_truthy
 
-      FactoryGirl.create(:work, fandom_string: tag.name)
+      FactoryBot.create(:work, fandom_string: tag.name)
       expect(tag.can_change_type?).to be_falsey
     end
 
@@ -278,7 +278,7 @@ describe Tag do
       tag = Fandom.create(name: "Fandom")
       expect(tag.can_change_type?).to be_truthy
 
-      work = FactoryGirl.create(:work, fandom_string: tag.name)
+      work = FactoryBot.create(:work, fandom_string: tag.name)
       work.posted = true
       work.save
       expect(tag.can_change_type?).to be_falsey
@@ -287,17 +287,17 @@ describe Tag do
     it "should be false for a tag used in a tag set"
 
     it "should be true for a tag used on a bookmark" do
-      tag = FactoryGirl.create(:unsorted_tag)
+      tag = FactoryBot.create(:unsorted_tag)
       expect(tag.can_change_type?).to be_truthy
 
-      bookmark = FactoryGirl.create(:bookmark, tag_string: tag.name)
+      bookmark = FactoryBot.create(:bookmark, tag_string: tag.name)
 
       expect(bookmark.tags).to include(tag)
       expect(tag.can_change_type?).to be_truthy
     end
 
     it "should be true for a tag used on an external work" do
-      FactoryGirl.create(:external_work, character_string: "Jane Smith")
+      FactoryBot.create(:external_work, character_string: "Jane Smith")
       tag = Tag.find_by_name("Jane Smith")
 
       expect(tag.can_change_type?).to be_truthy
@@ -307,7 +307,7 @@ describe Tag do
   describe "type changes" do
     context "from Unsorted to Fandom" do
       before do
-        @fandom_tag = FactoryGirl.create(:unsorted_tag)
+        @fandom_tag = FactoryBot.create(:unsorted_tag)
         @fandom_tag.type = "Fandom"
         @fandom_tag.save
         @fandom_tag = Tag.find(@fandom_tag.id)
@@ -324,7 +324,7 @@ describe Tag do
 
     context "from Unsorted to Character" do
       before do
-        @character_tag = FactoryGirl.create(:unsorted_tag)
+        @character_tag = FactoryBot.create(:unsorted_tag)
         @character_tag.type = "Character"
         @character_tag.save
         @character_tag = Tag.find(@character_tag.id)
@@ -341,7 +341,7 @@ describe Tag do
 
     context "from Fandom to Unsorted" do
       before do
-        @unsorted_tag = FactoryGirl.create(:fandom, canonical: false)
+        @unsorted_tag = FactoryBot.create(:fandom, canonical: false)
         @unsorted_tag.type = "UnsortedTag"
         @unsorted_tag.save
         @unsorted_tag = Tag.find(@unsorted_tag.id)
@@ -359,7 +359,7 @@ describe Tag do
 
     context "from Fandom to Character" do
       before do
-        @character_tag = FactoryGirl.create(:fandom, canonical: false)
+        @character_tag = FactoryBot.create(:fandom, canonical: false)
         @character_tag.type = "Character"
         @character_tag.save
         @character_tag = Tag.find(@character_tag.id)
@@ -377,7 +377,7 @@ describe Tag do
 
     context "from Character to Unsorted" do
       before do
-        @unsorted_tag = FactoryGirl.create(:character, canonical: false)
+        @unsorted_tag = FactoryBot.create(:character, canonical: false)
         @unsorted_tag.type = "UnsortedTag"
         @unsorted_tag.save
         @unsorted_tag = Tag.find(@unsorted_tag.id)
@@ -394,7 +394,7 @@ describe Tag do
 
     context "from Character to Fandom" do
       before do
-        @fandom_tag = FactoryGirl.create(:character, canonical: false)
+        @fandom_tag = FactoryBot.create(:character, canonical: false)
         @fandom_tag.type = "Fandom"
         @fandom_tag.save
         @fandom_tag = Tag.find(@fandom_tag.id)
@@ -411,8 +411,8 @@ describe Tag do
 
     context "when the Character had a Fandom attached" do
       before do
-        @unsorted_tag = FactoryGirl.create(:character, canonical: false)
-        fandom_tag = FactoryGirl.create(:fandom, canonical: true)
+        @unsorted_tag = FactoryBot.create(:character, canonical: false)
+        fandom_tag = FactoryBot.create(:fandom, canonical: true)
         @unsorted_tag.parents = [fandom_tag]
         @unsorted_tag.save
       end
@@ -439,16 +439,16 @@ describe Tag do
 
   describe "find_or_create_by_name" do
     it "should sort unsorted tags that get used on works" do
-      tag = FactoryGirl.create(:unsorted_tag)
-      FactoryGirl.create(:work, character_string: tag.name)
+      tag = FactoryBot.create(:unsorted_tag)
+      FactoryBot.create(:work, character_string: tag.name)
 
       tag = Tag.find(tag.id)
       expect(tag).to be_a(Character)
     end
 
     it "should sort unsorted tags that get used on external works" do
-      tag = FactoryGirl.create(:unsorted_tag)
-      FactoryGirl.create(:external_work, character_string: tag.name)
+      tag = FactoryBot.create(:unsorted_tag)
+      FactoryBot.create(:external_work, character_string: tag.name)
 
       tag = Tag.find(tag.id)
       expect(tag).to be_a(Character)
@@ -458,9 +458,9 @@ describe Tag do
   describe "multiple tags of the same type" do
     before do
       # set up three tags of the same type
-      @canonical_tag = FactoryGirl.create(:canonical_fandom)
-      @syn_tag = FactoryGirl.create(:fandom)
-      @sub_tag = FactoryGirl.create(:canonical_fandom)
+      @canonical_tag = FactoryBot.create(:canonical_fandom)
+      @syn_tag = FactoryBot.create(:fandom)
+      @sub_tag = FactoryBot.create(:canonical_fandom)
     end
 
     it "should let you make a tag the synonym of a canonical one" do
@@ -489,9 +489,9 @@ describe Tag do
       describe "and works under each" do
         before do
           # create works with all three tags
-          @direct_work = FactoryGirl.create(:work, fandom_string: @canonical_tag.name)
-          @syn_work = FactoryGirl.create(:work, fandom_string: @syn_tag.name)
-          @sub_work = FactoryGirl.create(:work, fandom_string: @sub_tag.name)
+          @direct_work = FactoryBot.create(:work, fandom_string: @canonical_tag.name)
+          @syn_work = FactoryBot.create(:work, fandom_string: @syn_tag.name)
+          @sub_work = FactoryBot.create(:work, fandom_string: @sub_tag.name)
         end
 
         xit "should find all works that would need to be reindexed" do
@@ -509,9 +509,9 @@ describe Tag do
       describe "and bookmarks under each" do
         before do
           # create bookmarks with all three tags
-          @direct_bm = FactoryGirl.create(:bookmark, tag_string: @canonical_tag.name)
-          @syn_bm = FactoryGirl.create(:bookmark, tag_string: @syn_tag.name)
-          @sub_bm = FactoryGirl.create(:bookmark, tag_string: @sub_tag.name)
+          @direct_bm = FactoryBot.create(:bookmark, tag_string: @canonical_tag.name)
+          @syn_bm = FactoryBot.create(:bookmark, tag_string: @syn_tag.name)
+          @sub_bm = FactoryBot.create(:bookmark, tag_string: @sub_tag.name)
         end
 
         it "should find all bookmarks that would need to be reindexed" do

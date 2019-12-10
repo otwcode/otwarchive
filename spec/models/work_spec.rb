@@ -76,11 +76,38 @@ describe Work do
     end
   end
 
-
   context "invalid endnotes" do
     let(:too_long) { ArchiveConfig.NOTES_MAX + 1 }
     it "cannot be longer than ArchiveConfig.NOTES_MAX" do
       expect(build(:work, title: Faker::Lorem.characters(too_long))).to be_invalid
+    end
+  end
+
+  context "invalid language" do
+    let(:deleted_language_id) do
+      briefly_lived_language = create(:language)
+      deleted_language_id = briefly_lived_language.id
+      briefly_lived_language.destroy
+      deleted_language_id
+    end
+
+    it "is valid with a supported language" do
+      work = build(:work, language_id: Language.default.id)
+      expect(work).to be_valid
+    end
+
+    it "is not valid with a language we don't support" do
+      work = build(:work, language_id: deleted_language_id)
+
+      expect(work).not_to be_valid
+      expect(work.errors.messages[:base]).to include("Language cannot be blank.")
+    end
+
+    it "is not valid without a language" do
+      work = build(:work, language_id: "")
+
+      expect(work).not_to be_valid
+      expect(work.errors.messages[:base]).to include("Language cannot be blank.")
     end
   end
 
@@ -297,7 +324,7 @@ describe Work do
     let(:work) { build(:work) }
 
     context "when the pseuds start with special characters" do
-      it "should remove those characters" do
+      it "removes those characters" do
         allow(work).to receive(:pseuds).and_return [Pseud.new(name: "-jolyne")]
         expect(work.authors_to_sort_on).to eq "jolyne"
 
@@ -307,14 +334,14 @@ describe Work do
     end
 
     context "when the pseuds start with numbers" do
-      it "should not remove numbers" do
+      it "does not remove numbers" do
         allow(work).to receive(:pseuds).and_return [Pseud.new(name: "007james")]
         expect(work.authors_to_sort_on).to eq "007james"
       end
     end
 
     context "when the work is anonymous" do
-      it "should set the author sorting to Anonymous" do
+      it "returns Anonymous" do
         work.in_anon_collection = true
         allow(work).to receive(:pseuds).and_return [Pseud.new(name: "stealthy")]
         expect(work.authors_to_sort_on).to eq "Anonymous"
@@ -322,9 +349,12 @@ describe Work do
     end
 
     context "when the work has multiple pseuds" do
-      it "should combine them with commas" do
+      it "sorts them like the byline then joins them with commas" do
         allow(work).to receive(:pseuds).and_return [Pseud.new(name: "diavolo"), Pseud.new(name: "doppio")]
         expect(work.authors_to_sort_on).to eq "diavolo,  doppio"
+
+        allow(work).to receive(:pseuds).and_return [Pseud.new(name: "Tiziano"), Pseud.new(name: "squalo")]
+        expect(work.authors_to_sort_on).to eq "squalo,  tiziano"
       end
     end
   end
@@ -382,7 +412,6 @@ describe Work do
       @work.recipients = @recipient2.pseuds.first.name + "," + @recipient2.pseuds.first.name
       expect(@work.new_recipients).to eq(@recipient2.pseuds.first.name)
     end
-
   end
 
   describe "#find_by_url" do
@@ -520,7 +549,7 @@ describe Work do
 
       it "raises an error" do
         expect { work.remove_author(to_remove) }.to raise_exception(
-          "Sorry, we can't remove all authors of a work."
+          "Sorry, we can't remove all creators of a work."
         )
       end
     end

@@ -105,6 +105,8 @@ class CollectionItemsController < ApplicationController
         errors << ts("%{collection_title}, because you don't own this item and the collection is anonymous or unrevealed.", collection_title: collection.title)
       elsif !current_user.is_author_of?(@item) && !collection.user_is_maintainer?(current_user)
         errors << ts("%{collection_title}, either you don't own this item or are not a moderator of the collection.", collection_title: collection.title)
+      elsif @item.is_a?(Work) && @item.anonymous? && !current_user.is_author_of?(@item)
+        errors << ts("%{collection_title}, because you don't own this item and the item is anonymous.", collection_title: collection.title)
       # add the work to a collection, and try to save it
       elsif @item.add_to_collection(collection) && @item.save
         # approved_by_user and approved_by_collection are both true

@@ -166,20 +166,6 @@ class ChallengeAssignment < ApplicationRecord
   end
   alias_method :defaulted?, :defaulted
 
-  include Comparable
-  # sort in order that puts assignments with no request ahead of assignments with no offer,
-  # ahead of assignments with both request and offer, and within each group sorts by
-  # request byline and then offer byline.
-  def <=>(other)
-    return -1 if self.request_signup.nil? && other.request_signup
-    return 1 if other.request_signup.nil? && self.request_signup
-    return -1 if self.offer_signup.nil? && other.offer_signup
-    return 1 if other.offer_signup.nil? && self.offer_signup
-    cmp = self.request_byline.downcase <=> other.request_byline.downcase
-    return cmp if cmp != 0
-    self.offer_byline.downcase <=> other.offer_byline.downcase
-  end
-
   def offer_signup_pseud=(pseud_byline)
     if pseud_byline.blank?
       self.offer_signup = nil

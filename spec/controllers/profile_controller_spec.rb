@@ -10,7 +10,7 @@ describe ProfileController do
     end
 
     it 'should create a new profile if one does not exist' do
-      @user = FactoryGirl.create(:user)
+      @user = FactoryBot.create(:user)
       @user.profile.destroy
       @user.reload
       get :show, params: { user_id: @user }

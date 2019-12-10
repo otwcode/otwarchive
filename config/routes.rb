@@ -554,11 +554,7 @@ Otwarchive::Application.routes.draw do
   resources :external_authors do
     resources :external_author_names
   end
-  resources :orphans, only: [:index, :new, :create] do
-    collection do
-      get :about
-    end
-  end
+  resources :orphans, only: [:index, :new, :create]
 
   get 'search' => 'works#search'
   post 'support' => 'feedbacks#create', as: 'feedbacks'

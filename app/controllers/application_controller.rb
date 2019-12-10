@@ -4,6 +4,12 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception, prepend: true
   rescue_from ActionController::InvalidAuthenticityToken, with: :display_auth_error
   rescue_from ActionController::UnknownFormat, with: :raise_not_found
+  rescue_from Elasticsearch::Transport::Transport::Errors::ServiceUnavailable do
+    # Non-standard code to distinguish Elasticsearch errors from standard 503s.
+    # We can't use 444 because nginx will close connections without sending
+    # response headers.
+    head 445
+  end
 
   def raise_not_found
     redirect_to '/404'
@@ -433,12 +439,6 @@ public
                   (@check_visibility_of.respond_to?(:visible?) && !@check_visibility_of.visible?) ||
                   (@check_visibility_of.respond_to?(:hidden_by_admin?) && @check_visibility_of.hidden_by_admin?)
       can_view_hidden = logged_in_as_admin? || current_user_owns?(@check_visibility_of)
-
-      # Override the standard visibility check if the user has a creator invite:
-      if @check_visibility_of.is_a?(Creatable)
-        can_view_hidden ||= @check_visibility_of.user_has_creator_invite?(current_user)
-      end
-
       access_denied if (is_hidden && !can_view_hidden)
     end
   end

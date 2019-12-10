@@ -3,7 +3,7 @@
 require 'spec_helper'
 
 describe AdminMailer, type: :mailer do
-  describe "send_spam_email" do
+  describe "send_spam_alert" do
     let(:spam_user) { create(:user) }
 
     let(:spam1) do
@@ -35,42 +35,51 @@ describe AdminMailer, type: :mailer do
       }
     end
 
-    let(:mail) { AdminMailer.send_spam_alert(report) }
+    let(:email) { AdminMailer.send_spam_alert(report) }
 
     context "when the report is valid" do
       it "has the correct subject" do
-        expect(mail).to have_subject "[#{ArchiveConfig.APP_SHORT_NAME}] Potential spam alert"
+        expect(email).to have_subject "[#{ArchiveConfig.APP_SHORT_NAME}] Potential spam alert"
       end
 
       it "delivers to the correct address" do
-        expect(mail).to deliver_to ArchiveConfig.SPAM_ALERT_ADDRESS
+        expect(email).to deliver_to ArchiveConfig.SPAM_ALERT_ADDRESS
       end
 
-      it "delivers from the correct address" do
-        expect(mail).to deliver_from("Archive of Our Own <#{ArchiveConfig.RETURN_ADDRESS}>")
+      it_behaves_like "an email with a valid sender"
+
+      it_behaves_like "a multipart email"
+
+      describe "HTML version" do
+        it "lists the usernames and all work titles" do
+          expect(email).to have_html_part_content(spam_user.login)
+          expect(email).to have_html_part_content(spam1.title)
+          expect(email).to have_html_part_content(spam2.title)
+          expect(email).to have_html_part_content(spam3.title)
+
+          expect(email).to have_html_part_content(other_user.login)
+          expect(email).to have_html_part_content(other_spam.title)
+        end
+
+        it "lists the users in the correct order" do
+          expect(email.html_part.decoded).to have_text(/#{spam_user.login}.*#{other_user.login}/m)
+        end
       end
 
-      it "lists the usernames and all work titles" do
-        expect(mail.text_part).to have_body_text(/#{spam_user.login}/)
-        expect(mail.text_part).to have_body_text(/#{spam1.title}/)
-        expect(mail.text_part).to have_body_text(/#{spam2.title}/)
-        expect(mail.text_part).to have_body_text(/#{spam3.title}/)
+      describe "text version" do
+        it "lists the usernames and all work titles" do
+          expect(email).to have_text_part_content(spam_user.login)
+          expect(email).to have_text_part_content(spam1.title)
+          expect(email).to have_text_part_content(spam2.title)
+          expect(email).to have_text_part_content(spam3.title)
 
-        expect(mail.text_part).to have_body_text(/#{other_user.login}/)
-        expect(mail.text_part).to have_body_text(/#{other_spam.title}/)
+          expect(email).to have_text_part_content(other_user.login)
+          expect(email).to have_text_part_content(other_spam.title)
+        end
 
-        expect(mail.html_part).to have_body_text(/#{spam_user.login}/)
-        expect(mail.html_part).to have_body_text(/#{spam1.title}/)
-        expect(mail.html_part).to have_body_text(/#{spam2.title}/)
-        expect(mail.html_part).to have_body_text(/#{spam3.title}/)
-
-        expect(mail.html_part).to have_body_text(/#{other_user.login}/)
-        expect(mail.html_part).to have_body_text(/#{other_spam.title}/)
-      end
-
-      it "lists the users in the correct order" do
-        expect(mail.text_part).to have_body_text(/#{spam_user.login}.*#{other_user.login}/m)
-        expect(mail.html_part).to have_body_text(/#{spam_user.login}.*#{other_user.login}/m)
+        it "lists the users in the correct order" do
+          expect(email.text_part.decoded).to have_text(/#{spam_user.login}.*#{other_user.login}/m)
+        end
       end
     end
 
@@ -84,22 +93,28 @@ describe AdminMailer, type: :mailer do
       end
 
       context "when there are other users to list" do
-        it "silently omits the missing user" do
-          expect(mail.text_part).not_to have_body_text(/#{spam_user.login}/)
-          expect(mail.text_part).not_to have_body_text(/#{spam1.title}/)
-          expect(mail.text_part).not_to have_body_text(/#{spam2.title}/)
-          expect(mail.text_part).not_to have_body_text(/#{spam3.title}/)
+        describe "HTML version" do
+          it "silently omits the missing user" do
+            expect(email).not_to have_html_part_content(spam_user.login)
+            expect(email).not_to have_html_part_content(spam1.title)
+            expect(email).not_to have_html_part_content(spam2.title)
+            expect(email).not_to have_html_part_content(spam3.title)
 
-          expect(mail.text_part).to have_body_text(/#{other_user.login}/)
-          expect(mail.text_part).to have_body_text(/#{other_spam.title}/)
+            expect(email).to have_html_part_content(other_user.login)
+            expect(email).to have_html_part_content(other_spam.title)
+          end
+        end
 
-          expect(mail.html_part).not_to have_body_text(/#{spam_user.login}/)
-          expect(mail.html_part).not_to have_body_text(/#{spam1.title}/)
-          expect(mail.html_part).not_to have_body_text(/#{spam2.title}/)
-          expect(mail.html_part).not_to have_body_text(/#{spam3.title}/)
+        describe "text version" do
+          it "silently omits the missing user" do
+            expect(email).not_to have_text_part_content(spam_user.login)
+            expect(email).not_to have_text_part_content(spam1.title)
+            expect(email).not_to have_text_part_content(spam2.title)
+            expect(email).not_to have_text_part_content(spam3.title)
 
-          expect(mail.html_part).to have_body_text(/#{other_user.login}/)
-          expect(mail.html_part).to have_body_text(/#{other_spam.title}/)
+            expect(email).to have_text_part_content(other_user.login)
+            expect(email).to have_text_part_content(other_spam.title)
+          end
         end
       end
 
@@ -111,8 +126,102 @@ describe AdminMailer, type: :mailer do
         end
 
         it "aborts delivery" do
-          expect(mail.actual_message).to be_a(ActionMailer::Base::NullMail)
+          expect(email.actual_message).to be_a(ActionMailer::Base::NullMail)
         end
+      end
+    end
+  end
+
+  describe "feedback" do
+    let(:feedback) { create(:feedback) }
+    let(:email) { AdminMailer.feedback(feedback.id) }
+
+    it "has the correct subject" do
+      expect(email).to have_subject("[#{ArchiveConfig.APP_SHORT_NAME}] Support - #{feedback.summary}")
+    end
+
+    it "delivers to the correct address" do
+      expect(email).to deliver_to(ArchiveConfig.FEEDBACK_ADDRESS)
+    end
+
+    it "delivers from the correct address" do
+      expect(email).to deliver_from(feedback.email)
+    end
+
+    it_behaves_like "a multipart email"
+
+    describe "HTML email" do
+      it "contains the comment" do
+        expect(email).to have_html_part_content(feedback.comment)
+      end
+
+      it "contains the summary" do
+        expect(email).to have_html_part_content(feedback.summary)
+      end
+    end
+
+    describe "text email" do
+      it "contains the comment" do
+        expect(email).to have_text_part_content(feedback.comment)
+      end
+
+      it "contains the summary" do
+        expect(email).to have_text_part_content(feedback.summary)
+      end
+    end
+  end
+
+  describe "abuse_report" do
+    let(:report) { create(:abuse_report) }
+    let(:email) { AdminMailer.abuse_report(report.id) }
+    let(:email2) { UserMailer.abuse_report(report.id) }
+
+    # Assume all of these reports pass the spam check
+    before(:each) do
+      allow(Akismetor).to receive(:spam?).and_return(false)
+    end
+
+    it "has the correct subject" do
+      expect(email).to have_subject "[#{ArchiveConfig.APP_SHORT_NAME}] Admin Abuse Report"
+    end
+
+    it "delivers to the correct address" do
+      expect(email).to deliver_to ArchiveConfig.ABUSE_ADDRESS
+    end
+
+    it "ccs the user who filed the report" do
+      expect(email2).to deliver_to(report.email)
+    end
+
+    it_behaves_like "an email with a valid sender"
+
+    it_behaves_like "a multipart email"
+
+    describe "HTML version" do
+      it "contains the comment" do
+        expect(email).to have_html_part_content(report.comment)
+      end
+
+      it "contains the email address" do
+        expect(email).to have_html_part_content(report.email)
+      end
+
+      it "contains the url of the page with abuse" do
+        expect(email).to have_html_part_content(report.url)
+      end
+    end
+
+    describe "text version" do
+      it "contains the comment" do
+        expect(email).to have_text_part_content(report.comment)
+      end
+
+      it "contains the email address" do
+        expect(email).to have_text_part_content(report.email)
+      end
+
+      it "contains the url of the page with abuse" do
+        expect(email).to have_text_part_content(report.url)
       end
     end
   end
