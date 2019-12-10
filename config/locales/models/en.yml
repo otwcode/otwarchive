@@ -9,7 +9,7 @@ en:
         user:
           attributes:
             password_confirmation:
-              confirmation: "doesn't match new password"
+              confirmation: "doesn't match new password."
     models:
       archive_warning:
         one: "Warning"
