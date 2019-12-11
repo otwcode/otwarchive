@@ -33,8 +33,7 @@ Scenario: Create a bookmark
     When I am logged in as "first_bookmark_user"
       And I go to first_bookmark_user's user page
     Then I should not see "You don't have anything posted under this name yet"
-      And I should see "Revenge of the Sith"  
-    
+      And I should see "Revenge of the Sith"
     When I edit the bookmark for "Revenge of the Sith"
       And I check "bookmark_private"
       And I press "Update"
