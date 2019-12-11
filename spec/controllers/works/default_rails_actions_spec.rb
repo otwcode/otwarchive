@@ -315,15 +315,9 @@ describe WorksController, work_search: true do
       expect(assigns(:fandom)).to eq(@fandom)
     end
 
-    it "returns search results when given work_search parameters" do
-      params = { :work_search => { query: "fandoms: #{@fandom.name}" } }
-      get :index, params: params
-      expect(assigns(:works)).to include(@work)
-    end
-
     describe "without caching" do
       before do
-        allow(controller).to receive(:use_caching?).and_return(false)
+        AdminSetting.first.update_attribute(:enable_test_caching, false)
       end
 
       it "returns the result with different works the second time" do
@@ -337,7 +331,7 @@ describe WorksController, work_search: true do
 
     describe "with caching" do
       before do
-        allow(controller).to receive(:use_caching?).and_return(true)
+        AdminSetting.first.update_attribute(:enable_test_caching, true)
       end
 
       context "with NO owner tag" do
