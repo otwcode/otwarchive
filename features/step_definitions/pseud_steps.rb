@@ -38,9 +38,3 @@ When /^"([^"]*)" creates the pseud "([^"]*)"$/ do |username, newpseud|
   fill_in "Name", with: newpseud
   click_button "Create"
 end
-
-When /^I create the pseud "([^"]*)"$/ do |newpseud|
-  visit new_user_pseud_path(User.current_user)
-  fill_in "Name", with: newpseud
-  click_button "Create"
-end
