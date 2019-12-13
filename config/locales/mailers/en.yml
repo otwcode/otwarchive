@@ -1,24 +1,19 @@
 en:
   mailer:
     general:
+      signature:
+        app_short_name: AO3
       footer:
         general:
-          html: |-
-              <p>
-               If you've received this message in error, please <a href="%{support_url}" style="color:#ffffff; text-decoration:underline">contact Support</a>.
-              </p>
-
-              <p>
-               The Archive of Our Own is a fan-run and fan-supported archive that relies on <a href="%{donate_url}" style="color:#ffffff; text-decoration:underline">your donations</a>.
-              </p>
-          text: |-
-              If you've received this message in error, please contact Support at %{support_url}.
-
-              The Archive of Our Own is a fan-run and fan-supported archive that relies on your donations: %{donate_url}.
+          html:
+            support_link_text: contact Support
+            donate_link_text: your donations
+            part1: "If you've received this message in error, please %{support_link}."
+            part2: "The Archive of Our Own is a fan-run and fan-supported archive that relies on %{donate_link}."
+          text:
+            part1: "If you've received this message in error, please contact Support at %{support_url}."
+            part2: "The Archive of Our Own is a fan-run and fan-supported archive that relies on your donations: %{donate_url}."
         sent_at: "Sent at %{sent_at}."
-        sent_by:
-          html: "Sent by <b>%{sent_by}</b>."
-          text: "Sent by %{sent_by}."
     kudos:
       guest:
         one: a guest
@@ -26,8 +21,8 @@ en:
       you_have: "[%{app_name}] You've got kudos!"
       html:
         left_kudos:
-          one: "%{givers_list} left kudos on <i>%{commentable_link}</i>."
-          other: "%{givers_list} left kudos on <i>%{commentable_link}</i>."
+          one: "%{givers_list} left kudos on %{commentable_link}."
+          other: "%{givers_list} left kudos on %{commentable_link}."
       text:
         left_kudos:
           one: "%{givers_list} left kudos on %{commentable_link}."
@@ -35,16 +30,12 @@ en:
   user_mailer:
     invite_increase_notification:
       subject: "[%{app_name}] New Invitations"
-      html:  "<p> Hi %{login}! </p>\n\
-          <p> We just wanted to let you know that you have %{total} new invitation(s), which can be used to create new accounts at the archive. You can invite a friend at %{invitation_page}. </p>\n\
-          <p> Cheers, <br> %{archive_name} </p>"
-      txt: |-
-          Hi %{login}
-          We just wanted to let you know that you have %{total} new invitation(s),
-          which can be used to create new accounts at the archive. You can invite a
-          friend at %{invitation_page}.
-          Cheers,
-          %{archive_name}
+      greeting: "Hi %{login}!"
+      body: 
+        one: "We just wanted to let you know that you have %{count} new invitation, which can be used to create a new account at the Archive. You can invite a friend at %{invitation_page}."
+        other: "We just wanted to let you know that you have %{count} new invitations, which can be used to create new accounts at the Archive. You can invite a friend at %{invitation_page}."
+      invitation_page_link_text: your invitations page
+      closing: "Cheers,"
     admin_deleted_work_notification:
       subject: "[%{app_name}] Your work has been deleted by an admin"
       hello: "Dear %{user},"
