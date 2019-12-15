@@ -1,5 +1,8 @@
 class Rack::Attack
 
+  # The following is a useful resource.
+  # https://www.driftingruby.com/episodes/rails-api-throttling-with-rack-attack
+  # 
   ### Configure Cache ###
 
   # If you don't want to use Rails.cache (Rack::Attack's default), then
@@ -21,13 +24,28 @@ class Rack::Attack
   # counted by rack-attack and this throttle may be activated too
   # quickly. If so, enable the condition to exclude them from tracking.
 
+  # Thottle elasticsearch normal queries.
+  #
+  # The regex comes from:
+  # echo $(grep elastic /etc/nginx/conf.d/ao3_routing.conf  | grep -v  "unicorn_elastic_bookmarks" | awk '{print $1}' | cut -c 4- | sed -e 's/"/|/' -e 's#\/#\\/#g' ) | sed -e 's/ //g'
+  # I have stopped trying to be clever.
+  limit = ArchiveConfig.RATE_LIMIT_ELASTICSEARCH_NUMBER
+  period = ArchiveConfig.RATE_LIMIT_PERIOD
+  throttle('req/elastic/ip', limit: limit, period: period) do |req|
+    req.ip if req.path =~ /^\/(ccollections\/.*\/works|collections\/.*\/tags\/.*\/works|tags\/search.*|people\/search.*|works\/search.*|tags\/.*\/works|users\/.*\/works)/
+  end
+
+  limit = ArchiveConfig.RATE_LIMIT_ELASTICSEARCH_BOOKMARK_NUMBER
+  throttle('req/elastic_bookmarks/ip', limit: limit, period: period) do |req|
+    req.ip if req.path =~ /^\/(collections\/.*\/bookmarks|tags\/.*\/bookmarks|users\/.*\/bookmarks)/
+  end
+
   # Throttle all requests by IP (60rpm)
   #
   # Key: "rack::attack:#{Time.now.to_i/:period}:req/ip:#{req.ip}"
   limit = ArchiveConfig.RATE_LIMIT_NUMBER
-  period = ArchiveConfig.RATE_LIMIT_PERIOD
   throttle('req/ip', limit: limit, period: period) do |req|
-    req.ip # unless req.path.start_with?('/assets')
+    req.ip
   end
 
   ### Prevent Brute-Force Login Attacks ###
