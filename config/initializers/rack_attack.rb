@@ -23,23 +23,21 @@ class Rack::Attack
   # Note: If you're serving assets through rack, those requests may be
   # counted by rack-attack and this throttle may be activated too
   # quickly. If so, enable the condition to exclude them from tracking.
+  #
 
-  # Thottle elasticsearch normal queries.
-  limit = ArchiveConfig.RATE_LIMIT_ELASTICSEARCH_NUMBER
-  period = ArchiveConfig.RATE_LIMIT_PERIOD
-  throttle('req/elastic/ip', limit: limit, period: period) do |req|
-    req.ip if req.env['HTTP_X_UNICORNS'] == "unicorn_elastic"
-  end
+  # This stanza allows us to limit by which backend is selected by nginx.
 
-  limit = ArchiveConfig.RATE_LIMIT_ELASTICSEARCH_BOOKMARK_NUMBER
-  throttle('req/elastic_bookmarks/ip', limit: limit, period: period) do |req|
-    req.ip if req.env['HTTP_X_UNICORNS'] == "unicorn_elastic_bookmarks"
+  ArchiveConfig.RATE_LIMIT.each do |k,v|
+    throttle('req/#{k}/ip', limit: ArchiveConfig.RATE_LIMIT[k]["limit"], period: ArchiveConfig.RATE_LIMIT[k]["period"]) do |req|
+      req.ip if req.env['HTTP_X_UNICORNS'] == k
+     end
   end
 
   # Throttle all requests by IP (60rpm)
   #
   # Key: "rack::attack:#{Time.now.to_i/:period}:req/ip:#{req.ip}"
-  limit = ArchiveConfig.RATE_LIMIT_NUMBER
+  period = ArchiveConfig.RATE_LIMIT["default"]["limit"]
+  limit = ArchiveConfig.RATE_LIMIT["default"]["period"]
   throttle('req/ip', limit: limit, period: period) do |req|
     req.ip
   end
@@ -53,8 +51,8 @@ class Rack::Attack
   # Another common method of attack is to use a swarm of computers with
   # different IPs to try brute-forcing a password for a specific account.
 
-  login_limit = ArchiveConfig.RATE_LIMIT_LOGIN_ATTEMPTS
-  login_period = ArchiveConfig.RATE_LIMIT_LOGIN_PERIOD
+  login_limit = ArchiveConfig.RATE_LIMIT["login"]["limit"]
+  login_period = ArchiveConfig.RATE_LIMIT["login"]["period"]
 
   # Throttle POST requests to /login by IP address
   #
