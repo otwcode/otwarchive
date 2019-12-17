@@ -27,8 +27,8 @@ class Rack::Attack
 
   # This stanza allows us to limit by which backend is selected by nginx.
 
-  ArchiveConfig.RATE_LIMIT.each do |k, _|
-    throttle("req/#{k}/ip", limit: ArchiveConfig.RATE_LIMIT[k]["limit"], period: ArchiveConfig.RATE_LIMIT[k]["period"]) do |req|
+  ArchiveConfig.RATE_LIMIT_PER_NGINX_UPSTREAM.each do |k, _|
+    throttle("req/#{k}/ip", limit: ArchiveConfig.RATE_LIMIT_PER_NGINX_UPSTREAM[k]["limit"], period: ArchiveConfig.RATE_LIMIT_PER_NGINX_UPSTREAM[k]["period"]) do |req|
       req.ip if req.env['HTTP_X_UNICORNS'] == k
     end
   end
