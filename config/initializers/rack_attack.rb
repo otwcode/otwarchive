@@ -36,8 +36,8 @@ class Rack::Attack
   # Throttle all requests by IP (60rpm)
   #
   # Key: "rack::attack:#{Time.now.to_i/:period}:req/ip:#{req.ip}"
-  period = ArchiveConfig.RATE_LIMIT["default"]["limit"]
-  limit = ArchiveConfig.RATE_LIMIT["default"]["period"]
+  limit = ArchiveConfig.RATE_LIMIT_NUMBER
+  period = ArchiveConfig.RATE_LIMIT_PERIOD
   throttle('req/ip', limit: limit, period: period) do |req|
     req.ip
   end
@@ -51,8 +51,8 @@ class Rack::Attack
   # Another common method of attack is to use a swarm of computers with
   # different IPs to try brute-forcing a password for a specific account.
 
-  login_limit = ArchiveConfig.RATE_LIMIT["login"]["limit"]
-  login_period = ArchiveConfig.RATE_LIMIT["login"]["period"]
+  login_limit = ArchiveConfig.RATE_LIMIT_LOGIN_ATTEMPTS
+  login_period = ArchiveConfig.RATE_LIMIT_LOGIN_PERIOD
 
   # Throttle POST requests to /login by IP address
   #
