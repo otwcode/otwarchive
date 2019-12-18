@@ -169,7 +169,7 @@ RATE_LIMIT_PER_NGINX_UPSTREAM:
   unicorn_elastic:
     limit: 300
     period: 300
-    unicorn_elastic_bookmarks:
+  unicorn_elastic_bookmarks:
     limit: 300
     period: 300
 
