@@ -33,6 +33,12 @@ class Rack::Attack
     end
   end
 
+  # If we fail to unmask the remote IP for a request, the
+  # frontends will pass the internal network (10.0.0.0/8) to the
+  # unicorns. We need to ensure that we don't block these requests.
+
+  Rack::Attack.safelist_ip("10.0.0.0/8")
+
   # Throttle all requests by IP (60rpm)
   #
   # Key: "rack::attack:#{Time.now.to_i/:period}:req/ip:#{req.ip}"
