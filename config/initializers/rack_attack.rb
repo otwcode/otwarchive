@@ -1,5 +1,8 @@
 class Rack::Attack
 
+  # The following is a useful resource.
+  # https://www.driftingruby.com/episodes/rails-api-throttling-with-rack-attack
+  #
   ### Configure Cache ###
 
   # If you don't want to use Rails.cache (Rack::Attack's default), then
@@ -9,7 +12,7 @@ class Rack::Attack
   # safelisting). It must implement .increment and .write like
   # ActiveSupport::Cache::Store
 
-  # Rack::Attack.cache.store = ActiveSupport::Cache::MemoryStore.new 
+  # Rack::Attack.cache.store = ActiveSupport::Cache::MemoryStore.new
 
   ### Throttle Spammy Clients ###
 
@@ -20,6 +23,15 @@ class Rack::Attack
   # Note: If you're serving assets through rack, those requests may be
   # counted by rack-attack and this throttle may be activated too
   # quickly. If so, enable the condition to exclude them from tracking.
+  #
+
+  # This stanza allows us to limit by which backend is selected by nginx.
+
+  ArchiveConfig.RATE_LIMIT_PER_NGINX_UPSTREAM.each do |k, v|
+    throttle("req/#{k}/ip", limit: v["limit"], period: v["period"]) do |req|
+      req.ip if req.env['HTTP_X_UNICORNS'] == k
+    end
+  end
 
   # Throttle all requests by IP (60rpm)
   #
@@ -27,7 +39,7 @@ class Rack::Attack
   limit = ArchiveConfig.RATE_LIMIT_NUMBER
   period = ArchiveConfig.RATE_LIMIT_PERIOD
   throttle('req/ip', limit: limit, period: period) do |req|
-    req.ip # unless req.path.start_with?('/assets')
+    req.ip
   end
 
   ### Prevent Brute-Force Login Attacks ###
