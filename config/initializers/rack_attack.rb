@@ -21,6 +21,12 @@ class Rack::Attack
   # counted by rack-attack and this throttle may be activated too
   # quickly. If so, enable the condition to exclude them from tracking.
 
+  # the 10.0.0.0/8 netwok is internal, we rarely see the frontends
+  # passing an internal network upwards to the unicorns. We need
+  # to ensure that we don't block these requests.
+
+  Rack::Attack.safelist_ip("10.0.0.0/8")
+
   # Throttle all requests by IP (60rpm)
   #
   # Key: "rack::attack:#{Time.now.to_i/:period}:req/ip:#{req.ip}"
