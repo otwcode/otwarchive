@@ -21,9 +21,9 @@ class Rack::Attack
   # counted by rack-attack and this throttle may be activated too
   # quickly. If so, enable the condition to exclude them from tracking.
 
-  # the 10.0.0.0/8 netwok is internal, we rarely see the frontends
-  # passing an internal network upwards to the unicorns. We need
-  # to ensure that we don't block these requests.
+  # If we fail to unmask the remote IP for a request, the
+  # frontends will pass the internal network (10.0.0.0/8) to the
+  # unicorns. We need to ensure that we don't block these requests.
 
   Rack::Attack.safelist_ip("10.0.0.0/8")
 
