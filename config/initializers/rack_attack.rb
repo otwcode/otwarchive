@@ -37,7 +37,10 @@ class Rack::Attack
   # frontends will pass the internal network (10.0.0.0/8) to the
   # unicorns. We need to ensure that we don't block these requests.
 
-  Rack::Attack.safelist_ip("10.0.0.0/8")
+  Rack::Attack.safelist('allow from local net') do |req|
+    # Requests are allowed if the return value is truthy
+    req.ip.start_with?('127.') || req.ip == '::1' || req.ip.start_with?('10.')
+  end
 
   # Throttle all requests by IP (60rpm)
   #
