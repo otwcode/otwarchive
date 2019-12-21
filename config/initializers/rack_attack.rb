@@ -26,8 +26,8 @@ class Rack::Attack
   # unicorns. We need to ensure that we don't block these requests.
 
   Rack::Attack.safelist('allow from local net') do |req|
-  # Requests are allowed if the return value is truthy
-    req.ip.start_with?('127.') || '::1' == req.ip  || req.ip.start_with?('10.')
+    # Requests are allowed if the return value is truthy
+    req.ip.start_with?('127.') || req.ip == '::1' || req.ip.start_with?('10.')
   end
 
   # Throttle all requests by IP (60rpm)
