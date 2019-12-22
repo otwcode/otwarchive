@@ -207,7 +207,7 @@ $.TokenList = function (input, url_or_data, settings) {
     var hidden_input_id = $(input)
                               .attr('id');
 
-    // Keep a reference to the label whose for attribute matches the original input box's id        
+    // Keep a reference to the label whose for attribute matches the original input box's id
     var hidden_input_label = $('label[for="' + hidden_input_id + '"]');
 
     // Keep a reference to the original input box's aria-describedby attribute
