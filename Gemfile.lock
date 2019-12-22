@@ -217,6 +217,8 @@ GEM
     kgio (2.10.0)
     launchy (2.4.3)
       addressable (~> 2.3)
+    lockup (1.5.1)
+      rails (>= 3, < 6.1)
     lograge (0.6.0)
       actionpack (>= 4, < 5.2)
       activesupport (>= 4, < 5.2)
@@ -295,7 +297,7 @@ GEM
       byebug (~> 9.0)
       pry (~> 0.10)
     public_suffix (3.0.3)
-    rack (2.0.7)
+    rack (2.0.8)
     rack-attack (6.1.0)
       rack (>= 1.0, < 3)
     rack-dev-mark (0.7.8)
@@ -509,6 +511,7 @@ DEPENDENCIES
   httparty
   kgio (= 2.10.0)
   launchy
+  lockup
   lograge
   mechanize
   minitest

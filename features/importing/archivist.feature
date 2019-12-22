@@ -179,7 +179,7 @@ Feature: Archivist bulk imports
     Then I should see "Create Account"
     When I fill in the sign up form with valid data
     And I press "Create Account"
-    Then I should see "Account Created!"
+    Then I should see "Almost Done!"
 
   Scenario: Orphan a work in response to an invite, leaving name on it
     Given I have an orphan account
