@@ -214,6 +214,9 @@ $.TokenList = function (input, url_or_data, settings) {
     var hidden_input_describedby = $(input)
                                      .attr("aria-describedby");
 
+    // String used as the id attribute for the autocomplete dropdown
+    var autocomplete_dropdown_id = hidden_input_id + "_autocomplete_dropdown";
+
     // Change the original label's for attribute to match the id attribute we give the new input box
     hidden_input_label.attr({
       'for': hidden_input_id + '_autocomplete',
@@ -225,7 +228,7 @@ $.TokenList = function (input, url_or_data, settings) {
         var input_box = $("<input>")
         .attr({
           "aria-autocomplete": "list",
-          "aria-controls": hidden_input_id + "_autocomplete_dropdown",
+          "aria-controls": autocomplete_dropdown_id,
           "autocomplete": "off",
           "class": "text",
           "id": hidden_input_id + "_autocomplete",
@@ -443,7 +446,7 @@ $.TokenList = function (input, url_or_data, settings) {
         .attr({
           "aria-expanded": "false",
           "aria-haspopup": "listbox",
-          "aria-owns": hidden_input_id + "_autocomplete_dropdown",
+          "aria-owns": autocomplete_dropdown_id,
           "role": "combobox"
         })
         .appendTo(token_list)
@@ -760,7 +763,7 @@ $.TokenList = function (input, url_or_data, settings) {
 
     function show_dropdown() {
         dropdown
-            .attr("id", hidden_input_id + "_autocomplete_dropdown")
+            .attr("id", autocomplete_dropdown_id)
             .css({
                 position: "absolute"
                 // ,
