@@ -810,7 +810,7 @@ $.TokenList = function (input, url_or_data, settings) {
             dropdown.empty();
             var dropdown_ul = $("<ul>")
                 .attr({
-                  "aria-labelledby": hidden_input_id + '_autocomplete_label',
+                  "aria-labelledby": hidden_input_label.attr("id"),
                   "role": "listbox"
                 })
                 .appendTo(dropdown)
