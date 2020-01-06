@@ -69,4 +69,5 @@ Otwarchive::Application.configure do
   # :rw Retry in all SQL, but does not retry if Lost connection has happened in write SQL
   config.active_record.retry_mode = :rw
 
+  config.middleware.use Rack::Attack
 end

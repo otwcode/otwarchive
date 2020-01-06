@@ -2,7 +2,7 @@
 
 require "spec_helper"
 
-describe TagQuery do
+describe TagQuery, tag_search: true do
   context "searching tags by draft status" do
     let!(:work) do
       create(:posted_work,
@@ -100,7 +100,7 @@ describe TagQuery do
     # Make tag wrangled; it should be reindexed without using queues
     before do
       create(:common_tagging, common_tag_id: wrangled_tag.id)
-      refresh_index_without_updating "tag"
+      TagIndexer.refresh_index
     end
 
     it "matches wrangled tags" do

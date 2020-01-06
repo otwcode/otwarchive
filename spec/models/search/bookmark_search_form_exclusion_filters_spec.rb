@@ -1,6 +1,6 @@
 require "spec_helper"
 
-describe BookmarkSearchForm do
+describe BookmarkSearchForm, bookmark_search: true do
   describe "tag exclusion behavior" do
     let!(:user) do
       FactoryBot.create(:user)

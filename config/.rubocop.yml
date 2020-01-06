@@ -1,7 +1,19 @@
 # options available at https://github.com/bbatsov/rubocop/blob/master/config/default.yml
 
 AllCops:
-  TargetRubyVersion: 2.3
+  TargetRubyVersion: 2.6
+
+Bundler/OrderedGems:
+  Enabled: false
+
+Layout/DotPosition:
+  EnforcedStyle: leading
+
+Layout/IndentFirstArrayElement:
+  EnforcedStyle: consistent
+
+Layout/MultilineMethodCallIndentation:
+  EnforcedStyle: indented
 
 Layout/TrailingWhitespace:
   Enabled: false
@@ -28,10 +40,21 @@ Metrics/ModuleLength:
 Style/FormatStringToken:
   EnforcedStyle: template
 
+Style/FrozenStringLiteralComment:
+  Enabled: false
+
+Style/GlobalVars:
+  AllowedVariables:
+    - $elasticsearch
+    - $rollout
+
 # stop checking if uses of "self" are redundant
 Style/RedundantSelf:
   Enabled: false
 
 # stop checking quotation marks
 Style/StringLiterals:
+  Enabled: false
+
+Style/SymbolArray:
   Enabled: false

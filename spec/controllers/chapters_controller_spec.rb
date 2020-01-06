@@ -239,6 +239,13 @@ describe ChaptersController do
         get :show, params: { work_id: work.id, id: chapter.id }
         expect(assigns[:chapters]).to eq([work.chapters.first, chapter])
       end
+
+      it "does not increment the hit count" do
+        REDIS_GENERAL.set("work_stats:#{work.id}:last_visitor", nil)
+        expect {
+          get :show, params: { work_id: work.id, id: work.chapters.first.id }
+        }.not_to change { REDIS_GENERAL.get("work_stats:#{work.id}:hit_count").to_i }
+      end
     end
 
     context "when other user is logged in" do
@@ -436,7 +443,7 @@ describe ChaptersController do
         expect(assigns[:work].major_version).to eq(2)
       end
 
-      context "when the post without preview button is clicked" do
+      context "when the post button is clicked" do
         context "when the chapter and work are valid" do
           it "posts the chapter" do
             post :create, params: { work_id: work.id, chapter: @chapter_attributes, post_without_preview_button: true }
@@ -670,7 +677,7 @@ describe ChaptersController do
         end
       end
 
-      context "when the post without preview button is clicked" do
+      context "when the post button is clicked" do
         it "posts the chapter" do
           put :update, params: { work_id: work.id, id: work.chapters.first.id, chapter: @chapter_attributes, post_without_preview_button: true }
           expect(assigns[:chapter].posted).to be true
