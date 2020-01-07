@@ -193,7 +193,7 @@ class WorksController < ApplicationController
     # Users must explicitly okay viewing of adult content
     if params[:view_adult]
       session[:adult] = true
-    elsif @work.adult? && !see_adult?
+    elsif params[:format] == "html" && @work.adult? && !see_adult?
       render('_adult', layout: 'application') && return
     end
 

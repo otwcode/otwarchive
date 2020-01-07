@@ -1,0 +1,22 @@
+<%=
+  work_fields = [:id, :expected_number_of_chapters, :created_at, :updated_at, :major_version, :minor_version, :posted, :language_id, :restricted, :title, :summary, :notes, :word_count, :revised_at, :complete]
+  chapter_fields = [:id, :content, :position, :created_at, :updated_at, :title, :notes, :summary, :word_count, :published_at, :endnotes]
+  work_methods = [:count_visible_comments, :public_bookmarks_count, :guest_kudos_count, :kudos_count, :adult?, :published_at]
+  tag_fields = [:id, :name, :canonical, :created_at, :updated_at, :adult]
+  tag_types = ["Freeform", "Character", "Relationship", "ArchiveWarning", "Fandom", "Rating", "Category"]
+
+  kudo_fields = [:id, :created_at, :updated_at, :pseud_id]
+  kudo_methods = [:name]
+
+if !@work.unrevealed? || logged_in_as_admin? || @work.user_is_owner_or_invited?(current_user) || can_see_work(k, current_user)
+  {
+   "version" => "1",
+   "work" => @work.as_json(only: work_fields, methods: work_methods),
+   "chapters" => (@chapters or [@chapter]).as_json(only: chapter_fields),
+    "tags" => @tag_groups.as_json(only: tag_fields + tag_types),
+     "kudos" => @kudos.as_json(only: kudo_fields, methods: kudo_methods)
+  }.to_json.html_safe
+else
+  {"version" => "1"}.to_json.html_safe
+end
+%>
