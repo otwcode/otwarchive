@@ -8,15 +8,15 @@
   kudo_fields = [:id, :created_at, :updated_at, :pseud_id]
   kudo_methods = [:name]
 
-if !@work.unrevealed? || logged_in_as_admin? || @work.user_is_owner_or_invited?(current_user) || can_see_work(k, current_user)
-  {
-   "version" => "1",
-   "work" => @work.as_json(only: work_fields, methods: work_methods),
-   "chapters" => (@chapters or [@chapter]).as_json(only: chapter_fields),
-    "tags" => @tag_groups.as_json(only: tag_fields + tag_types),
+  if !@work.unrevealed? || logged_in_as_admin? || @work.user_is_owner_or_invited?(current_user) || can_see_work(k, current_user)
+    {
+     "version" => "0.0",
+     "work" => @work.as_json(only: work_fields, methods: work_methods),
+     "chapters" => (@chapters or [@chapter]).as_json(only: chapter_fields),
+     "tags" => @tag_groups.as_json(only: tag_fields + tag_types),
      "kudos" => @kudos.as_json(only: kudo_fields, methods: kudo_methods)
-  }.to_json.html_safe
-else
-  {"version" => "1"}.to_json.html_safe
-end
+    }.to_json.html_safe
+  else
+    {"version" => "0.0"}.to_json.html_safe
+  end
 %>
