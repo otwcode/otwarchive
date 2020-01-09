@@ -135,7 +135,8 @@ class User < ApplicationRecord
   end
 
   def remove_pseud_from_kudos
-    # NB: updates the kudos to remove the pseud, but the cache will not expire, and there's also issue 2198
+    # TODO: AO3-5054 Expire kudos cache when deleting a user.
+    # TODO: AO3-2195 Display orphaned kudos (no pseuds; no IPs so not counted as guest kudos).
     pseuds_list = pseuds.map(&:id)
     Kudo.where(["pseud_id IN (?)", pseuds_list]).update_all("pseud_id = NULL") if pseuds_list.present?
   end
