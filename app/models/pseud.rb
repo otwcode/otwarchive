@@ -350,7 +350,7 @@ class Pseud < ApplicationRecord
     # the cache is invalidated and the pseud change will be visible.
     Comment.where(pseud_id: self.id).update_all(pseud_id: replacement.id,
                                                 updated_at: Time.now)
-    # NB: updates the kudos to use the new default pseud, but the cache will not expire
+    # TODO: AO3-5054 Expire kudos cache when changing default pseuds.
     Kudo.where(pseud_id: self.id).update_all(pseud_id: replacement.id)
     change_collections_membership
     change_gift_recipients
