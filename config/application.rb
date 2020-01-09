@@ -3,7 +3,7 @@ require File.expand_path('../boot', __FILE__)
 require 'rails/all'
 
 # If you have a Gemfile, require the gems listed there, including any gems
-# you've limited to :test, :development, :staging, or :production.
+# you've limited to :test, :development, or :production.
 Bundler.require(*Rails.groups)
 
 module Otwarchive
