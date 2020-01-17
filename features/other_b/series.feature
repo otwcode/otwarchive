@@ -151,7 +151,8 @@ Feature: Create and Edit Series
     Then I should see "Series was successfully updated."
       And I should see "Many a Robot"
     # Work blurbs should be updated.
-    When I go to my user page
+    When I wait 3 seconds
+      And I go to my user page
     Then I should see "Part 1 of Many a Robot" within "#user-works"
     # Work metas should be updated.
     When I view the work "WALL-E"
@@ -232,7 +233,8 @@ Feature: Create and Edit Series
       And I press "Preview"
     Then I should see "Pointless Pseud"
       And I should see "Part 2 of the Ponies series"
-    When I edit the work "Rainbow Dash"
+    When I wait 3 seconds
+      And I edit the work "Rainbow Dash"
       And I fill in "Or create and use a new one:" with "Black Beauty"
       And I press "Preview"
     Then I should see "Part 2 of the Ponies series" within "dd.series"
