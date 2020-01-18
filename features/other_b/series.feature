@@ -147,12 +147,12 @@ Feature: Create and Edit Series
     When I view the series "Robots"
       And I follow "Edit Series"
       And I fill in "Series Title" with "Many a Robot"
+      And I wait 2 seconds
       And I press "Update"
     Then I should see "Series was successfully updated."
       And I should see "Many a Robot"
     # Work blurbs should be updated.
-    When I wait 3 seconds
-      And I go to my user page
+    When I go to my user page
     Then I should see "Part 1 of Many a Robot" within "#user-works"
     # Work metas should be updated.
     When I view the work "WALL-E"
@@ -233,9 +233,9 @@ Feature: Create and Edit Series
       And I press "Preview"
     Then I should see "Pointless Pseud"
       And I should see "Part 2 of the Ponies series"
-    When I wait 3 seconds
-      And I edit the work "Rainbow Dash"
+    When I edit the work "Rainbow Dash"
       And I fill in "Or create and use a new one:" with "Black Beauty"
+      And I wait 2 seconds
       And I press "Preview"
     Then I should see "Part 2 of the Ponies series" within "dd.series"
       And I should see "Part 1 of the Black Beauty series" within "dd.series"
@@ -266,6 +266,7 @@ Feature: Create and Edit Series
     Then I should not see "Edit Series"
     When I follow "Creator Invitations page"
       And I check "selected[]"
+      And I wait 2 seconds
       And I press "Accept"
     Then I should see "You are now listed as a co-creator on Gentleman Jack."
     When I follow "Gentleman Jack"
