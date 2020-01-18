@@ -13,7 +13,7 @@ end
 
 When /^I add the work "([^\"]*)" to (?:the )?series "([^\"]*)"(?: as "([^"]*)")?$/ do |work_title, series_title, pseud|
   unless pseud.blank? && Pseud.where(name: pseud).exists?
-    step %{I create the pseud "#{pseud}"}
+    step %{I add the pseud "#{pseud}"}
   end
 
   if Work.where(title: work_title).exists?
