@@ -16,6 +16,15 @@ class Rack::Attack
 
   ### Throttle Spammy Clients ###
 
+  # If we fail to unmask the remote IP for a request, the
+  # frontends will pass the internal network (10.0.0.0/8) to the
+  # unicorns. We need to ensure that we don't block these requests.
+
+  Rack::Attack.safelist('allow from local net') do |req|
+    # Requests are allowed if the return value is truthy
+    req.ip.start_with?('127.') || req.ip == '::1' || req.ip.start_with?('10.')
+  end
+
   # If any single client IP is making tons of requests, then they're
   # probably malicious or a poorly-configured scraper. Either way, they
   # don't deserve to hog all of the app server's CPU. Cut them off!
@@ -31,15 +40,6 @@ class Rack::Attack
     throttle("req/#{k}/ip", limit: v["limit"], period: v["period"]) do |req|
       req.ip if req.env['HTTP_X_UNICORNS'] == k
     end
-  end
-
-  # If we fail to unmask the remote IP for a request, the
-  # frontends will pass the internal network (10.0.0.0/8) to the
-  # unicorns. We need to ensure that we don't block these requests.
-
-  Rack::Attack.safelist('allow from local net') do |req|
-    # Requests are allowed if the return value is truthy
-    req.ip.start_with?('127.') || req.ip == '::1' || req.ip.start_with?('10.')
   end
 
   # Throttle all requests by IP (60rpm)
