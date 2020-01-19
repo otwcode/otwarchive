@@ -101,11 +101,15 @@ module OTWSanitize
       else
         url = node['src']
       end
+      @source_url = standardize_url(url)
+    end
+
+    def standardize_url(url)
       # strip off optional protocol and www
       protocol_regex = %r{^(?:https?:)?//(?:www\.)?}i
       # normalize the url
       url = url&.gsub(protocol_regex, "")
-      @source_url = Addressable::URI.parse(url).normalize.to_s
+      Addressable::URI.parse(url).normalize.to_s
     end
 
     # For sites that support https, ensure we use a secure embed
