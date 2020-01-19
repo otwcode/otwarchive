@@ -176,6 +176,12 @@ describe HtmlCleaner do
           expect(result).to be_empty
         end
 
+        it "strips archive.org iframe if the src is not the embed directory" do
+          html = '<iframe src="http://archive.org/123/wrong/456.html"></iframe>'
+          result = sanitize_value(field, html)
+          expect(result).to be_empty
+        end
+
         %w(metacafe.com vidders.net criticalcommons.org static.ning.com ning.com).each do |source|
           it "doesn't convert src to https for #{source}" do
             html = '<iframe width="560" height="315" src="http://' + source + '/embed/123" frameborder="0"></iframe>'

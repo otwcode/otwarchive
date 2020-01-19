@@ -5,7 +5,7 @@ module OTWSanitize
   class EmbedSanitizer
     WHITELIST_REGEXES = {
       ao3:              %r{^archiveofourown\.org/},
-      archiveorg:       %r{^archive\.org/},
+      archiveorg:       %r{^archive\.org\/embed/},
       criticalcommons:  %r{^criticalcommons\.org/},
       dailymotion:      %r{^dailymotion\.com/},
       eighttracks:      %r{^8tracks\.com/},
