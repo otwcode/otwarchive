@@ -177,7 +177,7 @@ describe HtmlCleaner do
         end
 
         it "strips archive.org iframe if the src is not the embed directory" do
-          html = '<iframe src="http://archive.org/123/wrong/456.html"></iframe>'
+          html = '<iframe src="http://archive.org/embed/../123/wrong/456.html"></iframe>'
           result = sanitize_value(field, html)
           expect(result).to be_empty
         end

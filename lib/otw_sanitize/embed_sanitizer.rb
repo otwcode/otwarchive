@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+require 'addressable/uri'
 
 module OTWSanitize
   # Creates a Sanitize transformer to sanitize embedded media
@@ -102,7 +103,8 @@ module OTWSanitize
       end
       # strip off optional protocol and www
       protocol_regex = %r{^(?:https?:)?//(?:www\.)?}i
-      @source_url = url&.gsub(protocol_regex, '')
+      url = url&.gsub(protocol_regex, '')
+      @source_url = Addressable::URI.parse(url).normalize.to_s
     end
 
     # For sites that support https, ensure we use a secure embed
