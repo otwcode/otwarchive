@@ -109,7 +109,7 @@ module OTWSanitize
       protocol_regex = %r{^(?:https?:)?//(?:www\.)?}i
       # normalize the url
       url = url&.gsub(protocol_regex, "")
-      Addressable::URI.parse(url).normalize.to_s
+      Addressable::URI.parse(url).normalize.to_s rescue nil
     end
 
     # For sites that support https, ensure we use a secure embed
