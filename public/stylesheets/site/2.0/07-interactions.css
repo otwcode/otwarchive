@@ -543,11 +543,6 @@ a.modal.help {
   margin-top: 0.5em;
 }
 
-.twitter-share-button {
-    min-width: 76px;
-    min-height: 28px;
-}
-
 /*MODE: DYNAMIC is in early dev and so currently sharing styles with toggled */
 
 div.dynamic {
