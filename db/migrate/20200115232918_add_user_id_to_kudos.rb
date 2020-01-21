@@ -19,15 +19,13 @@ class AddUserIdToKudos < ActiveRecord::Migration[5.1]
   def down
     if Rails.env.staging? || Rails.env.production?
 =begin
-      pt-online-schema-change -uroot --alter \
-      "DROP COLUMN user_id, DROP INDEX index_kudos_on_user_id (user_id)" \
+      pt-online-schema-change -uroot --alter "DROP COLUMN user_id" \
       D=$DATABASE,t=kudos --chunk-size=10k --max-flow-ctl 0 \
       --pause-file /tmp/pauseme --max-load Threads_running=25 \
       --critical-load Threads_running=400 --set-vars innodb_lock_wait_timeout=2 \
       --alter-foreign-keys-method=auto --execute
 =end
     else
-      remove_index :kudos, name: 'index_kudos_on_user_id'
       remove_column :kudos, :user_id
     end
   end
