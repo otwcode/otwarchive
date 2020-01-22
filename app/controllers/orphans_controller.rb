@@ -45,7 +45,7 @@ class OrphansController < ApplicationController
   # Given an ActiveRecord item and an ActiveRecord relation, check whether the
   # item is in the relation. If not, show a flash error.
   def check_one_owned(chosen_item, all_owned_items)
-    show_orphan_permission_error unless all_owned_items.where(id: chosen_item.id).exists?
+    show_orphan_permission_error unless all_owned_items.exists?(chosen_item.id)
   end
 
   # Given a collection of ActiveRecords and an ActiveRecord relation, check
