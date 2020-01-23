@@ -1,4 +1,4 @@
-class UserMailer < BulletproofMailer::Base
+class UserMailer < ActionMailer::Base
   include Resque::Mailer # see README in this directory
 
   layout 'mailer'
@@ -116,7 +116,7 @@ class UserMailer < BulletproofMailer::Base
 
     # die if we haven't got any creations to notify about
     # see lib/bulletproof_mailer.rb
-    abort_delivery if @creations.empty?
+    return if @creations.empty?
 
     # make sure we only notify once per creation
     @creations.uniq!
