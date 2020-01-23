@@ -114,8 +114,6 @@ class UserMailer < ActionMailer::Base
       @creations << creation
     end
 
-    # die if we haven't got any creations to notify about
-    # see lib/bulletproof_mailer.rb
     return if @creations.empty?
 
     # make sure we only notify once per creation
