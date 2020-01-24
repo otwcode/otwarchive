@@ -23,7 +23,7 @@ module ShareHelper
     chapters_text = ts("Chapters: ") + work.chapter_total_display + tag("br")
     fandom_text = add_label_for_embed(ts("Fandom: "), tag_groups["Fandom"].map { |fandom| link_to fandom.name, tag_url(fandom) }.join(', ').html_safe, tag("br"))
     rating_text = add_label_for_embed(ts("Rating: "), tag_groups["Rating"].map { |rating| rating.name }.join(', '), tag("br"))
-    warning_text = add_label_for_embed(ts("Warnings: "), tag_groups["Warning"].map { |warning| warning_display_name(warning.name) }.join(', '), tag("br"))
+    warning_text = add_label_for_embed(ts("Warnings: "), tag_groups["ArchiveWarning"].map { |warning| warning_display_name(warning.name) }.join(', '), tag("br"))
     relationship_text = add_label_for_embed(ts("Relationships: "), tag_groups["Relationship"].map { |rel| rel.name }.join(', '), tag("br"))
     char_text = add_label_for_embed(ts("Characters: "), tag_groups["Character"].map { |char| char.name }.join(', '), tag("br"))
     tags_text = add_label_for_embed(ts("Additional Tags: "), tag_groups["Freeform"].map { |freeform| freeform.name }.join(', '), tag("br"))
@@ -48,7 +48,7 @@ module ShareHelper
   def get_embed_link_bookmark_meta(bookmark)
     if bookmark.bookmarkable.is_a?(Work)
       tags_text = add_label_for_embed(ts("Bookmarker's Tags: "), bookmark.tags.map {|tag| tag.name}.join(", "), tag("br"))
-      bookmark_text = add_label_for_embed(ts("Bookmarker's Notes: "), raw(sanitize_field(bookmark, :notes)))
+      bookmark_text = add_label_for_embed(ts("Bookmarker's Notes: "), raw(sanitize_field(bookmark, :bookmarker_notes)))
     end
   end
 

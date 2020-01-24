@@ -3,7 +3,6 @@ class UserMailer < BulletproofMailer::Base
 
   layout 'mailer'
 
-  include AuthlogicHelpersForMailers # otherwise any logged_in? checks in views will choke and die! :)
   helper_method :current_user
   helper_method :current_admin
   helper_method :logged_in?
@@ -158,18 +157,11 @@ class UserMailer < BulletproofMailer::Base
     I18n.with_locale(Locale.find(@user.preference.preferred_locale).iso) do
       mail(
         to: @user.email,
-        subject: "[#{ArchiveConfig.APP_SHORT_NAME}] Additional Invite Code Request Declined"
+        subject: t('user_mailer.invite_request_declined.subject', app_name: ArchiveConfig.APP_SHORT_NAME)
       )
     end
     ensure
       I18n.locale = I18n.default_locale
-  end
-
-  # Sends an admin message to an array of users
-  def mass_archive_notification(admin, users, subject, message)
-    users.each do |user|
-      archive_notification(admin, user, subject, message)
-    end
   end
 
   def collection_notification(collection_id, subject, message)
@@ -222,20 +214,6 @@ class UserMailer < BulletproofMailer::Base
       I18n.locale = I18n.default_locale
   end
 
-  # Sends a temporary password to the user
-  def reset_password(user_id, activation_code)
-    @user = User.find(user_id)
-    @password = activation_code
-    I18n.with_locale(Locale.find(@user.preference.preferred_locale).iso) do
-      mail(
-        to: @user.email,
-        subject: t('user_mailer.reset_password.subject', app_name: ArchiveConfig.APP_SHORT_NAME)
-      )
-    end
-    ensure
-      I18n.locale = I18n.default_locale
-  end
-
   # Confirms to a user that their email was changed
   def change_email(user_id, old_email, new_email)
     @user = User.find(user_id)
@@ -253,18 +231,55 @@ class UserMailer < BulletproofMailer::Base
 
   ### WORKS NOTIFICATIONS ###
 
-  # Sends email when a user is added as a co-author
-  def coauthor_notification(user_id, creation_id, creation_class_name)
-    @user = User.find(user_id)
-    @creation = creation_class_name.constantize.find(creation_id)
+  # Sends email when an archivist adds someone as a co-creator.
+  def creatorship_notification_archivist(creatorship_id, archivist_id)
+    @creatorship = Creatorship.find(creatorship_id)
+    @archivist = User.find(archivist_id)
+    @user = @creatorship.pseud.user
+    @creation = @creatorship.creation
     I18n.with_locale(Locale.find(@user.preference.preferred_locale).iso) do
       mail(
         to: @user.email,
-        subject: t('user_mailer.coauthor_notification.subject', app_name: ArchiveConfig.APP_SHORT_NAME)
+        subject: t("user_mailer.creatorship_notification_archivist.subject",
+                   app_name: ArchiveConfig.APP_SHORT_NAME)
       )
     end
-    ensure
-      I18n.locale = I18n.default_locale
+  ensure
+    I18n.locale = I18n.default_locale
+  end
+
+  # Sends email when a user is added as a co-creator
+  def creatorship_notification(creatorship_id, adding_user_id)
+    @creatorship = Creatorship.find(creatorship_id)
+    @adding_user = User.find(adding_user_id)
+    @user = @creatorship.pseud.user
+    @creation = @creatorship.creation
+    I18n.with_locale(Locale.find(@user.preference.preferred_locale).iso) do
+      mail(
+        to: @user.email,
+        subject: t("user_mailer.creatorship_notification.subject",
+                   app_name: ArchiveConfig.APP_SHORT_NAME)
+      )
+    end
+  ensure
+    I18n.locale = I18n.default_locale
+  end
+
+  # Sends email when a user is added as an unapproved/pending co-creator
+  def creatorship_invitation(creatorship_id, inviting_user_id)
+    @creatorship = Creatorship.find(creatorship_id)
+    @inviting_user = User.find(inviting_user_id)
+    @user = @creatorship.pseud.user
+    @creation = @creatorship.creation
+    I18n.with_locale(Locale.find(@user.preference.preferred_locale).iso) do
+      mail(
+        to: @user.email,
+        subject: t("user_mailer.creatorship_invitation.subject",
+                   app_name: ArchiveConfig.APP_SHORT_NAME)
+      )
+    end
+  ensure
+    I18n.locale = I18n.default_locale
   end
 
   # Sends emails to authors whose stories were listed as the inspiration of another work
@@ -322,9 +337,10 @@ class UserMailer < BulletproofMailer::Base
     @user = user
     @work = work
     work_copy = generate_attachment_content_from_work(work)
+    work_copy = ::Mail::Encodings::Base64.encode(work_copy)
     filename = work.title.gsub(/[*:?<>|\/\\\"]/,'')
-    attachments["#{filename}.txt"] = {content: work_copy}
-    attachments["#{filename}.html"] = {content: work_copy}
+    attachments["#{filename}.txt"] = { content: work_copy, encoding: "base64" }
+    attachments["#{filename}.html"] = { content: work_copy, encoding: "base64" }
     I18n.with_locale(Locale.find(@user.preference.preferred_locale).iso) do
       mail(
         to: user.email,
@@ -342,9 +358,10 @@ class UserMailer < BulletproofMailer::Base
     @user = user
     @work = work
     work_copy = generate_attachment_content_from_work(work)
+    work_copy = ::Mail::Encodings::Base64.encode(work_copy)
     filename = work.title.gsub(/[*:?<>|\/\\\"]/,'')
-    attachments["#{filename}.txt"] = {content: work_copy}
-    attachments["#{filename}.html"] = {content: work_copy}
+    attachments["#{filename}.txt"] = { content: work_copy, encoding: "base64" }
+    attachments["#{filename}.html"] = { content: work_copy, encoding: "base64" }
     I18n.with_locale(Locale.find(@user.preference.preferred_locale).iso) do
       mail(
         to: user.email,
@@ -363,6 +380,16 @@ class UserMailer < BulletproofMailer::Base
     mail(
         to: @user.email,
         subject: "[#{ArchiveConfig.APP_SHORT_NAME}] Your work has been hidden by the Abuse Team"
+    )
+  end
+
+  def admin_spam_work_notification(creation_id, user_id)
+    @user = User.find_by(id: user_id)
+    @work = Work.find_by(id: creation_id)
+
+    mail(
+        to: @user.email,
+        subject: "[#{ArchiveConfig.APP_SHORT_NAME}] Your work was hidden as spam"
     )
   end
 

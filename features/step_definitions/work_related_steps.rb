@@ -64,6 +64,7 @@ When /^I post a related work as remixer$/ do
     step %{I go to the new work page}
     step %{I select "Not Rated" from "Rating"}
     step %{I check "No Archive Warnings Apply"}
+    step %{I select "English" from "Choose a language"}
     step %{I fill in "Fandoms" with "Stargate"}
     step %{I fill in "Work Title" with "Followup"}
     step %{I fill in "content" with "That could be an amusing crossover."}

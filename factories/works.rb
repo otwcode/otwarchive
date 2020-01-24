@@ -1,44 +1,49 @@
 require 'faker'
-FactoryGirl.define do
+FactoryBot.define do
 
   factory :work do
-    title "My title is long enough"
-    fandom_string "Testing"
-    rating_string "Not Rated"
-    warning_string "No Archive Warnings Apply"
+    title { "My title is long enough" }
+    fandom_string { "Testing" }
+    rating_string { "Not Rated" }
+    archive_warning_string { "No Archive Warnings Apply" }
+    language_id { Language.default.id }
     chapter_info = { content: "This is some chapter content for my work." }
-    chapter_attributes chapter_info
+    chapter_attributes { chapter_info }
 
-    after(:build) do |work|
-      work.authors = [FactoryGirl.build(:pseud)] if work.authors.blank?
+    transient do
+      authors { [build(:pseud)] }
+    end
+
+    after(:build) do |work, evaluator|
+      evaluator.authors.each do |pseud|
+        work.creatorships.build(pseud: pseud)
+      end
     end
 
     factory :no_authors do
-      after(:build) do |work|
-        work.authors = []
-      end
+      authors { [] }
     end
 
     factory :custom_work_skin do
-      work_skin_id 1
+      work_skin_id { 1 }
     end
 
     factory :posted_work do
-      posted true
+      posted { true }
+    end
 
-      factory :restricted_work do
-        restricted true
-      end
+    factory :draft do
+      posted { false }
     end
   end
 
   factory :external_work do
-    title "An External Work"
-    author "An Author"
-    url "http://www.example.org"
+    title { "An External Work" }
+    author { "An Author" }
+    url { "http://www.example.org" }
 
     after(:build) do |work|
-      work.fandoms = [FactoryGirl.build(:fandom)] if work.fandoms.blank?
+      work.fandoms = [FactoryBot.build(:fandom)] if work.fandoms.blank?
     end
   end
 
@@ -51,8 +56,7 @@ FactoryGirl.define do
   end
 
   factory :external_creatorship do |f|
-    f.creation_type 'Work'
+    f.creation_type { 'Work' }
     f.association :external_author_name
   end
-
 end
