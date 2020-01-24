@@ -8,7 +8,6 @@ class AddUserIdToKudos < ActiveRecord::Migration[5.1]
       --pause-file /tmp/pauseme --max-load Threads_running=25 \
       --critical-load Threads_running=400 --set-vars innodb_lock_wait_timeout=2 \
       --alter-foreign-keys-method=auto --execute
-      insert into schema_migrations (version) values ("20200115232918")
 =end
     else
       add_column :kudos, :user_id, :int
