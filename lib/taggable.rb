@@ -91,7 +91,7 @@ module Taggable
   end
 
   def short_fandom_string
-    fandoms.size > 2 ? "Multifandom" : fandom_string
+    fandoms.size > 2 ? ts("Multifandom") : fandom_string
   end
 
   # _string= methods
