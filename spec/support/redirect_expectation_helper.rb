@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module RedirectExpectationHelper
   def it_redirects_to_with_notice(path, notice)
     it_redirects_to_simple(path)
@@ -33,6 +34,18 @@ module RedirectExpectationHelper
     expect(flash[:error]).to eq error
     expect(flash[:notice]).to eq notice
     expect(flash[:caution]).blank?
+  end
+
+  def it_redirects_to_with_comment_notice(path, notice)
+    it_redirects_to_simple(path)
+    expect(flash[:comment_notice]).to eq notice
+    expect(flash[:comment_error]).blank?
+  end
+
+  def it_redirects_to_with_comment_error(path, error)
+    it_redirects_to_simple(path)
+    expect(flash[:comment_error]).to eq error
+    expect(flash[:comment_notice]).blank?
   end
 
   def it_redirects_to_simple(path)
