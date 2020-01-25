@@ -19,7 +19,7 @@
       
     <% # Tumblr share %>
     <li>
-      <% tumblr_url = shareable.is_a?(Bookmark) ? work_url(bookmark.bookmarkable) : work_url(@work)%>
+      <% tumblr_url = shareable.is_a?(Bookmark) ? work_url(bookmark.bookmarkable) : work_url(@work) %>
       <% tumblr_title = get_tumblr_embed_link_title(shareable.is_a?(Bookmark) ? bookmark.bookmarkable : @work) %>
       <% tumblr_caption = shareable.is_a?(Bookmark) ? render('share/embed_link_bookmark', item: bookmark) : render('share/embed_meta', work: @work) %>
 
