@@ -47,7 +47,7 @@ Feature: Prompt Meme Challenge
     And I should not see "Delete Prompt"
     And I should see "Delete Sign-up"
 
-  Scenario: User can't delete prompt if they don't have more than the minimum 
+  Scenario: User can't delete prompt if they don't have more than the minimum
   number required by the meme
 
   Given I am logged in as "myname1"
@@ -100,7 +100,7 @@ Feature: Prompt Meme Challenge
   Then I should not see "In response to a prompt"
     And I should see "Battle 12"
 
-  Scenario: When user deletes signup, the work creator can edit the work 
+  Scenario: When user deletes signup, the work creator can edit the work
   normally
 
   Given "myname1" has signed up for Battle 12 with combination A
@@ -109,7 +109,7 @@ Feature: Prompt Meme Challenge
   When I am logged in as "myname2"
     And I edit the work "Fulfilled Story"
     And I fill in "Additional Tags" with "My New Tag"
-    And I press "Post Without Preview"
+    And I press "Post"
   Then I should see "Work was successfully updated."
     And I should see "My New Tag"
 
@@ -148,7 +148,7 @@ Feature: Prompt Meme Challenge
   Then I should see "Challenge Sign-ups for myname1"
     And I should not see "Battle 12"
 
-  Scenario: A user can still access their Claims page after a prompt meme they 
+  Scenario: A user can still access their Claims page after a prompt meme they
   had a fulfilled claim in has been deleted
 
   Given everyone has signed up for Battle 12
@@ -160,7 +160,7 @@ Feature: Prompt Meme Challenge
   When I follow "Fulfilled Claims"
   Then I should not see "Battle 12"
 
-  Scenario: The prompt line should not show on claim fills after the prompt meme 
+  Scenario: The prompt line should not show on claim fills after the prompt meme
   has been deleted
 
   Given everyone has signed up for Battle 12

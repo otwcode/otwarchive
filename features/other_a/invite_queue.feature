@@ -129,7 +129,7 @@ Feature: Invite queue management
         | user_registration_password_confirmation | password1                |
       And all emails have been delivered
     When I press "Create Account"
-    Then I should see "Account Created!"
+    Then I should see "Almost Done!"
     Then 1 email should be delivered
       And the email should contain "Welcome to the Archive of Our Own,"
       And the email should contain "newuser"
