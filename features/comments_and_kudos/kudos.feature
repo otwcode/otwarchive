@@ -19,6 +19,7 @@ Feature: Leave kudos
       And all emails have been delivered
       And I view the work "Awesome Story"
     Then I should not see "left kudos on this work"
+
     # Note: this step cannot be put into the steps file because of the heart character
     When I press "Kudos ♥"
     Then I should see "myname2 left kudos on this work!"
@@ -33,6 +34,7 @@ Feature: Leave kudos
     When I press "Kudos ♥"
     Then I should see "You have already left kudos here. :)"
       And I should not see "myname2 and myname2 left kudos on this work!"
+
     When I am logged out
       And I view the work "Awesome Story"
       And I press "Kudos ♥"
@@ -45,22 +47,17 @@ Feature: Leave kudos
       And the email should contain "A guest"
       And the email should contain "left kudos"
       And the email should contain "."
+
     When I am logged in as "myname3"
       And I view the work "Awesome Story"
       And I press "Kudos ♥"
     Then I should see "myname3 and myname2 as well as 1 guest left kudos on this work!"
     When I am logged in as "myname1"
       And I view the work "Awesome Story"
-      Then I should not see "Kudos ♥"
+    Then I should not see "Kudos ♥"
 
-  Scenario: kudos page
-    When I go to the "Awesome Story" work kudos page
-    Then I should not see " left kudos on this work"
-    When I am logged in as "myname3"
-      And I view the work "Awesome Story"
-      And I press "Kudos ♥"
-      And I go to the "Awesome Story" work kudos page
-    Then I should see "myname3 left kudos on this work!"
+    When I go to the work kudos page for "Awesome Story"
+    Then I should see "myname2 and myname3 as well as 1 guest left kudos on this work!"
 
   Scenario: kudos on a multi-chapter work
     Given I am logged in as "myname1"
