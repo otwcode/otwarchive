@@ -150,10 +150,10 @@ module WorksHelper
     url_for("#{path}?updated_at=#{work.updated_at.to_i}").gsub(' ', '%20')
   end
 
- # Generates a list of a work's tags and details for use in feeds
+  # Generates a list of a work's tags and details for use in feeds
   def feed_summary(work)
     tags = work.tags.group_by(&:type)
-    text = "<p>by #{byline(work, visibility: 'public', full_path: true)}</p>"
+    text = "<p>by #{byline(work, { visibility: 'public', full_path: true })}</p>"
     text << work.summary if work.summary
     text << "<p>Words: #{work.word_count}, Chapters: #{work.chapter_total_display}, Language: #{work.language ? work.language.name : 'English'}</p>"
     unless work.series.count == 0
@@ -173,11 +173,11 @@ module WorksHelper
   # Returns true or false to determine whether the work notes module should display
   def show_work_notes?(work)
     work.notes.present? ||
-      work.endnotes.present? ||
-      work.gifts.not_rejected.present? ||
-      work.challenge_claims.present? ||
-      work.parent_work_relationships.present? ||
-      work.approved_related_works.present?
+    work.endnotes.present? ||
+    work.gifts.not_rejected.present? ||
+    work.challenge_claims.present? ||
+    work.parent_work_relationships.present? ||
+    work.approved_related_works.present?
   end
 
   # Returns true or false to determine whether the work associations should be included
