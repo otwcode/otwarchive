@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 class ArchiveWarning < Tag
   NAME = ArchiveConfig.WARNING_CATEGORY_NAME
 

@@ -1,4 +1,5 @@
 class Tag < ApplicationRecord
+
   include ActiveModel::ForbiddenAttributesProtection
   include Searchable
   include StringCleaner
