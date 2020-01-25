@@ -49,8 +49,10 @@ describe KudosController do
 
     context "when work does not exist" do
       it "redirects to referer with an error" do
-        pending "Return not a 500 when posting kudos on a non-existent work."
+        referer = root_path
+        request.headers["HTTP_REFERER"] = referer
         post :create, params: { kudo: { commentable_id: "333", commentable_type: "Work" } }
+        it_redirects_to_with_comment_error(referer, "We couldn't save your kudos, sorry!")
       end
 
       context "with format: :js" do
