@@ -3,8 +3,8 @@
 <%= ts("Bookmarker's Tags: ").html_safe %>
 <%= bookmark.tags.pluck(:name).join(", ") %><br />
 <% end %>
-<% if bookmark.notes.present? %>
+<% if bookmark.bookmarker_notes.present? %>
 <%= ts("Bookmarker's Notes: ").html_safe %>
-<%= raw(sanitize_field(bookmark, :notes)) %>
+<%= raw(sanitize_field(bookmark, :bookmarker_notes)) %>
 <% end %>
 <% end %>
