@@ -10,15 +10,7 @@ describe ShareHelper do
     end
   end
 
-  describe "get_embed_link_meta" do
-    context "a work in a series" do
-      it "should do something" do
-        @work
-      end
-    end
-  end
-
-  describe "get_tweet_text_for_bookmark" do
+  describe "#get_tweet_text_for_bookmark" do
     context "bookmark is a work" do
       it "should return a formatted tweet" do
         bookmark = FactoryBot.create(:bookmark)
