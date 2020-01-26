@@ -42,6 +42,37 @@ class UserMailer < BulletproofMailer::Base
     )
   end
 
+  def anonymous_or_unrevealed_notification(user_id, work_id, collection_id,
+                                           anonymous:, unrevealed:)
+    return unless anonymous || unrevealed
+
+    @user = User.find(user_id)
+    @work = Work.find(work_id)
+    @collection = Collection.find(collection_id)
+
+    @becoming_anonymous = anonymous
+    @becoming_unrevealed = unrevealed
+
+    I18n.with_locale(Locale.find(@user.preference.preferred_locale).iso) do
+      @status = if anonymous && unrevealed
+                  t(".status.anonymous_unrevealed")
+                elsif anonymous
+                  t(".status.anonymous")
+                else
+                  t(".status.unrevealed")
+                end
+
+      mail(
+        to: @user.email,
+        subject: t(".subject",
+                   status: @status,
+                   app_name: ArchiveConfig.APP_SHORT_NAME)
+      )
+    end
+  ensure
+    I18n.locale = I18n.default_locale
+  end
+
   # Sends an invitation to join the archive
   # Must be sent synchronously as it is rescued
   # TODO refactor to make it asynchronous

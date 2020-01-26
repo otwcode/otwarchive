@@ -1,0 +1,26 @@
+<% content_for :message do %>
+  <p><%= t(".greeting", user: style_bold(@user.default_pseud.byline)).html_safe %></p>
+
+  <p><%= t(".changed_status",
+           collection: style_link(@collection.title, collection_url(@collection)),
+           work: style_link(@work.title.html_safe, work_url(@work)),
+           status: @status).html_safe %></p>
+
+  <% if @becoming_anonymous %>
+    <p><%= t(".anonymous_info") %></p>
+  <% end %>
+
+  <% if @becoming_unrevealed %>
+    <p><%= t(".unrevealed_info") %></p>
+  <% end %>
+
+  <p><%= t(".do_not_want.html",
+           collection_items_link: style_link(t(".collection_items_link_text"),
+                                             user_collection_items_url(@user, approved: true)),
+           status: @status).html_safe %></p>
+
+  <p><%= t(".more_info.html",
+           faq_link: style_link(t(".faq_link_text"),
+                                archive_faq_url("collections-and-challenges",
+                                                anchor: :collectionoptions))).html_safe %></p>
+<% end %>

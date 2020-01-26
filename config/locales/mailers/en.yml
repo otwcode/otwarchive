@@ -214,3 +214,21 @@ en:
       main:
         one: "We regret to inform you that your request for a new invitation cannot be fulfilled at this time."
         other: "We regret to inform you that your request for %{count} new invitations cannot be fulfilled at this time."
+    anonymous_or_unrevealed_notification:
+      subject: "[%{app_name}] Your work has become %{status}"
+      status:
+        anonymous: "anonymous"
+        anonymous_unrevealed: "anonymous and unrevealed"
+        unrevealed: "unrevealed"
+      greeting: "Dear %{user},"
+      changed_status: "The collection maintainers of %{collection} have changed the status of your work %{work} to %{status}."
+      anonymous_info: "Anonymous works are included in tag listings, but not on your works page. On the work, your user name will be replaced with \"Anonymous.\""
+      unrevealed_info: "Unrevealed works are not included in tag listings or on your works page. Anyone who follows a link to the work will receive a notice that it is currently unrevealed, and they will be unable to access its content."
+      do_not_want:
+        html: "If you do not want your work to be %{status}, please visit your %{collection_items_link} to remove it from this collection."
+        text: "If you do not want your work to be %{status}, please visit your Approved Collection Items page to remove it from this collection:"
+      collection_items_link_text: "Approved Collection Items page"
+      more_info:
+        html: "For more information, visit our %{faq_link}."
+        text: "For more information, visit our Collections and Challenges FAQ:"
+      faq_link_text: "Collections and Challenges FAQ"
