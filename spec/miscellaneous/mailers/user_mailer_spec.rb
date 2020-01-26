@@ -307,16 +307,18 @@ describe UserMailer, type: :mailer do
     describe "HTML version" do
       it "has the correct content" do
         expect(email).to have_html_part_content("Once your account is up and running, you can post your fanworks, set up email")
-        expect(email).to have_html_part_content("follow this link to activate your account")
+        expect(email).to have_html_part_content("follow this link to activate your account</a>.")
       end
     end
 
     describe "text version" do
       it "has the correct content" do
-        expect(email).to have_html_part_content("Once your account is up and running, you can post your fanworks, set up email")
-        expect(email).to have_text_part_content("follow this link to activate your account")
-
-        
+        expect(email).to have_text_part_content("Once your account is up and running, you can post your fanworks, set up email")
+        expect(email).to have_text_part_content("follow this link to activate your account:")
+      end
+    end
+  end
+  
   describe "invite_increase_notification" do
     let!(:user) { create(:user) }
 
