@@ -16,6 +16,7 @@ describe KudosController do
           request.headers["HTTP_REFERER"] = referer
           post :create, params: { kudo: { commentable_id: work.id, commentable_type: "Work" } }
           it_redirects_to_with_comment_notice(referer, "Thank you for leaving kudos!")
+          expect(assigns(:kudo).user).to be_nil
         end
       end
 
@@ -25,6 +26,20 @@ describe KudosController do
           request.headers["HTTP_REFERER"] = referer
           post :create, params: { kudo: { commentable_id: work.first_chapter.id, commentable_type: "Chapter" } }
           it_redirects_to_with_comment_notice(referer, "Thank you for leaving kudos!")
+          expect(assigns(:kudo).user).to be_nil
+        end
+      end
+
+      context "when kudos giver is logged in" do
+        let(:user) { create(:user) }
+        before { fake_login_known_user(user) }
+
+        it "redirects to referer with a notice" do
+          referer = work_path(work)
+          request.headers["HTTP_REFERER"] = referer
+          post :create, params: { kudo: { commentable_id: work.id, commentable_type: "Work" } }
+          it_redirects_to_with_comment_notice(referer, "Thank you for leaving kudos!")
+          expect(assigns(:kudo).user).to eq(user)
         end
       end
 

@@ -58,6 +58,7 @@ class User < ApplicationRecord
   has_many :work_skins, foreign_key: "author_id", dependent: :nullify
 
   before_create :create_default_associateds
+  before_destroy :remove_user_from_kudos
 
   after_update :update_pseud_name
   after_update :log_change_if_login_was_edited
@@ -139,6 +140,12 @@ class User < ApplicationRecord
     # TODO: AO3-2195 Display orphaned kudos (no pseuds; no IPs so not counted as guest kudos).
     pseuds_list = pseuds.map(&:id)
     Kudo.where(["pseud_id IN (?)", pseuds_list]).update_all("pseud_id = NULL") if pseuds_list.present?
+  end
+
+  def remove_user_from_kudos
+    # TODO: AO3-5054 Expire kudos cache when deleting a user.
+    # TODO: AO3-2195 Display orphaned kudos (no users; no IPs so not counted as guest kudos).
+    Kudo.where(user: self).update_all(user_id: nil)
   end
 
   def read_inbox_comments

@@ -3,6 +3,7 @@ class Kudo < ApplicationRecord
   include Responder
 
   belongs_to :pseud
+  belongs_to :user
   belongs_to :commentable, polymorphic: true
 
   validate :cannot_be_author

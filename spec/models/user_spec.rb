@@ -1,6 +1,22 @@
 require "spec_helper"
 
 describe User do
+  describe "#destroy" do
+    context "on a user with kudos" do
+      let(:user) { create(:user) }
+      let!(:kudo_bundle) { create_list(:kudo, 2, user: user) }
+
+      it "removes user from kudos" do
+        user.destroy!
+        kudo_bundle.each do |kudo|
+          kudo.reload
+          expect(kudo.user).to be_nil
+          expect(kudo.user_id).to be_nil
+        end
+      end
+    end
+  end
+
   describe "#save" do
     context "on a valid user" do
       let(:user) { build(:user) }
