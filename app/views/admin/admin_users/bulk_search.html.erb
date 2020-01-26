@@ -34,7 +34,7 @@
     <p><%= ts("#{pluralize(@results[:total], "email")} entered. #{@results[:searched]} searched. " + 
               "#{@results[:found_users].size} found. #{@results[:not_found_emails].size} not found. #{pluralize(@results[:duplicates], "duplicate")}.") %></p>
 
-    <% if @results[:not_found_emails] %>
+    <% if @results[:not_found_emails]&.any? %>
       <h3 class="heading"><%= ts("Not found") %></h3>
       <p><%= @results[:not_found_emails].join(", ") %></p>
     <% end %>
