@@ -165,6 +165,13 @@ RATE_LIMIT_NUMBER: 300
 RATE_LIMIT_PERIOD: 300
 RATE_LIMIT_LOGIN_ATTEMPTS: 5
 RATE_LIMIT_LOGIN_PERIOD: 20
+RATE_LIMIT_PER_NGINX_UPSTREAM:
+  unicorn_elastic:
+    limit: 300
+    period: 300
+  unicorn_elastic_bookmarks:
+    limit: 300
+    period: 300
 
 # The number of tags to show on the search page:
 TAGS_PER_SEARCH_PAGE: 50
@@ -462,5 +469,9 @@ CHARACTER_COUNT_SCRIPTS: ["Han", "Hiragana", "Katakana", "Thai"]
 
 
 # Cache durations for work and bookmark searches (in seconds)
-WORK_SEARCH_CACHE_DURATION: 1800
-BOOKMARK_SEARCH_CACHE_DURATION: 1800
+SECONDS_UNTIL_WORK_INDEX_EXPIRE: 1800
+SECONDS_UNTIL_BOOKMARK_INDEX_EXPIRE: 1800
+
+# Case-insensitive password for staging, plus a hint in case you forget.
+LOCKUP_CODEWORD: "secret"
+LOCKUP_HINT: "Don't tell anyone."

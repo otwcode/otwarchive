@@ -135,7 +135,8 @@ class User < ApplicationRecord
   end
 
   def remove_pseud_from_kudos
-    # NB: updates the kudos to remove the pseud, but the cache will not expire, and there's also issue 2198
+    # TODO: AO3-5054 Expire kudos cache when deleting a user.
+    # TODO: AO3-2195 Display orphaned kudos (no pseuds; no IPs so not counted as guest kudos).
     pseuds_list = pseuds.map(&:id)
     Kudo.where(["pseud_id IN (?)", pseuds_list]).update_all("pseud_id = NULL") if pseuds_list.present?
   end
@@ -260,10 +261,17 @@ class User < ApplicationRecord
   end
 
   def self.search_multiple_by_email(emails = [])
-    users = User.where(email: emails)
-    found_emails = users.map(&:email)
-    not_found = emails - found_emails
-    [users, not_found]
+    # Normalise and dedupe emails
+    all_emails = emails.map(&:downcase)
+    unique_emails = all_emails.uniq
+    # Find users and their email addresses
+    users = User.where(email: unique_emails)
+    found_emails = users.map(&:email).map(&:downcase)
+    # Remove found users from the total list of unique emails and count duplicates
+    not_found_emails = unique_emails - found_emails
+    num_duplicates = emails.size - unique_emails.size
+
+    [users, not_found_emails, num_duplicates]
   end
 
   ### AUTHENTICATION AND PASSWORDS

@@ -146,12 +146,6 @@ Given /^I log out$/ do
   step(%{I follow "Log Out"})
 end
 
-Given /^"([^"]*)" has the pseud "([^"]*)"$/ do |username, pseud|
-  step (%{I am logged in as "#{username}"})
-  step(%{"#{username}" creates the pseud "#{pseud}"})
-  step("I am logged out")
-end
-
 Given /^"([^"]*)" deletes their account/ do |username|
   visit user_path(username)
   step(%{I follow "Profile"})
@@ -184,25 +178,6 @@ end
 When /^the user "([^\"]*)" has failed to log in (\d+) times$/ do |login, count|
   user = User.find_by(login: login)
   user.update(failed_attempts: count.to_i)
-end
-
-When /^"([^\"]*)" creates the default pseud "([^"]*)"$/ do |username, newpseud|
-  visit new_user_pseud_path(username)
-  fill_in "Name", with: newpseud
-  check("pseud_is_default")
-  click_button "Create"
-end
-
-When /^"([^"]*)" creates the pseud "([^"]*)"$/ do |username, newpseud|
-  visit new_user_pseud_path(username)
-  fill_in "Name", with: newpseud
-  click_button "Create"
-end
-
-When /^I create the pseud "([^"]*)"$/ do |newpseud|
-  visit new_user_pseud_path(User.current_user)
-  fill_in "Name", with: newpseud
-  click_button "Create"
 end
 
 When /^I fill in the sign up form with valid data$/ do

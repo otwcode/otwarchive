@@ -164,13 +164,6 @@ class UserMailer < BulletproofMailer::Base
       I18n.locale = I18n.default_locale
   end
 
-  # Sends an admin message to an array of users
-  def mass_archive_notification(admin, users, subject, message)
-    users.each do |user|
-      archive_notification(admin, user, subject, message)
-    end
-  end
-
   def collection_notification(collection_id, subject, message)
     @message = message
     @collection = Collection.find(collection_id)

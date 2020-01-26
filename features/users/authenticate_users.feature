@@ -46,7 +46,7 @@ Feature: User Authentication
       And I fill in "Confirm new password" with "newpass"
       And I press "Change Password"
     Then I should see "We couldn't save this user because:"
-      And I should see "Password confirmation doesn't match confirmation"
+      And I should see "Password confirmation doesn't match new password."
 
     # and I should be able to change the password
     When I fill in "New password" with "new<pass"

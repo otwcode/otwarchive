@@ -315,6 +315,68 @@ describe UserMailer, type: :mailer do
       it "has the correct content" do
         expect(email).to have_html_part_content("Once your account is up and running, you can post your fanworks, set up email")
         expect(email).to have_text_part_content("follow this link to activate your account")
+
+        
+  describe "invite_increase_notification" do
+    let!(:user) { create(:user) }
+
+    context "when 1 invitation is issued" do
+      let(:count) { 1 }
+
+      subject(:email) { UserMailer.invite_increase_notification(user.id, count).deliver }
+
+      # Test the headers
+      it_behaves_like "an email with a valid sender"
+
+      it "has the correct subject line" do
+        expect(email.subject).to eq("[#{ArchiveConfig.APP_SHORT_NAME}] New Invitations")
+      end
+
+      # Test both body contents
+      it_behaves_like "a multipart email"
+
+      it_behaves_like "a translated email"
+
+      describe "HTML version" do
+        it "has the correct content" do
+          expect(email).to have_html_part_content("you have #{count} new invitation, which")
+        end
+      end
+
+      describe "text version" do
+        it "has the correct content" do
+          expect(email).to have_text_part_content("you have #{count} new invitation, which")
+        end
+      end
+    end
+
+    context "when multiple invitations are issued" do
+      let(:count) { 5 }
+
+      subject(:email) { UserMailer.invite_increase_notification(user.id, count).deliver }
+
+      # Test the headers
+      it_behaves_like "an email with a valid sender"
+
+      it "has the correct subject line" do
+        expect(email.subject).to eq("[#{ArchiveConfig.APP_SHORT_NAME}] New Invitations")
+      end
+
+      # Test both body contents
+      it_behaves_like "a multipart email"
+
+      it_behaves_like "a translated email"
+
+      describe "HTML version" do
+        it "has the correct content" do
+          expect(email).to have_html_part_content("you have #{count} new invitations, which")
+        end
+      end
+
+      describe "text version" do
+        it "has the correct content" do
+          expect(email).to have_text_part_content("you have #{count} new invitations, which")
+        end
       end
     end
   end
