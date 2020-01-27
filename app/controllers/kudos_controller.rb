@@ -14,6 +14,7 @@ class KudosController < ApplicationController
     @kudo = Kudo.new(kudo_params)
     if current_user.present?
       @kudo.pseud = current_user.default_pseud
+      @kudo.user = current_user
     else
       @kudo.ip_address = request.remote_ip
     end
