@@ -133,6 +133,13 @@
   border: 0;
 }
 
+.userstuff[dir="rtl"] blockquote:not([dir="ltr"]),
+.userstuff blockquote[dir="rtl"] {
+  margin: auto 1.5em auto auto;
+  border-left: none;
+  border-right: 2px solid #999;
+}
+
 .userstuff hr {
   width: 33%;
   margin: 0.875em auto 1.2525em auto;
