@@ -7,6 +7,10 @@ module LanguageHelper
     %w(ar he).include?(Globalize.locale.to_s)
   end
 
+  def post_rtl?(post)
+    %w(ar he).include?(post.language.short)
+  end
+
   def english?
     params[:language_id] == "en"
   end
