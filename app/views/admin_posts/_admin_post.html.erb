@@ -1,12 +1,8 @@
 <% # expects "admin_post" %>
-<% if %w(ar he).include?(admin_post.language.short) %>
-  <div dir="rtl" class="header">
-<% else %>
-  <div class="header">
-<% end %>
-<h3 class="heading">
-  <%= link_to admin_post.title.html_safe, admin_post %>
-</h3>
+<div <% if post_rtl?(admin_post) %>dir="rtl"<% end %> class="header">
+  <h3 class="heading">
+   <%= link_to admin_post.title.html_safe, admin_post %>
+  </h3>
 </div>
 <h4 class="landmark heading"><%= ts("Post Header") %></h4>
 <div class="wrapper">
@@ -38,10 +34,6 @@
     <% end %>
   </dl>
 </div>
-<% if %w(ar he).include?(admin_post.language.short) %>
-  <div dir="rtl" class="userstuff">
-<% else %>
-  <div class="userstuff">
-<% end %>
-<%= raw sanitize_field(admin_post, :content) %>
+<div <% if post_rtl?(admin_post) %>dir="rtl"<% end %> class="userstuff">
+  <%= raw sanitize_field(admin_post, :content) %>
 </div>
