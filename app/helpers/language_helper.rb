@@ -7,7 +7,7 @@ module LanguageHelper
     %w(ar he).include?(Globalize.locale.to_s)
   end
 
-  def is_rtl?(lang)
+  def rtl_lang?(lang)
     %w(ar he).include?(lang)
   end
 
