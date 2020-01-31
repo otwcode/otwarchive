@@ -7,8 +7,8 @@ module LanguageHelper
     %w(ar he).include?(Globalize.locale.to_s)
   end
 
-  def post_rtl?(post)
-    %w(ar he).include?(post.language.short)
+  def is_rtl?(lang)
+    %w(ar he).include?(lang)
   end
 
   def english?
