@@ -34,6 +34,6 @@
     <% end %>
   </dl>
 </div>
-<div <% if is_rtl?(admin_post.language.short) %>dir="rtl"<% end %> class="userstuff">
+<div <% if rtl_lang?(admin_post.language.short) %>dir="rtl"<% end %> class="userstuff">
   <%= raw sanitize_field(admin_post, :content) %>
 </div>
