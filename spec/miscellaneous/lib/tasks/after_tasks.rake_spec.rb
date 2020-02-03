@@ -97,3 +97,35 @@ describe "rake After:unhide_invited_works" do
     end
   end
 end
+
+describe "rake After:add_user_id_to_kudos" do
+  let(:pseud) { create(:pseud) }
+  let!(:guest_kudos) { create(:kudo, ip_address: "0.00.0.000") }
+  let!(:orphaned_kudos) { create(:kudo) }
+  let!(:broken_kudos) { create(:kudo, pseud_id: 5678910) }
+  let!(:user_kudos) { create(:kudo, pseud_id: pseud.id) }
+
+  it "doesn't add user_id to guest kudos with only an ip_address" do
+    subject.invoke
+    guest_kudos.reload
+    expect(guest_kudos.user_id).to be(nil)  
+  end
+
+  it "doesn't add user_id to orphaned kudos with no pseud_id or ip_address" do
+    subject.invoke
+    orphaned_kudos.reload
+    expect(orphaned_kudos.user_id).to be(nil)  
+  end
+
+  it "doesn't add user_id to broken kudos with a pseud_id belonging to a nonexistent user" do
+    subject.invoke
+    broken_kudos.reload
+    expect(broken_kudos.user_id).to eq(nil)  
+  end
+
+  it "adds user_id to kudos with a pseud_id belonging to an existing user" do
+    subject.invoke
+    user_kudos.reload
+    expect(user_kudos.user_id).to eq(pseud.user_id)  
+  end
+end
