@@ -99,33 +99,59 @@ describe "rake After:unhide_invited_works" do
 end
 
 describe "rake After:add_user_id_to_kudos" do
-  let(:pseud) { create(:pseud) }
-  let!(:guest_kudos) { create(:kudo, ip_address: "0.00.0.000") }
-  let!(:orphaned_kudos) { create(:kudo) }
-  let!(:broken_kudos) { create(:kudo, pseud_id: 5_678_910) }
-  let!(:user_kudos) { create(:kudo, pseud_id: pseud.id) }
+  context "when the kudos has no pseud_id" do
+    it "doesn't add user_id if the kudos has an ip_address" do
+      guest_kudos = create(:kudo, ip_address: "0.00.0.000")
 
-  it "doesn't add user_id to guest kudos with only an ip_address" do
-    subject.invoke
-    guest_kudos.reload
-    expect(guest_kudos.user_id).to be(nil)  
+      subject.invoke
+
+      guest_kudos.reload
+      expect(guest_kudos.user_id).to be(nil)  
+    end
+
+    it "doesn't add user_id if the kudos has no ip_address" do
+      orphaned_kudos = create(:kudo)
+
+      subject.invoke
+
+      orphaned_kudos.reload
+      expect(orphaned_kudos.user_id).to be(nil)  
+    end
   end
 
-  it "doesn't add user_id to orphaned kudos with no pseud_id or ip_address" do
-    subject.invoke
-    orphaned_kudos.reload
-    expect(orphaned_kudos.user_id).to be(nil)  
-  end
+  context "when the kudos has a pseud_id" do
+    context "when the pseud exists" do
+      it "doesn't add user_id if the user does not exist" do
+        userless_pseud = create(:pseud)
+        userless_kudos = create(:kudo, pseud_id: userless_pseud.id)
+        userless_pseud.update_columns(user_id: 0)
 
-  it "doesn't add user_id to broken kudos with a pseud_id belonging to a nonexistent user" do
-    subject.invoke
-    broken_kudos.reload
-    expect(broken_kudos.user_id).to eq(nil)  
-  end
+        subject.invoke
+  
+        userless_kudos.reload
+        expect(userless_kudos.user_id).to eq(nil)  
+      end
 
-  it "adds user_id to kudos with a pseud_id belonging to an existing user" do
-    subject.invoke
-    user_kudos.reload
-    expect(user_kudos.user_id).to eq(pseud.user_id)  
+      it "adds user_id if the user exists" do
+        pseud = create(:pseud)
+        user_kudos = create(:kudo, pseud_id: pseud.id)
+
+        subject.invoke
+  
+        user_kudos.reload
+        expect(user_kudos.user_id).to eq(pseud.user_id)  
+      end
+    end
+
+    context "when the pseud doesn't exist" do
+      it "doesn't add user_id" do
+        pseudless_kudos = create(:kudo, pseud_id: 0)
+
+        subject.invoke
+  
+        pseudless_kudos.reload
+        expect(pseudless_kudos.user_id).to eq(nil)  
+      end
+    end
   end
 end
