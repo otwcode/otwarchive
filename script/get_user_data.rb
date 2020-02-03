@@ -67,8 +67,8 @@ user_agents = []
 u.comments.pluck(:user_agent)&.map { |ua| user_agents << ua unless ua.blank? }
 
 # Lists of IP addresses and previous email addresses and usernames
-# Actions that are or may be taken by admins are excluded to avoid revealing
-# admins' IP addresses
+# Actions that are or may be taken by admins, e.g. account activation, are
+# excluded to avoid revealing admins' IP addresses
 # We migrated to Devise on 27 December, 2018
 previous_usernames = []
 previous_emails = []
@@ -85,12 +85,6 @@ audits.map do |audit|
     changes.each do |k, v|
       case k
       when "accepted_tos_version"
-        ips << ip unless ip.blank?
-      # Activated account, pre-Devise
-      when "activated_at"
-        ips << ip unless ip.blank?
-      # Confirmed account creation, post-Devise
-      when "confirmed_at"
         ips << ip unless ip.blank?
       # Changed email address
       when "email"
