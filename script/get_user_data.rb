@@ -66,9 +66,11 @@ u.works.pluck(:ip_address)&.map { |ip| ips << ip unless ip.blank? }
 user_agents = []
 u.comments.pluck(:user_agent)&.map { |ua| user_agents << ua unless ua.blank? }
 
+
 # Lists of IP addresses and previous email addresses and usernames
 # Actions that are or may be taken by admins are excluded to avoid revealing
 # admins' IP addresses
+# We migrated to Devise on 27 December, 2018
 previous_usernames = []
 previous_emails = []
 audits = u.audits.pluck(:action, :audited_changes, :remote_address)
@@ -85,23 +87,51 @@ audits.map do |audit|
       case k
       when "accepted_tos_version"
         ips << ip unless ip.blank?
+      # Activated account, pre-Devise
+      when "activated_at"
+        ips << ip unless ip.blank?
+      # Confirmed account creation, post-Devise
+      when "confirmed_at"
+        ips << ip unless ip.blank?
       # Changed email address
       when "email"
         ips << ip unless ip.blank?
         previous_emails << v[0] unless v[0].blank?
+      # Changed password, post-Devise
+      when "encrypted_password"
+        ips << ip unless ip.blank?
+      # Failed login attempt, post-Devise
+      # This is currently only recorded after a password reset or after the
+      # account is locked and unlocked
+      when "failed_attempts"
+        ips << ip unless ip.blank?
+      # Failed login attempt, pre-Devise
       when "failed_login_count"
+        ips << ip unless ip.blank?
+      # Failed login attempt that resulted in account being locked, post-Devise
+      when "locked_at"
         ips << ip unless ip.blank?
       # Changed username
       when "login"
         ips << ip unless ip.blank?
         previous_usernames << v[0] unless v[0].blank?
-      # Requested password reset email
+      # Requested password reset email, pre-Devise
       when "recently_reset"
+        ips << ip unless ip.blank?
+      # Submitted login form with "Remember me" checked, post-Devise
+      # This is recorded whether the login attempt was successful or not
+      when "remember_created_at"
+        ips << ip unless ip.blank?
+      # Requested password reset email, post-Devise
+      when "reset_password_sent_at"
+        ips << ip unless ip.blank?
+      # Logged in, post-Devise
+      when "sign_in_count"
         ips << ip unless ip.blank?
       end
     end
-  end
-end
+   end
+ end
 
 
 puts "Data for #{u.login} (#{u.email})"
