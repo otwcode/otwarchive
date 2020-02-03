@@ -102,7 +102,7 @@ describe "rake After:add_user_id_to_kudos" do
   let(:pseud) { create(:pseud) }
   let!(:guest_kudos) { create(:kudo, ip_address: "0.00.0.000") }
   let!(:orphaned_kudos) { create(:kudo) }
-  let!(:broken_kudos) { create(:kudo, pseud_id: 5678910) }
+  let!(:broken_kudos) { create(:kudo, pseud_id: 5_678_910) }
   let!(:user_kudos) { create(:kudo, pseud_id: pseud.id) }
 
   it "doesn't add user_id to guest kudos with only an ip_address" do

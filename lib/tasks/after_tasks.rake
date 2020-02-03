@@ -634,12 +634,12 @@ namespace :After do
 
   desc "Add user_id to existing logged in kudos"
   task(add_user_id_to_kudos: :environment) do
-    kudos = Kudo.where("pseud_id IS NOT NULL")
-    kudos_count = kudos.count
+    kudos_to_update = Kudo.where("pseud_id IS NOT NULL")
+    kudos_count = kudos_to_update.count
     estimated_batches = kudos_count / 1000
     puts "Total number of kudos to check: #{kudos_count}"
 
-    kudos.find_in_batches.with_index do |batch, index|
+    kudos_to_update.find_in_batches.with_index do |batch, index|
       batch_number = index + 1
       batch.each do |kudos|
         kudos.user_id = kudos.pseud&.user_id
