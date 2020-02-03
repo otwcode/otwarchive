@@ -66,7 +66,6 @@ u.works.pluck(:ip_address)&.map { |ip| ips << ip unless ip.blank? }
 user_agents = []
 u.comments.pluck(:user_agent)&.map { |ua| user_agents << ua unless ua.blank? }
 
-
 # Lists of IP addresses and previous email addresses and usernames
 # Actions that are or may be taken by admins are excluded to avoid revealing
 # admins' IP addresses
@@ -130,8 +129,8 @@ audits.map do |audit|
         ips << ip unless ip.blank?
       end
     end
-   end
- end
+  end
+end
 
 
 puts "Data for #{u.login} (#{u.email})"
