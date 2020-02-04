@@ -99,59 +99,79 @@ describe "rake After:unhide_invited_works" do
 end
 
 describe "rake After:add_user_id_to_kudos" do
-  context "when the kudos has no pseud_id" do
-    it "doesn't add user_id if the kudos has an ip_address" do
-      guest_kudos = create(:kudo, ip_address: "127.0.0.1")
+  context "when user has no pseud" do
+    it "runs without erroring or updating user_id or pseud_id" do
+      pseudless_user = create(:user)
+      deleted_pseud_kudos = create(:kudo,
+                                   pseud_id: pseudless_user.default_pseud_id)
+
+      pseudless_user.default_pseud.delete
+      pseudless_user.reload
+      deleted_pseud_kudos.reload
 
       subject.invoke
 
-      guest_kudos.reload
-      expect(guest_kudos.user_id).to be(nil)  
-    end
-
-    it "doesn't add user_id if the kudos has no ip_address" do
-      orphaned_kudos = create(:kudo)
-
-      subject.invoke
-
-      orphaned_kudos.reload
-      expect(orphaned_kudos.user_id).to be(nil)  
+      deleted_pseud_kudos.reload
+      expect(deleted_pseud_kudos.user_id).to be(nil)
+      expect(deleted_pseud_kudos.pseud_id).not_to be(nil)      
     end
   end
 
-  context "when the kudos has a pseud_id" do
-    context "when the pseud exists" do
-      it "doesn't add user_id if the user does not exist" do
-        userless_pseud = create(:pseud)
-        userless_kudos = create(:kudo, pseud_id: userless_pseud.id)
-        userless_pseud.update_columns(user_id: 0)
+  context "when user has a pseud" do
+    # If the user has left kudos on a work and is later added to it as a
+    # co-creator, the kudos will be invalid due to the is_author? validation.
+    # The kudos should still update because update_all skips validations.
+    context "when kudos is invalid" do
+      it "adds user_id and doesn't update pseud_id" do
+        co_creator = create(:user)
+        work = create(:work)
+        co_creator_kudos = create(:kudo,
+                                  commentable: work,
+                                  pseud_id: co_creator.default_pseud_id)
+
+        # Add user to work.
+        work.creatorships.create(pseud: co_creator.default_pseud)
+        work.reload
 
         subject.invoke
-  
-        userless_kudos.reload
-        expect(userless_kudos.user_id).to eq(nil)  
-      end
 
-      it "adds user_id if the user exists" do
-        pseud = create(:pseud)
-        user_kudos = create(:kudo, pseud_id: pseud.id)
-
-        subject.invoke
-  
-        user_kudos.reload
-        expect(user_kudos.user_id).to eq(pseud.user_id)  
+        co_creator_kudos.reload
+        expect(co_creator_kudos.user_id).to eq(co_creator.id)
+        expect(co_creator_kudos.pseud_id).to eq(co_creator.default_pseud_id)
       end
     end
 
-    context "when the pseud doesn't exist" do
-      it "doesn't add user_id" do
-        pseudless_kudos = create(:kudo, pseud_id: 0)
+    context "when kudos is valid" do
+      it "adds user_id and doesn't update pseud_id" do
+        user = create(:user)
+        user_kudos = create(:kudo, pseud_id: user.default_pseud_id)
 
         subject.invoke
-  
-        pseudless_kudos.reload
-        expect(pseudless_kudos.user_id).to eq(nil)  
+
+        user_kudos.reload
+        expect(user_kudos.user_id).to eq(user.id)
+        expect(user_kudos.pseud_id).to eq(user.default_pseud_id)
       end
+    end
+  end
+
+  context "when the user has multiple pseuds" do
+    it "updates user_id for all pseuds' kudos" do
+      user_with_pseuds = create(:user)
+      second_pseud = create(:pseud, user_id: user_with_pseuds.id)
+      default_pseud_kudos = create(:kudo,
+                                   pseud_id: user_with_pseuds.default_pseud_id)
+      second_pseud_kudos = create(:kudo, pseud_id: second_pseud.id)
+
+      subject.invoke
+
+      default_pseud_kudos.reload
+      expect(default_pseud_kudos.user_id).to eq(user_with_pseuds.id)
+      expect(default_pseud_kudos.pseud_id).to eq(user_with_pseuds.default_pseud_id)
+
+      second_pseud_kudos.reload
+      expect(second_pseud_kudos.user_id).to eq(user_with_pseuds.id)
+      expect(second_pseud_kudos.pseud_id).to eq(second_pseud.id)
     end
   end
 end
