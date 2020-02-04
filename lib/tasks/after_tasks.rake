@@ -632,22 +632,19 @@ namespace :After do
     puts && STDOUT.flush
   end
 
-  desc "Add user_id to existing logged in kudos without user_ids"
+  desc "Update each user's kudos with the user's id"
   task(add_user_id_to_kudos: :environment) do
-    kudos_to_update = Kudo.where("pseud_id IS NOT NULL AND user_id IS NULL")
-    kudos_count = kudos_to_update.count
-    total_batches = kudos_count / 1000
-    puts "Total number of kudos to check: #{kudos_count}"
+    total_users = User.all.size
+    total_batches = (total_users + 999) / 1000
+    puts "Updating #{total_users} users' kudos in #{total_batches} batches"
 
-    kudos_to_update.find_in_batches.with_index do |batch, index|
+    User.find_in_batches.with_index do |batch, index|
       batch_number = index + 1
-      progress_msg = "Batch #{batch_number} of about #{total_batches} complete"
-      batch.each do |kudos|
-        # Skip unless the pseud and user exist.
-        next unless kudos&.pseud&.user
-
-        kudos.user_id = kudos.pseud.user_id
-        kudos.save if kudos.changed?
+      progress_msg = "Batch #{batch_number} of #{total_batches} complete"
+      batch.each do |user|
+        Kudo.where(pseud_id: user.pseud_ids)
+          .where(user_id: nil)
+          .update_all(user_id: user.id)
       end
       puts(progress_msg) && STDOUT.flush
     end
