@@ -101,7 +101,7 @@ end
 describe "rake After:add_user_id_to_kudos" do
   context "when the kudos has no pseud_id" do
     it "doesn't add user_id if the kudos has an ip_address" do
-      guest_kudos = create(:kudo, ip_address: "0.00.0.000")
+      guest_kudos = create(:kudo, ip_address: "127.0.0.1")
 
       subject.invoke
 
