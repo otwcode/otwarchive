@@ -128,16 +128,23 @@
   border-left: 2px solid #999;
 }
 
-.userstuff blockquote blockquote {
+.userstuff blockquote[dir="ltr"] {
+  text-align: left;
+}
+
+.userstuff blockquote blockquote,
+.userstuff blockquote blockquote[dir="rtl"] {
   padding: 0.25em;
   border: 0;
 }
 
 .userstuff[dir="rtl"] blockquote:not([dir="ltr"]),
+.userstuff [dir="rtl"] blockquote:not([dir="ltr"]),
 .userstuff blockquote[dir="rtl"] {
   margin: auto 1.5em auto auto;
   border-left: none;
   border-right: 2px solid #999;
+  text-align: right;
 }
 
 .userstuff hr {
