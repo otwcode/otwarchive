@@ -102,8 +102,9 @@ describe "rake After:add_user_id_to_kudos" do
   context "when user has no pseud" do
     it "runs without erroring or updating user_id or pseud_id" do
       pseudless_user = create(:user)
+      deleted_pseud_id = pseudless_user.default_pseud_id
       deleted_pseud_kudos = create(:kudo,
-                                   pseud_id: pseudless_user.default_pseud_id)
+                                   pseud_id: deleted_pseud_id)
 
       pseudless_user.default_pseud.delete
       pseudless_user.reload
@@ -113,7 +114,7 @@ describe "rake After:add_user_id_to_kudos" do
 
       deleted_pseud_kudos.reload
       expect(deleted_pseud_kudos.user_id).to be(nil)
-      expect(deleted_pseud_kudos.pseud_id).not_to be(nil)      
+      expect(deleted_pseud_kudos.pseud_id).to eq(deleted_pseud_id)      
     end
   end
 
