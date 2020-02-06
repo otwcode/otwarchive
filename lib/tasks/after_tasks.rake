@@ -638,12 +638,11 @@ namespace :After do
     total_batches = (total_users + 999) / 1000
     puts "Updating #{total_users} users' kudos in #{total_batches} batches"
 
-    User.find_in_batches.with_index do |batch, index|
+    User.includes(:pseuds).find_in_batches.with_index do |batch, index|
       batch_number = index + 1
       progress_msg = "Batch #{batch_number} of #{total_batches} complete"
       batch.each do |user|
-        Kudo.where(pseud_id: user.pseud_ids)
-          .where(user_id: nil)
+        Kudo.where(pseud_id: user.pseud_ids, user_id: nil)
           .update_all(user_id: user.id)
       end
       puts(progress_msg) && STDOUT.flush
