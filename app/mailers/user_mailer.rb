@@ -53,19 +53,19 @@ class UserMailer < BulletproofMailer::Base
     @becoming_anonymous = anonymous
     @becoming_unrevealed = unrevealed
 
-    I18n.with_locale(Locale.find(@user.preference.preferred_locale).iso) do
-      @status = if anonymous && unrevealed
-                  t(".status.anonymous_unrevealed")
-                elsif anonymous
-                  t(".status.anonymous")
-                else
-                  t(".status.unrevealed")
-                end
+    # Symbol used to pick the appropriate translation string:
+    @status = if anonymous && unrevealed
+                :anonymous_unrevealed
+              elsif anonymous
+                :anonymous
+              else
+                :unrevealed
+              end
 
+    I18n.with_locale(Locale.find(@user.preference.preferred_locale).iso) do
       mail(
         to: @user.email,
-        subject: t(".subject",
-                   status: @status,
+        subject: t(".subject.#{@status}",
                    app_name: ArchiveConfig.APP_SHORT_NAME)
       )
     end
