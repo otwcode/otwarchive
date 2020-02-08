@@ -182,6 +182,8 @@ module UsersHelper
       t('users_helper.log_email_change', default: 'Email Changed')
     elsif action == ArchiveConfig.ACTION_TROUBLESHOOT
       t('users_helper.log_troubleshot', default: 'Account Troubleshot')
+    elsif action == ArchiveConfig.ACTION_NOTE
+      t('users_helper.log_note', default: 'Note Added')
     end
   end
 
