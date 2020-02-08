@@ -1,0 +1,32 @@
+---
+id:
+  mailer:
+    kudos:
+      you_have: "[%{app_name}] Anda mendapatkan jempol!"
+  user_mailer:
+    delete_work_notification:
+      hello: Kepada %{user},
+      html:
+        part1_other: Karya Anda, %{title}, telah dihapus atas permintaan %{pseud}.
+        part1_yourself: Karya Anda, %{title}, telah dihapus atas permintaan Anda.
+        part2: Jika Anda memiliki pertanyaan, silakan %{support}.
+      part2: Jika Anda memiliki pertanyaan, silakan %{support}.
+      part3: Attached is a copy of your work for your reference.
+      subject: "[%{app_name}] Karya Anda telah dihapus"
+      support: hubungi Komite Dukungan
+      text:
+        part1_other: Karya Anda, \"%{title}\", telah dihapus atas permintaan %{pseud}.
+        part1_yourself: Karya Anda, \"%{title}\", telah dihapus atas permintaan Anda.
+        part2: Jika Anda memiliki pertanyaan, silakan %{support} (%{url}).
+    invite_increase_notification:
+      closing: Salam,
+      greeting: " Hi %{login}!"
+      html: |-
+        <p> Halo %{login}! </p>\n\
+                  <p> Kami hanya ingin memberitahu Anda, bahwa Anda memiliki %{total} undangan baru yang dapat digunakan untuk membuat akun baru di Archive of Our Own - AO3 (Arsip Milik Kita). Anda dapat mengundang teman Anda di %{invitation_page}. </p>\n\
+                  <p> Salam, <br> %{archive_name}</p>
+      subject: "[%{app_name}] Undangan Baru"
+      txt: "Halo %{login}\n          Kami hanya ingin memberitahu Anda,  bahwa Anda
+        memiliki %{total} undangan baru yang dapat digunakan untuk membuat akun baru
+        di Archive of Our Own - AO3 (Arsip Milik Kita). Anda dapat mengundang teman
+        Anda di %{invitation_page}.\n          Salam, \n          %{archive_name}\n"

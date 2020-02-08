@@ -1,9 +1,5 @@
 ---
 sl:
-  activerecord:
-    errors:
-      messages:
-        record_invalid: ''
   date:
     abbr_day_names:
     - ned
@@ -60,67 +56,67 @@ sl:
   datetime:
     distance_in_words:
       about_x_hours:
-        one: okoli 1 ura
-        two: okoli 2 uri
         few: okoli %{count} ure
+        one: okoli 1 ura
         other: okoli %{count} ur
+        two: okoli 2 uri
       about_x_months:
-        one: okoli 1 mesec
-        two: okoli 2 meseca
         few: okoli %{count} mesece
+        one: okoli 1 mesec
         other: okoli %{count} mesecev
+        two: okoli 2 meseca
       about_x_years:
-        one: okoli 1 leto
-        two: okoli 2 leti
         few: okoli %{count} leta
+        one: okoli 1 leto
         other: okoli %{count} let
+        two: okoli 2 leti
       almost_x_years:
-        one: skoraj 1 leto
-        two: skoraj 2 leti
         few: skoraj %{count} leta
+        one: skoraj 1 leto
         other: skoraj %{count} let
+        two: skoraj 2 leti
       half_a_minute: pol minute
-      less_than_x_seconds:
-        one: manj kot 1 sekunda
-        two: manj kot 2 sekundi
-        few: manj kot %{count} sekunde
-        other: manj kot %{count} sekund
       less_than_x_minutes:
-        one: manj kot ena minuta
-        two: manj kot dve minuti
         few: manj kot %{count} minute
+        one: manj kot ena minuta
         other: manj kot %{count} minut
+        two: manj kot dve minuti
+      less_than_x_seconds:
+        few: manj kot %{count} sekunde
+        one: manj kot 1 sekunda
+        other: manj kot %{count} sekund
+        two: manj kot 2 sekundi
       over_x_years:
-        one: več kot 1 leto
-        two: več kot 2 leti
         few: več kot %{count} leta
+        one: več kot 1 leto
         other: več kot %{count} let
-      x_seconds:
-        one: 1 sekunda
-        two: 2 sekundi
-        few: "%{count} sekunde"
-        other: "%{count} sekund"
-      x_minutes:
-        one: 1 minuta
-        two: 2 minuti
-        few: "%{count} minute"
-        other: "%{count} minut"
+        two: več kot 2 leti
       x_days:
-        one: 1 dan
-        two: 2 dneva
         few: "%{count} dnevi"
+        one: 1 dan
         other: "%{count} dni"
+        two: 2 dneva
+      x_minutes:
+        few: "%{count} minute"
+        one: 1 minuta
+        other: "%{count} minut"
+        two: 2 minuti
       x_months:
-        one: 1 mesec
-        two: 2 meseca
         few: "%{count} mesece"
+        one: 1 mesec
         other: "%{count} mesecev"
+        two: 2 meseca
+      x_seconds:
+        few: "%{count} sekunde"
+        one: 1 sekunda
+        other: "%{count} sekund"
+        two: 2 sekundi
     prompts:
-      second: Sekunde
-      minute: Minute
-      hour: Ura
       day: Dan
+      hour: Ura
+      minute: Minute
       month: Mesec
+      second: Sekunde
       year: Leto
   errors:
     format: "%{attribute} %{message}"
@@ -141,16 +137,13 @@ sl:
       not_a_number: ni številka
       odd: mora biti liho
       taken: je že zasedeno
-      too_long: je predolgo (dovoljeno je do %{count} znakov)
-      too_short: je prekratko (zahtevano je najmanj %{count} znakov)
-      wrong_length: je napačne dolžine (mora biti natančno %{count} znakov)
     template:
       body: 'Napačno izpolnjena polja:'
       header:
-        one: Ena napaka preprečuje, da bi shranili %{model}
-        two: Dve napaki preprečujeta, da bi shranili %{model}
         few: "%{count} napake preprečujejo, da bi shranili %{model}"
+        one: Ena napaka preprečuje, da bi shranili %{model}
         other: "%{count} napak preprečuje, da bi shranili %{model}"
+        two: Dve napaki preprečujeta, da bi shranili %{model}
   number:
     currency:
       format:
@@ -170,10 +163,7 @@ sl:
     human:
       decimal_units:
         format: "%n %u"
-        units:
-          unit: ''
       format:
-        delimiter: ''
         precision: 1
         significant: true
         strip_insignificant_zeros: true
@@ -181,20 +171,14 @@ sl:
         format: "%n %u"
         units:
           byte:
-            one: Byte
-            two: Bytes
             few: Bytes
+            one: Byte
             other: Bytes
+            two: Bytes
           gb: GB
           kb: KB
           mb: MB
           tb: TB
-    percentage:
-      format:
-        delimiter: ''
-    precision:
-      format:
-        delimiter: ''
   support:
     array:
       last_word_connector: " in "

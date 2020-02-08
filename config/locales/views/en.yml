@@ -1,28 +1,34 @@
+---
 en:
   admin:
     blacklist:
       emails_found:
-        one: "one email found"
+        one: one email found
         other: "%{count} emails found"
   users:
     delete_preview:
-      heading: "What do you want to do with your works?"
-      orphan: "orphan"
-      orphaning: "orphaning"
-      submit: "Save"
-      cancel: "Cancel"
-      confirm: "Are you sure? This can't be undone!"
-      options:
-        keep_pseud: "Leave my pseud but attach to the orphan account"
-        orphan_pseud: "Change my pseud to \"orphan\" and attach to the orphan account"
-        remove: "Remove me completely as co-creator"
-        delete: "Delete completely"
+      cancel: Cancel
+      confirm: Are you sure? This can't be undone!
       co_creations:
-        legend: "Works You Made With Others"
-        summary: "You have %{work_count} work(s) co-created with the following users: %{co_creators}."
-        orphan_info: "You are not able to delete these as they are shared works, but you can %{orphan_link} them or remove yourself completely as a co-creator."
+        legend: Works You Made With Others
+        orphan_info: You are not able to delete these as they are shared works, but
+          you can %{orphan_link} them or remove yourself completely as a co-creator.
+        summary: 'You have %{work_count} work(s) co-created with the following users:
+          %{co_creators}.'
+      heading: What do you want to do with your works?
+      options:
+        delete: Delete completely
+        keep_pseud: Leave my pseud but attach to the orphan account
+        orphan_pseud: Change my pseud to "orphan" and attach to the orphan account
+        remove: Remove me completely as co-creator
+      orphan: orphan
+      orphaning: orphaning
       sole_creations:
-        legend: "Works and Collections You Made By Yourself"
-        works_summary: "You have %{work_count} work(s) under the following pseuds: %{pseuds}."
-        collections_summary: "You have %{collection_count} collection(s) under the following pseuds: %{pseuds}."
-        options_info: "You can delete them, but please consider %{orphaning_link} them instead!"
+        collections_summary: 'You have %{collection_count} collection(s) under the
+          following pseuds: %{pseuds}.'
+        legend: Works and Collections You Made By Yourself
+        options_info: You can delete them, but please consider %{orphaning_link} them
+          instead!
+        works_summary: 'You have %{work_count} work(s) under the following pseuds:
+          %{pseuds}.'
+      submit: Save

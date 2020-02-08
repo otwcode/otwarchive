@@ -1,0 +1,76 @@
+---
+fr:
+  mailer:
+    kudos:
+      guest:
+        one: un/une invité-e
+        other: "%{count} invité-e-s"
+  user_mailer:
+    creatorship_notification:
+      explanation: Lorsque vous êtes co-créateur-trice d’une œuvre, votre nom peut
+        être ajouté à de nouveaux chapitres quels que soient les paramètres de la
+        co-création. Il pourra également être ajouté à toute série à laquelle l’œuvre
+        serait annexée.
+      html:
+        creation: "%{creation_link} par %{pseud_links}"
+        edit: modifier le/la %{type}
+        remove: Si votre nom a été ajouté par erreur ou si vous ne voulez pas qu’il
+          figure en tant que co-créateur-trice, vous pouvez %{edit} afin d’être retiré-e
+          des co-créateur-trice-s.
+      intro: L’utilisateur-trice %{adding_user} a ajouté votre pseudo %{pseud} en
+        tant que co-créateur-trice pour le/la %{type} suivant-e
+      subject: "[%{app_name}] Notification de Co-création"
+      text:
+        creation: "%{title} (%{url}) par %{pseuds}"
+        remove: 'Si votre nom a été ajouté par erreur ou si vous ne voulez pas qu’il
+          figure en tant que co-créateur-trice, vous pouvez modifier le/la %{type}
+          afin d’être retiré-e des co-créateur-trice-s : %{url}'
+    creatorship_notification_archivist:
+      html:
+        creation: "%{creation_link} par %{pseud_links}"
+        edit: modifier le/la %{type}
+        remove: Si votre nom a été ajouté par erreur ou si vous ne voulez pas qu’il
+          figure en tant que co-créateur-trice, vous pouvez %{edit} afin d’être retiré-e
+          des co-créateur-trice-s.
+      text:
+        creation: "%{title} (%{url}) par %{pseuds}"
+        remove: 'Si votre nom a été ajouté par erreur ou si vous ne voulez pas qu’il
+          figure en tant que co-créateur-trice, vous pouvez modifier le/la %{type}
+          afin d’être retiré-e des co-créateur-trice-s : %{url}'
+    delete_work_notification:
+      hello: Cher-ère %{user},
+      html:
+        part1_other: Votre œuvre %{title} a été supprimée suite à la demande de %{pseud}.
+        part1_yourself: Votre œuvre %{title} a été supprimée suite à la demande de
+          %{pseud}.
+        part2: Si vous avez des questions, veuillez %{support}.
+      part2: Si vous avez des questions, veuillez %{support} (%{url})
+      part3: Ci-joint une copie de votre œuvre pour référence.
+      subject: "[%{app_name}] Votre œuvre a été supprimée"
+      support: contacter le Support Technique
+      text:
+        part1_other: Votre œuvre "%{title}" a été supprimée suite à la demande de
+          %{pseud}.
+        part1_yourself: Votre œuvre "%{title}" a été supprimée suite à votre demande.
+        part2: Si vous avez des questions, veuillez %{support} (%{url}).
+    invite_increase_notification:
+      body:
+        one: " Nous vous envoyons ce message pour vous informer que vous possédez
+          %{count}  nouvelle invitation, permettant de créer un nouveau compte sur
+          l’archive. Vous pouvez aussi inviter un-e ami-e à l’adresse suivante : %{invitation_page}."
+        other: " Nous vous envoyons ce message pour vous informer que vous possédez
+          %{count}  nouvelles invitations, permettant de créer de nouveaux comptes
+          sur l’archive. Vous pouvez aussi inviter un-e ami-e à l’adresse suivante
+          : %{invitation_page}."
+      closing: Cordialement,
+      greeting: 'Bonjour %{login} ! '
+      html: |-
+        <p> Bonjour %{login} ! </p>\n\
+                  <p> Nous vous envoyons ce message pour vous informer que vous possédez %{total} nouvelle(s) invitation(s), permettant de créer de nouveaux comptes sur l’archive. Vous pouvez aussi inviter un-e ami-e à l’adresse suivante : %{invitation_page}. </p>\n\
+                  <p> Cordialement, <br> %{archive_name}</p>
+      subject: "[%{app_name}] Nouvelles Invitations"
+      txt: |-
+        Bonjour %{login} !
+                 Nous vous envoyons ce message pour vous informer que vous possédez %{total}  nouvelle(s) invitation(s), permettant de créer de nouveaux comptes sur l’archive. Vous pouvez aussi inviter un-e ami-e à l’adresse suivante : %{invitation_page}.
+                  Cordialement,
+                  %{archive_name}

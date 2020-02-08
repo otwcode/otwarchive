@@ -1,0 +1,64 @@
+---
+hr:
+  mailer:
+    general:
+      footer:
+        general:
+          html: |-
+            <p>
+             Ako ste ovu poruku primili pogreškom, molimo vas <a href="%{support_url}" style="color:#ffffff; text-decoration:underline">javite se korisničkoj podršci</a>.
+            </p>
+
+            <p>
+             Naš vlastiti arhiv je od fanova za fanove, te ovisi o <a href="%{donate_url}" style="color:#ffffff; text-decoration:underline">vašim donacijama</a>.
+            </p>
+          text: "Ako ste ovu poruku primili pogreškom, molimo vas, javite se korisničkoj
+            podršci na %{support_url}.\n              \nNaš vlastiti arhiv je od fanova
+            za fanove, te ovisi o vašim donacijama: %{donate_url}."
+        sent_at: Poslano na %{sent_at}.
+        sent_by:
+          html: Poslano od <b>%{sent_by}</b>.
+          text: Poslano od %{sent_by}.
+      signature:
+        app_short_name: AO3
+    kudos:
+      guest:
+        one: gost
+        other: "%{count} gosta/iju"
+      html:
+        left_kudos:
+          one: "%{givers_list} je ostavio/la kudos na <i>%{commentable_link}</i>."
+          other: "%{givers_list} su ostavili kudose na <i>%{commentable_link}</i>."
+      text:
+        left_kudos:
+          one: "%{givers_list} je ostavio/la kudos na %{commentable_link}."
+          other: "%{givers_list} su ostavili kudose na %{commentable_link}."
+      you_have: "[%{app_name}] Imate kudose!"
+  user_mailer:
+    abuse_report:
+      description_para: 'Opis zloupotrebe:'
+      para1: 'Sljedeća prijava zloupotrebe poslana je timu za zloupotrebu:'
+      subject: "[%{app_name}] Vaša prijava zloupotrebe"
+      url_para: 'URL stranice na kojoj je zloupotreba:'
+    change_email:
+      part1: "%{login}, e-mail povezan s vašim računom je promijenjen u %{email}"
+      subject: "[%{app_name}] Promijenjen e-mail"
+    invite_increase_notification:
+      body:
+        one: Samo smo vam htjeli javiti da imate %{count} novu/e pozivnicu/e, koja/e
+          se može/gu iskoristiti za stvaranje novih računa na arhivi. Možete pozvati
+          prijatelje na %{invitation_page}.
+        other: Samo smo vam htjeli javiti da imate %{count} novu/e pozivnicu/e, koja/e
+          se može/gu iskoristiti za stvaranje novih računa na arhivi. Možete pozvati
+          prijatelje na %{invitation_page}.
+      closing: Pozdrav,
+      greeting: Bok %{login}!
+      html: |-
+        <p> Bok %{login}! </p>
+        <p> %{total} novu/e pozivnicu/e, koja/e se može/gu iskoristiti za stvaranje novih računa na arhivi. Možete pozvati prijatelje na %{invitation_page}. </p>
+        <p> Pozdrav, <br> %{archive_name}</p>
+      invitation_page_link_text: vaša stranica pozivnica
+      subject: "[%{app_name}] Nove pozivnice"
+      txt: "Bok %{login}\nSamo smo vam htjeli javiti da imate %{total} novu/e pozivnicu/e,
+        koja/e se može/gu iskoristiti za stvaranje novih računa na arhivi. Možete
+        pozvati prijatelje na %{invitation_page}.\nPozdrav, \n%{archive_name}"

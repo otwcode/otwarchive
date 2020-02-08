@@ -1,0 +1,13 @@
+---
+pt:
+  user_mailer:
+    invite_increase_notification:
+      closing: Cumprimentos,
+      html: |-
+        <p> Olá %{login}! </p>
+        <p> Queremos apenas informar-te de que tens %{total} novo(s) convite(s), que podem ser utilizados para criar novas contas no AO3. Podes convidar uma pessoa amiga em %{invitation_page}. </p>
+        <p> Cumprimentos, <br> %{archive_name}</p>"
+      subject: "[%{app_name}] Novos Convites"
+      txt: "Olá %{login}\nQueremos apenas informar-te de que tens %{total} novo(s)
+        convite(s), que podem ser utilizados para criar novas contas no AO3. Podes
+        convidar uma pessoa amiga em %{invitation_page}.\nCumprimentos, \n%{archive_name}"

@@ -72,36 +72,36 @@ ka:
         one: თითქმის 1 წელი
         other: თითქმის %{count} წელი
       half_a_minute: ნახევარი წუთი
-      less_than_x_seconds:
-        one: 1 წამზე ნაკლები
-        other: "%{count} წამზე ნაკლები"
       less_than_x_minutes:
         one: 1 წუთზე ნაკლები
         other: "%{count} წუთზე ნაკლები"
+      less_than_x_seconds:
+        one: 1 წამზე ნაკლები
+        other: "%{count} წამზე ნაკლები"
       over_x_years:
         one: 1 წელზე მეტი
         other: "%{count} წელზე მეტი"
-      x_seconds:
-        one: 1 წამი
-        other: "%{count} წამი"
-      x_minutes:
-        one: 1 წუთი
-        other: "%{count} წუთი"
       x_days:
         one: 1 დღე
         other: "%{count} დღე"
+      x_minutes:
+        one: 1 წუთი
+        other: "%{count} წუთი"
       x_months:
         one: 1 თვე
         other: "%{count} თვე"
+      x_seconds:
+        one: 1 წამი
+        other: "%{count} წამი"
       x_years:
         one: 1 წელი
         other: "%{count} წელი"
     prompts:
-      second: წამი
-      minute: წუთი
-      hour: საათი
       day: დღე
+      hour: საათი
+      minute: წუთი
       month: თვე
+      second: წამი
       year: წელი
   errors:
     format: "%{attribute} %{message}"
@@ -120,8 +120,8 @@ ka:
       less_than: უნდა იყოს %{count}-ზე ნაკლები
       less_than_or_equal_to: უნდა იყოს %{count}-ზე ნაკლები ან ტოლი
       model_invalid: 'დადასტურება წარუმატებელია: %{errors}'
-      not_a_number: არ არის რიცხვი
       not_an_integer: არ არის მთელი რიცხვი
+      not_a_number: არ არის რიცხვი
       odd: უნდა იყოს კენტი
       other_than: უნდა განსხვავდებოდეს %{count}-გან
       present: უნდა იყოს ცარიელი
@@ -173,9 +173,7 @@ ka:
           quadrillion: კვადრილიონი
           thousand: ათასი
           trillion: ტრილიონი
-          unit: ''
       format:
-        delimiter: ''
         precision: 3
         significant: true
         strip_insignificant_zeros: true
@@ -191,11 +189,7 @@ ka:
           tb: TB
     percentage:
       format:
-        delimiter: ''
         format: "%n%"
-    precision:
-      format:
-        delimiter: ''
   support:
     array:
       last_word_connector: ", და "

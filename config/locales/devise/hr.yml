@@ -1,0 +1,7 @@
+---
+hr:
+  users:
+    mailer:
+      reset_password_instructions:
+        unrequested: Ako niste zatražili ponovno postavljanje lozinke, možete ignorirati
+          ovaj e-mail i vaša prijašnja lozinka će nastaviti raditi.
