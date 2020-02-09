@@ -6,14 +6,15 @@ class KudosController < ApplicationController
 
   def index
     @work = Work.find(params[:work_id])
-    @kudos = @work.kudos.includes(pseud: :user).with_pseud
+    @kudos = @work.kudos.includes(:user).with_user
     @guest_kudos_count = @work.kudos.by_guest.count
   end
 
   def create
     @kudo = Kudo.new(kudo_params)
     if current_user.present?
-      @kudo.pseud = current_user.default_pseud
+      # TODO: Remove saving pseud_id when dropping the column pseud_id on kudos.
+      @kudo.pseud_id = current_user.default_pseud.id
       @kudo.user = current_user
     else
       @kudo.ip_address = request.remote_ip
@@ -29,7 +30,7 @@ class KudosController < ApplicationController
 
         format.js do
           @commentable = @kudo.commentable
-          @kudos = @commentable.kudos.with_pseud.includes(pseud: :user).order("created_at DESC")
+          @kudos = @commentable.kudos.with_user.includes(:user).order("created_at DESC")
 
           render :create, status: :created
         end
