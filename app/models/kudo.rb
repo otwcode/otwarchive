@@ -11,12 +11,12 @@ class Kudo < ApplicationRecord
   validates_uniqueness_of :user_id,
     scope: [:commentable_id, :commentable_type],
     message: ts("^You have already left kudos here. :)"),
-    if: Proc.new { |kudo| !kudo.user.nil? }
+    if: proc { |kudo| !kudo.user.nil? }
 
   validates_uniqueness_of :ip_address,
     scope: [:commentable_id, :commentable_type],
     message: ts("^You have already left kudos here. :)"),
-    if: Proc.new { |kudo| !kudo.ip_address.blank? }
+    if: proc { |kudo| !kudo.ip_address.blank? }
 
   scope :with_user, -> { where("user_id IS NOT NULL") }
   scope :by_guest, -> { where("user_id IS NULL") }
