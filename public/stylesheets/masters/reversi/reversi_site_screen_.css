@@ -326,6 +326,10 @@ fieldset fieldset.listbox {
   outline: none;
 }
 
+form dd.required {
+  background: #eee;
+}
+
 .mce-container input:focus {
   background: #F3EFEC;
 }
