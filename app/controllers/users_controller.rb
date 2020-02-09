@@ -110,7 +110,7 @@ class UsersController < ApplicationController
   def activate
     if params[:id].blank?
       flash[:error] = ts('Your activation key is missing.')
-      redirect_to ''
+      redirect_to root_path
 
       return
     end
@@ -119,13 +119,13 @@ class UsersController < ApplicationController
 
     unless @user
       flash[:error] = ts("Your activation key is invalid. If you didn't activate within 14 days, your account was deleted. Please sign up again, or contact support via the link in our footer for more help.").html_safe
-      redirect_to ''
+      redirect_to root_path
 
       return
     end
 
     if @user.active?
-      flash.now[:error] = ts('Your account has already been activated.')
+      flash[:error] = ts("Your account has already been activated.")
       redirect_to @user
 
       return
@@ -133,7 +133,7 @@ class UsersController < ApplicationController
 
     @user.activate
 
-    flash[:notice] = ts('Signup complete! Please log in.')
+    flash[:notice] = ts("Account activation complete! Please log in.")
 
     @user.create_log_item(action: ArchiveConfig.ACTION_ACTIVATE)
 
