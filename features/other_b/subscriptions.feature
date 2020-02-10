@@ -92,7 +92,7 @@
     And I follow "Add Chapter"
     And I fill in "Chapter Title" with "ICE CREAM CAKE"
     And I fill in "content" with "meltiiiinnngg"
-    And I press "Post Without Preview"
+    And I press "Post"
     And subscription notifications are sent
   Then 1 email should be delivered to "second_user@foo.com"
     And the email should contain "wip_author"
@@ -107,7 +107,7 @@
     And I set up the draft "Second Work"
     And I check "series-options-show"
     And I select "Awesome Series" from "work_series_attributes_id"
-    And I press "Post Without Preview"
+    And I press "Post"
   Then 0 emails should be delivered
   When subscription notifications are sent
   Then 1 email should be delivered to "second_user@foo.com"
@@ -133,7 +133,7 @@
     And the email should contain "A FOURTH"
 
   Scenario: different types of subscriptions are listed separately on a user's subscription page
-  
+
   When I am logged in as "second_user"
     And "second_user" subscribes to author "third_user"
     And "second_user" subscribes to work "Awesome Story"
@@ -162,7 +162,7 @@
     And I should not see "third_user"
 
   Scenario: Subscribe to a multi-chapter work should redirect you back to the chapter you were viewing
-  
+
   When I am logged in as "first_user"
     And I post the work "Multi Chapter Work"
     And a chapter is added to "Multi Chapter Work"

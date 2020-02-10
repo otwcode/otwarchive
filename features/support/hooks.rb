@@ -1,4 +1,7 @@
 Before do
+  # Reset the current user:
+  User.current_user = nil
+
   # Clear Memcached
   Rails.cache.clear
 
@@ -9,5 +12,9 @@ Before do
   REDIS_ROLLOUT.flushall
   REDIS_AUTOCOMPLETE.flushall
 
-  step %{all search indexes are completely regenerated}
+  Indexer.all.map(&:prepare_for_testing)
+end
+
+After do
+  Indexer.all.map(&:delete_index)
 end

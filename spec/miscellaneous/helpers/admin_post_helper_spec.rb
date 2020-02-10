@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe AdminPostHelper, type: :helper do
+describe AdminPostHelper do
   describe '#sorted_translations' do
     it 'returns translations sorted alphabetically by language' do
       english = Language.find_by(short: 'en', sortable_name: '')

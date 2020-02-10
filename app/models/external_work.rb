@@ -44,6 +44,11 @@ class ExternalWork < ApplicationRecord
     self.update_attribute(:dead, true) unless url_active?(self.url)
   end
 
+  # Allow encoded characters to display correctly in titles
+  def title
+    read_attribute(:title).try(:html_safe)
+  end
+
   ########################################################################
   # VISIBILITY
   ########################################################################
@@ -68,8 +73,6 @@ class ExternalWork < ApplicationRecord
   def visible?(user=User.current_user)
     self.hidden_by_admin? ? user.kind_of?(Admin) : true
   end
-
-  alias_method :visible, :visible?
 
   # Visibility has changed, which means we need to reindex
   # the external work's bookmarker pseuds, to update their bookmark counts.
@@ -142,14 +145,15 @@ class ExternalWork < ApplicationRecord
     as_json(
       root: false,
       only: [
-        :title, :summary, :hidden_by_admin, :created_at, :language_id
+        :title, :summary, :hidden_by_admin, :created_at
       ],
       methods: [
         :posted, :restricted, :tag, :filter_ids, :rating_ids,
-        :warning_ids, :category_ids, :fandom_ids, :character_ids,
+        :archive_warning_ids, :category_ids, :fandom_ids, :character_ids,
         :relationship_ids, :freeform_ids, :creators, :revised_at
       ]
     ).merge(
+      language_id: language&.short,
       bookmarkable_type: "ExternalWork",
       bookmarkable_join: { name: "bookmarkable" }
     )

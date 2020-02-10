@@ -23,7 +23,7 @@ Feature: Tag Wrangling - special cases
   When I follow "New Tag"
     And I fill in "Name" with "România"
     And I check "Canonical"
-    And I choose "Freeform"
+    And I choose "Additional Tag"
     And I press "Create Tag"
   Then I should see "Tag was successfully created."
     But I should see "România - Freeform"

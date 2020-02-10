@@ -1,6 +1,6 @@
 require 'faker'
 
-FactoryGirl.define do
+FactoryBot.define do
   factory :comment do
     name { Faker::Name.first_name }
     comment_content { Faker::Lorem.sentence(25) }
@@ -35,7 +35,7 @@ FactoryGirl.define do
     commentable_type { "Work" }
     commentable_id { create(:work, moderated_commenting_enabled: true).id }
     pseud
-    unreviewed true
+    unreviewed { true }
   end
 
   factory :inbox_comment do

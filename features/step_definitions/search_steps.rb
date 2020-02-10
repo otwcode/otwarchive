@@ -1,32 +1,8 @@
-Given /^the (\w+) indexes are completely regenerated$/ do |klass|
-  es_update(klass)
-end
-
-Given /^all search indexes are completely regenerated$/ do
-  ['work', 'bookmark', 'pseud', 'tag'].each do |klass|
-    step %{the #{klass} indexes are completely regenerated}
-  end
-end
-
-Given /^the (\w+) indexes are refreshed$/ do |model|
-  $elasticsearch.indices.refresh index: "ao3_test_#{model}s"
-end
-
-Given /^all search indexes are refreshed$/ do
-  ['work', 'bookmark', 'pseud', 'tag'].each do |model|
-    step %{the #{model} indexes are refreshed}
-  end
-end
-
-Given /^the (\w+) indexing job has been run$/ do |reindex_type|
-  ScheduledReindexJob.perform(reindex_type)
-  step %{all search indexes are refreshed}
-end
-
 Given /^all indexing jobs have been run$/ do
-  %w(main background stats).each do |reindex_type|
-    step %{the #{reindex_type} indexing job has been run}
+  %w[main background stats].each do |reindex_type|
+    ScheduledReindexJob.perform(reindex_type)
   end
+  Indexer.all.map(&:refresh_index)
 end
 
 Given /^the max search result count is (\d+)$/ do |max|
@@ -42,4 +18,9 @@ end
 Given /^(\d+) tag(?:s)? (?:is|are) displayed per search page$/ do |per_page|
   stub_const("ArchiveConfig", OpenStruct.new(ArchiveConfig))
   ArchiveConfig.TAGS_PER_SEARCH_PAGE = per_page.to_i
+end
+
+Given /^dashboard counts expire after (\d+) seconds?$/ do |seconds|
+  stub_const("ArchiveConfig", OpenStruct.new(ArchiveConfig))
+  ArchiveConfig.SECONDS_UNTIL_DASHBOARD_COUNTS_EXPIRE = seconds.to_i
 end

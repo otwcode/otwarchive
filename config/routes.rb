@@ -1,5 +1,7 @@
 Otwarchive::Application.routes.draw do
 
+  mount Lockup::Engine, at: '/lockup' if Rails.env.staging?
+
   devise_for :admin,
              module: 'admin',
              only: :sessions,
@@ -210,7 +212,6 @@ Otwarchive::Application.routes.draw do
   # When adding new nested resources, please keep them in alphabetical order
   resources :users, except: [:new, :create] do
     member do
-      get :browse
       get :change_email
       post :changed_email
       get :change_password
@@ -243,6 +244,7 @@ Otwarchive::Application.routes.draw do
         put :reject
       end
     end
+    resource :creatorships, controller: "creatorships", only: [:show, :update]
     resources :external_authors do
       resources :external_author_names
     end
@@ -554,11 +556,7 @@ Otwarchive::Application.routes.draw do
   resources :external_authors do
     resources :external_author_names
   end
-  resources :orphans, only: [:index, :new, :create] do
-    collection do
-      get :about
-    end
-  end
+  resources :orphans, only: [:index, :new, :create]
 
   get 'search' => 'works#search'
   post 'support' => 'feedbacks#create', as: 'feedbacks'

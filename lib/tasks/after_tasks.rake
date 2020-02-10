@@ -407,7 +407,7 @@ namespace :After do
 
   desc "Set initial values for sortable tag names for tags that aren't fandoms"
   task(:more_sortable_tag_names => :environment) do
-    [Category, Character, Freeform, Rating, Relationship, Warning].each do |klass|
+    [Category, Character, Freeform, Rating, Relationship, ArchiveWarning].each do |klass|
       puts "Adding sortable names for #{klass.to_s.downcase.pluralize}"
       klass.by_name.find_each(:conditions => "canonical = 1 AND sortable_name = ''") do |tag|
         tag.set_sortable_name
@@ -628,6 +628,24 @@ namespace :After do
         work.save if work.changed?
       end
       print(".") && STDOUT.flush
+    end
+    puts && STDOUT.flush
+  end
+
+  desc "Update each user's kudos with the user's id"
+  task(add_user_id_to_kudos: :environment) do
+    total_users = User.all.size
+    total_batches = (total_users + 999) / 1000
+    puts "Updating #{total_users} users' kudos in #{total_batches} batches"
+
+    User.includes(:pseuds).find_in_batches.with_index do |batch, index|
+      batch_number = index + 1
+      progress_msg = "Batch #{batch_number} of #{total_batches} complete"
+      batch.each do |user|
+        Kudo.where(pseud_id: user.pseud_ids, user_id: nil)
+          .update_all(user_id: user.id)
+      end
+      puts(progress_msg) && STDOUT.flush
     end
     puts && STDOUT.flush
   end
