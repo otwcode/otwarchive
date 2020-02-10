@@ -15,8 +15,10 @@
 <%= t(".unrevealed_info") %>
 <% end %>
 
-<%= t(".do_not_want.#{@status}.text") %> <%= user_collection_items_url(@user, approved: true) %>
+<%= t(".do_not_want.#{@status}.text",
+      collection_items_url: user_collection_items_url(@user, approved: true)) %>
 
-<%= t(".more_info.text") %> <%= archive_faq_url("collections-and-challenges",
-                                                anchor: :collectionoptions) %>
+<%= t(".more_info.text",
+      faq_url: archive_faq_url("collections-and-challenges",
+                               anchor: :collectionoptions)) %>
 <% end %>
