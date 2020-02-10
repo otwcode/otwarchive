@@ -25,7 +25,6 @@ module CreationNotifier
     end
   end
 
-<<<<<<< HEAD:lib/creatable.rb
   # Notify new co-authors that they've been added to a creation
   def notify_co_authors
     this_creation = self
@@ -45,8 +44,6 @@ module CreationNotifier
     pseuds.map(&:byline)
   end
 
-=======
->>>>>>> master:lib/creation_notifier.rb
   # notify recipients that they have gotten a story!
   # we also need to check to see if the work is in a collection
   # only notify a recipient once for each work
