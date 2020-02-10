@@ -341,8 +341,6 @@ class CollectionItem < ApplicationRecord
     return if item.users.include?(User.current_user)
 
     item.users.each do |user|
-      next if user.preference.collection_emails_off
-
       UserMailer.anonymous_or_unrevealed_notification(
         user.id, item.id, collection.id,
         anonymous: newly_anonymous, unrevealed: newly_unrevealed
