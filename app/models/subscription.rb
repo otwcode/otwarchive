@@ -38,7 +38,7 @@ class Subscription < ApplicationRecord
   end
 
   def subject_text(creation)
-    authors = if Subscription.anonymous_creation?(creation)
+    authors = if self.class.anonymous_creation?(creation)
                 "Anonymous"
               else
                 creation.pseuds.map(&:byline).to_sentence
