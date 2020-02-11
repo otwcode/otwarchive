@@ -30,22 +30,6 @@ module MailerHelper
       pseud.byline, user_pseud_url(pseud.user, pseud))
   end
 
-  def creator_links(work)
-    if work.anonymous?
-      "Anonymous"
-    else
-      work.pseuds.map { |p| style_pseud_link(p) }.to_sentence.html_safe
-    end
-  end
-
-  def creator_text(work)
-    if work.anonymous?
-      "Anonymous"
-    else
-      work.pseuds.map { |p| text_pseud(p) }.to_sentence.html_safe
-    end
-  end
-
   def text_pseud(pseud)
     pseud.byline + " (#{user_pseud_url(pseud.user, pseud)})"
   end
