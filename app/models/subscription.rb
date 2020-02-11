@@ -41,7 +41,7 @@ class Subscription < ApplicationRecord
     authors = if creation.is_a?(Work) && creation.anonymous? || creation.is_a?(Chapter) && creation.work.anonymous?
                 "Anonymous"
               else
-                creation.pseuds.map{ |p| p.byline }.to_sentence
+                creation.pseuds.map(&:byline).to_sentence
               end
     chapter_text = creation.is_a?(Chapter) ? "#{creation.chapter_header} of " : ""
     work_title = creation.is_a?(Chapter) ? creation.work.title : creation.title
