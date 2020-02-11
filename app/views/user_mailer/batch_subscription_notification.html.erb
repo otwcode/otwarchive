@@ -5,15 +5,13 @@
 
     <% this_work = creation.respond_to?(:work) ? creation.work : creation %>
     <% work_link = style_link(this_work.title.html_safe, work_url(this_work)) %>
-    <% creators = creator_links(this_work) %>
 
     <% cache("subscription-email-preface-#{creation.cache_key}") do %>
-      <%= creators %> posted a
+      <%= creator_links(this_work) %> posted a
       <% if creation.is_a?(Work) %>
         <%= this_work.backdate ? "backdated" : "new" %> work:
       <% else %>
         new chapter of <i><b><%= work_link %></b></i> (<%= this_work.word_count %> words):
-        <% chapter_title = (creation.chapter_header + (creation.title.blank? ? "" : ": #{creation.title}")).html_safe %>
       <% end %>
     <% end %>
 
@@ -26,7 +24,7 @@
       <% unless @seen[this_work.id] %>
         <br>
 
-        by <%= creators %>
+        by <%= creator_links(this_work) %>
       <% end %>
     </p>
 
