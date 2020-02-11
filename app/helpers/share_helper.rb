@@ -5,7 +5,7 @@ module ShareHelper
   # get work title, word count, and creator and add app short name, but do not add formatting so it can be link text for Tumblr sharing
   def get_tumblr_embed_link_title(work)
     title = work.title + " (#{work.word_count} #{ts('words')})"
-    pseud = work.creators.to_sentence
+    pseud = text_byline(work)
     "#{title} #{ts("by")} #{pseud} #{ts("[#{ArchiveConfig.APP_SHORT_NAME}]")}"
   end
   
@@ -13,7 +13,7 @@ module ShareHelper
     if work.unrevealed?
       ts("Mystery Work")
     else
-      names = work.creators.to_sentence
+      names = text_byline(work)
       fandoms = work.short_fandom_string
       "#{work.title} by #{names} - #{fandoms}".truncate(95)
     end
