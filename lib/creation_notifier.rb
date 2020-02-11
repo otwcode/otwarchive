@@ -25,10 +25,6 @@ module CreationNotifier
     end
   end
 
-  def creators
-    pseuds.map(&:byline)
-  end
-
   # notify recipients that they have gotten a story!
   # we also need to check to see if the work is in a collection
   # only notify a recipient once for each work

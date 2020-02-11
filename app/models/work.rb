@@ -1244,7 +1244,7 @@ class Work < ApplicationRecord
     if anonymous?
       ["Anonymous"]
     else
-      super + external_author_names.pluck(:name)
+      pseuds.map(&:byline) + external_author_names.pluck(:name)
     end
   end
 
