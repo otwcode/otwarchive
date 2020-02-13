@@ -330,7 +330,7 @@ fieldset fieldset.listbox {
 }
 
 form dd.required {
-  background: #eee;
+  color: #eee;
 }
 
 .mce-container input:focus {
