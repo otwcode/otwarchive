@@ -123,28 +123,36 @@
 /* quotes and stresses */
 
 .userstuff blockquote {
-  margin: auto auto auto 1.5em;
+  border-width: 0;
+  border-color: #999;
+  border-style: solid;
+  margin: auto;
   padding: 0.75em;
-  border-left: 2px solid #999;
+  border-left-width: 2px;
+  margin-left: 1.5em;
 }
 
+.userstuff[dir="rtl"] blockquote,
+.userstuff [dir="rtl"] blockquote,
+.userstuff blockquote[dir="rtl"] {
+  border-left-width: inherit;
+  border-right-width: 2px;
+  margin-right: 1.5em;
+  margin-left: unset;
+}
+
+.userstuff [dir="ltr"] blockquote,
 .userstuff blockquote[dir="ltr"] {
+  border-left-width: 2px;
+  border-right-width: inherit;
+  margin-right: unset;
+  margin-left: 1.5em;
   text-align: left;
 }
 
-.userstuff blockquote blockquote,
-.userstuff blockquote blockquote[dir="rtl"] {
+.userstuff blockquote blockquote {
   padding: 0.25em;
   border: 0;
-}
-
-.userstuff[dir="rtl"] blockquote:not([dir="ltr"]),
-.userstuff [dir="rtl"] blockquote:not([dir="ltr"]),
-.userstuff blockquote[dir="rtl"] {
-  margin: auto 1.5em auto auto;
-  border-left: none;
-  border-right: 2px solid #999;
-  text-align: right;
 }
 
 .userstuff hr {
