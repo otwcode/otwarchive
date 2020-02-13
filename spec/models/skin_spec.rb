@@ -106,19 +106,15 @@ describe Skin do
                 background:-ms-linear-gradient(top,#fafafa,#ddd);
                 background:-o-linear-gradient(top,#fafafa,#ddd);
                 background:linear-gradient(top,#fafafa,#ddd);
-                color:#555 }"
+                color:#555 }",
+ 
+        "saves box shadows with multiple shadows" =>
+          "li { box-shadow: 5px 5px 5px black, inset 0 0 0 1px #dadada; }"
     }.each_pair do |condition, css|
       it condition do
         @skin.css = css
         expect(@skin.save).to be_truthy
       end
-    end
-
-    # This is verified to work in prod and staging, but not dev
-    # TODO: fix across environments?
-    xit "should save CSS3 box shadows with multiple shadows" do
-      @skin.css = "li { box-shadow: 5px 5px 5px black, inset 0 0 0 1px #dadada; }"
-      expect(@skin.save).to be_truthy
     end
 
     # bad bad bad css
@@ -168,13 +164,42 @@ describe Skin do
       expect(@skin.errors[:base].join(' ').match(/upload a screencap/)).to be_truthy
     end
 
-    it "should only allow valid media types" do
-      @skin.media = ["foobar"]
-      expect(@skin.save).not_to be_truthy
-      expect(@skin.errors[:base]).not_to be_empty
-      @skin.media = %w(screen print)
-      expect(@skin.save).to be_truthy
-      expect(@skin.errors[:base]).to be_empty
+    context "when a media query is provided" do
+      [
+        "all",
+        "screen",
+        "handheld",
+        "speech",
+        "print",
+        "braille",
+        "embossed",
+        "projection",
+        "tty",
+        "tv",
+        "only screen and (max-width: 42em)",
+        "only screen and (max-width: 62em)",
+        "(prefers-color-scheme: dark)",
+        "(prefers-color-scheme: light)"
+      ].each do |media_query|
+        it "allows #{media_query}" do
+          @skin.media = [media_query]
+          expect(@skin.save).to be_truthy
+          expect(@skin.errors[:base]).to be_empty
+        end
+      end
+
+      {
+        "doesn't allow max-width that isn't whitelisted" => "only screen and (max-width: 1024px)",
+        "doesn't allow media that isn't whitelisted" => "(min-aspect-ratio: 8/5)",
+        "doesn't allow two whitelisted media combined with and instead of a comma" => "screen and (prefers-color-scheme: dark",
+        "doesn't allow combination of whitelisted media and non-whitelisted media" => "(prefers-color-scheme: dark), (monochrome)"
+      }.each_pair do |description, media_query|
+        it description do
+          @skin.media = [media_query]
+          expect(@skin.save).not_to be_truthy
+          expect(@skin.errors[:base]).not_to be_empty
+        end
+      end
     end
 
     it "should only allow valid roles" do

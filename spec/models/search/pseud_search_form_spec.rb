@@ -1,6 +1,6 @@
 require "spec_helper"
 
-describe PseudSearchForm do
+describe PseudSearchForm, pseud_search: true do
   context "searching pseuds in a fandom" do
     let(:fandom_kp) { create(:canonical_fandom) }
     let(:fandom_mlaatr) { create(:canonical_fandom) }

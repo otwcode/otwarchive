@@ -22,7 +22,7 @@ gem 'rails-controller-testing'
 
 # Database
 # gem 'sqlite3-ruby', require: 'sqlite3'
-gem 'mysql2', '0.3.20'
+gem 'mysql2', '0.5.2'
 
 #https://github.com/qertoip/transaction_retry
 # We don't use the isolation gem directly, but it needs to be
@@ -67,7 +67,7 @@ gem 'resque', '>=1.14.0'
 gem 'resque_mailer'
 gem 'resque-scheduler'
 #gem 'daemon-spawn', require: 'daemon_spawn'
-gem 'elasticsearch', '>=6.0.0'
+gem 'elasticsearch', '6.8.0'
 gem 'aws-sdk'
 gem 'css_parser'
 
@@ -178,6 +178,10 @@ end
 
 group :test, :development, :staging do
   gem 'bullet', '>= 5.7.3'
+end
+
+group :staging do
+  gem 'lockup'
 end
 
 # Deploy with Capistrano

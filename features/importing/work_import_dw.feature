@@ -3,6 +3,7 @@ Feature: Import Works from DW
   In order to have an archive full of works
   As an author
   I want to create new works by importing them from DW
+
   @import_dw
   Scenario: Importing a new work from an DW story with automatic metadata
     Given basic tags
@@ -13,7 +14,8 @@ Feature: Import Works from DW
       And I am logged in as "cosomeone" with password "something"
     When I go to the import page
       And I fill in "urls" with "https://ao3testing.dreamwidth.org/1726.html"
-    When I press "Import"
+      And I select "English" from "Choose a language"
+      And I press "Import"
     Then I should see "Preview"
       And I should see "Testing" within "dd.fandom"
       And I should see "General Audiences" within "dd.rating"
@@ -34,7 +36,7 @@ Feature: Import Works from DW
     When I press "Post"
     Then I should see "Work was successfully posted."
     When I am on cosomeone's user page
-      Then I should see "Importing Test"
+    Then I should see "Importing Test"
 
   @import_dw_tables
   Scenario: Creating a new work from an DW story that has tables
@@ -48,7 +50,8 @@ Feature: Import Works from DW
       And I am logged in as "cosomeone" with password "something"
     When I go to the import page
       And I fill in "urls" with "https://ao3testing.dreamwidth.org/1836.html"
-    When I press "Import"
+      And I select "English" from "Choose a language"
+      And I press "Import"
     Then I should see "Preview"
       And I should see "Testing" within "dd.fandom"
       And I should see "Teen And Up Audiences" within "dd.rating"
@@ -64,7 +67,7 @@ Feature: Import Works from DW
     When I press "Post"
     Then I should see "Work was successfully posted."
     When I am on cosomeone's user page
-      Then I should see "Single Chapter Fic from DW"
+    Then I should see "Single Chapter Fic from DW"
 
   @import_dw_tables_no_backdate
   Scenario: Creating a new work from an DW story without backdating it
@@ -75,7 +78,8 @@ Feature: Import Works from DW
       And I am logged in as a random user
     When I go to the import page
       And I fill in "urls" with "https://ao3testing.dreamwidth.org/1726.html"
-    When I press "Import"
+      And I select "English" from "Choose a language"
+      And I press "Import"
     Then I should see "Preview"
       And I should see "Importing Test"
     When I press "Edit"
@@ -98,6 +102,7 @@ Feature: Import Works from DW
       And I am logged in as "cosomeone"
     When I go to the import page
       And I fill in "urls" with "https://ao3testingcomm.dreamwidth.org/702.html"
+      And I select "English" from "Choose a language"
       And I press "Import"
     Then I should see "Preview"
       And I should see "Testing" within "dd.fandom"
@@ -131,13 +136,14 @@ Feature: Import Works from DW
       And I set my time zone to "UTC"
     When I go to the import page
       And I fill in "urls" with
-         """
-         https://ao3testing.dreamwidth.org/2460.html
-         https://ao3testing.dreamwidth.org/2664.html
-         https://ao3testing.dreamwidth.org/2968.html
-         """
+        """
+        https://ao3testing.dreamwidth.org/2460.html
+        https://ao3testing.dreamwidth.org/2664.html
+        https://ao3testing.dreamwidth.org/2968.html
+        """
+      And I select "English" from "Choose a language"
       And I choose "import_multiple_chapters"
-    When I press "Import"
+      And I press "Import"
     Then I should see "Preview"
       And I should see "Testing" within "dd.fandom"
       And I should see "General Audiences" within "dd.rating"
@@ -159,5 +165,4 @@ Feature: Import Works from DW
       And I should see "My note on chapter 2." within "div.notes"
       And I should see "Rails 5.1 Chaptered (DW)" within "h3.title"
     When I am on cosomeone's user page
-      Then I should see "Rails 5.1 Chaptered (DW)"
-
+    Then I should see "Rails 5.1 Chaptered (DW)"

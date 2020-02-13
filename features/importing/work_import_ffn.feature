@@ -10,6 +10,7 @@ Feature: Import Works from fanfiction.net
       And the default ratings exist
     When I go to the import page
       And I fill in "urls" with "http://www.fanfiction.net/s/3129674/1/What_More_Than_Usual_Light"
+      And I select "English" from "Choose a language"
     When I press "Import"
     Then I should see "Sorry, Fanfiction.net does not allow imports from their site."
 
@@ -19,5 +20,6 @@ Feature: Import Works from fanfiction.net
       And the default ratings exist
     When I go to the import page
       And I fill in "urls" with "http://www.fanfiction.net/s/6646765/1/IChing"
+      And I select "English" from "Choose a language"
     When I press "Import"
     Then I should see "Sorry, Fanfiction.net does not allow imports from their site."

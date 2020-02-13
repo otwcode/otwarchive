@@ -202,6 +202,10 @@ When /^I reveal the authors of the "([^\"]*)" challenge$/ do |title|
     step %{all indexing jobs have been run}
 end
 
+When /^I use tomorrow as the "Sign-up closes" date$/ do
+  fill_in("Sign-up closes:", with: Date.tomorrow)
+end
+
 # Notification messages
 
 When /^I create an assignment notification message with (an ampersand|linebreaks) for "([^\"]*)"$/ do |message_content, title|
