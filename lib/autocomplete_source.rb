@@ -82,7 +82,7 @@ module AutocompleteSource
     # and returns an array of stripped and lowercase words for actual searching or use in keys
     def get_search_terms(search_term)
       terms = search_term.is_a?(Array) ? search_term.map {|term| term.split(',')}.flatten : (search_term.blank? ? [] : search_term.split(','))
-      terms.map {|term| term.strip.downcase}
+      terms.map { |term| term.strip.downcase }
     end
 
     def parse_autocomplete_value(current_autocomplete_value)
@@ -218,9 +218,16 @@ module AutocompleteSource
       autocomplete_prefix + "_" + AUTOCOMPLETE_CACHE_KEY + "_" + search_param
     end
 
+    # Split a string into words.
     def autocomplete_phrase_split(string)
-      # split into words
-      string.downcase.split(/(?:\s+|\&|\/|"|\(|\)|\~|-)/) # split on one or more spaces, ampersand, slash, double quotation mark, opening parenthesis, closing parenthesis (just in case), tilde, hyphen
+      # Use the ActiveSupport::Multibyte::Chars class to handle downcasing
+      # instead of the basic string class, because it can handle downcasing
+      # letters with accents or other diacritics.
+      normalized = string.mb_chars.downcase.to_s
+
+      # Split on one or more spaces, ampersand, slash, double quotation mark,
+      # opening parenthesis, closing parenthesis (just in case), tilde, hyphen
+      normalized.split(/(?:\s+|\&|\/|"|\(|\)|\~|-)/).reject(&:blank?)
     end
 
     def autocomplete_pieces(string)

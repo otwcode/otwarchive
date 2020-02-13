@@ -1,6 +1,6 @@
 require "spec_helper"
 
-describe PseudSearchForm do
+describe PseudSearchForm, pseud_search: true do
   context "searching pseuds in a fandom" do
     let(:fandom_kp) { create(:canonical_fandom) }
     let(:fandom_mlaatr) { create(:canonical_fandom) }
@@ -9,7 +9,7 @@ describe PseudSearchForm do
     let!(:work_3) { create(:posted_work, fandoms: [fandom_mlaatr]) }
     let!(:work_4) { create(:posted_work, fandoms: [fandom_mlaatr], restricted: true) }
 
-    before { update_and_refresh_indexes "pseud" }
+    before { run_all_indexing_jobs }
 
     it "returns all pseuds writing in the fandom when logged in" do
       User.current_user = User.new
@@ -38,7 +38,7 @@ describe PseudSearchForm do
     let!(:work_2) { create(:posted_work, fandoms: [fandom_kp], authors: [user.default_pseud]) }
     let!(:work_3) { create(:posted_work, fandoms: [fandom_mlaatr], authors: [user.default_pseud], restricted: true) }
 
-    before { update_and_refresh_indexes "pseud" }
+    before { run_all_indexing_jobs }
 
     it "returns all pseuds writing in all fandoms" do
       User.current_user = User.new

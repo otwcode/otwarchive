@@ -1,5 +1,3 @@
-# ES UPGRADE TRANSITION #
-# Change all instances of $new_elasticsearch to $elasticsearch
 class Indexer
 
   BATCH_SIZE = 1000
@@ -22,6 +20,18 @@ class Indexer
     raise "Must be defined in subclass"
   end
 
+  def self.all
+    [
+      BookmarkedExternalWorkIndexer,
+      BookmarkedSeriesIndexer,
+      BookmarkedWorkIndexer,
+      BookmarkIndexer,
+      PseudIndexer,
+      TagIndexer,
+      WorkIndexer
+    ]
+  end
+
   # Originally added to allow IndexSweeper to find the Elasticsearch document
   # ids when they do not match the associated ActiveRecord objects' ids.
   #
@@ -31,13 +41,13 @@ class Indexer
   end
 
   def self.delete_index
-    if $new_elasticsearch.indices.exists(index: index_name)
-      $new_elasticsearch.indices.delete(index: index_name)
+    if $elasticsearch.indices.exists(index: index_name)
+      $elasticsearch.indices.delete(index: index_name)
     end
   end
 
-  def self.create_index(shards = 5)
-    $new_elasticsearch.indices.create(
+  def self.create_index(shards: 5)
+    $elasticsearch.indices.create(
       index: index_name,
       body: {
         settings: {
@@ -53,9 +63,27 @@ class Indexer
     )
   end
 
+  def self.prepare_for_testing
+    raise "Wrong environment for test prep!" unless Rails.env.test?
+
+    delete_index
+    # Relevance sorting is unpredictable with multiple shards
+    # and small amounts of data
+    create_index(shards: 1)
+  end
+
+  def self.refresh_index
+    # Refreshes are resource-intensive, we use them only in tests.
+    raise "Wrong environment for index refreshes!" unless Rails.env.test?
+
+    return unless $elasticsearch.indices.exists(index: index_name)
+
+    $elasticsearch.indices.refresh(index: index_name)
+  end
+
   # Note that the index must exist before you can set the mapping
   def self.create_mapping
-    $new_elasticsearch.indices.put_mapping(
+    $elasticsearch.indices.put_mapping(
       index: index_name,
       type: document_type,
       body: mapping
@@ -94,7 +122,7 @@ class Indexer
     total = (indexables.count / BATCH_SIZE) + 1
     i = 1
     indexables.find_in_batches(batch_size: BATCH_SIZE) do |group|
-      puts "Queueing #{klass} batch #{i} of #{total}"
+      puts "Queueing #{klass} batch #{i} of #{total}" unless Rails.env.test?
       AsyncIndexer.new(self, :world).enqueue_ids(group.map(&:id))
       i += 1
     end
@@ -161,7 +189,7 @@ class Indexer
   end
 
   def index_documents
-    $new_elasticsearch.bulk(body: batch)
+    $elasticsearch.bulk(body: batch)
   end
 
   def index_document(object)
@@ -174,7 +202,7 @@ class Indexer
     if respond_to?(:parent_id)
       info.merge!(routing: parent_id(object.id, object))
     end
-    $new_elasticsearch.index(info)
+    $elasticsearch.index(info)
   end
 
   def routing_info(id)

@@ -2,20 +2,23 @@ class QueryResult
 
   include Enumerable
 
-  attr_reader :klass, :response, :current_page, :per_page
+  attr_reader :klass, :response, :current_page, :per_page, :error, :notice
 
   def initialize(model_name, response, options={})
     @klass = model_name.classify.constantize
     @response = response
     @current_page = options[:page] || 1
     @per_page = options[:per_page] || ArchiveConfig.ITEMS_PER_PAGE
+    @error = response[:error]
+    @notice = max_search_results_notice
   end
 
   def hits
-  	response['hits']['hits']
+    response.dig('hits', 'hits')
   end
 
   def items
+    return [] if response[:error]
     if @items.nil?
       @items = klass.load_from_elasticsearch(hits)
     end
@@ -101,7 +104,7 @@ class QueryResult
   end
 
   def unlimited_total_entries
-    response['hits']['total']
+    response.dig('hits', 'total') || 0
   end
 
   def offset

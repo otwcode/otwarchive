@@ -81,8 +81,7 @@ Feature: Archivist bulk imports
       | user1 | a@ao3.org |
     When I go to the import page
       And I import the work "http://ao3testing.dreamwidth.org/593.html" by "name1" with email "a@ao3.org" and by "name2" with email "b@ao3.org"
-    When the system processes jobs
-      Then 1 email should be delivered to "a@ao3.org"
+    Then 1 email should be delivered to "a@ao3.org"
       And 1 email should be delivered to "b@ao3.org"
 
   Scenario: Import a work for multiple authors with accounts should not display the archivist
@@ -176,11 +175,11 @@ Feature: Archivist bulk imports
       And I follow "Claim or remove your works" in the email
     Then I should see "Claiming Your Imported Works"
     And I should see "An archive including some of your work(s) has been moved to the Archive of Our Own."
-    When I press "Sign me up and give me my works! Yay!"
+    When I press "Sign me up and give me my works!"
     Then I should see "Create Account"
     When I fill in the sign up form with valid data
     And I press "Create Account"
-    Then I should see "Account Created!"
+    Then I should see "Almost Done!"
 
   Scenario: Orphan a work in response to an invite, leaving name on it
     Given I have an orphan account
@@ -245,7 +244,7 @@ Feature: Archivist bulk imports
     Then I should see "We have notified the author(s) you imported works for. If any were missed, you can also add co-authors manually."
     When I press "Edit"
     And I fill in "work_collection_names" with "Club"
-    And I press "Post Without Preview"
+    And I press "Post"
     Then I should see "Story"
     And I should see "randomtestname"
     And I should see "Club"
@@ -255,12 +254,13 @@ Feature: Archivist bulk imports
   Scenario: Should not be able to import for others unless the box is checked
     When I go to the import page
       And I fill in "URLs*" with "http://ao3testing.dreamwidth.org/593.html"
+      And I select "English" from "Choose a language"
       And I fill in "Author Name*" with "ao3testing"
       And I fill in "Author Email Address*" with "ao3testing@example.com"
-    When I press "Import"
+      And I press "Import"
     Then I should see /You have entered an external author name or e-mail address but did not select "Import for others."/
     When I check the 1st checkbox with id matching "importing_for_others"
-    And I press "Import"
+      And I press "Import"
     Then I should see "We have notified the author(s) you imported works for. If any were missed, you can also add co-authors manually."
 
   Scenario: Archivist can't see Open Doors tools

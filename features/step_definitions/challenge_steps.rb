@@ -21,6 +21,21 @@ end
 
 ### CHALLENGE TAGS
 
+Given /^signup summaries are always visible$/ do
+  stub_const("ArchiveConfig", OpenStruct.new(ArchiveConfig))
+  ArchiveConfig.ANONYMOUS_THRESHOLD_COUNT = 0
+end
+
+Given /^all signup summaries are delayed$/ do
+  stub_const("ArchiveConfig", OpenStruct.new(ArchiveConfig))
+  ArchiveConfig.MAX_SIGNUPS_FOR_LIVE_SUMMARY = 0
+end
+
+Given /^all signup summaries are live$/ do
+  stub_const("ArchiveConfig", OpenStruct.new(ArchiveConfig))
+  ArchiveConfig.MAX_SIGNUPS_FOR_LIVE_SUMMARY = 1_000_000
+end
+
 Given /^I have standard challenge tags set ?up$/ do
   begin
     unless UserSession.find
@@ -111,6 +126,11 @@ When /^I start signing up for "([^\"]*)"$/ do |title|
   step %{I follow "Sign Up"}
 end
 
+When /^I view the sign-up summary for "(.*?)"$/ do |title|
+  visit collection_path(Collection.find_by(title: title))
+  step %(I follow "Sign-up Summary")
+end
+
 ### Editing signups
 
 When /^I edit my signup for "([^\"]*)"$/ do |title|
@@ -182,6 +202,10 @@ When /^I reveal the authors of the "([^\"]*)" challenge$/ do |title|
     step %{all indexing jobs have been run}
 end
 
+When /^I use tomorrow as the "Sign-up closes" date$/ do
+  fill_in("Sign-up closes:", with: Date.tomorrow)
+end
+
 # Notification messages
 
 When /^I create an assignment notification message with (an ampersand|linebreaks) for "([^\"]*)"$/ do |message_content, title|
@@ -229,6 +253,20 @@ Then /^the notification message to "([^\"]*)" should escape the ampersand$/ do |
 
   email.html_part.body.should =~ /The first thing &amp; the second thing./
   email.html_part.body.should_not =~ /The first thing & the second thing./
+end
+
+Then /^the notification message to "([^\"]*)" should contain the no archive warnings tag$/ do |user|
+  @user = User.find_by(login: user)
+  email = emails("to: \"#{email_for(@user.email)}\"").first
+  email.multipart?.should be == true
+
+  email.text_part.body.should =~ /Warning:/
+  email.text_part.body.should =~ /No Archive Warnings Apply/
+  email.text_part.body.should_not =~ /Name with colon/
+
+  email.html_part.body.should =~ /Warning:/
+  email.html_part.body.should =~ /No Archive Warnings Apply/
+  email.html_part.body.should_not =~ /Name with colon/
 end
 
 # Delete challenge

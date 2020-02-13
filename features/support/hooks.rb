@@ -1,4 +1,7 @@
 Before do
+  # Reset the current user:
+  User.current_user = nil
+
   # Clear Memcached
   Rails.cache.clear
 
@@ -9,20 +12,9 @@ Before do
   REDIS_ROLLOUT.flushall
   REDIS_AUTOCOMPLETE.flushall
 
-  # ES UPGRADE TRANSITION #
-  # Remove rollout activation & unless block
-  $rollout.activate :start_new_indexing
-
-  unless elasticsearch_enabled?($elasticsearch)
-    $rollout.activate :stop_old_indexing
-    $rollout.activate :use_new_search
-  end
-
-  step %{all search indexes are completely regenerated}
+  Indexer.all.map(&:prepare_for_testing)
 end
 
-# ES UPGRADE TRANSITION #
-# Remove hook
-Before '@new-search' do
-  $rollout.activate :use_new_search
+After do
+  Indexer.all.map(&:delete_index)
 end

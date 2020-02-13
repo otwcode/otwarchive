@@ -8,6 +8,7 @@
 require 'simplecov'
 require 'cucumber/timecop'
 require 'capybara/poltergeist'
+require 'cucumber/rspec/doubles'
 SimpleCov.command_name "features-" + (ENV['TEST_RUN'] || 'local')
 if ENV["CI"] == "true" && ENV["TRAVIS"] == "true"
   # Only on Travis...
@@ -70,15 +71,6 @@ Before do
 
   language = Language.find_or_create_by(short: 'en', name: 'English')
   Locale.set_base_locale(iso: "en", name: "English (US)", language_id: language.id)
-end
-
-After do
-  # ES UPGRADE TRANSITION #
-  # Change all instances of $new_elasticsearch to $elasticsearch
-  indices = $new_elasticsearch.indices.get_mapping.keys.select { |key| key.match("test") }
-  indices.each do |index|
-    $new_elasticsearch.indices.delete(index: index)
-  end
 end
 
 Before '@disable_caching' do

@@ -1,12 +1,12 @@
 source 'https://rubygems.org'
 
-ruby File.read(File.expand_path('../.ruby_version', __FILE__)).strip.gsub("ruby","")
+ruby '2.6.5'
 
 gem 'test-unit', '~> 3.2'
 
 gem 'bundler'
 
-gem 'rails', '~> 5.1'
+gem 'rails', '~> 5.1.6.2'
 
 gem 'rails-observers', git: 'https://github.com/rails/rails-observers'
 gem 'actionpack-page_caching'
@@ -15,22 +15,27 @@ gem 'rails-controller-testing'
 
 # the published gem does not include fixes that are in Rails
 # specifically https://github.com/rails/strong_parameters/issues/16
-# gem 'strong_parameters', :git => 'https://github.com/rails/strong_parameters.git',  :ref => '904af2910c57b71bc992e8364aa48896be230c2f'
+# gem 'strong_parameters', git: 'https://github.com/rails/strong_parameters.git',  ref: '904af2910c57b71bc992e8364aa48896be230c2f'
 
 # Bundle edge Rails instead:
-# gem 'rails', :git => 'git://github.com/rails/rails.git'
+# gem 'rails', git: 'git://github.com/rails/rails.git'
 
 # Database
-# gem 'sqlite3-ruby', :require => 'sqlite3'
-gem 'mysql2', '0.3.20'
+# gem 'sqlite3-ruby', require: 'sqlite3'
+gem 'mysql2', '0.5.2'
 
 #https://github.com/qertoip/transaction_retry
+# We don't use the isolation gem directly, but it needs to be
+# at the latest version to avoid errors
+gem 'transaction_isolation', '1.0.5'
 gem 'transaction_retry'
 #https://github.com/winebarrel/activerecord-mysql-reconnect
 gem 'activerecord-mysql-reconnect', '~> 0.4.1'
 
+gem 'rack-attack'
+
 # Version of redis-rb gem
-# We are currently running Redis 2.6.4 (12/6/2012)
+# We are currently running Redis 3.2.1 (7/2018)
 gem 'redis', ">=3.0"
 gem 'redis-namespace'
 
@@ -49,21 +54,20 @@ gem 'akismetor'
 
 gem 'httparty'
 gem 'htmlentities'
-gem 'whenever', '~>0.6.2', :require => false
-gem 'nokogiri', '>= 1.8.2'
+gem 'whenever', '~>0.6.2', require: false
+gem 'nokogiri', '>= 1.8.5'
 gem 'mechanize'
 gem 'sanitize', '>= 4.6.5'
 # Until there is a working solution to
 # https://otwarchive.atlassian.net/browse/AO3-4957
 # https://github.com/rubys/nokogumbo/issues/50
 gem 'nokogumbo', '1.4.9'
-gem 'rest-client', '~> 1.8.0', :require => 'rest_client'
+gem 'rest-client', '~> 1.8.0', require: 'rest_client'
 gem 'resque', '>=1.14.0'
 gem 'resque_mailer'
 gem 'resque-scheduler'
-#gem 'daemon-spawn', :require => 'daemon_spawn'
-gem 'tire'
-gem 'elasticsearch', '>=6.0.0'
+#gem 'daemon-spawn', require: 'daemon_spawn'
+gem 'elasticsearch', '6.8.0'
 gem 'aws-sdk'
 gem 'css_parser'
 
@@ -76,7 +80,6 @@ gem 'fastimage'
 # Gems for authentication
 gem 'devise'
 gem 'devise-async'       # To mails through queues
-gem 'authlogic', '~> 3.6.0'
 gem 'bcrypt'
 
 # A highly updated version of the authorization plugin
@@ -100,7 +103,7 @@ gem 'timeliness'
 # gem 'rpm_contrib', '2.2.0'
 
 # for generating graphs
-gem 'google_visualr', git: 'https://github.com/stephendolan/google_visualr'
+gem 'google_visualr', git: 'https://github.com/winston/google_visualr'
 
 # Copycopter to aid translation
 # gem 'copycopter_client', '~> 2.0.1'
@@ -111,7 +114,7 @@ gem 'globalize', git: 'https://github.com/panorama-berlin/globalize'
 gem 'activemodel-serializers-xml'
 
 # Add a clean notifier that shows we are on dev or test
-gem 'rack-dev-mark', '>=0.7.5'
+gem 'rack-dev-mark', '>=0.7.8'
 
 #Phrase-app
 gem 'phraseapp-in-context-editor-ruby', '>=1.0.6'
@@ -126,7 +129,6 @@ gem 'rollout'
 #  Place the New Relic gem as low in the list as possible, allowing the
 #  frameworks above it to be instrumented when the gem initializes.
 gem 'newrelic_rpm'
-gem 'newrelic-redis'
 
 #   Use update memcached client with kinder, gentler I/O for Ruby
 gem 'connection_pool'
@@ -138,10 +140,9 @@ group :test do
   gem 'rspec-rails', '~> 3.6.0'
   gem 'pickle'
   gem 'shoulda'
-  gem 'capybara', '~> 2.6.2'
-  gem 'database_cleaner', '1.5.2'
+  gem 'capybara', '~> 2.16.1'
+  gem 'database_cleaner', '1.6.0'
   gem 'cucumber', '~> 2.4.0'
-  gem 'selenium-webdriver'
   gem 'poltergeist'
   gem 'capybara-screenshot'
   gem 'cucumber-rails', '~> 1.5', require: false
@@ -151,9 +152,9 @@ group :test do
   gem 'faker', '~> 1.6.3'
   # Record and replay data from external URLs
   gem 'vcr', '~> 3.0', '>= 3.0.1'
-  gem 'webmock', '~> 1.24.2'
+  gem 'webmock', '~> 3.7.6'
   gem 'timecop'
-  gem 'cucumber-timecop', :require => false
+  gem 'cucumber-timecop', require: false
   # Code coverage
   gem 'simplecov', '~> 0.14.0'
   gem 'codecov', '~> 0.1.10', require: false
@@ -162,26 +163,32 @@ end
 
 group :test, :development do
   gem 'awesome_print'
+  gem 'brakeman', '3.7.2'
   gem 'pry-byebug'
   gem 'whiny_validation'
-  gem 'factory_girl', '~> 4.8.0'
+  gem 'factory_bot', '~> 5.0.2'
   gem 'minitest'
 end
 
 group :development do
-  gem 'factory_girl_rails'
+  gem 'factory_bot_rails'
   gem 'bundler-audit'
+  gem 'active_record_query_trace', '~> 1.6', '>= 1.6.1'
 end
 
 group :test, :development, :staging do
-  gem 'bullet', '~> 5.6.0'
+  gem 'bullet', '>= 5.7.3'
+end
+
+group :staging do
+  gem 'lockup'
 end
 
 # Deploy with Capistrano
-gem 'capistrano-gitflow_version', '>=0.0.3', :require => false
+gem 'capistrano-gitflow_version', '>=0.0.3', require: false
 gem 'rvm-capistrano'
 
-group :production do
-  # Use unicorn as the web server
-  gem 'unicorn', '>= 5.1.0', :require => false
-end
+# Use unicorn as the web server
+gem 'unicorn', '~> 5.5', require: false
+# Use god as the monitor
+gem 'god', '~> 0.13.7'

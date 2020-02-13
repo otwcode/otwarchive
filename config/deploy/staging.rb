@@ -8,9 +8,8 @@
 # Calling "cap deploy:migrations" inserts the task "deploy:migrate" before deploy:symlink
 require 'capistrano/gitflow_version'
 
-server "test-app01.transformativeworks.org", :app, :db
-server "test-app02.transformativeworks.org", :app, :workers, :schedulers, primary: true
-server "test-front01.transformativeworks.org", :web
+server "linapp01", :app, :db, :workers, :schedulers, primary: true
+server "linfront01", :web
 
 set :rails_env, 'staging'
 

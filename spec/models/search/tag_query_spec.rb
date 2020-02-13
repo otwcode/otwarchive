@@ -1,6 +1,6 @@
-require 'spec_helper'
+require "spec_helper"
 
-describe TagQuery, type: :model do
+describe TagQuery, type: :model, tag_search: true do
   let!(:tags) do
     tags = {
       char_abc: create(:character, name: "abc"),
@@ -17,7 +17,7 @@ describe TagQuery, type: :model do
       rel_quotes: create(:relationship, name: "ab \"cd\" ef"),
       rel_unicode: create(:relationship, name: "Dave ♦ Sawbuck")
     }
-    update_and_refresh_indexes('tag', 1)
+    run_all_indexing_jobs
     tags
   end
 
@@ -31,7 +31,7 @@ describe TagQuery, type: :model do
   it "performs a query string search ('ab OR cd' matches 'ab cd', 'ab/cd' and 'ab “cd” ef')" do
     tag_query = TagQuery.new(name: "ab OR cd")
     results = tag_query.search_results
-    results.first.should eq(tags[:rel_slash])
+    results.should include(tags[:rel_slash])
     results.should include(tags[:rel_space])
     results.should include(tags[:rel_quotes])
   end
@@ -39,7 +39,6 @@ describe TagQuery, type: :model do
   it "performs an exact match with quotes ('xgh OR “abc d”' matches 'abc d')" do
     tag_query = TagQuery.new(name: 'xgh OR "abc d"')
     results = tag_query.search_results
-    results.first.should eq(tags[:char_abc_d])
     results.should include(tags[:char_abc_d])
   end
   
@@ -149,5 +148,12 @@ describe TagQuery, type: :model do
     tag_query = TagQuery.new(name: "dave sawbuck")
     results = tag_query.search_results
     results.should include(tags[:rel_unicode])
+  end
+
+  it "defaults to TAGS_PER_SEARCH_PAGE to determine the number of results" do
+    allow(ArchiveConfig).to receive(:TAGS_PER_SEARCH_PAGE).and_return(5)
+    tag_query = TagQuery.new(name: "a*")
+    results = tag_query.search_results
+    expect(results.size).to eq 5
   end
 end

@@ -8,13 +8,13 @@ class StoryParser
   require 'open-uri'
   include HtmlCleaner
 
-  OPTIONAL_META = { notes: 'Note',
-                    freeform_string: 'Tag',
-                    fandom_string: 'Fandom',
-                    rating_string: 'Rating',
-                    warning_string: 'Warning',
-                    relationship_string: 'Relationship|Pairing',
-                    character_string: 'Character' }.freeze
+  OPTIONAL_META = {notes: 'Note',
+                   freeform_string: 'Tag',
+                   fandom_string: 'Fandom',
+                   rating_string: 'Rating',
+                   archive_warning_string: 'Warning',
+                   relationship_string: 'Relationship|Pairing',
+                   character_string: 'Character' }.freeze
   REQUIRED_META = { title: 'Title',
                     summary: 'Summary',
                     revised_at: 'Date|Posted|Posted on|Posted at',
@@ -72,6 +72,98 @@ class StoryParser
 
 
   # Import many stories
+  def import_many(urls, options = {})
+    # Try to get the works
+    works = []
+    failed_urls = []
+    errors = []
+    @options = options
+    urls.each do |url|
+      begin
+        response = download_and_parse_work(url, options)
+        work = response[:work]
+        if response[:status] == :created
+          if work && work.save
+            work.chapters.each(&:save)
+            works << work
+          else
+            failed_urls << url
+            errors << work.errors.values.join(", ")
+            work.delete if work
+          end
+        elsif response[:status] == :already_imported
+          raise StoryParser::Error, response[:message]
+        end
+      rescue Timeout::Error
+        failed_urls << url
+        errors << "Import has timed out. This may be due to connectivity problems with the source site. Please try again in a few minutes, or check Known Issues to see if there are import problems with this site."
+        work.delete if work
+      rescue Error => exception
+        failed_urls << url
+        errors << "We couldn't successfully import that work, sorry: #{exception.message}"
+        work.delete if work
+      end
+    end
+    [works, failed_urls, errors]
+  end
+
+  # Downloads a story and passes it on to the parser.
+  # If the URL of the story is from a site for which we have special rules
+  # (eg, downloading from a livejournal clone, you want to use ?format=light
+  # to get a nice and consistent post format), it will pre-process the url
+  # according to the rules for that site.
+  def download_and_parse_work(location, options = {})
+    status = :created
+    message = ""
+    work = Work.find_by_url(location)
+    if work.nil?
+      @options = options
+      source = get_source_if_known(CHAPTERED_STORY_LOCATIONS, location)
+      if source.nil?
+        story = download_text(location)
+        work = parse_story(story, location, options)
+      else
+        work = download_and_parse_chaptered_story(source, location, options)
+      end
+    else
+      status = :already_imported
+      message = "A work has already been imported from #{location}."
+    end
+    {
+      status: status,
+      message: message,
+      work: work
+    }
+  end
+
+  # Given an array of urls for chapters of a single story,
+  # download them all and combine into a single work
+  def import_chapters_into_story(locations, options = {})
+    status = :created
+    work = Work.find_by_url(locations.first)
+    if work.nil?
+      chapter_contents = []
+      @options = options
+      locations.each do |location|
+        chapter_contents << download_text(location)
+      end
+      work = parse_chapters_into_story(locations.first, chapter_contents, options)
+      message = "Successfully created work \"" + work.title + "\"."
+    else
+      status = :already_imported
+      message = "A work has already been imported from #{locations.first}."
+    end
+    {
+      status: status,
+      message: message,
+      work: work
+    }
+  end
+
+
+  ### OLD PARSING METHODS
+
+  # Import many stories
   def import_from_urls(urls, options = {})
     # Try to get the works
     works = []
@@ -102,44 +194,6 @@ class StoryParser
     [works, failed_urls, errors]
   end
 
-  ### DOWNLOAD-AND-PARSE WRAPPERS
-
-  # General pathway for story importing:
-  #
-  # Starting points:
-  # - import_from_urls --> repeatedly calls download_and_parse_story
-  # - download_and_parse_story
-  # - download_and_parse_chapters_into_story
-  # - (download_and_parse_chapter_of_work -- requires existing work)
-  #
-  # Each of these will download the content and then hand it off to a parser.
-  #
-  # Parsers:
-  # - parse_story: for a work of one single chapter downloaded as a single text string
-  # - parse_chapters_into_story: for a work of multiple chapters downloaded as an array of text strings (the separate chapter contents)
-  # - parse_chapter_of_work: essentially duplicates parse_story, but turns the content into a chapter of an existing work
-  #
-  # All of these parsers then go into
-  # - parse_common: processes a single text string, cleaning up HTML and looking for meta information
-  # - sanitize_params: after processing, clean up the params and strip out bad HTML
-  #
-  # If the story is from a known source, parse_common hands off to a custom parser built just for that source,
-  # including parse_story_from_lj. If not known, it falls
-  # back on parse_story_from_unknown.
-  #
-  # The various parsers use different methods to collect up metadata, and generically we also use:
-  # - scan_text_for_meta: looks for text patterns like [metaname]: [value] eg, "Fandom: Highlander"
-  #
-  # Shared options:
-  #
-  # :do_not_set_current_author - true means do not save the current user as an author
-  # :importing for others - true means try and add external author for the work
-  # :pseuds - a list of pseuds to set as authors
-  # :set_tags, :fandom, :rating, :warning, :character, :relationship - sets these tags
-  # :override_tags - set tag values even if some were parsed out of the work
-  # :post_without_preview - if true, mark the story as posted without previewing
-  #
-
   # Downloads a story and passes it on to the parser.
   # If the URL of the story is from a site for which we have special rules
   # (eg, downloading from a livejournal clone, you want to use ?format=light
@@ -156,12 +210,6 @@ class StoryParser
       work = download_and_parse_chaptered_story(source, location, options)
     end
     work
-  end
-
-  # download and add a new chapter to the end of a work
-  def download_and_parse_chapter_of_work(work, location, options = {})
-    chapter_content = download_text(location)
-    parse_chapter_of_work(work, chapter_content, location, options)
   end
 
   # Given an array of urls for chapters of a single story,
@@ -211,6 +259,7 @@ class StoryParser
 
   # Everything below here is protected and should not be touched by outside
   # code -- please use the above functions to parse external works.
+
   protected
 
   # tries to create an external author for a given url
@@ -252,6 +301,7 @@ class StoryParser
 
     @options = options
     work.imported_from_url = location
+    work.ip_address = options[:ip_address]
     work.expected_number_of_chapters = work.chapters.length
     work.revised_at = work.chapters.last.published_at
     if work.revised_at && work.revised_at.to_date < Date.today
@@ -263,12 +313,12 @@ class StoryParser
     pseuds << User.current_user.default_pseud unless options[:do_not_set_current_author] || User.current_user.nil?
     pseuds << options[:archivist].default_pseud if options[:archivist]
     pseuds << options[:pseuds] if options[:pseuds]
-    pseuds = pseuds.uniq
+    pseuds = pseuds.flatten.compact.uniq
     raise Error, "A work must have at least one author specified" if pseuds.empty?
     pseuds.each do |pseud|
-      unless pseud.nil?
-        work.pseuds << pseud unless work.pseuds.include?(pseud)
-        work.chapters.each { |chapter| chapter.pseuds << pseud unless chapter.pseuds.include?(pseud) }
+      work.creatorships.build(pseud: pseud, enable_notifications: true)
+      work.chapters.each do |chapter|
+        chapter.creatorships.build(pseud: pseud)
       end
     end
 
@@ -297,7 +347,7 @@ class StoryParser
     # set default values for required tags
     work.fandom_string = meta_or_default(work.fandom_string, options[:fandom], ArchiveConfig.FANDOM_NO_TAG_NAME)
     work.rating_string = meta_or_default(work.rating_string, options[:rating], ArchiveConfig.RATING_DEFAULT_TAG_NAME)
-    work.warning_strings = meta_or_default(work.warning_strings, options[:warning], ArchiveConfig.WARNING_DEFAULT_TAG_NAME)
+    work.archive_warning_strings = meta_or_default(work.archive_warning_strings, options[:archive_warning], ArchiveConfig.WARNING_DEFAULT_TAG_NAME)
     work.category_string = meta_or_default(work.category_string, options[:category], [])
     work.character_string = meta_or_default(work.character_string, options[:character], [])
     work.relationship_string = meta_or_default(work.relationship_string, options[:relationship], [])
@@ -319,11 +369,11 @@ class StoryParser
       if chapter.content.length > ArchiveConfig.CONTENT_MAX
         # TODO: eventually: insert a new chapter
         chapter.content.truncate(ArchiveConfig.CONTENT_MAX, omission: "<strong>WARNING: import truncated automatically because chapter was too long! Please add a new chapter for remaining content.</strong>", separator: "</p>")
+      elsif chapter.content.empty?
+        raise Error, "Chapter #{chapter.position} of \"#{work.title}\" is blank."
       end
 
-      chapter.posted = true
-      # ack! causing the chapters to exist even if work doesn't get created!
-      # chapter.save
+      chapter.posted = true # do not save - causes the chapters to exist even if work doesn't get created!
     end
     work
   end
@@ -501,14 +551,15 @@ class StoryParser
     @doc = Nokogiri::HTML.parse(story.prepend("<foo/>"), nil, encoding) rescue ""
 
     # Try to convert all relative links to absolute
-    base = @doc.at_css('base') ? @doc.css('base')[0]['href'] : location.split('?').first
+    base = @doc.at_css("base") ? @doc.css("base")[0]["href"] : location.split("?").first
     if base.present?
-      @doc.css('a').each do |link|
-        next if link['href'].blank?
+      @doc.css("a").each do |link|
+        next if link["href"].blank? || link["href"].start_with?("#")
         begin
-          query = link['href'].match(/(\?.*)$/) ? $1 : ''
-          link['href'] = URI.join(base, link['href'].gsub(/(\?.*)$/, '')).to_s + query
+          query = link["href"].match(/(\?.*)$/) ? $1 : ""
+          link["href"] = URI.join(base, link["href"].gsub(/(\?.*)$/, "")).to_s + query
         rescue
+# ignored
         end
       end
     end
@@ -706,7 +757,7 @@ class StoryParser
     meta = {}
     metapatterns = detect_tags ? REQUIRED_META.merge(OPTIONAL_META) : REQUIRED_META
     is_tag = {}.tap do |h|
-      %w[fandom_string relationship_string freeform_string rating_string warning_string].each do |c|
+      %w[fandom_string relationship_string freeform_string rating_string archive_warning_string].each do |c|
         h[c.to_sym] = true
       end
     end
@@ -750,13 +801,15 @@ class StoryParser
         when Net::HTTPSuccess
           story = response.body
         when Net::HTTPRedirection
-          if limit > 0
+          if limit.positive?
             story = download_with_timeout(response['location'], limit - 1)
           end
         else
+          Rails.logger.error("------- STORY PARSER: download_with_timeout: response is not success or redirection ------")
           nil
         end
-      rescue Errno::ECONNREFUSED, SocketError, EOFError
+      rescue Errno::ECONNREFUSED, SocketError, EOFError => e
+        Rails.logger.error("------- STORY PARSER: download_with_timeout: error rescue: \n#{e.inspect} ------")
         nil
       end
     end
@@ -861,9 +914,9 @@ class StoryParser
   # Additional processing for meta - currently to make sure warnings
   # that aren't Archive warnings become additional tags instead
   def post_process_meta(meta)
-    if meta[:warning_string]
-      result = process_warnings(meta[:warning_string], meta[:freeform_string])
-      meta[:warning_string] = result[:warning_string]
+    if meta[:archive_warning_string]
+      result = process_warnings(meta[:archive_warning_string], meta[:freeform_string])
+      meta[:archive_warning_string] = result[:archive_warning_string]
       meta[:freeform_string] = result[:freeform_string]
     end
     meta
@@ -871,19 +924,19 @@ class StoryParser
 
   def process_warnings(warning_string, freeform_string)
     result = {
-      warning_string: warning_string,
-      freeform_string: freeform_string
+        archive_warning_string: warning_string,
+        freeform_string: freeform_string
     }
     new_warning = ''
-    result[:warning_string].split(/\s?,\s?/).each do |warning|
-      if Warning.warning? warning
+    result[:archive_warning_string].split(/\s?,\s?/).each do |warning|
+      if ArchiveWarning.warning? warning
         new_warning += ', ' unless new_warning.blank?
         new_warning += warning
       else
         result[:freeform_string] = (result[:freeform_string] || '') + ", #{warning}"
       end
     end
-    result[:warning_string] = new_warning
+    result[:archive_warning_string] = new_warning
     result
   end
 

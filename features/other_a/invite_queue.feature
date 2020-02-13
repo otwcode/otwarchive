@@ -123,13 +123,13 @@ Feature: Invite queue management
     When I click the first link in the email
       And I fill in the sign up form with valid data
       And I fill in the following:
-        | user_login                 | newuser                  |
-        | user_email                 | test@archiveofourown.org |
-        | user_password              | password1                |
-        | user_password_confirmation | password1                |
+        | user_registration_login                 | newuser                  |
+        | user_registration_email                 | test@archiveofourown.org |
+        | user_registration_password              | password1                |
+        | user_registration_password_confirmation | password1                |
       And all emails have been delivered
     When I press "Create Account"
-    Then I should see "Account Created!"
+    Then I should see "Almost Done!"
     Then 1 email should be delivered
       And the email should contain "Welcome to the Archive of Our Own,"
       And the email should contain "newuser"
@@ -139,6 +139,9 @@ Feature: Invite queue management
     # user activates account
     When all emails have been delivered
       And I click the first link in the email
+    Then I should be on the login page
+      And I should see "Account activation complete! Please log in."
+
     When I am logged in as "newuser" with password "password1"
     Then I should see "Successfully logged in."
 
