@@ -222,9 +222,9 @@ en:
         other: "We regret to inform you that your request for %{count} new invitations cannot be fulfilled at this time."
     anonymous_or_unrevealed_notification:
       subject:
-        anonymous: "[%{app_name}] Your work has become anonymous"
-        anonymous_unrevealed: "[%{app_name}] Your work has become anonymous and unrevealed"
-        unrevealed: "[%{app_name}] Your work has become unrevealed"
+        anonymous: "[%{app_name}] Your work was made anonymous"
+        anonymous_unrevealed: "[%{app_name}] Your work was made anonymous and unrevealed"
+        unrevealed: "[%{app_name}] Your work was made unrevealed"
       greeting: "Dear %{user},"
       changed_status:
         anonymous: "The collection maintainers of %{collection} have changed the status of your work %{work} to anonymous."
