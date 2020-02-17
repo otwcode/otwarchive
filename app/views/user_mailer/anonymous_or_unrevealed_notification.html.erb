@@ -5,11 +5,13 @@
            collection: style_link(@collection.title, collection_url(@collection)),
            work: style_creation_link(@work.title, work_url(@work))).html_safe %></p>
 
-  <% if @becoming_anonymous %>
-    <p><%= t(".anonymous_info") %></p>
-  <% end %>
+  <% if @becoming_anonymous && @becoming_unrevealed %>
+    <p><%= t(".unrevealed_info") %></p>
 
-  <% if @becoming_unrevealed %>
+    <p><%= t(".anonymous_unrevealed_info") %></p>
+  <% elsif @becoming_anonymous %>
+    <p><%= t(".anonymous_info") %></p>
+  <% else %>
     <p><%= t(".unrevealed_info") %></p>
   <% end %>
 
