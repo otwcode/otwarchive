@@ -6,9 +6,9 @@
       work: @work.title) %>
 
 <% if @becoming_anonymous && @becoming_unrevealed %>
-<%= t(".anonymous_info") %>
-
 <%= t(".unrevealed_info") %>
+
+<%= t(".anonymous_unrevealed_info") %>
 <% elsif @becoming_anonymous %>
 <%= t(".anonymous_info") %>
 <% else %>
