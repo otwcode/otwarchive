@@ -1,7 +1,5 @@
 Otwarchive::Application.routes.draw do
 
-  mount Lockup::Engine, at: '/lockup' if Rails.env.staging?
-
   devise_for :admin,
              module: 'admin',
              only: :sessions,
