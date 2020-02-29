@@ -10,14 +10,19 @@ class Kudo < ApplicationRecord
   validate :guest_cannot_kudos_restricted_work
 
   validates_uniqueness_of :pseud_id,
-    scope: [:commentable_id, :commentable_type],
-    message: ts("^You have already left kudos here. :)"),
-    if: Proc.new { |kudo| !kudo.pseud.nil? }
+                          scope: [:commentable_id, :commentable_type],
+                          message: ts("^You have already left kudos here. :)"),
+                          if: proc { |kudo| !kudo.pseud.nil? }
 
   validates_uniqueness_of :ip_address,
-    scope: [:commentable_id, :commentable_type],
-    message: ts("^You have already left kudos here. :)"),
-    if: Proc.new { |kudo| !kudo.ip_address.blank? }
+                          scope: [:commentable_id, :commentable_type],
+                          message: ts("^You have already left kudos here. :)"),
+                          if: proc { |kudo| !kudo.ip_address.blank? }
+
+  validates_uniqueness_of :user_id,
+                          scope: [:commentable_id, :commentable_type],
+                          message: ts("^You have already left kudos here. :)"),
+                          if: proc { |kudo| !kudo.user.nil? }
 
   scope :with_pseud, -> { where("pseud_id IS NOT NULL") }
   scope :by_guest, -> { where("pseud_id IS NULL") }
