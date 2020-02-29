@@ -57,6 +57,20 @@ class KudosController < ApplicationController
         end
       end
     end
+  rescue ActiveRecord::RecordNotUnique => e
+    # Uniqueness checks at application level (Rails validations) are inherently
+    # prone to race conditions. If we pass Rails validations but get rejected
+    # by database unique indices, use the usual duplicate error message.
+    #
+    # https://api.rubyonrails.org/v5.1/classes/ActiveRecord/Validations/ClassMethods.html#method-i-validates_uniqueness_of-label-Concurrency+and+integrity
+    if e.message =~ /Mysql2?::Error: Duplicate entry/i
+      flash[:comment_error] = ts("You have already left kudos here. :)")
+      redirect_to request.referer
+      return
+    end
+
+    # If we get unknown errors, let them propagate normally.
+    raise
   end
 
   private

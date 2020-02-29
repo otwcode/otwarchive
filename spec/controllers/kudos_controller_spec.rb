@@ -51,6 +51,34 @@ describe KudosController do
           post :create, params: { kudo: { commentable_id: work.id, commentable_type: "Work" } }
           expect(assigns(:kudo).user).to eq(user)
         end
+
+        context "when kudos giver has already left kudos on the work" do
+          let!(:old_kudo) { create(:kudo, user: user, commentable: work) }
+
+          it "redirects to referer with an error" do
+            post :create, params: { kudo: { commentable_id: work.id, commentable_type: "Work" } }
+            # TODO: AO3-5635 Fix this error message.
+            it_redirects_to_with_comment_error(referer, "User ^You have already left kudos here. :)")
+          end
+
+          # TODO: AO3-5869 Enable this test when database unique constraints exist.
+          xcontext "when duplicate database inserts happen despite Rails validations" do
+            # https://api.rubyonrails.org/v5.1/classes/ActiveRecord/Validations/ClassMethods.html#method-i-validates_uniqueness_of-label-Concurrency+and+integrity
+            #
+            # We fake this scenario by skipping Rails validations.
+            before do
+              allow_any_instance_of(Kudo).to receive(:save).and_call_original
+              allow_any_instance_of(Kudo).to receive(:save).with(no_args) do |kudo|
+                kudo.save(validate: false)
+              end
+            end
+
+            it "redirects to referer with an error" do
+              post :create, params: { kudo: { commentable_id: work.id, commentable_type: "Work" } }
+              it_redirects_to_with_comment_error(referer, "You have already left kudos here. :)")
+            end
+          end
+        end
       end
 
       context "when kudos giver is creator of work" do
