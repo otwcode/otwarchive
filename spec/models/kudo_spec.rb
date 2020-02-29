@@ -13,7 +13,6 @@ describe Kudo do
         it "does not save" do
           expect(new_kudo.save).to be_falsy
           expect(new_kudo.errors[:ip_address]).to be_empty
-          expect(new_kudo.errors[:pseud_id].first).to include("already left kudos")
           expect(new_kudo.errors[:user_id].first).to include("already left kudos")
         end
       end
@@ -26,7 +25,6 @@ describe Kudo do
         it "does not save" do
           expect(new_kudo.save).to be_falsy
           expect(new_kudo.errors[:ip_address]).to be_empty
-          expect(new_kudo.errors[:pseud_id]).to be_empty
           expect(new_kudo.errors[:user_id].first).to include("already left kudos")
         end
       end
@@ -53,7 +51,6 @@ describe Kudo do
         it "does not save" do
           expect(new_kudo.save).to be_falsy
           expect(new_kudo.errors[:ip_address].first).to include("already left kudos")
-          expect(new_kudo.errors[:pseud_id]).to be_empty
           expect(new_kudo.errors[:user_id]).to be_empty
         end
       end

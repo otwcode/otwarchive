@@ -9,11 +9,6 @@ class Kudo < ApplicationRecord
   validate :cannot_be_author
   validate :guest_cannot_kudos_restricted_work
 
-  validates_uniqueness_of :pseud_id,
-                          scope: [:commentable_id, :commentable_type],
-                          message: ts("^You have already left kudos here. :)"),
-                          if: proc { |kudo| !kudo.pseud.nil? }
-
   validates_uniqueness_of :ip_address,
                           scope: [:commentable_id, :commentable_type],
                           message: ts("^You have already left kudos here. :)"),
