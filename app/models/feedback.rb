@@ -14,8 +14,8 @@ class Feedback < ApplicationRecord
 
   validate :check_for_spam
   def check_for_spam
-    self.approved = logged_in_with_matching_email? || !Akismetor.spam?(akismet_attributes)
-    errors.add(:base, ts("This report looks like spam to our system!")) unless self.approved
+    approved = logged_in_with_matching_email? || !Akismetor.spam?(akismet_attributes)
+    errors.add(:base, ts("This report looks like spam to our system!")) unless approved
   end
 
   def logged_in_with_matching_email?
@@ -34,13 +34,11 @@ class Feedback < ApplicationRecord
   end
 
   def mark_as_spam!
-    update_attribute(:approved, false)
     # don't submit spam reports unless in production mode
     Rails.env.production? && Akismetor.submit_spam(akismet_attributes)
   end
 
   def mark_as_ham!
-    update_attribute(:approved, true)
     # don't submit ham reports unless in production mode
     Rails.env.production? && Akismetor.submit_ham(akismet_attributes)
   end

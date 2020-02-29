@@ -100,7 +100,7 @@ class WorksController < ApplicationController
         # the subtag is for eg collections/COLL/tags/TAG
         subtag = @tag.present? && @tag != @owner ? @tag : nil
         user = logged_in? || logged_in_as_admin? ? 'logged_in' : 'logged_out'
-        @works = Rails.cache.fetch("#{@owner.works_index_cache_key(subtag)}_#{user}_page#{params[:page]}_true", expires_in: 20.minutes) do
+        @works = Rails.cache.fetch("#{@owner.works_index_cache_key(subtag)}_#{user}_page#{params[:page]}_true", expires_in: ArchiveConfig.SECONDS_UNTIL_WORK_INDEX_EXPIRE.seconds) do
           results = @search.search_results
           # calling this here to avoid frozen object errors
           results.items
@@ -122,7 +122,7 @@ class WorksController < ApplicationController
         end
       end
     elsif use_caching?
-      @works = Rails.cache.fetch('works/index/latest/v1', expires_in: 10.minutes) do
+      @works = Rails.cache.fetch('works/index/latest/v1', expires_in: ArchiveConfig.SECONDS_UNTIL_WORK_INDEX_EXPIRE.seconds) do
         Work.latest.includes(:tags, :external_creatorships, :series, :language, :approved_collections, pseuds: [:user]).to_a
       end
     else
@@ -485,6 +485,7 @@ class WorksController < ApplicationController
     end
 
     options = build_options(params)
+    options[:ip_address] = request.remote_ip
 
     # now let's do the import
     if params[:import_multiple] == 'works' && @urls.length > 1

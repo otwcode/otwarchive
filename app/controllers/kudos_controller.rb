@@ -14,6 +14,7 @@ class KudosController < ApplicationController
     @kudo = Kudo.new(kudo_params)
     if current_user.present?
       @kudo.pseud = current_user.default_pseud
+      @kudo.user = current_user
     else
       @kudo.ip_address = request.remote_ip
     end
@@ -44,7 +45,7 @@ class KudosController < ApplicationController
           if @kudo && @kudo.creator_of_work?
             error_message = "You can't leave kudos on your own work."
           end
-          if !current_user.present? && commentable.restricted?
+          if !current_user.present? && commentable&.restricted?
             error_message = "You can't leave guest kudos on a restricted work."
           end
           flash[:comment_error] = ts(error_message)
