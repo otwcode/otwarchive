@@ -653,8 +653,12 @@ namespace :After do
   desc "Update kudo counts on indexed works"
   task(update_indexed_stat_counter_kudo_count: :environment) do
     counters = StatCounter.where("kudos_count > ?", 0)
+    total_batches = (counters.size + 999) / 1000
+    batch_number = 0
 
     counters.find_in_batches do |batch|
+      batch_number = batch_number + 1
+      progress_msg = "Batch #{batch_number} of #{total_batches} complete"
       batch.each do |counter|
         next unless counter.work
 
@@ -664,7 +668,7 @@ namespace :After do
         # Counters will be queued for reindexing.
         counter.save
       end
-      print(".") && STDOUT.flush
+      puts(progress_msg) && STDOUT.flush
     end
     puts && STDOUT.flush
   end
