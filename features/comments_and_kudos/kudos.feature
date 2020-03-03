@@ -60,6 +60,37 @@ Feature: Kudos
     When I go to the work kudos page for "Awesome Story"
     Then I should see "myname2 and myname3 as well as 1 guest left kudos on this work!"
 
+  @javascript
+  Scenario: Leaving kudos with JavaScript enabled
+
+    # As a registered user
+    When I am logged in as "myname2"
+      And I view the work "Awesome Story"
+      And I press "Kudos ♥"
+    Then I should see "Thank you for leaving kudos!"
+      And I should see "myname2 left kudos on this work!"
+    When I press "Kudos ♥"
+    Then I should see "You have already left kudos here. :)"
+      And I should not see "myname2 and myname2 left kudos on this work!"
+
+    # As another registered user
+    When I am logged in as "myname3"
+      And I view the work "Awesome Story"
+      And I press "Kudos ♥"
+    Then I should see "Thank you for leaving kudos!"
+      And I should see "myname3 and myname2 left kudos on this work!"
+    When I press "Kudos ♥"
+    Then I should see "You have already left kudos here. :)"
+
+    # As a guest user
+    When I am logged out
+      And I view the work "Awesome Story"
+      And I press "Kudos ♥"
+    Then I should see "Thank you for leaving kudos!"
+      And I should see "myname3 and myname2 as well as 1 guest left kudos on this work!"
+    When I press "Kudos ♥"
+    Then I should see "You have already left kudos here. :)"
+
   Scenario: Leaving kudos on a multi-chapter work
 
     Given I am logged in as "myname1"
