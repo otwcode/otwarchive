@@ -182,16 +182,14 @@ describe "rake After:update_indexed_stat_counter_kudo_count", work_search: true 
   let(:stat_counter) { work.stat_counter }
   let!(:kudo_bundle) { create_list(:kudo, 2, commentable_id: work.id) }
 
-  def result_count(options)
-    WorkSearchForm.new(options).search_results.size
-  end
-
   before do
     stat_counter.update_column(:kudos_count, 3)
     run_all_indexing_jobs
   end
 
   it "updates kudos_count" do
+    expect(stat_counter.kudos_count).to eq(3)
+
     subject.invoke
 
     stat_counter.reload
@@ -201,8 +199,9 @@ describe "rake After:update_indexed_stat_counter_kudo_count", work_search: true 
   it "updates work index" do
     expect do
       subject.invoke
-      WorkIndexer.refresh_index
-    end.to change { result_count(kudos_count: "2") }.from(0).to(1)
+      run_all_indexing_jobs
+    end.to change { WorkSearchForm.new(kudos_count: work.kudos.count.to_s)
+                      .search_results.size }.from(0).to(1)
   end
 end
 
