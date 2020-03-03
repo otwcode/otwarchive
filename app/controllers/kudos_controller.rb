@@ -63,8 +63,20 @@ class KudosController < ApplicationController
     # by database unique indices, use the usual duplicate error message.
     #
     # https://api.rubyonrails.org/v5.1/classes/ActiveRecord/Validations/ClassMethods.html#method-i-validates_uniqueness_of-label-Concurrency+and+integrity
-    flash[:comment_error] = ts("You have already left kudos here. :)")
-    redirect_to request.referer
+    respond_to do |format|
+      format.html do
+        flash[:comment_error] = ts("You have already left kudos here. :)")
+        redirect_to request.referer
+      end
+
+      format.js do
+        # TODO: AO3-5635 Clean up kudos error handling in JS.
+        # The JS error handler only checks for the existence of keys,
+        # e.g. "ip_address" will show the "already left kudos" message.
+        errors = { ip_address: "ERROR" }
+        render json: { errors: errors }, status: :unprocessable_entity
+      end
+    end
   end
 
   private

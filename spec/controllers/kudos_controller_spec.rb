@@ -77,6 +77,14 @@ describe KudosController do
               post :create, params: { kudo: { commentable_id: work.id, commentable_type: "Work" } }
               it_redirects_to_with_comment_error(referer, "You have already left kudos here. :)")
             end
+
+            context "with format: :js" do
+              it "returns an error in JSON format" do
+                post :create, params: { kudo: { commentable_id: work.id, commentable_type: "Work" }, format: :js }
+                # TODO: AO3-5635 Clean up kudos error handling in JS.
+                expect(JSON.parse(response.body)["errors"]).to include("ip_address")
+              end
+            end
           end
         end
       end
