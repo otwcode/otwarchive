@@ -649,6 +649,25 @@ namespace :After do
     end
     puts && STDOUT.flush
   end
+
+  desc "Update kudo counts on indexed works"
+  task(update_indexed_stat_counter_kudo_count: :environment) do
+    counters = StatCounter.where("kudos_count > ?", 0)
+
+    counters.find_in_batches do |batch|
+      batch.each do |counter|
+        next unless counter.work
+
+        counter.kudos_count = counter.work.kudos.count
+        next unless counter.kudos_count_changed?
+
+        # Counters will be queued for reindexing.
+        counter.save
+      end
+      print(".") && STDOUT.flush
+    end
+    puts && STDOUT.flush
+  end
 end # this is the end that you have to put new tasks above
 
 ##################
