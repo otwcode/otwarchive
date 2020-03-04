@@ -657,7 +657,7 @@ namespace :After do
     batch_number = 0
 
     counters.find_in_batches do |batch|
-      batch_number = batch_number + 1
+      batch_number += 1
       progress_msg = "Batch #{batch_number} of #{total_batches} complete"
       batch.each do |counter|
         next unless counter.work
