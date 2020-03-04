@@ -197,8 +197,8 @@ describe "rake After:update_indexed_stat_counter_kudo_count", work_search: true 
     expect do
       subject.invoke
       run_all_indexing_jobs
-    end.to change { WorkSearchForm.new(kudos_count: work.kudos.count.to_s)
-                      .search_results.size }.from(0).to(1)
+    end.to change { 
+      WorkSearchForm.new(kudos_count: work.kudos.count.to_s).search_results.size
+    }.from(0).to(1)
   end
 end
-
