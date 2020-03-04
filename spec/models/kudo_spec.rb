@@ -55,7 +55,7 @@ describe Kudo do
         end
       end
 
-      context "when kudos a different IP already exist" do
+      context "when kudos from a different IP already exist" do
         let(:old_kudo) { create(:kudo, ip_address: Faker::Internet.ip_v4_address) }
         let(:new_kudo) { build(:kudo, ip_address: ip_address, commentable: old_kudo.commentable) }
 
