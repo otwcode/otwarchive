@@ -455,8 +455,7 @@ $j(document).ready(function() {
         var msg = 'Sorry, we were unable to save your kudos';
         var data = $j.parseJSON(jqXHR.responseText);
 
-        // TODO: AO3-5859 Remove data.errors.pseud_id.
-        if (data.errors && (data.errors.pseud_id || data.errors.ip_address || data.errors.user_id)) {
+        if (data.errors && (data.errors.ip_address || data.errors.user_id)) {
           msg = "You have already left kudos here. :)";
         }
 
