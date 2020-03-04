@@ -70,7 +70,6 @@ class KudosController < ApplicationController
       end
 
       format.js do
-        # TODO: AO3-5635 Clean up kudos error handling in JS.
         # The JS error handler only checks for the existence of keys,
         # e.g. "ip_address" will show the "already left kudos" message.
         errors = { ip_address: "ERROR" }
