@@ -187,16 +187,13 @@ describe "rake After:update_indexed_stat_counter_kudo_count", work_search: true 
     run_all_indexing_jobs
   end
 
-  it "updates kudos_count" do
-    expect(stat_counter.kudos_count).to eq(3)
-
-    subject.invoke
-
-    stat_counter.reload
-    expect(stat_counter.kudos_count).to eq(work.kudos.count)
+  it "updates kudos_count on StatCounter" do
+    expect { 
+      subject.invoke
+    }.to change { stat_counter.reload.kudos_count }.from(3).to(work.kudos.count)
   end
 
-  it "updates work index" do
+  it "updates kudos_count in work index" do
     expect do
       subject.invoke
       run_all_indexing_jobs
