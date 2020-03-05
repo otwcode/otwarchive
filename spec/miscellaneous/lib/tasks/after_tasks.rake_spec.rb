@@ -97,3 +97,82 @@ describe "rake After:unhide_invited_works" do
     end
   end
 end
+
+describe "rake After:add_user_id_to_kudos" do
+  context "when user has no pseud" do
+    it "runs without erroring or updating user_id or pseud_id" do
+      pseudless_user = create(:user)
+      deleted_pseud_id = pseudless_user.default_pseud_id
+      deleted_pseud_kudos = create(:kudo,
+                                   pseud_id: deleted_pseud_id)
+
+      pseudless_user.default_pseud.delete
+      pseudless_user.reload
+      deleted_pseud_kudos.reload
+
+      subject.invoke
+
+      deleted_pseud_kudos.reload
+      expect(deleted_pseud_kudos.user_id).to be(nil)
+      expect(deleted_pseud_kudos.pseud_id).to eq(deleted_pseud_id)      
+    end
+  end
+
+  context "when user has a pseud" do
+    # If the user has left kudos on a work and is later added to it as a
+    # co-creator, the kudos will be invalid due to the is_author? validation.
+    # The kudos should still update because update_all skips validations.
+    context "when kudos is invalid" do
+      it "adds user_id and doesn't update pseud_id" do
+        co_creator = create(:user)
+        work = create(:work)
+        co_creator_kudos = create(:kudo,
+                                  commentable: work,
+                                  pseud_id: co_creator.default_pseud_id)
+
+        # Add user to work.
+        work.creatorships.create(pseud: co_creator.default_pseud)
+        work.reload
+
+        subject.invoke
+
+        co_creator_kudos.reload
+        expect(co_creator_kudos.user_id).to eq(co_creator.id)
+        expect(co_creator_kudos.pseud_id).to eq(co_creator.default_pseud_id)
+      end
+    end
+
+    context "when kudos is valid" do
+      it "adds user_id and doesn't update pseud_id" do
+        user = create(:user)
+        user_kudos = create(:kudo, pseud_id: user.default_pseud_id)
+
+        subject.invoke
+
+        user_kudos.reload
+        expect(user_kudos.user_id).to eq(user.id)
+        expect(user_kudos.pseud_id).to eq(user.default_pseud_id)
+      end
+    end
+  end
+
+  context "when the user has multiple pseuds" do
+    it "updates user_id for all pseuds' kudos" do
+      user_with_pseuds = create(:user)
+      second_pseud = create(:pseud, user_id: user_with_pseuds.id)
+      default_pseud_kudos = create(:kudo,
+                                   pseud_id: user_with_pseuds.default_pseud_id)
+      second_pseud_kudos = create(:kudo, pseud_id: second_pseud.id)
+
+      subject.invoke
+
+      default_pseud_kudos.reload
+      expect(default_pseud_kudos.user_id).to eq(user_with_pseuds.id)
+      expect(default_pseud_kudos.pseud_id).to eq(user_with_pseuds.default_pseud_id)
+
+      second_pseud_kudos.reload
+      expect(second_pseud_kudos.user_id).to eq(user_with_pseuds.id)
+      expect(second_pseud_kudos.pseud_id).to eq(second_pseud.id)
+    end
+  end
+end

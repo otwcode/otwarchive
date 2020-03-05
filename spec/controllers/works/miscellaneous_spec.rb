@@ -6,7 +6,7 @@ describe WorksController do
   include RedirectExpectationHelper
 
   context "reindex" do
-    let(:work) { create(:work) }
+    let!(:work) { create(:work) }
 
     context "if the user is an admin or tag wrangler" do
       let(:admin) { create(:admin) }

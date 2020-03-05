@@ -39,6 +39,7 @@ When /^I start to import the work "([^\"]*)"(?: by "([^\"]*)" with email "([^\"]
   step(%{I go to the import page})
   step(%{I check "Import for others ONLY with permission"})
   step(%{I fill in "urls" with "#{url}"})
+  step %{I select "English" from "Choose a language"}
   if external_author_name.present?
     step(%{I fill in "external_author_name" with "#{external_author_name}"})
     step(%{I fill in "external_author_email" with "#{external_author_email}"})
@@ -50,6 +51,7 @@ When /^I import the work "(.*?)"(?: by "(.*?)" with email "(.*?)")?(?: and by "(
   step(%{I go to the import page})
   step(%{I check "Import for others ONLY with permission"})
   step(%{I fill in "urls" with "#{url}"})
+  step %{I select "English" from "Choose a language"}
   if creator_name.present?
     step(%{I fill in "external_author_name" with "#{creator_name}"})
     step(%{I fill in "external_author_email" with "#{creator_email}"})
@@ -67,6 +69,7 @@ When /^I import the works "([^\"]*)"$/ do |urls|
   step(%{I go to the import page})
   step(%{I check "Import for others ONLY with permission"})
   step(%{I fill in "urls" with "#{urls}"})
+  step %{I select "English" from "Choose a language"}
   step(%{I check "Post without previewing"})
   step(%{I press "Import"})
 end

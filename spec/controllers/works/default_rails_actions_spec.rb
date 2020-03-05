@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require "spec_helper"
 
-describe WorksController do
+describe WorksController, work_search: true do
   include LoginMacros
   include RedirectExpectationHelper
 
@@ -230,11 +230,71 @@ describe WorksController do
   end
 
   describe "show" do
+    let(:work) { create(:posted_work) }
+
+    before(:each) do
+      REDIS_GENERAL.set("work_stats:#{work.id}:last_visitor", nil)
+    end
+
     it "doesn't error when a work has no fandoms" do
-      work = create(:posted_work, fandoms: [])
+      work_no_fandoms = create(:posted_work, fandoms: [])
       fake_login
-      get :show, params: { id: work.id }
+
+      get :show, params: { id: work_no_fandoms.id }
+
       expect(assigns(:page_title)).to include "No fandom specified"
+    end
+
+    context "when visited by a logged-out user" do
+      it "increments the hit count" do
+        expect do
+          get :show, params: { id: work.id }
+        end.to change { REDIS_GENERAL.get("work_stats:#{work.id}:hit_count").to_i }.by(1)
+      end
+    end
+
+    context "when visited by a logged-in user who is not a (co-)creator" do
+      it "increments the hit count" do
+        fake_login
+
+        expect do
+          get :show, params: { id: work.id }
+        end.to change { REDIS_GENERAL.get("work_stats:#{work.id}:hit_count").to_i }.by(1)
+      end
+    end
+
+    context "when visited by the creator of the work" do
+      it "does not increment the hit count" do
+        fake_login_known_user(work.pseuds.first.user)
+
+        expect do
+          get :show, params: { id: work.id }
+        end.not_to change { REDIS_GENERAL.get("work_stats:#{work.id}:hit_count").to_i }
+      end
+    end
+
+    context "when the work is part of an unrevealed collection" do
+      it "does not increment the hit count" do
+        work.update!(in_unrevealed_collection: true)
+        fake_login
+
+        expect do
+          get :show, params: { id: work.id }
+        end.not_to change { REDIS_GENERAL.get("work_stats:#{work.id}:hit_count").to_i }
+      end
+    end
+
+    context "when the work is hidden by an admin" do
+      let(:admin) { create(:admin) }
+
+      it "does not increment the hit count" do
+        work.update!(hidden_by_admin: true)
+        fake_login_admin(admin)
+
+        expect do
+          get :show, params: { id: work.id }
+        end.not_to change { REDIS_GENERAL.get("work_stats:#{work.id}:hit_count").to_i }
+      end
     end
   end
 
@@ -255,15 +315,9 @@ describe WorksController do
       expect(assigns(:fandom)).to eq(@fandom)
     end
 
-    it "returns search results when given work_search parameters" do
-      params = { :work_search => { query: "fandoms: #{@fandom.name}" } }
-      get :index, params: params
-      expect(assigns(:works)).to include(@work)
-    end
-
     describe "without caching" do
       before do
-        allow(controller).to receive(:use_caching?).and_return(false)
+        AdminSetting.first.update_attribute(:enable_test_caching, false)
       end
 
       it "returns the result with different works the second time" do
@@ -277,7 +331,7 @@ describe WorksController do
 
     describe "with caching" do
       before do
-        allow(controller).to receive(:use_caching?).and_return(true)
+        AdminSetting.first.update_attribute(:enable_test_caching, true)
       end
 
       context "with NO owner tag" do

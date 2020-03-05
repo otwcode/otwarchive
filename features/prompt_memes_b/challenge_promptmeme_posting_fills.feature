@@ -30,6 +30,7 @@ Feature: Prompt Meme Challenge
   Then I should see "New claim made"
     And I follow "Fulfill"
     And I check "No Archive Warnings Apply"
+    And I select "English" from "Choose a language"
     And I fill in "Fandoms" with "GhostSoup"
     And I should see "promptcollection" in the "work_collection_names" input
     And the "Untitled Prompt in The Kissing Game (Anonymous)" checkbox should be checked
@@ -420,6 +421,7 @@ Feature: Prompt Meme Challenge
     And I fill in "Work Title*" with "Fulfilled Story-thing"
     And I select "Not Rated" from "Rating"
     And I check "No Archive Warnings Apply"
+    And I select "English" from "Choose a language"
     And I fill in "content" with "This is an exciting story about Atlantis, but in a different universe this time"
   When I press "Preview"
     And I press "Post"

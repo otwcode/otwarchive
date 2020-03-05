@@ -314,6 +314,7 @@ When /^I start to fulfill my assignment$/ do
     step %{I fill in "Work Title" with "Fulfilled Story"}
     step %{I select "Not Rated" from "Rating"}
     step %{I check "No Archive Warnings Apply"}
+    step %{I select "English" from "Choose a language"}
     step %{I fill in "Fandom" with "Final Fantasy X"}
     step %{I fill in "content" with "This is a really cool story about Final Fantasy X"}
 end

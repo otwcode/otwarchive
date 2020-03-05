@@ -142,7 +142,7 @@ class WorkQuery < Query
   end
 
   def language_filter
-    term_filter(:language_id, options[:language_id]) if options[:language_id].present?
+    term_filter(:"language_id.keyword", options[:language_id]) if options[:language_id].present?
   end
 
   def crossover_filter

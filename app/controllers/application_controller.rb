@@ -10,6 +10,12 @@ class ApplicationController < ActionController::Base
   end
 
   rescue_from ActionController::UnknownFormat, with: :raise_not_found
+  rescue_from Elasticsearch::Transport::Transport::Errors::ServiceUnavailable do
+    # Non-standard code to distinguish Elasticsearch errors from standard 503s.
+    # We can't use 444 because nginx will close connections without sending
+    # response headers.
+    head 445
+  end
 
   def raise_not_found
     redirect_to '/404'
@@ -397,7 +403,7 @@ public
   end
 
   def use_caching?
-    %w(staging production).include?(Rails.env) && @admin_settings.enable_test_caching?
+    %w(staging production test).include?(Rails.env) && @admin_settings.enable_test_caching?
   end
 
   protected
