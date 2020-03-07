@@ -3,6 +3,6 @@
 </h3>
 
 <%= render "kudos/kudos",
-  kudos: @kudo.commentable.kudos.with_user.includes(:user).order("created_at DESC"),
+  kudos: @kudo.commentable.kudos.with_user.includes(:user).by_date,
   guest_kudos_count: @kudo.commentable.guest_kudos_count,
   commentable: @kudo.commentable %>
