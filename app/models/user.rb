@@ -135,7 +135,7 @@ class User < ApplicationRecord
   def remove_user_from_kudos
     # TODO: AO3-5054 Expire kudos cache when deleting a user.
     # TODO: AO3-2195 Display orphaned kudos (no users; no IPs so not counted as guest kudos).
-    # TODO: Remove "pseud_id: nil" when dropping the column pseud_id on kudos.
+    # TODO: AO3-5887 Remove "pseud_id: nil" when dropping the column pseud_id on kudos.
     Kudo.where(user: self).update_all(user_id: nil, pseud_id: nil)
   end
 
