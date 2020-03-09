@@ -54,7 +54,7 @@ shared_examples_for "on unrestricted works", :pending do
     end
 end
 
-describe "Comments", type: :request do
+describe "Comments" do
     subject { page }
   context "on restricted works" do
     before do
