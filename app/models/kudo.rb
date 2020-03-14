@@ -55,21 +55,21 @@ class Kudo < ApplicationRecord
   end
 
   def cannot_be_author
-    if user
-      commentable = nil
-      if commentable_type == "Work"
-       commentable = Work.find_by(id: commentable_id)
-      end
-      if commentable_type == "Chapter"
-       commentable = Chapter.find_by(id: commentable_id).work
-      end
-      if commentable.nil?
-        errors.add(:no_commentable,
-                   ts("^What did you want to leave kudos on?"))
-      elsif user.is_author_of?(commentable)
-        errors.add(:cannot_be_author,
-                   ts("^You can't leave kudos on your own work."))
-      end
+    return unless user
+
+    commentable = nil
+    if commentable_type == "Work"
+      commentable = Work.find_by(id: commentable_id)
+    elsif commentable_type == "Chapter"
+      commentable = Chapter.find_by(id: commentable_id).work
+    end
+
+    if commentable.nil?
+      errors.add(:no_commentable,
+                 ts("^What did you want to leave kudos on?"))
+    elsif user.is_author_of?(commentable)
+      errors.add(:cannot_be_author,
+                 ts("^You can't leave kudos on your own work."))
     end
   end
 
