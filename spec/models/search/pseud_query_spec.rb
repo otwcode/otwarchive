@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe PseudQuery, type: :model, pseud_search: true do
+describe PseudQuery, pseud_search: true do
   let!(:pseuds) do
     users = {
       user_abc: create(:user, login: "abc"),
