@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe ChallengeSignupsController, type: :controller do
+describe ChallengeSignupsController do
   include LoginMacros
   include RedirectExpectationHelper
   let(:user) { create(:user) }

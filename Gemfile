@@ -180,10 +180,6 @@ group :test, :development, :staging do
   gem 'bullet', '>= 5.7.3'
 end
 
-group :staging do
-  gem 'lockup'
-end
-
 # Deploy with Capistrano
 gem 'capistrano-gitflow_version', '>=0.0.3', require: false
 gem 'rvm-capistrano'

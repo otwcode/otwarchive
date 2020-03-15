@@ -30,17 +30,15 @@ class Feedback < ApplicationRecord
 
   def check_for_spam?
     # don't check for spam while running tests
-    self.approved = Rails.env.test? || !Akismetor.spam?(akismet_attributes)
+    Rails.env.test? || !Akismetor.spam?(akismet_attributes)
   end
 
   def mark_as_spam!
-    update_attribute(:approved, false)
     # don't submit spam reports unless in production mode
     Rails.env.production? && Akismetor.submit_spam(akismet_attributes)
   end
 
   def mark_as_ham!
-    update_attribute(:approved, true)
     # don't submit ham reports unless in production mode
     Rails.env.production? && Akismetor.submit_ham(akismet_attributes)
   end

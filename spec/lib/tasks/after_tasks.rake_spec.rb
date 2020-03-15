@@ -176,3 +176,31 @@ describe "rake After:add_user_id_to_kudos" do
     end
   end
 end
+
+describe "rake After:update_indexed_stat_counter_kudo_count", work_search: true do
+  let(:work) { create(:posted_work) }
+  let(:stat_counter) { work.stat_counter }
+  let!(:kudo_bundle) { create_list(:kudo, 2, commentable_id: work.id) }
+
+  before do
+    stat_counter.update_column(:kudos_count, 3)
+    run_all_indexing_jobs
+  end
+
+  it "updates kudos_count on StatCounter" do
+    expect do 
+      subject.invoke
+    end.to change {
+      stat_counter.reload.kudos_count
+    }.from(3).to(work.kudos.count)
+  end
+
+  it "updates kudos_count in work index" do
+    expect do
+      subject.invoke
+      run_all_indexing_jobs
+    end.to change { 
+      WorkSearchForm.new(kudos_count: work.kudos.count.to_s).search_results.size
+    }.from(0).to(1)
+  end
+end

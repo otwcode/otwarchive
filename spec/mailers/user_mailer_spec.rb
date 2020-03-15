@@ -1,6 +1,6 @@
 require "spec_helper"
 
-describe UserMailer, type: :mailer do
+describe UserMailer do
 
   describe "claim_notification" do
     title = "Façade"
