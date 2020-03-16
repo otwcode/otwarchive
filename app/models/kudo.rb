@@ -74,17 +74,19 @@ class Kudo < ApplicationRecord
   end
 
   def guest_cannot_kudos_restricted_work
+    return if user
+
     commentable = nil
     if commentable_type == "Work"
       commentable = Work.find_by(id: commentable_id)
-    end
-    if commentable_type == "Chapter"
+    elsif commentable_type == "Chapter"
       commentable = Chapter.find_by(id: commentable_id).work
     end
+
     if commentable.nil?
       errors.add(:no_commentable,
                  ts("^What did you want to leave kudos on?"))
-    elsif user.nil? && commentable.restricted?
+    elsif commentable.restricted?
       errors.add(:guest_on_restricted,
                  ts("^You can't leave guest kudos on a restricted work."))
     end
