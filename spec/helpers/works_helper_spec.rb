@@ -8,32 +8,32 @@ describe WorksHelper do
       @work = FactoryBot.create(:work)
     end
 
-    context "for an unrevealed work" do
+    context "when work is unrevealed" do
       it "should say that it's a mystery work" do
         @work.in_unrevealed_collection = true
         expect(helper.get_tweet_text(@work)).to eq("Mystery Work")
       end
     end
 
-    context "for an anonymous work" do
-      it "should not include the author's name" do
+    context "when work is anonymous" do
+      it "lists the creator as 'Anonymous'" do
         @work.in_anon_collection = true
         expect(helper.get_tweet_text(@work)).to match "Anonymous"
         expect(helper.get_tweet_text(@work)).not_to match "test pseud"
       end
     end
 
-    context "for a multifandom work" do
-      it "should not try to include all the fandoms" do
+    context "when work has three or more fandoms" do
+      it "lists the fandom as 'Multifandom'" do
         @work.fandom_string = "Testing, Battlestar Galactica, Naruto"
         expect(helper.get_tweet_text(@work)).to match "Multifandom"
         expect(helper.get_tweet_text(@work)).not_to match "Battlestar"
       end
     end
 
-    context "for a revealed, non-anon work with one fandom" do
-      it "should include all info" do
-        expect(helper.get_tweet_text(@work)).to eq("My title is long enough by #{@work.pseuds.first.name} - Testing")
+    context "when work is revealed, non-anonymous, and has one fandom" do
+      it "includes all info" do
+        expect(helper.get_tweet_text(@work)).to eq("My title is long enough by #{@work.pseuds.first.byline} - Testing")
       end
     end
 
