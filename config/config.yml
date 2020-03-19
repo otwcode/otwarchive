@@ -416,6 +416,7 @@ ACTION_RENAME: 7
 ACTION_PASSWORD_RESET: 8
 ACTION_NEW_EMAIL: 9
 ACTION_TROUBLESHOOT: 10
+ACTION_NOTE: 11
 
 
 # Elasticsearch index prefix
@@ -471,7 +472,3 @@ CHARACTER_COUNT_SCRIPTS: ["Han", "Hiragana", "Katakana", "Thai"]
 # Cache durations for work and bookmark searches (in seconds)
 SECONDS_UNTIL_WORK_INDEX_EXPIRE: 1800
 SECONDS_UNTIL_BOOKMARK_INDEX_EXPIRE: 1800
-
-# Case-insensitive password for staging, plus a hint in case you forget.
-LOCKUP_CODEWORD: "secret"
-LOCKUP_HINT: "Don't tell anyone."

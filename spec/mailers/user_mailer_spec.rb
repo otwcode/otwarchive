@@ -1,6 +1,6 @@
 require "spec_helper"
 
-describe UserMailer, type: :mailer do
+describe UserMailer do
 
   describe "claim_notification" do
     title = "Façade"
@@ -286,6 +286,39 @@ describe UserMailer, type: :mailer do
     end
   end
 
+  describe "signup_notification" do
+    let(:user) { create(:user) }
+
+    subject(:email) { UserMailer.signup_notification(user.id).deliver }
+
+    # Test the headers
+    it_behaves_like "an email with a valid sender"
+
+    it "has the correct subject line" do
+      subject = "[#{ArchiveConfig.APP_SHORT_NAME}] Confirmation"
+      expect(email).to have_subject(subject)
+    end
+
+    # Test both body contents
+    it_behaves_like "a multipart email"
+
+    it_behaves_like "a translated email"
+
+    describe "HTML version" do
+      it "has the correct content" do
+        expect(email).to have_html_part_content("Once your account is up and running, you can post your fanworks, set up email")
+        expect(email).to have_html_part_content("follow this link to activate your account</a>.")
+      end
+    end
+
+    describe "text version" do
+      it "has the correct content" do
+        expect(email).to have_text_part_content("Once your account is up and running, you can post your fanworks, set up email")
+        expect(email).to have_text_part_content("follow this link to activate your account:")
+      end
+    end
+  end
+  
   describe "invite_increase_notification" do
     let!(:user) { create(:user) }
 
