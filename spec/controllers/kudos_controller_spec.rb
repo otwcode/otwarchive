@@ -22,6 +22,8 @@ describe KudosController do
           it "does not save user on kudos" do
             post :create, params: { kudo: { commentable_id: work.id, commentable_type: "Work" } }
             expect(assigns(:kudo).user).to be_nil
+            # TODO: AO3-5887 Remove this check when dropping the column pseud_id from kudos.
+            expect(assigns(:kudo).pseud_id).to be_nil
           end
         end
 
@@ -34,6 +36,8 @@ describe KudosController do
           it "does not save user on kudos" do
             post :create, params: { kudo: { commentable_id: work.first_chapter.id, commentable_type: "Chapter" } }
             expect(assigns(:kudo).user).to be_nil
+            # TODO: AO3-5887 Remove this check when dropping the column pseud_id from kudos.
+            expect(assigns(:kudo).pseud_id).to be_nil
           end
         end
       end
@@ -50,6 +54,8 @@ describe KudosController do
         it "saves user on kudos" do
           post :create, params: { kudo: { commentable_id: work.id, commentable_type: "Work" } }
           expect(assigns(:kudo).user).to eq(user)
+          # TODO: AO3-5887 Remove this check when dropping the column pseud_id from kudos.
+          expect(assigns(:kudo).pseud_id).to eq(user.default_pseud.id)
         end
 
         context "when kudos giver has already left kudos on the work" do
@@ -61,8 +67,7 @@ describe KudosController do
             it_redirects_to_with_comment_error(referer, "User ^You have already left kudos here. :)")
           end
 
-          # TODO: AO3-5869 Enable this test when database unique constraints exist.
-          xcontext "when duplicate database inserts happen despite Rails validations" do
+          context "when duplicate database inserts happen despite Rails validations" do
             # https://api.rubyonrails.org/v5.1/classes/ActiveRecord/Validations/ClassMethods.html#method-i-validates_uniqueness_of-label-Concurrency+and+integrity
             #
             # We fake this scenario by skipping Rails validations.
