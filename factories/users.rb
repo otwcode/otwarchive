@@ -23,12 +23,6 @@ FactoryBot.define do
     password_confirmation { |u| u.password }
     email { generate(:email) }
 
-
-    factory :duplicate_user do
-      login { nil }
-      email { nil }
-    end
-
     factory :invited_user do
       login { generate(:login) }
       invitation_token { nil }

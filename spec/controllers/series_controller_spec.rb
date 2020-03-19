@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-RSpec.describe SeriesController, type: :controller do
+describe SeriesController do
   include LoginMacros
   include RedirectExpectationHelper
   let(:user) { create(:user) }

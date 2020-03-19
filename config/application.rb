@@ -36,16 +36,20 @@ module Otwarchive
     #
 
     I18n.config.enforce_available_locales = false
-    I18n.config.available_locales = [:en, :ar, :ca, 'zh-CN', :cs, :nl, :fi, :fr, :de, :he, :hu, :id,
-      :it, :ja, :ko, :lt, :pl, 'pt-BR', :ru, :es, :sv, :tr]
+    I18n.config.available_locales = [
+      :en, :af, :ar, :bg, :bn, :ca, :cs, :cy, :da, :de, :el, :es, :fa, :fi, :fr,
+      :he, :hi, :hr, :hu, :id, :it, :ja, :ka, :ko, :lt, :lv, :mk, :"mr-IN", :ms,
+      :nb, :nl, :pl, :"pt-BR", :"pt-PT", :ro, :ru, :sk, :sl, :sr, :sv, :th, :tl,
+      :tr, :uk, :vi, :"zh-CN"
+    ]
 
     # Set Time.zone default to the specified zone and make Active Record auto-convert to this zone.
     # Run "rake -D time" for a list of tasks for finding time zone names. Default is UTC.
     # config.time_zone = 'Central Time (US & Canada)'
     config.time_zone = 'Eastern Time (US & Canada)'
 
-    # The default locale is :en and all translations from config/locales/*.rb,yml are auto loaded.
-    # config.i18n.load_path += Dir[Rails.root.join('my', 'locales', '*.{rb,yml}').to_s]
+    # The default locale is :en and all translations from config/locales/**/*.rb,yml are auto loaded.
+    config.i18n.load_path += Dir[Rails.root.join('config', 'locales', '**', '*.{rb,yml}')]
     # config.i18n.default_locale = :de
 
     # JavaScript files you want as :defaults (application.js is always included).
@@ -80,7 +84,7 @@ module Otwarchive
 
     # Only send referrer information to ourselves
     config.action_dispatch.default_headers = {
-      "Referrer-Policy" => "same-origin",
+      "Referrer-Policy" => "strict-origin-when-cross-origin",
       "X-Frame-Options" => "SAMEORIGIN",
       "X-XSS-Protection" => "1; mode=block",
       "X-Content-Type-Options" => "nosniff",
