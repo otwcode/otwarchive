@@ -254,11 +254,20 @@ describe AbuseReport do
   end
 
   context "when report is spam" do
+    let(:legit_user) { create(:user) }
     let(:spam_report) { build(:abuse_report, username: 'viagra-test-123') }
+    let(:safe_report) { build(:abuse_report, username: 'viagra-test-123', email: legit_user.email) }
+
     it "is not valid if Akismet flags it as spam" do
       allow(Akismetor).to receive(:spam?).and_return(true)
       expect(spam_report.save).to be_falsey
       expect(spam_report.errors[:base]).to include("This report looks like spam to our system!")
+    end
+
+    it "is valid even with spam if logged in and providing correct email" do
+      User.current_user = legit_user
+      allow(Akismetor).to receive(:spam?).and_return(true)
+      expect(safe_report.save).to be_truthy
     end
   end
 end
