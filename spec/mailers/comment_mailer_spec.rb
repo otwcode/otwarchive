@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe CommentMailer, type: :mailer do
+describe CommentMailer do
   describe "comment_sent_notification" do
     let(:comment) { create(:comment) } 
 

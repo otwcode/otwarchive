@@ -22,6 +22,8 @@ describe KudosController do
           it "does not save user on kudos" do
             post :create, params: { kudo: { commentable_id: work.id, commentable_type: "Work" } }
             expect(assigns(:kudo).user).to be_nil
+            # TODO: AO3-5887 Remove this check when dropping the column pseud_id from kudos.
+            expect(assigns(:kudo).pseud_id).to be_nil
           end
         end
 
@@ -34,6 +36,8 @@ describe KudosController do
           it "does not save user on kudos" do
             post :create, params: { kudo: { commentable_id: work.first_chapter.id, commentable_type: "Chapter" } }
             expect(assigns(:kudo).user).to be_nil
+            # TODO: AO3-5887 Remove this check when dropping the column pseud_id from kudos.
+            expect(assigns(:kudo).pseud_id).to be_nil
           end
         end
       end
@@ -50,6 +54,42 @@ describe KudosController do
         it "saves user on kudos" do
           post :create, params: { kudo: { commentable_id: work.id, commentable_type: "Work" } }
           expect(assigns(:kudo).user).to eq(user)
+          # TODO: AO3-5887 Remove this check when dropping the column pseud_id from kudos.
+          expect(assigns(:kudo).pseud_id).to eq(user.default_pseud.id)
+        end
+
+        context "when kudos giver has already left kudos on the work" do
+          let!(:old_kudo) { create(:kudo, user: user, commentable: work) }
+
+          it "redirects to referer with an error" do
+            post :create, params: { kudo: { commentable_id: work.id, commentable_type: "Work" } }
+            # TODO: AO3-5635 Fix this error message.
+            it_redirects_to_with_comment_error(referer, "User ^You have already left kudos here. :)")
+          end
+
+          context "when duplicate database inserts happen despite Rails validations" do
+            # https://api.rubyonrails.org/v5.1/classes/ActiveRecord/Validations/ClassMethods.html#method-i-validates_uniqueness_of-label-Concurrency+and+integrity
+            #
+            # We fake this scenario by skipping Rails validations.
+            before do
+              allow_any_instance_of(Kudo).to receive(:save).and_call_original
+              allow_any_instance_of(Kudo).to receive(:save).with(no_args) do |kudo|
+                kudo.save(validate: false)
+              end
+            end
+
+            it "redirects to referer with an error" do
+              post :create, params: { kudo: { commentable_id: work.id, commentable_type: "Work" } }
+              it_redirects_to_with_comment_error(referer, "You have already left kudos here. :)")
+            end
+
+            context "with format: :js" do
+              it "returns an error in JSON format" do
+                post :create, params: { kudo: { commentable_id: work.id, commentable_type: "Work" }, format: :js }
+                expect(JSON.parse(response.body)["errors"]).to include("ip_address")
+              end
+            end
+          end
         end
       end
 
