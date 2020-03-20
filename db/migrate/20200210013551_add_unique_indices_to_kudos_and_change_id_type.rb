@@ -11,8 +11,8 @@ class AddUniqueIndicesToKudosAndChangeIdType < ActiveRecord::Migration[5.1]
                    ADD UNIQUE INDEX index_kudos_on_commentable_and_ip_address (commentable_id, commentable_type, ip_address),
                    CHANGE COLUMN id id bigint NOT NULL AUTO_INCREMENT" \\
           --no-swap-tables --no-drop-new-table --no-drop-triggers --no-check-unique-key-change \\
-          -uroot --ask-pass --chunk-size=10k --max-flow-ctl 0 --pause-file /tmp/pauseme \\
-          --max-load Threads_running=25 --critical-load Threads_running=400 \\
+          -uroot --ask-pass --chunk-size=5k --max-flow-ctl 0 --pause-file /tmp/pauseme \\
+          --max-load Threads_running=15 --critical-load Threads_running=100 \\
           --set-vars innodb_lock_wait_timeout=2 --alter-foreign-keys-method=auto \\
           --execute
 
@@ -50,8 +50,8 @@ class AddUniqueIndicesToKudosAndChangeIdType < ActiveRecord::Migration[5.1]
                    DROP INDEX index_kudos_on_commentable_and_ip_address,
                    CHANGE COLUMN id id int NOT NULL AUTO_INCREMENT" \\
           --no-swap-tables --no-drop-new-table --no-drop-triggers \\
-          -uroot --ask-pass --chunk-size=10k --max-flow-ctl 0 --pause-file /tmp/pauseme \\
-          --max-load Threads_running=25 --critical-load Threads_running=400 \\
+          -uroot --ask-pass --chunk-size=5k --max-flow-ctl 0 --pause-file /tmp/pauseme \\
+          --max-load Threads_running=15 --critical-load Threads_running=100 \\
           --set-vars innodb_lock_wait_timeout=2 --alter-foreign-keys-method=auto \\
           --execute
 
