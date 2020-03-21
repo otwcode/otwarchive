@@ -360,7 +360,7 @@ Feature: Edit chapters
       And I view the 2nd chapter
       And I follow "Edit Chapter"
     When I follow "Remove Me As Chapter Co-Creator"
-    Then I should see "You have been removed as a creator from the chapter"
+    Then I should see "You have been removed as a creator from the chapter."
       And I should see "Chapter 1"
     When I view the 2nd chapter
     Then I should see "Chapter 2"
@@ -377,7 +377,7 @@ Feature: Edit chapters
       And I view the 3rd chapter
       And I follow "Edit Chapter"
       And I follow "Remove Me As Chapter Co-Creator"
-    Then I should see "You have been removed as a creator from the chapter"
+    Then I should see "You have been removed as a creator from the chapter."
       And I should see "Chapter 1"
       And I should see "Edit Chapter"
     When I view the 2nd chapter
@@ -398,7 +398,7 @@ Feature: Edit chapters
       And I follow "Edit"
       And I follow "Manage Chapters"
     When I follow "Remove Me As Chapter Co-Creator"
-    Then I should see "You have been removed as a creator from the chapter"
+    Then I should see "You have been removed as a creator from the chapter."
       And I should see "Chapter 1"
     When I view the 2nd chapter
     Then I should see "Chapter by originalposter"

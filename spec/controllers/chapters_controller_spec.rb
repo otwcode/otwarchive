@@ -347,7 +347,7 @@ describe ChaptersController do
         chapter = create(:chapter, work: work, posted: true, authors: [user.pseuds.first, other_user.pseuds.first])
         get :edit, params: { work_id: work.id, id: chapter.id, remove: "me" }
         expect(assigns[:chapter].pseuds).to eq [other_user.pseuds.first]
-        it_redirects_to_with_notice(work_path(work), "You have been removed as a creator from the chapter")
+        it_redirects_to_with_notice(work_path(work), "You have been removed as a creator from the chapter.")
       end
     end
 
@@ -374,7 +374,7 @@ describe ChaptersController do
       it "removes user, gives notice, and redirects to work when user removes themselves" do
         get :edit, params: { work_id: work.id, id: co_second_chapter.id, remove: "me" }
         expect(assigns[:chapter].pseuds).to eq [user.pseuds.first]
-        it_redirects_to_with_notice(work_path(work), "You have been removed as a creator from the chapter")
+        it_redirects_to_with_notice(work_path(work), "You have been removed as a creator from the chapter.")
       end
 
       it "delegates to work removal of user after user removed from last co-created chapter" do
