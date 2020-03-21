@@ -54,9 +54,11 @@ module Filterable
 
     # This is the callback that gets called when FilterUpdater is done with a
     # single batch of Filterables of this type. Designed to reindex all of the
-    # Filterables whose filters changed. It's called after_commit, to minimize
-    # issues with stale data.
-    def reindex_for_filter_changes(ids, filter_taggings, queue)
+    # Filterables whose filters changed. It's called in after_commit, to
+    # minimize issues with stale data.
+    #
+    # The _ids argument isn't used here, but is used in some of the subclasses.
+    def reindex_for_filter_changes(_ids, filter_taggings, queue)
       changed_ids = filter_taggings.map(&:filterable_id)
       IndexQueue.enqueue_ids(base_class, changed_ids, queue)
     end
