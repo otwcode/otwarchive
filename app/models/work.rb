@@ -831,7 +831,8 @@ class Work < ApplicationRecord
 
     # Reindex any pseuds associated with works whose filters have changed.
     pseud_ids = Creatorship.where(creation_id: changed_ids,
-                                  creation_type: "Work").pluck(:pseud_id)
+                                  creation_type: "Work",
+                                  approved: true).pluck(:pseud_id)
     IndexQueue.enqueue_ids(Pseud, pseud_ids, queue)
   end
 
