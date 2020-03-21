@@ -20,9 +20,14 @@ class TroubleshootingController < ApplicationController
     disallowed = actions - @allowed_actions
 
     if disallowed.any?
+      disallowed_names = disallowed.map do |action|
+        t("troubleshooting.show.#{action}.title", default: action.titleize)
+      end
+
       flash[:error] =
         ts("The following actions aren't allowed: %{actions}.",
-           actions: disallowed.to_sentence)
+           actions: disallowed_names.to_sentence)
+
       redirect_to troubleshooting_path
       return
     end

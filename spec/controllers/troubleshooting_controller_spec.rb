@@ -138,12 +138,12 @@ describe TroubleshootingController do
 
       it "doesn't allow the user to reindex a tag" do
         put :update, params: { tag_id: tag.to_param, actions: ["reindex_tag"] }
-        it_redirects_to_with_error(tag_troubleshooting_path(tag), "The following actions aren't allowed: reindex_tag.")
+        it_redirects_to_with_error(tag_troubleshooting_path(tag), "The following actions aren't allowed: Reindex Tag.")
       end
 
       it "doesn't allow the user to update filters for a tag" do
         put :update, params: { tag_id: tag.to_param, actions: ["update_tag_filters"] }
-        it_redirects_to_with_error(tag_troubleshooting_path(tag), "The following actions aren't allowed: update_tag_filters.")
+        it_redirects_to_with_error(tag_troubleshooting_path(tag), "The following actions aren't allowed: Update Tag Filters.")
       end
 
       it "reindexes the work and redirects" do
