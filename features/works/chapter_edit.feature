@@ -377,12 +377,13 @@ Feature: Edit chapters
       And I view the 3rd chapter
       And I follow "Edit Chapter"
       And I follow "Remove Me As Chapter Co-Creator"
-    Then I should see "Chapter 1"
+    Then I should see "You have been removed as a creator from the chapter"
+      And I should see "Chapter 1"
       And I should see "Edit Chapter"
     When I view the 2nd chapter
       And I follow "Edit Chapter"
       And I follow "Remove Me As Chapter Co-Creator"
-    Then I should see "You have been removed as an author from the work"
+    Then I should see "You have been removed as a creator from the work."
     When I view the work "OP's Work"
     Then I should see "Chapter 1"
       And I should not see "Edit Chapter"
