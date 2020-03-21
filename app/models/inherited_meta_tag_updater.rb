@@ -47,14 +47,17 @@ class InheritedMetaTagUpdater
 
     # Delete the unnecessary meta taggings.
     base.meta_taggings.each do |mt|
-      unless missing.delete?(mt.meta_tag_id)
-        next if mt.direct
+      # If the meta tag ID is in the list of IDs we're looking for, we don't
+      # need to modify the meta tagging at all -- we just need to mark that
+      # we've seen it by removing it from the list of missing meta tag IDs.
+      #
+      # We also shouldn't modify the meta tagging if it's direct.
+      next if missing.delete?(mt.meta_tag_id) || mt.direct
 
-        # We weren't missing it, and it's not a direct meta tagging, so we
-        # don't need it anymore.
-        mt.destroy
-        modified = true
-      end
+      # The inherited meta tag isn't one of the ones we're expecting to see,
+      # which means that it shouldn't be here:
+      mt.destroy
+      modified = true
     end
 
     # Build the missing meta taggings.
