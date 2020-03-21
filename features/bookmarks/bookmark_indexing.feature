@@ -63,7 +63,7 @@ Feature: Bookmark Indexing
     Given a canonical fandom "Veronica Mars"
       And a canonical fandom "Veronica Mars (TV)"
       And bookmarks of external works and series tagged with the fandom tag "Veronica Mars"
-      And I am logged in as a tag wrangler
+      And I am logged in as an admin
     When I syn the tag "Veronica Mars" to "Veronica Mars (TV)"
       And I go to the bookmarks tagged "Veronica Mars (TV)"
     Then I should see "BookmarkedExternalWork"

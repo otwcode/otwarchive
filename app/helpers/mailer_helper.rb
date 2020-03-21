@@ -100,4 +100,22 @@ module MailerHelper
       creation.title
     end
   end
+
+  # The bylines used in subscription emails to prevent exposing the name(s) of
+  # anonymous creator(s).
+  def creator_links(work)
+    if work.anonymous?
+      "Anonymous"
+    else
+      work.pseuds.map { |p| style_pseud_link(p) }.to_sentence.html_safe
+    end
+  end
+
+  def creator_text(work)
+    if work.anonymous?
+      "Anonymous"
+    else
+      work.pseuds.map { |p| text_pseud(p) }.to_sentence.html_safe
+    end
+  end
 end # end of MailerHelper
