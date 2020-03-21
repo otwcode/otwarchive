@@ -155,7 +155,7 @@ shared_examples "a filterable" do
         filterable.reload
       end
 
-      it "removes the filter" do
+      it "removes the direct filter for the canonical" do
         filterable.update!(freeform_string: "")
         expect(filterable.filters.reload).not_to include(canonical)
       end
@@ -168,7 +168,7 @@ shared_examples "a filterable" do
     end
   end
 
-  describe "editing a tag" do
+  describe "removing a tag and adding another at the same time" do
     let(:old_freeform) { create(:canonical_freeform) }
     let(:new_freeform) { create(:canonical_freeform) }
 
