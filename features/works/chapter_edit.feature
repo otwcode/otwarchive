@@ -351,7 +351,10 @@ Feature: Edit chapters
     Then the "sabrina" checkbox should be checked and disabled
 
 
-  Scenario: Removing yourself as a co-creator from the chapter edit page
+  Scenario: Removing yourself as a co-creator from the chapter edit page when
+  you've co-created multiple chapters on the work removes you only from that 
+  specific chapter. Removing yourself as a co-creator from the chapter edit page
+  of the last chapter you've co-created also removes you from the work.
 
     Given the work "OP's Work" by "originalposter" with chapter two co-authored with "opsfriend"
       And a chapter with the co-author "opsfriend" is added to "OP's Work"
@@ -365,22 +368,7 @@ Feature: Edit chapters
     When I view the 2nd chapter
     Then I should see "Chapter 2"
       And I should see "Chapter by originalposter"
-
-
-  Scenario: Removing yourself as a co-creator from last remaining co-created chapter
-  also removes you as co-author from work
-
-    Given the work "OP's Work" by "originalposter" with chapter two co-authored with "opsfriend"
-      And a chapter with the co-author "opsfriend" is added to "OP's Work"
-      And I am logged in as "opsfriend"
-    When I view the work "OP's Work"
-      And I view the 3rd chapter
-      And I follow "Edit Chapter"
-      And I follow "Remove Me As Chapter Co-Creator"
-    Then I should see "You have been removed as a creator from the chapter."
-      And I should see "Chapter 1"
-      And I should see "Edit Chapter"
-    When I view the 2nd chapter
+    When I view the 1st chapter
       And I follow "Edit Chapter"
       And I follow "Remove Me As Chapter Co-Creator"
     Then I should see "You have been removed as a creator from the work."
