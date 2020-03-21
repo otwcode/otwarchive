@@ -469,7 +469,7 @@ Feature: Collection
       And I check "Anonymous"
       And I submit
     Then "creator" should be emailed
-      And the email should have "Your work has become anonymous" in the subject
+      And the email should have "Your work was made anonymous" in the subject
       And the email should contain "Anonymous works are included in tag listings, but not on your works page."
       And the email should not contain "translation missing"
 
@@ -487,7 +487,7 @@ Feature: Collection
       And I check "Unrevealed"
       And I submit
     Then "creator" should be emailed
-      And the email should have "Your work has become unrevealed" in the subject
+      And the email should have "Your work was made unrevealed" in the subject
       And the email should contain "Unrevealed works are not included in tag listings or on your works page."
       And the email should not contain "translation missing"
 
@@ -507,7 +507,7 @@ Feature: Collection
       And I check "Unrevealed"
       And I submit
     Then "creator" should be emailed
-      And the email should have "Your work has become anonymous and unrevealed" in the subject
-      And the email should contain "Anonymous works are included in tag listings, but not on your works page."
+      And the email should have "Your work was made anonymous and unrevealed" in the subject
       And the email should contain "Unrevealed works are not included in tag listings or on your works page."
+      And the email should contain "The collection maintainers may later reveal your work but leave it anonymous."
       And the email should not contain "translation missing"

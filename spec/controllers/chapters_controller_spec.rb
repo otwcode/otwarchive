@@ -196,7 +196,7 @@ describe ChaptersController do
     end
 
     it "assigns @kudos to non-anonymous kudos" do
-      kudo = create(:kudo, commentable_id: work.id, pseud: create(:pseud))
+      kudo = create(:kudo, commentable_id: work.id, user: create(:user))
       create(:kudo, commentable: work)
       get :show, params: { work_id: work.id, id: work.chapters.first.id }
       expect(assigns[:kudos]).to eq [kudo]
@@ -206,7 +206,7 @@ describe ChaptersController do
       second_chapter = create(:chapter, work: work, position: 2, posted: true)
       third_chapter = create(:chapter, work: work, position: 3, posted: true)
       comment = create(:comment, commentable_type: "Chapter", commentable_id: second_chapter.id)
-      kudo = create(:kudo, commentable_id: work.id, pseud: create(:pseud))
+      kudo = create(:kudo, commentable_id: work.id, user: create(:user))
       tag = create(:fandom)
       expect_any_instance_of(Work).to receive(:tag_groups).and_return("Fandom" => [tag])
       expect_any_instance_of(ChaptersController).to receive(:get_page_title).with(tag.name, user.pseuds.first.name, "My title is long enough - Chapter 2").and_return("page title")
