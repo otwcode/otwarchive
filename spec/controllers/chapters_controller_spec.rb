@@ -381,7 +381,7 @@ describe ChaptersController do
         get :edit, params: { work_id: work.id, id: co_second_chapter.id, remove: "me" }
         expect(assigns[:work].pseuds).to eq [user.pseuds.first, co_creator.pseuds.first]
         get :edit, params: { work_id: work.id, id: co_third_chapter.id, remove: "me" }
-        it_redirects_to_with_notice(edit_work_path(work, remove: "me"), "You have been removed as a creator form the chapter")
+        it_redirects_to_with_notice(edit_work_path(work, remove: "me"), "You have been removed as a creator form the chapter.")
       end
     end
   end
