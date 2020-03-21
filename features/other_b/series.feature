@@ -147,6 +147,7 @@ Feature: Create and Edit Series
     When I view the series "Robots"
       And I follow "Edit Series"
       And I fill in "Series Title" with "Many a Robot"
+      And I wait 2 seconds
       And I press "Update"
     Then I should see "Series was successfully updated."
       And I should see "Many a Robot"
@@ -234,6 +235,7 @@ Feature: Create and Edit Series
       And I should see "Part 2 of the Ponies series"
     When I edit the work "Rainbow Dash"
       And I fill in "Or create and use a new one:" with "Black Beauty"
+      And I wait 2 seconds
       And I press "Preview"
     Then I should see "Part 2 of the Ponies series" within "dd.series"
       And I should see "Part 1 of the Black Beauty series" within "dd.series"
@@ -264,6 +266,7 @@ Feature: Create and Edit Series
     Then I should not see "Edit Series"
     When I follow "Creator Invitations page"
       And I check "selected[]"
+      And I wait 2 seconds
       And I press "Accept"
     Then I should see "You are now listed as a co-creator on Gentleman Jack."
     When I follow "Gentleman Jack"

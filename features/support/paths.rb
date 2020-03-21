@@ -202,6 +202,8 @@ module NavigationHelpers
       tag_comments_path(Tag.find_by_name($1))
     when /^the work comments? page for "(.*?)"$/i
       work_comments_path(Work.find_by(title: $1), show_comments: true)
+    when /^the work kudos page for "(.*?)"$/i
+      work_kudos_path(Work.find_by(title: $1))
     when /^the FAQ reorder page$/i
       manage_archive_faqs_path
     when /^the Wrangling Guidelines reorder page$/i

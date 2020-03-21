@@ -102,30 +102,36 @@ en:
     signup_notification:
       subject: "[%{app_name}] Confirmation"
       faq: "FAQ"
-      admin_posts: "Archive admin posts"
-      contact_support: "get in touch with our Support team"
-      activate_your_account: "activate your account"
+      admin_posts: "AO3 News"
+      contact_support: "contact Support"
+      activate_your_account: "follow this link to activate your account"
       welcome: "Welcome to the Archive of Our Own, %{login}!"
       bye: "We hope you enjoy using the Archive."
       text:
-        part1: "Please activate your account: %{activate_account_url}"
+        part1: "Please follow this link to activate your account: %{activate_account_url}"
         part2: |-
                   Once your account is up and running, you can post your fanworks, set up email
                   subscriptions to let you know when your favorite creators or works have updated,
                   set preferences to customize the way the site looks and works for you, keep
-                  track of the works you've viewed on the Archive via your history, and much more.
+                  track of the works you've accessed on the Archive via your history, and much more.
         part3: |-
                   There's lots of information and advice on how to use the Archive in our FAQ
-                  at %{faq_url}. You'll
-                  find the latest news about site developments in our Archive admin posts at
-                  %{admin_posts_url}. If you need more
-                  help, run into a bug, or have questions or comments, please get in touch with
-                  our Support team, who are always happy to help out:
+                  at %{faq_url}. You'll find the latest news about site developments on AO3 News at
+                  %{admin_posts_url}. If you need more help, run into a bug, or have questions or 
+                  comments, please contact Support, who are always happy to help out:
                   %{contact_support_url}.
       html:
         part1: "Please %{activate_account_link}."
-        part2: "Once your account is up and running, you can post your fanworks, set up email subscriptions to let you know when your favorite creators or works have updated, set preferences to customize the way the site looks and works for you, keep track of the works you've viewed on the Archive via your history, and much more."
-        part3: "There's lots of information and advice on how to use the Archive in our %{faq_link}. You'll find the latest news about site developments in our %{admin_posts_link}. If you need more help, run into a bug, or have questions or comments, please %{contact_support_link}, who are always happy to help out."
+        part2: |-
+                  Once your account is up and running, you can post your fanworks, set up email 
+                  subscriptions to let you know when your favorite creators or works have updated, 
+                  set preferences to customize the way the site looks and works for you, keep 
+                  track of the works you've accessed on the Archive via your history, and much more.
+        part3: |-
+                  There's lots of information and advice on how to use the Archive in our %{faq_link}. 
+                  You'll find the latest news about site developments on %{admin_posts_link}. 
+                  If you need more help, run into a bug, or have questions or comments, please 
+                  %{contact_support_link}, who are always happy to help out.
     invitation:
       subject: "[%{app_name}] Invitation"
       greeting: "Hello from the %{app_name}!"
@@ -214,3 +220,31 @@ en:
       main:
         one: "We regret to inform you that your request for a new invitation cannot be fulfilled at this time."
         other: "We regret to inform you that your request for %{count} new invitations cannot be fulfilled at this time."
+    anonymous_or_unrevealed_notification:
+      subject:
+        anonymous: "[%{app_name}] Your work was made anonymous"
+        anonymous_unrevealed: "[%{app_name}] Your work was made anonymous and unrevealed"
+        unrevealed: "[%{app_name}] Your work was made unrevealed"
+      greeting: "Dear %{user},"
+      changed_status:
+        anonymous: "The collection maintainers of %{collection} have changed the status of your work %{work} to anonymous."
+        anonymous_unrevealed: "The collection maintainers of %{collection} have changed the status of your work %{work} to anonymous and unrevealed."
+        unrevealed: "The collection maintainers of %{collection} have changed the status of your work %{work} to unrevealed."
+      anonymous_info: "Anonymous works are included in tag listings, but not on your works page. On the work, your user name will be replaced with \"Anonymous.\""
+      unrevealed_info: "Unrevealed works are not included in tag listings or on your works page. Anyone who follows a link to the work will receive a notice that it is currently unrevealed, and they will be unable to access its content."
+      anonymous_unrevealed_info: "The collection maintainers may later reveal your work but leave it anonymous. People who subscribe to you will not be notified of this change. Your work will be included in tag listings, but not on your works page. On the work, your user name will be replaced with \"Anonymous.\""
+      do_not_want:
+        anonymous:
+          html: "If you do not want your work to be anonymous, please visit your %{collection_items_link} to remove it from this collection."
+          text: "If you do not want your work to be anonymous, please visit your Approved Collection Items page to remove it from this collection: %{collection_items_url}"
+        anonymous_unrevealed:
+          html: "If you do not want your work to be anonymous and unrevealed, please visit your %{collection_items_link} to remove it from this collection."
+          text: "If you do not want your work to be anonymous and unrevealed, please visit your Approved Collection Items page to remove it from this collection: %{collection_items_url}"
+        unrevealed:
+          html: "If you do not want your work to be unrevealed, please visit your %{collection_items_link} to remove it from this collection."
+          text: "If you do not want your work to be unrevealed, please visit your Approved Collection Items page to remove it from this collection: %{collection_items_url}"
+      collection_items_link_text: "Approved Collection Items page"
+      more_info:
+        html: "For more information, visit our %{faq_link}."
+        text: "For more information, visit our Collections and Challenges FAQ: %{faq_url}"
+      faq_link_text: "Collections and Challenges FAQ"

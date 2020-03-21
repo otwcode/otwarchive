@@ -39,8 +39,8 @@ module Otwarchive
     I18n.config.available_locales = [
       :en, :af, :ar, :bg, :bn, :ca, :cs, :cy, :da, :de, :el, :es, :fa, :fi, :fr,
       :he, :hi, :hr, :hu, :id, :it, :ja, :ka, :ko, :lt, :lv, :mk, :"mr-IN", :ms,
-      :nb, :pl, :"pt-BR", :"pt-PT", :ro, :ru, :sk, :sl, :sr, :sv, :th, :tl, :tr,
-      :uk, :vi, :"zh-CN"
+      :nb, :nl, :pl, :"pt-BR", :"pt-PT", :ro, :ru, :sk, :sl, :sr, :sv, :th, :tl,
+      :tr, :uk, :vi, :"zh-CN"
     ]
 
     # Set Time.zone default to the specified zone and make Active Record auto-convert to this zone.

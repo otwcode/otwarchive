@@ -42,6 +42,40 @@ class UserMailer < BulletproofMailer::Base
     )
   end
 
+  # We use an options hash here, instead of keyword arguments, to avoid
+  # compatibility issues with resque/resque_mailer.
+  def anonymous_or_unrevealed_notification(user_id, work_id, collection_id, options = {})
+    options = options.with_indifferent_access
+
+    @becoming_anonymous = options.fetch(:anonymous, false)
+    @becoming_unrevealed = options.fetch(:unrevealed, false)
+
+    return unless @becoming_anonymous || @becoming_unrevealed
+
+    @user = User.find(user_id)
+    @work = Work.find(work_id)
+    @collection = Collection.find(collection_id)
+
+    # Symbol used to pick the appropriate translation string:
+    @status = if @becoming_anonymous && @becoming_unrevealed
+                :anonymous_unrevealed
+              elsif @becoming_anonymous
+                :anonymous
+              else
+                :unrevealed
+              end
+
+    I18n.with_locale(Locale.find(@user.preference.preferred_locale).iso) do
+      mail(
+        to: @user.email,
+        subject: t(".subject.#{@status}",
+                   app_name: ArchiveConfig.APP_SHORT_NAME)
+      )
+    end
+  ensure
+    I18n.locale = I18n.default_locale
+  end
+
   # Sends an invitation to join the archive
   # Must be sent synchronously as it is rescued
   # TODO refactor to make it asynchronous

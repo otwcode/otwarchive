@@ -1,6 +1,6 @@
 require "spec_helper"
 
-describe "Security headers", type: :request do
+describe "Security headers" do
   it "includes the required headers" do
     get "/"
     headers = response.headers
