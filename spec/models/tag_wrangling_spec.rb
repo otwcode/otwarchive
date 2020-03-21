@@ -149,6 +149,9 @@ describe Tag do
       end
 
       context "when the synonym used to be canonical" do
+        # Only admins can make canonical tags into synonyms:
+        before { User.current_user = create(:admin) }
+
         let(:synonym) { create(:canonical_fandom) }
 
         it "changes the tag to non-canonical" do
