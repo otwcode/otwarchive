@@ -35,14 +35,14 @@ describe TroubleshootingController do
         get :show, params: { tag_id: tag.to_param }
         expect(response).to render_template(:show)
         expect(assigns[:allowed_actions]).to \
-          contain_exactly(*%w[fix_associations fix_counts fix_meta_tags])
+          contain_exactly("fix_associations", "fix_counts", "fix_meta_tags")
       end
 
       it "shows a form with the allowed actions for works" do
         get :show, params: { work_id: work.id }
         expect(response).to render_template(:show)
         expect(assigns[:allowed_actions]).to \
-          contain_exactly(*%w[reindex_work update_work_filters])
+          contain_exactly("reindex_work", "update_work_filters")
       end
     end
 
@@ -53,14 +53,14 @@ describe TroubleshootingController do
         get :show, params: { tag_id: tag.to_param }
         expect(response).to render_template(:show)
         expect(assigns[:allowed_actions]).to \
-          contain_exactly(*%w[fix_associations reindex_tag update_tag_filters fix_counts fix_meta_tags])
+          contain_exactly("fix_associations", "reindex_tag", "update_tag_filters", "fix_counts", "fix_meta_tags")
       end
 
       it "shows a form with the allowed actions for works" do
         get :show, params: { work_id: work.id }
         expect(response).to render_template(:show)
         expect(assigns[:allowed_actions]).to \
-          contain_exactly(*%w[reindex_work update_work_filters])
+          contain_exactly("reindex_work", "update_work_filters")
       end
     end
   end
