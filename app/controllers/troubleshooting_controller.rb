@@ -9,9 +9,8 @@ class TroubleshootingController < ApplicationController
 
   # Display options for troubleshooting.
   def show
-    @item_type = @item.class.base_class.model_name.human
-    @page_subtitle = ts("Troubleshoot %{type}",
-                        type: @item_type)
+    @item_type = @item.class.base_class.to_s.underscore
+    @page_subtitle = t(".page_title.#{@item_type}")
   end
 
   # Perform the desired troubleshooting actions.
