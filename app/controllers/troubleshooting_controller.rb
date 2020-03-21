@@ -120,7 +120,7 @@ class TroubleshootingController < ApplicationController
 
   # An action allowing the user to reindex a tag (and everything related to it).
   def reindex_tag
-    @item.async(:reindex_all, true)
+    @item.async(:reindex_associated, true)
     flash[:notice] << ts("Tag reindex job added to queue.")
   end
 

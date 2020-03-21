@@ -654,18 +654,18 @@ class Tag < ApplicationRecord
 
   #### FILTERING ####
 
-  before_update :reindex_all_for_name_or_type_change
-  def reindex_all_for_name_or_type_change
+  before_update :reindex_associated_for_name_or_type_change
+  def reindex_associated_for_name_or_type_change
     return unless name_changed? || type_changed?
 
     reindex_pseuds = (type == "Fandom") || (type_was == "Fandom")
-    async_after_commit(:reindex_all, reindex_pseuds)
+    async_after_commit(:reindex_associated, reindex_pseuds)
   end
 
   # Reindex anything even remotely related to this tag. This is overkill in
   # most cases, but necessary when something fundamental like the name or type
   # of a tag has changed.
-  def reindex_all(reindex_pseuds = false)
+  def reindex_associated(reindex_pseuds = false)
     works.reindex_all
     external_works.reindex_all
     bookmarks.reindex_all
