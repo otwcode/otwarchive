@@ -9,12 +9,10 @@ require 'capistrano/gitflow_version'
 # define servers and their roles and attributes
 server "ao3-app01", :app, :db, :schedulers
 server "ao3-app02", :app, :workers, :schedulers
-server "ao3-app03", :app, :workers, :schedulers
 server "ao3-front01", :web
 server "ao3-app19", :app
 server "ao3-app16", :app
 server "ao3-app05", :app, :workers, :schedulers, primary: true
-server "ao3-app08", :app, :workers, :schedulers
 server "ao3-front03", :web
 server "ao3-app06", :app, :workers, :schedulers
 server "ao3-app07", :app, :workers, :schedulers
