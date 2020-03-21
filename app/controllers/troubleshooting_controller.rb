@@ -153,16 +153,20 @@ class TroubleshootingController < ApplicationController
 
   # An action allowing the user to try to fix the inherited meta tags.
   def fix_meta_tags
-    MetaTagging.transaction do
+    modified = MetaTagging.transaction do
       InheritedMetaTagUpdater.new(@item).update
     end
 
-    # Fixing the meta taggings is all well and good, but unless the filters are
-    # adjusted too, this will have no immediate effects.
-    @item.async(:update_filters_for_filterables)
-
-    flash[:notice] << ts("Inherited meta tags recalculated. This tag has " \
-                         "also been enqueued to have its filters fixed.")
+    if modified
+      # Fixing the meta taggings is all well and good, but unless the filters
+      # are adjusted too, this will have no immediate effects.
+      @item.async(:update_filters_for_filterables)
+      flash[:notice] << ts("Inherited meta tags recalculated. This tag has " \
+                           "also been enqueued to have its filters fixed.")
+    else
+      flash[:notice] << ts("Inherited meta tags recalculated. No incorrect " \
+                           "meta tags found.")
+    end
   end
 
   # An action allowing the user to try to delete invalid associations.

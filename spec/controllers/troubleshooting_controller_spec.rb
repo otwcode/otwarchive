@@ -120,10 +120,20 @@ describe TroubleshootingController do
         tag.meta_tags.delete(grand)
         MetaTagging.create(sub_tag: tag, meta_tag: phantom, direct: false)
 
+        # Because the inherited meta tags are wrong, we should end up updating
+        # the filters for all of the tagged works as well:
+        expect_any_instance_of(Tag).to receive(:update_filters_for_filterables)
+
         put :update, params: { tag_id: tag.to_param, actions: ["fix_meta_tags"] }
 
         expect(tag.meta_tags.reload).to contain_exactly(meta, grand)
         it_redirects_to_simple(tag_path(tag))
+      end
+
+      it "doesn't update filters if the meta tags don't need fixing" do
+        expect_any_instance_of(Tag).not_to receive(:update_filters_for_filterables)
+
+        put :update, params: { tag_id: tag.to_param, actions: ["fix_meta_tags"] }
       end
 
       it "doesn't allow the user to reindex a tag" do
@@ -192,10 +202,20 @@ describe TroubleshootingController do
         tag.meta_tags.delete(grand)
         MetaTagging.create(sub_tag: tag, meta_tag: phantom, direct: false)
 
+        # Because the inherited meta tags are wrong, we should end up updating
+        # the filters for all of the tagged works as well:
+        expect_any_instance_of(Tag).to receive(:update_filters_for_filterables)
+
         put :update, params: { tag_id: tag.to_param, actions: ["fix_meta_tags"] }
 
         expect(tag.meta_tags.reload).to contain_exactly(meta, grand)
         it_redirects_to_simple(tag_path(tag))
+      end
+
+      it "doesn't update filters if the meta tags don't need fixing" do
+        expect_any_instance_of(Tag).not_to receive(:update_filters_for_filterables)
+
+        put :update, params: { tag_id: tag.to_param, actions: ["fix_meta_tags"] }
       end
 
       it "reindexes everything related to the tag and redirects" do

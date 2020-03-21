@@ -34,9 +34,13 @@ class InheritedMetaTagUpdater
   end
 
   # Generate the missing inherited meta taggings and delete the ones that are
-  # no longer needed.
+  # no longer needed. Returns true if any meta taggings were created/deleted,
+  # and false otherwise.
   def update
     calculate
+
+    # Keep track of whether the meta taggings were modified:
+    modified = false
 
     missing = Set.new(all)
     missing.delete(base.id)
@@ -44,16 +48,22 @@ class InheritedMetaTagUpdater
     # Delete the unnecessary meta taggings.
     base.meta_taggings.each do |mt|
       unless missing.delete?(mt.meta_tag_id)
-        # We weren't missing it, so as long as it's not a direct meta tagging,
-        # we don't need it anymore.
-        mt.destroy unless mt.direct
+        next if mt.direct
+
+        # We weren't missing it, and it's not a direct meta tagging, so we
+        # don't need it anymore.
+        mt.destroy
+        modified = true
       end
     end
 
     # Build the missing meta taggings.
     Tag.where(id: missing.to_a).each do |tag|
       base.meta_taggings.create(direct: false, meta_tag: tag)
+      modified = true
     end
+
+    modified
   end
 
   # Fixes inherited meta tags for all tags with at least one meta tagging.
