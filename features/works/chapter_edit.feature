@@ -360,21 +360,20 @@ Feature: Edit chapters
       And a chapter with the co-author "opsfriend" is added to "OP's Work"
       And I am logged in as "opsfriend"
     When I view the work "OP's Work"
-      And I view the 2nd chapter
+      And I view the 3rd chapter
       And I follow "Edit Chapter"
     When I follow "Remove Me As Chapter Co-Creator"
     Then I should see "You have been removed as a creator from the chapter."
       And I should see "Chapter 1"
-    When I view the 2nd chapter
-    Then I should see "Chapter 2"
+    When I view the 3rd chapter
+    Then I should see "Chapter 3"
       And I should see "Chapter by originalposter"
-    When I view the 1st chapter
+    When I view the 2nd chapter
       And I follow "Edit Chapter"
       And I follow "Remove Me As Chapter Co-Creator"
     Then I should see "You have been removed as a creator from the work."
     When I view the work "OP's Work"
-    Then I should see "Chapter 1"
-      And I should not see "Edit Chapter"
+    Then I should not see "Edit Chapter"
 
 
   Scenario: Removing yourself as a co-creator from the chapter manage page
