@@ -409,7 +409,7 @@ describe TagsController do
         it "has a useful error" do
           expect(assigns[:tag].errors.full_messages).to include(
             "Invalid meta tag '#{meta.name}': " \
-            "A meta tag can't be its own grandpa."
+            "A meta tag can't be its own grandparent."
           )
         end
 

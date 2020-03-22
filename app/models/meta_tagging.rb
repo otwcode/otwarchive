@@ -26,7 +26,7 @@ class MetaTagging < ApplicationRecord
         self.errors.add(:base, "A tag can't be its own meta tag.")
       end
       if self.meta_tag.meta_taggings.where(meta_tag: self.sub_tag).exists?
-        self.errors.add(:base, "A meta tag can't be its own grandpa.")
+        self.errors.add(:base, "A meta tag can't be its own grandparent.")
       end
     end
   end
