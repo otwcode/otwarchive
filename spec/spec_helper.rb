@@ -145,7 +145,9 @@ def run_all_indexing_jobs
 end
 
 # Suspend resque workers for the duration of the block, then resume after the
-# contents of the block have run.
+# contents of the block have run. Simulates what happens when there's a lot of
+# jobs already in the queue, so there's a long delay between jobs being
+# enqueued and jobs being run.
 def suspend_resque_workers
   # Set up an array to keep track of delayed actions.
   queue = []
