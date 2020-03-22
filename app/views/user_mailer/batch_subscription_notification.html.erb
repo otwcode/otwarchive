@@ -7,7 +7,7 @@
     <% work_link = style_link(this_work.title.html_safe, work_url(this_work)) %>
 
     <% cache("subscription-email-preface-#{creation.cache_key}") do %>
-      <%= this_work.pseuds.map{|p| style_pseud_link(p)}.to_sentence.html_safe %> posted a
+      <%= creator_links(this_work) %> posted a
       <% if creation.is_a?(Work) %>
         <%= this_work.backdate ? "backdated" : "new" %> work:
       <% else %>
@@ -24,7 +24,7 @@
       <% unless @seen[this_work.id] %>
         <br>
 
-        by <%= this_work.pseuds.map{|p| style_pseud_link(p)}.to_sentence.html_safe %>
+        by <%= creator_links(this_work) %>
       <% end %>
     </p>
 
