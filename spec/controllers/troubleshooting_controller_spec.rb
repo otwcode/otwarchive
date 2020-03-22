@@ -82,9 +82,7 @@ describe TroubleshootingController do
       end
     end
 
-    context "when logged in as a tag wrangler" do
-      before { fake_login_known_user(tag_wrangler) }
-
+    shared_examples "permitted for tag wranglers" do
       it "removes invalid tag associations and redirects to the tag" do
         tag.common_taggings.build(filterable: create(:freeform)).save(validate: false)
         tag.child_taggings.build(common_tag: create(:media)).save(validate: false)
@@ -134,16 +132,6 @@ describe TroubleshootingController do
         expect_any_instance_of(Tag).not_to receive(:update_filters_for_filterables)
 
         put :update, params: { tag_id: tag.to_param, actions: ["fix_meta_tags"] }
-      end
-
-      it "doesn't allow the user to reindex a tag" do
-        put :update, params: { tag_id: tag.to_param, actions: ["reindex_tag"] }
-        it_redirects_to_with_error(tag_troubleshooting_path(tag), "The following actions aren't allowed: Reindex Tag.")
-      end
-
-      it "doesn't allow the user to update filters for a tag" do
-        put :update, params: { tag_id: tag.to_param, actions: ["update_tag_filters"] }
-        it_redirects_to_with_error(tag_troubleshooting_path(tag), "The following actions aren't allowed: Update Tag Filters.")
       end
 
       it "reindexes the work and redirects" do
@@ -164,59 +152,27 @@ describe TroubleshootingController do
       end
     end
 
+    context "when logged in as a tag wrangler" do
+      before { fake_login_known_user(tag_wrangler) }
+
+      include_examples "permitted for tag wranglers"
+
+      it "doesn't allow the user to reindex a tag" do
+        put :update, params: { tag_id: tag.to_param, actions: ["reindex_tag"] }
+        it_redirects_to_with_error(tag_troubleshooting_path(tag), "The following actions aren't allowed: Reindex Tag.")
+      end
+
+      it "doesn't allow the user to update filters for a tag" do
+        put :update, params: { tag_id: tag.to_param, actions: ["update_tag_filters"] }
+        it_redirects_to_with_error(tag_troubleshooting_path(tag), "The following actions aren't allowed: Update Tag Filters.")
+      end
+    end
+
     context "when logged in as an admin" do
       before { fake_login_admin(create(:admin)) }
 
-      it "removes invalid tag associations and redirects to the tag" do
-        tag.common_taggings.build(filterable: create(:freeform)).save(validate: false)
-        tag.child_taggings.build(common_tag: create(:media)).save(validate: false)
-        tag.meta_taggings.build(meta_tag: tag).save(validate: false)
-
-        put :update, params: { tag_id: tag.to_param, actions: ["fix_associations"] }
-
-        expect(tag.parents.reload).to contain_exactly(Media.uncategorized)
-        expect(tag.children.reload).to contain_exactly
-        expect(tag.meta_tags.reload).to contain_exactly
-
-        it_redirects_to_simple(tag_path(tag))
-      end
-
-      it "fixes tag counts and redirects to the tag" do
-        tag.create_filter_count(public_works_count: 100)
-
-        expect(tag.filter_count.public_works_count).to eq 100
-        put :update, params: { tag_id: tag.to_param, actions: ["fix_counts"] }
-
-        tag.reload
-        expect(tag.filter_count.public_works_count).to eq 0
-        it_redirects_to_simple(tag_path(tag))
-      end
-
-      it "fixes meta tags and redirects to the tag" do
-        meta = create(:canonical_fandom)
-        grand = create(:canonical_fandom)
-        phantom = create(:canonical_fandom)
-
-        tag.meta_tags << meta
-        meta.meta_tags << grand
-        tag.meta_tags.delete(grand)
-        MetaTagging.create(sub_tag: tag, meta_tag: phantom, direct: false)
-
-        # Because the inherited meta tags are wrong, we should end up updating
-        # the filters for all of the tagged works as well:
-        expect_any_instance_of(Tag).to receive(:update_filters_for_filterables)
-
-        put :update, params: { tag_id: tag.to_param, actions: ["fix_meta_tags"] }
-
-        expect(tag.meta_tags.reload).to contain_exactly(meta, grand)
-        it_redirects_to_simple(tag_path(tag))
-      end
-
-      it "doesn't update filters if the meta tags don't need fixing" do
-        expect_any_instance_of(Tag).not_to receive(:update_filters_for_filterables)
-
-        put :update, params: { tag_id: tag.to_param, actions: ["fix_meta_tags"] }
-      end
+      # Anything permitted for tag wranglers is also permitted for admins:
+      include_examples "permitted for tag wranglers"
 
       it "reindexes everything related to the tag and redirects" do
         bookmark = create(:bookmark, tags: [tag])
@@ -247,26 +203,9 @@ describe TroubleshootingController do
 
         put :update, params: { tag_id: tag.to_param, actions: ["update_tag_filters"] }
 
-        expect(tag_work.filters.reload).to include(tag)
-        expect(syn_work.filters.reload).to include(tag)
+        expect(tag_work.direct_filters.reload).to include(tag)
+        expect(syn_work.direct_filters.reload).to include(tag)
         it_redirects_to_simple(tag_path(tag))
-      end
-
-      it "reindexes the work and redirects" do
-        expect do
-          put :update, params: { work_id: work.id, actions: ["reindex_work"] }
-        end.to(add_to_reindex_queue(work, :main))
-        it_redirects_to_simple(work)
-      end
-
-      it "recalculates the work's filters and redirects" do
-        work.fandoms = [tag]
-        work.filter_taggings.destroy_all
-
-        put :update, params: { work_id: work.id, actions: ["update_work_filters"] }
-
-        expect(work.filters.reload).to include(tag)
-        it_redirects_to_simple(work)
       end
     end
   end
