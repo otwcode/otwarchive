@@ -48,7 +48,7 @@ en:
         description: "Reindex this tag and all related works, bookmarks, series, pseuds, and external works."
       fix_counts:
         title: "Fix Tag Counts"
-        description: "Try to recalculate some counts associated with this tag (both filter counts and taggings counts). Keep in mind that the tag counts listed in the fandom lists include unrevealed works, so if the count is only a little off it may just be unrevealed drafts."
+        description: "Try to recalculate some counts associated with this tag (both filter counts and taggings counts). Keep in mind that the tag counts listed in the fandom lists include unrevealed works, so if the count is only a little off it may just be unrevealed works."
       fix_associations:
         title: "Fix Tag Associations"
         description: "Try to delete invalid associations involving this tag. (e.g. Parents of the wrong type, children of the wrong type, duplicate parents/children/meta-tags/sub-tags, etc.)"
