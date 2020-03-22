@@ -4,18 +4,19 @@ require 'rspec/expectations'
 
 # A matcher for checking whether a given item has been added to a particular
 # indexing queue.
-#
-# Clears the queue in question before running, so it doesn't work properly in
-# conjunction with run_all_indexing_jobs.
 RSpec::Matchers.define :add_to_reindex_queue do |item, queue|
   match do |given_proc|
     return false unless given_proc.is_a?(Proc)
 
     queue_key = IndexQueue.get_key(item.class, queue)
 
-    IndexQueue::REDIS.del(queue_key)
+    # Stub sadd so that we can track whether it was ever called with the right
+    # arguments:
+    allow(IndexQueue::REDIS).to receive(:sadd).and_call_original
     given_proc.call
-    IndexQueue::REDIS.smembers(queue_key).include?(item.id.to_s)
+    expect(IndexQueue::REDIS).to have_received(:sadd).with(
+      queue_key, eq(item.id).or(include(item.id))
+    ).at_least(:once)
   end
 
   failure_message do |given_proc|
