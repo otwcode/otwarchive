@@ -172,6 +172,71 @@
   When I press "Subscribe"
   Then the page title should include "Chapter 2"
 
+  # There are tests in collections/collection_anonymity.feature that ensure
+  # a creator's subscribers are not notified when the creator posts a new
+  # anonymous work.
+  Scenario: When a chapter is added to an anonymous work, subscription emails
+  are sent to users who have subscribed to the work, but not to users who have
+  subscribed to the creator.
+
+  Given the anonymous collection "anonymous_collection"
+    And I am logged in as "creator"
+    And I post the work "Multi Chapter Work" to the collection "anonymous_collection"
+    And "author_subscriber" subscribes to author "creator"
+    And "work_subscriber" subscribes to work "Multi Chapter Work"
+  When a chapter is added to "Multi Chapter Work"
+    And subscription notifications are sent
+  Then "author_subscriber" should not be emailed
+    But "work_subscriber" should be emailed
+    And the email should have "Anonymous posted Chapter 2 of Multi Chapter Work" in the subject
+    And the email should contain "Multi Chapter Work"
+    And the email should contain "Anonymous"
+    And the email should not contain "creator"
+
+  Scenario: When a chapter is added to an anonymous work in an anonymous series,
+  subscription emails are sent to users who have subscribed to the work or
+  series, but not to users who have subscribed to the creator.
+ 
+  Given the anonymous collection "anonymous_collection"
+    And I am logged in as "creator"
+    And I post the work "Multi Chapter Work" to the collection "anonymous_collection" as part of a series "Multi Work Series"
+    And "author_subscriber" subscribes to author "creator"
+    And "work_subscriber" subscribes to work "Multi Chapter Work"
+    And "series_subscriber" subscribes to series "Multi Work Series"
+  When a chapter is added to "Multi Chapter Work"
+    And subscription notifications are sent
+  Then "author_subscriber" should not be emailed
+    But "work_subscriber" should be emailed
+    And the email should have "Anonymous posted Chapter 2 of Multi Chapter Work" in the subject
+    And the email should contain "Multi Chapter Work"
+    And the email should contain "Anonymous"
+    And the email should not contain "creator"
+    And "series_subscriber" should be emailed
+    And the email should have "Anonymous posted Chapter 2 of Multi Chapter Work in the Multi Work Series series" in the subject
+    And the email should contain "Multi Chapter Work"
+    And the email should contain "Anonymous"
+    And the email should not contain "creator"
+
+  Scenario: When a new work is added to an anonymous series, subscription emails
+  are sent to users who are subscribed to the series, but not users who have 
+  subscribed to the creator.
+ 
+  Given the anonymous collection "anonymous_collection"
+    And I am logged in as "creator"
+    And I post the work "Multi Chapter Work" to the collection "anonymous_collection" as part of a series "Multi Work Series"
+    And "author_subscriber" subscribes to author "creator"
+    And "series_subscriber" subscribes to series "Multi Work Series"
+  When I am logged in as "creator"
+    And I post the work "Second Work" to the collection "anonymous_collection" as part of a series "Multi Work Series"
+    And subscription notifications are sent
+  Then "author_subscriber" should not be emailed
+    But "series_subscriber" should be emailed
+    And the email should have "Anonymous posted Second Work in the Multi Work Series series" in the subject
+    And the email should contain "Multi Work Series"
+    And the email should contain "Second Work"
+    And the email should contain "Anonymous"
+    And the email should not contain "creator"
+
   Scenario: subscribe to an individual work with an the & and < and > characters in the title
 
   Given I have loaded the fixtures

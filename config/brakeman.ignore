@@ -96,6 +96,25 @@
       "note": ""
     },
     {
+      "warning_type": "Cross Site Scripting",
+      "warning_code": 2,
+      "fingerprint": "04a2dece009c698540960269d024b874a42b71cf8e06e3216c41f8807e57f9b9",
+      "check_name": "CrossSiteScripting",
+      "message": "Unescaped model attribute",
+      "file": "app/views/kudos/index.html.erb",
+      "line": 9,
+      "link": "http://brakemanscanner.org/docs/warning_types/cross_site_scripting",
+      "code": "Work.find(params[:work_id]).kudos.includes(:user).with_user.map do\n link_to(kudo.user.login, kudo.user)\n end.to_sentence",
+      "render_path": [{"type":"controller","class":"KudosController","method":"index","line":11,"file":"app/controllers/kudos_controller.rb"}],
+      "location": {
+        "type": "template",
+        "template": "kudos/index"
+      },
+      "user_input": "Work.find(params[:work_id]).kudos",
+      "confidence": "Weak",
+      "note": ""
+    },
+    {
       "warning_type": "Redirect",
       "warning_code": 18,
       "fingerprint": "124a90c49fb5093fbfd833c3f1c3b8ae345145e9887aa8561a4d4687499486e3",
@@ -312,7 +331,7 @@
       "check_name": "FileAccess",
       "message": "Model attribute used in file name",
       "file": "app/models/skin.rb",
-      "line": 445,
+      "line": 459,
       "link": "http://brakemanscanner.org/docs/warning_types/file_access/",
       "code": "File.open((\"#{(Skin.site_skins_dir + version)}/\" + \"preview.png\"), \"rb\")",
       "render_path": null,
@@ -332,7 +351,7 @@
       "check_name": "FileAccess",
       "message": "Model attribute used in file name",
       "file": "app/models/skin.rb",
-      "line": 459,
+      "line": 473,
       "link": "http://brakemanscanner.org/docs/warning_types/file_access/",
       "code": "File.open((\"#{(Skin.site_skins_dir + version)}/\" + \"preview.png\"), \"rb\")",
       "render_path": null,
@@ -585,7 +604,7 @@
       "check_name": "FileAccess",
       "message": "Model attribute used in file name",
       "file": "app/models/skin.rb",
-      "line": 516,
+      "line": 530,
       "link": "http://brakemanscanner.org/docs/warning_types/file_access/",
       "code": "File.open((Skin.site_skins_dir + \"preview.png\"), \"rb\")",
       "render_path": null,
@@ -993,7 +1012,7 @@
       "line": 11,
       "link": "http://brakemanscanner.org/docs/warning_types/cross_site_scripting",
       "code": "ts(\"Are you sure you want to <strong><em>delete</em></strong> all the works and comments created by this user,\\n           along with their %{bookmarks} bookmarks, %{series} series, and %{collections} collections? This <strong>cannot be undone</strong>.\", :bookmarks => User.find_by(:login => params[:id]).bookmarks.size, :series => User.find_by(:login => params[:id]).series.size, :collections => User.find_by(:login => params[:id]).collections.size)",
-      "render_path": [{"type":"controller","class":"Admin::AdminUsersController","method":"confirm_delete_user_creations","line":96,"file":"app/controllers/admin/admin_users_controller.rb"}],
+      "render_path": [{"type":"controller","class":"Admin::AdminUsersController","method":"confirm_delete_user_creations","line":106,"file":"app/controllers/admin/admin_users_controller.rb"}],
       "location": {
         "type": "template",
         "template": "admin/admin_users/confirm_delete_user_creations"
@@ -1009,7 +1028,7 @@
       "check_name": "ValidationRegex",
       "message": "Insufficient validation for 'name' using /\\p{Alnum}/. Use \\A and \\z as anchors",
       "file": "app/models/pseud.rb",
-      "line": 67,
+      "line": 66,
       "link": "http://brakemanscanner.org/docs/warning_types/format_validation/",
       "code": null,
       "render_path": null,
@@ -1066,7 +1085,7 @@
       "check_name": "FileAccess",
       "message": "Model attribute used in file name",
       "file": "app/models/skin.rb",
-      "line": 413,
+      "line": 427,
       "link": "http://brakemanscanner.org/docs/warning_types/file_access/",
       "code": "File.open((\"#{(Skin.site_skins_dir + version)}/\" + skin_file), &:readline)",
       "render_path": null,
@@ -1337,7 +1356,7 @@
       "check_name": "FileAccess",
       "message": "Model attribute used in file name",
       "file": "app/models/skin.rb",
-      "line": 217,
+      "line": 223,
       "link": "http://brakemanscanner.org/docs/warning_types/file_access/",
       "code": "FileUtils.mkdir_p((Skin.skins_dir + skin_dirname))",
       "render_path": null,
@@ -1357,7 +1376,7 @@
       "check_name": "FileAccess",
       "message": "Model attribute used in file name",
       "file": "app/models/skin.rb",
-      "line": 243,
+      "line": 249,
       "link": "http://brakemanscanner.org/docs/warning_types/file_access/",
       "code": "FileUtils.rm_rf((Skin.skins_dir + skin_dirname))",
       "render_path": null,
@@ -1416,7 +1435,7 @@
       "check_name": "FileAccess",
       "message": "Model attribute used in file name",
       "file": "app/models/skin.rb",
-      "line": 234,
+      "line": 240,
       "link": "http://brakemanscanner.org/docs/warning_types/file_access/",
       "code": "File.open(((Skin.skins_dir + skin_dirname) + \"#{2}_#{(\"\" or next_skin.get_sheet_role)}.css\"), \"w\")",
       "render_path": null,
@@ -1543,25 +1562,6 @@
       },
       "user_input": "User.find_by(:login => params[:user_id]).subscriptions.build(subscription_params).subscribable",
       "confidence": "High",
-      "note": ""
-    },
-    {
-      "warning_type": "Cross Site Scripting",
-      "warning_code": 2,
-      "fingerprint": "be9c158f0cf37661f67085fc1140ea30289797dda66c9612697487d2d7ca4384",
-      "check_name": "CrossSiteScripting",
-      "message": "Unescaped model attribute",
-      "file": "app/views/kudos/index.html.erb",
-      "line": 9,
-      "link": "http://brakemanscanner.org/docs/warning_types/cross_site_scripting",
-      "code": "Work.find(params[:work_id]).kudos.includes(:pseud => :user).with_pseud.map do\n link_to(kudo.pseud.byline, kudo.pseud.user)\n end.to_sentence",
-      "render_path": [{"type":"controller","class":"KudosController","method":"index","line":11,"file":"app/controllers/kudos_controller.rb"}],
-      "location": {
-        "type": "template",
-        "template": "kudos/index"
-      },
-      "user_input": "Work.find(params[:work_id]).kudos",
-      "confidence": "Weak",
       "note": ""
     },
     {
@@ -1916,7 +1916,7 @@
       "check_name": "FileAccess",
       "message": "Model attribute used in file name",
       "file": "app/models/skin.rb",
-      "line": 514,
+      "line": 528,
       "link": "http://brakemanscanner.org/docs/warning_types/file_access/",
       "code": "File.open(((Skin.site_skins_dir + Skin.get_current_version) + \"/preview.png\"), \"rb\")",
       "render_path": null,
@@ -1993,7 +1993,7 @@
       "check_name": "FileAccess",
       "message": "Model attribute used in file name",
       "file": "app/models/skin.rb",
-      "line": 224,
+      "line": 230,
       "link": "http://brakemanscanner.org/docs/warning_types/file_access/",
       "code": "File.open(((Skin.skins_dir + skin_dirname) + \"#{1}_#{\"\"}.css\"), \"w\")",
       "render_path": null,
@@ -2007,6 +2007,6 @@
       "note": ""
     }
   ],
-  "updated": "2019-10-27 07:20:29 +0000",
+  "updated": "2020-02-09 23:33:40 +0000",
   "brakeman_version": "3.7.2"
 }

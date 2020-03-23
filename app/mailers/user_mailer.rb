@@ -1,4 +1,4 @@
-class UserMailer < BulletproofMailer::Base
+class UserMailer < ActionMailer::Base
   include Resque::Mailer # see README in this directory
 
   layout 'mailer'
@@ -141,16 +141,13 @@ class UserMailer < BulletproofMailer::Base
       # If the subscription notification is for a user subscription, we don't
       # want to send updates about works that have recently become anonymous.
       if @subscription.subscribable_type == 'User'
-        next if creation.is_a?(Work) && creation.anonymous?
-        next if creation.is_a?(Chapter) && creation.work.anonymous?
+        next if Subscription.anonymous_creation?(creation)
       end
 
       @creations << creation
     end
 
-    # die if we haven't got any creations to notify about
-    # see lib/bulletproof_mailer.rb
-    abort_delivery if @creations.empty?
+    return if @creations.empty?
 
     # make sure we only notify once per creation
     @creations.uniq!

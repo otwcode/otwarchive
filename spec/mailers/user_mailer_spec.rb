@@ -1,7 +1,6 @@
 require "spec_helper"
 
-describe UserMailer, type: :mailer do
-
+describe UserMailer do
   describe "claim_notification" do
     title = "Façade"
     title2 = Faker::Book.title
@@ -43,7 +42,7 @@ describe UserMailer, type: :mailer do
       end
 
       it "only has style_to links in the HTML body" do
-        expect(email.html_part).not_to have_xpath("//a[not(@style)]")
+        expect(email.html_part.decoded).not_to have_xpath("//a[not(@style)]")
       end
     end
 
@@ -122,15 +121,15 @@ describe UserMailer, type: :mailer do
       end
 
       it "lists the first imported work in an unordered list in the HTML body" do
-        expect(email.html_part).to have_xpath("//ul/li", text: title)
+        expect(email.html_part.decoded).to have_xpath("//ul/li", text: title)
       end
 
       it "lists the second imported work in an unordered list in the HTML body" do
-        expect(email.html_part).to have_xpath("//ul/li", text: title2)
+        expect(email.html_part.decoded).to have_xpath("//ul/li", text: title2)
       end
 
       it "only has style_to links in the HTML body" do
-        expect(email.html_part).not_to have_xpath("//a[not(@style)]")
+        expect(email.html_part.decoded).not_to have_xpath("//a[not(@style)]")
       end
     end
 
@@ -140,7 +139,7 @@ describe UserMailer, type: :mailer do
       end
 
       it "lists the first imported work as plain text" do
-        expect(email.text_part).not_to have_xpath("//ul/li", text: title)
+        expect(email.text_part.decoded).not_to have_xpath("//ul/li", text: title)
       end
 
       it "lists the second imported work with a leading hyphen" do

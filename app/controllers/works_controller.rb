@@ -211,7 +211,7 @@ class WorksController < ApplicationController
     end
 
     @tag_categories_limited = Tag::VISIBLE - ['ArchiveWarning']
-    @kudos = @work.kudos.with_pseud.includes(pseud: :user).order('created_at DESC')
+    @kudos = @work.kudos.with_user.includes(:user).by_date
 
     if current_user.respond_to?(:subscriptions)
       @subscription = current_user.subscriptions.where(subscribable_id: @work.id,
