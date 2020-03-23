@@ -368,7 +368,7 @@ Feature: Edit chapters
     When I view the 3rd chapter
     Then I should see "Chapter 3"
       And I should see "Chapter by originalposter"
-    When I view the 2nd chapter
+    When I follow "Previous Chapter"
       And I follow "Edit Chapter"
       And I follow "Remove Me As Chapter Co-Creator"
     Then I should see "You have been removed as a creator from the work."
