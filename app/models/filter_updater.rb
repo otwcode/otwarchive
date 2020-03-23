@@ -22,6 +22,9 @@ class FilterUpdater
 
     raise "FilterUpdater type '#{type}' not allowed." unless @klass
 
+    # A list for storing all of the FilterTaggings that we end up creating,
+    # modifying, or deleting. That way, we have a better idea of what we need
+    # to reindex.
     @modified = []
   end
 
@@ -165,7 +168,8 @@ class FilterUpdater
 
   # Given a list of pairs of IDs, treat each pair as a (key, value) pair, and
   # return a hash that associates each key with a list of values. Sets the
-  # default value of the hash to an empty frozen list.
+  # default value of the hash to an empty frozen list, and freezes all of the
+  # lists in the hash at the end.
   def hash_from_pairs(pairs)
     hash = Hash.new([].freeze)
 
@@ -174,7 +178,7 @@ class FilterUpdater
       hash[key] << value
     end
 
-    hash
+    hash.transform_values!(&:freeze)
   end
 
   ########################################

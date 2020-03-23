@@ -716,7 +716,7 @@ class Tag < ApplicationRecord
   # sub-tags will be deleted, which will result in the necessary items having
   # their filters fixed.
   after_update :update_filters_for_canonical_or_merger_change
-  def update_filters_for_canonical_or_merger_change(*)
+  def update_filters_for_canonical_or_merger_change
     return unless saved_change_to_canonical? || saved_change_to_merger_id?
 
     async_after_commit(:update_filters_for_taggables)
