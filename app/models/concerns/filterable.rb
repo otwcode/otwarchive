@@ -17,20 +17,11 @@ module Filterable
     has_many :direct_filters,
              source: :filter,
              through: :direct_filter_taggings
-
-    after_destroy :clean_up_filter_taggings
   end
 
   # Update filters for this particular filterable.
   def update_filters
     FilterUpdater.new(self.class.base_class, [id], :main).update
-  end
-
-  # Destroy the filter-taggings and manually trigger callbacks.
-  def clean_up_filter_taggings
-    to_destroy = self.filter_taggings.to_a
-    to_destroy.each(&:destroy)
-    self.class.reindex_for_filter_changes([self.id], to_destroy, :main)
   end
 
   class_methods do
