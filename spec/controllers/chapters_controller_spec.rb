@@ -323,7 +323,7 @@ describe ChaptersController do
       end
     end
 
-    context "when work owner is logged in" do
+    context "when logged in user owns the chapter" do
       before do
         fake_login_known_user(user)
       end
@@ -339,19 +339,9 @@ describe ChaptersController do
         it_redirects_to_simple(user_path(banned_user))
         expect(flash[:error]).to include("Your account has been banned.")
       end
-
-      it "removes user, gives notice, and redirects to work when user removes themselves" do
-        other_user = create(:user)
-        other_user.preference.allow_cocreator = true
-        other_user.preference.save
-        chapter = create(:chapter, work: work, posted: true, authors: [user.pseuds.first, other_user.pseuds.first])
-        get :edit, params: { work_id: work.id, id: chapter.id, remove: "me" }
-        expect(assigns[:chapter].pseuds).to eq [other_user.pseuds.first]
-        it_redirects_to_with_notice(work_path(work), "You have been removed as a creator from the chapter.")
-      end
     end
 
-    context "when other user is logged in" do
+    context "when logged in user does not own the chapter" do
       before do
         fake_login
       end
@@ -362,30 +352,40 @@ describe ChaptersController do
       end
     end
 
-    context "when co-creator is logged in" do
-      let(:co_creator) { create(:user) }
-      let!(:co_second_chapter) { create(:chapter, work: work, posted: true, authors: [user.pseuds.first, co_creator.pseuds.first]) }
-      let!(:co_third_chapter) { create(:chapter, work: work, posted: true, authors: [user.pseuds.first, co_creator.pseuds.first]) }
+    context "with valid remove params" do
+      context "when work is multichaptered and co-created" do
+        let(:co_creator) { create(:user) }
+        let!(:co_created_chapter) { create(:chapter, work: work, posted: true, authors: [user.pseuds.first, co_creator.pseuds.first]) }
 
-      before do
-        fake_login_known_user(co_creator)
-      end
+        context "when logged in user also owns other chapters" do
+          before do
+            fake_login_known_user(user)
+          end
 
-      it "removes user, gives notice, and redirects to work when user removes themselves" do
-        get :edit, params: { work_id: work.id, id: co_second_chapter.id, remove: "me" }
-        expect(assigns[:chapter].pseuds).to eq [user.pseuds.first]
-        it_redirects_to_with_notice(work_path(work), "You have been removed as a creator from the chapter.")
-      end
+          it "removes user from chapter, gives notice, and redirects to work" do
+            get :edit, params: { work_id: work.id, id: co_created_chapter.id, remove: "me" }
 
-      it "delegates to work removal of user after user removed from last co-created chapter" do
-        get :edit, params: { work_id: work.id, id: co_second_chapter.id, remove: "me" }
-        expect(assigns[:work].pseuds).to eq [user.pseuds.first, co_creator.pseuds.first]
-        get :edit, params: { work_id: work.id, id: co_third_chapter.id, remove: "me" }
+            expect(co_created_chapter.reload.pseuds).to eq [co_creator.pseuds.first]
+            expect(work.reload.pseuds).to eq [user.pseuds.first, co_creator.pseuds.first]
 
-        expect(co_second_chapter.reload.pseuds).to eq [user.pseuds.first]
-        expect(co_third_chapter.reload.pseuds).to eq [user.pseuds.first]
+            it_redirects_to_with_notice(work_path(work), "You have been removed as a creator from the chapter.")
+          end
+        end
 
-        it_redirects_to_with_notice(edit_work_path(work, remove: "me"), "You have been removed as a creator from the chapter.")
+        context "when logged in user only owns this chapter" do
+          before do
+            fake_login_known_user(co_creator)
+          end
+
+          it "removes user from chapter and delegates removal of the user from the work to the work controller" do
+            get :edit, params: { work_id: work.id, id: co_created_chapter.id, remove: "me" }
+
+            expect(co_created_chapter.reload.pseuds).to eq [user.pseuds.first]
+            expect(work.reload.pseuds).to eq [user.pseuds.first, co_creator.pseuds.first]
+            
+            it_redirects_to(edit_work_path(work, remove: "me"))
+          end
+        end
       end
     end
   end
