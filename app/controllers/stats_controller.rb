@@ -102,6 +102,7 @@ class StatsController < ApplicationController
     })
 
     options = {
+      colors: ["#993333"],
       vAxis: { minValue: 0 },
       title: chart_title
     }
