@@ -10,8 +10,8 @@ class DropPseudIdFromKudos < ActiveRecord::Migration[5.1]
           --alter "DROP COLUMN pseud_id,
                    DROP INDEX index_kudos_on_commentable_id_and_commentable_type_and_pseud_id" \\
           --no-swap-tables --no-drop-new-table --no-drop-triggers \\
-          -uroot --ask-pass --chunk-size=10k --max-flow-ctl 0 --pause-file /tmp/pauseme \\
-          --max-load Threads_running=25 --critical-load Threads_running=400 \\
+          -uroot --ask-pass --chunk-size=5k --max-flow-ctl 0 --pause-file /tmp/pauseme \\
+          --max-load Threads_running=15 --critical-load Threads_running=100 \\
           --set-vars innodb_lock_wait_timeout=2 --alter-foreign-keys-method=auto \\
           --execute
 
@@ -46,8 +46,8 @@ class DropPseudIdFromKudos < ActiveRecord::Migration[5.1]
                    ADD INDEX index_kudos_on_pseud_id (pseud_id),
                    ADD INDEX index_kudos_on_commentable_id_and_commentable_type_and_pseud_id (commentable_id, commentable_type, pseud_id)" \\
           --no-swap-tables --no-drop-new-table --no-drop-triggers \\
-          -uroot --ask-pass --chunk-size=10k --max-flow-ctl 0 --pause-file /tmp/pauseme \\
-          --max-load Threads_running=25 --critical-load Threads_running=400 \\
+          -uroot --ask-pass --chunk-size=5k --max-flow-ctl 0 --pause-file /tmp/pauseme \\
+          --max-load Threads_running=15 --critical-load Threads_running=100 \\
           --set-vars innodb_lock_wait_timeout=2 --alter-foreign-keys-method=auto \\
           --execute
 
