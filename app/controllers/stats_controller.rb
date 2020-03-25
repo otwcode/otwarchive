@@ -105,8 +105,6 @@ class StatsController < ApplicationController
       colors: ["#993333"],
       title: chart_title,
       vAxis: { 
-        minValue: 0,
-        viewWindowMode: "explicit", 
         viewWindow: { min: 0 }
       }
     }
