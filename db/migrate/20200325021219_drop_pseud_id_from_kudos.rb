@@ -43,8 +43,8 @@ class DropPseudIdFromKudos < ActiveRecord::Migration[5.1]
 
         pt-online-schema-change D=#{database},t=kudos \\
           --alter "ADD COLUMN pseud_id INT,
-                   ADD INDEX index_kudos_on_commentable_id_and_commentable_type_and_pseud_id (commentable_id, commentable_type, pseud_id),
-                   ADD INDEX index_kudos_on_pseud_id (pseud_id)" \\
+                   ADD INDEX index_kudos_on_pseud_id (pseud_id),
+                   ADD INDEX index_kudos_on_commentable_id_and_commentable_type_and_pseud_id (commentable_id, commentable_type, pseud_id)" \\
           --no-swap-tables --no-drop-new-table --no-drop-triggers \\
           -uroot --ask-pass --chunk-size=10k --max-flow-ctl 0 --pause-file /tmp/pauseme \\
           --max-load Threads_running=25 --critical-load Threads_running=400 \\
