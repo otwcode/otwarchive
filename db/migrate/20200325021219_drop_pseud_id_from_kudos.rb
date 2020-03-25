@@ -7,7 +7,8 @@ class DropPseudIdFromKudos < ActiveRecord::Migration[5.1]
         Schema Change Command:
 
         pt-online-schema-change D=#{database},t=kudos \\
-          --alter "DROP COLUMN pseud_id" \\
+          --alter "DROP COLUMN pseud_id,
+                   DROP INDEX index_kudos_on_commentable_id_and_commentable_type_and_pseud_id" \\
           --no-swap-tables --no-drop-new-table --no-drop-triggers \\
           -uroot --ask-pass --chunk-size=10k --max-flow-ctl 0 --pause-file /tmp/pauseme \\
           --max-load Threads_running=25 --critical-load Threads_running=400 \\
@@ -28,6 +29,8 @@ class DropPseudIdFromKudos < ActiveRecord::Migration[5.1]
       PTOSC
     else
       remove_column :kudos, :pseud_id
+      # index_kudos_on_pseud_id is automatically dropped with the column
+      remove_index :kudos, name: "index_kudos_on_commentable_id_and_commentable_type_and_pseud_id"
     end
   end
 
@@ -39,7 +42,9 @@ class DropPseudIdFromKudos < ActiveRecord::Migration[5.1]
         Schema Change Command:
 
         pt-online-schema-change D=#{database},t=kudos \\
-          --alter "ADD COLUMN pseud_id INT" \\
+          --alter "ADD COLUMN pseud_id INT,
+                   ADD INDEX index_kudos_on_commentable_id_and_commentable_type_and_pseud_id (commentable_id, commentable_type, pseud_id),
+                   ADD INDEX index_kudos_on_pseud_id (pseud_id)" \\
           --no-swap-tables --no-drop-new-table --no-drop-triggers \\
           -uroot --ask-pass --chunk-size=10k --max-flow-ctl 0 --pause-file /tmp/pauseme \\
           --max-load Threads_running=25 --critical-load Threads_running=400 \\
@@ -60,6 +65,8 @@ class DropPseudIdFromKudos < ActiveRecord::Migration[5.1]
       PTOSC
     else
       add_column :kudos, :pseud_id, :integer
+      add_index :kudos, [:pseud_id]
+      add_index :kudos, [:commentable_id, :commentable_type, :pseud_id]
     end
   end
 end
