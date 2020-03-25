@@ -65,8 +65,8 @@ class DropPseudIdFromKudos < ActiveRecord::Migration[5.1]
       PTOSC
     else
       add_column :kudos, :pseud_id, :integer
-      add_index :kudos, [:pseud_id]
-      add_index :kudos, [:commentable_id, :commentable_type, :pseud_id]
+      add_index :kudos, [:pseud_id], name: "index_kudos_on_pseud_id"
+      add_index :kudos, [:commentable_id, :commentable_type, :pseud_id], name: "index_kudos_on_commentable_id_and_commentable_type_and_pseud_id"
     end
   end
 end
