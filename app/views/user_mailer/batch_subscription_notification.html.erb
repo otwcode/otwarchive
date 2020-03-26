@@ -58,11 +58,9 @@
     <% end %>
 
     <% unless @seen_summary[this_work.id] || this_work.summary.blank? %>
-        <p>
-          <%= style_bold("Summary:") %>
-          <%= style_quote(raw strip_tags(sanitize_field(this_work, :summary))) %>
-        </p>
-        <% @seen_summary[this_work.id] = true %>
+      <%= style_bold("Summary:") %>
+      <%= style_quote(raw sanitize_field(this_work, :summary)) %>
+      <% @seen_summary[this_work.id] = true %>
     <% end %>
 
     <% if (index < @creations.length-1) %>

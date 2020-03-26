@@ -259,3 +259,20 @@
     And I go to my subscriptions page
     And I press "Unsubscribe from I am <strong>er Than Yesterday & Other Lies"
   Then I should see "You have successfully unsubscribed from I am <strong>er Than Yesterday & Other Lies"
+
+  Scenario: Subscription emails include HTML in work summaries in the HTML email and convert it for plain text emails.
+
+  When "second_user" subscribes to author "first_user"
+    And I am logged in as "first_user"
+    And I set up the draft "The First Awesome Story" 
+    And I fill in "Summary" with "<p>Paragraph <u>one</u>.</p><p>Paragraph 2.</p>"
+    And I press "Post"
+    And subscription notifications are sent
+  Then 1 email should be delivered to "second_user@foo.com"
+    And the email should contain "The First Awesome Story"
+    And the email html body should contain "<p>Paragraph <u>one</u>.</p>"
+    And the email html body should contain "<p>Paragraph 2.</p>"
+    And the email text body should not contain "<p>Paragraph <u>one</u>.</p>"
+    And the email text body should not contain "<p>Paragraph two.</p>"
+    But the email text body should contain "Paragraph _one_."
+    And the email text body should contain "Paragraph 2."
