@@ -521,12 +521,12 @@ Then /^I should be editing the challenge settings$/ do
   step %{I should see "Setting Up the Battle 12 Prompt Meme"}
 end
 
-Then /^(\d+) prompts should be required$/ do |number|
-  find_field("prompt_meme_requests_num_required").value.should == number
+Then "{int} prompt(s) should be required" do |number|
+  expect(page).to have_field("prompt_meme_requests_num_required", with: number)
 end
 
-Then /^(\d+) prompts should be allowed$/ do |number|
-  find_field("prompt_meme_requests_num_allowed").value.should == number
+Then "{int} prompt(s) should be allowed" do |number|
+  expect(page).to have_field("prompt_meme_requests_num_allowed", with: number)
 end
 
 Then /^I should not see the prompt meme dashboard for "([^\"]*)"$/ do |challenge_title|
