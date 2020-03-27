@@ -55,8 +55,6 @@ module NavigationHelpers
       new_user_session_path
     when /^account creation page$/i
       signup_path
-    when /^the invite new users page$/i
-      admin_invitations_path
     when /^invite requests page$/i
       invite_requests_path
     when /^the manage invite queue page$/i
@@ -258,6 +256,8 @@ module NavigationHelpers
       bulk_search_admin_users_path
     when /^the abuse administration page for "(.*)"$/i
       admin_user_path(User.find_by(login: $1))
+    when /^the invite new users page$/i
+      admin_invitations_path
 
     # Here is an example that pulls values out of the Regexp:
     #
