@@ -10,7 +10,7 @@ describe InvitationsController do
     let(:invite) { create(:invitation, invitee_email: "") }
     let(:admin) { create(:admin) }
 
-    it 'should display error on failure' do
+    it 'displays error on failure' do
       fake_login_admin(admin)
 
       allow(Invitation).to receive(:find).with(invite.id.to_s).and_return(invite)
