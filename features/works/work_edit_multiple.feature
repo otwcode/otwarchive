@@ -21,7 +21,8 @@ Feature: Edit Multiple Works
     And I should not see "Lovely"
   When I press "Yes, Delete Works"
   Then I should see "Your works Glorious, Excellent were deleted."
-  When I go to my works page
+  When all indexing jobs have been run
+    And I go to my works page
   Then I should not see "Glorious"
     And I should not see "Excellent"
     And I should see "Lovely"
@@ -124,26 +125,80 @@ Feature: Edit Multiple Works
   When I view the work "Work with Anonymous Commenting Enabled"
   Then I should not see "doesn't allow non-Archive users to comment"
 
-  Scenario: User can remove coauthors from multiple works at once
-    Given the following activated users exists
-      | login     |
-      | author    |
-      | coauthor  |
-      And I am logged in as "author"
-      And I edit multiple works coauthored as "author" with "coauthor"
-    When I check "coauthor" within "#work_pseuds_to_remove_checkboxes"
+  Scenario: User can change the pseud on multiple works at once
+    Given I am logged in as "author"
+      And I add the pseud "My New Pseud"
+      And I edit the multiple works "First" and "Second"
+    When I select "My New Pseud" from "Creator/Pseud(s)"
+      And I press "Update All Works"
+    Then I should see "Your edits were put through"
+    When I view the work "First"
+    Then I should see "My New Pseud" within ".byline"
+    When I view the work "Second"
+    Then I should see "My New Pseud" within ".byline"
+
+  Scenario: User can invite a co-creator to multiple works at once
+    Given the following activated users exist
+      | login       |
+      | lead_author |
+      | coauthor    |
+      And the user "coauthor" allows co-creators
+      And I am logged in as "lead_author"
+      And I edit the multiple works "First Shared" and "Second Shared"
+    When I fill in "Add Co-Creators" with "coauthor"
+      And I press "Update All Works"
+    Then I should see "Your edits were put through"
+      And 2 emails should be delivered to "coauthor"
+    When I view the work "First Shared"
+    Then I should not see "coauthor" within ".byline"
+    When I view the work "First Shared"
+    Then I should not see "coauthor" within ".byline"
+    When the user "coauthor" accepts all co-creator invitations
+      And I view the work "First Shared"
+    Then I should see "coauthor" within ".byline"
+    When I view the work "Second Shared"
+    Then I should see "coauthor" within ".byline"
+
+  Scenario: User can remove themselves from multiple works at once
+    Given the following activated users exist
+      | login       |
+      | lead_author |
+      | coauthor    |
+      And the user "coauthor" allows co-creators
+      And I am logged in as "lead_author"
+      And I edit multiple works coauthored as "lead_author" with "coauthor"
+    When I check "Remove Me As Co-Creator"
       And I press "Update All Works"
     Then I should see "Your edits were put through"
     When I view the work "Shared Work 1"
-    Then I should not see "coauthor" within ".byline"
+    Then I should not see "lead_author" within ".byline"
     When I view the work "Shared Work 2"
-    Then I should not see "coauthor" within ".byline"
+    Then I should not see "lead_author" within ".byline"
+
+  Scenario: User can remove themselves from one work even if they're the only creator on the other
+    Given the user "lead_creator" exists and is activated
+      And the user "co_creator" exists and is activated
+      And I am logged in as "lead_creator"
+      And I post the work "Solo"
+      And I coauthored the work "Shared" as "lead_creator" with "co_creator"
+    When I go to my edit multiple works page
+      And I select "Solo" for editing
+      And I select "Shared" for editing
+      And I press "Edit"
+      And I check "Remove Me As Co-Creator"
+      And I press "Update All Works"
+    Then I should see "You cannot remove yourself as co-creator of the work Solo because you are the only listed creator."
+    When I view the work "Solo"
+    Then I should see "lead_creator" within ".byline"
+    When I view the work "Shared"
+    Then I should not see "lead_creator" within ".byline"
 
   Scenario: User applies a private work skin to multiple coauthored works
     Given the following activated users with private work skins
       | login       |
       | lead_author |
       | coauthor    |
+      And the user "coauthor" allows co-creators
       And I am logged in as "lead_author"
       And I edit multiple works coauthored as "lead_author" with "coauthor"
     Then I should see "Lead Author's Work Skin" within "#work_work_skin_id"
@@ -151,3 +206,29 @@ Feature: Edit Multiple Works
     When I select "Lead Author's Work Skin" from "Select Work Skin"
       And I press "Update All Works"
     Then I should see "Your edits were put through"
+
+  Scenario: I can add several works to a collection at once
+    Given I am logged in as "author"
+      And I create the collection "MyCollection"
+      And I edit the multiple works "Glorious" and "Excellent"
+    When I fill in "Add To Collections" with "MyCollection"
+      And I press "Update All Works"
+    Then I should see "Your edits were put through"
+    When I view the work "Glorious"
+      Then I should see "MyCollection"
+    When I view the work "Excellent"
+      Then I should see "MyCollection"
+
+  Scenario: I can remove several works from a collection at once
+    Given I am logged in as "author"
+      And I create the collection "MyCollection"
+      And I post the work "Glorious" to the collection "MyCollection"
+      And I post the work "Excellent" to the collection "MyCollection"
+      And I edit the multiple works "Glorious" and "Excellent"
+    When I check "MyCollection"
+      And I press "Update All Works"
+    Then I should see "Your edits were put through"
+    When I view the work "Glorious"
+      Then I should not see "MyCollection"
+    When I view the work "Excellent"
+      Then I should not see "MyCollection"

@@ -6,24 +6,25 @@
     <% this_work = creation.respond_to?(:work) ? creation.work : creation %>
     <% work_link = style_link(this_work.title.html_safe, work_url(this_work)) %>
 
-    <%= this_work.pseuds.map{|p| style_pseud_link(p)}.to_sentence.html_safe %> posted a
-    <% if creation.is_a?(Work) %>
-      <%= this_work.backdate ? "backdated" : "new" %> work:
-    <% else %>
-      new chapter of <i><b><%= work_link %></b></i> (<%= this_work.word_count %> words):
-      <% chapter_title = (creation.chapter_header + (creation.title.blank? ? "" : ": #{creation.title}")).html_safe %>
+    <% cache("subscription-email-preface-#{creation.cache_key}") do %>
+      <%= creator_links(this_work) %> posted a
+      <% if creation.is_a?(Work) %>
+        <%= this_work.backdate ? "backdated" : "new" %> work:
+      <% else %>
+        new chapter of <i><b><%= work_link %></b></i> (<%= this_work.word_count %> words):
+      <% end %>
     <% end %>
 
     <p>
       <i>
         <%= style_bold(creation.is_a?(Work) ? work_link :
-          style_link(chapter_title, work_chapter_url(this_work, creation))) %>
+          style_link(creation.full_chapter_title.html_safe, work_chapter_url(this_work, creation))) %>
       </i> (<%= creation.word_count%> words)
 
       <% unless @seen[this_work.id] %>
         <br>
 
-        by <%= this_work.pseuds.map{|p| style_pseud_link(p)}.to_sentence.html_safe %>
+        by <%= creator_links(this_work) %>
       <% end %>
     </p>
 
@@ -32,11 +33,12 @@
     <% end %>
 
     <% unless @seen[this_work.id] %>
+      <% cache("subscription-email-meta-#{creation.cache_key}") do %>
       <p>
         <%= style_bold("Chapters:") %> <%= this_work.chapter_total_display %>
         <br><%= style_bold("Fandom:") %> <%= this_work.fandoms.map{|f| style_link(f.name, fandom_url(f))}.to_sentence.html_safe %>
         <br><%= style_bold("Rating:") %> <%= this_work.rating_string %>
-        <br><%= style_bold("Warnings:") %> <%= this_work.warning_string %>
+        <br><%= style_bold("Warnings:") %> <%= this_work.archive_warning_string %>
         <% if this_work.relationship_string && !this_work.relationship_string.blank? %>
           <br><%= style_bold("Relationships:") %> <%= this_work.relationship_string %>
         <% end %>
@@ -50,6 +52,7 @@
           <br><%= style_bold("Series:") %> <%= series_list_for_feeds(this_work).html_safe %>
         <% end %>
       </p>
+      <% end %>
 
       <% @seen[this_work.id] = true %>
     <% end %>

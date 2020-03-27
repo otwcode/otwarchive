@@ -4,7 +4,7 @@ describe SerialWorksController do
   include LoginMacros
   include RedirectExpectationHelper
   let(:user) { create(:user) }
-  let(:series) { create(:series, pseuds: user.pseuds) }
+  let(:series) { create(:series, authors: user.pseuds) }
   let!(:first_work) { create(:serial_work, series: series) }
   let!(:second_work) { create(:serial_work, series: series) }
   

@@ -7,7 +7,7 @@ Feature: Tag wrangling
     When I am logged in as "dizmo"
     Then I should not see "Tag Wrangling" within "#header"
     When I am logged in as an admin
-      And I fill in "query" with "dizmo"
+      And I fill in "Name" with "dizmo"
       And I press "Find"
     Then I should see "dizmo" within "#admin_users_table"    
     # admin making user tag wrangler
@@ -49,6 +49,7 @@ Feature: Tag wrangling
     When I go to the new work page
       And I select "Not Rated" from "Rating"
       And I check "No Archive Warnings Apply"
+      And I select "English" from "Choose a language"
       And I fill in "Fandoms" with "Stargate SG-1, Star Wars"
       And I fill in "Work Title" with "Revenge of the Sith 2"
       And I fill in "Characters" with "Daniel Jackson, Jack O'Neil"
@@ -147,8 +148,8 @@ Feature: Tag wrangling
     # trying to assign a non-canonical fandom to a character
     When I fill in "Fandoms" with "Stargate Atlantis"
       And I press "Save changes"
-    Then I should see "Cannot add association"
-      And I should see "'Stargate Atlantis' tag is not canonical"
+    Then I should see "Cannot add association to 'Stargate Atlantis':"
+      And I should see "Parent tag is not canonical."
       And I should not see "Stargate Atlantis" within "form"
       
     # making a fandom tag canonical, then assigning it to a character
@@ -191,20 +192,31 @@ Feature: Tag wrangling
     Then I should see "Tag was updated"
       And I should see "Stargate Atlantis"
 
+    # post a work to create new unwrangled and unwrangleable tags in the fandom
+    When I post the work "Test Work" with fandom "Stargate SG-1" with character "Samantha Carter" with second character "Anubis Arc"
+      And I edit the tag "Anubis Arc"
+      And I check "Unwrangleable"
+      And I fill in "Fandoms" with "Stargate SG-1"
+      And I press "Save changes"
+    Then I should see "Tag was updated"
+
     # check sidebar links and pages for wrangling within a fandom
     When I am on my wrangling page
       And I follow "Stargate SG-1"
     Then I should see "Wrangle Tags for Stargate SG-1"
-    When I follow "Characters (3)"
+    When I follow "Characters (4)"
     Then I should see "Wrangle Tags for Stargate SG-1"
       And I should see "Showing All Character Tags"
       And I should see "Daniel Jackson"
       And I should see "Jack O'Neil"
-      And I should see "Jack O'Neill"
+      And I should see "Anubis Arc"
+      But I should not see "Samantha Carter"
     When I follow "Canonical"
     Then I should see "Showing Canonical Character Tags"
       And I should see "Daniel Jackson"
       And I should see "Jack O'Neill"
+      But I should not see "Samantha Carter"
+      And I should not see "Anubis Arc"
       # This would fail because "Jack O'Neil" is in "Jack O'Neill"
       # But I should not see "Jack O'Neil"
     When I follow "Synonymous"
@@ -212,6 +224,20 @@ Feature: Tag wrangling
       And I should see "Jack O'Neil"
       # It will be in a td in the tbody, whereas "Jack O'Neil" is in a th
       But I should not see "Jack O'Neill" within "tbody th"
+      And I should not see "Daniel Jackson"
+      And I should not see "Samantha Carter"
+      And I should not see "Anubis Arc"
+    When I follow "Unwrangled"
+    Then I should see "Showing Unwrangled Character Tags"
+      And I should see "Samantha Carter"
+      And I should not see "Jack O'Neill"
+      And I should not see "Daniel Jackson"
+      And I should not see "Anubis Arc"
+    When I follow "Unwrangleable"
+    Then I should see "Showing Unwrangleable Character Tags"
+      And I should see "Anubis Arc"
+      And I should not see "Samantha Carter"
+      And I should not see "Jack O'Neill"
       And I should not see "Daniel Jackson"
     When I follow "Relationships (0)"
     Then I should see "Wrangle Tags for Stargate SG-1"

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require 'spec_helper'
 
-RSpec.describe ChallengeClaimsController, type: :controller do
+describe ChallengeClaimsController do
   include LoginMacros
   include RedirectExpectationHelper
   let(:user) { create(:user) }

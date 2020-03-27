@@ -119,8 +119,8 @@ end
 When /^I request some invites$/ do
   step %{I try to invite a friend from my user page}
   step %{I follow "Request invitations"}
-  step %{I fill in "user_invite_request_quantity" with "3"}
-  step %{I fill in "user_invite_request_reason" with "I want them for a friend"}
+  step %{I fill in "How many invitations would you like? (max 10)" with "3"}
+  step %{I fill in "Please specify why you'd like them:" with "I want them for a friend"}
   step %{I press "Send Request"}
 end
 
@@ -146,7 +146,7 @@ end
 
 Then /^I should see how long I have to activate my account$/ do
   days_to_activate = AdminSetting.first.days_to_purge_unactivated? ? (AdminSetting.first.days_to_purge_unactivated * 7) : ArchiveConfig.DAYS_TO_PURGE_UNACTIVATED
-  step %{I should see "You must verify your account within #{days_to_activate} days"}
+  step %{I should see "You must confirm your email address within #{days_to_activate} days"}
 end
 
 Then /^"([^"]*)" should have "([^"]*)" invitations$/ do |login, invitation_count|

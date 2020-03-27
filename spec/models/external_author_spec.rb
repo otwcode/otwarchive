@@ -1,7 +1,7 @@
 require 'spec_helper'
 require 'support/login_macros'
 
-describe ExternalAuthor, type: :model do
+describe ExternalAuthor do
   include LoginMacros
 
   describe "find_or_invite" do
@@ -10,7 +10,7 @@ describe ExternalAuthor, type: :model do
     let(:unclaimed_ext_author) { create(:external_author, is_claimed: false) }
     let(:unclaimed_user_author) { create(:external_author, email: unclaimed_user.email, is_claimed: false) }
     let(:claimed_ext_author) { create(:external_author, user_id: claimed_user.id, is_claimed: true) }
-    let(:archivist) { create_archivist }
+    let(:archivist) { create(:archivist) }
 
     context "a user with a matching email exists" do
       subject { unclaimed_user_author }

@@ -5,14 +5,14 @@ def comment_attributes_guest
 end
 
 def comment_attributes_user
-  { content: "Body text of the comment", pseud_id: FactoryGirl.create(:pseud).id }
+  { content: "Body text of the comment", pseud_id: FactoryBot.create(:pseud).id }
 end
 
 # This code block is used for logged out users and logged in users, on unrestricted works
 shared_examples_for "on unrestricted works", :pending do
     before do
       @work2 = create(:work, posted: true, fandom_string: "Merlin (TV)", title: "My title is long enough", restricted: false)
-      @work2.index.refresh
+      @work2.reindex_document
       @comment2 = create(:comment)
       @work2.first_chapter.comments << @comment2
     end
@@ -59,7 +59,7 @@ describe "Comments" do
   context "on restricted works" do
     before do
       @work1 = create(:work, posted: true, fandom_string: "Merlin (TV)", title: "My title is long enough", restricted: true)
-      @work1.index.refresh
+      @work1.reindex_document
       @comment = create(:comment, commentable_id: @work1.id)
       @comment2 = create(:comment, commentable_id: @work1.chapters.last.id, commentable_type: "Chapter")
     end
@@ -98,10 +98,10 @@ describe "Comments" do
   context "logged in users" do
     before do
       @user = create(:user)
-      visit login_path
+      visit new_user_session_path
       within("div#small_login") do
-        fill_in "User name:",with: "#{@user.login}" ,  exact: true
-        fill_in "Password", with: "password"
+        fill_in "User name or email:", with: "#{@user.login}", exact: true
+        fill_in "Password:", with: "password"
         check "Remember Me"
         click_button "Log In"
       end
@@ -114,7 +114,7 @@ describe "Comments" do
   context "on works which have anonymous commenting disabled" do
     before do
       @work = create(:work, posted: true, fandom_string: "Merlin (TV)", anon_commenting_disabled: "true" )
-      @work.index.refresh
+      @work.reindex_document
       @comment = create(:comment)
       @work.first_chapter.comments << @comment
     end

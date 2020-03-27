@@ -5,7 +5,7 @@ describe WorksHelper do
   describe '#get_tweet_text' do
 
     before(:each) do
-      @work = FactoryGirl.create(:work)
+      @work = FactoryBot.create(:work)
     end
 
     context "for an unrevealed work" do
@@ -41,7 +41,8 @@ describe WorksHelper do
 
   describe '#all_coauthor_skins' do
     before do
-      @allpseuds = Array.new(5) { |i| FactoryGirl.create(:pseud, name: "Pseud-#{i}") }
+      @users = Array.new(5) { FactoryBot.create(:user) }
+      @work = create(:work, authors: @users.flat_map(&:pseuds))
     end
 
     context 'no public work skins or private work skins' do
@@ -52,8 +53,8 @@ describe WorksHelper do
 
     context 'public work skins exist' do
       before do
-        FactoryGirl.create(:public_work_skin, title: 'Z Public Skin')
-        FactoryGirl.create(:public_work_skin, title: 'B Public Skin')
+        FactoryBot.create(:public_work_skin, title: 'Z Public Skin')
+        FactoryBot.create(:public_work_skin, title: 'B Public Skin')
       end
 
       context 'no private work skins' do
@@ -64,9 +65,9 @@ describe WorksHelper do
 
       context 'private work skins exist' do
         before do
-          FactoryGirl.create(:private_work_skin, title: 'A Private Skin', author: @allpseuds[3].user)
-          FactoryGirl.create(:private_work_skin, title: 'M Private Skin', author: @allpseuds[0].user)
-          FactoryGirl.create(:private_work_skin, title: 'Unowned Private Skin')
+          FactoryBot.create(:private_work_skin, title: 'A Private Skin', author: @users[3])
+          FactoryBot.create(:private_work_skin, title: 'M Private Skin', author: @users[0])
+          FactoryBot.create(:private_work_skin, title: 'Unowned Private Skin')
         end
 
         it 'returns public work skins and skins belonging to allpseuds, ordered by title' do
@@ -80,6 +81,22 @@ describe WorksHelper do
           expect(helper.all_coauthor_skins.pluck(:title)).not_to include(['Unowned Private Skin'])
         end
       end
+    end
+  end
+
+  describe '#sorted_languages' do
+    it 'returns all languages sorted alphabetically' do
+      # only english language exists
+      expect(Language.count).to eq(1)
+      english = Language.find_by(short: 'en', sortable_name: '')
+
+      # create 3 new languages
+      german = Language.create(name: 'Deutsch', short: 'de', sortable_name: '')
+      finnish = Language.create(name: 'Suomi', short: 'fi', sortable_name: 'su')
+      indonesian = Language.create(name: 'Bahasa Indonesia', short: 'id', sortable_name: 'ba')
+
+      # sort them
+      expect(sorted_languages).to eq([indonesian, german, english, finnish])
     end
   end
 end
