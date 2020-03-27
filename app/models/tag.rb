@@ -1199,29 +1199,41 @@ class Tag < ApplicationRecord
   # "merger" is the canonical tag of which this one will be a synonym
   # "mergers" are the tags which are (currently) synonyms of THIS one
   def syn_string=(tag_string)
+    # If the tag_string is blank, our tag should be given no merger
     if tag_string.blank?
       self.merger_id = nil
-    else
-      new_merger = Tag.find_by_name(tag_string)
-      unless new_merger && new_merger == self.merger
-        if new_merger && new_merger == self
-          self.errors.add(:base, tag_string + " is considered the same as " + self.name + " by the database.")
-        elsif new_merger && !new_merger.canonical?
-          self.errors.add(:base, '<a href="/tags/' + new_merger.to_param + '/edit">' + new_merger.name + '</a> is not a canonical tag. Please make it canonical before adding synonyms to it.')
-        elsif new_merger && new_merger.class != self.class
-          self.errors.add(:base, new_merger.name + " is a #{new_merger.type.to_s.downcase}. Synonyms must belong to the same category.")
-        elsif !new_merger
-          new_merger = self.class.new(name: tag_string, canonical: true)
-          unless new_merger.save
-            self.errors.add(:base, tag_string + " could not be saved. Please make sure that it's a valid tag name.")
-          end
-        end
-        if new_merger && self.errors.empty?
-          self.canonical = false
-          self.merger_id = new_merger.id
-          async(:add_merger_associations)
-        end
+      return
+    end
+
+    new_merger = Tag.find_by(name: tag_string)
+
+    # Bail out if the new merger is the same as the current merger
+    return if new_merger && new_merger == self.merger
+
+    # Return an error if a non-admin tries to make a canonical into a synonym
+    if self.canonical? && !User.current_user.is_a?(Admin)
+      self.errors.add(:base, "Only an admin can make a canonical tag into a synonym of another tag.")
+      return
+    end
+
+    if new_merger && new_merger == self
+      self.errors.add(:base, tag_string + " is considered the same as " + self.name + " by the database.")
+    elsif new_merger && !new_merger.canonical?
+      self.errors.add(:base, '<a href="/tags/' + new_merger.to_param + '/edit">' + new_merger.name + '</a> is not a canonical tag. Please make it canonical before adding synonyms to it.')
+    elsif new_merger && new_merger.class != self.class
+      self.errors.add(:base, new_merger.name + " is a #{new_merger.type.to_s.downcase}. Synonyms must belong to the same category.")
+    elsif !new_merger
+      new_merger = self.class.new(name: tag_string, canonical: true)
+      unless new_merger.save
+        self.errors.add(:base, tag_string + " could not be saved. Please make sure that it's a valid tag name.")
       end
+    end
+    
+    # If we don't have any errors, update the tag to add the new merger
+    if new_merger && self.errors.empty?
+      self.canonical = false
+      self.merger_id = new_merger.id
+      async(:add_merger_associations)
     end
   end
 

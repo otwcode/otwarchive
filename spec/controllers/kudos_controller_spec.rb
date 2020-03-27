@@ -61,8 +61,7 @@ describe KudosController do
             it_redirects_to_with_comment_error(referer, "User ^You have already left kudos here. :)")
           end
 
-          # TODO: AO3-5869 Enable this test when database unique constraints exist.
-          xcontext "when duplicate database inserts happen despite Rails validations" do
+          context "when duplicate database inserts happen despite Rails validations" do
             # https://api.rubyonrails.org/v5.1/classes/ActiveRecord/Validations/ClassMethods.html#method-i-validates_uniqueness_of-label-Concurrency+and+integrity
             #
             # We fake this scenario by skipping Rails validations.

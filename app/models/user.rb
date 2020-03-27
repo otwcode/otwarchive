@@ -42,9 +42,6 @@ class User < ApplicationRecord
 
   has_many :favorite_tags, dependent: :destroy
 
-  # MUST be before the pseuds association, or the 'dependent' destroys the pseuds before they can be removed from kudos
-  before_destroy :remove_pseud_from_kudos
-
   has_many :pseuds, dependent: :destroy
   validates_associated :pseuds
 
@@ -84,7 +81,7 @@ class User < ApplicationRecord
   has_many :bookmarks, through: :pseuds
   has_many :bookmark_collection_items, through: :bookmarks, source: :collection_items
   has_many :comments, through: :pseuds
-  has_many :kudos, through: :pseuds
+  has_many :kudos
 
   # Nested associations through creatorships got weird after 3.0.x
   has_many :creatorships, through: :pseuds
@@ -133,13 +130,6 @@ class User < ApplicationRecord
       work.touch
       work.expire_caches
     end
-  end
-
-  def remove_pseud_from_kudos
-    # TODO: AO3-5054 Expire kudos cache when deleting a user.
-    # TODO: AO3-2195 Display orphaned kudos (no pseuds; no IPs so not counted as guest kudos).
-    pseuds_list = pseuds.map(&:id)
-    Kudo.where(["pseud_id IN (?)", pseuds_list]).update_all("pseud_id = NULL") if pseuds_list.present?
   end
 
   def remove_user_from_kudos

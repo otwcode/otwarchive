@@ -104,21 +104,13 @@ Feature: Kudos
       And I view the work "Epic Saga"
     Then I should see kudos on every chapter but the draft
 
-  Scenario: Deleting pseud and user after leaving kudos should orphan them
+  Scenario: Deleting user after leaving kudos should orphan them
 
     Given I am logged in as "myname3"
     When "myname3" creates the default pseud "foobar"
       And I view the work "Awesome Story"
       And I press "Kudos ♥"
-    Then I should see "foobar (myname3) left kudos on this work!"
-    When "myname3" creates the default pseud "barfoo"
-      And I am on myname3's pseuds page
-      And I follow "delete_foobar"
-      And I view the work "Awesome Story"
-    # There's no clean way to expire the cache for all kudos after a pseud change,
-    # but that won't matter after AO3-5859.
-    # TODO: AO3-5859 Remove this comment and "Then" step.
-    # Then I should see "barfoo (myname3) left kudos on this work!"
+    Then I should see "myname3 left kudos on this work!"
     When "myname3" deletes their account
       And I view the work "Awesome Story"
       And "AO3-2195" is fixed
