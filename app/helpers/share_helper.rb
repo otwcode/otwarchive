@@ -37,6 +37,6 @@ module ShareHelper
   # Being able to add line breaks in the sharing templates makes the code
   # easier to read and edit, but we don't want them in the sharing code itself
   def remove_newlines(html)
-    html.gsub("\n", "")
+    html.delete("\n")
   end
 end
