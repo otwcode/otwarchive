@@ -2,13 +2,14 @@
 
 # Helper for work and bookmark social media sharing code
 module ShareHelper
-  # get work title, word count, and creator and add app short name, but do not add formatting so it can be link text for Tumblr sharing
+  # Get work title, word count, and creators and add app short name,
+  # but do not add formatting so it can be link text for Tumblr sharing.
   def get_tumblr_embed_link_title(work)
     title = work.title + " (#{work.word_count} #{ts('words')})"
     pseud = text_byline(work)
     "#{title} #{ts("by")} #{pseud} #{ts("[#{ArchiveConfig.APP_SHORT_NAME}]")}"
   end
-  
+
   def get_tweet_text(work)
     if work.unrevealed?
       ts("Mystery Work")
@@ -18,7 +19,7 @@ module ShareHelper
       "#{work.title} by #{names} - #{fandoms}".truncate(95)
     end
   end
-  
+
   def get_tweet_text_for_bookmark(bookmark)
     return unless bookmark.bookmarkable.is_a?(Work)
 
@@ -26,6 +27,8 @@ module ShareHelper
     fandoms = bookmark.bookmarkable.short_fandom_string
     "Bookmark of #{bookmark.bookmarkable.title} by #{names} - #{fandoms}".truncate(83)
   end
+
+  private
 
   # Being able to add line breaks in the sharing templates makes the code
   # easier to read and edit, but we don't want them in the sharing code itself
