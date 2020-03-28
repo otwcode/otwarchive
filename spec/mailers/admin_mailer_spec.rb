@@ -176,11 +176,6 @@ describe AdminMailer do
     let(:email) { AdminMailer.abuse_report(report.id) }
     let(:email2) { UserMailer.abuse_report(report.id) }
 
-    # Assume all of these reports pass the spam check
-    before(:each) do
-      allow(Akismetor).to receive(:spam?).and_return(false)
-    end
-
     it "has the correct subject" do
       expect(email).to have_subject "[#{ArchiveConfig.APP_SHORT_NAME}] Admin Abuse Report"
     end

@@ -13,13 +13,17 @@ When /^"([^\"]*)" subscribes to (author|work|series) "([^\"]*)"$/ do |user, type
     step %{I am logged in as "#{user}"}
     step %{I go to #{name}'s user page}
   when "work"
-    step %{I am logged in as "wip_author"}
-    step %{I post the work "#{name}"}
+    unless Work.find_by(title: name)
+      step %{I am logged in as "wip_author"}
+      step %{I post the work "#{name}"}
+    end
     step %{I am logged in as "#{user}"}
     visit work_url(Work.find_by(title: name))
   when "series"
-    step %{I am logged in as "series_author"}
-    step %{I add the work "Blah" to series "#{name}"}
+    unless Series.find_by(title: name)
+      step %{I am logged in as "series_author"}
+      step %{I add the work "Blah" to series "#{name}"}
+    end
     step %{I am logged in as "#{user}"}
     step %{I view the series "#{name}"}
   end

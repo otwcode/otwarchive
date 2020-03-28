@@ -13,8 +13,6 @@ class KudosController < ApplicationController
   def create
     @kudo = Kudo.new(kudo_params)
     if current_user.present?
-      # TODO: AO3-5887 Remove saving pseud_id when dropping the column pseud_id on kudos.
-      @kudo.pseud_id = current_user.default_pseud.id
       @kudo.user = current_user
     else
       @kudo.ip_address = request.remote_ip
