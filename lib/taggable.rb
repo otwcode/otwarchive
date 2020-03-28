@@ -90,10 +90,6 @@ module Taggable
     tag_category_string(:freeforms)
   end
 
-  def short_fandom_string
-    fandoms.size > 2 ? ts("Multifandom") : fandom_string
-  end
-
   # _string= methods
   # always use string= methods to set tags
   # << and = don't trigger callbacks to update common_tags

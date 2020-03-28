@@ -15,7 +15,7 @@ module ShareHelper
       ts("Mystery Work")
     else
       names = text_byline(work)
-      fandoms = work.short_fandom_string
+      fandoms = short_fandom_string(work)
       "#{work.title} by #{names} - #{fandoms}".truncate(95)
     end
   end
@@ -24,11 +24,15 @@ module ShareHelper
     return unless bookmark.bookmarkable.is_a?(Work)
 
     names = bookmark.bookmarkable.creators.to_sentence
-    fandoms = bookmark.bookmarkable.short_fandom_string
+    fandoms = short_fandom_string(bookmark.bookmarkable)
     "Bookmark of #{bookmark.bookmarkable.title} by #{names} - #{fandoms}".truncate(83)
   end
 
   private
+
+  def short_fandom_string(work)
+    work.fandoms.size > 2 ? ts("Multifandom") : work.fandom_string
+  end
 
   # Being able to add line breaks in the sharing templates makes the code
   # easier to read and edit, but we don't want them in the sharing code itself
