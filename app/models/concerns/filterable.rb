@@ -75,30 +75,30 @@ module Filterable
   end
 
   def rating_ids
-    filters_for_facets.select { |t| t.type == 'Rating' }.map(&:id)
+    filters_for_facets.select { |t| t.type == "Rating" }.map(&:id)
   end
 
   def archive_warning_ids
-    filters_for_facets.select { |t| t.type == 'ArchiveWarning' }.map(&:id)
+    filters_for_facets.select { |t| t.type == "ArchiveWarning" }.map(&:id)
   end
 
   def category_ids
-    filters_for_facets.select { |t| t.type == 'Category' }.map(&:id)
+    filters_for_facets.select { |t| t.type == "Category" }.map(&:id)
   end
 
   def fandom_ids
-    filters_for_facets.select { |t| t.type == 'Fandom' }.map(&:id)
+    filters_for_facets.select { |t| t.type == "Fandom" }.map(&:id)
   end
 
   def character_ids
-    filters_for_facets.select { |t| t.type == 'Character' }.map(&:id)
+    filters_for_facets.select { |t| t.type == "Character" }.map(&:id)
   end
 
   def relationship_ids
-    filters_for_facets.select { |t| t.type == 'Relationship' }.map(&:id)
+    filters_for_facets.select { |t| t.type == "Relationship" }.map(&:id)
   end
 
   def freeform_ids
-    filters_for_facets.select { |t| t.type == 'Freeform' }.map(&:id)
+    filters_for_facets.select { |t| t.type == "Freeform" }.map(&:id)
   end
 end

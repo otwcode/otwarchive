@@ -6,7 +6,7 @@
 # because the ONLY class that should be adding/updating FilterTaggings is the
 # FilterUpdater, which handles those itself.
 class FilterTagging < ApplicationRecord
-  belongs_to :filter, class_name: 'Tag', inverse_of: :filter_taggings
+  belongs_to :filter, class_name: "Tag", inverse_of: :filter_taggings
   belongs_to :filterable, polymorphic: true, inverse_of: :filter_taggings
 
   validates_uniqueness_of :filter_id, scope: [:filterable_type, :filterable_id]
@@ -15,7 +15,7 @@ class FilterTagging < ApplicationRecord
   def expire_caches
     return unless filterable_type == "Work"
 
-    CacheMaster.record(filterable_id, 'tag', filter_id)
+    CacheMaster.record(filterable_id, "tag", filter_id)
   end
 
   def self.update_filter_counts_since(date)

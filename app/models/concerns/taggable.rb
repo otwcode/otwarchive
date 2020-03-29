@@ -6,14 +6,14 @@ module Taggable
     attr_accessor :preview_mode, :placeholder_tags
 
     has_many :taggings, as: :taggable, inverse_of: :taggable, dependent: :destroy
-    has_many :tags, through: :taggings, source: :tagger, source_type: 'Tag'
+    has_many :tags, through: :taggings, source: :tagger, source_type: "Tag"
 
     Tag::VISIBLE.each do |type|
       has_many type.underscore.pluralize.to_sym,
                -> { where(tags: { type: type }) },
                through: :taggings,
                source: :tagger,
-               source_type: 'Tag',
+               source_type: "Tag",
                before_remove: :destroy_tagging
     end
 
