@@ -49,6 +49,9 @@ RSpec.configure do |config|
     DatabaseCleaner.start
     User.current_user = nil
     clean_the_database
+
+    # Assume all spam checks pass by default.
+    allow(Akismetor).to receive(:spam?).and_return(false)
   end
 
   config.after :each do

@@ -2,11 +2,6 @@ require 'spec_helper'
 
 describe Feedback do
   context "when report is not spam" do
-    # Assume all of these reports pass the spam check
-    before(:each) do
-      allow(Akismetor).to receive(:spam?).and_return(false)
-    end
-
     context "valid reports" do
       it "is valid" do
         expect(build(:feedback)).to be_valid
@@ -61,15 +56,17 @@ describe Feedback do
     let(:spam_report) { build(:feedback, username: 'viagra-test-123') }
     let(:safe_report) { build(:feedback, username: 'viagra-test-123', email: legit_user.email) }
 
-    it "is not valid if Akismet flags it as spam" do
+    before do
       allow(Akismetor).to receive(:spam?).and_return(true)
+    end
+
+    it "is not valid if Akismet flags it as spam" do
       expect(spam_report.save).to be_falsey
       expect(spam_report.errors[:base]).to include("This report looks like spam to our system!")
     end
 
     it "is valid even with spam if logged in and providing correct email" do
       User.current_user = legit_user
-      allow(Akismetor).to receive(:spam?).and_return(true)
       expect(safe_report.save).to be_truthy
     end
   end

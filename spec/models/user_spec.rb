@@ -12,8 +12,6 @@ describe User do
           kudo.reload
           expect(kudo.user).to be_nil
           expect(kudo.user_id).to be_nil
-          # TODO: AO3-5887 Remove this check when dropping the column pseud_id from kudos.
-          expect(kudo.pseud_id).to be_nil
         end
       end
     end
