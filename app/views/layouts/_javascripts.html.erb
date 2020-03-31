@@ -50,8 +50,7 @@
     params[:controller] == "home" && params[:action] == "tos_faq" ||
     params[:controller] == "home" && params[:action] == "dmca" ||
     params[:controller] == "abuse_reports" && params[:action] == "new" ||
-    params[:controller] == "feedbacks" && params[:action] == "new" ||
-    params[:tos] == "yes" %>
+    params[:controller] == "feedbacks" && params[:action] == "new" %>
   <%= javascript_tag do %>
     $j(document).ready(function() {
       <% # Users who haven't accepted this TOS and guests who don't have the
