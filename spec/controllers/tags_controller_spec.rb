@@ -353,8 +353,8 @@ describe TagsController do
         tag.reload
       end
 
-      shared_examples "invalid meta tag" do
-        it "doesn't add the meta tag" do
+      shared_examples "invalid metatag" do
+        it "doesn't add the metatag" do
           expect(tag.meta_tags).not_to include(meta)
         end
       end
@@ -364,12 +364,12 @@ describe TagsController do
 
         it "has a useful error" do
           expect(assigns[:tag].errors.full_messages).to include(
-            "Invalid meta tag '#{meta.name}': " \
+            "Invalid metatag '#{meta.name}': " \
             "Meta taggings can only exist between canonical tags."
           )
         end
 
-        include_examples "invalid meta tag"
+        include_examples "invalid metatag"
       end
 
       context "when the tag is the wrong type" do
@@ -377,12 +377,12 @@ describe TagsController do
 
         it "has a useful error" do
           expect(assigns[:tag].errors.full_messages).to include(
-            "Invalid meta tag '#{meta.name}': " \
+            "Invalid metatag '#{meta.name}': " \
             "Meta taggings can only exist between two tags of the same type."
           )
         end
 
-        include_examples "invalid meta tag"
+        include_examples "invalid metatag"
       end
 
       context "when the metatag is itself" do
@@ -390,12 +390,12 @@ describe TagsController do
 
         it "has a useful error" do
           expect(assigns[:tag].errors.full_messages).to include(
-            "Invalid meta tag '#{meta.name}': " \
-            "A tag can't be its own meta tag."
+            "Invalid metatag '#{meta.name}': " \
+            "A tag can't be its own metatag."
           )
         end
 
-        include_examples "invalid meta tag"
+        include_examples "invalid metatag"
       end
 
       context "when the metatag is its subtag" do
@@ -408,12 +408,12 @@ describe TagsController do
 
         it "has a useful error" do
           expect(assigns[:tag].errors.full_messages).to include(
-            "Invalid meta tag '#{meta.name}': " \
-            "A meta tag can't be its own grandparent."
+            "Invalid metatag '#{meta.name}': " \
+            "A metatag can't be its own grandparent."
           )
         end
 
-        include_examples "invalid meta tag"
+        include_examples "invalid metatag"
       end
 
       context "when the metatag is already its grandparent" do
@@ -430,8 +430,8 @@ describe TagsController do
 
         it "has a useful error" do
           expect(assigns[:tag].errors.full_messages).to include(
-            "Invalid meta tag '#{meta.name}': Meta tag has already been " \
-            "added (possibly as an indirect meta tag)."
+            "Invalid metatag '#{meta.name}': Metatag has already been " \
+            "added (possibly as an indirect metatag)."
           )
         end
 

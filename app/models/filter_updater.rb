@@ -142,7 +142,7 @@ class FilterUpdater
   # Reads MetaTagging info from the database for all tags included in this
   # batch.
   #
-  # Sets @meta_tags equal to a hash mapping from tag IDs to the tag's meta tag
+  # Sets @meta_tags equal to a hash mapping from tag IDs to the tag's metatag
   # IDs. The default value for the hash is an empty list.
   def load_meta_tags
     all_filters = @direct_filters.values.flatten.uniq

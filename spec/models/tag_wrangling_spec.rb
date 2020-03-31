@@ -60,7 +60,7 @@ describe Tag do
         end
       end
 
-      context "when the tag has a sub tag" do
+      context "when the tag has a subtag" do
         let!(:sub) { create(:canonical_fandom) }
 
         before do
@@ -68,19 +68,19 @@ describe Tag do
           [sub, fandom].each(&:reload)
         end
 
-        it "removes the meta tag relationship" do
+        it "removes the metatag relationship" do
           fandom.update!(canonical: false)
           expect(sub.reload.meta_tags).to eq([])
           expect(fandom.reload.sub_tags).to eq([])
         end
 
-        it "removes filters from works tagged with the sub tag" do
+        it "removes filters from works tagged with the subtag" do
           work = create(:work, fandom_string: sub.name)
           fandom.update!(canonical: false)
           expect(fandom.filtered_works.reload).not_to include(work)
         end
 
-        it "removes filters from works tagged with the sub tag's synonym" do
+        it "removes filters from works tagged with the subtag's synonym" do
           synonym = create(:fandom, merger: sub)
           work = create(:work, fandom_string: synonym.name)
           fandom.update!(canonical: false)
@@ -88,7 +88,7 @@ describe Tag do
         end
       end
 
-      context "when the tag has a meta tag" do
+      context "when the tag has a metatag" do
         let!(:meta) { create(:canonical_fandom) }
 
         before do
@@ -96,7 +96,7 @@ describe Tag do
           [meta, fandom].each(&:reload)
         end
 
-        it "removes the meta tag relationship" do
+        it "removes the metatag relationship" do
           fandom.update!(canonical: false)
           expect(meta.reload.sub_tags).to eq([])
           expect(fandom.reload.meta_tags).to eq([])
@@ -255,10 +255,10 @@ describe Tag do
   describe "meta_tags" do
     let!(:fandom) { create(:canonical_fandom) }
 
-    context "adding a meta tag" do
+    context "adding a metatag" do
       let!(:meta) { create(:canonical_fandom) }
 
-      it "adds inherited filters to works tagged with the sub tag" do
+      it "adds inherited filters to works tagged with the subtag" do
         work = create(:work, fandom_string: fandom.name)
 
         fandom.update!(meta_tag_string: meta.name)
@@ -266,7 +266,7 @@ describe Tag do
         expect(work.direct_filters.reload).not_to include(meta)
       end
 
-      it "reindexes works tagged with the sub tag" do
+      it "reindexes works tagged with the subtag" do
         work = create(:work, fandom_string: fandom.name)
         expect do
           fandom.update!(meta_tag_string: meta.name)
@@ -274,7 +274,7 @@ describe Tag do
                not_add_to_reindex_queue(work, :main))
       end
 
-      context "when the meta tag has a meta tag" do
+      context "when the metatag has a metatag" do
         let!(:meta_meta) { create(:canonical_fandom) }
 
         before do
@@ -288,7 +288,7 @@ describe Tag do
           expect(fandom.direct_meta_tags.reload).not_to include(meta_meta)
         end
 
-        it "adds inherited filters for the inherited meta tag" do
+        it "adds inherited filters for the inherited metatag" do
           work = create(:work, fandom_string: fandom.name)
           fandom.update!(meta_tag_string: meta.name)
           expect(work.filters.reload).to include(meta_meta)
@@ -296,7 +296,7 @@ describe Tag do
         end
       end
 
-      context "when the sub tag has a sub tag" do
+      context "when the subtag has a subtag" do
         let(:sub) { create(:canonical_fandom) }
 
         before do
@@ -310,7 +310,7 @@ describe Tag do
           expect(sub.direct_meta_tags.reload).not_to include(meta)
         end
 
-        it "reindexes works tagged with the sub tag's sub tag" do
+        it "reindexes works tagged with the subtag's subtag" do
           work = create(:work, fandom_string: sub.name)
           expect do
             fandom.update!(meta_tag_string: meta.name)
@@ -319,7 +319,7 @@ describe Tag do
         end
       end
 
-      context "when the sub tag has a synonym" do
+      context "when the subtag has a synonym" do
         let!(:synonym) { create(:fandom, merger: fandom) }
 
         it "adds inherited filters to the synonym's works" do
@@ -330,7 +330,7 @@ describe Tag do
           expect(work.direct_filters.reload).not_to include(meta)
         end
 
-        it "reindexes works tagged with the sub tag's synonym" do
+        it "reindexes works tagged with the subtag's synonym" do
           work = create(:work, fandom_string: synonym.name)
           expect do
             fandom.update!(meta_tag_string: meta.name)
@@ -340,7 +340,7 @@ describe Tag do
       end
     end
 
-    context "removing a meta tag" do
+    context "removing a metatag" do
       let!(:meta) { create(:canonical_fandom) }
 
       before do
@@ -348,13 +348,13 @@ describe Tag do
         [fandom, meta].each(&:reload)
       end
 
-      it "removes filters from works tagged with the sub tag" do
+      it "removes filters from works tagged with the subtag" do
         work = create(:work, fandom_string: fandom.name)
         fandom.update!(associations_to_remove: [meta.id])
         expect(work.filters.reload).not_to include(meta)
       end
 
-      it "reindexes works tagged with the sub tag" do
+      it "reindexes works tagged with the subtag" do
         work = create(:work, fandom_string: fandom.name)
         expect do
           fandom.update!(associations_to_remove: [meta.id])
@@ -362,7 +362,7 @@ describe Tag do
                not_add_to_reindex_queue(work, :main))
       end
 
-      context "when the meta tag has a meta tag" do
+      context "when the metatag has a metatag" do
         let!(:meta_meta) { create(:canonical_fandom) }
 
         before do
@@ -375,13 +375,13 @@ describe Tag do
           expect(fandom.meta_tags.reload).not_to include(meta_meta)
         end
 
-        it "removes filters for the inherited meta tag" do
+        it "removes filters for the inherited metatag" do
           work = create(:work, fandom_string: fandom.name)
           fandom.update!(associations_to_remove: [meta.id])
           expect(work.filters.reload).not_to include(meta_meta)
         end
 
-        context "when there exists another path to the inherited meta tag" do
+        context "when there exists another path to the inherited metatag" do
           before do
             alt = create(:canonical_fandom)
             alt.meta_tags << meta_meta
@@ -397,7 +397,7 @@ describe Tag do
         end
       end
 
-      context "when the sub tag has a sub tag" do
+      context "when the subtag has a subtag" do
         let(:sub) { create(:canonical_fandom) }
 
         before do
@@ -410,7 +410,7 @@ describe Tag do
           expect(meta.sub_tags.reload).not_to include(sub)
         end
 
-        it "reindexes works tagged with the sub tag's sub tag" do
+        it "reindexes works tagged with the subtag's subtag" do
           work = create(:work, fandom_string: sub.name)
           expect do
             fandom.update!(associations_to_remove: [meta.id])
@@ -419,7 +419,7 @@ describe Tag do
         end
       end
 
-      context "when the sub tag has a synonym" do
+      context "when the subtag has a synonym" do
         let!(:synonym) { create(:fandom, merger: fandom) }
 
         it "removes filters from the synonym's works" do
@@ -428,7 +428,7 @@ describe Tag do
           expect(work.filters.reload).not_to include(meta)
         end
 
-        it "reindexes works tagged with the sub tag's synonym" do
+        it "reindexes works tagged with the subtag's synonym" do
           work = create(:work, fandom_string: synonym.name)
           expect do
             fandom.update!(associations_to_remove: [meta.id])
@@ -437,7 +437,7 @@ describe Tag do
         end
       end
 
-      context "when there's also an indirect path to the direct meta tag" do
+      context "when there's also an indirect path to the direct metatag" do
         let!(:middle) { create(:canonical_fandom) }
 
         before do
@@ -446,7 +446,7 @@ describe Tag do
           [fandom, middle, meta].each(&:reload)
         end
 
-        it "marks the meta tag as inherited" do
+        it "marks the metatag as inherited" do
           fandom.update!(associations_to_remove: [meta.id])
           expect(fandom.meta_tags.reload).to include(meta)
           expect(fandom.direct_meta_tags.reload).not_to include(meta)
@@ -454,12 +454,12 @@ describe Tag do
       end
     end
 
-    describe "adding multiple meta tags" do
+    describe "adding multiple metatags" do
       let(:fandom) { create(:canonical_fandom) }
       let(:meta1) { create(:canonical_fandom) }
       let(:meta2) { create(:canonical_fandom) }
 
-      it "adds both direct meta tags" do
+      it "adds both direct metatags" do
         fandom.update!(meta_tag_string: "#{meta1.name}, #{meta2.name}")
         expect(fandom.meta_tags.reload).to include(meta1)
         expect(fandom.meta_tags.reload).to include(meta2)
@@ -467,7 +467,7 @@ describe Tag do
         expect(fandom.direct_meta_tags.reload).to include(meta2)
       end
 
-      it "updates inheritance for both meta tags" do
+      it "updates inheritance for both metatags" do
         meta_meta1 = create(:canonical_fandom)
         meta_meta1.sub_tags << meta1
         meta_meta2 = create(:canonical_fandom)
@@ -479,7 +479,7 @@ describe Tag do
       end
     end
 
-    describe "adding a meta tag and a sub tag simultaneously" do
+    describe "adding a metatag and a subtag simultaneously" do
       let(:fandom) { create(:canonical_fandom) }
       let(:meta) { create(:canonical_fandom) }
       let(:sub) { create(:canonical_fandom) }
@@ -502,7 +502,7 @@ describe Tag do
 
   describe "when the resque queue is long" do
     # https://otwarchive.atlassian.net/browse/AO3-4077
-    it "deletes the inherited meta tag when both direct ones are removed" do
+    it "deletes the inherited metatag when both direct ones are removed" do
       lowest = create(:canonical_fandom)
       middle = create(:canonical_fandom)
       highest = create(:canonical_fandom)
@@ -517,7 +517,7 @@ describe Tag do
       expect(lowest.meta_tags.reload).not_to include(highest)
     end
 
-    it "deletes meta filters when a syn and a meta tag are deleted" do
+    it "deletes meta filters when a syn and a metatag are deleted" do
       canonical = create(:canonical_fandom)
       meta = create(:canonical_fandom)
       canonical.meta_tags << meta

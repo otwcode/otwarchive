@@ -722,7 +722,7 @@ class Tag < ApplicationRecord
     async_after_commit(:update_filters_for_taggables)
   end
 
-  # Recalculate the inherited meta tags for this tag, and once those changes
+  # Recalculate the inherited metatags for this tag, and once those changes
   # are committed, update the filters for every work or external work that's
   # filter-tagged with this tag.
   def update_inherited_meta_tags
@@ -737,13 +737,13 @@ class Tag < ApplicationRecord
     async_after_commit(:update_filters_for_filterables)
   end
 
-  # When deleting a meta tag, we destroy the meta-tagging first to trigger the
+  # When deleting a metatag, we destroy the meta-tagging first to trigger the
   # appropriate destroy callback.
   def destroy_meta_tagging(meta_tag)
     meta_taggings.find_by(meta_tag: meta_tag)&.destroy
   end
 
-  # When deleting a sub tag, we destroy the sub-tagging first to trigger the
+  # When deleting a subtag, we destroy the sub-tagging first to trigger the
   # appropriate destroy callback.
   def destroy_sub_tagging(sub_tag)
     sub_taggings.find_by(sub_tag: sub_tag)&.destroy
@@ -827,7 +827,7 @@ class Tag < ApplicationRecord
   end
 
   # When canonical or merger is changed, we need to make sure that the
-  # associations (parents, children, meta tags, mergers) are fixed. Note that
+  # associations (parents, children, metatags, mergers) are fixed. Note that
   # these are all async calls, so we use async_after_commit to reduce the
   # likelihood of issues with stale data.
   before_update :update_associations_for_canonical_or_merger_change
@@ -863,7 +863,7 @@ class Tag < ApplicationRecord
   end
 
   # When we make this tag a synonym of another canonical tag, we want to move
-  # all the associations this tag has (subtags, meta tags, etc) over to that
+  # all the associations this tag has (subtags, metatags, etc) over to that
   # canonical tag.
   #
   # The callbacks that occur when changing the associations will trigger the
@@ -978,14 +978,14 @@ class Tag < ApplicationRecord
   def meta_tag_string=(tag_string)
     parse_tag_string(tag_string) do |name, parent|
       meta_tagging = meta_taggings.build(meta_tag: parent, direct: true)
-      save_and_gather_errors(meta_tagging, "Invalid meta tag '#{name}':")
+      save_and_gather_errors(meta_tagging, "Invalid metatag '#{name}':")
     end
   end
 
   def sub_tag_string=(tag_string)
     parse_tag_string(tag_string) do |name, sub|
       sub_tagging = sub_taggings.build(sub_tag: sub, direct: true)
-      save_and_gather_errors(sub_tagging, "Invalid sub tag '#{name}':")
+      save_and_gather_errors(sub_tagging, "Invalid subtag '#{name}':")
     end
   end
 

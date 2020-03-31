@@ -19,7 +19,7 @@ shared_examples "a filterable" do
         end.to add_to_reindex_queue(filterable, :main)
       end
 
-      context "when the tag has a meta tag" do
+      context "when the tag has a metatag" do
         let(:meta) { create(:canonical_freeform) }
         before { freeform.meta_tags << meta }
 
@@ -30,7 +30,7 @@ shared_examples "a filterable" do
         end
       end
 
-      context "when the filterable is already tagged with a sub tag" do
+      context "when the filterable is already tagged with a subtag" do
         let(:sub) { create(:canonical_freeform) }
 
         before do
@@ -85,7 +85,7 @@ shared_examples "a filterable" do
         end.to add_to_reindex_queue(filterable, :main)
       end
 
-      context "when the tag has a meta tag" do
+      context "when the tag has a metatag" do
         let(:meta) { create(:canonical_freeform) }
         before { freeform.meta_tags << meta }
 
@@ -94,7 +94,7 @@ shared_examples "a filterable" do
           expect(filterable.filters.reload).not_to include(meta)
         end
 
-        context "when the filterable is also tagged with that meta tag" do
+        context "when the filterable is also tagged with that metatag" do
           before do
             filterable.update!(
               freeform_string: "#{freeform.name}, #{meta.name}"
@@ -110,7 +110,7 @@ shared_examples "a filterable" do
         end
       end
 
-      context "when the filterable is also tagged with a sub tag" do
+      context "when the filterable is also tagged with a subtag" do
         let(:sub) { create(:canonical_freeform) }
 
         before do

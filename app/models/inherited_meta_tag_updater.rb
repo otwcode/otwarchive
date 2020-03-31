@@ -22,13 +22,13 @@ class InheritedMetaTagUpdater
     @all += @boundary
   end
 
-  # Check whether we're done finding all of our inherited meta tags.
+  # Check whether we're done finding all of our inherited metatags.
   def done?
     @boundary.empty?
   end
 
   # Go through the breadth-first search steps to figure out what this tag's
-  # inherited meta tags should be.
+  # inherited metatags should be.
   def calculate
     advance until done?
   end
@@ -47,14 +47,14 @@ class InheritedMetaTagUpdater
 
     # Delete the unnecessary meta taggings.
     base.meta_taggings.each do |mt|
-      # If the meta tag ID is in the list of IDs we're looking for, we don't
+      # If the metatag ID is in the list of IDs we're looking for, we don't
       # need to modify the meta tagging at all -- we just need to mark that
-      # we've seen it by removing it from the list of missing meta tag IDs.
+      # we've seen it by removing it from the list of missing metatag IDs.
       #
       # We also shouldn't modify the meta tagging if it's direct.
       next if missing.delete?(mt.meta_tag_id) || mt.direct
 
-      # The inherited meta tag isn't one of the ones we're expecting to see,
+      # The inherited metatag isn't one of the ones we're expecting to see,
       # which means that it shouldn't be here:
       mt.destroy
       modified = true
@@ -69,7 +69,7 @@ class InheritedMetaTagUpdater
     modified
   end
 
-  # Fixes inherited meta tags for all tags with at least one meta tagging.
+  # Fixes inherited metatags for all tags with at least one meta tagging.
   def self.update_all
     Tag.joins(:meta_taggings).distinct.find_each do |tag|
       new(tag).update

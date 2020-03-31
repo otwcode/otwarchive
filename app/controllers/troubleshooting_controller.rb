@@ -155,7 +155,7 @@ class TroubleshootingController < ApplicationController
     flash[:notice] << ts("Tag counts updated.")
   end
 
-  # An action allowing the user to try to fix the inherited meta tags.
+  # An action allowing the user to try to fix the inherited metatags.
   def fix_meta_tags
     modified = MetaTagging.transaction do
       InheritedMetaTagUpdater.new(@item).update
@@ -165,11 +165,11 @@ class TroubleshootingController < ApplicationController
       # Fixing the meta taggings is all well and good, but unless the filters
       # are adjusted too, this will have no immediate effects.
       @item.async(:update_filters_for_filterables)
-      flash[:notice] << ts("Inherited meta tags recalculated. This tag has " \
+      flash[:notice] << ts("Inherited metatags recalculated. This tag has " \
                            "also been enqueued to have its filters fixed.")
     else
-      flash[:notice] << ts("Inherited meta tags recalculated. No incorrect " \
-                           "meta tags found.")
+      flash[:notice] << ts("Inherited metatags recalculated. No incorrect " \
+                           "metatags found.")
     end
   end
 

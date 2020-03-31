@@ -7,7 +7,7 @@ class MetaTagging < ApplicationRecord
   validates_presence_of :meta_tag, :sub_tag, message: "does not exist."
   validates_uniqueness_of :meta_tag_id,
                           scope: :sub_tag_id,
-                          message: "has already been added (possibly as an indirect meta tag)."
+                          message: "has already been added (possibly as an indirect metatag)."
 
   after_create :expire_caching
   after_destroy :expire_caching
@@ -23,10 +23,10 @@ class MetaTagging < ApplicationRecord
         self.errors.add(:base, "Meta taggings can only exist between canonical tags.")
       end
       if self.meta_tag == self.sub_tag
-        self.errors.add(:base, "A tag can't be its own meta tag.")
+        self.errors.add(:base, "A tag can't be its own metatag.")
       end
       if self.meta_tag.meta_taggings.where(meta_tag: self.sub_tag).exists?
-        self.errors.add(:base, "A meta tag can't be its own grandparent.")
+        self.errors.add(:base, "A metatag can't be its own grandparent.")
       end
     end
   end

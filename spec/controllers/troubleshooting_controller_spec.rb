@@ -108,7 +108,7 @@ describe TroubleshootingController do
         it_redirects_to_simple(tag_path(tag))
       end
 
-      it "fixes meta tags and redirects to the tag" do
+      it "fixes metatags and redirects to the tag" do
         meta = create(:canonical_fandom)
         grand = create(:canonical_fandom)
         phantom = create(:canonical_fandom)
@@ -118,7 +118,7 @@ describe TroubleshootingController do
         tag.meta_tags.delete(grand)
         MetaTagging.create(sub_tag: tag, meta_tag: phantom, direct: false)
 
-        # Because the inherited meta tags are wrong, we should end up updating
+        # Because the inherited metatags are wrong, we should end up updating
         # the filters for all of the tagged works as well:
         expect_any_instance_of(Tag).to receive(:update_filters_for_filterables)
 
@@ -128,7 +128,7 @@ describe TroubleshootingController do
         it_redirects_to_simple(tag_path(tag))
       end
 
-      it "doesn't update filters if the meta tags don't need fixing" do
+      it "doesn't update filters if the metatags don't need fixing" do
         expect_any_instance_of(Tag).not_to receive(:update_filters_for_filterables)
 
         put :update, params: { tag_id: tag.to_param, actions: ["fix_meta_tags"] }

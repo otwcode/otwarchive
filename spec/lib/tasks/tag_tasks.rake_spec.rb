@@ -116,7 +116,7 @@ describe "rake Tag:reset_meta_tags" do
   let(:sub) { create(:canonical_fandom) }
   let(:meta) { create(:canonical_fandom) }
 
-  it "deletes phantom inherited meta tags" do
+  it "deletes phantom inherited metatags" do
     MetaTagging.create(sub_tag: sub, meta_tag: meta, direct: false)
 
     expect(sub.meta_tags.reload).to include(meta)
@@ -124,7 +124,7 @@ describe "rake Tag:reset_meta_tags" do
     expect(sub.meta_tags.reload).not_to include(meta)
   end
 
-  it "constructs missing inherited meta tags" do
+  it "constructs missing inherited metatags" do
     mid = create(:canonical_fandom)
     mid.meta_tags << meta
     mid.sub_tags << sub
