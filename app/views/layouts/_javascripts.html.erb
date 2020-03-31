@@ -54,13 +54,31 @@
     params[:tos] == "yes" %>
   <%= javascript_tag do %>
     $j(document).ready(function() {
-      <% # Users who haven't accepted this TOS and guests who don't have the cookie need
-         # the popup. We have to use JavaScript to check the cookie or risk issues
-         # when full page caching is enabled %>
+      <% # Users who haven't accepted this TOS and guests who don't have the
+         # cookie and are not using the bypass params need the popup. For
+         # guests, we have to use JavaScript to check the cookie and params or 
+         # we risk issues when full page caching is enabled. %>
       <% if current_user %>
         $j("body").prepend("<%= escape_javascript(render "layouts/tos_prompt") %>");
       <% else %>
-        if ($j.cookie("accepted_tos") != <%= @current_tos_version.to_s %>) {
+        var getUrlParameter = function getUrlParameter(sParam) {
+          var sPageURL = window.location.search.substring(1),
+            sURLVariables = sPageURL.split("&"),
+            sParameterName,
+            i;
+
+            for (i = 0; i < sURLVariables.length; i++) {
+              sParameterName = sURLVariables[i].split("=");
+
+              if (sParameterName[0] === sParam) {
+                return sParameterName[1] === undefined ? true : decodeURIComponent(sParameterName[1]);
+              }
+            }
+        };
+
+        var tos = getUrlParameter("tos");
+
+        if ($j.cookie("accepted_tos") != <%= @current_tos_version.to_s %> && tos != "yes" ) {
           $j("body").prepend("<%= escape_javascript(render "layouts/tos_prompt") %>");
         }
       <% end %>
