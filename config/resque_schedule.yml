@@ -47,3 +47,17 @@ run_update_filter_counts_large:
   queue: utilities
   args: update_counts_for_large_queue
   description: "Update filter counts for large filters"
+
+save_recent_counts_to_database:
+  every: 1h
+  class: "RedisHitCounter"
+  queue: utilities
+  args: save_recent_counts
+  description: "Save recent hit counts to database."
+
+remove_outdated_hit_count_keys:
+  every: 24h
+  class: "RedisHitCounter"
+  queue: utilities
+  args: remove_outdated_keys
+  description: "Remove old hit count information from redis."
