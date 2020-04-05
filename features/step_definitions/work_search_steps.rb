@@ -145,7 +145,7 @@ Given /^a set of works with comments for searching$/ do
   step %{the work "Work 6" with 3 comments setup}
   step %{the work "Work 7" with 10 comments setup}
 
-  step %{the statistics_tasks rake task is run}
+  step %{the statistics for all works are updated}
   step %{all indexing jobs have been run}
 end
 
@@ -200,7 +200,7 @@ Given /^a set of works with bookmarks for searching$/ do
   step %{the work "Work 6" with 4 bookmarks setup}
   step %{the work "Work 7" with 10 bookmarks setup}
 
-  step %{the statistics_tasks rake task is run}
+  step %{the statistics for all works are updated}
 
   # The cache on work blurb stat lines expires every hour -- we need to expire
   # them so we can check the results

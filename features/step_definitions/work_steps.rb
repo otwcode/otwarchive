@@ -102,7 +102,7 @@ Given(/^I have the Battle set loaded$/) do
   step %{mod fulfills claim}
   step %{I reveal the "Battle 12" challenge}
   step %{I am logged in as "myname4"}
-  step %{the statistics_tasks rake task is run}
+  step %{the statistics for all works are updated}
   step %{all indexing jobs have been run}
 end
 
@@ -224,10 +224,10 @@ end
 
 Given /^the spam work "([^\"]*)"$/ do |work|
   step %{I have a work "#{work}"}
-  step %{I am logged out}
   w = Work.find_by_title(work)
   w.update_attribute(:spam, true)
   w.update_attribute(:hidden_by_admin, true)
+  step %{I am logged out}
 end
 
 ### WHEN
@@ -549,9 +549,10 @@ When /^I post the work$/ do
   click_button "Post"
   step %{all indexing jobs have been run}
 end
-When /^the statistics_tasks rake task is run$/ do
-  step %{I run the rake task "statistics:update_stat_counters"}
+
+When /^the statistics for all works are updated$/ do
   step %{I run the rake task "statistics:update_stats"}
+  step %{the hit counts for all works are updated}
 end
 
 When /^I add the co-author "([^"]*)" to the work "([^"]*)"$/ do |coauthor, work|
@@ -622,7 +623,7 @@ When /^I mark the work "([^"]*)" for later$/ do |work|
 end
 
 When /^the statistics for the work "([^"]*)" are updated$/ do |title|
-  step %{the statistics_tasks rake task is run}
+  step %{the statistics for all works are updated}
   step %{all indexing jobs have been run}
   work = Work.find_by(title: title)
   # Touch the work to actually expire the cache
