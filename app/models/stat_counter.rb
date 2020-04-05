@@ -1,6 +1,4 @@
 class StatCounter < ApplicationRecord
-  include LogfileReader
-
   belongs_to :work
 
   after_commit :enqueue_to_index, on: :update
