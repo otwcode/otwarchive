@@ -115,7 +115,7 @@ Given /^the chaptered work(?: with ([\d]+) chapters)?(?: with ([\d]+) comments?)
   step %{I am logged in as a random user}
   step %{I post the work "#{title}"}
   work = Work.find_by(title: title)
-  visit work_url(work)
+  visit work_path(work)
   n_chapters ||= 2
   (n_chapters.to_i - 1).times do |i|
     step %{I follow "Add Chapter"}
@@ -127,7 +127,7 @@ Given /^the chaptered work(?: with ([\d]+) chapters)?(?: with ([\d]+) comments?)
   work = Work.find_by(title: title)
   n_comments.to_i.times do |i|
     step %{I am logged in as a random user}
-    visit work_url(work)
+    visit work_path(work)
     fill_in("comment[comment_content]", with: "Bla bla")
     click_button("Comment")
     step %{I am logged out}
@@ -231,6 +231,12 @@ Given /^the spam work "([^\"]*)"$/ do |work|
 end
 
 ### WHEN
+
+When /^I view the ([\d]+)(?:st|nd|rd|th) chapter of the work "([^"]*)"$/ do |chapter_no, title|
+  work = Work.find_by(title: title)
+  chapter = work.chapters_in_order[chapter_no.to_i - 1]
+  visit work_chapter_path(work, chapter)
+end
 
 When /^I view the ([\d]+)(?:st|nd|rd|th) chapter$/ do |chapter_no|
   (chapter_no.to_i - 1).times do |i|
@@ -621,6 +627,10 @@ When /^the statistics for the work "([^"]*)" are updated$/ do |title|
   work = Work.find_by(title: title)
   # Touch the work to actually expire the cache
   work.touch
+end
+
+When /^the hit counts for all works are updated$/ do
+  RedisHitCounter.new.save_recent_counts
 end
 
 ### THEN

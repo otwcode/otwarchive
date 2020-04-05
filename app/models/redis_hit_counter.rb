@@ -23,6 +23,8 @@ class RedisHitCounter
   # Note that we move it to a temporary key so that there's no danger of
   # updates occurring while we perform the transfer.
   def save_recent_counts
+    return unless redis.exists(:recent_counts)
+
     temp_key = make_temporary_key
     redis.rename(:recent_counts, temp_key)
     async(:save_hit_counts_at_key, temp_key)
@@ -80,7 +82,7 @@ class RedisHitCounter
 
     redis.multi do |multi|
       multi.rename(key, garbage_key)
-      multi.srem(:keys, key)
+      multi.hdel(:keys, key)
     end
 
     cursor = "0"
