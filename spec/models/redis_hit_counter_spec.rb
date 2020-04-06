@@ -5,22 +5,22 @@ describe RedisHitCounter do
   let(:work_id) { 33 }
   let(:ip_address) { "127.0.0.1" }
 
-  describe "#current_time_bucket" do
+  describe "#current_timestamp" do
     it "returns the previous date at 2:59 AM UTC" do
       Delorean.time_travel_to "2020/01/30 2:59 UTC" do
-        expect(hit_counter.current_time_bucket).to eq("20200129")
+        expect(hit_counter.current_timestamp).to eq("20200129")
       end
     end
 
     it "returns the current date at 3:00 AM UTC" do
       Delorean.time_travel_to "2020/01/30 3:00 UTC" do
-        expect(hit_counter.current_time_bucket).to eq("20200130")
+        expect(hit_counter.current_timestamp).to eq("20200130")
       end
     end
 
     it "returns the current date at 3:01 AM UTC" do
       Delorean.time_travel_to "2020/01/30 3:01 UTC" do
-        expect(hit_counter.current_time_bucket).to eq("20200130")
+        expect(hit_counter.current_timestamp).to eq("20200130")
       end
     end
   end

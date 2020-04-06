@@ -472,3 +472,7 @@ CHARACTER_COUNT_SCRIPTS: ["Han", "Hiragana", "Katakana", "Thai"]
 # Cache durations for work and bookmark searches (in seconds)
 SECONDS_UNTIL_WORK_INDEX_EXPIRE: 1800
 SECONDS_UNTIL_BOOKMARK_INDEX_EXPIRE: 1800
+
+# Settings used for the RedisHitCounter class:
+HIT_COUNT_ROLLOVER_HOUR: 3
+HIT_COUNT_BATCH_SIZE: 100

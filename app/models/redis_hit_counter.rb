@@ -1,14 +1,16 @@
+# A class for keeping track of hits/IP addresses in redis. Writes the values in
+# redis to the database when you call save_recent_counts.
 class RedisHitCounter
   # Records a hit for the given IP address on the given work ID.
   def add(work_id, ip_address)
-    time_bucket = current_time_bucket
-    key = "#{work_id}:#{time_bucket}"
+    timestamp = current_timestamp
+    key = "#{work_id}:#{timestamp}"
 
     # Simultaneously add the IP address to the set for this work/date combo,
     # and add the key we're using to the hash mapping from keys to timestamps.
     added, _ = redis.multi do |multi|
       multi.sadd(key, ip_address)
-      multi.hset(:keys, key, time_bucket)
+      multi.hset(:keys, key, timestamp)
     end
 
     # If trying to add the IP address results in sadd returns a positive
@@ -30,22 +32,32 @@ class RedisHitCounter
     async(:save_hit_counts_at_key, temp_key)
   end
 
+  # Go through the set of all keys, and figure out which of them have an
+  # outdated timestamp. Delete all such keys.
+  def remove_outdated_keys
+    last_timestamp = current_timestamp.to_i
+
+    scan_hash_in_batches(:keys) do |batch|
+      batch.each do |key, timestamp|
+        remove_key(key) if timestamp.to_i < last_timestamp
+      end
+    end
+  end
+
+  protected
+
   # Given a key pointing to a hash mapping from work IDs to hit counts,
   # iterate through the hash. For each set of hit counts retrieved from redis,
   # save it to the database, and then remove it from the hash.
   def save_hit_counts_at_key(key)
-    cursor = "0"
-
-    loop do
-      cursor, batch = redis.hscan(key, cursor, count: batch_size)
+    scan_hash_in_batches(key) do |batch|
       save_batch_hit_counts(batch)
       redis.hdel(key, batch.map(&:first))
-      break if cursor == "0"
     end
   end
 
-  # Helper function for save_hit_counts_at_key. Given a list of pairs of
-  # (work_id, hit_count), add each hit count to the appropriate StatCounter.
+  # Given a list of pairs of (work_id, hit_count), add each hit count to the
+  # appropriate StatCounter.
   def save_batch_hit_counts(batch)
     StatCounter.transaction do
       batch.each do |work_id, value|
@@ -53,24 +65,6 @@ class RedisHitCounter
         next if stat_counter.nil?
         stat_counter.update(hit_count: stat_counter.hit_count + value.to_i)
       end
-    end
-  end
-
-  # Go through the set of all keys, and figure out which of them have an
-  # outdated time bucket. Delete all such keys.
-  def remove_outdated_keys
-    cursor = "0"
-
-    time_bucket = current_time_bucket.to_i
-
-    loop do
-      cursor, batch = redis.hscan(:keys, cursor, count: batch_size)
-
-      batch.each do |key, time_bucket_for_key|
-        remove_key(key) if time_bucket_for_key.to_i < time_bucket
-      end
-
-      break if cursor == "0"
     end
   end
 
@@ -85,12 +79,8 @@ class RedisHitCounter
       multi.hdel(:keys, key)
     end
 
-    cursor = "0"
-
-    loop do
-      cursor, batch = redis.sscan(garbage_key, cursor, count: batch_size)
+    scan_set_in_batches(garbage_key) do |batch|
       redis.srem(garbage_key, batch)
-      break if cursor == "0"
     end
   end
 
@@ -104,6 +94,30 @@ class RedisHitCounter
     "temporary:#{redis.incr("temporary:index")}"
   end
 
+  # Scan a hash in redis batch-by-batch.
+  def scan_hash_in_batches(key)
+    cursor = "0"
+
+    loop do
+      cursor, batch = redis.hscan(key, cursor, count: batch_size)
+      yield batch
+      break if cursor == "0"
+    end
+  end
+
+  # Scan a set in redis batch-by-batch.
+  def scan_set_in_batches(key)
+    cursor = "0"
+
+    loop do
+      cursor, batch = redis.sscan(key, cursor, count: batch_size)
+      yield batch
+      break if cursor == "0"
+    end
+  end
+
+  public
+
   # The redis instance that we want to use for hit counts. We use a namespace
   # so that we can use simpler key names throughout this class.
   def redis
@@ -113,22 +127,22 @@ class RedisHitCounter
     )
   end
 
-  # Take the current date (offset by the rollover hour) and convert it to a
+  # Take the current time (offset by the rollover hour) and convert it to a
   # date. We use this date as part of the key for storing which IP addresses
   # have viewed a work recently.
-  def current_time_bucket
+  def current_timestamp
     (Time.now.utc - rollover_hour.hours).to_date.strftime("%Y%m%d")
   end
 
   # The hour we want the hit counts to rollover at. If someone views the work
   # shortly before this hour and shortly after, it counts as two hits.
   def rollover_hour
-    3
+    ArchiveConfig.HIT_COUNT_ROLLOVER_HOUR
   end
 
   # The size of the batches to be retrieved from redis.
   def batch_size
-    100
+    ArchiveConfig.HIT_COUNT_BATCH_SIZE
   end
 
   ####################
