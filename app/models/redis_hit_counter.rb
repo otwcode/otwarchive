@@ -62,7 +62,9 @@ class RedisHitCounter
     StatCounter.transaction do
       batch.each do |work_id, value|
         stat_counter = StatCounter.lock.find_by(work_id: work_id)
+
         next if stat_counter.nil?
+
         stat_counter.update(hit_count: stat_counter.hit_count + value.to_i)
       end
     end
@@ -86,12 +88,12 @@ class RedisHitCounter
 
   # Constructs an all-new key to use for garbage collection:
   def make_garbage_key
-    "garbage:#{redis.incr("garbage:index")}"
+    "garbage:#{redis.incr('garbage:index')}"
   end
 
   # Constructs an all-new key for temporary use:
   def make_temporary_key
-    "temporary:#{redis.incr("temporary:index")}"
+    "temporary:#{redis.incr('temporary:index')}"
   end
 
   # Scan a hash in redis batch-by-batch.

@@ -81,9 +81,9 @@ describe RedisHitCounter do
   end
 
   describe "#save_recent_counts" do
-    it "updates the stat counters from redis" do
-      stat_counter = StatCounter.create(work_id: work_id, hit_count: 3)
+    let!(:stat_counter) { StatCounter.create(work_id: work_id, hit_count: 3) }
 
+    it "updates the stat counters from redis" do
       hit_counter.redis.hset("recent_counts", work_id, 10)
       hit_counter.save_recent_counts
 
@@ -91,8 +91,6 @@ describe RedisHitCounter do
     end
 
     it "clears the recent counts hash" do
-      stat_counter = StatCounter.create(work_id: work_id, hit_count: 3)
-
       hit_counter.redis.hset("recent_counts", work_id, 10)
       hit_counter.save_recent_counts
 
@@ -151,7 +149,7 @@ describe RedisHitCounter do
       Delorean.time_travel_to "2020/01/30 3:02 UTC" do
         expect do
           hit_counter.remove_outdated_keys
-        end.not_to change { hit_counter.redis.hgetall("recent_counts") }
+        end.not_to(change { hit_counter.redis.hgetall("recent_counts") })
       end
     end
   end
