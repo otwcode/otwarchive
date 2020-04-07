@@ -103,6 +103,7 @@ describe ChaptersController do
       it "stores adult preference in sessions when given" do
         get :show, params: { work_id: work.id, id: work.chapters.first, view_adult: true }
         expect(cookies[:view_adult]).to eq "true"
+	expect(response.headers["X-view-adult"]).to eq "true"
       end
 
       it "renders _adults template if work is adult and adult permission has not been given" do
