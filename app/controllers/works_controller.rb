@@ -193,6 +193,7 @@ class WorksController < ApplicationController
     # Users must explicitly okay viewing of adult content
     if params[:view_adult]
       cookies[:view_adult] = "true"
+      response.set_header("X-view-adult", "true")
     elsif @work.adult? && !see_adult?
       render('_adult', layout: 'application') && return
     end
