@@ -29,7 +29,7 @@ class ChaptersController < ApplicationController
     @tag_groups = @work.tag_groups
     if params[:view_adult]
       cookies[:view_adult] = "true"
-      response.set_header('X-view-adult', 'true')
+      response.set_header("X-view-adult", "true")
     elsif @work.adult? && !see_adult?
       render "works/_adult", layout: "application" and return
     end
