@@ -18,3 +18,7 @@ end
 After do
   Indexer.all.map(&:delete_index)
 end
+
+AfterStep do |scenario|
+  page.has_no_text?("http:")
+end
