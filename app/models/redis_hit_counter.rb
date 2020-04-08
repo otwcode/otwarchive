@@ -13,9 +13,9 @@ class RedisHitCounter
       multi.hset(:keys, key, timestamp)
     end
 
-    # If trying to add the IP address results in sadd returns a positive
-    # number, we know that the user hasn't visited this work recently, so we
-    # want to add the hit to the counter.
+    # If trying to add the IP address resulted in sadd returning true, we know
+    # that the user hasn't visited this work recently. So we increment the
+    # count of recent hits.
     redis.hincrby(:recent_counts, work_id, 1) if added
   end
 
@@ -70,9 +70,9 @@ class RedisHitCounter
     end
   end
 
-  # Removes the set at a given key in a safe, incremental way (by renaming, and
-  # deleting incrementally). Simultaneously removes the key from the set stored
-  # at hit_count:keys.
+  # Removes the set at a given key (by renaming -- an atomic operation to
+  # prevent issues with simultaneous deleting/adding -- and then deleting in
+  # batches). Also removes the key from the set of keys stored in redis.
   def remove_key(key)
     garbage_key = make_garbage_key
 
@@ -86,7 +86,7 @@ class RedisHitCounter
     end
   end
 
-  # Constructs an all-new key to use for garbage collection:
+  # Constructs an all-new key to use for deleting sets:
   def make_garbage_key
     "garbage:#{redis.incr('garbage:index')}"
   end
