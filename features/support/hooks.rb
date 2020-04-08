@@ -20,5 +20,6 @@ After do
 end
 
 AfterStep do |scenario|
-  page.has_no_text?("http:")
+  return if page.blank?
+  page.has_no_text?("Work")
 end
