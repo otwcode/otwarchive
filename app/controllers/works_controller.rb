@@ -206,7 +206,7 @@ class WorksController < ApplicationController
         )
       else
         flash.keep
-        redirect_to(work_chapter_path(@work, @chapter)) && return
+        redirect_to([@work, @chapter, { only_path: true }]) && return
       end
     end
 
