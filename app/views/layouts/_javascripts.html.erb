@@ -74,8 +74,9 @@
       // For browsers that don't support localStorage according to our check,
       // make its functions handle cookies instead.
       // Credit: https://developer.mozilla.org/en-US/docs/Web/API/Web_Storage_API/Local_storage
-      if (!isSupported()) {
-        // 20 years is the Rails maximum and what we previous used.  
+      function setTOSCookie() {
+        // 20 years is the Rails maximum and what we previous used. 
+        console.log("write a cookie ffs");		
         var expiryDate = new Date;
         expiryDate.setFullYear(expiryDate.getFullYear() + 20);
 
