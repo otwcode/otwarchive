@@ -5,15 +5,15 @@ class HitCountController < ApplicationController
   def create
     raise NotFound unless request.format == "json"
 
-    if ENV['REQUEST_FROM_BOT']
-      render json: "failure"
+    if ENV["REQUEST_FROM_BOT"]
+      head :forbidden
     else
       RedisHitCounter.new.add(
         params[:work_id].to_i,
         request.remote_ip
       )
 
-      render json: "success"
+      head :ok
     end
   end
 end
