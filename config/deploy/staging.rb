@@ -12,6 +12,7 @@ server "test-app13", :app, :db, :schedulers
 server "test-app14", :app, :schedulers
 server "test-app15", :app, :workers, :schedulers, primary: true
 server "test-front11", :web
+server "test-front12", :web
 
 set :rails_env, 'staging'
 
