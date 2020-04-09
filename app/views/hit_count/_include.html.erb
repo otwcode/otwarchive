@@ -1,5 +1,9 @@
 <% unless @work.in_unrevealed_collection? || @work.hidden_by_admin? || current_user&.is_author_of?(@work) %>
   <% content_for :footer_js do %>
-    <script>jQuery.post("<%= work_hit_count_path(@work, format: :json) %>")</script>
+    <script>
+      $j(document).on("loadedCSRF", function() {
+        $j.post("<%= work_hit_count_path(@work, format: :json) %>")
+      })
+    </script>
   <% end %>
 <% end %>
