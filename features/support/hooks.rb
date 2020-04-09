@@ -18,8 +18,3 @@ end
 After do
   Indexer.all.map(&:delete_index)
 end
-
-AfterStep do |scenario|
-  return if page.blank?
-  page.has_no_text?("Work")
-end
