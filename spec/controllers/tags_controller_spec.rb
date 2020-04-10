@@ -179,7 +179,7 @@ describe TagsController do
     before do
       @fandom1 = FactoryBot.create(:fandom, canonical: true)
 
-      @archive_warning = FactoryBot.create(:tag, name: ArchiveConfig.WARNING_VIOLENCE_TAG_NAME)
+      @archive_warning = FactoryBot.create(:archive_warning)
       @freeform1 = FactoryBot.create(:freeform, canonical: false)
       @character1 = FactoryBot.create(:character, canonical: false)
       @character3 = FactoryBot.create(:character, canonical: false)

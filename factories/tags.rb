@@ -68,6 +68,10 @@ FactoryBot.define do
     sequence(:name) { |n| "Unsorted Tag #{n}" }
   end
 
+  factory :archive_warning do
+    sequence(:name) { |n| "The #{n} Archive Warning"}
+  end
+
   factory :fandom do
     sequence(:name) { |n| "The #{n} Fandom" }
 
