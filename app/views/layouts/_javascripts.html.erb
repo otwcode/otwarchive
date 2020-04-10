@@ -63,8 +63,6 @@
           try {
               localStorage.setItem(item, item);
               localStorage.removeItem(item);
-              sessionStorage.setItem(item, item);
-              sessionStorage.removeItem(item);
               return true;
           } catch (e) {
               return false;
@@ -75,7 +73,7 @@
         if (isSupported()) {
           localStorage.setItem("accepted_tos", "<%= @current_tos_version %>");
         } else {
-          // 20 years is the Rails maximum and what we previously used. 
+          // 20 years is the Rails maximum. 
           Cookies.set("accepted_tos", "<%= @current_tos_version %>", { expires: 7300 });
         }
       }
