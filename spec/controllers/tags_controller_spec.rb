@@ -185,11 +185,11 @@ describe TagsController do
       @character3 = FactoryBot.create(:character, canonical: false)
       @character2 = FactoryBot.create(:character, canonical: false, merger: @character3)
       @work = FactoryBot.create(:work,
-                                 posted: true,
-                                 fandom_string: "#{@fandom1.name}",
-                                 character_string: "#{@character1.name},#{@character2.name}",
-                                 freeform_string: "#{@freeform1.name}",
-                                 archive_warning_string: "#{@archive_warning.name}")
+                                posted: true,
+                                fandom_string: @fandom1.name,
+                                character_string: "#{@character1.name},#{@character2.name}",
+                                freeform_string: @freeform1.name,
+                                archive_warning_string: @archive_warning.name)
 
       @html_regex = /replaceWith\("(?<html>.*)"\);/
     end
@@ -206,7 +206,7 @@ describe TagsController do
 
       if @html_regex =~ @response.body
         # Unescape javascript string and parse with Capybara
-        html = JSON.load("\"#{Regexp.last_match(:html)}\"")
+        html = JSON.parse("\"#{Regexp.last_match(:html)}\"")
         node = Capybara.string html
         link_node = node.find("li.warnings > strong > a")
         expect(link_node.text).to eq(@archive_warning.name)
@@ -222,7 +222,7 @@ describe TagsController do
 
       if @html_regex =~ @response.body
         # Unescape javascript string and parse with Capybara
-        html = JSON.load("\"#{Regexp.last_match(:html)}\"")
+        html = JSON.parse("\"#{Regexp.last_match(:html)}\"")
         node = Capybara.string html
         link_node = node.find("li.freeforms > a")
         expect(link_node.text).to eq(@freeform1.name)
