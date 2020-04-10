@@ -52,7 +52,7 @@
     params[:controller] == "abuse_reports" && params[:action] == "new" ||
     params[:controller] == "feedbacks" && params[:action] == "new" %>
   <%= javascript_tag do %>
-    <% # localStorage polyfill we only need for guests. %>
+    <% # localStorage support check we only need for guests. %>
     <% unless current_user %>
       // We can't rely on !window.localStorage to test localStorage support in
       // browsers like Safari 9, which technically support it, but which have a
@@ -75,7 +75,7 @@
         if (isSupported()) {
           localStorage.setItem("accepted_tos", "<%= @current_tos_version %>");
         } else {
-          // 20 years is the Rails maximum and what we previous used. 
+          // 20 years is the Rails maximum and what we previously used. 
           Cookies.set("accepted_tos", "<%= @current_tos_version %>", { expires: 7300 });
         }
       }
@@ -89,7 +89,8 @@
         <% # Guests can bypass the popup using ?tos=yes in the URLs. %>
         acceptTOS();
       <% else %>
-        <% # Otherwise, guests who don't have the localStorage item need the popup.
+        <% # Otherwise, guests who don't have the localStorage item or the
+           # cookie need the popup.
            # We have to use JavaScript to remember their choice or risk issues
            # when full page caching is enabled. %>
         if (localStorage.getItem("accepted_tos") !== "<%= @current_tos_version %>" && Cookies.get("accepted_tos") !== "<%= @current_tos_version %>") {
