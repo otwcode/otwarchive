@@ -36,7 +36,7 @@
 <% end %>
 
 <script type="text/javascript">$j = jQuery.noConflict();</script>
-<%= javascript_include_tag "jquery.scrollTo.min", "jquery.livequery.min", "rails", "application", "bootstrap/bootstrap-dropdown.min", "jquery-shuffle", "jquery.tokeninput.min", "jquery.trap.min", "ao3modal.min", skip_pipeline: true %>
+<%= javascript_include_tag "jquery.scrollTo.min", "jquery.livequery.min", "rails", "application", "bootstrap/bootstrap-dropdown.min", "jquery-shuffle", "jquery.tokeninput.min", "jquery.trap.min", "ao3modal.min", "js.cookie.min", skip_pipeline: true %>
 
 <%= javascript_include_tag "filters.min", skip_pipeline: true %>
 
@@ -71,42 +71,15 @@
           }
       }
 
-      // For browsers that don't support localStorage according to our check,
-      // make its functions handle cookies instead.
-      // Credit: https://developer.mozilla.org/en-US/docs/Web/API/Web_Storage_API/Local_storage
-      function setTOSCookie() {
-        // 20 years is the Rails maximum and what we previous used. 
-        console.log("write a cookie ffs");		
-        var expiryDate = new Date;
-        expiryDate.setFullYear(expiryDate.getFullYear() + 20);
-
-        // window.localStorage is read only, ergo we must delete it for this to
-        // work in instances like Safari 9 private mode.
-        delete window.localStorage;
-        window.localStorage = {
-          getItem: function (sKey) {
-            if (!sKey || !this.hasOwnProperty(sKey)) { return null; }
-            return unescape(document.cookie.replace(new RegExp("(?:^|.*;\\s*)" + escape(sKey).replace(/[\-\.\+\*]/g, "\\$&") + "\\s*\\=\\s*((?:[^;](?!;))*[^;]?).*"), "$1"));
-          },
-          key: function (nKeyId) {
-            return unescape(document.cookie.replace(/\s*\=(?:.(?!;))*$/, "").split(/\s*\=(?:[^;](?!;))*[^;]?;\s*/)[nKeyId]);
-          },
-          setItem: function (sKey, sValue) {
-            if(!sKey) { return; }
-            document.cookie = escape(sKey) + "=" + escape(sValue) + "; expires=" + expiryDate.toUTCString() + "; path=/";
-            this.length = document.cookie.match(/\=/g).length;
-          },
-          length: 0,
-          removeItem: function (sKey) {
-            if (!sKey || !this.hasOwnProperty(sKey)) { return; }
-            document.cookie = escape(sKey) + "=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/";
-            this.length--;
-          },
-          hasOwnProperty: function (sKey) {
-            return (new RegExp("(?:^|;\\s*)" + escape(sKey).replace(/[\-\.\+\*]/g, "\\$&") + "\\s*\\=")).test(document.cookie);
-          }
-        };
-        window.localStorage.length = (document.cookie.match(/\=/g) || window.localStorage).length;
+      function acceptTOS() {
+        if (isSupported()) {
+          alert("localStorage isSupported!");
+          localStorage.setItem("accepted_tos", "<%= @current_tos_version %>");
+        } else {
+          // 20 years is the Rails maximum and what we previous used. 
+          alert("localStorage is not Supported!");
+          Cookies.set("accepted_tos", "<%= @current_tos_version %>", { expires: 7300 });
+        }
       }
     <% end %>
 
@@ -116,12 +89,12 @@
         $j("body").prepend("<%= escape_javascript(render "layouts/tos_prompt") %>");
       <% elsif params[:tos] == "yes" %>
         <% # Guests can bypass the popup using ?tos=yes in the URLs. %>
-        localStorage.setItem("accepted_tos", "<%= @current_tos_version %>");
+        acceptTOS();
       <% else %>
         <% # Otherwise, guests who don't have the localStorage item need the popup.
            # We have to use JavaScript to remember their choice or risk issues
            # when full page caching is enabled. %>
-        if (localStorage.getItem("accepted_tos") !== "<%= @current_tos_version %>") {
+        if (localStorage.getItem("accepted_tos") !== "<%= @current_tos_version %>" && Cookies.get("accepted_tos") !== "<%= @current_tos_version %>") {
           $j("body").prepend("<%= escape_javascript(render "layouts/tos_prompt") %>");
         }
       <% end %>

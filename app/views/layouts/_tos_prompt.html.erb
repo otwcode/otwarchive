@@ -67,11 +67,7 @@
         button.attr("disabled", !this.checked);
         if (this.checked) {
           button.on("click", function() {
-			if (isSupported()) {
-            localStorage.setItem("accepted_tos", "<%= @current_tos_version %>");}
-			else {
-			setTOSCookie();
-			}
+            acceptTOS();
             outer.removeClass("hidden").removeAttr("aria-hidden");
             $j.when(container.fadeOut(500)).done(function() {
               container.remove();
