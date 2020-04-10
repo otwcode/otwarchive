@@ -2,7 +2,7 @@ require "spec_helper"
 
 describe RedisHitCounter do
   let(:hit_counter) { RedisHitCounter.new }
-  let(:work_id) { 33 }
+  let(:work_id) { 42 }
   let(:ip_address) { "127.0.0.1" }
 
   describe "#current_timestamp" do

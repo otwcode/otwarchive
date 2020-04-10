@@ -1,7 +1,9 @@
 # A class for keeping track of hits/IP addresses in redis. Writes the values in
 # redis to the database when you call save_recent_counts.
 class RedisHitCounter
-  # Records a hit for the given IP address on the given work ID.
+  # Records a hit for the given IP address on the given work ID. If the IP
+  # address hasn't visited the work within the current 24 hour block, we
+  # increment the work's hit count. Otherwise, we do nothing.
   def add(work_id, ip_address)
     timestamp = current_timestamp
     key = "#{work_id}:#{timestamp}"
@@ -23,7 +25,8 @@ class RedisHitCounter
   # to transfer those values from the new key to the database.
   #
   # Note that we move it to a temporary key so that there's no danger of
-  # updates occurring while we perform the transfer.
+  # updates occurring while we perform the transfer, which simplifies the code
+  # for save_hit_counts_at_key and save_batch_hit_counts.
   def save_recent_counts
     return unless redis.exists(:recent_counts)
 
@@ -73,6 +76,9 @@ class RedisHitCounter
   # Removes the set at a given key (by renaming -- an atomic operation to
   # prevent issues with simultaneous deleting/adding -- and then deleting in
   # batches). Also removes the key from the set of keys stored in redis.
+  #
+  # Deletion technique adapted from:
+  # https://www.redisgreen.net/blog/deleting-large-sets/
   def remove_key(key)
     garbage_key = make_garbage_key
 
