@@ -173,6 +173,46 @@ describe TagsController do
     end
   end
 
+  describe "show_hidden" do
+    render_views
+
+    before do
+      @fandom1 = FactoryBot.create(:fandom, canonical: true)
+
+      @archive_warning = FactoryBot.create(:tag, name: ArchiveConfig.WARNING_VIOLENCE_TAG_NAME)
+      @freeform1 = FactoryBot.create(:freeform, canonical: false)
+      @character1 = FactoryBot.create(:character, canonical: false)
+      @character3 = FactoryBot.create(:character, canonical: false)
+      @character2 = FactoryBot.create(:character, canonical: false, merger: @character3)
+      @work = FactoryBot.create(:work,
+                                 posted: true,
+                                 fandom_string: "#{@fandom1.name}",
+                                 character_string: "#{@character1.name},#{@character2.name}",
+                                 freeform_string: "#{@freeform1.name}",
+                                 archive_warning_string: "#{@archive_warning.name}")
+    end
+    it "redirects to referer with an error for HTML format" do
+      referer = root_path
+      request.headers["HTTP_REFERER"] = referer
+      get :show_hidden, params: { creation_type: "Work", tag_type: "warnings", creation_id: @work.id }
+      it_redirects_to_with_error(referer, "Sorry, you need to have JavaScript enabled for this.")
+    end
+
+    it "returns a jquery callback to replace the caller with a list of warnings tags" do
+      get :show_hidden, xhr: true, params: { creation_type: "Work", tag_type: "warnings", creation_id: @work.id }
+      expect(@response).to have_http_status(:success)
+      expect(@response.body).to include(@archive_warning.name)
+      expect(@response.body).to include(tag_works_path(@archive_warning))
+    end
+
+    it "returns a jquery callback to replace the caller with a list of freeform tags" do
+      get :show_hidden, xhr: true, params: { creation_type: "Work", tag_type: "freeforms", creation_id: @work.id }
+      expect(response).to have_http_status(:success)
+      expect(@response.body).to include(@freeform1.name)
+      expect(@response.body).to include(tag_works_path(@freeform1))
+    end
+  end
+
   describe "edit" do
     context "when editing a banned tag" do
       before do
