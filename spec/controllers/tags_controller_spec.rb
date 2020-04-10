@@ -190,6 +190,8 @@ describe TagsController do
                                  character_string: "#{@character1.name},#{@character2.name}",
                                  freeform_string: "#{@freeform1.name}",
                                  archive_warning_string: "#{@archive_warning.name}")
+
+      @html_regex = /replaceWith\("(?<html>.*)"\);/
     end
     it "redirects to referer with an error for HTML format" do
       referer = root_path
@@ -201,15 +203,33 @@ describe TagsController do
     it "returns a jquery callback to replace the caller with a list of warnings tags" do
       get :show_hidden, xhr: true, params: { creation_type: "Work", tag_type: "warnings", creation_id: @work.id }
       expect(@response).to have_http_status(:success)
-      expect(@response.body).to include(@archive_warning.name)
-      expect(@response.body).to include(tag_works_path(@archive_warning))
+
+      if @html_regex =~ @response.body
+        # Unescape javascript string and parse with Capybara
+        html = JSON.load("\"#{Regexp.last_match(:html)}\"")
+        node = Capybara.string html
+        link_node = node.find("li.warnings > strong > a")
+        expect(link_node.text).to eq(@archive_warning.name)
+        expect(link_node[:href]).to eq(tag_works_path(@archive_warning))
+      else
+        raise "No html found"
+      end
     end
 
     it "returns a jquery callback to replace the caller with a list of freeform tags" do
       get :show_hidden, xhr: true, params: { creation_type: "Work", tag_type: "freeforms", creation_id: @work.id }
       expect(response).to have_http_status(:success)
-      expect(@response.body).to include(@freeform1.name)
-      expect(@response.body).to include(tag_works_path(@freeform1))
+
+      if @html_regex =~ @response.body
+        # Unescape javascript string and parse with Capybara
+        html = JSON.load("\"#{Regexp.last_match(:html)}\"")
+        node = Capybara.string html
+        link_node = node.find("li.freeforms > a")
+        expect(link_node.text).to eq(@freeform1.name)
+        expect(link_node[:href]).to eq(tag_works_path(@freeform1))
+      else
+        raise "No html found"
+      end
     end
   end
 
