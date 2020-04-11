@@ -224,19 +224,13 @@ end
 
 Given /^the spam work "([^\"]*)"$/ do |work|
   step %{I have a work "#{work}"}
+  step %{I am logged out}
   w = Work.find_by_title(work)
   w.update_attribute(:spam, true)
   w.update_attribute(:hidden_by_admin, true)
-  step %{I am logged out}
 end
 
 ### WHEN
-
-When /^I view the ([\d]+)(?:st|nd|rd|th) chapter of the work "([^"]*)"$/ do |chapter_no, title|
-  work = Work.find_by(title: title)
-  chapter = work.chapters_in_order[chapter_no.to_i - 1]
-  visit work_chapter_path(work, chapter)
-end
 
 When /^I view the ([\d]+)(?:st|nd|rd|th) chapter$/ do |chapter_no|
   (chapter_no.to_i - 1).times do |i|
@@ -632,6 +626,13 @@ end
 
 When /^the hit counts for all works are updated$/ do
   RedisHitCounter.new.save_recent_counts
+end
+
+When /^all hit count information is reset$/ do
+  redis = RedisHitCounter.new.redis
+  redis.keys.each do |key|
+    redis.del(key)
+  end
 end
 
 ### THEN
