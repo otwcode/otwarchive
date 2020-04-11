@@ -126,13 +126,11 @@ module NavigationHelpers
       work_path(Work.find_by(title: $1))
     when /^the work page with title (.*)/
       work_path(Work.find_by(title: $1))
-    when /^the work "([^"]*)"$/
-      work = Work.find_by(title: $1)
-      work_path(work)
-    when /^the work "([^"]*)" in full mode$/
-      work = Work.find_by(title: $1)
-      work_path(work, view_full_work: true)
-    when /^the ([\d]+)(?:st|nd|rd|th) chapter of the work "([^"]*)"$/
+    when /^the work "(.*?)"$/
+      work_path(Work.find_by(title: $1))
+    when /^the work "(.*?)" in full mode$/
+      work_path(Work.find_by(title: $1), view_full_work: true)
+    when /^the ([\d]+)(?:st|nd|rd|th) chapter of the work "(.*?)"$/
       work = Work.find_by(title: $2)
       chapter = work.chapters_in_order[$1.to_i - 1]
       work_chapter_path(work, chapter)

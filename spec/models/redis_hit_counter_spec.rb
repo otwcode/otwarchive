@@ -35,9 +35,9 @@ describe RedisHitCounter do
         expect(hit_counter.redis.smembers("#{work_id}:20200130")).to \
           eq([ip_address])
         expect(hit_counter.redis.hgetall("keys")).to \
-          eq({ "#{work_id}:20200130" => "20200130" })
+          eq("#{work_id}:20200130" => "20200130")
         expect(hit_counter.redis.hgetall("recent_counts")).to \
-          eq({ work_id.to_s => "1" })
+          eq(work_id.to_s => "1")
       end
     end
 
@@ -75,7 +75,7 @@ describe RedisHitCounter do
         end
 
         expect(hit_counter.redis.hgetall("recent_counts")).to \
-          eq({ work_id.to_s => "1" })
+          eq(work_id.to_s => "1")
       end
     end
   end
@@ -106,7 +106,7 @@ describe RedisHitCounter do
 
         expect(hit_counter.redis.exists("#{work_id}:20200129")).to be_truthy
         expect(hit_counter.redis.hgetall("keys")).to \
-          eq({ "#{work_id}:20200129" => "20200129" })
+          eq("#{work_id}:20200129" => "20200129")
       end
 
       Delorean.time_travel_to "2020/01/30 3:01 UTC" do
@@ -133,7 +133,7 @@ describe RedisHitCounter do
         expect(hit_counter.redis.exists("#{work_id}:20200129")).to be_falsey
         expect(hit_counter.redis.exists("#{work_id}:20200130")).to be_truthy
         expect(hit_counter.redis.hgetall("keys")).to \
-          eq({ "#{work_id}:20200130" => "20200130" })
+          eq("#{work_id}:20200130" => "20200130")
       end
     end
 
