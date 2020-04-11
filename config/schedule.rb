@@ -59,11 +59,6 @@ every 1.hour do
   rake "notifications:deliver_subscriptions"
 end
 
-# Move hit counts from redis to database
-every 10.minutes do
-  rake "statistics:update_stat_counters"
-end
-
 every 30.minutes do
   rake "statistics:update_stats"
 end
