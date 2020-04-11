@@ -49,6 +49,21 @@ Feature: Get messages in the inbox
       And I press "Filter"
     Then I should not see "guest on Down for the Count"
 
+  Scenario: A user can select a comment by clicking on 'Select' on the inbox page
+    Given I am logged in as "boxer" with password "10987tko"
+      And I post the work "The Fight"
+      And I set my preferences to turn on messages to my inbox about comments
+    When I am logged in as "cutman"
+      And I post the comment "You should receive this in your inbox." on the work "The Fight"
+    When I am logged in as "boxer" with password "10987tko"
+      And I go to my inbox page
+    Then I should see "cutman on The Fight"
+      And I should see "You should receive this in your inbox."
+      And I should see "Unread"
+    When I press "Select"
+      And I press "Mark Read"
+    Then I should not see "Unread"
+
   Scenario: A user can see some of their unread comments on the homepage
     Given I am logged in as "boxer" with password "10987tko"
       And I post the work "Pre-Fight Coverage"
