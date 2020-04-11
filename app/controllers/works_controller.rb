@@ -192,7 +192,7 @@ class WorksController < ApplicationController
 
     # Users must explicitly okay viewing of adult content
     if params[:view_adult]
-      session[:adult] = true
+      cookies[:view_adult] = "true"
     elsif @work.adult? && !see_adult?
       render('_adult', layout: 'application') && return
     end
@@ -206,7 +206,7 @@ class WorksController < ApplicationController
         )
       else
         flash.keep
-        redirect_to([@work, @chapter]) && return
+        redirect_to([@work, @chapter, { only_path: true }]) && return
       end
     end
 

@@ -28,7 +28,7 @@ class ChaptersController < ApplicationController
   def show
     @tag_groups = @work.tag_groups
     if params[:view_adult]
-      session[:adult] = true
+      cookies[:view_adult] = "true"
     elsif @work.adult? && !see_adult?
       render "works/_adult", layout: "application" and return
     end
