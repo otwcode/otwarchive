@@ -174,7 +174,6 @@ describe TagsController do
   end
 
   describe "show_hidden" do
-    let(:archive_warning) { create(:archive_warning) }
     let(:fandom1) { create(:fandom, canonical: true) }
     let(:freeform1) { create(:freeform, canonical: false) }
     let(:character1) { create(:character, canonical: false) }
@@ -184,7 +183,7 @@ describe TagsController do
                         fandom_string: fandom1.name,
                         character_string: "#{character1.name},#{character2.name}",
                         freeform_string: freeform1.name,
-                        archive_warning_string: archive_warning.name) }
+                        archive_warning_string: ArchiveConfig.WARNING_DEFAULT_TAG_NAME) }
 
     it "redirects to referer with an error for non-ajax requests" do
       referer = root_path
