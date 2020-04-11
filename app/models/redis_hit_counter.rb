@@ -102,26 +102,26 @@ class RedisHitCounter
     "temporary:#{redis.incr('temporary:index')}"
   end
 
-  # Scan a hash in redis batch-by-batch.
-  def scan_hash_in_batches(key)
+  # Scan a redis object stored at the given key using the provided scan_method.
+  # (Typically hscan or sscan.) Yields the contents of the object in batches.
+  def scan_in_batches(scan_method, key, &block)
     cursor = "0"
 
     loop do
-      cursor, batch = redis.hscan(key, cursor, count: batch_size)
-      yield batch
+      cursor, batch = redis.send(scan_method, key, cursor, count: batch_size)
+      block.call(batch)
       break if cursor == "0"
     end
   end
 
-  # Scan a set in redis batch-by-batch.
-  def scan_set_in_batches(key)
-    cursor = "0"
+  # Scan a hash in redis batch-by-batch.
+  def scan_hash_in_batches(key, &block)
+    scan_in_batches(:hscan, key, &block)
+  end
 
-    loop do
-      cursor, batch = redis.sscan(key, cursor, count: batch_size)
-      yield batch
-      break if cursor == "0"
-    end
+  # Scan a set in redis batch-by-batch.
+  def scan_set_in_batches(key, &block)
+    scan_in_batches(:sscan, key, &block)
   end
 
   public
