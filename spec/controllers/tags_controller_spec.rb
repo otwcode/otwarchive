@@ -174,8 +174,6 @@ describe TagsController do
   end
 
   describe "show_hidden" do
-    render_views
-
     let(:archive_warning) { create(:archive_warning) }
     let(:fandom1) { create(:fandom, canonical: true) }
     let(:freeform1) { create(:freeform, canonical: false) }
@@ -187,45 +185,17 @@ describe TagsController do
                         character_string: "#{character1.name},#{character2.name}",
                         freeform_string: freeform1.name,
                         archive_warning_string: archive_warning.name) }
-    let(:html_regex) { /replaceWith\("(?<html>.*)"\);/ }
 
-    it "redirects to referer with an error for HTML format" do
+    it "redirects to referer with an error for non-ajax requests" do
       referer = root_path
       request.headers["HTTP_REFERER"] = referer
       get :show_hidden, params: { creation_type: "Work", tag_type: "warnings", creation_id: work.id }
       it_redirects_to_with_error(referer, "Sorry, you need to have JavaScript enabled for this.")
     end
 
-    it "returns a jquery callback to replace the caller with a list of warnings tags" do
+    it "returns successfully for ajax requests" do
       get :show_hidden, xhr: true, params: { creation_type: "Work", tag_type: "warnings", creation_id: work.id }
       expect(response).to have_http_status(:success)
-
-      if html_regex =~ response.body
-        # Unescape javascript string and parse with Capybara
-        html = JSON.parse("\"#{Regexp.last_match(:html)}\"")
-        node = Capybara.string html
-        link_node = node.find("li.warnings > strong > a")
-        expect(link_node.text).to eq(archive_warning.name)
-        expect(link_node[:href]).to eq(tag_works_path(archive_warning))
-      else
-        raise "No html found"
-      end
-    end
-
-    it "returns a jquery callback to replace the caller with a list of freeform tags" do
-      get :show_hidden, xhr: true, params: { creation_type: "Work", tag_type: "freeforms", creation_id: work.id }
-      expect(response).to have_http_status(:success)
-
-      if html_regex =~ response.body
-        # Unescape javascript string and parse with Capybara
-        html = JSON.parse("\"#{Regexp.last_match(:html)}\"")
-        node = Capybara.string html
-        link_node = node.find("li.freeforms > a")
-        expect(link_node.text).to eq(freeform1.name)
-        expect(link_node[:href]).to eq(tag_works_path(freeform1))
-      else
-        raise "No html found"
-      end
     end
   end
 
