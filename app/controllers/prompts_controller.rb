@@ -148,7 +148,6 @@ class PromptsController < ApplicationController
       flash[:notice] = ts("Prompt was successfully updated.")
       redirect_to collection_signup_path(@collection, @challenge_signup)
     else
-      flash[:error] = ts("This change does not comply with sign-up rules, sorry. For more details, try using \"Edit Sign-up\".")
       render action: :edit
     end
   end
