@@ -60,6 +60,17 @@ Feature: Hit Counts
       And I go to the work "Hit Count Test"
     Then I should see "Hits:0"
 
+  Scenario: When an admin views a draft, it doesn't increment the hit count
+    Given I am logged in as a random user
+      And the draft "Hit Count Test"
+      And I am logged in as an admin
+      And all hit count information is reset
+    When I go to the work "Hit Count Test"
+      And I wait 1 second
+      And the hit counts for all works are updated
+      And I go to the work "Hit Count Test"
+    Then I should see "Hits:0"
+
   Scenario: Viewing the first chapter logged-in increments the hit count
     Given the chaptered work "Hit Count Test"
       And all hit count information is reset

@@ -1,4 +1,7 @@
-<% unless @work.in_unrevealed_collection? || @work.hidden_by_admin? || current_user&.is_author_of?(@work) %>
+<% unless @work.in_unrevealed_collection? ||
+          @work.hidden_by_admin? ||
+          !@work.posted? ||
+          current_user&.is_author_of?(@work) %>
   <% content_for :footer_js do %>
     <script>
       $j(document).on("loadedCSRF", function() {
