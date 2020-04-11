@@ -49,18 +49,22 @@ Feature: Get messages in the inbox
       And I press "Filter"
     Then I should not see "guest on Down for the Count"
 
-  Scenario: A user can select a comment by clicking on 'Select' on the inbox page
+  Scenario: I can bulk edit comments in my inbox by clicking 'Select'
     Given I am logged in as "boxer" with password "10987tko"
       And I post the work "The Fight"
       And I set my preferences to turn on messages to my inbox about comments
     When I am logged in as "cutman"
       And I post the comment "You should receive this in your inbox." on the work "The Fight"
+      And I post the comment "A second message for your inbox!" on the work "The Fight"
     When I am logged in as "boxer" with password "10987tko"
       And I go to my inbox page
     Then I should see "cutman on The Fight"
       And I should see "You should receive this in your inbox."
-      And I should see "Unread"
-    When I press "Select"
+      And I should see "A second message for your inbox!"
+      And I should see "Unread" within "li.comment:first-child"
+      And I should see "Unread" within "li.comment:last-child"
+    When I check "Select" within "li.comment:first-child"
+      And I check "Select" within "li.comment:last-child"
       And I press "Mark Read"
     Then I should not see "Unread"
 
