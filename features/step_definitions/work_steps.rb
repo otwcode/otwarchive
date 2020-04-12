@@ -625,7 +625,7 @@ When /^the statistics for the work "([^"]*)" are updated$/ do |title|
 end
 
 When /^the hit counts for all works are updated$/ do
-  wait_for_ajax
+  wait_for_ajax if @javascript
   RedisHitCounter.new.save_recent_counts
 end
 
