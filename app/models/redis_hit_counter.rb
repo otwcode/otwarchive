@@ -142,8 +142,9 @@ class RedisHitCounter
     (Time.now.utc - rollover_hour.hours).to_date.strftime("%Y%m%d")
   end
 
-  # The hour we want the hit counts to rollover at. If someone views the work
-  # shortly before this hour and shortly after, it counts as two hits.
+  # The hour (in UTC time) that we want the hit counts to rollover at. If
+  # someone views the work shortly before this hour and shortly after, it
+  # counts as two hits.
   def rollover_hour
     ArchiveConfig.HIT_COUNT_ROLLOVER_HOUR
   end
