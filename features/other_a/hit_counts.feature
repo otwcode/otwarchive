@@ -36,7 +36,7 @@ Feature: Hit Counts
 
   Scenario: Viewing an unrevealed work doesn't increment the hit count
     Given there is a work "Hit Count Test" in an unrevealed collection "Unrevealed"
-      And I am logged in as "moderator"
+      And I am logged in as the owner of "Unrevealed"
       And all hit count information is reset
     When I go to the work "Hit Count Test"
       And the hit counts for all works are updated
@@ -100,6 +100,7 @@ Feature: Hit Counts
     Given the chaptered work "Hit Count Test"
       And all hit count information is reset
     When I go to the 1st chapter of the work "Hit Count Test"
+      And all AJAX requests are complete
       And I go to the 2nd chapter of the work "Hit Count Test"
       And the hit counts for all works are updated
       And I go to the work "Hit Count Test"
