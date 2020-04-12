@@ -10,7 +10,7 @@ class RedisHitCounter
 
     # Simultaneously add the IP address to the set for this work/date combo,
     # and add the key we're using to the hash mapping from keys to timestamps.
-    added, _ = redis.multi do |multi|
+    added_ip, _added_key = redis.multi do |multi|
       multi.sadd(key, ip_address)
       multi.hset(:keys, key, timestamp)
     end
@@ -18,7 +18,7 @@ class RedisHitCounter
     # If trying to add the IP address resulted in sadd returning true, we know
     # that the user hasn't visited this work recently. So we increment the
     # count of recent hits.
-    redis.hincrby(:recent_counts, work_id, 1) if added
+    redis.hincrby(:recent_counts, work_id, 1) if added_ip
   end
 
   # Moves the current recent_counts hash to a temporary key, and enqueues a job
