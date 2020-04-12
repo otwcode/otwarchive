@@ -25,4 +25,12 @@ class StatCounter < ApplicationRecord
       REDIS_GENERAL.srem('works_to_update_stats', work.id)
     end
   end
+
+  ####################
+  # SCHEDULED JOBS
+  ####################
+
+  def self.perform(method, *args)
+    send(method, *args)
+  end
 end

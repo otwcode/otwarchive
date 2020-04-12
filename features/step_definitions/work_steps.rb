@@ -545,7 +545,7 @@ When /^I post the work$/ do
 end
 
 When /^the statistics for all works are updated$/ do
-  step %{I run the rake task "statistics:update_stats"}
+  StatCounter.stats_to_database
   step %{the hit counts for all works are updated}
 end
 

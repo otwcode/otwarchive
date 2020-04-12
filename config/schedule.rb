@@ -59,10 +59,6 @@ every 1.hour do
   rake "notifications:deliver_subscriptions"
 end
 
-every 30.minutes do
-  rake "statistics:update_stats"
-end
-
 # Move readings from redis to database
 every 10.minutes do
   rake "readings:to_database"
