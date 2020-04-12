@@ -4,7 +4,7 @@ describe HitCountController do
   include RedirectExpectationHelper
 
   let(:work_id) { 42 }
-  let(:ip) { "127.0.0.1" }
+  let(:ip) { Faker::Internet.ip_v4_address }
 
   before do
     allow_any_instance_of(ActionDispatch::Request).to receive(:remote_ip).and_return(ip)

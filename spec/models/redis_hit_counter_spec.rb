@@ -3,7 +3,7 @@ require "spec_helper"
 describe RedisHitCounter do
   let(:hit_counter) { RedisHitCounter.new }
   let(:work_id) { 42 }
-  let(:ip_address) { "127.0.0.1" }
+  let(:ip_address) { Faker::Internet.ip_v4_address }
 
   describe "#current_timestamp" do
     it "returns the previous date at 2:59 AM UTC" do
