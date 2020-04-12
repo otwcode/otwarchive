@@ -7,16 +7,12 @@ Feature: Hit Counts
   # step because logging in/logging out may result in the user being redirected
   # to the page that the user was just on, i.e. the work whose hit count we're
   # trying to test.
-  #
-  # We also use the "I wait 1 second" step to make sure that the browser has
-  # enough time to access the hit_count endpoint.
 
   Scenario: When the owner views their own work, it doesn't increment the hit count
     Given the work "Hit Count Test"
       And I am logged in as the author of "Hit Count Test"
       And all hit count information is reset
     When I go to the work "Hit Count Test"
-      And I wait 1 second
       And the hit counts for all works are updated
       And I go to the work "Hit Count Test"
     Then I should see "Hits:0"
@@ -26,7 +22,6 @@ Feature: Hit Counts
       And I am logged in as "viewer"
       And all hit count information is reset
     When I go to the work "Hit Count Test"
-      And I wait 1 second
       And the hit counts for all works are updated
       And I go to the work "Hit Count Test"
     Then I should see "Hits:1"
@@ -35,7 +30,6 @@ Feature: Hit Counts
     Given the work "Hit Count Test"
       And all hit count information is reset
     When I go to the work "Hit Count Test"
-      And I wait 1 second
       And the hit counts for all works are updated
       And I go to the work "Hit Count Test"
     Then I should see "Hits:1"
@@ -45,7 +39,6 @@ Feature: Hit Counts
       And I am logged in as "moderator"
       And all hit count information is reset
     When I go to the work "Hit Count Test"
-      And I wait 1 second
       And the hit counts for all works are updated
       And I go to the work "Hit Count Test"
     Then I should see "Hits:0"
@@ -55,7 +48,6 @@ Feature: Hit Counts
       And I am logged in as an admin
       And all hit count information is reset
     When I go to the work "Hit Count Test"
-      And I wait 1 second
       And the hit counts for all works are updated
       And I go to the work "Hit Count Test"
     Then I should see "Hits:0"
@@ -66,7 +58,6 @@ Feature: Hit Counts
       And I am logged in as an admin
       And all hit count information is reset
     When I go to the work "Hit Count Test"
-      And I wait 1 second
       And the hit counts for all works are updated
       And I go to the work "Hit Count Test"
     Then I should see "Hits:0"
@@ -76,7 +67,6 @@ Feature: Hit Counts
       And all hit count information is reset
       And I am logged in as "viewer"
     When I go to the 1st chapter of the work "Hit Count Test"
-      And I wait 1 second
       And the hit counts for all works are updated
       And I go to the work "Hit Count Test"
     Then I should see "Hits:1"
@@ -85,7 +75,6 @@ Feature: Hit Counts
     Given the chaptered work "Hit Count Test"
       And all hit count information is reset
     When I go to the 1st chapter of the work "Hit Count Test"
-      And I wait 1 second
       And the hit counts for all works are updated
       And I go to the work "Hit Count Test"
     Then I should see "Hits:1"
@@ -95,7 +84,6 @@ Feature: Hit Counts
       And I am logged in as "viewer"
       And all hit count information is reset
     When I go to the 2nd chapter of the work "Hit Count Test"
-      And I wait 1 second
       And the hit counts for all works are updated
       And I go to the work "Hit Count Test"
     Then I should see "Hits:1"
@@ -104,7 +92,6 @@ Feature: Hit Counts
     Given the chaptered work "Hit Count Test"
       And all hit count information is reset
     When I go to the 2nd chapter of the work "Hit Count Test"
-      And I wait 1 second
       And the hit counts for all works are updated
       And I go to the work "Hit Count Test"
     Then I should see "Hits:1"
@@ -114,7 +101,6 @@ Feature: Hit Counts
       And all hit count information is reset
     When I go to the 1st chapter of the work "Hit Count Test"
       And I go to the 2nd chapter of the work "Hit Count Test"
-      And I wait 1 second
       And the hit counts for all works are updated
       And I go to the work "Hit Count Test"
     Then I should see "Hits:1"
@@ -123,7 +109,6 @@ Feature: Hit Counts
     Given the chaptered work "Hit Count Test"
       And all hit count information is reset
     When I go to the work "Hit Count Test" in full mode
-      And I wait 1 second
       And the hit counts for all works are updated
       And I go to the work "Hit Count Test"
     Then I should see "Hits:1"
