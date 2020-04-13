@@ -132,12 +132,14 @@ end
 def clean_the_database
   # Now clear memcached
   Rails.cache.clear
-  # Now reset redis ...
+
+  # Clear Redis
+  REDIS_AUTOCOMPLETE.flushall
   REDIS_GENERAL.flushall
+  REDIS_HITS.flushall
   REDIS_KUDOS.flushall
   REDIS_RESQUE.flushall
   REDIS_ROLLOUT.flushall
-  REDIS_AUTOCOMPLETE.flushall
 end
 
 def run_all_indexing_jobs
