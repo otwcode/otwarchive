@@ -52,7 +52,6 @@ Feature: Get messages in the inbox
   Scenario: I can bulk edit comments in my inbox by clicking 'Select'
     Given I am logged in as "boxer"
       And I post the work "The Fight"
-      And I set my preferences to turn on messages to my inbox about comments
     When I am logged in as "cutman"
       And I post the comment "You should receive this in your inbox." on the work "The Fight"
       And I post the comment "A second message for your inbox!" on the work "The Fight"
