@@ -193,6 +193,7 @@ class PromptsController < ApplicationController
       :any_archive_warning,
       tag_set_attributes: [
         :fandom_tagnames,
+        :id,
         :updated_at,
         :character_tagnames,
         :relationship_tagnames,

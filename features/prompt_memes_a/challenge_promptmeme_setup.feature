@@ -172,7 +172,7 @@ Feature: Prompt Meme Challenge
   Then I should see "Edit"
     And I should see "Delete"
   
-  Scenario: Edit individual prompt via signup show
+  Scenario: Edit individual prompt and get invalid update error
   
   Given I have Battle 12 prompt meme fully set up
     And I am logged in as "myname1"
@@ -181,6 +181,8 @@ Feature: Prompt Meme Challenge
   When I follow "Edit Prompt"
   Then I should see single prompt editing
   And I should see "Edit Sign-up"
+  When I change my Battle 12 signup to invalid combination A2
+  Then I should see errors
  
  Scenario: Add one new prompt to existing signup
   
