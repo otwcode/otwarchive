@@ -853,6 +853,13 @@ class Tag < ApplicationRecord
   # parent).
   def transfer_or_remove_associations
     transaction do
+      # Try to prevent some concurrency issues.
+      lock!
+
+      # Abort if the tag has changed back to being canonical between the time
+      # this was enqueued and the time it ran.
+      return if self.canonical?
+
       add_associations_to_merger if self.merger&.canonical?
 
       self.mergers.find_each { |tag| tag.update(merger_id: nil) }
