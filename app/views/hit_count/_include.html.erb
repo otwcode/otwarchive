@@ -1,4 +1,4 @@
-<% unless RedisHitCounter.new.prevent_hits?(@work) || current_user&.is_author_of?(@work) %>
+<% unless RedisHitCounter.prevent_hits?(@work) || current_user&.is_author_of?(@work) %>
   <% content_for :footer_js do %>
     <script>
       $j(document).on("loadedCSRF", function() {

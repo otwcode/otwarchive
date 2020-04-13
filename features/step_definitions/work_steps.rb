@@ -626,11 +626,11 @@ end
 
 When /^the hit counts for all works are updated$/ do
   step "all AJAX requests are complete"
-  RedisHitCounter.new.save_recent_counts
+  RedisHitCounter.save_recent_counts
 end
 
 When /^all hit count information is reset$/ do
-  redis = RedisHitCounter.new.redis
+  redis = RedisHitCounter.redis
   redis.keys.each do |key|
     redis.del(key)
   end

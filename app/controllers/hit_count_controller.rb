@@ -11,7 +11,7 @@ class HitCountController < ApplicationController
         if ENV["REQUEST_FROM_BOT"]
           head :forbidden
         else
-          RedisHitCounter.new.add(
+          RedisHitCounter.add(
             params[:work_id].to_i,
             request.remote_ip
           )
