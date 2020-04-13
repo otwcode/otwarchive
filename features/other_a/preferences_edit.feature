@@ -104,6 +104,7 @@ Feature: Edit preferences
   by-case basis.
 
   Given I limit myself to the Archive
+    And a canonical freeform "Scary tag"
     And I am logged in as "someone_else"
     And I post the work "Someone Else's Work" as part of a series "A Series"
     And I am logged in as "tester"
