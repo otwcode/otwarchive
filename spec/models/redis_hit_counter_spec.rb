@@ -81,21 +81,71 @@ describe RedisHitCounter do
   end
 
   describe "#save_recent_counts" do
-    let!(:stat_counter) { StatCounter.create(work_id: work_id, hit_count: 3) }
+    let(:work_id) { work.id }
+    let(:stat_counter) { work.stat_counter }
 
-    it "updates the stat counters from redis" do
+    before do
+      stat_counter.update(hit_count: 3)
       hit_counter.redis.hset("recent_counts", work_id, 10)
-      hit_counter.save_recent_counts
-
-      expect(stat_counter.reload.hit_count).to eq(13)
     end
 
-    it "clears the recent counts hash" do
-      hit_counter.redis.hset("recent_counts", work_id, 10)
-      hit_counter.save_recent_counts
+    shared_examples "clears the recent counts hash" do
+      it "clears the recent counts hash" do
+        hit_counter.save_recent_counts
 
-      expect(hit_counter.redis.hgetall("recent_counts")).to \
-        eq({})
+        expect(hit_counter.redis.hgetall("recent_counts")).to \
+          eq({})
+      end
+    end
+
+    context "when the work is visible" do
+      let(:work) { create(:posted_work) }
+
+      it "updates the stat counters from redis" do
+        hit_counter.save_recent_counts
+
+        expect(stat_counter.reload.hit_count).to eq(13)
+      end
+
+      include_examples "clears the recent counts hash"
+    end
+
+    shared_examples "doesn't add the hits" do
+      it "doesn't add the hits" do
+        hit_counter.save_recent_counts
+
+        expect(stat_counter.reload.hit_count).to eq(3)
+      end
+    end
+
+    context "when the work is a draft" do
+      let(:work) { create(:draft) }
+
+      include_examples "doesn't add the hits"
+      include_examples "clears the recent counts hash"
+    end
+
+    context "when the work is hidden by an admin" do
+      let(:work) { create(:posted_work, hidden_by_admin: true) }
+
+      include_examples "doesn't add the hits"
+      include_examples "clears the recent counts hash"
+    end
+
+    context "when the work is in an unrevealed collection" do
+      let(:collection) { create(:unrevealed_collection) }
+      let(:work) { create(:posted_work, collections: [collection]) }
+
+      include_examples "doesn't add the hits"
+      include_examples "clears the recent counts hash"
+    end
+
+    context "when the work doesn't exist" do
+      let(:work_id) { 42 }
+      let(:stat_counter) { StatCounter.create(work_id: work_id) }
+
+      include_examples "doesn't add the hits"
+      include_examples "clears the recent counts hash"
     end
   end
 

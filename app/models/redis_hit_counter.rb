@@ -64,9 +64,10 @@ class RedisHitCounter
   def save_batch_hit_counts(batch)
     StatCounter.transaction do
       batch.each do |work_id, value|
+        work = Work.find_by(id: work_id)
         stat_counter = StatCounter.lock.find_by(work_id: work_id)
 
-        next if stat_counter.nil?
+        next if prevent_hits?(work) || stat_counter.nil?
 
         stat_counter.update(hit_count: stat_counter.hit_count + value.to_i)
       end
@@ -152,6 +153,14 @@ class RedisHitCounter
   # The size of the batches to be retrieved from redis.
   def batch_size
     ArchiveConfig.HIT_COUNT_BATCH_SIZE
+  end
+
+  # Check whether the work should allow hits at the moment:
+  def prevent_hits?(work)
+    work.nil? ||
+      work.in_unrevealed_collection ||
+      work.hidden_by_admin ||
+      !work.posted
   end
 
   ####################
