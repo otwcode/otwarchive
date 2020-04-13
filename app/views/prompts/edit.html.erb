@@ -9,16 +9,9 @@
 <!--/subnav-->
 
 <!--main content-->
-
-<% unless @prompt.errors.empty? %>
-    <div class="error">
-      <h4 class="heading"><%= ts("There were some problems with this submission. Please correct the mistakes below.") %></h4>
-    </div>
-  <% end %>
-
-<%= error_messages_for @prompt %>
-
 <%= form_for @prompt, :as => :prompt, :url => collection_prompt_path(@collection, @prompt), :html => {:method => :put} do |form| %>
+  <p class="required notice"><%= ts("* Required information") %></p>
+  <%= error_messages_for @prompt %>
   <%= render "prompt_form", :form => form, :required => true, :index => @index %>
   <%= submit_fieldset form %>
 <% end %>
