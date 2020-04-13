@@ -50,13 +50,13 @@ Feature: Get messages in the inbox
     Then I should not see "guest on Down for the Count"
 
   Scenario: I can bulk edit comments in my inbox by clicking 'Select'
-    Given I am logged in as "boxer" with password "10987tko"
+    Given I am logged in as "boxer"
       And I post the work "The Fight"
       And I set my preferences to turn on messages to my inbox about comments
     When I am logged in as "cutman"
       And I post the comment "You should receive this in your inbox." on the work "The Fight"
       And I post the comment "A second message for your inbox!" on the work "The Fight"
-    When I am logged in as "boxer" with password "10987tko"
+    When I am logged in as "boxer"
       And I go to my inbox page
     Then I should see "cutman on The Fight"
       And I should see "You should receive this in your inbox."
