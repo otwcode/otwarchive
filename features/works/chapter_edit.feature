@@ -145,12 +145,15 @@ Feature: Edit chapters
     And I should see "Chapter 4"
     And I should see "last chapter" within "#chapter-1"
 
-  # create a draft chapter and post it
+  # create a draft chapter and post it, and verify it shows up on the
+  # rearrange page
   When I am logged in as "epicauthor" with password "password"
     And a draft chapter is added to "New Epic Work"
   When I view the work "New Epic Work"
     And I follow "Edit"
   Then I should see "5 (Draft)"
+  When I follow "Manage Chapters"
+  Then I should see "Chapter 5"
   When I view the work "New Epic Work"
     Then I should see "4/5"
   When I select "5." from "selected_id"
