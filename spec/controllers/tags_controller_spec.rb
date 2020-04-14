@@ -174,41 +174,20 @@ describe TagsController do
   end
 
   describe "show_hidden" do
-    let!(:fandom1) { create(:fandom, canonical: true) }
-    let!(:freeform1) { create(:freeform, canonical: false) }
-    let!(:character1) { create(:character, canonical: false) }
-    let!(:character2) { create(:character, canonical: false) }
-    let!(:work) do
-      create(:work,
-             posted: true,
-             fandom_string: fandom1.name,
-             character_string: "#{character1.name},#{character2.name}",
-             freeform_string: freeform1.name,
-             archive_warning_string: ArchiveConfig.WARNING_DEFAULT_TAG_NAME)
-    end
+    let(:work) { create(:work, posted: true) }
 
     it "redirects to referer with an error for non-ajax warnings requests" do
-      referer = root_path
+      referer = tags_path
       request.headers["HTTP_REFERER"] = referer
       get :show_hidden, params: { creation_type: "Work", tag_type: "warnings", creation_id: work.id }
       it_redirects_to_with_error(referer, "Sorry, you need to have JavaScript enabled for this.")
     end
 
-    it "returns successfully for ajax warnings requests" do
-      get :show_hidden, xhr: true, params: { creation_type: "Work", tag_type: "warnings", creation_id: work.id }
-      expect(response).to have_http_status(:success)
-    end
-
     it "redirects to referer with an error for non-ajax freeforms requests" do
-      referer = root_path
+      referer = tags_path
       request.headers["HTTP_REFERER"] = referer
       get :show_hidden, params: { creation_type: "Work", tag_type: "freeforms", creation_id: work.id }
       it_redirects_to_with_error(referer, "Sorry, you need to have JavaScript enabled for this.")
-    end
-
-    it "returns successfully for ajax freeforms requests" do
-      get :show_hidden, xhr: true, params: { creation_type: "Work", tag_type: "freeforms", creation_id: work.id }
-      expect(response).to have_http_status(:success)
     end
   end
 
