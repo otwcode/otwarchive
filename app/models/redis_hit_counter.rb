@@ -40,6 +40,10 @@ class RedisHitCounter
     # Go through the set of all keys, and figure out which of them have an
     # outdated timestamp. Delete all such keys.
     def remove_outdated_keys
+      # NOTE: It's perfectly safe to convert the timestamp to an integer to be
+      # able to compare with other timestamps, as we're doing here. However,
+      # the integers shouldn't be used in any other way (e.g. subtraction,
+      # addition, etc.) since they won't behave the way you'd expect dates to.
       last_timestamp = current_timestamp.to_i
 
       scan_hash_in_batches(:keys) do |batch|
