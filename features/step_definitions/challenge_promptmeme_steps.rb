@@ -259,11 +259,6 @@ When /^I sign up for Battle 12 with combination E$/ do
     step "I press \"Submit\""
 end
 
-When /^I change my Battle 12 signup to invalid combination A2$/ do
-  uncheck("Stargate Atlantis")
-  step "I submit"
-end
-
 When /^I sign up for "([^\"]*)" fixed-fandom prompt meme$/ do |title|
   visit collection_path(Collection.find_by(title: title))
   step %{I follow "Sign Up"}
