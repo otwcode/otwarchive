@@ -6,11 +6,12 @@ Before do
   Rails.cache.clear
 
   # Clear Redis
+  REDIS_AUTOCOMPLETE.flushall
   REDIS_GENERAL.flushall
+  REDIS_HITS.flushall
   REDIS_KUDOS.flushall
   REDIS_RESQUE.flushall
   REDIS_ROLLOUT.flushall
-  REDIS_AUTOCOMPLETE.flushall
 
   Indexer.all.map(&:prepare_for_testing)
 end
