@@ -139,7 +139,7 @@ class RedisHitCounter
     def redis
       @redis ||= Redis::Namespace.new(
         "hit_count",
-        redis: REDIS_GENERAL
+        redis: REDIS_HITS
       )
     end
 
