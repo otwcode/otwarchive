@@ -134,7 +134,7 @@ module NavigationHelpers
       work_path(Work.find_by(title: $1), view_full_work: true)
     when /^the ([\d]+)(?:st|nd|rd|th) chapter of the work "(.*?)"$/
       work = Work.find_by(title: $2)
-      chapter = work.chapters_in_order[$1.to_i - 1]
+      chapter = work.chapters_in_order(include_content: false)[$1.to_i - 1]
       work_chapter_path(work, chapter)
     when /^the bookmarks page for user "(.*)" with pseud "(.*)"$/i
       step %{all indexing jobs have been run}
