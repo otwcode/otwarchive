@@ -65,8 +65,8 @@ content notice to visitors who are not logged in
     And I follow the recent chapter link for the work "WIP"
   Then I should see "adult content"
   When I follow "Proceed"
+    And the hit counts for all works are updated
   Then I should be on the 3rd chapter of the work "WIP"
-    And I should see "Hits: 1"
 
 Scenario: The recent chapter link in a work's blurb should honor the logged-in
 user's "Show me adult content without checking" preference
