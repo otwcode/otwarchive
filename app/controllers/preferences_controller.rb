@@ -64,7 +64,8 @@ class PreferencesController < ApplicationController
       :recipient_emails_off,
       :history_enabled,
       :first_login,
-      :banner_seen
+      :banner_seen,
+      :allow_cocreator
     )
   end
 end

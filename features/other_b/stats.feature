@@ -14,7 +14,15 @@ Feature: User statistics
   
   Given I am logged in as "NUMB3RSfan"
     And I post the work "Don Solves Crime"
+    And I post the work "Don Solves More Crime"
     And I set up the draft "Charlie Helps"
-  When I go to my stats page
-  Then I should see "Don Solves Crime"
+  When I am logged in as "reader"
+    And I view the work "Don Solves Crime"
+    And I am logged in as "NUMB3RSfan"
+    And I go to my stats page
+  Then "Don Solves Crime" should appear before "Don Solves More Crime"
     And I should not see "Charlie Helps"
+  When I follow "Date"
+  Then "Don Solves More Crime" should appear before "Don Solves Crime"
+  When I follow "Date"
+  Then "Don Solves Crime" should appear before "Don Solves More Crime"

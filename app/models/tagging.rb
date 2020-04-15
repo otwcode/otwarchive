@@ -3,7 +3,6 @@ class Tagging < ApplicationRecord
   belongs_to :taggable, polymorphic: true, touch: true
 
   validates_presence_of :tagger
-  validates_associated :taggable
   before_destroy :remove_filter_tagging
   before_save :add_filter_taggings
 

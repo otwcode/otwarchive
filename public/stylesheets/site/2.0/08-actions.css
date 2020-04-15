@@ -150,6 +150,10 @@ ul#skiplinks, .landmark, .landmark a, .index .heading.landmark {
 
 /* CONTEXTS */
 
+legend .action:link {
+  position: static;
+}
+
 .heading .actions, .heading .action, .heading span.actions {
   height: auto;
   font: 100 75%/1.286 'Lucida Grande', 'Lucida Sans Unicode', 'GNU Unifont', Verdana, Helvetica, sans-serif;

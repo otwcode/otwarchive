@@ -98,10 +98,10 @@
   <div id="comments_placeholder" <% unless params[:show_comments] || params[:tag_id] %>style="display:none;"<% end %>>
     <% if params[:show_comments] || params[:tag_id] %>
       <% @comments = commentable.comments.reviewed.page(params[:page]) %>
-      <%= will_paginate @comments %>
+      <%= will_paginate @comments, params: { anchor: :comments } %>
       <%= render 'comments/comment_thread', { :depth => 0, :comments => @comments } %>
       </ol><!-- need to tack this on to close thread -->
-      <%= will_paginate @comments %>
+      <%= will_paginate @comments, params: { anchor: :comments } %>
     <% end %>
   </div>
 
@@ -116,7 +116,7 @@
       <% @bookmark ||= bookmark_if_exists(commentable) %>
       <% bookmarkable = (commentable.respond_to?(:work) ? commentable.work : commentable) %>
       <% if @bookmark %>
-        <%= render "bookmarks/bookmark_form", :bookmarkable => bookmarkable, :bookmark => @bookmark, :button_name => ts("Edit"), :action => :update, :in_page => true %>
+        <%= render "bookmarks/bookmark_form", :bookmarkable => bookmarkable, :bookmark => @bookmark, :button_name => ts("Update"), :action => :update, :in_page => true %>
       <% else %>
         <%= render "bookmarks/bookmark_form", :bookmarkable => bookmarkable, :bookmark => Bookmark.new, :button_name => ts("Create"), :action => :create, :in_page => true %>
       <% end %>
