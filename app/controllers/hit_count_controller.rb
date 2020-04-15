@@ -5,6 +5,12 @@
 # database queries. We want this action to avoid hitting the database if at
 # all possible.
 class HitCountController < ApplicationController
+  skip_before_action :set_current_user,
+                     :logout_if_not_user_credentials
+
+  skip_after_action :ensure_user_credentials,
+                    :ensure_admin_credentials
+
   def create
     respond_to do |format|
       format.json do

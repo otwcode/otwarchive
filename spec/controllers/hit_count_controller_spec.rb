@@ -11,6 +11,15 @@ describe HitCountController do
   end
 
   describe "POST #create" do
+    it "doesn't check authentication" do
+      expect(controller).not_to receive(:logged_in?)
+      expect(controller).not_to receive(:current_user)
+      expect(controller).not_to receive(:logged_in_as_admin?)
+      expect(controller).not_to receive(:current_admin)
+
+      post :create, params: { work_id: work_id, format: :json }
+    end
+
     it "doesn't perform any database queries" do
       expect(ActiveRecord::Base.connection).not_to receive(:exec_query)
       expect(ActiveRecord::Base.connection).not_to receive(:exec_update)
