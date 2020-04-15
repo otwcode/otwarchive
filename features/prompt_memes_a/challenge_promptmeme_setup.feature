@@ -184,6 +184,7 @@ Feature: Prompt Meme Challenge
   When I uncheck "Stargate Atlantis"
     And I press "Update"
   Then I should see "Sorry! We couldn't save this request because:"
+    And I should see "Your Request must include exactly 1 fandom tags"
  
  Scenario: Add one new prompt to existing signup
   
