@@ -45,10 +45,10 @@ describe ChaptersController do
         expect(response).to render_template(:manage)
       end
 
-      it "assigns @chapters to only posted chapters" do
-        create(:chapter, :draft, work: work)
+      it "assigns @chapters to include draft works" do
+        chapter = create(:chapter, :draft, work: work, position: 2)
         get :manage, params: { work_id: work.id }
-        expect(assigns[:chapters]).to eq([work.chapters.first])
+        expect(assigns[:chapters]).to eq([work.chapters.first, chapter])
       end
 
       it "assigns @chapters to chapters in order" do
