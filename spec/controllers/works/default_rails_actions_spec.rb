@@ -232,10 +232,6 @@ describe WorksController, work_search: true do
   describe "show" do
     let(:work) { create(:posted_work) }
 
-    before(:each) do
-      REDIS_GENERAL.set("work_stats:#{work.id}:last_visitor", nil)
-    end
-
     it "doesn't error when a work has no fandoms" do
       work_no_fandoms = create(:posted_work, fandoms: [])
       fake_login
@@ -243,58 +239,6 @@ describe WorksController, work_search: true do
       get :show, params: { id: work_no_fandoms.id }
 
       expect(assigns(:page_title)).to include "No fandom specified"
-    end
-
-    context "when visited by a logged-out user" do
-      it "increments the hit count" do
-        expect do
-          get :show, params: { id: work.id }
-        end.to change { REDIS_GENERAL.get("work_stats:#{work.id}:hit_count").to_i }.by(1)
-      end
-    end
-
-    context "when visited by a logged-in user who is not a (co-)creator" do
-      it "increments the hit count" do
-        fake_login
-
-        expect do
-          get :show, params: { id: work.id }
-        end.to change { REDIS_GENERAL.get("work_stats:#{work.id}:hit_count").to_i }.by(1)
-      end
-    end
-
-    context "when visited by the creator of the work" do
-      it "does not increment the hit count" do
-        fake_login_known_user(work.pseuds.first.user)
-
-        expect do
-          get :show, params: { id: work.id }
-        end.not_to change { REDIS_GENERAL.get("work_stats:#{work.id}:hit_count").to_i }
-      end
-    end
-
-    context "when the work is part of an unrevealed collection" do
-      it "does not increment the hit count" do
-        work.update!(in_unrevealed_collection: true)
-        fake_login
-
-        expect do
-          get :show, params: { id: work.id }
-        end.not_to change { REDIS_GENERAL.get("work_stats:#{work.id}:hit_count").to_i }
-      end
-    end
-
-    context "when the work is hidden by an admin" do
-      let(:admin) { create(:admin) }
-
-      it "does not increment the hit count" do
-        work.update!(hidden_by_admin: true)
-        fake_login_admin(admin)
-
-        expect do
-          get :show, params: { id: work.id }
-        end.not_to change { REDIS_GENERAL.get("work_stats:#{work.id}:hit_count").to_i }
-      end
     end
   end
 

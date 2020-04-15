@@ -672,6 +672,13 @@ namespace :After do
     end
     puts && STDOUT.flush
   end
+
+  desc "Clean up the Redis info from the old hit count code."
+  task(remove_old_redis_hit_count_data: :environment) do
+    REDIS_GENERAL.scan_each(match: "work_stats:*") do |key|
+      REDIS_GENERAL.del(key)
+    end
+  end
 end # this is the end that you have to put new tasks above
 
 ##################

@@ -113,7 +113,7 @@ Given(/^I have the Battle set loaded$/) do
   step %{mod fulfills claim}
   step %{I reveal the "Battle 12" challenge}
   step %{I am logged in as "myname4"}
-  step %{the statistics_tasks rake task is run}
+  step %{the statistics for all works are updated}
   step %{all indexing jobs have been run}
 end
 
@@ -126,7 +126,7 @@ Given /^the chaptered work(?: with ([\d]+) chapters)?(?: with ([\d]+) comments?)
   step %{I am logged in as a random user}
   step %{I post the work "#{title}"}
   work = Work.find_by(title: title)
-  visit work_url(work)
+  visit work_path(work)
   n_chapters ||= 2
   (n_chapters.to_i - 1).times do |i|
     step %{I follow "Add Chapter"}
@@ -138,7 +138,7 @@ Given /^the chaptered work(?: with ([\d]+) chapters)?(?: with ([\d]+) comments?)
   work = Work.find_by(title: title)
   n_comments.to_i.times do |i|
     step %{I am logged in as a random user}
-    visit work_url(work)
+    visit work_path(work)
     fill_in("comment[comment_content]", with: "Bla bla")
     click_button("Comment")
     step %{I am logged out}
@@ -554,9 +554,10 @@ When /^I post the work$/ do
   click_button "Post"
   step %{all indexing jobs have been run}
 end
-When /^the statistics_tasks rake task is run$/ do
-  step %{I run the rake task "statistics:update_stat_counters"}
-  step %{I run the rake task "statistics:update_stats"}
+
+When /^the statistics for all works are updated$/ do
+  StatCounter.stats_to_database
+  step %{the hit counts for all works are updated}
 end
 
 When /^I add the co-author "([^"]*)" to the work "([^"]*)"$/ do |coauthor, work|
@@ -633,11 +634,23 @@ When /^I follow the recent chapter link for the work "([^\"]*)"$/ do |work|
 end
 
 When /^the statistics for the work "([^"]*)" are updated$/ do |title|
-  step %{the statistics_tasks rake task is run}
+  step %{the statistics for all works are updated}
   step %{all indexing jobs have been run}
   work = Work.find_by(title: title)
   # Touch the work to actually expire the cache
   work.touch
+end
+
+When /^the hit counts for all works are updated$/ do
+  step "all AJAX requests are complete"
+  RedisHitCounter.save_recent_counts
+end
+
+When /^all hit count information is reset$/ do
+  redis = RedisHitCounter.redis
+  redis.keys.each do |key|
+    redis.del(key)
+  end
 end
 
 ### THEN

@@ -5,7 +5,6 @@ class Work < ApplicationRecord
   include Bookmarkable
   include Searchable
   include BookmarkCountCaching
-  include WorkStats
   include WorkChapterCountCaching
   include ActiveModel::ForbiddenAttributesProtection
   include Creatable
@@ -952,6 +951,15 @@ class Work < ApplicationRecord
     end
   end
 
+  def update_stat_counter
+    counter = self.stat_counter || self.create_stat_counter
+    counter.update_attributes(
+      kudos_count: self.kudos.count,
+      comments_count: self.count_visible_comments,
+      bookmarks_count: self.bookmarks.where(private: false).count
+    )
+  end
+
   ########################################################################
   # RELATED WORKS
   # These are for inspirations/remixes/etc
@@ -1238,6 +1246,10 @@ class Work < ApplicationRecord
   end
   def bookmarks_count
     self.stat_counter.bookmarks_count
+  end
+
+  def hits
+    stat_counter&.hit_count
   end
 
   def creators
