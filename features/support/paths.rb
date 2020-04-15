@@ -123,9 +123,19 @@ module NavigationHelpers
       step %{all indexing jobs have been run}
       user_works_path(user_id: $1)
     when /^the "(.*)" work page/
+      # TODO: Avoid this in favor of 'the work "title"', and eventually remove.
       work_path(Work.find_by(title: $1))
     when /^the work page with title (.*)/
+      # TODO: Avoid this in favor of 'the work "title"', and eventually remove.
       work_path(Work.find_by(title: $1))
+    when /^the work "(.*?)"$/
+      work_path(Work.find_by(title: $1))
+    when /^the work "(.*?)" in full mode$/
+      work_path(Work.find_by(title: $1), view_full_work: true)
+    when /^the ([\d]+)(?:st|nd|rd|th) chapter of the work "(.*?)"$/
+      work = Work.find_by(title: $2)
+      chapter = work.chapters_in_order[$1.to_i - 1]
+      work_chapter_path(work, chapter)
     when /^the bookmarks page for user "(.*)" with pseud "(.*)"$/i
       step %{all indexing jobs have been run}
       user_pseud_bookmarks_path(user_id: $1, pseud_id: $2)

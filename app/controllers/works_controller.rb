@@ -220,7 +220,6 @@ class WorksController < ApplicationController
     end
 
     render :show
-    @work.increment_hit_count(request.remote_ip)
     Reading.update_or_create(@work, current_user) if current_user
   end
 
