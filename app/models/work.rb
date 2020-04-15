@@ -247,7 +247,7 @@ class Work < ApplicationRecord
   end
 
   def self.work_blurb_tag_cache_key(id)
-    "/v2/work_blurb_tag_cache_key/#{id}"
+    "/v3/work_blurb_tag_cache_key/#{id}"
   end
 
   def self.work_blurb_tag_cache(id)
@@ -941,13 +941,13 @@ class Work < ApplicationRecord
   end
 
   def guest_kudos_count
-    Rails.cache.fetch "works/#{id}/guest_kudos_count" do
+    Rails.cache.fetch "works/#{id}/guest_kudos_count-v2" do
       kudos.by_guest.count
     end
   end
 
   def all_kudos_count
-    Rails.cache.fetch "works/#{id}/kudos_count" do
+    Rails.cache.fetch "works/#{id}/kudos_count-v2" do
       kudos.count
     end
   end

@@ -28,7 +28,7 @@ class ChaptersController < ApplicationController
   def show
     @tag_groups = @work.tag_groups
     if params[:view_adult]
-      session[:adult] = true
+      cookies[:view_adult] = "true"
     elsif @work.adult? && !see_adult?
       render "works/_adult", layout: "application" and return
     end
@@ -57,7 +57,7 @@ class ChaptersController < ApplicationController
           @work.anonymous? ? ts("Anonymous") : @work.pseuds.sort.collect(&:byline).join(', '),
           @work.title + " - Chapter " + @chapter.position.to_s)
 
-      @kudos = @work.kudos.with_pseud.includes(pseud: :user).order("created_at DESC")
+      @kudos = @work.kudos.with_user.includes(:user).by_date
 
       if current_user.respond_to?(:subscriptions)
         @subscription = current_user.subscriptions.where(subscribable_id: @work.id,

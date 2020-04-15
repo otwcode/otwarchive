@@ -2,7 +2,7 @@
 
 require "spec_helper"
 
-describe BookmarkSearchForm do
+describe BookmarkSearchForm, bookmark_search: true do
   describe "options" do
     it "includes flags set to false" do
       bsf = BookmarkSearchForm.new(show_restricted: false, show_private: false)

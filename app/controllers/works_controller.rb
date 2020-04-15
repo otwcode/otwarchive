@@ -100,7 +100,7 @@ class WorksController < ApplicationController
         # the subtag is for eg collections/COLL/tags/TAG
         subtag = @tag.present? && @tag != @owner ? @tag : nil
         user = logged_in? || logged_in_as_admin? ? 'logged_in' : 'logged_out'
-        @works = Rails.cache.fetch("#{@owner.works_index_cache_key(subtag)}_#{user}_page#{params[:page]}_true", expires_in: 20.minutes) do
+        @works = Rails.cache.fetch("#{@owner.works_index_cache_key(subtag)}_#{user}_page#{params[:page]}_true", expires_in: ArchiveConfig.SECONDS_UNTIL_WORK_INDEX_EXPIRE.seconds) do
           results = @search.search_results
           # calling this here to avoid frozen object errors
           results.items
@@ -122,7 +122,7 @@ class WorksController < ApplicationController
         end
       end
     elsif use_caching?
-      @works = Rails.cache.fetch('works/index/latest/v1', expires_in: 10.minutes) do
+      @works = Rails.cache.fetch('works/index/latest/v1', expires_in: ArchiveConfig.SECONDS_UNTIL_WORK_INDEX_EXPIRE.seconds) do
         Work.latest.includes(:tags, :external_creatorships, :series, :language, :approved_collections, pseuds: [:user]).to_a
       end
     else
@@ -192,7 +192,7 @@ class WorksController < ApplicationController
 
     # Users must explicitly okay viewing of adult content
     if params[:view_adult]
-      session[:adult] = true
+      cookies[:view_adult] = "true"
     elsif @work.adult? && !see_adult?
       render('_adult', layout: 'application') && return
     end
@@ -206,12 +206,12 @@ class WorksController < ApplicationController
         )
       else
         flash.keep
-        redirect_to([@work, @chapter]) && return
+        redirect_to([@work, @chapter, { only_path: true }]) && return
       end
     end
 
     @tag_categories_limited = Tag::VISIBLE - ['ArchiveWarning']
-    @kudos = @work.kudos.with_pseud.includes(pseud: :user).order('created_at DESC')
+    @kudos = @work.kudos.with_user.includes(:user).by_date
 
     if current_user.respond_to?(:subscriptions)
       @subscription = current_user.subscriptions.where(subscribable_id: @work.id,
@@ -450,9 +450,14 @@ class WorksController < ApplicationController
   def import
     # check to make sure we have some urls to work with
     @urls = params[:urls].split
-
     if @urls.empty?
       flash.now[:error] = ts('Did you want to enter a URL?')
+      render(:new_import) && return
+    end
+
+    @language_id = params[:language_id]
+    if @language_id.empty?
+      flash.now[:error] = ts("Language cannot be blank.")
       render(:new_import) && return
     end
 
@@ -480,6 +485,7 @@ class WorksController < ApplicationController
     end
 
     options = build_options(params)
+    options[:ip_address] = request.remote_ip
 
     # now let's do the import
     if params[:import_multiple] == 'works' && @urls.length > 1

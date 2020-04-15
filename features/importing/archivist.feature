@@ -179,12 +179,11 @@ Feature: Archivist bulk imports
     Then I should see "Create Account"
     When I fill in the sign up form with valid data
     And I press "Create Account"
-    Then I should see "Account Created!"
+    Then I should see "Almost Done!"
 
   Scenario: Orphan a work in response to an invite, leaving name on it
     Given I have an orphan account
     When I import the work "http://ao3testing.dreamwidth.org/593.html" by "randomtestname" with email "random@example.com"
-      And the system processes jobs
     Then 1 email should be delivered to "random@example.com"
       And the email should contain "Claim or remove your works"
     When I am logged out
@@ -192,6 +191,7 @@ Feature: Archivist bulk imports
     Then I should see "Claiming Your Imported Works"
       And I should see "An archive including some of your work(s) has been moved to the Archive of Our Own."
     When I choose "Orphan my works and take my email address off them, but keep my name."
+      And I wait 2 seconds
       And I press "Update"
     Then I should see "Your imported stories have been orphaned. Thank you for leaving them in the archive! Your preferences have been saved."
     When I am logged in
@@ -201,7 +201,6 @@ Feature: Archivist bulk imports
   Scenario: Orphan a work in response to an invite, taking name off it
     Given I have an orphan account
     When I import the work "http://ao3testing.dreamwidth.org/593.html" by "randomtestname" with email "random@example.com"
-      And the system processes jobs
     Then 1 email should be delivered to "random@example.com"
       And the email should contain "Claim or remove your works"
     When I am logged out
@@ -210,6 +209,7 @@ Feature: Archivist bulk imports
       And I should see "An archive including some of your work(s) has been moved to the Archive of Our Own."
     When I choose "Orphan my works and take my email address off them, but keep my name."
       And I check "Assign my works to the AO3 orphan_account, removing both my name and email address."
+      And I wait 2 seconds
       And I press "Update"
     Then I should see "Your imported stories have been orphaned. Thank you for leaving them in the archive! Your preferences have been saved."
     When I am logged in
@@ -254,12 +254,13 @@ Feature: Archivist bulk imports
   Scenario: Should not be able to import for others unless the box is checked
     When I go to the import page
       And I fill in "URLs*" with "http://ao3testing.dreamwidth.org/593.html"
+      And I select "English" from "Choose a language"
       And I fill in "Author Name*" with "ao3testing"
       And I fill in "Author Email Address*" with "ao3testing@example.com"
-    When I press "Import"
+      And I press "Import"
     Then I should see /You have entered an external author name or e-mail address but did not select "Import for others."/
     When I check the 1st checkbox with id matching "importing_for_others"
-    And I press "Import"
+      And I press "Import"
     Then I should see "We have notified the author(s) you imported works for. If any were missed, you can also add co-authors manually."
 
   Scenario: Archivist can't see Open Doors tools

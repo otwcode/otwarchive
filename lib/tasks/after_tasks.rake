@@ -631,6 +631,47 @@ namespace :After do
     end
     puts && STDOUT.flush
   end
+
+  desc "Update each user's kudos with the user's id"
+  task(add_user_id_to_kudos: :environment) do
+    total_users = User.all.size
+    total_batches = (total_users + 999) / 1000
+    puts "Updating #{total_users} users' kudos in #{total_batches} batches"
+
+    User.includes(:pseuds).find_in_batches.with_index do |batch, index|
+      batch_number = index + 1
+      progress_msg = "Batch #{batch_number} of #{total_batches} complete"
+      batch.each do |user|
+        Kudo.where(pseud_id: user.pseud_ids, user_id: nil)
+          .update_all(user_id: user.id)
+      end
+      puts(progress_msg) && STDOUT.flush
+    end
+    puts && STDOUT.flush
+  end
+
+  desc "Update kudo counts on indexed works"
+  task(update_indexed_stat_counter_kudo_count: :environment) do
+    counters = StatCounter.where("kudos_count > ?", 0)
+    total_batches = (counters.size + 999) / 1000
+    batch_number = 0
+
+    counters.find_in_batches do |batch|
+      batch_number += 1
+      progress_msg = "Batch #{batch_number} of #{total_batches} complete"
+      batch.each do |counter|
+        next unless counter.work
+
+        counter.kudos_count = counter.work.kudos.count
+        next unless counter.kudos_count_changed?
+
+        # Counters will be queued for reindexing.
+        counter.save
+      end
+      puts(progress_msg) && STDOUT.flush
+    end
+    puts && STDOUT.flush
+  end
 end # this is the end that you have to put new tasks above
 
 ##################
