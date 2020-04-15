@@ -90,7 +90,7 @@
 <% end %>
 <% #### END CACHE show/hide %>
 
-<% #### CACHE stats #### %>
+<% #### CACHE stats ####, if you update the key edit features/step_definitions/work_search_steps.rb %>
 <% cache("#{work.cache_key}/stats-v2", expires_in: 1.hour, skip_digest: true) do %>
   <% unless work.approved_collections.empty? %>
     <dt class="collections"><%= ts('Collections') %>:</dt>
