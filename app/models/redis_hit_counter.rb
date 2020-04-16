@@ -117,7 +117,7 @@ class RedisHitCounter
 
       loop do
         cursor, batch = redis.send(scan_method, key, cursor, count: batch_size)
-        block.call(batch)
+        block.call(batch) if batch.any?
         break if cursor == "0"
       end
     end
