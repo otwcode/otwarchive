@@ -6,21 +6,16 @@ class RedisHitCounter
     # address hasn't visited the work within the current 24 hour block, we
     # increment the work's hit count. Otherwise, we do nothing.
     def add(work_id, ip_address)
-      timestamp = current_timestamp
-      key = "#{work_id}:#{timestamp}"
+      key = "visits:#{current_timestamp}"
+      visit = "#{work_id}:#{ip_address}"
 
-      # Simultaneously add the IP address to the set for this work/date combo,
-      # and add the key we're using to the hash mapping from keys to
-      # timestamps.
-      added_ip, _added_key = redis.multi do |multi|
-        multi.sadd(key, ip_address)
-        multi.hset(:keys, key, timestamp)
-      end
+      # Add the (work ID, IP address) pair to the set for this date.
+      added_visit = redis.sadd(key, visit)
 
-      # If trying to add the IP address resulted in sadd returning true, we
-      # know that the user hasn't visited this work recently. So we increment
-      # the count of recent hits.
-      redis.hincrby(:recent_counts, work_id, 1) if added_ip
+      # If trying to add the (work ID, IP address) pair resulted in sadd
+      # returning true, we know that the user hasn't visited this work
+      # recently. So we increment the count of recent hits.
+      redis.hincrby(:recent_counts, work_id, 1) if added_visit
     end
 
     # Moves the current recent_counts hash to a temporary key, and enqueues a
@@ -37,19 +32,22 @@ class RedisHitCounter
       async(:save_hit_counts_at_key, temp_key)
     end
 
-    # Go through the set of all keys, and figure out which of them have an
-    # outdated timestamp. Delete all such keys.
-    def remove_outdated_keys
+    # Go through the list of all keys starting with "visits:", compute the
+    # timestamp from the key, and delete the sets associated with any
+    # timestamps from before today.
+    def remove_old_visits
       # NOTE: It's perfectly safe to convert the timestamp to an integer to be
       # able to compare with other timestamps, as we're doing here. However,
       # the integers shouldn't be used in any other way (e.g. subtraction,
       # addition, etc.) since they won't behave the way you'd expect dates to.
       last_timestamp = current_timestamp.to_i
 
-      scan_hash_in_batches(:keys) do |batch|
-        batch.each do |key, timestamp|
-          remove_key(key) if timestamp.to_i < last_timestamp
-        end
+      redis.scan_each(match: "visits:*", count: batch_size) do |key|
+        _, timestamp = key.split(":")
+
+        next unless timestamp.to_i < last_timestamp
+
+        enqueue_remove_set(key)
       end
     end
 
@@ -80,22 +78,27 @@ class RedisHitCounter
       end
     end
 
-    # Removes the set at a given key (by renaming -- an atomic operation to
-    # prevent issues with simultaneous deleting/adding -- and then deleting in
-    # batches). Also removes the key from the set of keys stored in redis.
+    # Remove the set at the given key.
     #
     # Deletion technique adapted from:
     # https://www.redisgreen.net/blog/deleting-large-sets/
-    def remove_key(key)
+    def enqueue_remove_set(key)
       garbage_key = make_garbage_key
 
-      redis.multi do |multi|
-        multi.rename(key, garbage_key)
-        multi.hdel(:keys, key)
-      end
+      # In order to make sure that we're not simultaneously adding to the set
+      # and deleting it, we rename it.
+      redis.rename(key, garbage_key)
 
-      scan_set_in_batches(garbage_key) do |batch|
-        redis.srem(garbage_key, batch)
+      # We use async to perform the deletion because we don't want to lose
+      # track of our garbage. If the key we're removing is in Resque, and the
+      # job fails, it'll be retried until it succeeds.
+      async(:remove_set, garbage_key)
+    end
+
+    # Scan through the given set and delete it batch-by-batch.
+    def remove_set(key)
+      scan_set_in_batches(key) do |batch|
+        redis.srem(key, batch)
       end
     end
 

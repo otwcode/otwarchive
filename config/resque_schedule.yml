@@ -62,9 +62,9 @@ save_recent_counts_to_database:
   args: save_recent_counts
   description: "Save recent hit counts to database."
 
-remove_outdated_hit_count_keys:
+remove_old_hit_count_data:
   cron: "0 12 * * *"
   class: "RedisHitCounter"
   queue: utilities
-  args: remove_outdated_keys
+  args: remove_old_visits
   description: "Remove old hit count information from redis."
