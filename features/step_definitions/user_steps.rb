@@ -109,6 +109,7 @@ Given /^I am logged in as "([^"]*)" with password "([^"]*)"$/ do |login, passwor
   fill_in "Password:", with: password
   check "Remember Me"
   click_button "Log In"
+  step %{I should see "Hi, #{login}!" within "#greeting"}
   step %{confirmation emails have been delivered}
 end
 
