@@ -114,6 +114,7 @@ chapter when the chapters are reordered.
     And I fill in "chapters_1" with "2"
     And I fill in "chapters_2" with "1"
     And I press "Update Positions"
-    And I browse the "Canonical Fandom" works
+  Then I should see "Chapter order has been successfully updated."
+  When I browse the "Canonical Fandom" works
     And I follow the recent chapter link for the work "My WIP"
   Then I should be on the 2nd chapter of the work "My WIP"
