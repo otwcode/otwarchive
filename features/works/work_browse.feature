@@ -99,3 +99,22 @@ whole work by default"
     And I browse the "Canonical Fandom" works
     And I follow the recent chapter link for the work "WIP"
   Then I should be on the 2nd chapter of the work "WIP"
+
+Scenario: The recent chapter link in a work's blurb points to the last posted
+chapter when the chapters are reordered.
+
+  Given I am logged in as a random user
+    And a canonical fandom "Canonical Fandom"
+    And I post the 2 chapter work "My WIP" with fandom "Canonical Fandom"
+  When I browse the "Canonical Fandom" works
+    And I follow the recent chapter link for the work "My WIP"
+  Then I should be on the 2nd chapter of the work "My WIP"
+  When I follow "Edit"
+    And I follow "Manage Chapters"
+    And I fill in "chapter_1" with "2"
+    And I fill in "chapter_2" with "1"
+    And I press "Update Positions"
+    And I browse the "Canonical Fandom" works
+    And I follow the recent chapter link for the work "My WIP"
+  Then I should be on the 2nd chapter of the work "My WIP"
+    And show me the page
