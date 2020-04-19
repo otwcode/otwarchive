@@ -111,10 +111,9 @@ chapter when the chapters are reordered.
   Then I should be on the 2nd chapter of the work "My WIP"
   When I follow "Edit"
     And I follow "Manage Chapters"
-    And I fill in "chapter_1" with "2"
-    And I fill in "chapter_2" with "1"
+    And I fill in "chapters_1" with "2"
+    And I fill in "chapters_2" with "1"
     And I press "Update Positions"
     And I browse the "Canonical Fandom" works
     And I follow the recent chapter link for the work "My WIP"
   Then I should be on the 2nd chapter of the work "My WIP"
-    And show me the page
