@@ -69,10 +69,11 @@ class Chapter < ApplicationRecord
         end
       end
       # We're caching the chapter positions in the comment blurbs and the last
-      # chapter link in the work blurbs so we need to expire them
+      # chapter link in the work blurbs so we need to expire the blurbs and the
+      # work indexes.
       if positions_changed
         work.comments.each{ |c| c.touch }
-        work.touch
+        work.expire_caches
       end
     end
   end
