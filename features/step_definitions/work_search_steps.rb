@@ -258,7 +258,7 @@ end
 
 Given /^a set of works with various access levels for searching$/ do
   # Create a draft
-  FactoryBot.create(:work, title: "Draft Work")
+  FactoryBot.create(:draft, title: "Draft Work")
 
   # Create a work
   FactoryBot.create(:work, title: "Posted Work")
