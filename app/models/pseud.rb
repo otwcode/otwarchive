@@ -112,6 +112,7 @@ class Pseud < ApplicationRecord
 
   scope :alphabetical, -> { order(:name) }
   scope :starting_with, lambda {|letter| where('SUBSTR(name,1,1) = ?', letter)}
+  scope :abbreviated_list, -> { order(is_default: :desc).alphabetical.limit(ArchiveConfig.ITEMS_PER_PAGE) }
 
   def self.not_orphaned
     where("user_id != ?", User.orphan_account)
