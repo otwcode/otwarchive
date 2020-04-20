@@ -8,7 +8,7 @@
       <% pseud_link_text = current_page?(@user) ? ts("Pseuds") : (@author ? @author.name : @user.login) %>
       <a href="#" title="<%= ts("Pseud Switcher") %>"><%= pseud_link_text %></a>
       <ul class="expandable secondary">
-        <%= print_pseud_selector(@user.pseuds) %>
+        <%= print_pseud_selector(@user.pseuds.abbreviated_list) %>
         <li><%= span_if_current ts("All Pseuds (%{pseud_number})", :pseud_number => @user.pseuds.count), user_pseuds_path(@user) %></li>
       </ul>
     </li>
