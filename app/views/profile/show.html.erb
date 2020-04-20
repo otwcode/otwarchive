@@ -8,8 +8,10 @@
 
   <div class="wrapper">
     <dl class="meta">
-      <dt class="pseuds"><%= link_to ts("My pseuds:"), user_pseuds_path(@user) %></dt>
-      <dd class="pseuds"><%= print_pseud_list(@user.pseuds) %></dd>
+      <dt class="pseuds">
+        <%= link_to ts("All my pseuds (%{pseud_number})", :pseud_number => @user.pseuds.count), user_pseuds_path(@user) %>
+      </dt>
+      <dd class="pseuds"><%= print_pseud_list(@user.pseuds.abbreviated_list) %></dd>
       <dt><%= ts("I joined on:") %></dt>
       <dd><%= ts("%{date}", :date => l(@user.created_at.to_date)) %></dd>
       <% if @user.profile.location? %>
