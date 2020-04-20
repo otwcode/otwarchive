@@ -230,10 +230,10 @@ describe WorksController, work_search: true do
   end
 
   describe "show" do
-    let(:work) { create(:posted_work) }
+    let(:work) { create(:work) }
 
     it "doesn't error when a work has no fandoms" do
-      work_no_fandoms = create(:posted_work, fandoms: [])
+      work_no_fandoms = create(:work, fandoms: [])
       fake_login
 
       get :show, params: { id: work_no_fandoms.id }
@@ -245,7 +245,7 @@ describe WorksController, work_search: true do
   describe "index" do
     before do
       @fandom = create(:canonical_fandom)
-      @work = create(:posted_work, fandom_string: @fandom.name)
+      @work = create(:work, fandom_string: @fandom.name)
     end
 
     it "returns the work" do
@@ -267,7 +267,7 @@ describe WorksController, work_search: true do
       it "returns the result with different works the second time" do
         get :index
         expect(assigns(:works)).to include(@work)
-        work2 = create(:posted_work)
+        work2 = create(:work)
         get :index
         expect(assigns(:works)).to include(work2)
       end
@@ -282,7 +282,7 @@ describe WorksController, work_search: true do
         it "returns the same result the second time when a new work is created within the expiration time" do
           get :index
           expect(assigns(:works)).to include(@work)
-          work2 = create(:posted_work)
+          work2 = create(:work)
           run_all_indexing_jobs
           get :index
           expect(assigns(:works)).not_to include(work2)
@@ -292,7 +292,7 @@ describe WorksController, work_search: true do
       context "with a valid owner tag" do
         before do
           @fandom2 = create(:canonical_fandom)
-          @work2 = create(:posted_work, fandom_string: @fandom2.name)
+          @work2 = create(:work, fandom_string: @fandom2.name)
           run_all_indexing_jobs
         end
 
@@ -309,7 +309,7 @@ describe WorksController, work_search: true do
 
         context "with restricted works" do
           before do
-            @work2 = create(:posted_work, fandom_string: @fandom.name, restricted: true)
+            @work2 = create(:work, fandom_string: @fandom.name, restricted: true)
             run_all_indexing_jobs
           end
 
@@ -373,9 +373,9 @@ describe WorksController, work_search: true do
 
     context "with a valid owner user" do
       let(:user) { create(:user) }
-      let!(:user_work) { create(:posted_work, authors: [user.default_pseud]) }
+      let!(:user_work) { create(:work, authors: [user.default_pseud]) }
       let(:pseud) { create(:pseud, user: user) }
-      let!(:pseud_work) { create(:posted_work, authors: [pseud]) }
+      let!(:pseud_work) { create(:work, authors: [pseud]) }
 
       before { run_all_indexing_jobs }
 
@@ -409,7 +409,7 @@ describe WorksController, work_search: true do
   describe "update" do
     let(:update_user) { create(:user) }
     let(:update_work) {
-      work = create(:posted_work, authors: [update_user.default_pseud])
+      work = create(:work, authors: [update_user.default_pseud])
       create(:chapter, work: work)
       work
     }
@@ -475,13 +475,13 @@ describe WorksController, work_search: true do
       let(:anonymous_collection) { create(:anonymous_collection) }
 
       let!(:work) do
-        create(:posted_work,
+        create(:work,
                authors: [collected_user.default_pseud],
                collection_names: collection.name)
       end
 
       let!(:anonymous_work) do
-        create(:posted_work,
+        create(:work,
                authors: [collected_user.default_pseud],
                collection_names: anonymous_collection.name)
       end
@@ -513,27 +513,27 @@ describe WorksController, work_search: true do
       let(:collected_fandom_2) { create(:canonical_fandom) }
 
       let!(:unrestricted_work) do
-        create(:posted_work,
+        create(:work,
                authors: [collected_user.default_pseud],
                fandom_string: collected_fandom.name)
       end
 
       let!(:unrestricted_work_in_collection) do
-        create(:posted_work,
+        create(:work,
                authors: [collected_user.default_pseud],
                collection_names: collection.name,
                fandom_string: collected_fandom.name)
       end
 
       let!(:unrestricted_work_2_in_collection) do
-        create(:posted_work,
+        create(:work,
                authors: [collected_user.default_pseud],
                collection_names: collection.name,
                fandom_string: collected_fandom_2.name)
       end
 
       let!(:restricted_work_in_collection) do
-        create(:posted_work,
+        create(:work,
                restricted: true,
                authors: [collected_user.default_pseud],
                collection_names: collection.name,
@@ -581,13 +581,13 @@ describe WorksController, work_search: true do
       let(:unrevealed_collection) { create(:unrevealed_collection) }
 
       let!(:work) do
-        create(:posted_work,
+        create(:work,
                authors: [collected_user.default_pseud],
                collection_names: collection.name)
       end
 
       let!(:unrevealed_work) do
-        create(:posted_work,
+        create(:work,
                authors: [collected_user.default_pseud],
                collection_names: unrevealed_collection.name)
       end

@@ -17,19 +17,19 @@ describe BookmarkSearchForm, bookmark_search: true do
 
       let!(:work1) do
         Delorean.time_travel_to 40.minutes.ago do
-          create(:posted_work, title: "One", fandom_string: tag.name)
+          create(:work, title: "One", fandom_string: tag.name)
         end
       end
 
       let!(:work2) do
         Delorean.time_travel_to 60.minutes.ago do
-          create(:posted_work, title: "Two", fandom_string: tag.name)
+          create(:work, title: "Two", fandom_string: tag.name)
         end
       end
 
       let!(:work3) do
         Delorean.time_travel_to 50.minutes.ago do
-          create(:posted_work, title: "Three", fandom_string: tag.name)
+          create(:work, title: "Three", fandom_string: tag.name)
         end
       end
 
@@ -93,8 +93,8 @@ describe BookmarkSearchForm, bookmark_search: true do
     describe "searching" do
       let(:language) { create(:language, short: "ptBR") }
 
-      let(:work1) { create(:posted_work) }
-      let(:work2) { create(:posted_work, language_id: language.id) }
+      let(:work1) { create(:work) }
+      let(:work2) { create(:work, language_id: language.id) }
 
       let!(:bookmark1) { create(:bookmark, bookmarkable: work1) }
       let!(:bookmark2) { create(:bookmark, bookmarkable: work2) }

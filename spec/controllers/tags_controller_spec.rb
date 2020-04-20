@@ -18,7 +18,7 @@ describe TagsController do
       let(:freeform4) { create(:freeform, name: "an abo au") }
 
       before(:each) do
-        create(:posted_work,
+        create(:work,
                fandom_string: fandom.name,
                freeform_string: "#{freeform1.name}, #{freeform2.name},
                #{freeform3.name}, #{freeform4.name}")
@@ -46,10 +46,10 @@ describe TagsController do
       let(:relationship2) { create(:relationship) }
 
       before do
-        create(:posted_work,
+        create(:work,
                character_string: character1.name,
                relationship_string: relationship1.name)
-        create(:posted_work,
+        create(:work,
                character_string: character2.name,
                relationship_string: relationship2.name)
         run_all_indexing_jobs
