@@ -184,7 +184,7 @@ describe WorksController, work_search: true do
 
     it "doesn't allow a user to create a work in a series that they don't own" do
       @series = create(:series)
-      work_attributes = attributes_for(:work)
+      work_attributes = attributes_for(:work).except(:posted)
       work_attributes[:series_attributes] = { id: @series.id }
       expect {
         post :create, params: { work: work_attributes }
@@ -196,7 +196,7 @@ describe WorksController, work_search: true do
 
     it "doesn't allow a user to submit only a pseud that is not theirs" do
       @user2 = create(:user)
-      work_attributes = attributes_for(:work)
+      work_attributes = attributes_for(:work).except(:posted)
       work_attributes[:author_attributes] = { ids: [@user2.pseuds.first.id] }
       expect {
         post :create, params: { work: work_attributes }
@@ -207,7 +207,7 @@ describe WorksController, work_search: true do
     end
 
     it "renders new if the work has invalid pseuds" do
-      work_attributes = attributes_for(:work)
+      work_attributes = attributes_for(:work).except(:posted)
       work_attributes[:author_attributes] = { ids: @user.pseud_ids,
                                               byline: "*impossible*" }
       post :create, params: { work: work_attributes }
@@ -219,7 +219,7 @@ describe WorksController, work_search: true do
     it "renders new if the work has ambiguous pseuds" do
       create(:pseud, name: "ambiguous")
       create(:pseud, name: "ambiguous")
-      work_attributes = attributes_for(:work)
+      work_attributes = attributes_for(:work).except(:posted)
       work_attributes[:author_attributes] = { ids: @user.pseud_ids,
                                               byline: "ambiguous" }
       post :create, params: { work: work_attributes }
