@@ -74,7 +74,6 @@ describe TagsController do
       @character3 = FactoryBot.create(:character, canonical: false)
       @character2 = FactoryBot.create(:character, canonical: false, merger: @character3)
       @work = FactoryBot.create(:work,
-                                 posted: true,
                                  fandom_string: "#{@fandom1.name}",
                                  character_string: "#{@character1.name},#{@character2.name}",
                                  freeform_string: "#{@freeform1.name}")

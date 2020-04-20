@@ -160,7 +160,7 @@ Given /^(?:a|the) canonical(?: "([^"]*)")? fandom "([^"]*)" with (\d+) works$/ d
   fandom = FactoryBot.create(:fandom, name: tag_name, canonical: true)
   fandom.add_association(Media.find_by(name: media)) if media.present?
   number_of_works.to_i.times do
-    FactoryBot.create(:work, posted: true, fandom_string: tag_name)
+    FactoryBot.create(:work fandom_string: tag_name)
   end
   step %(the periodic filter count task is run)
 end

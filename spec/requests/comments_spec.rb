@@ -11,7 +11,7 @@ end
 # This code block is used for logged out users and logged in users, on unrestricted works
 shared_examples_for "on unrestricted works", :pending do
     before do
-      @work2 = create(:work, posted: true, fandom_string: "Merlin (TV)", title: "My title is long enough", restricted: false)
+      @work2 = create(:work, fandom_string: "Merlin (TV)", title: "My title is long enough", restricted: false)
       @work2.reindex_document
       @comment2 = create(:comment)
       @work2.first_chapter.comments << @comment2
@@ -58,7 +58,7 @@ describe "Comments" do
     subject { page }
   context "on restricted works" do
     before do
-      @work1 = create(:work, posted: true, fandom_string: "Merlin (TV)", title: "My title is long enough", restricted: true)
+      @work1 = create(:work, fandom_string: "Merlin (TV)", title: "My title is long enough", restricted: true)
       @work1.reindex_document
       @comment = create(:comment, commentable_id: @work1.id)
       @comment2 = create(:comment, commentable_id: @work1.chapters.last.id, commentable_type: "Chapter")
@@ -113,7 +113,7 @@ describe "Comments" do
 
   context "on works which have anonymous commenting disabled" do
     before do
-      @work = create(:work, posted: true, fandom_string: "Merlin (TV)", anon_commenting_disabled: "true" )
+      @work = create(:work, fandom_string: "Merlin (TV)", anon_commenting_disabled: "true" )
       @work.reindex_document
       @comment = create(:comment)
       @work.first_chapter.comments << @comment

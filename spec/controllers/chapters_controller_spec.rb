@@ -6,7 +6,7 @@ describe ChaptersController do
 
   let(:user) { create(:user) }
   let!(:work) { create(:posted_work, authors: [user.pseuds.first]) }
-  let(:unposted_work) { create(:work, authors: [user.pseuds.first]) }
+  let(:unposted_work) { create(:draft, authors: [user.pseuds.first]) }
 
   let(:banned_users_work) { create(:posted_work) }
   let(:banned_user) do
@@ -75,7 +75,7 @@ describe ChaptersController do
       end
 
       it "errors and redirects to login when work is restricted" do
-        restricted_work = create(:work, posted: true, restricted: true)
+        restricted_work = create(:work, restricted: true)
         get :show, params: { work_id: restricted_work.id, id: restricted_work.chapters.first }
         it_redirects_to(new_user_session_path(restricted: true))
       end

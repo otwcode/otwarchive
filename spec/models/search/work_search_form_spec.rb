@@ -124,7 +124,6 @@ describe WorkSearchForm, work_search: true do
                          summary: "An unexpected journey",
                          fandom_string: "The Hobbit",
                          character_string: "Bilbo Baggins",
-                         posted: true,
                          expected_number_of_chapters: 3,
                          complete: false)
     end
@@ -136,7 +135,6 @@ describe WorkSearchForm, work_search: true do
                          summary: "Mr and Mrs Dursley, of number four Privet Drive...",
                          fandom_string: "Harry Potter",
                          character_string: "Harry Potter, Ron Weasley, Hermione Granger",
-                         posted: true,
                          language_id: language.id)
     end
 
