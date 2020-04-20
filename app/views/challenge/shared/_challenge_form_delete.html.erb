@@ -1,12 +1,15 @@
-<ul class="navigation actions" role="menu">
-  <% if @collection.challenge %>
-    <li><%= link_to ts("Delete Challenge"),
-                    if @collection.prompt_meme?
-                      collection_prompt_meme_path(@collection)
-                    else
-                      collection_gift_exchange_path(@collection)
-                    end,
-                    data: {confirm: ts('Are you certain you want to delete the challenge from this collection? All signups, assignments, and settings will be lost. (Works will remain in the collection.)')},
-                    :method => :delete %></li>
-  <% end %>
-</ul>
+<% 
+  # This is a list element that should always be rendered within an ul with classes "navigation actions" and role "menu".
+  # To see an example of how to include this, see _prompt_meme_form.html.erb
+%>
+
+<li>
+  <%= link_to ts("Delete Challenge"),
+    if @collection.prompt_meme?
+      confirm_delete_collection_prompt_meme_path(@collection)
+    else
+      confirm_delete_collection_gift_exchange_path(@collection)
+    end,
+    data: {confirm: ts("Are you certain you want to delete the challenge from this collection? All sign-ups, assignments, and settings will be lost. (Works will remain in the collection).")}
+  %>
+</li>
