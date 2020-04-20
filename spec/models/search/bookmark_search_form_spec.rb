@@ -137,7 +137,7 @@ describe BookmarkSearchForm, bookmark_search: true do
     let(:bookmarker) { create(:user, login: "yabalchoath") }
 
     {
-      Work: :posted_work,
+      Work: :work,
       Series: :series_with_a_work,
       ExternalWork: :external_work
     }.each_pair do |type, factory|

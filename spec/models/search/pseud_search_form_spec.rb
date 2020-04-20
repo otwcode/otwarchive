@@ -145,7 +145,7 @@ describe PseudSearchForm, pseud_search: true do
     end
 
     {
-      Work: :posted_work,
+      Work: :work,
       Series: :series_with_a_work,
       ExternalWork: :external_work
     }.each_pair do |type, factory|
