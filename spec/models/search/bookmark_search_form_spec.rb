@@ -168,7 +168,7 @@ describe BookmarkSearchForm, bookmark_search: true do
     let(:author) { create(:user, login: "yabalchoath") }
 
     {
-      Work: :posted_work,
+      Work: :work,
       Series: :series_with_a_work
     }.each_pair do |type, factory|
       it "returns the correct bookmarked #{type.to_s.pluralize} when author changes username" do
