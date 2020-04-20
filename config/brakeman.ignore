@@ -500,25 +500,6 @@
       "note": ""
     },
     {
-      "warning_type": "Cross Site Scripting",
-      "warning_code": 2,
-      "fingerprint": "3af5cac1e50b1ecc493cea22bfa27e2d9e53e6ec8cc1775e644e2ea1ee30342c",
-      "check_name": "CrossSiteScripting",
-      "message": "Unescaped model attribute",
-      "file": "app/views/profile/show.html.erb",
-      "line": 33,
-      "link": "http://brakemanscanner.org/docs/warning_types/cross_site_scripting",
-      "code": "sanitize_field(User.find_by(:login => params[:user_id]).profile, :about_me)",
-      "render_path": [{"type":"controller","class":"ProfileController","method":"show","line":19,"file":"app/controllers/profile_controller.rb"}],
-      "location": {
-        "type": "template",
-        "template": "profile/show"
-      },
-      "user_input": "User.find_by(:login => params[:user_id]).profile",
-      "confidence": "Weak",
-      "note": ""
-    },
-    {
       "warning_type": "Remote Code Execution",
       "warning_code": 24,
       "fingerprint": "3d66ffcf48e7509ecd8c6e3d47442515354cf51d16f487306551161eb14e9e6b",
@@ -1191,6 +1172,25 @@
         "template": "layouts/_banner"
       },
       "user_input": "AdminBanner.where(:active => true).last",
+      "confidence": "Weak",
+      "note": ""
+    },
+    {
+      "warning_type": "Cross Site Scripting",
+      "warning_code": 2,
+      "fingerprint": "7fbd164d387ce684b59f48c67412c54794d6851fdb21a25dae29b074bc64a1cd",
+      "check_name": "CrossSiteScripting",
+      "message": "Unescaped model attribute",
+      "file": "app/views/profile/show.html.erb",
+      "line": 33,
+      "link": "http://brakemanscanner.org/docs/warning_types/cross_site_scripting",
+      "code": "sanitize_field(ProfilePresenter.new(User.find_by(:login => params[:user_id]).profile), :about_me)",
+      "render_path": [{"type":"controller","class":"ProfileController","method":"show","line":20,"file":"app/controllers/profile_controller.rb"}],
+      "location": {
+        "type": "template",
+        "template": "profile/show"
+      },
+      "user_input": "User.find_by(:login => params[:user_id]).profile",
       "confidence": "Weak",
       "note": ""
     },
@@ -2007,6 +2007,6 @@
       "note": ""
     }
   ],
-  "updated": "2020-02-09 23:33:40 +0000",
+  "updated": "2020-06-10 23:27:17 +0100",
   "brakeman_version": "3.7.2"
 }

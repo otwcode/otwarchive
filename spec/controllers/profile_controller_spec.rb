@@ -16,5 +16,15 @@ describe ProfileController do
       get :show, params: { user_id: @user }
       expect(@user.profile).to be
     end
+
+    it 'uses the profile presenter for the profile' do
+      @user = FactoryBot.create(:user)
+      profile_presenter = double(:profile_presenter)
+      allow(ProfilePresenter).to receive(:new).and_return(profile_presenter)
+
+      get :show, params: { user_id: @user }
+
+      expect(assigns(:profile)).to eq(profile_presenter)
+    end
   end
 end

@@ -61,6 +61,10 @@ Scenario: Changing email address and viewing
     And the email should not contain "translation missing"
   When I change my preferences to display my email address
   Then I should see "My email address: valid2@archiveofourown.org"
+  When I log out
+    And I go to editname's user page
+    And I follow "Profile"
+  Then I should see "My email address"
 
 Scenario: Changing email address after requesting password reset
 
@@ -99,6 +103,10 @@ Scenario: Entering date of birth and displaying
   When I change my preferences to display my date of birth
   Then I should see "My birthday: 1980-11-30"
     And 0 emails should be delivered
+  When I log out
+    And I go to editname's user page
+    And I follow "Profile"
+  Then I should see "My birthday: 1980-11-30"
 
 Scenario: Change password - mistake in typing old password
 

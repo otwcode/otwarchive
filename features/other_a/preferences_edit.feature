@@ -40,7 +40,7 @@ Feature: Edit preferences
     And I should see "Turn off the banner showing on every page."
 
 
-  Scenario: View and edit preferences for viewing history, personal details, view entire work
+  Scenario: View and edit preferences for viewing history, view entire work
 
   Given the following activated user exists
     | login         | password   |
@@ -50,16 +50,10 @@ Feature: Edit preferences
   Then I should not see "My email address"
     And I should not see "My birthday"
   When I am logged in as "editname" with password "password"
-  Then I should see "Hi, editname!"
-    And I should see "Log Out"
-  When I post the work "This has two chapters"
-  And I follow "Add Chapter"
-    And I fill in "content" with "Secondy chapter"
-    And I press "Preview"
-    And I press "Post"
-  Then I should see "Secondy chapter"
+    And I post the 2 chapter work "This has two chapters"
+  Then I should be on the 2nd chapter of the work "This has two chapters"
     And I follow "Previous Chapter"
-  Then I should not see "Secondy chapter"
+  Then I should be on the 1st chapter of the work "This has two chapters"
   When I follow "editname"
   Then I should see "Dashboard" within "div#dashboard"
     And I should see "History" within "div#dashboard"
@@ -79,22 +73,12 @@ Feature: Edit preferences
   Then I should see "Edit My Profile"
   When I uncheck "Turn on Viewing History"
     And I check "Show the whole work by default."
-    And I check "Show my email address to other people."
-    And I check "Show my date of birth to other people."
     And I press "Update"
   Then I should see "Your preferences were successfully updated"
   And I should not see "History" within "div#dashboard"
   When I go to the works page
     And I follow "This has two chapters"
-  Then I should see "Secondy chapter"
-  When I log out
-    And I go to editname's user page
-    And I follow "Profile"
-  Then I should see "My email address"
-    And I should see "My birthday"
-  When I go to the works page
-    And I follow "This has two chapters"
-  Then I should not see "Secondy chapter"
+  Then I should not see "Next Chapter"
 
   @javascript
   Scenario: User can hide warning and freeform tags and reveal them on a case-

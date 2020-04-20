@@ -9,6 +9,7 @@ class ProfileController < ApplicationController
       Profile.create(user_id: @user.id)
       @user.reload
     end
+    @profile = ProfilePresenter.new(@user.profile)
     #code the same as the stuff in users_controller
     if current_user.respond_to?(:subscriptions)
       @subscription = current_user.subscriptions.where(subscribable_id: @user.id,

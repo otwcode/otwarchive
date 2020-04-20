@@ -2,8 +2,8 @@
   <%= render 'users/header' %>
 
   <!--main content-->
-  <% unless @user.profile.title.blank? %>
-    <h3 class="heading"><%=h @user.profile.title %></h3>
+  <% if @profile.title.present? %>
+    <h3 class="heading"><%=h @profile.title %></h3>
   <% end %>
 
   <div class="wrapper">
@@ -11,28 +11,28 @@
       <dt class="pseuds">
         <%= link_to ts("All my pseuds (%{pseud_number})", :pseud_number => @user.pseuds.count), user_pseuds_path(@user) %>
       </dt>
-      <dd class="pseuds"><%= print_pseud_list(@user.pseuds.abbreviated_list) %></dd>
+      <dd class="pseuds"><%= print_pseud_list(@profile.pseuds) %></dd>
       <dt><%= ts("I joined on:") %></dt>
-      <dd><%= ts("%{date}", :date => l(@user.created_at.to_date)) %></dd>
-      <% if @user.profile.location? %>
+      <dd><%= ts("%{date}", :date => l(@profile.created_at)) %></dd>
+      <% if @profile.location %>
         <dt class="location"><%=h ts("I live in:") %></dt>
-        <dd><%=h @user.profile.location %></dd>
+        <dd><%=h @profile.location %></dd>
       <% end %>
-      <% if @user.preference.try(:date_of_birth_visible) %>
+      <% if @profile.date_of_birth %>
         <dt class="birthday"><%=h ts("My birthday:") %></dt>
-        <dd class="birthday"><%=l(@user.profile.date_of_birth) unless @user.profile.date_of_birth.blank? %></dd>
+        <dd class="birthday"><%=l(@profile.date_of_birth) %></dd>
       <% end %>
-      <% if @user.preference.try(:email_visible) %>
+      <% if @profile.email %>
         <dt class="email"><%=h ts("My email address:") %></dt>
-        <dd class="email"><%= mail_to @user.email, nil, :encode => "hex" %></dd>
+        <dd class="email"><%= mail_to @profile.email, nil, :encode => "hex" %></dd>
       <% end %>
     </dl>
   </div>
 
-  <% unless @user.profile.about_me.blank? %>
+  <% if @profile.about_me.present? %>
     <div class="bio module">
       <h3 class="heading"><%=h ts("Bio") %></h3>
-      <blockquote class="userstuff"><%=raw sanitize_field(@user.profile, :about_me) %></blockquote>
+      <blockquote class="userstuff"><%=raw sanitize_field(@profile, :about_me) %></blockquote>
     </div>
   <% end %>
   <!--/content-->
