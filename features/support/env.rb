@@ -71,13 +71,9 @@ Before do
 
   language = Language.find_or_create_by(short: 'en', name: 'English')
   Locale.set_base_locale(iso: "en", name: "English (US)", language_id: language.id)
-end
 
-After do
-  indices = $elasticsearch.indices.get_mapping.keys.select { |key| key.match("test") }
-  indices.each do |index|
-    $elasticsearch.indices.delete(index: index)
-  end
+  # Assume all spam checks pass by default.
+  allow(Akismetor).to receive(:spam?).and_return(false)
 end
 
 Before '@disable_caching' do

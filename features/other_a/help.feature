@@ -25,6 +25,7 @@ Scenario: view the help popup for chapter title
     And I check "No Archive Warnings Apply"
     And I fill in "Fandoms" with "New Fandom"
     And I fill in "Work Title" with "New Epic Work"
+    And I select "English" from "Choose a language"
     And I fill in "content" with "Well, maybe not so epic."
     And I press "Post"
     And I follow "Add Chapter"

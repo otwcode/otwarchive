@@ -86,19 +86,6 @@
             <%= live_validation_for_field("comment_email_for_#{commentable.id}", :failureMessage => ts('Please enter your email address.')) %>
           </dd>
         </dl>
-
-        <%= content_for :footer_js do %>
-          <%= javascript_tag do %>
-            var name_id = "#comment_name_for_<%= commentable.id %>";
-            var email_id = "#comment_email_for_<%= commentable.id %>";
-            if (!$j(name_id).val()) {
-              $j(name_id).val($j.cookie('comment_name'));
-            }
-            if (!$j(email_id).val()) {
-              $j(email_id).val($j.cookie('comment_email'));
-            }
-          <% end %>
-        <% end %>
       <% end %>
 
       <p>

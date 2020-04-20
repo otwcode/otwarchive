@@ -66,14 +66,6 @@ Feature: Download a work
   Then I should be able to download all versions of "Epic Novel"
 
 
-  Scenario: Works cannot be downloaded if unrevealed
-
-  Given there is a work "Blabla" in an unrevealed collection "Unrevealed"
-    And I am logged in as the author of "Blabla"
-  Then I should not be able to download the mobi version of "Blabla"
-    And I should see "Sorry, you can't download an unrevealed work."
-
-
   Scenario: Works can be downloaded when anonymous
 
   Given there is a work "Test Work" in an anonymous collection "Anonymous"
@@ -89,9 +81,33 @@ Feature: Download a work
   Given I am logged in
     And I set up the draft "Many Fandom Work"
     And I fill in "Fandoms" with "Fandom 1, Fandom 2, Fandom 3, Fandom 4"
-    And I press "Post Without Preview"
+    And I press "Post"
   When I am logged out
     And I view the work "Many Fandom Work"
     And I follow "HTML"
   Then I should see "Multifandom"
     And I should be able to download all versions of "Many Fandom Work"
+
+
+  Scenario: Download option is unavailable if work is unrevealed.
+
+  Given there is a work "Blabla" in an unrevealed collection "Unrevealed"
+    And I am logged in as the author of "Blabla"
+  Then I should not see "Download"
+
+
+  Scenario: Download option is unavailable if work is unposted.
+
+  Given I am logged in
+    And the draft "Unposted Work"
+  When I view the work "Unposted Work"
+  Then I should not see "Download"
+
+
+  Scenario: Download option is unavailable if work is hidden by admin.
+
+  Given I am logged in
+    And I post the work "TOS Violation"
+  When I am logged in as an admin
+    And I hide the work "TOS Violation"
+  Then I should not see "Download"
