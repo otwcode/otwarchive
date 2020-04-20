@@ -1,6 +1,6 @@
 require 'faker'
 
-FactoryGirl.define do
+FactoryBot.define do
 
   factory :invite_request do
     sequence :email do |n|
@@ -9,7 +9,7 @@ FactoryGirl.define do
   end
 
   factory :invitation do
-    invitee_email "default@email.com"
+    invitee_email { "default@email.com" }
   end
 
 end

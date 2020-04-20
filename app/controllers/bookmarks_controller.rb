@@ -60,7 +60,7 @@ class BookmarksController < ApplicationController
 
   def index
     if @bookmarkable
-      access_denied unless is_admin? || @bookmarkable.visible
+      access_denied unless is_admin? || @bookmarkable.visible?
       @bookmarks = @bookmarkable.bookmarks.is_public.paginate(page: params[:page], per_page: ArchiveConfig.ITEMS_PER_PAGE)
     else
       base_options = {
@@ -122,7 +122,7 @@ class BookmarksController < ApplicationController
           tags = Tag.where(id: excluded_tag_ids + excluded_bookmark_tag_ids)
           tags.each do |tag|
             if excluded_tag_ids.include?(tag.id.to_s)
-              key = tag.class.to_s.downcase
+              key = tag.class.to_s.underscore
               @facets[key] ||= []
               @facets[key] << QueryFacet.new(tag.id, tag.name, 0)
             end
@@ -134,7 +134,7 @@ class BookmarksController < ApplicationController
           end
         end
       elsif use_caching?
-        @bookmarks = Rails.cache.fetch("bookmarks/index/latest/v2_true", expires_in: 10.minutes) do
+        @bookmarks = Rails.cache.fetch("bookmarks/index/latest/v2_true", expires_in: ArchiveConfig.SECONDS_UNTIL_BOOKMARK_INDEX_EXPIRE.seconds) do
           search = BookmarkSearchForm.new(show_private: false, show_restricted: false, sort_column: 'created_at')
           results = search.search_results
           flash_search_warnings(results)
@@ -385,7 +385,8 @@ class BookmarksController < ApplicationController
       :other_bookmark_tag_names,
       :excluded_bookmark_tag_names,
       rating_ids: [],
-      warning_ids: [],
+      warning_ids: [], # backwards compatibility
+      archive_warning_ids: [],
       category_ids: [],
       fandom_ids: [],
       character_ids: [],
@@ -394,5 +395,4 @@ class BookmarksController < ApplicationController
       tag_ids: [],
     )
   end
-
 end

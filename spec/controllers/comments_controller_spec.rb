@@ -231,7 +231,7 @@ describe CommentsController do
   end
 
   describe "PUT #review_all" do
-    xit "redirects to root path with an error if current user does not own the commentable" do
+    it "redirects to root path with an error if current user does not own the commentable" do
       fake_login
       put :review_all, params: { work_id: unreviewed_comment.commentable_id }
       it_redirects_to_with_error(root_path, "What did you want to review comments on?")

@@ -49,6 +49,7 @@ Feature: Tag wrangling
     When I go to the new work page
       And I select "Not Rated" from "Rating"
       And I check "No Archive Warnings Apply"
+      And I select "English" from "Choose a language"
       And I fill in "Fandoms" with "Stargate SG-1, Star Wars"
       And I fill in "Work Title" with "Revenge of the Sith 2"
       And I fill in "Characters" with "Daniel Jackson, Jack O'Neil"
@@ -197,6 +198,8 @@ Feature: Tag wrangling
       And I check "Unwrangleable"
       And I fill in "Fandoms" with "Stargate SG-1"
       And I press "Save changes"
+      # Make sure that the indices are up-to-date:
+      And all indexing jobs have been run
     Then I should see "Tag was updated"
 
     # check sidebar links and pages for wrangling within a fandom

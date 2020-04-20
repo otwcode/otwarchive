@@ -4,6 +4,12 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception, prepend: true
   rescue_from ActionController::InvalidAuthenticityToken, with: :display_auth_error
   rescue_from ActionController::UnknownFormat, with: :raise_not_found
+  rescue_from Elasticsearch::Transport::Transport::Errors::ServiceUnavailable do
+    # Non-standard code to distinguish Elasticsearch errors from standard 503s.
+    # We can't use 444 because nginx will close connections without sending
+    # response headers.
+    head 445
+  end
 
   def raise_not_found
     redirect_to '/404'
@@ -381,7 +387,7 @@ public
   def see_adult?
     params[:anchor] = "comments" if (params[:show_comments] && params[:anchor].blank?)
     Rails.logger.debug "Added anchor #{params[:anchor]}"
-    return true if session[:adult] || logged_in_as_admin?
+    return true if cookies[:view_adult] || logged_in_as_admin?
     return false unless current_user
     return true if current_user.is_author_of?(@work)
     return true if current_user.preference && current_user.preference.adult
@@ -389,7 +395,7 @@ public
   end
 
   def use_caching?
-    %w(staging production).include?(Rails.env) && @admin_settings.enable_test_caching?
+    %w(staging production test).include?(Rails.env) && @admin_settings.enable_test_caching?
   end
 
   protected

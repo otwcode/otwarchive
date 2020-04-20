@@ -238,7 +238,7 @@ Feature: Reading count
   When I am logged in as "editor" with password "password"
     And I edit the work "Some Work V1"
     And I fill in "Work Title" with "Some Work V2"
-    And I press "Post Without Preview"
+    And I press "Post"
     And I am logged out
   When I am logged in as "reader" with password "password"
     And I go to the homepage

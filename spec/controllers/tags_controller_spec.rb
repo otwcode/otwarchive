@@ -18,7 +18,7 @@ describe TagsController do
       let(:freeform4) { create(:freeform, name: "an abo au") }
 
       before(:each) do
-        create(:posted_work,
+        create(:work,
                fandom_string: fandom.name,
                freeform_string: "#{freeform1.name}, #{freeform2.name},
                #{freeform3.name}, #{freeform4.name}")
@@ -46,10 +46,10 @@ describe TagsController do
       let(:relationship2) { create(:relationship) }
 
       before do
-        create(:posted_work,
+        create(:work,
                character_string: character1.name,
                relationship_string: relationship1.name)
-        create(:posted_work,
+        create(:work,
                character_string: character2.name,
                relationship_string: relationship2.name)
         run_all_indexing_jobs
@@ -65,16 +65,15 @@ describe TagsController do
 
   describe "mass_update" do
     before do
-      @fandom1 = FactoryGirl.create(:fandom, canonical: true)
-      @fandom2 = FactoryGirl.create(:fandom, canonical: true)
-      @fandom3 = FactoryGirl.create(:fandom, canonical: false)
+      @fandom1 = FactoryBot.create(:fandom, canonical: true)
+      @fandom2 = FactoryBot.create(:fandom, canonical: true)
+      @fandom3 = FactoryBot.create(:fandom, canonical: false)
 
-      @freeform1 = FactoryGirl.create(:freeform, canonical: false)
-      @character1 = FactoryGirl.create(:character, canonical: false)
-      @character3 = FactoryGirl.create(:character, canonical: false)
-      @character2 = FactoryGirl.create(:character, canonical: false, merger: @character3)
-      @work = FactoryGirl.create(:work,
-                                 posted: true,
+      @freeform1 = FactoryBot.create(:freeform, canonical: false)
+      @character1 = FactoryBot.create(:character, canonical: false)
+      @character3 = FactoryBot.create(:character, canonical: false)
+      @character2 = FactoryBot.create(:character, canonical: false, merger: @character3)
+      @work = FactoryBot.create(:work,
                                  fandom_string: "#{@fandom1.name}",
                                  character_string: "#{@character1.name},#{@character2.name}",
                                  freeform_string: "#{@freeform1.name}")
@@ -155,7 +154,7 @@ describe TagsController do
   describe "reindex" do
     context "when reindexing a tag" do
       before do
-        @tag = FactoryGirl.create(:freeform)
+        @tag = FactoryBot.create(:freeform)
       end
 
       it "Only an admin can reindex a tag" do
@@ -167,7 +166,7 @@ describe TagsController do
 
   describe "feed" do
     it "You can only get a feed on Fandom, Character and Relationships" do
-      @tag = FactoryGirl.create(:banned, canonical: false)
+      @tag = FactoryBot.create(:banned, canonical: false)
       get :feed, params: { id: @tag.id, format: :atom }
       it_redirects_to(tag_works_path(tag_id: @tag.name))
     end
@@ -176,7 +175,7 @@ describe TagsController do
   describe "edit" do
     context "when editing a banned tag" do
       before do
-        @tag = FactoryGirl.create(:banned)
+        @tag = FactoryBot.create(:banned)
       end
 
       it "redirects with an error when not an admin" do
@@ -226,6 +225,33 @@ describe TagsController do
         expect(tag.canonical?).to be_falsy
         it_redirects_to_with_notice(wrangle_tag_path(tag, page: 1, sort_column: "name", sort_direction: "ASC"),
                                     "Tag was updated.")
+      end
+    end
+
+    context "when making a canonical tag into a synonym" do
+      let(:tag) { create(:freeform, canonical: true) }
+      let(:synonym) { create(:freeform, canonical: true) }
+
+      context "when logged in as a wrangler" do
+        it "errors and renders the edit page" do
+          put :update, params: { id: tag, tag: { syn_string: synonym.name }, commit: "Save changes" }
+          expect(response).to render_template(:edit)
+          expect(assigns[:tag].errors.full_messages).to include("Only an admin can make a canonical tag into a synonym of another tag.")
+
+          tag.reload
+          expect(tag.merger_id).to eq(nil)
+        end
+      end
+
+      context "when logged in as an admin" do
+        it "succeeds and redirects to the edit page" do
+          fake_login_admin(create(:admin))
+          put :update, params: { id: tag, tag: { syn_string: synonym.name }, commit: "Save changes" }
+          it_redirects_to_with_notice(edit_tag_path(tag), "Tag was updated.")
+
+          tag.reload
+          expect(tag.merger_id).to eq(synonym.id)
+        end
       end
     end
 
