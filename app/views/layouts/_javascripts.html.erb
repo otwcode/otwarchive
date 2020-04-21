@@ -33,6 +33,14 @@
       return elem === doc.activeElement && !!(elem.type || elem.href);
     }
   </script>
+  <!--
+    Disable jQuery animations, because the autocomplete dropdown cannot be
+    clicked while it's in the slideDown animation. This causes intermittent
+    failures in javascript-based autocomplete tests.
+  -->
+  <script type="text/javascript">
+    jQuery.fx.off = true;
+  </script>
 <% end %>
 
 <script type="text/javascript">$j = jQuery.noConflict();</script>
