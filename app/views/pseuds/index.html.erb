@@ -11,6 +11,10 @@
 <% end %>
 <!--/subnav-->
 
+<!--subnav-->
+<%= will_paginate @pseuds %>
+<!--/subnav-->
+
 <!--main content-->
 <h3 class="landmark heading"><%= ts("List of Pseuds") %></h3>
 <ul class="pseud index group">
@@ -20,4 +24,6 @@
 </ul>
 <!--/content-->
 
-
+<!--subnav-->
+<%= will_paginate @pseuds %>
+<!--/subnav-->
