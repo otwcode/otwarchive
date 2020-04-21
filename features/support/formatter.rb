@@ -23,9 +23,8 @@ module Ao3Cucumber
     private
 
     def before_feature(feature)
-      # Print the feature's short description, followed by its file name
-      # in a different color.
-      @io.puts "#{feature} #{format_string(feature.location.file, :comment)}"
+      # Print the feature's file name.
+      @io.puts "#{feature.location.file}"
       @io.flush
       @current_feature = feature
       @start_time = Time.now
