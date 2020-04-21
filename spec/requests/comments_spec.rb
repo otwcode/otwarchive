@@ -113,7 +113,7 @@ describe "Comments" do
 
   context "on works which have anonymous commenting disabled" do
     before do
-      @work = create(:work, fandom_string: "Merlin (TV)", anon_commenting_disabled: "true" )
+      @work = create(:work, fandom_string: "Merlin (TV)", anon_commenting_disabled: "true")
       @work.reindex_document
       @comment = create(:comment)
       @work.first_chapter.comments << @comment
