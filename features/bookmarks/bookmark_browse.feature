@@ -1,4 +1,4 @@
-@no-txn @bookmarks @search
+@bookmarks @search
 Feature: Browse Bookmarks
 
   Scenario: Bookmarks appear on both the user's bookmark page and on the bookmark page for the pseud they used create the bookmark

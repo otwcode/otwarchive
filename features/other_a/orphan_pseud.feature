@@ -84,6 +84,7 @@ Feature: Orphan pseud
       And I follow "Orphan Works by To Be Orphaned"
     Then I should see "Orphan All Works by To Be Orphaned"
     When I choose "Take my pseud off as well"
+      And I wait 2 seconds
       And I press "Yes, I'm sure"
     Then I should see "Orphaning was successful."
 

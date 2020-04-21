@@ -2,13 +2,13 @@ require "spec_helper"
 
 describe SpamReport do
   let(:author) { create(:user).default_pseud }
-  let!(:first_spam) { create(:work, spam: true, posted: true, authors: [author]) }
-  let!(:second_spam) { create(:work, spam: true, posted: true, authors: [author]) }
-  let!(:third_spam) { create(:work, spam: true, posted: true, authors: [author]) }
+  let!(:first_spam) { create(:work, spam: true, authors: [author]) }
+  let!(:second_spam) { create(:work, spam: true, authors: [author]) }
+  let!(:third_spam) { create(:work, spam: true, authors: [author]) }
 
   before(:example) do
     allow(ArchiveConfig).to receive(:SPAM_THRESHOLD).and_return(10)
-    create(:work, spam: false, posted: true)
+    create(:work, spam: false)
   end
 
   it "has a recent date after the new date" do
@@ -46,7 +46,7 @@ describe SpamReport do
                                            work_ids: [first_spam.id, second_spam.id, third_spam.id] }
     ).and_return(double("AdminMailer", deliver: true))
     SpamReport.run
-    create(:work, spam: false, posted: true, authors: [author], created_at: 3.days.ago)
+    create(:work, spam: false, authors: [author], created_at: 3.days.ago)
     expect(AdminMailer).to receive(:send_spam_alert).with(
       third_spam.pseuds.first.user_id => { score: 11,
                                            work_ids: [first_spam.id, second_spam.id, third_spam.id] }

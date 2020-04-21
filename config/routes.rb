@@ -343,6 +343,7 @@ Otwarchive::Application.routes.draw do
         put :review_all
       end
     end
+    resource :hit_count, controller: :hit_count, only: [:create]
     resources :kudos, only: [:index]
     resources :links, controller: "work_links", only: [:index]
     resource :troubleshooting, controller: :troubleshooting, only: [:show, :update]

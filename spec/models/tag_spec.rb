@@ -249,7 +249,7 @@ describe Tag do
 
   describe "has_posted_works?" do
     before do
-      create(:posted_work, fandom_string: "love live,jjba")
+      create(:work, fandom_string: "love live,jjba")
       create(:draft, fandom_string: "zombie land saga,jjba")
     end
 

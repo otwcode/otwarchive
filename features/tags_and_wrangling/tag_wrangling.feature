@@ -198,6 +198,8 @@ Feature: Tag wrangling
       And I check "Unwrangleable"
       And I fill in "Fandoms" with "Stargate SG-1"
       And I press "Save changes"
+      # Make sure that the indices are up-to-date:
+      And all indexing jobs have been run
     Then I should see "Tag was updated"
 
     # check sidebar links and pages for wrangling within a fandom

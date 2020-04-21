@@ -143,11 +143,10 @@ group :test do
   gem 'shoulda'
   gem 'capybara', '~> 2.16.1'
   gem 'database_cleaner', '1.6.0'
-  gem 'cucumber', '~> 2.4.0'
+  gem 'cucumber', '~> 3.1'
   gem 'poltergeist'
   gem 'capybara-screenshot'
-  gem 'cucumber-rails', '~> 1.5', require: false
-  gem 'gherkin'
+  gem 'cucumber-rails', require: false
   gem 'launchy'    # So you can do Then show me the page
   gem 'delorean'
   gem 'faker', '~> 1.6.3'
