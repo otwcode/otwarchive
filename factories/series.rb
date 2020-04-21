@@ -20,7 +20,7 @@ FactoryBot.define do
 
     factory :series_with_a_work do
       after(:build) do |series|
-        series.works = [create(:posted_work)]
+        series.works = [create(:work)]
       end
     end
   end

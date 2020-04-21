@@ -96,7 +96,7 @@ describe RedisHitCounter do
     end
 
     context "when the work is visible" do
-      let(:work) { create(:posted_work) }
+      let(:work) { create(:work) }
 
       it "updates the stat counters from redis" do
         RedisHitCounter.save_recent_counts
@@ -123,7 +123,7 @@ describe RedisHitCounter do
     end
 
     context "when the work is hidden by an admin" do
-      let(:work) { create(:posted_work, hidden_by_admin: true) }
+      let(:work) { create(:work, hidden_by_admin: true) }
 
       include_examples "doesn't add the hits"
       include_examples "clears the recent counts hash"
@@ -131,7 +131,7 @@ describe RedisHitCounter do
 
     context "when the work is in an unrevealed collection" do
       let(:collection) { create(:unrevealed_collection) }
-      let(:work) { create(:posted_work, collections: [collection]) }
+      let(:work) { create(:work, collections: [collection]) }
 
       include_examples "doesn't add the hits"
       include_examples "clears the recent counts hash"

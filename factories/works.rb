@@ -9,6 +9,7 @@ FactoryBot.define do
     language_id { Language.default.id }
     chapter_info = { content: "This is some chapter content for my work." }
     chapter_attributes { chapter_info }
+    posted { true }
 
     transient do
       authors { [build(:pseud)] }
@@ -26,10 +27,6 @@ FactoryBot.define do
 
     factory :custom_work_skin do
       work_skin_id { 1 }
-    end
-
-    factory :posted_work do
-      posted { true }
     end
 
     factory :draft do

@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe StatCounterIndexer, work_search: true do
-  let!(:work) { create(:work, title: "unique title", posted: true) }
+  let!(:work) { create(:work, title: "unique title") }
   let!(:stat_counter) { work.stat_counter }
 
   describe "#index_documents" do

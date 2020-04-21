@@ -164,7 +164,7 @@ Given(/^I coauthored the work "(.*?)" as "(.*?)" with "(.*?)"$/) do |title, logi
   author1.user.preference.update(allow_cocreator: true)
   author2 = User.find_by(login: coauthor).default_pseud
   author2.user.preference.update(allow_cocreator: true)
-  work = FactoryBot.create(:work, authors: [author1, author2], posted: true, title: title)
+  work = FactoryBot.create(:work, authors: [author1, author2], title: title)
   work.creatorships.unapproved.each(&:accept!)
 end
 
