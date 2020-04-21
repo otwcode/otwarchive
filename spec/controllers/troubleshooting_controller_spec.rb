@@ -7,7 +7,7 @@ describe TroubleshootingController do
   include RedirectExpectationHelper
 
   let(:tag) { create(:canonical_fandom) }
-  let(:work) { create(:posted_work) }
+  let(:work) { create(:work) }
   let(:tag_wrangler) { create(:user, roles: [Role.new(name: "tag_wrangler")]) }
   let(:non_tag_wrangler) { create(:user) }
 
@@ -177,7 +177,7 @@ describe TroubleshootingController do
       it "reindexes everything related to the tag and redirects" do
         bookmark = create(:bookmark, tags: [tag])
         series = create(:series)
-        work = create(:posted_work, fandoms: [tag], series: [series])
+        work = create(:work, fandoms: [tag], series: [series])
         external_work = create(:external_work, fandoms: [tag])
         pseud = work.pseuds.first
 
@@ -196,9 +196,9 @@ describe TroubleshootingController do
 
       it "recalculates filters and redirects to the tag" do
         syn = create(:fandom, merger: tag)
-        tag_work = create(:posted_work, fandoms: [tag])
+        tag_work = create(:work, fandoms: [tag])
         tag_work.filter_taggings.destroy_all
-        syn_work = create(:posted_work, fandoms: [syn])
+        syn_work = create(:work, fandoms: [syn])
         syn_work.filter_taggings.destroy_all
 
         put :update, params: { tag_id: tag.to_param, actions: ["update_tag_filters"] }
