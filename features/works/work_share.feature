@@ -20,8 +20,8 @@ Feature: Share Works
       And I should not see "Relationships:" within "#share"
       And I should not see "Characters:" within "#share"
       And I should not see "Summary:" within "#share"
-    When I log out
-      And I view the work "Blabla"
+    When I view the work "Blabla"
+      And I log out
     Then I should see "Share"
     When I follow "Share"
     Then I should see "Copy and paste the following code to link back to this work"
