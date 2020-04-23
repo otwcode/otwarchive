@@ -1,1 +1,6 @@
 <%= render 'share/share', :shareable => @work %>
+
+<% # Twitter javascript is initialized in works/_work_header_navigation, but we need to re-initialize the newly added tweet button. %>
+<script>
+	twttr.widgets.load();
+</script>
