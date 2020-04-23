@@ -1,6 +1,4 @@
 <%= render 'share/share', :shareable => @work %>
 
-<% # Twitter javascript is initialized in works/_work_header_navigation, but we need to re-initialize the newly added tweet button. %>
-<script>
-	twttr.widgets.load();
-</script>
+<% # FRONTEND NOTE: Twitter widget JavaScript included here to ensure that it is only loaded when users share a work, not on every page load. This improves user privacy. %>
+<script type="text/javascript" src="//platform.twitter.com/widgets.js"></script>
