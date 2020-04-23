@@ -225,7 +225,7 @@ class WorksController < ApplicationController
 
   # GET /works/1/share
   def share
-    render :layout => false
+    render layout: false
   end
 
   def navigate
