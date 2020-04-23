@@ -4,11 +4,11 @@ class WorksController < ApplicationController
   # only registered users and NOT admin should be able to create new works
   before_action :load_collection
   before_action :load_owner, only: [:index]
-  before_action :users_only, except: [:index, :show, :navigate, :search, :collected, :edit_tags, :update_tags, :reindex, :drafts]
-  before_action :check_user_status, except: [:index, :show, :navigate, :search, :collected, :reindex]
+  before_action :users_only, except: [:index, :show, :navigate, :search, :collected, :edit_tags, :update_tags, :drafts]
+  before_action :check_user_status, except: [:index, :show, :navigate, :search, :collected]
   before_action :load_work, except: [:new, :create, :import, :index, :show_multiple, :edit_multiple, :update_multiple, :delete_multiple, :search, :drafts, :collected]
   # this only works to check ownership of a SINGLE item and only if load_work has happened beforehand
-  before_action :check_ownership, except: [:index, :show, :navigate, :new, :create, :import, :show_multiple, :edit_multiple, :edit_tags, :update_tags, :update_multiple, :delete_multiple, :search, :mark_for_later, :mark_as_read, :drafts, :collected, :reindex]
+  before_action :check_ownership, except: [:index, :show, :navigate, :new, :create, :import, :show_multiple, :edit_multiple, :edit_tags, :update_tags, :update_multiple, :delete_multiple, :search, :mark_for_later, :mark_as_read, :drafts, :collected]
   # admins should have the ability to edit tags (:edit_tags, :update_tags) as per our ToS
   before_action :check_ownership_or_admin, only: [:edit_tags, :update_tags]
   before_action :log_admin_activity, only: [:update_tags]
@@ -702,17 +702,6 @@ class WorksController < ApplicationController
     end
 
     redirect_to show_multiple_user_works_path(@user, work_ids: @works.map(&:id))
-  end
-
-  # Reindex the work.
-  def reindex
-    if logged_in_as_admin? || permit?('tag_wrangler')
-      RedisSearchIndexQueue.queue_works([params[:id]], priority: :high)
-      flash[:notice] = ts('Work queued to be reindexed')
-    else
-      flash[:error] = ts("Sorry, you don't have permission to perform this action.")
-    end
-    redirect_to(request.env['HTTP_REFERER'] || root_path)
   end
 
   # marks a work to read later
