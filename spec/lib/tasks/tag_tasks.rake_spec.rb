@@ -172,11 +172,4 @@ describe "rake Tag:reset_filters" do
     expect(work.filters.reload).not_to include(extra)
     expect(work.direct_filters.reload).not_to include(extra)
   end
-
-  it "remove duplicate filters" do
-    work.filter_taggings.build(filter: sub).save!(validate: false)
-    expect(sub.filtered_works.reload.count).to eq(2)
-    subject.invoke
-    expect(sub.filter_taggings.reload.count).to eq(1)
-  end
 end
