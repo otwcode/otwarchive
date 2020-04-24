@@ -164,14 +164,14 @@ describe HtmlCleaner do
           end
         end
 		
-		%w{vidders.net}.each do |source|
+        %w{vidders.net}.each do |source|
 		
-		  it "converts flashvars to https for #{source}" do
-		    html = '<embed src="http://' + source + 'embed/123" flashvars="config=http://' + source' + embed/123"></embed>'
-			result = sanitize_value(field, html)
-			expect(result).to match('flashvars=.*https:')
-		  end
-		end
+          it "converts flashvars to https for #{source}" do
+            html = '<embed src="http://' + source + 'embed/123" flashvars="config=http://' + source' + embed/123"></embed>'
+            result = sanitize_value(field, html)
+            expect(result).to match('flashvars=.*https:')
+          end
+        end
 
         it "keeps google player embeds" do
           html = '<embed type="application/x-shockwave-flash" flashvars="audioUrl=http://dl.dropbox.com/u/123/foo.mp3" src="http://www.google.com/reader/ui/123-audio-player.swf" width="400" height="27" allowscriptaccess="never" allownetworking="internal"></embed>'
