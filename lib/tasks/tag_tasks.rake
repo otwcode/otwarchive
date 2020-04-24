@@ -62,8 +62,21 @@ namespace :Tag do
 
   desc "Reset filter taggings"
   task(reset_filters: :environment) do
-    FilterTagging.delete_all
-    FilterTagging.build_from_taggings
+    Work.update_filters(async_update: true) do
+      print(".") && STDOUT.flush
+    end
+
+    ExternalWork.update_filters(async_update: true) do
+      print(".") && STDOUT.flush
+    end
+
+    print("\n") && STDOUT.flush
+  end
+
+  desc "Reset inherited meta taggings"
+  task(reset_meta_tags: :environment) do
+    InheritedMetaTagUpdater.update_all { print(".") && STDOUT.flush }
+    print("\n") && STDOUT.flush
   end
 
   desc "Reset filter counts"

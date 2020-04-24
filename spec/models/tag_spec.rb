@@ -249,7 +249,7 @@ describe Tag do
 
   describe "has_posted_works?" do
     before do
-      create(:posted_work, fandom_string: "love live,jjba")
+      create(:work, fandom_string: "love live,jjba")
       create(:draft, fandom_string: "zombie land saga,jjba")
     end
 
@@ -500,49 +500,6 @@ describe Tag do
 
       expect(@canonical_tag.sub_tags).to eq([@sub_tag])
       expect(@sub_tag.meta_tags).to eq([@canonical_tag])
-    end
-
-    describe "with a synonym and a subtag" do
-      before do
-        @syn_tag.syn_string = @canonical_tag.name
-        @syn_tag.save
-        @sub_tag.meta_tag_string = @canonical_tag.name
-      end
-
-      describe "and works under each" do
-        before do
-          # create works with all three tags
-          @direct_work = FactoryBot.create(:work, fandom_string: @canonical_tag.name)
-          @syn_work = FactoryBot.create(:work, fandom_string: @syn_tag.name)
-          @sub_work = FactoryBot.create(:work, fandom_string: @sub_tag.name)
-        end
-
-        xit "should find all works that would need to be reindexed" do
-          # get all the work ids that it would queue
-          expect(@syn_tag.all_filtered_work_ids).to eq([@syn_work.id])
-          expect(@sub_tag.all_filtered_work_ids).to eq([@sub_work.id])
-          expect(@canonical_tag.all_filtered_work_ids).to eq([@direct_work.id, @syn_work.id, @sub_work.id])
-
-          # make sure the canonical tag continues to have the right ids even if set to non-canonical
-          @canonical_tag.canonical = false
-          expect(@canonical_tag.all_filtered_work_ids).to match_array([@direct_work.id, @syn_work.id, @sub_work.id])
-        end
-      end
-
-      describe "and bookmarks under each" do
-        before do
-          # create bookmarks with all three tags
-          @direct_bm = FactoryBot.create(:bookmark, tag_string: @canonical_tag.name)
-          @syn_bm = FactoryBot.create(:bookmark, tag_string: @syn_tag.name)
-          @sub_bm = FactoryBot.create(:bookmark, tag_string: @sub_tag.name)
-        end
-
-        it "finds all bookmarks that would need to be reindexed" do
-          expect(@syn_tag.all_bookmark_ids).to eq([@syn_bm.id])
-          expect(@sub_tag.all_bookmark_ids).to eq([@sub_bm.id])
-          expect(@canonical_tag.all_bookmark_ids).to match_array([@direct_bm.id, @syn_bm.id, @sub_bm.id])
-        end
-      end
     end
   end
 end

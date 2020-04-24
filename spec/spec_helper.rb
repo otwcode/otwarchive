@@ -148,3 +148,29 @@ def run_all_indexing_jobs
   end
   Indexer.all.map(&:refresh_index)
 end
+
+# Suspend resque workers for the duration of the block, then resume after the
+# contents of the block have run. Simulates what happens when there's a lot of
+# jobs already in the queue, so there's a long delay between jobs being
+# enqueued and jobs being run.
+def suspend_resque_workers
+  # Set up an array to keep track of delayed actions.
+  queue = []
+
+  # Override the default Resque.enqueue behavior.
+  allow(Resque).to receive(:enqueue) do |klass, *args|
+    queue << [klass, args]
+  end
+
+  # Run the code inside the block.
+  yield
+
+  # Empty out the queue and perform all of the operations.
+  while queue.any?
+    klass, args = queue.shift
+    klass.perform(*args)
+  end
+
+  # Resume the original Resque.enqueue behavior.
+  allow(Resque).to receive(:enqueue).and_call_original
+end

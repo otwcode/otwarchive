@@ -8,17 +8,17 @@ Feature: View a work with various options
     And I follow "Comments (2)"
   Then I should see "Bla bla"
 
-  Scenario: Regular logged-in user doesn't have the option to reindex a work
+  Scenario: Regular logged-in user doesn't have the option to troubleshoot a work
   Given the work "Whatever"
     And I am logged in
    When I view the work "Whatever"
-   Then I should not see "Reindex Work"
+   Then I should not see "Troubleshoot"
 
-  Scenario: Logged-out user doesn't have the option to reindex a work
+  Scenario: Logged-out user doesn't have the option to troubleshoot a work
   Given the work "Whatever"
     And I am logged out
    When I view the work "Whatever"
-   Then I should not see "Reindex Work"
+   Then I should not see "Troubleshoot"
 
   Scenario: viewing a work when logged in and having set full mode in the preferences
   Given I am logged in as a random user

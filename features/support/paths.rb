@@ -10,6 +10,8 @@ module NavigationHelpers
 
     when /the home\s?page/
       '/'
+    when /the media page/
+      media_path
     when /^the search bookmarks page$/i
       step %{all indexing jobs have been run}
       search_bookmarks_path
