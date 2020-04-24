@@ -167,7 +167,7 @@ describe HtmlCleaner do
         %w{vidders.net}.each do |source|
 		
           it "converts flashvars to https for #{source}" do
-            html = '<embed src="http://' + source + 'embed/123" flashvars="config=http://' + source' + embed/123"></embed>'
+            html = '<embed src="http://' + source + 'embed/123" flashvars="config=http://' + source + '/embed/123"></embed>'
             result = sanitize_value(field, html)
             expect(result).to match('flashvars=.*https:')
           end
