@@ -163,11 +163,11 @@ describe HtmlCleaner do
             expect(result).to match('https:')
           end
         end
-		
+
         %w{vidders.net}.each do |source|
-		
+
           it "converts flashvars to https for #{source}" do
-            html = '<embed src="http://' + source + 'embed/123" flashvars="config=http://' + source + '/embed/123"></embed>'
+            html = '<embed flashvars="config=http://' + source + '/embed/123" src="http://static.ning.com/socialnetworkmain/widgets/video/flvplayer/flvplayer.swf?xn_version=3704000907" type="application/x-shockwave-flash" width="456" height="344"></embed>'
             result = sanitize_value(field, html)
             expect(result).to match('flashvars=.*https:')
           end
