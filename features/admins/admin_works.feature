@@ -3,12 +3,15 @@ Feature: Admin Actions for Works, Comments, Series, Bookmarks
   As an admin
   I should be able to perform special actions
 
-  Scenario: Can reindex works
+  Scenario: Can troubleshoot works
     Given I am logged in as "regular_user"
       And I post the work "Just a work you know"
     When I am logged in as an admin
       And I view the work "Just a work you know"
-      And I follow "Reindex Work"
+      And I follow "Troubleshoot"
+      And I check "Reindex Work"
+      And I press "Troubleshoot"
+    Then I should see "Work sent to be reindexed."
 
   Scenario: Can hide works
     Given I am logged in as "regular_user"

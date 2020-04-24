@@ -151,19 +151,6 @@ describe TagsController do
     end
   end
 
-  describe "reindex" do
-    context "when reindexing a tag" do
-      before do
-        @tag = FactoryBot.create(:freeform)
-      end
-
-      it "Only an admin can reindex a tag" do
-        get :reindex, params: { id: @tag.name }
-        it_redirects_to_with_error(root_path, "Please log in as admin")
-      end
-    end
-  end
-
   describe "feed" do
     it "You can only get a feed on Fandom, Character and Relationships" do
       @tag = FactoryBot.create(:banned, canonical: false)
@@ -187,23 +174,10 @@ describe TagsController do
   end
 
   describe "update" do
-    context "when updating a tag" do
-      let(:tag) { create(:freeform) }
+    context "setting a new type for the tag" do
       let(:unsorted_tag) { create(:unsorted_tag) }
 
-      it "resets the taggings count" do
-        # manufacture a tag with borked taggings_count
-        tag.taggings_count = 10
-        tag.save
-
-        put :update, params: { id: tag, tag: { fix_taggings_count: true } }
-        it_redirects_to_with_notice(edit_tag_path(tag), "Tag was updated.")
-
-        tag.reload
-        expect(tag.taggings_count).to eq(0)
-      end
-
-      it "changes just the tag type" do
+      it "changes the tag type and redirects" do
         put :update, params: { id: unsorted_tag, tag: { type: "Fandom" }, commit: "Save changes" }
         it_redirects_to_with_notice(edit_tag_path(unsorted_tag), "Tag was updated.")
         expect(Tag.find(unsorted_tag.id).class).to eq(Fandom)
@@ -212,19 +186,6 @@ describe TagsController do
         it_redirects_to_with_notice(edit_tag_path(unsorted_tag), "Tag was updated.")
         # The tag now has the original class, we can reload the original record without error.
         unsorted_tag.reload
-      end
-    end
-
-    context "when updating a canonical tag" do
-      let(:tag) { create(:canonical_freeform) }
-
-      it "wrangles" do
-        expect(tag.canonical?).to be_truthy
-        put :update, params: { id: tag, tag: { canonical: false }, commit: "Wrangle" }
-        tag.reload
-        expect(tag.canonical?).to be_falsy
-        it_redirects_to_with_notice(wrangle_tag_path(tag, page: 1, sort_column: "name", sort_direction: "ASC"),
-                                    "Tag was updated.")
       end
     end
 
@@ -391,8 +352,8 @@ describe TagsController do
         tag.reload
       end
 
-      shared_examples "invalid meta tag" do
-        it "doesn't add the meta tag" do
+      shared_examples "invalid metatag" do
+        it "doesn't add the metatag" do
           expect(tag.meta_tags).not_to include(meta)
         end
       end
@@ -402,12 +363,12 @@ describe TagsController do
 
         it "has a useful error" do
           expect(assigns[:tag].errors.full_messages).to include(
-            "Invalid meta tag '#{meta.name}': " \
+            "Invalid metatag '#{meta.name}': " \
             "Meta taggings can only exist between canonical tags."
           )
         end
 
-        include_examples "invalid meta tag"
+        include_examples "invalid metatag"
       end
 
       context "when the tag is the wrong type" do
@@ -415,12 +376,12 @@ describe TagsController do
 
         it "has a useful error" do
           expect(assigns[:tag].errors.full_messages).to include(
-            "Invalid meta tag '#{meta.name}': " \
+            "Invalid metatag '#{meta.name}': " \
             "Meta taggings can only exist between two tags of the same type."
           )
         end
 
-        include_examples "invalid meta tag"
+        include_examples "invalid metatag"
       end
 
       context "when the metatag is itself" do
@@ -428,12 +389,12 @@ describe TagsController do
 
         it "has a useful error" do
           expect(assigns[:tag].errors.full_messages).to include(
-            "Invalid meta tag '#{meta.name}': " \
-            "A tag can't be its own meta tag."
+            "Invalid metatag '#{meta.name}': " \
+            "A tag can't be its own metatag."
           )
         end
 
-        include_examples "invalid meta tag"
+        include_examples "invalid metatag"
       end
 
       context "when the metatag is its subtag" do
@@ -446,12 +407,12 @@ describe TagsController do
 
         it "has a useful error" do
           expect(assigns[:tag].errors.full_messages).to include(
-            "Invalid meta tag '#{meta.name}': " \
-            "A meta tag can't be its own grandpa."
+            "Invalid metatag '#{meta.name}': " \
+            "A metatag can't be its own grandparent."
           )
         end
 
-        include_examples "invalid meta tag"
+        include_examples "invalid metatag"
       end
 
       context "when the metatag is already its grandparent" do
@@ -468,8 +429,8 @@ describe TagsController do
 
         it "has a useful error" do
           expect(assigns[:tag].errors.full_messages).to include(
-            "Invalid meta tag '#{meta.name}': Meta tag has already been " \
-            "added (possibly as an indirect meta tag)."
+            "Invalid metatag '#{meta.name}': Metatag has already been " \
+            "added (possibly as an indirect metatag)."
           )
         end
 
