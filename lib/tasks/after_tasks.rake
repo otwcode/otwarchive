@@ -585,14 +585,12 @@ namespace :After do
   desc "Enforce HTTPS where available for embedded media from ning.com and vidders.net"
   task(enforce_https: :environment) do
     Chapter.find_each do |chapter|
-      if chapter.id % 1000 == 0
-        puts chapter.id
-      end
+      puts chapter.id if (chapter.id % 1000).zero?
       if chapter.content.match /<(embed|iframe).*(ning.com|vidders.net)/
         begin
           chapter.content_sanitizer_version = -1
           chapter.sanitize_field(chapter, :content)
-        rescue
+        rescue StandardError
           puts "couldn't update chapter #{chapter.id}"
         end
       end
