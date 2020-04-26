@@ -103,9 +103,7 @@ whole work by default"
 Scenario: The recent chapter link in a work's blurb points to the last posted
 chapter when the chapters are reordered.
 
-  Given the following admin settings are configured:
-    | enable_test_caching | 1 |
-    And I am logged in as a random user
+  Given I am logged in as a random user
     And a canonical fandom "Canonical Fandom"
     And I post the 2 chapter work "My WIP" with fandom "Canonical Fandom"
   When I browse the "Canonical Fandom" works
