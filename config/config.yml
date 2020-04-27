@@ -472,3 +472,14 @@ CHARACTER_COUNT_SCRIPTS: ["Han", "Hiragana", "Katakana", "Thai"]
 # Cache durations for work and bookmark searches (in seconds)
 SECONDS_UNTIL_WORK_INDEX_EXPIRE: 1800
 SECONDS_UNTIL_BOOKMARK_INDEX_EXPIRE: 1800
+
+# Batch size used for the RedisHitCounter class:
+HIT_COUNT_BATCH_SIZE: 100
+
+# The hour (in UTC time) that we want the hit counts to rollover at. If someone
+# views the work shortly before this hour and shortly after, it should count as
+# two hits. Used by the RedisHitCounter class.
+HIT_COUNT_ROLLOVER_HOUR: 3
+
+# The batch size for calculating a work's filters from its tags:
+FILTER_UPDATE_BATCH_SIZE: 100

@@ -124,7 +124,6 @@ describe WorkSearchForm, work_search: true do
                          summary: "An unexpected journey",
                          fandom_string: "The Hobbit",
                          character_string: "Bilbo Baggins",
-                         posted: true,
                          expected_number_of_chapters: 3,
                          complete: false)
     end
@@ -136,7 +135,6 @@ describe WorkSearchForm, work_search: true do
                          summary: "Mr and Mrs Dursley, of number four Privet Drive...",
                          fandom_string: "Harry Potter",
                          character_string: "Harry Potter, Ron Weasley, Hermione Granger",
-                         posted: true,
                          language_id: language.id)
     end
 
@@ -481,8 +479,8 @@ describe WorkSearchForm, work_search: true do
   describe "searching for authors who changes username" do
     let!(:user) { create(:user, login: "81_white_chain") }
     let!(:second_pseud) { create(:pseud, name: "peacekeeper", user: user) }
-    let!(:work_by_default_pseud) { create(:posted_work, authors: [user.default_pseud]) }
-    let!(:work_by_second_pseud) { create(:posted_work, authors: [second_pseud]) }
+    let!(:work_by_default_pseud) { create(:work, authors: [user.default_pseud]) }
+    let!(:work_by_second_pseud) { create(:work, authors: [second_pseud]) }
 
     before { run_all_indexing_jobs }
 
@@ -509,7 +507,7 @@ describe WorkSearchForm, work_search: true do
     describe "by authors" do
       before do
         %w(21st_wombat 007aardvark).each do |pseud_name|
-          create(:posted_work, authors: [create(:pseud, name: pseud_name)])
+          create(:work, authors: [create(:pseud, name: pseud_name)])
         end
         run_all_indexing_jobs
       end
@@ -533,8 +531,8 @@ describe WorkSearchForm, work_search: true do
       let!(:user_2) { create(:user, login: "ruth") }
 
       before do
-        create(:posted_work, authors: [user_1.default_pseud])
-        create(:posted_work, authors: [user_2.default_pseud])
+        create(:work, authors: [user_1.default_pseud])
+        create(:work, authors: [user_2.default_pseud])
         run_all_indexing_jobs
       end
 

@@ -8,7 +8,7 @@ describe KudosController do
 
   describe "POST #create" do
     context "when work is public" do
-      let(:work) { create(:posted_work) }
+      let(:work) { create(:work) }
       let(:referer) { work_path(work) }
       before { request.headers["HTTP_REFERER"] = referer }
 
@@ -22,8 +22,6 @@ describe KudosController do
           it "does not save user on kudos" do
             post :create, params: { kudo: { commentable_id: work.id, commentable_type: "Work" } }
             expect(assigns(:kudo).user).to be_nil
-            # TODO: AO3-5887 Remove this check when dropping the column pseud_id from kudos.
-            expect(assigns(:kudo).pseud_id).to be_nil
           end
         end
 
@@ -36,8 +34,6 @@ describe KudosController do
           it "does not save user on kudos" do
             post :create, params: { kudo: { commentable_id: work.first_chapter.id, commentable_type: "Chapter" } }
             expect(assigns(:kudo).user).to be_nil
-            # TODO: AO3-5887 Remove this check when dropping the column pseud_id from kudos.
-            expect(assigns(:kudo).pseud_id).to be_nil
           end
         end
       end
@@ -54,8 +50,6 @@ describe KudosController do
         it "saves user on kudos" do
           post :create, params: { kudo: { commentable_id: work.id, commentable_type: "Work" } }
           expect(assigns(:kudo).user).to eq(user)
-          # TODO: AO3-5887 Remove this check when dropping the column pseud_id from kudos.
-          expect(assigns(:kudo).pseud_id).to eq(user.default_pseud.id)
         end
 
         context "when kudos giver has already left kudos on the work" do
@@ -132,7 +126,7 @@ describe KudosController do
     end
 
     context "when work is restricted" do
-      let(:work) { create(:posted_work, restricted: true) }
+      let(:work) { create(:work, restricted: true) }
 
       it "redirects to referer with an error" do
         referer = work_path(work)

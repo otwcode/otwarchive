@@ -28,7 +28,7 @@ class ChaptersController < ApplicationController
   def show
     @tag_groups = @work.tag_groups
     if params[:view_adult]
-      session[:adult] = true
+      cookies[:view_adult] = "true"
     elsif @work.adult? && !see_adult?
       render "works/_adult", layout: "application" and return
     end
@@ -66,12 +66,6 @@ class ChaptersController < ApplicationController
       end
       # update the history.
       Reading.update_or_create(@work, current_user) if current_user
-
-      # TEMPORARY hack-like thing to fix the fact that chaptered works weren't hit-counted or added to history at all
-      if chapter_position == 0
-        Rails.logger.debug "Chapter remote addr: #{request.remote_ip}"
-        @work.increment_hit_count(request.remote_ip)
-      end
 
       respond_to do |format|
         format.html

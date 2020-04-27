@@ -25,7 +25,6 @@ class AdminSetting < ApplicationRecord
     cache_expiration: 10,
     tag_wrangling_off?: false,
     downloads_enabled?: true,
-    stats_updated_at: nil,
     disable_support_form?: false
   }.freeze
 
@@ -61,13 +60,6 @@ class AdminSetting < ApplicationRecord
   # This will be called by a worker when a job needs to be processed
   def self.perform(method, *args)
     self.send(method, *args)
-  end
-
-  def self.set_stats_updated_at(time)
-    if self.first
-      self.first.stats_updated_at = time
-      self.first.save
-    end
   end
 
   private

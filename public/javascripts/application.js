@@ -659,7 +659,10 @@ function updateCachedTokens() {
       $j('input[name=authenticity_token]').each(function(){
         $j(this).attr('value', token);
       });
-      $j('meta[name=csrf-token]').attr('value', token);
+      $j('meta[name=csrf-token]').attr('content', token);
+      $j.event.trigger({ type: "loadedCSRF" });
     });
+  } else {
+    $j.event.trigger({ type: "loadedCSRF" });
   }
 }

@@ -202,10 +202,6 @@ Given(/^the following language exists$/) do |table|
   end
 end
 
-Given /^the abuse report will not be considered spam$/ do
-  allow(Akismetor).to receive(:spam?).and_return(false)
-end
-
 ### WHEN
 
 When /^I visit the last activities item$/ do
