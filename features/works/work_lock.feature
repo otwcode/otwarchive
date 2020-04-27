@@ -1,5 +1,4 @@
 @works @search
-@no-txn
 
 Feature: Locking works to archive users only
   In order to keep my works under the radar
