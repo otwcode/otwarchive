@@ -272,7 +272,7 @@ end
 
 When /^I edit the work "([^"]*)"$/ do |work|
   work = Work.find_by(title: work)
-  visit edit_work_url(work)
+  visit edit_work_path(work)
 end
 When /^I edit the draft "([^"]*)"$/ do |draft|
   step %{I edit the work "#{draft}"}
