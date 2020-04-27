@@ -62,7 +62,7 @@ end
 Given /^I am logged in as superadmin$/ do
   step("I have an AdminSetting")
   step("I am logged out")
-  admin = Admin.find_by(login: "superadmin") || FactoryGirl.create(:superadmin)
+  admin = Admin.find_by(login: "superadmin") || FactoryBot.create(:superadmin)
   visit new_admin_session_path
   fill_in "Admin user name", with: "superadmin"
   fill_in "Admin password", with: "IHaveThePower"
