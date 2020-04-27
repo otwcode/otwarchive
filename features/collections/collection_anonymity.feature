@@ -98,6 +98,7 @@ Feature: Collection
     Then I should not see "Mystery Work"
       And I should see "Hiding Work"
 
+  @javascript
   Scenario: The authors in an anonymous collection should only be visible to themselves and admins
     Given I have the anonymous collection "Anonymous Hugs"
       And I am logged in as "first_user"
@@ -128,6 +129,7 @@ Feature: Collection
     Then I should see "Old Snippet by Anonymous"
       And I should not see "first_user"
 
+  @javascript
   Scenario: The moderator can reveal all the authors in an anonymous collection
     Given I have the anonymous collection "Anonymous Hugs"
       And "second_user" subscribes to author "first_user"
@@ -149,6 +151,7 @@ Feature: Collection
       And the email to "second_user" should contain "first_user"
       And "third_user" should not be emailed
 
+  @javascript
   Scenario: The moderator can reveal a single author in an anonymous collection
     Given I have the anonymous collection "Anonymous Hugs"
       And "second_user" subscribes to author "first_user"
@@ -228,6 +231,7 @@ Feature: Collection
       And the series "New series" should be visible on the "Anon Work" work page
       And the neighbors of "Anon Work" in the "New series" series should link to it
 
+  @javascript
   Scenario: Adding a co-author to (one chapter of) an anonymous work should still keep it anonymous
     Given I have the anonymous collection "Various Penguins"
       And I am logged in as "Jessica"

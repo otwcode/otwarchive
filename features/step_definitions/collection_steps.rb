@@ -212,21 +212,32 @@ Then /^the author of "([^\"]*)" should be visible to me on the work page$/ do |t
   page.should have_content("Anonymous [#{authors}]")
 end
 
+# Scenarios using this step need the @javascript tag
 Then /^the author of "([^\"]*)" should be publicly visible$/ do |title|
   work = Work.find_by(title: title)
+  byline = work.users.first.pseuds.first.byline
   visit work_path(work)
-  page.should have_content("by <a href=\"#{user_url(work.users.first)}\"><strong>#{work.users.first.pseuds.first.byline}")
+  step %{I should see "#{byline}" within "title"}
+  step %{I should see "#{byline}" within ".byline"}
+  click_link "Share"
+  with_scope "#modal" do
+    page.should have_content "by <a href=\"#{user_url(work.users.first)}\"><strong>#{byline}"
+  end
   if work.collections.first
     visit collection_path(work.collections.first)
-    page.should have_content("#{title} by #{work.users.first.pseuds.first.byline}")
+    page.should have_content("#{title} by #{byline}")
   end
 end
 
+# Scenarios using this step need the @javascript tag
 Then /^the author of "([^\"]*)" should be hidden from me$/ do |title|
   work = Work.find_by(title: title)
   visit work_path(work)
   page.should_not have_content(work.users.first.pseuds.first.byline)
-  page.should have_content("by Anonymous")
+  step %{I should see "Anonymous" within "title"}
+  step %{I should see "Anonymous" within ".byline"}
+  click_link "Share"
+  step %{I should see "by Anonymous" within "#modal"}
   visit collection_path(work.collections.first)
   page.should_not have_content("#{title} by #{work.users.first.pseuds.first.byline}")
   page.should have_content("#{title} by Anonymous")
