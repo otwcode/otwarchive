@@ -7,11 +7,15 @@
 <hr />
 
 <h3>Your admin roles:</h3>
-<ul>
-<% current_admin.roles.each do |role| %>
-  <li><%= role.titleize %></li>
+<% if current_admin.roles.any? %>
+  <ul>
+  <% current_admin.roles.each do |role| %>
+    <li><%= role.titleize %></li>
+  <% end %>
+  </ul>
+<% else %>
+  <ul>You currently have no admin roles assigned to you.</ul>
 <% end %>
-</ul>
 
 <hr />
 
