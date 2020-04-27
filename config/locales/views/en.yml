@@ -53,5 +53,5 @@ en:
         title: "Fix Tag Associations"
         description: "Try to delete invalid associations involving this tag. (e.g. Parents of the wrong type, children of the wrong type, duplicate parents/children/meta-tags/sub-tags, etc.)"
       fix_meta_tags:
-        title: "Fix Meta Tags"
+        title: "Fix Metatags"
         description: "Try to recalculate inherited metatags. Use this option if this tag has grandparent metatags (i.e. a metatag with its own metatag), and the works aren't showing up in the grandparent's listing. You might also try this if you've removed a metatag, but the works are still showing up in the former metatag's listing."
