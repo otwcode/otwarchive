@@ -17,7 +17,7 @@
       <%= edit_comment_link comment %>
     </li>
   <% end %>
-  <% if comment.pseud.nil? and (logged_in_as_admin? || is_author_of?(comment.ultimate_parent)) %>
+  <% if comment.pseud.nil? and ((logged_in_as_admin? && current_admin.can_modify_comment?) || is_author_of?(comment.ultimate_parent)) %>
     <li id="tag_comment_as_spam_link_<%= comment.id %>">
       <%= tag_comment_as_spam_link comment %>
     </li>
@@ -27,7 +27,7 @@
       <%= button_to(ts("Approve"), review_comment_path(comment), method: :put) %>
     </li>
   <% end %>
-  <% if logged_in_as_admin? || is_author_of?(comment) || is_author_of?(comment.ultimate_parent) %>
+  <% if (logged_in_as_admin? && current_admin.can_modify_comment?) || is_author_of?(comment) || is_author_of?(comment.ultimate_parent) %>
     <li id="delete_comment_link_<%= comment.id %>">
       <%= do_cancel_delete_comment_link comment %>
     </li>

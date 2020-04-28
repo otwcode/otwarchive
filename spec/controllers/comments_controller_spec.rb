@@ -309,9 +309,18 @@ describe CommentsController do
 
   describe "PUT #reject" do
     context "when logged-in as admin" do
-      before { fake_login_admin(create(:admin)) }
+      before { @admin = create(:admin) }
 
-      it "marks the comment as spam" do
+      it "fails to mark the comment as spam if admin does not have correct role" do
+        @admin.update(roles: [])
+        fake_login_admin(@admin)
+        put :reject, params: { id: comment.id }
+        it_redirects_to_with_error(root_url, "Sorry, only an authorized admin can access the page you were trying to reach.")
+      end
+
+      it "marks the comment as spam when admin has correct role" do
+        @admin.update(roles: ["policy_and_abuse"])
+        fake_login_admin(@admin)
         put :reject, params: { id: comment.id }
         expect(flash[:error]).to be_nil
         expect(response).to redirect_to(work_path(comment.ultimate_parent,
@@ -325,6 +334,8 @@ describe CommentsController do
       before { fake_login_known_user(comment.ultimate_parent.users.first) }
 
       it "marks the comment as spam" do
+        # 
+        # 
         put :reject, params: { id: comment.id }
         expect(flash[:error]).to be_nil
         expect(response).to redirect_to(work_path(comment.ultimate_parent,
@@ -828,7 +839,7 @@ describe CommentsController do
     end
 
     context "when logged in as an admin" do
-      before { fake_login_admin(create(:admin)) }
+      before { fake_login_admin(create(:admin, roles: ['policy_and_abuse'])) }
 
       it "DELETE #destroy successfully deletes the comment" do
         delete :destroy, params: { id: comment.id }
