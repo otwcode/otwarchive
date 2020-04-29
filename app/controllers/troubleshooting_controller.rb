@@ -60,17 +60,27 @@ class TroubleshootingController < ApplicationController
   # the i18n scope en.troubleshooting.show.
   def allowed_actions
     if @item.is_a?(Tag)
-      if logged_in_as_admin?
-        %w[fix_associations fix_counts fix_meta_tags update_tag_filters reindex_tag]
-      else
-        %w[fix_associations fix_counts fix_meta_tags]
-      end
+      allowed_actions_for_tag
     elsif @item.is_a?(Work)
-      if logged_in_as_admin?
-        %w[update_work_filters reindex_work]
-      else
-        %w[update_work_filters]
-      end
+      allowed_actions_for_work
+    end
+  end
+
+  # Decide which options should be available when we're troubleshooting a tag.
+  def allowed_actions_for_tag
+    if logged_in_as_admin?
+      %w[fix_associations fix_counts fix_meta_tags update_tag_filters reindex_tag]
+    else
+      %w[fix_associations fix_counts fix_meta_tags]
+    end
+  end
+
+  # Decide which options should be available when we're troubleshooting a work.
+  def allowed_actions_for_work
+    if logged_in_as_admin?
+      %w[update_work_filters reindex_work]
+    else
+      %w[update_work_filters]
     end
   end
 
