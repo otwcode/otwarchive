@@ -1,5 +1,5 @@
 class AdminPostPolicy < ApplicationPolicy
-  POSTING_ROLES = %w(superadmin communications translation)
+  POSTING_ROLES = %w(superadmin communications translation).freeze
 
   def self.can_post?(user)
     self.new(user, nil).can_post?

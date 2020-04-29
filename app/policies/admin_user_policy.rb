@@ -1,6 +1,6 @@
 class AdminUserPolicy < ApplicationPolicy
-  USER_SEARCH_ROLES = %w(superadmin policy_and_abuse open_doors support tag_wrangling)
-  USER_ACTION_ROLES = %w(superadmin policy_and_abuse)
+  USER_SEARCH_ROLES = %w(superadmin policy_and_abuse open_doors support tag_wrangling).freeze
+  USER_ACTION_ROLES = %w(superadmin policy_and_abuse).freeze
 
   def index?
     can_search_users?

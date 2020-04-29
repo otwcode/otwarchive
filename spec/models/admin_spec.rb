@@ -93,7 +93,6 @@ describe Admin, :ready do
       end
     end
 
-
     context 'valid roles' do
       it 'can be assigned a valid role' do
         admin = create(:admin)
@@ -108,7 +107,6 @@ describe Admin, :ready do
         expect { admin.update!(roles: ['fake_role']) }.to \
           raise_error(ActiveRecord::RecordInvalid, \
                       "Validation failed: Roles is invalid")
-
       end
     end
   end
