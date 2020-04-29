@@ -84,4 +84,32 @@ describe Admin, :ready do
                     "Validation failed: Email has already been taken")
     end
   end
+
+  describe "admin roles" do
+    context 'has no roles by default' do
+      it 'has no roles when initially created' do
+        admin = create(:admin)
+        expect(admin.roles).to eq([])
+      end
+    end
+
+
+    context 'valid roles' do
+      it 'can be assigned a valid role' do
+        admin = create(:admin)
+        expect(admin.update(roles: ['superadmin'])).to be_truthy
+      end
+    end
+
+    context 'invalid roles' do
+      it 'cannot be assigned invalid role' do
+        admin = create(:admin)
+        
+        expect { admin.update!(roles: ['fake_role']) }.to \
+          raise_error(ActiveRecord::RecordInvalid, \
+                      "Validation failed: Roles is invalid")
+
+      end
+    end
+  end
 end
