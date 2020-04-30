@@ -212,7 +212,6 @@ Then /^the author of "([^\"]*)" should be visible to me on the work page$/ do |t
   page.should have_content("Anonymous [#{authors}]")
 end
 
-# Scenarios using this step need the @javascript tag
 Then /^the author of "([^\"]*)" should be publicly visible$/ do |title|
   work = Work.find_by(title: title)
   byline = work.users.first.pseuds.first.byline
@@ -225,7 +224,6 @@ Then /^the author of "([^\"]*)" should be publicly visible$/ do |title|
   end
 end
 
-# Scenarios using this step need the @javascript tag
 Then /^the author of "([^\"]*)" should be hidden from me$/ do |title|
   work = Work.find_by(title: title)
   visit work_path(work)
