@@ -62,15 +62,26 @@ namespace :Tag do
 
   desc "Reset filter taggings"
   task(reset_filters: :environment) do
-    Work.update_filters(async_update: true) do
-      print(".") && STDOUT.flush
-    end
+    puts "Adding jobs for work filter updates to the reindex_world queue:"
 
-    ExternalWork.update_filters(async_update: true) do
+    Work.update_filters(async_update: true,
+                        job_queue: :reindex_world,
+                        reindex_queue: :world) do
       print(".") && STDOUT.flush
     end
 
     print("\n") && STDOUT.flush
+
+    puts "Adding jobs for external work filter updates to the reindex_world queue:"
+    ExternalWork.update_filters(async_update: true,
+                                job_queue: :reindex_world,
+                                reindex_queue: :world) do
+      print(".") && STDOUT.flush
+    end
+
+    print("\n") && STDOUT.flush
+
+    puts "All jobs enqueued! Once all jobs have finished running, call rake search:run_world_index_queue."
   end
 
   desc "Reset inherited meta taggings"
