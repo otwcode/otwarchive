@@ -225,7 +225,11 @@ class WorksController < ApplicationController
 
   # GET /works/1/share
   def share
-    render layout: false
+    if @work.unrevealed?
+      render template: "errors/404", status: :not_found
+    else
+      render layout: false
+    end
   end
 
   def navigate

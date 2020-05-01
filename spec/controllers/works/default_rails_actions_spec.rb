@@ -242,6 +242,16 @@ describe WorksController, work_search: true do
     end
   end
 
+  describe "share" do
+    it "returns a 404 response for unrevealed works" do
+      unrevealed_collection = create :unrevealed_collection
+      unrevealed_work = create :work, collections: [unrevealed_collection]
+
+      get :share, params: { id: unrevealed_work.id }
+      expect(response.status).to eq(404)
+    end
+  end
+
   describe "index" do
     before do
       @fandom = create(:canonical_fandom)
