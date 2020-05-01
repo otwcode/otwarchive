@@ -522,3 +522,13 @@ Feature: Collection
     Then I should see "Share"
     When I follow "Share"
     Then I should see "by Anonymous" within "#modal"
+
+  Scenario: Work share button should not display for unrevealed works
+    Given I have the hidden collection "Hidden Treasury"
+    When I am logged in as "first_user"
+      And I post the work "Old Snippet" to the collection "Hidden Treasury"
+    Then the work "Old Snippet" should be visible to me
+      And I should not see "Share"
+    When I am logged in as "moderator"
+    Then the work "Old Snippet" should be visible to me
+      And I should not see "Share"

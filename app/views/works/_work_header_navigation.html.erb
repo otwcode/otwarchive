@@ -96,7 +96,7 @@
     </li>
   <% end %>
 
-  <% unless @work.users.all? {|u| u.preference.disable_share_links?} %>
+  <% unless @work.unrevealed? || @work.users.all? {|u| u.preference.disable_share_links?} %>
     <li class="share hidden">
       <%= link_to_modal ts("Share"), :for => share_work_path, :title => ts("Share Work") %>
     </li>
