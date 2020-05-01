@@ -18,6 +18,10 @@ class AdminModerationPolicy < ApplicationPolicy
     can_moderate_record?
   end
 
+  def edit?
+    can_moderate_content?
+  end
+
   def can_moderate_record?
     record.is_a?(Comment) ? can_moderate_comment? : can_moderate_content?
   end
