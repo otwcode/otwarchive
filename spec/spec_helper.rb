@@ -158,8 +158,11 @@ def suspend_resque_workers
   # Set up an array to keep track of delayed actions.
   queue = []
 
-  # Override the default Resque.enqueue behavior.
-  allow(Resque).to receive(:enqueue) do |klass, *args|
+  # Override the default Resque.enqueue_to behavior.
+  #
+  # The first argument is which queue the job is supposed to be added to, but
+  # it doesn't matter for our purposes, so we ignore it.
+  allow(Resque).to receive(:enqueue_to) do |_, klass, *args|
     queue << [klass, args]
   end
 
@@ -172,6 +175,6 @@ def suspend_resque_workers
     klass.perform(*args)
   end
 
-  # Resume the original Resque.enqueue behavior.
-  allow(Resque).to receive(:enqueue).and_call_original
+  # Resume the original Resque.enqueue_to behavior.
+  allow(Resque).to receive(:enqueue_to).and_call_original
 end

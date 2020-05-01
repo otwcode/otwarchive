@@ -42,7 +42,7 @@ describe TroubleshootingController do
         get :show, params: { work_id: work.id }
         expect(response).to render_template(:show)
         expect(assigns[:allowed_actions]).to \
-          contain_exactly("reindex_work", "update_work_filters")
+          contain_exactly("update_work_filters")
       end
     end
 
@@ -134,13 +134,6 @@ describe TroubleshootingController do
         put :update, params: { tag_id: tag.to_param, actions: ["fix_meta_tags"] }
       end
 
-      it "reindexes the work and redirects" do
-        expect do
-          put :update, params: { work_id: work.id, actions: ["reindex_work"] }
-        end.to(add_to_reindex_queue(work, :main))
-        it_redirects_to_simple(work)
-      end
-
       it "recalculates the work's filters and redirects" do
         work.fandoms = [tag]
         work.filter_taggings.destroy_all
@@ -165,6 +158,11 @@ describe TroubleshootingController do
       it "doesn't allow the user to update filters for a tag" do
         put :update, params: { tag_id: tag.to_param, actions: ["update_tag_filters"] }
         it_redirects_to_with_error(tag_troubleshooting_path(tag), "The following actions aren't allowed: Update Tag Filters.")
+      end
+
+      it "doesn't allow the user to reindex the work" do
+        put :update, params: { work_id: work.id, actions: ["reindex_work"] }
+        it_redirects_to_with_error(work_troubleshooting_path(work), "The following actions aren't allowed: Reindex Work.")
       end
     end
 
@@ -206,6 +204,13 @@ describe TroubleshootingController do
         expect(tag_work.direct_filters.reload).to include(tag)
         expect(syn_work.direct_filters.reload).to include(tag)
         it_redirects_to_simple(tag_path(tag))
+      end
+
+      it "reindexes the work and redirects" do
+        expect do
+          put :update, params: { work_id: work.id, actions: ["reindex_work"] }
+        end.to(add_to_reindex_queue(work, :main))
+        it_redirects_to_simple(work)
       end
     end
   end
