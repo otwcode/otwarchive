@@ -7,7 +7,7 @@ class MetaTagging < ApplicationRecord
   validates_presence_of :meta_tag, :sub_tag, message: "does not exist."
   validates_uniqueness_of :meta_tag_id,
                           scope: :sub_tag_id,
-                          message: "has already been added."
+                          message: "has already been added (possibly as an indirect metatag)."
 
   after_create :expire_caching
   after_destroy :expire_caching
