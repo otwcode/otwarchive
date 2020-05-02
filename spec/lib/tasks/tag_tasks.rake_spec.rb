@@ -172,4 +172,11 @@ describe "rake Tag:reset_filters" do
     expect(work.filters.reload).not_to include(extra)
     expect(work.direct_filters.reload).not_to include(extra)
   end
+
+  it "adds works to the world reindex queue" do
+    work.filters.delete(meta)
+    expect do
+      subject.invoke
+    end.to add_to_reindex_queue(work, :world)
+  end
 end
