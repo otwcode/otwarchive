@@ -586,7 +586,7 @@ namespace :After do
   task(enforce_https: :environment) do
     Chapter.find_each do |chapter|
       puts chapter.id if (chapter.id % 1000).zero?
-      if chapter.content.match /<(embed|iframe).*(ning.com|vidders.net)/
+      if chapter.content.match /<(embed|iframe) .*(ning\.com|vidders\.net)/
         begin
           chapter.content_sanitizer_version = -1
           chapter.sanitize_field(chapter, :content)
