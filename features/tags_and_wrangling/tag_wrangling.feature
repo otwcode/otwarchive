@@ -339,6 +339,8 @@ Feature: Tag wrangling
       And I fill in "tag_meta_tag_string" with "Grandparent"
       And I press "Save changes"
     Then I should see "Tag was updated"
+      And I should see "Grandparent" within "#parent_MetaTag_associations_to_remove_checkboxes"
+      But I should not see "Parent" within "#parent_MetaTag_associations_to_remove_checkboxes"
 
     When I view the tag "Child"
     Then I should see "Grandparent" within ".meta"
