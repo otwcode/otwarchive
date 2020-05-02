@@ -583,7 +583,7 @@ namespace :After do
   end
 
   desc "Enforce HTTPS where available for embedded media from ning.com and vidders.net"
-  task(enforce_https: :environment) do
+  task(enforce_https_viddersnet: :environment) do
     Chapter.find_each do |chapter|
       puts chapter.id if (chapter.id % 1000).zero?
       if chapter.content.match /<(embed|iframe) .*(ning\.com|vidders\.net)/
