@@ -797,31 +797,23 @@ class Tag < ApplicationRecord
   def associations_to_remove; @associations_to_remove ? @associations_to_remove : []; end
   def associations_to_remove=(taglist)
     taglist.reject {|tid| tid.blank?}.each do |tag_id|
-      tag_to_remove = Tag.find(tag_id)
-      if tag_to_remove
-        self.async(:remove_association, tag_to_remove.id)
-      end
+      remove_association(tag_id)
     end
   end
 
   # Determine how two tags are related and divorce them from each other
   def remove_association(tag_id)
     tag = Tag.find(tag_id)
+
     if tag.class == self.class
-      if self.mergers.include?(tag)
-        tag.update_attributes(merger_id: nil)
-      elsif self.direct_meta_tags.include?(tag)
-        self.meta_tags.delete(tag)
-      elsif self.direct_sub_tags.include?(tag)
-        tag.meta_tags.delete(self)
-      end
+      tag.update(merger: nil) if tag.merger == self
+      meta_taggings.where(direct: true, meta_tag: tag).destroy_all
+      sub_taggings.where(direct: true, sub_tag: tag).destroy_all
     else
-      if self.parents.include?(tag)
-        self.parents.delete(tag)
-      elsif tag.parents.include?(self)
-        tag.parents.delete(self)
-      end
+      common_taggings.where(filterable: tag).destroy_all
+      child_taggings.where(common_tag: tag).destroy_all
     end
+
     tag.touch
     self.touch
   end
