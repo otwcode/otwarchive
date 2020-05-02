@@ -810,9 +810,9 @@ class Tag < ApplicationRecord
     if tag.class == self.class
       if self.mergers.include?(tag)
         tag.update_attributes(merger_id: nil)
-      elsif self.meta_tags.include?(tag)
+      elsif self.direct_meta_tags.include?(tag)
         self.meta_tags.delete(tag)
-      elsif self.sub_tags.include?(tag)
+      elsif self.direct_sub_tags.include?(tag)
         tag.meta_tags.delete(self)
       end
     else
@@ -891,11 +891,13 @@ class Tag < ApplicationRecord
     end
 
     self.direct_meta_tags.find_each do |tag|
-      self.merger.meta_taggings.create(meta_tag: tag)
+      meta_tagging = self.merger.meta_taggings.find_or_initialize_by(meta_tag: tag)
+      meta_tagging.update(direct: true)
     end
 
     self.direct_sub_tags.find_each do |tag|
-      self.merger.sub_taggings.create(sub_tag: tag)
+      sub_tagging = self.merger.sub_taggings.find_or_initialize_by(sub_tag: tag)
+      sub_tagging.update(direct: true)
     end
   end
 
@@ -984,14 +986,16 @@ class Tag < ApplicationRecord
 
   def meta_tag_string=(tag_string)
     parse_tag_string(tag_string) do |name, parent|
-      meta_tagging = meta_taggings.build(meta_tag: parent, direct: true)
+      meta_tagging = meta_taggings.find_or_initialize_by(meta_tag: parent)
+      meta_tagging.direct = true
       save_and_gather_errors(meta_tagging, "Invalid metatag '#{name}':")
     end
   end
 
   def sub_tag_string=(tag_string)
     parse_tag_string(tag_string) do |name, sub|
-      sub_tagging = sub_taggings.build(sub_tag: sub, direct: true)
+      sub_tagging = sub_taggings.find_or_initialize_by(sub_tag: sub)
+      sub_tagging.direct = true
       save_and_gather_errors(sub_tagging, "Invalid subtag '#{name}':")
     end
   end
