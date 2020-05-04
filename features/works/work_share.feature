@@ -61,3 +61,20 @@ Feature: Share Works
     When I follow "Share"
     Then I should see "Copy and paste the following code to link back to this work"
       And I should see "><strong>Whatever</strong></a> (9 words) b"
+
+  @javascript
+  Scenario: Share URL should not be used for post-login redirect
+    Given I have a work "Blabla"
+      And the following activated user exists
+      | login   | password |
+      | MadUser | password |
+    When I am logged out
+      And I view the work "Blabla"
+    Then I should see "Share"
+    When I follow "Share"
+    Then I should see "Close" within "#modal"
+    When I follow "Close"
+      And I fill in "User name or email:" with "maduser"
+      And I fill in "Password:" with "password"
+      And I press "Log In"
+    Then I should be on the "Blabla" work page
