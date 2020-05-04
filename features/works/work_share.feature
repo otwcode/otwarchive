@@ -53,3 +53,11 @@ Feature: Share Works
     And I set my preferences to hide the share buttons on my work
     And I view the work "Don't Lie When You're Hurting Inside"
   Then I should not see "Share"
+
+  Scenario: Sharing should work for multi-chapter works
+    Given the chaptered work "Whatever"
+    When I view the work "Whatever"
+    Then I should see "Share"
+    When I follow "Share"
+    Then I should see "Copy and paste the following code to link back to this work"
+      And I should see "><strong>Whatever</strong></a> (9 words) b"
