@@ -10,8 +10,6 @@ FactoryBot.define do
     factory :superadmin do
       login { "superadmin" }
       password { "IHaveThePower" }
-      password_confirmation { "IHaveThePower" }
-      email
       roles { ["superadmin"] }
     end
   end

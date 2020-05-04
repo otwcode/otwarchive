@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-sudo apt-get update #-qq
+sudo apt-get update -qq
 
 # PDF
 sudo apt-get install -qq xfonts-75dpi xfonts-base

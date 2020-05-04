@@ -13,7 +13,7 @@ class AdminSettingPolicy < ApplicationPolicy
     if user.roles.include?('superadmin')
       [
         :account_creation_enabled, :invite_from_queue_enabled, :invite_from_queue_number,
-        :invite_from_queue_frequency, :days_to_purge_unactivated, :last_updated_by,
+        :invite_from_queue_frequency, :days_to_purge_unactivated,
         :invite_from_queue_at, :suspend_filter_counts, :suspend_filter_counts_at,
         :enable_test_caching, :cache_expiration, :tag_wrangling_off,
         :request_invite_enabled, :creation_requires_invite, :downloads_enabled,

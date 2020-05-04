@@ -5,8 +5,8 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception, prepend: true
   rescue_from ActionController::InvalidAuthenticityToken, with: :display_auth_error
 
-  rescue_from 'Pundit::NotAuthorizedError' do
-    access_denied(admin_access_denied: true)
+  rescue_from Pundit::NotAuthorizedError do
+    admin_only_access_denied
   end
 
   rescue_from ActionController::UnknownFormat, with: :raise_not_found
