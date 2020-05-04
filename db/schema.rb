@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20200423205608) do
+ActiveRecord::Schema.define(version: 20190611212339) do
 
   create_table "abuse_reports", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC" do |t|
     t.string "email"
@@ -95,6 +95,7 @@ ActiveRecord::Schema.define(version: 20200423205608) do
     t.bigint "cache_expiration", default: 10
     t.boolean "tag_wrangling_off", default: false, null: false
     t.integer "default_skin_id"
+    t.datetime "stats_updated_at"
     t.boolean "request_invite_enabled", default: false, null: false
     t.boolean "creation_requires_invite", default: false, null: false
     t.boolean "downloads_enabled", default: true
@@ -112,7 +113,6 @@ ActiveRecord::Schema.define(version: 20200423205608) do
     t.string "login"
     t.string "encrypted_password"
     t.string "password_salt"
-    t.text "roles"
   end
 
   create_table "api_keys", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC" do |t|
@@ -477,6 +477,7 @@ ActiveRecord::Schema.define(version: 20200423205608) do
     t.string "category"
     t.integer "comment_sanitizer_version", limit: 2, default: 0, null: false
     t.integer "summary_sanitizer_version", limit: 2, default: 0, null: false
+    t.boolean "approved", default: false, null: false
     t.string "ip_address"
     t.string "username"
     t.string "language"
@@ -501,6 +502,7 @@ ActiveRecord::Schema.define(version: 20200423205608) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.boolean "inherited", default: false, null: false
+    t.index ["filter_id", "filterable_type"], name: "index_filter_taggings_on_filter_id_and_filterable_type"
     t.index ["filterable_id", "filterable_type"], name: "index_filter_taggings_filterable"
   end
 
@@ -604,17 +606,16 @@ ActiveRecord::Schema.define(version: 20200423205608) do
     t.integer "content_sanitizer_version", limit: 2, default: 0, null: false
   end
 
-  create_table "kudos", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC" do |t|
+  create_table "kudos", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC" do |t|
+    t.integer "pseud_id"
     t.integer "commentable_id"
     t.string "commentable_type", collation: "utf8_general_ci"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string "ip_address", collation: "utf8_general_ci"
-    t.integer "user_id"
-    t.index ["commentable_id", "commentable_type", "ip_address"], name: "index_kudos_on_commentable_and_ip_address", unique: true
-    t.index ["commentable_id", "commentable_type", "user_id"], name: "index_kudos_on_commentable_and_user", unique: true
+    t.index ["commentable_id", "commentable_type", "pseud_id"], name: "index_kudos_on_commentable_id_and_commentable_type_and_pseud_id"
     t.index ["ip_address"], name: "index_kudos_on_ip_address"
-    t.index ["user_id"], name: "index_kudos_on_user_id"
+    t.index ["pseud_id"], name: "index_kudos_on_pseud_id"
   end
 
   create_table "languages", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC" do |t|
@@ -768,7 +769,10 @@ ActiveRecord::Schema.define(version: 20200423205608) do
     t.boolean "automatically_approve_collections", default: false, null: false
     t.boolean "collection_emails_off", default: false, null: false
     t.boolean "collection_inbox_off", default: false, null: false
+    t.boolean "hide_private_hit_count", default: false, null: false
+    t.boolean "hide_public_hit_count", default: false, null: false
     t.boolean "recipient_emails_off", default: false, null: false
+    t.boolean "hide_all_hit_counts", default: false, null: false
     t.boolean "view_full_works", default: false, null: false
     t.string "time_zone"
     t.boolean "plain_text_skin", default: false, null: false
@@ -1079,6 +1083,7 @@ ActiveRecord::Schema.define(version: 20200423205608) do
   create_table "stat_counters", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC" do |t|
     t.integer "work_id"
     t.integer "hit_count", default: 0, null: false
+    t.string "last_visitor"
     t.integer "download_count", default: 0, null: false
     t.integer "comments_count", default: 0, null: false
     t.integer "kudos_count", default: 0, null: false
@@ -1256,6 +1261,8 @@ ActiveRecord::Schema.define(version: 20200423205608) do
     t.boolean "backdate", default: false, null: false
     t.text "endnotes"
     t.string "imported_from_url"
+    t.integer "hit_count_old", default: 0, null: false
+    t.string "last_visitor_old"
     t.boolean "complete", default: false, null: false
     t.integer "summary_sanitizer_version", limit: 2, default: 0, null: false
     t.integer "notes_sanitizer_version", limit: 2, default: 0, null: false
