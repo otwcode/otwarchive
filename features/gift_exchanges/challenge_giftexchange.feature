@@ -539,7 +539,7 @@ Feature: Gift Exchange Challenge
     When I delete the challenge "Bad Gift Exchange"
     Then I should see "Are you sure you want to delete the challenge from the collection Bad Gift Exchange? All sign-ups, assignments, and settings will be lost. (Works and bookmarks will remain in the collection.)"
     When I press "Yes, Delete Challenge"
-	Then I should see "Challenge settings were deleted."
+    Then I should see "Challenge settings were deleted."
       And I should not see the gift exchange dashboard for "Bad Gift Exchange"
       And no one should have an assignment for "Bad Gift Exchange"
       And no one should be signed up for "Bad Gift Exchange"
