@@ -453,12 +453,12 @@ Otwarchive::Application.routes.draw do
     end
     resources :requests, controller: "challenge_requests"
     # challenge types
-    resource :gift_exchange, controller: 'challenge/gift_exchange' do
+    resource :gift_exchange, controller: "challenge/gift_exchange" do
       member do
         get :confirm_delete
       end
     end
-    resource :prompt_meme, controller: 'challenge/prompt_meme' do
+    resource :prompt_meme, controller: "challenge/prompt_meme" do
       member do
         get :confirm_delete
       end
