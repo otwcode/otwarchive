@@ -427,15 +427,10 @@ describe TagsController do
           grandparent
         end
 
-        it "has a useful error" do
-          expect(assigns[:tag].errors.full_messages).to include(
-            "Invalid metatag '#{meta.name}': Metatag has already been " \
-            "added (possibly as an indirect metatag)."
-          )
-        end
+        include_examples "success message"
 
-        it "does not create two meta-taggings" do
-          expect(MetaTagging.where(sub_tag: tag, meta_tag: meta).count).to eq 1
+        it "marks the formerly inherited meta tagging as direct" do
+          expect(MetaTagging.find_by(sub_tag: tag, meta_tag: meta).direct).to be_truthy
         end
       end
     end
