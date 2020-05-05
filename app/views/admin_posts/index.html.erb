@@ -1,5 +1,5 @@
 <div class="news admin home">
-  <% if current_admin&.admin_post_access? %>
+  <% if policy(@admin_posts).can_post? %>
     <%= render "admin_index" %>
   <% else %>
     <div class="primary header module">

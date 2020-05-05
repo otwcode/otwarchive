@@ -24,7 +24,7 @@
 <!--/descriptions-->
 
 <!--subnav-->
-<% if logged_in_as_admin? && current_admin.can_edit_works? %>
+<% if AdminModerationPolicy.can_edit_works?(current_admin) %>
   <%= render partial: 'admin/admin_options', locals: { item: @work } %>
 <% end %>
 <!--/subnav-->

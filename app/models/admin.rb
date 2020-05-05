@@ -25,14 +25,4 @@ class Admin < ApplicationRecord
       errors.add(:roles, :invalid)
     end
   end
-
-  ### PERMISSIONS ###
-
-  def admin_post_access?
-    AdminPostPolicy.can_post?(self)
-  end
-
-  def can_edit_works?
-    AdminModerationPolicy.can_edit_works?(self)
-  end
 end

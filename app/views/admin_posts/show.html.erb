@@ -6,7 +6,8 @@
     <!--/descriptions-->
     <!--subnav-->
     <div class="navigation actions module">
-      <% if current_admin&.admin_post_access? %>
+      <% if policy(@admin_post).can_post? %>
+      
         <h4 class="landmark heading"><%= ts("Admin Actions") %></h4>
         <ul class="management actions" role="navigation">
           <li><%= link_to ts("Edit Post"), edit_admin_post_path(@admin_post) %></li>

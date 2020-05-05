@@ -19,7 +19,7 @@
     <%= link_to ts("Admin Posts", key: "header"), admin_posts_path %>
     <ul class="menu" role="menu">
       <li><%= span_if_current ts("AO3 News", key: "header"), admin_posts_path %></li>
-      <% if current_admin.admin_post_access? %>
+      <% if AdminPostPolicy.can_post?(current_admin) %>
         <li><%= span_if_current ts("Post AO3 News", key: "header"), new_admin_post_path %></li>
       <% end %>
       <li><%= span_if_current ts("Archive FAQ", key: "header"), archive_faqs_path %></li>
