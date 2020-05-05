@@ -2,7 +2,7 @@
 <h3 class="landmark heading"><%= ts("Actions") %></h3>
 <ul class="work navigation actions" role="menu">
   <% if logged_in_as_admin? || permit?("tag_wrangler") %>
-    <li class="reindex"><%= link_to ts("Reindex Work"), reindex_work_path(@work) %></li>
+    <li class="reindex"><%= link_to ts("Troubleshoot"), work_troubleshooting_path(@work) %></li>
   <% end %>
 
   <% if is_author_of?(@work) %>

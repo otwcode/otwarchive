@@ -30,6 +30,10 @@ class IndexQueue
     new(key).add_ids(ids)
   end
 
+  def self.from_class_and_label(klass, label)
+    new(get_key(klass, label))
+  end
+
   ####################
   # INSTANCE METHODS
   ####################
