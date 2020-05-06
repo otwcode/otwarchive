@@ -278,7 +278,7 @@ public
     false
   end
 
-  def admin_only_access_denied()
+  def admin_only_access_denied
     flash[:error] = ts("Sorry, only an authorized admin can access the page you were trying to reach.")
     redirect_to root_path
     false
