@@ -840,12 +840,24 @@ describe CommentsController do
 
     context "when logged in as an admin" do
       before { fake_login_admin(create(:admin, roles: ['policy_and_abuse'])) }
+      let(:admin) { create(:admin) }
+      
+      context 'DELETE COMMENT' do
+        it "DELETE #destroy does not permit deletion of the comment when admin noes not have correct role" do
+          admin.update(roles: [])
+          fake_login_admin(admin)
+          delete :destroy, params: { id: comment.id }
+          it_redirects_to_with_error(root_url, "Sorry, only an authorized admin can access the page you were trying to reach.")
+        end
 
-      it "DELETE #destroy successfully deletes the comment" do
-        delete :destroy, params: { id: comment.id }
-        expect(flash[:comment_notice]).to eq "Comment deleted."
-        it_redirects_to_simple(work_path(work, show_comments: true, anchor: :comments))
-        expect { comment.reload }.to raise_exception(ActiveRecord::RecordNotFound)
+        it "DELETE #destroy successfully deletes the comment when admin has correct role" do
+          admin.update(roles: ['policy_and_abuse'])
+          fake_login_admin(admin)
+          delete :destroy, params: { id: comment.id }
+          expect(flash[:comment_notice]).to eq "Comment deleted."
+          it_redirects_to_simple(work_path(work, show_comments: true, anchor: :comments))
+          expect { comment.reload }.to raise_exception(ActiveRecord::RecordNotFound)
+        end
       end
 
       it "GET #add_comment redirects to the work with an error" do
