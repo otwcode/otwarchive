@@ -322,3 +322,42 @@ Feature: Tag wrangling
       And I am logged in as an admin
     When I view the tag "Cowboy Bebop"
     Then I should see "Troubleshoot"
+
+  Scenario: Can simultaneously add a grandparent metatag as a direct metatag and remove the parent metatag
+    Given a canonical fandom "Grandparent"
+      And a canonical fandom "Parent"
+      And a canonical fandom "Child"
+      And "Grandparent" is a metatag of the fandom "Parent"
+      And "Parent" is a metatag of the fandom "Child"
+      And I am logged in as a random user
+      And I post the work "Oldest" with fandom "Grandparent"
+      And I post the work "Middle" with fandom "Parent"
+      And I post the work "Youngest" with fandom "Child"
+      And I am logged in as a tag wrangler
+
+    When I edit the tag "Child"
+      And I check the 1st checkbox with id matching "MetaTag"
+      And I fill in "tag_meta_tag_string" with "Grandparent"
+      And I press "Save changes"
+    Then I should see "Tag was updated"
+      And I should see "Grandparent" within "#parent_MetaTag_associations_to_remove_checkboxes"
+      But I should not see "Parent" within "#parent_MetaTag_associations_to_remove_checkboxes"
+
+    When I view the tag "Child"
+    Then I should see "Grandparent" within ".meta"
+      But I should not see "Parent" within ".meta"
+
+    When I go to the works tagged "Grandparent"
+    Then I should see "Oldest"
+      And I should see "Middle"
+      And I should see "Youngest"
+
+    When I go to the works tagged "Parent"
+    Then I should see "Middle"
+      But I should not see "Oldest"
+      And I should not see "Youngest"
+
+    When I go to the works tagged "Child"
+    Then I should see "Youngest"
+      But I should not see "Oldest"
+      And I should not see "Middle"
