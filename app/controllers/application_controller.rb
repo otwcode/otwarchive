@@ -9,6 +9,10 @@ class ApplicationController < ActionController::Base
     admin_only_access_denied
   end
 
+  def pundit_user
+    current_admin || current_user
+  end
+
   rescue_from ActionController::UnknownFormat, with: :raise_not_found
   rescue_from Elasticsearch::Transport::Transport::Errors::ServiceUnavailable do
     # Non-standard code to distinguish Elasticsearch errors from standard 503s.

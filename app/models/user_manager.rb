@@ -12,6 +12,7 @@ class UserManager
               :successes
 
   PERMITTED_ACTIONS = %w[note warn suspend unsuspend ban unban spamban].freeze
+  REQUIRED_ADMIN_ROLES = %w(superadmin policy_and_abuse).freeze
 
   def initialize(admin, params)
     @admin = admin
@@ -26,7 +27,8 @@ class UserManager
   end
 
   def save
-    validate_user_and_admin &&
+    check_correct_admin_roles &&
+      validate_user_and_admin &&
       validate_admin_note &&
       validate_suspension &&
       validate_next_of_kin &&
@@ -43,6 +45,17 @@ class UserManager
   end
 
   private
+
+  def check_correct_admin_roles
+    admin_access = (admin.roles & REQUIRED_ADMIN_ROLES).any?
+
+    if admin_access
+      true
+    else
+      errors << "Must have a valid admin role to proceed."
+      false
+    end
+  end
 
   def validate_user_and_admin
     if user && admin
