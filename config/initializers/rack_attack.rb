@@ -20,7 +20,7 @@ class Rack::Attack
   # frontends will pass the internal network (10.0.0.0/8) to the
   # unicorns. We need to ensure that we don't block these requests.
 
-  ArchiveConfig.RATE_LIMIT_SAFELIST.each do | ip |
+  ArchiveConfig.RATE_LIMIT_SAFELIST.each do |ip|
     Rack::Attack.safelist_ip(ip)
   end
 
