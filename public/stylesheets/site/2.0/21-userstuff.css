@@ -68,6 +68,11 @@
   list-style-type: lower-roman;
 }
 
+.userstuff ul[dir="rtl"] li {
+    margin-right: 1.75em;
+    margin-left: 0;
+}
+
 /* headings */
 
 .userstuff h1 {
