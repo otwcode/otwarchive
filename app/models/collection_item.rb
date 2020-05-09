@@ -147,7 +147,7 @@ class CollectionItem < ApplicationRecord
       end
 
       # if at least one of the owners of the items automatically approves
-      # adding or is a member of the collection, go ahead and approve by user
+      # adding, go ahead and approve by user
       if !approved_by_user?
         case item_type
         when "Work"
@@ -157,7 +157,7 @@ class CollectionItem < ApplicationRecord
         end
 
         users.each do |user|
-          if user.preference.automatically_approve_collections || (collection && collection.user_is_posting_participant?(user))
+          if user.preference.automatically_approve_collections
             # if the work is being added by a collection maintainer and at
             # least ONE of the works owners allows automatic inclusion in
             # collections, add the work to the collection
@@ -318,6 +318,33 @@ class CollectionItem < ApplicationRecord
           relationship.notify_parent_owners
         end
       end
+    end
+  end
+
+  after_update :notify_of_unrevealed_or_anonymous
+  def notify_of_unrevealed_or_anonymous
+    # This CollectionItem's anonymous/unrevealed status can only affect the
+    # item's status if (a) the CollectionItem is approved by the user and (b)
+    # the item is a work. (Bookmarks can't be anonymous/unrevealed at the
+    # moment.)
+    return unless approved_by_user? && item.is_a?(Work)
+
+    # Check whether anonymous/unrevealed is becoming true, when the work
+    # currently has it set to false:
+    newly_anonymous = (saved_change_to_anonymous?(to: true) && !item.anonymous?)
+    newly_unrevealed = (saved_change_to_unrevealed?(to: true) && !item.unrevealed?)
+
+    return unless newly_unrevealed || newly_anonymous
+
+    # Don't notify if it's one of the work creators who is changing the work's
+    # status.
+    return if item.users.include?(User.current_user)
+
+    item.users.each do |user|
+      UserMailer.anonymous_or_unrevealed_notification(
+        user.id, item.id, collection.id,
+        anonymous: newly_anonymous, unrevealed: newly_unrevealed
+      ).deliver
     end
   end
 end

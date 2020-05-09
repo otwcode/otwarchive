@@ -407,7 +407,7 @@ namespace :After do
 
   desc "Set initial values for sortable tag names for tags that aren't fandoms"
   task(:more_sortable_tag_names => :environment) do
-    [Category, Character, Freeform, Rating, Relationship, Warning].each do |klass|
+    [Category, Character, Freeform, Rating, Relationship, ArchiveWarning].each do |klass|
       puts "Adding sortable names for #{klass.to_s.downcase.pluralize}"
       klass.by_name.find_each(:conditions => "canonical = 1 AND sortable_name = ''") do |tag|
         tag.set_sortable_name
@@ -615,6 +615,69 @@ namespace :After do
       print(".") && STDOUT.flush
     end
     puts && STDOUT.flush
+  end
+
+  desc "Reveal works and creators hidden upon invitation to unrevealed or anonymous collections"
+  task(unhide_invited_works: :environment) do
+    works = Work.where("in_anon_collection IS true OR in_unrevealed_collection IS true")
+    puts "Total number of works to check: #{works.count}"
+
+    works.find_in_batches do |batch|
+      batch.each do |work|
+        work.update_anon_unrevealed
+        work.save if work.changed?
+      end
+      print(".") && STDOUT.flush
+    end
+    puts && STDOUT.flush
+  end
+
+  desc "Update each user's kudos with the user's id"
+  task(add_user_id_to_kudos: :environment) do
+    total_users = User.all.size
+    total_batches = (total_users + 999) / 1000
+    puts "Updating #{total_users} users' kudos in #{total_batches} batches"
+
+    User.includes(:pseuds).find_in_batches.with_index do |batch, index|
+      batch_number = index + 1
+      progress_msg = "Batch #{batch_number} of #{total_batches} complete"
+      batch.each do |user|
+        Kudo.where(pseud_id: user.pseud_ids, user_id: nil)
+          .update_all(user_id: user.id)
+      end
+      puts(progress_msg) && STDOUT.flush
+    end
+    puts && STDOUT.flush
+  end
+
+  desc "Update kudo counts on indexed works"
+  task(update_indexed_stat_counter_kudo_count: :environment) do
+    counters = StatCounter.where("kudos_count > ?", 0)
+    total_batches = (counters.size + 999) / 1000
+    batch_number = 0
+
+    counters.find_in_batches do |batch|
+      batch_number += 1
+      progress_msg = "Batch #{batch_number} of #{total_batches} complete"
+      batch.each do |counter|
+        next unless counter.work
+
+        counter.kudos_count = counter.work.kudos.count
+        next unless counter.kudos_count_changed?
+
+        # Counters will be queued for reindexing.
+        counter.save
+      end
+      puts(progress_msg) && STDOUT.flush
+    end
+    puts && STDOUT.flush
+  end
+
+  desc "Clean up the Redis info from the old hit count code."
+  task(remove_old_redis_hit_count_data: :environment) do
+    REDIS_GENERAL.scan_each(match: "work_stats:*") do |key|
+      REDIS_GENERAL.del(key)
+    end
   end
 end # this is the end that you have to put new tasks above
 

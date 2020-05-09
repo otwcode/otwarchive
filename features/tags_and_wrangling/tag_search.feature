@@ -1,4 +1,4 @@
-@no-txn @tags @tag_wrangling @search
+@tags @tag_wrangling @search
 Feature: Search Tags
   In order to find tags
   As a user
