@@ -3,7 +3,7 @@ class StatsController < ApplicationController
   before_action :users_only
   before_action :load_user
   before_action :check_ownership
-
+  
   # only the current user
   def load_user
     @user = current_user
@@ -25,15 +25,8 @@ class StatsController < ApplicationController
 
     # NOTE: Because we are going to be eval'ing the @sort variable later we MUST make sure that its content is
     # checked against the whitelist of valid options
-    sort_options = ""
-    @sort = ""
-    if current_user.preference.hide_hit_counts
-      sort_options = %w(date kudos.count comment_thread_count bookmarks.count subscriptions.count word_count)
-      @sort = sort_options.include?(params[:sort_column]) ? params[:sort_column] : "kudos.count"
-    else
-      sort_options = %w(hits date kudos.count comment_thread_count bookmarks.count subscriptions.count word_count)
-      @sort = sort_options.include?(params[:sort_column]) ? params[:sort_column] : "hits"
-    end
+    sort_options = %w(hits date kudos.count comment_thread_count bookmarks.count subscriptions.count word_count)
+    @sort = sort_options.include?(params[:sort_column]) ? params[:sort_column] : "hits"
 
     @dir = params[:sort_direction] == "ASC" ? "ASC" : "DESC"
     params[:sort_column] = @sort
@@ -48,10 +41,7 @@ class StatsController < ApplicationController
       end_date = DateTime.parse("01/01/#{next_year}")
       work_query = work_query.where("works.revised_at >= ? AND works.revised_at <= ?", start_date, end_date)
     end
-    # NOTE: eval is used here instead of send only because you can't send "bookmarks.count" -- avoid eval
-    # wherever possible and be extremely cautious of its security implications (we whitelist the contents of
-    # @sort above, so this should never contain potentially dangerous user input)
-    works = work_query.all.sort_by {|w| @dir == "ASC" ? (eval("w.#{@sort}") || 0) : (0 - (eval("w.#{@sort}") || 0).to_i)}
+    works = work_query.all.sort_by { |w| @dir == "ASC" ? (stat_element(w, @sort) || 0) : (0 - (stat_element(w, @sort) || 0).to_i) }
 
     # on the off-chance a new user decides to look at their stats and have no works
     if works.blank?
@@ -68,9 +58,8 @@ class StatsController < ApplicationController
     # gather totals for all works
     @totals = {}
     (sort_options - ["date"]).each do |value|
-      # see explanation above about the eval here
       # the inject is used to collect the sum in the "result" variable as we iterate over all the works
-      @totals[value.split(".")[0].to_sym] = works.uniq.inject(0) {|result, work| result + (eval("work.#{value}") || 0)} # sum the works
+      @totals[value.split(".")[0].to_sym] = works.uniq.inject(0) { |result, work| result + (stat_element(work, value) || 0) } # sum the works
     end
     @totals[:user_subscriptions] = Subscription.where(subscribable_id: @user.id, subscribable_type: 'User').count
 
@@ -78,7 +67,6 @@ class StatsController < ApplicationController
     @chart_data = GoogleVisualr::DataTable.new
     @chart_data.new_column('string', 'Title')
 
-    # TODO: If current_user.preference_hide_hit_counts is true, we probably shouldn't graph hits here
     chart_col = @sort == "date" ? "hits" : @sort
     chart_col_title = chart_col.split(".")[0].titleize == "Comments" ? ts("Comment Threads") : chart_col.split(".")[0].titleize
     if @sort == "date" && @dir == "ASC"
@@ -93,8 +81,7 @@ class StatsController < ApplicationController
     @chart_data.new_column('number', chart_col_title)
 
     # Add Rows and Values
-    # see explanation above about the eval here
-    @chart_data.add_rows(works.uniq[0..4].map {|w| [w.title, eval("w.#{chart_col}")]})
+    @chart_data.add_rows(works.uniq[0..4].map { |w| [w.title, stat_element(w, chart_col)] })
 
     # image version of bar chart
     # opts from here: http://code.google.com/apis/chart/image/docs/gallery/bar_charts.html
@@ -106,8 +93,35 @@ class StatsController < ApplicationController
      chm: "N,000000,0,-1,11"
     })
 
-    @chart = GoogleVisualr::Interactive::ColumnChart.new(@chart_data, title: chart_title)
+    options = {
+      colors: ["#993333"],
+      title: chart_title,
+      vAxis: { 
+        viewWindow: { min: 0 }
+      }
+    }
+    @chart = GoogleVisualr::Interactive::ColumnChart.new(@chart_data, options)
 
   end
 
+  private
+
+  def stat_element(work, element)
+    case element.downcase
+    when "date"
+      work.date
+    when "hits"
+      work.hits
+    when "kudos.count"
+      work.kudos.count
+    when "comment_thread_count"
+      work.comment_thread_count
+    when "bookmarks.count"
+      work.bookmarks.count
+    when "subscriptions.count"
+      work.subscriptions.count
+    when "word_count"
+      work.word_count
+    end
+  end
 end

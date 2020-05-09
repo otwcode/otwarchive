@@ -1,10 +1,10 @@
 require 'spec_helper'
 
-RSpec.describe SeriesController, type: :controller do
+describe SeriesController do
   include LoginMacros
   include RedirectExpectationHelper
   let(:user) { create(:user) }
-  let(:series) { create(:series, pseuds: user.pseuds) }
+  let(:series) { create(:series, authors: [user.default_pseud]) }
 
   describe 'new' do
     it 'assigns a series' do
@@ -30,39 +30,47 @@ RSpec.describe SeriesController, type: :controller do
 
     it 'gives notice and redirects on a valid series' do
       fake_login_known_user(user)
-      post :create, params: { series: { title: "test title" } }
+      post :create, params: { series: { title: "test title", author_attributes: { ids: user.pseud_ids } } }
       expect(flash[:notice]).to eq "Series was successfully created."
       expect(response).to have_http_status :redirect
     end
   end
 
   describe 'update' do
-    it 'redirects and errors if removing the last author of a series' do
+    it "redirects and errors if removing the last author of a series" do
       fake_login_known_user(user)
-      put :update, params: { series: { author_attributes: { id: nil } }, id: series }
-      it_redirects_to_with_error(edit_series_path(series), \
-                                 "Sorry, you cannot remove yourself entirely as an author of a series right now.")
+      put :update, params: { series: { author_attributes: { ids: [""] } }, id: series }
+      expect(response).to render_template :edit
+      expect(assigns[:series].errors.full_messages).to \
+        include "You haven't selected any pseuds for this series."
     end
 
-    xit 'allows you to change the pseuds associated with the series' do
+    it "allows you to change which of your pseuds is listed on the series" do
       fake_login_known_user(user)
-      new_pseud = create(:pseud)
-        put :update, params: { series: { author_attributes: { ids: [user.id] } }, id: series, pseud: { byline: new_pseud.byline } }
+      new_pseud = create(:pseud, user: user)
+      put :update, params: { series: { author_attributes: { ids: [new_pseud.id] } }, id: series }
       it_redirects_to_with_notice(series_path(series), \
                                   "Series was successfully updated.")
-      series.reload
-      expect(series.pseuds).to include(new_pseud)
+      expect(series.pseuds.reload).to contain_exactly(new_pseud)
     end
 
-    it 'renders the edit template if the update fails' do
+    it "allows you to invite co-creators" do
       fake_login_known_user(user)
-      new_pseud = create(:pseud)
-      allow_any_instance_of(Series).to receive(:update_attributes) { false }
-      put :update, params: { series: { author_attributes: { ids: [user.id] } }, id: series, pseud: { byline: new_pseud.byline } }
-      expect(assigns(:pseuds))
-      expect(assigns(:coauthors))
-      expect(assigns(:selected_pseuds))
+      co_creator = create(:user)
+      co_creator.preference.update(allow_cocreator: true)
+      put :update, params: { series: { author_attributes: { byline: co_creator.login } }, id: series }
+      it_redirects_to_with_notice(series_path(series), \
+                                  "Series was successfully updated.")
+      expect(series.pseuds.reload).not_to include(co_creator.default_pseud)
+      expect(series.user_has_creator_invite?(co_creator)).to be_truthy
+    end
+
+    it "renders the edit template if the update fails" do
+      fake_login_known_user(user)
+      allow_any_instance_of(Series).to receive(:save) { false }
+      put :update, params: { series: { title: "foobar" }, id: series }
       expect(response).to render_template('edit')
+      expect(series.reload.title).not_to eq("foobar")
     end
   end
 

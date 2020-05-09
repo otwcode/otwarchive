@@ -1,12 +1,12 @@
 <% content_for :message do %>
-<% pretty_title = "<i>#{style_link(@work.title.html_safe, work_url(@work))}</i>".html_safe %>
-    <p><%= t(".hello", user: @user.default_pseud.byline) %></p>
+  <% pretty_title = "<i>#{style_link(@work.title.html_safe, work_url(@work))}</i>".html_safe %>
+  <p><%= t(".hello", user: @user.default_pseud.byline) %></p>
 
-    <p><%= t(".html.part1", title: pretty_title, tos: style_link(t(".tos"), tos_url).html_safe).html_safe %></p>
+  <p><%= t(".html.part1", title: pretty_title, tos: style_link(t(".tos"), tos_url).html_safe).html_safe %></p>
 
-    <p><%= t(".part2") %></p>
+  <p><%= t(".part2") %></p>
 
-    <p><%= t(".html.part3", abuse: abuse_link(t(".contact_abuse"))).html_safe %></p>
-    <p><%= t(".sincerely") %></p>
-    <p><%= style_bold(t(".signature")) %></p>
+  <p><%= t(".html.part3", abuse: abuse_link(t(".contact_abuse"))).html_safe %></p>
+  <p><%= t(".sincerely") %></p>
+  <p><%= style_bold(t(".signature")) %></p>
 <% end %>

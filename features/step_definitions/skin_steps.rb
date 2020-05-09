@@ -76,6 +76,7 @@ Given /^the approved public skin "([^"]*)" with css "([^"]*)"$/ do |skin_name, c
   step "the unapproved public skin \"#{skin_name}\" with css \"#{css}\""
   step "I am logged in as an admin"
   step "I approve the skin \"#{skin_name}\""
+  step "I am logged out"
 end
 
 Given /^the approved public skin "([^"]*)"$/ do |skin_name|

@@ -3,9 +3,9 @@ Feature: Collection
   In order to have an archive full of collections
   As a humble user
   I want to locate and browse an existing collection
-  
+
   Scenario: Collections index should have different links for logged in and logged out users
-  
+
   Given I am logged in as "onlooker"
   When I go to the collections page
   Then I should see "Open Challenges"
@@ -16,7 +16,7 @@ Feature: Collection
     And I should not see "New Collection"
 
   Scenario: Filter collections index to only show prompt memes
-  
+
   Given I have loaded the fixtures
   When I go to the collections page
     And I choose "Prompt Meme Challenge"
@@ -27,9 +27,9 @@ Feature: Collection
     And I should not see "Another Plain Collection"
     And I should not see "Surprise Presents"
     And I should not see "Another Gift Swap"
-    
+
   Scenario: Filter collections index to only show gift exchanges
-  
+
   Given I have loaded the fixtures
   When I go to the collections page
     And I choose "Gift Exchange Challenge"
@@ -40,9 +40,9 @@ Feature: Collection
     And I should not see "Some Test Collection"
     And I should not see "Some Other Collection"
     And I should not see "Another Plain Collection"
-    
+
   Scenario: Filter collections index to only show non-challenge collections
-  
+
   Given I have loaded the fixtures
   When I go to the collections page
     And I choose "No Challenge"
@@ -53,9 +53,9 @@ Feature: Collection
     And I should not see "Surprise Presents"
     And I should not see "Another Gift Swap"
     And I should not see "On Demand"
-  
+
   Scenario: Filter collections index to only show closed collections
-  
+
   Given I have loaded the fixtures
   When I go to the collections page
     And I choose "collection_filters_closed_true"
@@ -66,9 +66,9 @@ Feature: Collection
     And I should not see "Some Other Collection"
     And I should not see "Surprise Presents"
     And I should not see "Another Gift Swap"
-  
+
   Scenario: Filter collections index to only show open collections
-    
+
   Given I have loaded the fixtures
   When I go to the collections page
     And I choose "collection_filters_closed_false"
@@ -92,9 +92,9 @@ Feature: Collection
     And I should not see "Another Plain Collection"
     And I should not see "Another Gift Swap"
     And I should not see "On Demand"
-    
+
   Scenario: Filter collections index to only show unmoderated collections
-  
+
   Given I have loaded the fixtures
   When I go to the collections page
     And I choose "collection_filters_moderated_false"
@@ -105,9 +105,9 @@ Feature: Collection
     And I should see "Another Gift Swap"
     And I should see "On Demand"
     And I should not see "Surprise Presents"
-    
+
   Scenario: Filter collections index to show open, moderated gift exchanges
-  
+
   Given I have loaded the fixtures
   When I go to the collections page
     And I choose "collection_filters_closed_false"

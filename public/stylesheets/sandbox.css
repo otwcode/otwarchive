@@ -29,3 +29,12 @@ and preserve the balance/symmetry of the page */
 .edit_external_author ul ul {
   margin-left: 2.75em;
 }
+
+/* AO3-5845: Workaround for Twitter button not always displaying in some
+browsers. */
+.twitter-share-button {
+  min-width: 76px;
+  min-height: 28px;
+  width: 76px;
+  height: 28px;
+}
