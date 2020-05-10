@@ -30,19 +30,15 @@ en:
   user_mailer:
     invite_increase_notification:
       subject: "[%{app_name}] New Invitations"
-      html:  "<p> Hi %{login}! </p>\n\
-          <p> We just wanted to let you know that you have %{total} new invitation(s), which can be used to create new accounts at the archive. You can invite a friend at %{invitation_page}. </p>\n\
-          <p> Cheers, <br> %{archive_name} </p>"
-      txt: |-
-          Hi %{login}
-          We just wanted to let you know that you have %{total} new invitation(s),
-          which can be used to create new accounts at the archive. You can invite a
-          friend at %{invitation_page}.
-          Cheers,
-          %{archive_name}
+      greeting: "Hi %{login}!"
+      body:
+        one: "We just wanted to let you know that you have %{count} new invitation, which can be used to create a new account at the Archive. You can invite a friend at %{invitation_page}."
+        other: "We just wanted to let you know that you have %{count} new invitations, which can be used to create new accounts at the Archive. You can invite a friend at %{invitation_page}."
+      invitation_page_link_text: your invitations page
+      closing: "Cheers,"
     admin_hidden_work_notification:
       subject: "[%{app_name}] Your work has been hidden by the Abuse Team"
-      hello: "Dear %{user},"
+      greeting: "Dear %{user},"
       tos: "Terms of Service"
       contact_abuse: "contact our Abuse Team"
       sincerely: "Sincerely,"
@@ -53,7 +49,7 @@ en:
         part3: "If you have any questions, please %{abuse}."
       text:
         part1: "Your work %{title} has been been reported as being in violation of the Archive of Our Own's Terms of Service (%{tos_url})."
-        part3: "If you have any questions, please contact our Abuse Team (%{abuse})."
+        part3: "If you have any questions, please contact our Abuse Team (%{abuse_url})."
     admin_deleted_work_notification:
       subject: "[%{app_name}] Your work has been deleted by an admin"
       hello: "Dear %{user},"

@@ -381,4 +381,40 @@ describe UserMailer do
       end
     end
   end
+
+  describe "admin_hidden_notification" do
+    title = Faker::Book.title
+    let(:author) { create(:user) }
+    let(:work) { create(:work, title: title, authors: [author.pseuds.first]) }
+
+
+    subject(:email) { UserMailer.admin_hidden_work_notification(work.id,  author.id).deliver }
+
+    # Test the headers
+    it_behaves_like "an email with a valid sender"
+
+    it "has the correct subject line" do
+      expect(email.subject).to eq("[#{ArchiveConfig.APP_SHORT_NAME}] Your work has been hidden by the Abuse Team")
+
+    end
+    # Test both body contents
+    it_behaves_like "a multipart email"
+
+    it_behaves_like "a translated email"
+
+    describe "HTML version" do
+      it "has the correct content" do
+        expect(email).to have_html_part_content("While the work is under investigation it has been hidden")
+        expect(email).to have_html_part_content("contact our Abuse Team</a>")
+      end
+    end
+
+    describe "text version" do
+      it "has the correct content" do
+        expect(email).to have_text_part_content("While the work is under investigation it has been hidden")
+        expect(email).to have_text_part_content("contact our Abuse Team")
+      end
+    end
+  end
 end
+
