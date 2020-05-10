@@ -387,15 +387,12 @@ describe UserMailer do
     let(:author) { create(:user) }
     let(:work) { create(:work, title: title, authors: [author.pseuds.first]) }
 
-
     subject(:email) { UserMailer.admin_hidden_work_notification(work.id,  author.id).deliver }
-
     # Test the headers
     it_behaves_like "an email with a valid sender"
 
     it "has the correct subject line" do
       expect(email.subject).to eq("[#{ArchiveConfig.APP_SHORT_NAME}] Your work has been hidden by the Abuse Team")
-
     end
     # Test both body contents
     it_behaves_like "a multipart email"
@@ -417,4 +414,3 @@ describe UserMailer do
     end
   end
 end
-
