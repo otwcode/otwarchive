@@ -2,7 +2,7 @@
 
 ## Reporting bugs
 
-We maintain a [JIRA issue tracker](https://otwarchive.atlassian.net) for developers,
+We maintain a [Jira issue tracker](https://otwarchive.atlassian.net) for developers,
 and a [list of Known Issues](https://archiveofourown.org/known_issues) for
 [Archive of Our Own](https://archiveofourown.org) users, neither of which are
 publicly editable.
@@ -13,7 +13,7 @@ please [contact the AO3 Support team](https://archiveofourown.org/support).
 
 ## Reporting security issues
 
-Please see [SECURITY.md](https://github.com/otwcode/otwarchive/blob/master/SECURITY.md).
+Please refer to [SECURITY.md](https://github.com/otwcode/otwarchive/blob/master/SECURITY.md).
 
 
 ## Suggesting new features
@@ -30,7 +30,7 @@ official OTW volunteers, please feel free to make changes!
 
 ## Contributing code
 
-**We only accept pull requests for issues we have already added to [JIRA](https://otwarchive.atlassian.net)**,
+**We only accept pull requests for issues we have already added to [Jira](https://otwarchive.atlassian.net)**,
 with the exception of spelling corrections and documentation improvements
 (e.g. any Markdown files).
 
@@ -46,7 +46,7 @@ can review and eventually merge your pull request.
 
 Once your pull request is merged, it will be deployed to our internal testing site
 and our QA team will check that everything is working as intended. If not, we may
-set the issue to ["Broken on Test"](https://github.com/otwcode/otwarchive/wiki/Issue-Tracking-with-JIRA)
+set the issue to ["Broken on Test"](https://github.com/otwcode/otwarchive/wiki/Issue-Tracking-with-Jira)
 and ask you to make further changes in new pull requests.
 
 If all is well, your contribution will be deployed to the [Archive of Our Own](https://archiveofourown.org)
