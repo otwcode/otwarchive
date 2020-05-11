@@ -16,16 +16,16 @@ please [contact the AO3 Support team](https://archiveofourown.org/support).
 Please refer to [SECURITY.md](https://github.com/otwcode/otwarchive/blob/master/SECURITY.md).
 
 
-## Suggesting new features
-
-Please [contact the AO3 Support team](https://archiveofourown.org/support).
-
-
 ## Updating documentation
 
 Our [development wiki](https://github.com/otwcode/otwarchive/wiki) is publicly
 editable. Unless a page says at the top that it should only be edited by
 official OTW volunteers, please feel free to make changes!
+
+
+## Suggesting new features
+
+Please [contact the AO3 Support team](https://archiveofourown.org/support).
 
 
 ## Contributing code
