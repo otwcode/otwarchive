@@ -107,7 +107,6 @@ Feature: Create bookmarks of external works
     Given "first_user" has bookmarked an external work
       And I am logged in as "second_user"
     When I use the bookmarklet on a previously bookmarked URL
-      And I wait 1 second
       And I press "Create"
     Then I should see "Bookmark was successfully created."
       And the work info for my new bookmark should match the original
@@ -118,7 +117,6 @@ Feature: Create bookmarks of external works
       And I am logged in as "second_user"
     When I go to the new external work page
       And I enter a previously bookmarked URL in the autocomplete
-      And I wait 1 second
       And I press "Create"
     Then I should see "Bookmark was successfully created."
       And the work info for my new bookmark should match the original
@@ -129,7 +127,6 @@ Feature: Create bookmarks of external works
       And I am logged in as "second_user"
     When I go to the new external work page
       And I enter a previously bookmarked URL in the autocomplete
-      And I wait 1 second
       And I fill in "Title" with ""
       And I fill in "Creator" with "Different Author"
       And I press "Create"
@@ -138,7 +135,6 @@ Feature: Create bookmarks of external works
       And the field labeled "Title" should contain ""
       And the field labeled "Creator" should contain "Different Author"
     When I fill in "Title" with "Different Title"
-      And I wait 1 second
       And I press "Create"
     Then I should see "Bookmark was successfully created."
       And the title and creator info for my new bookmark should vary from the original
