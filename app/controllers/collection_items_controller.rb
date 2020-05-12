@@ -43,6 +43,8 @@ class CollectionItemsController < ApplicationController
                             @collection_items.approved_by_user.approved_by_collection
                           when params[:rejected]
                             @collection_items.rejected_by_user
+                          when params[:awaiting_collection]
+                            @collection_items.approved_by_user.unreviewed_by_collection
                           else
                             @collection_items.unreviewed_by_user
                           end

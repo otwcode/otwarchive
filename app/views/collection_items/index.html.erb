@@ -13,7 +13,10 @@
 %>
 
 <ul class="navigation actions" role="navigation">
-  <li><%= span_if_current ts("Awaiting Approval"), base_path, !(params[:rejected] || params[:approved] || params[:invited]) %></li>
+  <li><%= span_if_current ts("Awaiting Approval"), base_path, !(params[:rejected] || params[:approved] || params[:invited] || params[:awaiting_collection]) %></li>
+  <% if @user %>
+    <li><%= span_if_current ts("Awaiting Collection Approval"), user_collection_items_path(@user, awaiting_collection: true) %></li>
+  <% end %>
   <% unless @user %>
     <li><%= span_if_current ts("Invited"),  base_path + "?invited=true"  %></li>
   <% end %>
@@ -25,6 +28,11 @@
 <% if params[:invited] %>
   <p class="notice">
     <%= ts("Works listed here have been invited to this collection. Once a work's creator has approved inclusion in this collection, the work will be moved to 'Approved'.") %>
+  </p>
+<% end %>
+<% if @user && params[:awaiting_collection] %>
+  <p class="notice">
+    <%= ts("Works listed here have been addded to a collection but need approval from a collection moderator before they are listed in the collection.") %>
   </p>
 <% end %>
 <% if @collection_items.count < 1 %>
