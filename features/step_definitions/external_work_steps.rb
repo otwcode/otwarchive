@@ -37,8 +37,10 @@ Given /^"([^"]*)" has bookmarked an external work$/ do |user|
   step %{basic tags}
   step %{I am logged in as "#{user}"}
   visit new_external_work_path
-  # We use the labels for some fields because the ids change when
-  # JavaScript is enabled
+  # Typically, when we write step definitions, we prefer to use a
+  # field's id attribute over its label. But in this case,
+  # we have to use the labels for some fields because the ids
+  # change when JavaScript is enabled.
   fill_in("URL", with: "http://example.org/200")
   fill_in("bookmark_external_author", with: DEFAULT_EXTERNAL_CREATOR)
   fill_in("bookmark_external_title", with: DEFAULT_EXTERNAL_TITLE)
