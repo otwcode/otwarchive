@@ -56,4 +56,11 @@ namespace :search do
       AsyncIndexer.new(PseudIndexer, :world).enqueue_ids(group.map(&:id))
     end
   end
+
+  desc "Run tasks enqueued to the world queue by IndexQueue."
+  task run_world_index_queue: :environment do
+    ScheduledReindexJob::MAIN_CLASSES.each do |klass|
+      IndexQueue.from_class_and_label(klass, :world).run
+    end
+  end
 end

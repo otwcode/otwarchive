@@ -1,7 +1,7 @@
 require 'faker'
 
-FactoryGirl.define do
+FactoryBot.define do
   factory :serial_work do
-    work_id { FactoryGirl.create(:work).id }
+    work_id { FactoryBot.create(:work).id }
   end
 end

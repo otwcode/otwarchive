@@ -4,20 +4,20 @@ describe TagSetNominationsController do
   include LoginMacros
   include RedirectExpectationHelper
 
-  let(:tag_set_nomination) { FactoryGirl.create(:tag_set_nomination) }
+  let(:tag_set_nomination) { FactoryBot.create(:tag_set_nomination) }
   let(:owned_tag_set) { tag_set_nomination.owned_tag_set }
 
   let(:tag_nominator_pseud) { tag_set_nomination.pseud }
   let(:tag_nominator) { tag_nominator_pseud.user }
   let(:mod_pseud) {
-    FactoryGirl.create(:pseud).tap do |pseud|
+    FactoryBot.create(:pseud).tap do |pseud|
       owned_tag_set.add_moderator(pseud)
       owned_tag_set.save!
     end
   }
   let(:moderator) { mod_pseud.user }
 
-  let(:random_user) { FactoryGirl.create(:user) }
+  let(:random_user) { FactoryBot.create(:user) }
 
   describe 'GET index' do
     context 'user is not logged in' do
@@ -1368,7 +1368,7 @@ describe TagSetNominationsController do
       context 'not all tag nominations have an associated _approve, _reject, _change, or _synonym param value' do
         it 'redirects and returns a flash message' do
           put :update_multiple, params: { tag_set_id: owned_tag_set.id }.merge(base_params)
-          it_redirects_to(tag_set_nominations_path(owned_tag_set))
+          it_redirects_to_simple(tag_set_nominations_path(owned_tag_set))
           expect(flash[:notice]).to include('Still some nominations left to review!')
         end
       end
@@ -1381,7 +1381,7 @@ describe TagSetNominationsController do
                   'relationship_approve_New Relationship': 1,
                   'fandom_approve_New Fandom': 1,
                   'freeform_reject_New Freeform': 1)
-          it_redirects_to(tag_set_path(owned_tag_set))
+          it_redirects_to_simple(tag_set_path(owned_tag_set))
           expect(flash[:notice]).to include('All nominations reviewed, yay!')
         end
       end

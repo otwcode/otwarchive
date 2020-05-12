@@ -1,7 +1,13 @@
-@no-txn @works @search
+@works @search
 Feature: Search works by work info
   As a user
   I want to search works by work info
+
+  Scenario: Inputting bad queries
+    When I am on the homepage
+    When I fill in "site_search" with "bad~query!!!"
+      And I press "Search"
+    Then I should see "Your search failed because of a syntax error"
 
   Scenario: Search by language
     Given I have the Battle set loaded

@@ -55,7 +55,7 @@ Feature: Filing an abuse report
     And I fill in "Your email (required)" with ""
     And I select "Deutsch" from "abuse_report_language"
     And I press "Submit"
-    And I should see "Email does not seem to be a valid address."
+    And I should see "Email should look like an email address."
     And "Deutsch" should be selected within "Select language (required)"
   Then I fill in "Your email" with "valid@archiveofourown.org"
     And I press "Submit"

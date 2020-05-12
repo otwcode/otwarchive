@@ -12,8 +12,6 @@ work_00082:
   notes: 
   backdate: false
   word_count: 683
-  last_visitor_old: 
-  hit_count_old: 0
   title_to_sort_on: all it's cracked up to be
   id: 82
   language_id: 
@@ -23,8 +21,7 @@ work_00082:
   revised_at: 2009-12-12 21:14:01 Z
   endnotes: 
   hidden_by_admin: false
-  authors_to_sort_on: llwyden
-work_00059: 
+work_00059:
   restricted: true
   posted: true
   major_version: 1
@@ -37,8 +34,6 @@ work_00059:
   notes: Title from a song by Xandria.
   backdate: false
   word_count: 1006
-  last_visitor_old: 
-  hit_count_old: 0
   title_to_sort_on: my scarlet name
   id: 59
   language_id: 1
@@ -48,8 +43,7 @@ work_00059:
   revised_at: 2004-09-17 23:00:00 Z
   endnotes: 
   hidden_by_admin: false
-  authors_to_sort_on: sarkymoocow
-work_00040: 
+work_00040:
   restricted: false
   posted: true
   major_version: 1
@@ -62,8 +56,6 @@ work_00040:
   notes: ""
   backdate: false
   word_count: 3
-  last_visitor_old: 
-  hit_count_old: 0
   title_to_sort_on: scuff
   id: 40
   language_id: 1
@@ -73,8 +65,7 @@ work_00040:
   revised_at: 2009-12-11 02:48:40 Z
   endnotes: 
   hidden_by_admin: false
-  authors_to_sort_on: some other fucking pseud
-work_00017: 
+work_00017:
   restricted: false
   posted: true
   major_version: 1
@@ -87,8 +78,6 @@ work_00017:
   notes: ""
   backdate: false
   word_count: 3
-  last_visitor_old: 
-  hit_count_old: 0
   title_to_sort_on: grrrrrrrr
   id: 17
   language_id: 1
@@ -98,8 +87,7 @@ work_00017:
   revised_at: 2009-12-11 08:47:23 Z
   endnotes: 
   hidden_by_admin: false
-  authors_to_sort_on: testuser4,  non-default pseud
-work_00061: 
+work_00061:
   restricted: false
   posted: true
   major_version: 1
@@ -112,8 +100,6 @@ work_00061:
   notes: Set post-season three, with spoilers up to 4.01.
   backdate: false
   word_count: 1684
-  last_visitor_old: 
-  hit_count_old: 0
   title_to_sort_on: see you in hell
   id: 61
   language_id: 1
@@ -123,8 +109,7 @@ work_00061:
   revised_at: 2009-12-11 22:22:13 Z
   endnotes: 
   hidden_by_admin: false
-  authors_to_sort_on: cal
-work_00038: 
+work_00038:
   restricted: false
   posted: true
   major_version: 1
@@ -137,8 +122,6 @@ work_00038:
   notes: ""
   backdate: false
   word_count: 4
-  last_visitor_old: 
-  hit_count_old: 0
   title_to_sort_on: jambo
   id: 38
   language_id: 1
@@ -148,8 +131,7 @@ work_00038:
   revised_at: 2009-12-11 00:50:34 Z
   endnotes: 
   hidden_by_admin: false
-  authors_to_sort_on: some other fucking pseud
-work_00041: 
+work_00041:
   restricted: false
   posted: true
   major_version: 1
@@ -162,8 +144,6 @@ work_00041:
   notes: ""
   backdate: false
   word_count: 1
-  last_visitor_old: 
-  hit_count_old: 0
   title_to_sort_on: muu
   id: 41
   language_id: 1
@@ -173,8 +153,7 @@ work_00041:
   revised_at: 2009-12-11 02:55:48 Z
   endnotes: 
   hidden_by_admin: false
-  authors_to_sort_on: testuser
-work_00039: 
+work_00039:
   restricted: false
   posted: true
   major_version: 1
@@ -187,8 +166,6 @@ work_00039:
   notes: ""
   backdate: false
   word_count: 13
-  last_visitor_old: 
-  hit_count_old: 0
   title_to_sort_on: twins
   id: 39
   language_id: 1
@@ -198,8 +175,7 @@ work_00039:
   revised_at: 2009-12-11 00:57:27 Z
   endnotes: 
   hidden_by_admin: false
-  authors_to_sort_on: some other fucking pseud
-work_00062: 
+work_00062:
   restricted: false
   posted: true
   major_version: 1
@@ -212,8 +188,6 @@ work_00062:
   notes: Written for my beloved Zooey_Glass for her birthday; she was also kind enough to beta. Thank you, darling! Title from the Placebo song <i>Blind</i>. The fic covers a period up to some point late in season two, and contains no spoilers beyond that.
   backdate: false
   word_count: 2940
-  last_visitor_old: 
-  hit_count_old: 0
   title_to_sort_on: fill your every breath
   id: 62
   language_id: 1
@@ -223,8 +197,7 @@ work_00062:
   revised_at: 2009-12-11 22:26:00 Z
   endnotes: 
   hidden_by_admin: false
-  authors_to_sort_on: cal
-work_00083: 
+work_00083:
   restricted: false
   posted: false
   major_version: 1
@@ -237,8 +210,6 @@ work_00083:
   notes: 
   backdate: false
   word_count: 218
-  last_visitor_old: 
-  hit_count_old: 0
   title_to_sort_on: best of men, the
   id: 83
   language_id: 
@@ -248,8 +219,7 @@ work_00083:
   revised_at: 2009-12-12 21:14:01 Z
   endnotes: 
   hidden_by_admin: false
-  authors_to_sort_on: llwyden
-work_00020: 
+work_00020:
   restricted: false
   posted: true
   major_version: 1
@@ -262,8 +232,6 @@ work_00020:
   notes: ""
   backdate: false
   word_count: 4
-  last_visitor_old: 
-  hit_count_old: 0
   title_to_sort_on: baaah
   id: 20
   language_id: 1
@@ -273,7 +241,6 @@ work_00020:
   revised_at: 2009-12-11 16:32:18 Z
   endnotes: 
   hidden_by_admin: false
-  authors_to_sort_on: testuser,  non-default pseud
 work_00019: 
   restricted: false
   posted: true
@@ -287,8 +254,6 @@ work_00019:
   notes: ""
   backdate: false
   word_count: 2
-  last_visitor_old: 
-  hit_count_old: 0
   title_to_sort_on: title
   id: 19
   language_id: 1
@@ -298,7 +263,6 @@ work_00019:
   revised_at: 2009-12-11 15:47:16 Z
   endnotes: 
   hidden_by_admin: false
-  authors_to_sort_on: testuser2,  some other fucking pseud
 work_00063: 
   restricted: false
   posted: true
@@ -312,8 +276,6 @@ work_00063:
   notes: Written for Rinkle for her prompt <cite>concussion, flowers</cite>. Title from Led Zeppelin's <em>That's The Way</em>. Spoilers for episode 1.01, and references to the end of Season 2.
   backdate: false
   word_count: 3001
-  last_visitor_old: 
-  hit_count_old: 0
   title_to_sort_on: kissing tiny flowers
   id: 63
   language_id: 1
@@ -323,7 +285,6 @@ work_00063:
   revised_at: 2009-12-11 22:29:06 Z
   endnotes: 
   hidden_by_admin: false
-  authors_to_sort_on: cal
 work_00084: 
   restricted: false
   posted: false
@@ -337,8 +298,6 @@ work_00084:
   notes: 
   backdate: false
   word_count: 5807
-  last_visitor_old: 
-  hit_count_old: 0
   title_to_sort_on: better man, the
   id: 84
   language_id: 
@@ -348,7 +307,6 @@ work_00084:
   revised_at: 2009-12-12 21:14:02 Z
   endnotes: 
   hidden_by_admin: false
-  authors_to_sort_on: llwyden
 work_00042: 
   restricted: false
   posted: true
@@ -362,8 +320,6 @@ work_00042:
   notes: ""
   backdate: false
   word_count: 1
-  last_visitor_old: 
-  hit_count_old: 0
   title_to_sort_on: lam
   id: 42
   language_id: 1
@@ -373,7 +329,6 @@ work_00042:
   revised_at: 2009-12-11 04:08:45 Z
   endnotes: 
   hidden_by_admin: false
-  authors_to_sort_on: non-default pseud,  non-default pseud
 work_00085: 
   restricted: false
   posted: false
@@ -387,8 +342,6 @@ work_00085:
   notes: 
   backdate: false
   word_count: 862
-  last_visitor_old: 
-  hit_count_old: 0
   title_to_sort_on: mazes and monsters
   id: 85
   language_id: 
@@ -398,7 +351,6 @@ work_00085:
   revised_at: 2009-12-12 21:14:03 Z
   endnotes: 
   hidden_by_admin: false
-  authors_to_sort_on: llwyden
 work_00100: 
   restricted: false
   posted: false
@@ -412,8 +364,6 @@ work_00100:
   notes: ""
   backdate: false
   word_count: 9019
-  last_visitor_old: 
-  hit_count_old: 0
   title_to_sort_on: from heaven and hell
   id: 100
   language_id: 1
@@ -423,7 +373,6 @@ work_00100:
   revised_at: 2009-12-12 23:24:57 Z
   endnotes: ""
   hidden_by_admin: false
-  authors_to_sort_on: tassos
 work_00001: 
   restricted: false
   posted: true
@@ -437,8 +386,6 @@ work_00001:
   notes: ""
   backdate: false
   word_count: 10
-  last_visitor_old: 
-  hit_count_old: 0
   title_to_sort_on: work with two chapters
   id: 1
   language_id: 1
@@ -448,7 +395,6 @@ work_00001:
   revised_at: 2009-12-11 03:09:52 Z
   endnotes: 
   hidden_by_admin: false
-  authors_to_sort_on: testuser,  testuser2
 work_00043: 
   restricted: false
   posted: true
@@ -462,8 +408,6 @@ work_00043:
   notes: Inspired by <a href="http://example.com/LOLIantoes.gif" title="nonexistent image to demonstrate linking CSS style">this image</a>.
   backdate: false
   word_count: 18
-  last_visitor_old: 
-  hit_count_old: 0
   title_to_sort_on: kings
   id: 43
   language_id: 1
@@ -473,7 +417,6 @@ work_00043:
   revised_at: 2009-12-11 04:10:19 Z
   endnotes: 
   hidden_by_admin: false
-  authors_to_sort_on: non-default pseud,  non-default pseud
 work_00064: 
   restricted: false
   posted: true
@@ -487,8 +430,6 @@ work_00064:
   notes: Unabashed, shameless schmoop.
   backdate: false
   word_count: 959
-  last_visitor_old: 
-  hit_count_old: 0
   title_to_sort_on: easy like sunday morning
   id: 64
   language_id: 1
@@ -498,7 +439,6 @@ work_00064:
   revised_at: 2009-12-11 22:33:55 Z
   endnotes: 
   hidden_by_admin: true
-  authors_to_sort_on: cal
 work_00101: 
   restricted: false
   posted: true
@@ -512,8 +452,6 @@ work_00101:
   notes: Accidental  Documentaries<br>By Tassos
   backdate: false
   word_count: 51133
-  last_visitor_old: 
-  hit_count_old: 0
   title_to_sort_on: accidental documentaries
   id: 101
   language_id: 1
@@ -523,7 +461,6 @@ work_00101:
   revised_at: 2009-12-12 23:32:30 Z
   endnotes: ""
   hidden_by_admin: false
-  authors_to_sort_on: tassos
 work_00002: 
   restricted: false
   posted: true
@@ -537,8 +474,6 @@ work_00002:
   notes: Notes on test work with only one chapter
   backdate: false
   word_count: 11
-  last_visitor_old: 
-  hit_count_old: 0
   title_to_sort_on: work with one chapter only
   id: 2
   language_id: 1
@@ -548,7 +483,6 @@ work_00002:
   revised_at: 2008-11-09 01:26:01 Z
   endnotes: 
   hidden_by_admin: false
-  authors_to_sort_on: non-default pseud
 work_00044: 
   restricted: false
   posted: true
@@ -562,8 +496,6 @@ work_00044:
   notes: ""
   backdate: false
   word_count: 9
-  last_visitor_old: 
-  hit_count_old: 0
   title_to_sort_on: haaaaam
   id: 44
   language_id: 1
@@ -573,7 +505,6 @@ work_00044:
   revised_at: 2009-12-11 01:02:50 Z
   endnotes: 
   hidden_by_admin: false
-  authors_to_sort_on: testuser
 work_00065: 
   restricted: false
   posted: true
@@ -587,8 +518,6 @@ work_00065:
   notes: Written for my lovely Zooey Glass to congratulate her on winning Nano 2006. No spoilers.
   backdate: false
   word_count: 2824
-  last_visitor_old: 
-  hit_count_old: 0
   title_to_sort_on: three times dean winchester was not possessed, this never happened, let us never speak of it again
   id: 65
   language_id: 1
@@ -598,7 +527,6 @@ work_00065:
   revised_at: 2009-12-11 22:38:29 Z
   endnotes: 
   hidden_by_admin: false
-  authors_to_sort_on: cal
 work_00086: 
   restricted: false
   posted: false
@@ -612,8 +540,6 @@ work_00086:
   notes: 
   backdate: false
   word_count: 209
-  last_visitor_old: 
-  hit_count_old: 0
   title_to_sort_on: not just a pretty face
   id: 86
   language_id: 
@@ -623,7 +549,6 @@ work_00086:
   revised_at: 2009-12-12 21:14:04 Z
   endnotes: 
   hidden_by_admin: false
-  authors_to_sort_on: llwyden
 work_00102: 
   restricted: false
   posted: true
@@ -637,8 +562,6 @@ work_00102:
   notes: ""
   backdate: false
   word_count: 2963
-  last_visitor_old: 
-  hit_count_old: 0
   title_to_sort_on: if only
   id: 102
   language_id: 1
@@ -651,7 +574,6 @@ work_00102:
   revised_at: 2009-12-12 23:53:29 Z
   endnotes: I hope you enjoyed it, R&R please! Feedback it like it's 1999!
   hidden_by_admin: false
-  authors_to_sort_on: enigel
 work_00003: 
   restricted: false
   posted: true
@@ -665,8 +587,6 @@ work_00003:
   notes: Notes on test work with only one chapter
   backdate: false
   word_count: 12
-  last_visitor_old: 
-  hit_count_old: 0
   title_to_sort_on: thirdwork
   id: 3
   language_id: 1
@@ -676,7 +596,6 @@ work_00003:
   revised_at: 2009-12-11 05:19:36 Z
   endnotes: 
   hidden_by_admin: false
-  authors_to_sort_on: testuser2
 work_00045: 
   restricted: false
   posted: true
@@ -690,8 +609,6 @@ work_00045:
   notes: ""
   backdate: false
   word_count: 1
-  last_visitor_old: 
-  hit_count_old: 0
   title_to_sort_on: faaaaaaaaaah
   id: 45
   language_id: 1
@@ -701,7 +618,6 @@ work_00045:
   revised_at: 2009-12-11 01:24:40 Z
   endnotes: 
   hidden_by_admin: false
-  authors_to_sort_on: testuser2
 work_00087: 
   restricted: false
   posted: true
@@ -715,8 +631,6 @@ work_00087:
   notes: ""
   backdate: false
   word_count: 119
-  last_visitor_old: 
-  hit_count_old: 0
   title_to_sort_on: pirates of miami beach, the
   id: 87
   language_id: 1
@@ -726,7 +640,6 @@ work_00087:
   revised_at: 2009-12-12 21:28:21 Z
   endnotes: ""
   hidden_by_admin: false
-  authors_to_sort_on: llwyden ferch gyfrinach
 work_00103: 
   restricted: false
   posted: true
@@ -740,8 +653,6 @@ work_00103:
   notes: ""
   backdate: false
   word_count: 356
-  last_visitor_old: 
-  hit_count_old: 0
   title_to_sort_on: bye bye line height baseline madness
   id: 103
   language_id: 1
@@ -765,7 +676,6 @@ work_00103:
   revised_at: 2009-12-13 00:00:00 Z
   endnotes: ""
   hidden_by_admin: false
-  authors_to_sort_on: non-default pseud,  cal
 work_00004: 
   restricted: false
   posted: true
@@ -779,8 +689,6 @@ work_00004:
   notes: Notes on test work with only one chapter
   backdate: false
   word_count: 13
-  last_visitor_old: 
-  hit_count_old: 0
   title_to_sort_on: fourthwork
   id: 4
   language_id: 1
@@ -790,7 +698,6 @@ work_00004:
   revised_at: 2008-11-09 01:26:01 Z
   endnotes: 
   hidden_by_admin: false
-  authors_to_sort_on: testuser3
 work_00025: 
   restricted: false
   posted: true
@@ -804,8 +711,6 @@ work_00025:
   notes: ""
   backdate: false
   word_count: 3
-  last_visitor_old: 
-  hit_count_old: 0
   title_to_sort_on: tbbh
   id: 25
   language_id: 1
@@ -815,7 +720,6 @@ work_00025:
   revised_at: 2009-12-11 21:55:41 Z
   endnotes: 
   hidden_by_admin: false
-  authors_to_sort_on: testuser2,  non-default pseud,  some other fucking pseud
 work_00046: 
   restricted: false
   posted: true
@@ -829,8 +733,6 @@ work_00046:
   notes: ""
   backdate: false
   word_count: 12
-  last_visitor_old: 
-  hit_count_old: 0
   title_to_sort_on: what the frak?!
   id: 46
   language_id: 1
@@ -840,7 +742,6 @@ work_00046:
   revised_at: 2009-12-11 01:28:46 Z
   endnotes: 
   hidden_by_admin: false
-  authors_to_sort_on: testuser4
 work_00090: 
   restricted: false
   posted: true
@@ -854,8 +755,6 @@ work_00090:
   notes: ""
   backdate: false
   word_count: 297
-  last_visitor_old: 
-  hit_count_old: 0
   title_to_sort_on: "play #yuletide"
   id: 90
   language_id: 1
@@ -865,7 +764,6 @@ work_00090:
   revised_at: 2009-12-12 21:22:54 Z
   endnotes: Testing, testing.
   hidden_by_admin: false
-  authors_to_sort_on: hh_ook
 work_00067: 
   restricted: false
   posted: true
@@ -879,8 +777,6 @@ work_00067:
   notes: ""
   backdate: false
   word_count: 326
-  last_visitor_old: 
-  hit_count_old: 0
   title_to_sort_on: testing
   id: 67
   language_id: 1
@@ -890,7 +786,6 @@ work_00067:
   revised_at: 2009-12-12 21:11:47 Z
   endnotes: ""
   hidden_by_admin: false
-  authors_to_sort_on: dawningstar
 work_00088: 
   restricted: false
   posted: false
@@ -904,8 +799,6 @@ work_00088:
   notes: 
   backdate: false
   word_count: 2329
-  last_visitor_old: 
-  hit_count_old: 0
   title_to_sort_on: tapped out
   id: 88
   language_id: 
@@ -915,7 +808,6 @@ work_00088:
   revised_at: 2009-12-12 21:14:05 Z
   endnotes: 
   hidden_by_admin: false
-  authors_to_sort_on: llwyden
 work_00070: 
   restricted: false
   posted: true
@@ -929,8 +821,6 @@ work_00070:
   notes: ""
   backdate: false
   word_count: 159
-  last_visitor_old: 
-  hit_count_old: 0
   title_to_sort_on: how the entmoot ended (chapter 666)
   id: 70
   language_id: 1
@@ -942,7 +832,6 @@ work_00070:
   revised_at: 2009-12-12 21:15:46 Z
   endnotes: <a name="oneyeah"></a><a href="#onefoot"><sup>1</sup></a> BWAHAHAHAHA I WIN.
   hidden_by_admin: false
-  authors_to_sort_on: shusu
 work_00047: 
   restricted: true
   posted: true
@@ -956,8 +845,6 @@ work_00047:
   notes: ""
   backdate: false
   word_count: 5
-  last_visitor_old: 
-  hit_count_old: 0
   title_to_sort_on: when harry met snivelly
   id: 47
   language_id: 1
@@ -967,7 +854,6 @@ work_00047:
   revised_at: 2009-12-11 23:12:10 Z
   endnotes: 
   hidden_by_admin: false
-  authors_to_sort_on: testuser3
 work_00091: 
   restricted: false
   posted: true
@@ -981,8 +867,6 @@ work_00091:
   notes: ""
   backdate: false
   word_count: 9
-  last_visitor_old: 
-  hit_count_old: 0
   title_to_sort_on: my new story whooo
   id: 91
   language_id: 1
@@ -992,7 +876,6 @@ work_00091:
   revised_at: 2009-12-12 21:45:15 Z
   endnotes: ""
   hidden_by_admin: false
-  authors_to_sort_on: cal
 work_00068: 
   restricted: false
   posted: true
@@ -1006,8 +889,6 @@ work_00068:
   notes: Welcome
   backdate: false
   word_count: 23
-  last_visitor_old: 
-  hit_count_old: 0
   title_to_sort_on: very odd story, a
   id: 68
   language_id: 1
@@ -1017,8 +898,7 @@ work_00068:
   revised_at: 2009-12-12 21:11:11 Z
   endnotes: The End!!
   hidden_by_admin: false
-  authors_to_sort_on: jenn_calaelen
-work_00089: 
+work_00089:
   restricted: false
   posted: true
   major_version: 1
@@ -1031,8 +911,6 @@ work_00089:
   notes: ""
   backdate: false
   word_count: 147
-  last_visitor_old: 
-  hit_count_old: 0
   title_to_sort_on: "last temptation of #yulechat, the"
   id: 89
   language_id: 1
@@ -1042,7 +920,6 @@ work_00089:
   revised_at: 2009-12-12 21:19:21 Z
   endnotes: ""
   hidden_by_admin: false
-  authors_to_sort_on: yulechatismadeofawesome
 work_00104: 
   restricted: false
   posted: true
@@ -1063,8 +940,6 @@ work_00104:
         The term "HTML5 validator" can be used to refer to a conformance checker that itself conforms to the applicable requirements of this specification.
   backdate: false
   word_count: 2363
-  last_visitor_old: 
-  hit_count_old: 0
   title_to_sort_on: really long title that should break a few lines and so on and so on supercalifragilisticexpialidocious, a
   id: 104
   language_id: 1
@@ -1082,7 +957,6 @@ work_00104:
   revised_at: 2009-12-18 17:57:27 Z
   endnotes: ""
   hidden_by_admin: false
-  authors_to_sort_on: some other fucking pseud
 work_00005: 
   restricted: false
   posted: true
@@ -1096,8 +970,6 @@ work_00005:
   notes: Notes on test work with only one chapter
   backdate: false
   word_count: 14
-  last_visitor_old: 
-  hit_count_old: 0
   title_to_sort_on: fifthwork
   id: 5
   language_id: 1
@@ -1107,7 +979,6 @@ work_00005:
   revised_at: 2008-12-11 01:26:01 Z
   endnotes: 
   hidden_by_admin: false
-  authors_to_sort_on: testuser4
 work_00048: 
   restricted: true
   posted: true
@@ -1121,8 +992,6 @@ work_00048:
   notes: ""
   backdate: false
   word_count: 7
-  last_visitor_old: 
-  hit_count_old: 0
   title_to_sort_on: what happened next
   id: 48
   language_id: 1
@@ -1132,7 +1001,6 @@ work_00048:
   revised_at: 2009-12-11 23:14:26 Z
   endnotes: 
   hidden_by_admin: false
-  authors_to_sort_on: testuser3
 work_00071: 
   restricted: false
   posted: false
@@ -1146,8 +1014,6 @@ work_00071:
   notes: 
   backdate: false
   word_count: 501
-  last_visitor_old: 
-  hit_count_old: 0
   title_to_sort_on: sometimes
   id: 71
   language_id: 
@@ -1157,7 +1023,6 @@ work_00071:
   revised_at: 2009-12-12 21:13:50 Z
   endnotes: 
   hidden_by_admin: false
-  authors_to_sort_on: llwyden
 work_00092: 
   restricted: false
   posted: true
@@ -1171,8 +1036,6 @@ work_00092:
   notes: This is the opening paragraph of a rough draft of a paper I wrote in 2007. I'm putting it here to test word-count limits.
   backdate: false
   word_count: 390
-  last_visitor_old: 
-  hit_count_old: 0
   title_to_sort_on: this is lizifer's awesome test "fic"
   id: 92
   language_id: 1
@@ -1182,7 +1045,6 @@ work_00092:
   revised_at: 2009-12-12 22:14:56 Z
   endnotes: ""
   hidden_by_admin: false
-  authors_to_sort_on: lizifer
 work_00069: 
   restricted: false
   posted: true
@@ -1196,8 +1058,6 @@ work_00069:
   notes: I love that Harry Potter is a test fandom.
   backdate: false
   word_count: 37
-  last_visitor_old: 
-  hit_count_old: 0
   title_to_sort_on: this is the best i could come up with on short notice.
   id: 69
   language_id: 1
@@ -1207,7 +1067,6 @@ work_00069:
   revised_at: 2009-12-12 21:12:03 Z
   endnotes: Now to make a crossover with SPN.
   hidden_by_admin: false
-  authors_to_sort_on: badjuju
 work_00105: 
   restricted: false
   posted: true
@@ -1221,8 +1080,6 @@ work_00105:
   notes: ""
   backdate: false
   word_count: 1643
-  last_visitor_old: 
-  hit_count_old: 0
   title_to_sort_on: all of the characters i am allowed and then some oh i think we'll have to do some limiting of the table field in editing multiple works oh yes we will how about a little max-width for yer money there me old son am i done yet oh god the green validation io
   id: 105
   language_id: 1
@@ -1235,7 +1092,6 @@ work_00105:
   revised_at: 2010-01-04 12:35:37 Z
   endnotes: ""
   hidden_by_admin: false
-  authors_to_sort_on: thelongestpseudinthegoshdarnworldomgwtfo
 work_00006: 
   restricted: false
   posted: true
@@ -1249,8 +1105,6 @@ work_00006:
   notes: ""
   backdate: false
   word_count: 73
-  last_visitor_old: 
-  hit_count_old: 0
   title_to_sort_on: how i got kicked out of mit
   id: 6
   language_id: 1
@@ -1260,7 +1114,6 @@ work_00006:
   revised_at: 2008-12-11 13:59:15 Z
   endnotes: 
   hidden_by_admin: false
-  authors_to_sort_on: ash
 work_00050: 
   restricted: true
   posted: true
@@ -1274,8 +1127,6 @@ work_00050:
   notes: you don't have to read it to "get" the rest of the series.
   backdate: false
   word_count: 5
-  last_visitor_old: 
-  hit_count_old: 0
   title_to_sort_on: dark and angsty interlude
   id: 50
   language_id: 1
@@ -1285,7 +1136,6 @@ work_00050:
   revised_at: 2009-12-11 23:20:29 Z
   endnotes: 
   hidden_by_admin: false
-  authors_to_sort_on: testuser2
 work_00093: 
   restricted: false
   posted: true
@@ -1299,8 +1149,6 @@ work_00093:
   notes: ""
   backdate: false
   word_count: 4672
-  last_visitor_old: 
-  hit_count_old: 0
   title_to_sort_on: ncis and the haunted computer
   id: 93
   language_id: 1
@@ -1313,7 +1161,6 @@ work_00093:
   revised_at: 2008-02-07 00:00:00 Z
   endnotes: ""
   hidden_by_admin: false
-  authors_to_sort_on: tassos
 work_00106: 
   restricted: false
   posted: false
@@ -1327,8 +1174,6 @@ work_00106:
   notes: ""
   backdate: false
   word_count: 90
-  last_visitor_old: 
-  hit_count_old: 0
   title_to_sort_on: addding tags for stats purposes
   id: 106
   language_id: 1
@@ -1338,7 +1183,6 @@ work_00106:
   revised_at: 2010-07-28 13:10:05 Z
   endnotes: ""
   hidden_by_admin: false
-  authors_to_sort_on: cal
 work_00030: 
   restricted: false
   posted: true
@@ -1352,8 +1196,6 @@ work_00030:
   notes: ""
   backdate: false
   word_count: 1
-  last_visitor_old: 
-  hit_count_old: 0
   title_to_sort_on: bab
   id: 30
   language_id: 1
@@ -1363,7 +1205,6 @@ work_00030:
   revised_at: 2009-12-11 21:54:49 Z
   endnotes: 
   hidden_by_admin: false
-  authors_to_sort_on: testuser2,  non-default pseud,  non-default pseud
 work_00007: 
   restricted: false
   posted: true
@@ -1377,8 +1218,6 @@ work_00007:
   notes: ""
   backdate: false
   word_count: 4593
-  last_visitor_old: 
-  hit_count_old: 0
   title_to_sort_on: day ten, tale ten
   id: 7
   language_id: 1
@@ -1390,7 +1229,6 @@ work_00007:
   revised_at: 2008-12-06 22:32:20 Z
   endnotes: 
   hidden_by_admin: false
-  authors_to_sort_on: boccaccio
 work_00051: 
   restricted: false
   posted: true
@@ -1404,8 +1242,6 @@ work_00051:
   notes: ""
   backdate: false
   word_count: 14
-  last_visitor_old: 
-  hit_count_old: 0
   title_to_sort_on: yay threesome!
   id: 51
   language_id: 1
@@ -1415,7 +1251,6 @@ work_00051:
   revised_at: 2009-12-11 23:22:57 Z
   endnotes: 
   hidden_by_admin: false
-  authors_to_sort_on: testuser2
 work_00072: 
   restricted: false
   posted: false
@@ -1429,8 +1264,6 @@ work_00072:
   notes: 
   backdate: false
   word_count: 1774
-  last_visitor_old: 
-  hit_count_old: 0
   title_to_sort_on: gk christmas story
   id: 72
   language_id: 
@@ -1440,7 +1273,6 @@ work_00072:
   revised_at: 2009-12-12 21:13:51 Z
   endnotes: 
   hidden_by_admin: false
-  authors_to_sort_on: llwyden
 work_00049: 
   restricted: false
   posted: true
@@ -1454,8 +1286,6 @@ work_00049:
   notes: ""
   backdate: false
   word_count: 9
-  last_visitor_old: 
-  hit_count_old: 0
   title_to_sort_on: happy-happy joy-joy!
   id: 49
   language_id: 1
@@ -1465,7 +1295,6 @@ work_00049:
   revised_at: 2009-12-11 23:33:39 Z
   endnotes: 
   hidden_by_admin: false
-  authors_to_sort_on: testuser2
 work_00107: 
   restricted: false
   posted: true
@@ -1479,8 +1308,6 @@ work_00107:
   notes: ""
   backdate: false
   word_count: 90
-  last_visitor_old: 
-  hit_count_old: 0
   title_to_sort_on: addding tags for stats purposes
   id: 107
   language_id: 1
@@ -1490,7 +1317,6 @@ work_00107:
   revised_at: 2010-07-28 13:11:34 Z
   endnotes: ""
   hidden_by_admin: false
-  authors_to_sort_on: cal
 work_00008: 
   restricted: false
   posted: true
@@ -1504,8 +1330,6 @@ work_00008:
   notes: ""
   backdate: false
   word_count: 2034
-  last_visitor_old: 
-  hit_count_old: 0
   title_to_sort_on: day five, tale four
   id: 8
   language_id: 1
@@ -1515,7 +1339,6 @@ work_00008:
   revised_at: 2008-12-06 22:52:02 Z
   endnotes: 
   hidden_by_admin: false
-  authors_to_sort_on: boccaccio
 work_00052: 
   restricted: true
   posted: true
@@ -1529,8 +1352,6 @@ work_00052:
   notes: ""
   backdate: false
   word_count: 8
-  last_visitor_old: 
-  hit_count_old: 0
   title_to_sort_on: angst bunny
   id: 52
   language_id: 1
@@ -1540,7 +1361,6 @@ work_00052:
   revised_at: 2009-12-11 23:24:17 Z
   endnotes: 
   hidden_by_admin: false
-  authors_to_sort_on: testuser2
 work_00029: 
   restricted: false
   posted: true
@@ -1554,8 +1374,6 @@ work_00029:
   notes: ""
   backdate: false
   word_count: 2
-  last_visitor_old: 
-  hit_count_old: 0
   title_to_sort_on: chum
   id: 29
   language_id: 1
@@ -1565,7 +1383,6 @@ work_00029:
   revised_at: 2009-12-11 00:24:31 Z
   endnotes: 
   hidden_by_admin: false
-  authors_to_sort_on: some other fucking pseud
 work_00073: 
   restricted: false
   posted: false
@@ -1579,8 +1396,6 @@ work_00073:
   notes: 
   backdate: false
   word_count: 2028
-  last_visitor_old: 
-  hit_count_old: 0
   title_to_sort_on: celebrations
   id: 73
   language_id: 
@@ -1590,7 +1405,6 @@ work_00073:
   revised_at: 2009-12-12 21:13:52 Z
   endnotes: 
   hidden_by_admin: false
-  authors_to_sort_on: llwyden
 work_00094: 
   restricted: false
   posted: true
@@ -1604,8 +1418,6 @@ work_00094:
   notes: ""
   backdate: false
   word_count: 2870
-  last_visitor_old: 
-  hit_count_old: 0
   title_to_sort_on: ncis and the bus stop phone booth
   id: 94
   language_id: 1
@@ -1618,7 +1430,6 @@ work_00094:
   revised_at: 2009-12-12 22:47:44 Z
   endnotes: ""
   hidden_by_admin: false
-  authors_to_sort_on: tassos
 work_00010: 
   restricted: false
   posted: true
@@ -1632,8 +1443,6 @@ work_00010:
   notes: ""
   backdate: false
   word_count: 429
-  last_visitor_old: 
-  hit_count_old: 0
   title_to_sort_on: for your life
   id: 10
   language_id: 1
@@ -1643,7 +1452,6 @@ work_00010:
   revised_at: 2008-12-06 23:19:50 Z
   endnotes: 
   hidden_by_admin: false
-  authors_to_sort_on: zooey_glass
 work_00009: 
   restricted: false
   posted: true
@@ -1657,8 +1465,6 @@ work_00009:
   notes: ""
   backdate: false
   word_count: 1534
-  last_visitor_old: 
-  hit_count_old: 0
   title_to_sort_on: clerk's tale, the
   id: 9
   language_id: 1
@@ -1668,7 +1474,6 @@ work_00009:
   revised_at: 2008-12-06 22:55:59 Z
   endnotes: 
   hidden_by_admin: false
-  authors_to_sort_on: chaucer
 work_00074: 
   restricted: false
   posted: false
@@ -1682,8 +1487,6 @@ work_00074:
   notes: 
   backdate: false
   word_count: 1131
-  last_visitor_old: 
-  hit_count_old: 0
   title_to_sort_on: light
   id: 74
   language_id: 
@@ -1693,7 +1496,6 @@ work_00074:
   revised_at: 2009-12-12 21:13:53 Z
   endnotes: 
   hidden_by_admin: false
-  authors_to_sort_on: llwyden
 work_00095: 
   restricted: false
   posted: true
@@ -1707,8 +1509,6 @@ work_00095:
   notes: ""
   backdate: false
   word_count: 1557
-  last_visitor_old: 
-  hit_count_old: 0
   title_to_sort_on: ncis and five encounters with the fbi
   id: 95
   language_id: 1
@@ -1721,7 +1521,6 @@ work_00095:
   revised_at: 2009-04-12 01:00:00 Z
   endnotes: ""
   hidden_by_admin: false
-  authors_to_sort_on: tassos
 work_00053: 
   restricted: false
   posted: true
@@ -1735,8 +1534,6 @@ work_00053:
   notes: ""
   backdate: false
   word_count: 1252
-  last_visitor_old: 
-  hit_count_old: 0
   title_to_sort_on: dreams are all guillotines, testing redux
   id: 53
   language_id: 1
@@ -1746,7 +1543,6 @@ work_00053:
   revised_at: 2009-12-11 12:50:55 Z
   endnotes: 
   hidden_by_admin: false
-  authors_to_sort_on: testuser
 work_00032: 
   restricted: false
   posted: true
@@ -1760,8 +1556,6 @@ work_00032:
   notes: ""
   backdate: false
   word_count: 19
-  last_visitor_old: 
-  hit_count_old: 0
   title_to_sort_on: tiiii
   id: 32
   language_id: 1
@@ -1771,7 +1565,6 @@ work_00032:
   revised_at: 2009-12-11 22:23:56 Z
   endnotes: 
   hidden_by_admin: false
-  authors_to_sort_on: some other fucking pseud
 work_00011: 
   restricted: false
   posted: true
@@ -1785,8 +1578,6 @@ work_00011:
   notes: "Written as a Christmas gift for Oxoniensis, 2007. Set at some unspecified time after canon, in the happy world in my head where Dean and Rory live happily ever after. "
   backdate: false
   word_count: 97
-  last_visitor_old: 
-  hit_count_old: 0
   title_to_sort_on: keep dancing
   id: 11
   language_id: 1
@@ -1796,7 +1587,6 @@ work_00011:
   revised_at: 2008-12-06 23:24:00 Z
   endnotes: 
   hidden_by_admin: false
-  authors_to_sort_on: zooey_glass
 work_00096: 
   restricted: false
   posted: true
@@ -1810,8 +1600,6 @@ work_00096:
   notes: "Spoilers: Stargate sometime early season 7 before the main story arc. And Buffy post Chosen. For the purposes of this story, Spike is completely dead."
   backdate: false
   word_count: 117876
-  last_visitor_old: 
-  hit_count_old: 0
   title_to_sort_on: bridges
   id: 96
   language_id: 1
@@ -1824,7 +1612,6 @@ work_00096:
   revised_at: 2009-12-12 22:54:18 Z
   endnotes: ""
   hidden_by_admin: false
-  authors_to_sort_on: tassos
 work_00075: 
   restricted: false
   posted: false
@@ -1838,8 +1625,6 @@ work_00075:
   notes: 
   backdate: false
   word_count: 5875
-  last_visitor_old: 
-  hit_count_old: 0
   title_to_sort_on: found again
   id: 75
   language_id: 
@@ -1849,7 +1634,6 @@ work_00075:
   revised_at: 2009-12-12 21:13:55 Z
   endnotes: 
   hidden_by_admin: false
-  authors_to_sort_on: llwyden
 work_00033: 
   restricted: false
   posted: true
@@ -1863,8 +1647,6 @@ work_00033:
   notes: ""
   backdate: false
   word_count: 16
-  last_visitor_old: 
-  hit_count_old: 0
   title_to_sort_on: yyipee
   id: 33
   language_id: 1
@@ -1874,7 +1656,6 @@ work_00033:
   revised_at: 2009-12-11 22:26:06 Z
   endnotes: 
   hidden_by_admin: false
-  authors_to_sort_on: some other fucking pseud
 work_00012: 
   restricted: false
   posted: true
@@ -1888,8 +1669,6 @@ work_00012:
   notes: Written for technosage's <a href="http://technosage.livejournal.com/224268.html">porn-paragraph-a-thon</a> on Livejournal, December 2007, to the prompt 'Jared/Jensen; dom/sub'.
   backdate: false
   word_count: 262
-  last_visitor_old: 
-  hit_count_old: 0
   title_to_sort_on: paying attention
   id: 12
   language_id: 1
@@ -1899,7 +1678,6 @@ work_00012:
   revised_at: 2008-12-06 23:26:41 Z
   endnotes: 
   hidden_by_admin: false
-  authors_to_sort_on: zooey_glass
 work_00054: 
   restricted: false
   posted: true
@@ -1913,8 +1691,6 @@ work_00054:
   notes: ""
   backdate: false
   word_count: 448
-  last_visitor_old: 
-  hit_count_old: 0
   title_to_sort_on: why we rely
   id: 54
   language_id: 1
@@ -1955,7 +1731,6 @@ work_00054:
   revised_at: 2009-12-11 12:58:05 Z
   endnotes: ""
   hidden_by_admin: false
-  authors_to_sort_on: cal
 work_00097: 
   restricted: false
   posted: true
@@ -1969,8 +1744,6 @@ work_00097:
   notes: ""
   backdate: false
   word_count: 17224
-  last_visitor_old: 
-  hit_count_old: 0
   title_to_sort_on: "slats: moments in time"
   id: 97
   language_id: 1
@@ -1983,7 +1756,6 @@ work_00097:
   revised_at: 2009-12-12 23:01:10 Z
   endnotes: ""
   hidden_by_admin: false
-  authors_to_sort_on: tassos
 work_00034: 
   restricted: false
   posted: true
@@ -1997,8 +1769,6 @@ work_00034:
   notes: ""
   backdate: false
   word_count: 27
-  last_visitor_old: 
-  hit_count_old: 0
   title_to_sort_on: aaaaliens
   id: 34
   language_id: 1
@@ -2008,7 +1778,6 @@ work_00034:
   revised_at: 2009-12-11 22:31:04 Z
   endnotes: 
   hidden_by_admin: false
-  authors_to_sort_on: some other fucking pseud
 work_00013: 
   restricted: false
   posted: true
@@ -2022,8 +1791,6 @@ work_00013:
   notes: "I expected to be kind of helpless after dying, but it turns out it's not as peaceful as it's made out to be. So, I figured I'd write some stuff down. "
   backdate: false
   word_count: 74
-  last_visitor_old: 
-  hit_count_old: 0
   title_to_sort_on: i knew i should have argued
   id: 13
   language_id: 1
@@ -2033,7 +1800,6 @@ work_00013:
   revised_at: 2008-12-06 23:34:39 Z
   endnotes: 
   hidden_by_admin: false
-  authors_to_sort_on: jessica
 work_00076: 
   restricted: false
   posted: false
@@ -2047,8 +1813,6 @@ work_00076:
   notes: 
   backdate: false
   word_count: 1251
-  last_visitor_old: 
-  hit_count_old: 0
   title_to_sort_on: dreams of reality
   id: 76
   language_id: 
@@ -2058,7 +1822,6 @@ work_00076:
   revised_at: 2009-12-12 21:13:56 Z
   endnotes: 
   hidden_by_admin: false
-  authors_to_sort_on: llwyden
 work_00056: 
   restricted: false
   posted: true
@@ -2072,8 +1835,6 @@ work_00056:
   notes: I once swore I'd never write RPS. I blame the Js.
   backdate: false
   word_count: 3067
-  last_visitor_old: 
-  hit_count_old: 0
   title_to_sort_on: method acting
   id: 56
   language_id: 1
@@ -2083,7 +1844,6 @@ work_00056:
   revised_at: 2007-03-28 23:00:00 Z
   endnotes: 
   hidden_by_admin: false
-  authors_to_sort_on: parenthetical
 work_00035: 
   restricted: false
   posted: true
@@ -2097,8 +1857,6 @@ work_00035:
   notes: ""
   backdate: false
   word_count: 59
-  last_visitor_old: 
-  hit_count_old: 0
   title_to_sort_on: ppppp
   id: 35
   language_id: 1
@@ -2108,7 +1866,6 @@ work_00035:
   revised_at: 2009-12-11 04:06:51 Z
   endnotes: 
   hidden_by_admin: false
-  authors_to_sort_on: testuser2,  testuser4,  non-default pseud,  some other fucking pseud
 work_00014: 
   restricted: false
   posted: true
@@ -2122,8 +1879,6 @@ work_00014:
   notes: "Not the Bible version. No offence intended. "
   backdate: false
   word_count: 398
-  last_visitor_old: 
-  hit_count_old: 0
   title_to_sort_on: sodom and gomorrah
   id: 14
   language_id: 1
@@ -2133,7 +1888,6 @@ work_00014:
   revised_at: 2009-12-11 05:19:36 Z
   endnotes: 
   hidden_by_admin: false
-  authors_to_sort_on: uriel
 work_00077: 
   restricted: false
   posted: false
@@ -2147,8 +1901,6 @@ work_00077:
   notes: 
   backdate: false
   word_count: 625
-  last_visitor_old: 
-  hit_count_old: 0
   title_to_sort_on: bugged
   id: 77
   language_id: 
@@ -2158,7 +1910,6 @@ work_00077:
   revised_at: 2009-12-12 21:13:56 Z
   endnotes: 
   hidden_by_admin: false
-  authors_to_sort_on: llwyden
 work_00098: 
   restricted: false
   posted: true
@@ -2172,8 +1923,6 @@ work_00098:
   notes: "Spoilers: In the Farscape Universe, this is set just after Bad Timing, season 4, so everything is game. In the Stargate Universe, it's general season 7 before the cliffhangar, though you should know that I just started watching Stargate this summer."
   backdate: false
   word_count: 52416
-  last_visitor_old: 
-  hit_count_old: 0
   title_to_sort_on: pathways
   id: 98
   language_id: 1
@@ -2186,7 +1935,6 @@ work_00098:
   revised_at: 2009-12-12 23:07:31 Z
   endnotes: ""
   hidden_by_admin: false
-  authors_to_sort_on: tassos
 work_00099: 
   restricted: false
   posted: true
@@ -2200,8 +1948,6 @@ work_00099:
   notes: ""
   backdate: false
   word_count: 81418
-  last_visitor_old: 
-  hit_count_old: 0
   title_to_sort_on: ray of smoke
   id: 99
   language_id: 1
@@ -2214,7 +1960,6 @@ work_00099:
   revised_at: 2009-12-12 23:18:43 Z
   endnotes: ""
   hidden_by_admin: false
-  authors_to_sort_on: tassos
 work_00078: 
   restricted: false
   posted: false
@@ -2228,8 +1973,6 @@ work_00078:
   notes: 
   backdate: false
   word_count: 1156
-  last_visitor_old: 
-  hit_count_old: 0
   title_to_sort_on: once more, with feeling
   id: 78
   language_id: 
@@ -2239,7 +1982,6 @@ work_00078:
   revised_at: 2009-12-12 21:13:57 Z
   endnotes: 
   hidden_by_admin: false
-  authors_to_sort_on: llwyden
 work_00036: 
   restricted: false
   posted: true
@@ -2253,8 +1995,6 @@ work_00036:
   notes: ""
   backdate: false
   word_count: 5
-  last_visitor_old: 
-  hit_count_old: 0
   title_to_sort_on: chhhhhhhh
   id: 36
   language_id: 1
@@ -2264,7 +2004,6 @@ work_00036:
   revised_at: 2009-12-11 00:30:26 Z
   endnotes: 
   hidden_by_admin: false
-  authors_to_sort_on: some other fucking pseud
 work_00015: 
   restricted: false
   posted: true
@@ -2278,8 +2017,6 @@ work_00015:
   notes: ""
   backdate: false
   word_count: 12
-  last_visitor_old: 
-  hit_count_old: 0
   title_to_sort_on: ofc
   id: 15
   language_id: 1
@@ -2289,7 +2026,6 @@ work_00015:
   revised_at: 2009-12-11 04:25:24 Z
   endnotes: 
   hidden_by_admin: false
-  authors_to_sort_on: testuser,  testuser2,  testuser4,  non-default pseud,  some other fucking pseud
 work_00057: 
   restricted: false
   posted: true
@@ -2303,8 +2039,6 @@ work_00057:
   notes: Written for Zooey_Glass for her prompt <em>Sam/Dean, popcorn</em>. I'm fairly confident this isn't what she had in mind. &lt;3 General spoilers up to episode 3.08.
   backdate: false
   word_count: 2035
-  last_visitor_old: 
-  hit_count_old: 0
   title_to_sort_on: pop secret
   id: 57
   language_id: 1
@@ -2314,7 +2048,6 @@ work_00057:
   revised_at: 2008-12-23 23:00:00 Z
   endnotes: 
   hidden_by_admin: false
-  authors_to_sort_on: parenthetical
 work_00080: 
   restricted: false
   posted: false
@@ -2328,8 +2061,6 @@ work_00080:
   notes: 
   backdate: false
   word_count: 547
-  last_visitor_old: 
-  hit_count_old: 0
   title_to_sort_on: as it didn't happen
   id: 80
   language_id: 
@@ -2339,7 +2070,6 @@ work_00080:
   revised_at: 2009-12-12 21:13:59 Z
   endnotes: 
   hidden_by_admin: false
-  authors_to_sort_on: llwyden
 work_00079: 
   restricted: false
   posted: false
@@ -2353,8 +2083,6 @@ work_00079:
   notes: 
   backdate: false
   word_count: 3909
-  last_visitor_old: 
-  hit_count_old: 0
   title_to_sort_on: murphy's law
   id: 79
   language_id: 
@@ -2364,7 +2092,6 @@ work_00079:
   revised_at: 2009-12-12 21:13:58 Z
   endnotes: 
   hidden_by_admin: false
-  authors_to_sort_on: llwyden
 work_00081: 
   restricted: false
   posted: false
@@ -2378,8 +2105,6 @@ work_00081:
   notes: 
   backdate: false
   word_count: 3980
-  last_visitor_old: 
-  hit_count_old: 0
   title_to_sort_on: friends
   id: 81
   language_id: 
@@ -2389,7 +2114,6 @@ work_00081:
   revised_at: 2009-12-12 21:14:00 Z
   endnotes: 
   hidden_by_admin: false
-  authors_to_sort_on: llwyden
 work_00058: 
   restricted: false
   posted: true
@@ -2403,8 +2127,6 @@ work_00058:
   notes: Written long before season 4.
   backdate: false
   word_count: 979
-  last_visitor_old: 
-  hit_count_old: 0
   title_to_sort_on: therapy
   id: 58
   language_id: 1
@@ -2414,7 +2136,6 @@ work_00058:
   revised_at: 2009-12-11 22:00:00 Z
   endnotes: 
   hidden_by_admin: false
-  authors_to_sort_on: parenthetical
 work_00060: 
   restricted: false
   posted: true
@@ -2428,8 +2149,6 @@ work_00060:
   notes: Written for the sncross_bigbang challenge on LJ. Thank you to darkmagic_luvr for making <a href="http://community.livejournal.com/sinnessjukdom/4130.html">an amazing amount of gorgeous art</a> for this fic! &lt;3 Much love and thanks also to the lovely Zooey Glass for a lightning-speed beta. All remaining mistakes are my own.
   backdate: true
   word_count: 8416
-  last_visitor_old: 
-  hit_count_old: 0
   title_to_sort_on: january girl
   id: 60
   language_id: 1
@@ -2439,7 +2158,6 @@ work_00060:
   revised_at: 2009-12-11 22:00:00 Z
   endnotes: 
   hidden_by_admin: false
-  authors_to_sort_on: parenthetical
 work_00016: 
   restricted: false
   posted: true
@@ -2453,8 +2171,6 @@ work_00016:
   notes: ""
   backdate: false
   word_count: 1
-  last_visitor_old: 
-  hit_count_old: 0
   title_to_sort_on: ttttttttttt
   id: 16
   language_id: 1
@@ -2464,4 +2180,3 @@ work_00016:
   revised_at: 2009-12-11 06:34:22 Z
   endnotes: 
   hidden_by_admin: false
-  authors_to_sort_on: testuser3,  testuser4

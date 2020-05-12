@@ -1,0 +1,24 @@
+<% content_for :message do %>
+<%= t(".greeting", user: @user.default_pseud.byline) %>
+
+<%= t(".changed_status.#{@status}",
+      collection: @collection.title,
+      work: @work.title) %>
+
+<% if @becoming_anonymous && @becoming_unrevealed %>
+<%= t(".unrevealed_info") %>
+
+<%= t(".anonymous_unrevealed_info") %>
+<% elsif @becoming_anonymous %>
+<%= t(".anonymous_info") %>
+<% else %>
+<%= t(".unrevealed_info") %>
+<% end %>
+
+<%= t(".do_not_want.#{@status}.text",
+      collection_items_url: user_collection_items_url(@user, approved: true)) %>
+
+<%= t(".more_info.text",
+      faq_url: archive_faq_url("collections-and-challenges",
+                               anchor: :collectionoptions)) %>
+<% end %>
