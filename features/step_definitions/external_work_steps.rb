@@ -32,10 +32,10 @@ Given /^I bookmark the external work "([^\"]*)"(?: with fandom "([^"]*)")?(?: wi
   click_button("Create")
 end
 
-Given "{string} has bookmarked an external work" do |string|
+Given "{string} has bookmarked an external work" do |user|
   step %{mock websites with no content}
   step %{basic tags}
-  step %{I am logged in as "#{string}"}
+  step %{I am logged in as "#{user}"}
   visit new_external_work_path
   # Typically, when we write step definitions, we prefer to use a
   # field's id attribute over its label. But in this case,
