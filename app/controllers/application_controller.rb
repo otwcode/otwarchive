@@ -83,7 +83,7 @@ class ApplicationController < ActionController::Base
     if logged_in_as_admin?
       # if we are logged in as an admin and we don't have the admin_credentials
       # set then set that cookie
-      cookies.permanent[:admin_credentials] = 1 unless cookies[:admin_credentials]
+      cookies[:admin_credentials] = {value: 1, expires: 1.year.from_now} unless cookies[:admin_credentials]
     else
       # if we are NOT logged in as an admin and we have the admin_credentials
       # set then delete that cookie
@@ -109,7 +109,7 @@ class ApplicationController < ActionController::Base
   after_action :ensure_user_credentials
   def ensure_user_credentials
     if logged_in?
-      cookies.permanent[:user_credentials] = 1 unless cookies[:user_credentials]
+      cookies[:user_credentials] = {value: 1, expires: 1.year.from_now} unless cookies[:user_credentials]
     else
       cookies.delete :user_credentials unless cookies[:user_credentials].nil?
     end
@@ -465,11 +465,11 @@ public
   def valid_sort_column(param, model='work')
     allowed = []
     if model.to_s.downcase == 'work'
-      allowed = ['author', 'title', 'date', 'created_at', 'word_count', 'hit_count']
+      allowed = %w(author title date created_at word_count hit_count)
     elsif model.to_s.downcase == 'tag'
-      allowed = ['name', 'created_at', 'taggings_count_cache']
+      allowed = %w(name created_at taggings_count_cache)
     elsif model.to_s.downcase == 'collection'
-      allowed = ['collections.title', 'collections.created_at']
+      allowed = %w(collections.title collections.created_at)
     elsif model.to_s.downcase == 'prompt'
       allowed = %w(fandom created_at prompter)
     elsif model.to_s.downcase == 'claim'
@@ -489,7 +489,7 @@ public
   end
 
   def valid_sort_direction(param)
-    !param.blank? && ['asc', 'desc'].include?(param.to_s.downcase)
+    !param.blank? && %w(asc desc).include?(param.to_s.downcase)
   end
 
   def flash_search_warnings(result)
