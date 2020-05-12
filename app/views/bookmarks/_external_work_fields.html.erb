@@ -32,7 +32,7 @@
               type: "get",
               data: "external_work_url=" + $j("#bookmark_external_url").val(),
               dataType: "script",
-              url: "<%= url_for(controller: "external_works", action: "fetch") %>"
+              url: "<%= url_for(controller: "external_works", action: "fetch", only_path: true) %>"
             });
           }
         <% end %>
