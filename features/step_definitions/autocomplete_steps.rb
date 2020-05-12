@@ -55,7 +55,7 @@ end
 
 When /^I enter "([^\"]+)" in the "([^\"]+)" autocomplete field$/ do |text, fieldname|
   field = find_field(fieldname)
-  # Clear the field
+  # Clear the field.
   field.set("")
   # Simulate keystrokes to make the autocomplete dropdown appear (instead of fill_in).
   field.send_keys(text)
@@ -67,7 +67,7 @@ end
 
 When /^I choose "([^\"]+)" from the "([^\"]+)" autocomplete$/ do |text, fieldname|
   field = find_field(fieldname)
-  # Clear the field
+  # Clear the field.
   field.set("")
   # Simulate keystrokes to make the autocomplete dropdown appear (instead of fill_in)
   field.send_keys(text)
