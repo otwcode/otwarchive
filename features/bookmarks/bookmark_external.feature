@@ -116,7 +116,7 @@ Feature: Create bookmarks of external works
     Given "first_user" has bookmarked an external work
       And I am logged in as "second_user"
     When I go to the new external work page
-      And I enter a previously bookmarked URL in the autocomplete
+      And I choose a previously bookmarked URL from the autocomplete
       And I press "Create"
     Then I should see "Bookmark was successfully created."
       And the work info for my new bookmark should match the original
@@ -126,7 +126,7 @@ Feature: Create bookmarks of external works
     Given "first_user" has bookmarked an external work
       And I am logged in as "second_user"
     When I go to the new external work page
-      And I enter a previously bookmarked URL in the autocomplete
+      And I choose a previously bookmarked URL from the autocomplete
       And I fill in "Title" with ""
       And I fill in "Creator" with "Different Author"
       And I press "Create"

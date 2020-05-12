@@ -109,9 +109,8 @@ When /^I specify two fandoms and enter text in the character autocomplete field$
   step %{I enter text in the character autocomplete field}
 end
 
-When /^I enter a previously bookmarked URL in the autocomplete$/ do
+When /^I choose a previously bookmarked URL from the autocomplete$/ do
   url = ExternalWork.first.url
-  step %{I enter "#{url}" in the "URL" autocomplete field}
   step %{I choose "#{url}" from the "URL" autocomplete}
 end
 
