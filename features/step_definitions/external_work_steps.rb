@@ -32,7 +32,7 @@ Given /^I bookmark the external work "([^\"]*)"(?: with fandom "([^"]*)")?(?: wi
   click_button("Create")
 end
 
-Given /^"([^"]*)" has bookmarked an external work$/ do |user|
+Given /^{string} has bookmarked an external work$/ do |user|
   step %{mock websites with no content}
   step %{basic tags}
   step %{I am logged in as "#{user}"}
