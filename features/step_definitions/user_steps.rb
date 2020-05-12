@@ -9,13 +9,13 @@ Given /^I have no users$/ do
 end
 
 Given /I have an orphan account/ do
-  user = FactoryGirl.create(:user, login: 'orphan_account')
+  user = FactoryBot.create(:user, login: 'orphan_account')
   user.activate
 end
 
 Given /the following activated users? exists?/ do |table|
   table.hashes.each do |hash|
-    user = FactoryGirl.create(:user, hash)
+    user = FactoryBot.create(:user, hash)
     user.activate
     user.pseuds.first.add_to_autocomplete
     step %{confirmation emails have been delivered}
@@ -24,7 +24,7 @@ end
 
 Given /the following users exist with BCrypt encrypted passwords/ do |table|
   table.hashes.each do |hash|
-    user = FactoryGirl.create(:user, hash)
+    user = FactoryBot.create(:user, hash)
     user.activate
     user.pseuds.first.add_to_autocomplete
 
@@ -46,7 +46,7 @@ end
 
 Given /the following users exist with SHA-512 encrypted passwords/ do |table|
   table.hashes.each do |hash|
-    user = FactoryGirl.create(:user, hash)
+    user = FactoryBot.create(:user, hash)
     user.activate
     user.pseuds.first.add_to_autocomplete
 
@@ -67,16 +67,16 @@ end
 
 Given /the following activated users with private work skins/ do |table|
   table.hashes.each do |hash|
-    user = FactoryGirl.create(:user, hash)
+    user = FactoryBot.create(:user, hash)
     user.activate
-    FactoryGirl.create(:private_work_skin, author: user, title: "#{user.login.titleize}'s Work Skin")
+    FactoryBot.create(:private_work_skin, author: user, title: "#{user.login.titleize}'s Work Skin")
     step %{confirmation emails have been delivered}
   end
 end
 
 Given /the following activated tag wranglers? exists?/ do |table|
   table.hashes.each do |hash|
-    user = FactoryGirl.create(:user, hash)
+    user = FactoryBot.create(:user, hash)
     user.activate
     user.tag_wrangler = '1'
     user.pseuds.first.add_to_autocomplete
@@ -99,14 +99,9 @@ Given /^the user "([^"]*)" exists and has the role "([^"]*)"/ do |login, role|
   user.save
 end
 
-Given /^I am logged in as "([^"]*)" with password "([^"]*)"(?:( with preferences set to hidden warnings and additional tags))?$/ do |login, password, hidden|
+Given /^I am logged in as "([^"]*)" with password "([^"]*)"$/ do |login, password|
   user = find_or_create_new_user(login, password)
   step("I am logged out")
-  if hidden.present?
-    user.preference.hide_warnings = true
-    user.preference.hide_freeform = true
-    user.preference.save
-  end
   step %{I am on the homepage}
   find_link('login-dropdown').click
 
@@ -114,6 +109,7 @@ Given /^I am logged in as "([^"]*)" with password "([^"]*)"(?:( with preferences
   fill_in "Password:", with: password
   check "Remember Me"
   click_button "Log In"
+  step %{I should see "Hi, #{login}!" within "#greeting"}
   step %{confirmation emails have been delivered}
 end
 
@@ -151,12 +147,6 @@ Given /^I log out$/ do
   step(%{I follow "Log Out"})
 end
 
-Given /^"([^"]*)" has the pseud "([^"]*)"$/ do |username, pseud|
-  step (%{I am logged in as "#{username}"})
-  step(%{"#{username}" creates the pseud "#{pseud}"})
-  step("I am logged out")
-end
-
 Given /^"([^"]*)" deletes their account/ do |username|
   visit user_path(username)
   step(%{I follow "Profile"})
@@ -171,8 +161,11 @@ end
 Given(/^I coauthored the work "(.*?)" as "(.*?)" with "(.*?)"$/) do |title, login, coauthor|
   step %{basic tags}
   author1 = User.find_by(login: login).default_pseud
+  author1.user.preference.update(allow_cocreator: true)
   author2 = User.find_by(login: coauthor).default_pseud
-  FactoryGirl.create(:work, authors: [author1, author2], posted: true, title: title)
+  author2.user.preference.update(allow_cocreator: true)
+  work = FactoryBot.create(:work, authors: [author1, author2], title: title)
+  work.creatorships.unapproved.each(&:accept!)
 end
 
 # WHEN
@@ -186,25 +179,6 @@ end
 When /^the user "([^\"]*)" has failed to log in (\d+) times$/ do |login, count|
   user = User.find_by(login: login)
   user.update(failed_attempts: count.to_i)
-end
-
-When /^"([^\"]*)" creates the default pseud "([^"]*)"$/ do |username, newpseud|
-  visit new_user_pseud_path(username)
-  fill_in "Name", with: newpseud
-  check("pseud_is_default")
-  click_button "Create"
-end
-
-When /^"([^"]*)" creates the pseud "([^"]*)"$/ do |username, newpseud|
-  visit new_user_pseud_path(username)
-  fill_in "Name", with: newpseud
-  click_button "Create"
-end
-
-When /^I create the pseud "([^"]*)"$/ do |newpseud|
-  visit new_user_pseud_path(User.current_user)
-  fill_in "Name", with: newpseud
-  click_button "Create"
 end
 
 When /^I fill in the sign up form with valid data$/ do
@@ -229,6 +203,13 @@ end
 When /^I visit the change username page for (.*)$/ do |login|
   user = User.find_by(login: login)
   visit change_username_user_path(user)
+end
+
+When /^the user "(.*?)" accepts all (?:co-)?creator (?:invitations|invites)$/ do |login|
+  # To make sure that we don't have caching issues with the byline:
+  step %{I wait 1 second}
+  user = User.find_by(login: login)
+  user.creatorships.unapproved.each(&:accept!)
 end
 
 # THEN

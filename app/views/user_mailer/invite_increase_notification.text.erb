@@ -1,4 +1,8 @@
 <% content_for :message do %>
-<%= t 'user_mailer.invite_increase_notification.txt', login: @user.login, total: @total, invitation_page: user_invitations_url(@user), archive_name: ArchiveConfig.APP_SHORT_NAME %>
-<% end %>
+<%= t(".greeting", login: @user.login) %>
 
+<%= t(".body", count: @total, invitation_page: user_invitations_url(@user)) %>
+
+<%= t(".closing") %>
+<%= t("mailer.general.signature.app_short_name") %>
+<% end %>

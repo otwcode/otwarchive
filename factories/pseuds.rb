@@ -1,6 +1,6 @@
 require 'faker'
 
-FactoryGirl.define do
+FactoryBot.define do
   factory :pseud do
     name { Faker::Lorem.characters(8) }
     user

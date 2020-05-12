@@ -1,5 +1,4 @@
 @works @search
-@no-txn
 
 Feature: Locking works to archive users only
   In order to keep my works under the radar
@@ -12,6 +11,7 @@ Scenario: Posting locked work
       And I go to the new work page
       And I select "Not Rated" from "Rating"
       And I check "No Archive Warnings Apply"
+      And I select "English" from "Choose a language"
       And I fill in "Fandoms" with "Supernatural"
       And I fill in "Characters" with "Sammy"
       And I fill in "Work Title" with "Awesomeness"
