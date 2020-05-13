@@ -5,69 +5,80 @@
 <!--main content-->
 <%= form_for @admin_setting, :url => admin_setting_path(@admin_setting), html: { method: "put", class: "manage" } do |f| %>
   <%= error_messages_for @admin_setting %>
-  <fieldset>
-    <legend><%= ts("Accounts and Invitations") %></legend>
-    <h3 class="landmark heading"><%= ts("Accounts and Invitations") %></h3>
-    <dl>
 
-      <dt><%= f.check_box :account_creation_enabled %></dt>
-      <dd><%= f.label :account_creation_enabled, ts("Account creation enabled") %></dd>
-      <dt><%= f.check_box :creation_requires_invite %></dt>
-      <dd><%= f.label :creation_requires_invite, ts("Account creation requires invitation") %></dd>
-      <dt><%= f.check_box :request_invite_enabled %></dt>
-      <dd><%= f.label :request_invite_enabled, ts("Users can request invitations") %></dd>
+  <% if AdminSettingPolicy.user_has_correct_role?(current_admin, nil) %>
+    <fieldset>
+      <legend><%= ts("Accounts and Invitations") %></legend>
+      <h3 class="landmark heading"><%= ts("Accounts and Invitations") %></h3>
+      <dl>
 
-      <dt><%= f.check_box :invite_from_queue_enabled %></dt>
-      <dd><%= f.label :invite_from_queue_enabled, ts("Invite from queue enabled (People can add themselves to the queue and invitations are sent out automatically)") %></dd>
+        <dt><%= f.check_box :account_creation_enabled %></dt>
+        <dd><%= f.label :account_creation_enabled, ts("Account creation enabled") %></dd>
+        <dt><%= f.check_box :creation_requires_invite %></dt>
+        <dd><%= f.label :creation_requires_invite, ts("Account creation requires invitation") %></dd>
+        <dt><%= f.check_box :request_invite_enabled %></dt>
+        <dd><%= f.label :request_invite_enabled, ts("Users can request invitations") %></dd>
 
-      <dt><%= f.label :invite_from_queue_number, ts("Number of people to invite from the queue at once") %></dt>
-      <dd><%= f.text_field :invite_from_queue_number, :size => "3" %></dd>
+        <dt><%= f.check_box :invite_from_queue_enabled %></dt>
+        <dd><%= f.label :invite_from_queue_enabled, ts("Invite from queue enabled (People can add themselves to the queue and invitations are sent out automatically)") %></dd>
 
-      <dt><%= f.label :invite_from_queue_frequency, ts("How often (in days) should we invite people from the queue") %></dt>
-      <dd><%= f.text_field :invite_from_queue_frequency, :size => "3" %></dd>
+        <dt><%= f.label :invite_from_queue_number, ts("Number of people to invite from the queue at once") %></dt>
+        <dd><%= f.text_field :invite_from_queue_number, :size => "3" %></dd>
 
-      <dt><%= f.label :days_to_purge_unactivated, ts("How many weeks you have to activate your account before we purge it") %></dt>
-      <dd><%= f.text_field :days_to_purge_unactivated, :size => "3" %></dd>
-    </dl>
-  </fieldset>
+        <dt><%= f.label :invite_from_queue_frequency, ts("How often (in days) should we invite people from the queue") %></dt>
+        <dd><%= f.text_field :invite_from_queue_frequency, :size => "3" %></dd>
 
-  <fieldset>
-    <legend><%= ts("Turn Off Support Form") %></legend>
-    <h3 class="landmark heading"><%= ts("Turn Off Support Form") %></h3>
-    <dl>
-      <dt><%= f.check_box :disable_support_form %></dt>
-      <dd>
-        <%= f.label :disable_support_form, ts("Turn off support form") %>
-        <legend><%= f.label :disabled_support_form_text, ts("Disabled support form text") %></legend>
-        <p><%= allowed_html_instructions %></p>
-        <%= f.text_area :disabled_support_form_text %>
-      </dd>
-    </dl>
-  </fieldset>
-  
+        <dt><%= f.label :days_to_purge_unactivated, ts("How many weeks you have to activate your account before we purge it") %></dt>
+        <dd><%= f.text_field :days_to_purge_unactivated, :size => "3" %></dd>
+      </dl>
+    </fieldset>
+  <% end %>
+
+  <% if AdminSettingPolicy.user_has_correct_role?(current_admin, 'support') %>
+    <fieldset>
+      <legend><%= ts("Turn Off Support Form") %></legend>
+      <h3 class="landmark heading"><%= ts("Turn Off Support Form") %></h3>
+      <dl>
+        <dt><%= f.check_box :disable_support_form %></dt>
+        <dd>
+          <%= f.label :disable_support_form, ts("Turn off support form") %>
+          <legend><%= f.label :disabled_support_form_text, ts("Disabled support form text") %></legend>
+          <p><%= allowed_html_instructions %></p>
+          <%= f.text_area :disabled_support_form_text %>
+        </dd>
+      </dl>
+    </fieldset>
+  <% end %>
 
   <fieldset>
     <legend><%= ts("Performance and Misc") %></legend>
     <h3 class="landmark heading"><%= ts("Performance and Misc") %></h3>
     <dl>
+      <% if AdminSettingPolicy.user_has_correct_role?(current_admin, nil) %>
+        <dt><%= f.check_box :suspend_filter_counts %></dt>
+        <dd><%= f.label :suspend_filter_counts, ts("Suspend some filter tracking due to high posting volume") %></dd>
+      <% end %>
 
-      <dt><%= f.check_box :suspend_filter_counts %></dt>
-      <dd><%= f.label :suspend_filter_counts, ts("Suspend some filter tracking due to high posting volume") %></dd>
+      <% if AdminSettingPolicy.user_has_correct_role?(current_admin, 'tag_wrangling') %>
+        <dt><%= f.check_box :tag_wrangling_off %></dt>
+        <dd><%= f.label :tag_wrangling_off, ts("Turn off tag wrangling for non-admins") %></dd>
+      <% end %>
 
-      <dt><%= f.check_box :tag_wrangling_off %></dt>
-      <dd><%= f.label :tag_wrangling_off, ts("Turn off tag wrangling for non-admins") %></dd>
+      <% if AdminSettingPolicy.user_has_correct_role?(current_admin, nil) %>
+        <dt><%= f.check_box :downloads_enabled %></dt>
+        <dd><%= f.label :downloads_enabled, ts("Allow downloads") %></dd>
 
-      <dt><%= f.check_box :downloads_enabled %></dt>
-      <dd><%= f.label :downloads_enabled, ts("Allow downloads") %></dd>
+        <dt><%= f.check_box :enable_test_caching %></dt>
+        <dd><%= f.label :enable_test_caching, ts("Turn on caching (currently experimental)") %></dd>
 
-      <dt><%= f.check_box :enable_test_caching %></dt>
-      <dd><%= f.label :enable_test_caching, ts("Turn on caching (currently experimental)") %></dd>
+        <dt><%= f.label :cache_expiration, ts("How often (in minutes) should we refresh caching") %></dt>
+        <dd><%= f.text_field :cache_expiration, :size => "3" %></dd>
+      <% end %>
 
-      <dt><%= f.label :cache_expiration, ts("How often (in minutes) should we refresh caching") %></dt>
-      <dd><%= f.text_field :cache_expiration, :size => "3" %></dd>
-
-      <dt><%= f.check_box :hide_spam %></dt>
-      <dd><%= f.label :hide_spam, ts("Automatically hide spam works") %></dd>
+      <% if AdminSettingPolicy.user_has_correct_role?(current_admin, 'policy_and_abuse') %>
+        <dt><%= f.check_box :hide_spam %></dt>
+        <dd><%= f.label :hide_spam, ts("Automatically hide spam works") %></dd>
+      <% end %>
     </dl>
   </fieldset>
 
