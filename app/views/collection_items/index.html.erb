@@ -58,8 +58,6 @@
     <%= submit_fieldset %>
   <% end %>
 
-  <% unless @user %>
-    <%= will_paginate @collection_items %>
-  <% end %>
+  <%= will_paginate @collection_items %>
 <% end %>
 <!--/content-->
