@@ -28,24 +28,37 @@ class CollectionItemsController < ApplicationController
       @collection_items = @collection.collection_items.include_for_works
       @collection_items = case
                           when params[:approved]
+                            # Approved by both the user and the collection.
                             @collection_items.approved_by_collection
-                          when params[:rejected]
+                          when params[:collection_rejected]
+                            # Formerly params[:rejected]. Rejected by the collection, any status from user.
                             @collection_items.rejected_by_collection
                           when params[:invited]
+                            # Approved by the collection, unreviewed by the user.
                             @collection_items.invited_by_collection
+                          when params[:user_rejected]
+                            # Rejected by user, any status from collection.
+                            @collection_items.rejected_by_user
                           else
+                            # Unreviewed by the collection, any status from the user.
                             @collection_items.unreviewed_by_collection
                           end
     elsif params[:user_id] && (@user = User.find_by(login: params[:user_id])) && @user == current_user
       @collection_items = CollectionItem.for_user(@user).includes(:collection)
       @collection_items = case
                           when params[:approved]
+                            # Approved by both the user and the collection.
                             @collection_items.approved_by_user.approved_by_collection
-                          when params[:rejected]
+                          when params[:user_rejected]
+                            # Formerly params[:rejected]. Rejected by the user, any status from the collection.
                             @collection_items.rejected_by_user
                           when params[:awaiting_collection]
                             @collection_items.approved_by_user.unreviewed_by_collection
+                          when params[:collection_rejected]
+                            # Rejected by the collection, any status from the user.
+                            @collection_items.rejected_by_collection
                           else
+                            # Unreviewed by the user, any status from the collection.
                             @collection_items.unreviewed_by_user
                           end
     else
