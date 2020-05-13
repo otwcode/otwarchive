@@ -23,8 +23,7 @@
         @collection ? !known_params : params[:awaiting_collection] %></li>
 
   <% # Default page for user. Set as current if this is a user and no other known params are set, or if this is not a user and the invited param is set. %>
-  <% # Could potentially be renamed "Awaiting User Approval." %>
-  <li><%= span_if_current ts("Invited"),
+  <li><%= span_if_current ts("Awaiting User Approval"),
         invited_path,
         @user ? !known_params : params[:invited] %></li>
 
