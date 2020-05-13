@@ -233,7 +233,10 @@ a.tag,
 #header .primary .open a,
 #header .primary .dropdown:hover a,
 #header .primary .dropdown a:focus,
+#header #search input:focus,
+#header #search input:hover,
 #dashboard a,
+#dashboard span,
 #dashboard .current,
 .heading,
 .group .heading,
@@ -259,9 +262,7 @@ input[type="submit"],
 button,
 .current,
 .actions label,
-#header .actions a,
-#header input[type="submit"],
-#header .search input[type="text"] {
+#header .actions a {
   background: #555;
   border-color: #222;
   color: #eee;
@@ -272,13 +273,9 @@ button,
 .actions a:hover,
 .actions input:hover,
 #dashboard a:hover,
-#header .search input[type="text"]:hover,
-#header .search input[type="submit"]:hover,
 .actions a:focus,
 .actions input:focus,
-#dashboard a:focus,
-#header .search input[type="text"]:focus,
-#header .search input[type="submit"]:focus {
+#dashboard a:focus {
   color: #999;
   border-color: #000;
   box-shadow: inset 2px 2px 2px #000;
@@ -327,6 +324,10 @@ fieldset fieldset,
 
 fieldset fieldset.listbox {
   outline: none;
+}
+
+form dd.required {
+  color: #eee;
 }
 
 .mce-container input:focus {

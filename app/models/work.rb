@@ -1,11 +1,10 @@
 class Work < ApplicationRecord
-  include Taggable
+  include Filterable
   include CreationNotifier
   include Collectible
   include Bookmarkable
   include Searchable
   include BookmarkCountCaching
-  include WorkStats
   include WorkChapterCountCaching
   include ActiveModel::ForbiddenAttributesProtection
   include Creatable
@@ -247,7 +246,7 @@ class Work < ApplicationRecord
   end
 
   def self.work_blurb_tag_cache_key(id)
-    "/v2/work_blurb_tag_cache_key/#{id}"
+    "/v3/work_blurb_tag_cache_key/#{id}"
   end
 
   def self.work_blurb_tag_cache(id)
@@ -301,11 +300,6 @@ class Work < ApplicationRecord
     chapters.sort_by(&:position).reverse.each(&:destroy)
   end
 
-  after_destroy :clean_up_filter_taggings
-  def clean_up_filter_taggings
-    FilterTagging.where("filterable_type = 'Work' AND filterable_id = #{self.id}").destroy_all
-  end
-
   after_destroy :clean_up_assignments
   def clean_up_assignments
     self.challenge_assignments.each {|a| a.creation = nil; a.save!}
@@ -315,16 +309,8 @@ class Work < ApplicationRecord
   # RESQUE
   ########################################################################
 
+  include AsyncWithResque
   @queue = :utilities
-  # This will be called by a worker when a job needs to be processed
-  def self.perform(id, method, *args)
-    find(id).send(method, *args)
-  end
-
-  # We can pass this any Work instance method that we want to run later.
-  def async(method, *args)
-    Resque.enqueue(Work, id, method, *args)
-  end
 
   ########################################################################
   # IMPORTING
@@ -819,64 +805,38 @@ class Work < ApplicationRecord
     return true
   end
 
+  # When the filters on a work change, we need to perform some extra checks.
+  def self.reindex_for_filter_changes(ids, filter_taggings, queue)
+    # The crossover/OTP status of a work can change without actually changing
+    # the filters (e.g. if you have a work tagged with canonical fandom A and
+    # unfilterable fandom B, synning B to A won't change the work's filters,
+    # but the work will immediately stop qualifying as a crossover). So we want
+    # to reindex all works whose filters were checked, not just the works that
+    # had their filters changed.
+    IndexQueue.enqueue_ids(Work, ids, queue)
+
+    # Only works are included in the filter count, so if a work's
+    # filter-taggings change, the FilterCount probably needs updating.
+    FilterCount.enqueue_filters(filter_taggings.map(&:filter_id))
+
+    # From here, we only want to update works whose filter_taggings have
+    # actually changed.
+    changed_ids = filter_taggings.map(&:filterable_id)
+    return unless changed_ids.present?
+
+    # Reindex any series associated with works whose filters have changed.
+    series_ids = SerialWork.where(work_id: changed_ids).pluck(:series_id)
+    IndexQueue.enqueue_ids(Series, series_ids, queue)
+
+    # Reindex any pseuds associated with works whose filters have changed.
+    pseud_ids = Creatorship.where(creation_id: changed_ids,
+                                  creation_type: "Work",
+                                  approved: true).pluck(:pseud_id)
+    IndexQueue.enqueue_ids(Pseud, pseud_ids, queue)
+  end
+
   # FILTERING CALLBACKS
   after_save :adjust_filter_counts
-
-  # Creates a filter_tagging relationship between the work and the tag or its
-  # canonical synonym. Also updates the series index because series inherit tags
-  # from works
-  def add_filter_tagging(tag, meta = false)
-    filter = tag.canonical? ? tag : tag.merger
-    if filter
-      if !self.filters.include?(filter)
-        if meta
-          self.filter_taggings.create(filter_id: filter.id, inherited: true)
-        else
-          self.filters << filter
-        end
-        filter.reset_filter_count
-      elsif !meta
-        ft = self.filter_taggings.where(["filter_id = ?", filter.id]).first
-        ft.update_attribute(:inherited, false)
-      end
-      IndexQueue.enqueue_ids(Series, series.pluck(:id), :main)
-    end
-  end
-
-  # Removes filter_tagging relationship unless the work is tagged with more than
-  # one synonymous tags. Also updates the series index because series inherit
-  # tags from works
-  def remove_filter_tagging(tag)
-    filter = tag.filter
-    if filter
-      filters_to_remove = [filter] + filter.meta_tags
-      filters_to_remove.each do |filter_to_remove|
-        if self.filters.include?(filter_to_remove)
-          all_sub_tags = filter_to_remove.sub_tags + [filter_to_remove]
-          sub_mergers = all_sub_tags.empty? ? [] : all_sub_tags.collect(&:mergers).flatten.compact
-          all_tags_with_filter_to_remove_as_meta = all_sub_tags + sub_mergers
-          remaining_tags = self.tags - [tag]
-          if (remaining_tags & all_tags_with_filter_to_remove_as_meta).empty? # none of the remaining tags need filter_to_remove
-            self.filter_taggings.where(filter_id: filter_to_remove.id).destroy_all
-            filter_to_remove.reset_filter_count
-            filter_to_remove.update_works_index_timestamp!
-          else # we should keep filter_to_remove, but check if inheritence needs to be updated
-            direct_tags_for_filter_to_remove = filter_to_remove.mergers + [filter_to_remove]
-            if (remaining_tags & direct_tags_for_filter_to_remove).empty? # not tagged with filter or mergers directly
-              ft = self.filter_taggings.where(["filter_id = ?", filter_to_remove.id]).first
-              ft.update_attribute(:inherited, true)
-            end
-          end
-        end
-      end
-      IndexQueue.enqueue_ids(Series, series.pluck(:id), :main)
-    end
-  end
-
-  # Must be called before save
-  def visibility_changed?
-    self.posted_changed? || self.restricted_changed? || self.hidden_by_admin_changed?
-  end
 
   # We need to do a recount for our filters if:
   # - the work is brand new
@@ -941,15 +901,24 @@ class Work < ApplicationRecord
   end
 
   def guest_kudos_count
-    Rails.cache.fetch "works/#{id}/guest_kudos_count" do
+    Rails.cache.fetch "works/#{id}/guest_kudos_count-v2" do
       kudos.by_guest.count
     end
   end
 
   def all_kudos_count
-    Rails.cache.fetch "works/#{id}/kudos_count" do
+    Rails.cache.fetch "works/#{id}/kudos_count-v2" do
       kudos.count
     end
+  end
+
+  def update_stat_counter
+    counter = self.stat_counter || self.create_stat_counter
+    counter.update_attributes(
+      kudos_count: self.kudos.count,
+      comments_count: self.count_visible_comments,
+      bookmarks_count: self.bookmarks.where(private: false).count
+    )
   end
 
   ########################################################################
@@ -1238,6 +1207,10 @@ class Work < ApplicationRecord
   end
   def bookmarks_count
     self.stat_counter.bookmarks_count
+  end
+
+  def hits
+    stat_counter&.hit_count
   end
 
   def creators

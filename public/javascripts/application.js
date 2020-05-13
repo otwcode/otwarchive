@@ -455,7 +455,7 @@ $j(document).ready(function() {
         var msg = 'Sorry, we were unable to save your kudos';
         var data = $j.parseJSON(jqXHR.responseText);
 
-        if (data.errors && (data.errors.pseud_id || data.errors.ip_address)) {
+        if (data.errors && (data.errors.ip_address || data.errors.user_id)) {
           msg = "You have already left kudos here. :)";
         }
 
@@ -659,7 +659,10 @@ function updateCachedTokens() {
       $j('input[name=authenticity_token]').each(function(){
         $j(this).attr('value', token);
       });
-      $j('meta[name=csrf-token]').attr('value', token);
+      $j('meta[name=csrf-token]').attr('content', token);
+      $j.event.trigger({ type: "loadedCSRF" });
     });
+  } else {
+    $j.event.trigger({ type: "loadedCSRF" });
   }
 }

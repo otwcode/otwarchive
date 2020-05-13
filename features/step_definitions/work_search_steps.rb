@@ -25,16 +25,16 @@ Given /^a set of alternate universe works for searching$/ do
    "High School AU",
    "Alternate Universe - Coffee Shops & Cafés",
    "Coffee Shop AU"].each do |freeform|
-    FactoryBot.create(:posted_work, freeform_string: freeform)
+    FactoryBot.create(:work, freeform_string: freeform)
   end
 
   # Create a work with a summary that is a text match for both the unwrangled
   # tag (Coffee Shop AU) and the metatag's syn (AU)
-  FactoryBot.create(:posted_work, summary: "A humble Coffee Shop AU")
+  FactoryBot.create(:work, summary: "A humble Coffee Shop AU")
 
   # Create a work with a character tag that is a text match for the metatag's
   # syn (AU)
-  FactoryBot.create(:posted_work, character_string: "AU Character")
+  FactoryBot.create(:work, character_string: "AU Character")
 
   step %{all indexing jobs have been run}
 end
@@ -57,18 +57,18 @@ Given /^a set of Steve Rogers works for searching$/ do
   # Create a work for each character tag in each fandom
   ["Marvel Cinematic Universe", "The Avengers (Marvel Movies)"].each do |fandom|
     ["Steve Rogers", "Captain America"].each do |character|
-      FactoryBot.create(:posted_work,
+      FactoryBot.create(:work,
                          fandom_string: fandom,
                          character_string: character)
     end
   end
 
   # Create a work without Steve as a character but with him in a relationship
-  FactoryBot.create(:posted_work,
+  FactoryBot.create(:work,
                      relationship_string: "Steve Rogers/Tony Stark")
 
   # Create a work that only mentions Steve in the summary
-  FactoryBot.create(:posted_work,
+  FactoryBot.create(:work,
                      summary: "Bucky thinks about his pal Steve Rogers.")
 
   step %{all indexing jobs have been run}
@@ -84,11 +84,11 @@ Given /^a set of Kirk\/Spock works for searching$/ do
 
   # Create a work for each tag
   ["James T. Kirk/Spock", "K/S", "Spirk"].each do |relationship|
-    FactoryBot.create(:posted_work, relationship_string: relationship)
+    FactoryBot.create(:work, relationship_string: relationship)
   end
 
   # Create a F/M work using one of the synonyms
-  FactoryBot.create(:posted_work,
+  FactoryBot.create(:work,
                      title: "The Genderswap K/S Work That Uses a Synonym",
                      relationship_string: "Spirk",
                      category_string: "F/M")
@@ -110,7 +110,7 @@ Given /^a set of Spock\/Uhura works for searching$/ do
   ["Spock/Nyota Uhura",
    "Uhura/Spock",
    "James T. Kirk/Spock/Nyota Uhura"].each do |relationship|
-    FactoryBot.create(:posted_work,
+    FactoryBot.create(:work,
                        relationship_string: relationship)
   end
 
@@ -122,11 +122,11 @@ Given /^a set of works with various categories for searching$/ do
 
   # Create one work with each category
   %w(Gen Other F/F Multi F/M M/M).each do |category|
-    FactoryBot.create(:posted_work, category_string: category)
+    FactoryBot.create(:work, category_string: category)
   end
 
   # Create one work using multiple categories
-  FactoryBot.create(:posted_work, category_string: "M/M, F/F")
+  FactoryBot.create(:work, category_string: "M/M, F/F")
 
   step %{all indexing jobs have been run}
 end
@@ -145,7 +145,7 @@ Given /^a set of works with comments for searching$/ do
   step %{the work "Work 6" with 3 comments setup}
   step %{the work "Work 7" with 10 comments setup}
 
-  step %{the statistics_tasks rake task is run}
+  step %{the statistics for all works are updated}
   step %{all indexing jobs have been run}
 end
 
@@ -170,16 +170,16 @@ Given /^a set of Star Trek works for searching$/ do
   # Create a work using each of the related fandoms
   ["Star Trek", "Star Trek: The Original Series",
    "Star Trek: The Original Series (Movies)", "ST: TOS"].each do |fandom|
-    FactoryBot.create(:posted_work, fandom_string: fandom)
+    FactoryBot.create(:work, fandom_string: fandom)
   end
 
   # Create a work with two fandoms (e.g. a crossover)
-  FactoryBot.create(:posted_work,
+  FactoryBot.create(:work,
                      fandom_string: "ST: TOS,
                                     Battlestar Galactica (2003)")
 
   # Create a work with an additional tag (freeform) that references the fandom
-  FactoryBot.create(:posted_work,
+  FactoryBot.create(:work,
                      fandom_string: "Battlestar Galactica (2003)",
                      freeform_string: "Star Trek Fusion")
 
@@ -200,13 +200,13 @@ Given /^a set of works with bookmarks for searching$/ do
   step %{the work "Work 6" with 4 bookmarks setup}
   step %{the work "Work 7" with 10 bookmarks setup}
 
-  step %{the statistics_tasks rake task is run}
+  step %{the statistics for all works are updated}
 
   # The cache on work blurb stat lines expires every hour -- we need to expire
   # them so we can check the results
   7.times do |i|
     work = Work.find_by_title("Work #{i + 1}")
-    ActionController::Base.new.expire_fragment("#{work.cache_key}/stats")
+    ActionController::Base.new.expire_fragment("#{work.cache_key}/stats-v2")
   end
 
   step %{all indexing jobs have been run}
@@ -222,10 +222,10 @@ Given /^a set of works with various ratings for searching$/ do
              ArchiveConfig.RATING_EXPLICIT_TAG_NAME]
 
   ratings.each do |rating|
-    FactoryBot.create(:posted_work, rating_string: rating)
+    FactoryBot.create(:work, rating_string: rating)
   end
 
-  FactoryBot.create(:posted_work,
+  FactoryBot.create(:work,
                      rating_string: ArchiveConfig.RATING_DEFAULT_TAG_NAME,
                      summary: "Nothing explicit here.")
 
@@ -245,11 +245,11 @@ Given /^a set of works with various warnings for searching$/ do
 
   # Create a work for each warning
   warnings.each do |warning|
-    FactoryBot.create(:posted_work, archive_warning_string: warning)
+    FactoryBot.create(:work, archive_warning_string: warning)
   end
 
   # Create a work that uses multiple warnings
-  FactoryBot.create(:posted_work,
+  FactoryBot.create(:work,
                      archive_warning_string: "#{ArchiveConfig.WARNING_DEFAULT_TAG_NAME},
                                      #{ArchiveConfig.WARNING_NONE_TAG_NAME}")
 
@@ -258,16 +258,16 @@ end
 
 Given /^a set of works with various access levels for searching$/ do
   # Create a draft
-  FactoryBot.create(:work, title: "Draft Work")
+  FactoryBot.create(:draft, title: "Draft Work")
 
   # Create a work
-  FactoryBot.create(:posted_work, title: "Posted Work")
+  FactoryBot.create(:work, title: "Posted Work")
 
   # Create a work restricted to registered users
-  FactoryBot.create(:posted_work, restricted: true, title: "Restricted Work")
+  FactoryBot.create(:work, restricted: true, title: "Restricted Work")
 
   # Create a work hidden by an admin
-  FactoryBot.create(:posted_work,
+  FactoryBot.create(:work,
                      hidden_by_admin: true,
                      title: "Work Hidden by Admin")
 

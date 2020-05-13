@@ -66,6 +66,7 @@ gem 'rest-client', '~> 1.8.0', require: 'rest_client'
 gem 'resque', '>=1.14.0'
 gem 'resque_mailer'
 gem 'resque-scheduler'
+gem 'after_commit_everywhere'
 #gem 'daemon-spawn', require: 'daemon_spawn'
 gem 'elasticsearch', '6.8.0'
 gem 'aws-sdk'
@@ -142,11 +143,10 @@ group :test do
   gem 'shoulda'
   gem 'capybara', '~> 2.16.1'
   gem 'database_cleaner', '1.6.0'
-  gem 'cucumber', '~> 2.4.0'
+  gem 'cucumber', '~> 3.1'
   gem 'poltergeist'
   gem 'capybara-screenshot'
-  gem 'cucumber-rails', '~> 1.5', require: false
-  gem 'gherkin'
+  gem 'cucumber-rails', require: false
   gem 'launchy'    # So you can do Then show me the page
   gem 'delorean'
   gem 'faker', '~> 1.6.3'
@@ -178,10 +178,6 @@ end
 
 group :test, :development, :staging do
   gem 'bullet', '>= 5.7.3'
-end
-
-group :staging do
-  gem 'lockup'
 end
 
 # Deploy with Capistrano

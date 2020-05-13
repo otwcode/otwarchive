@@ -3,7 +3,7 @@ require File.expand_path('../boot', __FILE__)
 require 'rails/all'
 
 # If you have a Gemfile, require the gems listed there, including any gems
-# you've limited to :test, :development, :staging, or :production.
+# you've limited to :test, :development, or :production.
 Bundler.require(*Rails.groups)
 
 module Otwarchive
@@ -39,8 +39,8 @@ module Otwarchive
     I18n.config.available_locales = [
       :en, :af, :ar, :bg, :bn, :ca, :cs, :cy, :da, :de, :el, :es, :fa, :fi, :fr,
       :he, :hi, :hr, :hu, :id, :it, :ja, :ka, :ko, :lt, :lv, :mk, :"mr-IN", :ms,
-      :nb, :pl, :"pt-BR", :"pt-PT", :ro, :ru, :sk, :sl, :sr, :sv, :th, :tl, :tr,
-      :uk, :vi, :"zh-CN"
+      :nb, :nl, :pl, :"pt-BR", :"pt-PT", :ro, :ru, :sk, :sl, :sr, :sv, :th, :tl,
+      :tr, :uk, :vi, :"zh-CN"
     ]
 
     # Set Time.zone default to the specified zone and make Active Record auto-convert to this zone.

@@ -139,6 +139,9 @@ Feature: Invite queue management
     # user activates account
     When all emails have been delivered
       And I click the first link in the email
+    Then I should be on the login page
+      And I should see "Account activation complete! Please log in."
+
     When I am logged in as "newuser" with password "password1"
     Then I should see "Successfully logged in."
 

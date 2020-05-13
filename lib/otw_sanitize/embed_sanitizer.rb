@@ -1,11 +1,12 @@
 # frozen_string_literal: true
+require "addressable/uri"
 
 module OTWSanitize
   # Creates a Sanitize transformer to sanitize embedded media
   class EmbedSanitizer
     WHITELIST_REGEXES = {
       ao3:              %r{^archiveofourown\.org/},
-      archiveorg:       %r{^archive\.org/},
+      archiveorg:       %r{^archive\.org\/embed/},
       criticalcommons:  %r{^criticalcommons\.org/},
       dailymotion:      %r{^dailymotion\.com/},
       eighttracks:      %r{^8tracks\.com/},
@@ -100,9 +101,15 @@ module OTWSanitize
       else
         url = node['src']
       end
+      @source_url = standardize_url(url)
+    end
+
+    def standardize_url(url)
       # strip off optional protocol and www
       protocol_regex = %r{^(?:https?:)?//(?:www\.)?}i
-      @source_url = url&.gsub(protocol_regex, '')
+      # normalize the url
+      url = url&.gsub(protocol_regex, "")
+      Addressable::URI.parse(url).normalize.to_s rescue nil
     end
 
     # For sites that support https, ensure we use a secure embed

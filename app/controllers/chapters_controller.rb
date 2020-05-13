@@ -28,7 +28,7 @@ class ChaptersController < ApplicationController
   def show
     @tag_groups = @work.tag_groups
     if params[:view_adult]
-      session[:adult] = true
+      cookies[:view_adult] = "true"
     elsif @work.adult? && !see_adult?
       render "works/_adult", layout: "application" and return
     end
@@ -57,7 +57,7 @@ class ChaptersController < ApplicationController
           @work.anonymous? ? ts("Anonymous") : @work.pseuds.sort.collect(&:byline).join(', '),
           @work.title + " - Chapter " + @chapter.position.to_s)
 
-      @kudos = @work.kudos.with_pseud.includes(pseud: :user).order("created_at DESC")
+      @kudos = @work.kudos.with_user.includes(:user).by_date
 
       if current_user.respond_to?(:subscriptions)
         @subscription = current_user.subscriptions.where(subscribable_id: @work.id,
@@ -66,12 +66,6 @@ class ChaptersController < ApplicationController
       end
       # update the history.
       Reading.update_or_create(@work, current_user) if current_user
-
-      # TEMPORARY hack-like thing to fix the fact that chaptered works weren't hit-counted or added to history at all
-      if chapter_position == 0
-        Rails.logger.debug "Chapter remote addr: #{request.remote_ip}"
-        @work.increment_hit_count(request.remote_ip)
-      end
 
       respond_to do |format|
         format.html

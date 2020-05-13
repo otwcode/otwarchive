@@ -1,6 +1,6 @@
 require "spec_helper"
 
-describe TagQuery, type: :model, tag_search: true do
+describe TagQuery, tag_search: true do
   let!(:tags) do
     tags = {
       char_abc: create(:character, name: "abc"),

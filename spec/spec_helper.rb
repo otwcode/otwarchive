@@ -49,6 +49,9 @@ RSpec.configure do |config|
     DatabaseCleaner.start
     User.current_user = nil
     clean_the_database
+
+    # Assume all spam checks pass by default.
+    allow(Akismetor).to receive(:spam?).and_return(false)
   end
 
   config.after :each do
@@ -115,11 +118,8 @@ RSpec.configure do |config|
   #       # Equivalent to being in spec/controllers
   #     end
   config.infer_spec_type_from_file_location!
-  config.define_derived_metadata(file_path: %r{/spec/miscellaneous/lib/tasks/}) do |metadata|
+  config.define_derived_metadata(file_path: %r{/spec/lib/tasks/}) do |metadata|
     metadata[:type] = :task
-  end
-  config.define_derived_metadata(file_path: %r{/spec/miscellaneous/helpers/}) do |metadata|
-    metadata[:type] = :helper
   end
 
   # Set default formatter to print out the description of each test as it runs
@@ -132,12 +132,14 @@ end
 def clean_the_database
   # Now clear memcached
   Rails.cache.clear
-  # Now reset redis ...
+
+  # Clear Redis
+  REDIS_AUTOCOMPLETE.flushall
   REDIS_GENERAL.flushall
+  REDIS_HITS.flushall
   REDIS_KUDOS.flushall
   REDIS_RESQUE.flushall
   REDIS_ROLLOUT.flushall
-  REDIS_AUTOCOMPLETE.flushall
 end
 
 def run_all_indexing_jobs
@@ -145,4 +147,33 @@ def run_all_indexing_jobs
     ScheduledReindexJob.perform reindex_type
   end
   Indexer.all.map(&:refresh_index)
+end
+
+# Suspend resque workers for the duration of the block, then resume after the
+# contents of the block have run. Simulates what happens when there's a lot of
+# jobs already in the queue, so there's a long delay between jobs being
+# enqueued and jobs being run.
+def suspend_resque_workers
+  # Set up an array to keep track of delayed actions.
+  queue = []
+
+  # Override the default Resque.enqueue_to behavior.
+  #
+  # The first argument is which queue the job is supposed to be added to, but
+  # it doesn't matter for our purposes, so we ignore it.
+  allow(Resque).to receive(:enqueue_to) do |_, klass, *args|
+    queue << [klass, args]
+  end
+
+  # Run the code inside the block.
+  yield
+
+  # Empty out the queue and perform all of the operations.
+  while queue.any?
+    klass, args = queue.shift
+    klass.perform(*args)
+  end
+
+  # Resume the original Resque.enqueue_to behavior.
+  allow(Resque).to receive(:enqueue_to).and_call_original
 end

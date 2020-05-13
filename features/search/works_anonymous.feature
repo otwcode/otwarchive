@@ -1,4 +1,4 @@
-@no-txn @works @search
+@works @search
 Feature: Search anonymous works
   As a creator of anonymous works
   I do not want searching for my name to ruin my anonymity

@@ -19,8 +19,4 @@ class Preference < ApplicationRecord
      return false unless User.current_user.is_a? User
      return User.current_user.try(:preference).try(:disable_work_skins)
   end
-
-  def hide_hit_counts
-    self.try(:hide_all_hit_counts) || self.try(:hide_private_hit_count)
-  end
 end
