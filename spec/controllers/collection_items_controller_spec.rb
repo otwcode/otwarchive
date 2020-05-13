@@ -8,32 +8,27 @@ describe CollectionItemsController do
     let(:user) { create(:user) }
     let(:collection) { create(:collection) }
 
+    let(:rejected_work) { create(:work, authors: [user.default_pseud]) }
+    let(:rejected_work2) { create(:work, authors: [user.default_pseud]) }
+    let(:approved_work) { create(:work, authors: [user.default_pseud]) }
+    let(:invited_work) { create(:work, authors: [user.default_pseud]) }
+    let(:awaiting_collection_approval_work) { create(:work, authors: [user.default_pseud]) }
+
     before(:each) do
-      @collection = create(:collection)
-      @rejected_work = create(:work, authors: [user.default_pseud])
-      @rejected_work2 = create(:work, authors: [user.default_pseud])
-      @approved_work = create(:work, authors: [user.default_pseud])
-      @invited_work = create(:work, authors: [user.default_pseud])
-      @awaiting_collection_approval_work = create(:work, authors: [user.default_pseud])
+      approved_work.add_to_collection(collection) && approved_work.save
+      @approved_work_item = CollectionItem.find_by_item_id(approved_work.id)
 
-      @approved_work.add_to_collection(collection) && @approved_work.save
-      @approved_work_item = CollectionItem.find_by_item_id(@approved_work.id)
+      @rejected_by_collection_work_item = create(:collection_item, collection: collection, item: rejected_work,)
+      @rejected_by_collection_work_item.update_attribute(:collection_approval_status, -1)
 
-      @rejected_by_collection_work_item = create(:collection_item, collection_id: collection.id, item_id: @rejected_work.id)
-      @rejected_by_collection_work_item.collection_approval_status = -1
-      @rejected_by_collection_work_item.save
+      @rejected_by_user_work_item = create(:collection_item, collection: collection, item: rejected_work2)
+      @rejected_by_user_work_item.update_attribute(:user_approval_status, -1)
 
-      @rejected_by_user_work_item = create(:collection_item, collection_id: collection.id, item_id: @rejected_work2.id)
-      @rejected_by_user_work_item.user_approval_status = -1
-      @rejected_by_user_work_item.save
+      @invited_work_item = create(:collection_item, collection: collection, item: invited_work)
+      @invited_work_item.update_attribute(:user_approval_status, 0)
 
-      @invited_work_item = create(:collection_item, collection_id: collection.id, item_id: @invited_work.id)
-      @invited_work_item.user_approval_status = 0
-      @invited_work_item.save
-
-      @awaiting_collection_approval_work_item = create(:collection_item, collection_id: collection.id, item_id: @awaiting_collection_approval_work.id)
-      @awaiting_collection_approval_work_item.collection_approval_status = 0
-      @awaiting_collection_approval_work_item.save
+      @awaiting_collection_approval_work_item = create(:collection_item, collection: collection, item: awaiting_collection_approval_work)
+      @awaiting_collection_approval_work_item.update_attribute(:collection_approval_status, 0)
     end
 
     context "with collection params" do
