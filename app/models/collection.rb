@@ -174,36 +174,6 @@ class Collection < ApplicationRecord
   scope :name_only, -> { select("collections.name") }
   scope :by_title, -> { order(:title) }
 
-  scope :approved, -> {
-    includes(:collection_items)
-      .where(
-        collection_items: {
-          user_approval_status: CollectionItem::APPROVED,
-          collection_approval_status: CollectionItem::APPROVED
-        }
-      )
-      .references(:collection_items)
-  }
-  scope :user_approved, -> {
-    includes(:collection_items)
-      .where(
-        collection_items: {
-          user_approval_status: CollectionItem::APPROVED
-        }
-      )
-      .references(:collection_items)
-  }
-  scope :rejected, -> {
-    includes(:collection_items)
-      .where(
-        collection_items: {
-          user_approval_status: CollectionItem::REJECTED
-        }
-      )
-      .references(:collection_items)
-  }
-
-
   before_validation :cleanup_url
   def cleanup_url
     self.header_image_url = reformat_url(self.header_image_url) if self.header_image_url
@@ -211,10 +181,15 @@ class Collection < ApplicationRecord
 
   # Get only collections with running challenges
   def self.signup_open(challenge_type)
-    table = challenge_type.tableize
-    not_closed.where(challenge_type: challenge_type).
-      joins("INNER JOIN #{table} on #{table}.id = challenge_id").where("#{table}.signup_open = 1").
-      where("#{table}.signups_close_at > ?", Time.now).order("#{table}.signups_close_at DESC")
+    if challenge_type == "PromptMeme"
+      not_closed.where(challenge_type: challenge_type).
+        joins("INNER JOIN prompt_memes on prompt_memes.id = challenge_id").where("prompt_memes.signup_open = 1").
+        where("prompt_memes.signups_close_at > ?", Time.now).order("prompt_memes.signups_close_at DESC")
+    elsif challenge_type == "GiftExchange"
+      not_closed.where(challenge_type: challenge_type).
+        joins("INNER JOIN gift_exchanges on gift_exchanges.id = challenge_id").where("gift_exchanges.signup_open = 1").
+        where("gift_exchanges.signups_close_at > ?", Time.now).order("gift_exchanges.signups_close_at DESC")
+    end
   end
 
   scope :with_name_like, lambda {|name|
@@ -438,17 +413,8 @@ class Collection < ApplicationRecord
     UserMailer.collection_notification(self.id, subject, message).deliver
   end
 
+  include AsyncWithResque
   @queue = :collection
-  # This will be called by a worker when a job needs to be processed
-  def self.perform(id, method, *args)
-    find(id).send(method, *args)
-  end
-
-  # We can pass this any Collection instance method that we want to
-  # run later.
-  def async(method, *args)
-    Resque.enqueue(Collection, id, method, *args)
-  end
 
   def reveal!
     async(:reveal_collection_items)

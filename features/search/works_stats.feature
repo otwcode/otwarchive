@@ -1,4 +1,4 @@
-@no-txn @works @search
+@works @search
 Feature: Search works by stats
   As a user
   I want to search works by hits, kudos, comments, and bookmarks

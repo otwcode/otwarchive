@@ -15,7 +15,6 @@ admin_setting_3:
   cache_expiration: 10
   tag_wrangling_off: false
   default_skin_id:
-  stats_updated_at:
   request_invite_enabled: false
   creation_requires_invite: false
   downloads_enabled: true

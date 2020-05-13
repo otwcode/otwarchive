@@ -10,6 +10,8 @@ module NavigationHelpers
 
     when /the home\s?page/
       '/'
+    when /the media page/
+      media_path
     when /^the search bookmarks page$/i
       step %{all indexing jobs have been run}
       search_bookmarks_path
@@ -93,6 +95,8 @@ module NavigationHelpers
       user_inbox_path(User.current_user)
     when /my invitations page/
       user_invitations_path(User.current_user)
+    when /my creator invitations page/
+      user_creatorships_path(User.current_user)
     when /the gifts page$/
       gifts_path
     when /the gifts page for the recipient (.*)$/
@@ -121,9 +125,19 @@ module NavigationHelpers
       step %{all indexing jobs have been run}
       user_works_path(user_id: $1)
     when /^the "(.*)" work page/
+      # TODO: Avoid this in favor of 'the work "title"', and eventually remove.
       work_path(Work.find_by(title: $1))
     when /^the work page with title (.*)/
+      # TODO: Avoid this in favor of 'the work "title"', and eventually remove.
       work_path(Work.find_by(title: $1))
+    when /^the work "(.*?)"$/
+      work_path(Work.find_by(title: $1))
+    when /^the work "(.*?)" in full mode$/
+      work_path(Work.find_by(title: $1), view_full_work: true)
+    when /^the ([\d]+)(?:st|nd|rd|th) chapter of the work "(.*?)"$/
+      work = Work.find_by(title: $2)
+      chapter = work.chapters_in_order(include_content: false)[$1.to_i - 1]
+      work_chapter_path(work, chapter)
     when /^the bookmarks page for user "(.*)" with pseud "(.*)"$/i
       step %{all indexing jobs have been run}
       user_pseud_bookmarks_path(user_id: $1, pseud_id: $2)
@@ -182,28 +196,24 @@ module NavigationHelpers
       edit_collection_gift_exchange_path(Collection.find_by(title: $1))
     when /^"(.*)" gift exchange matching page$/i
       collection_potential_matches_path(Collection.find_by(title: $1))
+    when /^the works tagged "(.*?)" in collection "(.*?)"$/i
+      step %{all indexing jobs have been run}
+      collection_tag_works_path(Collection.find_by(title: $2), Tag.find_by_name($1))
     when /^the works tagged "(.*)"$/i
       step %{all indexing jobs have been run}
       tag_works_path(Tag.find_by_name($1))
     when /^the bookmarks tagged "(.*)"$/i
       step %{all indexing jobs have been run}
       tag_bookmarks_path(Tag.find_by_name($1))
-    when /^the url for works tagged "(.*)"$/i
-      step %{all indexing jobs have been run}
-      tag_works_url(Tag.find_by_name($1))
     when /^the bookmarks in collection "(.*)"$/i
       step %{all indexing jobs have been run}
       collection_bookmarks_path(Collection.find_by(title: $1))
-    when /^the works tagged "(.*)" in collection "(.*)"$/i
-      step %{all indexing jobs have been run}
-      collection_tag_works_path(Collection.find_by(title: $2), Tag.find_by_name($1))
-    when /^the url for works tagged "(.*)" in collection "(.*)"$/i
-      step %{all indexing jobs have been run}
-      collection_tag_works_url(Collection.find_by(title: $2), Tag.find_by_name($1))
     when /^the tag comments? page for "(.*)"$/i
       tag_comments_path(Tag.find_by_name($1))
     when /^the work comments? page for "(.*?)"$/i
       work_comments_path(Work.find_by(title: $1), show_comments: true)
+    when /^the work kudos page for "(.*?)"$/i
+      work_kudos_path(Work.find_by(title: $1))
     when /^the FAQ reorder page$/i
       manage_archive_faqs_path
     when /^the Wrangling Guidelines reorder page$/i

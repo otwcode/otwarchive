@@ -1,8 +1,4 @@
-redis_resque:
-  test: dev.ao3.org:6398
-  development: dev.ao3.org:6379
-  production: redis.ao3.org:6379
-redis_kudos:
+redis_autocomplete:
   test: dev.ao3.org:6398
   development: dev.ao3.org:6379
   production: redis.ao3.org:6379
@@ -10,11 +6,19 @@ redis_general:
   test: dev.ao3.org:6398
   development: dev.ao3.org:6379
   production: redis.ao3.org:6379
-redis_rollout:
+redis_hits:
   test: dev.ao3.org:6398
   development: dev.ao3.org:6379
   production: redis.ao3.org:6379
-redis_autocomplete:
+redis_kudos:
+  test: dev.ao3.org:6398
+  development: dev.ao3.org:6379
+  production: redis.ao3.org:6379
+redis_resque:
+  test: dev.ao3.org:6398
+  development: dev.ao3.org:6379
+  production: redis.ao3.org:6379
+redis_rollout:
   test: dev.ao3.org:6398
   development: dev.ao3.org:6379
   production: redis.ao3.org:6379

@@ -95,6 +95,7 @@ Then(/^show me the emails?$/) do
   ActionMailer::Base.deliveries.each do |email|
     puts "From: #{email.from}"
     puts "To: #{email.to}"
+    puts "Subject: #{email.subject}"
     puts email.text_part.body.to_s
     puts ""
   end

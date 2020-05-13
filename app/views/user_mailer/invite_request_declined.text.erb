@@ -1,9 +1,9 @@
 <% content_for :message do %>
-<%= t('.greeting', user: @user.login) %>
-<%= t('.main', count: @total) %>
-<%= t('.reason') %>
+<%= t(".greeting", user: @user.login) %>
+<%= t(".main", count: @total) %>
+<%= t(".reason") %>
 <%= to_plain_text(raw @reason) %>
 
-<%= t('.signoff') %>
-<%= ArchiveConfig.APP_SHORT_NAME %>
+<%= t(".signoff") %>
+<%= t("mailer.general.signature.app_short_name") %>
 <% end %>
