@@ -31,7 +31,7 @@ and preserve the balance/symmetry of the page */
 }
 
 /* AO3-5907 avoid size change for modal during twitter button loads */
-.twitter_share_li {
+.twitter {
   width: 76px;
   height: 28px;
 }
