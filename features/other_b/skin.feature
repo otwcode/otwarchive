@@ -13,7 +13,7 @@ Feature: Non-public site and work skins
     And I should see "(No Description Provided)"
     And I should see "by skinner"
     But I should see "Use"
-    And I should see "Delete"
+    And I should see a "Delete" button
     And I should see "Edit"
     And I should not see "Stop Using"
     And I should not see "(Approved)"
@@ -211,7 +211,7 @@ Feature: Non-public site and work skins
   Given I am logged in as "skinner"
     And I create the skin "Ugly Skin"
   When I go to "Ugly Skin" skin page
-    And I follow "Delete"
+    And I press "Delete"
   Then I should see "The skin was deleted."
     And I should be on skinner's skins page
     And I should not see "Ugly Skin"
@@ -222,7 +222,7 @@ Feature: Non-public site and work skins
     And I create the skin "Ugly Skin"
     And I change my skin to "Ugly Skin"
   When I go to skinner's skins page
-    And I follow "Delete"
+    And I press "Delete"
   Then I should see "The skin was deleted."
   When I go to skinner's preferences page
   Then "Default" should be selected within "preference_skin_id"
