@@ -1,9 +1,11 @@
 <!--Descriptive page name, messages and instructions-->
-<% if @user %>
-  <h2 class="heading"><%= ts("Items by %{login} in Collections", :login => @user.login) %></h2>
+<h2 class="heading">
+  <% if @user %>
+    <%= ts("Items by %{login} in Collections", login: @user.login) %>
   <% else %>
-  <h2 class="heading"><%= ts("Items in") %> <%= link_to(@collection.title, @collection) %></h2>
-<% end %>
+    <%= ts("Items in %{collection_name}", collection_name: link_to(@collection.title, @collection)).html_safe %>
+  <% end %>
+</h2>
 <!--/descriptions-->
 <!--subnav-->
 <%
