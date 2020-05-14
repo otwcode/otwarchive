@@ -8,27 +8,27 @@ describe CollectionItemsController do
     let(:user) { create(:user) }
     let(:collection) { create(:collection) }
 
-    let(:rejected_work) { create(:work, authors: [user.default_pseud]) }
-    let(:rejected_work2) { create(:work, authors: [user.default_pseud]) }
+    let(:rejected_by_collection_work) { create(:work, authors: [user.default_pseud]) }
+    let(:rejected_by_user_work) { create(:work, authors: [user.default_pseud]) }
     let(:approved_work) { create(:work, authors: [user.default_pseud]) }
-    let(:invited_work) { create(:work, authors: [user.default_pseud]) }
-    let(:awaiting_collection_approval_work) { create(:work, authors: [user.default_pseud]) }
+    let(:unreviewed_by_user_work) { create(:work, authors: [user.default_pseud]) }
+    let(:unreviewed_by_collection_work) { create(:work, authors: [user.default_pseud]) }
 
     before(:each) do
       approved_work.add_to_collection(collection) && approved_work.save
       @approved_work_item = CollectionItem.find_by_item_id(approved_work.id)
 
-      @rejected_by_collection_work_item = create(:collection_item, collection: collection, item: rejected_work,)
+      @rejected_by_collection_work_item = create(:collection_item, collection: collection, item: rejected_by_collection_work)
       @rejected_by_collection_work_item.update_attribute(:collection_approval_status, -1)
 
-      @rejected_by_user_work_item = create(:collection_item, collection: collection, item: rejected_work2)
+      @rejected_by_user_work_item = create(:collection_item, collection: collection, item: rejected_by_user_work)
       @rejected_by_user_work_item.update_attribute(:user_approval_status, -1)
 
-      @invited_work_item = create(:collection_item, collection: collection, item: invited_work)
-      @invited_work_item.update_attribute(:user_approval_status, 0)
+      @unreviewed_by_user_work_item = create(:collection_item, collection: collection, item: unreviewed_by_user_work)
+      @unreviewed_by_user_work_item.update_attribute(:user_approval_status, 0)
 
-      @awaiting_collection_approval_work_item = create(:collection_item, collection: collection, item: awaiting_collection_approval_work)
-      @awaiting_collection_approval_work_item.update_attribute(:collection_approval_status, 0)
+      @unreviewed_by_collection_work_item = create(:collection_item, collection: collection, item: unreviewed_by_collection_work)
+      @unreviewed_by_collection_work_item.update_attribute(:collection_approval_status, 0)
     end
 
     context "with collection params" do
@@ -47,96 +47,96 @@ describe CollectionItemsController do
           fake_login_known_user(owner)
           get :index, params: { collection_id: collection.name }
           expect(response).to have_http_status(:success)
-          expect(assigns(:collection_items)).to include @awaiting_collection_approval_work_item
+          expect(assigns(:collection_items)).to include @unreviewed_by_collection_work_item
         end
 
         it "excludes items that are invited, approved by both parties, or rejected by the collection or user" do
           fake_login_known_user(owner)
           get :index, params: { collection_id: collection.name }
-          expect(assigns(:collection_items)).not_to include @invited_work_item
+          expect(assigns(:collection_items)).not_to include @unreviewed_by_user_work_item
           expect(assigns(:collection_items)).not_to include @approved_work_item
           expect(assigns(:collection_items)).not_to include @rejected_by_collection_work_item
           expect(assigns(:collection_items)).not_to include @rejected_by_user_work_item
         end
       end
 
-      context "with params[:collection_rejected]" do
+      context "with params[:status] = \"rejected_by_collection\"" do
         let(:owner) { collection.owners.first.user }
 
         it "includes items rejected by the collection" do
           fake_login_known_user(owner)
-          get :index, params: { collection_id: collection.name, collection_rejected: true }
+          get :index, params: { collection_id: collection.name, status: "rejected_by_collection" }
           expect(response).to have_http_status(:success)
           expect(assigns(:collection_items)).to include @rejected_by_collection_work_item
         end
 
         it "excludes items that are invited, approved by both parties, rejected by the user, or awaiting approval from collection" do
           fake_login_known_user(owner)
-          get :index, params: { collection_id: collection.name, collection_rejected: true }
+          get :index, params: { collection_id: collection.name, status: "rejected_by_collection" }
           expect(assigns(:collection_items)).not_to include @approved_work_item
-          expect(assigns(:collection_items)).not_to include @invited_work_item
+          expect(assigns(:collection_items)).not_to include @unreviewed_by_user_work_item
           expect(assigns(:collection_items)).not_to include @rejected_by_user_work_item
-          expect(assigns(:collection_items)).not_to include @awaiting_collection_approval_work_item
+          expect(assigns(:collection_items)).not_to include @unreviewed_by_collection_work_item
         end
       end
 
-      context "with params[:user_rejected]" do
+      context "with params[:status] = \"rejected_by_user\"" do
         let(:owner) { collection.owners.first.user }
 
         it "includes items rejected by the user" do
           fake_login_known_user(owner)
-          get :index, params: { collection_id: collection.name, user_rejected: true }
+          get :index, params: { collection_id: collection.name, status: "rejected_by_user" }
           expect(response).to have_http_status(:success)
           expect(assigns(:collection_items)).to include @rejected_by_user_work_item
         end
 
         it "excludes items that are invited, approved by both parties, rejected by the collection, or awaiting approval from collection" do
           fake_login_known_user(owner)
-          get :index, params: { collection_id: collection.name, user_rejected: true }
+          get :index, params: { collection_id: collection.name, status: "rejected_by_user" }
           expect(assigns(:collection_items)).not_to include @approved_work_item
-          expect(assigns(:collection_items)).not_to include @invited_work_item
+          expect(assigns(:collection_items)).not_to include @unreviewed_by_user_work_item
           expect(assigns(:collection_items)).not_to include @rejected_by_collection_work_item
-          expect(assigns(:collection_items)).not_to include @awaiting_collection_approval_work_item
+          expect(assigns(:collection_items)).not_to include @unreviewed_by_collection_work_item
         end
       end
 
-      context "with params[:invited]" do
+      context "with params[:status] = \"unreviewed_by_user\"" do
         let(:owner) { collection.owners.first.user }
 
         it "includes invited items" do
           fake_login_known_user(owner)
-          get :index, params: { collection_id: collection.name, invited: true }
+          get :index, params: { collection_id: collection.name, status: "unreviewed_by_user" }
           expect(response).to have_http_status(:success)
-          expect(assigns(:collection_items)).to include @invited_work_item
+          expect(assigns(:collection_items)).to include @unreviewed_by_user_work_item
         end
 
         it "excludes items that are approved, rejected by the collection or user, or awaiting approval from collection" do
           fake_login_known_user(owner)
-          get :index, params: { collection_id: collection.name, invited: true }
+          get :index, params: { collection_id: collection.name, status: "unreviewed_by_user" }
           expect(assigns(:collection_items)).not_to include @approved_work_item
           expect(assigns(:collection_items)).not_to include @rejected_by_collection_work_item
           expect(assigns(:collection_items)).not_to include @rejected_by_user_work_item
-          expect(assigns(:collection_items)).not_to include @awaiting_collection_approval_work_item
+          expect(assigns(:collection_items)).not_to include @unreviewed_by_collection_work_item
         end
       end
 
-      context "with params[:approved]" do
+      context "with params[:status] = \"approved\"" do
         let(:owner) { collection.owners.first.user }
 
         it "includes approved items" do
           fake_login_known_user(owner)
-          get :index, params: { collection_id: collection.name, approved: true }
+          get :index, params: { collection_id: collection.name, status: "approved" }
           expect(response).to have_http_status(:success)
           expect(assigns(:collection_items)).to include @approved_work_item
         end
 
         it "excludes items that are invited, rejected by the collection or user, or awaiting approval from collection" do
           fake_login_known_user(owner)
-          get :index, params: { collection_id: collection.name, approved: true }
-          expect(assigns(:collection_items)).not_to include @invited_work_item
+          get :index, params: { collection_id: collection.name, status: "approved" }
+          expect(assigns(:collection_items)).not_to include @unreviewed_by_user_work_item
           expect(assigns(:collection_items)).not_to include @rejected_by_collection_work_item
           expect(assigns(:collection_items)).not_to include @rejected_by_user_work_item
-          expect(assigns(:collection_items)).not_to include @awaiting_collection_approval_work_item
+          expect(assigns(:collection_items)).not_to include @unreviewed_by_collection_work_item
         end
       end
 
@@ -147,13 +147,13 @@ describe CollectionItemsController do
           fake_login_known_user(owner)
           get :index, params: { collection_id: collection.name, fake: true }
           expect(response).to have_http_status(:success)
-          expect(assigns(:collection_items)).to include @awaiting_collection_approval_work_item
+          expect(assigns(:collection_items)).to include @unreviewed_by_collection_work_item
         end
 
         it "excludes items that are invited, approved by both parties, or rejected by the collection or user" do
           fake_login_known_user(owner)
           get :index, params: { collection_id: collection.name, fake: true }
-          expect(assigns(:collection_items)).not_to include @invited_work_item
+          expect(assigns(:collection_items)).not_to include @unreviewed_by_user_work_item
           expect(assigns(:collection_items)).not_to include @approved_work_item
           expect(assigns(:collection_items)).not_to include @rejected_by_collection_work_item
           expect(assigns(:collection_items)).not_to include @rejected_by_user_work_item
@@ -167,7 +167,7 @@ describe CollectionItemsController do
           fake_login_known_user(user)
           get :index, params: { user_id: user.login }
           expect(response).to have_http_status(:success)
-          expect(assigns(:collection_items)).to include @invited_work_item
+          expect(assigns(:collection_items)).to include @unreviewed_by_user_work_item
         end
 
         it "excludes items that are approved by both parties, rejected by the collection or user, or awaiting approval from collection" do
@@ -176,79 +176,79 @@ describe CollectionItemsController do
           expect(assigns(:collection_items)).not_to include @approved_work_item
           expect(assigns(:collection_items)).not_to include @rejected_by_collection_work_item
           expect(assigns(:collection_items)).not_to include @rejected_by_user_work_item
-          expect(assigns(:collection_items)).not_to include @awaiting_collection_approval_work_item
+          expect(assigns(:collection_items)).not_to include @unreviewed_by_collection_work_item
         end
       end
 
-      context "with params[:awaiting_collection]" do
+      context "with params[:status] = \"unreviewed_by_collection\"" do
         it "includes items awaiting collection approval" do
           fake_login_known_user(user)
-          get :index, params: { user_id: user.login, awaiting_collection: true }
+          get :index, params: { user_id: user.login, status: "unreviewed_by_collection" }
           expect(response).to have_http_status(:success)
-          expect(assigns(:collection_items)).to include @awaiting_collection_approval_work_item
+          expect(assigns(:collection_items)).to include @unreviewed_by_collection_work_item
         end
 
         it "excludes items that are invited, approved by both parties, or rejected by the collection or user" do
           fake_login_known_user(user)
-          get :index, params: { user_id: user.login, awaiting_collection: true }
-          expect(assigns(:collection_items)).not_to include @invited_work_item
+          get :index, params: { user_id: user.login, status: "unreviewed_by_collection" }
+          expect(assigns(:collection_items)).not_to include @unreviewed_by_user_work_item
           expect(assigns(:collection_items)).not_to include @approved_work_item
           expect(assigns(:collection_items)).not_to include @rejected_by_collection_work_item
           expect(assigns(:collection_items)).not_to include @rejected_by_user_work_item
         end
       end
 
-      context "with params[:collection_rejected]" do
+      context "with params[:status] = \"rejected_by_collection\"" do
         it "includes items rejected by the collection" do
           fake_login_known_user(user)
-          get :index, params: { user_id: user.login, collection_rejected: true }
+          get :index, params: { user_id: user.login, status: "rejected_by_collection" }
           expect(response).to have_http_status(:success)
           expect(assigns(:collection_items)).to include @rejected_by_collection_work_item
         end
 
         it "excludes items that are invited, approved by both parties, rejected by the user, or awaiting approval from collection" do
           fake_login_known_user(user)
-          get :index, params: { user_id: user.login, collection_rejected: true }
+          get :index, params: { user_id: user.login, status: "rejected_by_collection" }
           expect(assigns(:collection_items)).not_to include @approved_work_item
-          expect(assigns(:collection_items)).not_to include @invited_work_item
+          expect(assigns(:collection_items)).not_to include @unreviewed_by_user_work_item
           expect(assigns(:collection_items)).not_to include @rejected_by_user_work_item
-          expect(assigns(:collection_items)).not_to include @awaiting_collection_approval_work_item
+          expect(assigns(:collection_items)).not_to include @unreviewed_by_collection_work_item
         end
       end
 
-      context "with params[:user_rejected]" do
+      context "with params[:status] = \"rejected_by_user\"" do
         it "includes items rejected by the user" do
           fake_login_known_user(user)
-          get :index, params: { user_id: user.login, user_rejected: true }
+          get :index, params: { user_id: user.login, status: "rejected_by_user" }
           expect(response).to have_http_status(:success)
           expect(assigns(:collection_items)).to include @rejected_by_user_work_item
         end
 
         it "excludes items that are invited, approved by both parties, rejected by the collection, or awaiting approval from collection" do
           fake_login_known_user(user)
-          get :index, params: { user_id: user.login, user_rejected: true }
+          get :index, params: { user_id: user.login, status: "rejected_by_user" }
           expect(assigns(:collection_items)).not_to include @approved_work_item
-          expect(assigns(:collection_items)).not_to include @invited_work_item
+          expect(assigns(:collection_items)).not_to include @unreviewed_by_user_work_item
           expect(assigns(:collection_items)).not_to include @rejected_by_collection_work_item
-          expect(assigns(:collection_items)).not_to include @awaiting_collection_approval_work_item
+          expect(assigns(:collection_items)).not_to include @unreviewed_by_collection_work_item
         end
       end
 
-      context "with params[:approved]" do
+      context "with params[:status] = \"approved\"" do
         it "includes approved items" do
           fake_login_known_user(user)
-          get :index, params: { user_id: user.login, approved: true }
+          get :index, params: { user_id: user.login, status: "approved" }
           expect(response).to have_http_status(:success)
           expect(assigns(:collection_items)).to include @approved_work_item
         end
 
         it "excludes items that are invited, rejected by the collection or user, or awaiting approval from collection" do
           fake_login_known_user(user)
-          get :index, params: { user_id: user.login, approved: true }
-          expect(assigns(:collection_items)).not_to include @invited_work_item
+          get :index, params: { user_id: user.login, status: "approved" }
+          expect(assigns(:collection_items)).not_to include @unreviewed_by_user_work_item
           expect(assigns(:collection_items)).not_to include @rejected_by_collection_work_item
           expect(assigns(:collection_items)).not_to include @rejected_by_user_work_item
-          expect(assigns(:collection_items)).not_to include @awaiting_collection_approval_work_item
+          expect(assigns(:collection_items)).not_to include @unreviewed_by_collection_work_item
         end
       end
 
@@ -257,7 +257,7 @@ describe CollectionItemsController do
           fake_login_known_user(user)
           get :index, params: { user_id: user.login, fake: true }
           expect(response).to have_http_status(:success)
-          expect(assigns(:collection_items)).to include @invited_work_item
+          expect(assigns(:collection_items)).to include @unreviewed_by_user_work_item
         end
 
         it "excludes items that are approved by both parties, rejected by the collection or user, or awaiting approval from collection" do
@@ -266,7 +266,7 @@ describe CollectionItemsController do
           expect(assigns(:collection_items)).not_to include @approved_work_item
           expect(assigns(:collection_items)).not_to include @rejected_by_collection_work_item
           expect(assigns(:collection_items)).not_to include @rejected_by_user_work_item
-          expect(assigns(:collection_items)).not_to include @awaiting_collection_approval_work_item
+          expect(assigns(:collection_items)).not_to include @unreviewed_by_collection_work_item
         end
       end
     end
