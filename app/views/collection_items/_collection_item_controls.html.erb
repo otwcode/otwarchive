@@ -51,9 +51,13 @@
       <% end %>
     </li>
   <% end %>        
+
   <li>
-    <%= form.label(:remove) do %>
-      <%= form.check_box :remove %>
+    <% disable_destroy = !collection_item.user_allowed_to_destroy?(@current_user) %>
+    <%= form.label(:remove,
+      options = {},
+      html_options = { class: disable_destroy ? "disabled" : nil }) do %>
+      <%= form.check_box :remove, disabled: disable_destroy %>
       <%= ts("Remove") %>
     <% end %>
   </li>

@@ -293,17 +293,29 @@ describe CollectionItemsController do
       @collection = FactoryBot.create(:collection)
       @approved_work = FactoryBot.create(:work)
       @approved_work.add_to_collection(@collection) && @approved_work.save
+      @rejected_by_user_work = create(:work)
+      @rejected_by_user_item = create(:collection_item,
+                                      item: @rejected_by_user_work,
+                                      collection: @collection)
+      @rejected_by_user_item.update_attribute(:user_approval_status, -1)
     end
 
-    context "destroy" do
+    context "when logged in as the collection owner" do
       let(:owner) { @collection.owners.first.user }
 
-      it "removes things" do
+      it "destroys item approved by both the user and the collection" do
         @approved_work_item = CollectionItem.find_by_item_id(@approved_work.id)
         fake_login_known_user(owner)
         delete :destroy, params: { id: @approved_work_item.id, work_id: @approved_work.id}
         it_redirects_to_with_notice(collection_items_path(@collection), "Item completely removed from collection " + @collection.title + ".")
         expect(CollectionItem.where(item_id: @approved_work.id)).to be_empty
+      end
+
+      it "does not destroy item rejected by the user" do
+        fake_login_known_user(owner)
+        delete :destroy, params: { id: @rejected_by_user_item.id, work_id: @rejected_by_user_work.id}
+        it_redirects_to_with_error(collection_path(@collection), "Sorry, you're not allowed to do that.")
+        expect(CollectionItem.where(item_id: @rejected_by_user_work.id)).not_to be_empty
       end
     end
   end
@@ -371,7 +383,16 @@ describe CollectionItemsController do
         context "setting remove" do
           let(:attributes) { { remove: "1" } }
 
-          it "deletes the collection item and redirects" do
+          it "deletes approved collection item and redirects" do
+            patch :update_multiple, params: params
+            expect { item.reload }.to \
+              raise_exception(ActiveRecord::RecordNotFound)
+            it_redirects_to_with_notice(user_collection_items_path(work_owner),
+                                        "Collection status updated!")
+          end
+
+          it "deletes rejected collection item and redirects" do
+            item.update_attribute(:user_approval_status, -1)
             patch :update_multiple, params: params
             expect { item.reload }.to \
               raise_exception(ActiveRecord::RecordNotFound)
@@ -454,6 +475,19 @@ describe CollectionItemsController do
             patch :update_multiple, params: params
             expect { item.reload }.to \
               raise_exception(ActiveRecord::RecordNotFound)
+            it_redirects_to_with_notice(collection_items_path(collection),
+                                        "Collection status updated!")
+          end
+        end
+
+        context "setting remove on a work rejected by user" do
+          let(:attributes) { { remove: "1" } }
+
+          it "silently fails to update the collection item" do
+            item.update_attribute(:user_approval_status, -1)
+            patch :update_multiple, params: params
+            item.reload
+            expect(item).to be_present
             it_redirects_to_with_notice(collection_items_path(collection),
                                         "Collection status updated!")
           end
