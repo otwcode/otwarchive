@@ -39,11 +39,13 @@ end
 When(/^I view the(?: ([^"]*)) collection items page for "(.*?)"$/) do |item_status, collection|
   c = Collection.find_by(title: collection)
   if item_status == "approved"
-    visit collection_items_path(c, approved: true)
-  elsif item_status == "rejected"
-    visit collection_items_path(c, rejected: true)
-  elsif item_status == "invited"
-    visit collection_items_path(c, invited: true)
+    visit collection_items_path(c, status: "approved")
+  elsif item_status == "rejected by user"
+    visit collection_items_path(c, status: "rejected_by_user")
+  elsif item_status == "rejected by collection"
+    visit collection_items_path(c, status: "rejected_by_collection")
+  elsif item_status == "awaiting user approval"
+    visit collection_items_path(c, status: "awaiting_user_approval")
   else
     visit collection_items_path(c)
   end
