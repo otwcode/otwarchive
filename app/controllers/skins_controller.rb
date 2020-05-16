@@ -147,7 +147,7 @@ class SkinsController < ApplicationController
   def confirm_delete
   end
 
-  #DELETE /skins/1
+  # DELETE /skins/1
   def destroy
     @skin = Skin.find_by(id: params[:id])
     begin
