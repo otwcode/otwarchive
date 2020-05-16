@@ -11,6 +11,7 @@ Otwarchive::Application.routes.draw do
 
   devise_scope :user do
     get 'signup(/:invitation_token)' => 'users/registrations#new', as: 'signup'
+    get 'users/logout' => 'users/sessions#confirm_logout'
   end
 
   devise_for :users,

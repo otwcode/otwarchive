@@ -145,6 +145,7 @@ end
 
 Given /^I log out$/ do
   step(%{I follow "Log Out"})
+  step(%{I press "Yes, Log Out"})
 end
 
 Given /^"([^"]*)" deletes their account/ do |username|
