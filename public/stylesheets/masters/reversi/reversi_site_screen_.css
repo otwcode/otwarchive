@@ -363,6 +363,7 @@ span.claimed,
 
 .actions label.disabled {
   background: #222;
+    box-shadow: none;
 }
 
 .delete a,
