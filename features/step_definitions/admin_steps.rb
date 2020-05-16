@@ -53,7 +53,7 @@ Given /^I am logged in as an admin$/ do
 end
 
 Given /^I am logged out as an admin$/ do
-  page.driver.submit :delete, destroy_admin_session_path, {}
+  http_delete destroy_admin_session_path
 end
 
 Given /^basic languages$/ do

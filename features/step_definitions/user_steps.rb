@@ -139,13 +139,14 @@ Given /^user "([^"]*)" is banned$/ do |login|
 end
 
 Given /^I am logged out$/ do
-  page.driver.submit :delete, destroy_user_session_path, {}
-  page.driver.submit :delete, destroy_admin_session_path, {}
+  http_delete destroy_user_session_path
+  http_delete destroy_admin_session_path
 end
 
 Given /^I log out$/ do
   step(%{I follow "Log Out"})
-  step(%{I press "Yes, Log Out"})
+  # If JavaScript is enabled, this button will not appear
+  click_button("Yes, Log Out") unless @javascript
 end
 
 Given /^"([^"]*)" deletes their account/ do |username|
