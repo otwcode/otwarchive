@@ -109,7 +109,7 @@ ol.pagination, div.pagination, ol.year {
   background: #ccc;
 }
 
-.actions .disabled select[disabled] {
+.actions .disabled select {
   background: transparent;
   color: #111;
   border-color: #aaa;
