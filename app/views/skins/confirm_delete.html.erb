@@ -1,0 +1,17 @@
+<!--Descriptive page name, messages and instructions-->
+<h2 class="heading"><%= ts("Delete Skin") %></h2>
+
+<!--main content-->
+<%= form_for(@skin, :html => {:method => :delete, :class => "simple destroy"}) do |f| %>
+  <p class="caution notice">
+    <% if @skin.title.nil? %>
+      <%= ts('Are you sure you want to <strong><em>delete</em></strong> this skin?').html_safe %>
+    <% else %>
+      <%= ts('Are you sure you want to <strong><em>delete</em></strong> the skin "%{skin_title}"?', :skin_title => @skin.title).html_safe %>
+    <% end %>
+  </p>
+  <p class="actions">
+    <%= f.submit ts("Yes, Delete Skin") %>
+  </p>
+<% end %>
+<!--/content-->
