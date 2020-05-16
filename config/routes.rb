@@ -1,12 +1,16 @@
 Otwarchive::Application.routes.draw do
 
+  devise_scope :admin do
+    get 'admin/logout' => 'admin/sessions#confirm_logout'
+  end
+
   devise_for :admin,
              module: 'admin',
              only: :sessions,
-             controllers: { sessions: 'admin/sessions' },
+             controllers: {sessions: 'admin/sessions'},
              path_names: {
-               sign_in: 'login',
-               sign_out: 'logout'
+                 sign_in: 'login',
+                 sign_out: 'logout'
              }
 
   devise_scope :user do
@@ -17,14 +21,14 @@ Otwarchive::Application.routes.draw do
   devise_for :users,
              module: 'users',
              controllers: {
-                sessions: 'users/sessions',
-                registrations: 'users/registrations',
-                passwords: 'users/passwords'
-              },
-              path_names: {
-                sign_in: 'login',
-                sign_out: 'logout'
-              }
+                 sessions: 'users/sessions',
+                 registrations: 'users/registrations',
+                 passwords: 'users/passwords'
+             },
+             path_names: {
+                 sign_in: 'login',
+                 sign_out: 'logout'
+             }
 
   #### ERRORS ####
 
@@ -110,7 +114,7 @@ Otwarchive::Application.routes.draw do
   resources :tag_sets, controller: 'owned_tag_sets' do
     resources :nominations, controller: 'tag_set_nominations' do
       collection do
-        put  :update_multiple
+        put :update_multiple
         delete :destroy_multiple
         get :confirm_destroy_multiple
       end
@@ -471,8 +475,8 @@ Otwarchive::Application.routes.draw do
 
   namespace :api do
     namespace :v2 do
-      resources :bookmarks, only: [:create], defaults: { format: :json }
-      resources :works, only: [:create], defaults: { format: :json }
+      resources :bookmarks, only: [:create], defaults: {format: :json}
+      resources :works, only: [:create], defaults: {format: :json}
       post 'bookmarks/search', to: 'bookmarks#search'
       post 'works/search', to: 'works#search'
     end
@@ -605,7 +609,7 @@ Otwarchive::Application.routes.draw do
 
   patch '/admin/skins/update' => 'admin_skins#update', as: :update_admin_skin
 
-  get '/admin/admin_users/troubleshoot/:id' =>'admin/admin_users#troubleshoot', as: :troubleshoot_admin_user
+  get '/admin/admin_users/troubleshoot/:id' => 'admin/admin_users#troubleshoot', as: :troubleshoot_admin_user
 
   # TODO: rewrite the autocomplete controller to deal with the fact that
   # there are fifty different actions going on in there
