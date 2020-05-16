@@ -196,7 +196,7 @@ class SkinsController < ApplicationController
   def check_title
     if params[:skin][:title].match(/archive/i)
       flash[:error] = ts("You can't use the word 'archive' in your skin title, sorry! (We have to reserve it for official skins.)")
-      render (@skin ? :edit : :new)
+      render @skin ? :edit : :new
     end
   end
 
@@ -208,12 +208,11 @@ class SkinsController < ApplicationController
       skin_parent_titles = params[:skin][:skin_parents_attributes].values.map { |v| v[:parent_skin_title] }
       skin_parents = skin_parent_titles.empty? ? [] : Skin.where(title: skin_parent_titles).pluck(:id)
       skin_parents += @skin.get_all_parents.collect(&:id) if @skin
-      unless (skin_parents.uniq & archive_parents.collect(&:id)).empty?
+      unless (skin_parents.uniq & archive_parents.map(&:id)).empty?
         flash[:error] = ts("You already have some of the archive components as parents, so we couldn't load the others. Please remove the existing components first if you really want to do this!")
         return true
       end
-      last_position = params[:skin][:skin_parents_attributes].keys.map { |k| k.to_i }.max rescue 0
-      last_position ||= 0
+      last_position = params[:skin][:skin_parents_attributes]&.keys&.map(&:to_i)&.max || 0
       archive_parents.each do |parent_skin|
         last_position += 1
         new_skin_parent_hash = ActionController::Parameters.new({position: last_position, parent_skin_id: parent_skin.id})
