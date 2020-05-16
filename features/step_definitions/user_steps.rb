@@ -139,8 +139,8 @@ Given /^user "([^"]*)" is banned$/ do |login|
 end
 
 Given /^I am logged out$/ do
-  visit destroy_user_session_path
-  visit destroy_admin_session_path
+  page.driver.submit :delete, destroy_user_session_path, {}
+  page.driver.submit :delete, destroy_admin_session_path, {}
 end
 
 Given /^I log out$/ do
