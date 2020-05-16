@@ -7,10 +7,10 @@ Otwarchive::Application.routes.draw do
   devise_for :admin,
              module: 'admin',
              only: :sessions,
-             controllers: {sessions: 'admin/sessions'},
+             controllers: { sessions: 'admin/sessions' },
              path_names: {
-                 sign_in: 'login',
-                 sign_out: 'logout'
+               sign_in: 'login',
+               sign_out: 'logout'
              }
 
   devise_scope :user do
@@ -21,13 +21,13 @@ Otwarchive::Application.routes.draw do
   devise_for :users,
              module: 'users',
              controllers: {
-                 sessions: 'users/sessions',
-                 registrations: 'users/registrations',
-                 passwords: 'users/passwords'
+               sessions: 'users/sessions',
+               registrations: 'users/registrations',
+               passwords: 'users/passwords'
              },
              path_names: {
-                 sign_in: 'login',
-                 sign_out: 'logout'
+               sign_in: 'login',
+               sign_out: 'logout'
              }
 
   #### ERRORS ####
@@ -475,8 +475,8 @@ Otwarchive::Application.routes.draw do
 
   namespace :api do
     namespace :v2 do
-      resources :bookmarks, only: [:create], defaults: {format: :json}
-      resources :works, only: [:create], defaults: {format: :json}
+      resources :bookmarks, only: [:create], defaults: { format: :json }
+      resources :works, only: [:create], defaults: { format: :json }
       post 'bookmarks/search', to: 'bookmarks#search'
       post 'works/search', to: 'works#search'
     end
