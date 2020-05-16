@@ -29,10 +29,10 @@
     <li><%= link_to ts("Open Challenges"), list_challenges_collections_path %></li>
   <% end %>
   <% if logged_in? %>
-    <% # Logged in user on own collections index gets links for user Collections and Manage Collected Works %>
+    <% # Logged in user on own collections index gets links for user Collections and Manage Collection Items %>
     <% if @user && @user == current_user %>
       <li><%= span_if_current ts("Collections"), user_collections_path(@user) %></li>
-      <li><%= link_to ts("Manage Collected Works"), user_collection_items_path(@user) %></li>
+      <li><%= link_to ts("Manage Collection Items"), user_collection_items_path(@user) %></li>
     <% end %>
     <% # Logged in collection maintainer on own collection gets link for New Subcollection and all other logged in users get New Collection link %>
     <% if @collection && !@collection.parent && @collection.user_is_maintainer?(current_user) %>
