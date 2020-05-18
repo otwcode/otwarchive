@@ -1,0 +1,22 @@
+en:
+  collections_helper:
+    collection_item_approval_options:
+      collection:
+        approved: "Approved by collection moderators"
+        neutral: "Unreviewed by collection moderators"
+        rejected: "Rejected by collection moderators"
+      user:
+        bookmark:
+          approved: "Approved by bookmarker"
+          neutral: "Unreviewed by bookmarker"
+          rejected: "Rejected by bookmarker"
+        work:
+          approved: "Approved by creator"
+          neutral: "Unreviewed by creator"
+          rejected: "Rejected by creator"
+    collection_item_approval_options_label:
+      collection: "Collection approval status"
+      user:
+        bookmark: "Bookmarker approval status"
+        work: "Creator approval status"
+

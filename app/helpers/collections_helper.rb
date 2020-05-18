@@ -104,61 +104,22 @@ module CollectionsHelper
     end
   end
 
-  def collection_item_collection_approval_status_string(collection_item)
-    status = collection_item.collection_approval_status
-    case
-    when status == 1
-      ts("Approved by collection")
-    when status == 0
-      ts("Pending approval from collection")
-    when status == -1
-      ts("Rejected by collection")
+  def collection_item_approval_options_label(options = {})
+    if options[:actor] == "user" && (options[:item_type] == "bookmark" || options[:item_type] == "work")
+      t("collections_helper.collection_item_approval_options_label.user.#{options[:item_type]}")
+    elsif options[:actor] == "collection"
+      t("collections_helper.collection_item_approval_options_label.collection")
     end
   end
 
-  def collection_item_user_approval_status_string(collection_item)
-    status = collection_item.user_approval_status
-    case
-    when status == 1
-      ts("Approved by user")
-    when status == 0
-      ts("Pending approval from user")
-    when status == -1
-      ts("Rejected by user")
-    end
-  end
-
-  def collection_item_user_approval_options_label(item_type)
-    if item_type == "Bookmark"
-      ts("Bookmarker approval status")
-    else
-      ts("Creator approval status")
-    end
-  end
-
-  def collection_item_collection_approval_options
-    [ [ts("Unreviewed by collection moderators"), CollectionItem::NEUTRAL],
-      [ts("Approved by collection moderators"), CollectionItem::APPROVED],
-      [ts("Rejected by collection moderators"), CollectionItem::REJECTED] ]
-  end
-
-  def collection_item_user_approval_options(item_type)
-    if item_type == "Bookmark"
-      collection_item_bookmarker_approval_options
-    else
-      collection_item_creator_approval_options
-    end    
-  end
-
-  def collection_item_creator_approval_options
-    [ [ts("Unreviewed by creator"), CollectionItem::NEUTRAL],
-      [ts("Approved by creator"), CollectionItem::APPROVED],
-      [ts("Rejected by creator"), CollectionItem::REJECTED] ]
-  end
-
-  def collection_item_bookmarker_approval_options
-    [ [ts("Unreviewed by bookmarker"), CollectionItem::NEUTRAL],
-      [ts("Approved by bookmarker"), CollectionItem::APPROVED],
-      [ts("Rejected by bookmarker"), CollectionItem::REJECTED] ]
+  def collection_item_approval_options(options = {})
+    key = if options[:actor] == "user" && (options[:item_type] == "bookmark" || options[:item_type] == "work")
+            "collections_helper.collection_item_approval_options.user.#{options[:item_type]}"
+          elsif options[:actor] == "collection"
+            "collections_helper.collection_item_approval_options.collection"
+          end
+    [ [t("#{key}.neutral"), CollectionItem::NEUTRAL],
+      [t("#{key}.approved"), CollectionItem::APPROVED],
+      [t("#{key}.rejected"), CollectionItem::REJECTED] ]
   end
 end

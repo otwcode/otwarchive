@@ -12,9 +12,12 @@
       <%= form.label(:user_approval_status,
         options = {},
         html_options = { class: @collection ? "disabled" :  nil }) do %>
-        <span class="landmark"><%= collection_item_user_approval_options_label(collection_item.item_type) %></span>
+        <span class="landmark"><%= collection_item_approval_options_label(
+          options = { actor: "user",
+              item_type: collection_item.item_type.downcase }) %></span>
         <%= form.select(:user_approval_status,
-          collection_item_user_approval_options(collection_item.item_type),
+          collection_item_approval_options(options = { actor: "user",
+            item_type: collection_item.item_type.downcase }),
           options = {},
           html_options = { disabled: @collection ? true :  nil }) %>
       <% end %>
@@ -23,9 +26,12 @@
       <%= form.label(:collection_approval_status,
         options = {},
         html_options = { class: @user ? "disabled" :  nil }) do %>
-        <span class="landmark"><%= ts("Collection approval status") %></span>
+        <span class="landmark"><%= collection_item_approval_options_label(
+          options = { actor: "collection",
+            item_type: collection_item.item_type.downcase }) %></span>
         <%= form.select(:collection_approval_status,
-          collection_item_collection_approval_options,
+          collection_item_approval_options(options = { actor: "collection",
+              item_type: collection_item.item_type.downcase }),
           options = {},
           html_options = { disabled: @user ? true :  nil }) %>
       <% end %>
