@@ -11,33 +11,33 @@
 <%
   base_path = @user ? user_collection_items_path(@user) : collection_items_path(@collection)
   approved_path = @user ? user_collection_items_path(@user, status: "approved") : collection_items_path(@collection, status: "approved")
-  awaiting_collection_path = @user ? user_collection_items_path(@user, status: "unreviewed_by_collection") : base_path
-  invited_path = @user ? base_path : collection_items_path(@collection, status: "unreviewed_by_user")
-  user_rejected_path = base_path + "?status=rejected_by_user"
-  collection_rejected_path = base_path + "?status=rejected_by_collection"
+  awaiting_collection_approval_path = @user ? user_collection_items_path(@user, status: "unreviewed_by_collection") : base_path
+  awaiting_user_approval_path = @user ? base_path : collection_items_path(@collection, status: "unreviewed_by_user")
+  rejected_by_user_path = base_path + "?status=rejected_by_user"
+  rejected_by_collection_path = base_path + "?status=rejected_by_collection"
   known_params = (params[:status] == "approved" || params[:status] == "unreviewed_by_user" || params[:status] == "unreviewed_by_collection" || params[:status] == "rejected_by_user" || params[:status] == "rejected_by_collection")
 %>
 
 <ul class="navigation actions" role="navigation">
   <% # Default page for collection. Set as current if this is a collection and no other known params are set, or if this is not a collection and the awaiting_collection param is set. %>
   <li><%= span_if_current ts("Awaiting Collection Approval"),
-        awaiting_collection_path, 
-        @collection ? !known_params : params[:status] == "unreviewed_by_collection" %></li>
+    awaiting_collection_approval_path, 
+    @collection ? !known_params : params[:status] == "unreviewed_by_collection" %></li>
 
   <% # Default page for user. Set as current if this is a user and no other known params are set, or if this is not a user and the invited param is set. %>
   <li><%= span_if_current ts("Awaiting User Approval"),
-        invited_path,
-        @user ? !known_params : params[:status] == "unreviewed_by_user" %></li>
+    awaiting_user_approval_path,
+    @user ? !known_params : params[:status] == "unreviewed_by_user" %></li>
 
-  <li><%= span_if_current ts("Rejected by Collection"), collection_rejected_path %></li>
-  <li><%= span_if_current ts("Rejected by User"), user_rejected_path %></li>
+  <li><%= span_if_current ts("Rejected by Collection"), rejected_by_collection_path %></li>
+  <li><%= span_if_current ts("Rejected by User"), rejected_by_user_path %></li>
   <li><%= span_if_current ts("Approved"), approved_path %></li>
 </ul>
 <!--/subnav-->
 
 <% if params[:status] == "unreviewed_by_user" %>
   <p class="notice">
-    <%= ts("Works listed here have been invited to this collection. Once a work's creator has approved inclusion in this collection, the work will be moved to 'Approved'.") %>
+    <%= ts("Works listed here have been invited to this collection. Once a work's creator has approved inclusion in this collection, the work will be moved to \"Approved.\"") %>
   </p>
 <% end %>
 <% if @user && params[:status] == "unreviewed_by_collection" %>
@@ -52,7 +52,7 @@
   <%= form_tag (@user ? update_multiple_user_collection_items_path(@user) : update_multiple_collection_items_path(@collection)), method: :patch do %>
     <ul class="index group">
       <% @collection_items.each do |collection_item| %>
-        <%= render 'item_fields', collection_item: collection_item %>
+        <%= render "item_fields", collection_item: collection_item %>
       <% end %>
     </ul>
     <%= submit_fieldset %>
