@@ -219,9 +219,9 @@ class Tag < ApplicationRecord
     end
   end
 
-  after_commit :queue_flush_work_cache
+  after_save :queue_flush_work_cache
   def queue_flush_work_cache
-    async(:flush_work_cache) if persisted?
+    async_after_commit(:flush_work_cache) if saved_change_to_name? || saved_change_to_type?
   end
 
   def flush_work_cache
