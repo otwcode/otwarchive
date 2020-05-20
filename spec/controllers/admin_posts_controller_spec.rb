@@ -38,7 +38,7 @@ describe AdminPostsController do
       context 'when admin does not have correct authorization' do
         it "denies random admin access" do
           @admin.update(roles: [])
-          sign_in @admin
+          fake_login_admin(@admin)
           put :update, params: { id: @post.id, admin_post: { admin_id: @admin.id, title: 'Modified Title of Post' } }
           it_redirects_to_with_error(root_url, "Sorry, only an authorized admin can access the page you were trying to reach.")
         end
@@ -47,7 +47,7 @@ describe AdminPostsController do
       context 'when admin has correct roles' do
         it "allows access to authorized admins and updates admin post" do
           @admin.update(roles: ['communications'])
-          sign_in @admin
+          fake_login_admin(@admin)
           put :update, params: { id: @post.id, admin_post: { admin_id: @admin.id, title: 'Modified Title of Post' } }
           it_redirects_to_with_notice(admin_post_path(assigns[:admin_post]), "Admin Post was successfully updated.")
         end
@@ -64,7 +64,7 @@ describe AdminPostsController do
     context 'when admin does not have correct authorization' do
       it "denies random admin access" do
         @admin.update(roles: [])
-        sign_in @admin
+        fake_login_admin(@admin)
         get :edit, params: { id: @post.id }
         it_redirects_to_with_error(root_url, "Sorry, only an authorized admin can access the page you were trying to reach.")
       end
@@ -73,7 +73,7 @@ describe AdminPostsController do
     context 'when admin does not have correct authorization' do
       it "allows access to authorized admins and renders edit template" do
         @admin.update(roles: ['communications'])
-        sign_in @admin
+        fake_login_admin(@admin)
         get :edit, params: { id: @post.id }
         expect(response).to render_template(:edit)
       end
