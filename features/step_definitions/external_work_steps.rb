@@ -37,7 +37,7 @@ When /^the (character|fandom|relationship) "(.*?)" is removed from the external 
   external_work = ExternalWork.find_by(title: title)
   tags = external_work.tags.where(type: tag_type).pluck(:name) - [tag]
   tag_string = tags.join(", ")
-  step %{I am logged in as an admin}
+  step %{I am logged in as superadmin}
   visit edit_external_work_path(external_work)
   fill_in("work_#{tag_type}", with: tag_string)
   click_button("Update External work")
