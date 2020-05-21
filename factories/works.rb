@@ -44,6 +44,10 @@ FactoryBot.define do
     end
   end
 
+  factory :moderated_work do
+    work_id { create(:work, moderated_commenting_enabled: true).id }
+  end
+
   factory :external_author do |f|
     f.sequence(:email) { |n| "foo#{n}@external.com" }
   end
