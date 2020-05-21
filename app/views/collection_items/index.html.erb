@@ -37,14 +37,10 @@
 
 <% # TODO: Update notice text. Items can be bookmarks or works. %>
 <% if @collection && params[:status] == "unreviewed_by_user" %>
-  <p class="notice">
-    <%= t(".collection.notice.user_neutral") %>
-  </p>
+  <p class="notice"><%= t(".collection.notice.user_neutral") %></p>
 <% end %>
 <% if @user && params[:status] == "unreviewed_by_collection" %>
-  <p class="notice">
-    <%= t(".user.notice.collection_neutral") %>
-  </p>
+  <p class="notice"><%= t(".user.notice.collection_neutral") %></p>
 <% end %>
 <% if @collection_items.count < 1 %>
   <p class="note"><%= t(".no_items") %></p>
