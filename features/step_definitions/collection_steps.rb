@@ -36,7 +36,7 @@ When /^I add the work "([^\"]*)" to the collection "([^\"]*)"$/ do |work_title, 
   click_button("Add")
 end
 
-When(/^I view the(?: ([^"]*)) collection items page for "(.*?)"$/) do |item_status, collection|
+When /^I view the(?: ([^"]*)) collection items page for "(.*?)"$/ do |item_status, collection|
   c = Collection.find_by(title: collection)
   if item_status == "approved"
     visit collection_items_path(c, status: "approved")
@@ -46,6 +46,8 @@ When(/^I view the(?: ([^"]*)) collection items page for "(.*?)"$/) do |item_stat
     visit collection_items_path(c, status: "rejected_by_collection")
   elsif item_status == "awaiting user approval"
     visit collection_items_path(c, status: "awaiting_user_approval")
+  elsif item_status == "awaiting collection approval"
+    visit collection_items_path(c)
   else
     visit collection_items_path(c)
   end
