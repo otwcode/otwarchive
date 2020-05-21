@@ -118,8 +118,8 @@ module CollectionsHelper
           elsif options[:actor] == "collection"
             "collections_helper.collection_item_approval_options.collection"
           end
-    [ [t("#{key}.neutral"), CollectionItem::NEUTRAL],
+    [[t("#{key}.neutral"), CollectionItem::NEUTRAL],
       [t("#{key}.approved"), CollectionItem::APPROVED],
-      [t("#{key}.rejected"), CollectionItem::REJECTED] ]
+      [t("#{key}.rejected"), CollectionItem::REJECTED]]
   end
 end

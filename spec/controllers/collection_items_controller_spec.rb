@@ -313,7 +313,7 @@ describe CollectionItemsController do
 
       it "does not destroy item rejected by the user" do
         fake_login_known_user(owner)
-        delete :destroy, params: { id: @rejected_by_user_item.id, work_id: @rejected_by_user_work.id}
+        delete :destroy, params: { id: @rejected_by_user_item.id, work_id: @rejected_by_user_work.id }
         it_redirects_to_with_error(collection_path(@collection), "Sorry, you're not allowed to do that.")
         expect(CollectionItem.where(item_id: @rejected_by_user_work.id)).not_to be_empty
       end

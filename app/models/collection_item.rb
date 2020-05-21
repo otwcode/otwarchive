@@ -216,6 +216,7 @@ class CollectionItem < ApplicationRecord
 
   def remove=(value)
     return if self.user_approval_status == REJECTED && !User.current_user.is_author_of?(item)
+
     if value == "1"
       self.destroy
     end
