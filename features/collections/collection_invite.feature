@@ -21,7 +21,6 @@ Feature: Collection
     And I follow "Approved"
   Then I should see "A Death in Hong Kong"
 
-
   Scenario: Invite a work to a collection where a user approves inclusion
   Given I am logged in as "Scott" with password "password"
     And I set my preferences to require my approval for my work to be collected
@@ -37,7 +36,7 @@ Feature: Collection
   When I follow "Manage Items"
     And I follow "Awaiting User Approval"
   Then I should see "Murder in Milan"
-    And I should see "Works listed here have been invited to this collection. Once a work's creator has approved inclusion in this collection, the work will be moved to 'Approved'."
+    And I should see /Works listed here have been invited to this collection. Once a work's creator has approved inclusion in this collection, the work will be moved to "Approved\."/
   When I am logged in as "Scott" with password "password"
     And I accept the invitation for my work in the collection "scotts collection"
     And I press "Submit"
