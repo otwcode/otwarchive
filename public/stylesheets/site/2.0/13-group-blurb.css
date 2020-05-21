@@ -357,7 +357,7 @@ blurbs on the manage collection items pages, mostly reseting styles inherited fr
   clear: both;
 }
 
-.bookmark .blurb dl.stats {
+.bookmark dl.stats {
   margin-bottom: 0.643em;
 }
 
