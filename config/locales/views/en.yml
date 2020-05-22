@@ -9,17 +9,17 @@ en:
       collection:
         page_name: "Items in %{collection_link}"
         notice:
-          user_neutral: "Works listed here have been invited to this collection. Once a work's creator has approved inclusion in this collection, the work will be moved to \"Approved.\""
+          unreviewed_by_user: "Works listed here have been invited to this collection. Once a work's creator has approved inclusion in this collection, the work will be moved to \"Approved.\""
       user:
         page_name: "Items by %{username} in Collections"
         notice:
-          collection_neutral: "Works listed here have been addded to a collection but need approval from a collection moderator before they are listed in the collection."
+          unreviewed_by_collection: "Works listed here have been added to a collection but need approval from a collection moderator before they are listed in the collection."
       navigation:
         approved: "Approved"
-        collection_neutral: "Awaiting Collection Approval"
-        collection_ rejected: "Rejected by Collection"
-        user_neutral: "Awaiting User Approval"
-        user_rejected: "Rejected by User"
+        rejected_by_collection: "Rejected by Collection"
+        rejected_by_user: "Rejected by User"
+        unreviewed_by_collection: "Awaiting Collection Approval"
+        unreviewed_by_user: "Awaiting User Approval"
       no_items: "Nothing to review here!"
   users:
     delete_preview:
