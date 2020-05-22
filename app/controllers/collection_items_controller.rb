@@ -26,28 +26,28 @@ class CollectionItemsController < ApplicationController
 
     if @collection && @collection.user_is_maintainer?(current_user)
       @collection_items = @collection.collection_items.include_for_works
-      @collection_items = case
-                          when params[:status] == "approved"
+      @collection_items = case params[:status]
+                          when "approved"
                             @collection_items.approved_by_collection
-                          when params[:status] == "rejected_by_collection"
+                          when "rejected_by_collection"
                             @collection_items.rejected_by_collection
-                          when params[:status] == "rejected_by_user"
+                          when "rejected_by_user"
                             @collection_items.rejected_by_user
-                          when params[:status] == "unreviewed_by_user"
+                          when "unreviewed_by_user"
                             @collection_items.invited_by_collection
                           else
                             @collection_items.unreviewed_by_collection
                           end
     elsif params[:user_id] && (@user = User.find_by(login: params[:user_id])) && @user == current_user
       @collection_items = CollectionItem.for_user(@user).includes(:collection)
-      @collection_items = case
-                          when params[:status] == "approved"
+      @collection_items = case params[:status]
+                          when "approved"
                             @collection_items.approved_by_user.approved_by_collection
-                          when params[:status] == "rejected_by_collection"
+                          when "rejected_by_collection"
                             @collection_items.rejected_by_collection
-                          when params[:status] == "rejected_by_user"
+                          when "rejected_by_user"
                             @collection_items.rejected_by_user
-                          when params[:status] == "unreviewed_by_collection"
+                          when "unreviewed_by_collection"
                             @collection_items.approved_by_user.unreviewed_by_collection
                           else
                             @collection_items.unreviewed_by_user
