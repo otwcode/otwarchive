@@ -14,11 +14,12 @@
         options = {},
         html_options = { class: @collection ? "disabled" :  nil }) do %>
         <span class="landmark"><%= collection_item_approval_options_label(
-          options = { actor: "user",
-            item_type: collection_item.item_type.downcase }) %></span>
+          actor: "user",
+          item_type: collection_item.item_type) %></span>
         <%= form.select(:user_approval_status,
-          collection_item_approval_options(options = { actor: "user",
-            item_type: collection_item.item_type.downcase }),
+          collection_item_approval_options(
+            actor: "user",
+            item_type: collection_item.item_type),
           options = {},
           html_options = { disabled: @collection ? true :  nil }) %>
       <% end %>
@@ -28,11 +29,12 @@
         options = {},
         html_options = { class: @user ? "disabled" :  nil }) do %>
         <span class="landmark"><%= collection_item_approval_options_label(
-          options = { actor: "collection",
-            item_type: collection_item.item_type.downcase }) %></span>
+            actor: "collection",
+            item_type: collection_item.item_type) %></span>
         <%= form.select(:collection_approval_status,
-          collection_item_approval_options(options = { actor: "collection",
-            item_type: collection_item.item_type.downcase }),
+          collection_item_approval_options(
+            actor: "collection",
+            item_type: collection_item.item_type),
           options = {},
           html_options = { disabled: @user ? true :  nil }) %>
       <% end %>

@@ -104,20 +104,29 @@ module CollectionsHelper
     end
   end
 
-  def collection_item_approval_options_label(options = {})
-    if options[:actor] == "user" && (options[:item_type] == "bookmark" || options[:item_type] == "work")
-      t("collections_helper.collection_item_approval_options_label.user.#{options[:item_type]}")
-    elsif options[:actor] == "collection"
+  def collection_item_approval_options_label(actor:, item_type:)
+    item_type = item_type.downcase
+    actor = actor.downcase
+
+    case actor
+    when "user"
+      t("collections_helper.collection_item_approval_options_label.user.#{item_type}")
+    when "collection"
       t("collections_helper.collection_item_approval_options_label.collection")
     end
   end
 
-  def collection_item_approval_options(options = {})
-    key = if options[:actor] == "user" && (options[:item_type] == "bookmark" || options[:item_type] == "work")
-            "collections_helper.collection_item_approval_options.user.#{options[:item_type]}"
-          elsif options[:actor] == "collection"
+  def collection_item_approval_options(actor:, item_type:)
+    item_type = item_type.downcase
+    actor = actor.downcase
+
+    key = case actor
+          when "user"
+            "collections_helper.collection_item_approval_options.user.#{item_type}"
+          when "collection"
             "collections_helper.collection_item_approval_options.collection"
           end
+
     [
       [t("#{key}.neutral"), CollectionItem::NEUTRAL],
       [t("#{key}.approved"), CollectionItem::APPROVED],
