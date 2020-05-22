@@ -215,7 +215,7 @@ class CollectionItem < ApplicationRecord
   end
 
   def remove=(value)
-    return unless user_allowed_to_destroy?(user)
+    return unless user_allowed_to_destroy?(User.current_user)
 
     if value == "1"
       self.destroy
