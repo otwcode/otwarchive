@@ -145,8 +145,6 @@ end
 
 Given /^I log out$/ do
   step(%{I follow "Log Out"})
-  # If JavaScript is enabled, this button will not appear
-  click_button("Yes, Log Out") unless @javascript
 end
 
 Given /^"([^"]*)" deletes their account/ do |username|
@@ -193,13 +191,13 @@ When /^I fill in the sign up form with valid data$/ do
 end
 
 When /^I try to delete my account as (.*)$/ do |login|
-  step (%{I go to #{login}\'s user page})
-  step (%{I follow "Profile"})
-  step (%{I follow "Delete My Account"})
+  step(%{I go to #{login}\'s user page})
+  step(%{I follow "Profile"})
+  step(%{I follow "Delete My Account"})
 end
 
 When /^I try to delete my account$/ do
-  step (%{I try to delete my account as #{DEFAULT_USER}})
+  step(%{I try to delete my account as #{DEFAULT_USER}})
 end
 
 When /^I visit the change username page for (.*)$/ do |login|

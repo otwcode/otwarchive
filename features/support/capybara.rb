@@ -15,3 +15,12 @@ end
 
 Capybara.default_driver = :rack_test
 Capybara.javascript_driver = :poltergeist
+
+def http_delete(path)
+  if Capybara.current_driver == :poltergeist
+    page.execute_script("$.ajax({url: '#{path}', data: {}, type: 'DELETE'});")
+    wait_for_ajax
+  else
+    page.driver.submit :delete, path, {}
+  end
+end
