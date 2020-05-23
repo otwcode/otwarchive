@@ -381,4 +381,353 @@ describe UserMailer do
       end
     end
   end
+
+  describe "added_to_collection_notifictation" do
+    before(:all) do
+      @user = create(:user)
+      @collection = create(:collection)
+
+      # So the variable names aren't unbearably long, we're using abbreviations.
+      # Status comes first: a for approved, n for neutral a.k.a. unreviewed, and r
+      # for rejected. Then comes the actor: c for collection, u for user. So ac_au
+      # would be approved by the collection and approved by the user, rc_au
+      # rejected by the collection and approved by the user, and so on.
+      # Work is included in the name in case we ever add a version of this emails
+      # for bookmarks.
+
+      # Works for items that will be approved by collection.
+      @ac_au_work = create(:work, authors: [@user.default_pseud])
+      @ac_nu_work = create(:work, authors: [@user.default_pseud])
+      @ac_ru_work = create(:work, authors: [@user.default_pseud])
+
+      # Works for items that will be unreviewed by collection.
+      @nc_au_work = create(:work, authors: [@user.default_pseud])
+      @nc_nu_work = create(:work, authors: [@user.default_pseud])
+      @nc_ru_work = create(:work, authors: [@user.default_pseud])
+
+      # Works for items that will be rejected by collection.
+      @rc_au_work = create(:work, authors: [@user.default_pseud])
+      @rc_nu_work = create(:work, authors: [@user.default_pseud])
+      @rc_ru_work = create(:work, authors: [@user.default_pseud])
+
+      # Work items approved by collection.
+      @ac_au_work.add_to_collection(@collection) && @ac_au_work.save
+      @ac_au_work_item = create(:collection_item, item: @ac_au_work)
+
+      @ac_nu_work_item = create(:collection_item,
+                                collection: @collection,
+                                item: @ac_nu_work)
+      @ac_nu_work_item.update_attribute(
+        :user_approval_status, CollectionItem::NEUTRAL)
+ 
+      @ac_ru_work_item = create(:collection_item,
+                                collection: @collection,
+                                item: @ac_ru_work)
+      @ac_ru_work_item.update_attribute(
+        :user_approval_status, CollectionItem::REJECTED)
+
+      # Work items unreviewed by collection.
+      @nc_au_work_item = create(:collection_item,
+                                collection: @collection,
+                                item: @nc_au_work)
+      @nc_au_work_item.update_attribute(
+        :collection_approval_status, CollectionItem::NEUTRAL)
+
+      @nc_nu_work_item = create(:collection_item,
+                                collection: @collection,
+                                item: @nc_nu_work)
+      @nc_nu_work_item.update_attributes(
+        collection_approval_status: CollectionItem::NEUTRAL,
+        user_approval_status: CollectionItem::NEUTRAL)
+
+      @nc_ru_work_item = create(:collection_item,
+                                collection: @collection,
+                                item: @nc_ru_work)
+      @nc_ru_work_item.update_attributes(
+        collection_approval_status: CollectionItem::NEUTRAL,
+        user_approval_status: CollectionItem::REJECTED)
+
+      # Work items rejected by collection.
+      @rc_au_work_item = create(:collection_item,
+                                collection: @collection,
+                                item: @nc_au_work)
+      @rc_au_work_item.update_attribute(
+        :collection_approval_status, CollectionItem::REJECTED)
+
+      @rc_nu_work_item = create(:collection_item,
+                                collection: @collection,
+                                item: @rc_nu_work)
+      @rc_nu_work_item.update_attributes(
+        collection_approval_status: CollectionItem::REJECTED,
+        user_approval_status: CollectionItem::NEUTRAL)
+
+      @rc_ru_work_item = create(:collection_item,
+                                collection: @collection,
+                                item: @rc_ru_work)
+      @rc_ru_work_item.update_attributes(
+        collection_approval_status: CollectionItem::REJECTED,
+        user_approval_status: CollectionItem::REJECTED)
+    end
+
+    context "when collection item is approved by collection and approved by user" do
+      subject(:email) { UserMailer.added_to_collection_notification(@user.id, @ac_au_work.id, @collection.id).deliver }
+
+      # Test the headers
+      it_behaves_like "an email with a valid sender"
+
+      it "has the correct subject line" do
+        subject = "[#{ArchiveConfig.APP_SHORT_NAME}][#{@collection.title}] Your work was added to a collection"
+        expect(email).to have_subject(subject)
+      end
+
+      # Test both body contents
+      it_behaves_like "a multipart email"
+
+      it_behaves_like "a translated email"
+
+      describe "HTML version" do
+        it "has the correct content" do
+          expect(email).to have_html_part_content("Manage Approved Collection Items page")
+        end
+      end
+
+      describe "text version" do
+        it "has the correct content" do
+          expect(email).to have_text_part_content("Manage Approved Collection Items page")
+        end
+      end
+    end
+
+    context "when collection item is approved by collection and awaiting user approval" do
+      subject(:email) { UserMailer.added_to_collection_notification(@user.id, @ac_nu_work.id, @collection.id).deliver }
+
+      # Test the headers
+      it_behaves_like "an email with a valid sender"
+
+      it "has the correct subject line" do
+        subject = "[#{ArchiveConfig.APP_SHORT_NAME}][#{@collection.title}] Your work was added to a collection"
+        expect(email).to have_subject(subject)
+      end
+
+      # Test both body contents
+      it_behaves_like "a multipart email"
+
+      it_behaves_like "a translated email"
+
+      describe "HTML version" do
+        it "has the correct content" do
+          expect(email).to have_html_part_content("Manage Collection Items Awaiting User Approval page")
+        end
+      end
+
+      describe "text version" do
+        it "has the correct content" do
+          expect(email).to have_text_part_content("Manage Collection Items Awaiting User Approval page")
+        end
+      end
+    end
+
+    context "when collection item is approved by collection and rejected by user" do
+      subject(:email) { UserMailer.added_to_collection_notification(@user.id, @ac_ru_work.id, @collection.id).deliver }
+
+      # Test the headers
+      it_behaves_like "an email with a valid sender"
+
+      it "has the correct subject line" do
+        subject = "[#{ArchiveConfig.APP_SHORT_NAME}][#{@collection.title}] Your work was added to a collection"
+        expect(email).to have_subject(subject)
+      end
+
+      # Test both body contents
+      it_behaves_like "a multipart email"
+
+      it_behaves_like "a translated email"
+
+      describe "HTML version" do
+        it "has the correct content" do
+          expect(email).to have_html_part_content("Manage Collection Items Rejected by User page")
+        end
+      end
+
+      describe "text version" do
+        it "has the correct content" do
+          expect(email).to have_text_part_content("Manage Collection Items Rejected by User page")
+        end
+      end
+    end
+
+    context "when collection item is unreveiewed by collection and approved by user" do
+      subject(:email) { UserMailer.added_to_collection_notification(@user.id, @nc_au_work.id, @collection.id).deliver }
+
+      # Test the headers
+      it_behaves_like "an email with a valid sender"
+
+      it "has the correct subject line" do
+        subject = "[#{ArchiveConfig.APP_SHORT_NAME}][#{@collection.title}] Your work was added to a collection"
+        expect(email).to have_subject(subject)
+      end
+
+      # Test both body contents
+      it_behaves_like "a multipart email"
+
+      it_behaves_like "a translated email"
+
+      describe "HTML version" do
+        it "has the correct content" do
+          expect(email).to have_html_part_content("Manage Collection Items Awaiting Collection Approval page")
+        end
+      end
+
+      describe "text version" do
+        it "has the correct content" do
+          expect(email).to have_text_part_content("Manage Collection Items Awaiting Collection Approval page")
+        end
+      end
+    end
+
+    context "when collection item is unreveiewed by collection and unreviewed by user" do
+      subject(:email) { UserMailer.added_to_collection_notification(@user.id, @nc_nu_work.id, @collection.id).deliver }
+
+      # Test the headers
+      it_behaves_like "an email with a valid sender"
+
+      it "has the correct subject line" do
+        subject = "[#{ArchiveConfig.APP_SHORT_NAME}][#{@collection.title}] Your work was added to a collection"
+        expect(email).to have_subject(subject)
+      end
+
+      # Test both body contents
+      it_behaves_like "a multipart email"
+
+      it_behaves_like "a translated email"
+
+      describe "HTML version" do
+        it "has the correct content" do
+          expect(email).to have_html_part_content("Manage Collection Items Awaiting User Approval page")
+        end
+      end
+
+      describe "text version" do
+        it "has the correct content" do
+          expect(email).to have_text_part_content("Manage Collection Items Awaiting User Approval page")
+        end
+      end
+    end
+
+    context "when collection item is unreveiewed by collection and rejected by user" do
+      subject(:email) { UserMailer.added_to_collection_notification(@user.id, @nc_ru_work.id, @collection.id).deliver }
+
+      # Test the headers
+      it_behaves_like "an email with a valid sender"
+
+      it "has the correct subject line" do
+        subject = "[#{ArchiveConfig.APP_SHORT_NAME}][#{@collection.title}] Your work was added to a collection"
+        expect(email).to have_subject(subject)
+      end
+
+      # Test both body contents
+      it_behaves_like "a multipart email"
+
+      it_behaves_like "a translated email"
+
+      describe "HTML version" do
+        it "has the correct content" do
+          expect(email).to have_html_part_content("Manage Collection Items Rejected by User page")
+        end
+      end
+
+      describe "text version" do
+        it "has the correct content" do
+          expect(email).to have_text_part_content("Manage Collection Items Rejected by User page")
+        end
+      end
+    end
+
+    context "when collection item is rejected by collection and approved by user" do
+      subject(:email) { UserMailer.added_to_collection_notification(@user.id, @rc_au_work.id, @collection.id).deliver }
+
+      # Test the headers
+      it_behaves_like "an email with a valid sender"
+
+      it "has the correct subject line" do
+        subject = "[#{ArchiveConfig.APP_SHORT_NAME}][#{@collection.title}] Your work was added to a collection"
+        expect(email).to have_subject(subject)
+      end
+
+      # Test both body contents
+      it_behaves_like "a multipart email"
+
+      it_behaves_like "a translated email"
+
+      describe "HTML version" do
+        it "has the correct content" do
+          expect(email).to have_html_part_content("Manage Collection Items Rejected by Collection page")
+        end
+      end
+
+      describe "text version" do
+        it "has the correct content" do
+          expect(email).to have_text_part_content("Manage Collection Items Rejected by Collection page")
+        end
+      end
+    end
+
+    context "when collection item is rejected by collection and unreviewed by user" do
+      subject(:email) { UserMailer.added_to_collection_notification(@user.id, @rc_nu_work.id, @collection.id).deliver }
+
+      # Test the headers
+      it_behaves_like "an email with a valid sender"
+
+      it "has the correct subject line" do
+        subject = "[#{ArchiveConfig.APP_SHORT_NAME}][#{@collection.title}] Your work was added to a collection"
+        expect(email).to have_subject(subject)
+      end
+
+      # Test both body contents
+      it_behaves_like "a multipart email"
+
+      it_behaves_like "a translated email"
+
+      describe "HTML version" do
+        it "has the correct content" do
+          expect(email).to have_html_part_content("Manage Collection Items Awaiting User Approval page")
+        end
+      end
+
+      describe "text version" do
+        it "has the correct content" do
+          expect(email).to have_text_part_content("Manage Collection Items Awaiting User Approval page")
+        end
+      end
+    end
+
+    context "when collection item is rejected by collection and rejected by user" do
+      subject(:email) { UserMailer.added_to_collection_notification(@user.id, @rc_ru_work.id, @collection.id).deliver }
+
+      # Test the headers
+      it_behaves_like "an email with a valid sender"
+
+      it "has the correct subject line" do
+        subject = "[#{ArchiveConfig.APP_SHORT_NAME}][#{@collection.title}] Your work was added to a collection"
+        expect(email).to have_subject(subject)
+      end
+
+      # Test both body contents
+      it_behaves_like "a multipart email"
+
+      it_behaves_like "a translated email"
+
+      describe "HTML version" do
+        it "has the correct content" do
+          expect(email).to have_html_part_content("Manage Collection Items Rejected by User page")
+        end
+      end
+
+      describe "text version" do
+        it "has the correct content" do
+          expect(email).to have_text_part_content("Manage Collection Items Rejected by User page")
+        end
+      end
+    end
+  end
 end

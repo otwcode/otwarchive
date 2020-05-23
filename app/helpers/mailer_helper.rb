@@ -118,4 +118,35 @@ module MailerHelper
       work.pseuds.map { |p| text_pseud(p) }.to_sentence.html_safe
     end
   end
+
+  def user_manage_collection_items_link(user, collection_item)
+    url = user_manage_collection_items_url(user, collection_item)
+    style_link(user_manage_collection_items_page_name(collection_item), url) 
+  end
+
+  def user_manage_collection_items_url(user, collection_item)
+    user_collection_items_url(user,
+      status: user_collection_item_status(collection_item))
+  end
+
+  def user_manage_collection_items_page_name(collection_item)
+    status = user_collection_item_status(collection_item)
+    t("mailer_helper.user_manage_collection_items_page_name.#{status}")
+  end
+
+  def user_collection_item_status(collection_item)
+    if collection_item.unreviewed_by_user?
+      "unreviewed_by_user"
+    elsif collection_item.rejected_by_user?
+      "rejected_by_user"
+    # It's not unreviewed or rejected by the user, so#
+    # collection_item.approved_by_user? is implied.
+    elsif collection_item.approved_by_collection?
+      "approved"
+    elsif collection_item.rejected_by_collection?
+      "rejected_by_collection"
+    elsif collection_item.unreviewed_by_collection?
+      "unreviewed_by_collection"
+    end
+  end
 end # end of MailerHelper
