@@ -390,7 +390,8 @@ describe UserMailer do
     let!(:collection_item) { create(:collection_item,
                                     collection_id: collection.id,
                                     item_id: work.id,
-                                    item_type: "Work") }
+                                    item_type: "Work")
+                            }
 
     context "when collection item is approved by collection and approved by user" do
       subject(:email) { UserMailer.added_to_collection_notification(user.id, work.id, collection.id).deliver }
