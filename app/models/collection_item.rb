@@ -264,7 +264,7 @@ class CollectionItem < ApplicationRecord
   def reject_by_user ; self.user_approval_status = REJECTED ; end
   def approved_by_user? ; self.user_approval_status == APPROVED ; end
   def rejected_by_user? ; self.user_approval_status == REJECTED ; end
-  def unreviewed_by_user? ; self.collection_approval_status == NEUTRAL ; end
+  def unreviewed_by_user? ; self.user_approval_status == NEUTRAL ; end
 
   def approve_by_collection ; self.collection_approval_status = APPROVED ; end
   def reject_by_collection ; self.collection_approval_status = REJECTED ; end
