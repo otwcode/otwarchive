@@ -24,6 +24,7 @@ class UserMailer < ActionMailer::Base
     @user = User.find(user_id)
     @work = Work.find(work_id)
     @collection = Collection.find(collection_id)
+    @collection_item = @work.collection_items.where(collection_id: @collection.id).first
 
     I18n.with_locale(Locale.find(@user.preference.preferred_locale).iso) do
       mail(

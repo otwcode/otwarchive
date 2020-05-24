@@ -10,7 +10,7 @@
   <p><%= t(".part2") %></p>
 
   <p><%= t(".html.part3",
-      manage_link: user_manage_collection_items_link(@user, @work.collection_items.where(collection_id: @collection.id).first)).html_safe %></p>
+      manage_link: user_manage_collection_items_link(@user, @collection_item)).html_safe %></p>
 
   <p><%= t(".html.part4",
     preferences_link: style_link(t(".preferences_page_name"), user_preferences_url(@user))
