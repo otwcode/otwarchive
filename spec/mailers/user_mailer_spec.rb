@@ -399,10 +399,7 @@ describe UserMailer do
       # Test the headers
       it_behaves_like "an email with a valid sender"
 
-      it "has the correct subject line" do
-        subject = "[#{ArchiveConfig.APP_SHORT_NAME}][#{collection.title}] Your work was added to a collection"
-        expect(email).to have_subject(subject)
-      end
+      it_behaves_like "an added_to_collection_notification with the correct subject line"
 
       # Test both body contents
       it_behaves_like "a multipart email"
@@ -436,10 +433,7 @@ describe UserMailer do
       # Test the headers
       it_behaves_like "an email with a valid sender"
 
-      it "has the correct subject line" do
-        subject = "[#{ArchiveConfig.APP_SHORT_NAME}][#{collection.title}] Your work was added to a collection"
-        expect(email).to have_subject(subject)
-      end
+      it_behaves_like "an added_to_collection_notification with the correct subject line"
 
       # Test both body contents
       it_behaves_like "a multipart email"
@@ -474,10 +468,7 @@ describe UserMailer do
       # Test the headers
       it_behaves_like "an email with a valid sender"
 
-      it "has the correct subject line" do
-        subject = "[#{ArchiveConfig.APP_SHORT_NAME}][#{collection.title}] Your work was added to a collection"
-        expect(email).to have_subject(subject)
-      end
+      it_behaves_like "an added_to_collection_notification with the correct subject line"
 
       # Test both body contents
       it_behaves_like "a multipart email"
@@ -511,10 +502,7 @@ describe UserMailer do
       # Test the headers
       it_behaves_like "an email with a valid sender"
 
-      it "has the correct subject line" do
-        subject = "[#{ArchiveConfig.APP_SHORT_NAME}][#{collection.title}] Your work was added to a collection"
-        expect(email).to have_subject(subject)
-      end
+      it_behaves_like "an added_to_collection_notification with the correct subject line"
 
       # Test both body contents
       it_behaves_like "a multipart email"
@@ -548,10 +536,7 @@ describe UserMailer do
       # Test the headers
       it_behaves_like "an email with a valid sender"
 
-      it "has the correct subject line" do
-        subject = "[#{ArchiveConfig.APP_SHORT_NAME}][#{collection.title}] Your work was added to a collection"
-        expect(email).to have_subject(subject)
-      end
+      it_behaves_like "an added_to_collection_notification with the correct subject line"
 
       # Test both body contents
       it_behaves_like "a multipart email"
@@ -588,10 +573,7 @@ describe UserMailer do
       # Test the headers
       it_behaves_like "an email with a valid sender"
 
-      it "has the correct subject line" do
-        subject = "[#{ArchiveConfig.APP_SHORT_NAME}][#{collection.title}] Your work was added to a collection"
-        expect(email).to have_subject(subject)
-      end
+      it_behaves_like "an added_to_collection_notification with the correct subject line"
 
       # Test both body contents
       it_behaves_like "a multipart email"
@@ -627,10 +609,7 @@ describe UserMailer do
       # Test the headers
       it_behaves_like "an email with a valid sender"
 
-      it "has the correct subject line" do
-        subject = "[#{ArchiveConfig.APP_SHORT_NAME}][#{collection.title}] Your work was added to a collection"
-        expect(email).to have_subject(subject)
-      end
+      it_behaves_like "an added_to_collection_notification with the correct subject line"
 
       # Test both body contents
       it_behaves_like "a multipart email"
@@ -664,10 +643,7 @@ describe UserMailer do
       # Test the headers
       it_behaves_like "an email with a valid sender"
 
-      it "has the correct subject line" do
-        subject = "[#{ArchiveConfig.APP_SHORT_NAME}][#{collection.title}] Your work was added to a collection"
-        expect(email).to have_subject(subject)
-      end
+      it_behaves_like "an added_to_collection_notification with the correct subject line"
 
       # Test both body contents
       it_behaves_like "a multipart email"
@@ -701,10 +677,7 @@ describe UserMailer do
       # Test the headers
       it_behaves_like "an email with a valid sender"
 
-      it "has the correct subject line" do
-        subject = "[#{ArchiveConfig.APP_SHORT_NAME}][#{collection.title}] Your work was added to a collection"
-        expect(email).to have_subject(subject)
-      end
+      it_behaves_like "an added_to_collection_notification with the correct subject line"
 
       # Test both body contents
       it_behaves_like "a multipart email"

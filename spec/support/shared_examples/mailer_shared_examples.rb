@@ -24,3 +24,10 @@ shared_examples_for "an email with a valid sender" do
     expect(email).to deliver_from("Archive of Our Own <#{ArchiveConfig.RETURN_ADDRESS}>")
   end
 end
+
+shared_examples_for "an added_to_collection_notification with the correct subject line" do
+  it "has the correct subject line" do
+    subject = "[#{ArchiveConfig.APP_SHORT_NAME}][#{collection.title}] Your work was added to a collection"
+    expect(email).to have_subject(subject)
+  end
+end
