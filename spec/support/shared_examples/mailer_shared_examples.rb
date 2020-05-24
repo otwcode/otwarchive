@@ -31,3 +31,17 @@ shared_examples_for "an added_to_collection_notification with the correct subjec
     expect(email).to have_subject(subject)
   end
 end
+
+shared_examples_for "an added_to_collection_notification with the correct content" do |linked_user_collection_items_page|
+  it "has the correct content in HTML version" do
+    expect(email).to have_html_part_content(">#{collection.title}</a> have added your work <")
+    expect(email).to have_html_part_content("previously elected to allow automatic inclusion")
+    expect(email).to have_html_part_content("#{linked_user_collection_items_page} page")
+  end
+
+  it "has the correct content in text version" do
+    expect(email).to have_text_part_content("#{collection.title} have added your work (#{work.title})")
+    expect(email).to have_text_part_content("previously elected to allow automatic inclusion")
+    expect(email).to have_text_part_content("#{linked_user_collection_items_page} page")
+  end
+end
