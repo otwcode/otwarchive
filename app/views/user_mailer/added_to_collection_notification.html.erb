@@ -12,8 +12,6 @@
   <p><%= t(".html.part3",
       manage_link: user_manage_collection_items_link(@user, @work.collection_items.where(collection_id: @collection.id).first)).html_safe %></p>
 
-  <% # If you would like to remove your work from this collection, please visit your user_manage_collection_items_link(@user, @work.collection_items.where(collection_id: @collection.id).first) %>
-
   <p><%= t(".html.part4",
     preferences_link: style_link(t(".preferences_page_name"), user_preferences_url(@user))
     ).html_safe %>
