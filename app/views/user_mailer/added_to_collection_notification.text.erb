@@ -1,14 +1,16 @@
 <% collection_item = @work.collection_items.where(collection_id: @collection.id).first %>
 <% content_for :message do %>
-Dear <%= @user.default_pseud.byline %>,
+<%= t(".greeting", default_pseud: @user.default_pseud.byline) %>
 
-The collection maintainers of <%= @collection.title %> have added your work (<%= @work.title.html_safe %>) to their collection!
+<%= t(".text.part1", collection_title: @collection.title, work_title: @work.title) %>
 
-You are receiving this notification because you have previously elected to allow automatic inclusion of your works into collections on the Archive of Our Own.
+<%= t(".part2") %>
 
-If you would like to remove your work from this collection, please visit your "<%= user_manage_collection_items_page_name(collection_item) %>" page: <%= user_manage_collection_items_url(@user, collection_item) %>.
+<%= t(".text.part3",
+  manage_page_name: user_manage_collection_items_page_name(collection_item),
+  manage_url: user_manage_collection_items_url(@user, collection_item)) %>
 
-If in future you would prefer to individually accept or reject requests to add your works to collections, please edit your Preferences (<%= "#{root_url}users/#{@user.default_pseud.name}/preferences" %>) and untick the box next to "Automatically agree to your work being collected by others in the Archive.".
+<%= t(".text.part4", preferences_page_name: t(".preferences_page_name"), preferences_url: user_preferences_url(@user), collected_work_preference: t(".collected_work_preference")) %>
 
-Thanks!
+<%= t(".part5") %>
 <% end %>

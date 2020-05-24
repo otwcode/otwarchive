@@ -24,10 +24,17 @@ class UserMailer < ActionMailer::Base
     @user = User.find(user_id)
     @work = Work.find(work_id)
     @collection = Collection.find(collection_id)
-    mail(
-         to: @user.email,
-         subject: "[#{ArchiveConfig.APP_SHORT_NAME}]#{'[' + @collection.title + ']'} Your work was added to a collection"
-    )
+
+    I18n.with_locale(Locale.find(@user.preference.preferred_locale).iso) do
+      mail(
+        to: @user.email,
+        subject: t(".subject",
+                   app_name: ArchiveConfig.APP_SHORT_NAME,
+                   collection_title: @collection.title)
+      )
+    end
+  ensure
+    I18n.locale = I18n.default_locale
   end
 
   # Send a request to a work owner asking that they approve the inclusion

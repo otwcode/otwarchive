@@ -384,8 +384,8 @@ describe UserMailer do
 
   describe "added_to_collection_notifictation" do
     let(:user) { create(:user) }
-    let(:collection) { create(:collection) }
-    let(:work) { create(:work) }
+    let(:collection) { create(:collection, title: "Faves & Stuff") }
+    let(:work) { create(:work, title: Faker::Book.title) }
 
     let!(:collection_item) { create(:collection_item,
                                     collection_id: collection.id,
@@ -411,12 +411,16 @@ describe UserMailer do
 
       describe "HTML version" do
         it "has the correct content" do
+          expect(email).to have_html_part_content(">#{collection.title}</a> have added your work <")
+          expect(email).to have_html_part_content("previously elected to allow automatic inclusion")
           expect(email).to have_html_part_content("Manage Approved Collection Items page")
         end
       end
 
       describe "text version" do
         it "has the correct content" do
+          expect(email).to have_text_part_content("#{collection.title} have added your work (#{work.title})")
+          expect(email).to have_text_part_content("previously elected to allow automatic inclusion")
           expect(email).to have_text_part_content("Manage Approved Collection Items page")
         end
       end
@@ -444,12 +448,16 @@ describe UserMailer do
 
       describe "HTML version" do
         it "has the correct content" do
+          expect(email).to have_html_part_content(">#{collection.title}</a> have added your work <")
+          expect(email).to have_html_part_content("previously elected to allow automatic inclusion")
           expect(email).to have_html_part_content("Manage Collection Items Awaiting User Approval page")
         end
       end
 
       describe "text version" do
         it "has the correct content" do
+          expect(email).to have_text_part_content("#{collection.title} have added your work (#{work.title})")
+          expect(email).to have_text_part_content("previously elected to allow automatic inclusion")
           expect(email).to have_text_part_content("Manage Collection Items Awaiting User Approval page")
         end
       end
@@ -478,12 +486,16 @@ describe UserMailer do
 
       describe "HTML version" do
         it "has the correct content" do
+          expect(email).to have_html_part_content(">#{collection.title}</a> have added your work <")
+          expect(email).to have_html_part_content("previously elected to allow automatic inclusion")
           expect(email).to have_html_part_content("Manage Collection Items Rejected by User page")
         end
       end
 
       describe "text version" do
         it "has the correct content" do
+          expect(email).to have_text_part_content("#{collection.title} have added your work (#{work.title})")
+          expect(email).to have_text_part_content("previously elected to allow automatic inclusion")
           expect(email).to have_text_part_content("Manage Collection Items Rejected by User page")
         end
       end
@@ -511,12 +523,16 @@ describe UserMailer do
 
       describe "HTML version" do
         it "has the correct content" do
+          expect(email).to have_html_part_content(">#{collection.title}</a> have added your work <")
+          expect(email).to have_html_part_content("previously elected to allow automatic inclusion")
           expect(email).to have_html_part_content("Manage Collection Items Awaiting Collection Approval page")
         end
       end
 
       describe "text version" do
         it "has the correct content" do
+          expect(email).to have_text_part_content("#{collection.title} have added your work (#{work.title})")
+          expect(email).to have_text_part_content("previously elected to allow automatic inclusion")
           expect(email).to have_text_part_content("Manage Collection Items Awaiting Collection Approval page")
         end
       end
@@ -544,12 +560,16 @@ describe UserMailer do
 
       describe "HTML version" do
         it "has the correct content" do
+          expect(email).to have_html_part_content(">#{collection.title}</a> have added your work <")
+          expect(email).to have_html_part_content("previously elected to allow automatic inclusion")
           expect(email).to have_html_part_content("Manage Collection Items Awaiting User Approval page")
         end
       end
 
       describe "text version" do
         it "has the correct content" do
+          expect(email).to have_text_part_content("#{collection.title} have added your work (#{work.title})")
+          expect(email).to have_text_part_content("previously elected to allow automatic inclusion")
           expect(email).to have_text_part_content("Manage Collection Items Awaiting User Approval page")
         end
       end
@@ -580,12 +600,16 @@ describe UserMailer do
 
       describe "HTML version" do
         it "has the correct content" do
+          expect(email).to have_html_part_content(">#{collection.title}</a> have added your work <")
+          expect(email).to have_html_part_content("previously elected to allow automatic inclusion")
           expect(email).to have_html_part_content("Manage Collection Items Rejected by User page")
         end
       end
 
       describe "text version" do
         it "has the correct content" do
+          expect(email).to have_text_part_content("#{collection.title} have added your work (#{work.title})")
+          expect(email).to have_text_part_content("previously elected to allow automatic inclusion")
           expect(email).to have_text_part_content("Manage Collection Items Rejected by User page")
         end
       end
@@ -615,12 +639,16 @@ describe UserMailer do
 
       describe "HTML version" do
         it "has the correct content" do
+          expect(email).to have_html_part_content(">#{collection.title}</a> have added your work <")
+          expect(email).to have_html_part_content("previously elected to allow automatic inclusion")
           expect(email).to have_html_part_content("Manage Collection Items Rejected by Collection page")
         end
       end
 
       describe "text version" do
         it "has the correct content" do
+          expect(email).to have_text_part_content("#{collection.title} have added your work (#{work.title})")
+          expect(email).to have_text_part_content("previously elected to allow automatic inclusion")
           expect(email).to have_text_part_content("Manage Collection Items Rejected by Collection page")
         end
       end
@@ -648,12 +676,16 @@ describe UserMailer do
 
       describe "HTML version" do
         it "has the correct content" do
+          expect(email).to have_html_part_content(">#{collection.title}</a> have added your work <")
+          expect(email).to have_html_part_content("previously elected to allow automatic inclusion")
           expect(email).to have_html_part_content("Manage Collection Items Awaiting User Approval page")
         end
       end
 
       describe "text version" do
         it "has the correct content" do
+          expect(email).to have_text_part_content("#{collection.title} have added your work (#{work.title})")
+          expect(email).to have_text_part_content("previously elected to allow automatic inclusion")
           expect(email).to have_text_part_content("Manage Collection Items Awaiting User Approval page")
         end
       end
@@ -681,6 +713,8 @@ describe UserMailer do
 
       describe "HTML version" do
         it "has the correct content" do
+          expect(email).to have_html_part_content(">#{collection.title}</a> have added your work <")
+          expect(email).to have_html_part_content("previously elected to allow automatic inclusion")
           expect(email).to have_html_part_content("Manage Collection Items Rejected by User page")
         end
       end
