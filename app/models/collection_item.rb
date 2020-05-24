@@ -260,20 +260,53 @@ class CollectionItem < ApplicationRecord
     user.is_author_of?(self.item) || (self.collection.user_is_maintainer?(user) && self.user_approval_status != REJECTED)
   end
 
-  def approve_by_user ; self.user_approval_status = APPROVED ; end
-  def reject_by_user ; self.user_approval_status = REJECTED ; end
-  def approved_by_user? ; self.user_approval_status == APPROVED ; end
-  def rejected_by_user? ; self.user_approval_status == REJECTED ; end
-  def unreviewed_by_user? ; self.user_approval_status == NEUTRAL ; end
+  def approve_by_user
+    self.user_approval_status = APPROVED
+  end
 
-  def approve_by_collection ; self.collection_approval_status = APPROVED ; end
-  def reject_by_collection ; self.collection_approval_status = REJECTED ; end
-  def approved_by_collection? ; self.collection_approval_status == APPROVED ; end
-  def rejected_by_collection? ; self.collection_approval_status == REJECTED ; end
-  def unreviewed_by_collection? ; self.collection_approval_status == NEUTRAL ; end
+  def reject_by_user
+    self.user_approval_status = REJECTED
+  end
+  
+  def approved_by_user?
+    self.user_approval_status == APPROVED
+  end
+  
+  def rejected_by_user?
+    self.user_approval_status == REJECTED
+  end
+  
+  def unreviewed_by_user?
+    self.user_approval_status == NEUTRAL
+  end
 
-  def approved? ; approved_by_user? && approved_by_collection? ; end
-  def rejected? ; rejected_by_user? && rejected_by_collection? ; end
+  def approve_by_collection
+    self.collection_approval_status = APPROVED
+  end
+  
+  def reject_by_collection
+    self.collection_approval_status = REJECTED
+  end
+
+  def approved_by_collection?
+    self.collection_approval_status == APPROVED
+  end
+  
+  def rejected_by_collection?
+    self.collection_approval_status == REJECTED
+  end
+  
+  def unreviewed_by_collection?
+    self.collection_approval_status == NEUTRAL
+  end
+
+  def approved?
+    approved_by_user? && approved_by_collection?
+  end
+  
+  def rejected?
+    rejected_by_user? && rejected_by_collection?
+  end
 
   def reject(user)
     reject_by_user if user && user.is_author_of?(item)
