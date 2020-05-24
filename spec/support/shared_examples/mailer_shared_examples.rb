@@ -25,6 +25,14 @@ shared_examples_for "an email with a valid sender" do
   end
 end
 
+shared_examples_for "an added_to_collection_notification email" do |linked_user_collection_items_page|
+  it_behaves_like "an email with a valid sender"
+  it_behaves_like "an added_to_collection_notification with the correct subject line"
+  it_behaves_like "a multipart email"
+  it_behaves_like "a translated email"
+  it_behaves_like "an added_to_collection_notification with the correct content", linked_user_collection_items_page
+end
+
 shared_examples_for "an added_to_collection_notification with the correct subject line" do
   it "has the correct subject line" do
     subject = "[#{ArchiveConfig.APP_SHORT_NAME}][#{collection.title}] Your work was added to a collection"

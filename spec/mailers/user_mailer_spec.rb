@@ -393,186 +393,45 @@ describe UserMailer do
                                     item_type: "Work")
                            }
 
-    context "when collection item is approved by collection and approved by user" do
-      subject(:email) { UserMailer.added_to_collection_notification(user.id, work.id, collection.id).deliver }
+    # collection_approval_status, user_approval_status, link text
+    [
+      [CollectionItem::APPROVED, CollectionItem::APPROVED, "Manage Approved Collection Items"],
+      [CollectionItem::APPROVED, CollectionItem::NEUTRAL, "Manage Collection Items Awaiting User Approval"],
+      [CollectionItem::APPROVED, CollectionItem::REJECTED, "Manage Collection Items Rejected by User"],
+      [CollectionItem::NEUTRAL, CollectionItem::APPROVED, "Manage Collection Items Awaiting Collection Approval"],
+      [CollectionItem::NEUTRAL, CollectionItem::NEUTRAL, "Manage Collection Items Awaiting User Approval"],
+      [CollectionItem::NEUTRAL, CollectionItem::REJECTED, "Manage Collection Items Rejected by User"],
+      [CollectionItem::REJECTED, CollectionItem::APPROVED, "Manage Collection Items Rejected by Collection"],
+      [CollectionItem::REJECTED, CollectionItem::NEUTRAL, "Manage Collection Items Awaiting User Approval"],
+      [CollectionItem::REJECTED, CollectionItem::REJECTED, "Manage Collection Items Rejected by User"]
+    ].each do |scenario|
+      collection_status_name = case scenario[0]
+                               when CollectionItem::APPROVED
+                                 "approved"
+                               when CollectionItem::NEUTRAL
+                                 "unreviewed"
+                               when CollectionItem::REJECTED
+                                 "rejected"
+                               end
 
-      # Test the headers
-      it_behaves_like "an email with a valid sender"
+      user_status_name = case scenario[1]
+                         when CollectionItem::APPROVED
+                           "approved"
+                         when CollectionItem::NEUTRAL
+                           "unreviewed"
+                         when CollectionItem::REJECTED
+                           "rejected"
+                         end
 
-      it_behaves_like "an added_to_collection_notification with the correct subject line"
+      context "when collection item is #{collection_status_name} by collection and #{user_status_name} by user" do
+        subject(:email) { UserMailer.added_to_collection_notification(user.id, work.id, collection.id).deliver }
 
-      # Test both body contents
-      it_behaves_like "a multipart email"
+        before do
+          collection_item.update_attributes(collection_approval_status: scenario[0], user_approval_status: scenario[1])
+        end
 
-      it_behaves_like "a translated email"
-
-      it_behaves_like "an added_to_collection_notification with the correct content", "Manage Approved Collection Items"
-    end
-
-    context "when collection item is approved by collection and awaiting user approval" do
-      subject(:email) { UserMailer.added_to_collection_notification(user.id, work.id, collection.id).deliver }
-
-      before do
-        collection_item.update_attribute(:user_approval_status, CollectionItem::NEUTRAL)
+        it_behaves_like "an added_to_collection_notification email", scenario[2]
       end
-
-      # Test the headers
-      it_behaves_like "an email with a valid sender"
-
-      it_behaves_like "an added_to_collection_notification with the correct subject line"
-
-      # Test both body contents
-      it_behaves_like "a multipart email"
-
-      it_behaves_like "a translated email"
-
-      it_behaves_like "an added_to_collection_notification with the correct content", "Manage Collection Items Awaiting User Approval"
-    end
-
-    context "when collection item is approved by collection and rejected by user" do
-      subject(:email) { UserMailer.added_to_collection_notification(user.id, work.id, collection.id).deliver }
-
-      before do
-        collection_item.reject_by_user
-        collection_item.save
-      end
-
-      # Test the headers
-      it_behaves_like "an email with a valid sender"
-
-      it_behaves_like "an added_to_collection_notification with the correct subject line"
-
-      # Test both body contents
-      it_behaves_like "a multipart email"
-
-      it_behaves_like "a translated email"
-
-      it_behaves_like "an added_to_collection_notification with the correct content", "Manage Collection Items Rejected by User"
-    end
-
-    context "when collection item is unreveiewed by collection and approved by user" do
-      subject(:email) { UserMailer.added_to_collection_notification(user.id, work.id, collection.id).deliver }
-
-      before do
-        collection_item.update_attributes(collection_approval_status: CollectionItem::NEUTRAL, user_approval_status: CollectionItem::APPROVED)
-      end
-
-      # Test the headers
-      it_behaves_like "an email with a valid sender"
-
-      it_behaves_like "an added_to_collection_notification with the correct subject line"
-
-      # Test both body contents
-      it_behaves_like "a multipart email"
-
-      it_behaves_like "a translated email"
-
-      it_behaves_like "an added_to_collection_notification with the correct content", "Manage Collection Items Awaiting Collection Approval"
-    end
-
-    context "when collection item is unreveiewed by collection and unreviewed by user" do
-      subject(:email) { UserMailer.added_to_collection_notification(user.id, work.id, collection.id).deliver }
-
-      before do
-        collection_item.update_attributes(collection_approval_status: CollectionItem::NEUTRAL, user_approval_status: CollectionItem::NEUTRAL)
-      end
-
-      # Test the headers
-      it_behaves_like "an email with a valid sender"
-
-      it_behaves_like "an added_to_collection_notification with the correct subject line"
-
-      # Test both body contents
-      it_behaves_like "a multipart email"
-
-      it_behaves_like "a translated email"
-
-      it_behaves_like "an added_to_collection_notification with the correct content", "Manage Collection Items Awaiting User Approval"
-    end
-
-    context "when collection item is unreveiewed by collection and rejected by user" do
-      subject(:email) { UserMailer.added_to_collection_notification(user.id, work.id, collection.id).deliver }
-
-      before do
-        collection_item.update_attributes(
-          collection_approval_status: CollectionItem::NEUTRAL,
-          user_approval_status: CollectionItem::REJECTED
-        )
-      end
-
-      # Test the headers
-      it_behaves_like "an email with a valid sender"
-
-      it_behaves_like "an added_to_collection_notification with the correct subject line"
-
-      # Test both body contents
-      it_behaves_like "a multipart email"
-
-      it_behaves_like "a translated email"
-
-      it_behaves_like "an added_to_collection_notification with the correct content", "Manage Collection Items Rejected by User"
-    end
-
-    context "when collection item is rejected by collection and approved by user" do
-      subject(:email) { UserMailer.added_to_collection_notification(user.id, work.id, collection.id).deliver }
-
-      before do
-        collection_item.reject_by_collection
-        collection_item.approve_by_user
-        collection_item.save
-      end
-
-      # Test the headers
-      it_behaves_like "an email with a valid sender"
-
-      it_behaves_like "an added_to_collection_notification with the correct subject line"
-
-      # Test both body contents
-      it_behaves_like "a multipart email"
-
-      it_behaves_like "a translated email"
-
-      it_behaves_like "an added_to_collection_notification with the correct content", "Manage Collection Items Rejected by Collection"
-    end
-
-    context "when collection item is rejected by collection and unreviewed by user" do
-      subject(:email) { UserMailer.added_to_collection_notification(user.id, work.id, collection.id).deliver }
-
-      before do
-        collection_item.update_attributes(collection_approval_status: CollectionItem::REJECTED, user_approval_status: CollectionItem::NEUTRAL)
-      end
-
-      # Test the headers
-      it_behaves_like "an email with a valid sender"
-
-      it_behaves_like "an added_to_collection_notification with the correct subject line"
-
-      # Test both body contents
-      it_behaves_like "a multipart email"
-
-      it_behaves_like "a translated email"
-
-      it_behaves_like "an added_to_collection_notification with the correct content", "Manage Collection Items Awaiting User Approval"
-    end
-
-    context "when collection item is rejected by collection and rejected by user" do
-      subject(:email) { UserMailer.added_to_collection_notification(user.id, work.id, collection.id).deliver }
-
-      before do
-        collection_item.update_attributes(collection_approval_status: CollectionItem::REJECTED, user_approval_status: CollectionItem::REJECTED)
-      end
-
-      # Test the headers
-      it_behaves_like "an email with a valid sender"
-
-      it_behaves_like "an added_to_collection_notification with the correct subject line"
-
-      # Test both body contents
-      it_behaves_like "a multipart email"
-
-      it_behaves_like "a translated email"
-
-      it_behaves_like "an added_to_collection_notification with the correct content", "Manage Collection Items Rejected by User"
     end
   end
 end
