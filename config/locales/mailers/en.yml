@@ -251,15 +251,16 @@ en:
     added_to_collection_notification:
       subject: "[%{app_name}][%{collection_title}] Your work was added to a collection"
       greeting: "Dear %{default_pseud},"
+      approved_collection_items_page_name: "Approved Collection Items page"
       preferences_page_name: "Preferences"
       collected_work_preference: "\"Automatically agree to your work being collected by others in the Archive.\""
       part2: "You are receiving this notification because you have previously elected to allow automatic inclusion of your works into collections on the Archive of Our Own."
       part5: "Thanks!"
       text:
         part1: "The collection maintainers of %{collection_title} have added your work (%{work_title}) to their collection!"
-        part3: "If you would like to remove your work from this collection, please visit your \"%{manage_page_name}\": %{manage_url}."
+        part3: "If you would like to remove your work from this collection, please visit your \"Approved Collection Items\" page: %{approved_collection_items_url}."
         part4: "If in future you would prefer to individually accept or reject requests to add your works to collections, please edit your %{preferences_page_name} (%{preferences_url}) and untick the box next to %{collected_work_preference}."
       html:
         part1: "The collection maintainers of %{collection_link} have added your work %{work_link} to their collection!"
-        part3: "If you would like to remove your work from this collection, please visit your %{manage_link}."
+        part3: "If you would like to remove your work from this collection, please visit your %{approved_collection_items_link}."
         part4: "If in future you would prefer to individually accept or reject requests to add your works to collections, please edit your %{preferences_link} and untick the box next to:"

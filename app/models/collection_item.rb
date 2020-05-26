@@ -275,10 +275,6 @@ class CollectionItem < ApplicationRecord
   def rejected_by_user?
     self.user_approval_status == REJECTED
   end
-  
-  def unreviewed_by_user?
-    self.user_approval_status == NEUTRAL
-  end
 
   def approve_by_collection
     self.collection_approval_status = APPROVED
@@ -294,10 +290,6 @@ class CollectionItem < ApplicationRecord
   
   def rejected_by_collection?
     self.collection_approval_status == REJECTED
-  end
-  
-  def unreviewed_by_collection?
-    self.collection_approval_status == NEUTRAL
   end
 
   def approved?

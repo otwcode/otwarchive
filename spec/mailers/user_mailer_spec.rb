@@ -387,50 +387,34 @@ describe UserMailer do
     let(:collection) { create(:collection, title: "Faves & Stuff") }
     let(:work) { create(:work, title: Faker::Book.title) }
 
-    let!(:collection_item) { create(:collection_item,
-                                    collection_id: collection.id,
-                                    item_id: work.id,
-                                    item_type: "Work")
-                           }
+    subject(:email) { UserMailer.added_to_collection_notification(user.id, work.id, collection.id).deliver }
 
-    # collection_approval_status, user_approval_status, link text
-    [
-      [CollectionItem::APPROVED, CollectionItem::APPROVED, "Manage Approved Collection Items"],
-      [CollectionItem::APPROVED, CollectionItem::NEUTRAL, "Manage Collection Items Awaiting User Approval"],
-      [CollectionItem::APPROVED, CollectionItem::REJECTED, "Manage Collection Items Rejected by User"],
-      [CollectionItem::NEUTRAL, CollectionItem::APPROVED, "Manage Collection Items Awaiting Collection Approval"],
-      [CollectionItem::NEUTRAL, CollectionItem::NEUTRAL, "Manage Collection Items Awaiting User Approval"],
-      [CollectionItem::NEUTRAL, CollectionItem::REJECTED, "Manage Collection Items Rejected by User"],
-      [CollectionItem::REJECTED, CollectionItem::APPROVED, "Manage Collection Items Rejected by Collection"],
-      [CollectionItem::REJECTED, CollectionItem::NEUTRAL, "Manage Collection Items Awaiting User Approval"],
-      [CollectionItem::REJECTED, CollectionItem::REJECTED, "Manage Collection Items Rejected by User"]
-    ].each do |scenario|
-      collection_status_name = case scenario[0]
-                               when CollectionItem::APPROVED
-                                 "approved"
-                               when CollectionItem::NEUTRAL
-                                 "unreviewed"
-                               when CollectionItem::REJECTED
-                                 "rejected"
-                               end
+    # Test the headers
+    it_behaves_like "an email with a valid sender"
 
-      user_status_name = case scenario[1]
-                         when CollectionItem::APPROVED
-                           "approved"
-                         when CollectionItem::NEUTRAL
-                           "unreviewed"
-                         when CollectionItem::REJECTED
-                           "rejected"
-                         end
+    it "has the correct subject line" do
+      subject = "[#{ArchiveConfig.APP_SHORT_NAME}][#{collection.title}] Your work was added to a collection"
+      expect(email).to have_subject(subject)
+    end
 
-      context "when collection item is #{collection_status_name} by collection and #{user_status_name} by user" do
-        subject(:email) { UserMailer.added_to_collection_notification(user.id, work.id, collection.id).deliver }
+    # Test both body contents
+    it_behaves_like "a multipart email"
 
-        before do
-          collection_item.update_attributes(collection_approval_status: scenario[0], user_approval_status: scenario[1])
-        end
+    it_behaves_like "a translated email"
+    
+    describe "HTML version" do
+      it "has the correct content" do
+        expect(email).to have_html_part_content(">#{collection.title}</a> have added your work <")
+        expect(email).to have_html_part_content("previously elected to allow automatic inclusion")
+        expect(email).to have_html_part_content(">Approved Collection Items page<")
+      end
+    end
 
-        it_behaves_like "an added_to_collection_notification email", scenario[2]
+    describe "text version" do
+      it "has the correct content" do
+        expect(email).to have_text_part_content("#{collection.title} have added your work (#{work.title})")
+        expect(email).to have_text_part_content("previously elected to allow automatic inclusion")
+        expect(email).to have_text_part_content("\"Approved Collection Items\" page:")
       end
     end
   end

@@ -5,9 +5,7 @@
 
 <%= t(".part2") %>
 
-<%= t(".text.part3",
-  manage_page_name: user_manage_collection_items_page_name(@collection_item),
-  manage_url: user_manage_collection_items_url(@user, @collection_item)) %>
+<%= t(".text.part3", approved_collection_items_url: user_collection_items_url(@user, status: "approved")) %>
 
 <%= t(".text.part4", preferences_page_name: t(".preferences_page_name"), preferences_url: user_preferences_url(@user), collected_work_preference: t(".collected_work_preference")) %>
 

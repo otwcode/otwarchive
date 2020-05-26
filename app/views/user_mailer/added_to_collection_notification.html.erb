@@ -1,20 +1,13 @@
 <% content_for :message do %>
-  <p><%= t(".greeting",
-    default_pseud: style_bold(@user.default_pseud.byline)).html_safe %></p>
+  <p><%= t(".greeting", default_pseud: style_bold(@user.default_pseud.byline)).html_safe %></p>
 
-  <p><%= t(".html.part1", 
-      collection_link: style_link(@collection.title, collection_url(@collection)),
-      work_link: style_link(@work.title, work_url(@work))
-  ).html_safe %></p>
+  <p><%= t(".html.part1", collection_link: style_link(@collection.title, collection_url(@collection)), work_link: style_link(@work.title, work_url(@work))).html_safe %></p>
 
   <p><%= t(".part2") %></p>
 
-  <p><%= t(".html.part3",
-      manage_link: user_manage_collection_items_link(@user, @collection_item)).html_safe %></p>
+  <p><%= t(".html.part3", approved_collection_items_link: style_link(t(".approved_collection_items_page_name"), user_collection_items_url(@user, status: "approved"))).html_safe %></p>
 
-  <p><%= t(".html.part4",
-    preferences_link: style_link(t(".preferences_page_name"), user_preferences_url(@user))
-    ).html_safe %>
+  <p><%= t(".html.part4", preferences_link: style_link(t(".preferences_page_name"), user_preferences_url(@user))).html_safe %>
 
   <p><%= style_quote(t(".collected_work_preference")) %></p>
 
