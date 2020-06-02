@@ -582,6 +582,21 @@ namespace :After do
     end
   end
 
+  desc "Enforce HTTPS where available for embedded media from ning.com and vidders.net"
+  task(enforce_https_viddersnet: :environment) do
+    Chapter.find_each do |chapter|
+      puts chapter.id if (chapter.id % 1000).zero?
+      if chapter.content.match /<(embed|iframe) .*(ning\.com|vidders\.net)/
+        begin
+          chapter.content_sanitizer_version = -1
+          chapter.sanitize_field(chapter, :content)
+        rescue StandardError
+          puts "couldn't update chapter #{chapter.id}"
+        end
+      end
+    end
+  end
+
   desc "Fix crossover status for works with two fandom tags."
   task(crossover_reindex_works_with_two_fandoms: :environment) do
     # Find all works with two fandom tags:
