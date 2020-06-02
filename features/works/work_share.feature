@@ -27,7 +27,7 @@ Feature: Share Works
     When I follow "Share"
     Then the share modal should contain "Copy and paste the following code to link back to this work"
       And the share modal should contain "or use the Tweet or Tumblr links to share the work"
-      And the share modal should contain '<a href="http://%{current_host}/works/1"><strong>Blabla</strong></a> (6 words)'
+      And the share modal should contain '<a href="%{current_url}"><strong>Blabla</strong></a> (6 words)'
       And the share modal should contain 'by <a href="http://%{current_host}/users/testuser1"><strong>testuser1</strong></a>'
       And the share modal should contain 'Fandom: <a href="http://%{current_host}/tags/Stargate%%20SG-1">Stargate SG-1</a>'
       And the share modal should contain "Rating: Not Rated"
