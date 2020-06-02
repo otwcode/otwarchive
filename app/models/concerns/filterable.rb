@@ -26,14 +26,16 @@ module Filterable
 
   class_methods do
     # Update the filters for all filterables in this relation.
-    def update_filters(async_update: false)
+    def update_filters(async_update: false,
+                       reindex_queue: :background,
+                       job_queue: :utilities)
       batch_size = ArchiveConfig.FILTER_UPDATE_BATCH_SIZE
 
       select(:id).find_in_batches(batch_size: batch_size) do |batch|
-        updater = FilterUpdater.new(base_class, batch.map(&:id), :background)
+        updater = FilterUpdater.new(base_class, batch.map(&:id), reindex_queue)
 
         if async_update
-          updater.async_update
+          updater.async_update(job_queue: job_queue)
         else
           updater.update
         end

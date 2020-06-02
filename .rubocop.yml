@@ -21,10 +21,16 @@ Layout/TrailingWhitespace:
 Lint/AmbiguousRegexpLiteral:
   Enabled: false
 
+Metrics/AbcSize:
+  Enabled: false
+
 Metrics/BlockLength:
   Enabled: false
 
 Metrics/ClassLength:
+  Enabled: false
+
+Metrics/CyclomaticComplexity:
   Enabled: false
 
 Metrics/LineLength:
@@ -35,6 +41,18 @@ Metrics/MethodLength:
 
 Metrics/ModuleLength:
   Enabled: false
+
+Metrics/PerceivedComplexity:
+  Enabled: false
+
+Style/ClassAndModuleChildren:
+  Enabled: false
+
+Style/Documentation:
+  Enabled: false
+
+Style/EmptyMethod:
+  EnforcedStyle: expanded
 
 # prefer template tokens (like %{foo}) over annotated tokens (like %s)
 Style/FormatStringToken:
@@ -51,6 +69,9 @@ Style/GlobalVars:
 # stop checking if uses of "self" are redundant
 Style/RedundantSelf:
   Enabled: false
+
+Style/SingleLineMethods:
+  AllowIfMethodIsEmpty: false
 
 # stop checking quotation marks
 Style/StringLiterals:

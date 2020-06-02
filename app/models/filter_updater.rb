@@ -7,16 +7,16 @@
 class FilterUpdater
   include AfterCommitEverywhere
 
-  attr_reader :klass, :type, :ids, :queue
+  attr_reader :klass, :type, :ids, :reindex_queue
 
   # Takes as argument the type of filterable that we're modifying, the list of
   # IDs of filterables that we're modifying, and the priority of the current
-  # change. (The priority, queue, is not actually used in this class. It's just
+  # change. (The priority, reindex_queue, is not used in this class. It's just
   # passed along to the filterable class through reindex_for_filter_changes.)
-  def initialize(type, ids, queue)
+  def initialize(type, ids, reindex_queue)
     @type = type.to_s
     @ids = ids.to_a
-    @queue = queue
+    @reindex_queue = reindex_queue
 
     @klass = [Work, ExternalWork].find { |klass| klass.to_s == @type }
 
@@ -32,16 +32,14 @@ class FilterUpdater
   # DELAY CALCULATIONS WITH RESQUE
   ########################################
 
-  @queue = :utilities
-
   # Put this object on the Resque queue so that update will be called later.
-  def async_update
-    Resque.enqueue(self.class, type, ids, queue)
+  def async_update(job_queue: :utilities)
+    Resque.enqueue_to(job_queue, self.class, type, ids, reindex_queue)
   end
 
   # Perform for Resque.
-  def self.perform(type, ids, queue)
-    FilterUpdater.new(type, ids, queue).update
+  def self.perform(type, ids, reindex_queue)
+    FilterUpdater.new(type, ids, reindex_queue).update
   end
 
   ########################################
@@ -96,7 +94,7 @@ class FilterUpdater
   # Notify the filterable class about the changes that we made, so that it can
   # perform the appropriate steps to reindex everything.
   def reindex_changed
-    klass.reindex_for_filter_changes(@valid_item_ids, @modified, queue)
+    klass.reindex_for_filter_changes(@valid_item_ids, @modified, reindex_queue)
   end
 
   ########################################

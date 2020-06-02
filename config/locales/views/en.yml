@@ -42,16 +42,16 @@ en:
         description: "Send in this work to be reindexed. Use this option if the work isn't appearing in searches, or is appearing in searches that it shouldn't. (e.g. If someone has orphaned their work and it can still be found with the old name, or if it's not behaving as expected when you filter crossovers, completion status, word count, etc.)"
       update_tag_filters:
         title: "Update Tag Filters"
-        description: "Recalculate filters for all works directly tagged with this tag or one of its synonyms. Does not include subtags. Use this option if wrangling seems to have gone wrong. (e.g. If the tag works list is missing works tagged with a synonym, or if the tags listed in the sidebar are extremely wrong. Keep in mind that the tags listed in the sidebar will never be 100% correct, but if there's a non-canonical tag listed, or if the count is off by an order of magnitude, you should probably use this option.)"
+        description: "Recalculate filters for all works directly tagged with this tag or one of its synonyms. Does not include subtags. Use this option if the filters include old canonical tags that have been renamed or old parent tags that works aren't tagged with, or if the tag counts are wildly off. Also use this option if the works from a synonym are not showing on the works page of the canonical within a half hour of the tag being synned. Keep in mind that the tags listed in the filters will never be 100% correct."
       reindex_tag:
         title: "Reindex Tag"
-        description: "Reindex this tag and all related works, bookmarks, series, pseuds, and external works."
+        description: "Reindex this tag and all related works, bookmarks, series, pseuds, and external works. Use this option if none of the others have worked. It will not fix autocomplete issues."
       fix_counts:
         title: "Fix Tag Counts"
-        description: "Try to recalculate some counts associated with this tag (both filter counts and taggings counts). Keep in mind that the tag counts listed in the fandom lists include unrevealed works, so if the count is only a little off it may just be unrevealed works."
+        description: "Try to recalculate some counts associated with this tag (both filter counts and taggings counts). Keep in mind that the tag counts listed in the fandom lists include unrevealed works and drafts, so if the count is only a little off it may just be unrevealed works or drafts."
       fix_associations:
         title: "Fix Tag Associations"
-        description: "Try to delete invalid associations involving this tag. (e.g. Parents of the wrong type, children of the wrong type, duplicate parents/children/meta-tags/sub-tags, etc.)"
+        description: "Try to delete invalid associations involving this tag (e.g., parents of the wrong type, children of the wrong type, duplicate parents/children/metatags/subtags, etc.). Most of these impossible relationships appear on tag landing pages."
       fix_meta_tags:
-        title: "Fix Meta Tags"
-        description: "Try to recalculate inherited metatags. Use this option if this tag has grandparent metatags (i.e. a metatag with its own metatag), and the works aren't showing up in the grandparent's listing. You might also try this if you've removed a metatag, but the works are still showing up in the former metatag's listing."
+        title: "Fix Metatags"
+        description: "Try to recalculate inherited metatags. Use this option if this tag has grandparent metatags (i.e., a metatag with its own metatag), and the works aren't showing up in the grandparent's listing. You might also try this if you've removed a metatag, but the works are still showing up in the former metatag's listing. If the works still don't go away, ask a staffer to run \"Update Tag Filters\" on this tag."

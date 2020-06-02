@@ -33,6 +33,14 @@
       return elem === doc.activeElement && !!(elem.type || elem.href);
     }
   </script>
+  <!--
+    Disable jQuery animations, because the autocomplete dropdown cannot be
+    clicked while it's in the slideDown animation. This causes intermittent
+    failures in JavaScript-based autocomplete tests.
+  -->
+  <script type="text/javascript">
+    jQuery.fx.off = true;
+  </script>
 <% end %>
 
 <script type="text/javascript">$j = jQuery.noConflict();</script>
@@ -73,8 +81,7 @@
         if (isSupported()) {
           localStorage.setItem("accepted_tos", "<%= @current_tos_version %>");
         } else {
-          // 20 years is the Rails maximum. 
-          Cookies.set("accepted_tos", "<%= @current_tos_version %>", { expires: 7300 });
+          Cookies.set("accepted_tos", "<%= @current_tos_version %>", { expires: 365 });
         }
       }
     <% end %>
