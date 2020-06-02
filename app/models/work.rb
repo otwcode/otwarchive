@@ -1157,9 +1157,9 @@ class Work < ApplicationRecord
     return unless hidden_by_admin? && saved_change_to_hidden_by_admin?
     users.each do |user|
       if spam?
-        UserMailer.admin_spam_work_notification(id, user.id).deliver
+        UserMailer.admin_spam_work_notification(id, user.id).deliver_after_commit
       else
-        UserMailer.admin_hidden_work_notification(id, user.id).deliver
+        UserMailer.admin_hidden_work_notification(id, user.id).deliver_after_commit
       end
     end
   end
