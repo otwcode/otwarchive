@@ -699,6 +699,6 @@ Then /^the share modal should contain ("|')(.*?)\1$/ do |quote, text|
   # to be copy-pasted to other sites. This means any expected text that includes
   # a link needs to use the current Capybara host instead of example.com.
   # Usage: Put %{current_host} in place of a domain name in the test.
-  text = text % { :current_host => "#{Capybara.current_session.server.host}:#{Capybara.current_session.server.port}" }
+  text = format(text, current_host: "#{Capybara.current_session.server.host}:#{Capybara.current_session.server.port}")
   step %{I should see #{quote}#{text}#{quote} within "#share"}
 end
