@@ -15,7 +15,7 @@ Feature: Share Works
       And the share modal should contain 'Fandom: <a href="http://%{current_host}/tags/Stargate%%20SG-1">Stargate SG-1</a>'
       And the share modal should contain "Rating: Not Rated"
       And the share modal should contain "Warnings: No Archive Warnings Apply"
-      And I should see "Tweet" within "a.twitter"
+      And I should see "Tweet" within "li.twitter"
       And I should see "Share on Tumblr" within "div#share ul li a[title]"
       And I should not see "Series:" within "#share"
       And I should not see "Relationships:" within "#share"
@@ -32,7 +32,7 @@ Feature: Share Works
       And the share modal should contain 'Fandom: <a href="http://%{current_host}/tags/Stargate%%20SG-1">Stargate SG-1</a>'
       And the share modal should contain "Rating: Not Rated"
       And the share modal should contain "Warnings: No Archive Warnings Apply"
-      And I should see "Tweet" within "a.twitter"
+      And I should see "Tweet" within "li.twitter"
       And I should see "Share on Tumblr" within "div#share ul li a[title]"
       And I should not see "Series:" within "#share"
       And I should not see "Relationships:" within "#share"
