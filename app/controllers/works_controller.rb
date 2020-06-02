@@ -227,10 +227,21 @@ class WorksController < ApplicationController
 
   # GET /works/1/share
   def share
-    if @work.unrevealed?
-      render template: "errors/404", status: :not_found
+    if request.xhr?
+      if @work.unrevealed?
+        render template: "errors/404", status: :not_found
+      else
+        render layout: false
+      end
     else
-      render layout: false
+      # Avoid getting an unstyled page if JavaScript is disabled
+      flash[:error] = ts('Sorry, you need to have JavaScript enabled for this.')
+      if request.env['HTTP_REFERER']
+        redirect_to(request.env['HTTP_REFERER'] || root_path)
+      else
+        # else branch needed to deal with bots, which don't have a referer
+        redirect_to '/'
+      end
     end
   end
 

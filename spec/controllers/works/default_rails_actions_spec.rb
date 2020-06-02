@@ -247,8 +247,16 @@ describe WorksController, work_search: true do
       unrevealed_collection = create :unrevealed_collection
       unrevealed_work = create :work, collections: [unrevealed_collection]
 
-      get :share, params: { id: unrevealed_work.id }
+      get :share, params: { id: unrevealed_work.id }, xhr: true
       expect(response.status).to eq(404)
+    end
+
+    it "redirects to referer with an error for non-ajax warnings requests" do
+      work = create(:work)
+      referer = work_path(work)
+      request.headers["HTTP_REFERER"] = referer
+      get :share, params: { id: work.id }
+      it_redirects_to_with_error(referer, "Sorry, you need to have JavaScript enabled for this.")
     end
   end
 

@@ -2,6 +2,7 @@
 Feature: Share Works
   Testing the "Share" button on works, with Javascript emulation
 
+  @javascript
   Scenario: Share a work
     Given I have a work "Blabla"
     When I view the work "Blabla"
@@ -54,6 +55,7 @@ Feature: Share Works
     And I view the work "Don't Lie When You're Hurting Inside"
   Then I should not see "Share"
 
+  @javascript
   Scenario: Sharing should work for multi-chapter works
     Given the chaptered work "Whatever"
     When I view the work "Whatever"
