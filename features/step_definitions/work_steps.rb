@@ -693,3 +693,12 @@ end
 Then /^the Remove Me As Chapter Co-Creator option should not be on the ([\d]+)(?:st|nd|rd|th) chapter$/ do |chapter_number|
   step %{I should not see "Remove Me As Chapter Co-Creator" within "ul#sortable_chapter_list > li:nth-of-type(#{chapter_number})"}
 end
+
+Then /^the share modal should contain ("|')(.*?)\1$/ do |quote, text|
+  # The share modal contains links with a domain name, since it is intended
+  # to be copy-pasted to other sites. This means any expected text that includes
+  # a link needs to use the current Capybara host instead of example.com.
+  # Usage: Put %{current_host} in place of a domain name in the test.
+  text = text % { :current_host => "#{Capybara.current_session.server.host}:#{Capybara.current_session.server.port}" }
+  step %{I should see #{quote}#{text}#{quote} within "#share"}
+end
