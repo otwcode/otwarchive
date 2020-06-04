@@ -383,7 +383,7 @@ describe UserMailer do
   end
 
   describe "batch_subscription_notification" do
-    let(:work) { create(:posted_work, summary: "<p>Paragraph <u>one</u>.</p><p>Paragraph 2.</p>") }
+    let(:work) { create(:work, summary: "<p>Paragraph <u>one</u>.</p><p>Paragraph 2.</p>") }
     let(:chapter) { create(:chapter, work: work, posted: true, summary: "<p><b>Another</b> HTML summary.</p>") } 
     let(:subscription) { create(:subscription, subscribable: work) }
 
