@@ -37,9 +37,9 @@ module CreationNotifier
                                    recipient_emails_off: false).pluck(:user_id)
       recip_ids.each do |userid|
         if self.collections.empty? || self.collections.first.nil?
-          UserMailer.recipient_notification(userid, self.id).deliver
+          UserMailer.recipient_notification(userid, self.id).deliver_after_commit
         else
-          UserMailer.recipient_notification(userid, self.id, self.collections.first.id).deliver
+          UserMailer.recipient_notification(userid, self.id, self.collections.first.id).deliver_after_commit
         end
       end
     end
@@ -85,9 +85,9 @@ module CreationNotifier
   def notify_prompters
     if !self.challenge_claims.empty? && !self.unrevealed?
       if self.collections.first.nil?
-        UserMailer.prompter_notification(self.id,).deliver
+        UserMailer.prompter_notification(self.id,).deliver_after_commit
       else
-        UserMailer.prompter_notification(self.id, self.collections.first.id).deliver
+        UserMailer.prompter_notification(self.id, self.collections.first.id).deliver_after_commit
       end
     end
   end

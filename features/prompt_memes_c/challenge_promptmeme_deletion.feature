@@ -113,13 +113,15 @@ Feature: Prompt Meme Challenge
   Then I should see "Work was successfully updated."
     And I should see "My New Tag"
 
-  Scenario: A mod can delete a prompt meme and all the claims and sign-ups will
-  be deleted with it, but the collection will remain
+  Scenario: A mod can delete a prompt meme without needing Javascript and all the
+  claims and sign-ups will be deleted with it, but the collection will remain
 
   Given everyone has signed up for Battle 12
     And "myname4" has claimed a prompt from Battle 12
   When I am logged in as "mod1"
     And I delete the challenge "Battle 12"
+  Then I should see "Are you sure you want to delete the challenge from the collection Battle 12? All sign-ups, assignments, and settings will be lost. (Works and bookmarks will remain in the collection.)"
+  When I press "Yes, Delete Challenge"
   Then I should see "Challenge settings were deleted."
     And I should not see the prompt meme dashboard for "Battle 12"
     And no one should have a claim in "Battle 12"

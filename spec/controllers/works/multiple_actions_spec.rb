@@ -9,8 +9,8 @@ describe WorksController do
 
   describe "edit_multiple" do
     it "should redirect to the orphan path when the Orphan button was clicked" do
-      work1 = create(:work, authors: [multiple_works_user.default_pseud], posted: true)
-      work2 = create(:work, authors: [multiple_works_user.default_pseud], posted: true)
+      work1 = create(:work, authors: [multiple_works_user.default_pseud])
+      work2 = create(:work, authors: [multiple_works_user.default_pseud])
       work_ids = [work1.id, work2.id]
       fake_login_known_user(multiple_works_user)
       post :edit_multiple, params: { id: work1.id, work_ids: work_ids, commit: "Orphan" }
@@ -20,8 +20,8 @@ describe WorksController do
 
   describe "confirm_delete_multiple" do
     it "should return the works specified in the work_ids parameters" do
-      work1 = create(:work, authors: [multiple_works_user.default_pseud], posted: true)
-      work2 = create(:work, authors: [multiple_works_user.default_pseud], posted: true)
+      work1 = create(:work, authors: [multiple_works_user.default_pseud])
+      work2 = create(:work, authors: [multiple_works_user.default_pseud])
       fake_login_known_user(multiple_works_user)
       params = { commit: "Orphan", id: work1.id, work_ids: [work1.id, work2.id] }
       post :confirm_delete_multiple, params: params
@@ -34,14 +34,12 @@ describe WorksController do
     let(:multiple_work1) {
       create(:work,
              authors: [multiple_works_user.default_pseud],
-             title: "Work 1",
-             posted: true)
+             title: "Work 1")
     }
     let(:multiple_work2) {
       create(:work,
              authors: [multiple_works_user.default_pseud],
-             title: "Work 2",
-             posted: true)
+             title: "Work 2")
     }
 
     before do
@@ -67,16 +65,14 @@ describe WorksController do
              authors: [multiple_works_user.default_pseud],
              title: "Work 1",
              anon_commenting_disabled: true,
-             moderated_commenting_enabled: true,
-             posted: true)
+             moderated_commenting_enabled: true)
     }
     let(:multiple_work2) {
       create(:work,
              authors: [multiple_works_user.default_pseud],
              title: "Work 2",
              anon_commenting_disabled: true,
-             moderated_commenting_enabled: true,
-             posted: true)
+             moderated_commenting_enabled: true)
     }
     let(:params) {
       {

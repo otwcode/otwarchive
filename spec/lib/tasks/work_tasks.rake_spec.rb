@@ -17,7 +17,7 @@ describe "rake work:purge_old_drafts" do
   context "when there is a posted work that is 32 days old" do
     it "doesn't delete the work" do
       work = Delorean.time_travel_to 32.days.ago do
-        create(:posted_work)
+        create(:work)
       end
 
       subject.invoke

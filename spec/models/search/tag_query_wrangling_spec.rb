@@ -5,7 +5,7 @@ require "spec_helper"
 describe TagQuery, tag_search: true do
   context "searching tags by draft status" do
     let!(:work) do
-      create(:posted_work,
+      create(:work,
              fandom_string: "jjba,imas",
              character_string: "bruno,koume",
              relationship_string: "bruabba,koume/ryo",
@@ -36,7 +36,7 @@ describe TagQuery, tag_search: true do
       expect(results).to contain_exactly("action")
 
       # draft-only tags appear on another posted work
-      create(:posted_work,
+      create(:work,
              fandom_string: "zombie land saga",
              character_string: "saki",
              relationship_string: "saki/ai",
