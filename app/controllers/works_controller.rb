@@ -240,7 +240,7 @@ class WorksController < ApplicationController
         redirect_to(request.env["HTTP_REFERER"] || root_path)
       else
         # else branch needed to deal with bots, which don't have a referer
-        redirect_to "/"
+        redirect_to root_path
       end
     end
   end
