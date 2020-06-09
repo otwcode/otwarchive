@@ -235,12 +235,12 @@ class WorksController < ApplicationController
       end
     else
       # Avoid getting an unstyled page if JavaScript is disabled
-      flash[:error] = ts('Sorry, you need to have JavaScript enabled for this.')
-      if request.env['HTTP_REFERER']
-        redirect_to(request.env['HTTP_REFERER'] || root_path)
+      flash[:error] = ts("Sorry, you need to have JavaScript enabled for this.")
+      if request.env["HTTP_REFERER"]
+        redirect_to(request.env["HTTP_REFERER"] || root_path)
       else
         # else branch needed to deal with bots, which don't have a referer
-        redirect_to '/'
+        redirect_to "/"
       end
     end
   end
