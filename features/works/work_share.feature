@@ -8,13 +8,13 @@ Feature: Share Works
     When I view the work "Blabla"
     Then I should see "Share"
     When I follow "Share"
-    Then the share modal should contain "Copy and paste the following code to link back to this work"
-      And the share modal should contain "or use the Tweet or Tumblr links to share the work"
-      And the share modal should contain '<a href="%{current_url}"><strong>Blabla</strong></a> (6 words)'
-      And the share modal should contain 'by <a href="http://%{current_host}/users/testuser1"><strong>testuser1</strong></a>'
-      And the share modal should contain 'Fandom: <a href="http://%{current_host}/tags/Stargate%%20SG-1">Stargate SG-1</a>'
-      And the share modal should contain "Rating: Not Rated"
-      And the share modal should contain "Warnings: No Archive Warnings Apply"
+    Then I should see "Copy and paste the following code to link back to this work" within "#share"
+      And I should see "or use the Tweet or Tumblr links to share the work" within "#share"
+      And I should see '<strong>Blabla</strong></a> (6 words)' within "#share"
+      And I should see 'by <a href="http://www.example.com/users/testuser1"><strong>testuser1</strong></a>' within "#share"
+      And I should see 'Fandom: <a href="http://www.example.com/tags/Stargate%20SG-1">Stargate SG-1</a>' within "#share"
+      And I should see "Rating: Not Rated" within "#share"
+      And I should see "Warnings: No Archive Warnings Apply" within "#share"
       And the share modal should contain a Twitter share button
       And I should see "Share on Tumblr" within "div#share ul li a[title]"
       And I should not see "Series:" within "#share"
@@ -25,13 +25,13 @@ Feature: Share Works
       And I log out
     Then I should see "Share"
     When I follow "Share"
-    Then the share modal should contain "Copy and paste the following code to link back to this work"
-      And the share modal should contain "or use the Tweet or Tumblr links to share the work"
-      And the share modal should contain '<a href="%{current_url}"><strong>Blabla</strong></a> (6 words)'
-      And the share modal should contain 'by <a href="http://%{current_host}/users/testuser1"><strong>testuser1</strong></a>'
-      And the share modal should contain 'Fandom: <a href="http://%{current_host}/tags/Stargate%%20SG-1">Stargate SG-1</a>'
-      And the share modal should contain "Rating: Not Rated"
-      And the share modal should contain "Warnings: No Archive Warnings Apply"
+    Then I should see "Copy and paste the following code to link back to this work" within "#share"
+      And I should see "or use the Tweet or Tumblr links to share the work" within "#share"
+      And I should see '<strong>Blabla</strong></a> (6 words)' within "#share"
+      And I should see 'by <a href="http://www.example.com/users/testuser1"><strong>testuser1</strong></a>' within "#share"
+      And I should see 'Fandom: <a href="http://www.example.com/tags/Stargate%20SG-1">Stargate SG-1</a>' within "#share"
+      And I should see "Rating: Not Rated" within "#share"
+      And I should see "Warnings: No Archive Warnings Apply" within "#share"
       And the share modal should contain a Twitter share button
       And I should see "Share on Tumblr" within "div#share ul li a[title]"
       And I should not see "Series:" within "#share"

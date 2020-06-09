@@ -694,19 +694,6 @@ Then /^the Remove Me As Chapter Co-Creator option should not be on the ([\d]+)(?
   step %{I should not see "Remove Me As Chapter Co-Creator" within "ul#sortable_chapter_list > li:nth-of-type(#{chapter_number})"}
 end
 
-Then /^the share modal should contain ("|')(.*?)\1$/ do |quote, text|
-  # The share modal contains links with a domain name, since it is intended
-  # to be copy-pasted to other sites. This means any expected text that includes
-  # a link needs to use the current Capybara host instead of example.com.
-  # Usage: Put %{current_host} in place of a domain name in the test.
-  text = format(
-    text,
-    current_host: "#{Capybara.current_session.server.host}:#{Capybara.current_session.server.port}",
-    current_url: current_url,
-  )
-  step %{I should see #{quote}#{text}#{quote} within "#share"}
-end
-
 Then /^the share modal should contain a Twitter share button$/ do
   with_scope('#share') do
     iframe = find('li.twitter #twitter-widget-0')
