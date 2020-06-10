@@ -46,9 +46,9 @@ class Admin::AdminInvitationsController < Admin::BaseController
     elsif !invitation_params[:invitee_email].blank?
       @invitations = Invitation.where('invitee_email LIKE ?', "%#{invitation_params[:invitee_email]}%")
       @invitation = @invitations.first if @invitations.length == 1
-	  if @invitations.length == 0
-	    @invitations = nil
-	  end
+      if @invitations.length == 0
+	      @invitations = nil
+      end
     end
     unless @user || @invitation || @invitations
       flash.now[:error] = t('user_not_found', default: "No results were found. Try another search.")
