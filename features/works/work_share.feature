@@ -11,8 +11,8 @@ Feature: Share Works
     Then I should see "Copy and paste the following code to link back to this work" within "#share"
       And I should see "or use the Tweet or Tumblr links to share the work" within "#share"
       And I should see '<strong>Blabla</strong></a> (6 words)' within "#share"
-      And I should see 'by <a href="http://test.host/users/testuser1"><strong>testuser1</strong></a>' within "#share"
-      And I should see 'Fandom: <a href="http://test.host/tags/Stargate%20SG-1">Stargate SG-1</a>' within "#share"
+      And I should see 'by <a href="http://www.example.com/users/testuser1"><strong>testuser1</strong></a>' within "#share"
+      And I should see 'Fandom: <a href="http://www.example.com/tags/Stargate%20SG-1">Stargate SG-1</a>' within "#share"
       And I should see "Rating: Not Rated" within "#share"
       And I should see "Warnings: No Archive Warnings Apply" within "#share"
       And the share modal should contain a Twitter share button
@@ -28,8 +28,8 @@ Feature: Share Works
     Then I should see "Copy and paste the following code to link back to this work" within "#share"
       And I should see "or use the Tweet or Tumblr links to share the work" within "#share"
       And I should see '<strong>Blabla</strong></a> (6 words)' within "#share"
-      And I should see 'by <a href="http://test.host/users/testuser1"><strong>testuser1</strong></a>' within "#share"
-      And I should see 'Fandom: <a href="http://test.host/tags/Stargate%20SG-1">Stargate SG-1</a>' within "#share"
+      And I should see 'by <a href="http://www.example.com/users/testuser1"><strong>testuser1</strong></a>' within "#share"
+      And I should see 'Fandom: <a href="http://www.example.com/tags/Stargate%20SG-1">Stargate SG-1</a>' within "#share"
       And I should see "Rating: Not Rated" within "#share"
       And I should see "Warnings: No Archive Warnings Apply" within "#share"
       And the share modal should contain a Twitter share button
