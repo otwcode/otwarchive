@@ -13,6 +13,5 @@ Capybara.configure do |config|
   config.default_max_wait_time = 25
 end
 
-Capybara.app_host = "http://test.host"
 Capybara.default_driver = :rack_test
 Capybara.javascript_driver = :poltergeist
