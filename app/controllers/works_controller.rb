@@ -401,7 +401,7 @@ class WorksController < ApplicationController
           flash[:notice] << ts(" It should appear in work listings within the next few minutes.")
         end
         in_moderated_collection
-        redirect_to(@work)
+        redirect_to work_path(@work)
       else
         @chapter.errors.full_messages.each { |err| @work.errors.add(:base, err) }
         render :edit
