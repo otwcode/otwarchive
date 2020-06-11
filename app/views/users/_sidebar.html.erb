@@ -5,7 +5,7 @@
   <li><%= span_if_current ts("Profile"), user_profile_path(@user) %></li>
   <% if @user.pseuds.size > 1 %>
     <li class="pseud" aria-haspopup="true">
-      <% pseud_link_text = current_page?(@user) ? ts("Pseuds") : (@author ? @author.name : @user.login) %>
+      <% pseud_link_text = current_page?(@user) ? ts("Pseuds") : (@pseud ? @pseud.name : @user.login) %>
       <a href="#" title="<%= ts("Pseud Switcher") %>"><%= pseud_link_text %></a>
       <ul class="expandable secondary">
         <%= print_pseud_selector(@user.pseuds.abbreviated_list) %>

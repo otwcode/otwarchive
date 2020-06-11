@@ -24,5 +24,17 @@ describe "Users", type: :request do
         is_expected.to have_content("All Pseuds (4)")
       end
     end
+
+    it "always shows the current pseud above the selector" do
+      visit "/users/Zaphod/pseuds/Slartibartfast"
+
+      within("li.pseud > a") do
+        is_expected.to have_content("Slartibartfast")
+      end
+
+      within("ul.expandable") do
+        is_expected.not_to have_content("Slartibartfast")
+      end
+    end
   end
 end
