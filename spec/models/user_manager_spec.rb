@@ -47,7 +47,7 @@ describe User do
       end
 
       it "returns error if invalid admin action" do
-        manager = UserManager.new(admin, { user_login: user.login, admin_action: 'something_wicked' })
+        manager = UserManager.new(admin, user_login: user.login, admin_action: 'something_wicked')
         expect(manager.save).to be_falsey
       end
     end
@@ -58,22 +58,24 @@ describe User do
       let(:next_of_kin) { create(:user) }
 
       it "succeeds if next of kin info is filled out" do
-        manager = UserManager.new(admin, { 
+        manager = UserManager.new(
+          admin,
           user_login: user.login,
           next_of_kin_name: next_of_kin.login,
           next_of_kin_email: next_of_kin.email
-        })
+        )
         expect(manager.save).to be_truthy
         expect(manager.successes).to eq ["Fannish next of kin was updated."]
       end
 
       it "succeeds if suspension info is filled out" do
-        manager = UserManager.new(admin, { 
+        manager = UserManager.new(
+          admin,
           user_login: user.login,
           admin_action: 'suspend',
           suspend_days: '5',
           admin_note: 'User violated community guidelines'
-        })
+        )
         expect(manager.save).to be_truthy
         expect(manager.successes).to eq ["User has been temporarily suspended."]
       end
