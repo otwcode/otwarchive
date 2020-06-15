@@ -81,8 +81,7 @@
         if (isSupported()) {
           localStorage.setItem("accepted_tos", "<%= @current_tos_version %>");
         } else {
-          // 20 years is the Rails maximum. 
-          Cookies.set("accepted_tos", "<%= @current_tos_version %>", { expires: 7300 });
+          Cookies.set("accepted_tos", "<%= @current_tos_version %>", { expires: 365 });
         }
       }
     <% end %>

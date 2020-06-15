@@ -273,43 +273,6 @@ module CommentsHelper
     end
   end
 
-  # non-JavaScript fallbacks for great justice!
-
-  def fallback_url_for_top_level(commentable, options = {})
-    default_options = {anchor: "comments"}
-    if commentable.is_a?(Tag)
-      default_options[:controller] = :comments
-      default_options[:action] = :index
-      default_options[:tag_id] = commentable.name
-    else
-      default_options[:controller] = commentable.class.to_s.underscore.pluralize
-      default_options[:action] = "show"
-      default_options[:id] = commentable.id
-    end
-    default_options[:add_comment] = params[:add_comment] if params[:add_comment]
-    default_options[:show_comments] = params[:show_comments] if params[:show_comments]
-
-    options = default_options.merge(options)
-    url_for(options)
-  end
-
-  def fallback_url_for_comment(comment, options = {})
-    default_options = {anchor: "comment_#{comment.id}"}
-    default_options[:action] = "show"
-    default_options[:show_comments] = true
-    default_options[:id] = comment.id if comment.ultimate_parent.is_a?(Tag)
-
-    options = default_options.merge(options)
-
-    if @thread_view # hopefully means we're on a Thread page
-      options[:id] = @thread_root if @thread_root
-      url_for(options)
-    else # Top Level Commentable
-      fallback_url_for_top_level(comment.ultimate_parent, options)
-    end
-
-  end
-
   # find the parent of the commentable
   def find_parent(commentable)
     if commentable.is_a?(Comment)

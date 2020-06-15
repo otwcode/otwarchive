@@ -3,6 +3,13 @@ require 'cucumber/timecop'
 require 'email_spec/cucumber'
 
 Before do
+  # Create default settings if necessary, since the database is truncated
+  # after every test.
+  #
+  # Enable our experimental caching, skipping validations which require
+  # setting an admin as the last updater.
+  AdminSetting.default.update_attribute(:enable_test_caching, true)
+
   # Create default language and locale.
   Locale.default
 
