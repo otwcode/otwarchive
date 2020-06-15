@@ -34,7 +34,6 @@ Given /^I am logged in as an admin$/ do
 end
 
 Given /^I am logged in as superadmin$/ do
-  step("I have an AdminSetting")
   step("I am logged out")
   admin = Admin.find_by(login: "superadmin")
   if admin.blank?
