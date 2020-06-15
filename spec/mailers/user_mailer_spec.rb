@@ -381,4 +381,55 @@ describe UserMailer do
       end
     end
   end
+
+  describe "batch_subscription_notification" do
+    let(:work) { create(:work, summary: "<p>Paragraph <u>one</u>.</p><p>Paragraph 2.</p>") }
+    let(:chapter) { create(:chapter, work: work, posted: true, summary: "<p><b>Another</b> HTML summary.</p>") } 
+    let(:subscription) { create(:subscription, subscribable: work) }
+
+    subject(:email) { UserMailer.batch_subscription_notification(subscription.id, ["Work_#{work.id}", "Chapter_#{chapter.id}"].to_json).deliver }
+
+    # Test the headers
+    it_behaves_like "an email with a valid sender"
+
+    it "has the correct subject line" do
+      subject = "[#{ArchiveConfig.APP_SHORT_NAME}] #{subscription.subject_text(work)} and 1 more"
+      expect(email).to have_subject(subject)
+    end
+
+    # Test both body contents
+    it_behaves_like "a multipart email"
+
+    describe "HTML version" do
+      it "has the correct content" do
+        expect(email).to have_html_part_content("new work")
+        expect(email).to have_html_part_content("new chapter of")
+      end
+
+      it "includes HTML from the work summary" do
+        expect(email).to have_html_part_content("<p>Paragraph <u>one</u>.</p>")
+        expect(email).to have_html_part_content("<p>Paragraph 2.</p>")
+      end
+
+      it "includes HTML from the chapter summary" do
+        expect(email).to have_html_part_content("<p><b>Another</b> HTML summary.</p>")
+      end
+    end
+
+    describe "text version" do
+      it "has the correct content" do
+        expect(email).to have_text_part_content("new work")
+        expect(email).to have_text_part_content("new chapter of #{work.title}")
+      end
+
+      it "reformats HTML from the work summary" do
+        expect(email).to have_text_part_content("Paragraph _one_.")
+        expect(email).to have_text_part_content("Paragraph 2.")
+      end
+
+      it "reformats HTML from the chapter summary" do
+        expect(email).to have_text_part_content("*Another* HTML summary.")
+      end
+    end
+  end
 end

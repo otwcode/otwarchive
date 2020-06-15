@@ -303,13 +303,13 @@ class CollectionItem < ApplicationRecord
       recipient_pseuds = Pseud.parse_bylines(self.recipients, assume_matching_login: true)[:pseuds]
       recipient_pseuds.each do |pseud|
         unless pseud.user.preference.recipient_emails_off
-          UserMailer.recipient_notification(pseud.user.id, self.item.id, self.collection.id).deliver
+          UserMailer.recipient_notification(pseud.user.id, self.item.id, self.collection.id).deliver_after_commit
         end
       end
 
       # also notify prompters of responses to their prompt
       if item_type == "Work" && !item.challenge_claims.blank?
-        UserMailer.prompter_notification(self.item.id, self.collection.id).deliver
+        UserMailer.prompter_notification(self.item.id, self.collection.id).deliver_after_commit
       end
 
       # also notify the owners of any parent/inspired-by works
@@ -344,7 +344,7 @@ class CollectionItem < ApplicationRecord
       UserMailer.anonymous_or_unrevealed_notification(
         user.id, item.id, collection.id,
         anonymous: newly_anonymous, unrevealed: newly_unrevealed
-      ).deliver
+      ).deliver_after_commit
     end
   end
 end

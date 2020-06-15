@@ -1,35 +1,10 @@
-default_settings = {
-  invite_from_queue_enabled: ArchiveConfig.INVITE_FROM_QUEUE_ENABLED,
-  invite_from_queue_number: ArchiveConfig.INVITE_FROM_QUEUE_NUMBER,
-  invite_from_queue_frequency: ArchiveConfig.INVITE_FROM_QUEUE_FREQUENCY,
-  account_creation_enabled: true,
-  creation_requires_invite: true,
-  request_invite_enabled: true,
-  days_to_purge_unactivated: ArchiveConfig.DAYS_TO_PURGE_UNACTIVATED
-}
-
-def update_settings(settings)
-  admin_settings = AdminSetting.first_or_create
-  admin_settings.update_attributes(settings)
-  admin_settings.save(validate: false)
-end
-
 ### GIVEN
 
-Given /^I have an AdminSetting$/ do
-  unless AdminSetting.first
-    settings = AdminSetting.new(default_settings)
-    settings.save(validate: false)
-  end
-end
-
 Given /^the following admin settings are configured:$/ do |table|
-  settings = default_settings.merge(table.rows_hash.symbolize_keys)
-  update_settings settings
-end
-
-Given /^default admin settings$/ do
-  update_settings settings = {}
+  admin_settings = AdminSetting.first
+  admin_settings.assign_attributes(table.rows_hash.symbolize_keys)
+  # Skip validations which require setting an admin as the last updater.
+  admin_settings.save!(validate: false)
 end
 
 Given /the following admins? exists?/ do |table|
@@ -46,7 +21,6 @@ Given /^I am logged in as admin with role "([^\"]*)"$/ do |role|
 end
 
 Given /^I am logged in as an admin$/ do
-  step("I have an AdminSetting")
   step("I am logged out")
   admin = Admin.find_by(login: "testadmin")
   if admin.blank?
@@ -60,7 +34,6 @@ Given /^I am logged in as an admin$/ do
 end
 
 Given /^I am logged in as superadmin$/ do
-  step("I have an AdminSetting")
   step("I am logged out")
   admin = Admin.find_by(login: "superadmin")
   if admin.blank?
@@ -85,10 +58,6 @@ Given /^basic languages$/ do
   de.name = 'Deutsch'
   de.language_id = german.id
   de.save!
-end
-
-Given /^advanced languages$/ do
-  Language.find_or_create_by(short: "FR", name: "Francais")
 end
 
 Given /^downloads are off$/ do
@@ -258,12 +227,6 @@ When /^I make a multi-question FAQ post$/ do
   fill_in("archive_faq_questions_attributes_2_content", with: "This is an answer to the third question")
   fill_in("archive_faq_questions_attributes_2_anchor", with: "whatisao33")
   click_button("Post")
-end
-
-When /^there are (\d+) Archive FAQs$/ do |n|
-  (1..n.to_i).each do |i|
-    step %{I make a #{i} FAQ post}
-  end
 end
 
 When /^(\d+) Archive FAQs? exists?$/ do |n|
