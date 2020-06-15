@@ -15,8 +15,7 @@ Scenario: tag cloud should only contain top-level canonical freeforms in "No Fan
     metatag freeforms with uses show up and their subtags do not anymore TODO
     metatag freeforms with no uses do not show and neither do their subtags (which I think is bad) TODO
 
-  Given tag wrangling is on
-    And the following activated tag wrangler exists
+  Given the following activated tag wrangler exists
     | login  | password    |
     | Enigel | wrangulate! |
     And basic tags

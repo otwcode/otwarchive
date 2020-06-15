@@ -92,12 +92,12 @@ class Comment < ApplicationRecord
         users << self.comment_owner
       end
       if notify_user_by_email?(self.comment_owner) && notify_user_of_own_comments?(self.comment_owner)
-        CommentMailer.comment_sent_notification(self).deliver
+        CommentMailer.comment_sent_notification(self).deliver_after_commit
       end
 
       # send notification to the owner(s) of the ultimate parent, who can be users or admins
       if self.ultimate_parent.is_a?(AdminPost)
-        AdminMailer.edited_comment_notification(self.id).deliver
+        AdminMailer.edited_comment_notification(self.id).deliver_after_commit
       else
         # at this point, users contains those who've already been notified
         if users.empty?
@@ -109,7 +109,7 @@ class Comment < ApplicationRecord
         users.each do |user|
           unless user == self.comment_owner && !notify_user_of_own_comments?(user)
             if notify_user_by_email?(user) || self.ultimate_parent.is_a?(Tag)
-              CommentMailer.edited_comment_notification(user, self).deliver
+              CommentMailer.edited_comment_notification(user, self).deliver_after_commit
             end
             if notify_user_by_inbox?(user)
               update_feedback_in_inbox(user)
@@ -134,7 +134,7 @@ class Comment < ApplicationRecord
       users << self.comment_owner
     end
     if notify_user_by_email?(self.comment_owner) && notify_user_of_own_comments?(self.comment_owner)
-      CommentMailer.comment_sent_notification(self).deliver
+      CommentMailer.comment_sent_notification(self).deliver_after_commit
     end
 
     # Reply to owner of parent comment if this is a reply comment
@@ -144,7 +144,7 @@ class Comment < ApplicationRecord
 
     # send notification to the owner(s) of the ultimate parent, who can be users or admins
     if self.ultimate_parent.is_a?(AdminPost)
-      AdminMailer.comment_notification(self.id).deliver
+      AdminMailer.comment_notification(self.id).deliver_after_commit
     else
       # at this point, users contains those who've already been notified
       if users.empty?
@@ -156,7 +156,7 @@ class Comment < ApplicationRecord
       users.each do |user|
         unless user == self.comment_owner && !notify_user_of_own_comments?(user)
           if notify_user_by_email?(user) || self.ultimate_parent.is_a?(Tag)
-            CommentMailer.comment_notification(user, self).deliver
+            CommentMailer.comment_notification(user, self).deliver_after_commit
           end
           if notify_user_by_inbox?(user)
             add_feedback_to_inbox(user)
@@ -270,9 +270,9 @@ class Comment < ApplicationRecord
         if (have_different_owner?(parent_comment))
           if !parent_comment_owner || notify_user_by_email?(parent_comment_owner) || self.ultimate_parent.is_a?(Tag)
             if self.saved_change_to_edited_at?
-              CommentMailer.edited_comment_reply_notification(parent_comment, self).deliver
+              CommentMailer.edited_comment_reply_notification(parent_comment, self).deliver_after_commit
             else
-              CommentMailer.comment_reply_notification(parent_comment, self).deliver
+              CommentMailer.comment_reply_notification(parent_comment, self).deliver_after_commit
             end
           end
           if parent_comment_owner && notify_user_by_inbox?(parent_comment_owner)
