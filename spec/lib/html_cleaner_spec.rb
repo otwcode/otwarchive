@@ -154,13 +154,21 @@ describe HtmlCleaner do
         end
 
         %w{youtube.com youtube-nocookie.com vimeo.com player.vimeo.com
-           archiveofourown.org archive.org dailymotion.com 8tracks.com podfic.com
-           open.spotify.com spotify.com w.soundcloud.com soundcloud.com viddertube.com}.each do |source|
+           archiveofourown.org archive.org dailymotion.com 8tracks.com static.ning.com ning.com podfic.com
+           open.spotify.com spotify.com w.soundcloud.com soundcloud.com vidders.net viddertube.com}.each do |source|
 
           it "converts src to https for #{source}" do
             html = '<iframe width="560" height="315" src="http://' + source + '/embed/123" frameborder="0"></iframe>'
             result = sanitize_value(field, html)
             expect(result).to match('https:')
+          end
+        end
+
+        %w[vidders.net].each do |source|
+          it "converts flashvars to https for #{source}" do
+            html = '<embed flashvars="config=http://' + source + '/embed/123" src="http://' + source + '/embed/123" type="application/x-shockwave-flash" width="456" height="344"></embed>'
+            result = sanitize_value(field, html)
+            expect(result).to match('flashvars=.*https:')
           end
         end
 
@@ -182,7 +190,7 @@ describe HtmlCleaner do
           expect(result).to be_empty
         end
 
-        %w(metacafe.com vidders.net criticalcommons.org static.ning.com ning.com).each do |source|
+        %w(metacafe.com criticalcommons.org).each do |source|
           it "doesn't convert src to https for #{source}" do
             html = '<iframe width="560" height="315" src="http://' + source + '/embed/123" frameborder="0"></iframe>'
             result = sanitize_value(field, html)

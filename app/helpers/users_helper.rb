@@ -15,16 +15,6 @@ module UsersHelper
     current_user.is_a?(User) ? current_user.maintained_collections.present? : false
   end
 
-  # print all works that belong to a given pseud
-  def print_works(pseud)
-    result = ''
-    conditions = logged_in? ? 'posted = 1' : 'posted = 1 AND restricted = 0 OR restricted IS NULL'
-    pseud.works.find(:all, order: 'works.revised_at DESC', conditions: conditions).each do |work|
-      result += (render partial: 'works/work_blurb', locals: { work: work })
-    end
-    result
-  end
-
   def sidebar_pseud_link_text(user, pseud)
     text = if current_page?(user)
              ts('Pseuds')
@@ -138,25 +128,6 @@ module UsersHelper
       items += visible_recs == 1 ? link_to(visible_recs.to_s + ' rec', user_pseud_bookmarks_path(pseud.user, pseud, recs_only: true)) : link_to(visible_recs.to_s + ' recs', user_pseud_bookmarks_path(pseud.user, pseud, recs_only: true))
     end
     items.html_safe
-  end
-
-  def authors_header(collection, what = 'People')
-    if collection.total_pages < 2
-      case collection.size
-      when 0
-        "0 #{what}"
-      when 1
-        "1 #{what.singularize}"
-      else
-        collection.total_entries.to_s + " #{what}"
-      end
-    else
-      %( %d - %d of %d ) %[
-        collection.offset + 1,
-        collection.offset + collection.length,
-        collection.total_entries
-      ] + what
-    end
   end
 
   def log_item_action_name(action)

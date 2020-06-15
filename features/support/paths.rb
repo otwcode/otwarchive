@@ -25,8 +25,14 @@ module NavigationHelpers
       step %{all indexing jobs have been run}
       search_people_path
     when /^the bookmarks page$/i
+      # This cached page only expires by time, not by any user action;
+      # just clear it every time.
+      Rails.cache.delete "bookmarks/index/latest/v2_true"
       bookmarks_path
     when /^the works page$/i
+      # This cached page only expires by time, not by any user action;
+      # just clear it every time.
+      Rails.cache.delete "works/index/latest/v1"
       works_path
     when /^the admin login page$/i
       new_admin_session_path
