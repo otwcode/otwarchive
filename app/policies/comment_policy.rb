@@ -10,7 +10,7 @@ class CommentPolicy < ApplicationPolicy
   end
 
   def can_mark_comment_spam?
-    (can_delete_comment? || is_author_of?(record.ultimate_parent))
+    (can_delete_comment? || author_of?(record.ultimate_parent))
   end
 
   alias_method :destroy?, :can_delete_comment?
@@ -18,7 +18,7 @@ class CommentPolicy < ApplicationPolicy
 
   private
 
-  def is_author_of?(work)
+  def author_of?(work)
     user.is_a?(User) && user.is_author_of?(work)
   end
 end

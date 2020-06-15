@@ -107,7 +107,6 @@ describe Admin, :ready do
         expect { admin.update!(roles: ['fake_role']) }.to \
           raise_error(ActiveRecord::RecordInvalid, \
                       "Validation failed: Roles is invalid")
-
       end
     end
   end

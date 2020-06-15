@@ -334,8 +334,6 @@ describe CommentsController do
       before { fake_login_known_user(comment.ultimate_parent.users.first) }
 
       it "marks the comment as spam" do
-        # 
-        # 
         put :reject, params: { id: comment.id }
         expect(flash[:error]).to be_nil
         expect(response).to redirect_to(work_path(comment.ultimate_parent,

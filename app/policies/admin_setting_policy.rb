@@ -29,9 +29,9 @@ class AdminSettingPolicy < ApplicationPolicy
         :hide_spam, :disable_support_form, :disabled_support_form_text
       ]
     else
-      permitted = permitted + [:tag_wrangling_off] if user.roles.include?('tag_wrangling')
-      permitted = permitted + [:disable_support_form, :disabled_support_form_text] if user.roles.include?('support')
-      permitted = permitted + [:hide_spam] if user.roles.include?('policy_and_abuse')
+      permitted += [:tag_wrangling_off] if user.roles.include?('tag_wrangling')
+      permitted += [:disable_support_form, :disabled_support_form_text] if user.roles.include?('support')
+      permitted += [:hide_spam] if user.roles.include?('policy_and_abuse')
     end
 
     permitted
@@ -42,7 +42,7 @@ class AdminSettingPolicy < ApplicationPolicy
     unauthorized_params = setting_params - permitted_attributes
 
     if unauthorized_params.any?
-      extra_params = unauthorized_params.map{ |p| p.to_s.humanize }.join(", ")
+      extra_params = unauthorized_params.map { |p| p.to_s.humanize }.join(", ")
       "You are not permitted to change the following settings: #{extra_params}"
     else
       true

@@ -364,13 +364,13 @@ class CommentsController < ApplicationController
 
   def approve
     @comment.mark_as_ham!
-    redirect_to_all_comments(@comment.ultimate_parent, {show_comments: true})
+    redirect_to_all_comments(@comment.ultimate_parent, show_comments: true)
   end
 
   def reject
     authorize @comment
     @comment.mark_as_spam!
-    redirect_to_all_comments(@comment.ultimate_parent, {show_comments: true})
+    redirect_to_all_comments(@comment.ultimate_parent, show_comments: true)
   end
 
   def show_comments
