@@ -52,6 +52,6 @@ Otwarchive::Application.configure do
   config.assets.enabled = false
 
   # Make sure that we don't have a host mismatch:
-  config.action_controller.default_url_options = { host: "http://test.host", port: nil }
+  config.action_controller.default_url_options = { host: "http://www.example.com", port: nil }
   config.action_mailer.default_url_options = config.action_controller.default_url_options
 end
