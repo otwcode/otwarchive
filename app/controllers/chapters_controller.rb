@@ -84,8 +84,12 @@ class ChaptersController < ApplicationController
   def edit
     if params["remove"] == "me"
       @chapter.creatorships.for_user(current_user).destroy_all
-      flash[:notice] = ts("You have been removed as a creator from the chapter")
-      redirect_to @work
+      if @work.chapters.any? { |c| current_user.is_author_of?(c) }
+        flash[:notice] = ts("You have been removed as a creator from the chapter.")
+        redirect_to @work
+      else # remove from work if no longer co-creator on any chapter
+        redirect_to edit_work_path(@work, remove: "me")
+      end
     end
   end
 
