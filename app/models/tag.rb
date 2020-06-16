@@ -185,14 +185,6 @@ class Tag < ApplicationRecord
     end
   end
 
-  validate :current_user_can_create?, on: :create
-  def current_user_can_create?
-    return if Tag::USER_DEFINED.include?(type)
-    unless User.current_user.is_a?(Admin)
-      self.errors.add(:base, "You can't create tags of this type.")
-    end
-  end
-
   before_validation :check_synonym
   def check_synonym
     if !self.new_record? && self.name_changed?
