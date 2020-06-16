@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require "spec_helper"
 
 describe Admin::AdminInvitationsController do
@@ -47,7 +48,7 @@ describe Admin::AdminInvitationsController do
 
     it "does not allow non-admins to invite from queue" do
       fake_login
-      post :invite_from_queue, params: { invitation: { invite_from_queue: '1' }}
+      post :invite_from_queue, params: { invitation: { invite_from_queue: '1' } }
 
       it_redirects_to_with_notice(root_path, "I'm sorry, only an admin can look at that area")
     end
@@ -55,7 +56,7 @@ describe Admin::AdminInvitationsController do
     it "allows admins to invite from queue" do
       email = 'test_email@example.com'
       fake_login_admin(admin)
-      post :invite_from_queue, params: { invitation: { invite_from_queue: '1' }}
+      post :invite_from_queue, params: { invitation: { invite_from_queue: '1' } }
 
       it_redirects_to_with_notice(admin_invitations_path, "1 people from the invite queue were invited.")
     end
@@ -67,7 +68,7 @@ describe Admin::AdminInvitationsController do
 
     it "does not allow non-admins to invite from queue" do
       fake_login
-      post :grant_invites_to_users, params: { invitation: { user_group: 'ALL' }}
+      post :grant_invites_to_users, params: { invitation: { user_group: 'ALL' } }
 
       it_redirects_to_with_notice(root_path, "I'm sorry, only an admin can look at that area")
     end
@@ -75,7 +76,7 @@ describe Admin::AdminInvitationsController do
     it "allows admins to invite from queue" do
       email = 'test_email@example.com'
       fake_login_admin(admin)
-      post :grant_invites_to_users, params: { invitation: { user_group: 'ALL', number_of_invites: '2' }}
+      post :grant_invites_to_users, params: { invitation: { user_group: 'ALL', number_of_invites: '2' } }
 
       it_redirects_to_with_notice(admin_invitations_path, "Invitations successfully created.")
     end
@@ -88,7 +89,7 @@ describe Admin::AdminInvitationsController do
 
     it "does not allow non-admins to search" do
       fake_login
-      get :find, params: { invitation: { user_name: user.login }}
+      get :find, params: { invitation: { user_name: user.login } }
 
       it_redirects_to_with_notice(root_path, "I'm sorry, only an admin can look at that area")
     end
@@ -96,7 +97,7 @@ describe Admin::AdminInvitationsController do
     it "allows admins to invite by user_name" do
       user.update(invitations: [invitation])
       fake_login_admin(admin)
-      get :find, params: { invitation: { user_name: user.login }}
+      get :find, params: { invitation: { user_name: user.login } }
 
       expect(response).to render_template("find")
       expect(assigns(:invitations)).to include(invitation)
@@ -104,7 +105,7 @@ describe Admin::AdminInvitationsController do
 
     it "allows admins to invite by token" do
       fake_login_admin(admin)
-      get :find, params: { invitation: { token: invitation.token }}
+      get :find, params: { invitation: { token: invitation.token } }
 
       expect(response).to render_template("find")
       expect(assigns(:invitation)).to eq(invitation)
@@ -113,7 +114,7 @@ describe Admin::AdminInvitationsController do
     it "allows admins to invite by invitee_email" do
       invitation.update(invitee_email: user.email)
       fake_login_admin(admin)
-      get :find, params: { invitation: { invitee_email: user.email }}
+      get :find, params: { invitation: { invitee_email: user.email } }
 
       expect(response).to render_template("find")
       expect(assigns(:invitation)).to eq(invitation)

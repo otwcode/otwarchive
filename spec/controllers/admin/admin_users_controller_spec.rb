@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require "spec_helper"
 
 describe Admin::AdminUsersController do
@@ -105,7 +106,7 @@ describe Admin::AdminUsersController do
           admin.update(roles: [])
           fake_login_admin(admin)
           post :update_status, params: {
-            user_login: user.login, user_login: user.login, admin_action: 'suspend', suspend_days: '3', admin_note: 'User violated community guidelines'
+            user_login: user.login, admin_action: 'suspend', suspend_days: '3', admin_note: 'User violated community guidelines'
           }
           it_redirects_to_with_error(root_url, "Sorry, only an authorized admin can access the page you were trying to reach.")
         end
