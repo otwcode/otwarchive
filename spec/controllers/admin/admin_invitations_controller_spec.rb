@@ -38,7 +38,7 @@ describe Admin::AdminInvitationsController do
       fake_login_admin(admin)
       post :create, params: { invitation: { invitee_email: email } }
 
-      it_redirects_to_with_notice(admin_invitations_path, "An invitation was sent to #{ email }")
+      it_redirects_to_with_notice(admin_invitations_path, "An invitation was sent to #{email}")
     end
   end
 
@@ -54,7 +54,6 @@ describe Admin::AdminInvitationsController do
     end
 
     it "allows admins to invite from queue" do
-      email = 'test_email@example.com'
       fake_login_admin(admin)
       post :invite_from_queue, params: { invitation: { invite_from_queue: '1' } }
 
@@ -74,7 +73,6 @@ describe Admin::AdminInvitationsController do
     end
 
     it "allows admins to invite from queue" do
-      email = 'test_email@example.com'
       fake_login_admin(admin)
       post :grant_invites_to_users, params: { invitation: { user_group: 'ALL', number_of_invites: '2' } }
 
