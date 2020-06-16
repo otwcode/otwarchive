@@ -18,20 +18,10 @@ class AdminSettingPolicy < ApplicationPolicy
   end
 
   def permitted_attributes
-    permitted = []
     if user.roles.include?('superadmin')
-      permitted = [
-        :account_creation_enabled, :invite_from_queue_enabled, :invite_from_queue_number,
-        :invite_from_queue_frequency, :days_to_purge_unactivated,
-        :invite_from_queue_at, :suspend_filter_counts, :suspend_filter_counts_at,
-        :enable_test_caching, :cache_expiration, :tag_wrangling_off,
-        :request_invite_enabled, :creation_requires_invite, :downloads_enabled,
-        :hide_spam, :disable_support_form, :disabled_support_form_text
-      ]
+      permitted = full_permitted_attribute_list
     else
-      permitted += [:tag_wrangling_off] if user.roles.include?('tag_wrangling')
-      permitted += [:disable_support_form, :disabled_support_form_text] if user.roles.include?('support')
-      permitted += [:hide_spam] if user.roles.include?('policy_and_abuse')
+      permitted = build_partial_permitted_attribute_list(user)
     end
 
     permitted
@@ -51,4 +41,26 @@ class AdminSettingPolicy < ApplicationPolicy
 
   alias_method :index?, :can_update_settings?
   alias_method :update?, :can_update_settings?
+
+  private
+
+  def full_permitted_attribute_list
+    [
+      :account_creation_enabled, :invite_from_queue_enabled, :invite_from_queue_number,
+      :invite_from_queue_frequency, :days_to_purge_unactivated,
+      :invite_from_queue_at, :suspend_filter_counts, :suspend_filter_counts_at,
+      :enable_test_caching, :cache_expiration, :tag_wrangling_off,
+      :request_invite_enabled, :creation_requires_invite, :downloads_enabled,
+      :hide_spam, :disable_support_form, :disabled_support_form_text
+    ]
+  end
+
+  def build_partial_permitted_attribute_list(user)
+    permitted = []
+    permitted += [:tag_wrangling_off] if user.roles.include?('tag_wrangling')
+    permitted += [:disable_support_form, :disabled_support_form_text] if user.roles.include?('support')
+    permitted += [:hide_spam] if user.roles.include?('policy_and_abuse')
+
+    permitted
+  end
 end
