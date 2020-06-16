@@ -116,7 +116,7 @@ describe Admin::AdminUsersController do
           admin.update(roles: ['policy_and_abuse'])
           fake_login_admin(admin)
           post :update_status, params: {
-            user_login: user.login, user_login: user.login, admin_action: 'suspend', suspend_days: '3', admin_note: 'User violated community guidelines'
+            user_login: user.login, admin_action: 'suspend', suspend_days: '3', admin_note: 'User violated community guidelines'
           }
 
           user.reload
@@ -188,7 +188,6 @@ describe Admin::AdminUsersController do
           expect(response).to have_http_status(:success)
         end
       end
-
     end
 
     describe "GET #troubleshoot" do

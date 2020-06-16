@@ -64,7 +64,7 @@ describe InvitationsController do
     it "does not send invite if email is missing" do
       admin.update(roles: ['policy_and_abuse'])
       fake_login_admin(admin)
-      post :invite_friend, params: { user_id: user.id, id: invitation.id, invitation: { invitee_email: nil, number_of_invites: 1 }}
+      post :invite_friend, params: { user_id: user.id, id: invitation.id, invitation: { invitee_email: nil, number_of_invites: 1 } }
       expect(response).to render_template("show")
       expect(flash[:error]).to match('Please enter an email address.')
     end
@@ -72,7 +72,7 @@ describe InvitationsController do
     it "sends invite" do
       admin.update(roles: ['policy_and_abuse'])
       fake_login_admin(admin)
-      post :invite_friend, params: { user_id: user.id, id: invitation.id, invitation: { invitee_email: user.email, number_of_invites: 1 }}
+      post :invite_friend, params: { user_id: user.id, id: invitation.id, invitation: { invitee_email: user.email, number_of_invites: 1 } }
       it_redirects_to_with_notice(invitation_path(invitation), "Invitation was successfully sent.")
     end
   end
@@ -82,7 +82,7 @@ describe InvitationsController do
 
     it "does not allow non-admins to create" do
       fake_login
-      post :create, params: { user_id: invitee.login, invitation: { invitee_email: invitee.email, number_of_invites: 1 }}
+      post :create, params: { user_id: invitee.login, invitation: { invitee_email: invitee.email, number_of_invites: 1 } }
 
       it_redirects_to_with_error(
         user_path(@current_user),
@@ -94,7 +94,7 @@ describe InvitationsController do
       admin.update(roles: ['policy_and_abuse'])
       fake_login_admin(admin)
 
-      post :create, params: { user_id: invitee.login, invitation: { invitee_email: invitee.email, number_of_invites: 1 }}
+      post :create, params: { user_id: invitee.login, invitation: { invitee_email: invitee.email, number_of_invites: 1 } }
       it_redirects_to_with_notice(user_invitations_path(invitee), "Invitations were successfully created.")
     end
   end
@@ -106,7 +106,7 @@ describe InvitationsController do
       admin.update(roles: ['policy_and_abuse'])
       fake_login_admin(admin)
 
-      put :update, params: { id: invitation.id, invitation: { invitee_email: invitee.email }}
+      put :update, params: { id: invitation.id, invitation: { invitee_email: invitee.email } }
       it_redirects_to_with_notice(
         find_admin_invitations_path("invitation[token]" => invitation.token),
         'Invitation was successfully sent.'
