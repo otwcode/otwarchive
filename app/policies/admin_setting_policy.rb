@@ -18,13 +18,11 @@ class AdminSettingPolicy < ApplicationPolicy
   end
 
   def permitted_attributes
-    permitted =  if user.roles.include?('superadmin')
-                   full_permitted_attribute_list
-                 else
-                   build_partial_permitted_attribute_list(user)
-                 end
-
-    permitted
+    if user.roles.include?('superadmin')
+      full_permitted_attribute_list
+    else
+      build_partial_permitted_attribute_list(user)
+    end
   end
 
   def verify_permitted_params(setting_params)
