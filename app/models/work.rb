@@ -808,16 +808,11 @@ class Work < ApplicationRecord
 
   def archive_warnings_are_valid?
     return false if self.archive_warning_string.blank?
-    # Replace unicode full-width commas
-    archive_warnings_array = replace_unicode_commas(archive_warning_string)
+    archive_warnings_array = archive_warning_string.split(ArchiveConfig.DELIMITER_FOR_INPUT)
     archive_warnings_array.each do |string|
       string.strip!
       return false unless ArchiveWarning.find_by(name: string).canonical?
     end
-  end
-
-  def replace_unicode_commas(tag_string)
-    tag_string.gsub(/\uff0c|\u3001/, ',').split(ArchiveConfig.DELIMITER_FOR_INPUT)
   end
 
   # When the filters on a work change, we need to perform some extra checks.
