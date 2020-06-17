@@ -43,6 +43,7 @@ RSpec.configure do |config|
     DatabaseCleaner.strategy = :transaction
     DatabaseCleaner.clean
     Indexer.all.map(&:prepare_for_testing)
+    ArchiveWarning.find_or_create_by_name(ArchiveConfig.WARNING_NONE_TAG_NAME).update(canonical: true)
   end
 
   config.before :each do

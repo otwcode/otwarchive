@@ -5,7 +5,7 @@ FactoryBot.define do
     title { "My title is long enough" }
     fandom_string { "Testing" }
     rating_string { "Not Rated" }
-    archive_warning_string { "No Archive Warnings Apply" }
+    archive_warning_string { ArchiveConfig.WARNING_NONE_TAG_NAME }
     language_id { Language.default.id }
     chapter_info = { content: "This is some chapter content for my work." }
     chapter_attributes { chapter_info }
