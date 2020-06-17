@@ -154,8 +154,8 @@ module Taggable
         # Tags users are not allowed to create.
         else
           tag = klass.find_by_name(string)
-          next if tag.nil?
-          tags << tag if tag.is_a?(klass)
+          next unless tag.present? && tag.canonical? && tag.is_a?(klass)
+          tags << tag
         end
       end
     end
