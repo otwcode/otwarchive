@@ -800,8 +800,7 @@ class Work < ApplicationRecord
   # Check to see that a work is tagged appropriately
   def has_required_tags?
     return false if self.fandom_string.blank?
-    # return false if self.archive_warning_string.blank?
-    return false unless self.archive_warnings_are_valid?
+    return false if self.archive_warning_string.blank?
     return false if self.rating_string.blank?
     return true
   end
@@ -813,6 +812,12 @@ class Work < ApplicationRecord
       string.strip!
       return false unless ArchiveWarning.find_by(name: string).canonical?
     end
+  end
+
+  def rating_is_valid?
+    return false if self.rating_string.blank?
+    rating_string = self.rating_string.strip
+    return false unless Rating.find_by(name: rating_string).canonical?
   end
 
   # When the filters on a work change, we need to perform some extra checks.

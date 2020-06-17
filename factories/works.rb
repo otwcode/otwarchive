@@ -4,7 +4,7 @@ FactoryBot.define do
   factory :work do
     title { "My title is long enough" }
     fandom_string { "Testing" }
-    rating_string { "Not Rated" }
+    rating_string { ArchiveConfig.RATING_DEFAULT_TAG_NAME }
     archive_warning_string { ArchiveConfig.WARNING_NONE_TAG_NAME }
     language_id { Language.default.id }
     chapter_info = { content: "This is some chapter content for my work." }

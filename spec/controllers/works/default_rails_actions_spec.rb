@@ -233,6 +233,14 @@ describe WorksController, work_search: true do
       post :create, params: { work: work_attributes }
       expect(response).to render_template("new")
       expect(assigns[:work].errors.full_messages).to \
+        include "Please add all required tags. Warning is missing."
+    end
+
+    it "renders new if the work has noncanonical rating" do
+      work_attributes = attributes_for(:work).except(:posted, :rating_string).merge(rating_string: "Rating")
+      post :create, params: { work: work_attributes }
+      expect(response).to render_template("new")
+      expect(assigns[:work].errors.full_messages).to \
         include "Please add all required tags."
     end
   end

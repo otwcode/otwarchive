@@ -143,11 +143,19 @@ module Taggable
     tag_array.each do |string|
       string.strip!
       unless string.blank?
-        tag = klass.find_or_create_by_name(string)
-        if tag.valid?
-          tags << tag if tag.is_a?(klass)
+        # Tags users are allowed to create.
+        if Tag::USER_DEFINED.include?(klass.to_s)
+          tag = klass.find_or_create_by_name(string)
+          if tag.valid?
+            tags << tag if tag.is_a?(klass)
+          else
+            self.invalid_tags << tag
+          end
+        # Tags users are not allowed to create.
         else
-          self.invalid_tags << tag
+          tag = klass.find_by_name(string)
+          next if tag.nil?
+          tags << tag if tag.is_a?(klass)
         end
       end
     end
