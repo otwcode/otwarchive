@@ -227,6 +227,14 @@ describe WorksController, work_search: true do
       expect(assigns[:work].errors.full_messages).to \
         include "Invalid creator: The pseud ambiguous is ambiguous."
     end
+
+    it "renders new if the work has noncanonical warnings" do
+      work_attributes = attributes_for(:work).except(:posted, :archive_warning_string).merge(archive_warning_string: "Warning")
+      post :create, params: { work: work_attributes }
+      expect(response).to render_template("new")
+      expect(assigns[:work].errors.full_messages).to \
+        include "Please add all required tags."
+    end
   end
 
   describe "show" do
