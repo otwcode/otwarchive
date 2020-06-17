@@ -805,21 +805,6 @@ class Work < ApplicationRecord
     return true
   end
 
-  def archive_warnings_are_valid?
-    return false if self.archive_warning_string.blank?
-    archive_warnings_array = archive_warning_string.split(ArchiveConfig.DELIMITER_FOR_INPUT)
-    archive_warnings_array.each do |string|
-      string.strip!
-      return false unless ArchiveWarning.find_by(name: string).canonical?
-    end
-  end
-
-  def rating_is_valid?
-    return false if self.rating_string.blank?
-    rating_string = self.rating_string.strip
-    return false unless Rating.find_by(name: rating_string).canonical?
-  end
-
   # When the filters on a work change, we need to perform some extra checks.
   def self.reindex_for_filter_changes(ids, filter_taggings, queue)
     # The crossover/OTP status of a work can change without actually changing
