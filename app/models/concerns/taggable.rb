@@ -143,12 +143,12 @@ module Taggable
     tag_array.each do |string|
       string.strip!
       next if string.blank?
+
       tag = if Tag::USER_DEFINED.include?(klass.to_s)
               klass.find_or_create_by_name(string)
             else
               klass.find_by(name: string, canonical: true)
             end
-
       next unless tag.present? && tag.is_a?(klass)
 
       if tag.valid?
