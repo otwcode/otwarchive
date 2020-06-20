@@ -3,6 +3,7 @@ Feature: Archivist bulk imports
   Background:
     Given I have an archivist "archivist"
       And the default ratings exist
+      And all warnings exist
       And I am logged in as "archivist"
 
   Scenario: Non-archivist cannot import for others

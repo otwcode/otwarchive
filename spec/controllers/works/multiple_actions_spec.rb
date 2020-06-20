@@ -162,5 +162,115 @@ describe WorksController do
         end
       end
     end
+
+    context "with archive_warning_strings" do    
+      context "when string doesn't match a canonical ArchiveWarning name" do
+        let(:work_params) {
+          { work: { archive_warning_strings: ["Nonexistent Warning"] } }
+        }
+
+        before do
+          put :update_multiple, params: params
+        end
+
+        it "doesn't update the works' archive warnings" do
+          assigns(:works).each do |work|
+            expect(work.archive_warnings.reload.map(&:name)).not_to include("Nonexistent Warning")
+            expect(work.archive_warnings.reload.map(&:name)).to include(ArchiveConfig.WARNING_NONE_TAG_NAME)
+          end
+        end
+      end
+
+      context "when string matches a canonical ArchiveWarning name" do
+        let(:work_params) {
+          {
+            work: {
+              archive_warning_strings: [ArchiveConfig.WARNING_CHAN_TAG_NAME]
+            }
+          }
+        }
+
+        before do
+          put :update_multiple, params: params
+        end
+
+        it "replaces the works' archive warnings" do
+          assigns(:works).each do |work|
+            expect(work.archive_warnings.reload.map(&:name)).not_to include(ArchiveConfig.WARNING_NONE_TAG_NAME)
+            expect(work.archive_warnings.reload.map(&:name)).to include(ArchiveConfig.WARNING_CHAN_TAG_NAME)
+          end
+        end
+      end
+    end
+
+    context "with category_string" do    
+      context "when string doesn't match a canonical Category name" do
+        let(:work_params) {
+          { 
+            work: { category_string: ["Nonexistent Category"] } 
+          }
+        }
+
+        before do
+          put :update_multiple, params: params
+        end
+
+        it "doesn't update the works' categories" do
+          assigns(:works).each do |work|
+            expect(work.categories.reload.map(&:name)).not_to include("Nonexistent Category")
+          end
+        end
+      end
+
+      context "when string matches a canonical Category name" do
+        let(:work_params) {
+          { work: { category_string: [ArchiveConfig.CATEGORY_SLASH_TAG_NAME] } }
+        }
+
+        before do
+          put :update_multiple, params: params
+        end
+
+        it "replaces the works' categories" do
+          assigns(:works).each do |work|
+            expect(work.categories.reload.map(&:name)).to include(ArchiveConfig.CATEGORY_SLASH_TAG_NAME)
+          end
+        end
+      end
+    end 
+  
+    context "with rating_string" do    
+      context "when string doesn't match a canonical Rating name" do
+        let(:work_params) { { work: { rating_string: "Nonexistent Rating" } } }
+
+        before do
+          put :update_multiple, params: params
+        end
+
+        it "doesn't update the works' rating" do
+          assigns(:works).each do |work|
+            expect(work.ratings.reload.map(&:name)).not_to include("Nonexistent Rating")
+            expect(work.ratings.reload.map(&:name)).to include(ArchiveConfig.RATING_DEFAULT_TAG_NAME)
+          end
+        end
+      end
+
+      context "when string matches a canonical Rating name" do
+        let(:work_params) {
+          { work: { rating_string: ArchiveConfig.RATING_EXPLICIT_TAG_NAME } }
+        }
+
+        before do
+          put :update_multiple, params: params
+        end
+
+        it "replaces the works' rating" do
+          assigns(:works).each do |work|
+            expect(work.ratings.reload.map(&:name)).not_to include(ArchiveConfig.RATING_DEFAULT_TAG_NAME)
+            expect(work.ratings.reload.map(&:name)).to include(ArchiveConfig.RATING_EXPLICIT_TAG_NAME)
+          end
+        end
+      end
+    end 
   end
 end
