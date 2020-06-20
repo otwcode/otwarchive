@@ -35,7 +35,9 @@ class Sanitize
         'blockquote' => {'cite' => ['http', 'https', :relative]},
         'img' => {'src' => ['http', 'https', :relative]},
         'q' => {'cite' => ['http', 'https', :relative]}
-      }
+      },
+
+      remove_contents: %w[iframe math noembed noframes noscript plaintext script style svg xmp]
     )
 
     CLASS_ATTRIBUTE = freeze_config(
