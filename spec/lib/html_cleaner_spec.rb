@@ -291,6 +291,41 @@ describe HtmlCleaner do
 
     [:content, :endnotes, :notes, :summary].each do |field|
       context "Sanitize #{field} field" do
+
+        # These are from https://github.com/rgrove/sanitize/commit/a11498de9e283cd457b35ee252983662f7452aa9
+        it 'should not preserve the content of removed `math` elements' do
+          content = sanitize_value(field, '<math>hello! <script>alert(0)</script></math>')
+          expect(content).to eq("")
+        end
+
+        it 'should not preserve the content of removed `plaintext` elements' do
+          content = sanitize_value(field, '<plaintext>hello! <script>alert(0)</script>')
+          expect(content).to eq("")
+        end
+
+        it 'should not preserve the content of removed `svg` elements' do
+          content = sanitize_value(field, '<svg>hello! <script>alert(0)</script></svg>')
+          expect(content).to eq("")
+        end
+
+        it 'should not preserve the content of removed `xmp` elements' do
+          content = sanitize_value(field, '<xmp>hello! <script>alert(0)</script></xmp>')
+          expect(content).to eq("")
+        end
+
+        # https://github.com/rgrove/sanitize/security/advisories/GHSA-p4x4-rw2p-8j8m
+        describe 'foreign content bypass in relaxed config' do
+          it 'prevents a sanitization bypass via carefully crafted foreign content' do
+            %w[iframe noembed noframes noscript plaintext script style xmp].each do |tag_name|
+              content = sanitize_value(field, "<math><#{tag_name}>/*&lt;/#{tag_name}&gt;&lt;img src onerror=alert(1)>*/")
+              expect(content).to eq("")
+
+              content = sanitize_value(field, "<svg><#{tag_name}>/*&lt;/#{tag_name}&gt;&lt;img src onerror=alert(1)>*/")
+              expect(content).to eq("")
+            end
+          end
+        end
+
         it "should keep html" do
           value = "<em>hello</em> <blockquote>world</blockquote>"
           result = sanitize_value(field, value)
