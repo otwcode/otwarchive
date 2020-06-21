@@ -18,6 +18,7 @@ Capybara.javascript_driver = :poltergeist
 
 def http_delete(path)
   if Capybara.current_driver == :poltergeist
+    visit root_path if page.current_path.nil?
     page.evaluate_script("jQuery.ajax({url: '#{path}', data: {}, type: 'DELETE'});")
     wait_for_ajax
   else
