@@ -13,7 +13,7 @@ Given /the following admins? exists?/ do |table|
   end
 end
 
-Given /^I am logged in as admin with role "([^\"]*)"$/ do |role|
+Given /^I am logged in as admin with role "(.*?)"$/ do |role|
   step("I am logged in as an admin")
   admin = Admin.find_by(login: "testadmin")
   admin.roles << role
@@ -42,6 +42,58 @@ Given /^I am logged in as superadmin$/ do
   visit new_admin_session_path
   fill_in "Admin user name", with: "superadmin"
   fill_in "Admin password", with: "IHaveThePower"
+  click_button "Log in as admin"
+  step(%{I should see "Successfully logged in"})
+end
+
+Given /^I am logged in as policy_and_abuse_admin$/ do
+  step("I am logged out")
+  admin = Admin.find_by(login: "policy_admin")
+  if admin.blank?
+    FactoryBot.create(:policy_and_abuse_admin)
+  end
+  visit new_admin_session_path
+  fill_in "Admin user name", with: "policy_admin"
+  fill_in "Admin password", with: "policy"
+  click_button "Log in as admin"
+  step(%{I should see "Successfully logged in"})
+end
+
+Given /^I am logged in as support_admin$/ do
+  step("I am logged out")
+  admin = Admin.find_by(login: "support_admin")
+  if admin.blank?
+    FactoryBot.create(:support_admin)
+  end
+  visit new_admin_session_path
+  fill_in "Admin user name", with: "support_admin"
+  fill_in "Admin password", with: "support"
+  click_button "Log in as admin"
+  step(%{I should see "Successfully logged in"})
+end
+
+Given /^I am logged in as tag_wrangling_admin$/ do
+  step("I am logged out")
+  admin = Admin.find_by(login: "tag_wrangling_admin")
+  if admin.blank?
+    FactoryBot.create(:tag_wrangling_admin)
+  end
+  visit new_admin_session_path
+  fill_in "Admin user name", with: "tag_wrangling_admin"
+  fill_in "Admin password", with: "tagwrangling"
+  click_button "Log in as admin"
+  step(%{I should see "Successfully logged in"})
+end
+
+Given /^I am logged in as open_doors_admin$/ do
+  step("I am logged out")
+  admin = Admin.find_by(login: "open_doors_admin")
+  if admin.blank?
+    FactoryBot.create(:open_doors_admin)
+  end
+  visit new_admin_session_path
+  fill_in "Admin user name", with: "open_doors_admin"
+  fill_in "Admin password", with: "opendoors"
   click_button "Log in as admin"
   step(%{I should see "Successfully logged in"})
 end
@@ -122,7 +174,7 @@ end
 Given /^the fannish next of kin "([^\"]*)" for the user "([^\"]*)"$/ do |kin, user|
   step %{the user "#{kin}" exists and is activated}
   step %{the user "#{user}" exists and is activated}
-  step %{I am logged in as superadmin}
+  step %{I am logged in as policy_and_abuse_admin}
   step %{I go to the abuse administration page for "#{user}"}
   fill_in("Fannish next of kin's username", with: "#{kin}")
   fill_in("Fannish next of kin's email", with: "testing@foo.com")
@@ -131,7 +183,7 @@ end
 
 Given /^the user "([^\"]*)" is suspended$/ do |user|
   step %{the user "#{user}" exists and is activated}
-  step %{I am logged in as superadmin}
+  step %{I am logged in as policy_and_abuse_admin}
   step %{I go to the abuse administration page for "#{user}"}
   choose("admin_action_suspend")
   fill_in("suspend_days", with: 30)

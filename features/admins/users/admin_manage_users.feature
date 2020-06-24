@@ -40,7 +40,7 @@ Feature: Admin Actions to manage users
 
   Scenario: A admin can activate a user account
     Given the user "mrparis" exists and is not activated
-      And I am logged in as superadmin
+      And I am logged in as support_admin
     When I go to the abuse administration page for "mrparis"
       And I press "Activate User Account"
     Then I should see "User Account Activated"

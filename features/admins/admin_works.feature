@@ -16,7 +16,7 @@ Feature: Admin Actions for Works, Comments, Series, Bookmarks
   Scenario: Can hide works
     Given I am logged in as "regular_user"
       And I post the work "ToS Violation"
-    When I am logged in as superadmin
+    When I am logged in as policy_and_abuse_admin
       And I view the work "ToS Violation"
       And I follow "Hide Work"
     Then I should see "Item has been hidden."

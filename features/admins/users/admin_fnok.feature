@@ -9,7 +9,7 @@ Feature: Admin Fannish Next Of Kind actions
       | login    | password   |
       | harrykim | diesalot   |
       | libby    | stillalive |
-      And I am logged in as superadmin
+      And I am logged in as policy_and_abuse_admin
     When I go to the abuse administration page for "harrykim"
       And I fill in "Fannish next of kin's username" with "libby"
       And I fill in "Fannish next of kin's email" with "testy@foo.com"

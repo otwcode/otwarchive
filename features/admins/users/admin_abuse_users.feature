@@ -6,7 +6,7 @@ Feature: Admin Abuse actions
 
   Background:
     Given the user "mrparis" exists and is activated
-      And I am logged in as superadmin
+      And I am logged in as policy_and_abuse_admin
     When I go to the abuse administration page for "mrparis"
 
   Scenario: An admin adds a note to a user
