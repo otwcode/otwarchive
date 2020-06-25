@@ -46,6 +46,19 @@ Given /^I am logged in as superadmin$/ do
   step(%{I should see "Successfully logged in"})
 end
 
+Given /^I am logged in as policy_and_abuse_admin$/ do
+  step("I am logged out")
+  admin = Admin.find_by(login: "policy_admin")
+  if admin.blank?
+    FactoryBot.create(:policy_and_abuse_admin)
+  end
+  visit new_admin_session_path
+  fill_in "Admin user name", with: "policy_admin"
+  fill_in "Admin password", with: "policy"
+  click_button "Log in as admin"
+  step(%{I should see "Successfully logged in"})
+end
+
 Given /^I am logged out as an admin$/ do
   visit destroy_admin_session_path
 end

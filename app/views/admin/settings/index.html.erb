@@ -34,7 +34,7 @@
     </fieldset>
   <% end %>
 
-  <% if AdminSettingPolicy.user_has_correct_role?(current_admin, 'support') %>
+  <% if AdminSettingPolicy.user_has_correct_role?(current_admin, "support") %>
     <fieldset>
       <legend><%= ts("Turn Off Support Form") %></legend>
       <h3 class="landmark heading"><%= ts("Turn Off Support Form") %></h3>
@@ -59,7 +59,7 @@
         <dd><%= f.label :suspend_filter_counts, ts("Suspend some filter tracking due to high posting volume") %></dd>
       <% end %>
 
-      <% if AdminSettingPolicy.user_has_correct_role?(current_admin, 'tag_wrangling') %>
+      <% if AdminSettingPolicy.user_has_correct_role?(current_admin, "tag_wrangling") %>
         <dt><%= f.check_box :tag_wrangling_off %></dt>
         <dd><%= f.label :tag_wrangling_off, ts("Turn off tag wrangling for non-admins") %></dd>
       <% end %>
@@ -75,7 +75,7 @@
         <dd><%= f.text_field :cache_expiration, :size => "3" %></dd>
       <% end %>
 
-      <% if AdminSettingPolicy.user_has_correct_role?(current_admin, 'policy_and_abuse') %>
+      <% if AdminSettingPolicy.user_has_correct_role?(current_admin, "policy_and_abuse") %>
         <dt><%= f.check_box :hide_spam %></dt>
         <dd><%= f.label :hide_spam, ts("Automatically hide spam works") %></dd>
       <% end %>

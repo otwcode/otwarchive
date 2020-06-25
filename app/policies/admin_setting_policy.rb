@@ -6,7 +6,7 @@ class AdminSettingPolicy < ApplicationPolicy
   end
 
   def user_has_correct_role?(role)
-    user_has_roles?([role]) || user.roles.include?('superadmin')
+    user_has_roles?([role]) || user.roles.include?("superadmin")
   end
 
   def self.can_update_settings?(user)
@@ -18,7 +18,7 @@ class AdminSettingPolicy < ApplicationPolicy
   end
 
   def permitted_attributes
-    if user.roles.include?('superadmin')
+    if user.roles.include?("superadmin")
       full_permitted_attribute_list
     else
       build_partial_permitted_attribute_list(user)
@@ -55,9 +55,9 @@ class AdminSettingPolicy < ApplicationPolicy
 
   def build_partial_permitted_attribute_list(user)
     permitted = []
-    permitted += [:tag_wrangling_off] if user.roles.include?('tag_wrangling')
-    permitted += [:disable_support_form, :disabled_support_form_text] if user.roles.include?('support')
-    permitted += [:hide_spam] if user.roles.include?('policy_and_abuse')
+    permitted += [:tag_wrangling_off] if user.roles.include?("tag_wrangling")
+    permitted += [:disable_support_form, :disabled_support_form_text] if user.roles.include?("support")
+    permitted += [:hide_spam] if user.roles.include?("policy_and_abuse")
 
     permitted
   end

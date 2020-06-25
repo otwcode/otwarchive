@@ -9,7 +9,7 @@ describe Admin::SettingsController do
   describe "GET #index" do
     let(:admin) { create(:admin) }
 
-    context 'when admin does not have correct authorization' do
+    context "when admin does not have correct authorization" do
       it "denies random admin access" do
         admin.update(roles: [])
         fake_login_admin(admin)
@@ -18,9 +18,9 @@ describe Admin::SettingsController do
       end
     end
 
-    context 'when admin has correct authorization' do
+    context "when admin has correct authorization" do
       it "allows admins to access index" do
-        admin.update(roles: ['policy_and_abuse'])
+        admin.update(roles: ["policy_and_abuse"])
         fake_login_admin(admin)
         get :index
         expect(response).to have_http_status(:success)
@@ -32,7 +32,7 @@ describe Admin::SettingsController do
     let(:admin) { create(:admin) }
     let(:setting) { create(:admin_setting, last_updated_by: admin.id) }
 
-    context 'when admin does not have correct authorization' do
+    context "when admin does not have correct authorization" do
       it "denies random admin access" do
         admin.update(roles: [])
         fake_login_admin(admin)
@@ -42,10 +42,10 @@ describe Admin::SettingsController do
       end
     end
 
-    context 'when admin has correct authorization' do
-      context 'when admin has superadmin role' do
+    context "when admin has correct authorization" do
+      context "when admin has superadmin role" do
         it "allows superadmins to update all settings" do
-          admin.update(roles: ['superadmin'])
+          admin.update(roles: ["superadmin"])
           fake_login_admin(admin)
 
           put :update, params: {
@@ -73,9 +73,9 @@ describe Admin::SettingsController do
         end
       end
 
-      context 'when admin has policy_and_abuse role' do
+      context "when admin has policy_and_abuse role" do
         it "prohibits admins with policy_and_abuse role to update forbidden settings" do
-          admin.update(roles: ['policy_and_abuse'])
+          admin.update(roles: ["policy_and_abuse"])
           fake_login_admin(admin)
 
           put :update, params: {
@@ -90,14 +90,14 @@ describe Admin::SettingsController do
             } 
           }
 
-          expect(response).to render_template('index')
-          expect(flash[:error]).to(
-            include("You are not permitted to change the following settings: Suspend filter counts, Enable test caching, Cache expiration, Tag wrangling off, Downloads enabled")
+          it_redirects_to_with_error(
+            admin_settings_url,
+            "You are not permitted to change the following settings: Suspend filter counts, Enable test caching, Cache expiration, Tag wrangling off, Downloads enabled"
           )
         end
 
         it "allows admins with policy_and_abuse role to update spam setting" do
-          admin.update(roles: ['policy_and_abuse'])
+          admin.update(roles: ["policy_and_abuse"])
           fake_login_admin(admin)
 
           put :update, params: { id: setting.id, admin_setting: { hide_spam: "1" } }
@@ -106,9 +106,9 @@ describe Admin::SettingsController do
         end
       end
 
-      context 'when admin has support role' do
+      context "when admin has support role" do
         it "prohibits admins with support role to update forbidden settings" do
-          admin.update(roles: ['support'])
+          admin.update(roles: ["support"])
           fake_login_admin(admin)
 
           put :update, params: {
@@ -123,14 +123,14 @@ describe Admin::SettingsController do
             } 
           }
 
-          expect(response).to render_template('index')
-          expect(flash[:error]).to(
-            include("You are not permitted to change the following settings: Enable test caching, Tag wrangling off, Downloads enabled, Hide spam")
+          it_redirects_to_with_error(
+            admin_settings_url,
+            "You are not permitted to change the following settings: Enable test caching, Tag wrangling off, Downloads enabled, Hide spam"
           )
         end
 
         it "allows admins with support role to update spam setting" do
-          admin.update(roles: ['support'])
+          admin.update(roles: ["support"])
           fake_login_admin(admin)
 
           put :update, params: {
@@ -145,9 +145,9 @@ describe Admin::SettingsController do
         end
       end
 
-      context 'when admin has tag_wrangling role' do
+      context "when admin has tag_wrangling role" do
         it "prohibits admins with tag_wrangling role to update forbidden settings" do
-          admin.update(roles: ['tag_wrangling'])
+          admin.update(roles: ["tag_wrangling"])
           fake_login_admin(admin)
 
           put :update, params: {
@@ -162,14 +162,14 @@ describe Admin::SettingsController do
             } 
           }
 
-          expect(response).to render_template('index')
-          expect(flash[:error]).to(
-            include("You are not permitted to change the following settings: Enable test caching, Downloads enabled, Hide spam, Disable support form, Disabled support form text")
+          it_redirects_to_with_error(
+            admin_settings_url,
+            "You are not permitted to change the following settings: Enable test caching, Downloads enabled, Hide spam, Disable support form, Disabled support form text"
           )
         end
 
-        it "allows admins with policy_and_abuse role to update spam setting" do
-          admin.update(roles: ['tag_wrangling'])
+        it "allows admins with tag_wrangling role to turn wrangling off" do
+          admin.update(roles: ["tag_wrangling"])
           fake_login_admin(admin)
 
           put :update, params: { id: setting.id, admin_setting: { tag_wrangling_off: "0" } }

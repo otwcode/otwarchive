@@ -14,6 +14,7 @@ class CommentPolicy < ApplicationPolicy
   end
 
   alias_method :destroy?, :can_delete_comment?
+  alias_method :approve?, :can_delete_comment?
   alias_method :reject?, :can_mark_comment_spam?
 
   private

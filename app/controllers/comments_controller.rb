@@ -363,6 +363,7 @@ class CommentsController < ApplicationController
   end
 
   def approve
+    authorize @comment
     @comment.mark_as_ham!
     redirect_to_all_comments(@comment.ultimate_parent, show_comments: true)
   end
