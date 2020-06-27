@@ -127,7 +127,7 @@ describe Admin::SettingsController do
           )
         end
 
-        it "allows admins with support role to update spam setting" do
+        it "allows admins with support role to update support form settings" do
           admin.update(roles: ["support"])
           fake_login_admin(admin)
 
