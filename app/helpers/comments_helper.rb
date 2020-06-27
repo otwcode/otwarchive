@@ -116,6 +116,16 @@ module CommentsHelper
     is_author_of?(comment) && comment.count_all_comments == 0 && !comment_parent_hidden?(comment)
   end
 
+  # Can mark a spam comment ham.
+  def can_mark_comment_ham?(comment)
+    comment.pseud.nil? && !comment.approved? && policy(comment).can_mark_comment_ham?
+  end
+
+  # Can makr a ham comment spam.
+  def can_mark_comment_spam?(comment)
+    comment.pseud.nil? && comment.approved? && policy(comment).can_mark_comment_spam?
+  end
+
   def comment_parent_hidden?(comment)
     parent = comment.ultimate_parent
     (parent.respond_to?(:hidden_by_admin) && parent.hidden_by_admin) ||

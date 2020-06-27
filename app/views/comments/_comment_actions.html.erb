@@ -17,7 +17,7 @@
       <%= edit_comment_link comment %>
     </li>
   <% end %>
-  <% if comment.pseud.nil? and policy(comment).can_mark_comment_spam? %>
+  <% if can_mark_comment_spam?(comment) || can_mark_comment_ham?(comment) %>
     <li id="tag_comment_as_spam_link_<%= comment.id %>">
       <%= tag_comment_as_spam_link comment %>
     </li>

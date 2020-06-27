@@ -241,15 +241,28 @@ describe CommentsController do
   describe "PUT #approve" do
     before { comment.update_column(:approved, false) }
 
-    context "when logged-in as admin" do
+    context "when logged-in as admin without a role" do
       before { fake_login_admin(create(:admin)) }
+
+      it "leaves the comment marked as spam and redirects with an error" do
+        put :approve, params: { id: comment.id }
+        expect(comment.reload.approved).to be_falsey
+        it_redirects_to_with_error(
+          root_path,
+          "Sorry, only an authorized admin can access the page you were trying to reach."
+        )
+      end
+    end
+
+    context "when logged-in as admin with authorized role" do
+      before { fake_login_admin(create(:superadmin)) }
 
       it "marks the comment as not spam" do
         put :approve, params: { id: comment.id }
         expect(flash[:error]).to be_nil
         expect(response).to redirect_to(work_path(comment.ultimate_parent,
                                                   show_comments: true,
-                                                  anchor: 'comments'))
+                                                  anchor: "comments"))
         expect(comment.reload.approved).to be_truthy
       end
     end
@@ -257,13 +270,13 @@ describe CommentsController do
     context "when logged-in as the work's creator" do
       before { fake_login_known_user(comment.ultimate_parent.users.first) }
 
-      it "marks the comment as not spam" do
+      it "leaves the comment marked as spam and redirects with an error" do
         put :approve, params: { id: comment.id }
-        expect(flash[:error]).to be_nil
-        expect(response).to redirect_to(work_path(comment.ultimate_parent,
-                                                  show_comments: true,
-                                                  anchor: 'comments'))
-        expect(comment.reload.approved).to be_truthy
+        expect(comment.reload.approved).to be_falsey
+        it_redirects_to_with_error(
+          root_path,
+          "Sorry, only an authorized admin can access the page you were trying to reach."
+        )
       end
     end
 
