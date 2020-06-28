@@ -1,4 +1,4 @@
-@no-txn @works @search
+@works @search
 Feature: Search works by work info
   As a user
   I want to search works by work info

@@ -1,63 +1,23 @@
 module Taggable
+  extend ActiveSupport::Concern
 
-  def self.included(taggable)
-    taggable.class_eval do
-      attr_accessor :invalid_tags
-      attr_accessor :preview_mode, :placeholder_tags
+  included do
+    attr_accessor :invalid_tags
+    attr_accessor :preview_mode, :placeholder_tags
 
-      has_many :filter_taggings, as: :filterable
-      has_many :filters, through: :filter_taggings
-      has_many :direct_filter_taggings, -> { where(inherited: 0) }, class_name: "FilterTagging", as: :filterable
-      has_many :direct_filters, source: :filter, through: :direct_filter_taggings
+    has_many :taggings, as: :taggable, inverse_of: :taggable, dependent: :destroy
+    has_many :tags, through: :taggings, source: :tagger, source_type: "Tag"
 
-      has_many :taggings, as: :taggable, dependent: :destroy
-      has_many :tags, through: :taggings, source: :tagger, source_type: 'Tag'
-
-      has_many :ratings,
-        -> { where("tags.type = 'Rating'") },
-        through: :taggings,
-        source: :tagger,
-        source_type: 'Tag',
-        before_remove: :remove_filter_tagging
-      has_many :categories,
-        -> { where("tags.type = 'Category'") },
-        through: :taggings,
-        source: :tagger,
-        source_type: 'Tag',
-        before_remove: :remove_filter_tagging
-      has_many :archive_warnings,
-        -> { where("tags.type = 'ArchiveWarning'") },
-        through: :taggings,
-        source: :tagger,
-        source_type: 'Tag',
-        before_remove: :remove_filter_tagging
-      has_many :fandoms,
-        -> { where("tags.type = 'Fandom'") },
-        through: :taggings,
-        source: :tagger,
-        source_type: 'Tag',
-        before_remove: :remove_filter_tagging
-      has_many :relationships,
-        -> { where("tags.type = 'Relationship'") },
-        through: :taggings,
-        source: :tagger,
-        source_type: 'Tag',
-        before_remove: :remove_filter_tagging
-      has_many :characters,
-        -> { where("tags.type = 'Character'") },
-        through: :taggings,
-        source: :tagger,
-        source_type: 'Tag',
-        before_remove: :remove_filter_tagging
-      has_many :freeforms,
-        -> { where("tags.type = 'Freeform'") },
-        through: :taggings,
-        source: :tagger,
-        source_type: 'Tag',
-        before_remove: :remove_filter_tagging
-
-      after_update :reset_placeholders
+    Tag::VISIBLE.each do |type|
+      has_many type.underscore.pluralize.to_sym,
+               -> { where(tags: { type: type }) },
+               through: :taggings,
+               source: :tagger,
+               source_type: "Tag",
+               before_remove: :destroy_tagging
     end
+
+    after_update :reset_placeholders
   end
 
   # string methods
@@ -182,13 +142,19 @@ module Taggable
     end
     tag_array.each do |string|
       string.strip!
-      unless string.blank?
-        tag = klass.find_or_create_by_name(string)
-        if tag.valid?
-          tags << tag if tag.is_a?(klass)
-        else
-          self.invalid_tags << tag
-        end
+      next if string.blank?
+
+      tag = if Tag::USER_DEFINED.include?(klass.to_s)
+              klass.find_or_create_by_name(string)
+            else
+              klass.find_by(name: string, canonical: true)
+            end
+      next unless tag.present? && tag.is_a?(klass)
+
+      if tag.valid?
+        tags << tag if tag.is_a?(klass)
+      else
+        self.invalid_tags << tag
       end
     end
     if self.preview_mode
@@ -205,46 +171,7 @@ module Taggable
     end
   end
 
-  ################
-  # SEARCH
-  ################
-
-  public
-
-  # Simple name to make it easier for people to use in full-text search
-  def tag
-    (tags + filters).uniq.map{ |t| t.name }
+  def destroy_tagging(tag)
+    taggings.find_by(tagger: tag)&.destroy
   end
-
-  # Index all the filters for pulling works
-  def filter_ids
-    (tags.pluck(:id) + filters.pluck(:id)).uniq
-  end
-
-  # Index only direct filters (non meta-tags) for facets
-  def filters_for_facets
-    @filters_for_facets ||= filters.where("filter_taggings.inherited = 0")
-  end
-  def rating_ids
-    filters_for_facets.select{ |t| t.type.to_s == 'Rating' }.map{ |t| t.id }
-  end
-  def archive_warning_ids
-    filters_for_facets.select{ |t| t.type.to_s == 'ArchiveWarning' }.map{ |t| t.id }
-  end
-  def category_ids
-    filters_for_facets.select{ |t| t.type.to_s == 'Category' }.map{ |t| t.id }
-  end
-  def fandom_ids
-    filters_for_facets.select{ |t| t.type.to_s == 'Fandom' }.map{ |t| t.id }
-  end
-  def character_ids
-    filters_for_facets.select{ |t| t.type.to_s == 'Character' }.map{ |t| t.id }
-  end
-  def relationship_ids
-    filters_for_facets.select{ |t| t.type.to_s == 'Relationship' }.map{ |t| t.id }
-  end
-  def freeform_ids
-    filters_for_facets.select{ |t| t.type.to_s == 'Freeform' }.map{ |t| t.id }
-  end
-
 end

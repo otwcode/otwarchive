@@ -25,9 +25,24 @@ class AdminSetting < ApplicationRecord
     cache_expiration: 10,
     tag_wrangling_off?: false,
     downloads_enabled?: true,
-    stats_updated_at: nil,
     disable_support_form?: false
   }.freeze
+
+  # Create AdminSetting.first on a blank database. We call this only in an initializer
+  # or a testing setup, not as part of any heavily used methods (e.g. AdminSetting.current).
+  def self.default
+    return AdminSetting.first if AdminSetting.first
+
+    settings = AdminSetting.new(
+      invite_from_queue_enabled: ArchiveConfig.INVITE_FROM_QUEUE_ENABLED,
+      invite_from_queue_number: ArchiveConfig.INVITE_FROM_QUEUE_NUMBER,
+      invite_from_queue_frequency: ArchiveConfig.INVITE_FROM_QUEUE_FREQUENCY,
+      account_creation_enabled: ArchiveConfig.ACCOUNT_CREATION_ENABLED,
+      days_to_purge_unactivated: ArchiveConfig.DAYS_TO_PURGE_UNACTIVATED
+    )
+    settings.save(validate: false)
+    settings
+  end
 
   def self.current
     Rails.cache.fetch("admin_settings", race_condition_ttl: 10.seconds) { AdminSetting.first } || OpenStruct.new(DEFAULT_SETTINGS)
@@ -63,13 +78,6 @@ class AdminSetting < ApplicationRecord
     self.send(method, *args)
   end
 
-  def self.set_stats_updated_at(time)
-    if self.first
-      self.first.stats_updated_at = time
-      self.first.save
-    end
-  end
-
   private
 
   def expire_cached_settings
@@ -93,5 +101,4 @@ class AdminSetting < ApplicationRecord
       self.invite_from_queue_at = Time.now + self.invite_from_queue_frequency.days
     end
   end
-
 end

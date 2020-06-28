@@ -43,6 +43,15 @@ RSpec.configure do |config|
     DatabaseCleaner.strategy = :transaction
     DatabaseCleaner.clean
     Indexer.all.map(&:prepare_for_testing)
+    ArchiveWarning.find_or_create_by_name(ArchiveConfig.WARNING_CHAN_TAG_NAME).update(canonical: true)
+    ArchiveWarning.find_or_create_by_name(ArchiveConfig.WARNING_NONE_TAG_NAME).update(canonical: true)
+    Category.find_or_create_by_name(ArchiveConfig.CATEGORY_SLASH_TAG_NAME).update(canonical: true)
+    Rating.find_or_create_by_name(ArchiveConfig.RATING_DEFAULT_TAG_NAME).update(canonical: true)
+    Rating.find_or_create_by_name(ArchiveConfig.RATING_EXPLICIT_TAG_NAME).update(canonical: true)
+    # Needs these for the API tests.
+    ArchiveWarning.find_or_create_by_name(ArchiveConfig.WARNING_DEFAULT_TAG_NAME).update(canonical: true)
+    ArchiveWarning.find_or_create_by_name(ArchiveConfig.WARNING_NONCON_TAG_NAME).update(canonical: true)
+    Rating.find_or_create_by_name(ArchiveConfig.RATING_GENERAL_TAG_NAME).update(canonical: true)
   end
 
   config.before :each do
@@ -95,6 +104,10 @@ RSpec.configure do |config|
     WorkIndexer.delete_index
   end
 
+  config.before :each, type: :controller do
+    @request.host = "www.example.com"
+  end
+
   # If you're not using ActiveRecord, or you'd prefer not to run each of your
   # examples within a transaction, remove the following line or assign false
   # instead of true.
@@ -132,12 +145,14 @@ end
 def clean_the_database
   # Now clear memcached
   Rails.cache.clear
-  # Now reset redis ...
+
+  # Clear Redis
+  REDIS_AUTOCOMPLETE.flushall
   REDIS_GENERAL.flushall
+  REDIS_HITS.flushall
   REDIS_KUDOS.flushall
   REDIS_RESQUE.flushall
   REDIS_ROLLOUT.flushall
-  REDIS_AUTOCOMPLETE.flushall
 end
 
 def run_all_indexing_jobs
@@ -145,4 +160,33 @@ def run_all_indexing_jobs
     ScheduledReindexJob.perform reindex_type
   end
   Indexer.all.map(&:refresh_index)
+end
+
+# Suspend resque workers for the duration of the block, then resume after the
+# contents of the block have run. Simulates what happens when there's a lot of
+# jobs already in the queue, so there's a long delay between jobs being
+# enqueued and jobs being run.
+def suspend_resque_workers
+  # Set up an array to keep track of delayed actions.
+  queue = []
+
+  # Override the default Resque.enqueue_to behavior.
+  #
+  # The first argument is which queue the job is supposed to be added to, but
+  # it doesn't matter for our purposes, so we ignore it.
+  allow(Resque).to receive(:enqueue_to) do |_, klass, *args|
+    queue << [klass, args]
+  end
+
+  # Run the code inside the block.
+  yield
+
+  # Empty out the queue and perform all of the operations.
+  while queue.any?
+    klass, args = queue.shift
+    klass.perform(*args)
+  end
+
+  # Resume the original Resque.enqueue_to behavior.
+  allow(Resque).to receive(:enqueue_to).and_call_original
 end

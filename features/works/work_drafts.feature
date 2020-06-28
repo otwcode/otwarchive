@@ -1,5 +1,4 @@
 @works @search
-@no-txn
 Feature: Work Drafts
 
   Scenario: Creating a work draft
