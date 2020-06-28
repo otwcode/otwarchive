@@ -921,6 +921,16 @@ class Work < ApplicationRecord
     )
   end
 
+  def comment_permissions=(value)
+    if has_attribute?(:comment_permissions)
+      write_attribute(:comment_permissions, value)
+    end
+
+    write_attribute(:anon_commenting_disabled, value)
+  end
+
+  alias_method :anon_commenting_disabled=, :comment_permissions=
+
   ########################################################################
   # RELATED WORKS
   # These are for inspirations/remixes/etc
