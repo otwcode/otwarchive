@@ -698,6 +698,8 @@ class WorksController < ApplicationController
     # We used to reject any parameters with value "0", so on the old edit
     # multiple form there were special values in place of the "0". We keep
     # checking those values for backwards-compatibility with the old form.
+    #
+    # TODO: Remove these checks.
     if updated_work_params[:anon_commenting_disabled] == 'allow_anon'
       updated_work_params[:anon_commenting_disabled] = '0'
     end
@@ -922,6 +924,7 @@ class WorksController < ApplicationController
       :rating_string, :fandom_string, :relationship_string, :character_string,
       :archive_warning_string, :category_string, :expected_number_of_chapters, :revised_at,
       :freeform_string, :summary, :notes, :endnotes, :collection_names, :recipients, :wip_length,
+      # TODO: Remove anon_commenting_disabled.
       :backdate, :language_id, :work_skin_id, :restricted, :anon_commenting_disabled, :comment_permissions,
       :moderated_commenting_enabled, :title, :pseuds_to_add, :collections_to_add,
       current_user_pseud_ids: [],
