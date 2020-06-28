@@ -282,9 +282,9 @@
         <fieldset>
           <%=
             radio_button_list(f, :comment_permissions, [
-              [Work::COMMENT_PERMISSIONS_ENABLE_ALL, ts("Registered users and guests can comment")],
-              [Work::COMMENT_PERMISSIONS_DISABLE_ANON, ts("Only registered users can comment")],
-              [Work::COMMENT_PERMISSIONS_DISABLE_ALL, ts("No one can comment")]
+              [:enable_all, ts("Registered users and guests can comment")],
+              [:disable_anon, ts("Only registered users can comment")],
+              [:disable_all, ts("No one can comment")]
             ])
           %>
         </fieldset>

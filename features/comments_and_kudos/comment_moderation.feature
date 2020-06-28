@@ -15,7 +15,23 @@ Feature: Comment Moderation
     Then I should see "Sorry, this work doesn't allow non-Archive users to comment."
     When I press "Kudos ♥"
     Then I should see "Thank you for leaving kudos"    
-    
+
+  Scenario: Turn off comments from everyone, but everyone can still leave kudos
+    Given I am logged in as "author"
+      And I set up the draft "No Comments"
+      And I choose "No one can comment"
+      And I post the work without preview
+    When I am logged out
+      And I view the work "No Comments"
+    Then I should see "Sorry, this work doesn't allow comments."
+    When I press "Kudos ♥"
+    Then I should see "Thank you for leaving kudos"
+    When I am logged in as "fan"
+      And I view the work "No Comments"
+    Then I should see "Sorry, this work doesn't allow comments."
+    When I press "Kudos ♥"
+    Then I should see "Thank you for leaving kudos"
+
   Scenario: Turn on moderation
     Given I am logged in as "author"
       And I set up the draft "Moderation"

@@ -64,14 +64,14 @@ describe WorksController do
       create(:work,
              authors: [multiple_works_user.default_pseud],
              title: "Work 1",
-             comment_permissions: Work::COMMENT_PERMISSIONS_DISABLE_ANON,
+             comment_permissions: :disable_anon,
              moderated_commenting_enabled: true)
     }
     let(:multiple_work2) {
       create(:work,
              authors: [multiple_works_user.default_pseud],
              title: "Work 2",
-             comment_permissions: Work::COMMENT_PERMISSIONS_DISABLE_ALL,
+             comment_permissions: :disable_all,
              moderated_commenting_enabled: true)
     }
     let(:params) {
@@ -103,7 +103,7 @@ describe WorksController do
       let(:work_params) {
         {
           work: {
-            comment_permissions: "allow_all",
+            comment_permissions: "enable_all",
             moderated_commenting_enabled: "not_moderated"
           }
         }
@@ -112,7 +112,7 @@ describe WorksController do
       it "should change the comment_permissions option to 0" do
         put :update_multiple, params: params
         assigns(:works).each do |work|
-          expect(work.comment_permissions).to eq(Work::COMMENT_PERMISSIONS_ENABLE_ALL)
+          expect(work.comment_permissions).to eq("enable_all")
         end
       end
 
