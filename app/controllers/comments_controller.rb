@@ -19,7 +19,7 @@ class CommentsController < ApplicationController
   before_action :check_ownership, only: [:edit, :update, :cancel_comment_edit]
   before_action :check_permission_to_edit, only: [:edit, :update ]
   before_action :check_permission_to_delete, only: [:delete_comment, :destroy]
-  before_action :check_anonymous_comment_preference, only: [:new, :create, :add_comment_reply]
+  before_action :check_parent_comment_permissions, only: [:new, :create, :add_comment_reply]
   before_action :check_unreviewed, only: [:add_comment_reply]
   before_action :check_permission_to_review, only: [:unreviewed]
   before_action :check_permission_to_access_single_unreviewed, only: [:show]
@@ -87,8 +87,9 @@ class CommentsController < ApplicationController
     redirect_to new_user_session_path(restricted_commenting: true)
   end
 
-  # Check to see if the ultimate_parent is a Work, and if so, if it allows anon comments
-  def check_anonymous_comment_preference
+  # Check to see if the ultimate_parent is a Work, and if so, if it allows
+  # comments for the current user.
+  def check_parent_comment_permissions
     parent = find_parent
     return unless parent.is_a?(Work)
 
