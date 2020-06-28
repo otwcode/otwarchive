@@ -64,14 +64,14 @@ describe WorksController do
       create(:work,
              authors: [multiple_works_user.default_pseud],
              title: "Work 1",
-             anon_commenting_disabled: true,
+             comment_permissions: Work::COMMENT_PERMISSIONS_DISABLE_ANON,
              moderated_commenting_enabled: true)
     }
     let(:multiple_work2) {
       create(:work,
              authors: [multiple_works_user.default_pseud],
              title: "Work 2",
-             anon_commenting_disabled: true,
+             comment_permissions: Work::COMMENT_PERMISSIONS_DISABLE_ALL,
              moderated_commenting_enabled: true)
     }
     let(:params) {
@@ -89,7 +89,7 @@ describe WorksController do
           language_id: "",
           work_skin_id: "",
           restricted: "",
-          anon_commenting_disabled: "",
+          comment_permissions: "",
           moderated_commenting_enabled: ""
         }
       }.merge(work_params)
@@ -103,20 +103,20 @@ describe WorksController do
       let(:work_params) {
         {
           work: {
-            anon_commenting_disabled: "allow_anon",
+            comment_permissions: "allow_all",
             moderated_commenting_enabled: "not_moderated"
           }
         }
       }
 
-      it "should convert the anon_commenting_disabled parameter to false" do
+      it "should change the comment_permissions option to 0" do
         put :update_multiple, params: params
         assigns(:works).each do |work|
-          expect(work.anon_commenting_disabled).to be false
+          expect(work.comment_permissions).to eq(Work::COMMENT_PERMISSIONS_ENABLE_ALL)
         end
       end
 
-      it "should convert the moderated_commenting_enabled parameter to false" do
+      it "should change the moderated_commenting_enabled option to false" do
         put :update_multiple, params: params
         assigns(:works).each do |work|
           expect(work.moderated_commenting_enabled).to be false

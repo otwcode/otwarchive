@@ -147,6 +147,15 @@ class Work < ApplicationRecord
   # Run Taggable#check_for_invalid_tags as a validation.
   validate :check_for_invalid_tags
 
+  COMMENT_PERMISSIONS_ENABLE_ALL = 0
+  COMMENT_PERMISSIONS_DISABLE_ANON = 1
+  COMMENT_PERMISSIONS_DISABLE_ALL = 2
+
+  validates_inclusion_of :comment_permissions,
+    in: [COMMENT_PERMISSIONS_ENABLE_ALL,
+         COMMENT_PERMISSIONS_DISABLE_ANON,
+         COMMENT_PERMISSIONS_DISABLE_ALL]
+
   ########################################################################
   # HOOKS
   # These are methods that run before/after saves and updates to ensure
@@ -492,13 +501,6 @@ class Work < ApplicationRecord
       user_is_owner_or_invited?(user)
     end
   end
-
-  def unrestricted=(setting)
-    if setting == "1"
-      self.restricted = false
-    end
-  end
-  def unrestricted; !self.restricted; end
 
   def unrevealed?(user=User.current_user)
     # eventually here is where we check if it's in a challenge that hasn't been made public yet
@@ -922,14 +924,23 @@ class Work < ApplicationRecord
   end
 
   def comment_permissions=(value)
-    if has_attribute?(:comment_permissions)
-      write_attribute(:comment_permissions, value)
-    end
-
+    write_attribute(:comment_permissions, value)
     write_attribute(:anon_commenting_disabled, value)
   end
 
   alias_method :anon_commenting_disabled=, :comment_permissions=
+
+  def enable_all_comments?
+    comment_permissions == COMMENT_PERMISSIONS_DISABLE_ANON
+  end
+
+  def disable_anon_comments?
+    comment_permissions == COMMENT_PERMISSIONS_DISABLE_ANON
+  end
+
+  def disable_all_comments?
+    comment_permissions == COMMENT_PERMISSIONS_DISABLE_ALL
+  end
 
   ########################################################################
   # RELATED WORKS

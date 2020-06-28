@@ -8,7 +8,7 @@ Feature: Comment Moderation
   Scenario: Turn off comments from anonymous users who can still leave kudos
     Given I am logged in as "author"
       And I set up the draft "No Anons"
-      And I check "Disable anonymous commenting"
+      And I choose "Only registered users can comment"
       And I post the work without preview
       And I am logged out
     When I view the work "No Anons"

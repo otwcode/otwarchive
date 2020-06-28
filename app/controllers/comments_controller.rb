@@ -90,9 +90,15 @@ class CommentsController < ApplicationController
   # Check to see if the ultimate_parent is a Work, and if so, if it allows anon comments
   def check_anonymous_comment_preference
     parent = find_parent
-    return unless parent.respond_to?(:anon_commenting_disabled) && parent.anon_commenting_disabled && !logged_in?
-    flash[:error] = ts("Sorry, this work doesn't allow non-Archive users to comment.")
-    redirect_to work_path(parent)
+    return unless parent.is_a?(Work)
+
+    if parent.disable_all_comments?
+      flash[:error] = ts("Sorry, this work doesn't allow comments.")
+      redirect_to work_path(parent)
+    elsif parent.disable_anon_comments? && !logged_in?
+      flash[:error] = ts("Sorry, this work doesn't allow non-Archive users to comment.")
+      redirect_to work_path(parent)
+    end
   end
 
   def check_unreviewed

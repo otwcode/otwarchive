@@ -109,7 +109,7 @@ module CommentsHelper
   #### HELPERS FOR CHECKING WHICH BUTTONS/FORMS TO DISPLAY #####
 
   def can_reply_to_comment?(comment)
-    !(comment.unreviewed? || no_anon_reply(comment) || comment_parent_hidden?(comment))
+    !(comment.unreviewed? || parent_disallows_comments?(comment) || comment_parent_hidden?(comment))
   end
 
   def can_edit_comment?(comment)
@@ -122,8 +122,11 @@ module CommentsHelper
       (parent.respond_to?(:in_unrevealed_collection) && parent.in_unrevealed_collection)
   end
 
-  def no_anon_reply(comment)
-    comment.ultimate_parent.is_a?(Work) && comment.ultimate_parent.anon_commenting_disabled && !logged_in?
+  def parent_disallows_comments?(comment)
+    return false unless (parent = comment.ultimate_parent).is_a?(Work)
+
+    parent.disable_all_comments? ||
+      parent.disable_anon_comments? && !logged_in?
   end
 
   #### HELPERS FOR REPLYING TO COMMENTS #####
