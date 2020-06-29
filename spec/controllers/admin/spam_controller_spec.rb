@@ -9,7 +9,7 @@ describe Admin::SpamController do
   describe "GET #index" do    
     let(:admin) { create(:admin) }
 
-    context 'when admin does not have correct authorization' do
+    context "when admin does not have correct authorization" do
       it "admin must be logged in" do
         fake_login
 
@@ -18,11 +18,11 @@ describe Admin::SpamController do
       end
     end
 
-    context 'when admin does have correct authorization' do
+    context "when admin does have correct authorization" do
       it "allows admin to view index page" do
         fake_login_admin(admin)
         get :index, params: { reviewed: false, approved: false }
-        expect(response).to render_template('index')
+        expect(response).to render_template("index")
       end
     end
   end
@@ -30,7 +30,7 @@ describe Admin::SpamController do
   describe "GET #bulk_update" do
     let(:admin) { create(:admin) }
 
-    context 'when admin does not have correct authorization' do
+    context "when admin does not have correct authorization" do
       it "denies non-admin access" do
         fake_login
         get :bulk_update, params: { ham: true }
@@ -38,9 +38,9 @@ describe Admin::SpamController do
       end
     end
 
-    context 'when admin does have correct authorization' do
+    context "when admin does have correct authorization" do
       it "allows admin with authorization to mark user_creation as spam" do
-        3.times { FactoryBot.create(:moderated_work) }
+        FactoryBot.create_list(:moderated_work, 3)
         moderated_work = ModeratedWork.first
         fake_login_admin(admin)
         get :bulk_update, params: { spam: ModeratedWork.all.map(&:id) }
