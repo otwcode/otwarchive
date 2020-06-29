@@ -921,16 +921,20 @@ class Work < ApplicationRecord
   end
 
   def comment_permissions=(value)
+    write_attribute(:comment_permissions, value)
+
     # Map the special value back to an integer, and write it to the
     # anon_commenting_disabled column so that if we do have to revert, we can
     # go back to using the anon_commenting_disabled column without data loss.
     write_attribute(:anon_commenting_disabled,
-                    Work.comment_permissions[value])
+                    Work.comment_permissions[comment_permissions])
 
-    write_attribute(:comment_permissions, value)
   end
 
-  alias_method :anon_commenting_disabled=, :comment_permissions=
+  def anon_commenting_disabled=(value)
+    write_attribute(:anon_commenting_disabled, value)
+    write_attribute(:comment_permissions, anon_commenting_disabled ? :disable_anon : :enable_all)
+  end
 
   ########################################################################
   # RELATED WORKS
