@@ -1,6 +1,14 @@
-# options available at https://github.com/bbatsov/rubocop/blob/master/config/default.yml
+# Options available at https://github.com/bbatsov/rubocop/blob/master/config/default.yml
+
+require:
+  - rubocop-rspec
 
 AllCops:
+  RSpec:
+    Patterns:
+      - "(?:^|/)factories/"
+      - "(?:^|/)features/"
+      - "(?:^|/)spec/"
   TargetRubyVersion: 2.6
 
 Bundler/OrderedGems:
@@ -45,6 +53,63 @@ Metrics/ModuleLength:
 Metrics/PerceivedComplexity:
   Enabled: false
 
+# Allow "allow_any_instance_of"
+RSpec/AnyInstance:
+  Enabled: false
+
+# By default allow only prefixes "when", "with", "without".
+# We have too many, so let's allow everything.
+RSpec/ContextWording:
+  Enabled: false
+
+RSpec/DescribedClass:
+  Enabled: false
+
+RSpec/ExampleLength:
+  Enabled: false
+
+# Prefer: expect { run }.to change { Foo.bar }
+# over: expect { run }.to change(Foo, :bar)
+RSpec/ExpectChange:
+  EnforcedStyle: block
+
+RSpec/FilePath:
+  Exclude:
+    # Exception for WorksController, whose many specs need multiple files
+    - 'spec/controllers/works/*.rb'
+
+# Avoid instance variables, except for those not assigned within the spec,
+# e.g. @request.
+RSpec/InstanceVariable:
+  AssignmentOnly: true
+
+# Allow unreferenced let! calls for test setup
+RSpec/LetSetup:
+  Enabled: false
+
+# Allow both "have_received" and "receive" for expectations
+RSpec/MessageSpies:
+  Enabled: false
+
+# Allow multiple top level describes (rake specs)
+RSpec/MultipleDescribes:
+  Enabled: false
+
+# Allow unlimited expectations per test
+RSpec/MultipleExpectations:
+  Enabled: false
+
+# Allow unnamed subjects
+RSpec/NamedSubject:
+  Enabled: false
+
+# Allow unlimited nested groups
+RSpec/NestedGroups:
+  Enabled: false
+
+RSpec/PredicateMatcher:
+  Enabled: false
+
 Style/ClassAndModuleChildren:
   Enabled: false
 
@@ -54,7 +119,7 @@ Style/Documentation:
 Style/EmptyMethod:
   EnforcedStyle: expanded
 
-# prefer template tokens (like %{foo}) over annotated tokens (like %s)
+# Prefer template tokens (like %{foo}) over annotated tokens (like %s)
 Style/FormatStringToken:
   EnforcedStyle: template
 
@@ -66,16 +131,15 @@ Style/GlobalVars:
     - $elasticsearch
     - $rollout
 
-# stop checking if uses of "self" are redundant
+# Stop checking if uses of "self" are redundant
 Style/RedundantSelf:
   Enabled: false
 
 Style/SingleLineMethods:
   AllowIfMethodIsEmpty: false
 
-# stop checking quotation marks
 Style/StringLiterals:
-  Enabled: false
+  EnforcedStyle: double_quotes
 
 Style/SymbolArray:
   Enabled: false

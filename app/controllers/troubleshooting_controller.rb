@@ -150,7 +150,7 @@ class TroubleshootingController < ApplicationController
   def update_tag_filters
     @item.async(:update_filters_for_taggables)
 
-    @item.synonyms.find_each do |syn|
+    @item.mergers.find_each do |syn|
       syn.async(:update_filters_for_taggables)
     end
 
