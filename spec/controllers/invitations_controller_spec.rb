@@ -8,7 +8,7 @@ describe InvitationsController do
   let(:user) { create(:user) }
 
   describe "GET #index" do
-    context 'when admin does not have correct authorization' do
+    context "when admin does not have correct authorization" do
       it "denies random admin access" do
         admin.update(roles: [])
         fake_login_admin(admin)
@@ -17,9 +17,9 @@ describe InvitationsController do
       end
     end
 
-    context 'when admin has correct authorization' do
+    context "when admin has correct authorization" do
       it "allows admins to access index" do
-        admin.update(roles: ['policy_and_abuse'])
+        admin.update(roles: ["policy_and_abuse"])
         fake_login_admin(admin)
         get :index, params: { user_id: user.login }
         expect(response).to render_template("index")
@@ -28,7 +28,7 @@ describe InvitationsController do
   end
 
   describe "GET #manage" do
-    context 'when admin does not have correct authorization' do
+    context "when admin does not have correct authorization" do
       it "denies random admin access" do
         admin.update(roles: [])
         fake_login_admin(admin)
@@ -37,9 +37,9 @@ describe InvitationsController do
       end
     end
 
-    context 'when admin has correct authorization' do
+    context "when admin has correct authorization" do
       it "allows admins to access index" do
-        admin.update(roles: ['policy_and_abuse'])
+        admin.update(roles: ["policy_and_abuse"])
         fake_login_admin(admin)
         get :manage, params: { user_id: user.login }
         expect(response).to render_template("manage")
@@ -51,7 +51,7 @@ describe InvitationsController do
     let(:invitation) { create(:invitation) }
 
     it "allows admins to access show page" do
-      admin.update(roles: ['policy_and_abuse'])
+      admin.update(roles: ["policy_and_abuse"])
       fake_login_admin(admin)
       get :show, params: { id: invitation.id }
       expect(response).to render_template("show")
@@ -62,15 +62,15 @@ describe InvitationsController do
     let(:invitation) { create(:invitation) }
 
     it "does not send invite if email is missing" do
-      admin.update(roles: ['policy_and_abuse'])
+      admin.update(roles: ["policy_and_abuse"])
       fake_login_admin(admin)
       post :invite_friend, params: { user_id: user.id, id: invitation.id, invitation: { invitee_email: nil, number_of_invites: 1 } }
       expect(response).to render_template("show")
-      expect(flash[:error]).to match('Please enter an email address.')
+      expect(flash[:error]).to match("Please enter an email address.")
     end
 
     it "sends invite" do
-      admin.update(roles: ['policy_and_abuse'])
+      admin.update(roles: ["policy_and_abuse"])
       fake_login_admin(admin)
       post :invite_friend, params: { user_id: user.id, id: invitation.id, invitation: { invitee_email: user.email, number_of_invites: 1 } }
       it_redirects_to_with_notice(invitation_path(invitation), "Invitation was successfully sent.")
@@ -91,7 +91,7 @@ describe InvitationsController do
     end
 
     it "creates invitations" do
-      admin.update(roles: ['policy_and_abuse'])
+      admin.update(roles: ["policy_and_abuse"])
       fake_login_admin(admin)
 
       post :create, params: { user_id: invitee.login, invitation: { invitee_email: invitee.email, number_of_invites: 1 } }
@@ -103,13 +103,13 @@ describe InvitationsController do
     it "updates and resends invitations" do
       invitee = create(:user)
       invitation = create(:invitation)
-      admin.update(roles: ['policy_and_abuse'])
+      admin.update(roles: ["policy_and_abuse"])
       fake_login_admin(admin)
 
       put :update, params: { id: invitation.id, invitation: { invitee_email: invitee.email } }
       it_redirects_to_with_notice(
         find_admin_invitations_path("invitation[token]" => invitation.token),
-        'Invitation was successfully sent.'
+        "Invitation was successfully sent."
       )
     end
   end
@@ -128,7 +128,7 @@ describe InvitationsController do
 
     it "deletes invitations" do
       invitation = create(:invitation)
-      admin.update(roles: ['policy_and_abuse'])
+      admin.update(roles: ["policy_and_abuse"])
       fake_login_admin(admin)
 
       post :destroy, params: { id: invitation.id }

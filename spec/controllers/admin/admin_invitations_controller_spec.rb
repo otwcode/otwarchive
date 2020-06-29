@@ -26,7 +26,7 @@ describe Admin::AdminInvitationsController do
     let(:admin) { create(:admin) }
 
     it "does not allow non-admins to create invites" do
-      email = 'test_email@example.com'
+      email = "test_email@example.com"
       fake_login
       post :create, params: { invitation: { invitee_email: email } }
 
@@ -34,7 +34,7 @@ describe Admin::AdminInvitationsController do
     end
 
     it "allows admins to access index" do
-      email = 'test_email@example.com'
+      email = "test_email@example.com"
       fake_login_admin(admin)
       post :create, params: { invitation: { invitee_email: email } }
 
@@ -48,14 +48,14 @@ describe Admin::AdminInvitationsController do
 
     it "does not allow non-admins to invite from queue" do
       fake_login
-      post :invite_from_queue, params: { invitation: { invite_from_queue: '1' } }
+      post :invite_from_queue, params: { invitation: { invite_from_queue: "1" } }
 
       it_redirects_to_with_notice(root_path, "I'm sorry, only an admin can look at that area")
     end
 
     it "allows admins to invite from queue" do
       fake_login_admin(admin)
-      post :invite_from_queue, params: { invitation: { invite_from_queue: '1' } }
+      post :invite_from_queue, params: { invitation: { invite_from_queue: "1" } }
 
       it_redirects_to_with_notice(admin_invitations_path, '1 people from the invite queue were invited.')
     end
@@ -67,14 +67,14 @@ describe Admin::AdminInvitationsController do
 
     it "does not allow non-admins to invite from queue" do
       fake_login
-      post :grant_invites_to_users, params: { invitation: { user_group: 'ALL' } }
+      post :grant_invites_to_users, params: { invitation: { user_group: "ALL" } }
 
       it_redirects_to_with_notice(root_path, "I'm sorry, only an admin can look at that area")
     end
 
     it "allows admins to invite from queue" do
       fake_login_admin(admin)
-      post :grant_invites_to_users, params: { invitation: { user_group: 'ALL', number_of_invites: '2' } }
+      post :grant_invites_to_users, params: { invitation: { user_group: "ALL", number_of_invites: "2" } }
 
       it_redirects_to_with_notice(admin_invitations_path, "Invitations successfully created.")
     end
