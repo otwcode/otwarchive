@@ -928,12 +928,12 @@ class Work < ApplicationRecord
     # go back to using the anon_commenting_disabled column without data loss.
     write_attribute(:anon_commenting_disabled,
                     Work.comment_permissions[comment_permissions])
-
   end
 
   def anon_commenting_disabled=(value)
     write_attribute(:anon_commenting_disabled, value)
-    write_attribute(:comment_permissions, anon_commenting_disabled ? :disable_anon : :enable_all)
+    write_attribute(:comment_permissions,
+                    anon_commenting_disabled ? :disable_anon : :enable_all)
   end
 
   ########################################################################

@@ -695,11 +695,18 @@ class WorksController < ApplicationController
     # To avoid overwriting, we entirely trash any blank fields.
     updated_work_params = work_params.reject { |_key, value| value.blank? }
 
-    # We used to reject any parameters with value "0", so on the old edit
-    # multiple form there were special values in place of the "0". We keep
-    # checking those values for backwards-compatibility with the old form.
+    # It takes around 1 hour to restart all the workers when deploying, so the
+    # old code and the new code need to co-exist. The old WorksController code
+    # used to reject parameters with a value of "0", so the new WorksController
+    # form cannot use "0".
     #
-    # TODO: Remove these checks.
+    # Instead, we use special values to represent "0", and handle them with the
+    # following if statements.
+    #
+    # TODO: To eliminate this code, we need to do separate deploys for these
+    # two steps:
+    # (1) Make the works/edit_multiple form use "0" instead of special values.
+    # (2) Delete the code handling the special values.
     if updated_work_params[:anon_commenting_disabled] == 'allow_anon'
       updated_work_params[:anon_commenting_disabled] = '0'
     end
@@ -924,7 +931,10 @@ class WorksController < ApplicationController
       :rating_string, :fandom_string, :relationship_string, :character_string,
       :archive_warning_string, :category_string, :expected_number_of_chapters, :revised_at,
       :freeform_string, :summary, :notes, :endnotes, :collection_names, :recipients, :wip_length,
+<<<<<<< HEAD
       # TODO: Remove anon_commenting_disabled.
+=======
+>>>>>>> master
       :backdate, :language_id, :work_skin_id, :restricted, :anon_commenting_disabled, :comment_permissions,
       :moderated_commenting_enabled, :title, :pseuds_to_add, :collections_to_add,
       current_user_pseud_ids: [],

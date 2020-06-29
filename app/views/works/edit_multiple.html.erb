@@ -47,6 +47,13 @@
             {:include_blank => true} %>
       </dd>
 
+      <%
+        # For each of the following radio buttons, we replace the value that
+        # would normally be "0" with a special string that will be replaced
+        # with "0" in the controller. This is for cross-compatibility with the
+        # old code -- see WorksController#update_multiple for details.
+      %>
+
       <dt><%= ts("Visibility") %> <%= link_to_help "registered-users" %></dt>
       <dd>
         <fieldset>
@@ -54,7 +61,7 @@
             radio_button_list(form, :restricted, [
               ["", ts("Keep current visibility settings")],
               ["1", ts("Only show to registered users")],
-              ["0", ts("Show to all")],
+              ["unrestricted", ts("Show to all")]
             ])
           %>
         </fieldset>
@@ -67,7 +74,7 @@
             radio_button_list(form, :moderated_commenting_enabled, [
               ["", ts("Keep current comment moderation settings")],
               ["1", ts("Enable comment moderation")],
-              ["0", ts("Disable comment moderation")],
+              ["not_moderated", ts("Disable comment moderation")]
             ])
           %>
         </fieldset>
