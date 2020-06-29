@@ -159,6 +159,24 @@ describe TagsController do
     end
   end
 
+  describe "show_hidden" do
+    let(:work) { create(:work, posted: true) }
+
+    it "redirects to referer with an error for non-ajax warnings requests" do
+      referer = tags_path
+      request.headers["HTTP_REFERER"] = referer
+      get :show_hidden, params: { creation_type: "Work", tag_type: "warnings", creation_id: work.id }
+      it_redirects_to_with_error(referer, "Sorry, you need to have JavaScript enabled for this.")
+    end
+
+    it "redirects to referer with an error for non-ajax freeforms requests" do
+      referer = tags_path
+      request.headers["HTTP_REFERER"] = referer
+      get :show_hidden, params: { creation_type: "Work", tag_type: "freeforms", creation_id: work.id }
+      it_redirects_to_with_error(referer, "Sorry, you need to have JavaScript enabled for this.")
+    end
+  end
+
   describe "edit" do
     context "when editing a banned tag" do
       before do

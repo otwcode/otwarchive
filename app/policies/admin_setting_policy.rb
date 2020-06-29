@@ -10,7 +10,7 @@ class AdminSettingPolicy < ApplicationPolicy
   end
 
   def permitted_attributes
-    if user.roles.include?('superadmin')
+    if user.roles.include?("superadmin")
       [
         :account_creation_enabled, :invite_from_queue_enabled, :invite_from_queue_number,
         :invite_from_queue_frequency, :days_to_purge_unactivated,
@@ -19,7 +19,7 @@ class AdminSettingPolicy < ApplicationPolicy
         :request_invite_enabled, :creation_requires_invite, :downloads_enabled,
         :hide_spam, :disable_support_form, :disabled_support_form_text
       ]
-    elsif user.roles.include?('tag_wrangling')
+    elsif user.roles.include?("tag_wrangling")
       [:tag_wrangling_off]
     end
   end

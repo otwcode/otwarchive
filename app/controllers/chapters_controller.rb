@@ -120,7 +120,7 @@ class ChaptersController < ApplicationController
           redirect_to [@work, @chapter]
         else
           draft_flash_message(@work)
-          redirect_to [:preview, @work, @chapter]
+          redirect_to preview_work_chapter_path(@work, @chapter)
         end
       else
         render :new
@@ -157,7 +157,7 @@ class ChaptersController < ApplicationController
       @work.set_revised_at_by_chapter(@chapter)
       if @chapter.save && @work.save
         flash[:notice] = ts("Chapter was successfully #{posted_changed ? 'posted' : 'updated'}.")
-        redirect_to [@work, @chapter]
+        redirect_to work_chapter_path(@work, @chapter)
       else
         render :edit
       end

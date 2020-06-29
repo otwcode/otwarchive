@@ -272,7 +272,7 @@ end
 
 When /^I edit the work "([^"]*)"$/ do |work|
   work = Work.find_by(title: work)
-  visit edit_work_url(work)
+  visit edit_work_path(work)
 end
 When /^I edit the draft "([^"]*)"$/ do |draft|
   step %{I edit the work "#{draft}"}
@@ -692,4 +692,13 @@ end
 
 Then /^the Remove Me As Chapter Co-Creator option should not be on the ([\d]+)(?:st|nd|rd|th) chapter$/ do |chapter_number|
   step %{I should not see "Remove Me As Chapter Co-Creator" within "ul#sortable_chapter_list > li:nth-of-type(#{chapter_number})"}
+end
+
+Then /^the share modal should contain a Twitter share button$/ do
+  with_scope('#share') do
+    iframe = find('li.twitter #twitter-widget-0')
+    within_frame(iframe) do
+      page.should have_content("Tweet")
+    end
+  end
 end
