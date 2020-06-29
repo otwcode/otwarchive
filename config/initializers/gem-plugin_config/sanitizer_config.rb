@@ -35,7 +35,11 @@ class Sanitize
         'blockquote' => {'cite' => ['http', 'https', :relative]},
         'img' => {'src' => ['http', 'https', :relative]},
         'q' => {'cite' => ['http', 'https', :relative]}
-      }
+      },
+      
+      # TODO: This can be removed once we upgrade sanitizer gem, AO3-5801
+      # I would leave the tests we added in AO3-5974 though.
+      remove_contents: %w[iframe math noembed noframes noscript plaintext script style svg xmp]
     )
 
     CLASS_ATTRIBUTE = freeze_config(

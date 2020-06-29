@@ -30,11 +30,8 @@ and preserve the balance/symmetry of the page */
   margin-left: 2.75em;
 }
 
-/* AO3-5845: Workaround for Twitter button not always displaying in some
-browsers. */
-.twitter-share-button {
-  min-width: 76px;
-  min-height: 28px;
+/* AO3-5907 avoid size change for modal during twitter button loads */
+.twitter {
   width: 76px;
   height: 28px;
 }

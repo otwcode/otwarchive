@@ -227,6 +227,22 @@ describe WorksController, work_search: true do
       expect(assigns[:work].errors.full_messages).to \
         include "Invalid creator: The pseud ambiguous is ambiguous."
     end
+
+    it "renders new if the work has noncanonical warnings" do
+      work_attributes = attributes_for(:work).except(:posted, :archive_warning_string).merge(archive_warning_string: "Warning")
+      post :create, params: { work: work_attributes }
+      expect(response).to render_template("new")
+      expect(assigns[:work].errors.full_messages).to \
+        include "Please add all required tags. Warning is missing."
+    end
+
+    it "renders new if the work has noncanonical rating" do
+      work_attributes = attributes_for(:work).except(:posted, :rating_string).merge(rating_string: "Rating")
+      post :create, params: { work: work_attributes }
+      expect(response).to render_template("new")
+      expect(assigns[:work].errors.full_messages).to \
+        include "Please add all required tags."
+    end
   end
 
   describe "show" do
@@ -239,6 +255,24 @@ describe WorksController, work_search: true do
       get :show, params: { id: work_no_fandoms.id }
 
       expect(assigns(:page_title)).to include "No fandom specified"
+    end
+  end
+
+  describe "share" do
+    it "returns a 404 response for unrevealed works" do
+      unrevealed_collection = create :unrevealed_collection
+      unrevealed_work = create :work, collections: [unrevealed_collection]
+
+      get :share, params: { id: unrevealed_work.id }, xhr: true
+      expect(response.status).to eq(404)
+    end
+
+    it "redirects to referer with an error for non-ajax warnings requests" do
+      work = create(:work)
+      referer = work_path(work)
+      request.headers["HTTP_REFERER"] = referer
+      get :share, params: { id: work.id }
+      it_redirects_to_with_error(referer, "Sorry, you need to have JavaScript enabled for this.")
     end
   end
 
