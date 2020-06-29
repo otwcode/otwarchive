@@ -65,7 +65,7 @@ describe Collectible do
     end
   end
 
-  context "being posted to a collection", focus: true do
+  context "being posted to a collection" do
     let(:collection) { create(:collection) }
     # build but don't save so we can change the collection settings
     let(:work) { build(:work, collection_names: collection.name) }
