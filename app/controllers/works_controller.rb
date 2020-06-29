@@ -929,7 +929,7 @@ class WorksController < ApplicationController
       :rating_string, :fandom_string, :relationship_string, :character_string,
       :archive_warning_string, :category_string, :expected_number_of_chapters, :revised_at,
       :freeform_string, :summary, :notes, :endnotes, :collection_names, :recipients, :wip_length,
-      :backdate, :language_id, :work_skin_id, :restricted, :anon_commenting_disabled,
+      :backdate, :language_id, :work_skin_id, :restricted, :anon_commenting_disabled, :comment_permissions,
       :moderated_commenting_enabled, :title, :pseuds_to_add, :collections_to_add,
       :unrestricted,
       current_user_pseud_ids: [],

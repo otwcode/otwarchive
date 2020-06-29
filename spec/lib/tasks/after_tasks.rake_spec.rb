@@ -131,7 +131,7 @@ describe "rake After:copy_anon_commenting_disabled_to_comment_permissions" do
 
   before do
     work.update_columns(anon_commenting_disabled: true,
-                        comment_permissions: 0)
+                        comment_permissions: :enable_all)
   end
 
   it "updates comment_permissions to match anon_commenting_disabled" do
@@ -139,6 +139,6 @@ describe "rake After:copy_anon_commenting_disabled_to_comment_permissions" do
       subject.invoke
     end.to change {
       work.reload.comment_permissions
-    }.from(0).to(1)
+    }.from("enable_all").to("disable_anon")
   end
 end
