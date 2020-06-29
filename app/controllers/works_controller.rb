@@ -691,15 +691,30 @@ class WorksController < ApplicationController
     @user = current_user
     @works = Work.joins(pseuds: :user).where('users.id = ?', @user.id).where(id: params[:work_ids]).readonly(false)
     @errors = []
-    # to avoid overwriting, we entirely trash any blank fields and also any unchecked checkboxes
+
+    # To avoid overwriting, we entirely trash any blank fields and also any
+    # unchecked checkboxes.
+    #
+    # Note that in the current edit_multiple form, we don't actually have any
+    # fields with value 0 (the hidden input used for unchecked checkboxes). So
+    # in a future release, it would be good to stop rejecting the params with
+    # value == '0', and stop checking for these special values below. But for
+    # compatibility with the existing form, we need to keep this code as is for
+    # now, and change it incrementally.
     updated_work_params = work_params.reject { |_key, value| value.blank? || value == '0' }
 
-    # manually allow switching of anon/moderated comments
+    # Special values which would normally be represented by 0, but can't
+    # because of the filter on updated_work_params.
     if updated_work_params[:anon_commenting_disabled] == 'allow_anon'
       updated_work_params[:anon_commenting_disabled] = '0'
     end
+
     if updated_work_params[:moderated_commenting_enabled] == 'not_moderated'
       updated_work_params[:moderated_commenting_enabled] = '0'
+    end
+
+    if updated_work_params[:restricted] == 'unrestricted'
+      updated_work_params[:restricted] = '0'
     end
 
     @works.each do |work|
