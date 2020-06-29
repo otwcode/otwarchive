@@ -206,6 +206,19 @@ describe TroubleshootingController do
         it_redirects_to_simple(tag_path(tag))
       end
 
+      it "recalculates filters for unfilterable tags" do
+        unfilterable = create(:fandom)
+        work = create(:work, fandoms: [unfilterable])
+
+        # Create an unnecessary filter tagging:
+        work.filter_taggings.create(filter: unfilterable)
+
+        put :update, params: { tag_id: unfilterable.to_param, actions: ["update_tag_filters"] }
+
+        expect(work.filters.reload).not_to include(unfilterable)
+        it_redirects_to_simple(tag_path(unfilterable))
+      end
+
       it "reindexes the work and redirects" do
         expect do
           put :update, params: { work_id: work.id, actions: ["reindex_work"] }
