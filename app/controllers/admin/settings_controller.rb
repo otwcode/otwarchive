@@ -13,11 +13,11 @@ class Admin::SettingsController < Admin::BaseController
 
     if authorized_params == true && @admin_setting.update(admin_setting_params)
       flash[:notice] = ts("Archive settings were successfully updated.")
+      redirect_to admin_settings_path
     else
       flash[:error] = authorized_params unless authorized_params == true
+      render action: "index"
     end
-
-    redirect_to admin_settings_path
   end
 
   private
