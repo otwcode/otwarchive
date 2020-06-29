@@ -8,7 +8,7 @@ describe WorksController do
   let!(:multiple_works_user) { create(:user) }
 
   describe "edit_multiple" do
-    it "should redirect to the orphan path when the Orphan button was clicked" do
+    it "redirects to the orphan path when the Orphan button was clicked" do
       work1 = create(:work, authors: [multiple_works_user.default_pseud])
       work2 = create(:work, authors: [multiple_works_user.default_pseud])
       work_ids = [work1.id, work2.id]
@@ -19,7 +19,7 @@ describe WorksController do
   end
 
   describe "confirm_delete_multiple" do
-    it "should return the works specified in the work_ids parameters" do
+    it "returns the works specified in the work_ids parameters" do
       work1 = create(:work, authors: [multiple_works_user.default_pseud])
       work2 = create(:work, authors: [multiple_works_user.default_pseud])
       fake_login_known_user(multiple_works_user)
@@ -48,12 +48,12 @@ describe WorksController do
     end
 
     # already covered - just for completeness
-    it "should delete all the works" do
+    it "deletes all the works" do
       expect { Work.find(multiple_work1.id) }.to raise_exception(ActiveRecord::RecordNotFound)
       expect { Work.find(multiple_work2.id) }.to raise_exception(ActiveRecord::RecordNotFound)
     end
 
-    it "should display a notice" do
+    it "displays a notice" do
       expect(flash[:notice]).to eq "Your works Work 1, Work 2 were deleted."
     end
   end
@@ -109,14 +109,14 @@ describe WorksController do
         }
       }
 
-      it "should change the comment_permissions option to 0" do
+      it "changes the comment_permissions option to 0" do
         put :update_multiple, params: params
         assigns(:works).each do |work|
           expect(work.comment_permissions).to eq("enable_all")
         end
       end
 
-      it "should change the moderated_commenting_enabled option to false" do
+      it "changes the moderated_commenting_enabled option to false" do
         put :update_multiple, params: params
         assigns(:works).each do |work|
           expect(work.moderated_commenting_enabled).to be false
