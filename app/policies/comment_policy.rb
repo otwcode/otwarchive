@@ -13,8 +13,12 @@ class CommentPolicy < ApplicationPolicy
     (can_delete_comment? || author_of?(record.ultimate_parent))
   end
 
+  def can_mark_comment_ham?
+    can_delete_comment?
+  end
+
   alias_method :destroy?, :can_delete_comment?
-  alias_method :approve?, :can_delete_comment?
+  alias_method :approve?, :can_mark_comment_ham?
   alias_method :reject?, :can_mark_comment_spam?
 
   private
