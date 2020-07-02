@@ -9,8 +9,9 @@ class Admin::SettingsController < Admin::BaseController
   # PUT /admin_settings/1.xml
   def update
     authorize @admin_setting
+    authorized_params = policy(@admin_setting).verify_permitted_params(admin_setting_params) 
 
-    if policy(@admin_setting).verify_permitted_params(admin_setting_params) && @admin_setting.update(admin_setting_params)
+    if authorized_params == true && @admin_setting.update(admin_setting_params)
       flash[:notice] = ts("Archive settings were successfully updated.")
       redirect_to admin_settings_path
     else
