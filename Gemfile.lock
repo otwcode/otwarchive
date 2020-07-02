@@ -303,6 +303,8 @@ GEM
       byebug (~> 9.0)
       pry (~> 0.10)
     public_suffix (3.0.3)
+    pundit (2.0.0)
+      activesupport (>= 3.0.0)
     rack (2.2.3)
     rack-attack (6.1.0)
       rack (>= 1.0, < 3)
@@ -530,6 +532,7 @@ DEPENDENCIES
   pickle
   poltergeist
   pry-byebug
+  pundit
   rack (~> 2.1, >= 2.1.4)
   rack-attack
   rack-dev-mark (>= 0.7.8)

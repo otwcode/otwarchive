@@ -108,6 +108,6 @@ Feature: Download a work
 
   Given I am logged in
     And I post the work "TOS Violation"
-  When I am logged in as an admin
+  When I am logged in as policy_and_abuse_admin
     And I hide the work "TOS Violation"
   Then I should not see "Download"

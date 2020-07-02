@@ -9,7 +9,7 @@ Scenario: Post a FAQ
       And I should not see "Some text"
     When I am logged in as an admin
     When I follow "Admin Posts"
-      And I follow "Archive FAQ" within "#main"
+      And I follow "Archive FAQ" within "#header"
       And I should not see "Some text"
     When I follow "New FAQ Category"
       And I fill in "Question*" with "What is AO3?"
@@ -25,7 +25,7 @@ Scenario: Post a FAQ
   Scenario: Edit FAQ
     Given I have posted a FAQ
     When I follow "Admin Posts"
-      And I follow "Archive FAQ" within "#main"
+      And I follow "Archive FAQ" within "#header"
       And I follow "Edit"
       And I fill in "Answer*" with "Number 1 posted FAQ, this is, and Yoda approves."
       And I press "Post"
@@ -43,7 +43,7 @@ Scenario: Post a FAQ
       And I should not see "Some text"
     When I am logged in as an admin
     When I follow "Admin Posts"
-      And I follow "Archive FAQ" within "#main"
+      And I follow "Archive FAQ" within "#header"
       And I should not see "Some text"
     When I follow "New FAQ Category"
       And I fill in "Question*" with "What is AO3?"
