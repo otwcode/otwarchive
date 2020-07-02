@@ -1,5 +1,8 @@
 class Admin < ApplicationRecord
   include ActiveModel::ForbiddenAttributesProtection
+  VALID_ROLES = %w(superadmin communications translation tag_wrangling docs support policy_and_abuse open_doors).freeze
+
+  serialize :roles, Array
 
   devise :database_authenticatable,
          :validatable,
@@ -15,4 +18,11 @@ class Admin < ApplicationRecord
   validates :email, uniqueness: true
   validates_presence_of :password_confirmation, if: :new_record?
   validates_confirmation_of :password, if: :new_record?
+
+  validate :allowed_roles
+  def allowed_roles
+    if roles && (roles - VALID_ROLES).present?
+      errors.add(:roles, :invalid)
+    end
+  end
 end
