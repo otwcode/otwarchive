@@ -4,7 +4,7 @@ describe ShareHelper do
   before do
     # The admin check is defined in ApplicationController
     # and is unavailable for helper specs.
-    allow(helper).to receive(:logged_in_as_admin?) { false }
+    allow(helper).to receive(:logged_in_as_admin?).and_return(false)
 
     # Stub a Devise helper for creator checks
     allow(helper).to receive(:current_user)
@@ -61,7 +61,7 @@ describe ShareHelper do
       let(:work) { create(:work, title: "MAMA 2020", fandom_string: "K/DA") }
       let(:bookmark) { build_stubbed(:bookmark, bookmarkable: work) }
 
-      it "should return a formatted tweet" do
+      it "returns a formatted tweet" do
         text = "Bookmark of MAMA 2020 by #{work.pseuds.first.byline} - K/DA".truncate(83)
         expect(helper.get_tweet_text_for_bookmark(bookmark)).to eq(text)
       end
