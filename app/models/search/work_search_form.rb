@@ -31,7 +31,7 @@ class WorkSearchForm
     :fandom_ids,
     :rating_ids,
     :category_ids,
-    :warning_ids,
+    :archive_warning_ids,
     :character_names,
     :character_ids,
     :relationship_names,
@@ -49,32 +49,6 @@ class WorkSearchForm
 
   attr_accessor :options
 
-  # Make a direct request to the elasticsearch count api
-  def self.count_for_user(user)
-    WorkQuery.new(user_ids: [user.id]).count
-  end
-
-  def self.count_for_pseuds(pseuds)
-    WorkQuery.new(pseud_ids: pseuds.map(&:id)).count
-  end
-
-  def self.user_count(user)
-    cached_count(user) || count_for_user(user)
-  end
-
-  def self.pseud_count(pseud)
-    cached_count(pseud) || count_for_pseuds([pseud])
-  end
-
-  def self.cached_count(owner)
-    status = User.current_user ? 'logged_in' : 'logged_out'
-    key = "#{owner.works_index_cache_key}_#{status}_page"
-    works = Rails.cache.read(key)
-    if works.present?
-      works.total_entries
-    end
-  end
-
   ATTRIBUTES.each do |filterable|
     define_method(filterable) { options[filterable] }
   end
@@ -88,14 +62,35 @@ class WorkSearchForm
   def process_options
     @options.delete_if { |k, v| v == "0" || v.blank? }
     standardize_creator_queries
+    standardize_language_ids
     set_sorting
     clean_up_angle_brackets
+    rename_warning_field
   end
 
   # Make the creator/creators change backwards compatible
   def standardize_creator_queries
     return unless @options[:query].present?
     @options[:query] = @options[:query].gsub('creator:', 'creators:')
+  end
+
+  def standardize_language_ids
+    # Maintain backward compatibility for old work searches/filters:
+
+    # - Using language IDs in the "Language" dropdown
+    if @options[:language_id].present? && @options[:language_id].to_i != 0
+      language = Language.find_by(id: options[:language_id])
+      options[:language_id] = language.short if language.present?
+    end
+
+    # - Using language IDs in "Any field" (search) or "Search within results" (filters)
+    if @options[:query].present?
+      @options[:query] = @options[:query].gsub(/\blanguage_id\s*:\s*(\d+)/) do
+        lang = Language.find_by(id: Regexp.last_match[1])
+        lang = Language.default if lang.blank?
+        "language_id: " + lang.short
+      end
+    end
   end
 
   def set_sorting
@@ -108,6 +103,12 @@ class WorkSearchForm
       next unless @options[countable].present?
       str = @options[countable]
       @options[countable] = str.gsub("&gt;", ">").gsub("&lt;", "<")
+    end
+  end
+
+  def rename_warning_field
+    if @options[:warning_ids].present?
+      @options[:archive_warning_ids] = @options.delete(:warning_ids)
     end
   end
 
@@ -148,7 +149,7 @@ class WorkSearchForm
       summary << "Single Chapter"
     end
     if @options[:language_id].present?
-      language = Language.find_by(id: @options[:language_id])
+      language = Language.find_by(short: @options[:language_id])
       if language.present?
         summary << "Language: #{language.name}"
       end
@@ -220,4 +221,35 @@ class WorkSearchForm
     end
   end
 
+  ###############
+  # COUNTING
+  ###############
+
+  def self.count_for_user(user)
+    Rails.cache.fetch(count_cache_key(user), count_cache_options) do
+      WorkQuery.new(user_ids: [user.id]).count
+    end
+  end
+
+  def self.count_for_pseud(pseud)
+    Rails.cache.fetch(count_cache_key(pseud), count_cache_options) do
+      WorkQuery.new(pseud_ids: [pseud.id]).count
+    end
+  end
+
+  # If we want to invalidate cached work counts whenever the owner (which for
+  # this method can only be a user or a pseud) has a new work, we can use
+  # "#{owner.works_index_cache_key}" instead of "#{owner.class.name.underscore}_#{owner.id}".
+  # See lib/works_owner.rb.
+  def self.count_cache_key(owner)
+    status = User.current_user ? 'logged_in' : 'logged_out'
+    "work_count_#{owner.class.name.underscore}_#{owner.id}_#{status}"
+  end
+
+  def self.count_cache_options
+    {
+      expires_in: ArchiveConfig.SECONDS_UNTIL_DASHBOARD_COUNTS_EXPIRE.seconds,
+      race_condition_ttl: 10.seconds
+    }
+  end
 end

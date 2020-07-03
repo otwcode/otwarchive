@@ -7,8 +7,8 @@ Feature: Invite requests
       And I am logged in as "user1"
     When I try to invite a friend from my user page
       And I follow "Request invitations"
-    When I fill in "user_invite_request_quantity" with "3"
-      And I fill in "user_invite_request_reason" with "I want them for a friend"
+    When I fill in "How many invitations would you like? (max 10)" with "3"
+      And I fill in "Please specify why you'd like them:" with "I want them for a friend"
       And I press "Send Request"
     Then I should see a create confirmation message
 
@@ -83,9 +83,9 @@ Feature: Invite requests
         | user_registration_password               | password1 |
         | user_registration_password_confirmation  | password1 |
       And I press "Create Account"
-    Then I should see "Within 24 hours, you should receive an email at the address you gave us."
+    Then I should see "You should soon receive a confirmation email at the address you gave us"
       And I should see how long I have to activate my account
-      And I should see "If you don't hear from us within 24 hours"
+      And I should see "If you haven't received this email within 24 hours"
 
   Scenario: Banned users cannot access their invitations page
 
@@ -111,14 +111,14 @@ Feature: Invite requests
     Then I should see "Invitation was successfully sent."
 
   Scenario: An admin can get to a user's invitations page
-    Given I am logged in as an admin
+    Given I am logged in as superadmin
       And the user "steven" exists and is activated
     When I go to the abuse administration page for "steven"
       And I follow "Add User Invitations"
     Then I should be on steven's invitations page
 
   Scenario: An admin can get to a user's manage invitations page
-    Given I am logged in as an admin
+    Given I am logged in as superadmin
       And the user "steven" exists and is activated
     When I go to the abuse administration page for "steven"
       And I follow "Manage User Invitations"

@@ -7,7 +7,8 @@ Feature: Private bookmarks
   @disable_caching
   Scenario: private bookmarks on public and restricted works
 
-    Given a canonical fandom "Stargate SG-1"
+    Given dashboard counts expire after 10 seconds
+      And a canonical fandom "Stargate SG-1"
       And I am logged in as "workauthor"
       And I post the locked work "Secret Masterpiece"
       And I post the work "Public Masterpiece"
@@ -51,10 +52,13 @@ Feature: Private bookmarks
       And I should not see "Another Masterpiece"
     When I am on avid_bookmarker's bookmarks page
     Then I should see "3 Bookmarks by avid_bookmarker"
-      And I should see "Bookmarks (3)"
+      And I should see "Bookmarks (0)"
       And I should see "Public Masterpiece"
       And I should see "Secret Masterpiece"
       And I should see "Another Masterpiece"
+    When I wait 11 seconds
+      And I reload the page
+    Then I should see "Bookmarks (3)"
     When I go to the bookmarks page for user "avid_bookmarker" with pseud "infrequent_bookmarker"
     Then I should see "1 Bookmark by infrequent_bookmarker (avid_bookmarker)"
       And I should see "Bookmarks (1)"

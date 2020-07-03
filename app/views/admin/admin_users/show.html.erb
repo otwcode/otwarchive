@@ -21,7 +21,7 @@
       <%= button_to ts("Activate User Account"), { action: "activate", id: @user }, disabled: @user.active? %>
     </li>
     <li>
-      <%= link_to ts("Manage User Roles"), { action: "index", query: @user.login, role: '0' } %>
+      <%= link_to ts("Manage User Roles"), { action: "index", name: @user.login, role: '0' } %>
     </li>
   </ul>
   <!--/subnav-->
@@ -52,6 +52,10 @@
       <legend><%= ts("Warnings and Suspensions") %></legend>
       <h4 class="heading"><%= ts("Warnings and Suspensions") %></h4>
       <ul>
+        <li>
+          <%= radio_button_tag "admin_action", "note" %>
+          <%= label_tag "admin_action_note", ts("Record note") %>
+        </li>
         <li>
           <%= radio_button_tag "admin_action", "warn" %>
           <%= label_tag "admin_action_warn", ts("Record warning") %>

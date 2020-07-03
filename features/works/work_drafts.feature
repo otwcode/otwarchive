@@ -1,5 +1,4 @@
 @works @search
-@no-txn
 Feature: Work Drafts
 
   Scenario: Creating a work draft
@@ -15,6 +14,7 @@ Feature: Work Drafts
   Then I should see "Post New Work"
     And I select "General Audiences" from "Rating"
     And I check "No Archive Warnings Apply"
+    And I select "English" from "Choose a language"
     And I fill in "Fandoms" with "MASH (TV)"
     And I fill in "Work Title" with "Draft Dodging"
     And I fill in "content" with "Klinger lay under his porch."
@@ -23,7 +23,7 @@ Feature: Work Drafts
   When I press "Edit"
   Then I should see "Edit Work"
     And I fill in "content" with "Klinger, in Uncle Gus's Aunt Gussie dress, lay under his porch."
-    And I press "Save Without Posting"
+    And I press "Save As Draft"
   Then I should see "This work is a draft and has not been posted."
     And I should see "Klinger, in Uncle Gus's Aunt Gussie dress, lay under his porch."
   When I am on persnickety's works page
@@ -102,7 +102,7 @@ Feature: Work Drafts
       When I follow "Edit"
         Then I should see "Edit Work"
       When I fill in "content" with "My draft has changed!"
-        And I press "Save Without Posting"
+        And I press "Save As Draft"
       Then I should see "This work is a draft and has not been posted"
         And I should see "My draft has changed!"
       When I am on drafty's works page
@@ -117,7 +117,7 @@ Feature: Work Drafts
         And the draft "Walking Into Mordor"
       When I edit the draft "Walking Into Mordor"
         And I press "Preview"
-      Then I should see "Please post your work or save without posting if you want to keep them."
+      Then I should see "Please post your work or save as draft if you want to keep them."
 
     Scenario: A chaptered draft should be able to have beginning and end notes, and it should display them.
       Given I am logged in as "composer"
@@ -125,7 +125,7 @@ Feature: Work Drafts
       When I edit the draft "Epic in Progress"
         And I add the beginning notes "Some beginning notes."
         And I add the end notes "Some end notes."
-        And I press "Save Without Posting"
+        And I press "Save As Draft"
       Then I should see "Some beginning notes."
         And I should see "See the end of the work for more notes."
       When I follow "more notes"

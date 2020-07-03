@@ -5,17 +5,12 @@ describe WorksController do
   include LoginMacros
   include RedirectExpectationHelper
 
-  let(:multiple_user_pseud) { create(:pseud) }
-  let!(:multiple_works_user) {
-    user = create(:user)
-    user.pseuds << multiple_user_pseud
-    user
-  }
+  let!(:multiple_works_user) { create(:user) }
 
   describe "edit_multiple" do
     it "should redirect to the orphan path when the Orphan button was clicked" do
-      work1 = create(:work, authors: [multiple_works_user.default_pseud], posted: true)
-      work2 = create(:work, authors: [multiple_works_user.default_pseud], posted: true)
+      work1 = create(:work, authors: [multiple_works_user.default_pseud])
+      work2 = create(:work, authors: [multiple_works_user.default_pseud])
       work_ids = [work1.id, work2.id]
       fake_login_known_user(multiple_works_user)
       post :edit_multiple, params: { id: work1.id, work_ids: work_ids, commit: "Orphan" }
@@ -25,8 +20,8 @@ describe WorksController do
 
   describe "confirm_delete_multiple" do
     it "should return the works specified in the work_ids parameters" do
-      work1 = create(:work, authors: [multiple_works_user.default_pseud], posted: true)
-      work2 = create(:work, authors: [multiple_works_user.default_pseud], posted: true)
+      work1 = create(:work, authors: [multiple_works_user.default_pseud])
+      work2 = create(:work, authors: [multiple_works_user.default_pseud])
       fake_login_known_user(multiple_works_user)
       params = { commit: "Orphan", id: work1.id, work_ids: [work1.id, work2.id] }
       post :confirm_delete_multiple, params: params
@@ -39,14 +34,12 @@ describe WorksController do
     let(:multiple_work1) {
       create(:work,
              authors: [multiple_works_user.default_pseud],
-             title: "Work 1",
-             posted: true)
+             title: "Work 1")
     }
     let(:multiple_work2) {
       create(:work,
              authors: [multiple_works_user.default_pseud],
-             title: "Work 2",
-             posted: true)
+             title: "Work 2")
     }
 
     before do
@@ -72,16 +65,14 @@ describe WorksController do
              authors: [multiple_works_user.default_pseud],
              title: "Work 1",
              anon_commenting_disabled: true,
-             moderated_commenting_enabled: true,
-             posted: true)
+             moderated_commenting_enabled: true)
     }
     let(:multiple_work2) {
       create(:work,
              authors: [multiple_works_user.default_pseud],
              title: "Work 2",
              anon_commenting_disabled: true,
-             moderated_commenting_enabled: true,
-             posted: true)
+             moderated_commenting_enabled: true)
     }
     let(:params) {
       {
@@ -97,8 +88,7 @@ describe WorksController do
           collections_to_add: "",
           language_id: "",
           work_skin_id: "",
-          restricted: "0",
-          unrestricted: "0",
+          restricted: "",
           anon_commenting_disabled: "",
           moderated_commenting_enabled: ""
         }
@@ -134,34 +124,152 @@ describe WorksController do
       end
     end
 
-    context 'adding and removing coauthors' do
-      let(:coauthor_to_remove_pseud) { FactoryGirl.create(:pseud) }
-      let(:coauthor_to_add_pseud) { FactoryGirl.create(:pseud) }
+    context "updating creators" do
+      let(:pseud_to_invite) do
+        user = FactoryBot.create(:user)
+        user.preference.update(allow_cocreator: true)
+        user.default_pseud
+      end
+
+      let(:other_editor_pseud) { create(:pseud, user: multiple_works_user) }
+
       let(:work_params) {
         {
           work: {
-            pseuds_to_remove: [coauthor_to_remove_pseud.id.to_s, ""],
-            pseuds_to_add: coauthor_to_add_pseud.name
+            pseuds_to_add: pseud_to_invite.name,
+            current_user_pseud_ids: [other_editor_pseud.id]
           }
         }
       }
 
       before do
-        multiple_work2.update_attribute(:authors, [multiple_works_user.default_pseud, coauthor_to_remove_pseud])
         put :update_multiple, params: params
       end
 
-      it "removes coauthors when pseuds_to_remove param exists" do
+      it "invites coauthors when pseuds_to_add param exists" do
         assigns(:works).each do |work|
-          expect(work.pseuds).not_to include(coauthor_to_remove_pseud)
+          expect(work.pseuds.reload).not_to include(pseud_to_invite)
+          expect(work.creatorships.unapproved.map(&:pseud)).to include(pseud_to_invite)
         end
       end
 
-      it "adds coauthors when pseuds_to_add param exists" do
+      it "modifies the editor's pseuds when current_user_pseud_ids param exists" do
         assigns(:works).each do |work|
-          expect(work.pseuds).to include(coauthor_to_add_pseud)
+          work.pseuds.reload
+          expect(work.pseuds).to include(other_editor_pseud)
+          expect(work.pseuds).not_to include(multiple_works_user.default_pseud)
         end
       end
     end
+
+    context "with archive_warning_strings" do    
+      context "when string doesn't match a canonical ArchiveWarning name" do
+        let(:work_params) {
+          { work: { archive_warning_strings: ["Nonexistent Warning"] } }
+        }
+
+        before do
+          put :update_multiple, params: params
+        end
+
+        it "doesn't update the works' archive warnings" do
+          assigns(:works).each do |work|
+            expect(work.archive_warnings.reload.map(&:name)).not_to include("Nonexistent Warning")
+            expect(work.archive_warnings.reload.map(&:name)).to include(ArchiveConfig.WARNING_NONE_TAG_NAME)
+          end
+        end
+      end
+
+      context "when string matches a canonical ArchiveWarning name" do
+        let(:work_params) {
+          {
+            work: {
+              archive_warning_strings: [ArchiveConfig.WARNING_CHAN_TAG_NAME]
+            }
+          }
+        }
+
+        before do
+          put :update_multiple, params: params
+        end
+
+        it "replaces the works' archive warnings" do
+          assigns(:works).each do |work|
+            expect(work.archive_warnings.reload.map(&:name)).not_to include(ArchiveConfig.WARNING_NONE_TAG_NAME)
+            expect(work.archive_warnings.reload.map(&:name)).to include(ArchiveConfig.WARNING_CHAN_TAG_NAME)
+          end
+        end
+      end
+    end
+
+    context "with category_string" do    
+      context "when string doesn't match a canonical Category name" do
+        let(:work_params) {
+          { 
+            work: { category_string: ["Nonexistent Category"] } 
+          }
+        }
+
+        before do
+          put :update_multiple, params: params
+        end
+
+        it "doesn't update the works' categories" do
+          assigns(:works).each do |work|
+            expect(work.categories.reload.map(&:name)).not_to include("Nonexistent Category")
+          end
+        end
+      end
+
+      context "when string matches a canonical Category name" do
+        let(:work_params) {
+          { work: { category_string: [ArchiveConfig.CATEGORY_SLASH_TAG_NAME] } }
+        }
+
+        before do
+          put :update_multiple, params: params
+        end
+
+        it "replaces the works' categories" do
+          assigns(:works).each do |work|
+            expect(work.categories.reload.map(&:name)).to include(ArchiveConfig.CATEGORY_SLASH_TAG_NAME)
+          end
+        end
+      end
+    end 
+  
+    context "with rating_string" do    
+      context "when string doesn't match a canonical Rating name" do
+        let(:work_params) { { work: { rating_string: "Nonexistent Rating" } } }
+
+        before do
+          put :update_multiple, params: params
+        end
+
+        it "doesn't update the works' rating" do
+          assigns(:works).each do |work|
+            expect(work.ratings.reload.map(&:name)).not_to include("Nonexistent Rating")
+            expect(work.ratings.reload.map(&:name)).to include(ArchiveConfig.RATING_DEFAULT_TAG_NAME)
+          end
+        end
+      end
+
+      context "when string matches a canonical Rating name" do
+        let(:work_params) {
+          { work: { rating_string: ArchiveConfig.RATING_EXPLICIT_TAG_NAME } }
+        }
+
+        before do
+          put :update_multiple, params: params
+        end
+
+        it "replaces the works' rating" do
+          assigns(:works).each do |work|
+            expect(work.ratings.reload.map(&:name)).not_to include(ArchiveConfig.RATING_DEFAULT_TAG_NAME)
+            expect(work.ratings.reload.map(&:name)).to include(ArchiveConfig.RATING_EXPLICIT_TAG_NAME)
+          end
+        end
+      end
+    end 
   end
 end

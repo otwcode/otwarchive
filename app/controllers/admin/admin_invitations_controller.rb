@@ -1,6 +1,4 @@
-class Admin::AdminInvitationsController < ApplicationController
-
-  before_action :admin_only
+class Admin::AdminInvitationsController < Admin::BaseController
 
   def index
   end

@@ -36,7 +36,7 @@
     <%= blurb_tag_block(prompt, tag_groups) %>
     <% any_types = TagSet::TAG_TYPES.select {|type| prompt.send("any_#{type}")} %>
     <% unless any_types.empty? %>
-      <%= any_types.map {|type| content_tag(:li, ts("Any #{type.capitalize}"), :class => "tag") }.join("\n").html_safe %>
+      <%= any_types.map { |type| content_tag(:li, ts("Any %{tag_type}", tag_type: tag_type_label_name(type)), :class => "tag") }.join("\n").html_safe %>
     <% end %>
   </ul>
   <% if prompt.optional_tag_set && !prompt.optional_tag_set.tags.empty? %>
