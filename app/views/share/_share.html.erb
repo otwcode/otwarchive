@@ -1,35 +1,41 @@
-<div id="share<% if shareable.is_a?(Bookmark) %>_<%= bookmark.id %><% end %>">
+<% id_suffix = shareable.is_a?(Bookmark) ? "_#{shareable.id}" : "" %>
+<div id="share<%= id_suffix %>">
 
-  <p class="note"><%= ts("Copy and paste the following code to link back to this work (") %><kbd><%= ts("CTRL A")%></kbd><%= ts("/") %><kbd><%= ts("CMD A")%></kbd><%= ts(" will select all), or use the Tweet or Tumblr links to share the work on your Twitter or Tumblr account.") %></p>
-  
-  <% # HTML share code %>
+  <p class="note"><%= ts("Copy and paste the following code to link back to this work (") %><kbd><%= ts("CTRL A") %></kbd><%= ts("/") %><kbd><%= ts("CMD A") %></kbd><%= ts(" will select all), or use the Tweet or Tumblr links to share the work on your Twitter or Tumblr account.") %></p>
+
+  <%# HTML share code %>
   <p>
-    <textarea cols="50" rows="4" id="<%= shareable.is_a?(Bookmark) ? "embed_code_#{bookmark.id}" : "embed_code" %>"><%= CGI.escapeHTML(remove_newlines(render "share/embed_link_#{shareable.class.to_s.downcase}", item: shareable).html_safe).html_safe %>
-    </textarea>
+    <% embed_partial = shareable.is_a?(Bookmark) ? "share/embed_link_bookmark" : "share/embed_link_work" %>
+    <textarea cols="50" rows="4" id="embed_code<%= id_suffix %>"><%= remove_newlines(render(embed_partial, item: shareable)) %></textarea>
   </p>
-  
-  <ul>
-    
-    <% # Twitter share %>
-    <li class="twitter">
-      <a href="http://twitter.com/share" class="twitter-share-button" data-size="large" data-via="ao3org" data-text="<%= shareable.is_a?(Bookmark)? get_tweet_text_for_bookmark(bookmark) : get_tweet_text(@work) %>" data-url="<%= shareable.is_a?(Bookmark)? bookmark_url(bookmark) : work_url(@work) %>">
-        <%= ts('Tweet') %>
-      </a>
-    </li>
-      
-    <% # Tumblr share %>
-    <li>
-      <% tumblr_url = shareable.is_a?(Bookmark) ? work_url(bookmark.bookmarkable) : work_url(@work) %>
-      <% tumblr_title = get_tumblr_embed_link_title(shareable.is_a?(Bookmark) ? bookmark.bookmarkable : @work) %>
-      <% tumblr_caption = shareable.is_a?(Bookmark) ? render('share/embed_link_bookmark', item: bookmark) : render('share/embed_meta', work: @work) %>
 
-      <a href="http://tumblr.com/widgets/share/tool?canonicalUrl=<%=u tumblr_url %>&title=<%=u tumblr_title %>&caption=<%=u tumblr_caption %>" title="<%= ts('Share on Tumblr') %>" style="display:inline-block; text-indent:-9999px; overflow:hidden; width:81px; height:20px; background:url('//platform.tumblr.com/v1/share_1.png') top left no-repeat transparent; border-bottom: none;" target="_blank">
-        <%= ts('Share on Tumblr') %>
+  <ul>
+    <%# Twitter share %>
+    <li class="twitter">
+      <% twitter_text = shareable.is_a?(Bookmark) ? get_tweet_text_for_bookmark(shareable) : get_tweet_text(shareable) %>
+      <% twitter_url = shareable.is_a?(Bookmark) ? bookmark_url(shareable) : work_url(shareable) %>
+
+      <a href="http://twitter.com/share" class="twitter-share-button" data-size="large"
+        data-via="ao3org" data-text="<%= twitter_text %>" data-url="<%= twitter_url %>">
+        <%= ts("Tweet") %>
       </a>
     </li>
-      
+
+    <%# Tumblr share %>
+    <li>
+      <% work = shareable.is_a?(Bookmark) ? shareable.bookmarkable : shareable %>
+      <% tumblr_url = work_url(work) %>
+      <% tumblr_title = get_tumblr_embed_link_title(work) %>
+      <% tumblr_caption = shareable.is_a?(Bookmark) ? render("share/embed_link_bookmark", item: shareable) : render("share/embed_meta", work: shareable) %>
+
+      <a title="<%= ts("Share on Tumblr") %>" target="_blank"
+        href="http://tumblr.com/widgets/share/tool?canonicalUrl=<%= u tumblr_url %>&title=<%= u tumblr_title %>&caption=<%= u tumblr_caption %>"
+        style="display:inline-block; text-indent:-9999px; overflow:hidden; width:81px; height:20px; background:url('//platform.tumblr.com/v1/share_1.png') top left no-repeat transparent; border-bottom: none;">
+        <%= ts("Share on Tumblr") %>
+      </a>
+    </li>
   </ul>
-  
 </div>
 
-<% # FRONT END NOTE: Twitter widget JavaScript is included separately in bookmarks/index, bookmarks/show, and works/_work_header_navigation to ensure it is only loaded once per page %>
+<%# FRONT END NOTE: Twitter widget JavaScript is included separately in
+  bookmarks/index, bookmarks/show, and works/share to ensure it is only loaded once per page %>

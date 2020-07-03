@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 # Helper for work and bookmark social media sharing code
 module ShareHelper
   # Get work title, word count, and creators and add app short name,
