@@ -24,21 +24,6 @@ Feature: Non-public site and work skins
   When I go to the new skin page
     Then I should see "Sorry, you don't have permission"
 
-  Scenario: An admin can reject and unreject a skin
-  Given the unapproved public skin "public skin"
-    And I am logged in as an admin
-  When I go to admin's skins page
-    And I check "make_rejected_public_skin"
-    And I submit
-  Then I should see "The following skins were updated: public skin"
-  When I follow "Rejected Skins"
-  Then I should see "public skin"
-  When I check "make_unrejected_public_skin"
-    And I submit
-  Then I should see "The following skins were updated: public skin"
-  When I follow "Rejected Skins"
-  Then I should not see "public skin"
-
   Scenario: A user should be able to select one of their own non-public skins to use in
   their preferences
   Given I am logged in as "skinner"
