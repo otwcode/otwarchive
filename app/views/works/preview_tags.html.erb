@@ -19,7 +19,7 @@
 
 <%= form_for(@work, url: { action: :update_tags }) do |form| %>
   <%= form.hidden_field :rating_string, value: "#{@work.rating_string}" %>
-  <%= form.hidden_field :warning_string, value: "#{@work.warning_string}" %>
+  <%= form.hidden_field :archive_warning_string, value: "#{@work.archive_warning_string}" %>
   <%= form.hidden_field :category_string, value: "#{@work.category_string}" %>
   <%= form.hidden_field :fandom_string, value: "#{@work.fandom_string}" %>
   <%= form.hidden_field :relationship_string, value: "#{@work.relationship_string}" %>
@@ -36,7 +36,7 @@
         <%= submit_tag ts('Update'), name: 'update_button' %>
       <% else %>
         <%= submit_tag ts('Post'), name: 'post_button' %>
-        <%= submit_tag ts('Save Without Posting'), name: 'save_button' %>
+        <%= submit_tag ts('Save As Draft'), name: 'save_button' %>
       <% end %>
       <%= submit_tag ts('Edit'), name: 'edit_button' %>
       <%= submit_tag ts('Cancel'), name: 'cancel_button' %>

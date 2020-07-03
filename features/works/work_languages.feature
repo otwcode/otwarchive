@@ -4,9 +4,9 @@ Feature: Create Works
   In order to have an archive full of works
   As an author
   I want to create new works
-    
+
   Scenario: Creating a new work with international characters
-    
+
   Given basic tags
     And basic languages
       And I am logged in as "germanfan" with password "password"
@@ -31,14 +31,15 @@ Feature: Create Works
     Then I should see "Dies ist eine Fanfic in Deutsch."
     When I log out
     Then I should see "Successfully logged out"
-    
-    # another example in a different language
-    
+
+    # another example with a different character set (language not in fixtures)
+
     Given I am logged in as "finnishfan" with password "password"
     When I go to the new work page
     Then I should see "Post New Work"
       And I select "Not Rated" from "Rating"
       And I check "No Archive Warnings Apply"
+      And I select "English" from "Choose a language"
       And I fill in "Fandoms" with "A fandom"
       And I fill in "Work Title" with "Ennen päivänlaskua ei voi"
       And I fill in "content" with "A story that is long enough to count"

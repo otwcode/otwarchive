@@ -10,6 +10,8 @@
 
 <!--main content-->
 <%= form_for @prompt, :as => :prompt, :url => collection_prompt_path(@collection, @prompt), :html => {:method => :put} do |form| %>
+  <p class="required notice"><%= ts("* Required information") %></p>
+  <%= error_messages_for @prompt %>
   <%= render "prompt_form", :form => form, :required => true, :index => @index %>
   <%= submit_fieldset form %>
 <% end %>

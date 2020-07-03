@@ -5,7 +5,7 @@ describe AdminPostsController do
   include RedirectExpectationHelper
 
   describe "POST #create" do
-    before { fake_login_admin(create(:admin)) }
+    before { fake_login_admin(create(:admin, roles: ["communications"])) }
 
     let(:base_params) { { title: "AdminPost Title",
                           content: "AdminPost content long enough to pass validation" } }

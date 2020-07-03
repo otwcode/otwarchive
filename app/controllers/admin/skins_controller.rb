@@ -1,6 +1,4 @@
-class Admin::SkinsController < ApplicationController
-
-  before_action :admin_only
+class Admin::SkinsController < Admin::BaseController
 
   def index
     @unapproved_skins = Skin.unapproved_skins.sort_by_recent
