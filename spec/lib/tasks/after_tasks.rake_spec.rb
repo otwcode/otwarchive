@@ -2,11 +2,11 @@ require "spec_helper"
 
 describe "rake After:reset_word_counts" do
   let(:en) { Language.find_by(short: "en") }
-  let(:en_work) { create(:posted_work, language: en, chapter_attributes: { content: "Nice ride, Gloria!" }) }
+  let(:en_work) { create(:work, language: en, chapter_attributes: { content: "Nice ride, Gloria!" }) }
 
   context "when there are multiple languages" do
     let(:es) { create(:language, short: "es") }
-    let(:es_work) { create(:posted_work, language: es, chapter_attributes: { content: "Así pasa la gloria del mundo." }) }
+    let(:es_work) { create(:work, language: es, chapter_attributes: { content: "Así pasa la gloria del mundo." }) }
 
     before do
       # Screw up the word counts
@@ -53,13 +53,13 @@ describe "rake After:unhide_invited_works" do
   let(:anonymous_unrevealed_collection) { create(:anonymous_unrevealed_collection) }
   let(:collection) { create(:collection) }
 
-  let(:anonymous_work) { create(:posted_work, collections: [anonymous_collection]) }
-  let(:unrevealed_work) { create(:posted_work, collections: [unrevealed_collection]) }
-  let(:work) { create(:posted_work, collections: [collection]) }
+  let(:anonymous_work) { create(:work, collections: [anonymous_collection]) }
+  let(:unrevealed_work) { create(:work, collections: [unrevealed_collection]) }
+  let(:work) { create(:work, collections: [collection]) }
 
-  let(:invited_anonymous_work) { create(:posted_work, collections: [anonymous_collection]) }
-  let(:invited_unrevealed_work) { create(:posted_work, collections: [unrevealed_collection]) }
-  let(:invited_anonymous_unrevealed_work) { create(:posted_work, collections: [anonymous_unrevealed_collection]) }
+  let(:invited_anonymous_work) { create(:work, collections: [anonymous_collection]) }
+  let(:invited_unrevealed_work) { create(:work, collections: [unrevealed_collection]) }
+  let(:invited_anonymous_unrevealed_work) { create(:work, collections: [anonymous_unrevealed_collection]) }
 
   context "when invited works are incorrectly anonymous or unrevealed" do
     before do
@@ -99,7 +99,7 @@ describe "rake After:unhide_invited_works" do
 end
 
 describe "rake After:update_indexed_stat_counter_kudo_count", work_search: true do
-  let(:work) { create(:posted_work) }
+  let(:work) { create(:work) }
   let(:stat_counter) { work.stat_counter }
   let!(:kudo_bundle) { create_list(:kudo, 2, commentable_id: work.id) }
 
@@ -123,5 +123,22 @@ describe "rake After:update_indexed_stat_counter_kudo_count", work_search: true 
     end.to change { 
       WorkSearchForm.new(kudos_count: work.kudos.count.to_s).search_results.size
     }.from(0).to(1)
+  end
+end
+
+describe "rake After:copy_anon_commenting_disabled_to_comment_permissions" do
+  let(:work) { create(:work) }
+
+  before do
+    work.update_columns(anon_commenting_disabled: true,
+                        comment_permissions: :enable_all)
+  end
+
+  it "updates comment_permissions to match anon_commenting_disabled" do
+    expect do
+      subject.invoke
+    end.to change {
+      work.reload.comment_permissions
+    }.from("enable_all").to("disable_anon")
   end
 end

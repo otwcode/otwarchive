@@ -21,7 +21,7 @@
       <%= button_to ts("Activate User Account"), { action: "activate", id: @user }, disabled: @user.active? %>
     </li>
     <li>
-      <%= link_to ts("Manage User Roles"), { action: "index", query: @user.login, role: '0' } %>
+      <%= link_to ts("Manage User Roles"), { action: "index", name: @user.login, role: '0' } %>
     </li>
   </ul>
   <!--/subnav-->

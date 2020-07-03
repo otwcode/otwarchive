@@ -1,74 +1,75 @@
 @users
 Feature: Reading count
 
-  Scenario: only see own reading history
-    Given the following activated user exists
-    | login          | password   |
-    | first_reader        | password   |
+  Scenario: A user can only see their own reading history
+
+  Given the following activated user exists
+    | login        |
+    | first_reader |
   When I am logged in as "second_reader"
     And I go to first_reader's reading page
-    Then I should see "Sorry, you don't have permission"
+  Then I should see "Sorry, you don't have permission"
     And I should not see "History" within "div#dashboard"
   When I go to second_reader's reading page
-    Then I should see "History" within "div#dashboard"
+  Then I should see "History" within "div#dashboard"
 
-  Scenario: Read a work several times, counts show on reading history
-      increment the count whenever you reread a story
-      also updates the date
+  Scenario: A user can read a work several times, updating the count and date in their history
+
     Given I am logged in as "writer"
       And I post the work "some work"
       And all indexing jobs have been run
       And I am logged out
     When I am logged in as "fandomer"
       And fandomer first read "some work" on "2010-05-25"
-    When I go to fandomer's reading page
+      And I go to fandomer's reading page
     Then I should see "some work"
       And I should see "Visited once"
       And I should see "Last visited: 25 May 2010"
-    When I am on writer's works page
-      And I follow "some work"
-    When the reading rake task is run
+
+    When time is frozen at 20/4/2020
+      And I go to the work "some work"
+      And the reading rake task is run
       And I go to fandomer's reading page
     Then I should see "Visited 2 times"
-      And I should see "Last visited: less than 1 minute ago"
+      And I should see "Last visited: 20 Apr 2020"
 
-  Scenario: disable reading history
-    then re-enable and check counts update again
+  Scenario: A user's reading history is updated only when enabled
 
     Given I am logged in as "writer"
       And I post the work "some work"
       And I am logged out
     When I am logged in as "fandomer"
       And fandomer first read "some work" on "2010-05-25"
-    When I go to fandomer's reading page
+      And I go to fandomer's reading page
     Then I should see "some work"
       And I should see "Visited once"
       And I should see "Last visited: 25 May 2010"
+
     When I follow "Preferences"
       And I uncheck "Turn on Viewing History"
       And I press "Update"
       And all indexing jobs have been run
     Then I should not see "My History"
-    When I am on writer's works page
-      And I follow "some work"
-    When I am on writer's works page
-      And I follow "some work"
-    When the reading rake task is run
+
+    When I go to the work "some work"
+      And the reading rake task is run
       And I go to fandomer's reading page
     Then I should see "You have reading history disabled"
       And I should not see "some work"
+
     When I check "Turn on Viewing History"
       And I press "Update"
     Then I should see "Your preferences were successfully updated."
+
     When I go to fandomer's reading page
     Then I should see "Visited once"
       And I should see "Last visited: 25 May 2010"
-    When I am on writer's works page
-      And I follow "some work"
-    When the reading rake task is run
+    When time is frozen at 20/4/2020
+      And I go to the work "some work"
+      And the reading rake task is run
       And I go to fandomer's reading page
     Then I should see "Visited 2 times"
-      And I should see "Last visited: less than 1 minute ago"
+      And I should see "Last visited: 20 Apr 2020"
 
   Scenario: Clear entire reading history
 
@@ -78,7 +79,7 @@ Feature: Reading count
       And I follow "First work"
       And I am on testuser's works page
       And I follow "second work"
-      And I am on testuser2's works page
+      And I am on testuser2 works page
       And I follow "fifth"
       And I should see "fifth by testuser2"
       And I follow "Proceed"

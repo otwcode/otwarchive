@@ -61,6 +61,10 @@ class Series < ApplicationRecord
     self.works.posted
   end
 
+  def works_in_order
+    works.order("serial_works.position")
+  end
+
   # Get the filters for the works in this series
   def filters
     Tag.joins("JOIN filter_taggings ON tags.id = filter_taggings.filter_id

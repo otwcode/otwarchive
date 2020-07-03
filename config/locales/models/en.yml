@@ -65,6 +65,11 @@ en:
         name_with_colon:
           one: "Relationship:"
           other: "Relationships:"
+      meta_tagging:
+        meta_tag_id: "Metatag"
+        meta_tag: "Metatag"
+        sub_tag_id: "Subtag"
+        sub_tag: "Subtag"
       creatorships:
         pseud_id: "Pseud"
         base: "Invalid creator:"

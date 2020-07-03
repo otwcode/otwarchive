@@ -1,9 +1,8 @@
-class Admin::AdminUsersController < ApplicationController
+class Admin::AdminUsersController < Admin::BaseController
   include ExportsHelper
 
-  before_action :admin_only
-
   def index
+    authorize User, policy_class: AdminUserPolicy
     @role_values = @roles.map{ |role| [role.name.humanize.titlecase, role.name] }
     @role = Role.find_by(name: params[:role]) if params[:role]
     @users = User.search_by_role(
@@ -13,6 +12,7 @@ class Admin::AdminUsersController < ApplicationController
   end
 
   def bulk_search
+    authorize User, policy_class: AdminUserPolicy
     @emails = params[:emails].split if params[:emails]
     if @emails.present?
       found_users, not_found_emails, duplicates = User.search_multiple_by_email(@emails)
@@ -47,24 +47,18 @@ class Admin::AdminUsersController < ApplicationController
   def show
     @hide_dashboard = true
     @user = User.find_by(login: params[:id])
+    authorize @user, policy_class: AdminUserPolicy
     unless @user
       redirect_to action: "index", query: params[:query], role: params[:role] and return
     end
     @log_items = @user.log_items.sort_by(&:created_at).reverse
   end
 
-  # GET admin/users/1/edit
-  def edit
-    @user = User.find_by(login: params[:id])
-    unless @user
-      redirect_to action: "index", query: params[:query], role: params[:role]
-    end
-  end
-
   # POST admin/users/update
   def update
     @user = User.find_by(login: params[:id])
-    if @user.admin_update(params[:user])
+    authorize @user, policy_class: AdminUserPolicy
+    if @user.admin_update(user_params)
       flash[:notice] = ts("User was successfully updated.")
     else
       flash[:error] = ts("There was an error updating user %{name}", name: params[:id])
@@ -74,7 +68,8 @@ class Admin::AdminUsersController < ApplicationController
 
   def update_status
     @user = User.find_by(login: params[:user_login])
-    @user_manager = UserManager.new(current_admin, params)
+    authorize @user, policy_class: AdminUserPolicy
+    @user_manager = UserManager.new(current_admin, user_management_params)
     if @user_manager.save
       flash[:notice] = @user_manager.success_message
       if params[:admin_action] == "spamban"
@@ -98,6 +93,7 @@ class Admin::AdminUsersController < ApplicationController
   end
 
   def confirm_delete_user_creations
+    authorize @user, policy_class: AdminUserPolicy
     @works = @user.works.paginate(page: params[:works_page])
     @comments = @user.comments.paginate(page: params[:comments_page])
     @bookmarks = @user.bookmarks
@@ -106,6 +102,7 @@ class Admin::AdminUsersController < ApplicationController
   end
 
   def destroy_user_creations
+    authorize @user, policy_class: AdminUserPolicy
     creations = @user.works + @user.bookmarks + @user.collections + @user.comments
     creations.each do |creation|
       AdminActivity.log_action(current_admin, creation, action: "destroy spam", summary: creation.inspect)
@@ -148,4 +145,15 @@ class Admin::AdminUsersController < ApplicationController
     redirect_to action: :show
   end
 
+  def user_params
+    params[:user].slice(
+      *AdminUserPolicy.new(current_admin, @user).permitted_user_params
+    )
+  end
+
+  def user_management_params
+    params.slice(
+      *AdminUserPolicy.new(current_admin, @user).permitted_management_params
+    )
+  end
 end

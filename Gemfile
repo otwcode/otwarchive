@@ -7,6 +7,7 @@ gem 'test-unit', '~> 3.2'
 gem 'bundler'
 
 gem 'rails', '~> 5.1.6.2'
+gem 'rack', '~> 2.1', '>= 2.1.4'
 
 gem 'rails-observers', git: 'https://github.com/rails/rails-observers'
 gem 'actionpack-page_caching'
@@ -66,6 +67,7 @@ gem 'rest-client', '~> 1.8.0', require: 'rest_client'
 gem 'resque', '>=1.14.0'
 gem 'resque_mailer'
 gem 'resque-scheduler'
+gem 'after_commit_everywhere'
 #gem 'daemon-spawn', require: 'daemon_spawn'
 gem 'elasticsearch', '6.8.0'
 gem 'aws-sdk'
@@ -84,6 +86,7 @@ gem 'bcrypt'
 
 # A highly updated version of the authorization plugin
 gem 'permit_yo'
+gem 'pundit'
 
 # fix for annoying UTF-8 error messages as per this:
 # http://openhood.com/rack/ruby/2010/07/15/rack-test-warning/
@@ -142,11 +145,10 @@ group :test do
   gem 'shoulda'
   gem 'capybara', '~> 2.16.1'
   gem 'database_cleaner', '1.6.0'
-  gem 'cucumber', '~> 2.4.0'
+  gem 'cucumber', '~> 3.1'
   gem 'poltergeist'
   gem 'capybara-screenshot'
-  gem 'cucumber-rails', '~> 1.5', require: false
-  gem 'gherkin'
+  gem 'cucumber-rails', require: false
   gem 'launchy'    # So you can do Then show me the page
   gem 'delorean'
   gem 'faker', '~> 1.6.3'
