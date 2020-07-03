@@ -33,3 +33,38 @@ run_stats_reindex_queue:
   queue: utilities
   args: stats
   description: "Kick off a reindex of works with stats updates"
+
+run_update_filter_counts_small:
+  every: 2m
+  class: "FilterCount"
+  queue: utilities
+  args: update_counts_for_small_queue
+  description: "Update filter counts for small filters"
+
+run_update_filter_counts_large:
+  every: 1h
+  class: "FilterCount"
+  queue: utilities
+  args: update_counts_for_large_queue
+  description: "Update filter counts for large filters"
+
+update_stat_counters:
+  cron: "0,30 * * * *"
+  class: "StatCounter"
+  queue: utilities
+  args: stats_to_database
+  description: "Update kudos/bookmark/comment counts on StatCounters."
+
+save_recent_counts_to_database:
+  cron: "15,45 * * * *"
+  class: "RedisHitCounter"
+  queue: utilities
+  args: save_recent_counts
+  description: "Save recent hit counts to database."
+
+remove_old_hit_count_data:
+  cron: "0 12 * * *"
+  class: "RedisHitCounter"
+  queue: utilities
+  args: remove_old_visits
+  description: "Remove old hit count information from redis."

@@ -1,5 +1,5 @@
 class WranglingGuidelinesController < ApplicationController
-  before_filter :admin_only, except: [:index, :show]
+  before_action :admin_only, except: [:index, :show]
 
   # GET /wrangling_guidelines
   def index
@@ -53,7 +53,7 @@ class WranglingGuidelinesController < ApplicationController
   # reorder FAQs
   def update_positions
     if params[:wrangling_guidelines]
-      @wrangling_guidelines = WranglingGuideline.reorder(params[:wrangling_guidelines])
+      @wrangling_guidelines = WranglingGuideline.reorder_list(params[:wrangling_guidelines])
       flash[:notice] = ts('Wrangling Guidelines order was successfully updated.')
     end
     redirect_to(wrangling_guidelines_path)
@@ -63,8 +63,8 @@ class WranglingGuidelinesController < ApplicationController
   def destroy
     @wrangling_guideline = WranglingGuideline.find(params[:id])
     @wrangling_guideline.destroy
-
-    redirect_to(wrangling_guidelines_url)
+    flash[:notice] = ts('Wrangling Guideline was successfully deleted.')
+    redirect_to(wrangling_guidelines_path)
   end
 
   private

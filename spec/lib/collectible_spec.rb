@@ -21,13 +21,57 @@ describe Collectible do
     expect(work.collection_names).not_to include(fake_name)
   end
 
-  context "being posted to a collection", focus: true do
+  it "should return collections for approved_collections scope" do
+    work = create(:work)
+    collection1 = create(:collection)
+    collection2 = create(:collection)
+
+    work.collections << [collection1, collection2]
+    work.collection_items.update_all(
+      user_approval_status: CollectionItem::APPROVED,
+      collection_approval_status: CollectionItem::APPROVED
+    )
+
+    expect(work.approved_collections.count).to eq(2)
+    expect(work.approved_collections).to include(collection1)
+    expect(work.approved_collections).to include(collection2)
+  end
+
+  context "approved_collections have more than one work" do
+    it "should return distinct collections for approved_collections scope" do
+      work1 = create(:work)
+      work2 = create(:work)
+
+      collection = create(:collection)
+
+      work1.collections << [collection]
+      work2.collections << [collection]
+
+      work1.collection_items.first.update(
+        user_approval_status: CollectionItem::APPROVED,
+        collection_approval_status: CollectionItem::APPROVED
+      )
+
+      work2.collection_items.first.update(
+        user_approval_status: CollectionItem::APPROVED,
+        collection_approval_status: CollectionItem::APPROVED
+      )
+
+      expect(work1.approved_collections.count).to eq(1)
+      expect(work2.approved_collections.count).to eq(1)
+
+      expect(work1.approved_collections).to include(collection)
+      expect(work2.approved_collections).to include(collection)
+    end
+  end
+
+  context "being posted to a collection" do
     let(:collection) { create(:collection) }
     # build but don't save so we can change the collection settings
     let(:work) { build(:work, collection_names: collection.name) }
     subject { work }
 
-    describe "once added" do
+    context "once added" do
 
       it "should be in that collection" do
         work.save
@@ -50,51 +94,73 @@ describe Collectible do
 
     end
 
-    %w(unrevealed anonymous).each do |state|
-      describe "which is #{state}" do
+    {
+      unrevealed: :in_unrevealed_collection,
+      anonymous: :in_anon_collection
+    }.each_pair do |state, work_attribute|
+      context "which is #{state}" do
         before do
           # set the state of the collection and then save to put the work into the collection
-          update_collection_setting(collection, state, true)
+          collection.collection_preference.attributes = { state => true }
+          collection.collection_preference.save!
           work.save!
         end
 
         it "should be #{state}" do
-          expect(work.reload.send("in_#{state == 'anonymous' ? 'anon' : state}_collection")).to be_truthy
+          expect(work.reload.send(work_attribute)).to be_truthy
         end
 
-        describe "and when the collection is no longer #{state}" do
+        context "and when the collection is no longer #{state}" do
           before do
-            collection.collection_preference.send("#{state}=",false)
-            collection.collection_preference.save
-            work.reload
+            collection.collection_preference.attributes = { state => false }
+            collection.collection_preference.save!
           end
 
           it "should not be #{state}" do
-            expect(collection.send("#{state}?")).not_to be_truthy
-            expect(work.send("in_#{state == 'anonymous' ? 'anon' : state}_collection")).not_to be_truthy
+            expect(collection.send("#{state}?")).to be_falsey
+            expect(work.reload.send(work_attribute)).to be_falsey
           end
         end
 
-        describe "when the work is removed from the collection" do
+        context "when the collectible's owner removes it from the collection" do
           before do
             work.collection_names = ""
-            work.save
+            work.save!
           end
 
           it "should not be #{state}" do
-            expect(work.send("in_#{state == 'anonymous' ? 'anon' : state}_collection")).not_to be_truthy
+            expect(work.reload.send(work_attribute)).to be_falsey
           end
         end
-        describe "when the work's collection item is individually changed" do
+
+        context "when the collection item is destroyed" do
           before do
-            ci = work.collection_items.first
-            ci.send("#{state}=", false)
-            ci.save
-            work.reload
+            ci = CollectionItem.find_by(item: work, collection: collection)
+            ci.destroy
           end
 
-          xit "should no longer be #{state}" do
-            expect(work.send("in_#{state == 'anonymous' ? 'anon' : state}_collection")).not_to be_truthy
+          it "should not be #{state}" do
+            expect(work.reload.send(work_attribute)).to be_falsey
+          end
+        end
+
+        context "when the collection is destroyed" do
+          before { collection.destroy }
+
+          it "should not be #{state}" do
+            expect(work.reload.send(work_attribute)).to be_falsey
+          end
+        end
+
+        context "when the work's collection item is individually changed" do
+          before do
+            ci = CollectionItem.find_by(item: work, collection: collection)
+            ci.attributes = { state => false }
+            ci.save!
+          end
+
+          it "should no longer be #{state}" do
+            expect(work.reload.send(work_attribute)).to be_falsey
           end
         end
       end

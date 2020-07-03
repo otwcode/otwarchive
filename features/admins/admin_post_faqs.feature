@@ -9,7 +9,7 @@ Scenario: Post a FAQ
       And I should not see "Some text"
     When I am logged in as an admin
     When I follow "Admin Posts"
-      And I follow "Archive FAQ" within "#main"
+      And I follow "Archive FAQ" within "#header"
       And I should not see "Some text"
     When I follow "New FAQ Category"
       And I fill in "Question*" with "What is AO3?"
@@ -25,7 +25,7 @@ Scenario: Post a FAQ
   Scenario: Edit FAQ
     Given I have posted a FAQ
     When I follow "Admin Posts"
-      And I follow "Archive FAQ" within "#main"
+      And I follow "Archive FAQ" within "#header"
       And I follow "Edit"
       And I fill in "Answer*" with "Number 1 posted FAQ, this is, and Yoda approves."
       And I press "Post"
@@ -34,9 +34,7 @@ Scenario: Post a FAQ
     When I go to the archive_faqs page
       And I follow "Edit"
       And I fill in "Answer*" with "New Content, yay"
-      And I check "archive_faq_notify_translations"
       And I press "Post"
-      And 1 email should be delivered
 
   Scenario: Post a FAQ that is a Translation of another
     Given basic languages
@@ -45,7 +43,7 @@ Scenario: Post a FAQ
       And I should not see "Some text"
     When I am logged in as an admin
     When I follow "Admin Posts"
-      And I follow "Archive FAQ" within "#main"
+      And I follow "Archive FAQ" within "#header"
       And I should not see "Some text"
     When I follow "New FAQ Category"
       And I fill in "Question*" with "What is AO3?"
@@ -72,10 +70,8 @@ Scenario: Post a FAQ
 #      And I fill in "Answer*" with "Einige Text, das ist lang genug, um die Überprüfung bestanden."
 #      And I fill in "Category name*" with "Neuer Abschnitt"
 #      And I fill in "Anchor name*" with "wasistao3"
-#      And I check "archive_faq_notify_translations"
 #      And I press "Post"
 #    Then I should see "ArchiveFaq was successfully updated."
-#      And 1 email should be delivered
 #
 #    # The user has previously selected German as their language, lets make sure it persisted through Controller actions
 #    Then I should see "Questions in the Neuer Abschnitt Category"

@@ -26,7 +26,7 @@ class ChallengeSignupSweeper < ActionController::Caching::Sweeper
   end
 
   def get_requests_from_record(record, collection)
-    Prompt.find(:collection => collection, :type => 'request', :challenge_signup => record)
+    Prompt.find(collection: collection, type: 'request', challenge_signup: record)
   end
 
   # Whenever these records are updated, we need to blank out the collections cache
@@ -39,8 +39,7 @@ class ChallengeSignupSweeper < ActionController::Caching::Sweeper
         ActionController::Base.new.expire_fragment("collection-#{collection.id}-request-#{request.id}")
         # expire the prompt summary too - done in the model
         # and the collection blurb, for the stats
-        ActionController::Base.new.expire_fragment("collection-blurb-#{collection.id}-v3")
-        ActionController::Base.new.expire_fragment("collection-profile-#{collection.id}")
+        CollectionSweeper.expire_collection_blurb_and_profile(collection)
       end
       # expire the signup summary, for prompt meme challenge prompts index
       ActionController::Base.new.expire_fragment("collection-#{collection.id}-signup-#{record.id}")

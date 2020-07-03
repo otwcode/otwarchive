@@ -4,15 +4,16 @@ require 'csv'
 class ChallengeSignupsController < ApplicationController
   include ExportsHelper
 
-  before_filter :users_only, :except => [:summary, :display_summary, :requests_summary]
-  before_filter :load_collection, :except => [:index]
-  before_filter :load_challenge, :except => [:index]
-  before_filter :load_signup_from_id, :only => [:show, :edit, :update, :destroy, :confirm_delete]
-  before_filter :allowed_to_destroy, :only => [:destroy, :confirm_delete]
-  before_filter :signup_owner_only, :only => [:edit, :update]
-  before_filter :maintainer_or_signup_owner_only, :only => [:show]
-  before_filter :check_signup_open, :only => [:new, :create, :edit, :update]
-  before_filter :check_pseud_ownership, :only => [:create, :update]
+  before_action :users_only, except: [:summary, :display_summary, :requests_summary]
+  before_action :load_collection, except: [:index]
+  before_action :load_challenge, except: [:index]
+  before_action :load_signup_from_id, only: [:show, :edit, :update, :destroy, :confirm_delete]
+  before_action :allowed_to_destroy, only: [:destroy, :confirm_delete]
+  before_action :signup_owner_only, only: [:edit, :update]
+  before_action :maintainer_or_signup_owner_only, only: [:show]
+  before_action :check_signup_open, only: [:new, :create, :edit, :update]
+  before_action :check_pseud_ownership, only: [:create, :update]
+  before_action :check_signup_in_collection, only: [:show, :edit, :update, :destroy, :confirm_delete]
 
   def load_challenge
     @challenge = @collection.challenge
@@ -78,13 +79,20 @@ class ChallengeSignupsController < ApplicationController
     end
   end
 
+  def check_signup_in_collection
+    unless @challenge_signup.collection_id == @collection.id
+      flash[:error] = ts("Sorry, that sign-up isn't associated with that collection.")
+      redirect_to @collection
+    end
+  end
+
   #### ACTIONS
 
   def index
     if params[:user_id] && (@user = User.find_by(login: params[:user_id]))
       if current_user == @user
         @challenge_signups = @user.challenge_signups.order_by_date
-        render :action => :index and return
+        render action: :index and return
       else
         flash[:error] = ts("You aren't allowed to see that user's sign-ups.")
         redirect_to '/' and return
@@ -127,25 +135,32 @@ class ChallengeSignupsController < ApplicationController
   end
 
   def summary
+    @summary = ChallengeSignupSummary.new(@collection)
+
     if @collection.signups.count < (ArchiveConfig.ANONYMOUS_THRESHOLD_COUNT/2)
-      flash.now[:notice] = ts("Summary does not appear until at least %{count} sign-ups have been made!", :count => ((ArchiveConfig.ANONYMOUS_THRESHOLD_COUNT/2)))
+      flash.now[:notice] = ts("Summary does not appear until at least %{count} sign-ups have been made!", count: ((ArchiveConfig.ANONYMOUS_THRESHOLD_COUNT/2)))
     elsif @collection.signups.count > ArchiveConfig.MAX_SIGNUPS_FOR_LIVE_SUMMARY
       # too many signups in this collection to show the summary page "live"
-      if !File.exists?(ChallengeSignup.summary_file(@collection)) ||
-          (@collection.challenge.signup_open? && File.mtime(ChallengeSignup.summary_file(@collection)) < 1.hour.ago)
-        # either the file is missing, or signup is open and the last regeneration was more than an hour ago.
+      modification_time = @summary.cached_time
 
-        # touch the file so we don't generate a second request
-        summary_dir = ChallengeSignup.summary_dir
-        FileUtils.mkdir_p(summary_dir) unless File.directory?(summary_dir)
-        FileUtils.touch(ChallengeSignup.summary_file(@collection))
+      # The time is always written alongside the cache, so if the time is
+      # missing, then the cache must be missing as well -- and we want to
+      # generate it. We also want to generate it if signups are open and it was
+      # last generated more than an hour ago.
+      if modification_time.nil? ||
+         (@collection.challenge.signup_open? && modification_time < 1.hour.ago)
 
-        # generate the page
-        ChallengeSignup.generate_summary(@collection)
+        # Touch the cache so that we don't try to generate the summary a second
+        # time on subsequent page loads.
+        @summary.touch_cache
+
+        # Generate the cache of the summary in the background.
+        @summary.enqueue_for_generation
       end
     else
       # generate it on the fly
-      @tag_type, @summary_tags = ChallengeSignup.generate_summary_tags(@collection)
+      @tag_type = @summary.tag_type
+      @summary_tags = @summary.summary
       @generated_live = true
     end
   end
@@ -162,13 +177,13 @@ class ChallengeSignupsController < ApplicationController
     @challenge.class::PROMPT_TYPES.each do |prompt_type|
       num_to_build = params["num_#{prompt_type}"] ? params["num_#{prompt_type}"].to_i : @challenge.required(prompt_type)
       if num_to_build < @challenge.required(prompt_type)
-        notice += ts("You must submit at least %{required} #{prompt_type}. ", :required => @challenge.required(prompt_type))
+        notice += ts("You must submit at least %{required} #{prompt_type}. ", required: @challenge.required(prompt_type))
         num_to_build = @challenge.required(prompt_type)
       elsif num_to_build > @challenge.allowed(prompt_type)
-        notice += ts("You can only submit up to %{allowed} #{prompt_type}. ", :allowed => @challenge.allowed(prompt_type))
+        notice += ts("You can only submit up to %{allowed} #{prompt_type}. ", allowed: @challenge.allowed(prompt_type))
         num_to_build = @challenge.allowed(prompt_type)
       elsif params["num_#{prompt_type}"]
-        notice += ts("Set up %{num} #{prompt_type.pluralize}. ", :num => num_to_build)
+        notice += ts("Set up %{num} #{prompt_type.pluralize}. ", num: num_to_build)
       end
       num_existing = @challenge_signup.send(prompt_type).count
       num_existing.upto(num_to_build-1) do
@@ -205,7 +220,7 @@ class ChallengeSignupsController < ApplicationController
       flash[:notice] = ts('Sign-up was successfully created.')
       redirect_to collection_signup_path(@collection, @challenge_signup)
     else
-      render :action => :new
+      render action: :new
     end
   end
 
@@ -214,7 +229,7 @@ class ChallengeSignupsController < ApplicationController
       flash[:notice] = ts('Sign-up was successfully updated.')
       redirect_to collection_signup_path(@collection, @challenge_signup)
     else
-      render :action => :edit
+      render action: :edit
     end
   end
 
@@ -242,7 +257,7 @@ protected
 
   def request_to_array(type, request)
     any_types = TagSet::TAG_TYPES.select {|type| request && request.send("any_#{type}")}
-    any_types.map! { |type| ts("Any %{type}", :type => type.capitalize) }
+    any_types.map! { |type| ts("Any %{type}", type: type.capitalize) }
     tags = request.nil? ? [] : request.tag_set.tags.map {|tag| tag.name}
     rarray = [(tags + any_types).join(", ")]
 
@@ -346,7 +361,7 @@ protected
       :any_freeform,
       :any_category,
       :any_rating,
-      :any_warning,
+      :any_archive_warning,
       :anonymous,
       :description,
       :_destroy,
@@ -358,14 +373,14 @@ protected
         :freeform_tagnames,
         :category_tagnames,
         :rating_tagnames,
-        :warning_tagnames,
+        :archive_warning_tagnames,
         :fandom_tagnames,
         character_tagnames: [],
         relationship_tagnames: [],
         freeform_tagnames: [],
         category_tagnames: [],
         rating_tagnames: [],
-        warning_tagnames: [],
+        archive_warning_tagnames: [],
         fandom_tagnames: [],
       ],
       optional_tag_set_attributes: [

@@ -7,7 +7,7 @@ namespace :admin do
 
   desc "Resend sign-up notification emails after 24 hours"
   task(:resend_signup_emails => :environment) do
-    @users = User.find(:all, :conditions => {:activated_at => nil, :created_at => 48.hours.ago..24.hours.ago})
+    @users = User.where(confirmed_at: nil, created_at: 48.hours.ago..24.hours.ago)
     @users.each do |user|
       UserMailer.signup_notification(user.id).deliver
     end
@@ -16,10 +16,17 @@ namespace :admin do
 
   desc "Purge unvalidated accounts created more than 2 weeks ago"
   task(:purge_unvalidated_users => :environment) do
-    users = User.find(:all, :conditions => ["activated_at IS NULL AND created_at < ?", 2.weeks.ago])
+    users = User.where("confirmed_at IS NULL AND created_at < ?", 2.weeks.ago)
     puts users.map(&:login).join(", ")
     users.map(&:destroy)
     puts "Unvalidated accounts created more than two weeks ago have been purged"
+
+    # Purged users are allowed to reuse their invitations:
+    invite_ids = users.map(&:invitation_id)
+    Invitation.includes(:creator).where(id: invite_ids).each do |invite|
+      invite.update(redeemed_at: nil, invitee: nil)
+    end
+    puts "Invitations for the purged accounts have been reset"
   end
 
 end

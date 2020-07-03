@@ -1,4 +1,4 @@
-class Collection < ActiveRecord::Base
+class Collection < ApplicationRecord
   include ActiveModel::ForbiddenAttributesProtection
   include UrlHelpers
   include WorksOwner
@@ -61,8 +61,8 @@ class Collection < ActiveRecord::Base
   has_many :bookmarks, through: :collection_items, source: :item, source_type: 'Bookmark'
   has_many :approved_bookmarks, -> { where('collection_items.user_approval_status = ? AND collection_items.collection_approval_status = ?', CollectionItem::APPROVED, CollectionItem::APPROVED) }, through: :collection_items, source: :item, source_type: 'Bookmark'
 
-  has_many :fandoms, -> { uniq }, through: :approved_works
-  has_many :filters, -> { uniq }, through: :approved_works
+  has_many :fandoms, -> { distinct }, through: :approved_works
+  has_many :filters, -> { distinct }, through: :approved_works
 
   has_many :collection_participants, dependent: :destroy
   accepts_nested_attributes_for :collection_participants, allow_destroy: true
@@ -181,10 +181,15 @@ class Collection < ActiveRecord::Base
 
   # Get only collections with running challenges
   def self.signup_open(challenge_type)
-    table = challenge_type.tableize
-    not_closed.where(challenge_type: challenge_type).
-      joins("INNER JOIN #{table} on #{table}.id = challenge_id").where("#{table}.signup_open = 1").
-      where("#{table}.signups_close_at > ?", Time.now).order("#{table}.signups_close_at DESC")
+    if challenge_type == "PromptMeme"
+      not_closed.where(challenge_type: challenge_type).
+        joins("INNER JOIN prompt_memes on prompt_memes.id = challenge_id").where("prompt_memes.signup_open = 1").
+        where("prompt_memes.signups_close_at > ?", Time.now).order("prompt_memes.signups_close_at DESC")
+    elsif challenge_type == "GiftExchange"
+      not_closed.where(challenge_type: challenge_type).
+        joins("INNER JOIN gift_exchanges on gift_exchanges.id = challenge_id").where("gift_exchanges.signup_open = 1").
+        where("gift_exchanges.signups_close_at > ?", Time.now).order("gift_exchanges.signups_close_at DESC")
+    end
   end
 
   scope :with_name_like, lambda {|name|
@@ -229,8 +234,8 @@ class Collection < ActiveRecord::Base
     "#{name} #{title}"
   end
 
-  def autocomplete_search_string_was
-    "#{name_was} #{title_was}"
+  def autocomplete_search_string_before_last_save
+    "#{name_before_last_save} #{title_before_last_save}"
   end
 
   def autocomplete_prefixes
@@ -305,10 +310,33 @@ class Collection < ActiveRecord::Base
     count
   end
 
+  # Return the count of all bookmarkable items (works, series, external works)
+  # that are in this collection (or any of its children) and visible to
+  # the current user. Excludes bookmarks of deleted works/series.
+  def all_bookmarked_items_count
+    # The set of all bookmarks in this collection and its children.
+    # Note that "approved_by_collection" forces the bookmarks to be approved
+    # both by the collection AND by the user.
+    bookmarks = Bookmark.is_public.joins(:collection_items).
+                merge(CollectionItem.approved_by_collection).
+                where(collection_items: { collection_id: children.ids + [id] })
+
+    logged_in = User.current_user.present?
+
+    [
+      logged_in ? Work.visible_to_registered_user : Work.visible_to_all,
+      logged_in ? Series.visible_to_registered_user : Series.visible_to_all,
+      ExternalWork.visible_to_all
+    ].map do |relation|
+      relation.joins(:bookmarks).merge(bookmarks).distinct.
+        count("bookmarks.bookmarkable_id")
+    end.sum
+  end
+
   def all_fandoms
     # We want filterable fandoms, but not inherited metatags:
     Fandom.for_collections([self] + children).
-      where('filter_taggings.inherited = 0').uniq
+      where('filter_taggings.inherited = 0').distinct
   end
 
   def all_fandoms_count
@@ -385,17 +413,8 @@ class Collection < ActiveRecord::Base
     UserMailer.collection_notification(self.id, subject, message).deliver
   end
 
+  include AsyncWithResque
   @queue = :collection
-  # This will be called by a worker when a job needs to be processed
-  def self.perform(id, method, *args)
-    find(id).send(method, *args)
-  end
-
-  # We can pass this any Collection instance method that we want to
-  # run later.
-  def async(method, *args)
-    Resque.enqueue(Collection, id, method, *args)
-  end
 
   def reveal!
     async(:reveal_collection_items)

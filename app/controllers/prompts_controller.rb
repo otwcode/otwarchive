@@ -1,14 +1,16 @@
 class PromptsController < ApplicationController
 
-  before_filter :users_only
-  before_filter :load_collection, :except => [:index]
-  before_filter :load_challenge, :except => [:index]
-  before_filter :load_prompt_from_id, :only => [:show, :edit, :update, :destroy]
-  before_filter :load_signup, :except => [:index, :destroy, :show]
-  # before_filter :promptmeme_only, :except => [:index, :new]
-  before_filter :allowed_to_destroy, :only => [:destroy]
-  before_filter :signup_owner_only, :only => [:edit, :update]
-  before_filter :check_signup_open, :only => [:new, :create, :edit, :update]
+  before_action :users_only
+  before_action :load_collection, except: [:index]
+  before_action :load_challenge, except: [:index]
+  before_action :load_prompt_from_id, only: [:show, :edit, :update, :destroy]
+  before_action :load_signup, except: [:index, :destroy, :show]
+  # before_action :promptmeme_only, except: [:index, :new]
+  before_action :allowed_to_destroy, only: [:destroy]
+  before_action :allowed_to_view, only: [:show]
+  before_action :signup_owner_only, only: [:edit, :update]
+  before_action :check_signup_open, only: [:new, :create, :edit, :update]
+  before_action :check_prompt_in_collection, only: [:show, :edit, :update, :destroy]
 
   # def promptmeme_only
   #   unless @collection.challenge_type == "PromptMeme"
@@ -30,7 +32,7 @@ class PromptsController < ApplicationController
 
   def load_signup
     unless @challenge_signup
-    	@challenge_signup = ChallengeSignup.in_collection(@collection).by_user(current_user).first
+      @challenge_signup = ChallengeSignup.in_collection(@collection).by_user(current_user).first
     end
     no_signup and return unless @challenge_signup
   end
@@ -84,6 +86,19 @@ class PromptsController < ApplicationController
     false
   end
 
+  def check_prompt_in_collection
+    unless @prompt.collection_id == @collection.id
+      flash[:error] = ts("Sorry, that prompt isn't associated with that collection.")
+      redirect_to @collection
+    end
+  end
+
+  def allowed_to_view
+    unless @challenge.user_allowed_to_see_prompt?(current_user, @prompt)
+      access_denied(redirect: @collection)
+    end
+  end
+
   #### ACTIONS
 
   def index
@@ -109,7 +124,7 @@ class PromptsController < ApplicationController
   end
 
   def create
-    params[:prompt].merge!({:challenge_signup_id => @challenge_signup.id})
+    params[:prompt].merge!({challenge_signup_id: @challenge_signup.id})
 
     if params[:prompt_type] == "offer"
       @prompt = @challenge_signup.offers.build(prompt_params)
@@ -124,16 +139,16 @@ class PromptsController < ApplicationController
       flash[:notice] = ts("Prompt was successfully added.")
       redirect_to collection_signup_path(@collection, @challenge_signup)
     else
-      render :action => :new
+      render action: :new
     end
   end
 
   def update
     if @prompt.update_attributes(prompt_params)
-      flash[:notice] = 'Prompt was successfully updated.'
+      flash[:notice] = ts("Prompt was successfully updated.")
       redirect_to collection_signup_path(@collection, @challenge_signup)
     else
-      render :action => :edit
+      render action: :edit
     end
   end
 
@@ -175,23 +190,24 @@ class PromptsController < ApplicationController
       :any_freeform,
       :any_category,
       :any_rating,
-      :any_warning,
+      :any_archive_warning,
       tag_set_attributes: [
         :fandom_tagnames,
+        :id,
         :updated_at,
         :character_tagnames,
         :relationship_tagnames,
         :freeform_tagnames,
         :category_tagnames,
         :rating_tagnames,
-        :warning_tagnames,
+        :archive_warning_tagnames,
         fandom_tagnames: [],
         character_tagnames: [],
         relationship_tagnames: [],
         freeform_tagnames: [],
         category_tagnames: [],
         rating_tagnames: [],
-        warning_tagnames: []
+        archive_warning_tagnames: []
       ],
       optional_tag_set_attributes: [
         :tagnames

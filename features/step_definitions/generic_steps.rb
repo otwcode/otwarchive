@@ -1,5 +1,5 @@
 When /^(?:|I )unselect "([^"]+)" from "([^"]+)"$/ do |item, selector|
-  unselect(item, :from => selector)
+  unselect(item, from: selector)
 end
 
 Then /^debug$/ do
@@ -46,6 +46,10 @@ Given /^I wait (\d+) seconds?$/ do |number|
   Kernel::sleep number.to_i
 end
 
+When "all AJAX requests are complete" do
+  wait_for_ajax if @javascript
+end
+
 When 'the system processes jobs' do
   #resque runs inline during testing. see resque.rb in initializers/gem-plugin_config
   #Delayed::Worker.new.work_off
@@ -56,20 +60,20 @@ When 'I reload the page' do
 end
 
 Then /^I should see Posted now$/ do
-	now = Time.zone.now.to_s
+  now = Time.zone.now.to_s
   step "I should see \"Posted #{now}\""
 end
 
 When /^I fill in "([^\"]*)" with$/ do |field, value|
-  fill_in(field, :with => value)
+  fill_in(field, with: value)
 end
 
 When /^I fill in "([^\"]*)" with `([^\`]*)`$/ do |field, value|
-  fill_in(field, :with => value)
+  fill_in(field, with: value)
 end
 
 When /^I fill in "([^\"]*)" with '([^\']*)'$/ do |field, value|
-  fill_in(field, :with => value)
+  fill_in(field, with: value)
 end
 
 Then /^I should see a create confirmation message$/ do
@@ -102,7 +106,11 @@ Then /^I should not see the image "([^"]*)" text "([^"]*)"(?: within "([^"]*)")?
 end
 
 Then /^"([^"]*)" should be selected within "([^"]*)"$/ do |value, field|
-  page.has_select?(field, :selected => value).should == true
+  page.has_select?(field, selected: value).should == true
+end
+
+Then /^"(.*)?" should( not)? be an option within "(.*)?"$/ do |value, negation, field|
+  expect(page.has_select?(field, with_options: [value])).to be !negation
 end
 
 Then /^I should see "([^"]*)" in the "([^"]*)" input/ do |content, labeltext|
@@ -127,7 +135,7 @@ end
 
 Then /^the "([^"]*)" checkbox(?: within "([^"]*)")? should be disabled$/ do |label, selector|
   with_scope(selector) do
-    field_disabled = find_field(label, :disabled => true)
+    field_disabled = find_field(label, disabled: true)
     if field_disabled.respond_to? :should
       field_disabled.should be_truthy
     else
@@ -145,14 +153,6 @@ Then /^the "([^"]*)" checkbox(?: within "([^"]*)")? should not be disabled$/ do 
       assert !field_disabled
     end
   end
-end
-
-Then /^I should find "([^"]*)" selected within "([^"]*)"$/ do |text, selector|
-    if page.respond_to? :should
-      page.should have_content('<option selected="selected" value="' + text + '"')
-    else
-      assert page.has_content?('<option selected="selected" value="' + text + '"')
-    end
 end
 
 Then /^I should not see the field "([^"]*)"(?: within "([^"]*)")?$/ do |id, selector|
@@ -183,7 +183,7 @@ When /^I uncheck the (\d+)(?:st|nd|rd|th) checkbox with id matching "([^"]*)"$/ 
 end
 
 When /^I fill in the (\d+)(?:st|nd|rd|th) field with id matching "([^"]*)" with "([^"]*)"$/ do |index, id_string, value|
-  fill_in(page.all("input[type='text']").select {|el| el['id'] && el['id'].match(/#{id_string}/)}[(index.to_i-1)]['id'], :with => value)
+  fill_in(page.all("input[type='text']").select {|el| el['id'] && el['id'].match(/#{id_string}/)}[(index.to_i-1)]['id'], with: value)
 end
 
 
@@ -222,6 +222,12 @@ Then /^I should see the page title "(.*)"$/ do |text|
   end
 end
 
+Then /^I should see the raw html page title "(.*)"$/ do |text|
+  within('head title') do
+    page.body.should =~ /#{Regexp.escape(text)}/m
+  end
+end
+
 Then /^I should find a checkbox "([^\"]*)"$/ do |name|
   field = find_field(name)
   field['checked'].respond_to? :should
@@ -239,4 +245,9 @@ end
 
 When /^I want to search for exactly one term$/ do
   Capybara.exact = true
+end
+
+When /^I should see the correct time zone for "(.*)"$/ do |zone|
+  Time.zone = zone
+  page.body.should =~ /#{Regexp.escape(Time.zone.now.zone)}/
 end

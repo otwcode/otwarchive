@@ -1,17 +1,11 @@
 require 'spec_helper'
 
 describe CommentMailer do
-  describe "basic comment emails" do
+  describe "comment_sent_notification" do
+    let(:comment) { create(:comment) } 
 
-    before(:each) do
-      @comment = FactoryGirl.create(:comment)
-    end
+    subject(:email) { CommentMailer.comment_sent_notification(comment).deliver }
 
-    let(:email) { CommentMailer.comment_sent_notification(@comment).deliver }
-
-    it "should have a valid from line" do
-      text = "From: Archive of Our Own <#{ArchiveConfig.RETURN_ADDRESS}>"
-      expect(email.encoded).to match(/#{text}/)
-    end
+    it_behaves_like "an email with a valid sender"
   end
 end

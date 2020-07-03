@@ -1,19 +1,18 @@
 class Fandom < Tag
 
   NAME = ArchiveConfig.FANDOM_CATEGORY_NAME
-  index_name Tag.index_name
 
   has_many :wrangling_assignments
-  has_many :wranglers, :through => :wrangling_assignments, :source => :user
+  has_many :wranglers, through: :wrangling_assignments, source: :user
 
-  has_many :parents, :through => :common_taggings, :source => :filterable, :source_type => 'Tag', :after_remove => :check_media
-  has_many :medias,  -> { where(type: 'Media') }, :through => :common_taggings, :source => :filterable, :source_type => 'Tag'
-  has_many :characters, -> { where(type: 'Character') }, :through => :child_taggings, :source => :common_tag
-  has_many :relationships, -> { where(type: 'Relationship') }, :through => :child_taggings, :source => :common_tag
-  has_many :freeforms, -> { where(type: 'Freeform') }, :through => :child_taggings, :source => :common_tag
+  has_many :parents, through: :common_taggings, source: :filterable, source_type: 'Tag', after_remove: :check_media
+  has_many :medias,  -> { where(type: 'Media') }, through: :common_taggings, source: :filterable, source_type: 'Tag'
+  has_many :characters, -> { where(type: 'Character') }, through: :child_taggings, source: :common_tag
+  has_many :relationships, -> { where(type: 'Relationship') }, through: :child_taggings, source: :common_tag
+  has_many :freeforms, -> { where(type: 'Freeform') }, through: :child_taggings, source: :common_tag
 
 
-  scope :by_media, lambda {|media| where(:media_id => media.id)}
+  scope :by_media, lambda {|media| where(media_id: media.id)}
 
   def self.unwrangled
     joins(:common_taggings).
@@ -30,7 +29,6 @@ class Fandom < Tag
     if self.medias.empty? && self.type == "Fandom" # type could be something else if the tag is in the process of being re-categorised (re-sorted)
       self.parents << Media.uncategorized
     end
-    true
   end
 
   before_update :check_wrangling_status
@@ -49,17 +47,5 @@ class Fandom < Tag
   end
   def child_types
     ['Character', 'Relationship', 'Freeform', 'SubTag', 'Merger']
-  end
-
-  def add_association(tag)
-    if tag.is_a?(Media)
-      self.parents << tag unless self.parents.include?(tag)
-      # Remove default media if another is added
-      if self.medias.include?(Media.uncategorized)
-        self.remove_association(Media.uncategorized.id)
-      end
-    else
-      self.children << tag unless self.children.include?(tag)
-    end
   end
 end

@@ -1,9 +1,9 @@
 class ArchiveFaqsController < ApplicationController
 
-  before_filter :admin_only, except: [:index, :show]
-  before_filter :set_locale
-  before_filter :require_language_id
-  around_filter :with_locale
+  before_action :admin_only, except: [:index, :show]
+  before_action :set_locale
+  before_action :require_language_id
+  around_action :with_locale
 
   # GET /archive_faqs
   def index
@@ -19,7 +19,7 @@ class ArchiveFaqsController < ApplicationController
   # GET /archive_faqs/1
   def show
     @questions = []
-    @archive_faq = ArchiveFaq.find_by(slug: params[:id])
+    @archive_faq = ArchiveFaq.find_by!(slug: params[:id])
     if params[:language_id] == "en"
       @questions = @archive_faq.questions
     else
@@ -84,9 +84,6 @@ class ArchiveFaqsController < ApplicationController
       if @archive_faq.save
         flash[:notice] = 'ArchiveFaq was successfully created.'
         redirect_to(@archive_faq)
-        if @archive_faq.email_translations? && @archive_faq.new_record?
-          AdminMailer.created_faq(@archive_faq.id, current_admin.login).deliver
-        end
       else
         render action: "new"
       end
@@ -95,18 +92,19 @@ class ArchiveFaqsController < ApplicationController
   # PUT /archive_faqs/1
   def update
     @archive_faq = ArchiveFaq.find_by(slug: params[:id])
-      if @archive_faq.update_attributes(archive_faq_params)
-        flash[:notice] = 'ArchiveFaq was successfully updated.'
-        redirect_to(@archive_faq)
-      else
-        render action: "edit"
-      end
+
+    if @archive_faq.update_attributes(archive_faq_params)
+      flash[:notice] = 'ArchiveFaq was successfully updated.'
+      redirect_to(@archive_faq)
+    else
+      render action: "edit"
+    end
   end
 
   # reorder FAQs
   def update_positions
     if params[:archive_faqs]
-      @archive_faqs = ArchiveFaq.reorder(params[:archive_faqs])
+      @archive_faqs = ArchiveFaq.reorder_list(params[:archive_faqs])
       flash[:notice] = ts("Archive FAQs order was successfully updated.")
     elsif params[:archive_faq]
       params[:archive_faq].each_with_index do |id, position|
@@ -161,14 +159,14 @@ class ArchiveFaqsController < ApplicationController
   def destroy
     @archive_faq = ArchiveFaq.find_by(slug: params[:id])
     @archive_faq.destroy
-    redirect_to(archive_faqs_url)
+    redirect_to(archive_faqs_path)
   end
 
   private
 
   def archive_faq_params
     params.require(:archive_faq).permit(
-      :title, :notify_translations,
+      :title,
       questions_attributes: [
         :id, :question, :anchor, :content, :screencast, :_destroy, :is_translated
       ]

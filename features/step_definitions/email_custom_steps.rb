@@ -1,3 +1,7 @@
+Given /^(?:a clear email queue|no emails have been sent|the email queue is clear)$/ do
+  reset_mailer
+end
+
 Then /^"([^\"]*)" should be emailed$/ do |user|
   @user = User.find_by(login: user)
   emails("to: \"#{email_for(@user.email)}\"").size.should > 0

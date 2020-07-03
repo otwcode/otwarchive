@@ -90,28 +90,43 @@ module CommentsHelper
                     :show_comments
 
     link_text = ts("%{words} %{count}",
-                  :words => options[:link_type] == "hide" || params[:show_comments] ?
+                  words: options[:link_type] == "hide" || params[:show_comments] ?
                               "Hide Comments" :
                               "Comments",
-                  :count => options[:show_count] ?
+                  count: options[:show_count] ?
                               "(" +comment_count+ ")" :
                               "")
 
     link_to(
         link_text,
-        url_for(:controller => :comments,
-                :action => link_action,
+        url_for(controller: :comments,
+                action: link_action,
                 commentable_id => commentable_value,
-                :view_full_work => params[:view_full_work]),
-        :remote => true)
+                view_full_work: params[:view_full_work]),
+        remote: true)
   end
 
+  #### HELPERS FOR CHECKING WHICH BUTTONS/FORMS TO DISPLAY #####
 
-  #### HELPERS FOR REPLYING TO COMMENTS #####
+  def can_reply_to_comment?(comment)
+    !(comment.unreviewed? || no_anon_reply(comment) || comment_parent_hidden?(comment))
+  end
+
+  def can_edit_comment?(comment)
+    is_author_of?(comment) && comment.count_all_comments == 0 && !comment_parent_hidden?(comment)
+  end
+
+  def comment_parent_hidden?(comment)
+    parent = comment.ultimate_parent
+    (parent.respond_to?(:hidden_by_admin) && parent.hidden_by_admin) ||
+      (parent.respond_to?(:in_unrevealed_collection) && parent.in_unrevealed_collection)
+  end
 
   def no_anon_reply(comment)
     comment.ultimate_parent.is_a?(Work) && comment.ultimate_parent.anon_commenting_disabled && !logged_in?
   end
+
+  #### HELPERS FOR REPLYING TO COMMENTS #####
 
   def add_cancel_comment_reply_link(comment)
     if params[:add_comment_reply_id] && params[:add_comment_reply_id] == comment.id.to_s
@@ -131,14 +146,14 @@ module CommentsHelper
                           comment.parent.id
     link_to(
       ts("Reply"),
-      url_for(:controller => :comments,
-              :action => :add_comment_reply,
-              :id => comment.id,
-              :comment_id => params[:comment_id],
+      url_for(controller: :comments,
+              action: :add_comment_reply,
+              id: comment.id,
+              comment_id: params[:comment_id],
               commentable_id => commentable_value,
-              :view_full_work => params[:view_full_work],
-              :page => params[:page]),
-      :remote => true)
+              view_full_work: params[:view_full_work],
+              page: params[:page]),
+      remote: true)
   end
 
   # return link to cancel new reply to a comment
@@ -151,14 +166,14 @@ module CommentsHelper
                           comment.parent.id
     link_to(
       ts("Cancel"),
-      url_for(:controller => :comments,
-              :action => :cancel_comment_reply,
-              :id => comment.id,
-              :comment_id => params[:comment_id],
+      url_for(controller: :comments,
+              action: :cancel_comment_reply,
+              id: comment.id,
+              comment_id: params[:comment_id],
               commentable_id => commentable_value,
-              :view_full_work => params[:view_full_work],
-              :page => params[:page]),
-      :remote => true)
+              view_full_work: params[:view_full_work],
+              page: params[:page]),
+      remote: true)
   end
 
   # TO DO: create fallbacks to support non-JavaScript requests!
@@ -176,12 +191,12 @@ module CommentsHelper
                               commentable.ultimate_parent.id
         link_to(
           ts("Cancel"),
-          url_for(:controller => :comments,
-                  :action => :cancel_comment_reply,
-                  :id => commentable.id,
-                  :comment_id => params[:comment_id],
+          url_for(controller: :comments,
+                  action: :cancel_comment_reply,
+                  id: commentable.id,
+                  comment_id: params[:comment_id],
                   commentable_id => commentable_value),
-          :remote => true)
+          remote: true)
        else
         # canceling a reply to a different commentable thingy
         commentable_id = commentable.is_a?(Tag) ?
@@ -192,31 +207,31 @@ module CommentsHelper
                               commentable.id
         link_to(
           ts("Cancel"),
-          url_for(:controller => :comments,
-                  :action => :cancel_comment,
+          url_for(controller: :comments,
+                  action: :cancel_comment,
                   commentable_id => commentable_value),
-          :remote => true)
+          remote: true)
       end
     else
       # canceling an edit
       link_to(
         ts("Cancel"),
-        url_for(:controller => :comments,
-                :action => :cancel_comment_edit,
-                :id => (comment.id),
-                :comment_id => params[:comment_id]),
-        :remote => true)
+        url_for(controller: :comments,
+                action: :cancel_comment_edit,
+                id: (comment.id),
+                comment_id: params[:comment_id]),
+        remote: true)
     end
   end
 
   # return html link to edit comment
   def edit_comment_link(comment)
     link_to(ts("Edit"),
-            url_for(:controller => :comments,
-                    :action => :edit,
-                    :id => comment,
-                    :comment_id => params[:comment_id]),
-            :remote => true)
+            url_for(controller: :comments,
+                    action: :edit,
+                    id: comment,
+                    comment_id: params[:comment_id]),
+            remote: true)
   end
 
   def do_cancel_delete_comment_link(comment)
@@ -231,68 +246,31 @@ module CommentsHelper
   def delete_comment_link(comment)
     link_to(
       ts("Delete"),
-      url_for(:controller => :comments,
-              :action => :delete_comment,
-              :id => comment,
-              :comment_id => params[:comment_id]),
-      :remote => true)
+      url_for(controller: :comments,
+              action: :delete_comment,
+              id: comment,
+              comment_id: params[:comment_id]),
+      remote: true)
   end
 
   # return link to cancel new reply to a comment
   def cancel_delete_comment_link(comment)
     link_to(
       ts("Cancel"),
-      url_for(:controller => :comments,
-              :action => :cancel_comment_delete,
-              :id => comment,
-              :comment_id => params[:comment_id]),
-      :remote => true)
+      url_for(controller: :comments,
+              action: :cancel_comment_delete,
+              id: comment,
+              comment_id: params[:comment_id]),
+      remote: true)
   end
 
   # return html link to mark/unmark comment as spam
   def tag_comment_as_spam_link(comment)
     if comment.approved
-      link_to(ts("Spam"), reject_comment_path(comment), :method => :put, :confirm => "Are you sure you want to mark this as spam?" )
+      link_to(ts("Spam"), reject_comment_path(comment), method: :put, confirm: "Are you sure you want to mark this as spam?" )
     else
-      link_to(ts("Not Spam"), approve_comment_path(comment), :method => :put)
+      link_to(ts("Not Spam"), approve_comment_path(comment), method: :put)
     end
-  end
-
-  # non-JavaScript fallbacks for great justice!
-
-  def fallback_url_for_top_level(commentable, options = {})
-    default_options = {:anchor => "comments"}
-    if commentable.is_a?(Tag)
-      default_options[:controller] = :comments
-      default_options[:action] = :index
-      default_options[:tag_id] = commentable.name
-    else
-      default_options[:controller] = commentable.class.to_s.underscore.pluralize
-      default_options[:action] = "show"
-      default_options[:id] = commentable.id
-    end
-    default_options[:add_comment] = params[:add_comment] if params[:add_comment]
-    default_options[:show_comments] = params[:show_comments] if params[:show_comments]
-
-    options = default_options.merge(options)
-    url_for(options)
-  end
-
-  def fallback_url_for_comment(comment, options = {})
-    default_options = {:anchor => "comment_#{comment.id}"}
-    default_options[:action] = "show"
-    default_options[:show_comments] = true
-    default_options[:id] = comment.id if comment.ultimate_parent.is_a?(Tag)
-
-    options = default_options.merge(options)
-
-    if @thread_view # hopefully means we're on a Thread page
-      options[:id] = @thread_root if @thread_root
-      url_for(options)
-    else # Top Level Commentable
-      fallback_url_for_top_level(comment.ultimate_parent, options)
-    end
-
   end
 
   # find the parent of the commentable
@@ -318,7 +296,7 @@ module CommentsHelper
   def current_user_is_anonymous_creator(commentable)
     if logged_in?
       parent = find_parent(commentable)
-      parent.respond_to?(:work) && parent.anonymous? && current_user.is_author_of?(parent)
+      parent.is_a?(Work) && parent.anonymous? && current_user.is_author_of?(parent)
     end
   end
 

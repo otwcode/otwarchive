@@ -53,17 +53,17 @@ end
 
 When /^I fill in gift exchange challenge options$/ do
   current_date = DateTime.current
-  fill_in("Sign-up opens", :with => "#{current_date.months_ago(2)}")
-    fill_in("Sign-up closes", :with => "#{current_date.years_since(1)}")
-    select("(GMT-05:00) Eastern Time (US & Canada)", :from => "gift_exchange_time_zone")
-    fill_in("Tag Sets To Use:", :with => "Standard Challenge Tags")
-    fill_in("gift_exchange_request_restriction_attributes_fandom_num_required", :with => "1")
-    fill_in("gift_exchange_request_restriction_attributes_fandom_num_allowed", :with => "1")
-    fill_in("gift_exchange_request_restriction_attributes_freeform_num_allowed", :with => "2")
-    fill_in("gift_exchange_offer_restriction_attributes_fandom_num_required", :with => "1")
-    fill_in("gift_exchange_offer_restriction_attributes_fandom_num_allowed", :with => "1")
-    fill_in("gift_exchange_offer_restriction_attributes_freeform_num_allowed", :with => "2")
-    select("1", :from => "gift_exchange_potential_match_settings_attributes_num_required_fandoms")
+  fill_in("Sign-up opens", with: "#{current_date.months_ago(2)}")
+    fill_in("Sign-up closes", with: "#{current_date.years_since(1)}")
+    select("(GMT-05:00) Eastern Time (US & Canada)", from: "gift_exchange_time_zone")
+    fill_in("Tag Sets To Use:", with: "Standard Challenge Tags")
+    fill_in("gift_exchange_request_restriction_attributes_fandom_num_required", with: "1")
+    fill_in("gift_exchange_request_restriction_attributes_fandom_num_allowed", with: "1")
+    fill_in("gift_exchange_request_restriction_attributes_freeform_num_allowed", with: "2")
+    fill_in("gift_exchange_offer_restriction_attributes_fandom_num_required", with: "1")
+    fill_in("gift_exchange_offer_restriction_attributes_fandom_num_allowed", with: "1")
+    fill_in("gift_exchange_offer_restriction_attributes_freeform_num_allowed", with: "2")
+    select("1", from: "gift_exchange_potential_match_settings_attributes_num_required_fandoms")
 end
 
 When /^I fill in single-fandom gift exchange challenge options$/ do
@@ -78,7 +78,7 @@ When /^I fill in single-fandom gift exchange challenge options$/ do
   fill_in("gift_exchange_request_restriction_attributes_relationship_num_allowed", with: "3")
   fill_in("gift_exchange_request_restriction_attributes_rating_num_allowed", with: "5")
   fill_in("gift_exchange_request_restriction_attributes_category_num_allowed", with: "5")
-  fill_in("gift_exchange_request_restriction_attributes_warning_num_allowed", with: "5")
+  fill_in("gift_exchange_request_restriction_attributes_archive_warning_num_allowed", with: "5")
   fill_in("gift_exchange_request_restriction_attributes_freeform_num_allowed", with: "2")
   fill_in("gift_exchange_offer_restriction_attributes_fandom_num_required", with: "1")
   fill_in("gift_exchange_offer_restriction_attributes_fandom_num_allowed", with: "1")
@@ -87,9 +87,16 @@ When /^I fill in single-fandom gift exchange challenge options$/ do
   select("1", from: "gift_exchange_potential_match_settings_attributes_num_required_characters")
   check("gift_exchange_offer_restriction_attributes_allow_any_rating")
   check("gift_exchange_offer_restriction_attributes_allow_any_category")
-  check("gift_exchange_offer_restriction_attributes_allow_any_warning")
+  check("gift_exchange_offer_restriction_attributes_allow_any_archive_warning")
   check("gift_exchange_offer_restriction_attributes_character_restrict_to_fandom")
   check("gift_exchange_offer_restriction_attributes_relationship_restrict_to_fandom")
+end
+
+When /^I allow warnings in my gift exchange$/ do
+  fill_in("gift_exchange_request_restriction_attributes_archive_warning_num_allowed", with: "1")
+  check("gift_exchange_request_restriction_attributes_allow_any_archive_warning")
+  fill_in("gift_exchange_offer_restriction_attributes_archive_warning_num_allowed", with: "1")
+  check("gift_exchange_offer_restriction_attributes_allow_any_archive_warning")
 end
 
 Then /^"([^\"]*)" gift exchange should be fully created$/ do |title|
@@ -102,6 +109,18 @@ Given /^the gift exchange "([^\"]*)" is ready for signups$/ do |title|
   step %{I am logged in as "mod1"}
   step %{I have created the gift exchange "#{title}"}
   step %{I open signups for "#{title}"}
+end
+
+# This is going to make broken assignments a la AO3-5748
+Given /^"(.*?)" has two pinchhit assignments in the gift exchange "(.*?)"$/ do |user, collection_title|
+  collection = Collection.find_by(title: collection_title)
+  user = User.find_by(login: user)
+  assignments = ChallengeAssignment.where(collection_id: collection.id).limit(2)
+  assignments.each do |a| 
+    a.pinch_hitter_id = user.default_pseud_id
+    a.save
+    a.reload
+  end
 end
 
 ## Signing up
@@ -176,14 +195,14 @@ end
 When /^I sign up for "([^\"]*)" with combination SGA$/ do |title|
   step %{I start signing up for "#{title}"}
     step %{I fill in "challenge_signup_requests_attributes_0_tag_set_attributes_fandom_tagnames" with "Stargate Atlantis"}
-    fill_in("challenge_signup_requests_attributes_0_title", :with => "SGA love")
+    fill_in("challenge_signup_requests_attributes_0_title", with: "SGA love")
     click_button "Submit"
 end
 
 When /^I sign up for "([^\"]*)" with combination SG-1$/ do |title|
   step %{I start signing up for "#{title}"}
     step %{I fill in "challenge_signup_requests_attributes_0_tag_set_attributes_fandom_tagnames" with "Stargate SG-1"}
-    fill_in("challenge_signup_requests_attributes_0_title", :with => "SG1 love")
+    fill_in("challenge_signup_requests_attributes_0_title", with: "SG1 love")
     click_button "Submit"
 end
 
@@ -231,7 +250,7 @@ When /^I assign a recipient to herself$/ do
   id = first_recip_field['id']
   if id.match(/assignments_(\d+)_request/)
     num = $1
-    fill_in "challenge_assignments_#{num}_offer_signup_pseud", :with => recip
+    fill_in "challenge_assignments_#{num}_offer_signup_pseud", with: recip
   end
 end
 
@@ -247,7 +266,7 @@ end
 When /^I assign a pinch recipient$/ do
   name = page.all("td").select {|el| el['id'] && el['id'].match(/offer_signup_for/)}[0].text
   pseud = Pseud.find_by(name: name)
-  request_pseud = ChallengeSignup.where(:pseud_id => pseud.id).first.offer_potential_matches.first.request_signup.pseud.name
+  request_pseud = ChallengeSignup.where(pseud_id: pseud.id).first.offer_potential_matches.first.request_signup.pseud.name
   step %{I fill in the 1st field with id matching "request_signup_pseud" with "#{request_pseud}"}
 end
 
@@ -295,6 +314,7 @@ When /^I start to fulfill my assignment$/ do
     step %{I fill in "Work Title" with "Fulfilled Story"}
     step %{I select "Not Rated" from "Rating"}
     step %{I check "No Archive Warnings Apply"}
+    step %{I select "English" from "Choose a language"}
     step %{I fill in "Fandom" with "Final Fantasy X"}
     step %{I fill in "content" with "This is a really cool story about Final Fantasy X"}
 end

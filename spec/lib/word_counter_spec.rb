@@ -1,9 +1,14 @@
 # -*- coding: utf-8 -*-
 
 require 'word_counter'
+require 'spec_helper'
 
 describe WordCounter do
- let(:word_counter) { WordCounter.new("") }
+  let(:word_counter) { WordCounter.new("") }
+
+  it "should return zero for an empty string" do
+    expect(word_counter.count).to eq(0)
+  end
 
   it "should count plain words delimited with spaces" do
     word_counter.text = "one two three four"
@@ -71,4 +76,13 @@ describe WordCounter do
     expect(word_counter.count).to eq(5)
   end
 
+  it "should count words not delimited with space correctly" do
+    word_counter.text = "一个简单の栗子"
+    expect(word_counter.count).to eq(7)
+  end
+
+  it "should count words in mixed languages correctly" do
+    word_counter.text = "\“嘿Bob,\” Alice说，‘啊？！？’"
+    expect(word_counter.count).to eq(5)
+  end
 end

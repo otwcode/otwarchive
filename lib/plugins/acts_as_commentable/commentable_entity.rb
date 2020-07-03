@@ -2,8 +2,8 @@ module CommentableEntity
 
   def self.included(commentable)
     commentable.class_eval do
-      has_many :comments, :as => :commentable, :dependent => :destroy
-      has_many :total_comments, :class_name => 'Comment', :as => :parent
+      has_many :comments, as: :commentable, dependent: :destroy
+      has_many :total_comments, class_name: 'Comment', as: :parent
       extend ClassMethods
     end
   end
@@ -27,8 +27,13 @@ module CommentableEntity
   # hidden-by-admin comments.
   # returns number of visible (not deleted) comments
   def count_visible_comments
-    self.total_comments.where(hidden_by_admin: false, is_deleted: false, unreviewed: false).count
-  end
+    self.total_comments.where(
+      hidden_by_admin: false,
+      is_deleted: false,
+      unreviewed: false,
+      approved: true
+    ).count
+  end  
 
   # Return the name of this commentable object
   # Should be overridden in the implementing class if necessary
@@ -65,5 +70,4 @@ module CommentableEntity
       self.commentable_owners.email.join(',')
     end
   end
-
 end

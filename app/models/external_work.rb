@@ -1,8 +1,9 @@
 include UrlHelpers
-class ExternalWork < ActiveRecord::Base
+class ExternalWork < ApplicationRecord
   include ActiveModel::ForbiddenAttributesProtection
-  include Taggable
   include Bookmarkable
+  include Filterable
+  include Searchable
 
   has_many :related_works, as: :parent
 
@@ -44,6 +45,11 @@ class ExternalWork < ActiveRecord::Base
     self.update_attribute(:dead, true) unless url_active?(self.url)
   end
 
+  # Allow encoded characters to display correctly in titles
+  def title
+    read_attribute(:title).try(:html_safe)
+  end
+
   ########################################################################
   # VISIBILITY
   ########################################################################
@@ -68,47 +74,18 @@ class ExternalWork < ActiveRecord::Base
   def visible?(user=User.current_user)
     self.hidden_by_admin? ? user.kind_of?(Admin) : true
   end
-  # FIXME - duplicate of above but called in different ways in different places
-  def visible(user=User.current_user)
-    self.hidden_by_admin? ? user.kind_of?(Admin) : true
+
+  # Visibility has changed, which means we need to reindex
+  # the external work's bookmarker pseuds, to update their bookmark counts.
+  def should_reindex_pseuds?
+    pertinent_attributes = %w[id hidden_by_admin]
+    destroyed? || (saved_changes.keys & pertinent_attributes).present?
   end
 
   #######################################################################
   # TAGGING
   # External works are taggable objects.
   #######################################################################
-
-  # FILTERING CALLBACKS
-  after_save :check_filter_taggings
-
-  # Add and remove filter taggings as tags are added and removed
-  def check_filter_taggings
-    current_filters = self.tags.collect{|tag| tag.canonical? ? tag : tag.merger }.compact
-    current_filters.each {|filter| self.add_filter_tagging(filter)}
-    filters_to_remove = self.filters - current_filters
-    unless filters_to_remove.empty?
-      filters_to_remove.each {|filter| self.remove_filter_tagging(filter)}
-    end
-    return true
-  end
-
-  # Creates a filter_tagging relationship between the work and the tag or its canonical synonym
-  def add_filter_tagging(tag)
-    filter = tag.canonical? ? tag : tag.merger
-    if filter && !self.filters.include?(filter)
-      self.filters << filter
-      filter.reset_filter_count
-    end
-  end
-
-  # Removes filter_tagging relationship unless the work is tagged with more than one synonymous tags
-  def remove_filter_tagging(tag)
-    filter = tag.canonical? ? tag : tag.merger
-    if filter && (self.tags & tag.synonyms).empty? && self.filters.include?(filter)
-      self.filters.delete(filter)
-      filter.reset_filter_count
-    end
-  end
 
   def tag_groups
     self.tags.group_by { |t| t.type.to_s }
@@ -122,14 +99,18 @@ class ExternalWork < ActiveRecord::Base
     as_json(
       root: false,
       only: [
-        :title, :summary, :hidden_by_admin, :created_at, :language_id
+        :title, :summary, :hidden_by_admin, :created_at
       ],
       methods: [
         :posted, :restricted, :tag, :filter_ids, :rating_ids,
-        :warning_ids, :category_ids, :fandom_ids, :character_ids,
+        :archive_warning_ids, :category_ids, :fandom_ids, :character_ids,
         :relationship_ids, :freeform_ids, :creators, :revised_at
       ]
-    ).merge(bookmarkable_type: "ExternalWork")
+    ).merge(
+      language_id: language&.short,
+      bookmarkable_type: "ExternalWork",
+      bookmarkable_join: { name: "bookmarkable" }
+    )
   end
 
   def posted
@@ -149,5 +130,4 @@ class ExternalWork < ActiveRecord::Base
   def revised_at
     created_at
   end
-
 end

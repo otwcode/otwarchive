@@ -1,7 +1,7 @@
 class PreferencesController < ApplicationController
-  before_filter :load_user
-  before_filter :check_ownership
-  skip_before_filter :store_location
+  before_action :load_user
+  before_action :check_ownership
+  skip_before_action :store_location
 
   # Ensure that the current user is authorized to view and change this information
   def load_user
@@ -29,10 +29,10 @@ class PreferencesController < ApplicationController
 
     if @user.preference.save
       flash[:notice] = ts('Your preferences were successfully updated.')
-      redirect_to @user
+      redirect_to user_path(@user)
     else
       flash[:error] = ts('Sorry, something went wrong. Please try that again.')
-      render :action => :index
+      render action: :index
     end
   end
 
@@ -53,9 +53,6 @@ class PreferencesController < ApplicationController
       :time_zone,
       :preferred_locale,
       :work_title_format,
-      :hide_all_hit_counts,
-      :hide_private_hit_count,
-      :hide_public_hit_count,
       :comment_emails_off,
       :comment_inbox_off,
       :comment_copy_to_self_off,
@@ -67,7 +64,8 @@ class PreferencesController < ApplicationController
       :recipient_emails_off,
       :history_enabled,
       :first_login,
-      :banner_seen
+      :banner_seen,
+      :allow_cocreator
     )
   end
 end

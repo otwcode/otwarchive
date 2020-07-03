@@ -1,11 +1,19 @@
-class Subscription < ActiveRecord::Base
+class Subscription < ApplicationRecord
   include ActiveModel::ForbiddenAttributesProtection
 
+  VALID_SUBSCRIBABLES = %w(Work User Series).freeze
+
   belongs_to :user
-  belongs_to :subscribable, :polymorphic => true
+  belongs_to :subscribable, polymorphic: true
 
-  validates_presence_of :user, :subscribable_id, :subscribable_type
+  validates_presence_of :user
 
+  validates :subscribable_type, inclusion: { in: VALID_SUBSCRIBABLES }
+  # Without the condition, you get a 500 error instead of a validation error
+  # if there's an invalid subscribable type
+  validates :subscribable, presence: true,
+                           if: proc { |s| VALID_SUBSCRIBABLES.include?(s.subscribable_type) }
+  
   # Get the subscriptions associated with this work
   # currently: users subscribed to work, users subscribed to creator of work
   scope :for_work, lambda {|work|
@@ -30,11 +38,18 @@ class Subscription < ActiveRecord::Base
   end
 
   def subject_text(creation)
-    authors = creation.pseuds.map{ |p| p.byline }.to_sentence
+    authors = if self.class.anonymous_creation?(creation)
+                "Anonymous"
+              else
+                creation.pseuds.map(&:byline).to_sentence
+              end
     chapter_text = creation.is_a?(Chapter) ? "#{creation.chapter_header} of " : ""
     work_title = creation.is_a?(Chapter) ? creation.work.title : creation.title
     text = "#{authors} posted #{chapter_text}#{work_title}"
     text += subscribable_type == "Series" ? " in the #{self.name} series" : ""
   end
 
+  def self.anonymous_creation?(creation)
+    (creation.is_a?(Work) && creation.anonymous?) || (creation.is_a?(Chapter) && creation.work.anonymous?)
+  end
 end

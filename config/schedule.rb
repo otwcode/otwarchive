@@ -25,47 +25,38 @@ set :set_path_automatically, false
 set :cron_log, "#{path}/log/whenever.log"
 
 # put a timestamp in the whenever log
-every 1.days, :at => 'midnight' do
+every 1.days, at: 'midnight' do
   command "date"
 end
 
 # Purge user accounts that haven't been activated
-every 1.days, :at => '6:31 am' do
+every 1.days, at: '6:31 am' do
   rake "admin:purge_unvalidated_users"
 end
 
 # Unsuspend selected users
-every 1.day, :at => '6:51 am'  do
+every 1.day, at: '6:51 am'  do
   rake "admin:unsuspend_users"
 end
 
 # Delete unused tags
-every 1.day, :at => '7:10 am' do
+every 1.day, at: '7:10 am' do
   rake "Tag:delete_unused"
 end
 
 # Delete old drafts
-every 1.day, :at => '7:40 am' do
+every 1.day, at: '7:40 am' do
   rake "work:purge_old_drafts"
 end
 
 # Send kudos notifications
-every 1.day, :at => '10:00 am' do
+every 1.day, at: '10:00 am' do
   rake "notifications:deliver_kudos"
 end
 
 # Send subscription notifications
 every 1.hour do
   rake "notifications:deliver_subscriptions"
-end
-
-# Move hit counts from redis to database
-every 10.minutes do
-  rake "statistics:update_stat_counters"
-end
-
-every 30.minutes do
-  rake "statistics:update_stats"
 end
 
 # Move readings from redis to database

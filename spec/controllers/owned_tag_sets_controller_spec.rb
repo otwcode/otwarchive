@@ -13,7 +13,7 @@ describe OwnedTagSetsController do
       let!(:owned_tag_sets) { Array.new(3) { create(:owned_tag_set, owner: user.default_pseud) } }
 
       it "displays the tag sets owned by the user" do
-        get :index, user_id: user.login
+        get :index, params: { user_id: user.login }
         expect(assigns(:tag_sets)).to match_array owned_tag_sets
       end
     end
@@ -24,7 +24,7 @@ describe OwnedTagSetsController do
       let!(:owned_tag_sets) { create(:owned_tag_set, owned_set_taggings: owned_set_taggings) }
 
       it "displays the tag sets associated with the restriction" do
-        get :index, restriction: restriction.id
+        get :index, params: { restriction: restriction.id }
         expect(assigns(:tag_sets)).to match_array owned_tag_sets
       end
     end
@@ -34,7 +34,7 @@ describe OwnedTagSetsController do
       let!(:non_matching_tag_set) { create(:owned_tag_set, title: "asdf") }
 
       it "displays the tag set matching the query" do
-        get :index, query: "correct_title"
+        get :index, params: { query: "correct_title" }
         expect(assigns(:tag_sets)).to include matching_tag_set
         expect(assigns(:tag_sets)).to_not include non_matching_tag_set
       end
@@ -67,7 +67,7 @@ describe OwnedTagSetsController do
       let(:params) { { restriction: restriction.id } }
 
       before do
-        get :show_options, params
+        get :show_options, params: params
       end
 
       context "where the restriction isn't found" do
@@ -113,7 +113,7 @@ describe OwnedTagSetsController do
   describe "show" do
     context "where tag set is not found" do
       it "redirects and displays an error" do
-        get :show, id: 12345
+        get :show, params: { id: 12345 }
         it_redirects_to_with_error(tag_sets_path, "What Tag Set did you want to look at?")
       end
     end
@@ -131,7 +131,7 @@ describe OwnedTagSetsController do
 
       context "where tag set is not visible" do
         it "doesn't set the tag hash" do
-          get :show, id: owned_tag_set.id
+          get :show, params: { id: owned_tag_set.id }
           expect(assigns(:tag_hash)).to_not be_present
         end
       end
@@ -141,7 +141,7 @@ describe OwnedTagSetsController do
 
         context "where tag set has type character" do
           it "sets the correct data" do
-            get :show, id: owned_tag_set.id
+            get :show, params: { id: owned_tag_set.id }
             tag_hash = assigns(:tag_hash)
             expect(tag_hash).to be_present
             filterable = Tag.find(tag.common_taggings.first.filterable_id)
@@ -172,7 +172,7 @@ describe OwnedTagSetsController do
 
       context "where tag set is successfully saved" do
         it "saves the owned tag set and redirects to the tag set path" do
-          post :create, owned_tag_set_params
+          post :create, params: owned_tag_set_params
           tag_set = OwnedTagSet.find(assigns(:tag_set).id)
           expect(tag_set.tag_set_ownerships.map(&:pseud_id)).to include user.default_pseud.id
           it_redirects_to_with_notice(tag_set_path(tag_set), "Tag Set was successfully created.")
@@ -185,7 +185,7 @@ describe OwnedTagSetsController do
         end
 
         it "renders new page" do
-          post :create, owned_tag_set_params
+          post :create, params: owned_tag_set_params
           assert_template :new
         end
       end
@@ -202,7 +202,7 @@ describe OwnedTagSetsController do
 
     context "where the user isn't a moderator" do
       it "redirects and displays an error" do
-        put :update, id: tag_set.id
+        put :update, params: { id: tag_set.id }
         it_redirects_to_with_error(user_path(user), "Sorry, you don't have permission to access the page you were trying to reach.")
       end
     end
@@ -213,9 +213,9 @@ describe OwnedTagSetsController do
 
       context "where the tag set is successfully updated" do
         it "updates the tag set and redirects" do
-          put :update, params
+          put :update, params: params
           expect(OwnedTagSet.find(tag_set.id).nominated).to eq false
-          it_redirects_to tag_set_path(tag_set)
+          it_redirects_to_with_notice(tag_set_path(tag_set), "Tag Set was successfully updated.")
         end
       end
 
@@ -231,7 +231,7 @@ describe OwnedTagSetsController do
         end
 
         it "sets the parent and child tags, then renders the edit view" do
-          put :update, params
+          put :update, params: params
           expect(assigns(:tags_in_set)).to include(fandom_tag, character_tag)
           expect(assigns(:parent_tags_in_set)).to include [fandom_tag.name, fandom_tag.id]
           expect(assigns(:child_tags_in_set)).to include [character_tag.name, character_tag.id]
@@ -251,7 +251,7 @@ describe OwnedTagSetsController do
 
     context "where the tag is successfully destroyed" do
       it "redirects with a notice" do
-        post :destroy, id: tag_set.id
+        post :destroy, params: { id: tag_set.id }
         expect(OwnedTagSet.find_by(id: tag_set.id)).to_not be_present
         it_redirects_to_with_notice(tag_sets_path, "Your Tag Set #{tag_set.title} was deleted.")
       end
@@ -263,7 +263,7 @@ describe OwnedTagSetsController do
       end
 
       it "redirects with a flash error" do
-        post :destroy, id: tag_set.id
+        post :destroy, params: { id: tag_set.id }
         it_redirects_to_with_error(tag_sets_path, "We couldn't delete that right now, sorry! Please try again later.")
       end
     end
@@ -284,7 +284,7 @@ describe OwnedTagSetsController do
         end
 
         it "redirects to tag set path and displays a notice" do
-          put :do_batch_load, id: tag_set.id, batch_associations: true
+          put :do_batch_load, params: { id: tag_set.id, batch_associations: true }
           it_redirects_to_with_notice(tag_set_path(tag_set), "Tags and associations loaded!")
         end
       end
@@ -295,7 +295,7 @@ describe OwnedTagSetsController do
         end
 
         it "redirects to batch load path and displays a notice" do
-          put :do_batch_load, id: tag_set.id, batch_associations: true
+          put :do_batch_load, params: { id: tag_set.id, batch_associations: true }
           expect(flash[:notice]).to eq "We couldn't add all the tags and associations you wanted -- the ones left below didn't work. See the help for suggestions!"
           assert_template :batch_load
         end
@@ -304,7 +304,7 @@ describe OwnedTagSetsController do
 
     context "where the batch_association param is not set" do
       it "redirects and displays an error" do
-        put :do_batch_load, id: tag_set.id
+        put :do_batch_load, params: { id: tag_set.id }
         it_redirects_to_with_error(batch_load_tag_set_path, "What did you want to load?")
       end
     end

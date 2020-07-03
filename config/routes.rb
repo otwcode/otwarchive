@@ -9,16 +9,33 @@ Otwarchive::Application.routes.draw do
                sign_out: 'logout'
              }
 
+  devise_scope :user do
+    get 'signup(/:invitation_token)' => 'users/registrations#new', as: 'signup'
+  end
+
+  devise_for :users,
+             module: 'users',
+             controllers: {
+                sessions: 'users/sessions',
+                registrations: 'users/registrations',
+                passwords: 'users/passwords'
+              },
+              path_names: {
+                sign_in: 'login',
+                sign_out: 'logout'
+              }
+
   #### ERRORS ####
 
   get '/403', to: 'errors#403'
   get '/404', to: 'errors#404'
   get '/422', to: 'errors#422'
   get '/500', to: 'errors#500'
+  get '/auth_error', to: 'errors#auth_error'
 
   #### DOWNLOADS ####
 
-  get 'downloads/:download_prefix/:download_authors/:id/:download_title.:format' => 'downloads#show', as: 'download'
+  get 'downloads/:id/:download_title.:format' => 'downloads#show', as: 'download'
 
   #### OPEN DOORS ####
   namespace :opendoors do
@@ -42,12 +59,12 @@ Otwarchive::Application.routes.draw do
     collection do
       get :manage
       post :reorder
+      get :status
     end
   end
 
-  get 'signup/:invitation_token' => 'users#new', as: 'signup'
   get 'claim/:invitation_token' => 'external_authors#claim', as: 'claim'
-  get 'complete_claim/:invitation_token' => 'external_authors#complete_claim', as: 'complete_claim'
+  post 'complete_claim/:invitation_token' => 'external_authors#complete_claim', as: 'complete_claim'
 
   #### TAGS ####
 
@@ -78,7 +95,6 @@ Otwarchive::Application.routes.draw do
       post :mass_update
       get :remove_association
       get :wrangle
-      get :reindex
     end
     collection do
       get :show_hidden
@@ -87,6 +103,7 @@ Otwarchive::Application.routes.draw do
     resources :works
     resources :bookmarks
     resources :comments
+    resource :troubleshooting, controller: :troubleshooting, only: [:show, :update]
   end
 
   resources :tag_sets, controller: 'owned_tag_sets' do
@@ -123,11 +140,9 @@ Otwarchive::Application.routes.draw do
   end
 
   #### ADMIN ####
-  resources :admins
   resources :admin_posts do
     resources :comments
   end
-
 
   namespace :admin do
     resources :activities, only: [:index, :show]
@@ -144,9 +159,15 @@ Otwarchive::Application.routes.draw do
         get :index_approved
       end
     end
+    resources :spam, only: [:index] do
+      collection do
+        post :bulk_update
+      end
+    end
     resources :user_creations, only: [:destroy] do
       member do
-        get :hide
+        put :hide
+        put :set_spam
       end
     end
     resources :users, controller: 'admin_users' do
@@ -158,11 +179,10 @@ Otwarchive::Application.routes.draw do
         get :check_user
       end
       collection do
-        get :notify
         get :bulk_search
         post :bulk_search
-        post :send_notification
-        post :update_user
+        post :update
+        post :update_status
       end
     end
     resources :invitations, controller: 'admin_invitations' do
@@ -174,6 +194,7 @@ Otwarchive::Application.routes.draw do
     end
     resources :api
   end
+  resources :admins, only: [:index]
 
   post '/admin/api/new', to: 'admin/api#create'
 
@@ -185,12 +206,9 @@ Otwarchive::Application.routes.draw do
     end
   end
 
-  resources :passwords, only: [:new, :create]
-
   # When adding new nested resources, please keep them in alphabetical order
-  resources :users do
+  resources :users, except: [:new, :create] do
     member do
-      get :browse
       get :change_email
       post :changed_email
       get :change_password
@@ -199,6 +217,7 @@ Otwarchive::Application.routes.draw do
       post :changed_username
       post :end_first_login
       post :end_banner
+      post :end_tos_prompt
     end
     resources :assignments, controller: "challenge_assignments", only: [:index] do
       collection do
@@ -222,6 +241,7 @@ Otwarchive::Application.routes.draw do
         put :reject
       end
     end
+    resource :creatorships, controller: "creatorships", only: [:show, :update]
     resources :external_authors do
       resources :external_author_names
     end
@@ -296,7 +316,7 @@ Otwarchive::Application.routes.draw do
       get :mark_for_later
       get :mark_as_read
       get :confirm_delete
-      get :reindex
+      get :share
     end
     resources :bookmarks
     resources :chapters do
@@ -323,8 +343,10 @@ Otwarchive::Application.routes.draw do
         put :review_all
       end
     end
+    resource :hit_count, controller: :hit_count, only: [:create]
     resources :kudos, only: [:index]
     resources :links, controller: "work_links", only: [:index]
+    resource :troubleshooting, controller: :troubleshooting, only: [:show, :update]
   end
 
   resources :chapters do
@@ -364,7 +386,6 @@ Otwarchive::Application.routes.draw do
     end
   end
 
-  resources :prompts
   resources :collections do
     collection do
       get :list_challenges
@@ -432,8 +453,16 @@ Otwarchive::Application.routes.draw do
     end
     resources :requests, controller: "challenge_requests"
     # challenge types
-    resource :gift_exchange, controller: 'challenge/gift_exchange'
-    resource :prompt_meme, controller: 'challenge/prompt_meme'
+    resource :gift_exchange, controller: "challenge/gift_exchange" do
+      member do
+        get :confirm_delete
+      end
+    end
+    resource :prompt_meme, controller: "challenge/prompt_meme" do
+      member do
+        get :confirm_delete
+      end
+    end
   end
 
   #### I18N ####
@@ -445,26 +474,14 @@ Otwarchive::Application.routes.draw do
   end
   resources :locales, except: :destroy
 
-  #### SESSIONS ####
-
-  resources :user_sessions, only: [:new, :create, :destroy] do
-    collection do
-      get :passwd_small
-      get :passwd
-    end
-  end
-  get 'login' => 'user_sessions#new'
-  get 'logout' => 'user_sessions#destroy'
-
   #### API ####
 
   namespace :api do
-    namespace :v1 do
+    namespace :v2 do
       resources :bookmarks, only: [:create], defaults: { format: :json }
       resources :works, only: [:create], defaults: { format: :json }
-      post 'bookmarks/import', to: 'bookmarks#create'
-      post 'works/import', to: 'works#create'
-      post 'works/urls', to: 'works#batch_urls'
+      post 'bookmarks/search', to: 'bookmarks#search'
+      post 'works/search', to: 'works#search'
     end
   end
 
@@ -546,11 +563,7 @@ Otwarchive::Application.routes.draw do
   resources :external_authors do
     resources :external_author_names
   end
-  resources :orphans, only: [:index, :new, :create] do
-    collection do
-      get :about
-    end
-  end
+  resources :orphans, only: [:index, :new, :create]
 
   get 'search' => 'works#search'
   post 'support' => 'feedbacks#create', as: 'feedbacks'
@@ -563,6 +576,7 @@ Otwarchive::Application.routes.draw do
   get 'site_map' => 'home#site_map'
   get 'site_pages' => 'home#site_pages'
   get 'first_login_help' => 'home#first_login_help'
+  get 'token_dispenser' => 'home#token_dispenser'
   get 'delete_confirmation' => 'users#delete_confirmation'
   get 'activate/:id' => 'users#activate', as: 'activate'
   get 'devmode' => 'devmode#index'
@@ -580,7 +594,43 @@ Otwarchive::Application.routes.draw do
 
   # See how all your routes lay out with "rake routes"
 
-  # This is a legacy wild controller route that's not recommended for RESTful applications.
-  # Note: This route will make all actions in every controller accessible via GET requests.
-  get ':controller(/:action(/:id(.:format)))'
+  # These are whitelisted routes that are proven to be used throughout the
+  # application, which previously relied on a deprecated catch-all route definition
+  # (`get ':controller(/:action(/:id(.:format)))'`) to work.
+  #
+  # They are generally not RESTful and in some cases are *almost* duplicates of
+  # existing routes defined above, but due to how extensively they are used
+  # throughout the application must exist until forms, controllers, and tests
+  # can be refactored to not rely on their existence.
+  #
+  # Note written on August 1, 2017 during upgrade to Rails 5.1.
+  get '/bookmarks/fetch_recent/:id' => 'bookmarks#fetch_recent', as: :fetch_recent_bookmarks
+  get '/bookmarks/hide_recent/:id' => 'bookmarks#hide_recent', as: :hide_recent_bookmarks
+
+  get '/invite_requests/show' => 'invite_requests#show', as: :show_invite_request
+  get '/user_invite_requests/update' => 'user_invite_requests#update'
+
+  patch '/admin/skins/update' => 'admin_skins#update', as: :update_admin_skin
+
+  get '/admin/admin_users/troubleshoot/:id' =>'admin/admin_users#troubleshoot', as: :troubleshoot_admin_user
+
+  # TODO: rewrite the autocomplete controller to deal with the fact that
+  # there are fifty different actions going on in there
+  get '/autocomplete/:action' => 'autocomplete#%{action}'
+
+  get '/assignments/no_challenge' => 'challenge_assignments#no_challenge'
+  get '/assignments/no_user' => 'challenge_assignments#no_user'
+  get '/assignments/no_assignment' => 'challenge_assignments#no_assignment'
+
+  get '/challenges/no_collection' => 'challenges#no_collection'
+  get '/challenges/no_challenge' => 'challenges#no_challenge'
+
+  get '/works/clean_work_search_params' => 'works#clean_work_search_params'
+  get '/works/collected' => 'works#collected'
+  get '/works/drafts' => 'works#drafts'
+
+  post '/works/edit_multiple/:id' => 'works#edit_multiple'
+  post '/works/confirm_delete_multiple/:id' => 'works#confirm_delete_multiple'
+  post '/works/delete_multiple/:id' => 'works#delete_multiple'
+  put '/works/update_multiple' => 'works#update_multiple'
 end

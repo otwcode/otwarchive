@@ -1,9 +1,9 @@
-class InboxComment < ActiveRecord::Base
+class InboxComment < ApplicationRecord
   validates_presence_of :user_id
   validates_presence_of :feedback_comment_id
 
   belongs_to :user
-  belongs_to :feedback_comment, :class_name => 'Comment'
+  belongs_to :feedback_comment, class_name: 'Comment'
 
   # Filters inbox comments by read and/or replied to and sorts by date
   scope :find_by_filters, lambda { |filters|
@@ -17,16 +17,17 @@ class InboxComment < ActiveRecord::Base
       when 'false' then false
       else [true, false]
     end
+    direction = (filters[:date]&.upcase == "ASC" ? "created_at ASC" : "created_at DESC")
 
-    includes(feedback_comment: :pseud)
-    .order("created_at #{filters[:date] || 'DESC'}")
-    .where(read: read, replied_to: replied_to)
+    includes(feedback_comment: :pseud).
+      order(direction).
+      where(read: read, replied_to: replied_to)
   }
 
   scope :for_homepage, -> {
-    where(read: false)
-    .order(created_at: :desc)
-    .limit(ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_ON_HOMEPAGE)
+    where(read: false).
+      order(created_at: :desc).
+      limit(ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_ON_HOMEPAGE)
   }
 
   # Gets the number of unread comments

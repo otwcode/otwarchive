@@ -4,7 +4,7 @@ include CssCleaner
 include SkinCacheHelper
 include SkinWizard
 
-class Skin < ActiveRecord::Base
+class Skin < ApplicationRecord
   include ActiveModel::ForbiddenAttributesProtection
 
   TYPE_OPTIONS = [
@@ -12,8 +12,14 @@ class Skin < ActiveRecord::Base
                    [ts("Work Skin"), "WorkSkin"],
                  ]
 
-  # any media types that are not a single alphanumeric word have to be specially handled in get_media_for_filename/parse_media_from_filename
-  MEDIA = %w(all screen handheld speech print braille embossed projection tty tv) + ['only screen and (max-width: 42em)'] + ['only screen and (max-width: 62em)']
+  # any media types that are not a single alphanumeric word have to be specially
+  # handled in get_media_for_filename/parse_media_from_filename
+  MEDIA = %w(all screen handheld speech print braille embossed projection tty tv) + [
+    "only screen and (max-width: 42em)",
+    "only screen and (max-width: 62em)",
+    "(prefers-color-scheme: dark)",
+    "(prefers-color-scheme: light)"
+  ]
   IE_CONDITIONS = %w(IE IE5 IE6 IE7 IE8 IE9 IE8_or_lower)
   ROLES = %w(user override)
   ROLE_NAMES = {"user" => "add on to archive skin", "override" => "replace archive skin entirely"}
@@ -89,7 +95,6 @@ class Skin < ActiveRecord::Base
   def valid_public_preview
     return true if (self.official? || !self.public? || self.icon_file_name)
     errors.add(:base, ts("You need to upload a screencap if you want to share your skin."))
-    return false
   end
 
   validates_presence_of :title
@@ -155,10 +160,14 @@ class Skin < ActiveRecord::Base
 
   def self.approved_or_owned_by(user = User.current_user)
     if user.nil?
-      where(public: true, official: true)
+      approved_skins
     else
-      where("(public = 1 AND official = 1) OR author_id = ?", user.id)
+      approved_or_owned_by_any([user])
     end
+  end
+
+  def self.approved_or_owned_by_any(users)
+    where("(public = 1 AND official = 1) OR author_id in (?)", users.map(&:id))
   end
 
   def self.usable
@@ -254,14 +263,22 @@ class Skin < ActiveRecord::Base
         "narrow"
       when m.match(/max-width: 62em/)
         "midsize"
+      when m.match(/prefers-color-scheme: dark/)
+        "dark"
+      when m.match(/prefers-color-scheme: light/)
+        "light"
       else
         m
       end
-    }.join('.')
+    }.join(".")
   end
 
   def parse_media_from_filename(media_string)
-    media_string.gsub(/narrow/, 'only screen and (max-width: 42em)').gsub(/midsize/, 'only screen and (max-width: 62em)').gsub('.', ', ')
+    media_string.gsub(/narrow/, "only screen and (max-width: 42em)")
+      .gsub(/midsize/, "only screen and (max-width: 62em)")
+      .gsub(/dark/, "(prefers-color-scheme: dark)")
+      .gsub(/light/, "(prefers-color-scheme: light)")
+      .gsub(".", ", ")
   end
 
   def parse_sheet_role(role_string)
@@ -271,10 +288,10 @@ class Skin < ActiveRecord::Base
   end
 
   def get_css
-    if self.filename
-      File.read(Rails.public_path + self.filename)
+    if filename
+      File.read(Rails.public_path.join(filename))
     else
-      self.css
+      css
     end
   end
 
@@ -386,7 +403,8 @@ class Skin < ActiveRecord::Base
   end
 
   def stylesheet_link(file, media)
-    '<link rel="stylesheet" type="text/css" media="' + media + '" href="/' + file + '" />'
+    # we want one and only one / in the url path
+    '<link rel="stylesheet" type="text/css" media="' + media + '" href="/' + file.gsub(/^\/*/,"") + '" />'
   end
 
   def self.naturalized(string)
@@ -472,7 +490,7 @@ class Skin < ActiveRecord::Base
   end
 
   def self.skins_dir
-    Rails.public_path + SKIN_PATH
+    Rails.public_path.join(SKIN_PATH).to_s
   end
 
   def self.skin_dir_entries(dir, regex)
@@ -480,7 +498,7 @@ class Skin < ActiveRecord::Base
   end
 
   def self.site_skins_dir
-    Rails.public_path + SITE_SKIN_PATH
+    Rails.public_path.join(SITE_SKIN_PATH).to_s
   end
 
   # Get the most recent version and find the topmost skin
@@ -498,14 +516,16 @@ class Skin < ActiveRecord::Base
   end
 
   def self.default
-    Skin.find_by(title: "Default", official: true) || Skin.create_default
+    Rails.cache.fetch("site_default_skin") do
+      Skin.find_by(title: "Default", official: true) || Skin.create_default
+    end
   end
 
   def self.create_default
     skin = Skin.find_or_create_by(title: "Default", css: "", public: true, role: "user")
     current_version = Skin.get_current_version
     if current_version
-      File.open(Skin.site_skins_dir + current_version + 'preview.png', 'rb') {|preview_file| skin.icon = preview_file}
+      File.open(Skin.site_skins_dir + current_version + '/preview.png', 'rb') {|preview_file| skin.icon = preview_file}
     else
       File.open(Skin.site_skins_dir + 'preview.png', 'rb') {|preview_file| skin.icon = preview_file}
     end

@@ -1,42 +1,38 @@
 class AbuseReportsController < ApplicationController
-  skip_before_filter :store_location
-  before_filter :load_abuse_languages
+  skip_before_action :store_location
+  before_action :load_abuse_languages
 
   def new
     @abuse_report = AbuseReport.new
-    if logged_in_as_admin?
-      @abuse_report.email = current_admin.email
-      @abuse_report.username = current_admin.login
-    elsif is_registered_user?
-      @abuse_report.email = current_user.email
-      @abuse_report.username = current_user.login
+    reporter = current_admin || current_user
+    if reporter.present?
+      @abuse_report.email = reporter.email
+      @abuse_report.username = reporter.login
     end
-    @abuse_report.url = params[:url] || request.env['HTTP_REFERER']
+    @abuse_report.url = params[:url] || request.env["HTTP_REFERER"]
   end
 
   def create
     @abuse_report = AbuseReport.new(abuse_report_params)
-    language_name = Language.find_by(id: @abuse_report.language).name
-    @abuse_report.language = language_name
+    @abuse_report.ip_address = request.remote_ip
     if @abuse_report.save
       @abuse_report.email_and_send
-      flash[:notice] = ts('Your abuse report was sent to the Abuse team.')
-      redirect_to ''
+      flash[:notice] = ts("Your abuse report was sent to the Abuse team.")
+      redirect_to root_path
     else
-      render action: 'new'
+      render action: "new"
     end
   end
 
+  private
+
   def load_abuse_languages
-    @abuse_languages = Language.where(abuse_support_available: true).order(
-      :name
-    )
+    @abuse_languages = Language.where(abuse_support_available: true).default_order
   end
 
-  private
   def abuse_report_params
     params.require(:abuse_report).permit(
-      :username, :email, :ip_address, :language, :summary, :url, :comment
+      :username, :email, :language, :summary, :url, :comment
     )
   end
 end

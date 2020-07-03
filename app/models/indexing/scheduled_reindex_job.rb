@@ -1,11 +1,10 @@
 class ScheduledReindexJob
+  MAIN_CLASSES = %w(Pseud Tag Work Bookmark Series ExternalWork).freeze
 
   def self.perform(reindex_type)
     classes = case reindex_type
-              when 'main'
-                %w(Pseud Tag Work Bookmark)
-              when 'background'
-                %w(Work Bookmark)
+              when 'main', 'background'
+                MAIN_CLASSES
               when 'stats'
                 %w(StatCounter)
               end
@@ -13,7 +12,7 @@ class ScheduledReindexJob
   end
 
   def self.run_queue(klass, reindex_type)
-    IndexQueue.new("index:#{klass.underscore}:#{reindex_type}").run
+    IndexQueue.from_class_and_label(klass, reindex_type).run
   end
 
 end

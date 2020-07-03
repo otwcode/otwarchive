@@ -1,9 +1,16 @@
 # coding: utf-8
 class InvitationsController < ApplicationController
 
-  before_filter :check_permission
-  before_filter :admin_only, :only => [:create, :destroy]
-  before_filter :check_user_status, :only => [:index, :manage, :invite_friend, :update]
+  before_action :check_permission
+  before_action :admin_only, only: [:create, :destroy]
+  before_action :check_user_status, only: [:index, :manage, :invite_friend, :update]
+  before_action :load_invitation, only: [:show, :invite_friend, :update, :destroy]
+  before_action :check_ownership_or_admin, only: [:show, :invite_friend, :update]
+
+  def load_invitation
+    @invitation = Invitation.find(params[:id] || invitation_params[:id])
+    @check_ownership_of = @invitation
+  end
 
   def check_permission
     @user = User.find_by(login: params[:user_id])
@@ -15,31 +22,28 @@ class InvitationsController < ApplicationController
   end
 
   def manage
-    if params[:status].blank? || !['unsent', 'unredeemed', 'redeemed'].include?(params[:status])
-      @invitations = @user.invitations
-    else
-      @invitations = @user.invitations.send(params[:status])
+    status = params[:status]
+    @invitations = @user.invitations
+    if %w(unsent unredeemed redeemed).include?(status)
+      @invitations = @invitations.send(status)
     end
   end
 
   def show
-    @invitation = Invitation.find(params[:id])
   end
 
   def invite_friend
-    @invitation = @user.invitations.find(invitation_params[:id])
-
     if !invitation_params[:invitee_email].blank?
       @invitation.invitee_email = invitation_params[:invitee_email]
       if @invitation.save
         flash[:notice] = 'Invitation was successfully sent.'
         redirect_to([@user, @invitation])
       else
-        render :action => "show"
+        render action: "show"
       end
     else
       flash[:error] = "Please enter an email address."
-      render :action => "show"
+      render action: "show"
     end
   end
 
@@ -50,28 +54,26 @@ class InvitationsController < ApplicationController
       end
     end
     flash[:notice] = "Invitations were successfully created."
-    redirect_to user_invitations_url(@user)
+    redirect_to user_invitations_path(@user)
   end
 
   def update
-    @invitation = Invitation.find(params[:id])
     @invitation.attributes = invitation_params
 
     if @invitation.invitee_email_changed? && @invitation.update_attributes(invitation_params)
       flash[:notice] = 'Invitation was successfully sent.'
       if logged_in_as_admin?
-        redirect_to find_admin_invitations_url("invitation[token]" => @invitation.token)
+        redirect_to find_admin_invitations_path("invitation[token]" => @invitation.token)
       else
         redirect_to([@user, @invitation])
       end
     else
       flash[:error] = "Please enter an email address." if @invitation.invitee_email.blank?
-      render :action => "show"
+      render action: "show"
     end
   end
 
   def destroy
-    @invitation = Invitation.find(params[:id])
     @user = @invitation.creator
     if @invitation.destroy
       flash[:notice] = "Invitation successfully destroyed"
@@ -79,9 +81,9 @@ class InvitationsController < ApplicationController
       flash[:error] = "Invitation was not destroyed."
     end
     if @user.is_a?(User)
-      redirect_to user_invitations_url(@user)
+      redirect_to user_invitations_path(@user)
     else
-      redirect_to admin_invitations_url
+      redirect_to admin_invitations_path
     end
   end
 

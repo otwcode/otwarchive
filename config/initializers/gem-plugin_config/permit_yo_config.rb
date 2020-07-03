@@ -11,7 +11,7 @@ module Otwarchive
     config.permit_yo.permission_denied_flash = :error
 
     # Where users get redirected if they are not currently logged in
-    config.permit_yo.require_user_redirection = {:controller => :user_sessions, :action => :new}
+    config.permit_yo.require_user_redirection = {controller: :user_sessions, action: :new}
   end
 end
 
@@ -34,12 +34,12 @@ module PermitYo
           if should_have_role
             unless self.roles.include?(role)
               self.roles << role
-              self.create_log_item( options = {:action => ArchiveConfig.ACTION_ADD_ROLE, :role_id => role.id, :note => 'Change made by Admin'})
+              self.create_log_item( options = {action: ArchiveConfig.ACTION_ADD_ROLE, role_id: role.id, note: 'Change made by Admin'})
             end
           else
             if self.roles.include?(role)
               self.roles.delete(role)
-              self.create_log_item( options = {:action => ArchiveConfig.ACTION_REMOVE_ROLE, :role_id => role.id, :note => 'Change made by Admin'})
+              self.create_log_item( options = {action: ArchiveConfig.ACTION_REMOVE_ROLE, role_id: role.id, note: 'Change made by Admin'})
             end
           end
         end

@@ -1,4 +1,4 @@
-class ExternalAuthor < ActiveRecord::Base
+class ExternalAuthor < ApplicationRecord
   include ActiveModel::ForbiddenAttributesProtection
 
   # send :include, Activation # eventually we will let users create new identities
@@ -8,26 +8,26 @@ class ExternalAuthor < ActiveRecord::Base
 
   belongs_to :user
 
-  has_many :external_author_names, :dependent => :destroy
-  accepts_nested_attributes_for :external_author_names, :allow_destroy => true
+  has_many :external_author_names, dependent: :destroy
+  accepts_nested_attributes_for :external_author_names, allow_destroy: true
   validates_associated :external_author_names
 
-  has_many :external_creatorships, :through => :external_author_names
-  has_many :works, -> { uniq }, :through => :external_creatorships, :source => :creation, :source_type => 'Work'
+  has_many :external_creatorships, through: :external_author_names
+  has_many :works, -> { distinct }, through: :external_creatorships, source: :creation, source_type: 'Work'
 
   has_one :invitation
 
-  validates_uniqueness_of :email, :case_sensitive => false, :allow_blank => true,
-    :message => ts('There is already an external author with that email.')
+  validates_uniqueness_of :email, case_sensitive: false, allow_blank: true,
+    message: ts('There is already an external author with that email.')
 
-  validates :email, :email_veracity => true
+  validates :email, email_veracity: true
 
   def self.claimed
-    where(:is_claimed => true)
+    where(is_claimed: true)
   end
 
   def self.unclaimed
-    where(:is_claimed => false)
+    where(is_claimed: false)
   end
 
   after_create :create_default_name
@@ -74,9 +74,9 @@ class ExternalAuthor < ActiveRecord::Base
           # remove this user's archivist from the work creators, else just add the claiming user
           claiming_user_archivist = external_creatorship.archivist
           if other_unclaimed_creators.map(&:archivist).exclude?(claiming_user_archivist)
-            work.change_ownership(claiming_user_archivist, claiming_user, pseud_to_add)
+            change_ownership(work, claiming_user_archivist, claiming_user, pseud_to_add)
           else
-            work.add_creator(claiming_user, pseud_to_add)
+            add_creator(work, claiming_user, pseud_to_add)
           end
           claimed_works << work.id
         end
@@ -96,7 +96,7 @@ class ExternalAuthor < ActiveRecord::Base
       # remove user, add archivist back
       archivist = external_creatorship.archivist
       work = external_creatorship.creation
-      work.change_ownership(user, archivist)
+      change_ownership(work, user, archivist)
     end
 
     self.user = nil
@@ -112,7 +112,7 @@ class ExternalAuthor < ActiveRecord::Base
         work = external_creatorship.creation
         archivist_pseud = work.pseuds.select {|pseud| archivist.pseuds.include?(pseud)}.first
         orphan_pseud = remove_pseud ? User.orphan_account.default_pseud : User.orphan_account.pseuds.find_or_create_by(name: external_author_name.name)
-        work.change_ownership(archivist, User.orphan_account, orphan_pseud)
+        change_ownership(work, archivist, User.orphan_account, orphan_pseud)
       end
     end
   end
@@ -149,4 +149,28 @@ class ExternalAuthor < ActiveRecord::Base
     end
   end
 
+  private
+
+  # Add a new creator to the work:
+  def add_creator(work, creator_to_add, new_pseud = nil)
+    new_pseud = creator_to_add.default_pseud if new_pseud.nil?
+
+    work.transaction do
+      work.creatorships.find_or_create_by(pseud: new_pseud)
+
+      work.chapters.each do |chapter|
+        chapter.creatorships.find_or_create_by(pseud: new_pseud)
+      end
+    end
+  end
+
+  # Transfer ownership of the work from one user to another
+  def change_ownership(work, old_user, new_user, new_pseud = nil)
+    raise "No new user provided, cannot change ownership" unless new_user
+
+    work.transaction do
+      add_creator(work, new_user, new_pseud)
+      work.remove_author(old_user)
+    end
+  end
 end

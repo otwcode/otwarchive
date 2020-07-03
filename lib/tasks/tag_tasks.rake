@@ -1,7 +1,7 @@
 namespace :Tag do
   desc "Reset common taggings - slow"
   task(reset_common: :environment) do
-    Work.find(:all).each do |w|
+    Work.find_each do |w|
       print "." if w.id.modulo(100) == 0; STDOUT.flush
       #w.update_common_tags
     end
@@ -10,7 +10,7 @@ namespace :Tag do
 
   desc "Reset tag count"
   task(reset_count: :environment) do
-    Tag.find(:all).each do |t|
+    Tag.find_each do |t|
       t.taggings_count
     end
     puts "Tag count reset."
@@ -29,7 +29,7 @@ namespace :Tag do
 
   desc "Update relationship has_characters"
   task(update_has_characters: :environment) do
-    Relationship.all.each do |relationship|
+    Relationship.find_each do |relationship|
       relationship.update_attribute(:has_characters, true) unless relationship.characters.blank?
     end
   end
@@ -37,7 +37,7 @@ namespace :Tag do
   desc "Delete unused tags"
   task(delete_unused: :environment) do
     deleted_names = []
-    Tag.find(:all, conditions: { canonical: false, merger_id: nil, taggings_count_cache: 0 }).each do |t|
+    Tag.where(canonical: false, merger_id: nil, taggings_count_cache: 0).each do |t|
       if t.taggings.count.zero? && t.child_taggings.count.zero? && t.set_taggings.count.zero?
         deleted_names << t.name
         t.destroy
@@ -76,20 +76,85 @@ namespace :Tag do
     Tagging.find_each { |t| t.destroy if t.taggable.nil? }
     CommonTagging.find_each { |t| t.destroy if t.common_tag.nil? }
   end
+
   desc "Reset filter taggings"
   task(reset_filters: :environment) do
-    FilterTagging.delete_all
-    FilterTagging.build_from_taggings
+    puts "Adding jobs for work filter updates to the reindex_world queue:"
+
+    Work.update_filters(async_update: true,
+                        job_queue: :reindex_world,
+                        reindex_queue: :world) do
+      print(".") && STDOUT.flush
+    end
+
+    print("\n") && STDOUT.flush
+
+    puts "Adding jobs for external work filter updates to the reindex_world queue:"
+    ExternalWork.update_filters(async_update: true,
+                                job_queue: :reindex_world,
+                                reindex_queue: :world) do
+      print(".") && STDOUT.flush
+    end
+
+    print("\n") && STDOUT.flush
+
+    puts "All jobs enqueued! Once all jobs have finished running, call rake search:run_world_index_queue."
   end
+
+  desc "Reset inherited meta taggings"
+  task(reset_meta_tags: :environment) do
+    InheritedMetaTagUpdater.update_all { print(".") && STDOUT.flush }
+    print("\n") && STDOUT.flush
+  end
+
   desc "Reset filter counts"
   task(reset_filter_counts: :environment) do
     FilterCount.set_all
   end
+
   desc "Reset filter counts from date"
   task(unsuspend_filter_counts: :environment) do
-    admin_settings = Rails.cache.fetch("admin_settings") { AdminSetting.first }
+    admin_settings = AdminSetting.current
     if admin_settings && admin_settings.suspend_filter_counts_at
       FilterTagging.update_filter_counts_since(admin_settings.suspend_filter_counts_at)
     end
+  end
+
+  desc "Clean up invalid CommonTaggings"
+  task(destroy_invalid_common_taggings: :environment) do
+    count = 0
+
+    CommonTagging.destroy_invalid do |ct, valid|
+      unless valid
+        puts "Deleting invalid CommonTagging: " \
+             "#{ct.filterable.try(:name)} > #{ct.common_tag.try(:name)}"
+        puts ct.errors.full_messages
+      end
+
+      if ((count += 1) % 1000).zero?
+        puts "Processed #{count} CommonTaggings."
+      end
+    end
+
+    puts "Processed #{count} CommonTaggings."
+  end
+
+  desc "Clean up invalid MetaTaggings"
+  task(destroy_invalid_meta_taggings: :environment) do
+    count = 0
+
+    MetaTagging.destroy_invalid do |mt, valid|
+      unless valid
+        puts "Deleting invalid MetaTagging: " \
+             "#{mt.meta_tag.try(:name)} > #{mt.sub_tag.try(:name)}"
+        puts mt.errors.full_messages
+      end
+
+      if ((count += 1) % 1000).zero?
+        puts "Processed #{count} MetaTaggings."
+      end
+    end
+
+    puts "Processed #{count} MetaTaggings."
   end
 end

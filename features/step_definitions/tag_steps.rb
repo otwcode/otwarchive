@@ -10,6 +10,7 @@ Given /^basic tags$/ do
   step %{the basic warnings exist}
   Fandom.where(name: "No Fandom", canonical: true).first_or_create
   step %{the basic categories exist}
+  step %{all indexing jobs have been run}
 end
 
 Given /^the default ratings exist$/ do
@@ -28,8 +29,22 @@ Given(/^an adult canonical rating exists with name: "([^"]*)"$/) do |rating|
 end
 
 Given /^the basic warnings exist$/ do
-  Warning.find_or_create_by_name("No Archive Warnings Apply").update(canonical: true)
-  Warning.find_or_create_by_name("Choose Not To Use Archive Warnings").update(canonical: true)
+  warnings = [ArchiveConfig.WARNING_DEFAULT_TAG_NAME,
+              ArchiveConfig.WARNING_NONE_TAG_NAME]
+  warnings.each do |warning|
+    ArchiveWarning.find_or_create_by_name(warning).update(canonical: true)
+  end
+end
+
+Given /^all warnings exist$/ do
+  step %{the basic warnings exist}
+  warnings = [ArchiveConfig.WARNING_VIOLENCE_TAG_NAME,
+              ArchiveConfig.WARNING_DEATH_TAG_NAME,
+              ArchiveConfig.WARNING_NONCON_TAG_NAME,
+              ArchiveConfig.WARNING_CHAN_TAG_NAME]
+  warnings.each do |warning|
+    ArchiveWarning.find_or_create_by_name(warning).update(canonical: true)
+  end
 end
 
 Given /^the basic categories exist$/ do
@@ -85,11 +100,11 @@ Given /^a synonym "([^\"]*)" of the tag "([^\"]*)"$/ do |synonym, merger|
   synonym.save
 end
 
-Given /^"([^\"]*)" is a metatag of the fandom "([^\"]*)"$/ do |metatag, fandom|
-  fandom = Fandom.find_or_create_by_name(fandom)
-  metatag = Fandom.find_or_create_by_name(metatag)
-  fandom.meta_tags << metatag
-  fandom.save
+Given /^"([^\"]*)" is a metatag of the (\w+) "([^\"]*)"$/ do |metatag, tag_type, tag|
+  tag = tag_type.classify.constantize.find_or_create_by_name(tag)
+  metatag = tag_type.classify.constantize.find_or_create_by_name(metatag)
+  tag.meta_tags << metatag
+  tag.save
 end
 
 Given /^I am logged in as a tag wrangler$/ do
@@ -102,26 +117,31 @@ end
 
 Given /^the tag wrangler "([^\"]*)" with password "([^\"]*)" is wrangler of "([^\"]*)"$/ do |user, password, fandomname|
   tw = User.find_by(login: user)
+
   if tw.blank?
-    tw = FactoryGirl.create(:user, {:login => user, :password => password})
+    tw = FactoryBot.create(:user, login: user, password: password)
     tw.activate
   else
     tw.password = password
     tw.password_confirmation = password
     tw.save
   end
+
   tw.tag_wrangler = '1'
-  visit logout_path
-  assert !UserSession.find
-  visit login_path
-  fill_in "User name", :with => user
-  fill_in "Password", :with => password
+
+  visit destroy_user_session_path
+
+  visit new_user_session_path
+  user_record = find_or_create_new_user(user, password)
+
+  fill_in "User name or email:", with: user
+  fill_in "Password:", with: password
   check "Remember Me"
   click_button "Log In"
-  assert UserSession.find
+
   fandom = Fandom.where(name: fandomname, canonical: true).first_or_create
   visit tag_wranglers_url
-  fill_in "tag_fandom_string", :with => fandomname
+  fill_in "tag_fandom_string", with: fandomname
   click_button "Assign"
 end
 
@@ -136,11 +156,13 @@ Given /^a tag "([^\"]*)" with(?: (\d+))? comments$/ do |tagname, n_comments|
   end
 end
 
-Given /^the canonical fandom "([^"]*)" with (\d+) works$/ do |tag_name, number_of_works|
-  FactoryGirl.create(:fandom, name: tag_name, canonical: true)
+Given /^(?:a|the) canonical(?: "([^"]*)")? fandom "([^"]*)" with (\d+) works$/ do |media, tag_name, number_of_works|
+  fandom = FactoryBot.create(:fandom, name: tag_name, canonical: true)
+  fandom.add_association(Media.find_by(name: media)) if media.present?
   number_of_works.to_i.times do
-    FactoryGirl.create(:work, posted: true, fandom_string: tag_name)
+    FactoryBot.create(:work, fandom_string: tag_name)
   end
+  step %(the periodic filter count task is run)
 end
 
 Given /^a period-containing tag "([^\"]*)" with(?: (\d+))? comments$/ do |tagname, n_comments|
@@ -174,9 +196,9 @@ end
 
 Given(/^the following typed tags exists$/) do |table|
   table.hashes.each do |hash|
-    type = hash["type"].classify.constantize
+    type = hash["type"].downcase.to_sym
     hash.delete("type")
-    FactoryGirl.create(type, hash)
+    FactoryBot.create(type, hash)
   end
 end
 
@@ -185,15 +207,15 @@ Given /^the tag "([^"]*)" does not exist$/ do |tag_name|
   tag.destroy if tag.present?
 end
 
-Given(/^a media exists with name: "([^"]*)", canonical: true$/) do |media|
-  media = Media.find_or_create_by_name(media)
-  media.update(canonical: true)
-end
-
 ### WHEN
 
 When /^the periodic tag count task is run$/i do
   Tag.write_redis_to_database
+end
+
+When /^the periodic filter count task is run$/i do
+  FilterCount.update_counts_for_small_queue
+  FilterCount.update_counts_for_large_queue
 end
 
 When /^I check the canonical option for the tag "([^"]*)"$/ do |tagname|
@@ -203,7 +225,7 @@ end
 
 When /^I select "([^"]*)" for the unsorted tag "([^"]*)"$/ do |type, tagname|
   tag = Tag.find_by(name: tagname)
-  select(type, :from => "tags[#{tag.id}]")
+  select(type, from: "tags[#{tag.id}]")
 end
 
 When /^I check the (?:mass )?wrangling option for "([^"]*)"$/ do |tagname|
@@ -225,7 +247,7 @@ When /^I view the tag "([^\"]*)"$/ do |tag|
 end
 
 When /^I create the fandom "([^\"]*)" with id (\d+)$/ do |name, id|
- tag = Fandom.new(:name => name)
+ tag = Fandom.new(name: name)
  tag.id = id.to_i
  tag.canonical = true
  tag.save
@@ -235,7 +257,7 @@ When /^I set up the comment "([^"]*)" on the tag "([^"]*)"$/ do |comment_text, t
   tag = Tag.find_by!(name: tag)
   visit tag_url(tag)
   click_link(" comment")
-  fill_in("Comment", :with => comment_text)
+  fill_in("Comment", with: comment_text)
 end
 
 When /^I post the comment "([^"]*)" on the tag "([^"]*)"$/ do |comment_text, tag|
@@ -282,17 +304,23 @@ When /^the tag "([^\"]*)" is decanonized$/ do |tag|
   tag.save
 end
 
+When /^the tag "([^"]*)" is canonized$/ do |tag|
+  tag = Tag.find_by!(name: tag)
+  tag.canonical = true
+  tag.save
+end
+
 When /^I make a(?: (\d+)(?:st|nd|rd|th)?)? Wrangling Guideline$/ do |n|
   n ||= 1
   visit new_wrangling_guideline_path
-  fill_in("Guideline text", :with => "Number #{n} posted Wrangling Guideline, this is.")
-  fill_in("Title", :with => "Number #{n} Wrangling Guideline")
+  fill_in("Guideline text", with: "Number #{n} posted Wrangling Guideline, this is.")
+  fill_in("Title", with: "Number #{n} Wrangling Guideline")
   click_button("Post")
 end
 
 When /^(\d+) Wrangling Guidelines? exists?$/ do |n|
   (1..n.to_i).each do |i|
-    FactoryGirl.create(:wrangling_guideline, id: i)
+    FactoryBot.create(:wrangling_guideline, id: i)
   end
 end
 
@@ -300,6 +328,40 @@ When /^I flush the wrangling sidebar caches$/ do
   [Fandom, Character, Relationship, Freeform].each do |klass|
     Rails.cache.delete("/wrangler/counts/sidebar/#{klass}")
   end
+end
+
+When /^I syn the tag "([^"]*)" to "([^"]*)"$/ do |syn, merger|
+  syn = Tag.find_by(name: syn)
+  visit edit_tag_path(syn)
+  fill_in("Synonym of", with: merger)
+  click_button("Save changes")
+end
+
+When /^I de-syn the tag "([^"]*)" from "([^"]*)"$/ do |syn, merger|
+  merger = Tag.find_by(name: merger)
+  syn_id = Tag.find_by(name: syn).id
+  visit edit_tag_path(merger)
+  check("child_Merger_associations_to_remove_#{syn_id}")
+  click_button("Save changes")
+end
+
+When /^I subtag the tag "([^"]*)" to "([^"]*)"$/ do |subtag, metatag|
+  subtag = Tag.find_by(name: subtag)
+  visit edit_tag_path(subtag)
+  fill_in("Add MetaTags:", with: metatag)
+  click_button("Save changes")
+end
+
+When /^I remove the metatag "([^"]*)" from "([^"]*)"$/ do |metatag, subtag|
+  subtag = Tag.find_by(name: subtag)
+  metatag_id = Tag.find_by(name: metatag).id
+  visit edit_tag_path(subtag)
+  check("parent_MetaTag_associations_to_remove_#{metatag_id}")
+  click_button("Save changes")
+end
+
+When /^I view the (canonical|synonymous|unfilterable|unwrangled|unwrangleable) (character|relationship|freeform) bin for "(.*?)"$/ do |status, type, tag|
+  visit wrangle_tag_path(Tag.find_by(name: tag), show: type.pluralize, status: status)
 end
 
 ### THEN
@@ -328,14 +390,14 @@ end
 Then /^"([^\"]*)" should be assigned to the wrangler "([^\"]*)"$/ do |fandom, username|
   user = User.find_by(login: username)
   fandom = Fandom.find_by(name: fandom)
-  assignment = WranglingAssignment.find(:first, conditions: { user_id: user.id, fandom_id: fandom.id })
+  assignment = WranglingAssignment.where(user_id: user.id, fandom_id: fandom.id ).first
   assignment.should_not be_nil
 end
 
 Then /^"([^\"]*)" should not be assigned to the wrangler "([^\"]*)"$/ do |fandom, username|
   user = User.find_by(login: username)
   fandom = Fandom.find_by(name: fandom)
-  assignment = WranglingAssignment.find(:first, conditions: { user_id: user.id, fandom_id: fandom.id })
+  assignment = WranglingAssignment.where(user_id: user.id, fandom_id: fandom.id ).first
   assignment.should be_nil
 end
 
