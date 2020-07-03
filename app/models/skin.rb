@@ -7,6 +7,9 @@ include SkinWizard
 class Skin < ApplicationRecord
   include ActiveModel::ForbiddenAttributesProtection
 
+  # TODO: Remove after AO3-4740's migration.
+  self.ignored_columns = %w[featured]
+
   TYPE_OPTIONS = [
                    [ts("Site Skin"), "Skin"],
                    [ts("Work Skin"), "WorkSkin"],
