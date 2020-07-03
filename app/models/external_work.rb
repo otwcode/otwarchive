@@ -9,7 +9,7 @@ class ExternalWork < ApplicationRecord
 
   belongs_to :language
 
-  # Need to use duplicate.count.size to get the number of records.
+  # .duplicate.count.size returns the number of URLs with multiple external works
   scope :duplicate, -> { group(:url).having("count(DISTINCT id) > 1") }
 
   AUTHOR_LENGTH_MAX = 500

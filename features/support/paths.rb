@@ -29,10 +29,6 @@ module NavigationHelpers
       # just clear it every time.
       Rails.cache.delete "bookmarks/index/latest/v2_true"
       bookmarks_path
-    when /^the external works page$/i
-      external_works_path
-    when /^the external works page with only duplicates$/i
-      external_works_path(show: :duplicates)
     when /^the works page$/i
       # This cached page only expires by time, not by any user action;
       # just clear it every time.
@@ -264,6 +260,10 @@ module NavigationHelpers
       fandom_path($1)
     when /^the new external work page$/i
       new_external_work_path
+    when /^the external works page$/i
+      external_works_path
+    when /^the external works page with only duplicates$/i
+      external_works_path(show: :duplicates)
 
     # Admin Pages
     when /^the admin-posts page$/i
