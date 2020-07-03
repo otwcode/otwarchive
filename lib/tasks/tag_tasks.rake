@@ -49,20 +49,23 @@ namespace :Tag do
     end
   end
 
-  desc "Reset non canonical warnings"
-  task(reset_non_canonical_warnings: :environment) do
-    choose_not_to_warn = Warning.find_by(name: "Choose Not To Use Archive Warnings")
-    Warning.where(canonical: [false, nil]).each do |warning|
-      if warning.taggings_count.zero?
-        warning.destroy
-      else
-        warning.works.each do |work|
-          work.warnings = choose_not_to_warn if work.warnings.count <= 1
-        end
-        # Once we get becomes!  ( rails 4.0.2 ) use it
-        warning.becomes!(Freeform)
-        warning.save!
+  desc "Convert non-canonical warnings into freeforms"
+  task(convert_non_canonical_warnings_to_freeforms: :environment) do
+    default_warning = ArchiveWarning.find_by(name: ArchiveConfig.WARNING_DEFAULT_TAG_NAME)
+    warnings = ArchiveWarning.where(canonical: false)
+    puts "Total non-canonical warnings: #{warnings.count}"
+
+    warnings.find_each do |warning|
+      puts("#{warning.name} (#{warning.works.count})") && STDOUT.flush
+
+      warning.works.find_each do |work|
+        # If the only warning is non-canonical, add a default warning
+        # so the work won't be left with no warnings.
+        work.archive_warnings << default_warning if work.archive_warnings.count <= 1
       end
+
+      warning.becomes!(Freeform)
+      warning.save!
     end
   end
 
