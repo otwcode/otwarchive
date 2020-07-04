@@ -1,6 +1,4 @@
 class TagWranglingsController < ApplicationController
-  # cache_sweeper :tag_sweeper
-
   before_action :check_user_status
   before_action :check_permission_to_wrangle
 
@@ -103,5 +101,4 @@ class TagWranglingsController < ApplicationController
   def discuss
     @comments = Comment.where(commentable_type: 'Tag').order('updated_at DESC').paginate(page: params[:page])
   end
-
 end

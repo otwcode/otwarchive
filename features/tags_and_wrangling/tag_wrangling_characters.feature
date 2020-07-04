@@ -3,7 +3,7 @@
 Feature: Tag Wrangling - Characters
 
 @javascript
-Scenario: Syns, mergers, characters, autocompletes
+Scenario: character wrangling - syns, mergers, characters, autocompletes
 
   Given the following activated tag wrangler exists
     | login  | password    |
