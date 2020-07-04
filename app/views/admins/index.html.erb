@@ -15,7 +15,7 @@
   <% if current_admin.roles.any? %>
     <ul>
       <% current_admin.roles.each do |role| %>
-        <li><%= role.titleize %></li>
+        <li><%= t("activerecord.attributes.admin/role.#{role}") %></li>
       <% end %>
     </ul>
   <% else %>
