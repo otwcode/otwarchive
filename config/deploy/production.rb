@@ -7,23 +7,23 @@
 require 'capistrano/gitflow_version'
 
 # define servers and their roles and attributes
-server "ao3-app01.ao3.org",  :app , :db
-server "ao3-app98.ao3.org",  :app , :workers , :schedulers
-server "ao3-app02.ao3.org",  :app , primary: true
-server "ao3-app03.ao3.org",  :app , :workers , :schedulers
-server "ao3-app04.ao3.org",  :app
-server "ao3-app99.ao3.org",  :app , :workers , :schedulers
-server "ao3-app05.ao3.org",  :app
-server "ao3-app08.ao3.org",  :app , :workers , :schedulers
-server "ao3-app06.ao3.org",  :app
-server "ao3-app90.ao3.org",  :app , :workers , :schedulers
-server "ao3-app07.ao3.org",  :app
-server "ao3-front01.ao3.org", :web
-server "ao3-app09.ao3.org",  :app 
-server "ao3-app91.ao3.org",  :app , :workers , :schedulers
-server "ao3-app11.ao3.org",  :app , :workers , :schedulers
-server "ao3-app12.ao3.org",  :app
-server "ao3-front02.ao3.org", :web
+server "ao3-app01", :app, :db, :schedulers
+server "ao3-front01", :web
+server "ao3-app19", :app
+server "ao3-app16", :app
+server "ao3-front03", :web
+server "ao3-app06", :app, :workers, :schedulers
+server "ao3-app07", :app, :workers, :schedulers
+server "ao3-front02", :web
+server "ao3-app12", :app
+server "ao3-app09", :app
+server "ao3-app15", :app, primary: true
+server "ao3-app20", :app
+server "ao3-front04", :web
+server "ao3-app17", :app, :workers, :schedulers
+server "ao3-app18", :app, :workers, :schedulers
+server "ao3-app14", :app
+server "ao3-front05", :web
 
 # ORDER OF EVENTS
 # Calling "cap deploy" runs:

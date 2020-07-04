@@ -1,9 +1,11 @@
 //Init script for calling tinyMCE rich text editor: basic configuration can be done here.
 
 tinyMCE.init({
-  plugins: "directionality hr image link paste tabfocus",
+  branding: false,
+  plugins: "directionality hr image link lists paste tabfocus",
+  contextmenu: false,
   menubar: false,
-  toolbar: "bold italic underline strikethrough | link unlink image | blockquote | hr | bullist numlist | alignleft aligncenter alignright alignjustify | undo redo | ltr rtl",
+  toolbar: "paste | bold italic underline strikethrough | link unlink image | blockquote | hr | bullist numlist | alignleft aligncenter alignright alignjustify | undo redo | ltr rtl",
   
   browser_spellcheck: true,
   
@@ -66,25 +68,31 @@ tinyMCE.init({
   // Override the list of targets provided in the link plugin. We do not allow the target attribute, so we want an empty list.
   target_list: [
     { title: 'None', value: '' }  
-  ]
+  ],
+
+  mobile: {
+    // As of version 5.0, TinyMCE has a very limited mobile version it inflicts on Android and iOS phones by default.
+    // This forces the desktop version. Note that this is only implicitly documented and may break.
+    theme: "silver",
+  }
 });
 
 // Require the user to turn the RTE on instead of loading automatically using selector option 
 function addEditor(id) {
   tinyMCE.execCommand('mceAddEditor', false, id)
 }
- 
-// Let the user turn the RTE back off        
+
+// Let the user turn the RTE back off
 function removeEditor(id) {
-	tinyMCE.execCommand('mceRemoveEditor', false, id)
+  tinyMCE.execCommand('mceRemoveEditor', false, id)
 }
 
 // Toggle between the links
 $j(document).ready(function(){
   $j(".rtf-html-switch").removeClass('hidden');
-  
+
   $j(".html-link").addClass('current'); 
-  
+
   $j(".rtf-link").click(function(event){
     addEditor('content');
     $j(this).addClass('current');
@@ -93,7 +101,7 @@ $j(document).ready(function(){
     $j('.html-notes').addClass('hidden');
     event.preventDefault();
   });            
-  
+
   $j('.html-link').click(function(event){
     removeEditor('content');
     $j(this).addClass('current');

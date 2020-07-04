@@ -1,25 +1,51 @@
+require 'cucumber/rspec/doubles'
+require 'cucumber/timecop'
+require 'email_spec/cucumber'
+
 Before do
-  # Reset Elasticsearch
-  Work.tire.index.delete
-  Work.create_elasticsearch_index
+  # Create default settings if necessary, since the database is truncated
+  # after every test.
+  #
+  # Enable our experimental caching, skipping validations which require
+  # setting an admin as the last updater.
+  AdminSetting.default.update_attribute(:enable_test_caching, true)
 
-  Bookmark.tire.index.delete
-  Bookmark.create_elasticsearch_index
-  Bookmark.import
+  # Create default language and locale.
+  Locale.default
 
-  Tag.tire.index.delete
-  Tag.create_elasticsearch_index
+  # Assume all spam checks pass by default.
+  allow(Akismetor).to receive(:spam?).and_return(false)
 
-  Pseud.tire.index.delete
-  Pseud.create_elasticsearch_index
+  # Reset the current user:
+  User.current_user = nil
 
   # Clear Memcached
   Rails.cache.clear
 
   # Clear Redis
+  REDIS_AUTOCOMPLETE.flushall
   REDIS_GENERAL.flushall
+  REDIS_HITS.flushall
   REDIS_KUDOS.flushall
   REDIS_RESQUE.flushall
   REDIS_ROLLOUT.flushall
-  REDIS_AUTOCOMPLETE.flushall
+
+  Indexer.all.map(&:prepare_for_testing)
+end
+
+After do
+  Indexer.all.map(&:delete_index)
+end
+
+@javascript = false
+Before "@javascript" do
+  @javascript = true
+end
+
+Before "@disable_caching" do
+  ActionController::Base.perform_caching = false
+end
+
+After "@disable_caching" do
+  ActionController::Base.perform_caching = true
 end

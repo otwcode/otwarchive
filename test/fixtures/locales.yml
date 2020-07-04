@@ -13,7 +13,7 @@ French:
   main: "0"
 Spanish:
   id: 3
-  name: Español 
+  name: Español
   iso: es-ES
   language_id: 3
   main: "0"
@@ -42,8 +42,8 @@ Czech:
   language_id: 7
   main: "0"
 Russian:
-  id: 8    
-  name: Pyccĸий  
+  id: 8
+  name: Pyccĸий
   iso: ru-RU
   language_id: 8
   main: "0"
@@ -70,10 +70,10 @@ Português:
   name: Português
   iso: pt-BR
   language_id: 12
-  main: "0" 
->中文:
+  main: "0"
+">中文":
   id: 13
-  name: >中文
+  name: ">中文"
   iso: zh-CHS
   language_id: 13
   main: "0"

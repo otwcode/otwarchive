@@ -27,28 +27,6 @@ module BookmarksHelper
     end
   end
 
-  def get_bookmark_link_text(bookmarkable, blurb=false)
-    @bookmark = bookmark_if_exists(bookmarkable)
-    case bookmarkable.class.to_s
-    when blurb == true
-      @bookmark ? ts("Saved") : ts("Save")
-    when "Series"
-      @bookmark ? ts("Edit Series Bookmark") : ts("Bookmark Series")
-    when "ExternalWork"
-      @bookmark ? ts("Edit Bookmark") : ts("Add A New Bookmark")
-    else
-      @bookmark ? ts("Edit Bookmark") : ts("Bookmark")
-    end
-  end
-
-  # Link to bookmark
-  def bookmark_link(bookmarkable, blurb=false)
-    return "" unless logged_in?
-    url = get_bookmark_path(bookmarkable)
-    text = get_bookmark_link_text(bookmarkable, blurb)
-    link_to text, url
-  end
-
   def link_to_user_bookmarkable_bookmarks(bookmarkable)
     id_symbol = (bookmarkable.class.to_s.underscore + '_id').to_sym
     link_to "You have saved multiple bookmarks for this item", {controller: :bookmarks, action: :index, id_symbol => bookmarkable, existing: true}
@@ -106,6 +84,13 @@ module BookmarksHelper
     elsif bookmark
       bookmark_path(bookmark)
     end
+  end
+
+  def get_count_for_bookmark_blurb(bookmarkable)
+    count = bookmarkable.public_bookmark_count
+    link = link_to (count < 100 ? count.to_s : "*"),
+              polymorphic_path([bookmarkable, Bookmark])
+    content_tag(:span, link, class: "count")
   end
 
 end

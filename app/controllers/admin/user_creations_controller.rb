@@ -1,11 +1,9 @@
-class Admin::UserCreationsController < ApplicationController
-  
-  before_action :admin_only
+class Admin::UserCreationsController < Admin::BaseController
   before_action :get_creation
   before_action :can_be_marked_as_spam, only: [:set_spam]
 
   def get_creation
-    raise "Redshirt: Attempted to constantize invalid class initialize #{params[:creation_type]}" unless %w(ExternalWork Bookmark Work).include?(params[:creation_type])
+    raise "Redshirt: Attempted to constantize invalid class initialize #{params[:creation_type]}" unless %w(Bookmark ExternalWork Series Work).include?(params[:creation_type])
     @creation_class = params[:creation_type].constantize
     @creation = @creation_class.find(params[:id])
   end
@@ -19,6 +17,7 @@ class Admin::UserCreationsController < ApplicationController
   
   # Removes an object from public view
   def hide
+    authorize @creation, policy_class: AdminModerationPolicy
     @creation.hidden_by_admin = (params[:hidden] == "true")
     @creation.save(validate: false)
     action = @creation.hidden_by_admin? ? "hide" : "unhide"
@@ -31,21 +30,12 @@ class Admin::UserCreationsController < ApplicationController
     elsif @creation_class == ExternalWork || @creation_class == Bookmark
       redirect_to(request.env["HTTP_REFERER"] || root_path)
     else
-      unless action == "unhide"
-        # Email users so they're aware of Abuse action
-        orphan_account = User.orphan_account
-        users = @creation.pseuds.map(&:user).uniq
-        users.each do |user|
-          unless user == orphan_account
-            UserMailer.admin_hidden_work_notification(@creation.id, user.id).deliver
-          end
-        end
-       end
       redirect_to(@creation)
     end
   end  
   
   def set_spam
+    authorize @creation, policy_class: AdminModerationPolicy
     action = "mark as " + (params[:spam] == "true" ? "spam" : "not spam")
     AdminActivity.log_action(current_admin, @creation, action: action, summary: @creation.inspect)    
     if params[:spam] == "true"
@@ -61,6 +51,7 @@ class Admin::UserCreationsController < ApplicationController
   end
 
   def destroy
+    authorize @creation, policy_class: AdminModerationPolicy
     AdminActivity.log_action(current_admin, @creation, action: "destroy", summary: @creation.inspect)
     @creation.destroy
     flash[:notice] = ts("Item was successfully deleted.")

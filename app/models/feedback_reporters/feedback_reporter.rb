@@ -1,6 +1,11 @@
+# frozen_string_literal: true
+
+require "zoho_auth_client"
+require "zoho_resource_client"
+
 class FeedbackReporter
   include HtmlCleaner
-  require 'url_formatter'
+  require "url_formatter"
 
   attr_accessor :title,
                 :description,
@@ -21,25 +26,38 @@ class FeedbackReporter
   end
 
   def description
-    strip_html_breaks_simple(@description)
+    add_break_between_paragraphs(@description)
   end
 
   def send_report!
-    # We're sending the XML data via a URL to our Support ticket service. The
-    # URL needs to be Percent-encoded so that everything shows up correctly on
-    # the other end. (https://en.wikipedia.org/wiki/Percent-encoding)
-    encoded_xml = CGI.escape(xml.to_str)
-    HTTParty.post("#{ArchiveConfig.NEW_BUGS_SITE}#{project_path}",
-                  body: "&xml=#{encoded_xml}")
+    zoho_resource_client.create_ticket(ticket_attributes: report_attributes)
   end
 
-  def xml
-    view = ActionView::Base.new(Rails.root.join('app', 'views'))
-    view.assign({ report: self })
-    view.render(template: template)
+  def report_attributes
+    {
+      "email" => email,
+      "contactId" => zoho_contact_id,
+      "cf" => {
+        "cf_language" => language.presence || Language.default.name,
+        "cf_name" => username.presence || "Anonymous user"
+      }
+    }
   end
 
-  def project_path
-    self.class::PROJECT_PATH
+  private
+
+  def zoho_contact_id
+    zoho_resource_client.retrieve_contact_id
+  end
+
+  def access_token
+    @access_token ||= ZohoAuthClient.new.access_token
+  end
+
+  def zoho_resource_client
+    @zoho_resource_client ||= ZohoResourceClient.new(
+      access_token: access_token,
+      email: email
+    )
   end
 end

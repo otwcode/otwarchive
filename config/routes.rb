@@ -9,6 +9,22 @@ Otwarchive::Application.routes.draw do
                sign_out: 'logout'
              }
 
+  devise_scope :user do
+    get 'signup(/:invitation_token)' => 'users/registrations#new', as: 'signup'
+  end
+
+  devise_for :users,
+             module: 'users',
+             controllers: {
+                sessions: 'users/sessions',
+                registrations: 'users/registrations',
+                passwords: 'users/passwords'
+              },
+              path_names: {
+                sign_in: 'login',
+                sign_out: 'logout'
+              }
+
   #### ERRORS ####
 
   get '/403', to: 'errors#403'
@@ -19,7 +35,7 @@ Otwarchive::Application.routes.draw do
 
   #### DOWNLOADS ####
 
-  get 'downloads/:download_prefix/:download_authors/:id/:download_title.:format' => 'downloads#show', as: 'download'
+  get 'downloads/:id/:download_title.:format' => 'downloads#show', as: 'download'
 
   #### OPEN DOORS ####
   namespace :opendoors do
@@ -47,7 +63,6 @@ Otwarchive::Application.routes.draw do
     end
   end
 
-  get 'signup/:invitation_token' => 'users#new', as: 'signup'
   get 'claim/:invitation_token' => 'external_authors#claim', as: 'claim'
   post 'complete_claim/:invitation_token' => 'external_authors#complete_claim', as: 'complete_claim'
 
@@ -80,7 +95,6 @@ Otwarchive::Application.routes.draw do
       post :mass_update
       get :remove_association
       get :wrangle
-      get :reindex
     end
     collection do
       get :show_hidden
@@ -89,6 +103,7 @@ Otwarchive::Application.routes.draw do
     resources :works
     resources :bookmarks
     resources :comments
+    resource :troubleshooting, controller: :troubleshooting, only: [:show, :update]
   end
 
   resources :tag_sets, controller: 'owned_tag_sets' do
@@ -125,11 +140,9 @@ Otwarchive::Application.routes.draw do
   end
 
   #### ADMIN ####
-  resources :admins
   resources :admin_posts do
     resources :comments
   end
-
 
   namespace :admin do
     resources :activities, only: [:index, :show]
@@ -144,6 +157,11 @@ Otwarchive::Application.routes.draw do
       collection do
         get :index_rejected
         get :index_approved
+      end
+    end
+    resources :spam, only: [:index] do
+      collection do
+        post :bulk_update
       end
     end
     resources :user_creations, only: [:destroy] do
@@ -163,7 +181,8 @@ Otwarchive::Application.routes.draw do
       collection do
         get :bulk_search
         post :bulk_search
-        post :update_user
+        post :update
+        post :update_status
       end
     end
     resources :invitations, controller: 'admin_invitations' do
@@ -175,6 +194,7 @@ Otwarchive::Application.routes.draw do
     end
     resources :api
   end
+  resources :admins, only: [:index]
 
   post '/admin/api/new', to: 'admin/api#create'
 
@@ -186,12 +206,9 @@ Otwarchive::Application.routes.draw do
     end
   end
 
-  resources :passwords, only: [:new, :create]
-
   # When adding new nested resources, please keep them in alphabetical order
-  resources :users do
+  resources :users, except: [:new, :create] do
     member do
-      get :browse
       get :change_email
       post :changed_email
       get :change_password
@@ -200,6 +217,7 @@ Otwarchive::Application.routes.draw do
       post :changed_username
       post :end_first_login
       post :end_banner
+      post :end_tos_prompt
     end
     resources :assignments, controller: "challenge_assignments", only: [:index] do
       collection do
@@ -223,6 +241,7 @@ Otwarchive::Application.routes.draw do
         put :reject
       end
     end
+    resource :creatorships, controller: "creatorships", only: [:show, :update]
     resources :external_authors do
       resources :external_author_names
     end
@@ -297,7 +316,7 @@ Otwarchive::Application.routes.draw do
       get :mark_for_later
       get :mark_as_read
       get :confirm_delete
-      get :reindex
+      get :share
     end
     resources :bookmarks
     resources :chapters do
@@ -324,8 +343,10 @@ Otwarchive::Application.routes.draw do
         put :review_all
       end
     end
+    resource :hit_count, controller: :hit_count, only: [:create]
     resources :kudos, only: [:index]
     resources :links, controller: "work_links", only: [:index]
+    resource :troubleshooting, controller: :troubleshooting, only: [:show, :update]
   end
 
   resources :chapters do
@@ -365,7 +386,6 @@ Otwarchive::Application.routes.draw do
     end
   end
 
-  resources :prompts
   resources :collections do
     collection do
       get :list_challenges
@@ -433,8 +453,16 @@ Otwarchive::Application.routes.draw do
     end
     resources :requests, controller: "challenge_requests"
     # challenge types
-    resource :gift_exchange, controller: 'challenge/gift_exchange'
-    resource :prompt_meme, controller: 'challenge/prompt_meme'
+    resource :gift_exchange, controller: "challenge/gift_exchange" do
+      member do
+        get :confirm_delete
+      end
+    end
+    resource :prompt_meme, controller: "challenge/prompt_meme" do
+      member do
+        get :confirm_delete
+      end
+    end
   end
 
   #### I18N ####
@@ -446,26 +474,14 @@ Otwarchive::Application.routes.draw do
   end
   resources :locales, except: :destroy
 
-  #### SESSIONS ####
-
-  resources :user_sessions, only: [:new, :create, :destroy] do
-    collection do
-      get :passwd_small
-      get :passwd
-    end
-  end
-  get 'login' => 'user_sessions#new'
-  get 'logout' => 'user_sessions#destroy'
-
   #### API ####
 
   namespace :api do
-    namespace :v1 do
+    namespace :v2 do
       resources :bookmarks, only: [:create], defaults: { format: :json }
       resources :works, only: [:create], defaults: { format: :json }
-      post 'bookmarks/import', to: 'bookmarks#create'
-      post 'works/import', to: 'works#create'
-      post 'works/urls', to: 'works#batch_urls'
+      post 'bookmarks/search', to: 'bookmarks#search'
+      post 'works/search', to: 'works#search'
     end
   end
 
@@ -547,11 +563,7 @@ Otwarchive::Application.routes.draw do
   resources :external_authors do
     resources :external_author_names
   end
-  resources :orphans, only: [:index, :new, :create] do
-    collection do
-      get :about
-    end
-  end
+  resources :orphans, only: [:index, :new, :create]
 
   get 'search' => 'works#search'
   post 'support' => 'feedbacks#create', as: 'feedbacks'

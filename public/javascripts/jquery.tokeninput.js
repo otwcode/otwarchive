@@ -60,24 +60,85 @@ var POSITION = {
 };
 
 // Keys "enum"
-var KEY = {
-    BACKSPACE: 8,
-    TAB: 9,
-    ENTER: 13,
-    ESCAPE: 27,
-    SPACE: 32,
-    PAGE_UP: 33,
-    PAGE_DOWN: 34,
-    END: 35,
-    HOME: 36,
-    LEFT: 37,
-    UP: 38,
-    RIGHT: 39,
-    DOWN: 40,
-    DELETE: 46,
-    NUMPAD_ENTER: 108,
-    COMMA: 188
-};
+var KEY;
+if (!(KeyboardEvent.prototype.hasOwnProperty("key"))) {
+    // Older browsers past IE8
+    KEY = {
+        BACKSPACE: 8,
+        TAB: 9,
+        ENTER: 13,
+        ESCAPE: 27,
+        SPACE: 32,
+        PAGE_UP: 33,
+        PAGE_DOWN: 34,
+        END: 35,
+        HOME: 36,
+        LEFT: 37,
+        UP: 38,
+        RIGHT: 39,
+        DOWN: 40,
+        DELETE: 46,
+        NUMPAD_ENTER: 108,
+        COMMA: 188
+    };
+    Object.defineProperty(
+        KeyboardEvent.prototype,
+        "key",
+        {
+            configurable: true,
+            enumerable: true,
+            get: function () {
+            return this.keyCode;
+            }
+        });
+} else {
+    var browserHasKeyProp = true;
+    KEY = {
+        BACKSPACE: "Backspace",
+        TAB: "Tab",
+        ENTER: "Enter",
+        ESCAPE: "Escape",
+        SPACE: " ",
+        PAGE_UP: "PageUp",
+        PAGE_DOWN: "PageDown",
+        END: "End",
+        HOME: "Home",
+        LEFT: "ArrowLeft",
+        UP: "ArrowUp",
+        RIGHT: "ArrowRight",
+        DOWN: "ArrowDown",
+        DELETE: "Delete",
+        NUMPAD_ENTER: "Enter",
+        COMMA: ","
+    };
+}
+
+
+// IE/Edge compatibility for event.key
+if (browserHasKeyProp) {
+    (function() {
+        var eventProto = KeyboardEvent.prototype;
+        var keyProp = Object.getOwnPropertyDescriptor(eventProto, "key");
+        var keys = {
+            Spacebar: " ",
+            Esc: "Escape",
+            Left: "ArrowLeft",
+            Up: "ArrowUp",
+            Right: "ArrowRight",
+            Down: "ArrowDown",
+            Del: "Delete",
+        };
+
+        Object.defineProperty(eventProto, "key", {
+            configurable: true,
+            enumerable: true,
+            get: function() {
+                var key = keyProp.get.call(this);
+                return keys.hasOwnProperty(key) ? keys[key] : key;
+            }
+        });
+    })();
+}
 
 
 // Expose the .tokenInput function to jQuery as a plugin
@@ -177,7 +238,7 @@ $.TokenList = function (input, url_or_data, settings) {
             var previous_token;
             var next_token;
 
-            switch(event.keyCode) {
+            switch(event.key) {
                 case KEY.LEFT:
                 case KEY.RIGHT:
                 case KEY.UP:
@@ -190,7 +251,7 @@ $.TokenList = function (input, url_or_data, settings) {
                             next_token = $(selected_token).next();                            
 
                             // no matter what, deselect the currently selected token
-                            if(event.keyCode === KEY.LEFT || event.keyCode === KEY.UP) {
+                            if(event.key === KEY.LEFT || event.key === KEY.UP) {
                                 deselect_token($(selected_token), POSITION.BEFORE);
                             } else {
                                 deselect_token($(selected_token), POSITION.AFTER);
@@ -200,14 +261,14 @@ $.TokenList = function (input, url_or_data, settings) {
                             next_token = input_token.next();
                         }
 
-                        if((event.keyCode === KEY.LEFT || event.keyCode === KEY.UP) && previous_token.length) {
+                        if((event.key === KEY.LEFT || event.key === KEY.UP) && previous_token.length) {
                             // We are moving left, select the previous token if it exists
                             select_token($(previous_token.get(0)));
-                        } else if((event.keyCode === KEY.RIGHT || event.keyCode === KEY.DOWN) && next_token.length) {
+                        } else if((event.key === KEY.RIGHT || event.key === KEY.DOWN) && next_token.length) {
                             // We are moving right, select the next token if it exists
                             select_token($(next_token.get(0)));
                         } 
-                    } else if (event.keyCode === KEY.LEFT || event.keyCode === KEY.RIGHT) {
+                    } else if (event.key === KEY.LEFT || event.key === KEY.RIGHT) {
                         // ignore to allow users to move around in the string they're typing in the input field with the arrow keys
                         return true;
                     } else {
@@ -216,7 +277,7 @@ $.TokenList = function (input, url_or_data, settings) {
 
                         if (!selected_dropdown_item) {
                             dropdown_item = first_dropdown_item;
-                        } else if(event.keyCode === KEY.DOWN) {
+                        } else if(event.key === KEY.DOWN) {
                             dropdown_item = $(selected_dropdown_item).next();
                         } else {
                             dropdown_item = $(selected_dropdown_item).prev();
@@ -226,7 +287,7 @@ $.TokenList = function (input, url_or_data, settings) {
                             select_dropdown_item(dropdown_item);
                             // scroll to newly selected item if necessary
                             $(dropdown).scrollTo($(dropdown_item));                            
-                        } else if (event.keyCode === KEY.UP) {
+                        } else if (event.key === KEY.UP) {
                             // deselect the dropdown item
                             if(selected_dropdown_item) {
                                 deselect_dropdown_item($(selected_dropdown_item));
@@ -372,7 +433,7 @@ $.TokenList = function (input, url_or_data, settings) {
         .hide();
         
     // Save data to pre-populate list with
-    var li_data = $(input).val() || settings.prePopulate
+    var li_data = $(input).val() || settings.prePopulate;
     if(settings.processPrePopulate && $.isFunction(settings.onResult)) {
         li_data = settings.onResult.call(hidden_input, li_data);
     }    
@@ -401,7 +462,7 @@ $.TokenList = function (input, url_or_data, settings) {
     
     // Set up the live params to expire our cache if they change
     if(settings.liveParams) {
-        var live_param_fields = settings.liveParams.split("&")
+        var live_param_fields = settings.liveParams.split("&");
         $.each(live_param_fields, function (index, value) {
             var kv = value.split("=");
             var id_to_get = '#' + kv[1] + ' input';
@@ -457,7 +518,7 @@ $.TokenList = function (input, url_or_data, settings) {
             // use the jqueryUI Sortable method
             // this_token.sortable();
             // this_token.addClass("ui-state-default");
-          };
+          }
 
         // The 'delete token' button
         var delete_span_token = $("<span></span>")
@@ -470,7 +531,7 @@ $.TokenList = function (input, url_or_data, settings) {
 				// Link with a title attribute for better accessibility
         $("<a href=\"#\">" + settings.deleteText + "</a>")
 						.attr("title", "remove " + value)
-						.appendTo(delete_span_token)
+						.appendTo(delete_span_token);
 
         // Store data on the token
         var token_data = {"id": id, "name": value};
@@ -861,7 +922,7 @@ $.TokenList = function (input, url_or_data, settings) {
 
         // Get live params
         if(settings.liveParams) {
-            var live_param_fields = settings.liveParams.split("&")
+            var live_param_fields = settings.liveParams.split("&");
             $.each(live_param_fields, function (index, value) {
                 var kv = value.split("=");
                 // test for checkboxes or text input field
@@ -925,7 +986,7 @@ $.TokenList.Cache = function (options) {
     
     this.clear_data = function () {
         flush();
-    }
+    };
 
     this.add = function (query, results) {
         if(size > settings.max_size) {

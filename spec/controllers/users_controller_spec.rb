@@ -1,30 +1,42 @@
-require 'spec_helper'
+require "spec_helper"
 
 describe UsersController do
+  include RedirectExpectationHelper
 
-  def valid_user_attributes
-    {
-      email: "sna.foo@gmail.com", login: "myname", age_over_13: "1",
-      terms_of_service: "1", password: "password"
-    }
-  end
+  describe "GET #activate" do
+    let(:user) { create(:user, confirmed_at: nil) }
 
-  before do
-    allow_any_instance_of(UsersController).to receive(:check_account_creation_status).and_return(true)
-  end
-
-  describe "create" do
-
-    context "with valid parameters" do
-      it "should be successful" do
-        post :create, params: { user: valid_user_attributes }
-
-        expect(response).to be_success
-        expect(assigns(:user)).to be_a(User)
-        expect(assigns(:user)).to eq(User.last)
+    context "with no activation key" do
+      it "redirects with an error" do
+        get :activate, params: { id: "" }
+        it_redirects_to_with_error(root_path, "Your activation key is missing.")
       end
     end
 
-  end
+    context "with an invalid activation key" do
+      it "redirects with an error" do
+        get :activate, params: { id: "foobar" }
+        it_redirects_to_with_error(root_path, "Your activation key is invalid. If you didn't activate within 14 days, your account was deleted. Please sign up again, or contact support via the link in our footer for more help.")
+      end
+    end
 
+    context "with a used activation key" do
+      before { user.activate }
+
+      it "redirects with an error" do
+        expect(user.active?).to be_truthy
+        get :activate, params: { id: user.confirmation_token }
+        it_redirects_to_with_error(user_path(user), "Your account has already been activated.")
+      end
+    end
+
+    context "with a valid activation key" do
+      it "activates the account and redirects with a success message" do
+        expect(user.active?).to be_falsey
+        get :activate, params: { id: user.confirmation_token }
+        expect(user.reload.active?).to be_truthy
+        it_redirects_to_with_notice(new_user_session_path, "Account activation complete! Please log in.")
+      end
+    end
+  end
 end

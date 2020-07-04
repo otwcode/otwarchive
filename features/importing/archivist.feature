@@ -3,6 +3,7 @@ Feature: Archivist bulk imports
   Background:
     Given I have an archivist "archivist"
       And the default ratings exist
+      And all warnings exist
       And I am logged in as "archivist"
 
   Scenario: Non-archivist cannot import for others
@@ -12,7 +13,7 @@ Feature: Archivist bulk imports
 
   Scenario: Make a user an archivist
     Given I have pre-archivist setup for "not_archivist"
-      And I am logged in as an admin
+      And I am logged in as open_doors_admin
     When I make "not_archivist" an archivist
     Then I should see "User was successfully updated"
 
@@ -81,8 +82,7 @@ Feature: Archivist bulk imports
       | user1 | a@ao3.org |
     When I go to the import page
       And I import the work "http://ao3testing.dreamwidth.org/593.html" by "name1" with email "a@ao3.org" and by "name2" with email "b@ao3.org"
-    When the system processes jobs
-      Then 1 email should be delivered to "a@ao3.org"
+    Then 1 email should be delivered to "a@ao3.org"
       And 1 email should be delivered to "b@ao3.org"
 
   Scenario: Import a work for multiple authors with accounts should not display the archivist
@@ -114,6 +114,7 @@ Feature: Archivist bulk imports
       | login | email                     |
       | ao3   | ao3testing@dreamwidth.org |
     When I import the work "http://ao3testing.dreamwidth.org/593.html"
+      And all indexing jobs have been run
     Then I should see import confirmation
       And I should see "ao3"
       And I should not see "[archived by archivist]"
@@ -126,12 +127,14 @@ Feature: Archivist bulk imports
     Given the user "creator" exists and is activated
     When I import the work "http://ao3testing.dreamwidth.org/593.html" by "creator" with email "not_creators_account_email@example.com"
       And the system processes jobs
+      And all indexing jobs have been run
     Then 1 email should be delivered to "not_creators_account_email@example.com"
     When I am logged in as "creator"
       # Use the URL because we get logged out if we follow the link in the email
       And I go to the claim page for "not_creators_account_email@example.com"
     Then I should see "Claim your works with your logged-in account."
     When I press "Add these works to my currently-logged-in account"
+      And all indexing jobs have been run
     Then I should see "Author Identities for creator"
       And I should see "We have added the stories imported under not_creators_account_email@example.com to your account."
     When I go to creator's works page
@@ -173,16 +176,15 @@ Feature: Archivist bulk imports
       And I follow "Claim or remove your works" in the email
     Then I should see "Claiming Your Imported Works"
     And I should see "An archive including some of your work(s) has been moved to the Archive of Our Own."
-    When I press "Sign me up and give me my works! Yay!"
+    When I press "Sign me up and give me my works!"
     Then I should see "Create Account"
     When I fill in the sign up form with valid data
     And I press "Create Account"
-    Then I should see "Account Created!"
+    Then I should see "Almost Done!"
 
   Scenario: Orphan a work in response to an invite, leaving name on it
     Given I have an orphan account
     When I import the work "http://ao3testing.dreamwidth.org/593.html" by "randomtestname" with email "random@example.com"
-      And the system processes jobs
     Then 1 email should be delivered to "random@example.com"
       And the email should contain "Claim or remove your works"
     When I am logged out
@@ -190,6 +192,7 @@ Feature: Archivist bulk imports
     Then I should see "Claiming Your Imported Works"
       And I should see "An archive including some of your work(s) has been moved to the Archive of Our Own."
     When I choose "Orphan my works and take my email address off them, but keep my name."
+      And I wait 2 seconds
       And I press "Update"
     Then I should see "Your imported stories have been orphaned. Thank you for leaving them in the archive! Your preferences have been saved."
     When I am logged in
@@ -199,7 +202,6 @@ Feature: Archivist bulk imports
   Scenario: Orphan a work in response to an invite, taking name off it
     Given I have an orphan account
     When I import the work "http://ao3testing.dreamwidth.org/593.html" by "randomtestname" with email "random@example.com"
-      And the system processes jobs
     Then 1 email should be delivered to "random@example.com"
       And the email should contain "Claim or remove your works"
     When I am logged out
@@ -208,6 +210,7 @@ Feature: Archivist bulk imports
       And I should see "An archive including some of your work(s) has been moved to the Archive of Our Own."
     When I choose "Orphan my works and take my email address off them, but keep my name."
       And I check "Assign my works to the AO3 orphan_account, removing both my name and email address."
+      And I wait 2 seconds
       And I press "Update"
     Then I should see "Your imported stories have been orphaned. Thank you for leaving them in the archive! Your preferences have been saved."
     When I am logged in
@@ -242,7 +245,7 @@ Feature: Archivist bulk imports
     Then I should see "We have notified the author(s) you imported works for. If any were missed, you can also add co-authors manually."
     When I press "Edit"
     And I fill in "work_collection_names" with "Club"
-    And I press "Post Without Preview"
+    And I press "Post"
     Then I should see "Story"
     And I should see "randomtestname"
     And I should see "Club"
@@ -252,12 +255,13 @@ Feature: Archivist bulk imports
   Scenario: Should not be able to import for others unless the box is checked
     When I go to the import page
       And I fill in "URLs*" with "http://ao3testing.dreamwidth.org/593.html"
+      And I select "English" from "Choose a language"
       And I fill in "Author Name*" with "ao3testing"
       And I fill in "Author Email Address*" with "ao3testing@example.com"
-    When I press "Import"
+      And I press "Import"
     Then I should see /You have entered an external author name or e-mail address but did not select "Import for others."/
     When I check the 1st checkbox with id matching "importing_for_others"
-    And I press "Import"
+      And I press "Import"
     Then I should see "We have notified the author(s) you imported works for. If any were missed, you can also add co-authors manually."
 
   Scenario: Archivist can't see Open Doors tools
