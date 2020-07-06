@@ -45,7 +45,7 @@ FactoryBot.define do
   end
 
   factory :moderated_work do
-    work_id { create(:work, moderated_commenting_enabled: true).id }
+    work_id { create(:work).id }
   end
 
   factory :external_author do |f|

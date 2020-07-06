@@ -6,7 +6,7 @@ describe Admin::UserCreationsController do
   include LoginMacros
   include RedirectExpectationHelper
 
-  describe "GET #hide" do    
+  describe "PUT #hide" do    
     let(:admin) { create(:admin) }
     let(:work) { create(:work) }
 
@@ -43,7 +43,7 @@ describe Admin::UserCreationsController do
     end
   end
 
-  describe "GET #set_spam" do
+  describe "PUT #set_spam" do
     let(:admin) { create(:admin) }
     let(:work) { create(:work) }
 
@@ -80,7 +80,7 @@ describe Admin::UserCreationsController do
     end
   end
 
-  describe "GET #destroy" do
+  describe "DELETE #destroy" do
     let(:admin) { create(:admin) }
     let(:work) { create(:work) }
 

@@ -27,7 +27,7 @@ describe Admin::SpamController do
     end
   end
 
-  describe "GET #bulk_update" do
+  describe "POST #bulk_update" do
     let(:admin) { create(:admin) }
 
     context "when admin does not have correct authorization" do
