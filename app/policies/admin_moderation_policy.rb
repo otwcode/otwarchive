@@ -9,6 +9,7 @@ class AdminModerationPolicy < ApplicationPolicy
     user_has_roles?(CONTENT_MODERATORS)
   end
 
+  alias_method :edit?, :can_moderate_content?
   alias_method :hide?, :can_moderate_content?
   alias_method :set_spam?, :can_moderate_content?
   alias_method :destroy?, :can_moderate_content?
