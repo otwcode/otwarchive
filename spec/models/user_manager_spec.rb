@@ -2,18 +2,18 @@ require "spec_helper"
 
 describe User do
   describe "#save" do
-    context "denies random admin access" do
+    context "when admin lacks proper role" do
       let(:user) { create(:user) }
       let(:admin) { create(:admin) }
 
-      it "returns error for admin without proper role" do
+      it "returns error" do
         manager = UserManager.new(admin, user_login: user.login)
         expect(manager.save).to be_falsey
         expect(manager.errors).to eq ["Must have a valid admin role to proceed."]
       end
     end
 
-    context "returns errors if params fields are missing" do
+    context "when params fields are missing" do
       let(:user) { create(:user) }
       let(:admin) { create(:admin, roles: ["policy_and_abuse"]) }
       let(:next_of_kin) { create(:user) }
@@ -48,7 +48,7 @@ describe User do
       end
     end
 
-    context "allows save and succeeds with correct admin role and data" do
+    context "when admin has proper role and data is correct" do
       let(:user) { create(:user) }
       let(:admin) { create(:admin, roles: ["policy_and_abuse"]) }
       let(:next_of_kin) { create(:user) }
