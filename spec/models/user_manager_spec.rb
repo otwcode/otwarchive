@@ -9,7 +9,7 @@ describe User do
       it "returns error" do
         manager = UserManager.new(admin, user_login: user.login)
         expect(manager.save).to be_falsey
-        expect(manager.errors).to eq ["Must have a valid admin role to proceed."]
+        expect(manager.errors).to eq ["Must have authorized admin role to proceed"]
       end
     end
 

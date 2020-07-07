@@ -82,7 +82,6 @@ describe InvitationsController do
         end
       end
 
-
       context "when logged in as admin without correct authorization" do
         it "redirects with error" do
           fake_login_admin(admin)

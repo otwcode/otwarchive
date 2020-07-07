@@ -1,13 +1,13 @@
 class UserPolicy < ApplicationPolicy
-  USER_SEARCH_ROLES = %w(superadmin policy_and_abuse open_doors support tag_wrangling).freeze
-  USER_ACTION_ROLES = %w(superadmin policy_and_abuse).freeze
+  USER_MANAGEMENT_ROLES = %w(superadmin policy_and_abuse open_doors support tag_wrangling).freeze
+  POLICY_ROLES = %w(superadmin policy_and_abuse).freeze
 
   def can_suspend_users?
-    user_has_roles?(USER_ACTION_ROLES)
+    user_has_roles?(POLICY_ROLES)
   end
 
   def can_search_users?
-    user_has_roles?(USER_SEARCH_ROLES)
+    user_has_roles?(USER_MANAGEMENT_ROLES)
   end
 
   def self.can_search_users?(admin)

@@ -52,7 +52,7 @@ class UserManager
     if admin_access
       true
     else
-      errors << "Must have a valid admin role to proceed."
+      errors << "Must have authorized admin role to proceed"
       false
     end
   end
