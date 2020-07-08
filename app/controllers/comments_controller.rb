@@ -369,7 +369,7 @@ class CommentsController < ApplicationController
   end
 
   def reject
-    authorize @comment
+    authorize @comment unless user_is_author_of_work(@comment)
     @comment.mark_as_spam!
     redirect_to_all_comments(@comment.ultimate_parent, show_comments: true)
   end
@@ -558,5 +558,9 @@ class CommentsController < ApplicationController
 
   def filter_params
     params.permit!
+  end
+
+  def user_is_author_of_work(comment)
+    current_user.is_a?(User) && current_user.is_author_of?(comment.ultimate_parent)
   end
 end
