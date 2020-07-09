@@ -305,7 +305,7 @@ class CommentsController < ApplicationController
   # DELETE /comments/1
   # DELETE /comments/1.xml
   def destroy
-    authorize @comment if current_admin.present?
+    authorize @comment if logged_in_as_admin?
 
     parent = @comment.ultimate_parent
     parent_comment = @comment.reply_comment? ? @comment.commentable : nil
@@ -369,7 +369,7 @@ class CommentsController < ApplicationController
   end
 
   def reject
-    authorize @comment unless user_is_author_of_work(@comment)
+    authorize @comment if logged_in_as_admin?
     @comment.mark_as_spam!
     redirect_to_all_comments(@comment.ultimate_parent, show_comments: true)
   end
@@ -558,9 +558,5 @@ class CommentsController < ApplicationController
 
   def filter_params
     params.permit!
-  end
-
-  def user_is_author_of_work(comment)
-    current_user.is_a?(User) && current_user.is_author_of?(comment.ultimate_parent)
   end
 end
