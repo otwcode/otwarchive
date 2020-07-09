@@ -9,11 +9,7 @@ class CommentPolicy < ApplicationPolicy
     user_has_roles?(DELETE_COMMENT_ROLES)
   end
 
-  def can_mark_comment_ham?
-    can_delete_comment?
-  end
-
   alias_method :destroy?, :can_delete_comment?
-  alias_method :approve?, :can_mark_comment_ham?
+  alias_method :approve?, :can_delete_comment?
   alias_method :reject?, :can_delete_comment?
 end

@@ -852,6 +852,7 @@ describe CommentsController do
 
     context "when logged in as an admin" do
       before { fake_login_admin(create(:admin, roles: ["policy_and_abuse"])) }
+
       let(:admin) { create(:admin) }
       
       context "DELETE COMMENT" do
