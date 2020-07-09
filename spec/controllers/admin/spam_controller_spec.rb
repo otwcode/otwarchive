@@ -61,7 +61,6 @@ describe Admin::SpamController do
     context "when logged in as admin" do
       it "marks moderated workd as reviewed, marks works as spam, hides the works, and redirects with notice" do
         FactoryBot.create_list(:moderated_work, 3)
-        moderated_work = ModeratedWork.first
         fake_login_admin(admin)
         post :bulk_update, params: { spam: ModeratedWork.all.map(&:id) }
 
