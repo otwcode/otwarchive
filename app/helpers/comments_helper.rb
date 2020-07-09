@@ -118,14 +118,16 @@ module CommentsHelper
 
   # Only an admin with proper authorization can mark a spam comment ham.
   def can_mark_comment_ham?(comment)
-    return unless comment.pseud.nil? && !comment.approved? 
+    return unless comment.pseud.nil? && !comment.approved?
+
     policy(comment).can_delete_comment?
   end
 
   # An admin with proper authorization or a creator of the comment's ultimate
   # parent (i.e. the work) can mark an approved comment as spam.
   def can_mark_comment_spam?(comment)
-    return unless comment.pseud.nil? && comment.approved? 
+    return unless comment.pseud.nil? && comment.approved?
+
     policy(comment).can_delete_comment? || is_author_of?(comment.ultimate_parent)
   end
 
