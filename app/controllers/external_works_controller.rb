@@ -35,6 +35,7 @@ class ExternalWorksController < ApplicationController
     authorize current_admin, policy_class: AdminModerationPolicy
     @external_work = ExternalWork.find(params[:id])
     @work = @external_work
+    # authorize current_admin, policy_class: AdminModerationPolicy
   end
 
   def update

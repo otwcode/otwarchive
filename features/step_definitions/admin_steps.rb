@@ -120,7 +120,7 @@ Given /^downloads are off$/ do
 end
 
 Given /^tag wrangling is off$/ do
-  step("I am logged in as superadmin")
+  step("I am logged in as tag_wrangling_admin")
   visit(admin_settings_path)
   step(%{I check "Turn off tag wrangling for non-admins"})
   step(%{I press "Update"})  
@@ -128,7 +128,7 @@ Given /^tag wrangling is off$/ do
 end
 
 Given /^tag wrangling is on$/ do
-  step("I am logged in as superadmin")
+  step("I am logged in as tag_wrangling_admin")
   visit(admin_settings_path)
   step(%{I uncheck "Turn off tag wrangling for non-admins"})
   step(%{I press "Update"})
@@ -136,7 +136,7 @@ Given /^tag wrangling is on$/ do
 end
 
 Given /^the support form is disabled and its text field set to "Please don't contact us"$/ do
-  step("I am logged in as superadmin")
+  step("I am logged in as support_admin")
   visit(admin_settings_path)
   check("Turn off support form")
   fill_in(:admin_setting_disabled_support_form_text, with: "Please don't contact us")
