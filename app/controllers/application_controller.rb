@@ -9,8 +9,9 @@ class ApplicationController < ActionController::Base
     admin_only_access_denied
   end
 
+  # sets admin user for pundit policies
   def pundit_user
-    current_admin || current_user
+    current_admin
   end
 
   rescue_from ActionController::UnknownFormat, with: :raise_not_found

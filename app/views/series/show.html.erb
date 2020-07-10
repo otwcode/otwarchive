@@ -18,6 +18,11 @@
 </h2>
 <!--/descriptions-->
 
+<% if AdminModerationPolicy.can_edit_works?(current_admin) %>
+  <!-- BEGIN admin options -->
+  <div><%= render "admin/admin_options", item: @series %></div>
+<% end %>
+
 <!--subnav-->
 <% if logged_in? %>
   <%= render "series/series_navigation" %>
@@ -77,11 +82,6 @@
       <%= render "bookmarks/bookmark_form", bookmarkable: @series, bookmark: Bookmark.new, button_name: ts("Create"), action: :create, in_page: true %>
     <% end %>
   </div>
-<% end %>
-
-<% if logged_in_as_admin? %>
-<!-- BEGIN admin options -->
-  <%= render "admin/admin_options", item: @series %>
 <% end %>
 
 <h3 class="landmark heading"><%= ts("Listing Series") %></h3>
