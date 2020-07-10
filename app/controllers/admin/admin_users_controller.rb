@@ -2,7 +2,7 @@ class Admin::AdminUsersController < Admin::BaseController
   include ExportsHelper
 
   def index
-    authorize User, policy_class: AdminUserPolicy
+    authorize User, policy_class: UserPolicy
     @role_values = @roles.map{ |role| [role.name.humanize.titlecase, role.name] }
     @role = Role.find_by(name: params[:role]) if params[:role]
     @users = User.search_by_role(
@@ -12,7 +12,7 @@ class Admin::AdminUsersController < Admin::BaseController
   end
 
   def bulk_search
-    authorize User, policy_class: AdminUserPolicy
+    authorize User, policy_class: UserPolicy
     @emails = params[:emails].split if params[:emails]
     if @emails.present?
       found_users, not_found_emails, duplicates = User.search_multiple_by_email(@emails)
@@ -47,7 +47,7 @@ class Admin::AdminUsersController < Admin::BaseController
   def show
     @hide_dashboard = true
     @user = User.find_by(login: params[:id])
-    authorize @user, policy_class: AdminUserPolicy
+    authorize @user, policy_class: UserPolicy
     unless @user
       redirect_to action: "index", query: params[:query], role: params[:role] and return
     end
@@ -57,7 +57,7 @@ class Admin::AdminUsersController < Admin::BaseController
   # POST admin/users/update
   def update
     @user = User.find_by(login: params[:id])
-    authorize @user, policy_class: AdminUserPolicy
+    authorize @user, policy_class: UserPolicy
     if @user.admin_update(user_params)
       flash[:notice] = ts("User was successfully updated.")
     else
@@ -68,8 +68,8 @@ class Admin::AdminUsersController < Admin::BaseController
 
   def update_status
     @user = User.find_by(login: params[:user_login])
-    authorize @user, policy_class: AdminUserPolicy
-    @user_manager = UserManager.new(current_admin, user_management_params)
+    authorize @user, policy_class: UserPolicy
+    @user_manager = UserManager.new(current_admin, params)
     if @user_manager.save
       flash[:notice] = @user_manager.success_message
       if params[:admin_action] == "spamban"
@@ -93,7 +93,7 @@ class Admin::AdminUsersController < Admin::BaseController
   end
 
   def confirm_delete_user_creations
-    authorize @user, policy_class: AdminUserPolicy
+    authorize @user, policy_class: UserPolicy
     @works = @user.works.paginate(page: params[:works_page])
     @comments = @user.comments.paginate(page: params[:comments_page])
     @bookmarks = @user.bookmarks
@@ -102,7 +102,7 @@ class Admin::AdminUsersController < Admin::BaseController
   end
 
   def destroy_user_creations
-    authorize @user, policy_class: AdminUserPolicy
+    authorize @user, policy_class: UserPolicy
     creations = @user.works + @user.bookmarks + @user.collections + @user.comments
     creations.each do |creation|
       AdminActivity.log_action(current_admin, creation, action: "destroy spam", summary: creation.inspect)
@@ -115,6 +115,8 @@ class Admin::AdminUsersController < Admin::BaseController
 
   def troubleshoot
     @user = User.find_by(login: params[:id])
+    authorize @user, policy_class: UserPolicy
+
     @user.fix_user_subscriptions
     @user.set_user_work_dates
     @user.reindex_user_creations
@@ -126,6 +128,8 @@ class Admin::AdminUsersController < Admin::BaseController
 
   def activate
     @user = User.find_by(login: params[:id])
+    authorize @user, policy_class: UserPolicy
+
     @user.activate
     if @user.active?
       @user.create_log_item( options = { action: ArchiveConfig.ACTION_ACTIVATE, note: "Manually Activated", admin_id: current_admin.id })
@@ -139,6 +143,7 @@ class Admin::AdminUsersController < Admin::BaseController
 
   def send_activation
     @user = User.find_by(login: params[:id])
+    authorize @user, policy_class: UserPolicy
     # send synchronously to avoid getting caught in mail queue
     UserMailer.signup_notification(@user.id).deliver!
     flash[:notice] = ts("Activation email sent")
@@ -146,14 +151,6 @@ class Admin::AdminUsersController < Admin::BaseController
   end
 
   def user_params
-    params[:user].slice(
-      *AdminUserPolicy.new(current_admin, @user).permitted_user_params
-    )
-  end
-
-  def user_management_params
-    params.slice(
-      *AdminUserPolicy.new(current_admin, @user).permitted_management_params
-    )
+    params.require(:user).permit(:email, roles: [])
   end
 end

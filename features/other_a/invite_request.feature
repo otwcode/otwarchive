@@ -125,7 +125,7 @@ Feature: Invite requests
     Then I should be on steven's manage invitations page
 
   Scenario: An admin can create a user's invitations
-    Given I am logged in as an admin
+    Given I am logged in as superadmin
       And the user "steven" exists and is activated
     When I go to steven's invitations page
     Then I should see "Create more invitations for this user"
@@ -136,7 +136,7 @@ Feature: Invite requests
   Scenario: An admin can delete a user's invitations
     Given the user "user1" exists and is activated
       And "user1" has "5" invitations
-      And I am logged in as an admin
+      And I am logged in as superadmin
     When I follow "Invite New Users"
       And I fill in "invitation[user_name]" with "user1"
       And I press "Go"
