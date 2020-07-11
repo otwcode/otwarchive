@@ -24,7 +24,7 @@
 <!--/descriptions-->
 
 <!--subnav-->
-<% if AdminModerationPolicy.can_edit_works?(current_admin) %>
+<% if UserCreationPolicy.can_modify_creations?(current_admin) %>
   <%= render partial: 'admin/admin_options', locals: { item: @work } %>
 <% end %>
 <!--/subnav-->

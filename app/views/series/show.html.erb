@@ -18,7 +18,7 @@
 </h2>
 <!--/descriptions-->
 
-<% if AdminModerationPolicy.can_edit_works?(current_admin) %>
+<% if UserCreationPolicy.can_modify_creations?(current_admin) %>
   <!-- BEGIN admin options -->
   <div><%= render "admin/admin_options", item: @series %></div>
 <% end %>
