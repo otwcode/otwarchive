@@ -8,6 +8,7 @@ gem 'bundler'
 
 gem 'rails', '~> 5.2.3'
 gem 'rack', '~> 2.1', '>= 2.1.4'
+gem 'sprockets', '< 4'
 
 gem 'rails-observers', git: 'https://github.com/rails/rails-observers'
 gem 'actionpack-page_caching'
