@@ -25,7 +25,7 @@ class RedisHitCounter
     # updates occurring while we perform the transfer, which simplifies the
     # code for save_hit_counts_at_key and save_batch_hit_counts.
     def save_recent_counts
-      return unless redis.exists(:recent_counts)
+      return unless redis.exists?(:recent_counts)
 
       temp_key = make_temporary_key
       redis.rename(:recent_counts, temp_key)

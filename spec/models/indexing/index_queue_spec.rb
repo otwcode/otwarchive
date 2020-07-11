@@ -29,7 +29,7 @@ describe IndexQueue do
     iq.add_id(1)
     iq.run
 
-    expect(IndexQueue::REDIS.exists("index:work:main")).to be_falsey
+    expect(IndexQueue::REDIS.exists?("index:work:main")).to be_false
   end
 
   describe "#run" do
