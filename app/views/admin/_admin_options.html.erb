@@ -13,17 +13,17 @@
 
   <h3 class="landmark heading"><%= ts("Admin Actions") %></h3>
   <ul class="management actions">
-    <% if item.hidden_by_admin? %>
+    <% if admin_can_hide_creations?(current_admin) %>
       <li>
-        <%= link_to ts("Make %{item} Visible", item: item_type_name),
-                    hide_admin_user_creation_path(item, creation_type: item.class, hidden: "false"),
-                    method: :put %>
-      </li>
-    <% else %>
-      <li>
-        <%= link_to ts("Hide %{item}", item: item_type_name),
-                    hide_admin_user_creation_path(item, creation_type: item.class, hidden: "true"),
-                    method: :put %>
+        <% if item.hidden_by_admin? %>
+          <%= link_to ts("Make %{item} Visible", item: item_type_name),
+                      hide_admin_user_creation_path(item, creation_type: item.class, hidden: "false"),
+                      method: :put %>
+        <% else %>
+          <%= link_to ts("Hide %{item}", item: item_type_name),
+                      hide_admin_user_creation_path(item, creation_type: item.class, hidden: "true"),
+                      method: :put %>
+        <% end %>
       </li>
     <% end %>
     <% if @work.present? %>

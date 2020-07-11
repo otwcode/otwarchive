@@ -12,7 +12,13 @@ module AdminHelper
 
     UserCreationPolicy.can_destroy_creations?(current_admin) ||
       UserCreationPolicy.can_edit_creations?(current_admin) ||
-      UserCreationPolicy.can_hide_creations?(current_admin) ||
+      admin_can_hide_creations?(current_admin) ||
       UserCreationPolicy.can_mark_creations_spam?(current_admin) 
+  end
+
+  def admin_can_hide_creations?(current_admin)
+    return unless logged_in_as_admin?
+
+    UserCreationPolicy.can_hide_creations?(current_admin)
   end
 end
