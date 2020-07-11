@@ -22,7 +22,8 @@ module AdminHelper
     UserCreationPolicy.can_destroy_creations?(current_admin)
   end
 
-  # Currently applies to editing ExternalWorks and the tags or laguage of Works.
+  # Currently applies to editing ExternalWorks and the tags or language of
+  # Works.
   def admin_can_edit_creations?(current_admin)
     return unless logged_in_as_admin?
 
