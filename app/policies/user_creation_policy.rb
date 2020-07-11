@@ -26,6 +26,9 @@ class UserCreationPolicy < ApplicationPolicy
     user_has_roles?(DESTROY_ROLES)
   end
 
+  # Currently applies to editing ExternalWorks and the tags or laguage of Works.
+  # Admins cannot edit Bookmarks or Series or make any other type of edit to
+  # Works.
   def can_edit_creations?
     user_has_roles?(EDIT_ROLES)
   end
