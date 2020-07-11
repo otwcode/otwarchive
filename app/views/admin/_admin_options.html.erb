@@ -53,13 +53,16 @@
         </li>
       <% end %>
     <% end %>
-    <li><%= link_to ts("Delete %{item}", item: item_type_name),
+    <% if admin_can_destroy_creations?(current_admin) %>
+      <li>
+        <%= link_to ts("Delete %{item}", item: item_type_name),
                     admin_user_creation_path(item, creation_type: item.class),
                     data: {
                             confirm: ts("Are you sure you want to delete this?")
                           },
                     method: :delete %>
-    </li>
+      </li>
+    <% end %>
   </ul>
 </div>
 <!-- END admin options -->
