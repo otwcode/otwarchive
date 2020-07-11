@@ -16,21 +16,13 @@
     <% if item.hidden_by_admin? %>
       <li>
         <%= link_to ts("Make %{item} Visible", item: item_type_name),
-                    { controller: "admin/user_creations",
-                      action: "hide",
-                      id: item,
-                      creation_type: item.class,
-                      hidden: "false" },
+                    hide_admin_user_creation_path(item, creation_type: item.class, hidden: "false"),
                     method: :put %>
       </li>
     <% else %>
       <li>
         <%= link_to ts("Hide %{item}", item: item_type_name),
-                    { controller: "admin/user_creations",
-                      action: "hide",
-                      id: item,
-                      creation_type: item.class,
-                      hidden: "true" },
+                    hide_admin_user_creation_path(item, creation_type: item.class, hidden: "true"),
                     method: :put %>
       </li>
     <% end %>
@@ -41,21 +33,13 @@
       <% if @work.spam? %>
         <li>
           <%= link_to ts("Mark Not Spam"),
-                      { controller: "admin/user_creations",
-                        action: "set_spam",
-                        id: @work.id,
-                        creation_type: @work.class,
-                        spam: "false" },
+                      set_spam_admin_user_creation_path(@work.id, creation_type: @work.class, spam: "false"),
                       method: :put %>
         </li>
       <% else %>
         <li>
           <%= link_to ts("Mark As Spam"),
-                      { controller: "admin/user_creations",
-                        action: "set_spam",
-                        id: @work.id,
-                        creation_type: @work.class,
-                        spam: "true" },
+                      set_spam_admin_user_creation_path(@work.id, creation_type: @work.class, spam: "true"),
                       method: :put %>
         </li>
       <% end %>
@@ -66,10 +50,7 @@
       </li>
     <% end %>
     <li><%= link_to ts("Delete %{item}", item: item_type_name),
-                    { controller: "admin/user_creations",
-                      action: "destroy",
-                      id: item,
-                      creation_type: item.class },
+                    admin_user_creation_path(item, creation_type: item.class),
                     data: {
                             confirm: ts("Are you sure you want to delete this?")
                           },
