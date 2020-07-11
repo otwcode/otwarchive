@@ -1457,7 +1457,7 @@ DEPENDENCIES
   rack (~> 2.1, >= 2.1.4)
   rack-attack
   rack-dev-mark (>= 0.7.8)
-  rails (~> 5.2.3)
+  rails (~> 5.2.4.3)
   rails-controller-testing
   rails-observers!
   redis (>= 3.0)
