@@ -11,9 +11,9 @@ module AdminHelper
     return unless logged_in_as_admin?
 
     UserCreationPolicy.can_destroy_creations?(current_admin) ||
-      UserCreationPolicy.can_edit_creations?(current_admin) ||
+      admin_can_edit_creations?(current_admin) ||
       admin_can_hide_creations?(current_admin) ||
-      UserCreationPolicy.can_mark_creations_spam?(current_admin) 
+      admin_can_mark_creations_spam?(current_admin)
   end
 
   # Currently applies to editing ExternalWorks and the tags or laguage of Works.
@@ -27,5 +27,12 @@ module AdminHelper
     return unless logged_in_as_admin?
 
     UserCreationPolicy.can_hide_creations?(current_admin)
+  end
+
+  # Currently applies to Works.
+  def admin_can_mark_creations_spam?(current_admin)
+    return unless logged_in_as_admin?
+
+    UserCreationPolicy.can_mark_creations_spam?(current_admin)
   end
 end

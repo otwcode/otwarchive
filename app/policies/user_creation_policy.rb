@@ -37,6 +37,7 @@ class UserCreationPolicy < ApplicationPolicy
     user_has_roles?(HIDE_ROLES)
   end
 
+  # Currently applies to Works.
   def can_mark_creations_spam?
     user_has_roles?(SPAM_ROLES)
   end

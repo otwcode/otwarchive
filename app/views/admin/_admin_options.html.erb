@@ -32,17 +32,17 @@
           <%= link_to ts("Edit Tags and Language"), edit_tags_work_path(@work) %>
         </li>
       <% end %>
-      <% if @work.spam? %>
+      <% if admin_can_mark_creations_spam?(current_admin) %>
         <li>
-          <%= link_to ts("Mark Not Spam"),
-                      set_spam_admin_user_creation_path(@work.id, creation_type: @work.class, spam: "false"),
-                      method: :put %>
-        </li>
-      <% else %>
-        <li>
-          <%= link_to ts("Mark As Spam"),
-                      set_spam_admin_user_creation_path(@work.id, creation_type: @work.class, spam: "true"),
-                      method: :put %>
+          <% if @work.spam? %>
+            <%= link_to ts("Mark Not Spam"),
+                        set_spam_admin_user_creation_path(@work.id, creation_type: @work.class, spam: "false"),
+                        method: :put %>
+          <% else %>
+            <%= link_to ts("Mark As Spam"),
+                        set_spam_admin_user_creation_path(@work.id, creation_type: @work.class, spam: "true"),
+                        method: :put %>
+          <% end %>
         </li>
       <% end %>
     <% end %>
