@@ -13,9 +13,10 @@ When /^I fill in the basic work information for "([^"]*)"$/ do |title|
   step %{I fill in basic work tags}
   check(DEFAULT_WARNING)
   fill_in("Work Title", with: title)
+  select("English", from: "work_language_id")
   fill_in("content", with: DEFAULT_CONTENT)
 end
-# Here we set up a draft and can then post it as a draft, preview and post, post without preview,
+# Here we set up a draft and can then post it as a draft, preview and post, post,
 # or fill in additional information on the work form.
 # Example: I set up the draft "Foo"
 # Example: I set up the draft "Foo" with fandom "Captain America" in the collection "MCU Stories" as a gift to "Bob"
@@ -32,10 +33,11 @@ end
 #
 # If you add to this regexp, you probably want to update all the
 # similar regexps in the I post/Given the draft/the work steps below.
-When /^I set up (?:a|the) draft "([^"]*)"(?: with fandom "([^"]*)")?(?: with character "([^"]*)")?(?: with second character "([^"]*)")?(?: with freeform "([^"]*)")?(?: with second freeform "([^"]*)")?(?: with category "([^"]*)")?(?: (?:in|to) (?:the )?collection "([^"]*)")?(?: as a gift (?:for|to) "([^"]*)")?(?: as part of a series "([^"]*)")?(?: with relationship "([^"]*)")?(?: using the pseud "([^"]*)")?$/ do |title, fandom, character, character2, freeform, freeform2, category, collection, recipient, series, relationship, pseud|
+When /^I set up (?:a|the) draft "([^"]*)"(?: with fandom "([^"]*)")?(?: with character "([^"]*)")?(?: with second character "([^"]*)")?(?: with freeform "([^"]*)")?(?: with second freeform "([^"]*)")?(?: with category "([^"]*)")?(?: with rating "([^\"]*)")?(?: (?:in|to) (?:the )?collection "([^"]*)")?(?: as a gift (?:for|to) "([^"]*)")?(?: as part of a series "([^"]*)")?(?: with relationship "([^"]*)")?(?: using the pseud "([^"]*)")?$/ do |title, fandom, character, character2, freeform, freeform2, category, rating, collection, recipient, series, relationship, pseud|
   step %{basic tags}
   visit new_work_path
   step %{I fill in the basic work information for "#{title}"}
+  select(rating.blank? ? DEFAULT_RATING : rating, from: "Rating")
   check(category.blank? ? DEFAULT_CATEGORY : category)
   fill_in("Fandoms", with: (fandom.blank? ? DEFAULT_FANDOM : fandom))
   fill_in("Additional Tags", with: (freeform.blank? ? DEFAULT_FREEFORM : freeform)+(freeform2.blank? ? '' : ','+freeform2))
@@ -61,7 +63,7 @@ When /^I set up (?:a|the) draft "([^"]*)"(?: with fandom "([^"]*)")?(?: with cha
 end
 
 # This is the same regexp as above
-When /^I post (?:a|the) work "([^"]*)"(?: with fandom "([^"]*)")?(?: with character "([^"]*)")?(?: with second character "([^"]*)")?(?: with freeform "([^"]*)")?(?: with second freeform "([^"]*)")?(?: with category "([^"]*)")?(?: (?:in|to) (?:the )?collection "([^"]*)")?(?: as a gift (?:for|to) "([^"]*)")?(?: as part of a series "([^"]*)")?(?: with relationship "([^"]*)")?(?: using the pseud "([^"]*)")?$/ do |title, fandom, character, character2, freeform, freeform2, category, collection, recipient, series, relationship, pseud|
+When /^I post (?:a|the) (?:(\d+) chapter )?work "([^"]*)"(?: with fandom "([^"]*)")?(?: with character "([^"]*)")?(?: with second character "([^"]*)")?(?: with freeform "([^"]*)")?(?: with second freeform "([^"]*)")?(?: with category "([^"]*)")?(?: with rating "([^\"]*)")?(?: (?:in|to) (?:the )?collection "([^"]*)")?(?: as a gift (?:for|to) "([^"]*)")?(?: as part of a series "([^"]*)")?(?: with relationship "([^"]*)")?(?: using the pseud "([^"]*)")?$/ do |number_of_chapters, title, fandom, character, character2, freeform, freeform2, category, rating, collection, recipient, series, relationship, pseud|
   # If the work is already a draft then visit the preview page and post it
   work = Work.find_by(title: title)
   if work
@@ -69,8 +71,18 @@ When /^I post (?:a|the) work "([^"]*)"(?: with fandom "([^"]*)")?(?: with charac
     click_button("Post")
   else
     # Note: this will match the above regexp and work just fine even if all the options are blank!
-    step %{I set up the draft "#{title}" with fandom "#{fandom}" with character "#{character}" with second character "#{character2}" with freeform "#{freeform}" with second freeform "#{freeform2}" with category "#{category}" in collection "#{collection}" as a gift to "#{recipient}" as part of a series "#{series}" with relationship "#{relationship}" using the pseud "#{pseud}"}
-    click_button("Post Without Preview")
+    step %{I set up the draft "#{title}" with fandom "#{fandom}" with character "#{character}" with second character "#{character2}" with freeform "#{freeform}" with second freeform "#{freeform2}" with category "#{category}" with rating "#{rating}" in collection "#{collection}" as a gift to "#{recipient}" as part of a series "#{series}" with relationship "#{relationship}" using the pseud "#{pseud}"}
+    click_button("Post")
+  end
+  # Now add the chapters
+  if number_of_chapters.present? && number_of_chapters.to_i > 1
+    work = Work.find_by_title(title)
+    visit work_url(work)
+    (number_of_chapters.to_i - 1).times do
+      step %{I follow "Add Chapter"}
+      fill_in("content", with: "Yet another chapter.")
+      click_button("Post")
+    end
   end
   step %{all indexing jobs have been run}
   Tag.write_redis_to_database
@@ -101,7 +113,7 @@ Given(/^I have the Battle set loaded$/) do
   step %{mod fulfills claim}
   step %{I reveal the "Battle 12" challenge}
   step %{I am logged in as "myname4"}
-  step %{the statistics_tasks rake task is run}
+  step %{the statistics for all works are updated}
   step %{all indexing jobs have been run}
 end
 
@@ -114,19 +126,19 @@ Given /^the chaptered work(?: with ([\d]+) chapters)?(?: with ([\d]+) comments?)
   step %{I am logged in as a random user}
   step %{I post the work "#{title}"}
   work = Work.find_by(title: title)
-  visit work_url(work)
+  visit work_path(work)
   n_chapters ||= 2
   (n_chapters.to_i - 1).times do |i|
     step %{I follow "Add Chapter"}
     fill_in("content", with: "Yet another chapter.")
-    click_button("Post Without Preview")
+    click_button("Post")
   end
   step %{I am logged out}
   n_comments ||= 0
   work = Work.find_by(title: title)
   n_comments.to_i.times do |i|
     step %{I am logged in as a random user}
-    visit work_url(work)
+    visit work_path(work)
     fill_in("comment[comment_content]", with: "Bla bla")
     click_button("Comment")
     step %{I am logged out}
@@ -261,7 +273,7 @@ end
 
 When /^I edit the work "([^"]*)"$/ do |work|
   work = Work.find_by(title: work)
-  visit edit_work_url(work)
+  visit edit_work_path(work)
 end
 When /^I edit the draft "([^"]*)"$/ do |draft|
   step %{I edit the work "#{draft}"}
@@ -283,7 +295,7 @@ When /^I post the chaptered draft "([^"]*)"$/ do |title|
 end
 
 When /^I post the work "([^"]*)" without preview$/ do |title|
-  # we now post without preview as our default test case
+  # we now post as our default test case
   step %{I post the work "#{title}"}
 end
 
@@ -534,7 +546,7 @@ When /^I update the work$/ do
   Tag.write_redis_to_database
 end
 When /^I post the work without preview$/ do
-  click_button "Post Without Preview"
+  click_button "Post"
   step %{all indexing jobs have been run}
 
   Tag.write_redis_to_database
@@ -543,9 +555,10 @@ When /^I post the work$/ do
   click_button "Post"
   step %{all indexing jobs have been run}
 end
-When /^the statistics_tasks rake task is run$/ do
-  step %{I run the rake task "statistics:update_stat_counters"}
-  step %{I run the rake task "statistics:update_stats"}
+
+When /^the statistics for all works are updated$/ do
+  StatCounter.stats_to_database
+  step %{the hit counts for all works are updated}
 end
 
 When /^I add the co-author "([^"]*)" to the work "([^"]*)"$/ do |coauthor, work|
@@ -583,7 +596,7 @@ When /^I give the work "([^"]*)" to the user "([^"]*)"$/ do |work_title, recipie
   step %{the user "#{recipient}" exists and is activated}
   visit edit_work_path(Work.find_by(title: work_title))
   fill_in("work_recipients", with: "#{recipient}")
-  click_button("Post Without Preview")
+  click_button("Post")
 end
 
 When /^I add the beginning notes "([^"]*)"$/ do |notes|
@@ -615,12 +628,30 @@ When /^I mark the work "([^"]*)" for later$/ do |work|
   Reading.update_or_create_in_database
 end
 
+When /^I follow the recent chapter link for the work "([^\"]*)"$/ do |work|
+  work = Work.find_by_title(work)
+  work_id = work.id.to_s
+  find("#work_#{work_id} dd.chapters a").click
+end
+
 When /^the statistics for the work "([^"]*)" are updated$/ do |title|
-  step %{the statistics_tasks rake task is run}
+  step %{the statistics for all works are updated}
   step %{all indexing jobs have been run}
   work = Work.find_by(title: title)
   # Touch the work to actually expire the cache
   work.touch
+end
+
+When /^the hit counts for all works are updated$/ do
+  step "all AJAX requests are complete"
+  RedisHitCounter.save_recent_counts
+end
+
+When /^all hit count information is reset$/ do
+  redis = RedisHitCounter.redis
+  redis.keys.each do |key|
+    redis.del(key)
+  end
 end
 
 ### THEN
@@ -662,4 +693,13 @@ end
 
 Then /^the Remove Me As Chapter Co-Creator option should not be on the ([\d]+)(?:st|nd|rd|th) chapter$/ do |chapter_number|
   step %{I should not see "Remove Me As Chapter Co-Creator" within "ul#sortable_chapter_list > li:nth-of-type(#{chapter_number})"}
+end
+
+Then /^the share modal should contain a Twitter share button$/ do
+  with_scope('#share') do
+    iframe = find('li.twitter #twitter-widget-0')
+    within_frame(iframe) do
+      page.should have_content("Tweet")
+    end
+  end
 end

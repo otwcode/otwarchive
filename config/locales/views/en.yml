@@ -1,0 +1,66 @@
+en:
+  admin:
+    blacklist:
+      emails_found:
+        one: "one email found"
+        other: "%{count} emails found"
+  admins:
+    index:
+      page_title: "Hi, %{login}!"
+      confidentiality_reminder: "You are now logged in as an admin. That means you will probably encounter information that is personal or confidential (e.g. usernames, email and IP addresses, creator names on anonymous works, etc). Please do not use this information in ways unrelated to your OTW role. If you have questions about what you can or cannot do with information you see here, contact your committee chair(s)."
+      responsibility: "With great power comes great responsibility."
+      log_out_reminder: "Please remember to log out before resuming your normal site activity and leaving comments and kudos!"
+      roles:
+        heading: "Your admin roles:"
+        none: "You currently have no admin roles assigned to you."
+  users:
+    delete_preview:
+      heading: "What do you want to do with your works?"
+      orphan: "orphan"
+      orphaning: "orphaning"
+      submit: "Save"
+      cancel: "Cancel"
+      confirm: "Are you sure? This can't be undone!"
+      options:
+        keep_pseud: "Leave my pseud but attach to the orphan account"
+        orphan_pseud: "Change my pseud to \"orphan\" and attach to the orphan account"
+        remove: "Remove me completely as co-creator"
+        delete: "Delete completely"
+      co_creations:
+        legend: "Works You Made With Others"
+        summary: "You have %{work_count} work(s) co-created with the following users: %{co_creators}."
+        orphan_info: "You are not able to delete these as they are shared works, but you can %{orphan_link} them or remove yourself completely as a co-creator."
+      sole_creations:
+        legend: "Works and Collections You Made By Yourself"
+        works_summary: "You have %{work_count} work(s) under the following pseuds: %{pseuds}."
+        collections_summary: "You have %{collection_count} collection(s) under the following pseuds: %{pseuds}."
+        options_info: "You can delete them, but please consider %{orphaning_link} them instead!"
+  troubleshooting:
+    show:
+      page_title:
+        tag: "Troubleshoot Tag"
+        work: "Troubleshoot Work"
+      page_description:
+        tag: "If this tag is exhibiting undesirable behavior, try one of these options to fix it."
+        work: "If this work is exhibiting undesirable behavior, try one of these options to fix it."
+      update_work_filters:
+        title: "Update Work Filters"
+        description: "Recalculate the filters for this work based on the current set of tags. Use this option if wrangling seems to have gone wrong. (e.g. If you synned one of this work's tags to a canonical but it's not showing up in the tag listings, or if the wrong tags are listed in the sidebar when you drill down to a search that includes only this work.)"
+      reindex_work:
+        title: "Reindex Work"
+        description: "Send in this work to be reindexed. Use this option if the work isn't appearing in searches, or is appearing in searches that it shouldn't. (e.g. If someone has orphaned their work and it can still be found with the old name, or if it's not behaving as expected when you filter crossovers, completion status, word count, etc.)"
+      update_tag_filters:
+        title: "Update Tag Filters"
+        description: "Recalculate filters for all works directly tagged with this tag or one of its synonyms. Does not include subtags. Use this option if the filters include old canonical tags that have been renamed or old parent tags that works aren't tagged with, or if the tag counts are wildly off. Also use this option if the works from a synonym are not showing on the works page of the canonical within a half hour of the tag being synned. Keep in mind that the tags listed in the filters will never be 100% correct."
+      reindex_tag:
+        title: "Reindex Tag"
+        description: "Reindex this tag and all related works, bookmarks, series, pseuds, and external works. Use this option if none of the others have worked. It will not fix autocomplete issues."
+      fix_counts:
+        title: "Fix Tag Counts"
+        description: "Try to recalculate some counts associated with this tag (both filter counts and taggings counts). Keep in mind that the tag counts listed in the fandom lists include unrevealed works and drafts, so if the count is only a little off it may just be unrevealed works or drafts."
+      fix_associations:
+        title: "Fix Tag Associations"
+        description: "Try to delete invalid associations involving this tag (e.g., parents of the wrong type, children of the wrong type, duplicate parents/children/metatags/subtags, etc.). Most of these impossible relationships appear on tag landing pages."
+      fix_meta_tags:
+        title: "Fix Metatags"
+        description: "Try to recalculate inherited metatags. Use this option if this tag has grandparent metatags (i.e., a metatag with its own metatag), and the works aren't showing up in the grandparent's listing. You might also try this if you've removed a metatag, but the works are still showing up in the former metatag's listing. If the works still don't go away, ask a staffer to run \"Update Tag Filters\" on this tag."

@@ -29,7 +29,7 @@ class PreferencesController < ApplicationController
 
     if @user.preference.save
       flash[:notice] = ts('Your preferences were successfully updated.')
-      redirect_to @user
+      redirect_to user_path(@user)
     else
       flash[:error] = ts('Sorry, something went wrong. Please try that again.')
       render action: :index
@@ -53,9 +53,6 @@ class PreferencesController < ApplicationController
       :time_zone,
       :preferred_locale,
       :work_title_format,
-      :hide_all_hit_counts,
-      :hide_private_hit_count,
-      :hide_public_hit_count,
       :comment_emails_off,
       :comment_inbox_off,
       :comment_copy_to_self_off,

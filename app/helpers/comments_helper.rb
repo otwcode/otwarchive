@@ -116,6 +116,21 @@ module CommentsHelper
     is_author_of?(comment) && comment.count_all_comments == 0 && !comment_parent_hidden?(comment)
   end
 
+  # Only an admin with proper authorization can mark a spam comment ham.
+  def can_mark_comment_ham?(comment)
+    return unless comment.pseud.nil? && !comment.approved?
+
+    policy(comment).can_delete_comment?
+  end
+
+  # An admin with proper authorization or a creator of the comment's ultimate
+  # parent (i.e. the work) can mark an approved comment as spam.
+  def can_mark_comment_spam?(comment)
+    return unless comment.pseud.nil? && comment.approved?
+
+    policy(comment).can_delete_comment? || is_author_of?(comment.ultimate_parent)
+  end
+
   def comment_parent_hidden?(comment)
     parent = comment.ultimate_parent
     (parent.respond_to?(:hidden_by_admin) && parent.hidden_by_admin) ||
@@ -271,43 +286,6 @@ module CommentsHelper
     else
       link_to(ts("Not Spam"), approve_comment_path(comment), method: :put)
     end
-  end
-
-  # non-JavaScript fallbacks for great justice!
-
-  def fallback_url_for_top_level(commentable, options = {})
-    default_options = {anchor: "comments"}
-    if commentable.is_a?(Tag)
-      default_options[:controller] = :comments
-      default_options[:action] = :index
-      default_options[:tag_id] = commentable.name
-    else
-      default_options[:controller] = commentable.class.to_s.underscore.pluralize
-      default_options[:action] = "show"
-      default_options[:id] = commentable.id
-    end
-    default_options[:add_comment] = params[:add_comment] if params[:add_comment]
-    default_options[:show_comments] = params[:show_comments] if params[:show_comments]
-
-    options = default_options.merge(options)
-    url_for(options)
-  end
-
-  def fallback_url_for_comment(comment, options = {})
-    default_options = {anchor: "comment_#{comment.id}"}
-    default_options[:action] = "show"
-    default_options[:show_comments] = true
-    default_options[:id] = comment.id if comment.ultimate_parent.is_a?(Tag)
-
-    options = default_options.merge(options)
-
-    if @thread_view # hopefully means we're on a Thread page
-      options[:id] = @thread_root if @thread_root
-      url_for(options)
-    else # Top Level Commentable
-      fallback_url_for_top_level(comment.ultimate_parent, options)
-    end
-
   end
 
   # find the parent of the commentable

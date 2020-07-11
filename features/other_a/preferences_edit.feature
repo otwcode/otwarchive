@@ -27,9 +27,6 @@ Feature: Edit preferences
     And I should see "Your site skin"
     And I should see "Your time zone"
     And I should see "Browser page title format"
-    And I should see "Don't show me any hit counts."
-    And I should see "Don't show me hits on my works."
-    And I should see "Don't show other people hits on my works."
     And I should see "Turn off emails about comments."
     And I should see "Turn off messages to your inbox about comments."
     And I should see "Turn off copies of your own comments."
@@ -104,6 +101,7 @@ Feature: Edit preferences
   by-case basis.
 
   Given I limit myself to the Archive
+    And a canonical freeform "Scary tag"
     And I am logged in as "someone_else"
     And I post the work "Someone Else's Work" as part of a series "A Series"
     And I am logged in as "tester"
@@ -123,6 +121,8 @@ Feature: Edit preferences
     And I should not see "Show additional tags"
   When I follow "Show warnings"
   Then I should see "No Archive Warnings Apply" within "dl.work.meta"
+  When I follow "No Archive Warnings Apply" within "dl.work.meta"
+  Then I should be on the works tagged "No Archive Warnings Apply"
   When I view the work "My Work"
   Then I should see "No Archive Warnings Apply" within "dl.work.meta"
     And I should not see "Show warnings"
@@ -138,6 +138,8 @@ Feature: Edit preferences
     And I should not see "Show additional tags"
   When I follow "Show warnings"
   Then I should see "No Archive Warnings Apply" within "li.warnings"
+  When I follow "No Archive Warnings Apply" within "li.warnings"
+  Then I should be on the works tagged "No Archive Warnings Apply"
   When I go to my works page
   Then I should see "My Work"
     And I should see "No Archive Warnings Apply" within "li.warnings"
@@ -154,6 +156,8 @@ Feature: Edit preferences
     And I should not see "Show additional tags"
   When I follow "Show warnings"
   Then I should see "No Archive Warnings Apply" within "li.warnings"
+  When I follow "No Archive Warnings Apply" within "li.warnings"
+  Then I should be on the works tagged "No Archive Warnings Apply"
 
   # Warnings are hidden in bookmark blurbs.
   # This is slightly excessive -- bookmarks use the work blurb -- but we'll
@@ -166,6 +170,8 @@ Feature: Edit preferences
     And I should not see "Show additional tags"
   When I follow "Show warnings"
   Then I should see "No Archive Warnings Apply" within "li.warnings"
+  When I follow "No Archive Warnings Apply" within "li.warnings"
+  Then I should be on the works tagged "No Archive Warnings Apply"
 
   # Change tester's preferences to hide freeforms as well as warnings.
   When I go to my preferences page
@@ -250,6 +256,8 @@ Feature: Edit preferences
     And I should not see "Scary tag" within "dl.work.meta"
   When I follow "Show additional tags"
   Then I should see "Scary tag" within "dl.work.meta"
+  When I follow "Scary tag" within "dl.work.meta"
+  Then I should be on the works tagged "Scary tag"
   When I view the work "My Work"
   Then I should see "No Archive Warnings Apply" within "dl.work.meta"
     And I should not see "Show warnings"
@@ -265,6 +273,8 @@ Feature: Edit preferences
     And I should see "Show additional tags"
   When I follow "Show additional tags"
   Then I should see "Scary tag" within "li.freeforms"
+  When I follow "Scary tag" within "li.freeforms"
+  Then I should be on the works tagged "Scary tag"
   When I go to my works page
   Then I should see "My Work"
     And I should see "No Archive Warnings Apply" within "li.warnings"
@@ -281,6 +291,8 @@ Feature: Edit preferences
     And I should see "Show additional tags"
   When I follow "Show additional tags"
   Then I should see "Scary tag" within "li.freeforms"
+  When I follow "Scary tag" within "li.freeforms"
+  Then I should be on the works tagged "Scary tag"
 
   # Freeforms are hidden in bookmark blurbs.
   When I go to my bookmarks page
@@ -291,6 +303,8 @@ Feature: Edit preferences
     And I should see "Show additional tags"
   When I follow "Show additional tags"
   Then I should see "Scary tag" within "li.freeforms"
+  When I follow "Scary tag" within "li.freeforms"
+  Then I should be on the works tagged "Scary tag"
 
   Scenario: User can hide warning and freeform tags on work blurbs and meta with
   JavaScript disabled, but gets an error if they attempt to reveal them.

@@ -11,7 +11,8 @@ class UserManager
               :errors,
               :successes
 
-  PERMITTED_ACTIONS = %w(warn suspend unsuspend ban unban spamban)
+  PERMITTED_ACTIONS = %w[note warn suspend unsuspend ban unban spamban].freeze
+  REQUIRED_ADMIN_ROLES = %w(superadmin policy_and_abuse).freeze
 
   def initialize(admin, params)
     @admin = admin
@@ -26,7 +27,8 @@ class UserManager
   end
 
   def save
-    validate_user_and_admin &&
+    check_correct_admin_roles &&
+      validate_user_and_admin &&
       validate_admin_note &&
       validate_suspension &&
       validate_next_of_kin &&
@@ -44,6 +46,17 @@ class UserManager
 
   private
 
+  def check_correct_admin_roles
+    admin_access = (admin.roles & REQUIRED_ADMIN_ROLES).any?
+
+    if admin_access
+      true
+    else
+      errors << "Must have authorized admin role to proceed"
+      false
+    end
+  end
+
   def validate_user_and_admin
     if user && admin
       true
@@ -55,6 +68,7 @@ class UserManager
 
   def validate_admin_note
     return true if admin_note.present? || admin_action.blank?
+
     if admin_action == "spamban"
       @admin_note = "Banned for spam"
     elsif admin_action.present?
@@ -96,9 +110,11 @@ class UserManager
 
   def save_next_of_kin
     return true if user.fannish_next_of_kin.nil? && kin_name.blank? && kin_email.blank?
+
     same_kin_user = User.find_by(login: kin_name)&.id == user.fannish_next_of_kin&.kin_id
     same_kin_email = user.fannish_next_of_kin&.kin_email == kin_email
     return true if same_kin_user && same_kin_email
+
     if FannishNextOfKin.update_for_user(user, kin_name, kin_email)
       successes << "Fannish next of kin was updated."
     else
@@ -109,6 +125,7 @@ class UserManager
 
   def save_admin_action
     return true if admin_action.blank?
+
     if admin_action == 'spamban'
       ban_user
     elsif PERMITTED_ACTIONS.include?(admin_action)
@@ -116,11 +133,16 @@ class UserManager
     end
   end
 
+  def note_user
+    log_action(ArchiveConfig.ACTION_NOTE)
+    successes << "Note was recorded."
+  end
+
   def warn_user
     log_action(ArchiveConfig.ACTION_WARN)
     successes << "Warning was recorded."
   end
-  
+
   def suspend_user
     user.suspended = true
     user.suspended_until = suspension_length.to_i.days.from_now

@@ -10,6 +10,8 @@ module NavigationHelpers
 
     when /the home\s?page/
       '/'
+    when /the media page/
+      media_path
     when /^the search bookmarks page$/i
       step %{all indexing jobs have been run}
       search_bookmarks_path
@@ -23,8 +25,14 @@ module NavigationHelpers
       step %{all indexing jobs have been run}
       search_people_path
     when /^the bookmarks page$/i
+      # This cached page only expires by time, not by any user action;
+      # just clear it every time.
+      Rails.cache.delete "bookmarks/index/latest/v2_true"
       bookmarks_path
     when /^the works page$/i
+      # This cached page only expires by time, not by any user action;
+      # just clear it every time.
+      Rails.cache.delete "works/index/latest/v1"
       works_path
     when /^the admin login page$/i
       new_admin_session_path
@@ -123,9 +131,19 @@ module NavigationHelpers
       step %{all indexing jobs have been run}
       user_works_path(user_id: $1)
     when /^the "(.*)" work page/
+      # TODO: Avoid this in favor of 'the work "title"', and eventually remove.
       work_path(Work.find_by(title: $1))
     when /^the work page with title (.*)/
+      # TODO: Avoid this in favor of 'the work "title"', and eventually remove.
       work_path(Work.find_by(title: $1))
+    when /^the work "(.*?)"$/
+      work_path(Work.find_by(title: $1))
+    when /^the work "(.*?)" in full mode$/
+      work_path(Work.find_by(title: $1), view_full_work: true)
+    when /^the ([\d]+)(?:st|nd|rd|th) chapter of the work "(.*?)"$/
+      work = Work.find_by(title: $2)
+      chapter = work.chapters_in_order(include_content: false)[$1.to_i - 1]
+      work_chapter_path(work, chapter)
     when /^the bookmarks page for user "(.*)" with pseud "(.*)"$/i
       step %{all indexing jobs have been run}
       user_pseud_bookmarks_path(user_id: $1, pseud_id: $2)
@@ -200,6 +218,8 @@ module NavigationHelpers
       tag_comments_path(Tag.find_by_name($1))
     when /^the work comments? page for "(.*?)"$/i
       work_comments_path(Work.find_by(title: $1), show_comments: true)
+    when /^the work kudos page for "(.*?)"$/i
+      work_kudos_path(Work.find_by(title: $1))
     when /^the FAQ reorder page$/i
       manage_archive_faqs_path
     when /^the Wrangling Guidelines reorder page$/i

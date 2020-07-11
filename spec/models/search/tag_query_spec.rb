@@ -1,6 +1,6 @@
 require "spec_helper"
 
-describe TagQuery, type: :model do
+describe TagQuery, tag_search: true do
   let!(:tags) do
     tags = {
       char_abc: create(:character, name: "abc"),
@@ -17,7 +17,7 @@ describe TagQuery, type: :model do
       rel_quotes: create(:relationship, name: "ab \"cd\" ef"),
       rel_unicode: create(:relationship, name: "Dave ♦ Sawbuck")
     }
-    update_and_refresh_indexes("tag", 1)
+    run_all_indexing_jobs
     tags
   end
 

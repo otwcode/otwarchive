@@ -2,7 +2,7 @@
 
 require "spec_helper"
 
-describe BookmarkSearchForm do
+describe BookmarkSearchForm, bookmark_search: true do
   describe "options" do
     it "includes flags set to false" do
       bsf = BookmarkSearchForm.new(show_restricted: false, show_private: false)
@@ -17,19 +17,19 @@ describe BookmarkSearchForm do
 
       let!(:work1) do
         Delorean.time_travel_to 40.minutes.ago do
-          create(:posted_work, title: "One", fandom_string: tag.name)
+          create(:work, title: "One", fandom_string: tag.name)
         end
       end
 
       let!(:work2) do
         Delorean.time_travel_to 60.minutes.ago do
-          create(:posted_work, title: "Two", fandom_string: tag.name)
+          create(:work, title: "Two", fandom_string: tag.name)
         end
       end
 
       let!(:work3) do
         Delorean.time_travel_to 50.minutes.ago do
-          create(:posted_work, title: "Three", fandom_string: tag.name)
+          create(:work, title: "Three", fandom_string: tag.name)
         end
       end
 
@@ -91,10 +91,10 @@ describe BookmarkSearchForm do
     end
 
     describe "searching" do
-      let(:language) { create(:language, short: "nl") }
+      let(:language) { create(:language, short: "ptBR") }
 
-      let(:work1) { create(:posted_work, language_id: Language.default.id) }
-      let(:work2) { create(:posted_work, language_id: language.id) }
+      let(:work1) { create(:work) }
+      let(:work2) { create(:work, language_id: language.id) }
 
       let!(:bookmark1) { create(:bookmark, bookmarkable: work1) }
       let!(:bookmark2) { create(:bookmark, bookmarkable: work2) }
@@ -106,25 +106,25 @@ describe BookmarkSearchForm do
 
         it "returns work bookmarkables with specified language" do
           # "Work language" dropdown, with short names
-          results = BookmarkSearchForm.new(language_id: "nl").bookmarkable_search_results
+          results = BookmarkSearchForm.new(language_id: "ptBR").bookmarkable_search_results
           expect(results).not_to include work1
           expect(results).to include work2
 
           # "Work language" dropdown, with IDs (backward compatibility)
           bsf = BookmarkSearchForm.new(language_id: language.id)
-          expect(bsf.language_id).to eq("nl")
+          expect(bsf.language_id).to eq("ptBR")
           results = bsf.bookmarkable_search_results
           expect(results).not_to include work1
           expect(results).to include work2
 
           # "Any field on work" or "Search within results", with short names
-          results = BookmarkSearchForm.new(bookmarkable_query: "language_id: nl").bookmarkable_search_results
+          results = BookmarkSearchForm.new(bookmarkable_query: "language_id: ptBR").bookmarkable_search_results
           expect(results).not_to include work1
           expect(results).to include work2
 
           # "Any field on work" or "Search within results", with IDs (backward compatibility)
           bsf = BookmarkSearchForm.new(bookmarkable_query: "language_id: #{language.id} OR language_id: #{unused_language.id}")
-          expect(bsf.bookmarkable_query).to eq("language_id: nl OR language_id: tlh")
+          expect(bsf.bookmarkable_query).to eq("language_id: ptBR OR language_id: tlh")
           results = bsf.bookmarkable_search_results
           expect(results).not_to include work1
           expect(results).to include work2
@@ -137,7 +137,7 @@ describe BookmarkSearchForm do
     let(:bookmarker) { create(:user, login: "yabalchoath") }
 
     {
-      Work: :posted_work,
+      Work: :work,
       Series: :series_with_a_work,
       ExternalWork: :external_work
     }.each_pair do |type, factory|
@@ -168,7 +168,7 @@ describe BookmarkSearchForm do
     let(:author) { create(:user, login: "yabalchoath") }
 
     {
-      Work: :posted_work,
+      Work: :work,
       Series: :series_with_a_work
     }.each_pair do |type, factory|
       it "returns the correct bookmarked #{type.to_s.pluralize} when author changes username" do

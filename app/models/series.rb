@@ -39,6 +39,7 @@ class Series < ApplicationRecord
     too_long: ts("must be less than %{max} letters long.", max: ArchiveConfig.NOTES_MAX)
 
   after_save :adjust_restricted
+  after_update :expire_caches
   after_update_commit :update_work_index
 
   scope :visible_to_registered_user, -> { where(hidden_by_admin: false).order('series.updated_at DESC') }
@@ -58,6 +59,10 @@ class Series < ApplicationRecord
 
   def posted_works
     self.works.posted
+  end
+
+  def works_in_order
+    works.order("serial_works.position")
   end
 
   # Get the filters for the works in this series
@@ -137,6 +142,11 @@ class Series < ApplicationRecord
   def should_reindex_pseuds?
     pertinent_attributes = %w[id restricted hidden_by_admin]
     destroyed? || (saved_changes.keys & pertinent_attributes).present?
+  end
+
+  def expire_caches
+    # Expire cached work blurbs and metas if series title changes
+    self.works.each(&:touch) if saved_change_to_title?
   end
 
   # Change the positions of the serial works in the series

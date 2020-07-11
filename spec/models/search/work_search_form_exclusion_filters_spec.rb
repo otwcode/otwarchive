@@ -1,13 +1,13 @@
 require "spec_helper"
 
-describe WorkSearchForm do
+describe WorkSearchForm, work_search: true do
   describe "tag exclusion behavior" do
     let!(:included_work) do
-      FactoryBot.create(:work, posted: true)
+      FactoryBot.create(:work)
     end
 
     let!(:excluded_work) do
-      FactoryBot.create(:work, posted: true)
+      FactoryBot.create(:work)
     end
 
     describe "mergers" do

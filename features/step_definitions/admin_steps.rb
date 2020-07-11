@@ -1,35 +1,10 @@
-default_settings = {
-  invite_from_queue_enabled: ArchiveConfig.INVITE_FROM_QUEUE_ENABLED,
-  invite_from_queue_number: ArchiveConfig.INVITE_FROM_QUEUE_NUMBER,
-  invite_from_queue_frequency: ArchiveConfig.INVITE_FROM_QUEUE_FREQUENCY,
-  account_creation_enabled: true,
-  creation_requires_invite: true,
-  request_invite_enabled: true,
-  days_to_purge_unactivated: ArchiveConfig.DAYS_TO_PURGE_UNACTIVATED
-}
-
-def update_settings(settings)
-  admin_settings = AdminSetting.first_or_create
-  admin_settings.update_attributes(settings)
-  admin_settings.save(validate: false)
-end
-
 ### GIVEN
 
-Given /^I have an AdminSetting$/ do
-  unless AdminSetting.first
-    settings = AdminSetting.new(default_settings)
-    settings.save(validate: false)
-  end
-end
-
 Given /^the following admin settings are configured:$/ do |table|
-  settings = default_settings.merge(table.rows_hash.symbolize_keys)
-  update_settings settings
-end
-
-Given /^default admin settings$/ do
-  update_settings settings = {}
+  admin_settings = AdminSetting.first
+  admin_settings.assign_attributes(table.rows_hash.symbolize_keys)
+  # Skip validations which require setting an admin as the last updater.
+  admin_settings.save!(validate: false)
 end
 
 Given /the following admins? exists?/ do |table|
@@ -38,8 +13,14 @@ Given /the following admins? exists?/ do |table|
   end
 end
 
+Given /^I am logged in as admin with role "(.*?)"$/ do |role|
+  step("I am logged in as an admin")
+  admin = Admin.find_by(login: "testadmin")
+  admin.roles << role
+  admin.save!
+end
+
 Given /^I am logged in as an admin$/ do
-  step("I have an AdminSetting")
   step("I am logged out")
   admin = Admin.find_by(login: "testadmin")
   if admin.blank?
@@ -49,7 +30,72 @@ Given /^I am logged in as an admin$/ do
   fill_in "Admin user name", with: "testadmin"
   fill_in "Admin password", with: "testadmin"
   click_button "Log in as admin"
-  step("I should see \"Successfully logged in\"")
+  step(%{I should see "Successfully logged in"})
+end
+
+Given /^I am logged in as superadmin$/ do
+  step("I am logged out")
+  admin = Admin.find_by(login: "superadmin")
+  if admin.blank?
+    FactoryBot.create(:superadmin)
+  end
+  visit new_admin_session_path
+  fill_in "Admin user name", with: "superadmin"
+  fill_in "Admin password", with: "IHaveThePower"
+  click_button "Log in as admin"
+  step(%{I should see "Successfully logged in"})
+end
+
+Given /^I am logged in as policy_and_abuse_admin$/ do
+  step("I am logged out")
+  admin = Admin.find_by(login: "policy_admin")
+  if admin.blank?
+    FactoryBot.create(:policy_and_abuse_admin)
+  end
+  visit new_admin_session_path
+  fill_in "Admin user name", with: "policy_admin"
+  fill_in "Admin password", with: "policy"
+  click_button "Log in as admin"
+  step(%{I should see "Successfully logged in"})
+end
+
+Given /^I am logged in as support_admin$/ do
+  step("I am logged out")
+  admin = Admin.find_by(login: "support_admin")
+  if admin.blank?
+    FactoryBot.create(:support_admin)
+  end
+  visit new_admin_session_path
+  fill_in "Admin user name", with: "support_admin"
+  fill_in "Admin password", with: "support"
+  click_button "Log in as admin"
+  step(%{I should see "Successfully logged in"})
+end
+
+Given /^I am logged in as tag_wrangling_admin$/ do
+  step("I am logged out")
+  admin = Admin.find_by(login: "tag_wrangling_admin")
+  if admin.blank?
+    FactoryBot.create(:tag_wrangling_admin)
+  end
+  visit new_admin_session_path
+  fill_in "Admin user name", with: "tag_wrangling_admin"
+  fill_in "Admin password", with: "tagwrangling"
+  click_button "Log in as admin"
+  step(%{I should see "Successfully logged in"})
+end
+
+Given /^I am logged in as open_doors_admin$/ do
+  step("I am logged out")
+  admin = Admin.find_by(login: "open_doors_admin")
+  if admin.blank?
+    FactoryBot.create(:open_doors_admin)
+  end
+  visit new_admin_session_path
+  fill_in "Admin user name", with: "open_doors_admin"
+  fill_in "Admin password", with: "opendoors"
+  click_button "Log in as admin"
+  step(%{I should see "Successfully logged in"})
 end
 
 Given /^I am logged out as an admin$/ do
@@ -66,35 +112,31 @@ Given /^basic languages$/ do
   de.save!
 end
 
-Given /^advanced languages$/ do
-  Language.find_or_create_by(short: "FR", name: "Francais")
-end
-
 Given /^downloads are off$/ do
-  step("I am logged in as an admin")
+  step("I am logged in as superadmin")
   visit(admin_settings_path)
   uncheck("Allow downloads")
   click_button("Update")
 end
 
 Given /^tag wrangling is off$/ do
-  step("I am logged in as an admin")
+  step("I am logged in as tag_wrangling_admin")
   visit(admin_settings_path)
-  step("I check \"Turn off tag wrangling for non-admins\"")
-  step("I press \"Update\"")
+  step(%{I check "Turn off tag wrangling for non-admins"})
+  step(%{I press "Update"})  
   step("I am logged out as an admin")
 end
 
 Given /^tag wrangling is on$/ do
-  step("I am logged in as an admin")
+  step("I am logged in as tag_wrangling_admin")
   visit(admin_settings_path)
-  step("I uncheck \"Turn off tag wrangling for non-admins\"")
-  step("I press \"Update\"")
+  step(%{I uncheck "Turn off tag wrangling for non-admins"})
+  step(%{I press "Update"})
   step("I am logged out as an admin")
 end
 
 Given /^the support form is disabled and its text field set to "Please don't contact us"$/ do
-  step("I am logged in as an admin")
+  step("I am logged in as support_admin")
   visit(admin_settings_path)
   check("Turn off support form")
   fill_in(:admin_setting_disabled_support_form_text, with: "Please don't contact us")
@@ -102,7 +144,7 @@ Given /^the support form is disabled and its text field set to "Please don't con
 end
 
 Given /^the support form is enabled$/ do
-  step("I am logged in as an admin")
+  step("I am logged in as superadmin")
   visit(admin_settings_path)
   uncheck("Turn off support form")
   click_button("Update")
@@ -116,7 +158,7 @@ end
 Given /^I have posted known issues$/ do
   step %{I am logged in as an admin}
   step %{I follow "Admin Posts"}
-  step %{I follow "Known Issues" within "#main"}
+  step %{I follow "Known Issues" within "#header"}
   step %{I follow "make a new known issues post"}
   step %{I fill in "known_issue_title" with "First known problem"}
   step %{I fill in "content" with "This is a bit of a problem"}
@@ -124,7 +166,7 @@ Given /^I have posted known issues$/ do
 end
 
 Given /^I have posted an admin post$/ do
-  step("I am logged in as an admin")
+  step(%{I am logged in as admin with role "communications"})
   step("I make an admin post")
   step("I am logged out as an admin")
 end
@@ -132,7 +174,7 @@ end
 Given /^the fannish next of kin "([^\"]*)" for the user "([^\"]*)"$/ do |kin, user|
   step %{the user "#{kin}" exists and is activated}
   step %{the user "#{user}" exists and is activated}
-  step %{I am logged in as an admin}
+  step %{I am logged in as policy_and_abuse_admin}
   step %{I go to the abuse administration page for "#{user}"}
   fill_in("Fannish next of kin's username", with: "#{kin}")
   fill_in("Fannish next of kin's email", with: "testing@foo.com")
@@ -141,7 +183,7 @@ end
 
 Given /^the user "([^\"]*)" is suspended$/ do |user|
   step %{the user "#{user}" exists and is activated}
-  step %{I am logged in as an admin}
+  step %{I am logged in as policy_and_abuse_admin}
   step %{I go to the abuse administration page for "#{user}"}
   choose("admin_action_suspend")
   fill_in("suspend_days", with: 30)
@@ -151,7 +193,7 @@ end
 
 Given /^the user "([^\"]*)" is banned$/ do |user|
   step %{the user "#{user}" exists and is activated}
-  step %{I am logged in as an admin}
+  step %{I am logged in as superadmin}
   step %{I go to the abuse administration page for "#{user}"}
   choose("admin_action_ban")
   fill_in("Notes", with: "Why they are banned")
@@ -164,13 +206,13 @@ Then /^the user "([^\"]*)" should be permanently banned$/ do |user|
 end
 
 Given /^I have posted an admin post without paragraphs$/ do
-  step("I am logged in as an admin")
+  step(%{I am logged in as admin with role "communications"})
   step("I make an admin post without paragraphs")
   step("I am logged out as an admin")
 end
 
 Given /^I have posted an admin post with tags$/ do
-  step("I am logged in as an admin")
+  step(%{I am logged in as admin with role "communications"})
   visit new_admin_post_path
   fill_in("admin_post_title", with: "Default Admin Post")
   fill_in("content", with: "Content of the admin post.")
@@ -182,10 +224,6 @@ Given(/^the following language exists$/) do |table|
   table.hashes.each do |hash|
     FactoryBot.create(:language, hash)
   end
-end
-
-Given /^the abuse report will not be considered spam$/ do
-  allow(Akismetor).to receive(:spam?).and_return(false)
 end
 
 ### WHEN
@@ -243,12 +281,6 @@ When /^I make a multi-question FAQ post$/ do
   click_button("Post")
 end
 
-When /^there are (\d+) Archive FAQs$/ do |n|
-  (1..n.to_i).each do |i|
-    step %{I make a #{i} FAQ post}
-  end
-end
-
 When /^(\d+) Archive FAQs? exists?$/ do |n|
   (1..n.to_i).each do |i|
     FactoryBot.create(:archive_faq, id: i)
@@ -266,7 +298,7 @@ end
 When /^I edit known issues$/ do
   step %{I am logged in as an admin}
   step %{I follow "Admin Posts"}
-  step %{I follow "Known Issues" within "#main"}
+  step %{I follow "Known Issues" within "#header"}
   step %{I follow "Edit"}
   step %{I fill in "known_issue_title" with "More known problems"}
   step %{I fill in "content" with "This is a bit of a problem, and this is too"}
@@ -276,7 +308,7 @@ end
 When /^I delete known issues$/ do
   step %{I am logged in as an admin}
   step %{I follow "Admin Posts"}
-  step %{I follow "Known Issues" within "#main"}
+  step %{I follow "Known Issues" within "#header"}
   step %{I follow "Delete"}
 end
 

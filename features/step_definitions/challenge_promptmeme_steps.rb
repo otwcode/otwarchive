@@ -362,6 +362,7 @@ When /^I start to fulfill my claim with "([^\"]*)"$/ do |title|
     step %{I fill in "Work Title" with "#{title}"}
     step %{I select "Not Rated" from "Rating"}
     step %{I check "No Archive Warnings Apply"}
+    step %{I select "English" from "Choose a language"}
     step %{I fill in "Fandom" with "Stargate Atlantis"}
     step %{I fill in "content" with "This is an exciting story about Atlantis"}
 end
@@ -385,6 +386,7 @@ When /^I fulfill my claim again$/ do
   step %{I fill in "Work Title" with "Second Story"}
     step %{I select "Not Rated" from "Rating"}
     step %{I check "No Archive Warnings Apply"}
+    step %{I select "English" from "Choose a language"}
     step %{I fill in "Fandom" with "Stargate Atlantis"}
     step %{I fill in "content" with "This is an exciting story about Atlantis"}
   step %{I press "Preview"}
@@ -518,12 +520,12 @@ Then /^I should be editing the challenge settings$/ do
   step %{I should see "Setting Up the Battle 12 Prompt Meme"}
 end
 
-Then /^(\d+) prompts should be required$/ do |number|
-  find_field("prompt_meme_requests_num_required").value.should == number.to_s
+Then "{int} prompt(s) should be required" do |number|
+  expect(page).to have_field("prompt_meme_requests_num_required", with: number.to_s)
 end
 
-Then /^(\d+) prompts should be allowed$/ do |number|
-  find_field("prompt_meme_requests_num_allowed").value.should == number.to_s
+Then "{int} prompt(s) should be allowed" do |number|
+  expect(page).to have_field("prompt_meme_requests_num_allowed", with: number.to_s)
 end
 
 Then /^I should not see the prompt meme dashboard for "([^\"]*)"$/ do |challenge_title|

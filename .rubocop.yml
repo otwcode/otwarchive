@@ -1,0 +1,145 @@
+# Options available at https://github.com/bbatsov/rubocop/blob/master/config/default.yml
+
+require:
+  - rubocop-rspec
+
+AllCops:
+  RSpec:
+    Patterns:
+      - "(?:^|/)factories/"
+      - "(?:^|/)features/"
+      - "(?:^|/)spec/"
+  TargetRubyVersion: 2.6
+
+Bundler/OrderedGems:
+  Enabled: false
+
+Layout/DotPosition:
+  EnforcedStyle: leading
+
+Layout/IndentFirstArrayElement:
+  EnforcedStyle: consistent
+
+Layout/MultilineMethodCallIndentation:
+  EnforcedStyle: indented
+
+Layout/TrailingWhitespace:
+  Enabled: false
+
+Lint/AmbiguousRegexpLiteral:
+  Enabled: false
+
+Metrics/AbcSize:
+  Enabled: false
+
+Metrics/BlockLength:
+  Enabled: false
+
+Metrics/ClassLength:
+  Enabled: false
+
+Metrics/CyclomaticComplexity:
+  Enabled: false
+
+Metrics/LineLength:
+  Enabled: false
+
+Metrics/MethodLength:
+  Enabled: false
+
+Metrics/ModuleLength:
+  Enabled: false
+
+Metrics/PerceivedComplexity:
+  Enabled: false
+
+# Allow "allow_any_instance_of"
+RSpec/AnyInstance:
+  Enabled: false
+
+# By default allow only prefixes "when", "with", "without".
+# We have too many, so let's allow everything.
+RSpec/ContextWording:
+  Enabled: false
+
+RSpec/DescribedClass:
+  Enabled: false
+
+RSpec/ExampleLength:
+  Enabled: false
+
+# Prefer: expect { run }.to change { Foo.bar }
+# over: expect { run }.to change(Foo, :bar)
+RSpec/ExpectChange:
+  EnforcedStyle: block
+
+RSpec/FilePath:
+  Exclude:
+    # Exception for WorksController, whose many specs need multiple files
+    - 'spec/controllers/works/*.rb'
+
+# Avoid instance variables, except for those not assigned within the spec,
+# e.g. @request.
+RSpec/InstanceVariable:
+  AssignmentOnly: true
+
+# Allow unreferenced let! calls for test setup
+RSpec/LetSetup:
+  Enabled: false
+
+# Allow both "have_received" and "receive" for expectations
+RSpec/MessageSpies:
+  Enabled: false
+
+# Allow multiple top level describes (rake specs)
+RSpec/MultipleDescribes:
+  Enabled: false
+
+# Allow unlimited expectations per test
+RSpec/MultipleExpectations:
+  Enabled: false
+
+# Allow unnamed subjects
+RSpec/NamedSubject:
+  Enabled: false
+
+# Allow unlimited nested groups
+RSpec/NestedGroups:
+  Enabled: false
+
+RSpec/PredicateMatcher:
+  Enabled: false
+
+Style/ClassAndModuleChildren:
+  Enabled: false
+
+Style/Documentation:
+  Enabled: false
+
+Style/EmptyMethod:
+  EnforcedStyle: expanded
+
+# Prefer template tokens (like %{foo}) over annotated tokens (like %s)
+Style/FormatStringToken:
+  EnforcedStyle: template
+
+Style/FrozenStringLiteralComment:
+  Enabled: false
+
+Style/GlobalVars:
+  AllowedVariables:
+    - $elasticsearch
+    - $rollout
+
+# Stop checking if uses of "self" are redundant
+Style/RedundantSelf:
+  Enabled: false
+
+Style/SingleLineMethods:
+  AllowIfMethodIsEmpty: false
+
+Style/StringLiterals:
+  EnforcedStyle: double_quotes
+
+Style/SymbolArray:
+  Enabled: false

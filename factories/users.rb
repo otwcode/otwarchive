@@ -13,6 +13,7 @@ FactoryBot.define do
   end
 
   factory :role do
+    name { Faker::Book.genre }
   end
 
   factory :user do
@@ -22,12 +23,6 @@ FactoryBot.define do
     terms_of_service { '1' }
     password_confirmation { |u| u.password }
     email { generate(:email) }
-
-
-    factory :duplicate_user do
-      login { nil }
-      email { nil }
-    end
 
     factory :invited_user do
       login { generate(:login) }

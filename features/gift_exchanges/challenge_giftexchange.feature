@@ -49,11 +49,10 @@ Feature: Gift Exchange Challenge
     Then I should see "My Gift Exchange"
 
   Scenario: Change timezone for a gift exchange
-    Given I am logged in as "mod1"
-      And time is frozen at 1/1/2019
-      And I have created the gift exchange "My Gift Exchange"
-      And I am on "My Gift Exchange" gift exchange edit page
-    When I select "(GMT-08:00) Pacific Time (US & Canada)" from "Time zone:"
+    Given time is frozen at 1/1/2019
+      And the gift exchange "My Gift Exchange" is ready for signups
+    When I go to "My Gift Exchange" gift exchange edit page
+      And I select "(GMT-08:00) Pacific Time (US & Canada)" from "Time zone"
       And I submit
     Then I should see "Challenge was successfully updated"
       And I should see the correct time zone for "Pacific Time (US & Canada)"
@@ -294,11 +293,8 @@ Feature: Gift Exchange Challenge
       And everyone has their assignments for "Second Challenge"
     When I am logged in as "myname1"
       And I start to fulfill my assignment
-      And "AO3-4571" is fixed
-    # "I start to fulfill" will use the first Fulfill option on the page
-    # which will be for the oldest assignment
-    # Then the "Awesome Gift Exchange (myname3)" checkbox should be checked
-    #   And the "Second Challenge (myname3)" checkbox should not be checked
+    Then the "Awesome Gift Exchange (myname3)" checkbox should be checked
+      And the "Second Challenge (myname3)" checkbox should not be checked
 
   Scenario: User has more than one pseud on signup form
     Given "myname1" has the pseud "othername"
@@ -536,11 +532,13 @@ Feature: Gift Exchange Challenge
         And the email should not contain "Warnings:"
         And the email should not contain "Optional Tags:"
 
-  Scenario: A mod can delete a gift exchange and all the assignments and
+  Scenario: A mod can delete a gift exchange without needing Javascript and all the assignments and
   sign-ups will be deleted with it, but the collection will remain
     Given everyone has their assignments for "Bad Gift Exchange"
       And I am logged in as "mod1"
     When I delete the challenge "Bad Gift Exchange"
+    Then I should see "Are you sure you want to delete the challenge from the collection Bad Gift Exchange? All sign-ups, assignments, and settings will be lost. (Works and bookmarks will remain in the collection.)"
+    When I press "Yes, Delete Challenge"
     Then I should see "Challenge settings were deleted."
       And I should not see the gift exchange dashboard for "Bad Gift Exchange"
       And no one should have an assignment for "Bad Gift Exchange"

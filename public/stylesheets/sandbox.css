@@ -29,3 +29,9 @@ and preserve the balance/symmetry of the page */
 .edit_external_author ul ul {
   margin-left: 2.75em;
 }
+
+/* AO3-5907 avoid size change for modal during twitter button loads */
+.twitter {
+  width: 76px;
+  height: 28px;
+}

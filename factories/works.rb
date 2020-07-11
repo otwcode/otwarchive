@@ -4,10 +4,12 @@ FactoryBot.define do
   factory :work do
     title { "My title is long enough" }
     fandom_string { "Testing" }
-    rating_string { "Not Rated" }
-    archive_warning_string { "No Archive Warnings Apply" }
+    rating_string { ArchiveConfig.RATING_DEFAULT_TAG_NAME }
+    archive_warning_string { ArchiveConfig.WARNING_NONE_TAG_NAME }
+    language_id { Language.default.id }
     chapter_info = { content: "This is some chapter content for my work." }
     chapter_attributes { chapter_info }
+    posted { true }
 
     transient do
       authors { [build(:pseud)] }
@@ -27,10 +29,6 @@ FactoryBot.define do
       work_skin_id { 1 }
     end
 
-    factory :posted_work do
-      posted { true }
-    end
-
     factory :draft do
       posted { false }
     end
@@ -44,6 +42,10 @@ FactoryBot.define do
     after(:build) do |work|
       work.fandoms = [FactoryBot.build(:fandom)] if work.fandoms.blank?
     end
+  end
+
+  factory :moderated_work do
+    work_id { create(:work).id }
   end
 
   factory :external_author do |f|

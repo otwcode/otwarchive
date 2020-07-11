@@ -1,17 +1,17 @@
 require "spec_helper"
 
-describe BookmarkSearchForm do
+describe BookmarkSearchForm, bookmark_search: true do
   describe "tag exclusion behavior" do
     let!(:user) do
       FactoryBot.create(:user)
     end
 
     let!(:included_work) do
-      FactoryBot.create(:work, posted: true)
+      FactoryBot.create(:work)
     end
 
     let!(:excluded_work) do
-      FactoryBot.create(:work, posted: true)
+      FactoryBot.create(:work)
     end
 
     let!(:included_bookmark) do

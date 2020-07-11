@@ -1,12 +1,13 @@
 source 'https://rubygems.org'
 
-ruby '2.6.3'
+ruby '2.6.5'
 
 gem 'test-unit', '~> 3.2'
 
 gem 'bundler'
 
 gem 'rails', '~> 5.2.3'
+gem 'rack', '~> 2.1', '>= 2.1.4'
 
 gem 'rails-observers', git: 'https://github.com/rails/rails-observers'
 gem 'actionpack-page_caching'
@@ -22,7 +23,7 @@ gem 'rails-controller-testing'
 
 # Database
 # gem 'sqlite3-ruby', require: 'sqlite3'
-gem 'mysql2', '0.4.4'
+gem 'mysql2', '0.5.2'
 
 #https://github.com/qertoip/transaction_retry
 # We don't use the isolation gem directly, but it needs to be
@@ -31,6 +32,8 @@ gem 'transaction_isolation', '1.0.5'
 gem 'transaction_retry'
 #https://github.com/winebarrel/activerecord-mysql-reconnect
 gem 'activerecord-mysql-reconnect', '~> 0.4.1'
+
+gem 'rack-attack'
 
 # Version of redis-rb gem
 # We are currently running Redis 3.2.1 (7/2018)
@@ -64,8 +67,9 @@ gem 'rest-client', '~> 1.8.0', require: 'rest_client'
 gem 'resque', '>=1.14.0'
 gem 'resque_mailer'
 gem 'resque-scheduler'
+gem 'after_commit_everywhere'
 #gem 'daemon-spawn', require: 'daemon_spawn'
-gem 'elasticsearch', '~> 6.0.0'
+gem 'elasticsearch', '6.8.0'
 gem 'aws-sdk'
 gem 'css_parser'
 
@@ -82,6 +86,7 @@ gem 'bcrypt'
 
 # A highly updated version of the authorization plugin
 gem 'permit_yo'
+gem 'pundit'
 
 # fix for annoying UTF-8 error messages as per this:
 # http://openhood.com/rack/ruby/2010/07/15/rack-test-warning/
@@ -109,7 +114,7 @@ gem 'globalize', git: 'https://github.com/globalize/globalize'
 gem 'activemodel-serializers-xml'
 
 # Add a clean notifier that shows we are on dev or test
-gem 'rack-dev-mark', '>=0.7.5'
+gem 'rack-dev-mark', '>=0.7.8'
 
 #Phrase-app
 gem 'phraseapp-in-context-editor-ruby', '>=1.0.6'
@@ -136,18 +141,17 @@ group :test do
   gem 'pickle'
   gem 'shoulda'
   gem 'capybara', '~> 2.16.1'
+  gem 'cucumber', '~> 3.1'
   gem 'database_cleaner', '1.7.0'
-  gem 'cucumber', '~> 3.0.2'
   gem 'poltergeist'
   gem 'capybara-screenshot'
-  gem 'cucumber-rails', '~> 1.5', require: false
-  gem 'gherkin'
+  gem 'cucumber-rails', require: false
   gem 'launchy'    # So you can do Then show me the page
   gem 'delorean'
   gem 'faker', '~> 1.6.3'
   # Record and replay data from external URLs
   gem 'vcr', '~> 3.0', '>= 3.0.1'
-  gem 'webmock', '~> 3.7.5'
+  gem 'webmock', '~> 3.7.6'
   gem 'timecop'
   gem 'cucumber-timecop', require: false
   # Code coverage

@@ -1,3 +1,7 @@
-ruby:
-  enabled: true
-  config_file: config/.rubocop.yml
+jshint:
+  config_file: .jshintrc
+  ignore_file: .jshintignore
+
+rubocop:
+  version: 0.72.0
+  config_file: .rubocop.yml

@@ -7,7 +7,7 @@
     <% work_link = style_link(this_work.title.html_safe, work_url(this_work)) %>
 
     <% cache("subscription-email-preface-#{creation.cache_key}") do %>
-      <%= this_work.pseuds.map{|p| style_pseud_link(p)}.to_sentence.html_safe %> posted a
+      <%= creator_links(this_work) %> posted a
       <% if creation.is_a?(Work) %>
         <%= this_work.backdate ? "backdated" : "new" %> work:
       <% else %>
@@ -24,12 +24,13 @@
       <% unless @seen[this_work.id] %>
         <br>
 
-        by <%= this_work.pseuds.map{|p| style_pseud_link(p)}.to_sentence.html_safe %>
+        by <%= creator_links(this_work) %>
       <% end %>
     </p>
 
     <% if creation.summary.present? && creation.is_a?(Chapter) %>
-      <%= style_bold("Chapter Summary:") %> <%= style_quote(raw strip_tags(sanitize_field(creation, :summary))) %>
+      <p><%= style_bold("Chapter Summary:") %></p>
+      <%= style_quote(raw sanitize_field(creation, :summary)) %>
     <% end %>
 
     <% unless @seen[this_work.id] %>
@@ -58,11 +59,9 @@
     <% end %>
 
     <% unless @seen_summary[this_work.id] || this_work.summary.blank? %>
-        <p>
-          <%= style_bold("Summary:") %>
-          <%= style_quote(raw strip_tags(sanitize_field(this_work, :summary))) %>
-        </p>
-        <% @seen_summary[this_work.id] = true %>
+      <p><%= style_bold("Summary:") %></p>
+      <%= style_quote(raw sanitize_field(this_work, :summary)) %>
+      <% @seen_summary[this_work.id] = true %>
     <% end %>
 
     <% if (index < @creations.length-1) %>

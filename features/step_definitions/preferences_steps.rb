@@ -48,18 +48,6 @@ When /^I set my preferences to hide freeform$/ do
   click_button("Update")
 end
 
-When /^I set my preferences to hide all hit counts$/ do
-  user = User.current_user
-  user.preference.hide_all_hit_counts = true
-  user.preference.save
-end
-
-When /^I set my preferences to hide hit counts on my works$/ do
-  user = User.current_user
-  user.preference.hide_private_hit_count = true
-  user.preference.save
-end
-
 When /^I set my preferences to hide the share buttons on my work$/ do
   user = User.current_user
   user.preference.disable_share_links = true
@@ -125,4 +113,16 @@ When /^I set my preferences to hide both warnings and freeforms$/ do
   check("preference_hide_warnings")
   check("preference_hide_freeform")
   click_button("Update")
+end
+
+When /^I set my preferences to show adult content without warning$/ do
+  user = User.current_user
+  user.preference.adult = true
+  user.preference.save
+end
+
+When /^I set my preferences to warn before showing adult content$/ do
+  user = User.current_user
+  user.preference.adult = false
+  user.preference.save
 end
