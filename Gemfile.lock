@@ -1035,8 +1035,6 @@ GEM
     chronic (0.10.2)
     climate_control (0.2.0)
     cliver (0.3.2)
-    cocaine (0.6.0)
-      terrapin (= 0.6.0)
     codecov (0.1.20)
       colorize
       json
@@ -1417,7 +1415,6 @@ DEPENDENCIES
   capistrano-gitflow_version (>= 0.0.3)
   capybara (~> 2.16.1)
   capybara-screenshot
-  cocaine
   codecov (~> 0.1.10)
   connection_pool
   css_parser
@@ -1477,6 +1474,7 @@ DEPENDENCIES
   shoulda
   simplecov (~> 0.14.0)
   sprockets (< 4)
+  terrapin
   test-unit (~> 3.2)
   timecop
   timeliness

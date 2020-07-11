@@ -74,7 +74,7 @@ gem 'elasticsearch', '6.8.0'
 gem 'aws-sdk'
 gem 'css_parser'
 
-gem 'cocaine'
+gem 'terrapin'
 gem 'paperclip', '>= 5.2.0'
 
 # for looking up image dimensions quickly
