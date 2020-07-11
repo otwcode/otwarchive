@@ -1,5 +1,28 @@
 en:
   admin:
+    admin_options:
+      delete:
+        bookmark: "Delete Bookmark"
+        confirmation: "Are you sure you want to delete this?"
+        external_work: "Delete External Work"
+        series: "Delete Series"
+        work: "Delete Work"
+      edit: 
+        external_work: "Edit External Work"
+      edit_tags: "Edit Tags and Language"
+      hide:
+        bookmark: "Hide Bookmark"
+        external_work: "Hide External Work"
+        series: "Hide Series"
+        work: "Hide Work"
+      landmark: "Admin Actions"
+      not_spam: "Mark Not Spam"
+      spam: "Mark As Spam"
+      unhide:
+        bookmark: "Make Bookmark Visible"
+        external_work: "Make External Work Visible"
+        series: "Make Series Visible"
+        work: "Make Work Visible"
     blacklist:
       emails_found:
         one: "one email found"
