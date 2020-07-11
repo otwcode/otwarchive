@@ -22,13 +22,6 @@ class UserCreationPolicy < ApplicationPolicy
     self.new(user, nil).can_mark_creations_spam?
   end
 
-  def self.can_modify_creations?(user)
-    self.new(user, nil).can_destroy_creations? ||
-      self.new(user, nil).can_edit_creations? ||
-      self.new(user, nil).can_hide_creations? ||
-      self.new(user, nil).can_mark_creations_spam?
-  end
-
   def can_destroy_creations?
     user_has_roles?(DESTROY_ROLES)
   end

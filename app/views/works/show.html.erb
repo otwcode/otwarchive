@@ -24,8 +24,8 @@
 <!--/descriptions-->
 
 <!--subnav-->
-<% if UserCreationPolicy.can_modify_creations?(current_admin) %>
-  <%= render partial: 'admin/admin_options', locals: { item: @work } %>
+<% if can_access_admin_options?(current_admin) %>
+  <%= render "admin/admin_options", item: @work %>
 <% end %>
 <!--/subnav-->
 
