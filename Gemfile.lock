@@ -1261,7 +1261,7 @@ GEM
       thor (>= 0.19.0, < 2.0)
     raindrops (0.19.1)
     rake (13.0.1)
-    redis (4.2.1)
+    redis (3.3.5)
     redis-namespace (1.7.0)
       redis (>= 3.0.4)
     request_store (1.5.0)
@@ -1287,8 +1287,7 @@ GEM
       http-cookie (>= 1.0.2, < 2.0)
       mime-types (>= 1.16, < 3.0)
       netrc (~> 0.7)
-    rollout (2.4.6)
-      redis (~> 4.0)
+    rollout (2.4.3)
     rspec (3.8.0)
       rspec-core (~> 3.8.0)
       rspec-expectations (~> 3.8.0)
@@ -1460,7 +1459,7 @@ DEPENDENCIES
   rails (~> 5.2.4.3)
   rails-controller-testing
   rails-observers!
-  redis (>= 3.0)
+  redis (~> 3.3.5)
   redis-namespace
   resque (>= 1.14.0)
   resque-scheduler
