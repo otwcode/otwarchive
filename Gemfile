@@ -142,7 +142,7 @@ group :test do
   gem 'shoulda'
   gem 'capybara', '~> 2.16.1'
   gem 'cucumber', '~> 3.1'
-  gem 'database_cleaner', '1.7.0'
+  gem 'database_cleaner'
   gem 'poltergeist'
   gem 'capybara-screenshot'
   gem 'cucumber-rails', require: false

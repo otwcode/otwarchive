@@ -1077,7 +1077,7 @@ GEM
       timecop
     cucumber-wire (0.0.1)
     dalli (2.7.10)
-    database_cleaner (1.7.0)
+    database_cleaner (1.8.5)
     delorean (2.1.0)
       chronic
     devise (4.7.2)
@@ -1425,7 +1425,7 @@ DEPENDENCIES
   cucumber-rails
   cucumber-timecop
   dalli
-  database_cleaner (= 1.7.0)
+  database_cleaner
   delorean
   devise
   devise-async
