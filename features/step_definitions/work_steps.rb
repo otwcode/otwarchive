@@ -164,7 +164,7 @@ Given /^the work(?: "([^"]*)")? with(?: (\d+))? comments setup$/ do |title, n_co
   title ||= "Blabla"
   step %{I have a work "#{title}"}
   step %{I am logged out}
-  n_comments = 3 if n_comments.zero?
+  n_comments = 3 if n_comments.blank? || n_comments.zero?
   n_comments.times do
     text = Faker::Lorem.paragraph
     step %{I am logged in as a random user}
