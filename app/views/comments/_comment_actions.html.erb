@@ -27,7 +27,7 @@
       <%= button_to(ts("Approve"), review_comment_path(comment), method: :put) %>
     </li>
   <% end %>
-  <% if (logged_in_as_admin? && policy(comment).can_delete_comment?) || is_author_of?(comment) || is_author_of?(comment.ultimate_parent) %>
+  <% if (logged_in_as_admin? && policy(comment).can_destroy_comment?) || is_author_of?(comment) || is_author_of?(comment.ultimate_parent) %>
     <li id="delete_comment_link_<%= comment.id %>">
       <%= do_cancel_delete_comment_link comment %>
     </li>
