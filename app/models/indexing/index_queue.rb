@@ -67,7 +67,7 @@ class IndexQueue
   private
 
   def exists?
-    REDIS.exists?(name)
+    REDIS.exists(name)
   end
 
   def rename

@@ -151,13 +151,13 @@ describe RedisHitCounter do
       Delorean.time_travel_to "2020/01/30 2:59 UTC" do
         RedisHitCounter.add(work_id, ip_address)
 
-        expect(RedisHitCounter.redis.exists?("visits:20200129")).to be_true
+        expect(RedisHitCounter.redis.exists("visits:20200129")).to be_truthy
       end
 
       Delorean.time_travel_to "2020/01/30 3:01 UTC" do
         RedisHitCounter.remove_old_visits
 
-        expect(RedisHitCounter.redis.exists?("visits:20200129")).to be_false
+        expect(RedisHitCounter.redis.exists("visits:20200129")).to be_falsey
       end
     end
 
@@ -173,8 +173,8 @@ describe RedisHitCounter do
       Delorean.time_travel_to "2020/01/30 3:02 UTC" do
         RedisHitCounter.remove_old_visits
 
-        expect(RedisHitCounter.redis.exists?("visits:20200129")).to be_false
-        expect(RedisHitCounter.redis.exists?("visits:20200130")).to be_true
+        expect(RedisHitCounter.redis.exists("visits:20200129")).to be_falsey
+        expect(RedisHitCounter.redis.exists("visits:20200130")).to be_truthy
       end
     end
 
