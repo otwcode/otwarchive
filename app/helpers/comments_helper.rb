@@ -131,6 +131,15 @@ module CommentsHelper
     policy(comment).can_mark_comment_spam? || is_author_of?(comment.ultimate_parent)
   end
 
+  # Comments can be deleted by admins with proper authorization, their creator
+  # (if the creator is a registered user), or the creator of the comment's
+  # ultimate parent.
+  def can_destroy_comment?(comment)
+    policy(comment).can_destroy_comment? || 
+      is_author_of?(comment) || 
+      is_author_of?(comment.ultimate_parent)
+  end
+
   def comment_parent_hidden?(comment)
     parent = comment.ultimate_parent
     (parent.respond_to?(:hidden_by_admin) && parent.hidden_by_admin) ||
