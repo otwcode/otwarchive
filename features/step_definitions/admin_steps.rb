@@ -138,7 +138,7 @@ end
 Given /^the support form is disabled and its text field set to "Please don't contact us"$/ do
   step("I am logged in as support_admin")
   visit(admin_settings_path)
-  check("Turn off Support form")
+  check("Turn off support form")
   fill_in(:admin_setting_disabled_support_form_text, with: "Please don't contact us")
   click_button("Update")
 end
@@ -146,7 +146,7 @@ end
 Given /^the support form is enabled$/ do
   step("I am logged in as superadmin")
   visit(admin_settings_path)
-  uncheck("Turn off Support form")
+  uncheck("Turn off support form")
   click_button("Update")
 end
 

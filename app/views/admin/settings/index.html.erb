@@ -3,11 +3,10 @@
 <!--/descriptions-->
 
 <!--main content-->
-<%= form_for @admin_setting, html: { class: "manage" } do |f| %>
+<%= form_for @admin_setting, html: { class: "verbose manage" } do |f| %>
   <%= error_messages_for @admin_setting %>
   <fieldset>
-    <legend><%= t(".landmark.account_and_invitations") %></legend>
-    <h3 class="landmark heading"><%= t(".landmark.account_and_invitations") %></h3>
+    <legend><%= t(".legend.account_and_invitations") %></legend>
     <dl>
       <dt><%= admin_setting_checkbox(f, :account_creation_enabled) %></dt>
       <dd><%= f.label :account_creation_enabled, t(".fields.account_creation_enabled") %></dd>
@@ -33,23 +32,23 @@
   </fieldset>
 
   <fieldset>
-    <legend><%= t(".landmark.disable_support_form") %></legend>
-    <h3 class="landmark heading"><%= t(".landmark.disable_support_form") %></h3>
+    <legend><%= t(".legend.disable_support_form") %></legend>
     <dl>
       <dt><%= admin_setting_checkbox(f, :disable_support_form) %></dt>
       <dd>
         <%= f.label :disable_support_form, t(".fields.disable_support_form") %>
-        <legend><%= f.label :disabled_support_form_text, t(".fields.disabled_support_form_text") %></legend>
-        <p><%= allowed_html_instructions %></p>
-        <%= f.text_area :disabled_support_form_text,
-              disabled: admin_setting_disabled?(:disabled_support_form_text) %>
+        <fieldset>
+          <legend><%= f.label :disabled_support_form_text, t(".fields.disabled_support_form_text") %></legend>
+          <p><%= allowed_html_instructions %></p>
+          <%= f.text_area :disabled_support_form_text,
+                disabled: admin_setting_disabled?(:disabled_support_form_text) %>
+        </fieldset>
       </dd>
     </dl>
   </fieldset>
 
   <fieldset>
-    <legend><%= t(".landmark.performance_and_misc") %></legend>
-    <h3 class="landmark heading"><%= t(".landmark.performance_and_misc") %></h3>
+    <legend><%= t(".legend.performance_and_misc") %></legend>
     <dl>
       <dt><%= admin_setting_checkbox(f, :suspend_filter_counts) %></dt>
       <dd><%= f.label :suspend_filter_counts, t(".fields.suspend_filter_counts") %></dd>
@@ -72,9 +71,7 @@
   </fieldset>
 
   <fieldset>
-    <legend><%= t(".landmark.actions") %></legend>
-    <h3 class="landmark heading"><%= t(".landmark.actions") %></h3>
-
+    <legend><%= t(".legend.actions") %></legend>
     <p class="submit actions"><%= f.submit t(".update") %></p>
   </fieldset>
 <% end %>

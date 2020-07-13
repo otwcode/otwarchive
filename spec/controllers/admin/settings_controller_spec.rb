@@ -72,25 +72,22 @@ describe Admin::SettingsController do
       context "when admin has policy_and_abuse role" do
         before { admin.update(roles: ["policy_and_abuse"]) }
 
-        it "prohibits admins with policy_and_abuse role to update forbidden settings" do
-          put :update, params: {
-            id: setting.id,
-            admin_setting: {
-              suspend_filter_counts: "0",
-              tag_wrangling_off: "0",
-              downloads_enabled: "1",
-              enable_test_caching: "0",
-              cache_expiration: "10",
-              hide_spam: "1"
-            }
-          }
-
-          it_redirects_to_with_error(admin_settings_path, "Sorry, only an authorized admin can update the settings you were trying to update.")
+        {
+          disable_support_form: true,
+          downloads_enabled: false,
+          tag_wrangling_off: true
+        }.each_pair do |field, value|
+          it "prevents admins with policy_and_abuse role from updating #{field}" do
+            expect do
+              put :update, params: { id: setting.id, admin_setting: { field => value } }
+            end.to raise_exception(ActionController::UnpermittedParameters)
+            expect(setting.reload.send(field)).not_to eq(value)
+          end
         end
 
         it "allows admins with policy_and_abuse role to update spam setting" do
           put :update, params: { id: setting.id, admin_setting: { hide_spam: "1" } }
-
+          expect(setting.reload.hide_spam?).to be_truthy
           it_redirects_to_with_notice(admin_settings_path, "Archive settings were successfully updated.")
         end
       end
@@ -98,31 +95,29 @@ describe Admin::SettingsController do
       context "when admin has support role" do
         before { admin.update(roles: ["support"]) }
 
-        it "prohibits admins with support role to update forbidden settings" do
-          put :update, params: {
-            id: setting.id,
-            admin_setting: {
-              disable_support_form: "1",
-              disabled_support_form_text: "Disable support",
-              tag_wrangling_off: "0",
-              downloads_enabled: "1",
-              enable_test_caching: "0",
-              hide_spam: "1"
-            }
-          }
-
-          it_redirects_to_with_error(admin_settings_path, "Sorry, only an authorized admin can update the settings you were trying to update.")
+        {
+          downloads_enabled: false,
+          hide_spam: true,
+          tag_wrangling_off: true
+        }.each_pair do |field, value|
+          it "prevents admins with support role from updating #{field}" do
+            expect do
+              put :update, params: { id: setting.id, admin_setting: { field => value } }
+            end.to raise_exception(ActionController::UnpermittedParameters)
+            expect(setting.reload.send(field)).not_to eq(value)
+          end
         end
 
         it "allows admins with support role to update support form settings" do
           put :update, params: {
             id: setting.id,
             admin_setting: {
-              disable_support_form: "1",
+              disable_support_form: true,
               disabled_support_form_text: "Disable support"
             }
           }
-
+          expect(setting.reload.disable_support_form?).to be_truthy
+          expect(setting.reload.disabled_support_form_text).to include("Disable support")
           it_redirects_to_with_notice(admin_settings_path, "Archive settings were successfully updated.")
         end
       end
@@ -130,24 +125,22 @@ describe Admin::SettingsController do
       context "when admin has tag_wrangling role" do
         before { admin.update(roles: ["tag_wrangling"]) }
 
-        it "prohibits admins with tag_wrangling role to update forbidden settings" do
-          put :update, params: {
-            id: setting.id,
-            admin_setting: {
-              disable_support_form: "1",
-              disabled_support_form_text: "Disable support",
-              tag_wrangling_off: "0",
-              downloads_enabled: "1",
-              enable_test_caching: "0",
-              hide_spam: "1"
-            }
-          }
-
-          it_redirects_to_with_error(admin_settings_path, "Sorry, only an authorized admin can update the settings you were trying to update.")
+        {
+          disable_support_form: true,
+          downloads_enabled: false,
+          hide_spam: true
+        }.each_pair do |field, value|
+          it "prevents admins with tag_wrangling role from updating #{field}" do
+            expect do
+              put :update, params: { id: setting.id, admin_setting: { field => value } }
+            end.to raise_exception(ActionController::UnpermittedParameters)
+            expect(setting.reload.send(field)).not_to eq(value)
+          end
         end
 
         it "allows admins with tag_wrangling role to turn wrangling off" do
-          put :update, params: { id: setting.id, admin_setting: { tag_wrangling_off: "0" } }
+          put :update, params: { id: setting.id, admin_setting: { tag_wrangling_off: "1" } }
+          expect(setting.reload.tag_wrangling_off?).to be_truthy
           it_redirects_to_with_notice(admin_settings_path, "Archive settings were successfully updated.")
         end
       end

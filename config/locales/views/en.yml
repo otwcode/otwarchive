@@ -34,8 +34,8 @@ en:
           cache_expiration: "How often (in minutes) should we refresh caching"
           creation_requires_invite: "Account creation requires invitation"
           days_to_purge_unactivated: "How many weeks you have to activate your account before we purge it"
-          disable_support_form: "Turn off Support form"
-          disabled_support_form_text: "Disabled Support form text"
+          disable_support_form: "Turn off support form"
+          disabled_support_form_text: "Disabled support form text"
           downloads_enabled: "Allow downloads"
           enable_test_caching: "Turn on caching (currently experimental)"
           hide_spam: "Automatically hide spam works"
@@ -46,7 +46,7 @@ en:
           suspend_filter_counts: "Suspend some filter tracking due to high posting volume"
           tag_wrangling_off: "Turn off tag wrangling for non-admins"
         heading: "Archive Settings"
-        landmark:
+        legend:
           account_and_invitations: "Accounts and Invitations"
           disable_support_form: "Turn Off Support Form"
           performance_and_misc: "Performance and Misc"
@@ -57,7 +57,6 @@ en:
         update: "Update"
       update:
         success: "Archive settings were successfully updated."
-        permission_error: "Sorry, only an authorized admin can update the settings you were trying to update."
   admins:
     index:
       page_title: "Hi, %{login}!"
