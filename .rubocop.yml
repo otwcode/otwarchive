@@ -131,6 +131,11 @@ Style/GlobalVars:
     - $elasticsearch
     - $rollout
 
+Style/PercentLiteralDelimiters:
+  PreferredDelimiters:
+    "%w": "()"
+    "%W": "()"
+
 # Stop checking if uses of "self" are redundant
 Style/RedundantSelf:
   Enabled: false
