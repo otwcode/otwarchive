@@ -27,10 +27,10 @@ class AdminUserPolicy < ApplicationPolicy
     end
   end
 
-  alias_method :index?, :can_search_users?
-  alias_method :show?, :can_search_users?
-  alias_method :bulk_search?, :can_search_users?
-  alias_method :update?, :can_search_users?
-  alias_method :update_status?, :can_search_users?
-  alias_method :confirm_delete_user_creations?, :destroy_user_creations?
+  alias index? can_search_users?
+  alias show? can_search_users?
+  alias bulk_search? can_search_users?
+  alias update? can_search_users?
+  alias update_status? can_search_users?
+  alias confirm_delete_user_creations? destroy_user_creations?
 end
