@@ -15,13 +15,11 @@ class AdminSettingPolicy < ApplicationPolicy
       downloads_enabled
       enable_test_caching
       hide_spam
-      invite_from_queue_at
       invite_from_queue_enabled
       invite_from_queue_frequency
       invite_from_queue_number
       request_invite_enabled
       suspend_filter_counts
-      suspend_filter_counts_at
       tag_wrangling_off
     ],
     "support" => %i[disable_support_form disabled_support_form_text],

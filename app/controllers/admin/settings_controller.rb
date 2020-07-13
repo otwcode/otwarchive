@@ -10,13 +10,13 @@ class Admin::SettingsController < Admin::BaseController
     authorize @admin_setting
 
     if policy(@admin_setting).unpermitted_attributes(params).present?
-      flash[:error] = ts("Sorry, only an authorized admin can update the settings you were trying to update.")
+      flash[:error] = t(".permission_error")
       redirect_to admin_settings_path
       return
     end
 
     if @admin_setting.update(permitted_attributes(@admin_setting).merge(last_updated: current_admin))
-      flash[:notice] = ts("Archive settings were successfully updated.")
+      flash[:notice] = t(".success")
       redirect_to admin_settings_path
     else
       render :index
