@@ -42,4 +42,19 @@ module AdminHelper
 
     UserCreationPolicy.can_mark_creations_spam?(current_admin)
   end
+
+  def admin_setting_disabled?(field)
+    return unless logged_in_as_admin?
+
+    !policy(AdminSetting).permitted_attributes.include?(field)
+  end
+
+  def admin_setting_checkbox(form, field_name)
+    form.check_box(field_name, disabled: admin_setting_disabled?(field_name))
+  end
+
+  def admin_setting_text_field(form, field_name, options = {})
+    options[:disabled] = admin_setting_disabled?(field_name)
+    form.text_field(field_name, options)
+  end
 end
