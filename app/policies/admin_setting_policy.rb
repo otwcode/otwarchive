@@ -37,8 +37,8 @@ class AdminSettingPolicy < ApplicationPolicy
     end
   end
 
-  alias_method :index?, :can_update_settings?
-  alias_method :update?, :can_update_settings?
+  alias index? can_update_settings?
+  alias update? can_update_settings?
 
   private
 

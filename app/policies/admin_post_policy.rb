@@ -9,9 +9,9 @@ class AdminPostPolicy < ApplicationPolicy
     user_has_roles?(POSTING_ROLES)
   end
 
-  alias_method :new?, :can_post?
-  alias_method :edit?, :can_post?
-  alias_method :create?, :can_post?
-  alias_method :update?, :can_post?
-  alias_method :destroy?, :can_post?
+  alias new? can_post?
+  alias edit? can_post?
+  alias create? can_post?
+  alias update? can_post?
+  alias destroy? can_post?
 end

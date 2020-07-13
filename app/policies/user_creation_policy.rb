@@ -43,8 +43,8 @@ class UserCreationPolicy < ApplicationPolicy
     user_has_roles?(SPAM_ROLES)
   end
 
-  alias_method :edit?, :can_edit_creations?
-  alias_method :hide?, :can_hide_creations?
-  alias_method :set_spam?, :can_mark_creations_spam?
-  alias_method :destroy?, :can_destroy_creations?
+  alias edit? can_edit_creations?
+  alias hide? can_hide_creations?
+  alias set_spam? can_mark_creations_spam?
+  alias destroy? can_destroy_creations?
 end
