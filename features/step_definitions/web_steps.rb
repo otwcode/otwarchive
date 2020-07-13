@@ -108,10 +108,10 @@ When /^(?:|I )attach the file "([^"]*)" to "([^"]*)"(?: within "([^"]*)")?$/ do 
   end
 end
 
-Then /^visiting "([^"]*)" should fail with an error$/ do |path|
+Then /^visiting "([^"]*)" should fail with a not found error$/ do |path|
   expect {
     visit path
-  }.to raise_error
+  }.to raise_error(ActiveRecord::RecordNotFound)
 end
 
 Then /^visiting "([^"]*)" should fail with "([^"]*)"$/ do |path, flash_error|
