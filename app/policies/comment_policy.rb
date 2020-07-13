@@ -18,7 +18,7 @@ class CommentPolicy < ApplicationPolicy
     user_has_roles?(SPAM_ROLES)
   end
 
-  alias_method :destroy?, :can_destroy_comment?
-  alias_method :approve?, :can_mark_comment_spam?
-  alias_method :reject?, :can_mark_comment_spam?
+  alias destroy? can_delete_comment?
+  alias approve? can_mark_comment_spam?
+  alias reject? can_mark_comment_spam?
 end
