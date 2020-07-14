@@ -1,6 +1,7 @@
 /*==ZONE: SYSTEM
 SUBSECTIONS:
-  1. SPLASH, 2. SESSIONS, 3. DOCS, 4. COMMS, 5. SUPPORT, 6. FAQ, 7. TOS POPUP
+  1. SPLASH, 2. SESSIONS, 3. DOCS, 4. COMMS, 5. SUPPORT, 6. FAQ, 7. TOS POPUP,
+  8. PROXY NOTICE
 */
 
 .system p {
@@ -366,4 +367,14 @@ For practicality, /archive_faqs are also .docs and .support and have the .userst
 #tos_prompt [disabled] {
   background: #ccc;
     box-shadow: none;
+}
+
+/* 8. ZONE: SYSTEM: PROXY NOTICE */
+#proxy-notice {
+  background: #efd1d1;
+  border-bottom: 1px solid #900; 
+}
+
+#proxy-notice p {
+  padding: 0 0.75em;
 }

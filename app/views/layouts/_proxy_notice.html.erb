@@ -1,0 +1,16 @@
+<div class="proxy announcement group" id="proxy-notice">
+  <p class="english">Notice: (1) You are using a proxy site that is not affiliated with AO3. (2) The entity that set up the proxy site can see whatever data you submit to the AO3 through the proxy site, including your IP address and the content of comments.</p>
+  <p class="chinese"> 重要提示：<br/>
+ （1）您使用的是第三方开发的反向代理网站，此网站并非Archive of Our Own - AO3（AO3作品库）原站。<br/>
+ （2）代理网站的开发者能够获取您上传至该站点的全部内容，包括您的ip地址。如您通过代理登录AO3，对方将获得您的密码。</p>
+  <p class="submit"><button class="action" type="button" id="proxy-notice-dismiss">&times;</button></p>
+</div>
+
+<%= javascript_tag do %>
+  $j(document).ready(function() {
+    $j("#proxy-notice-dismiss").on("click", function() {
+      Cookies.set("proxy_notice", "0");
+      $j("#proxy-notice").slideUp();
+    });
+  });
+<% end %>

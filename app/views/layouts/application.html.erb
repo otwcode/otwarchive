@@ -38,6 +38,15 @@
   <body class="<%= logged_in? ? 'logged-in' : 'logged-out' %>" <%= PhraseApp::InContextEditor.enabled? ? "data-no-turbolink" : "" %>>
     <div id="outer" class="wrapper">
       <ul id="skiplinks"><li><a href="#main"><%= ts('Main Content') %></a></li></ul>
+      <%= content_for :footer_js do %>
+        <%= javascript_tag do %>
+          $j(document).ready(function() {
+            if (window.location.hostname !== "archiveofourown.org" && Cookies.get("proxy_notice") !== "0") {
+              $j("body").prepend("<%= escape_javascript(render "layouts/proxy_notice") %>");
+            }
+          });
+        <% end %>
+      <% end %>
       <%= render :partial => 'layouts/header' %>
       <div id="inner" class="wrapper">
         <!-- BEGIN sidebar -->
