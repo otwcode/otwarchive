@@ -160,9 +160,6 @@ Feature: Admin Actions for Works, Comments, Series, Bookmarks
       | login         | password   |
       | author        | password   |
       | commenter     | password   |
-      And the following admin exists
-        | login       | password |
-        | Zooey       | secret   |
 
     # set up a work with a genuine comment
 
@@ -197,6 +194,7 @@ Feature: Admin Actions for Works, Comments, Series, Bookmarks
       And I should see "Hide Comments (1)"
       # Admin can still see spam comment
       And I should see "rolex"
+      And I should see "This comment has been marked as spam."
       # proper content should still be there
       And I should see "I loved this!"
 
@@ -215,6 +213,31 @@ Feature: Admin Actions for Works, Comments, Series, Bookmarks
     When I follow "Comments (1)"
     Then I should not see "rolex"
       And I should see "I loved this!"
+
+    # now mark comment as not spam
+    When I am logged in as superadmin
+      And I view the work "The One Where Neal is Awesome"
+      And I follow "Comments (1)"
+      And I follow "Not Spam"
+    Then I should see "Hide Comments (2)"
+      And I should not see "Not Spam"
+      And I should not see "This comment has been marked as spam."
+
+    # user can see comment again
+    When I am logged out as an admin
+      And I view the work "The One Where Neal is Awesome"
+    Then I should see "Comments (2)"
+    When I follow "Comments (2)"
+    Then I should see "rolex"
+      And I should not see "This comment has been marked as spam."
+
+    # author can see comment again
+    When I am logged in as "author" with password "password"
+      And I view the work "The One Where Neal is Awesome"
+    Then I should see "Comments (2)"
+    When I follow "Comments (2)"
+    Then I should see "rolex"
+      And I should not see "This comment has been marked as spam."
 
   Scenario: Admin can edit language on works when posting without previewing
     Given basic tags
