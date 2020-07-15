@@ -2,7 +2,7 @@ class Admin::AdminUsersController < Admin::BaseController
   include ExportsHelper
 
   def index
-    authorize User, policy_class: UserPolicy
+    authorize User
     @role_values = @roles.map{ |role| [role.name.humanize.titlecase, role.name] }
     @role = Role.find_by(name: params[:role]) if params[:role]
     @users = User.search_by_role(
@@ -12,7 +12,7 @@ class Admin::AdminUsersController < Admin::BaseController
   end
 
   def bulk_search
-    authorize User, policy_class: UserPolicy
+    authorize User
     @emails = params[:emails].split if params[:emails]
     if @emails.present?
       found_users, not_found_emails, duplicates = User.search_multiple_by_email(@emails)
@@ -47,7 +47,7 @@ class Admin::AdminUsersController < Admin::BaseController
   def show
     @hide_dashboard = true
     @user = User.find_by(login: params[:id])
-    authorize @user, policy_class: UserPolicy
+    authorize @user
     unless @user
       redirect_to action: "index", query: params[:query], role: params[:role] and return
     end
@@ -57,7 +57,7 @@ class Admin::AdminUsersController < Admin::BaseController
   # POST admin/users/update
   def update
     @user = User.find_by(login: params[:id])
-    authorize @user, policy_class: UserPolicy
+    authorize @user
     if @user.admin_update(user_params)
       flash[:notice] = ts("User was successfully updated.")
     else
@@ -68,7 +68,7 @@ class Admin::AdminUsersController < Admin::BaseController
 
   def update_status
     @user = User.find_by(login: params[:user_login])
-    authorize @user, policy_class: UserPolicy
+    authorize @user
     @user_manager = UserManager.new(current_admin, params)
     if @user_manager.save
       flash[:notice] = @user_manager.success_message
@@ -93,7 +93,7 @@ class Admin::AdminUsersController < Admin::BaseController
   end
 
   def confirm_delete_user_creations
-    authorize @user, policy_class: UserPolicy
+    authorize @user
     @works = @user.works.paginate(page: params[:works_page])
     @comments = @user.comments.paginate(page: params[:comments_page])
     @bookmarks = @user.bookmarks
@@ -102,7 +102,7 @@ class Admin::AdminUsersController < Admin::BaseController
   end
 
   def destroy_user_creations
-    authorize @user, policy_class: UserPolicy
+    authorize @user
     creations = @user.works + @user.bookmarks + @user.collections + @user.comments
     creations.each do |creation|
       AdminActivity.log_action(current_admin, creation, action: "destroy spam", summary: creation.inspect)
@@ -115,7 +115,7 @@ class Admin::AdminUsersController < Admin::BaseController
 
   def troubleshoot
     @user = User.find_by(login: params[:id])
-    authorize @user, policy_class: UserPolicy
+    authorize @user
 
     @user.fix_user_subscriptions
     @user.set_user_work_dates
@@ -128,7 +128,7 @@ class Admin::AdminUsersController < Admin::BaseController
 
   def activate
     @user = User.find_by(login: params[:id])
-    authorize @user, policy_class: UserPolicy
+    authorize @user
 
     @user.activate
     if @user.active?
@@ -143,7 +143,7 @@ class Admin::AdminUsersController < Admin::BaseController
 
   def send_activation
     @user = User.find_by(login: params[:id])
-    authorize @user, policy_class: UserPolicy
+    authorize @user
     # send synchronously to avoid getting caught in mail queue
     UserMailer.signup_notification(@user.id).deliver!
     flash[:notice] = ts("Activation email sent")

@@ -27,7 +27,7 @@ class UserCreationPolicy < ApplicationPolicy
     user_has_roles?(DESTROY_ROLES)
   end
 
-  # Currently applies to editing ExternalWorks and the tags or laguage of Works.
+  # Currently applies to editing ExternalWorks and the tags or language of Works.
   # Admins cannot edit Bookmarks or Series or make any other type of edit to
   # Works.
   def can_edit_creations?
@@ -43,7 +43,9 @@ class UserCreationPolicy < ApplicationPolicy
     user_has_roles?(SPAM_ROLES)
   end
 
+  # ExternalWorksController
   alias edit? can_edit_creations?
+  # Admin::UserCreationsController
   alias hide? can_hide_creations?
   alias set_spam? can_mark_creations_spam?
   alias destroy? can_destroy_creations?
