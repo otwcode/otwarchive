@@ -24,7 +24,7 @@
 <!--/descriptions-->
 
 <!--subnav-->
-<% if can_access_admin_options?(current_admin) %>
+<% if can_access_admin_options? %>
   <%= render "admin/admin_options", item: @work %>
 <% end %>
 <!--/subnav-->
