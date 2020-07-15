@@ -1,6 +1,6 @@
 class CommentPolicy < ApplicationPolicy
-  DESTROY_ROLES = %w(superadmin policy_and_abuse communications support).freeze
-  SPAM_ROLES = %w(superadmin policy_and_abuse communications support).freeze
+  DESTROY_ROLES = %w(superadmin board policy_and_abuse communications support).freeze
+  SPAM_ROLES = %w(superadmin board policy_and_abuse communications support).freeze
 
   def can_destroy_comment?
     user_has_roles?(DESTROY_ROLES)
