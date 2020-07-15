@@ -1,6 +1,6 @@
 <h3 class="landmark heading"><%= ts("Admin Navigation", key: "header") %></h3>
 <ul class="admin primary navigation actions" role="navigation">
-  <% if policy(User).can_troubleshoot_users? %>
+  <% if policy(User).can_manage_users? %>
     <li class="dropdown">
       <%= link_to ts("Manage Users", key: "header"), admin_users_path %>
       <ul class="menu" role="menu">
