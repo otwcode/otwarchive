@@ -1,5 +1,17 @@
-# To execute this docker-compose yml file use `docker-compose -f <file_name> up`
-# Add the `-d` flag at the end for detached execution
+# To run the Archive in docker for the first time you should run one of the init scripts:
+# - linux: `script/docker/init.sh`
+# - windows: `script/docker/init.cmd`
+#
+# This will handle setting up config files, creating databases, and running migrations.
+#
+# After these oneoff tasks have been perfomed, on subsequent starts you can simply use:
+#
+# ```
+# docker-compose up -d web
+# ```
+#
+# After starting the archive, it will be visible at http://localhost:3000/
+
 version: "3"
 volumes:
   my-datavolume:
