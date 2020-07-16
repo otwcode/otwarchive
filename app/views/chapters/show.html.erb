@@ -14,8 +14,8 @@
 <!--/descriptions-->
 
 <!--subnav-->
-<% if logged_in_as_admin? %>
-  <%= render :partial => 'admin/admin_options', :locals => {:item => @work} %>
+<% if can_access_admin_options? %>
+  <%= render "admin/admin_options", item: @work %>
 <% end %>
 <!--/subnav-->
 

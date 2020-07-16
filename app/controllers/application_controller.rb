@@ -1,8 +1,19 @@
 PROFILER_SESSIONS_FILE = 'used_tags.txt'
 
 class ApplicationController < ActionController::Base
+  include Pundit
   protect_from_forgery with: :exception, prepend: true
   rescue_from ActionController::InvalidAuthenticityToken, with: :display_auth_error
+
+  rescue_from Pundit::NotAuthorizedError do
+    admin_only_access_denied
+  end
+
+  # sets admin user for pundit policies
+  def pundit_user
+    current_admin
+  end
+
   rescue_from ActionController::UnknownFormat, with: :raise_not_found
   rescue_from Elasticsearch::Transport::Transport::Errors::ServiceUnavailable do
     # Non-standard code to distinguish Elasticsearch errors from standard 503s.
@@ -216,7 +227,7 @@ public
 
   def after_sign_in_path_for(resource)
     if resource.is_a?(Admin)
-      admin_users_path
+      admins_path
     else
       back = session[:return_to]
       session.delete(:return_to)
@@ -273,7 +284,7 @@ public
   end
 
   def admin_only_access_denied
-    flash[:error] = ts("I'm sorry, only an admin can look at that area.")
+    flash[:error] = ts("Sorry, only an authorized admin can access the page you were trying to reach.")
     redirect_to root_path
     false
   end

@@ -13,7 +13,7 @@ Feature: Archivist bulk imports
 
   Scenario: Make a user an archivist
     Given I have pre-archivist setup for "not_archivist"
-      And I am logged in as an admin
+      And I am logged in as open_doors_admin
     When I make "not_archivist" an archivist
     Then I should see "User was successfully updated"
 

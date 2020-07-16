@@ -88,8 +88,7 @@ describe WorksController do
           collections_to_add: "",
           language_id: "",
           work_skin_id: "",
-          restricted: "0",
-          unrestricted: "0",
+          restricted: "",
           anon_commenting_disabled: "",
           moderated_commenting_enabled: ""
         }

@@ -7,6 +7,7 @@ gem 'test-unit', '~> 3.2'
 gem 'bundler'
 
 gem 'rails', '~> 5.1.6.2'
+gem 'rack', '~> 2.1', '>= 2.1.4'
 
 gem 'rails-observers', git: 'https://github.com/rails/rails-observers'
 gem 'actionpack-page_caching'
@@ -85,6 +86,7 @@ gem 'bcrypt'
 
 # A highly updated version of the authorization plugin
 gem 'permit_yo'
+gem 'pundit'
 
 # fix for annoying UTF-8 error messages as per this:
 # http://openhood.com/rack/ruby/2010/07/15/rack-test-warning/
