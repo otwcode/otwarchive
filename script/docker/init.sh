@@ -3,11 +3,11 @@
 set -ex
 
 # Change directory to root of the repo
-cd "$(dirname "$0")/.."
+cd "$(dirname "$0")/../.."
 
-cp -n docker/database.yml config/database.yml
-cp -n docker/redis.yml config/redis.yml
-cp -n docker/local.yml config/local.yml
+cp -n config/docker/database.yml config/database.yml
+cp -n config/docker/redis.yml config/redis.yml
+cp -n config/docker/local.yml config/local.yml
 
 docker-compose up -d
 

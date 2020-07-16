@@ -1,9 +1,9 @@
 :: Change directory to root of the repo
-cd /D "%~dp0\.."
+cd /D "%~dp0\..\.."
 
-copy docker\database.yml config\database.yml
-copy docker\redis.yml config\redis.yml
-copy docker\local.yml config\local.yml
+copy config\docker\database.yml config\database.yml
+copy config\docker\redis.yml config\redis.yml
+copy config\docker\local.yml config\local.yml
 
 docker-compose up -d
 
