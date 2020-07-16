@@ -1,7 +1,6 @@
 module NewRelic
   module Agent
     class NewRelicService
-
       def create_http_connection
         if Agent.config[:proxy_host]
           ::NewRelic::Agent.logger.debug("Using proxy server #{Agent.config[:proxy_host]}:#{Agent.config[:proxy_port]}")
