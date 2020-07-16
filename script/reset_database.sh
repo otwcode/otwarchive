@@ -4,7 +4,7 @@ case "${RAILS_ENV}" in
 test) ;;
 development) ;;
 *)
-  echo "Only supported in test and development ( eg  RAILS_ENV=test ./script/reset_database.sh )"
+  echo "Only supported in test and development (e.g. 'RAILS_ENV=test ./script/reset_database.sh')"
   exit 1
   ;;
 esac

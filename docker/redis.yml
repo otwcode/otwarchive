@@ -13,3 +13,6 @@ redis_rollout:
 redis_autocomplete:
   test: redis:6379
   development: redis:6379
+redis_hits:
+  test: redis:6379
+  development: redis:6379

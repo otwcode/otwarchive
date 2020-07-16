@@ -8,7 +8,6 @@ volumes:
 services:
   db:
     image: mysql:5.7
-    container_name: otwa_db
     environment:
       - MYSQL_ROOT_PASSWORD=change_me
     ports:
@@ -22,14 +21,12 @@ services:
       - my-datavolume:/var/lib/mysql:rw
   redis:
     image: redis:5
-    container_name: otwa_redis
     ports:
       - "6379:6379"
     volumes:
       - redis-data:/var/lib/redis:rw
   es:
     image: docker.elastic.co/elasticsearch/elasticsearch:6.8.9
-    container_name: otwa_es
     ports:
       - "9200:9200"
       - "9300:9300"
@@ -43,16 +40,14 @@ services:
       - discovery.type=single-node
   mc:
     image: memcached:1.5
-    container_name: otwa_mc
     ports:
       - "11211:11211"
   web:
     build:
       context: .
       dockerfile: ./docker/Dockerfile
-    container_name: otwa_web
     environment:
-      - DOCKER=1
+      - OTWA_NO_START_REDIS=1
       - QT_QPA_PLATFORM=offscreen
     command: bash -c "rm -f tmp/pids/server.pid && bundle exec rails s -p 3000 -b '0.0.0.0'"
     volumes:
