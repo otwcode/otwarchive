@@ -45,7 +45,7 @@ end
 Given /^basic languages$/ do
   Language.default
   german = Language.find_or_create_by(short: "DE", name: "Deutsch", support_available: true, abuse_support_available: true)
-  de = Locale.create(iso: "de", name: "Deutsch", language: german)
+  Locale.create(iso: "de", name: "Deutsch", language: german)
 end
 
 Given /^downloads are off$/ do
