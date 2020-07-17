@@ -1,19 +1,19 @@
-ENV["RAILS_ENV"] ||= 'test'
+ENV["RAILS_ENV"] ||= "test"
 
 require File.expand_path("../../config/environment", __FILE__)
-require 'simplecov'
-SimpleCov.command_name "rspec-" + (ENV['TEST_RUN'] || '')
+require "simplecov"
+SimpleCov.command_name "rspec-" + (ENV["TEST_RUN"] || "")
 if ENV["CI"] == "true" && ENV["TRAVIS"] == "true"
   # Only on Travis...
   require "codecov"
   SimpleCov.formatter = SimpleCov::Formatter::Codecov
 end
 
-require 'rspec/rails'
-require 'factory_bot'
-require 'database_cleaner'
-require 'email_spec'
-require 'webmock/rspec'
+require "rspec/rails"
+require "factory_bot"
+require "database_cleaner"
+require "email_spec"
+require "webmock/rspec"
 
 DatabaseCleaner.start
 DatabaseCleaner.clean
