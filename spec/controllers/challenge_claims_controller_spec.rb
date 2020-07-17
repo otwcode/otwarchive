@@ -25,6 +25,28 @@ describe ChallengeClaimsController do
       it_redirects_to_with_error(root_path, \
                                  "You aren't allowed to see that user's claims.")
     end
+
+    context "for a prompt meme" do
+      let(:signup) { create(:prompt_meme_signup) }
+
+      it "will not allow a logged in user to see everyone's claims" do
+        fake_login_known_user(user)
+
+        get :index, params: { collection_id: collection.name }
+
+        it_redirects_to_with_error(collection, "Sorry, you're not allowed to do that.")
+      end
+
+      it "will allow a maintainer to see everyone's claims" do
+        collection.collection_participants.create(pseud: user.pseuds.first, participant_role: "Moderator")
+        fake_login_known_user(user)
+
+        get :index, params: { collection_id: collection.name }
+
+        expect(flash[:error]).to be_blank
+        expect(assigns(:claims))
+      end
+    end
   end
 
   describe 'show' do

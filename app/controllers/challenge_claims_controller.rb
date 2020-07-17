@@ -73,11 +73,12 @@ class ChallengeClaimsController < ApplicationController
     end
     if params[:collection_id]
       return unless load_collection
+
       @challenge = @collection.challenge if @collection
+      not_allowed(@collection) unless user_scoped? || @challenge.user_allowed_to_see_assignments?(current_user)
+
       @claims = ChallengeClaim.unposted_in_collection(@collection)
-      if params[:for_user] || !@challenge.user_allowed_to_see_claims?(current_user)
-        @claims = @claims.where(claiming_user_id: current_user.id)
-      end
+      @claims = @claims.where(claiming_user_id: current_user.id) if user_scoped?
 
       # sorting
       set_sort_order
@@ -147,4 +148,7 @@ class ChallengeClaimsController < ApplicationController
     )
   end
 
+  def user_scoped?
+    params[:for_user].to_s.casecmp?("true")
+  end
 end
