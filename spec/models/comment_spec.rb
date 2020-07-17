@@ -42,9 +42,10 @@ describe Comment do
 
       context "with major changes to content" do
         before { comment.comment_content = "something completely different" }
+
         it "does not set unreviewed" do
-          expect{ comment.moderate_update }.
-            not_to change{ comment.unreviewed }
+          expect { comment.moderate_update }
+            .not_to change { comment.unreviewed }
         end
       end
     end
@@ -54,8 +55,8 @@ describe Comment do
 
       context "with no changes to content" do
         it "does not reset unreviewed" do
-          expect{ comment.moderate_update }.
-            not_to change{ comment.unreviewed }
+          expect { comment.moderate_update }
+            .not_to change { comment.unreviewed }
         end
       end
 
@@ -63,8 +64,8 @@ describe Comment do
         before { comment.comment_content = "hi there friend" }
 
         it "does not reset unreviewed" do
-          expect{ comment.moderate_update }.
-            not_to change{ comment.unreviewed }
+          expect { comment.moderate_update }
+            .not_to change { comment.unreviewed }
         end
       end
 
@@ -72,8 +73,8 @@ describe Comment do
         before { comment.comment_content = "hi there ya filthy animal" }
 
         it "resets unreviewed" do
-          expect{ comment.moderate_update }.
-            to change{ comment.unreviewed }
+          expect { comment.moderate_update }
+            .to change { comment.unreviewed }
         end
       end
 
@@ -86,8 +87,8 @@ describe Comment do
           comment.comment_content = "something completely different"
 
           expect(user).to receive(:is_author_of?).and_return(true)
-          expect{ comment.moderate_update }.
-            not_to change{ comment.unreviewed }
+          expect { comment.moderate_update }
+            .not_to change { comment.unreviewed }
         end
       end
     end
