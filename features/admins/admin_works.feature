@@ -6,7 +6,7 @@ Feature: Admin Actions for Works, Comments, Series, Bookmarks
   Scenario: Can troubleshoot works
     Given I am logged in as "regular_user"
       And I post the work "Just a work you know"
-    When I am logged in as superadmin
+    When I am logged in as a "policy_and_abuse" admin
       And I view the work "Just a work you know"
       And I follow "Troubleshoot"
       And I check "Reindex Work"
@@ -16,7 +16,7 @@ Feature: Admin Actions for Works, Comments, Series, Bookmarks
   Scenario: Can hide works
     Given I am logged in as "regular_user"
       And I post the work "ToS Violation"
-    When I am logged in as policy_and_abuse_admin
+    When I am logged in as a "policy_and_abuse" admin
       And I view the work "ToS Violation"
       And I follow "Hide Work"
     Then I should see "Item has been hidden."
@@ -29,7 +29,7 @@ Feature: Admin Actions for Works, Comments, Series, Bookmarks
   Scenario: Can unhide works
     Given I am logged in as "regular_user"
       And I post the work "ToS Violation"
-    When I am logged in as superadmin
+    When I am logged in as a "policy_and_abuse" admin
       And I view the work "ToS Violation"
       And I follow "Hide Work"
       And all indexing jobs have been run
@@ -45,7 +45,7 @@ Feature: Admin Actions for Works, Comments, Series, Bookmarks
   Scenario: Can delete works
     Given I am logged in as "regular_user"
       And I post the work "ToS Violation"
-    When I am logged in as superadmin
+    When I am logged in as a "policy_and_abuse" admin
       And I view the work "ToS Violation"
       And I follow "Delete Work"
       And all indexing jobs have been run
@@ -71,7 +71,7 @@ Feature: Admin Actions for Works, Comments, Series, Bookmarks
       And I press "Create"
       And all indexing jobs have been run
     Then I should see "Bookmark was successfully created"
-    When I am logged in as superadmin
+    When I am logged in as a "policy_and_abuse" admin
       And I am on bad_user's bookmarks page
     When I follow "Hide Bookmark"
       And all indexing jobs have been run
@@ -84,7 +84,7 @@ Feature: Admin Actions for Works, Comments, Series, Bookmarks
     Given basic tags
       And I am logged in as "regular_user"
       And I post the work "Changes" with fandom "User-Added Fandom" with freeform "User-Added Freeform" with category "M/M"
-    When I am logged in as superadmin
+    When I am logged in as a "policy_and_abuse" admin
       And I view the work "Changes"
       And I follow "Edit Tags and Language"
     When I select "Mature" from "Rating"
@@ -121,7 +121,7 @@ Feature: Admin Actions for Works, Comments, Series, Bookmarks
     Given basic tags
       And I am logged in as "regular_user"
       And I bookmark the external work "External Changes"
-    When I am logged in as superadmin
+    When I am logged in as a "policy_and_abuse" admin
       And I view the external work "External Changes"
       And I follow "Edit External Work"
     When I fill in "Creator" with "Admin-Added Creator"
@@ -149,7 +149,7 @@ Feature: Admin Actions for Works, Comments, Series, Bookmarks
     Given basic tags
       And I am logged in as "regular_user"
       And I bookmark the external work "External Changes"
-    When I am logged in as superadmin
+    When I am logged in as a "policy_and_abuse" admin
       And I view the external work "External Changes"
       And I follow "Delete External Work"
     Then I should see "Item was successfully deleted."
@@ -175,7 +175,7 @@ Feature: Admin Actions for Works, Comments, Series, Bookmarks
 
     # comment from registered user cannot be marked as spam.
     # If registered user is spamming, this goes to Abuse team as ToS violation
-    When I am logged in as superadmin
+    When I am logged in as a "policy_and_abuse" admin
     Then I should see "Successfully logged in"
     When I view the work "The One Where Neal is Awesome"
       And I follow "Comments (1)"
@@ -183,7 +183,7 @@ Feature: Admin Actions for Works, Comments, Series, Bookmarks
 
     # now mark a comment as spam
     When I post the comment "Would you like a genuine rolex" on the work "The One Where Neal is Awesome" as a guest
-      And I am logged in as superadmin
+      And I am logged in as a "policy_and_abuse" admin
       And I view the work "The One Where Neal is Awesome"
       And I follow "Comments (2)"
     Then I should see "rolex"
@@ -215,7 +215,7 @@ Feature: Admin Actions for Works, Comments, Series, Bookmarks
       And I should see "I loved this!"
 
     # now mark comment as not spam
-    When I am logged in as superadmin
+    When I am logged in as a "policy_and_abuse" admin
       And I view the work "The One Where Neal is Awesome"
       And I follow "Comments (1)"
       And I follow "Not Spam"
@@ -244,7 +244,7 @@ Feature: Admin Actions for Works, Comments, Series, Bookmarks
       And basic languages
       And I am logged in as "regular_user"
       And I post the work "Wrong Language"
-    When I am logged in as superadmin
+    When I am logged in as a "policy_and_abuse" admin
       And I view the work "Wrong Language"
       And I follow "Edit Tags and Language"
     Then I should see "Edit Work Tags and Language for "
@@ -258,7 +258,7 @@ Feature: Admin Actions for Works, Comments, Series, Bookmarks
       And basic languages
       And I am logged in as "regular_user"
       And I post the work "Wrong Language"
-    When I am logged in as superadmin
+    When I am logged in as a "policy_and_abuse" admin
       And I view the work "Wrong Language"
       And I follow "Edit Tags and Language"
     When I select "Deutsch" from "Choose a language"
@@ -270,7 +270,7 @@ Feature: Admin Actions for Works, Comments, Series, Bookmarks
 
   Scenario: can mark a work as spam
   Given the work "Spammity Spam"
-    And I am logged in as superadmin
+    And I am logged in as a "policy_and_abuse" admin
     And I view the work "Spammity Spam"
   Then I should see "Mark As Spam"
   When I follow "Mark As Spam"
@@ -281,7 +281,7 @@ Feature: Admin Actions for Works, Comments, Series, Bookmarks
 
   Scenario: can mark a spam work as not-spam
   Given the spam work "Spammity Spam"
-    And I am logged in as superadmin
+    And I am logged in as a "policy_and_abuse" admin
     And I view the work "Spammity Spam"
   Then I should see "Mark Not Spam"
   When I follow "Mark Not Spam"
@@ -293,7 +293,7 @@ Feature: Admin Actions for Works, Comments, Series, Bookmarks
   Scenario: Admin can hide a series (e.g. if the series description or notes contain a TOS Violation)
     Given I am logged in as "tosser"
       And I add the work "Legit Work" to series "Violation"
-    When I am logged in as superadmin
+    When I am logged in as a "policy_and_abuse" admin
       And I view the series "Violation"
       And I follow "Hide Series"
     Then I should see "Item has been hidden."
@@ -321,7 +321,7 @@ Feature: Admin Actions for Works, Comments, Series, Bookmarks
   Scenario: Admin can un-hide a series
     Given I am logged in as "tosser"
       And I add the work "Legit Work" to series "Violation"
-      And I am logged in as superadmin
+      And I am logged in as a "policy_and_abuse" admin
       And I view the series "Violation"
       And I follow "Hide Series"
     When I follow "Make Series Visible"
