@@ -20,7 +20,7 @@ DatabaseCleaner.clean
 
 # Requires supporting ruby files with custom matchers and macros, etc,
 # in spec/support/ and its subdirectories.
-Dir[Rails.root.join("spec/support/**/*.rb")].each {|f| require f}
+Dir[Rails.root.join("spec/support/**/*.rb")].each { |f| require f }
 
 FactoryBot.find_definitions
 FactoryBot.definition_file_paths = %w(factories)
