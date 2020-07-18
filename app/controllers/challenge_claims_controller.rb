@@ -122,18 +122,17 @@ class ChallengeClaimsController < ApplicationController
   end
 
   def destroy
-    @claim = ChallengeClaim.find(params[:id])
+    if @challenge_claim.claiming_user == current_user
 
     begin
-      if @claim.claiming_user == current_user
         @usernotmod = "true"
       end
-      @claim.destroy
       if @usernotmod == "true"
         flash[:notice] = ts("Your claim was deleted.")
       else
         flash[:notice] = ts("The claim was deleted.")
       end
+      @challenge_claim.destroy
     rescue
       flash[:error] = ts("We couldn't delete that right now, sorry! Please try again later.")
     end
