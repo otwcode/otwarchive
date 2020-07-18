@@ -6,7 +6,7 @@ Feature: Tag wrangling
     Given I have loaded the "roles" fixture
     When I am logged in as "dizmo"
     Then I should not see "Tag Wrangling" within "#header"
-    When I am logged in as tag_wrangling_admin
+    When I am logged in as a "tag_wrangling" admin
       And I go to the manage users page
       And I fill in "Name" with "dizmo"
       And I press "Find"
