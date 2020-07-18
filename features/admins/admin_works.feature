@@ -6,7 +6,7 @@ Feature: Admin Actions for Works, Comments, Series, Bookmarks
   Scenario: Can troubleshoot works
     Given I am logged in as "regular_user"
       And I post the work "Just a work you know"
-    When I am logged in as a "policy_and_abuse" admin
+    When I am logged in as a "support" admin
       And I view the work "Just a work you know"
       And I follow "Troubleshoot"
       And I check "Reindex Work"

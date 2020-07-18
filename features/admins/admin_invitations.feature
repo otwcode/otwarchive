@@ -255,7 +255,7 @@ Feature: Admin Actions to Manage Invitations
       And I should not see "Joining the Archive currently requires an invitation; however, we are not accepting new invitation requests at this time."
 
   Scenario: An admin can send an invitation to a user via email
-    Given I am logged in as a "support" admin
+    Given I am logged in as an admin
       And all emails have been delivered
     When I follow "Invite New Users"
       And I fill in "invitation[invitee_email]" with "fred@bedrock.com"
@@ -264,7 +264,7 @@ Feature: Admin Actions to Manage Invitations
       And 1 email should be delivered
 
   Scenario: An admin can't create an invite without an email address.
-    Given I am logged in as a "support" admin
+    Given I am logged in as an admin
       And all emails have been delivered
     When I follow "Invite New Users"
       And I press "Invite user"
@@ -278,7 +278,7 @@ Feature: Admin Actions to Manage Invitations
       | odo   | mybucket9  |
       And "dax" has "0" invitations
       And "odo" has "3" invitations
-      And I am logged in as a "support" admin
+      And I am logged in as an admin
     When I follow "Invite New Users"
       And I fill in "Number of invitations" with "2"
       And I select "All" from "Users"
@@ -293,7 +293,7 @@ Feature: Admin Actions to Manage Invitations
       | bashir | heytheredoc |
       And "dax" has "5" invitations
       And "bashir" has "0" invitations
-      And I am logged in as a "support" admin
+      And I am logged in as an admin
     When I follow "Invite New Users"
       And I fill in "Number of invitations" with "2"
       And I select "With no unused invitations" from "Users"
@@ -304,7 +304,7 @@ Feature: Admin Actions to Manage Invitations
   Scenario: An admin can see the invitation of an existing user via name or token
     Given the user "dax" exists and is activated
       And "dax" has "2" invitations
-      And I am logged in as a "support" admin
+      And I am logged in as an admin
     When I follow "Invite New Users"
       And I fill in "Enter a user name" with "dax"
       And I press "Go"
@@ -315,14 +315,14 @@ Feature: Admin Actions to Manage Invitations
     Then I should see "copy and use"
 
   Scenario: An admin can't find a invitation for a nonexistent user
-    Given I am logged in as a "support" admin
+    Given I am logged in as an admin
       And I follow "Invite New Users"
     When I fill in "Enter a user name" with "dax"
       And I press "Go"
     Then I should see "No results were found. Try another search"
 
   Scenario: An admin can invite people from the queue
-    Given I am logged in as a "support" admin
+    Given I am logged in as an admin
       And an invitation request for "fred@bedrock.com"
       And an invitation request for "barney@bedrock.com"
       And all emails have been delivered
@@ -352,7 +352,7 @@ Feature: Admin Actions to Manage Invitations
 
   Scenario: An admin can search the invitation queue, and search parameters are
   kept even if deleting without JavaScript
-    Given I am logged in as a "support" admin
+    Given I am logged in as an admin
       And an invitation request for "streamtv@example.com"
       And an invitation request for "livetv@example.com"
       And an invitation request for "clearstream@example.com"
