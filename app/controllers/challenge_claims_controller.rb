@@ -122,21 +122,21 @@ class ChallengeClaimsController < ApplicationController
   end
 
   def destroy
+    redirect_path = collection_claims_path(@collection)
+    flash[:notice] = ts("The claim was deleted.")
+
     if @challenge_claim.claiming_user == current_user
+      redirect_path = collection_claims_path(@collection, for_user: true)
+      flash[:notice] = ts("Your claim was deleted.")
+    end
 
     begin
-        @usernotmod = "true"
-      end
-      if @usernotmod == "true"
-        flash[:notice] = ts("Your claim was deleted.")
-      else
-        flash[:notice] = ts("The claim was deleted.")
-      end
       @challenge_claim.destroy
     rescue
+      flash.delete(:notice)
       flash[:error] = ts("We couldn't delete that right now, sorry! Please try again later.")
     end
-    redirect_to collection_claims_path(@collection)
+    redirect_to redirect_path
   end
 
   private
