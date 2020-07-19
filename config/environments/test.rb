@@ -15,7 +15,12 @@ Otwarchive::Application.configure do
   config.consider_all_requests_local       = true
   config.action_controller.perform_caching = true
   config.action_mailer.perform_caching = true
-  config.cache_store = :dalli_store, '127.0.0.1:11211',
+
+  memcached_servers = "127.0.0.1:11211"
+  if File.file?("#{Rails.root}/config/local.yml")
+    memcached_servers = YAML.load_file(Rails.root.join("config", "local.yml")).fetch("MEMCACHED_SERVERS", memcached_servers)
+  end
+  config.cache_store = :dalli_store, memcached_servers,
                           { namespace:  'ao3-v1', expires_in:  0, compress: true , pool_size: 10 }
 
   # Raise exceptions instead of rendering exception templates
