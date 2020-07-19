@@ -14,8 +14,8 @@ FactoryBot.define do
     name { Faker::Name.first_name }
     comment_content { Faker::Lorem.sentence(25) }
     email { Faker::Internet.email }
-    commentable_type { "Work" }
-    commentable_id { create(:work).id }
+    commentable_type { "Chapter" }
+    commentable_id { create(:chapter).id }
   end
 
   factory :adminpost_comment, class: Comment do
