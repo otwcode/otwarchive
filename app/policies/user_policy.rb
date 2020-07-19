@@ -11,12 +11,25 @@ class UserPolicy < ApplicationPolicy
   # - deleting all of a spammer's creations
   JUDGE_ROLES = %w(superadmin policy_and_abuse).freeze
 
+  # Define which roles can update which attributes.
+  ALLOWED_ATTRIBUTES_BY_ROLES = {
+    "open_doors" => [roles: []],
+    "policy_and_abuse" => %i[email],
+    "superadmin" => [:email, roles: []],
+    "support" => %i[email],
+    "tag_wrangling" => [roles: []]
+  }.freeze
+
   def can_manage_users?
     user_has_roles?(MANAGE_ROLES)
   end
 
   def can_judge_users?
     user_has_roles?(JUDGE_ROLES)
+  end
+
+  def permitted_attributes
+    ALLOWED_ATTRIBUTES_BY_ROLES.values_at(*user.roles).compact.flatten
   end
 
   alias index? can_manage_users?
