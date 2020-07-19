@@ -8,11 +8,11 @@ linters:
         - .rubocop.yml
       Layout/InitialIndentation:
         Enabled: false
-      Layout/TrailingBlankLines:
+      Layout/LineLength:
+        Enabled: false
+      Layout/TrailingEmptyLines:
         Enabled: false
       Layout/TrailingWhitespace:
-        Enabled: false
-      Metrics/LineLength:
         Enabled: false
       Naming/FileName:
         Enabled: false

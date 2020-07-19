@@ -11,5 +11,5 @@ jshint:
   ignore_file: .jshintignore
 
 rubocop:
-  version: 0.72.0
+  version: 0.83.0
   config_file: .rubocop.yml

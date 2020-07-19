@@ -1,8 +1,8 @@
 # Options available at https://github.com/bbatsov/rubocop/blob/master/config/default.yml
 
 require:
-  - rubocop-rspec
   - rubocop-rails
+  - rubocop-rspec
 
 AllCops:
   RSpec:
@@ -18,8 +18,11 @@ Bundler/OrderedGems:
 Layout/DotPosition:
   EnforcedStyle: leading
 
-Layout/IndentFirstArrayElement:
+Layout/FirstArrayElementIndentation:
   EnforcedStyle: consistent
+
+Layout/LineLength:
+  Enabled: false
 
 Layout/MultilineMethodCallIndentation:
   EnforcedStyle: indented
@@ -40,9 +43,6 @@ Metrics/ClassLength:
   Enabled: false
 
 Metrics/CyclomaticComplexity:
-  Enabled: false
-
-Metrics/LineLength:
   Enabled: false
 
 Metrics/MethodLength:
