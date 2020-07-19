@@ -3,6 +3,7 @@ class UserPolicy < ApplicationPolicy
   # - troubleshooting for a user
   # - managing a user's invitations
   # - updating a user's email and roles (e.g. wranglers, archivists, not admin roles)
+  # This is further restricted using ALLOWED_ATTRIBUTES_BY_ROLES.
   MANAGE_ROLES = %w(superadmin policy_and_abuse open_doors support tag_wrangling).freeze
 
   # Roles that allow:
