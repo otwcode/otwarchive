@@ -69,6 +69,7 @@ class Comment < ApplicationRecord
   # Put comments back into moderation after significant changes
   def moderate_update
     return if !moderated_commenting_enabled? || is_creator_comment?
+
     self.unreviewed = true if significant_content_change?
   end
 
