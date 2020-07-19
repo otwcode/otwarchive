@@ -1,0 +1,28 @@
+---
+EnableDefaultLinters: true
+linters:
+  Rubocop:
+    enabled: true
+    rubocop_config:
+      inherit_from:
+        - .rubocop.yml
+      Layout/InitialIndentation:
+        Enabled: false
+      Layout/TrailingBlankLines:
+        Enabled: false
+      Layout/TrailingWhitespace:
+        Enabled: false
+      Metrics/LineLength:
+        Enabled: false
+      Naming/FileName:
+        Enabled: false
+      Style/FrozenStringLiteralComment:
+        Enabled: false
+      Lint/UselessAssignment:
+        Enabled: false
+      # Workaround for RuboCop 0.72 and later
+      # https://github.com/Shopify/erb-lint/issues/130
+      Rails:
+        Enabled: true
+      Rails/OutputSafety:
+        Enabled: false

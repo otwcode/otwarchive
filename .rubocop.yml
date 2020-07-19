@@ -2,6 +2,7 @@
 
 require:
   - rubocop-rspec
+  - rubocop-rails
 
 AllCops:
   RSpec:
