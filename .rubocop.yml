@@ -60,7 +60,7 @@ Rails/DynamicFindBy:
     - find_by_name
     # Exception for Tagging.find_by_tag
     - find_by_tag
-    # Exception for Work.find_by_*
+    # Exceptions for Work.find_by_*
     - find_by_url
     - find_by_url_cache_key
     - find_by_url_generation
