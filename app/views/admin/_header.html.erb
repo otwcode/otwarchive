@@ -1,6 +1,6 @@
 <h3 class="landmark heading"><%= ts("Admin Navigation", key: "header") %></h3>
 <ul class="admin primary navigation actions" role="navigation">
-  <% if policy(User).can_search_users? %>
+  <% if policy(User).can_manage_users? %>
     <li class="dropdown">
       <%= link_to ts("Manage Users", key: "header"), admin_users_path %>
       <ul class="menu" role="menu">
@@ -32,11 +32,9 @@
   </li>
   <li><%= link_to ts("Blacklist", key: "header"), admin_blacklisted_emails_path %></li>
   <li><%= link_to ts("Spam", key: "header"), admin_spam_index_path %></li>
-
-  <% if AdminSettingPolicy.can_update_settings?(current_admin) %>
+  <% if policy(AdminSetting).can_view_settings? %>
     <li><%= link_to ts("Settings", key: "header"), admin_settings_path %></li>
   <% end %>
-
   <li><%= link_to ts("Banners", key: "header"), admin_banners_path %></li>
   <li class="dropdown">
     <%= link_to ts("Skins", key: "header"), admin_skins_path %>

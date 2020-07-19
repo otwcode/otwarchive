@@ -40,6 +40,7 @@ en:
       work: "Work"
     attributes:
       admin/role:
+        board: "Board"
         communications: "Communications"
         docs: "AO3 Docs"
         open_doors: "Open Doors"

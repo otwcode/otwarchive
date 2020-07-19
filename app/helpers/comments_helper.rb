@@ -120,7 +120,7 @@ module CommentsHelper
   def can_mark_comment_ham?(comment)
     return unless comment.pseud.nil? && !comment.approved?
 
-    policy(comment).can_delete_comment?
+    policy(comment).can_mark_comment_spam?
   end
 
   # An admin with proper authorization or a creator of the comment's ultimate
@@ -128,7 +128,16 @@ module CommentsHelper
   def can_mark_comment_spam?(comment)
     return unless comment.pseud.nil? && comment.approved?
 
-    policy(comment).can_delete_comment? || is_author_of?(comment.ultimate_parent)
+    policy(comment).can_mark_comment_spam? || is_author_of?(comment.ultimate_parent)
+  end
+
+  # Comments can be deleted by admins with proper authorization, their creator
+  # (if the creator is a registered user), or the creator of the comment's
+  # ultimate parent.
+  def can_destroy_comment?(comment)
+    policy(comment).can_destroy_comment? || 
+      is_author_of?(comment) || 
+      is_author_of?(comment.ultimate_parent)
   end
 
   def comment_parent_hidden?(comment)

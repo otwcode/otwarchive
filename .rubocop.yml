@@ -62,6 +62,13 @@ RSpec/AnyInstance:
 RSpec/ContextWording:
   Enabled: false
 
+RSpec/DescribeClass:
+  Exclude:
+    # Exception for rake specs, where the top level describe uses a task name
+    - 'spec/lib/tasks/*.rake_spec.rb'
+    # Exception for integration specs, which may not test a specific class
+    - 'spec/requests/**/*.rb'
+
 RSpec/DescribedClass:
   Enabled: false
 
@@ -130,6 +137,14 @@ Style/GlobalVars:
   AllowedVariables:
     - $elasticsearch
     - $rollout
+
+Style/PercentLiteralDelimiters:
+  Exclude:
+    # Exception for Cucumber step definitions, where we heavily use %{} for strings
+    - 'features/**/*.rb'
+  PreferredDelimiters:
+    "%w": "()"
+    "%W": "()"
 
 # Stop checking if uses of "self" are redundant
 Style/RedundantSelf:

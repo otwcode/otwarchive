@@ -26,6 +26,9 @@
       <span class="visitor icon"><!-- visitor icon holder --></span>
     <% end %>
   </div>
+  <% unless single_comment.approved? %>
+    <p class="notice"><%= ts("This comment has been marked as spam.") %></p>
+  <% end %>
   <blockquote class="userstuff"><%=raw sanitize_field(single_comment, :comment_content) %></blockquote>
   <% unless single_comment.edited_at.blank? %>
     <p class="edited datetime">
