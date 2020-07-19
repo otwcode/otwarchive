@@ -6,21 +6,13 @@ gem 'test-unit', '~> 3.2'
 
 gem 'bundler'
 
-gem 'rails', '~> 5.2.4.3'
-gem 'rack', '~> 2.1', '>= 2.1.4'
-gem 'sprockets', '< 4'
+gem "rails", "~> 5.2.4.3"
+gem "rack", "~> 2.1", ">= 2.1.4"
+gem "sprockets", "< 4"
 
 gem 'rails-observers', git: 'https://github.com/rails/rails-observers'
 gem 'actionpack-page_caching'
 gem 'rails-controller-testing'
-#gem 'activerecord-deprecated_finders'
-
-# the published gem does not include fixes that are in Rails
-# specifically https://github.com/rails/strong_parameters/issues/16
-# gem 'strong_parameters', git: 'https://github.com/rails/strong_parameters.git',  ref: '904af2910c57b71bc992e8364aa48896be230c2f'
-
-# Bundle edge Rails instead:
-# gem 'rails', git: 'git://github.com/rails/rails.git'
 
 # Database
 # gem 'sqlite3-ruby', require: 'sqlite3'
@@ -38,7 +30,7 @@ gem 'rack-attack'
 
 # Version of redis-rb gem
 # We are currently running Redis 3.2.1 (7/2018)
-gem 'redis', "~> 3.3.5"
+gem "redis", "~> 3.3.5"
 gem 'redis-namespace'
 
 # Here are all our application-specific gems
@@ -74,7 +66,7 @@ gem 'elasticsearch', '6.8.0'
 gem 'aws-sdk'
 gem 'css_parser'
 
-gem 'terrapin'
+gem "terrapin"
 gem 'paperclip', '>= 5.2.0'
 
 # for looking up image dimensions quickly
