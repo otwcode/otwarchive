@@ -9,7 +9,7 @@ Feature: Admin Actions to manage users
       | login | password    |
       | dizmo | wrangulator |
     And I have loaded the "roles" fixture
-    When I am logged in as a "support" admin
+    When I am logged in as a super admin
     And I go to the manage users page
     And I fill in "Name" with "dizmo"
     And I press "Find"
