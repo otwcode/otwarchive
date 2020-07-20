@@ -375,7 +375,7 @@ class User < ApplicationRecord
   # Set the roles for this user
   def set_roles(role_list)
     if role_list
-      self.roles = Role.find(role_list)
+      self.roles = Role.where(id: role_list)
     else
       self.roles = []
     end

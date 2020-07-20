@@ -57,4 +57,16 @@ module AdminHelper
     options[:disabled] = admin_setting_disabled?(field_name)
     form.text_field(field_name, options)
   end
+
+  def admin_can_update_user_roles?
+    return unless logged_in_as_admin?
+
+    policy(User).permitted_attributes.include?(roles: [])
+  end
+
+  def admin_can_update_user_email?
+    return unless logged_in_as_admin?
+
+    policy(User).permitted_attributes.include?(:email)
+  end
 end
