@@ -113,7 +113,7 @@ describe Admin::AdminUsersController do
         end
       end
 
-      %w[open_doors tag_wrangling].each do |admin_role|
+      %w(open_doors tag_wrangling).each do |admin_role|
         context "when admin has #{admin_role} role" do
           before { admin.update(roles: [admin_role]) }
 
@@ -132,7 +132,7 @@ describe Admin::AdminUsersController do
         end
       end
 
-      %w[support policy_and_abuse].each do |admin_role|
+      %w(support policy_and_abuse).each do |admin_role|
         context "when admin has #{admin_role} role" do
           before { admin.update(roles: [admin_role]) }
 
