@@ -8,7 +8,7 @@ Feature: Admin Find Users page
         | userB  | b@bo3.org  |
         | userCB | cb@bo3.org |
       And the user "userB" exists and has the role "archivist"
-      And I am logged in as superadmin
+      And I am logged in as an "open_doors" admin
       And I go to the manage users page
 
   Scenario: The Find Users page should perform a partial match on name
