@@ -100,7 +100,7 @@ describe Admin::AdminUsersController do
       context "when admin has superadmin role" do
         before { admin.update(roles: ["superadmin"]) }
 
-        it "allows adming to update all attributes" do
+        it "allows admins to update all attributes" do
           put :update, params: {
             id: user.login,
             user: {
@@ -125,7 +125,7 @@ describe Admin::AdminUsersController do
 
           it "allows admins with #{admin_role} role to update roles" do
             put :update, params: { id: user.login, user: { roles: [role.id.to_s] } }
-            expect(user.reload.roles.include?(role)).to be_truthy
+            expect(user.reload.roles).to include(role)
             it_redirects_to_with_notice(root_path, "User was successfully updated.")
           end
         end
@@ -138,7 +138,7 @@ describe Admin::AdminUsersController do
             expect do
               put :update, params: { id: user.login, user: { roles: [role.id.to_s] } }
             end.to raise_exception(ActionController::UnpermittedParameters)
-            expect(user.reload.roles.include?(role)).to be_falsey
+            expect(user.reload.roles).not_to include(role)
           end
 
           it "allows admins with #{admin_role} role to update email" do
