@@ -70,7 +70,7 @@ class Comment < ApplicationRecord
 
     if self.saved_change_to_edited_at? && self.saved_change_to_comment_content? && self.moderated_commenting_enabled? && !self.is_creator_comment?
       # we might need to put it back into moderation
-      if content_too_different?(self.comment_content, self.comment_content_was)
+      if content_too_different?(comment_content, comment_content_before_last_save)
         # we use update_column because we don't want to invoke this callback again
         self.update_column(:unreviewed, true)
       end
