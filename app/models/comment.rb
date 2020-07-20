@@ -63,18 +63,18 @@ class Comment < ApplicationRecord
   after_create :update_work_stats
   after_destroy :update_work_stats
 
-  before_update :moderate_update
   after_update :after_update
-
-  # Put comments back into moderation after significant changes
-  def moderate_update
-    return if !moderated_commenting_enabled? || is_creator_comment?
-    self.unreviewed = true if significant_content_change?
-  end
-
   def after_update
     users = []
     admins = []
+
+    if self.saved_change_to_edited_at? && self.saved_change_to_comment_content? && self.moderated_commenting_enabled? && !self.is_creator_comment?
+      # we might need to put it back into moderation
+      if content_too_different?(self.comment_content, self.comment_content_was)
+        # we use update_column because we don't want to invoke this callback again
+        self.update_column(:unreviewed, true)
+      end
+    end
 
     if self.saved_change_to_edited_at? || (self.saved_change_to_unreviewed? && !self.unreviewed?)
       # Reply to owner of parent comment if this is a reply comment
@@ -208,12 +208,6 @@ class Comment < ApplicationRecord
       new_feedback = user.inbox_comments.build
       new_feedback.feedback_comment_id = self.id
       new_feedback.save
-    end
-
-    def significant_content_change?
-      comment_content_changed? && content_too_different?(
-        comment_content, comment_content_was
-      )
     end
 
     def content_too_different?(new_content, old_content)
