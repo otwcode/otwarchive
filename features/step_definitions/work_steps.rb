@@ -123,26 +123,21 @@ Given /^I have no works or comments$/ do
 end
 
 Given /^the chaptered work(?: with ([\d]+) chapters)?(?: with ([\d]+) comments?)? "([^"]*)"$/ do |n_chapters, n_comments, title|
-  step %{I am logged in as a random user}
-  step %{I post the work "#{title}"}
-  work = Work.find_by(title: title)
-  visit work_path(work)
-  n_chapters ||= 2
-  (n_chapters.to_i - 1).times do |i|
-    step %{I follow "Add Chapter"}
-    fill_in("content", with: "Yet another chapter.")
-    click_button("Post")
-  end
   step %{I am logged out}
+  step %{basic tags}
+
+  title ||= "Blabla"
+  n_chapters ||= 2
+
+  work = FactoryBot.create(:work, title: title, expected_number_of_chapters: n_chapters.to_i)
+  FactoryBot.create_list(:chapter, n_chapters.to_i - 1,
+                         work: work,
+                         posted: true)
+
   n_comments ||= 0
-  work = Work.find_by(title: title)
-  n_comments.to_i.times do |i|
-    step %{I am logged in as a random user}
-    visit work_path(work)
-    fill_in("comment[comment_content]", with: "Bla bla")
-    click_button("Comment")
-    step %{I am logged out}
-  end
+  FactoryBot.create_list(:comment, n_comments.to_i, :by_guest,
+                         commentable: work.chapters.posted.first,
+                         comment_content: "Bla bla")
 end
 
 Given /^I have a work "([^"]*)"$/ do |work|
@@ -161,27 +156,26 @@ Given /^I have a multi-chapter draft$/ do
 end
 
 Given /^the work(?: "([^"]*)")? with(?: (\d+))? comments setup$/ do |title, n_comments|
-  title ||= "Blabla"
-  step %{I have a work "#{title}"}
   step %{I am logged out}
+  step %{basic tags}
+
+  title ||= "Blabla"
+  work = FactoryBot.create(:work, title: title)
+
   n_comments ||= 3
-  n_comments.to_i.times do |i|
-    step %{I am logged in as a random user}
-    step %{I post the comment "Keep up the good work" on the work "#{title}"}
-    step %{I am logged out}
-  end
+  FactoryBot.create_list(:comment, n_comments.to_i, :by_guest,
+                         commentable: work.last_posted_chapter)
 end
 
 Given /^the work(?: "([^"]*)")? with(?: (\d+))? bookmarks? setup$/ do |title, n_bookmarks|
-  title ||= "Blabla"
-  step %{I have a work "#{title}"}
   step %{I am logged out}
+  step %{basic tags}
+
+  title ||= "Blabla"
+  work = FactoryBot.create(:work, title: title)
+
   n_bookmarks ||= 3
-  n_bookmarks.to_i.times do |i|
-    step %{I am logged in as a random user}
-    step %{I bookmark the work "#{title}"}
-    step %{I am logged out}
-  end
+  FactoryBot.create_list(:bookmark, n_bookmarks.to_i, bookmarkable: work)
 end
 
 Given /^the chaptered work setup$/ do
