@@ -8,7 +8,7 @@ describe Admin::AdminUsersController do
 
   describe "GET #index" do
     let(:admin) { create(:admin) }
- 
+
     context "when admin does not have correct authorization" do
       it "redirects with error" do
         admin.update(roles: [])
@@ -32,7 +32,7 @@ describe Admin::AdminUsersController do
 
   describe "GET #bulk_search" do
     let(:admin) { create(:admin) }
- 
+
     context "when admin does not have correct authorization" do
       it "redirects with error" do
         admin.update(roles: [])
@@ -82,7 +82,7 @@ describe Admin::AdminUsersController do
   describe "PUT #update" do
     let(:admin) { create(:admin) }
     let(:user) { create(:user) }
-  
+
     context "when admin does not have correct authorization" do
       it "redirects with error" do
         admin.update(roles: [])
@@ -113,7 +113,7 @@ describe Admin::AdminUsersController do
         end
       end
 
-      %w(open_doors tag_wrangling).each do |admin_role|
+      %w[open_doors tag_wrangling].each do |admin_role|
         context "when admin has #{admin_role} role" do
           before { admin.update(roles: [admin_role]) }
 
@@ -132,7 +132,7 @@ describe Admin::AdminUsersController do
         end
       end
 
-      %w(support policy_and_abuse).each do |admin_role|
+      %w[support policy_and_abuse].each do |admin_role|
         context "when admin has #{admin_role} role" do
           before { admin.update(roles: [admin_role]) }
 
@@ -156,7 +156,7 @@ describe Admin::AdminUsersController do
   describe "POST #update_status" do
     let(:admin) { create(:admin) }
     let(:user) { create(:user) }
-  
+
     context "when admin does not have correct authorization" do
       it "redirects with error" do
         admin.update(roles: [])
@@ -168,7 +168,7 @@ describe Admin::AdminUsersController do
         it_redirects_to_with_error(root_url, "Sorry, only an authorized admin can access the page you were trying to reach.")
       end
     end
-  
+
     context "when admin has correct authorization" do
       it "allows admins to suspend user with note" do
         admin.update(roles: ["policy_and_abuse"])
@@ -332,7 +332,7 @@ describe Admin::AdminUsersController do
         post :send_activation, params: { id: user.login }
 
         it_redirects_to_with_notice(admin_user_path(id: user.login), "Activation email sent")
-      end 
+      end
     end
   end
 end
