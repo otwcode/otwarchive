@@ -134,9 +134,12 @@ Given /^the chaptered work(?: with ([\d]+) chapters)?(?: with ([\d]+) comments?)
                          work: work,
                          posted: true)
 
+  # Make sure that the word count is set properly:
+  work.save
+
   n_comments ||= 0
   FactoryBot.create_list(:comment, n_comments.to_i, :by_guest,
-                         commentable: work.chapters.posted.first,
+                         commentable: work.first_chapter,
                          comment_content: "Bla bla")
 end
 
