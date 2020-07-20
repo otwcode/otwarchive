@@ -113,9 +113,10 @@ describe Admin::AdminUsersController do
         end
       end
 
-      ["open_doors", "tag_wrangling"].each do |admin_role|
+      %w[open_doors tag_wrangling].each do |admin_role|
         context "when admin has #{admin_role} role" do
           before { admin.update(roles: [admin_role]) }
+
           it "prevents admins with #{admin_role} role from updating email" do
             expect do
               put :update, params: { id: user.login, user: { email: "updated@example.com" } }
@@ -131,9 +132,10 @@ describe Admin::AdminUsersController do
         end
       end
 
-      ["support", "policy_and_abuse"].each do |admin_role|
+      %w[support policy_and_abuse].each do |admin_role|
         context "when admin has #{admin_role} role" do
           before { admin.update(roles: [admin_role]) }
+
           it "prevents admins with #{admin_role} role from updating roles" do
             expect do
               put :update, params: { id: user.login, user: { roles: [role.id.to_s] } }
