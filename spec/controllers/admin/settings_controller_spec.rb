@@ -88,7 +88,7 @@ describe Admin::SettingsController do
         {
           hide_spam: true,
           invite_from_queue_enabled: false,
-          invite_from_queue_number: 10,
+          invite_from_queue_number: 10
         }.each_pair do |field, value|
           it "allows admins with policy_and_abuse role to update #{field}" do
             put :update, params: { id: setting.id, admin_setting: { field => value } }
