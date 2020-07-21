@@ -12,7 +12,7 @@ Feature: Invite queue management
 
   Scenario: Can turn queue off in Admin Settings and it displays as off
 
-    Given I am logged in as a super admin
+    Given I am logged in as a "policy_and_abuse" admin
       And I go to the admin-settings page
       And I uncheck "admin_setting_invite_from_queue_enabled"
       And I press "Update"
