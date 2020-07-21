@@ -85,10 +85,16 @@ describe Admin::SettingsController do
           end
         end
 
-        it "allows admins with policy_and_abuse role to update spam setting" do
-          put :update, params: { id: setting.id, admin_setting: { hide_spam: "1" } }
-          expect(setting.reload.hide_spam?).to be_truthy
-          it_redirects_to_with_notice(admin_settings_path, "Archive settings were successfully updated.")
+        {
+          hide_spam: true,
+          invite_from_queue_enabled: false,
+          invite_from_queue_number: 11
+        }.each_pair do |field, value|
+          it "allows admins with policy_and_abuse role to update #{field}" do
+            put :update, params: { id: setting.id, admin_setting: { field => value } }
+            expect(setting.reload.send(field)).to eq(value)
+            it_redirects_to_with_notice(admin_settings_path, "Archive settings were successfully updated.")
+          end
         end
       end
 
