@@ -5,7 +5,7 @@ Feature: Admin Actions to Manage Invitations
   I want to be able to require invitations for new users
 
   Scenario: Admin can set invite from queue number to a number greater than or equal to 1
-    Given I am logged in as a super admin
+    Given I am logged in as a "policy_and_abuse" admin
       And I go to the admin-settings page
       And I fill in "admin_setting_invite_from_queue_number" with "0"
       And I press "Update"

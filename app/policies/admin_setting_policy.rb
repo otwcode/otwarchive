@@ -4,7 +4,11 @@ class AdminSettingPolicy < ApplicationPolicy
 
   # Define which roles can update which settings.
   ALLOWED_SETTINGS_BY_ROLES = {
-    "policy_and_abuse" => %i[hide_spam],
+    "policy_and_abuse" => %i[
+      hide_spam
+      invite_from_queue_enabled
+      invite_from_queue_number
+    ],
     "superadmin" => %i[
       account_creation_enabled
       cache_expiration
