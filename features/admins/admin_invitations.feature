@@ -7,10 +7,10 @@ Feature: Admin Actions to Manage Invitations
   Scenario: Admin can set invite from queue number to a number greater than or equal to 1
     Given I am logged in as a "policy_and_abuse" admin
       And I go to the admin-settings page
-      And I fill in "admin_setting_invite_from_queue_number" with "0"
+      And I fill in "Number of people to invite from the queue at once" with "0"
       And I press "Update"
     Then I should see "Invite from queue number must be greater than 0. To disable invites, uncheck the appropriate setting."
-    When I fill in "admin_setting_invite_from_queue_number" with "1"
+    When I fill in "Number of people to invite from the queue at once" with "1"
       And I press "Update"
     Then I should not see "Invite from queue number must be greater than 0."
 
