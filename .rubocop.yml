@@ -174,9 +174,6 @@ Style/PercentLiteralDelimiters:
   Exclude:
     # Exception for Cucumber step definitions, where we heavily use %{} for strings
     - 'features/**/*.rb'
-  PreferredDelimiters:
-    "%w": "()"
-    "%W": "()"
 
 # Stop checking if uses of "self" are redundant
 Style/RedundantSelf:
