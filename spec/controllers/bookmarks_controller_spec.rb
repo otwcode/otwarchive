@@ -48,7 +48,7 @@ describe BookmarksController do
         fake_login
         get :new, params: { chapter_id: chapter2.id, format: :js }, xhr: true
         expect(response).to render_template("bookmark_form_dynamic")
-        expect(assigns(:bookmarkable)).to eq(chapteredwork)
+        expect(assigns(:bookmarkable)).to eq(chaptered_work)
       end
     end
   end
@@ -213,16 +213,16 @@ describe BookmarksController do
 
   describe "show" do
     let(:chaptered_work) { create(:work) }
-    let(:chapter2) { create(:chapter, work: chaptered_work) }
+    let(:chapter2) { create(:chapter, work: chaptered_work, position: 2, posted: true, title: "Second title") }
     let(:bookmark) { create(:bookmark, bookmarkable_id: chaptered_work.id) }
-    # render_views check why I needed this
+    render_views # to see the title appear in the right place
 
     it "finds a work from a bookmark" do
       fake_login_known_user(bookmark.pseud.user)
       get :show, params: { id: bookmark }
       expect(response).to have_http_status(:success)
-      expect(response.body).to include(chaptered_work.title)
       expect(assigns(:bookmark)).to eq(bookmark)
+      expect(response.body).to include(chaptered_work.title)
     end
   end
 end
