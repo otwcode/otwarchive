@@ -38,3 +38,8 @@ When /^"([^"]*)" creates the pseud "([^"]*)"$/ do |username, newpseud|
   fill_in "Name", with: newpseud
   click_button "Create"
 end
+
+Given /^max items per page is 3$/ do
+  stub_const("ArchiveConfig", OpenStruct.new(ArchiveConfig))
+  ArchiveConfig.ITEMS_PER_PAGE = 3
+end

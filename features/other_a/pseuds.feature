@@ -117,3 +117,18 @@ Scenario: Manage pseuds - add, edit
     And I should see "My new fancy name (editpseuds)"
     And I should see "I wanted to add another fancy name"
     And I should not see "My new name (editpseuds)"
+
+Scenario: Many pseuds
+
+  Given max items per page is 3
+    And "Zaphod" has the pseud "Slartibartfast"
+    And "Zaphod" has the pseud "Agrajag"
+    And "Zaphod" has the pseud "Betelgeuse"
+    And I am logged in as "Zaphod"
+
+  When I view my profile
+  Then I should see "Zaphod"
+    And I should see "Agrajag"
+    And I should see "Betelgeuse"
+    And I should not see "Slartibartfast"
+    And I should see "All my pseuds (4)"
