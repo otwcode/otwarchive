@@ -28,7 +28,7 @@ describe BookmarksController do
       it "with chapter" do
         fake_login
         get :new, params: { chapter_id: chapter2.id }
-        expect(response).to render_template('new')
+        expect(response).to render_template("new")
         expect(assigns(:bookmarkable)).to eq(chaptered_work)
       end
     end
@@ -217,7 +217,7 @@ describe BookmarksController do
     let(:bookmark) { create(:bookmark, bookmarkable_id: chaptered_work.id) }
     # render_views check why I needed this
 
-    it "should find a work from a bookmark" do
+    it "finds a work from a bookmark" do
       fake_login_known_user(bookmark.pseud.user)
       get :show, params: { id: bookmark }
       expect(response).to have_http_status(:success)
