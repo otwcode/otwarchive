@@ -58,7 +58,7 @@ class Admin::AdminUsersController < Admin::BaseController
   def update
     @user = User.find_by(login: params[:id])
     authorize @user
-    if @user.admin_update(user_params)
+    if @user.admin_update(permitted_attributes(@user))
       flash[:notice] = ts("User was successfully updated.")
     else
       flash[:error] = ts("There was an error updating user %{name}", name: params[:id])
@@ -148,9 +148,5 @@ class Admin::AdminUsersController < Admin::BaseController
     UserMailer.signup_notification(@user.id).deliver!
     flash[:notice] = ts("Activation email sent")
     redirect_to action: :show
-  end
-
-  def user_params
-    params.require(:user).permit(:email, roles: [])
   end
 end

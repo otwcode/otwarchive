@@ -148,12 +148,9 @@ end
 Given /^a tag "([^\"]*)" with(?: (\d+))? comments$/ do |tagname, n_comments|
   tag = Fandom.find_or_create_by_name(tagname)
   step %{I am logged out}
+
   n_comments ||= 3
-  n_comments.to_i.times do |i|
-    step %{I am logged in as a tag wrangler}
-    step %{I post the comment "Comment number #{i}" on the tag "#{tagname}"}
-    step %{I am logged out}
-  end
+  FactoryBot.create_list(:comment, n_comments.to_i, :on_tag, commentable: tag)
 end
 
 Given /^(?:a|the) canonical(?: "([^"]*)")? fandom "([^"]*)" with (\d+) works$/ do |media, tag_name, number_of_works|
@@ -168,12 +165,9 @@ end
 Given /^a period-containing tag "([^\"]*)" with(?: (\d+))? comments$/ do |tagname, n_comments|
   tag = Fandom.find_or_create_by_name(tagname)
   step %{I am logged out}
+
   n_comments ||= 3
-  n_comments.to_i.times do |i|
-    step %{I am logged in as a tag wrangler}
-    step %{I post the comment "Comment number #{i}" on the period-containing tag "#{tagname}"}
-    step %{I am logged out}
-  end
+  FactoryBot.create_list(:comment, n_comments.to_i, :on_tag, commentable: tag)
 end
 
 Given /^the unsorted tags setup$/ do
