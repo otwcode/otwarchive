@@ -5,7 +5,6 @@
 
 erblint:
   enabled: true
-  version: 0.0.29
   config_file: .erb-lint.yml
 
 jshint:
