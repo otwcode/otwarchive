@@ -66,7 +66,7 @@ describe AdminPostsController do
       end
     end
 
-    context "when admin does not have correct authorization" do
+    context "when admin has correct roles" do
       it "allows access to authorized admins and renders edit template" do
         admin.update(roles: ["communications"])
         fake_login_admin(admin)

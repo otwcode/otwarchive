@@ -4,13 +4,13 @@ class UserPolicy < ApplicationPolicy
   # - managing a user's invitations
   # - updating a user's email and roles (e.g. wranglers, archivists, not admin roles)
   # This is further restricted using ALLOWED_ATTRIBUTES_BY_ROLES.
-  MANAGE_ROLES = %w(superadmin policy_and_abuse open_doors support tag_wrangling).freeze
+  MANAGE_ROLES = %w[superadmin policy_and_abuse open_doors support tag_wrangling].freeze
 
   # Roles that allow:
   # - updating a user's Fannish Next of Kin
   # - suspending and banning
   # - deleting all of a spammer's creations
-  JUDGE_ROLES = %w(superadmin policy_and_abuse).freeze
+  JUDGE_ROLES = %w[superadmin policy_and_abuse].freeze
 
   # Define which roles can update which attributes.
   ALLOWED_ATTRIBUTES_BY_ROLES = {

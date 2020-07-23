@@ -1,6 +1,7 @@
 # Options available at https://github.com/bbatsov/rubocop/blob/master/config/default.yml
 
 require:
+  - rubocop-rails
   - rubocop-rspec
 
 AllCops:
@@ -17,8 +18,11 @@ Bundler/OrderedGems:
 Layout/DotPosition:
   EnforcedStyle: leading
 
-Layout/IndentFirstArrayElement:
+Layout/FirstArrayElementIndentation:
   EnforcedStyle: consistent
+
+Layout/LineLength:
+  Enabled: false
 
 Layout/MultilineMethodCallIndentation:
   EnforcedStyle: indented
@@ -41,9 +45,6 @@ Metrics/ClassLength:
 Metrics/CyclomaticComplexity:
   Enabled: false
 
-Metrics/LineLength:
-  Enabled: false
-
 Metrics/MethodLength:
   Enabled: false
 
@@ -52,6 +53,37 @@ Metrics/ModuleLength:
 
 Metrics/PerceivedComplexity:
   Enabled: false
+
+Rails/DynamicFindBy:
+  AllowedMethods:
+    # Exception for Tag.find_by_name
+    - find_by_name
+    # Exception for Tagging.find_by_tag
+    - find_by_tag
+    # Exceptions for Work.find_by_*
+    - find_by_url
+    - find_by_url_cache_key
+    - find_by_url_generation
+    - find_by_url_generation_key
+    - find_by_url_uncached
+
+# Allow all uses of html_safe, they're everywhere...
+Rails/OutputSafety:
+  Enabled: false
+
+Rails/RakeEnvironment:
+  Enabled: false
+
+# Allow update_attribute, update_all, touch, etc.
+Rails/SkipsModelValidations:
+  Enabled: false
+
+Rails/UnknownEnv:
+  Environments:
+    - development
+    - test
+    - staging
+    - production
 
 # Allow "allow_any_instance_of"
 RSpec/AnyInstance:
@@ -142,9 +174,6 @@ Style/PercentLiteralDelimiters:
   Exclude:
     # Exception for Cucumber step definitions, where we heavily use %{} for strings
     - 'features/**/*.rb'
-  PreferredDelimiters:
-    "%w": "()"
-    "%W": "()"
 
 # Stop checking if uses of "self" are redundant
 Style/RedundantSelf:

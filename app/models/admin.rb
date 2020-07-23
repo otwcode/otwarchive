@@ -1,6 +1,6 @@
 class Admin < ApplicationRecord
   include ActiveModel::ForbiddenAttributesProtection
-  VALID_ROLES = %w(superadmin board communications translation tag_wrangling docs support policy_and_abuse open_doors).freeze
+  VALID_ROLES = %w[superadmin board communications translation tag_wrangling docs support policy_and_abuse open_doors].freeze
 
   serialize :roles, Array
 
@@ -20,8 +20,8 @@ class Admin < ApplicationRecord
 
   validate :allowed_roles
   def allowed_roles
-    if roles && (roles - VALID_ROLES).present?
-      errors.add(:roles, :invalid)
-    end
+    return unless roles && (roles - VALID_ROLES).present?
+
+    errors.add(:roles, :invalid)
   end
 end
