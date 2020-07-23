@@ -6,8 +6,7 @@
   <li id="add_collection_link"><%= collection_link(bookmark) %></li>
   <% if bookmark.bookmarkable.is_a?(Work) && !bookmark.bookmarkable.unrevealed? %>
     <li class="share hidden">
-      <%= link_to_modal ts("Share"), :for => "#share_#{bookmark.id}", :title => ts("Share Bookmark") %>
-      <%= render 'share/share', :shareable => bookmark, :bookmark => bookmark %>
+      <%= link_to_modal ts("Share"), :for => share_bookmark_path(bookmark), :title => ts("Share Bookmark") %>
     </li>
   <% end %>
 </ul>

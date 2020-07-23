@@ -1,14 +1,16 @@
 class BookmarksController < ApplicationController
   before_action :load_collection
   before_action :load_owner, only: [ :index ]
-  before_action :load_bookmarkable, only: [ :index, :new, :create, :fetch_recent, :hide_recent ]
+  before_action :load_bookmarkable, only: [ :index, :new, :create, :fetch_recent, :hide_recent, :share ]
   before_action :users_only, only: [:new, :create, :edit, :update]
   before_action :check_user_status, only: [:new, :create, :edit, :update]
-  before_action :load_bookmark, only: [ :show, :edit, :update, :destroy, :fetch_recent, :hide_recent, :confirm_delete ]
-  before_action :check_visibility, only: [ :show ]
+  before_action :load_bookmark, only: [ :show, :edit, :update, :destroy, :fetch_recent, :hide_recent, :confirm_delete, :share ]
+  before_action :check_visibility, only: [ :show, :share ]
   before_action :check_ownership, only: [ :edit, :update, :destroy, :confirm_delete ]
 
   before_action :check_pseud_ownership, only: [:create, :update]
+
+  skip_before_action :store_location, only: [:share]
 
   def check_pseud_ownership
     if params[:bookmark][:pseud_id]
@@ -260,6 +262,26 @@ class BookmarksController < ApplicationController
       @bookmark.update_attributes(bookmark_params)
       @bookmarkable = @bookmark.bookmarkable
       render :edit and return
+    end
+  end
+
+  # GET /bookmarks/1/share
+  def share
+    if request.xhr?
+      if @bookmark.bookmarkable.unrevealed?
+        render template: "errors/404", status: :not_found
+      else
+        render layout: false
+      end
+    else
+      # Avoid getting an unstyled page if JavaScript is disabled
+      flash[:error] = ts("Sorry, you need to have JavaScript enabled for this.")
+      if request.env["HTTP_REFERER"]
+        redirect_to(request.env["HTTP_REFERER"] || root_path)
+      else
+        # else branch needed to deal with bots, which don't have a referer
+        redirect_to root_path
+      end
     end
   end
 

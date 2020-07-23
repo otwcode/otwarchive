@@ -43,6 +43,37 @@ describe BookmarksController do
     end
   end
 
+  describe "share" do
+    it "returns correct response for bookmark to revealed work" do
+      bookmark = create :bookmark
+      # Assert this bookmark is of an revealed work
+      expect(bookmark.bookmarkable.unrevealed?).to eq(false)
+
+      get :share, params: { id: bookmark.id }, xhr: true
+      expect(response.status).to eq(200)
+      expect(response).to render_template("bookmarks/share")
+    end
+
+    it "returns a 404 response for bookmark to unrevealed work" do
+      unrevealed_collection = create :unrevealed_collection
+      unrevealed_work = create :work, collections: [unrevealed_collection]
+      unrevealed_bookmark = create :bookmark, bookmarkable_id: unrevealed_work.id
+      # Assert this bookmark is of an unrevealed work
+      expect(unrevealed_bookmark.bookmarkable.unrevealed?).to eq(true)
+
+      get :share, params: { id: unrevealed_bookmark.id }, xhr: true
+      expect(response.status).to eq(404)
+    end
+
+    it "redirects to referer with an error for non-ajax warnings requests" do
+      bookmark = create(:bookmark)
+      referer = bookmark_path(bookmark)
+      request.headers["HTTP_REFERER"] = referer
+      get :share, params: { id: bookmark.id }
+      it_redirects_to_with_error(referer, "Sorry, you need to have JavaScript enabled for this.")
+    end
+  end
+
   describe "index" do
     let!(:external_work_bookmark) { create(:external_work_bookmark) }
     let!(:series_bookmark) { create(:series_bookmark) }

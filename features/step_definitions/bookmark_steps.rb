@@ -418,3 +418,9 @@ Then /^the cache of the bookmark on "([^\"]*)" should not expire if I have not e
   bookmark.reload
   assert orig_cache_key == bookmark.cache_key, "Cache key #{orig_cache_key} does not match #{bookmark.cache_key}."
 end
+
+When /^I view the bookmark for "([^"]*)"$/ do |title|
+  work = Work.find_by(title: title)
+  bookmark = work.bookmarks.first
+  visit bookmark_path(bookmark)
+end
