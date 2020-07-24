@@ -14,37 +14,39 @@ describe BookmarksController do
       let(:chapter2) { create(:chapter, work: chaptered_work) }
       let(:bookmark) { create(:bookmark, bookmarkable_id: chaptered_work.id) }
 
-      it "redirects and should not return the form for anyone not logged in" do
+      it "redirects logged out users" do
         get :new
         it_redirects_to_user_login
       end
+      
+      context "when logged in" do
+        it "renders the new form template" do
+          fake_login
+          get :new
+          expect(response).to render_template("new")
+        end
 
-      it "renders the new form template if logged in" do
-        fake_login
-        get :new
-        expect(response).to render_template("new")
-      end
-
-      it "with chapter" do
-        fake_login
-        get :new, params: { chapter_id: chapter2.id }
-        expect(response).to render_template("new")
-        expect(assigns(:bookmarkable)).to eq(chaptered_work)
+        it "renders the new form for a multi-chapter work" do
+          fake_login
+          get :new, params: { chapter_id: chapter2.id }
+          expect(response).to render_template("new")
+          expect(assigns(:bookmarkable)).to eq(chaptered_work)
+        end
       end
     end
 
-    context "with javascript" do
+    context "with javascript when logged in" do
       let(:chaptered_work) { create(:work) }
       let(:chapter2) { create(:chapter, work: chaptered_work) }
       let(:bookmark) { create(:bookmark, bookmarkable_id: chaptered_work.id) }
 
-      it "renders the bookmark_form_dynamic form if logged in" do
+      it "renders the bookmark_form_dynamic form" do
         fake_login
         get :new, params: { format: :js }, xhr: true
         expect(response).to render_template("bookmark_form_dynamic")
       end
 
-      it "with chapter" do
+      it "renders the new form for a bookmark on a multi-chapter work" do
         fake_login
         get :new, params: { chapter_id: chapter2.id, format: :js }, xhr: true
         expect(response).to render_template("bookmark_form_dynamic")
@@ -216,11 +218,13 @@ describe BookmarksController do
     let(:chapter2) { create(:chapter, work: chaptered_work, position: 2, posted: true, title: "Second title") }
     let(:bookmark) { create(:bookmark, bookmarkable_id: chaptered_work.id) }
 
-    it "shows a bookmark" do
-      fake_login_known_user(bookmark.pseud.user)
-      get :show, params: { id: bookmark }
-      expect(response).to have_http_status(:success)
-      expect(assigns(:bookmark)).to eq(bookmark)
+    context "when logged in" do
+      it "returns a bookmark on a public multi-chapter work" do
+        fake_login_known_user(bookmark.pseud.user)
+        get :show, params: { id: bookmark }
+        expect(response).to have_http_status(:success)
+        expect(assigns(:bookmark)).to eq(bookmark)
+      end
     end
   end
 end
