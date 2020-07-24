@@ -30,6 +30,12 @@ Layout/MultilineMethodCallIndentation:
 Layout/TrailingWhitespace:
   Enabled: false
 
+Lint/AmbiguousBlockAssociation:
+  Exclude:
+    # Exception for specs where we use change matchers:
+    # https://github.com/rubocop-hq/rubocop/issues/4222
+    - 'spec/**/*.rb'
+
 Lint/AmbiguousRegexpLiteral:
   Enabled: false
 

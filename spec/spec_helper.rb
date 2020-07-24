@@ -143,6 +143,8 @@ RSpec.configure do |config|
   config.file_fixture_path = "spec/support/fixtures"
 end
 
+RSpec::Matchers.define_negated_matcher :avoid_changing, :change
+
 def clean_the_database
   # Now clear memcached
   Rails.cache.clear
