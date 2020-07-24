@@ -138,7 +138,7 @@ describe Admin::AdminUsersController do
             end.to change { user.reload.roles.pluck(:name) }
               .from([old_role.name])
               .to([role.name])
-              .and not_change { user.reload.email }
+              .and avoid_changing { user.reload.email }
 
             it_redirects_to_with_notice(root_path, "User was successfully updated.")
           end
@@ -162,7 +162,7 @@ describe Admin::AdminUsersController do
             end.to change { user.reload.email }
               .from("user@example.com")
               .to("updated@example.com")
-              .and not_change { user.reload.roles.pluck(:name) }
+              .and avoid_changing { user.reload.roles.pluck(:name) }
 
             it_redirects_to_with_notice(root_path, "User was successfully updated.")
           end
