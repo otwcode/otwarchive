@@ -81,7 +81,9 @@ describe Admin::AdminUsersController do
 
   describe "PUT #update" do
     let(:admin) { create(:admin) }
-    let(:user) { create(:user) }
+    let(:old_role) { create(:role) }
+    let(:role) { create(:role) }
+    let(:user) { create(:user, email: "user@example.com", roles: [old_role]) }
 
     context "when admin does not have correct authorization" do
       it "redirects with error" do
@@ -94,20 +96,26 @@ describe Admin::AdminUsersController do
     end
 
     context "when admin has correct authorization" do
-      role = FactoryBot.create(:role)
       before { fake_login_admin(admin) }
 
       context "when admin has superadmin role" do
         before { admin.update(roles: ["superadmin"]) }
 
         it "allows admins to update all attributes" do
-          put :update, params: {
-            id: user.login,
-            user: {
-              email: "updated@example.com",
-              roles: [role.id.to_s]
+          expect do
+            put :update, params: {
+              id: user.login,
+              user: {
+                email: "updated@example.com",
+                roles: [role.id.to_s]
+              }
             }
-          }
+          end.to change { user.reload.roles.pluck(:name) }
+            .from([old_role.name])
+            .to([role.name])
+            .and change { user.reload.email }
+            .from("user@example.com")
+            .to("updated@example.com")
 
           it_redirects_to_with_notice(root_path, "User was successfully updated.")
         end
@@ -125,8 +133,13 @@ describe Admin::AdminUsersController do
           end
 
           it "allows admins with #{admin_role} role to update roles" do
-            put :update, params: { id: user.login, user: { roles: [role.id.to_s] } }
-            expect(user.reload.roles).to include(role)
+            expect do
+              put :update, params: { id: user.login, user: { roles: [role.id.to_s] } }
+            end.to change { user.reload.roles.pluck(:name) }
+              .from([old_role.name])
+              .to([role.name])
+              .and not_change { user.reload.email }
+
             it_redirects_to_with_notice(root_path, "User was successfully updated.")
           end
         end
@@ -144,8 +157,13 @@ describe Admin::AdminUsersController do
           end
 
           it "allows admins with #{admin_role} role to update email" do
-            put :update, params: { id: user.login, user: { email: "updated@example.com" } }
-            expect(user.reload.email).to eq("updated@example.com")
+            expect do
+              put :update, params: { id: user.login, user: { email: "updated@example.com" } }
+            end.to change { user.reload.email }
+              .from("user@example.com")
+              .to("updated@example.com")
+              .and not_change { user.reload.roles.pluck(:name) }
+
             it_redirects_to_with_notice(root_path, "User was successfully updated.")
           end
         end
