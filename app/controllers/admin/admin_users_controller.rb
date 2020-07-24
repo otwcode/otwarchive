@@ -56,12 +56,16 @@ class Admin::AdminUsersController < Admin::BaseController
 
   # POST admin/users/update
   def update
-    @user = User.find_by(login: params[:id])
-    authorize @user
-    if @user.admin_update(permitted_attributes(@user))
+    @user = authorize User.find_by(login: params[:id])
+
+    attributes = permitted_attributes(@user)
+    @user.email = attributes[:email] if attributes[:email].present?
+    @user.roles = Role.where(id: attributes[:roles]) if attributes[:roles].present?
+
+    if @user.save
       flash[:notice] = ts("User was successfully updated.")
     else
-      flash[:error] = ts("There was an error updating user %{name}", name: params[:id])
+      flash[:error] = ts("The user %{name} could not be updated: %{errors}", name: params[:id], errors: @user.errors.full_messages.join(" "))
     end
     redirect_to request.referer || root_path
   end

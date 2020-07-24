@@ -16,9 +16,14 @@ Feature: Admin Actions to manage users
     Then I should see "dizmo" within "#admin_users_table"
 
     # change user email
+    When I fill in "user_email" with "not even an email"
+      And I press "Update"
+    Then I should see "The user dizmo could not be updated: Email is invalid"
+
     When I fill in "user_email" with "dizmo@fake.com"
       And I press "Update"
     Then the "user_email" field should contain "dizmo@fake.com"
+      And I should see "User was successfully updated."
 
     # Adding and removing roles
     When I check "user_roles_1"
