@@ -243,25 +243,6 @@ describe WorksController do
       end
     end
 
-    context "when work parameters are invalid" do
-      let(:work_params) {
-        {
-            work: {
-                summary: "a" * (ArchiveConfig.SUMMARY_MAX + 1),
-            }
-        }
-      }
-
-      before do
-        put :update_multiple, params: params
-      end
-
-      xit "redirects to the user multiple work path with an error" do
-        it_redirects_to_with_error(edit_multiple_user_works_path(multiple_works_user),
-                                   flash[:error]).to match("The work Work 1 could not be edited: Summary must be less than")
-      end
-    end
-
     context "updating creators" do
       let(:pseud_to_invite) do
         user = FactoryBot.create(:user)
