@@ -269,15 +269,6 @@ describe WorksController, work_search: true do
       end
     end
 
-    it "renders the co-author view if a work has invalid pseuds" do
-      allow_any_instance_of(Work).to receive(:invalid_pseuds).and_return(@user.pseuds.first)
-      work_attributes = attributes_for(:work)
-      post :create, params: { work: work_attributes }
-      expect(response).to render_template("new")
-      expect(assigns[:work].errors.full_messages).to \
-        include "Invalid creator: Could not find a pseud *impossible*."
-    end
-
     it "renders new if the work has ambiguous pseuds" do
       create(:pseud, name: "ambiguous")
       create(:pseud, name: "ambiguous")
@@ -355,12 +346,6 @@ describe WorksController, work_search: true do
       expect(assigns(:fandom)).to eq(@fandom)
     end
 
-    it "should return search results when given work_search parameters" do
-      params = { work_search: { query: "fandoms: #{@fandom.name}" } }
-      get :index, params: params
-      expect(assigns(:works)).to include(@work)
-    end
-
     it "redirects to tag page for noncanonical tags" do
       unsorted_tag = create(:unsorted_tag)
       get :index, params: { id: @work, tag_id: unsorted_tag.name }
@@ -379,7 +364,7 @@ describe WorksController, work_search: true do
       noncanonical_fandom = create(:fandom, canonical: false)
       noncanonical_fandom.syn_string = @fandom.name
       noncanonical_fandom.save
-      collection = FactoryGirl.create(:collection)
+      collection = create(:collection)
       get :index, params: { id: @work, tag_id: noncanonical_fandom.name, collection_id: collection }
       expect(response).to redirect_to(collection_tag_works_path(collection, @fandom))
     end
@@ -443,7 +428,8 @@ describe WorksController, work_search: true do
         context "when disabling filtering" do
           before do
             allow(controller).to receive(:fetch_admin_settings).and_return(true)
-            admin_settings = AdminSetting.new(disable_filtering: true)
+            AdminSetting.first.update_attribute(:suspend_filter_counts, true)
+            admin_settings = AdminSetting.first
             controller.instance_variable_set("@admin_settings", admin_settings)
           end
 
@@ -558,9 +544,9 @@ describe WorksController, work_search: true do
 
   describe "update" do
     let(:update_user) { create(:user) }
-    let(:update_work) {
+    let!(:update_work) {
       work = create(:work, authors: [update_user.default_pseud], posted: true)
-      create(:chapter, work: work)
+      update_chapter = create(:chapter, work: work)
       work
     }
 
@@ -599,8 +585,8 @@ describe WorksController, work_search: true do
 
     it "displays chapter errors if chapter is invalid" do
       allow_any_instance_of(Chapter).to receive(:save).and_return(false)
-      chapter_error = ["Test Error"]
-      allow_any_instance_of(Chapter).to receive(:errors).and_return(chapter_error)
+      chapter_error = ["Fake Test Error"]
+      allow_any_instance_of(Chapter).to receive(:errors).and_return(update_chapter)
       allow_any_instance_of(Chapter).to receive(:valid?).and_return(false)
 
       attrs = { title: "New Work Title" }
@@ -621,12 +607,14 @@ describe WorksController, work_search: true do
           id: update_work.id
         }
       end
+
       it "should update coauthors for each chapter when the work is updated" do
         put :update, params: params
         updated_work = Work.find(update_work.id)
-        expect(updated_work.pseuds).to include new_coauthor.default_pseud
+        # does it need to save or is it broken from the earlier failure in line 586 or something else?
+        expect(updated_work.pseuds).to include new_coauthor.default_pseud # both bits fail
         updated_work.chapters.each do |c|
-          expect(c.pseuds).to include new_coauthor.default_pseud
+          expect(c.pseuds).to include new_coauthor.default_pseud # both bits fail
         end
       end
     end

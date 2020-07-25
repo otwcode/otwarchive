@@ -6,26 +6,37 @@ describe WorksController do
   include RedirectExpectationHelper
 
   let(:user) { create(:user) }
-  let!(:work) { create(:work, authors: [user.default_pseud], posted: true) }
+  let!(:work) { create(:work, authors: [user.default_pseud]) } #, posted: true
 
   context "update_tags" do
     before do
       fake_login_known_user(user)
     end
 
-    it "should render edit tags when there are invalid tags" do
+    it "allows you to update tags in bulk" do
+      # check it loads the work in the first place for debugging
+      get :show, params: { id: work.id }
+      expect(response).to render_template("show")
+      # actual test
+      patch :update_tags, params: { work: work.id, fandom_string: "Fake test fandom" }
+      expect(response).to render_template "show"
+      expect(response).to include("successfully updated")
+      expect(flash[:notice]).to eq "successfully updated"
+    end
+
+    it "renders edit tags when there are invalid tags" do
       allow_any_instance_of(Work).to receive(:invalid_tags).and_return([create(:unsorted_tag)])
 
-      patch :update_tags, params: { id: work }
+      patch :update_tags, params: { work: work.id }
       expect(response).to render_template "edit_tags"
 
       allow_any_instance_of(Work).to receive(:invalid_tags).and_call_original
     end
 
-    it "should throw error when there are invalid tags and trying to preview" do
+    it "throws error when there are invalid tags and trying to preview" do
       allow_any_instance_of(Work).to receive(:invalid_tags).and_return([create(:unsorted_tag)])
 
-      expect {patch :update_tags, params: { id: work, preview_button: true } }.to raise_error UncaughtThrowError
+      expect {patch :update_tags, params: { work: work.id, preview_button: true } }.to raise_error UncaughtThrowError
 
       allow_any_instance_of(Work).to receive(:invalid_tags).and_call_original
     end
