@@ -1,7 +1,18 @@
 <% creation_type = @creation.model_name.human.downcase %>
 <% content_for :message do %>
-<%= t(".intro", type: creation_type, archivist: @archivist.login,
+<% if creation_type == "work" %>
+  <%= t(".intro_work", archivist: @archivist.login,
       pseud: @creatorship.pseud.name) %>
+<% elsif creation_type == "chapter" %>
+  <%= t(".intro_chapter", archivist: @archivist.login,
+      pseud: @creatorship.pseud.name) %>
+<% elsif creation_type == "series" %>
+  <%= t(".intro_series", archivist: @archivist.login,
+      pseud: @creatorship.pseud.name) %>
+<% else %>
+  <%= t(".intro", type: creation_type, archivist: @archivist.login,
+      pseud: @creatorship.pseud.name) %>
+<% end %>
 
 <%= t ".text.creation", title: creation_title(@creation),
   url: polymorphic_url(@creation),
@@ -9,5 +20,13 @@
 
 <%= t(".explanation") %>
 
-<%= t ".text.remove", type: creation_type, url: edit_polymorphic_url(@creation) %>
+<% if creation_type == "work" %>
+  <%= t(".text.remove_work", url: edit_polymorphic_url(@creation)) %>
+<% elsif creation_type == "chapter" %>
+  <%= t(".text.remove_chapter", url: edit_polymorphic_url(@creation)) %>
+<% elsif creation_type == "series" %>
+  <%= t(".text.remove_series", url: edit_polymorphic_url(@creation)) %>
+<% else %>
+  <%= t ".text.remove", type: creation_type, url: edit_polymorphic_url(@creation) %>
+<% end %>
 <% end %>
