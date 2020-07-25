@@ -249,7 +249,7 @@ end
 Given /^the spam work "([^\"]*)" by "([^\"]*)"$/ do |work, author|
   step %{I have a work "#{work}" by "#{author}"}
   step %{I am logged out}
-  w = Work.find_by_title(work)
+  w = Work.find_by(title: work)
   w.update_attribute(:spam, true)
   w.update_attribute(:hidden_by_admin, true)
 end
