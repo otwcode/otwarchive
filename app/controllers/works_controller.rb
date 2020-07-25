@@ -4,8 +4,8 @@ class WorksController < ApplicationController
   # only registered users and NOT admin should be able to create new works
   before_action :load_collection
   before_action :load_owner, only: [:index]
-  before_action :users_only, except: [:index, :show, :navigate, :search, :collected, :edit_tags, :update_tags, :drafts, :share, :reindex]
-  before_action :check_user_status, except: [:index, :show, :navigate, :search, :collected, :share, :reindex]
+  before_action :users_only, except: [:index, :show, :navigate, :search, :collected, :edit_tags, :update_tags, :drafts, :share]
+  before_action :check_user_status, except: [:index, :show, :navigate, :search, :collected, :share]
   before_action :load_work, except: [:new, :create, :import, :index, :show_multiple, :edit_multiple, :update_multiple, :delete_multiple, :search, :drafts, :collected]
   # this only works to check ownership of a SINGLE item and only if load_work has happened beforehand
   before_action :check_ownership, except: [:index, :show, :navigate, :new, :create, :import, :show_multiple, :edit_multiple, :edit_tags, :update_tags, :update_multiple, :delete_multiple, :search, :mark_for_later, :mark_as_read, :drafts, :collected, :share]
@@ -311,13 +311,7 @@ class WorksController < ApplicationController
     set_work_form_fields
 
     # If Edit or Cancel is pressed, bail out and display relevant form
-    if params[:edit_button]
-      render :new and return
-    elsif params[:cancel_button] || work_cannot_be_saved?
-      flash[:notice] = ts('New work posting canceled.')
-      redirect_to current_user and return
-    else
-      # now also treating the cancel_coauthor_button case, bc it should function like a preview, really
+    if params[:edit_button] || work_cannot_be_saved?
       set_work_tag_error_messages
       render :new
     else
@@ -870,19 +864,6 @@ class WorksController < ApplicationController
     end
   end
 
-  # Takes an array of tags and returns a comma-separated list, without the markup
-  def tag_list(tags)
-    tags = tags.distinct.compact
-    if !tags.blank? && tags.respond_to?(:collect)
-      last_tag = tags.pop
-      tag_list = tags.collect { |tag| tag.name + ', ' }.join
-      tag_list += last_tag.name
-      tag_list.html_safe
-    else
-      ''
-    end
-  end
-
   def index_page_title
     if @owner.present?
       owner_name =
@@ -916,36 +897,6 @@ class WorksController < ApplicationController
   end
 
   private
-
-  # NOTE: The reason for the gross condition=(...) thing is because I don't know
-  #       what potential values `saved` has as used elsewhere (which is what is
-  #       passed as `condition`) and thus the usual approach of condition=nil
-  #       followed by a ||= cannot be reliably used. -@duckinator
-  def preview_mode(page_name, condition = (@work.has_required_tags? && @work.invalid_tags.blank?))
-    @preview_mode = true
-
-    if condition
-      yield
-    else
-      @work.check_for_invalid_tags unless @work.invalid_tags.blank?
-
-      if @work.fandoms.blank?
-        @work.errors.add(:base, 'Updating: Please add all required tags. Fandom is missing.')
-      elsif !@work.has_required_tags?
-        @work.errors.add(:base, 'Updating: Please add all required tags.')
-      end
-
-      render page_name
-    end
-  end
-
-  def sort_direction(sortdir)
-    if sortdir == '>' || sortdir == 'ascending'
-      'asc'
-    elsif sortdir == '<' || sortdir == 'descending'
-      'desc'
-    end
-  end
 
   def build_options(params)
     pseuds_to_apply =
