@@ -27,4 +27,18 @@
   
 </div>
 
-<% # FRONT END NOTE: Twitter widget JavaScript is included separately in bookmarks/index, bookmarks/show, and works/_work_header_navigation to ensure it is only loaded once per page %>
+<%
+  # FRONT END NOTE: Twitter widgets library is only loaded once per page.
+  # On first load, widgets.js will load after twitter elements on the page and render them.
+  # On subsequent loads, we call `load()` explicitly to trigger rendering widgets.
+%>
+<script>
+  // If we've already loaded the twitter widgets bundle
+  if(window.twttr){
+    // Trigger rendering of widget elements in the div `share` defined above
+    window.twttr.widgets.load(document.getElementById("share"));
+  } else {
+    // Otherwise, load the widgets bundle
+    window.twttr=(function(d,s,id){ var js,fjs=d.getElementsByTagName(s)[0],t=window.twttr||{};if(d.getElementById(id))return t;js=d.createElement(s);js.id=id;js.src="https://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);t._e=[];t.ready=function(f){t._e.push(f);};return t;}(document,"script","twitter-wjs"));
+  }
+</script>
