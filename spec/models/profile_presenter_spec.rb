@@ -1,4 +1,4 @@
-require 'spec_helper'
+require "spec_helper"
 
 describe ProfilePresenter do
   let(:user) { create(:user, email: "example@example.com") }
