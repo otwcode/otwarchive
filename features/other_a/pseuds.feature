@@ -131,7 +131,7 @@ Scenario: Many pseuds
     And I should see "Agrajag" within "dl.meta"
     And I should see "Betelgeuse" within "dl.meta"
     And I should not see "Slartibartfast" within "dl.meta"
-    And I should see "All my pseuds (4)" within "dl.meta"
+    And I should see "All my pseuds, including 1 more" within "dl.meta"
 
   When I go to my user page
   Then I should see "Zaphod" within "ul.expandable"
@@ -143,3 +143,7 @@ Scenario: Many pseuds
   When I go to my "Slartibartfast" pseud page
   Then I should see "Slartibartfast" within "li.pseud > a"
     And I should not see "Slartibartfast" within "ul.expandable"
+
+  When max items per page is 10
+    And I view my profile
+  Then I should see "All my pseuds (4)" within "dl.meta"

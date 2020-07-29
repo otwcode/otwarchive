@@ -9,7 +9,7 @@
   <div class="wrapper">
     <dl class="meta">
       <dt class="pseuds">
-        <%= link_to ts("All my pseuds (%{pseud_number})", :pseud_number => @user.pseuds.count), user_pseuds_path(@user) %>
+        <%= link_to all_pseuds_link(@profile), user_pseuds_path(@user) %>
       </dt>
       <dd class="pseuds"><%= print_pseud_list(@profile.pseuds) %></dd>
       <dt><%= ts("I joined on:") %></dt>
