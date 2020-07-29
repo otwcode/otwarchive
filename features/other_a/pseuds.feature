@@ -127,8 +127,19 @@ Scenario: Many pseuds
     And I am logged in as "Zaphod"
 
   When I view my profile
-  Then I should see "Zaphod"
-    And I should see "Agrajag"
-    And I should see "Betelgeuse"
-    And I should not see "Slartibartfast"
-    And I should see "All my pseuds (4)"
+  Then I should see "Zaphod" within "dl.meta"
+    And I should see "Agrajag" within "dl.meta"
+    And I should see "Betelgeuse" within "dl.meta"
+    And I should not see "Slartibartfast" within "dl.meta"
+    And I should see "All my pseuds (4)" within "dl.meta"
+
+  When I go to my user page
+  Then I should see "Zaphod" within "ul.expandable"
+    And I should see "Agrajag" within "ul.expandable"
+    And I should see "Betelgeuse" within "ul.expandable"
+    And I should not see "Slartibartfast" within "ul.expandable"
+    And I should see "All Pseuds (4)" within "ul.expandable"
+
+  When I go to my "Slartibartfast" pseud page
+  Then I should see "Slartibartfast" within "li.pseud > a"
+    And I should not see "Slartibartfast" within "ul.expandable"
