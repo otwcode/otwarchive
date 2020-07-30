@@ -9,11 +9,6 @@ class ChallengeClaim < ApplicationRecord
   belongs_to :request_prompt, class_name: "Prompt"
   belongs_to :creation, polymorphic: true
 
-  # have to override the == operator or else two claims by same user on same user's prompts are equal
-  def ==(other)
-    super(other) && other.request_prompt_id == self.request_prompt_id
-  end
-
   scope :for_request_signup, lambda {|signup|
     where('request_signup_id = ?', signup.id)
   }
@@ -112,13 +107,6 @@ class ChallengeClaim < ApplicationRecord
 
   def fulfilled?
     self.creation && (item = get_collection_item) && item.approved?
-  end
-
-  include Comparable
-  def <=>(other)
-    return -1 if self.request_signup.nil? && other.request_signup
-    return 1 if other.request_signup.nil? && self.request_signup
-    return self.request_byline.downcase <=> other.request_byline.downcase
   end
 
   def title
