@@ -228,6 +228,52 @@ describe CommentsController do
         end
       end
     end
+
+    context "when the commentable is a work" do
+      context "when the work has all comments disabled" do
+        let(:work) { create(:work, comment_permissions: :disable_all) }
+
+        it "shows an error and redirects" do
+          post :create, params: { work_id: work.id, comment: anon_comment_attributes }
+          it_redirects_to_with_error(work_path(work),
+                                     "Sorry, this work doesn't allow comments.")
+        end
+      end
+
+      context "when the work has anonymous comments disabled" do
+        let(:work) { create(:work, comment_permissions: :disable_anon) }
+
+        it "shows an error and redirects" do
+          post :create, params: { work_id: work.id, comment: anon_comment_attributes }
+          it_redirects_to_with_error(work_path(work),
+                                     "Sorry, this work doesn't allow non-Archive users to comment.")
+        end
+      end
+    end
+
+    context "when the commentable is a comment" do
+      context "when the parent work has all comments disabled" do
+        let(:work) { create(:work, comment_permissions: :disable_all) }
+        let(:comment) { create(:comment, commentable: work.first_chapter) }
+
+        it "shows an error and redirects" do
+          post :create, params: { comment_id: comment.id, comment: anon_comment_attributes }
+          it_redirects_to_with_error(work_path(work),
+                                     "Sorry, this work doesn't allow comments.")
+        end
+      end
+
+      context "when the parent work has anonymous comments disabled" do
+        let(:work) { create(:work, comment_permissions: :disable_anon) }
+        let(:comment) { create(:comment, commentable: work.first_chapter) }
+
+        it "shows an error and redirects" do
+          post :create, params: { comment_id: comment.id, comment: anon_comment_attributes }
+          it_redirects_to_with_error(work_path(work),
+                                     "Sorry, this work doesn't allow non-Archive users to comment.")
+        end
+      end
+    end
   end
 
   describe "PUT #review_all" do

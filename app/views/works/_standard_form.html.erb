@@ -266,14 +266,6 @@
         <%= link_to_help "registered-users" %>
       </dd>
 
-      <dt class="anonymous comments">
-        <%= f.check_box :anon_commenting_disabled %>
-      </dt>
-      <dd class="anonymous comments">
-        <%= f.label :anon_commenting_disabled, ts("Disable anonymous commenting") %>
-        <%= link_to_help "comments-anonymous" %>
-      </dd>
-
       <dt class="moderated comments">
         <%= f.check_box :moderated_commenting_enabled %>
       </dt>
@@ -281,6 +273,23 @@
         <%= f.label :moderated_commenting_enabled, ts("Enable comment moderation") %>
         <%= link_to_help "comments-moderated" %>
       </dd>
+
+      <dt class="permissions comments">
+        <%= ts("Who can comment on this work") %>
+        <%= link_to_help "who-can-comment-on-this-work" %>
+      </dt>
+      <dd class="permissions comments">
+        <fieldset>
+          <%=
+            radio_button_list(f, :comment_permissions, [
+              [:enable_all, ts("Registered users and guests can comment")],
+              [:disable_anon, ts("Only registered users can comment")],
+              [:disable_all, ts("No one can comment")]
+            ])
+          %>
+        </fieldset>
+      </dd>
+
     </dl>
   </fieldset>
   <% unless @chapters %>
