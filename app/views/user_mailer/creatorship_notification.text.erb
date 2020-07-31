@@ -1,11 +1,11 @@
 <% creation_type = @creation.model_name.human.downcase %>
 <% content_for :message do %>
 <% if creation_type == "work" %>
-  <%= t(".intro_work", inviting_user: @adding_user.login, pseud: @creatorship.pseud.name) %>
+  <%= t(".intro_work", adding_user: @adding_user.login, pseud: @creatorship.pseud.name) %>
 <% elsif creation_type == "chapter" %>
-  <%= t(".intro_chapter", inviting_user: @adding_user.login, pseud: @creatorship.pseud.name) %>
+  <%= t(".intro_chapter", adding_user: @adding_user.login, pseud: @creatorship.pseud.name) %>
 <% elsif creation_type == "series" %>
-  <%= t(".intro_series", inviting_user: @adding_user.login, pseud: @creatorship.pseud.name) %>
+  <%= t(".intro_series", adding_user: @adding_user.login, pseud: @creatorship.pseud.name) %>
 <% else %>
   <%= t(".intro", type: creation_type, adding_user: @adding_user.login,
       pseud: @creatorship.pseud.name) %>
