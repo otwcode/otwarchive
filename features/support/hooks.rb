@@ -24,9 +24,7 @@ Before do
 
   # Remove old tag feeds
   page_cache_dir = Rails.root.join("public", "test_cache")
-  if Dir.exist?(page_cache_dir)
-    FileUtils.remove_dir(page_cache_dir, true)
-  end
+  FileUtils.remove_dir(page_cache_dir, true) if Dir.exist?(page_cache_dir)
 
   # Clear Redis
   REDIS_AUTOCOMPLETE.flushall

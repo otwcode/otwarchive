@@ -192,13 +192,9 @@ class CollectionItemsController < ApplicationController
     allowed_items.where(id: update_params.keys).each do |item|
       item_data = update_params[item.id]
       if item_data[:remove] == "1"
-        unless item.destroy
-          @collection_items << item
-        end
+        @collection_items << item unless item.destroy
       else
-        unless item.update(item_data)
-          @collection_items << item
-        end
+        @collection_items << item unless item.update(item_data)
       end
     end
 
