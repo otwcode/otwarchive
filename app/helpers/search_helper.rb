@@ -29,14 +29,8 @@ module SearchHelper
       header << "by #{parent.login}"
     end
 
-    if parent.is_a?(Tag)
-      header << "in #{link_to_tag_with_text(parent, parent.name)}"
-    end
-
-    if @fandom.present?
-      header << "in #{link_to_tag(@fandom)}"
-    end
-
+    header << "in #{link_to_tag_with_text(parent, parent.name)}" if parent.is_a?(Tag)
+    header << "in #{link_to_tag(@fandom)}" if @fandom.present?
     header.join(" ").html_safe
   end
 
