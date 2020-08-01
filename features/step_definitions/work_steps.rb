@@ -410,14 +410,23 @@ When /^I edit multiple works with different comment moderation settings$/ do
   step %{I press "Edit"}
 end
 
-When /^I edit multiple works with different anonymous commenting settings$/ do
-  step %{I set up the draft "Work with Anonymous Commenting Disabled"}
-  check("work_anon_commenting_disabled")
+When /^I edit multiple works with different commenting settings$/ do
+  step %{I set up the draft "Work with All Commenting Enabled"}
+  choose("Registered users and guests can comment")
   step %{I post the work without preview}
-  step %{I post the work "Work with Anonymous Commenting Enabled"}
+
+  step %{I set up the draft "Work with Anonymous Commenting Disabled"}
+  choose("Only registered users can comment")
+  step %{I post the work without preview}
+
+  step %{I set up the draft "Work with All Commenting Disabled"}
+  choose("No one can comment")
+  step %{I post the work without preview}
+
   step %{I go to my edit multiple works page}
+  step %{I select "Work with All Commenting Enabled" for editing}
   step %{I select "Work with Anonymous Commenting Disabled" for editing}
-  step %{I select "Work with Anonymous Commenting Enabled" for editing}
+  step %{I select "Work with All Commenting Disabled" for editing}
   step %{I press "Edit"}
 end
 

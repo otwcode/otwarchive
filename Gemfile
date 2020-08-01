@@ -79,7 +79,7 @@ gem 'bcrypt'
 
 # A highly updated version of the authorization plugin
 gem 'permit_yo'
-gem 'pundit'
+gem "pundit"
 
 # fix for annoying UTF-8 error messages as per this:
 # http://openhood.com/rack/ruby/2010/07/15/rack-test-warning/

@@ -61,20 +61,7 @@
             radio_button_list(form, :restricted, [
               ["", ts("Keep current visibility settings")],
               ["1", ts("Only show to registered users")],
-              ["unrestricted", ts("Show to all")],
-            ])
-          %>
-        </fieldset>
-      </dd>
-
-      <dt><%= ts("Anonymous Commenting") %><%= link_to_help "comments-anonymous" %></dt>
-      <dd>
-        <fieldset>
-          <%=
-            radio_button_list(form, :anon_commenting_disabled, [
-              ["", ts("Keep current anonymous comment settings")],
-              ["allow_anon", ts("Enable anonymous comments")],
-              ["1", ts("Disable anonymous comments")]
+              ["unrestricted", ts("Show to all")]
             ])
           %>
         </fieldset>
@@ -87,7 +74,24 @@
             radio_button_list(form, :moderated_commenting_enabled, [
               ["", ts("Keep current comment moderation settings")],
               ["1", ts("Enable comment moderation")],
-              ["not_moderated", ts("Disable comment moderation")],
+              ["not_moderated", ts("Disable comment moderation")]
+            ])
+          %>
+        </fieldset>
+      </dd>
+
+      <dt>
+        <%= ts("Who can comment on these works") %>
+        <%= link_to_help "who-can-comment-on-this-work" %>
+      </dt>
+      <dd>
+        <fieldset>
+          <%=
+            radio_button_list(form, :comment_permissions, [
+              ["", ts("Keep current comment settings")],
+              [:enable_all, ts("Registered users and guests can comment")],
+              [:disable_anon, ts("Only registered users can comment")],
+              [:disable_all, ts("No one can comment")]
             ])
           %>
         </fieldset>

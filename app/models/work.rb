@@ -499,13 +499,6 @@ class Work < ApplicationRecord
     end
   end
 
-  def unrestricted=(setting)
-    if setting == "1"
-      self.restricted = false
-    end
-  end
-  def unrestricted; !self.restricted; end
-
   def unrevealed?(user=User.current_user)
     # eventually here is where we check if it's in a challenge that hasn't been made public yet
     #!self.collection_items.unrevealed.empty?
@@ -928,8 +921,6 @@ class Work < ApplicationRecord
   end
 
   def comment_permissions=(value)
-    return unless has_attribute?(:comment_permissions)
-
     write_attribute(:comment_permissions, value)
 
     # Map the special value back to an integer, and write it to the
@@ -941,11 +932,8 @@ class Work < ApplicationRecord
 
   def anon_commenting_disabled=(value)
     write_attribute(:anon_commenting_disabled, value)
-
-    if has_attribute?(:comment_permissions)
-      write_attribute(:comment_permissions,
-                      anon_commenting_disabled ? :disable_anon : :enable_all)
-    end
+    write_attribute(:comment_permissions,
+                    anon_commenting_disabled ? :disable_anon : :enable_all)
   end
 
   ########################################################################

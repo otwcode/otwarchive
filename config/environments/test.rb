@@ -21,9 +21,7 @@ Otwarchive::Application.configure do
   config.action_mailer.perform_caching = true
 
   memcached_servers = "127.0.0.1:11211"
-  if File.file?("#{Rails.root}/config/local.yml")
-    memcached_servers = YAML.load_file(Rails.root.join("config", "local.yml")).fetch("MEMCACHED_SERVERS", memcached_servers)
-  end
+  memcached_servers = YAML.load_file(Rails.root.join("config/local.yml")).fetch("MEMCACHED_SERVERS", memcached_servers) if File.file?(Rails.root.join("config/local.yml"))
   config.cache_store = :dalli_store, memcached_servers,
                           { namespace: "ao3-v1", expires_in: 0, compress: true, pool_size: 10, raise_errors: true }
 
