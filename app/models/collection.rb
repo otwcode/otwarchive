@@ -45,10 +45,10 @@ class Collection < ApplicationRecord
   def clean_up_challenge
     return if self.challenge_id
 
-    assignments.each {|assignment| assignment.destroy}
-    potential_matches.each {|potential_match| potential_match.destroy}
-    signups.each {|signup| signup.destroy}
-    prompts.each {|prompt| prompt.destroy}
+    assignments.each(&:destroy)
+    potential_matches.each(&:destroy)
+    signups.each(&:destroy)
+    prompts.each(&:destroy)
   end
 
   has_many :collection_items, dependent: :destroy
