@@ -89,6 +89,14 @@ class ApplicationController < ActionController::Base
     cookies[:flash_is_set] = 1 unless flash.empty?
   end
 
+  # Override redirect_to so that if it's called in a before_action hook, it'll
+  # still call check_for_flash after it runs.
+  def redirect_to(*args, **kwargs)
+    super.tap do
+      check_for_flash
+    end
+  end
+
   after_action :ensure_admin_credentials
   def ensure_admin_credentials
     if logged_in_as_admin?
