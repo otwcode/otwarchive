@@ -11,10 +11,10 @@ module SearchHelper
       total_entries = collection.total_entries
       total_entries = collection.unlimited_total_entries if collection.respond_to?(:unlimited_total_entries)
       header << ts(" %{start_number} - %{end_number} of %{total} %{things}",
-                       start_number: collection.offset + 1,
-                       end_number: collection.offset + collection.length,
-                       total: total_entries,
-                       things: item_name.pluralize)
+                   start_number: collection.offset + 1,
+                   end_number: collection.offset + collection.length,
+                   total: total_entries,
+                   things: item_name.pluralize)
     end
     header << ts("found") if search.present? && search.query.present?
 
