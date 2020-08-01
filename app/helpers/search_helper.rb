@@ -22,15 +22,15 @@ module SearchHelper
 
     case parent
     when Collection
-      header << "in #{link_to(parent.title, parent)}"
+      header << ts("in %{collection_link}", collection_link: link_to(parent.title, parent))
     when Pseud
-      header << "by #{parent.byline}"
+      header << ts("by %{byline}", byline: parent.byline)
     when User
-      header << "by #{parent.login}"
+      header << ts("by %{username}", username: parent.login)
     end
 
-    header << "in #{link_to_tag_with_text(parent, parent.name)}" if parent.is_a?(Tag)
-    header << "in #{link_to_tag(@fandom)}" if @fandom.present?
+    header << ts("in %{tag_link}", tag_link: link_to_tag_with_text(parent, parent.name)) if parent.is_a?(Tag)
+    header << ts("in %{fandom_link}", fandom_link: link_to_tag(@fandom)) if @fandom.present?
     header.join(" ").html_safe
   end
 
