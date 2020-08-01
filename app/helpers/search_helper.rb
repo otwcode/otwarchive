@@ -16,9 +16,7 @@ module SearchHelper
                 total_entries
                 ] + item_name.pluralize
     end
-    if search.present? && search.query.present?
-      header << "found"
-    end
+    header << ts("found") if search.present? && search.query.present?
 
     case parent
     when Collection
