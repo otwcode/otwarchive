@@ -1,5 +1,5 @@
 class QuestionsController < ApplicationController
-  before_filter :load_archive_faq, :except => [:index, :update_positions]
+  before_action :load_archive_faq, except: [:index, :update_positions]
 
   # GET /archive_faq/:archive_faq_id/questions/manage
   def manage
@@ -20,7 +20,7 @@ class QuestionsController < ApplicationController
   def update_positions
     if params[:questions]
       @archive_faq = ArchiveFaq.find_by_slug(params[:archive_faq_id])
-      @archive_faq.reorder(params[:questions])
+      @archive_faq.reorder_list(params[:questions])
       flash[:notice] = ts("Question order has been successfully updated.")
     elsif params[:question]
       params[:question].each_with_index do |id, position|

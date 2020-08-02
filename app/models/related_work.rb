@@ -1,11 +1,12 @@
 class RelatedWork < ActiveRecord::Base
   include ActiveModel::ForbiddenAttributesProtection
   belongs_to :work
-  belongs_to :parent, :polymorphic => true
-  
-  scope :posted, 
+  belongs_to :parent, polymorphic: true
+
+  scope :posted, -> {
     joins("INNER JOIN `works` `child_works` ON `child_works`.`id` = `related_works`.`work_id`").
     where("child_works.posted = 1")
+  }
 
   def notify_parent_owners
     if parent.respond_to?(:pseuds)
@@ -13,7 +14,7 @@ class RelatedWork < ActiveRecord::Base
       orphan_account = User.orphan_account
       users.each do |user|
         unless user == orphan_account
-          UserMailer.related_work_notification(user.id, self.id).deliver
+          UserMailer.related_work_notification(user.id, self.id).deliver_after_commit
         end
       end
     end

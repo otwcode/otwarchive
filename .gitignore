@@ -12,6 +12,7 @@ stdout
 /.dropbox
 /.dropbox.attr
 /.rspec
+Gemfile.linters.lock
 REVISION
 
 # /config/
@@ -25,6 +26,7 @@ REVISION
 /config/newrelic.yml
 /config/redis.yml
 /config/redis-cucumber.conf
+/config/skins.dump
 
 # /config/environments/
 /config/environments/development.rb
@@ -39,10 +41,12 @@ REVISION
 /log/*
 
 # /public/
-/public/system
 /public/downloads
 /public/stylesheets/cached_for_screen.css
 /public/stylesheets/skins
+/public/system/skins
+/public/system/work_skins
+/public/tags
 
 # /public/images/
 /public/images/Thumbs.db
@@ -68,5 +72,6 @@ spec/results.html
 spec/results
 features_report.html
 coverage
+redis-cucumber-dump.rdb
 
 .rspec

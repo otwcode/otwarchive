@@ -1,8 +1,5 @@
-class Pseud < ActiveRecord::Base
+class Pseud < ApplicationRecord
   include ActiveModel::ForbiddenAttributesProtection
-
-  include Tire::Model::Search
-  # include Tire::Model::Callbacks
   include Searchable
   include WorksOwner
 
@@ -24,30 +21,32 @@ class Pseud < ActiveRecord::Base
 
   belongs_to :user
   delegate :login, to: :user, prefix: true
-  has_many :kudos
   has_many :bookmarks, dependent: :destroy
-  has_many :recs, class_name: 'Bookmark', conditions: {rec: true}
+  has_many :recs, -> { where(rec: true) }, class_name: 'Bookmark'
   has_many :comments
-  has_many :creatorships
-  has_many :works, through: :creatorships, source: :creation, source_type: 'Work', readonly: false
+
+  has_many :creatorships, dependent: :destroy
+  has_many :approved_creatorships, -> { Creatorship.approved }, class_name: "Creatorship"
+
+  has_many :works, through: :approved_creatorships, source: :creation, source_type: "Work"
+  has_many :chapters, through: :approved_creatorships, source: :creation, source_type: "Chapter"
+  has_many :series, through: :approved_creatorships, source: :creation, source_type: "Series"
+
   has_many :tags, through: :works
   has_many :filters, through: :works
   has_many :direct_filters, through: :works
-  has_many :chapters, through: :creatorships, source: :creation, source_type: 'Chapter', readonly: false
-  has_many :series, through: :creatorships, source: :creation, source_type: 'Series', readonly: false
   has_many :collection_participants, dependent: :destroy
   has_many :collections, through: :collection_participants
   has_many :tag_set_ownerships, dependent: :destroy
   has_many :tag_sets, through: :tag_set_ownerships
   has_many :challenge_signups, dependent: :destroy
-  has_many :gifts, conditions: { rejected: false }
+  has_many :gifts, -> { where(rejected: false) }
   has_many :gift_works, through: :gifts, source: :work
-  has_many :rejected_gifts, class_name: "Gift", conditions: { rejected: true }
+  has_many :rejected_gifts, -> { where(rejected: true) }, class_name: "Gift"
   has_many :rejected_gift_works, through: :rejected_gifts, source: :work
 
-  has_many :offer_assignments, through: :challenge_signups, conditions: ["challenge_assignments.sent_at IS NOT NULL"]
-  has_many :pinch_hit_assignments, class_name: "ChallengeAssignment", foreign_key: "pinch_hitter_id",
-    conditions: ["challenge_assignments.sent_at IS NOT NULL"]
+  has_many :offer_assignments, -> { where("challenge_assignments.sent_at IS NOT NULL") }, through: :challenge_signups
+  has_many :pinch_hit_assignments, -> { where("challenge_assignments.sent_at IS NOT NULL") }, class_name: "ChallengeAssignment", foreign_key: "pinch_hitter_id"
 
   has_many :prompts, dependent: :destroy
 
@@ -74,6 +73,7 @@ class Pseud < ActiveRecord::Base
 
   after_update :check_default_pseud
   after_update :expire_caches
+  after_commit :reindex_creations
 
   scope :on_works, lambda {|owned_works|
     select("DISTINCT pseuds.*").
@@ -82,47 +82,36 @@ class Pseud < ActiveRecord::Base
     order(:name)
   }
 
-  scope :with_works,
+  scope :with_works, -> {
     select("pseuds.*, count(pseuds.id) AS work_count").
     joins(:works).
     group(:id).
     order(:name)
+  }
 
-  scope :with_posted_works, with_works.merge(Work.visible_to_registered_user)
-  scope :with_public_works, with_works.merge(Work.visible_to_all)
+  scope :with_posted_works, -> { with_works.merge(Work.visible_to_registered_user) }
+  scope :with_public_works, -> { with_works.merge(Work.visible_to_all) }
 
-  scope :with_bookmarks,
+  scope :with_bookmarks, -> {
     select("pseuds.*, count(pseuds.id) AS bookmark_count").
     joins(:bookmarks).
     group(:id).
     order(:name)
+  }
 
   # conditions: {bookmarks: {private: false, hidden_by_admin: false}},
-  scope :with_public_bookmarks, with_bookmarks.merge(Bookmark.is_public)
+  scope :with_public_bookmarks, -> { with_bookmarks.merge(Bookmark.is_public) }
 
-  scope :with_public_recs,
+  scope :with_public_recs, -> {
     select("pseuds.*, count(pseuds.id) AS rec_count").
     joins(:bookmarks).
     group(:id).
     order(:name).
     merge(Bookmark.is_public.recs)
-
-  scope :alphabetical, order(:name)
-  scope :starting_with, lambda {|letter| where('SUBSTR(name,1,1) = ?', letter)}
-
-  scope :coauthor_of, lambda {|pseuds|
-    select("pseuds.*").
-    joins("LEFT JOIN creatorships ON creatorships.pseud_id = pseuds.id
-          LEFT JOIN creatorships c2 ON c2.creation_id = creatorships.creation_id").
-    where(["creatorships.creation_type = 'Work' AND
-          c2.creation_type = 'Work' AND
-          c2.pseud_id IN (?) AND
-          creatorships.pseud_id NOT IN (?)",
-          pseuds.collect(&:id),
-          pseuds.collect(&:id)]).
-    group("pseuds.id").
-    includes(:user)
   }
+
+  scope :alphabetical, -> { order(:name) }
+  scope :starting_with, lambda {|letter| where('SUBSTR(name,1,1) = ?', letter)}
 
   def self.not_orphaned
     where("user_id != ?", User.orphan_account)
@@ -157,31 +146,29 @@ class Pseud < ActiveRecord::Base
     self.recs.is_public.size
   end
 
-  scope :public_work_count_for, lambda {|pseud_ids|
-    {
-      select: "pseuds.id, count(pseuds.id) AS work_count",
-      joins: :works,
-      conditions: {works: {posted: true, hidden_by_admin: false, restricted: false}, pseuds: {id: pseud_ids}},
-      group: 'pseuds.id'
-    }
+  scope :public_work_count_for, -> (pseud_ids) {
+    select('pseuds.id, count(pseuds.id) AS work_count')
+      .joins(:works)
+      .where(
+        pseuds: { id: pseud_ids }, works: { posted: true, hidden_by_admin: false, restricted: false }
+      ).group('pseuds.id')
   }
 
-  scope :posted_work_count_for, lambda {|pseud_ids|
-    {
-      select: "pseuds.id, count(pseuds.id) AS work_count",
-      joins: :works,
-      conditions: {works: {posted: true, hidden_by_admin: false}, pseuds: {id: pseud_ids}},
-      group: 'pseuds.id'
-    }
+  scope :posted_work_count_for, -> (pseud_ids) {
+    select('pseuds.id, count(pseuds.id) AS work_count')
+      .joins(:works)
+      .where(
+        pseuds: { id: pseud_ids }, works: { posted: true, hidden_by_admin: false }
+      ).group('pseuds.id')
   }
 
-  scope :public_rec_count_for, lambda {|pseud_ids|
-    {
-      select: "pseuds.id, count(pseuds.id) AS rec_count",
-      joins: :bookmarks,
-      conditions: {bookmarks: {private: false, hidden_by_admin: false, rec: true}, pseuds: {id: pseud_ids}},
-      group: 'pseuds.id'
-    }
+  scope :public_rec_count_for, -> (pseud_ids) {
+    select('pseuds.id, count(pseuds.id) AS rec_count')
+    .joins(:bookmarks)
+    .where(
+      pseuds: { id: pseud_ids }, bookmarks: { private: false, hidden_by_admin: false, rec: true }
+    )
+    .group('pseuds.id')
   }
 
   def self.rec_counts_for_pseuds(pseuds)
@@ -204,6 +191,7 @@ class Pseud < ActiveRecord::Base
       else
         pseuds_with_counts = Pseud.posted_work_count_for(pseuds.collect(&:id))
       end
+
       count_hash = {}
       pseuds_with_counts.each {|p| count_hash[p.id] = p.work_count.to_i}
       count_hash
@@ -211,19 +199,17 @@ class Pseud < ActiveRecord::Base
   end
 
   def unposted_works
-    @unposted_works = self.works.find(:all, conditions: {posted: false}, order: 'works.created_at DESC')
+    @unposted_works = self.works.where(posted: false).order(created_at: :desc)
   end
 
 
   # look up by byline
-  scope :by_byline, lambda {|byline|
-    {
-      conditions: ['users.login = ? AND pseuds.name = ?',
+  scope :by_byline, -> (byline) {
+    joins(:user)
+      .where('users.login = ? AND pseuds.name = ?',
         (byline.include?('(') ? byline.split('(', 2)[1].strip.chop : byline),
         (byline.include?('(') ? byline.split('(', 2)[0].strip : byline)
-      ],
-      include: :user
-    }
+      )
   }
 
   # Produces a byline that indicates the user's name if pseud is not unique
@@ -256,23 +242,26 @@ class Pseud < ActiveRecord::Base
         conditions = ['pseuds.name = ?', pseud_name]
       end
     end
-    Pseud.find(:all, include: :user, conditions: conditions)
+    Pseud.joins(:user).where(conditions)
   end
 
   # Takes a comma-separated list of bylines
   # Returns a hash containing an array of pseuds and an array of bylines that couldn't be found
   def self.parse_bylines(list, options = {})
-    valid_pseuds, ambiguous_pseuds, failures = [], {}, []
+    valid_pseuds = []
+    ambiguous_pseuds = {}
+    failures = []
+    banned_pseuds = []
     bylines = list.split ","
     for byline in bylines
       pseuds = Pseud.parse_byline(byline, options)
-      banned_pseuds = pseuds.select { |pseud| pseud.user.banned? || pseud.user.suspended? }
-      if banned_pseuds.present?
-        pseuds = pseuds - banned_pseuds
-        banned_pseuds = banned_pseuds.map(&:byline)
-      end
       if pseuds.length == 1
-        valid_pseuds << pseuds.first
+        pseud = pseuds.first
+        if pseud.user.banned? || pseud.user.suspended?
+          banned_pseuds << pseud
+        else
+          valid_pseuds << pseud
+        end
       elsif pseuds.length > 1
         ambiguous_pseuds[pseuds.first.name] = pseuds
       else
@@ -280,10 +269,10 @@ class Pseud < ActiveRecord::Base
       end
     end
     {
-      pseuds: valid_pseuds,
+      pseuds: valid_pseuds.flatten.uniq,
       ambiguous_pseuds: ambiguous_pseuds,
       invalid_pseuds: failures,
-      banned_pseuds: banned_pseuds
+      banned_pseuds: banned_pseuds.flatten.uniq.map(&:byline)
     }
   end
 
@@ -298,21 +287,68 @@ class Pseud < ActiveRecord::Base
     "#{id}#{AUTOCOMPLETE_DELIMITER}#{byline}"
   end
 
+  # This method is for use in before_* callbacks
   def autocomplete_value_was
     "#{id}#{AUTOCOMPLETE_DELIMITER}#{byline_was}"
   end
 
-  ## END AUTOCOMPLETE
-
-  def creations
-    self.works + self.chapters + self.series
+  # See byline_before_last_save for the reasoning behind why both this and
+  # autocomplete_value_was exist in this model
+  #
+  # This method is for use in after_* callbacks
+  def autocomplete_value_before_last_save
+    "#{id}#{AUTOCOMPLETE_DELIMITER}#{byline_before_last_save}"
   end
 
+  def byline_before_last_save
+    past_name = name_before_last_save.blank? ? name : name_before_last_save
+
+    # In this case, self belongs to a user that has already been saved
+    # during it's (self's) callback cycle, which means we need to
+    # look *back* at the user's [attributes]_before_last_save, since
+    # [attribute]_was for the pseud's user will behave as if this were an
+    # after_* callback on the user, instead of a before_* callback on self.
+    #
+    # see psued_sweeper.rb:13 for more context
+    #
+    past_user_name = user.blank? ? "" : (user.login_before_last_save.blank? ? user.login : user.login_before_last_save)
+    (past_name != past_user_name) ? "#{past_name} (#{past_user_name})" : past_name
+  end
+
+  # This method is for removing stale autocomplete records in a before_*
+  # callback, such as the one used in PseudSweeper
+  #
+  # This is a particular case for the Pseud model
+  def remove_stale_from_autocomplete_before_save
+    Rails.logger.debug "Removing stale from autocomplete: #{autocomplete_search_string_was}"
+    self.class.remove_from_autocomplete(self.autocomplete_search_string_was, self.autocomplete_prefixes, self.autocomplete_value_was)
+  end
+
+
+  ## END AUTOCOMPLETE
+
   def replace_me_with_default
-    self.creations.each {|creation| change_ownership(creation, self.user.default_pseud) }
-    Comment.update_all("pseud_id = #{self.user.default_pseud.id}", "pseud_id = #{self.id}") unless self.comments.blank?
-    # NB: updates the kudos to use the new default pseud, but the cache will not expire
-    Kudo.update_all("pseud_id = #{self.user.default_pseud.id}", "pseud_id = #{self.id}") unless self.kudos.blank?
+    replacement = user.default_pseud
+
+    # We don't use change_ownership here because we want to transfer both
+    # approved and unapproved creatorships.
+    self.creatorships.includes(:creation).each do |creatorship|
+      next if creatorship.creation.nil?
+
+      existing =
+        replacement.creatorships.find_by(creation: creatorship.creation)
+
+      if existing
+        existing.update(approved: existing.approved || creatorship.approved)
+      else
+        creatorship.update(pseud: replacement)
+      end
+    end
+
+    # Update the pseud ID for all comments. Also updates the timestamp, so that
+    # the cache is invalidated and the pseud change will be visible.
+    Comment.where(pseud_id: self.id).update_all(pseud_id: replacement.id,
+                                                updated_at: Time.now)
     change_collections_membership
     change_gift_recipients
     change_challenge_participation
@@ -320,35 +356,49 @@ class Pseud < ActiveRecord::Base
   end
 
   # Change the ownership of a creation from one pseud to another
-  # Options: skip_series -- if you begin by changing ownership of the series, you don't
-  # want to go back up again and get stuck in a loop
   def change_ownership(creation, pseud, options={})
-    # Should only transfer creatorship if we're a co-creator.
-    if creation.pseuds.include?(self)
-      creation.pseuds.delete(self)
-      creation.pseuds << pseud unless pseud.nil? || creation.pseuds.include?(pseud)
-    end
+    transaction do
+      # Update children before updating the creation itself, since deleting
+      # creatorships from the creation will also delete them from the creation's
+      # children.
+      unless options[:skip_children]
+        children = if creation.is_a?(Work)
+                     creation.chapters
+                   elsif creation.is_a?(Series)
+                     creation.works
+                   else
+                     []
+                   end
 
-    if creation.is_a?(Work)
-      creation.chapters.each {|chapter| self.change_ownership(chapter, pseud)}
-      unless options[:skip_series]
-        for series in creation.series
-          if series.works.count > 1 && (series.works - [creation]).collect(&:pseuds).flatten.include?(self)
-            series.pseuds << pseud rescue nil
-          else
-            self.change_ownership(series, pseud)
-          end
+        children.each do |child|
+          change_ownership(child, pseud, options)
         end
       end
-      comments = creation.total_comments.where("comments.pseud_id = ?", self.id)
-      comments.each do |comment|
-        comment.update_attribute(:pseud_id, pseud.id)
+
+      # Should only add new creatorships if we're an approved co-creator.
+      if creation.creatorships.approved.where(pseud: self).exists?
+        creation.creatorships.find_or_create_by(pseud: pseud)
       end
-    elsif creation.is_a?(Series) && options[:skip_series]
-      creation.works.each {|work| self.change_ownership(work, pseud)}
+
+      # But we should delete all creatorships, even invited ones:
+      creation.creatorships.where(pseud: self).destroy_all
+
+      if creation.is_a?(Work)
+        creation.series.each do |series|
+          if series.work_pseuds.where(id: id).exists?
+            series.creatorships.find_or_create_by(pseud: pseud)
+          else
+            change_ownership(series, pseud, options.merge(skip_children: true))
+          end
+        end
+        comments = creation.total_comments.where("comments.pseud_id = ?", self.id)
+        comments.each do |comment|
+          comment.update_attribute(:pseud_id, pseud.id)
+        end
+      end
+      # make sure changes affect caching/search/author fields
+      creation.save
     end
-    # make sure changes affect caching/search/author fields
-    creation.save rescue nil
   end
 
   def change_membership(collection, new_pseud)
@@ -369,21 +419,21 @@ class Pseud < ActiveRecord::Base
       where("challenge_signups.pseud_id = #{id}").
       update_all("prompts.pseud_id = #{user.default_pseud.id}")
 
-    ChallengeSignup.update_all("pseud_id = #{self.user.default_pseud.id}", "pseud_id = #{self.id}")
-    ChallengeAssignment.update_all("pinch_hitter_id = #{self.user.default_pseud.id}", "pinch_hitter_id = #{self.id}")
+    ChallengeSignup.where("pseud_id = #{self.id}").update_all("pseud_id = #{self.user.default_pseud.id}")
+    ChallengeAssignment.where("pinch_hitter_id = #{self.id}").update_all("pinch_hitter_id = #{self.user.default_pseud.id}")
     return
   end
 
   def change_gift_recipients
-    Gift.update_all("pseud_id = #{self.user.default_pseud.id}", "pseud_id = #{self.id}")
+    Gift.where("pseud_id = #{self.id}").update_all("pseud_id = #{self.user.default_pseud.id}")
   end
 
   def change_bookmarks_ownership
-    Bookmark.update_all("pseud_id = #{self.user.default_pseud.id}", "pseud_id = #{self.id}")
+    Bookmark.where("pseud_id = #{self.id}").update_all("pseud_id = #{self.user.default_pseud.id}")
   end
 
   def change_collections_membership
-    CollectionParticipant.update_all("pseud_id = #{self.user.default_pseud.id}", "pseud_id = #{self.id}")
+    CollectionParticipant.where("pseud_id = #{self.id}").update_all("pseud_id = #{self.user.default_pseud.id}")
   end
 
   def check_default_pseud
@@ -394,7 +444,7 @@ class Pseud < ActiveRecord::Base
   end
 
   def expire_caches
-    if name_changed?
+    if saved_change_to_name?
       self.works.each{ |work| work.touch }
     end
   end
@@ -417,28 +467,25 @@ class Pseud < ActiveRecord::Base
   ## SEARCH #######################
   #################################
 
-  mapping do
-    indexes :name, boost: 20
-  end
-
   def collection_ids
-    collections.value_of(:id)
+    collections.pluck(:id)
   end
 
-  self.include_root_in_json = false
-  def to_indexed_json
-    to_json(methods: [:user_login, :collection_ids])
+  def document_json
+    PseudIndexer.new({}).document(self)
   end
 
-  def self.search(options={})
-    tire.search(page: options[:page], per_page: ArchiveConfig.ITEMS_PER_PAGE, load: true) do
-      query do
-        boolean do
-          must { string options[:query], default_operator: "AND" } if options[:query].present?
-          must { term :collection_ids, options[:collection_id] } if options[:collection_id].present?
-        end
-      end
-    end
+  def should_reindex_creations?
+    pertinent_attributes = %w[id name]
+    destroyed? || (saved_changes.keys & pertinent_attributes).present?
   end
 
+  # If the pseud gets renamed, anything indexed with the old name needs to be reindexed:
+  # works, series, bookmarks.
+  def reindex_creations
+    return unless should_reindex_creations?
+    IndexQueue.enqueue_ids(Work, works.pluck(:id), :main)
+    IndexQueue.enqueue_ids(Bookmark, bookmarks.pluck(:id), :main)
+    IndexQueue.enqueue_ids(Series, series.pluck(:id), :main)
+  end
 end

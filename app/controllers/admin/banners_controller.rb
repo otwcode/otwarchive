@@ -1,6 +1,4 @@
-class Admin::BannersController < ApplicationController
-
-  before_filter :admin_only
+class Admin::BannersController < Admin::BaseController
 
   # GET /admin/banners
   def index
@@ -70,7 +68,7 @@ class Admin::BannersController < ApplicationController
     @admin_banner.destroy
 
     flash[:notice] = ts('Banner successfully deleted.')
-    redirect_to admin_banners_url
+    redirect_to admin_banners_path
   end
 
   private

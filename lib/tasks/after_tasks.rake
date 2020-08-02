@@ -153,17 +153,16 @@ namespace :After do
 #    end
 #  end
 
-
- desc "Clear out old epub files"
- task(:remove_old_epubs => :environment) do
-   download_dir =  "#{Rails.public_path}/downloads/"
-   cmd = %Q{find #{download_dir} -depth -name epub -exec rm -rf {} \\;}
-   puts cmd
-   `#{cmd}`
-   cmd = %Q{find #{download_dir} -name "*.epub" -exec rm {} \\;}
-   puts cmd
-   `#{cmd}`
- end
+# desc "Clear out old epub files"
+# task(:remove_old_epubs => :environment) do
+#   download_dir = Rails.public_path.join("downloads").to_s
+#     cmd = %Q{find #{download_dir} -depth -name epub -exec rm -rf {} \\;}
+#     puts cmd
+#     `#{cmd}`
+#  cmd = %Q{find #{download_dir} -name "*.epub" -exec rm {} \\;}
+#  puts cmd
+#  `#{cmd}`
+# end
 
 #  desc "update filter taggings since nov 21"
 #  task(:update_filter_taggings => :environment) do
@@ -234,7 +233,7 @@ namespace :After do
 #  end
 
 
-  
+
 #  desc "Set complete status for works"
 #  task(:set_complete_status => :environment) do
 #    Work.update_all("complete = 1", "expected_number_of_chapters = 1")
@@ -280,7 +279,7 @@ namespace :After do
 #     convert_restriction_tagset(meme.request_restriction, owners, title + "_requests")
 #   end
 # end
-# 
+#
 # def convert_restriction_tagset(restriction, owner_pseuds, title)
 #   if restriction && restriction.tag_set_id
 #     tag_set_title = "Tag Set For #{title.gsub(/[^\w\s]+/, '_')}"
@@ -296,7 +295,7 @@ namespace :After do
 #     end
 #   end
 # end
-# 
+#
 # desc "Convert existing skins to be based off version 1.0"
 # task(:convert_existing_skins => :environment) do
 #   oldskin = Skin.find_by_title_and_official("Archive 1.0", true)
@@ -322,7 +321,7 @@ namespace :After do
 #
 #
 # require 'nokogiri'
-# 
+#
 # desc "Esacape ampersands in work titles"
 # task(:escape_ampersands => :environment) do
 #   Work.where("title LIKE '%&%'").each do |work|
@@ -330,7 +329,7 @@ namespace :After do
 #     work.save
 #   end
 # end
-# 
+#
 # desc "Set stat counts for works"
 # task(:set_work_stats => :environment) do
 #   Work.find_each do |work|
@@ -338,7 +337,7 @@ namespace :After do
 #     work.update_stat_counter
 #   end
 # end
-# 
+#
 # desc "Set anon/unrevealed status for works"
 # task(:set_anon_unrevealed => :environment) do
 #   CollectionItem.where("(anonymous = 1 OR unrevealed = 1) AND item_type = 'Work'").each do |collection_item|
@@ -346,13 +345,13 @@ namespace :After do
 #     work = collection_item.item
 #     if work.present?
 #       work.update_attributes(
-#         in_anon_collection: collection_item.anonymous, 
+#         in_anon_collection: collection_item.anonymous,
 #         in_unrevealed_collection: collection_item.unrevealed
 #       )
 #     end
 #   end
 # end
-# 
+#
 # desc "Add filters to external works"
 # task(:external_work_filters => :environment) do
 #   ExternalWork.find_each do |ew|
@@ -362,19 +361,19 @@ namespace :After do
 # end
 
   #### Add your new tasks here
-  
+
 
   desc "Set initial values for sortable tag names"
   task(:sortable_tag_names => :environment) do
     Media.all.each{ |m| m.save }
-    
+
     Fandom.find_each do |fandom|
       fandom.set_sortable_name
       puts fandom.sortable_name
       fandom.save
     end
   end
-  
+
   desc "Increase skins' width threshold for handheld devices to 640px"
   task(:increase_handheld_width => :environment) do
     hh_width_media = "only screen and (max-width: 480px)"
@@ -395,9 +394,9 @@ namespace :After do
       lang = Language.find_by_short(short)
       if lang.present?
         Locale.create(
-          iso: iso, 
-          short: short, 
-          name: lang.name, 
+          iso: iso,
+          short: short,
+          name: lang.name,
           language_id: lang.id
         )
       else
@@ -408,7 +407,7 @@ namespace :After do
 
   desc "Set initial values for sortable tag names for tags that aren't fandoms"
   task(:more_sortable_tag_names => :environment) do
-    [Category, Character, Freeform, Rating, Relationship, Warning].each do |klass|
+    [Category, Character, Freeform, Rating, Relationship, ArchiveWarning].each do |klass|
       puts "Adding sortable names for #{klass.to_s.downcase.pluralize}"
       klass.by_name.find_each(:conditions => "canonical = 1 AND sortable_name = ''") do |tag|
         tag.set_sortable_name
@@ -433,10 +432,10 @@ namespace :After do
   end
 
 
-  desc "Clean up work URLs for abuse reports from the last month"
-  task(:clean_abuse_report_work_urls => :environment) do
+  desc "Clean up URLs for abuse reports from the last month"
+  task(:clean_abuse_report_urls => :environment) do
     AbuseReport.where("created_at > ?", 1.month.ago).each do |report|
-      report.clean_work_url
+      report.clean_url
       puts report.url
       report.save
     end
@@ -465,7 +464,7 @@ namespace :After do
       end
 
       if skin.background_color.present? || skin.foreground_color.present? || skin.font.present? || skin.base_em.present?
-        wizard_css += "body, #main { 
+        wizard_css += "body, #main {
           #{skin.background_color.present? ? "background: #{skin.background_color}; " : ''}
           #{skin.foreground_color.present? ? "color: #{skin.foreground_color}; " : ''} "
         if skin.base_em.present?
@@ -501,13 +500,217 @@ namespace :After do
     end
   end
 
+  desc "Fix comment threaded_left and threaded_right."
+  task(fix_comment_threading: :environment) do
+    progress = 0
+
+    # It's possible that the callback to fix threaded_left and threaded_right
+    # after a comment is destroyed hasn't been working for some time. If so,
+    # this task can be used to recalculate threaded_left and threaded_right for
+    # all of the comments that need it.
+    Comment.where("thread = id").includes(:thread_comments).find_each do |root|
+      print "." and STDOUT.flush if ((progress += 1) % 1000).zero?
+
+      # It only affects threads that have more than one comment.
+      next if root.children_count.zero?
+
+      # Get all threaded_left and threaded_right values.
+      left_and_right_values = root.thread_comments.flat_map do |c|
+        [c.threaded_left, c.threaded_right]
+      end
+
+      # Compute a mapping from threaded_left and threaded_right values
+      # back to a compact version.
+      left_and_right_values.sort!
+      compact_left_and_right = {}
+      left_and_right_values.each_with_index do |value, index|
+        compact_left_and_right[value] = index + 1
+      end
+
+      # Calculate the changes that need to be made.
+      changes = {}
+      root.thread_comments.each do |c|
+        new_left = compact_left_and_right[c.threaded_left]
+        new_right = compact_left_and_right[c.threaded_right]
+        if new_left != c.threaded_left || new_right != c.threaded_right
+          changes[c.id] = { threaded_left: new_left, threaded_right: new_right }
+        end
+      end
+
+      # Don't bother if we have nothing to change.
+      next if changes.empty?
+
+      Comment.transaction do
+        changes.each_pair do |id, values|
+          # Use update_all to bypass validations & callbacks (for speed).
+          Comment.where(id: id).update_all(values)
+        end
+      end
+    end
+
+    print "\n"
+  end
+
+  desc "Prune unnecessary deleted comment placeholders."
+  task(prune_deleted_comment_placeholders: :environment) do
+    # This should be performed after the fix_comment_threading task, if that's
+    # necessary. (It can be used without it, but unless threaded_left and
+    # threaded_right are set correctly, it won't delete any existing
+    # placeholders.)
+    Comment.where(is_deleted: true).find_each do |placeholder|
+      if placeholder.children_count.zero?
+        # We don't need a placeholder if it doesn't have children.
+        placeholder.destroy
+      end
+    end
+  end
+
+  desc "Enforce HTTPS where available for embedded media"
+  task(enforce_https: :environment) do
+    Chapter.find_each do |chapter|
+      if chapter.id % 1000 == 0
+        puts chapter.id
+      end
+      if chapter.content.match /<(embed|iframe)/
+        begin
+          chapter.content_sanitizer_version = -1
+          chapter.sanitize_field(chapter, :content)
+        rescue
+          puts "couldn't update chapter #{chapter.id}"
+        end
+      end
+    end
+  end
+
+  desc "Enforce HTTPS where available for embedded media from ning.com and vidders.net"
+  task(enforce_https_viddersnet: :environment) do
+    Chapter.find_each do |chapter|
+      puts chapter.id if (chapter.id % 1000).zero?
+      if chapter.content.match /<(embed|iframe) .*(ning\.com|vidders\.net)/
+        begin
+          chapter.content_sanitizer_version = -1
+          chapter.sanitize_field(chapter, :content)
+        rescue StandardError
+          puts "couldn't update chapter #{chapter.id}"
+        end
+      end
+    end
+  end
+
+  desc "Fix crossover status for works with two fandom tags."
+  task(crossover_reindex_works_with_two_fandoms: :environment) do
+    # Find all works with two fandom tags:
+    Work.joins(:tags).merge(Fandom.all).
+      group("works.id").having("COUNT(tags.id) > 1").
+      select(:id).
+      find_in_batches do |batch|
+      print(".") && STDOUT.flush
+      AsyncIndexer.index(WorkIndexer, batch.map(&:id), :background)
+    end
+    print("\n") && STDOUT.flush
+  end
+
+  # Usage: rake After:reset_word_counts[en]
+  desc "Reset word counts for works in the specified language"
+  task(:reset_word_counts, [:lang] => :environment) do |_t, args|
+    language = Language.find_by(short: args.lang)
+    raise "Invalid language: '#{args.lang}'" if language.nil?
+
+    works = Work.where(language: language)
+    print "Resetting word count for #{works.count} '#{language.short}' works: "
+
+    works.find_in_batches do |batch|
+      batch.each do |work|
+        work.chapters.each do |chapter|
+          chapter.content_will_change!
+          chapter.save
+        end
+        work.save
+      end
+      print(".") && STDOUT.flush
+    end
+    puts && STDOUT.flush
+  end
+
+  desc "Reveal works and creators hidden upon invitation to unrevealed or anonymous collections"
+  task(unhide_invited_works: :environment) do
+    works = Work.where("in_anon_collection IS true OR in_unrevealed_collection IS true")
+    puts "Total number of works to check: #{works.count}"
+
+    works.find_in_batches do |batch|
+      batch.each do |work|
+        work.update_anon_unrevealed
+        work.save if work.changed?
+      end
+      print(".") && STDOUT.flush
+    end
+    puts && STDOUT.flush
+  end
+
+  desc "Update each user's kudos with the user's id"
+  task(add_user_id_to_kudos: :environment) do
+    total_users = User.all.size
+    total_batches = (total_users + 999) / 1000
+    puts "Updating #{total_users} users' kudos in #{total_batches} batches"
+
+    User.includes(:pseuds).find_in_batches.with_index do |batch, index|
+      batch_number = index + 1
+      progress_msg = "Batch #{batch_number} of #{total_batches} complete"
+      batch.each do |user|
+        Kudo.where(pseud_id: user.pseud_ids, user_id: nil)
+          .update_all(user_id: user.id)
+      end
+      puts(progress_msg) && STDOUT.flush
+    end
+    puts && STDOUT.flush
+  end
+
+  desc "Update kudo counts on indexed works"
+  task(update_indexed_stat_counter_kudo_count: :environment) do
+    counters = StatCounter.where("kudos_count > ?", 0)
+    total_batches = (counters.size + 999) / 1000
+    batch_number = 0
+
+    counters.find_in_batches do |batch|
+      batch_number += 1
+      progress_msg = "Batch #{batch_number} of #{total_batches} complete"
+      batch.each do |counter|
+        next unless counter.work
+
+        counter.kudos_count = counter.work.kudos.count
+        next unless counter.kudos_count_changed?
+
+        # Counters will be queued for reindexing.
+        counter.save
+      end
+      puts(progress_msg) && STDOUT.flush
+    end
+    puts && STDOUT.flush
+  end
+
+  desc "Clean up the Redis info from the old hit count code."
+  task(remove_old_redis_hit_count_data: :environment) do
+    REDIS_GENERAL.scan_each(match: "work_stats:*") do |key|
+      REDIS_GENERAL.del(key)
+    end
+  end
+
+  desc "Copy anon_commenting_disabled to comment_permissions."
+  task(copy_anon_commenting_disabled_to_comment_permissions: :environment) do
+    Work.in_batches do |batch|
+      batch.update_all("comment_permissions = anon_commenting_disabled")
+      print(".") && STDOUT.flush
+    end
+
+    puts && STDOUT.flush
+  end
 end # this is the end that you have to put new tasks above
 
 ##################
 # ADD NEW MIGRATE TASKS TO THIS LIST ONCE THEY ARE WORKING
 
 # Remove tasks from the list once they've been run on the deployed site
-# NOTE: 
+# NOTE:
 desc "Run all current migrate tasks"
 # task :After => ['After:convert_tag_sets', 'autocomplete:reload_tagset_data', 'skins:disable_all', 'skins:unapprove_all',
 # 'skins:load_site_skins', 'After:convert_existing_skins', 'skins:load_user_skins', 'After:remove_old_epubs']

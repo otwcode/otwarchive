@@ -15,7 +15,7 @@
 <!--/subnav-->
 
 <!--main content-->
-<%= form_for(@preference, :url => { :action => "update", :user_id => @user }) do |f| %>
+<%= form_for(@preference, url: user_preference_path(@user, @preference)) do |f| %>
 <fieldset>
   <legend><%= ts('Privacy') %></legend>
   <h4 class="heading"><%= ts('Privacy') %> <%= link_to_help 'privacy-preferences' %></h4>
@@ -38,6 +38,10 @@
     <li>
       <%= f.check_box :disable_share_links %>
       <%= f.label :disable_share_links, ts('Hide the share buttons on my work.') %>
+    </li>
+    <li>
+      <%= f.check_box :allow_cocreator %>
+      <%= f.label :allow_cocreator, ts("Allow others to invite me to be a co-creator.")  %>
     </li>
   </ul>
 </fieldset>
@@ -79,7 +83,7 @@
 
     <dt><%= f.label :time_zone, ts('Your time zone') %></dt>
     <dd><%= f.time_zone_select :time_zone, nil, :default => Time.zone.name %></dd>
-    
+
     <% if Rails.env.test? || Rails.env.development? || $rollout.active?(:set_locale_preference, @user) %>
       <dt><%= f.label :preferred_locale, ts('Your locale') %> <%= link_to_help 'locale-preferences' %></dt>
       <dd><%= f.select :preferred_locale, @available_locales.collect{|locale| [locale.name, locale.id]}, :default => @preference.preferred_locale %></dd>
@@ -90,27 +94,6 @@
   </dl>
 </fieldset>
 
-<fieldset>
-  <legend><%= ts('Statistics') %></legend>
-
-  <h4 class="heading"><%= ts('Statistics') %> <%= link_to_help 'statistics-preferences' %></h4>
-  <ul>
-    <li>
-      <%= f.check_box :hide_all_hit_counts %>
-      <%= f.label :hide_all_hit_counts, ts("Don't show me any hit counts.") %>
-    </li>
-
-    <li>
-      <%= f.check_box :hide_private_hit_count %>
-      <%= f.label :hide_private_hit_count, ts("Don't show me hits on my works.") %>
-    </li>
-
-    <li>
-      <%= f.check_box :hide_public_hit_count %>
-      <%= f.label :hide_public_hit_count, ts("Don't show other people hits on my works.") %>
-    </li>
-  </ul>
-</fieldset>
 <fieldset>
 	<legend><%= ts('Comments') %></legend>
   <h4 class="heading"><%= ts('Comments') %> <%= link_to_help 'comment-preferences' %></h4>
@@ -135,10 +118,6 @@
     	  <%= f.label :kudos_emails_off, ts('Turn off emails about kudos.')  %>
   	</li>
 
-  	<li>
-    	  <%= f.check_box :admin_emails_off %>
-    	  <%= f.label :admin_emails_off, ts('Turn off admin emails.')  %>
-  	</li>
   </ul>
 </fieldset>
 <fieldset>

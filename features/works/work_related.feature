@@ -107,7 +107,7 @@ Scenario: Translation, related work, and parent work links appear in the right p
   When I am logged in as "inspiration"
     And I edit the work "Worldbuilding"
     And I list the work "Parent Work" as inspiration
-    And I press "Post Without Preview"
+    And I press "Post"
     And a chapter is added to "Worldbuilding"
     And a draft chapter is added to "Worldbuilding"
   When I view the work "Worldbuilding"
@@ -136,7 +136,7 @@ Scenario: A user cannot see another user's related works page
   When I am logged in as "inspiration"
   When I go to remixer's user page
   Then I should not see "Related Works"
-  When I go to remixers's related works page
+  When I go to remixer's related works page
   # It's currently possible to access a user's related works page directly
   # Then I should see "Sorry, you don't have permission to access the page you were trying to reach."
 
@@ -284,13 +284,14 @@ Scenario: Listing external works as inspirations
   When I view my related works
   Then I should see "From N/A to English"
   # inactive URL should give a helpful message (AO3-1783)
+  # unreachable URL should give a more helpful message (A03-3536)
   When I edit the work "Followup"
     And I check "parent-options-show"
     And I fill in "URL" with "http://example.org/404"
     And I fill in "Title" with "Worldbuilding Two"
     And I fill in "Author" with "BNF"
     And I press "Preview"
-  Then I should see "Parent work info would not save."
+  Then I should see "Parent work Url could not be reached. If the URL is correct and the site is currently down, please try again later."
 
 Scenario: External work language
 
@@ -301,6 +302,7 @@ Scenario: External work language
     And I go to the new work page
     And I select "Not Rated" from "Rating"
     And I check "No Archive Warnings Apply"
+    And I select "English" from "Choose a language"
     And I fill in "Fandoms" with "Stargate"
     And I fill in "Work Title" with "Followup 4"
     And I fill in "content" with "That could be an amusing crossover."
@@ -343,18 +345,49 @@ Scenario: Restricted works listed as Inspiration show up [Restricted] for guests
     And I view the work "Followup"
   Then I should see "Inspired by [Restricted Work] by inspiration"
 
-  Scenario: When a user is notified that a co-authored work has been inspired by a work they posted, the e-mail should link to each author's URL instead of showing escaped HTML
+Scenario: Anonymous works listed as inspiration should have links to the authors,
+  but only for the authors themselves and admins
   Given I have related works setup
+    And I have the anonymous collection "Muppets Anonymous"
+    And a related work has been posted and approved
+
+  When I am logged in as "remixer"
+    And I add the work "Followup" to the collection "Muppets Anonymous"
+    And I view the work "Worldbuilding"
+  Then I should see "Works inspired by this one: Followup by Anonymous [remixer]"
+  When I follow "remixer" within ".afterword .children"
+  Then I should be on my "remixer" pseud page
+
+  When I am logged in as an admin
+    And I view the work "Worldbuilding"
+  Then I should see "Works inspired by this one: Followup by Anonymous [remixer]"
+  When I follow "remixer" within ".afterword .children"
+  Then I should be on remixer's "remixer" pseud page
+
+  When I am logged out
+    And I view the work "Worldbuilding"
+  Then I should see "Works inspired by this one: Followup by Anonymous"
+    And I should not see "remixer" within ".afterword .children"
+
+Scenario: When a user is notified that a co-authored work has been inspired by a work they posted,
+  the e-mail should link to each author's URL instead of showing escaped HTML
+  Given I have related works setup
+    And the user "misterdeejay" exists and is activated
+    And the user "misterdeejay" allows co-creators
     And I am logged in as "inspiration"
     And I post the work "Seed of an Idea"
   When I am logged in as "inspired"
     And I set up the draft "Seedling of an Idea"
-    And I add the co-author "misterdeejay"
+    And I invite the co-author "misterdeejay"
+    And I preview the work
+  Then I should not see "misterdeejay"
+    But 1 email should be delivered to "misterdeejay"
+    And the email should contain "The user inspired has invited your pseud misterdeejay to be listed as a co-creator on the following work"
+  When the user "misterdeejay" accepts all creator invites
+    And I edit the work "Seedling of an Idea"
     And I list the work "Seed of an Idea" as inspiration
     And I preview the work
     And I post the work
-  Then 1 email should be delivered to "misterdeejay"
-    And the email should contain "You have been listed as a co-creator on the following work"
   Then 1 email should be delivered to "inspiration"
     And the email should link to inspired's user url
     And the email should not contain "&lt;a href=&quot;http://archiveofourown.org/users/inspired/pseuds/inspired&quot;"
@@ -366,13 +399,13 @@ Scenario: Restricted works listed as Inspiration show up [Restricted] for guests
   Given I am logged in
     And I set up a draft "Inspired"
   When I list a series as inspiration
-    And I press "Post Without Preview"
+    And I press "Post"
   Then I should see "Only a link to a work can be listed as an inspiration."
 
-  Scenario: When using a URL on the site to cite a parent work, the URL must be 
+  Scenario: When using a URL on the site to cite a parent work, the URL must be
   for a work that exists
   Given I am logged in
     And I set up a draft "Inspired"
   When I list a nonexistent work as inspiration
-    And I press "Post Without Preview"
+    And I press "Post"
   Then I should see "The work you listed as an inspiration does not seem to exist."

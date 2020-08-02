@@ -12,7 +12,7 @@ module HtmlCleaner
       attributes ||= {}
       self_closing = ""
     end
-    
+
     attr = ""
     attributes.each { |aname, avalue| attr += " #{aname}='#{avalue}'" }
     return "<#{name}#{attr}#{self_closing}>"
@@ -25,10 +25,9 @@ module HtmlCleaner
       self_closing = node.children.empty?
     rescue NameError
       name = node
-      attributes ||= {}
       self_closing = false
     end
-    
+
     self_closing ? "" : "</#{name}>"
   end
 
@@ -45,7 +44,7 @@ module HtmlCleaner
 
     def open_paragraph_tags
       result = ""
-      each do |tags| 
+      each do |tags|
         tags.each do |tag, attributes|
           next if result == "" && tag != "p"
           next if ignore_tag?(tag)
@@ -55,11 +54,11 @@ module HtmlCleaner
       end
       return result
     end
-    
+
     def close_paragraph_tags
       return "" if !inside_paragraph?
       result = ""
-      reverse.each do |tags| 
+      reverse.each do |tags|
         tags.reverse.each do |tag, attributes|
           next if ignore_tag?(tag)
           result += close_tag(tag, attributes)
@@ -83,7 +82,7 @@ module HtmlCleaner
     end
   end
 
-  # If we aren't sure that this field hasn't been sanitized since the last sanitizer version, 
+  # If we aren't sure that this field hasn't been sanitized since the last sanitizer version,
   # we sanitize it before we allow it to pass through (and save it if possible).
   def sanitize_field(object, fieldname)
     return "" if object.send(fieldname).nil?
@@ -98,11 +97,11 @@ module HtmlCleaner
       Rails.logger.debug "Already sanitized #{fieldname} on #{object.class.name} (id #{object.id})"
       object.send("#{fieldname}")
     else
-      # no sanitizer version information, so re-sanitize 
+      # no sanitizer version information, so re-sanitize
       Rails.logger.debug "Sanitizing without saving #{fieldname} on #{object.class.name} (id #{object.id})"
       sanitize_value(fieldname, object.send("#{fieldname}"))
     end
-  end 
+  end
 
   def get_white_list_sanitizer
     @white_list_sanitizer ||= HTML::WhiteListSanitizer.new
@@ -115,72 +114,77 @@ module HtmlCleaner
   # yank out bad end-of-line characters and evil msword curly quotes
   def fix_bad_characters(text)
     return "" if text.nil?
-    
+
     # get the text into UTF-8 and get rid of invalid characters
-    text = text.encode("UTF-8", :invalid => :replace, :undef => :replace, :replace => "")
-    
+    text = text.encode("UTF-8", invalid: :replace, undef: :replace, replace: "")
+
     text.gsub! "<3", "&lt;3"
 
     # convert carriage returns to newlines
     text.gsub!(/\r\n?/, "\n")
-    
-    # replace curlyquotes
-    # note: turns out not to be necessary?
-    # text.gsub! "\xE2\x80\x98", "'"
-    # text.gsub! "\xE2\x80\x99", "'"
-    # text.gsub! "\xE2\x80\x9C", '"'
-    # text.gsub! "\xE2\x80\x9D", '"'
-    
+
     # argh, get rid of ____spacer____ inserts
     text.gsub! "____spacer____", ""
-    
-    # trash a whole bunch of crappy non-printing format characters stuck 
+
+    # trash a whole bunch of crappy non-printing format characters stuck
     # in most commonly by MS Word
     # \p{Cf} matches all unicode char in the "other, format" category
     text.gsub!(/\p{Cf}/u, '')
 
     return text
   end
-  
+
   def sanitize_value(field, value)
+    return value if ArchiveConfig.FIELDS_WITHOUT_SANITIZATION.include?(field.to_s)
     if ArchiveConfig.NONZERO_INTEGER_PARAMETERS.has_key?(field.to_s)
       return (value.to_i > 0) ? value.to_i : ArchiveConfig.NONZERO_INTEGER_PARAMETERS[field.to_s]
     end
     return "" if value.blank?
-    value.strip!
+    unfrozen_value = value&.dup
+    unfrozen_value.strip!
     if field.to_s == 'title'
       # prevent invisible titles
-      value.gsub!("<", "&lt;")
-      value.gsub!(">", "&gt;")
+      unfrozen_value.gsub!("<", "&lt;")
+      unfrozen_value.gsub!(">", "&gt;")
     end
     if ArchiveConfig.FIELDS_ALLOWING_LESS_THAN.include?(field.to_s)
-      value.gsub!("<", "&lt;")
+      unfrozen_value.gsub!("<", "&lt;")
     end
     if ArchiveConfig.FIELDS_ALLOWING_HTML.include?(field.to_s)
       # We're allowing users to use HTML in this field
       transformers = []
       if ArchiveConfig.FIELDS_ALLOWING_VIDEO_EMBEDS.include?(field.to_s)
-        transformers << Sanitize::Transformers::ALLOW_VIDEO_EMBEDS 
+        transformers << OTWSanitize::EmbedSanitizer.transformer
+        transformers << OTWSanitize::MediaSanitizer.transformer
       end
       if ArchiveConfig.FIELDS_ALLOWING_CSS.include?(field.to_s)
-        transformers << Sanitize::Transformers::ALLOW_USER_CLASSES
+        transformers << OTWSanitize::UserClassSanitizer.transformer
       end
-      # the screencast field shouldn't be wrapped in <p> tags
-      unless field.to_s == "screencast"
-        value = add_paragraphs_to_text(Sanitize.clean(fix_bad_characters(value),
-                               Sanitize::Config::ARCHIVE.merge(:transformers => transformers)))
+      # Now that we know what transformers we need, let's sanitize the unfrozen value
+      if ArchiveConfig.FIELDS_ALLOWING_CSS.include?(field.to_s)
+        unfrozen_value = add_paragraphs_to_text(Sanitize.clean(fix_bad_characters(unfrozen_value),
+                               Sanitize::Config::CSS_ALLOWED.merge(transformers: transformers)))
+      else
+        # the screencast field shouldn't be wrapped in <p> tags
+        unfrozen_value = add_paragraphs_to_text(Sanitize.clean(fix_bad_characters(unfrozen_value),
+                               Sanitize::Config::ARCHIVE.merge(transformers: transformers))) unless field.to_s == "screencast"
       end
       doc = Nokogiri::HTML::Document.new
       doc.encoding = "UTF-8"
-      value = doc.fragment(value).to_xhtml
+      unfrozen_value = doc.fragment(unfrozen_value).to_xhtml
+
+      # Hack! the herald angels sing
+      # TODO: AO3-5801 Switch to an HTML5 serializer that doesn't add invalid closing tags
+      # to track and source elements.
+      unfrozen_value.gsub!(%r{</(source|track)>}, "")
     else
       # clean out all tags
-      value = Sanitize.clean(fix_bad_characters(value))
+      unfrozen_value = Sanitize.clean(fix_bad_characters(unfrozen_value))
     end
 
     # Plain text fields can't contain &amp; entities:
-    value.gsub!(/&amp;/, '&') unless (ArchiveConfig.FIELDS_ALLOWING_HTML_ENTITIES + ArchiveConfig.FIELDS_ALLOWING_HTML).include?(field.to_s)
-    value
+    unfrozen_value.gsub!(/&amp;/, '&') unless (ArchiveConfig.FIELDS_ALLOWING_HTML_ENTITIES + ArchiveConfig.FIELDS_ALLOWING_HTML).include?(field.to_s)
+    unfrozen_value
   end
 
   # grabbed from http://code.google.com/p/sanitizeparams/ and tweaked
@@ -192,7 +196,9 @@ module HtmlCleaner
     hash.keys.each do |key|
       if hash[key].is_a? String
         hash[key] = sanitize_value(key, hash[key])
-      elsif hash[key].is_a? Hash
+      elsif hash[key].is_a?(ActionController::Parameters)
+        hash[key] = hash[key].to_hash
+      elsif hash[key].is_a?(Hash)
         hash[key] = walk_hash(hash[key])
       elsif hash[key].is_a? Array
         hash[key] = walk_array(hash[key])
@@ -217,8 +223,8 @@ module HtmlCleaner
 
   # Tags whose content we don't touch
   def dont_touch_content_tag?(tag)
-    %w(a abbr acronym address br dl h1 h2 h3 h4 h5 h6 hr img ol p
-       pre table ul).include?(tag)
+    %w(a abbr acronym address audio br dl h1 h2 h3 h4 h5 h6 hr img ol p
+       pre source table track video ul).include?(tag)
   end
 
   # Tags that don't contain content
@@ -235,14 +241,14 @@ module HtmlCleaner
 
   # Tags that can't be inside p tags
   def put_outside_p_tag?(tag)
-    %w(dl h1 h2 h3 h4 h5 h6 hr ol p pre table ul).include?(tag)
+    %w(audio dl h1 h2 h3 h4 h5 h6 hr ol p pre source table track ul video).include?(tag)
   end
 
   # Tags before and after which we don't want to convert linebreaks
   # into br's and p's
   def no_break_before_after_tag?(tag)
-    %w(blockquote br center dl div h1 h2 h3 h4 h5 h6
-       hr ol p pre table ul).include?(tag)
+    %w(audio blockquote br center dl div h1 h2 h3 h4 h5 h6
+       hr ol p pre source table track ul video).include?(tag)
   end
 
   # Traverse a Nokogiri document tree recursively in order to insert
@@ -267,8 +273,8 @@ module HtmlCleaner
     if node.name == "br" && node.next_sibling && node.next_sibling.name == "br"
       return [stack, out_html]
     end
-      
-    # Don't decend into node if we don't want to touch the content of
+
+    # Don't descend into node if we don't want to touch the content of
     # this kind of tag
     if dont_touch_content_tag?(node.name)
       if put_inside_p_tag?(node.name) && !stack.inside_paragraph?
@@ -314,13 +320,13 @@ module HtmlCleaner
 
       # If we have three newlines, assume user wants a blank line
       text.gsub!(/\n\s*?\n\s*?\n/, "\n\n&nbsp;\n\n")
-      
+
       # Convert double newlines into single paragraph break
       text.gsub!(/\n+\s*?\n+/, stack.close_paragraph_tags + stack.open_paragraph_tags)
-      
+
       # Convert single newlines into br tags
       text.gsub!(/\n/, '<br/>')
-      
+
       out_html += text
     end
 
@@ -348,15 +354,8 @@ module HtmlCleaner
   end
 
   def add_paragraphs_to_text(text)
-    # By default, Nokogiri closes unclosed tags very late, often at
-    # the end of the document. We want runaway tags closed at the end
-    # of the line
     doc = Nokogiri::XML.parse("<myroot>#{text}</myroot>")
     doc.errors.each do |error|
-      match = error.message.match(/Premature end of data in tag (\w+) line (\d+)/)
-      
-      text = close_unclosed_tag(text, match[1], match[2]) if match
-
       match = error.message.match(/Opening and ending tag mismatch: (\w+) line (\d+) and myroot/)
       text = close_unclosed_tag(text, match[1], match[2]) if match
     end
@@ -370,37 +369,41 @@ module HtmlCleaner
     out_html
   end
 
-  
+
   ### STRIPPING FOR DISPLAY ONLY
   # Regexps for stripping particular tags and attributes for display.
   # These assume they are running on well-formed XHTML, which we can do
   # because they will only be used on already-cleaned fields.
-  
+
   # strip img tags
   def strip_images(value)
     value.gsub(/<img .*?>/, '')
   end
-    
+
   # strip style attributes
   def strip_styles(value)
     strip_attribute(value, "style")
   end
-  
+
   # strip class attributes
   def strip_classes(value)
     strip_attribute(value, "class")
   end
-  
+
   def strip_attribute(value, attribname)
     value.gsub(/\s*#{attribname}=\".*?\"\s*/, "")
   end
-  
+
   def strip_html_breaks_simple(value)
     return "" if value.blank?
     value.gsub(/\s*<br ?\/?>\s*/, "<br />\n").
           gsub(/\s*<p[^>]*>\s*&nbsp;\s*<\/p>\s*/, "\n\n\n").
           gsub(/\s*<p[^>]*>(.*?)<\/p>\s*/m, "\n\n" + '\1').
           strip
-  end      
-  
+  end
+
+  def add_break_between_paragraphs(value)
+    return "" if value.blank?
+    value.gsub(%r{\s*</p>\s*<p>\s*}, "</p><br /><p>")
+  end
 end

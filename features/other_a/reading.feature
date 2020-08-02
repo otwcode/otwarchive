@@ -1,83 +1,85 @@
 @users
 Feature: Reading count
 
-  Scenario: only see own reading history
-    Given the following activated user exists
-    | login          | password   |
-    | first_reader        | password   |
+  Scenario: A user can only see their own reading history
+
+  Given the following activated user exists
+    | login        |
+    | first_reader |
   When I am logged in as "second_reader"
     And I go to first_reader's reading page
-    Then I should see "Sorry, you don't have permission"
+  Then I should see "Sorry, you don't have permission"
     And I should not see "History" within "div#dashboard"
   When I go to second_reader's reading page
-    Then I should see "History" within "div#dashboard"
-    
-  Scenario: Read a work several times, counts show on reading history
-      increment the count whenever you reread a story
-      also updates the date
+  Then I should see "History" within "div#dashboard"
+
+  Scenario: A user can read a work several times, updating the count and date in their history
+
     Given I am logged in as "writer"
       And I post the work "some work"
+      And all indexing jobs have been run
       And I am logged out
     When I am logged in as "fandomer"
       And fandomer first read "some work" on "2010-05-25"
-    When I go to fandomer's reading page
-    Then I should see "some work"
-      And I should see "Viewed once"
-      And I should see "Last viewed: 25 May 2010"
-    When I am on writer's works page
-      And I follow "some work"
-    When the reading rake task is run
       And I go to fandomer's reading page
-    Then I should see "Viewed 2 times"
-      And I should see "Last viewed: less than 1 minute ago"
+    Then I should see "some work"
+      And I should see "Visited once"
+      And I should see "Last visited: 25 May 2010"
 
-  Scenario: disable reading history
-    then re-enable and check counts update again
+    When time is frozen at 20/4/2020
+      And I go to the work "some work"
+      And the reading rake task is run
+      And I go to fandomer's reading page
+    Then I should see "Visited 2 times"
+      And I should see "Last visited: 20 Apr 2020"
+
+  Scenario: A user's reading history is updated only when enabled
 
     Given I am logged in as "writer"
       And I post the work "some work"
       And I am logged out
     When I am logged in as "fandomer"
       And fandomer first read "some work" on "2010-05-25"
-    When I go to fandomer's reading page
+      And I go to fandomer's reading page
     Then I should see "some work"
-      And I should see "Viewed once"
-      And I should see "Last viewed: 25 May 2010"    
+      And I should see "Visited once"
+      And I should see "Last visited: 25 May 2010"
+
     When I follow "Preferences"
       And I uncheck "Turn on Viewing History"
       And I press "Update"
+      And all indexing jobs have been run
     Then I should not see "My History"
-    When I am on writer's works page
-      And I follow "some work"
-    When I am on writer's works page
-      And I follow "some work"
-    When the reading rake task is run
+
+    When I go to the work "some work"
+      And the reading rake task is run
       And I go to fandomer's reading page
     Then I should see "You have reading history disabled"
       And I should not see "some work"
+
     When I check "Turn on Viewing History"
       And I press "Update"
     Then I should see "Your preferences were successfully updated."
+
     When I go to fandomer's reading page
-    Then I should see "Viewed once"
-      And I should see "Last viewed: 25 May 2010"
-    When I am on writer's works page
-      And I follow "some work"
-    When the reading rake task is run
+    Then I should see "Visited once"
+      And I should see "Last visited: 25 May 2010"
+    When time is frozen at 20/4/2020
+      And I go to the work "some work"
+      And the reading rake task is run
       And I go to fandomer's reading page
-    Then I should see "Viewed 2 times"
-      And I should see "Last viewed: less than 1 minute ago"
+    Then I should see "Visited 2 times"
+      And I should see "Last visited: 20 Apr 2020"
 
   Scenario: Clear entire reading history
 
     Given I have loaded the fixtures
-      And the work indexes are updated
     When I am logged in as "fandomer"
       And I am on testuser's works page
       And I follow "First work"
       And I am on testuser's works page
       And I follow "second work"
-      And I am on testuser2's works page
+      And I am on testuser2 works page
       And I follow "fifth"
       And I should see "fifth by testuser2"
       And I follow "Proceed"
@@ -142,29 +144,28 @@ Feature: Reading count
   When the reading rake task is run
     And I go to fandomer's reading page
   Then I should see "multichapter work"
-    And I should see "Viewed once"
+    And I should see "Visited once"
   When I press "Delete from History"
   Then I should see "Work successfully deleted from your history."
   When I view the work "multichapter work"
     And the reading rake task is run
   When I go to fandomer's reading page
   Then I should see "multichapter work"
-    And I should see "Viewed once"
+    And I should see "Visited once"
   When I view the work "multichapter work"
     And I follow "Next Chapter"
     And the reading rake task is run
   When I go to fandomer's reading page
   Then I should see "multichapter work"
-  When "intermittent failure" is fixed
-    # I should see "Viewed 3 times"
+    And I should see "Visited 3 times"
   When I view the work "multichapter work"
     And I follow "Next Chapter"
   When I follow "Mark for Later"
   Then I should see "This work was added to your Marked for Later list."
+    And the reading rake task is run
     And I go to fandomer's reading page
   Then I should see "multichapter work"
-  When "intermittent failure" is fixed
-    # I should see "Viewed 5 times"
+    And I should see "Visited 6 times"
     And I should see "(Marked for Later.)"
 
   Scenario: A user can see some of their works marked for later on the homepage
@@ -238,7 +239,7 @@ Feature: Reading count
   When I am logged in as "editor" with password "password"
     And I edit the work "Some Work V1"
     And I fill in "Work Title" with "Some Work V2"
-    And I press "Post Without Preview"
+    And I press "Post"
     And I am logged out
   When I am logged in as "reader" with password "password"
     And I go to the homepage

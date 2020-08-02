@@ -4,7 +4,6 @@
       <!--title-->
       <h4 class="heading" id="collection_item_<%= collection_item.id %>">
         <%= error_messages_for collection_item %>
-        <%= form.hidden_field :collection_id %>
         <%= link_to collection_item_display_title(collection_item), collection_item.item %>
       </h4>
 
@@ -34,7 +33,7 @@
         <p class="datetime"><%= collection_item.item_date.to_date %></p>
       <% end %>
       <div class="icon">
-        <%= image_tag(collection_item.collection.icon.url(:standard), size: "100x100", alt: collection_item.collection.icon_alt_text, class: "icon") %>
+        <%= image_tag(collection_item.collection.icon.url(:standard), size: "100x100", alt: collection_item.collection.icon_alt_text, class: "icon", skip_pipeline: true) %>
       </div> 
     </div>
 

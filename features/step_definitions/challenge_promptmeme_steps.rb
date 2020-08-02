@@ -1,27 +1,27 @@
 
 Given /^I have Battle 12 prompt meme set up$/ do
   step %{I am logged in as "mod1"}
-    step "I have standard challenge tags setup"
+  step "I have standard challenge tags setup"
   step "I set up Battle 12 promptmeme collection"
 end
 
 Given /^I have Battle 12 prompt meme fully set up$/ do
   step %{I am logged in as "mod1"}
-    step "I have standard challenge tags setup"
+  step "I have standard challenge tags setup"
   step "I set up Battle 12 promptmeme collection"
   step "I fill in Battle 12 challenge options"
 end
 
 Given /^I have no-column prompt meme fully set up$/ do
   step %{I am logged in as "mod1"}
-    step "I have standard challenge tags setup"
+  step "I have standard challenge tags setup"
   step "I set up Battle 12 promptmeme collection"
   step "I fill in no-column challenge options"
 end
 
 Given /^I have single-prompt prompt meme fully set up$/ do
   step %{I am logged in as "mod1"}
-    step "I have standard challenge tags setup"
+  step "I have standard challenge tags setup"
   step "I set up Battle 12 promptmeme collection"
   step "I fill in single-prompt challenge options"
 end
@@ -89,7 +89,7 @@ When /^I set up an?(?: ([^"]*)) promptmeme "([^\"]*)"(?: with name "([^"]*)")?$/
     check("This collection is unrevealed")
     check("This collection is anonymous")
   end
-  select("Prompt Meme", :from => "challenge_type")
+  select("Prompt Meme", from: "challenge_type")
   step %{I submit}
   step "I should see \"Collection was successfully created\""
 
@@ -114,7 +114,7 @@ When /^I set up Battle 12 promptmeme collection$/ do
   fill_in("Rules", with: "Be nicer to people")
   check("This collection is unrevealed")
   check("This collection is anonymous")
-  select("Prompt Meme", :from => "challenge_type")
+  select("Prompt Meme", from: "challenge_type")
   step %{I submit}
   step "I should see \"Collection was successfully created\""
 end
@@ -260,7 +260,7 @@ When /^I sign up for Battle 12 with combination E$/ do
 end
 
 When /^I sign up for "([^\"]*)" fixed-fandom prompt meme$/ do |title|
-  visit collection_path(Collection.find_by_title(title))
+  visit collection_path(Collection.find_by(title: title))
   step %{I follow "Sign Up"}
     step %{I check the 1st checkbox with value "Stargate SG-1"}
     step %{I check the 2nd checkbox with value "Stargate SG-1"}
@@ -270,7 +270,7 @@ When /^I sign up for "([^\"]*)" fixed-fandom prompt meme$/ do |title|
 end
 
 When /^I sign up for "([^\"]*)" many-fandom prompt meme$/ do |title|
-  visit collection_path(Collection.find_by_title(title))
+  visit collection_path(Collection.find_by(title: title))
   step %{I follow "Sign Up"}
     step %{I fill in the 1st field with id matching "fandom_tagnames" with "Stargate Atlantis"}
     step %{I check the 1st checkbox with id matching "anonymous"}
@@ -318,7 +318,7 @@ When /^I add a new prompt to my signup for a prompt meme$/ do
 end
 
 When /^I edit the signup by "([^\"]*)"$/ do |participant|
-  visit collection_path(Collection.find_by_title("Battle 12"))
+  visit collection_path(Collection.find_by(title: "Battle 12"))
   step %{I follow "Prompts ("}
   step %{I follow "Edit Sign-up"}
 end
@@ -326,25 +326,25 @@ end
 ### WHEN viewing after signups
 
 When /^I view my signup for "([^\"]*)"$/ do |title|
-  visit collection_path(Collection.find_by_title(title))
+  visit collection_path(Collection.find_by(title: title))
   step %{I follow "My Prompts"}
 end
 
 When /^I view unposted claims for "([^\"]*)"$/ do |title|
-  visit collection_path(Collection.find_by_title(title))
+  visit collection_path(Collection.find_by(title: title))
   # step %{show me the sidebar}
   step %{I follow "Unposted Claims ("}
 end
 
 When /^I view prompts for "([^\"]*)"$/ do |title|
-  visit collection_path(Collection.find_by_title(title))
+  visit collection_path(Collection.find_by(title: title))
   step %{I follow "Prompts ("}
 end
 
 ### WHEN claiming
 
 When /^I claim a prompt from "([^\"]*)"$/ do |title|
-  visit collection_path(Collection.find_by_title(title))
+  visit collection_path(Collection.find_by(title: title))
     step %{I follow "Prompts ("}
     step %{I press "Claim"}
 end
@@ -363,6 +363,7 @@ When /^I start to fulfill my claim with "([^\"]*)"$/ do |title|
     step %{I fill in "Work Title" with "#{title}"}
     step %{I select "Not Rated" from "Rating"}
     step %{I check "No Archive Warnings Apply"}
+    step %{I select "English" from "Choose a language"}
     step %{I fill in "Fandom" with "Stargate Atlantis"}
     step %{I fill in "content" with "This is an exciting story about Atlantis"}
 end
@@ -386,6 +387,7 @@ When /^I fulfill my claim again$/ do
   step %{I fill in "Work Title" with "Second Story"}
     step %{I select "Not Rated" from "Rating"}
     step %{I check "No Archive Warnings Apply"}
+    step %{I select "English" from "Choose a language"}
     step %{I fill in "Fandom" with "Stargate Atlantis"}
     step %{I fill in "content" with "This is an exciting story about Atlantis"}
   step %{I press "Preview"}
@@ -404,19 +406,19 @@ When /^mod fulfills claim$/ do
 end
 
 When /^I delete my prompt in "([^\"]*)"$/ do |title|
-  visit collection_path(Collection.find_by_title(title))
+  visit collection_path(Collection.find_by(title: title))
   step %{I follow "Prompts ("}
   step %{I press "Delete Prompt"}
 end
 
 When /^I delete the prompt by "([^\"]*)"$/ do |participant|
-  visit collection_path(Collection.find_by_title("Battle 12"))
+  visit collection_path(Collection.find_by(title: "Battle 12"))
   step %{I follow "Prompts ("}
   step %{I follow "Delete Prompt"}
 end
 
 When /^I edit the first prompt$/ do
-  visit collection_path(Collection.find_by_title("Battle 12"))
+  visit collection_path(Collection.find_by(title: "Battle 12"))
   step %{I follow "Prompts ("}
   # The 'Edit Sign-up' and 'Edit Prompt' buttons were removed for mods in
   # Prompt Meme challenges
@@ -436,7 +438,7 @@ Then /^I should see a prompt is claimed$/ do
     step %{I should see "My Claims in Battle 12"}
     step %{I should see "Fulfill"}
     step %{I should see "Drop Claim"}
-    
+
   # Claims in the user page are just the prompts that have been claimed
   step "I am on my user page"
     step %{I follow "Claims"}
@@ -519,16 +521,16 @@ Then /^I should be editing the challenge settings$/ do
   step %{I should see "Setting Up the Battle 12 Prompt Meme"}
 end
 
-Then /^(\d+) prompts should be required$/ do |number|
-  find_field("prompt_meme_requests_num_required").value.should == number
+Then "{int} prompt(s) should be required" do |number|
+  expect(page).to have_field("prompt_meme_requests_num_required", with: number)
 end
 
-Then /^(\d+) prompts should be allowed$/ do |number|
-  find_field("prompt_meme_requests_num_allowed").value.should == number
+Then "{int} prompt(s) should be allowed" do |number|
+  expect(page).to have_field("prompt_meme_requests_num_allowed", with: number)
 end
 
 Then /^I should not see the prompt meme dashboard for "([^\"]*)"$/ do |challenge_title|
-  collection = Collection.find_by_title(challenge_title)
+  collection = Collection.find_by(title: challenge_title)
   visit collection_path(collection)
   step %{I should not see "Prompt Meme" within "#dashboard"}
   step %{I should not see "Prompts" within "#dashboard"}
@@ -540,7 +542,7 @@ Then /^I should not see the prompt meme dashboard for "([^\"]*)"$/ do |challenge
 end
 
 Then /^no one should have a claim in "([^\"]*)"$/ do |challenge_title|
-  collection = Collection.find_by_title(challenge_title)
+  collection = Collection.find_by(title: challenge_title)
   if collection.present?
     User.all.each do |user|
       user.request_claims.in_collection(collection).should be_empty
@@ -550,10 +552,7 @@ Then /^no one should have a claim in "([^\"]*)"$/ do |challenge_title|
   else
     ChallengeClaim.all.each do |claim|
       collection_id = claim.collection_id
-      Collection.find_by_id(collection_id).should_not be_nil
+      Collection.find_by(id: collection_id).should_not be_nil
     end
   end
 end
-
-
-

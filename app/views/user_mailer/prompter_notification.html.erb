@@ -5,7 +5,7 @@
 
   <p>
     <% if @collection.nil? %>
-      <i><b><%= style_link(@work.title.html_safe, work_url(@work)) %></b></i> %> (<%= @work.word_count %> words)
+      <i><b><%= style_link(@work.title.html_safe, work_url(@work)) %></b></i> (<%= @work.word_count %> words)
     <% else %>
       <i><b><%= style_link(@work.title.html_safe, collection_work_url(@collection, @work)) %></b></i> (<%= @work.word_count %> words)
     <% end %>

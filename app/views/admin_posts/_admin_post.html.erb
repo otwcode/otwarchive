@@ -1,5 +1,5 @@
 <% # expects "admin_post" %>
-<div class="header">
+<div <% if rtl_language?(admin_post.language) %>dir="rtl"<% end %> class="header">
   <h3 class="heading">
     <%= link_to admin_post.title.html_safe, admin_post %>
   </h3>
@@ -16,7 +16,7 @@
       <dt class="translations"><%= ts("Translations:") %></dt>
       <dd class="translations">
         <ul class="languages commas">
-          <% for translation in admin_post.translations.sort_by { |translation| translation.language.short } %>
+          <% for translation in sorted_translations(admin_post) %>
             <li><%= link_to translation.language.name, translation %></li>
           <% end %>
         </ul>
@@ -34,6 +34,6 @@
     <% end %>
   </dl>
 </div>
-<div class="userstuff">
-  <%=raw sanitize_field(admin_post, :content) %>
+<div <% if rtl_language?(admin_post.language) %>dir="rtl"<% end %> class="userstuff">
+  <%= raw sanitize_field(admin_post, :content) %>
 </div>

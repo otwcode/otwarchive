@@ -1,13 +1,21 @@
 @admin
 Feature: Admin Abuse actions
   In order to manage user accounts
-  As an an admin
+  As an admin
   I want to be able to manage abusive users
 
   Background:
     Given the user "mrparis" exists and is activated
-      And I am logged in as an admin
+      And I am logged in as a "policy_and_abuse" admin
     When I go to the abuse administration page for "mrparis"
+
+  Scenario: An admin adds a note to a user
+    Given I choose "Record note"
+      And I fill in "Notes" with "This user is suspicious."
+    When I press "Update"
+    Then I should see "Note was recorded."
+      And I should see "Note Added"
+      And I should see "This user is suspicious."
 
   Scenario: A user is given a warning with a note
     Given I choose "Record warning"
@@ -51,7 +59,7 @@ Feature: Admin Abuse actions
       And I should see "Suspended Permanently"
       And I should see "To the New Zealand penal colony with you."
     When I follow "Manage Users"
-      And I fill in "query" with "mrparis"
+      And I fill in "Name" with "mrparis"
       And I press "Find"
     Then I should see "1 user found"
     When I follow "Details"
@@ -59,7 +67,7 @@ Feature: Admin Abuse actions
 
   Scenario: A user cannot be banned without a note
     Given the user "mrparis" exists and is activated
-      And I am logged in as an admin
+      And I am logged in as a "policy_and_abuse" admin
     When I go to the abuse administration page for "mrparis"
       And I choose "Suspend permanently (ban user)"
     When I press "Update"
@@ -67,7 +75,7 @@ Feature: Admin Abuse actions
 
   Scenario: A user's suspension is lifted with a note
     Given the user "mrparis" is suspended
-      And I am logged in as an admin
+      And I am logged in as a "policy_and_abuse" admin
     When I go to the abuse administration page for "mrparis"
       And I choose "Lift temporary suspension, effective immediately."
       And I fill in "Notes" with "Good behavior."
@@ -78,7 +86,7 @@ Feature: Admin Abuse actions
 
   Scenario: A user's suspension cannot be lifted without a note
     Given the user "mrparis" is suspended
-      And I am logged in as an admin
+      And I am logged in as a "policy_and_abuse" admin
     When I go to the abuse administration page for "mrparis"
       And I choose "Lift temporary suspension, effective immediately."
     When I press "Update"
@@ -86,7 +94,7 @@ Feature: Admin Abuse actions
 
   Scenario: A user's ban is lifted with a note
     Given the user "mrparis" is banned
-      And I am logged in as an admin
+      And I am logged in as a "policy_and_abuse" admin
     When I go to the abuse administration page for "mrparis"
       And I choose "Lift permanent suspension, effective immediately."
       And I fill in "Notes" with "Need him to infiltrate the Maquis."
@@ -97,7 +105,7 @@ Feature: Admin Abuse actions
 
   Scenario: A user's ban cannot be lifted without a note
     Given the user "mrparis" is banned
-      And I am logged in as an admin
+      And I am logged in as a "policy_and_abuse" admin
     When I go to the abuse administration page for "mrparis"
       And I choose "Lift permanent suspension, effective immediately."
     When I press "Update"
@@ -113,7 +121,7 @@ Feature: Admin Abuse actions
       And I bookmark the work "Not Spam"
       And I add the work "Loads of Spam" to series "One Spam After Another"
       And I post the comment "I like spam" on the work "Not Spam"
-      And I am logged in as an admin
+      And I am logged in as a "policy_and_abuse" admin
     When I go to the abuse administration page for "Spamster"
       And I choose "Spammer: ban and delete all creations"
       And I press "Update"
@@ -142,7 +150,7 @@ Feature: Admin Abuse actions
   Scenario: A user's works cannot be destroyed unless they are banned
     Given I am logged in as "Spamster"
       And I post the work "Loads of Spam"
-      And I am logged in as an admin
+      And I am logged in as a "policy_and_abuse" admin
       And I go to the abuse administration page for "Spamster"
       And I choose "Spammer: ban and delete all creations"
       And I press "Update"
@@ -153,7 +161,7 @@ Feature: Admin Abuse actions
 
   Scenario: An already-banned user can have their works destroyed
     Given the user "Spamster" is banned
-      And I am logged in as an admin
+      And I am logged in as a "policy_and_abuse" admin
     When I go to the abuse administration page for "Spamster"
       And I choose "Spammer: ban and delete all creations"
       And I press "Update"

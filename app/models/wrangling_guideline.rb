@@ -1,4 +1,4 @@
-class WranglingGuideline < ActiveRecord::Base
+class WranglingGuideline < ApplicationRecord
   include ActiveModel::ForbiddenAttributesProtection
   acts_as_list
 
@@ -6,7 +6,7 @@ class WranglingGuideline < ActiveRecord::Base
   validates_length_of :content, maximum: ArchiveConfig.CONTENT_MAX,
                                 too_long: ts('cannot be more than %{max} characters long.', max: ArchiveConfig.CONTENT_MAX)
 
-  def self.reorder(positions)
-    SortableList.new(find(:all, order: 'position ASC')).reorder_list(positions)
+  def self.reorder_list(positions)
+    SortableList.new(self.all.order(position: :asc)).reorder_list(positions)
   end
 end

@@ -6,11 +6,11 @@ describe ShareHelper do
     context "for anonymous works" do
 
       it "should not link to a user's profile" do
-        @collection = FactoryGirl.create(:collection)
+        @collection = FactoryBot.create(:collection)
         @collection.collection_preference.send("anonymous=", true)
         @collection.collection_preference.save
-        @work = FactoryGirl.create(:work, collection_names: @collection.name)
-        expect(get_embed_link_title(@work)).to include("by Anonymous")
+        @work = FactoryBot.create(:work, collection_names: @collection.name)
+        expect(get_embed_link_title(@work.reload)).to include("by Anonymous")
       end
     end
   end
@@ -26,7 +26,7 @@ describe ShareHelper do
   describe "get_tweet_text_for_bookmark" do
     context "bookmark is a work" do
       it "should return a formatted tweet" do
-        @bookmark = FactoryGirl.create(:bookmark)
+        @bookmark = FactoryBot.create(:bookmark)
         expect(get_tweet_text_for_bookmark(@bookmark)).to eq "Bookmark of #{@bookmark.bookmarkable.title} by #{@bookmark.bookmarkable.pseuds.map(&:name).join(', ')} - #{@bookmark.bookmarkable.fandoms.string}".truncate(83)
       end
     end

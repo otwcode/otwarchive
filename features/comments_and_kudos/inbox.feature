@@ -35,14 +35,19 @@ Feature: Get messages in the inbox
     Then I should see "cutman on Down for the Count"
       And I should see "less than 1 minute ago"
 
-  Scenario: Logged in comments in my inbox should have timestamps
+  Scenario: Comments in my inbox should be filterable
     Given I am logged in as "boxer" with password "10987tko"
       And I post the work "Down for the Count"
     When I post the comment "The fight game's complex." on the work "Down for the Count" as a guest
     When I am logged in as "boxer" with password "10987tko"
       And I go to my inbox page
+      And I choose "Show unread"
+      And I press "Filter"
     Then I should see "guest on Down for the Count"
       And I should see "less than 1 minute ago"
+    When I choose "Show read"
+      And I press "Filter"
+    Then I should not see "guest on Down for the Count"
 
   Scenario: A user can see some of their unread comments on the homepage
     Given I am logged in as "boxer" with password "10987tko"
@@ -128,9 +133,10 @@ Feature: Get messages in the inbox
     When I follow "Reply" within ".latest.messages.module"
       And I fill in "Comment" with "Thank you! Please go to bed." within "#reply-to-comment"
       And I press "Comment" within "#reply-to-comment"
-    Then I should be on the homepage
-      And I should not see "Unread messages"
-      And I should not see "dude this is super great!!"
+      And "AO3-5877" is fixed
+    # Then I should be on the homepage
+      # And I should not see "Unread messages"
+      # And I should not see "dude this is super great!!"
     When I am logged in as "unbeatablesg"
       And I go to the homepage
     Then I should see "sewwiththeflo on Cat Thor's Bizarre Adventure"

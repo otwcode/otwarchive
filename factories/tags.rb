@@ -1,5 +1,5 @@
 require 'faker'
-FactoryGirl.define do
+FactoryBot.define do
   sequence(:tag_title) do |n|
     "Owned Tag Set #{n}"
   end
@@ -10,16 +10,21 @@ FactoryGirl.define do
 
   factory :common_tagging do
     association :common_tag, factory: :relationship
-    association :filterable, factory: :fandom
+    association :filterable, factory: :canonical_fandom
+  end
+
+  factory :meta_tagging do
+    association :meta_tag, factory: :freeform
+    association :sub_tag, factory: :freeform
   end
 
   factory :tag_set do
-    tags { [create(:fandom)] }
+    tags { [create(:canonical_fandom)] }
   end
 
   factory :owned_tag_set do
     title { generate(:tag_title) }
-    nominated true
+    nominated { true }
     transient do
       owned_set_taggings { [create(:owned_set_tagging)] }
       owner { create(:pseud) }
@@ -45,9 +50,9 @@ FactoryGirl.define do
   end
 
   factory :tag_nomination do
-    type 'FandomNomination'
+    type { 'FandomNomination' }
 
-    canonical true
+    canonical { true }
     association :owned_tag_set
 
     after(:build) do |nomination|
@@ -56,7 +61,6 @@ FactoryGirl.define do
   end
 
   factory :tag do
-    canonical true
     name { generate(:tag_name) }
   end
 
@@ -65,28 +69,43 @@ FactoryGirl.define do
   end
 
   factory :fandom do
-    canonical true
     sequence(:name) { |n| "The #{n} Fandom" }
+
+    factory :canonical_fandom do
+      canonical { true }
+    end
   end
 
   factory :character do
-    canonical true
     sequence(:name) { |n| "Character #{n}" }
-    common_taggings { [create(:common_tagging)] }
+
+    factory :canonical_character do
+      canonical { true }
+    end
   end
 
   factory :relationship do
-    canonical true
     sequence(:name) { |n| "Jane#{n}/John#{n}" }
+
+    factory :canonical_relationship do
+      canonical { true }
+    end
   end
 
   factory :freeform do
-    canonical true
     sequence(:name) { |n| "Freeform #{n}" }
+
+    factory :canonical_freeform do
+      canonical { true }
+    end
+  end
+
+  factory :media do
+    sequence(:name) { |n| "Media #{n}" }
+    canonical { true }
   end
 
   factory :banned do |f|
-    f.canonical true
     f.sequence(:name) { |n| "Banned #{n}" }
   end
 end

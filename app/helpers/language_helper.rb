@@ -1,10 +1,14 @@
 module LanguageHelper
   def available_faq_locales
-    ArchiveFaq.translated_locales.map { |code| Locale.find_by_iso(code) }
+    ArchiveFaq.translated_locales.map { |code| Locale.find_by(iso: code) }
   end
 
   def rtl?
     %w(ar he).include?(Globalize.locale.to_s)
+  end
+
+  def rtl_language?(language)
+    %w(ar he).include?(language.short)
   end
 
   def english?

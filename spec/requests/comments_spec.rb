@@ -5,16 +5,16 @@ def comment_attributes_guest
 end
 
 def comment_attributes_user
-  { content: "Body text of the comment", pseud_id: FactoryGirl.create(:pseud).id }
+  { content: "Body text of the comment", pseud_id: FactoryBot.create(:pseud).id }
 end
 
 # This code block is used for logged out users and logged in users, on unrestricted works
 shared_examples_for "on unrestricted works", :pending do
     before do
-      @work2 = create(:work, posted: true, fandom_string: "Merlin (TV)", title: "My title is long enough", restricted: false)
-      @work2.index.refresh
+      @work2 = create(:work, fandom_string: "Merlin (TV)", title: "My title is long enough", restricted: false)
+      @work2.reindex_document
       @comment2 = create(:comment)
-      @work2.comments << @comment2
+      @work2.last_posted_chapter.comments << @comment2
     end
 
     #has been added
@@ -24,7 +24,7 @@ shared_examples_for "on unrestricted works", :pending do
     end
 
     it "should be creatable on a work's chapter" do
-      visit "/works/#{@work2.id}/chapters/#{@work2.chapters.last.id}/comments/new"
+      visit "/works/#{@work2.id}/chapters/#{@work2.last_posted_chapter.id}/comments/new"
       is_expected.to have_content("#{@work2.title}")
     end
 
@@ -34,7 +34,7 @@ shared_examples_for "on unrestricted works", :pending do
     end
 
     it "should be readable on a work's chapter" do
-      visit "/works/#{@work2.id}/chapters/#{@work2.chapters.last.id}/comments"
+      visit "/works/#{@work2.id}/chapters/#{@work2.last_posted_chapter.id}/comments"
       is_expected.to have_content("#{@work2.title}")
     end
 
@@ -44,12 +44,12 @@ shared_examples_for "on unrestricted works", :pending do
     end
 
     it "should be directly readable on a chapter" do
-      visit "/chapters/#{@work2.chapters.last.id}/comments/#{@comment2.id}"
+      visit "/chapters/#{@work2.last_posted_chapter.id}/comments/#{@comment2.id}"
       is_expected.to have_content("#{@work2.title}")
     end
 
     it "should be directly readable on a work's chapter" do
-      visit "/works/#{@work2.id}/chapters/#{@work2.chapters.last.id}/comments/#{@comment2.id}"
+      visit "/works/#{@work2.id}/chapters/#{@work2.last_posted_chapter.id}/comments/#{@comment2.id}"
       is_expected.to have_content("#{@work2.title}")
     end
 end
@@ -58,10 +58,10 @@ describe "Comments" do
     subject { page }
   context "on restricted works" do
     before do
-      @work1 = create(:work, posted: true, fandom_string: "Merlin (TV)", title: "My title is long enough", restricted: true)
-      @work1.index.refresh
-      @comment = create(:comment, commentable_id: @work1.id)
-      @comment2 = create(:comment, commentable_id: @work1.chapters.last.id, commentable_type: "Chapter")
+      @work1 = create(:work, fandom_string: "Merlin (TV)", title: "My title is long enough", restricted: true)
+      @work1.reindex_document
+      @comment = create(:comment, commentable: @work1.last_posted_chapter)
+      @comment2 = create(:comment, commentable: @work1.last_posted_chapter)
     end
 
     it "should not be creatable by guests on a work" do
@@ -69,7 +69,7 @@ describe "Comments" do
       is_expected.to have_content("Commenting on this work is only available to registered users of the Archive.")
     end
     it "should not be creatable by guests on a work's chapter" do
-      visit "/works/#{@work1.id}/chapters/#{@work1.chapters.last.id}/comments/new"
+      visit "/works/#{@work1.id}/chapters/#{@work1.last_posted_chapter.id}/comments/new"
       is_expected.to have_content("Commenting on this work is only available to registered users of the Archive.")
     end
     it "should not be readable by guests on a work" do
@@ -77,7 +77,7 @@ describe "Comments" do
       is_expected.to have_content("Commenting on this work is only available to registered users of the Archive.")
     end
     it "should not be readable by guests on a work's chapter" do
-      visit "/works/#{@work1.id}/chapters/#{@work1.chapters.last.id}/comments"
+      visit "/works/#{@work1.id}/chapters/#{@work1.last_posted_chapter.id}/comments"
       is_expected.to have_content("Commenting on this work is only available to registered users of the Archive.")
     end
     it "should not be directly readable by guests on a work" do
@@ -85,7 +85,7 @@ describe "Comments" do
       is_expected.to have_content("Commenting on this work is only available to registered users of the Archive.")
     end
     it "should not be directly readable by guests on a work's chapter" do
-      visit "/works/#{@work1.id}/chapters/#{@work1.chapters.last.id}/comments/#{@comment2.id}"
+      visit "/works/#{@work1.id}/chapters/#{@work1.last_posted_chapter.id}/comments/#{@comment2.id}"
       is_expected.to have_content("Commenting on this work is only available to registered users of the Archive.")
     end
   end
@@ -98,10 +98,10 @@ describe "Comments" do
   context "logged in users" do
     before do
       @user = create(:user)
-      visit login_path
+      visit new_user_session_path
       within("div#small_login") do
-        fill_in "User name:",with: "#{@user.login}" ,  exact: true
-        fill_in "Password", with: "password"
+        fill_in "User name or email:", with: "#{@user.login}", exact: true
+        fill_in "Password:", with: "password"
         check "Remember Me"
         click_button "Log In"
       end
@@ -113,10 +113,10 @@ describe "Comments" do
 
   context "on works which have anonymous commenting disabled" do
     before do
-      @work = create(:work, posted: true, fandom_string: "Merlin (TV)", anon_commenting_disabled: "true" )
-      @work.index.refresh
+      @work = create(:work, fandom_string: "Merlin (TV)", comment_permissions: :disable_anon)
+      @work.reindex_document
       @comment = create(:comment)
-      @work.comments << @comment
+      @work.first_chapter.comments << @comment
     end
 
     it "should not be creatable by guests on a work" do
@@ -127,7 +127,7 @@ describe "Comments" do
     end
 
     it "should not be creatable by guests on a work's chapter" do
-      visit "/works/#{@work.id}/chapters/#{@work.chapters.last.id}/comments/new"
+      visit "/works/#{@work.id}/chapters/#{@work.last_posted_chapter.id}/comments/new"
       is_expected.to have_content("Sorry, this work doesn't allow non-Archive users to comment.")
       is_expected.not_to have_button "Reply"
       is_expected.not_to have_button "Comment"
@@ -139,7 +139,7 @@ describe "Comments" do
     end
 
     it "should not be able to be replied to by guests on a work's chapter" do
-      visit "/works/#{@work.id}/chapters/#{@work.chapters.last.id}/comments/#{@comment.id}"
+      visit "/works/#{@work.id}/chapters/#{@work.last_posted_chapter.id}/comments/#{@comment.id}"
       is_expected.not_to have_button "Reply"
     end
   end
