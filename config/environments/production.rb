@@ -54,14 +54,6 @@ Otwarchive::Application.configure do
   # Send deprecation notices to registered listeners
   config.active_support.deprecation = :notify
 
-#  # run after initialization so have access to ArchiveConfig
-#  config.after_initialize do
-#    config.middleware.use ExceptionNotifier,
-#      email_prefix: ArchiveConfig.ERROR_PREFIX,
-#      sender_address: ArchiveConfig.RETURN_ADDRESS,
-#      exception_recipients: ArchiveConfig.ERROR_ADDRESS
-#  end
-
   # https://github.com/winebarrel/activerecord-mysql-reconnect
   config.active_record.enable_retry = true
   config.active_record.execution_tries = 20 # times

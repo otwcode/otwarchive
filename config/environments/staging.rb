@@ -56,15 +56,6 @@ Otwarchive::Application.configure do
 
   # Make it clear we are on staging
   config.rack_dev_mark.enable = true
-
-
-#  # run after initialization so have access to ArchiveConfig
-#  config.after_initialize do
-#    config.middleware.use ExceptionNotifier,
-#      email_prefix: ArchiveConfig.ERROR_PREFIX,
-#      sender_address: ArchiveConfig.RETURN_ADDRESS,
-#      exception_recipients: ArchiveConfig.ERROR_ADDRESS
-#  end
   config.rack_dev_mark.theme = [:title, Rack::DevMark::Theme::GithubForkRibbon.new(position: "left", fixed: "true", color: "orange")]
 
   config.after_initialize do
