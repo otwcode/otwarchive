@@ -6,13 +6,13 @@ describe Admin::SpamController do
   include LoginMacros
   include RedirectExpectationHelper
 
-  describe "GET #index" do    
+  describe "GET #index" do
     let(:admin) { create(:admin) }
 
     context "when logged in as user" do
       it "redirects with notice" do
         fake_login
-        get :index, params: { reviewed: false, approved: false }
+        get :index
 
         it_redirects_to_with_notice(root_url, "I'm sorry, only an admin can look at that area")
       end
@@ -21,7 +21,7 @@ describe Admin::SpamController do
     context "when logged in as admin without correct authorization" do
       xit "redirects with notice" do
         fake_login_admin(admin)
-        get :index, params: { reviewed: false, approved: false }
+        get :index
 
         it_redirects_to_with_error(root_url, "Sorry, only an authorized admin can access the page you were trying to reach.")
       end
@@ -30,8 +30,8 @@ describe Admin::SpamController do
     context "when logged in as admin" do
       it "renders index template" do
         fake_login_admin(admin)
-        get :index, params: { reviewed: false, approved: false }
  
+        get :index
         expect(response).to render_template(:index)
       end
     end
