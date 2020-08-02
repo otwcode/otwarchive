@@ -138,8 +138,7 @@ class ApplicationController < ActionController::Base
       cookies.delete :user_credentials unless cookies[:user_credentials].nil?
     end
   end
-
->>>>>>> 1a2deae17f2eeeb714a4231f896a3219916945a8
+  
   # mark the flash as being set (called when flash is set)
   def set_flash_cookie(key=nil, msg=nil)
     cookies[:flash_is_set] = 1
