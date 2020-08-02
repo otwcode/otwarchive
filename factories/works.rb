@@ -32,6 +32,11 @@ FactoryBot.define do
     factory :draft do
       posted { false }
     end
+
+    factory :spam_work do
+      spam { true }
+      spam_checked_at { Time.now }
+    end
   end
 
   factory :external_work do
