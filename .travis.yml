@@ -29,9 +29,11 @@ env:
   - TEST_GROUP="cucumber features/works"
 
 services:
-  - mysql
   - redis
   - memcached
+
+addons:
+  mariadb: '10.5'
 
 before_install:
   - bash script/travis/ebook_converters.sh
