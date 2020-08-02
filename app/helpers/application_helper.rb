@@ -109,6 +109,12 @@ module ApplicationHelper
 
   def non_anonymous_byline(creation, url_path = nil)
     only_path = url_path.nil? ? true : url_path
+
+    if @preview_mode
+      # Skip cache in preview mode
+      return byline_text(creation, only_path)
+    end
+
     Rails.cache.fetch("#{creation.cache_key}/byline-nonanon/#{only_path.to_s}") do
       byline_text(creation, only_path)
     end
@@ -118,9 +124,7 @@ module ApplicationHelper
     if creation.respond_to?(:author)
       creation.author
     else
-      pseuds = []
-      pseuds << creation.authors if creation.authors
-      pseuds << creation.pseuds if creation.pseuds && (!@preview_mode || creation.authors.blank?)
+      pseuds = @preview_mode ? creation.pseuds_after_saving : creation.pseuds.to_a
       pseuds = pseuds.flatten.uniq.sort
 
       archivists = Hash.new []
@@ -556,5 +560,19 @@ module ApplicationHelper
   # checkbox or radio designs
   def label_indicator_and_text(text)
     content_tag(:span, "", class: "indicator", "aria-hidden": "true") + content_tag(:span, text)
+  end
+
+  # Display a collection of radio buttons, wrapped in an unordered list.
+  #
+  # The parameter option_array should be a list of pairs, where the first
+  # element in each pair is the radio button's value, and the second element in
+  # each pair is the radio button's label.
+  def radio_button_list(form, field_name, option_array)
+    content_tag(:ul) do
+      form.collection_radio_buttons(field_name, option_array, :first, :second,
+                                    include_hidden: false) do |builder|
+        content_tag(:li, builder.label { builder.radio_button + builder.text })
+      end
+    end
   end
 end # end of ApplicationHelper

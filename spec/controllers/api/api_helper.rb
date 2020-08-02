@@ -25,9 +25,9 @@ module ApiHelper
 
   def api_fields
     {
-      title: "API Title", summary: "API summary", fandoms: "API Fandom", warnings: "Rape/Non-Con",
-      characters: "API 1, API 2", rating: "General", relationships: "bar 1/bar 2",
-      categories: "M/M", freeform: "API tag 1, API tag 2", external_author_name: "API Author",
+      title: "API Title", summary: "API summary", fandoms: "API Fandom", warnings: ArchiveConfig.WARNING_NONCON_TAG_NAME,
+      characters: "API 1, API 2", rating: ArchiveConfig.RATING_GENERAL_TAG_NAME, relationships: "bar 1/bar 2",
+      categories: ArchiveConfig.CATEGORY_SLASH_TAG_NAME, freeform: "API tag 1, API tag 2", external_author_name: "API Author",
       external_author_email: "api@foo.com", notes: "This is an <i>API note</i>.",
       date: "2002-01-12", chapter_title: "API chapter title (TBD)", language_code: "es"
     }

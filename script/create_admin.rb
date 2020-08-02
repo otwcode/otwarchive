@@ -1,52 +1,85 @@
 #!script/rails runner
-# 
-# 1. Run this script on production as follows:
-#      RAILS_ENV=production bundle exec rails r script/create_admin.rb
-# 2. When prompted, type or paste in the admins, one per line, in the format USERNAME, EMAIL 
-#    (USERNAME is Org name without the admin- prefix or any spaces)
-# 3. Enter a final blank line to finish inputting admins
-# 4. Follow the onscreen instructions
+#
+# Run this script and follow the onscreen instructions:
+#   bundle exec rails r script/create_admin.rb
 
-require 'csv'
+require "csv"
 
-def multi_gets(all_text = '')
+include Rails.application.routes.url_helpers
+
+# Base URL
+default_url_options[:host] = ArchiveConfig.APP_URL
+
+def multi_gets(all_text = "")
   until (text = gets) == "\n"
     all_text << text
   end
   all_text.chomp
 end
 
-print "Paste or enter admins, one per line, in the format\n\tUSERNAME, EMAIL\n
-(where USERNAME is their Org name without spaces and without the admin- prefix)\n
-then two line breaks to end:\n"
-input = multi_gets
+puts <<~PROMPT
+  Paste or enter admins, one per line, in the format
 
-list = CSV.parse(input)
+    USERNAME, EMAIL, ROLE
 
-puts "\nCopy and paste each section into a separate file and upload to the user's Vault:\n"
+  or
+
+    USERNAME, EMAIL, ROLE, ROLE, ROLE
+
+  where
+
+  - USERNAME is their OTW name without the admin- prefix (spaces will be removed)
+  - EMAIL/ROLE can be left blank to skip updating email/roles of existing admins
+  - ROLE is one of:
+
+  #{Admin::VALID_ROLES.sort.map { |r| "  #{r}" }.join("\n")}
+
+  then two line breaks to end:
+
+PROMPT
+
+list = CSV.parse(multi_gets)
+
+puts "\nFor new admins, copy and paste each section into a separate file and upload to the admin's Vault:\n"
 
 admins = []
 list.each do |user|
-  name = user[0].strip
-  email = user[1].strip
-  password = `pwgen 8 1`.strip
+  login = user[0].gsub(/\s+/, "")
+  email = user[1]&.strip
+  roles = user.drop(2).compact.map(&:strip)
 
-  a = Admin.new(email: email, login: "admin-#{name}", password: password, password_confirmation: password)
+  a = Admin.find_or_initialize_by(login: "admin-#{login}")
+  a.email = email if email.present?
+  a.roles = roles if roles.present?
 
+  if a.new_record?
+    # Create password only for new admins
+    password = `pwgen 8 1`.strip
+    a.password = password
+    a.password_confirmation = password
+
+    password_file = <<~PASSFILE
+      username: #{a.login}
+      password: #{password}
+      #{new_admin_session_url}
+    PASSFILE
+  end
+
+  puts "==== #{a.login}.txt"
   if a.save
-    puts
-    puts "username: admin-#{name}"
-    puts "password: #{password}"
-    puts "http://archiveofourown.org/admin/login"
-    puts
+    puts password_file if password_file.present?
     admins << a
   else
     puts a.errors.full_messages
   end
+  puts
 end
 
-puts "\nCopy and paste into the wiki at https://wiki.transformativeworks.org/mediawiki/AO3_Admins:\n"
+puts "\nFor all saved admins, copy and paste into the wiki at https://wiki.transformativeworks.org/mediawiki/AO3_Admins:\n"
 
+admins.sort_by!(&:created_at)
 admins.each do |admin|
-  puts "|-\n| #{Date.today.to_formatted_s("YYYY-MM-dd")} || #{admin.login} || UPDATE WITH USER COMMITTEE"
+  role_description = admin.roles.map { |r| I18n.t("activerecord.attributes.admin/role.#{r}") }.sort.join(", ")
+  role_description = "UPDATE WITH USER COMMITTEE" if role_description.blank?
+  puts "|-\n| #{admin.created_at.strftime('%Y-%m-%d')} || #{admin.login} || #{role_description}"
 end

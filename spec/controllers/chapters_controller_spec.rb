@@ -5,11 +5,15 @@ describe ChaptersController do
   include RedirectExpectationHelper
 
   let(:user) { create(:user) }
-  let!(:work) { create(:posted_work, authors: [user.pseuds.first]) }
-  let(:unposted_work) { create(:work, authors: [user.pseuds.first]) }
-  let(:banned_user) { create(:user, banned: true) }
-  let(:banned_users_work) { create(:work, posted: true, authors: [banned_user.pseuds.first]) }
+  let!(:work) { create(:work, authors: [user.pseuds.first]) }
+  let(:unposted_work) { create(:draft, authors: [user.pseuds.first]) }
 
+  let(:banned_users_work) { create(:work) }
+  let(:banned_user) do
+    user = banned_users_work.users.first
+    user.update(banned: true)
+    user
+  end
 
   describe "index" do
     it "redirects to work" do
@@ -42,13 +46,13 @@ describe ChaptersController do
       end
 
       it "assigns @chapters to only posted chapters" do
-        create(:chapter, work: work, authors: work.authors, posted: false)
+        create(:chapter, work: work, posted: false)
         get :manage, params: { work_id: work.id }
         expect(assigns[:chapters]).to eq([work.chapters.first])
       end
 
       it "assigns @chapters to chapters in order" do
-        chapter = create(:chapter, work: work, authors: work.authors, position: 2, posted: true)
+        chapter = create(:chapter, work: work, position: 2, posted: true)
         get :manage, params: { work_id: work.id }
         expect(assigns[:chapters]).to eq([work.chapters.first, chapter])
       end
@@ -71,19 +75,19 @@ describe ChaptersController do
       end
 
       it "errors and redirects to login when work is restricted" do
-        restricted_work = create(:work, posted: true, restricted: true)
+        restricted_work = create(:work, restricted: true)
         get :show, params: { work_id: restricted_work.id, id: restricted_work.chapters.first }
         it_redirects_to(new_user_session_path(restricted: true))
       end
 
       it "assigns @chapters to only posted chapters" do
-        chapter = create(:chapter, work: work, authors: work.authors, posted: false)
+        chapter = create(:chapter, work: work, posted: false)
         get :show, params: { work_id: work.id, id: chapter.id }
         expect(assigns[:chapters]).to eq([work.chapters.first])
       end
 
       it "errors and redirects to login when trying to view unposted chapter" do
-        chapter = create(:chapter, work: work, authors: work.authors, posted: false)
+        chapter = create(:chapter, work: work, posted: false)
         get :show, params: { work_id: work.id, id: chapter.id }
         it_redirects_to_with_error(new_user_session_path, "Sorry, you don't have permission to access the page you were trying to reach. Please log in.")
       end
@@ -98,7 +102,7 @@ describe ChaptersController do
 
       it "stores adult preference in sessions when given" do
         get :show, params: { work_id: work.id, id: work.chapters.first, view_adult: true }
-        expect(session[:adult]).to be true
+        expect(cookies[:view_adult]).to eq "true"
       end
 
       it "renders _adults template if work is adult and adult permission has not been given" do
@@ -121,7 +125,7 @@ describe ChaptersController do
     end
 
     it "redirects to chapter with selected_id" do
-      chapter = create(:chapter, work: work, authors: work.authors, position: 2, posted: true)
+      chapter = create(:chapter, work: work, position: 2, posted: true)
       get :show, params: { work_id: work.id, id: work.chapters.first, selected_id: chapter.id }
       it_redirects_to work_chapter_path(work_id: work.id, id: chapter.id)
     end
@@ -133,41 +137,41 @@ describe ChaptersController do
     end
 
     it "assigns @chapters to chapters in order" do
-      chapter = create(:chapter, work: work, authors: work.authors, position: 2, posted: true)
+      chapter = create(:chapter, work: work, position: 2, posted: true)
       get :show, params: { work_id: work.id, id: chapter.id }
       expect(assigns[:chapters]).to eq([work.chapters.first, chapter])
     end
 
     it "assigns @previous_chapter when not on first chapter" do
-      chapter = create(:chapter, work: work, authors: work.authors, position: 2, posted: true)
+      chapter = create(:chapter, work: work, position: 2, posted: true)
       get :show, params: { work_id: work.id, id: chapter.id }
       expect(assigns[:previous_chapter]).to eq(work.chapters.first)
     end
 
     it "does not assign @previous_chapter when on first chapter" do
-      create(:chapter, work: work, authors: work.authors, position: 2, posted: true)
+      create(:chapter, work: work, position: 2, posted: true)
       get :show, params: { work_id: work.id, id: work.chapters.first.id }
       expect(assigns[:previous_chapter]).to be_nil
     end
 
     it "assigns @next_chapter when not on last chapter" do
-      chapter = create(:chapter, work: work, authors: work.authors, position: 2, posted: true)
+      chapter = create(:chapter, work: work, position: 2, posted: true)
       get :show, params: { work_id: work.id, id: work.chapters.first.id }
       expect(assigns[:next_chapter]).to eq(chapter)
     end
 
     it "does not assign @next_chapter when on last chapter" do
-      chapter = create(:chapter, work: work, authors: work.authors, position: 2, posted: true)
+      chapter = create(:chapter, work: work, position: 2, posted: true)
       get :show, params: { work_id: work.id, id: chapter.id }
       expect(assigns[:next_chapter]).to be_nil
     end
 
     it "assigns @comments to only reviewed comments" do
-      moderated_work = create(:posted_work, moderated_commenting_enabled: true)
-      comment = create(:comment, commentable_type: "Chapter", commentable_id: moderated_work.chapters.first.id)
+      moderated_work = create(:work, moderated_commenting_enabled: true)
+      comment = create(:comment, commentable: moderated_work.chapters.first)
       comment.unreviewed = false
       comment.save
-      create(:comment, unreviewed: true, commentable_type: "Chapter", commentable_id: moderated_work.chapters.first.id)
+      create(:comment, unreviewed: true, commentable: moderated_work.chapters.first)
       get :show, params: { work_id: moderated_work.id, id: moderated_work.chapters.first.id }
       expect(assigns[:comments]).to eq [comment]
     end
@@ -192,17 +196,17 @@ describe ChaptersController do
     end
 
     it "assigns @kudos to non-anonymous kudos" do
-      kudo = create(:kudo, commentable_id: work.id, pseud: create(:pseud))
+      kudo = create(:kudo, commentable: work, user: create(:user))
       create(:kudo, commentable: work)
       get :show, params: { work_id: work.id, id: work.chapters.first.id }
       expect(assigns[:kudos]).to eq [kudo]
     end
 
     it "assigns instance variables correctly" do
-      second_chapter = create(:chapter, work: work, authors: work.authors, position: 2, posted: true)
-      third_chapter = create(:chapter, work: work, authors: work.authors, position: 3, posted: true)
-      comment = create(:comment, commentable_type: "Chapter", commentable_id: second_chapter.id)
-      kudo = create(:kudo, commentable_id: work.id, pseud: create(:pseud))
+      second_chapter = create(:chapter, work: work, position: 2, posted: true)
+      third_chapter = create(:chapter, work: work, position: 3, posted: true)
+      comment = create(:comment, commentable: second_chapter)
+      kudo = create(:kudo, commentable: work, user: create(:user))
       tag = create(:fandom)
       expect_any_instance_of(Work).to receive(:tag_groups).and_return("Fandom" => [tag])
       expect_any_instance_of(ChaptersController).to receive(:get_page_title).with(tag.name, user.pseuds.first.name, "My title is long enough - Chapter 2").and_return("page title")
@@ -220,18 +224,13 @@ describe ChaptersController do
       expect(assigns[:subscription]).to be_nil
     end
 
-    it "increments the hit count when accessing the first chapter" do
-      REDIS_GENERAL.set("work_stats:#{work.id}:last_visitor", nil)
-      expect { get :show, params: { work_id: work.id, id: work.chapters.first.id } }.to change { REDIS_GENERAL.get("work_stats:#{work.id}:hit_count").to_i }.by(1)
-    end
-
     context "when work owner is logged in" do
       before do
         fake_login_known_user(user)
       end
 
       it "assigns @chapters to all chapters" do
-        chapter = create(:chapter, work: work, authors: work.authors, position: 2, posted: false)
+        chapter = create(:chapter, work: work, position: 2, posted: false)
         get :show, params: { work_id: work.id, id: chapter.id }
         expect(assigns[:chapters]).to eq([work.chapters.first, chapter])
       end
@@ -243,7 +242,7 @@ describe ChaptersController do
       end
 
       it "assigns @chapters to only posted chapters" do
-        chapter = create(:chapter, work: work, authors: work.authors, posted: false)
+        chapter = create(:chapter, work: work, posted: false)
         get :show, params: { work_id: work.id, id: chapter.id }
         expect(assigns[:chapters]).to eq([work.chapters.first])
       end
@@ -284,15 +283,6 @@ describe ChaptersController do
         expect(response).to render_template(:new)
       end
 
-      it "assigns instance variables correctly" do
-        get :new, params: { work_id: work.id }
-        expect(assigns[:work]).to eq work
-        expect(assigns[:allpseuds]).to eq user.pseuds
-        expect(assigns[:pseuds]).to eq user.pseuds
-        expect(assigns[:coauthors]).to eq []
-        expect(assigns[:selected_pseuds]).to eq [user.pseuds.first.id]
-      end
-
       it "errors and redirects to user page when user is banned" do
         fake_login_known_user(banned_user)
         get :new, params: { work_id: banned_users_work.id }
@@ -321,7 +311,7 @@ describe ChaptersController do
       end
     end
 
-    context "when work owner is logged in" do
+    context "when logged in user owns the chapter" do
       before do
         fake_login_known_user(user)
       end
@@ -331,32 +321,15 @@ describe ChaptersController do
         expect(response).to render_template(:edit)
       end
 
-      it "assigns instance variables correctly" do
-        get :edit, params: { work_id: work.id, id: work.chapters.first.id }
-        expect(assigns[:work]).to eq work
-        expect(assigns[:allpseuds]).to eq user.pseuds
-        expect(assigns[:pseuds]).to eq user.pseuds
-        expect(assigns[:coauthors]).to eq []
-        expect(assigns[:selected_pseuds]).to eq [user.pseuds.first.id]
-      end
-
       it "errors and redirects to user page when user is banned" do
         fake_login_known_user(banned_user)
         get :edit, params: { work_id: banned_users_work.id, id: banned_users_work.chapters.first.id }
         it_redirects_to_simple(user_path(banned_user))
         expect(flash[:error]).to include("Your account has been banned.")
       end
-
-      it "removes user, gives notice, and redirects to work when user removes themselves" do
-        other_user = create(:user)
-        chapter = create(:chapter, work: work, posted: true, authors: [user.pseuds.first, other_user.pseuds.first])
-        get :edit, params: { work_id: work.id, id: chapter.id, remove: "me" }
-        expect(assigns[:chapter].pseuds).to eq [other_user.pseuds.first]
-        it_redirects_to_with_notice(work_path(work), "You have been removed as a creator from the chapter")
-      end
     end
 
-    context "when other user is logged in" do
+    context "when logged in user does not own the chapter" do
       before do
         fake_login
       end
@@ -364,6 +337,43 @@ describe ChaptersController do
       it "errors and redirects to work" do
         get :edit, params: { work_id: work.id, id: work.chapters.first.id }
         it_redirects_to_with_error(work_path(work), "Sorry, you don't have permission to access the page you were trying to reach.")
+      end
+    end
+
+    context "with valid remove params" do
+      context "when work is multichaptered and co-created" do
+        let(:co_creator) { create(:user) }
+        let!(:co_created_chapter) { create(:chapter, work: work, posted: true, authors: [user.pseuds.first, co_creator.pseuds.first]) }
+
+        context "when logged in user also owns other chapters" do
+          before do
+            fake_login_known_user(user)
+          end
+
+          it "removes user from chapter, gives notice, and redirects to work" do
+            get :edit, params: { work_id: work.id, id: co_created_chapter.id, remove: "me" }
+
+            expect(co_created_chapter.reload.pseuds).to eq [co_creator.pseuds.first]
+            expect(work.reload.pseuds).to eq [user.pseuds.first, co_creator.pseuds.first]
+
+            it_redirects_to_with_notice(work_path(work), "You have been removed as a creator from the chapter.")
+          end
+        end
+
+        context "when logged in user only owns this chapter" do
+          before do
+            fake_login_known_user(co_creator)
+          end
+
+          it "removes user from chapter and delegates removal of the user from the work to the work controller" do
+            get :edit, params: { work_id: work.id, id: co_created_chapter.id, remove: "me" }
+
+            expect(co_created_chapter.reload.pseuds).to eq [user.pseuds.first]
+            expect(work.reload.pseuds).to eq [user.pseuds.first, co_creator.pseuds.first]
+            
+            it_redirects_to(edit_work_path(work, remove: "me"))
+          end
+        end
       end
     end
   end
@@ -398,16 +408,8 @@ describe ChaptersController do
         @chapter_attributes[:author_attributes] = { ids: [user2.pseuds.first.id] }
         expect { post :create, params: { work_id: work.id, chapter: @chapter_attributes } }.to_not change(Chapter, :count)
         expect(response).to render_template("new")
-        expect(flash[:error]).to eq "You're not allowed to use that pseud."
-      end
-
-      it "assigns instance variables correctly" do
-        post :create, params: { work_id: work.id, chapter: @chapter_attributes }
-        expect(assigns[:work]).to eq work
-        expect(assigns[:allpseuds]).to eq user.pseuds
-        expect(assigns[:pseuds]).to eq user.pseuds
-        expect(assigns[:coauthors]).to eq []
-        expect(assigns[:selected_pseuds]).to eq [user.pseuds.first.id]
+        expect(assigns[:chapter].errors.full_messages).to \
+          include "You're not allowed to use that pseud."
       end
 
       it "adds a new chapter" do
@@ -422,34 +424,22 @@ describe ChaptersController do
         expect(assigns[:work].wip_length).to eq 3
       end
 
-      context "when chapter has invalid pseuds" do
-        before do
-          allow_any_instance_of(Chapter).to receive(:invalid_pseuds).and_return([user.pseuds.first])
-        end
-        it "renders choose coauthor if chapter is valid" do
-          post :create, params: { work_id: work.id, chapter: @chapter_attributes }
-          expect(response).to render_template("_choose_coauthor")
-        end
-
-        it "renders new if chapter is not valid" do
-          post :create, params: { work_id: work.id, chapter: { content: "" } }
-          expect(response).to render_template(:new)
-        end
+      it "renders new if chapter has invalid pseuds" do
+        @chapter_attributes[:author_attributes] = { byline: "*impossible*" }
+        post :create, params: { work_id: work.id, chapter: @chapter_attributes }
+        expect(response).to render_template(:new)
+        expect(assigns[:chapter].errors.full_messages).to \
+          include("Invalid creator: Could not find a pseud *impossible*.")
       end
 
-      context "when chapter has ambiguous pseuds" do
-        before do
-          allow_any_instance_of(Chapter).to receive(:ambiguous_pseuds).and_return([user.pseuds.first])
-        end
-        it "renders choose coauthor if chapter is valid" do
-          post :create, params: { work_id: work.id, chapter: @chapter_attributes }
-          expect(response).to render_template("_choose_coauthor")
-        end
-
-        it "renders new if chapter is not valid" do
-          post :create, params: { work_id: work.id, chapter: { content: "" } }
-          expect(response).to render_template(:new)
-        end
+      it "renders new if chapter has ambiguous pseuds" do
+        create(:pseud, name: "ambiguous")
+        create(:pseud, name: "ambiguous")
+        @chapter_attributes[:author_attributes] = { byline: "ambiguous" }
+        post :create, params: { work_id: work.id, chapter: @chapter_attributes }
+        expect(response).to render_template(:new)
+        expect(assigns[:chapter].errors.full_messages).to \
+          include("Invalid creator: The pseud ambiguous is ambiguous.")
       end
 
       it "renders new if the edit button has been clicked" do
@@ -468,7 +458,7 @@ describe ChaptersController do
         expect(assigns[:work].major_version).to eq(2)
       end
 
-      context "when the post without preview button is clicked" do
+      context "when the post button is clicked" do
         context "when the chapter and work are valid" do
           it "posts the chapter" do
             post :create, params: { work_id: work.id, chapter: @chapter_attributes, post_without_preview_button: true }
@@ -588,16 +578,8 @@ describe ChaptersController do
         @chapter_attributes[:author_attributes] = { ids: [user2.pseuds.first.id] }
         put :update, params: { work_id: work.id, id: work.chapters.first.id, chapter: @chapter_attributes }
         expect(response).to render_template("edit")
-        expect(flash[:error]).to eq "You're not allowed to use that pseud."
-      end
-
-      it "assigns instance variables correctly" do
-        put :update, params: { work_id: work.id, id: work.chapters.first.id, chapter: @chapter_attributes }
-        expect(assigns[:work]).to eq work
-        expect(assigns[:allpseuds]).to eq user.pseuds
-        expect(assigns[:pseuds]).to eq user.pseuds
-        expect(assigns[:coauthors]).to eq []
-        expect(assigns[:selected_pseuds]).to eq [user.pseuds.first.id]
+        expect(assigns[:chapter].errors.full_messages).to \
+          include "You're not allowed to use that pseud."
       end
 
       it "updates the work's wip length when given" do
@@ -607,34 +589,22 @@ describe ChaptersController do
         expect(assigns[:work].wip_length).to eq 3
       end
 
-      context "when chapter has invalid pseuds" do
-        before do
-          allow_any_instance_of(Chapter).to receive(:invalid_pseuds).and_return([user.pseuds.first])
-        end
-        it "renders choose coauthor if chapter is valid" do
-          put :update, params: { work_id: work.id, id: work.chapters.first.id, chapter: @chapter_attributes }
-          expect(response).to render_template("_choose_coauthor")
-        end
-
-        it "renders edit if chapter is not valid" do
-          put :update, params: { work_id: work.id, id: work.chapters.first.id, chapter: { content: "" } }
-          expect(response).to render_template(:edit)
-        end
+      it "renders edit if chapter has invalid pseuds" do
+        @chapter_attributes[:author_attributes] = { byline: "*impossible*" }
+        put :update, params: { work_id: work.id, id: work.chapters.first.id, chapter: @chapter_attributes }
+        expect(response).to render_template(:edit)
+        expect(assigns[:chapter].errors.full_messages).to \
+          include("Invalid creator: Could not find a pseud *impossible*.")
       end
 
-      context "when chapter has ambiguous pseuds" do
-        before do
-          allow_any_instance_of(Chapter).to receive(:ambiguous_pseuds).and_return([user.pseuds.first])
-        end
-        it "renders choose coauthor if chapter is valid" do
-          put :update, params: { work_id: work.id, id: work.chapters.first.id, chapter: @chapter_attributes }
-          expect(response).to render_template("_choose_coauthor")
-        end
-
-        it "renders edit if chapter is not valid" do
-          put :update, params: { work_id: work.id, id: work.chapters.first.id, chapter: { content: "" } }
-          expect(response).to render_template(:edit)
-        end
+      it "renders edit if chapter has ambiguous pseuds" do
+        create(:pseud, name: "ambiguous")
+        create(:pseud, name: "ambiguous")
+        @chapter_attributes[:author_attributes] = { byline: "ambiguous" }
+        put :update, params: { work_id: work.id, id: work.chapters.first.id, chapter: @chapter_attributes }
+        expect(response).to render_template(:edit)
+        expect(assigns[:chapter].errors.full_messages).to \
+          include("Invalid creator: The pseud ambiguous is ambiguous.")
       end
 
       context "when the preview button is clicked" do
@@ -722,7 +692,7 @@ describe ChaptersController do
         end
       end
 
-      context "when the post without preview button is clicked" do
+      context "when the post button is clicked" do
         it "posts the chapter" do
           put :update, params: { work_id: work.id, id: work.chapters.first.id, chapter: @chapter_attributes, post_without_preview_button: true }
           expect(assigns[:chapter].posted).to be true
@@ -814,10 +784,6 @@ describe ChaptersController do
         get :preview, params: { work_id: work.id, id: work.chapters.first.id }
         expect(assigns[:work]).to eq work
         expect(assigns[:chapter]).to eq work.chapters.first
-        expect(assigns[:allpseuds]).to eq user.pseuds
-        expect(assigns[:pseuds]).to eq user.pseuds
-        expect(assigns[:coauthors]).to eq []
-        expect(assigns[:selected_pseuds]).to eq [user.pseuds.first.id]
         expect(assigns[:preview_mode]).to be true
       end
     end

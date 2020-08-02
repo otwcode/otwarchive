@@ -9,7 +9,7 @@ Feature: Admin Fannish Next Of Kind actions
       | login    | password   |
       | harrykim | diesalot   |
       | libby    | stillalive |
-      And I am logged in as an admin
+      And I am logged in as a "policy_and_abuse" admin
     When I go to the abuse administration page for "harrykim"
       And I fill in "Fannish next of kin's username" with "libby"
       And I fill in "Fannish next of kin's email" with "testy@foo.com"
@@ -26,7 +26,7 @@ Feature: Admin Fannish Next Of Kind actions
 
   Scenario: An invalid Fannish Next of Kin username is added
     Given the fannish next of kin "libby" for the user "harrykim"
-      And I am logged in as an admin
+      And I am logged in as a "policy_and_abuse" admin
     When I go to the abuse administration page for "harrykim"
       And I fill in "Fannish next of kin's username" with "userididnotcreate"
       And I press "Update"
@@ -34,7 +34,7 @@ Feature: Admin Fannish Next Of Kind actions
 
   Scenario: A blank Fannish Next of Kin username can't be added
     Given the fannish next of kin "libby" for the user "harrykim"
-      And I am logged in as an admin
+      And I am logged in as a "policy_and_abuse" admin
     When I go to the abuse administration page for "harrykim"
       And I fill in "Fannish next of kin's username" with ""
       And I press "Update"
@@ -42,7 +42,7 @@ Feature: Admin Fannish Next Of Kind actions
 
   Scenario: A blank Fannish Next of Kin email can't be added
     Given the fannish next of kin "libby" for the user "harrykim"
-      And I am logged in as an admin
+      And I am logged in as a "policy_and_abuse" admin
     When I go to the abuse administration page for "harrykim"
       And I fill in "Fannish next of kin's email" with ""
       And I press "Update"
@@ -51,7 +51,7 @@ Feature: Admin Fannish Next Of Kind actions
   Scenario: A Fannish Next of Kin is edited
     Given the fannish next of kin "libby" for the user "harrykim"
       And the user "newlibby" exists and is activated
-      And I am logged in as an admin
+      And I am logged in as a "policy_and_abuse" admin
     When I go to the abuse administration page for "harrykim"
       And I fill in "Fannish next of kin's username" with "newlibby"
       And I fill in "Fannish next of kin's email" with "newlibby@foo.com"
@@ -60,7 +60,7 @@ Feature: Admin Fannish Next Of Kind actions
 
   Scenario: A Fannish Next of Kin is removed
     Given the fannish next of kin "libby" for the user "harrykim"
-      And I am logged in as an admin
+      And I am logged in as a "policy_and_abuse" admin
     When I go to the abuse administration page for "harrykim"
       And I fill in "Fannish next of kin's username" with ""
       And I fill in "Fannish next of kin's email" with ""
@@ -75,7 +75,7 @@ Feature: Admin Fannish Next Of Kind actions
       And I fill in "Password" with "password"
       And I press "Change User Name"
     Then I should get confirmation that I changed my username
-    When I am logged in as an admin
+    When I am logged in as a "policy_and_abuse" admin
       And I go to the manage users page
       And I fill in "Name" with "harrykim"
       And I press "Find"
@@ -89,7 +89,7 @@ Feature: Admin Fannish Next Of Kind actions
       And I fill in "Password" with "password"
       And I press "Change User Name"
     Then I should get confirmation that I changed my username
-    When I am logged in as an admin
+    When I am logged in as a "policy_and_abuse" admin
       And I go to the manage users page
       And I fill in "Name" with "harrykim2"
       And I press "Find"
@@ -98,7 +98,7 @@ Feature: Admin Fannish Next Of Kind actions
   Scenario: A Fannish Next of Kin can update even after an invalid user is entered
     Given the fannish next of kin "libby" for the user "harrykim"
       And the user "harrysmom" exists and is activated
-      And I am logged in as an admin
+      And I am logged in as a "policy_and_abuse" admin
     When I go to the abuse administration page for "harrykim"
       And I fill in "Fannish next of kin's username" with "libbylibby"
       And I fill in "Fannish next of kin's email" with "libbylibby@example.com"

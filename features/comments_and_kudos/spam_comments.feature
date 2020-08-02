@@ -23,7 +23,7 @@ Feature: Marking comments as spam
     Then I should see "Comment Threads: 1"
 
   Scenario: Spam comments are not included in an admin post's comment count
-    Given I am logged in as an admin
+    Given I am logged in as a "communications" admin
       And I make an admin post
       And I am logged out as an admin
       And I go to the admin-posts page

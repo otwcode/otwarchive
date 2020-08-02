@@ -32,6 +32,7 @@ class ExternalWorksController < ApplicationController
   end
 
   def edit
+    authorize @external_work, policy_class: UserCreationPolicy
     @external_work = ExternalWork.find(params[:id])
     @work = @external_work
   end
@@ -57,8 +58,8 @@ class ExternalWorksController < ApplicationController
 
   def work_params
     params.require(:work).permit(
-      :rating_string, :fandom_string, :relationship_string, :character_string,
-      :freeform_string, category_string: [], warning_strings: []
+        :rating_string, :fandom_string, :relationship_string, :character_string,
+        :freeform_string, category_string: [], archive_warning_strings: []
     )
   end
 end

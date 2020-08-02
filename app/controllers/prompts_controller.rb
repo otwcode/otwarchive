@@ -32,7 +32,7 @@ class PromptsController < ApplicationController
 
   def load_signup
     unless @challenge_signup
-    	@challenge_signup = ChallengeSignup.in_collection(@collection).by_user(current_user).first
+      @challenge_signup = ChallengeSignup.in_collection(@collection).by_user(current_user).first
     end
     no_signup and return unless @challenge_signup
   end
@@ -145,7 +145,7 @@ class PromptsController < ApplicationController
 
   def update
     if @prompt.update_attributes(prompt_params)
-      flash[:notice] = 'Prompt was successfully updated.'
+      flash[:notice] = ts("Prompt was successfully updated.")
       redirect_to collection_signup_path(@collection, @challenge_signup)
     else
       render action: :edit
@@ -190,23 +190,24 @@ class PromptsController < ApplicationController
       :any_freeform,
       :any_category,
       :any_rating,
-      :any_warning,
+      :any_archive_warning,
       tag_set_attributes: [
         :fandom_tagnames,
+        :id,
         :updated_at,
         :character_tagnames,
         :relationship_tagnames,
         :freeform_tagnames,
         :category_tagnames,
         :rating_tagnames,
-        :warning_tagnames,
+        :archive_warning_tagnames,
         fandom_tagnames: [],
         character_tagnames: [],
         relationship_tagnames: [],
         freeform_tagnames: [],
         category_tagnames: [],
         rating_tagnames: [],
-        warning_tagnames: []
+        archive_warning_tagnames: []
       ],
       optional_tag_set_attributes: [
         :tagnames

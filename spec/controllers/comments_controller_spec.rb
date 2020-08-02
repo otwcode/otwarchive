@@ -5,7 +5,7 @@ describe CommentsController do
   include RedirectExpectationHelper
 
   let(:comment) { create(:comment) }
-  let(:unreviewed_comment) { create(:unreviewed_comment) }
+  let(:unreviewed_comment) { create(:comment, :unreviewed) }
 
   before(:each) do
     request.env["HTTP_REFERER"] = "/where_i_came_from"
@@ -29,13 +29,13 @@ describe CommentsController do
       it "redirects to the comment on the commentable without an error" do
         get :add_comment_reply, params: { comment_id: comment.id }
         expect(flash[:error]).to be_nil
-        expect(response).to redirect_to(work_path(comment.ultimate_parent, show_comments: true, anchor: "comment_#{comment.id}"))
+        expect(response).to redirect_to(chapter_path(comment.commentable, show_comments: true, anchor: "comment_#{comment.id}"))
       end
 
       it "redirects to the comment on the commentable with the reply form open and without an error" do
         get :add_comment_reply, params: { comment_id: comment.id, id: comment.id }
         expect(flash[:error]).to be_nil
-        expect(response).to redirect_to(work_path(comment.ultimate_parent, add_comment_reply_id: comment.id, show_comments: true, anchor: "comment_#{comment.id}"))
+        expect(response).to redirect_to(chapter_path(comment.commentable, add_comment_reply_id: comment.id, show_comments: true, anchor: "comment_#{comment.id}"))
       end
     end
   end
@@ -43,7 +43,7 @@ describe CommentsController do
   describe "GET #unreviewed" do
     let!(:user) { create(:user) }
     let!(:work) { create(:work, authors: [user.default_pseud], moderated_commenting_enabled: true ) }
-    let(:comment) { create(:unreviewed_comment, commentable_id: work.id) }
+    let(:comment) { create(:comment, :unreviewed, commentable: work.first_chapter) }
 
     it "redirects logged out users to login path with an error" do
       get :unreviewed, params: { comment_id: comment.id, work_id: work.id }
@@ -58,13 +58,13 @@ describe CommentsController do
 
     it "renders the :unreviewed template for a user who owns the work" do
       fake_login_known_user(user)
-      get :unreviewed, params: { work_id: comment.commentable_id }
+      get :unreviewed, params: { work_id: work.id }
       expect(response).to render_template("unreviewed")
     end
 
     it "renders the :unreviewed template for an admin" do
       fake_login_admin(create(:admin))
-      get :unreviewed, params: { work_id: comment.commentable_id }
+      get :unreviewed, params: { work_id: work.id }
       expect(response).to render_template("unreviewed")
     end
   end
@@ -143,7 +143,7 @@ describe CommentsController do
 
   describe "POST #create" do
     let(:anon_comment_attributes) do
-      attributes_for(:comment).slice(:name, :email, :comment_content)
+      attributes_for(:comment, :by_guest).slice(:name, :email, :comment_content)
     end
 
     context "when replying from the inbox" do
@@ -228,12 +228,68 @@ describe CommentsController do
         end
       end
     end
+
+    context "when the commentable is a work" do
+      context "when the work has all comments disabled" do
+        let(:work) { create(:work, comment_permissions: :disable_all) }
+
+        it "shows an error and redirects" do
+          post :create, params: { work_id: work.id, comment: anon_comment_attributes }
+          it_redirects_to_with_error(work_path(work),
+                                     "Sorry, this work doesn't allow comments.")
+        end
+
+        it "sets flash_is_set to bypass caching" do
+          post :create, params: { work_id: work.id, comment: anon_comment_attributes }
+          expect(cookies[:flash_is_set]).to eq(1)
+        end
+      end
+
+      context "when the work has anonymous comments disabled" do
+        let(:work) { create(:work, comment_permissions: :disable_anon) }
+
+        it "shows an error and redirects" do
+          post :create, params: { work_id: work.id, comment: anon_comment_attributes }
+          it_redirects_to_with_error(work_path(work),
+                                     "Sorry, this work doesn't allow non-Archive users to comment.")
+        end
+
+        it "sets flash_is_set to bypass caching" do
+          post :create, params: { work_id: work.id, comment: anon_comment_attributes }
+          expect(cookies[:flash_is_set]).to eq(1)
+        end
+      end
+    end
+
+    context "when the commentable is a comment" do
+      context "when the parent work has all comments disabled" do
+        let(:work) { create(:work, comment_permissions: :disable_all) }
+        let(:comment) { create(:comment, commentable: work.first_chapter) }
+
+        it "shows an error and redirects" do
+          post :create, params: { comment_id: comment.id, comment: anon_comment_attributes }
+          it_redirects_to_with_error(work_path(work),
+                                     "Sorry, this work doesn't allow comments.")
+        end
+      end
+
+      context "when the parent work has anonymous comments disabled" do
+        let(:work) { create(:work, comment_permissions: :disable_anon) }
+        let(:comment) { create(:comment, commentable: work.first_chapter) }
+
+        it "shows an error and redirects" do
+          post :create, params: { comment_id: comment.id, comment: anon_comment_attributes }
+          it_redirects_to_with_error(work_path(work),
+                                     "Sorry, this work doesn't allow non-Archive users to comment.")
+        end
+      end
+    end
   end
 
   describe "PUT #review_all" do
-    xit "redirects to root path with an error if current user does not own the commentable" do
+    it "redirects to root path with an error if current user does not own the commentable" do
       fake_login
-      put :review_all, params: { work_id: unreviewed_comment.commentable_id }
+      put :review_all, params: { work_id: unreviewed_comment.commentable.work_id }
       it_redirects_to_with_error(root_path, "What did you want to review comments on?")
     end
   end
@@ -241,15 +297,28 @@ describe CommentsController do
   describe "PUT #approve" do
     before { comment.update_column(:approved, false) }
 
-    context "when logged-in as admin" do
+    context "when logged-in as admin without a role" do
       before { fake_login_admin(create(:admin)) }
+
+      it "leaves the comment marked as spam and redirects with an error" do
+        put :approve, params: { id: comment.id }
+        expect(comment.reload.approved).to be_falsey
+        it_redirects_to_with_error(
+          root_path,
+          "Sorry, only an authorized admin can access the page you were trying to reach."
+        )
+      end
+    end
+
+    context "when logged-in as admin with authorized role" do
+      before { fake_login_admin(create(:superadmin)) }
 
       it "marks the comment as not spam" do
         put :approve, params: { id: comment.id }
         expect(flash[:error]).to be_nil
         expect(response).to redirect_to(work_path(comment.ultimate_parent,
                                                   show_comments: true,
-                                                  anchor: 'comments'))
+                                                  anchor: "comments"))
         expect(comment.reload.approved).to be_truthy
       end
     end
@@ -257,13 +326,13 @@ describe CommentsController do
     context "when logged-in as the work's creator" do
       before { fake_login_known_user(comment.ultimate_parent.users.first) }
 
-      it "marks the comment as not spam" do
+      it "leaves the comment marked as spam and redirects with an error" do
         put :approve, params: { id: comment.id }
-        expect(flash[:error]).to be_nil
-        expect(response).to redirect_to(work_path(comment.ultimate_parent,
-                                                  show_comments: true,
-                                                  anchor: 'comments'))
-        expect(comment.reload.approved).to be_truthy
+        expect(comment.reload.approved).to be_falsey
+        it_redirects_to_with_error(
+          root_path,
+          "Sorry, only an authorized admin can access the page you were trying to reach."
+        )
       end
     end
 
@@ -309,14 +378,24 @@ describe CommentsController do
 
   describe "PUT #reject" do
     context "when logged-in as admin" do
-      before { fake_login_admin(create(:admin)) }
+      let(:admin) { create(:admin) }
+      
 
-      it "marks the comment as spam" do
+      it "fails to mark the comment as spam if admin does not have correct role" do
+        admin.update(roles: [])
+        fake_login_admin(admin)
+        put :reject, params: { id: comment.id }
+        it_redirects_to_with_error(root_url, "Sorry, only an authorized admin can access the page you were trying to reach.")
+      end
+
+      it "marks the comment as spam when admin has correct role" do
+        admin.update(roles: ["policy_and_abuse"])
+        fake_login_admin(admin)
         put :reject, params: { id: comment.id }
         expect(flash[:error]).to be_nil
         expect(response).to redirect_to(work_path(comment.ultimate_parent,
                                                   show_comments: true,
-                                                  anchor: 'comments'))
+                                                  anchor: "comments"))
         expect(comment.reload.approved).to be_falsey
       end
     end
@@ -329,7 +408,7 @@ describe CommentsController do
         expect(flash[:error]).to be_nil
         expect(response).to redirect_to(work_path(comment.ultimate_parent,
                                                   show_comments: true,
-                                                  anchor: 'comments'))
+                                                  anchor: "comments"))
         expect(comment.reload.approved).to be_falsey
       end
     end
@@ -497,7 +576,7 @@ describe CommentsController do
     it "redirects to the comment on the commentable without an error" do
       get :cancel_comment_delete, params: { id: comment.id }
       expect(flash[:error]).to be_nil
-      expect(response).to redirect_to(work_path(comment.ultimate_parent, show_comments: true, anchor: "comment_#{comment.id}"))
+      expect(response).to redirect_to(chapter_path(comment.commentable, show_comments: true, anchor: "comment_#{comment.id}"))
     end
   end
 
@@ -509,7 +588,7 @@ describe CommentsController do
         it "redirects to the comment on the commentable without an error" do
           get :cancel_comment_edit, params: { id: comment.id }
           expect(flash[:error]).to be_nil
-          expect(response).to redirect_to(work_path(comment.ultimate_parent, show_comments: true, anchor: "comment_#{comment.id}"))
+          expect(response).to redirect_to(chapter_path(comment.commentable, show_comments: true, anchor: "comment_#{comment.id}"))
         end
       end
 
@@ -550,7 +629,7 @@ describe CommentsController do
     context "when logged in as the owner of the unreviewed comment" do
       it "deletes the comment and redirects to referrer with a success message" do
         fake_login
-        comment = create(:unreviewed_comment, pseud_id: @current_user.default_pseud.id)
+        comment = create(:comment, :unreviewed, pseud_id: @current_user.default_pseud.id)
         get :destroy, params: { id: comment.id }
         expect(Comment.find_by(id: comment.id)).to_not be_present
         expect(response).to redirect_to("/where_i_came_from")
@@ -558,12 +637,12 @@ describe CommentsController do
       end
       it "redirects and gives an error if the comment could not be deleted" do
         fake_login
-        comment = create(:unreviewed_comment, pseud_id: @current_user.default_pseud.id)
+        comment = create(:comment, :unreviewed, pseud_id: @current_user.default_pseud.id)
         allow_any_instance_of(Comment).to receive(:destroy_or_mark_deleted).and_return(false)
         get :destroy, params: { id: comment.id }
         allow_any_instance_of(Comment).to receive(:destroy_or_mark_deleted).and_call_original
         expect(Comment.find_by(id: comment.id)).to be_present
-        expect(response).to redirect_to(work_path(comment.ultimate_parent, show_comments: true, anchor: "comment_#{comment.id}"))
+        expect(response).to redirect_to(chapter_path(comment.commentable, show_comments: true, anchor: "comment_#{comment.id}"))
         expect(flash[:comment_error]).to eq "We couldn't delete that comment."
       end
     end
@@ -572,7 +651,7 @@ describe CommentsController do
   describe "PUT #review" do
     let!(:user) { create(:user) }
     let!(:work) { create(:work, authors: [user.default_pseud], moderated_commenting_enabled: true ) }
-    let(:comment) { create(:unreviewed_comment, commentable_id: work.id) }
+    let(:comment) { create(:comment, :unreviewed, commentable: work.first_chapter) }
 
     before do
       fake_login_known_user(user)
@@ -632,7 +711,7 @@ describe CommentsController do
 
   shared_examples "no one can add or edit comments" do
     let(:anon_comment_attributes) do
-      attributes_for(:comment).slice(:name, :email, :comment_content)
+      attributes_for(:comment, :by_guest).slice(:name, :email, :comment_content)
     end
 
     context "when logged out" do
@@ -828,13 +907,26 @@ describe CommentsController do
     end
 
     context "when logged in as an admin" do
-      before { fake_login_admin(create(:admin)) }
+      before { fake_login_admin(create(:admin, roles: ["policy_and_abuse"])) }
 
-      it "DELETE #destroy successfully deletes the comment" do
-        delete :destroy, params: { id: comment.id }
-        expect(flash[:comment_notice]).to eq "Comment deleted."
-        it_redirects_to_simple(work_path(work, show_comments: true, anchor: :comments))
-        expect { comment.reload }.to raise_exception(ActiveRecord::RecordNotFound)
+      let(:admin) { create(:admin) }
+      
+      context "DELETE COMMENT" do
+        it "DELETE #destroy does not permit deletion of the comment when admin noes not have correct role" do
+          admin.update(roles: [])
+          fake_login_admin(admin)
+          delete :destroy, params: { id: comment.id }
+          it_redirects_to_with_error(root_url, "Sorry, only an authorized admin can access the page you were trying to reach.")
+        end
+
+        it "DELETE #destroy successfully deletes the comment when admin has correct role" do
+          admin.update(roles: ["policy_and_abuse"])
+          fake_login_admin(admin)
+          delete :destroy, params: { id: comment.id }
+          expect(flash[:comment_notice]).to eq "Comment deleted."
+          it_redirects_to_simple(work_path(work, show_comments: true, anchor: :comments))
+          expect { comment.reload }.to raise_exception(ActiveRecord::RecordNotFound)
+        end
       end
 
       it "GET #add_comment redirects to the work with an error" do

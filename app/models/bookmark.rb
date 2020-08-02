@@ -7,7 +7,7 @@ class Bookmark < ApplicationRecord
 
   belongs_to :bookmarkable, polymorphic: true
   belongs_to :pseud
-  has_many :taggings, as: :taggable, dependent: :destroy
+  has_many :taggings, as: :taggable, inverse_of: :taggable, dependent: :destroy
   has_many :tags, through: :taggings, source: :tagger, source_type: 'Tag'
 
   validates_length_of :bookmarker_notes,
@@ -144,7 +144,7 @@ class Bookmark < ApplicationRecord
         return true if pseud.user == current_user
       else
         if self.bookmarkable_type == 'Work' || self.bookmarkable_type == 'Series' || self.bookmarkable_type == 'ExternalWork'
-          return true if self.bookmarkable.visible(current_user)
+          return true if self.bookmarkable.visible?(current_user)
         else
           return true
         end

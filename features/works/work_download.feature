@@ -81,7 +81,7 @@ Feature: Download a work
   Given I am logged in
     And I set up the draft "Many Fandom Work"
     And I fill in "Fandoms" with "Fandom 1, Fandom 2, Fandom 3, Fandom 4"
-    And I press "Post Without Preview"
+    And I press "Post"
   When I am logged out
     And I view the work "Many Fandom Work"
     And I follow "HTML"
@@ -108,6 +108,6 @@ Feature: Download a work
 
   Given I am logged in
     And I post the work "TOS Violation"
-  When I am logged in as an admin
+  When I am logged in as a "policy_and_abuse" admin
     And I hide the work "TOS Violation"
   Then I should not see "Download"

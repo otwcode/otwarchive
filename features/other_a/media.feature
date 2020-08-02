@@ -56,7 +56,7 @@ Feature: The All Fandoms page.
       And I go to the media page
     Then I should see "Lord of the Rings (1)"
 
-    When I am logged in as an admin
+    When I am logged in as a "policy_and_abuse" admin
       And I go to the media page
     Then I should see "Lord of the Rings (2)"
 
@@ -66,7 +66,7 @@ Feature: The All Fandoms page.
       And I go to the media page
     Then I should see "Lord of the Rings (1)"
 
-  Scenario: Adding or removing a meta tag changes the meta tag's count.
+  Scenario: Adding or removing a metatag changes the metatag's count.
     Given I have a canonical "Books" fandom tag named "Harry Potter"
       And I have a canonical "Books" fandom tag named "Wizarding World"
       And I am logged in as "Rowling"
@@ -77,7 +77,7 @@ Feature: The All Fandoms page.
     Then I should see "Harry Potter (1)"
       And I should see "Wizarding World (1)"
 
-    # Adding a meta tag.
+    # Adding a metatag.
     When I am logged in as a tag wrangler
       And I subtag the tag "Harry Potter" to "Wizarding World"
       And the periodic filter count task is run
@@ -85,7 +85,7 @@ Feature: The All Fandoms page.
     Then I should see "Harry Potter (1)"
       And I should see "Wizarding World (2)"
 
-    # Removing the meta tag.
+    # Removing the metatag.
     When I remove the metatag "Wizarding World" from "Harry Potter"
       And the periodic filter count task is run
       And I go to the media page

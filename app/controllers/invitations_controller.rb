@@ -1,6 +1,4 @@
-# coding: utf-8
 class InvitationsController < ApplicationController
-
   before_action :check_permission
   before_action :admin_only, only: [:create, :destroy]
   before_action :check_user_status, only: [:index, :manage, :invite_friend, :update]
@@ -14,7 +12,7 @@ class InvitationsController < ApplicationController
 
   def check_permission
     @user = User.find_by(login: params[:user_id])
-    access_denied unless logged_in_as_admin? || @user.present? && @user == current_user
+    access_denied unless policy(User).can_manage_users? || @user.present? && @user == current_user
   end
 
   def index
@@ -22,10 +20,10 @@ class InvitationsController < ApplicationController
   end
 
   def manage
-    if params[:status].blank? || !['unsent', 'unredeemed', 'redeemed'].include?(params[:status])
-      @invitations = @user.invitations
-    else
-      @invitations = @user.invitations.send(params[:status])
+    status = params[:status]
+    @invitations = @user.invitations
+    if %w(unsent unredeemed redeemed).include?(status)
+      @invitations = @invitations.send(status)
     end
   end
 

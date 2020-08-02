@@ -1,6 +1,6 @@
 require 'faker'
 
-FactoryGirl.define do
+FactoryBot.define do
   sequence(:login) do |n|
     "#{Faker::Lorem.characters(8)}#{n}"
   end
@@ -13,25 +13,20 @@ FactoryGirl.define do
   end
 
   factory :role do
+    name { Faker::Company.profession }
   end
 
   factory :user do
     login { generate(:login) }
-    password "password"
-    age_over_13 '1'
-    terms_of_service '1'
+    password { "password" }
+    age_over_13 { '1' }
+    terms_of_service { '1' }
     password_confirmation { |u| u.password }
     email { generate(:email) }
 
-
-    factory :duplicate_user do
-      login nil
-      email nil
-    end
-
     factory :invited_user do
-      login {generate(:login)}
-      invitation_token nil
+      login { generate(:login) }
+      invitation_token { nil }
     end
 
     factory :opendoors_user do

@@ -10,32 +10,12 @@
       "line": 6,
       "link": "http://brakemanscanner.org/docs/warning_types/cross_site_scripting",
       "code": "ts(\"Are you sure you want to <strong><em>delete</em></strong> the collection %{collection_name}? All collection settings will be lost. (Works will not be deleted.)\", :collection_name => Collection.find_by(:name => params[:collection_id]).title)",
-      "render_path": [{"type":"controller","class":"CollectionsController","method":"confirm_delete","line":155,"file":"app/controllers/collections_controller.rb"}],
+      "render_path": [{"type":"controller","class":"CollectionsController","method":"confirm_delete","line":161,"file":"app/controllers/collections_controller.rb"}],
       "location": {
         "type": "template",
         "template": "collections/confirm_delete"
       },
       "user_input": "Collection.find_by(:name => params[:collection_id]).title",
-      "confidence": "Weak",
-      "note": ""
-    },
-    {
-      "warning_type": "SQL Injection",
-      "warning_code": 0,
-      "fingerprint": "00ad760d6a9dc3abfc5ed457a5da94079d17a54d129d6a915a91813914843295",
-      "check_name": "SQL",
-      "message": "Possible SQL injection",
-      "file": "app/models/inbox_comment.rb",
-      "line": 22,
-      "link": "http://brakemanscanner.org/docs/warning_types/sql_injection/",
-      "code": "includes(:feedback_comment => :pseud).order(\"created_at #{(filters[:date] or \"DESC\")}\")",
-      "render_path": null,
-      "location": {
-        "type": "method",
-        "class": "InboxComment",
-        "method": "find_by_filters"
-      },
-      "user_input": "filters[:date]",
       "confidence": "Weak",
       "note": ""
     },
@@ -49,33 +29,13 @@
       "line": 14,
       "link": "http://brakemanscanner.org/docs/warning_types/dynamic_render_path/",
       "code": "render(action => (Work.find_by(:id => params[:work_id]) or Chapter.find_by(:id => params[:id]).work).chapters.find_by(:id => params[:id]), {})",
-      "render_path": [{"type":"controller","class":"ChaptersController","method":"update","line":163,"file":"app/controllers/chapters_controller.rb"}],
+      "render_path": [{"type":"controller","class":"ChaptersController","method":"update","line":154,"file":"app/controllers/chapters_controller.rb"}],
       "location": {
         "type": "template",
         "template": "chapters/preview"
       },
       "user_input": "params[:id]",
       "confidence": "Weak",
-      "note": ""
-    },
-    {
-      "warning_type": "Dangerous Send",
-      "warning_code": 23,
-      "fingerprint": "0161e4568c5086f4fb269998a800b95789e35aefecce9ce8c3bdff5a60d03433",
-      "check_name": "Send",
-      "message": "User controlled method execution",
-      "file": "app/controllers/tags_controller.rb",
-      "line": 152,
-      "link": "http://brakemanscanner.org/docs/warning_types/dangerous_send/",
-      "code": "(params[:creation_type].classify.constantize rescue nil).find(params[:creation_id]).send(params[:tag_type])",
-      "render_path": null,
-      "location": {
-        "type": "method",
-        "class": "TagsController",
-        "method": "show_hidden"
-      },
-      "user_input": "params[:tag_type]",
-      "confidence": "High",
       "note": ""
     },
     {
@@ -107,7 +67,7 @@
       "line": 6,
       "link": "http://brakemanscanner.org/docs/warning_types/cross_site_scripting",
       "code": "strip_tags(WorkSearchForm.new((clean_work_search_params or {})).summary)",
-      "render_path": [{"type":"controller","class":"WorksController","method":"search","line":44,"file":"app/controllers/works_controller.rb"}],
+      "render_path": [{"type":"controller","class":"WorksController","method":"search","line":43,"file":"app/controllers/works_controller.rb"}],
       "location": {
         "type": "template",
         "template": "works/search_results"
@@ -126,12 +86,31 @@
       "line": 6,
       "link": "http://brakemanscanner.org/docs/warning_types/cross_site_scripting",
       "code": "ts(\"Are you sure you want to <strong><em>delete</em></strong> %{chapter_number} of %{work_title}? This will delete all comments on the chapter as well and cannot be undone!\", :chapter_number => (Work.find_by(:id => params[:work_id]) or Chapter.find_by(:id => params[:id]).work).chapters.find_by(:id => params[:id]).chapter_header, :work_title => (Work.find_by(:id => params[:work_id]) or Chapter.find_by(:id => params[:id]).work).title)",
-      "render_path": [{"type":"controller","class":"ChaptersController","method":"confirm_delete","line":221,"file":"app/controllers/chapters_controller.rb"}],
+      "render_path": [{"type":"controller","class":"ChaptersController","method":"confirm_delete","line":211,"file":"app/controllers/chapters_controller.rb"}],
       "location": {
         "type": "template",
         "template": "chapters/confirm_delete"
       },
       "user_input": "Work.find_by(:id => params[:work_id])",
+      "confidence": "Weak",
+      "note": ""
+    },
+    {
+      "warning_type": "Cross Site Scripting",
+      "warning_code": 2,
+      "fingerprint": "04a2dece009c698540960269d024b874a42b71cf8e06e3216c41f8807e57f9b9",
+      "check_name": "CrossSiteScripting",
+      "message": "Unescaped model attribute",
+      "file": "app/views/kudos/index.html.erb",
+      "line": 9,
+      "link": "http://brakemanscanner.org/docs/warning_types/cross_site_scripting",
+      "code": "Work.find(params[:work_id]).kudos.includes(:user).with_user.map do\n link_to(kudo.user.login, kudo.user)\n end.to_sentence",
+      "render_path": [{"type":"controller","class":"KudosController","method":"index","line":11,"file":"app/controllers/kudos_controller.rb"}],
+      "location": {
+        "type": "template",
+        "template": "kudos/index"
+      },
+      "user_input": "Work.find(params[:work_id]).kudos",
       "confidence": "Weak",
       "note": ""
     },
@@ -219,10 +198,10 @@
       "check_name": "CrossSiteScripting",
       "message": "Unescaped model attribute",
       "file": "app/views/chapters/_chapter.html.erb",
-      "line": 24,
+      "line": 30,
       "link": "http://brakemanscanner.org/docs/warning_types/cross_site_scripting",
       "code": "byline((Work.find_by(:id => params[:work_id]) or Chapter.find_by(:id => params[:id]).work).chapters.find_by(:id => params[:id]))",
-      "render_path": [{"type":"controller","class":"ChaptersController","method":"show","line":76,"file":"app/controllers/chapters_controller.rb"},{"type":"template","name":"chapters/show","line":22,"file":"app/views/chapters/show.html.erb"}],
+      "render_path": [{"type":"controller","class":"ChaptersController","method":"show","line":77,"file":"app/controllers/chapters_controller.rb"},{"type":"template","name":"chapters/show","line":28,"file":"app/views/chapters/show.html.erb"}],
       "location": {
         "type": "template",
         "template": "chapters/_chapter"
@@ -241,7 +220,7 @@
       "line": 29,
       "link": "http://brakemanscanner.org/docs/warning_types/cross_site_scripting",
       "code": "(Work.find_by(:id => params[:work_id]) or Chapter.find_by(:id => params[:id]).work).title",
-      "render_path": [{"type":"controller","class":"ChaptersController","method":"show","line":76,"file":"app/controllers/chapters_controller.rb"},{"type":"template","name":"chapters/show","line":19,"file":"app/views/chapters/show.html.erb"}],
+      "render_path": [{"type":"controller","class":"ChaptersController","method":"show","line":77,"file":"app/controllers/chapters_controller.rb"},{"type":"template","name":"chapters/show","line":25,"file":"app/views/chapters/show.html.erb"}],
       "location": {
         "type": "template",
         "template": "works/_work_header"
@@ -260,32 +239,13 @@
       "line": 4,
       "link": "http://brakemanscanner.org/docs/warning_types/cross_site_scripting",
       "code": "sanitize_field((Work.find_by(:id => params[:work_id]) or Chapter.find_by(:id => params[:id]).work), :endnotes)",
-      "render_path": [{"type":"controller","class":"ChaptersController","method":"show","line":76,"file":"app/controllers/chapters_controller.rb"},{"type":"template","name":"chapters/show","line":31,"file":"app/views/chapters/show.html.erb"}],
+      "render_path": [{"type":"controller","class":"ChaptersController","method":"show","line":77,"file":"app/controllers/chapters_controller.rb"},{"type":"template","name":"chapters/show","line":37,"file":"app/views/chapters/show.html.erb"}],
       "location": {
         "type": "template",
         "template": "works/_work_endnotes"
       },
       "user_input": "Work.find_by(:id => params[:work_id])",
       "confidence": "Weak",
-      "note": ""
-    },
-    {
-      "warning_type": "Cross Site Scripting",
-      "warning_code": 4,
-      "fingerprint": "2720851e62deff0d384b45b2cf580d695a8a7a7e9fa44ae01a320aea2cf309db",
-      "check_name": "LinkToHref",
-      "message": "Unsafe model attribute in link_to href",
-      "file": "app/views/challenge/shared/_challenge_form_delete.html.erb",
-      "line": 3,
-      "link": "http://brakemanscanner.org/docs/warning_types/link_to_href",
-      "code": "link_to(ts(\"Delete Challenge\"), eval(\"collection_#{challenge_class_name(Collection.find_by(:name => params[:collection_id]))}_path(@collection)\"), :data => ({ :confirm => ts(\"Are you certain you want to delete the challenge from this collection? All signups, assignments, and settings will be lost. (Works will remain in the collection.)\") }), :method => :delete)",
-      "render_path": [{"type":"controller","class":"Challenge::GiftExchangeController","method":"new","line":25,"file":"app/controllers/challenge/gift_exchange_controller.rb"},{"type":"template","name":"challenge/gift_exchange/new","line":1,"file":"app/views/challenge/gift_exchange/new.html.erb"},{"type":"template","name":"challenge/gift_exchange/_gift_exchange_form","line":6,"file":"app/views/challenge/gift_exchange/_gift_exchange_form.html.erb"}],
-      "location": {
-        "type": "template",
-        "template": "challenge/shared/_challenge_form_delete"
-      },
-      "user_input": "Collection.find_by(:name => params[:collection_id])",
-      "confidence": "Medium",
       "note": ""
     },
     {
@@ -298,7 +258,7 @@
       "line": 32,
       "link": "http://brakemanscanner.org/docs/warning_types/cross_site_scripting",
       "code": "byline((Work.find_by(:id => params[:work_id]) or Chapter.find_by(:id => params[:id]).work))",
-      "render_path": [{"type":"controller","class":"ChaptersController","method":"show","line":76,"file":"app/controllers/chapters_controller.rb"},{"type":"template","name":"chapters/show","line":19,"file":"app/views/chapters/show.html.erb"}],
+      "render_path": [{"type":"controller","class":"ChaptersController","method":"show","line":77,"file":"app/controllers/chapters_controller.rb"},{"type":"template","name":"chapters/show","line":25,"file":"app/views/chapters/show.html.erb"}],
       "location": {
         "type": "template",
         "template": "works/_work_header"
@@ -336,7 +296,7 @@
       "line": 25,
       "link": "http://brakemanscanner.org/docs/warning_types/cross_site_scripting",
       "code": "sanitize_field(OwnedTagSet.find_by(:id => params[:id]), :description)",
-      "render_path": [{"type":"controller","class":"OwnedTagSetsController","method":"show","line":71,"file":"app/controllers/owned_tag_sets_controller.rb"}],
+      "render_path": [{"type":"controller","class":"OwnedTagSetsController","method":"show","line":72,"file":"app/controllers/owned_tag_sets_controller.rb"}],
       "location": {
         "type": "template",
         "template": "owned_tag_sets/show"
@@ -355,7 +315,7 @@
       "line": 16,
       "link": "http://brakemanscanner.org/docs/warning_types/cross_site_scripting",
       "code": "sanitize_field(Work.find_by(:id => params[:id]).first_chapter, :content)",
-      "render_path": [{"type":"controller","class":"WorksController","method":"update","line":369,"file":"app/controllers/works_controller.rb"}],
+      "render_path": [{"type":"controller","class":"WorksController","method":"update","line":370,"file":"app/controllers/works_controller.rb"}],
       "location": {
         "type": "template",
         "template": "works/preview"
@@ -371,7 +331,7 @@
       "check_name": "FileAccess",
       "message": "Model attribute used in file name",
       "file": "app/models/skin.rb",
-      "line": 445,
+      "line": 459,
       "link": "http://brakemanscanner.org/docs/warning_types/file_access/",
       "code": "File.open((\"#{(Skin.site_skins_dir + version)}/\" + \"preview.png\"), \"rb\")",
       "render_path": null,
@@ -391,7 +351,7 @@
       "check_name": "FileAccess",
       "message": "Model attribute used in file name",
       "file": "app/models/skin.rb",
-      "line": 459,
+      "line": 473,
       "link": "http://brakemanscanner.org/docs/warning_types/file_access/",
       "code": "File.open((\"#{(Skin.site_skins_dir + version)}/\" + \"preview.png\"), \"rb\")",
       "render_path": null,
@@ -463,26 +423,6 @@
       "note": ""
     },
     {
-      "warning_type": "Remote Code Execution",
-      "warning_code": 24,
-      "fingerprint": "31b4360e5ac45b4b88f666d03efd105491971918dfb6fccfa1dc0aa630052716",
-      "check_name": "UnsafeReflection",
-      "message": "Unsafe reflection method constantize called with parameter value",
-      "file": "app/controllers/tags_controller.rb",
-      "line": 138,
-      "link": "http://brakemanscanner.org/docs/warning_types/remote_code_execution/",
-      "code": "params[:creation_type].classify.constantize",
-      "render_path": null,
-      "location": {
-        "type": "method",
-        "class": "TagsController",
-        "method": "show_hidden"
-      },
-      "user_input": "params[:creation_type].classify",
-      "confidence": "High",
-      "note": ""
-    },
-    {
       "warning_type": "Redirect",
       "warning_code": 18,
       "fingerprint": "31c7c22b0d7c87430fb6be7fbe63789ade04c009603587d270da4083eba6c2f4",
@@ -531,7 +471,7 @@
       "line": 42,
       "link": "http://brakemanscanner.org/docs/warning_types/cross_site_scripting",
       "code": "sanitize_field((Work.find_by(:id => params[:work_id]) or Chapter.find_by(:id => params[:id]).work), :summary)",
-      "render_path": [{"type":"controller","class":"ChaptersController","method":"show","line":76,"file":"app/controllers/chapters_controller.rb"},{"type":"template","name":"chapters/show","line":19,"file":"app/views/chapters/show.html.erb"}],
+      "render_path": [{"type":"controller","class":"ChaptersController","method":"show","line":77,"file":"app/controllers/chapters_controller.rb"},{"type":"template","name":"chapters/show","line":25,"file":"app/views/chapters/show.html.erb"}],
       "location": {
         "type": "template",
         "template": "works/_work_header"
@@ -547,10 +487,10 @@
       "check_name": "CrossSiteScripting",
       "message": "Unescaped model attribute",
       "file": "app/views/chapters/_chapter.html.erb",
-      "line": 63,
+      "line": 67,
       "link": "http://brakemanscanner.org/docs/warning_types/cross_site_scripting",
       "code": "sanitize_field((Work.find_by(:id => params[:work_id]) or Chapter.find_by(:id => params[:id]).work).chapters.find_by(:id => params[:id]), :content)",
-      "render_path": [{"type":"controller","class":"ChaptersController","method":"show","line":76,"file":"app/controllers/chapters_controller.rb"},{"type":"template","name":"chapters/show","line":22,"file":"app/views/chapters/show.html.erb"}],
+      "render_path": [{"type":"controller","class":"ChaptersController","method":"show","line":77,"file":"app/controllers/chapters_controller.rb"},{"type":"template","name":"chapters/show","line":28,"file":"app/views/chapters/show.html.erb"}],
       "location": {
         "type": "template",
         "template": "chapters/_chapter"
@@ -575,47 +515,6 @@
         "template": "profile/show"
       },
       "user_input": "User.find_by(:login => params[:user_id]).profile",
-      "confidence": "Weak",
-      "note": ""
-    },
-    {
-      "warning_type": "Cross-Site Scripting",
-      "warning_code": 2,
-      "fingerprint": "3b5ea2f1532d60d6d3df8d1eed60f7558b6ee8e4f602e38e387eb2b9c8064756",
-      "check_name": "CrossSiteScripting",
-      "message": "Unescaped model attribute",
-      "file": "app/views/owned_tag_sets/_show_tag_set_tags.html.erb",
-      "line": 32,
-      "link": "https://brakemanscanner.org/docs/warning_types/cross_site_scripting",
-      "code": "([] or HashWithIndifferentAccess.new[:relationship].values_at(*(([] + TagSetAssociation.names_by_parent(TagSetAssociation.for_tag_set(OwnedTagSet.find_by(:id => params[:id])), :BRAKEMAN_SAFE_LITERAL).merge(Tag.names_by_parent(:BRAKEMAN_SAFE_LITERAL.classify.constantize.in_tag_set(OwnedTagSet.find_by(:id => params[:id])), \"fandom\")) do\n (oldval | newval)\n end.keys).compact.uniq.sort do\n (a.gsub(/^(the |an |a )/, \"\") <=> b.gsub(/^(the |an |a )/, \"\"))\n end - Tag.names_by_parent(Fandom.in_tag_set(OwnedTagSet.find_by(:id => params[:id])), \"media\").values.flatten)).flatten.compact.uniq).sort do\n (a.gsub(/^(the |an |a )/, \"\") <=> b.gsub(/^(the |an |a )/, \"\"))\n end.map do\n content_tag(:li, tag)\n end.join(\"\\n\")",
-      "render_path": [
-        {
-          "type": "controller",
-          "class": "OwnedTagSetsController",
-          "method": "show",
-          "line": 71,
-          "file": "app/controllers/owned_tag_sets_controller.rb",
-          "rendered": {
-            "name": "owned_tag_sets/show",
-            "file": "/vagrant/app/views/owned_tag_sets/show.html.erb"
-          }
-        },
-        {
-          "type": "template",
-          "name": "owned_tag_sets/show",
-          "line": 55,
-          "file": "app/views/owned_tag_sets/show.html.erb",
-          "rendered": {
-            "name": "owned_tag_sets/_show_tag_set_tags",
-            "file": "/vagrant/app/views/owned_tag_sets/_show_tag_set_tags.html.erb"
-          }
-        }
-      ],
-      "location": {
-        "type": "template",
-        "template": "owned_tag_sets/_show_tag_set_tags"
-      },
-      "user_input": "TagSetAssociation.names_by_parent(TagSetAssociation.for_tag_set(OwnedTagSet.find_by(:id => params[:id])), :BRAKEMAN_SAFE_LITERAL).merge(Tag.names_by_parent(:BRAKEMAN_SAFE_LITERAL.classify.constantize.in_tag_set(OwnedTagSet.find_by(:id => params[:id])), \"fandom\"))",
       "confidence": "Weak",
       "note": ""
     },
@@ -705,7 +604,7 @@
       "check_name": "FileAccess",
       "message": "Model attribute used in file name",
       "file": "app/models/skin.rb",
-      "line": 516,
+      "line": 530,
       "link": "http://brakemanscanner.org/docs/warning_types/file_access/",
       "code": "File.open((Skin.site_skins_dir + \"preview.png\"), \"rb\")",
       "render_path": null,
@@ -747,12 +646,31 @@
       "line": 70,
       "link": "http://brakemanscanner.org/docs/warning_types/cross_site_scripting",
       "code": "sanitize_field((Work.find_by(:id => params[:work_id]) or Chapter.find_by(:id => params[:id]).work), :notes)",
-      "render_path": [{"type":"controller","class":"ChaptersController","method":"show","line":76,"file":"app/controllers/chapters_controller.rb"},{"type":"template","name":"chapters/show","line":19,"file":"app/views/chapters/show.html.erb"},{"type":"template","name":"works/_work_header","line":49,"file":"app/views/works/_work_header.html.erb"}],
+      "render_path": [{"type":"controller","class":"ChaptersController","method":"show","line":77,"file":"app/controllers/chapters_controller.rb"},{"type":"template","name":"chapters/show","line":25,"file":"app/views/chapters/show.html.erb"},{"type":"template","name":"works/_work_header","line":49,"file":"app/views/works/_work_header.html.erb"}],
       "location": {
         "type": "template",
         "template": "works/_work_header_notes"
       },
       "user_input": "Work.find_by(:id => params[:work_id])",
+      "confidence": "Weak",
+      "note": ""
+    },
+    {
+      "warning_type": "Cross Site Scripting",
+      "warning_code": 2,
+      "fingerprint": "4c2812ecba16106adca83fe060ad8671affa5d656e84eab329ba363745b06fae",
+      "check_name": "CrossSiteScripting",
+      "message": "Unescaped model attribute",
+      "file": "app/views/users/confirmation.html.erb",
+      "line": 14,
+      "link": "http://brakemanscanner.org/docs/warning_types/cross_site_scripting",
+      "code": "ts(\"<strong>Important!</strong> You must confirm your email address within %{days_before_purge} days, or your account will expire. If this happens, you can sign up again using the same invitation.\", :days_before_purge => (if AdminSetting.current.days_to_purge_unactivated? then\n  (AdminSetting.current.days_to_purge_unactivated * 7)\nelse\n  ArchiveConfig.DAYS_TO_PURGE_UNACTIVATED\nend))",
+      "render_path": [{"type":"controller","class":"Users::RegistrationsController","method":"notify_and_show_confirmation_screen","line":46,"file":"app/controllers/users/registrations_controller.rb"}],
+      "location": {
+        "type": "template",
+        "template": "users/confirmation"
+      },
+      "user_input": "AdminSetting.current.days_to_purge_unactivated",
       "confidence": "Weak",
       "note": ""
     },
@@ -773,85 +691,6 @@
         "method": "encoding"
       },
       "user_input": "params[:term]",
-      "confidence": "High",
-      "note": ""
-    },
-    {
-      "warning_type": "Dangerous Eval",
-      "warning_code": 13,
-      "fingerprint": "4eaafeda127dc38372e728ce01ef6d8684bde59886a42bd5d8d9b3268e68e0c3",
-      "check_name": "Evaluation",
-      "message": "User input in eval",
-      "file": "app/controllers/collections_controller.rb",
-      "line": 139,
-      "link": "http://brakemanscanner.org/docs/warning_types/dangerous_eval/",
-      "code": "eval(\"edit_collection_#{params[:challenge_type].demodulize.tableize.singularize}_path(@collection)\")",
-      "render_path": null,
-      "location": {
-        "type": "method",
-        "class": "CollectionsController",
-        "method": "update"
-      },
-      "user_input": "params[:challenge_type].demodulize.tableize.singularize",
-      "confidence": "High",
-      "note": ""
-    },
-    {
-      "warning_type": "Dangerous Send",
-      "warning_code": 23,
-      "fingerprint": "4f23316dd25962cd6143c0f020f7ef59fbc6da975038e56fc79eae354a063d00",
-      "check_name": "Send",
-      "message": "User controlled method execution",
-      "file": "app/controllers/tags_controller.rb",
-      "line": 306,
-      "link": "http://brakemanscanner.org/docs/warning_types/dangerous_send/",
-      "code": "Tag.find_by_name(params[:id]).send(params[:show])",
-      "render_path": null,
-      "location": {
-        "type": "method",
-        "class": "TagsController",
-        "method": "wrangle"
-      },
-      "user_input": "params[:show]",
-      "confidence": "High",
-      "note": ""
-    },
-    {
-      "warning_type": "Dangerous Send",
-      "warning_code": 23,
-      "fingerprint": "4f23316dd25962cd6143c0f020f7ef59fbc6da975038e56fc79eae354a063d00",
-      "check_name": "Send",
-      "message": "User controlled method execution",
-      "file": "app/controllers/tags_controller.rb",
-      "line": 313,
-      "link": "http://brakemanscanner.org/docs/warning_types/dangerous_send/",
-      "code": "Tag.find_by_name(params[:id]).send(params[:show])",
-      "render_path": null,
-      "location": {
-        "type": "method",
-        "class": "TagsController",
-        "method": "wrangle"
-      },
-      "user_input": "params[:show]",
-      "confidence": "High",
-      "note": ""
-    },
-    {
-      "warning_type": "Dangerous Eval",
-      "warning_code": 13,
-      "fingerprint": "4f6c04b41bf5880c5fa2a572c328bcbbcc94cc2549956ed8bb4a6d957f2dcf63",
-      "check_name": "Evaluation",
-      "message": "User input in eval",
-      "file": "app/views/collections/_sidebar.html.erb",
-      "line": 51,
-      "link": "http://brakemanscanner.org/docs/warning_types/dangerous_eval/",
-      "code": "eval(\"edit_collection_#{challenge_class_name(Collection.find_by(:name => params[:collection_id]))}_path(@collection)\")",
-      "render_path": [{"type":"controller","class":"ApplicationController","method":"load_collection","line":315,"file":"app/controllers/application_controller.rb"},{"type":"template","name":"layouts/application","line":49,"file":"app/views/layouts/application.html.erb"}],
-      "location": {
-        "type": "template",
-        "template": "collections/_sidebar"
-      },
-      "user_input": "Collection.find_by(:name => params[:collection_id])",
       "confidence": "High",
       "note": ""
     },
@@ -881,10 +720,10 @@
       "check_name": "CrossSiteScripting",
       "message": "Unescaped model attribute",
       "file": "app/views/owned_tag_sets/_show_tag_set_tags.html.erb",
-      "line": 32,
+      "line": 31,
       "link": "http://brakemanscanner.org/docs/warning_types/cross_site_scripting",
       "code": "([] or HashWithIndifferentAccess.new[:relationship].values_at(*(([] + TagSetAssociation.names_by_parent(TagSetAssociation.for_tag_set(OwnedTagSet.find_by(:id => params[:id])), tag_type).merge(Tag.names_by_parent(tag_type.classify.constantize.in_tag_set(OwnedTagSet.find_by(:id => params[:id])), \"fandom\")) do\n oldval.|(newval)\n end.keys).compact.uniq.sort do\n (a.gsub(/^(the |an |a )/, \"\") <=> b.gsub(/^(the |an |a )/, \"\"))\n end - Tag.names_by_parent(Fandom.in_tag_set(OwnedTagSet.find_by(:id => params[:id])), \"media\").values.flatten)).flatten.compact.uniq).sort do\n (a.gsub(/^(the |an |a )/, \"\") <=> b.gsub(/^(the |an |a )/, \"\"))\n end.map do\n content_tag(:li, tag)\n end.join(\"\\n\")",
-      "render_path": [{"type":"controller","class":"OwnedTagSetsController","method":"show","line":71,"file":"app/controllers/owned_tag_sets_controller.rb"},{"type":"template","name":"owned_tag_sets/show","line":55,"file":"app/views/owned_tag_sets/show.html.erb"}],
+      "render_path": [{"type":"controller","class":"OwnedTagSetsController","method":"show","line":72,"file":"app/controllers/owned_tag_sets_controller.rb"},{"type":"template","name":"owned_tag_sets/show","line":56,"file":"app/views/owned_tag_sets/show.html.erb"}],
       "location": {
         "type": "template",
         "template": "owned_tag_sets/_show_tag_set_tags"
@@ -913,66 +752,6 @@
       "note": ""
     },
     {
-      "warning_type": "SQL Injection",
-      "warning_code": 0,
-      "fingerprint": "519a9eac882cc7c75fc223c691ad49739f1b35bf912a3efc708d54c594e63ae1",
-      "check_name": "SQL",
-      "message": "Possible SQL injection",
-      "file": "app/models/chapter.rb",
-      "line": 67,
-      "link": "http://brakemanscanner.org/docs/warning_types/sql_injection/",
-      "code": "Chapter.where(\"id = #{chapter.id}\").update_all(\"position = #{(i + 1)}\")",
-      "render_path": null,
-      "location": {
-        "type": "method",
-        "class": "Chapter",
-        "method": "fix_positions"
-      },
-      "user_input": "(i + 1)",
-      "confidence": "Medium",
-      "note": ""
-    },
-    {
-      "warning_type": "SQL Injection",
-      "warning_code": 0,
-      "fingerprint": "528619cc637ca9c6b76a0f7131f845a2a5e8a5c6fb307c48334bca4e59bf7635",
-      "check_name": "SQL",
-      "message": "Possible SQL injection",
-      "file": "app/controllers/series_controller.rb",
-      "line": 139,
-      "link": "http://brakemanscanner.org/docs/warning_types/sql_injection/",
-      "code": "Series.find(params[:id]).reorder(params[:serial_works])",
-      "render_path": null,
-      "location": {
-        "type": "method",
-        "class": "SeriesController",
-        "method": "update_positions"
-      },
-      "user_input": "params[:serial_works]",
-      "confidence": "High",
-      "note": ""
-    },
-    {
-      "warning_type": "Dangerous Eval",
-      "warning_code": 13,
-      "fingerprint": "537b3eec85cd223672ce57eb7085ecf414705967e428a0fb32ecab01f67b083c",
-      "check_name": "Evaluation",
-      "message": "User input in eval",
-      "file": "app/controllers/collections_controller.rb",
-      "line": 144,
-      "link": "http://brakemanscanner.org/docs/warning_types/dangerous_eval/",
-      "code": "eval(\"new_collection_#{params[:challenge_type].demodulize.tableize.singularize}_path(@collection)\")",
-      "render_path": null,
-      "location": {
-        "type": "method",
-        "class": "CollectionsController",
-        "method": "update"
-      },
-      "user_input": "params[:challenge_type].demodulize.tableize.singularize",
-      "confidence": "High",
-      "note": ""
-    },
-    {
       "warning_type": "Cross Site Scripting",
       "warning_code": 2,
       "fingerprint": "53b0e2a9660c64156a826010ca10fcdb54fb160951eb8534b32f52c33b754770",
@@ -982,52 +761,12 @@
       "line": 41,
       "link": "http://brakemanscanner.org/docs/warning_types/cross_site_scripting",
       "code": "ts(\"If you have already requested an invitation, you can %{status}. There are currently %{count} people on the waiting list. We are sending \\n    out %{invites} invitations per day.\", :status => link_to(\"check your position on the waiting list\", status_invite_requests_path), :count => InviteRequest.count, :invites => AdminSetting.current.invite_from_queue_number)",
-      "render_path": [{"type":"controller","class":"InviteRequestsController","method":"create","line":38,"file":"app/controllers/invite_requests_controller.rb"},{"type":"template","name":"invite_requests/index","line":3,"file":"app/views/invite_requests/index.html.erb"}],
+      "render_path": [{"type":"controller","class":"InviteRequestsController","method":"create","line":39,"file":"app/controllers/invite_requests_controller.rb"},{"type":"template","name":"invite_requests/index","line":3,"file":"app/views/invite_requests/index.html.erb"}],
       "location": {
         "type": "template",
         "template": "invite_requests/_index_open"
       },
       "user_input": "AdminSetting.current.invite_from_queue_number",
-      "confidence": "Weak",
-      "note": ""
-    },
-    {
-      "warning_type": "SQL Injection",
-      "warning_code": 0,
-      "fingerprint": "547e5f3fe8fed0470acc6ebd660073febcebfe5f782eb24dedc9bfa7a1f9015b",
-      "check_name": "SQL",
-      "message": "Possible SQL injection",
-      "file": "app/models/challenge_claim.rb",
-      "line": 51,
-      "link": "http://brakemanscanner.org/docs/warning_types/sql_injection/",
-      "code": "joins(\"INNER JOIN challenge_signups ON (challenge_claims.request_signup_id = challenge_signups.id)\\r\\n                           INNER JOIN pseuds ON challenge_signups.pseud_id = pseuds.id\").order(\"pseuds.name #{dir}\")",
-      "render_path": null,
-      "location": {
-        "type": "method",
-        "class": "ChallengeClaim",
-        "method": "ChallengeClaim.order_by_requesting_pseud"
-      },
-      "user_input": "dir",
-      "confidence": "Weak",
-      "note": ""
-    },
-    {
-      "warning_type": "SQL Injection",
-      "warning_code": 0,
-      "fingerprint": "573f644d1fecc3cdc471598d0b67e32c7469e0b12f729814ab6bcc70a8e2c5c8",
-      "check_name": "SQL",
-      "message": "Possible SQL injection",
-      "file": "app/models/collection.rb",
-      "line": 216,
-      "link": "http://brakemanscanner.org/docs/warning_types/sql_injection/",
-      "code": "not_closed.where(:challenge_type => challenge_type).joins(\"INNER JOIN #{challenge_type.tableize} on #{challenge_type.tableize}.id = challenge_id\")",
-      "render_path": null,
-      "location": {
-        "type": "method",
-        "class": "Collection",
-        "method": "Collection.signup_open"
-      },
-      "user_input": "challenge_type.tableize",
       "confidence": "Weak",
       "note": ""
     },
@@ -1041,7 +780,7 @@
       "line": 6,
       "link": "http://brakemanscanner.org/docs/warning_types/cross_site_scripting",
       "code": "ts(\"Edit Work Tags for %{title}\", :title => Work.find_by(:id => params[:id]).title)",
-      "render_path": [{"type":"controller","class":"WorksController","method":"edit_tags","line":337,"file":"app/controllers/works_controller.rb"}],
+      "render_path": [{"type":"controller","class":"WorksController","method":"edit_tags","line":342,"file":"app/controllers/works_controller.rb"}],
       "location": {
         "type": "template",
         "template": "works/edit_tags"
@@ -1177,33 +916,13 @@
       "line": 20,
       "link": "http://brakemanscanner.org/docs/warning_types/cross_site_scripting",
       "code": "(OwnedTagSet.find_by(:id => params[:id]).owners + OwnedTagSet.find_by(:id => params[:id]).moderators).map do\n content_tag(:li, link_to(owner.byline, owner.user))\n end.join(\"\\n\")",
-      "render_path": [{"type":"controller","class":"OwnedTagSetsController","method":"show","line":71,"file":"app/controllers/owned_tag_sets_controller.rb"}],
+      "render_path": [{"type":"controller","class":"OwnedTagSetsController","method":"show","line":72,"file":"app/controllers/owned_tag_sets_controller.rb"}],
       "location": {
         "type": "template",
         "template": "owned_tag_sets/show"
       },
       "user_input": "OwnedTagSet.find_by(:id => params[:id]).owners",
       "confidence": "Weak",
-      "note": ""
-    },
-    {
-      "warning_type": "SQL Injection",
-      "warning_code": 0,
-      "fingerprint": "65611e00ec5e46c47743e90fbeeaf9bbe9d94d084e1cdf43a92d64ae1c183c7d",
-      "check_name": "SQL",
-      "message": "Possible SQL injection",
-      "file": "app/models/work.rb",
-      "line": 823,
-      "link": "http://brakemanscanner.org/docs/warning_types/sql_injection/",
-      "code": "Work.where(\"id = #{self.id}\").update_all(\"complete = #{(self.chapters.posted.count == expected_number_of_chapters)}\")",
-      "render_path": null,
-      "location": {
-        "type": "method",
-        "class": "Work",
-        "method": "update_complete_status"
-      },
-      "user_input": "(self.chapters.posted.count == expected_number_of_chapters)",
-      "confidence": "Medium",
       "note": ""
     },
     {
@@ -1251,10 +970,10 @@
       "check_name": "CrossSiteScripting",
       "message": "Unescaped model attribute",
       "file": "app/views/chapters/_chapter.html.erb",
-      "line": 46,
+      "line": 52,
       "link": "http://brakemanscanner.org/docs/warning_types/cross_site_scripting",
       "code": "sanitize_field((Work.find_by(:id => params[:work_id]) or Chapter.find_by(:id => params[:id]).work).chapters.find_by(:id => params[:id]), :notes)",
-      "render_path": [{"type":"controller","class":"ChaptersController","method":"show","line":76,"file":"app/controllers/chapters_controller.rb"},{"type":"template","name":"chapters/show","line":22,"file":"app/views/chapters/show.html.erb"}],
+      "render_path": [{"type":"controller","class":"ChaptersController","method":"show","line":77,"file":"app/controllers/chapters_controller.rb"},{"type":"template","name":"chapters/show","line":28,"file":"app/views/chapters/show.html.erb"}],
       "location": {
         "type": "template",
         "template": "chapters/_chapter"
@@ -1293,7 +1012,7 @@
       "line": 11,
       "link": "http://brakemanscanner.org/docs/warning_types/cross_site_scripting",
       "code": "ts(\"Are you sure you want to <strong><em>delete</em></strong> all the works and comments created by this user,\\n           along with their %{bookmarks} bookmarks, %{series} series, and %{collections} collections? This <strong>cannot be undone</strong>.\", :bookmarks => User.find_by(:login => params[:id]).bookmarks.size, :series => User.find_by(:login => params[:id]).series.size, :collections => User.find_by(:login => params[:id]).collections.size)",
-      "render_path": [{"type":"controller","class":"Admin::AdminUsersController","method":"confirm_delete_user_creations","line":195,"file":"app/controllers/admin/admin_users_controller.rb"}],
+      "render_path": [{"type":"controller","class":"Admin::AdminUsersController","method":"confirm_delete_user_creations","line":106,"file":"app/controllers/admin/admin_users_controller.rb"}],
       "location": {
         "type": "template",
         "template": "admin/admin_users/confirm_delete_user_creations"
@@ -1303,32 +1022,13 @@
       "note": ""
     },
     {
-      "warning_type": "Dangerous Eval",
-      "warning_code": 13,
-      "fingerprint": "6bf40a9a7583b0ebd3a6d3c11e743716d6a9787c9051bd121dbac3210a9a0291",
-      "check_name": "Evaluation",
-      "message": "User input in eval",
-      "file": "app/views/challenge/shared/_challenge_form_delete.html.erb",
-      "line": 3,
-      "link": "http://brakemanscanner.org/docs/warning_types/dangerous_eval/",
-      "code": "eval(\"collection_#{challenge_class_name(Collection.find_by(:name => params[:collection_id]))}_path(@collection)\")",
-      "render_path": [{"type":"controller","class":"Challenge::GiftExchangeController","method":"new","line":25,"file":"app/controllers/challenge/gift_exchange_controller.rb"},{"type":"template","name":"challenge/gift_exchange/new","line":1,"file":"app/views/challenge/gift_exchange/new.html.erb"},{"type":"template","name":"challenge/gift_exchange/_gift_exchange_form","line":6,"file":"app/views/challenge/gift_exchange/_gift_exchange_form.html.erb"}],
-      "location": {
-        "type": "template",
-        "template": "challenge/shared/_challenge_form_delete"
-      },
-      "user_input": "Collection.find_by(:name => params[:collection_id])",
-      "confidence": "High",
-      "note": ""
-    },
-    {
       "warning_type": "Format Validation",
       "warning_code": 30,
       "fingerprint": "70298f7f185bd7c9c1f1092ac4e98f11d063d5394385295f96881fc863102f25",
       "check_name": "ValidationRegex",
       "message": "Insufficient validation for 'name' using /\\p{Alnum}/. Use \\A and \\z as anchors",
       "file": "app/models/pseud.rb",
-      "line": 63,
+      "line": 66,
       "link": "http://brakemanscanner.org/docs/warning_types/format_validation/",
       "code": null,
       "render_path": null,
@@ -1337,26 +1037,6 @@
         "model": "Pseud"
       },
       "user_input": null,
-      "confidence": "High",
-      "note": ""
-    },
-    {
-      "warning_type": "SQL Injection",
-      "warning_code": 0,
-      "fingerprint": "7069feee925a71df77b744ef73c6074cabf93578c66263d5bda0c48d5446d7eb",
-      "check_name": "SQL",
-      "message": "Possible SQL injection",
-      "file": "app/controllers/wrangling_guidelines_controller.rb",
-      "line": 56,
-      "link": "http://brakemanscanner.org/docs/warning_types/sql_injection/",
-      "code": "WranglingGuideline.reorder(params[:wrangling_guidelines])",
-      "render_path": null,
-      "location": {
-        "type": "method",
-        "class": "WranglingGuidelinesController",
-        "method": "update_positions"
-      },
-      "user_input": "params[:wrangling_guidelines]",
       "confidence": "High",
       "note": ""
     },
@@ -1405,7 +1085,7 @@
       "check_name": "FileAccess",
       "message": "Model attribute used in file name",
       "file": "app/models/skin.rb",
-      "line": 413,
+      "line": 427,
       "link": "http://brakemanscanner.org/docs/warning_types/file_access/",
       "code": "File.open((\"#{(Skin.site_skins_dir + version)}/\" + skin_file), &:readline)",
       "render_path": null,
@@ -1415,25 +1095,6 @@
         "method": "Skin.load_site_css"
       },
       "user_input": "(Skin.site_skins_dir + version)",
-      "confidence": "High",
-      "note": ""
-    },
-    {
-      "warning_type": "Dangerous Eval",
-      "warning_code": 13,
-      "fingerprint": "73692669bdaca5d617ed72a3aa777c040dd87f0fa8787e8ca2dbe7a4b1964695",
-      "check_name": "Evaluation",
-      "message": "User input in eval",
-      "file": "app/views/collection_profile/show.html.erb",
-      "line": 101,
-      "link": "http://brakemanscanner.org/docs/warning_types/dangerous_eval/",
-      "code": "eval(\"collection_#{challenge_class_name(Collection.find_by(:name => params[:collection_id]))}_path(@collection)\")",
-      "render_path": [{"type":"controller","class":"CollectionProfileController","method":"show","line":11,"file":"app/controllers/collection_profile_controller.rb"}],
-      "location": {
-        "type": "template",
-        "template": "collection_profile/show"
-      },
-      "user_input": "Collection.find_by(:name => params[:collection_id])",
       "confidence": "High",
       "note": ""
     },
@@ -1496,62 +1157,22 @@
       "note": ""
     },
     {
-      "warning_type": "Dangerous Eval",
-      "warning_code": 13,
-      "fingerprint": "7b8cf3f933110738049c4c37245c414d999cc72feb088f0a7c369ac02afb4af0",
-      "check_name": "Evaluation",
-      "message": "User input in eval",
-      "file": "app/controllers/stats_controller.rb",
-      "line": 97,
-      "link": "http://brakemanscanner.org/docs/warning_types/dangerous_eval/",
-      "code": "eval(\"w.#{(\"hits\" or ((\"\" or (params[:sort_column] or \"kudos.count\")) or (params[:sort_column] or \"hits\")))}\")",
-      "render_path": null,
-      "location": {
-        "type": "method",
-        "class": "StatsController",
-        "method": "index"
-      },
-      "user_input": "params[:sort_column]",
-      "confidence": "High",
-      "note": ""
-    },
-    {
       "warning_type": "Cross Site Scripting",
       "warning_code": 2,
       "fingerprint": "7ba28d2592f71016ee91d223906a0b807609b9a9448a180c420a4de5a39c24a4",
       "check_name": "CrossSiteScripting",
       "message": "Unescaped model attribute",
       "file": "app/views/series/show.html.erb",
-      "line": 41,
+      "line": 47,
       "link": "http://brakemanscanner.org/docs/warning_types/cross_site_scripting",
       "code": "sanitize_field(Series.find_by(:id => params[:id]), :summary)",
-      "render_path": [{"type":"controller","class":"SeriesController","method":"show","line":54,"file":"app/controllers/series_controller.rb"}],
+      "render_path": [{"type":"controller","class":"SeriesController","method":"show","line":57,"file":"app/controllers/series_controller.rb"}],
       "location": {
         "type": "template",
         "template": "series/show"
       },
       "user_input": "Series.find_by(:id => params[:id])",
       "confidence": "Weak",
-      "note": ""
-    },
-    {
-      "warning_type": "SQL Injection",
-      "warning_code": 0,
-      "fingerprint": "7bdad2cd7d3aeba744f579ce885adff4a385a8acfab09575af96703017a6f956",
-      "check_name": "SQL",
-      "message": "Possible SQL injection",
-      "file": "app/controllers/challenge_requests_controller.rb",
-      "line": 33,
-      "link": "http://brakemanscanner.org/docs/warning_types/sql_injection/",
-      "code": "Collection.find_by(:name => params[:collection_id]).prompts.where(\"type = 'Request'\").joins(:challenge_signup => :pseud).order(\"pseuds.name #{@sort_direction}\")",
-      "render_path": null,
-      "location": {
-        "type": "method",
-        "class": "ChallengeRequestsController",
-        "method": "index"
-      },
-      "user_input": "@sort_direction",
-      "confidence": "Medium",
       "note": ""
     },
     {
@@ -1571,44 +1192,6 @@
       },
       "user_input": "AdminBanner.where(:active => true).last",
       "confidence": "Weak",
-      "note": ""
-    },
-    {
-      "warning_type": "Cross Site Scripting",
-      "warning_code": 2,
-      "fingerprint": "80956874bb517bc1a8d91a9e56c8ab08fb829db9c24b85cddb2691db51e9b9c0",
-      "check_name": "CrossSiteScripting",
-      "message": "Unescaped model attribute",
-      "file": "app/views/external_works/_work_module.html.erb",
-      "line": 17,
-      "link": "http://brakemanscanner.org/docs/warning_types/cross_site_scripting",
-      "code": "(Work.find(params[:work_id]) or (Chapter.find(params[:chapter_id]).work or (ExternalWork.find(params[:external_work_id]) or Series.find(params[:series_id])))).fandom_tags.collect do\n link_to_tag_works(tag)\n end.join(\", \")",
-      "render_path": [{"type":"controller","class":"BookmarksController","method":"index","line":148,"file":"app/controllers/bookmarks_controller.rb"},{"type":"template","name":"bookmarks/index","line":59,"file":"app/views/bookmarks/index.html.erb"},{"type":"template","name":"bookmarks/_bookmarks","line":23,"file":"app/views/bookmarks/_bookmarks.html.erb"},{"type":"template","name":"bookmarks/_bookmarkable_blurb","line":13,"file":"app/views/bookmarks/_bookmarkable_blurb.html.erb"},{"type":"template","name":"bookmarks/_bookmark_item_module","line":3,"file":"app/views/bookmarks/_bookmark_item_module.html.erb"}],
-      "location": {
-        "type": "template",
-        "template": "external_works/_work_module"
-      },
-      "user_input": "Work.find(params[:work_id])",
-      "confidence": "Weak",
-      "note": ""
-    },
-    {
-      "warning_type": "Cross Site Scripting",
-      "warning_code": 4,
-      "fingerprint": "8181b7ef559c868ad0a159b22e57eabbfc459c705f7b48771530032c05d081c1",
-      "check_name": "LinkToHref",
-      "message": "Unsafe model attribute in link_to href",
-      "file": "app/views/collection_profile/show.html.erb",
-      "line": 101,
-      "link": "http://brakemanscanner.org/docs/warning_types/link_to_href",
-      "code": "link_to(ts(\"Delete Challenge\"), eval(\"collection_#{challenge_class_name(Collection.find_by(:name => params[:collection_id]))}_path(@collection)\"), :data => ({ :confirm => ts(\"Are you certain you want to delete the challenge from this collection? All sign-ups, assignments, and settings will be lost. (Works will remain in the collection.)\") }), :method => :delete)",
-      "render_path": [{"type":"controller","class":"CollectionProfileController","method":"show","line":11,"file":"app/controllers/collection_profile_controller.rb"}],
-      "location": {
-        "type": "template",
-        "template": "collection_profile/show"
-      },
-      "user_input": "Collection.find_by(:name => params[:collection_id])",
-      "confidence": "Medium",
       "note": ""
     },
     {
@@ -1658,10 +1241,10 @@
       "check_name": "CrossSiteScripting",
       "message": "Unescaped model attribute",
       "file": "app/views/owned_tag_sets/_show_tag_set_tags.html.erb",
-      "line": 31,
+      "line": 30,
       "link": "http://brakemanscanner.org/docs/warning_types/cross_site_scripting",
       "code": "([] or HashWithIndifferentAccess.new[:character].values_at(*(([] + TagSetAssociation.names_by_parent(TagSetAssociation.for_tag_set(OwnedTagSet.find_by(:id => params[:id])), tag_type).merge(Tag.names_by_parent(tag_type.classify.constantize.in_tag_set(OwnedTagSet.find_by(:id => params[:id])), \"fandom\")) do\n oldval.|(newval)\n end.keys).compact.uniq.sort do\n (a.gsub(/^(the |an |a )/, \"\") <=> b.gsub(/^(the |an |a )/, \"\"))\n end - Tag.names_by_parent(Fandom.in_tag_set(OwnedTagSet.find_by(:id => params[:id])), \"media\").values.flatten)).flatten.compact.uniq).sort do\n (a.gsub(/^(the |an |a )/, \"\") <=> b.gsub(/^(the |an |a )/, \"\"))\n end.map do\n content_tag(:li, tag)\n end.join(\"\\n\")",
-      "render_path": [{"type":"controller","class":"OwnedTagSetsController","method":"show","line":71,"file":"app/controllers/owned_tag_sets_controller.rb"},{"type":"template","name":"owned_tag_sets/show","line":55,"file":"app/views/owned_tag_sets/show.html.erb"}],
+      "render_path": [{"type":"controller","class":"OwnedTagSetsController","method":"show","line":72,"file":"app/controllers/owned_tag_sets_controller.rb"},{"type":"template","name":"owned_tag_sets/show","line":56,"file":"app/views/owned_tag_sets/show.html.erb"}],
       "location": {
         "type": "template",
         "template": "owned_tag_sets/_show_tag_set_tags"
@@ -1729,32 +1312,13 @@
       "note": ""
     },
     {
-      "warning_type": "Dangerous Eval",
-      "warning_code": 13,
-      "fingerprint": "9261c4d6deb6c62a5c58751d471c2960723a6ebcbbdcecd7732d3dbad046bdd8",
-      "check_name": "Evaluation",
-      "message": "User input in eval",
-      "file": "app/views/potential_matches/_no_match_required.html.erb",
-      "line": 8,
-      "link": "http://brakemanscanner.org/docs/warning_types/dangerous_eval/",
-      "code": "eval(\"edit_collection_#{challenge_class_name(Collection.find_by(:name => params[:collection_id]))}_path(@collection, :anchor => 'match_settings')\")",
-      "render_path": [{"type":"controller","class":"ChallengeAssignmentsController","method":"set","line":180,"file":"app/controllers/challenge_assignments_controller.rb"},{"type":"template","name":"potential_matches/index","line":34,"file":"app/views/potential_matches/index.html.erb"}],
-      "location": {
-        "type": "template",
-        "template": "potential_matches/_no_match_required"
-      },
-      "user_input": "Collection.find_by(:name => params[:collection_id])",
-      "confidence": "High",
-      "note": ""
-    },
-    {
       "warning_type": "Cross Site Scripting",
       "warning_code": 2,
       "fingerprint": "991f44ca4542d6fb1588b5cee20245ca99869c155430a6d4270b9252f1a80d90",
       "check_name": "CrossSiteScripting",
       "message": "Unescaped model attribute",
       "file": "app/views/works/show.html.erb",
-      "line": 46,
+      "line": 51,
       "link": "http://brakemanscanner.org/docs/warning_types/cross_site_scripting",
       "code": "sanitize_field(Work.find_by(:id => params[:id]).first_chapter, :content)",
       "render_path": [{"type":"controller","class":"WorksController","method":"show","line":222,"file":"app/controllers/works_controller.rb"}],
@@ -1767,97 +1331,16 @@
       "note": ""
     },
     {
-      "warning_type": "Mass Assignment",
-      "warning_code": 105,
-      "fingerprint": "9c55ed4d66b9f3de6a19df35cc5ce2e7a822e3a798bbb28771487496db7f4b9c",
-      "check_name": "PermitAttributes",
-      "message": "Potentially dangerous key allowed for mass assignment",
-      "file": "app/controllers/skins_controller.rb",
-      "line": 159,
-      "link": "https://brakemanscanner.org/docs/warning_types/mass_assignment/",
-      "code": "params.require(:skin).permit(:title, :description, :public, :css, :role, :ie_condition, :unusable, :font, :base_em, :margin, :paragraph_margin, :background_color, :foreground_color, :headercolor, :accent_color, :icon, { :media => ([]) }, :skin_parents_attributes => ([:id, :position, :parent_skin_id, :parent_skin_title, :child_skin_id, :_destroy]))",
-      "render_path": null,
-      "location": {
-        "type": "method",
-        "class": "SkinsController",
-        "method": "skin_params"
-      },
-      "user_input": ":role",
-      "confidence": "Medium",
-      "note": ""
-    },
-    {
-      "warning_type": "Cross-Site Scripting",
-      "warning_code": 2,
-      "fingerprint": "9e838dfb3325088dd9a3a6b11076e55841c22e21643dcedad5a36d9a15d87e3e",
-      "check_name": "CrossSiteScripting",
-      "message": "Unescaped model attribute",
-      "file": "app/views/owned_tag_sets/_show_tag_set_tags.html.erb",
-      "line": 31,
-      "link": "https://brakemanscanner.org/docs/warning_types/cross_site_scripting",
-      "code": "([] or HashWithIndifferentAccess.new[:character].values_at(*(([] + TagSetAssociation.names_by_parent(TagSetAssociation.for_tag_set(OwnedTagSet.find_by(:id => params[:id])), :BRAKEMAN_SAFE_LITERAL).merge(Tag.names_by_parent(:BRAKEMAN_SAFE_LITERAL.classify.constantize.in_tag_set(OwnedTagSet.find_by(:id => params[:id])), \"fandom\")) do\n (oldval | newval)\n end.keys).compact.uniq.sort do\n (a.gsub(/^(the |an |a )/, \"\") <=> b.gsub(/^(the |an |a )/, \"\"))\n end - Tag.names_by_parent(Fandom.in_tag_set(OwnedTagSet.find_by(:id => params[:id])), \"media\").values.flatten)).flatten.compact.uniq).sort do\n (a.gsub(/^(the |an |a )/, \"\") <=> b.gsub(/^(the |an |a )/, \"\"))\n end.map do\n content_tag(:li, tag)\n end.join(\"\\n\")",
-      "render_path": [
-        {
-          "type": "controller",
-          "class": "OwnedTagSetsController",
-          "method": "show",
-          "line": 71,
-          "file": "app/controllers/owned_tag_sets_controller.rb",
-          "rendered": {
-            "name": "owned_tag_sets/show",
-            "file": "/vagrant/app/views/owned_tag_sets/show.html.erb"
-          }
-        },
-        {
-          "type": "template",
-          "name": "owned_tag_sets/show",
-          "line": 55,
-          "file": "app/views/owned_tag_sets/show.html.erb",
-          "rendered": {
-            "name": "owned_tag_sets/_show_tag_set_tags",
-            "file": "/vagrant/app/views/owned_tag_sets/_show_tag_set_tags.html.erb"
-          }
-        }
-      ],
-      "location": {
-        "type": "template",
-        "template": "owned_tag_sets/_show_tag_set_tags"
-      },
-      "user_input": "TagSetAssociation.names_by_parent(TagSetAssociation.for_tag_set(OwnedTagSet.find_by(:id => params[:id])), :BRAKEMAN_SAFE_LITERAL).merge(Tag.names_by_parent(:BRAKEMAN_SAFE_LITERAL.classify.constantize.in_tag_set(OwnedTagSet.find_by(:id => params[:id])), \"fandom\"))",
-      "confidence": "Weak",
-      "note": ""
-    },
-    {
-      "warning_type": "Dangerous Eval",
-      "warning_code": 13,
-      "fingerprint": "a49a7e4d9fda814675993ac5eb9390b0bd0aae4ce83fc712da433ccd72d9e9a0",
-      "check_name": "Evaluation",
-      "message": "User input in eval",
-      "file": "app/controllers/stats_controller.rb",
-      "line": 54,
-      "link": "http://brakemanscanner.org/docs/warning_types/dangerous_eval/",
-      "code": "eval(\"w.#{((\"\" or (params[:sort_column] or \"kudos.count\")) or (params[:sort_column] or \"hits\"))}\")",
-      "render_path": null,
-      "location": {
-        "type": "method",
-        "class": "StatsController",
-        "method": "index"
-      },
-      "user_input": "params[:sort_column]",
-      "confidence": "High",
-      "note": ""
-    },
-    {
       "warning_type": "Cross Site Scripting",
       "warning_code": 2,
       "fingerprint": "a67cbda35cc12bfd4da8e353304f1cf5010be61d1878e38b222a26a83f96f0e6",
       "check_name": "CrossSiteScripting",
       "message": "Unescaped model attribute",
       "file": "app/views/series/show.html.erb",
-      "line": 45,
+      "line": 51,
       "link": "http://brakemanscanner.org/docs/warning_types/cross_site_scripting",
       "code": "sanitize_field(Series.find_by(:id => params[:id]), :series_notes)",
-      "render_path": [{"type":"controller","class":"SeriesController","method":"show","line":54,"file":"app/controllers/series_controller.rb"}],
+      "render_path": [{"type":"controller","class":"SeriesController","method":"show","line":57,"file":"app/controllers/series_controller.rb"}],
       "location": {
         "type": "template",
         "template": "series/show"
@@ -1867,33 +1350,13 @@
       "note": ""
     },
     {
-      "warning_type": "SQL Injection",
-      "warning_code": 0,
-      "fingerprint": "a9a06390110fbdac58ab1c0bb59e89fa1c837f98031b9698f1991e0ce2744fcf",
-      "check_name": "SQL",
-      "message": "Possible SQL injection",
-      "file": "app/controllers/chapters_controller.rb",
-      "line": 180,
-      "link": "http://brakemanscanner.org/docs/warning_types/sql_injection/",
-      "code": "(Work.find_by(:id => params[:work_id]) or Chapter.find_by(:id => params[:id]).work).reorder(params[:chapters])",
-      "render_path": null,
-      "location": {
-        "type": "method",
-        "class": "ChaptersController",
-        "method": "update_positions"
-      },
-      "user_input": "params[:chapters]",
-      "confidence": "Medium",
-      "note": ""
-    },
-    {
       "warning_type": "File Access",
       "warning_code": 16,
       "fingerprint": "aa30d0e2ffa912f13600be81c1bb3c346fb301a8fc1b32fa2ba7fa37317ebf3a",
       "check_name": "FileAccess",
       "message": "Model attribute used in file name",
       "file": "app/models/skin.rb",
-      "line": 217,
+      "line": 223,
       "link": "http://brakemanscanner.org/docs/warning_types/file_access/",
       "code": "FileUtils.mkdir_p((Skin.skins_dir + skin_dirname))",
       "render_path": null,
@@ -1913,7 +1376,7 @@
       "check_name": "FileAccess",
       "message": "Model attribute used in file name",
       "file": "app/models/skin.rb",
-      "line": 243,
+      "line": 249,
       "link": "http://brakemanscanner.org/docs/warning_types/file_access/",
       "code": "FileUtils.rm_rf((Skin.skins_dir + skin_dirname))",
       "render_path": null,
@@ -1966,52 +1429,13 @@
       "note": ""
     },
     {
-      "warning_type": "SQL Injection",
-      "warning_code": 0,
-      "fingerprint": "b34bb9ea5262c8545b1af210cc33739647501c8cd19d4ff1b9f25ee5920706b2",
-      "check_name": "SQL",
-      "message": "Possible SQL injection",
-      "file": "app/models/potential_match.rb",
-      "line": 171,
-      "link": "http://brakemanscanner.org/docs/warning_types/sql_injection/",
-      "code": "collection.prompts.where(\"any_#{required_types.first.downcase} = 1\")",
-      "render_path": null,
-      "location": {
-        "type": "method",
-        "class": "PotentialMatch",
-        "method": "PotentialMatch.matching_signup_ids"
-      },
-      "user_input": "required_types.first.downcase",
-      "confidence": "Weak",
-      "note": ""
-    },
-    {
-      "warning_type": "SQL Injection",
-      "warning_code": 0,
-      "fingerprint": "b3d3b1587f02c60b59d5092fc651717b8d6433a446ed5c18e78dec04ec31cabb",
-      "check_name": "SQL",
-      "message": "Possible SQL injection",
-      "file": "app/views/invite_requests/_invite_request.html.erb",
-      "line": 9,
-      "link": "http://brakemanscanner.org/docs/warning_types/sql_injection/",
-      "code": "InviteRequest.where(\"position <= #{invite_request.position}\")",
-      "render_path": [{"type":"controller","class":"InviteRequestsController","method":"show","line":18,"file":"app/controllers/invite_requests_controller.rb"},{"type":"template","name":"invite_requests/show","line":2,"file":"app/views/invite_requests/show.js.erb"}],
-      "location": {
-        "type": "template",
-        "template": "invite_requests/_invite_request"
-      },
-      "user_input": "invite_request.position",
-      "confidence": "Medium",
-      "note": ""
-    },
-    {
       "warning_type": "File Access",
       "warning_code": 16,
       "fingerprint": "b52623066b8ea9104e3bccf90aa416a0e3b139c7521afde4f0885f45599b8f22",
       "check_name": "FileAccess",
       "message": "Model attribute used in file name",
       "file": "app/models/skin.rb",
-      "line": 234,
+      "line": 240,
       "link": "http://brakemanscanner.org/docs/warning_types/file_access/",
       "code": "File.open(((Skin.skins_dir + skin_dirname) + \"#{2}_#{(\"\" or next_skin.get_sheet_role)}.css\"), \"w\")",
       "render_path": null,
@@ -2060,25 +1484,6 @@
       },
       "user_input": "Collection.find_by(:name => params[:collection_id]).challenge",
       "confidence": "Weak",
-      "note": ""
-    },
-    {
-      "warning_type": "Cross Site Scripting",
-      "warning_code": 4,
-      "fingerprint": "b86b1c5328815563779a2d1d1ce340c7fe291d2768d7fe68a3ba3b5d83a64f44",
-      "check_name": "LinkToHref",
-      "message": "Unsafe model attribute in link_to href",
-      "file": "app/views/potential_matches/_no_match_required.html.erb",
-      "line": 8,
-      "link": "http://brakemanscanner.org/docs/warning_types/link_to_href",
-      "code": "link_to(ts(\"challenge match settings\"), eval(\"edit_collection_#{challenge_class_name(Collection.find_by(:name => params[:collection_id]))}_path(@collection, :anchor => 'match_settings')\"))",
-      "render_path": [{"type":"controller","class":"ChallengeAssignmentsController","method":"set","line":180,"file":"app/controllers/challenge_assignments_controller.rb"},{"type":"template","name":"potential_matches/index","line":34,"file":"app/views/potential_matches/index.html.erb"}],
-      "location": {
-        "type": "template",
-        "template": "potential_matches/_no_match_required"
-      },
-      "user_input": "Collection.find_by(:name => params[:collection_id])",
-      "confidence": "Medium",
       "note": ""
     },
     {
@@ -2160,65 +1565,6 @@
       "note": ""
     },
     {
-      "warning_type": "Dangerous Send",
-      "warning_code": 23,
-      "fingerprint": "bd266fab375afe427a4c1d856b89375e0d5d0f2a1ec60c49a3797912c04f081e",
-      "check_name": "Send",
-      "message": "User controlled method execution",
-      "file": "app/controllers/tags_controller.rb",
-      "line": 152,
-      "link": "https://brakemanscanner.org/docs/warning_types/dangerous_send/",
-      "code": "(:BRAKEMAN_SAFE_LITERAL.constantize rescue nil).find(params[:creation_id]).send(params[:tag_type])",
-      "render_path": null,
-      "location": {
-        "type": "method",
-        "class": "TagsController",
-        "method": "show_hidden"
-      },
-      "user_input": "params[:tag_type]",
-      "confidence": "High",
-      "note": ""
-    },
-    {
-      "warning_type": "Cross Site Scripting",
-      "warning_code": 2,
-      "fingerprint": "be9c158f0cf37661f67085fc1140ea30289797dda66c9612697487d2d7ca4384",
-      "check_name": "CrossSiteScripting",
-      "message": "Unescaped model attribute",
-      "file": "app/views/kudos/index.html.erb",
-      "line": 9,
-      "link": "http://brakemanscanner.org/docs/warning_types/cross_site_scripting",
-      "code": "Work.find(params[:work_id]).kudos.includes(:pseud => :user).with_pseud.map do\n link_to(kudo.pseud.byline, kudo.pseud.user)\n end.to_sentence",
-      "render_path": [{"type":"controller","class":"KudosController","method":"index","line":11,"file":"app/controllers/kudos_controller.rb"}],
-      "location": {
-        "type": "template",
-        "template": "kudos/index"
-      },
-      "user_input": "Work.find(params[:work_id]).kudos",
-      "confidence": "Weak",
-      "note": ""
-    },
-    {
-      "warning_type": "Dangerous Send",
-      "warning_code": 23,
-      "fingerprint": "c01011e19807abc66b27dd91e27cce6b382d1254caf5ab2850a4a8f86e5d1286",
-      "check_name": "Send",
-      "message": "User controlled method execution",
-      "file": "app/controllers/invitations_controller.rb",
-      "line": 28,
-      "link": "http://brakemanscanner.org/docs/warning_types/dangerous_send/",
-      "code": "User.find_by(:login => params[:user_id]).invitations.send(params[:status])",
-      "render_path": null,
-      "location": {
-        "type": "method",
-        "class": "InvitationsController",
-        "method": "manage"
-      },
-      "user_input": "params[:status]",
-      "confidence": "High",
-      "note": ""
-    },
-    {
       "warning_type": "Cross Site Scripting",
       "warning_code": 2,
       "fingerprint": "c04c41ba3a91fc8ea691d08fcf4aaad3ba713212c9997ff5c4cca1c4d56861bc",
@@ -2263,10 +1609,10 @@
       "check_name": "CrossSiteScripting",
       "message": "Unescaped model attribute",
       "file": "app/views/chapters/_chapter.html.erb",
-      "line": 33,
+      "line": 39,
       "link": "http://brakemanscanner.org/docs/warning_types/cross_site_scripting",
       "code": "sanitize_field((Work.find_by(:id => params[:work_id]) or Chapter.find_by(:id => params[:id]).work).chapters.find_by(:id => params[:id]), :summary)",
-      "render_path": [{"type":"controller","class":"ChaptersController","method":"show","line":76,"file":"app/controllers/chapters_controller.rb"},{"type":"template","name":"chapters/show","line":22,"file":"app/views/chapters/show.html.erb"}],
+      "render_path": [{"type":"controller","class":"ChaptersController","method":"show","line":77,"file":"app/controllers/chapters_controller.rb"},{"type":"template","name":"chapters/show","line":28,"file":"app/views/chapters/show.html.erb"}],
       "location": {
         "type": "template",
         "template": "chapters/_chapter"
@@ -2304,7 +1650,7 @@
       "line": 5,
       "link": "http://brakemanscanner.org/docs/warning_types/cross_site_scripting",
       "code": "(Work.find_by(:id => params[:work_id]) or Chapter.find_by(:id => params[:id]).work).collections.unrevealed.collect do\n link_to(challenge.title, collection_path(challenge))\n end.join(\", \")",
-      "render_path": [{"type":"controller","class":"ChaptersController","method":"show","line":76,"file":"app/controllers/chapters_controller.rb"}],
+      "render_path": [{"type":"controller","class":"ChaptersController","method":"show","line":77,"file":"app/controllers/chapters_controller.rb"}],
       "location": {
         "type": "template",
         "template": "chapters/show"
@@ -2343,12 +1689,31 @@
       "line": 3,
       "link": "http://brakemanscanner.org/docs/warning_types/cross_site_scripting",
       "code": "(Work.find_by(:id => params[:work_id]) or Chapter.find_by(:id => params[:id]).work).title",
-      "render_path": [{"type":"controller","class":"ChaptersController","method":"create","line":118,"file":"app/controllers/chapters_controller.rb"}],
+      "render_path": [{"type":"controller","class":"ChaptersController","method":"create","line":114,"file":"app/controllers/chapters_controller.rb"}],
       "location": {
         "type": "template",
         "template": "chapters/new"
       },
       "user_input": "Work.find_by(:id => params[:work_id])",
+      "confidence": "Weak",
+      "note": ""
+    },
+    {
+      "warning_type": "Cross Site Scripting",
+      "warning_code": 2,
+      "fingerprint": "c9dae5fda170a2677d997e40bedbc48212381fac03785ec90837638f8bf9793e",
+      "check_name": "CrossSiteScripting",
+      "message": "Unescaped model attribute",
+      "file": "app/views/external_works/_work_module.html.erb",
+      "line": 18,
+      "link": "http://brakemanscanner.org/docs/warning_types/cross_site_scripting",
+      "code": "(Work.find(params[:work_id]) or (Chapter.find(params[:chapter_id]).work or (ExternalWork.find(params[:external_work_id]) or Series.find(params[:series_id])))).tag_groups[\"Fandom\"].collect do\n link_to_tag_works(tag)\n end.join(\", \")",
+      "render_path": [{"type":"controller","class":"BookmarksController","method":"index","line":148,"file":"app/controllers/bookmarks_controller.rb"},{"type":"template","name":"bookmarks/index","line":59,"file":"app/views/bookmarks/index.html.erb"},{"type":"template","name":"bookmarks/_bookmarks","line":23,"file":"app/views/bookmarks/_bookmarks.html.erb"},{"type":"template","name":"bookmarks/_bookmarkable_blurb","line":13,"file":"app/views/bookmarks/_bookmarkable_blurb.html.erb"},{"type":"template","name":"bookmarks/_bookmark_item_module","line":3,"file":"app/views/bookmarks/_bookmark_item_module.html.erb"}],
+      "location": {
+        "type": "template",
+        "template": "external_works/_work_module"
+      },
+      "user_input": "Work.find(params[:work_id])",
       "confidence": "Weak",
       "note": ""
     },
@@ -2401,7 +1766,7 @@
       "line": 117,
       "link": "http://brakemanscanner.org/docs/warning_types/link_to_href",
       "code": "link_to(ts(format.upcase), download_url_for_work((Work.find_by(:id => params[:work_id]) or Chapter.find_by(:id => params[:id]).work), format))",
-      "render_path": [{"type":"controller","class":"ChaptersController","method":"show","line":76,"file":"app/controllers/chapters_controller.rb"},{"type":"template","name":"chapters/show","line":19,"file":"app/views/chapters/show.html.erb"},{"type":"template","name":"works/_work_header","line":2,"file":"app/views/works/_work_header.html.erb"}],
+      "render_path": [{"type":"controller","class":"ChaptersController","method":"show","line":77,"file":"app/controllers/chapters_controller.rb"},{"type":"template","name":"chapters/show","line":25,"file":"app/views/chapters/show.html.erb"},{"type":"template","name":"works/_work_header","line":2,"file":"app/views/works/_work_header.html.erb"}],
       "location": {
         "type": "template",
         "template": "works/_work_header_navigation"
@@ -2436,10 +1801,10 @@
       "check_name": "CrossSiteScripting",
       "message": "Unescaped model attribute",
       "file": "app/views/chapters/_chapter.html.erb",
-      "line": 18,
+      "line": 24,
       "link": "http://brakemanscanner.org/docs/warning_types/cross_site_scripting",
       "code": "(Work.find_by(:id => params[:work_id]) or Chapter.find_by(:id => params[:id]).work).chapters.find_by(:id => params[:id]).title",
-      "render_path": [{"type":"controller","class":"ChaptersController","method":"show","line":76,"file":"app/controllers/chapters_controller.rb"},{"type":"template","name":"chapters/show","line":22,"file":"app/views/chapters/show.html.erb"}],
+      "render_path": [{"type":"controller","class":"ChaptersController","method":"show","line":77,"file":"app/controllers/chapters_controller.rb"},{"type":"template","name":"chapters/show","line":28,"file":"app/views/chapters/show.html.erb"}],
       "location": {
         "type": "template",
         "template": "chapters/_chapter"
@@ -2465,26 +1830,6 @@
       },
       "user_input": "Bookmark.find(params[:id]).bookmarkable",
       "confidence": "Weak",
-      "note": ""
-    },
-    {
-      "warning_type": "SQL Injection",
-      "warning_code": 0,
-      "fingerprint": "e093f2ffce7cb82bdc2e4c5818234af8257119a20c7ade7b3e0830c3f3c5648b",
-      "check_name": "SQL",
-      "message": "Possible SQL injection",
-      "file": "app/models/user.rb",
-      "line": 183,
-      "link": "http://brakemanscanner.org/docs/warning_types/sql_injection/",
-      "code": "Kudo.where(\"pseud_id IN (#{self.pseuds.collect(&:id).join(\",\")})\")",
-      "render_path": null,
-      "location": {
-        "type": "method",
-        "class": "User",
-        "method": "remove_pseud_from_kudos"
-      },
-      "user_input": "self.pseuds.collect(&:id).join(\",\")",
-      "confidence": "Medium",
       "note": ""
     },
     {
@@ -2517,7 +1862,7 @@
       "line": 6,
       "link": "http://brakemanscanner.org/docs/warning_types/cross_site_scripting",
       "code": "ts(\"Are you sure you want to <strong><em>delete</em></strong> the series \\\"%{series_title}\\\"? This will not delete the individual works.\", :series_title => Series.find_by(:id => params[:id]).title)",
-      "render_path": [{"type":"controller","class":"SeriesController","method":"confirm_delete","line":156,"file":"app/controllers/series_controller.rb"}],
+      "render_path": [{"type":"controller","class":"SeriesController","method":"confirm_delete","line":137,"file":"app/controllers/series_controller.rb"}],
       "location": {
         "type": "template",
         "template": "series/confirm_delete"
@@ -2546,36 +1891,16 @@
       "note": ""
     },
     {
-      "warning_type": "Mass Assignment",
-      "warning_code": 105,
-      "fingerprint": "e43d5ad85f88568ed86bcde06aa361031aee5b20e58f8ae86b3f01022825baca",
-      "check_name": "PermitAttributes",
-      "message": "Potentially dangerous key allowed for mass assignment",
-      "file": "app/controllers/admin/api_controller.rb",
-      "line": 58,
-      "link": "https://brakemanscanner.org/docs/warning_types/mass_assignment/",
-      "code": "params.require(:api_key).permit(:name, :access_token, :banned)",
-      "render_path": null,
-      "location": {
-        "type": "method",
-        "class": "Admin::ApiController",
-        "method": "api_key_params"
-      },
-      "user_input": ":banned",
-      "confidence": "Medium",
-      "note": ""
-    },
-    {
       "warning_type": "Cross Site Scripting",
       "warning_code": 2,
       "fingerprint": "eb513f789cb36ff4075c984f36084eed5863254c29e8e337d3f963e6a914855b",
       "check_name": "CrossSiteScripting",
       "message": "Unescaped model attribute",
       "file": "app/views/chapters/_chapter.html.erb",
-      "line": 72,
+      "line": 76,
       "link": "http://brakemanscanner.org/docs/warning_types/cross_site_scripting",
       "code": "sanitize_field((Work.find_by(:id => params[:work_id]) or Chapter.find_by(:id => params[:id]).work).chapters.find_by(:id => params[:id]), :endnotes)",
-      "render_path": [{"type":"controller","class":"ChaptersController","method":"show","line":76,"file":"app/controllers/chapters_controller.rb"},{"type":"template","name":"chapters/show","line":22,"file":"app/views/chapters/show.html.erb"}],
+      "render_path": [{"type":"controller","class":"ChaptersController","method":"show","line":77,"file":"app/controllers/chapters_controller.rb"},{"type":"template","name":"chapters/show","line":28,"file":"app/views/chapters/show.html.erb"}],
       "location": {
         "type": "template",
         "template": "chapters/_chapter"
@@ -2585,53 +1910,13 @@
       "note": ""
     },
     {
-      "warning_type": "SQL Injection",
-      "warning_code": 0,
-      "fingerprint": "eb61a9c89ecf0e460438e715636aa569018c4ed035a3ed0d54ac35d1a29de852",
-      "check_name": "SQL",
-      "message": "Possible SQL injection",
-      "file": "app/controllers/archive_faqs_controller.rb",
-      "line": 107,
-      "link": "http://brakemanscanner.org/docs/warning_types/sql_injection/",
-      "code": "ArchiveFaq.reorder(params[:archive_faqs])",
-      "render_path": null,
-      "location": {
-        "type": "method",
-        "class": "ArchiveFaqsController",
-        "method": "update_positions"
-      },
-      "user_input": "params[:archive_faqs]",
-      "confidence": "High",
-      "note": ""
-    },
-    {
-      "warning_type": "Dangerous Eval",
-      "warning_code": 13,
-      "fingerprint": "eb7aa2b843511df716f40ca4f031615f5e672e727ee694b9609a80464b552cc6",
-      "check_name": "Evaluation",
-      "message": "User input in eval",
-      "file": "app/controllers/collections_controller.rb",
-      "line": 114,
-      "link": "http://brakemanscanner.org/docs/warning_types/dangerous_eval/",
-      "code": "eval(\"new_collection_#{params[:challenge_type].demodulize.tableize.singularize}_path(@collection)\")",
-      "render_path": null,
-      "location": {
-        "type": "method",
-        "class": "CollectionsController",
-        "method": "create"
-      },
-      "user_input": "params[:challenge_type].demodulize.tableize.singularize",
-      "confidence": "High",
-      "note": ""
-    },
-    {
       "warning_type": "File Access",
       "warning_code": 16,
       "fingerprint": "ed9568c987a1ed6812b3ba3a9913e154e51f052a7ff3b6281db9c272ba29b3cf",
       "check_name": "FileAccess",
       "message": "Model attribute used in file name",
       "file": "app/models/skin.rb",
-      "line": 514,
+      "line": 528,
       "link": "http://brakemanscanner.org/docs/warning_types/file_access/",
       "code": "File.open(((Skin.site_skins_dir + Skin.get_current_version) + \"/preview.png\"), \"rb\")",
       "render_path": null,
@@ -2642,26 +1927,6 @@
       },
       "user_input": "((Skin.site_skins_dir + Skin.get_current_version) + \"/preview.png\")",
       "confidence": "Medium",
-      "note": ""
-    },
-    {
-      "warning_type": "SQL Injection",
-      "warning_code": 0,
-      "fingerprint": "edbd3f13bd71eedf5622d74045040bfd464450493836efaea6838082b5baa08c",
-      "check_name": "SQL",
-      "message": "Possible SQL injection",
-      "file": "app/controllers/questions_controller.rb",
-      "line": 23,
-      "link": "http://brakemanscanner.org/docs/warning_types/sql_injection/",
-      "code": "ArchiveFaq.find_by_slug(params[:archive_faq_id]).reorder(params[:questions])",
-      "render_path": null,
-      "location": {
-        "type": "method",
-        "class": "QuestionsController",
-        "method": "update_positions"
-      },
-      "user_input": "params[:questions]",
-      "confidence": "High",
       "note": ""
     },
     {
@@ -2684,26 +1949,6 @@
       "note": ""
     },
     {
-      "warning_type": "Command Injection",
-      "warning_code": 14,
-      "fingerprint": "f2695ad9966bb13703d4b547aa9bb8a0ce7728db788f830c1cc0bdda9acb01a2",
-      "check_name": "Execute",
-      "message": "Possible command injection",
-      "file": "lib/redis_test_setup.rb",
-      "line": 13,
-      "link": "https://brakemanscanner.org/docs/warning_types/command_injection/",
-      "code": "`cat #{File.expand_path(File.join(rails_root, \"log\"))}/redis-#{env}.pid`",
-      "render_path": null,
-      "location": {
-        "type": "method",
-        "class": "RedisTestSetup",
-        "method": "start_redis!"
-      },
-      "user_input": "File.expand_path(File.join(rails_root, \"log\"))",
-      "confidence": "Medium",
-      "note": ""
-    },
-    {
       "warning_type": "Cross Site Scripting",
       "warning_code": 2,
       "fingerprint": "f699011dba7b420946da332030a020538f9646b9e3d27bc84af5cb9597c7928c",
@@ -2713,7 +1958,7 @@
       "line": 4,
       "link": "http://brakemanscanner.org/docs/warning_types/cross_site_scripting",
       "code": "ts(\"Edit Work Tags and Language for %{title}\", :title => Work.find_by(:id => params[:id]).title)",
-      "render_path": [{"type":"controller","class":"WorksController","method":"edit_tags","line":337,"file":"app/controllers/works_controller.rb"}],
+      "render_path": [{"type":"controller","class":"WorksController","method":"edit_tags","line":342,"file":"app/controllers/works_controller.rb"}],
       "location": {
         "type": "template",
         "template": "works/edit_tags"
@@ -2748,7 +1993,7 @@
       "check_name": "FileAccess",
       "message": "Model attribute used in file name",
       "file": "app/models/skin.rb",
-      "line": 224,
+      "line": 230,
       "link": "http://brakemanscanner.org/docs/warning_types/file_access/",
       "code": "File.open(((Skin.skins_dir + skin_dirname) + \"#{1}_#{\"\"}.css\"), \"w\")",
       "render_path": null,
@@ -2760,47 +2005,8 @@
       "user_input": "((Skin.skins_dir + skin_dirname) + \"#{1}_#{\"\"}.css\")",
       "confidence": "Medium",
       "note": ""
-    },
-    {
-      "warning_type": "Cross Site Scripting",
-      "warning_code": 2,
-      "fingerprint": "fc5488b7f49a45176e39345f3f21356882a47161efadee214554e6d418edb9a0",
-      "check_name": "CrossSiteScripting",
-      "message": "Unescaped model attribute",
-      "file": "app/views/users/confirmation.html.erb",
-      "line": 14,
-      "link": "http://brakemanscanner.org/docs/warning_types/cross_site_scripting",
-      "code": "ts(\"<strong>Important!</strong> You must verify your account within %{days_before_purge} days, or your registration will expire.\", :days_before_purge => (if AdminSetting.current.days_to_purge_unactivated? then\n  (AdminSetting.current.days_to_purge_unactivated * 7)\nelse\n  ArchiveConfig.DAYS_TO_PURGE_UNACTIVATED\nend))",
-      "render_path": [{"type":"controller","class":"Users::RegistrationsController","method":"notify_and_show_confirmation_screen","line":46,"file":"app/controllers/users/registrations_controller.rb"}],
-      "location": {
-        "type": "template",
-        "template": "users/confirmation"
-      },
-      "user_input": "AdminSetting.current.days_to_purge_unactivated",
-      "confidence": "Weak",
-      "note": ""
-    },
-    {
-      "warning_type": "SQL Injection",
-      "warning_code": 0,
-      "fingerprint": "ff85f1aa6cd593462fb6880c108f2293eb4f05857548ed986ea2667a0d07b9f2",
-      "check_name": "SQL",
-      "message": "Possible SQL injection",
-      "file": "app/models/challenge_claim.rb",
-      "line": 55,
-      "link": "http://brakemanscanner.org/docs/warning_types/sql_injection/",
-      "code": "joins(\"INNER JOIN users ON challenge_claims.claiming_user_id = users.id\").order(\"pseuds.name #{dir}\")",
-      "render_path": null,
-      "location": {
-        "type": "method",
-        "class": "ChallengeClaim",
-        "method": "ChallengeClaim.order_by_offering_pseud"
-      },
-      "user_input": "dir",
-      "confidence": "Weak",
-      "note": ""
     }
   ],
-  "updated": "2019-05-08 22:12:43 +0000",
+  "updated": "2020-02-09 23:33:40 +0000",
   "brakeman_version": "3.7.2"
 }
