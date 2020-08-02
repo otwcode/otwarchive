@@ -1,6 +1,6 @@
-require 'cucumber/rspec/doubles'
-require 'cucumber/timecop'
-require 'email_spec/cucumber'
+require "cucumber/rspec/doubles"
+require "cucumber/timecop"
+require "email_spec/cucumber"
 
 Before do
   # Create default settings if necessary, since the database is truncated
@@ -23,7 +23,7 @@ Before do
   Rails.cache.clear
 
   # Remove old tag feeds
-  page_cache_dir = Rails.root.join("public", "test_cache")
+  page_cache_dir = Rails.root.join("public/test_cache")
   FileUtils.remove_dir(page_cache_dir, true) if Dir.exist?(page_cache_dir)
 
   # Clear Redis

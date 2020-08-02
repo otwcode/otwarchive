@@ -1,6 +1,6 @@
 ENV["RAILS_ENV"] ||= "test"
 
-require File.expand_path("../../config/environment", __FILE__)
+require File.expand_path("../config/environment", __dir__)
 require "simplecov"
 SimpleCov.command_name "rspec-" + (ENV["TEST_RUN"] || "")
 if ENV["CI"] == "true" && ENV["TRAVIS"] == "true"
@@ -20,10 +20,10 @@ DatabaseCleaner.clean
 
 # Requires supporting ruby files with custom matchers and macros, etc,
 # in spec/support/ and its subdirectories.
-Dir[Rails.root.join("spec/support/**/*.rb")].each { |f| require f }
+Dir[Rails.root.join("spec/support/**/*.rb")].sort.each { |f| require f }
 
 FactoryBot.find_definitions
-FactoryBot.definition_file_paths = %w(factories)
+FactoryBot.definition_file_paths = %w[factories]
 
 RSpec.configure do |config|
   config.mock_with :rspec
