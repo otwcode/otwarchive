@@ -1,11 +1,11 @@
 class UserCreationPolicy < ApplicationPolicy
   # Defines the roles that allow admins to modify user creations.
   # User creations are Bookmarks, ExternalWorks, Series, Works.
-  DESTROY_ROLES = %w(superadmin policy_and_abuse).freeze
+  DESTROY_ROLES = %w[superadmin policy_and_abuse].freeze
   # Support admins need edit permissions due to AO3-4932.
-  EDIT_ROLES = %w(superadmin support policy_and_abuse).freeze
-  HIDE_ROLES = %w(superadmin policy_and_abuse).freeze
-  SPAM_ROLES = %w(superadmin policy_and_abuse).freeze
+  EDIT_ROLES = %w[superadmin support policy_and_abuse].freeze
+  HIDE_ROLES = %w[superadmin policy_and_abuse].freeze
+  SPAM_ROLES = %w[superadmin policy_and_abuse].freeze
 
   def self.can_destroy_creations?(user)
     self.new(user, nil).can_destroy_creations?
@@ -27,7 +27,7 @@ class UserCreationPolicy < ApplicationPolicy
     user_has_roles?(DESTROY_ROLES)
   end
 
-  # Currently applies to editing ExternalWorks and the tags or laguage of Works.
+  # Currently applies to editing ExternalWorks and the tags or language of Works.
   # Admins cannot edit Bookmarks or Series or make any other type of edit to
   # Works.
   def can_edit_creations?
@@ -43,7 +43,9 @@ class UserCreationPolicy < ApplicationPolicy
     user_has_roles?(SPAM_ROLES)
   end
 
+  # ExternalWorksController
   alias edit? can_edit_creations?
+  # Admin::UserCreationsController
   alias hide? can_hide_creations?
   alias set_spam? can_mark_creations_spam?
   alias destroy? can_destroy_creations?

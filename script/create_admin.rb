@@ -59,24 +59,25 @@ list.each do |user|
     a.password_confirmation = password
 
     password_file = <<~PASSFILE
-
       username: #{a.login}
       password: #{password}
-      #{new_admin_session_url}"
-
+      #{new_admin_session_url}
     PASSFILE
   end
 
+  puts "==== #{a.login}.txt"
   if a.save
     puts password_file if password_file.present?
     admins << a
   else
     puts a.errors.full_messages
   end
+  puts
 end
 
 puts "\nFor all saved admins, copy and paste into the wiki at https://wiki.transformativeworks.org/mediawiki/AO3_Admins:\n"
 
+admins.sort_by!(&:created_at)
 admins.each do |admin|
   role_description = admin.roles.map { |r| I18n.t("activerecord.attributes.admin/role.#{r}") }.sort.join(", ")
   role_description = "UPDATE WITH USER COMMITTEE" if role_description.blank?

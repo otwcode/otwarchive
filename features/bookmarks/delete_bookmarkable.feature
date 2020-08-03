@@ -46,7 +46,7 @@ Feature: Bookmarks of deleted items
     Given basic tags
       And I am logged in as "Alice"
       And I bookmark the external work "Extremely Objectionable Content"
-      And I am logged in as policy_and_abuse_admin
+      And I am logged in as a "policy_and_abuse" admin
       And I view the external work "Extremely Objectionable Content"
       And I follow "Delete External Work"
       And all indexing jobs have been run

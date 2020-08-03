@@ -13,7 +13,7 @@ FactoryBot.define do
   end
 
   factory :role do
-    name { Faker::Book.genre }
+    name { Faker::Company.profession }
   end
 
   factory :user do

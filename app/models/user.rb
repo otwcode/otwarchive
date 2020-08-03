@@ -357,32 +357,6 @@ class User < ApplicationRecord
     User.fetch_orphan_account if ArchiveConfig.ORPHANING_ALLOWED
   end
 
-  # Allow admins to set roles and change email
-  def admin_update(attributes)
-    if User.current_user.is_a?(Admin)
-      success = true
-      success = set_roles(attributes[:roles])
-      if success && attributes[:email]
-        self.email = attributes[:email]
-        success = self.save(validate: false)
-      end
-      success
-    end
-  end
-
-  private
-
-  # Set the roles for this user
-  def set_roles(role_list)
-    if role_list
-      self.roles = Role.find(role_list)
-    else
-      self.roles = []
-    end
-  end
-
-  public
-
   # Is this user an authorized translation admin?
   def translation_admin
     self.is_translation_admin?

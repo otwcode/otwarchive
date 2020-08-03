@@ -692,19 +692,21 @@ class WorksController < ApplicationController
     @works = Work.joins(pseuds: :user).where('users.id = ?', @user.id).where(id: params[:work_ids]).readonly(false)
     @errors = []
 
-    # To avoid overwriting, we entirely trash any blank fields and also any
-    # unchecked checkboxes.
-    #
-    # Note that in the current edit_multiple form, we don't actually have any
-    # fields with value 0 (the hidden input used for unchecked checkboxes). So
-    # in a future release, it would be good to stop rejecting the params with
-    # value == '0', and stop checking for these special values below. But for
-    # compatibility with the existing form, we need to keep this code as is for
-    # now, and change it incrementally.
-    updated_work_params = work_params.reject { |_key, value| value.blank? || value == '0' }
+    # To avoid overwriting, we entirely trash any blank fields.
+    updated_work_params = work_params.reject { |_key, value| value.blank? }
 
-    # Special values which would normally be represented by 0, but can't
-    # because of the filter on updated_work_params.
+    # It takes around 1 hour to restart all the workers when deploying, so the
+    # old code and the new code need to co-exist. The old WorksController code
+    # used to reject parameters with a value of "0", so the new WorksController
+    # form cannot use "0".
+    #
+    # Instead, we use special values to represent "0", and handle them with the
+    # following if statements.
+    #
+    # TODO: To eliminate this code, we need to do separate deploys for these
+    # two steps:
+    # (1) Make the works/edit_multiple form use "0" instead of special values.
+    # (2) Delete the code handling the special values.
     if updated_work_params[:anon_commenting_disabled] == 'allow_anon'
       updated_work_params[:anon_commenting_disabled] = '0'
     end
@@ -929,9 +931,9 @@ class WorksController < ApplicationController
       :rating_string, :fandom_string, :relationship_string, :character_string,
       :archive_warning_string, :category_string, :expected_number_of_chapters, :revised_at,
       :freeform_string, :summary, :notes, :endnotes, :collection_names, :recipients, :wip_length,
+      # TODO: Remove anon_commenting_disabled.
       :backdate, :language_id, :work_skin_id, :restricted, :anon_commenting_disabled, :comment_permissions,
       :moderated_commenting_enabled, :title, :pseuds_to_add, :collections_to_add,
-      :unrestricted,
       current_user_pseud_ids: [],
       collections_to_remove: [],
       challenge_assignment_ids: [],
