@@ -41,7 +41,7 @@
       <%= content_for :footer_js do %>
         <%= javascript_tag do %>
           $j(document).ready(function() {
-            if (window.location.hostname !== "archiveofourown.org" && Cookies.get("proxy_notice") !== "0") {
+            if (window.location.hostname !== "<%= ArchiveConfig.APP_HOST %>" && Cookies.get("proxy_notice") !== "0") {
               $j("#skiplinks").after("<%= escape_javascript(render "layouts/proxy_notice") %>");
             }
           });
