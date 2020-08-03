@@ -42,7 +42,7 @@
         <%= javascript_tag do %>
           $j(document).ready(function() {
             if (window.location.hostname !== "archiveofourown.org" && Cookies.get("proxy_notice") !== "0") {
-              $j("#outer").prepend("<%= escape_javascript(render "layouts/proxy_notice") %>");
+              $j("#skiplinks").after("<%= escape_javascript(render "layouts/proxy_notice") %>");
             }
           });
         <% end %>
