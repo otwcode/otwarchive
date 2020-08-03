@@ -15,7 +15,7 @@
       <meta name="robots" content="noindex" />
       <meta name="googlebot" content="noindex" />
     <% end %>
-  	<meta name="viewport" content="width=device-width, initial-scale=1.0"/>  
+  	<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>
       <% if defined?(@page_title) %>
         <%= @page_title %>
@@ -42,7 +42,7 @@
         <%= javascript_tag do %>
           $j(document).ready(function() {
             if (window.location.hostname !== "archiveofourown.org" && Cookies.get("proxy_notice") !== "0") {
-              $j("body").prepend("<%= escape_javascript(render "layouts/proxy_notice") %>");
+              $j("#outer").prepend("<%= escape_javascript(render "layouts/proxy_notice") %>");
             }
           });
         <% end %>
