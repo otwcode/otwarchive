@@ -18,9 +18,7 @@ class Users::SessionsController < Devise::SessionsController
   # GET /users/logout
   def confirm_logout
     # If the user is already logged out, we just redirect to the front page.
-    unless user_signed_in?
-      redirect_to root_path
-    end
+    redirect_to root_path unless user_signed_in?
   end
 
   # DELETE /users/logout

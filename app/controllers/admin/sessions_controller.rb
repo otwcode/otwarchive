@@ -8,9 +8,7 @@ class Admin
     # GET /admin/logout
     def confirm_logout
       # If the user is already logged out, we just redirect to the front page.
-      unless admin_signed_in?
-        redirect_to root_path
-      end
+      redirect_to root_path unless admin_signed_in?
     end
   end
 end
