@@ -73,11 +73,12 @@ class ChallengeClaimsController < ApplicationController
     end
     if params[:collection_id]
       return unless load_collection
-      @challenge = @collection.challenge if @collection
+
+      @challenge = @collection.challenge
+      not_allowed(@collection) unless user_scoped? || @challenge.user_allowed_to_see_assignments?(current_user)
+
       @claims = ChallengeClaim.unposted_in_collection(@collection)
-      if params[:for_user] || !@challenge.user_allowed_to_see_claims?(current_user)
-        @claims = @claims.where(claiming_user_id: current_user.id)
-      end
+      @claims = @claims.where(claiming_user_id: current_user.id) if user_scoped?
 
       # sorting
       set_sort_order
@@ -121,22 +122,21 @@ class ChallengeClaimsController < ApplicationController
   end
 
   def destroy
-    @claim = ChallengeClaim.find(params[:id])
+    redirect_path = collection_claims_path(@collection)
+    flash[:notice] = ts("The claim was deleted.")
+
+    if @challenge_claim.claiming_user == current_user
+      redirect_path = collection_claims_path(@collection, for_user: true)
+      flash[:notice] = ts("Your claim was deleted.")
+    end
 
     begin
-      if @claim.claiming_user == current_user
-        @usernotmod = "true"
-      end
-      @claim.destroy
-      if @usernotmod == "true"
-        flash[:notice] = ts("Your claim was deleted.")
-      else
-        flash[:notice] = ts("The claim was deleted.")
-      end
+      @challenge_claim.destroy
     rescue
+      flash.delete(:notice)
       flash[:error] = ts("We couldn't delete that right now, sorry! Please try again later.")
     end
-    redirect_to collection_claims_path(@collection)
+    redirect_to redirect_path
   end
 
   private
@@ -147,4 +147,7 @@ class ChallengeClaimsController < ApplicationController
     )
   end
 
+  def user_scoped?
+    params[:for_user].to_s.casecmp?("true")
+  end
 end
