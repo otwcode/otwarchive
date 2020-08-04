@@ -190,7 +190,7 @@ When /^I visit the last activities item$/ do
   visit("/admin/activities/#{AdminActivity.last.id}")
 end
 
-When /^I fill in "([^"]*)" with "([^"]*)'s" invite code$/  do |field, login|
+When /^I fill in "([^"]*)" with "([^"]*)'s" invite code$/ do |field, login|
   user = User.find_by(login: login)
   token = user.invitations.first.token
   fill_in(field, with: token)

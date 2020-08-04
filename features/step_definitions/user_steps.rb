@@ -230,8 +230,8 @@ Then /^I should get a new user activation email$/ do
 end
 
 Then /^a user account should exist for "(.*?)"$/ do |login|
-   user = User.find_by(login: login)
-   assert !user.blank?
+  user = User.find_by(login: login)
+  assert !user.blank?
 end
 
 Then /^a user account should not exist for "(.*)"$/ do |login|
