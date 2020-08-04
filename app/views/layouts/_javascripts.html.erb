@@ -107,12 +107,14 @@
 <% end %>
 
 <% # Renders layouts/proxy_notice below skip links in layouts/application. %>
-<%= javascript_tag do %>
-  $j(document).ready(function() {
-    if (window.location.hostname !== "<%= ArchiveConfig.APP_HOST %>" && Cookies.get("proxy_notice") !== "0") {
-      $j("#skiplinks").after("<%= escape_javascript(render "layouts/proxy_notice") %>");
-    }
-  });
+<% if Rails.env.production? %>
+  <%= javascript_tag do %>
+    $j(document).ready(function() {
+      if (window.location.hostname !== "<%= ArchiveConfig.APP_HOST %>" && Cookies.get("proxy_notice") !== "0") {
+        $j("#skiplinks").after("<%= escape_javascript(render "layouts/proxy_notice") %>");
+      }
+    });
+  <% end %>
 <% end %>
 
 <%= yield :footer_js %>
