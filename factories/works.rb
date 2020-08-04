@@ -35,7 +35,7 @@ FactoryBot.define do
 
     factory :spam_work do
       spam { true }
-      spam_checked_at { Time.now }
+      spam_checked_at { Time.zone.now }
     end
   end
 
