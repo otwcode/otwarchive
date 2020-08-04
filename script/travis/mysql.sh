@@ -1,4 +1,3 @@
-
 #!/bin/bash
 set -e
 
@@ -9,11 +8,11 @@ innodb_lock_wait_timeout=15\n\
 transaction-isolation=READ-COMMITTED\n\
 innodb_file_per_table=1\n\
 /"
+
 # The conf change requires a restart
 sudo systemctl restart mariadb
-# The conf change requires a restart
 
 sudo mysql -e "
 CREATE USER 'travis'@'%' IDENTIFIED BY 'password';
-GRANT ALL PRIVILEGES ON *.* TO 'travis'@'%' ;
+GRANT ALL PRIVILEGES ON *.* TO 'travis'@'%';
 flush privileges;"
