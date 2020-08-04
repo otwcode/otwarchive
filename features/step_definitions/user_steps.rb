@@ -139,8 +139,8 @@ Given /^user "([^"]*)" is banned$/ do |login|
 end
 
 Given /^I am logged out$/ do
-  http_delete destroy_user_session_path
-  http_delete destroy_admin_session_path
+  page.driver.remove_cookie(user_credentials)
+  page.driver.remove_cookie(admin_credentials)
 end
 
 Given /^I log out$/ do

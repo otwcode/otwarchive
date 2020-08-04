@@ -53,7 +53,7 @@ Given /^I am logged in as an admin$/ do
 end
 
 Given /^I am logged out as an admin$/ do
-  http_delete destroy_admin_session_path
+  page.driver.remove_cookie(admin_credentials)
 end
 
 Given /^basic languages$/ do
