@@ -376,7 +376,7 @@ For practicality, /archive_faqs are also .docs and .support and have the .userst
   font-size: 0.875em;
 }
 
-#proxy-notice .content {
+#proxy-notice div {
   padding: 0.643em 0.875em;
 }
 
