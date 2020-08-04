@@ -1,12 +1,12 @@
 @bookmarks
 Feature: Share Bookmarks
-  Testing the "Share" button on bookmarks, with Javascript emulation
+  Testing the "Share" button on bookmarks, with JavaScript emulation
 
   @javascript
   Scenario: Share a bookmark
     Given I am logged in as "tess"
       And I have a bookmark for "Damp Gravel"
-    When I view the bookmark for "Damp Gravel"
+    When I go to the first bookmark for the work "Damp Gravel"
     Then I should see "Damp Gravel"
       And I should see "Share"
     When I follow "Share"
@@ -34,7 +34,7 @@ Feature: Share Bookmarks
       And I press "Create"
       And all indexing jobs have been run
     Then I should see "Bookmark was successfully created"
-    When I view the bookmark for "Hidden Figures"
+    When I go to the first bookmark for the work "Hidden Figures"
     Then I should see "Hidden Figures"
       And I should see "Add To Collection"
       And I should not see "Share"
@@ -44,6 +44,6 @@ Feature: Share Bookmarks
     Given I am logged in as "tess"
       And I have a bookmark for "Damp Gravel"
     When I am logged out
-      And I view the bookmark for "Damp Gravel"
+      And I go to the first bookmark for the work "Damp Gravel"
     Then I should see "Damp Gravel"
       And I should not see "Share"
