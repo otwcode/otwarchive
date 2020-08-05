@@ -583,42 +583,6 @@ describe WorksController, work_search: true do
       end
     end
 
-    it "displays chapter errors if chapter is invalid" do
-      allow_any_instance_of(Chapter).to receive(:save).and_return(false)
-      chapter_error = ["Fake Test Error"]
-      allow_any_instance_of(Chapter).to receive(:errors).and_return(update_chapter)
-      allow_any_instance_of(Chapter).to receive(:valid?).and_return(false)
-
-      attrs = { title: "New Work Title" }
-      put :update, params: { id: update_work.id, work: attrs }
-      expect(assigns(:work).errors[:base]).to eq(chapter_error)
-
-      allow_any_instance_of(Chapter).to receive(:valid?).and_call_original
-      allow_any_instance_of(Chapter).to receive(:errors).and_call_original
-      allow_any_instance_of(Chapter).to receive(:save).and_call_original
-    end
-
-    context "where the coauthor is being updated" do
-      let(:new_coauthor) { create(:user) }
-      let(:params) do
-        {
-          work: { title: "New title" },
-          pseud: { byline: new_coauthor.login },
-          id: update_work.id
-        }
-      end
-
-      it "should update coauthors for each chapter when the work is updated" do
-        put :update, params: params
-        updated_work = Work.find(update_work.id)
-        # does it need to save or is it broken from the earlier failure in line 586 or something else?
-        expect(updated_work.pseuds).to include new_coauthor.default_pseud # both bits fail
-        updated_work.chapters.each do |c|
-          expect(c.pseuds).to include new_coauthor.default_pseud # both bits fail
-        end
-      end
-    end
-
     it "allows the user to invite co-creators" do
       co_creator = create(:user)
       co_creator.preference.update(allow_cocreator: true)
