@@ -489,5 +489,6 @@ FILTER_UPDATE_BATCH_SIZE: 100
 PERMITTED_HOSTS: [
   "archiveofourown.org", "download.archiveofourown.org",
   "insecure.archiveofourown.org", "insecure-test.archiveofourown.org",
-  "www.archiveofourown.org", "test.archiveofourown.org"
+  "www.archiveofourown.org", "test.archiveofourown.org",
+  "testdownload.archiveofourown.org"
 ]
