@@ -1,7 +1,8 @@
 test:
   adapter: mysql2
   database: otwarchive_test
-  username: root
+  username: travis
+  password: password
   encoding: utf8mb4
   collation: utf8mb4_unicode_ci
   variables:

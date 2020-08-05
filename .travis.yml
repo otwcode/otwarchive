@@ -29,9 +29,11 @@ env:
   - TEST_GROUP="cucumber features/works"
 
 services:
-  - mysql
   - redis
   - memcached
+
+addons:
+  mariadb: '10.5'
 
 before_install:
   - bash script/travis/ebook_converters.sh
@@ -46,6 +48,7 @@ script:
   - export RAILS_ENV=test
   - export CUCUMBER_FORMAT=Ao3Cucumber::Formatter
   - export CUCUMBER_RETRY=1
+  - bundle exec rake db:create
   - bundle exec rake db:schema:load
   - bundle exec rake db:migrate
   - bundle exec "$TEST_GROUP"
