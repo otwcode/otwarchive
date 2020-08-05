@@ -3,9 +3,9 @@
 
 <%= t(".part1", collection: @collection.title, work: @work.title.html_safe ) %>
 
-<%= t(".text.part2") %>: <%= user_collection_items_url(@user) %>.
+<%= t(".text.part2", collection_items_url: user_collection_items_url(@user)) %>
 
-<%= t(".text.part3", link: "#{root_url}users/#{@user.default_pseud.name}/preferences") %>
+<%= t(".text.part3", link: user_preferences_url(@user)) %>
 
 <%= t(".bye") %>
 <% end %>

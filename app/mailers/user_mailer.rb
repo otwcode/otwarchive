@@ -24,7 +24,7 @@ class UserMailer < ActionMailer::Base
     @collection = Collection.find(collection_id)
     mail(
          to: @user.email,
-         subject: t("user_mailer.added_to_collection_notification.subject", ao3: ArchiveConfig.APP_SHORT_NAME, collection: @collection.title)
+         subject: t("user_mailer.added_to_collection_notification.subject", app_name: ArchiveConfig.APP_SHORT_NAME, collection: @collection.title)
     )
   end
 
@@ -36,7 +36,7 @@ class UserMailer < ActionMailer::Base
     @collection = Collection.find(collection_id)
     mail(
          to: @user.email,
-         subject: t("user_mailer.invited_to_collection_notification.subject", ao3: ArchiveConfig.APP_SHORT_NAME, collection: @collection.title)
+         subject: t("user_mailer.invited_to_collection_notification.subject", app_name: ArchiveConfig.APP_SHORT_NAME, collection: @collection.title)
     )
   end
 

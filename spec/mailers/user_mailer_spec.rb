@@ -217,42 +217,6 @@ describe UserMailer do
     end
   end
 
-  describe "invitation from a user request" do
-    token = 'abc123'
-
-    let(:user) { create(:user) }
-    let(:invitation) { create(:invitation, token: token, creator: user) }
-
-    subject(:email) { UserMailer.invitation(invitation.id).deliver }
-
-    # Test the headers
-    it_behaves_like "an email with a valid sender"
-
-    it "has the correct subject line" do
-      text = "[#{ArchiveConfig.APP_SHORT_NAME}] Invitation"
-      expect(email).to have_subject(text)
-    end
-
-    # Test both body contents
-    it_behaves_like "a multipart email"
-
-    it_behaves_like "a translated email"
-
-    describe "HTML version" do
-      it "has text contents" do
-        expect(email).to have_html_part_content("like to join us, please sign up at the following address")
-        expect(email).to have_html_part_content("has invited you")
-      end
-    end
-
-    describe "text version" do
-      it "says the right thing" do
-        expect(email).to have_text_part_content("like to join us, please sign up at the following address")
-        expect(email).to have_text_part_content("has invited you")
-      end
-    end
-  end
-
   describe "challenge_assignment_notification" do
     let!(:gift_exchange) { create(:gift_exchange) }
     let!(:collection) { create(:collection, challenge: gift_exchange, challenge_type: "GiftExchange") }
@@ -469,7 +433,7 @@ describe UserMailer do
     end
   end
 
-  describe "invited to collection" do
+  describe "invited to collection notification" do
     let!(:gift_exchange) { create(:gift_exchange) }
     let!(:collection) { create(:collection, challenge: gift_exchange, challenge_type: "GiftExchange") }
     let!(:otheruser) { create(:user) }
@@ -503,11 +467,10 @@ describe UserMailer do
     end
   end
 
-  describe "added to collection" do
-    let!(:gift_exchange) { create(:gift_exchange) }
-    let!(:collection) { create(:collection, challenge: gift_exchange, challenge_type: "GiftExchange") }
-    let!(:otheruser) { create(:user) }
-    let!(:work) { create(:work) }
+  describe "added to collection notification" do
+    let(:collection) { create(:collection) }
+    let(:otheruser) { create(:user) }
+    let(:work) { create(:work, author: otheruser) }
 
     let(:email) { UserMailer.added_to_collection_notification(otheruser.id, work.id, collection.id).deliver }
 
@@ -525,20 +488,19 @@ describe UserMailer do
     it_behaves_like "a translated email"
 
     describe "HTML version" do
-      it "has text contents" do
-        expect(email).to have_html_part_content("added your work")
-      end
-      
-      it "does not have exposed HTML" do
-        expect(email).not_to have_html_part_content("&lt;")
+      it "has the correct content" do
+        expect(email).to have_html_part_content(">#{collection.title}</a> have added your work <")
+        expect(email).to have_html_part_content("previously elected to allow automatic inclusion")
+        expect(email).to have_html_part_content(">Approved Collection Items page<")
       end
     end
 
     describe "text version" do
-      it "says the right thing" do
-        expect(email).to have_text_part_content("have added your work")
+      it "has the correct content" do
+        expect(email).to have_text_part_content("#{collection.title} have added your work (#{work.title})")
+        expect(email).to have_text_part_content("previously elected to allow automatic inclusion")
+        expect(email).to have_text_part_content("\"Approved Collection Items\" page:")
       end
     end
   end
-
 end

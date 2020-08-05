@@ -3,9 +3,9 @@
 
   <p><%= t(".part1", collection: style_link(@collection.title, collection_url(@collection)).html_safe, work: style_link(@work.title.html_safe, work_url(@work)).html_safe).html_safe %></p>
 
-  <p><%= t(".html.part2", link: style_link(t(".html.linktext").html_safe, user_collection_items_url(@user)).html_safe).html_safe %></p>
+  <p><%= t(".html.part2", link: style_link(t(".html.link_text").html_safe, user_collection_items_url(@user)).html_safe).html_safe %></p>
 
-  <p><%= t(".html.part3", prefs: style_link(t(".html.preferences"), "#{root_url}/users/#{@user.default_pseud.name}/preferences").html_safe, quote: style_quote(t(".html.quotelink")).html_safe).html_safe %>
+  <p><%= t(".html.part3", prefs: style_link(t(".html.preferences"), user_preferences_url(@user)), quote: style_quote(t(".html.quote_link")).html_safe).html_safe %>
   </p>
 
   <p><%= t(".bye") %></p>
