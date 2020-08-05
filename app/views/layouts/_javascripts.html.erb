@@ -107,7 +107,7 @@
 <% end %>
 
 <% # Renders layouts/proxy_notice below skip links in layouts/application. %>
-<% if Rails.env.production? %>
+<% if %w(staging production).include?(Rails.env) %>
   <%= javascript_tag do %>
     $j(document).ready(function() {
       if (window.location.hostname !== "<%= ArchiveConfig.APP_HOST %>" && Cookies.get("proxy_notice") !== "0") {
