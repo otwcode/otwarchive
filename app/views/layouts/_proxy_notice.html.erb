@@ -10,7 +10,7 @@
 <%= javascript_tag do %>
   $j(document).ready(function() {
     $j("#proxy-notice-dismiss").on("click", function() {
-      Cookies.set("proxy_notice", "0");
+      Cookies.set("proxy_notice", "0", { domain: window.location.hostname });
       $j("#proxy-notice").slideUp();
     });
   });

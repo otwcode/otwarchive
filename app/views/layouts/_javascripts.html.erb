@@ -111,7 +111,9 @@
   <%= javascript_tag do %>
     $j(document).ready(function() {
       var permitted_hosts = <%= ArchiveConfig.PERMITTED_HOSTS.to_s.html_safe %>;
-      if (!permitted_hosts.includes(window.location.hostname) && Cookies.get("proxy_notice") !== "0") {
+      var current_host = window.location.hostname;
+
+      if (!permitted_hosts.includes(current_host) && Cookies.get("proxy_notice", { domain: current_host }) !== "0") {
         $j("#skiplinks").after("<%= escape_javascript(render "layouts/proxy_notice") %>");
       }
     });
