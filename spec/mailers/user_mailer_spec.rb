@@ -434,10 +434,9 @@ describe UserMailer do
   end
 
   describe "invited to collection notification" do
-    let!(:gift_exchange) { create(:gift_exchange) }
-    let!(:collection) { create(:collection, challenge: gift_exchange, challenge_type: "GiftExchange") }
-    let!(:otheruser) { create(:user) }
-    let!(:work) { create(:work) }
+    let(:collection) { create(:collection) }
+    let(:otheruser) { create(:user) }
+    let(:work) { create(:work, authors: [otheruser]) }
 
     let(:email) { UserMailer.invited_to_collection_notification(otheruser.id, work.id, collection.id).deliver }
 
@@ -470,7 +469,7 @@ describe UserMailer do
   describe "added to collection notification" do
     let(:collection) { create(:collection) }
     let(:otheruser) { create(:user) }
-    let(:work) { create(:work, author: otheruser) }
+    let(:work) { create(:work, authors: [otheruser]) }
 
     let(:email) { UserMailer.added_to_collection_notification(otheruser.id, work.id, collection.id).deliver }
 
