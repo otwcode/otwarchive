@@ -110,7 +110,7 @@
 <% if %w(staging production).include?(Rails.env) %>
   <%= javascript_tag do %>
     $j(document).ready(function() {
-      var permitted_hosts = <%= ArchiveConfig.PERMITTED_HOSTS.to_s.html_safe %>;
+      var permitted_hosts = <%= ArchiveConfig.PERMITTED_HOSTS.to_json.html_safe %>;
       var current_host = window.location.hostname;
 
       if (!permitted_hosts.includes(current_host) && Cookies.get("proxy_notice") !== "0") {
