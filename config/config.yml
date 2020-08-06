@@ -486,15 +486,15 @@ HIT_COUNT_ROLLOVER_HOUR: 3
 FILTER_UPDATE_BATCH_SIZE: 100
 
 # URLs for which we should not display the proxy notice. Alphabetical by
-# enviornment.
+# environment.
 PERMITTED_HOSTS: [
   # Production
   "archiveofourown.org",
   "download.archiveofourown.org",
   "insecure.archiveofourown.org",
-  "insecure-test.archiveofourown.org",
   "www.archiveofourown.org",
   # Staging
+  "insecure-test.archiveofourown.org",
   "test.archiveofourown.org",
   "testdownload.archiveofourown.org"
 ]
