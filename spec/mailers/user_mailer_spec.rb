@@ -433,10 +433,10 @@ describe UserMailer do
     end
   end
 
-  describe "invited to collection notification" do
+  describe "invited_to_collection_notification" do
     let(:collection) { create(:collection) }
     let(:otheruser) { create(:user) }
-    let(:work) { create(:work, authors: [otheruser]) }
+    let(:work) { create(:work, authors: [otheruser.default_pseud]) }
 
     let(:email) { UserMailer.invited_to_collection_notification(otheruser.id, work.id, collection.id).deliver }
 
@@ -466,10 +466,10 @@ describe UserMailer do
     end
   end
 
-  describe "added to collection notification" do
+  describe "added_to_collection_notification" do
     let(:collection) { create(:collection) }
     let(:otheruser) { create(:user) }
-    let(:work) { create(:work, authors: [otheruser]) }
+    let(:work) { create(:work, authors: [otheruser.default_pseud]) }
 
     let(:email) { UserMailer.added_to_collection_notification(otheruser.id, work.id, collection.id).deliver }
 
