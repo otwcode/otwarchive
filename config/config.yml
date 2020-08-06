@@ -485,10 +485,16 @@ HIT_COUNT_ROLLOVER_HOUR: 3
 # The batch size for calculating a work's filters from its tags:
 FILTER_UPDATE_BATCH_SIZE: 100
 
-# URLs for which we should not display the proxy notice.
+# URLs for which we should not display the proxy notice. Alphabetical by
+# enviornment.
 PERMITTED_HOSTS: [
-  "archiveofourown.org", "download.archiveofourown.org",
-  "insecure.archiveofourown.org", "insecure-test.archiveofourown.org",
-  "www.archiveofourown.org", "test.archiveofourown.org",
+  # Production
+  "archiveofourown.org",
+  "download.archiveofourown.org",
+  "insecure.archiveofourown.org",
+  "insecure-test.archiveofourown.org",
+  "www.archiveofourown.org",
+  # Staging
+  "test.archiveofourown.org",
   "testdownload.archiveofourown.org"
 ]
