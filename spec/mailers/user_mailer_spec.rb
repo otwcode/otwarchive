@@ -489,7 +489,7 @@ describe UserMailer do
     describe "HTML version" do
       it "has the correct content" do
         expect(email).to have_html_part_content(">#{collection.title}</a> have")
-        expect(email).to have_html_part_content("added your work <")
+        expect(email).to have_html_part_content("added your work (<")
         expect(email).to have_html_part_content("previously elected to allow automatic inclusion")
         expect(email).to have_html_part_content(">Approved Collection Items page<")
       end
