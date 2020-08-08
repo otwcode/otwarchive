@@ -24,7 +24,7 @@
     </li>
       
     <% # Tumblr share %>
-    <li>
+    <li class="tumblr">
       <!-- Sharingbutton Tumblr. See https://sharingbuttons.io/ -->
       <a class="resp-sharing-button__link" href="http://tumblr.com/widgets/share/tool?canonicalUrl=<%=u shareable.is_a?(Bookmark) ? work_url(shareable.bookmarkable) : work_url(@work) %>&title=<%=u shareable.is_a?(Bookmark) ? get_tumblr_embed_link_title(shareable.bookmarkable) : get_tumblr_embed_link_title(@work) %>&caption=<%=u shareable.is_a?(Bookmark) ? get_tumblr_bookmark_embed_link(shareable) : get_embed_link_meta(@work) %>" target="_blank" rel="noopener" aria-label="Tumblr">
         <div class="resp-sharing-button resp-sharing-button--tumblr resp-sharing-button--medium">

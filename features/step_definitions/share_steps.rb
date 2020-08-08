@@ -1,8 +1,6 @@
-Then /^the share modal should contain a Twitter share button$/ do
+Then /^the share modal should contain social share buttons$/ do
   with_scope("#share") do
-    iframe = find("li.twitter #twitter-widget-0")
-    within_frame(iframe) do
-      page.should have_content("Tweet")
-    end
+    expect(page).to have_css("li.twitter", text: "Twitter")
+    expect(page).to have_css("li.tumblr", text: "Tumblr")
   end
 end
