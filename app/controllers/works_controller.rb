@@ -138,7 +138,7 @@ class WorksController < ApplicationController
     options[:page] = params[:page] || 1
     options[:show_restricted] = current_user.present? || logged_in_as_admin?
 
-    @user = User.find_by(login: params[:user_id])
+    @user = User.find_by!(login: params[:user_id])
 
     return unless @user.present?
 
