@@ -577,14 +577,16 @@ describe WorksController, work_search: true do
       before { run_all_indexing_jobs }
 
       context "as a guest" do
-        it "renders the empty collected form" do
-          get :collected
-          expect(response).to render_template("collected")
+        it "returns not found error if user does not exist" do
+          expect {
+            get :collected, params: { user_id: "dummyuser" }
+          }.to raise_error(ActiveRecord::RecordNotFound)
         end
 
-        it "does NOT return any works if no user is set" do
-          get :collected
-          expect(assigns(:works)).to be_nil
+        it "returns not found error if no user is set" do
+          expect {
+            get :collected
+          }.to raise_error(ActiveRecord::RecordNotFound)
         end
 
         it "returns ONLY unrestricted works in collections" do
