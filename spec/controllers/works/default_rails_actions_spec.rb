@@ -577,6 +577,11 @@ describe WorksController, work_search: true do
       before { run_all_indexing_jobs }
 
       context "as a guest" do
+        it "renders the collected form" do
+          get :collected, params: { user_id: collected_user.login }
+          expect(response).to render_template("collected")
+        end
+
         it "returns not found error if user does not exist" do
           expect {
             get :collected, params: { user_id: "dummyuser" }
