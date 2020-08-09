@@ -505,6 +505,18 @@ describe WorksController, work_search: true do
     let(:collection) { create(:collection) }
     let(:collected_user) { create(:user) }
 
+    it "returns not found error if user does not exist" do
+      expect do
+        get :collected, params: { user_id: "dummyuser" }
+      end.to raise_error(ActiveRecord::RecordNotFound)
+    end
+
+    it "returns not found error if no user is set" do
+      expect do
+        get :collected
+      end.to raise_error(ActiveRecord::RecordNotFound)
+    end
+
     context "with anonymous works" do
       let(:anonymous_collection) { create(:anonymous_collection) }
 
@@ -580,18 +592,6 @@ describe WorksController, work_search: true do
         it "renders the collected form" do
           get :collected, params: { user_id: collected_user.login }
           expect(response).to render_template("collected")
-        end
-
-        it "returns not found error if user does not exist" do
-          expect {
-            get :collected, params: { user_id: "dummyuser" }
-          }.to raise_error(ActiveRecord::RecordNotFound)
-        end
-
-        it "returns not found error if no user is set" do
-          expect {
-            get :collected
-          }.to raise_error(ActiveRecord::RecordNotFound)
         end
 
         it "returns ONLY unrestricted works in collections" do
