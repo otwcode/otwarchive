@@ -1,19 +1,14 @@
 <% content_for :message do %>
-  <p>Dear <%= style_bold(@user.default_pseud.byline) %>,</p>
+  <p><%= t(".greeting", name: style_bold(@user.default_pseud.byline)).html_safe %></p>
 
-  <p>The collection maintainers of <%= style_link(@collection.title, collection_url(@collection)) %> have
-    added your work (<%= style_link(@work.title.html_safe, work_url(@work)) %>) to their collection!</p>
+  <p><%= t(".part1", collection: style_link(@collection.title, collection_url(@collection)).html_safe, work: style_link(@work.title.html_safe, work_url(@work)).html_safe).html_safe %></p>
 
-  <p>You are receiving this notification because you have previously elected to allow
-  automatic inclusion of your works into collections on the Archive of Our Own.</p>
+  <p><%= t(".part2") %></p>
 
-  <p>If you would like to remove your work from this collection, please visit your
-   <%= style_link("Approved Collection Items page", user_collection_items_url(@user) + "?approved=true") %>.</p>
+  <p><%= t(".html.part3", link: style_link(t(".html.link_text").html_safe, user_collection_items_url(@user) + "?approved=true").html_safe).html_safe %></p>
 
-  <p>If in future you would prefer to individually accept or reject requests to add your
-    works to collections, please edit your <%= style_link("Preferences", "#{root_url}users/#{@user.default_pseud.name}/preferences") %>
-    and untick the box next to: <%= style_quote("\"Automatically agree to your work being collected by others in the Archive.\"") %>
+  <p><%= t(".html.part4", prefs: style_link(t(".html.preferences"), user_preferences_url(@user)), quote: style_quote(t(".html.quote_link")).html_safe).html_safe %>
   </p>
 
-  <p>Thanks!</p>
+  <p><%= t(".bye") %></p>
 <% end %>

@@ -267,3 +267,16 @@ en:
 
     added_to_collection_notification:
       subject: "[%{app_name}][%{collection}] Your work was added to a collection"
+      greeting: "Dear %{name},"
+      part1: "The collection maintainers of %{collection} have added your work (%{work}) to their collection!"
+      part2: "You are receiving this notification because you have previously elected to allow automatic inclusion of your works into collections on the Archive of Our Own."
+      bye: "Thanks!"
+      text:
+        part3: "If you would like to remove your work from this collection, please visit your \"Approved Collection Items\" page: %{collection_items_url}."
+        part4: "If in future you would prefer to individually accept or reject requests to add your works to collections, please edit your Preferences, (%{link}) and untick the box next to \"Automatically agree to your work being collected by others in the Archive.\"."
+      html:
+        part3: "If you would like to remove your work from this collection, please visit your %{link}."
+        link_text: "Approved Collection Items page"
+        part4: "If in future you would prefer to individually accept or reject requests to add your works to collections, please edit your %{prefs} and untick the box next to: %{quote}"
+        preferences: "Preferences"
+        quote_link: "Automatically agree to your work being collected by others in the Archive."
