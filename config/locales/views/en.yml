@@ -70,6 +70,9 @@ en:
     proxy_notice:
       text_html: "Notice: (1) You are using a proxy site that is not affiliated with AO3. (2) The entity that set up the proxy site can see whatever data you submit to the AO3 through the proxy site, including your IP address and the content of comments."
       button: "Dismiss Notice"
+    home:
+      donate:
+        page_title: "Donate or Volunteer"
   users:
     delete_preview:
       heading: "What do you want to do with your works?"
