@@ -126,9 +126,11 @@ Feature: User dashboard
   When I add the work "Pseud's Work 1" to series "Pseud Series A" as "gravy"
     And I bookmark the work "Work 5" as "gravy"
     And I go to meatloaf's user page
-    And I follow "gravy" within ".pseud .expandable li"
+  Then I should not see "(meatloaf)" within "#byline"
+  When I follow "gravy" within ".pseud .expandable li"
   Then I should see "Works (0)" within "#dashboard"
     And I should see "Bookmarks (0)" within "#dashboard"
+    And I should see "gravy (meatloaf)" within "#byline"
   When I wait 11 seconds
     And I reload the page
   Then I should see "Recent works"
