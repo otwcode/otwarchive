@@ -22,6 +22,7 @@ namespace :stage_only do
   task :update_robots, roles: :web do
     run "cp #{release_path}/public/robots.private.txt #{release_path}/public/robots.txt"
   end
+
   desc "Send out 'Testarchive deployed' notification"
   task :notify_testers do
     system "echo 'Testarchive deployed' | mail -s 'Testarchive deployed' #{mail_to}"
