@@ -694,16 +694,6 @@ namespace :After do
       REDIS_GENERAL.del(key)
     end
   end
-
-  desc "Copy anon_commenting_disabled to comment_permissions."
-  task(copy_anon_commenting_disabled_to_comment_permissions: :environment) do
-    Work.in_batches do |batch|
-      batch.update_all("comment_permissions = anon_commenting_disabled")
-      print(".") && STDOUT.flush
-    end
-
-    puts && STDOUT.flush
-  end
 end # this is the end that you have to put new tasks above
 
 ##################
