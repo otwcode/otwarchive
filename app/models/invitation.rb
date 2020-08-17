@@ -33,7 +33,7 @@ class Invitation < ApplicationRecord
       total.times do
         user.invitations.create
       end
-      UserMailer.invite_increase_notification(user.id, total).deliver
+      UserMailer.invite_increase_notification(user.id, total).deliver_later
     end
     User.out_of_invites.update_all('out_of_invites = 0')
   end
@@ -45,7 +45,7 @@ class Invitation < ApplicationRecord
       total.times do
         user.invitations.create
       end
-      UserMailer.invite_increase_notification(user.id, total).deliver
+      UserMailer.invite_increase_notification(user.id, total).deliver_later
     end
     User.out_of_invites.update_all('out_of_invites = 0')
   end
@@ -68,10 +68,10 @@ class Invitation < ApplicationRecord
         if self.external_author
           archivist = self.external_author.external_creatorships.collect(&:archivist).collect(&:login).uniq.join(", ")
           # send invite synchronously for now -- this should now work delayed but just to be safe
-          UserMailer.invitation_to_claim(self.id, archivist).deliver!
+          UserMailer.invitation_to_claim(self.id, archivist).deliver_now
         else
           # send invitations actively sent by a user synchronously to avoid delays
-          UserMailer.invitation(self.id).deliver!
+          UserMailer.invitation(self.id).deliver_now
         end
         self.sent_at = Time.now
       rescue Exception => exception
