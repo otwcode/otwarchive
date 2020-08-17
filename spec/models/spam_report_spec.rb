@@ -6,12 +6,12 @@ describe SpamReport do
   let!(:second_spam) { create(:work, spam: true, authors: [author]) }
   let!(:third_spam) { create(:work, spam: true, authors: [author]) }
 
+  let(:message_double) { instance_double(ActionMailer::MessageDelivery, deliver_later: true) }
+
   before(:example) do
     allow(ArchiveConfig).to receive(:SPAM_THRESHOLD).and_return(10)
     create(:work, spam: false)
   end
-
-  let(:message_double) { instance_double(ActionMailer::MessageDelivery, deliver_later: true) }
 
   it "has a recent date after the new date" do
     spam_report = SpamReport.new
