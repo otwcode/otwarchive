@@ -128,16 +128,7 @@ Feature: User dashboard
     | user      | #main .primary h2         |
     | works     | .works-index .heading     |
     | bookmarks | .bookmarks-index .heading |
-   #| series    | .series-index .heading    |
-
-  # Would really like to remove this special handling in the scenario below and uncomment the last example above
-  Scenario: The series pages for a non-default pseud should display both pseud and username
-  Given "meatloaf" has the pseud "gravy"
-  When I go to meatloaf's series page
-  Then I should not see "(meatloaf)" within ".series-index .heading"
-  When I go to meatloaf's "gravy" pseud page
-    And I follow "Series" within "#dashboard ul:nth-child(4) li:nth-child(2)"
-  Then I should see "gravy (meatloaf)" within ".series-index .heading"
+    | series    | .series-index .heading    |
 
   Scenario: The dashboard for a specific pseud should only list the creations owned by that pseud
   Given dashboard counts expire after 10 seconds
