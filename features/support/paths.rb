@@ -130,6 +130,9 @@ module NavigationHelpers
     when /^([^ ]*?)(?:'s)? works page$/i
       step %{all indexing jobs have been run}
       user_works_path(user_id: $1)
+    when /^the works page for user "(.*)" with pseud "(.*)"$/i
+      step %{all indexing jobs have been run}
+      user_pseud_works_path(user_id: $1, pseud_id: $2)
     when /^the "(.*)" work page/
       # TODO: Avoid this in favor of 'the work "title"', and eventually remove.
       work_path(Work.find_by(title: $1))

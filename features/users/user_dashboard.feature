@@ -117,6 +117,25 @@ Feature: User dashboard
     And I should see "Work One"
     And I should see "Work Six"
 
+  Scenario: The user pages for a non-default pseud should display both pseud and username
+  Given "meatloaf" has the pseud "gravy"
+  When I go to meatloaf's user page
+  Then I should not see "(meatloaf)" within "#main .primary h2"
+  When I go to meatloaf's works page
+  Then I should not see "(meatloaf)" within ".works-index .heading"
+  When I go to meatloaf's series page
+  Then I should not see "(meatloaf)" within ".series-index .heading"
+  When I go to meatloaf's bookmarks page
+  Then I should not see "(meatloaf)" within ".bookmarks-index .heading"
+  When I go to meatloaf's "gravy" pseud page
+  Then I should see "gravy (meatloaf)" within "#main .primary h2"
+  When I follow "Series" within "#dashboard ul:nth-child(4) li:nth-child(2)"
+  Then I should see "gravy (meatloaf)" within ".series-index .heading"
+  When I go to the works page for user "meatloaf" with pseud "gravy"
+  Then I should see "gravy (meatloaf)" within ".works-index .heading"
+  When I go to the bookmarks page for user "meatloaf" with pseud "gravy"
+  Then I should see "gravy (meatloaf)" within ".bookmarks-index .heading"
+
   Scenario: The dashboard for a specific pseud should only list the creations owned by that pseud
   Given dashboard counts expire after 10 seconds
     And I am logged in as "meatloaf"
@@ -126,11 +145,9 @@ Feature: User dashboard
   When I add the work "Pseud's Work 1" to series "Pseud Series A" as "gravy"
     And I bookmark the work "Work 5" as "gravy"
     And I go to meatloaf's user page
-  Then I should not see "(meatloaf)" within "#byline"
-  When I follow "gravy" within ".pseud .expandable li"
+    And I follow "gravy" within ".pseud .expandable li"
   Then I should see "Works (0)" within "#dashboard"
     And I should see "Bookmarks (0)" within "#dashboard"
-    And I should see "gravy (meatloaf)" within "#byline"
   When I wait 11 seconds
     And I reload the page
   Then I should see "Recent works"
