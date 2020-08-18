@@ -132,7 +132,7 @@ module NavigationHelpers
     when /^([^ ]*?)(?:'s)? works page$/i
       step %{all indexing jobs have been run}
       user_works_path(user_id: $1)
-    when /^the works page for user "(.*)" with pseud "(.*)"$/i
+    when /^the works page for user "(.*?)" with pseud "(.*?)"$/i
       step %{all indexing jobs have been run}
       user_pseud_works_path(user_id: $1, pseud_id: $2)
     when /^the "(.*)" work page/
@@ -165,7 +165,7 @@ module NavigationHelpers
       user_readings_path(user_id: $1)
     when /^(.*?)(?:'s)? series page$/i
       user_series_index_path(user_id: $1)
-    when /^the series page for user "(.*)" with pseud "(.*)"$/i
+    when /^the series page for user "(.*?)" with pseud "(.*?)"$/i
       step %{all indexing jobs have been run}
       user_pseud_series_index_path(user_id: $1, pseud_id: $2)
     when /^(.*?)(?:'s)? stats page$/i

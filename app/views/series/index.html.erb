@@ -1,7 +1,7 @@
 <!--descriptive page name and system messages, descriptions, and instructions.-->
 <h2 class="heading">
   <% if @user %>
-    <%= search_header @series, nil, "Series", @pseud ? @pseud: @user %>
+    <%= search_header @series, nil, "Series", @pseud ? @pseud : @user %>
   <% else %>
     <%=h "View All Series" %>
   <% end %>
