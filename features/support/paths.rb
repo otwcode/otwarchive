@@ -165,9 +165,6 @@ module NavigationHelpers
       user_readings_path(user_id: $1)
     when /^(.*?)(?:'s)? series page$/i
       user_series_index_path(user_id: $1)
-    when /^the series page for user "(.*)" with pseud "(.*)"$/i
-      step %{all indexing jobs have been run}
-      user_pseud_series_index_path(user_id: $1, pseud_id: $2)
     when /^(.*?)(?:'s)? stats page$/i
       user_stats_path(user_id: $1)
     when /^(.*?)(?:'s)? preferences page$/i

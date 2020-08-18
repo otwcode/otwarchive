@@ -169,7 +169,7 @@ Feature: Create and Edit Series
     Given I am logged in as "whoever" with password "whatever"
       And I add the work "grumble" to series "polarbears"
     When I go to whoever's series page
-    Then I should see "1 Series by whoever"
+    Then I should see "whoever's Series"
       And I should see "polarbears"
 
   Scenario: Series index for maaany series
