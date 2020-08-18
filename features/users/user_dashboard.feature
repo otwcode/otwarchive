@@ -125,7 +125,8 @@ Feature: User dashboard
   Then I should see "gravy (meatloaf)" within "<selector>"
   Examples:
     | page_name | selector                  |
-    | user      | #main .primary h2         |
+    # AO3-6006 addresses this first scenario
+    # | user      | #main .primary h2         |
     | works     | .works-index .heading     |
     | bookmarks | .bookmarks-index .heading |
     | series    | .series-index .heading    |
