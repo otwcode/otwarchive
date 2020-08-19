@@ -54,7 +54,7 @@ module CommentMethods
     # Returns comment itself if unthreaded
     def full_set
       if self.threaded_left
-        Comment.include(:pseud).where("threaded_left BETWEEN (?) and (?) AND thread = (?)",
+        Comment.includes(:pseud).where("threaded_left BETWEEN (?) and (?) AND thread = (?)",
                             self.threaded_left, self.threaded_right, self.thread).order(:threaded_left)
       else
         return [self]
@@ -63,7 +63,7 @@ module CommentMethods
 
     # Returns all sub-comments
     def all_children
-      self.children_count > 0 ? Comment.include(:pseud).where("threaded_left > (?) and threaded_right < (?) and thread = (?)",
+      self.children_count > 0 ? Comment.includes(:pseud).where("threaded_left > (?) and threaded_right < (?) and thread = (?)",
                                              self.threaded_left, self.threaded_right, self.thread).order(:threaded_left) : []
     end
 
