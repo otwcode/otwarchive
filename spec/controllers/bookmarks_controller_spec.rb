@@ -252,7 +252,9 @@ describe BookmarksController do
     let(:bookmark) { create(:bookmark, bookmarkable_id: chaptered_work.id) }
 
     context "when logged in" do
-      fake_login_known_user(bookmark.pseud.user)
+      before do
+        fake_login_known_user(bookmark.pseud.user)
+      end
 
       it "returns a bookmark on a public multi-chapter work" do
         get :show, params: { id: bookmark }
