@@ -1035,8 +1035,6 @@ GEM
     chronic (0.10.2)
     climate_control (0.2.0)
     cliver (0.3.2)
-    cocaine (0.5.8)
-      climate_control (>= 0.0.3, < 1.0)
     codecov (0.2.6)
       colorize
       json
@@ -1416,7 +1414,6 @@ DEPENDENCIES
   capistrano-gitflow_version (>= 0.0.3)
   capybara (~> 2.16.1)
   capybara-screenshot
-  cocaine
   codecov (~> 0.2.0)
   connection_pool
   css_parser
