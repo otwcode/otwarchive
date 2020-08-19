@@ -49,6 +49,26 @@ namespace :Tag do
     end
   end
 
+  desc "Convert non-canonical warnings into freeforms"
+  task(convert_non_canonical_warnings_to_freeforms: :environment) do
+    default_warning = ArchiveWarning.find_by(name: ArchiveConfig.WARNING_DEFAULT_TAG_NAME)
+    warnings = ArchiveWarning.where(canonical: false)
+    puts "Total non-canonical warnings: #{warnings.count}"
+
+    warnings.find_each do |warning|
+      puts("#{warning.name} (#{warning.works.count})") && STDOUT.flush
+
+      warning.works.find_each do |work|
+        # If the only warning is non-canonical, add a default warning
+        # so the work won't be left with no warnings.
+        work.archive_warnings << default_warning if work.archive_warnings.count <= 1
+      end
+
+      warning.becomes!(Freeform)
+      warning.save!
+    end
+  end
+
   desc "Delete unused admin post tags"
   task(delete_unused_admin_post_tags: :environment) do
     AdminPostTag.joins("LEFT JOIN `admin_post_taggings` ON admin_post_taggings.admin_post_tag_id = admin_post_tags.id").where("admin_post_taggings.id IS NULL").destroy_all

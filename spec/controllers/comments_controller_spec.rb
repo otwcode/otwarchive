@@ -238,6 +238,11 @@ describe CommentsController do
           it_redirects_to_with_error(work_path(work),
                                      "Sorry, this work doesn't allow comments.")
         end
+
+        it "sets flash_is_set to bypass caching" do
+          post :create, params: { work_id: work.id, comment: anon_comment_attributes }
+          expect(cookies[:flash_is_set]).to eq(1)
+        end
       end
 
       context "when the work has anonymous comments disabled" do
@@ -247,6 +252,11 @@ describe CommentsController do
           post :create, params: { work_id: work.id, comment: anon_comment_attributes }
           it_redirects_to_with_error(work_path(work),
                                      "Sorry, this work doesn't allow non-Archive users to comment.")
+        end
+
+        it "sets flash_is_set to bypass caching" do
+          post :create, params: { work_id: work.id, comment: anon_comment_attributes }
+          expect(cookies[:flash_is_set]).to eq(1)
         end
       end
     end
