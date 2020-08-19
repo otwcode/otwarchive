@@ -1,16 +1,15 @@
 require "spec_helper"
 
 describe UserMailer do
-
   describe "creatorship invitation" do
     title = Faker::Book.title
 
+    subject(:email) { UserMailer.creatorship_invitation(work_creatorship.id, author.id).deliver }
+
     let(:author) { create(:user) }
     let(:second_author) { create(:user) }
-    let(:work) { create(:work, title: title, authors: [author.default_pseud, second_author.default_pseud] ) }
+    let(:work) { create(:work, title: title, authors: [author.default_pseud, second_author.default_pseud]) }
     let(:work_creatorship) { Creatorship.find_by(creation_id: work.id, pseud_id: second_author.default_pseud.id) }
-
-    subject(:email) { UserMailer.creatorship_invitation(work_creatorship.id, author.id).deliver }
 
     # Test the headers
     it_behaves_like "an email with a valid sender"
@@ -41,12 +40,12 @@ describe UserMailer do
   describe "creatorship_notification" do
     title = Faker::Book.title
 
+    subject(:email) { UserMailer.creatorship_notification(work_creatorship.id, author.id).deliver }
+
     let(:author) { create(:user) }
     let(:second_author) { create(:user) }
-    let(:work) { create(:work, title: title, authors: [author.default_pseud, second_author.default_pseud] ) }
+    let(:work) { create(:work, title: title, authors: [author.default_pseud, second_author.default_pseud]) }
     let(:work_creatorship) { Creatorship.find_by(creation_id: work.id, pseud_id: second_author.default_pseud.id) }
-
-    subject(:email) { UserMailer.creatorship_notification(work_creatorship.id, author.id).deliver }
 
     # Test the headers
     it_behaves_like "an email with a valid sender"
@@ -77,12 +76,12 @@ describe UserMailer do
   describe "creatorship_notification_archivist" do
     title = Faker::Book.title
 
+    subject(:email) { UserMailer.creatorship_notification_archivist(work_creatorship.id, author.id).deliver }
+
     let(:author) { create(:user) }
     let(:second_author) { create(:user) }
-    let(:work) { create(:work, title: title, authors: [author.default_pseud, second_author.default_pseud] ) }
+    let(:work) { create(:work, title: title, authors: [author.default_pseud, second_author.default_pseud]) }
     let(:work_creatorship) { Creatorship.find_by(creation_id: work.id, pseud_id: second_author.default_pseud.id) }
-
-    subject(:email) { UserMailer.creatorship_notification_archivist(work_creatorship.id, author.id).deliver }
 
     # Test the headers
     it_behaves_like "an email with a valid sender"

@@ -1,6 +1,5 @@
-require 'faker'
+require "faker"
 FactoryBot.define do
-
   factory :creatorships do
     title { "My title is long enough" }
 
@@ -13,6 +12,5 @@ FactoryBot.define do
         work.creatorships.build(pseud: pseud)
       end
     end
-
   end
 end
