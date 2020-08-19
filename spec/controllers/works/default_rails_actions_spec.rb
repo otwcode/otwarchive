@@ -211,7 +211,7 @@ describe WorksController, work_search: true do
   describe "create" do
     before do
       user = create(:user)
-      fake_login_known_user(@user)
+      fake_login_known_user(user)
     end
 
     it "doesn't allow a user to create a work in a series that they don't own" do
