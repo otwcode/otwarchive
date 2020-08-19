@@ -178,9 +178,7 @@ describe WorksController, work_search: true do
 
   describe "edit" do
     let(:user) { create(:user) }
-    let(:work) {
-      create(:work, authors: [user.default_pseud], posted: true)
-    }
+    let(:work) { create(:work, authors: [user.default_pseud], posted: true) }
 
     before do
       fake_login_known_user(user)
@@ -188,15 +186,13 @@ describe WorksController, work_search: true do
 
     it "redirects to orphan work page if only author is being removed" do
       get :edit, params: { id: work.id, remove: "me" }
-      expect(response).to redirect_to controller: 'orphans', action: 'new', work_id: work.id
+      expect(response).to redirect_to controller: "orphans", action: "new", work_id: work.id
     end
   end
 
   context "destroy" do
     let(:user) { create(:user) }
-    let!(:work) {
-      create(:work, authors: [user.default_pseud], posted: true)
-    }
+    let!(:work) { create(:work, authors: [user.default_pseud], posted: true) }
 
     before do
       fake_login_known_user(user)
@@ -214,7 +210,7 @@ describe WorksController, work_search: true do
 
   describe "create" do
     before do
-      @user = create(:user)
+      user = create(:user)
       fake_login_known_user(@user)
     end
 
@@ -244,7 +240,7 @@ describe WorksController, work_search: true do
 
     it "renders new if the work has invalid pseuds" do
       work_attributes = attributes_for(:work).except(:posted)
-      work_attributes[:author_attributes] = { ids: @user.pseud_ids,
+      work_attributes[:author_attributes] = { ids: user.pseud_ids,
                                               byline: "*impossible*" }
       post :create, params: { work: work_attributes }
       expect(response).to render_template("new")
@@ -265,7 +261,7 @@ describe WorksController, work_search: true do
       end
 
       it "redirects to user page with notice" do
-        it_redirects_to_with_notice(@user, "New work posting canceled.")
+        it_redirects_to_with_notice(user, "New work posting canceled.")
       end
     end
 
