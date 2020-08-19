@@ -209,8 +209,9 @@ describe WorksController, work_search: true do
   end
 
   describe "create" do
+    let(:user) { create(:user) }
+
     before do
-      user = create(:user)
       fake_login_known_user(user)
     end
 
@@ -269,7 +270,7 @@ describe WorksController, work_search: true do
       create(:pseud, name: "ambiguous")
       create(:pseud, name: "ambiguous")
       work_attributes = attributes_for(:work).except(:posted)
-      work_attributes[:author_attributes] = { ids: @user.pseud_ids,
+      work_attributes[:author_attributes] = { ids: user.pseud_ids,
                                               byline: "ambiguous" }
       post :create, params: { work: work_attributes }
       expect(response).to render_template("new")
@@ -326,10 +327,8 @@ describe WorksController, work_search: true do
   end
 
   describe "index" do
-    before do
-      let(:fandom) { create(:canonical_fandom) }
-      let!(:work) { create(:work, fandom_string: fandom.name) }
-    end
+    let(:fandom) { create(:canonical_fandom) }
+    let!(:work) { create(:work, fandom_string: fandom.name) }
 
     it "returns the work" do
       get :index
