@@ -128,11 +128,12 @@ GEM
     cliver (0.3.2)
     cocaine (0.5.8)
       climate_control (>= 0.0.3, < 1.0)
-    codecov (0.1.14)
+    codecov (0.2.6)
+      colorize
       json
       simplecov
-      url
     coderay (1.1.1)
+    colorize (0.8.1)
     concurrent-ruby (1.1.6)
     connection_pool (2.2.1)
     crack (0.4.3)
@@ -446,7 +447,6 @@ GEM
       raindrops (~> 0.7)
     unidecoder (1.1.2)
     uniform_notifier (1.12.1)
-    url (0.3.2)
     vcr (3.0.3)
     vegas (0.1.11)
       rack (>= 1.0.0)
@@ -494,7 +494,7 @@ DEPENDENCIES
   capybara (~> 2.16.1)
   capybara-screenshot
   cocaine
-  codecov (~> 0.1.10)
+  codecov (~> 0.2.0)
   connection_pool
   css_parser
   cucumber (~> 3.1)

@@ -159,7 +159,7 @@ group :test do
   gem 'cucumber-timecop', require: false
   # Code coverage
   gem 'simplecov', '~> 0.14.0'
-  gem 'codecov', '~> 0.1.10', require: false
+  gem 'codecov', '~> 0.2.0', require: false
   gem 'email_spec', '1.6.0'
 end
 
