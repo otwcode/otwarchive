@@ -125,13 +125,7 @@ describe WorksController do
     end
 
     context "when work parameters are invalid" do
-      let(:work_params) {
-        {
-            work: {
-                summary: "a" * (ArchiveConfig.SUMMARY_MAX + 1),
-            }
-        }
-      }
+      let(:work_params) { { work: { summary: "a" * (ArchiveConfig.SUMMARY_MAX + 1) } } }
 
       before do
         put :update_multiple, params: params

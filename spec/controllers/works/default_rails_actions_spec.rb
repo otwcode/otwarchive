@@ -331,42 +331,42 @@ describe WorksController, work_search: true do
 
   describe "index" do
     before do
-      @fandom = create(:canonical_fandom)
-      @work = create(:work, fandom_string: @fandom.name)
+      let(:fandom) { create(:canonical_fandom) }
+      let!(:work) { create(:work, fandom_string: fandom.name) }
     end
 
     it "returns the work" do
       get :index
-      expect(assigns(:works)).to include(@work)
+      expect(assigns(:works)).to include(work)
     end
 
     it "sets the fandom when given a fandom id" do
-      params = { fandom_id: @fandom.id }
+      params = { fandom_id: fandom.id }
       get :index, params: params
-      expect(assigns(:fandom)).to eq(@fandom)
+      expect(assigns(:fandom)).to eq(fandom)
     end
 
     it "redirects to tag page for noncanonical tags" do
       unsorted_tag = create(:unsorted_tag)
-      get :index, params: { id: @work, tag_id: unsorted_tag.name }
+      get :index, params: { id: work, tag_id: unsorted_tag.name }
       expect(response).to redirect_to(tag_path(unsorted_tag))
     end
 
     it "redirects to tags works page for noncanonical merged tags page" do
       noncanonical_fandom = create(:fandom, canonical: false)
-      noncanonical_fandom.syn_string = @fandom.name
+      noncanonical_fandom.syn_string = fandom.name
       noncanonical_fandom.save
-      get :index, params: { id: @work, tag_id: noncanonical_fandom.name }
-      expect(response).to redirect_to(tag_works_path(@fandom))
+      get :index, params: { id: work, tag_id: noncanonical_fandom.name }
+      expect(response).to redirect_to(tag_works_path(fandom))
     end
 
     it "redirects to collection tags works page for noncanonical merged tags page" do
       noncanonical_fandom = create(:fandom, canonical: false)
-      noncanonical_fandom.syn_string = @fandom.name
+      noncanonical_fandom.syn_string = fandom.name
       noncanonical_fandom.save
       collection = create(:collection)
-      get :index, params: { id: @work, tag_id: noncanonical_fandom.name, collection_id: collection }
-      expect(response).to redirect_to(collection_tag_works_path(collection, @fandom))
+      get :index, params: { id: work, tag_id: noncanonical_fandom.name, collection_id: collection }
+      expect(response).to redirect_to(collection_tag_works_path(collection, fandom))
     end
 
     describe "without caching" do
@@ -380,7 +380,7 @@ describe WorksController, work_search: true do
 
       it "returns the result with different works the second time" do
         get :index
-        expect(assigns(:works)).to include(@work)
+        expect(assigns(:works)).to include(work)
         work2 = create(:work)
         get :index
         expect(assigns(:works)).to include(work2)
@@ -399,7 +399,7 @@ describe WorksController, work_search: true do
       context "with NO owner tag" do
         it "returns the same result the second time when a new work is created within the expiration time" do
           get :index
-          expect(assigns(:works)).to include(@work)
+          expect(assigns(:works)).to include(work)
           work2 = create(:work)
           run_all_indexing_jobs
           get :index
@@ -409,20 +409,20 @@ describe WorksController, work_search: true do
 
       context "with a valid owner tag" do
         before do
-          @fandom2 = create(:canonical_fandom)
-          @work2 = create(:work, fandom_string: @fandom2.name)
+          fandom2 = create(:canonical_fandom)
+          work2 = create(:work, fandom_string: fandom2.name)
           run_all_indexing_jobs
         end
 
         it "only gets works under that tag" do
-          get :index, params: { tag_id: @fandom.name }
-          expect(assigns(:works).items).to include(@work)
-          expect(assigns(:works).items).not_to include(@work2)
+          get :index, params: { tag_id: fandom.name }
+          expect(assigns(:works).items).to include(work)
+          expect(assigns(:works).items).not_to include(work2)
         end
 
         it "shows different results on second page" do
           get :index, params: { tag_id: @fandom.name, page: 2 }
-          expect(assigns(:works).items).not_to include(@work)
+          expect(assigns(:works).items).not_to include(work)
         end
 
         context "when disabling filtering" do
@@ -433,37 +433,37 @@ describe WorksController, work_search: true do
             controller.instance_variable_set("@admin_settings", admin_settings)
           end
 
-          it "should show results when filters are disabled" do
-            get :index, params: { tag_id: @fandom.name }
-            expect(assigns(:works)).to include(@work)
-          end
-
           after do
             allow(controller).to receive(:fetch_admin_settings).and_call_original
+          end
+
+          it "shows results when filters are disabled" do
+            get :index, params: { tag_id: fandom.name }
+            expect(assigns(:works)).to include(work)
           end
         end
 
         context "with restricted works" do
           before do
-            @work2 = create(:work, fandom_string: @fandom.name, restricted: true)
+            work2 = create(:work, fandom_string: @fandom.name, restricted: true)
             run_all_indexing_jobs
           end
 
           it "shows restricted works to guests" do
-            get :index, params: { tag_id: @fandom.name }
-            expect(assigns(:works).items).to include(@work)
-            expect(assigns(:works).items).not_to include(@work2)
+            get :index, params: { tag_id: fandom.name }
+            expect(assigns(:works).items).to include(work)
+            expect(assigns(:works).items).not_to include(work2)
           end
 
         end
 
         context "when tag is a synonym" do
-          let(:fandom_synonym) { create(:fandom, merger: @fandom) }
+          let(:fandom_synonym) { create(:fandom, merger: fandom) }
 
           it "redirects to the merger's work index" do
             params = { tag_id: fandom_synonym.name }
             get :index, params: params
-            it_redirects_to tag_works_path(@fandom)
+            it_redirects_to tag_works_path(fandom)
           end
 
           context "when collection is specified" do
@@ -472,7 +472,7 @@ describe WorksController, work_search: true do
             it "redirects to the merger's collection works index" do
               params = { tag_id: fandom_synonym.name, collection_id: collection.name }
               get :index, params: params
-              it_redirects_to collection_tag_works_path(collection, @fandom)
+              it_redirects_to collection_tag_works_path(collection, fandom)
             end
           end
         end
@@ -519,7 +519,7 @@ describe WorksController, work_search: true do
         params = { user_id: user.login }
         get :index, params: params
         expect(assigns(:works).items).to include(user_work, pseud_work)
-        expect(assigns(:works).items).not_to include(@work)
+        expect(assigns(:works).items).not_to include(work)
       end
 
       context "with a valid pseud" do
@@ -527,7 +527,7 @@ describe WorksController, work_search: true do
           params = { user_id: user.login, pseud_id: pseud.name }
           get :index, params: params
           expect(assigns(:works).items).to include(pseud_work)
-          expect(assigns(:works).items).not_to include(user_work, @work)
+          expect(assigns(:works).items).not_to include(user_work, work)
         end
       end
 
@@ -536,7 +536,7 @@ describe WorksController, work_search: true do
           params = { user_id: user.login, pseud_id: "nonexistent_pseud" }
           get :index, params: params
           expect(assigns(:works).items).to include(user_work, pseud_work)
-          expect(assigns(:works).items).not_to include(@work)
+          expect(assigns(:works).items).not_to include(work)
         end
       end
     end
@@ -546,7 +546,7 @@ describe WorksController, work_search: true do
     let(:update_user) { create(:user) }
     let!(:update_work) {
       work = create(:work, authors: [update_user.default_pseud], posted: true)
-      update_chapter = create(:chapter, work: work)
+      create(:chapter, work: work)
       work
     }
 
@@ -555,11 +555,11 @@ describe WorksController, work_search: true do
     end
 
     it "doesn't allow the user to add a series that they don't own" do
-      @series = create(:series)
-      attrs = { series_attributes: { id: @series.id } }
+      series = create(:series)
+      attrs = { series_attributes: { id: series.id } }
       expect {
         put :update, params: { id: update_work.id, work: attrs }
-      }.not_to change { @series.works.all.count }
+      }.not_to change { series.works.all.count }
       expect(response).to render_template :edit
       expect(assigns[:work].errors.full_messages).to \
         include("You can't add a work to that series.")
@@ -650,14 +650,14 @@ describe WorksController, work_search: true do
           controller.instance_variable_set("@admin_settings", admin_settings)
         end
 
-        xit "should show results" do
-          get :collected, params: { user_id: collected_user.login, work_search: { query: "fandom_ids:#{collected_fandom.id}" }}
-          expect(assigns(:works)).to include(@unrestricted_work_2_in_collection)
-          expect(assigns(:works)).to include(@unrestricted_work_in_collection)
-        end
-
         after do
           allow(controller).to receive(:fetch_admin_settings).and_call_original
+        end
+
+        xit "should show results" do
+          get :collected, params: { user_id: collected_user.login, work_search: { query: "fandom_ids:#{collected_fandom.id}" } }
+          expect(assigns(:works)).to include(@unrestricted_work_2_in_collection)
+          expect(assigns(:works)).to include(@unrestricted_work_in_collection)
         end
       end
     end
