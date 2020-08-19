@@ -124,9 +124,10 @@ module NavigationHelpers
     when /^(.*?)(?:'s)? user page$/i
       user_path(id: $1)
     when /^(.*?)(?:'s)? "(.*)" pseud page$/i
+      # TODO: Avoid this in favor of 'the (user|dashboard) page for user "(.*)" with pseud "(.*)', and eventually remove. 
       user_pseud_path(user_id: $1, id: $2)
-    when /^the (user|dashboard) page for user "(.*)" with pseud "(.*)"$/i
-      user_pseud_path(user_id: $2, id: $3)
+    when /^the (user|dashboard) page for user "(.*?)" with pseud "(.*?)"$/i
+      user_pseud_path(user_id: Regexp.last_match(2), id: Regexp.last_match(3))
     when /^(.*?)(?:'s)? user url$/i
       user_url(id: $1)
     when /^([^ ]*?)(?:'s)? works page$/i
@@ -134,7 +135,7 @@ module NavigationHelpers
       user_works_path(user_id: $1)
     when /^the works page for user "(.*?)" with pseud "(.*?)"$/i
       step %{all indexing jobs have been run}
-      user_pseud_works_path(user_id: $1, pseud_id: $2)
+      user_pseud_works_path(user_id: Regexp.last_match(1), pseud_id: Regexp.last_match(2))
     when /^the "(.*)" work page/
       # TODO: Avoid this in favor of 'the work "title"', and eventually remove.
       work_path(Work.find_by(title: $1))
@@ -167,7 +168,7 @@ module NavigationHelpers
       user_series_index_path(user_id: $1)
     when /^the series page for user "(.*?)" with pseud "(.*?)"$/i
       step %{all indexing jobs have been run}
-      user_pseud_series_index_path(user_id: $1, pseud_id: $2)
+      user_pseud_series_index_path(user_id: Regexp.last_match(1), pseud_id: Regexp.last_match(2))
     when /^(.*?)(?:'s)? stats page$/i
       user_stats_path(user_id: $1)
     when /^(.*?)(?:'s)? preferences page$/i
