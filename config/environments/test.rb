@@ -16,8 +16,6 @@ Otwarchive::Application.configure do
   config.action_controller.perform_caching = true
   config.action_controller.page_cache_directory = Rails.root.join("public/test_cache")
 
-  config.active_record.cache_versioning = false
-
   config.action_mailer.perform_caching = true
 
   memcached_servers = "127.0.0.1:11211"
