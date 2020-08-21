@@ -118,7 +118,7 @@ describe Tag do
     end
 
     it "is not valid for fandom type tag" do
-      tag = tag_fandom = FactoryBot.create(:fandom, name: 'NewFandom')
+      tag = FactoryBot.create(:fandom, name: "NewFandom")
 
       tag.unwrangleable = true
       expect(tag).not_to be_valid

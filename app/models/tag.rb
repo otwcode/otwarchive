@@ -178,20 +178,14 @@ class Tag < ApplicationRecord
   def unwrangleable_status
     return unless unwrangleable?
 
-    if canonical? || merger_id.present?
-      self.errors.add(:unwrangleable, "can't be set on a canonical or synonymized tag.")
-    end
-
-    if is_a?(UnsortedTag)
-      self.errors.add(:unwrangleable, "can't be set on an unsorted tag.")
-    end
+    self.errors.add(:unwrangleable, "can't be set on a canonical or synonymized tag.") if canonical? || merger_id.present?
+    self.errors.add(:unwrangleable, "can't be set on an unsorted tag.") if is_a?(UnsortedTag)
 
     if is_a?(Fandom)
       self.errors.add(:unwrangleable, "can't be set on a fandom.")
     elsif !has_parent?(self)
       self.errors.add(:unwrangleable, "can't be set on a tag with no fandoms.")
     end
-
   end
 
   before_validation :check_synonym
