@@ -103,28 +103,28 @@ describe Tag do
   end
 
   context "unwrangleable" do
-    it "should not be valid as canonical and unwrangleable" do
+    it "is not valid for a canonical tag" do
       tag = Freeform.create(name: "wrangled", canonical: true)
 
       tag.unwrangleable = true
       expect(tag).not_to be_valid
     end
 
-    it "should not be valid as unsorted and unwrangleable" do
+    it "is not valid for an unsorted tag" do
       tag = FactoryBot.create(:unsorted_tag)
 
       tag.unwrangleable = true
       expect(tag).not_to be_valid
     end
 
-    it "should not be valid for a fandom" do
+    it "is not valid for fandom type tag" do
       tag = tag_fandom = FactoryBot.create(:fandom, name: 'NewFandom')
 
       tag.unwrangleable = true
       expect(tag).not_to be_valid
     end
 
-    it "should not be valid for a tag with no fandom" do
+    it "is not valid for a tag with no fandom" do
       tag = Freeform.create(name: "NewTag")
 
       tag.unwrangleable = true
