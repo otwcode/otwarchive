@@ -308,9 +308,9 @@ describe Tag do
 
     it "should be true for a tag used on an external work" do
       FactoryBot.create(:external_work, character_string: "Jane Smith")
-      #tag = Tag.find_by_name("Jane Smith")
+      tag = Tag.find_by_name("Jane Smith")
 
-      #expect(tag.can_change_type?).to be_truthy
+      expect(tag.can_change_type?).to be_truthy
     end
   end
 
