@@ -180,12 +180,8 @@ class Tag < ApplicationRecord
 
     self.errors.add(:unwrangleable, "can't be set on a canonical or synonymized tag.") if canonical? || merger_id.present?
     self.errors.add(:unwrangleable, "can't be set on an unsorted tag.") if is_a?(UnsortedTag)
-
-    if is_a?(Fandom)
-      self.errors.add(:unwrangleable, "can't be set on a fandom.")
-    elsif !has_parent?(self)
-      self.errors.add(:unwrangleable, "can't be set on a tag with no fandoms.")
-    end
+    self.errors.add(:unwrangleable, "can't be set on a fandom.") if is_a?(Fandom)
+    self.errors.add(:unwrangleable, "can't be set on a tag with no fandoms.") unless self.has_fandom?
   end
 
   before_validation :check_synonym
@@ -795,6 +791,10 @@ class Tag < ApplicationRecord
 
   def has_child?(tag)
     self.child_taggings.where(common_tag_id: tag.id).count > 0
+  end
+
+  def has_fandom?
+    self.parents.select { |parent| parent.is_a?(Fandom) }.present?
   end
 
   def associations_to_remove; @associations_to_remove ? @associations_to_remove : []; end
