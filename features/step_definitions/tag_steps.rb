@@ -176,6 +176,15 @@ Given /^the unsorted tags setup$/ do
   end
 end
 
+Given /^the tag wrangling setup$/ do
+  step %{basic tags}
+  step %{a media exists with name: "TV Shows", canonical: true}
+  step %{I am logged in as a random user}
+  step %{I post the work "Revenge of the Sith 2" with fandom "Star Wars, Stargate SG-1" with character "Daniel Jackson" with second character "Jack O'Neil" with rating "Not Rated" with relationship "McShep"}
+  step %{The periodic tag count task is run}
+  step %{I flush the wrangling sidebar caches}
+end
+
 Given /^I have posted a Wrangling Guideline?(?: titled "([^\"]*)")?$/ do |title|
   step %{I am logged in as an admin}
   visit new_wrangling_guideline_path
