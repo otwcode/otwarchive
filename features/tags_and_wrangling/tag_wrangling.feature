@@ -66,120 +66,140 @@ Feature: Tag wrangling
     Then I should see "Tag was updated"
       And the "Stargate SG-1" tag should be canonical
 
+  Scenario: Assign wrangler to a fandom
+    Given the tag wrangling setup
+      And I have a canonical "TV Shows" fandom tag named "Stargate SG-1"
+      And I am logged in as a tag wrangler
+    When I go to my wrangling page
+      And I follow "Wranglers"
+      And I fill in "tag_fandom_string" with "Stargate SG-1"
+      And I press "Assign"
+    Then "Stargate SG-1" should be assigned to the wrangler "wrangler"
+    When I follow "Wrangling Home"
+    Then I should see "Stargate SG-1"
+    When I follow "Wranglers"
+    Then I should see "Stargate SG-1"
+      And I should see "wrangler" within "ul.wranglers"
 
+  Scenario: Making a character canonical and assiging it to a fandom
+    Given the tag wrangling setup
+      And I have a canonical "TV Shows" fandom tag named "Stargate SG-1"
+      And I am logged in as a tag wrangler
+    When I go to the "Daniel Jackson" tag edit page
+      And I fill in "Fandoms" with "Stargate SG-1"
+      And I check "tag_canonical"
+      And I press "Save changes"
+    Then I should see "Tag was updated"
+      And the "Daniel Jackson" tag should be canonical
+      # TODO: need step for this
+      # And the tag "Daniel Jackson" should be in fandom "Stargate SG-1"
 
-
-
-    # When I follow "Tag Wrangling" within "#header"
-    # Then I should see "Wrangling Home"
-    #   And I should not see "Stargate SG-1"
-    # When I follow "Wranglers"
-    # Then I should see "Tag Wrangling Assignments"
-    #   And I should see "Stargate SG-1"
+  Scenario: Assigning a fandom to a non-canonical character
+    Given the tag wrangling setup
+      And I have a canonical "TV Shows" fandom tag named "Stargate SG-1"
+      And I am logged in as a tag wrangler
+    When I go to the "Daniel Jackson" tag edit page
+      And I fill in "Fandoms" with "Stargate SG-1"
+      And I press "Save changes"
+    Then I should see "Tag was updated"
+      And the "Daniel Jackson" tag should not be canonical
+      # TODO: need step for this
+      # And the tag "Daniel Jackson" should be in fandom "Stargate SG-1"
+    
+  Scenario: Merging canonical and non-canonical character tags
+    Given the tag wrangling setup
+      And I have a canonical "TV Shows" fandom tag named "Stargate SG-1"
+      And I add the fandom "Stargate SG-1" to the character "Jack O'Neil"
+      And I am logged in as a tag wrangler
+    When I go to the "Jack O'Neil" tag edit page
+      And I fill in "Synonym of" with "Jack O'Neill"
+      And I press "Save changes"
+      And I follow "Jack O'Neill"
+    Then I should see "Stargate SG-1"
+    When I view the tag "Stargate SG-1"
+    Then I should see "Jack O'Neil"
+      And I should see "Jack O'Neill"
       
-    # # assign wrangler to a fandom
-    # When I fill in "tag_fandom_string" with "Stargate SG-1"
-    #   And I press "Assign"
-    #   And I follow "Wrangling Home"
-    # Then I should see "Stargate SG-1"
-    # When I follow "Wranglers"
-    # Then I should see "Stargate SG-1"
-    #   And I should see "dizmo" within "ul.wranglers"
-    # When I follow "Wrangling Tools"
-    #   And I follow "Characters by fandom (2)"
-    # Then I should see "Daniel Jackson"
-    #   And I should see "Jack O'Neil"
-     
-    # # making a character tag canonical and assigning it a fandom
-    # When I view the tag "Daniel Jackson"
-    #   And I follow "Edit" within ".header"
-    # Then I should see "Edit Daniel Jackson Tag"
-    # When I check "tag_canonical"
-    #   And I fill in "Fandoms" with "Stargate SG-1"
-    #   And I press "Save changes"
-    # Then I should see "Tag was updated"
+  Scenario Outline: Creating new non-canonical tags
+    Given I am logged in as a tag wrangler
+      And I go to my wrangling page
+    When I follow "New Tag"
+      And I fill in "Name" with "MyNewTag"
+      And I choose <type>
+      And I press "Create Tag"
+    Then I should see "Tag was successfully created"
+      And the "MyNewTag" tag should be a <type> tag
+      And the "MyNewTag" tag should not be canonical
     
-    # # assigning a fandom to a non-canonical character
-    # When I view the tag "Jack O'Neil"
-    #   And I follow "Edit" within ".header"
-    #   And I fill in "Fandoms" with "Stargate SG-1"
-    #   And I press "Save changes"
-    # Then I should see "Tag was updated"
-    
-    # # assigning (and creating) a canonical merger to a non-canonical character
-    # When I fill in "Synonym of" with "Jack O'Neill"
-    #   And I press "Save changes"
-    #   And I follow "Jack O'Neill"
-    # Then I should see "Stargate SG-1"
-    # When I view the tag "Stargate SG-1"
-    # Then I should see "Daniel Jackson"
-    #   And I should see "Jack O'Neil"
-    #   And I should see "Jack O'Neill"
-      
-    # # creating a new non-canonical fandom tag
-    # When I follow "Tag Wrangling" within "#header"
-    #   And I follow "New Tag"
-    #   And I fill in "Name" with "Stargate Atlantis"
-    #   And I choose "Fandom"
-    #   And I press "Create Tag"
-    # Then I should see "Tag was successfully created"
-    
-    # # creating a new canonical character
-    # When I follow "New Tag"
-    #   And I fill in "Name" with "John Sheppard"
-    #   And I choose "Character"
-    #   And I check "Canonical"
-    #   And I press "Create Tag"
-    # Then I should see "Tag was successfully created"
-    
-    # # trying to assign a non-canonical fandom to a character
-    # When I fill in "Fandoms" with "Stargate Atlantis"
-    #   And I press "Save changes"
-    # Then I should see "Cannot add association to 'Stargate Atlantis':"
-    #   And I should see "Parent tag is not canonical."
-    #   And I should not see "Stargate Atlantis" within "form"
-      
-    # # making a fandom tag canonical, then assigning it to a character
-    # When I view the tag "Stargate Atlantis"
-    #   And I follow "Edit" within ".header"
-    #   And I check "tag_canonical"
-    #   And I press "Save changes"
-    #   And I view the tag "John Sheppard"
-    #   And I follow "Edit" within ".header"
-    #   And I fill in "Fandoms" with "Stargate Atlantis"
-    #   And I press "Save changes"
-    # Then I should see "Tag was updated"
-    #   And I should see "Stargate Atlantis"
-    # When I follow "New Tag"
-    #   And I fill in "Name" with "Rodney McKay"
-    #   And I choose "Character"
-    #   And I check "Canonical"
-    #   And I press "Create Tag"
-    # Then I should see "Tag was successfully created"
-    # When I fill in "Fandoms" with "Stargate Atlantis"
-    #   And I press "Save changes"
-    # Then I should see "Tag was updated"
-    
-    # # assigning a fandom to a non-canonical relationship tag
-    # When I view the tag "McShep"
-    #   And I follow "Edit" within ".header"
-    #   And I fill in "Fandoms" with "Stargate Atlantis"
-    #   And I press "Save changes"
-    # Then I should see "Tag was updated"
-    
-    # # assigning (and creating) a canonical merger to a non-canonical relationship
-    # When I fill in "Synonym of" with "Rodney McKay/John Sheppard"
-    #   And I press "Save changes"
-    #   And I follow "Rodney McKay/John Sheppard"
-    # Then I should see "Stargate Atlantis"
-  
-    # # assigning characters to a canonical relationship
-    # When I fill in "Characters" with "Rodney McKay, John Sheppard"
-    #   And I press "Save changes"
-    # Then I should see "Tag was updated"
-    #   And I should see "Stargate Atlantis"
+    Examples:
+      | type        |
+      | "Fandom"    |
+      | "Character" |
 
-    # # post a work to create new unwrangled and unwrangleable tags in the fandom
+  Scenario Outline: Creating new canonical tags
+    Given I am logged in as a tag wrangler
+      And I go to my wrangling page
+    When I follow "New Tag"
+      And I fill in "Name" with "MyNewTag"
+      And I choose <type>
+      And I check "Canonical"
+      And I press "Create Tag"
+    Then I should see "Tag was successfully created"
+      And the "MyNewTag" tag should be a <type> tag
+      And the "MyNewTag" tag should be canonical
+    
+    Examples:
+      | type        |
+      | "Fandom"    |
+      | "Character" |
+    
+  Scenario: Trying to assign a non-canonical fandom to a character
+    Given the tag wrangling setup
+      And a non-canonical fandom "Stargate Atlantis"
+      And I have a canonical "TV Shows" fandom tag named "Stargate SG-1"
+      And I am logged in as a tag wrangler
+    When I go to the "Jack O'Neil" tag edit page
+      And I fill in "Fandoms" with "Stargate Atlantis"
+    And I press "Save changes"
+    Then I should see "Cannot add association to 'Stargate Atlantis':"
+      And I should see "Parent tag is not canonical."
+      And I should not see "Stargate Atlantis" within "form"
+    
+  Scenario: Assigning a fandom to a non-canonical relationship tag
+    Given the tag wrangling setup
+      And I have a canonical "TV Shows" fandom tag named "Stargate Atlantis"
+      And I am logged in as a tag wrangler
+    When I go to the "JackDaniel" tag edit page
+      And I fill in "Fandoms" with "Stargate Atlantis"
+      And I press "Save changes"
+    Then I should see "Tag was updated"
+    When I follow "JackDaniel"
+    Then I should see "Stargate Atlantis"
+
+  #!!! 
+  Scenario: Creating a canonical merger and adding characters to a non-canonical relationship 
+    Given the tag wrangling setup
+      And I have a canonical "TV Shows" fandom tag named "Stargate SG-1"
+      And a canonical character "Jack O'Neil" in fandom "Stargate SG-1"
+      And a canonical character "Daniel Jackson" in fandom "Stargate SG-1"
+      And I am logged in as a tag wrangler
+    When I go to the "JackDaniel" tag edit page
+      And I fill in "Synonym of" with "Jack O'Neil/Daniel Jackson"
+      And I fill in "Fandoms" with "Stargate SG-1"
+      And I press "Save changes"
+    Then I should see "Tag was updated"
+    When I follow "Jack O'Neil/Daniel Jackson"
+    Then I should see "JackDaniel"
+    When I fill in "Characters" with "Daniel Jackson, Jack O'Neil"
+      #And I fill in "Fandoms" with "Stargate SG-1"
+      And I press "Save changes"
+    Then I should see "Tag was updated"
+      And I should see "Stargate SG-1"
+
+  Scenario: Post a work to create new unwrangled and unwrangleable tags in the fandom
+    Given the tag wrangling setup
+      And I have a canonical "TV Shows" fandom tag named "Stargate SG-1"
+      And I am logged in as a tag wrangler
     # When I post the work "Test Work" with fandom "Stargate SG-1" with character "Samantha Carter" with second character "Anubis Arc"
     #   And I edit the tag "Anubis Arc"
     #   And I check "Unwrangleable"
@@ -189,7 +209,7 @@ Feature: Tag wrangling
     #   And all indexing jobs have been run
     # Then I should see "Tag was updated"
 
-    # # check sidebar links and pages for wrangling within a fandom
+  Scenario: Check sidebar links and pages for wrangling within a fandom
     # When I am on my wrangling page
     #   And I follow "Stargate SG-1"
     # Then I should see "Wrangle Tags for Stargate SG-1"

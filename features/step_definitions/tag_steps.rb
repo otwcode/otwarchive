@@ -79,15 +79,9 @@ Given /^a canonical relationship "([^\"]*)" in fandom "([^\"]*)"$/ do |relations
   rel.add_association(fand)
 end
 
-Given /^a canonical (\w+) "([^\"]*)"$/ do |tag_type, tagname|
+Given /^a (non-?c|c)anonical (\w+) "([^\"]*)"$/ do |canonical, tag_type, tagname|
   t = tag_type.classify.constantize.find_or_create_by_name(tagname)
-  t.canonical = true
-  t.save
-end
-
-Given /^a noncanonical (\w+) "([^\"]*)"$/ do |tag_type, tagname|
-  t = tag_type.classify.constantize.find_or_create_by_name(tagname)
-  t.canonical = false
+  t.canonical = canonical == "canonical"
   t.save
 end
 
@@ -180,7 +174,7 @@ Given /^the tag wrangling setup$/ do
   step %{basic tags}
   step %{a media exists with name: "TV Shows", canonical: true}
   step %{I am logged in as a random user}
-  step %{I post the work "Revenge of the Sith 2" with fandom "Star Wars, Stargate SG-1" with character "Daniel Jackson" with second character "Jack O'Neil" with rating "Not Rated" with relationship "McShep"}
+  step %{I post the work "Revenge of the Sith 2" with fandom "Star Wars, Stargate SG-1" with character "Daniel Jackson" with second character "Jack O'Neil" with rating "Not Rated" with relationship "JackDaniel"}
   step %{The periodic tag count task is run}
   step %{I flush the wrangling sidebar caches}
 end
@@ -404,14 +398,15 @@ Then /^"([^\"]*)" should not be assigned to the wrangler "([^\"]*)"$/ do |fandom
   assignment.should be_nil
 end
 
-Then(/^the "([^"]*)" tag should be a "([^"]*)" tag$/) do |tagname , tag_type|
+Then(/^the "([^"]*)" tag should be a "([^"]*)" tag$/) do |tagname, tag_type|
   tag = Tag.find_by(name: tagname)
   assert tag.type == tag_type
 end
 
-Then(/^the "([^"]*)" tag should be canonical$/) do |tagname|
+Then(/^the "([^"]*)" tag should (be|not be) canonical$/) do |tagname, canonical|
   tag = Tag.find_by(name: tagname)
-  assert tag.canonical?
+  expected = canonical == "be"
+  assert tag.canonical == expected
 end
 
 Then(/^show me what the tag "([^"]*)" is like$/) do |tagname|
