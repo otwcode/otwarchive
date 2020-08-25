@@ -81,7 +81,7 @@ end
 
 Given /^a (non-?c|c)anonical (\w+) "([^\"]*)"$/ do |canonical, tag_type, tagname|
   t = tag_type.classify.constantize.find_or_create_by_name(tagname)
-  t.canonical = canonical == "canonical"
+  t.canonical = canonical == "c"
   t.save
 end
 
