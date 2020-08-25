@@ -176,38 +176,35 @@ Feature: Tag wrangling
     When I follow "JackDaniel"
     Then I should see "Stargate Atlantis"
 
-  #!!! 
   Scenario: Creating a canonical merger and adding characters to a non-canonical relationship 
-    Given the tag wrangling setup
-      And I have a canonical "TV Shows" fandom tag named "Stargate SG-1"
-      And a canonical character "Jack O'Neil" in fandom "Stargate SG-1"
-      And a canonical character "Daniel Jackson" in fandom "Stargate SG-1"
+    Given I have a canonical "TV Shows" fandom tag named "RWBY"
+      And a canonical character "Blake Belladonna" in fandom "RWBY"
+      And a canonical character "Yang Xiao Long" in fandom "RWBY"
+      And a non-canonical relationship "Bumbleby"
       And I am logged in as a tag wrangler
-    When I go to the "JackDaniel" tag edit page
-      And I fill in "Synonym of" with "Jack O'Neil/Daniel Jackson"
-      And I fill in "Fandoms" with "Stargate SG-1"
+    When I go to the "Bumbleby" tag edit page
+      And I fill in "Synonym of" with "Blake/Yang"
+      And I fill in "Fandoms" with "RWBY"
+      And I fill in "Characters" with "Blake Belladonna, Yang Xiao Long"
       And I press "Save changes"
     Then I should see "Tag was updated"
-    When I follow "Jack O'Neil/Daniel Jackson"
-    Then I should see "JackDaniel"
-    When I fill in "Characters" with "Daniel Jackson, Jack O'Neil"
-      #And I fill in "Fandoms" with "Stargate SG-1"
-      And I press "Save changes"
-    Then I should see "Tag was updated"
-      And I should see "Stargate SG-1"
+      And I should see "RWBY"
+      And I should see "Blake/Yang"
+      And I should see "Blake Belladonna"
+      And I should see "Yang Xiao Long"
+      And the "Blake/Yang" tag should be canonical
 
   Scenario: Post a work to create new unwrangled and unwrangleable tags in the fandom
     Given the tag wrangling setup
       And I have a canonical "TV Shows" fandom tag named "Stargate SG-1"
       And I am logged in as a tag wrangler
-    # When I post the work "Test Work" with fandom "Stargate SG-1" with character "Samantha Carter" with second character "Anubis Arc"
-    #   And I edit the tag "Anubis Arc"
-    #   And I check "Unwrangleable"
-    #   And I fill in "Fandoms" with "Stargate SG-1"
-    #   And I press "Save changes"
-    #   # Make sure that the indices are up-to-date:
-    #   And all indexing jobs have been run
-    # Then I should see "Tag was updated"
+      And I post the work "Test Work" with fandom "Stargate SG-1" with character "Samantha Carter" with second character "Anubis Arc"
+    When I go to the "Anubis Arc" tag edit page
+      And I check "Unwrangleable"
+      And I fill in "Fandoms" with "Stargate SG-1"
+      And I press "Save changes"
+    Then I should see "Tag was updated"
+      # TODO: Tag should be unwrangleable
 
   Scenario: Check sidebar links and pages for wrangling within a fandom
     # When I am on my wrangling page
