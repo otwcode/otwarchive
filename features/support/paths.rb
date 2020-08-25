@@ -255,7 +255,7 @@ module NavigationHelpers
     when /^the "(.*)" tag page$/i
       tag_path(Tag.find_by_name($1))
     when /^the "(.*)" tag edit page$/i
-      edit_tag_path(Tag.find_by_name(Regexp.last_match(1)))
+      edit_tag_path(Tag.find_by(name: Regexp.last_match(1)))
     when /^the wrangling tools page$/
       tag_wranglings_path
     when /^the "(.*)" fandom relationship page$/i

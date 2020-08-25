@@ -213,13 +213,16 @@ Feature: Tag wrangling
       And I post the work "Test Work" with fandom "Stargate SG-1" with character "Janet Fraiser" with second character "Apophis"
     When I go to the "Apophis" tag edit page
       And I check "Unwrangleable"
+      And I fill in "Fandoms" with "Stargate SG-1"
       And I press "Save changes"
+    Then the "Apophis" tag should be unwrangleable
     When I am on my wrangling page
       And I follow "Stargate SG-1"
     Then I should see "Wrangle Tags for Stargate SG-1"
-    When I follow "Characters (3)"
+    When I follow "Characters (4)"
     Then I should see "Wrangle Tags for Stargate SG-1"
       And I should see "Showing All Character Tags"
+      And I should see "Aphophis"
       And I should see "Samantha Carter"
       And I should see "Teal'c"
       And I should see "Tealc"
