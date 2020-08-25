@@ -192,18 +192,6 @@ Feature: Tag wrangling
       And I should see "Yang Xiao Long"
       And the "Blake/Yang" tag should be canonical
 
-  Scenario: Post a work to create new unwrangled and unwrangleable tags in the fandom
-    Given the tag wrangling setup
-      And I have a canonical "TV Shows" fandom tag named "Stargate SG-1"
-      And I am logged in as a tag wrangler
-      And I post the work "Test Work" with fandom "Stargate SG-1" with character "Samantha Carter" with second character "Apophis"
-    When I go to the "Apophis" tag edit page
-      And I check "Unwrangleable"
-      And I fill in "Fandoms" with "Stargate SG-1"
-      And I press "Save changes"
-    Then I should see "Tag was updated"
-      And the "Apophis" tag should be unwrangleable
-
   Scenario: Check sidebar links and pages for wrangling within a fandom
     Given I have a canonical "TV Shows" fandom tag named "Stargate SG-1"
       And a canonical character "Samantha Carter" in fandom "Stargate SG-1"
@@ -215,7 +203,8 @@ Feature: Tag wrangling
       And I check "Unwrangleable"
       And I fill in "Fandoms" with "Stargate SG-1"
       And I press "Save changes"
-    Then the "Apophis" tag should be unwrangleable
+    Then I should see "Tag was updated"
+      And the "Apophis" tag should be unwrangleable
     When I am on my wrangling page
       And I follow "Stargate SG-1"
     Then I should see "Wrangle Tags for Stargate SG-1"
