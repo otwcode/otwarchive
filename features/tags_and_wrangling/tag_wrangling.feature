@@ -91,8 +91,7 @@ Feature: Tag wrangling
       And I press "Save changes"
     Then I should see "Tag was updated"
       And the "Daniel Jackson" tag should be canonical
-      # TODO: need step for this
-      # And the tag "Daniel Jackson" should be in fandom "Stargate SG-1"
+      And the "Daniel Jackson" tag should be in the "Stargate SG-1" fandom
 
   Scenario: Assigning a fandom to a non-canonical character
     Given the tag wrangling setup
@@ -103,8 +102,7 @@ Feature: Tag wrangling
       And I press "Save changes"
     Then I should see "Tag was updated"
       And the "Daniel Jackson" tag should not be canonical
-      # TODO: need step for this
-      # And the tag "Daniel Jackson" should be in fandom "Stargate SG-1"
+      And the "Daniel Jackson" tag should be in the "Stargate SG-1" fandom
     
   Scenario: Merging canonical and non-canonical character tags
     Given the tag wrangling setup
@@ -198,13 +196,13 @@ Feature: Tag wrangling
     Given the tag wrangling setup
       And I have a canonical "TV Shows" fandom tag named "Stargate SG-1"
       And I am logged in as a tag wrangler
-      And I post the work "Test Work" with fandom "Stargate SG-1" with character "Samantha Carter" with second character "Anubis Arc"
-    When I go to the "Anubis Arc" tag edit page
+      And I post the work "Test Work" with fandom "Stargate SG-1" with character "Samantha Carter" with second character "Apophis"
+    When I go to the "Apophis" tag edit page
       And I check "Unwrangleable"
       And I fill in "Fandoms" with "Stargate SG-1"
       And I press "Save changes"
     Then I should see "Tag was updated"
-      # TODO: Need a step to verify tag should be unwrangleable
+      And the "Apophis" tag should be unwrangleable
 
   Scenario: Check sidebar links and pages for wrangling within a fandom
     Given I have a canonical "TV Shows" fandom tag named "Stargate SG-1"
@@ -213,6 +211,9 @@ Feature: Tag wrangling
       And a synonym "Tealc" of the tag "Teal'c"
       And the tag wrangler "wrangler" with password "password" is wrangler of "Stargate SG-1"
       And I post the work "Test Work" with fandom "Stargate SG-1" with character "Janet Fraiser" with second character "Apophis"
+    When I go to the "Apophis" tag edit page
+      And I check "Unwrangleable"
+      And I press "Save changes"
     When I am on my wrangling page
       And I follow "Stargate SG-1"
     Then I should see "Wrangle Tags for Stargate SG-1"
@@ -233,10 +234,9 @@ Feature: Tag wrangling
       And I should see "Tealc" within "tbody th"
       And I should not see "Teal'c" within "tbody td"
       And I should not see "Samantha Carter"
-    # TODO: Need a step to make Apophis unwrangleable here, then uncomment below
     When I follow "Unwrangleable"
     Then I should see "Showing Unwrangleable Character Tags"
-      #And I should see "Aphophis"
+      And I should see "Aphophis"
       And I should not see "Samantha Carter"
     When I follow "Unwrangled"
     Then I should see "Showing Unwrangled Character Tags"
@@ -255,7 +255,6 @@ Feature: Tag wrangling
     When I follow "Mergers (0)"
     Then I should see "Wrangle Tags for Stargate SG-1"
       And I should see "Showing All Merger Tags"
-  
 
   Scenario: Wrangler has option to troubleshoot a work
 

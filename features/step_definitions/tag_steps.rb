@@ -409,6 +409,18 @@ Then(/^the "([^"]*)" tag should (be|not be) canonical$/) do |tagname, canonical|
   assert tag.canonical == expected
 end
 
+Then(/^the "([^"]*)" tag should (be|not be) unwrangleable$/) do |tagname, unwrangleable|
+  tag = Tag.find_by(name: tagname)
+  expected = unwrangleable == "be"
+  assert tag.unwrangleable == expected
+end
+
+Then(/^the "([^"]*)" tag should be in the "([^"]*)" fandom$/) do |tagname, fandom_name|
+  tag = Tag.find_by(name: tagname) 
+  fandom = Fandom.find_by(name: fandom_name)
+  assert tag.has_parent?(fandom)
+end
+
 Then(/^show me what the tag "([^"]*)" is like$/) do |tagname|
   tag = Tag.find_by(name: tagname)
   puts tag.inspect
