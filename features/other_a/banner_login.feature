@@ -6,6 +6,9 @@ Feature: First login help banner
   Given I am logged in as "newname"
   When I am on newname's user page
   Then I should see the first login banner
+    And I should see "Hi! It looks like you've just logged into the archive for the first time."
+    And I should see "Learn some tips and tricks or dismiss this message permanently."
+    And I should see "If you experience harassment, you can contact our Policy & Abuse team."
   
   Scenario: Popup details can be viewed
   

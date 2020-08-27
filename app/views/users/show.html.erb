@@ -6,7 +6,10 @@
       <%= link_to_modal ts("Learn some tips and tricks"), :for => first_login_help_path, :title => "First login help" %> 
       or dismiss this message permanently.
     </p>
-      <%= form_tag end_first_login_user_path(current_user), :method => :post, :remote => true do %>
+    <p>
+      If you experience harassment, you can <a href="/abuse_reports/new">contact our Policy & Abuse team</a>.
+    </p>
+    <%= form_tag end_first_login_user_path(current_user), :method => :post, :remote => true do %>
     <p class="submit actions">
       <%= submit_tag ts("Dismiss permanently") %>
       <%= link_to "x", nil, :remote => true, :id => "hide-first-login-help", :title => "Hide first login help banner" %>
