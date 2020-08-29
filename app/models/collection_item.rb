@@ -214,10 +214,7 @@ class CollectionItem < ApplicationRecord
     }.join(", ")
   end
 
-  def remove=(value)
-    @remove = value
-  end
-
+  attr_writer :remove
   def remove
     @remove || ""
   end
