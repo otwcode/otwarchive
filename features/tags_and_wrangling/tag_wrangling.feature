@@ -45,9 +45,9 @@ Feature: Tag wrangling
   Scenario: Edit tag page
     Given the tag wrangling setup
       And I am logged in as a tag wrangler
-    When I go to the "Stargate SG-1" tag page
+    When I go to the "Daniel Jackson" tag page
       And I follow "Edit" within ".header"
-    Then I should see "Edit Stargate SG-1 Tag"
+    Then I should see "Edit Daniel Jackson Tag"
       And I should see "Name"
       And I should see "Category"
       And I should see "Canonical"
@@ -55,6 +55,10 @@ Feature: Tag wrangling
       And I should see "Unwrangleable"
       And I should see "Fandom"
       And I should see "Meta"
+    When I go to the "Stargate SG-1" tag edit page
+    Then I should see "Edit Stargate SG-1 Tag"
+      # Fandoms cannot be unwrangleable
+      And I should not see "Unwrangleable"
 
   Scenario: Making a fandom canonical and assigning media to it
     Given the tag wrangling setup
