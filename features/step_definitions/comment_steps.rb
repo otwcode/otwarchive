@@ -177,12 +177,12 @@ end
 
 Then /^the comment on "([^\"]*?)" should be marked as unreviewed/ do |work|
   w = Work.find_by(title: work)
-  assert w.comments.first.reload.unreviewed?
+  assert w.comments.first.unreviewed?
 end
 
 Then /^the comment on "([^\"]*?)" should not be marked as unreviewed/ do |work|
   w = Work.find_by(title: work)
-  assert !w.comments.first.reload.unreviewed?
+  assert !w.comments.first.unreviewed?
 end
 
 When /^I view the unreviewed comments page for "([^\"]*?)"/ do |work|
