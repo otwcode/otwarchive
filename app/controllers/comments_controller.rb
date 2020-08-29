@@ -87,17 +87,18 @@ class CommentsController < ApplicationController
     redirect_to new_user_session_path(restricted_commenting: true)
   end
 
-  # Check to see if the ultimate_parent is a Work, and if so, if it allows
+  # Check to see if the ultimate_parent is a Work or AdminPost, and if so, if it allows
   # comments for the current user.
   def check_parent_comment_permissions
     parent = find_parent
-    return unless parent.is_a?(Work)
+    return unless parent.is_a?(Work) || parent.is_a?(AdminPost)
 
     if parent.disable_all_comments?
-      flash[:error] = ts("Sorry, this work doesn't allow comments.")
-      redirect_to work_path(parent)
+      flash[:error] = ts("Sorry, this work or post doesn't allow comments.")
+      #redirect_to work_path(parent)
+      redirect_to admin_post_path(parent)
     elsif parent.disable_anon_comments? && !logged_in?
-      flash[:error] = ts("Sorry, this work doesn't allow non-Archive users to comment.")
+      flash[:error] = ts("Sorry, this work or post doesn't allow non-Archive users to comment.")
       redirect_to work_path(parent)
     end
   end
