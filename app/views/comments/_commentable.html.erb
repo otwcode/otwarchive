@@ -80,7 +80,7 @@
   </p>
   <% elsif commentable_parent.is_a?(AdminPost) && commentable_parent.disable_anon_comments? && !logged_in? %>
   <p class="notice">
-    <%= ts("Sorry, this news post doesn't allow non-Archive users to comment.") %>
+    <%= ts("Sorry, this news post doesn't allow non-Archive users to comment. You can however <a href=\"/support\">contact Support</a> with any feedback or questions").html_safe %>
   </p>
   <% elsif commentable_parent.is_a?(Work) && commentable_parent.disable_all_comments? %>
     <p class="notice">
