@@ -95,7 +95,7 @@ class CommentsController < ApplicationController
       name = "work"
       path = proc { |x| work_path(x) }
     elsif parent.is_a?(AdminPost)
-      name = "post"
+      name = "news post"
       path = proc { |x| admin_post_path(x) }
     else
       return
