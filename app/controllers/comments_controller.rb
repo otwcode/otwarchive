@@ -91,15 +91,22 @@ class CommentsController < ApplicationController
   # comments for the current user.
   def check_parent_comment_permissions
     parent = find_parent
-    return unless parent.is_a?(Work) || parent.is_a?(AdminPost)
+    if parent.is_a?(Work)
+      name = "work"
+      path = proc { |x| work_path(x) }
+    elsif parent.is_a?(AdminPost)
+      name = "post"
+      path = proc { |x| admin_post_path(x) }
+    else
+      return
+    end
 
     if parent.disable_all_comments?
-      flash[:error] = ts("Sorry, this work or post doesn't allow comments.")
-      #redirect_to work_path(parent)
-      redirect_to admin_post_path(parent)
+      flash[:error] = ts("Sorry, this #{name} doesn't allow comments.")
+      redirect_to path[parent]
     elsif parent.disable_anon_comments? && !logged_in?
-      flash[:error] = ts("Sorry, this work or post doesn't allow non-Archive users to comment.")
-      redirect_to work_path(parent)
+      flash[:error] = ts("Sorry, this #{name} doesn't allow non-Archive users to comment.")
+      redirect_to path[parent]
     end
   end
 
