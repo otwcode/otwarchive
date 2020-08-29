@@ -28,6 +28,8 @@ module SearchHelper
     end
 
     header << ts("in %{tag_link}", tag_link: link_to_tag_with_text(parent, parent.name)) if parent.is_a?(Tag)
+    # The @fandom version is used when following a fandom link from a user's dashboard, which
+    # which will take you to a URL like /users/username/works?fandom_id=123.
     header << ts("in %{fandom_link}", fandom_link: link_to_tag(@fandom)) if @fandom.present?
     header.join(" ").html_safe
   end
