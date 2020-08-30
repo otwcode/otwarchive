@@ -47,7 +47,8 @@ Feature: Commenting on admin posts
       And I should see "No one can comment"
     When I choose "No one can comment"
       And I press "Post"
-      And I am logged in as "regular"
+    Then I should see "successfully updated"
+    When I am logged in as "regular"
       And I go to the admin-posts page
       And follow "Comment"
     Then I should see "Sorry, this news post doesn't allow comments."
