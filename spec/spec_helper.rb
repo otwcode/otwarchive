@@ -1,28 +1,29 @@
-ENV["RAILS_ENV"] ||= 'test'
+ENV["RAILS_ENV"] ||= "test"
 
-require File.expand_path("../../config/environment", __FILE__)
-require 'simplecov'
-SimpleCov.command_name "rspec-" + (ENV['TEST_RUN'] || '')
+require File.expand_path("../config/environment", __dir__)
+require "simplecov"
+SimpleCov.command_name "rspec-" + (ENV["TEST_RUN"] || "")
 if ENV["CI"] == "true" && ENV["TRAVIS"] == "true"
   # Only on Travis...
   require "codecov"
   SimpleCov.formatter = SimpleCov::Formatter::Codecov
 end
 
-require 'rspec/rails'
-require 'factory_bot'
-require 'database_cleaner'
-require 'email_spec'
+require "rspec/rails"
+require "factory_bot"
+require "database_cleaner"
+require "email_spec"
+require "webmock/rspec"
 
 DatabaseCleaner.start
 DatabaseCleaner.clean
 
 # Requires supporting ruby files with custom matchers and macros, etc,
 # in spec/support/ and its subdirectories.
-Dir[Rails.root.join("spec/support/**/*.rb")].each {|f| require f}
+Dir[Rails.root.join("spec/support/**/*.rb")].sort.each { |f| require f }
 
 FactoryBot.find_definitions
-FactoryBot.definition_file_paths = %w(factories)
+FactoryBot.definition_file_paths = %w[factories]
 
 RSpec.configure do |config|
   config.mock_with :rspec
@@ -35,6 +36,7 @@ RSpec.configure do |config|
   config.include EmailSpec::Helpers
   config.include EmailSpec::Matchers
   config.include Devise::Test::ControllerHelpers, type: :controller
+  config.include Devise::Test::IntegrationHelpers, type: :request
   config.include Capybara::DSL
   config.include TaskExampleGroup, type: :task
 
@@ -141,6 +143,8 @@ RSpec.configure do |config|
 
   config.file_fixture_path = "spec/support/fixtures"
 end
+
+RSpec::Matchers.define_negated_matcher :avoid_changing, :change
 
 def clean_the_database
   # Now clear memcached

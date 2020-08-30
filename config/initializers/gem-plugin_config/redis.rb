@@ -10,7 +10,7 @@ else
 end
 
 unless ENV['TRAVIS']
-  if rails_env == "test"
+  if rails_env == "test" && !ENV["OTWA_NO_START_REDIS"]
     # https://gist.github.com/441072
     start_redis!(rails_root, :cucumber)
   end

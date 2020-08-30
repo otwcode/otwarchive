@@ -109,11 +109,35 @@ module CommentsHelper
   #### HELPERS FOR CHECKING WHICH BUTTONS/FORMS TO DISPLAY #####
 
   def can_reply_to_comment?(comment)
-    !(comment.unreviewed? || no_anon_reply(comment) || comment_parent_hidden?(comment))
+    !(comment.unreviewed? || parent_disallows_comments?(comment) || comment_parent_hidden?(comment))
   end
 
   def can_edit_comment?(comment)
     is_author_of?(comment) && comment.count_all_comments == 0 && !comment_parent_hidden?(comment)
+  end
+
+  # Only an admin with proper authorization can mark a spam comment ham.
+  def can_mark_comment_ham?(comment)
+    return unless comment.pseud.nil? && !comment.approved?
+
+    policy(comment).can_mark_comment_spam?
+  end
+
+  # An admin with proper authorization or a creator of the comment's ultimate
+  # parent (i.e. the work) can mark an approved comment as spam.
+  def can_mark_comment_spam?(comment)
+    return unless comment.pseud.nil? && comment.approved?
+
+    policy(comment).can_mark_comment_spam? || is_author_of?(comment.ultimate_parent)
+  end
+
+  # Comments can be deleted by admins with proper authorization, their creator
+  # (if the creator is a registered user), or the creator of the comment's
+  # ultimate parent.
+  def can_destroy_comment?(comment)
+    policy(comment).can_destroy_comment? || 
+      is_author_of?(comment) || 
+      is_author_of?(comment.ultimate_parent)
   end
 
   def comment_parent_hidden?(comment)
@@ -122,8 +146,11 @@ module CommentsHelper
       (parent.respond_to?(:in_unrevealed_collection) && parent.in_unrevealed_collection)
   end
 
-  def no_anon_reply(comment)
-    comment.ultimate_parent.is_a?(Work) && comment.ultimate_parent.anon_commenting_disabled && !logged_in?
+  def parent_disallows_comments?(comment)
+    return false unless (parent = comment.ultimate_parent).is_a?(Work)
+
+    parent.disable_all_comments? ||
+      parent.disable_anon_comments? && !logged_in?
   end
 
   #### HELPERS FOR REPLYING TO COMMENTS #####

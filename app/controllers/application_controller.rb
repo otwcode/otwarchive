@@ -1,8 +1,19 @@
 PROFILER_SESSIONS_FILE = 'used_tags.txt'
 
 class ApplicationController < ActionController::Base
+  include Pundit
   protect_from_forgery with: :exception, prepend: true
   rescue_from ActionController::InvalidAuthenticityToken, with: :display_auth_error
+
+  rescue_from Pundit::NotAuthorizedError do
+    admin_only_access_denied
+  end
+
+  # sets admin user for pundit policies
+  def pundit_user
+    current_admin
+  end
+
   rescue_from ActionController::UnknownFormat, with: :raise_not_found
   rescue_from Elasticsearch::Transport::Transport::Errors::ServiceUnavailable do
     # Non-standard code to distinguish Elasticsearch errors from standard 503s.
@@ -76,6 +87,14 @@ class ApplicationController < ActionController::Base
   after_action :check_for_flash
   def check_for_flash
     cookies[:flash_is_set] = 1 unless flash.empty?
+  end
+
+  # Override redirect_to so that if it's called in a before_action hook, it'll
+  # still call check_for_flash after it runs.
+  def redirect_to(*args, **kwargs)
+    super.tap do
+      check_for_flash
+    end
   end
 
   after_action :ensure_admin_credentials
@@ -216,7 +235,7 @@ public
 
   def after_sign_in_path_for(resource)
     if resource.is_a?(Admin)
-      admin_users_path
+      admins_path
     else
       back = session[:return_to]
       session.delete(:return_to)
@@ -273,7 +292,7 @@ public
   end
 
   def admin_only_access_denied
-    flash[:error] = ts("I'm sorry, only an admin can look at that area.")
+    flash[:error] = ts("Sorry, only an authorized admin can access the page you were trying to reach.")
     redirect_to root_path
     false
   end

@@ -13,6 +13,7 @@ FactoryBot.define do
   end
 
   factory :role do
+    name { Faker::Company.profession }
   end
 
   factory :user do

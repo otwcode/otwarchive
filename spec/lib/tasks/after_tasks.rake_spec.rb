@@ -125,3 +125,20 @@ describe "rake After:update_indexed_stat_counter_kudo_count", work_search: true 
     }.from(0).to(1)
   end
 end
+
+describe "rake After:copy_anon_commenting_disabled_to_comment_permissions" do
+  let(:work) { create(:work) }
+
+  before do
+    work.update_columns(anon_commenting_disabled: true,
+                        comment_permissions: :enable_all)
+  end
+
+  it "updates comment_permissions to match anon_commenting_disabled" do
+    expect do
+      subject.invoke
+    end.to change {
+      work.reload.comment_permissions
+    }.from("enable_all").to("disable_anon")
+  end
+end

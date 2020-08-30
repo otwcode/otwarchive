@@ -43,12 +43,12 @@ class Collection < ApplicationRecord
   # We need to get rid of all of these if the challenge is destroyed
   after_save :clean_up_challenge
   def clean_up_challenge
-    if self.challenge.nil?
-      assignments.each {|assignment| assignment.destroy}
-      potential_matches.each {|potential_match| potential_match.destroy}
-      signups.each {|signup| signup.destroy}
-      prompts.each {|prompt| prompt.destroy}
-    end
+    return if self.challenge_id
+
+    assignments.each(&:destroy)
+    potential_matches.each(&:destroy)
+    signups.each(&:destroy)
+    prompts.each(&:destroy)
   end
 
   has_many :collection_items, dependent: :destroy

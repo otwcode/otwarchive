@@ -11,14 +11,13 @@ end
 
 Given /^I have an Open Doors committee member "([^\"]*)"$/ do |name|
   step(%{I have pre-archivist setup for "#{name}"})
-  step(%{I am logged in as an admin})
   step(%{I make "#{name}" an Open Doors committee member})
-  step(%{I log out})
 end
 
 ### WHEN
 
 When /^I make "([^\"]*)" an archivist$/ do |name|
+  step(%{I go to the manage users page})
   step(%{I fill in "Name" with "#{name}"})
   step(%{I check "Exact match only"})
   step(%{I press "Find"})

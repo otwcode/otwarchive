@@ -691,15 +691,32 @@ class WorksController < ApplicationController
     @user = current_user
     @works = Work.joins(pseuds: :user).where('users.id = ?', @user.id).where(id: params[:work_ids]).readonly(false)
     @errors = []
-    # to avoid overwriting, we entirely trash any blank fields and also any unchecked checkboxes
-    updated_work_params = work_params.reject { |_key, value| value.blank? || value == '0' }
 
-    # manually allow switching of anon/moderated comments
+    # To avoid overwriting, we entirely trash any blank fields.
+    updated_work_params = work_params.reject { |_key, value| value.blank? }
+
+    # It takes around 1 hour to restart all the workers when deploying, so the
+    # old code and the new code need to co-exist. The old WorksController code
+    # used to reject parameters with a value of "0", so the new WorksController
+    # form cannot use "0".
+    #
+    # Instead, we use special values to represent "0", and handle them with the
+    # following if statements.
+    #
+    # TODO: To eliminate this code, we need to do separate deploys for these
+    # two steps:
+    # (1) Make the works/edit_multiple form use "0" instead of special values.
+    # (2) Delete the code handling the special values.
     if updated_work_params[:anon_commenting_disabled] == 'allow_anon'
       updated_work_params[:anon_commenting_disabled] = '0'
     end
+
     if updated_work_params[:moderated_commenting_enabled] == 'not_moderated'
       updated_work_params[:moderated_commenting_enabled] = '0'
+    end
+
+    if updated_work_params[:restricted] == 'unrestricted'
+      updated_work_params[:restricted] = '0'
     end
 
     @works.each do |work|
@@ -914,9 +931,9 @@ class WorksController < ApplicationController
       :rating_string, :fandom_string, :relationship_string, :character_string,
       :archive_warning_string, :category_string, :expected_number_of_chapters, :revised_at,
       :freeform_string, :summary, :notes, :endnotes, :collection_names, :recipients, :wip_length,
-      :backdate, :language_id, :work_skin_id, :restricted, :anon_commenting_disabled,
+      # TODO: Remove anon_commenting_disabled.
+      :backdate, :language_id, :work_skin_id, :restricted, :anon_commenting_disabled, :comment_permissions,
       :moderated_commenting_enabled, :title, :pseuds_to_add, :collections_to_add,
-      :unrestricted,
       current_user_pseud_ids: [],
       collections_to_remove: [],
       challenge_assignment_ids: [],

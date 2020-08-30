@@ -19,7 +19,7 @@ Feature: Tag wrangling
   Scenario: Admin can remove a user's wrangling privileges from the manage users page (this will leave assignments intact)
 
     Given the tag wrangler "tangler" with password "wr@ngl3r" is wrangler of "Testing"
-    When I am logged in as an admin
+    When I am logged in as a "tag_wrangling" admin
       And I am on the manage users page
     When I fill in "Name" with "tangler"
       And I press "Find"

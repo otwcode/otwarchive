@@ -12,9 +12,9 @@ Feature: Invite queue management
 
   Scenario: Can turn queue off in Admin Settings and it displays as off
 
-    Given I am logged in as an admin
+    Given I am logged in as a "policy_and_abuse" admin
       And I go to the admin-settings page
-      And I uncheck "admin_setting_invite_from_queue_enabled"
+      And I uncheck "Invite from queue enabled (People can add themselves to the queue and invitations are sent out automatically)"
       And I press "Update"
     When I am logged out as an admin
       And I am on the homepage
@@ -23,10 +23,10 @@ Feature: Invite queue management
 
   Scenario: Can turn queue on in Admin Settings and it displays as on
 
-    Given I am logged in as an admin
+    Given I am logged in as a "policy_and_abuse" admin
       And account creation requires an invitation
       And I go to the admin-settings page
-      And I check "admin_setting_invite_from_queue_enabled"
+      And I check "Invite from queue enabled (People can add themselves to the queue and invitations are sent out automatically)"
       And I press "Update"
     When I am logged out as an admin
       And I am on the homepage

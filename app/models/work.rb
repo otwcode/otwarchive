@@ -147,6 +147,12 @@ class Work < ApplicationRecord
   # Run Taggable#check_for_invalid_tags as a validation.
   validate :check_for_invalid_tags
 
+  enum comment_permissions: {
+    enable_all: 0,
+    disable_anon: 1,
+    disable_all: 2
+  }, _suffix: :comments
+
   ########################################################################
   # HOOKS
   # These are methods that run before/after saves and updates to ensure
@@ -492,13 +498,6 @@ class Work < ApplicationRecord
       user_is_owner_or_invited?(user)
     end
   end
-
-  def unrestricted=(setting)
-    if setting == "1"
-      self.restricted = false
-    end
-  end
-  def unrestricted; !self.restricted; end
 
   def unrevealed?(user=User.current_user)
     # eventually here is where we check if it's in a challenge that hasn't been made public yet
@@ -921,6 +920,22 @@ class Work < ApplicationRecord
     )
   end
 
+  def comment_permissions=(value)
+    write_attribute(:comment_permissions, value)
+
+    # Map the special value back to an integer, and write it to the
+    # anon_commenting_disabled column so that if we do have to revert, we can
+    # go back to using the anon_commenting_disabled column without data loss.
+    write_attribute(:anon_commenting_disabled,
+                    Work.comment_permissions[comment_permissions])
+  end
+
+  def anon_commenting_disabled=(value)
+    write_attribute(:anon_commenting_disabled, value)
+    write_attribute(:comment_permissions,
+                    anon_commenting_disabled ? :disable_anon : :enable_all)
+  end
+
   ########################################################################
   # RELATED WORKS
   # These are for inspirations/remixes/etc
@@ -1002,7 +1017,6 @@ class Work < ApplicationRecord
   scope :ordered_by_hit_count_asc, -> { order("hit_count ASC") }
   scope :ordered_by_date_desc, -> { order("revised_at DESC") }
   scope :ordered_by_date_asc, -> { order("revised_at ASC") }
-  scope :random_order, -> { order("RAND()") }
 
   scope :recent, lambda { |*args| where("revised_at > ?", (args.first || 4.weeks.ago.to_date)) }
   scope :within_date_range, lambda { |*args| where("revised_at BETWEEN ? AND ?", (args.first || 4.weeks.ago), (args.last || Time.now)) }

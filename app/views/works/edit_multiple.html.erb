@@ -47,74 +47,54 @@
             {:include_blank => true} %>
       </dd>
 
+      <%
+        # For each of the following radio buttons, we replace the value that
+        # would normally be "0" with a special string that will be replaced
+        # with "0" in the controller. This is for cross-compatibility with the
+        # old code -- see WorksController#update_multiple for details.
+      %>
+
       <dt><%= ts("Visibility") %> <%= link_to_help "registered-users" %></dt>
       <dd>
-        <ul>
-          <li>
-            <label for="work_restricted">
-              <%= form.check_box :restricted %>
-              <%= ts("Only show to registered users") %>
-            </label>
-          </li>
-          <li>
-            <label for="work_unrestricted">
-              <%= form.check_box :unrestricted %>
-              <%= ts("Show to all") %>
-            </label>
-          </li>
-        </ul>
-      </dd>
-
-      <dt><%= ts("Anonymous Commenting") %><%= link_to_help "comments-anonymous" %></dt>
-      <dd>
-        <ul>
-          <li>
-            <label for="work_anon_commenting_disabled_">
-              <%= form.radio_button(:anon_commenting_disabled, '') %>
-              <%= ts("Keep current anonymous comment settings") %>
-            </label>
-          </li>
-          <li>
-            <% # We use "allow_anon" as a placeholder value because the mass edit code strips 0, which is the value we actually want %>
-            <% # The controller will change it to the proper value %>
-            <label for="work_anon_commenting_disabled_allow_anon">
-              <%= form.radio_button(:anon_commenting_disabled, "allow_anon") %>
-              <%= ts("Enable anonymous comments") %>
-            </label>
-          </li>
-          <li>
-            <label for="work_anon_commenting_disabled_1">
-              <%= form.radio_button(:anon_commenting_disabled, "1") %>
-              <%= ts("Disable anonymous comments") %>
-            </label>
-          </li>
-        </ul>
+        <fieldset>
+          <%=
+            radio_button_list(form, :restricted, [
+              ["", ts("Keep current visibility settings")],
+              ["1", ts("Only show to registered users")],
+              ["unrestricted", ts("Show to all")]
+            ])
+          %>
+        </fieldset>
       </dd>
 
       <dt><%= ts("Comment Moderation") %><%= link_to_help "comments-moderated" %></dt>
       <dd>
-        <ul>
-          <li>
-            <label for="work_moderated_commenting_enabled_">
-              <%= form.radio_button(:moderated_commenting_enabled, '') %>
-              <%= ts("Keep current comment moderation settings") %>
-            </label>
-          </li>
-          <li>
-            <label for="work_moderated_commenting_enabled_1">
-              <%= form.radio_button(:moderated_commenting_enabled, "1") %>
-              <%= ts("Enable comment moderation") %>
-            </label>
-          </li>
-          <li>
-            <% # We use "not_moderated" as a placeholder value because the mass edit code strips 0, which is the value we actually want %>
-            <% # The controller will change it to the proper value %>
-            <label for="work_moderated_commenting_enabled_not_moderated">
-              <%= form.radio_button(:moderated_commenting_enabled, "not_moderated") %>
-              <%= ts("Disable comment moderation") %>
-            </label>
-          </li>
-        </ul>
+        <fieldset>
+          <%=
+            radio_button_list(form, :moderated_commenting_enabled, [
+              ["", ts("Keep current comment moderation settings")],
+              ["1", ts("Enable comment moderation")],
+              ["not_moderated", ts("Disable comment moderation")]
+            ])
+          %>
+        </fieldset>
+      </dd>
+
+      <dt>
+        <%= ts("Who can comment on these works") %>
+        <%= link_to_help "who-can-comment-on-this-work" %>
+      </dt>
+      <dd>
+        <fieldset>
+          <%=
+            radio_button_list(form, :comment_permissions, [
+              ["", ts("Keep current comment settings")],
+              [:enable_all, ts("Registered users and guests can comment")],
+              [:disable_anon, ts("Only registered users can comment")],
+              [:disable_all, ts("No one can comment")]
+            ])
+          %>
+        </fieldset>
       </dd>
     </dl>
   </fieldset>

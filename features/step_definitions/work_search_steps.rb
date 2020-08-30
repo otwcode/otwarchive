@@ -134,16 +134,21 @@ end
 Given /^a set of works with comments for searching$/ do
   step %{basic tags}
 
-  # Comments created with factories are not added to a work's stat totals
-  # even after running the rake task, so we're doing it through steps that add
-  # comments through the interface
-  step %{I have a work "Work 1"}
-  step %{the work "Work 2" with 1 comments setup}
-  step %{the work "Work 3" with 1 comments setup}
-  step %{the work "Work 4" with 1 comments setup}
-  step %{the work "Work 5" with 3 comments setup}
-  step %{the work "Work 6" with 3 comments setup}
-  step %{the work "Work 7" with 10 comments setup}
+  counts = {
+    "Work 1" => 0,
+    "Work 2" => 1,
+    "Work 3" => 1,
+    "Work 4" => 1,
+    "Work 5" => 3,
+    "Work 6" => 3,
+    "Work 7" => 10
+  }
+
+  counts.each_pair do |title, comment_count|
+    work = FactoryBot.create(:work, title: title)
+    FactoryBot.create_list(:comment, comment_count, :by_guest,
+                           commentable: work.last_posted_chapter)
+  end
 
   step %{the statistics for all works are updated}
   step %{all indexing jobs have been run}
@@ -189,26 +194,22 @@ end
 Given /^a set of works with bookmarks for searching$/ do
   step %{basic tags}
 
-  # Bookmarks created with factories are not added to a work's stat totals
-  # even after running the rake task, so we're doing it through steps that add
-  # bookmarks through the interface
-  step %{I have a work "Work 1"}
-  step %{the work "Work 2" with 1 bookmark setup}
-  step %{the work "Work 3" with 1 bookmark setup}
-  step %{the work "Work 4" with 2 bookmarks setup}
-  step %{the work "Work 5" with 2 bookmarks setup}
-  step %{the work "Work 6" with 4 bookmarks setup}
-  step %{the work "Work 7" with 10 bookmarks setup}
+  counts = {
+    "Work 1" => 0,
+    "Work 2" => 1,
+    "Work 3" => 1,
+    "Work 4" => 2,
+    "Work 5" => 2,
+    "Work 6" => 4,
+    "Work 7" => 10
+  }
 
-  step %{the statistics for all works are updated}
-
-  # The cache on work blurb stat lines expires every hour -- we need to expire
-  # them so we can check the results
-  7.times do |i|
-    work = Work.find_by_title("Work #{i + 1}")
-    ActionController::Base.new.expire_fragment("#{work.cache_key}/stats-v2")
+  counts.each_pair do |title, bookmark_count|
+    work = FactoryBot.create(:work, title: title)
+    FactoryBot.create_list(:bookmark, bookmark_count, bookmarkable: work)
   end
 
+  step %{the statistics for all works are updated}
   step %{all indexing jobs have been run}
 end
 

@@ -13,17 +13,29 @@ Given /the following admins? exists?/ do |table|
   end
 end
 
-Given /^I am logged in as an admin$/ do
-  step("I am logged out")
-  admin = Admin.find_by(login: "testadmin")
-  if admin.blank?
-    FactoryBot.create(:admin, login: "testadmin", password: "testadmin", email: "testadmin@example.org")
-  end
+Given "I am logged in as a super admin" do
+  step %{I am logged in as a "superadmin" admin}
+end
+
+Given "I am logged in as a(n) {string} admin" do |role|
+  step %{I am logged out}
+  login = "testadmin-#{role}"
+  FactoryBot.create(:admin, login: login, roles: [role]) if Admin.find_by(login: login).nil?
+  visit new_admin_session_path
+  fill_in "Admin user name", with: login
+  fill_in "Admin password", with: "password"
+  click_button "Log in as admin"
+  step %{I should see "Successfully logged in"}
+end
+
+Given "I am logged in as an admin" do
+  step %{I am logged out}
+  FactoryBot.create(:admin, login: "testadmin", email: "testadmin@example.org") if Admin.find_by(login: "testadmin").nil?
   visit new_admin_session_path
   fill_in "Admin user name", with: "testadmin"
-  fill_in "Admin password", with: "testadmin"
+  fill_in "Admin password", with: "password"
   click_button "Log in as admin"
-  step("I should see \"Successfully logged in\"")
+  step %{I should see "Successfully logged in"}
 end
 
 Given /^I am logged out as an admin$/ do
@@ -33,30 +45,34 @@ end
 Given /^basic languages$/ do
   Language.default
   german = Language.find_or_create_by(short: "DE", name: "Deutsch", support_available: true, abuse_support_available: true)
-  de = Locale.new
-  de.iso = 'de'
-  de.name = 'Deutsch'
-  de.language_id = german.id
-  de.save!
+  Locale.create(iso: "de", name: "Deutsch", language: german)
 end
 
 Given /^downloads are off$/ do
-  step("I am logged in as an admin")
+  step("I am logged in as a super admin")
   visit(admin_settings_path)
   uncheck("Allow downloads")
   click_button("Update")
 end
 
 Given /^tag wrangling is off$/ do
-  step("I am logged in as an admin")
+  step(%{I am logged in as a "tag_wrangling" admin})
   visit(admin_settings_path)
-  step("I check \"Turn off tag wrangling for non-admins\"")
-  step("I press \"Update\"")
+  step(%{I check "Turn off tag wrangling for non-admins"})
+  step(%{I press "Update"})  
+  step("I am logged out as an admin")
+end
+
+Given /^tag wrangling is on$/ do
+  step(%{I am logged in as a "tag_wrangling" admin})
+  visit(admin_settings_path)
+  step(%{I uncheck "Turn off tag wrangling for non-admins"})
+  step(%{I press "Update"})
   step("I am logged out as an admin")
 end
 
 Given /^the support form is disabled and its text field set to "Please don't contact us"$/ do
-  step("I am logged in as an admin")
+  step(%{I am logged in as a "support" admin})
   visit(admin_settings_path)
   check("Turn off support form")
   fill_in(:admin_setting_disabled_support_form_text, with: "Please don't contact us")
@@ -64,7 +80,7 @@ Given /^the support form is disabled and its text field set to "Please don't con
 end
 
 Given /^the support form is enabled$/ do
-  step("I am logged in as an admin")
+  step(%{I am logged in as a "support" admin})
   visit(admin_settings_path)
   uncheck("Turn off support form")
   click_button("Update")
@@ -78,7 +94,7 @@ end
 Given /^I have posted known issues$/ do
   step %{I am logged in as an admin}
   step %{I follow "Admin Posts"}
-  step %{I follow "Known Issues" within "#main"}
+  step %{I follow "Known Issues" within "#header"}
   step %{I follow "make a new known issues post"}
   step %{I fill in "known_issue_title" with "First known problem"}
   step %{I fill in "content" with "This is a bit of a problem"}
@@ -86,7 +102,7 @@ Given /^I have posted known issues$/ do
 end
 
 Given /^I have posted an admin post$/ do
-  step("I am logged in as an admin")
+  step(%{I am logged in as a "communications" admin})
   step("I make an admin post")
   step("I am logged out as an admin")
 end
@@ -94,7 +110,7 @@ end
 Given /^the fannish next of kin "([^\"]*)" for the user "([^\"]*)"$/ do |kin, user|
   step %{the user "#{kin}" exists and is activated}
   step %{the user "#{user}" exists and is activated}
-  step %{I am logged in as an admin}
+  step %{I am logged in as a "policy_and_abuse" admin}
   step %{I go to the abuse administration page for "#{user}"}
   fill_in("Fannish next of kin's username", with: "#{kin}")
   fill_in("Fannish next of kin's email", with: "testing@foo.com")
@@ -103,7 +119,7 @@ end
 
 Given /^the user "([^\"]*)" is suspended$/ do |user|
   step %{the user "#{user}" exists and is activated}
-  step %{I am logged in as an admin}
+  step %{I am logged in as a "policy_and_abuse" admin}
   step %{I go to the abuse administration page for "#{user}"}
   choose("admin_action_suspend")
   fill_in("suspend_days", with: 30)
@@ -113,7 +129,7 @@ end
 
 Given /^the user "([^\"]*)" is banned$/ do |user|
   step %{the user "#{user}" exists and is activated}
-  step %{I am logged in as an admin}
+  step(%{I am logged in as a "policy_and_abuse" admin})
   step %{I go to the abuse administration page for "#{user}"}
   choose("admin_action_ban")
   fill_in("Notes", with: "Why they are banned")
@@ -126,13 +142,13 @@ Then /^the user "([^\"]*)" should be permanently banned$/ do |user|
 end
 
 Given /^I have posted an admin post without paragraphs$/ do
-  step("I am logged in as an admin")
+  step(%{I am logged in as a "communications" admin})
   step("I make an admin post without paragraphs")
   step("I am logged out as an admin")
 end
 
 Given /^I have posted an admin post with tags$/ do
-  step("I am logged in as an admin")
+  step(%{I am logged in as a "communications" admin})
   visit new_admin_post_path
   fill_in("admin_post_title", with: "Default Admin Post")
   fill_in("content", with: "Content of the admin post.")
@@ -173,7 +189,7 @@ When /^I make an admin post without paragraphs$/ do
 end
 
 When /^I make a(?: (\d+)(?:st|nd|rd|th)?)? FAQ post$/ do |n|
-  n ||= 1
+  n = 1 if n.zero?
   visit new_archive_faq_path
   fill_in("Question*", with: "Number #{n} Question.")
   fill_in("Answer*", with: "Number #{n} posted FAQ, this is.")
@@ -218,7 +234,7 @@ end
 When /^I edit known issues$/ do
   step %{I am logged in as an admin}
   step %{I follow "Admin Posts"}
-  step %{I follow "Known Issues" within "#main"}
+  step %{I follow "Known Issues" within "#header"}
   step %{I follow "Edit"}
   step %{I fill in "known_issue_title" with "More known problems"}
   step %{I fill in "content" with "This is a bit of a problem, and this is too"}
@@ -228,7 +244,7 @@ end
 When /^I delete known issues$/ do
   step %{I am logged in as an admin}
   step %{I follow "Admin Posts"}
-  step %{I follow "Known Issues" within "#main"}
+  step %{I follow "Known Issues" within "#header"}
   step %{I follow "Delete"}
 end
 

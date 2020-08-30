@@ -62,7 +62,7 @@ Feature: Share Works
     Then I should see "Share"
     When I follow "Share"
     Then I should see "Copy and paste the following code to link back to this work"
-      And I should see "><strong>Whatever</strong></a> (9 words) b"
+      And I should see "><strong>Whatever</strong></a> (10 words) b"
 
   @javascript
   Scenario: Share URL should not be used for post-login redirect
