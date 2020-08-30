@@ -41,7 +41,7 @@ Feature: Commenting on admin posts
       And I am logged in as a "communications" admin
     When I go to the admin-posts page
       And I follow "Edit"
-    Then I should see "Who can comment on this work"
+    Then I should see "Who can comment on this"
       And I should see "Registered users and guests can comment"
       And I should see "Only registered users can comment"
       And I should see "No one can comment"

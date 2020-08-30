@@ -99,7 +99,7 @@ Feature: Admin Actions to Post News
     When I follow "Admin Posts"
       And I follow "Post AO3 News"
     Then I should see "New AO3 News Post"
-      And I should see "Who can comment on this work"
+      And I should see "Who can comment on this"
       And I should see "Registered users and guests can comment"
       And I should see "Only registered users can comment"
       And I should see "No one can comment"
