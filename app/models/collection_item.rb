@@ -214,14 +214,9 @@ class CollectionItem < ApplicationRecord
     }.join(", ")
   end
 
-  def remove=(value)
-    if value == "1"
-      self.destroy
-    end
-  end
-
+  attr_writer :remove
   def remove
-    ""
+    @remove || ""
   end
 
   def title
