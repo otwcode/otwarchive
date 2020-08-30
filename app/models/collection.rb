@@ -410,7 +410,7 @@ class Collection < ApplicationRecord
 
   def notify_maintainers(subject, message)
     # send maintainers a notice via email
-    UserMailer.collection_notification(self.id, subject, message).deliver
+    UserMailer.collection_notification(self.id, subject, message).deliver_later
   end
 
   include AsyncWithResque

@@ -190,10 +190,10 @@ class Work < ApplicationRecord
           # Check to see if this work is being deleted by an Admin
           if User.current_user.is_a?(Admin)
             # this has to use the synchronous version because the work is going to be destroyed
-            UserMailer.admin_deleted_work_notification(user, self).deliver!
+            UserMailer.admin_deleted_work_notification(user, self).deliver_now
           else
             # this has to use the synchronous version because the work is going to be destroyed
-            UserMailer.delete_work_notification(user, self).deliver!
+            UserMailer.delete_work_notification(user, self).deliver_now
           end
         end
       end

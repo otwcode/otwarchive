@@ -91,5 +91,11 @@ module Otwarchive
       "X-Download-Options" => "noopen",
       "X-Permitted-Cross-Domain-Policies" => "none"
     }
+
+    # Use Resque to run ActiveJobs (including sending delayed mail):
+    config.active_job.queue_adapter = :resque
+
+    # Use "mailer" instead of "mailers" as the Resque queue for emails:
+    config.action_mailer.deliver_later_queue_name = :mailer
   end
 end

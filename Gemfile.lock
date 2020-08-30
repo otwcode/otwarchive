@@ -1280,9 +1280,6 @@ GEM
       redis (>= 3.3)
       resque (>= 1.26)
       rufus-scheduler (~> 3.2)
-    resque_mailer (2.4.3)
-      actionmailer (>= 3.0)
-      activesupport (>= 3.0)
     rest-client (1.8.0)
       http-cookie (>= 1.0.2, < 2.0)
       mime-types (>= 1.16, < 3.0)
@@ -1463,7 +1460,6 @@ DEPENDENCIES
   redis-namespace
   resque (>= 1.14.0)
   resque-scheduler
-  resque_mailer
   rest-client (~> 1.8.0)
   rollout
   rspec (~> 3.8)
