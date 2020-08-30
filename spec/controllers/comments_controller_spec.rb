@@ -261,26 +261,74 @@ describe CommentsController do
       end
     end
 
-    context "when the commentable is a comment" do
-      context "when the parent work has all comments disabled" do
-        let(:work) { create(:work, comment_permissions: :disable_all) }
-        let(:comment) { create(:comment, commentable: work.first_chapter) }
+    context "when the commentable is an admin post" do
+      context "where all comments are disabled" do
+        let(:admin_post) { create(:admin_post, comment_permissions: :disable_all) }
 
         it "shows an error and redirects" do
-          post :create, params: { comment_id: comment.id, comment: anon_comment_attributes }
-          it_redirects_to_with_error(work_path(work),
-                                     "Sorry, this work doesn't allow comments.")
+          post :create, params: { admin_post_id: admin_post.id, comment: anon_comment_attributes }
+          it_redirects_to_with_error(admin_post_path(admin_post),
+                                    "Sorry, this news post doesn't allow comments.")
         end
       end
 
-      context "when the parent work has anonymous comments disabled" do
-        let(:work) { create(:work, comment_permissions: :disable_anon) }
-        let(:comment) { create(:comment, commentable: work.first_chapter) }
+      context "where anonymous comments disabled" do
+        let(:admin_post) { create(:admin_post, comment_permissions: :disable_anon) }
 
         it "shows an error and redirects" do
-          post :create, params: { comment_id: comment.id, comment: anon_comment_attributes }
-          it_redirects_to_with_error(work_path(work),
-                                     "Sorry, this work doesn't allow non-Archive users to comment.")
+          post :create, params: { admin_post_id: admin_post.id, comment: anon_comment_attributes }
+          it_redirects_to_with_error(admin_post_path(admin_post),
+                                    "Sorry, this news post doesn't allow non-Archive users to comment.")
+        end
+      end
+    end
+
+    context "when the commentable is a comment" do
+      context "on a parent work" do
+        context "where all comments are disabled" do
+          let(:work) { create(:work, comment_permissions: :disable_all) }
+          let(:comment) { create(:comment, commentable: work.first_chapter) }
+
+          it "shows an error and redirects" do
+            post :create, params: { comment_id: comment.id, comment: anon_comment_attributes }
+            it_redirects_to_with_error(work_path(work),
+                                      "Sorry, this work doesn't allow comments.")
+          end
+        end
+
+        context "where anonymous comments disabled" do
+          let(:work) { create(:work, comment_permissions: :disable_anon) }
+          let(:comment) { create(:comment, commentable: work.first_chapter) }
+
+          it "shows an error and redirects" do
+            post :create, params: { comment_id: comment.id, comment: anon_comment_attributes }
+            it_redirects_to_with_error(work_path(work),
+                                      "Sorry, this work doesn't allow non-Archive users to comment.")
+          end
+        end
+      end
+
+      context "on an admin post" do
+        context "where all comments are disabled" do
+          let(:admin_post) { create(:admin_post, comment_permissions: :disable_all) }
+          let(:comment) { create(:comment, commentable: admin_post) }
+
+          it "shows an error and redirects" do
+            post :create, params: { comment_id: comment.id, comment: anon_comment_attributes }
+            it_redirects_to_with_error(admin_post_path(admin_post),
+                                      "Sorry, this news post doesn't allow comments.")
+          end
+        end
+
+        context "where anonymous comments disabled" do
+          let(:admin_post) { create(:admin_post, comment_permissions: :disable_anon) }
+          let(:comment) { create(:comment, commentable: admin_post) }
+
+          it "shows an error and redirects" do
+            post :create, params: { comment_id: comment.id, comment: anon_comment_attributes }
+            it_redirects_to_with_error(admin_post_path(admin_post),
+                                      "Sorry, this news post doesn't allow non-Archive users to comment.")
+          end
         end
       end
     end
