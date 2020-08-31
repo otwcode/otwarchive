@@ -168,7 +168,7 @@ Given /^the work(?: "([^"]*)")? with(?: (\d+))? comments setup$/ do |title, n_co
   title ||= "Blabla"
   work = FactoryBot.create(:work, title: title)
 
-  n_comments ||= 3
+  n_comments = 3 if n_comments.blank? || n_comments.zero?
   FactoryBot.create_list(:comment, n_comments.to_i, :by_guest,
                          commentable: work.last_posted_chapter)
 end
@@ -180,7 +180,7 @@ Given /^the work(?: "([^"]*)")? with(?: (\d+))? bookmarks? setup$/ do |title, n_
   title ||= "Blabla"
   work = FactoryBot.create(:work, title: title)
 
-  n_bookmarks ||= 3
+  n_bookmarks = 3 if n_bookmarks.blank? || n_bookmarks.zero?
   FactoryBot.create_list(:bookmark, n_bookmarks.to_i, bookmarkable: work)
 end
 

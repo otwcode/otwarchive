@@ -131,7 +131,7 @@ class ExternalAuthor < ApplicationRecord
 
   def notify_user_of_claim(claimed_work_ids)
     # send announcement to user of the stories they have been given
-    UserMailer.claim_notification(self.id, claimed_work_ids).deliver
+    UserMailer.claim_notification(self.id, claimed_work_ids).deliver_later
   end
 
   def find_or_invite(archivist = nil)

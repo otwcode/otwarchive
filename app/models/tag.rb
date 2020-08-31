@@ -367,8 +367,8 @@ class Tag < ApplicationRecord
 
   scope :random, -> {
     (User.current_user.is_a?(Admin) || User.current_user.is_a?(User)) ?
-    visible_to_registered_user_with_count.order("RAND()") :
-    visible_to_all_with_count.order("RAND()")
+    visible_to_registered_user_with_count.random_order :
+    visible_to_all_with_count.random_order
   }
 
   scope :with_count, -> {
@@ -451,11 +451,11 @@ class Tag < ApplicationRecord
 
   def self.by_name_without_articles(fieldname = "name")
     fieldname = "name" unless fieldname.match(/^([\w]+\.)?[\w]+$/)
-    order("case when lower(substring(#{fieldname} from 1 for 4)) = 'the ' then substring(#{fieldname} from 5)
+    order(Arel.sql("case when lower(substring(#{fieldname} from 1 for 4)) = 'the ' then substring(#{fieldname} from 5)
             when lower(substring(#{fieldname} from 1 for 2)) = 'a ' then substring(#{fieldname} from 3)
             when lower(substring(#{fieldname} from 1 for 3)) = 'an ' then substring(#{fieldname} from 4)
             else #{fieldname}
-            end")
+            end"))
   end
 
   def self.in_tag_set(tag_set)
@@ -967,7 +967,7 @@ class Tag < ApplicationRecord
     sub_taggings.destroy_invalid
   end
 
-  # defines fandom_string=, media_string=, character_string=, relationship_string=, freeform_string= 
+  # defines fandom_string=, media_string=, character_string=, relationship_string=, freeform_string=
   %w(Fandom Media Character Relationship Freeform).each do |tag_type|
     attr_reader "#{tag_type.downcase}_string"
 
@@ -1030,7 +1030,7 @@ class Tag < ApplicationRecord
         self.errors.add(:base, tag_string + " could not be saved. Please make sure that it's a valid tag name.")
       end
     end
-    
+
     # If we don't have any errors, update the tag to add the new merger
     if new_merger && self.errors.empty?
       self.canonical = false

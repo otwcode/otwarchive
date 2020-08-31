@@ -31,13 +31,11 @@ class Comment < ApplicationRecord
     message: ts("^This comment has already been left on this work. (It may not appear right away for performance reasons.)")
   }
 
-  scope :recent, lambda { |*args|  where("created_at > ?", (args.first || 1.week.ago.to_date)) }
-  scope :limited, lambda {|limit| {limit: limit.kind_of?(Fixnum) ? limit : 5} }
   scope :ordered_by_date, -> { order('created_at DESC') }
-  scope :top_level, -> { where("commentable_type in (?)", ["Chapter", "Bookmark"]) }
-  scope :include_pseud, -> { includes(:pseud) }
-  scope :not_deleted, -> { where(is_deleted: false) }
-  scope :reviewed, -> { where(unreviewed: false) }
+  scope :top_level,       -> { where.not(commentable_type: "Comment") }
+  scope :include_pseud,   -> { includes(:pseud) }
+  scope :not_deleted,     -> { where(is_deleted: false) }
+  scope :reviewed,        -> { where(unreviewed: false) }
   scope :unreviewed_only, -> { where(unreviewed: true) }
 
   # Gets methods and associations from acts_as_commentable plugin
@@ -72,7 +70,7 @@ class Comment < ApplicationRecord
 
     if self.saved_change_to_edited_at? && self.saved_change_to_comment_content? && self.moderated_commenting_enabled? && !self.is_creator_comment?
       # we might need to put it back into moderation
-      if content_too_different?(self.comment_content, self.comment_content_was)
+      if content_too_different?(comment_content, comment_content_before_last_save)
         # we use update_column because we don't want to invoke this callback again
         self.update_column(:unreviewed, true)
       end
