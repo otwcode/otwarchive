@@ -6,6 +6,7 @@ RUN apt-get update             && \
         calibre                   \
         default-mysql-client      \
         phantomjs                 \
+        pwgen                     \
         wkhtmltopdf               \
         zip
 
@@ -18,6 +19,11 @@ VOLUME /otwa
 COPY Gemfile .
 COPY Gemfile.lock .
 RUN gem install bundler -v 1.17.3 && bundle install
+
+# Install linters
+COPY Gemfile.linters .
+COPY Gemfile.linters.lock .
+BUNDLE_GEMFILE=Gemfile.linters bundle install
 
 # Default command to run in a new container
 EXPOSE 3000
