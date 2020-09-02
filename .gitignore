@@ -12,7 +12,6 @@ stdout
 /.dropbox
 /.dropbox.attr
 /.rspec
-Gemfile.linters.lock
 REVISION
 
 # /config/
