@@ -20,10 +20,6 @@ COPY Gemfile .
 COPY Gemfile.lock .
 RUN gem install bundler -v 1.17.3 && bundle install
 
-# Install linters
-COPY Gemfile.linters .
-RUN export BUNDLE_GEMFILE=Gemfile.linters && bundle install
-
 # Default command to run in a new container
 EXPOSE 3000
 CMD bundle exec rails s -p 3000
