@@ -1,5 +1,7 @@
 # Available linter versions:
 # http://help.houndci.com/en/articles/2461415-supported-linters
+#
+# Keep versions in sync with Gemfile.
 
 erblint:
   enabled: true
