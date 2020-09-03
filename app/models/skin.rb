@@ -1,11 +1,12 @@
 require 'fileutils'
-include HtmlCleaner
-include CssCleaner
-include SkinCacheHelper
-include SkinWizard
 
 class Skin < ApplicationRecord
   include ActiveModel::ForbiddenAttributesProtection
+
+  include HtmlCleaner
+  include CssCleaner
+  include SkinCacheHelper
+  include SkinWizard
 
   TYPE_OPTIONS = [
                    [ts("Site Skin"), "Skin"],
