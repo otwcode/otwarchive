@@ -5,11 +5,11 @@ FactoryBot.define do
     title { Faker::Lorem.word }
 
     trait :private do
-      public { false }
+      add_attribute(:public) { false }
     end
 
     trait :public do
-      public { true }
+      add_attribute(:public) { true }
       official { true }
     end
   end
