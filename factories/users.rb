@@ -8,12 +8,9 @@ FactoryBot.define do
   sequence :email do |n|
     Faker::Internet.email(name="#{Faker::Name.first_name}_#{n}")
   end
-  sequence :admin_login do |n|
-    "testadmin#{n}"
-  end
 
   factory :role do
-    name { Faker::Company.profession }
+    sequence(:name) { |n| "#{Faker::Company.profession}_#{n}" }
   end
 
   factory :user do
