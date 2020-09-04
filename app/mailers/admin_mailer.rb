@@ -1,4 +1,6 @@
 class AdminMailer < ActionMailer::Base
+  include HtmlCleaner
+
   layout 'mailer'
   helper :mailer
   default from: "Archive of Our Own " + "<#{ArchiveConfig.RETURN_ADDRESS}>"

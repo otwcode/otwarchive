@@ -1,3 +1,7 @@
+# Make sure that the methods in SkinCacheHelper are available to steps in this
+# file (specifically, the steps checking cache expiration):
+World(SkinCacheHelper)
+
 DEFAULT_CSS = "\"#title { text-decoration: blink;}\""
 
 Given /^basic skins$/ do

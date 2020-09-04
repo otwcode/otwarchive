@@ -251,8 +251,8 @@ describe Skin do
     let(:random_user) { FactoryBot.create(:user) }
 
     before do
-      FactoryBot.create(:private_work_skin, author: skin_owner, title: 'Private Skin 1')
-      FactoryBot.create(:private_work_skin, author: skin_owner, title: 'Private Skin 2')
+      create(:work_skin, :private, author: skin_owner, title: "Private Skin 1")
+      create(:work_skin, :private, author: skin_owner, title: "Private Skin 2")
     end
 
     context 'no user argument given' do
@@ -316,10 +316,10 @@ describe Skin do
 
     context 'users own skins' do
       before do
-        FactoryBot.create(:private_work_skin, author: users[1], title: "User 2's First Skin")
-        FactoryBot.create(:private_work_skin, author: users[1], title: "User 2's Second Skin")
-        FactoryBot.create(:private_work_skin, author: users[2], title: "User 3's Skin")
-        FactoryBot.create(:private_work_skin, title: 'Unowned Private Skin')
+        create(:work_skin, :private, author: users[1], title: "User 2's First Skin")
+        create(:work_skin, :private, author: users[1], title: "User 2's Second Skin")
+        create(:work_skin, :private, author: users[2], title: "User 3's Skin")
+        create(:work_skin, :private, title: "Unowned Private Skin")
       end
 
       it 'returns approved and owned skins' do
