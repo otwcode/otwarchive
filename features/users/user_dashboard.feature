@@ -81,6 +81,8 @@ Feature: User dashboard
   Given I am logged in as "meatloaf"
     And I post the work "My Work"
   When I add the work "My Work" to the series "Oldest Series"
+    # Make sure all other series are more recent
+    And it is currently 1 second from now
     And I add the work "My Work" to the series "Series 2"
     And I add the work "My Work" to the series "Series 3"
     And I add the work "My Work" to the series "Series 4"
