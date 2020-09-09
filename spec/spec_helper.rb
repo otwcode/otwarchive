@@ -106,6 +106,10 @@ RSpec.configure do |config|
     WorkIndexer.delete_index
   end
 
+  config.before :each, default_skin: true do
+    AdminSetting.current.update_attribute(:default_skin, Skin.default)
+  end
+
   config.before :each, type: :controller do
     @request.host = "www.example.com"
   end

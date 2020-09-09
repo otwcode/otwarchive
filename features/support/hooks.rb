@@ -53,3 +53,8 @@ end
 After "@disable_caching" do
   ActionController::Base.perform_caching = true
 end
+
+Before "@skins" do
+  # Create a default skin:
+  AdminSetting.current.update_attribute(:default_skin, Skin.default)
+end

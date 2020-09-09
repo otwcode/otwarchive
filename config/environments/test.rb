@@ -21,7 +21,7 @@ Otwarchive::Application.configure do
   memcached_servers = "127.0.0.1:11211"
   memcached_servers = YAML.load_file(Rails.root.join("config/local.yml")).fetch("MEMCACHED_SERVERS", memcached_servers) if File.file?(Rails.root.join("config/local.yml"))
   config.cache_store = :mem_cache_store, memcached_servers,
-                       { namespace: "ao3-v1", compress: true, pool_size: 10, raise_errors: true }
+                       { namespace: "ao3-v1-test", compress: true, pool_size: 10, raise_errors: true }
 
   # Raise exceptions instead of rendering exception templates
   config.action_dispatch.show_exceptions = false

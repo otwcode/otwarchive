@@ -1,8 +1,9 @@
 require 'spec_helper'
 
-describe Skin do
-
-  describe "save" do
+describe Skin, default_skin: true do
+  describe "save", default_skin: false do
+    # This block doesn't need the default skin to be loaded, because we're
+    # testing whether a skin can be saved, so we disable default_skin.
 
     before(:each) do
       @skin = Skin.new(title: "Test Skin")
@@ -223,27 +224,26 @@ describe Skin do
 
 
   describe "use" do
-    before(:each) do
+    before do
       Skin.load_site_css
-      @css = "body {background: purple;}"
-      @skin = Skin.new(title: "Test Skin", css: @css)
-      @skin.save
-      @style = @skin.get_style
+      Skin.set_default_to_current_version
     end
 
+    let(:css) { "body {background: purple;}" }
+    let(:skin) { Skin.create(title: "Test Skin", css: css) }
+    let(:style) { skin.get_style }
+
     it "should have a valid style block" do
-      style_regex = Regexp.new('<style type="text/css" media="all">')
-      expect(@style.match(style_regex)).to be_truthy
+      expect(style).to match(%r{<style type="text/css" media="all">})
     end
 
     it "should include the css" do
-      expect(@style.match(/background: purple;/)).to be_truthy
+      expect(style).to match(%r{background: purple;})
     end
 
     it "should include links to the default archive skin" do
-      expect(@style.match(/<link rel="stylesheet" type="text\/css"/)).to be_truthy
+      expect(style).to match(%r{<link rel="stylesheet" type="text/css"})
     end
-
   end
 
   describe '.approved_or_owned_by' do

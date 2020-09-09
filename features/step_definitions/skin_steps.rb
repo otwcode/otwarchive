@@ -145,13 +145,13 @@ end
 When /^the skin "([^\"]*)" is in the chooser$/ do |skin_name|
   skin = Skin.find_by(title: skin_name)
   skin.in_chooser = true
-  skin.save
+  skin.save!
 end
 
 When /^the skin "([^\"]*)" is cached$/ do |skin_name|
   skin = Skin.find_by(title: skin_name)
   skin.cached = true
-  skin.save
+  skin.save!
   skin.cache!
 end
 
@@ -193,32 +193,32 @@ end
 
 Then /^the cache of the skin on "([^\"]*)" should expire after I save the skin$/ do |title|
   skin = Skin.find_by(title: title)
-  orig_cache_key = skin_cache_value(skin)
+  orig_cache_version = skin_cache_version(skin)
   visit edit_skin_path(skin)
   fill_in("CSS", with: "#random { text-decoration: blink;}")
   click_button("Update")
-  assert orig_cache_key != skin_cache_value(skin), "Cache key #{orig_cache_key} matches #{skin_cache_value(skin)}."
+  assert orig_cache_version != skin_cache_version(skin), "Cache version #{orig_cache_version} matches #{skin_cache_version(skin)}."
 end
 
 Then(/^the cache of the skin on "(.*?)" should not expire after I save "(.*?)"$/) do |arg1, arg2|
   skin = Skin.find_by(title: arg1)
   save_me = Skin.find_by(title: arg2)
-  orig_skin_key = skin_cache_value(skin)
-  orig_save_me_key = skin_cache_value(save_me)
+  orig_skin_version = skin_cache_version(skin)
+  orig_save_me_version = skin_cache_version(save_me)
   visit edit_skin_path(save_me)
   fill_in("CSS", with: "#random { text-decoration: blink;}")
   click_button("Update")
-  assert orig_save_me_key != skin_cache_value(save_me), "Cache key #{orig_save_me_key} matches #{skin_cache_value(save_me)}"
-  assert orig_skin_key == skin_cache_value(skin), "Cache key #{orig_skin_key} does not match #{skin_cache_value(skin)}"
+  assert orig_save_me_version != skin_cache_version(save_me), "Cache version #{orig_save_me_version} matches #{skin_cache_version(save_me)}"
+  assert orig_skin_version == skin_cache_version(skin), "Cache version #{orig_skin_version} does not match #{skin_cache_version(skin)}"
 end
 
 Then(/^the cache of the skin on "(.*?)" should expire after I save a parent skin$/) do |arg1|
   skin = Skin.find_by(title: arg1)
-  orig_skin_key = skin_cache_value(skin)
+  orig_skin_version = skin_cache_version(skin)
   parent_id = SkinParent.where(child_skin_id: skin.id).last.parent_skin_id
   parent = Skin.find(parent_id)
   parent.save!
-  assert orig_skin_key != skin_cache_value(skin), "Cache key #{orig_skin_key} matches #{skin_cache_value(skin)}"
+  assert orig_skin_version != skin_cache_version(skin), "Cache version #{orig_skin_version} matches #{skin_cache_version(skin)}"
 end
 
 Then /^I should see a purple logo$/ do
