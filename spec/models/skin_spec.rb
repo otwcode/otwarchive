@@ -238,7 +238,7 @@ describe Skin, default_skin: true do
     end
 
     it "should include the css" do
-      expect(style).to match(%r{background: purple;})
+      expect(style).to match(/background: purple;/)
     end
 
     it "should include links to the default archive skin" do
