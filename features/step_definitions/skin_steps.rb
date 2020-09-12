@@ -224,3 +224,13 @@ end
 Then /^I should see a purple logo$/ do
   page.should have_xpath('//style', text: "#header .heading a { color: purple; }")
 end
+
+Then /^I should see the skin "(.*?)" in the skin chooser$/ do |skin|
+  with_scope("#skin_chooser") do
+    expect(page).to have_content(skin)
+  end
+end
+
+Then /^I should not see the skin chooser$/ do
+  expect(page).not_to have_css("#skin_chooser")
+end
