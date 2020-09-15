@@ -63,9 +63,15 @@ class Skin < ApplicationRecord
   after_save :skin_invalidate_cache
   def skin_invalidate_cache
     skin_chooser_expire_cache
-    skin_cache_version_update(self)
+    skin_cache_version_update(id)
 
-    child_skins.find_each(&:skin_invalidate_cache) if type.nil?
+    # Work skins can't have children, but site skins (which have type nil)
+    # might have children that need expiration:
+    return unless type.nil?
+
+    SkinParent.get_all_child_ids(id).each do |child_id|
+      skin_cache_version_update(child_id)
+    end
   end
 
   validates_attachment_content_type :icon, content_type: /image\/\S+/, allow_nil: true
@@ -260,6 +266,11 @@ class Skin < ApplicationRecord
     FileUtils.rm_rf skin_dir # clear out old if exists
     self.cached = false
     save!
+  end
+
+  def recache_children!
+    child_ids = SkinParent.get_all_child_ids(id)
+    Skin.where(cached: true, id: child_ids).find_each(&:cache!)
   end
 
   def get_sheet_role

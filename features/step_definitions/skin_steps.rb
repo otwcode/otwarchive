@@ -10,7 +10,7 @@ Given /^basic skins$/ do
 end
 
 Given /^I set up the skin "([^"]*)"$/ do |skin_name|
-  visit new_skin_url
+  visit new_skin_path
   fill_in("Title", with: skin_name)
   fill_in("Description", with: "Random description")
   fill_in("CSS", with: "#title { text-decoration: blink;}")
@@ -97,6 +97,17 @@ end
 
 Given /^"([^"]*)" is using the approved public skin "([^"]*)"$/ do |login, skin_name|
   step "\"#{login}\" is using the approved public skin with css #{DEFAULT_CSS}"
+end
+
+Given /^I have a skin "(.*?)" with a parent "(.*?)"$/ do |child_title, parent_title|
+  step %{I set up the skin "#{parent_title}"}
+  click_button("Submit")
+  step %{I set up the skin "#{child_title}"}
+  click_button("Submit")
+
+  child = Skin.find_by(title: child_title)
+  parent = Skin.find_by(title: parent_title)
+  child.skin_parents.create(position: 1, parent_skin: parent)
 end
 
 ### WHEN
@@ -233,4 +244,16 @@ end
 
 Then /^I should not see the skin chooser$/ do
   expect(page).not_to have_css("#skin_chooser")
+end
+
+Then /^the filesystem cache of the skin "(.*?)" should include "(.*?)"$/ do |title, contents|
+  skin = Skin.find_by(title: title)
+  expect(skin.cached?).to be_truthy
+
+  directory = Skin.skins_dir + skin.skin_dirname
+  style = Skin.skin_dir_entries(directory, /.css$/).map do |filename|
+    File.read(directory + filename)
+  end.join("\n")
+
+  expect(style).to include(contents)
 end
