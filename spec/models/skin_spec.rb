@@ -1,10 +1,7 @@
 require 'spec_helper'
 
-describe Skin, default_skin: true do
-  describe "save", default_skin: false do
-    # This block doesn't need the default skin to be loaded, because we're
-    # testing whether a skin can be saved, so we disable default_skin.
-
+describe Skin do
+  describe "save" do
     before(:each) do
       @skin = Skin.new(title: "Test Skin")
     end
@@ -223,7 +220,7 @@ describe Skin, default_skin: true do
   end
 
 
-  describe "use" do
+  describe "use", default_skin: true do
     before do
       Skin.load_site_css
       Skin.set_default_to_current_version
@@ -246,7 +243,7 @@ describe Skin, default_skin: true do
     end
   end
 
-  describe '.approved_or_owned_by' do
+  describe ".approved_or_owned_by", default_skin: true do
     let(:skin_owner) { FactoryBot.create(:user) }
     let(:random_user) { FactoryBot.create(:user) }
 
@@ -305,7 +302,7 @@ describe Skin, default_skin: true do
     end
   end
 
-  describe '.approved_or_owned_by_any' do
+  describe ".approved_or_owned_by_any", default_skin: true do
     let(:users) { Array.new(3) { FactoryBot.create(:user) } }
 
     context 'users do not own skins' do

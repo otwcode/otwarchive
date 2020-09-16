@@ -41,7 +41,7 @@ module SkinsHelper
 
     # We include the version information for both the skin_id and the
     # AdminSetting.default_skin_id because the default skin is used in skins of
-    # type "user," so we need to regenerate the cache block when it's modified.
+    # type "user", so we need to regenerate the cache block when it's modified.
     #
     # We also include the default_skin_id in the version number so that we
     # regenerate the cache block when an admin updates the current default
