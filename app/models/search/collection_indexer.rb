@@ -34,8 +34,19 @@ class CollectionIndexer < Indexer
       closed: object.closed?,
       moderated: object.moderated?,
       unrevealed: object.unrevealed?,
-      anonymous: object.anonymous?
-      
+      anonymous: object.anonymous?,
+      owner_ids: object.all_owners.pluck(:id),
+      moderator_ids: object.all_moderators.pluck(:id),
+      public_fandom_ids: object.all_fandoms.pluck(:id),
+      public_fandoms_count: object.all_fandoms_count,
+      public_works_count: object.all_approved_works_count,
+      public_bookmarked_items_count: object.all_approved_bookmarks_count
+
+      # general_fandom_ids
+      # general_fandoms_count
+      # general_works_count
+      # general_bookmarked_items_count
+
       # signups_open_at: signups_open_at,
       # signups_close_at: signups_close_at,
       # assignments_due_at: assignments_due_at,
