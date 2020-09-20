@@ -1,9 +1,7 @@
 require 'spec_helper'
 
 describe Skin do
-
   describe "save" do
-
     before(:each) do
       @skin = Skin.new(title: "Test Skin")
     end
@@ -222,31 +220,30 @@ describe Skin do
   end
 
 
-  describe "use" do
-    before(:each) do
+  describe "use", default_skin: true do
+    before do
       Skin.load_site_css
-      @css = "body {background: purple;}"
-      @skin = Skin.new(title: "Test Skin", css: @css)
-      @skin.save
-      @style = @skin.get_style
+      Skin.set_default_to_current_version
     end
 
+    let(:css) { "body {background: purple;}" }
+    let(:skin) { Skin.create(title: "Test Skin", css: css) }
+    let(:style) { skin.get_style }
+
     it "should have a valid style block" do
-      style_regex = Regexp.new('<style type="text/css" media="all">')
-      expect(@style.match(style_regex)).to be_truthy
+      expect(style).to match(%r{<style type="text/css" media="all">})
     end
 
     it "should include the css" do
-      expect(@style.match(/background: purple;/)).to be_truthy
+      expect(style).to match(/background: purple;/)
     end
 
     it "should include links to the default archive skin" do
-      expect(@style.match(/<link rel="stylesheet" type="text\/css"/)).to be_truthy
+      expect(style).to match(%r{<link rel="stylesheet" type="text/css"})
     end
-
   end
 
-  describe '.approved_or_owned_by' do
+  describe ".approved_or_owned_by", default_skin: true do
     let(:skin_owner) { FactoryBot.create(:user) }
     let(:random_user) { FactoryBot.create(:user) }
 
@@ -305,7 +302,7 @@ describe Skin do
     end
   end
 
-  describe '.approved_or_owned_by_any' do
+  describe ".approved_or_owned_by_any", default_skin: true do
     let(:users) { Array.new(3) { FactoryBot.create(:user) } }
 
     context 'users do not own skins' do
