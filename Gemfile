@@ -165,11 +165,6 @@ group :development do
   gem 'factory_bot_rails'
   gem 'bundler-audit'
   gem 'active_record_query_trace', '~> 1.6', '>= 1.6.1'
-  # Linters
-  gem "erb_lint", "0.0.29"
-  gem "rubocop", "0.83.0"
-  gem "rubocop-rails", "2.6.0"
-  gem "rubocop-rspec", "1.41.0"
 end
 
 group :test, :development, :staging do
