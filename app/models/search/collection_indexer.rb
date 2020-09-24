@@ -11,7 +11,8 @@ class CollectionIndexer < Indexer
           title: { type: "text", analyzer: "simple" },
           name: { type: "text", analyzer: "simple" },
           description: { type: "text", analyzer: "simple" },
-          collection_type: { type: "keyword" }
+          collection_type: { type: "keyword" },
+          created_at: { type: "date" }
         }
       }
     }
@@ -21,8 +22,7 @@ class CollectionIndexer < Indexer
     object.as_json(
       root: false,
       only: [
-        :id, :name, :title, :created_at, :description,
-        :parent_id, :collection_type
+        :id, :name, :title, :description, :parent_id, :collection_type, :created_at
       ],
       methods: [
         :signup_open
