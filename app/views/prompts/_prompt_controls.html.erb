@@ -43,7 +43,7 @@
           <li><%= link_to ts("Fulfill"), new_collection_work_path(collection, :claim_id => claim.id) %></li>
         <% end %>
         <% # The drop claim link should show up if the current user has claimed the prompt %>
-        <li><%= link_to ts("Drop Claim"), collection_claim_path(collection, claim), data: {confirm: ts('Do you really want to delete this claim?')}, :method => :delete %></li>
+        <li><%= link_to ts("Drop Claim"), collection_claim_path(collection, claim), data: {confirm: ts('Do you really want to drop this claim?')}, :method => :delete %></li>
         <% # The claim link should show up if the user has not already claimed the prompt %>
         <% else %>
         <li>
