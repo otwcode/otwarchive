@@ -98,6 +98,14 @@ RSpec.configure do |config|
     TagIndexer.delete_index
   end
 
+  config.before :each, collection_search: true do
+    CollectionIndexer.prepare_for_testing
+  end
+
+  config.after :each, collection_search: true do
+    CollectionIndexer.delete_index
+  end
+
   config.before :each, work_search: true do
     WorkIndexer.prepare_for_testing
   end

@@ -71,6 +71,8 @@ class CollectionQuery < Query
     term_filter(:anonymous, bool_value(options[:anonymous])) if options[:anonymous].present?
   end
   
+
+  # TODO: wire this method up and test it
   def collection_type_filter
     term_filter(:"collection_type", options[:collection_type]) if options[:collection_type].present?
   end
@@ -104,8 +106,7 @@ class CollectionQuery < Query
   end
 
   def sort
-    direction = options[:sort_direction].present? ? options[:sort_direction] : "desc"
-
+    direction = options[:sort_direction].present? ? options[:sort_direction] : 'desc'
     { sort_column => { order: direction } }
   end
 end

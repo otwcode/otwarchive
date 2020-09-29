@@ -2,6 +2,7 @@ class Collection < ApplicationRecord
   include ActiveModel::ForbiddenAttributesProtection
   include UrlHelpers
   include WorksOwner
+  include Searchable
 
   has_attached_file :icon,
   styles: { standard: "100x100>" },
