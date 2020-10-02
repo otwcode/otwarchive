@@ -85,13 +85,13 @@ class CollectionQuery < Query
   # Note that fields don't need to be explicitly included in the
   # field list to be searchable directly (ie, "complete:true" will still work)
   def general_query
-    input = (options[:title] || "").dup
+    input = (options[:query] || options[:title] || "").dup
     query = escape_reserved_characters(input)
 
     return {
       query_string: {
         query: query,
-        fields: ["name, title"],
+        fields: ["title^5", "name"],
         default_operator: "AND"
       }
     } unless query.blank?

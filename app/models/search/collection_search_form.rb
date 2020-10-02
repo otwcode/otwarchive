@@ -32,8 +32,6 @@ class CollectionSearchForm
     @options = opts
     process_options
     @searcher = CollectionQuery.new(@options)
-
-    # binding.pry
   end
 
   def process_options
@@ -78,11 +76,11 @@ class CollectionSearchForm
   ].freeze
 
   def sort_columns
-    options[:sort_column] || 'created_at'
+    options[:sort_column] || default_sort_column
   end
 
   def sort_direction
-    options[:sort_direction] || 'desc'
+    options[:sort_direction] || default_sort_direction
   end
 
   def sort_options
@@ -103,6 +101,10 @@ class CollectionSearchForm
   end
 
   def default_sort_direction
-    'desc'
+    if sort_column.include?('title')
+      'asc'
+    else
+      'desc'
+    end
   end
 end
