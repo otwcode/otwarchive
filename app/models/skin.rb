@@ -1,11 +1,12 @@
 require 'fileutils'
-include HtmlCleaner
-include CssCleaner
-include SkinCacheHelper
-include SkinWizard
 
 class Skin < ApplicationRecord
   include ActiveModel::ForbiddenAttributesProtection
+
+  include HtmlCleaner
+  include CssCleaner
+  include SkinCacheHelper
+  include SkinWizard
 
   TYPE_OPTIONS = [
                    [ts("Site Skin"), "Skin"],
@@ -60,6 +61,18 @@ class Skin < ApplicationRecord
                     default_url: "/images/skins/iconsets/default/icon_skins.png"
 
   after_save :skin_invalidate_cache
+  def skin_invalidate_cache
+    skin_chooser_expire_cache
+    skin_cache_version_update(id)
+
+    # Work skins can't have children, but site skins (which have type nil)
+    # might have children that need expiration:
+    return unless type.nil?
+
+    SkinParent.get_all_child_ids(id).each do |child_id|
+      skin_cache_version_update(child_id)
+    end
+  end
 
   validates_attachment_content_type :icon, content_type: /image\/\S+/, allow_nil: true
   validates_attachment_size :icon, less_than: 500.kilobytes, allow_nil: true
@@ -182,8 +195,12 @@ class Skin < ApplicationRecord
     order("featured DESC, updated_at DESC")
   end
 
+  def approved_or_owned_by?(user)
+    self.public? && self.official? || author_id == user.id
+  end
+
   def remove_me_from_preferences
-    Preference.where("skin_id = #{self.id}").update_all("skin_id = #{Skin.default.id}")
+    Preference.where(skin_id: self.id).update_all(skin_id: AdminSetting.default_skin_id)
   end
 
   def editable?
@@ -251,6 +268,11 @@ class Skin < ApplicationRecord
     save!
   end
 
+  def recache_children!
+    child_ids = SkinParent.get_all_child_ids(id)
+    Skin.where(cached: true, id: child_ids).find_each(&:cache!)
+  end
+
   def get_sheet_role
     "#{get_role}_#{get_media_for_filename}_#{ie_condition}"
   end
@@ -314,14 +336,16 @@ class Skin < ApplicationRecord
 
   # This is the main function that actually returns code to be embedded in a page
   def get_style(roles_to_include = DEFAULT_ROLES_TO_INCLUDE)
-    Rails.cache.fetch(skin_cache_html_key(self, roles_to_include)) do
-      style = ""
-      if self.get_role != "override" && self.get_role != "site"
-        style += AdminSetting.default_skin != Skin.default ? '' : (Skin.get_current_site_skin ? Skin.get_current_site_skin.get_style(roles_to_include) : '')
-      end
-      style += self.get_style_block(roles_to_include)
-      style.html_safe
+    style = ""
+
+    if self.get_role != "override" && self.get_role != "site" &&
+       self.id != AdminSetting.default_skin_id &&
+       AdminSetting.default_skin.is_a?(Skin)
+      style += AdminSetting.default_skin.get_style(roles_to_include)
     end
+
+    style += self.get_style_block(roles_to_include)
+    style.html_safe
   end
 
   def get_ie_comment(style, ie_condition = self.ie_condition)
@@ -516,22 +540,51 @@ class Skin < ApplicationRecord
   end
 
   def self.default
-    Rails.cache.fetch("site_default_skin") do
-      Skin.find_by(title: "Default", official: true) || Skin.create_default
-    end
+    Skin.find_by(title: "Default", official: true) || Skin.create_default
   end
 
   def self.create_default
-    skin = Skin.find_or_create_by(title: "Default", css: "", public: true, role: "user")
-    current_version = Skin.get_current_version
-    if current_version
-      File.open(Skin.site_skins_dir + current_version + '/preview.png', 'rb') {|preview_file| skin.icon = preview_file}
-    else
-      File.open(Skin.site_skins_dir + 'preview.png', 'rb') {|preview_file| skin.icon = preview_file}
+    transaction do
+      skin = Skin.find_or_initialize_by(title: "Default")
+
+      skin.official = true
+      skin.public = true
+      skin.role = "site"
+      skin.css = ""
+      skin.set_thumbnail_from_current_version
+
+      skin.save!
+      skin
     end
-    skin.official = true
-    skin.save!
-    skin
   end
 
+  def self.set_default_to_current_version
+    transaction do
+      default_skin = default
+
+      default_skin.set_thumbnail_from_current_version
+
+      parent_skin = get_current_site_skin
+      if parent_skin && default_skin.parent_skins != [parent_skin]
+        default_skin.skin_parents.destroy_all
+        default_skin.skin_parents.build(parent_skin: parent_skin, position: 1)
+      end
+
+      default_skin.save!
+    end
+  end
+
+  def set_thumbnail_from_current_version
+    current_version = self.class.get_current_version
+
+    icon_path = if current_version
+                  self.class.site_skins_dir + current_version + "/preview.png"
+                else
+                  self.class.site_skins_dir + "preview.png"
+                end
+
+    File.open(icon_path) do |icon_file|
+      self.icon = icon_file
+    end
+  end
 end

@@ -334,6 +334,8 @@ Feature: Edit chapters
     When I follow "Edit Chapter"
     Then the "sabrina" checkbox should not be checked
     When I check "sabrina"
+      # Expire cached byline
+      And it is currently 1 second from now
       And I post the chapter
     Then I should not see "Chapter by karma"
       And 1 email should be delivered to "sabrina"

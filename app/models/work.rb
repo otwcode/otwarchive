@@ -193,10 +193,10 @@ class Work < ApplicationRecord
           # Check to see if this work is being deleted by an Admin
           if User.current_user.is_a?(Admin)
             # this has to use the synchronous version because the work is going to be destroyed
-            UserMailer.admin_deleted_work_notification(user, self).deliver!
+            UserMailer.admin_deleted_work_notification(user, self).deliver_now
           else
             # this has to use the synchronous version because the work is going to be destroyed
-            UserMailer.delete_work_notification(user, self).deliver!
+            UserMailer.delete_work_notification(user, self).deliver_now
           end
         end
       end
@@ -1004,7 +1004,6 @@ class Work < ApplicationRecord
   scope :ordered_by_hit_count_asc, -> { order("hit_count ASC") }
   scope :ordered_by_date_desc, -> { order("revised_at DESC") }
   scope :ordered_by_date_asc, -> { order("revised_at ASC") }
-  scope :random_order, -> { order("RAND()") }
 
   scope :recent, lambda { |*args| where("revised_at > ?", (args.first || 4.weeks.ago.to_date)) }
   scope :within_date_range, lambda { |*args| where("revised_at BETWEEN ? AND ?", (args.first || 4.weeks.ago), (args.last || Time.now)) }
