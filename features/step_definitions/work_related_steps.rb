@@ -6,9 +6,9 @@ Given /^I have related works setup$/ do
   step "I am logged out"
   step %{I have loaded the "languages" fixture}
 
-  inspiration = FactoryBot.create(:user, login: "inspiration", confirmed_at: Time.now)
-  FactoryBot.create(:user, login: "translator", confirmed_at: Time.now)
-  FactoryBot.create(:user, login: "remixer", confirmed_at: Time.now)
+  inspiration = FactoryBot.create(:user, login: "inspiration", confirmed_at: Time.now.utc)
+  FactoryBot.create(:user, login: "translator", confirmed_at: Time.now.utc)
+  FactoryBot.create(:user, login: "remixer", confirmed_at: Time.now.utc)
 
   FactoryBot.create(:work, title: "Worldbuilding", authors: inspiration.pseuds)
   FactoryBot.create(:work, title: "Worldbuilding Two", authors: inspiration.pseuds)
