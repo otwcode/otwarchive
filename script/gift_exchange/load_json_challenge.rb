@@ -92,7 +92,7 @@ TagSet::TAG_TYPES.each do |type|
     end
 
     tag = type.classify.constantize.find_or_create_by_name(name)
-    tag.update_attributes(canonical: true) unless tag.canonical
+    tag.update(canonical: true) unless tag.canonical
   end
 end
 
