@@ -20,6 +20,18 @@ class Indexer
     raise "Must be defined in subclass"
   end
 
+  def self.all
+    [
+      BookmarkedExternalWorkIndexer,
+      BookmarkedSeriesIndexer,
+      BookmarkedWorkIndexer,
+      BookmarkIndexer,
+      PseudIndexer,
+      TagIndexer,
+      WorkIndexer
+    ]
+  end
+
   # Originally added to allow IndexSweeper to find the Elasticsearch document
   # ids when they do not match the associated ActiveRecord objects' ids.
   #
@@ -34,7 +46,7 @@ class Indexer
     end
   end
 
-  def self.create_index(shards = 5)
+  def self.create_index(shards: 5)
     $elasticsearch.indices.create(
       index: index_name,
       body: {
@@ -49,6 +61,24 @@ class Indexer
         mappings: mapping,
       }
     )
+  end
+
+  def self.prepare_for_testing
+    raise "Wrong environment for test prep!" unless Rails.env.test?
+
+    delete_index
+    # Relevance sorting is unpredictable with multiple shards
+    # and small amounts of data
+    create_index(shards: 1)
+  end
+
+  def self.refresh_index
+    # Refreshes are resource-intensive, we use them only in tests.
+    raise "Wrong environment for index refreshes!" unless Rails.env.test?
+
+    return unless $elasticsearch.indices.exists(index: index_name)
+
+    $elasticsearch.indices.refresh(index: index_name)
   end
 
   # Note that the index must exist before you can set the mapping
@@ -92,7 +122,7 @@ class Indexer
     total = (indexables.count / BATCH_SIZE) + 1
     i = 1
     indexables.find_in_batches(batch_size: BATCH_SIZE) do |group|
-      puts "Queueing #{klass} batch #{i} of #{total}"
+      puts "Queueing #{klass} batch #{i} of #{total}" unless Rails.env.test?
       AsyncIndexer.new(self, :world).enqueue_ids(group.map(&:id))
       i += 1
     end

@@ -88,7 +88,7 @@ Feature: Delete Works
       And I should see "No Archive Warnings Apply"
       And I should not see "Choose Not To Use Archive Warnings"
       And I should see "Category: F/M"
-      And I should see "Characters: Sam Winchester, Dean Winchester"
+      And I should see "Characters: Sam WinchesterDean Winchester"
       And I should see "Relationship: Harry/Ginny"
       And I should see "For Someone else, recipient"
       And I should see "Collections: Collection 1, Collection 2"
@@ -156,7 +156,8 @@ Feature: Delete Works
       And I fill in "Notes" with "My thoughts on the work"
       And I press "Create"
     Then I should see "Bookmark was successfully created"
-    When I go to the bookmarks page
+    When all indexing jobs have been run
+      And I go to the bookmarks page
     Then I should see "All Something Breaks Loose"
     When I am logged in as "thorough"
       And I go to giftee's user page
@@ -172,8 +173,8 @@ Feature: Delete Works
     When I go to thorough's user page
     Then I should not see "All Something Breaks Loose"
     # This is correct behaviour - bookmark details are preserved even though the work is gone
-    Then all indexing jobs have been run
-    Then I go to the bookmarks page
+    When all indexing jobs have been run
+      And I go to the bookmarks page
     Then I should not see "All Something Breaks Loose"
     When I go to someone_else's bookmarks page
     Then I should not see "All Something Breaks Loose"

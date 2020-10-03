@@ -12,10 +12,10 @@ describe WorksController do
     user
   end
   let!(:default_pseud_work) do
-    create(:work, authors: [drafts_user.default_pseud], posted: false, title: "Default pseud work")
+    create(:draft, authors: [drafts_user.default_pseud], title: "Default pseud work")
   end
   let!(:other_pseud_work) do
-    create(:work, authors: [drafts_user_pseud], posted: false, title: "Other pseud work")
+    create(:draft, authors: [drafts_user_pseud], title: "Other pseud work")
   end
 
   describe "drafts" do
@@ -85,7 +85,7 @@ describe WorksController do
     end
 
     it "should display an error if the current user is not the owner of the specified work" do
-      random_work = create(:work, posted: false)
+      random_work = create(:draft)
       put :post_draft, params: { id: random_work.id }
       # There is code to return a different message in the action, but it is unreachable using a web request
       # as the application_controller redirects the user first
@@ -95,7 +95,7 @@ describe WorksController do
 
     context "if the work is already posted" do
       it "displays an error and redirects" do
-        drafts_user_work = create(:work, authors: [drafts_user.default_pseud], posted: true)
+        drafts_user_work = create(:work, authors: [drafts_user.default_pseud])
         put :post_draft, params: { id: drafts_user_work.id }
         it_redirects_to_with_error(edit_user_work_path(drafts_user, drafts_user_work),
                                    "That work is already posted. Do you want to edit it instead?")
@@ -103,7 +103,7 @@ describe WorksController do
     end
 
     it "should display an error and redirect if the work is invalid" do
-      drafts_user_work = create(:work, authors: [drafts_user.default_pseud], posted: false)
+      drafts_user_work = create(:draft, authors: [drafts_user.default_pseud])
       allow_any_instance_of(Work).to receive(:valid?).and_return(false)
       put :post_draft, params: { id: drafts_user_work.id }
       it_redirects_to_with_error(edit_user_work_path(drafts_user, drafts_user_work),
@@ -112,7 +112,7 @@ describe WorksController do
     end
 
     it "should display a notice message and redirect if the work is in a moderated collection" do
-      drafts_user_work = create(:work, authors: [drafts_user.default_pseud], posted: false)
+      drafts_user_work = create(:draft, authors: [drafts_user.default_pseud])
       draft_collection = create(:collection)
       draft_collection.collection_preference.moderated = true
       draft_collection.collection_preference.save

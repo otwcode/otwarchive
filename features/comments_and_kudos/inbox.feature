@@ -133,9 +133,10 @@ Feature: Get messages in the inbox
     When I follow "Reply" within ".latest.messages.module"
       And I fill in "Comment" with "Thank you! Please go to bed." within "#reply-to-comment"
       And I press "Comment" within "#reply-to-comment"
-    Then I should be on the homepage
-      And I should not see "Unread messages"
-      And I should not see "dude this is super great!!"
+      And "AO3-5877" is fixed
+    # Then I should be on the homepage
+      # And I should not see "Unread messages"
+      # And I should not see "dude this is super great!!"
     When I am logged in as "unbeatablesg"
       And I go to the homepage
     Then I should see "sewwiththeflo on Cat Thor's Bizarre Adventure"

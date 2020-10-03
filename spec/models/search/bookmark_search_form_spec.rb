@@ -2,7 +2,7 @@
 
 require "spec_helper"
 
-describe BookmarkSearchForm do
+describe BookmarkSearchForm, bookmark_search: true do
   describe "options" do
     it "includes flags set to false" do
       bsf = BookmarkSearchForm.new(show_restricted: false, show_private: false)
@@ -17,19 +17,19 @@ describe BookmarkSearchForm do
 
       let!(:work1) do
         Delorean.time_travel_to 40.minutes.ago do
-          create(:posted_work, title: "One", fandom_string: tag.name)
+          create(:work, title: "One", fandom_string: tag.name)
         end
       end
 
       let!(:work2) do
         Delorean.time_travel_to 60.minutes.ago do
-          create(:posted_work, title: "Two", fandom_string: tag.name)
+          create(:work, title: "Two", fandom_string: tag.name)
         end
       end
 
       let!(:work3) do
         Delorean.time_travel_to 50.minutes.ago do
-          create(:posted_work, title: "Three", fandom_string: tag.name)
+          create(:work, title: "Three", fandom_string: tag.name)
         end
       end
 
@@ -93,8 +93,8 @@ describe BookmarkSearchForm do
     describe "searching" do
       let(:language) { create(:language, short: "ptBR") }
 
-      let(:work1) { create(:posted_work) }
-      let(:work2) { create(:posted_work, language_id: language.id) }
+      let(:work1) { create(:work) }
+      let(:work2) { create(:work, language_id: language.id) }
 
       let!(:bookmark1) { create(:bookmark, bookmarkable: work1) }
       let!(:bookmark2) { create(:bookmark, bookmarkable: work2) }
@@ -137,7 +137,7 @@ describe BookmarkSearchForm do
     let(:bookmarker) { create(:user, login: "yabalchoath") }
 
     {
-      Work: :posted_work,
+      Work: :work,
       Series: :series_with_a_work,
       ExternalWork: :external_work
     }.each_pair do |type, factory|
@@ -168,7 +168,7 @@ describe BookmarkSearchForm do
     let(:author) { create(:user, login: "yabalchoath") }
 
     {
-      Work: :posted_work,
+      Work: :work,
       Series: :series_with_a_work
     }.each_pair do |type, factory|
       it "returns the correct bookmarked #{type.to_s.pluralize} when author changes username" do

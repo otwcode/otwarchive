@@ -5,7 +5,7 @@ describe AdminPostsController do
   include RedirectExpectationHelper
 
   describe "POST #create" do
-    before { fake_login_admin(create(:admin)) }
+    before { fake_login_admin(create(:admin, roles: ["communications"])) }
 
     let(:base_params) { { title: "AdminPost Title",
                           content: "AdminPost content long enough to pass validation" } }
@@ -24,6 +24,54 @@ describe AdminPostsController do
           expect(response).to render_template(:new)
           expect(assigns[:admin_post].errors.full_messages).to include("Translated post does not exist")
         end
+      end
+    end
+  end
+
+  describe "POST #update" do
+    let(:admin) { create(:admin) }
+    let(:post) { create(:admin_post) }
+
+    context "updating post" do
+      context "when admin does not have correct authorization" do
+        it "denies random admin access" do
+          admin.update(roles: [])
+          fake_login_admin(admin)
+          put :update, params: { id: post.id, admin_post: { admin_id: admin.id, title: "Modified Title of Post" } }
+          it_redirects_to_with_error(root_url, "Sorry, only an authorized admin can access the page you were trying to reach.")
+        end
+      end
+
+      context "when admin has correct roles" do
+        it "allows access to authorized admins and updates admin post" do
+          admin.update(roles: ["communications"])
+          fake_login_admin(admin)
+          put :update, params: { id: post.id, admin_post: { admin_id: admin.id, title: "Modified Title of Post" } }
+          it_redirects_to_with_notice(admin_post_path(assigns[:admin_post]), "Admin Post was successfully updated.")
+        end
+      end
+    end
+  end
+
+  describe "GET #edit" do
+    let(:admin) { create(:admin) }
+    let(:post) { create(:admin_post) }
+
+    context "when admin does not have correct authorization" do
+      it "denies random admin access" do
+        admin.update(roles: [])
+        fake_login_admin(admin)
+        get :edit, params: { id: post.id }
+        it_redirects_to_with_error(root_url, "Sorry, only an authorized admin can access the page you were trying to reach.")
+      end
+    end
+
+    context "when admin has correct roles" do
+      it "allows access to authorized admins and renders edit template" do
+        admin.update(roles: ["communications"])
+        fake_login_admin(admin)
+        get :edit, params: { id: post.id }
+        expect(response).to render_template(:edit)
       end
     end
   end

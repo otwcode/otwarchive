@@ -21,7 +21,6 @@ class Pseud < ApplicationRecord
 
   belongs_to :user
   delegate :login, to: :user, prefix: true
-  has_many :kudos
   has_many :bookmarks, dependent: :destroy
   has_many :recs, -> { where(rec: true) }, class_name: 'Bookmark'
   has_many :comments
@@ -350,8 +349,6 @@ class Pseud < ApplicationRecord
     # the cache is invalidated and the pseud change will be visible.
     Comment.where(pseud_id: self.id).update_all(pseud_id: replacement.id,
                                                 updated_at: Time.now)
-    # NB: updates the kudos to use the new default pseud, but the cache will not expire
-    Kudo.where(pseud_id: self.id).update_all(pseud_id: replacement.id)
     change_collections_membership
     change_gift_recipients
     change_challenge_participation

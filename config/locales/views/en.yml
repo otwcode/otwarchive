@@ -1,0 +1,125 @@
+en:
+  admin:
+    admin_options:
+      delete:
+        bookmark: "Delete Bookmark"
+        confirmation: "Are you sure you want to delete this?"
+        external_work: "Delete External Work"
+        series: "Delete Series"
+        work: "Delete Work"
+      edit:
+        external_work: "Edit External Work"
+      edit_tags: "Edit Tags and Language"
+      hide:
+        bookmark: "Hide Bookmark"
+        external_work: "Hide External Work"
+        series: "Hide Series"
+        work: "Hide Work"
+      landmark: "Admin Actions"
+      not_spam: "Mark Not Spam"
+      spam: "Mark As Spam"
+      unhide:
+        bookmark: "Make Bookmark Visible"
+        external_work: "Make External Work Visible"
+        series: "Make Series Visible"
+        work: "Make Work Visible"
+    blacklist:
+      emails_found:
+        one: "one email found"
+        other: "%{count} emails found"
+    settings:
+      index:
+        fields:
+          account_creation_enabled: "Account creation enabled"
+          cache_expiration: "How often (in minutes) should we refresh caching"
+          creation_requires_invite: "Account creation requires invitation"
+          days_to_purge_unactivated: "How many weeks you have to activate your account before we purge it"
+          disable_support_form: "Turn off support form"
+          disabled_support_form_text: "Disabled support form text"
+          downloads_enabled: "Allow downloads"
+          enable_test_caching: "Turn on caching (currently experimental)"
+          hide_spam: "Automatically hide spam works"
+          invite_from_queue_enabled: "Invite from queue enabled (People can add themselves to the queue and invitations are sent out automatically)"
+          invite_from_queue_frequency: "How often (in days) should we invite people from the queue"
+          invite_from_queue_number: "Number of people to invite from the queue at once"
+          request_invite_enabled: "Users can request invitations"
+          suspend_filter_counts: "Suspend some filter tracking due to high posting volume"
+          tag_wrangling_off: "Turn off tag wrangling for non-admins"
+        heading: "Archive Settings"
+        legend:
+          account_and_invitations: "Accounts and Invitations"
+          disable_support_form: "Turn Off Support Form"
+          performance_and_misc: "Performance and Misc"
+          actions: "Actions"
+        last_updated_by_admin: "Last updated on %{updated_at} by %{admin_name}."
+        queue_status: "%{number} people are scheduled to be sent invitations on %{date}."
+        queue_status_help: "(The automatic task that invites people from the queue only runs once a day. Don't be alarmed if the date you see is yesterday's. Do be alarmed if the date you see is more than one day in the past and the queue is supposed to be active.)"
+        update: "Update"
+      update:
+        success: "Archive settings were successfully updated."
+  admins:
+    index:
+      page_title: "Hi, %{login}!"
+      confidentiality_reminder: "You are now logged in as an admin. That means you will probably encounter information that is personal or confidential (e.g. usernames, email and IP addresses, creator names on anonymous works, etc). Please do not use this information in ways unrelated to your OTW role. If you have questions about what you can or cannot do with information you see here, contact your committee chair(s)."
+      responsibility: "With great power comes great responsibility."
+      log_out_reminder: "Please remember to log out before resuming your normal site activity and leaving comments and kudos!"
+      roles:
+        heading: "Your admin roles:"
+        none: "You currently have no admin roles assigned to you."
+  layouts:
+    proxy_notice:
+      faux_heading: "Important message:"
+      point1: "You are using a proxy site that is not part of the Archive of Our Own."
+      point2: "The entity that set up the proxy site can see what you submit, including your IP address. If you log in through the proxy site, it can see your password."
+      button: "Dismiss Notice"
+  users:
+    delete_preview:
+      heading: "What do you want to do with your works?"
+      orphan: "orphan"
+      orphaning: "orphaning"
+      submit: "Save"
+      cancel: "Cancel"
+      confirm: "Are you sure? This can't be undone!"
+      options:
+        keep_pseud: "Leave my pseud but attach to the orphan account"
+        orphan_pseud: "Change my pseud to \"orphan\" and attach to the orphan account"
+        remove: "Remove me completely as co-creator"
+        delete: "Delete completely"
+      co_creations:
+        legend: "Works You Made With Others"
+        summary: "You have %{work_count} work(s) co-created with the following users: %{co_creators}."
+        orphan_info: "You are not able to delete these as they are shared works, but you can %{orphan_link} them or remove yourself completely as a co-creator."
+      sole_creations:
+        legend: "Works and Collections You Made By Yourself"
+        works_summary: "You have %{work_count} work(s) under the following pseuds: %{pseuds}."
+        collections_summary: "You have %{collection_count} collection(s) under the following pseuds: %{pseuds}."
+        options_info: "You can delete them, but please consider %{orphaning_link} them instead!"
+  troubleshooting:
+    show:
+      page_title:
+        tag: "Troubleshoot Tag"
+        work: "Troubleshoot Work"
+      page_description:
+        tag: "If this tag is exhibiting undesirable behavior, try one of these options to fix it."
+        work: "If this work is exhibiting undesirable behavior, try one of these options to fix it."
+      update_work_filters:
+        title: "Update Work Filters"
+        description: "Recalculate the filters for this work based on the current set of tags. Use this option if wrangling seems to have gone wrong. (e.g. If you synned one of this work's tags to a canonical but it's not showing up in the tag listings, or if the wrong tags are listed in the sidebar when you drill down to a search that includes only this work.)"
+      reindex_work:
+        title: "Reindex Work"
+        description: "Send in this work to be reindexed. Use this option if the work isn't appearing in searches, or is appearing in searches that it shouldn't. (e.g. If someone has orphaned their work and it can still be found with the old name, or if it's not behaving as expected when you filter crossovers, completion status, word count, etc.)"
+      update_tag_filters:
+        title: "Update Tag Filters"
+        description: "Recalculate filters for all works directly tagged with this tag or one of its synonyms. Does not include subtags. Use this option if the filters include old canonical tags that have been renamed or old parent tags that works aren't tagged with, or if the tag counts are wildly off. Also use this option if the works from a synonym are not showing on the works page of the canonical within a half hour of the tag being synned. Keep in mind that the tags listed in the filters will never be 100% correct."
+      reindex_tag:
+        title: "Reindex Tag"
+        description: "Reindex this tag and all related works, bookmarks, series, pseuds, and external works. Use this option if none of the others have worked. It will not fix autocomplete issues."
+      fix_counts:
+        title: "Fix Tag Counts"
+        description: "Try to recalculate some counts associated with this tag (both filter counts and taggings counts). Keep in mind that the tag counts listed in the fandom lists include unrevealed works and drafts, so if the count is only a little off it may just be unrevealed works or drafts."
+      fix_associations:
+        title: "Fix Tag Associations"
+        description: "Try to delete invalid associations involving this tag (e.g., parents of the wrong type, children of the wrong type, duplicate parents/children/metatags/subtags, etc.). Most of these impossible relationships appear on tag landing pages."
+      fix_meta_tags:
+        title: "Fix Metatags"
+        description: "Try to recalculate inherited metatags. Use this option if this tag has grandparent metatags (i.e., a metatag with its own metatag), and the works aren't showing up in the grandparent's listing. You might also try this if you've removed a metatag, but the works are still showing up in the former metatag's listing. If the works still don't go away, ask a staffer to run \"Update Tag Filters\" on this tag."

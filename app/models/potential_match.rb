@@ -92,7 +92,7 @@ public
     invalid_signup_ids = collection.signups.select {|s| !s.valid?}.collect(&:id)
     unless invalid_signup_ids.empty?
       invalid_signup_ids.each {|sid| REDIS_GENERAL.sadd invalid_signup_key(collection), sid}
-      UserMailer.invalid_signup_notification(collection.id, invalid_signup_ids).deliver
+      UserMailer.invalid_signup_notification(collection.id, invalid_signup_ids).deliver_later
       PotentialMatch.cancel_generation(collection)
     else
 

@@ -56,6 +56,7 @@ Given /^I set up importing( with a mock website)?( as an archivist)?$/ do |mock,
   end
   step %{basic languages}
   step %{basic tags}
+  step %{all warnings exist}
   if is_archivist.blank?
     step %{I am logged in as a random user}
   else

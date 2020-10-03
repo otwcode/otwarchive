@@ -8,11 +8,9 @@ FactoryBot.define do
   sequence :email do |n|
     Faker::Internet.email(name="#{Faker::Name.first_name}_#{n}")
   end
-  sequence :admin_login do |n|
-    "testadmin#{n}"
-  end
 
   factory :role do
+    sequence(:name) { |n| "#{Faker::Company.profession}_#{n}" }
   end
 
   factory :user do
@@ -22,12 +20,6 @@ FactoryBot.define do
     terms_of_service { '1' }
     password_confirmation { |u| u.password }
     email { generate(:email) }
-
-
-    factory :duplicate_user do
-      login { nil }
-      email { nil }
-    end
 
     factory :invited_user do
       login { generate(:login) }

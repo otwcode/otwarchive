@@ -1,11 +1,12 @@
 # frozen_string_literal: true
+require "addressable/uri"
 
 module OTWSanitize
   # Creates a Sanitize transformer to sanitize embedded media
   class EmbedSanitizer
     WHITELIST_REGEXES = {
       ao3:              %r{^archiveofourown\.org/},
-      archiveorg:       %r{^archive\.org/},
+      archiveorg:       %r{^archive\.org\/embed/},
       criticalcommons:  %r{^criticalcommons\.org/},
       dailymotion:      %r{^dailymotion\.com/},
       eighttracks:      %r{^8tracks\.com/},
@@ -27,8 +28,8 @@ module OTWSanitize
     ].freeze
 
     SUPPORTS_HTTPS = %i[
-      ao3 archiveorg dailymotion eighttracks podfic
-      soundcloud spotify viddertube vimeo youtube
+      ao3 archiveorg dailymotion eighttracks ning podfic
+      soundcloud spotify viddersnet viddertube vimeo youtube
     ].freeze
 
     # Creates a callable transformer for the sanitizer to use
@@ -100,15 +101,25 @@ module OTWSanitize
       else
         url = node['src']
       end
+      @source_url = standardize_url(url)
+    end
+
+    def standardize_url(url)
       # strip off optional protocol and www
       protocol_regex = %r{^(?:https?:)?//(?:www\.)?}i
-      @source_url = url&.gsub(protocol_regex, '')
+      # normalize the url
+      url = url&.gsub(protocol_regex, "")
+      Addressable::URI.parse(url).normalize.to_s rescue nil
     end
 
     # For sites that support https, ensure we use a secure embed
     def ensure_https
       return unless supports_https? && node['src'].present?
       node['src'] = node['src'].gsub("http:", "https:")
+      if allows_flashvars? && node['flashvars'].present?
+        node['flashvars'] = node['flashvars'].gsub("http:", "https:")
+        node['flashvars'] = node['flashvars'].gsub("http%3A", "https%3A")
+      end
     end
 
     # We're now certain that this is an embed from a trusted source, but we

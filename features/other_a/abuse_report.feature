@@ -3,9 +3,6 @@ Feature: Filing an abuse report
   As an annoyed user
   I want to file an abuse ticket
 
-  Background:
-  Given the abuse report will not be considered spam
-
   Scenario: File an abuse request with default options
 
   Given basic languages

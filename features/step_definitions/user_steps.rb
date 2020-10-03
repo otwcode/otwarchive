@@ -69,7 +69,7 @@ Given /the following activated users with private work skins/ do |table|
   table.hashes.each do |hash|
     user = FactoryBot.create(:user, hash)
     user.activate
-    FactoryBot.create(:private_work_skin, author: user, title: "#{user.login.titleize}'s Work Skin")
+    FactoryBot.create(:work_skin, :private, author: user, title: "#{user.login.titleize}'s Work Skin")
     step %{confirmation emails have been delivered}
   end
 end
@@ -109,6 +109,7 @@ Given /^I am logged in as "([^"]*)" with password "([^"]*)"$/ do |login, passwor
   fill_in "Password:", with: password
   check "Remember Me"
   click_button "Log In"
+  step %{I should see "Hi, #{login}!" within "#greeting"}
   step %{confirmation emails have been delivered}
 end
 
@@ -146,12 +147,6 @@ Given /^I log out$/ do
   step(%{I follow "Log Out"})
 end
 
-Given /^"([^"]*)" has the pseud "([^"]*)"$/ do |username, pseud|
-  step (%{I am logged in as "#{username}"})
-  step(%{"#{username}" creates the pseud "#{pseud}"})
-  step("I am logged out")
-end
-
 Given /^"([^"]*)" deletes their account/ do |username|
   visit user_path(username)
   step(%{I follow "Profile"})
@@ -169,7 +164,7 @@ Given(/^I coauthored the work "(.*?)" as "(.*?)" with "(.*?)"$/) do |title, logi
   author1.user.preference.update(allow_cocreator: true)
   author2 = User.find_by(login: coauthor).default_pseud
   author2.user.preference.update(allow_cocreator: true)
-  work = FactoryBot.create(:work, authors: [author1, author2], posted: true, title: title)
+  work = FactoryBot.create(:work, authors: [author1, author2], title: title)
   work.creatorships.unapproved.each(&:accept!)
 end
 
@@ -184,25 +179,6 @@ end
 When /^the user "([^\"]*)" has failed to log in (\d+) times$/ do |login, count|
   user = User.find_by(login: login)
   user.update(failed_attempts: count.to_i)
-end
-
-When /^"([^\"]*)" creates the default pseud "([^"]*)"$/ do |username, newpseud|
-  visit new_user_pseud_path(username)
-  fill_in "Name", with: newpseud
-  check("pseud_is_default")
-  click_button "Create"
-end
-
-When /^"([^"]*)" creates the pseud "([^"]*)"$/ do |username, newpseud|
-  visit new_user_pseud_path(username)
-  fill_in "Name", with: newpseud
-  click_button "Create"
-end
-
-When /^I create the pseud "([^"]*)"$/ do |newpseud|
-  visit new_user_pseud_path(User.current_user)
-  fill_in "Name", with: newpseud
-  click_button "Create"
 end
 
 When /^I fill in the sign up form with valid data$/ do

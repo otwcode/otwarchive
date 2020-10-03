@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require "spec_helper"
 
-describe WorksController do
+describe WorksController, work_search: true do
   include LoginMacros
   include RedirectExpectationHelper
 
@@ -184,7 +184,7 @@ describe WorksController do
 
     it "doesn't allow a user to create a work in a series that they don't own" do
       @series = create(:series)
-      work_attributes = attributes_for(:work)
+      work_attributes = attributes_for(:work).except(:posted)
       work_attributes[:series_attributes] = { id: @series.id }
       expect {
         post :create, params: { work: work_attributes }
@@ -196,7 +196,7 @@ describe WorksController do
 
     it "doesn't allow a user to submit only a pseud that is not theirs" do
       @user2 = create(:user)
-      work_attributes = attributes_for(:work)
+      work_attributes = attributes_for(:work).except(:posted)
       work_attributes[:author_attributes] = { ids: [@user2.pseuds.first.id] }
       expect {
         post :create, params: { work: work_attributes }
@@ -207,7 +207,7 @@ describe WorksController do
     end
 
     it "renders new if the work has invalid pseuds" do
-      work_attributes = attributes_for(:work)
+      work_attributes = attributes_for(:work).except(:posted)
       work_attributes[:author_attributes] = { ids: @user.pseud_ids,
                                               byline: "*impossible*" }
       post :create, params: { work: work_attributes }
@@ -219,7 +219,7 @@ describe WorksController do
     it "renders new if the work has ambiguous pseuds" do
       create(:pseud, name: "ambiguous")
       create(:pseud, name: "ambiguous")
-      work_attributes = attributes_for(:work)
+      work_attributes = attributes_for(:work).except(:posted)
       work_attributes[:author_attributes] = { ids: @user.pseud_ids,
                                               byline: "ambiguous" }
       post :create, params: { work: work_attributes }
@@ -227,81 +227,59 @@ describe WorksController do
       expect(assigns[:work].errors.full_messages).to \
         include "Invalid creator: The pseud ambiguous is ambiguous."
     end
+
+    it "renders new if the work has noncanonical warnings" do
+      work_attributes = attributes_for(:work).except(:posted, :archive_warning_string).merge(archive_warning_string: "Warning")
+      post :create, params: { work: work_attributes }
+      expect(response).to render_template("new")
+      expect(assigns[:work].errors.full_messages).to \
+        include "Please add all required tags. Warning is missing."
+    end
+
+    it "renders new if the work has noncanonical rating" do
+      work_attributes = attributes_for(:work).except(:posted, :rating_string).merge(rating_string: "Rating")
+      post :create, params: { work: work_attributes }
+      expect(response).to render_template("new")
+      expect(assigns[:work].errors.full_messages).to \
+        include "Please add all required tags."
+    end
   end
 
   describe "show" do
-    let(:work) { create(:posted_work) }
-
-    before(:each) do
-      REDIS_GENERAL.set("work_stats:#{work.id}:last_visitor", nil)
-    end
+    let(:work) { create(:work) }
 
     it "doesn't error when a work has no fandoms" do
-      work_no_fandoms = create(:posted_work, fandoms: [])
+      work_no_fandoms = create(:work, fandoms: [])
       fake_login
 
       get :show, params: { id: work_no_fandoms.id }
 
       expect(assigns(:page_title)).to include "No fandom specified"
     end
+  end
 
-    context "when visited by a logged-out user" do
-      it "increments the hit count" do
-        expect do
-          get :show, params: { id: work.id }
-        end.to change { REDIS_GENERAL.get("work_stats:#{work.id}:hit_count").to_i }.by(1)
-      end
+  describe "share" do
+    it "returns a 404 response for unrevealed works" do
+      unrevealed_collection = create :unrevealed_collection
+      unrevealed_work = create :work, collections: [unrevealed_collection]
+
+      get :share, params: { id: unrevealed_work.id }, xhr: true
+      expect(response.status).to eq(404)
     end
 
-    context "when visited by a logged-in user who is not a (co-)creator" do
-      it "increments the hit count" do
-        fake_login
-
-        expect do
-          get :show, params: { id: work.id }
-        end.to change { REDIS_GENERAL.get("work_stats:#{work.id}:hit_count").to_i }.by(1)
-      end
-    end
-
-    context "when visited by the creator of the work" do
-      it "does not increment the hit count" do
-        fake_login_known_user(work.pseuds.first.user)
-
-        expect do
-          get :show, params: { id: work.id }
-        end.not_to change { REDIS_GENERAL.get("work_stats:#{work.id}:hit_count").to_i }
-      end
-    end
-
-    context "when the work is part of an unrevealed collection" do
-      it "does not increment the hit count" do
-        work.update!(in_unrevealed_collection: true)
-        fake_login
-
-        expect do
-          get :show, params: { id: work.id }
-        end.not_to change { REDIS_GENERAL.get("work_stats:#{work.id}:hit_count").to_i }
-      end
-    end
-
-    context "when the work is hidden by an admin" do
-      let(:admin) { create(:admin) }
-
-      it "does not increment the hit count" do
-        work.update!(hidden_by_admin: true)
-        fake_login_admin(admin)
-
-        expect do
-          get :show, params: { id: work.id }
-        end.not_to change { REDIS_GENERAL.get("work_stats:#{work.id}:hit_count").to_i }
-      end
+    it "redirects to referer with an error for non-ajax warnings requests" do
+      work = create(:work)
+      referer = work_path(work)
+      request.headers["HTTP_REFERER"] = referer
+      get :share, params: { id: work.id }
+      it_redirects_to_with_error(referer, "Sorry, you need to have JavaScript enabled for this.")
     end
   end
 
   describe "index" do
     before do
       @fandom = create(:canonical_fandom)
-      @work = create(:posted_work, fandom_string: @fandom.name)
+      @work = create(:work, fandom_string: @fandom.name)
     end
 
     it "returns the work" do
@@ -315,21 +293,15 @@ describe WorksController do
       expect(assigns(:fandom)).to eq(@fandom)
     end
 
-    it "returns search results when given work_search parameters" do
-      params = { :work_search => { query: "fandoms: #{@fandom.name}" } }
-      get :index, params: params
-      expect(assigns(:works)).to include(@work)
-    end
-
     describe "without caching" do
       before do
-        allow(controller).to receive(:use_caching?).and_return(false)
+        AdminSetting.first.update_attribute(:enable_test_caching, false)
       end
 
       it "returns the result with different works the second time" do
         get :index
         expect(assigns(:works)).to include(@work)
-        work2 = create(:posted_work)
+        work2 = create(:work)
         get :index
         expect(assigns(:works)).to include(work2)
       end
@@ -337,14 +309,14 @@ describe WorksController do
 
     describe "with caching" do
       before do
-        allow(controller).to receive(:use_caching?).and_return(true)
+        AdminSetting.first.update_attribute(:enable_test_caching, true)
       end
 
       context "with NO owner tag" do
         it "returns the same result the second time when a new work is created within the expiration time" do
           get :index
           expect(assigns(:works)).to include(@work)
-          work2 = create(:posted_work)
+          work2 = create(:work)
           run_all_indexing_jobs
           get :index
           expect(assigns(:works)).not_to include(work2)
@@ -354,7 +326,7 @@ describe WorksController do
       context "with a valid owner tag" do
         before do
           @fandom2 = create(:canonical_fandom)
-          @work2 = create(:posted_work, fandom_string: @fandom2.name)
+          @work2 = create(:work, fandom_string: @fandom2.name)
           run_all_indexing_jobs
         end
 
@@ -371,7 +343,7 @@ describe WorksController do
 
         context "with restricted works" do
           before do
-            @work2 = create(:posted_work, fandom_string: @fandom.name, restricted: true)
+            @work2 = create(:work, fandom_string: @fandom.name, restricted: true)
             run_all_indexing_jobs
           end
 
@@ -435,9 +407,9 @@ describe WorksController do
 
     context "with a valid owner user" do
       let(:user) { create(:user) }
-      let!(:user_work) { create(:posted_work, authors: [user.default_pseud]) }
+      let!(:user_work) { create(:work, authors: [user.default_pseud]) }
       let(:pseud) { create(:pseud, user: user) }
-      let!(:pseud_work) { create(:posted_work, authors: [pseud]) }
+      let!(:pseud_work) { create(:work, authors: [pseud]) }
 
       before { run_all_indexing_jobs }
 
@@ -471,7 +443,7 @@ describe WorksController do
   describe "update" do
     let(:update_user) { create(:user) }
     let(:update_work) {
-      work = create(:posted_work, authors: [update_user.default_pseud])
+      work = create(:work, authors: [update_user.default_pseud])
       create(:chapter, work: work)
       work
     }
@@ -537,13 +509,13 @@ describe WorksController do
       let(:anonymous_collection) { create(:anonymous_collection) }
 
       let!(:work) do
-        create(:posted_work,
+        create(:work,
                authors: [collected_user.default_pseud],
                collection_names: collection.name)
       end
 
       let!(:anonymous_work) do
-        create(:posted_work,
+        create(:work,
                authors: [collected_user.default_pseud],
                collection_names: anonymous_collection.name)
       end
@@ -575,27 +547,27 @@ describe WorksController do
       let(:collected_fandom_2) { create(:canonical_fandom) }
 
       let!(:unrestricted_work) do
-        create(:posted_work,
+        create(:work,
                authors: [collected_user.default_pseud],
                fandom_string: collected_fandom.name)
       end
 
       let!(:unrestricted_work_in_collection) do
-        create(:posted_work,
+        create(:work,
                authors: [collected_user.default_pseud],
                collection_names: collection.name,
                fandom_string: collected_fandom.name)
       end
 
       let!(:unrestricted_work_2_in_collection) do
-        create(:posted_work,
+        create(:work,
                authors: [collected_user.default_pseud],
                collection_names: collection.name,
                fandom_string: collected_fandom_2.name)
       end
 
       let!(:restricted_work_in_collection) do
-        create(:posted_work,
+        create(:work,
                restricted: true,
                authors: [collected_user.default_pseud],
                collection_names: collection.name,
@@ -643,13 +615,13 @@ describe WorksController do
       let(:unrevealed_collection) { create(:unrevealed_collection) }
 
       let!(:work) do
-        create(:posted_work,
+        create(:work,
                authors: [collected_user.default_pseud],
                collection_names: collection.name)
       end
 
       let!(:unrevealed_work) do
-        create(:posted_work,
+        create(:work,
                authors: [collected_user.default_pseud],
                collection_names: unrevealed_collection.name)
       end

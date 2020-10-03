@@ -14,12 +14,14 @@ When /^I begin orphaning the work "([^"]*)"$/ do |name|
   step %{I wait 1 second}
   step %{I edit the work "#{name}"}
   step %{I follow "Orphan Work"}
+  step %{I should see "Orphan Works"}
 end
 
 When /^I begin orphaning the series "([^"]*)"$/ do |name|
   step %{I wait 1 second}
   step %{I view the series "#{name}"}
   step %{I follow "Orphan Series"}
+  step %{I should see "Orphan Series"}
 end
 
 When /^I orphan(?:| and take my pseud off) the (work|series) "([^"]*)"$/ do |type, name|

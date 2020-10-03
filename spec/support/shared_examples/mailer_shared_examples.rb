@@ -5,17 +5,17 @@ shared_examples_for "a multipart email" do
   end
 
   it "does not have exposed HTML" do
-    expect(email.html_part).not_to have_body_text("&lt;")
+    expect(email).not_to have_html_part_content("&lt;")
   end
 end
 
 shared_examples_for "a translated email" do
   it "does not have missing translations in HTML version" do
-    expect(email.html_part).not_to have_body_text("translation missing")
+    expect(email).not_to have_html_part_content("translation missing")
   end
 
   it "does not have missing translations in text version" do
-    expect(email.text_part).not_to have_body_text("translation missing")
+    expect(email).not_to have_text_part_content("translation missing")
   end
 end
 

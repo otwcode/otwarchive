@@ -7,7 +7,7 @@ class Bookmark < ApplicationRecord
 
   belongs_to :bookmarkable, polymorphic: true
   belongs_to :pseud
-  has_many :taggings, as: :taggable, dependent: :destroy
+  has_many :taggings, as: :taggable, inverse_of: :taggable, dependent: :destroy
   has_many :tags, through: :taggings, source: :tagger, source_type: 'Tag'
 
   validates_length_of :bookmarker_notes,

@@ -4,8 +4,13 @@ Feature: Admin Actions to Post News
   As an an admin
   I want to be able to use the Admin Posts screen
 
+  Scenario: Must be authorized to post
+    Given I am logged in as a "tag_wrangling" admin
+    When I go to the admin-posts page
+    Then I should not see "Post AO3 News"
+
   Scenario: Make an admin post
-    Given I am logged in as an admin
+    Given I am logged in as a "communications" admin
     When I make an admin post
     Then I should see "Admin Post was successfully created."
 
@@ -16,55 +21,20 @@ Feature: Admin Actions to Post News
     When I am logged out as an admin
       And I am logged in as "happyuser"
       And I go to the admin-posts page
-    Given all emails have been delivered
-    When I follow "Comment"
+    When all emails have been delivered
+      And I follow "Comment"
       And I fill in "Comment" with "Excellent, my dear!"
       And I press "Comment"
     # notification to the admin list for admin post
     Then 1 email should be delivered to "admin@example.org"
       And the email should contain "Excellent"
 
-    # admin replies to comment of regular user
-    Given I am logged out
-      And I am logged in as an admin
-      And I go to the admin-posts page
-      And I follow "Default Admin Post"
-    Given all emails have been delivered
-    When I follow "Comments (1)"
-      And I follow "Reply"
-      And I fill in "Comment" with "Thank you very much!" within ".odd"
-      And I press "Comment" within ".odd"
-    Then I should see "Comment created"
-    # Someone can spoof being an admin by using the admin name and a different email, but their icon will not match
-    # We want to improve this so that the name is linked and the spoof is more obvious
-    When "Issue AO3-3685" is fixed
-    # notification to the admin list for admin post
-      And 1 email should be delivered to "admin@example.org"
-    # reply to the user
-      And 1 email should be delivered to "happyuser"
-
-    # regular user replies to comment of admin
-    Given I am logged out as an admin
-      And I am logged in as a random user
-      And I go to the admin-posts page
-    Given all emails have been delivered
-    When I follow "Read 2 Comments"
-      And I follow "Reply" within ".even"
-      And I fill in "Comment" with "Oh, don't grow too big a head, you." within ".even"
-      And I press "Comment" within ".even"
-    # reply to the admin as a regular user
-    Then 1 email should be delivered to "testadmin@example.org"
-    # notification to the admin list for admin post
-      And 1 email should be delivered to "admin@example.org"
-
     # regular user edits their comment
-    Given all emails have been delivered
-    When I follow "Edit"
+    When all emails have been delivered
+      And I follow "Edit"
       And I press "Update"
-    # reply to the admin as a regular user
-    Then 1 email should be delivered to "testadmin@example.org"
     # notification to the admin list for admin post
-      And 1 email should be delivered to "admin@example.org"
+    Then 1 email should be delivered to "admin@example.org"
 
   Scenario: Evil user can impersonate admin in comments
   # However, they can't use an icon, so the admin's icon is the guarantee that they're real
@@ -100,14 +70,14 @@ Feature: Admin Actions to Post News
   Scenario: Make a translation of an admin post
     Given I have posted an admin post
       And basic languages
-      And I am logged in as an admin
+      And I am logged in as a "translation" admin
     When I make a translation of an admin post
       And I am logged in as "ordinaryuser"
     Then I should see a translated admin post
 
   Scenario: Make a translation of an admin post that doesn't exist
     Given basic languages
-      And I am logged in as an admin
+      And I am logged in as a "translation" admin
     When I make a translation of an admin post
     Then I should see "Sorry! We couldn't save this admin post because:"
       And I should see "Translated post does not exist"
@@ -116,7 +86,7 @@ Feature: Admin Actions to Post News
   Scenario: Make a translation of an admin post stop being a translation
     Given I have posted an admin post
       And basic languages
-      And I am logged in as an admin
+      And I am logged in as a "translation" admin
       And I make a translation of an admin post
     When I follow "Edit Post"
       And I fill in "Translation of" with ""
@@ -125,7 +95,7 @@ Feature: Admin Actions to Post News
     Then I should not see a translated admin post
 
   Scenario: Log in as an admin and create an admin post with tags
-    Given I am logged in as an admin
+    Given I am logged in as a "communications" admin
     When I follow "Admin Posts"
       And I follow "Post AO3 News"
       Then I should see "New AO3 News Post"
@@ -140,7 +110,7 @@ Feature: Admin Actions to Post News
   Scenario: Admin posts can be filtered by tags and languages
     Given I have posted an admin post with tags
       And basic languages
-      And I am logged in as an admin
+      And I am logged in as a "translation" admin
     When I make a translation of an admin post with tags
       And I am logged in as "ordinaryuser"
     Then I should see a translated admin post with tags
@@ -166,7 +136,7 @@ Feature: Admin Actions to Post News
       And "Deutsch" should be selected within "Language"
 
   Scenario: If an admin post has characters like & and < and > in the title, the escaped version will not show on the various admin post pages
-    Given I am logged in as an admin
+    Given I am logged in as a "communications" admin
     When I follow "Admin Posts"
       And I follow "Post AO3 News"
       And I fill in "admin_post_title" with "App News & a <strong> Warning"
@@ -207,7 +177,7 @@ Feature: Admin Actions to Post News
 
   Scenario: Edits to an admin post should appear on the homepage
     Given I have posted an admin post without paragraphs
-      And I am logged in as an admin
+      And I am logged in as a "communications" admin
     When I go to the admin-posts page
       And I follow "Edit"
       And I fill in "admin_post_title" with "Edited Post"
@@ -221,7 +191,7 @@ Feature: Admin Actions to Post News
 
   Scenario: A deleted admin post should be removed from the homepage
     Given I have posted an admin post
-      And I am logged in as an admin
+      And I am logged in as a "communications" admin
     When I go to the admin-posts page
       And I follow "Delete"
     When I go to the homepage

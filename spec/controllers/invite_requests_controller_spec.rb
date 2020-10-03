@@ -61,7 +61,7 @@ describe InviteRequestsController do
     end
 
     context "with valid emails" do
-      let(:ip) { "867.53.09" }
+      let(:ip) { "127.0.0.1" }
 
       before do
         allow_any_instance_of(ActionDispatch::Request).to receive(:remote_ip).and_return(ip)

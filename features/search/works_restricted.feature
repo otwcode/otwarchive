@@ -1,4 +1,4 @@
-@no-txn @works @search
+@works @search
 Feature: Search restricted works
   As a user
   I want search results to only include works I can access

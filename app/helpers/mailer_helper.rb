@@ -9,6 +9,12 @@ module MailerHelper
     link_to(body.html_safe, url, html_options)
   end
 
+  # For work, chapter, and series titles
+  def style_creation_link(title, url, html_options = {})
+    html_options[:style] = "color:#990000"
+    ("<i><b>" + link_to(title.html_safe, url, html_options) + "</b></i>").html_safe
+  end
+
   def style_footer_link(body, url, html_options = {})
     html_options[:style] = "color:#FFFFFF"
     link_to(body.html_safe, url, html_options)
@@ -92,6 +98,24 @@ module MailerHelper
          position: creation.position, title: creation.work.title)
     else
       creation.title
+    end
+  end
+
+  # The bylines used in subscription emails to prevent exposing the name(s) of
+  # anonymous creator(s).
+  def creator_links(work)
+    if work.anonymous?
+      "Anonymous"
+    else
+      work.pseuds.map { |p| style_pseud_link(p) }.to_sentence.html_safe
+    end
+  end
+
+  def creator_text(work)
+    if work.anonymous?
+      "Anonymous"
+    else
+      work.pseuds.map { |p| text_pseud(p) }.to_sentence.html_safe
     end
   end
 end # end of MailerHelper

@@ -9,11 +9,12 @@ module SeriesHelper
   def series_data_for_work(work)
     series = work.series.select(&:visible?)
     series.map do |serial|
-      serial_works = \
-        serial.serial_works.includes(:work).references(:works).
-        where(works: { posted: true }).order(:position).
-        map(&:work).select(&:visible?)
-      visible_position = serial_works.index(work) || serial_works.length
+      works_in_series = serial.works_in_order.posted.select(
+        # Include only the fields needed to calculate visibility:
+        :id, :restricted, :hidden_by_admin, :posted
+      ).select(&:visible?)
+
+      visible_position = works_in_series.index(work) || works_in_series.length
       unless !visible_position
         # Span used at end of previous_link and beginning of next_link to prevent extra
         # whitespace around main_link if next or previous link is missing. It also allows
@@ -24,7 +25,7 @@ module SeriesHelper
         # with a left-pointing arrow before "Previous"
         previous_link = if visible_position > 0
                           link_to(ts("&#8592; Previous Work").html_safe,
-                                  serial_works[visible_position - 1],
+                                  works_in_series[visible_position - 1],
                                   class: "previous") + divider_span
                         else
                           "".html_safe
@@ -39,9 +40,9 @@ module SeriesHelper
         # This is empty if there is no next work, otherwise it is
         # <span class="divider"> </span><a href class="next">Next Work</a>
         # with a right-pointing arrow after "Work"
-        next_link = if visible_position < serial_works.size - 1
+        next_link = if visible_position < works_in_series.size - 1
                       divider_span + link_to(ts("Next Work &#8594;").html_safe,
-                                             serial_works[visible_position + 1],
+                                             works_in_series[visible_position + 1],
                                              class: "next")
                     else
                       "".html_safe

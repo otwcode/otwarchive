@@ -43,12 +43,12 @@ class Collection < ApplicationRecord
   # We need to get rid of all of these if the challenge is destroyed
   after_save :clean_up_challenge
   def clean_up_challenge
-    if self.challenge.nil?
-      assignments.each {|assignment| assignment.destroy}
-      potential_matches.each {|potential_match| potential_match.destroy}
-      signups.each {|signup| signup.destroy}
-      prompts.each {|prompt| prompt.destroy}
-    end
+    return if self.challenge_id
+
+    assignments.each(&:destroy)
+    potential_matches.each(&:destroy)
+    signups.each(&:destroy)
+    prompts.each(&:destroy)
   end
 
   has_many :collection_items, dependent: :destroy
@@ -410,20 +410,11 @@ class Collection < ApplicationRecord
 
   def notify_maintainers(subject, message)
     # send maintainers a notice via email
-    UserMailer.collection_notification(self.id, subject, message).deliver
+    UserMailer.collection_notification(self.id, subject, message).deliver_later
   end
 
+  include AsyncWithResque
   @queue = :collection
-  # This will be called by a worker when a job needs to be processed
-  def self.perform(id, method, *args)
-    find(id).send(method, *args)
-  end
-
-  # We can pass this any Collection instance method that we want to
-  # run later.
-  def async(method, *args)
-    Resque.enqueue(Collection, id, method, *args)
-  end
 
   def reveal!
     async(:reveal_collection_items)

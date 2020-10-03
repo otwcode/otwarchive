@@ -134,11 +134,11 @@ class BookmarksController < ApplicationController
           end
         end
       elsif use_caching?
-        @bookmarks = Rails.cache.fetch("bookmarks/index/latest/v2_true", expires_in: 10.minutes) do
+        @bookmarks = Rails.cache.fetch("bookmarks/index/latest/v2_true", expires_in: ArchiveConfig.SECONDS_UNTIL_BOOKMARK_INDEX_EXPIRE.seconds) do
           search = BookmarkSearchForm.new(show_private: false, show_restricted: false, sort_column: 'created_at')
           results = search.search_results
           flash_search_warnings(results)
-          @bookmarks = results.to_a
+          results.to_a
         end
       else
         @bookmarks = Bookmark.latest.includes(:bookmarkable, :pseud, :tags, :collections).to_a
@@ -193,7 +193,7 @@ class BookmarksController < ApplicationController
     if @bookmark.errors.empty?
       if @bookmarkable.save && @bookmark.save
         flash[:notice] = ts('Bookmark was successfully created. It should appear in bookmark listings within the next few minutes.')
-        redirect_to(@bookmark) and return
+        redirect_to(bookmark_path(@bookmark)) && return
       end
     end
     @bookmarkable.errors.full_messages.each { |msg| @bookmark.errors.add(:base, msg) }

@@ -1,7 +1,7 @@
 require 'spec_helper'
 
-describe StatCounterIndexer do
-  let!(:work) { create(:work, title: "unique title", posted: true) }
+describe StatCounterIndexer, work_search: true do
+  let!(:work) { create(:work, title: "unique title") }
   let!(:stat_counter) { work.stat_counter }
 
   describe "#index_documents" do
@@ -25,35 +25,35 @@ describe StatCounterIndexer do
     it "should update the search results for kudos" do
       expect do
         StatCounterIndexer.new([stat_counter.id]).index_documents
-        refresh_index_without_updating("work")
+        WorkIndexer.refresh_index
       end.to change { result_count(kudos_count: "> 5") }.from(0).to(1)
     end
 
     it "should update the search results for bookmarks" do
       expect do
         StatCounterIndexer.new([stat_counter.id]).index_documents
-        refresh_index_without_updating("work")
+        WorkIndexer.refresh_index
       end.to change { result_count(bookmarks_count: "> 5") }.from(0).to(1)
     end
 
     it "should update the search results for comments" do
       expect do
         StatCounterIndexer.new([stat_counter.id]).index_documents
-        refresh_index_without_updating("work")
+        WorkIndexer.refresh_index
       end.to change { result_count(comments_count: "> 5") }.from(0).to(1)
     end
 
     it "should update the search results for hit count" do
       expect do
         StatCounterIndexer.new([stat_counter.id]).index_documents
-        refresh_index_without_updating("work")
+        WorkIndexer.refresh_index
       end.to change { result_count(hits: "> 5") }.from(0).to(1)
     end
 
     it "should not change the search results for title" do
       expect do
         StatCounterIndexer.new([stat_counter.id]).index_documents
-        refresh_index_without_updating("work")
+        WorkIndexer.refresh_index
       end.not_to change { result_count(title: "unique title") }
     end
   end

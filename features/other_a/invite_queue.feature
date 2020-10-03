@@ -3,7 +3,6 @@ Feature: Invite queue management
 
   Background:
     Given I have no users
-    And I have an AdminSetting
     And the following admin exists
       | login       | password   | email                    |
       | admin-sam   | password   | test@archiveofourown.org |
@@ -13,9 +12,9 @@ Feature: Invite queue management
 
   Scenario: Can turn queue off in Admin Settings and it displays as off
 
-    Given I am logged in as an admin
+    Given I am logged in as a "policy_and_abuse" admin
       And I go to the admin-settings page
-      And I uncheck "admin_setting_invite_from_queue_enabled"
+      And I uncheck "Invite from queue enabled (People can add themselves to the queue and invitations are sent out automatically)"
       And I press "Update"
     When I am logged out as an admin
       And I am on the homepage
@@ -24,10 +23,10 @@ Feature: Invite queue management
 
   Scenario: Can turn queue on in Admin Settings and it displays as on
 
-    Given I am logged in as an admin
+    Given I am logged in as a "policy_and_abuse" admin
       And account creation requires an invitation
       And I go to the admin-settings page
-      And I check "admin_setting_invite_from_queue_enabled"
+      And I check "Invite from queue enabled (People can add themselves to the queue and invitations are sent out automatically)"
       And I press "Update"
     When I am logged out as an admin
       And I am on the homepage
@@ -129,7 +128,7 @@ Feature: Invite queue management
         | user_registration_password_confirmation | password1                |
       And all emails have been delivered
     When I press "Create Account"
-    Then I should see "Account Created!"
+    Then I should see "Almost Done!"
     Then 1 email should be delivered
       And the email should contain "Welcome to the Archive of Our Own,"
       And the email should contain "newuser"
@@ -139,6 +138,9 @@ Feature: Invite queue management
     # user activates account
     When all emails have been delivered
       And I click the first link in the email
+    Then I should be on the login page
+      And I should see "Account activation complete! Please log in."
+
     When I am logged in as "newuser" with password "password1"
     Then I should see "Successfully logged in."
 
