@@ -144,7 +144,7 @@
             <%= ts("inspired") %>
             <%= link_to related_work.work.title, related_work.work %>
             <% if current_user == @user %>
-              <span class="actions" role="button"><%= button_to ts("Remove"), related_work_path(related_work), data: { confirm: ts("Are you sure?") }, method: :delete %></span>
+              <span class="actions"><%= button_to ts("Remove"), related_work_path(related_work), data: { confirm: ts("Are you sure?") }, method: :delete %></span>
             <% end %>
           </dd>
         <% end %>
