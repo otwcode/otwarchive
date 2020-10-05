@@ -196,3 +196,17 @@ Feature: Admin Actions to Post News
       And I follow "Delete"
     When I go to the homepage
     Then I should not see "Default Admin Post"
+
+  Scenario: Log in as an admin and create an admin post in a rtl (right-to-left) language
+    Given I am logged in as a "communications" admin
+      And Persian language
+    When I follow "Admin Posts"
+      And I follow "Post AO3 News"
+      Then I should see "New AO3 News Post"
+    When I fill in "admin_post_title" with "فارسی"
+      And I fill in "content" with "چیزهایی هست که باید در حین ایجاد یک گزارش از آنها آگاه باشید"
+      And I select "Persian" from "Choose a language"
+      And I press "Post"
+    Then I should see "Admin Post was successfully created."
+      And I should see "باشید" within "div.admin.home div.userstuff"
+      And the user content should be shown as right-to-left
