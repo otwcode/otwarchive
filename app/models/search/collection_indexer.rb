@@ -8,7 +8,6 @@ class CollectionIndexer < Indexer
     {
       "collection" => {
         properties: {
-          title: { type: "text", analyzer: "simple" },
           title: {
             type: "text",
             analyzer: "collection_title_analyzer",
@@ -69,31 +68,32 @@ class CollectionIndexer < Indexer
       ]
     ).merge(
       closed: object.closed?,
-      moderated: object.moderated?,
       unrevealed: object.unrevealed?,
       anonymous: object.anonymous?,
       owner_ids: object.all_owners.pluck(:id),
       moderator_ids: object.all_moderators.pluck(:id),
+      signup_open: object.challenge&.signup_open,
+      signups_open_at: object.challenge&.signups_open_at,
+      signups_close_at: object.challenge&.signups_close_at,
+      assignments_due_at: object.challenge&.assignments_due_at,
+      works_reveal_at: object.challenge&.works_reveal_at,
+      authors_reveal_at: object.challenge&.authors_reveal_at,
+      general_fandom_ids: object.all_fandoms.pluck(:id),
+      public_fandom_ids: object.all_approved_works.where(restricted: false).map(&:fandoms).flatten.pluck(:id),
 
-      # signup_open
-      # general_fandom_ids
-      # general_fandoms_count
-      # general_works_count
-      # general_bookmarked_items_count
-      # signups_open_at
-      # signups_close_at
-      # assignments_due_at
-      # works_reveal_at
-      # authors_reveal_at
+      # decorator methods
 
+      # add all children collctions to all these
 
-      # decorator
+      general_fandoms_count: object.all_fandoms_count,
+      public_fandoms_count: object.works.where(restricted: false).map(&:fandoms).flatten.count,
+
+      general_works_count: object.works.count,
+      public_works_count: object.works.where(restricted: false).count,
+      
       # 
-      # general_fandoms_count
-      # general_works_count
-      # general_bookmarked_items_count
-      # public_fandoms_count: object.all_fandoms_count,
-      # public_works_count: object.all_approved_works_count
+      # 
+      # general_bookmarked_items_count: object, 
       # public_bookmarked_items_count: object.all_approved_bookmarks_count
     )
   end

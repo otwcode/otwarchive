@@ -10,8 +10,8 @@
       <dd class="sort">
         <%= select_tag :sort_column,
             options_for_select({
-              ts("Title") => "collections.title",
-              ts("Date Created") => "collections.created_at" },
+              ts("Title") => "title",
+              ts("Date Created") => "created_at" },
               params[:sort_column]) %>
       </dd>
       <dt class="sort">
