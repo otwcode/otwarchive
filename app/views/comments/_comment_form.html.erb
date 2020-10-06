@@ -86,6 +86,7 @@
             <%= live_validation_for_field("comment_email_for_#{commentable.id}", :failureMessage => ts('Please enter your email address.')) %>
           </dd>
         </dl>
+        <p class="footnote">(<%= allowed_html_instructions %>)</p>
       <% end %>
 
       <p>
