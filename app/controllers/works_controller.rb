@@ -138,10 +138,7 @@ class WorksController < ApplicationController
     options[:page] = params[:page] || 1
     options[:show_restricted] = current_user.present? || logged_in_as_admin?
 
-    @user = User.find_by(login: params[:user_id])
-
-    return unless @user.present?
-
+    @user = User.find_by!(login: params[:user_id])
     @search = WorkSearchForm.new(options.merge(works_parent: @user, collected: true))
     @works = @search.search_results
     flash_search_warnings(@works)
