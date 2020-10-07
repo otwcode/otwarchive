@@ -82,19 +82,22 @@ class CollectionIndexer < Indexer
       public_fandom_ids: object.all_approved_works.where(restricted: false).map(&:fandoms).flatten.pluck(:id),
 
       # decorator methods
-
-      # add all children collctions to all these
-
       general_fandoms_count: object.all_fandoms_count,
-      public_fandoms_count: object.works.where(restricted: false).map(&:fandoms).flatten.count,
-
-      general_works_count: object.works.count,
-      public_works_count: object.works.where(restricted: false).count,
-      
-      # 
-      # 
-      # general_bookmarked_items_count: object, 
-      # public_bookmarked_items_count: object.all_approved_bookmarks_count
+      public_fandoms_count: object.all_approved_works.where(restricted: false).map(&:fandoms).flatten.uniq.count,
+      general_works_count: object.all_approved_works.count,
+      public_works_count: object.all_approved_works.where(restricted: false).count,
+      general_bookmarked_items_count: get_bookmarked_items_count(object), 
+      public_bookmarked_items_count: get_bookmarked_items_count(object, true),
     )
+  end
+
+  def get_bookmarked_items_count(collection, is_public = false)
+    bookmarks = Bookmark.is_public.joins(:collection_items)
+                .merge(CollectionItem.approved_by_collection)
+                .where(collection_items: { collection_id: collection.children.ids + [collection.id] })
+
+    bookmarks = bookmarks.select{ |b| b.bookmarkable.restricted == false } if is_public == true
+
+    bookmarks.count
   end
 end
