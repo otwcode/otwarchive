@@ -90,5 +90,24 @@ describe CollectionSearchForm, collection_search: true do
         expect(collection_search.search_results.map(&:title)).to eq sorted_collection_titles.reverse
       end
     end
+
+    describe "signups_close_at sorting" do
+      let!(:first_gift_exchange) { create(:gift_exchange, signup_open: true, signups_open_at: Time.zone.now - 2.days, signups_close_at: Time.zone.now + 1.week) }
+      let!(:first_collection) { create(:collection, title: 'first', challenge: first_gift_exchange, challenge_type: "GiftExchange") }
+      let!(:second_gift_exchange) { create(:gift_exchange, signup_open: true, signups_open_at: Time.zone.now - 2.days, signups_close_at: Time.zone.now + 2.weeks) }
+      let!(:second_collection) { create(:collection, title: 'second', challenge: second_gift_exchange, challenge_type: "GiftExchange") }
+      let(:sorted_collection_titles) { ['first', 'second'] }
+
+      before(:each) do
+        run_all_indexing_jobs
+      end
+
+      it "sorts collections by title and default asc order" do
+        collection_search = CollectionSearchForm.new(sort_column: 'signups_close_at')
+        expect(collection_search.search_results.map(&:title)).to eq sorted_collection_titles
+      end
+    end
+
+    
   end
 end

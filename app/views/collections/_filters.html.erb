@@ -1,4 +1,5 @@
-<%= form_for @search, as: :collection_search, url: collections_url, html: { method: :get, class: "narrow-hidden filters", id: "collection-filters" } do |f| %>
+<%= form_tag collections_url, method: :get, class: "narrow-hidden filters",
+    id: "collection-filters" do %>
   <h3 class="landmark heading"><%= ts("Filters") %></h3>
   <%= field_set_tag ts("Filter collections:") do %>
     <dl>

@@ -23,6 +23,16 @@ class CollectionsController < ApplicationController
     end
   end
 
+  def search
+    # options = params[:work_search].present? ? clean_work_search_params : {}
+    # options[:page] = params[:page] if params[:page].present?
+    # options[:show_restricted] = current_user.present? || logged_in_as_admin?
+
+    @search = CollectionSearchForm.new({})
+    # @search = CollectionSearchForm.new(collection_query_params)
+
+  end
+
   def index
     if params[:work_id] && (@work = Work.find_by(id: params[:work_id]))
       @collections = @work.approved_collections.by_title.includes(:parent, :moderators, :children, :collection_preference, owners: [:user]).paginate(page: params[:page])
@@ -189,4 +199,7 @@ class CollectionsController < ApplicationController
     )
   end
 
+  def collection_query_params
+    params.require(:collection_filters).permit(:title)
+  end
 end

@@ -34,16 +34,13 @@ class CollectionQuery < Query
   def visibility_filters
     [
       signup_open_filter,
-      closed_filter,
-      moderated_filter,
-      unrevealed_filter,
-      anonymous_filter
+      closed_filter
     ]
   end
 
   def collection_filters
     [
-      collection_type_filter
+      challenge_type_filter
     ]
   end
 
@@ -59,23 +56,38 @@ class CollectionQuery < Query
     term_filter(:closed, bool_value(options[:closed])) if options[:closed].present?
   end
 
-  def moderated_filter
-    term_filter(:moderated, bool_value(options[:moderated])) if options[:moderated].present?
+  def challenge_type_filter
+    term_filter(:challenge_type, options[:challenge_type]) if options[:challenge_type].present?
   end
 
-  def unrevealed_filter
-    term_filter(:unrevealed, bool_value(options[:unrevealed])) if options[:unrevealed].present?
+
+  # TODO: wire this up for collections
+  def fandom_filter
+    key = User.current_user.present? ? "fandoms.id" : "fandoms.id_for_public"
+    if options[:fandom_ids]
+      options[:fandom_ids].map do |fandom_id|
+        { term: { key => fandom_id } }
+      end
+    end
   end
 
-  def anonymous_filter
-    term_filter(:anonymous, bool_value(options[:anonymous])) if options[:anonymous].present?
-  end
-  
+  # filtering
+  # 
+  # owner_ids
+  # moderator_ids
+  # general_fandom_ids
+  # public_fandom_ids
+  # ([] & []).any?
 
-  # TODO: wire this method up and test it
-  def collection_type_filter
-    term_filter(:"collection_type", options[:collection_type]) if options[:collection_type].present?
-  end
+  # decorator
+  # 
+  # general_fandoms_count
+  # general_works_count
+  # general_bookmarked_items_count
+  # public_fandoms_count
+  # public_works_count
+  # public_bookmarked_items_count
+
 
   ####################
   # QUERIES

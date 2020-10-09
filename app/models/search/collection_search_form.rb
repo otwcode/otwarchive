@@ -101,7 +101,7 @@ class CollectionSearchForm
   end
 
   def default_sort_direction
-    if sort_column.include?('title')
+    if sort_column.include?('title') || sort_column.include?('signups_close_at')
       'asc'
     else
       'desc'

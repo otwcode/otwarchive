@@ -29,19 +29,4 @@ describe CollectionQuery do
     q = CollectionQuery.new(closed: 'false')
     expect(q.filters).to include(term: { closed: false})
   end
-
-  it "should allow you to filter for moderated collections" do
-    q = CollectionQuery.new(moderated: 'true')
-    expect(q.filters).to include(term: { moderated: true })
-  end
-
-  it "should allow you to filter for moderated collections" do
-    q = CollectionQuery.new(unrevealed: 'true')
-    expect(q.filters).to include(term: { unrevealed: true })
-  end
-
-  it "should allow you to filter for non-anonymous collections" do
-    q = CollectionQuery.new(anonymous: 'false')
-    expect(q.filters).to include(term: { anonymous: false })
-  end
 end
