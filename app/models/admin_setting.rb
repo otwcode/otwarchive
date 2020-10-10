@@ -25,8 +25,25 @@ class AdminSetting < ApplicationRecord
     cache_expiration: 10,
     tag_wrangling_off?: false,
     downloads_enabled?: true,
-    disable_support_form?: false
+    disable_support_form?: false,
+    default_skin_id: nil
   }.freeze
+
+  # Create AdminSetting.first on a blank database. We call this only in an initializer
+  # or a testing setup, not as part of any heavily used methods (e.g. AdminSetting.current).
+  def self.default
+    return AdminSetting.first if AdminSetting.first
+
+    settings = AdminSetting.new(
+      invite_from_queue_enabled: ArchiveConfig.INVITE_FROM_QUEUE_ENABLED,
+      invite_from_queue_number: ArchiveConfig.INVITE_FROM_QUEUE_NUMBER,
+      invite_from_queue_frequency: ArchiveConfig.INVITE_FROM_QUEUE_FREQUENCY,
+      account_creation_enabled: ArchiveConfig.ACCOUNT_CREATION_ENABLED,
+      days_to_purge_unactivated: ArchiveConfig.DAYS_TO_PURGE_UNACTIVATED
+    )
+    settings.save(validate: false)
+    settings
+  end
 
   def self.current
     Rails.cache.fetch("admin_settings", race_condition_ttl: 10.seconds) { AdminSetting.first } || OpenStruct.new(DEFAULT_SETTINGS)
@@ -34,15 +51,7 @@ class AdminSetting < ApplicationRecord
 
   class << self
     delegate *DEFAULT_SETTINGS.keys, :to => :current
-  end
-
-  def self.default_skin
-    settings = current
-    if settings.default_skin_id.present?
-      Rails.cache.fetch("admin_default_skin") { settings.default_skin }
-    else
-      Skin.default
-    end
+    delegate :default_skin, to: :current
   end
 
   # run once a day from cron
@@ -65,9 +74,7 @@ class AdminSetting < ApplicationRecord
   private
 
   def expire_cached_settings
-    unless Rails.env.development?
-      Rails.cache.delete("admin_settings")
-    end
+    Rails.cache.delete("admin_settings")
   end
 
   def check_filter_status
@@ -85,5 +92,4 @@ class AdminSetting < ApplicationRecord
       self.invite_from_queue_at = Time.now + self.invite_from_queue_frequency.days
     end
   end
-
 end

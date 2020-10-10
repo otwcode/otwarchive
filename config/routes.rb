@@ -145,11 +145,9 @@ Otwarchive::Application.routes.draw do
   end
 
   #### ADMIN ####
-  resources :admins
   resources :admin_posts do
     resources :comments
   end
-
 
   namespace :admin do
     resources :activities, only: [:index, :show]
@@ -201,6 +199,7 @@ Otwarchive::Application.routes.draw do
     end
     resources :api
   end
+  resources :admins, only: [:index]
 
   post '/admin/api/new', to: 'admin/api#create'
 
@@ -322,6 +321,7 @@ Otwarchive::Application.routes.draw do
       get :mark_for_later
       get :mark_as_read
       get :confirm_delete
+      get :share
     end
     resources :bookmarks
     resources :chapters do
@@ -458,8 +458,16 @@ Otwarchive::Application.routes.draw do
     end
     resources :requests, controller: "challenge_requests"
     # challenge types
-    resource :gift_exchange, controller: 'challenge/gift_exchange'
-    resource :prompt_meme, controller: 'challenge/prompt_meme'
+    resource :gift_exchange, controller: "challenge/gift_exchange" do
+      member do
+        get :confirm_delete
+      end
+    end
+    resource :prompt_meme, controller: "challenge/prompt_meme" do
+      member do
+        get :confirm_delete
+      end
+    end
   end
 
   #### I18N ####
@@ -509,6 +517,7 @@ Otwarchive::Application.routes.draw do
     end
     member do
       get :confirm_delete
+      get :share
     end
     resources :collection_items
   end

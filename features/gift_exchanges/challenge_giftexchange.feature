@@ -532,11 +532,13 @@ Feature: Gift Exchange Challenge
         And the email should not contain "Warnings:"
         And the email should not contain "Optional Tags:"
 
-  Scenario: A mod can delete a gift exchange and all the assignments and
+  Scenario: A mod can delete a gift exchange without needing Javascript and all the assignments and
   sign-ups will be deleted with it, but the collection will remain
     Given everyone has their assignments for "Bad Gift Exchange"
       And I am logged in as "mod1"
     When I delete the challenge "Bad Gift Exchange"
+    Then I should see "Are you sure you want to delete the challenge from the collection Bad Gift Exchange? All sign-ups, assignments, and settings will be lost. (Works and bookmarks will remain in the collection.)"
+    When I press "Yes, Delete Challenge"
     Then I should see "Challenge settings were deleted."
       And I should not see the gift exchange dashboard for "Bad Gift Exchange"
       And no one should have an assignment for "Bad Gift Exchange"

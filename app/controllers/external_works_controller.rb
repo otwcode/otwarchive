@@ -32,6 +32,7 @@ class ExternalWorksController < ApplicationController
   end
 
   def edit
+    authorize @external_work, policy_class: UserCreationPolicy
     @external_work = ExternalWork.find(params[:id])
     @work = @external_work
   end

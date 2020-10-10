@@ -14,20 +14,28 @@ Otwarchive::Application.configure do
   # Show full error reports and enable caching
   config.consider_all_requests_local       = true
   config.action_controller.perform_caching = true
+  config.action_controller.page_cache_directory = Rails.root.join("public/test_cache")
+
   config.action_mailer.perform_caching = true
-  config.cache_store = :dalli_store, '127.0.0.1:11211',
-                          { namespace:  'ao3-v1', expires_in:  0, compress: true , pool_size: 10 }
+
+  memcached_servers = "127.0.0.1:11211"
+  memcached_servers = YAML.load_file(Rails.root.join("config/local.yml")).fetch("MEMCACHED_SERVERS", memcached_servers) if File.file?(Rails.root.join("config/local.yml"))
+  config.cache_store = :mem_cache_store, memcached_servers,
+                       { namespace: "ao3-v1-test", compress: true, pool_size: 10, raise_errors: true }
 
   # Raise exceptions instead of rendering exception templates
   config.action_dispatch.show_exceptions = false
 
   # Disable request forgery protection in test environment
-  config.action_controller.allow_forgery_protection    = false
+  config.action_controller.allow_forgery_protection = false
 
   # Tell Action Mailer not to deliver emails to the real world.
   # The :test delivery method accumulates sent emails in the
   # ActionMailer::Base.deliveries array.
   config.action_mailer.delivery_method = :test
+
+  # Inline ActiveJob when testing:
+  config.active_job.queue_adapter = :inline
 
   # Use SQL instead of Active Record's schema dumper when creating the test database.
   # This is necessary if your schema can't be completely dumped by the schema dumper,
@@ -52,5 +60,6 @@ Otwarchive::Application.configure do
   config.assets.enabled = false
 
   # Make sure that we don't have a host mismatch:
-  config.action_mailer.default_url_options = { host: "http://www.example.com" }
+  config.action_controller.default_url_options = { host: "http://www.example.com", port: nil }
+  config.action_mailer.default_url_options = config.action_controller.default_url_options
 end

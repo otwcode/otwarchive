@@ -8,10 +8,8 @@ Feature: Admin Find Users page
         | userB  | b@bo3.org  |
         | userCB | cb@bo3.org |
       And the user "userB" exists and has the role "archivist"
-      And I am logged in as an admin
-
-  Scenario: The default page for the Admin section should be the Find Users page
-    Then I should see "Find Users"
+      And I am logged in as a super admin
+      And I go to the manage users page
 
   Scenario: The Find Users page should perform a partial match on name
     When I fill in "Name" with "user"

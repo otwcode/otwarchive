@@ -123,26 +123,27 @@ Given /^I have no works or comments$/ do
 end
 
 Given /^the chaptered work(?: with ([\d]+) chapters)?(?: with ([\d]+) comments?)? "([^"]*)"$/ do |n_chapters, n_comments, title|
-  step %{I am logged in as a random user}
-  step %{I post the work "#{title}"}
-  work = Work.find_by(title: title)
-  visit work_path(work)
-  n_chapters ||= 2
-  (n_chapters.to_i - 1).times do |i|
-    step %{I follow "Add Chapter"}
-    fill_in("content", with: "Yet another chapter.")
-    click_button("Post")
-  end
   step %{I am logged out}
-  n_comments ||= 0
-  work = Work.find_by(title: title)
-  n_comments.to_i.times do |i|
-    step %{I am logged in as a random user}
-    visit work_path(work)
-    fill_in("comment[comment_content]", with: "Bla bla")
-    click_button("Comment")
-    step %{I am logged out}
+  step %{basic tags}
+
+  title ||= "Blabla"
+  n_chapters ||= 2
+
+  work = FactoryBot.create(:work, title: title, expected_number_of_chapters: n_chapters.to_i)
+
+  # In order to make sure that the chapter positions are valid, we have to set
+  # them manually. So we can't use create_list, and have to loop instead:
+  (n_chapters.to_i - 1).times do |index|
+    FactoryBot.create(:chapter, work: work, posted: true, position: index + 2)
   end
+
+  # Make sure that the word count is set properly:
+  work.save
+
+  n_comments ||= 0
+  FactoryBot.create_list(:comment, n_comments.to_i, :by_guest,
+                         commentable: work.first_chapter,
+                         comment_content: "Bla bla")
 end
 
 Given /^I have a work "([^"]*)"$/ do |work|
@@ -161,27 +162,26 @@ Given /^I have a multi-chapter draft$/ do
 end
 
 Given /^the work(?: "([^"]*)")? with(?: (\d+))? comments setup$/ do |title, n_comments|
-  title ||= "Blabla"
-  step %{I have a work "#{title}"}
   step %{I am logged out}
-  n_comments ||= 3
-  n_comments.to_i.times do |i|
-    step %{I am logged in as a random user}
-    step %{I post the comment "Keep up the good work" on the work "#{title}"}
-    step %{I am logged out}
-  end
+  step %{basic tags}
+
+  title ||= "Blabla"
+  work = FactoryBot.create(:work, title: title)
+
+  n_comments = 3 if n_comments.blank? || n_comments.zero?
+  FactoryBot.create_list(:comment, n_comments.to_i, :by_guest,
+                         commentable: work.last_posted_chapter)
 end
 
 Given /^the work(?: "([^"]*)")? with(?: (\d+))? bookmarks? setup$/ do |title, n_bookmarks|
-  title ||= "Blabla"
-  step %{I have a work "#{title}"}
   step %{I am logged out}
-  n_bookmarks ||= 3
-  n_bookmarks.to_i.times do |i|
-    step %{I am logged in as a random user}
-    step %{I bookmark the work "#{title}"}
-    step %{I am logged out}
-  end
+  step %{basic tags}
+
+  title ||= "Blabla"
+  work = FactoryBot.create(:work, title: title)
+
+  n_bookmarks = 3 if n_bookmarks.blank? || n_bookmarks.zero?
+  FactoryBot.create_list(:bookmark, n_bookmarks.to_i, bookmarkable: work)
 end
 
 Given /^the chaptered work setup$/ do
@@ -272,7 +272,7 @@ end
 
 When /^I edit the work "([^"]*)"$/ do |work|
   work = Work.find_by(title: work)
-  visit edit_work_url(work)
+  visit edit_work_path(work)
 end
 When /^I edit the draft "([^"]*)"$/ do |draft|
   step %{I edit the work "#{draft}"}
@@ -410,14 +410,23 @@ When /^I edit multiple works with different comment moderation settings$/ do
   step %{I press "Edit"}
 end
 
-When /^I edit multiple works with different anonymous commenting settings$/ do
-  step %{I set up the draft "Work with Anonymous Commenting Disabled"}
-  check("work_anon_commenting_disabled")
+When /^I edit multiple works with different commenting settings$/ do
+  step %{I set up the draft "Work with All Commenting Enabled"}
+  choose("Registered users and guests can comment")
   step %{I post the work without preview}
-  step %{I post the work "Work with Anonymous Commenting Enabled"}
+
+  step %{I set up the draft "Work with Anonymous Commenting Disabled"}
+  choose("Only registered users can comment")
+  step %{I post the work without preview}
+
+  step %{I set up the draft "Work with All Commenting Disabled"}
+  choose("No one can comment")
+  step %{I post the work without preview}
+
   step %{I go to my edit multiple works page}
+  step %{I select "Work with All Commenting Enabled" for editing}
   step %{I select "Work with Anonymous Commenting Disabled" for editing}
-  step %{I select "Work with Anonymous Commenting Enabled" for editing}
+  step %{I select "Work with All Commenting Disabled" for editing}
   step %{I press "Edit"}
 end
 

@@ -25,8 +25,14 @@ module NavigationHelpers
       step %{all indexing jobs have been run}
       search_people_path
     when /^the bookmarks page$/i
+      # This cached page only expires by time, not by any user action;
+      # just clear it every time.
+      Rails.cache.delete "bookmarks/index/latest/v2_true"
       bookmarks_path
     when /^the works page$/i
+      # This cached page only expires by time, not by any user action;
+      # just clear it every time.
+      Rails.cache.delete "works/index/latest/v1"
       works_path
     when /^the admin login page$/i
       new_admin_session_path
@@ -208,6 +214,9 @@ module NavigationHelpers
     when /^the bookmarks in collection "(.*)"$/i
       step %{all indexing jobs have been run}
       collection_bookmarks_path(Collection.find_by(title: $1))
+    when /^the first bookmark for the work "(.*?)"$/i
+      work = Work.find_by(title: Regexp.last_match(1))
+      bookmark_path(work.bookmarks.first)
     when /^the tag comments? page for "(.*)"$/i
       tag_comments_path(Tag.find_by_name($1))
     when /^the work comments? page for "(.*?)"$/i

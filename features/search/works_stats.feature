@@ -147,7 +147,8 @@ Feature: Search works by stats
   Scenario: Search by > a number of comments and sort in ascending order by
     title using the header search
     Given a set of works with comments for searching
-    When I fill in "site_search" with "comments: > 2 sort: title ascending"
+    When I am on the home page
+      And I fill in "site_search" with "comments: > 2 sort: title ascending"
       And I press "Search"
     Then I should see "You searched for: comments count: > 2 sort by: title ascending"
       And I should see "3 Found"
@@ -222,7 +223,8 @@ Feature: Search works by stats
   Scenario: Search by > a number of bookmarks and sort in ascending order by
   title using the header search
     Given a set of works with bookmarks for searching
-    When I fill in "site_search" with "bookmarks: > 2 sort by: title ascending"
+    When I am on the home page
+      And I fill in "site_search" with "bookmarks: > 2 sort by: title ascending"
       And I press "Search"
     Then I should see "You searched for: bookmarks count: > 2 sort by: title ascending"
       And I should see "2 Found"

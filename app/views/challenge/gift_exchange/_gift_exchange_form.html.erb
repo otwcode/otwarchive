@@ -3,7 +3,11 @@
 <!--/descriptions-->
 
 <!--subnav-->
-<%= render "challenge/shared/challenge_form_delete" %>
+<% if @collection.challenge %>
+  <ul class="navigation actions">
+    <li><%= render "challenge/shared/challenge_form_delete" %></li>
+  </ul>
+<% end %>
 <!--/subnav-->
 
 <!--main content-->

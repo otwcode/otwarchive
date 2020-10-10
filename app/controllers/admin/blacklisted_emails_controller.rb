@@ -1,6 +1,4 @@
-class Admin::BlacklistedEmailsController < ApplicationController
-
-  before_action :admin_only
+class Admin::BlacklistedEmailsController < Admin::BaseController
 
   def index
     @admin_blacklisted_email = AdminBlacklistedEmail.new

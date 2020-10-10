@@ -366,7 +366,7 @@ describe Work do
       before :each do
         @skin_author = create(:user)
         @second_author = create(:user)
-        @private_skin = create(:private_work_skin, author_id: @skin_author.id)
+        @private_skin = create(:work_skin, :private, author_id: @skin_author.id)
       end
 
       let(:work_author) { @skin_author }

@@ -145,7 +145,7 @@ class PromptsController < ApplicationController
 
   def update
     if @prompt.update_attributes(prompt_params)
-      flash[:notice] = 'Prompt was successfully updated.'
+      flash[:notice] = ts("Prompt was successfully updated.")
       redirect_to collection_signup_path(@collection, @challenge_signup)
     else
       render action: :edit
@@ -193,6 +193,7 @@ class PromptsController < ApplicationController
       :any_archive_warning,
       tag_set_attributes: [
         :fandom_tagnames,
+        :id,
         :updated_at,
         :character_tagnames,
         :relationship_tagnames,

@@ -69,7 +69,7 @@ Given /the following activated users with private work skins/ do |table|
   table.hashes.each do |hash|
     user = FactoryBot.create(:user, hash)
     user.activate
-    FactoryBot.create(:private_work_skin, author: user, title: "#{user.login.titleize}'s Work Skin")
+    FactoryBot.create(:work_skin, :private, author: user, title: "#{user.login.titleize}'s Work Skin")
     step %{confirmation emails have been delivered}
   end
 end

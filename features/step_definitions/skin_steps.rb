@@ -1,3 +1,7 @@
+# Make sure that the methods in SkinCacheHelper are available to steps in this
+# file (specifically, the steps checking cache expiration):
+World(SkinCacheHelper)
+
 DEFAULT_CSS = "\"#title { text-decoration: blink;}\""
 
 Given /^basic skins$/ do
@@ -6,7 +10,7 @@ Given /^basic skins$/ do
 end
 
 Given /^I set up the skin "([^"]*)"$/ do |skin_name|
-  visit new_skin_url
+  visit new_skin_path
   fill_in("Title", with: skin_name)
   fill_in("Description", with: "Random description")
   fill_in("CSS", with: "#title { text-decoration: blink;}")
@@ -95,6 +99,17 @@ Given /^"([^"]*)" is using the approved public skin "([^"]*)"$/ do |login, skin_
   step "\"#{login}\" is using the approved public skin with css #{DEFAULT_CSS}"
 end
 
+Given /^I have a skin "(.*?)" with a parent "(.*?)"$/ do |child_title, parent_title|
+  step %{I set up the skin "#{parent_title}"}
+  click_button("Submit")
+  step %{I set up the skin "#{child_title}"}
+  click_button("Submit")
+
+  child = Skin.find_by(title: child_title)
+  parent = Skin.find_by(title: parent_title)
+  child.skin_parents.create(position: 1, parent_skin: parent)
+end
+
 ### WHEN
 
 When /^I change my skin to "([^\"]*)"$/ do |skin_name|
@@ -141,13 +156,13 @@ end
 When /^the skin "([^\"]*)" is in the chooser$/ do |skin_name|
   skin = Skin.find_by(title: skin_name)
   skin.in_chooser = true
-  skin.save
+  skin.save!
 end
 
 When /^the skin "([^\"]*)" is cached$/ do |skin_name|
   skin = Skin.find_by(title: skin_name)
   skin.cached = true
-  skin.save
+  skin.save!
   skin.cache!
 end
 
@@ -189,34 +204,56 @@ end
 
 Then /^the cache of the skin on "([^\"]*)" should expire after I save the skin$/ do |title|
   skin = Skin.find_by(title: title)
-  orig_cache_key = skin_cache_value(skin)
+  orig_cache_version = skin_cache_version(skin)
   visit edit_skin_path(skin)
   fill_in("CSS", with: "#random { text-decoration: blink;}")
   click_button("Update")
-  assert orig_cache_key != skin_cache_value(skin), "Cache key #{orig_cache_key} matches #{skin_cache_value(skin)}."
+  assert orig_cache_version != skin_cache_version(skin), "Cache version #{orig_cache_version} matches #{skin_cache_version(skin)}."
 end
 
 Then(/^the cache of the skin on "(.*?)" should not expire after I save "(.*?)"$/) do |arg1, arg2|
   skin = Skin.find_by(title: arg1)
   save_me = Skin.find_by(title: arg2)
-  orig_skin_key = skin_cache_value(skin)
-  orig_save_me_key = skin_cache_value(save_me)
+  orig_skin_version = skin_cache_version(skin)
+  orig_save_me_version = skin_cache_version(save_me)
   visit edit_skin_path(save_me)
   fill_in("CSS", with: "#random { text-decoration: blink;}")
   click_button("Update")
-  assert orig_save_me_key != skin_cache_value(save_me), "Cache key #{orig_save_me_key} matches #{skin_cache_value(save_me)}"
-  assert orig_skin_key == skin_cache_value(skin), "Cache key #{orig_skin_key} does not match #{skin_cache_value(skin)}"
+  assert orig_save_me_version != skin_cache_version(save_me), "Cache version #{orig_save_me_version} matches #{skin_cache_version(save_me)}"
+  assert orig_skin_version == skin_cache_version(skin), "Cache version #{orig_skin_version} does not match #{skin_cache_version(skin)}"
 end
 
 Then(/^the cache of the skin on "(.*?)" should expire after I save a parent skin$/) do |arg1|
   skin = Skin.find_by(title: arg1)
-  orig_skin_key = skin_cache_value(skin)
+  orig_skin_version = skin_cache_version(skin)
   parent_id = SkinParent.where(child_skin_id: skin.id).last.parent_skin_id
   parent = Skin.find(parent_id)
   parent.save!
-  assert orig_skin_key != skin_cache_value(skin), "Cache key #{orig_skin_key} matches #{skin_cache_value(skin)}"
+  assert orig_skin_version != skin_cache_version(skin), "Cache version #{orig_skin_version} matches #{skin_cache_version(skin)}"
 end
 
 Then /^I should see a purple logo$/ do
   page.should have_xpath('//style', text: "#header .heading a { color: purple; }")
+end
+
+Then /^I should see the skin "(.*?)" in the skin chooser$/ do |skin|
+  with_scope("#skin_chooser") do
+    expect(page).to have_content(skin)
+  end
+end
+
+Then /^I should not see the skin chooser$/ do
+  expect(page).not_to have_css("#skin_chooser")
+end
+
+Then /^the filesystem cache of the skin "(.*?)" should include "(.*?)"$/ do |title, contents|
+  skin = Skin.find_by(title: title)
+  expect(skin.cached?).to be_truthy
+
+  directory = Skin.skins_dir + skin.skin_dirname
+  style = Skin.skin_dir_entries(directory, /.css$/).map do |filename|
+    File.read(directory + filename)
+  end.join("\n")
+
+  expect(style).to include(contents)
 end

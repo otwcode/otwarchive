@@ -53,8 +53,8 @@ describe WorksHelper do
 
     context 'public work skins exist' do
       before do
-        FactoryBot.create(:public_work_skin, title: 'Z Public Skin')
-        FactoryBot.create(:public_work_skin, title: 'B Public Skin')
+        create(:work_skin, :public, title: "Z Public Skin")
+        create(:work_skin, :public, title: "B Public Skin")
       end
 
       context 'no private work skins' do
@@ -65,9 +65,9 @@ describe WorksHelper do
 
       context 'private work skins exist' do
         before do
-          FactoryBot.create(:private_work_skin, title: 'A Private Skin', author: @users[3])
-          FactoryBot.create(:private_work_skin, title: 'M Private Skin', author: @users[0])
-          FactoryBot.create(:private_work_skin, title: 'Unowned Private Skin')
+          create(:work_skin, :private, title: "A Private Skin", author: @users[3])
+          create(:work_skin, :private, title: "M Private Skin", author: @users[0])
+          create(:work_skin, :private, title: "Unowned Private Skin")
         end
 
         it 'returns public work skins and skins belonging to allpseuds, ordered by title' do

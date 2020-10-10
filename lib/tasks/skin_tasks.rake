@@ -149,6 +149,7 @@ namespace :skins do
   desc "Load site skins"
   task(:load_site_skins => :environment) do
     Skin.load_site_css
+    Skin.set_default_to_current_version
   end
 
   desc "Cache all site skins"
@@ -158,13 +159,13 @@ namespace :skins do
 
   desc "Remove all existing skins from preferences"
   task(:disable_all => :environment) do
-    default_id = Skin.default.id
+    default_id = AdminSetting.default_skin_id
     Preference.update_all(:skin_id => default_id)
   end
 
   desc "Unapprove all existing official skins"
   task(:unapprove_all => :environment) do
-    default_id = Skin.default.id
+    default_id = AdminSetting.default_skin_id
     Skin.where("id != ?", default_id).update_all(:official => false)
   end
 

@@ -96,10 +96,9 @@
     </li>
   <% end %>
 
-  <% unless @work.users.all? {|u| u.preference.disable_share_links?} %>
+  <% unless @work.unrevealed? || @work.users.all? {|u| u.preference.disable_share_links?} %>
     <li class="share hidden">
-      <%= link_to_modal ts("Share"), :for => "#share", :title => ts("Share Work") %>
-      <%= render 'share/share', :shareable => @work %>
+      <%= link_to_modal ts("Share"), :for => share_work_path(@work), :title => ts("Share Work") %>
     </li>
   <% end %>
 
@@ -121,8 +120,3 @@
   <% end %>
 </ul>
 <!-- END navigation -->
-
-<% # FRONTEND NOTE: Twitter widget JavaScript included here for share/_share to ensure it is only loaded once per page %>
-<% content_for :footer_js do %>
-  <script type="text/javascript" src="//platform.twitter.com/widgets.js"></script>
-<% end %>

@@ -17,7 +17,7 @@ class FandomNomination < TagNomination
     RelationshipNomination.for_tag_set(owned_tag_set).where(parent_tagname: tagname).pluck :tagname
   end
 
-  after_save :reject_children, if: "rejected?"
+  after_save :reject_children, if: :rejected?
   def reject_children
     character_nominations.each {|char| char.rejected = true; char.save}
     relationship_nominations.each {|rel| rel.rejected = true; rel.save}

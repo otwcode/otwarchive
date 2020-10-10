@@ -12,7 +12,7 @@ describe InboxHelper do
 
     context "for Tags" do
       it "should return a link to the Comment on the Tag" do
-        @commentable = FactoryBot.create(:tag_comment)
+        @commentable = FactoryBot.create(:comment, :on_tag)
         string = commentable_description_link(@commentable)
         expect(string.gsub("%20", " ")).to eq "<a href=\"/tags/#{@commentable.ultimate_parent.name}/comments/#{@commentable.id}\">#{@commentable.ultimate_parent.name}</a>"
       end
@@ -20,7 +20,7 @@ describe InboxHelper do
 
     context "for AdminPosts" do
       it "should return a link to the Comment on the Adminpost" do
-        @commentable = FactoryBot.create(:adminpost_comment)
+        @commentable = FactoryBot.create(:comment, :on_admin_post)
         expect(commentable_description_link(@commentable)).to eq "<a href=\"/admin_posts/#{@commentable.ultimate_parent.id}/comments/#{@commentable.id}\">#{@commentable.ultimate_parent.title}</a>"
       end
     end
