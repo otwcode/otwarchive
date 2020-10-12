@@ -233,7 +233,7 @@ end
 
 Then /^a user account should exist for "(.*?)"$/ do |login|
   user = User.find_by(login: login)
-  assert !user.blank?
+  assert user.present?
 end
 
 Then /^a user account should not exist for "(.*)"$/ do |login|
