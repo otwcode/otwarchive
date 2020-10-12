@@ -20,7 +20,7 @@ Feature: Non-public site and work skins
     And I should not see "(Not yet reviewed)"
 
   Scenario: A logged-out user should not be able to create skins.
-  Given I am logged out
+  Given I am a visitor
   When I go to the new skin page
     Then I should see "Sorry, you don't have permission"
 

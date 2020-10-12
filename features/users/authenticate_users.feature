@@ -65,16 +65,14 @@ Feature: User Authentication
       And I should see "Reset password token is invalid"
 
     # old password should no longer work
-    When I am logged out
-      And I am on the homepage
+    When I am on the homepage
       And I fill in "User name or email:" with "sam"
       And I fill in "Password:" with "secret"
       And I press "Log In"
     Then I should not see "Hi, sam"
 
     # new password should work
-    When I am logged out
-      And I am on the homepage
+    When I am on the homepage
       And I fill in "User name or email:" with "sam"
       And I fill in "Password:" with "new<pass"
       And I press "Log In"
@@ -100,7 +98,7 @@ Feature: User Authentication
       And I press "Reset Password"
     Then I should see "Check your email for instructions on how to reset your password."
       And 1 email should be delivered
-    When I am logged out
+    When I start a new session
       And I follow "Change my password." in the email
       And I fill in "New password" with "newpass"
       And I fill in "Confirm new password" with "newpass"
@@ -121,7 +119,7 @@ Feature: User Authentication
     Then I should see "Check your email for instructions on how to reset your password."
       And 1 email should be delivered
     When it is currently 2 weeks from now
-      And I am logged out
+      And I start a new session
       And I follow "Change my password." in the email
       And I fill in "New password" with "newpass"
       And I fill in "Confirm new password" with "newpass"

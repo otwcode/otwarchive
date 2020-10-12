@@ -7,7 +7,7 @@ Feature: Search restricted works
   that are public; they should not contain works that are drafts, restricted to
   registered users, or hidden by an admin
     Given a set of works with various access levels for searching
-      And I am logged out
+      And I am a visitor
     When I search for works containing "Work"
     Then I should see "You searched for: Work"
       And I should see "1 Found"

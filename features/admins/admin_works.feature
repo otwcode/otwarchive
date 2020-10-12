@@ -200,7 +200,7 @@ Feature: Admin Actions for Works, Comments, Series, Bookmarks
       And I should see "I loved this!"
 
     # user can't see spam comment
-    When I am logged out as an admin
+    When I am logged out
       And I view the work "The One Where Neal is Awesome"
     Then I should see "Comments (1)"
     When I follow "Comments (1)"
@@ -225,7 +225,7 @@ Feature: Admin Actions for Works, Comments, Series, Bookmarks
       And I should not see "This comment has been marked as spam."
 
     # user can see comment again
-    When I am logged out as an admin
+    When I am logged out
       And I view the work "The One Where Neal is Awesome"
     Then I should see "Comments (2)"
     When I follow "Comments (2)"

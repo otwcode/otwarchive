@@ -4,7 +4,7 @@ class Users::SessionsController < Devise::SessionsController
   before_action :admin_logout_required
   skip_before_action :store_location
 
-  # POST /users/login 
+  # POST /users/login
   def create
     super do |resource|
       unless resource.remember_me

@@ -69,7 +69,7 @@ Feature: Download a work
   Scenario: Works can be downloaded when anonymous
 
   Given there is a work "Test Work" in an anonymous collection "Anonymous"
-  When I am logged out
+  When I am a visitor
     And I view the work "Test Work"
     And I follow "HTML"
   Then I should see "Anonymous"

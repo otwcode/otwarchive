@@ -101,7 +101,7 @@ end
 
 Given /^I am logged in as "([^"]*)" with password "([^"]*)"$/ do |login, password|
   user = find_or_create_new_user(login, password)
-  step("I am logged out")
+  step("I start a new session")
   step %{I am on the homepage}
   find_link('login-dropdown').click
 
@@ -138,9 +138,12 @@ Given /^user "([^"]*)" is banned$/ do |login|
   user.save
 end
 
+Given /^I start a new session$/ do
+  page.driver.reset!
+end
+
 Given /^I am logged out$/ do
-  page.driver.remove_cookie(user_credentials)
-  page.driver.remove_cookie(admin_credentials)
+  step(%{I follow "Log Out"})
 end
 
 Given /^I log out$/ do
@@ -154,8 +157,7 @@ Given /^"([^"]*)" deletes their account/ do |username|
 end
 
 Given /^I am a visitor$/ do
-  step(%{I am logged out as an admin})
-  step(%{I am logged out})
+  step "I start a new session"
 end
 
 Given(/^I coauthored the work "(.*?)" as "(.*?)" with "(.*?)"$/) do |title, login, coauthor|

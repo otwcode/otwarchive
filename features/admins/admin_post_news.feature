@@ -18,8 +18,7 @@ Feature: Admin Actions to Post News
     Given I have posted an admin post
 
     # regular user replies to admin post
-    When I am logged out as an admin
-      And I am logged in as "happyuser"
+    When I am logged in as "happyuser"
       And I go to the admin-posts page
     When all emails have been delivered
       And I follow "Comment"
@@ -41,8 +40,7 @@ Feature: Admin Actions to Post News
   # also their username will be plain text and not a link
 
     Given I have posted an admin post
-    When I am logged out as an admin
-      And I am logged in as "happyuser"
+    When I am logged in as "happyuser"
       And I go to the admin-posts page
     When I follow "Comment"
       And I fill in "Comment" with "Excellent, my dear!"
@@ -150,7 +148,7 @@ Feature: Admin Actions to Post News
     When I go to the home page
     Then I should see "App News & a <strong> Warning"
       And I should not see "App News &amp; a &lt;strong&gt; Warning"
-    When I am logged out as an admin
+    When I am logged out
       And I go to the admin-posts page
     Then I should see "App News & a <strong> Warning"
       And I should not see "App News &amp; a &lt;strong&gt; Warning"

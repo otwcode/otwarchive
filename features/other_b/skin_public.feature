@@ -104,7 +104,6 @@ Feature: Public skins
   Given the approved public skin "Uncached skin"
     And the approved public skin "Cached skin"
     And the skin "Cached skin" is cached
-    And I am logged out
   When I go to the public skins page
   Then I should see "Cached skin"
     And I should not see "Uncached skin"

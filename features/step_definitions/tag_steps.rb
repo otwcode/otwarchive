@@ -108,7 +108,7 @@ Given /^"([^\"]*)" is a metatag of the (\w+) "([^\"]*)"$/ do |metatag, tag_type,
 end
 
 Given /^I am logged in as a tag wrangler$/ do
-  step "I am logged out"
+  step "I start a new session"
   username = "wrangler"
   step %{I am logged in as "#{username}"}
   user = User.find_by(login: username)
@@ -129,15 +129,7 @@ Given /^the tag wrangler "([^\"]*)" with password "([^\"]*)" is wrangler of "([^
 
   tw.tag_wrangler = '1'
 
-  page.driver.remove_cookie(user_credentials)
-
-  visit new_user_session_path
-  user_record = find_or_create_new_user(user, password)
-
-  fill_in "User name or email:", with: user
-  fill_in "Password:", with: password
-  check "Remember Me"
-  click_button "Log In"
+  step %{I am logged in as "#{user}" with password "#{password}"}
 
   fandom = Fandom.where(name: fandomname, canonical: true).first_or_create
   visit tag_wranglers_url
@@ -147,7 +139,7 @@ end
 
 Given /^a tag "([^\"]*)" with(?: (\d+))? comments$/ do |tagname, n_comments|
   tag = Fandom.find_or_create_by_name(tagname)
-  step %{I am logged out}
+  step "I start a new session"
 
   n_comments = 3 if n_comments.blank? || n_comments.zero?
   FactoryBot.create_list(:comment, n_comments.to_i, :on_tag, commentable: tag)
@@ -164,7 +156,7 @@ end
 
 Given /^a period-containing tag "([^\"]*)" with(?: (\d+))? comments$/ do |tagname, n_comments|
   tag = Fandom.find_or_create_by_name(tagname)
-  step %{I am logged out}
+  step "I start a new session"
 
   n_comments = 3 if n_comments.blank? || n_comments.zero?
   FactoryBot.create_list(:comment, n_comments.to_i, :on_tag, commentable: tag)
