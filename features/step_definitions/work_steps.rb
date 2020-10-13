@@ -309,7 +309,7 @@ When /^a chapter with the co-author "([^\"]*)" is added to "([^\"]*)"$/ do |coau
   step %{a chapter is set up for "#{work_title}"}
   step %{I invite the co-author "#{coauthor}"}
   click_button("Post")
-  step %{the user "#{coauthor}" accepts all co-creator invitations}
+  step %{the user "#{coauthor}" accepts all co-creator requests}
   step %{all indexing jobs have been run}
   Tag.write_redis_to_database
 end

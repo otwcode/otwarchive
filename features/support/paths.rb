@@ -101,7 +101,7 @@ module NavigationHelpers
       user_inbox_path(User.current_user)
     when /my invitations page/
       user_invitations_path(User.current_user)
-    when /my creator invitations page/
+    when /my co-creator requests page/
       user_creatorships_path(User.current_user)
     when /the gifts page$/
       gifts_path

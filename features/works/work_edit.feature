@@ -138,7 +138,7 @@ Feature: Edit Works
     When I am logged in as "coauthor"
       And I follow "Dialogue" in the email
     Then I should not see "Edit"
-    When I follow "Creator Invitations page"
+    When I follow "Co-Creator Requests page"
       And I check "selected[]"
       # Expire cached byline
       And it is currently 1 second from now
@@ -221,7 +221,7 @@ Feature: Edit Works
     When I press "Post"
     Then I should see "Work was successfully posted. It should appear in work listings within the next few minutes."
       But I should not see "Michael"
-    When the user "Burnham" accepts all creator invites
+    When the user "Burnham" accepts all co-creator requests
       And I view the work "Thats not my Spock"
     Then I should see "Michael (Burnham), testuser"
     When the user "Burnham" disallows co-creators
@@ -244,7 +244,7 @@ Feature: Edit Works
       And I press "Post"
     Then I should see "Work was successfully posted. It should appear in work listings within the next few minutes."
       But I should not see "Michael"
-    When the user "Burnham" accepts all co-creator invites
+    When the user "Burnham" accepts all co-creator requests
       And I view the work "Thats not my Spock"
     Then I should see "Michael (Burnham), testuser"
     When the user "Burnham" disallows co-creators
@@ -259,6 +259,6 @@ Feature: Edit Works
     Then I should see "Work was successfully updated"
       And I should see "Michael (Burnham), testuser"
       But I should not see "Georgiou"
-    When the user "Georgiou" accepts all co-creator invites
+    When the user "Georgiou" accepts all co-creator requests
       And I view the work "Thats not my Spock, it has too much beard"
     Then I should see "Georgiou, Michael (Burnham), testuser"
