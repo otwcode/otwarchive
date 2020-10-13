@@ -40,7 +40,10 @@ class CollectionQuery < Query
 
   def collection_filters
     [
-      challenge_type_filter
+      challenge_type_filter,
+      fandom_filter,
+      owner_filter,
+      moderator_filter
     ]
   end
 
@@ -56,38 +59,22 @@ class CollectionQuery < Query
     term_filter(:closed, bool_value(options[:closed])) if options[:closed].present?
   end
 
-  def challenge_type_filter
-    term_filter(:challenge_type, options[:challenge_type]) if options[:challenge_type].present?
-  end
-
-
-  # TODO: wire this up for collections
   def fandom_filter
-    key = User.current_user.present? ? "fandoms.id" : "fandoms.id_for_public"
-    if options[:fandom_ids]
-      options[:fandom_ids].map do |fandom_id|
-        { term: { key => fandom_id } }
-      end
-    end
+    key = User.current_user.present? ? :general_fandom_ids : :public_fandom_ids
+    terms_filter(key, options[:fandom_ids]) if options[:fandom_ids].present?
   end
 
-  # filtering
-  # 
-  # owner_ids
-  # moderator_ids
-  # general_fandom_ids
-  # public_fandom_ids
-  # ([] & []).any?
+  def owner_filter
+    terms_filter(:owner_ids, options[:owner_ids]) if options[:owner_ids].present?
+  end
 
-  # decorator
-  # 
-  # general_fandoms_count
-  # general_works_count
-  # general_bookmarked_items_count
-  # public_fandoms_count
-  # public_works_count
-  # public_bookmarked_items_count
+  def moderator_filter
+    terms_filter(:moderator_ids, options[:moderator_ids]) if options[:moderator_ids].present?
+  end
 
+  def challenge_type_filter
+    match_filter(:challenge_type, options[:challenge_type]) if options[:challenge_type].present?
+  end
 
   ####################
   # QUERIES

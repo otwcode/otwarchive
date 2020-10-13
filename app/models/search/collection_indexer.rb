@@ -72,6 +72,7 @@ class CollectionIndexer < Indexer
       anonymous: object.anonymous?,
       owner_ids: object.all_owners.pluck(:id),
       moderator_ids: object.all_moderators.pluck(:id),
+      challenge_type: object.challenge_type,
       signup_open: object.challenge&.signup_open,
       signups_open_at: object.challenge&.signups_open_at,
       signups_close_at: object.challenge&.signups_close_at,
@@ -80,8 +81,6 @@ class CollectionIndexer < Indexer
       authors_reveal_at: object.challenge&.authors_reveal_at,
       general_fandom_ids: object.all_fandoms.pluck(:id),
       public_fandom_ids: object.all_approved_works.where(restricted: false).map(&:fandoms).flatten.pluck(:id),
-
-      # decorator methods
       general_fandoms_count: object.all_fandoms_count,
       public_fandoms_count: object.all_approved_works.where(restricted: false).map(&:fandoms).flatten.uniq.count,
       general_works_count: object.all_approved_works.count,

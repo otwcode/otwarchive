@@ -38,15 +38,13 @@ describe CollectionSearchForm, collection_search: true do
     end
 
     it "finds works that match by title" do
-      t = CollectionSearchForm.new(query: 'test')
-      results = t.search_results
-      expect(results).to include collection
+      query = CollectionSearchForm.new(query: 'test')
+      expect(query.search_results).to include collection
     end
 
     it "finds works that match by name" do
-      t = CollectionSearchForm.new(query: collection.name)
-      results = t.search_results
-      expect(results).to include collection
+      query = CollectionSearchForm.new(query: collection.name)
+      expect(query.search_results).to include collection
     end
   end
 
@@ -108,6 +106,56 @@ describe CollectionSearchForm, collection_search: true do
       end
     end
 
-    
-  end
+    describe "filtering" do
+      let!(:gift_exchange) { create(:gift_exchange, signup_open: true, signups_open_at: Time.zone.now - 2.days, signups_close_at: Time.zone.now + 1.week) }
+      let!(:gift_exchange_collection) { create(:collection, challenge: gift_exchange, challenge_type: "GiftExchange") }
+
+      let!(:prompt_meme) { create(:prompt_meme, signup_open: true, signups_open_at: Time.zone.now - 2.days, signups_close_at: Time.zone.now + 1.week) }
+      let!(:prompt_meme_collection) { create(:collection, challenge: prompt_meme, challenge_type: "PromptMeme") }
+
+      let!(:no_signup) { create(:collection, title: 'no signup', collection_preference: create(:collection_preference, closed: true)) }
+
+      # closed_filter,
+      # fandom_filter,
+      # owner_filter,
+      # moderator_filter
+
+      before(:each) do
+        run_all_indexing_jobs
+      end
+
+      describe "filters collections by challenge_type" do
+        it "shows only gift exchanges" do
+          query = CollectionSearchForm.new(challenge_type: 'GiftExchange')
+
+          expect(query.search_results).to include gift_exchange_collection
+          expect(query.search_results).not_to include prompt_meme_collection
+        end
+
+        it "shows only prompt memes" do
+          query = CollectionSearchForm.new(challenge_type: 'PromptMeme')
+
+          expect(query.search_results).to include prompt_meme_collection
+          expect(query.search_results).not_to include gift_exchange_collection
+        end
+      end
+
+      it "filter collections by signup_open_filter" do
+        query = CollectionSearchForm.new(signup_open: true)
+        expect(query.search_results).to include prompt_meme_collection
+        expect(query.search_results).to include gift_exchange_collection
+        expect(query.search_results).not_to include no_signup
+      end
+
+      it "filter collections by closed filter" do
+        query = CollectionSearchForm.new(closed: true)
+        expect(query.search_results).not_to include prompt_meme_collection
+        expect(query.search_results).not_to include gift_exchange_collection
+        expect(query.search_results).to include no_signup
+      end
+
+      
+    end
+
+  end  
 end

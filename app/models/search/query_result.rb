@@ -27,8 +27,13 @@ class QueryResult
 
   # Laying some groundwork for making better use of search results
   def decorate_items(items)
-    return items unless klass == Pseud
-    PseudDecorator.decorate_from_search(items, hits)
+    if klass == Pseud
+      PseudDecorator.decorate_from_search(items, hits)  
+    elsif klass == Collection
+      CollectionDecorator.decorate_from_search(items, hits)
+    else
+      items
+    end
   end
 
   def each(&block)
