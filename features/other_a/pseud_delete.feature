@@ -91,7 +91,7 @@ Feature: Delete pseud.
       And I follow "My Prompts"
     Then I should see "Antidisestablishmentarianism."
 
-  Scenario: Deleting a pseud should preserve approved creatorships even if the default pseud has an invitation for the same work.
+  Scenario: Deleting a pseud should preserve approved creatorships even if the default pseud has a request for the same work.
     Given I am logged in as "original_pseud"
       And I add the pseud "other_pseud"
       And I am logged in as "coauthor"
@@ -146,7 +146,7 @@ Feature: Delete pseud.
       And I follow "Delete"
     Then I should see "The pseud was successfully deleted."
 
-    # We should still have an invitation for Other Invited:
+    # We should still have a request for Other Invited:
     When I go to my co-creator requests page
     Then I should see "Other Invited" within ".creatorships"
       And I should see "original_pseud" within ".creatorships"

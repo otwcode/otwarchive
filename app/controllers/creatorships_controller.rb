@@ -46,7 +46,7 @@ class CreatorshipsController < ApplicationController
 
   # When the user presses "Reject" on the co-creator request listing, this is
   # the code that runs. Note that rejection is equivalent to destroying the
-  # invitation.
+  # request.
   def reject_update
     @creatorships.each(&:destroy)
     flash[:notice] = ts("Requests rejected.")
