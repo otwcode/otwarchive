@@ -5,6 +5,8 @@ class CollectionParticipant < ApplicationRecord
   has_one :user, through: :pseud
   belongs_to :collection
 
+  after_commit :reindex_collection
+
   PARTICIPANT_ROLES = ["None", "Owner", "Moderator", "Member", "Invited"]
   NONE = PARTICIPANT_ROLES[0]
   OWNER = PARTICIPANT_ROLES[1]
@@ -57,4 +59,9 @@ class CollectionParticipant < ApplicationRecord
     (role == MEMBER || role == NONE) ? self.collection.user_is_maintainer?(user) : self.collection.user_is_owner?(user)
   end
 
+  def reindex_collection
+    return unless MAINTAINER_ROLES.include?(participant_role)
+
+    IndexQueue.enqueue_ids(Collection, collection_id, :background)
+  end
 end

@@ -1,6 +1,6 @@
 class CollectionPreference < ApplicationRecord
   belongs_to :collection
-  after_update :after_update
+  after_update :after_update, :reindex_collection
 
   def after_update
     if self.collection.valid? && self.valid?
@@ -11,5 +11,9 @@ class CollectionPreference < ApplicationRecord
         collection.reveal_authors!
       end
     end
+  end
+
+  def reindex_collection
+    IndexQueue.enqueue_ids(Collection, collection_id, :background)
   end
 end
