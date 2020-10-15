@@ -70,8 +70,8 @@ class CollectionIndexer < Indexer
       closed: object.closed?,
       unrevealed: object.unrevealed?,
       anonymous: object.anonymous?,
-      owner_ids: object.all_owners.pluck(:id),
-      moderator_ids: object.all_moderators.pluck(:id),
+      owner_ids: object.all_owners.pluck(:user_id),
+      moderator_ids: object.all_moderators.pluck(:user_id),
       challenge_type: object.challenge_type,
       signup_open: object.challenge&.signup_open,
       signups_open_at: object.challenge&.signups_open_at,
@@ -79,15 +79,22 @@ class CollectionIndexer < Indexer
       assignments_due_at: object.challenge&.assignments_due_at,
       works_reveal_at: object.challenge&.works_reveal_at,
       authors_reveal_at: object.challenge&.authors_reveal_at,
-      general_fandom_ids: object.all_fandoms.pluck(:id),
-      public_fandom_ids: object.all_approved_works.where(restricted: false).map(&:fandoms).flatten.pluck(:id),
-      general_fandoms_count: object.all_fandoms_count,
-      public_fandoms_count: object.all_approved_works.where(restricted: false).map(&:fandoms).flatten.uniq.count,
+      general_fandom_ids: get_fandom_ids(object),
+      public_fandom_ids: get_fandom_ids(object, true),
+      general_fandoms_count: get_fandom_ids(object).count,
+      public_fandoms_count: get_fandom_ids(object, true).count,
       general_works_count: object.all_approved_works.count,
       public_works_count: object.all_approved_works.where(restricted: false).count,
       general_bookmarked_items_count: get_bookmarked_items_count(object), 
       public_bookmarked_items_count: get_bookmarked_items_count(object, true),
     )
+  end
+
+  def get_fandom_ids(collection, only_public = false)
+    approved_works = collection.all_approved_works
+    approved_works = approved_works.where(restricted: false) if only_public
+
+    approved_works.map(&:fandoms).flatten.pluck(:id)
   end
 
   def get_bookmarked_items_count(collection, is_public = false)

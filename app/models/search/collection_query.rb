@@ -13,10 +13,7 @@ class CollectionQuery < Query
 
   # Combine the available filters
   def filters
-    @filters ||= (
-      visibility_filters +
-      collection_filters
-    ).flatten.compact
+    [signup_open_filter, closed_filter, challenge_type_filter, fandom_filter, owner_filter, moderator_filter].compact
   end
 
   # Combine the available queries
@@ -25,26 +22,6 @@ class CollectionQuery < Query
     @queries = [
       general_query
     ].flatten.compact
-  end
-
-  ####################
-  # GROUPS OF FILTERS
-  ####################
-
-  def visibility_filters
-    [
-      signup_open_filter,
-      closed_filter
-    ]
-  end
-
-  def collection_filters
-    [
-      challenge_type_filter,
-      fandom_filter,
-      owner_filter,
-      moderator_filter
-    ]
   end
 
   ####################
@@ -60,16 +37,18 @@ class CollectionQuery < Query
   end
 
   def fandom_filter
+    return unless options[:fandom_ids].present?
+
     key = User.current_user.present? ? :general_fandom_ids : :public_fandom_ids
-    terms_filter(key, options[:fandom_ids]) if options[:fandom_ids].present?
+    options[:fandom_ids].flatten.uniq.map { |fandom_id| term_filter(key, fandom_id) } if options[:fandom_ids].present?
   end
 
   def owner_filter
-    terms_filter(:owner_ids, options[:owner_ids]) if options[:owner_ids].present?
+    options[:owner_ids].flatten.uniq.map { |owner_id| term_filter(:owner_ids, owner_id) } if options[:owner_ids].present?
   end
 
   def moderator_filter
-    terms_filter(:moderator_ids, options[:moderator_ids]) if options[:moderator_ids].present?
+    options[:moderator_ids].flatten.uniq.map { |moderator_id| term_filter(:moderator_ids, moderator_id) } if options[:moderator_ids].present?
   end
 
   def challenge_type_filter

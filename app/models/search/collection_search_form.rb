@@ -6,12 +6,14 @@ class CollectionSearchForm
 
   ATTRIBUTES = [
     :title,
-    :collection_type,
+    :challenge_type,
     :signup_open,
-    :moderated,
     :unrevealed,
     :anonymous,
     :closed,
+    :fandom_ids,
+    :owner_ids,
+    :moderator_ids,
     :signups_open_at,
     :signups_close_at,
     :assignments_due_at,
