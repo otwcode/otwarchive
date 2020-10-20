@@ -14,6 +14,6 @@ class CollectionPreference < ApplicationRecord
   end
 
   def reindex_collection
-    IndexQueue.enqueue_ids(Collection, collection_id, :background)
+    IndexQueue.enqueue_id(Collection, collection_id, :background)
   end
 end

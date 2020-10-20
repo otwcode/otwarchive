@@ -51,4 +51,19 @@ class PromptMeme < ApplicationRecord
   def user_allowed_to_see_claims?(user)
     user_allowed_to_see_assignments?(user)
   end
+
+  # reindex collection after creation, deletion, and certain attribute updates
+  after_create :reindex_collection
+  after_destroy :reindex_collection
+  after_update :reindex_collection, if: Proc.new { |c| c.saved_change_to_signup_open? ||
+                                                       c.saved_change_to_signups_open_at? ||
+                                                       c.saved_change_to_signups_close_at? ||
+                                                       c.saved_change_to_assignments_due_at? ||
+                                                       c.saved_change_to_works_reveal_at? ||
+                                                       c.saved_change_to_authors_reveal_at?
+                                                  }
+
+  def reindex_collection
+    IndexQueue.enqueue_id(Collection, collection.id, :main)
+  end
 end

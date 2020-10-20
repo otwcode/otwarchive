@@ -342,4 +342,13 @@ class CollectionItem < ApplicationRecord
       ).deliver_after_commit
     end
   end
+
+  # reindex collection after creation, deletion, and approval_status update
+  after_create :reindex_collection
+  after_destroy :reindex_collection
+  after_update :reindex_collection, if: Proc.new { |c| c.saved_change_to_user_approval_status? || c.saved_change_to_collection_approval_status? }
+
+  def reindex_collection
+    IndexQueue.enqueue_id(Collection, collection_id, :background)
+  end
 end

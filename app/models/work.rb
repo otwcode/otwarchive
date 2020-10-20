@@ -818,6 +818,8 @@ class Work < ApplicationRecord
     # filter-taggings change, the FilterCount probably needs updating.
     FilterCount.enqueue_filters(filter_taggings.map(&:filter_id))
 
+    IndexQueue.enqueue_ids(Collection, collections.pluck(:id), queue)
+
     # From here, we only want to update works whose filter_taggings have
     # actually changed.
     changed_ids = filter_taggings.map(&:filterable_id)
