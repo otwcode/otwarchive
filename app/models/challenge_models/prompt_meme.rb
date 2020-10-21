@@ -64,6 +64,8 @@ class PromptMeme < ApplicationRecord
                                                   }
 
   def reindex_collection
+    return unless collection.present?
+
     IndexQueue.enqueue_id(Collection, collection.id, :main)
   end
 end

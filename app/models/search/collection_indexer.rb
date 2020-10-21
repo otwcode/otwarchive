@@ -71,6 +71,7 @@ class CollectionIndexer < Indexer
       unrevealed: object.unrevealed?,
       anonymous: object.anonymous?,
       owner_ids: object.all_owners.pluck(:user_id),
+      moderated: object.moderated?,
       moderator_ids: object.all_moderators.pluck(:user_id),
       challenge_type: object.challenge_type,
       signup_open: object.challenge&.signup_open,

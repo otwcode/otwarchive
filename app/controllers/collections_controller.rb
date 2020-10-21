@@ -23,38 +23,50 @@ class CollectionsController < ApplicationController
     end
   end
 
-  def search
-    # options = params[:work_search].present? ? clean_work_search_params : {}
-    # options[:page] = params[:page] if params[:page].present?
-    # options[:show_restricted] = current_user.present? || logged_in_as_admin?
-
-    @search = CollectionSearchForm.new({})
-    # @search = CollectionSearchForm.new(collection_query_params)
-
-  end
+  # def index
+  #   if params[:work_id] && (@work = Work.find_by(id: params[:work_id]))
+  #     @collections = @work.approved_collections.by_title.includes(:parent, :moderators, :children, :collection_preference, owners: [:user]).paginate(page: params[:page])
+  #   elsif params[:collection_id] && (@collection = Collection.find_by(name: params[:collection_id]))
+  #     @collections = @collection.children.by_title.includes(:parent, :moderators, :children, :collection_preference, owners: [:user]).paginate(page: params[:page])
+  #   elsif params[:user_id] && (@user = User.find_by(login: params[:user_id]))
+  #     @collections = @user.maintained_collections.by_title.includes(:parent, :moderators, :children, :collection_preference, owners: [:user]).paginate(page: params[:page])
+  #     @page_subtitle = ts("%{username} - Collections", username: @user.login)
+  #   else
+  #     if params[:user_id]
+  #       flash.now[:error] = ts("We couldn't find a user by that name, sorry.")
+  #     elsif params[:collection_id]
+  #       flash.now[:error] = ts("We couldn't find a collection by that name.")
+  #     elsif params[:work_id]
+  #       flash.now[:error] = ts("We couldn't find that work.")
+  #     end
+  #     @sort_and_filter = true
+  #     params[:collection_filters] ||= {}
+  #     params[:sort_column] = "collections.created_at" if !valid_sort_column(params[:sort_column], 'collection')
+  #     params[:sort_direction] = 'DESC' if !valid_sort_direction(params[:sort_direction])
+  #     sort = params[:sort_column] + " " + params[:sort_direction]
+  #     @collections = Collection.sorted_and_filtered(sort, params[:collection_filters], params[:page])
+  #   end
+  # end
 
   def index
     if params[:work_id] && (@work = Work.find_by(id: params[:work_id]))
       @collections = @work.approved_collections.by_title.includes(:parent, :moderators, :children, :collection_preference, owners: [:user]).paginate(page: params[:page])
     elsif params[:collection_id] && (@collection = Collection.find_by(name: params[:collection_id]))
-      @collections = @collection.children.by_title.includes(:parent, :moderators, :children, :collection_preference, owners: [:user]).paginate(page: params[:page])
+      @collections = CollectionSearchForm.new({ parent_id: params[:collection_id] }).to_a.paginate(page: params[:page])
     elsif params[:user_id] && (@user = User.find_by(login: params[:user_id]))
-      @collections = @user.maintained_collections.by_title.includes(:parent, :moderators, :children, :collection_preference, owners: [:user]).paginate(page: params[:page])
+      @collections = CollectionSearchForm.new(moderator_ids: params[:user_id]).to_a.paginate(page: params[:page])
       @page_subtitle = ts("%{username} - Collections", username: @user.login)
     else
       if params[:user_id]
         flash.now[:error] = ts("We couldn't find a user by that name, sorry.")
       elsif params[:collection_id]
         flash.now[:error] = ts("We couldn't find a collection by that name.")
-      elsif params[:work_id]
-        flash.now[:error] = ts("We couldn't find that work.")
       end
+
       @sort_and_filter = true
-      params[:collection_filters] ||= {}
-      params[:sort_column] = "collections.created_at" if !valid_sort_column(params[:sort_column], 'collection')
-      params[:sort_direction] = 'DESC' if !valid_sort_direction(params[:sort_direction])
-      sort = params[:sort_column] + " " + params[:sort_direction]
-      @collections = Collection.sorted_and_filtered(sort, params[:collection_filters], params[:page])
+      query_params = params[:collection_filters] || {}
+      query_params.merge(sort_column: params[:sort_column], sort_direction: params[:sort_direction])
+      @collections = CollectionSearchForm.new(query_params).search_results.to_a.paginate(page: params[:page])
     end
   end
 
@@ -62,17 +74,19 @@ class CollectionsController < ApplicationController
   def list_challenges
     @page_subtitle = "Open Challenges"
     @hide_dashboard = true
-    @challenge_collections = (Collection.signup_open("GiftExchange").limit(15) + Collection.signup_open("PromptMeme").limit(15))
+
+    @challenge_collections = (CollectionSearchForm.new(challenge_type: 'GiftExchange').search_results.take(15) +
+                             CollectionSearchForm.new(challenge_type: 'PromptMeme').search_results.take(15))
   end
 
   def list_ge_challenges
     @page_subtitle = "Open Gift Exchange Challenges"
-    @challenge_collections = Collection.signup_open("GiftExchange").limit(15)
+    @challenge_collections = CollectionSearchForm.new(challenge_type: 'GiftExchange').search_results.take(15)
   end
 
   def list_pm_challenges
     @page_subtitle = "Open Prompt Meme Challenges"
-    @challenge_collections = Collection.signup_open("PromptMeme").limit(15)
+    @challenge_collections = CollectionSearchForm.new(challenge_type: 'PromptMeme').search_results.take(15)
   end
 
   def show
@@ -197,9 +211,5 @@ class CollectionsController < ApplicationController
         :gift_exchange, :show_random, :prompt_meme, :email_notify
       ]
     )
-  end
-
-  def collection_query_params
-    params.require(:collection_filters).permit(:title)
   end
 end

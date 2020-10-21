@@ -110,11 +110,10 @@ describe CollectionSearchForm, collection_search: true do
   describe "filtering" do
     let!(:gift_exchange) { create(:gift_exchange, signup_open: true, signups_open_at: Time.zone.now - 2.days, signups_close_at: Time.zone.now + 1.week) }
     let!(:gift_exchange_collection) { create(:collection, challenge: gift_exchange, challenge_type: "GiftExchange") }
-
     let!(:prompt_meme) { create(:prompt_meme, signup_open: true, signups_open_at: Time.zone.now - 2.days, signups_close_at: Time.zone.now + 1.week) }
     let!(:prompt_meme_collection) { create(:collection, challenge: prompt_meme, challenge_type: "PromptMeme") }
 
-    let!(:no_signup) { create(:collection, title: 'no signup', collection_preference: create(:collection_preference, closed: true)) }
+    let!(:no_signup) { create(:collection, title: 'no signup', collection_preference: create(:collection_preference, closed: true, moderated: true)) }
 
     let!(:participant) { create(:collection_participant, collection: prompt_meme_collection) }
     let!(:moderator) { create(:collection_participant, participant_role: CollectionParticipant::MODERATOR, collection: prompt_meme_collection) }
@@ -166,6 +165,13 @@ describe CollectionSearchForm, collection_search: true do
       expect(query.search_results).to include no_signup
     end
 
+    it "filter collections by moderated filter" do
+      query = CollectionSearchForm.new(moderated: true)
+      expect(query.search_results).not_to include prompt_meme_collection
+      expect(query.search_results).not_to include gift_exchange_collection
+      expect(query.search_results).to include no_signup
+    end
+
     it "filters on public_fandom_ids if user is not logged in" do
       query = CollectionSearchForm.new(fandom_ids: [fandom.id])
 
@@ -197,6 +203,28 @@ describe CollectionSearchForm, collection_search: true do
       expect(query.search_results).to include prompt_meme_collection
       expect(query.search_results).not_to include gift_exchange_collection
       expect(query.search_results).not_to include no_signup
+    end
+  end
+
+  describe "filters collection by parent_id" do
+    before do
+      @parent = FactoryBot.create(:collection)
+      # Temporarily set User.current_user to get past the collection
+      # needing to be owned by same person as parent:
+      User.current_user = @parent.owners.first.user
+      @child = FactoryBot.create(:collection, parent_name: @parent.name)
+      User.current_user = nil
+      # reload the parent collection
+      @parent.reload
+
+      run_all_indexing_jobs
+    end
+
+    it "filters all child collection of parent" do
+      query = CollectionSearchForm.new(parent_id: @parent.id)
+
+      expect(query.search_results).to include @child
+      expect(query.search_results).not_to include @parent
     end
   end
 end

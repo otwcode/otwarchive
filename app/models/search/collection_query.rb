@@ -13,7 +13,7 @@ class CollectionQuery < Query
 
   # Combine the available filters
   def filters
-    [signup_open_filter, closed_filter, challenge_type_filter, fandom_filter, owner_filter, moderator_filter].compact
+    [signup_open_filter, closed_filter, challenge_type_filter, fandom_filter, owner_filter, moderator_filter, parent_filter, moderated_filter].compact
   end
 
   # Combine the available queries
@@ -36,6 +36,10 @@ class CollectionQuery < Query
     term_filter(:closed, bool_value(options[:closed])) if options[:closed].present?
   end
 
+  def moderated_filter
+    term_filter(:moderated, bool_value(options[:moderated])) if options[:moderated].present?
+  end
+
   def fandom_filter
     return unless options[:fandom_ids].present?
 
@@ -53,6 +57,10 @@ class CollectionQuery < Query
 
   def challenge_type_filter
     match_filter(:challenge_type, options[:challenge_type]) if options[:challenge_type].present?
+  end
+
+  def parent_filter
+    match_filter(:parent_id, options[:parent_id]) if options[:parent_id].present?
   end
 
   ####################
