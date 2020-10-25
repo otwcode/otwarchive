@@ -41,6 +41,8 @@
             <%= link_to related_work.parent.title.html_safe, related_work.parent %> by <%= byline(related_work.parent) %>.
           <% elsif related_work.parent.restricted? && !logged_in? %>
             <%= ts("[Restricted Work] by") %> <%= byline(related_work.parent) %>. <%= ts("Log in to view.") %>
+          <% elsif (related_work.parent.unrevealed? ||related_work.parent.anonymous?) %>
+            <%= ts("Inspired by a work in an unrevealed collection.") %>
           <% else %>
             <%= link_to related_work.parent.title.html_safe, related_work.parent %> <%= ts("by") %> <%= byline(related_work.parent) %>.
           <% end %>

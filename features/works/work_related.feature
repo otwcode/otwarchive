@@ -658,3 +658,14 @@ Scenario: When a user is notified that a co-authored work has been inspired by a
       And I should not see "A work in an unrevealed collection"
       And I should not see "Worldbuilding Translated by translator"
       And I should not see "From English to Deutsch"
+
+  Scenario: A work in a hidden collection should not be revealed by posting a related work
+    Given a hidden collection "Hidden"
+      And I have related works setup
+    When I am logged in as "inspiration"
+      And I add the work "Worldbuilding" to the collection "Hidden"
+      And I post a related work as remixer
+    When I view the work "Followup"
+    Then I should not see "Worldbuilding"
+      And I should not see "inspiration"
+      And I should see "Inspired by a work in an unrevealed collection."
