@@ -167,10 +167,7 @@ class CommentsController < ApplicationController
   # Comments on tags can be frozen by admins with proper authorization.
   # Comments on admin posts can be frozen by any admin.
   def check_permission_to_freeze
-    parent = find_parent
-    return if parent.is_a?(Work) && policy(@comment).can_freeze_work_comment? || current_user_owns?(parent)
-    return if parent.is_a?(Tag) && policy(@comment).can_freeze_tag_comment?
-    return if parent.is_a?(AdminPost) && logged_in_as_admin?
+    return if permission_to_modify_frozen_status
 
     flash[:error] = ts("Sorry, you don't have permission to freeze that comment thread.")
     redirect_to(request.env["HTTP_REFERER"] || root_path) and return
@@ -181,10 +178,7 @@ class CommentsController < ApplicationController
   # Comments on tags can be unfrozen by admins with proper authorization.
   # Comments on admin posts can be unfrozen by any admin.
   def check_permission_to_unfreeze
-    parent = find_parent
-    return if parent.is_a?(Work) && policy(@comment).can_freeze_work_comment? || current_user_owns?(parent)
-    return if parent.is_a?(Tag) && policy(@comment).can_freeze_tag_comment?
-    return if parent.is_a?(AdminPost) && logged_in_as_admin?
+    return if permission_to_modify_frozen_status
 
     flash[:error] = ts("Sorry, you don't have permission to unfreeze that comment thread.")
     redirect_to(request.env["HTTP_REFERER"] || root_path) and return
@@ -622,6 +616,14 @@ class CommentsController < ApplicationController
                   anchor: options[:anchor],
                   page: options[:page]
     end
+  end
+
+  def permission_to_modify_frozen_status
+    parent = find_parent
+    return true if parent.is_a?(Work) && policy(@comment).can_freeze_work_comment? || current_user_owns?(parent)
+    return true if parent.is_a?(Tag) && policy(@comment).can_freeze_tag_comment?
+    return true if parent.is_a?(AdminPost) && logged_in_as_admin?
+    return false
   end
 
   # TODO: Remove when AO3-5939 is fixed.
