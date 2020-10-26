@@ -77,6 +77,11 @@ Rails/DynamicFindBy:
 Rails/OutputSafety:
   Enabled: false
 
+Rails/Output:
+  Exclude:
+    # Allow migrations to print pt-osc comments to console:
+    - 'db/migrate/*.rb'
+
 Rails/RakeEnvironment:
   Enabled: false
 

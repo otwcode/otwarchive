@@ -127,7 +127,7 @@ class CollectionItem < ApplicationRecord
                     self.collection.collection_preference.email_notify
 
     if email_notify && !self.collection.email.blank?
-      CollectionMailer.item_added_notification(item_id, collection_id, item_type).deliver
+      CollectionMailer.item_added_notification(item_id, collection_id, item_type).deliver_later
     end
   end
 
@@ -164,7 +164,7 @@ class CollectionItem < ApplicationRecord
             approve_by_user
             users.each do |email_user|
               unless email_user.preference.collection_emails_off
-                UserMailer.added_to_collection_notification(email_user.id, item.id, collection.id).deliver!
+                UserMailer.added_to_collection_notification(email_user.id, item.id, collection.id).deliver_now
               end
             end
             break
@@ -182,7 +182,7 @@ class CollectionItem < ApplicationRecord
         # so we send an email to all the works owners
         item.users.each do |email_author|
           unless email_author.preference.collection_emails_off
-            UserMailer.invited_to_collection_notification(email_author.id, item.id, collection.id).deliver!
+            UserMailer.invited_to_collection_notification(email_author.id, item.id, collection.id).deliver_now
           end
         end
       end
@@ -214,14 +214,9 @@ class CollectionItem < ApplicationRecord
     }.join(", ")
   end
 
-  def remove=(value)
-    if value == "1"
-      self.destroy
-    end
-  end
-
+  attr_writer :remove
   def remove
-    ""
+    @remove || ""
   end
 
   def title

@@ -168,7 +168,7 @@ Given /^the work(?: "([^"]*)")? with(?: (\d+))? comments setup$/ do |title, n_co
   title ||= "Blabla"
   work = FactoryBot.create(:work, title: title)
 
-  n_comments ||= 3
+  n_comments = 3 if n_comments.blank? || n_comments.zero?
   FactoryBot.create_list(:comment, n_comments.to_i, :by_guest,
                          commentable: work.last_posted_chapter)
 end
@@ -180,7 +180,7 @@ Given /^the work(?: "([^"]*)")? with(?: (\d+))? bookmarks? setup$/ do |title, n_
   title ||= "Blabla"
   work = FactoryBot.create(:work, title: title)
 
-  n_bookmarks ||= 3
+  n_bookmarks = 3 if n_bookmarks.blank? || n_bookmarks.zero?
   FactoryBot.create_list(:bookmark, n_bookmarks.to_i, bookmarkable: work)
 end
 
@@ -701,13 +701,4 @@ end
 
 Then /^the Remove Me As Chapter Co-Creator option should not be on the ([\d]+)(?:st|nd|rd|th) chapter$/ do |chapter_number|
   step %{I should not see "Remove Me As Chapter Co-Creator" within "ul#sortable_chapter_list > li:nth-of-type(#{chapter_number})"}
-end
-
-Then /^the share modal should contain a Twitter share button$/ do
-  with_scope('#share') do
-    iframe = find('li.twitter #twitter-widget-0')
-    within_frame(iframe) do
-      page.should have_content("Tweet")
-    end
-  end
 end

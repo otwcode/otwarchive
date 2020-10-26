@@ -513,6 +513,7 @@ Otwarchive::Application.routes.draw do
     end
     member do
       get :confirm_delete
+      get :share
     end
     resources :collection_items
   end

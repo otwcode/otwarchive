@@ -44,7 +44,7 @@
           <%= collection_form.label :parent_name, ts("Parent collection (that you maintain)") %>
         </dt>
         <dd>
-          <%= collection_form.text_field :parent_name, autocomplete_options("collection_parent_name", :autocomplete_token_limit => 1) %>
+          <%= collection_form.text_field :parent_name, autocomplete_options("collection_parent_name", data: { autocomplete_token_limit: 1 }) %>
         </dd>
       <% end %>
 

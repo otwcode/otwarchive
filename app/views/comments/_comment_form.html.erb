@@ -75,17 +75,18 @@
         <dl>
           <dt class="landmark"><%= ts("Note") %>:</dt>
           <dd class="instructions comment_form"><%=ts("All fields are required. Your email address will not be published.") %></dd>
-          <dt><%= f.label "name_for_#{commentable.id}", ts("Name: ") %></dt>
+          <dt><%= f.label "name_for_#{commentable.id}", ts("Guest name: ") %></dt>
           <dd>
             <%= f.text_field :name, :id => "comment_name_for_#{commentable.id}" %>
             <%= live_validation_for_field("comment_name_for_#{commentable.id}", :failureMessage => ts('Please enter your name.')) %>
           </dd>
-          <dt><%= f.label "email_for_#{commentable.id}", ts("Email: ") %></dt>
+          <dt><%= f.label "email_for_#{commentable.id}", ts("Guest email: ") %></dt>
           <dd>
             <%= f.text_field :email, :id => "comment_email_for_#{commentable.id}" %>
             <%= live_validation_for_field("comment_email_for_#{commentable.id}", :failureMessage => ts('Please enter your email address.')) %>
           </dd>
         </dl>
+        <p class="footnote">(<%= allowed_html_instructions %>)</p>
       <% end %>
 
       <p>

@@ -3,8 +3,8 @@ Feature: Comment Moderation
   In order to avoid spam and troll comments
   As an author
   I'd like to be able to moderate comments
-  
-  
+
+
   Scenario: Turn off comments from anonymous users who can still leave kudos
     Given I am logged in as "author"
       And I set up the draft "No Anons"
@@ -14,7 +14,7 @@ Feature: Comment Moderation
     When I view the work "No Anons"
     Then I should see "Sorry, this work doesn't allow non-Archive users to comment."
     When I press "Kudos ♥"
-    Then I should see "Thank you for leaving kudos"    
+    Then I should see "Thank you for leaving kudos"
 
   Scenario: Turn off comments from everyone, but everyone can still leave kudos
     Given I am logged in as "author"
@@ -41,7 +41,7 @@ Feature: Comment Moderation
     When I am logged in as "commenter"
       And I view the work "Moderation"
     Then I should see "has chosen to moderate comments"
-    
+
   Scenario: Post a moderated comment
     Given the moderated work "Moderation" by "author"
     When I am logged in as "commenter"
@@ -81,7 +81,7 @@ Feature: Comment Moderation
       And I view the work "Moderation"
       And I follow "Unreviewed Comments (1)"
     Then I should see "Edited unfail comment"
-      
+
   Scenario: Author comments do not need to be approved
     Given the moderated work "Moderation" by "author"
     When I am logged in as "author"
@@ -91,7 +91,7 @@ Feature: Comment Moderation
       And I should see "Comment created"
       And I should not see "Unreviewed Comments (1)"
       And I should see "Comments:1"
-      
+
   Scenario: Moderated comments can be approved by the author
     Given the moderated work "Moderation" by "author"
       And I am logged in as "commenter"
@@ -110,7 +110,7 @@ Feature: Comment Moderation
     When I follow "Comments (1)"
     Then I should see "Test comment"
       And the comment on "Moderation" should not be marked as unreviewed
-      
+
   Scenario: Moderated comments can be approved from the inbox
     Given the moderated work "Moderation" by "author"
       And I am logged in as "commenter"
@@ -146,7 +146,7 @@ Feature: Comment Moderation
       And I view the work "Moderation"
     Then I should see "Comments (1)"
       And I should not see "Unreviewed Comments (1)"
-    
+
   Scenario: Moderated comments can be deleted by the author
     Given the moderated work "Moderation" by "author"
       And I am logged in as "commenter"
@@ -158,7 +158,7 @@ Feature: Comment Moderation
     # Then I should see "Comment deleted"
     #   And I should not see "Test comment"
     #   And I should see "No unreviewed comments"
-      
+
   Scenario: Moderation should work on threaded comments
     Given the moderated work "Moderation" by "author"
       And I am logged in as "author"
@@ -188,7 +188,7 @@ Feature: Comment Moderation
     When I am logged in as "author"
       And I view the unreviewed comments page for "Moderation"
     Then I should not see "Reply"
-      
+
   Scenario: The commenter can edit their unapproved comment
     Given the moderated work "Moderation" by "author"
       And I am logged in as "commenter"
@@ -201,7 +201,7 @@ Feature: Comment Moderation
       And I should see "Delete"
     When I edit a comment
     Then I should see "Comment was successfully updated"
-      
+
   Scenario: Users should not see unapproved replies to their own comments
     Given the moderated work "Moderation" by "author" with the approved comment "Test comment" by "commenter"
       And I am logged in as "new_commenter"
@@ -233,11 +233,11 @@ Feature: Comment Moderation
     When I am logged in as "commenter"
       And I go to my inbox page
     Then I should see "A moderated reply"
-    
+
   Scenario: When I turn off moderation, comments stay unreviewed
     Given the moderated work "Moderation" by "author"
       And I am logged in as "commenter"
-      And I post the comment "Interesting Comment" on the work "Moderation"      
+      And I post the comment "Interesting Comment" on the work "Moderation"
     When I am logged in as "author"
       And I edit the work "Moderation"
       And I uncheck "Enable comment moderation"
@@ -258,11 +258,11 @@ Feature: Comment Moderation
     When I follow "Comments (1)"
     Then I should see "New Comment"
       And I should not see "Interesting Comment"
-    
+
   Scenario: When an approved comment is edited significantly it gets moderated again
     Given the moderated work "Moderation" by "author"
       And I am logged in as "commenter"
-      And I post the comment "Interesting Comment" on the work "Moderation"      
+      And I post the comment "Interesting Comment" on the work "Moderation"
       And I am logged in as "author"
       And I view the unreviewed comments page for "Moderation"
       And I press "Approve"
@@ -279,9 +279,10 @@ Feature: Comment Moderation
     Then I should see "Interesting Commentary"
     When I follow "Edit"
       And I fill in "Comment" with "AHAHAHA LOOK I HAVE TOTALLY CHANGED IT"
+      And it is currently 1 second from now
       And I press "Update"
     Then the comment on "Moderation" should be marked as unreviewed
-      
+
   Scenario: I can approve multiple comments at once
     Given the moderated work "Moderation" by "author"
       And I am logged in as "commenter"
