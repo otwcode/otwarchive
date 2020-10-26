@@ -164,12 +164,6 @@ class Comment < ApplicationRecord
     end
   end
 
-  def new_comment_from_params(params)
-    transaction do
-      new(params)
-    end
-  end
-
   protected
 
     def notify_user_of_own_comments?(user)
