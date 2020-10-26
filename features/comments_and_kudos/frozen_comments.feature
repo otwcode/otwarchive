@@ -16,7 +16,7 @@ Feature: Comment freezing
     When I am logged in as "author"
       And I view the work "Popular Fic" with comments
       And I press "Freeze"
-    Then I should see "Thread successfully frozen!"
+    Then I should see "Comment thread successfully frozen!"
       And I should see "Frozen" within "#comments_placeholder .comment ul.actions"
       And I should not see "Reply" within "#comments_placeholder .comment ul.actions"
 
@@ -32,7 +32,7 @@ Feature: Comment freezing
 
     When I view the work "Popular Fic" with comments
       And I press "Unfreeze"
-    Then I should see "Thread successfully unfrozen!"
+    Then I should see "Comment thread successfully unfrozen!"
       And I should see "Reply" within "#comments_placeholder .comment ul.actions"
       And I should not see "Frozen" within "#comments_placeholder .comment ul.actions"
 
