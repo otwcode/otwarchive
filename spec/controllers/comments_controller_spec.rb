@@ -708,12 +708,10 @@ describe CommentsController do
       end
 
       context "when comment is the middle of a thread" do
-        # For the sake of the specs, the child has to be created last.
-        # This is not true of the actual code.
         let!(:parent) { create(:comment) }
         let!(:comment) { create(:comment, commentable: parent) }
-        let!(:sibling) { create(:comment, commentable: parent) }
         let!(:child) { create(:comment, commentable: comment) }
+        let!(:sibling) { create(:comment, commentable: parent) }
 
         it "freezes the comment and its child, but not its parent or sibling, and redirects with success message" do
           fake_login_known_user(comment.ultimate_parent.pseuds.first.user)
@@ -939,12 +937,10 @@ describe CommentsController do
       end
 
       context "when comment is the middle of a thread" do
-        # For the sake of the specs, the child has to be created last.
-        # This is not true of the actual code.
         let!(:parent) { create(:comment, on_ice: true) }
         let!(:comment) { create(:comment, commentable: parent, on_ice: true) }
-        let!(:sibling) { create(:comment, commentable: parent, on_ice: true) }
         let!(:child) { create(:comment, commentable: comment, on_ice: true) }
+        let!(:sibling) { create(:comment, commentable: parent, on_ice: true) }
 
         it "leaves the comment and its child frozen, as well as its parent and sibling, and redirects with error" do
           fake_login_known_user(comment.ultimate_parent.pseuds.first.user)
@@ -1170,12 +1166,10 @@ describe CommentsController do
       end
 
       context "when comment is the middle of a thread" do
-        # For the sake of the specs, the child has to be created last.
-        # This is not true of the actual code.
         let!(:parent) { create(:comment) }
         let!(:comment) { create(:comment, commentable: parent) }
-        let!(:sibling) { create(:comment, commentable: parent) }
         let!(:child) { create(:comment, commentable: comment) }
+        let!(:sibling) { create(:comment, commentable: parent) }
 
         it "leaves the comment and its child frozen, as well as its parent and sibling, and redirects with error" do
           fake_login_known_user(comment.ultimate_parent.pseuds.first.user)
@@ -1399,12 +1393,10 @@ describe CommentsController do
       end
 
       context "when comment is the middle of a thread" do
-        # For the sake of the specs, the child has to be created last.
-        # This is not true of the actual code.
         let!(:parent) { create(:comment, on_ice: true) }
         let!(:comment) { create(:comment, commentable: parent, on_ice: true) }
-        let!(:sibling) { create(:comment, commentable: parent, on_ice: true) }
         let!(:child) { create(:comment, commentable: comment, on_ice: true) }
+        let!(:sibling) { create(:comment, commentable: parent, on_ice: true) }
 
         it "unfreezes the comment and its child, but not its parent or sibling, and redirects with success message" do
           fake_login_known_user(comment.ultimate_parent.pseuds.first.user)

@@ -286,7 +286,9 @@ class CommentsController < ApplicationController
       flash[:error] = ts("What did you want to comment on?")
       redirect_back_or_default(root_path)
     else
-      @comment = Comment.new(comment_params)
+      @comment = Comment.transaction do
+        new(comment_params)
+      end
       @comment.ip_address = request.remote_ip
       @comment.user_agent = request.env["HTTP_USER_AGENT"]
       @comment.commentable = Comment.commentable_object(@commentable)
@@ -424,8 +426,10 @@ class CommentsController < ApplicationController
 
   # PUT /comments/1/freeze
   def freeze
+    # TODO: When AO3-5939 is fixed, we can use
+    # @comment.full_set.each { |c| c.mark_frozen! }
     if !@comment.on_ice? && @comment.save
-      @comment.full_set.each { |c| c.mark_frozen! }
+      set_to_freeze_or_unfreeze.each { |c| c.mark_frozen! }
       flash[:notice] = ts("Comment thread successfully frozen!")
     else
       flash[:error] = ts("Sorry, that comment thread could not be frozen.")
@@ -435,8 +439,10 @@ class CommentsController < ApplicationController
 
   # PUT /comments/1/unfreeze
   def unfreeze
+    # TODO: When AO3-5939 is fixed, we can use
+    # @comment.full_set.each { |c| c.mark_unfrozen! }
     if @comment.on_ice? && @comment.save
-      @comment.full_set.each { |c| c.mark_unfrozen! }
+      set_to_freeze_or_unfreeze.each { |c| c.mark_unfrozen! }
       flash[:notice] = ts("Comment thread successfully unfrozen!")
     else
       flash[:error] = ts("Sorry, that comment thread could not be unfrozen.")
@@ -620,11 +626,28 @@ class CommentsController < ApplicationController
     end
   end
 
-  def can_modify_frozen_status
-    parent = find_parent
-    return if parent.is_a?(Work) && policy(@comment).can_freeze_work_comment? || current_user_owns?(parent)
-    return if parent.is_a?(Tag) && policy(@comment).can_freeze_tag_comment?
-    return if parent.is_a?(AdminPost) && logged_in_as_admin?
+  # TODO: Remove when AO3-5939 is fixed.
+  def set_to_freeze_or_unfreeze
+    # Our set always starts with the comment we actually pressed the button on.
+    comment_set = [@comment]
+
+    # We're going to find all of the comments on @comment's ultimate parent
+    # and then use the comments' commentables to figure which comments belong
+    # to the set (thread) we are freezing or unfreezing.
+    all_comments = @comment.ultimate_parent.find_all_comments
+
+    # First, we'll loop through all_comments to find any direct replies to
+    # @comment. Then we'll loop through again to find any direct replies to
+    # _those_ replies. We'll repeat this until we find no more replies.
+    newest_ids = [@comment.id]
+
+    while newest_ids.present?
+      child_comments_by_commentable = all_comments.where(commentable_id: newest_ids, commentable_type: "Comment")
+
+      comment_set << child_comments_by_commentable unless child_comments_by_commentable.empty?
+      newest_ids = child_comments_by_commentable.pluck(:id)
+    end
+    return comment_set.flatten
   end
 
   private
