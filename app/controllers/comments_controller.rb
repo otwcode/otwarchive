@@ -6,7 +6,7 @@ class CommentsController < ApplicationController
                                               :cancel_comment_reply,
                                               :delete_comment, :cancel_comment_delete, :unreviewed, :review_all ]
   before_action :check_user_status, only: [:new, :create, :edit, :update, :destroy]
-  before_action :load_comment, only: [:show, :edit, :update, :delete_comment, :destroy, :cancel_comment_edit, :cancel_comment_delete, :review, :approve, :reject, :freeze]
+  before_action :load_comment, only: [:show, :edit, :update, :delete_comment, :destroy, :cancel_comment_edit, :cancel_comment_delete, :review, :approve, :reject, :freeze, :unfreeze]
   before_action :check_visibility, only: [:show]
   before_action :check_if_restricted
   before_action :check_tag_wrangler_access
@@ -26,6 +26,7 @@ class CommentsController < ApplicationController
   before_action :check_permission_to_access_single_unreviewed, only: [:show]
   before_action :check_permission_to_moderate, only: [:approve, :reject]
   before_action :check_permission_to_freeze, only: [:freeze]
+  before_action :check_permission_to_unfreeze, only: [:unfreeze]
 
   cache_sweeper :comment_sweeper
 
@@ -164,19 +165,28 @@ class CommentsController < ApplicationController
   # Comments on works can be frozen by admins with proper authorization or the
   # work creator.
   # Comments on tags can be frozen by admins with proper authorization.
-  # Comments on admin posts can be from by any admin.
+  # Comments on admin posts can be frozen by any admin.
   def check_permission_to_freeze
     parent = find_parent
     return if parent.is_a?(Work) && policy(@comment).can_freeze_work_comment? || current_user_owns?(parent)
     return if parent.is_a?(Tag) && policy(@comment).can_freeze_tag_comment?
     return if parent.is_a?(AdminPost) && logged_in_as_admin?
 
-    message = if @comment.on_ice?
-                ts("Sorry, you don't have permission to unfreeze that comment thread.")
-              else
-                ts("Sorry, you don't have permission to freeze that comment thread.")
-              end
-    flash[:error] = message
+    flash[:error] = ts("Sorry, you don't have permission to freeze that comment thread.")
+    redirect_to(request.env["HTTP_REFERER"] || root_path) and return
+  end
+
+  # Comments on works can be unfrozen by admins with proper authorization or the
+  # work creator.
+  # Comments on tags can be unfrozen by admins with proper authorization.
+  # Comments on admin posts can be unfrozen by any admin.
+  def check_permission_to_unfreeze
+    parent = find_parent
+    return if parent.is_a?(Work) && policy(@comment).can_freeze_work_comment? || current_user_owns?(parent)
+    return if parent.is_a?(Tag) && policy(@comment).can_freeze_tag_comment?
+    return if parent.is_a?(AdminPost) && logged_in_as_admin?
+
+    flash[:error] = ts("Sorry, you don't have permission to unfreeze that comment thread.")
     redirect_to(request.env["HTTP_REFERER"] || root_path) and return
   end
 
@@ -414,12 +424,22 @@ class CommentsController < ApplicationController
 
   # PUT /comments/1/freeze
   def freeze
-    if !@comment.on_ice?
+    if !@comment.on_ice? && @comment.save
       @comment.full_set.each { |c| c.mark_frozen! }
-      flash[:notice] = ts("Thread successfully frozen!")
+      flash[:notice] = ts("Comment thread successfully frozen!")
     else
+      flash[:error] = ts("Sorry, that comment thread could not be frozen.")
+    end
+    redirect_to(request.env["HTTP_REFERER"] || root_path) and return
+  end
+
+  # PUT /comments/1/unfreeze
+  def unfreeze
+    if @comment.on_ice? && @comment.save
       @comment.full_set.each { |c| c.mark_unfrozen! }
-      flash[:notice] = ts("Thread successfully unfrozen!")
+      flash[:notice] = ts("Comment thread successfully unfrozen!")
+    else
+      flash[:error] = ts("Sorry, that comment thread could not be unfrozen.")
     end
     redirect_to(request.env["HTTP_REFERER"] || root_path) and return
   end
@@ -598,6 +618,13 @@ class CommentsController < ApplicationController
                   anchor: options[:anchor],
                   page: options[:page]
     end
+  end
+
+  def can_modify_frozen_status
+    parent = find_parent
+    return if parent.is_a?(Work) && policy(@comment).can_freeze_work_comment? || current_user_owns?(parent)
+    return if parent.is_a?(Tag) && policy(@comment).can_freeze_tag_comment?
+    return if parent.is_a?(AdminPost) && logged_in_as_admin?
   end
 
   private

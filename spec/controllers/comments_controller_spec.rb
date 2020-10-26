@@ -551,7 +551,7 @@ describe CommentsController do
             put :freeze, params: { id: comment.id }
 
             expect(comment.reload.on_ice).to be_truthy
-            it_redirects_to_with_notice("/where_i_came_from", "Thread successfully frozen!")
+            it_redirects_to_with_notice("/where_i_came_from", "Comment thread successfully frozen!")
           end
         end
 
@@ -600,7 +600,7 @@ describe CommentsController do
                 put :freeze, params: { id: comment.id }
 
                 expect(comment.reload.on_ice).to be_truthy
-                it_redirects_to_with_notice("/where_i_came_from", "Thread successfully frozen!")
+                it_redirects_to_with_notice("/where_i_came_from", "Comment thread successfully frozen!")
               end
             end
           end
@@ -663,7 +663,7 @@ describe CommentsController do
                 put :freeze, params: { id: comment.id }
 
                 expect(comment.reload.on_ice).to be_truthy
-                it_redirects_to_with_notice("/where_i_came_from", "Thread successfully frozen!")
+                it_redirects_to_with_notice("/where_i_came_from", "Comment thread successfully frozen!")
               end
             end
           end
@@ -685,7 +685,7 @@ describe CommentsController do
             put :freeze, params: { id: comment.id }
 
             expect(comment.reload.on_ice).to be_truthy
-            it_redirects_to_with_notice("/where_i_came_from", "Thread successfully frozen!")
+            it_redirects_to_with_notice("/where_i_came_from", "Comment thread successfully frozen!")
           end
         end
       end
@@ -703,7 +703,7 @@ describe CommentsController do
           [comment, child1, child2, grandchild].each do |comment|
             expect(comment.reload.on_ice).to be_truthy
           end
-          it_redirects_to_with_notice("/where_i_came_from", "Thread successfully frozen!")
+          it_redirects_to_with_notice("/where_i_came_from", "Comment thread successfully frozen!")
         end
       end
 
@@ -723,7 +723,7 @@ describe CommentsController do
           expect(child.reload.on_ice).to be_truthy
           expect(parent.reload.on_ice).to be_falsey
           expect(sibling.reload.on_ice).to be_falsey
-          it_redirects_to_with_notice("/where_i_came_from", "Thread successfully frozen!")
+          it_redirects_to_with_notice("/where_i_came_from", "Comment thread successfully frozen!")
         end
       end
 
@@ -741,7 +741,482 @@ describe CommentsController do
           expect(child1.reload.on_ice).to be_falsey
           expect(child2.reload.on_ice).to be_falsey
           expect(comment.reload.on_ice).to be_truthy
-          it_redirects_to_with_notice("/where_i_came_from", "Thread successfully frozen!")
+          it_redirects_to_with_notice("/where_i_came_from", "Comment thread successfully frozen!")
+        end
+      end
+
+      context "when comment is not saved" do
+        let!(:comment) { create(:comment) }
+
+        before do
+          allow_any_instance_of(Comment).to receive(:save).and_return(false)
+        end
+
+        it "redirects with error" do
+          fake_login_known_user(comment.ultimate_parent.pseuds.first.user)
+          put :freeze, params: { id: comment.id }
+
+          it_redirects_to_with_error("/where_i_came_from", "Sorry, that comment thread could not be frozen.")
+        end
+      end
+    end
+
+    context "when comment is frozen" do
+      context "when ultimate parent is an AdminPost" do
+        let(:comment) { create(:comment, :on_admin_post, on_ice: true) }
+
+        context "when logged out" do
+          it "leaves comment frozen and redirects with error" do
+            put :freeze, params: { id: comment.id }
+
+            expect(comment.reload.on_ice).to be_truthy
+            it_redirects_to_with_error("/where_i_came_from", "Sorry, you don't have permission to freeze that comment thread.")
+          end
+        end
+
+        context "when logged in as an admin" do
+          let(:admin) { create(:admin) }
+
+          it "leaves comment frozen and redirects with error" do
+            fake_login_admin(admin)
+            put :freeze, params: { id: comment.id }
+
+            expect(comment.reload.on_ice).to be_truthy
+            it_redirects_to_with_error("/where_i_came_from", "Sorry, that comment thread could not be frozen.")
+          end
+        end
+
+        context "when logged in as a user" do
+          it "leaves comment frozen and redirects with error" do
+            fake_login
+            put :freeze, params: { id: comment.id }
+
+            expect(comment.reload.on_ice).to be_truthy
+            it_redirects_to_with_error("/where_i_came_from", "Sorry, you don't have permission to freeze that comment thread.")
+          end
+        end
+      end
+
+      context "when ultimate parent is a Tag" do
+        let(:comment) { create(:comment, :on_tag, on_ice: true) }
+
+        context "when logged out" do
+          it "leaves comment frozen and redirects with error" do
+            put :freeze, params: { id: comment.id }
+
+            expect(comment.reload.on_ice).to be_truthy
+            it_redirects_to_with_error(new_user_session_path, "Sorry, you don't have permission to access the page you were trying to reach. Please log in.")
+          end
+        end
+
+        context "when logged in as an admin" do
+          let(:admin) { create(:admin) }
+
+          context "with no role" do
+            it "leaves comment frozen and redirects with error" do
+              admin.update(roles: [])
+              fake_login_admin(admin)
+              put :freeze, params: { id: comment.id }
+
+              expect(comment.reload.on_ice).to be_truthy
+              it_redirects_to_with_error("/where_i_came_from", "Sorry, you don't have permission to freeze that comment thread.")
+            end
+          end
+
+          %w[superadmin tag_wrangling].each do |admin_role|
+            context "with the #{admin_role} role" do
+              it "leaves comment frozen and redirects with error" do
+                admin.update(roles: [admin_role])
+                fake_login_admin(admin)
+                put :freeze, params: { id: comment.id }
+
+                expect(comment.reload.on_ice).to be_truthy
+                it_redirects_to_with_error("/where_i_came_from", "Sorry, that comment thread could not be frozen.")
+              end
+            end
+          end
+        end
+
+        context "when logged in as a random user" do
+          it "leaves comment frozen and redirects with error" do
+            fake_login
+            put :freeze, params: { id: comment.id }
+
+            expect(comment.reload.on_ice).to be_truthy
+            it_redirects_to_with_error(user_path(@current_user), "Sorry, you don't have permission to access the page you were trying to reach.")
+          end
+        end
+
+        context "when logged in as a user with the tag wrangling role" do
+          let(:tag_wrangler) { create(:user, roles: [Role.new(name: "tag_wrangler")]) }
+
+          it "leaves comment frozen and redirects with error" do
+            fake_login_known_user(tag_wrangler)
+            put :freeze, params: { id: comment.id }
+
+            expect(comment.reload.on_ice).to be_truthy
+            it_redirects_to_with_error("/where_i_came_from", "Sorry, you don't have permission to freeze that comment thread.")
+          end
+        end
+      end
+
+      context "when ultimate parent is a Work" do
+        let(:comment) { create(:comment, on_ice: true) }
+
+        context "when logged out" do
+          it "leaves comment frozen and redirects with error" do
+            put :freeze, params: { id: comment.id }
+
+            expect(comment.reload.on_ice).to be_truthy
+            it_redirects_to_with_error("/where_i_came_from", "Sorry, you don't have permission to freeze that comment thread.")
+          end
+        end
+
+        context "when logged in as an admin" do
+          let(:admin) { create(:admin) }
+
+          context "with no role" do
+            it "leaves comment frozen and redirects with error" do
+              admin.update(roles: [])
+              fake_login_admin(admin)
+              put :freeze, params: { id: comment.id }
+
+              expect(comment.reload.on_ice).to be_truthy
+              it_redirects_to_with_error("/where_i_came_from", "Sorry, you don't have permission to freeze that comment thread.")
+            end
+          end
+
+          %w[superadmin policy_and_abuse].each do |admin_role|
+            context "with the #{admin_role} role" do
+              it "leaves comment frozen and redirects with error" do
+                admin.update(roles: [admin_role])
+                fake_login_admin(admin)
+                put :freeze, params: { id: comment.id }
+
+                expect(comment.reload.on_ice).to be_truthy
+                it_redirects_to_with_error("/where_i_came_from", "Sorry, that comment thread could not be frozen.")
+              end
+            end
+          end
+        end
+
+        context "when logged in as a random user" do
+          it "leaves comment frozen and redirects with error" do
+            fake_login
+            put :freeze, params: { id: comment.id }
+
+            expect(comment.reload.on_ice).to be_truthy
+            it_redirects_to_with_error("/where_i_came_from", "Sorry, you don't have permission to freeze that comment thread.")
+          end
+        end
+
+        context "when logged in as a user who owns the work" do
+          it "leaves comment frozen and redirects with error" do
+            fake_login_known_user(comment.ultimate_parent.pseuds.first.user)
+            put :freeze, params: { id: comment.id }
+
+            expect(comment.reload.on_ice).to be_truthy
+            it_redirects_to_with_error("/where_i_came_from", "Sorry, that comment thread could not be frozen.")
+          end
+        end
+      end
+
+      context "when comment is the start of a thread" do
+        let!(:comment) { create(:comment, on_ice: true) }
+        let!(:child1) { create(:comment, commentable: comment, on_ice: true) }
+        let!(:grandchild) { create(:comment, commentable: child1, on_ice: true) }
+        let!(:child2) { create(:comment, commentable: comment, on_ice: true) }
+
+        it "leaves thread frozen and redirects with error" do
+          fake_login_known_user(comment.ultimate_parent.pseuds.first.user)
+          put :freeze, params: { id: comment.id }
+
+          [comment, child1, child2, grandchild].each do |comment|
+            expect(comment.reload.on_ice).to be_truthy
+          end
+          it_redirects_to_with_error("/where_i_came_from", "Sorry, that comment thread could not be frozen.")
+        end
+      end
+
+      context "when comment is the middle of a thread" do
+        # For the sake of the specs, the child has to be created last.
+        # This is not true of the actual code.
+        let!(:parent) { create(:comment, on_ice: true) }
+        let!(:comment) { create(:comment, commentable: parent, on_ice: true) }
+        let!(:sibling) { create(:comment, commentable: parent, on_ice: true) }
+        let!(:child) { create(:comment, commentable: comment, on_ice: true) }
+
+        it "leaves the comment and its child frozen, as well as its parent and sibling, and redirects with error" do
+          fake_login_known_user(comment.ultimate_parent.pseuds.first.user)
+          put :freeze, params: { id: comment.id }
+
+          [comment, child, parent, sibling].each do |comment|
+            expect(comment.reload.on_ice).to be_truthy
+          end
+          it_redirects_to_with_error("/where_i_came_from", "Sorry, that comment thread could not be frozen.")
+        end
+      end
+
+      context "when comment is the end of a thread" do
+        let!(:parent) { create(:comment, on_ice: true) }
+        let!(:child1) { create(:comment, commentable: parent, on_ice: true) }
+        let!(:child2) { create(:comment, commentable: parent, on_ice: true) }
+        let!(:comment) { create(:comment, commentable: child1, on_ice: true) }
+
+        it "leaves the comment frozen, along with any other comments in the thread, and redirects with error" do
+          fake_login_known_user(comment.ultimate_parent.pseuds.first.user)
+          put :freeze, params: { id: comment.id }
+
+          [comment, parent, child1, child2].each do |comment|
+            expect(comment.reload.on_ice).to be_truthy
+          end
+          it_redirects_to_with_error("/where_i_came_from", "Sorry, that comment thread could not be frozen.")
+        end
+      end
+
+      context "when comment is not saved" do
+        let!(:comment) { create(:comment, on_ice: true) }
+
+        before do
+          allow_any_instance_of(Comment).to receive(:save).and_return(false)
+        end
+
+        it "redirects with error" do
+          fake_login_known_user(comment.ultimate_parent.pseuds.first.user)
+          put :freeze, params: { id: comment.id }
+
+          it_redirects_to_with_error("/where_i_came_from", "Sorry, that comment thread could not be frozen.")
+        end
+      end
+    end
+  end
+
+  describe "PUT #unfreeze" do
+    context "when comment is not frozen" do
+      context "when ultimate parent is an AdminPost" do
+        let(:comment) { create(:comment, :on_admin_post) }
+
+        context "when logged out" do
+          it "leaves comment unfrozen and redirects with error" do
+            put :unfreeze, params: { id: comment.id }
+
+            expect(comment.reload.on_ice).to be_falsey
+            it_redirects_to_with_error("/where_i_came_from", "Sorry, you don't have permission to unfreeze that comment thread.")
+          end
+        end
+
+        context "when logged in as an admin" do
+          let(:admin) { create(:admin) }
+
+          it "leaves comment unfrozen and redirects with success message" do
+            fake_login_admin(admin)
+            put :unfreeze, params: { id: comment.id }
+
+            expect(comment.reload.on_ice).to be_falsey
+            it_redirects_to_with_error("/where_i_came_from", "Sorry, that comment thread could not be unfrozen.")
+          end
+        end
+
+        context "when logged in as a user" do
+          it "leaves comment unfrozen and redirects with error" do
+            fake_login
+            put :unfreeze, params: { id: comment.id }
+
+            expect(comment.reload.on_ice).to be_falsey
+            it_redirects_to_with_error("/where_i_came_from", "Sorry, you don't have permission to unfreeze that comment thread.")
+          end
+        end
+      end
+
+      context "when ultimate parent is a Tag" do
+        let(:comment) { create(:comment, :on_tag) }
+
+        context "when logged out" do
+          it "leaves comment unfrozen and redirects with error" do
+            put :unfreeze, params: { id: comment.id }
+
+            expect(comment.reload.on_ice).to be_falsey
+            it_redirects_to_with_error(new_user_session_path, "Sorry, you don't have permission to access the page you were trying to reach. Please log in.")
+          end
+        end
+
+        context "when logged in as an admin" do
+          let(:admin) { create(:admin) }
+
+          context "with no role" do
+            it "leaces comment unfrozen and redirects with error" do
+              admin.update(roles: [])
+              fake_login_admin(admin)
+              put :unfreeze, params: { id: comment.id }
+
+              expect(comment.reload.on_ice).to be_falsey
+              it_redirects_to_with_error("/where_i_came_from", "Sorry, you don't have permission to unfreeze that comment thread.")
+            end
+          end
+
+          %w[superadmin tag_wrangling].each do |admin_role|
+            context "with the #{admin_role} role" do
+              it "leaves comment unfrozen and redirects with error" do
+                admin.update(roles: [admin_role])
+                fake_login_admin(admin)
+                put :unfreeze, params: { id: comment.id }
+
+                expect(comment.reload.on_ice).to be_falsey
+                it_redirects_to_with_error("/where_i_came_from", "Sorry, that comment thread could not be unfrozen.")
+              end
+            end
+          end
+        end
+
+        context "when logged in as a random user" do
+          it "leaves comment unfrozen and redirects with error" do
+            fake_login
+            put :unfreeze, params: { id: comment.id }
+
+            expect(comment.reload.on_ice).to be_falsey
+            it_redirects_to_with_error(user_path(@current_user), "Sorry, you don't have permission to access the page you were trying to reach.")
+          end
+        end
+
+        context "when logged in as a user with the tag wrangling role" do
+          let(:tag_wrangler) { create(:user, roles: [Role.new(name: "tag_wrangler")]) }
+
+          it "leaves comment unfrozen and redirects with error" do
+            fake_login_known_user(tag_wrangler)
+            put :unfreeze, params: { id: comment.id }
+
+            expect(comment.reload.on_ice).to be_falsey
+            it_redirects_to_with_error("/where_i_came_from", "Sorry, you don't have permission to unfreeze that comment thread.")
+          end
+        end
+      end
+
+      context "when ultimate parent is a Work" do
+        let(:comment) { create(:comment) }
+
+        context "when logged out" do
+          it "leaves comment unfrozen and redirects with error" do
+            put :unfreeze, params: { id: comment.id }
+
+            expect(comment.reload.on_ice).to be_falsey
+            it_redirects_to_with_error("/where_i_came_from", "Sorry, you don't have permission to unfreeze that comment thread.")
+          end
+        end
+
+        context "when logged in as an admin" do
+          let(:admin) { create(:admin) }
+
+          context "with no role" do
+            it "leaves comment unfrozen and redirects with error" do
+              admin.update(roles: [])
+              fake_login_admin(admin)
+              put :unfreeze, params: { id: comment.id }
+
+              expect(comment.reload.on_ice).to be_falsey
+              it_redirects_to_with_error("/where_i_came_from", "Sorry, you don't have permission to unfreeze that comment thread.")
+            end
+          end
+
+          %w[superadmin policy_and_abuse].each do |admin_role|
+            context "with the #{admin_role} role" do
+              it "leaves comment unfrozen and redirects with error" do
+                admin.update(roles: [admin_role])
+                fake_login_admin(admin)
+                put :unfreeze, params: { id: comment.id }
+
+                expect(comment.reload.on_ice).to be_falsey
+                it_redirects_to_with_error("/where_i_came_from", "Sorry, that comment thread could not be unfrozen.")
+              end
+            end
+          end
+        end
+
+        context "when logged in as a random user" do
+          it "leaves comment unfrozen and redirects with error" do
+            fake_login
+            put :unfreeze, params: { id: comment.id }
+
+            expect(comment.reload.on_ice).to be_falsey
+            it_redirects_to_with_error("/where_i_came_from", "Sorry, you don't have permission to unfreeze that comment thread.")
+          end
+        end
+
+        context "when logged in as a user who owns the work" do
+          it "leaves comment unfrozen and redirects with error" do
+            fake_login_known_user(comment.ultimate_parent.pseuds.first.user)
+            put :unfreeze, params: { id: comment.id }
+
+            expect(comment.reload.on_ice).to be_falsey
+            it_redirects_to_with_error("/where_i_came_from", "Sorry, that comment thread could not be unfrozen.")
+          end
+        end
+      end
+
+      context "when comment is the start of a thread" do
+        let!(:comment) { create(:comment) }
+        let!(:child1) { create(:comment, commentable: comment) }
+        let!(:grandchild) { create(:comment, commentable: child1) }
+        let!(:child2) { create(:comment, commentable: comment) }
+
+        it "leaves entire thread unfrozen and redirects with error" do
+          fake_login_known_user(comment.ultimate_parent.pseuds.first.user)
+          put :unfreeze, params: { id: comment.id }
+
+          [comment, child1, child2, grandchild].each do |comment|
+            expect(comment.reload.on_ice).to be_falsey
+          end
+          it_redirects_to_with_error("/where_i_came_from", "Sorry, that comment thread could not be unfrozen.")
+        end
+      end
+
+      context "when comment is the middle of a thread" do
+        # For the sake of the specs, the child has to be created last.
+        # This is not true of the actual code.
+        let!(:parent) { create(:comment) }
+        let!(:comment) { create(:comment, commentable: parent) }
+        let!(:sibling) { create(:comment, commentable: parent) }
+        let!(:child) { create(:comment, commentable: comment) }
+
+        it "leaves the comment and its child frozen, as well as its parent and sibling, and redirects with error" do
+          fake_login_known_user(comment.ultimate_parent.pseuds.first.user)
+          put :unfreeze, params: { id: comment.id }
+
+          [comment, child, parent, sibling].each do |comment|
+            expect(comment.reload.on_ice).to be_falsey
+          end
+          it_redirects_to_with_error("/where_i_came_from", "Sorry, that comment thread could not be unfrozen.")
+        end
+      end
+
+      context "when comment is the end of a thread" do
+        let!(:parent) { create(:comment) }
+        let!(:child1) { create(:comment, commentable: parent) }
+        let!(:child2) { create(:comment, commentable: parent) }
+        let!(:comment) { create(:comment, commentable: child1) }
+
+        it "leaves the comment unfrozen, along with any other comments in the thread, and redirects with error" do
+          fake_login_known_user(comment.ultimate_parent.pseuds.first.user)
+          put :unfreeze, params: { id: comment.id }
+
+          [comment, parent, child1, child2].each do |comment|
+            expect(comment.reload.on_ice).to be_falsey
+          end
+          it_redirects_to_with_error("/where_i_came_from", "Sorry, that comment thread could not be unfrozen.")
+        end
+      end
+
+      context "when comment is not saved" do
+        let!(:comment) { create(:comment) }
+
+        before do
+          allow_any_instance_of(Comment).to receive(:save).and_return(false)
+        end
+
+        it "redirects with error" do
+          fake_login_known_user(comment.ultimate_parent.pseuds.first.user)
+          put :unfreeze, params: { id: comment.id }
+
+          it_redirects_to_with_error("/where_i_came_from", "Sorry, that comment thread could not be unfrozen.")
         end
       end
     end
@@ -752,7 +1227,7 @@ describe CommentsController do
 
         context "when logged out" do
           it "doesn't unfreeze comment and redirects with error" do
-            put :freeze, params: { id: comment.id }
+            put :unfreeze, params: { id: comment.id }
 
             expect(comment.reload.on_ice).to be_truthy
             it_redirects_to_with_error("/where_i_came_from", "Sorry, you don't have permission to unfreeze that comment thread.")
@@ -764,17 +1239,17 @@ describe CommentsController do
 
           it "unfreezes comment and redirects with success message" do
             fake_login_admin(admin)
-            put :freeze, params: { id: comment.id }
+            put :unfreeze, params: { id: comment.id }
 
             expect(comment.reload.on_ice).to be_falsey
-            it_redirects_to_with_notice("/where_i_came_from", "Thread successfully unfrozen!")
+            it_redirects_to_with_notice("/where_i_came_from", "Comment thread successfully unfrozen!")
           end
         end
 
         context "when logged in as a user" do
           it "doesn't unfreeze comment and redirects with error" do
             fake_login
-            put :freeze, params: { id: comment.id }
+            put :unfreeze, params: { id: comment.id }
 
             expect(comment.reload.on_ice).to be_truthy
             it_redirects_to_with_error("/where_i_came_from", "Sorry, you don't have permission to unfreeze that comment thread.")
@@ -787,7 +1262,7 @@ describe CommentsController do
 
         context "when logged out" do
           it "doesn't unfreeze comment and redirects with error" do
-            put :freeze, params: { id: comment.id }
+            put :unfreeze, params: { id: comment.id }
 
             expect(comment.reload.on_ice).to be_truthy
             it_redirects_to_with_error(new_user_session_path, "Sorry, you don't have permission to access the page you were trying to reach. Please log in.")
@@ -801,7 +1276,7 @@ describe CommentsController do
             it "doesn't unfreeze comment and redirects with error" do
               admin.update(roles: [])
               fake_login_admin(admin)
-              put :freeze, params: { id: comment.id }
+              put :unfreeze, params: { id: comment.id }
 
               expect(comment.reload.on_ice).to be_truthy
               it_redirects_to_with_error("/where_i_came_from", "Sorry, you don't have permission to unfreeze that comment thread.")
@@ -813,10 +1288,10 @@ describe CommentsController do
               it "unfreezes comment and redirects with success message" do
                 admin.update(roles: [admin_role])
                 fake_login_admin(admin)
-                put :freeze, params: { id: comment.id }
+                put :unfreeze, params: { id: comment.id }
 
                 expect(comment.reload.on_ice).to be_falsey
-                it_redirects_to_with_notice("/where_i_came_from", "Thread successfully unfrozen!")
+                it_redirects_to_with_notice("/where_i_came_from", "Comment thread successfully unfrozen!")
               end
             end
           end
@@ -825,7 +1300,7 @@ describe CommentsController do
         context "when logged in as a random user" do
           it "doesn't unfreeze comment and redirects with error" do
             fake_login
-            put :freeze, params: { id: comment.id }
+            put :unfreeze, params: { id: comment.id }
 
             expect(comment.reload.on_ice).to be_truthy
             it_redirects_to_with_error(user_path(@current_user), "Sorry, you don't have permission to access the page you were trying to reach.")
@@ -837,7 +1312,7 @@ describe CommentsController do
 
           it "doesn't unfreeze comment and redirects with error" do
             fake_login_known_user(tag_wrangler)
-            put :freeze, params: { id: comment.id }
+            put :unfreeze, params: { id: comment.id }
 
             expect(comment.reload.on_ice).to be_truthy
             it_redirects_to_with_error("/where_i_came_from", "Sorry, you don't have permission to unfreeze that comment thread.")
@@ -850,7 +1325,7 @@ describe CommentsController do
 
         context "when logged out" do
           it "doesn't unfreeze comment and redirects with error" do
-            put :freeze, params: { id: comment.id }
+            put :unfreeze, params: { id: comment.id }
 
             expect(comment.reload.on_ice).to be_truthy
             it_redirects_to_with_error("/where_i_came_from", "Sorry, you don't have permission to unfreeze that comment thread.")
@@ -864,7 +1339,7 @@ describe CommentsController do
             it "doesn't unfreeze comment and redirects with error" do
               admin.update(roles: [])
               fake_login_admin(admin)
-              put :freeze, params: { id: comment.id }
+              put :unfreeze, params: { id: comment.id }
 
               expect(comment.reload.on_ice).to be_truthy
               it_redirects_to_with_error("/where_i_came_from", "Sorry, you don't have permission to unfreeze that comment thread.")
@@ -876,10 +1351,10 @@ describe CommentsController do
               it "unfreezes comment and redirects with success message" do
                 admin.update(roles: [admin_role])
                 fake_login_admin(admin)
-                put :freeze, params: { id: comment.id }
+                put :unfreeze, params: { id: comment.id }
 
                 expect(comment.reload.on_ice).to be_falsey
-                it_redirects_to_with_notice("/where_i_came_from", "Thread successfully unfrozen!")
+                it_redirects_to_with_notice("/where_i_came_from", "Comment thread successfully unfrozen!")
               end
             end
           end
@@ -888,7 +1363,7 @@ describe CommentsController do
         context "when logged in as a random user" do
           it "doesn't unfreeze comment and redirects with error" do
             fake_login
-            put :freeze, params: { id: comment.id }
+            put :unfreeze, params: { id: comment.id }
 
             expect(comment.reload.on_ice).to be_truthy
             it_redirects_to_with_error("/where_i_came_from", "Sorry, you don't have permission to unfreeze that comment thread.")
@@ -898,10 +1373,10 @@ describe CommentsController do
         context "when logged in as a user who owns the work" do
           it "freezes the comment and redirects with success message" do
             fake_login_known_user(comment.ultimate_parent.pseuds.first.user)
-            put :freeze, params: { id: comment.id }
+            put :unfreeze, params: { id: comment.id }
 
             expect(comment.reload.on_ice).to be_falsey
-            it_redirects_to_with_notice("/where_i_came_from", "Thread successfully unfrozen!")
+            it_redirects_to_with_notice("/where_i_came_from", "Comment thread successfully unfrozen!")
           end
         end
       end
@@ -914,12 +1389,12 @@ describe CommentsController do
 
         it "unfreezes entire thread and redirects with success message" do
           fake_login_known_user(comment.ultimate_parent.pseuds.first.user)
-          put :freeze, params: { id: comment.id }
+          put :unfreeze, params: { id: comment.id }
 
           [comment, child1, child2, grandchild].each do |comment|
             expect(comment.reload.on_ice).to be_falsey
           end
-          it_redirects_to_with_notice("/where_i_came_from", "Thread successfully unfrozen!")
+          it_redirects_to_with_notice("/where_i_came_from", "Comment thread successfully unfrozen!")
         end
       end
 
@@ -933,13 +1408,13 @@ describe CommentsController do
 
         it "unfreezes the comment and its child, but not its parent or sibling, and redirects with success message" do
           fake_login_known_user(comment.ultimate_parent.pseuds.first.user)
-          put :freeze, params: { id: comment.id }
+          put :unfreeze, params: { id: comment.id }
 
           expect(comment.reload.on_ice).to be_falsey
           expect(child.reload.on_ice).to be_falsey
           expect(parent.reload.on_ice).to be_truthy
           expect(sibling.reload.on_ice).to be_truthy
-          it_redirects_to_with_notice("/where_i_came_from", "Thread successfully unfrozen!")
+          it_redirects_to_with_notice("/where_i_came_from", "Comment thread successfully unfrozen!")
         end
       end
 
@@ -951,13 +1426,28 @@ describe CommentsController do
 
         it "unfreezes the comment, but no other comments in the thread, and redirects with success message" do
           fake_login_known_user(comment.ultimate_parent.pseuds.first.user)
-          put :freeze, params: { id: comment.id }
+          put :unfreeze, params: { id: comment.id }
 
           expect(parent.reload.on_ice).to be_truthy
           expect(child1.reload.on_ice).to be_truthy
           expect(child2.reload.on_ice).to be_truthy
           expect(comment.reload.on_ice).to be_falsey
-          it_redirects_to_with_notice("/where_i_came_from", "Thread successfully unfrozen!")
+          it_redirects_to_with_notice("/where_i_came_from", "Comment thread successfully unfrozen!")
+        end
+      end
+
+      context "when comment is not saved" do
+        let!(:comment) { create(:comment, on_ice: true) }
+
+        before do
+          allow_any_instance_of(Comment).to receive(:save).and_return(false)
+        end
+
+        it "redirects with error" do
+          fake_login_known_user(comment.ultimate_parent.pseuds.first.user)
+          put :unfreeze, params: { id: comment.id }
+
+          it_redirects_to_with_error("/where_i_came_from", "Sorry, that comment thread could not be unfrozen.")
         end
       end
     end
@@ -1676,7 +2166,7 @@ describe CommentsController do
 
       it "PUT #freeze successfully freezes the comment" do
         put :freeze, params: { id: comment.id }
-        it_redirects_to_with_notice("/where_i_came_from", "Thread successfully frozen!")
+        it_redirects_to_with_notice("/where_i_came_from", "Comment thread successfully frozen!")
         expect(comment.reload.on_ice).to be_truthy
       end
     end
@@ -1766,7 +2256,7 @@ describe CommentsController do
             admin.update(roles: [admin_role])
             fake_login_admin(admin)
             put :freeze, params: { id: comment.id }
-            it_redirects_to_with_notice("/where_i_came_from", "Thread successfully frozen!")
+            it_redirects_to_with_notice("/where_i_came_from", "Comment thread successfully frozen!")
             expect(comment.reload.on_ice).to be_truthy
           end
         end
