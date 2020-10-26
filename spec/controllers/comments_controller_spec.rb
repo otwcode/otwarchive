@@ -2005,6 +2005,11 @@ describe CommentsController do
         put :freeze, params: { id: comment.id }
         it_redirects_to_with_error(root_path, "Sorry, you don't have permission to access the page you were trying to reach. Please log in.")
       end
+
+      it "PUT #unfreeze redirects to the home page with an error" do
+        put :unfreeze, params: { id: comment.id }
+        it_redirects_to_with_error(root_path, "Sorry, you don't have permission to access the page you were trying to reach. Please log in.")
+      end
     end
 
     context "when logged in as a random user" do
@@ -2064,6 +2069,11 @@ describe CommentsController do
         put :freeze, params: { id: comment.id }
         it_redirects_to_with_error(root_path, "Sorry, you don't have permission to access the page you were trying to reach.")
       end
+
+      it "PUT #unfreeze redirects to the home page with an error" do
+        put :unfreeze, params: { id: comment.id }
+        it_redirects_to_with_error(root_path, "Sorry, you don't have permission to access the page you were trying to reach.")
+      end
     end
 
     context "when logged in as the comment writer" do
@@ -2096,6 +2106,11 @@ describe CommentsController do
 
       it "PUT #freeze redirects to the home page with an error" do
         put :freeze, params: { id: comment.id }
+        it_redirects_to_with_error(root_path, "Sorry, you don't have permission to access the page you were trying to reach.")
+      end
+
+      it "PUT #unfreeze redirects to the home page with an error" do
+        put :unfreeze, params: { id: comment.id }
         it_redirects_to_with_error(root_path, "Sorry, you don't have permission to access the page you were trying to reach.")
       end
     end
@@ -2160,6 +2175,13 @@ describe CommentsController do
         put :freeze, params: { id: comment.id }
         it_redirects_to_with_notice("/where_i_came_from", "Comment thread successfully frozen!")
         expect(comment.reload.on_ice).to be_truthy
+      end
+
+      it "PUT #unfreeze successfully unfreezes the comment" do
+        comment.update(on_ice: true)
+        put :unfreeze, params: { id: comment.id }
+        it_redirects_to_with_notice("/where_i_came_from", "Comment thread successfully unfrozen!")
+        expect(comment.reload.on_ice).to be_falsey
       end
     end
 
@@ -2250,6 +2272,28 @@ describe CommentsController do
             put :freeze, params: { id: comment.id }
             it_redirects_to_with_notice("/where_i_came_from", "Comment thread successfully frozen!")
             expect(comment.reload.on_ice).to be_truthy
+          end
+        end
+      end
+
+      context "PUT #unfreeze" do
+        # TODO: Should this be more like check_permission_to_delete and use access_denied?
+        it "does not permit unfreezing of the comment when admin has no role" do
+          comment.update(on_ice: true)
+          admin.update(roles: [])
+          fake_login_admin(admin)
+          put :unfreeze, params: { id: comment.id }
+          it_redirects_to_with_error("/where_i_came_from", "Sorry, you don't have permission to unfreeze that comment thread.")
+        end
+
+        %w[superadmin policy_and_abuse].each do |admin_role|
+          it "successfully unfreezes the comment when admin has #{admin_role} role" do
+            comment.update(on_ice: true)
+            admin.update(roles: [admin_role])
+            fake_login_admin(admin)
+            put :unfreeze, params: { id: comment.id }
+            it_redirects_to_with_notice("/where_i_came_from", "Comment thread successfully unfrozen!")
+            expect(comment.reload.on_ice).to be_falsey
           end
         end
       end
