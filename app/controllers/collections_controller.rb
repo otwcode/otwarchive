@@ -23,31 +23,6 @@ class CollectionsController < ApplicationController
     end
   end
 
-  # def index
-  #   if params[:work_id] && (@work = Work.find_by(id: params[:work_id]))
-  #     @collections = @work.approved_collections.by_title.includes(:parent, :moderators, :children, :collection_preference, owners: [:user]).paginate(page: params[:page])
-  #   elsif params[:collection_id] && (@collection = Collection.find_by(name: params[:collection_id]))
-  #     @collections = @collection.children.by_title.includes(:parent, :moderators, :children, :collection_preference, owners: [:user]).paginate(page: params[:page])
-  #   elsif params[:user_id] && (@user = User.find_by(login: params[:user_id]))
-  #     @collections = @user.maintained_collections.by_title.includes(:parent, :moderators, :children, :collection_preference, owners: [:user]).paginate(page: params[:page])
-  #     @page_subtitle = ts("%{username} - Collections", username: @user.login)
-  #   else
-  #     if params[:user_id]
-  #       flash.now[:error] = ts("We couldn't find a user by that name, sorry.")
-  #     elsif params[:collection_id]
-  #       flash.now[:error] = ts("We couldn't find a collection by that name.")
-  #     elsif params[:work_id]
-  #       flash.now[:error] = ts("We couldn't find that work.")
-  #     end
-  #     @sort_and_filter = true
-  #     params[:collection_filters] ||= {}
-  #     params[:sort_column] = "collections.created_at" if !valid_sort_column(params[:sort_column], 'collection')
-  #     params[:sort_direction] = 'DESC' if !valid_sort_direction(params[:sort_direction])
-  #     sort = params[:sort_column] + " " + params[:sort_direction]
-  #     @collections = Collection.sorted_and_filtered(sort, params[:collection_filters], params[:page])
-  #   end
-  # end
-
   def index
     if params[:work_id] && (@work = Work.find_by(id: params[:work_id]))
       @collections = @work.approved_collections.by_title.includes(:parent, :moderators, :children, :collection_preference, owners: [:user]).paginate(page: params[:page])
@@ -64,9 +39,9 @@ class CollectionsController < ApplicationController
       end
 
       @sort_and_filter = true
-      query_params = params[:collection_filters] || {}
-      query_params.merge(sort_column: params[:sort_column], sort_direction: params[:sort_direction])
-      @collections = CollectionSearchForm.new(query_params).search_results.to_a.paginate(page: params[:page])
+      params[:collection_filters] ||= {}
+      query_params = params[:collection_filters].merge(sort_column: params[:sort_column], sort_direction: params[:sort_direction])
+      @collections = CollectionSearchForm.new(query_params.to_unsafe_h).search_results.to_a.paginate(page: params[:page])
     end
   end
 

@@ -102,8 +102,8 @@
           <li>
             <%= label_tag "collection_filters_challenge_type_gift_exchange" do %>
               <%= radio_button_tag "collection_filters[challenge_type]",
-                  "gift_exchange",
-                  params[:collection_filters][:challenge_type] == "gift_exchange"
+                  "GiftExchange",
+                  params[:collection_filters][:challenge_type] == "GiftExchange"
               %>
               <%= label_indicator_and_text(ts("Gift Exchange Challenge")) %>
             <% end %>
@@ -111,8 +111,8 @@
           <li>
             <%= label_tag "collection_filters_challenge_type_prompt_meme" do %>
               <%= radio_button_tag "collection_filters[challenge_type]",
-                  "prompt_meme",
-                  params[:collection_filters][:challenge_type] == "prompt_meme"
+                  "PromptMeme",
+                  params[:collection_filters][:challenge_type] == "PromptMeme"
               %>
               <%= label_indicator_and_text(ts("Prompt Meme Challenge")) %>
             <% end %>

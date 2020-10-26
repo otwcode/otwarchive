@@ -56,7 +56,12 @@ class CollectionQuery < Query
   end
 
   def challenge_type_filter
-    match_filter(:challenge_type, options[:challenge_type]) if options[:challenge_type].present?
+    if options[:challenge_type].present?
+      type_param = options[:challenge_type]
+      challenge_type = (type_param == 'PromptMeme' || type_param == 'GiftExchange') ? type_param : 'NULL'
+
+      match_filter(:challenge_type, challenge_type)
+    end
   end
 
   def parent_filter

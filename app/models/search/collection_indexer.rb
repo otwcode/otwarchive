@@ -22,11 +22,16 @@ class CollectionIndexer < Indexer
               }
             }
           },
+          challenge_type: {            
+            type: "keyword",
+            null_value: "NULL" 
+          },
           name: { type: "text", analyzer: "simple" },
           description: { type: "text", analyzer: "simple" },
           collection_type: { type: "keyword" },
           created_at: { type: "date" }
         }
+
       }
     }
   end
