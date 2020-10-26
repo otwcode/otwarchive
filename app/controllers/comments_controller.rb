@@ -286,9 +286,7 @@ class CommentsController < ApplicationController
       flash[:error] = ts("What did you want to comment on?")
       redirect_back_or_default(root_path)
     else
-      @comment = Comment.transaction do
-        new(comment_params)
-      end
+      @comment = Comment.new(comment_params)
       @comment.ip_address = request.remote_ip
       @comment.user_agent = request.env["HTTP_USER_AGENT"]
       @comment.commentable = Comment.commentable_object(@commentable)
