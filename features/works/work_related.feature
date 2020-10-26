@@ -659,7 +659,7 @@ Scenario: When a user is notified that a co-authored work has been inspired by a
       And I should not see "Worldbuilding Translated by translator"
       And I should not see "From English to Deutsch"
 
-  Scenario: A work in a hidden collection should not be revealed by posting a related work
+  Scenario: A work that is inspired by a work in an unrevealed collection does not list the title or creator of the unrevealed work in its notes
     Given a hidden collection "Hidden"
       And I have related works setup
     When I am logged in as "inspiration"
