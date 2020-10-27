@@ -1,4 +1,7 @@
 class Work < ApplicationRecord
+  # TODO: Remove this after AO3-6016 is deployed.
+  self.ignored_columns = [:anon_commenting_disabled]
+
   include Filterable
   include CreationNotifier
   include Collectible
@@ -925,22 +928,6 @@ class Work < ApplicationRecord
       comments_count: self.count_visible_comments,
       bookmarks_count: self.bookmarks.where(private: false).count
     )
-  end
-
-  def comment_permissions=(value)
-    write_attribute(:comment_permissions, value)
-
-    # Map the special value back to an integer, and write it to the
-    # anon_commenting_disabled column so that if we do have to revert, we can
-    # go back to using the anon_commenting_disabled column without data loss.
-    write_attribute(:anon_commenting_disabled,
-                    Work.comment_permissions[comment_permissions])
-  end
-
-  def anon_commenting_disabled=(value)
-    write_attribute(:anon_commenting_disabled, value)
-    write_attribute(:comment_permissions,
-                    anon_commenting_disabled ? :disable_anon : :enable_all)
   end
 
   ########################################################################

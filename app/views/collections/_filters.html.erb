@@ -34,7 +34,7 @@
         <%= text_field_tag "collection_filters[title]",
             params[:collection_filters][:title],
             autocomplete_options("collection_fullname",
-              autocomplete_token_limit: 1) %>
+              data: { autocomplete_token_limit: 1 }) %>
       </dd>
       <dt class="autocomplete search">
         <%= label_tag "collection_filters_fandom", ts("Filter by fandom") %>
@@ -42,7 +42,7 @@
       <dd class="autocomplete search">
         <%= text_field_tag "collection_filters[fandom]",
             params[:collection_filters][:fandom],
-            autocomplete_options("fandom", autocomplete_token_limit: 1) %>
+            autocomplete_options("fandom", data: { autocomplete_token_limit: 1 }) %>
       </dd>
       <dt><%= ts("Closed") %></dt>
       <dd>
