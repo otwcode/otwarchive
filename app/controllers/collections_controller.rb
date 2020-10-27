@@ -27,9 +27,9 @@ class CollectionsController < ApplicationController
     if params[:work_id] && (@work = Work.find_by(id: params[:work_id]))
       @collections = @work.approved_collections.by_title.includes(:parent, :moderators, :children, :collection_preference, owners: [:user]).paginate(page: params[:page])
     elsif params[:collection_id] && (@collection = Collection.find_by(name: params[:collection_id]))
-      @collections = CollectionSearchForm.new({ parent_id: params[:collection_id] }).to_a.paginate(page: params[:page])
+      @collections = CollectionSearchForm.new({ parent_id: @collection.id }).search_results.to_a.paginate(page: params[:page])
     elsif params[:user_id] && (@user = User.find_by(login: params[:user_id]))
-      @collections = CollectionSearchForm.new(moderator_ids: params[:user_id]).to_a.paginate(page: params[:page])
+      @collections = CollectionSearchForm.new(moderator_ids: [@user.id]).search_results.to_a.paginate(page: params[:page])
       @page_subtitle = ts("%{username} - Collections", username: @user.login)
     else
       if params[:user_id]
