@@ -58,7 +58,7 @@ class UserInviteRequestsController < ApplicationController
           requested_total = request.quantity.to_i
           request.quantity = 0
           request.save!
-          UserMailer.invite_request_declined(request.user_id, requested_total, request.reason).deliver
+          UserMailer.invite_request_declined(request.user_id, requested_total, request.reason).deliver_later
         end
       end
       flash[:notice] = 'All Requests were declined.'

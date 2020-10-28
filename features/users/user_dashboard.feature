@@ -60,13 +60,15 @@ Feature: User dashboard
   Then I should see "Recent works"
     And I should see "Oldest Work"
     And I should see "Work 5"
-    And I should not see "Works (5)" within "#user-works"
+    And I should see "Works (5)" within "#dashboard"
+    And I should not see "Works (" within "#user-works"
   When I post the work "Newest Work"
     And all indexing jobs have been run
     And I go to meatloaf's user page
   Then I should see "Newest Work"
     And I should not see "Oldest Work"
     And I should see "Works (5)" within "#dashboard"
+    And I should see "Works (5)" within "#user-works"
   When I wait 11 seconds
     And I reload the page
   Then I should see "Works (6)" within "#dashboard"
@@ -79,6 +81,8 @@ Feature: User dashboard
   Given I am logged in as "meatloaf"
     And I post the work "My Work"
   When I add the work "My Work" to the series "Oldest Series"
+    # Make sure all other series are more recent
+    And it is currently 1 second from now
     And I add the work "My Work" to the series "Series 2"
     And I add the work "My Work" to the series "Series 3"
     And I add the work "My Work" to the series "Series 4"

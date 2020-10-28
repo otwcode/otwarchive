@@ -189,7 +189,7 @@ When /^I make an admin post without paragraphs$/ do
 end
 
 When /^I make a(?: (\d+)(?:st|nd|rd|th)?)? FAQ post$/ do |n|
-  n ||= 1
+  n = 1 if n.zero?
   visit new_archive_faq_path
   fill_in("Question*", with: "Number #{n} Question.")
   fill_in("Answer*", with: "Number #{n} posted FAQ, this is.")
