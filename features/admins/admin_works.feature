@@ -53,7 +53,7 @@ Feature: Admin Actions for Works, Comments, Series, Bookmarks
       And 1 email should be delivered
       And the email should contain "deleted from the Archive by a site admin"
       And the email should not contain "translation missing"
-    When I am logged out
+    When I log out
       And I am on regular_user's works page
     Then I should not see "ToS Violation"
     When I am logged in
@@ -165,13 +165,11 @@ Feature: Admin Actions for Works, Comments, Series, Bookmarks
 
     When I am logged in as "author"
       And I post the work "The One Where Neal is Awesome"
-    When I am logged out
-      And I am logged in as "commenter"
+    When I am logged in as "commenter"
       And I view the work "The One Where Neal is Awesome"
       And I fill in "Comment" with "I loved this!"
       And I press "Comment"
     Then I should see "Comment created!"
-    When I am logged out
 
     # comment from registered user cannot be marked as spam.
     # If registered user is spamming, this goes to Abuse team as ToS violation
@@ -200,7 +198,7 @@ Feature: Admin Actions for Works, Comments, Series, Bookmarks
       And I should see "I loved this!"
 
     # user can't see spam comment
-    When I am logged out
+    When I log out
       And I view the work "The One Where Neal is Awesome"
     Then I should see "Comments (1)"
     When I follow "Comments (1)"
@@ -225,7 +223,7 @@ Feature: Admin Actions for Works, Comments, Series, Bookmarks
       And I should not see "This comment has been marked as spam."
 
     # user can see comment again
-    When I am logged out
+    When I log out
       And I view the work "The One Where Neal is Awesome"
     Then I should see "Comments (2)"
     When I follow "Comments (2)"
@@ -300,7 +298,7 @@ Feature: Admin Actions for Works, Comments, Series, Bookmarks
     Then I should see "Item has been hidden."
       And I should see the image "title" text "Hidden by Administrator"
       And I should see "Make Series Visible"
-    When I am logged out
+    When I log out
       And I go to tosser's series page
     Then I should see "Series (0)"
       And I should not see "Violation"
@@ -329,7 +327,7 @@ Feature: Admin Actions for Works, Comments, Series, Bookmarks
     Then I should see "Item is no longer hidden."
       And I should not see the image "title" text "Hidden by Administrator"
       And I should see "Hide Series"
-    When I am logged out
+    When I log out
       And I go to tosser's series page
     Then I should see "Series (1)"
       And I should see "Violation"

@@ -198,13 +198,13 @@ Given /^the chaptered work with comments setup$/ do
     step %{I view the #{i.to_s}th chapter}
     step %{I post a comment "Woohoo"}
   end
-  step "I am logged out"
+  step "I log out"
 end
 
 Given /^the work "([^"]*)"$/ do |work|
   unless Work.where(title: work).exists?
     step %{I have a work "#{work}"}
-    step %{I am logged out}
+    step %{I log out}
   end
 end
 
@@ -218,14 +218,14 @@ Given /^there is a work "([^"]*)" in an unrevealed collection "([^"]*)"$/ do |wo
   step %{I have the hidden collection "#{collection}"}
   step %{I am logged in as a random user}
   step %{I post the work "#{work}" to the collection "#{collection}"}
-  step %{I am logged out}
+  step %{I log out}
 end
 
 Given /^there is a work "([^"]*)" in an anonymous collection "([^"]*)"$/ do |work, collection|
   step %{I have the anonymous collection "#{collection}"}
   step %{I am logged in as a random user}
   step %{I post the work "#{work}" to the collection "#{collection}"}
-  step %{I am logged out}
+  step %{I log out}
 end
 
 Given /^I am logged in as the author of "([^"]*)"$/ do |work|
@@ -235,7 +235,7 @@ end
 
 Given /^the spam work "([^\"]*)"$/ do |work|
   step %{I have a work "#{work}"}
-  step %{I am logged out}
+  step %{I log out}
   w = Work.find_by_title(work)
   w.update_attribute(:spam, true)
   w.update_attribute(:hidden_by_admin, true)

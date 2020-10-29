@@ -47,7 +47,7 @@ Feature: Public skins
 
   Scenario: Public skins should not be viewable by users until approved
   Given the unapproved public skin "public skin"
-    And I am logged out
+    And I log out
   When I go to "public skin" skin page
     Then I should see "Sorry, you don't have permission"
   When I go to "public skin" edit skin page

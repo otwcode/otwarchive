@@ -37,7 +37,7 @@ Feature: Search restricted works
     Then I should see "You searched for: restricted: true"
       And I should see "1 Found"
       And the results should contain only the restricted work
-    When I am logged out
+    When I log out
       And I search for works containing "restricted: true"
     Then I should see "You searched for: restricted: true"
       And I should see "No results found."

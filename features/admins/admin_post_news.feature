@@ -45,7 +45,7 @@ Feature: Admin Actions to Post News
     When I follow "Comment"
       And I fill in "Comment" with "Excellent, my dear!"
       And I press "Comment"
-    When I am logged out
+    When I log out
       And I go to the admin-posts page
       And I follow "Default Admin Post"
       And I fill in "Comment" with "Behold, ye mighty, and despair!"
@@ -148,7 +148,7 @@ Feature: Admin Actions to Post News
     When I go to the home page
     Then I should see "App News & a <strong> Warning"
       And I should not see "App News &amp; a &lt;strong&gt; Warning"
-    When I am logged out
+    When I log out
       And I go to the admin-posts page
     Then I should see "App News & a <strong> Warning"
       And I should not see "App News &amp; a &lt;strong&gt; Warning"

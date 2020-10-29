@@ -37,7 +37,7 @@ Feature: User Authentication
       And I should not see "Change My Password"
 
     # link from the email should work
-    When I am logged out
+    When I log out
       And I follow "Change my password." in the email
     Then I should see "Change My Password"
 
@@ -56,7 +56,7 @@ Feature: User Authentication
       And I should see "Hi, sam"
 
     # password reset link should no longer work
-    When I am logged out
+    When I log out
       And I follow "Change my password." in the email
       And I fill in "New password" with "override"
       And I fill in "Confirm new password" with "override"
@@ -79,7 +79,7 @@ Feature: User Authentication
     Then I should see "Hi, sam"
 
     # password entered the second time should not work
-    When I am logged out
+    When I log out
       And I am on the homepage
       And I fill in "User name or email:" with "sam"
       And I fill in "Password:" with "override"

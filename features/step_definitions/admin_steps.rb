@@ -56,7 +56,7 @@ Given /^tag wrangling is off$/ do
   visit(admin_settings_path)
   step(%{I check "Turn off tag wrangling for non-admins"})
   step(%{I press "Update"})  
-  step("I am logged out")
+  step("I log out")
 end
 
 Given /^tag wrangling is on$/ do
@@ -64,7 +64,7 @@ Given /^tag wrangling is on$/ do
   visit(admin_settings_path)
   step(%{I uncheck "Turn off tag wrangling for non-admins"})
   step(%{I press "Update"})
-  step("I am logged out")
+  step("I log out")
 end
 
 Given /^the support form is disabled and its text field set to "Please don't contact us"$/ do
@@ -100,7 +100,7 @@ end
 Given /^I have posted an admin post$/ do
   step(%{I am logged in as a "communications" admin})
   step("I make an admin post")
-  step("I am logged out")
+  step("I log out")
 end
 
 Given /^the fannish next of kin "([^\"]*)" for the user "([^\"]*)"$/ do |kin, user|
@@ -140,7 +140,7 @@ end
 Given /^I have posted an admin post without paragraphs$/ do
   step(%{I am logged in as a "communications" admin})
   step("I make an admin post without paragraphs")
-  step("I am logged out")
+  step("I log out")
 end
 
 Given /^I have posted an admin post with tags$/ do

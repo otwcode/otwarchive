@@ -16,7 +16,7 @@ Feature: Invite queue management
       And I go to the admin-settings page
       And I uncheck "Invite from queue enabled (People can add themselves to the queue and invitations are sent out automatically)"
       And I press "Update"
-    When I am logged out
+    When I log out
       And I am on the homepage
     Then I should not see "Get an Invite"
       And I should see "Archive of Our Own"
@@ -28,7 +28,7 @@ Feature: Invite queue management
       And I go to the admin-settings page
       And I check "Invite from queue enabled (People can add themselves to the queue and invitations are sent out automatically)"
       And I press "Update"
-    When I am logged out
+    When I log out
       And I am on the homepage
     Then I should see "Get an Invitation"
     When I follow "Get an Invitation"
