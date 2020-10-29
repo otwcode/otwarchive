@@ -79,7 +79,7 @@ Given /^a canonical relationship "([^\"]*)" in fandom "([^\"]*)"$/ do |relations
   rel.add_association(fand)
 end
 
-Given /^a (non-?canonical|canonical) (\w+) "(.*?)"$/ do |canonical_status, tag_type, tag_name|
+Given /^a (non-?canonical|canonical) (\w+) "([^\"]*)"$/ do |canonical_status, tag_type, tag_name|
   t = tag_type.classify.constantize.find_or_create_by_name(tag_name)
   t.canonical = canonical_status == "canonical"
   t.save
