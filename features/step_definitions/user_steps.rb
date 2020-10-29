@@ -142,6 +142,8 @@ Given /^I start a new session$/ do
   page.driver.reset!
 end
 
+# TODO: This should eventually be removed in favor of the "I log out" step,
+# which does the same thing (but has a shorter and less passive name).
 Given /^I am logged out$/ do
   step(%{I follow "Log Out"})
 end
@@ -233,12 +235,12 @@ end
 
 Then /^a user account should exist for "(.*?)"$/ do |login|
   user = User.find_by(login: login)
-  assert user.present?
+  expect(user).to be_present
 end
 
 Then /^a user account should not exist for "(.*)"$/ do |login|
   user = User.find_by(login: login)
-  assert user.blank?
+  expect(user).to be_blank
 end
 
 Then /^a new user account should exist$/ do
