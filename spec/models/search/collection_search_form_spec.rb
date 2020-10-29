@@ -149,6 +149,14 @@ describe CollectionSearchForm, collection_search: true do
         expect(query.search_results).to include prompt_meme_collection
         expect(query.search_results).not_to include gift_exchange_collection
       end
+
+      it "shows only collections without a challenge" do
+        query = CollectionSearchForm.new(challenge_type: 'no_challange')
+
+        expect(query.search_results).to include no_signup
+        expect(query.search_results).not_to include prompt_meme_collection
+        expect(query.search_results).not_to include gift_exchange_collection
+      end
     end
 
     it "filter collections by signup_open_filter" do
