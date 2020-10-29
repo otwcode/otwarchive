@@ -39,9 +39,7 @@ class CollectionsController < ApplicationController
       end
 
       @sort_and_filter = true
-      params[:collection_filters] ||= {}
-      query_params = params[:collection_filters].merge(sort_column: params[:sort_column], sort_direction: params[:sort_direction])
-      @collections = CollectionSearchForm.new(query_params.to_unsafe_h).search_results.to_a.paginate(page: params[:page])
+      @collections = CollectionSearchForm.new(parsed_collection_filters).search_results.to_a.paginate(page: params[:page])
     end
   end
 
@@ -171,6 +169,29 @@ class CollectionsController < ApplicationController
   end
 
   private
+
+  def parsed_collection_filters
+    collection_filters = collection_filter_params.to_h
+    collection_filters = collection_filters.delete_if { |key, value| value.blank? }
+
+    # find fandom id from name given in filter, otherwise send params through
+    parsed_filters = collection_filters.inject({}) do |new_hash, (k, v)|
+      if k == 'fandom'
+        fandom = Fandom.find_by(name: v)
+        new_hash[:fandom_ids] = [fandom&.id].compact
+      else
+        new_hash[k] = v
+      end
+      
+      new_hash
+    end 
+
+    parsed_filters.symbolize_keys
+  end
+
+  def collection_filter_params
+    params.permit(:title, :fandom, :challenge_type, :moderated, :closed, :sort_column, :sort_direction)
+  end
 
   def collection_params
     params.require(:collection).permit(

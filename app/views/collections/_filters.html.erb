@@ -11,7 +11,7 @@
       <dd class="sort">
         <%= select_tag :sort_column,
             options_for_select({
-              ts("Title") => "title",
+              ts("Title") => "title.keyword",
               ts("Date Created") => "created_at" },
               params[:sort_column]) %>
       </dd>
@@ -31,8 +31,8 @@
             ts("Filter by title") %>
       </dt>
       <dd class="autocomplete search">
-        <%= text_field_tag "collection_filters[title]",
-            params[:collection_filters][:title],
+        <%= text_field_tag "title",
+            params[:title],
             autocomplete_options("collection_fullname",
               data: { autocomplete_token_limit: 1 }) %>
       </dd>
@@ -40,8 +40,8 @@
         <%= label_tag "collection_filters_fandom", ts("Filter by fandom") %>
       </dt>
       <dd class="autocomplete search">
-        <%= text_field_tag "collection_filters[fandom]",
-            params[:collection_filters][:fandom],
+        <%= text_field_tag "fandom",
+            params[:fandom],
             autocomplete_options("fandom", data: { autocomplete_token_limit: 1 }) %>
       </dd>
       <dt><%= ts("Closed") %></dt>
@@ -50,21 +50,21 @@
           <li>
             <%= label_tag "collection_filters_closed_true" do %>
               <%= radio_button_tag "collection_filters[closed]", true,
-                  params[:collection_filters][:closed] == "true" %>
+                  params[:closed] == "true" %>
               <%= label_indicator_and_text(ts("Yes")) %>
             <% end %>
           </li>
           <li>
             <%= label_tag "collection_filters_closed_false" do %>
               <%= radio_button_tag "collection_filters[closed]", false,
-                  params[:collection_filters][:closed] == "false" %>
+                  params[:closed] == "false" %>
               <%= label_indicator_and_text(ts("No")) %>
             <% end %>
           </li>
           <li>
             <%= label_tag "collection_filters_closed_" do %>
               <%= radio_button_tag "collection_filters[closed]", "",
-                  params[:collection_filters][:closed] == "" %>
+                  params[:closed] == "" %>
               <%= label_indicator_and_text(ts("Either")) %>
             <% end %>
           </li>
@@ -76,21 +76,21 @@
           <li>
             <%= label_tag "collection_filters_moderated_true" do %>
               <%= radio_button_tag "collection_filters[moderated]", true,
-                  params[:collection_filters][:moderated] == "true" %>
+                  params[:moderated] == "true" %>
               <%= label_indicator_and_text(ts("Yes")) %>
             <% end %>
           </li>
           <li>
             <%= label_tag "collection_filters_moderated_false" do %>
               <%= radio_button_tag "collection_filters[moderated]", false,
-                  params[:collection_filters][:moderated] == "false" %>
+                  params[:moderated] == "false" %>
               <%= label_indicator_and_text(ts("No")) %>
             <% end %>
           </li>
           <li>
             <%= label_tag "collection_filters_moderated_" do %>
               <%= radio_button_tag "collection_filters[moderated]", "",
-                  params[:collection_filters][:moderated] == "" %>
+                  params[:moderated] == "" %>
               <%= label_indicator_and_text(ts("Either")) %>
             <% end %>
           </li>
@@ -103,7 +103,7 @@
             <%= label_tag "collection_filters_challenge_type_gift_exchange" do %>
               <%= radio_button_tag "collection_filters[challenge_type]",
                   "GiftExchange",
-                  params[:collection_filters][:challenge_type] == "GiftExchange"
+                  params[:challenge_type] == "GiftExchange"
               %>
               <%= label_indicator_and_text(ts("Gift Exchange Challenge")) %>
             <% end %>
@@ -112,7 +112,7 @@
             <%= label_tag "collection_filters_challenge_type_prompt_meme" do %>
               <%= radio_button_tag "collection_filters[challenge_type]",
                   "PromptMeme",
-                  params[:collection_filters][:challenge_type] == "PromptMeme"
+                  params[:challenge_type] == "PromptMeme"
               %>
               <%= label_indicator_and_text(ts("Prompt Meme Challenge")) %>
             <% end %>
@@ -121,7 +121,7 @@
             <%= label_tag "collection_filters_challenge_type_no_challenge" do %>
               <%= radio_button_tag "collection_filters[challenge_type]",
                   "no_challenge",
-                  params[:collection_filters][:challenge_type] == "no_challenge"
+                  params[:challenge_type] == "no_challenge"
               %>
               <%= label_indicator_and_text(ts("No Challenge")) %>
             <% end %>
@@ -129,7 +129,7 @@
           <li>
             <%= label_tag "collection_filters_challenge_type_" do %>
               <%= radio_button_tag "collection_filters[challenge_type]", "",
-                  params[:collection_filters][:challenge_type] == "" %>
+                  params[:challenge_type] == "" %>
               <%= label_indicator_and_text(ts("Any")) %>
             <% end %>
           </li>

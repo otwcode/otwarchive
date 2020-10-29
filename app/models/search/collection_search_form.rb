@@ -76,7 +76,7 @@ class CollectionSearchForm
 
   SORT_OPTIONS = [
     ['Date Posted', 'created_at'],
-    ['Title', 'title']
+    ['Title', 'title.keyword']
   ].freeze
 
   def sort_columns
