@@ -4,7 +4,8 @@ Feature: Share Works
 
   @javascript
   Scenario: Share a work
-    Given I have a work "Blabla"
+    Given I am logged in as "testuser1"
+      And I post the work "Blabla"
     When I view the work "Blabla"
     Then I should see "Share"
     When I follow "Share"
@@ -15,8 +16,7 @@ Feature: Share Works
       And I should see 'Fandom: <a href="http://www.example.com/tags/Stargate%20SG-1">Stargate SG-1</a>' within "#share"
       And I should see "Rating: Not Rated" within "#share"
       And I should see "Warnings: No Archive Warnings Apply" within "#share"
-      And the share modal should contain a Twitter share button
-      And I should see "Share on Tumblr" within "div#share ul li a[title]"
+      And the share modal should contain social share buttons
       And I should not see "Series:" within "#share"
       And I should not see "Relationships:" within "#share"
       And I should not see "Characters:" within "#share"
@@ -32,8 +32,7 @@ Feature: Share Works
       And I should see 'Fandom: <a href="http://www.example.com/tags/Stargate%20SG-1">Stargate SG-1</a>' within "#share"
       And I should see "Rating: Not Rated" within "#share"
       And I should see "Warnings: No Archive Warnings Apply" within "#share"
-      And the share modal should contain a Twitter share button
-      And I should see "Share on Tumblr" within "div#share ul li a[title]"
+      And the share modal should contain social share buttons
       And I should not see "Series:" within "#share"
       And I should not see "Relationships:" within "#share"
       And I should not see "Characters:" within "#share"

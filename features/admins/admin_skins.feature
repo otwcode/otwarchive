@@ -22,15 +22,18 @@ Feature: Admin manage skins
   Scenario: Admin can add a public skin to the chooser and then remove it
   Given the approved public skin "public skin"
     And the skin "public skin" is cached
-    And I am logged in as an admin
+  When I am logged in as an admin
+  Then I should not see the skin chooser
   When I follow "Approved Skins"
     And I check "Chooser"
     And I press "Update"
   Then I should see "The following skins were updated: public skin"
+    And I should see the skin "public skin" in the skin chooser
   When I follow "Approved Skins"
     And I check "Not In Chooser"
     And I press "Update"
   Then I should see "The following skins were updated: public skin"
+    And I should not see the skin chooser
 
   Scenario: An admin can reject and unreject a skin
   Given the unapproved public skin "public skin"

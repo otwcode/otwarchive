@@ -9,7 +9,7 @@ namespace :admin do
   task(:resend_signup_emails => :environment) do
     @users = User.where(confirmed_at: nil, created_at: 48.hours.ago..24.hours.ago)
     @users.each do |user|
-      UserMailer.signup_notification(user.id).deliver
+      UserMailer.signup_notification(user.id).deliver_later
     end
     puts "Sign-up notification emails resent"
   end

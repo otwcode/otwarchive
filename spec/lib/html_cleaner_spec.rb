@@ -6,7 +6,7 @@ describe HtmlCleaner do
   include HtmlCleaner
 
   describe "TagStack" do
-    let(:stack) { TagStack.new }
+    let(:stack) { HtmlCleaner::TagStack.new }
 
     describe "inside paragraph?" do
       it "should return false" do
