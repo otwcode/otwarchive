@@ -89,6 +89,7 @@ class CommentsController < ApplicationController
 
   # Check to see if the ultimate_parent is a Work or AdminPost, and if so, if it allows
   # comments for the current user.
+  # AO3-6027 TODO: localize strings
   def check_parent_comment_permissions
     parent = find_parent
     if parent.is_a?(Work)
