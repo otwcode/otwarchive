@@ -51,8 +51,8 @@ Feature: Admin Actions to Post News
       And I go to the admin-posts page
       And I follow "Default Admin Post"
       And I fill in "Comment" with "Behold, ye mighty, and despair!"
-      And I fill in "Name" with "admin"
-      And I fill in "Email" with "admin@example.com"
+      And I fill in "Guest name" with "admin"
+      And I fill in "Guest email" with "admin@example.com"
       And I press "Comment"
     Then I should see "Comment created!"
       And I should see "admin"

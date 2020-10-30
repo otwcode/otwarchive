@@ -156,13 +156,17 @@ class CollectionItemsController < ApplicationController
 
   def update_multiple
     if @collection&.user_is_maintainer?(current_user)
-      update_multiple_with_params(@collection.collection_items,
-                                  collection_update_multiple_params,
-                                  collection_items_path(@collection))
+      update_multiple_with_params(
+        allowed_items: @collection.collection_items,
+        update_params: collection_update_multiple_params,
+        success_path: collection_items_path(@collection)
+      )
     elsif @user && @user == current_user
-      update_multiple_with_params(CollectionItem.for_user(@user),
-                                  user_update_multiple_params,
-                                  user_collection_items_path(@user))
+      update_multiple_with_params(
+        allowed_items: CollectionItem.for_user(@user),
+        update_params: user_update_multiple_params,
+        success_path: user_collection_items_path(@user)
+      )
     else
       flash[:error] = ts("You don't have permission to do that, sorry!")
       redirect_to(@collection || @user)
@@ -173,7 +177,7 @@ class CollectionItemsController < ApplicationController
   # to update, and only updates items that can be found in allowed_items (which
   # should be a relation on CollectionItems). When all items are successfully
   # updated, redirects to success_path.
-  def update_multiple_with_params(allowed_items, update_params, success_path)
+  def update_multiple_with_params(allowed_items:, update_params:, success_path:)
     # Collect any failures so that we can display errors:
     @collection_items = []
 
@@ -186,7 +190,12 @@ class CollectionItemsController < ApplicationController
     # which uses find() under the hood -- we ensure that we'll fail silently if
     # the user tries to update an item they're not allowed to.
     allowed_items.where(id: update_params.keys).each do |item|
-      @collection_items << item unless item.update(update_params[item.id])
+      item_data = update_params[item.id]
+      if item_data[:remove] == "1"
+        @collection_items << item unless item.destroy
+      else
+        @collection_items << item unless item.update(item_data)
+      end
     end
 
     if @collection_items.empty?

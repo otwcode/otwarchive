@@ -65,7 +65,7 @@ class Admin::SkinsController < Admin::BaseController
     flash[:notice] << ts("The following skins were updated: %{titles}", titles: modified_skin_titles.join(', '))
 
     # set default
-    if params[:set_default].present? && params[:set_default] != AdminSetting.default_skin.title
+    if params[:set_default].present? && params[:set_default] != AdminSetting.default_skin&.title
       skin = Skin.find_by(title: params[:set_default], official: true)
       @admin_setting = AdminSetting.first
       if skin && @admin_setting

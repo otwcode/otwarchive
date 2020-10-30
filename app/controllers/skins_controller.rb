@@ -91,6 +91,7 @@ class SkinsController < ApplicationController
     loaded = load_archive_parents
     if @skin.update_attributes(skin_params)
       @skin.cache! if @skin.cached?
+      @skin.recache_children!
       flash[:notice] = ts("Skin was successfully updated.")
       if loaded
         if flash[:error].present?
@@ -113,7 +114,7 @@ class SkinsController < ApplicationController
     flash[:notice] << ts("Go back or click any link to remove the skin.")
     flash[:notice] << ts("Tip: You can preview any archive page you want by tacking on '?site_skin=[skin_id]' like you can see in the url above.")
     flash[:notice] << "<a href='#{skin_path(@skin)}' class='action' role='button'>".html_safe + ts("Return To Skin To Use") + "</a>".html_safe
-    tag = FilterCount.where("public_works_count BETWEEN 10 AND 20").order("RAND()").first.filter
+    tag = FilterCount.where("public_works_count BETWEEN 10 AND 20").random_order.first.filter
     redirect_to tag_works_path(tag, site_skin: @skin.id)
   end
 
@@ -130,7 +131,7 @@ class SkinsController < ApplicationController
   def unset
     session[:site_skin] = nil
     if logged_in? && current_user.preference
-      current_user.preference.skin = Skin.default
+      current_user.preference.skin_id = AdminSetting.default_skin_id
       current_user.preference.save
     end
     flash[:notice] = ts("You are now using the default Archive skin again!")
@@ -147,7 +148,8 @@ class SkinsController < ApplicationController
     end
 
     if current_user && current_user.is_a?(User) && current_user.preference.skin_id == @skin.id
-      current_user.preference.update_attribute("skin_id", Skin.default.id)
+      current_user.preference.skin_id = AdminSetting.default_skin_id
+      current_user.preference.save
     end
     redirect_to user_skins_path(current_user) rescue redirect_to skins_path
   end

@@ -57,6 +57,7 @@ Feature: Special co-creator behavior for archivists
     When I view the series "Imported Series"
       And I follow "Edit Series"
       And I try to invite the co-author "allow"
+      And it is currently 1 second from now
       And I press "Update"
     Then "allow" should be a co-creator of the series "Imported Series"
       And 1 email should be delivered to "allow"
@@ -70,6 +71,7 @@ Feature: Special co-creator behavior for archivists
     When I view the series "Imported Series"
       And I follow "Edit Series"
       And I try to invite the co-author "disallow"
+      And it is currently 1 second from now
       And I press "Update"
     Then "disallow" should be a co-creator of the series "Imported Series"
       And 1 email should be delivered to "disallow"
