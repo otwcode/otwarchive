@@ -1,4 +1,4 @@
-require 'spec_helper'
+require "spec_helper"
 
 describe CollectionQuery do
 
@@ -12,21 +12,21 @@ describe CollectionQuery do
 
   it "should sort by created_at by default" do
     q = CollectionQuery.new
-    expect(q.generated_query[:sort]).to eq({'created_at' => { order: 'desc' }})
+    expect(q.generated_query[:sort]).to eq({"created_at" => { order: "desc" }})
   end
 
   it "should allow you to sort by title" do
-    q = CollectionQuery.new(sort_column: 'title', sort_direction: 'asc')
-    expect(q.generated_query[:sort]).to eq({'title' => { order: 'asc'}})
+    q = CollectionQuery.new(sort_column: "title", sort_direction: "asc")
+    expect(q.generated_query[:sort]).to eq({"title" => { order: "asc"}})
   end
 
   it "should allow you to filter for collections with open signup" do
-    q = CollectionQuery.new(signup_open: 'true')
+    q = CollectionQuery.new(signup_open: "true")
     expect(q.filters).to include(term: { "signup_open": true })
   end
 
   it "should allow you to filter for collections that are closed" do
-    q = CollectionQuery.new(closed: 'false')
+    q = CollectionQuery.new(closed: "false")
     expect(q.filters).to include(term: { closed: false})
   end
 end

@@ -15,12 +15,12 @@ describe CollectionsController do
     let!(:participant) { create(:collection_participant, collection: prompt_meme_collection) }
     let!(:moderator) { create(:collection_participant, participant_role: CollectionParticipant::MODERATOR, collection: prompt_meme_collection) }
     let!(:fandom) { create(:fandom) }
-    let!(:item) {
+    let!(:item) do
       create(
         :collection_item, user_approval_status: CollectionItem::APPROVED, collection_approval_status: CollectionItem::APPROVED, 
         work: create(:work, restricted: false, fandoms: [fandom]), collection: prompt_meme_collection
       )
-    }
+    end
 
     before(:each) do
       run_all_indexing_jobs
