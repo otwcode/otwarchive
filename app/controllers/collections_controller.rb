@@ -171,11 +171,8 @@ class CollectionsController < ApplicationController
   private
 
   def parsed_collection_filters
-    collection_filters = collection_filter_params.to_h
-    collection_filters = collection_filters.delete_if { |key, value| value.blank? }
-
     # find fandom id from name given in filter, otherwise send params through
-    parsed_filters = collection_filters.inject({}) do |new_hash, (k, v)|
+    parsed_filters = collection_filter_params.inject({}) do |new_hash, (k, v)|
       if k == 'fandom'
         fandom = Fandom.find_by(name: v)
         new_hash[:fandom_ids] = [fandom&.id].compact
@@ -190,7 +187,11 @@ class CollectionsController < ApplicationController
   end
 
   def collection_filter_params
-    params.permit(:title, :fandom, :challenge_type, :moderated, :closed, :sort_column, :sort_direction)
+    white_list = %w(title fandom challenge_type moderated closed sort_column sort_direction)
+    collection_filters = params.to_unsafe_h.select { |k, v| white_list.include?(k) }
+    collection_filters = collection_filters.delete_if { |key, value| value.blank? }
+
+    collection_filters
   end
 
   def collection_params

@@ -58,7 +58,7 @@ Feature: Collection
 
   Given I have loaded the fixtures
   When I go to the collections page
-    And I choose "collection_filters_closed_true"
+    And I choose "closed_true"
     And I press "Sort and Filter"
   Then I should see "Another Plain Collection"
     And I should see "On Demand"
@@ -71,7 +71,7 @@ Feature: Collection
 
   Given I have loaded the fixtures
   When I go to the collections page
-    And I choose "collection_filters_closed_false"
+    And I choose "closed_false"
     And I press "Sort and Filter"
   Then I should see "Some Test Collection"
     And I should see "Some Other Collection"
@@ -84,7 +84,7 @@ Feature: Collection
 
   Given I have loaded the fixtures
   When I go to the collections page
-    And I choose "collection_filters_moderated_true"
+    And I choose "moderated_true"
     And I press "Sort and Filter"
   Then I should see "Surprise Presents"
     And I should not see "Some Test Collection"
@@ -97,7 +97,7 @@ Feature: Collection
 
   Given I have loaded the fixtures
   When I go to the collections page
-    And I choose "collection_filters_moderated_false"
+    And I choose "moderated_false"
     And I press "Sort and Filter"
   Then I should see "Some Test Collection"
     And I should see "Some Other Collection"
@@ -110,8 +110,8 @@ Feature: Collection
 
   Given I have loaded the fixtures
   When I go to the collections page
-    And I choose "collection_filters_closed_false"
-    And I choose "collection_filters_moderated_true"
+    And I choose "closed_false"
+    And I choose "moderated_true"
     And I choose "Gift Exchange Challenge"
     And I press "Sort and Filter"
   Then I should see "Surprise Presents"
@@ -129,7 +129,7 @@ Feature: Collection
     And I am logged in as a random user
     And I post the work "Stronger than you" with fandom "Steven's Universe" in the collection "Collection1"
   When I go to the collections page
-    And I fill in "collection_filters_fandom" with "Steven's Universe"
+    And I fill in "fandom" with "Steven's Universe"
     And I press "Sort and Filter"
   Then I should see "Collection1"
     And I should not see "Collection2"
