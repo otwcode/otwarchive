@@ -51,7 +51,7 @@ describe CollectionSearchForm, collection_search: true do
     describe "created_at sorting" do
       let!(:collection_1_year_ago) { create(:collection, created_at: Time.zone.now - 1.year, title: "collection_1_year_ago") }
       let!(:collection_now) { create(:collection, title: "collection_now") }
-      let(:sorted_collection_titles) { %w(collection_now collection_1_year_ago) }
+      let(:sorted_collection_titles) { %w[collection_now collection_1_year_ago] }
 
       before do
         run_all_indexing_jobs
@@ -71,7 +71,7 @@ describe CollectionSearchForm, collection_search: true do
     describe "title sorting" do
       let!(:collection_1_year_ago) { create(:collection, title: "a_test") }
       let!(:collection_now) { create(:collection, title: "z_test") }
-      let(:sorted_collection_titles) { %w(a_test z_test) }
+      let(:sorted_collection_titles) { %w[a_test z_test] }
 
       before do
         run_all_indexing_jobs
@@ -93,7 +93,7 @@ describe CollectionSearchForm, collection_search: true do
       let!(:first_collection) { create(:collection, title: "first", challenge: first_gift_exchange, challenge_type: "GiftExchange") }
       let!(:second_gift_exchange) { create(:gift_exchange, signup_open: true, signups_open_at: Time.zone.now - 2.days, signups_close_at: Time.zone.now + 2.weeks) }
       let!(:second_collection) { create(:collection, title: "second", challenge: second_gift_exchange, challenge_type: "GiftExchange") }
-      let(:sorted_collection_titles) { ["first", "second"] }
+      let(:sorted_collection_titles) { %w[first second] }
 
       before do
         run_all_indexing_jobs
