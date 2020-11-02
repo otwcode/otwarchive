@@ -11,7 +11,7 @@ class CollectionsController < ApplicationController
   # In both CollectionsController#create and CollectionsController#update there are a vulnerable usages of eval
   # For now just make sure the values passed to it are safe
   def validate_challenge_type
-    if params[:challenge_type] and not ["", "GiftExchange", "PromptMeme"].include?(params[:challenge_type])
+    if params[:challenge_type] and not ["", "GiftExchange", "PromptMeme", "no_challenge"].include?(params[:challenge_type])
       return render status: :bad_request, text: "invalid challenge_type"
     end
   end

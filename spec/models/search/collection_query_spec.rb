@@ -1,7 +1,6 @@
 require "spec_helper"
 
 describe CollectionQuery do
-
   it "allows you to perform a simple search" do
     q = CollectionQuery.new(title: "test")
     search_body = q.generated_query
