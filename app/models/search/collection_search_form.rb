@@ -75,8 +75,8 @@ class CollectionSearchForm
   ###############
 
   SORT_OPTIONS = [
-    ['Date Posted', 'created_at'],
-    ['Title', 'title.keyword']
+    ["Date Created", "created_at"],
+    ["Title", "title.keyword"]
   ].freeze
 
   def sort_columns
@@ -101,14 +101,14 @@ class CollectionSearchForm
   end
 
   def default_sort_column
-    'created_at'
+    "created_at"
   end
 
   def default_sort_direction
-    if sort_column.include?('title') || sort_column.include?('signups_close_at')
-      'asc'
+    if sort_column.include?("title") || sort_column.include?("signups_close_at")
+      "asc"
     else
-      'desc'
+      "desc"
     end
   end
 end

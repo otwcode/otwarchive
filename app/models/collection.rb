@@ -490,11 +490,4 @@ class Collection < ApplicationRecord
   def clear_icon
     self.icon = nil if delete_icon? && !icon.dirty?
   end
-
-  after_save :reindex_collection
-  after_destroy :reindex_collection
-
-  def reindex_collection
-    IndexQueue.enqueue_id(Collection, id, :main)
-  end
 end

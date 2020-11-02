@@ -10,7 +10,6 @@ describe CollectionSearchForm, collection_search: true do
     end
   end
 
-
   describe "#set_sorting" do
     it "does not override provided sort column" do
       options = { sort_column: "title" }
@@ -52,14 +51,14 @@ describe CollectionSearchForm, collection_search: true do
     describe "created_at sorting" do
       let!(:collection_1_year_ago) { create(:collection, created_at: Time.zone.now - 1.year, title: "collection_1_year_ago") }
       let!(:collection_now) { create(:collection, title: "collection_now") }
-      let(:sorted_collection_titles) { ["collection_now", "collection_1_year_ago"] }
+      let(:sorted_collection_titles) { %w(collection_now collection_1_year_ago) }
 
-      before(:each) do
+      before do
         run_all_indexing_jobs
       end
 
       it "sorts collections by created_at and desc by default" do
-        collection_search = CollectionSearchForm.new()
+        collection_search = CollectionSearchForm.new
         expect(collection_search.search_results.map(&:title)).to eq sorted_collection_titles
       end
 
@@ -70,11 +69,11 @@ describe CollectionSearchForm, collection_search: true do
     end
 
     describe "title sorting" do
-      let!(:collection_1_year_ago) { create(:collection, title: "a test") }
-      let!(:collection_now) { create(:collection, title: "z test") }
-      let(:sorted_collection_titles) { ["a test", "z test"] }
+      let!(:collection_1_year_ago) { create(:collection, title: "a_test") }
+      let!(:collection_now) { create(:collection, title: "z_test") }
+      let(:sorted_collection_titles) { %w(a_test z_test) }
 
-      before(:each) do
+      before do
         run_all_indexing_jobs
       end
 
@@ -96,7 +95,7 @@ describe CollectionSearchForm, collection_search: true do
       let!(:second_collection) { create(:collection, title: "second", challenge: second_gift_exchange, challenge_type: "GiftExchange") }
       let(:sorted_collection_titles) { ["first", "second"] }
 
-      before(:each) do
+      before do
         run_all_indexing_jobs
       end
 
@@ -131,7 +130,7 @@ describe CollectionSearchForm, collection_search: true do
       )
     end
 
-    before(:each) do
+    before do
       run_all_indexing_jobs
     end
 

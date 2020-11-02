@@ -1,6 +1,6 @@
 class CollectionQuery < Query
   def klass
-    'Collection'
+    "Collection"
   end
 
   def index_name
@@ -58,7 +58,7 @@ class CollectionQuery < Query
   def challenge_type_filter
     if options[:challenge_type].present?
       type_param = options[:challenge_type]
-      challenge_type = (type_param == 'PromptMeme' || type_param == 'GiftExchange') ? type_param : 'NULL'
+      challenge_type = (type_param == "PromptMeme" || type_param == "GiftExchange") ? type_param : "NULL"
 
       match_filter(:challenge_type, challenge_type)
     end
@@ -72,9 +72,7 @@ class CollectionQuery < Query
   # QUERIES
   ####################
 
-  # Search for a tag by name
-  # Note that fields don't need to be explicitly included in the
-  # field list to be searchable directly (ie, "complete:true" will still work)
+  # Search for a collection by name
   def general_query
     input = (options[:query] || options[:title] || "").dup
     query = escape_reserved_characters(input)
@@ -93,11 +91,11 @@ class CollectionQuery < Query
   ####################
 
   def sort_column
-    options[:sort_column].present? ? options[:sort_column] : 'created_at'
+    options[:sort_column].present? ? options[:sort_column] : "created_at"
   end
 
   def sort
-    direction = options[:sort_direction].present? ? options[:sort_direction] : 'desc'
+    direction = options[:sort_direction].present? ? options[:sort_direction] : "desc"
     { sort_column => { order: direction } }
   end
 end

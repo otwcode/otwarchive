@@ -8,7 +8,7 @@ class Indexer
     "Pseud" => %w(PseudIndexer),
     "Series" => %w(BookmarkedSeriesIndexer),
     "ExternalWork" => %w(BookmarkedExternalWorkIndexer),
-    "Collection" => %w(CollectionIndexer),
+    "Collection" => %w(CollectionIndexer)
   }.freeze
 
   delegate :klass, :index_name, :document_type, to: :class

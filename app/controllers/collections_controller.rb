@@ -24,22 +24,17 @@ class CollectionsController < ApplicationController
   end
 
   def index
-    if params[:work_id] && (@work = Work.find_by(id: params[:work_id]))
+    if params[:work_id] && (@work = Work.find_by!(id: params[:work_id]))
       @collections = @work.approved_collections.by_title.includes(:parent, :moderators, :children, :collection_preference, owners: [:user]).paginate(page: params[:page])
-    elsif params[:collection_id] && (@collection = Collection.find_by(name: params[:collection_id]))
-      @collections = CollectionSearchForm.new({ parent_id: @collection.id }).search_results.to_a.paginate(page: params[:page])
-    elsif params[:user_id] && (@user = User.find_by(login: params[:user_id]))
-      @collections = CollectionSearchForm.new(moderator_ids: [@user.id]).search_results.to_a.paginate(page: params[:page])
+    elsif params[:collection_id] && (@collection = Collection.find_by!(name: params[:collection_id]))
+      @collections = CollectionSearchForm.new({ parent_id: @collection.id }).search_results
+    elsif params[:user_id] && (@user = User.find_by!(login: params[:user_id]))
+      @collections = CollectionSearchForm.new(moderator_ids: [@user.id]).search_results
       @page_subtitle = ts("%{username} - Collections", username: @user.login)
     else
-      if params[:user_id]
-        flash.now[:error] = ts("We couldn't find a user by that name, sorry.")
-      elsif params[:collection_id]
-        flash.now[:error] = ts("We couldn't find a collection by that name.")
-      end
-
       @sort_and_filter = true
-      @collections = CollectionSearchForm.new(parsed_collection_filters).search_results.to_a.paginate(page: params[:page])
+      @collections = CollectionSearchForm.new(parsed_collection_filters).search_results
+      flash_search_warnings(@collections)
     end
   end
 
@@ -48,18 +43,18 @@ class CollectionsController < ApplicationController
     @page_subtitle = "Open Challenges"
     @hide_dashboard = true
 
-    @challenge_collections = (CollectionSearchForm.new(challenge_type: 'GiftExchange').search_results.take(15) +
-                             CollectionSearchForm.new(challenge_type: 'PromptMeme').search_results.take(15))
+    @challenge_collections = (CollectionSearchForm.new(challenge_type: 'GiftExchange', page: 1, per_page: 15).search_results.to_a +
+                             CollectionSearchForm.new(challenge_type: 'PromptMeme', page: 1, per_page: 15).search_results.to_a)
   end
 
   def list_ge_challenges
     @page_subtitle = "Open Gift Exchange Challenges"
-    @challenge_collections = CollectionSearchForm.new(challenge_type: 'GiftExchange').search_results.take(15)
+    @challenge_collections = CollectionSearchForm.new(challenge_type: 'GiftExchange', page: 1, per_page: 15).search_results
   end
 
   def list_pm_challenges
     @page_subtitle = "Open Prompt Meme Challenges"
-    @challenge_collections = CollectionSearchForm.new(challenge_type: 'PromptMeme').search_results.take(15)
+    @challenge_collections = CollectionSearchForm.new(challenge_type: 'PromptMeme', page: 1, per_page: 15).search_results
   end
 
   def show
@@ -187,8 +182,8 @@ class CollectionsController < ApplicationController
   end
 
   def collection_filter_params
-    white_list = %w(title fandom challenge_type moderated closed sort_column sort_direction)
-    collection_filters = params.to_unsafe_h.select { |k, v| white_list.include?(k) }
+    safe_list = %w(title fandom challenge_type moderated closed sort_column sort_direction page)
+    collection_filters = params.to_unsafe_h.select { |k, v| safe_list.include?(k) }
     collection_filters = collection_filters.delete_if { |key, value| value.blank? }
 
     collection_filters
