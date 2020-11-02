@@ -6,7 +6,9 @@ Feature: First login help banner
   Given I am logged in as "newname"
   When I am on newname's user page
   Then I should see the first login banner
-    And I should see "Hi! It looks like you've just logged into the archive for the first time."
+    And I should see "If you experience harassment, you can contact our Policy & Abuse team."
+  When I follow "contact our Policy & Abuse team"
+  Then I should see "Report Abuse"
 
   Scenario: Popup details can be viewed
   
@@ -14,14 +16,6 @@ Feature: First login help banner
   When I am on newname's user page
   When I follow "Learn some tips and tricks"
   Then I should see the first login popup
-  
-  Scenario: Policy & Abuse link in help banner
-
-  Given I am logged in as "newname"
-  When I am on newname's user page
-  Then I should see "If you experience harassment, you can contact our Policy & Abuse team."
-  When I follow "contact our Policy & Abuse team"
-  Then I should see "Report Abuse"
 
   Scenario: Turn off first login help banner directly
 
