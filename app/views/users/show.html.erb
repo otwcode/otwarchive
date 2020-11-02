@@ -5,7 +5,7 @@
       <%= t(".login_banner.welcome_text", help_link: link_to_modal(t(".login_banner.help_link"), for: first_login_help_path, title: t(".login_banner.help_title"))).html_safe %>
     </p>
     <p>
-      <%= t(".login_banner.abuse_text", abuse_link: link_to(t(".login_banner.abuse_link"), "/abuse_reports/new")).html_safe %>
+      <%= t(".login_banner.abuse_text", abuse_link: link_to(t(".login_banner.abuse_link"), new_abuse_report_path)).html_safe %>
     </p>
     <%= form_tag end_first_login_user_path(current_user), method: :post, remote: true do %>
       <p class="submit actions">
