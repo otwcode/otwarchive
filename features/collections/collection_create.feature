@@ -130,7 +130,8 @@ Given I have the collection "Scotts Collection" with name "scotts_collection"
     And I fill in "Collection name" with "temporary_subcollection"
     And I press "Submit"
   Then I should see "Collection was successfully created"
-  When I follow "Collection Settings"
+  When all indexing jobs have been run
+    And I follow "Collection Settings"
     And I follow "Delete Collection"
     And I press "Yes, Delete Collection"
   Then I should see "Collection was successfully deleted."
@@ -153,7 +154,8 @@ Given I have the collection "Scotts Collection" with name "scotts_collection"
     And I fill in "Collection name" with "child_collection"
     And I press "Submit"
   Then I should see "Collection was successfully created"
-  When I go to the collections page
+  When all indexing jobs have been run 
+    And I go to the collections page
     And I follow "Parent"
     And I follow "Collection Settings"
   When I follow "Delete Collection"

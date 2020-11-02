@@ -60,6 +60,7 @@ Scenario: Delete a user with a collection
   When I am logged in as "moderator" with password "password"
     And all emails have been delivered
     And I create the collection "fake"
+    And all indexing jobs have been run
     And I go to the collections page
   Then I should see "fake"
     And I should see "moderator" within "#main"
@@ -71,7 +72,8 @@ Scenario: Delete a user with a collection
     And 0 emails should be delivered
     And I should be logged out
     And a user account should not exist for "moderator"
-  When I go to the collections page
+  When all indexing jobs have been run
+    And I go to the collections page
   Then I should see "fake"
     # TODO: And a caching bug is fixed...
     # And I should see "orphan_account"

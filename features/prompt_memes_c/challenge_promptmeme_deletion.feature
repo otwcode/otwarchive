@@ -126,7 +126,8 @@ Feature: Prompt Meme Challenge
     And I should not see the prompt meme dashboard for "Battle 12"
     And no one should have a claim in "Battle 12"
     And no one should be signed up for "Battle 12"
-  When I go to the collections page
+  When all indexing jobs have been run
+    And I go to the collections page
   Then I should see "Battle 12"
 
   Scenario: A user can still access their Sign-ups page after a prompt meme they
@@ -187,7 +188,8 @@ Feature: Prompt Meme Challenge
   Then I should see "Collection was successfully deleted."
     And no one should have a claim in "Battle 12"
     And no one should be signed up for "Battle 12"
-  When I go to the collections page
+  When all indexing jobs have been run
+    And I go to the collections page
   Then I should not see "Battle 12"
 
   Scenario: Claim fills should still be accessible even after the prompt meme

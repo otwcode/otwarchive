@@ -32,7 +32,8 @@ Feature: Collection
     And I add the fandom "Starsky & Hutch" to the character "Foo The Wonder Goat"
     And a character exists with name: "Obscure person", canonical: true
     And I add the fandom "Tiny fandom" to the character "Obscure person"
-  When I go to the collections page
+  When all indexing jobs have been run 
+    And I go to the collections page
   Then I should see "Collections in the "
     And I should not see "Yuletide"
   When I follow "New Collection"
@@ -87,7 +88,8 @@ Feature: Collection
   Then I should see "Challenge was successfully created"
   When I log out
     And I am logged in as "myname1"
-  When I go to the collections page
+  When all indexing jobs have been run
+    And I go to the collections page
   Then I should see "Yuletide"
   When I follow "Yuletide"
   Then I should see "Sign Up"
@@ -194,7 +196,8 @@ Feature: Collection
   # another person signs up
   When I log out
     And I am logged in as "myname2"
-  When I go to the collections page
+  When all indexing jobs have been run
+    And I go to the collections page
     And I follow "Yuletide"
     And I follow "Profile"
   # before signing up, you can check who else has already signed up
@@ -224,7 +227,8 @@ Feature: Collection
   #           offers: SGA (JS, TE), S&H (JS, TE, Foo)
   When I log out
     And I am logged in as "myname3"
-  When I go to the collections page
+  When all indexing jobs have been run 
+    And I go to the collections page
     And I follow "Yuletide"
     And I follow "Sign Up"
   When I check the 1st checkbox with the value "Starsky & Hutch"
@@ -248,7 +252,8 @@ Feature: Collection
   #     offers Tiny (Obscure, JS), S&H (Foo, JS)
   When I log out
     And I am logged in as "myname4"
-  When I go to the collections page
+  When all indexing jobs have been run
+    And I go to the collections page
     And I follow "Yuletide"
     And I follow "Sign Up"
     And I check the 1st checkbox with value "Stargate Atlantis"
@@ -262,7 +267,8 @@ Feature: Collection
   Then I should see "Sign-up was successfully created"
 
   # ordinary users can't see signups until 5 people have signed up
-  When I go to the collections page
+  When all indexing jobs have been run 
+    And I go to the collections page
     And I follow "Yuletide"
   Then I should not see "Sign-ups" within "#dashboard"
     And I should see "Sign-up Summary"
@@ -275,7 +281,8 @@ Feature: Collection
   #   offers Tiny (Foo, Obscure), SGA (JS, TE)
   When I log out
     And I am logged in as "myname5"
-  When I go to the collections page
+  When all indexing jobs have been run
+    And I go to the collections page
     And I follow "Yuletide"
     And I follow "Sign Up"
     And I check the 1st checkbox with value "Stargate Atlantis"
@@ -288,7 +295,8 @@ Feature: Collection
   Then I should see "Sign-up was successfully created"
 
   # ordinary users can't see signups but can see summary
-  When I go to the collections page
+  When all indexing jobs have been run
+    And I go to the collections page
     And I follow "Yuletide"
   Then I should not see "Sign-ups" within "#dashboard"
     And I should see "Sign-up Summary"
@@ -304,7 +312,8 @@ Feature: Collection
   #    offers: Tiny (Foo, Obscure), SGA (JS, TE)
   When I log out
     And I am logged in as "myname6"
-  When I go to the collections page
+  When all indexing jobs have been run
+    And I go to the collections page
     And I follow "Yuletide"
     And I follow "Sign Up"
     And I check the 1st checkbox with value "Stargate Atlantis"
@@ -315,7 +324,8 @@ Feature: Collection
     And I fill in "challenge_signup_offers_attributes_1_tag_set_attributes_character_tagnames" with "Teyla Emmagan, John Sheppard"
     And I press "Submit"
   Then I should see "Sign-up was successfully created"
-  When I go to the collections page
+  When all indexing jobs have been run 
+    And I go to the collections page
     And I follow "Yuletide"
     And I follow "Sign-up Summary"
   Then I should see "Sign-up Summary for Yuletide"
@@ -327,6 +337,7 @@ Feature: Collection
   # mod can view signups
   When I log out
     And I am logged in as "mod1"
+    And all indexing jobs have been run
     And I go to the collections page
     And I follow "Yuletide"
     And I follow "Sign-ups"
@@ -448,7 +459,8 @@ Feature: Collection
   When I follow "Gifts"
   Then I should not see "Stargate Atlantis"
     And I should not see "myname" within "ul.gift"
-  When I go to the collections page
+  When all indexing jobs have been run 
+    And I go to the collections page
     And I follow "Yuletide"
   Then I should see "Works (0)"
     And I should see "Fandoms (0)"
@@ -521,6 +533,7 @@ Feature: Collection
 
   # Mod checks for unfulfilled assignments, and gets pinch-hitters to do them.
   When I am logged in as "mod1"
+    And all indexing jobs have been run
     And I go to the collections page
     And I follow "Yuletide"
     And I follow "Assignments"
@@ -611,6 +624,7 @@ Feature: Collection
 
   # mod reveals authors on Jan 1st
   When I am logged in as "mod1"
+    And all indexing jobs have been run
     And I go to the collections page
     And I follow "Yuletide"
     And I follow "Collection Settings"

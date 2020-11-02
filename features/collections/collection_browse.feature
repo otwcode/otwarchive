@@ -45,6 +45,7 @@ Feature: Collection
 
   Given I have loaded the fixtures
   When I go to the collections page
+    And all indexing jobs have been run
     And I choose "No Challenge"
     And I press "Sort and Filter"
   Then I should see "Some Test Collection"
@@ -129,6 +130,7 @@ Feature: Collection
     And I am logged in as a random user
     And I post the work "Stronger than you" with fandom "Steven's Universe" in the collection "Collection1"
   When I go to the collections page
+    And all indexing jobs have been run
     And I fill in "fandom" with "Steven's Universe"
     And I press "Sort and Filter"
   Then I should see "Collection1"
