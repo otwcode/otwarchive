@@ -44,9 +44,11 @@ a.resp-sharing-button__link,
   display: inline-block
 }
 
-a.resp-sharing-button__link {
+a.resp-sharing-button__link,
+a.resp-sharing-button__link:hover {
   text-decoration: none;
   color: #fff;
+  border: none;
 }
 
 .resp-sharing-button {
