@@ -150,8 +150,6 @@ namespace :skins do
   task(:load_site_skins => :environment) do
     settings = AdminSetting.first
     settings.update(default_skin_id: Skin.default.id, last_updated_by: Admin.first.id) if settings.default_skin_id.nil?
-    end
-    
     Skin.load_site_css
     Skin.set_default_to_current_version
   end
