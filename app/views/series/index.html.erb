@@ -1,10 +1,11 @@
 <!--descriptive page name and system messages, descriptions, and instructions.-->
-<% if @user %>
-	<h2 class="heading"><%=h t('.owned_series', :default => "%{user_name}'s Series", :user_name => @user.login) %></h2>
+<h2 class="heading">
+  <% if @user %>
+    <%= search_header @series, nil, "Series", @pseud ? @pseud : @user %>
   <% else %>
-	<h2 class="heading"><%=h "View All Series" %></h2>
-<% end %>
-
+    <%=h "View All Series" %>
+  <% end %>
+</h2>
 
 <!-- /descriptions-->
 
