@@ -66,9 +66,14 @@ en:
       roles:
         heading: "Your admin roles:"
         none: "You currently have no admin roles assigned to you."
+  home:
+    donate:
+      page_title: "Donate or Volunteer"
   layouts:
     proxy_notice:
-      text_html: "Notice: (1) You are using a proxy site that is not affiliated with AO3. (2) The entity that set up the proxy site can see whatever data you submit to the AO3 through the proxy site, including your IP address and the content of comments."
+      faux_heading: "Important message:"
+      point1: "You are using a proxy site that is not part of the Archive of Our Own."
+      point2: "The entity that set up the proxy site can see what you submit, including your IP address. If you log in through the proxy site, it can see your password."
       button: "Dismiss Notice"
   users:
     delete_preview:

@@ -11,4 +11,8 @@ class ApplicationRecord < ActiveRecord::Base
       end
     end
   end
+
+  def self.random_order
+    order(Arel.sql("RAND()"))
+  end
 end

@@ -223,6 +223,9 @@ module NavigationHelpers
     when /^the bookmarks in collection "(.*)"$/i
       step %{all indexing jobs have been run}
       collection_bookmarks_path(Collection.find_by(title: $1))
+    when /^the first bookmark for the work "(.*?)"$/i
+      work = Work.find_by(title: Regexp.last_match(1))
+      bookmark_path(work.bookmarks.first)
     when /^the tag comments? page for "(.*)"$/i
       tag_comments_path(Tag.find_by_name($1))
     when /^the work comments? page for "(.*?)"$/i

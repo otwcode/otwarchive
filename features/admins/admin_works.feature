@@ -163,10 +163,10 @@ Feature: Admin Actions for Works, Comments, Series, Bookmarks
 
     # set up a work with a genuine comment
 
-    When I am logged in as "author" with password "password"
+    When I am logged in as "author"
       And I post the work "The One Where Neal is Awesome"
     When I am logged out
-      And I am logged in as "commenter" with password "password"
+      And I am logged in as "commenter"
       And I view the work "The One Where Neal is Awesome"
       And I fill in "Comment" with "I loved this!"
       And I press "Comment"
@@ -188,6 +188,7 @@ Feature: Admin Actions for Works, Comments, Series, Bookmarks
       And I follow "Comments (2)"
     Then I should see "rolex"
       And I should see "Spam" within "#feedback"
+      And it is currently 1 second from now
     When I follow "Spam" within "#feedback"
     # Can see link to unmark
     Then I should see "Not Spam"

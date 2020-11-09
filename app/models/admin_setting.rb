@@ -25,7 +25,8 @@ class AdminSetting < ApplicationRecord
     cache_expiration: 10,
     tag_wrangling_off?: false,
     downloads_enabled?: true,
-    disable_support_form?: false
+    disable_support_form?: false,
+    default_skin_id: nil
   }.freeze
 
   # Create AdminSetting.first on a blank database. We call this only in an initializer
@@ -50,15 +51,7 @@ class AdminSetting < ApplicationRecord
 
   class << self
     delegate *DEFAULT_SETTINGS.keys, :to => :current
-  end
-
-  def self.default_skin
-    settings = current
-    if settings.default_skin_id.present?
-      Rails.cache.fetch("admin_default_skin") { settings.default_skin }
-    else
-      Skin.default
-    end
+    delegate :default_skin, to: :current
   end
 
   # run once a day from cron
@@ -81,9 +74,7 @@ class AdminSetting < ApplicationRecord
   private
 
   def expire_cached_settings
-    unless Rails.env.development?
-      Rails.cache.delete("admin_settings")
-    end
+    Rails.cache.delete("admin_settings")
   end
 
   def check_filter_status
