@@ -121,6 +121,18 @@ Feature: User dashboard
     And I should see "Work One"
     And I should see "Work Six"
 
+  Scenario Outline: The dashboard/works/bookmarks pages for a non-default pseud should display both pseud and username
+  Given "meatloaf" has the pseud "gravy"
+  When I go to meatloaf's <page_name> page
+  Then I should not see "(meatloaf)" within "<selector>"
+  When I go to the <page_name> page for user "meatloaf" with pseud "gravy"
+  Then I should see "gravy (meatloaf)" within "<selector>"
+  Examples:
+    | page_name | selector                  |
+    | user      | #main .primary h2         |
+    | works     | .works-index .heading     |
+    | bookmarks | .bookmarks-index .heading |
+
   Scenario: The dashboard for a specific pseud should only list the creations owned by that pseud
   Given dashboard counts expire after 10 seconds
     And I am logged in as "meatloaf"
