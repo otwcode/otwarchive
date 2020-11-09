@@ -55,7 +55,6 @@ a.resp-sharing-button__link:hover {
   border-radius: 5px;
   transition: 25ms ease-out;
   padding: 0.5em 0.75em;
-  font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
 }
 
 .resp-sharing-button__icon svg {
@@ -81,7 +80,7 @@ a.resp-sharing-button__link:hover {
   background-color: #55acee;
 }
 
-.resp-sharing-button--twitter:hover, .resp-sharing-button--twitter:focus {
+.resp-sharing-button--twitter:hover, a:focus .resp-sharing-button--twitter {
   background-color: #2795e9;
 }
 
@@ -89,7 +88,7 @@ a.resp-sharing-button__link:hover {
   background-color: #35465C;
 }
 
-.resp-sharing-button--tumblr:hover, .resp-sharing-button--tumblr:focus {
+.resp-sharing-button--tumblr:hover, a:focus .resp-sharing-button--tumblr {
   background-color: #222d3c;
 }
 
