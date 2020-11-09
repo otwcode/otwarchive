@@ -66,6 +66,9 @@ en:
       roles:
         heading: "Your admin roles:"
         none: "You currently have no admin roles assigned to you."
+  home:
+    donate:
+      page_title: "Donate or Volunteer"
   layouts:
     proxy_notice:
       faux_heading: "Important message:"
