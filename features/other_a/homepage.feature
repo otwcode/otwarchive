@@ -24,3 +24,4 @@ Feature: Various things on the homepage
   When I follow "Site Map"
     And I follow "Donations"
   Then I should see "There are two main ways to support the AO3 - donating your time or money"
+    And I should see the page title "Donate or Volunteer"
