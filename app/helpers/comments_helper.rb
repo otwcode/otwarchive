@@ -113,7 +113,7 @@ module CommentsHelper
   end
 
   def can_edit_comment?(comment)
-    is_author_of?(comment) && !comment.on_ice? && comment.count_all_comments == 0 && !comment_parent_hidden?(comment)
+    is_author_of?(comment) && !comment.on_ice? && comment.count_all_comments.zero? && !comment_parent_hidden?(comment)
   end
 
   # Only an admin with proper authorization can mark a spam comment ham.

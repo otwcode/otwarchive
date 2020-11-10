@@ -113,6 +113,7 @@ class CommentsController < ApplicationController
 
   def check_if_commentable_frozen
     return unless @commentable&.respond_to?(:on_ice?) && @commentable&.on_ice?
+
     flash[:error] = ts("Sorry, you cannot reply to a frozen comment.")
     redirect_to(request.env["HTTP_REFERER"] || root_path)
   end
@@ -170,7 +171,7 @@ class CommentsController < ApplicationController
     return if permission_to_modify_frozen_status
 
     flash[:error] = ts("Sorry, you don't have permission to freeze that comment thread.")
-    redirect_to(request.env["HTTP_REFERER"] || root_path) and return
+    redirect_to(request.env["HTTP_REFERER"] || root_path) && return
   end
 
   # Comments on works can be unfrozen by admins with proper authorization or the
@@ -181,7 +182,7 @@ class CommentsController < ApplicationController
     return if permission_to_modify_frozen_status
 
     flash[:error] = ts("Sorry, you don't have permission to unfreeze that comment thread.")
-    redirect_to(request.env["HTTP_REFERER"] || root_path) and return
+    redirect_to(request.env["HTTP_REFERER"] || root_path) && return
   end
 
   # Get the thing the user is trying to comment on
@@ -426,7 +427,7 @@ class CommentsController < ApplicationController
     else
       flash[:error] = ts("Sorry, that comment thread could not be frozen.")
     end
-    redirect_to(request.env["HTTP_REFERER"] || root_path) and return
+    redirect_to(request.env["HTTP_REFERER"] || root_path) && return
   end
 
   # PUT /comments/1/unfreeze
@@ -439,7 +440,7 @@ class CommentsController < ApplicationController
     else
       flash[:error] = ts("Sorry, that comment thread could not be unfrozen.")
     end
-    redirect_to(request.env["HTTP_REFERER"] || root_path) and return
+    redirect_to(request.env["HTTP_REFERER"] || root_path) && return
   end
 
   def show_comments
@@ -623,7 +624,8 @@ class CommentsController < ApplicationController
     return true if parent.is_a?(Work) && policy(@comment).can_freeze_work_comment? || current_user_owns?(parent)
     return true if parent.is_a?(Tag) && policy(@comment).can_freeze_tag_comment?
     return true if parent.is_a?(AdminPost) && logged_in_as_admin?
-    return false
+
+    false
   end
 
   # TODO: Remove when AO3-5939 is fixed.
@@ -647,7 +649,7 @@ class CommentsController < ApplicationController
       comment_set << child_comments_by_commentable unless child_comments_by_commentable.empty?
       newest_ids = child_comments_by_commentable.pluck(:id)
     end
-    return comment_set.flatten
+    comment_set.flatten
   end
 
   private
