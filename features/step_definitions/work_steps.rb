@@ -499,20 +499,24 @@ When /^I list the work "([^"]*)" as inspiration$/ do |title|
   url_of_work = work_url(work).sub("www.example.com", ArchiveConfig.APP_HOST)
   fill_in("work_parent_attributes_url", with: url_of_work)
 end
-When /^I set the publication date to today$/ do
-  today = Time.new
-  month = today.strftime("%B")
 
+When /^I set the publication date to (\d+) (.*) (\d+)$/ do |day, month, year|
   if page.has_selector?("#backdate-options-show")
     check("backdate-options-show") if page.find("#backdate-options-show")
-    select("#{today.day}", from: "work[chapter_attributes][published_at(3i)]")
-    select("#{month}", from: "work[chapter_attributes][published_at(2i)]")
-    select("#{today.year}", from: "work[chapter_attributes][published_at(1i)]")
+    select(day.to_s, from: "work[chapter_attributes][published_at(3i)]")
+    select(month, from: "work[chapter_attributes][published_at(2i)]")
+    select(year.to_s, from: "work[chapter_attributes][published_at(1i)]")
   else
-    select("#{today.day}", from: "chapter[published_at(3i)]")
-    select("#{month}", from: "chapter[published_at(2i)]")
-    select("#{today.year}", from: "chapter[published_at(1i)]")
+    select(day.to_s, from: "chapter[published_at(3i)]")
+    select(month, from: "chapter[published_at(2i)]")
+    select(year.to_s, from: "chapter[published_at(1i)]")
   end
+end
+
+When /^I set the publication date to today$/ do
+  today = Time.current
+  month = today.strftime("%B")
+  step %{I set the publication date to #{today.day} #{month} #{today.year}}
 end
 
 When /^I browse the "(.*?)" works$/ do |tagname|
