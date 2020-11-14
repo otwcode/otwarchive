@@ -89,24 +89,23 @@ class CommentsController < ApplicationController
 
   # Check to see if the ultimate_parent is a Work or AdminPost, and if so, if it allows
   # comments for the current user.
-  # AO3-6027 TODO: localize strings
   def check_parent_comment_permissions
     parent = find_parent
     if parent.is_a?(Work)
-      name = "work"
+      entity = "work"
       path = proc { |x| work_path(x) }
     elsif parent.is_a?(AdminPost)
-      name = "news post"
+      entity = "admin_post"
       path = proc { |x| admin_post_path(x) }
     else
       return
     end
 
     if parent.disable_all_comments?
-      flash[:error] = ts("Sorry, this #{name} doesn't allow comments.")
+      flash[:error] = t("comments.commentable.permissions.#{entity}.disable_all")
       redirect_to path[parent]
     elsif parent.disable_anon_comments? && !logged_in?
-      flash[:error] = ts("Sorry, this #{name} doesn't allow non-Archive users to comment.")
+      flash[:error] = t("comments.commentable.permissions.#{entity}.disable_anon")
       redirect_to path[parent]
     end
   end

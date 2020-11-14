@@ -69,6 +69,21 @@ en:
   home:
     donate:
       page_title: "Donate or Volunteer"
+  comments:
+    commentable:
+      button: "Comment"
+      permissions:
+        admin_post: 
+          alt_action: "You can however %{support_link} with any feedback or questions."
+          alt_action_link: "contact Support"
+          disable_all: "Sorry, this news post doesn't allow comments."
+          disable_anon: "Sorry, this news post doesn't allow non-Archive users to comment."
+        work: 
+          alt_action: "You can however still leave Kudos!"
+          disable_all: "Sorry, this work doesn't allow comments."
+          disable_anon: "Sorry, this work doesn't allow non-Archive users to comment."
+          hidden: "Sorry, you can't add or edit comments on a hidden work."
+          unrevealed: "Sorry, you can't add or edit comments on an unrevealed work."
   layouts:
     proxy_notice:
       faux_heading: "Important message:"
