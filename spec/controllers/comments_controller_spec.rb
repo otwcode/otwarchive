@@ -1,4 +1,4 @@
-require 'spec_helper'
+require "spec_helper"
 
 describe CommentsController do
   include LoginMacros
@@ -7,7 +7,7 @@ describe CommentsController do
   let(:comment) { create(:comment) }
   let(:unreviewed_comment) { create(:comment, :unreviewed) }
 
-  before(:each) do
+  before do
     request.env["HTTP_REFERER"] = "/where_i_came_from"
   end
 
@@ -42,7 +42,7 @@ describe CommentsController do
 
   describe "GET #unreviewed" do
     let!(:user) { create(:user) }
-    let!(:work) { create(:work, authors: [user.default_pseud], moderated_commenting_enabled: true ) }
+    let!(:work) { create(:work, authors: [user.default_pseud], moderated_commenting_enabled: true) }
     let(:comment) { create(:comment, :unreviewed, commentable: work.first_chapter) }
 
     it "redirects logged out users to login path with an error" do
@@ -98,7 +98,7 @@ describe CommentsController do
       context "when logged in as a tag wrangler" do
         before do
           fake_login
-          @current_user.roles << Role.new(name: 'tag_wrangler')
+          @current_user.roles << Role.new(name: "tag_wrangler")
         end
 
         it "renders the :new template" do
@@ -160,8 +160,8 @@ describe CommentsController do
           pseud_id: user.default_pseud_id,
           comment_content: "Hello fellow human!"
         }
-        post :create, params: { comment_id: comment.id, comment: comment_attributes, filters: { date: 'asc' } }
-        expect(response).to redirect_to(user_inbox_path(user, filters: { date: 'asc' }))
+        post :create, params: { comment_id: comment.id, comment: comment_attributes, filters: { date: "asc" } }
+        expect(response).to redirect_to(user_inbox_path(user, filters: { date: "asc" }))
         expect(flash[:comment_notice]).to eq "Comment created!"
       end
     end
@@ -188,7 +188,7 @@ describe CommentsController do
       context "when logged in as a tag wrangler" do
         before do
           fake_login
-          @current_user.roles << Role.new(name: 'tag_wrangler')
+          @current_user.roles << Role.new(name: "tag_wrangler")
         end
 
         it "posts the comment and shows it in context" do
@@ -268,7 +268,7 @@ describe CommentsController do
         it "shows an error and redirects" do
           post :create, params: { admin_post_id: admin_post.id, comment: anon_comment_attributes }
           it_redirects_to_with_error(admin_post_path(admin_post),
-                                    "Sorry, this news post doesn't allow comments.")
+                                     "Sorry, this news post doesn't allow comments.")
         end
       end
 
@@ -278,7 +278,7 @@ describe CommentsController do
         it "shows an error and redirects" do
           post :create, params: { admin_post_id: admin_post.id, comment: anon_comment_attributes }
           it_redirects_to_with_error(admin_post_path(admin_post),
-                                    "Sorry, this news post doesn't allow non-Archive users to comment.")
+                                     "Sorry, this news post doesn't allow non-Archive users to comment.")
         end
       end
     end
@@ -292,7 +292,7 @@ describe CommentsController do
           it "shows an error and redirects" do
             post :create, params: { comment_id: comment.id, comment: anon_comment_attributes }
             it_redirects_to_with_error(work_path(work),
-                                      "Sorry, this work doesn't allow comments.")
+                                       "Sorry, this work doesn't allow comments.")
           end
         end
 
@@ -303,7 +303,7 @@ describe CommentsController do
           it "shows an error and redirects" do
             post :create, params: { comment_id: comment.id, comment: anon_comment_attributes }
             it_redirects_to_with_error(work_path(work),
-                                      "Sorry, this work doesn't allow non-Archive users to comment.")
+                                       "Sorry, this work doesn't allow non-Archive users to comment.")
           end
         end
       end
@@ -316,7 +316,7 @@ describe CommentsController do
           it "shows an error and redirects" do
             post :create, params: { comment_id: comment.id, comment: anon_comment_attributes }
             it_redirects_to_with_error(admin_post_path(admin_post),
-                                      "Sorry, this news post doesn't allow comments.")
+                                       "Sorry, this news post doesn't allow comments.")
           end
         end
 
@@ -327,7 +327,7 @@ describe CommentsController do
           it "shows an error and redirects" do
             post :create, params: { comment_id: comment.id, comment: anon_comment_attributes }
             it_redirects_to_with_error(admin_post_path(admin_post),
-                                      "Sorry, this news post doesn't allow non-Archive users to comment.")
+                                       "Sorry, this news post doesn't allow non-Archive users to comment.")
           end
         end
       end
@@ -526,7 +526,7 @@ describe CommentsController do
       context "when logged in as a tag wrangler" do
         before do
           fake_login
-          @current_user.roles << Role.new(name: 'tag_wrangler')
+          @current_user.roles << Role.new(name: "tag_wrangler")
         end
 
         it "redirects to the tag comments page when the format is html" do
@@ -570,7 +570,7 @@ describe CommentsController do
     it "redirects to the comment path without an error" do
       get :hide_comments, params: { comment_id: unreviewed_comment.id }
       expect(flash[:error]).to be_nil
-      expect(response).to redirect_to(comment_path(unreviewed_comment, anchor: 'comments'))
+      expect(response).to redirect_to(comment_path(unreviewed_comment, anchor: "comments"))
     end
   end
 
@@ -579,7 +579,7 @@ describe CommentsController do
       it "redirects to the comment path with add_comment params and without an error" do
         get :add_comment, params: { comment_id: unreviewed_comment.id }
         expect(flash[:error]).to be_nil
-        expect(response).to redirect_to(comment_path(unreviewed_comment, add_comment: true, anchor: 'comments'))
+        expect(response).to redirect_to(comment_path(unreviewed_comment, add_comment: true, anchor: "comments"))
       end
     end
   end
@@ -595,9 +595,9 @@ describe CommentsController do
 
     context "with valid and invalid params" do
       it "removes invalid params and redirects without an error to comment path with valid params and the comments anchor" do
-        get :cancel_comment, params: { comment_id: comment.id, show_comments: 'yes', random_option: 'no' }
+        get :cancel_comment, params: { comment_id: comment.id, show_comments: "yes", random_option: "no" }
         expect(flash[:error]).to be_nil
-        expect(response).to redirect_to(comment_path(comment, show_comments: 'yes', anchor: "comments"))
+        expect(response).to redirect_to(comment_path(comment, show_comments: "yes", anchor: "comments"))
       end
     end
   end
@@ -613,9 +613,9 @@ describe CommentsController do
 
     context "with valid and invalid params" do
       it "removes invalid params and redirects without an error to comment path with valid params and the comments anchor" do
-        get :cancel_comment_reply, params: { comment_id: comment.id, show_comments: 'yes', random_option: 'no' }
+        get :cancel_comment_reply, params: { comment_id: comment.id, show_comments: "yes", random_option: "no" }
         expect(flash[:error]).to be_nil
-        expect(response).to redirect_to(comment_path(comment, show_comments: 'yes', anchor: "comments"))
+        expect(response).to redirect_to(comment_path(comment, show_comments: "yes", anchor: "comments"))
       end
     end
   end
@@ -679,10 +679,11 @@ describe CommentsController do
         fake_login
         comment = create(:comment, :unreviewed, pseud_id: @current_user.default_pseud.id)
         get :destroy, params: { id: comment.id }
-        expect(Comment.find_by(id: comment.id)).to_not be_present
+        expect(Comment.find_by(id: comment.id)).not_to be_present
         expect(response).to redirect_to("/where_i_came_from")
         expect(flash[:notice]).to eq "Comment deleted."
       end
+
       it "redirects and gives an error if the comment could not be deleted" do
         fake_login
         comment = create(:comment, :unreviewed, pseud_id: @current_user.default_pseud.id)
@@ -698,7 +699,7 @@ describe CommentsController do
 
   describe "PUT #review" do
     let!(:user) { create(:user) }
-    let!(:work) { create(:work, authors: [user.default_pseud], moderated_commenting_enabled: true ) }
+    let!(:work) { create(:work, authors: [user.default_pseud], moderated_commenting_enabled: true) }
     let(:comment) { create(:comment, :unreviewed, commentable: work.first_chapter) }
 
     before do
@@ -717,8 +718,8 @@ describe CommentsController do
 
     context "when recipient approves comment from inbox with filters" do
       it "marks comment reviewed and redirects to user inbox path with success message" do
-        put :review, params: { id: comment.id, approved_from: "inbox", filters: { date: 'asc' } }
-        expect(response).to redirect_to(user_inbox_path(user, filters: { date: 'asc' }))
+        put :review, params: { id: comment.id, approved_from: "inbox", filters: { date: "asc" } }
+        expect(response).to redirect_to(user_inbox_path(user, filters: { date: "asc" }))
         expect(flash[:notice]).to eq "Comment approved."
         comment.reload
         expect(comment.unreviewed).to be false
