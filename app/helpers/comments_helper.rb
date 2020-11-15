@@ -145,14 +145,9 @@ module CommentsHelper
   # Comments on tags can be frozen by admins with proper authorization.
   # Comments on admin posts can be frozen by any admin.
   def can_freeze_comment?(comment)
-    if comment.ultimate_parent.is_a?(Work)
-      policy(comment).can_freeze_work_comment? ||
+    policy(comment).can_freeze_comment? ||
+      comment.ultimate_parent.is_a?(Work) &&
         is_author_of?(comment.ultimate_parent)
-    elsif comment.ultimate_parent.is_a?(Tag)
-      policy(comment).can_freeze_tag_comment?
-    elsif comment.ultimate_parent.is_a?(AdminPost)
-      logged_in_as_admin?
-    end
   end
 
   def comment_parent_hidden?(comment)

@@ -8,12 +8,14 @@ class CommentPolicy < ApplicationPolicy
     user_has_roles?(DESTROY_ROLES)
   end
 
-  def can_freeze_work_comment?
-    user_has_roles?(FREEZE_WORK_COMMENT_ROLES)
-  end
-
-  def can_freeze_tag_comment?
-    user_has_roles?(FREEZE_TAG_COMMENT_ROLES)
+  def can_freeze_comment?
+    if record.ultimate_parent.class == Work
+      user_has_roles?(FREEZE_WORK_COMMENT_ROLES)
+    elsif Tag::TYPES.include?(record.ultimate_parent.class.to_s)
+      user_has_roles?(FREEZE_TAG_COMMENT_ROLES)
+    elsif record.ultimate_parent.class == AdminPost
+      user&.is_a?(Admin)
+    end
   end
 
   def can_mark_comment_spam?

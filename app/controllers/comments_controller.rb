@@ -621,9 +621,8 @@ class CommentsController < ApplicationController
 
   def permission_to_modify_frozen_status
     parent = find_parent
-    return true if parent.is_a?(Work) && policy(@comment).can_freeze_work_comment? || current_user_owns?(parent)
-    return true if parent.is_a?(Tag) && policy(@comment).can_freeze_tag_comment?
-    return true if parent.is_a?(AdminPost) && logged_in_as_admin?
+    return true if policy(@comment).can_freeze_comment?
+    return true if parent.is_a?(Work) && current_user_owns?(parent)
 
     false
   end
