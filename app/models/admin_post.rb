@@ -70,7 +70,7 @@ class AdminPost < ApplicationRecord
   end
 
   def comment_permissions=(value)
-    write_attribute(:comment_permissions, value)
+    self[:comment_permissions] = value
   end
 
   private
