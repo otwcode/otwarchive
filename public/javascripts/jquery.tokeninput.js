@@ -210,6 +210,10 @@ $.TokenList = function (input, url_or_data, settings) {
     // Keep a reference to the label whose for attribute matches the original input box's id
     var hidden_input_label = $('label[for="' + hidden_input_id + '"]');
 
+    // Keep a reference to the original input box's aria-describedby attribute
+    var hidden_input_describedby = $(input)
+                                     .attr("aria-describedby");
+
     // Change the original label's for attribute so it will match the id attribue we give the new input box
     hidden_input_label.attr({
       'for': hidden_input_id + '_autocomplete'
@@ -225,6 +229,12 @@ $.TokenList = function (input, url_or_data, settings) {
           "class": "text",
           "role": "combobox",
           "type": "text"
+        })
+        // add aria-describedby attribute from original input, if it exists.
+        .attr("aria-describedby", function() {
+          if (hidden_input_describedby) {
+            return hidden_input_describedby;
+          }
         })
         .focus(function () {
             if (settings.tokenLimit === null || token_count < settings.tokenLimit) {
