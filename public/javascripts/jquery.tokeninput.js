@@ -227,6 +227,7 @@ $.TokenList = function (input, url_or_data, settings) {
           "aria-expanded": "true",
           "autocomplete": "off",
           "class": "text",
+          "id": hidden_input_id + "_autocomplete",
           "role": "combobox",
           "type": "text"
         })
