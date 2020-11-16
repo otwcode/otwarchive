@@ -207,7 +207,7 @@ $.TokenList = function (input, url_or_data, settings) {
     var hidden_input_id = $(input)
                               .attr('id');
 
-    // Keep a reference to the label whose for attribute that matches the original input box's id
+    // Keep a reference to the label whose for attribute matches the original input box's id
     var hidden_input_label = $('label[for="' + hidden_input_id + '"]');
 
     // Change the original label's for attribute so it will match the id attribue we give the new input box
