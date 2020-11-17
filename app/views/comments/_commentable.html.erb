@@ -102,7 +102,7 @@
   <% else %>
     <div id="add_comment_placeholder" title="top level comment">
       <div id="add_comment">
-        <%= render 'comments/comment_form', {:comment => Comment.new, :commentable => commentable, :button_name => t(".button")} %>
+        <%= render 'comments/comment_form', {:comment => Comment.new, :commentable => commentable, :button_name => t(".actions.button")} %>
       </div>
     </div>
   <% end %>

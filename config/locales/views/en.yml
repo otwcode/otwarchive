@@ -71,7 +71,8 @@ en:
       page_title: "Donate or Volunteer"
   comments:
     commentable:
-      button: "Comment"
+      actions:
+        button: "Comment"
       permissions:
         admin_post: 
           alt_action: "You can however %{support_link} with any feedback or questions."

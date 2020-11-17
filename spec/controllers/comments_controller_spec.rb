@@ -272,7 +272,7 @@ describe CommentsController do
         end
       end
 
-      context "where anonymous comments disabled" do
+      context "where anonymous comments are disabled" do
         let(:admin_post) { create(:admin_post, comment_permissions: :disable_anon) }
 
         it "shows an error and redirects" do
@@ -296,7 +296,7 @@ describe CommentsController do
           end
         end
 
-        context "where anonymous comments disabled" do
+        context "where anonymous comments are disabled" do
           let(:work) { create(:work, comment_permissions: :disable_anon) }
           let(:comment) { create(:comment, commentable: work.first_chapter) }
 
@@ -320,7 +320,7 @@ describe CommentsController do
           end
         end
 
-        context "where anonymous comments disabled" do
+        context "where anonymous comments are disabled" do
           let(:admin_post) { create(:admin_post, comment_permissions: :disable_anon) }
           let(:comment) { create(:comment, commentable: admin_post) }
 

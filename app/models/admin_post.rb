@@ -69,10 +69,6 @@ class AdminPost < ApplicationRecord
     end
   end
 
-  def comment_permissions=(value)
-    self[:comment_permissions] = value
-  end
-
   private
 
   def expire_cached_home_admin_posts
