@@ -66,9 +66,6 @@ en:
       roles:
         heading: "Your admin roles:"
         none: "You currently have no admin roles assigned to you."
-  home:
-    donate:
-      page_title: "Donate or Volunteer"
   comments:
     commentable:
       actions:
@@ -85,6 +82,9 @@ en:
           disable_anon: "Sorry, this work doesn't allow non-Archive users to comment."
           hidden: "Sorry, you can't add or edit comments on a hidden work."
           unrevealed: "Sorry, you can't add or edit comments on an unrevealed work."
+  home:
+    donate:
+      page_title: "Donate or Volunteer"
   layouts:
     proxy_notice:
       faux_heading: "Important message:"
