@@ -22,7 +22,7 @@ Feature: Admin Actions to Post News
       And I am logged in as "happyuser"
       And I go to the admin-posts page
     When all emails have been delivered
-      And I follow "Comment"
+      And I follow "Default Admin Post"
       And I fill in "Comment" with "Excellent, my dear!"
       And I press "Comment"
     # notification to the admin list for admin post
@@ -44,7 +44,7 @@ Feature: Admin Actions to Post News
     When I am logged out as an admin
       And I am logged in as "happyuser"
       And I go to the admin-posts page
-    When I follow "Comment"
+    When I follow "Default Admin Post"
       And I fill in "Comment" with "Excellent, my dear!"
       And I press "Comment"
     When I am logged out
