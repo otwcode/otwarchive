@@ -72,7 +72,7 @@ en:
   comments:
     commentable:
       actions:
-        button: "Comment"
+        comment: "Comment"
       permissions:
         admin_post: 
           alt_action: "You can however %{support_link} with any feedback or questions."

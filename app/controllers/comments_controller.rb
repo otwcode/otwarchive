@@ -92,20 +92,20 @@ class CommentsController < ApplicationController
   def check_parent_comment_permissions
     parent = find_parent
     if parent.is_a?(Work)
-      entity = "work"
+      translation_key = "work"
       parent_path = work_path(parent)
     elsif parent.is_a?(AdminPost)
-      entity = "admin_post"
+      translation_key = "admin_post"
       parent_path = admin_post_path(parent)
     else
       return
     end
 
     if parent.disable_all_comments?
-      flash[:error] = t("comments.commentable.permissions.#{entity}.disable_all")
+      flash[:error] = t("comments.commentable.permissions.#{translation_key}.disable_all")
       redirect_to parent_path
     elsif parent.disable_anon_comments? && !logged_in?
-      flash[:error] = t("comments.commentable.permissions.#{entity}.disable_anon")
+      flash[:error] = t("comments.commentable.permissions.#{translation_key}.disable_anon")
       redirect_to parent_path
     end
   end
