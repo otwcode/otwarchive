@@ -420,9 +420,9 @@ class CommentsController < ApplicationController
   # PUT /comments/1/freeze
   def freeze
     # TODO: When AO3-5939 is fixed, we can use
-    # @comment.full_set.each { |c| c.mark_frozen! }
+    # @comment.full_set.each(&:mark_frozen!)
     if !@comment.on_ice? && @comment.save
-      set_to_freeze_or_unfreeze.each { |c| c.mark_frozen! }
+      set_to_freeze_or_unfreeze.each(&:mark_frozen!)
       flash[:notice] = ts("Comment thread successfully frozen!")
     else
       flash[:error] = ts("Sorry, that comment thread could not be frozen.")
@@ -433,9 +433,9 @@ class CommentsController < ApplicationController
   # PUT /comments/1/unfreeze
   def unfreeze
     # TODO: When AO3-5939 is fixed, we can use
-    # @comment.full_set.each { |c| c.mark_unfrozen! }
+    # @comment.full_set.each(&:mark_unfrozen!)
     if @comment.on_ice? && @comment.save
-      set_to_freeze_or_unfreeze.each { |c| c.mark_unfrozen! }
+      set_to_freeze_or_unfreeze.each(&:mark_unfrozen!)
       flash[:notice] = ts("Comment thread successfully unfrozen!")
     else
       flash[:error] = ts("Sorry, that comment thread could not be unfrozen.")
