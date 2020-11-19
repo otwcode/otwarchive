@@ -3,7 +3,7 @@ require "spec_helper"
 describe CollectionDecorator do
   
   let!(:collection) { create(:collection) }
-  let!(:search_results) {
+  let!(:search_results) do
     [{
       "_id" =>
       collection.id.to_s,
@@ -35,7 +35,7 @@ describe CollectionDecorator do
         "public_bookmarked_items_count" => 10
       }
     }]
-  }
+  end
 
   describe ".decorate_from_search" do
     it "initializes decorators" do

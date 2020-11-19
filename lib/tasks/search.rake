@@ -19,7 +19,7 @@ namespace :search do
   task(index_bookmarks: :environment) do
     BookmarkIndexer.index_all
   end
-  desc 'Reindex collections'
+  desc "Reindex collections"
   task(index_collections: :environment) do
     CollectionIndexer.index_all
   end
@@ -60,9 +60,9 @@ namespace :search do
       AsyncIndexer.new(PseudIndexer, :world).enqueue_ids(group.map(&:id))
     end
   end
-  desc 'Reindex collections'
+  desc "Reindex collections"
   task timed_collections: :environment do
-    time = ENV['TIME_PERIOD'] || 'NOW() - INTERVAL 1 DAY'
+    time = ENV["TIME_PERIOD"] || "NOW() - INTERVAL 1 DAY"
     Collection.where("collections.updated_at >  #{time}").select(:id).find_in_batches(batch_size: BATCH_SIZE) do |group|
       AsyncIndexer.new(CollectionIndexer, :world).enqueue_ids(group.map(&:id))
     end

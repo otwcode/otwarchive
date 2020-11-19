@@ -14,15 +14,11 @@ describe CollectionsController do
 
     let!(:participant) { create(:collection_participant, collection: prompt_meme_collection) }
     let!(:moderator) { create(:collection_participant, participant_role: CollectionParticipant::MODERATOR, collection: prompt_meme_collection) }
-    let!(:fandom) { create(:fandom) }
     let!(:item) do
-      create(
-        :collection_item, user_approval_status: CollectionItem::APPROVED, collection_approval_status: CollectionItem::APPROVED, 
-        work: create(:work, restricted: false, fandoms: [fandom]), collection: prompt_meme_collection
-      )
+      create(:collection_item, user_approval_status: CollectionItem::APPROVED, collection_approval_status: CollectionItem::APPROVED, work: create(:work, restricted: false), collection: prompt_meme_collection)
     end
 
-    before(:each) do
+    before do
       run_all_indexing_jobs
     end
 
@@ -94,26 +90,26 @@ describe CollectionsController do
     end
 
     context "collections index for subcollections" do
+      let!(:parent) { FactoryBot.create(:collection) }
+
       before do
-        @parent = FactoryBot.create(:collection)
         # Temporarily set User.current_user to get past the collection
         # needing to be owned by same person as parent:
-        User.current_user = @parent.owners.first.user
-        @child = FactoryBot.create(:collection, parent_name: @parent.name)
+        User.current_user = parent.owners.first.user
+        @child = FactoryBot.create(:collection, parent_name: parent.name)
         User.current_user = nil
         # reload the parent collection
-        @parent.reload
+        parent.reload
   
         run_all_indexing_jobs
       end
   
       it "filters all child collections of given collection" do
-        get :index, params: { collection_id: @parent.name }
+        get :index, params: { collection_id: parent.name }
         expect(response).to have_http_status(:success)
         expect(assigns(:collections)).to include @child
 
-
-        expect(assigns(:collections)).not_to include @parent
+        expect(assigns(:collections)).not_to include parent
       end
     end
   end
@@ -124,7 +120,7 @@ describe CollectionsController do
     let!(:prompt_meme) { create(:prompt_meme, signup_open: true, signups_open_at: Time.zone.now - 2.days, signups_close_at: Time.zone.now + 1.week) }
     let!(:prompt_meme_collection) { create(:collection, challenge: prompt_meme, challenge_type: "PromptMeme") }
 
-    before(:each) do
+    before do
       run_all_indexing_jobs
     end
 
