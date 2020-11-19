@@ -9,12 +9,13 @@ class CommentPolicy < ApplicationPolicy
   end
 
   def can_freeze_comment?
-    if record.ultimate_parent.class == Work
-      user_has_roles?(FREEZE_WORK_COMMENT_ROLES)
-    elsif Tag::TYPES.include?(record.ultimate_parent.class.to_s)
-      user_has_roles?(FREEZE_TAG_COMMENT_ROLES)
-    elsif record.ultimate_parent.class == AdminPost
+    case record.ultimate_parent
+    when AdminPost
       user&.is_a?(Admin)
+    when Tag
+      user_has_roles?(FREEZE_TAG_COMMENT_ROLES)
+    when Work
+      user_has_roles?(FREEZE_WORK_COMMENT_ROLES)
     end
   end
 
