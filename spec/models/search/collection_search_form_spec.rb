@@ -116,17 +116,16 @@ describe CollectionSearchForm, collection_search: true do
 
     let!(:participant) { create(:collection_participant, collection: prompt_meme_collection) }
     let!(:moderator) { create(:collection_participant, participant_role: CollectionParticipant::MODERATOR, collection: prompt_meme_collection) }
-    let!(:fandom) { create(:fandom) }
     let!(:item) do
       create(
         :collection_item, user_approval_status: CollectionItem::APPROVED, collection_approval_status: CollectionItem::APPROVED, 
-        work: create(:work, restricted: false, fandoms: [fandom]), collection: prompt_meme_collection
+        work: create(:work, restricted: false), collection: prompt_meme_collection
       )
     end
     let!(:item2) do
       create(
         :collection_item, user_approval_status: CollectionItem::APPROVED, collection_approval_status: CollectionItem::APPROVED, 
-        work: create(:work, restricted: true, fandoms: [fandom]), collection: gift_exchange_collection
+        work: create(:work, restricted: true), collection: gift_exchange_collection
       )
     end
 
@@ -177,23 +176,6 @@ describe CollectionSearchForm, collection_search: true do
       expect(query.search_results).not_to include prompt_meme_collection
       expect(query.search_results).not_to include gift_exchange_collection
       expect(query.search_results).to include no_signup
-    end
-
-    it "filters on public_fandom_ids if user is not logged in" do
-      query = CollectionSearchForm.new(fandom_ids: [fandom.id])
-
-      expect(query.search_results).to include prompt_meme_collection
-      expect(query.search_results).not_to include gift_exchange_collection
-      expect(query.search_results).not_to include no_signup
-    end
-
-    it "filters on general_fandom_ids if user is logged in" do
-      User.current_user = create(:user)
-      query = CollectionSearchForm.new(fandom_ids: [fandom.id])
-
-      expect(query.search_results).to include prompt_meme_collection
-      expect(query.search_results).to include gift_exchange_collection
-      expect(query.search_results).not_to include no_signup
     end
 
     it "filters collections by owner_ids" do  

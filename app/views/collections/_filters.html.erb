@@ -35,15 +35,7 @@
             params[:title],
             autocomplete_options("collection_fullname",
               data: { autocomplete_token_limit: 1 }) %>
-      </dd>
-      <dt class="autocomplete search">
-        <%= label_tag "fandom", ts("Filter by fandom") %>
-      </dt>
-      <dd class="autocomplete search">
-        <%= text_field_tag "fandom",
-            params[:fandom],
-            autocomplete_options("fandom", data: { autocomplete_token_limit: 1 }) %>
-      </dd>
+      </dd>      
       <dt><%= ts("Closed") %></dt>
       <dd>
         <ul>

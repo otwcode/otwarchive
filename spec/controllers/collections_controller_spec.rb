@@ -35,13 +35,6 @@ describe CollectionsController do
         expect(assigns(:collections)).to include no_signup
       end
 
-      it "filters collections by fandom" do
-        get :index, params: { fandom: fandom.name }
-        expect(response).to have_http_status(:success)
-        expect(assigns(:collections)).to include prompt_meme_collection
-        expect(assigns(:collections)).not_to include gift_exchange_collection
-      end
-
       describe "filters collections by challenge_type" do
         it "filters prompt memes" do
           get :index, params: { challenge_type: "PromptMeme" }

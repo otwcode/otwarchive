@@ -27,13 +27,13 @@ class CollectionsController < ApplicationController
     if params[:work_id] && (@work = Work.find_by!(id: params[:work_id]))
       @collections = @work.approved_collections.by_title.includes(:parent, :moderators, :children, :collection_preference, owners: [:user]).paginate(page: params[:page])
     elsif params[:collection_id] && (@collection = Collection.find_by!(name: params[:collection_id]))
-      @collections = CollectionSearchForm.new({ parent_id: @collection.id }).search_results
+      @collections = CollectionSearchForm.new({ parent_id: @collection.id }.merge(page: params[:page])).search_results
     elsif params[:user_id] && (@user = User.find_by!(login: params[:user_id]))
-      @collections = CollectionSearchForm.new(moderator_ids: [@user.id]).search_results
+      @collections = CollectionSearchForm.new({ moderator_ids: [@user.id] }.merge(page: params[:page])).search_results
       @page_subtitle = ts("%{username} - Collections", username: @user.login)
     else
       @sort_and_filter = true
-      @collections = CollectionSearchForm.new(parsed_collection_filters).search_results
+      @collections = CollectionSearchForm.new(collection_filter_params).search_results
       flash_search_warnings(@collections)
     end
   end
@@ -165,24 +165,8 @@ class CollectionsController < ApplicationController
 
   private
 
-  def parsed_collection_filters
-    # find fandom id from name given in filter, otherwise send params through
-    parsed_filters = collection_filter_params.inject({}) do |new_hash, (k, v)|
-      if k == 'fandom'
-        fandom = Fandom.find_by(name: v)
-        new_hash[:fandom_ids] = [fandom&.id].compact
-      else
-        new_hash[k] = v
-      end
-      
-      new_hash
-    end 
-
-    parsed_filters.symbolize_keys
-  end
-
   def collection_filter_params
-    safe_list = %w(title fandom challenge_type moderated closed sort_column sort_direction page)
+    safe_list = %w(title challenge_type moderated closed sort_column sort_direction page)
     collection_filters = params.to_unsafe_h.select { |k, v| safe_list.include?(k) }
     collection_filters = collection_filters.delete_if { |key, value| value.blank? }
 
