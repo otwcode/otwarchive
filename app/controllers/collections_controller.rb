@@ -43,18 +43,18 @@ class CollectionsController < ApplicationController
     @page_subtitle = "Open Challenges"
     @hide_dashboard = true
 
-    @challenge_collections = (CollectionSearchForm.new(challenge_type: 'GiftExchange', page: 1, per_page: 15).search_results.to_a +
-                             CollectionSearchForm.new(challenge_type: 'PromptMeme', page: 1, per_page: 15).search_results.to_a)
+    @challenge_collections = (CollectionSearchForm.new(challenge_type: "GiftExchange", page: 1, per_page: 15).search_results.to_a +
+                             CollectionSearchForm.new(challenge_type: "PromptMeme", page: 1, per_page: 15).search_results.to_a)
   end
 
   def list_ge_challenges
     @page_subtitle = "Open Gift Exchange Challenges"
-    @challenge_collections = CollectionSearchForm.new(challenge_type: 'GiftExchange', page: 1, per_page: 15).search_results
+    @challenge_collections = CollectionSearchForm.new(challenge_type: "GiftExchange", page: 1, per_page: 15).search_results
   end
 
   def list_pm_challenges
     @page_subtitle = "Open Prompt Meme Challenges"
-    @challenge_collections = CollectionSearchForm.new(challenge_type: 'PromptMeme', page: 1, per_page: 15).search_results
+    @challenge_collections = CollectionSearchForm.new(challenge_type: "PromptMeme", page: 1, per_page: 15).search_results
   end
 
   def show
@@ -167,8 +167,8 @@ class CollectionsController < ApplicationController
 
   def collection_filter_params
     safe_list = %w(title challenge_type moderated closed sort_column sort_direction page)
-    collection_filters = params.to_unsafe_h.select { |k, v| safe_list.include?(k) }
-    collection_filters = collection_filters.delete_if { |key, value| value.blank? }
+    collection_filters = params.to_unsafe_h.select { |k, _| safe_list.include?(k) }
+    collection_filters = collection_filters.delete_if { |_, value| value.blank? }
 
     collection_filters
   end

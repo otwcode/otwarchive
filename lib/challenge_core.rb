@@ -83,7 +83,7 @@ module ChallengeCore
   end
 
   def reindex_collection
-    return unless self.collection.present?
+    return if self.collection.blank?
 
     IndexQueue.enqueue_id(Collection, collection.id, :main)
   end

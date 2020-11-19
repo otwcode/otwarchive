@@ -1,5 +1,4 @@
 class CollectionIndexer < Indexer
-
   def self.klass
     "Collection"
   end
