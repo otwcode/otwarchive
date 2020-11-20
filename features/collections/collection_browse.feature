@@ -18,8 +18,7 @@ Feature: Collection
   Scenario: Filter collections index to only show prompt memes
 
   Given I have loaded the fixtures
-  When all indexing jobs have been run
-    And I go to the collections page
+  When I go to the collections page
     And I choose "Prompt Meme Challenge"
     And I press "Sort and Filter"
   Then I should see "On Demand"
@@ -32,8 +31,7 @@ Feature: Collection
   Scenario: Filter collections index to only show gift exchanges
 
   Given I have loaded the fixtures
-  When all indexing jobs have been run
-    And I go to the collections page
+  When I go to the collections page
     And I choose "Gift Exchange Challenge"
     And I press "Sort and Filter"
   Then I should see "Surprise Presents"
@@ -46,8 +44,7 @@ Feature: Collection
   Scenario: Filter collections index to only show non-challenge collections
 
   Given I have loaded the fixtures
-  When all indexing jobs have been run
-    And I go to the collections page
+  When I go to the collections page
     And I choose "No Challenge"
     And I press "Sort and Filter"
   Then I should see "Some Test Collection"
@@ -60,8 +57,7 @@ Feature: Collection
   Scenario: Filter collections index to only show closed collections
 
   Given I have loaded the fixtures
-  When all indexing jobs have been run
-    And I go to the collections page
+  When I go to the collections page
     And I choose "closed_true"
     And I press "Sort and Filter"
   Then I should see "Another Plain Collection"
@@ -74,8 +70,7 @@ Feature: Collection
   Scenario: Filter collections index to only show open collections
 
   Given I have loaded the fixtures
-  When all indexing jobs have been run
-    And I go to the collections page
+  When I go to the collections page
     And I choose "closed_false"
     And I press "Sort and Filter"
   Then I should see "Some Test Collection"
@@ -88,8 +83,7 @@ Feature: Collection
   Scenario: Filter collections index to only show moderated collections
 
   Given I have loaded the fixtures
-  When all indexing jobs have been run
-    And I go to the collections page
+  When I go to the collections page
     And I choose "moderated_true"
     And I press "Sort and Filter"
   Then I should see "Surprise Presents"
@@ -102,8 +96,7 @@ Feature: Collection
   Scenario: Filter collections index to only show unmoderated collections
 
   Given I have loaded the fixtures
-  When all indexing jobs have been run
-    And I go to the collections page
+  When I go to the collections page
     And I choose "moderated_false"
     And I press "Sort and Filter"
   Then I should see "Some Test Collection"
@@ -116,8 +109,7 @@ Feature: Collection
   Scenario: Filter collections index to show open, moderated gift exchanges
 
   Given I have loaded the fixtures
-  When all indexing jobs have been run
-    And I go to the collections page
+  When I go to the collections page
     And I choose "closed_false"
     And I choose "moderated_true"
     And I choose "Gift Exchange Challenge"
@@ -133,8 +125,7 @@ Feature: Collection
 
   Given I have loaded the fixtures
     And I am logged in as "testuser" with password "testuser"
-  When all indexing jobs have been run
-    And I go to the collections page
+  When I go to the collections page
   Then I should see "Collections in the "
     And I should see "Some Test Collection"
   When I follow "Some Test Collection"

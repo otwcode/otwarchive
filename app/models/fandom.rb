@@ -48,9 +48,4 @@ class Fandom < Tag
   def child_types
     ['Character', 'Relationship', 'Freeform', 'SubTag', 'Merger']
   end
-
-  after_update :reindex_associated_collections, if: Proc.new { |c| c.saved_change_to_canonical? || c.saved_change_to_merger_id? }
-  def reindex_associated_collections
-    IndexQueue.enqueue_ids(Collection, works.map(&:collections).flatten.pluck(:id), :background)
-  end
 end

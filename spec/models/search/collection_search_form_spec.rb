@@ -187,6 +187,14 @@ describe CollectionSearchForm, collection_search: true do
       expect(query.search_results).not_to include gift_exchange_collection
       expect(query.search_results).not_to include no_signup
     end
+
+    it "filters collections by maintainer_id to get collections for owners and moderators" do
+      query = CollectionSearchForm.new(maintainer_id: participant.pseud.user_id)
+
+      expect(query.search_results).to include prompt_meme_collection
+      expect(query.search_results).not_to include gift_exchange_collection
+      expect(query.search_results).not_to include no_signup
+    end
   end
 
   describe "filters collection by parent_id" do

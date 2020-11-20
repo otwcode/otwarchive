@@ -29,7 +29,7 @@ class CollectionsController < ApplicationController
     elsif params[:collection_id] && (@collection = Collection.find_by!(name: params[:collection_id]))
       @collections = CollectionSearchForm.new({ parent_id: @collection.id }.merge(page: params[:page])).search_results
     elsif params[:user_id] && (@user = User.find_by!(login: params[:user_id]))
-      @collections = CollectionSearchForm.new({ moderator_ids: [@user.id] }.merge(page: params[:page])).search_results
+      @collections = CollectionSearchForm.new({ maintainer_id: @user.id }.merge(page: params[:page])).search_results
       @page_subtitle = ts("%{username} - Collections", username: @user.login)
     else
       @sort_and_filter = true
@@ -43,18 +43,18 @@ class CollectionsController < ApplicationController
     @page_subtitle = "Open Challenges"
     @hide_dashboard = true
 
-    @challenge_collections = (CollectionSearchForm.new(challenge_type: "GiftExchange", page: 1, per_page: 15).search_results.to_a +
-                             CollectionSearchForm.new(challenge_type: "PromptMeme", page: 1, per_page: 15).search_results.to_a)
+    @challenge_collections = (CollectionSearchForm.new(challenge_type: "GiftExchange", signup_open: true, sort_column: "signups_close_at", page: 1, per_page: 15).search_results.to_a +
+                             CollectionSearchForm.new(challenge_type: "PromptMeme", signup_open: true, sort_column: "signups_close_at", page: 1, per_page: 15).search_results.to_a)
   end
 
   def list_ge_challenges
     @page_subtitle = "Open Gift Exchange Challenges"
-    @challenge_collections = CollectionSearchForm.new(challenge_type: "GiftExchange", page: 1, per_page: 15).search_results
+    @challenge_collections = CollectionSearchForm.new(challenge_type: "GiftExchange", signup_open: true, sort_column: "signups_close_at", page: 1, per_page: 15).search_results
   end
 
   def list_pm_challenges
     @page_subtitle = "Open Prompt Meme Challenges"
-    @challenge_collections = CollectionSearchForm.new(challenge_type: "PromptMeme", page: 1, per_page: 15).search_results
+    @challenge_collections = CollectionSearchForm.new(challenge_type: "PromptMeme", signup_open: true, sort_column: "signups_close_at", page: 1, per_page: 15).search_results
   end
 
   def show

@@ -68,7 +68,7 @@ describe CollectionsController do
       it "sorts collections by title, ASC by default" do
         sorted_collection_titles = Collection.order("title ASC").map(&:title)
 
-        get :index, params: { sort_column: "title.keyword"}
+        get :index, params: { sort_column: "title.keyword" }
         expect(response).to have_http_status(:success)
         expect(assigns(:collections).map(&:title)).to eq sorted_collection_titles
       end

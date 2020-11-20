@@ -13,7 +13,7 @@ class CollectionQuery < Query
 
   # Combine the available filters
   def filters
-    [signup_open_filter, closed_filter, challenge_type_filter, fandom_filter, owner_filter, moderator_filter, parent_filter, moderated_filter].compact
+    [signup_open_filter, closed_filter, challenge_type_filter, owner_filter, moderator_or_owner_filter, moderator_filter, parent_filter, moderated_filter].compact
   end
 
   # Combine the available queries
@@ -40,19 +40,16 @@ class CollectionQuery < Query
     term_filter(:moderated, bool_value(options[:moderated])) if options[:moderated].present?
   end
 
-  def fandom_filter
-    return unless options[:fandom_ids].present?
-
-    key = User.current_user.present? ? :general_fandom_ids : :public_fandom_ids
-    options[:fandom_ids].flatten.uniq.map { |fandom_id| term_filter(key, fandom_id) } if options[:fandom_ids].present?
-  end
-
   def owner_filter
     options[:owner_ids].flatten.uniq.map { |owner_id| term_filter(:owner_ids, owner_id) } if options[:owner_ids].present?
   end
 
   def moderator_filter
     options[:moderator_ids].flatten.uniq.map { |moderator_id| term_filter(:moderator_ids, moderator_id) } if options[:moderator_ids].present?
+  end
+
+  def moderator_or_owner_filter
+    term_filter(:maintainer_ids, options[:maintainer_id]) if options[:maintainer_id].present?
   end
 
   def challenge_type_filter
