@@ -10,10 +10,10 @@ class CollectionDecorator < SimpleDelegator
     decorate_from_search(items, hits)
   end
 
-   # TODO: Either eliminate this function or add definitions for work_counts and
-  # bookmark_counts (and possibly fandom information, as well?). The NameError
-  # that this causes isn't a problem at the moment because the function isn't
-  # being called from anywhere, but it needs to be fixed before it can be used.
+  #  # TODO: Either eliminate this function or add definitions for work_counts and
+  # # bookmark_counts (and possibly fandom information, as well?). The NameError
+  # # that this causes isn't a problem at the moment because the function isn't
+  # # being called from anywhere, but it needs to be fixed before it can be used.
   def self.decorate_from_search(results, search_hits)
     search_data = search_hits.group_by { |doc| doc["_id"] }
     results.map do |result|
@@ -32,16 +32,12 @@ class CollectionDecorator < SimpleDelegator
     @data = HashWithIndifferentAccess.new(info)
   end
 
-  def works_count
+  def all_approved_works_count
     count = User.current_user.present? ? data[:general_works_count] : data[:public_works_count]
     count || 0
   end
 
-  def bookmarks_count
+  def all_bookmarked_items_count
     User.current_user.present? ? data[:general_bookmarked_items_count] : data[:public_bookmarked_items_count]
-  end
-
-  def fandoms_count
-    User.current_user.present? ? data[:general_fandoms_count] : data[:public_fandoms_count]
   end
 end

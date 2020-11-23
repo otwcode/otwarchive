@@ -1,6 +1,11 @@
 class CollectionQuery < Query
+  # The "klass" function in the query classes is used only to determine what
+  # type of search results to return (that is, which class the QueryResult
+  # class will call "load_from_elasticsearch" on). Because the Collection search
+  # should always wrap Collections up in a CollectionDecorator, we return CollectionDecorator
+  # instead of Collection.
   def klass
-    "Collection"
+    "CollectionDecorator"
   end
 
   def index_name
@@ -13,7 +18,7 @@ class CollectionQuery < Query
 
   # Combine the available filters
   def filters
-    [signup_open_filter, closed_filter, challenge_type_filter, owner_filter, moderator_or_owner_filter, moderator_filter, parent_filter, moderated_filter].compact
+    [signup_open_filter, closed_filter, challenge_type_filter, owner_filter, maintainer_filter, moderator_filter, parent_filter, moderated_filter, signup_closes_in_future_filter].compact
   end
 
   # Combine the available queries
@@ -32,6 +37,10 @@ class CollectionQuery < Query
     term_filter(:signup_open, bool_value(options[:signup_open])) if options[:signup_open].present?
   end
 
+  def signup_closes_in_future_filter
+    # { range: { signup_close_at: { gte: Time.zone.now.utc } } } if options[:signup_open].present?
+  end
+
   def closed_filter
     term_filter(:closed, bool_value(options[:closed])) if options[:closed].present?
   end
@@ -48,7 +57,7 @@ class CollectionQuery < Query
     options[:moderator_ids].flatten.uniq.map { |moderator_id| term_filter(:moderator_ids, moderator_id) } if options[:moderator_ids].present?
   end
 
-  def moderator_or_owner_filter
+  def maintainer_filter
     term_filter(:maintainer_ids, options[:maintainer_id]) if options[:maintainer_id].present?
   end
 

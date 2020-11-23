@@ -69,16 +69,5 @@ describe CollectionDecorator do
         expect(decorator.bookmarks_count).to eq(5)
       end
     end
-
-    describe "#fandoms_count" do
-      it "returns the public fandoms count if there's no current user" do
-        expect(decorator.bookmarks_count).to eq(10)
-      end
-
-      it "returns the general fandoms count if there is a current user" do
-        User.current_user = User.new
-        expect(decorator.bookmarks_count).to eq(5)
-      end
-    end
   end
 end

@@ -48,7 +48,7 @@
         <dd><%= link_to(collection.prompts.count.to_s, collection_requests_path(collection)) %></dd>
       <% end %>
       <dt><%= ts("Works:") %></dt>
-      <dd><%= link_to(@works_count, collection_works_path(collection)) %></dd>
+      <dd><%= link_to(collection.all_approved_works_count, collection_works_path(collection)) %></dd>
       <% if (@bookmarks_count = collection.all_bookmarked_items_count) > 0 %>
         <dt><%= ts("Bookmarked Items:") %></dt>
         <dd><%= link_to(@bookmarks_count, collection_bookmarks_path(collection)) %></dd>

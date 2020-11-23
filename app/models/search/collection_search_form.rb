@@ -51,20 +51,6 @@ class CollectionSearchForm
     false
   end
 
-  def summary
-    summary = []
-    if @options[:title].present?
-      summary << "Title: #{@options[:title]}"
-    end
-
-    if @options[:sort_column].present?
-      summary << "sort by: #{name_for_sort_column(@options[:sort_column]).downcase}" +
-        (@options[:sort_direction].present? ?
-          (@options[:sort_direction] == "asc" ? " ascending" : " descending") : "")
-    end
-    summary.join(" ")
-  end
-
   def search_results
     @searcher.search_results
   end
@@ -87,7 +73,7 @@ class CollectionSearchForm
   end
 
   def sort_options
-    options[:faceted] || options[:collected] ? SORT_OPTIONS[1..-1] : SORT_OPTIONS
+    SORT_OPTIONS
   end
 
   def sort_values

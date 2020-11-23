@@ -62,6 +62,8 @@ class CollectionParticipant < ApplicationRecord
   def reindex_collection
     return unless MAINTAINER_ROLES.include?(participant_role)
 
-    IndexQueue.enqueue_id(Collection, collection_id, :background)
+    ids = [collection_id]
+    ids.push(collection.children.pluck(:id)) if collection.children.any?
+    IndexQueue.enqueue_ids(Collection, ids, :background)
   end
 end
