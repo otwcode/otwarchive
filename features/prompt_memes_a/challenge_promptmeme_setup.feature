@@ -26,8 +26,7 @@ Feature: Prompt Meme Challenge
   
   Given I have Battle 12 prompt meme fully set up
     And I am logged in as a random user
-  When all indexing jobs have been run 
-    And I go to the collections page
+  When I go to the collections page
   Then I should see "Battle 12"
   
   Scenario: Prompt meme is in list of open challenges
@@ -163,8 +162,7 @@ Feature: Prompt Meme Challenge
   Given I have Battle 12 prompt meme fully set up
     And I am logged in as "myname1"
   When I sign up for Battle 12 with combination A
-  When all indexing jobs have been run
-    And I go to the collections page
+  When I go to the collections page
   Then I should see "Prompts: 2"
 
   Scenario: Sign-ups in the dashboard have correct controls

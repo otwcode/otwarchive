@@ -4,14 +4,14 @@ class CollectionsController < ApplicationController
   before_action :load_collection_from_id, only: [:show, :edit, :update, :destroy, :confirm_delete]
   before_action :collection_owners_only, only: [:edit, :update, :destroy, :confirm_delete]
   before_action :check_user_status, only: [:new, :create, :edit, :update, :destroy]
-  before_action :validate_challenge_type
+  before_action :validate_challenge_type #, only: [:create, :update]
   cache_sweeper :collection_sweeper
 
   # Lazy fix to prevent passing unsafe values to eval via challenge_type
   # In both CollectionsController#create and CollectionsController#update there are a vulnerable usages of eval
   # For now just make sure the values passed to it are safe
   def validate_challenge_type
-    if params[:challenge_type] and not ["", "GiftExchange", "PromptMeme", "no_challenge"].include?(params[:challenge_type])
+    if params[:challenge_type] and not ["", "GiftExchange", "PromptMeme"].include?(params[:challenge_type])
       return render status: :bad_request, text: "invalid challenge_type"
     end
   end
@@ -27,13 +27,16 @@ class CollectionsController < ApplicationController
     if params[:work_id] && (@work = Work.find_by!(id: params[:work_id]))
       @collections = @work.approved_collections.by_title.includes(:parent, :moderators, :children, :collection_preference, owners: [:user]).paginate(page: params[:page])
     elsif params[:collection_id] && (@collection = Collection.find_by!(name: params[:collection_id]))
-      @collections = CollectionSearchForm.new({ parent_id: @collection.id }.merge(page: params[:page])).search_results
+      @search = CollectionSearchForm.new({ parent_id: @collection.id }.merge(page: params[:page]))
+      @collections = @search.search_results
     elsif params[:user_id] && (@user = User.find_by!(login: params[:user_id]))
-      @collections = CollectionSearchForm.new({ maintainer_id: @user.id }.merge(page: params[:page])).search_results
+      @search = CollectionSearchForm.new({ maintainer_id: @user.id }.merge(page: params[:page]))
+      @collections = @search.search_results
       @page_subtitle = ts("%{username} - Collections", username: @user.login)
     else
       @sort_and_filter = true
-      @collections = CollectionSearchForm.new(collection_filter_params).search_results
+      @search = CollectionSearchForm.new(collection_filter_params)
+      @collections = @search.search_results
       flash_search_warnings(@collections)
     end
   end
@@ -167,7 +170,8 @@ class CollectionsController < ApplicationController
 
   def collection_filter_params
     safe_list = %w(title challenge_type moderated closed sort_column sort_direction page)
-    collection_filters = params.to_unsafe_h.select { |k, _| safe_list.include?(k) }
+    search_params = params[:collection_search].present? ? params[:collection_search].to_unsafe_h : {}
+    collection_filters = search_params.select { |k, _| safe_list.include?(k) }
     collection_filters = collection_filters.delete_if { |_, value| value.blank? }
 
     collection_filters

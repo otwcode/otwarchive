@@ -30,7 +30,6 @@ class CollectionIndexer < Indexer
           collection_type: { type: "keyword" },
           created_at: { type: "date" }
         }
-
       }
     }
   end
@@ -88,7 +87,7 @@ class CollectionIndexer < Indexer
       general_works_count: object.all_approved_works.count,
       public_works_count: object.all_approved_works.where(restricted: false).count,
       general_bookmarked_items_count: get_bookmarked_items_count(object), 
-      public_bookmarked_items_count: get_bookmarked_items_count(object, true),
+      public_bookmarked_items_count: get_bookmarked_items_count(object, true)
     )
   end
 

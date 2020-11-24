@@ -50,23 +50,23 @@ describe CollectionDecorator do
 
     describe "#works_count" do
       it "returns the public works count if there's no current user" do
-        expect(decorator.works_count).to eq(10)
+        expect(decorator.all_approved_works_count).to eq(10)
       end
 
       it "returns the general works count if there is a current user" do
         User.current_user = User.new
-        expect(decorator.works_count).to eq(7)
+        expect(decorator.all_approved_works_count).to eq(7)
       end
     end
 
     describe "#bookmarks_count" do
       it "returns the public count if there's no current user" do
-        expect(decorator.bookmarks_count).to eq(10)
+        expect(decorator.all_bookmarked_items_count).to eq(10)
       end
 
       it "returns the general count if there is a current user" do
         User.current_user = User.new
-        expect(decorator.bookmarks_count).to eq(5)
+        expect(decorator.all_bookmarked_items_count).to eq(5)
       end
     end
   end

@@ -1,62 +1,47 @@
-<%= form_tag collections_url, method: :get, class: "narrow-hidden filters",
-    id: "collection-filters" do %>
+<%= form_for @search, as: :collection_search, url: collections_path, html: { method: :get, class: "narrow-hidden filters", id: "collection-filters" } do |f| %>
+
   <h3 class="landmark heading"><%= ts("Filters") %></h3>
   <%= field_set_tag ts("Filter collections:") do %>
     <dl>
       <dt class="landmark"><%= ts("Sort and Filter") %></dt>
       <dd class="submit actions"><%= submit_tag ts("Sort and Filter") %></dd>
       <dt class="sort">
-        <%= label_tag :sort_column, ts("Sort by") %>
+        <%= f.label :sort_column, ts("Sort by") %>
       </dt>
       <dd class="sort">
-        <%= select_tag :sort_column,
-            options_for_select({
-              ts("Title") => "title.keyword",
-              ts("Date Created") => "created_at" },
-              params[:sort_column]) %>
+        <%= f.select :sort_column, options_for_select({ ts("Title") => "title.keyword", ts("Date Created") => "created_at" }) %>
       </dd>
       <dt class="sort">
-        <%= label_tag :sort_direction, ts("Sort direction") %>
+        <%= f.label :sort_direction, ts("Sort direction") %>
       </dt>
       <dd class="sort">
-        <%= select_tag :sort_direction,
-            options_for_select({
-              ts("Ascending") => "ASC",
-              ts("Descending") => "DESC" },
-              params[:sort_direction]) %>
+        <%= f.select :sort_direction, options_for_select({ ts("Ascending") => "ASC", ts("Descending") => "DESC" }) %>
       </dd>
 
       <dt class="autocomplete search">
-        <%= label_tag "title",
-            ts("Filter by title") %>
+        <%= f.label "title", ts("Filter by title") %>
       </dt>
       <dd class="autocomplete search">
-        <%= text_field_tag "title",
-            params[:title],
-            autocomplete_options("collection_fullname",
-              data: { autocomplete_token_limit: 1 }) %>
+        <%= f.text_field "title", autocomplete_options("collection_fullname", data: { autocomplete_token_limit: 1 }) %>
       </dd>      
       <dt><%= ts("Closed") %></dt>
       <dd>
         <ul>
           <li>
-            <%= label_tag "closed_true" do %>
-              <%= radio_button_tag "closed", true,
-                  params[:closed] == "true" %>
+            <%= f.label "closed_true" do %>
+              <%= f.radio_button "closed", true %>
               <%= label_indicator_and_text(ts("Yes")) %>
             <% end %>
           </li>
           <li>
-            <%= label_tag "closed_false" do %>
-              <%= radio_button_tag "closed", false,
-                  params[:closed] == "false" %>
+            <%= f.label "closed_false" do %>
+              <%= f.radio_button "closed", false %>
               <%= label_indicator_and_text(ts("No")) %>
             <% end %>
           </li>
           <li>
-            <%= label_tag "closed_" do %>
-              <%= radio_button_tag "closed", "",
-                  params[:closed] == "" %>
+            <%= f.label "closed_" do %>
+              <%= f.radio_button "closed", "" %>
               <%= label_indicator_and_text(ts("Either")) %>
             <% end %>
           </li>
@@ -66,23 +51,20 @@
       <dd>
         <ul>
           <li>
-            <%= label_tag "moderated_true" do %>
-              <%= radio_button_tag "moderated", true,
-                  params[:moderated] == "true" %>
+            <%= f.label "moderated_true" do %>
+              <%= f.radio_button "moderated", true %>
               <%= label_indicator_and_text(ts("Yes")) %>
             <% end %>
           </li>
           <li>
-            <%= label_tag "moderated_false" do %>
-              <%= radio_button_tag "moderated", false,
-                  params[:moderated] == "false" %>
+            <%= f.label "moderated_false" do %>
+              <%= f.radio_button "moderated", false %>
               <%= label_indicator_and_text(ts("No")) %>
             <% end %>
           </li>
           <li>
-            <%= label_tag "moderated_" do %>
-              <%= radio_button_tag "moderated", "",
-                  params[:moderated] == "" %>
+            <%= f.label "moderated_" do %>
+              <%= f.radio_button "moderated", "" %>
               <%= label_indicator_and_text(ts("Either")) %>
             <% end %>
           </li>
@@ -92,36 +74,26 @@
       <dd>
         <ul>
           <li>
-            <%= label_tag "challenge_type_gift_exchange" do %>
-              <%= radio_button_tag "challenge_type",
-                  "GiftExchange",
-                  params[:challenge_type] == "GiftExchange"
-              %>
+            <%= f.label "challenge_type_gift_exchange" do %>
+              <%= f.radio_button "challenge_type", "GiftExchange" %>
               <%= label_indicator_and_text(ts("Gift Exchange Challenge")) %>
             <% end %>
           </li>
           <li>
-            <%= label_tag "challenge_type_prompt_meme" do %>
-              <%= radio_button_tag "challenge_type",
-                  "PromptMeme",
-                  params[:challenge_type] == "PromptMeme"
-              %>
+            <%= f.label "challenge_type_prompt_meme" do %>
+              <%= f.radio_button "challenge_type", "PromptMeme" %>
               <%= label_indicator_and_text(ts("Prompt Meme Challenge")) %>
             <% end %>
           </li>
           <li>
-            <%= label_tag "challenge_type_no_challenge" do %>
-              <%= radio_button_tag "challenge_type",
-                  "no_challenge",
-                  params[:challenge_type] == "no_challenge"
-              %>
+            <%= f.label "challenge_type_no_challenge" do %>
+              <%= f.radio_button "challenge_type", "no_challenge" %>
               <%= label_indicator_and_text(ts("No Challenge")) %>
             <% end %>
           </li>
           <li>
-            <%= label_tag "challenge_type_" do %>
-              <%= radio_button_tag "challenge_type", "",
-                  params[:challenge_type] == "" %>
+            <%= f.label "challenge_type_" do %>
+              <%= f.radio_button "challenge_type", "" %>
               <%= label_indicator_and_text(ts("Any")) %>
             <% end %>
           </li>

@@ -21,7 +21,7 @@ module NavigationHelpers
     when /^the search works page$/i
       step %{all indexing jobs have been run}
       search_works_path
-    when /^go to the collections page$/i
+    when /^the collections page$/i
       step %{all indexing jobs have been run}
       collections_path
     when /^the search people page$/i

@@ -38,7 +38,7 @@ class CollectionQuery < Query
   end
 
   def signup_closes_in_future_filter
-    # { range: { signup_close_at: { gte: Time.zone.now.utc } } } if options[:signup_open].present?
+    { range: { signups_close_at: { gte: "now" } } } if options[:signup_open].present?
   end
 
   def closed_filter
@@ -89,7 +89,7 @@ class CollectionQuery < Query
         fields: ["title^5", "name"],
         default_operator: "AND"
       }
-    } unless query.blank?
+    } if query.present?
   end
 
   ####################

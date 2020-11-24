@@ -27,10 +27,10 @@ class Indexer
       BookmarkedSeriesIndexer,
       BookmarkedWorkIndexer,
       BookmarkIndexer,
+      CollectionIndexer,
       PseudIndexer,
       TagIndexer,
-      WorkIndexer,
-      CollectionIndexer
+      WorkIndexer
     ]
   end
 

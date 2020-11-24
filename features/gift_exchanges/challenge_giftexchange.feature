@@ -35,8 +35,7 @@ Feature: Gift Exchange Challenge
       And I am on "My Gift Exchange" gift exchange edit page
     When I check "Sign-up open?"
       And I submit
-    When all indexing jobs have been run
-      And I view open challenges
+    When I view open challenges
     Then I should see "My Gift Exchange"
 
   Scenario: Gift exchange also appears in list of open gift exchange challenges
@@ -45,8 +44,7 @@ Feature: Gift Exchange Challenge
       And I am on "My Gift Exchange" gift exchange edit page
     When I check "Sign-up open?"
       And I submit
-    When all indexing jobs have been run
-      And I view open challenges
+    When I view open challenges
       And I follow "Gift Exchange Challenges"
     Then I should see "My Gift Exchange"
 
@@ -123,7 +121,6 @@ Feature: Gift Exchange Challenge
     Given the gift exchange "Awesome Gift Exchange" is ready for signups
       And I am logged in as "myname1"
     When I sign up for "Awesome Gift Exchange" with combination A
-      And all indexing jobs have been run
       And I go to the collections page
       And I follow "Awesome Gift Exchange"
     Then I should not see "Sign-ups" within "#dashboard"
@@ -546,8 +543,7 @@ Feature: Gift Exchange Challenge
       And I should not see the gift exchange dashboard for "Bad Gift Exchange"
       And no one should have an assignment for "Bad Gift Exchange"
       And no one should be signed up for "Bad Gift Exchange"
-    When all indexing jobs have been run
-      And I am on the collections page
+    When I am on the collections page
     Then I should see "Bad Gift Exchange"
 
   Scenario: A user can still access their Sign-ups page after a gift exchange

@@ -58,7 +58,7 @@ Feature: Collection
 
   Given I have loaded the fixtures
   When I go to the collections page
-    And I choose "closed_true"
+    And I choose "collection_search_closed_true"
     And I press "Sort and Filter"
   Then I should see "Another Plain Collection"
     And I should see "On Demand"
@@ -71,7 +71,7 @@ Feature: Collection
 
   Given I have loaded the fixtures
   When I go to the collections page
-    And I choose "closed_false"
+    And I choose "collection_search_closed_false"
     And I press "Sort and Filter"
   Then I should see "Some Test Collection"
     And I should see "Some Other Collection"
@@ -84,7 +84,7 @@ Feature: Collection
 
   Given I have loaded the fixtures
   When I go to the collections page
-    And I choose "moderated_true"
+    And I choose "collection_search_moderated_true"
     And I press "Sort and Filter"
   Then I should see "Surprise Presents"
     And I should not see "Some Test Collection"
@@ -97,7 +97,7 @@ Feature: Collection
 
   Given I have loaded the fixtures
   When I go to the collections page
-    And I choose "moderated_false"
+    And I choose "collection_search_moderated_false"
     And I press "Sort and Filter"
   Then I should see "Some Test Collection"
     And I should see "Some Other Collection"
@@ -110,8 +110,8 @@ Feature: Collection
 
   Given I have loaded the fixtures
   When I go to the collections page
-    And I choose "closed_false"
-    And I choose "moderated_true"
+    And I choose "collection_search_closed_false"
+    And I choose "collection_search_moderated_true"
     And I choose "Gift Exchange Challenge"
     And I press "Sort and Filter"
   Then I should see "Surprise Presents"
