@@ -33,14 +33,14 @@ describe CollectionsController do
 
       describe "filters collections by challenge_type" do
         it "filters prompt memes" do
-          get :index, params: { challenge_type: "PromptMeme" }
+          get :index, params: { collection_search: { challenge_type: "PromptMeme" }}
           expect(response).to have_http_status(:success)
           expect(assigns(:collections)).to include prompt_meme_collection
           expect(assigns(:collections)).not_to include gift_exchange_collection
         end
 
         it "filters gift exchanges" do
-          get :index, params: { challenge_type: "GiftExchange" }
+          get :index, params: { collection_search: { challenge_type: "GiftExchange" } }
           expect(response).to have_http_status(:success)
           expect(assigns(:collections)).to include gift_exchange_collection
           expect(assigns(:collections)).not_to include prompt_meme_collection
@@ -60,7 +60,7 @@ describe CollectionsController do
       it "sorts collections by created_at ASC" do
         sorted_collection_titles = Collection.order("created_at ASC").map(&:title)
 
-        get :index, params: { sort_direction: "ASC" }
+        get :index, params: { collection_search: { sort_direction: "ASC" } }
         expect(response).to have_http_status(:success)
         expect(assigns(:collections).map(&:title)).to eq sorted_collection_titles
       end
@@ -68,7 +68,7 @@ describe CollectionsController do
       it "sorts collections by title, ASC by default" do
         sorted_collection_titles = Collection.order("title ASC").map(&:title)
 
-        get :index, params: { sort_column: "title.keyword" }
+        get :index, params: { collection_search: { sort_column: "title.keyword" } }
         expect(response).to have_http_status(:success)
         expect(assigns(:collections).map(&:title)).to eq sorted_collection_titles
       end
@@ -76,7 +76,7 @@ describe CollectionsController do
       it "sorts collections by title" do
         sorted_collection_titles = Collection.order("title DESC").map(&:title)
 
-        get :index, params: { sort_column: "title.keyword", sort_direction: "DESC" }
+        get :index, params: { collection_search: { sort_column: "title.keyword", sort_direction: "DESC" } }
         expect(response).to have_http_status(:success)
         expect(assigns(:collections).map(&:title)).to eq sorted_collection_titles
       end
