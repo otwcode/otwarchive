@@ -235,6 +235,7 @@ class Work < ApplicationRecord
 
   def update_pseud_and_collection_index
     return unless should_reindex_pseuds_and_collections?
+
     IndexQueue.enqueue_ids(Pseud, pseud_ids, :background)
     IndexQueue.enqueue_ids(Collection, collection_ids, :background)
   end

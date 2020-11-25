@@ -33,7 +33,7 @@ describe CollectionsController do
 
       describe "filters collections by challenge_type" do
         it "filters prompt memes" do
-          get :index, params: { collection_search: { challenge_type: "PromptMeme" }}
+          get :index, params: { collection_search: { challenge_type: "PromptMeme" } }
           expect(response).to have_http_status(:success)
           expect(assigns(:collections)).to include prompt_meme_collection
           expect(assigns(:collections)).not_to include gift_exchange_collection

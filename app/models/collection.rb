@@ -292,11 +292,11 @@ class Collection < ApplicationRecord
   def all_approved_works_count
     if !User.current_user.nil?
       count = self.approved_works.unhidden.count
-      self.children.each {|child| count += child.approved_works.unhidden.count}
+      self.children.each { |child| count += child.approved_works.unhidden.count }
       count
     else
       count = self.approved_works.where(restricted: false).unhidden.count
-      self.children.each {|child| count += child.approved_works.where(restricted: false).unhidden.count}
+      self.children.each { |child| count += child.approved_works.where(restricted: false).unhidden.count }
       count
     end
   end
