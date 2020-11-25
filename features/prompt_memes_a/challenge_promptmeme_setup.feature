@@ -33,16 +33,14 @@ Feature: Prompt Meme Challenge
   
   Given I have Battle 12 prompt meme fully set up
     And I am logged in as a random user
-  When all indexing jobs have been run 
-    And I view open challenges
+  When I view open challenges
   Then I should see "Battle 12"
 
   Scenario: Prompt meme is also in list of open prompt meme challenges
   
   Given I have Battle 12 prompt meme fully set up
     And I am logged in as a random user
-  When all indexing jobs have been run
-    And I view open challenges
+  When I view open challenges
     And I follow "Prompt Meme Challenges"
   Then I should see "Battle 12"
   

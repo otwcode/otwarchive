@@ -286,17 +286,17 @@ class Collection < ApplicationRecord
   def all_approved_works
     work_ids = all_items.where(item_type: "Work", user_approval_status: CollectionItem::APPROVED,
       collection_approval_status: CollectionItem::APPROVED).pluck(:item_id)
-    Work.where(id: work_ids, posted: true)
+    Work.where(id: work_ids, posted: true).unhidden
   end
 
   def all_approved_works_count
     if !User.current_user.nil?
-      count = self.approved_works.count
-      self.children.each {|child| count += child.approved_works.count}
+      count = self.approved_works.unhidden.count
+      self.children.each {|child| count += child.approved_works.unhidden.count}
       count
     else
-      count = self.approved_works.where(restricted: false).count
-      self.children.each {|child| count += child.approved_works.where(restricted: false).count}
+      count = self.approved_works.where(restricted: false).unhidden.count
+      self.children.each {|child| count += child.approved_works.where(restricted: false).unhidden.count}
       count
     end
   end
