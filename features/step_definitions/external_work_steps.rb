@@ -12,9 +12,9 @@ end
 
 Given /^I set up an external work$/ do
   visit new_external_work_path
-  fill_in("bookmark_external_url", with: DEFAULT_EXTERNAL_URL)
-  fill_in("bookmark_external_author", with: DEFAULT_EXTERNAL_CREATOR)
-  fill_in("bookmark_external_title", with: DEFAULT_EXTERNAL_TITLE)
+  fill_in("external_work_url", with: DEFAULT_EXTERNAL_URL)
+  fill_in("external_work_author", with: DEFAULT_EXTERNAL_CREATOR)
+  fill_in("external_work_title", with: DEFAULT_EXTERNAL_TITLE)
   step %{I fill in basic external work tags}
   fill_in("bookmark_notes", with: DEFAULT_BOOKMARK_NOTES)
   fill_in("bookmark_tag_string", with: DEFAULT_BOOKMARK_TAGS)
@@ -22,9 +22,9 @@ end
 
 Given /^I bookmark the external work "([^\"]*)"(?: with fandom "([^"]*)")?(?: with character "([^"]*)")?$/ do |title, fandom, character|
   step %{I set up an external work}
-  fill_in("bookmark_external_title", with: title)
-  fill_in("bookmark_external_fandom_string", with: fandom) if fandom.present?
-  fill_in("bookmark_external_character_string", with: character) if character.present?
+  fill_in("external_work_title", with: title)
+  fill_in("external_work_fandom_string", with: fandom) if fandom.present?
+  fill_in("external_work_character_string", with: character) if character.present?
   click_button("Create")
 end
 
