@@ -47,7 +47,7 @@ class Challenge::PromptMemeController < ChallengesController
   end
 
   def update
-    if @challenge.update_attributes(prompt_meme_params)
+    if @challenge.update(prompt_meme_params)
       flash[:notice] = 'Challenge was successfully updated.'
       # expire the cache on the signup form
       ActionController::Base.new.expire_fragment('challenge_signups/new')

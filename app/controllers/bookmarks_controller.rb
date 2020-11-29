@@ -252,14 +252,14 @@ class BookmarksController < ApplicationController
     flash[:error] = (flash[:error]).html_safe unless flash[:error].blank?
 
     if errors.empty?
-      if @bookmark.update_attributes(bookmark_params)
+      if @bookmark.update(bookmark_params)
         flash[:notice] ||= ""
         flash[:notice] = ts(" Bookmark was successfully updated. ").html_safe + flash[:notice]
         flash[:notice] = (flash[:notice]).html_safe unless flash[:notice].blank?
         redirect_to(@bookmark)
       end
     else
-      @bookmark.update_attributes(bookmark_params)
+      @bookmark.update(bookmark_params)
       @bookmarkable = @bookmark.bookmarkable
       render :edit and return
     end

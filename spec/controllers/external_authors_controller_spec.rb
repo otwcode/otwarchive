@@ -134,9 +134,9 @@ describe ExternalAuthorsController do
               do_not_email: true
             }
 
-            allow_any_instance_of(ExternalAuthor).to receive(:update_attributes).and_return(false)
+            allow_any_instance_of(ExternalAuthor).to receive(:update).and_return(false)
             put :update, params: parameters
-            allow_any_instance_of(ExternalAuthor).to receive(:update_attributes).and_call_original
+            allow_any_instance_of(ExternalAuthor).to receive(:update).and_call_original
             expect(response).to render_template :edit
             expect(flash[:notice]).to eq "Your imported stories have been orphaned. Thank you for leaving them in the archive! "
             expect(flash[:error]).to eq "There were problems saving your preferences."

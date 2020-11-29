@@ -1,7 +1,7 @@
 class ApiKey < ApplicationRecord
   include ActiveModel::ForbiddenAttributesProtection
   
-  validates :name, presence: true, uniqueness: true
+  validates :name, presence: true, uniqueness: { case_sensitive: false }
   validates :access_token, presence: true, uniqueness: true
 
   before_validation(on: :create) do

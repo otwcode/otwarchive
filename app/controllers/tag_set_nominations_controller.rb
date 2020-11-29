@@ -111,7 +111,7 @@ class TagSetNominationsController < ApplicationController
 
 
   def update
-    if @tag_set_nomination.update_attributes(tag_set_nomination_params)
+    if @tag_set_nomination.update(tag_set_nomination_params)
       flash[:notice] = ts("Your nominations were successfully updated.")
       redirect_to tag_set_nomination_path(@tag_set, @tag_set_nomination)
     else

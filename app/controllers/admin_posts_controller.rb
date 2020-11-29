@@ -70,7 +70,7 @@ class AdminPostsController < Admin::BaseController
   def update
     @admin_post = AdminPost.find(params[:id])
     authorize @admin_post
-    if @admin_post.update_attributes(admin_post_params)
+    if @admin_post.update(admin_post_params)
       flash[:notice] = ts("Admin Post was successfully updated.")
       redirect_to(@admin_post)
     else

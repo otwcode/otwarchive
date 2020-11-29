@@ -38,7 +38,7 @@ class KnownIssuesController < ApplicationController
   def update
     @known_issue = KnownIssue.find(params[:id])
 
-    if @known_issue.update_attributes(known_issue_params)
+    if @known_issue.update(known_issue_params)
       flash[:notice] = 'Known issue was successfully updated.'
       redirect_to(@known_issue)
     else

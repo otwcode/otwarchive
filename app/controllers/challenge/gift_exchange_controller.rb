@@ -46,7 +46,7 @@ class Challenge::GiftExchangeController < ChallengesController
   end
 
   def update
-    if @challenge.update_attributes(gift_exchange_params)
+    if @challenge.update(gift_exchange_params)
       flash[:notice] = ts('Challenge was successfully updated.')
 
       # expire the cache on the signup form

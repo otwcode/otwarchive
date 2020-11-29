@@ -23,7 +23,7 @@ describe Challenge::PromptMemeController do
     context "when it fails to update parameters" do
       before do
         fake_login_known_user(collection.owners.first.user)
-        allow_any_instance_of(PromptMeme).to receive(:update_attributes).and_return(false)
+        allow_any_instance_of(PromptMeme).to receive(:update).and_return(false)
         allow(controller).to receive(:prompt_meme_params).and_return({})
         post :update, params: { collection_id: collection.name, prompt_meme: {} }
       end
@@ -34,7 +34,7 @@ describe Challenge::PromptMemeController do
 
       after do
         allow(controller).to receive(:prompt_meme_params).and_call_original
-        allow_any_instance_of(PromptMeme).to receive(:update_attributes).and_call_original
+        allow_any_instance_of(PromptMeme).to receive(:update).and_call_original
       end
     end
   end

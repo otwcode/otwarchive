@@ -3,7 +3,7 @@ class Locale < ApplicationRecord
 
   belongs_to :language
   validates_presence_of :iso
-  validates_uniqueness_of :iso
+  validates_uniqueness_of :iso, case_sensitive: false
   validates_presence_of :name
 
   scope :default_order, -> { order(:iso) }

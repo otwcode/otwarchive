@@ -163,7 +163,7 @@ class Tag < ApplicationRecord
   has_many :parent_tag_set_associations, class_name: 'TagSetAssociation', foreign_key: 'parent_tag_id', dependent: :destroy
 
   validates_presence_of :name
-  validates_uniqueness_of :name
+  validates_uniqueness_of :name, case_sensitive: false
   validates_length_of :name, minimum: 1, message: "cannot be blank."
   validates_length_of :name,
     maximum: ArchiveConfig.TAG_MAX,
@@ -238,7 +238,7 @@ class Tag < ApplicationRecord
   end
   def update_wrangler(tag)
     unless User.current_user.nil?
-      self.update_attributes(last_wrangler: User.current_user)
+      self.update(last_wrangler: User.current_user)
     end
   end
 
@@ -1043,7 +1043,7 @@ class Tag < ApplicationRecord
     names.each do |name|
       syn = Tag.find_by_name(name)
       if syn && !syn.canonical?
-        syn.update_attributes(merger_id: self.id)
+        syn.update(merger_id: self.id)
       end
     end
   end

@@ -124,7 +124,7 @@ class CollectionsController < ApplicationController
   end
 
   def update
-    if @collection.update_attributes(collection_params)
+    if @collection.update(collection_params)
       flash[:notice] = ts('Collection was successfully updated.')
       if params[:challenge_type].blank?
         if @collection.challenge
