@@ -128,8 +128,7 @@ gem 'dalli'
 gem 'kgio', '2.10.0'
 
 group :test do
-  gem 'rspec', '~> 3.8'
-  gem 'rspec-rails', '~> 3.8.2'
+  gem 'rspec-rails', '~> 4.0.1'
   gem 'pickle'
   gem 'shoulda'
   gem 'capybara', '~> 2.16.1'
