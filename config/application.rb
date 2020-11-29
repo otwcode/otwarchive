@@ -59,6 +59,7 @@ module Otwarchive
     config.encoding = "utf-8"
 
     config.action_mailer.default_url_options = { host: "archiveofourown.org" }
+    config.action_mailer.delivery_job = "ActionMailer::MailDeliveryJob"
 
     config.action_view.automatically_disable_submit_tag = false
 
