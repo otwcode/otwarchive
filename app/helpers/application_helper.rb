@@ -298,14 +298,12 @@ module ApplicationHelper
   def autocomplete_options(method, options={})
     {
       class: "autocomplete",
-      data: {
-        autocomplete_method: (method.is_a?(Array) ? method.to_json : "/autocomplete/#{method}"),
-        autocomplete_hint_text: ts("Start typing for suggestions!"),
-        autocomplete_no_results_text: ts("(No suggestions found)"),
-        autocomplete_min_chars: 1,
-        autocomplete_searching_text: ts("Searching...")
-      }
-    }.deep_merge(options)
+      autocomplete_method: (method.is_a?(Array) ? method.to_json : "/autocomplete/#{method}"),
+      autocomplete_hint_text: ts("Start typing for suggestions!"),
+      autocomplete_no_results_text: ts("(No suggestions found)"),
+      autocomplete_min_chars: 1,
+      autocomplete_searching_text: ts("Searching...")
+    }.merge(options)
   end
 
   # see http://asciicasts.com/episodes/197-nested-model-form-part-2

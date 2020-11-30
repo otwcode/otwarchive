@@ -53,7 +53,7 @@
           <%= f.text_field :translated_post_id,
           autocomplete_options('admin_posts', 
                           title: ts('translation of'),
-                          data: { autocomplete_token_limit: 1 }) %>
+                          autocomplete_token_limit: 1) %>
         </dd>
       </dl>
     </fieldset>
