@@ -1,9 +1,9 @@
 require "spec_helper"
 require "controllers/api/api_helper"
 
-include ApiHelper
-
 describe "API v2 BookmarksController", type: :request, bookmark_search: true do
+  include ApiHelper
+
   bookmark = { id: "123",
                url: "http://example.com",
                author: "Thing",
@@ -21,7 +21,7 @@ describe "API v2 BookmarksController", type: :request, bookmark_search: true do
                rec: "0" }
 
   before do
-    ApiHelper.mock_external
+    mock_external
   end
 
   after do
