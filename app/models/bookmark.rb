@@ -158,13 +158,6 @@ class Bookmark < ApplicationRecord
     bookmarkable.bookmarks.visible.size
   end
 
-  # Virtual attribute for external works
-  def external=(attributes)
-    unless attributes.values.to_s.blank?
-      !self.bookmarkable ? self.bookmarkable = ExternalWork.new(attributes) : self.bookmarkable.attributes = attributes
-    end
-  end
-
   def tag_string
     tags.map{|tag| tag.name}.join(ArchiveConfig.DELIMITER_FOR_OUTPUT)
   end

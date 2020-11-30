@@ -64,9 +64,6 @@ module Taggable
   def archive_warning_string=(tag_string)
     parse_tags(ArchiveWarning, tag_string)
   end
-  def archive_warning_strings=(array)
-    parse_tags(ArchiveWarning, array)
-  end
   def fandom_string=(tag_string)
     parse_tags(Fandom, tag_string)
   end
@@ -79,6 +76,9 @@ module Taggable
   def freeform_string=(tag_string)
     parse_tags(Freeform, tag_string)
   end
+
+  alias category_strings= category_string=
+  alias archive_warning_strings= archive_warning_string=
 
   # a work can only have one rating, so using first will work
   # should always have a rating, if it doesn't err conservatively
