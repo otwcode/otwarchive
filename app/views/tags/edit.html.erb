@@ -90,9 +90,10 @@
         <dd>
           <%= f.text_field :syn_string,
                 autocomplete_options("tag?type=#{@tag.type.downcase}",
-                class: "autocomplete tags",
-                data: { autocomplete_token_limit: 1 }) %>
-          <p><%= ts("Choose an existing tag or add a new tag name here to create a new canonical and make this tag its synonym.") %></p>
+                class: "autocomplete tags", autocomplete_token_limit: 1) %>
+          <p>
+            <%= ts("Choose an existing tag or add a new tag name here to create a new canonical and make this tag its synonym.") %>
+          </p>
           <% if @tag.merger %>
             <p class="actions" role="navigation">
               <%= link_to ts("Edit %{tag_name}", tag_name: @tag.merger.name),
