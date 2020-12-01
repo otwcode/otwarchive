@@ -27,7 +27,6 @@ class CollectionIndexer < Indexer
           },
           name: { type: "text", analyzer: "simple" },
           description: { type: "text", analyzer: "simple" },
-          challenge_type: { type: "keyword" },
           created_at: { type: "date" }
         }
       }
@@ -95,8 +94,12 @@ class CollectionIndexer < Indexer
     bookmarks = Bookmark.is_public.joins(:collection_items)
                 .merge(CollectionItem.approved_by_collection)
                 .where(collection_items: { collection_id: collection.children.ids + [collection.id] })
-    bookmarks = is_public ? bookmarks.visible_to_all : bookmarks.visible_to_registered_user
 
-    bookmarks.count
+    
+    # bookmarks = bookmarks.select{ |b| b.bookmarkable.restricted == false } if is_public == true
+
+    # bookmarks = is_public ? bookmarks.visible_to_all : bookmarks.visible_to_registered_user
+
+    # bookmarks.count
   end
 end
