@@ -41,6 +41,7 @@ jobs:
 
     strategy:
       max-parallel: 5
+      fail-fast: false
       matrix:
         tests:
           - command: rake db:otwseed
@@ -85,7 +86,7 @@ jobs:
         if: ${{ matrix.tests.cucumber != 'false' }}
         run: sudo apt-get install -y phantomjs
 
-      - name: Cached wkhtmltopdf package
+      - name: Cache wkhtmltopdf package
         if: ${{ matrix.tests.ebook == 'true' }}
         uses: actions/cache@v2
         with:
