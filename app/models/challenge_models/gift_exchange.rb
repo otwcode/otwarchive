@@ -44,9 +44,6 @@ class GiftExchange < ApplicationRecord
     end
   end
 
-  after_destroy :reindex_collection
-  after_update :reindex_collection, if: :should_reindex_collection?
-
   # make sure that challenge sign-up / close / open dates aren't contradictory
   validate :validate_signup_dates
 

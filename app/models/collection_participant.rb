@@ -60,13 +60,9 @@ class CollectionParticipant < ApplicationRecord
   end
 
   def reindex_collection
-    is_assigned_as_maintainer = MAINTAINER_ROLES.include?(participant_role)
-    participant_change = previous_changes[:participant_role]
-    is_removed_as_maintainer = participant_change.present? && MAINTAINER_ROLES.include?(participant_change.first) && MAINTAINER_ROLES.exclude?(participant_change.second)
-    return unless is_assigned_as_maintainer || is_removed_as_maintainer
-
-    ids = [collection_id]
-    ids.push(collection.children.pluck(:id)) if collection.children.any?
+    return unless MAINTAINER_ROLES.include?(participant_role) || MAINTAINER_ROLES.include?(participant_role_before_last_save)
+ 
+    ids = [collection_id] + collection.children.pluck(:id)     
     IndexQueue.enqueue_ids(Collection, ids, :background)
   end
 end

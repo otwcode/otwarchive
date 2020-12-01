@@ -242,7 +242,8 @@ class Work < ApplicationRecord
 
   # Visibility has changed, which means we need to reindex
   # the work's pseuds, to update their work counts, as well as
-  # the work's bookmarker pseuds, to update their bookmark counts.
+  # the work's bookmarker pseuds, and their associated collections
+  # to update their bookmark counts.
   def should_reindex_pseuds_and_collections?
     pertinent_attributes = %w(id posted restricted in_anon_collection
                               in_unrevealed_collection hidden_by_admin)

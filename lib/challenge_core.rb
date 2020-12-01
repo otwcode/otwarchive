@@ -78,7 +78,7 @@ module ChallengeCore
 
   # reindex collection after creation, deletion, and certain attribute updates
   def should_reindex_collection? 
-    pertinent_attributes = %w[id signup_open signups_open_at signups_close_at assignments_due_at works_reveal_at authors_reveal_at] 
+    pertinent_attributes = %w[id signup_open signups_open_at signups_close_at assignments_due_at works_reveal_at authors_reveal_at]
     (self.saved_changes.keys & pertinent_attributes).present?
   end
 
@@ -103,6 +103,11 @@ module ChallengeCore
   end
   
   def self.included(base)
+    base.class_eval do
+      after_destroy :reindex_collection
+      after_commit :reindex_collection, if: :should_reindex_collection?
+    end
+
     base.extend(ClassMethods)
   end
   

@@ -125,7 +125,7 @@ class Bookmark < ApplicationRecord
     end
   end
 
-  # We index the bookmark count, so if it should change, update the pseud
+  # We index the bookmark count for pseuds and collections, so update those if they should change
   def update_pseud_and_collection_index
     return unless destroyed? || saved_change_to_id? || saved_change_to_private? || saved_change_to_hidden_by_admin?
     IndexQueue.enqueue_id(Pseud, pseud_id, :background)

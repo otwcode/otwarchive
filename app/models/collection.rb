@@ -286,7 +286,7 @@ class Collection < ApplicationRecord
   def all_approved_works
     work_ids = all_items.where(item_type: "Work", user_approval_status: CollectionItem::APPROVED,
       collection_approval_status: CollectionItem::APPROVED).pluck(:item_id)
-    Work.where(id: work_ids, posted: true).unhidden
+    Work.where(id: work_ids).visible_to_registered_user
   end
 
   def all_approved_works_count

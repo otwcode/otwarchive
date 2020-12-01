@@ -10,10 +10,7 @@ class CollectionDecorator < SimpleDelegator
     decorate_from_search(items, hits)
   end
 
-  #  # TODO: Either eliminate this function or add definitions for work_counts and
-  # # bookmark_counts (and possibly fandom information, as well?). The NameError
-  # # that this causes isn't a problem at the moment because the function isn't
-  # # being called from anywhere, but it needs to be fixed before it can be used.
+  # TODO: pull this out into a reusable module
   def self.decorate_from_search(results, search_hits)
     search_data = search_hits.group_by { |doc| doc["_id"] }
     results.map do |result|

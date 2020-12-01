@@ -30,9 +30,6 @@ class PromptMeme < ApplicationRecord
 
   before_validation :update_allowed_values, :update_allowed_prompts
 
-  after_destroy :reindex_collection
-  after_update :reindex_collection, if: :should_reindex_collection?
-
   # make sure that challenge sign-up / close / open dates aren't contradictory
   validate :validate_signup_dates
 

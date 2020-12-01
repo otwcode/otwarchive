@@ -222,16 +222,14 @@ Feature: Prompt Meme Challenge
   
   Given I have no-column prompt meme fully set up
   When I am logged in as "myname1"
-  When all indexing jobs have been run
-    And I sign up for Battle 12 with combination E
+  When I sign up for Battle 12 with combination E
   Then I should see "Sign-up was successfully created"
   
   Scenario: If there are no fandoms, prompt info on claims should show description or URL
   
   Given I have no-column prompt meme fully set up
   When I am logged in as "myname1"
-  When all indexing jobs have been run
-    And I sign up for Battle 12 with combination E
+  When I sign up for Battle 12 with combination E
   When I claim a prompt from "Battle 12"
   # TODO: check design: regular user doesn't get link to unposted claims anymore
   # When I view unposted claims for "Battle 12"
@@ -241,7 +239,6 @@ Feature: Prompt Meme Challenge
 
   Given I have no-column prompt meme fully set up
   When I am logged in as "myname1"
-    And all indexing jobs have been run
     And I sign up for Battle 12 with combination E
     And I view prompts for "Battle 12"
   # TODO: We need to check the display for fandomless memes

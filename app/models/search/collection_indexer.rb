@@ -27,7 +27,7 @@ class CollectionIndexer < Indexer
           },
           name: { type: "text", analyzer: "simple" },
           description: { type: "text", analyzer: "simple" },
-          collection_type: { type: "keyword" },
+          challenge_type: { type: "keyword" },
           created_at: { type: "date" }
         }
       }
@@ -67,7 +67,7 @@ class CollectionIndexer < Indexer
     object.as_json(
       root: false,
       only: [
-        :id, :name, :title, :description, :parent_id, :collection_type, :created_at
+        :id, :name, :title, :description, :parent_id, :challenge_type, :created_at
       ]
     ).merge(
       closed: object.closed?,

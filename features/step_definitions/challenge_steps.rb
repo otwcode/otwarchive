@@ -115,7 +115,6 @@ Then /^signup should be open$/ do
 end
 
 When /^I view open challenges$/ do
-  step %{all indexing jobs have been run}
   step "I go to the collections page"
   step %{I follow "Open Challenges"}
 end
