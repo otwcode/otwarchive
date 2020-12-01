@@ -1,11 +1,11 @@
 # The only manually edited section of this file.
 # SimpleCov must be required before any application code.
 
-require 'simplecov'
-SimpleCov.command_name 'features-' + (ENV['TEST_RUN'] || 'local')
-if ENV['CI'] == 'true' && ENV['TRAVIS'] == 'true'
-  # Only on Travis...
-  require 'codecov'
+require "simplecov"
+
+if ENV["CI"] == "true"
+  # Only when running CI:
+  require "codecov"
   SimpleCov.formatter = SimpleCov::Formatter::Codecov
 end
 
