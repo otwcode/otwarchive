@@ -117,9 +117,6 @@ jobs:
       - name: Run test group
         run: bundle exec ${{ matrix.tests.command }}
 
-      - name: Stop all redis servers
-        run: ./script/gh-actions/stop_all_redis.sh
-
       - name: Upload failure screenshots
         if: ${{ failure() && matrix.tests.cucumber != 'false' }}
         uses: actions/upload-artifact@v2
