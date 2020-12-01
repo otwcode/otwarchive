@@ -12,8 +12,11 @@ module Otwarchive
     # Application configuration should go into files in config/initializers
     # -- all .rb files in that directory are automatically loaded.
 
+    config.load_defaults "6.0"
+
     # Custom directories with classes and modules you want to be autoloadable.
     # config.autoload_paths += %W(#{config.root}/extras)
+    config.add_autoload_paths_to_load_path = false
     config.eager_load_paths += [Rails.root.join("lib")]
     config.autoload_paths += [Rails.root.join("app/sweepers")]
     %w[
@@ -59,7 +62,6 @@ module Otwarchive
     config.encoding = "utf-8"
 
     config.action_mailer.default_url_options = { host: "archiveofourown.org" }
-    config.action_mailer.delivery_job = "ActionMailer::MailDeliveryJob"
 
     config.action_view.automatically_disable_submit_tag = false
 
@@ -74,6 +76,7 @@ module Otwarchive
     # This is necessary if your schema can't be completely dumped by the schema dumper,
     # like if you have constraints or database-specific column types
     config.active_record.schema_format = :sql
+    config.active_record.belongs_to_required_by_default = false
 
     ### end of preservation section
 

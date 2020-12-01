@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 # Creates a Sanitize transformer to sanitize audio and video tags
-module OTWSanitize
+module OtwSanitize
   class MediaSanitizer
     # Attribute whitelists
     AUDIO_ATTRIBUTES = %w[

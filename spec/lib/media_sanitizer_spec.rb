@@ -2,7 +2,7 @@
 
 require 'spec_helper'
 
-describe OTWSanitize::MediaSanitizer do
+describe OtwSanitize::MediaSanitizer do
   describe ".transformer" do
     it "returns a callable object" do
       transform = OTWSanitize::MediaSanitizer.transformer
@@ -14,7 +14,7 @@ describe OTWSanitize::MediaSanitizer do
         Sanitize::Config.merge(
           Sanitize::Config::BASIC,
           transformers: [
-            OTWSanitize::MediaSanitizer.transformer
+            OtwSanitize::MediaSanitizer.transformer
           ]
         )
       end

@@ -1,6 +1,10 @@
 Otwarchive::Application.configure do
   # Settings specified here will take precedence over those in config/environment.rb
 
+  local_config = YAML.load_file(Rails.root.join("config/local.yml"))
+
+  config.hosts = local_config["PERMITTED_HOSTS"]
+
   # The production environment is meant for finished, "live" apps.
   # Code is not reloaded between requests
   config.cache_classes = true
@@ -31,7 +35,7 @@ Otwarchive::Application.configure do
   # config.logger = SyslogLogger.new
 
   # Use a different cache store in production
-  config.cache_store = :mem_cache_store, YAML.load_file(Rails.root.join("config/local.yml"))["MEMCACHED_SERVERS"],
+  config.cache_store = :mem_cache_store, local_config["MEMCACHED_SERVERS"],
                        { namespace: "ao3-v1", compress: true, pool_size: 10 }
 
   # Disable Rails's static asset server

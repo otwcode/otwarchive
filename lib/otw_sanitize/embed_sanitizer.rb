@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require "addressable/uri"
 
-module OTWSanitize
+module OtwSanitize
   # Creates a Sanitize transformer to sanitize embedded media
   class EmbedSanitizer
     WHITELIST_REGEXES = {
