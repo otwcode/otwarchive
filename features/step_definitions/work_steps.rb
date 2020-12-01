@@ -372,7 +372,7 @@ end
 
 When /^I fill in basic external work tags$/ do
   select(DEFAULT_RATING, from: "Rating")
-  fill_in("bookmark_external_fandom_string", with: DEFAULT_FANDOM)
+  fill_in("external_work_fandom_string", with: DEFAULT_FANDOM)
   fill_in("bookmark_tag_string", with: DEFAULT_FREEFORM)
 end
 
