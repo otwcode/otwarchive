@@ -90,7 +90,8 @@
         <dd>
           <%= f.text_field :syn_string,
                 autocomplete_options("tag?type=#{@tag.type.downcase}",
-                class: "autocomplete tags", autocomplete_token_limit: 1) %>
+                class: "autocomplete tags",
+                data: { autocomplete_token_limit: 1 }) %>
           <p>
             <%= ts("Choose an existing tag or add a new tag name here to create a new canonical and make this tag its synonym.") %>
           </p>
@@ -136,7 +137,7 @@
             <% if @parents[tag_type].present? %>
               <h4 class="heading"><%= ts("Check to remove:") %></h4>
               <%= check_all_none("All", "None", tag_type) %>
-              <%= checkbox_section(f, "associations_to_remove", @parents[tag_type], 
+              <%= checkbox_section(f, "associations_to_remove", @parents[tag_type],
                     name_helper_method: "remove_tag_association_label",
                     extra_info_method: "link_to_edit_tag",
                     field_id: "parent_#{tag_type}_associations_to_remove",
