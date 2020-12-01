@@ -97,9 +97,8 @@ class CollectionIndexer < Indexer
 
     
     # bookmarks = bookmarks.select{ |b| b.bookmarkable.restricted == false } if is_public == true
+    bookmarks = is_public ? bookmarks.visible_to_all : bookmarks.visible_to_registered_user
 
-    # bookmarks = is_public ? bookmarks.visible_to_all : bookmarks.visible_to_registered_user
-
-    # bookmarks.count
+    bookmarks.count
   end
 end
