@@ -2,9 +2,9 @@ ENV["RAILS_ENV"] ||= "test"
 
 require File.expand_path("../config/environment", __dir__)
 require "simplecov"
-SimpleCov.command_name "rspec-" + (ENV["TEST_RUN"] || "")
-if ENV["CI"] == "true" && ENV["TRAVIS"] == "true"
-  # Only on Travis...
+
+if ENV["CI"] == "true"
+  # Only when running CI:
   require "codecov"
   SimpleCov.formatter = SimpleCov::Formatter::Codecov
 end
