@@ -19,6 +19,7 @@ jobs:
       TEST_GROUP: ${{ matrix.tests.command }}
       CUCUMBER_RETRY: 1
       CUCUMBER_FORMAT: Ao3Cucumber::Formatter
+      SPEC_OPTS: --force-color
 
     services:
       database:
