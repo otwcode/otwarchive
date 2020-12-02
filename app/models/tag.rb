@@ -190,7 +190,7 @@ class Tag < ApplicationRecord
     if !self.new_record? && self.name_changed?
       # ordinary wranglers can change case and accents but not punctuation or the actual letters in the name
       # admins can change tags with no restriction
-      unless User.current_user.is_a?(Admin) || (self.name.downcase == self.name_was.downcase) || (self.name.mb_chars.normalize(:kd).gsub(/[^\x00-\x7F]/u,'').downcase.to_s == self.name_was.mb_chars.normalize(:kd).gsub(/[^\x00-\x7F]/u,'').downcase.to_s)
+      unless User.current_user.is_a?(Admin) || only_case_changed?
         self.errors.add(:name, "can only be changed by an admin.")
       end
     end
@@ -1194,4 +1194,14 @@ class Tag < ApplicationRecord
     TagNomination.where(tagname: tag.name).update_all(values)
   end
 
+  def only_case_changed?
+    new_normalized_name = normalized_without_punctuation(self.name)
+    old_normalized_name = normalized_without_punctuation(self.name_was)
+    (self.name.downcase == self.name_was.downcase) ||
+      (new_normalized_name == old_normalized_name)
+  end
+
+  def normalized_without_punctuation(str)
+    str.mb_chars.unicode_normalize(:nfkd).gsub(/[^\x00-\x7F]/u,'').downcase.to_s
+  end
 end
