@@ -314,15 +314,14 @@ class Collection < ApplicationRecord
   # Return the count of all bookmarkable items (works, series, external works)
   # that are in this collection (or any of its children) and visible to
   # the current user. Excludes bookmarks of deleted works/series.
-  def all_bookmarked_items_count
+  # Takes logged_in as an optional param, to calculate bookmarkables for public and registered users
+  def all_bookmarked_items_count(logged_in = User.current_user.present?)
     # The set of all bookmarks in this collection and its children.
     # Note that "approved_by_collection" forces the bookmarks to be approved
     # both by the collection AND by the user.
     bookmarks = Bookmark.is_public.joins(:collection_items).
                 merge(CollectionItem.approved_by_collection).
                 where(collection_items: { collection_id: children.ids + [id] })
-
-    logged_in = User.current_user.present?
 
     [
       logged_in ? Work.visible_to_registered_user : Work.visible_to_all,

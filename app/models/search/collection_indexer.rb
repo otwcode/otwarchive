@@ -85,20 +85,8 @@ class CollectionIndexer < Indexer
       authors_reveal_at: object.challenge&.authors_reveal_at,
       general_works_count: object.all_approved_works.count,
       public_works_count: object.all_approved_works.where(restricted: false).count,
-      general_bookmarked_items_count: get_bookmarked_items_count(object), 
-      public_bookmarked_items_count: get_bookmarked_items_count(object, true)
+      general_bookmarked_items_count: object.all_bookmarked_items_count(false), 
+      public_bookmarked_items_count: object.all_bookmarked_items_count(true)
     )
-  end
-
-  def get_bookmarked_items_count(collection, is_public = false)
-    bookmarks = Bookmark.is_public.joins(:collection_items)
-                .merge(CollectionItem.approved_by_collection)
-                .where(collection_items: { collection_id: collection.children.ids + [collection.id] })
-
-    
-    # bookmarks = bookmarks.select{ |b| b.bookmarkable.restricted == false } if is_public == true
-    bookmarks = is_public ? bookmarks.visible_to_all : bookmarks.visible_to_registered_user
-
-    bookmarks.count
   end
 end
