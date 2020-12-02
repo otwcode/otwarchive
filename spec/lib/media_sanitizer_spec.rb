@@ -5,7 +5,7 @@ require 'spec_helper'
 describe OtwSanitize::MediaSanitizer do
   describe ".transformer" do
     it "returns a callable object" do
-      transform = OTWSanitize::MediaSanitizer.transformer
+      transform = OtwSanitize::MediaSanitizer.transformer
       expect(transform).to respond_to(:call)
     end
 
