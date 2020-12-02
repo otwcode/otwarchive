@@ -207,12 +207,8 @@ $.TokenList = function (input, url_or_data, settings) {
     var hidden_input_id = $(input)
                               .attr('id');
 
-    // Keep a reference to the label whose for attribute matches the original input box's id
+    // Keep a reference to the label whose for attribute that matches the original input box's id
     var hidden_input_label = $('label[for="' + hidden_input_id + '"]');
-
-    // Keep a reference to the original input box's aria-describedby attribute
-    var hidden_input_describedby = $(input)
-                                     .attr("aria-describedby");
 
     // Change the original label's for attribute so it will match the id attribue we give the new input box
     hidden_input_label.attr({
@@ -221,21 +217,9 @@ $.TokenList = function (input, url_or_data, settings) {
 
     // Give the new input box an id attribute based on the original input box's id
     // Originally included .css({outline: "none" }), but we actually want to see an outline for accessibility reasons
-        var input_box = $("<input>")
+        var input_box = $("<input type=\"text\" class=\"text\" autocomplete=\"off\" role=\"combobox\" aria-expanded=\"true\" aria-autocomplete=\"list\">")
         .attr({
-          "aria-autocomplete": "list",
-          "aria-expanded": "true",
-          "autocomplete": "off",
-          "class": "text",
-          "id": hidden_input_id + "_autocomplete",
-          "role": "combobox",
-          "type": "text"
-        })
-        // add aria-describedby attribute from original input, if it exists.
-        .attr("aria-describedby", function() {
-          if (hidden_input_describedby) {
-            return hidden_input_describedby;
-          }
+          'id': hidden_input_id + '_autocomplete'
         })
         .focus(function () {
             if (settings.tokenLimit === null || token_count < settings.tokenLimit) {
@@ -403,7 +387,7 @@ $.TokenList = function (input, url_or_data, settings) {
     var first_dropdown_item = null;
 
     // The list to store the token items in
-    var token_list = $("<ul />")
+    var token_list = $("<ul />") // was role=\"listbox\" aria-activedescendant=\"ui-active-menuitem\"
         .addClass(settings.classes.tokenList)
         .click(function (event) {
             var li = $(event.target).closest("li");
@@ -438,7 +422,7 @@ $.TokenList = function (input, url_or_data, settings) {
     }
 
     // The token holding the input box
-    var input_token = $("<li />")
+    var input_token = $("<li />") // was role=\"menuitem\"
         .addClass(settings.classes.inputToken)
         .appendTo(token_list)
         .append(input_box);
@@ -546,10 +530,10 @@ $.TokenList = function (input, url_or_data, settings) {
                 delete_token($(this).parent());
                 return false;
             });
-        // Link with a title attribute for better accessibility
+				// Link with a title attribute for better accessibility
         $("<a href=\"#\">" + settings.deleteText + "</a>")
-            .attr("title", "remove " + value)
-            .appendTo(delete_span_token);
+						.attr("title", "remove " + value)
+						.appendTo(delete_span_token);
 
         // Store data on the token
         var token_data = {"id": id, "name": value};
@@ -794,11 +778,7 @@ $.TokenList = function (input, url_or_data, settings) {
     function populate_dropdown (query, results) {
         if(results && results.length) {
             dropdown.empty();
-            var dropdown_ul = $("<ul>")
-                .attr({
-                  "aria-activedescendant": "ui-active-menuitem",
-                  "role": "listbox"
-                })
+            var dropdown_ul = $("<ul role=\"listbox\" aria-activedescendant=\"ui-active-menuitem\">")
                 .appendTo(dropdown)
                 .mouseover(function (event) {
                     select_dropdown_item($(event.target).closest("li"));

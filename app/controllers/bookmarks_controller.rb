@@ -186,8 +186,8 @@ class BookmarksController < ApplicationController
   # POST /bookmarks
   # POST /bookmarks.xml
   def create
-    @bookmark = Bookmark.new(bookmark_params)
-    @bookmarkable = @bookmark.bookmarkable
+    @bookmarkable ||= ExternalWork.new(external_work_params)
+    @bookmark = @bookmarkable.bookmarks.build(bookmark_params)
     if @bookmarkable.new_record? && @bookmarkable.fandoms.blank?
        @bookmark.errors.add(:base, "Fandom tag is required")
        render :new and return
@@ -375,12 +375,14 @@ class BookmarksController < ApplicationController
 
   def bookmark_params
     params.require(:bookmark).permit(
-      :bookmarkable_id, :bookmarkable_type,
-      :pseud_id, :bookmarker_notes, :tag_string, :collection_names, :private, :rec,
-      external: [
-        :url, :author, :title, :fandom_string, :rating_string, :relationship_string,
-        :character_string, :summary, category_string: []
-      ]
+      :pseud_id, :bookmarker_notes, :tag_string, :collection_names, :private, :rec
+    )
+  end
+
+  def external_work_params
+    params.require(:external_work).permit(
+      :url, :author, :title, :fandom_string, :rating_string, :relationship_string,
+      :character_string, :summary, category_strings: []
     )
   end
 
