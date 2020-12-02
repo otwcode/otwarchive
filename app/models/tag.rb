@@ -1195,13 +1195,14 @@ class Tag < ApplicationRecord
   end
 
   def only_case_changed?
-    new_normalized_name = normalized_without_punctuation(self.name)
-    old_normalized_name = normalized_without_punctuation(self.name_was)
+    new_normalized_name = normalized_without_unicode(self.name)
+    old_normalized_name = normalized_without_unicode(self.name_was)
     (self.name.downcase == self.name_was.downcase) ||
       (new_normalized_name == old_normalized_name)
   end
 
-  def normalized_without_punctuation(str)
+  # Produce an ASCII, downcased version of a string
+  def normalized_without_unicode(str)
     str.mb_chars.unicode_normalize(:nfkd).gsub(/[^\x00-\x7F]/u,'').downcase.to_s
   end
 end
