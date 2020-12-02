@@ -103,11 +103,6 @@ module ChallengeCore
   end
   
   def self.included(base)
-    base.class_eval do
-      after_destroy :reindex_collection
-      after_commit :reindex_collection, if: :should_reindex_collection?
-    end
-
     base.extend(ClassMethods)
   end
   
