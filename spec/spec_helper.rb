@@ -141,8 +141,6 @@ RSpec.configure do |config|
     metadata[:type] = :task
   end
 
-  # Set default formatter to print out the description of each test as it runs
-  config.color = true
   config.formatter = :documentation
 
   config.file_fixture_path = "spec/support/fixtures"
