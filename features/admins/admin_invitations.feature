@@ -351,11 +351,11 @@ Feature: Admin Actions to Manage Invitations
     Then I should see "oldman@ds9.com" in the "invitation_invitee_email" input
 
   Scenario: An admin can delete an invitation
-    Given an invitation for "test@a.com" exists
-      And an invitation for "test@a.com" exists
-      And I am logged in as an admin
+    Given an invitation for "test@example.com" exists
+      And an invitation for "test@example.com" exists
+      And I am logged in as a "policy_and_abuse" admin
     When I follow "Invite New Users"
-      And I fill in "track_invitation_invitee_email" with "test@a.com"
+      And I fill in "track_invitation_invitee_email" with "test@example.com"
       And I press "Go"
     Then I should see "Delete"
     When I follow "Delete"

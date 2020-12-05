@@ -58,7 +58,7 @@ class InvitationsController < ApplicationController
   def update
     @invitation.attributes = invitation_params
 
-    if @invitation.invitee_email_changed? && !@invitation.invitee_email.blank? && @invitation.update_attributes(invitation_params)
+    if @invitation.invitee_email_changed? && @invitation.invitee_email.present? && @invitation.update_attributes(invitation_params)
       flash[:notice] = 'Invitation was successfully sent.'
       if logged_in_as_admin?
         redirect_to find_admin_invitations_path("invitation[token]" => @invitation.token)

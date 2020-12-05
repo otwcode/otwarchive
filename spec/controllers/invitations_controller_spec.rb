@@ -233,6 +233,7 @@ describe InvitationsController do
 
     it "errors on failure" do
       invite = create(:invitation, invitee_email: "")
+      admin.update(roles: ["policy_and_abuse"])
       fake_login_admin(admin)
 
       allow(Invitation).to receive(:find).with(invite.id.to_s).and_return(invite)
