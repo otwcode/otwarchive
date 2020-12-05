@@ -7,11 +7,11 @@ describe BookmarkSearchForm, bookmark_search: true do
     end
 
     let!(:included_work) do
-      FactoryBot.create(:work, posted: true)
+      FactoryBot.create(:work)
     end
 
     let!(:excluded_work) do
-      FactoryBot.create(:work, posted: true)
+      FactoryBot.create(:work)
     end
 
     let!(:included_bookmark) do

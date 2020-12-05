@@ -6,7 +6,8 @@ Feature: Tag wrangling
     Given I have loaded the "roles" fixture
     When I am logged in as "dizmo"
     Then I should not see "Tag Wrangling" within "#header"
-    When I am logged in as an admin
+    When I am logged in as a "tag_wrangling" admin
+      And I go to the manage users page
       And I fill in "Name" with "dizmo"
       And I press "Find"
     Then I should see "dizmo" within "#admin_users_table"    
@@ -198,6 +199,8 @@ Feature: Tag wrangling
       And I check "Unwrangleable"
       And I fill in "Fandoms" with "Stargate SG-1"
       And I press "Save changes"
+      # Make sure that the indices are up-to-date:
+      And all indexing jobs have been run
     Then I should see "Tag was updated"
 
     # check sidebar links and pages for wrangling within a fandom
@@ -252,12 +255,12 @@ Feature: Tag wrangling
     Then I should see "Wrangle Tags for Stargate SG-1"
       And I should see "Showing All Merger Tags"
 
-  Scenario: Wrangler has option to reindex a work
+  Scenario: Wrangler has option to troubleshoot a work
 
     Given the work "Indexing Issues"
       And I am logged in as a tag wrangler
      When I view the work "Indexing Issues"
-     Then I should see "Reindex Work"
+     Then I should see "Troubleshoot"
 
   @javascript
   Scenario: AO3-1698 Sign up for a fandom from the edit fandom page,
@@ -299,25 +302,62 @@ Feature: Tag wrangling
     Then I should not see "Sign Up"
       And I should see the tag wrangler listed as an editor of the tag
 
-  Scenario: A user can not see the reindex button on a tag page
+  Scenario: A user can not see the troubleshoot button on a tag page
 
     Given a canonical fandom "Cowboy Bebop"
       And I am logged in as a random user
     When I view the tag "Cowboy Bebop"
-    Then I should not see "Reindex Tag"
+    Then I should not see "Troubleshoot"
 
-  Scenario: A tag wrangler can not see the reindex button on a tag page
+  Scenario: A tag wrangler can see the troubleshoot button on a tag page
 
     Given a canonical fandom "Cowboy Bebop"
       And the tag wrangler "lain" with password "lainnial" is wrangler of "Cowboy Bebop"
     When I view the tag "Cowboy Bebop"
-    Then I should not see "Reindex Tag"
+    Then I should see "Troubleshoot"
 
-  Scenario: An admin can see the reindex button on a tag page
-    and will receive the correct message when pressed.
+  Scenario: An admin can see the troubleshoot button on a tag page
 
     Given a canonical fandom "Cowboy Bebop"
       And I am logged in as an admin
     When I view the tag "Cowboy Bebop"
-    Then I follow "Reindex Tag"
-      And I should see "Tag sent to be reindexed"
+    Then I should see "Troubleshoot"
+
+  Scenario: Can simultaneously add a grandparent metatag as a direct metatag and remove the parent metatag
+    Given a canonical fandom "Grandparent"
+      And a canonical fandom "Parent"
+      And a canonical fandom "Child"
+      And "Grandparent" is a metatag of the fandom "Parent"
+      And "Parent" is a metatag of the fandom "Child"
+      And I am logged in as a random user
+      And I post the work "Oldest" with fandom "Grandparent"
+      And I post the work "Middle" with fandom "Parent"
+      And I post the work "Youngest" with fandom "Child"
+      And I am logged in as a tag wrangler
+
+    When I edit the tag "Child"
+      And I check the 1st checkbox with id matching "MetaTag"
+      And I fill in "tag_meta_tag_string" with "Grandparent"
+      And I press "Save changes"
+    Then I should see "Tag was updated"
+      And I should see "Grandparent" within "#parent_MetaTag_associations_to_remove_checkboxes"
+      But I should not see "Parent" within "#parent_MetaTag_associations_to_remove_checkboxes"
+
+    When I view the tag "Child"
+    Then I should see "Grandparent" within ".meta"
+      But I should not see "Parent" within ".meta"
+
+    When I go to the works tagged "Grandparent"
+    Then I should see "Oldest"
+      And I should see "Middle"
+      And I should see "Youngest"
+
+    When I go to the works tagged "Parent"
+    Then I should see "Middle"
+      But I should not see "Oldest"
+      And I should not see "Youngest"
+
+    When I go to the works tagged "Child"
+    Then I should see "Youngest"
+      But I should not see "Oldest"
+      And I should not see "Middle"

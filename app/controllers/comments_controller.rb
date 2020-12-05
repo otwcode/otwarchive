@@ -19,7 +19,7 @@ class CommentsController < ApplicationController
   before_action :check_ownership, only: [:edit, :update, :cancel_comment_edit]
   before_action :check_permission_to_edit, only: [:edit, :update ]
   before_action :check_permission_to_delete, only: [:delete_comment, :destroy]
-  before_action :check_anonymous_comment_preference, only: [:new, :create, :add_comment_reply]
+  before_action :check_parent_comment_permissions, only: [:new, :create, :add_comment_reply]
   before_action :check_unreviewed, only: [:add_comment_reply]
   before_action :check_permission_to_review, only: [:unreviewed]
   before_action :check_permission_to_access_single_unreviewed, only: [:show]
@@ -87,12 +87,19 @@ class CommentsController < ApplicationController
     redirect_to new_user_session_path(restricted_commenting: true)
   end
 
-  # Check to see if the ultimate_parent is a Work, and if so, if it allows anon comments
-  def check_anonymous_comment_preference
+  # Check to see if the ultimate_parent is a Work, and if so, if it allows
+  # comments for the current user.
+  def check_parent_comment_permissions
     parent = find_parent
-    return unless parent.respond_to?(:anon_commenting_disabled) && parent.anon_commenting_disabled && !logged_in?
-    flash[:error] = ts("Sorry, this work doesn't allow non-Archive users to comment.")
-    redirect_to work_path(parent)
+    return unless parent.is_a?(Work)
+
+    if parent.disable_all_comments?
+      flash[:error] = ts("Sorry, this work doesn't allow comments.")
+      redirect_to work_path(parent)
+    elsif parent.disable_anon_comments? && !logged_in?
+      flash[:error] = ts("Sorry, this work doesn't allow non-Archive users to comment.")
+      redirect_to work_path(parent)
+    end
   end
 
   def check_unreviewed
@@ -247,11 +254,6 @@ class CommentsController < ApplicationController
       # First, try saving the comment
       if @comment.save
         if @comment.approved?
-          # save user's name/email if not logged in, truncated in case of something really long and wacky
-          if @comment.pseud.nil?
-            cookies[:comment_name] = @comment.name[0..100]
-            cookies[:comment_email] = @comment.email[0..100]
-          end
           if @comment.unreviewed?
             flash[:comment_notice] = ts("Your comment was received! It will appear publicly after the work creator has approved it.")
           else
@@ -310,6 +312,8 @@ class CommentsController < ApplicationController
   # DELETE /comments/1
   # DELETE /comments/1.xml
   def destroy
+    authorize @comment if logged_in_as_admin?
+
     parent = @comment.ultimate_parent
     parent_comment = @comment.reply_comment? ? @comment.commentable : nil
     unreviewed = @comment.unreviewed?
@@ -366,13 +370,15 @@ class CommentsController < ApplicationController
   end
 
   def approve
+    authorize @comment
     @comment.mark_as_ham!
-    redirect_to_all_comments(@comment.ultimate_parent, {show_comments: true})
+    redirect_to_all_comments(@comment.ultimate_parent, show_comments: true)
   end
 
   def reject
-   @comment.mark_as_spam!
-   redirect_to_all_comments(@comment.ultimate_parent, {show_comments: true})
+    authorize @comment if logged_in_as_admin?
+    @comment.mark_as_spam!
+    redirect_to_all_comments(@comment.ultimate_parent, show_comments: true)
   end
 
   def show_comments

@@ -3,6 +3,7 @@ Feature: Archivist bulk imports
   Background:
     Given I have an archivist "archivist"
       And the default ratings exist
+      And all warnings exist
       And I am logged in as "archivist"
 
   Scenario: Non-archivist cannot import for others
@@ -12,7 +13,7 @@ Feature: Archivist bulk imports
 
   Scenario: Make a user an archivist
     Given I have pre-archivist setup for "not_archivist"
-      And I am logged in as an admin
+      And I am logged in as an "open_doors" admin
     When I make "not_archivist" an archivist
     Then I should see "User was successfully updated"
 
@@ -184,7 +185,6 @@ Feature: Archivist bulk imports
   Scenario: Orphan a work in response to an invite, leaving name on it
     Given I have an orphan account
     When I import the work "http://ao3testing.dreamwidth.org/593.html" by "randomtestname" with email "random@example.com"
-      And the system processes jobs
     Then 1 email should be delivered to "random@example.com"
       And the email should contain "Claim or remove your works"
     When I am logged out
@@ -192,6 +192,7 @@ Feature: Archivist bulk imports
     Then I should see "Claiming Your Imported Works"
       And I should see "An archive including some of your work(s) has been moved to the Archive of Our Own."
     When I choose "Orphan my works and take my email address off them, but keep my name."
+      And I wait 2 seconds
       And I press "Update"
     Then I should see "Your imported stories have been orphaned. Thank you for leaving them in the archive! Your preferences have been saved."
     When I am logged in
@@ -201,7 +202,6 @@ Feature: Archivist bulk imports
   Scenario: Orphan a work in response to an invite, taking name off it
     Given I have an orphan account
     When I import the work "http://ao3testing.dreamwidth.org/593.html" by "randomtestname" with email "random@example.com"
-      And the system processes jobs
     Then 1 email should be delivered to "random@example.com"
       And the email should contain "Claim or remove your works"
     When I am logged out
@@ -210,6 +210,7 @@ Feature: Archivist bulk imports
       And I should see "An archive including some of your work(s) has been moved to the Archive of Our Own."
     When I choose "Orphan my works and take my email address off them, but keep my name."
       And I check "Assign my works to the AO3 orphan_account, removing both my name and email address."
+      And I wait 2 seconds
       And I press "Update"
     Then I should see "Your imported stories have been orphaned. Thank you for leaving them in the archive! Your preferences have been saved."
     When I am logged in

@@ -1,11 +1,13 @@
 class Work < ApplicationRecord
-  include Taggable
+  # TODO: Remove this after AO3-6016 is deployed.
+  self.ignored_columns = [:anon_commenting_disabled]
+
+  include Filterable
   include CreationNotifier
   include Collectible
   include Bookmarkable
   include Searchable
   include BookmarkCountCaching
-  include WorkStats
   include WorkChapterCountCaching
   include ActiveModel::ForbiddenAttributesProtection
   include Creatable
@@ -148,6 +150,12 @@ class Work < ApplicationRecord
   # Run Taggable#check_for_invalid_tags as a validation.
   validate :check_for_invalid_tags
 
+  enum comment_permissions: {
+    enable_all: 0,
+    disable_anon: 1,
+    disable_all: 2
+  }, _suffix: :comments
+
   ########################################################################
   # HOOKS
   # These are methods that run before/after saves and updates to ensure
@@ -185,10 +193,10 @@ class Work < ApplicationRecord
           # Check to see if this work is being deleted by an Admin
           if User.current_user.is_a?(Admin)
             # this has to use the synchronous version because the work is going to be destroyed
-            UserMailer.admin_deleted_work_notification(user, self).deliver!
+            UserMailer.admin_deleted_work_notification(user, self).deliver_now
           else
             # this has to use the synchronous version because the work is going to be destroyed
-            UserMailer.delete_work_notification(user, self).deliver!
+            UserMailer.delete_work_notification(user, self).deliver_now
           end
         end
       end
@@ -301,11 +309,6 @@ class Work < ApplicationRecord
     chapters.sort_by(&:position).reverse.each(&:destroy)
   end
 
-  after_destroy :clean_up_filter_taggings
-  def clean_up_filter_taggings
-    FilterTagging.where("filterable_type = 'Work' AND filterable_id = #{self.id}").destroy_all
-  end
-
   after_destroy :clean_up_assignments
   def clean_up_assignments
     self.challenge_assignments.each {|a| a.creation = nil; a.save!}
@@ -315,16 +318,8 @@ class Work < ApplicationRecord
   # RESQUE
   ########################################################################
 
+  include AsyncWithResque
   @queue = :utilities
-  # This will be called by a worker when a job needs to be processed
-  def self.perform(id, method, *args)
-    find(id).send(method, *args)
-  end
-
-  # We can pass this any Work instance method that we want to run later.
-  def async(method, *args)
-    Resque.enqueue(Work, id, method, *args)
-  end
 
   ########################################################################
   # IMPORTING
@@ -506,13 +501,6 @@ class Work < ApplicationRecord
       user_is_owner_or_invited?(user)
     end
   end
-
-  def unrestricted=(setting)
-    if setting == "1"
-      self.restricted = false
-    end
-  end
-  def unrestricted; !self.restricted; end
 
   def unrevealed?(user=User.current_user)
     # eventually here is where we check if it's in a challenge that hasn't been made public yet
@@ -819,64 +807,38 @@ class Work < ApplicationRecord
     return true
   end
 
+  # When the filters on a work change, we need to perform some extra checks.
+  def self.reindex_for_filter_changes(ids, filter_taggings, queue)
+    # The crossover/OTP status of a work can change without actually changing
+    # the filters (e.g. if you have a work tagged with canonical fandom A and
+    # unfilterable fandom B, synning B to A won't change the work's filters,
+    # but the work will immediately stop qualifying as a crossover). So we want
+    # to reindex all works whose filters were checked, not just the works that
+    # had their filters changed.
+    IndexQueue.enqueue_ids(Work, ids, queue)
+
+    # Only works are included in the filter count, so if a work's
+    # filter-taggings change, the FilterCount probably needs updating.
+    FilterCount.enqueue_filters(filter_taggings.map(&:filter_id))
+
+    # From here, we only want to update works whose filter_taggings have
+    # actually changed.
+    changed_ids = filter_taggings.map(&:filterable_id)
+    return unless changed_ids.present?
+
+    # Reindex any series associated with works whose filters have changed.
+    series_ids = SerialWork.where(work_id: changed_ids).pluck(:series_id)
+    IndexQueue.enqueue_ids(Series, series_ids, queue)
+
+    # Reindex any pseuds associated with works whose filters have changed.
+    pseud_ids = Creatorship.where(creation_id: changed_ids,
+                                  creation_type: "Work",
+                                  approved: true).pluck(:pseud_id)
+    IndexQueue.enqueue_ids(Pseud, pseud_ids, queue)
+  end
+
   # FILTERING CALLBACKS
   after_save :adjust_filter_counts
-
-  # Creates a filter_tagging relationship between the work and the tag or its
-  # canonical synonym. Also updates the series index because series inherit tags
-  # from works
-  def add_filter_tagging(tag, meta = false)
-    filter = tag.canonical? ? tag : tag.merger
-    if filter
-      if !self.filters.include?(filter)
-        if meta
-          self.filter_taggings.create(filter_id: filter.id, inherited: true)
-        else
-          self.filters << filter
-        end
-        filter.reset_filter_count
-      elsif !meta
-        ft = self.filter_taggings.where(["filter_id = ?", filter.id]).first
-        ft.update_attribute(:inherited, false)
-      end
-      IndexQueue.enqueue_ids(Series, series.pluck(:id), :main)
-    end
-  end
-
-  # Removes filter_tagging relationship unless the work is tagged with more than
-  # one synonymous tags. Also updates the series index because series inherit
-  # tags from works
-  def remove_filter_tagging(tag)
-    filter = tag.filter
-    if filter
-      filters_to_remove = [filter] + filter.meta_tags
-      filters_to_remove.each do |filter_to_remove|
-        if self.filters.include?(filter_to_remove)
-          all_sub_tags = filter_to_remove.sub_tags + [filter_to_remove]
-          sub_mergers = all_sub_tags.empty? ? [] : all_sub_tags.collect(&:mergers).flatten.compact
-          all_tags_with_filter_to_remove_as_meta = all_sub_tags + sub_mergers
-          remaining_tags = self.tags - [tag]
-          if (remaining_tags & all_tags_with_filter_to_remove_as_meta).empty? # none of the remaining tags need filter_to_remove
-            self.filter_taggings.where(filter_id: filter_to_remove.id).destroy_all
-            filter_to_remove.reset_filter_count
-            filter_to_remove.update_works_index_timestamp!
-          else # we should keep filter_to_remove, but check if inheritence needs to be updated
-            direct_tags_for_filter_to_remove = filter_to_remove.mergers + [filter_to_remove]
-            if (remaining_tags & direct_tags_for_filter_to_remove).empty? # not tagged with filter or mergers directly
-              ft = self.filter_taggings.where(["filter_id = ?", filter_to_remove.id]).first
-              ft.update_attribute(:inherited, true)
-            end
-          end
-        end
-      end
-      IndexQueue.enqueue_ids(Series, series.pluck(:id), :main)
-    end
-  end
-
-  # Must be called before save
-  def visibility_changed?
-    self.posted_changed? || self.restricted_changed? || self.hidden_by_admin_changed?
-  end
 
   # We need to do a recount for our filters if:
   # - the work is brand new
@@ -950,6 +912,15 @@ class Work < ApplicationRecord
     Rails.cache.fetch "works/#{id}/kudos_count-v2" do
       kudos.count
     end
+  end
+
+  def update_stat_counter
+    counter = self.stat_counter || self.create_stat_counter
+    counter.update_attributes(
+      kudos_count: self.kudos.count,
+      comments_count: self.count_visible_comments,
+      bookmarks_count: self.bookmarks.where(private: false).count
+    )
   end
 
   ########################################################################
@@ -1033,7 +1004,6 @@ class Work < ApplicationRecord
   scope :ordered_by_hit_count_asc, -> { order("hit_count ASC") }
   scope :ordered_by_date_desc, -> { order("revised_at DESC") }
   scope :ordered_by_date_asc, -> { order("revised_at ASC") }
-  scope :random_order, -> { order("RAND()") }
 
   scope :recent, lambda { |*args| where("revised_at > ?", (args.first || 4.weeks.ago.to_date)) }
   scope :within_date_range, lambda { |*args| where("revised_at BETWEEN ? AND ?", (args.first || 4.weeks.ago), (args.last || Time.now)) }
@@ -1188,9 +1158,9 @@ class Work < ApplicationRecord
     return unless hidden_by_admin? && saved_change_to_hidden_by_admin?
     users.each do |user|
       if spam?
-        UserMailer.admin_spam_work_notification(id, user.id).deliver
+        UserMailer.admin_spam_work_notification(id, user.id).deliver_after_commit
       else
-        UserMailer.admin_hidden_work_notification(id, user.id).deliver
+        UserMailer.admin_hidden_work_notification(id, user.id).deliver_after_commit
       end
     end
   end
@@ -1238,6 +1208,10 @@ class Work < ApplicationRecord
   end
   def bookmarks_count
     self.stat_counter.bookmarks_count
+  end
+
+  def hits
+    stat_counter&.hit_count
   end
 
   def creators

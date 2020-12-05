@@ -5,17 +5,17 @@ Feature: Admin Actions to Manage Invitations
   I want to be able to require invitations for new users
 
   Scenario: Admin can set invite from queue number to a number greater than or equal to 1
-    Given I am logged in as an admin
+    Given I am logged in as a "policy_and_abuse" admin
       And I go to the admin-settings page
-      And I fill in "admin_setting_invite_from_queue_number" with "0"
+      And I fill in "Number of people to invite from the queue at once" with "0"
       And I press "Update"
     Then I should see "Invite from queue number must be greater than 0. To disable invites, uncheck the appropriate setting."
-    When I fill in "admin_setting_invite_from_queue_number" with "1"
+    When I fill in "Number of people to invite from the queue at once" with "1"
       And I press "Update"
     Then I should not see "Invite from queue number must be greater than 0."
 
   Scenario: Account creation enabled, invitations required, users can request invitations, and the queue is enabled
-    Given I am logged in as an admin
+    Given I am logged in as a super admin
       And I go to the admin-settings page
       And I check "Account creation enabled"
       And I check "Account creation requires invitation"
@@ -30,7 +30,7 @@ Feature: Admin Actions to Manage Invitations
       And I should not see "Joining the Archive currently requires an invitation; however, we are not accepting new invitation requests at this time."
 
   Scenario: Account creation enabled, invitations required, users can request invitations, and the queue is disabled
-    Given I am logged in as an admin
+    Given I am logged in as a super admin
       And I go to the admin-settings page
       And I check "Account creation enabled"
       And I check "Account creation requires invitation"
@@ -45,7 +45,7 @@ Feature: Admin Actions to Manage Invitations
       And I should see "Joining the Archive currently requires an invitation; however, we are not accepting new invitation requests at this time."
 
   Scenario: Account creation enabled, invitations required, users cannot request invitations, and the queue is enabled
-    Given I am logged in as an admin
+    Given I am logged in as a super admin
       And I go to the admin-settings page
       And I check "Account creation enabled"
       And I check "Account creation requires invitation"
@@ -64,7 +64,7 @@ Feature: Admin Actions to Manage Invitations
       And I should not see "Joining the Archive currently requires an invitation; however, we are not accepting new invitation requests at this time."
 
   Scenario: Account creation enabled, invitations not required, users can request invitations, and the queue is enabled
-    Given I am logged in as an admin
+    Given I am logged in as a super admin
       And I go to the admin-settings page
       And I check "Account creation enabled"
       And I uncheck "Account creation requires invitation"
@@ -79,7 +79,7 @@ Feature: Admin Actions to Manage Invitations
       And I should see "Create an Account!"
 
   Scenario: Account creation disabled, invitations required, users can request invitations, and the queue is enabled
-    Given I am logged in as an admin
+    Given I am logged in as a super admin
       And I go to the admin-settings page
       And I uncheck "Account creation enabled"
       And I check "Account creation requires invitation"
@@ -94,7 +94,7 @@ Feature: Admin Actions to Manage Invitations
       And I should not see "Joining the Archive currently requires an invitation; however, we are not accepting new invitation requests at this time."
 
   Scenario: Account creation enabled, invitations required, users cannot request invitations, and the queue is disabled
-    Given I am logged in as an admin
+    Given I am logged in as a super admin
       And I go to the admin-settings page
       And I check "Account creation enabled"
       And I check "Account creation requires invitation"
@@ -114,7 +114,7 @@ Feature: Admin Actions to Manage Invitations
       And I should not see "Get an Invitation" within "div#small_login"
 
   Scenario: Account creation enabled, invitations not required, users cannot request invitations, and the queue is enabled
-    Given I am logged in as an admin
+    Given I am logged in as a super admin
       And I go to the admin-settings page
       And I check "Account creation enabled"
       And I uncheck "Account creation requires invitation"
@@ -128,9 +128,8 @@ Feature: Admin Actions to Manage Invitations
       And I should see "Create an Account!"
       And I should not see "Joining the Archive currently requires an invitation; however, we are not accepting new invitation requests at this time."
 
-
   Scenario: Account creation disabled, invitations not required, users can request invitations, and the queue is enabled
-    Given I am logged in as an admin
+    Given I am logged in as a super admin
       And I go to the admin-settings page
       And I uncheck "Account creation enabled"
       And I uncheck "Account creation requires invitation"
@@ -144,7 +143,7 @@ Feature: Admin Actions to Manage Invitations
       And I should not see "Create an Account!"
 
   Scenario: Account creation enabled, invitations not required, users can request invitations, and the queue is disabled
-    Given I am logged in as an admin
+    Given I am logged in as a super admin
       And I go to the admin-settings page
       And I check "Account creation enabled"
       And I uncheck "Account creation requires invitation"
@@ -159,7 +158,7 @@ Feature: Admin Actions to Manage Invitations
       And I should see "Create an Account!"
 
   Scenario: Account creation disabled, invitations required, users cannot request invitations, and the queue is enabled
-    Given I am logged in as an admin
+    Given I am logged in as a super admin
       And I go to the admin-settings page
       And I uncheck "Account creation enabled"
       And I check "Account creation requires invitation"
@@ -174,7 +173,7 @@ Feature: Admin Actions to Manage Invitations
       And I should not see "Joining the Archive currently requires an invitation; however, we are not accepting new invitation requests at this time."
 
   Scenario: Account creation enabled, invitations not required, users cannot request invitations, and the queue is disabled
-    Given I am logged in as an admin
+    Given I am logged in as a super admin
       And I go to the admin-settings page
       And I check "Account creation enabled"
       And I uncheck "Account creation requires invitation"
@@ -192,7 +191,7 @@ Feature: Admin Actions to Manage Invitations
       And I should see "Create Account"
 
   Scenario: Account creation disabled, invitations required, users cannot request invitations, and the queue is disabled
-    Given I am logged in as an admin
+    Given I am logged in as a super admin
       And I go to the admin-settings page
       And I uncheck "Account creation enabled"
       And I check "Account creation requires invitation"
@@ -207,7 +206,7 @@ Feature: Admin Actions to Manage Invitations
       And I should see "Joining the Archive currently requires an invitation; however, we are not accepting new invitation requests at this time."
 
   Scenario: Account creation disabled, invitations not required, users can request invitations, and the queue is disabled
-    Given I am logged in as an admin
+    Given I am logged in as a super admin
       And I go to the admin-settings page
       And I uncheck "Account creation enabled"
       And I uncheck "Account creation requires invitation"
@@ -222,7 +221,7 @@ Feature: Admin Actions to Manage Invitations
       And I should not see "Joining the Archive currently requires an invitation; however, we are not accepting new invitation requests at this time."
 
   Scenario: Account creation disabled, invitations not required, users cannot request invitations, and the queue is enabled
-    Given I am logged in as an admin
+    Given I am logged in as a super admin
       And I go to the admin-settings page
       And I uncheck "Account creation enabled"
       And I uncheck "Account creation requires invitation"
@@ -241,7 +240,7 @@ Feature: Admin Actions to Manage Invitations
       And I should not see "Joining the Archive currently requires an invitation; however, we are not accepting new invitation requests at this time."
 
   Scenario: Account creation disabled, invitations not required, users cannot request invitations, and the queue is disabled
-    Given I am logged in as an admin
+    Given I am logged in as a super admin
       And I go to the admin-settings page
       And I uncheck "Account creation enabled"
       And I uncheck "Account creation requires invitation"
@@ -265,12 +264,12 @@ Feature: Admin Actions to Manage Invitations
       And 1 email should be delivered
 
   Scenario: An admin can't create an invite without an email address.
-   Given I am logged in as an admin
-     And all emails have been delivered
-   When I follow "Invite New Users"
-     And I press "Invite user"
-   Then I should see "Please enter an email address"
-     And 0 email should be delivered
+    Given I am logged in as an admin
+      And all emails have been delivered
+    When I follow "Invite New Users"
+      And I press "Invite user"
+    Then I should see "Please enter an email address"
+      And 0 email should be delivered
 
   Scenario: An admin can send an invitation to all existing users
     Given the following activated users exist
@@ -292,33 +291,33 @@ Feature: Admin Actions to Manage Invitations
       | login  | password    |
       | dax    | lotsaspots  |
       | bashir | heytheredoc |
-     And "dax" has "5" invitations
-     And "bashir" has "0" invitations
-     And I am logged in as an admin
-   When I follow "Invite New Users"
-     And I fill in "Number of invitations" with "2"
-     And I select "With no unused invitations" from "Users"
-     And I press "Generate invitations"
-   Then "dax" should have "7" invitations
-     And "bashir" should have "2" invitations
+      And "dax" has "5" invitations
+      And "bashir" has "0" invitations
+      And I am logged in as an admin
+    When I follow "Invite New Users"
+      And I fill in "Number of invitations" with "2"
+      And I select "With no unused invitations" from "Users"
+      And I press "Generate invitations"
+    Then "dax" should have "7" invitations
+      And "bashir" should have "2" invitations
 
   Scenario: An admin can see the invitation of an existing user via name or token
     Given the user "dax" exists and is activated
-     And "dax" has "2" invitations
-     And I am logged in as an admin
-   When I follow "Invite New Users"
-     And I fill in "Enter a user name" with "dax"
-     And I press "Go"
-   Then I should see "copy and use"
-   When I follow "Invite New Users"
-     And I fill in "Enter an invite token" with "dax's" invite code
-     And I press "Go"
-   Then I should see "copy and use"
+      And "dax" has "2" invitations
+      And I am logged in as an admin
+    When I follow "Invite New Users"
+      And I fill in "Enter a user name" with "dax"
+      And I press "Go"
+    Then I should see "copy and use"
+    When I follow "Invite New Users"
+      And I fill in "Enter an invite token" with "dax's" invite code
+      And I press "Go"
+    Then I should see "copy and use"
 
   Scenario: An admin can't find a invitation for a nonexistent user
     Given I am logged in as an admin
       And I follow "Invite New Users"
-    Then I fill in "Enter a user name" with "dax"
+    When I fill in "Enter a user name" with "dax"
       And I press "Go"
     Then I should see "No results were found. Try another search"
 
@@ -336,20 +335,20 @@ Feature: Admin Actions to Manage Invitations
       And 1 email should be delivered
 
  Scenario: An admin can edit an invitation
-   Given the user "dax" exists and is activated
-     And "dax" has "2" invitations
-     And I am logged in as an admin
-   When I follow "Invite New Users"
-     And I fill in "Enter a user name" with "dax"
-     And I press "Go"
-   Then I should see "copy and use"
-   When I follow "Invite New Users"
-     And I fill in "Enter an invite token" with "dax's" invite code
-     And I press "Go"
-   Then I should see "copy and use"
-   When I fill in "invitation_invitee_email" with "oldman@ds9.com"
-     And I press "Update Invitation"
-   Then I should see "oldman@ds9.com" in the "invitation_invitee_email" input
+    Given the user "dax" exists and is activated
+      And "dax" has "2" invitations
+      And I am logged in as a "support" admin
+    When I follow "Invite New Users"
+      And I fill in "Enter a user name" with "dax"
+      And I press "Go"
+    Then I should see "copy and use"
+    When I follow "Invite New Users"
+      And I fill in "Enter an invite token" with "dax's" invite code
+      And I press "Go"
+    Then I should see "copy and use"
+    When I fill in "invitation_invitee_email" with "oldman@ds9.com"
+      And I press "Update Invitation"
+    Then I should see "oldman@ds9.com" in the "invitation_invitee_email" input
 
   Scenario: An admin can delete an invitation
     Given an invitation for "test@a.com" exists

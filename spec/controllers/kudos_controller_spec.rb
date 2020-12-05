@@ -8,7 +8,7 @@ describe KudosController do
 
   describe "POST #create" do
     context "when work is public" do
-      let(:work) { create(:posted_work) }
+      let(:work) { create(:work) }
       let(:referer) { work_path(work) }
       before { request.headers["HTTP_REFERER"] = referer }
 
@@ -126,7 +126,7 @@ describe KudosController do
     end
 
     context "when work is restricted" do
-      let(:work) { create(:posted_work, restricted: true) }
+      let(:work) { create(:work, restricted: true) }
 
       it "redirects to referer with an error" do
         referer = work_path(work)

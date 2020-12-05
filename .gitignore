@@ -12,6 +12,7 @@ stdout
 /.dropbox
 /.dropbox.attr
 /.rspec
+Gemfile.linters.lock
 REVISION
 
 # /config/
@@ -44,6 +45,8 @@ REVISION
 /public/stylesheets/cached_for_screen.css
 /public/stylesheets/skins
 /public/system/skins
+/public/system/work_skins
+/public/tags
 
 # /public/images/
 /public/images/Thumbs.db

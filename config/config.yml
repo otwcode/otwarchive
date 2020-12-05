@@ -172,6 +172,7 @@ RATE_LIMIT_PER_NGINX_UPSTREAM:
   unicorn_elastic_bookmarks:
     limit: 300
     period: 300
+RATE_LIMIT_SAFELIST: ["127.0.0.0/8", "10.0.0.0/8"]
 
 # The number of tags to show on the search page:
 TAGS_PER_SEARCH_PAGE: 50
@@ -472,3 +473,28 @@ CHARACTER_COUNT_SCRIPTS: ["Han", "Hiragana", "Katakana", "Thai"]
 # Cache durations for work and bookmark searches (in seconds)
 SECONDS_UNTIL_WORK_INDEX_EXPIRE: 1800
 SECONDS_UNTIL_BOOKMARK_INDEX_EXPIRE: 1800
+
+# Batch size used for the RedisHitCounter class:
+HIT_COUNT_BATCH_SIZE: 100
+
+# The hour (in UTC time) that we want the hit counts to rollover at. If someone
+# views the work shortly before this hour and shortly after, it should count as
+# two hits. Used by the RedisHitCounter class.
+HIT_COUNT_ROLLOVER_HOUR: 3
+
+# The batch size for calculating a work's filters from its tags:
+FILTER_UPDATE_BATCH_SIZE: 100
+
+# URLs for which we should not display the proxy notice. Alphabetical by
+# environment.
+PERMITTED_HOSTS: [
+  # Production
+  "archiveofourown.org",
+  "download.archiveofourown.org",
+  "insecure.archiveofourown.org",
+  "www.archiveofourown.org",
+  # Staging
+  "insecure-test.archiveofourown.org",
+  "test.archiveofourown.org",
+  "testdownload.archiveofourown.org"
+]

@@ -7,24 +7,24 @@ describe AdminMailer do
     let(:spam_user) { create(:user) }
 
     let(:spam1) do
-      create(:posted_work, spam: true, title: "First Spam",
+      create(:work, spam: true, title: "First Spam",
                            authors: [spam_user.default_pseud])
     end
 
     let(:spam2) do
-      create(:posted_work, spam: true, title: "Second Spam",
+      create(:work, spam: true, title: "Second Spam",
                            authors: [spam_user.default_pseud])
     end
 
     let(:spam3) do
-      create(:posted_work, spam: true, title: "Third Spam",
+      create(:work, spam: true, title: "Third Spam",
                            authors: [spam_user.default_pseud])
     end
 
     let(:other_user) { create(:user) }
 
     let(:other_spam) do
-      create(:posted_work, spam: true, title: "Mistaken Spam",
+      create(:work, spam: true, title: "Mistaken Spam",
                            authors: [other_user.default_pseud])
     end
 
@@ -126,7 +126,7 @@ describe AdminMailer do
         end
 
         it "aborts delivery" do
-          expect(email.actual_message).to be_a(ActionMailer::Base::NullMail)
+          expect(email.message).to be_a(ActionMailer::Base::NullMail)
         end
       end
     end

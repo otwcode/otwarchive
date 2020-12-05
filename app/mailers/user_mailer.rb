@@ -1,6 +1,4 @@
 class UserMailer < ActionMailer::Base
-  include Resque::Mailer # see README in this directory
-
   layout 'mailer'
 
   helper_method :current_user

@@ -10,12 +10,12 @@ describe OrphansController do
   let!(:user) { create(:user) }
 
   let!(:pseud) { create(:pseud, user: user) }
-  let!(:work) { create(:posted_work, authors: [pseud]) }
-  let(:second_work) { create(:posted_work, authors: user.pseuds) }
+  let!(:work) { create(:work, authors: [pseud]) }
+  let(:second_work) { create(:work, authors: user.pseuds) }
   let(:series) { create(:series, works: [work], authors: [pseud]) }
 
   let(:other_user) { create(:user) }
-  let(:other_work) { create(:posted_work, authors: [other_user.default_pseud]) }
+  let(:other_work) { create(:work, authors: [other_user.default_pseud]) }
 
   describe "GET #new" do
     render_views

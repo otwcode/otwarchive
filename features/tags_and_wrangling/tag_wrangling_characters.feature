@@ -1,4 +1,4 @@
-@no-txn @tags @users @tag_wrangling @search
+@tags @users @tag_wrangling @search
 
 Feature: Tag Wrangling - Characters
 
@@ -108,8 +108,8 @@ Scenario: character wrangling - syns, mergers, characters, autocompletes
   When I follow "Edit First Doctor"
     And I fill in "MetaTags" with "The Doctor (DW)"
     And I press "Save changes"
-  Then I should see "Invalid meta tag 'The Doctor (DW)':"
-    And I should see "Meta tag does not exist."
+  Then I should see "Invalid metatag 'The Doctor (DW)':"
+    And I should see "Metatag does not exist."
     And I should not see "The Doctor (DW)" within "form"
   When I follow "New Tag"
     And I fill in "Name" with "The Doctor (DW)"

@@ -36,15 +36,15 @@ $j(document).ready(function() {
 
 function get_token_input_options(self) {
   return {
-    searchingText: self.attr('autocomplete_searching_text'),
-    hintText: self.attr('autocomplete_hint_text'),
-    noResultsText: self.attr('autocomplete_no_results_text'),
-    minChars: self.attr('autocomplete_min_chars'),
+    searchingText: self.data('autocomplete-searching-text'),
+    hintText: self.data('autocomplete-hint-text'),
+    noResultsText: self.data('autocomplete-no-results-text'),
+    minChars: self.data('autocomplete-min-chars'),
     queryParam: "term",
     preventDuplicates: true,
-    tokenLimit: self.attr('autocomplete_token_limit'),
-    liveParams: self.attr('autocomplete_live_params'),
-    makeSortable: self.attr('autocomplete_sortable')
+    tokenLimit: self.data('autocomplete-token-limit'),
+    liveParams: self.data('autocomplete-live-params'),
+    makeSortable: self.data('autocomplete-sortable')
   };
 }
 
@@ -58,9 +58,9 @@ if (input.livequery) {
       var token_input_options = get_token_input_options(self);
       var method;
       try {
-          method = $.parseJSON(self.attr('autocomplete_method'));
+          method = $.parseJSON(self.data('autocomplete-method'));
       } catch (err) {
-          method = self.attr('autocomplete_method');
+          method = self.data('autocomplete-method');
       }
       self.tokenInput(method, token_input_options);
     });
@@ -659,7 +659,10 @@ function updateCachedTokens() {
       $j('input[name=authenticity_token]').each(function(){
         $j(this).attr('value', token);
       });
-      $j('meta[name=csrf-token]').attr('value', token);
+      $j('meta[name=csrf-token]').attr('content', token);
+      $j.event.trigger({ type: "loadedCSRF" });
     });
+  } else {
+    $j.event.trigger({ type: "loadedCSRF" });
   }
 }

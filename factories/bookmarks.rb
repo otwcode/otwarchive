@@ -3,7 +3,7 @@ require 'faker'
 FactoryBot.define do
   factory :bookmark do
     bookmarkable_type { "Work" }
-    bookmarkable_id { FactoryBot.create(:posted_work).id }
+    bookmarkable_id { FactoryBot.create(:work).id }
     pseud_id { FactoryBot.create(:pseud).id }
 
     factory :external_work_bookmark do

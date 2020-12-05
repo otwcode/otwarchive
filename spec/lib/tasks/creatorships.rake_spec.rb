@@ -3,7 +3,7 @@
 require "spec_helper"
 
 describe "rake creatorships:remove_deleted_work_creatorships" do
-  let(:work) { create(:posted_work) }
+  let(:work) { create(:work) }
 
   let(:work_creatorships_relation) do
     Creatorship.where(creation_type: "Work", creation_id: work.id)
@@ -28,7 +28,7 @@ describe "rake creatorships:remove_deleted_work_creatorships" do
 end
 
 describe "rake creatorships:remove_deleted_chapter_creatorships" do
-  let(:chapter) { create(:posted_work).chapters.first }
+  let(:chapter) { create(:work).chapters.first }
 
   let(:chapter_creatorships_relation) do
     Creatorship.where(creation_type: "Chapter", creation_id: chapter.id)
@@ -81,7 +81,7 @@ describe "rake creatorships:add_missing_series_creatorships" do
   let(:series) { create(:series) }
 
   let!(:work) do
-    create(:posted_work, authors: series.pseuds, series: [series])
+    create(:work, authors: series.pseuds, series: [series])
   end
 
   before { series.creatorships.delete_all }
@@ -97,7 +97,7 @@ describe "rake creatorships:remove_orphaned_empty_series" do
 
   context "when the series has a work but no pseuds" do
     before do
-      create(:posted_work, authors: series.pseuds, series: [series])
+      create(:work, authors: series.pseuds, series: [series])
       series.creatorships.delete_all
     end
 

@@ -1,5 +1,49 @@
 require "spec_helper"
 
+describe "rake Tag:convert_non_canonical_warnings_to_freeforms" do
+  it "does not update works with only canonical warnings" do
+    warning_names = [ArchiveConfig.WARNING_NONCON_TAG_NAME, ArchiveConfig.WARNING_CHAN_TAG_NAME]
+    work = create(:work, archive_warning_string: warning_names.join(","))
+
+    subject.invoke
+
+    expect(work.reload.archive_warnings.pluck(:name)).to eq(warning_names)
+    expect(work.freeforms).to be_empty
+  end
+
+  it "does not add default warning to works with a canonical warning after conversion" do
+    freeform_warning = ArchiveWarning.create(name: "Dead Dove", canonical: false)
+
+    work = create(:work, archive_warning_string: ArchiveConfig.WARNING_NONCON_TAG_NAME)
+    # work.archive_warning_string= is the usual way to add tags, but it will discard
+    # non-canonical warnings.
+    work.archive_warnings << freeform_warning
+
+    expect { subject.invoke }.to change { work.reload.archive_warnings.pluck(:name) }
+      .from([ArchiveConfig.WARNING_NONCON_TAG_NAME, freeform_warning.name])
+      .to([ArchiveConfig.WARNING_NONCON_TAG_NAME])
+      .and change { work.reload.freeforms.pluck(:name) }
+      .from([])
+      .to([freeform_warning.name])
+  end
+
+  it "adds default warning to works with no canonical warnings after conversion" do
+    freeform_warning = ArchiveWarning.create(name: "Ultimate Dead Dove", canonical: false)
+
+    work = create(:work, archive_warning_string: "")
+    # work.archive_warning_string= is the usual way to add tags, but it will discard
+    # non-canonical warnings.
+    work.archive_warnings << freeform_warning
+
+    expect { subject.invoke }.to change { work.reload.archive_warnings.pluck(:name) }
+      .from([freeform_warning.name])
+      .to([ArchiveConfig.WARNING_DEFAULT_TAG_NAME])
+      .and change { work.reload.freeforms.pluck(:name) }
+      .from([])
+      .to([freeform_warning.name])
+  end
+end
+
 describe "rake Tag:destroy_invalid_common_taggings" do
   it "deletes CommonTaggings with a missing child" do
     parent = create(:canonical_fandom)
@@ -109,5 +153,74 @@ describe "rake Tag:destroy_invalid_meta_taggings" do
 
     expect { subject.invoke }.not_to raise_exception
     expect { meta_tagging.reload }.not_to raise_exception
+  end
+end
+
+describe "rake Tag:reset_meta_tags" do
+  let(:sub) { create(:canonical_fandom) }
+  let(:meta) { create(:canonical_fandom) }
+
+  it "deletes phantom inherited metatags" do
+    MetaTagging.create(sub_tag: sub, meta_tag: meta, direct: false)
+
+    expect(sub.meta_tags.reload).to include(meta)
+    subject.invoke
+    expect(sub.meta_tags.reload).not_to include(meta)
+  end
+
+  it "constructs missing inherited metatags" do
+    mid = create(:canonical_fandom)
+    mid.meta_tags << meta
+    mid.sub_tags << sub
+    sub.meta_tags.delete(meta)
+
+    expect(sub.meta_tags.reload).not_to include(meta)
+    subject.invoke
+    expect(sub.meta_tags.reload).to include(meta)
+  end
+end
+
+describe "rake Tag:reset_filters" do
+  let(:sub) { create(:canonical_fandom) }
+  let(:syn) { create(:fandom, merger: sub) }
+  let(:meta) { create(:canonical_fandom) }
+  let(:work) { create(:work, fandom_string: syn.name) }
+  let(:extra) { create(:fandom) }
+
+  before { sub.meta_tags << meta }
+
+  it "adds missing inherited filters" do
+    work.filters.delete(meta)
+    subject.invoke
+    expect(work.filters.reload).to include(meta)
+    expect(work.direct_filters.reload).not_to include(meta)
+  end
+
+  it "adds missing direct filters" do
+    work.filters.delete(sub)
+    subject.invoke
+    expect(work.filters.reload).to include(sub)
+    expect(work.direct_filters.reload).to include(sub)
+  end
+
+  it "removes incorrect inherited filters" do
+    work.filter_taggings.create(filter: extra, inherited: true)
+    subject.invoke
+    expect(work.filters.reload).not_to include(extra)
+    expect(work.direct_filters.reload).not_to include(extra)
+  end
+
+  it "removes incorrect direct filters" do
+    work.filter_taggings.create(filter: extra, inherited: false)
+    subject.invoke
+    expect(work.filters.reload).not_to include(extra)
+    expect(work.direct_filters.reload).not_to include(extra)
+  end
+
+  it "adds works to the world reindex queue" do
+    work.filters.delete(meta)
+    expect do
+      subject.invoke
+    end.to add_to_reindex_queue(work, :world)
   end
 end

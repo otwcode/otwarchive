@@ -9,7 +9,7 @@ describe Work do
 
   context "when posted" do
     it "posts the first chapter" do
-      work = create(:posted_work)
+      work = create(:work)
       work.first_chapter.posted.should == true
     end
   end
@@ -366,7 +366,7 @@ describe Work do
       before :each do
         @skin_author = create(:user)
         @second_author = create(:user)
-        @private_skin = create(:private_work_skin, author_id: @skin_author.id)
+        @private_skin = create(:work_skin, :private, author_id: @skin_author.id)
       end
 
       let(:work_author) { @skin_author }
@@ -458,12 +458,12 @@ describe Work do
 
   describe "#update_complete_status" do
     it "marks a work complete when it's been completed" do
-      work = create(:posted_work, expected_number_of_chapters: 1)
+      work = create(:work, expected_number_of_chapters: 1)
       expect(work.complete).to be_truthy
     end
 
     it "marks a work incomplete when it's no longer completed" do
-      work = create(:posted_work, expected_number_of_chapters: 1)
+      work = create(:work, expected_number_of_chapters: 1)
       work.update_attributes!(expected_number_of_chapters: nil)
       expect(work.reload.complete).to be_falsey
     end
@@ -472,7 +472,7 @@ describe Work do
   describe "#hide_spam" do
     before do
       @admin_setting = AdminSetting.first || AdminSetting.create
-      @work = create(:posted_work)
+      @work = create(:work)
     end
     context "when the admin setting is enabled" do
       before do

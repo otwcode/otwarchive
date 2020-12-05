@@ -249,7 +249,7 @@ namespace :After do
 #  task(:invite_external_authors => :environment) do
 #    Invitation.where("sent_at is NULL").where("external_author_id IS NOT NULL").each do |invite|
 #      archivist = invite.external_author.external_creatorships.collect(&:archivist).collect(&:login).uniq.join(", ")
-#      UserMailer.invitation_to_claim(invite, archivist).deliver
+#      UserMailer.invitation_to_claim(invite, archivist).deliver_now
 #      invite.sent_at = Time.now
 #      invite.save
 #    end
@@ -582,6 +582,21 @@ namespace :After do
     end
   end
 
+  desc "Enforce HTTPS where available for embedded media from ning.com and vidders.net"
+  task(enforce_https_viddersnet: :environment) do
+    Chapter.find_each do |chapter|
+      puts chapter.id if (chapter.id % 1000).zero?
+      if chapter.content.match /<(embed|iframe) .*(ning\.com|vidders\.net)/
+        begin
+          chapter.content_sanitizer_version = -1
+          chapter.sanitize_field(chapter, :content)
+        rescue StandardError
+          puts "couldn't update chapter #{chapter.id}"
+        end
+      end
+    end
+  end
+
   desc "Fix crossover status for works with two fandom tags."
   task(crossover_reindex_works_with_two_fandoms: :environment) do
     # Find all works with two fandom tags:
@@ -670,6 +685,23 @@ namespace :After do
       end
       puts(progress_msg) && STDOUT.flush
     end
+    puts && STDOUT.flush
+  end
+
+  desc "Clean up the Redis info from the old hit count code."
+  task(remove_old_redis_hit_count_data: :environment) do
+    REDIS_GENERAL.scan_each(match: "work_stats:*") do |key|
+      REDIS_GENERAL.del(key)
+    end
+  end
+
+  desc "Copy anon_commenting_disabled to comment_permissions."
+  task(copy_anon_commenting_disabled_to_comment_permissions: :environment) do
+    Work.in_batches do |batch|
+      batch.update_all("comment_permissions = anon_commenting_disabled")
+      print(".") && STDOUT.flush
+    end
+
     puts && STDOUT.flush
   end
 end # this is the end that you have to put new tasks above

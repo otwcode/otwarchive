@@ -69,7 +69,7 @@ Given /the following activated users with private work skins/ do |table|
   table.hashes.each do |hash|
     user = FactoryBot.create(:user, hash)
     user.activate
-    FactoryBot.create(:private_work_skin, author: user, title: "#{user.login.titleize}'s Work Skin")
+    FactoryBot.create(:work_skin, :private, author: user, title: "#{user.login.titleize}'s Work Skin")
     step %{confirmation emails have been delivered}
   end
 end
@@ -109,6 +109,7 @@ Given /^I am logged in as "([^"]*)" with password "([^"]*)"$/ do |login, passwor
   fill_in "Password:", with: password
   check "Remember Me"
   click_button "Log In"
+  step %{I should see "Hi, #{login}!" within "#greeting"}
   step %{confirmation emails have been delivered}
 end
 
@@ -163,7 +164,7 @@ Given(/^I coauthored the work "(.*?)" as "(.*?)" with "(.*?)"$/) do |title, logi
   author1.user.preference.update(allow_cocreator: true)
   author2 = User.find_by(login: coauthor).default_pseud
   author2.user.preference.update(allow_cocreator: true)
-  work = FactoryBot.create(:work, authors: [author1, author2], posted: true, title: title)
+  work = FactoryBot.create(:work, authors: [author1, author2], title: title)
   work.creatorships.unapproved.each(&:accept!)
 end
 

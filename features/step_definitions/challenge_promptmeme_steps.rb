@@ -291,8 +291,7 @@ When /^I add prompt (\d+) with "([^"]+)"$/ do |number, tag|
 end
 
 When /^I add prompts up to (\d+) starting with (\d+)$/ do |final_number_of_prompts, start|
-  @index = start.to_i
-  final_number_of_prompts = final_number_of_prompts.to_i
+  @index = start
   while @index <= final_number_of_prompts
     step "I add prompt #{@index}"
     @index = @index + 1
@@ -521,12 +520,12 @@ Then /^I should be editing the challenge settings$/ do
   step %{I should see "Setting Up the Battle 12 Prompt Meme"}
 end
 
-Then /^(\d+) prompts should be required$/ do |number|
-  find_field("prompt_meme_requests_num_required").value.should == number
+Then "{int} prompt(s) should be required" do |number|
+  expect(page).to have_field("prompt_meme_requests_num_required", with: number.to_s)
 end
 
-Then /^(\d+) prompts should be allowed$/ do |number|
-  find_field("prompt_meme_requests_num_allowed").value.should == number
+Then "{int} prompt(s) should be allowed" do |number|
+  expect(page).to have_field("prompt_meme_requests_num_allowed", with: number.to_s)
 end
 
 Then /^I should not see the prompt meme dashboard for "([^\"]*)"$/ do |challenge_title|

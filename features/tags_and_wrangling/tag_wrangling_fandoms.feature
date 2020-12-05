@@ -80,8 +80,8 @@ Scenario: fandoms wrangling - syns, mergers, autocompletes, metatags
   When I edit the tag "Stargate Atlantis"
     And I fill in "MetaTags" with "Stargate Franchise"
     And I press "Save changes"
-  Then I should see "Invalid meta tag 'Stargate Franchise':"
-    And I should see "Meta tag does not exist."
+  Then I should see "Invalid metatag 'Stargate Franchise':"
+    And I should see "Metatag does not exist."
     And I should not see "Stargate Franchise" within "form"
   When I follow "New Tag"
     And I fill in "Name" with "Stargate Franchise"
@@ -148,7 +148,6 @@ Scenario: fandoms wrangling - syns, mergers, autocompletes, metatags
 Scenario: Checking the media pages
 
   Given basic tags
-    And tag wrangling is on
     And a media exists with name: "TV Shows", canonical: true
     And a media exists with name: "Video Games", canonical: true
     And a media exists with name: "Books", canonical: true

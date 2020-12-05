@@ -7,7 +7,7 @@ class Bookmark < ApplicationRecord
 
   belongs_to :bookmarkable, polymorphic: true
   belongs_to :pseud
-  has_many :taggings, as: :taggable, dependent: :destroy
+  has_many :taggings, as: :taggable, inverse_of: :taggable, dependent: :destroy
   has_many :tags, through: :taggings, source: :tagger, source_type: 'Tag'
 
   validates_length_of :bookmarker_notes,
@@ -156,13 +156,6 @@ class Bookmark < ApplicationRecord
   # Returns the number of bookmarks on an item visible to the current user
   def self.count_visible_bookmarks(bookmarkable, current_user=:false)
     bookmarkable.bookmarks.visible.size
-  end
-
-  # Virtual attribute for external works
-  def external=(attributes)
-    unless attributes.values.to_s.blank?
-      !self.bookmarkable ? self.bookmarkable = ExternalWork.new(attributes) : self.bookmarkable.attributes = attributes
-    end
   end
 
   def tag_string
