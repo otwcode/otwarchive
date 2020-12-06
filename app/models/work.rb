@@ -1,7 +1,4 @@
 class Work < ApplicationRecord
-  # TODO: Remove this after AO3-6016 is deployed.
-  self.ignored_columns = [:anon_commenting_disabled]
-
   include Filterable
   include CreationNotifier
   include Collectible
