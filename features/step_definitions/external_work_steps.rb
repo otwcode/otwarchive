@@ -16,9 +16,9 @@ end
 
 Given /^I set up an external work$/ do
   visit new_external_work_path
-  fill_in("bookmark_external_url", with: DEFAULT_EXTERNAL_URL)
-  fill_in("bookmark_external_author", with: DEFAULT_EXTERNAL_CREATOR)
-  fill_in("bookmark_external_title", with: DEFAULT_EXTERNAL_TITLE)
+  fill_in("external_work_url", with: DEFAULT_EXTERNAL_URL)
+  fill_in("external_work_author", with: DEFAULT_EXTERNAL_CREATOR)
+  fill_in("external_work_title", with: DEFAULT_EXTERNAL_TITLE)
   step %{I fill in basic external work tags}
   fill_in("bookmark_notes", with: DEFAULT_BOOKMARK_NOTES)
   fill_in("bookmark_tag_string", with: DEFAULT_BOOKMARK_TAGS)
@@ -26,9 +26,9 @@ end
 
 Given /^I bookmark the external work "([^\"]*)"(?: with fandom "([^"]*)")?(?: with character "([^"]*)")?$/ do |title, fandom, character|
   step %{I set up an external work}
-  fill_in("bookmark_external_title", with: title)
-  fill_in("bookmark_external_fandom_string", with: fandom) if fandom.present?
-  fill_in("bookmark_external_character_string", with: character) if character.present?
+  fill_in("external_work_title", with: title)
+  fill_in("external_work_fandom_string", with: fandom) if fandom.present?
+  fill_in("external_work_character_string", with: character) if character.present?
   click_button("Create")
 end
 
@@ -62,7 +62,7 @@ When /^the (character|fandom|relationship) "(.*?)" is removed from the external 
   external_work = ExternalWork.find_by(title: title)
   tags = external_work.tags.where(type: tag_type).pluck(:name) - [tag]
   tag_string = tags.join(", ")
-  step %{I am logged in as an admin}
+  step %{I am logged in as a "policy_and_abuse" admin}
   visit edit_external_work_path(external_work)
   fill_in("work_#{tag_type}", with: tag_string)
   click_button("Update External work")

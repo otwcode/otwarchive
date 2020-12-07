@@ -1,8 +1,8 @@
 # Use css parser to break up style blocks
 require 'css_parser'
-include CssParser
 
 module CssCleaner
+  include CssParser
 
   # constant regexps for css values
   ALPHA_REGEX = Regexp.new('[a-z\-]+')

@@ -248,7 +248,7 @@ Given /^bookmarks of all types tagged with the (character|relationship|fandom) t
   FactoryBot.create(:bookmark, bookmarkable_id: work.id, bookmarkable_type: "Work")
 
   step %{bookmarks of external works and series tagged with the #{tag_type} tag "#{tag}"}
-end 
+end
 
 # Freeform is omitted because there is no freeform option on the bookmark external work form
 Given /^bookmarks of external works and series tagged with the (character|relationship|fandom) tag "(.*?)"$/ do |tag_type, tag|

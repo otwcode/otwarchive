@@ -1,57 +1,64 @@
-# Contributing to Archive of Our Own
+# Contributing to OTW-Archive
+
+## Reporting bugs
+
+We maintain a [Jira issue tracker](https://otwarchive.atlassian.net) for developers,
+and a [list of Known Issues](https://archiveofourown.org/known_issues) for
+[Archive of Our Own](https://archiveofourown.org) users, neither of which are
+publicly editable.
+
+If you need help using the site, or want to report an issue you have found,
+please [contact the AO3 Support team](https://archiveofourown.org/support).
+
+
+## Reporting security issues
+
+Please refer to [SECURITY.md](https://github.com/otwcode/otwarchive/blob/master/SECURITY.md).
+
+
+## Updating documentation
+
+Our [development wiki](https://github.com/otwcode/otwarchive/wiki) is publicly
+editable. Unless a page says at the top that it should only be edited by
+official OTW volunteers, please feel free to make changes!
+
+
+## Suggesting new features
+
+Please [contact the AO3 Support team](https://archiveofourown.org/support).
+
 
 ## Contributing code
 
-### Report a bug
+**We only accept pull requests for issues we have already added to [Jira](https://otwarchive.atlassian.net)**,
+with the exception of spelling corrections and documentation improvements
+(e.g. any Markdown files).
 
-We have a [list of known issues](https://archiveofourown.org/known_issues).
-If you have a problem that you don't see on that list, please send a bug report
-via the [Support and Feedback Form](https://archiveofourown.org/support).
+Please check out our development wiki for more information on:
 
-### Pick an issue to work on
+- [how to set up a development environment](https://github.com/otwcode/otwarchive/wiki)
+- [code conventions](https://github.com/otwcode/otwarchive/wiki/Commit-policy)
 
-You will find our [list of approved issues on JIRA](https://otwarchive.atlassian.net/projects/AO3/issues).
+Please follow the checklist on [our template](https://github.com/otwcode/otwarchive/blob/master/.github/PULL_REQUEST_TEMPLATE.md) when submitting pull requests.
 
-We regret that we cannot accept pull requests for issues we haven't already logged, with the exception of documentation
-or spelling corrections.
+Please be patient with us! Due to our workload, it may take some time before we
+can review and eventually merge your pull request.
 
-### Resolve the issue
+Once your pull request is merged, it will be deployed to our internal testing site
+and our QA team will check that everything is working as intended. If not, we may
+set the issue to ["Broken on Test"](https://github.com/otwcode/otwarchive/wiki/Issue-Tracking-with-Jira)
+and ask you to make further changes in new pull requests.
 
-Consult our [Developer Documentation](https://github.com/otwcode/otwarchive/wiki) on how to set up a local development
-environment so you can work on the Archive code.
+If all is well, your contribution will be deployed to the [Archive of Our Own](https://archiveofourown.org)
+and you will be credited in the [release notes](https://archiveofourown.org/admin_posts?tag=1)!
 
-### Submit your pull request
-
-Please read the checklist on [our pull request template](https://github.com/otwcode/otwarchive/blob/master/.github/PULL_REQUEST_TEMPLATE.md)
-for the steps you need to perform to make sure we can accept your pull request.
-
-### Action comments on your pull request
-
-When we review your pull request, we will make comments on GitHub. Please make sure you read these carefully and apply
-the suggestions!
-
-Due to our workload, it may take several weeks before an approved pull request is merged, so be patient - we will get to it!
-
-### Testing and fixing bugs
-
-Once your pull request is merged, it will be deployed to our internal Staging server and our manual QA team will check it.
-We may ask you to make further changes and submit a new pull request if we find any problems that will affect our users'
-ability to benefit from your changes.
-
-### Release
-
-Once we have checked that all is well, your contribution will be deployed to [Archive of Our Own](https://archiveofourown.org) and you will be credited
-in the [AO3 Release Notes](https://archiveofourown.org/admin_posts?tag=1)! Make sure you tell us your preferred name and pronoun
-in the pull request.
 
 ## Volunteering for the OTW
 
-If you would like to donate more of your time and expertise in a multi-national, inclusive, fandom-oriented development team, you might
-enjoy becoming an official OTW volunteer.
+If you would like to donate more of your time and expertise in a multi-national,
+inclusive, fandom-oriented team, you might enjoy [becoming an official OTW volunteer](http://transformativeworks.org/how-you-can-help/volunteer).
 
-[Read more about volunteering with the OTW](http://transformativeworks.org/how-you-can-help/volunteer).
 
 ## Questions?
 
 [Drop us an email](mailto:otw-coders@transformativeworks.org) if you have any questions.
-

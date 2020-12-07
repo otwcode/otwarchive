@@ -1,6 +1,7 @@
 /*==ZONE: SYSTEM
 SUBSECTIONS:
-  1. SPLASH, 2. SESSIONS, 3. DOCS, 4. COMMS, 5. SUPPORT, 6. FAQ, 7. TOS POPUP
+  1. SPLASH, 2. SESSIONS, 3. DOCS, 4. COMMS, 5. SUPPORT, 6. FAQ, 7. TOS POPUP,
+  8. PROXY NOTICE
 */
 
 .system p {
@@ -129,7 +130,7 @@ SUBSECTIONS:
 
 .splash .account p {
   margin-left: 1em;
-  margin-right: 1em; 
+  margin-right: 1em;
 }
 
 .splash .account ul {
@@ -165,7 +166,7 @@ SUBSECTIONS:
 }
 
 .splash .jump {
-  text-align: right; 
+  text-align: right;
 }
 
 .splash .placeholder {
@@ -231,7 +232,7 @@ SUBSECTIONS:
   overflow: auto;
 }
 
-/*3. ZONE: SYSTEM: DOCS 
+/*3. ZONE: SYSTEM: DOCS
 For practicality, /home .docs have been given the .userstuff class as well, to save doubling up that sheet or confusing end users. We will just cope with the inconsistency.*/
 
 .docs .userstuff ul, .docs .userstuff ol {
@@ -301,10 +302,10 @@ For practicality, /archive_faqs are also .docs and .support and have the .userst
   font-weight: 700;
 }
 
-.faq .userstuff .notice, .faq .userstuff .caution, .faq .example, .guideline .userstuff .notice, .guideline .userstuff .caution, .guideline .example  { 
-  margin: 0.643em 3.858em; 
+.faq .userstuff .notice, .faq .userstuff .caution, .faq .example, .guideline .userstuff .notice, .guideline .userstuff .caution, .guideline .example  {
+  margin: 0.643em 3.858em;
   padding: 0.643em;
-} 
+}
 
 .faq .example, .guideline .example {
   border: 1px solid #c2d2df;
@@ -366,4 +367,19 @@ For practicality, /archive_faqs are also .docs and .support and have the .userst
 #tos_prompt [disabled] {
   background: #ccc;
     box-shadow: none;
+}
+
+/* 8. ZONE: SYSTEM: PROXY NOTICE */
+#proxy-notice {
+  background: #efd1d1;
+  border-bottom: 1px solid #900;
+  font-size: 0.875em;
+}
+
+#proxy-notice .userstuff {
+  padding: 0.643em 0.875em;
+}
+
+#proxy-notice .submit {
+  margin-bottom: 0;
 }

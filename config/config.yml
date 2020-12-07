@@ -172,6 +172,7 @@ RATE_LIMIT_PER_NGINX_UPSTREAM:
   unicorn_elastic_bookmarks:
     limit: 300
     period: 300
+RATE_LIMIT_SAFELIST: ["127.0.0.0/8", "10.0.0.0/8"]
 
 # The number of tags to show on the search page:
 TAGS_PER_SEARCH_PAGE: 50
@@ -483,3 +484,17 @@ HIT_COUNT_ROLLOVER_HOUR: 3
 
 # The batch size for calculating a work's filters from its tags:
 FILTER_UPDATE_BATCH_SIZE: 100
+
+# URLs for which we should not display the proxy notice. Alphabetical by
+# environment.
+PERMITTED_HOSTS: [
+  # Production
+  "archiveofourown.org",
+  "download.archiveofourown.org",
+  "insecure.archiveofourown.org",
+  "www.archiveofourown.org",
+  # Staging
+  "insecure-test.archiveofourown.org",
+  "test.archiveofourown.org",
+  "testdownload.archiveofourown.org"
+]

@@ -334,6 +334,8 @@ Feature: Edit chapters
     When I follow "Edit Chapter"
     Then the "sabrina" checkbox should not be checked
     When I check "sabrina"
+      # Expire cached byline
+      And it is currently 1 second from now
       And I post the chapter
     Then I should not see "Chapter by karma"
       And 1 email should be delivered to "sabrina"
@@ -351,30 +353,41 @@ Feature: Edit chapters
     Then the "sabrina" checkbox should be checked and disabled
 
 
-  Scenario: Removing yourself as a co-creator from the chapter edit page
+  Scenario: Removing yourself as a co-creator from the chapter edit page when
+  you've co-created multiple chapters on the work removes you only from that 
+  specific chapter. Removing yourself as a co-creator from the chapter edit page
+  of the last chapter you've co-created also removes you from the work.
 
     Given the work "OP's Work" by "originalposter" with chapter two co-authored with "opsfriend"
+      And a chapter with the co-author "opsfriend" is added to "OP's Work"
       And I am logged in as "opsfriend"
     When I view the work "OP's Work"
-      And I view the 2nd chapter
+      And I view the 3rd chapter
       And I follow "Edit Chapter"
     When I follow "Remove Me As Chapter Co-Creator"
-    Then I should see "You have been removed as a creator from the chapter"
+    Then I should see "You have been removed as a creator from the chapter."
       And I should see "Chapter 1"
-    When I view the 2nd chapter
-    Then I should see "Chapter 2"
+    When I view the 3rd chapter
+    Then I should see "Chapter 3"
       And I should see "Chapter by originalposter"
+    When I follow "Previous Chapter"
+      And I follow "Edit Chapter"
+      And I follow "Remove Me As Chapter Co-Creator"
+    Then I should see "You have been removed as a creator from the work."
+    When I view the work "OP's Work"
+    Then I should not see "Edit Chapter"
 
 
   Scenario: Removing yourself as a co-creator from the chapter manage page
 
     Given the work "OP's Work" by "originalposter" with chapter two co-authored with "opsfriend"
+      And a chapter with the co-author "opsfriend" is added to "OP's Work"
       And I am logged in as "opsfriend"
     When I view the work "OP's Work"
       And I follow "Edit"
       And I follow "Manage Chapters"
     When I follow "Remove Me As Chapter Co-Creator"
-    Then I should see "You have been removed as a creator from the chapter"
+    Then I should see "You have been removed as a creator from the chapter."
       And I should see "Chapter 1"
     When I view the 2nd chapter
     Then I should see "Chapter by originalposter"

@@ -18,6 +18,10 @@
 </h2>
 <!--/descriptions-->
 
+<% if can_access_admin_options? %>
+  <div><%= render "admin/admin_options", item: @series %></div>
+<% end %>
+
 <!--subnav-->
 <% if logged_in? %>
   <%= render "series/series_navigation" %>
@@ -79,16 +83,9 @@
   </div>
 <% end %>
 
-<% if logged_in_as_admin? %>
-<!-- BEGIN admin options -->
-  <%= render "admin/admin_options", item: @series %>
-<% end %>
-
 <h3 class="landmark heading"><%= ts("Listing Series") %></h3>
 <ul class="series work index group">
-  <% for serial in @serial_works %>
-    <%= render "works/work_blurb", work: serial.work %>
-  <% end %>
+  <%= render partial: "works/work_blurb", collection: @works, as: :work %>
 </ul>
 <!--/content-->
 

@@ -64,9 +64,6 @@ module Taggable
   def archive_warning_string=(tag_string)
     parse_tags(ArchiveWarning, tag_string)
   end
-  def archive_warning_strings=(array)
-    parse_tags(ArchiveWarning, array)
-  end
   def fandom_string=(tag_string)
     parse_tags(Fandom, tag_string)
   end
@@ -79,6 +76,9 @@ module Taggable
   def freeform_string=(tag_string)
     parse_tags(Freeform, tag_string)
   end
+
+  alias category_strings= category_string=
+  alias archive_warning_strings= archive_warning_string=
 
   # a work can only have one rating, so using first will work
   # should always have a rating, if it doesn't err conservatively
@@ -142,13 +142,19 @@ module Taggable
     end
     tag_array.each do |string|
       string.strip!
-      unless string.blank?
-        tag = klass.find_or_create_by_name(string)
-        if tag.valid?
-          tags << tag if tag.is_a?(klass)
-        else
-          self.invalid_tags << tag
-        end
+      next if string.blank?
+
+      tag = if Tag::USER_DEFINED.include?(klass.to_s)
+              klass.find_or_create_by_name(string)
+            else
+              klass.find_by(name: string, canonical: true)
+            end
+      next unless tag.present? && tag.is_a?(klass)
+
+      if tag.valid?
+        tags << tag if tag.is_a?(klass)
+      else
+        self.invalid_tags << tag
       end
     end
     if self.preview_mode

@@ -3,6 +3,7 @@ Feature: Archivist bulk imports
   Background:
     Given I have an archivist "archivist"
       And the default ratings exist
+      And all warnings exist
       And I am logged in as "archivist"
 
   Scenario: Non-archivist cannot import for others
@@ -12,7 +13,7 @@ Feature: Archivist bulk imports
 
   Scenario: Make a user an archivist
     Given I have pre-archivist setup for "not_archivist"
-      And I am logged in as an admin
+      And I am logged in as an "open_doors" admin
     When I make "not_archivist" an archivist
     Then I should see "User was successfully updated"
 

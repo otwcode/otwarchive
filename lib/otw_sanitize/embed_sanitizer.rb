@@ -28,8 +28,8 @@ module OTWSanitize
     ].freeze
 
     SUPPORTS_HTTPS = %i[
-      ao3 archiveorg dailymotion eighttracks podfic
-      soundcloud spotify viddertube vimeo youtube
+      ao3 archiveorg dailymotion eighttracks ning podfic
+      soundcloud spotify viddersnet viddertube vimeo youtube
     ].freeze
 
     # Creates a callable transformer for the sanitizer to use
@@ -116,6 +116,10 @@ module OTWSanitize
     def ensure_https
       return unless supports_https? && node['src'].present?
       node['src'] = node['src'].gsub("http:", "https:")
+      if allows_flashvars? && node['flashvars'].present?
+        node['flashvars'] = node['flashvars'].gsub("http:", "https:")
+        node['flashvars'] = node['flashvars'].gsub("http%3A", "https%3A")
+      end
     end
 
     # We're now certain that this is an embed from a trusted source, but we

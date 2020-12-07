@@ -140,6 +140,8 @@ Feature: Edit Works
     Then I should not see "Edit"
     When I follow "Creator Invitations page"
       And I check "selected[]"
+      # Expire cached byline
+      And it is currently 1 second from now
       And I press "Accept"
     Then I should see "You are now listed as a co-creator on Dialogue."
     When I follow "Dialogue"

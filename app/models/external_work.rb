@@ -1,6 +1,7 @@
-include UrlHelpers
 class ExternalWork < ApplicationRecord
   include ActiveModel::ForbiddenAttributesProtection
+
+  include UrlHelpers
   include Bookmarkable
   include Filterable
   include Searchable
