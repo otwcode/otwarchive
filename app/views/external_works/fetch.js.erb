@@ -2,7 +2,6 @@
   $j('#external_work_author').val("<%= @external_work.author %>").change();
   $j('#external_work_title').val("<%= @external_work.title %>").change();
   $j('#external_work_summary').val("<%= escape_javascript(@external_work.summary&.html_safe) %>").change();
-  $j('#external_work_summary').html("<%= escape_javascript(@external_work.summary&.html_safe) %>").change();
   $j('#fetched').val("<%= @external_work.id %>");
   $j('#external_work_rating_string').val("<%= @external_work.rating_string %>");
   var categories = <%= @external_work.category_strings.to_json.html_safe %>;
