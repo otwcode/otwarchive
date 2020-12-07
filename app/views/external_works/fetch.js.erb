@@ -9,7 +9,7 @@
   $j('input[name="external_work[category_strings][]"]').each(function() {
     $j(this).prop("checked", categories.includes(this.value));
   });
-  $j('#external_work_fandom_string').val("<%= @external_work.fandom_string %>");
-  $j('#external_work_relationship_string').val("<%= @external_work.relationship_string %>");
-  $j('#external_work_character_string').val("<%= @external_work.character_string %>");
+  $j('#external_work_fandom_string_autocomplete').val("<%= @external_work.fandom_string %>");
+  $j('#external_work_relationship_string_autocomplete').val("<%= @external_work.relationship_string %>");
+  $j('#external_work_character_string_autocomplete').val("<%= @external_work.character_string %>");
 <% end %>
