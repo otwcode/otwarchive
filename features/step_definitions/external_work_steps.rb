@@ -91,9 +91,5 @@ Then /^the summary and tag info for my new bookmark should match the original$/ 
   original_work = works[0]
   new_work = works[1]
   expect(new_work.summary).to eq(original_work.summary)
-  # TODO: AO3-5168 means we have to test just certain tag types for now
-  # expect(new_work.tags).to eq(original_work.tags)
-  expect(new_work.fandoms).to eq(original_work.fandoms)
-  expect(new_work.relationships).to eq(original_work.relationships)
-  expect(new_work.characters).to eq(original_work.characters)
+  expect(new_work.tags).to eq(original_work.tags)
 end
