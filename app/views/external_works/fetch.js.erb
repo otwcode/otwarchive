@@ -6,9 +6,9 @@
   $j('#fetched').val("<%= @external_work.id %>");
   $j('#external_work_rating_string').val("<%= @external_work.rating_string %>");
   var categories = <%= @external_work.category_strings.to_json.html_safe %>;
-  $j('input[name="external_work[category_strings][]"]').each(function() {
-    $j(this).prop("checked", categories.includes(this.value));
-  });
+  $j.each(categories, function(i, category) {
+     $j("input[value='" + category + "']").prop('checked', true);
+   });
   $j('#external_work_fandom_string_autocomplete').val("<%= @external_work.fandom_string %>");
   $j('#external_work_relationship_string_autocomplete').val("<%= @external_work.relationship_string %>");
   $j('#external_work_character_string_autocomplete').val("<%= @external_work.character_string %>");
