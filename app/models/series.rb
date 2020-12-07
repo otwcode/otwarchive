@@ -144,6 +144,12 @@ class Series < ApplicationRecord
     destroyed? || (saved_changes.keys & pertinent_attributes).present?
   end
 
+  # Visibility has changed, which means we need to reindex
+  # the series' bookmarker collections, to update their bookmark counts.
+  def should_reindex_collections?  
+    should_reindex_pseuds?
+  end
+
   def expire_caches
     # Expire cached work blurbs and metas if series title changes
     self.works.each(&:touch) if saved_change_to_title?

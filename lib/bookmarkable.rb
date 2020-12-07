@@ -30,6 +30,7 @@ module Bookmarkable
     return unless respond_to?(:should_reindex_collections?)
     return unless should_reindex_collections?
 
+    collection_ids = bookmarks.map(&:collection_ids).flatten
     IndexQueue.enqueue_ids(Collection, collection_ids, :background)
   end
 end

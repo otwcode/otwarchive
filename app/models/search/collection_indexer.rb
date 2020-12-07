@@ -85,8 +85,8 @@ class CollectionIndexer < Indexer
       authors_reveal_at: object.challenge&.authors_reveal_at,
       general_works_count: object.all_approved_works.count,
       public_works_count: object.all_approved_works.where(restricted: false).count,
-      general_bookmarked_items_count: object.all_bookmarked_items_count(false), 
-      public_bookmarked_items_count: object.all_bookmarked_items_count(true)
+      general_bookmarked_items_count: object.all_bookmarked_items_count(true), 
+      public_bookmarked_items_count: object.all_bookmarked_items_count(false)
     )
   end
 end
