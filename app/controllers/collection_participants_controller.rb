@@ -21,11 +21,10 @@ class CollectionParticipantsController < ApplicationController
   end
 
   def load_participant_and_collection
+    @participant = CollectionParticipant.find_by(id: params[:id])
+
     if params[:collection_participant]
-      @participant = CollectionParticipant.find_by(id: collection_participant_params[:id])
       @new_role = collection_participant_params[:participant_role]
-    else
-      @participant = CollectionParticipant.find_by(id: params[:id])
     end
 
     no_participant and return unless @participant
@@ -139,9 +138,6 @@ class CollectionParticipantsController < ApplicationController
   private
 
   def collection_participant_params
-    params.require(:collection_participant).permit(
-      :id, :participant_role, :collection_id
-    )
+    params.require(:collection_participant).permit(:participant_role)
   end
-
 end

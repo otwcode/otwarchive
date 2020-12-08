@@ -165,13 +165,13 @@ describe CollectionParticipantsController do
         participant_role: user_role
       )
     end
-    let(:id_to_update) { nil }
+    let(:id_to_update) { "" }
     let(:params) do
       {
-        collection_id: collection.id,
+        id: id_to_update,
+        collection_id: collection.name,
         collection_participant: {
-          participant_role:  CollectionParticipant::MEMBER,
-          id: id_to_update
+          participant_role:  CollectionParticipant::MEMBER
         }
       }
     end

@@ -407,11 +407,10 @@ Otwarchive::Application.routes.draw do
     resources :tags do
       resources :works
     end
-    resources :participants, controller: "collection_participants" do
+    resources :participants, controller: "collection_participants", only: [:index, :update, :destroy] do
       collection do
         get :add
         get :join
-        patch :update
       end
     end
     resources :items, controller: "collection_items" do
