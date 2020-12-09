@@ -32,11 +32,11 @@ module Bookmarkable
 
     bookmark_ids = bookmarks.pluck(:id)
     collection_ids = Collection.joins(:collection_items).where(collection_items: {
-                                                          item_id: bookmark_ids,
-                                                          item_type: 'Bookmark',
-                                                          user_approval_status: 1,
-                                                          collection_approval_status: 1
-                                                        }).pluck(:id, :parent_id).flatten.uniq.compact
+                                                           item_id: bookmark_ids,
+                                                           item_type: "Bookmark",
+                                                           user_approval_status: 1,
+                                                           collection_approval_status: 1
+                                                         }).pluck(:id, :parent_id).flatten.uniq.compact
 
     IndexQueue.enqueue_ids(Collection, collection_ids, :background)
   end
