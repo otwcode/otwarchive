@@ -205,7 +205,7 @@ When /^I visit the change username page for (.*)$/ do |login|
   visit change_username_user_path(user)
 end
 
-When /^the user "(.*?)" accepts all (?:co-)?creator (?:invitations|invites)$/ do |login|
+When /^the user "(.*?)" accepts all co-creator requests$/ do |login|
   # To make sure that we don't have caching issues with the byline:
   step %{I wait 1 second}
   user = User.find_by(login: login)
