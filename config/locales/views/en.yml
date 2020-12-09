@@ -135,3 +135,6 @@ en:
       fix_meta_tags:
         title: "Fix Metatags"
         description: "Try to recalculate inherited metatags. Use this option if this tag has grandparent metatags (i.e., a metatag with its own metatag), and the works aren't showing up in the grandparent's listing. You might also try this if you've removed a metatag, but the works are still showing up in the former metatag's listing. If the works still don't go away, ask a staffer to run \"Update Tag Filters\" on this tag."
+  skins:
+    confirm_delete:
+      confirm_html: Are you sure you want to <strong><em>delete</em></strong> the skin \"%{skin_title}\"?

@@ -212,6 +212,7 @@ Feature: Non-public site and work skins
     And I create the skin "Ugly Skin"
   When I go to "Ugly Skin" skin page
     And I follow "Delete"
+    And I press "Yes, Delete Skin"
   Then I should see "The skin was deleted."
     And I should be on skinner's skins page
     And I should not see "Ugly Skin"
@@ -223,6 +224,7 @@ Feature: Non-public site and work skins
     And I change my skin to "Ugly Skin"
   When I go to skinner's skins page
     And I follow "Delete"
+    And I press "Yes, Delete Skin"
   Then I should see "The skin was deleted."
   When I go to skinner's preferences page
   Then "Default" should be selected within "preference_skin_id"

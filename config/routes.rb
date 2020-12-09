@@ -527,6 +527,7 @@ Otwarchive::Application.routes.draw do
     member do
       get :preview
       get :set
+      get :confirm_delete
     end
     collection do
       get :unset
