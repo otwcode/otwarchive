@@ -69,7 +69,7 @@ Feature: Download a work
   Scenario: Works can be downloaded when anonymous
 
   Given there is a work "Test Work" in an anonymous collection "Anonymous"
-  When I am logged out
+  When I am a visitor
     And I view the work "Test Work"
     And I follow "HTML"
   Then I should see "Anonymous"
@@ -82,7 +82,7 @@ Feature: Download a work
     And I set up the draft "Many Fandom Work"
     And I fill in "Fandoms" with "Fandom 1, Fandom 2, Fandom 3, Fandom 4"
     And I press "Post"
-  When I am logged out
+  When I log out
     And I view the work "Many Fandom Work"
     And I follow "HTML"
   Then I should see "Multifandom"

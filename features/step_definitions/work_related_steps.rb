@@ -3,7 +3,7 @@
 Given /^I have related works setup$/ do
   step "basic tags"
   step "all emails have been delivered"
-  step "I am logged out"
+  step "I start a new session"
   step %{I have loaded the "languages" fixture}
 
   inspiration = FactoryBot.create(:user, login: "inspiration", confirmed_at: Time.now.utc)

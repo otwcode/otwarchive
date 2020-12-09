@@ -87,29 +87,24 @@ Feature: Edit Works
       | login          | password   |
       | Scott          | password   |
       And I have a moderated collection "Digital Hoarders 2013" with name "digital_hoarders_2013"
-      And I am logged out
     When I am logged in as "Scott" with password "password"
       And I post the work "Murder in Milan" in the collection "Digital Hoarders 2013"
     Then I should see "You have submitted your work to the moderated collection 'Digital Hoarders 2013'. It will not become a part of the collection until it has been approved by a moderator."
-      And I am logged out
-      And I am logged in as "moderator"
+    When I am logged in as "moderator"
       And I go to "Digital Hoarders 2013" collection's page
       And I follow "Collection Settings"
       And I uncheck "This collection is moderated"
       And I press "Update"
     Then I should see "Collection was successfully updated"
-      And I am logged out
     When I am logged in as "Scott"
       And I post the work "Murder by Numbers" in the collection "Digital Hoarders 2013"
     Then I should see "Work was successfully posted"
-      And I am logged out
     When I am logged in as "moderator"
       And I go to "Digital Hoarders 2013" collection's page
       And I follow "Collection Settings"
       And I check "This collection is moderated"
       And I press "Update"
     Then I should see "Collection was successfully updated"
-      And I am logged out
     When I am logged in as "Scott"
       And I edit the work "Murder by Numbers"
       And I press "Post"
