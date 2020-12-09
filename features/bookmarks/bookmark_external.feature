@@ -101,3 +101,27 @@ Feature: Create bookmarks of external works
     Then I should not see "Bookmark External Work"
     When I go to the bookmarks in collection "Testing BEW Collection"
     Then I should not see "Bookmark External Work"
+
+  Scenario: Users can see external works, admins can also see only duplicates
+    Given basic tags
+      And I am logged in
+      # Bookmark the same URL twice
+      And I bookmark the external work "External Title"
+      And I bookmark the external work "Alternate Title"
+
+    When I go to the external works page
+    Then I should see "External Title"
+      And I should see "Alternate Title"
+      And I should not see "Show duplicates"
+
+    When I go to the external works page with only duplicates
+    Then I should see "Sorry, you don't have permission to access the page you were trying to reach."
+
+    When I am logged in as an admin
+      And I go to the external works page
+    Then I should see "External Title"
+      And I should see "Alternate Title"
+      And I should see "Show duplicates (1)"
+    When I follow "Show duplicates (1)"
+    Then I should see "External Title"
+      And I should not see "Alternate Title"

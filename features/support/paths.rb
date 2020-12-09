@@ -274,6 +274,10 @@ module NavigationHelpers
       fandom_path($1)
     when /^the new external work page$/i
       new_external_work_path
+    when /^the external works page$/i
+      external_works_path
+    when /^the external works page with only duplicates$/i
+      external_works_path(show: :duplicates)
 
     # Admin Pages
     when /^the admin-posts page$/i

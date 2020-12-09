@@ -20,7 +20,12 @@ class ExternalWorksController < ApplicationController
   end
 
   def index
-    if params[:show] == 'duplicates'
+    if params[:show] == "duplicates"
+      unless logged_in_as_admin?
+        access_denied
+        return
+      end
+
       @external_works = ExternalWork.duplicate.order("created_at DESC").paginate(page: params[:page])
     else
       @external_works = ExternalWork.order("created_at DESC").paginate(page: params[:page])
