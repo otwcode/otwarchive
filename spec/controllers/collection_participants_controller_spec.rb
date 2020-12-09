@@ -155,7 +155,7 @@ describe CollectionParticipantsController do
         id: id_to_update,
         collection_id: collection.name,
         collection_participant: {
-          participant_role:  CollectionParticipant::MEMBER
+          participant_role: CollectionParticipant::MEMBER
         }
       }
     end
