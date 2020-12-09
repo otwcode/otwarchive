@@ -1197,15 +1197,8 @@ class Work < ApplicationRecord
     approved_collections.pluck(:id, :parent_id).flatten.uniq.compact
   end
 
-  def comments_count
-    self.stat_counter.comments_count
-  end
-  def kudos_count
-    self.stat_counter.kudos_count
-  end
-  def bookmarks_count
-    self.stat_counter.bookmarks_count
-  end
+  delegate :comments_count, :kudos_count, :bookmarks_count,
+           to: :stat_counter, allow_nil: true
 
   def hits
     stat_counter&.hit_count
