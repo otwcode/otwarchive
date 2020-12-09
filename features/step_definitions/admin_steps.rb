@@ -44,6 +44,12 @@ Given /^basic languages$/ do
   Locale.create(iso: "de", name: "Deutsch", language: german)
 end
 
+Given /^Persian language$/ do
+  Language.default
+  persian = Language.find_or_create_by(short: "fa", name: "Persian", support_available: true, abuse_support_available: true)
+  Locale.create(iso: "fa", name: "Persian", language: persian)
+end
+
 Given /^downloads are off$/ do
   step("I am logged in as a super admin")
   visit(admin_settings_path)
@@ -430,4 +436,8 @@ end
 Then /^the work "([^\"]*)" should not be marked as spam/ do |work|
   w = Work.find_by_title(work)
   assert !w.spam?
+end
+
+Then /^the user content should be shown as right-to-left$/ do
+  page.should have_xpath("//div[contains(@class, 'userstuff') and @dir='rtl']")
 end
