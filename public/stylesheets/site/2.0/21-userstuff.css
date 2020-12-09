@@ -149,6 +149,11 @@
 
 /* media */
 
+.userstuff img {
+  max-width: 100%;
+  height: auto;
+}
+
 .userstuff video {
   max-width: 100%;
 }
@@ -179,10 +184,6 @@
 
 .bookmark .user .userstuff blockquote {
 	margin-bottom: 1.286em;
-}
-
-.news .userstuff img {
-  max-width: 100%;
 }
 
 /*END== */
