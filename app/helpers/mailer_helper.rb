@@ -90,7 +90,7 @@ module MailerHelper
     html.split("\n").map { |line_of_text| h(line_of_text) }.join('<br>').html_safe
   end
 
-  # The title used in creatorship_notification and creatorship_invitation
+  # The title used in creatorship_notification and creatorship_request
   # emails.
   def creation_title(creation)
     if creation.is_a?(Chapter)

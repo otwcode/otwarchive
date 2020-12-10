@@ -4,7 +4,7 @@ Feature: Marking comments as spam
   Scenario: Spam comments are not included in a work's comment count
     Given I am logged in as "author"
       And I post the work "Popular Fic"
-      And I am logged out
+      And I log out
       And I view the work "Popular Fic" with comments
       And I post a guest comment
       And I post a spam comment
@@ -25,7 +25,7 @@ Feature: Marking comments as spam
   Scenario: Spam comments are not included in an admin post's comment count
     Given I am logged in as a "communications" admin
       And I make an admin post
-      And I am logged out as an admin
+      And I log out
       And I go to the admin-posts page
       And I follow "Default Admin Post"
       And I post a guest comment

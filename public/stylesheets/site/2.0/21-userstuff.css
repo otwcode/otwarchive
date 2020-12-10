@@ -30,7 +30,9 @@
 .userstuff dd {
   display: block;
   line-height: 1.5;
-  margin: 1.25em auto 1.25em 3em;
+  margin-block-start: 1.25em;
+  margin-block-end: 1.25em;
+  margin-inline-start: 3em;
 }
 
 .userstuff dd p {
@@ -47,7 +49,10 @@
   font-weight: normal;
   display: list-item;
   list-style-type: disc;
-  margin: 0.75em 0 0.75em 1.75em;
+  margin-block-start: 0.75em;
+  margin-inline-end: 0;
+  margin-block-end: 0.75em;
+  margin-inline-start: 1.75em;
 }
 
 .userstuff ol {
@@ -57,7 +62,10 @@
 
 .userstuff ol li {
   list-style-type: decimal;
-  margin: 0.75em 0 0.75em 1.75em;
+  margin-block-start: 0.75em;
+  margin-inline-end: 0;
+  margin-block-end: 0.75em;
+  margin-inline-start: 1.75em;
 }
 
 .userstuff ol li ol li {
@@ -141,6 +149,11 @@
 
 /* media */
 
+.userstuff img {
+  max-width: 100%;
+  height: auto;
+}
+
 .userstuff video {
   max-width: 100%;
 }
@@ -171,10 +184,6 @@
 
 .bookmark .user .userstuff blockquote {
 	margin-bottom: 1.286em;
-}
-
-.news .userstuff img {
-  max-width: 100%;
 }
 
 /*END== */
