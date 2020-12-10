@@ -139,3 +139,21 @@ Feature: Create bookmarks of external works
     Then I should see "Bookmark was successfully created."
       And the title and creator info for my new bookmark should vary from the original
       And the summary and tag info for my new bookmark should match the original
+
+  @javascript
+  Scenario: When using the autocomplete to select a URL that has already been bookmarked, any information you have entered will be overwritten
+    Given "first_user" has bookmarked an external work
+      And I am logged in as "second_user"
+    When I go to the new external work page
+      And I fill in "Creator" with "ao3testing"
+      And I fill in "Title" with "Some External Work"
+      And I fill in "Fandoms" with "Test Fandom"
+      And I select "General Audiences" from "Rating"
+      And I check "M/M"
+      And I fill in "Relationships" with "Character 1/Character 2"
+      And I fill in "Characters" with "Character 3, Character 4"
+      And I choose a previously bookmarked URL from the autocomplete
+      And I press "Create"
+    Then I should see "Bookmark was successfully created."
+      And show me the page
+      And the work info for my new bookmark should match the original
