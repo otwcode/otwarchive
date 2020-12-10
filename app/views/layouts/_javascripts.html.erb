@@ -113,7 +113,7 @@
       var permitted_hosts = <%= ArchiveConfig.PERMITTED_HOSTS.to_json.html_safe %>;
       var current_host = window.location.hostname;
 
-      if (!permitted_hosts.includes(current_host) && Cookies.get("proxy_notice") !== "0") {
+      if (!permitted_hosts.includes(current_host) && Cookies.get("proxy_notice") !== "0" && window.location.protocol !== "file:") {
         $j("#skiplinks").after("<%= escape_javascript(render "layouts/proxy_notice") %>");
       }
     });

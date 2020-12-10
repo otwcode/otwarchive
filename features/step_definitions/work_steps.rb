@@ -123,7 +123,7 @@ Given /^I have no works or comments$/ do
 end
 
 Given /^the chaptered work(?: with ([\d]+) chapters)?(?: with ([\d]+) comments?)? "([^"]*)"$/ do |n_chapters, n_comments, title|
-  step %{I am logged out}
+  step %{I start a new session}
   step %{basic tags}
 
   title ||= "Blabla"
@@ -162,7 +162,7 @@ Given /^I have a multi-chapter draft$/ do
 end
 
 Given /^the work(?: "([^"]*)")? with(?: (\d+))? comments setup$/ do |title, n_comments|
-  step %{I am logged out}
+  step %{I start a new session}
   step %{basic tags}
 
   title ||= "Blabla"
@@ -174,7 +174,7 @@ Given /^the work(?: "([^"]*)")? with(?: (\d+))? comments setup$/ do |title, n_co
 end
 
 Given /^the work(?: "([^"]*)")? with(?: (\d+))? bookmarks? setup$/ do |title, n_bookmarks|
-  step %{I am logged out}
+  step %{I start a new session}
   step %{basic tags}
 
   title ||= "Blabla"
@@ -198,13 +198,13 @@ Given /^the chaptered work with comments setup$/ do
     step %{I view the #{i.to_s}th chapter}
     step %{I post a comment "Woohoo"}
   end
-  step "I am logged out"
+  step "I log out"
 end
 
 Given /^the work "([^"]*)"$/ do |work|
   unless Work.where(title: work).exists?
     step %{I have a work "#{work}"}
-    step %{I am logged out}
+    step %{I log out}
   end
 end
 
@@ -218,14 +218,14 @@ Given /^there is a work "([^"]*)" in an unrevealed collection "([^"]*)"$/ do |wo
   step %{I have the hidden collection "#{collection}"}
   step %{I am logged in as a random user}
   step %{I post the work "#{work}" to the collection "#{collection}"}
-  step %{I am logged out}
+  step %{I log out}
 end
 
 Given /^there is a work "([^"]*)" in an anonymous collection "([^"]*)"$/ do |work, collection|
   step %{I have the anonymous collection "#{collection}"}
   step %{I am logged in as a random user}
   step %{I post the work "#{work}" to the collection "#{collection}"}
-  step %{I am logged out}
+  step %{I log out}
 end
 
 Given /^I am logged in as the author of "([^"]*)"$/ do |work|
@@ -235,7 +235,7 @@ end
 
 Given /^the spam work "([^\"]*)"$/ do |work|
   step %{I have a work "#{work}"}
-  step %{I am logged out}
+  step %{I log out}
   w = Work.find_by_title(work)
   w.update_attribute(:spam, true)
   w.update_attribute(:hidden_by_admin, true)
@@ -309,7 +309,7 @@ When /^a chapter with the co-author "([^\"]*)" is added to "([^\"]*)"$/ do |coau
   step %{a chapter is set up for "#{work_title}"}
   step %{I invite the co-author "#{coauthor}"}
   click_button("Post")
-  step %{the user "#{coauthor}" accepts all co-creator invitations}
+  step %{the user "#{coauthor}" accepts all co-creator requests}
   step %{all indexing jobs have been run}
   Tag.write_redis_to_database
 end

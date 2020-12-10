@@ -202,7 +202,7 @@ Feature: Create Gifts
       And the email should contain "The user gifter has invited your pseud gifter2 to be listed as a co-creator on the following work"
       And the email should not contain "translation missing"
     When all emails have been delivered
-      And the user "gifter2" accepts all co-creator invites
+      And the user "gifter2" accepts all co-creator requests
       And I press "Post"
     Then 1 email should be delivered to "giftee1"
       And the email should link to gifter's user url
