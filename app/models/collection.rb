@@ -1,5 +1,6 @@
 class Collection < ApplicationRecord
   include ActiveModel::ForbiddenAttributesProtection
+  include Filterable
   include UrlHelpers
   include WorksOwner
 
@@ -60,9 +61,6 @@ class Collection < ApplicationRecord
 
   has_many :bookmarks, through: :collection_items, source: :item, source_type: 'Bookmark'
   has_many :approved_bookmarks, -> { where('collection_items.user_approval_status = ? AND collection_items.collection_approval_status = ?', CollectionItem::APPROVED, CollectionItem::APPROVED) }, through: :collection_items, source: :item, source_type: 'Bookmark'
-
-  has_many :fandoms, -> { distinct }, through: :approved_works
-  has_many :filters, -> { distinct }, through: :approved_works
 
   has_many :collection_participants, dependent: :destroy
   accepts_nested_attributes_for :collection_participants, allow_destroy: true
@@ -146,6 +144,10 @@ class Collection < ApplicationRecord
   def no_reserved_strings
     errors.add(:title, ts("^Sorry, the ',' character cannot be in a collection Display Title.")) if
       title.match(/\,/)
+  end
+  validate :validate_tag_limit
+  def validate_tags
+    errors.add(:taggings, "You have reached the tag limit of %{max}") if taggings.count > 
   end
 
   # return title.html_safe to overcome escaping done by sanitiser

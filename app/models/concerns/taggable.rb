@@ -77,6 +77,34 @@ module Taggable
     parse_tags(Freeform, tag_string)
   end
 
+  def tag_string
+    tags.map{|tag| tag.name}.join(ArchiveConfig.DELIMITER_FOR_OUTPUT)
+  end
+
+  def tag_string=(tag_string)
+    # Make sure that we trigger the callback for our taggings.
+    self.taggings.destroy_all
+
+    self.tags = []
+
+    # Replace unicode full-width commas
+    tag_string.gsub!(/\uff0c|\u3001/, ',')
+    tag_array = tag_string.split(ArchiveConfig.DELIMITER_FOR_INPUT)
+
+    tag_array.each do |string|
+      string.strip!
+      unless string.blank?
+        tag = Tag.find_by_name(string)
+        if tag
+          self.tags << tag
+        else
+          self.tags << UnsortedTag.create(name: string)
+        end
+      end
+    end
+    return self.tags
+  end
+
   alias category_strings= category_string=
   alias archive_warning_strings= archive_warning_string=
 
