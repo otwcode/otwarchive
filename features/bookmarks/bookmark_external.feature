@@ -122,7 +122,7 @@ Feature: Create bookmarks of external works
       And the work info for my new bookmark should match the original
 
   @javascript
-  Scenario: When getting an error (e.g. because you the title is blank) after using the autocomplete to select a previously-bookmarked URL, any changes you made to the work information are not overridden on the edit page
+  Scenario: When getting an error (e.g. because the title is blank) after using the autocomplete to select a previously-bookmarked URL, any changes you made to the work information are not overridden on the edit page
     Given "first_user" has bookmarked an external work
       And I am logged in as "second_user"
     When I go to the new external work page
