@@ -112,8 +112,7 @@ end
 When /^I choose a previously bookmarked URL from the autocomplete$/ do
   url = ExternalWork.first.url
   step %{I choose "#{url}" from the "URL" autocomplete}
-  # Give it time to populate the other fields.
-  step %{I wait 1 second}
+  step %{all AJAX requests are complete}
 end
 
 ## Here's where we create the steps defining which tags should appear/not appear

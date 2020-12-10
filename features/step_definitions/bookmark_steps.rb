@@ -386,6 +386,7 @@ end
 When(/^I use the bookmarklet on a previously bookmarked URL$/) do
   url = ExternalWork.first.url
   visit new_external_work_path(params: { url_from_external: url })
+  step %{all AJAX requests are complete}
 end
 
 Then /^the bookmark on "([^\"]*)" should have tag "([^\"]*)"$$/ do |title, tag|
