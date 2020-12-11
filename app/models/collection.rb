@@ -145,10 +145,6 @@ class Collection < ApplicationRecord
     errors.add(:title, ts("^Sorry, the ',' character cannot be in a collection Display Title.")) if
       title.match(/\,/)
   end
-  validate :validate_tag_limit
-  def validate_tags
-    errors.add(:taggings, "You have reached the tag limit of %{max}") if taggings.count > 
-  end
 
   # return title.html_safe to overcome escaping done by sanitiser
   def title

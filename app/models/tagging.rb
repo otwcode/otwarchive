@@ -3,6 +3,7 @@ class Tagging < ApplicationRecord
   belongs_to :taggable, polymorphic: true, touch: true, inverse_of: :taggings
 
   validates_presence_of :tagger, :taggable
+  validate :collection_tag_limit
 
   # When we create or destroy a tagging, it may change the taggings count.
   after_create :update_taggings_count
@@ -41,5 +42,11 @@ class Tagging < ApplicationRecord
     # and if it's necessary to disambiguate existing canonical/unfilterable tags
     # in multiple fandoms.
     tagger.enqueue_to_index if tagger.taggings_count < ArchiveConfig.TAGGINGS_COUNT_REINDEX_LIMIT
+  end
+
+  def collection_tag_limit
+    return unless taggable.class == Collection && taggable.tags.count >= ArchiveConfig.COLLECTION_TAG_MAX
+
+    errors.add(:tags, "You have reached the tag limit")
   end
 end
