@@ -179,5 +179,4 @@ Feature: Create bookmarks of external works
       And I choose a previously bookmarked URL from the autocomplete
       And I press "Create"
     Then I should see "Bookmark was successfully created."
-      And show me the page
       And the work info for my new bookmark should match the original
