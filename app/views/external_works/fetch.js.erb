@@ -5,7 +5,7 @@
   $j('#fetched').val("<%= @external_work.id %>");
   $j('#external_work_rating_string').val("<%= @external_work.rating_string %>");
   var categories = <%= @external_work.category_strings.to_json.html_safe %>;
-  $j('input[name="external_work[category_strings][]"]').each(function() {
+  $j('input[id^="external_work_category_strings_"]').each(function() {
     $j(this).prop("checked", categories.indexOf(this.value) >= 0 );
   });
   $j('#external_work_fandom_string_autocomplete').val("<%= @external_work.fandom_string %>");
