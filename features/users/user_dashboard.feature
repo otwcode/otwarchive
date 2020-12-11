@@ -60,13 +60,15 @@ Feature: User dashboard
   Then I should see "Recent works"
     And I should see "Oldest Work"
     And I should see "Work 5"
-    And I should not see "Works (5)" within "#user-works"
+    And I should see "Works (5)" within "#dashboard"
+    And I should not see "Works (" within "#user-works"
   When I post the work "Newest Work"
     And all indexing jobs have been run
     And I go to meatloaf's user page
   Then I should see "Newest Work"
     And I should not see "Oldest Work"
     And I should see "Works (5)" within "#dashboard"
+    And I should see "Works (5)" within "#user-works"
   When I wait 11 seconds
     And I reload the page
   Then I should see "Works (6)" within "#dashboard"
@@ -79,6 +81,8 @@ Feature: User dashboard
   Given I am logged in as "meatloaf"
     And I post the work "My Work"
   When I add the work "My Work" to the series "Oldest Series"
+    # Make sure all other series are more recent
+    And it is currently 1 second from now
     And I add the work "My Work" to the series "Series 2"
     And I add the work "My Work" to the series "Series 3"
     And I add the work "My Work" to the series "Series 4"
@@ -91,7 +95,7 @@ Feature: User dashboard
   Then I should see "Newest Series" within "#user-series"
     And I should not see "Oldest Series" within "#user-series"
   When I follow "Series (6)" within "#user-series"
-  Then I should see "meatloaf's Series"
+  Then I should see "6 Series by meatloaf"
     And I should see "Oldest Series"
     And I should see "Newest Series"
 
@@ -116,6 +120,19 @@ Feature: User dashboard
   Then I should see "6 Bookmarks by meatloaf"
     And I should see "Work One"
     And I should see "Work Six"
+
+  Scenario Outline: The dashboard/works/bookmarks pages for a non-default pseud should display both pseud and username
+  Given "meatloaf" has the pseud "gravy"
+  When I go to meatloaf's <page_name> page
+  Then I should not see "(meatloaf)" within "<selector>"
+  When I go to the <page_name> page for user "meatloaf" with pseud "gravy"
+  Then I should see "gravy (meatloaf)" within "<selector>"
+  Examples:
+    | page_name | selector                  |
+    | user      | #main .primary h2         |
+    | works     | .works-index .heading     |
+    | bookmarks | .bookmarks-index .heading |
+    | series    | .series-index .heading    |
 
   Scenario: The dashboard for a specific pseud should only list the creations owned by that pseud
   Given dashboard counts expire after 10 seconds

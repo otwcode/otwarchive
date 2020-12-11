@@ -1,8 +1,15 @@
-require 'cucumber/rspec/doubles'
-require 'cucumber/timecop'
-require 'email_spec/cucumber'
+require "cucumber/rspec/doubles"
+require "cucumber/timecop"
+require "email_spec/cucumber"
 
 Before do
+  # Create default settings if necessary, since the database is truncated
+  # after every test.
+  #
+  # Enable our experimental caching, skipping validations which require
+  # setting an admin as the last updater.
+  AdminSetting.default.update_attribute(:enable_test_caching, true)
+
   # Create default language and locale.
   Locale.default
 
@@ -14,6 +21,10 @@ Before do
 
   # Clear Memcached
   Rails.cache.clear
+
+  # Remove old tag feeds
+  page_cache_dir = Rails.root.join("public/test_cache")
+  FileUtils.remove_dir(page_cache_dir, true) if Dir.exist?(page_cache_dir)
 
   # Clear Redis
   REDIS_AUTOCOMPLETE.flushall
@@ -41,4 +52,9 @@ end
 
 After "@disable_caching" do
   ActionController::Base.perform_caching = true
+end
+
+Before "@skins" do
+  # Create a default skin:
+  AdminSetting.current.update_attribute(:default_skin, Skin.default)
 end

@@ -168,10 +168,10 @@ describe ChaptersController do
 
     it "assigns @comments to only reviewed comments" do
       moderated_work = create(:work, moderated_commenting_enabled: true)
-      comment = create(:comment, commentable_type: "Chapter", commentable_id: moderated_work.chapters.first.id)
+      comment = create(:comment, commentable: moderated_work.chapters.first)
       comment.unreviewed = false
       comment.save
-      create(:comment, unreviewed: true, commentable_type: "Chapter", commentable_id: moderated_work.chapters.first.id)
+      create(:comment, unreviewed: true, commentable: moderated_work.chapters.first)
       get :show, params: { work_id: moderated_work.id, id: moderated_work.chapters.first.id }
       expect(assigns[:comments]).to eq [comment]
     end
@@ -196,7 +196,7 @@ describe ChaptersController do
     end
 
     it "assigns @kudos to non-anonymous kudos" do
-      kudo = create(:kudo, commentable_id: work.id, user: create(:user))
+      kudo = create(:kudo, commentable: work, user: create(:user))
       create(:kudo, commentable: work)
       get :show, params: { work_id: work.id, id: work.chapters.first.id }
       expect(assigns[:kudos]).to eq [kudo]
@@ -205,8 +205,8 @@ describe ChaptersController do
     it "assigns instance variables correctly" do
       second_chapter = create(:chapter, work: work, position: 2, posted: true)
       third_chapter = create(:chapter, work: work, position: 3, posted: true)
-      comment = create(:comment, commentable_type: "Chapter", commentable_id: second_chapter.id)
-      kudo = create(:kudo, commentable_id: work.id, user: create(:user))
+      comment = create(:comment, commentable: second_chapter)
+      kudo = create(:kudo, commentable: work, user: create(:user))
       tag = create(:fandom)
       expect_any_instance_of(Work).to receive(:tag_groups).and_return("Fandom" => [tag])
       expect_any_instance_of(ChaptersController).to receive(:get_page_title).with(tag.name, user.pseuds.first.name, "My title is long enough - Chapter 2").and_return("page title")
@@ -311,7 +311,7 @@ describe ChaptersController do
       end
     end
 
-    context "when work owner is logged in" do
+    context "when logged in user owns the chapter" do
       before do
         fake_login_known_user(user)
       end
@@ -327,19 +327,9 @@ describe ChaptersController do
         it_redirects_to_simple(user_path(banned_user))
         expect(flash[:error]).to include("Your account has been banned.")
       end
-
-      it "removes user, gives notice, and redirects to work when user removes themselves" do
-        other_user = create(:user)
-        other_user.preference.allow_cocreator = true
-        other_user.preference.save
-        chapter = create(:chapter, work: work, posted: true, authors: [user.pseuds.first, other_user.pseuds.first])
-        get :edit, params: { work_id: work.id, id: chapter.id, remove: "me" }
-        expect(assigns[:chapter].pseuds).to eq [other_user.pseuds.first]
-        it_redirects_to_with_notice(work_path(work), "You have been removed as a creator from the chapter")
-      end
     end
 
-    context "when other user is logged in" do
+    context "when logged in user does not own the chapter" do
       before do
         fake_login
       end
@@ -347,6 +337,43 @@ describe ChaptersController do
       it "errors and redirects to work" do
         get :edit, params: { work_id: work.id, id: work.chapters.first.id }
         it_redirects_to_with_error(work_path(work), "Sorry, you don't have permission to access the page you were trying to reach.")
+      end
+    end
+
+    context "with valid remove params" do
+      context "when work is multichaptered and co-created" do
+        let(:co_creator) { create(:user) }
+        let!(:co_created_chapter) { create(:chapter, work: work, posted: true, authors: [user.pseuds.first, co_creator.pseuds.first]) }
+
+        context "when logged in user also owns other chapters" do
+          before do
+            fake_login_known_user(user)
+          end
+
+          it "removes user from chapter, gives notice, and redirects to work" do
+            get :edit, params: { work_id: work.id, id: co_created_chapter.id, remove: "me" }
+
+            expect(co_created_chapter.reload.pseuds).to eq [co_creator.pseuds.first]
+            expect(work.reload.pseuds).to eq [user.pseuds.first, co_creator.pseuds.first]
+
+            it_redirects_to_with_notice(work_path(work), "You have been removed as a creator from the chapter.")
+          end
+        end
+
+        context "when logged in user only owns this chapter" do
+          before do
+            fake_login_known_user(co_creator)
+          end
+
+          it "removes user from chapter and delegates removal of the user from the work to the work controller" do
+            get :edit, params: { work_id: work.id, id: co_created_chapter.id, remove: "me" }
+
+            expect(co_created_chapter.reload.pseuds).to eq [user.pseuds.first]
+            expect(work.reload.pseuds).to eq [user.pseuds.first, co_creator.pseuds.first]
+            
+            it_redirects_to(edit_work_path(work, remove: "me"))
+          end
+        end
       end
     end
   end

@@ -7,8 +7,6 @@ class TagsController < ApplicationController
 
   caches_page :feed
 
-  # cache_sweeper :tag_sweeper
-
   def load_tag
     @tag = Tag.find_by_name(params[:id])
     unless @tag && @tag.is_a?(Tag)
@@ -198,7 +196,7 @@ class TagsController < ApplicationController
         flash[:notice] = ts('Tag was successfully created.')
       end
       @tag.update_attribute(:canonical, tag_params[:canonical])
-      redirect_to url_for(controller: 'tags', action: 'edit', id: @tag)
+      redirect_to edit_tag_path(@tag)
     else
       render(action: 'new') && return
     end

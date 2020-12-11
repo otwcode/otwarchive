@@ -1,12 +1,11 @@
-class Admin::AdminInvitationsController < ApplicationController
-
-  before_action :admin_only
+class Admin::AdminInvitationsController < Admin::BaseController
 
   def index
   end
 
   def create
     @invitation = current_admin.invitations.new(invitation_params)
+
     if @invitation.invitee_email.blank?
       flash[:error] = t('no_email', default: "Please enter an email address.")
       render action: 'index'

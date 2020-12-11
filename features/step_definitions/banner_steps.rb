@@ -89,7 +89,7 @@ Then /^a logged-in user should see the(?: "([^\"]*)")? banner$/ do |banner_type|
 end
 
 Then /^a logged-out user should see the(?: "([^\"]*)")? banner$/ do |banner_type|
-  step %{I am logged out}
+  step "I am a visitor"
   visit(works_path)
   if banner_type.present?
     if banner_type == "alert"
@@ -112,7 +112,7 @@ Then /^a logged-in user should see the edited active banner$/ do
 end
 
 Then /^a logged-out user should see the edited active banner$/ do
-  step %{I am logged out}
+  step "I am a visitor"
   visit(works_path)
   step %{I should see "This is some edited banner text"}
 end
@@ -123,7 +123,7 @@ Then /^a logged-in user should not see a banner$/ do
 end
 
 Then /^a logged-out user should not see a banner$/ do
-  step %{I am logged out}
+  step "I am a visitor"
   page.should_not have_xpath("//div[@class=\"announcement group\"]")
 end
 

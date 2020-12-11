@@ -1,5 +1,5 @@
 class AdminMailer < ActionMailer::Base
-  include Resque::Mailer # see README in this directory
+  include HtmlCleaner
 
   layout 'mailer'
   helper :mailer
@@ -47,12 +47,14 @@ class AdminMailer < ActionMailer::Base
 
   # Sends a spam report
   def send_spam_alert(spam)
-    @users = User.where(id: spam.keys).to_a
-    return if @users.empty?
-
     # Make sure that the keys of the spam array are integers, so that we can do
-    # an easy look-up with user IDs.
-    @spam = spam.transform_keys(&:to_i)
+    # an easy look-up with user IDs. We call stringify_keys first because
+    # the currently installed version of Resque::Mailer does odd things when
+    # you pass a hash as an argument, and we want to know what we're dealing with.
+    @spam = spam.stringify_keys.transform_keys(&:to_i)
+
+    @users = User.where(id: @spam.keys).to_a
+    return if @users.empty?
 
     # The users might have been retrieved from the database out of order, so
     # re-sort them by their score.

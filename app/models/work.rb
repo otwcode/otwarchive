@@ -147,6 +147,12 @@ class Work < ApplicationRecord
   # Run Taggable#check_for_invalid_tags as a validation.
   validate :check_for_invalid_tags
 
+  enum comment_permissions: {
+    enable_all: 0,
+    disable_anon: 1,
+    disable_all: 2
+  }, _suffix: :comments
+
   ########################################################################
   # HOOKS
   # These are methods that run before/after saves and updates to ensure
@@ -184,10 +190,10 @@ class Work < ApplicationRecord
           # Check to see if this work is being deleted by an Admin
           if User.current_user.is_a?(Admin)
             # this has to use the synchronous version because the work is going to be destroyed
-            UserMailer.admin_deleted_work_notification(user, self).deliver!
+            UserMailer.admin_deleted_work_notification(user, self).deliver_now
           else
             # this has to use the synchronous version because the work is going to be destroyed
-            UserMailer.delete_work_notification(user, self).deliver!
+            UserMailer.delete_work_notification(user, self).deliver_now
           end
         end
       end
@@ -492,13 +498,6 @@ class Work < ApplicationRecord
       user_is_owner_or_invited?(user)
     end
   end
-
-  def unrestricted=(setting)
-    if setting == "1"
-      self.restricted = false
-    end
-  end
-  def unrestricted; !self.restricted; end
 
   def unrevealed?(user=User.current_user)
     # eventually here is where we check if it's in a challenge that hasn't been made public yet
@@ -1002,7 +1001,6 @@ class Work < ApplicationRecord
   scope :ordered_by_hit_count_asc, -> { order("hit_count ASC") }
   scope :ordered_by_date_desc, -> { order("revised_at DESC") }
   scope :ordered_by_date_asc, -> { order("revised_at ASC") }
-  scope :random_order, -> { order("RAND()") }
 
   scope :recent, lambda { |*args| where("revised_at > ?", (args.first || 4.weeks.ago.to_date)) }
   scope :within_date_range, lambda { |*args| where("revised_at BETWEEN ? AND ?", (args.first || 4.weeks.ago), (args.last || Time.now)) }
@@ -1157,9 +1155,9 @@ class Work < ApplicationRecord
     return unless hidden_by_admin? && saved_change_to_hidden_by_admin?
     users.each do |user|
       if spam?
-        UserMailer.admin_spam_work_notification(id, user.id).deliver
+        UserMailer.admin_spam_work_notification(id, user.id).deliver_after_commit
       else
-        UserMailer.admin_hidden_work_notification(id, user.id).deliver
+        UserMailer.admin_hidden_work_notification(id, user.id).deliver_after_commit
       end
     end
   end
@@ -1199,15 +1197,8 @@ class Work < ApplicationRecord
     approved_collections.pluck(:id, :parent_id).flatten.uniq.compact
   end
 
-  def comments_count
-    self.stat_counter.comments_count
-  end
-  def kudos_count
-    self.stat_counter.kudos_count
-  end
-  def bookmarks_count
-    self.stat_counter.bookmarks_count
-  end
+  delegate :comments_count, :kudos_count, :bookmarks_count,
+           to: :stat_counter, allow_nil: true
 
   def hits
     stat_counter&.hit_count

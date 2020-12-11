@@ -6,7 +6,7 @@ describe HtmlCleaner do
   include HtmlCleaner
 
   describe "TagStack" do
-    let(:stack) { TagStack.new }
+    let(:stack) { HtmlCleaner::TagStack.new }
 
     describe "inside paragraph?" do
       it "should return false" do
@@ -154,13 +154,21 @@ describe HtmlCleaner do
         end
 
         %w{youtube.com youtube-nocookie.com vimeo.com player.vimeo.com
-           archiveofourown.org archive.org dailymotion.com 8tracks.com podfic.com
-           open.spotify.com spotify.com w.soundcloud.com soundcloud.com viddertube.com}.each do |source|
+           archiveofourown.org archive.org dailymotion.com 8tracks.com static.ning.com ning.com podfic.com
+           open.spotify.com spotify.com w.soundcloud.com soundcloud.com vidders.net viddertube.com}.each do |source|
 
           it "converts src to https for #{source}" do
             html = '<iframe width="560" height="315" src="http://' + source + '/embed/123" frameborder="0"></iframe>'
             result = sanitize_value(field, html)
             expect(result).to match('https:')
+          end
+        end
+
+        %w[vidders.net].each do |source|
+          it "converts flashvars to https for #{source}" do
+            html = '<embed flashvars="config=http://' + source + '/embed/123" src="http://' + source + '/embed/123" type="application/x-shockwave-flash" width="456" height="344"></embed>'
+            result = sanitize_value(field, html)
+            expect(result).to match('flashvars=.*https:')
           end
         end
 
@@ -182,7 +190,7 @@ describe HtmlCleaner do
           expect(result).to be_empty
         end
 
-        %w(metacafe.com vidders.net criticalcommons.org static.ning.com ning.com).each do |source|
+        %w(metacafe.com criticalcommons.org).each do |source|
           it "doesn't convert src to https for #{source}" do
             html = '<iframe width="560" height="315" src="http://' + source + '/embed/123" frameborder="0"></iframe>'
             result = sanitize_value(field, html)
@@ -545,6 +553,40 @@ describe HtmlCleaner do
           it "adds rel=nofollow to links with a rel attribute" do
             result = sanitize_value(field, "<a href='foo' rel='help'>Foo</a>")
             expect(result).to eq("<p>\n  <a href=\"foo\" rel=\"nofollow\">Foo</a>\n</p>")
+          end
+        end
+
+        # These are from https://github.com/rgrove/sanitize/commit/a11498de9e283cd457b35ee252983662f7452aa9
+        it 'should not preserve the content of removed `math` elements' do
+          content = sanitize_value(field, '<math>hello! <script>alert(0)</script></math>')
+          expect(content).to eq("")
+        end
+
+        it 'should not preserve the content of removed `plaintext` elements' do
+          content = sanitize_value(field, '<plaintext>hello! <script>alert(0)</script>')
+          expect(content).to eq("")
+        end
+
+        it 'should not preserve the content of removed `svg` elements' do
+          content = sanitize_value(field, '<svg>hello! <script>alert(0)</script></svg>')
+          expect(content).to eq("")
+        end
+
+        it 'should not preserve the content of removed `xmp` elements' do
+          content = sanitize_value(field, '<xmp>hello! <script>alert(0)</script></xmp>')
+          expect(content).to eq("")
+        end
+
+        # https://github.com/rgrove/sanitize/security/advisories/GHSA-p4x4-rw2p-8j8m
+        describe 'foreign content bypass in relaxed config' do
+          it 'prevents a sanitization bypass via carefully crafted foreign content' do
+            %w[iframe noembed noframes noscript plaintext script style xmp].each do |tag_name|
+              content = sanitize_value(field, "<math><#{tag_name}>/*&lt;/#{tag_name}&gt;&lt;img src onerror=alert(1)>*/")
+              expect(content).to eq("")
+
+              content = sanitize_value(field, "<svg><#{tag_name}>/*&lt;/#{tag_name}&gt;&lt;img src onerror=alert(1)>*/")
+              expect(content).to eq("")
+            end
           end
         end
       end

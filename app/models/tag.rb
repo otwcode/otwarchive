@@ -176,13 +176,12 @@ class Tag < ApplicationRecord
 
   validate :unwrangleable_status
   def unwrangleable_status
-    if unwrangleable? && (canonical? || merger_id.present?)
-      self.errors.add(:unwrangleable, "can't be set on a canonical or synonymized tag.")
-    end
+    return unless unwrangleable?
 
-    if unwrangleable? && is_a?(UnsortedTag)
-      self.errors.add(:unwrangleable, "can't be set on an unsorted tag.")
-    end
+    self.errors.add(:unwrangleable, "can't be set on a canonical or synonymized tag.") if canonical? || merger_id.present?
+    self.errors.add(:unwrangleable, "can't be set on an unsorted tag.") if is_a?(UnsortedTag)
+    self.errors.add(:unwrangleable, "can't be set on a fandom.") if is_a?(Fandom)
+    self.errors.add(:unwrangleable, "can't be set on a tag with no fandoms.") if self.parents.by_type("Fandom").blank?
   end
 
   before_validation :check_synonym
@@ -219,9 +218,9 @@ class Tag < ApplicationRecord
     end
   end
 
-  after_commit :queue_flush_work_cache
+  after_save :queue_flush_work_cache
   def queue_flush_work_cache
-    async(:flush_work_cache) if persisted?
+    async_after_commit(:flush_work_cache) if saved_change_to_name? || saved_change_to_type?
   end
 
   def flush_work_cache
@@ -367,8 +366,8 @@ class Tag < ApplicationRecord
 
   scope :random, -> {
     (User.current_user.is_a?(Admin) || User.current_user.is_a?(User)) ?
-    visible_to_registered_user_with_count.order("RAND()") :
-    visible_to_all_with_count.order("RAND()")
+    visible_to_registered_user_with_count.random_order :
+    visible_to_all_with_count.random_order
   }
 
   scope :with_count, -> {
@@ -451,11 +450,11 @@ class Tag < ApplicationRecord
 
   def self.by_name_without_articles(fieldname = "name")
     fieldname = "name" unless fieldname.match(/^([\w]+\.)?[\w]+$/)
-    order("case when lower(substring(#{fieldname} from 1 for 4)) = 'the ' then substring(#{fieldname} from 5)
+    order(Arel.sql("case when lower(substring(#{fieldname} from 1 for 4)) = 'the ' then substring(#{fieldname} from 5)
             when lower(substring(#{fieldname} from 1 for 2)) = 'a ' then substring(#{fieldname} from 3)
             when lower(substring(#{fieldname} from 1 for 3)) = 'an ' then substring(#{fieldname} from 4)
             else #{fieldname}
-            end")
+            end"))
   end
 
   def self.in_tag_set(tag_set)
@@ -967,7 +966,7 @@ class Tag < ApplicationRecord
     sub_taggings.destroy_invalid
   end
 
-  # defines fandom_string=, media_string=, character_string=, relationship_string=, freeform_string= 
+  # defines fandom_string=, media_string=, character_string=, relationship_string=, freeform_string=
   %w(Fandom Media Character Relationship Freeform).each do |tag_type|
     attr_reader "#{tag_type.downcase}_string"
 
@@ -1030,7 +1029,7 @@ class Tag < ApplicationRecord
         self.errors.add(:base, tag_string + " could not be saved. Please make sure that it's a valid tag name.")
       end
     end
-    
+
     # If we don't have any errors, update the tag to add the new merger
     if new_merger && self.errors.empty?
       self.canonical = false

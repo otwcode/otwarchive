@@ -237,7 +237,7 @@ Feature: Collection
       And I follow "2" within "div#main.works-edit.region"
       And I invite the co-author "Amos"
       And I press "Post"
-      And the user "Amos" accepts all co-creator invites
+      And the user "Amos" accepts all co-creator requests
     Then the author of "Cone of Silence" should be visible to me on the work page
     When I am logged out
     Then the author of "Cone of Silence" should be hidden from me
@@ -511,3 +511,24 @@ Feature: Collection
       And the email should contain "Unrevealed works are not included in tag listings or on your works page."
       And the email should contain "The collection maintainers may later reveal your work but leave it anonymous."
       And the email should not contain "translation missing"
+
+  @javascript
+  Scenario: Work share modal should not reveal anonymous authors
+    Given I have the anonymous collection "Anonymous Hugs"
+    When I am logged in as "first_user"
+      And I post the work "Old Snippet" to the collection "Anonymous Hugs" as a gift for "third_user"
+    When I am logged out
+      And I view the work "Old Snippet"
+    Then I should see "Share"
+    When I follow "Share"
+    Then I should see "by Anonymous" within "#modal"
+
+  Scenario: Work share button should not display for unrevealed works
+    Given I have the hidden collection "Hidden Treasury"
+    When I am logged in as "first_user"
+      And I post the work "Old Snippet" to the collection "Hidden Treasury"
+    Then the work "Old Snippet" should be visible to me
+      And I should not see "Share"
+    When I am logged in as "moderator"
+    Then the work "Old Snippet" should be visible to me
+      And I should not see "Share"

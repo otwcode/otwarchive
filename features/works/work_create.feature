@@ -106,7 +106,7 @@ Feature: Create Works
       And I should see "No Archive Warnings Apply"
       And I should not see "Choose Not To Use Archive Warnings"
       And I should see "Category: F/M"
-      And I should see "Characters: Sam Winchester, Dean Winchester"
+      And I should see "Characters: Sam WinchesterDean Winchester"
       And I should see "Relationship: Harry/Ginny"
       And I should see "Additional Tags: An extra tag"
       And I should see "For Someone else, recipient"
@@ -122,7 +122,7 @@ Feature: Create Works
       And I should see "Pseud2" within ".byline"
       And I should see "Pseud3" within ".byline"
       But I should not see "coauthor" within ".byline"
-    When the user "coauthor" accepts all creator invites
+    When the user "coauthor" accepts all co-creator requests
       And I view the work "All Something Breaks Loose"
     Then I should see "coauthor" within ".byline"
     When I follow "Add Chapter"
@@ -155,7 +155,7 @@ Feature: Create Works
       And I should see "Pseud3" within ".byline"
       But I should not see "cosomeone" within ".byline"
       And 1 email should be delivered to "cosomeone@example.org"
-    When the user "cosomeone" accepts all creator invites
+    When the user "cosomeone" accepts all co-creator requests
       And I view the work "All Something Breaks Loose"
     Then I should see "cosomeone" within ".byline"
     When all emails have been delivered
@@ -333,7 +333,7 @@ Feature: Create Works
     Then I should see "Work was successfully posted. It should appear in work listings within the next few minutes."
       And I should not see "Me (myself)"
       And I should see "My new series"
-    When the user "myself" accepts all creator invites
+    When the user "myself" accepts all co-creator requests
       And I view the work "All Hell Breaks Loose"
     Then I should see "Me (myself), testuser"
 
@@ -355,7 +355,7 @@ Feature: Create Works
     When I press "Post"
     Then I should see "Work was successfully posted. It should appear in work listings within the next few minutes."
       But I should not see "Michael (Burnham)"
-    When the user "Burnham" accepts all creator invites
+    When the user "Burnham" accepts all co-creator requests
       And I view the work "Thats not my Spock"
     Then I should see "Michael (Burnham), testuser"
 
@@ -384,7 +384,7 @@ Feature: Create Works
     When I am logged in as "barbaz"
       And I view the work "Chaptered Work"
     Then I should not see "Edit"
-    When I follow "Creator Invitations page"
+    When I follow "Co-Creator Requests page"
       And I check "selected[]"
       And I press "Accept"
     Then I should see "You are now listed as a co-creator on Chaptered Work."

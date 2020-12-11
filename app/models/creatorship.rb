@@ -150,12 +150,12 @@ class Creatorship < ApplicationRecord
 
     if approved?
       if User.current_user.try(:is_archivist?)
-        UserMailer.creatorship_notification_archivist(id, User.current_user.id).deliver
+        UserMailer.creatorship_notification_archivist(id, User.current_user.id).deliver_later
       else
-        UserMailer.creatorship_notification(id, User.current_user.id).deliver
+        UserMailer.creatorship_notification(id, User.current_user.id).deliver_later
       end
     else
-      UserMailer.creatorship_invitation(id, User.current_user.id).deliver
+      UserMailer.creatorship_request(id, User.current_user.id).deliver_later
     end
   end
 

@@ -81,8 +81,7 @@
         if (isSupported()) {
           localStorage.setItem("accepted_tos", "<%= @current_tos_version %>");
         } else {
-          // 20 years is the Rails maximum. 
-          Cookies.set("accepted_tos", "<%= @current_tos_version %>", { expires: 7300 });
+          Cookies.set("accepted_tos", "<%= @current_tos_version %>", { expires: 365 });
         }
       }
     <% end %>
@@ -103,6 +102,20 @@
           $j("body").prepend("<%= escape_javascript(render "layouts/tos_prompt") %>");
         }
       <% end %>
+    });
+  <% end %>
+<% end %>
+
+<% # Renders layouts/proxy_notice below skip links in layouts/application. %>
+<% if %w(staging production).include?(Rails.env) %>
+  <%= javascript_tag do %>
+    $j(document).ready(function() {
+      var permitted_hosts = <%= ArchiveConfig.PERMITTED_HOSTS.to_json.html_safe %>;
+      var current_host = window.location.hostname;
+
+      if (!permitted_hosts.includes(current_host) && Cookies.get("proxy_notice") !== "0" && window.location.protocol !== "file:") {
+        $j("#skiplinks").after("<%= escape_javascript(render "layouts/proxy_notice") %>");
+      }
     });
   <% end %>
 <% end %>

@@ -4,20 +4,22 @@ class WorksController < ApplicationController
   # only registered users and NOT admin should be able to create new works
   before_action :load_collection
   before_action :load_owner, only: [:index]
-  before_action :users_only, except: [:index, :show, :navigate, :search, :collected, :edit_tags, :update_tags, :drafts]
-  before_action :check_user_status, except: [:index, :show, :navigate, :search, :collected]
+  before_action :users_only, except: [:index, :show, :navigate, :search, :collected, :edit_tags, :update_tags, :drafts, :share]
+  before_action :check_user_status, except: [:index, :show, :navigate, :search, :collected, :share]
   before_action :load_work, except: [:new, :create, :import, :index, :show_multiple, :edit_multiple, :update_multiple, :delete_multiple, :search, :drafts, :collected]
   # this only works to check ownership of a SINGLE item and only if load_work has happened beforehand
-  before_action :check_ownership, except: [:index, :show, :navigate, :new, :create, :import, :show_multiple, :edit_multiple, :edit_tags, :update_tags, :update_multiple, :delete_multiple, :search, :mark_for_later, :mark_as_read, :drafts, :collected]
+  before_action :check_ownership, except: [:index, :show, :navigate, :new, :create, :import, :show_multiple, :edit_multiple, :edit_tags, :update_tags, :update_multiple, :delete_multiple, :search, :mark_for_later, :mark_as_read, :drafts, :collected, :share]
   # admins should have the ability to edit tags (:edit_tags, :update_tags) as per our ToS
   before_action :check_ownership_or_admin, only: [:edit_tags, :update_tags]
   before_action :log_admin_activity, only: [:update_tags]
-  before_action :check_visibility, only: [:show, :navigate]
+  before_action :check_visibility, only: [:show, :navigate, :share]
 
   before_action :load_first_chapter, only: [:show, :edit, :update, :preview]
 
   cache_sweeper :collection_sweeper
   cache_sweeper :feed_sweeper
+
+  skip_before_action :store_location, only: [:share]
 
   # we want to extract the countable params from work_search and move them into their fields
   def clean_work_search_params
@@ -136,10 +138,7 @@ class WorksController < ApplicationController
     options[:page] = params[:page] || 1
     options[:show_restricted] = current_user.present? || logged_in_as_admin?
 
-    @user = User.find_by(login: params[:user_id])
-
-    return unless @user.present?
-
+    @user = User.find_by!(login: params[:user_id])
     @search = WorkSearchForm.new(options.merge(works_parent: @user, collected: true))
     @works = @search.search_results
     flash_search_warnings(@works)
@@ -221,6 +220,26 @@ class WorksController < ApplicationController
 
     render :show
     Reading.update_or_create(@work, current_user) if current_user
+  end
+
+  # GET /works/1/share
+  def share
+    if request.xhr?
+      if @work.unrevealed?
+        render template: "errors/404", status: :not_found
+      else
+        render layout: false
+      end
+    else
+      # Avoid getting an unstyled page if JavaScript is disabled
+      flash[:error] = ts("Sorry, you need to have JavaScript enabled for this.")
+      if request.env["HTTP_REFERER"]
+        redirect_to(request.env["HTTP_REFERER"] || root_path)
+      else
+        # else branch needed to deal with bots, which don't have a referer
+        redirect_to root_path
+      end
+    end
   end
 
   def navigate
@@ -379,7 +398,7 @@ class WorksController < ApplicationController
           flash[:notice] << ts(" It should appear in work listings within the next few minutes.")
         end
         in_moderated_collection
-        redirect_to(@work)
+        redirect_to work_path(@work)
       else
         @chapter.errors.full_messages.each { |err| @work.errors.add(:base, err) }
         render :edit
@@ -669,16 +688,9 @@ class WorksController < ApplicationController
     @user = current_user
     @works = Work.joins(pseuds: :user).where('users.id = ?', @user.id).where(id: params[:work_ids]).readonly(false)
     @errors = []
-    # to avoid overwriting, we entirely trash any blank fields and also any unchecked checkboxes
-    updated_work_params = work_params.reject { |_key, value| value.blank? || value == '0' }
 
-    # manually allow switching of anon/moderated comments
-    if updated_work_params[:anon_commenting_disabled] == 'allow_anon'
-      updated_work_params[:anon_commenting_disabled] = '0'
-    end
-    if updated_work_params[:moderated_commenting_enabled] == 'not_moderated'
-      updated_work_params[:moderated_commenting_enabled] = '0'
-    end
+    # To avoid overwriting, we entirely trash any blank fields.
+    updated_work_params = work_params.reject { |_key, value| value.blank? }
 
     @works.each do |work|
       # now we can just update each work independently, woo!
@@ -892,9 +904,8 @@ class WorksController < ApplicationController
       :rating_string, :fandom_string, :relationship_string, :character_string,
       :archive_warning_string, :category_string, :expected_number_of_chapters, :revised_at,
       :freeform_string, :summary, :notes, :endnotes, :collection_names, :recipients, :wip_length,
-      :backdate, :language_id, :work_skin_id, :restricted, :anon_commenting_disabled,
+      :backdate, :language_id, :work_skin_id, :restricted, :comment_permissions,
       :moderated_commenting_enabled, :title, :pseuds_to_add, :collections_to_add,
-      :unrestricted,
       current_user_pseud_ids: [],
       collections_to_remove: [],
       challenge_assignment_ids: [],

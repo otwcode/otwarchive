@@ -79,9 +79,9 @@ describe ExternalAuthorsController do
               id: external_author.id,
               imported_stories: "nothing",
               external_author: {
-                do_not_email: external_author.do_not_email, 
+                do_not_email: external_author.do_not_email,
                 do_not_import: external_author.do_not_import
-              } 
+              }
             }
 
             put :update, params: parameters
@@ -96,9 +96,9 @@ describe ExternalAuthorsController do
               id: external_author.id,
               imported_stories: "orphan",
               external_author: {
-                do_not_email: external_author.do_not_email, 
+                do_not_email: external_author.do_not_email,
                 do_not_import: external_author.do_not_import
-              } 
+              }
             }
 
             put :update, params: parameters
@@ -113,9 +113,9 @@ describe ExternalAuthorsController do
               id: external_author.id,
               imported_stories: "delete",
               external_author: {
-                do_not_email: external_author.do_not_email, 
+                do_not_email: external_author.do_not_email,
                 do_not_import: external_author.do_not_import
-              } 
+              }
             }
 
             put :update, params: parameters
@@ -136,7 +136,7 @@ describe ExternalAuthorsController do
           }
 
           put :update, params: parameters
-          it_redirects_to_with_notice(user_external_authors_path(user), "Your preferences have been saved.")       
+          it_redirects_to_with_notice(user_external_authors_path(user), "Your preferences have been saved.")
           external_author.reload
           expect(external_author.do_not_email).to be_truthy
           expect(external_author.do_not_import).to be_truthy
@@ -173,7 +173,7 @@ describe ExternalAuthorsController do
               imported_stories: "nothing",
               external_author: {
                 do_not_email: external_author.do_not_email,
-                do_not_import: external_author.do_not_import    
+                do_not_import: external_author.do_not_import
               }
             }
 
@@ -191,7 +191,7 @@ describe ExternalAuthorsController do
               invitation_token: invitation.token,
               id: external_author.id,
               imported_stories: "nothing",
-              external_author: { 
+              external_author: {
                 do_not_email: 1,
                 do_not_import: 1
               }
@@ -214,7 +214,7 @@ describe ExternalAuthorsController do
               invitation_token: invitation.token,
               id: external_author.id,
               imported_stories: "nothing",
-              external_author: { 
+              external_author: {
                 do_not_email: 1,
                 do_not_import: 1
               }
@@ -242,7 +242,7 @@ describe ExternalAuthorsController do
               imported_stories: "orphan",
               external_author: {
                 do_not_email: external_author.do_not_email,
-                do_not_import: external_author.do_not_import    
+                do_not_import: external_author.do_not_import
               }
             }
 
@@ -260,7 +260,7 @@ describe ExternalAuthorsController do
               invitation_token: invitation.token,
               id: external_author.id,
               imported_stories: "orphan",
-              external_author: { 
+              external_author: {
                 do_not_email: true,
                 do_not_import: true
               }
@@ -308,7 +308,7 @@ describe ExternalAuthorsController do
               imported_stories: "delete",
               external_author: {
                 do_not_email: external_author.do_not_email,
-                do_not_import: external_author.do_not_import    
+                do_not_import: external_author.do_not_import
               }
             }
 
@@ -326,7 +326,7 @@ describe ExternalAuthorsController do
               invitation_token: invitation.token,
               id: external_author.id,
               imported_stories: "delete",
-              external_author: { 
+              external_author: {
                 do_not_email: true,
                 do_not_import: true
               }
@@ -349,7 +349,7 @@ describe ExternalAuthorsController do
               invitation_token: invitation.token,
               id: external_author.id,
               imported_stories: "delete",
-              external_author: { 
+              external_author: {
                 do_not_email: true
               }
             }

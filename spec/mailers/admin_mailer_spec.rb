@@ -126,7 +126,7 @@ describe AdminMailer do
         end
 
         it "aborts delivery" do
-          expect(email.actual_message).to be_a(ActionMailer::Base::NullMail)
+          expect(email.message).to be_a(ActionMailer::Base::NullMail)
         end
       end
     end

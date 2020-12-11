@@ -79,15 +79,9 @@ Given /^a canonical relationship "([^\"]*)" in fandom "([^\"]*)"$/ do |relations
   rel.add_association(fand)
 end
 
-Given /^a canonical (\w+) "([^\"]*)"$/ do |tag_type, tagname|
-  t = tag_type.classify.constantize.find_or_create_by_name(tagname)
-  t.canonical = true
-  t.save
-end
-
-Given /^a noncanonical (\w+) "([^\"]*)"$/ do |tag_type, tagname|
-  t = tag_type.classify.constantize.find_or_create_by_name(tagname)
-  t.canonical = false
+Given /^a (non-?canonical|canonical) (\w+) "([^\"]*)"$/ do |canonical_status, tag_type, tag_name|
+  t = tag_type.classify.constantize.find_or_create_by_name(tag_name)
+  t.canonical = canonical_status == "canonical"
   t.save
 end
 
@@ -108,7 +102,7 @@ Given /^"([^\"]*)" is a metatag of the (\w+) "([^\"]*)"$/ do |metatag, tag_type,
 end
 
 Given /^I am logged in as a tag wrangler$/ do
-  step "I am logged out"
+  step "I start a new session"
   username = "wrangler"
   step %{I am logged in as "#{username}"}
   user = User.find_by(login: username)
@@ -129,15 +123,7 @@ Given /^the tag wrangler "([^\"]*)" with password "([^\"]*)" is wrangler of "([^
 
   tw.tag_wrangler = '1'
 
-  visit destroy_user_session_path
-
-  visit new_user_session_path
-  user_record = find_or_create_new_user(user, password)
-
-  fill_in "User name or email:", with: user
-  fill_in "Password:", with: password
-  check "Remember Me"
-  click_button "Log In"
+  step %{I am logged in as "#{user}" with password "#{password}"}
 
   fandom = Fandom.where(name: fandomname, canonical: true).first_or_create
   visit tag_wranglers_url
@@ -147,13 +133,10 @@ end
 
 Given /^a tag "([^\"]*)" with(?: (\d+))? comments$/ do |tagname, n_comments|
   tag = Fandom.find_or_create_by_name(tagname)
-  step %{I am logged out}
-  n_comments ||= 3
-  n_comments.to_i.times do |i|
-    step %{I am logged in as a tag wrangler}
-    step %{I post the comment "Comment number #{i}" on the tag "#{tagname}"}
-    step %{I am logged out}
-  end
+  step "I start a new session"
+
+  n_comments = 3 if n_comments.blank? || n_comments.zero?
+  FactoryBot.create_list(:comment, n_comments.to_i, :on_tag, commentable: tag)
 end
 
 Given /^(?:a|the) canonical(?: "([^"]*)")? fandom "([^"]*)" with (\d+) works$/ do |media, tag_name, number_of_works|
@@ -167,19 +150,25 @@ end
 
 Given /^a period-containing tag "([^\"]*)" with(?: (\d+))? comments$/ do |tagname, n_comments|
   tag = Fandom.find_or_create_by_name(tagname)
-  step %{I am logged out}
-  n_comments ||= 3
-  n_comments.to_i.times do |i|
-    step %{I am logged in as a tag wrangler}
-    step %{I post the comment "Comment number #{i}" on the period-containing tag "#{tagname}"}
-    step %{I am logged out}
-  end
+  step "I start a new session"
+
+  n_comments = 3 if n_comments.blank? || n_comments.zero?
+  FactoryBot.create_list(:comment, n_comments.to_i, :on_tag, commentable: tag)
 end
 
 Given /^the unsorted tags setup$/ do
   30.times do |i|
     UnsortedTag.find_or_create_by_name("unsorted tag #{i}")
   end
+end
+
+Given /^the tag wrangling setup$/ do
+  step %{basic tags}
+  step %{a media exists with name: "TV Shows", canonical: true}
+  step %{I am logged in as a random user}
+  step %{I post the work "Revenge of the Sith 2" with fandom "Star Wars, Stargate SG-1" with character "Daniel Jackson" with second character "Jack O'Neil" with rating "Not Rated" with relationship "JackDaniel"}
+  step %{The periodic tag count task is run}
+  step %{I flush the wrangling sidebar caches}
 end
 
 Given /^I have posted a Wrangling Guideline?(?: titled "([^\"]*)")?$/ do |title|
@@ -311,7 +300,7 @@ When /^the tag "([^"]*)" is canonized$/ do |tag|
 end
 
 When /^I make a(?: (\d+)(?:st|nd|rd|th)?)? Wrangling Guideline$/ do |n|
-  n ||= 1
+  n = 1 if n.zero?
   visit new_wrangling_guideline_path
   fill_in("Guideline text", with: "Number #{n} posted Wrangling Guideline, this is.")
   fill_in("Title", with: "Number #{n} Wrangling Guideline")
@@ -319,7 +308,7 @@ When /^I make a(?: (\d+)(?:st|nd|rd|th)?)? Wrangling Guideline$/ do |n|
 end
 
 When /^(\d+) Wrangling Guidelines? exists?$/ do |n|
-  (1..n.to_i).each do |i|
+  (1..n).each do |i|
     FactoryBot.create(:wrangling_guideline, id: i)
   end
 end
@@ -401,14 +390,27 @@ Then /^"([^\"]*)" should not be assigned to the wrangler "([^\"]*)"$/ do |fandom
   assignment.should be_nil
 end
 
-Then(/^the "([^"]*)" tag should be a "([^"]*)" tag$/) do |tagname , tag_type|
+Then(/^the "([^"]*)" tag should be a "([^"]*)" tag$/) do |tagname, tag_type|
   tag = Tag.find_by(name: tagname)
   assert tag.type == tag_type
 end
 
-Then(/^the "([^"]*)" tag should be canonical$/) do |tagname|
+Then(/^the "([^"]*)" tag should (be|not be) canonical$/) do |tagname, canonical|
   tag = Tag.find_by(name: tagname)
-  assert tag.canonical?
+  expected = canonical == "be"
+  assert tag.canonical == expected
+end
+
+Then(/^the "([^"]*)" tag should (be|not be) unwrangleable$/) do |tagname, unwrangleable|
+  tag = Tag.find_by(name: tagname)
+  expected = unwrangleable == "be"
+  assert tag.unwrangleable == expected
+end
+
+Then(/^the "([^"]*)" tag should be in the "([^"]*)" fandom$/) do |tagname, fandom_name|
+  tag = Tag.find_by(name: tagname) 
+  fandom = Fandom.find_by(name: fandom_name)
+  assert tag.has_parent?(fandom)
 end
 
 Then(/^show me what the tag "([^"]*)" is like$/) do |tagname|
