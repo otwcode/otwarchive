@@ -35,6 +35,8 @@ class StatCounterIndexer
   end
 
   def index_documents
+    return if (batch = self.batch).empty?
+
     $elasticsearch.bulk(body: batch)
   end
 
