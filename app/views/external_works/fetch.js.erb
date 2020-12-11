@@ -4,13 +4,9 @@
   $j('#external_work_summary').val("<%= escape_javascript(@external_work.summary&.html_safe) %>").change();
   $j('#fetched').val("<%= @external_work.id %>");
   $j('#external_work_rating_string').val("<%= @external_work.rating_string %>");
-  var work_categories = <%= @external_work.category_strings.to_json.html_safe %>;
-  var unwanted_categories = <%= (Category.canonical.pluck(:name) - @external_work.category_strings).to_json.html_safe %>;
-  $j.each(work_categories, function(i, category) {
-    $j("input[value='" + category + "']").prop('checked', true);
-  });
-  $j.each(unwanted_categories, function(i, category) {
-    $j("input[value='" + category + "']").prop('checked', false);
+  var categories = <%= @external_work.category_strings.to_json.html_safe %>;
+  $j('input[name="external_work[category_strings][]"]').each(function() {
+    $j(this).prop("checked", categories.indexOf(this.value) >= 0 );
   });
   $j('#external_work_fandom_string_autocomplete').val("<%= @external_work.fandom_string %>");
   $j('#external_work_relationship_string_autocomplete').val("<%= @external_work.relationship_string %>");
