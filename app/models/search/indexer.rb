@@ -175,6 +175,8 @@ class Indexer
   end
 
   def batch
+    return @batch if @batch
+
     @batch = []
     ids.each do |id|
       object = objects[id.to_i]
@@ -189,7 +191,7 @@ class Indexer
   end
 
   def index_documents
-    return if (batch = self.batch).empty?
+    return if batch.empty?
 
     $elasticsearch.bulk(body: batch)
   end
