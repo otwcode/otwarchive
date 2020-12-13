@@ -96,10 +96,7 @@ describe CommentsController do
       end
 
       context "when logged in as a tag wrangler" do
-        before do
-          fake_login
-          @current_user.roles << Role.new(name: 'tag_wrangler')
-        end
+        before { fake_login_known_user(create(:tag_wrangler)) }
 
         it "renders the :new template" do
           post :new, params: { tag_id: fandom.name }
@@ -113,7 +110,7 @@ describe CommentsController do
 
         it "shows an error and redirects" do
           post :new, params: { tag_id: fandom.name }
-          it_redirects_to_with_error(user_path(@current_user),
+          it_redirects_to_with_error(user_path(controller.current_user),
                                      "Sorry, you don't have permission to " \
                                      "access the page you were trying to " \
                                      "reach.")
@@ -186,10 +183,7 @@ describe CommentsController do
       end
 
       context "when logged in as a tag wrangler" do
-        before do
-          fake_login
-          @current_user.roles << Role.new(name: 'tag_wrangler')
-        end
+        before { fake_login_known_user(create(:tag_wrangler)) }
 
         it "posts the comment and shows it in context" do
           post :create, params: { tag_id: fandom.name, comment: anon_comment_attributes }
@@ -209,7 +203,7 @@ describe CommentsController do
 
         it "shows an error and redirects" do
           post :create, params: { tag_id: fandom.name, comment: anon_comment_attributes }
-          it_redirects_to_with_error(user_path(@current_user),
+          it_redirects_to_with_error(user_path(controller.current_user),
                                      "Sorry, you don't have permission to " \
                                      "access the page you were trying to " \
                                      "reach.")
@@ -476,10 +470,7 @@ describe CommentsController do
       end
 
       context "when logged in as a tag wrangler" do
-        before do
-          fake_login
-          @current_user.roles << Role.new(name: 'tag_wrangler')
-        end
+        before { fake_login_known_user(create(:tag_wrangler)) }
 
         it "redirects to the tag comments page when the format is html" do
           get :show_comments, params: { tag_id: fandom.name }
@@ -497,7 +488,7 @@ describe CommentsController do
 
         it "shows an error and redirects" do
           get :show_comments, params: { tag_id: fandom.name }
-          it_redirects_to_with_error(user_path(@current_user),
+          it_redirects_to_with_error(user_path(controller.current_user),
                                      "Sorry, you don't have permission to " \
                                      "access the page you were trying to " \
                                      "reach.")
@@ -629,7 +620,7 @@ describe CommentsController do
     context "when logged in as the owner of the unreviewed comment" do
       it "deletes the comment and redirects to referrer with a success message" do
         fake_login
-        comment = create(:comment, :unreviewed, pseud_id: @current_user.default_pseud.id)
+        comment = create(:comment, :unreviewed, pseud_id: controller.current_user.default_pseud.id)
         get :destroy, params: { id: comment.id }
         expect(Comment.find_by(id: comment.id)).to_not be_present
         expect(response).to redirect_to("/where_i_came_from")
@@ -637,7 +628,7 @@ describe CommentsController do
       end
       it "redirects and gives an error if the comment could not be deleted" do
         fake_login
-        comment = create(:comment, :unreviewed, pseud_id: @current_user.default_pseud.id)
+        comment = create(:comment, :unreviewed, pseud_id: controller.current_user.default_pseud.id)
         allow_any_instance_of(Comment).to receive(:destroy_or_mark_deleted).and_return(false)
         get :destroy, params: { id: comment.id }
         allow_any_instance_of(Comment).to receive(:destroy_or_mark_deleted).and_call_original
