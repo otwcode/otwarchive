@@ -780,7 +780,11 @@ class WorksController < ApplicationController
   end
 
   def load_first_chapter
-    @chapter = @work.first_chapter
+    if current_user_owns?(@work)
+      @chapter = @work.first_chapter
+    else
+      @chapter = @work.chapters.in_order.posted.first
+    end
   end
 
   # Check whether we should display :new or :edit instead of previewing or
