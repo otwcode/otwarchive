@@ -108,7 +108,7 @@ en:
         link_faq: "check out our FAQ"
         link_support: "contact us through our Support and Feedback form"
         link_tos: "Terms of Service"
-        welcome_text: "Hi! It looks like you've just logged into the archive for the first time. %{help_link} or dismiss this message permanently."
+        welcome_text: "Hi! It looks like you've just logged into the Archive for the first time. %{help_link} or dismiss this message permanently."
   troubleshooting:
     show:
       page_title:
