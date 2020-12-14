@@ -67,7 +67,7 @@ en:
     creatorship_notification_archivist:
       subject: "[%{app_name}] Archivist co-creator notification"
       intro: "The user %{archivist} has added your pseud %{pseud} as a co-creator on the following %{type}:"
-      explanation: "Because they are acting in their official capacity as an Open Doors archivist, they are allowed to add you without an invitation, even if you have co-creation disabled."
+      explanation: "Because they are acting in their official capacity as an Open Doors archivist, they are allowed to add you without a request, even if you have co-creation disabled."
       html:
         creation: "%{creation_link} by %{pseud_links}"
         remove: "If you've been added in error or don't want to be listed as a creator, you can %{edit} to remove yourself as creator."
@@ -86,16 +86,16 @@ en:
       text:
         creation: "%{title} (%{url}) by %{pseuds}"
         remove: "If you've been added in error or don't want to be listed as a creator, you can edit the %{type} to remove yourself as creator: %{url}"
-    creatorship_invitation:
-      subject: "[%{app_name}] Co-creator invitation"
+    creatorship_request:
+      subject: "[%{app_name}] Co-creator request"
       intro: "The user %{inviting_user} has invited your pseud %{pseud} to be listed as a co-creator on the following %{type}:"
       html:
         creation: "%{creation_link} by %{pseud_links}"
-        instructions: "You can accept or reject this invitation on your %{page_name} page."
-        page_name: "Creator Invitations"
+        instructions: "You can accept or reject this request on your %{page_name} page."
+        page_name: "Co-Creator Requests"
       text:
         creation: "%{title} (%{url}) by %{pseuds}"
-        instructions: "You can accept or reject this invitation on your Creator Invitations page: %{url}"
+        instructions: "You can accept or reject this request on your Co-Creator Requests page: %{url}"
     change_email:
       subject: "[%{app_name}] Email changed"
       part1: "%{login}, the email associated with your account has been changed to %{email}"

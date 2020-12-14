@@ -104,7 +104,7 @@ describe WorksController do
         {
           work: {
             comment_permissions: "enable_all",
-            moderated_commenting_enabled: "not_moderated"
+            moderated_commenting_enabled: "0"
           }
         }
       }
