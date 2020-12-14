@@ -205,6 +205,7 @@ describe ExternalWork do
 end
 
 describe Collection do 
-  let(:filterable) { create(:collection).reload } 
+  let(:filterable) { create(:collection).reload }
+
   it_behaves_like "a filterable"
 end 

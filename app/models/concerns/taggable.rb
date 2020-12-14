@@ -49,6 +49,7 @@ module Taggable
   def freeform_string
     tag_category_string(:freeforms)
   end
+
   # Returns a string of tag names of all types
   def tag_string
     tags.map(&:name).join(ArchiveConfig.DELIMITER_FOR_OUTPUT)
@@ -80,6 +81,7 @@ module Taggable
   def freeform_string=(tag_string)
     parse_tags(Freeform, tag_string)
   end
+
   # Process a string of tags from any tag class. Unlike #parse_tags, it allows the creation of UnsortedTag instances.
   # Used in bookmarks and collections.
   def tag_string=(tag_string)
@@ -94,9 +96,9 @@ module Taggable
 
     tag_array.each do |string|
       string.strip!
-      next unless string.present?
+      next if string.blank?
       
-      if tag = Tag.find_by_name(string)
+      if (tag = Tag.find_by_name(string))
         self.tags << tag
       else
         self.tags << UnsortedTag.create(name: string)

@@ -152,7 +152,7 @@ class Tag < ApplicationRecord
   has_many :bookmarks, through: :taggings, source: :taggable, source_type: 'Bookmark'
   has_many :external_works, through: :taggings, source: :taggable, source_type: 'ExternalWork'
   has_many :approved_collections, through: :filtered_works
-  has_many :collections, through: :taggings, source: :taggable, source_type: 'Collection'
+  has_many :collections, through: :taggings, source: :taggable, source_type: "Collection"
 
   has_many :favorite_tags, dependent: :destroy
 
