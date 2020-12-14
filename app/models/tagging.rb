@@ -3,7 +3,7 @@ class Tagging < ApplicationRecord
   belongs_to :taggable, polymorphic: true, touch: true, inverse_of: :taggings
 
   validates_presence_of :tagger, :taggable
-  validate :collection_tag_limit
+  validate :collection_tag_limit, on: :create
 
   # When we create or destroy a tagging, it may change the taggings count.
   after_create :update_taggings_count
@@ -45,8 +45,8 @@ class Tagging < ApplicationRecord
   end
 
   def collection_tag_limit
-    return unless taggable.class == Collection && taggable.tags.count >= ArchiveConfig.COLLECTION_TAG_MAX
+    return unless taggable.class == Collection && taggable.tags.count >= ArchiveConfig.COLLECTION_TAGS_MAX
 
-    errors.add(:tags, "You have reached the tag limit")
+    errors.add(:tags, ts("Sorry, you can only save %{maximum} favorite tags.", maximum: ArchiveConfig.COLLECTION_TAGS_MAX))
   end
 end

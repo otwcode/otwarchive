@@ -203,3 +203,8 @@ describe ExternalWork do
   let(:filterable) { create(:external_work).reload }
   it_behaves_like "a filterable"
 end
+
+describe Collection do 
+  let(:filterable) { create(:collection).reload } 
+  it_behaves_like "a filterable"
+end 

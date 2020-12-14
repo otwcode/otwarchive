@@ -152,6 +152,7 @@ class Tag < ApplicationRecord
   has_many :bookmarks, through: :taggings, source: :taggable, source_type: 'Bookmark'
   has_many :external_works, through: :taggings, source: :taggable, source_type: 'ExternalWork'
   has_many :approved_collections, through: :filtered_works
+  has_many :collections, through: :taggings, source: :taggable, source_type: 'Collection'
 
   has_many :favorite_tags, dependent: :destroy
 
@@ -697,6 +698,7 @@ class Tag < ApplicationRecord
   def update_filters_for_taggables
     works.update_filters
     external_works.update_filters
+    collections.update_filters
   end
 
   # Update filters for all works and external works that already have this tag
@@ -704,6 +706,7 @@ class Tag < ApplicationRecord
   def update_filters_for_filterables
     filtered_works.update_filters
     filtered_external_works.update_filters
+    collections.update_filters
   end
 
   # When canonical or merger_id changes, only the items directly tagged with
