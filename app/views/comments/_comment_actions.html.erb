@@ -5,7 +5,7 @@
      # method for the reply link because that would prevent "Frozen" from
      # appearing on the Unreviewed Comments page for works with moderated
      # comments. %>
-  <% if comment.on_ice? %>
+  <% if comment.iced? %>
     <li><%= frozen_comment_indicator %></li>
   <% end %>
   <% if can_reply_to_comment?(comment) %>

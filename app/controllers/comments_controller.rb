@@ -112,7 +112,7 @@ class CommentsController < ApplicationController
   end
 
   def check_if_commentable_frozen
-    return unless @commentable&.respond_to?(:on_ice?) && @commentable&.on_ice?
+    return unless @commentable&.respond_to?(:iced?) && @commentable&.iced?
 
     flash[:error] = ts("Sorry, you cannot reply to a frozen comment.")
     redirect_to(request.env["HTTP_REFERER"] || root_path)
@@ -154,7 +154,7 @@ class CommentsController < ApplicationController
 
   # Comments cannot be edited after they've been replied to or if they are frozen.
   def check_permission_to_edit
-    if @comment&.on_ice?
+    if @comment&.iced?
       flash[:error] = ts("Frozen comments cannot be edited.")
       redirect_to(request.env["HTTP_REFERER"] || root_path)
     elsif !@comment&.count_all_comments&.zero?
@@ -421,7 +421,7 @@ class CommentsController < ApplicationController
   def freeze
     # TODO: When AO3-5939 is fixed, we can use
     # @comment.full_set.each(&:mark_frozen!)
-    if !@comment.on_ice? && @comment.save
+    if !@comment.iced? && @comment.save
       @comment.set_to_freeze_or_unfreeze.each(&:mark_frozen!)
       flash[:notice] = ts("Comment thread successfully frozen!")
     else
@@ -434,7 +434,7 @@ class CommentsController < ApplicationController
   def unfreeze
     # TODO: When AO3-5939 is fixed, we can use
     # @comment.full_set.each(&:mark_unfrozen!)
-    if @comment.on_ice? && @comment.save
+    if @comment.iced? && @comment.save
       @comment.set_to_freeze_or_unfreeze.each(&:mark_unfrozen!)
       flash[:notice] = ts("Comment thread successfully unfrozen!")
     else

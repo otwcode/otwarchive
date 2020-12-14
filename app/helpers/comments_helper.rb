@@ -109,11 +109,11 @@ module CommentsHelper
   #### HELPERS FOR CHECKING WHICH BUTTONS/FORMS TO DISPLAY #####
 
   def can_reply_to_comment?(comment)
-    !(comment.unreviewed? || comment.on_ice? || parent_disallows_comments?(comment) || comment_parent_hidden?(comment))
+    !(comment.unreviewed? || comment.iced? || parent_disallows_comments?(comment) || comment_parent_hidden?(comment))
   end
 
   def can_edit_comment?(comment)
-    is_author_of?(comment) && !comment.on_ice? && comment.count_all_comments.zero? && !comment_parent_hidden?(comment)
+    is_author_of?(comment) && !comment.iced? && comment.count_all_comments.zero? && !comment_parent_hidden?(comment)
   end
 
   # Only an admin with proper authorization can mark a spam comment ham.
@@ -280,7 +280,7 @@ module CommentsHelper
   end
 
   def freeze_comment_button(comment)
-    if comment.on_ice?
+    if comment.iced?
       button_to ts("Unfreeze"), unfreeze_comment_path(comment), method: :put
     else
       button_to ts("Freeze"), freeze_comment_path(comment), method: :put
@@ -289,7 +289,7 @@ module CommentsHelper
 
   # Not a link or button, but included with them.
   def frozen_comment_indicator
-    content_tag(:span, ts("Frozen"), class: "current")
+    content_tag(:span, ts("Frozen"), class: "frozen current")
   end
 
   # return html link to delete comments

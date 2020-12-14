@@ -397,12 +397,12 @@ class Comment < ApplicationRecord
 
   # Freeze single comment.
   def mark_frozen!
-    update_attribute(:on_ice, true)
+    update_attribute(:iced, true)
   end
 
   # Unfreeze single comment.
   def mark_unfrozen!
-    update_attribute(:on_ice, false)
+    update_attribute(:iced, false)
   end
 
   def sanitized_content
