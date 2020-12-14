@@ -99,12 +99,15 @@ en:
         options_info: "You can delete them, but please consider %{orphaning_link} them instead!"
     show:
       login_banner:
-        abuse_text: "If you experience harassment, you can %{abuse_link}."
-        abuse_link: "contact our Policy & Abuse team"
         dismiss: "Dismiss permanently"
         help_link: "Learn some tips and tricks"
+        help_text: "For more guidance on using the site, %{link_faq}!  If you need technical support, you can %{link_support}. If you experience harassment or have specific questions about the %{link_tos}, you can %{link_abuse}."
         help_title: "First login help"
         hide: "Hide first login help banner"
+        link_abuse: "contact our Policy & Abuse team"
+        link_faq: "check out our FAQ"
+        link_support: "contact us through our Support and Feedback form"
+        link_tos: "Terms of Service"
         welcome_text: "Hi! It looks like you've just logged into the archive for the first time. %{help_link} or dismiss this message permanently."
   troubleshooting:
     show:
