@@ -422,7 +422,7 @@ class CommentsController < ApplicationController
     # TODO: When AO3-5939 is fixed, we can use
     # @comment.full_set.each(&:mark_frozen!)
     if !@comment.on_ice? && @comment.save
-      set_to_freeze_or_unfreeze.each(&:mark_frozen!)
+      @comment.set_to_freeze_or_unfreeze.each(&:mark_frozen!)
       flash[:notice] = ts("Comment thread successfully frozen!")
     else
       flash[:error] = ts("Sorry, that comment thread could not be frozen.")
@@ -435,7 +435,7 @@ class CommentsController < ApplicationController
     # TODO: When AO3-5939 is fixed, we can use
     # @comment.full_set.each(&:mark_unfrozen!)
     if @comment.on_ice? && @comment.save
-      set_to_freeze_or_unfreeze.each(&:mark_unfrozen!)
+      @comment.set_to_freeze_or_unfreeze.each(&:mark_unfrozen!)
       flash[:notice] = ts("Comment thread successfully unfrozen!")
     else
       flash[:error] = ts("Sorry, that comment thread could not be unfrozen.")
@@ -625,30 +625,6 @@ class CommentsController < ApplicationController
     return true if parent.is_a?(Work) && current_user_owns?(parent)
 
     false
-  end
-
-  # TODO: Remove when AO3-5939 is fixed.
-  def set_to_freeze_or_unfreeze
-    # Our set always starts with the comment we actually pressed the button on.
-    comment_set = [@comment]
-
-    # We're going to find all of the comments on @comment's ultimate parent
-    # and then use the comments' commentables to figure which comments belong
-    # to the set (thread) we are freezing or unfreezing.
-    all_comments = @comment.ultimate_parent.find_all_comments
-
-    # First, we'll loop through all_comments to find any direct replies to
-    # @comment. Then we'll loop through again to find any direct replies to
-    # _those_ replies. We'll repeat this until we find no more replies.
-    newest_ids = [@comment.id]
-
-    while newest_ids.present?
-      child_comments_by_commentable = all_comments.where(commentable_id: newest_ids, commentable_type: "Comment")
-
-      comment_set << child_comments_by_commentable unless child_comments_by_commentable.empty?
-      newest_ids = child_comments_by_commentable.pluck(:id)
-    end
-    comment_set.flatten
   end
 
   private
