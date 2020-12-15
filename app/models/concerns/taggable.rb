@@ -97,12 +97,8 @@ module Taggable
     tag_array.each do |string|
       string.strip!
       next if string.blank?
-      
-      if (tag = Tag.find_by_name(string))
-        self.tags << tag
-      else
-        self.tags << UnsortedTag.create(name: string)
-      end
+
+      self.tags << (Tag.find_by_name(string) || UnsortedTag.create(name: string))
     end
 
     self.tags
