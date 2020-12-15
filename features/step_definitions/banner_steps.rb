@@ -128,11 +128,11 @@ Then /^a logged-out user should not see a banner$/ do
 end
 
 Then /^I should see the first login banner$/ do
-  step %{I should see "It looks like you've just logged into the archive for the first time"}
+  step %{I should see "It looks like you've just logged into the Archive for the first time"}
 end
 
 Then /^I should not see the first login banner$/ do
-  step %{I should not see "It looks like you've just logged into the archive for the first time"}
+  step %{I should not see "It looks like you've just logged into the Archive for the first time"}
 end
 
 Then /^I should see the first login popup$/ do
