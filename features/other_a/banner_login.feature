@@ -6,8 +6,17 @@ Feature: First login help banner
   Given I am logged in as "newname"
   When I am on newname's user page
   Then I should see the first login banner
-    And I should see "If you experience harassment, you can contact our Policy & Abuse team."
-  When I follow "contact our Policy & Abuse team"
+    And I should see "For more guidance on using the site, check out our FAQ! If you need technical support, you can contact us through our Support and Feedback form. If you experience harassment or have specific questions about the Terms of Service, you can contact our Policy & Abuse team."
+  When I follow "check out our FAQ"
+  Then I should be on the faq page
+  When I am on newname's user page
+    And I follow "contact us through our Support and Feedback form"
+  Then I should be on the support page
+  When I am on newname's user page
+    And I follow "Terms of Service"
+  Then I should be on the tos page
+  When I am on newname's user page
+    And I follow "contact our Policy & Abuse team"
   Then I should see "Report Abuse"
 
   Scenario: Popup details can be viewed
