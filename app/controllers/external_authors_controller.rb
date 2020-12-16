@@ -76,8 +76,8 @@ class ExternalAuthorsController < ApplicationController
     end
 
     if @invitation &&
-      params[:imported_stories].present? &&
-      params[:imported_stories] != "nothing"
+       params[:imported_stories].present? &&
+       params[:imported_stories] != "nothing"
       @invitation.mark_as_redeemed
     end
 
