@@ -75,11 +75,13 @@ class ExternalAuthorsController < ApplicationController
       flash[:notice] += "Your imported stories have been deleted. "
     end
 
-    if @invitation && params[:imported_stories].present? && params[:imported_stories] != "nothing"
+    if @invitation &&
+      params[:imported_stories].present? &&
+      params[:imported_stories] != "nothing"
       @invitation.mark_as_redeemed
     end
 
-    if @external_author.update_attributes(external_author_params[:external_author])
+    if @external_author.update(external_author_params[:external_author])
       flash[:notice] += "Your preferences have been saved."
       redirect_to @user ? user_external_authors_path(@user) : root_path
     else
