@@ -154,7 +154,7 @@ describe ExternalAuthorsController do
             }
           }
 
-          allow_any_instance_of(ExternalAuthor).to receive(:update_attributes).and_return(false)
+          allow_any_instance_of(ExternalAuthor).to receive(:update).and_return(false)
           put :update, params: parameters
           expect(response).to render_template :edit
           expect(flash[:error]).to eq "There were problems saving your preferences."
@@ -219,7 +219,7 @@ describe ExternalAuthorsController do
               }
             }
 
-            allow_any_instance_of(ExternalAuthor).to receive(:update_attributes).and_return(false)
+            allow_any_instance_of(ExternalAuthor).to receive(:update).and_return(false)
             put :update, params: parameters
             expect(response).to render_template :edit
             expect(flash[:notice]).to eq "Okay, we'll leave things the way they are! You can use the email link any time if you change your mind. "
@@ -284,7 +284,7 @@ describe ExternalAuthorsController do
               external_author: { do_not_email: true }
             }
 
-            allow_any_instance_of(ExternalAuthor).to receive(:update_attributes).and_return(false)
+            allow_any_instance_of(ExternalAuthor).to receive(:update).and_return(false)
             put :update, params: parameters
             expect(response).to render_template :edit
             expect(flash[:notice]).to eq "Your imported stories have been orphaned. Thank you for leaving them in the archive! "
@@ -351,7 +351,7 @@ describe ExternalAuthorsController do
               }
             }
 
-            allow_any_instance_of(ExternalAuthor).to receive(:update_attributes).and_return(false)
+            allow_any_instance_of(ExternalAuthor).to receive(:update).and_return(false)
             put :update, params: parameters
             expect(response).to render_template :edit
             expect(flash[:notice]).to eq "Your imported stories have been deleted. "
