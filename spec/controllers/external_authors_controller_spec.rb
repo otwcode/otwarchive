@@ -156,7 +156,6 @@ describe ExternalAuthorsController do
 
           allow_any_instance_of(ExternalAuthor).to receive(:update_attributes).and_return(false)
           put :update, params: parameters
-          allow_any_instance_of(ExternalAuthor).to receive(:update_attributes).and_call_original
           expect(response).to render_template :edit
           expect(flash[:error]).to eq "There were problems saving your preferences."
         end
@@ -222,7 +221,6 @@ describe ExternalAuthorsController do
 
             allow_any_instance_of(ExternalAuthor).to receive(:update_attributes).and_return(false)
             put :update, params: parameters
-            allow_any_instance_of(ExternalAuthor).to receive(:update_attributes).and_call_original
             expect(response).to render_template :edit
             expect(flash[:notice]).to eq "Okay, we'll leave things the way they are! You can use the email link any time if you change your mind. "
             expect(flash[:error]).to eq "There were problems saving your preferences."
@@ -288,7 +286,6 @@ describe ExternalAuthorsController do
 
             allow_any_instance_of(ExternalAuthor).to receive(:update_attributes).and_return(false)
             put :update, params: parameters
-            allow_any_instance_of(ExternalAuthor).to receive(:update_attributes).and_call_original
             expect(response).to render_template :edit
             expect(flash[:notice]).to eq "Your imported stories have been orphaned. Thank you for leaving them in the archive! "
             expect(flash[:error]).to eq "There were problems saving your preferences."
@@ -356,7 +353,6 @@ describe ExternalAuthorsController do
 
             allow_any_instance_of(ExternalAuthor).to receive(:update_attributes).and_return(false)
             put :update, params: parameters
-            allow_any_instance_of(ExternalAuthor).to receive(:update_attributes).and_call_original
             expect(response).to render_template :edit
             expect(flash[:notice]).to eq "Your imported stories have been deleted. "
             expect(flash[:error]).to eq "There were problems saving your preferences."
@@ -406,10 +402,6 @@ describe ExternalAuthorsController do
     context "with archivist permissions" do
       before(:each) do
         allow_any_instance_of(User).to receive(:is_archivist?).and_return(true)
-      end
-
-      after(:each) do
-        allow_any_instance_of(User).to receive(:is_archivist?).and_call_original
       end
 
       it "assigns external_authors and renders index" do
