@@ -47,6 +47,6 @@ class Tagging < ApplicationRecord
   def collection_tag_limit
     return unless taggable.class == Collection && taggable.tags.count >= ArchiveConfig.COLLECTION_TAGS_MAX
 
-    errors.add(:tags, ts("Sorry, you can only save %{maximum} collections tags.", maximum: ArchiveConfig.COLLECTION_TAGS_MAX))
+    errors.add(:tags, ts("Sorry, a collection can only have %{maximum} tags.", maximum: ArchiveConfig.COLLECTION_TAGS_MAX))
   end
 end
