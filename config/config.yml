@@ -104,6 +104,9 @@ LOGIN_LENGTH_MAX: 40
 PASSWORD_LENGTH_MIN: 6
 PASSWORD_LENGTH_MAX: 40
 
+# The maximum number of tags you can add to a collection
+COLLECTION_TAGS_MAX: 10
+
 # max number of tags of each type allowed in challenge prompts (requests/offers)
 # increasing this number can lead to slower automated matching
 PROMPT_TAGS_MAX: 20
