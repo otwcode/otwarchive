@@ -126,14 +126,13 @@ describe ExternalAuthorsController do
         end
 
         context "when updating preferences" do
-          xit "renders edit template with a success message for orphaning and an error for preferences" do
+          it "renders edit template with a success message for orphaning and an error for preferences" do
             parameters = {
               invitation_token: invitation.token,
               id: external_author.id,
               imported_stories: "orphan",
-              do_not_email: true
+              external_author: { do_not_email: true }
             }
-
             allow_any_instance_of(ExternalAuthor).to receive(:update_attributes).and_return(false)
             put :update, params: parameters
             allow_any_instance_of(ExternalAuthor).to receive(:update_attributes).and_call_original

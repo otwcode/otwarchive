@@ -46,13 +46,13 @@
           <% end %>
       	</ul>
       </li>
-      <li><%= link_to ts('Log Out', key: 'header'), destroy_user_session_path %></li>
+      <li><%= link_to ts('Log Out', key: 'header'), destroy_user_session_path, method: :delete %></li>
     </ul>
 
     <% elsif logged_in_as_admin? %>
       <ul class="user navigation actions" role="navigation">
         <li><%= link_to ts("Hi, %{name}!", name: current_admin.login, key: 'header'), admins_path %></li>
-        <li><%= link_to ts('Log Out', key: 'header'), destroy_admin_session_path %></li>
+        <li><%= link_to ts('Log Out', key: 'header'), destroy_admin_session_path, method: :delete %></li>
       </ul>
     <% end %>
   <p class="icon"><%= icon_display(current_user) %></p>

@@ -2,9 +2,9 @@ ENV["RAILS_ENV"] ||= "test"
 
 require File.expand_path("../config/environment", __dir__)
 require "simplecov"
-SimpleCov.command_name "rspec-" + (ENV["TEST_RUN"] || "")
-if ENV["CI"] == "true" && ENV["TRAVIS"] == "true"
-  # Only on Travis...
+
+if ENV["CI"] == "true"
+  # Only when running CI:
   require "codecov"
   SimpleCov.formatter = SimpleCov::Formatter::Codecov
 end
@@ -149,8 +149,6 @@ RSpec.configure do |config|
     metadata[:type] = :task
   end
 
-  # Set default formatter to print out the description of each test as it runs
-  config.color = true
   config.formatter = :documentation
 
   config.file_fixture_path = "spec/support/fixtures"

@@ -45,6 +45,7 @@ class HomeController < ApplicationController
   
   # donate
   def donate
+    @page_subtitle = t(".page_title")
     render action: "donate", layout: "application"
   end
   

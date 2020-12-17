@@ -122,6 +122,8 @@ class Tag < ApplicationRecord
   has_many :filter_taggings, foreign_key: 'filter_id', dependent: :destroy
   has_many :filtered_works, through: :filter_taggings, source: :filterable, source_type: 'Work'
   has_many :filtered_external_works, through: :filter_taggings, source: :filterable, source_type: "ExternalWork"
+  has_many :filtered_collections, through: :filter_taggings, source: :filterable, source_type: "Collection"
+
   has_one :filter_count, foreign_key: 'filter_id'
   has_many :direct_filter_taggings,
               -> { where(inherited: 0) },
@@ -148,6 +150,7 @@ class Tag < ApplicationRecord
   has_many :direct_sub_tags, -> { where('meta_taggings.direct = 1') }, through: :sub_taggings, source: :sub_tag
   has_many :taggings, as: :tagger
   has_many :works, through: :taggings, source: :taggable, source_type: 'Work'
+  has_many :collections, through: :taggings, source: :taggable, source_type: "Collection"
 
   has_many :bookmarks, through: :taggings, source: :taggable, source_type: 'Bookmark'
   has_many :external_works, through: :taggings, source: :taggable, source_type: 'ExternalWork'
@@ -176,13 +179,12 @@ class Tag < ApplicationRecord
 
   validate :unwrangleable_status
   def unwrangleable_status
-    if unwrangleable? && (canonical? || merger_id.present?)
-      self.errors.add(:unwrangleable, "can't be set on a canonical or synonymized tag.")
-    end
+    return unless unwrangleable?
 
-    if unwrangleable? && is_a?(UnsortedTag)
-      self.errors.add(:unwrangleable, "can't be set on an unsorted tag.")
-    end
+    self.errors.add(:unwrangleable, "can't be set on a canonical or synonymized tag.") if canonical? || merger_id.present?
+    self.errors.add(:unwrangleable, "can't be set on an unsorted tag.") if is_a?(UnsortedTag)
+    self.errors.add(:unwrangleable, "can't be set on a fandom.") if is_a?(Fandom)
+    self.errors.add(:unwrangleable, "can't be set on a tag with no fandoms.") if self.parents.by_type("Fandom").blank?
   end
 
   before_validation :check_synonym
@@ -698,6 +700,7 @@ class Tag < ApplicationRecord
   def update_filters_for_taggables
     works.update_filters
     external_works.update_filters
+    collections.update_filters
   end
 
   # Update filters for all works and external works that already have this tag
@@ -705,6 +708,7 @@ class Tag < ApplicationRecord
   def update_filters_for_filterables
     filtered_works.update_filters
     filtered_external_works.update_filters
+    filtered_collections.update_filters
   end
 
   # When canonical or merger_id changes, only the items directly tagged with
