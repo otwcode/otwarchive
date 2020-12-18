@@ -672,6 +672,7 @@ class Tag < ApplicationRecord
     external_works.reindex_all
     bookmarks.reindex_all
 
+    filtered_collections.reindex_all
     filtered_works.reindex_all
     filtered_external_works.reindex_all
 

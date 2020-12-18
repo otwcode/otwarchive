@@ -66,7 +66,7 @@ class CollectionIndexer < Indexer
     object.as_json(
       root: false,
       only: [
-        :id, :name, :title, :description, :parent_id, :challenge_type, :created_at
+        :id, :name, :title, :description, :parent_id, :challenge_type, :multifandom, :open_doors, :created_at
       ]
     ).merge(
       closed: object.closed?,
@@ -86,7 +86,9 @@ class CollectionIndexer < Indexer
       general_works_count: object.all_approved_works.count,
       public_works_count: object.all_approved_works.where(restricted: false).count,
       general_bookmarked_items_count: object.all_bookmarked_items_count(true), 
-      public_bookmarked_items_count: object.all_bookmarked_items_count(false)
+      public_bookmarked_items_count: object.all_bookmarked_items_count(false),
+      filter_ids: object.filter_ids,
+      tag: object.tag
     )
   end
 end

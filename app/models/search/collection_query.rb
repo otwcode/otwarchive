@@ -1,4 +1,6 @@
 class CollectionQuery < Query
+  include TaggableQuery
+
   # The "klass" function in the query classes is used only to determine what
   # type of search results to return (that is, which class the QueryResult
   # class will call "load_from_elasticsearch" on). Because the Collection search
@@ -72,6 +74,19 @@ class CollectionQuery < Query
 
   def parent_filter
     match_filter(:parent_id, options[:parent_id]) if options[:parent_id].present?
+  end
+
+  def filter_id_filter
+    if filter_ids.present?
+      filter_ids.map { |filter_id| term_filter(:filter_ids, filter_id) }
+    end
+  end
+
+  # This filter is used to restrict our results to only include collections
+  # whose "tag" text matches all of the tag names in tag. This is useful when the user
+  # enters a non-existent tag, which would be discarded by the TaggableQuery.filter_ids function.
+  def tag_filter
+    match_filter(:tag, options[:tag].join(" ")) if options[:tag].present?
   end
 
   ####################

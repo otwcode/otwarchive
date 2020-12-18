@@ -22,6 +22,18 @@ class CollectionSearchForm
     :authors_reveal_at,
     :sort_column,
     :sort_direction,
+    :filter_ids,
+    :fandom_names,
+    :fandom_ids,
+    :rating_ids,
+    :category_ids,
+    :archive_warning_ids,
+    :character_names,
+    :character_ids,
+    :relationship_names,
+    :relationship_ids,
+    :freeform_names,
+    :freeform_ids,
     :page
   ]
 
