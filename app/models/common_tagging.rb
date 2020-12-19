@@ -21,10 +21,11 @@ class CommonTagging < ApplicationRecord
   after_commit :update_search
 
   before_destroy :check_unwrangleable
-  # Check an unwrangleable tag has at least 1 fandom before destroying the link
+  # Check an unwrangleable tag has at least 1 fandom before destroying the association
   def check_unwrangleable
-    tag = Tag.find_by_id(common_tag)
-    return unless tag.unwrangleable && tag.parents.by_type("Fandom").size == 1
+    tag = Tag.find_by(id: common_tag)
+    return unless tag && tag.unwrangleable && tag.parents.by_type("Fandom").size == 1
+
     errors.add(:base, "Unwrangleable tag must have at least one fandom.")
     throw :abort
   end
