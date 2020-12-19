@@ -8,11 +8,11 @@
 class CommonTagging < ApplicationRecord
   # we need "touch" here so that when a common tagging changes, the tag(s) themselves are updated and
   # they get noticed by the tag sweeper (which then updates their autocomplete data)
-  belongs_to :common_tag, class_name: 'Tag', touch: true
+  belongs_to :common_tag, class_name: "Tag", touch: true
   belongs_to :filterable, polymorphic: true, touch: true
 
-  validates_presence_of :common_tag, :filterable, message: "does not exist."
-  validates_uniqueness_of :common_tag_id, scope: :filterable_id
+  validates :common_tag, :filterable, presence: { message: "does not exist." }
+  validates :common_tag_id, uniqueness: { scope: :filterable_id }
 
   after_create :update_wrangler
   after_create :inherit_parents
@@ -24,16 +24,14 @@ class CommonTagging < ApplicationRecord
   # Check an unwrangleable tag has at least 1 fandom before destroying the association
   def check_unwrangleable
     tag = Tag.find_by(id: common_tag)
-    return unless tag && tag.unwrangleable && tag.parents.by_type("Fandom").size == 1
+    return unless tag&.unwrangleable && tag.parents.by_type("Fandom").size == 1
 
     errors.add(:base, "Unwrangleable tag must have at least one fandom.")
     throw :abort
   end
 
   def update_wrangler
-    unless User.current_user.nil?
-      common_tag.update_attributes!(last_wrangler: User.current_user)
-    end
+    common_tag.update!(last_wrangler: User.current_user) unless User.current_user.nil?
   end
 
   # A relationship should inherit its characters' fandoms
@@ -50,6 +48,7 @@ class CommonTagging < ApplicationRecord
   # The parent tag must always be canonical.
   def check_canonical_filterable
     return if filterable.nil? || filterable.canonical
+
     errors.add(:base, "Parent tag is not canonical.")
   end
 
@@ -67,6 +66,7 @@ class CommonTagging < ApplicationRecord
   def remove_uncategorized_media
     return unless common_tag.is_a?(Fandom) && filterable.is_a?(Media)
     return if common_tag.medias.count < 2
+
     common_tag.common_taggings.where(filterable: Media.uncategorized).destroy_all
   end
 
