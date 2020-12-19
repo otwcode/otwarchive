@@ -809,8 +809,12 @@ class Tag < ApplicationRecord
       meta_taggings.where(direct: true, meta_tag: tag).destroy_all
       sub_taggings.where(direct: true, sub_tag: tag).destroy_all
     else
+      # associations where self is parent
       common_taggings.where(filterable: tag).destroy_all
+      return false if common_taggings.where(filterable: tag).any?
+      # associations where self is child
       child_taggings.where(common_tag: tag).destroy_all
+      return false if child_taggings.where(common_tag: tag).any?
     end
 
     tag.touch
