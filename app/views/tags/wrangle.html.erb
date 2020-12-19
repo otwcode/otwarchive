@@ -140,8 +140,13 @@
                 <% unless params[:status] == 'unwrangled' %>
                   <li>
                     <label for="remove_associated_<%= tag.id %>">
-                      <%= ts('Remove') %>
-                      <%= check_box_tag 'remove_associated[]', tag.id, false, id: "remove_associated_#{tag.id}" %>
+                      <% if tag.unwrangleable? && tag.parents.by_type("Fandom").size == 1 %>
+                        <%= ts('Unwrangleable') %>
+                        <%= check_box_tag 'remove_associated[]', tag.id, false, id: "remove_associated_#{tag.id}", disabled: true %>
+                      <% else %>
+                        <%= ts('Remove') %>
+                        <%= check_box_tag 'remove_associated[]', tag.id, false, id: "remove_associated_#{tag.id}" %>
+                      <% end %>
                     </label>
                   </li>
                 <% end %>
