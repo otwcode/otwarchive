@@ -475,7 +475,7 @@ $j(document).ready(function() {
   });
 
   // Scroll to the top of the comments section when loading additional pages via Ajax in comment pagination.
-  $j('#comments_placeholder').find('.pagination').on('click.rails', 'a[data-remote]', function(e){
+  $j('#comments_placeholder').on('click.rails', '.pagination a[data-remote]', function(e){
     $j.scrollTo('#comments_placeholder');
   });
 
