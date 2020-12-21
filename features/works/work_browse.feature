@@ -118,3 +118,22 @@ chapter when the chapters are reordered.
   When I browse the "Canonical Fandom" works
     And I follow the recent chapter link for the work "My WIP"
   Then I should be on the 2nd chapter of the work "My WIP"
+
+  Scenario: Kudos link from from work browsing leads to full work page
+  Given I am logged in as "cool_author"
+    And I post the chaptered work "Awesome Work"
+    And a draft chapter is added to "Awesome Work"
+  When I am logged in as "reader"
+    And I go to the works page
+  Then I should not see "Kudos: 1" within work "Awesome Work" blurb
+  When I am logged in as "reader"
+    And I view the work "Awesome Work"
+    And I leave kudos on "Awesome Work"
+  Then I should see "reader left kudos on this work!"
+  When I am logged out
+    And the statistics for the work "Awesome Work" are updated
+    And I go to the works page
+  Then I should see "Kudos: 1" within work "Awesome Work" blurb
+  When I follow the kudos link for the work "Awesome Work"
+  Then I should be on the work "Awesome Work"
+    And I should see "reader left kudos on this work!"

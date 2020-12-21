@@ -642,6 +642,12 @@ When /^I follow the recent chapter link for the work "([^\"]*)"$/ do |work|
   find("#work_#{work_id} dd.chapters a").click
 end
 
+When /^I follow the kudos link for the work "([^\"]*)"$/ do |work|
+  work = Work.find_by(title: work)
+  work_id = work.id.to_s
+  find("#work_#{work_id} dd.kudos a").click
+end
+
 When /^the statistics for the work "([^"]*)" are updated$/ do |title|
   step %{the statistics for all works are updated}
   step %{all indexing jobs have been run}
@@ -701,4 +707,16 @@ end
 
 Then /^the Remove Me As Chapter Co-Creator option should not be on the ([\d]+)(?:st|nd|rd|th) chapter$/ do |chapter_number|
   step %{I should not see "Remove Me As Chapter Co-Creator" within "ul#sortable_chapter_list > li:nth-of-type(#{chapter_number})"}
+end
+
+Then /^I should see "([^"]*)" within work "([^\"]*)" blurb$/ do |content, work|
+  work = Work.find_by(title: work)
+  work_id = work.id.to_s
+  step %{I should see "#{content}" within "li#work_#{work_id}"}
+end
+
+Then /^I should not see "([^"]*)" within work "([^\"]*)" blurb$/ do |content, work|
+  work = Work.find_by(title: work)
+  work_id = work.id.to_s
+  step %{I should not see "#{content}" within "li#work_#{work_id}"}
 end
