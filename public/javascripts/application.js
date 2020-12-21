@@ -479,9 +479,9 @@ $j(document).ready(function() {
     $j.scrollTo('#comments_placeholder');
   });
 
-  // Scroll to the top of the feedback section when loading comments via AJAX
+  // Scroll to the top of the comments section when loading comments via AJAX
   $j("#show_comments_link_top").on('click.rails', 'a[href*="show_comments"]', function(e){
-    $j.scrollTo('#feedback');
+    $j.scrollTo('#comments');
   });
 });
 
