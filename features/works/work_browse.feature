@@ -137,3 +137,20 @@ chapter when the chapters are reordered.
   When I follow the kudos link for the work "Awesome Work"
   Then I should be on the work "Awesome Work"
     And I should see "reader left kudos on this work!"
+
+  Scenario: Comments link from from work browsing leads to full work page
+  Given I am logged in as "cool_author"
+    And I post the chaptered work "Awesome Work"
+  When I am logged in as "reader"
+    And I go to the works page
+  Then I should not see "Comments: 1" within work "Awesome Work" blurb
+  When I am logged in as "commenter"
+    And I post the comment "Bravo!" on the work "Awesome Work"
+  Then I should see "Bravo!"
+  When I am logged out
+    And the statistics for the work "Awesome Work" are updated
+    And I go to the works page
+  Then I should see "Comments: 1" within work "Awesome Work" blurb
+  When I follow the comments link for the work "Awesome Work"
+  Then I should be on the work "Awesome Work"
+    And I should see "Bravo!"

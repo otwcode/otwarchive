@@ -648,6 +648,12 @@ When /^I follow the kudos link for the work "([^\"]*)"$/ do |work|
   find("#work_#{work_id} dd.kudos a").click
 end
 
+When /^I follow the comments link for the work "([^\"]*)"$/ do |work|
+  work = Work.find_by(title: work)
+  work_id = work.id.to_s
+  find("#work_#{work_id} dd.comments a").click
+end
+
 When /^the statistics for the work "([^"]*)" are updated$/ do |title|
   step %{the statistics for all works are updated}
   step %{all indexing jobs have been run}
