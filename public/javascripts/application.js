@@ -36,15 +36,15 @@ $j(document).ready(function() {
 
 function get_token_input_options(self) {
   return {
-    searchingText: self.attr('autocomplete_searching_text'),
-    hintText: self.attr('autocomplete_hint_text'),
-    noResultsText: self.attr('autocomplete_no_results_text'),
-    minChars: self.attr('autocomplete_min_chars'),
+    searchingText: self.data('autocomplete-searching-text'),
+    hintText: self.data('autocomplete-hint-text'),
+    noResultsText: self.data('autocomplete-no-results-text'),
+    minChars: self.data('autocomplete-min-chars'),
     queryParam: "term",
     preventDuplicates: true,
-    tokenLimit: self.attr('autocomplete_token_limit'),
-    liveParams: self.attr('autocomplete_live_params'),
-    makeSortable: self.attr('autocomplete_sortable')
+    tokenLimit: self.data('autocomplete-token-limit'),
+    liveParams: self.data('autocomplete-live-params'),
+    makeSortable: self.data('autocomplete-sortable')
   };
 }
 
@@ -58,9 +58,9 @@ if (input.livequery) {
       var token_input_options = get_token_input_options(self);
       var method;
       try {
-          method = $.parseJSON(self.attr('autocomplete_method'));
+          method = $.parseJSON(self.data('autocomplete-method'));
       } catch (err) {
-          method = self.attr('autocomplete_method');
+          method = self.data('autocomplete-method');
       }
       self.tokenInput(method, token_input_options);
     });
@@ -475,12 +475,12 @@ $j(document).ready(function() {
   });
 
   // Scroll to the top of the comments section when loading additional pages via Ajax in comment pagination.
-  $j('#comments_placeholder').find('.pagination').find('a[data-remote]').livequery('click.rails', function(e){
+  $j('#comments_placeholder').on('click.rails', '.pagination a[data-remote]', function(e){
     $j.scrollTo('#comments_placeholder');
   });
 
   // Scroll to the top of the feedback section when loading comments via AJAX
-  $j("#show_comments_link_top").find('a[href*="show_comments"]').livequery('click.rails', function(e){
+  $j("#show_comments_link_top").on('click.rails', 'a[href*="show_comments"]', function(e){
     $j.scrollTo('#feedback');
   });
 });

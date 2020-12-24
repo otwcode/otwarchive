@@ -248,7 +248,7 @@ Given /^bookmarks of all types tagged with the (character|relationship|fandom) t
   FactoryBot.create(:bookmark, bookmarkable_id: work.id, bookmarkable_type: "Work")
 
   step %{bookmarks of external works and series tagged with the #{tag_type} tag "#{tag}"}
-end 
+end
 
 # Freeform is omitted because there is no freeform option on the bookmark external work form
 Given /^bookmarks of external works and series tagged with the (character|relationship|fandom) tag "(.*?)"$/ do |tag_type, tag|
@@ -381,6 +381,12 @@ When(/^I attempt to transfer my bookmark of "([^"]*)" to a pseud that is not min
   pseud_id = User.find_by(login: "not_the_bookmarker").pseuds.first.id
   find("#bookmark_pseud_id", visible: false).set(pseud_id)
   click_button "Update"
+end
+
+When(/^I use the bookmarklet on a previously bookmarked URL$/) do
+  url = ExternalWork.first.url
+  visit new_external_work_path(params: { url_from_external: url })
+  step %{all AJAX requests are complete}
 end
 
 Then /^the bookmark on "([^\"]*)" should have tag "([^\"]*)"$$/ do |title, tag|

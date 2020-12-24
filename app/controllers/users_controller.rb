@@ -99,7 +99,7 @@ class UsersController < ApplicationController
 
   def notify_and_show_confirmation_screen
     # deliver synchronously to avoid getting caught in backed-up mail queue
-    UserMailer.signup_notification(@user.id).deliver!
+    UserMailer.signup_notification(@user.id).deliver_now
 
     flash[:notice] = ts("During testing you can activate via <a href='%{activation_url}'>your activation url</a>.",
                         activation_url: activate_path(@user.confirmation_token)).html_safe if Rails.env.development?
@@ -175,7 +175,7 @@ class UsersController < ApplicationController
 
       if @new_email == @confirm_email && @user.save
         flash[:notice] = ts('Your email has been successfully updated')
-        UserMailer.change_email(@user.id, @old_email, @new_email).deliver
+        UserMailer.change_email(@user.id, @old_email, @new_email).deliver_later
         @user.create_log_item(options = { action: ArchiveConfig.ACTION_NEW_EMAIL })
       else
         flash[:error] = ts("Email addresses don't match! Please retype and try again")

@@ -9,8 +9,8 @@ Otwarchive::Application.configure do
 
   memcached_servers = "127.0.0.1:11211"
   memcached_servers = YAML.load_file(Rails.root.join("config/local.yml")).fetch("MEMCACHED_SERVERS", memcached_servers) if File.file?(Rails.root.join("config/local.yml"))
-  config.cache_store = :dalli_store, memcached_servers,
-                          { namespace:  'ao3-v1', expires_in:  0, compress: true , pool_size: 10 }
+  config.cache_store = :mem_cache_store, memcached_servers,
+                       { namespace: "ao3-v1-dev", compress: true, pool_size: 10 }
 
   # Log error messages when you accidentally call methods on nil.
   # config.whiny_nils = true
@@ -33,7 +33,7 @@ Otwarchive::Application.configure do
   config.i18n.fallbacks = true
   # Make it clear we are on Dev
   config.rack_dev_mark.enable = true
-  config.rack_dev_mark.theme = [:title, Rack::DevMark::Theme::GithubForkRibbon.new(position: 'left', color: 'green' , fixed: 'true' )]
+  config.rack_dev_mark.theme = [:title, Rack::DevMark::Theme::GithubForkRibbon.new(position: "left", color: "green", fixed: "true")]
 
   config.eager_load = false
   config.assets.enabled = false

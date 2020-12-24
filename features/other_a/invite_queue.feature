@@ -16,7 +16,7 @@ Feature: Invite queue management
       And I go to the admin-settings page
       And I uncheck "Invite from queue enabled (People can add themselves to the queue and invitations are sent out automatically)"
       And I press "Update"
-    When I am logged out as an admin
+    When I log out
       And I am on the homepage
     Then I should not see "Get an Invite"
       And I should see "Archive of Our Own"
@@ -28,7 +28,7 @@ Feature: Invite queue management
       And I go to the admin-settings page
       And I check "Invite from queue enabled (People can add themselves to the queue and invitations are sent out automatically)"
       And I press "Update"
-    When I am logged out as an admin
+    When I log out
       And I am on the homepage
     Then I should see "Get an Invitation"
     When I follow "Get an Invitation"
@@ -80,7 +80,6 @@ Feature: Invite queue management
   Scenario: Can still check status when queue is off
 
     Given the invitation queue is disabled
-      And I am logged out as an admin
     When I go to the invite_requests page
       And I follow "check your position on the waiting list"
     Then I should see the page title "Invitation Request Status"

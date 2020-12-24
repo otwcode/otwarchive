@@ -138,10 +138,7 @@ class WorksController < ApplicationController
     options[:page] = params[:page] || 1
     options[:show_restricted] = current_user.present? || logged_in_as_admin?
 
-    @user = User.find_by(login: params[:user_id])
-
-    return unless @user.present?
-
+    @user = User.find_by!(login: params[:user_id])
     @search = WorkSearchForm.new(options.merge(works_parent: @user, collected: true))
     @works = @search.search_results
     flash_search_warnings(@works)
@@ -695,30 +692,6 @@ class WorksController < ApplicationController
     # To avoid overwriting, we entirely trash any blank fields.
     updated_work_params = work_params.reject { |_key, value| value.blank? }
 
-    # It takes around 1 hour to restart all the workers when deploying, so the
-    # old code and the new code need to co-exist. The old WorksController code
-    # used to reject parameters with a value of "0", so the new WorksController
-    # form cannot use "0".
-    #
-    # Instead, we use special values to represent "0", and handle them with the
-    # following if statements.
-    #
-    # TODO: To eliminate this code, we need to do separate deploys for these
-    # two steps:
-    # (1) Make the works/edit_multiple form use "0" instead of special values.
-    # (2) Delete the code handling the special values.
-    if updated_work_params[:anon_commenting_disabled] == 'allow_anon'
-      updated_work_params[:anon_commenting_disabled] = '0'
-    end
-
-    if updated_work_params[:moderated_commenting_enabled] == 'not_moderated'
-      updated_work_params[:moderated_commenting_enabled] = '0'
-    end
-
-    if updated_work_params[:restricted] == 'unrestricted'
-      updated_work_params[:restricted] = '0'
-    end
-
     @works.each do |work|
       # now we can just update each work independently, woo!
       unless work.update_attributes(updated_work_params)
@@ -931,8 +904,7 @@ class WorksController < ApplicationController
       :rating_string, :fandom_string, :relationship_string, :character_string,
       :archive_warning_string, :category_string, :expected_number_of_chapters, :revised_at,
       :freeform_string, :summary, :notes, :endnotes, :collection_names, :recipients, :wip_length,
-      # TODO: Remove anon_commenting_disabled.
-      :backdate, :language_id, :work_skin_id, :restricted, :anon_commenting_disabled, :comment_permissions,
+      :backdate, :language_id, :work_skin_id, :restricted, :comment_permissions,
       :moderated_commenting_enabled, :title, :pseuds_to_add, :collections_to_add,
       current_user_pseud_ids: [],
       collections_to_remove: [],

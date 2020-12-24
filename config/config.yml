@@ -104,6 +104,9 @@ LOGIN_LENGTH_MAX: 40
 PASSWORD_LENGTH_MIN: 6
 PASSWORD_LENGTH_MAX: 40
 
+# The maximum number of tags you can add to a collection
+COLLECTION_TAGS_MAX: 10
+
 # max number of tags of each type allowed in challenge prompts (requests/offers)
 # increasing this number can lead to slower automated matching
 PROMPT_TAGS_MAX: 20
@@ -484,3 +487,17 @@ HIT_COUNT_ROLLOVER_HOUR: 3
 
 # The batch size for calculating a work's filters from its tags:
 FILTER_UPDATE_BATCH_SIZE: 100
+
+# URLs for which we should not display the proxy notice. Alphabetical by
+# environment.
+PERMITTED_HOSTS: [
+  # Production
+  "archiveofourown.org",
+  "download.archiveofourown.org",
+  "insecure.archiveofourown.org",
+  "www.archiveofourown.org",
+  # Staging
+  "insecure-test.archiveofourown.org",
+  "test.archiveofourown.org",
+  "testdownload.archiveofourown.org"
+]

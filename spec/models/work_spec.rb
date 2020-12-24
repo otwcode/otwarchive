@@ -366,7 +366,7 @@ describe Work do
       before :each do
         @skin_author = create(:user)
         @second_author = create(:user)
-        @private_skin = create(:private_work_skin, author_id: @skin_author.id)
+        @private_skin = create(:work_skin, :private, author_id: @skin_author.id)
       end
 
       let(:work_author) { @skin_author }
@@ -571,62 +571,6 @@ describe Work do
         expect(work.pseuds.reload).to contain_exactly(other.default_pseud)
         expect(solo_chapter.pseuds.reload).to contain_exactly(other.default_pseud)
       end
-    end
-  end
-
-  describe "#anon_commenting_disabled=" do
-    let(:work) { create(:work) }
-
-    it "updating anon_commenting_disabled also updates comment_permissions" do
-      expect(work.anon_commenting_disabled).to eq(false)
-      expect(work.comment_permissions).to eq("enable_all")
-
-      work.anon_commenting_disabled = true
-
-      expect(work.anon_commenting_disabled).to eq(true)
-      expect(work.comment_permissions).to eq("disable_anon")
-
-      work.save!
-      work.reload
-
-      expect(work.anon_commenting_disabled).to eq(true)
-      expect(work.comment_permissions).to eq("disable_anon")
-    end
-  end
-
-  describe "#comment_permissions=" do
-    let(:work) { create(:work) }
-
-    it "setting comment_permissions to disable_anon also updates anon_commenting_disabled" do
-      expect(work.comment_permissions).to eq("enable_all")
-      expect(work.anon_commenting_disabled).to eq(false)
-
-      work.comment_permissions = "disable_anon"
-
-      expect(work.comment_permissions).to eq("disable_anon")
-      expect(work.anon_commenting_disabled).to eq(true)
-
-      work.save!
-      work.reload
-
-      expect(work.comment_permissions).to eq("disable_anon")
-      expect(work.anon_commenting_disabled).to eq(true)
-    end
-
-    it "setting comment_permissions to disable_all also sets anon_commenting_disabled to true" do
-      expect(work.comment_permissions).to eq("enable_all")
-      expect(work.anon_commenting_disabled).to eq(false)
-
-      work.comment_permissions = "disable_all"
-
-      expect(work.comment_permissions).to eq("disable_all")
-      expect(work.anon_commenting_disabled).to eq(true)
-
-      work.save!
-      work.reload
-
-      expect(work.comment_permissions).to eq("disable_all")
-      expect(work.anon_commenting_disabled).to eq(true)
     end
   end
 end

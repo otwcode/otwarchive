@@ -1,28 +1,29 @@
-ENV["RAILS_ENV"] ||= 'test'
+ENV["RAILS_ENV"] ||= "test"
 
-require File.expand_path("../../config/environment", __FILE__)
-require 'simplecov'
-SimpleCov.command_name "rspec-" + (ENV['TEST_RUN'] || '')
-if ENV["CI"] == "true" && ENV["TRAVIS"] == "true"
-  # Only on Travis...
+require File.expand_path("../config/environment", __dir__)
+require "simplecov"
+
+if ENV["CI"] == "true"
+  # Only when running CI:
   require "codecov"
   SimpleCov.formatter = SimpleCov::Formatter::Codecov
 end
 
-require 'rspec/rails'
-require 'factory_bot'
-require 'database_cleaner'
-require 'email_spec'
+require "rspec/rails"
+require "factory_bot"
+require "database_cleaner"
+require "email_spec"
+require "webmock/rspec"
 
 DatabaseCleaner.start
 DatabaseCleaner.clean
 
 # Requires supporting ruby files with custom matchers and macros, etc,
 # in spec/support/ and its subdirectories.
-Dir[Rails.root.join("spec/support/**/*.rb")].each {|f| require f}
+Dir[Rails.root.join("spec/support/**/*.rb")].sort.each { |f| require f }
 
 FactoryBot.find_definitions
-FactoryBot.definition_file_paths = %w(factories)
+FactoryBot.definition_file_paths = %w[factories]
 
 RSpec.configure do |config|
   config.mock_with :rspec
@@ -36,7 +37,6 @@ RSpec.configure do |config|
   config.include EmailSpec::Matchers
   config.include Devise::Test::ControllerHelpers, type: :controller
   config.include Devise::Test::IntegrationHelpers, type: :request
-  config.include Capybara::DSL
   config.include TaskExampleGroup, type: :task
 
   config.before :suite do
@@ -105,6 +105,10 @@ RSpec.configure do |config|
     WorkIndexer.delete_index
   end
 
+  config.before :each, default_skin: true do
+    AdminSetting.current.update_attribute(:default_skin, Skin.default)
+  end
+
   config.before :each, type: :controller do
     @request.host = "www.example.com"
   end
@@ -136,8 +140,6 @@ RSpec.configure do |config|
     metadata[:type] = :task
   end
 
-  # Set default formatter to print out the description of each test as it runs
-  config.color = true
   config.formatter = :documentation
 
   config.file_fixture_path = "spec/support/fixtures"

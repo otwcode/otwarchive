@@ -9,6 +9,7 @@ development) ;;
   ;;
 esac
 
+bundle install
 bundle exec rake db:drop
 bundle exec rake db:create
 bundle exec rails db:environment:set

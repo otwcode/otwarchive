@@ -1,7 +1,13 @@
 test:
+  host: 127.0.0.1
+  port: 3306
   adapter: mysql2
   database: otwarchive_test
+<<<<<<< HEAD:config/travis/database.yml
   username: travis
+=======
+  username: root
+>>>>>>> fca67491c226fdf250fb477c4cb0cf07f79d8de3:config/gh-actions/database.yml
   password: password
   encoding: utf8mb4
   collation: utf8mb4_unicode_ci

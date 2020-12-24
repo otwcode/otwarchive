@@ -37,7 +37,7 @@ class RedisMailQueue
       # queue the notification for delivery
       begin
         # don't die if we hit one deleted user
-        KudoMailer.batch_kudo_notification(author_id, user_kudos.to_json).deliver
+        KudoMailer.batch_kudo_notification(author_id, user_kudos.to_json).deliver_later
       rescue
       end
     end
@@ -65,7 +65,7 @@ class RedisMailQueue
       end
       begin
         # don't die if we hit one deleted subscription
-        UserMailer.batch_subscription_notification(subscription_id, entries.to_json).deliver
+        UserMailer.batch_subscription_notification(subscription_id, entries.to_json).deliver_later
       rescue ActiveRecord::RecordNotFound
         # never rescue all errors
       end

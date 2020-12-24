@@ -1,5 +1,7 @@
 class Prompt < ApplicationRecord
   include ActiveModel::ForbiddenAttributesProtection
+
+  include UrlHelpers
   include TagTypeHelper
 
   # -1 represents all matching

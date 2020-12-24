@@ -249,7 +249,7 @@ namespace :After do
 #  task(:invite_external_authors => :environment) do
 #    Invitation.where("sent_at is NULL").where("external_author_id IS NOT NULL").each do |invite|
 #      archivist = invite.external_author.external_creatorships.collect(&:archivist).collect(&:login).uniq.join(", ")
-#      UserMailer.invitation_to_claim(invite, archivist).deliver
+#      UserMailer.invitation_to_claim(invite, archivist).deliver_now
 #      invite.sent_at = Time.now
 #      invite.save
 #    end
