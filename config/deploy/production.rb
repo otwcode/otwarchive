@@ -11,17 +11,19 @@ server "ao3-app01", :app, :db, :schedulers
 server "ao3-front01", :web
 server "ao3-app19", :app
 server "ao3-app16", :app
-server "ao3-front03", :web
+server "ao3-front07", :web
 server "ao3-app06", :app, :workers, :schedulers
 server "ao3-app07", :app, :workers, :schedulers
 server "ao3-front02", :web
 server "ao3-app12", :app
+server "ao3-app22", :app
 server "ao3-app09", :app
+server "ao3-front08", :web
 server "ao3-app15", :app, primary: true
 server "ao3-app20", :app
+server "ao3-app21", :app
 server "ao3-front04", :web
 server "ao3-app17", :app, :workers, :schedulers
-server "ao3-app18", :app, :workers, :schedulers
 server "ao3-app14", :app
 server "ao3-front05", :web
 
