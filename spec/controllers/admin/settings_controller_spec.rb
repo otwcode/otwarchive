@@ -5,20 +5,23 @@ describe Admin::SettingsController do
   include RedirectExpectationHelper
 
   describe "GET #index" do
-    let(:admin) { create(:admin, roles: []) }
+    it "denies access to guest users" do
+      get :index
+      it_redirects_to_with_notice(root_url, "I'm sorry, only an admin can look at that area")
+    end
 
-    context "when admin does not have correct authorization" do
-      it "denies random admin access" do
-        fake_login_admin(admin)
+    context "when logged in as admin" do
+      let(:admin) { create(:admin, roles: []) }
+
+      before { fake_login_admin(admin) }
+
+      it "denies access to admins without correct roles" do
         get :index
         it_redirects_to_with_error(root_url, "Sorry, only an authorized admin can access the page you were trying to reach.")
       end
-    end
 
-    context "when admin has correct authorization" do
-      it "allows admins to access index" do
+      it "allows access to admins with correct roles" do
         admin.update(roles: ["policy_and_abuse"])
-        fake_login_admin(admin)
         get :index
         expect(response).to have_http_status(:success)
       end
