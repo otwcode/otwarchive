@@ -220,26 +220,19 @@ describe CommentsController do
                                      "access the page you were trying to " \
                                      "reach. Please log in.")
         end
-
-        context "when the commentable is a restricted work" do
-          let(:work) { comment.ultimate_parent }
-
-          before { work.update!(restricted: true) }
-
-          it "(on a comment) redirects to the login page" do
-            post :create, params: { comment_id: comment.id, comment: anon_comment_attributes }
-            it_redirects_to(new_user_session_path(restricted_commenting: true))
-          end
-
-          it "redirects to the login page" do
-            post :create, params: { work_id: work.id, comment: anon_comment_attributes }
-            it_redirects_to(new_user_session_path(restricted_commenting: true))
-          end
-        end
       end
     end
 
     context "when the commentable is a work" do
+      context "when the work is restricted" do
+        let(:work) { create(:work, restricted: true) }
+
+        it "redirects to the login page" do
+          post :create, params: { work_id: work.id, comment: anon_comment_attributes }
+          it_redirects_to(new_user_session_path(restricted_commenting: true))
+        end
+      end
+
       context "when the work has all comments disabled" do
         let(:work) { create(:work, comment_permissions: :disable_all) }
 
@@ -272,6 +265,17 @@ describe CommentsController do
     end
 
     context "when the commentable is a comment" do
+      context "when the parent work is restricted" do
+        let(:work) { comment.ultimate_parent }
+
+        before { work.update!(restricted: true) }
+
+        it "redirects to the login page" do
+          post :create, params: { comment_id: comment.id, comment: anon_comment_attributes }
+          it_redirects_to(new_user_session_path(restricted_commenting: true))
+        end
+      end
+
       context "when the parent work has all comments disabled" do
         let(:work) { create(:work, comment_permissions: :disable_all) }
         let(:comment) { create(:comment, commentable: work.first_chapter) }
@@ -651,7 +655,7 @@ describe CommentsController do
       end
     end
 
-    context "when logged out and the commentable is a restricted work" do
+    context "when logged out and the commentable is a comment on a restricted work" do
       let(:work) { comment.ultimate_parent }
 
       before { work.update!(restricted: true) }

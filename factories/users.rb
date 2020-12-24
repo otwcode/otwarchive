@@ -21,7 +21,7 @@ FactoryBot.define do
     password_confirmation(&:password)
     email { generate(:email) }
 
-    # By default, create activated users who can logged in, since we use
+    # By default, create activated users who can log in, since we use
     # devise :confirmable.
     confirmed_at { Faker::Time.backward }
 
