@@ -178,6 +178,11 @@ describe HtmlCleaner do
           expect(result).to include(html)
         end
 
+        it "converts Archive-hosted Dewplayer embeds into audio tags" do
+          html = '<embed type="application/x-shockwave-flash" flashvars="mp3=http://example.com/next-color-planet.mp3" src="https://archiveofourown.org/system/dewplayer/dewplayer.swf" width="200" height="27" allowscriptaccess="never" allownetworking="internal"></embed>'
+          expect(sanitize_value(field, html)).to include('<audio src="https://example.com/next-color-planet.mp3" controls="controls" crossorigin="anonymous" preload="metadata"></audio>')
+        end
+
         it "strips embeds with unknown source" do
           html = '<embed src="http://www.evil.org"></embed>'
           result = sanitize_value(field, html)
