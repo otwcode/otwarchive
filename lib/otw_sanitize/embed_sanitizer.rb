@@ -145,8 +145,10 @@ module OTWSanitize
       mp3_urls = CGI.parse(flashvars)["mp3"]
       return if mp3_urls.blank?
 
-      audio_fragment = mp3_urls.map { |url| "<audio src='#{url}'></audio>" }.join
-      node.replace(audio_fragment)
+      # Dewplayer allows specifying multiple sources.
+      mp3_urls = mp3_urls.map { |url| url.split("|") }.flatten
+      audio_fragment = mp3_urls.map { |url| "<audio src='#{url}'></audio>" }.join("<br>")
+      node.replace("<p>#{audio_fragment}</p>")
     end
 
     # We're now certain that this is an embed from a trusted source, but we
