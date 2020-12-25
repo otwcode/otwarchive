@@ -134,6 +134,7 @@ describe "rake After:replace_dewplayer_embeds" do
     expect do
       subject.invoke
     end.to avoid_changing { embed_work.reload.first_chapter.content }
-      .and change { dewplayer_work.reload.first_chapter.content }.to('<audio src="https://example.com/HINOTORI.mp3" controls="controls" crossorigin="anonymous" preload="metadata"></audio>')
+
+    expect(dewplayer_work.reload.first_chapter.content).to include('<audio src="https://example.com/HINOTORI.mp3" controls="controls" crossorigin="anonymous" preload="metadata"></audio>')
   end
 end
