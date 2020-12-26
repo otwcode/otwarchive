@@ -704,7 +704,29 @@ namespace :After do
 
     puts && STDOUT.flush
   end
-end # this is the end that you have to put new tasks above
+
+  desc "Replace Archive-hosted Dewplayer embeds with HTML5 audio tags"
+  task(replace_dewplayer_embeds: :environment) do
+    updated_chapter_count = 0
+
+    Chapter.find_each do |chapter|
+      puts(chapter.id) && STDOUT.flush if (chapter.id % 1000).zero?
+      if chapter.content.match /<embed .*dewplayer/
+        begin
+          chapter.content_sanitizer_version = -1
+          chapter.sanitize_field(chapter, :content)
+          updated_chapter_count += 1
+        rescue StandardError
+          puts("Couldn't update chapter #{chapter.id}") && STDOUT.flush
+        end
+      end
+    end
+
+    puts("Updated #{updated_chapter_count} chapter(s).") && STDOUT.flush
+  end
+
+  # This is the end that you have to put new tasks above.
+end
 
 ##################
 # ADD NEW MIGRATE TASKS TO THIS LIST ONCE THEY ARE WORKING

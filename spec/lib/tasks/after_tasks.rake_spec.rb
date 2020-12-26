@@ -125,3 +125,16 @@ describe "rake After:update_indexed_stat_counter_kudo_count", work_search: true 
     }.from(0).to(1)
   end
 end
+
+describe "rake After:replace_dewplayer_embeds" do
+  let!(:dewplayer_work) { create(:work, chapter_attributes: { content: '<embed type="application/x-shockwave-flash" flashvars="mp3=https://example.com/HINOTORI.mp3" src="https://archiveofourown.org/system/dewplayer/dewplayer-vol.swf" width="250" height="27"></embed>' }) }
+  let!(:embed_work) { create(:work, chapter_attributes: { content: '<embed type="application/x-shockwave-flash" flashvars="audioUrl=https://example.com/失礼しますが、RIP♡-Explicit.mp3" src="http://podfic.com/player/audio-player.swf" width="400" height="27"></embed>' }) }
+
+  it "updates only works using Dewplayer embeds" do
+    expect do
+      subject.invoke
+    end.to avoid_changing { embed_work.reload.first_chapter.content }
+
+    expect(dewplayer_work.reload.first_chapter.content).to include('<audio src="https://example.com/HINOTORI.mp3" controls="controls" crossorigin="anonymous" preload="metadata"></audio>')
+  end
+end

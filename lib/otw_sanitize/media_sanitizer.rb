@@ -54,6 +54,9 @@ module OTWSanitize
     # Creates a callable transformer for the sanitizer to use
     def self.transformer
       lambda do |env|
+        # Don't continue if this node is already safelisted.
+        return if env[:is_whitelisted]
+
         new(env[:node]).sanitized_node
       end
     end
