@@ -4,8 +4,9 @@ require 'spec_helper'
 describe ChallengeClaimsController do
   include LoginMacros
   include RedirectExpectationHelper
+
   let(:user) { create(:user) }
-  let(:signup) { create(:challenge_signup) }
+  let(:signup) { create(:prompt_meme_signup) }
   let(:collection) { signup.collection }
   let(:claim) { create(:challenge_claim, collection: collection) }
 
@@ -94,9 +95,11 @@ describe ChallengeClaimsController do
   end
 
   describe 'create' do
+    let(:prompt) { signup.requests.first }
+
     it 'sets a notice and redirects' do
       fake_login_known_user(user)
-      post :create, params: { collection_id: collection.name, challenge_claim: {collection_id: collection.id} }
+      post :create, params: { collection_id: collection.name, prompt_id: prompt.id }
       it_redirects_to_with_notice(collection_claims_path(collection, for_user: true), \
                                   "New claim made.")
     end
@@ -104,7 +107,7 @@ describe ChallengeClaimsController do
     it 'on an exception gives an error and redirects' do
       fake_login_known_user(user)
       allow_any_instance_of(ChallengeClaim).to receive(:save) { false }
-      post :create, params: { collection_id: collection.name, challenge_claim: {collection_id: collection.id} }
+      post :create, params: { collection_id: collection.name, prompt_id: prompt.id }
       it_redirects_to_with_error(collection_claims_path(collection, for_user: true), \
                                  "We couldn't save the new claim.")
     end
@@ -112,8 +115,6 @@ describe ChallengeClaimsController do
 
   describe "destroy" do
     context "for a prompt meme" do
-      let(:signup) { create(:prompt_meme_signup) }
-
       context "when a user deletes their own claim" do
         before do
           claim.update!(claiming_user: user)

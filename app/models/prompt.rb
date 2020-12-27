@@ -29,7 +29,7 @@ class Prompt < ApplicationRecord
   accepts_nested_attributes_for :optional_tag_set
   has_many :optional_tags, through: :optional_tag_set, source: :tag
 
-  has_many :request_claims, class_name: "ChallengeClaim", foreign_key: 'request_prompt_id'
+  has_many :request_claims, class_name: "ChallengeClaim", foreign_key: "request_prompt_id", inverse_of: :request_prompt
 
   # SCOPES
 
@@ -220,17 +220,6 @@ class Prompt < ApplicationRecord
 
   def fulfilled_claims
     self.request_claims.fulfilled
-  end
-
-  # We want to have all the matching methods defined on
-  # TagSet available here, too, without rewriting them,
-  # so we just pass them through method_missing
-  def method_missing(method, *args, &block)
-    super || (tag_set && tag_set.respond_to?(method) ? tag_set.send(method) : super)
-  end
-
-  def respond_to?(method, include_private = false)
-    super || tag_set.respond_to?(method, include_private)
   end
 
   # Computes the "full" tag set (tag_set + optional_tag_set), and stores the
