@@ -142,11 +142,19 @@ module OTWSanitize
       flashvars = node["flashvars"]
       return if flashvars.blank?
 
-      mp3_urls = CGI.parse(flashvars)["mp3"]
+      mp3_urls = []
+      flashvars.split(/&/).each do |pairs|
+        key, value = pairs.split("=", 2)
+        next unless key == "mp3" && value
+
+        # URL-decode the flashvars value if necessary.
+        value = Addressable::URI.unencode(value) if value =~ /^https?%3A/
+
+        # Dewplayer allows specifying multiple sources.
+        mp3_urls.concat(value.split("|"))
+      end
       return if mp3_urls.blank?
 
-      # Dewplayer allows specifying multiple sources.
-      mp3_urls = mp3_urls.map { |url| url.split("|") }.flatten
       audio_fragment = mp3_urls.map { |url| "<audio src='#{url}'></audio>" }.join("<br>")
       node.replace("<p>#{audio_fragment}</p>")
     end
