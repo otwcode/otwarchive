@@ -708,6 +708,7 @@ namespace :After do
   desc "Replace Archive-hosted Dewplayer embeds with HTML5 audio tags"
   task(replace_dewplayer_embeds: :environment) do
     updated_chapter_count = 0
+    errored_chapters = []
 
     Chapter.find_each do |chapter|
       puts(chapter.id) && STDOUT.flush if (chapter.id % 1000).zero?
@@ -717,11 +718,15 @@ namespace :After do
           chapter.sanitize_field(chapter, :content)
           updated_chapter_count += 1
         rescue StandardError
-          puts("Couldn't update chapter #{chapter.id}") && STDOUT.flush
+          errored_chapters << chapter.id
         end
       end
     end
 
+    if errored_chapters.any?
+      puts("Couldn't update #{errored_chapters.size} chapter(s): #{errored_chapters.join(',')}")
+      STDOUT.flush
+    end
     puts("Updated #{updated_chapter_count} chapter(s).") && STDOUT.flush
   end
 

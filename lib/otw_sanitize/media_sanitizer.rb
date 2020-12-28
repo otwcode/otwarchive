@@ -97,7 +97,7 @@ module OTWSanitize
       unless url =~ /http/
         url = "https://" + url
       end
-      URI(url).host
+      Addressable::URI.parse(url).normalize.host
     end
 
     def blacklisted_source?

@@ -134,7 +134,15 @@ describe "rake After:replace_dewplayer_embeds" do
     expect do
       subject.invoke
     end.to avoid_changing { embed_work.reload.first_chapter.content }
+      .and output("Updated 1 chapter(s).\n").to_stdout
 
     expect(dewplayer_work.reload.first_chapter.content).to include('<audio src="https://example.com/HINOTORI.mp3" controls="controls" crossorigin="anonymous" preload="metadata"></audio>')
+  end
+
+  it "outputs chapter IDs with Dewplayer embeds that couldn't be updated" do
+    allow_any_instance_of(Chapter).to receive(:update_attribute).and_raise("monkey wrench")
+    expect do
+      subject.invoke
+    end.to output("Couldn't update 1 chapter(s): #{dewplayer_work.first_chapter.id}\nUpdated 0 chapter(s).\n").to_stdout
   end
 end

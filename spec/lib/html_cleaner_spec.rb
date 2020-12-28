@@ -179,8 +179,8 @@ describe HtmlCleaner do
         end
 
         it "converts an Archive-hosted Dewplayer embed into an audio tag" do
-          html = '<embed type="application/x-shockwave-flash" flashvars="mp3=http://example.com/next-color-planet.mp3" src="https://archiveofourown.org/system/dewplayer/dewplayer.swf" width="200" height="27" allowscriptaccess="never" allownetworking="internal"></embed>'
-          expect(sanitize_value(field, html)).to include('<audio src="https://example.com/next-color-planet.mp3" controls="controls" crossorigin="anonymous" preload="metadata"></audio>')
+          html = '<embed type="application/x-shockwave-flash" flashvars="mp3=http://example.com/next%20color%20planet.mp3?dl=0" src="https://archiveofourown.org/system/dewplayer/dewplayer.swf" width="200" height="27" allowscriptaccess="never" allownetworking="internal"></embed>'
+          expect(sanitize_value(field, html)).to include('<audio src="https://example.com/next%20color%20planet.mp3?dl=0" controls="controls" crossorigin="anonymous" preload="metadata"></audio>')
         end
 
         it "converts an Archive-hosted Dewplayer multi embed into audio tags" do
