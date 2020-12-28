@@ -179,8 +179,18 @@ describe HtmlCleaner do
         end
 
         it "converts an Archive-hosted Dewplayer embed into an audio tag" do
-          html = '<embed type="application/x-shockwave-flash" flashvars="mp3=http://example.com/next%20color%20planet%27.mp3?dl=0" src="https://archiveofourown.org/system/dewplayer/dewplayer.swf" width="200" height="27" allowscriptaccess="never" allownetworking="internal"></embed>'
-          expect(sanitize_value(field, html)).to include('<audio src="https://example.com/next%20color%20planet%27.mp3?dl=0" controls="controls" crossorigin="anonymous" preload="metadata"></audio>')
+          html = '<embed type="application/x-shockwave-flash" flashvars="mp3=http://example.com/next%20color%20planet.mp3?dl=0" src="https://archiveofourown.org/system/dewplayer/dewplayer.swf" width="200" height="27" allowscriptaccess="never" allownetworking="internal"></embed>'
+          expect(sanitize_value(field, html)).to include('<audio src="https://example.com/next%20color%20planet.mp3?dl=0" controls="controls" crossorigin="anonymous" preload="metadata"></audio>')
+        end
+
+        it "converts an Archive-hosted Dewplayer embed with single quotes in the source URL into an audio tag" do
+          html = '<embed type="application/x-shockwave-flash" flashvars="mp3=http://example.com/\'quote%27.mp3" src="https://archiveofourown.org/system/dewplayer/dewplayer.swf" width="200" height="27" allowscriptaccess="never" allownetworking="internal"></embed>'
+          expect(sanitize_value(field, html)).to include('<audio src="https://example.com/\'quote%27.mp3" controls="controls" crossorigin="anonymous" preload="metadata"></audio>')
+        end
+
+        it "converts an Archive-hosted Dewplayer embed with double quotes in the source URL into an audio tag" do
+          html = '<embed type="application/x-shockwave-flash" flashvars=\'mp3=http://example.com/"quote%22.mp3\' src="https://archiveofourown.org/system/dewplayer/dewplayer.swf" width="200" height="27" allowscriptaccess="never" allownetworking="internal"></embed>'
+          expect(sanitize_value(field, html)).to include('<audio src="https://example.com/%22quote%22.mp3" controls="controls" crossorigin="anonymous" preload="metadata"></audio>')
         end
 
         it "converts an Archive-hosted Dewplayer embed with an encoded source URL into an audio tag" do
@@ -191,8 +201,7 @@ describe HtmlCleaner do
         it "converts an Archive-hosted Dewplayer multi embed into audio tags" do
           html = '<embed type="application/x-shockwave-flash" flashvars="mp3=http://example.com/live-again.mp3|http://example.com/cursed-night.mp3" src="https://archiveofourown.org/system/dewplayer/dewplayer.swf" width="200" height="27" allowscriptaccess="never" allownetworking="internal"></embed>'
           result = sanitize_value(field, html)
-          expect(result).to include('<audio src="https://example.com/live-again.mp3" controls="controls" crossorigin="anonymous" preload="metadata"></audio>')
-          expect(result).to include('<audio src="https://example.com/cursed-night.mp3" controls="controls" crossorigin="anonymous" preload="metadata"></audio>')
+          expect(result.squish).to eq('<p> <audio src="https://example.com/live-again.mp3" controls="controls" crossorigin="anonymous" preload="metadata"></audio> <br /> <audio src="https://example.com/cursed-night.mp3" controls="controls" crossorigin="anonymous" preload="metadata"></audio> </p>')
         end
 
         it "strips embeds with unknown source" do
