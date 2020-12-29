@@ -29,7 +29,7 @@ class Prompt < ApplicationRecord
   accepts_nested_attributes_for :optional_tag_set
   has_many :optional_tags, through: :optional_tag_set, source: :tag
 
-  has_many :request_claims, class_name: "ChallengeClaim", foreign_key: "request_prompt_id", inverse_of: :request_prompt
+  has_many :request_claims, class_name: "ChallengeClaim", foreign_key: "request_prompt_id", inverse_of: :request_prompt, dependent: :destroy
 
   # SCOPES
 
@@ -43,14 +43,6 @@ class Prompt < ApplicationRecord
     joins("JOIN set_taggings ON set_taggings.tag_set_id = prompts.tag_set_id").
     where("set_taggings.tag_id = ?", tag.id)
   }
-
-  # CALLBACKS
-
-  before_destroy :clear_claims
-  def clear_claims
-    # remove this prompt reference from any existing assignments
-    request_claims.each {|claim| claim.destroy}
-  end
 
   # VALIDATIONS
 

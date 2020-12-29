@@ -27,8 +27,7 @@ describe ChallengeClaimsController do
                                  "You aren't allowed to see that user's claims.")
     end
 
-    context "for a prompt meme" do
-      let(:signup) { create(:prompt_meme_signup) }
+    context "when multiple users have claims" do
       let!(:claim_by_other_user) { create(:challenge_claim, collection: collection, claiming_user: create(:user)) }
 
       it "does not allow a logged in user to access the page with everyone's claims" do
@@ -114,31 +113,29 @@ describe ChallengeClaimsController do
   end
 
   describe "destroy" do
-    context "for a prompt meme" do
-      context "when a user deletes their own claim" do
-        before do
-          claim.update!(claiming_user: user)
-        end
-
-        it "redirects them to their claims in collection page" do
-          fake_login_known_user(user)
-
-          delete :destroy, params: { id: claim.id, collection_id: collection.name }
-
-          it_redirects_to_with_notice(collection_claims_path(collection, for_user: true),
-                                      "Your claim was deleted.")
-        end
+    context "when a user deletes their own claim" do
+      before do
+        claim.update!(claiming_user: user)
       end
 
-      context "when a maintainer deletes someone else's claim" do
-        it "redirects them to the collection claims page" do
-          fake_login_known_user(collection.all_owners.first.user)
+      it "redirects them to their claims in collection page" do
+        fake_login_known_user(user)
 
-          delete :destroy, params: { id: claim.id, collection_id: collection.name }
+        delete :destroy, params: { id: claim.id, collection_id: collection.name }
 
-          it_redirects_to_with_notice(collection_claims_path(collection),
-                                      "The claim was deleted.")
-        end
+        it_redirects_to_with_notice(collection_claims_path(collection, for_user: true),
+                                    "Your claim was deleted.")
+      end
+    end
+
+    context "when a maintainer deletes someone else's claim" do
+      it "redirects them to the collection claims page" do
+        fake_login_known_user(collection.all_owners.first.user)
+
+        delete :destroy, params: { id: claim.id, collection_id: collection.name }
+
+        it_redirects_to_with_notice(collection_claims_path(collection),
+                                    "The claim was deleted.")
       end
     end
 
