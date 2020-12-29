@@ -672,4 +672,4 @@ Scenario: When a user is notified that a co-authored work has been inspired by a
       And I follow "HTML"
     Then I should not see "Worldbuilding"
       And I should not see "inspiration"
-      And I should see "a work in an unrevealed collection."
+      And I should see "Inspired by a work in an unrevealed collection."
