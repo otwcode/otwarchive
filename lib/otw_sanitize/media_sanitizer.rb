@@ -93,11 +93,11 @@ module OTWSanitize
 
     def source_host
       url = source_url
+      return nil if url.blank?
+
       # Just in case we're missing a protocol
-      unless url =~ /http/
-        url = "https://" + url
-      end
-      URI(url).host
+      url = "https://" + url unless url =~ /http/
+      Addressable::URI.parse(url).normalize.host
     end
 
     def blacklisted_source?
