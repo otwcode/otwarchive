@@ -1,5 +1,5 @@
 <% content_for :message do %>
-  <p>Dear <%= @user.default_pseud.byline %>,</p>
+  <p><%= t("mailer.general.greeting.formal", name: style_bold(@user.login)).html_safe %></p>
 
   <p>Your work <i><%= style_link(@work.title.html_safe, work_url(@work)) %></i> has been flagged by our automated system as spam and hidden until it can be reviewed by our Abuse team. While the work is hidden it can only be accessed by you and AO3 site admins.</p>
 

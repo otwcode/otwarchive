@@ -1,5 +1,5 @@
 <% content_for :message do %>
-  <p><%= t(".greeting", user: style_bold(@user.login)).html_safe %></p>
+  <p><%= t("mailer.general.greeting.formal", name: style_bold(@user.login)).html_safe %></p>
 
   <p><%= t(".main", count: @total) %></p>
   <p><%= t(".reason") %></p>

@@ -6,6 +6,7 @@ en:
         informal:
           addressed: "Hi, %{name}!"
           unaddressed: "Hi!"
+        formal: "Dear %{name},"
       signature:
         app_short_name: AO3
       footer:
@@ -42,7 +43,6 @@ en:
       closing: "Cheers,"
     admin_deleted_work_notification:
       subject: "[%{app_name}] Your work has been deleted by an admin"
-      hello: "Dear %{user},"
       opendoors: "contact Open Doors"
       abuse_committee: "contact our Abuse Committee"
       bye: "Attached is a copy of your work for your reference."
@@ -57,7 +57,6 @@ en:
     delete_work_notification:
       subject: "[%{app_name}] Your work has been deleted"
       support: "contact Support"
-      hello: "Dear %{user},"
       part2: "If you have questions, please %{support}."
       part3: "Attached is a copy of your work for your reference."
       html:
@@ -218,7 +217,6 @@ en:
         part15: "Organization for Transformative Works"
     invite_request_declined:
       subject: "[%{app_name}] Additional Invite Code Request Declined"
-      greeting: "Dear %{user},"
       reason: "Your request was:"
       signoff: "Regards,"
       main:
@@ -229,7 +227,6 @@ en:
         anonymous: "[%{app_name}] Your work was made anonymous"
         anonymous_unrevealed: "[%{app_name}] Your work was made anonymous and unrevealed"
         unrevealed: "[%{app_name}] Your work was made unrevealed"
-      greeting: "Dear %{user},"
       changed_status:
         anonymous: "The collection maintainers of %{collection} have changed the status of your work %{work} to anonymous."
         anonymous_unrevealed: "The collection maintainers of %{collection} have changed the status of your work %{work} to anonymous and unrevealed."

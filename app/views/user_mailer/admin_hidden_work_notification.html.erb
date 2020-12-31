@@ -1,5 +1,5 @@
 <% content_for :message do %>
-    <p>Dear <%= @user.default_pseud.byline %>,</p>
+    <p><%= t("mailer.general.greeting.formal", name: style_bold(@user.login)).html_safe %></p>
 
     <p>Your work <i><%= style_link(@work.title.html_safe, work_url(@work)) %></i> has been reported as being in violation of the Archive of Our Own's <%= style_link("Terms of Service", tos_url) %>.</p>
 

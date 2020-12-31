@@ -1,5 +1,5 @@
 <% content_for :message do %>
-Dear <%= @user.default_pseud.byline %>,
+<%= t("mailer.general.greeting.formal", name: @user.login) %>
 
 The collection maintainers of <%= @collection.title %> have added your work (<%= @work.title.html_safe %>) to their collection!
 

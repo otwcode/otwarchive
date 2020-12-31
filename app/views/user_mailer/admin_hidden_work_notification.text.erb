@@ -1,5 +1,5 @@
 <% content_for :message do %>
-    Dear <%= @user.default_pseud.byline %>,
+    <%= t("mailer.general.greeting.formal", name: @user.login) %>
 
     Your work "<%= @work.title.html_safe %>" (<%= work_url(@work) %>) has been reported to the Abuse Team as a violation of the Archive of Our Own's Terms of Service (<%= root_url + "tos" %>).
 
@@ -9,4 +9,4 @@
 
     Sincerely,
     AO3 Abuse
-<% end %>   
+<% end %>
