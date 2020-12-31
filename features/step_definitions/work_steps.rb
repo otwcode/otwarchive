@@ -1,3 +1,5 @@
+require 'cgi'
+
 DEFAULT_TITLE = "My Work Title"
 DEFAULT_FANDOM = "Stargate SG-1"
 DEFAULT_RATING = "Not Rated"
@@ -532,7 +534,7 @@ When /^I browse the "(.*?)" works with page parameter "(.*?)"$/ do |tagname, pag
 end
 
 When /^I delete the work "([^"]*)"$/ do |work|
-  work = Work.find_by(title: work)
+  work = Work.find_by(title: CGI.escapeHTML(work))
   visit edit_work_path(work)
   step %{I follow "Delete Work"}
   # If JavaScript is enabled, window.confirm will be used and this button will not appear
