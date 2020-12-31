@@ -1,4 +1,4 @@
-require 'cgi'
+require "cgi"
 
 DEFAULT_TITLE = "My Work Title"
 DEFAULT_FANDOM = "Stargate SG-1"
