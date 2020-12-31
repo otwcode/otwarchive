@@ -482,13 +482,13 @@ describe UserMailer do
       describe "HTML version" do
         it "has the correct content" do
           expect(email).to have_html_part_content("Hi, <b")
-          expect(email).to have_html_part_content("A. Name</b>")
+          expect(email).to have_html_part_content("#{feedback.username}</b>")
         end
       end
 
       describe "text version" do
         it "has the correct content" do
-          expect(email).to have_text_part_content("Hi, A. Name!")
+          expect(email).to have_text_part_content("Hi, #{feedback.username}!")
         end
       end
     end
