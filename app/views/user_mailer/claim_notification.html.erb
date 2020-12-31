@@ -1,6 +1,6 @@
 <% content_for :message do %>
   <h2 class="heading">
-    Hello from the Archive of Our Own!
+    <%= t("mailer.general.greeting.introductory", app_name: ArchiveConfig.APP_NAME) %>
   </h2>
 
   <p>You're receiving this e-mail because you had works in a fanworks archive that has been imported by <%= style_link('Open Doors', 'http://opendoors.transformativeworks.org/') %> into the <%= style_link('Archive of Our Own', root_url) %> (AO3). Because this e-mail address is connected to one registered on the imported archive, the associated fanworks (listed below) have been automatically added to your AO3 account.</p>

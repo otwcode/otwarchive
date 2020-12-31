@@ -6,7 +6,7 @@ en:
         informal:
           addressed: "Hi, %{name}!"
           unaddressed: "Hi!"
-        introductory: "Hello from the Archive of Our Own!"
+        introductory: "Hello from the %{app_name}!"
       signature:
         app_short_name: AO3
       footer:
@@ -137,7 +137,6 @@ en:
                   %{contact_support_link}, who are always happy to help out.
     invitation:
       subject: "[%{app_name}] Invitation"
-      greeting: "Hello from the %{app_name}!"
       has_invited: "%{user_name} has invited you to join our beta!"
       been_invited: "You've been invited to join our beta!"
       part1: "The Archive of Our Own (AO3) is a free, noncommercial archive built by and for fans. We are multifannish and welcome all kinds of fanworks, including fanfiction, fanart, fanvids, and podfic. We run on the open-source otwarchive software, and our servers are owned by the nonprofit Organization for Transformative Works, which works to protect fan rights and preserve fanworks."
@@ -177,7 +176,6 @@ en:
 
     invitation_to_claim:
       subject: "[%{app_name}] Invitation to claim works"
-      greeting: "Hello from the %{app_name}!"
 
       part6: "The works uploaded include:"
       part8: "To preserve rec lists and bookmarks, the imported archive's web addresses may redirect to the imported copy of these works for a limited time (check the announcement post for your archive to be sure). If you've already uploaded a copy of these works and you did NOT use the import from URL feature, there will be two copies of the same work on the archive."
