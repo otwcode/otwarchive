@@ -1,0 +1,15 @@
+---
+sv:
+  users:
+    mailer:
+      reset_password_instructions:
+        expiration: Om du inte använder den här länken för att återställa ditt lösenord
+          inom en vecka kommer den att gå ut och du behöver begära en ny länk.
+        intro: "%{user}, någon har begärt en återställning av ditt kontos lösenord.
+          Du kan ändra ditt lösenord genom att följa länken nedan och skriva in ditt
+          nya lösenord:"
+        link_title: Ändra mitt lösenord.
+        subject: "[%{app_name}] Återställ ditt lösenord"
+        unrequested: Om det inte var du som begärde återställning av ditt lösenord
+          så kan du bortse från det här mailet. Ditt tidigare lösenord kommer att
+          fortsätta fungera.

@@ -5,9 +5,9 @@ de:
       messages:
         record_invalid: 'Gültigkeitsprüfung ist fehlgeschlagen: %{errors}'
         restrict_dependent_destroy:
+          has_many: Datensatz kann nicht gelöscht werden, da abhängige %{record} existieren.
           has_one: Datensatz kann nicht gelöscht werden, da ein abhängiger %{record}-Datensatz
             existiert.
-          has_many: Datensatz kann nicht gelöscht werden, da abhängige %{record} existieren.
   date:
     abbr_day_names:
     - So
@@ -76,36 +76,36 @@ de:
         one: fast ein Jahr
         other: fast %{count} Jahre
       half_a_minute: eine halbe Minute
-      less_than_x_seconds:
-        one: weniger als eine Sekunde
-        other: weniger als %{count} Sekunden
       less_than_x_minutes:
         one: weniger als eine Minute
         other: weniger als %{count} Minuten
+      less_than_x_seconds:
+        one: weniger als eine Sekunde
+        other: weniger als %{count} Sekunden
       over_x_years:
         one: mehr als ein Jahr
         other: mehr als %{count} Jahre
-      x_seconds:
-        one: eine Sekunde
-        other: "%{count} Sekunden"
-      x_minutes:
-        one: eine Minute
-        other: "%{count} Minuten"
       x_days:
         one: ein Tag
         other: "%{count} Tage"
+      x_minutes:
+        one: eine Minute
+        other: "%{count} Minuten"
       x_months:
         one: ein Monat
         other: "%{count} Monate"
+      x_seconds:
+        one: eine Sekunde
+        other: "%{count} Sekunden"
       x_years:
         one: ein Jahr
         other: "%{count} Jahr"
     prompts:
-      second: Sekunde
-      minute: Minute
-      hour: Stunde
       day: Tag
+      hour: Stunde
+      minute: Minute
       month: Monat
+      second: Sekunde
       year: Jahr
   errors:
     format: "%{attribute} %{message}"
@@ -124,8 +124,8 @@ de:
       less_than: muss kleiner als %{count} sein
       less_than_or_equal_to: muss kleiner oder gleich %{count} sein
       model_invalid: 'Gültigkeitsprüfung ist fehlgeschlagen: %{errors}'
-      not_a_number: ist keine Zahl
       not_an_integer: muss ganzzahlig sein
+      not_a_number: ist keine Zahl
       odd: muss ungerade sein
       other_than: darf nicht gleich %{count} sein
       present: darf nicht ausgefüllt werden
@@ -172,22 +172,8 @@ de:
       decimal_units:
         format: "%n %u"
         units:
-          billion:
-            one: Milliarde
-            other: Milliarden
-          million:
-            one: Million
-            other: Millionen
-          quadrillion:
-            one: Billiarde
-            other: Billiarden
           thousand: Tausend
-          trillion:
-            one: Billion
-            other: Billionen
-          unit: ''
       format:
-        delimiter: ''
         precision: 3
         significant: true
         strip_insignificant_zeros: true
@@ -203,11 +189,7 @@ de:
           tb: TB
     percentage:
       format:
-        delimiter: ''
         format: "%n %"
-    precision:
-      format:
-        delimiter: ''
   support:
     array:
       last_word_connector: " und "

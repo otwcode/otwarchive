@@ -1,0 +1,152 @@
+---
+fi:
+  mailer:
+    general:
+      footer:
+        general:
+          html:
+            donate_link_text: lahjoitustenne
+            part1: Jos olet saanut tämän viestin virheellisesti, ole hyvä ja %{support_link}.
+            part2: Archive of Our Own (Oma arkisto) on fanien pyörittämä ja tukema
+              arkisto, joka toimii %{donate_link} varassa.
+            support_link_text: Ota yhteyttä Käyttäjätukeen
+          text:
+            part1: Jos olet saanut tämän viestin virheellisesti, ole hyvä ja ota yhteyttä
+              Käyttäjätukeen osoitteessa %{support_url}.
+            part2: 'Archive of Our Own (Oma arkisto) on fanien pyörittämä ja tukema
+              arkisto, joka toimii lahjoitustenne varassa: %{donate_url}.'
+        sent_at: Lähetetty %{sent_at}.
+        sent_by:
+          html: Lähettäjä <b>%{sent_by}</b>.
+          text: Lähettäjä %{sent_by}.
+      signature:
+        app_short_name: AO3
+    kudos:
+      guest:
+        one: vieras
+        other: "%{count} vierasta"
+      html:
+        left_kudos:
+          one: "%{givers_list} kehui teosta  <i>%{commentable_link}</i>."
+          other: "%{givers_list} kehuivat teosta <i>%{commentable_link}</i>."
+      text:
+        left_kudos:
+          one: "%{givers_list} kehui teosta %{commentable_link}."
+          other: "%{givers_list} kehuivat teosta %{commentable_link}."
+      you_have: "[%{app_name}] Sinulle on kehuja!"
+  user_mailer:
+    abuse_report:
+      description_para: 'Kuvaus väärinkäytöksestä:'
+      para1: 'Seuraava ilmoitus väärinkäytöksestä on lähetetty Säännöt ja väärinkäytökset
+        -toimikunnalle:'
+      subject: "[%{app_name}] Ilmoituksesi Säännöt ja väärinkäytökset -toimikunnalle"
+      url_para: 'Osoite, jossa väärinkäytös on:'
+    admin_deleted_work_notification:
+      abuse_committee: ota yhteyttä Säännöt ja väärinkäytökset -toimikuntaan
+      bye: Tähän viestiin on liitetty tiedoksesi kopio teoksestasi.
+      hello: Hyvä %{user},
+      html:
+        part1: Sivuston ylläpitäjä on poistanut teoksesi %{title} AO3:sta.
+        part2: Jos teoksesi kuului Open Doors (Avoimet ovet) -toimikunnan tuomaan
+          projektiin, ole hyvä ja %{opendoors_link}, jos sinulla on kysymyksiä.
+        part3: Jos teoksesi saattoi rikkoa AO3:n Käyttöehtoja, ole hyvä ja %{abuse_link}.
+      opendoors: ota yhteyttä Open Doors -toimikuntaan
+      subject: "[%{app_name}] Ylläpitäjä on poistanut teoksesi"
+      text:
+        part1: Sivuston ylläpitäjä on poistanut teoksesi "%{title}" AO3:sta.
+        part2: Jos teoksesi kuului Open Doors (Avoimet ovet) -toimikunnan tuomaan
+          projektiin, ole hyvä ja ota yhteyttä Open Doors -toimikuntaan (%{opendoors_link}),
+          jos sinulla on kysymyksiä.
+        part3: Jos teoksesi saattoi rikkoa AO3:n Käyttöehtoja, ole hyvä ja ota yhteyttä
+          Säännöt ja väärinkäytökset -toimikuntaan (%{abuse_link}).
+    change_email:
+      part1: "%{login}, tunnuksesi uudeksi sähköpostiosoitteeksi on asetettu %{email}"
+      subject: "[%{app_name}] Sähköpostiosoite muutettu"
+    creatorship_invitation:
+      html:
+        creation: "%{creation_link}, tekijä %{pseud_links}"
+        instructions: Voit hyväksyä tai hylätä kutsun %{page_name} -sivullasi.
+        page_name: Tekijäkutsut
+      intro: 'Käyttäjä %{inviting_user} on kutsunut nimimerkkisi %{pseud} listattavaksi
+        kanssatekijänä seuraavaan teokseen: %{type}:'
+      subject: "[%{app_name}] Kutsu kanssatekijäksi"
+      text:
+        creation: "%{title} (%{url}), tekijä %{pseuds}"
+        instructions: 'Voit hyväksyä tai hylätä kutsun Tekijäkutsut-sivullasi: %{url}'
+    creatorship_notification:
+      explanation: Teoksen kanssatekijnä sinut voidaan lisätä uusiin lukuihin riippumatta
+        tilisi kanssatekijyysasetuksista. Sinut lisätään myös kaikkiin sarjoihin,
+        joihin teos lisätään.
+      html:
+        creation: "%{creation_link}, tekijä(t) %{pseud_links}"
+        remove: Jos sinut on lisätty virheellisesti tai et halua, että sinut ilmoitetaan
+          tekijäksi, voit  %{edit} poistaaksesi itsesi tekijöistä.
+      subject: "[%{app_name}] Ilmoitus kanssatekijäksi lisäämisestä"
+      text:
+        creation: "%{title} (%{url}), tekijä(t) %{pseuds}"
+    creatorship_notification_archivist:
+      explanation: Koska hän teki näin virallisessa Open Doors -arkistonhoitajan roolissaan,
+        hän pystyi lisäämään sinut ilman kutsua, vaikka sinulla olisi toiseksi tekijäksi
+        lisääminen poissa käytöstä.
+      html:
+        creation: "%{pseud_links}: %{creation_link}"
+        edit: "%{type} on muokattavissa"
+        remove: Jos haluat poistaa itsesi tekijöistä, koska sinut on lisätty tekijäksi
+          virheellisesti  tai et halua olla nimettynä tekijänä, %{edit} linkin kautta.
+      subject: "[%{app_name}] Arkistonhoitajan ilmoitus toiseksi tekijäksi lisäämisestä"
+      text:
+        creation: "%{pseuds}: %{title} (%{url})"
+        remove: 'Jos haluat poistaa itsesi tekijöistä, koska sinut on lisätty tekijäksi
+          virheellisesti tai et halua olla nimettynä tekijänä, %{type} on muokattavissa
+          linkin kautta: %{url}'
+    invite_increase_notification:
+      body:
+        one: Halusimme vain kertoa, että sinulla on %{count} kpl uusia kutsuja, joilla
+          arkistoon voi luoda uusia tunnuksia. Voit kutsua ystävän mukaan sivulla
+          %{invitation_page}.
+        other: Halusimme vain kertoa, että sinulla on %{count} kpl uusia kutsuja,
+          joilla arkistoon voi luoda uusia tunnuksia. Voit kutsua ystävän mukaan sivulla
+          %{invitation_page}.
+      closing: Terveisin,
+      greeting: Hei %{login}!
+      subject: "[%{app_name}] Uusia kutsuja"
+      txt: "Hei %{login}\nHalusimme vain kertoa, että sinulla on %{total} kpl uusia
+        kutsuja, joilla arkistoon voi luoda uusia tunnuksia. Voit kutsua ystävän mukaan
+        sivulla %{invitation_page}.\nTerveisin, \n%{archive_name}"
+    invite_request_declined:
+      greeting: Hyvä %{user}
+      main:
+        one: Valitettavasti joudumme ilmoittamaan, että emme voi myöntää sinulle uutta
+          kutsua.
+        other: Valitettavasti joudumme ilmoittamaan, että emme voi myöntää sinulle
+          %{count} uutta kutsua.
+      reason: 'Pyyntösi oli:'
+      signoff: Terveisin
+      subject: "[%{app_name}] Pyyntösi ylimääräisistä kutsukoodeista on hylätty"
+    signup_notification:
+      activate_your_account: aktivoi tunnuksesi
+      admin_posts: AO3:n uutisista
+      bye: Toivomme, että nautit AO3:n käytöstä.
+      contact_support: ota yhteyttä Käyttäjätukeemme
+      faq: UKK:mme
+      html:
+        part1: Ole hyvä ja %{activate_account_link}.
+        part2: Kun tunnuksesi on valmis, voit julkaista faniteoksiasi, tilata suosikkitekijöidesi
+          ja -teostesi päivitykset sähköpostiisi, muuttaa sivuston ulkonäköä ja toimintoja
+          asetuksistasi, pitää kirjaa AO3:ssa katselemistasi teoksista ja paljon muuta.
+        part3: "%{faq_link} sisältää paljon tietoa ja neuvoja AO3:n käyttöön. Uusimmat
+          tiedot sivuston muutoksista löydät  %{admin_posts_link}. Jos tarvitset apua
+          tai törmäät bugiin, tai sinulla on kysymyksiä tai kommentteja, ole hyvä
+          ja  %{contact_support_link}, joka auttaa aina mielellään."
+      subject: "[%{app_name}] Vahvistus"
+      text:
+        part1: 'Aktivoi tunnuksesi: %{activate_account_url}'
+        part2: Kun tunnuksesi on valmis, voit julkaista faniteoksiasi, tilata suosikkitekijöidesi
+          ja -teostesi päivitykset sähköpostiisi, muuttaa sivuston ulkonäköä ja toimintoja
+          asetuksistasi, pitää kirjaa AO3:ssa katselemistasi teoksista ja paljon muuta.
+        part3: UKK:mme osoitteessa %{faq_url} sisältää paljon tietoa ja neuvoja AO3:n
+          käyttöön. Uusimmat tiedot sivuston muutoksista löydät AO3:n uutisista osoitteessa
+          %{admin_posts_url}. Jos tarvitset apua tai törmäät bugiin, tai sinulla on
+          kysymyksiä tai kommentteja, ole hyvä ja ota yhteyttä Käyttäjätukeemme, joka
+          auttaa aina mielellään osoitteessa %{contact_support_url}.
+      welcome: Tervetuloa Archive of Our Own - AO3:een (Oma arkisto), %{login}!

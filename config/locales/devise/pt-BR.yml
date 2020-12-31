@@ -1,0 +1,13 @@
+---
+pt-BR:
+  users:
+    mailer:
+      reset_password_instructions:
+        expiration: Caso você não utilize esse link para redefinir sua senha dentro
+          de uma semana, ele vai expirar e você terá que solicitar um novo link.
+        intro: "%{user}, alguém requisitou a redefinição da senha de sua conta. Para
+          alterar sua senha, acesse o seguinte link e insira sua nova senha:"
+        link_title: Redefinir minha senha.
+        subject: "[%{app_name}] Altere sua senha"
+        unrequested: Caso você não tenha solicitado a redefinição da sua senha, você
+          pode ignorar este e-mail e sua antiga senha vai continuar funcionando.

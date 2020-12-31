@@ -1,0 +1,103 @@
+---
+nl:
+  mailer:
+    general:
+      footer:
+        general:
+          html: |2
+
+            <p>Is dit bericht niet voor jou bedoeld? <a href="%{support_url}" style="color:#ffffff; text-decoration:underline">Neem dan contact op met Support</a>.</p>
+
+            AO3 is een door fans ondersteund archief dat afhankelijk is van <a href="%{donate_url}" style="color:#ffffff; text-decoration:underline">jouw donaties</a>.</p>
+    kudos:
+      guest:
+        one: een bezoeker
+        other: "%{count} bezoekers"
+      html:
+        left_kudos:
+          one: "%{givers_list} left kudos on <i>%{commentable_link}</i>."
+          other: "%{givers_list} hebben kudos achtergelaten op <i>%{commentable_link}</i>."
+      text:
+        left_kudos:
+          one: "%{givers_list} heeft kudos achtergelaten op %{commentable_link}."
+          other: "%{givers_list} hebben kudos achtergelaten op %{commentable_link}."
+      you_have: "[%{app_name}] Je hebt kudos ontvangen!"
+  user_mailer:
+    admin_deleted_work_notification:
+      abuse_committee: contacteer Beleid & Misbruik
+      bye: Bijgevoegd is een kopie van jouw werk ter referentie.
+      hello: Beste %{user},
+      html:
+        part1: Jouw werk %{title} werd verwijderd uit het Archief door een site admin.
+        part2: Als jouw werk geïmporteerd werd door ons Open Deuren team in het kader
+          van één van hun projecten, %{opendoors_link} met verdere vragen.
+        part3: Als het mogelijk is dat jouw werk de servicevoorwaarden van het Archief
+          schond, %{abuse_link}.
+      opendoors: contacteer Open Deuren
+      subject: "[%{app_name}] Jouw werk is verwijderd door een admin"
+      text:
+        part1: Jouw werk %{title} werd verwijderd uit het Archief door een site admin.
+        part2: Als jouw werk geïmporteerd werd door ons Open Deuren team in het kader
+          van één van hun projecten, contacteer Open Deuren (%{opendoors_link}) met
+          verdere vragen.
+        part3: Als het mogelijk is dat jouw werk de servicevoorwaarden van het Archief
+          schond, contacteer Beleid & Misbruik(%{abuse_link}).
+    challenge_assignment_notification:
+      any: Elke
+      description: 'Beschrijving:'
+      due: 'Deze taak moet klaar zijn op:'
+      html:
+        footer: Je krijgt deze e-mail omdat je ingeschreven bent bij de %{title} uitdaging.
+          Voor meer informatie over deze uitdaging en de contactinfo van de moderators,
+          ga naar %{footer_link}.
+        footer_link: profielpagina van de uitdaging
+        look_up: Je kan deze taak opzoeken vanaf %{link}.
+        look_up_link: Jouw Assignments (Taken) pagina
+        part1: De volgende aanvraag wordt aan jou toegewezen in de %{link} uitdaging
+          in het Archive of Our Own - AO3 (Ons Eigen Archief)!
+      optional_tags: 'Optionele Tags:'
+      prompts: 'Prompts:'
+      prompt_url: 'Prompt URL:'
+      recipient: 'Ontvanger:'
+      recipient_missing: 'Geen: vraag hulp aan een moderator!'
+      subject: "[%{app_name}][%{collection_title}] Jouw taak!"
+      text:
+        footer: Je krijgt deze e-mail omdat je ingeschreven bent bij de %{title} uitdaging
+          (%{url}). Voor meer informatie over deze uitdaging en de contactinfo van
+          de moderators, ga naar %{profile_url}.
+        look_up: Je kan deze taak opzoeken vanaf je Assignments (Taken) pagina via
+          %{link}.
+        part1: De volgende aanvraag wordt aan jou toegewezen in de %{collection_title}
+          (%{collection_url}) uitdaging in het Archive of Our Own - AO3 (Ons Eigen
+          Archief)!
+    change_email:
+      part1: "%{login}, het e-mailadres dat aan je account is gekoppeld, is gewijzigd
+        naar %{email}"
+      subject: "[%{app_name}] E-mail gewijzigd"
+    creatorship_notification:
+      explanation: Als medeproducent van een werk, kan je worden toegevoegd aan nieuwe
+        hoofdstukken ongeacht je instellingen. Je zal ook worden toegevoegd aan series
+        waaraan het werk wordt toegevoegd.
+      html:
+        creation: "%{creation_link} door  %{pseud_links}"
+        edit: het %{type} aanpassen
+        remove: Als je per ongeluk werd toegevoegd of niet als producent wil bekend
+          staan, dan kan je %{edit} om jezelf te verwijderen als producent
+      intro: 'De gebruiker %{adding_user} heeft je pseudoniem %{pseud} vastgelegd
+        als een medeproducent van het volgende %{type}:'
+      subject: "[%{app_name}] Medeproducent Notificatie"
+      text:
+        creation: "%{title} (%{url}) door %{pseuds}"
+        remove: 'Als je per ongeluk werd toegevoegd of niet als producent bekend wil
+          staan, dan kan je het %{type} aanpassen om jezelf te verwijderen als producent:
+          %{url}'
+    invite_request_declined:
+      greeting: Beste %{user},
+      main:
+        one: Het spijt ons je te informeren dat je verzoek voor een nieuwe uitnodiging
+          op dit moment niet vervuld kan worden.
+        other: Het spijt ons je te informeren dat je verzoek voor %{count} nieuwe
+          uitnodigingen op dit moment niet vervuld kan worden.
+      reason: 'Je verzoek was:'
+      signoff: Vriendelijke groeten,
+      subject: "[%{app_name}] Aanvraag Extra Uitnodigingscode Geweigerd"

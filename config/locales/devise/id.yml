@@ -1,0 +1,15 @@
+---
+id:
+  users:
+    mailer:
+      reset_password_instructions:
+        expiration: Tautan ini akan kadaluarsa jika Anda tidak menggunakannya untuk
+          mengubah kata sandi Anda dalam seminggu. Jika itu terjadi, Anda perlu meminta
+          tautan baru.
+        intro: "%{user}, seseorang telah meminta agar kata sandi akun Anda diatur
+          ulang. Kata sandi akun Anda dapat Anda ubah dengan mengikuti tautan berikut
+          dan memasukkan kata sandi yang baru:"
+        link_title: Ubah kata sandi saya.
+        subject: "[%{app_name}] Atur ulang kata sandi Anda"
+        unrequested: Jika tidak pernah meminta kata sandi Anda diatur ulang, mohon
+          abaikan surel ini. Kata sandi lama Anda akan tetap berfungsi.

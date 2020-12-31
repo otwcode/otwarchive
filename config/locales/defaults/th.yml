@@ -59,24 +59,13 @@ th:
     - :year
   datetime:
     distance_in_words:
-      about_x_hours: ประมาณ %{count} ชั่วโมง
-      about_x_months: ประมาณ %{count} เดือน
-      about_x_years: ประมาณ %{count} ปี
-      almost_x_years: เกือบ %{count} ปี
       half_a_minute: ครึ่งนาที
-      less_than_x_seconds: น้อยกว่า %{count} วินาที
-      less_than_x_minutes: น้อยกว่า %{count} นาที
-      over_x_years: มากกว่า %{count} ปี
-      x_seconds: "%{count} วินาที"
-      x_minutes: "%{count} นาที"
-      x_days: "%{count} วัน"
-      x_months: "%{count} เดือน"
     prompts:
-      second: วินาที
-      minute: นาที
-      hour: ชั่วโมง
       day: วัน
+      hour: ชั่วโมง
+      minute: นาที
       month: เดือน
+      second: วินาที
       year: ปี
   errors:
     format: "%{attribute} %{message}"
@@ -94,16 +83,12 @@ th:
       invalid: ไม่ถูกต้อง
       less_than: ต้องมีค่าน้อยกว่า %{count}
       less_than_or_equal_to: ต้องมีค่าน้อยกว่าหรือเท่ากับ %{count}
-      not_a_number: ไม่ใช่ตัวเลข
       not_an_integer: ไม่ใช่จำนวนเต็ม
+      not_a_number: ไม่ใช่ตัวเลข
       odd: ต้องเป็นจำนวนคี่
       taken: ถูกใช้ไปแล้ว
-      too_long: ยาวเกินไป (ต้องไม่เกิน %{count} ตัวอักษร)
-      too_short: สั้นเกินไป (ต้องยาวกว่า %{count} ตัวอักษร)
-      wrong_length: มีความยาวไม่ถูกต้อง (ต้องมีความยาว %{count} ตัวอักษร)
     template:
       body: 'โปรดตรวจสอบข้อมูลในช่องต่อไปนี้:'
-      header: พบข้อผิดพลาด %{count} ประการ ทำให้ไม่สามารถบันทึก%{model}ได้
   helpers:
     select:
       prompt: โปรดเลือก
@@ -136,26 +121,17 @@ th:
           quadrillion: พันล้านล้าน
           thousand: พัน
           trillion: ล้านล้าน
-          unit: ''
       format:
-        delimiter: ''
         precision: 3
         significant: true
         strip_insignificant_zeros: true
       storage_units:
         format: "%n %u"
         units:
-          byte: ไบต์
           gb: จิกะไบต์
           kb: กิโลไบต์
           mb: เมกะไบต์
           tb: เทระไบต์
-    percentage:
-      format:
-        delimiter: ''
-    precision:
-      format:
-        delimiter: ''
   support:
     array:
       last_word_connector: ", และ "

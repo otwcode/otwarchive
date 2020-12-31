@@ -1,0 +1,299 @@
+---
+id:
+  mailer:
+    kudos:
+      guest:
+        other: "%{count} tamu"
+      html:
+        left_kudos:
+          other: "%{givers_list} memberikan jempol pada <i>%{commentable_link}</i>."
+      text:
+        left_kudos:
+          other: "%{givers_list} memberikan jempol pada %{commentable_link}."
+      you_have: "[%{app_name}] Anda mendapatkan jempol!"
+  user_mailer:
+    abuse_report:
+      description_para: 'Deskripsi pelanggaran:'
+      para1: 'Laporan pelanggaran berikut telah dikirimkan ke tim Pelanggaran:'
+      subject: "[%{app_name}] Laporan Pelanggaran Anda"
+      url_para: 'Alamat URL halaman yang mengandung pelanggaran:'
+    admin_deleted_work_notification:
+      abuse_committee: hubungi komite Pelanggaran kami
+      bye: Terlampir adalah salinan karya Anda sebagai referensi.
+      hello: Kepada %{user},
+      html:
+        part1: Karya Anda, %{title}, telah dihapus dari Arsip oleh administrator situs.
+        part2: Jika karya Anda merupakan bagian dari proyek impor yang diatur oleh
+          tim Open Doors (Pintu Terbuka) kami, silakan %{opendoors_link} dengan pertanyaan
+          lebih lanjut.
+        part3: Jika ada kemungkinan karya Anda melanggar Ketentuan Layanan Arsip,
+          silakan %{abuse_link}.
+      opendoors: hubungi tim Pintu Terbuka
+      subject: "[%{app_name}] Karya Anda telah dihapus oleh seorang administrator"
+      text:
+        part1: Karya Anda, "%{title}", telah dihapus dari Arsip oleh administrator
+          situs.
+        part2: Jika karya Anda merupakan bagian dari proyek impor yang diatur oleh
+          tim Open Doors (Pintu Terbuka) kami, silakan hubungi tim Pintu Terbuka (%{opendoors_link})
+          dengan pertanyaan lebih lanjut.
+        part3: Jika ada kemungkinan karya Anda melanggar Ketentuan Layanan Arsip,
+          silakan hubungi Komite Pelanggaran kami (%{abuse_link}).
+    challenge_assignment_notification:
+      any: Apapun
+      description: 'Deskripsi:'
+      due: 'Tenggat waktu tugas ini adalah:'
+      html:
+        footer: Anda menerima surel ini karena Anda telah mendaftarkan diri untuk
+          mengikuti Challenge %{title}. Untuk informasi lebih lanjut terkait challenge
+          ini atau untuk mengontak moderator, silahkan kunjungi %{footer_link}.
+        footer_link: halaman profil challenge
+        look_up: Anda dapat melihat tugas ini pada %{link}.
+        look_up_link: halaman Assignments (Tugas) Anda
+        part1: Anda telah ditugaskan untuk memenuhi permintaan berikut dalam challenge
+          %{link} di Archive of Our Own (Arsip Milik Kita)!
+      optional_tags: 'Label Pilihan:'
+      prompts: 'Prompt:'
+      prompt_url: 'URL Prompt:'
+      recipient: 'Penerima:'
+      recipient_missing: 'Tidak tersedia: mohon kontak moderator untuk bantuan!'
+      subject: "[%{app_name}][%{collection_title}] Tugas Anda!"
+      text:
+        footer: Anda menerima surel ini karena Anda telah mendaftarkan diri untuk
+          mengikuti Challenge %{title} (%{url}). Untuk informasi lebih lanjut terkait
+          challenge ini atau untuk mengontak moderator, silakan kunjungi %{profile_url}.
+        look_up: Anda dapat melihat tugas ini dari halaman Assignments (Tugas) di
+          %{link}.
+        part1: Anda telah diberikan tugas untuk memenuhi permintaan berikut dalam
+          challenge %{collection_title} (%{collection_url}) di Arsip Milik Kita!
+    change_email:
+      part1: "%{login}, alamat surel yang diasosiasikan dengan akun Anda telah diganti
+        ke %{email}"
+      subject: "[%{app_name}] Alamat surel telah diganti"
+    creatorship_invitation:
+      html:
+        creation: "%{creation_link} oleh %{pseud_links}"
+        instructions: Anda dapat menerima atau menolak undangan ini di halaman %{page_name}
+          Anda.
+        page_name: Undangan Rekan Pencipta
+      intro: "%{inviting_user} telah mengundang nama alias %{pseud} Anda untuk menjadi
+        rekan pencipta untuk %{type} berikut:"
+      subject: "[%{app_name}] Undangan untuk menjadi rekan pencipta"
+      text:
+        creation: "%{title} (%{url}) oleh %{pseuds}"
+        instructions: 'Anda dapat menerima atau menolak undangan ini di halaman Undangan
+          Rekan Pencipta Anda: %{url}'
+    creatorship_notification:
+      explanation: Ketika Anda menjadi seorang rekan pencipta sebuah karya, Anda dapat
+        ditambahkan pada bab-bab terbaru dalam karya terlepas dari pengaturan pembuatan
+        karya rekanan sebelumnya. Anda juga akan ditambahkan ke dalam seri manapun
+        tempat karya tersebut berada.
+      html:
+        creation: "%{creation_link} oleh %{pseud_links}"
+        edit: menyunting %{type}
+        remove: Jika Anda ditambahkan akibat kesalahan atau Anda tidak ingin didaftarkan
+          sebagai pencipta, Anda dapat %{edit} untuk menghapus status Anda sebagai
+          pencipta.
+      intro: 'Pengguna %{adding_user} telah mendaftarkan nama pengguna Anda %{pseud}
+        sebagai rekan pencipta pada karya berikut %{type}:'
+      subject: "[%{app_name}] Notifikasi Rekan Pencipta"
+      text:
+        creation: "%{title} (%{url}) oleh %{pseuds}"
+        remove: 'Jika Anda ditambahkan akibat kesalahan atau tidak ingin didaftarkan
+          sebagai pencipta, Anda dapat menyunting %{type} untuk menghapus status Anda
+          sebagai pencipta: %{url}'
+    creatorship_notification_archivist:
+      explanation: Karena berlaku dalam kapasitas resmi sebagai pengarsip Open Doors,
+        ia diizinkan untuk menunjuk Anda sebagai rekan pencipta tanpa undangan, walaupun
+        Anda telah mematikan opsi untuk menjadi rekan pencipta.
+      html:
+        creation: "%{creation_link} oleh %{pseud_links}"
+        edit: sunting %{type}
+        remove: Jika ada kesalahan dalam penunjukan ini atau Anda tidak ingin ditunjuk
+          sebagai pencipta, Anda dapat %{edit} untuk menghapus alias Anda sebagai
+          pencipta.
+      intro: 'Pengarsip %{archivist} telah menunjuk alias %{pseud} Anda sebagai rekan
+        pencipta untuk %{type} berikut:'
+      subject: "[%{app_name}] Notifikasi penunjukan sebagai rekan pencipta oleh pengarsip"
+      text:
+        creation: "%{title} (%{url}) oleh %{pseuds}"
+        remove: 'Jika ada kesalahan dalam penunjukan ini atau Anda tidak ingin ditunjuk
+          sebagai pencipta, Anda dapat menyunting %{type} ini untuk menghapus alias
+          Anda sebagai pencipta: %{url}'
+    delete_work_notification:
+      hello: Kepada %{user},
+      html:
+        part1_other: Karya Anda, %{title}, telah dihapus atas permintaan %{pseud}.
+        part1_yourself: Karya Anda, %{title}, telah dihapus atas permintaan Anda.
+        part2: Jika Anda memiliki pertanyaan, silakan %{support}.
+      part2: Jika Anda memiliki pertanyaan, silakan %{support}.
+      part3: Attached is a copy of your work for your reference.
+      subject: "[%{app_name}] Karya Anda telah dihapus"
+      support: hubungi Komite Dukungan
+      text:
+        part1_other: Karya Anda, \"%{title}\", telah dihapus atas permintaan %{pseud}.
+        part1_yourself: Karya Anda, \"%{title}\", telah dihapus atas permintaan Anda.
+        part2: Jika Anda memiliki pertanyaan, silakan %{support} (%{url}).
+    invitation_to_claim:
+      greeting: Halo dari %{app_name}!
+      html:
+        ao3_news: Berita AO3
+        contact_open_doors: kontak Pintu Terbuka (Open Doors)
+        contact_support: kontak dukungan AO3
+        faq_page: Halaman Pertanyaan Yang Sering Diajukan
+        open_doors: Pintu Terbuka (Open Doors)
+        part1: Anda telah menerima surel ini karena baru-baru ini ada arsip yang telah
+          diimpor oleh %{open_doors_link} ke %{app_link} (%{app_short_name}), dan
+          sejauh pengetahuan kami, karya-karya fans berikut ini merupakan milik Anda.
+          Kami memberikan Anda kesempatan untuk mengklaim (atau menghapus/meninggalkan)
+          karya-karya ini jika Anda ingin. Jika Anda belum mempunyai akun AO3 dengan
+          alamat surel yang berbeda, kami mengundang Anda untuk bergabung dengan kami!
+        part10: Jika Anda memiliki karya-karya lain di arsip impor yang menggunakan
+          alamat surel yang sudah tidak dapat Anda akses, harap kontak %{open_doors_link}
+          dengan menyertakan informasi apapun yang dapat memverifikasi identitas Anda.
+        part11: Untuk pertanyaan-pertanyaan lain, harap %{support_link}.
+        part13: Hormat kami,
+        part14: Tim Pintu Terbuka (Open Doors)
+        part15: Organisasi untuk Karya Transformatif (Organization for Transformative
+          Works)
+        part2: Anda dapat membaca pemberitahuan tentang kegiatan terbaru arsip di
+          %{news_link}, serta mendapat informasi tambahan mengenai Pintu Terbuka (Open
+          Door) %{open_doors_faq_link} atau %{open_doors_tutorial_link}. Untuk pertanyaan-pertanyaan
+          yang belum terjawab di Pertanyaan Yang Sering Diajukan, tutorial, atau surel
+          ini, harap %{support_link}.
+        part3: Jika ini adalah sebuah kesalahan dan karya-karya ini bukan milik Anda,
+          mohon jangan hapus karya-karya ini! Tolong %{open_doors_link} dan kami akan
+          menanganinya.
+        part4: Tergantung pada arsip asalnya, karya-karya Anda mungkin saja telah
+          diimpor dan hanya dapat dilihat oleh pengguna yang terdaftar saja (untuk
+          mencegah pencarian karya tersebut melalui Google). Jika hal ini terjadi,
+          karya-karya tersebut hanya dapat diakses oleh pengguna yang telah log masuk,
+          kecuali jika Anda membuka akses terhadap karya Anda. Untuk bantuan membuka
+          karya, meninggalkan karya, atau menghapus karya, harap %{support_link}.
+        part5: Klaim atau hapus karya-karya Anda disini.
+        part7: Jika karya-karya ini milik Anda, tetapi Anda tidak menginginkan karya-karya
+          ini lagi, Anda dapat meninggalkan mereka (sehingga mereka dapat tetap berada
+          di AO3, tetapi nama Anda akan terhapus) atau menghapus mereka (sehingga
+          karya-karya tersebut akan dihapus dari AO3). Untuk meninggalkan atau menghapus
+          karya, Anda tidak perlu menambahkannya ke akun manapun--Anda dapat melakukan
+          ini langsung melalui tautan klaim diatas. (Untuk bantuan, harap %{support_link}.)
+        part9: Jika Anda ingin Pintu Terbuka (Open Doors) untuk memperbarui tautan
+          pengalihan agar mengarahkan ke karya Anda sebelumnya, harap hapus salinan
+          terimpor, lalu %{open_doors_link} menggunakan nama akun AO3 Anda, nama akun
+          Anda di arsip terimpor, dan judul dan URL karya fan yang akan dituju oleh
+          tautan pengalihan Anda. (Jika Anda memiliki beberapa karya yang ingin Anda
+          ganti tautan pengalihannya, Anda dapat menuliskan semua tautan tersebut
+          dalam satu surel.)
+        tutorial_page: halaman tutorial
+      part12: Jika Anda ingin menghubungi kami, harap masukkan alamat-alamat surel
+        dari @transformativeworks.org ke daftar putih dan cek folder spam Anda untuk
+        memastikan Anda menerima balasan kami.
+      part6: 'Karya-karya yang diunggah termasuk:'
+      part8: Guna mempertahankan daftar rekomendasi dan markah buku, alamat-alamat
+        web yang tertera di arsip yang telah diimpor dapat menuju ke salinan karya-karya
+        impor ini selama jangka waktu yang terbatas (cek postingan pemberitahuan untuk
+        arsip Anda untuk memastikannya). Jika Anda telah mengunggah salinan dari karya-karya
+        ini dan Anda tidak menggunakan fitur impor dari URL, akan ada dua salinan
+        karya yang sama di dalam arsip.
+      subject: "[%{app_name}] Undangan untuk mengklaim karya"
+      text:
+        part1: Anda telah menerima surel ini karena baru-baru ini ada arsip yang telah
+          diimpor oleh Pintu Terbuka (Open Doors) %{open_doors_link} ke %{app_name}
+          (%{app_short_name} - %{app_url}), dan sejauh pengetahuan kami karya-karya
+          berikut ini adalah milik Anda. Kami memberikan Anda kesempatan untuk mengklaim
+          (atau menghapus/meninggalkan karya) karya-karya jika Anda ingin. Jika Anda
+          belum mempunyai akun AO3 dengan  alamat surel yang berbeda, kami mengundang
+          Anda untuk bergabung dengan kami!
+        part10: Jika Anda memiliki karya-karya lain di arsip impor di bawah alamat
+          surel yang sudah tidak dapat Anda akses, harap kontak Pintu Terbuka dengan
+          menyertakan informasi yang dapat kami gunakan untuk memverifikasi identitas
+          Anda.
+        part11: Untuk pertanyaan-pertanyaan lain, harap kontak Komite Dukungan AO3
+          di %{support_link}.
+        part13: "Hormat Kami,\nTim Pintu Terbuka (Open Doors)\nOrganisasi untuk Karya
+          Transformatif "
+        part2: Anda dapat membaca pemberitahuan tentang kegiatan terbaru arsip di
+          Berita AO3  %{news_link}, dan menemukan informasi tambahan mengenai halaman
+          Pertanyaan Yang Sering Diajukan Mengenai Pintu Terbuka (Open Door) %{open_doors_faq_link}
+          atau halaman tutorial %{open_doors_tutorial_link}. Untuk pertanyaan-pertanyaan
+          yang belum terjawab di Pertanyaan Yang Sering Diajukan, tutorial, atau surel
+          ini, harap hubungi Komite Dukungan di %{support_link}.
+        part3: Jika ini adalah suatu kesalahan dan ini bukan karya-karya Anda, harap
+          jangan hapus karya-karya ini! Tolong %{open_doors_link} dan kami akan menanganinya.
+        part4: Tergantung dengan arsip, karya-karya Anda mungkin saja telah diimpor
+          dan hanya dapat dilihat oleh pengguna yang terdaftar saja (untuk mencegah
+          pencarian karya tersebut melalui Google). Jika ini terjadi, karya-karya
+          tersebut hanya dapat diakses oleh pengguna yang telah log masuk, kecuali
+          Anda membuka akses bagi karya Anda. Untuk bantuan membuka karya, meninggalkan
+          karya, atau menghapus karya, harap hubungi Komite Dukungan AO3.
+        part5: 'Klaim atau hapus karya-karya Anda di sini: %{claim_url}'
+        part7: Jika karya-karya ini milik Anda, tetapi Anda tidak menginginkan karya-karya
+          ini lagi, Anda dapat meninggalkan mereka (sehingga mereka dapat tetap berada
+          di AO3, tetapi nama Anda akan terhapus) atau menghapus mereka (sehingga
+          karya-karya tersebut akan dihapus dari AO3). Untuk meninggalkan atau menghapus
+          karya, Anda tidak perlu menambahkannya ke akun manapun--Anda dapat melakukannya
+          langsung melalui tautan klaim diatas. (Untuk bantuan, harap hubungi Komite
+          Dukungan di %{support_link}.)
+        part9: If Jika Anda ingin Pintu Terbuka (Open Doors) untuk memperbarui tautan
+          pengalihan sehingga mengarahkan ke karya Anda yang telah ada sebelumnya,
+          harap hapus salinan impor, lalu hubungi Pintu Terbuka (Open Doors) di %{open_doors_link}
+          menggunakan nama akun AO3 Anda, nama akun Anda di arsip terimpor, dan judul
+          serta URL dari karya fan yang akan dituju oleh pengalihan Anda. (Jika Anda
+          memiliki beberapa karya yang ingin Anda ganti tautan pengalihannya, Anda
+          dapat menuliskan semua tautan tersebut dalam satu surel.)
+    invite_increase_notification:
+      body:
+        other: Kami hanya ingin memberitahu Anda, bahwa Anda memiliki %{count} undangan
+          baru yang dapat digunakan untuk membuat akun baru di Archive of Our Own
+          - AO3 (Arsip Milik Kita). Anda dapat mengundang teman Anda di %{invitation_page}.
+      closing: Salam,
+      greeting: " Hi %{login}!"
+      html: |-
+        <p> Halo %{login}! </p>\n\
+                  <p> Kami hanya ingin memberitahu Anda, bahwa Anda memiliki %{total} undangan baru yang dapat digunakan untuk membuat akun baru di Archive of Our Own - AO3 (Arsip Milik Kita). Anda dapat mengundang teman Anda di %{invitation_page}. </p>\n\
+                  <p> Salam, <br> %{archive_name}</p>
+      subject: "[%{app_name}] Undangan Baru"
+      txt: "Halo %{login}\n          Kami hanya ingin memberitahu Anda,  bahwa Anda
+        memiliki %{total} undangan baru yang dapat digunakan untuk membuat akun baru
+        di Archive of Our Own - AO3 (Arsip Milik Kita). Anda dapat mengundang teman
+        Anda di %{invitation_page}.\n          Salam, \n          %{archive_name}\n"
+    invite_request_declined:
+      greeting: Yang terhormat %{user},
+      main:
+        other: Kami mohon maaf karena permintaan Anda untuk %{count} undangan baru
+          tidak dapat kami penuhi saat ini.
+      reason: 'Permintaan Anda adalah:'
+      signoff: Salam,
+      subject: "[%{app_name}] Permintaan Kode Undangan Tambahan Ditolak"
+    signup_notification:
+      activate_your_account: aktifkan akun Anda
+      admin_posts: postingan admin AO3
+      bye: Kami harap Anda menikmati menggunakan AO3.
+      contact_support: hubungi tim Dukungan kami
+      faq: Pertanyaan yang Sering Diajukan
+      html:
+        part1: Mohon %{activate_account_link}.
+        part2: Setelah akun Anda tersedia dan aktif, Anda dapat memposting karya-karya
+          penggemar, mengatur layanan surel langganan untuk memberitahu Anda saat
+          pembuat konten favorit Anda memposting karya terbaru atau karya favorit
+          Anda diperbarui, mengatur tampilan situs, melacak karya-karya yang telah
+          Anda buka melalui riwayat, dan lain-lain.
+        part3: Terdapat banyak informasi dan saran mengenai cara penggunaan AO3 yang
+          tersedia di %{faq_link} kami. Anda dapat menemukan berita terbaru mengenai
+          perkembangan situs di %{admin_posts_link} kami. Jika Anda membutuhkan bantuan,
+          menemukan <i>bug</i>, atau ingin mengajukan pertanyaan atau komentar, mohon
+          %{contact_support_link}, yang dengan senang hati akan membantu Anda.
+      subject: "[%{app_name}] Konfirmasi"
+      text:
+        part1: 'Mohon aktifkan akun Anda: %{activate_account_url}'
+        part2: Setelah akun Anda tersedia dan aktif, Anda dapat memposting karya-karya
+          penggemar, mengatur layanan surel langganan untuk memberitahu Anda saat
+          pembuat konten favorit Anda memposting karya terbaru atau karya favorit
+          Anda diperbarui, mengatur tampilan situs, melacak karya-karya yang telah
+          Anda buka melalui riwayat, dan lain-lain.
+        part3: 'Terdapat banyak informasi dan saran mengenai cara penggunaan AO3 yang
+          tersedia di Pertanyaan yang Sering Diajukan kami pada %{faq_url}. Anda dapat
+          menemukan berita terbaru mengenai perkembangan situs di postingan admin
+          AO3 pada %{admin_posts_url}. Jika Anda membutuhkan bantuan, menemukan <i>bug</i>,
+          atau ingin mengajukan pertanyaan atau komentar, mohon hubungi tim Dukungan
+          kami, yang dengan senang hati akan membantu Anda: %{contact_support_url}.'
+      welcome: Selamat datang di Archive of Our Own – AO3 (Arsip Milik Kita), %{login}!

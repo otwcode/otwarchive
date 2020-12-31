@@ -1,0 +1,14 @@
+---
+hr:
+  users:
+    mailer:
+      reset_password_instructions:
+        expiration: Ako ne iskoristite ovu poveznicu za resetiranje lozinke unutar
+          tjedan dana, isteći će i morati ćete zatražiti novu poveznicu.
+        intro: "%{user}, netko je zatražio resetiranje lozinke za Vaš korisnički račun.
+          Svoju lozinku možete promijeniti tako da pratite poveznicu ispod i unesete
+          Vašu novu lozinku:"
+        link_title: Promijeni moju lozinku.
+        subject: "[%{app_name}] Resetirajte svoju lozinku"
+        unrequested: Ako Vi niste zatražili resetiranje lozinke, možete ignorirati
+          ovaj email i Vaša će prijašnja lozinka nastaviti funkcionirati.

@@ -1,0 +1,15 @@
+---
+vi:
+  users:
+    mailer:
+      reset_password_instructions:
+        expiration: Nếu trong thời hạn 1 tuần bạn không dùng đường link này để đặt
+          lại mật khẩu, đường link sẽ mất hiệu lực và bạn sẽ cần yêu cầu một đường
+          link mới.
+        intro: "%{user}, ai đó đã yêu cầu đặt lại mật khẩu cho tài khoản của bạn.
+          Bạn có thể thay đổi mật khẩu bằng cách nhấn vào đường link bên dưới và điền
+          mật khẩu mới."
+        link_title: Thay đổi mật khẩu của tôi.
+        subject: "[%{app_name}] Đặt lại mật khẩu"
+        unrequested: Nếu bạn không yêu cầu đặt lại mật khẩu, bạn có thể bỏ qua email
+          này và mật khẩu cũ của bạn sẽ tiếp tục có hiệu lực.

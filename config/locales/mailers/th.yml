@@ -1,0 +1,6 @@
+---
+th:
+  user_mailer:
+    change_email:
+      part1: "%{login}, อีเมล์ที่เกี่ยวข้องกับบัญชีของคุณถูกเปลี่ยนเป็น %{email}"
+      subject: "[%{app_name}] อีเมล์ถูกเปลี่ยนแล้ว"

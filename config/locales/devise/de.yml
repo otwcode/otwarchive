@@ -1,0 +1,14 @@
+---
+de:
+  users:
+    mailer:
+      reset_password_instructions:
+        expiration: Wenn Du den Link zur Passwortzurücksetzung nicht innerhalb der
+          nächsten sieben Tage nutzt, verfällt er und Du musst einen neuen anfordern.
+        intro: "%{user}, jemand hat ein neues Passwort für Dein Nutzerkonto angefordert.
+          Du kannst Dein Passwort ändern, indem Du den untenstehenden Link anklickst
+          und Dein neues Passwort eingibst:"
+        link_title: Passwort ändern.
+        subject: "[%{app_name}] Setze Dein Passwort zurück"
+        unrequested: Wenn Du keine Zurücksetzung Deines Passworts beantragt hast,
+          kannst Du diese E-Mail ignorieren und Dein altes Passwort bleibt gültig.

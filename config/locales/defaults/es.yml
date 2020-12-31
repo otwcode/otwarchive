@@ -5,8 +5,8 @@ es:
       messages:
         record_invalid: 'La validación falló: %{errors}'
         restrict_dependent_destroy:
-          has_one: No se puede eliminar el registro porque existe un %{record} dependiente
           has_many: No se puede eliminar el registro porque existen %{record} dependientes
+          has_one: No se puede eliminar el registro porque existe un %{record} dependiente
   date:
     abbr_day_names:
     - dom
@@ -75,36 +75,36 @@ es:
         one: casi 1 año
         other: casi %{count} años
       half_a_minute: medio minuto
-      less_than_x_seconds:
-        one: menos de 1 segundo
-        other: menos de %{count} segundos
       less_than_x_minutes:
         one: menos de 1 minuto
         other: menos de %{count} minutos
+      less_than_x_seconds:
+        one: menos de 1 segundo
+        other: menos de %{count} segundos
       over_x_years:
         one: más de 1 año
         other: más de %{count} años
-      x_seconds:
-        one: 1 segundo
-        other: "%{count} segundos"
-      x_minutes:
-        one: 1 minuto
-        other: "%{count} minutos"
       x_days:
         one: 1 día
         other: "%{count} días"
+      x_minutes:
+        one: 1 minuto
+        other: "%{count} minutos"
       x_months:
         one: 1 mes
         other: "%{count} meses"
+      x_seconds:
+        one: 1 segundo
+        other: "%{count} segundos"
       x_years:
         one: 1 año
         other: "%{count} años"
     prompts:
-      second: Segundo
-      minute: Minuto
-      hour: Hora
       day: Día
+      hour: Hora
+      minute: Minuto
       month: Mes
+      second: Segundo
       year: Año
   errors:
     format: "%{attribute} %{message}"
@@ -123,8 +123,8 @@ es:
       less_than: debe ser menor que %{count}
       less_than_or_equal_to: debe ser menor que o igual a %{count}
       model_invalid: 'La validación falló: %{errors}'
-      not_a_number: no es un número
       not_an_integer: debe ser un entero
+      not_a_number: no es un número
       odd: debe ser impar
       other_than: debe ser distinto de %{count}
       present: debe estar en blanco
@@ -172,17 +172,9 @@ es:
         format: "%n %u"
         units:
           billion: mil millones
-          million:
-            one: millón
-            other: millones
           quadrillion: mil billones
           thousand: mil
-          trillion:
-            one: billón
-            other: billones
-          unit: ''
       format:
-        delimiter: ''
         precision: 1
         significant: true
         strip_insignificant_zeros: true
@@ -200,11 +192,7 @@ es:
           tb: TB
     percentage:
       format:
-        delimiter: ''
         format: "%n %"
-    precision:
-      format:
-        delimiter: ''
   support:
     array:
       last_word_connector: " y "

@@ -1,0 +1,10 @@
+---
+zh-CN:
+  users:
+    mailer:
+      reset_password_instructions:
+        expiration: 此链接一周后失效，如果您届时仍未修改密码，则需要申请新的链接。
+        intro: "%{user}，有人提出了重设您的账号密码的申请。您可以进入下方的链接对密码进行更改："
+        link_title: 更改我的密码。
+        subject: "[%{app_name}] 重设您的密码"
+        unrequested: 如果您没有申请重设密码，请忽略此邮件，继续使用您原本的密码。

@@ -1,0 +1,14 @@
+---
+it:
+  users:
+    mailer:
+      reset_password_instructions:
+        expiration: Se non utilizzi questo link per reimpostare la tua password entro
+          una settimana, esso scadrà e dovrai richiederne uno nuovo.
+        intro: "%{user}, è stato richiesto di reimpostare la password del tuo account.
+          Puoi cambiare la tua password cliccando il seguente link e immettendo la
+          tua nuova password:"
+        link_title: Cambia la mia password.
+        subject: "[%{app_name}] Reimposta la tua password"
+        unrequested: Se la richiesta di reimpostare la password non è tua, puoi ignorare
+          questa email e la tua password attuale continuerà a funzionare.

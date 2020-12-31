@@ -1,0 +1,114 @@
+---
+hu:
+  mailer:
+    general:
+      footer:
+        general:
+          html: |-
+            <p>
+            Ha tévedésből kaptad ezt az emailt, <a href="%{support_url}" style="color:#ffffff; text-decoration:underline">lépj kapcsolatba a Támogatással</a>.
+            </p>
+
+            <p>
+            Az Archive of Our Own egy rajongók által működtetett és támogatott archívum, amely  <a href="%{donate_url}" style="color:#ffffff; text-decoration:underline">a Te adományaidból épül</a>.
+            </p>
+          text:
+            part1: 'Ha tévedésből kaptad ezt az emailt, lépj kapcsolatba a Támogatással:
+              %{support_url}.'
+            part2: 'Az Archive of Our Own egy rajongók által működtetett és támogatott
+              archívum, amely a Te adományaidból épül: %{donate_url}.'
+        sent_at: 'Dátum: %{sent_at}.'
+        sent_by:
+          html: 'Feladó: <b>%{sent_by}</b>.'
+          text: 'Feladó: %{sent_by}.'
+    kudos:
+      guest:
+        one: egy vendég
+        other: "%{count} vendég"
+      html:
+        left_kudos:
+          one: "%{givers_list} kudost hagyott itt: <i>%{commentable_link}</i>."
+          other: "%{givers_list} kudost hagyott itt: <i>%{commentable_link}</i>."
+      text:
+        left_kudos:
+          one: "%{givers_list} kudost hagyott itt: %{commentable_link}."
+          other: "%{givers_list} kudost hagyott itt: %{commentable_link}."
+      you_have: "​[%{app_name}]​​ ​Kudost kaptál!"
+  user_mailer:
+    abuse_report:
+      description_para: 'Visszaélés leírása:'
+      para1: 'A következő visszaélés bejelentést küldted a Szabályzat és visszaélés
+        csoportnak:'
+      subject: "[%{app_name}] Visszaélés bejelentésed"
+      url_para: 'Azon oldal URL-je, ahol a visszaélés történt:'
+    admin_deleted_work_notification:
+      abuse_committee: lépj kapcsolatba a Szabályzat & Visszaélés bizottsággal
+      bye: Csatoltuk a munkád másolatát.
+      hello: Kedves %{user},
+      html:
+        part1: A munkád, %{title} törölve lett az Archívumból egy admin által.
+        part2: Ha a munkád része volt az Open Doors (Nyitott Ajtók) egyik importálási
+          projektjének, további kérdéseiddel %{opendoors_link}.
+        part3: Ha előfordulhat, hogy a munkád megsértette az Archívum Szolgáltatási
+          Feltételeit, %{abuse_link}.
+      opendoors: lépj kapcsolatba a Nyitott Ajtók bizottsággal
+      subject: "[%{app_name}] A munkádat törölte egy admin"
+      text:
+        part1: '"A munkád, "%{title}" törölve lett az Archívumból egy oldal admin
+          által.'
+        part2: Ha a munkád része volt az Open Doors (Nyitott Ajtók) egyik importálási
+          projektjének, további kérdéseiddel lépj kapcsolatba a Nyitott Ajtók (%{opendoors_link})
+          bizottsággal.
+        part3: Ha előfordulhat, hogy a munkád megsértette az Archívum Szolgáltatási
+          Feltételeit, lépj kapcsolatba a Szabályzat & Visszaélés bizottsággal (%{abuse_link}).
+    change_email:
+      part1: "%{login}, a fiókodhoz tartozó email cím a következőre változott: %{email}"
+      subject: "[%{app_name}] Megváltozott email cím"
+    creatorship_notification:
+      explanation: Ha egy mű társalkotója vagy, akkor új fejezetekhez adhatnak hozzá
+        függetlenül a társalkotói beállításaidtól. Minden olyan sorozathoz is hozzá
+        fognak adni, amelyhez a művet hozzáadják.
+      html:
+        creation: "%{pseud_links}: %{creation_link}"
+        edit: a %{type} szerkesztésével
+        remove: Ha tévedésből adtak hozzá, vagy nem akarod, hogy alkotóként szerepelj,
+          akkor %{edit} eltávolíthatod magad az alkotók közül.
+      intro: 'Egy %{adding_user} nevű felhasználó társalkotóként tüntette fel %{pseud}
+        pszeudódat az alábbi %{type} mellett:'
+      subject: "[%{app_name}] Társalkotói értesítés"
+      text:
+        creation: "%{pseuds}: %{title} (%{url})"
+        remove: 'Ha tévedésből adtak hozzá, vagy nem akarod, hogy alkotóként szerepelj,
+          akkor a %{type} szerkesztésével eltávolíthatod magad az alkotók közül: %{url}'
+    delete_work_notification:
+      hello: Kedves %{user},
+      html:
+        part1_other: "%{pseud} kérésére töröltük %{title} című munkádat."
+        part1_yourself: Kérésedre töröltük %{title} című munkádat.
+        part2: Ha kérdésed van, kérjük, %{support}.
+      part2: Ha kérdésed van, kérjük, %{support}.
+      part3: A szóban forgó munkádat csatoltuk az e-mailhez.
+      subject: "[%{app_name}] Munkádat töröltük"
+      support: lépj kapcsolatba a Támogatással
+      text:
+        part1_other: '%{pseud} kérésére töröltük "%{title}" című munkádat.'
+        part1_yourself: Kérésedre töröltük "%{title}" című munkádat.
+        part2: Ha kérdésed van, kérjük, %{support} (%{url}).
+    invite_increase_notification:
+      body:
+        one: 'Örömmel tudatjuk veled, hogy van %{count} új meghívód, amely(ek)et új
+          fiók(ok) létrehozására használhatsz az archívumban. Itt hívhatsz meg barátokat:
+          %{invitation_page}.'
+        other: 'Örömmel tudatjuk veled, hogy van %{count} új meghívód, amely(ek)et
+          új fiók(ok) létrehozására használhatsz az archívumban. Itt hívhatsz meg
+          barátokat: %{invitation_page}.'
+      closing: 'Üdvözlettel:'
+      greeting: Szia %{login}!
+      html: |-
+        <p> Szia %{login}! </p>
+        <p> Örömmel tudatjuk veled, hogy van %{total} új meghívód, amely(ek)et új fiók(ok) létrehozására használhatsz az archívumban. Itt hívhatsz meg barátokat: %{invitation_page}. </p>
+        <p> Üdvözlettel:, <br> %{archive_name}</p>
+      subject: "[%{app_name}] Új Meghívók"
+      txt: "Szia %{login}\nÖrömmel tudatjuk veled, hogy van %{total} új meghívód,
+        amely(ek)et új fiók(ok) létrehozására használhatsz az archívumban. Itt hívhatsz
+        meg barátokat: %{invitation_page}.\nÜdvözlettel: \n%{archive_name}"

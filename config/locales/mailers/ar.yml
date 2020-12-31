@@ -1,0 +1,70 @@
+---
+ar:
+  mailer:
+    general:
+      footer:
+        general:
+          html:
+            donate_link_text: تبرعاتك
+            part1: "<p>\nفي حال تلقيك هذه الرسالة بالخطأ، رجاءاً %{support_link} \n</p>"
+            part2: AO3 هو أرشيف يدار من قبل المعجبين ويدعم من قبلهم أيضاً ويعتمد استمراره
+              على %{donate_link}.
+            support_link_text: تواصل مع لجنة الدعم
+          text:
+            part1: في حال تلقيك هذه الرسالة بالخطأ، رجاءاً تواصل مع لجنة الدعم على
+              %{support_url}.
+            part2: 'AO3 هو أرشيف يدار من قبل المعجبين ويدعم من قبلهم أيضاً ويعتمد
+              استمراره على تبرعاتكم: %{donate_url}.'
+        sent_at: أرسل في %{sent_at}.
+        sent_by:
+          html: أرسل من قبل <b>%{sent_by}</b>.
+          text: أرسل من قبل %{sent_by}.
+      signature:
+        app_short_name: AO3
+    kudos:
+      guest:
+        few: "%{count} ضيوف"
+        many: " %{count} ضيفاً"
+        one: ضيف واحد
+        other: "%{count} ضيف"
+        two: ضيفان
+      html:
+        left_kudos:
+          one: حصلت على علامة امتياز للعمل <i>%{commentable_link}</i> من %{givers_list}.
+          other: حصلت على علامات امتياز للعمل <i>%{commentable_link}</i> من %{givers_list}.
+      text:
+        left_kudos:
+          one: حصلت على علامة امتياز للعمل %{commentable_link} من %{givers_list}.
+          other: حصلت على علامات امتياز للعمل %{commentable_link} من %{givers_list}.
+      you_have: "[%{app_name}] حصلت على علامة امتياز!"
+  user_mailer:
+    abuse_report:
+      description_para: 'وصف التعسُّف:'
+      para1: 'تم إرسال البلاغ التالي إلى فريق السياسات والتعسُّفات:'
+      subject: "[%{app_name}] بلاغك إلى لجنة السياسات والتعسّفات"
+      url_para: 'رابط الصفحة التي تحتوي على التعسُّف:'
+    change_email:
+      part1: "%{login}، تم تغيير البريد الالكتروني المرتبط بحسابك إلى %{email}"
+      subject: "[%{app_name}] تم تغيير بريد الالكتروني"
+    creatorship_notification:
+      explanation: عندما تكون منتجاً مشاركا لعمل ما، سيتم إضافتك إلى جميع الفصول بغض
+        النظر عن إعداداتك كمنتج مشارك. كما ستتم إضافتك إلى أية سلسلة يضاف العمل إليها.
+      html:
+        creation: "%{creation_link} إنتاج %{pseud_links}"
+        edit: " تعديل الـ %{type}"
+        remove: " إذا تمت إضافتك بالخطأ أو إن لم تكن ترغب بتسجيل اسمك كمنتج مشارك،
+          يمكنك %{edit} لإزالة نفسك من قائمة المنتجين."
+      intro: 'أضاف المستخدم %{adding_user} اسمك المستعار %{pseud} إلى قائمة المنتجين
+        المشاركين للعمل %{type}:'
+      subject: "[%{app_name}] إشعار منتج مشارك"
+      text:
+        creation: "%{title} (%{url}) إنتاج %{pseuds}"
+        remove: " إذا تمت إضافتك بالخطأ او إن لم تكن ترغب بتسجيل اسمك كمنتج مشارك،
+          يمكنك تعديل الـ %{type} لإزالة نفسك من قائمة المنتجين: %{url}"
+    invite_increase_notification:
+      body:
+        other: نود إعلامك بأنه لديك %{count} دعوة(ات) جديدة يمكنك استخدامها لإنشاء
+          حسابات جديدة في الأرشيف. بإمكانك دعوة صديق من خلال %{invitation_page}.
+      closing: " مع التحية، "
+      greeting: " مرحباً %{login}"
+      subject: " [%{app_name}] دعوات جديدة"

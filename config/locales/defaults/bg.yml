@@ -72,33 +72,33 @@ bg:
         one: почти 1 година
         other: почти %{count} години
       half_a_minute: половин минута
-      less_than_x_seconds:
-        one: по-малко от 1 секунда
-        other: по-малко от %{count} секунди
       less_than_x_minutes:
         one: по-малко от 1 минута
         other: по-малко от %{count} минути
+      less_than_x_seconds:
+        one: по-малко от 1 секунда
+        other: по-малко от %{count} секунди
       over_x_years:
         one: над 1 година
         other: над %{count} години
-      x_seconds:
-        one: 1 секунда
-        other: "%{count} секунди"
-      x_minutes:
-        one: 1 минута
-        other: "%{count} минути"
       x_days:
         one: 1 ден
         other: "%{count} дни"
+      x_minutes:
+        one: 1 минута
+        other: "%{count} минути"
       x_months:
         one: 1 месец
         other: "%{count} месеца"
+      x_seconds:
+        one: 1 секунда
+        other: "%{count} секунди"
     prompts:
-      second: Секунда
-      minute: Минута
-      hour: Час
       day: Ден
+      hour: Час
+      minute: Минута
       month: Месец
+      second: Секунда
       year: Година
   errors:
     format: "%{attribute} %{message}"
@@ -116,13 +116,10 @@ bg:
       invalid: съдържа невярна стойност
       less_than: трябва да има стойност, по-малка от %{count}
       less_than_or_equal_to: трябва да има стойност, по-малка или равна на %{count}
-      not_a_number: не е число
       not_an_integer: не е цяло число
+      not_a_number: не е число
       odd: трябва да е четно
       taken: вече съществува
-      too_long: е прекаленo дълго (не може да е повече от %{count} символа)
-      too_short: е прекалено късо (не може да бъде по-малко от %{count} символа)
-      wrong_length: е с грешна дължина (трябва да е с дължина, равна на %{count} символа)
     template:
       body: 'Възникнаха проблеми със следните полета:'
       header:
@@ -160,9 +157,7 @@ bg:
           quadrillion: квадрилиона
           thousand: хиляди
           trillion: трилиона
-          unit: ''
       format:
-        delimiter: ''
         precision: 1
         significant: true
         strip_insignificant_zeros: true
@@ -176,12 +171,6 @@ bg:
           kb: КБ
           mb: МБ
           tb: ТБ
-    percentage:
-      format:
-        delimiter: ''
-    precision:
-      format:
-        delimiter: ''
   support:
     array:
       last_word_connector: " и "

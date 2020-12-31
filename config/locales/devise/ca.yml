@@ -1,0 +1,14 @@
+---
+ca:
+  users:
+    mailer:
+      reset_password_instructions:
+        expiration: Si no fas servir l’enllaç per canviar la teva contrasenya en una
+          setmana, aquest expirarà, i n’hauràs de sol·licitar un de nou.
+        intro: "%{user}, algú ha sol·licitat un canvi de contrasenya pel teu compte.
+          Pots canviar la contrasenya associada al teu compte clicant a l’enllaç a
+          continuació i introduïnt la teva nova contrasenya:"
+        link_title: Canvia la meva contrasenya.
+        subject: "[%{app_name}] Canvia la teva contrasenya"
+        unrequested: Si no has sol·licitat un canvi de contrasenya, pots ignorar aquest
+          correu electrònic i la teva contrasenya anterior continuarà funcionant.

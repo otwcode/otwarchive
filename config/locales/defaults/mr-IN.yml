@@ -5,8 +5,8 @@ mr-IN:
       messages:
         record_invalid: 'प्रमाणीकरण अयशस्वी: %{errors}'
         restrict_dependent_destroy:
-          has_one: अवलंबून %{record} अस्तित्वात असल्याने रेकॉर्ड हटवू शकत नाही
           has_many: अवलंबून %{record} अस्तित्वात असल्याने रेकॉर्ड हटवू शकत नाही
+          has_one: अवलंबून %{record} अस्तित्वात असल्याने रेकॉर्ड हटवू शकत नाही
   date:
     abbr_day_names:
     - सोम
@@ -75,33 +75,33 @@ mr-IN:
         one: जवळजवळ एक वर्ष
         other: जवळजवळ %{count} वर्ष
       half_a_minute: अर्धा मिनिट
-      less_than_x_seconds:
-        one: एक सेकंद पेक्षा कमी
-        other: "%{count} सेकंद पेक्षा कमी"
       less_than_x_minutes:
         one: एका मिनिटापेक्षा कमी
         other: "%{count} मिनिटापेक्षा कमी"
+      less_than_x_seconds:
+        one: एक सेकंद पेक्षा कमी
+        other: "%{count} सेकंद पेक्षा कमी"
       over_x_years:
         one: एका वर्षापेक्षा जास्त काळ
         other: "%{count} वर्षापेक्षा जास्त काळ"
-      x_seconds:
-        one: एक सेकंद
-        other: "%{count} सेकंद"
-      x_minutes:
-        one: एक मिनिट
-        other: "%{count} मिनिट"
       x_days:
         one: एक दिवस
         other: "%{count} दिवस"
+      x_minutes:
+        one: एक मिनिट
+        other: "%{count} मिनिट"
       x_months:
         one: एक महिना
         other: "%{count} महिना"
+      x_seconds:
+        one: एक सेकंद
+        other: "%{count} सेकंद"
     prompts:
-      second: सेकंद
-      minute: मिनिट
-      hour: तास
       day: दिवस
+      hour: तास
+      minute: मिनिट
       month: महिना
+      second: सेकंद
       year: वर्ष
   errors:
     format: "%{attribute} %{message}"
@@ -119,8 +119,8 @@ mr-IN:
       invalid: अवैध आहे
       less_than: "%{count} पेक्षा कमी असणे आवश्यक"
       less_than_or_equal_to: "%{count} पेक्षा कमी किंवा समान असणे आवश्यक आहे"
-      not_a_number: क्रमांक नाही
       not_an_integer: पूर्णांक असणे आवश्यक आहे
+      not_a_number: क्रमांक नाही
       odd: विषम संख्या असणे आवश्यक आहे
       other_than: "%{count} पेक्षा इतर असणे आवश्यक आहे"
       present: रिक्त असणे आवश्यक आहे
@@ -171,9 +171,7 @@ mr-IN:
           quadrillion: एकावर १५ शून्य इतकी संख्या
           thousand: हजार
           trillion: एकावर १२ शून्ये इतकी संख्या
-          unit: ''
       format:
-        delimiter: ''
         precision: 3
         significant: true
         strip_insignificant_zeros: true
@@ -187,12 +185,6 @@ mr-IN:
           kb: KB
           mb: MB
           tb: TB
-    percentage:
-      format:
-        delimiter: ''
-    precision:
-      format:
-        delimiter: ''
   support:
     array:
       last_word_connector: ", आणि "
