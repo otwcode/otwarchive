@@ -25,6 +25,17 @@ fr:
       guest:
         one: un/une invité-e
         other: "%{count} invité-e-s"
+      html:
+        left_kudos:
+          zero: |-
+            %{givers_list} a félicité votre œuvre <i>%{commentable_link}</i>.
+            %{givers_list} ont félicité votre œuvre <i>%{commentable_link}</i>.
+      text:
+        left_kudos:
+          zero: |-
+            %{givers_list} a félicité votre œuvre %{commentable_link}.
+            %{givers_list} ont félicité votre œuvre %{commentable_link}.
+      you_have: "[%{app_name}] Vous avez reçu des félicitations !"
   user_mailer:
     abuse_report:
       description_para: 'Description de l’abus signalé :'
@@ -84,6 +95,19 @@ fr:
       part1: "%{login}, l’adresse e-mail associée à votre compte a été remplacée par
         %{email}"
       subject: "[%{app_name}] Changement d’adresse e-mail"
+    creatorship_invitation:
+      html:
+        creation: "%{creation_link} par %{pseud_links}"
+        instructions: Vous pouvez accepter ou refuser cette invitation sur votre page
+          %{page_name}.
+        page_name: Invitations à la Co-création
+      intro: 'L''utilisateur-trice %{inviting_user} a invité votre pseudo %{pseud}
+        à être listé en tant que co-créateur-trice du/de la/de l'' %{type} suivant-e:'
+      subject: "[%{app_name}] Invitation à la co-création"
+      text:
+        creation: "%{title} (%{url}) par %{pseuds}"
+        instructions: 'Vous pouvez accepter ou refuser cette invitation sur votre
+          page Invitations à la Co-création : %{url}'
     creatorship_notification:
       explanation: Lorsque vous êtes co-créateur-trice d’une œuvre, votre nom peut
         être ajouté à de nouveaux chapitres quels que soient les paramètres de la
@@ -104,12 +128,18 @@ fr:
           figure en tant que co-créateur-trice, vous pouvez modifier le/la %{type}
           afin d’être retiré-e des co-créateur-trice-s : %{url}'
     creatorship_notification_archivist:
+      explanation: L’utilisateur-trice, en sa qualité d’archiviste officiel-le d’Open
+        Doors (Portes Ouvertes), a la possibilité de vous ajouter sans invitation,
+        même si vous avez désactivé la co-création.
       html:
         creation: "%{creation_link} par %{pseud_links}"
         edit: modifier le/la %{type}
         remove: Si votre nom a été ajouté par erreur ou si vous ne voulez pas qu’il
           figure en tant que co-créateur-trice, vous pouvez %{edit} afin d’être retiré-e
           des co-créateur-trice-s.
+      intro: 'L’utilisateur-trice %{archivist} a ajouté votre pseudo %{pseud} en tant
+        que co-créateur-trice  du/de la/de l'' %{type} suivant-e :'
+      subject: "[%{app_name}] Notification d’ajout en tant que co-créateur-trice"
       text:
         creation: "%{title} (%{url}) par %{pseuds}"
         remove: 'Si votre nom a été ajouté par erreur ou si vous ne voulez pas qu’il
@@ -277,6 +307,16 @@ fr:
                  Nous vous envoyons ce message pour vous informer que vous possédez %{total}  nouvelle(s) invitation(s), permettant de créer de nouveaux comptes sur l’archive. Vous pouvez aussi inviter un-e ami-e à l’adresse suivante : %{invitation_page}.
                   Cordialement,
                   %{archive_name}
+    invite_request_declined:
+      greeting: Cher/Chère %{user},
+      main:
+        one: Nous sommes au regret de vous informer que votre demande de nouvelle
+          invitation ne peut être satisfaite pour le moment.
+        other: Nous sommes au regret de vous informer que votre demande de %{count}
+          nouvelles invitations ne peut être satisfaite pour le moment.
+      reason: 'Votre demande était la suivante :'
+      signoff: Cordialement,
+      subject: "[%{app_name}] Demande de Code d’Invitation Supplémentaire Rejetée"
     signup_notification:
       activate_your_account: activer votre compte
       admin_posts: billets publiés par les admins

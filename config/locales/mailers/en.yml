@@ -177,6 +177,18 @@ en:
         creation: "%{title} (%{url}) by %{pseuds}"
         remove: 'If you''ve been added in error or don''t want to be listed as a creator,
           you can edit the %{type} to remove yourself as creator: %{url}'
+    creatorship_request:
+      html:
+        creation: "%{creation_link} by %{pseud_links}"
+        instructions: You can accept or reject this request on your %{page_name} page.
+        page_name: Co-Creator Requests
+      intro: 'The user %{inviting_user} has invited your pseud %{pseud} to be listed
+        as a co-creator on the following %{type}:'
+      subject: "[%{app_name}] Co-creator request"
+      text:
+        creation: "%{title} (%{url}) by %{pseuds}"
+        instructions: 'You can accept or reject this request on your Co-Creator Requests
+          page: %{url}'
     delete_work_notification:
       hello: Dear %{user},
       html:

@@ -2,6 +2,16 @@
 en:
   activerecord:
     attributes:
+      admin/role:
+        board: Board
+        communications: Communications
+        docs: AO3 Docs
+        open_doors: Open Doors
+        policy_and_abuse: Policy & Abuse
+        superadmin: Super admin
+        support: Support
+        tag_wrangling: Tag Wrangling
+        translation: Translation
       archive_warning:
         name_with_colon:
           one: 'Warning:'
@@ -28,6 +38,11 @@ en:
         name_with_colon:
           one: 'Additional Tag:'
           other: 'Additional Tags:'
+      meta_tagging:
+        meta_tag: Metatag
+        meta_tag_id: Metatag
+        sub_tag: Subtag
+        sub_tag_id: Subtag
       rating:
         name_with_colon: 'Rating:'
       relationship:
