@@ -631,4 +631,69 @@ describe UserMailer do
       end
     end
   end
+
+  describe "recipient_notification" do
+    context "when collection is present" do
+      let(:user) { create(:user) }
+      let(:work) { create(:work) }
+      let(:collection) { create(:collection) }
+
+      subject(:email) { UserMailer.recipient_notification(user.id, work.id, collection.id).deliver }
+
+      # Test the headers
+      it_behaves_like "an email with a valid sender"
+
+      it "has the correct subject line" do
+        subject = "[#{ArchiveConfig.APP_SHORT_NAME}][#{collection.title}] A Gift Work For You From #{collection.title}"
+        expect(email).to have_subject(subject)
+      end
+
+      # Test both body contents
+      it_behaves_like "a multipart email"
+
+      describe "HTML version" do
+        it "has the correct content" do
+          expect(email).to have_html_part_content("Hi, <b")
+          expect(email).to have_html_part_content("#{user.login}</b>")
+        end
+      end
+
+      describe "text version" do
+        it "has the correct content" do
+          expect(email).to have_text_part_content("Hi, #{user.login}!")
+        end
+      end
+    end
+
+    context "when no collection is present" do
+      let(:user) { create(:user) }
+      let(:work) { create(:work) }
+
+      subject(:email) { UserMailer.recipient_notification(user.id, work.id).deliver }
+
+      # Test the headers
+      it_behaves_like "an email with a valid sender"
+
+      it "has the correct subject line" do
+        subject = "[#{ArchiveConfig.APP_SHORT_NAME}] A Gift Work For You "
+        expect(email).to have_subject(subject)
+      end
+
+      # Test both body contents
+      it_behaves_like "a multipart email"
+
+      describe "HTML version" do
+        it "has the correct content" do
+          expect(email).to have_html_part_content("Hi, <b")
+          expect(email).to have_html_part_content("#{user.login}</b>")
+        end
+      end
+
+      describe "text version" do
+        it "has the correct content" do
+          expect(email).to have_text_part_content("Hi, #{user.login}")
+        end
+      end
+    end
+  end
 end
