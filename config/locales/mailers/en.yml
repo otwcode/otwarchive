@@ -6,7 +6,6 @@ en:
         informal:
           addressed: "Hi, %{name}!"
           unaddressed: "Hi!"
-        formal: "Dear %{name},"
       signature:
         app_short_name: AO3
       footer:
