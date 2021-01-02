@@ -177,7 +177,7 @@ describe AdminMailer do
     let(:email2) { UserMailer.abuse_report(report.id) }
 
     it "has the correct subject" do
-      expect(email).to have_subject "[#{ArchiveConfig.APP_SHORT_NAME}] Admin Abuse Report"
+      expect(email).to have_subject "[#{ArchiveConfig.APP_SHORT_NAME}] Admin abuse report"
     end
 
     it "delivers to the correct address" do

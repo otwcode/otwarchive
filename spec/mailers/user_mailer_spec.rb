@@ -232,7 +232,7 @@ describe UserMailer do
     it_behaves_like "an email with a valid sender"
 
     it "has the correct subject line" do
-      subject = "[#{ArchiveConfig.APP_SHORT_NAME}][#{collection.title}] Your Assignment!"
+      subject = "[#{ArchiveConfig.APP_SHORT_NAME}][#{collection.title}] Your assignment!"
       expect(email).to have_subject(subject)
     end
 
@@ -265,7 +265,7 @@ describe UserMailer do
     it_behaves_like "an email with a valid sender"
 
     it "has the correct subject line" do
-      subject = "[#{ArchiveConfig.APP_SHORT_NAME}] Additional Invite Code Request Declined"
+      subject = "[#{ArchiveConfig.APP_SHORT_NAME}] Additional invite code request declined"
       expect(email).to have_subject(subject)
     end
 
@@ -332,7 +332,7 @@ describe UserMailer do
       it_behaves_like "an email with a valid sender"
 
       it "has the correct subject line" do
-        expect(email.subject).to eq("[#{ArchiveConfig.APP_SHORT_NAME}] New Invitations")
+        expect(email.subject).to eq("[#{ArchiveConfig.APP_SHORT_NAME}] New invitations")
       end
 
       # Test both body contents
@@ -362,7 +362,7 @@ describe UserMailer do
       it_behaves_like "an email with a valid sender"
 
       it "has the correct subject line" do
-        expect(email.subject).to eq("[#{ArchiveConfig.APP_SHORT_NAME}] New Invitations")
+        expect(email.subject).to eq("[#{ArchiveConfig.APP_SHORT_NAME}] New invitations")
       end
 
       # Test both body contents
@@ -510,7 +510,7 @@ describe UserMailer do
     it_behaves_like "an email with a valid sender"
 
     it "has the correct subject line" do
-      subject = "[#{ArchiveConfig.APP_SHORT_NAME}] Your work has been hidden by the Abuse Team"
+      subject = "[#{ArchiveConfig.APP_SHORT_NAME}] Your work has been hidden by the Abuse team"
       expect(email.subject).to eq(subject)
     end
 
@@ -716,7 +716,7 @@ describe UserMailer do
     it_behaves_like "an email with a valid sender"
 
     it "has the correct subject line" do
-      subject = "[#{ArchiveConfig.APP_SHORT_NAME}][#{collection.title}] Potential Assignment Generation Complete"
+      subject = "[#{ArchiveConfig.APP_SHORT_NAME}][#{collection.title}] Potential assignment generation complete"
       expect(email.subject).to eq(subject)
     end
 
@@ -750,7 +750,7 @@ describe UserMailer do
     it_behaves_like "an email with a valid sender"
 
     it "has the correct subject line" do
-      subject = "[#{ArchiveConfig.APP_SHORT_NAME}][#{collection.title}] Invalid Sign-ups Found"
+      subject = "[#{ArchiveConfig.APP_SHORT_NAME}][#{collection.title}] Invalid sign-ups found"
       expect(email.subject).to eq(subject)
     end
 

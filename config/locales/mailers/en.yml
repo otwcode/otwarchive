@@ -42,7 +42,7 @@ en:
           other: "%{givers_list} left kudos on %{commentable_link}."
   user_mailer:
     invite_increase_notification:
-      subject: "[%{app_name}] New Invitations"
+      subject: "[%{app_name}] New invitations"
       body:
         one: "We just wanted to let you know that you have %{count} new invitation, which can be used to create a new account at the Archive. You can invite a friend at %{invitation_page}."
         other: "We just wanted to let you know that you have %{count} new invitations, which can be used to create new accounts at the Archive. You can invite a friend at %{invitation_page}."
@@ -155,12 +155,12 @@ en:
         faq_link: "For more information, please check out %{faq_link}."
         faq_link_text: "our FAQ"
     abuse_report:
-      subject: "[%{app_name}] Your Abuse Report"
+      subject: "[%{app_name}] Your abuse report"
       para1: "The following abuse report has been sent to the Abuse team:"
       url_para: "URL of the page the abuse is on:"
       description_para: "Description of the abuse:"
     challenge_assignment_notification:
-      subject: "[%{app_name}][%{collection_title}] Your Assignment!"
+      subject: "[%{app_name}][%{collection_title}] Your assignment!"
       recipient: "Recipient:" # this is followed by the name of the gift recipient
       recipient_missing: "None: contact a moderator for help!"
       prompts: "Prompts:"
@@ -213,7 +213,7 @@ en:
         part10: "If you had other works on the imported archive under an e-mail address you can no longer access, please %{open_doors_link} with any information that can help verify your identity."
         part11: "For other inquiries, please %{support_link}."
     invite_request_declined:
-      subject: "[%{app_name}] Additional Invite Code Request Declined"
+      subject: "[%{app_name}] Additional invite code request declined"
       reason: "Your request was:"
       main:
         one: "We regret to inform you that your request for a new invitation cannot be fulfilled at this time."
