@@ -14,6 +14,7 @@ describe UserMailer do
     shared_examples_for "a claim notification" do
       it "contains the text for a claim email" do
         expect(part).to include("You're receiving this e-mail because you had works in a fanworks archive that has been imported")
+        expect(part).to include("The Open Doors team")
       end
     end
 
@@ -99,6 +100,7 @@ describe UserMailer do
     shared_examples_for "an invitation to claim content" do
       it "contains the text for an invitation claim email" do
         expect(part).to include("You're receiving this e-mail because an archive has recently been imported by")
+        expect(part).to include("The Open Doors team")
       end
     end
 
@@ -453,12 +455,14 @@ describe UserMailer do
       describe "HTML version" do
         it "has the correct content" do
           expect(email).to have_html_part_content("Hi!")
+          expect(email).to have_html_part_content(">The AO3 Support team</b>")
         end
       end
 
       describe "text version" do
         it "has the correct content" do
           expect(email).to have_text_part_content("Hi!")
+          expect(email).to have_text_part_content("The AO3 Support team")
         end
       end
     end
@@ -483,12 +487,14 @@ describe UserMailer do
         it "has the correct content" do
           expect(email).to have_html_part_content("Hi, <b")
           expect(email).to have_html_part_content("#{feedback.username}</b>")
+          expect(email).to have_html_part_content(">The AO3 Support team</b>")
         end
       end
 
       describe "text version" do
         it "has the correct content" do
           expect(email).to have_text_part_content("Hi, #{feedback.username}!")
+          expect(email).to have_text_part_content("The AO3 Support team")
         end
       end
     end
@@ -518,6 +524,7 @@ describe UserMailer do
         expect(email).to have_html_part_content("Dear <b")
         expect(email).to have_html_part_content("#{user.login}</b>,")
         expect(email).to have_html_part_content("> has been reported")
+        expect(email).to have_html_part_content(">The AO3 Policy & Abuse team</b>")
       end
     end
 
@@ -525,6 +532,7 @@ describe UserMailer do
       it "has the correct content" do
         expect(email).to have_text_part_content("Dear #{user.login},")
         expect(email).to have_text_part_content(") has been reported")
+        expect(email).to have_text_part_content("The AO3 Policy & Abuse team")
       end
     end
   end
@@ -553,6 +561,7 @@ describe UserMailer do
         expect(email).to have_html_part_content("Dear <b")
         expect(email).to have_html_part_content("#{user.login}</b>,")
         expect(email).to have_html_part_content("> has been flagged by our automated system")
+        expect(email).to have_html_part_content(">The AO3 Policy & Abuse team</b>")
       end
     end
 
@@ -560,6 +569,7 @@ describe UserMailer do
       it "has the correct content" do
         expect(email).to have_text_part_content("Dear #{user.login},")
         expect(email).to have_text_part_content(") has been flagged by our automated system")
+        expect(email).to have_text_part_content("The AO3 Policy & Abuse team")
       end
     end
   end

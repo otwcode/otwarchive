@@ -12,6 +12,10 @@ en:
         introductory: "Hello from the Archive of Our Own!"
       signature:
         app_short_name: AO3
+        open_doors: The Open Doors team
+        parent_org: Organization for Transformative Works
+        policy_abuse: The AO3 Policy & Abuse team
+        support: The AO3 Support team
       footer:
         general:
           html:
@@ -192,10 +196,6 @@ en:
         part9: "If you would like Open Doors to update the redirect to point to your pre-existing work, please delete the imported copy, and contact Open Doors at %{open_doors_link} with your AO3 account name, your account name on the imported archive, and the title and URL of the fanwork you would like the redirect to point to. (If you have multiple works you would like to change the redirects for, you can list these in one email.)"
         part10: "If you had other works on the imported archive under an e-mail address you can no longer access, please contact Open Doors with any information that can help verify your identity."
         part11: "For other inquiries, please contact AO3 Support at %{support_link}."
-        part13: |-
-          Best,
-          The Open Doors team
-          Organization for Transformative Works
       html:
         part1: "You're receiving this e-mail because an archive has recently been imported by %{open_doors_link} into the %{app_link} (%{app_short_name}), and we believe that the following fanworks belong to you. We'd like to give you a chance to claim (or delete/orphan) these works if you want to. And if you don't already have an account under a different e-mail, we'd like to invite you aboard!"
         open_doors: "Open Doors"
@@ -212,8 +212,6 @@ en:
         part9: "If you would like Open Doors to update the redirect to point to your pre-existing work, please delete the imported copy, and %{open_doors_link} with your AO3 account name, your account name on the imported archive, and the title and URL of the fanwork you would like the redirect to point to. (If you have multiple works you would like to change the redirects for, you can list these in one email.)"
         part10: "If you had other works on the imported archive under an e-mail address you can no longer access, please %{open_doors_link} with any information that can help verify your identity."
         part11: "For other inquiries, please %{support_link}."
-        part14: "The Open Doors team"
-        part15: "Organization for Transformative Works"
     invite_request_declined:
       subject: "[%{app_name}] Additional Invite Code Request Declined"
       reason: "Your request was:"
