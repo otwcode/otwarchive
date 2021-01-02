@@ -696,4 +696,69 @@ describe UserMailer do
       end
     end
   end
+
+  describe "potential_match_generation_notification" do
+    let(:collection) { create(:collection) }
+
+    subject(:email) { UserMailer.potential_match_generation_notification(collection.id).deliver }
+
+    # Test the headers
+    it_behaves_like "an email with a valid sender"
+
+    it "has the correct subject line" do
+      subject = "[#{ArchiveConfig.APP_SHORT_NAME}][#{collection.title}] Potential Assignment Generation Complete"
+      expect(email.subject).to eq(subject)
+    end
+
+    # Test both body contents
+    it_behaves_like "a multipart email"
+
+    it_behaves_like "a translated email"
+
+    describe "HTML version" do
+      it "has the correct content" do
+        expect(email).to have_html_part_content("potential assignments for your challenge collection, <")
+        expect(email).to have_html_part_content("challenge's <")
+      end
+    end
+
+    describe "text version" do
+      it "has the correct content" do
+        expect(email).to have_text_part_content("potential assignments for your challenge collection \"#{collection.title}\"")
+        expect(email).to have_text_part_content("challenge's Matching page:")
+      end
+    end
+  end
+
+  describe "invalid_signup_notification" do
+    let(:collection) { create(:collection) }
+    let(:signup) { create(:challenge_signup) }
+
+    subject(:email) { UserMailer.invalid_signup_notification(collection.id, [signup.id]).deliver }
+
+    # Test the headers
+    it_behaves_like "an email with a valid sender"
+
+    it "has the correct subject line" do
+      subject = "[#{ArchiveConfig.APP_SHORT_NAME}][#{collection.title}] Invalid Sign-ups Found"
+      expect(email.subject).to eq(subject)
+    end
+
+    # Test both body contents
+    it_behaves_like "a multipart email"
+
+    it_behaves_like "a translated email"
+
+    describe "HTML version" do
+      it "has the correct content" do
+        expect(email).to have_html_part_content("invalid sign-ups in your challenge <")
+      end
+    end
+
+    describe "text version" do
+      it "has the correct content" do
+        expect(email).to have_text_part_content("invalid sign-ups in your challenge \"#{collection.title}\"")
+      end
+    end
+  end
 end
