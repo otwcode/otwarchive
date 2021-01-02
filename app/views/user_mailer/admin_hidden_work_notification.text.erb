@@ -1,11 +1,11 @@
 <% content_for :message do %>
     <%= t("mailer.general.greeting.formal", name: @user.login) %>
 
-    Your work "<%= @work.title.html_safe %>" (<%= work_url(@work) %>) has been reported to the Abuse Team as a violation of the Archive of Our Own's Terms of Service (<%= root_url + "tos" %>).
+    Your work "<%= @work.title.html_safe %>" (<%= work_url(@work) %>) has been reported as being in violation of the Archive of Our Own's Terms of Service (<%= root_url + "tos" %>).
 
     We are investigating the matter and will contact you once the investigation has been completed. While the work is under investigation it has been hidden; only you will be able to access it.
 
-    If you have any questions, please contact our Abuse Team (<%= root_url + "abuse_reports/new" %>).
+    If you have any questions, please contact our Policy & Abuse team (<%= root_url + "abuse_reports/new" %>).
 
     <%= t("mailer.general.closing.formal") %>
     <%= t("mailer.general.signature.policy_abuse") %>
