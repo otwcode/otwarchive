@@ -4,7 +4,7 @@
   <p><%= t(".body", count: @total, invitation_page: style_link(t(".invitation_page_link_text"), user_invitations_url(@user))).html_safe %></p>
 
   <p>
-    <%= t(".closing") %><br />
+    <%= t("mailer.general.closing.informal") %><br />
     <%= style_link(t("mailer.general.signature.app_short_name"), root_url) %>
   </p>
 <% end %>

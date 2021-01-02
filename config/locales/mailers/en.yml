@@ -3,6 +3,7 @@ en:
     general:
       closing:
         formal: "Sincerely,"
+        informal: "Best,"
       greeting:
         formal: "Dear %{name},"
         informal:
@@ -42,7 +43,6 @@ en:
         one: "We just wanted to let you know that you have %{count} new invitation, which can be used to create a new account at the Archive. You can invite a friend at %{invitation_page}."
         other: "We just wanted to let you know that you have %{count} new invitations, which can be used to create new accounts at the Archive. You can invite a friend at %{invitation_page}."
       invitation_page_link_text: your invitations page
-      closing: "Cheers,"
     admin_deleted_work_notification:
       subject: "[%{app_name}] Your work has been deleted by an admin"
       opendoors: "contact Open Doors"
@@ -212,7 +212,6 @@ en:
         part9: "If you would like Open Doors to update the redirect to point to your pre-existing work, please delete the imported copy, and %{open_doors_link} with your AO3 account name, your account name on the imported archive, and the title and URL of the fanwork you would like the redirect to point to. (If you have multiple works you would like to change the redirects for, you can list these in one email.)"
         part10: "If you had other works on the imported archive under an e-mail address you can no longer access, please %{open_doors_link} with any information that can help verify your identity."
         part11: "For other inquiries, please %{support_link}."
-        part13: "Best,"
         part14: "The Open Doors team"
         part15: "Organization for Transformative Works"
     invite_request_declined:
