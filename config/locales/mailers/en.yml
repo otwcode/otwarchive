@@ -1,6 +1,8 @@
 en:
   mailer:
     general:
+      closing:
+        formal: "Sincerely,"
       greeting:
         formal: "Dear %{name},"
         informal:
@@ -216,7 +218,6 @@ en:
     invite_request_declined:
       subject: "[%{app_name}] Additional Invite Code Request Declined"
       reason: "Your request was:"
-      signoff: "Regards,"
       main:
         one: "We regret to inform you that your request for a new invitation cannot be fulfilled at this time."
         other: "We regret to inform you that your request for %{count} new invitations cannot be fulfilled at this time."

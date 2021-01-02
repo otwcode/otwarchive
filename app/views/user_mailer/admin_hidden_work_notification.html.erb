@@ -7,6 +7,6 @@
 
     <p>If you have any questions, please <%= abuse_link("contact our Abuse Team") %>.</p>
 
-    <p>Sincerely,</p>
-    <p><%= style_bold("AO3 Abuse") %></p>
+    <p><%= t("mailer.general.closing.formal") %><br/>
+    <%= style_bold("AO3 Abuse") %></p>
 <% end %>
