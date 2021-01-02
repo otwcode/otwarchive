@@ -6,7 +6,7 @@ en:
         informal:
           addressed: "Hi, %{name}!"
           unaddressed: "Hi!"
-        introductory: "Hello from the %{app_name}!"
+        introductory: "Hello from the Archive of Our Own!"
       signature:
         app_short_name: AO3
       footer:
