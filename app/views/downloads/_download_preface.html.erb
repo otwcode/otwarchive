@@ -79,7 +79,7 @@
             <% work_link = link_to work.parent.title.html_safe, url_for(work.parent) %>
             <% author_link = byline(work.parent, visibility: 'public', only_path: false) %>
 
-            <%= ts(relation_text, work_link: work_link, author_link: author_link).html_safe %>
+            <%= ts(relation_text, work_link: work_link, author_link: author_link, work_info: work_info).html_safe %>
           </li>
         <% end %>
       </ul>
