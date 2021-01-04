@@ -39,6 +39,7 @@ class Series < ApplicationRecord
     too_long: ts("must be less than %{max} letters long.", max: ArchiveConfig.NOTES_MAX)
 
   after_save :adjust_restricted
+  after_update :expire_caches
   after_update_commit :update_work_index
 
   scope :visible_to_registered_user, -> { where(hidden_by_admin: false).order('series.updated_at DESC') }
@@ -58,6 +59,10 @@ class Series < ApplicationRecord
 
   def posted_works
     self.works.posted
+  end
+
+  def works_in_order
+    works.order("serial_works.position")
   end
 
   # Get the filters for the works in this series
@@ -139,6 +144,11 @@ class Series < ApplicationRecord
     destroyed? || (saved_changes.keys & pertinent_attributes).present?
   end
 
+  def expire_caches
+    # Expire cached work blurbs and metas if series title changes
+    self.works.each(&:touch) if saved_change_to_title?
+  end
+
   # Change the positions of the serial works in the series
   def reorder_list(positions)
     SortableList.new(self.serial_works.in_order).reorder_list(positions)
@@ -208,13 +218,17 @@ class Series < ApplicationRecord
   def bookmarkable_json
     as_json(
       root: false,
-      only: [:title, :summary, :hidden_by_admin, :restricted, :created_at,
-        :complete],
-      methods: [:revised_at, :posted, :tag, :filter_ids, :rating_ids,
+      only: [
+        :title, :summary, :hidden_by_admin, :restricted, :created_at,
+        :complete
+      ],
+      methods: [
+        :revised_at, :posted, :tag, :filter_ids, :rating_ids,
         :archive_warning_ids, :category_ids, :fandom_ids, :character_ids,
-        :relationship_ids, :freeform_ids, :pseud_ids, :creators, :language_id,
+        :relationship_ids, :freeform_ids, :pseud_ids, :creators,
         :word_count, :work_types]
     ).merge(
+      language_id: language&.short,
       anonymous: anonymous?,
       unrevealed: unrevealed?,
       bookmarkable_type: 'Series',
@@ -231,8 +245,8 @@ class Series < ApplicationRecord
   end
 
   # FIXME: should series have their own language?
-  def language_id
-    works.first.language_id if works.present?
+  def language
+    works.first.language if works.present?
   end
 
   def posted

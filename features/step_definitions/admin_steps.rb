@@ -1,35 +1,10 @@
-default_settings = {
-  invite_from_queue_enabled: ArchiveConfig.INVITE_FROM_QUEUE_ENABLED,
-  invite_from_queue_number: ArchiveConfig.INVITE_FROM_QUEUE_NUMBER,
-  invite_from_queue_frequency: ArchiveConfig.INVITE_FROM_QUEUE_FREQUENCY,
-  account_creation_enabled: true,
-  creation_requires_invite: true,
-  request_invite_enabled: true,
-  days_to_purge_unactivated: ArchiveConfig.DAYS_TO_PURGE_UNACTIVATED
-}
-
-def update_settings(settings)
-  admin_settings = AdminSetting.first_or_create
-  admin_settings.update_attributes(settings)
-  admin_settings.save(validate: false)
-end
-
 ### GIVEN
 
-Given /^I have an AdminSetting$/ do
-  unless AdminSetting.first
-    settings = AdminSetting.new(default_settings)
-    settings.save(validate: false)
-  end
-end
-
 Given /^the following admin settings are configured:$/ do |table|
-  settings = default_settings.merge(table.rows_hash.symbolize_keys)
-  update_settings settings
-end
-
-Given /^default admin settings$/ do
-  update_settings settings = {}
+  admin_settings = AdminSetting.first
+  admin_settings.assign_attributes(table.rows_hash.symbolize_keys)
+  # Skip validations which require setting an admin as the last updater.
+  admin_settings.save!(validate: false)
 end
 
 Given /the following admins? exists?/ do |table|
@@ -38,63 +13,68 @@ Given /the following admins? exists?/ do |table|
   end
 end
 
-Given /^I am logged in as an admin$/ do
-  step("I have an AdminSetting")
-  step("I am logged out")
-  admin = Admin.find_by(login: "testadmin")
-  if admin.blank?
-    FactoryBot.create(:admin, login: "testadmin", password: "testadmin", email: "testadmin@example.org")
-  end
-  visit new_admin_session_path
-  fill_in "Admin user name", with: "testadmin"
-  fill_in "Admin password", with: "testadmin"
-  click_button "Log in as admin"
-  step("I should see \"Successfully logged in\"")
+Given "I am logged in as a super admin" do
+  step %{I am logged in as a "superadmin" admin}
 end
 
-Given /^I am logged out as an admin$/ do
-  visit destroy_admin_session_path
+Given "I am logged in as a(n) {string} admin" do |role|
+  step "I start a new session"
+  login = "testadmin-#{role}"
+  FactoryBot.create(:admin, login: login, roles: [role]) if Admin.find_by(login: login).nil?
+  visit new_admin_session_path
+  fill_in "Admin user name", with: login
+  fill_in "Admin password", with: "password"
+  click_button "Log in as admin"
+  step %{I should see "Successfully logged in"}
+end
+
+Given "I am logged in as an admin" do
+  step "I start a new session"
+  FactoryBot.create(:admin, login: "testadmin", email: "testadmin@example.org") if Admin.find_by(login: "testadmin").nil?
+  visit new_admin_session_path
+  fill_in "Admin user name", with: "testadmin"
+  fill_in "Admin password", with: "password"
+  click_button "Log in as admin"
+  step %{I should see "Successfully logged in"}
 end
 
 Given /^basic languages$/ do
   Language.default
   german = Language.find_or_create_by(short: "DE", name: "Deutsch", support_available: true, abuse_support_available: true)
-  de = Locale.new
-  de.iso = 'de'
-  de.name = 'Deutsch'
-  de.language_id = german.id
-  de.save!
+  Locale.create(iso: "de", name: "Deutsch", language: german)
 end
 
-Given /^advanced languages$/ do
-  Language.find_or_create_by(short: "FR", name: "Francais")
+Given /^Persian language$/ do
+  Language.default
+  persian = Language.find_or_create_by(short: "fa", name: "Persian", support_available: true, abuse_support_available: true)
+  Locale.create(iso: "fa", name: "Persian", language: persian)
 end
 
 Given /^downloads are off$/ do
-  step("I am logged in as an admin")
+  step("I am logged in as a super admin")
   visit(admin_settings_path)
   uncheck("Allow downloads")
   click_button("Update")
 end
 
 Given /^tag wrangling is off$/ do
-  step("I am logged in as an admin")
+  step(%{I am logged in as a "tag_wrangling" admin})
   visit(admin_settings_path)
-  step("I check \"Turn off tag wrangling for non-admins\"")
-  step("I press \"Update\"")
-  step("I am logged out as an admin")
+  step(%{I check "Turn off tag wrangling for non-admins"})
+  step(%{I press "Update"})  
+  step("I log out")
 end
 
 Given /^tag wrangling is on$/ do
-  step("I am logged in as an admin")
+  step(%{I am logged in as a "tag_wrangling" admin})
   visit(admin_settings_path)
-  step("I uncheck \"Turn off tag wrangling for non-admins\"")
-  step("I press \"Update\"")
-  step("I am logged out as an admin")
+  step(%{I uncheck "Turn off tag wrangling for non-admins"})
+  step(%{I press "Update"})
+  step("I log out")
 end
 
 Given /^the support form is disabled and its text field set to "Please don't contact us"$/ do
-  step("I am logged in as an admin")
+  step(%{I am logged in as a "support" admin})
   visit(admin_settings_path)
   check("Turn off support form")
   fill_in(:admin_setting_disabled_support_form_text, with: "Please don't contact us")
@@ -102,7 +82,7 @@ Given /^the support form is disabled and its text field set to "Please don't con
 end
 
 Given /^the support form is enabled$/ do
-  step("I am logged in as an admin")
+  step(%{I am logged in as a "support" admin})
   visit(admin_settings_path)
   uncheck("Turn off support form")
   click_button("Update")
@@ -116,7 +96,7 @@ end
 Given /^I have posted known issues$/ do
   step %{I am logged in as an admin}
   step %{I follow "Admin Posts"}
-  step %{I follow "Known Issues" within "#main"}
+  step %{I follow "Known Issues" within "#header"}
   step %{I follow "make a new known issues post"}
   step %{I fill in "known_issue_title" with "First known problem"}
   step %{I fill in "content" with "This is a bit of a problem"}
@@ -124,15 +104,15 @@ Given /^I have posted known issues$/ do
 end
 
 Given /^I have posted an admin post$/ do
-  step("I am logged in as an admin")
+  step(%{I am logged in as a "communications" admin})
   step("I make an admin post")
-  step("I am logged out as an admin")
+  step("I log out")
 end
 
 Given /^the fannish next of kin "([^\"]*)" for the user "([^\"]*)"$/ do |kin, user|
   step %{the user "#{kin}" exists and is activated}
   step %{the user "#{user}" exists and is activated}
-  step %{I am logged in as an admin}
+  step %{I am logged in as a "policy_and_abuse" admin}
   step %{I go to the abuse administration page for "#{user}"}
   fill_in("Fannish next of kin's username", with: "#{kin}")
   fill_in("Fannish next of kin's email", with: "testing@foo.com")
@@ -141,7 +121,7 @@ end
 
 Given /^the user "([^\"]*)" is suspended$/ do |user|
   step %{the user "#{user}" exists and is activated}
-  step %{I am logged in as an admin}
+  step %{I am logged in as a "policy_and_abuse" admin}
   step %{I go to the abuse administration page for "#{user}"}
   choose("admin_action_suspend")
   fill_in("suspend_days", with: 30)
@@ -151,7 +131,7 @@ end
 
 Given /^the user "([^\"]*)" is banned$/ do |user|
   step %{the user "#{user}" exists and is activated}
-  step %{I am logged in as an admin}
+  step(%{I am logged in as a "policy_and_abuse" admin})
   step %{I go to the abuse administration page for "#{user}"}
   choose("admin_action_ban")
   fill_in("Notes", with: "Why they are banned")
@@ -164,13 +144,13 @@ Then /^the user "([^\"]*)" should be permanently banned$/ do |user|
 end
 
 Given /^I have posted an admin post without paragraphs$/ do
-  step("I am logged in as an admin")
+  step(%{I am logged in as a "communications" admin})
   step("I make an admin post without paragraphs")
-  step("I am logged out as an admin")
+  step("I log out")
 end
 
 Given /^I have posted an admin post with tags$/ do
-  step("I am logged in as an admin")
+  step(%{I am logged in as a "communications" admin})
   visit new_admin_post_path
   fill_in("admin_post_title", with: "Default Admin Post")
   fill_in("content", with: "Content of the admin post.")
@@ -184,17 +164,13 @@ Given(/^the following language exists$/) do |table|
   end
 end
 
-Given /^the abuse report will not be considered spam$/ do
-  allow(Akismetor).to receive(:spam?).and_return(false)
-end
-
 ### WHEN
 
 When /^I visit the last activities item$/ do
   visit("/admin/activities/#{AdminActivity.last.id}")
 end
 
-When /^I fill in "([^"]*)" with "([^"]*)'s" invite code$/  do |field, login|
+When /^I fill in "([^"]*)" with "([^"]*)'s" invite code$/ do |field, login|
   user = User.find_by(login: login)
   token = user.invitations.first.token
   fill_in(field, with: token)
@@ -215,7 +191,7 @@ When /^I make an admin post without paragraphs$/ do
 end
 
 When /^I make a(?: (\d+)(?:st|nd|rd|th)?)? FAQ post$/ do |n|
-  n ||= 1
+  n = 1 if n.zero?
   visit new_archive_faq_path
   fill_in("Question*", with: "Number #{n} Question.")
   fill_in("Answer*", with: "Number #{n} posted FAQ, this is.")
@@ -243,12 +219,6 @@ When /^I make a multi-question FAQ post$/ do
   click_button("Post")
 end
 
-When /^there are (\d+) Archive FAQs$/ do |n|
-  (1..n.to_i).each do |i|
-    step %{I make a #{i} FAQ post}
-  end
-end
-
 When /^(\d+) Archive FAQs? exists?$/ do |n|
   (1..n.to_i).each do |i|
     FactoryBot.create(:archive_faq, id: i)
@@ -266,7 +236,7 @@ end
 When /^I edit known issues$/ do
   step %{I am logged in as an admin}
   step %{I follow "Admin Posts"}
-  step %{I follow "Known Issues" within "#main"}
+  step %{I follow "Known Issues" within "#header"}
   step %{I follow "Edit"}
   step %{I fill in "known_issue_title" with "More known problems"}
   step %{I fill in "content" with "This is a bit of a problem, and this is too"}
@@ -276,7 +246,7 @@ end
 When /^I delete known issues$/ do
   step %{I am logged in as an admin}
   step %{I follow "Admin Posts"}
-  step %{I follow "Known Issues" within "#main"}
+  step %{I follow "Known Issues" within "#header"}
   step %{I follow "Delete"}
 end
 
@@ -356,7 +326,7 @@ Then /^the work "([^\"]*)" should not be hidden$/ do |work|
 end
 
 Then /^logged out users should not see the hidden work "([^\"]*)" by "([^\"]*)"?/ do |work, user|
-  step %{I am logged out}
+  step "I am a visitor"
   step %{I should not see the hidden work "#{work}" by "#{user}"}
 end
 
@@ -381,7 +351,7 @@ Then /^"([^\"]*)" should see their work "([^\"]*)" is hidden?/ do |user, work|
 end
 
 Then /^logged out users should see the unhidden work "([^\"]*)" by "([^\"]*)"?/ do |work, user|
-  step %{I am logged out}
+  step "I am a visitor"
   step %{I should see the unhidden work "#{work}" by "#{user}"}
 end
 
@@ -466,4 +436,8 @@ end
 Then /^the work "([^\"]*)" should not be marked as spam/ do |work|
   w = Work.find_by_title(work)
   assert !w.spam?
+end
+
+Then /^the user content should be shown as right-to-left$/ do
+  page.should have_xpath("//div[contains(@class, 'userstuff') and @dir='rtl']")
 end

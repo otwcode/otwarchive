@@ -1,4 +1,5 @@
 class WorkIndexer < Indexer
+
   def self.klass
     "Work"
   end
@@ -6,7 +7,7 @@ class WorkIndexer < Indexer
   def self.index_all(options = {})
     unless options[:skip_delete]
       delete_index
-      create_index(12)
+      create_index(shards: 12)
     end
     options[:skip_delete] = true
     super(options)
@@ -26,8 +27,8 @@ class WorkIndexer < Indexer
           tag: {
             type: "text"
           },
-          series_titles: {
-            type: "text"
+          series: {
+            type: "object"
           },
           authors_to_sort_on: {
             type: "keyword"
@@ -57,7 +58,7 @@ class WorkIndexer < Indexer
       root: false,
       only: [
         :id, :expected_number_of_chapters, :created_at, :updated_at,
-        :major_version, :minor_version, :posted, :language_id, :restricted,
+        :major_version, :minor_version, :posted, :restricted,
         :title, :summary, :notes, :word_count, :hidden_by_admin, :revised_at,
         :title_to_sort_on, :backdate, :endnotes,
         :imported_from_url, :complete, :work_skin_id, :in_anon_collection,
@@ -88,7 +89,17 @@ class WorkIndexer < Indexer
         :nonfiction
       ]
     ).merge(
-      series_titles: object.series.pluck(:title)
+      language_id: object.language&.short,
+      series: series_data(object)
     )
+  end
+
+  # Pluck the desired series data and then turn it back
+  # into a hash
+  def series_data(object)
+    series_attrs = [:id, :title, :position]
+    object.series.pluck(*series_attrs).map do |values|
+      series_attrs.zip(values).to_h
+    end
   end
 end

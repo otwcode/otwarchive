@@ -1,29 +1,34 @@
 Otwarchive::Application.routes.draw do
 
+  devise_scope :admin do
+    get "admin/logout" => "admin/sessions#confirm_logout"
+  end
+
   devise_for :admin,
-             module: 'admin',
+             module: "admin",
              only: :sessions,
-             controllers: { sessions: 'admin/sessions' },
+             controllers: { sessions: "admin/sessions" },
              path_names: {
-               sign_in: 'login',
-               sign_out: 'logout'
+               sign_in: "login",
+               sign_out: "logout"
              }
 
   devise_scope :user do
-    get 'signup(/:invitation_token)' => 'users/registrations#new', as: 'signup'
+    get "signup(/:invitation_token)" => "users/registrations#new", as: "signup"
+    get "users/logout" => "users/sessions#confirm_logout"
   end
 
   devise_for :users,
-             module: 'users',
+             module: "users",
              controllers: {
-                sessions: 'users/sessions',
-                registrations: 'users/registrations',
-                passwords: 'users/passwords'
-              },
-              path_names: {
-                sign_in: 'login',
-                sign_out: 'logout'
-              }
+               sessions: "users/sessions",
+               registrations: "users/registrations",
+               passwords: "users/passwords"
+             },
+             path_names: {
+               sign_in: "login",
+               sign_out: "logout"
+             }
 
   #### ERRORS ####
 
@@ -95,7 +100,6 @@ Otwarchive::Application.routes.draw do
       post :mass_update
       get :remove_association
       get :wrangle
-      get :reindex
     end
     collection do
       get :show_hidden
@@ -104,12 +108,13 @@ Otwarchive::Application.routes.draw do
     resources :works
     resources :bookmarks
     resources :comments
+    resource :troubleshooting, controller: :troubleshooting, only: [:show, :update]
   end
 
   resources :tag_sets, controller: 'owned_tag_sets' do
     resources :nominations, controller: 'tag_set_nominations' do
       collection do
-        put  :update_multiple
+        put :update_multiple
         delete :destroy_multiple
         get :confirm_destroy_multiple
       end
@@ -140,11 +145,9 @@ Otwarchive::Application.routes.draw do
   end
 
   #### ADMIN ####
-  resources :admins
   resources :admin_posts do
     resources :comments
   end
-
 
   namespace :admin do
     resources :activities, only: [:index, :show]
@@ -196,6 +199,7 @@ Otwarchive::Application.routes.draw do
     end
     resources :api
   end
+  resources :admins, only: [:index]
 
   post '/admin/api/new', to: 'admin/api#create'
 
@@ -317,7 +321,7 @@ Otwarchive::Application.routes.draw do
       get :mark_for_later
       get :mark_as_read
       get :confirm_delete
-      get :reindex
+      get :share
     end
     resources :bookmarks
     resources :chapters do
@@ -344,8 +348,10 @@ Otwarchive::Application.routes.draw do
         put :review_all
       end
     end
+    resource :hit_count, controller: :hit_count, only: [:create]
     resources :kudos, only: [:index]
     resources :links, controller: "work_links", only: [:index]
+    resource :troubleshooting, controller: :troubleshooting, only: [:show, :update]
   end
 
   resources :chapters do
@@ -406,11 +412,10 @@ Otwarchive::Application.routes.draw do
     resources :tags do
       resources :works
     end
-    resources :participants, controller: "collection_participants" do
+    resources :participants, controller: "collection_participants", only: [:index, :update, :destroy] do
       collection do
         get :add
         get :join
-        patch :update
       end
     end
     resources :items, controller: "collection_items" do
@@ -452,8 +457,16 @@ Otwarchive::Application.routes.draw do
     end
     resources :requests, controller: "challenge_requests"
     # challenge types
-    resource :gift_exchange, controller: 'challenge/gift_exchange'
-    resource :prompt_meme, controller: 'challenge/prompt_meme'
+    resource :gift_exchange, controller: "challenge/gift_exchange" do
+      member do
+        get :confirm_delete
+      end
+    end
+    resource :prompt_meme, controller: "challenge/prompt_meme" do
+      member do
+        get :confirm_delete
+      end
+    end
   end
 
   #### I18N ####
@@ -503,6 +516,7 @@ Otwarchive::Application.routes.draw do
     end
     member do
       get :confirm_delete
+      get :share
     end
     resources :collection_items
   end
@@ -513,6 +527,7 @@ Otwarchive::Application.routes.draw do
     member do
       get :preview
       get :set
+      get :confirm_delete
     end
     collection do
       get :unset
@@ -603,7 +618,7 @@ Otwarchive::Application.routes.draw do
 
   patch '/admin/skins/update' => 'admin_skins#update', as: :update_admin_skin
 
-  get '/admin/admin_users/troubleshoot/:id' =>'admin/admin_users#troubleshoot', as: :troubleshoot_admin_user
+  get "/admin/admin_users/troubleshoot/:id" => "admin/admin_users#troubleshoot", as: :troubleshoot_admin_user
 
   # TODO: rewrite the autocomplete controller to deal with the fact that
   # there are fifty different actions going on in there

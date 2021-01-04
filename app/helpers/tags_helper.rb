@@ -187,9 +187,7 @@ module TagsHelper
     sub_ul.html_safe
   end
 
-
   def blurb_tag_block(item, tag_groups=nil)
-    item_class = item.class.to_s.underscore
     tag_groups ||= item.tag_groups
     categories = ['ArchiveWarning', 'Relationship', 'Character', 'Freeform']
     tag_block = ""
@@ -197,12 +195,9 @@ module TagsHelper
     categories.each do |category|
       if tags = tag_groups[category]
         unless tags.empty?
-          class_name = category == "ArchiveWarning" ? "warnings" : category.downcase.pluralize
-
+          class_name = tag_block_class_name(category)
           if (class_name == "warnings" && hide_warnings?(item)) || (class_name == "freeforms" && hide_freeform?(item))
-            open_tags = "<li class='#{class_name}' id='#{item_class}_#{item.id}_category_#{class_name}'><strong>"
-            close_tags = "</strong></li>"
-            tag_block <<  open_tags + show_hidden_tags_link(item, class_name) + close_tags
+            tag_block << show_hidden_tag_link_list_item(item, category)
           elsif class_name == "warnings"
             open_tags = "<li class='#{class_name}'><strong>"
             close_tags = "</strong></li>"
@@ -216,6 +211,30 @@ module TagsHelper
       end
     end
     tag_block.html_safe
+  end
+
+  # Takes a tag category class name, e.g. Relationship, and returns a string.
+  # The returned string is plural and used for more than the HTML class
+  # attribute, which is why we don't use tag_type_css_class(tag_type).
+  def tag_block_class_name(category)
+    if category == "ArchiveWarning"
+      "warnings"
+    else
+      category.downcase.pluralize
+    end
+  end
+
+  # Wraps hidden tags toggle in <li> and <strong> tags for blurbs and work meta.
+  # options[:suppress_toggle_class] is used to skip placing an HTML class on the
+  # toggle in work meta. The class will still be on the tags.
+  def show_hidden_tag_link_list_item(item, category, options = {})
+    item_class = item.class.to_s.underscore
+    class_name = tag_block_class_name(category)
+    content_tag(:li,
+                content_tag(:strong, 
+                            show_hidden_tags_link(item, class_name)),
+                class: options[:suppress_toggle_class] ? nil : class_name,
+                id: "#{item_class}_#{item.id}_category_#{class_name}")
   end
 
   def get_title_string(tags, category_name = "")

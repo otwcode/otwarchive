@@ -46,6 +46,10 @@ Given /^I wait (\d+) seconds?$/ do |number|
   Kernel::sleep number.to_i
 end
 
+When "all AJAX requests are complete" do
+  wait_for_ajax if @javascript
+end
+
 When 'the system processes jobs' do
   #resque runs inline during testing. see resque.rb in initializers/gem-plugin_config
   #Delayed::Worker.new.work_off

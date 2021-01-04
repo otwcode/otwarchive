@@ -48,40 +48,13 @@ class BookmarkSearchForm
 
   attr_accessor :options
 
-  def self.count_for_user(user)
-    BookmarkQuery.new(
-      user_ids: [user.id],
-      show_private: User.current_user.is_a?(Admin) || user == User.current_user
-    ).count
-  end
-
-  def self.count_for_pseuds(pseuds)
-    BookmarkQuery.new(
-      pseud_ids: pseuds.map(&:id),
-      show_private: User.current_user.is_a?(Admin) ||
-                    pseuds.map(&:user).uniq == [User.current_user]
-    ).count
-  end
-
   ATTRIBUTES.each do |filterable|
     define_method(filterable) { options[filterable] }
   end
 
-  def initialize(options={})
-    @options = options
-    [:date, :bookmarkable_date].each do |countable|
-      if @options[countable].present?
-        @options[countable].gsub!("&gt;", ">")
-        @options[countable].gsub!("&lt;", "<")
-      end
-    end
-
-    # If we call the form field 'notes', the parser adds html to it
-    @options[:notes] = @options[:bookmark_notes]
-
-    # We need to respect some options that are deliberately set to false, and
-    # false.blank? is true, so we check for nil? and not blank? here.
-    @searcher = BookmarkQuery.new(options.delete_if { |_, v| v.nil? })
+  def initialize(options = {})
+    @options = processed_options(options)
+    @searcher = BookmarkQuery.new(@options)
   end
 
   def persisted?
@@ -132,7 +105,7 @@ class BookmarkSearchForm
       summary << "Type: #{self.bookmarkable_type}"
     end
     if self.language_id.present?
-      language = Language.find_by(id: self.language_id)
+      language = Language.find_by(short: self.language_id)
       if language.present?
         summary << "Work language: #{language.name}"
       end
@@ -181,4 +154,80 @@ class BookmarkSearchForm
     'desc'
   end
 
+  ###############
+  # COUNTING
+  ###############
+
+  def self.count_for_user(user)
+    show_private = User.current_user.is_a?(Admin) || user == User.current_user
+
+    Rails.cache.fetch(count_cache_key(user, show_private), count_cache_options) do
+      BookmarkQuery.new(user_ids: [user.id], show_private: show_private).count
+    end
+  end
+
+  def self.count_for_pseud(pseud)
+    show_private = User.current_user.is_a?(Admin) || pseud.user == User.current_user
+
+    Rails.cache.fetch(count_cache_key(pseud, show_private), count_cache_options) do
+      BookmarkQuery.new(pseud_ids: [pseud.id], show_private: show_private).count
+    end
+  end
+
+  def self.count_cache_key(owner, show_private)
+    status = User.current_user ? "logged_in" : "logged_out"
+    status << "_private" if show_private
+    "bookmark_count_#{owner.class.name.underscore}_#{owner.id}_#{status}"
+  end
+
+  def self.count_cache_options
+    {
+      expires_in: ArchiveConfig.SECONDS_UNTIL_DASHBOARD_COUNTS_EXPIRE.seconds,
+      race_condition_ttl: 10.seconds
+    }
+  end
+
+  private
+
+  def processed_options(opts = {})
+    [:date, :bookmarkable_date].each do |countable|
+      if opts[countable].present?
+        opts[countable] = opts[countable].gsub("&gt;", ">").
+                                          gsub("&lt;", "<")
+      end
+    end
+
+    # If we call the form field 'notes', the parser adds html to it
+    opts[:notes] = opts[:bookmark_notes]
+
+    opts = standardize_language_ids(opts)
+
+    # Support legacy warning searches
+    if opts[:warning_ids].present?
+      opts[:archive_warning_ids] = opts.delete(:warning_ids)
+    end
+
+    # We need to respect some options that are deliberately set to false, and
+    # false.blank? is true, so we check for nil? and not blank? here.
+    opts.delete_if { |_, v| v.nil? }
+  end
+
+  # Maintain backward compatibility for old bookmark searches/filters:
+  def standardize_language_ids(opts)
+    # - Using language IDs in the "Work language" dropdown
+    if opts[:language_id].present? && opts[:language_id].to_i != 0
+      language = Language.find_by(id: opts[:language_id])
+      opts[:language_id] = language.short if language.present?
+    end
+
+    # - Using language IDs in "Any field on work" (search) or "Search within results" (filters)
+    if opts[:bookmarkable_query].present?
+      opts[:bookmarkable_query] = opts[:bookmarkable_query].gsub(/\blanguage_id\s*:\s*(\d+)/) do
+        lang = Language.find_by(id: Regexp.last_match[1])
+        lang = Language.default if lang.blank?
+        "language_id: " + lang.short
+      end
+    end
+    opts
+  end
 end

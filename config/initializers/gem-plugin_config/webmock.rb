@@ -1,1 +1,4 @@
-WebMock.allow_net_connect! if Rails.env.test?
+if Rails.env.test?
+  WebMock.allow_net_connect!
+  WebMock.enable!
+end

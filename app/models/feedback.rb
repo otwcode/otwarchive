@@ -14,7 +14,12 @@ class Feedback < ApplicationRecord
 
   validate :check_for_spam
   def check_for_spam
-    errors.add(:base, ts("^This comment looks like spam to our system, sorry! Please try again, or create an account to comment.")) unless check_for_spam?
+    approved = logged_in_with_matching_email? || !Akismetor.spam?(akismet_attributes)
+    errors.add(:base, ts("This report looks like spam to our system!")) unless approved
+  end
+
+  def logged_in_with_matching_email?
+    User.current_user.present? && User.current_user.email == email
   end
 
   def akismet_attributes
@@ -28,26 +33,19 @@ class Feedback < ApplicationRecord
     }
   end
 
-  def check_for_spam?
-    # don't check for spam while running tests
-    self.approved = Rails.env.test? || !Akismetor.spam?(akismet_attributes)
-  end
-
   def mark_as_spam!
-    update_attribute(:approved, false)
     # don't submit spam reports unless in production mode
     Rails.env.production? && Akismetor.submit_spam(akismet_attributes)
   end
 
   def mark_as_ham!
-    update_attribute(:approved, true)
     # don't submit ham reports unless in production mode
     Rails.env.production? && Akismetor.submit_ham(akismet_attributes)
   end
 
   def email_and_send
-    AdminMailer.feedback(id).deliver
-    UserMailer.feedback(id).deliver
+    AdminMailer.feedback(id).deliver_later
+    UserMailer.feedback(id).deliver_later
     send_report
   end
 

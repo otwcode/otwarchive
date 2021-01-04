@@ -8,15 +8,21 @@
 # Calling "cap deploy:migrations" inserts the task "deploy:migrate" before deploy:symlink
 require 'capistrano/gitflow_version'
 
-server "test-app10.transformativeworks.org", :app, :db
-server "test-app11.transformativeworks.org", :app
-server "test-app12.transformativeworks.org", :app, :workers, :schedulers, primary: true
-server "test-front10.transformativeworks.org", :web
+server "test-app13", :app, :db, :schedulers
+server "test-app14", :app, :schedulers
+server "test-app15", :app, :workers, :schedulers, primary: true
+server "test-front11", :web
+server "test-front12", :web
 
 set :rails_env, 'staging'
 
 # our tasks which are staging specific
 namespace :stage_only do
+  desc "Set up staging robots.txt file"
+  task :update_robots, roles: :web do
+    run "cp #{release_path}/public/robots.private.txt #{release_path}/public/robots.txt"
+  end
+
   desc "Send out 'Testarchive deployed' notification"
   task :notify_testers do
     system "echo 'Testarchive deployed' | mail -s 'Testarchive deployed' #{mail_to}"
@@ -24,7 +30,7 @@ namespace :stage_only do
 end
 
 #before "deploy:update_code", "stage_only:git_in_home"
-#after "deploy:update_code", "stage_only:update_public", "stage_only:update_configs"
+after "deploy:update_code", "stage_only:update_robots"
 
 #before "db:reset_on_stage", "deploy:web:disable"
 # reset the database and clear subscriptions and emails out of it

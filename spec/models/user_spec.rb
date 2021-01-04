@@ -1,24 +1,37 @@
-require 'spec_helper'
+require "spec_helper"
 
-describe User, :ready do
+describe User do
+  describe "#destroy" do
+    context "on a user with kudos" do
+      let(:user) { create(:user) }
+      let!(:kudo_bundle) { create_list(:kudo, 2, user: user) }
 
-  describe "Create" do
-    context "valid user" do
+      it "removes user from kudos" do
+        user.destroy!
+        kudo_bundle.each do |kudo|
+          kudo.reload
+          expect(kudo.user).to be_nil
+          expect(kudo.user_id).to be_nil
+        end
+      end
+    end
+  end
 
-      let(:user) {build(:user)}
-      it "should save a minimalistic user" do
+  describe "#save" do
+    context "on a valid user" do
+      let(:user) { build(:user) }
+
+      it "saves without errors" do
         expect(user.save).to be_truthy
       end
 
-      let(:user) {build(:user)}
-      it "should encrypt password" do
+      it "encrypts password" do
         user.save
         expect(user.encrypted_password).not_to be_empty
         expect(user.encrypted_password).not_to eq(user.password)
       end
 
-      let(:user) {build(:user)}
-      it "should create default associateds" do
+      it "creates default associations" do
         user.save
         expect(user.profile).not_to be_nil
         expect(user.preference).not_to be_nil
@@ -26,44 +39,50 @@ describe User, :ready do
         expect(user.pseuds.first.name).to eq(user.login)
         expect(user.pseuds.first.is_default).to be_truthy
       end
-
     end
 
-    describe "User Validations" do
-      context "missing age_over_13 flage" do
-        let(:no_age_over_13) {build(:user, age_over_13: "0")}
-        it "should not save user" do
+    describe "on an invalid user" do
+      context "missing the age_over_13 flag" do
+        let(:no_age_over_13) { build(:user, age_over_13: "0") }
+
+        it "does not save" do
           expect(no_age_over_13.save).to be_falsey
-          expect(no_age_over_13.errors[:age_over_13]).not_to be_empty
+          expect(no_age_over_13.errors[:age_over_13].first).to include("you have to be over 13!")
         end
       end
 
-      context "missing terms_of_service flag" do
-        let(:no_tos) {build(:user, terms_of_service: "0")}
-        it "should not save user" do
+      context "missing the terms_of_service flag" do
+        let(:no_tos) { build(:user, terms_of_service: "0") }
+
+        it "does not save" do
           expect(no_tos.save).to be_falsey
-          expect(no_tos.errors[:terms_of_service]).not_to be_empty
+          expect(no_tos.errors[:terms_of_service].first).to include("you need to accept the Terms")
         end
       end
 
-      context "login length" do
-        let(:login_short) {build(:user, login: 5)}
-        it "should not save user with too short login" do
+      context "with login too short" do
+        let(:login_short) { build(:user, login: Faker::Lorem.characters(ArchiveConfig.LOGIN_LENGTH_MIN - 1)) }
+
+        it "does not save" do
           expect(login_short.save).to be_falsey
-          expect(login_short.errors[:login]).not_to be_empty
-        end
-
-        let(:login_long) {build(:user, login: 40)}
-        it "should not save user with too long login" do
-          expect(login_long.save).to be_falsey
-          expect(login_long.errors[:login]).not_to be_empty
+          expect(login_short.errors[:login].first).to include("is too short")
         end
       end
 
-      context "email veracity" do
-        BAD_EMAILS.each do |email|
-          let(:bad_email) {build(:user, email: email)}
-          it "cannot be created if the email does not pass veracity check" do
+      context "with login too long" do
+        let(:login_long) { build(:user, login: Faker::Lorem.characters(ArchiveConfig.LOGIN_LENGTH_MAX + 1)) }
+
+        it "does not save" do
+          expect(login_long.save).to be_falsey
+          expect(login_long.errors[:login].first).to include("is too long")
+        end
+      end
+
+      BAD_EMAILS.each do |email|
+        context "with email #{email}" do
+          let(:bad_email) { build(:user, email: email) }
+
+          it "does not save" do
             expect(bad_email.save).to be_falsey
             expect(bad_email.errors[:email]).to include("should look like an email address.")
             expect(bad_email.errors[:email]).to include("does not seem to be a valid address.")
@@ -71,45 +90,67 @@ describe User, :ready do
         end
       end
 
-      context "password length" do
-        let(:password_short) {build(:user, password: 5)}
-        it "should not save user with too short login" do
+      context "with password too short" do
+        let(:password_short) { build(:user, password: Faker::Lorem.characters(ArchiveConfig.PASSWORD_LENGTH_MIN - 1)) }
+
+        it "does not save" do
           expect(password_short.save).to be_falsey
-          expect(password_short.errors[:password]).not_to be_empty
+          expect(password_short.errors[:password].first).to include("is too short")
         end
+      end
 
-        let(:password_long) {build(:user, password: 41)}
-        it "should not save user with too long login" do
+      context "with password too long" do
+        let(:password_long) { build(:user, password: Faker::Lorem.characters(ArchiveConfig.PASSWORD_LENGTH_MAX + 1)) }
+
+        it "does not save" do
           expect(password_long.save).to be_falsey
-          expect(password_long.errors[:password]).not_to be_empty
+          expect(password_long.errors[:password].first).to include("is too long")
         end
       end
 
-      context "login format validation" do
-        let(:begins_with_symbol) {}
-        let(:ends_with_symbol){}
-        let(:correct_format) {}
+      context "with existing users" do
+        let(:existing_user) { create(:user) }
+        let(:new_user) { build(:user) }
+
+        it "does not save a duplicate login" do
+          new_user.login = existing_user.login
+          expect(new_user.save).to be_falsey
+          expect(new_user.errors[:login].first).to eq("has already been taken")
+        end
+
+        it "does not save a duplicate email" do
+          new_user.email = existing_user.email
+          expect(new_user.save).to be_falsey
+          expect(new_user.errors[:email].first).to eq("has already been taken")
+        end
       end
+    end
+  end
 
-      context "login or email exists" do
+  describe ".search_multiple_by_email" do
+    let(:user_bundle) { create_list(:user, 5) }
 
-        before :all do
-          @existing = create(:user)
-        end
+    it "removes exact duplicates from the list" do
+      emails = user_bundle.map(&:email) << user_bundle.first.email
+      expect(emails.size).to be > user_bundle.size
+      expect(User.search_multiple_by_email(emails).first.size).to eq(emails.size - 1)
+    end
 
-        let(:new) {build(:user, login: @existing.login)}
-        it "should not save user when login exists already" do
-          expect(new.save).to be_falsey
-          expect(new.errors[:login]).not_to be_empty
-        end
+    it "ignores case differences" do
+      emails = user_bundle.map(&:email) << user_bundle.first.email.upcase
+      expect(emails.size).to be > user_bundle.size
+      expect(User.search_multiple_by_email(emails).first.size).to eq(emails.size - 1)
+    end
 
-        let(:new) {build(:duplicate_user, email: @existing.email)}
-        it "should not save user when email exists already" do
-          expect(new.save).to be_falsey
-          expect(new.errors[:email]).not_to be_empty
-        end
+    it "returns found users, not found emails and the number of duplicates" do
+      more_emails = [user_bundle.second.email, user_bundle.first.email.upcase, "unknown@ao3.org", "UnKnown@AO3.org", "nobody@example.com"]
+      emails = user_bundle.map(&:email) + more_emails
 
-      end
+      found, not_found, duplicates = User.search_multiple_by_email(emails)
+
+      expect(not_found).to eq(["unknown@ao3.org", "nobody@example.com"])
+      expect(found.size).to eq(emails.map(&:downcase).uniq.size - not_found.size)
+      expect(duplicates).to eq(3)
     end
   end
 end

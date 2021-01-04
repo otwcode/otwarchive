@@ -99,7 +99,7 @@ class UsersController < ApplicationController
 
   def notify_and_show_confirmation_screen
     # deliver synchronously to avoid getting caught in backed-up mail queue
-    UserMailer.signup_notification(@user.id).deliver!
+    UserMailer.signup_notification(@user.id).deliver_now
 
     flash[:notice] = ts("During testing you can activate via <a href='%{activation_url}'>your activation url</a>.",
                         activation_url: activate_path(@user.confirmation_token)).html_safe if Rails.env.development?
@@ -110,7 +110,7 @@ class UsersController < ApplicationController
   def activate
     if params[:id].blank?
       flash[:error] = ts('Your activation key is missing.')
-      redirect_to ''
+      redirect_to root_path
 
       return
     end
@@ -119,13 +119,13 @@ class UsersController < ApplicationController
 
     unless @user
       flash[:error] = ts("Your activation key is invalid. If you didn't activate within 14 days, your account was deleted. Please sign up again, or contact support via the link in our footer for more help.").html_safe
-      redirect_to ''
+      redirect_to root_path
 
       return
     end
 
     if @user.active?
-      flash.now[:error] = ts('Your account has already been activated.')
+      flash[:error] = ts("Your account has already been activated.")
       redirect_to @user
 
       return
@@ -133,7 +133,7 @@ class UsersController < ApplicationController
 
     @user.activate
 
-    flash[:notice] = ts('Signup complete! Please log in.')
+    flash[:notice] = ts("Account activation complete! Please log in.")
 
     @user.create_log_item(action: ArchiveConfig.ACTION_ACTIVATE)
 
@@ -175,7 +175,7 @@ class UsersController < ApplicationController
 
       if @new_email == @confirm_email && @user.save
         flash[:notice] = ts('Your email has been successfully updated')
-        UserMailer.change_email(@user.id, @old_email, @new_email).deliver
+        UserMailer.change_email(@user.id, @old_email, @new_email).deliver_later
         @user.create_log_item(options = { action: ArchiveConfig.ACTION_NEW_EMAIL })
       else
         flash[:error] = ts("Email addresses don't match! Please retype and try again")

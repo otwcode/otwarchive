@@ -9,7 +9,7 @@ describe Work do
 
   context "when posted" do
     it "posts the first chapter" do
-      work = create(:posted_work)
+      work = create(:work)
       work.first_chapter.posted.should == true
     end
   end
@@ -76,11 +76,38 @@ describe Work do
     end
   end
 
-
   context "invalid endnotes" do
     let(:too_long) { ArchiveConfig.NOTES_MAX + 1 }
     it "cannot be longer than ArchiveConfig.NOTES_MAX" do
       expect(build(:work, title: Faker::Lorem.characters(too_long))).to be_invalid
+    end
+  end
+
+  context "invalid language" do
+    let(:deleted_language_id) do
+      briefly_lived_language = create(:language)
+      deleted_language_id = briefly_lived_language.id
+      briefly_lived_language.destroy
+      deleted_language_id
+    end
+
+    it "is valid with a supported language" do
+      work = build(:work, language_id: Language.default.id)
+      expect(work).to be_valid
+    end
+
+    it "is not valid with a language we don't support" do
+      work = build(:work, language_id: deleted_language_id)
+
+      expect(work).not_to be_valid
+      expect(work.errors.messages[:base]).to include("Language cannot be blank.")
+    end
+
+    it "is not valid without a language" do
+      work = build(:work, language_id: "")
+
+      expect(work).not_to be_valid
+      expect(work.errors.messages[:base]).to include("Language cannot be blank.")
     end
   end
 
@@ -339,7 +366,7 @@ describe Work do
       before :each do
         @skin_author = create(:user)
         @second_author = create(:user)
-        @private_skin = create(:private_work_skin, author_id: @skin_author.id)
+        @private_skin = create(:work_skin, :private, author_id: @skin_author.id)
       end
 
       let(:work_author) { @skin_author }
@@ -385,7 +412,6 @@ describe Work do
       @work.recipients = @recipient2.pseuds.first.name + "," + @recipient2.pseuds.first.name
       expect(@work.new_recipients).to eq(@recipient2.pseuds.first.name)
     end
-
   end
 
   describe "#find_by_url" do
@@ -432,12 +458,12 @@ describe Work do
 
   describe "#update_complete_status" do
     it "marks a work complete when it's been completed" do
-      work = create(:posted_work, expected_number_of_chapters: 1)
+      work = create(:work, expected_number_of_chapters: 1)
       expect(work.complete).to be_truthy
     end
 
     it "marks a work incomplete when it's no longer completed" do
-      work = create(:posted_work, expected_number_of_chapters: 1)
+      work = create(:work, expected_number_of_chapters: 1)
       work.update_attributes!(expected_number_of_chapters: nil)
       expect(work.reload.complete).to be_falsey
     end
@@ -446,7 +472,7 @@ describe Work do
   describe "#hide_spam" do
     before do
       @admin_setting = AdminSetting.first || AdminSetting.create
-      @work = create(:posted_work)
+      @work = create(:work)
     end
     context "when the admin setting is enabled" do
       before do

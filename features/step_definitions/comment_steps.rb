@@ -72,10 +72,10 @@ When /^I post the comment "([^"]*)" on the work "([^"]*)"$/ do |comment_text, wo
 end
 
 When /^I post the comment "([^"]*)" on the work "([^"]*)" as a guest(?: with email "([^"]*)")?$/ do |comment_text, work, email|
-  step "I am logged out"
+  step "I start a new session"
   step "I set up the comment \"#{comment_text}\" on the work \"#{work}\""
-  fill_in("Name", with: "guest")
-  fill_in("Email", with: (email || "guest@foo.com"))
+  fill_in("Guest name", with: "guest")
+  fill_in("Guest email", with: (email || "guest@foo.com"))
   click_button "Comment"
 end
 

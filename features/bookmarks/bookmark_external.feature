@@ -101,3 +101,82 @@ Feature: Create bookmarks of external works
     Then I should not see "Bookmark External Work"
     When I go to the bookmarks in collection "Testing BEW Collection"
     Then I should not see "Bookmark External Work"
+
+  Scenario: Users can see external works, admins can also see only duplicates
+    Given basic tags
+      And I am logged in
+      # Bookmark the same URL twice
+      And I bookmark the external work "External Title"
+      And I bookmark the external work "Alternate Title"
+
+    When I go to the external works page
+    Then I should see "External Title"
+      And I should see "Alternate Title"
+      And I should not see "Show duplicates"
+
+    When I go to the external works page with only duplicates
+    Then I should see "Sorry, you don't have permission to access the page you were trying to reach."
+
+    When I am logged in as an admin
+      And I go to the external works page
+    Then I should see "External Title"
+      And I should see "Alternate Title"
+      And I should see "Show duplicates (1)"
+    When I follow "Show duplicates (1)"
+    Then I should see "External Title"
+      And I should not see "Alternate Title"
+
+  @javascript
+  Scenario: When using the bookmarklet on a URL that has already been bookmarked, the work information will be automatically filled in
+    Given "first_user" has bookmarked an external work
+      And I am logged in as "second_user"
+    When I use the bookmarklet on a previously bookmarked URL
+      And I press "Create"
+    Then I should see "Bookmark was successfully created."
+      And the work info for my new bookmark should match the original
+
+  @javascript
+  Scenario: When using the autocomplete to select a URL that has already been bookmarked, the work information will be automatically filled in
+    Given "first_user" has bookmarked an external work
+      And I am logged in as "second_user"
+    When I go to the new external work page
+      And I choose a previously bookmarked URL from the autocomplete
+      And I press "Create"
+    Then I should see "Bookmark was successfully created."
+      And the work info for my new bookmark should match the original
+
+  @javascript
+  Scenario: When getting an error (e.g. because the title is blank) after using the autocomplete to select a previously-bookmarked URL, any changes you made to the work information are not overridden on the edit page
+    Given "first_user" has bookmarked an external work
+      And I am logged in as "second_user"
+    When I go to the new external work page
+      And I choose a previously bookmarked URL from the autocomplete
+      And I fill in "Title" with ""
+      And I fill in "Creator" with "Different Author"
+      And I press "Create"
+    Then I should see "Sorry! We couldn't save this bookmark because:"
+      And I should see "Title can't be blank"
+      And the field labeled "Title" should contain ""
+      And the field labeled "Creator" should contain "Different Author"
+    When I fill in "Title" with "Different Title"
+      And I press "Create"
+    Then I should see "Bookmark was successfully created."
+      And the title and creator info for my new bookmark should vary from the original
+      And the summary and tag info for my new bookmark should match the original
+
+  @javascript
+  Scenario: When using the autocomplete to select a URL that has already been bookmarked, any information you have entered will be overwritten
+    Given "first_user" has bookmarked an external work
+      And I am logged in as "second_user"
+    When I go to the new external work page
+      And I fill in "Creator" with "ao3testing"
+      And I fill in "Title" with "Some External Work"
+      And I fill in "Fandoms" with "Test Fandom"
+      And I select "General Audiences" from "Rating"
+      And I check "M/M"
+      And I fill in "Relationships" with "Character 1/Character 2"
+      And I fill in "Characters" with "Character 3, Character 4"
+      And I choose a previously bookmarked URL from the autocomplete
+      And I press "Create"
+    Then I should see "Bookmark was successfully created."
+      And the work info for my new bookmark should match the original

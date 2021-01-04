@@ -1,4 +1,4 @@
-class AdminsController < ApplicationController
-  before_action :admin_only
-  
+class AdminsController < Admin::BaseController
+  def index
+  end
 end

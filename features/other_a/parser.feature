@@ -49,7 +49,7 @@ Feature: Parsing HTML
     And the "Notes" field should contain "note"
     And the "End Notes" field should contain "keep-me"
     And the "content" field should contain "size-10"
-  When I press "Post Without Preview"
+  When I press "Post"
   Then I should see "Work was successfully posted."
     And I should see the image "src" text "britney.gif"
 

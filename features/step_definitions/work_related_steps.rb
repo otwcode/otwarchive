@@ -1,16 +1,17 @@
 ### GIVEN
 
 Given /^I have related works setup$/ do
-  step %{I am logged in as "inspiration"}
-  step %{I am logged in as "translator"}
-  step %{I am logged in as "remixer"}
-    step "basic tags"
-    step "all emails have been delivered"
-    step %{I have loaded the "languages" fixture}
-    step %{I am logged in as "inspiration"}
-    step %{I post the work "Worldbuilding"}
-    step %{I post the work "Worldbuilding Two"}
-    step "I am logged out"
+  step "basic tags"
+  step "all emails have been delivered"
+  step "I start a new session"
+  step %{I have loaded the "languages" fixture}
+
+  inspiration = FactoryBot.create(:user, login: "inspiration", confirmed_at: Time.now.utc)
+  FactoryBot.create(:user, login: "translator", confirmed_at: Time.now.utc)
+  FactoryBot.create(:user, login: "remixer", confirmed_at: Time.now.utc)
+
+  FactoryBot.create(:work, title: "Worldbuilding", authors: inspiration.pseuds)
+  FactoryBot.create(:work, title: "Worldbuilding Two", authors: inspiration.pseuds)
 end
 
 Given /^an inspiring parent work has been posted$/ do
@@ -64,6 +65,7 @@ When /^I post a related work as remixer$/ do
     step %{I go to the new work page}
     step %{I select "Not Rated" from "Rating"}
     step %{I check "No Archive Warnings Apply"}
+    step %{I select "English" from "Choose a language"}
     step %{I fill in "Fandoms" with "Stargate"}
     step %{I fill in "Work Title" with "Followup"}
     step %{I fill in "content" with "That could be an amusing crossover."}
