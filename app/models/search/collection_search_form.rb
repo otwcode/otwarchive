@@ -22,6 +22,7 @@ class CollectionSearchForm
     :authors_reveal_at,
     :sort_column,
     :sort_direction,
+    :tag,
     :filter_ids,
     :fandom_names,
     :fandom_ids,

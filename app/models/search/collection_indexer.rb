@@ -23,11 +23,12 @@ class CollectionIndexer < Indexer
           },
           challenge_type: {            
             type: "keyword",
-            null_value: "NULL" 
+            null_value: "NULL"
           },
           name: { type: "text", analyzer: "simple" },
           description: { type: "text", analyzer: "simple" },
-          created_at: { type: "date" }
+          created_at: { type: "date" },
+          signups_close_at: { type: "date" }
         }
       }
     }

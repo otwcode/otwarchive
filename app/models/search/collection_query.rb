@@ -77,9 +77,9 @@ class CollectionQuery < Query
   end
 
   def filter_id_filter
-    if filter_ids.present?
-      filter_ids.map { |filter_id| term_filter(:filter_ids, filter_id) }
-    end
+    return unless filter_ids.present?
+
+    filter_ids.map { |filter_id| term_filter(:filter_ids, filter_id) }
   end
 
   # This filter is used to restrict our results to only include collections

@@ -23,7 +23,15 @@
       </dt>
       <dd class="autocomplete search">
         <%= f.text_field "title", autocomplete_options("collection_fullname", data: { autocomplete_token_limit: 1 }) %>
-      </dd>      
+      </dd>
+
+      <dt class="autocomplete search">
+        <%= f.label "tag", ts("Filter by tag") %>
+      </dt>
+      <dd class="autocomplete search">
+        <%= f.text_field "tag", autocomplete_options("tag", data: { autocomplete_token_limit: 1 }) %>
+      </dd>
+
       <dt><%= ts("Closed") %></dt>
       <dd>
         <ul>

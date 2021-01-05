@@ -37,6 +37,15 @@
       (<%= collection.closed? ? ts("Closed") : ts("Open") %>, <%= collection.moderated? ? ts("Moderated") : ts("Unmoderated") %><%= collection.unrevealed? ? ts(", Unrevealed") : "" %><%= collection.anonymous? ? ts(", Anonymous") : "" %><%= collection.gift_exchange? ? ts(", Gift Exchange Challenge") : "" %><%= collection.prompt_meme? ? ts(", Prompt Meme Challenge") : "" %>)
     </p>
 
+    <% unless collection.tag_string.blank? %>
+      <h6 class="meta heading"><%= ts('Collection\'s Tags:') %></h6>
+      <ul class="meta tags commas">
+        <% collection.tags.each do |tag| %>
+          <li><%= link_to(tag.name, link_to_tag_bookmarks(tag), :class => 'tag') %></li>
+        <% end %>
+      </ul>
+    <% end %>
+
     <!--stats-->
     <dl class="stats">
       <% if (@challenges_count = collection.children.count) > 0 %>
