@@ -20,7 +20,7 @@ class CollectionQuery < Query
 
   # Combine the available filters
   def filters
-    [signup_open_filter, closed_filter, challenge_type_filter, owner_filter, maintainer_filter, moderator_filter, parent_filter, moderated_filter, signup_closes_in_future_filter].compact
+    [signup_open_filter, closed_filter, challenge_type_filter, owner_filter, maintainer_filter, moderator_filter, parent_filter, moderated_filter, signup_closes_in_future_filter, filter_id_filter].compact
   end
 
   # Combine the available queries
@@ -77,16 +77,9 @@ class CollectionQuery < Query
   end
 
   def filter_id_filter
-    return unless filter_ids.present?
+    return if filter_ids.blank?
 
     filter_ids.map { |filter_id| term_filter(:filter_ids, filter_id) }
-  end
-
-  # This filter is used to restrict our results to only include collections
-  # whose "tag" text matches all of the tag names in tag. This is useful when the user
-  # enters a non-existent tag, which would be discarded by the TaggableQuery.filter_ids function.
-  def tag_filter
-    match_filter(:tag, options[:tag].join(" ")) if options[:tag].present?
   end
 
   ####################

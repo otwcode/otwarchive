@@ -218,4 +218,22 @@ describe CollectionSearchForm, collection_search: true do
       expect(query.search_results).not_to include @parent
     end
   end
+
+  describe "filter by tag" do
+    let!(:collection) { create(:collection) }
+    let(:tag) { create(:freeform, canonical: true) }
+
+    before do
+      collection.tags.push(tag)
+      run_all_indexing_jobs
+    end
+
+    describe "when searching by tag" do
+      it "should only return works in that collection" do
+        search = CollectionSearchForm.new(tag: tag.name)
+
+        expect(search.search_results).to include collection
+      end
+    end
+  end
 end

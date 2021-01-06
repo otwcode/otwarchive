@@ -29,7 +29,7 @@
         <%= f.label "tag", ts("Filter by tag") %>
       </dt>
       <dd class="autocomplete search">
-        <%= f.text_field "tag", autocomplete_options("tag", data: { autocomplete_token_limit: 1 }) %>
+        <%= f.text_field "tag", autocomplete_options("tag", data: { autocomplete_token_limit: 5 }) %>
       </dd>
 
       <dt><%= ts("Closed") %></dt>
