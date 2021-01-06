@@ -15,7 +15,6 @@ class WorksController < ApplicationController
   before_action :check_visibility, only: [:show, :navigate, :share]
 
   before_action :load_first_chapter, only: [:show, :edit, :update, :preview]
-  before_action :init_serial, only: [:create, :new, :edit, :update, :preview]
 
   cache_sweeper :collection_sweeper
   cache_sweeper :feed_sweeper
@@ -302,14 +301,6 @@ class WorksController < ApplicationController
     @work = Work.new(work_params)
     @chapter = @work.first_chapter
     @chapter.attributes = work_params[:chapter_attributes] if work_params[:chapter_attributes]
-    if work_params[:series_attributes]
-      id = work_params[:series_attributes][:id]
-      title = work_params[:series_attributes][:title]
-      if id.blank? && !title.blank?
-        id = Series.where(title: title).last.id
-      end
-      @serial.id = id
-    end
     @work.ip_address = request.remote_ip
 
     @work.set_challenge_info
@@ -376,24 +367,10 @@ class WorksController < ApplicationController
     @work.preview_mode = !!(params[:preview_button] || params[:edit_button])
     @work.attributes = work_params
     @chapter.attributes = work_params[:chapter_attributes] if work_params[:chapter_attributes]
-    if work_params[:series_attributes]
-      id = work_params[:series_attributes][:id]
-      title = work_params[:series_attributes][:title]
-      unless id.blank? && title.blank?
-        if id.blank?
-          id = Series.where(title: title).last.id
-        else
-          title = Series.find(id).title
-        end
-        @serial.id = id
-        if @work.preview_mode
-          @work.series.build(title: title, id: id)
-        end
-      end
-    end
     @work.ip_address = request.remote_ip
     @work.set_word_count(@work.preview_mode)
     @work.save_parents if @work.preview_mode
+    @work.save_series if @work.preview_mode
 
     @work.set_challenge_info
     @work.set_challenge_claim_info
@@ -805,10 +782,6 @@ class WorksController < ApplicationController
 
   def load_first_chapter
     @chapter = @work.first_chapter
-  end
-
-  def init_serial
-    @serial = Series.new
   end
 
   # Check whether we should display :new or :edit instead of previewing or
