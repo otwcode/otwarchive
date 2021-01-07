@@ -299,6 +299,12 @@ class WorksController < ApplicationController
     end
 
     @work = Work.new(work_params)
+
+    if @work.new_series
+      params[:work][:series_attributes][:id] = @work.new_series.id
+      params[:work][:series_attributes][:title] = nil
+    end
+
     @chapter = @work.first_chapter
     @chapter.attributes = work_params[:chapter_attributes] if work_params[:chapter_attributes]
     @work.ip_address = request.remote_ip
@@ -370,6 +376,10 @@ class WorksController < ApplicationController
     @work.ip_address = request.remote_ip
     @work.set_word_count(@work.preview_mode)
     @work.save_parents if @work.preview_mode
+    if @work.new_series
+      params[:work][:series_attributes][:id] = @work.new_series.id
+      params[:work][:series_attributes][:title] = nil
+    end
     @work.save_series if @work.preview_mode
 
     @work.set_challenge_info
