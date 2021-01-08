@@ -606,8 +606,10 @@ class Work < ApplicationRecord
         errors.add(:base, ts("You can't add a work to that series."))
         return
       end
-      self.new_series = old_series unless (old_series.blank? || self.series.include?(old_series))
-      self.serial_works.build(series: old_series) unless (old_series.blank? || self.series.include?(old_series))
+      unless old_series.blank? || self.series.include?(old_series)
+        self.new_series = old_series 
+        self.serial_works.build(series: old_series)
+      end
       self.adjust_series_restriction
     elsif !attributes[:title].blank?
       new_series = Series.new
@@ -634,6 +636,7 @@ class Work < ApplicationRecord
   # Save relationship to series if applicable
   def save_series
     return unless self.new_series && self.new_series.present? && !(self.series.include?(self.new_series))
+
     self.series.build title: self.new_series[:title], id: self.new_series[:id]
   end
 

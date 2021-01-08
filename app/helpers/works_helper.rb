@@ -64,13 +64,12 @@ module WorksHelper
 
   # Determines whether or not "manage series" dropdown should appear
   def check_series_box(work)
-    work.series.present? || (params[:work] && !(work_series_value(:id).blank? && work_series_value(:title).blank?))
+    work.series.present? || work_series_value(:id).present? || work_series_value(:title).present?
   end
 
   # Passes value of fields for work series back to form when an error occurs on posting
   def work_series_value(field)
-    return unless params[:work] && params[:work][:series_attributes]
-    params[:work][:series_attributes][field]
+    return params.dig :work, :series_attributes, field
   end
 
   def language_link(work)
