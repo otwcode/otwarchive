@@ -1,5 +1,6 @@
 class Collection < ApplicationRecord
   include ActiveModel::ForbiddenAttributesProtection
+  include Filterable
   include UrlHelpers
   include WorksOwner
 
@@ -60,9 +61,6 @@ class Collection < ApplicationRecord
 
   has_many :bookmarks, through: :collection_items, source: :item, source_type: 'Bookmark'
   has_many :approved_bookmarks, -> { where('collection_items.user_approval_status = ? AND collection_items.collection_approval_status = ?', CollectionItem::APPROVED, CollectionItem::APPROVED) }, through: :collection_items, source: :item, source_type: 'Bookmark'
-
-  has_many :fandoms, -> { distinct }, through: :approved_works
-  has_many :filters, -> { distinct }, through: :approved_works
 
   has_many :collection_participants, dependent: :destroy
   accepts_nested_attributes_for :collection_participants, allow_destroy: true
@@ -410,7 +408,7 @@ class Collection < ApplicationRecord
 
   def notify_maintainers(subject, message)
     # send maintainers a notice via email
-    UserMailer.collection_notification(self.id, subject, message).deliver
+    UserMailer.collection_notification(self.id, subject, message).deliver_later
   end
 
   include AsyncWithResque

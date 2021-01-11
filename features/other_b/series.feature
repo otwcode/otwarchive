@@ -169,7 +169,7 @@ Feature: Create and Edit Series
     Given I am logged in as "whoever" with password "whatever"
       And I add the work "grumble" to series "polarbears"
     When I go to whoever's series page
-    Then I should see "whoever's Series"
+    Then I should see "1 Series by whoever"
       And I should see "polarbears"
 
   Scenario: Series index for maaany series
@@ -190,7 +190,7 @@ Feature: Create and Edit Series
       And I press "Update"
     Then I should see "Series was successfully updated."
       But I should not see "moon"
-    When the user "moon" accepts all co-creator invites
+    When the user "moon" accepts all co-creator requests
     Then "moon" should be a creator of the series "Ponies"
     When I view the series "Ponies"
       And I follow "Remove Me As Co-Creator"
@@ -264,7 +264,7 @@ Feature: Create and Edit Series
     When I am logged in as "barbaz"
       And I follow "Gentleman Jack" in the email
     Then I should not see "Edit Series"
-    When I follow "Creator Invitations page"
+    When I follow "Co-Creator Requests page"
       And I check "selected[]"
       And I wait 2 seconds
       And I press "Accept"
@@ -305,7 +305,7 @@ Feature: Create and Edit Series
       And I should not see "Me (myself)"
       And 1 email should be delivered to "myself"
       And the email should contain "The user testuser has invited your pseud Me to be listed as a co-creator on the following series"
-    When the user "myself" accepts all co-creator invites
+    When the user "myself" accepts all co-creator requests
       And I view the series "Gentleman Jack"
     Then "testuser" should be the creator of the series "Gentleman Jack"
       And "Me (myself)" should be the creator of the series "Gentleman Jack"

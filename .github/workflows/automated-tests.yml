@@ -1,0 +1,125 @@
+name: Automated Tests
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+  workflow_dispatch:
+
+jobs:
+  automated-tests:
+    name: ${{ matrix.tests.command }}
+    runs-on: ubuntu-latest
+
+    env:
+      CI: true
+      RAILS_ENV: test
+      TEST_GROUP: ${{ matrix.tests.command }}
+      CUCUMBER_RETRY: 1
+      CUCUMBER_FORMAT: Ao3Cucumber::Formatter
+      SPEC_OPTS: --force-color
+
+    services:
+      database:
+        image: mariadb:10.5.4-focal
+        env:
+          MYSQL_ROOT_PASSWORD: password
+          MYSQL_DATABASE: otwarchive_test
+        ports:
+          - 3306:3306
+
+      elasticsearch:
+        image: elasticsearch:6.8.9
+        ports:
+          - 9200:9200
+
+      memcached:
+        image: memcached:1.5
+        ports:
+          - 11211:11211
+
+    strategy:
+      fail-fast: false
+      matrix:
+        tests:
+          - command: rake db:otwseed
+            cucumber: 'false'
+          - command: rspec spec/controllers
+            cucumber: 'false'
+          - command: rspec spec/models
+            cucumber: 'false'
+          - command: rspec --exclude-pattern 'spec/{controllers,models}/**/*.rb'
+            cucumber: 'false'
+          - command: cucumber features/admins
+          - command: cucumber features/bookmarks
+          - command: cucumber features/collections
+          - command: cucumber features/comments_and_kudos
+          - command: cucumber features/gift_exchanges
+          - command: cucumber features/importing
+          - command: cucumber features/other_a
+          - command: cucumber features/other_b
+          - command: cucumber features/prompt_memes_a
+          - command: cucumber features/prompt_memes_b
+          - command: cucumber features/prompt_memes_c
+          - command: cucumber features/search
+          - command: cucumber features/tag_sets
+          - command: cucumber features/tags_and_wrangling
+          - command: cucumber features/users
+          - command: cucumber features/works
+            ebook: 'true'
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v2
+
+      - name: Run apt-get update
+        run: sudo apt-get update
+
+      - name: Install and start up redis servers
+        run: |
+          sudo apt-get install -y redis-server
+          ./script/gh-actions/multiple_redis.sh
+
+      - name: Install phantomjs
+        if: ${{ matrix.tests.cucumber != 'false' }}
+        run: sudo apt-get install -y phantomjs
+
+      - name: Cache wkhtmltopdf package
+        if: ${{ matrix.tests.ebook == 'true' }}
+        uses: actions/cache@v2
+        with:
+          path: wkhtmltopdf
+          key: wkhtmltopdf-${{ hashFiles('script/gh-actions/ebook_converters.sh') }}
+
+      - name: Install ebook converters
+        if: ${{ matrix.tests.ebook == 'true' }}
+        run: ./script/gh-actions/ebook_converters.sh
+
+      - name: Set up Ruby and run bundle install
+        uses: ruby/setup-ruby@v1
+        with:
+          bundler-cache: true
+
+      - name: Copy config files
+        run: |
+          cp config/gh-actions/database.yml config/database.yml
+          cp config/gh-actions/redis.yml config/redis.yml
+          cp config/gh-actions/local.yml config/local.yml
+
+      - name: Set transaction isolation level
+        run: ./script/gh-actions/configure_database.sh
+
+      - name: Make database
+        run: bundle exec rake db:create db:schema:load db:migrate
+
+      - name: Run test group
+        run: bundle exec ${{ matrix.tests.command }}
+
+      - name: Upload failure screenshots
+        if: ${{ failure() && matrix.tests.cucumber != 'false' }}
+        uses: actions/upload-artifact@v2
+        with:
+          name: test failures ${{ hashFiles('tmp/capybara/*') }}
+          path: tmp/capybara

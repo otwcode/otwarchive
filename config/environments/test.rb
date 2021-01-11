@@ -20,8 +20,8 @@ Otwarchive::Application.configure do
 
   memcached_servers = "127.0.0.1:11211"
   memcached_servers = YAML.load_file(Rails.root.join("config/local.yml")).fetch("MEMCACHED_SERVERS", memcached_servers) if File.file?(Rails.root.join("config/local.yml"))
-  config.cache_store = :dalli_store, memcached_servers,
-                       { namespace: "ao3-v1", expires_in: 0, compress: true, pool_size: 10, raise_errors: true }
+  config.cache_store = :mem_cache_store, memcached_servers,
+                       { namespace: "ao3-v1-test", compress: true, pool_size: 10, raise_errors: true }
 
   # Raise exceptions instead of rendering exception templates
   config.action_dispatch.show_exceptions = false
@@ -33,6 +33,9 @@ Otwarchive::Application.configure do
   # The :test delivery method accumulates sent emails in the
   # ActionMailer::Base.deliveries array.
   config.action_mailer.delivery_method = :test
+
+  # Inline ActiveJob when testing:
+  config.active_job.queue_adapter = :inline
 
   # Use SQL instead of Active Record's schema dumper when creating the test database.
   # This is necessary if your schema can't be completely dumped by the schema dumper,

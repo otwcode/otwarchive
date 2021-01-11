@@ -87,29 +87,24 @@ Feature: Edit Works
       | login          | password   |
       | Scott          | password   |
       And I have a moderated collection "Digital Hoarders 2013" with name "digital_hoarders_2013"
-      And I am logged out
     When I am logged in as "Scott" with password "password"
       And I post the work "Murder in Milan" in the collection "Digital Hoarders 2013"
     Then I should see "You have submitted your work to the moderated collection 'Digital Hoarders 2013'. It will not become a part of the collection until it has been approved by a moderator."
-      And I am logged out
-      And I am logged in as "moderator"
+    When I am logged in as "moderator"
       And I go to "Digital Hoarders 2013" collection's page
       And I follow "Collection Settings"
       And I uncheck "This collection is moderated"
       And I press "Update"
     Then I should see "Collection was successfully updated"
-      And I am logged out
     When I am logged in as "Scott"
       And I post the work "Murder by Numbers" in the collection "Digital Hoarders 2013"
     Then I should see "Work was successfully posted"
-      And I am logged out
     When I am logged in as "moderator"
       And I go to "Digital Hoarders 2013" collection's page
       And I follow "Collection Settings"
       And I check "This collection is moderated"
       And I press "Update"
     Then I should see "Collection was successfully updated"
-      And I am logged out
     When I am logged in as "Scott"
       And I edit the work "Murder by Numbers"
       And I press "Post"
@@ -138,8 +133,10 @@ Feature: Edit Works
     When I am logged in as "coauthor"
       And I follow "Dialogue" in the email
     Then I should not see "Edit"
-    When I follow "Creator Invitations page"
+    When I follow "Co-Creator Requests page"
       And I check "selected[]"
+      # Expire cached byline
+      And it is currently 1 second from now
       And I press "Accept"
     Then I should see "You are now listed as a co-creator on Dialogue."
     When I follow "Dialogue"
@@ -219,7 +216,7 @@ Feature: Edit Works
     When I press "Post"
     Then I should see "Work was successfully posted. It should appear in work listings within the next few minutes."
       But I should not see "Michael"
-    When the user "Burnham" accepts all creator invites
+    When the user "Burnham" accepts all co-creator requests
       And I view the work "Thats not my Spock"
     Then I should see "Michael (Burnham), testuser"
     When the user "Burnham" disallows co-creators
@@ -242,7 +239,7 @@ Feature: Edit Works
       And I press "Post"
     Then I should see "Work was successfully posted. It should appear in work listings within the next few minutes."
       But I should not see "Michael"
-    When the user "Burnham" accepts all co-creator invites
+    When the user "Burnham" accepts all co-creator requests
       And I view the work "Thats not my Spock"
     Then I should see "Michael (Burnham), testuser"
     When the user "Burnham" disallows co-creators
@@ -257,6 +254,6 @@ Feature: Edit Works
     Then I should see "Work was successfully updated"
       And I should see "Michael (Burnham), testuser"
       But I should not see "Georgiou"
-    When the user "Georgiou" accepts all co-creator invites
+    When the user "Georgiou" accepts all co-creator requests
       And I view the work "Thats not my Spock, it has too much beard"
     Then I should see "Georgiou, Michael (Burnham), testuser"

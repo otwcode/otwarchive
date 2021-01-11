@@ -6,6 +6,7 @@ module OTWSanitize
   class UserClassSanitizer
     def self.transformer
       lambda do |env|
+        # Check this node even if it is already safelisted.
         new(env[:node]).sanitized_node
       end
     end

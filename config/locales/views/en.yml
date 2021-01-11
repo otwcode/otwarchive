@@ -66,6 +66,9 @@ en:
       roles:
         heading: "Your admin roles:"
         none: "You currently have no admin roles assigned to you."
+  home:
+    donate:
+      page_title: "Donate or Volunteer"
   layouts:
     proxy_notice:
       faux_heading: "Important message:"
@@ -94,6 +97,18 @@ en:
         works_summary: "You have %{work_count} work(s) under the following pseuds: %{pseuds}."
         collections_summary: "You have %{collection_count} collection(s) under the following pseuds: %{pseuds}."
         options_info: "You can delete them, but please consider %{orphaning_link} them instead!"
+    show:
+      login_banner:
+        dismiss: "Dismiss permanently"
+        help_link: "Learn some tips and tricks"
+        help_text: "For more guidance on using the site, %{link_faq}!  If you need technical support, you can %{link_support}. If you experience harassment or have specific questions about the %{link_tos}, you can %{link_abuse}."
+        help_title: "First login help"
+        hide: "Hide first login help banner"
+        link_abuse: "contact our Policy & Abuse team"
+        link_faq: "check out our FAQ"
+        link_support: "contact us through our Support and Feedback form"
+        link_tos: "Terms of Service"
+        welcome_text: "Hi! It looks like you've just logged into the Archive for the first time. %{help_link} or dismiss this message permanently."
   troubleshooting:
     show:
       page_title:
@@ -123,3 +138,6 @@ en:
       fix_meta_tags:
         title: "Fix Metatags"
         description: "Try to recalculate inherited metatags. Use this option if this tag has grandparent metatags (i.e., a metatag with its own metatag), and the works aren't showing up in the grandparent's listing. You might also try this if you've removed a metatag, but the works are still showing up in the former metatag's listing. If the works still don't go away, ask a staffer to run \"Update Tag Filters\" on this tag."
+  skins:
+    confirm_delete:
+      confirm_html: Are you sure you want to <strong><em>delete</em></strong> the skin "%{skin_title}"?

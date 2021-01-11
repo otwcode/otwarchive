@@ -66,7 +66,6 @@ end
 When /^I enter a duplicate email$/ do
   user = FactoryBot.create(:user, login: "testuser2", password: "password", email: "foo@ao3.org")
   step %{confirmation emails have been delivered}
-  user.activate
 
   click_link("Change Email")
   fill_in("new_email", with: "foo@ao3.org")

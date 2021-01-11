@@ -1,11 +1,5 @@
 <% # load and cache site skin %>
-<% set_site_skin %>
-<% if @site_skin %>
-  <% skin_cache_key, roles = get_skin_cache(@site_skin) %>
-  <% cache('/v1/' + skin_cache_key, skip_digest: true) do %>
-    <%= @site_skin.get_style(roles) %>
-  <% end %>
-<% end %>
+<%= skin_tag %>
 
 <!--sandbox for developers	-->
 <%= stylesheet_link_tag 'sandbox', skip_pipeline: true %>

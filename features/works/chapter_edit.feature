@@ -285,7 +285,7 @@ Feature: Edit chapters
       And I invite the co-author "sabrina"
       And I post the chapter
     Then I should not see "sabrina"
-    When the user "sabrina" accepts all co-creator invites
+    When the user "sabrina" accepts all co-creator requests
       And I view the work "Summer Friends"
     Then I should see "karma, sabrina"
       And I should see "Chapter by karma"
@@ -312,7 +312,7 @@ Feature: Edit chapters
       And 1 email should be delivered to "amy"
       And the email should contain "The user karma has invited your pseud amy to be listed as a co-creator on the following chapter"
       And the email should not contain "translation missing"
-    When the user "amy" accepts all co-creator invites
+    When the user "amy" accepts all co-creator requests
       And I view the work "Forever Friends"
     Then I should see "amy, karma"
       And I should see "Chapter by karma"
@@ -334,6 +334,8 @@ Feature: Edit chapters
     When I follow "Edit Chapter"
     Then the "sabrina" checkbox should not be checked
     When I check "sabrina"
+      # Expire cached byline
+      And it is currently 1 second from now
       And I post the chapter
     Then I should not see "Chapter by karma"
       And 1 email should be delivered to "sabrina"
@@ -439,14 +441,14 @@ Feature: Edit chapters
       And I set up the draft "Rusty Has Two Moms"
       And I invite the co-author "brenda"
       And I post the work without preview
-      And the user "brenda" accepts all co-creator invites
+      And the user "brenda" accepts all co-creator requests
     When a chapter is set up for "Rusty Has Two Moms"
       And I invite the co-author "sharon"
       And I check "brenda"
       And I post the chapter
     Then I should see "brenda, rusty"
       And I should not see "Chapter by"
-    When the user "sharon" accepts all co-creator invites
+    When the user "sharon" accepts all co-creator requests
       And I view the work "Rusty Has Two Moms"
     Then I should see "brenda, rusty, sharon"
       And I should see "Chapter by brenda, rusty"
@@ -474,8 +476,8 @@ Feature: Edit chapters
       And I should not see "sharon"
       But 1 email should be delivered to "brenda"
       And 1 email should be delivered to "thegoodmom"
-    When the user "brenda" accepts all co-creator invites
-      And the user "thegoodmom" accepts all co-creator invites
+    When the user "brenda" accepts all co-creator requests
+      And the user "thegoodmom" accepts all co-creator requests
       And I view the work "Rusty Has Two Moms"
     Then I should see "brenda, rusty, sharon (thegoodmom)"
 
@@ -491,7 +493,7 @@ Feature: Edit chapters
       And I set up the draft "Rusty Has Two Moms"
       And I invite the co-author "brenda"
       And I post the work without preview
-      And the user "brenda" accepts all co-creator invites
+      And the user "brenda" accepts all co-creator requests
     When a chapter is set up for "Rusty Has Two Moms"
       And I invite the co-author "sharon"
       And I check "brenda"
@@ -500,7 +502,7 @@ Feature: Edit chapters
     When I select "thegoodmom" from "There's more than one user with the pseud sharon."
       And I press "Post"
     Then I should see "brenda, rusty"
-    When the user "thegoodmom" accepts all co-creator invites
+    When the user "thegoodmom" accepts all co-creator requests
       And I view the work "Rusty Has Two Moms"
     Then I should see "brenda, rusty, sharon (thegoodmom)"
 
@@ -544,7 +546,7 @@ Feature: Edit chapters
     When I am logged in as "brenda"
       And I follow "Rusty Has Two Moms" in the email
     Then I should not see "Edit"
-    When I follow "Creator Invitations page"
+    When I follow "Co-Creator Requests page"
       And I check "selected[]"
       And I press "Accept"
     Then I should see "You are now listed as a co-creator on Chapter 2 of Rusty Has Two Moms."
@@ -577,7 +579,7 @@ Feature: Edit chapters
       And I invite the co-author "thegoodmom"
       And I post the work without preview
     Then I should see "Work was successfully posted."
-    When the user "thegoodmom" accepts all co-creator invites
+    When the user "thegoodmom" accepts all co-creator requests
       And I view the work "Rusty Has Two Moms"
     Then I should see "rusty, thegoodmom"
     When the user "thegoodmom" disallows co-creators

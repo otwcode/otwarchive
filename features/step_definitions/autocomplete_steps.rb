@@ -67,7 +67,7 @@ end
 
 When /^I choose "([^\"]+)" from the "([^\"]+)" autocomplete$/ do |text, fieldname|
   field = find_field(fieldname)
-  # Clear the field
+  # Clear the field.
   field.set("")
   # Simulate keystrokes to make the autocomplete dropdown appear (instead of fill_in)
   field.send_keys(text)
@@ -107,6 +107,12 @@ When /^I specify two fandoms and enter text in the character autocomplete field$
   step %{I choose "Supernatural" from the "Fandoms" autocomplete}
   step %{I choose "Battlestar Galactica" from the "Fandoms" autocomplete}
   step %{I enter text in the character autocomplete field}
+end
+
+When /^I choose a previously bookmarked URL from the autocomplete$/ do
+  url = ExternalWork.first.url
+  step %{I choose "#{url}" from the "URL" autocomplete}
+  step %{all AJAX requests are complete}
 end
 
 ## Here's where we create the steps defining which tags should appear/not appear
@@ -196,7 +202,6 @@ end
 Given /^a set of users for testing autocomplete$/ do
   %w(myname coauthor giftee).each do |username|
     user = FactoryBot.create(:user, login: username)
-    user.activate
     user.pseuds.first.add_to_autocomplete
   end
 end

@@ -6,7 +6,7 @@ gem 'test-unit', '~> 3.2'
 
 gem 'bundler'
 
-gem "rails", "~> 5.2.4.3"
+gem "rails", "~> 5.2.4"
 gem "rack", "~> 2.1", ">= 2.1.4"
 gem "sprockets", "< 4"
 
@@ -58,7 +58,6 @@ gem 'sanitize', '>= 4.6.5'
 gem 'nokogumbo', '1.4.9'
 gem 'rest-client', '~> 1.8.0', require: 'rest_client'
 gem 'resque', '>=1.14.0'
-gem 'resque_mailer'
 gem 'resque-scheduler'
 gem 'after_commit_everywhere'
 #gem 'daemon-spawn', require: 'daemon_spawn'

@@ -18,6 +18,8 @@ class IndexSweeper
   end
 
   def process_batch
+    return if @batch.nil?
+
     load_errors
 
     @batch["items"].each do |item|

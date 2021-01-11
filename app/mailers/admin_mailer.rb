@@ -1,5 +1,5 @@
 class AdminMailer < ActionMailer::Base
-  include Resque::Mailer # see README in this directory
+  include HtmlCleaner
 
   layout 'mailer'
   helper :mailer

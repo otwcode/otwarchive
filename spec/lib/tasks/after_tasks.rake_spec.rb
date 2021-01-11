@@ -126,19 +126,30 @@ describe "rake After:update_indexed_stat_counter_kudo_count", work_search: true 
   end
 end
 
-describe "rake After:copy_anon_commenting_disabled_to_comment_permissions" do
-  let(:work) { create(:work) }
+describe "rake After:replace_dewplayer_embeds" do
+  let!(:dewplayer_work) { create(:work, chapter_attributes: { content: '<embed type="application/x-shockwave-flash" flashvars="mp3=https://example.com/HINOTORI.mp3" src="https://archiveofourown.org/system/dewplayer/dewplayer-vol.swf" width="250" height="27"></embed>' }) }
+  let!(:embed_work) { create(:work, chapter_attributes: { content: '<embed type="application/x-shockwave-flash" flashvars="audioUrl=https://example.com/失礼しますが、RIP♡-Explicit.mp3" src="http://podfic.com/player/audio-player.swf" width="400" height="27"></embed>' }) }
 
-  before do
-    work.update_columns(anon_commenting_disabled: true,
-                        comment_permissions: :enable_all)
-  end
-
-  it "updates comment_permissions to match anon_commenting_disabled" do
+  it "converts only works using Dewplayer embeds" do
     expect do
       subject.invoke
-    end.to change {
-      work.reload.comment_permissions
-    }.from("enable_all").to("disable_anon")
+    end.to avoid_changing { embed_work.reload.first_chapter.content }
+      .and output("Converted 1 chapter(s).\n").to_stdout
+
+    expect(dewplayer_work.reload.first_chapter.content).to include('<audio src="https://example.com/HINOTORI.mp3" controls="controls" crossorigin="anonymous" preload="metadata"></audio>')
+  end
+
+  it "outputs chapter IDs with Dewplayer embeds that couldn't be converted due to bad flashvars format" do
+    dewplayer_work.first_chapter.update_column(:content, '<embed type="application/x-shockwave-flash" flashvars="https://example.com/HINOTORI.mp3" src="https://archiveofourown.org/system/dewplayer/dewplayer-vol.swf" width="250" height="27"></embed>')
+    expect do
+      subject.invoke
+    end.to output("Couldn't convert 1 chapter(s): #{dewplayer_work.first_chapter.id}\nConverted 0 chapter(s).\n").to_stdout
+  end
+
+  it "outputs chapter IDs with Dewplayer embeds that raise exceptions" do
+    allow_any_instance_of(Chapter).to receive(:update_attribute).and_raise("monkey wrench")
+    expect do
+      subject.invoke
+    end.to output("Couldn't convert 1 chapter(s): #{dewplayer_work.first_chapter.id}\nConverted 0 chapter(s).\n").to_stdout
   end
 end

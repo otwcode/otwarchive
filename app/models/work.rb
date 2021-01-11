@@ -190,10 +190,10 @@ class Work < ApplicationRecord
           # Check to see if this work is being deleted by an Admin
           if User.current_user.is_a?(Admin)
             # this has to use the synchronous version because the work is going to be destroyed
-            UserMailer.admin_deleted_work_notification(user, self).deliver!
+            UserMailer.admin_deleted_work_notification(user, self).deliver_now
           else
             # this has to use the synchronous version because the work is going to be destroyed
-            UserMailer.delete_work_notification(user, self).deliver!
+            UserMailer.delete_work_notification(user, self).deliver_now
           end
         end
       end
@@ -920,22 +920,6 @@ class Work < ApplicationRecord
     )
   end
 
-  def comment_permissions=(value)
-    write_attribute(:comment_permissions, value)
-
-    # Map the special value back to an integer, and write it to the
-    # anon_commenting_disabled column so that if we do have to revert, we can
-    # go back to using the anon_commenting_disabled column without data loss.
-    write_attribute(:anon_commenting_disabled,
-                    Work.comment_permissions[comment_permissions])
-  end
-
-  def anon_commenting_disabled=(value)
-    write_attribute(:anon_commenting_disabled, value)
-    write_attribute(:comment_permissions,
-                    anon_commenting_disabled ? :disable_anon : :enable_all)
-  end
-
   ########################################################################
   # RELATED WORKS
   # These are for inspirations/remixes/etc
@@ -1213,15 +1197,8 @@ class Work < ApplicationRecord
     approved_collections.pluck(:id, :parent_id).flatten.uniq.compact
   end
 
-  def comments_count
-    self.stat_counter.comments_count
-  end
-  def kudos_count
-    self.stat_counter.kudos_count
-  end
-  def bookmarks_count
-    self.stat_counter.bookmarks_count
-  end
+  delegate :comments_count, :kudos_count, :bookmarks_count,
+           to: :stat_counter, allow_nil: true
 
   def hits
     stat_counter&.hit_count
