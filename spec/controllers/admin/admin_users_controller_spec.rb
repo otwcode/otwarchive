@@ -331,7 +331,7 @@ describe Admin::AdminUsersController do
 
   describe "POST #send_activation" do
     let(:admin) { create(:admin) }
-    let(:user) { create(:user) }
+    let(:user) { create(:user, :unconfirmed) }
 
     context "when admin does not have correct authorization" do
       it "redirects with error" do

@@ -52,9 +52,7 @@ Feature: Admin Actions to manage users
       And the user "mrparis" should be activated
 
   Scenario: A admin can send an activation email for a user account
-    Given the following users exist
-      | login  | password  | email                | confirmation_token |
-      | torres | something | torres@starfleet.org | fake_code          |
+    Given the user "torres" exists and is not activated
       And I am logged in as a "support" admin
       And all emails have been delivered
     When I go to the abuse administration page for "torres"
