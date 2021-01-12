@@ -1,5 +1,4 @@
 # encoding=utf-8
-require "cgi"
 
 class WorksController < ApplicationController
   # only registered users and NOT admin should be able to create new works
@@ -452,9 +451,8 @@ class WorksController < ApplicationController
     begin
       was_draft = !@work.posted?
       title = @work.title
-      unescaped_title = CGI.unescapeHTML(title)
       @work.destroy
-      flash[:notice] = ts("Your work %{title} was deleted.", title: unescaped_title)
+      flash[:notice] = ts("Your work %{title} was deleted.", title: title).html_safe
     rescue
       flash[:error] = ts("We couldn't delete that right now, sorry! Please try again later.")
     end

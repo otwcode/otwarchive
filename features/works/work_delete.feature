@@ -13,7 +13,7 @@ Feature: Delete Works
     When I go to newbie's user page
     Then I should not see "All Hell Breaks Loose"
 
-  Scenario: Deleting a work with characters in title
+  Scenario: Deleting a work with escapable characters in title
     Given I am logged in as "newbie"
       And I post the work "All Hell <b>Breaks</b> Loose"
     When I delete the work "All Hell <b>Breaks</b> Loose"
