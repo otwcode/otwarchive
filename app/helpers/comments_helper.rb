@@ -281,9 +281,9 @@ module CommentsHelper
 
   def freeze_comment_button(comment)
     if comment.iced?
-      button_to ts("Unfreeze"), unfreeze_comment_path(comment), method: :put
+      button_to ts("Unfreeze Thread"), unfreeze_comment_path(comment), method: :put
     else
-      button_to ts("Freeze"), freeze_comment_path(comment), method: :put
+      button_to ts("Freeze Thread"), freeze_comment_path(comment), method: :put
     end
   end
 
