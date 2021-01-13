@@ -1,4 +1,4 @@
-require 'spec_helper'
+require "spec_helper"
 
 describe CommentsController do
   include LoginMacros
@@ -129,10 +129,7 @@ describe CommentsController do
       end
 
       context "when logged in as a tag wrangler" do
-        before do
-          fake_login
-          @current_user.roles << Role.new(name: 'tag_wrangler')
-        end
+        before { fake_login_known_user(create(:tag_wrangler)) }
 
         it "renders the :new template" do
           post :new, params: { tag_id: fandom.name }
@@ -146,7 +143,7 @@ describe CommentsController do
 
         it "shows an error and redirects" do
           post :new, params: { tag_id: fandom.name }
-          it_redirects_to_with_error(user_path(@current_user),
+          it_redirects_to_with_error(user_path(controller.current_user),
                                      "Sorry, you don't have permission to " \
                                      "access the page you were trying to " \
                                      "reach.")
@@ -225,10 +222,7 @@ describe CommentsController do
       end
 
       context "when logged in as a tag wrangler" do
-        before do
-          fake_login
-          @current_user.roles << Role.new(name: 'tag_wrangler')
-        end
+        before { fake_login_known_user(create(:tag_wrangler)) }
 
         it "posts the comment and shows it in context" do
           post :create, params: { tag_id: fandom.name, comment: anon_comment_attributes }
@@ -248,7 +242,7 @@ describe CommentsController do
 
         it "shows an error and redirects" do
           post :create, params: { tag_id: fandom.name, comment: anon_comment_attributes }
-          it_redirects_to_with_error(user_path(@current_user),
+          it_redirects_to_with_error(user_path(controller.current_user),
                                      "Sorry, you don't have permission to " \
                                      "access the page you were trying to " \
                                      "reach.")
@@ -269,6 +263,15 @@ describe CommentsController do
     end
 
     context "when the commentable is a work" do
+      context "when the work is restricted" do
+        let(:work) { create(:work, restricted: true) }
+
+        it "redirects to the login page" do
+          post :create, params: { work_id: work.id, comment: anon_comment_attributes }
+          it_redirects_to(new_user_session_path(restricted_commenting: true))
+        end
+      end
+
       context "when the work has all comments disabled" do
         let(:work) { create(:work, comment_permissions: :disable_all) }
 
@@ -301,6 +304,17 @@ describe CommentsController do
     end
 
     context "when the commentable is a comment" do
+      context "when the parent work is restricted" do
+        let(:work) { comment.ultimate_parent }
+
+        before { work.update!(restricted: true) }
+
+        it "redirects to the login page" do
+          post :create, params: { comment_id: comment.id, comment: anon_comment_attributes }
+          it_redirects_to(new_user_session_path(restricted_commenting: true))
+        end
+      end
+
       context "when the parent work has all comments disabled" do
         let(:work) { create(:work, comment_permissions: :disable_all) }
         let(:comment) { create(:comment, commentable: work.first_chapter) }
@@ -1468,10 +1482,7 @@ describe CommentsController do
       end
 
       context "when logged in as a tag wrangler" do
-        before do
-          fake_login
-          @current_user.roles << Role.new(name: 'tag_wrangler')
-        end
+        before { fake_login_known_user(create(:tag_wrangler)) }
 
         it "redirects to the tag comments page when the format is html" do
           get :show_comments, params: { tag_id: fandom.name }
@@ -1489,7 +1500,7 @@ describe CommentsController do
 
         it "shows an error and redirects" do
           get :show_comments, params: { tag_id: fandom.name }
-          it_redirects_to_with_error(user_path(@current_user),
+          it_redirects_to_with_error(user_path(controller.current_user),
                                      "Sorry, you don't have permission to " \
                                      "access the page you were trying to " \
                                      "reach.")
@@ -1617,33 +1628,21 @@ describe CommentsController do
     end
   end
 
-  describe "GET #destroy" do
-    context "when logged out" do
-      it "doesn't destroy comment and redirects with error" do
-        delete :destroy, params: { id: comment.id }
-
-        it_redirects_to_with_error(comment, "Sorry, you don't have permission to access the page you were trying to reach. Please log in.")
-        expect { comment.reload }.not_to raise_exception
-      end
-    end
-
+  describe "DELETE #destroy" do
     context "when logged in as the owner of the unreviewed comment" do
-      it "deletes the comment and redirects to referrer with a success message" do
-        fake_login
-        comment = create(:comment, :unreviewed, pseud_id: @current_user.default_pseud.id)
-        get :destroy, params: { id: comment.id }
-        expect(Comment.find_by(id: comment.id)).to_not be_present
-        expect(response).to redirect_to("/where_i_came_from")
-        expect(flash[:notice]).to eq "Comment deleted."
+      before { fake_login_known_user(unreviewed_comment.pseud.user) }
+
+      it "deletes the comment and redirects to referer with a notice" do
+        delete :destroy, params: { id: unreviewed_comment.id }
+        expect { unreviewed_comment.reload }.to raise_exception(ActiveRecord::RecordNotFound)
+        it_redirects_to_with_notice("/where_i_came_from", "Comment deleted.")
       end
+
       it "redirects and gives an error if the comment could not be deleted" do
-        fake_login
-        comment = create(:comment, :unreviewed, pseud_id: @current_user.default_pseud.id)
         allow_any_instance_of(Comment).to receive(:destroy_or_mark_deleted).and_return(false)
-        get :destroy, params: { id: comment.id }
-        allow_any_instance_of(Comment).to receive(:destroy_or_mark_deleted).and_call_original
-        expect(Comment.find_by(id: comment.id)).to be_present
-        expect(response).to redirect_to(chapter_path(comment.commentable, show_comments: true, anchor: "comment_#{comment.id}"))
+        delete :destroy, params: { id: unreviewed_comment.id }
+        expect(unreviewed_comment.reload).to be_present
+        expect(response).to redirect_to(chapter_path(unreviewed_comment.commentable, show_comments: true, anchor: "comment_#{unreviewed_comment.id}"))
         expect(flash[:comment_error]).to eq "We couldn't delete that comment."
       end
     end
@@ -1815,6 +1814,17 @@ describe CommentsController do
 
             it_redirects_to_with_error(comment, "Sorry, you don't have permission to access the page you were trying to reach. Please log in.")
             expect { comment.reload }.not_to raise_exception
+          end
+
+          context "when Work is restricted" do
+            context "when commentable is a comment" do
+              before { comment.ultimate_parent.update!(restricted: true) }
+
+              it "redirects to the login page" do
+                delete :destroy, params: { id: comment.id }
+                it_redirects_to(new_user_session_path(restricted_commenting: true))
+              end
+            end
           end
         end
 

@@ -37,7 +37,6 @@ RSpec.configure do |config|
   config.include EmailSpec::Matchers
   config.include Devise::Test::ControllerHelpers, type: :controller
   config.include Devise::Test::IntegrationHelpers, type: :request
-  config.include Capybara::DSL
   config.include TaskExampleGroup, type: :task
 
   config.before :suite do
