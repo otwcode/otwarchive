@@ -626,7 +626,7 @@ describe CommentsController do
             put :freeze, params: { id: comment.id }
 
             expect(comment.reload.iced).to be_falsey
-            it_redirects_to_with_error(user_path(@current_user), "Sorry, you don't have permission to access the page you were trying to reach.")
+            it_redirects_to_with_error(user_path(controller.current_user), "Sorry, you don't have permission to access the page you were trying to reach.")
           end
         end
 
@@ -855,7 +855,7 @@ describe CommentsController do
             put :freeze, params: { id: comment.id }
 
             expect(comment.reload.iced).to be_truthy
-            it_redirects_to_with_error(user_path(@current_user), "Sorry, you don't have permission to access the page you were trying to reach.")
+            it_redirects_to_with_error(user_path(controller.current_user), "Sorry, you don't have permission to access the page you were trying to reach.")
           end
         end
 
@@ -1084,7 +1084,7 @@ describe CommentsController do
             put :unfreeze, params: { id: comment.id }
 
             expect(comment.reload.iced).to be_falsey
-            it_redirects_to_with_error(user_path(@current_user), "Sorry, you don't have permission to access the page you were trying to reach.")
+            it_redirects_to_with_error(user_path(controller.current_user), "Sorry, you don't have permission to access the page you were trying to reach.")
           end
         end
 
@@ -1311,7 +1311,7 @@ describe CommentsController do
             put :unfreeze, params: { id: comment.id }
 
             expect(comment.reload.iced).to be_truthy
-            it_redirects_to_with_error(user_path(@current_user), "Sorry, you don't have permission to access the page you were trying to reach.")
+            it_redirects_to_with_error(user_path(controller.current_user), "Sorry, you don't have permission to access the page you were trying to reach.")
           end
         end
 
@@ -1761,7 +1761,7 @@ describe CommentsController do
                 fake_login
                 delete :destroy, params: { id: comment.id }
 
-                it_redirects_to_with_error(user_path(@current_user), "Sorry, you don't have permission to access the page you were trying to reach.")
+                it_redirects_to_with_error(user_path(controller.current_user), "Sorry, you don't have permission to access the page you were trying to reach.")
                 expect { comment.reload }.not_to raise_exception
               end
             end
