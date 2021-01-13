@@ -1819,6 +1819,7 @@ describe CommentsController do
           context "when Work is restricted" do
             context "when commentable is a comment" do
               let(:work) { comment.ultimate_parent }
+
               before { work.update!(restricted: true) }
 
               it "redirects to the login page" do
