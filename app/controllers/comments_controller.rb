@@ -116,7 +116,7 @@ class CommentsController < ApplicationController
     return unless @commentable.respond_to?(:iced?) && @commentable.iced?
 
     flash[:error] = ts("Sorry, you cannot reply to a frozen comment.")
-    redirect_to(request.env["HTTP_REFERER"] || root_path)
+    redirect_back(fallback_location: root_path)
   end
 
   def check_permission_to_review
