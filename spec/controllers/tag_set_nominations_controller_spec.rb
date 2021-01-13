@@ -910,8 +910,8 @@ describe TagSetNominationsController do
           end
 
           it 'builds a new tag set nomination' do
-            expect { post :create, params: { tag_set_id: owned_tag_set.id, tag_set_nomination: { pseud_id: random_user.default_pseud.id } } }.
-              not_to change { owned_tag_set.tag_set_nominations.count }
+            expect { post :create, params: { tag_set_id: owned_tag_set.id, tag_set_nomination: { pseud_id: random_user.default_pseud.id } } }
+              .not_to change { owned_tag_set.tag_set_nominations.count }
             expect(assigns(:tag_set_nomination).new_record?).to be_truthy
             expect(assigns(:tag_set_nomination).pseud).to eq(random_user.default_pseud)
             expect(assigns(:tag_set_nomination).owned_tag_set).to eq(owned_tag_set)
@@ -1178,8 +1178,8 @@ describe TagSetNominationsController do
             end
 
             it "doesn't update the nominations" do
-              expect(fandom_nom.reload.tagname).not_to eq('Renamed Fandom')
-              expect(character_nom.reload.tagname).not_to eq('Renamed Character')
+              expect(fandom_nom.reload.tagname).not_to eq("Renamed Fandom")
+              expect(character_nom.reload.tagname).not_to eq("Renamed Character")
             end
           end
         end
