@@ -6,7 +6,7 @@ class FandomCrossover
   # to one another can be considered a crossover
   def check_for_crossover(fandoms)
     # Short-circuit the check if there's only one fandom tag:
-    return false if fandoms.count == 1
+    return false if fandoms.count <= 1
 
     # Replace fandoms with their mergers if possible,
     # as synonyms should have no meta tags themselves

@@ -26,7 +26,10 @@
           <% cache("unsorted-#{tag.cache_key}", skip_digest: true) do %>
           <tr>
             <th scope="row"><%= link_to tag.name, edit_tag_path(tag) %></th>
-            <td><%= link_to ts("Bookmarks (%{count})", :count => tag.bookmarks.count), tag_bookmarks_path(tag) %></td>
+            <td>
+              <%= link_to ts("Bookmarks (%{count})", :count => tag.bookmarks.count), tag_bookmarks_path(tag) %>
+              <%= ts("Collections (%{count})", :count => tag.collections.count) %>
+            </td>
             <td><%= select_tag "tags[#{tag.id}]", options_for_select(["", ts("Fandom"), ts("Character"), ts("Relationship"), ts("Freeform")]) %></td>
           </tr>
           <% end %>
