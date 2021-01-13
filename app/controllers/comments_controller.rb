@@ -21,7 +21,7 @@ class CommentsController < ApplicationController
   before_action :check_permission_to_delete, only: [:delete_comment, :destroy]
   before_action :check_parent_comment_permissions, only: [:new, :create, :add_comment_reply]
   before_action :check_unreviewed, only: [:add_comment_reply]
-  before_action :check_if_commentable_frozen, only: [:new, :create, :add_comment_reply]
+  before_action :check_frozen, only: [:new, :create, :add_comment_reply]
   before_action :check_permission_to_review, only: [:unreviewed]
   before_action :check_permission_to_access_single_unreviewed, only: [:show]
   before_action :check_permission_to_moderate, only: [:approve, :reject]
@@ -106,13 +106,14 @@ class CommentsController < ApplicationController
   end
 
   def check_unreviewed
-    return unless @commentable&.respond_to?(:unreviewed?) && @commentable&.unreviewed?
+    return unless @commentable.respond_to?(:unreviewed?) && @commentable.unreviewed?
+
     flash[:error] = ts("Sorry, you cannot reply to an unapproved comment.")
     redirect_to logged_in? ? root_path : new_user_session_path
   end
 
-  def check_if_commentable_frozen
-    return unless @commentable&.respond_to?(:iced?) && @commentable&.iced?
+  def check_frozen
+    return unless @commentable.respond_to?(:iced?) && @commentable.iced?
 
     flash[:error] = ts("Sorry, you cannot reply to a frozen comment.")
     redirect_to(request.env["HTTP_REFERER"] || root_path)
