@@ -114,7 +114,7 @@ class CommentsController < ApplicationController
   def check_frozen
     return unless @commentable.respond_to?(:iced?) && @commentable.iced?
 
-    flash[:error] = ts("Sorry, you cannot reply to a frozen comment.")
+    flash[:error] = t("comments.check_frozen.error")
     redirect_back(fallback_location: root_path)
   end
 
@@ -155,7 +155,7 @@ class CommentsController < ApplicationController
   # Comments cannot be edited after they've been replied to or if they are frozen.
   def check_permission_to_edit
     if @comment&.iced?
-      flash[:error] = ts("Frozen comments cannot be edited.")
+      flash[:error] = t("comment.check_permission_to_edit.error.frozen")
       redirect_back(fallback_location: root_path)
     elsif !@comment&.count_all_comments&.zero?
       flash[:error] = ts("Comments with replies cannot be edited")
@@ -413,9 +413,9 @@ class CommentsController < ApplicationController
     # @comment.full_set.each(&:mark_frozen!)
     if !@comment.iced? && @comment.save
       @comment.set_to_freeze_or_unfreeze.each(&:mark_frozen!)
-      flash[:notice] = ts("Comment thread successfully frozen!")
+      flash[:notice] = t(".success")
     else
-      flash[:error] = ts("Sorry, that comment thread could not be frozen.")
+      flash[:error] = t(".error")
     end
     redirect_back(fallback_location: root_path)
   end
@@ -426,9 +426,9 @@ class CommentsController < ApplicationController
     # @comment.full_set.each(&:mark_unfrozen!)
     if @comment.iced? && @comment.save
       @comment.set_to_freeze_or_unfreeze.each(&:mark_unfrozen!)
-      flash[:notice] = ts("Comment thread successfully unfrozen!")
+      flash[:notice] = t(".success")
     else
-      flash[:error] = ts("Sorry, that comment thread could not be unfrozen.")
+      flash[:error] = t(".error")
     end
     redirect_back(fallback_location: root_path)
   end
