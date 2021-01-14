@@ -25,8 +25,7 @@ class CommentsController < ApplicationController
   before_action :check_permission_to_review, only: [:unreviewed]
   before_action :check_permission_to_access_single_unreviewed, only: [:show]
   before_action :check_permission_to_moderate, only: [:approve, :reject]
-  before_action :check_permission_to_freeze, only: [:freeze]
-  before_action :check_permission_to_unfreeze, only: [:unfreeze]
+  before_action :check_permission_to_freeze, only: [:freeze, :unfreeze]
 
   cache_sweeper :comment_sweeper
 
@@ -164,25 +163,18 @@ class CommentsController < ApplicationController
     end
   end
 
-  # Comments on works can be frozen by admins with proper authorization or the
-  # work creator.
-  # Comments on tags can be frozen by admins with proper authorization.
-  # Comments on admin posts can be frozen by any admin.
+  # Comments on works can be frozen or unfrozen by admins with proper
+  # authorization or the work creator.
+  # Comments on tags can be frozen or unfrozen by admins with proper
+  # authorization.
+  # Comments on admin posts can be frozen or unfrozen by any admin.
   def check_permission_to_freeze
     return if permission_to_modify_frozen_status
 
-    flash[:error] = ts("Sorry, you don't have permission to freeze that comment thread.")
-    redirect_back(fallback_location: root_path)
-  end
-
-  # Comments on works can be unfrozen by admins with proper authorization or the
-  # work creator.
-  # Comments on tags can be unfrozen by admins with proper authorization.
-  # Comments on admin posts can be unfrozen by any admin.
-  def check_permission_to_unfreeze
-    return if permission_to_modify_frozen_status
-
-    flash[:error] = ts("Sorry, you don't have permission to unfreeze that comment thread.")
+    # If the comment is frozen, we're trying to unfreeze it. If it's not frozen,
+    # we're trying to freeze it.
+    attempted_action = @comment.iced? ? "unfreeze" : "freeze"
+    flash[:error] = t("comments.permissions.denied.#{attempted_action}")
     redirect_back(fallback_location: root_path)
   end
 
