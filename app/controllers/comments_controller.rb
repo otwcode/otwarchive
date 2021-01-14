@@ -171,10 +171,7 @@ class CommentsController < ApplicationController
   def check_permission_to_modify_frozen_status
     return if permission_to_modify_frozen_status
 
-    # If the comment is frozen, we're trying to unfreeze it. If it's not frozen,
-    # we're trying to freeze it.
-    attempted_action = @comment.iced? ? "unfreeze" : "freeze"
-    flash[:error] = t("comments.permissions.denied.#{attempted_action}")
+    flash[:error] = t(".permission_denied")
     redirect_back(fallback_location: root_path)
   end
 

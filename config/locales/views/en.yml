@@ -66,11 +66,6 @@ en:
       roles:
         heading: "Your admin roles:"
         none: "You currently have no admin roles assigned to you."
-  comments:
-    permissions:
-      denied:
-        freeze: "Sorry, you don't have permission to freeze that comment thread."
-        unfreeze: "Sorry, you don't have permission to unfreeze that comment thread."
   home:
     donate:
       page_title: "Donate or Volunteer"
