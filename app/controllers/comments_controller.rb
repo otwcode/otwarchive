@@ -157,10 +157,10 @@ class CommentsController < ApplicationController
   def check_permission_to_edit
     if @comment&.iced?
       flash[:error] = ts("Frozen comments cannot be edited.")
-      redirect_to(request.env["HTTP_REFERER"] || root_path)
+      redirect_back(fallback_location: root_path)
     elsif !@comment&.count_all_comments&.zero?
       flash[:error] = ts("Comments with replies cannot be edited")
-      redirect_to(request.env["HTTP_REFERER"] || root_path)
+      redirect_back(fallback_location: root_path)
     end
   end
 
@@ -172,7 +172,7 @@ class CommentsController < ApplicationController
     return if permission_to_modify_frozen_status
 
     flash[:error] = ts("Sorry, you don't have permission to freeze that comment thread.")
-    redirect_to(request.env["HTTP_REFERER"] || root_path) && return
+    redirect_back(fallback_location: root_path)
   end
 
   # Comments on works can be unfrozen by admins with proper authorization or the
@@ -183,7 +183,7 @@ class CommentsController < ApplicationController
     return if permission_to_modify_frozen_status
 
     flash[:error] = ts("Sorry, you don't have permission to unfreeze that comment thread.")
-    redirect_to(request.env["HTTP_REFERER"] || root_path) && return
+    redirect_back(fallback_location: root_path)
   end
 
   # Get the thing the user is trying to comment on
@@ -428,7 +428,7 @@ class CommentsController < ApplicationController
     else
       flash[:error] = ts("Sorry, that comment thread could not be frozen.")
     end
-    redirect_to(request.env["HTTP_REFERER"] || root_path) && return
+    redirect_back(fallback_location: root_path)
   end
 
   # PUT /comments/1/unfreeze
@@ -441,7 +441,7 @@ class CommentsController < ApplicationController
     else
       flash[:error] = ts("Sorry, that comment thread could not be unfrozen.")
     end
-    redirect_to(request.env["HTTP_REFERER"] || root_path) && return
+    redirect_back(fallback_location: root_path)
   end
 
   def show_comments
