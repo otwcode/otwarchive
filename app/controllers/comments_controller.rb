@@ -25,7 +25,7 @@ class CommentsController < ApplicationController
   before_action :check_permission_to_review, only: [:unreviewed]
   before_action :check_permission_to_access_single_unreviewed, only: [:show]
   before_action :check_permission_to_moderate, only: [:approve, :reject]
-  before_action :check_permission_to_freeze, only: [:freeze, :unfreeze]
+  before_action :check_permission_to_modify_frozen_status, only: [:freeze, :unfreeze]
 
   cache_sweeper :comment_sweeper
 
@@ -168,7 +168,7 @@ class CommentsController < ApplicationController
   # Comments on tags can be frozen or unfrozen by admins with proper
   # authorization.
   # Comments on admin posts can be frozen or unfrozen by any admin.
-  def check_permission_to_freeze
+  def check_permission_to_modify_frozen_status
     return if permission_to_modify_frozen_status
 
     # If the comment is frozen, we're trying to unfreeze it. If it's not frozen,
