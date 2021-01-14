@@ -475,12 +475,12 @@ $j(document).ready(function() {
   });
 
   // Scroll to the top of the comments section when loading additional pages via Ajax in comment pagination.
-  $j('#comments_placeholder').find('.pagination').find('a[data-remote]').livequery('click.rails', function(e){
+  $j('#comments_placeholder').on('click.rails', '.pagination a[data-remote]', function(e){
     $j.scrollTo('#comments_placeholder');
   });
 
   // Scroll to the top of the feedback section when loading comments via AJAX
-  $j("#show_comments_link_top").find('a[href*="show_comments"]').livequery('click.rails', function(e){
+  $j("#show_comments_link_top").on('click.rails', 'a[href*="show_comments"]', function(e){
     $j.scrollTo('#feedback');
   });
 });

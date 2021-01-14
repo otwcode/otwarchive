@@ -18,8 +18,7 @@ Feature: Admin Actions to Post News
     Given I have posted an admin post
 
     # regular user replies to admin post
-    When I am logged out as an admin
-      And I am logged in as "happyuser"
+    When I am logged in as "happyuser"
       And I go to the admin-posts page
     When all emails have been delivered
       And I follow "Default Admin Post"
@@ -41,13 +40,12 @@ Feature: Admin Actions to Post News
   # also their username will be plain text and not a link
 
     Given I have posted an admin post
-    When I am logged out as an admin
-      And I am logged in as "happyuser"
+    When I am logged in as "happyuser"
       And I go to the admin-posts page
     When I follow "Default Admin Post"
       And I fill in "Comment" with "Excellent, my dear!"
       And I press "Comment"
-    When I am logged out
+    When I log out
       And I go to the admin-posts page
       And I follow "Default Admin Post"
       And I fill in "Comment" with "Behold, ye mighty, and despair!"
@@ -151,7 +149,7 @@ Feature: Admin Actions to Post News
     When I go to the home page
     Then I should see "App News & a <strong> Warning"
       And I should not see "App News &amp; a &lt;strong&gt; Warning"
-    When I am logged out as an admin
+    When I log out
       And I go to the admin-posts page
     Then I should see "App News & a <strong> Warning"
       And I should not see "App News &amp; a &lt;strong&gt; Warning"
@@ -197,3 +195,17 @@ Feature: Admin Actions to Post News
       And I follow "Delete"
     When I go to the homepage
     Then I should not see "Default Admin Post"
+
+  Scenario: Log in as an admin and create an admin post in a rtl (right-to-left) language
+    Given I am logged in as a "communications" admin
+      And Persian language
+    When I follow "Admin Posts"
+      And I follow "Post AO3 News"
+      Then I should see "New AO3 News Post"
+    When I fill in "admin_post_title" with "فارسی"
+      And I fill in "content" with "چیزهایی هست که باید در حین ایجاد یک گزارش از آنها آگاه باشید"
+      And I select "Persian" from "Choose a language"
+      And I press "Post"
+    Then I should see "Admin Post was successfully created."
+      And I should see "باشید" within "div.admin.home div.userstuff"
+      And the user content should be shown as right-to-left

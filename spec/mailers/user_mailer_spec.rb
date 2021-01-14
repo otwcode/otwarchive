@@ -286,7 +286,7 @@ describe UserMailer do
   end
 
   describe "signup_notification" do
-    let(:user) { create(:user) }
+    let(:user) { create(:user, :unconfirmed) }
 
     subject(:email) { UserMailer.signup_notification(user.id).deliver }
 

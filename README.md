@@ -1,6 +1,6 @@
 OTW-Archive
 =========
-[![Build Status](https://img.shields.io/travis/com/otwcode/otwarchive/master?label=travis-ci)](https://travis-ci.com/github/otwcode/otwarchive) [![Codeship Status](https://img.shields.io/codeship/1f7468f0-7e15-0131-c059-7a8d26daf885/master.svg?label=codeship)](https://www.codeship.io/projects/14476) [![Coverage Status](https://img.shields.io/codecov/c/github/otwcode/otwarchive/master.svg)](https://codecov.io/gh/otwcode/otwarchive/branch/master)
+[![Build Status](https://img.shields.io/github/workflow/status/otwcode/otwarchive/Automated%20Tests/master)](https://github.com/otwcode/otwarchive/actions?query=workflow%3A%22Automated+Tests%22+branch%3Amaster) [![Codeship Status](https://img.shields.io/codeship/1f7468f0-7e15-0131-c059-7a8d26daf885/master.svg?label=codeship)](https://www.codeship.io/projects/14476) [![Coverage Status](https://img.shields.io/codecov/c/github/otwcode/otwarchive/master.svg)](https://codecov.io/gh/otwcode/otwarchive/branch/master)
 
 The OTW-Archive software is an open-source web application intended for hosting archives of fanworks, including fanfic, fanart, and fan vids.
 
@@ -27,7 +27,6 @@ The Archive code is licensed under [GPL](https://www.gnu.org/licenses/gpl-2.0.ht
 We benefit from software and services that are free to use for Open Source projects, including:
 
 * [RubyMine IDE](https://www.jetbrains.com/ruby/) by JetBrains
-* [Travis CI](https://travis-ci.org/)
 * [Codeship](https://codeship.com/)
 * [Hound](https://houndci.com/) by [thoughtbot](https://thoughtbot.com/)
 * [BrowserStack](https://www.browserstack.com)

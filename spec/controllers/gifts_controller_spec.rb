@@ -17,7 +17,7 @@ describe GiftsController do
     it "errors and redirects to homepage if the gift's recipient is not logged on" do
       fake_login
       post :toggle_rejected, params: { id: gift.id }
-      it_redirects_to_with_error(user_path(@current_user), "Sorry, you don't have permission to access the page you were trying to reach.")
+      it_redirects_to_with_error(user_path(controller.current_user), "Sorry, you don't have permission to access the page you were trying to reach.")
     end
   end
 end

@@ -692,20 +692,6 @@ class WorksController < ApplicationController
     # To avoid overwriting, we entirely trash any blank fields.
     updated_work_params = work_params.reject { |_key, value| value.blank? }
 
-    # It takes around 1 hour to restart all the workers when deploying, so the
-    # old code and the new code need to co-exist. The old Edit Multiple Works
-    # form used to use special values instead of the value "0", so the new
-    # WorksController needs to know how to handle those values.
-    #
-    # TODO: Delete this after AO3-6016 is deployed.
-    if updated_work_params[:moderated_commenting_enabled] == 'not_moderated'
-      updated_work_params[:moderated_commenting_enabled] = '0'
-    end
-
-    if updated_work_params[:restricted] == 'unrestricted'
-      updated_work_params[:restricted] = '0'
-    end
-
     @works.each do |work|
       # now we can just update each work independently, woo!
       unless work.update_attributes(updated_work_params)
