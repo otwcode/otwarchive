@@ -108,9 +108,9 @@ end
 
 When /^I comment on an admin post$/ do
   step "I go to the admin-posts page"
-    step %{I follow "Comment"}
-    step %{I fill in "comment[comment_content]" with "Excellent, my dear!"}
-    step %{I press "Comment"}
+  step %{I follow "Default Admin Post"}
+  step %{I fill in "comment[comment_content]" with "Excellent, my dear!"}
+  step %{I press "Comment"}
 end
 
 When /^I post a spam comment$/ do
