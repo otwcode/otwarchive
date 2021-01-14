@@ -2306,7 +2306,6 @@ describe CommentsController do
       end
 
       context "PUT #freeze" do
-        # TODO: Should this be more like check_permission_to_delete and use access_denied?
         it "does not permit freezing of the comment when admin has no role" do
           admin.update(roles: [])
           fake_login_admin(admin)
@@ -2326,7 +2325,6 @@ describe CommentsController do
       end
 
       context "PUT #unfreeze" do
-        # TODO: Should this be more like check_permission_to_delete and use access_denied?
         it "does not permit unfreezing of the comment when admin has no role" do
           comment.update(iced: true)
           admin.update(roles: [])
