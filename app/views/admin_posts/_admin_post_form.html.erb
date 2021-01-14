@@ -55,6 +55,20 @@
                           title: ts('translation of'),
                           data: { autocomplete_token_limit: 1 }) %>
         </dd>
+        <dt class="permissions comments">
+          <%= ts("Who can comment on this admin post") %>
+        </dt>
+        <dd class="permissions comments">
+          <fieldset>
+            <%=
+              radio_button_list(f, :comment_permissions, [
+                [:enable_all, ts("Registered users and guests can comment")],
+                [:disable_anon, ts("Only registered users can comment")],
+                [:disable_all, ts("No one can comment")]
+              ])
+            %>
+          </fieldset>
+        </dd>
       </dl>
     </fieldset>
 

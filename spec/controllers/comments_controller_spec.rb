@@ -7,7 +7,7 @@ describe CommentsController do
   let(:comment) { create(:comment) }
   let(:unreviewed_comment) { create(:comment, :unreviewed) }
 
-  before(:each) do
+  before do
     request.env["HTTP_REFERER"] = "/where_i_came_from"
   end
 
@@ -42,7 +42,7 @@ describe CommentsController do
 
   describe "GET #unreviewed" do
     let!(:user) { create(:user) }
-    let!(:work) { create(:work, authors: [user.default_pseud], moderated_commenting_enabled: true ) }
+    let!(:work) { create(:work, authors: [user.default_pseud], moderated_commenting_enabled: true) }
     let(:comment) { create(:comment, :unreviewed, commentable: work.first_chapter) }
 
     it "redirects logged out users to login path with an error" do
@@ -157,8 +157,8 @@ describe CommentsController do
           pseud_id: user.default_pseud_id,
           comment_content: "Hello fellow human!"
         }
-        post :create, params: { comment_id: comment.id, comment: comment_attributes, filters: { date: 'asc' } }
-        expect(response).to redirect_to(user_inbox_path(user, filters: { date: 'asc' }))
+        post :create, params: { comment_id: comment.id, comment: comment_attributes, filters: { date: "asc" } }
+        expect(response).to redirect_to(user_inbox_path(user, filters: { date: "asc" }))
         expect(flash[:comment_notice]).to eq "Comment created!"
       end
     end
@@ -264,37 +264,74 @@ describe CommentsController do
       end
     end
 
+    context "when the commentable is an admin post" do
+      context "where all comments are disabled" do
+        let(:admin_post) { create(:admin_post, comment_permissions: :disable_all) }
+
+        it "shows an error and redirects" do
+          post :create, params: { admin_post_id: admin_post.id, comment: anon_comment_attributes }
+          it_redirects_to_with_error(admin_post_path(admin_post),
+                                     "Sorry, this news post doesn't allow comments.")
+        end
+      end
+
+      context "where anonymous comments are disabled" do
+        let(:admin_post) { create(:admin_post, comment_permissions: :disable_anon) }
+
+        it "shows an error and redirects" do
+          post :create, params: { admin_post_id: admin_post.id, comment: anon_comment_attributes }
+          it_redirects_to_with_error(admin_post_path(admin_post),
+                                     "Sorry, this news post doesn't allow non-Archive users to comment.")
+        end
+      end
+    end
+
     context "when the commentable is a comment" do
-      context "when the parent work is restricted" do
-        let(:work) { comment.ultimate_parent }
+      context "on a parent work" do
+        context "where all comments are disabled" do
+          let(:work) { create(:work, comment_permissions: :disable_all) }
+          let(:comment) { create(:comment, commentable: work.first_chapter) }
 
-        before { work.update!(restricted: true) }
+          it "shows an error and redirects" do
+            post :create, params: { comment_id: comment.id, comment: anon_comment_attributes }
+            it_redirects_to_with_error(work_path(work),
+                                       "Sorry, this work doesn't allow comments.")
+          end
+        end
 
-        it "redirects to the login page" do
-          post :create, params: { comment_id: comment.id, comment: anon_comment_attributes }
-          it_redirects_to(new_user_session_path(restricted_commenting: true))
+        context "where anonymous comments are disabled" do
+          let(:work) { create(:work, comment_permissions: :disable_anon) }
+          let(:comment) { create(:comment, commentable: work.first_chapter) }
+
+          it "shows an error and redirects" do
+            post :create, params: { comment_id: comment.id, comment: anon_comment_attributes }
+            it_redirects_to_with_error(work_path(work),
+                                       "Sorry, this work doesn't allow non-Archive users to comment.")
+          end
         end
       end
 
-      context "when the parent work has all comments disabled" do
-        let(:work) { create(:work, comment_permissions: :disable_all) }
-        let(:comment) { create(:comment, commentable: work.first_chapter) }
+      context "on an admin post" do
+        context "where all comments are disabled" do
+          let(:admin_post) { create(:admin_post, comment_permissions: :disable_all) }
+          let(:comment) { create(:comment, commentable: admin_post) }
 
-        it "shows an error and redirects" do
-          post :create, params: { comment_id: comment.id, comment: anon_comment_attributes }
-          it_redirects_to_with_error(work_path(work),
-                                     "Sorry, this work doesn't allow comments.")
+          it "shows an error and redirects" do
+            post :create, params: { comment_id: comment.id, comment: anon_comment_attributes }
+            it_redirects_to_with_error(admin_post_path(admin_post),
+                                       "Sorry, this news post doesn't allow comments.")
+          end
         end
-      end
 
-      context "when the parent work has anonymous comments disabled" do
-        let(:work) { create(:work, comment_permissions: :disable_anon) }
-        let(:comment) { create(:comment, commentable: work.first_chapter) }
+        context "where anonymous comments are disabled" do
+          let(:admin_post) { create(:admin_post, comment_permissions: :disable_anon) }
+          let(:comment) { create(:comment, commentable: admin_post) }
 
-        it "shows an error and redirects" do
-          post :create, params: { comment_id: comment.id, comment: anon_comment_attributes }
-          it_redirects_to_with_error(work_path(work),
-                                     "Sorry, this work doesn't allow non-Archive users to comment.")
+          it "shows an error and redirects" do
+            post :create, params: { comment_id: comment.id, comment: anon_comment_attributes }
+            it_redirects_to_with_error(admin_post_path(admin_post),
+                                       "Sorry, this news post doesn't allow non-Archive users to comment.")
+          end
         end
       end
     end
@@ -533,7 +570,7 @@ describe CommentsController do
     it "redirects to the comment path without an error" do
       get :hide_comments, params: { comment_id: unreviewed_comment.id }
       expect(flash[:error]).to be_nil
-      expect(response).to redirect_to(comment_path(unreviewed_comment, anchor: 'comments'))
+      expect(response).to redirect_to(comment_path(unreviewed_comment, anchor: "comments"))
     end
   end
 
@@ -542,7 +579,7 @@ describe CommentsController do
       it "redirects to the comment path with add_comment params and without an error" do
         get :add_comment, params: { comment_id: unreviewed_comment.id }
         expect(flash[:error]).to be_nil
-        expect(response).to redirect_to(comment_path(unreviewed_comment, add_comment: true, anchor: 'comments'))
+        expect(response).to redirect_to(comment_path(unreviewed_comment, add_comment: true, anchor: "comments"))
       end
     end
   end
@@ -558,9 +595,9 @@ describe CommentsController do
 
     context "with valid and invalid params" do
       it "removes invalid params and redirects without an error to comment path with valid params and the comments anchor" do
-        get :cancel_comment, params: { comment_id: comment.id, show_comments: 'yes', random_option: 'no' }
+        get :cancel_comment, params: { comment_id: comment.id, show_comments: "yes", random_option: "no" }
         expect(flash[:error]).to be_nil
-        expect(response).to redirect_to(comment_path(comment, show_comments: 'yes', anchor: "comments"))
+        expect(response).to redirect_to(comment_path(comment, show_comments: "yes", anchor: "comments"))
       end
     end
   end
@@ -576,9 +613,9 @@ describe CommentsController do
 
     context "with valid and invalid params" do
       it "removes invalid params and redirects without an error to comment path with valid params and the comments anchor" do
-        get :cancel_comment_reply, params: { comment_id: comment.id, show_comments: 'yes', random_option: 'no' }
+        get :cancel_comment_reply, params: { comment_id: comment.id, show_comments: "yes", random_option: "no" }
         expect(flash[:error]).to be_nil
-        expect(response).to redirect_to(comment_path(comment, show_comments: 'yes', anchor: "comments"))
+        expect(response).to redirect_to(comment_path(comment, show_comments: "yes", anchor: "comments"))
       end
     end
   end
@@ -669,7 +706,7 @@ describe CommentsController do
 
   describe "PUT #review" do
     let!(:user) { create(:user) }
-    let!(:work) { create(:work, authors: [user.default_pseud], moderated_commenting_enabled: true ) }
+    let!(:work) { create(:work, authors: [user.default_pseud], moderated_commenting_enabled: true) }
     let(:comment) { create(:comment, :unreviewed, commentable: work.first_chapter) }
 
     before do
@@ -688,8 +725,8 @@ describe CommentsController do
 
     context "when recipient approves comment from inbox with filters" do
       it "marks comment reviewed and redirects to user inbox path with success message" do
-        put :review, params: { id: comment.id, approved_from: "inbox", filters: { date: 'asc' } }
-        expect(response).to redirect_to(user_inbox_path(user, filters: { date: 'asc' }))
+        put :review, params: { id: comment.id, approved_from: "inbox", filters: { date: "asc" } }
+        expect(response).to redirect_to(user_inbox_path(user, filters: { date: "asc" }))
         expect(flash[:notice]).to eq "Comment approved."
         comment.reload
         expect(comment.unreviewed).to be false

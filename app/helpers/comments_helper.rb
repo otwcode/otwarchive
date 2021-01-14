@@ -147,7 +147,8 @@ module CommentsHelper
   end
 
   def parent_disallows_comments?(comment)
-    return false unless (parent = comment.ultimate_parent).is_a?(Work)
+    parent = comment.ultimate_parent
+    return false unless parent.is_a?(Work) || parent.is_a?(AdminPost)
 
     parent.disable_all_comments? ||
       parent.disable_anon_comments? && !logged_in?
