@@ -5,8 +5,8 @@ ru:
       messages:
         record_invalid: 'Возникли ошибки: %{errors}'
         restrict_dependent_destroy:
-          has_one: 'Невозможно удалить запись, так как существует зависимость: %{record}'
           has_many: 'Невозможно удалить запись, так как существуют зависимости: %{record}'
+          has_one: 'Невозможно удалить запись, так как существует зависимость: %{record}'
   date:
     abbr_day_names:
     - Вс
@@ -63,72 +63,72 @@ ru:
   datetime:
     distance_in_words:
       about_x_hours:
-        one: около %{count} часа
         few: около %{count} часов
         many: около %{count} часов
+        one: около %{count} часа
         other: около %{count} часа
       about_x_months:
-        one: около %{count} месяца
         few: около %{count} месяцев
         many: около %{count} месяцев
+        one: около %{count} месяца
         other: около %{count} месяца
       about_x_years:
-        one: около %{count} года
         few: около %{count} лет
         many: около %{count} лет
+        one: около %{count} года
         other: около %{count} лет
       almost_x_years:
-        one: почти 1 год
         few: почти %{count} года
         many: почти %{count} лет
+        one: почти 1 год
         other: почти %{count} лет
       half_a_minute: полминуты
-      less_than_x_seconds:
-        one: меньше %{count} секунды
-        few: меньше %{count} секунд
-        many: меньше %{count} секунд
-        other: меньше %{count} секунды
       less_than_x_minutes:
-        one: меньше %{count} минуты
         few: меньше %{count} минут
         many: меньше %{count} минут
+        one: меньше %{count} минуты
         other: меньше %{count} минуты
+      less_than_x_seconds:
+        few: меньше %{count} секунд
+        many: меньше %{count} секунд
+        one: меньше %{count} секунды
+        other: меньше %{count} секунды
       over_x_years:
-        one: больше %{count} года
         few: больше %{count} лет
         many: больше %{count} лет
+        one: больше %{count} года
         other: больше %{count} лет
-      x_seconds:
-        one: "%{count} секунду"
-        few: "%{count} секунды"
-        many: "%{count} секунд"
-        other: "%{count} секунды"
-      x_minutes:
-        one: "%{count} минуту"
-        few: "%{count} минуты"
-        many: "%{count} минут"
-        other: "%{count} минуты"
       x_days:
-        one: "%{count} день"
         few: "%{count} дня"
         many: "%{count} дней"
+        one: "%{count} день"
         other: "%{count} дня"
+      x_minutes:
+        few: "%{count} минуты"
+        many: "%{count} минут"
+        one: "%{count} минуту"
+        other: "%{count} минуты"
       x_months:
-        one: "%{count} месяц"
         few: "%{count} месяца"
         many: "%{count} месяцев"
+        one: "%{count} месяц"
         other: "%{count} месяца"
+      x_seconds:
+        few: "%{count} секунды"
+        many: "%{count} секунд"
+        one: "%{count} секунду"
+        other: "%{count} секунды"
       x_years:
-        one: "%{count} год"
         few: "%{count} года"
         many: "%{count} лет"
+        one: "%{count} год"
         other: "%{count} года"
     prompts:
-      second: Секунд
-      minute: Минут
-      hour: Часов
       day: День
+      hour: Часов
+      minute: Минут
       month: Месяц
+      second: Секунд
       year: Год
   errors:
     format: "%{attribute} %{message}"
@@ -155,26 +155,26 @@ ru:
       required: не может отсутствовать
       taken: уже существует
       too_long:
-        one: слишком большой длины (не может быть больше чем %{count} символ)
         few: слишком большой длины (не может быть больше чем %{count} символа)
         many: слишком большой длины (не может быть больше чем %{count} символов)
+        one: слишком большой длины (не может быть больше чем %{count} символ)
         other: слишком большой длины (не может быть больше чем %{count} символа)
       too_short:
-        one: недостаточной длины (не может быть меньше %{count} символа)
         few: недостаточной длины (не может быть меньше %{count} символов)
         many: недостаточной длины (не может быть меньше %{count} символов)
+        one: недостаточной длины (не может быть меньше %{count} символа)
         other: недостаточной длины (не может быть меньше %{count} символа)
       wrong_length:
-        one: неверной длины (может быть длиной ровно %{count} символ)
         few: неверной длины (может быть длиной ровно %{count} символа)
         many: неверной длины (может быть длиной ровно %{count} символов)
+        one: неверной длины (может быть длиной ровно %{count} символ)
         other: неверной длины (может быть длиной ровно %{count} символа)
     template:
       body: 'Проблемы возникли со следующими полями:'
       header:
-        one: "%{model}: сохранение не удалось из-за %{count} ошибки"
         few: "%{model}: сохранение не удалось из-за %{count} ошибок"
         many: "%{model}: сохранение не удалось из-за %{count} ошибок"
+        one: "%{model}: сохранение не удалось из-за %{count} ошибки"
         other: "%{model}: сохранение не удалось из-за %{count} ошибки"
   helpers:
     select:
@@ -202,35 +202,7 @@ ru:
     human:
       decimal_units:
         format: "%n %u"
-        units:
-          billion:
-            one: миллиард
-            few: миллиардов
-            many: миллиардов
-            other: миллиардов
-          million:
-            one: миллион
-            few: миллионов
-            many: миллионов
-            other: миллионов
-          quadrillion:
-            one: квадриллион
-            few: квадриллионов
-            many: квадриллионов
-            other: квадриллионов
-          thousand:
-            one: тысяча
-            few: тысяч
-            many: тысяч
-            other: тысяч
-          trillion:
-            one: триллион
-            few: триллионов
-            many: триллионов
-            other: триллионов
-          unit: ''
       format:
-        delimiter: ''
         precision: 1
         significant: false
         strip_insignificant_zeros: false
@@ -238,9 +210,9 @@ ru:
         format: "%n %u"
         units:
           byte:
-            one: байт
             few: байта
             many: байт
+            one: байт
             other: байта
           eb: ЭБ
           gb: ГБ
@@ -250,11 +222,7 @@ ru:
           tb: ТБ
     percentage:
       format:
-        delimiter: ''
         format: "%n%"
-    precision:
-      format:
-        delimiter: ''
   support:
     array:
       last_word_connector: " и "

@@ -65,33 +65,33 @@ bn:
         one: প্রায় ১ বছর
         other: প্রায় %{count} বছর
       half_a_minute: অর্ধেক মিনিট
-      less_than_x_seconds:
-        one: '১ সেকেন্ডর কম '
-        other: "%{count} সেকেন্ডের কম"
       less_than_x_minutes:
         one: ১ মিনিটের কম
         other: "%{count} মিনিটের কম"
+      less_than_x_seconds:
+        one: '১ সেকেন্ডর কম '
+        other: "%{count} সেকেন্ডের কম"
       over_x_years:
         one: ১ বছরের বেশি
         other: "%{count} বছরের বেশি"
-      x_seconds:
-        one: ১ সেকেন্ড
-        other: "%{count} সেকেন্ড"
-      x_minutes:
-        one: ১ মিনিট
-        other: "%{count} মিনিট"
       x_days:
         one: ১ দিন
         other: "%{count} দিন"
+      x_minutes:
+        one: ১ মিনিট
+        other: "%{count} মিনিট"
       x_months:
         one: ১ মাস
         other: "%{count} মাস"
+      x_seconds:
+        one: ১ সেকেন্ড
+        other: "%{count} সেকেন্ড"
     prompts:
-      second: সেকেন্ড
-      minute: মিনিট
-      hour: ঘন্টা
       day: দিন
+      hour: ঘন্টা
+      minute: মিনিট
       month: মাস
+      second: সেকেন্ড
       year: বছর
   errors:
     format: "%{attribute} %{message}"
@@ -112,9 +112,6 @@ bn:
       not_a_number: নম্বর নয়
       odd: বেজোড় হতে হবে
       taken: আগেই নিয়ে নেওয়া হয়েছে
-      too_long: খুব বড়ো (সর্বোচ্চ %{count} অক্ষর)
-      too_short: খুব ছোটো (সর্বনিম্ন %{count} অক্ষর)
-      wrong_length: দৈর্ঘ্যটি সঠিক নয় (%{count} অক্ষর হতে হবে)
     template:
       body: 'এই ফিল্ডগুলোতে কিছু সমস্যা দেখা দিয়েছে:'
       header:
@@ -139,10 +136,7 @@ bn:
     human:
       decimal_units:
         format: "%n %u"
-        units:
-          unit: ''
       format:
-        delimiter: ''
         precision: 1
         significant: true
         strip_insignificant_zeros: true
@@ -156,12 +150,6 @@ bn:
           kb: KB
           mb: MB
           tb: TB
-    percentage:
-      format:
-        delimiter: ''
-    precision:
-      format:
-        delimiter: ''
   support:
     array:
       last_word_connector: ", এবং "

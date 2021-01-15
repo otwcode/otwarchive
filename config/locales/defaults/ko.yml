@@ -5,8 +5,8 @@ ko:
       messages:
         record_invalid: 데이터 검증에 실패하였습니다. %{errors}
         restrict_dependent_destroy:
-          has_one: "%{record}가 존재하기 때문에 삭제할 수 없습니다"
           has_many: "%{record}가 존재하기 때문에 삭제할 수 없습니다"
+          has_one: "%{record}가 존재하기 때문에 삭제할 수 없습니다"
   date:
     abbr_day_names:
     - 일
@@ -63,48 +63,36 @@ ko:
   datetime:
     distance_in_words:
       about_x_hours:
-        one: 약 한 시간
         other: 약 %{count}시간
       about_x_months:
-        one: 약 한 달
         other: 약 %{count}달
       about_x_years:
-        one: 약 일 년
         other: 약 %{count}년
       almost_x_years:
-        one: 일 년 이하
         other: "%{count}년 이하"
       half_a_minute: 30초
-      less_than_x_seconds:
-        one: 일 초 이하
-        other: "%{count}초 이하"
       less_than_x_minutes:
-        one: 일 분 이하
         other: "%{count}분 이하"
+      less_than_x_seconds:
+        other: "%{count}초 이하"
       over_x_years:
-        one: 일 년 이상
         other: "%{count}년 이상"
-      x_seconds:
-        one: 일 초
-        other: "%{count}초"
-      x_minutes:
-        one: 일 분
-        other: "%{count}분"
       x_days:
-        one: 하루
         other: "%{count}일"
+      x_minutes:
+        other: "%{count}분"
       x_months:
-        one: 한 달
         other: "%{count}달"
+      x_seconds:
+        other: "%{count}초"
       x_years:
-        one: 일 년
         other: "%{count}년"
     prompts:
-      second: 초
-      minute: 분
-      hour: 시
       day: 일
+      hour: 시
+      minute: 분
       month: 월
+      second: 초
       year: 년
   errors:
     format: "%{message}"
@@ -130,13 +118,9 @@ ko:
       present: "%{attribute}은(는) 비어있어야 합니다"
       required: "%{attribute}은(는) 반드시 있어야 합니다"
       taken: "%{attribute}은(는) 이미 존재합니다"
-      too_long: "%{attribute}은(는) %{count}자를 넘을 수 없습니다"
-      too_short: "%{attribute}은(는) 적어도 %{count}자를 넘어야 합니다"
-      wrong_length: "%{attribute}은(는) %{count}자여야 합니다"
     template:
       body: 아래 문제를 확인해 주세요.
       header:
-        one: 한 개의 오류로 인해 %{model}을(를) 저장할 수 없습니다
         other: "%{count}개의 오류로 인해 %{model}을(를) 저장할 수 없습니다"
   helpers:
     select:
@@ -170,27 +154,20 @@ ko:
           quadrillion: 경
           thousand: 천
           trillion: 조
-          unit: ''
       format:
-        delimiter: ''
         precision: 3
         significant: true
         strip_insignificant_zeros: true
       storage_units:
         format: "%n%u"
         units:
-          byte: 바이트
           gb: 기가바이트
           kb: 킬로바이트
           mb: 메가바이트
           tb: 테라바이트
     percentage:
       format:
-        delimiter: ''
         format: "%n%"
-    precision:
-      format:
-        delimiter: ''
   support:
     array:
       last_word_connector: ", "

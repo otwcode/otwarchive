@@ -5,8 +5,8 @@ nb:
       messages:
         record_invalid: 'Det oppstod feil: %{errors}'
         restrict_dependent_destroy:
-          has_one: Kan ikke slette registreringen, fordi 1 %{record} avhenger av denne.
           has_many: Kan ikke slette registreringen, fordi %{record} avhenger av denne.
+          has_one: Kan ikke slette registreringen, fordi 1 %{record} avhenger av denne.
   date:
     abbr_day_names:
     - søn
@@ -75,36 +75,36 @@ nb:
         one: nesten 1 år
         other: nesten %{count} år
       half_a_minute: et halvt minutt
-      less_than_x_seconds:
-        one: mindre enn 1 sekund
-        other: mindre enn %{count} sekunder
       less_than_x_minutes:
         one: mindre enn 1 minutt
         other: mindre enn %{count} minutter
+      less_than_x_seconds:
+        one: mindre enn 1 sekund
+        other: mindre enn %{count} sekunder
       over_x_years:
         one: over 1 år
         other: over %{count} år
-      x_seconds:
-        one: 1 sekund
-        other: "%{count} sekunder"
-      x_minutes:
-        one: 1 minutt
-        other: "%{count} minutter"
       x_days:
         one: 1 dag
         other: "%{count} dager"
+      x_minutes:
+        one: 1 minutt
+        other: "%{count} minutter"
       x_months:
         one: 1 måned
         other: "%{count} måneder"
+      x_seconds:
+        one: 1 sekund
+        other: "%{count} sekunder"
       x_years:
         one: 1 år
         other: "%{count} år"
     prompts:
-      second: sekund
-      minute: minutt
-      hour: time
       day: dag
+      hour: time
+      minute: minutt
       month: måned
+      second: sekund
       year: år
   errors:
     format: "%{attribute} %{message}"
@@ -130,9 +130,6 @@ nb:
       present: må være tom
       required: må eksistere
       taken: er allerede i bruk
-      too_long: er for lang (maksimum %{count} tegn)
-      too_short: er for kort (minimum %{count} tegn)
-      wrong_length: er av feil lengde (maksimum %{count} tegn)
     template:
       body: 'Det oppstod problemer med følgende felt:'
       header:
@@ -165,20 +162,7 @@ nb:
       decimal_units:
         format: "%n %u"
         units:
-          billion:
-            one: milliard
-            other: milliarder
-          million:
-            one: million
-            other: millioner
-          quadrillion:
-            one: billiard
-            other: billiarder
           thousand: tusen
-          trillion:
-            one: billion
-            other: billioner
-          unit: ''
       format:
         delimiter: " "
         precision: 1
@@ -196,20 +180,14 @@ nb:
           tb: TB
     percentage:
       format:
-        delimiter: ''
         format: "%n%"
-    precision:
-      format:
-        delimiter: ''
   support:
     array:
       last_word_connector: " og "
       two_words_connector: " og "
       words_connector: ", "
   time:
-    am: ''
     formats:
       default: "%A, %e. %B %Y, %H:%M"
       long: "%A, %e. %B %Y, %H:%M"
       short: "%e. %B, %H:%M"
-    pm: ''

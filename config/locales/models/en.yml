@@ -1,97 +1,98 @@
+---
 en:
   activerecord:
+    attributes:
+      admin/role:
+        board: Board
+        communications: Communications
+        docs: AO3 Docs
+        open_doors: Open Doors
+        policy_and_abuse: Policy & Abuse
+        superadmin: Super admin
+        support: Support
+        tag_wrangling: Tag Wrangling
+        translation: Translation
+      archive_warning:
+        name_with_colon:
+          one: 'Warning:'
+          other: 'Warnings:'
+      category:
+        name_with_colon:
+          one: 'Category:'
+          other: 'Categories:'
+      chapters/creatorships:
+        base: 'Invalid creator:'
+        pseud_id: Pseud
+      character:
+        name_with_colon:
+          one: 'Character:'
+          other: 'Characters:'
+      creatorships:
+        base: 'Invalid creator:'
+        pseud_id: Pseud
+      fandom:
+        name_with_colon:
+          one: 'Fandom:'
+          other: 'Fandoms:'
+      freeform:
+        name_with_colon:
+          one: 'Additional Tag:'
+          other: 'Additional Tags:'
+      meta_tagging:
+        meta_tag: Metatag
+        meta_tag_id: Metatag
+        sub_tag: Subtag
+        sub_tag_id: Subtag
+      rating:
+        name_with_colon: 'Rating:'
+      relationship:
+        name_with_colon:
+          one: 'Relationship:'
+          other: 'Relationships:'
+      series/creatorships:
+        base: 'Invalid creator:'
+        pseud_id: Pseud
+      work/chapters:
+        base: 'Invalid chapter:'
+        content: Content
+      work/creatorships:
+        base: 'Invalid creator:'
+        pseud_id: Pseud
     errors:
       models:
         creatorship:
           attributes:
             pseud_id:
-              taken: "is already listed as a creator."
+              taken: is already listed as a creator.
         user:
           attributes:
             password_confirmation:
-              confirmation: "doesn't match new password."
+              confirmation: doesn't match new password.
     models:
       archive_warning:
-        one: "Warning"
-        other: "Warnings" 
-      bookmark: "Bookmark"
+        one: Warning
+        other: Warnings
+      bookmark: Bookmark
       category:
-        one: "Category"
-        other: "Categories"
-      chapter: "Chapter"
+        one: Category
+        other: Categories
+      chapter: Chapter
       character:
-        one: "Character"
-        other: "Characters"
-      comment: "Comment"
+        one: Character
+        other: Characters
+      comment: Comment
       fandom:
-        one: "Fandom"
-        other: "Fandoms"
+        one: Fandom
+        other: Fandoms
       freeform:
-        one: "Additional Tag"
-        other: "Additional Tags"
-      pseud: "Pseud"
-      rating: "Rating"
+        one: Additional Tag
+        other: Additional Tags
+      pseud: Pseud
+      rating: Rating
       relationship:
-        one: "Relationship"
-        other: "Relationships"
+        one: Relationship
+        other: Relationships
       tag:
-        one: "Tag"
-        other: "Tags"
-      work: "Work"
-    attributes:
-      admin/role:
-        board: "Board"
-        communications: "Communications"
-        docs: "AO3 Docs"
-        open_doors: "Open Doors"
-        policy_and_abuse: "Policy & Abuse"
-        superadmin: "Super admin"
-        support: "Support"
-        tag_wrangling: "Tag Wrangling"
-        translation: "Translation"
-      archive_warning:
-        name_with_colon:
-          one: "Warning:"
-          other: "Warnings:"
-      category:
-        name_with_colon:
-          one: "Category:"
-          other: "Categories:"
-      character:
-        name_with_colon:
-          one: "Character:"
-          other: "Characters:"
-      fandom:
-        name_with_colon:
-          one: "Fandom:"
-          other: "Fandoms:"
-      freeform:
-        name_with_colon:
-          one: "Additional Tag:"
-          other: "Additional Tags:"
-      rating:
-        name_with_colon: "Rating:"
-      relationship:
-        name_with_colon:
-          one: "Relationship:"
-          other: "Relationships:"
-      meta_tagging:
-        meta_tag_id: "Metatag"
-        meta_tag: "Metatag"
-        sub_tag_id: "Subtag"
-        sub_tag: "Subtag"
-      creatorships:
-        pseud_id: "Pseud"
-        base: "Invalid creator:"
-      series/creatorships:
-        pseud_id: "Pseud"
-        base: "Invalid creator:"
-      chapters/creatorships:
-        pseud_id: "Pseud"
-        base: "Invalid creator:"
-      work/creatorships:
-        pseud_id: "Pseud"
-        base: "Invalid creator:"
-      work/chapters:
-        content: "Content"
-        base: "Invalid chapter:"
+        one: Tag
+        other: Tags
+      work: Work

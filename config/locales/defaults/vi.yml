@@ -5,8 +5,8 @@ vi:
       messages:
         record_invalid: 'Có các lỗi sau: %{errors}'
         restrict_dependent_destroy:
-          has_one: Không thể xóa do tồn tại đối tượng phụ thuộc %{record}
           has_many: Không thể xóa do tồn tại một số đối tượng phụ thuộc %{record}
+          has_one: Không thể xóa do tồn tại đối tượng phụ thuộc %{record}
   date:
     abbr_day_names:
     - CN
@@ -63,45 +63,34 @@ vi:
   datetime:
     distance_in_words:
       about_x_hours:
-        one: khoảng 1 giờ
         other: khoảng %{count} giờ
       about_x_months:
-        one: khoảng 1 tháng
         other: khoảng %{count} tháng
       about_x_years:
-        one: khoảng 1 năm
         other: khoảng %{count} năm
       almost_x_years:
-        one: gần 1 năm
         other: gần %{count} năm
       half_a_minute: 30 giây
-      less_than_x_seconds:
-        one: chưa tới 1 giây
-        other: chưa tới %{count} giây
       less_than_x_minutes:
-        one: chưa tới 1 phút
         other: chưa tới %{count} phút
+      less_than_x_seconds:
+        other: chưa tới %{count} giây
       over_x_years:
-        one: hơn 1 năm
         other: hơn %{count} năm
-      x_seconds:
-        one: 1 giây
-        other: "%{count} giây"
-      x_minutes:
-        one: 1 phút
-        other: "%{count} phút"
       x_days:
-        one: 1 ngày
         other: "%{count} ngày"
+      x_minutes:
+        other: "%{count} phút"
       x_months:
-        one: 1 tháng
         other: "%{count} tháng"
+      x_seconds:
+        other: "%{count} giây"
     prompts:
-      second: Giây
-      minute: Phút
-      hour: Giờ
       day: Ngày
+      hour: Giờ
+      minute: Phút
       month: Tháng
+      second: Giây
       year: Năm
   errors:
     format: "%{attribute} %{message}"
@@ -125,13 +114,9 @@ vi:
       other_than: cần phải khác %{count}
       present: cần phải để trắng
       taken: đã có
-      too_long: quá dài (tối đa %{count} ký tự)
-      too_short: quá ngắn (tối thiểu %{count} ký tự)
-      wrong_length: độ dài không đúng (phải là %{count} ký tự)
     template:
       body: 'Có lỗi với các mục sau:'
       header:
-        one: 1 lỗi ngăn không cho lưu %{model} này
         other: "%{count} lỗi ngăn không cho lưu %{model} này"
   helpers:
     select:
@@ -165,9 +150,7 @@ vi:
           quadrillion: Triệu tỷ
           thousand: Nghìn
           trillion: Nghìn tỷ
-          unit: ''
       format:
-        delimiter: ''
         precision: 1
         significant: true
         strip_insignificant_zeros: true
@@ -175,7 +158,6 @@ vi:
         format: "%n %u"
         units:
           byte:
-            one: Byte
             other: Byte
           gb: GB
           kb: KB
@@ -183,11 +165,7 @@ vi:
           tb: TB
     percentage:
       format:
-        delimiter: ''
         format: "%n%"
-    precision:
-      format:
-        delimiter: ''
   support:
     array:
       last_word_connector: ", và "

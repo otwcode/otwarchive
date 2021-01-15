@@ -72,33 +72,33 @@ hi:
         one: लगभग एक साल
         other: लगभग %{count} साल
       half_a_minute: एक आधा मिनट
-      less_than_x_seconds:
-        one: एक सेकेंड से कम
-        other: "%{count}  सेकेंड से कम"
       less_than_x_minutes:
         one: एक मिनट से कम
         other: "%{count} मिनट से कम"
+      less_than_x_seconds:
+        one: एक सेकेंड से कम
+        other: "%{count}  सेकेंड से कम"
       over_x_years:
         one: एक साल के ऊपर
         other: "%{count} साल से अधिक"
-      x_seconds:
-        one: एक सेकेंड
-        other: "%{count} सेकेंड"
-      x_minutes:
-        one: एक मिनट
-        other: "%{count} मिनट"
       x_days:
         one: एक दिन
         other: "%{count} दिन"
+      x_minutes:
+        one: एक मिनट
+        other: "%{count} मिनट"
       x_months:
         one: एक महीना
         other: "%{count} महीना"
+      x_seconds:
+        one: एक सेकेंड
+        other: "%{count} सेकेंड"
     prompts:
-      second: सेकेंड
-      minute: मिनट
-      hour: घंटा
       day: दिन
+      hour: घंटा
+      minute: मिनट
       month: माह
+      second: सेकेंड
       year: वर्ष
   errors:
     format: "%{attribute} %{message}"
@@ -120,9 +120,6 @@ hi:
       not_an_integer: एक पूर्णांक होना चाहिए
       odd: विसम होना चाहिए
       taken: पहले ही ले लिया गया है
-      too_long: अत्यधिक लंबा है (अधिकतम %{count} वर्ण हैं)
-      too_short: अत्यधिक छोटा है (न्यूनतम %{count} वर्ण हैं)
-      wrong_length: गलत लंबाई है (%{count} वर्ण युक्त होना चाहिए)
     template:
       body: 'निम्नलिखित क्षेत्रों के साथ समस्या थी:'
       header:
@@ -160,9 +157,7 @@ hi:
           quadrillion: करोड़ शंख
           thousand: हज़ार
           trillion: खरब
-          unit: ''
       format:
-        delimiter: ''
         precision: 3
         significant: true
         strip_insignificant_zeros: true
@@ -176,12 +171,6 @@ hi:
           kb: KB
           mb: MB
           tb: TB
-    percentage:
-      format:
-        delimiter: ''
-    precision:
-      format:
-        delimiter: ''
   support:
     array:
       last_word_connector: ", और "

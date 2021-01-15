@@ -72,33 +72,33 @@ el:
         one: σχεδόν ένα χρόνο
         other: σχεδόν %{count} χρόνια
       half_a_minute: μισό λεπτό
-      less_than_x_seconds:
-        one: λιγότερο από ένα δευτερόλεπτο
-        other: λιγότερο από %{count} δευτερόλεπτα
       less_than_x_minutes:
         one: λιγότερο από ένα λεπτό
         other: λιγότερο από %{count} λεπτά
+      less_than_x_seconds:
+        one: λιγότερο από ένα δευτερόλεπτο
+        other: λιγότερο από %{count} δευτερόλεπτα
       over_x_years:
         one: πάνω από ένα χρόνο
         other: πάνω από %{count} χρόνια
-      x_seconds:
-        one: 1 δευτερόλεπτο
-        other: "%{count} δευτερόλεπτα"
-      x_minutes:
-        one: 1 λεπτό
-        other: "%{count} λεπτά"
       x_days:
         one: 1 μέρα
         other: "%{count} ημέρες"
+      x_minutes:
+        one: 1 λεπτό
+        other: "%{count} λεπτά"
       x_months:
         one: 1 μήνα
         other: "%{count} μήνες"
+      x_seconds:
+        one: 1 δευτερόλεπτο
+        other: "%{count} δευτερόλεπτα"
     prompts:
-      second: Δευτερόλεπτο
-      minute: Λεπτό
-      hour: Ώρα
       day: Ημέρα
+      hour: Ώρα
+      minute: Λεπτό
       month: Μήνας
+      second: Δευτερόλεπτο
       year: Έτος
   errors:
     format: "%{attribute} %{message}"
@@ -166,9 +166,7 @@ el:
           quadrillion: τετράκις εκατομμύριο
           thousand: χίλια
           trillion: τρισεκατομμύριο
-          unit: ''
       format:
-        delimiter: ''
         precision: 1
         significant: true
         strip_insignificant_zeros: true
@@ -182,12 +180,6 @@ el:
           kb: KB
           mb: MB
           tb: TB
-    percentage:
-      format:
-        delimiter: ''
-    precision:
-      format:
-        delimiter: ''
   support:
     array:
       last_word_connector: " και "
