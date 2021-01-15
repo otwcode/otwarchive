@@ -466,7 +466,7 @@ $j(document).ready(function() {
           msg = "You can't leave guest kudos on a restricted work.";
         }
 
-        $j('#kudos_message').addClass('comment_error').text(msg);
+        $j('#kudos_message').addClass('kudos_error').text(msg);
       },
       success: function(data) {
         $j('#kudos_message').addClass('notice').text('Thank you for leaving kudos!');

@@ -64,8 +64,7 @@
 
 
   <div id="kudos_message"></div>
-  <!-- note mixed responsibilities: kudos and comment messages -->
-  <%= flash_div :comment_error, :comment_notice %>
+  <%= flash_div :kudos_error, :kudos_notice %>
 
   <% if @work && (@chapter.blank? || @chapter.posted?) %>
     <%= render "kudos/kudos", :kudos => @kudos, :guest_kudos_count => @work.guest_kudos_count, :commentable => @work %>
@@ -73,6 +72,7 @@
 
 
   <h3 class="landmark heading"><a id="comments"><%= ts("Comments") %></a></h3>
+  <%= flash_div :comment_error, :comment_notice %>
 
   <% commentable_parent = find_parent(commentable) %>
   <% if commentable_parent.is_a?(Work) && commentable_parent.disable_all_comments? %>
