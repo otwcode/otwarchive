@@ -395,6 +395,16 @@ class Comment < ApplicationRecord
     Rails.env.production? && Akismetor.submit_ham(akismet_attributes)
   end
 
+  # Freeze single comment.
+  def mark_frozen!
+    update_attribute(:iced, true)
+  end
+
+  # Unfreeze single comment.
+  def mark_unfrozen!
+    update_attribute(:iced, false)
+  end
+
   def sanitized_content
     sanitize_field self, :comment_content
   end

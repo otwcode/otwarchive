@@ -6,7 +6,7 @@ class CommentsController < ApplicationController
                                               :cancel_comment_reply,
                                               :delete_comment, :cancel_comment_delete, :unreviewed, :review_all ]
   before_action :check_user_status, only: [:new, :create, :edit, :update, :destroy]
-  before_action :load_comment, only: [:show, :edit, :update, :delete_comment, :destroy, :cancel_comment_edit, :cancel_comment_delete, :review, :approve, :reject]
+  before_action :load_comment, only: [:show, :edit, :update, :delete_comment, :destroy, :cancel_comment_edit, :cancel_comment_delete, :review, :approve, :reject, :freeze, :unfreeze]
   before_action :check_visibility, only: [:show]
   before_action :check_if_restricted
   before_action :check_tag_wrangler_access
@@ -21,9 +21,11 @@ class CommentsController < ApplicationController
   before_action :check_permission_to_delete, only: [:delete_comment, :destroy]
   before_action :check_parent_comment_permissions, only: [:new, :create, :add_comment_reply]
   before_action :check_unreviewed, only: [:add_comment_reply]
+  before_action :check_frozen, only: [:new, :create, :add_comment_reply]
   before_action :check_permission_to_review, only: [:unreviewed]
   before_action :check_permission_to_access_single_unreviewed, only: [:show]
   before_action :check_permission_to_moderate, only: [:approve, :reject]
+  before_action :check_permission_to_modify_frozen_status, only: [:freeze, :unfreeze]
 
   cache_sweeper :comment_sweeper
 
@@ -109,9 +111,17 @@ class CommentsController < ApplicationController
   end
 
   def check_unreviewed
-    return unless @commentable&.respond_to?(:unreviewed?) && @commentable&.unreviewed?
+    return unless @commentable.respond_to?(:unreviewed?) && @commentable.unreviewed?
+
     flash[:error] = ts("Sorry, you cannot reply to an unapproved comment.")
     redirect_to logged_in? ? root_path : new_user_session_path
+  end
+
+  def check_frozen
+    return unless @commentable.respond_to?(:iced?) && @commentable.iced?
+
+    flash[:error] = t("comments.check_frozen.error")
+    redirect_back(fallback_location: root_path)
   end
 
   def check_permission_to_review
@@ -148,11 +158,27 @@ class CommentsController < ApplicationController
     access_denied(redirect: @comment) unless logged_in_as_admin? || current_user_owns?(@comment) || current_user_owns?(@comment.ultimate_parent)
   end
 
-  # Comments cannot be edited after they've been replied to
+  # Comments cannot be edited after they've been replied to or if they are frozen.
   def check_permission_to_edit
-    return if @comment&.count_all_comments&.zero?
-    flash[:error] = ts("Comments with replies cannot be edited")
-    redirect_to(request.env["HTTP_REFERER"] || root_path)
+    if @comment&.iced?
+      flash[:error] = t("comment.check_permission_to_edit.error.frozen")
+      redirect_back(fallback_location: root_path)
+    elsif !@comment&.count_all_comments&.zero?
+      flash[:error] = ts("Comments with replies cannot be edited")
+      redirect_back(fallback_location: root_path)
+    end
+  end
+
+  # Comments on works can be frozen or unfrozen by admins with proper
+  # authorization or the work creator.
+  # Comments on tags can be frozen or unfrozen by admins with proper
+  # authorization.
+  # Comments on admin posts can be frozen or unfrozen by any admin.
+  def check_permission_to_modify_frozen_status
+    return if permission_to_modify_frozen_status
+
+    flash[:error] = t(".permission_denied")
+    redirect_back(fallback_location: root_path)
   end
 
   # Get the thing the user is trying to comment on
@@ -387,6 +413,32 @@ class CommentsController < ApplicationController
     redirect_to_all_comments(@comment.ultimate_parent, show_comments: true)
   end
 
+  # PUT /comments/1/freeze
+  def freeze
+    # TODO: When AO3-5939 is fixed, we can use
+    # @comment.full_set.each(&:mark_frozen!)
+    if !@comment.iced? && @comment.save
+      @comment.set_to_freeze_or_unfreeze.each(&:mark_frozen!)
+      flash[:notice] = t(".success")
+    else
+      flash[:error] = t(".error")
+    end
+    redirect_back(fallback_location: root_path)
+  end
+
+  # PUT /comments/1/unfreeze
+  def unfreeze
+    # TODO: When AO3-5939 is fixed, we can use
+    # @comment.full_set.each(&:mark_unfrozen!)
+    if @comment.iced? && @comment.save
+      @comment.set_to_freeze_or_unfreeze.each(&:mark_unfrozen!)
+      flash[:notice] = t(".success")
+    else
+      flash[:error] = t(".error")
+    end
+    redirect_back(fallback_location: root_path)
+  end
+
   def show_comments
     @comments = @commentable.comments.reviewed.page(params[:page])
 
@@ -428,6 +480,8 @@ class CommentsController < ApplicationController
     end
   end
 
+  # If JavaScript is enabled, use add_comment_reply.js to load the reply form
+  # Otherwise, redirect to a comment view with the form already loaded
   def add_comment_reply
     @comment = Comment.new
     respond_to do |format|
@@ -559,6 +613,14 @@ class CommentsController < ApplicationController
                   anchor: options[:anchor],
                   page: options[:page]
     end
+  end
+
+  def permission_to_modify_frozen_status
+    parent = find_parent
+    return true if policy(@comment).can_freeze_comment?
+    return true if parent.is_a?(Work) && current_user_owns?(parent)
+
+    false
   end
 
   private
