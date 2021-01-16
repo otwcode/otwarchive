@@ -285,7 +285,7 @@ Feature: Comment Moderation
       And it is currently 1 second from now
       And I press "Update"
     Then the comment on "Moderation" should be marked as unreviewed
-      And I should not see "Comments:1"
+      And I should not see "Comments:"
       And I should not see "Comments (1)"
 
   Scenario: I can approve multiple comments at once

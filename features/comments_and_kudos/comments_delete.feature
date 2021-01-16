@@ -13,7 +13,7 @@ Feature: Delete a comment
       And I post the comment "Fail comment" on the work "Awesome story"
       And I delete the comment
     Then I should see "Comment deleted."
-      And I should not see "Comments:1"
+      And I should not see "Comments:"
       And I should not see a link "Hide Comments (1)"
 
   Scenario: User deletes a comment they added to a work and which is the parent of another comment
@@ -38,7 +38,7 @@ Feature: Delete a comment
       And I view the work "Awesome story" with comments
       And I delete the comment
     Then I should see "Comment deleted."
-      And I should not see "Comments:1"
+      And I should not see "Comments:"
       And I should not see a link "Hide Comments (1)"
     
   Scenario: Author deletes a parent comment that another user added to their work
