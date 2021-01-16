@@ -63,7 +63,7 @@ class Comment < ApplicationRecord
   end
 
   def saved_change_to_visibility?
-    pertinent_attributes = %w(is_deleted hidden_by_admin unreviewed approved)
+    pertinent_attributes = %w[is_deleted hidden_by_admin unreviewed approved]
     (saved_changes.keys & pertinent_attributes).present?
   end
 
