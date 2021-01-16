@@ -106,7 +106,8 @@ Feature: Comment Moderation
     Then I should see "Comment approved"
     When I am logged out
       And I view the work "Moderation"
-    Then I should see "Comments (1)"
+    Then I should see "Comments:1"
+      And I should see "Comments (1)"
     When I follow "Comments (1)"
     Then I should see "Test comment"
       And the comment on "Moderation" should not be marked as unreviewed
@@ -128,7 +129,8 @@ Feature: Comment Moderation
       And I should not see "Unreviewed"
       And I should not see "Unread"
     When I view the work "Moderation"
-    Then I should see "Comments (1)"
+    Then I should see "Comments:1"
+      And I should see "Comments (1)"
       And I should not see "Unreviewed Comments (1)"
 
   Scenario: Comments can be approved from the home page inbox
@@ -144,7 +146,8 @@ Feature: Comment Moderation
     When I follow "Unreviewed Comments"
       And I press "Approve"
       And I view the work "Moderation"
-    Then I should see "Comments (1)"
+    Then I should see "Comments:1"
+      And I should see "Comments (1)"
       And I should not see "Unreviewed Comments (1)"
 
   Scenario: Moderated comments can be deleted by the author
@@ -282,6 +285,8 @@ Feature: Comment Moderation
       And it is currently 1 second from now
       And I press "Update"
     Then the comment on "Moderation" should be marked as unreviewed
+      And I should not see "Comments:1"
+      And I should not see "Comments (1)"
 
   Scenario: I can approve multiple comments at once
     Given the moderated work "Moderation" by "author"

@@ -130,7 +130,7 @@ When /^I post a guest comment$/ do
 end
 
 When /^all comments by "([^"]*)" are marked as spam$/ do |name|
-  Comment.where(name: name).update_all(approved: false)
+  Comment.where(name: name).find_each(&:mark_as_spam!)
 end
 
 When /^I compose an invalid comment(?: within "([^"]*)")?$/ do |selector|

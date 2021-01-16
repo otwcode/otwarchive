@@ -193,4 +193,9 @@ class Chapter < ApplicationRecord
   def commentable_name
     self.work.title
   end
+
+  def expire_comments_count
+    super
+    work&.expire_comments_count
+  end
 end
