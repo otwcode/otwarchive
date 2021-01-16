@@ -41,11 +41,14 @@ module CommentableEntity
 
   # The total number of visible comments on this commentable. Cached to reduce
   # computation. The cache is manually expired whenever a comment is added,
-  # removed, or changes visibility, but the cache also expires after an hour in
-  # case of issues with the cache (e.g. stale data when calculating the count).
+  # removed, or changes visibility, but the cache also expires after a fixed
+  # amount of time in case of issues with the cache (e.g. stale data when
+  # calculating the count).
   def count_visible_comments
     @count_visible_comments ||=
-      Rails.cache.fetch(count_visible_comments_key, expires_in: 1.hour) do
+      Rails.cache.fetch(count_visible_comments_key,
+                        expires_in: ArchiveConfig.SECONDS_UNTIL_COMMENT_COUNTS_EXPIRE.seconds,
+                        race_condition_ttl: 10.seconds) do
         count_visible_comments_uncached
       end
   end  
