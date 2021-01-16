@@ -915,7 +915,7 @@ class Work < ApplicationRecord
     counter = self.stat_counter || self.create_stat_counter
     counter.update_attributes(
       kudos_count: self.kudos.count,
-      comments_count: self.count_visible_comments,
+      comments_count: self.count_visible_comments_uncached,
       bookmarks_count: self.bookmarks.where(private: false).count
     )
   end
