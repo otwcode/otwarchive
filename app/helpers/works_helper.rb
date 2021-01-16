@@ -69,7 +69,7 @@ module WorksHelper
 
   # Passes value of fields for work series back to form when an error occurs on posting
   def work_series_value(field)
-    return params.dig :work, :series_attributes, field
+    params.dig :work, :series_attributes, field
   end
 
   def language_link(work)

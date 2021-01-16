@@ -620,7 +620,6 @@ class Work < ApplicationRecord
         # on the serial work will do the rest.
         new_series.creatorships.build(pseud: pseud)
       end
-      new_series.save
       self.new_series = new_series
       self.serial_works.build(series: new_series)
     end
@@ -635,7 +634,7 @@ class Work < ApplicationRecord
 
   # Save relationship to series if applicable
   def save_series
-    return unless self.new_series && self.new_series.present? && !(self.series.include?(self.new_series))
+    return unless self.new_series.present? && !(self.series.include? self.new_series)
 
     self.series.build title: self.new_series[:title], id: self.new_series[:id]
   end

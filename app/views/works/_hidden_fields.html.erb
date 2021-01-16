@@ -33,11 +33,9 @@
   <%= c.hidden_field :title, :value => "#{@chapter.title}" %>
   <%= c.hidden_field :published_at, :value => "#{@chapter.published_at}" %>
 <% end %>
-<% if params && params[:work] && params[:work][:series_attributes] %>
-  <%= fields_for "work[series_attributes]" do |s| %>
-    <%= s.hidden_field :id, :value => "#{params[:work][:series_attributes][:id]}" %>
-    <%= s.hidden_field :title, :value => "#{params[:work][:series_attributes][:title]}" %>
-  <% end %>
+<%= fields_for "work[series_attributes]" do |s| %>
+  <%= s.hidden_field :id, value: "#{work_series_value(:id)}" %>
+  <%= s.hidden_field :title, value: "#{work_series_value(:title)}" %>
 <% end %>
 <%= form.hidden_field :backdate, :value => "#{@work.backdate}" %>
 <%= form.hidden_field :expected_number_of_chapters, :value => "#{@work.expected_number_of_chapters}" %>

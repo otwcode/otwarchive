@@ -166,6 +166,16 @@ Given(/^I coauthored the work "(.*?)" as "(.*?)" with "(.*?)"$/) do |title, logi
   work.creatorships.unapproved.each(&:accept!)
 end
 
+Given /^"(.*?)" has an empty series "(.*?)"$/ do |login, title|
+  new_series = Series.new
+  new_series.title = title
+  user = User.find_by(login: login)
+  (user.pseuds).each do |pseud|
+    new_series.creatorships.build(pseud: pseud)
+  end
+  new_series.save
+end
+
 # WHEN
 
 When /^I follow the link for "([^"]*)" first invite$/ do |login|
