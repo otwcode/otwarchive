@@ -463,7 +463,7 @@ class WorksController < ApplicationController
       was_draft = !@work.posted?
       title = @work.title
       @work.destroy
-      flash[:notice] = ts('Your work %{title} was deleted.', title: title)
+      flash[:notice] = ts("Your work %{title} was deleted.", title: title).html_safe
     rescue
       flash[:error] = ts("We couldn't delete that right now, sorry! Please try again later.")
     end
