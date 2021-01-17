@@ -253,7 +253,7 @@ Then /^the "([^"]*)" field(?: within "([^"]*)")? should not contain "([^"]*)"$/ 
   end
 end
 
-Then /^the "(.*?)" (checkbox|radio button)(?: within "(.*?)")? should be checked( and disabled)?$/ do |label, input_type, selector, disabled|
+Then /^the "(.*?)" (checkbox|radio button)(?: within "(.*?)")? should be checked( and disabled)?$/ do |label, _input_type, selector, disabled|
   with_scope(selector) do
     assert has_checked_field?(label, disabled: disabled.present?)
   end
