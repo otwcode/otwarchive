@@ -1,4 +1,4 @@
-/*==ROLES AND STATES 
+/*==ROLES AND STATES
 http://otwcode.github.com/docs/front_end_coding/patterns/modifiers
 */
 
@@ -27,7 +27,6 @@ span.unread, .replied, span.claimed, .actions span.defaulted {
   white-space: nowrap;
   overflow: visible;
   position: relative;
-  cursor: pointer;
   text-decoration: none;
   border: 1px solid #bbb;
   border-bottom: 1px solid #aaa;
@@ -68,7 +67,7 @@ span.offered.requested {
 
 /* Arrows for the accordion widget */
 
-.collapsed:after { 
+.collapsed:after {
   content: " \2193";
 }
 
