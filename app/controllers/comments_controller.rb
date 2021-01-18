@@ -419,11 +419,11 @@ class CommentsController < ApplicationController
     # @comment.full_set.each(&:mark_frozen!)
     if !@comment.iced? && @comment.save
       @comment.set_to_freeze_or_unfreeze.each(&:mark_frozen!)
-      flash[:notice] = t(".success")
+      flash[:comment_notice] = t(".success")
     else
-      flash[:error] = t(".error")
+      flash[:comment_error] = t(".error")
     end
-    redirect_back(fallback_location: root_path)
+    redirect_to_all_comments(@comment.ultimate_parent, show_comments: true)
   end
 
   # PUT /comments/1/unfreeze
@@ -432,11 +432,11 @@ class CommentsController < ApplicationController
     # @comment.full_set.each(&:mark_unfrozen!)
     if @comment.iced? && @comment.save
       @comment.set_to_freeze_or_unfreeze.each(&:mark_unfrozen!)
-      flash[:notice] = t(".success")
+      flash[:comment_notice] = t(".success")
     else
-      flash[:error] = t(".error")
+      flash[:comment_error] = t(".error")
     end
-    redirect_back(fallback_location: root_path)
+    redirect_to_all_comments(@comment.ultimate_parent, show_comments: true)
   end
 
   def show_comments

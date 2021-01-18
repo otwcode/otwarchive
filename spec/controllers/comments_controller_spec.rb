@@ -602,7 +602,9 @@ describe CommentsController do
             put :freeze, params: { id: comment.id }
 
             expect(comment.reload.iced).to be_truthy
-            it_redirects_to_with_notice("/where_i_came_from", "Comment thread successfully frozen!")
+            expect(response).to redirect_to(admin_post_path(comment.ultimate_parent, show_comments: true, anchor: :comments))
+            expect(flash[:comment_error]).to be_blank
+            expect(flash[:comment_notice]).to eq("Comment thread successfully frozen!")
           end
         end
 
@@ -651,7 +653,9 @@ describe CommentsController do
                 put :freeze, params: { id: comment.id }
 
                 expect(comment.reload.iced).to be_truthy
-                it_redirects_to_with_notice("/where_i_came_from", "Comment thread successfully frozen!")
+                expect(response).to redirect_to(comments_path(tag_id: comment.ultimate_parent, anchor: :comments))
+                expect(flash[:comment_error]).to be_blank
+                expect(flash[:comment_notice]).to eq("Comment thread successfully frozen!")
               end
             end
           end
@@ -714,7 +718,9 @@ describe CommentsController do
                 put :freeze, params: { id: comment.id }
 
                 expect(comment.reload.iced).to be_truthy
-                it_redirects_to_with_notice("/where_i_came_from", "Comment thread successfully frozen!")
+                expect(response).to redirect_to(work_path(comment.ultimate_parent, show_comments: true, anchor: :comments))
+                expect(flash[:comment_error]).to be_blank
+                expect(flash[:comment_notice]).to eq("Comment thread successfully frozen!")
               end
             end
           end
@@ -736,7 +742,9 @@ describe CommentsController do
             put :freeze, params: { id: comment.id }
 
             expect(comment.reload.iced).to be_truthy
-            it_redirects_to_with_notice("/where_i_came_from", "Comment thread successfully frozen!")
+            expect(response).to redirect_to(work_path(comment.ultimate_parent, show_comments: true, anchor: :comments))
+            expect(flash[:comment_error]).to be_blank
+            expect(flash[:comment_notice]).to eq("Comment thread successfully frozen!")
           end
         end
       end
@@ -754,7 +762,9 @@ describe CommentsController do
           [comment, child1, child2, grandchild].each do |comment|
             expect(comment.reload.iced).to be_truthy
           end
-          it_redirects_to_with_notice("/where_i_came_from", "Comment thread successfully frozen!")
+          expect(response).to redirect_to(work_path(comment.ultimate_parent, show_comments: true, anchor: :comments))
+          expect(flash[:comment_error]).to be_blank
+          expect(flash[:comment_notice]).to eq("Comment thread successfully frozen!")
         end
       end
 
@@ -772,7 +782,9 @@ describe CommentsController do
           expect(child.reload.iced).to be_truthy
           expect(parent.reload.iced).to be_falsey
           expect(sibling.reload.iced).to be_falsey
-          it_redirects_to_with_notice("/where_i_came_from", "Comment thread successfully frozen!")
+          expect(response).to redirect_to(work_path(comment.ultimate_parent, show_comments: true, anchor: :comments))
+          expect(flash[:comment_error]).to be_blank
+          expect(flash[:comment_notice]).to eq("Comment thread successfully frozen!")
         end
       end
 
@@ -790,7 +802,9 @@ describe CommentsController do
           expect(child1.reload.iced).to be_falsey
           expect(child2.reload.iced).to be_falsey
           expect(comment.reload.iced).to be_truthy
-          it_redirects_to_with_notice("/where_i_came_from", "Comment thread successfully frozen!")
+          expect(response).to redirect_to(work_path(comment.ultimate_parent, show_comments: true, anchor: :comments))
+          expect(flash[:comment_error]).to be_blank
+          expect(flash[:comment_notice]).to eq("Comment thread successfully frozen!")
         end
       end
 
@@ -805,7 +819,9 @@ describe CommentsController do
 
           expect(comment.reload.iced).to be_truthy
           expect(comment.reload.approved).to be_falsey
-          it_redirects_to_with_notice("/where_i_came_from", "Comment thread successfully frozen!")
+          expect(response).to redirect_to(work_path(comment.ultimate_parent, show_comments: true, anchor: :comments))
+          expect(flash[:comment_error]).to be_blank
+          expect(flash[:comment_notice]).to eq("Comment thread successfully frozen!")
         end
       end
 
@@ -820,7 +836,9 @@ describe CommentsController do
           fake_login_known_user(comment.ultimate_parent.pseuds.first.user)
           put :freeze, params: { id: comment.id }
 
-          it_redirects_to_with_error("/where_i_came_from", "Sorry, that comment thread could not be frozen.")
+          expect(response).to redirect_to(work_path(comment.ultimate_parent, show_comments: true, anchor: :comments))
+          expect(flash[:comment_notice]).to be_blank
+          expect(flash[:comment_error]).to eq("Sorry, that comment thread could not be frozen.")
         end
       end
     end
@@ -846,7 +864,9 @@ describe CommentsController do
             put :freeze, params: { id: comment.id }
 
             expect(comment.reload.iced).to be_truthy
-            it_redirects_to_with_error("/where_i_came_from", "Sorry, that comment thread could not be frozen.")
+            expect(response).to redirect_to(admin_post_path(comment.ultimate_parent, show_comments: true, anchor: :comments))
+            expect(flash[:comment_notice]).to be_blank
+            expect(flash[:comment_error]).to eq("Sorry, that comment thread could not be frozen.")
           end
         end
 
@@ -895,7 +915,9 @@ describe CommentsController do
                 put :freeze, params: { id: comment.id }
 
                 expect(comment.reload.iced).to be_truthy
-                it_redirects_to_with_error("/where_i_came_from", "Sorry, that comment thread could not be frozen.")
+                expect(response).to redirect_to(comments_path(tag_id: comment.ultimate_parent, anchor: :comments))
+                expect(flash[:comment_notice]).to be_blank
+                expect(flash[:comment_error]).to eq("Sorry, that comment thread could not be frozen.")
               end
             end
           end
@@ -958,7 +980,9 @@ describe CommentsController do
                 put :freeze, params: { id: comment.id }
 
                 expect(comment.reload.iced).to be_truthy
-                it_redirects_to_with_error("/where_i_came_from", "Sorry, that comment thread could not be frozen.")
+                expect(response).to redirect_to(work_path(comment.ultimate_parent, show_comments: true, anchor: :comments))
+                expect(flash[:comment_notice]).to be_blank
+                expect(flash[:comment_error]).to eq("Sorry, that comment thread could not be frozen.")
               end
             end
           end
@@ -980,7 +1004,9 @@ describe CommentsController do
             put :freeze, params: { id: comment.id }
 
             expect(comment.reload.iced).to be_truthy
-            it_redirects_to_with_error("/where_i_came_from", "Sorry, that comment thread could not be frozen.")
+            expect(response).to redirect_to(work_path(comment.ultimate_parent, show_comments: true, anchor: :comments))
+            expect(flash[:comment_notice]).to be_blank
+            expect(flash[:comment_error]).to eq("Sorry, that comment thread could not be frozen.")
           end
         end
       end
@@ -998,7 +1024,9 @@ describe CommentsController do
           [comment, child1, child2, grandchild].each do |comment|
             expect(comment.reload.iced).to be_truthy
           end
-          it_redirects_to_with_error("/where_i_came_from", "Sorry, that comment thread could not be frozen.")
+          expect(response).to redirect_to(work_path(comment.ultimate_parent, show_comments: true, anchor: :comments))
+          expect(flash[:comment_notice]).to be_blank
+          expect(flash[:comment_error]).to eq("Sorry, that comment thread could not be frozen.")
         end
       end
 
@@ -1015,7 +1043,9 @@ describe CommentsController do
           [comment, child, parent, sibling].each do |comment|
             expect(comment.reload.iced).to be_truthy
           end
-          it_redirects_to_with_error("/where_i_came_from", "Sorry, that comment thread could not be frozen.")
+          expect(response).to redirect_to(work_path(comment.ultimate_parent, show_comments: true, anchor: :comments))
+          expect(flash[:comment_notice]).to be_blank
+          expect(flash[:comment_error]).to eq("Sorry, that comment thread could not be frozen.")
         end
       end
 
@@ -1032,7 +1062,9 @@ describe CommentsController do
           [comment, parent, child1, child2].each do |comment|
             expect(comment.reload.iced).to be_truthy
           end
-          it_redirects_to_with_error("/where_i_came_from", "Sorry, that comment thread could not be frozen.")
+          expect(response).to redirect_to(work_path(comment.ultimate_parent, show_comments: true, anchor: :comments))
+          expect(flash[:comment_notice]).to be_blank
+          expect(flash[:comment_error]).to eq("Sorry, that comment thread could not be frozen.")
         end
       end
 
@@ -1047,7 +1079,9 @@ describe CommentsController do
           fake_login_known_user(comment.ultimate_parent.pseuds.first.user)
           put :freeze, params: { id: comment.id }
 
-          it_redirects_to_with_error("/where_i_came_from", "Sorry, that comment thread could not be frozen.")
+          expect(response).to redirect_to(work_path(comment.ultimate_parent, show_comments: true, anchor: :comments))
+          expect(flash[:comment_notice]).to be_blank
+          expect(flash[:comment_error]).to eq("Sorry, that comment thread could not be frozen.")
         end
       end
     end
@@ -1075,7 +1109,9 @@ describe CommentsController do
             put :unfreeze, params: { id: comment.id }
 
             expect(comment.reload.iced).to be_falsey
-            it_redirects_to_with_error("/where_i_came_from", "Sorry, that comment thread could not be unfrozen.")
+            expect(response).to redirect_to(admin_post_path(comment.ultimate_parent, show_comments: true, anchor: :comments))
+            expect(flash[:comment_notice]).to be_blank
+            expect(flash[:comment_error]).to eq("Sorry, that comment thread could not be unfrozen.")
           end
         end
 
@@ -1124,7 +1160,9 @@ describe CommentsController do
                 put :unfreeze, params: { id: comment.id }
 
                 expect(comment.reload.iced).to be_falsey
-                it_redirects_to_with_error("/where_i_came_from", "Sorry, that comment thread could not be unfrozen.")
+                expect(response).to redirect_to(comments_path(tag_id: comment.ultimate_parent, anchor: :comments))
+                expect(flash[:comment_notice]).to be_blank
+                expect(flash[:comment_error]).to eq("Sorry, that comment thread could not be unfrozen.")
               end
             end
           end
@@ -1187,7 +1225,9 @@ describe CommentsController do
                 put :unfreeze, params: { id: comment.id }
 
                 expect(comment.reload.iced).to be_falsey
-                it_redirects_to_with_error("/where_i_came_from", "Sorry, that comment thread could not be unfrozen.")
+                expect(response).to redirect_to(work_path(comment.ultimate_parent, show_comments: true, anchor: :comments))
+                expect(flash[:comment_notice]).to be_blank
+                expect(flash[:comment_error]).to eq("Sorry, that comment thread could not be unfrozen.")
               end
             end
           end
@@ -1209,7 +1249,9 @@ describe CommentsController do
             put :unfreeze, params: { id: comment.id }
 
             expect(comment.reload.iced).to be_falsey
-            it_redirects_to_with_error("/where_i_came_from", "Sorry, that comment thread could not be unfrozen.")
+            expect(response).to redirect_to(work_path(comment.ultimate_parent, show_comments: true, anchor: :comments))
+            expect(flash[:comment_notice]).to be_blank
+            expect(flash[:comment_error]).to eq("Sorry, that comment thread could not be unfrozen.")
           end
         end
       end
@@ -1227,7 +1269,9 @@ describe CommentsController do
           [comment, child1, child2, grandchild].each do |comment|
             expect(comment.reload.iced).to be_falsey
           end
-          it_redirects_to_with_error("/where_i_came_from", "Sorry, that comment thread could not be unfrozen.")
+          expect(response).to redirect_to(work_path(comment.ultimate_parent, show_comments: true, anchor: :comments))
+          expect(flash[:comment_notice]).to be_blank
+          expect(flash[:comment_error]).to eq("Sorry, that comment thread could not be unfrozen.")
         end
       end
 
@@ -1244,7 +1288,9 @@ describe CommentsController do
           [comment, child, parent, sibling].each do |comment|
             expect(comment.reload.iced).to be_falsey
           end
-          it_redirects_to_with_error("/where_i_came_from", "Sorry, that comment thread could not be unfrozen.")
+          expect(response).to redirect_to(work_path(comment.ultimate_parent, show_comments: true, anchor: :comments))
+          expect(flash[:comment_notice]).to be_blank
+          expect(flash[:comment_error]).to eq("Sorry, that comment thread could not be unfrozen.")
         end
       end
 
@@ -1261,7 +1307,9 @@ describe CommentsController do
           [comment, parent, child1, child2].each do |comment|
             expect(comment.reload.iced).to be_falsey
           end
-          it_redirects_to_with_error("/where_i_came_from", "Sorry, that comment thread could not be unfrozen.")
+          expect(response).to redirect_to(work_path(comment.ultimate_parent, show_comments: true, anchor: :comments))
+          expect(flash[:comment_notice]).to be_blank
+          expect(flash[:comment_error]).to eq("Sorry, that comment thread could not be unfrozen.")
         end
       end
 
@@ -1276,7 +1324,9 @@ describe CommentsController do
           fake_login_known_user(comment.ultimate_parent.pseuds.first.user)
           put :unfreeze, params: { id: comment.id }
 
-          it_redirects_to_with_error("/where_i_came_from", "Sorry, that comment thread could not be unfrozen.")
+          expect(response).to redirect_to(work_path(comment.ultimate_parent, show_comments: true, anchor: :comments))
+          expect(flash[:comment_notice]).to be_blank
+          expect(flash[:comment_error]).to eq("Sorry, that comment thread could not be unfrozen.")
         end
       end
     end
@@ -1302,7 +1352,9 @@ describe CommentsController do
             put :unfreeze, params: { id: comment.id }
 
             expect(comment.reload.iced).to be_falsey
-            it_redirects_to_with_notice("/where_i_came_from", "Comment thread successfully unfrozen!")
+            expect(response).to redirect_to(admin_post_path(comment.ultimate_parent, show_comments: true, anchor: :comments))
+            expect(flash[:comment_error]).to be_blank
+            expect(flash[:comment_notice]).to eq("Comment thread successfully unfrozen!")
           end
         end
 
@@ -1351,7 +1403,9 @@ describe CommentsController do
                 put :unfreeze, params: { id: comment.id }
 
                 expect(comment.reload.iced).to be_falsey
-                it_redirects_to_with_notice("/where_i_came_from", "Comment thread successfully unfrozen!")
+                expect(response).to redirect_to(comments_path(tag_id: comment.ultimate_parent, anchor: :comments))
+                expect(flash[:comment_error]).to be_blank
+                expect(flash[:comment_notice]).to eq("Comment thread successfully unfrozen!")
               end
             end
           end
@@ -1414,7 +1468,9 @@ describe CommentsController do
                 put :unfreeze, params: { id: comment.id }
 
                 expect(comment.reload.iced).to be_falsey
-                it_redirects_to_with_notice("/where_i_came_from", "Comment thread successfully unfrozen!")
+                expect(response).to redirect_to(work_path(comment.ultimate_parent, show_comments: true, anchor: :comments))
+                expect(flash[:comment_error]).to be_blank
+                expect(flash[:comment_notice]).to eq("Comment thread successfully unfrozen!")
               end
             end
           end
@@ -1436,7 +1492,9 @@ describe CommentsController do
             put :unfreeze, params: { id: comment.id }
 
             expect(comment.reload.iced).to be_falsey
-            it_redirects_to_with_notice("/where_i_came_from", "Comment thread successfully unfrozen!")
+            expect(response).to redirect_to(work_path(comment.ultimate_parent, show_comments: true, anchor: :comments))
+            expect(flash[:comment_error]).to be_blank
+            expect(flash[:comment_notice]).to eq("Comment thread successfully unfrozen!")
           end
         end
       end
@@ -1454,7 +1512,9 @@ describe CommentsController do
           [comment, child1, child2, grandchild].each do |comment|
             expect(comment.reload.iced).to be_falsey
           end
-          it_redirects_to_with_notice("/where_i_came_from", "Comment thread successfully unfrozen!")
+          expect(response).to redirect_to(work_path(comment.ultimate_parent, show_comments: true, anchor: :comments))
+          expect(flash[:comment_error]).to be_blank
+          expect(flash[:comment_notice]).to eq("Comment thread successfully unfrozen!")
         end
       end
 
@@ -1472,7 +1532,9 @@ describe CommentsController do
           expect(child.reload.iced).to be_falsey
           expect(parent.reload.iced).to be_truthy
           expect(sibling.reload.iced).to be_truthy
-          it_redirects_to_with_notice("/where_i_came_from", "Comment thread successfully unfrozen!")
+          expect(response).to redirect_to(work_path(comment.ultimate_parent, show_comments: true, anchor: :comments))
+          expect(flash[:comment_error]).to be_blank
+          expect(flash[:comment_notice]).to eq("Comment thread successfully unfrozen!")
         end
       end
 
@@ -1490,7 +1552,9 @@ describe CommentsController do
           expect(child1.reload.iced).to be_truthy
           expect(child2.reload.iced).to be_truthy
           expect(comment.reload.iced).to be_falsey
-          it_redirects_to_with_notice("/where_i_came_from", "Comment thread successfully unfrozen!")
+          expect(response).to redirect_to(work_path(comment.ultimate_parent, show_comments: true, anchor: :comments))
+          expect(flash[:comment_error]).to be_blank
+          expect(flash[:comment_notice]).to eq("Comment thread successfully unfrozen!")
         end
       end
 
@@ -1505,7 +1569,9 @@ describe CommentsController do
 
           expect(comment.reload.iced).to be_falsey
           expect(comment.reload.approved).to be_falsey
-          it_redirects_to_with_notice("/where_i_came_from", "Comment thread successfully unfrozen!")
+          expect(response).to redirect_to(work_path(comment.ultimate_parent, show_comments: true, anchor: :comments))
+          expect(flash[:comment_error]).to be_blank
+          expect(flash[:comment_notice]).to eq("Comment thread successfully unfrozen!")
         end
       end
 
@@ -1520,7 +1586,9 @@ describe CommentsController do
           fake_login_known_user(comment.ultimate_parent.pseuds.first.user)
           put :unfreeze, params: { id: comment.id }
 
-          it_redirects_to_with_error("/where_i_came_from", "Sorry, that comment thread could not be unfrozen.")
+          expect(response).to redirect_to(work_path(comment.ultimate_parent, show_comments: true, anchor: :comments))
+          expect(flash[:comment_notice]).to be_blank
+          expect(flash[:comment_error]).to eq("Sorry, that comment thread could not be unfrozen.")
         end
       end
     end
@@ -2252,14 +2320,18 @@ describe CommentsController do
 
       it "PUT #freeze successfully freezes the comment" do
         put :freeze, params: { id: comment.id }
-        it_redirects_to_with_notice("/where_i_came_from", "Comment thread successfully frozen!")
+        expect(response).to redirect_to(work_path(comment.ultimate_parent, show_comments: true, anchor: :comments))
+        expect(flash[:comment_error]).to be_blank
+        expect(flash[:comment_notice]).to eq("Comment thread successfully frozen!")
         expect(comment.reload.iced).to be_truthy
       end
 
       it "PUT #unfreeze successfully unfreezes the comment" do
         comment.update(iced: true)
         put :unfreeze, params: { id: comment.id }
-        it_redirects_to_with_notice("/where_i_came_from", "Comment thread successfully unfrozen!")
+        expect(response).to redirect_to(work_path(comment.ultimate_parent, show_comments: true, anchor: :comments))
+        expect(flash[:comment_error]).to be_blank
+        expect(flash[:comment_notice]).to eq("Comment thread successfully unfrozen!")
         expect(comment.reload.iced).to be_falsey
       end
     end
@@ -2348,7 +2420,9 @@ describe CommentsController do
             admin.update(roles: [admin_role])
             fake_login_admin(admin)
             put :freeze, params: { id: comment.id }
-            it_redirects_to_with_notice("/where_i_came_from", "Comment thread successfully frozen!")
+            expect(response).to redirect_to(work_path(comment.ultimate_parent, show_comments: true, anchor: :comments))
+            expect(flash[:comment_error]).to be_blank
+            expect(flash[:comment_notice]).to eq("Comment thread successfully frozen!")
             expect(comment.reload.iced).to be_truthy
           end
         end
@@ -2369,7 +2443,9 @@ describe CommentsController do
             admin.update(roles: [admin_role])
             fake_login_admin(admin)
             put :unfreeze, params: { id: comment.id }
-            it_redirects_to_with_notice("/where_i_came_from", "Comment thread successfully unfrozen!")
+            expect(response).to redirect_to(work_path(comment.ultimate_parent, show_comments: true, anchor: :comments))
+            expect(flash[:comment_error]).to be_blank
+            expect(flash[:comment_notice]).to eq("Comment thread successfully unfrozen!")
             expect(comment.reload.iced).to be_falsey
           end
         end
