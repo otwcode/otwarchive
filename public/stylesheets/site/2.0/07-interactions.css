@@ -1,13 +1,13 @@
 /*==INTERACTIONS: global form rules
 http://otwcode.github.com/docs/front_end_coding/patterns/interactions
 (submit button styling is in actions.css with the other buttons)
-General rules for all form elements, and nearly ALL our forms use just these. 
+General rules for all form elements, and nearly ALL our forms use just these.
 Forms are normally in definition lists <dt label: dd input>
 with some un/ordered lists, normally of checkbox options <li checkbox:label>
 and some paragraphs, normally forms with a single <p label:input> .
 
 We might develop three MODES: .simple .verbose and .dynamic -- .sim and ver in early draft in sandbox
-We also have some jS WIDGETS, which are custom form interactions, like autocomplete 
+We also have some jS WIDGETS, which are custom form interactions, like autocomplete
 and a few variations for INTERACTION TYPES, which are, roughly:
 .post, .login, make .associations, set .preferences, [.search, .filter] => in searchbrowse
 */
@@ -21,8 +21,8 @@ fieldset {
   min-width: 0;
 }
 
-/*Guideline: Forms are written by lots of people, and, this is beta, change a LOT. 
-I've written a load of possible different nests to give a reasonably/broadly consistent view whatever goes in, 
+/*Guideline: Forms are written by lots of people, and, this is beta, change a LOT.
+I've written a load of possible different nests to give a reasonably/broadly consistent view whatever goes in,
 but it's probably not complete. */
 
 fieldset, form dl, fieldset dl dl, fieldset fieldset fieldset, fieldset fieldset dl dl, dd.hideme, form blockquote.userstuff {
@@ -62,7 +62,6 @@ legend, input[type="hidden"] {
 }
 
 label {
-  cursor: pointer;
   margin-right: 0.375em;
 }
 
@@ -149,7 +148,7 @@ form .footnote code {
   display: inline;
 }
 
-/* when we display information that cannot be edited, 
+/* when we display information that cannot be edited,
 like the current username on the change username form */
 form dd p.informational {
   padding-top: 0;
@@ -388,7 +387,7 @@ qTip2 Copyright 2009-2010 Craig Michael Thompson - http://craigsworks.com*/
 
 /* WIDGET: MODAL DIALOGS (called by help links) */
 
-a.modal.help { 
+a.modal.help {
   cursor: help;
 }
 
@@ -416,7 +415,7 @@ a.modal.help {
   width: 124px;
 }
 
-#modal-wrap { 
+#modal-wrap {
   display: none;
   position: absolute;
   right: 0;
@@ -429,7 +428,7 @@ a.modal.help {
   height: 100%;
 }
 
-#modal-wrap:before, #modal { 
+#modal-wrap:before, #modal {
   display: inline-block;
   vertical-align: middle;
 }
@@ -443,7 +442,7 @@ a.modal.help {
   padding-bottom: 44px;
   position: relative;
   text-align: left;
-  width: 80%; 
+  width: 80%;
   z-index: 501;
     box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.2);
 }
@@ -495,7 +494,7 @@ a.modal.help {
   width: auto;
 }
 
-#modal.img .content { 
+#modal.img .content {
   border: 0;
   overflow: visible;
   padding: 0;
@@ -539,7 +538,7 @@ a.modal.help {
   right: 8px;
 }
 
-#modal .content > h1:first-child, #modal .content > h2:first-child, #modal .content > .heading:first-child { 
+#modal .content > h1:first-child, #modal .content > h2:first-child, #modal .content > .heading:first-child {
   margin-top: 0.5em;
 }
 
@@ -551,7 +550,7 @@ div.dynamic {
   z-index: 500;
 }
 
-/*MODE: VERBOSE for forms with more than three fieldsets 
+/*MODE: VERBOSE for forms with more than three fieldsets
 TO DO: Make VERBOSE a class on FORM across the site; it is a surrounding DIV
 in some areas, hence .verbose form */
 
