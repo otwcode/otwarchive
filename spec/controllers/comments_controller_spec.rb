@@ -811,7 +811,7 @@ describe CommentsController do
       context "when comment is spam" do
         let(:comment) { create(:comment) }
 
-        before  { comment.update_attribute(:approved, false) }
+        before { comment.update_attribute(:approved, false) }
 
         it "freezes the comment and redirects with success message without changing the approved status" do
           fake_login_known_user(comment.ultimate_parent.pseuds.first.user)
