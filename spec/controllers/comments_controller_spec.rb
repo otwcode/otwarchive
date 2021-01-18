@@ -794,6 +794,21 @@ describe CommentsController do
         end
       end
 
+      context "when comment is spam" do
+        let(:comment) { create(:comment) }
+
+        before  { comment.update_attribute(:approved, false) }
+
+        it "freezes the comment and redirects with success message without changing the approved status" do
+          fake_login_known_user(comment.ultimate_parent.pseuds.first.user)
+          put :freeze, params: { id: comment.id }
+
+          expect(comment.reload.iced).to be_truthy
+          expect(comment.reload.approved).to be_falsey
+          it_redirects_to_with_notice("/where_i_came_from", "Comment thread successfully frozen!")
+        end
+      end
+
       context "when comment is not saved" do
         let!(:comment) { create(:comment) }
 
@@ -1475,6 +1490,21 @@ describe CommentsController do
           expect(child1.reload.iced).to be_truthy
           expect(child2.reload.iced).to be_truthy
           expect(comment.reload.iced).to be_falsey
+          it_redirects_to_with_notice("/where_i_came_from", "Comment thread successfully unfrozen!")
+        end
+      end
+
+      context "when comment is spam" do
+        let(:comment) { create(:comment, iced: true) }
+
+        before { comment.update_attribute(:approved, false) }
+
+        it "unfreezes the comment and redirects with success message without changing the approved status" do
+          fake_login_known_user(comment.ultimate_parent.pseuds.first.user)
+          put :unfreeze, params: { id: comment.id }
+
+          expect(comment.reload.iced).to be_falsey
+          expect(comment.reload.approved).to be_falsey
           it_redirects_to_with_notice("/where_i_came_from", "Comment thread successfully unfrozen!")
         end
       end

@@ -20,7 +20,7 @@ class Comment < ApplicationRecord
     maximum: ArchiveConfig.COMMENT_MAX,
     too_long: ts("must be less than %{count} characters long.", count: ArchiveConfig.COMMENT_MAX)
 
-  validate :check_for_spam
+  validate :check_for_spam, on: :create
 
   def check_for_spam
     errors.add(:base, ts("This comment looks like spam to our system, sorry! Please try again, or create an account to comment.")) unless check_for_spam?
