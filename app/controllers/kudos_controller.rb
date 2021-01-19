@@ -8,6 +8,21 @@ class KudosController < ApplicationController
     @work = Work.find(params[:work_id])
     @kudos = @work.kudos.includes(:user).with_user
     @guest_kudos_count = @work.kudos.by_guest.count
+
+    respond_to do |format|
+      format.html do
+        # Show kudos in order from oldest first, so that someone going through
+        # the pages one-by-one won't see duplicates:
+        @kudos = @kudos.order(id: :asc).paginate(
+          page: params[:page],
+          per_page: ArchiveConfig.MAX_KUDOS_TO_SHOW
+        )
+      end
+
+      format.js do
+        @kudos = @kudos.where("id < ?", params[:before].to_i) if params[:before]
+      end
+    end
   end
 
   def create
@@ -28,7 +43,7 @@ class KudosController < ApplicationController
 
         format.js do
           @commentable = @kudo.commentable
-          @kudos = @commentable.kudos.with_user.includes(:user).by_date
+          @kudos = @commentable.kudos.with_user.includes(:user)
 
           render :create, status: :created
         end
