@@ -58,7 +58,7 @@ Feature: Kudos
     Then I should not see "Kudos ♥"
 
     When I go to the work kudos page for "Awesome Story"
-    Then I should see "2 User Kudos on Awesome Story"
+    Then I should see "2 Users Who Left Kudos on Awesome Story"
       And I should see "1 guest has also left kudos"
       And I should see "myname2 and myname3 left kudos on this work!"
 
