@@ -10,8 +10,6 @@ class KudosSweeper < ActionController::Caching::Sweeper
     end
 
     # expire the cache for the kudos section in the view
-    # and for the full-page, expanded list
-    ActionController::Base.new.expire_fragment("#{kudo.commentable.cache_key}/kudos-v2")
-    ActionController::Base.new.expire_fragment("#{kudo.commentable.cache_key}/kudos/full-v2")
+    ActionController::Base.new.expire_fragment("#{kudo.commentable.cache_key}/kudos-v3")
   end
 end
