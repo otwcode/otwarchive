@@ -11,9 +11,7 @@ class KudosController < ApplicationController
 
     respond_to do |format|
       format.html do
-        # Show kudos in order from oldest first, so that someone going through
-        # the pages one-by-one won't see duplicates:
-        @kudos = @kudos.order(id: :asc).paginate(
+        @kudos = @kudos.order(id: :desc).paginate(
           page: params[:page],
           per_page: ArchiveConfig.MAX_KUDOS_TO_SHOW
         )
