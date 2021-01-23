@@ -371,7 +371,6 @@ class WorksController < ApplicationController
     @work.ip_address = request.remote_ip
     @work.set_word_count(@work.preview_mode)
     @work.save_parents if @work.preview_mode
-    @work.save_series if @work.preview_mode
 
     @work.set_challenge_info
     @work.set_challenge_claim_info

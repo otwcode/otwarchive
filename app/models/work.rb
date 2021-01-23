@@ -632,13 +632,6 @@ class Work < ApplicationRecord
     end
   end
 
-  # Save relationship to series if applicable
-  def save_series
-    return unless self.new_series.present? && !(self.series.include? self.new_series)
-
-    self.series.build title: self.new_series[:title], id: self.new_series[:id]
-  end
-
   ########################################################################
   # CHAPTERS
   ########################################################################
