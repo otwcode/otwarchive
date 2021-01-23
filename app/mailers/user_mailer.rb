@@ -434,7 +434,7 @@ class UserMailer < ActionMailer::Base
     @language = feedback.language
     mail(
       to: feedback.email,
-      subject: "[#{ArchiveConfig.APP_SHORT_NAME}] Support - #{strip_html_breaks_simple(feedback.summary)}"
+      subject: "[#{ArchiveConfig.APP_SHORT_NAME}] Support - #{unparse(feedback.summary)}"
     )
   end
 

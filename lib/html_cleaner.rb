@@ -1,87 +1,303 @@
 # note, if you modify this file you have to restart the server or console
 module HtmlCleaner
 
-  # Takes a Nokogiri node or a string/hash pair
-  def open_tag(node, attributes=nil)
-    begin
-      name = node.name
-      attributes = Hash[*(node.attribute_nodes.map { |n| [n.name, n.value] }.flatten)]
-      self_closing = node.children.empty? ? "/" : ""
-    rescue NameError
-      name = node
-      attributes ||= {}
-      self_closing = ""
+  class LinebreakRender < Redcarpet::Render::XHTML
+    @@MD_CHARS = Regexp.escape("`*_{}[]()#+-.!=~")
+    @@BLOCK_TAGS = %w[address blockquote center dd div dl dt h1 h2 h3 h4 h5 h6 hr ol p pre table ul]
+  
+    def preprocess(doc)
+      # Escape markdown special characters
+      escaped = doc.gsub(Regexp.new("([#{@@MD_CHARS}])")) { "\\#{Regexp.last_match(1)}" }
+
+      # Newlines after block elements (required by markdown spec)
+      escaped = escaped.gsub(%r{(?:</(?:#{@@BLOCK_TAGS.join('|')})>|<hr( /)?>)\n?(?=.)}) { |m| "#{m}\n\n" }
+      # Redcarpet doesn't think <center> is a block tag, so we need to convert it temporarily
+      # to something that is, and we need to do the opposite for ins and del
+      # (Pending https://github.com/vmg/redcarpet/pull/702)
+      escaped = escaped.gsub(%r{<center>((?:\n|.)*?)</center>}) { "<div class=\"temp-transform-center\">#{Regexp.last_match(1)}</div>"}
+      escaped = escaped.gsub(%r{<del>((?:\n|.)*?)</del>}) { "<span class=\"temp-transform-del\">#{Regexp.last_match(1)}</span>"}
+      escaped = escaped.gsub(%r{<ins>((?:\n|.)*?)</ins>}) { "<span class=\"temp-transform-ins\">#{Regexp.last_match(1)}</span>"}
+
+      # Markdown condenses extra newlines, but the user probably wanted them.
+      escaped
     end
 
-    attr = ""
-    attributes.each { |aname, avalue| attr += " #{aname}='#{avalue}'" }
-    return "<#{name}#{attr}#{self_closing}>"
+    def postprocess(doc)
+      # Unescape markdown chars
+      unescaped = doc.gsub(Regexp.new("\\\\([#{@@MD_CHARS}])")) { Regexp.last_match(1) }
+  
+      # Unconvert <center> from <div>, and <del> and <ins> from <span>
+      unescaped = unescaped.gsub(%r{<div class="temp-transform-center">((?:\n|.)*?)</div>}) { "<center>#{Regexp.last_match(1)}</center>" }
+      unescaped = unescaped.gsub(%r{<span class="temp-transform-ins">((?:\n|.)*?)</span>}) { "<ins>#{Regexp.last_match(1)}</ins>" }
+      unescaped = unescaped.gsub(%r{<span class="temp-transform-del">((?:\n|.)*?)</span>}) { "<del>#{Regexp.last_match(1)}</del>" }
+      unescaped.chomp
+    end
+    
+  end
+  
+  def render_input(input)
+    renderer = Redcarpet::Markdown.new(LinebreakRender.new(hard_wrap: true, xhtml: true, link_attributes: { rel: "nofollow" }), lax_spacing: true)
+    renderer.render(input)
   end
 
-  # Takes a Nokogiri node or a string
-  def close_tag(node, attributes=nil)
-    begin
-      name = node.name
-      self_closing = node.children.empty?
-    rescue NameError
-      name = node
-      self_closing = false
+  # Process input, and try to fix up to MAX_COUNT recoverable errors in tag/quote mismatching
+  # This works recursively on input, so an upper limit is needed to prevent infinite
+  # recursion when encountering an unfixiable error.
+  class MismatchedTagFixer
+    @@MAX_COUNT = 10
+
+    def initialize
+      @count = 0
     end
 
-    self_closing ? "" : "</#{name}>"
-  end
-
-  class TagStack < Array
-    include HtmlCleaner
-
-    def inside_paragraph?
-      flatten.include?("p")
+    # Scrape the list of currently open tags from an error string and split
+    # them into an array.
+    def open_tags(str)
+      tag_block = str.sub(/.*Currently open tags: (.*?)\.$/, '\1').chomp
+      tag_block.split(", ")
     end
 
-    def ignore_tag?(tag)
-      ["text", "myroot", "#cdata-section"].include?(tag)
+    # Scrape character column from error, and return
+    # as a zero-indexed offset
+    def index_from_err(str)
+      str.sub(/\d+:(\d+).*/, '\1').to_i - 1
     end
 
-    def open_paragraph_tags
-      result = ""
-      each do |tags|
-        tags.each do |tag, attributes|
-          next if result == "" && tag != "p"
-          next if ignore_tag?(tag)
-          result = "" if tag == "p"
-          result += open_tag(tag, attributes)
+    # Scrape line number from error, and return
+    # the matching line from input.
+    def line_from_err(str, input)
+      line_no = str.sub(/(\d+):.*/, '\1').to_i - 1
+      lines = input.lines
+      lines[line_no].chomp
+    end
+
+    def read(input)
+      @count += 1
+      updated = false
+
+      doc = Nokogiri::HTML5.fragment(input, max_errors: -1) 
+      # We're only set up to fix a limited set of error types, so grab the first error
+      # that appears to match one of those.
+      err = doc.errors.detect do |e|
+        e.to_s.include?("ERROR: That tag isn't allowed here") || e.str1 == ('eof-in-tag') || e.str1 == ('unexpected-character-in-unquoted-attribute-value') || e.to_s.include?('ERROR: Premature end of file ')
+      end
+
+      if err
+
+        if err.to_s.include?("ERROR: That tag isn't allowed here")
+          # Missing start tag, or unclosed tag inside a block.
+          # Grab column/line data and open tags from the error
+          lines = err.to_s.lines
+          i = self.index_from_err(lines[0])
+          tags = self.open_tags(lines[0])
+          block = self.line_from_err(lines[0], input)
+          # Get the line we're working with, and then use the index to remove everything before the 
+          # error (ie, "something</i> bar" goes to "</i> bar")
+          segment = block[i..]
+
+          if tags.length == 1
+            # only one tag open (html), so we should delete the closing tag
+            cut = segment.index(">") + 1
+            fixed = segment[cut..]
+
+            fixed_line = block.sub(segment, fixed)
+            input = input.sub(block, fixed_line)
+          else
+            # We need to check if this tag was previously opened
+            # and if so, close the tags inbetween.
+            bad_tag = segment.sub(%r{</(\w*)(.|\n)*}, '\1')
+            tag_i = tags.rindex(bad_tag)
+
+            if tag_i
+              # Tag was opened, closer intermediate tags
+              tags_to_close = tags[(tag_i + 1)..]
+              close_str = "</#{tags_to_close.join('></')}>"
+              fixed_line = block.sub(segment, close_str + segment)
+              input = input.sub(block, fixed_line)
+            else
+              # Tag was not opened, delete it.
+              cut = segment.index(">") + 1
+              fixed = segment[cut..]
+
+              fixed_line = input.sub(segment, fixed)
+              input = input.sub(block, fixed_line)
+            end
+          end
+
+          updated = true
+
+
         end
-      end
-      return result
-    end
 
-    def close_paragraph_tags
-      return "" if !inside_paragraph?
-      result = ""
-      reverse.each do |tags|
-        tags.reverse.each do |tag, attributes|
-          next if ignore_tag?(tag)
-          result += close_tag(tag, attributes)
-          return result if tag == "p"
+        if err.str1 == ('eof-in-tag')
+          # Missing close quote
+          # (this error can also mean missing close bracket, but that's not handled)
+          # NOTE: this only works sometimes - if the tag with the bad quote is nested within
+          # another tag, Nokogiri will eat it and we won't have enough info to reconstruct.
+
+          # Take what we have of the doc (ie, what got parsed up until the bad tag) and grab a chunk
+          # of the end of it, so we can find our place in the original input
+          matcher = doc.to_html[-20..-1] || doc.to_html
+          # Dump any trailing close tags, as they may have been added by nokogiri
+          matcher = matcher.sub(%r{(.*?)(</.*>)*$}, '\1')
+
+          # Look for the first opening tag after the end of parsed input, skipping any closing tags
+          # (in case we stripped one that was in the original input, as we can't tell)
+          tag = input.sub(%r{(?:.|\n)*?#{matcher}(?:</.*>)*(<[^/](?:.|\n)*?>)(?:.|\n)*}, '\1')
+
+          # Split attributes on = (ie, <p class='one' style='two'> becomes ["<p class", "'one' style", "'two'>"])
+          # Ignore any attributes with two matching quotes followed by either a space and text, or >
+          bad_attrs = tag.split("=").reject { |attr| attr.match?(/('|").+\1((?: +.+)|>)$/) }
+          # Grab the opening quote, and then insert it before the space + text or > spot.
+          bad_attrs.each do |attr|
+            fixed = attr.sub(/('|")(.+)((?: +.+)|>)$/, '\1\2\1\3')
+            input = input.sub(attr, fixed)
+          end
+
+          updated = true
+
         end
-      end
-    end
 
-    def close_and_pop_last
-      result = ""
-      pop.reverse.each do |tag, attributes|
-        next if ignore_tag?(tag)
-        result += "</#{tag}>"
-      end
-      return result
-    end
+        if err.str1 == ("unexpected-character-in-unquoted-attribute-value")
+          # Missing start quote
+          # Grab line/col from the error info and get the correct input line to fix
+          lines = err.to_s.lines
+          i = self.index_from_err(lines[0])
+          block = self.line_from_err(lines[0], input)
 
-    def add_p
-      self[-1] = self[-1] + [["p", {}]]
-      return "<p>"
+          # Grab the chunk of the line up through the bad quote 
+          # (ie, "hello <span class=something'>yes" goes to hello "<span class=something'")
+          segment = block[1..i]
+
+          # last char of this is quote, and the last = is what we need to insert it after
+          ch = segment[-1]
+          insert_i = segment.rindex("=")
+          # Need to make a copy of block, because insert modifies self, and we need the block
+          # to know where to replace the text
+          fixed = String.new(block).insert(insert_i + 2, ch)
+          input = input.sub(block, fixed)
+
+          updated = true
+
+
+        end
+
+        if err.to_s.include?("ERROR: Premature end of file ")
+          # Missing close tag
+          lines = err.to_s.lines
+          # scrape list of unclosed tags from error str
+          tags = open_tags(lines[0])
+          end_block = lines[1].chomp
+
+          # Work outward in, closing the last opened tag first.
+          bad_tag = tags[-1]
+          # Try the simple case (mismtched tag is in last line of input) first
+          start_count = end_block.scan(/<#{bad_tag}( .*)?>/).length
+          end_count = end_block.scan(%r{</#{bad_tag}>}).length
+          # More start tags than ends tags = we have an unclosed start
+          if (start_count - end_count).positive?
+            input += "</#{bad_tag}>"
+          else
+            # Gotta do this the hard way - search the tag nodes for one
+            # that contains our ending line
+            doc.search("#{bad_tag}").each do |node|
+              next unless node.inner_html.include?(end_block.chomp)
+
+              content = node.to_html
+              chomped = node.to_html.chomp("</#{node.name}>")        
+              content = chomped.sub(/\n\n/, "</#{node.name}>\n\n") if content.include?("\n\n")
+              # check with optional ending tag in case our bad tag has another of itself nested inside
+              # (ie, "<i>some text <i>closed properly</i> something")
+              input = input.sub(%r{#{chomped}(?:</#{node.name}>)?}, content)
+            end
+          end
+
+          updated = true
+
+        end
+
+      end
+      if updated && @count < @@MAX_COUNT
+
+        # We've hopefully fixed the mismatch, reprocess.
+        doc = self.read(input)
+      end
+
+      doc
     end
   end
 
+  # step 1b
+  def clean_inlines(node)
+    inline = %w[a abbr acronym b big br cite code del dfn em i img ins kbd q s samp small span strike strong sub sup tt u var]
+    return unless inline.include?(node.name) && node.content.include?("\n")
+
+    start_tag = node.to_html.sub(/(<#{node.name}.*?>)(?:\n|.)*/, '\1')
+    node.replace(node.to_html.gsub("\n\n", "</#{node.name}>\n\n#{start_tag}"))
+  end
+
+  # step 1c
+  def parse_blocks(node)
+    can_contain_p = %w[blockquote center div]
+    return unless node.elem? && can_contain_p.include?(node.name) && node.content.strip.include?("\n")
+
+    node.inner_html = render_input(node.inner_html)
+  end
+
+  def format_whitespace(node)
+    # Only reformat whitespace inside non-empty top level nodes.
+    return unless node.text? && node.parent && node.parent.name == "#document-fragment" && node.to_html.match?(/[^\s|\n]+$/)
+
+    formatted = node.to_html.gsub(/\s*\n\s*\n\s*\n\s*/, "\n\n&nbsp;\n\n")
+    node.replace(formatted)
+  end
+  
+  def format_xml(input)
+    # step 1a
+    # Nokogumbo is aggressively pedantic about table formatting
+    input = input.gsub(%r{(<table.*?>)(.*)((?:</thead>)?<tr>.*)</table>}, '\1\2<tbody>\3</tbody></table>')
+    doc = MismatchedTagFixer.new.read(input)
+
+    # If the doc doesn't have p tags, convert br to newline for processing
+    if doc.children.all? { |n| n.name != "p"}
+      doc.inner_html = doc.inner_html.gsub(%r{<br ?/?>\n*}, "\n")
+    end
+    doc.traverse do |node|
+      clean_inlines(node)
+      parse_blocks(node)
+      format_whitespace(node)
+    end
+    doc.to_html
+  end
+  
+  # Strip out HTML linebreak elements when they have corresponding
+  # newlines. This is for the edit view, so we don't confuse users
+  # with surprise HTML, and so we don't have issues with generating
+  # duplicate HTML linebreak elements on each edit/save cycle. 
+  def unparse(input)
+    return "" if input.nil?
+
+    input.gsub(%{\n*<br(?: /)?>\n*}, "\n").gsub(%r{\n*</?p>\n*}, "\n")
+  end
+  
+  
+  # Processing steps:
+  # 1. Parse input with Nokogiri. This allows us to do some cleanup steps that the Markdown renderer doesn't handle, and catch unclosed tags.
+  #   1a) Close off any mismatched tags so they don't eat the entire document.
+  #   1b) Rewrap inline tags with contents that cross what will become a paragraph boundary
+  #     ("<i>paragraph 1 \n\n paragraph 2</i>" is valid markup, and will italicize everything,
+  #     but "<p><i>paragraph 1</p><p>paragraph 2</i></p>" is not, and will only italicize the
+  #     first paragraph at best on modern browsers).
+  #   1c) Parse contents of block-level tags (Markdown assumes that if you've put stuff inside an HTML
+  #     block, you are willing to add your own whitespace tags)
+  # 2. Run Nokogiri output through Redcarpet, to use a well-tested library for linebreak conversions.
+  
+  def format_linebreaks(input)
+    formatted = format_xml(input)
+    formatted = formatted.gsub(%r{(<br( /)?>)\n}, '\1')
+    render_input(formatted)
+  end
+  
   # If we aren't sure that this field hasn't been sanitized since the last sanitizer version,
   # we sanitize it before we allow it to pass through (and save it if possible).
   def sanitize_field(object, fieldname)
@@ -103,22 +319,12 @@ module HtmlCleaner
     end
   end
 
-  def get_white_list_sanitizer
-    @white_list_sanitizer ||= HTML::WhiteListSanitizer.new
-  end
-
-  def get_full_sanitizer
-    @full_sanitizer ||= HTML::FullSanitizer.new
-  end
-
   # yank out bad end-of-line characters and evil msword curly quotes
   def fix_bad_characters(text)
     return "" if text.nil?
 
     # get the text into UTF-8 and get rid of invalid characters
     text = text.encode("UTF-8", invalid: :replace, undef: :replace, replace: "")
-
-    text.gsub! "<3", "&lt;3"
 
     # convert carriage returns to newlines
     text.gsub!(/\r\n?/, "\n")
@@ -162,12 +368,12 @@ module HtmlCleaner
       end
       # Now that we know what transformers we need, let's sanitize the unfrozen value
       if ArchiveConfig.FIELDS_ALLOWING_CSS.include?(field.to_s)
-        unfrozen_value = add_paragraphs_to_text(Sanitize.clean(fix_bad_characters(unfrozen_value),
-                               Sanitize::Config::CSS_ALLOWED.merge(transformers: transformers)))
+        unfrozen_value = format_linebreaks(Sanitize.clean(fix_bad_characters(unfrozen_value),
+                                Sanitize::Config::CSS_ALLOWED.merge(transformers: transformers)))
       else
         # the screencast field shouldn't be wrapped in <p> tags
-        unfrozen_value = add_paragraphs_to_text(Sanitize.clean(fix_bad_characters(unfrozen_value),
-                               Sanitize::Config::ARCHIVE.merge(transformers: transformers))) unless field.to_s == "screencast"
+        unfrozen_value = format_linebreaks(Sanitize.clean(fix_bad_characters(unfrozen_value),
+                                Sanitize::Config::ARCHIVE.merge(transformers: transformers))) unless field.to_s == "screencast"
       end
       doc = Nokogiri::HTML::Document.new
       doc.encoding = "UTF-8"
@@ -181,10 +387,27 @@ module HtmlCleaner
       # clean out all tags
       unfrozen_value = Sanitize.clean(fix_bad_characters(unfrozen_value))
     end
-
+  
     # Plain text fields can't contain &amp; entities:
-    unfrozen_value.gsub!(/&amp;/, '&') unless (ArchiveConfig.FIELDS_ALLOWING_HTML_ENTITIES + ArchiveConfig.FIELDS_ALLOWING_HTML).include?(field.to_s)
+    unfrozen_value.gsub!(/&amp;/, "&") unless (ArchiveConfig.FIELDS_ALLOWING_HTML_ENTITIES + ArchiveConfig.FIELDS_ALLOWING_HTML).include?(field.to_s)
     unfrozen_value
+  end
+  
+  
+  ### STRIPPING FOR DISPLAY ONLY
+  # Regexps for stripping particular tags and attributes for display.
+  # These assume they are running on well-formed XHTML, which we can do
+  # because they will only be used on already-cleaned fields.
+
+  # strip img tags
+  def strip_images(value)
+    value.gsub(/<img .*?>/, "")
+  end
+
+  def add_break_between_paragraphs(value)
+    return "" if value.blank?
+
+    value.gsub(%r{\s*</p>\s*<p>\s*}, "</p><br /><p>")
   end
 
   # grabbed from http://code.google.com/p/sanitizeparams/ and tweaked
@@ -219,191 +442,5 @@ module HtmlCleaner
     end
     array
   end
-
-
-  # Tags whose content we don't touch
-  def dont_touch_content_tag?(tag)
-    %w(a abbr acronym address audio br dl h1 h2 h3 h4 h5 h6 hr img ol p
-       pre source table track video ul).include?(tag)
-  end
-
-  # Tags that don't contain content
-  def self_closing_tag?(tag)
-    %w(br col hr img).include?(tag)
-  end
-
-  # Tags that need to go inside p tags
-  def put_inside_p_tag?(tag)
-    %w(a abbr acronym address b big cite code del dfn em i ins
-       kbd q s script samp small span strike strong style sub
-       sup tt u var).include?(tag)
-  end
-
-  # Tags that can't be inside p tags
-  def put_outside_p_tag?(tag)
-    %w(audio dl h1 h2 h3 h4 h5 h6 hr ol p pre source table track ul video).include?(tag)
-  end
-
-  # Tags before and after which we don't want to convert linebreaks
-  # into br's and p's
-  def no_break_before_after_tag?(tag)
-    %w(audio blockquote br center dl div h1 h2 h3 h4 h5 h6
-       hr ol p pre source table track ul video).include?(tag)
-  end
-
-  # Traverse a Nokogiri document tree recursively in order to insert
-  # linebreaks. Since the resulting document is going to have a
-  # different document structure (we're adding p tags at various
-  # levels!) we can't edit the document in place. Instead, we're
-  # creating a string with the resulting html and keep track of the
-  # changed path to the current element via a stack.
-  def traverse_nodes(node, stack=nil, out_html=nil)
-    stack = stack || TagStack.new
-    out_html = out_html || ""
-
-    # Convert double and triple br tags into paragraph breaks
-    if node.name == "br" && node.previous_sibling && node.previous_sibling.name == "br" && node.previous_sibling.previous_sibling && node.previous_sibling.previous_sibling.name == "br"
-      out_html += (stack.close_paragraph_tags + "<p>&nbsp;</p>" + stack.open_paragraph_tags)
-      return [stack, out_html]
-    end
-    if node.name == "br" && node.previous_sibling && node.previous_sibling.name == "br"
-      out_html += (stack.close_paragraph_tags + stack.open_paragraph_tags)
-      return [stack, out_html]
-    end
-    if node.name == "br" && node.next_sibling && node.next_sibling.name == "br"
-      return [stack, out_html]
-    end
-
-    # Don't descend into node if we don't want to touch the content of
-    # this kind of tag
-    if dont_touch_content_tag?(node.name)
-      if put_inside_p_tag?(node.name) && !stack.inside_paragraph?
-        return [stack, out_html + "<p>#{node.to_s}</p>"]
-      end
-
-      if put_outside_p_tag?(node.name) && stack.inside_paragraph?
-        out_html += (stack.close_paragraph_tags + node.to_s + stack.open_paragraph_tags)
-        return [stack, out_html]
-      end
-
-      return [stack, out_html + node.to_s]
-    end
-
-    if !node.text? && !node.cdata?
-      out_html += stack.add_p if put_inside_p_tag?(node.name) && !stack.inside_paragraph?
-
-      stack << [[node.name, Hash[*(node.attribute_nodes.map { |n| [n.name, n.value] }.flatten)]]]
-      out_html += open_tag(node)
-
-      # If we are the root node, pre-emptively open a paragraph
-      if node.name == "myroot"
-        out_html += stack.add_p
-      end
-
-      if no_break_before_after_tag?(node.name) and !stack.last.include?("p")
-        out_html += stack.add_p
-      end
-
-    else
-      text = node.to_s
-
-      # Remove leading/trailing linebreaks if we don't want to add
-      # additional linebreaks after the previous tag/before the next
-      # tag
-      prev_tag = node.previous_sibling.nil? ? "" : node.previous_sibling.name
-      text.lstrip! if no_break_before_after_tag?(prev_tag)
-      next_tag = node.next_sibling.nil? ? "" : node.next_sibling.name
-      text.rstrip! if no_break_before_after_tag?(next_tag)
-
-      out_html += stack.add_p if !stack.inside_paragraph? && text != ""
-      stack << [[node.name, Hash[*(node.attribute_nodes.map { |n| [n.name, n.value] }.flatten)]]]
-
-      # If we have three newlines, assume user wants a blank line
-      text.gsub!(/\n\s*?\n\s*?\n/, "\n\n&nbsp;\n\n")
-
-      # Convert double newlines into single paragraph break
-      text.gsub!(/\n+\s*?\n+/, stack.close_paragraph_tags + stack.open_paragraph_tags)
-
-      # Convert single newlines into br tags
-      text.gsub!(/\n/, '<br/>')
-
-      out_html += text
-    end
-
-    # decend into child nodes
-    node.children.each do |child|
-      stack, out_html = traverse_nodes(child, stack, out_html)
-    end
-
-    out_html += stack.close_and_pop_last
-    return [stack, out_html]
-  end
-
-
-  # Close an unclosed tag within the given text in the line at
-  # line_number, or before the next opening or closing tag if that
-  # comes first
-  def close_unclosed_tag(text, tag, line_number)
-    return text if self_closing_tag?(tag)
-    return text unless put_inside_p_tag?(tag)
-    line_number = line_number.to_i
-    lines = text.lines.to_a
-    pattern = /(^.*<#{tag}\s*.*?>.*?)($|<\/?\w+.*?\/?>)/
-    lines[line_number-1].gsub!(pattern, "\\1</#{tag}>\\2")
-    return lines.join("")
-  end
-
-  def add_paragraphs_to_text(text)
-    doc = Nokogiri::XML.parse("<myroot>#{text}</myroot>")
-    doc.errors.each do |error|
-      match = error.message.match(/Opening and ending tag mismatch: (\w+) line (\d+) and myroot/)
-      text = close_unclosed_tag(text, match[1], match[2]) if match
-    end
-
-    # Adding paragraphs in place of linebreaks
-    doc = Nokogiri::HTML.fragment("<myroot>#{text}</myroot>")
-    out_html = traverse_nodes(doc.at_css("myroot"))[1]
-    # Remove empty paragraphs
-    out_html.gsub!(/<p>\s*?<\/p>/, "")
-    out_html.gsub!(/(\A<myroot>)|(<\/myroot>\Z)|(\A<myroot\/>\Z)/, "")
-    out_html
-  end
-
-
-  ### STRIPPING FOR DISPLAY ONLY
-  # Regexps for stripping particular tags and attributes for display.
-  # These assume they are running on well-formed XHTML, which we can do
-  # because they will only be used on already-cleaned fields.
-
-  # strip img tags
-  def strip_images(value)
-    value.gsub(/<img .*?>/, '')
-  end
-
-  # strip style attributes
-  def strip_styles(value)
-    strip_attribute(value, "style")
-  end
-
-  # strip class attributes
-  def strip_classes(value)
-    strip_attribute(value, "class")
-  end
-
-  def strip_attribute(value, attribname)
-    value.gsub(/\s*#{attribname}=\".*?\"\s*/, "")
-  end
-
-  def strip_html_breaks_simple(value)
-    return "" if value.blank?
-    value.gsub(/\s*<br ?\/?>\s*/, "<br />\n").
-          gsub(/\s*<p[^>]*>\s*&nbsp;\s*<\/p>\s*/, "\n\n\n").
-          gsub(/\s*<p[^>]*>(.*?)<\/p>\s*/m, "\n\n" + '\1').
-          strip
-  end
-
-  def add_break_between_paragraphs(value)
-    return "" if value.blank?
-    value.gsub(%r{\s*</p>\s*<p>\s*}, "</p><br /><p>")
-  end
+  
 end

@@ -29,7 +29,7 @@
 <%= form.hidden_field :notes, :value => "#{@work.notes}" %>
 <%= form.hidden_field :endnotes, :value => "#{@work.endnotes}" %>
 <%= fields_for "work[chapter_attributes]", @chapter do |c| %>
-  <%= c.hidden_field :content, :value => "#{@chapter.content}" %>
+  <%= c.hidden_field :content, :value => "#{unparse(@chapter.content)}" %>
   <%= c.hidden_field :title, :value => "#{@chapter.title}" %>
   <%= c.hidden_field :published_at, :value => "#{@chapter.published_at}" %>
 <% end %>

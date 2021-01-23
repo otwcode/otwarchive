@@ -1041,6 +1041,8 @@ GEM
       simplecov
     coderay (1.1.3)
     colorize (0.8.1)
+    commonmarker (0.21.1)
+      ruby-enum (~> 0.5)
     concurrent-ruby (1.1.7)
     connection_pool (2.2.3)
     crack (0.4.3)
@@ -1185,11 +1187,11 @@ GEM
     netrc (0.11.0)
     newrelic_rpm (6.11.0.365)
     nio4r (2.5.4)
-    nokogiri (1.11.0)
+    nokogiri (1.11.1)
       mini_portile2 (~> 2.5.0)
       racc (~> 1.4)
-    nokogumbo (1.4.9)
-      nokogiri
+    nokogumbo (2.0.4)
+      nokogiri (~> 1.8, >= 1.8.4)
     ntlm-http (0.1.1)
     orm_adapter (0.5.0)
     paperclip (6.1.0)
@@ -1263,6 +1265,7 @@ GEM
       thor (>= 0.19.0, < 2.0)
     raindrops (0.19.1)
     rake (13.0.1)
+    redcarpet (3.5.1)
     redis (3.3.5)
     redis-namespace (1.7.0)
       redis (>= 3.0.4)
@@ -1308,16 +1311,18 @@ GEM
       rspec-mocks (~> 3.8.0)
       rspec-support (~> 3.8.0)
     rspec-support (3.8.3)
+    ruby-enum (0.8.0)
+      i18n
     ruby2_keywords (0.0.2)
     rufus-scheduler (3.6.0)
       fugit (~> 1.1, >= 1.1.6)
     rvm-capistrano (1.5.6)
       capistrano (~> 2.15.4)
     safe_yaml (1.0.5)
-    sanitize (4.6.6)
+    sanitize (5.2.3)
       crass (~> 1.0.2)
-      nokogiri (>= 1.4.4)
-      nokogumbo (~> 1.4)
+      nokogiri (>= 1.8.0)
+      nokogumbo (~> 2.0)
     shoulda (4.0.0)
       shoulda-context (~> 2.0)
       shoulda-matchers (~> 4.0)
@@ -1444,7 +1449,7 @@ DEPENDENCIES
   mysql2 (= 0.5.2)
   newrelic_rpm
   nokogiri (>= 1.8.5)
-  nokogumbo (= 1.4.9)
+  nokogumbo (> 2.0.0)
   paperclip (>= 5.2.0)
   permit_yo
   phraseapp-in-context-editor-ruby (>= 1.0.6)
@@ -1458,6 +1463,7 @@ DEPENDENCIES
   rails (~> 5.2.4)
   rails-controller-testing
   rails-observers!
+  redcarpet
   redis (~> 3.3.5)
   redis-namespace
   resque (>= 1.14.0)
@@ -1467,7 +1473,7 @@ DEPENDENCIES
   rspec (~> 3.8)
   rspec-rails (~> 3.8.2)
   rvm-capistrano
-  sanitize (>= 4.6.5)
+  sanitize (>= 5.0.0)
   shoulda
   simplecov (~> 0.14.0)
   sprockets (< 4)
