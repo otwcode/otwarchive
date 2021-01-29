@@ -70,7 +70,6 @@ class Work < ApplicationRecord
   # Can't write to work.pseuds until the work has an id
   attr_accessor :new_parent, :url_for_parent
   attr_accessor :new_recipients
-  attr_accessor :new_series
 
   # return title.html_safe to overcome escaping done by sanitiser
   def title
@@ -607,10 +606,8 @@ class Work < ApplicationRecord
         return
       end
       unless old_series.blank? || self.series.include?(old_series)
-        self.new_series = old_series 
         self.serial_works.build(series: old_series)
       end
-      self.adjust_series_restriction
     elsif !attributes[:title].blank?
       new_series = Series.new
       new_series.title = attributes[:title]
@@ -620,7 +617,6 @@ class Work < ApplicationRecord
         # on the serial work will do the rest.
         new_series.creatorships.build(pseud: pseud)
       end
-      self.new_series = new_series
       self.serial_works.build(series: new_series)
     end
   end
