@@ -138,8 +138,6 @@ class ChallengeAssignmentsController < ApplicationController
 
   def set
     # update all the assignments
-    # see http://asciicasts.com/episodes/198-edit-multiple-individually
-
     all_assignment_params = challenge_assignment_params.transform_keys(&:to_i)
 
     @assignments = []
