@@ -54,16 +54,40 @@ module CommentMethods
     # Returns comment itself if unthreaded
     def full_set
       if self.threaded_left
-        Comment.include(:pseud).where("threaded_left BETWEEN (?) and (?) AND thread = (?)",
+        Comment.includes(:pseud).where("threaded_left BETWEEN (?) and (?) AND thread = (?)",
                             self.threaded_left, self.threaded_right, self.thread).order(:threaded_left)
       else
         return [self]
       end
     end
 
+    # TODO: Remove when AO3-5939 is fixed.
+    def set_to_freeze_or_unfreeze
+      # Our set always starts with the comment we pressed the button on.
+      comment_set = [self]
+
+      # We're going to find all of the comments on @comment's ultimate parent
+      # and then use the comments' commentables to figure which comments belong
+      # to the set (thread) we are freezing or unfreezing.
+      all_comments = self.ultimate_parent.find_all_comments
+
+      # First, we'll loop through all_comments to find any direct replies to
+      # self. Then we'll loop through again to find any direct replies to
+      # _those_ replies. We'll repeat this until we find no more replies.
+      newest_ids = [self.id]
+
+      while newest_ids.present?
+        child_comments_by_commentable = all_comments.where(commentable_id: newest_ids, commentable_type: "Comment")
+
+        comment_set << child_comments_by_commentable unless child_comments_by_commentable.empty?
+        newest_ids = child_comments_by_commentable.pluck(:id)
+      end
+      comment_set.flatten
+    end
+
     # Returns all sub-comments
     def all_children
-      self.children_count > 0 ? Comment.include(:pseud).where("threaded_left > (?) and threaded_right < (?) and thread = (?)",
+      self.children_count > 0 ? Comment.includes(:pseud).where("threaded_left > (?) and threaded_right < (?) and thread = (?)",
                                              self.threaded_left, self.threaded_right, self.thread).order(:threaded_left) : []
     end
 

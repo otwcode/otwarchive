@@ -490,8 +490,10 @@ Otwarchive::Application.routes.draw do
   resources :comments do
     member do
       put :approve
+      put :freeze
       put :reject
       put :review
+      put :unfreeze
     end
     collection do
       get :hide_comments

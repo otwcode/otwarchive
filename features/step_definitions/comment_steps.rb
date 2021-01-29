@@ -108,9 +108,9 @@ end
 
 When /^I comment on an admin post$/ do
   step "I go to the admin-posts page"
-    step %{I follow "Comment"}
-    step %{I fill in "comment[comment_content]" with "Excellent, my dear!"}
-    step %{I press "Comment"}
+  step %{I follow "Default Admin Post"}
+  step %{I fill in "comment[comment_content]" with "Excellent, my dear!"}
+  step %{I press "Comment"}
 end
 
 When /^I post a spam comment$/ do
@@ -130,7 +130,7 @@ When /^I post a guest comment$/ do
 end
 
 When /^all comments by "([^"]*)" are marked as spam$/ do |name|
-  Comment.where(name: name).update_all(approved: false)
+  Comment.where(name: name).find_each(&:mark_as_spam!)
 end
 
 When /^I compose an invalid comment(?: within "([^"]*)")?$/ do |selector|
