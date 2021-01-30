@@ -21,7 +21,7 @@ class AdminMailer < ActionMailer::Base
     mail(
       from: @feedback.email.blank? ? ArchiveConfig.RETURN_ADDRESS : @feedback.email,
       to: ArchiveConfig.FEEDBACK_ADDRESS,
-      subject: "[#{ArchiveConfig.APP_SHORT_NAME}] Support - #{unparse(@feedback.summary)}"
+      subject: "[#{ArchiveConfig.APP_SHORT_NAME}] Support - #{strip_html_breaks_simple(@feedback.summary)}"
     )
   end
   

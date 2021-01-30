@@ -106,7 +106,7 @@ describe HtmlCleaner do
         it "allows audio tags" do
           html = '<audio controls="controls" crossorigin="anonymous" preload="metadata" loop="loop">\
               <source src="http://example.com/podfic.mp3" type="audio/mpeg">\
-              <p>Maybe you want to <a href="http://example.com/podfic.mp3" rel="nofollow">download this podfic instead</a>?</p>\
+              Maybe you want to <a href="http://example.com/podfic.mp3" rel="nofollow">download this podfic instead</a>?\
             </audio>'
           expect(sanitize_value(field, html)).to eq(html)
         end
@@ -210,7 +210,7 @@ describe HtmlCleaner do
         it "should allow RTL content in div" do
           html = '<div dir="rtl"><p>This is RTL content</p></div>'
           result = sanitize_value(field, html)
-          expect(result.to_s.squish).to eq('<div dir="rtl"> <p>This is RTL content</p> </div>')
+          expect(result.to_s.squish).to eq('<div dir="rtl"><p>This is RTL content</p> </div>')
         end
 
         it "should not allow iframes with unknown source" do
@@ -502,10 +502,6 @@ describe HtmlCleaner do
       expect(fix_bad_characters(bad_string)).to eq("AA")
     end
 
-    it "should escape <3" do
-      expect(fix_bad_characters("normal <3 text")).to eq("normal &lt;3 text")
-    end
-
     it "should convert \\r\\n to \\n" do
       expect(fix_bad_characters("normal\r\ntext")).to eq("normal\ntext")
     end
@@ -609,7 +605,7 @@ describe HtmlCleaner do
       end
     end
 
-      it "should not wrap tables in p tags" do
+      it "does not wrap tables in p tags" do
         result = format_linebreaks("aa <table><tr><td>foo</td></tr></table> bb")
         doc = Nokogiri::HTML.fragment(result)
         expect(doc.xpath(".//p").size).to eq(2)
@@ -617,7 +613,7 @@ describe HtmlCleaner do
       end
 
     # AO3-4599
-    it "should not add linebreaks inside pre tags" do
+    it "does not add linebreaks inside pre tags" do
       result = format_linebreaks("<pre><code>this should not have surrounding linebreaks</code></pre>")
       doc = Nokogiri::HTML.fragment(result)
       expect(doc.xpath(".//pre").inner_html).to eq("<code>this should not have surrounding linebreaks</code>")
@@ -632,7 +628,7 @@ describe HtmlCleaner do
         </#{tag}>
         """
 
-        result = format_linebreaks(html.strip())
+        result = format_linebreaks(html.strip)
         doc = Nokogiri::HTML.fragment(result)
         expect(doc.xpath("./#{tag}/li[1]").children.to_s.strip).to eq("A")
         expect(doc.xpath("./#{tag}/li[2]").children.to_s.strip).to eq("B")
@@ -673,7 +669,7 @@ describe HtmlCleaner do
       </dl>
       """
 
-      result = format_linebreaks(html.strip())
+      result = format_linebreaks(html.strip)
       doc = Nokogiri::HTML.fragment(result)
       expect(doc.xpath("./dl/dt[1]").children.to_s.strip).to eq("A")
       expect(doc.xpath("./dl/dd[1]").children.to_s.strip).to eq("aaa")
@@ -707,7 +703,7 @@ describe HtmlCleaner do
     it "should convert single linebreak to br" do
       result = format_linebreaks("some\ntext")
       doc = Nokogiri::HTML.fragment(result)
-      expect(doc.xpath("./p[1]").children.to_s.strip).to match(/some<br\/?>\ntext/)
+      expect(doc.xpath("./p[1]").children.to_s.strip).to match(%r{some<br/?>\ntext})
     end
 
     it "should convert double linebreaks to paragraph break" do
@@ -902,7 +898,7 @@ describe HtmlCleaner do
       expect(doc.xpath("./p[3]").children.to_s.strip).to eq("C")
     end
 
-   it "should not leave p inside i" do
+   it "does not leave p inside i" do
       result = format_linebreaks("<i><p>foo</p><p>bar</p></i>")
       doc = Nokogiri::HTML.fragment(result)
       expect(doc.xpath(".//i/p")).to be_empty
@@ -949,15 +945,7 @@ describe HtmlCleaner do
       end
     end
 
-    it "should handle missing ending quotation marks, sometimes" do
-      result = format_linebreaks("<i>some text</i><a href='ao3.org>mylink</a>stuff<strong>bold</strong>\nnewline")
-      doc = Nokogiri::HTML.fragment(result)
-      node = doc.xpath(".//a").first
-      expect(node.attribute("href").value).not_to match(/strong/)
-      expect(node.text.strip).to eq("mylink")
-    end
-
-    it "should handle missing ending quotation marks, sometimes" do
+    it "handles missing ending quotation marks" do
       result = format_linebreaks("sdfds<strong><a href='ao3.org>mylink</a></strong>")
       doc = Nokogiri::HTML.fragment(result)
       node = doc.xpath(".//a").first
@@ -965,7 +953,7 @@ describe HtmlCleaner do
       expect(node.text.strip).to eq("mylink")
     end
 
-    it "should handle missing starting quotation marks" do
+    it "handles missing starting quotation marks" do
       result = format_linebreaks('<strong><a href=ao3.org">mylink</a></strong>')
       doc = Nokogiri::HTML.fragment(result)
       node = doc.xpath(".//a").first
@@ -974,7 +962,7 @@ describe HtmlCleaner do
     end
 
     # AO3-3313
-    it "should properly handle images wrapped in links" do
+    it "properly handles images wrapped in links" do
       result = format_linebreaks('<a href="ao3.org.org"><img src="ao3.org/logo-stroke.png"></a>something<br />\n something')
       doc = Nokogiri::HTML.fragment(result)
       node = doc.xpath(".//a").first

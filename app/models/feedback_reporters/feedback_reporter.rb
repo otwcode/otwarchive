@@ -22,7 +22,7 @@ class FeedbackReporter
   end
 
   def title
-    unparse(@title)
+    strip_html_breaks_simple(@title)
   end
 
   def description

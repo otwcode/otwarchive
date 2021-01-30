@@ -36,7 +36,7 @@ module HtmlCleaner
   end
   
   def render_input(input)
-    renderer = Redcarpet::Markdown.new(LinebreakRender.new(hard_wrap: true, xhtml: true, link_attributes: { rel: "nofollow" }), lax_spacing: true)
+    renderer = Redcarpet::Markdown.new(LinebreakRender.new(hard_wrap: true, xhtml: true, link_attributes: { rel: "nofollow" }), lax_spacing: true, disable_indented_code_blocks: true)
     renderer.render(input)
   end
 
@@ -408,6 +408,15 @@ module HtmlCleaner
     return "" if value.blank?
 
     value.gsub(%r{\s*</p>\s*<p>\s*}, "</p><br /><p>")
+  end
+
+  def strip_html_breaks_simple(value)
+    return "" if value.blank?
+
+    value.gsub(/\s*<br ?\/?>\s*/, "<br />\n").
+      gsub(/\s*<p[^>]*>\s*&nbsp;\s*<\/p>\s*/, "\n\n\n").
+      gsub(/\s*<p[^>]*>(.*?)<\/p>\s*/m, "\n\n" + '\1').
+      strip
   end
 
   # grabbed from http://code.google.com/p/sanitizeparams/ and tweaked
