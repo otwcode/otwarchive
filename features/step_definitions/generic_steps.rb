@@ -212,6 +212,11 @@ Then /^I should see the text with tags '(.*)'$/ do |text|
   page.body.should =~ /#{Regexp.escape(text)}/m
 end
 
+# Unescaped match - needed to match linebreaks in selections.
+Then /^I should see the text with raw tags "(.*)"$/ do |text|
+  page.body.should =~ %r{#{text}}m
+end
+
 Then /^I should not see the text with tags '(.*)'$/ do |text|
   page.body.should_not =~ /#{Regexp.escape(text)}/m
 end

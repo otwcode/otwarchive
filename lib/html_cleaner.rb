@@ -79,7 +79,7 @@ module HtmlCleaner
       # We're only set up to fix a limited set of error types, so grab the first error
       # that appears to match one of those.
       err = doc.errors.detect do |e|
-        e.to_s.include?("ERROR: That tag isn't allowed here") || e.str1 == ('eof-in-tag') || e.str1 == ('unexpected-character-in-unquoted-attribute-value') || e.to_s.include?('ERROR: Premature end of file ')
+        e.to_s.include?("ERROR: That tag isn't allowed here") || e.str1 == "eof-in-tag" || e.str1 == "unexpected-character-in-unquoted-attribute-value" || e.to_s.include?("ERROR: Premature end of file")
       end
 
       if err
@@ -129,7 +129,7 @@ module HtmlCleaner
 
         end
 
-        if err.str1 == ('eof-in-tag')
+        if err.str1 == "eof-in-tag"
           # Missing close quote
           # (this error can also mean missing close bracket, but that's not handled)
           # NOTE: this only works sometimes - if the tag with the bad quote is nested within
@@ -158,7 +158,7 @@ module HtmlCleaner
 
         end
 
-        if err.str1 == ("unexpected-character-in-unquoted-attribute-value")
+        if err.str1 == "unexpected-character-in-unquoted-attribute-value"
           # Missing start quote
           # Grab line/col from the error info and get the correct input line to fix
           lines = err.to_s.lines
@@ -178,7 +178,6 @@ module HtmlCleaner
           input = input.sub(block, fixed)
 
           updated = true
-
 
         end
 
@@ -200,7 +199,7 @@ module HtmlCleaner
           else
             # Gotta do this the hard way - search the tag nodes for one
             # that contains our ending line
-            doc.search("#{bad_tag}").each do |node|
+            doc.search(bad_tag.to_s).each do |node|
               next unless node.inner_html.include?(end_block.chomp)
 
               content = node.to_html
@@ -368,12 +367,10 @@ module HtmlCleaner
       end
       # Now that we know what transformers we need, let's sanitize the unfrozen value
       if ArchiveConfig.FIELDS_ALLOWING_CSS.include?(field.to_s)
-        unfrozen_value = format_linebreaks(Sanitize.clean(fix_bad_characters(unfrozen_value),
-                                Sanitize::Config::CSS_ALLOWED.merge(transformers: transformers)))
+        unfrozen_value = format_linebreaks(Sanitize.clean(fix_bad_characters(unfrozen_value), Sanitize::Config::CSS_ALLOWED.merge(transformers: transformers)))
       else
         # the screencast field shouldn't be wrapped in <p> tags
-        unfrozen_value = format_linebreaks(Sanitize.clean(fix_bad_characters(unfrozen_value),
-                                Sanitize::Config::ARCHIVE.merge(transformers: transformers))) unless field.to_s == "screencast"
+        unfrozen_value = format_linebreaks(Sanitize.clean(fix_bad_characters(unfrozen_value), Sanitize::Config::ARCHIVE.merge(transformers: transformers))) unless field.to_s == "screencast"
       end
       doc = Nokogiri::HTML::Document.new
       doc.encoding = "UTF-8"
@@ -413,10 +410,10 @@ module HtmlCleaner
   def strip_html_breaks_simple(value)
     return "" if value.blank?
 
-    value.gsub(/\s*<br ?\/?>\s*/, "<br />\n").
-      gsub(/\s*<p[^>]*>\s*&nbsp;\s*<\/p>\s*/, "\n\n\n").
-      gsub(/\s*<p[^>]*>(.*?)<\/p>\s*/m, "\n\n" + '\1').
-      strip
+    value.gsub(%r{\s*<br ?/?>\s*}, "<br />\n")
+      .gsub(%r{\s*<p[^>]*>\s*&nbsp;\s*</p>\s*}, "\n\n\n")
+      .gsub(%r{\s*<p[^>]*>(.*?)</p>\s*}m, "\n\n" + '\1')
+      .strip
   end
 
   # grabbed from http://code.google.com/p/sanitizeparams/ and tweaked
