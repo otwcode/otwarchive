@@ -2,7 +2,7 @@ require "faker"
 
 FactoryBot.define do
   sequence(:login) do |n|
-    "#{Faker::Lorem.characters(8)}#{n}"
+    "#{Faker::Lorem.characters(number: 8)}#{n}"
   end
 
   sequence :email do |n|

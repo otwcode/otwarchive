@@ -60,6 +60,9 @@ RSpec.configure do |config|
     User.current_user = nil
     clean_the_database
 
+    # Clears used values for all generators.
+    Faker::UniqueGenerator.clear
+
     # Assume all spam checks pass by default.
     allow(Akismetor).to receive(:spam?).and_return(false)
   end

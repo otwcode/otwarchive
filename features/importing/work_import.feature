@@ -244,6 +244,8 @@ Feature: Import Works
       And I should see "Das Maß aller Dinge" within "h2.title"
       And I should see "Ä Ö Ü é è È É ü ö ä ß ñ"
 
+  # TODO: scarvesandcoffee.net is 403.
+  @wip
   Scenario: Import a chaptered work from an efiction site
   When I import "http://www.scarvesandcoffee.net/viewstory.php?sid=9570"
   Then I should see "Preview"
@@ -253,12 +255,12 @@ Feature: Import Works
   Then I should see "Chapter 2"
 
   Scenario: Searching for an imported work by URL will redirect you to the work
-    When I import "http://www.scarvesandcoffee.net/viewstory.php?sid=9570"
+    When I import "http://import-site-with-tags" with a mock website
       And I press "Post"
       And I go to the redirect page
-      And I fill in "Original URL of work" with "http://www.scarvesandcoffee.net/viewstory.php?sid=9570"
+      And I fill in "Original URL of work" with "http://import-site-with-tags"
       And I press "Go"
-    Then I should see "This is what Blaine's been thinking written in poems."
+    Then I should see "Detected Title"
 
   Scenario: Import URLs as chapters of a single work and post from drafts page
     Given I import the urls with mock websites as chapters
