@@ -13,6 +13,9 @@ Before do
   # Create default language and locale.
   Locale.default
 
+  # Clears used values for all generators.
+  Faker::UniqueGenerator.clear
+
   # Assume all spam checks pass by default.
   allow(Akismetor).to receive(:spam?).and_return(false)
 
