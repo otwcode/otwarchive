@@ -1,6 +1,6 @@
 require "spec_helper"
 
-describe "Rack::Attack", type: :request do
+describe "Rack::Attack" do
   before { freeze_time }
 
   def unique_ip_env
