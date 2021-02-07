@@ -1,63 +1,71 @@
 require "spec_helper"
 
 describe "Rack::Attack", type: :request do
-  # Our configuration ignores localhost by default, so we need to pick some other IP.
-  let(:ip) { Faker::Internet.unique.ip_v4_address }
-
   before { freeze_time }
 
-  context "on login attempts" do
-    def unique_ip_env
-      { "REMOTE_ADDR" => Faker::Internet.unique.ip_v4_address }
-    end
+  def unique_ip_env
+    { "REMOTE_ADDR" => Faker::Internet.unique.ip_v4_address }
+  end
 
-    def unique_user_params
-      { user: { login: Faker::Internet.unique.user_name, password: "secret" } }.to_query
-    end
+  def unique_user_params
+    { user: { login: Faker::Name.unique.first_name, password: "secret" } }
+  end
 
-    it "throttles by IP" do
-      env = { "REMOTE_ADDR" => ip }
+  it "test utility returns valid parameters for successful user login attempts" do
+    params = unique_user_params
+    create(:user, login: params[:user][:login], password: params[:user][:password])
+    post user_session_path, params: params.to_query
+    expect(response).to have_http_status(:redirect)
+  end
+
+  context "when there have been max user login attempts from an IP address" do
+    let(:ip) { Faker::Internet.unique.ip_v4_address }
+
+    before do
       ArchiveConfig.RATE_LIMIT_LOGIN_ATTEMPTS.times do
-        post user_session_path, params: unique_user_params, env: env
-        expect(response).to have_http_status(:ok)
+        post user_session_path, params: unique_user_params.to_query, env: { "REMOTE_ADDR" => ip }
       end
+    end
 
-      last_params = unique_user_params
-
-      # The same IP is throttled.
-      post user_session_path, params: last_params, env: env
+    it "throttles the next attempt from the same IP" do
+      post user_session_path, params: unique_user_params.to_query, env: { "REMOTE_ADDR" => ip }
       expect(response).to have_http_status(:too_many_requests)
+    end
 
-      # A different IP is not.
-      post user_session_path, params: last_params, env: unique_ip_env
-      expect(response).to have_http_status(:ok)
-
-      # The same IP is not throttled forever.
+    it "does not throttle the next attempt from the same IP after some time" do
       travel ArchiveConfig.RATE_LIMIT_LOGIN_PERIOD.seconds
-      post user_session_path, params: last_params, env: env
+      post user_session_path, params: unique_user_params.to_query, env: { "REMOTE_ADDR" => ip }
       expect(response).to have_http_status(:ok)
     end
 
-    it "throttles by user name / email" do
-      params = unique_user_params
+    it "does not throttle an attempt from a different IP" do
+      post user_session_path, params: unique_user_params.to_query, env: unique_ip_env
+      expect(response).to have_http_status(:ok)
+    end
+  end
+
+  context "when there have been max user login attempts for a username" do
+    let(:params) { unique_user_params.to_query }
+
+    before do
       ArchiveConfig.RATE_LIMIT_LOGIN_ATTEMPTS.times do
         post user_session_path, params: params, env: unique_ip_env
-        expect(response).to have_http_status(:ok)
       end
+    end
 
-      last_env = unique_ip_env
-
-      # The same user name is throttled.
-      post user_session_path, params: params, env: last_env
+    it "throttles the next attempt for the same username" do
+      post user_session_path, params: params, env: unique_ip_env
       expect(response).to have_http_status(:too_many_requests)
+    end
 
-      # A different user name is not.
-      post user_session_path, params: unique_user_params, env: last_env
-      expect(response).to have_http_status(:ok)
-
-      # The same user name is not throttled forever.
+    it "does not throttle the next attempt for the same username after some time" do
       travel ArchiveConfig.RATE_LIMIT_LOGIN_PERIOD.seconds
-      post user_session_path, params: params, env: last_env
+      post user_session_path, params: params, env: unique_ip_env
+      expect(response).to have_http_status(:ok)
+    end
+
+    it "does not throttle an attempt for a different username" do
+      post user_session_path, params: unique_user_params.to_query, env: unique_ip_env
       expect(response).to have_http_status(:ok)
     end
   end
