@@ -112,3 +112,15 @@ Feature: Commenting on admin posts
       And I press "Comment"
     Then I should see "Comment created!"
       And I should see "zug zug"
+
+  Scenario: Translation of admin post with comments disabled
+    Given I have posted an admin post with comments disabled
+      And basic languages
+      And I am logged in as a "translation" admin
+    When I make a translation of an admin post
+    Then I should see "Sorry, this news post doesn't allow comments."
+    When I follow "Edit Post"
+    Then I should see "No one can comment"
+      And I should not see "Registered users and guests can comment"
+      And I should not see "Only registered users can comment"
+      And I should not see "Comment permissions from the selected post will replace any permissions selected on this page."

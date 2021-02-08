@@ -97,6 +97,7 @@ Feature: Admin Actions to Post News
     When I follow "Admin Posts"
       And I follow "Post AO3 News"
     Then I should see "New AO3 News Post"
+      And I should see "Comment permissions from the selected post will replace any permissions selected on this page."
     When I fill in "admin_post_title" with "Good news, everyone!"
       And I fill in "content" with "I've taught the toaster to feel love."
       And I fill in "Tags" with "quotes, futurama"
