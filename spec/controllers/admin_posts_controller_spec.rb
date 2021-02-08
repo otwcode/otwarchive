@@ -96,7 +96,7 @@ describe AdminPostsController do
                       comment_permissions: :disable_all
                     }
                   }
-                }.to_not change(AdminPost, :comment_permissions)
+                }.not_to change { AdminPost.comment_permissions }
 
                 expect(translation.reload.comment_permissions).to eq(post.comment_permissions)
                 it_redirects_to_with_notice(admin_post_path(translation), "Admin Post was successfully updated.")

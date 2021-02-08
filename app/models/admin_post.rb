@@ -70,6 +70,14 @@ class AdminPost < ApplicationRecord
     end
   end
 
+  private
+
+  def expire_cached_home_admin_posts
+    unless Rails.env.development?
+      Rails.cache.delete("home/index/home_admin_posts")
+    end
+  end
+
   def inherit_translated_post_comment_permissions
     return unless translated_post_id.present? && AdminPost.find_by(id: translated_post_id)
 
@@ -77,21 +85,13 @@ class AdminPost < ApplicationRecord
   end
 
   def update_translation_comment_permissions
-    return unless translations.present?
+    return if translations.blank?
 
     transaction do
-      AdminPost.where(translated_post_id: id).each do |post|
+      AdminPost.where(translated_post_id: id).find_each do |post|
         post.comment_permissions = self.comment_permissions
         post.save
       end
-    end
-  end
-
-  private
-
-  def expire_cached_home_admin_posts
-    unless Rails.env.development?
-      Rails.cache.delete("home/index/home_admin_posts")
     end
   end
 end
