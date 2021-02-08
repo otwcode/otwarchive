@@ -32,6 +32,8 @@ RSpec.configure do |config|
     c.syntax = [:should, :expect]
   end
 
+  # TODO: Remove gems delorean and timecop now that Rails has time-travel helpers.
+  config.include ActiveSupport::Testing::TimeHelpers
   config.include FactoryBot::Syntax::Methods
   config.include EmailSpec::Helpers
   config.include EmailSpec::Matchers
