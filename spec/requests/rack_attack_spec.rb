@@ -32,14 +32,14 @@ describe "Rack::Attack" do
       expect(response).to have_http_status(:too_many_requests)
     end
 
-    it "does not throttle the next attempt from the same IP after some time" do
-      travel ArchiveConfig.RATE_LIMIT_LOGIN_PERIOD.seconds
-      post user_session_path, params: unique_user_params.to_query, env: { "REMOTE_ADDR" => ip }
+    it "does not throttle an attempt from a different IP" do
+      post user_session_path, params: unique_user_params.to_query, env: unique_ip_env
       expect(response).to have_http_status(:ok)
     end
 
-    it "does not throttle an attempt from a different IP" do
-      post user_session_path, params: unique_user_params.to_query, env: unique_ip_env
+    it "does not throttle the next attempt from the same IP after some time" do
+      travel ArchiveConfig.RATE_LIMIT_LOGIN_PERIOD.seconds
+      post user_session_path, params: unique_user_params.to_query, env: { "REMOTE_ADDR" => ip }
       expect(response).to have_http_status(:ok)
     end
   end
@@ -58,14 +58,14 @@ describe "Rack::Attack" do
       expect(response).to have_http_status(:too_many_requests)
     end
 
-    it "does not throttle the next attempt for the same username after some time" do
-      travel ArchiveConfig.RATE_LIMIT_LOGIN_PERIOD.seconds
-      post user_session_path, params: params, env: unique_ip_env
+    it "does not throttle an attempt for a different username" do
+      post user_session_path, params: unique_user_params.to_query, env: unique_ip_env
       expect(response).to have_http_status(:ok)
     end
 
-    it "does not throttle an attempt for a different username" do
-      post user_session_path, params: unique_user_params.to_query, env: unique_ip_env
+    it "does not throttle the next attempt for the same username after some time" do
+      travel ArchiveConfig.RATE_LIMIT_LOGIN_PERIOD.seconds
+      post user_session_path, params: params, env: unique_ip_env
       expect(response).to have_http_status(:ok)
     end
   end
