@@ -38,8 +38,7 @@ class AdminPost < ApplicationRecord
 
   scope :for_homepage, -> { order("created_at DESC").limit(ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_ON_HOMEPAGE) }
 
-  before_validation :inherit_translated_post_comment_permissions
-  after_save :expire_cached_home_admin_posts, :update_translation_comment_permissions
+  after_save :expire_cached_home_admin_posts, :inherit_translated_post_comment_permissions, :update_translation_comment_permissions
   after_destroy :expire_cached_home_admin_posts
 
   # Return the name to link comments to for this object
@@ -79,7 +78,7 @@ class AdminPost < ApplicationRecord
   end
 
   def inherit_translated_post_comment_permissions
-    return unless translated_post_id.present? && AdminPost.find_by(id: translated_post_id)
+    return if translated_post.blank?
 
     self.comment_permissions = translated_post.comment_permissions
   end
@@ -88,7 +87,7 @@ class AdminPost < ApplicationRecord
     return if translations.blank?
 
     transaction do
-      AdminPost.where(translated_post_id: id).find_each do |post|
+      translations.find_each do |post|
         post.comment_permissions = self.comment_permissions
         post.save
       end
