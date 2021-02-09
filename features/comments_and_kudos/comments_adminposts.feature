@@ -134,6 +134,4 @@ Feature: Commenting on admin posts
     Then I should see "Sorry, this news post doesn't allow comments."
     When I follow "Edit Post"
     Then I should see "No one can comment"
-      And I should not see "Registered users and guests can comment"
-      And I should not see "Only registered users can comment"
-      And I should not see "Comment permissions from the selected post will replace any permissions selected on this page."
+    # TODO: Test that the other options aren't available/selected in a non-brittle way

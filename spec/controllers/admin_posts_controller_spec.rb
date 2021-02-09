@@ -34,24 +34,12 @@ describe AdminPostsController do
     let(:post) { create(:admin_post) }
 
     context "when admin does not have correct authorization" do
-      context "with valid title" do
-        it "redirects with error" do
-          admin.update(roles: [])
-          fake_login_admin(admin)
-          put :update, params: { id: post.id, admin_post: { admin_id: admin.id, title: "Modified Title of Post" } }
+      it "redirects with error" do
+        admin.update(roles: [])
+        fake_login_admin(admin)
+        put :update, params: { id: post.id, admin_post: { admin_id: admin.id } }
 
-          it_redirects_to_with_error(root_url, "Sorry, only an authorized admin can access the page you were trying to reach.")
-        end
-      end
-
-      context "with invalid translated_post_id" do
-        it "redirects with error" do
-          admin.update(roles: [])
-          fake_login_admin(admin)
-          put :update, params: { id: post.id, admin_post: { admin_id: admin.id, translated_post_id: 0 } }
-
-          it_redirects_to_with_error(root_url, "Sorry, only an authorized admin can access the page you were trying to reach.")
-        end
+        it_redirects_to_with_error(root_url, "Sorry, only an authorized admin can access the page you were trying to reach.")
       end
     end
 
@@ -88,8 +76,7 @@ describe AdminPostsController do
                 admin.update(roles: [admin_role])
                 fake_login_admin(admin)
                 expect {
-                  put :update,
-                  params: {
+                  put :update, params: {
                     id: translation.id,
                     admin_post: {
                       admin_id: admin.id,
