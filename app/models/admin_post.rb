@@ -38,7 +38,8 @@ class AdminPost < ApplicationRecord
 
   scope :for_homepage, -> { order("created_at DESC").limit(ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_ON_HOMEPAGE) }
 
-  after_save :expire_cached_home_admin_posts, :inherit_translated_post_comment_permissions, :update_translation_comment_permissions
+  before_save :inherit_translated_post_comment_permissions
+  after_save :expire_cached_home_admin_posts, :update_translation_comment_permissions
   after_destroy :expire_cached_home_admin_posts
 
   # Return the name to link comments to for this object
