@@ -112,3 +112,26 @@ Feature: Commenting on admin posts
       And I press "Comment"
     Then I should see "Comment created!"
       And I should see "zug zug"
+
+  Scenario: Modifying the comment permissions of an admin post with translations
+    Given I have posted an admin post
+      And basic languages
+      And I am logged in as a "translation" admin
+    When I make a translation of an admin post
+      And I follow "Back to AO3 News Index"
+      And I follow "Edit"
+      And I choose "Only registered users can comment"
+      And I press "Post"
+    Then I should see "Sorry, this news post doesn't allow non-Archive users to comment."
+    When I follow "Deutsch"
+    Then I should see "Sorry, this news post doesn't allow non-Archive users to comment."
+
+  Scenario: Translation of admin post with comments disabled
+    Given I have posted an admin post with comments disabled
+      And basic languages
+      And I am logged in as a "translation" admin
+    When I make a translation of an admin post
+    Then I should see "Sorry, this news post doesn't allow comments."
+    When I follow "Edit Post"
+    Then I should see "No one can comment"
+    # TODO: Test that the other options aren't available/selected in a non-brittle way
