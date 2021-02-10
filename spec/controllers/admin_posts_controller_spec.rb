@@ -75,7 +75,7 @@ describe AdminPostsController do
               it "does not change comment_permissions and redirects with notice" do
                 admin.update(roles: [admin_role])
                 fake_login_admin(admin)
-                expect {
+                expect do
                   put :update, params: {
                     id: translation.id,
                     admin_post: {
@@ -83,7 +83,7 @@ describe AdminPostsController do
                       comment_permissions: :disable_all
                     }
                   }
-                }.not_to change { AdminPost.comment_permissions }
+                end.not_to change { AdminPost.comment_permissions }
 
                 expect(translation.reload.comment_permissions).to eq(post.comment_permissions)
                 it_redirects_to_with_notice(admin_post_path(translation), "Admin Post was successfully updated.")
