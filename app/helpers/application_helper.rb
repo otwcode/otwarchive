@@ -581,7 +581,7 @@ module ApplicationHelper
   # Identifier for creation, formatted external-work-12, series-12, work-12.
   def creation_id_for_css_classes(creation)
     return if creation.nil?
-    return unless %w(ExternalWork Series Work).include?(creation.class.name)
+    return unless %w[ExternalWork Series Work].include?(creation.class.name)
 
     "#{creation.class.name.underscore.dasherize}-#{creation.id}"
   end
