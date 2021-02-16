@@ -152,7 +152,7 @@ describe ApplicationHelper do
 
       context "when new user is added" do
         it "returns updated string" do
-          travel_to(Time.parse("2021-01-01"))
+          travel_to(1.day.ago)
           original_cache_key = "#{work.cache_key_with_version}/blurb_css_classes"
           expect(css_classes_for_creation_blurb(work)).to eq("#{default_classes} work-#{work.id} user-#{user1.id}")
 
@@ -165,7 +165,7 @@ describe ApplicationHelper do
 
       context "when user is removed" do
         it "returns updated string" do
-          travel_to(Time.parse("2021-01-01"))
+          travel_to(1.day.ago)
           work.creatorships.find_or_create_by(pseud_id: user2.default_pseud_id)
           original_cache_key = "#{work.cache_key_with_version}/blurb_css_classes"
           expect(css_classes_for_creation_blurb(work)).to eq("#{default_classes} work-#{work.id} user-#{user1.id} user-#{user2.id}")
@@ -181,7 +181,7 @@ describe ApplicationHelper do
         let(:collection) { create(:anonymous_collection) }
 
         it "returns updated string" do
-          travel_to(Time.parse("2021-01-01"))
+          travel_to(1.day.ago)
           original_cache_key = "#{work.cache_key_with_version}/blurb_css_classes"
           expect(css_classes_for_creation_blurb(work)).to eq("#{default_classes} work-#{work.id} user-#{user1.id}")
 
@@ -196,7 +196,7 @@ describe ApplicationHelper do
         let(:collection) { create(:unrevealed_collection) }
 
         it "returns updated string" do
-          travel_to(Time.parse("2021-01-01"))
+          travel_to(1.day.ago)
           original_cache_key = "#{work.cache_key_with_version}/blurb_css_classes"
           expect(css_classes_for_creation_blurb(work)).to eq("#{default_classes} work-#{work.id} user-#{user1.id}")
 
