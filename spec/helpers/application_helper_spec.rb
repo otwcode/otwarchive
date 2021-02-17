@@ -57,7 +57,7 @@ describe ApplicationHelper do
 
       it "returns string for work" do
         result = creator_ids_for_css_classes(work)
-        expect(result).to eq("user-#{user1.id}")
+        expect(result).to eq(["user-#{user1.id}"])
       end
 
       context "with multiple pseuds from same user" do
@@ -69,7 +69,7 @@ describe ApplicationHelper do
 
         it "returns string with one user" do
           result = creator_ids_for_css_classes(work)
-          expect(result).to eq("user-#{user1.id}")
+          expect(result).to eq(["user-#{user1.id}"])
         end
       end
 
@@ -82,7 +82,7 @@ describe ApplicationHelper do
 
         it "returns string with all users" do
           result = creator_ids_for_css_classes(work)
-          expect(result).to eq("user-#{user1.id} user-#{user2.id}")
+          expect(result).to eq(["user-#{user1.id}", "user-#{user2.id}"])
         end
       end
 
@@ -113,7 +113,7 @@ describe ApplicationHelper do
 
         it "returns string with user" do
           result = creator_ids_for_css_classes(work)
-          expect(result).to eq("user-#{user1.id}")
+          expect(result).to eq(["user-#{user1.id}"])
         end
       end
     end

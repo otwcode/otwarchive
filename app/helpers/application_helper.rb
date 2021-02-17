@@ -578,6 +578,18 @@ module ApplicationHelper
     end
   end
 
+  def css_classes_for_creation_blurb(creation)
+    return if creation.nil?
+
+    Rails.cache.fetch("#{creation.cache_key_with_version}/blurb_css_classes") do
+      creation_id = creation_id_for_css_classes(creation)
+      creator_ids = creator_ids_for_css_classes(creation).join(" ") if creator_ids_for_css_classes(creation).present?
+      "blurb group #{creation_id} #{creator_ids}".strip
+    end
+  end
+
+  private
+
   # Identifier for creation, formatted external-work-12, series-12, work-12.
   def creation_id_for_css_classes(creation)
     return if creation.nil?
@@ -586,7 +598,7 @@ module ApplicationHelper
     "#{creation.class.name.underscore.dasherize}-#{creation.id}"
   end
 
-  # Space-separated list of creator ids, formatted user-123 user-126.
+  # Array of creator ids, formatted user-123, user-126.
   # External works are not created by users, so we can skip this.
   # TODO: We will want to list users on series blurbs, but when a series becomes
   # or stops being anonymous, it is not touched, so the cache in
@@ -596,14 +608,6 @@ module ApplicationHelper
     return unless creation.is_a?(Work)
     return if creation.anonymous? || creation.unrevealed?
 
-    creation.users.pluck(:id).uniq.map { |id| "user-#{id}" }.join(" ")
-  end
-
-  def css_classes_for_creation_blurb(creation)
-    return if creation.nil?
-
-    Rails.cache.fetch("#{creation.cache_key_with_version}/blurb_css_classes") do
-      "blurb group #{creation_id_for_css_classes(creation)} #{creator_ids_for_css_classes(creation)}".strip
-    end
+    creation.users.pluck(:id).uniq.map { |id| "user-#{id}" }
   end
 end # end of ApplicationHelper
