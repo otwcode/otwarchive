@@ -8,7 +8,7 @@ describe ApplicationHelper do
       let(:external_work) { create(:external_work) }
 
       it "returns string for exteral work" do
-        result = creation_id_for_css_classes(external_work)
+        result = helper.creation_id_for_css_classes(external_work)
         expect(result).to eq("external-work-#{external_work.id}")
       end
     end
@@ -17,7 +17,7 @@ describe ApplicationHelper do
       let(:series) { create(:series) }
 
       it "returns string for series" do
-        result = creation_id_for_css_classes(series)
+        result = helper.creation_id_for_css_classes(series)
         expect(result).to eq("series-#{series.id}")
       end
     end
@@ -26,7 +26,7 @@ describe ApplicationHelper do
       let(:work) { create(:work) }
 
       it "returns string for work" do
-        result = creation_id_for_css_classes(work)
+        result = helper.creation_id_for_css_classes(work)
         expect(result).to eq("work-#{work.id}")
       end
     end
@@ -37,7 +37,7 @@ describe ApplicationHelper do
       let(:external_work) { create(:external_work) }
 
       it "returns nil for exteral work" do
-        result = creator_ids_for_css_classes(external_work)
+        result = helper.creator_ids_for_css_classes(external_work)
         expect(result).to be_nil
       end
     end
@@ -46,7 +46,7 @@ describe ApplicationHelper do
       let(:series) { create(:series) }
 
       it "returns nil for series" do
-        result = creator_ids_for_css_classes(series)
+        result = helper.creator_ids_for_css_classes(series)
         expect(result).to be_nil
       end
     end
@@ -56,7 +56,7 @@ describe ApplicationHelper do
       let(:user1) { work.users.first }
 
       it "returns string for work" do
-        result = creator_ids_for_css_classes(work)
+        result = helper.creator_ids_for_css_classes(work)
         expect(result).to eq(["user-#{user1.id}"])
       end
 
@@ -68,7 +68,7 @@ describe ApplicationHelper do
         end
 
         it "returns string with one user" do
-          result = creator_ids_for_css_classes(work)
+          result = helper.creator_ids_for_css_classes(work)
           expect(result).to eq(["user-#{user1.id}"])
         end
       end
@@ -81,7 +81,7 @@ describe ApplicationHelper do
         end
 
         it "returns string with all users" do
-          result = creator_ids_for_css_classes(work)
+          result = helper.creator_ids_for_css_classes(work)
           expect(result).to eq(["user-#{user1.id}", "user-#{user2.id}"])
         end
       end
@@ -92,7 +92,7 @@ describe ApplicationHelper do
         before { work.collections << collection }
 
         it "returns nil" do
-          result = creator_ids_for_css_classes(work)
+          result = helper.creator_ids_for_css_classes(work)
           expect(result).to be_nil
         end
       end
@@ -103,7 +103,7 @@ describe ApplicationHelper do
         before { work.collections << collection }
 
         it "returns nil" do
-          result = creator_ids_for_css_classes(work)
+          result = helper.creator_ids_for_css_classes(work)
           expect(result).to be_nil
         end
       end
@@ -112,7 +112,7 @@ describe ApplicationHelper do
         let(:external_creatorship) { create(:external_creatorship, work: work) }
 
         it "returns string with user" do
-          result = creator_ids_for_css_classes(work)
+          result = helper.creator_ids_for_css_classes(work)
           expect(result).to eq(["user-#{user1.id}"])
         end
       end
@@ -126,7 +126,7 @@ describe ApplicationHelper do
       let(:external_work) { create(:external_work) }
 
       it "returns string with default classes and creation info" do
-        result = css_classes_for_creation_blurb(external_work)
+        result = helper.css_classes_for_creation_blurb(external_work)
         expect(result).to eq("#{default_classes} external-work-#{external_work.id}")
       end
     end
@@ -135,7 +135,7 @@ describe ApplicationHelper do
       let(:series) { create(:series) }
 
       it "returns string with default classes and creation info" do
-        result = css_classes_for_creation_blurb(series)
+        result = helper.css_classes_for_creation_blurb(series)
         expect(result).to eq("#{default_classes} series-#{series.id}")
       end
     end
@@ -146,7 +146,7 @@ describe ApplicationHelper do
       let(:user2) { create(:user) }
 
       it "returns string with default classes and creation and creator info" do
-        result = css_classes_for_creation_blurb(work)
+        result = helper.css_classes_for_creation_blurb(work)
         expect(result).to eq("#{default_classes} work-#{work.id} user-#{user1.id}")
       end
 
@@ -154,11 +154,11 @@ describe ApplicationHelper do
         it "returns updated string" do
           travel_to(1.day.ago)
           original_cache_key = "#{work.cache_key_with_version}/blurb_css_classes"
-          expect(css_classes_for_creation_blurb(work)).to eq("#{default_classes} work-#{work.id} user-#{user1.id}")
+          expect(helper.css_classes_for_creation_blurb(work)).to eq("#{default_classes} work-#{work.id} user-#{user1.id}")
 
           travel_back
           work.creatorships.find_or_create_by(pseud_id: user2.default_pseud_id)
-          expect(css_classes_for_creation_blurb(work)).to eq("#{default_classes} work-#{work.id} user-#{user1.id} user-#{user2.id}")
+          expect(helper.css_classes_for_creation_blurb(work)).to eq("#{default_classes} work-#{work.id} user-#{user1.id} user-#{user2.id}")
           expect(original_cache_key).not_to eq("#{work.cache_key_with_version}/blurb_css_classes")
         end
       end
@@ -168,11 +168,11 @@ describe ApplicationHelper do
           travel_to(1.day.ago)
           work.creatorships.find_or_create_by(pseud_id: user2.default_pseud_id)
           original_cache_key = "#{work.cache_key_with_version}/blurb_css_classes"
-          expect(css_classes_for_creation_blurb(work)).to eq("#{default_classes} work-#{work.id} user-#{user1.id} user-#{user2.id}")
+          expect(helper.css_classes_for_creation_blurb(work)).to eq("#{default_classes} work-#{work.id} user-#{user1.id} user-#{user2.id}")
 
           travel_back
           work.creatorships.find_by(pseud_id: user2.default_pseud_id).destroy
-          expect(css_classes_for_creation_blurb(work)).to eq("#{default_classes} work-#{work.id} user-#{user1.id}")
+          expect(helper.css_classes_for_creation_blurb(work)).to eq("#{default_classes} work-#{work.id} user-#{user1.id}")
           expect(original_cache_key).not_to eq("#{work.cache_key_with_version}/blurb_css_classes")
         end
       end
@@ -183,11 +183,11 @@ describe ApplicationHelper do
         it "returns updated string" do
           travel_to(1.day.ago)
           original_cache_key = "#{work.cache_key_with_version}/blurb_css_classes"
-          expect(css_classes_for_creation_blurb(work)).to eq("#{default_classes} work-#{work.id} user-#{user1.id}")
+          expect(helper.css_classes_for_creation_blurb(work)).to eq("#{default_classes} work-#{work.id} user-#{user1.id}")
 
           travel_back
           work.collections << collection
-          expect(css_classes_for_creation_blurb(work)).to eq("#{default_classes} work-#{work.id}")
+          expect(helper.css_classes_for_creation_blurb(work)).to eq("#{default_classes} work-#{work.id}")
           expect(original_cache_key).not_to eq("#{work.cache_key_with_version}/blurb_css_classes")
         end
       end
@@ -198,11 +198,11 @@ describe ApplicationHelper do
         it "returns updated string" do
           travel_to(1.day.ago)
           original_cache_key = "#{work.cache_key_with_version}/blurb_css_classes"
-          expect(css_classes_for_creation_blurb(work)).to eq("#{default_classes} work-#{work.id} user-#{user1.id}")
+          expect(helper.css_classes_for_creation_blurb(work)).to eq("#{default_classes} work-#{work.id} user-#{user1.id}")
 
           travel_back
           work.collections << collection
-          expect(css_classes_for_creation_blurb(work)).to eq("#{default_classes} work-#{work.id}")
+          expect(helper.css_classes_for_creation_blurb(work)).to eq("#{default_classes} work-#{work.id}")
           expect(original_cache_key).not_to eq("#{work.cache_key_with_version}/blurb_css_classes")
         end
       end
