@@ -578,6 +578,23 @@ module ApplicationHelper
     end
   end
 
+  # Identifier for creation, formatted external-work-12, series-12, work-12.
+  def creation_id_for_css_classes(creation)
+    return unless %w[ExternalWork Series Work].include?(creation.class.name)
+
+    "#{creation.class.name.underscore.dasherize}-#{creation.id}"
+  end
+
+  # Array of creator ids, formatted user-123, user-126.
+  # External works are not created by users, so we can skip this.
+  # TODO: AO3-6132 to add creator ids to series blurbs.
+  def creator_ids_for_css_classes(creation)
+    return unless creation.is_a?(Work)
+    return if creation.anonymous? || creation.unrevealed?
+
+    creation.users.pluck(:id).uniq.map { |id| "user-#{id}" }
+  end
+
   def css_classes_for_creation_blurb(creation)
     return if creation.nil?
 
@@ -586,28 +603,5 @@ module ApplicationHelper
       creator_ids = creator_ids_for_css_classes(creation).join(" ") if creator_ids_for_css_classes(creation).present?
       "blurb group #{creation_id} #{creator_ids}".strip
     end
-  end
-
-  private
-
-  # Identifier for creation, formatted external-work-12, series-12, work-12.
-  def creation_id_for_css_classes(creation)
-    return if creation.nil?
-    return unless %w[ExternalWork Series Work].include?(creation.class.name)
-
-    "#{creation.class.name.underscore.dasherize}-#{creation.id}"
-  end
-
-  # Array of creator ids, formatted user-123, user-126.
-  # External works are not created by users, so we can skip this.
-  # TODO: We will want to list users on series blurbs, but when a series becomes
-  # or stops being anonymous, it is not touched, so the cache in
-  # css_classes_for_creation_blurb will not expire.
-  def creator_ids_for_css_classes(creation)
-    return if creation.nil?
-    return unless creation.is_a?(Work)
-    return if creation.anonymous? || creation.unrevealed?
-
-    creation.users.pluck(:id).uniq.map { |id| "user-#{id}" }
   end
 end # end of ApplicationHelper
