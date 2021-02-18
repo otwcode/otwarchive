@@ -36,18 +36,18 @@ describe ApplicationHelper do
     context "when creation is ExternalWork" do
       let(:external_work) { create(:external_work) }
 
-      it "returns nil for exteral work" do
+      it "returns empty array for exteral work" do
         result = helper.creator_ids_for_css_classes(external_work)
-        expect(result).to be_nil
+        expect(result).to be_empty
       end
     end
 
     context "when creation is Series" do
       let(:series) { create(:series) }
 
-      it "returns nil for series" do
+      it "returns empty array for series" do
         result = helper.creator_ids_for_css_classes(series)
-        expect(result).to be_nil
+        expect(result).to be_empty
       end
     end
 
@@ -55,7 +55,7 @@ describe ApplicationHelper do
       let(:work) { create(:work) }
       let(:user1) { work.users.first }
 
-      it "returns string for work" do
+      it "returns array of strings for work" do
         result = helper.creator_ids_for_css_classes(work)
         expect(result).to eq(["user-#{user1.id}"])
       end
@@ -67,7 +67,7 @@ describe ApplicationHelper do
           work.creatorships.find_or_create_by(pseud_id: user1_pseud2.id)
         end
 
-        it "returns string with one user" do
+        it "returns array of strings with one user" do
           result = helper.creator_ids_for_css_classes(work)
           expect(result).to eq(["user-#{user1.id}"])
         end
@@ -80,7 +80,7 @@ describe ApplicationHelper do
           work.creatorships.find_or_create_by(pseud_id: user2.default_pseud_id)
         end
 
-        it "returns string with all users" do
+        it "returns array of strings with all users" do
           result = helper.creator_ids_for_css_classes(work)
           expect(result).to eq(["user-#{user1.id}", "user-#{user2.id}"])
         end
@@ -91,9 +91,9 @@ describe ApplicationHelper do
 
         before { work.collections << collection }
 
-        it "returns nil" do
+        it "returns empty array" do
           result = helper.creator_ids_for_css_classes(work)
-          expect(result).to be_nil
+          expect(result).to be_empty
         end
       end
 
@@ -102,18 +102,27 @@ describe ApplicationHelper do
 
         before { work.collections << collection }
 
-        it "returns nil" do
+        it "returns empty array" do
           result = helper.creator_ids_for_css_classes(work)
-          expect(result).to be_nil
+          expect(result).to be_empty
         end
       end
 
       context "when work has external author" do
         let(:external_creatorship) { create(:external_creatorship, work: work) }
 
-        it "returns string with user" do
+        it "returns array of strings with user" do
           result = helper.creator_ids_for_css_classes(work)
           expect(result).to eq(["user-#{user1.id}"])
+        end
+      end
+
+      context "when work has no user" do
+        before { work.creatorships.delete_all }
+
+        it "returns empty array" do
+          result = helper.creator_ids_for_css_classes(work)
+          expect(result).to be_empty
         end
       end
     end
