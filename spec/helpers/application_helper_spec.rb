@@ -43,11 +43,58 @@ describe ApplicationHelper do
     end
 
     context "when creation is Series" do
-      let(:series) { create(:series) }
+      let(:empty_series) { create(:series) }
+      let(:user1) { empty_series.users.first }
+      # Note: The factory is set up so series with works have two users.
+      let(:series_with_work) { create(:series_with_a_work) }
+      let(:user2) { series_with_work.users.first }
+      let(:user3) { series_with_work.users.last }
 
-      it "returns empty array for series" do
-        result = helper.creator_ids_for_css_classes(series)
-        expect(result).to be_empty
+      it "returns array of strings for series" do
+        result = helper.creator_ids_for_css_classes(empty_series)
+        expect(result).to eq(["user-#{user1.id}"])
+      end
+
+      context "with multiple pseuds from same user" do
+        let(:user1_pseud2) { create(:pseud, user: user1) }
+
+        before do
+          empty_series.creatorships.find_or_create_by(pseud_id: user1_pseud2.id)
+        end
+
+        it "returns array of strings with one user" do
+          result = helper.creator_ids_for_css_classes(empty_series)
+          expect(result).to eq(["user-#{user1.id}"])
+        end
+      end
+
+      context "with pseuds from multiple users" do
+        it "returns array of strings with all users" do
+          result = helper.creator_ids_for_css_classes(series_with_work)
+          expect(result).to eq(["user-#{user2.id}", "user-#{user3.id}"])
+        end
+      end
+
+      context "when series is anonymous" do
+        let(:collection) { create(:anonymous_collection) }
+
+        before { series_with_work.works.first.collections << collection }
+
+        it "returns empty array" do
+          result = helper.creator_ids_for_css_classes(series_with_work)
+          expect(result).to be_empty
+        end
+      end
+
+      context "when work is unrevealed" do
+        let(:collection) { create(:unrevealed_collection) }
+
+        before { series_with_work.works.first.collections << collection }
+
+        it "returns array of strings" do
+          result = helper.creator_ids_for_css_classes(series_with_work)
+          expect(result).to eq(["user-#{user2.id}", "user-#{user3.id}"])
+        end
       end
     end
 
@@ -141,11 +188,112 @@ describe ApplicationHelper do
     end
 
     context "when creation is Series" do
-      let(:series) { create(:series) }
+      # Note: The factory is set up so series with works have two users.
+      # We're using let! because otherwise the user assignment gets messed up
+      # quite easily, e.g. adding the third user to the series results in user3
+      # being the last user on the series, thus making user2 and user3 the same.
+      let!(:series) { create(:series_with_a_work) }
+      let!(:work) { series.works.first }
+      let!(:user1) { series.users.first }
+      let!(:user2) { series.users.last }
+      let(:user3) { create(:user) }
 
-      it "returns string with default classes and creation info" do
+      it "returns string with default classes and creation and creator info" do
         result = helper.css_classes_for_creation_blurb(series)
-        expect(result).to eq("#{default_classes} series-#{series.id}")
+        expect(result).to eq("#{default_classes} series-#{series.id} user-#{user1.id} user-#{user2.id}")
+      end
+
+      context "when series is updated" do
+        context "when new user is added" do
+          it "returns updated string" do
+            original_cache_key = "#{series.cache_key_with_version}/blurb_css_classes"
+            expect(helper.css_classes_for_creation_blurb(series)).to eq("#{default_classes} series-#{series.id} user-#{user1.id} user-#{user2.id}")
+
+            travel(1.day)
+            series.creatorships.find_or_create_by(pseud_id: user3.default_pseud_id)
+            expect(helper.css_classes_for_creation_blurb(series.reload)).to eq("#{default_classes} series-#{series.id} user-#{user1.id} user-#{user2.id} user-#{user3.id}")
+            expect(original_cache_key).not_to eq("#{series.cache_key_with_version}/blurb_css_classes")
+            travel_back
+          end
+        end
+
+        context "when user is removed from series" do
+
+          before { series.creatorships.find_or_create_by(pseud_id: user3.default_pseud_id) }
+
+          it "returns updated string" do
+            original_cache_key = "#{series.cache_key_with_version}/blurb_css_classes"
+            expect(helper.css_classes_for_creation_blurb(series)).to eq("#{default_classes} series-#{series.id} user-#{user1.id} user-#{user2.id} user-#{user3.id}")
+
+            travel(1.day)
+            series.creatorships.find_by(pseud_id: user3.default_pseud_id).destroy
+            expect(helper.css_classes_for_creation_blurb(series.reload)).to eq("#{default_classes} series-#{series.id} user-#{user1.id} user-#{user2.id}")
+            expect(original_cache_key).not_to eq("#{series.cache_key_with_version}/blurb_css_classes")
+            travel_back
+          end
+        end
+      end
+
+      context "when series' work is updated" do
+        context "when new user is added to series' work" do
+          it "returns updated string" do
+            original_cache_key = "#{series.cache_key_with_version}/blurb_css_classes"
+            expect(helper.css_classes_for_creation_blurb(series)).to eq("#{default_classes} series-#{series.id} user-#{user1.id} user-#{user2.id}")
+
+            travel(1.day)
+            work.creatorships.find_or_create_by(pseud_id: user3.default_pseud_id)
+            expect(helper.css_classes_for_creation_blurb(series.reload)).to eq("#{default_classes} series-#{series.id} user-#{user1.id} user-#{user2.id} user-#{user3.id}")
+            expect(original_cache_key).not_to eq("#{series.cache_key_with_version}/blurb_css_classes")
+            travel_back
+          end
+        end
+
+        context "when user is removed from series' work" do
+
+          before { work.creatorships.find_or_create_by(pseud_id: user3.default_pseud_id) }
+
+          # TODO: AO3-5739 Co-creators removed from all works in a series are not removed from series
+          it "returns same string" do
+            original_cache_key = "#{series.cache_key_with_version}/blurb_css_classes"
+            expect(helper.css_classes_for_creation_blurb(series)).to eq("#{default_classes} series-#{series.id} user-#{user1.id} user-#{user2.id} user-#{user3.id}")
+
+            travel(1.day)
+            work.creatorships.find_by(pseud_id: user3.default_pseud_id).destroy
+            expect(helper.css_classes_for_creation_blurb(series.reload)).to eq("#{default_classes} series-#{series.id} user-#{user1.id} user-#{user2.id} user-#{user3.id}")
+            expect(original_cache_key).to eq("#{series.cache_key_with_version}/blurb_css_classes")
+            travel_back
+          end
+        end
+
+        context "when work becomes anonymous" do
+          let(:collection) { create(:anonymous_collection) }
+
+          it "returns updated string" do
+            original_cache_key = "#{series.cache_key_with_version}/blurb_css_classes"
+            expect(helper.css_classes_for_creation_blurb(series)).to eq("#{default_classes} series-#{series.id} user-#{user1.id} user-#{user2.id}")
+
+            travel(1.day)
+            work.collections << collection
+            expect(helper.css_classes_for_creation_blurb(series.reload)).to eq("#{default_classes} series-#{series.id}")
+            expect(original_cache_key).not_to eq("#{series.cache_key_with_version}/blurb_css_classes")
+            travel_back
+          end
+        end
+
+        context "when work becomes unrevealed" do
+          let(:collection) { create(:unrevealed_collection) }
+
+          it "returns same string" do
+            original_cache_key = "#{series.cache_key_with_version}/blurb_css_classes"
+            expect(helper.css_classes_for_creation_blurb(series)).to eq("#{default_classes} series-#{series.id} user-#{user1.id} user-#{user2.id}")
+
+            travel(1.day)
+            work.collections << collection
+            expect(helper.css_classes_for_creation_blurb(series.reload)).to eq("#{default_classes} series-#{series.id} user-#{user1.id} user-#{user2.id}")
+            expect(original_cache_key).to eq("#{series.cache_key_with_version}/blurb_css_classes")
+            travel_back
+          end
+        end
       end
     end
 

@@ -589,8 +589,9 @@ module ApplicationHelper
   # External works are not created by users, so we can skip this.
   # TODO: AO3-6132 to add creator ids to series blurbs.
   def creator_ids_for_css_classes(creation)
-    return [] unless creation.is_a?(Work)
-    return [] if creation.anonymous? || creation.unrevealed?
+    return [] unless %w[Series Work].include?(creation.class.name)
+    return [] if creation.anonymous?
+    return [] if creation.is_a?(Work) && creation.unrevealed?
 
     creation.users.pluck(:id).uniq.map { |id| "user-#{id}" }
   end

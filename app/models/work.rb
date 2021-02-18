@@ -176,7 +176,7 @@ class Work < ApplicationRecord
   after_save :moderate_spam
   after_save :notify_of_hiding
 
-  after_save :notify_recipients, :expire_caches, :update_pseud_index, :update_tag_index
+  after_save :notify_recipients, :expire_caches, :update_pseud_index, :update_tag_index, :touch_series
   after_destroy :expire_caches, :update_pseud_index
 
   before_destroy :send_deleted_work_notification, prepend: true
@@ -300,6 +300,12 @@ class Work < ApplicationRecord
     Tag.expire_ids(tag_ids)
     Collection.expire_ids(collection_ids)
   end
+
+  def touch_series
+    return unless saved_change_to_in_anon_collection?
+    series.update_all(updated_at: Time.now)
+  end
+
 
   after_destroy :destroy_chapters_in_reverse
   def destroy_chapters_in_reverse
