@@ -48,7 +48,7 @@ class Tagging < ApplicationRecord
   def amount_of_tags
     return unless taggable.tags.count >= maximum_allowed_tags
 
-    errors.add(:tags, ts("Sorry, a collection can only have %{maximum} tags.", maximum: maximum_allowed_tags)
+    errors.add(:tags, ts("Sorry, a collection can only have %{maximum} tags.", maximum: maximum_allowed_tags))
   end
   
   def maximum_allowed_tags
