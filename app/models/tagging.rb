@@ -1,9 +1,10 @@
 class Tagging < ApplicationRecord
+  DEFAULT_TAG_MAX = 30
   belongs_to :tagger, polymorphic: true, inverse_of: :taggings
   belongs_to :taggable, polymorphic: true, touch: true, inverse_of: :taggings
 
   validates_presence_of :tagger, :taggable
-  validate :collection_tag_limit, on: :create
+  validate :maximum_amount_of_tags, on: :create
 
   # When we create or destroy a tagging, it may change the taggings count.
   after_create :update_taggings_count
@@ -44,9 +45,16 @@ class Tagging < ApplicationRecord
     tagger.enqueue_to_index if tagger.taggings_count < ArchiveConfig.TAGGINGS_COUNT_REINDEX_LIMIT
   end
 
-  def collection_tag_limit
-    return unless taggable.class == Collection && taggable.tags.count >= ArchiveConfig.COLLECTION_TAGS_MAX
+  def amount_of_tags
+    return unless taggable.tags.count >= maximum_allowed_tags
 
-    errors.add(:tags, ts("Sorry, a collection can only have %{maximum} tags.", maximum: ArchiveConfig.COLLECTION_TAGS_MAX))
+    errors.add(:tags, ts("Sorry, a collection can only have %{maximum} tags.", maximum: maximum_allowed_tags)
+  end
+  
+  def maximum_allowed_tags
+    case taggable
+    when Collection then ArchiveConfig.COLLECTION_TAGS_MAX
+    else DEFAULT_TAG_MAX
+    end
   end
 end
