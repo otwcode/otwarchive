@@ -640,10 +640,15 @@ class Work < ApplicationRecord
   # If the work is posted, the first chapter should be posted too
   def post_first_chapter
     chapter_one = self.first_chapter
-    if self.saved_change_to_posted? || (chapter_one && chapter_one.posted != self.posted)
-      chapter_one.published_at = Date.today unless self.backdate
-      chapter_one.posted = self.posted
-      chapter_one.save
+    # is work just posted and has first chap been posted yet?
+    if self.saved_change_to_posted? && self.posted 
+      if chapter_one && !chapter_one.posted
+        chapter_one.published_at = Date.today unless self.backdate
+        # AO3-3498: chapter shouldn't get unposted for multichap draft when the work is posted
+        chapter_one.posted = true
+        chapter_one.save
+        Rails.logger.debug("first chapter saved")
+      end
     end
   end
 
@@ -770,7 +775,12 @@ class Work < ApplicationRecord
         self.word_count += chapter.set_word_count
       end
     else
-      self.word_count = Chapter.select("SUM(word_count) AS work_word_count").where(work_id: self.id, posted: true).first.work_word_count
+      # AO3-3498: work created but not posted = draft so get word count for draft
+      if !self.posted
+        self.word_count = Chapter.select("SUM(word_count) AS work_word_count").where(work_id: self.id).first.work_word_count
+      else
+        self.word_count = Chapter.select("SUM(word_count) AS work_word_count").where(work_id: self.id, posted: true).first.work_word_count
+      end
     end
   end
 

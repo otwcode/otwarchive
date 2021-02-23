@@ -622,6 +622,7 @@ class WorksController < ApplicationController
       redirect_to(edit_user_work_path(@user, @work)) && return
     end
 
+    # AO3-3498: 
     @work.posted = true
     @work.minor_version = @work.minor_version + 1
     # @work.update_minor_version
@@ -630,6 +631,11 @@ class WorksController < ApplicationController
       flash[:error] = ts('There were problems posting your work.')
       redirect_to(edit_user_work_path(@user, @work)) && return
     end
+
+    # AO3-3498: after posting/saving the work and chapter, 
+    # work's word count needs to be updated with the chapter's word count
+    @work.set_word_count
+    @work.save
 
     if !@collection.nil? && @collection.moderated?
       redirect_to work_path(@work), notice: ts('Work was submitted to a moderated collection. It will show up in the collection once approved.')
