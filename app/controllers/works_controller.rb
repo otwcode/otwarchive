@@ -622,7 +622,6 @@ class WorksController < ApplicationController
       redirect_to(edit_user_work_path(@user, @work)) && return
     end
 
-    # AO3-3498: 
     @work.posted = true
     @work.minor_version = @work.minor_version + 1
     # @work.update_minor_version
