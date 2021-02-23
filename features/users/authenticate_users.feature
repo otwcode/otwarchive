@@ -226,22 +226,21 @@ Feature: User Authentication
     Then I should see "Successfully logged in."
       And I should see "You'll stay logged in for 2 weeks even if you close your browser"
 
-  # TODO make this an actual test - it's been 4 years...
-  Scenario Outline: Show or hide preferences link
-    Given I have no users
-      And the following activated users exist
-      | login    | password |
-      | sam      | secret   |
-      | dean     | secret   |
-    And I am logged in as "<login>" with password "secret"
-    When I am on <user>'s user page
-    Then I should <action>
-
-    Examples:
-      | login | user  | action                   |
-      | sam   | sam   | not see "Log In"         |
-      | sam   | sam   | see "Log Out"            |
-      | sam   | sam   | see "Preferences" within "#dashboard"    |
-      | sam   | dean  | see "Log Out"            |
-      | sam   | dean  | not see "Preferences" within "#dashboard" |
-      | sam   | dean  | not see "Log In"         |
+  Scenario: Passwords cannot be reset for users who are on the config list of users being trolled or harassed.
+    Given the following activated user exists
+      | login  | email            | password |
+      | target | user@example.com | password |
+      And the user "target" is blocked from resetting their password
+    When I am on the home page
+      And I follow "Forgot password?"
+      And I fill in "Email address or user name" with "target"
+      And I press "Reset Password"
+    Then I should be on the home page
+      And I should see "Password resets are disabled for that user."
+      And 0 emails should be delivered
+    When I follow "Forgot password?"
+      And I fill in "Email address or user name" with "user@example.com"
+      And I press "Reset Password"
+    Then I should be on the home page
+      And I should see "Password resets are disabled for that user."
+      And 0 emails should be delivered

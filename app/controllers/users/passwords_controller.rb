@@ -6,9 +6,15 @@ class Users::PasswordsController < Devise::PasswordsController
   layout "session"
 
   def create
-    super do |user|
-      if user.nil? || user.new_record?
-        flash.now[:notice] = ts("We couldn't find an account with that email address or username. Please try again?")
+    user_id = User.find_for_authentication(login: params[:user][:login])&.id
+    if ArchiveConfig.TARGETED_USER_IDS.include?(user_id)
+      flash[:error] = t(".reset_blocked", contact_abuse_link: view_context.link_to(t(".contact_abuse"), new_abuse_report_path)).html_safe
+      redirect_to :root
+    else
+      super do |user|
+        if user.nil? || user.new_record?
+          flash.now[:notice] = ts("We couldn't find an account with that email address or username. Please try again?")
+        end
       end
     end
   end
