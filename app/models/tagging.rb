@@ -4,7 +4,7 @@ class Tagging < ApplicationRecord
   belongs_to :taggable, polymorphic: true, touch: true, inverse_of: :taggings
 
   validates_presence_of :tagger, :taggable
-  validate :maximum_amount_of_tags, on: :create
+  validate :maximum_allowed_tags, on: :create
 
   # When we create or destroy a tagging, it may change the taggings count.
   after_create :update_taggings_count
