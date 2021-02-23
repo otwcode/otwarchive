@@ -218,7 +218,6 @@ describe ApplicationHelper do
         end
 
         context "when user is removed from series" do
-
           before { series.creatorships.find_or_create_by(pseud_id: user3.default_pseud_id) }
 
           it "returns updated string" do
@@ -249,7 +248,6 @@ describe ApplicationHelper do
         end
 
         context "when user is removed from series' work" do
-
           before { work.creatorships.find_or_create_by(pseud_id: user3.default_pseud_id) }
 
           # TODO: AO3-5739 Co-creators removed from all works in a series are not removed from series
