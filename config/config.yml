@@ -507,4 +507,4 @@ PERMITTED_HOSTS: [
 
 # IDs of users experiencing certain types of harassment. For now, this is only
 # used to prevent harassment via repeated password reset requests.
-TARGETED_USER_IDS: []
+PROTECTED_USER_IDS: []
