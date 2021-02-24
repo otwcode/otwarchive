@@ -228,8 +228,8 @@ Feature: User Authentication
 
   Scenario: Passwords cannot be reset for users who are on the config list of users being trolled or harassed.
     Given the following activated user exists
-      | login  | email            | password
-      | target | user@example.com | password
+      | login  | email            |
+      | target | user@example.com |
       And the user "target" is blocked from resetting their password
     When I am on the home page
       And I follow "Forgot password?"
