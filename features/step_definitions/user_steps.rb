@@ -166,7 +166,7 @@ Given(/^I coauthored the work "(.*?)" as "(.*?)" with "(.*?)"$/) do |title, logi
   work.creatorships.unapproved.each(&:accept!)
 end
 
-Given /^the user "(.*?)" is blocked from resetting their password$/ do |login|
+Given "the user {string} is blocked from resetting their password" do |login|
   user_id = User.find_by(login: login).id
   allow(ArchiveConfig).to receive(:PROTECTED_USER_IDS).and_return([user_id])
 end
