@@ -72,7 +72,8 @@ end
 Given /the following activated tag wranglers? exists?/ do |table|
   table.hashes.each do |hash|
     user = FactoryBot.create(:user, hash)
-    user.tag_wrangler = '1'
+    role = Role.find_or_create_by(name: tag_wrangler)
+    user.roles = [role]
     user.pseuds.first.add_to_autocomplete
   end
 end
@@ -90,7 +91,6 @@ Given /^the user "([^"]*)" exists and has the role "([^"]*)"/ do |login, role|
   user = find_or_create_new_user(login, DEFAULT_PASSWORD)
   role = Role.find_or_create_by(name: role)
   user.roles = [role]
-  user.save
 end
 
 Given /^I am logged in as "([^"]*)" with password "([^"]*)"$/ do |login, password|
