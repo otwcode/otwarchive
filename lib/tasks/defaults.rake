@@ -1,5 +1,4 @@
 namespace :defaults do
-
   desc "Create default roles by name"
   task(:create_roles) do
     %w[archivist opendoors protected_user tag_wrangler translation_admin translator].each do |role|

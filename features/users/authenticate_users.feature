@@ -226,7 +226,7 @@ Feature: User Authentication
     Then I should see "Successfully logged in."
       And I should see "You'll stay logged in for 2 weeks even if you close your browser"
 
-  Scenario: Passwords cannot be reset for users who are on the config list of users being trolled or harassed.
+  Scenario: Passwords cannot be reset for users who have been given the protected role due to trolling or harassment.
     Given the following activated user exists
       | login  | email            |
       | target | user@example.com |
