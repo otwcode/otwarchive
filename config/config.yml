@@ -504,7 +504,3 @@ PERMITTED_HOSTS: [
   "test.archiveofourown.org",
   "testdownload.archiveofourown.org"
 ]
-
-# IDs of users experiencing certain types of harassment. For now, this is only
-# used to prevent harassment via repeated password reset requests.
-PROTECTED_USER_IDS: []

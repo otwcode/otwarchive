@@ -166,9 +166,9 @@ Given(/^I coauthored the work "(.*?)" as "(.*?)" with "(.*?)"$/) do |title, logi
   work.creatorships.unapproved.each(&:accept!)
 end
 
-Given "the user {string} is blocked from resetting their password" do |login|
-  user_id = User.find_by(login: login).id
-  allow(ArchiveConfig).to receive(:PROTECTED_USER_IDS).and_return([user_id])
+Given "the user {string} is a protected user" do |login|
+  user = User.find_by(login: login)
+  user.roles = [Role.find_or_create_by(name: "protected_user")]
 end
 
 # WHEN

@@ -6,8 +6,8 @@ class Users::PasswordsController < Devise::PasswordsController
   layout "session"
 
   def create
-    user_id = User.find_for_authentication(login: resource_params[:login])&.id
-    if ArchiveConfig.PROTECTED_USER_IDS.include?(user_id)
+    user = User.find_for_authentication(login: resource_params[:login])
+    if user.protected_user
       flash[:error] = t(".reset_blocked", contact_abuse_link: view_context.link_to(t(".contact_abuse"), new_abuse_report_path)).html_safe
       redirect_to :root
     else

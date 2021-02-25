@@ -230,7 +230,7 @@ Feature: User Authentication
     Given the following activated user exists
       | login  | email            |
       | target | user@example.com |
-      And the user "target" is blocked from resetting their password
+      And the user "target" is a protected user
     When I am on the home page
       And I follow "Forgot password?"
       And I fill in "Email address or user name" with "target"
