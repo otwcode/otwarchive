@@ -72,7 +72,7 @@ end
 Given /the following activated tag wranglers? exists?/ do |table|
   table.hashes.each do |hash|
     user = FactoryBot.create(:user, hash)
-    role = Role.find_or_create_by(name: tag_wrangler)
+    role = Role.find_or_create_by(name: "tag_wrangler")
     user.roles = [role]
     user.pseuds.first.add_to_autocomplete
   end
