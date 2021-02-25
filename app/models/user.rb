@@ -375,6 +375,11 @@ class User < ApplicationRecord
     has_role?(:tag_wrangler)
   end
 
+  # Set tag wrangler role for this user and log change
+  def tag_wrangler=(should_be_tag_wrangler)
+    set_role("tag_wrangler", should_be_tag_wrangler == "1")
+  end
+
   # Is this user an authorized archivist?
   def archivist
     self.is_archivist?
