@@ -101,8 +101,8 @@ describe Admin::AdminUsersController do
 
     context "when admin has correct authorization" do
       before do
-       fake_login_admin(admin)
-       User.current_user = admin
+        fake_login_admin(admin)
+        User.current_user = admin
       end
 
       context "when admin has superadmin role" do
