@@ -86,9 +86,13 @@ describe Admin::AdminUsersController do
     let(:user) { create(:user, email: "user@example.com", roles: [old_role]) }
 
     context "when admin does not have correct authorization" do
-      it "redirects with error" do
-        admin.update(roles: [])
+      before do
         fake_login_admin(admin)
+        User.current_user = admin
+        admin.update(roles: [])
+      end
+
+      it "redirects with error" do
         put :update, params: { id: user.login, user: { roles: [] } }
 
         it_redirects_to_with_error(root_url, "Sorry, only an authorized admin can access the page you were trying to reach.")
@@ -96,7 +100,10 @@ describe Admin::AdminUsersController do
     end
 
     context "when admin has correct authorization" do
-      before { fake_login_admin(admin) }
+      before do
+       fake_login_admin(admin)
+       User.current_user = admin
+      end
 
       context "when admin has superadmin role" do
         before { admin.update(roles: ["superadmin"]) }
