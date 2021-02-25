@@ -88,7 +88,6 @@ describe Admin::AdminUsersController do
     context "when admin does not have correct authorization" do
       before do
         fake_login_admin(admin)
-        User.current_user = admin
         admin.update(roles: [])
       end
 
@@ -100,10 +99,7 @@ describe Admin::AdminUsersController do
     end
 
     context "when admin has correct authorization" do
-      before do
-        fake_login_admin(admin)
-        User.current_user = admin
-      end
+      before { fake_login_admin(admin) }
 
       context "when admin has superadmin role" do
         before { admin.update(roles: ["superadmin"]) }
