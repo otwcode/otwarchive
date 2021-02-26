@@ -65,16 +65,13 @@ module Otwarchive
     # Configure sensitive parameters which will be filtered from the log file.
     config.filter_parameters += [:content, :password, :terms_of_service_non_production]
 
-    # configure middleware
-
-    ### things I'm preserving here from our Rails 2 environment.rb that we might or might not need
+    # Disable dumping schemas after migrations.
+    config.active_record.dump_schema_after_migration = false
 
     # Use SQL instead of Active Record's schema dumper when creating the test database.
     # This is necessary if your schema can't be completely dumped by the schema dumper,
     # like if you have constraints or database-specific column types
     config.active_record.schema_format = :sql
-
-    ### end of preservation section
 
     # handle errors with custom error pages:
     config.exceptions_app = self.routes

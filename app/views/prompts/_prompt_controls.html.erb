@@ -47,14 +47,7 @@
         <% # The claim link should show up if the user has not already claimed the prompt %>
         <% else %>
         <li>
-          <% new_claim = ChallengeClaim.new %>
-            <%= form_for [collection, new_claim], :url => collection_claims_path(collection) do |claim_form| %>
-                <%= claim_form.hidden_field :collection_id, :value => collection.id %>
-                <%= claim_form.hidden_field :request_signup_id, :value => challenge_signup.id %>
-                <%= claim_form.hidden_field :request_prompt_id, :value => prompt.id %>
-                <%= claim_form.hidden_field :claiming_user_id, :value => current_user.id %>
-                <%= submit_tag ts("Claim"), :id => "prompt_" + prompt.id.to_s %>
-            <% end %>
+          <%= button_to ts("Claim"), collection_claims_path(collection, prompt_id: prompt.id) %>
         </li>
       <% end %>
     <% end %>

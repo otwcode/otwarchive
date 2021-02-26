@@ -61,7 +61,7 @@ Given /^tag wrangling is off$/ do
   step(%{I am logged in as a "tag_wrangling" admin})
   visit(admin_settings_path)
   step(%{I check "Turn off tag wrangling for non-admins"})
-  step(%{I press "Update"})  
+  step(%{I press "Update"})
   step("I log out")
 end
 
@@ -164,6 +164,14 @@ Given(/^the following language exists$/) do |table|
   end
 end
 
+Given /^I have posted an admin post with comments disabled$/ do
+  step %{I am logged in as a "communications" admin}
+  step %{I start to make an admin post}
+  choose("No one can comment")
+  click_button("Post")
+  step %{I log out}
+end
+
 ### WHEN
 
 When /^I visit the last activities item$/ do
@@ -176,10 +184,14 @@ When /^I fill in "([^"]*)" with "([^"]*)'s" invite code$/ do |field, login|
   fill_in(field, with: token)
 end
 
-When /^I make an admin post$/ do
+When /^I start to make an admin post$/ do
   visit new_admin_post_path
   fill_in("admin_post_title", with: "Default Admin Post")
   fill_in("content", with: "Content of the admin post.")
+end
+
+When /^I make an admin post$/ do
+  step %(I start to make an admin post)
   click_button("Post")
 end
 

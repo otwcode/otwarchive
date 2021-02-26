@@ -32,12 +32,13 @@ RSpec.configure do |config|
     c.syntax = [:should, :expect]
   end
 
+  # TODO: Remove gems delorean and timecop now that Rails has time-travel helpers.
+  config.include ActiveSupport::Testing::TimeHelpers
   config.include FactoryBot::Syntax::Methods
   config.include EmailSpec::Helpers
   config.include EmailSpec::Matchers
   config.include Devise::Test::ControllerHelpers, type: :controller
   config.include Devise::Test::IntegrationHelpers, type: :request
-  config.include Capybara::DSL
   config.include TaskExampleGroup, type: :task
 
   config.before :suite do
@@ -60,6 +61,9 @@ RSpec.configure do |config|
     DatabaseCleaner.start
     User.current_user = nil
     clean_the_database
+
+    # Clears used values for all generators.
+    Faker::UniqueGenerator.clear
 
     # Assume all spam checks pass by default.
     allow(Akismetor).to receive(:spam?).and_return(false)

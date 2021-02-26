@@ -10,13 +10,11 @@ end
 
 Given /I have an orphan account/ do
   user = FactoryBot.create(:user, login: 'orphan_account')
-  user.activate
 end
 
 Given /the following activated users? exists?/ do |table|
   table.hashes.each do |hash|
     user = FactoryBot.create(:user, hash)
-    user.activate
     user.pseuds.first.add_to_autocomplete
     step %{confirmation emails have been delivered}
   end
@@ -25,7 +23,6 @@ end
 Given /the following users exist with BCrypt encrypted passwords/ do |table|
   table.hashes.each do |hash|
     user = FactoryBot.create(:user, hash)
-    user.activate
     user.pseuds.first.add_to_autocomplete
 
     # salt = Authlogic::Random.friendly_token
@@ -47,7 +44,6 @@ end
 Given /the following users exist with SHA-512 encrypted passwords/ do |table|
   table.hashes.each do |hash|
     user = FactoryBot.create(:user, hash)
-    user.activate
     user.pseuds.first.add_to_autocomplete
 
     # salt = Authlogic::Random.friendly_token
@@ -68,7 +64,6 @@ end
 Given /the following activated users with private work skins/ do |table|
   table.hashes.each do |hash|
     user = FactoryBot.create(:user, hash)
-    user.activate
     FactoryBot.create(:work_skin, :private, author: user, title: "#{user.login.titleize}'s Work Skin")
     step %{confirmation emails have been delivered}
   end
@@ -77,8 +72,8 @@ end
 Given /the following activated tag wranglers? exists?/ do |table|
   table.hashes.each do |hash|
     user = FactoryBot.create(:user, hash)
-    user.activate
-    user.tag_wrangler = '1'
+    role = Role.find_or_create_by(name: "tag_wrangler")
+    user.roles = [role]
     user.pseuds.first.add_to_autocomplete
   end
 end
@@ -96,7 +91,6 @@ Given /^the user "([^"]*)" exists and has the role "([^"]*)"/ do |login, role|
   user = find_or_create_new_user(login, DEFAULT_PASSWORD)
   role = Role.find_or_create_by(name: role)
   user.roles = [role]
-  user.save
 end
 
 Given /^I am logged in as "([^"]*)" with password "([^"]*)"$/ do |login, password|
@@ -295,9 +289,5 @@ end
 
 Then /^the user "([^"]*)" should be activated$/ do |login|
   user = User.find_by(login: login)
-  assert user.active?
-end
-
-Then /^I should see the current user's preferences in the console$/ do
-  puts User.current_user.preference.inspect
+  expect(user).to be_active
 end

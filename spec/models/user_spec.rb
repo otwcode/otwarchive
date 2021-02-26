@@ -61,7 +61,7 @@ describe User do
       end
 
       context "with login too short" do
-        let(:login_short) { build(:user, login: Faker::Lorem.characters(ArchiveConfig.LOGIN_LENGTH_MIN - 1)) }
+        let(:login_short) { build(:user, login: Faker::Lorem.characters(number: ArchiveConfig.LOGIN_LENGTH_MIN - 1)) }
 
         it "does not save" do
           expect(login_short.save).to be_falsey
@@ -70,7 +70,7 @@ describe User do
       end
 
       context "with login too long" do
-        let(:login_long) { build(:user, login: Faker::Lorem.characters(ArchiveConfig.LOGIN_LENGTH_MAX + 1)) }
+        let(:login_long) { build(:user, login: Faker::Lorem.characters(number: ArchiveConfig.LOGIN_LENGTH_MAX + 1)) }
 
         it "does not save" do
           expect(login_long.save).to be_falsey
@@ -91,7 +91,7 @@ describe User do
       end
 
       context "with password too short" do
-        let(:password_short) { build(:user, password: Faker::Lorem.characters(ArchiveConfig.PASSWORD_LENGTH_MIN - 1)) }
+        let(:password_short) { build(:user, password: Faker::Lorem.characters(number: ArchiveConfig.PASSWORD_LENGTH_MIN - 1)) }
 
         it "does not save" do
           expect(password_short.save).to be_falsey
@@ -100,7 +100,7 @@ describe User do
       end
 
       context "with password too long" do
-        let(:password_long) { build(:user, password: Faker::Lorem.characters(ArchiveConfig.PASSWORD_LENGTH_MAX + 1)) }
+        let(:password_long) { build(:user, password: Faker::Lorem.characters(number: ArchiveConfig.PASSWORD_LENGTH_MAX + 1)) }
 
         it "does not save" do
           expect(password_long.save).to be_falsey
