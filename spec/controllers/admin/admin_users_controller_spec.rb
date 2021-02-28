@@ -101,26 +101,28 @@ describe Admin::AdminUsersController do
     context "when admin has correct authorization" do
       before { fake_login_admin(admin) }
 
-      context "when admin has superadmin role" do
-        before { admin.update(roles: ["superadmin"]) }
+      %w[policy_and_abuse superadmin].each do |admin_role|
+        context "when admin has #{admin_role} role" do
+          before { admin.update(roles: [admin_role]) }
 
-        it "allows admins to update all attributes" do
-          expect do
-            put :update, params: {
-              id: user.login,
-              user: {
-                email: "updated@example.com",
-                roles: [role.id.to_s]
+          it "allows admins to update all attributes" do
+            expect do
+              put :update, params: {
+                id: user.login,
+                user: {
+                  email: "updated@example.com",
+                  roles: [role.id.to_s]
+                }
               }
-            }
-          end.to change { user.reload.roles.pluck(:name) }
-            .from([old_role.name])
-            .to([role.name])
-            .and change { user.reload.email }
-            .from("user@example.com")
-            .to("updated@example.com")
+            end.to change { user.reload.roles.pluck(:name) }
+              .from([old_role.name])
+              .to([role.name])
+              .and change { user.reload.email }
+              .from("user@example.com")
+              .to("updated@example.com")
 
-          it_redirects_to_with_notice(root_path, "User was successfully updated.")
+            it_redirects_to_with_notice(root_path, "User was successfully updated.")
+          end
         end
       end
 
@@ -148,7 +150,8 @@ describe Admin::AdminUsersController do
         end
       end
 
-      %w[support policy_and_abuse].each do |admin_role|
+      # Keep the array in case we need to add another role like this.
+      %w[support].each do |admin_role|
         context "when admin has #{admin_role} role" do
           before { admin.update(roles: [admin_role]) }
 

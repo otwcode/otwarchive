@@ -384,6 +384,17 @@ class User < ApplicationRecord
     has_role?(:archivist)
   end
 
+  # Is this user a protected user? These are users experiencing certain types
+  # of harassment. For now, this is only used to prevent harassment via repeated
+  # password reset requests.
+  def protected_user
+    self.is_protected_user?
+  end
+
+  def is_protected_user?
+    has_role?(:protected_user)
+  end
+
   # Creates log item tracking changes to user
   def create_log_item(options = {})
     options.reverse_merge! note: "System Generated", user_id: self.id

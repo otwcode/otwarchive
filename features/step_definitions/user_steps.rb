@@ -166,6 +166,11 @@ Given(/^I coauthored the work "(.*?)" as "(.*?)" with "(.*?)"$/) do |title, logi
   work.creatorships.unapproved.each(&:accept!)
 end
 
+Given "the user {string} is a protected user" do |login|
+  user = User.find_by(login: login)
+  user.roles = [Role.find_or_create_by(name: "protected_user")]
+end
+
 # WHEN
 
 When /^I follow the link for "([^"]*)" first invite$/ do |login|
