@@ -160,6 +160,9 @@ RSpec/NestedGroups:
 RSpec/PredicateMatcher:
   Enabled: false
 
+Style/AndOr:
+  EnforcedStyle: conditionals
+
 Style/ClassAndModuleChildren:
   Enabled: false
 
@@ -201,6 +204,3 @@ Style/SymbolArray:
 
 Style/TernaryParentheses:
   EnforcedStyle: require_parentheses_when_complex
-
-Style/AndOr:
-  EnforcedStyle: conditionals
