@@ -153,6 +153,14 @@ class Work < ApplicationRecord
     disable_all: 2
   }, _suffix: :comments
 
+  # If an existing gift doesn't validate, show the error. This will include
+  # the attribute name, i.e. "Gifts", at the start of the message, but we can't
+  # have everything.
+  validates_associated :gifts, on: :update,
+    message: ->(object, data) do
+      data[:value][0].errors.full_messages[0]
+    end
+
   ########################################################################
   # HOOKS
   # These are methods that run before/after saves and updates to ensure
@@ -451,7 +459,7 @@ class Work < ApplicationRecord
         if g.valid?
           new_recipients << name # new gifts are added after saving, not now
         else
-          errors.add(:base, ts("You cannot give a gift to the same user twice."))
+          g.errors.full_messages.each { |msg| self.errors.add(:base, msg) }
         end
       end
     end

@@ -308,3 +308,10 @@ Feature: Create Gifts
       And I reveal works for "Hidden Treasures"
     Then 0 emails should be delivered to "giftee1@foo.com"
       And "giftee2@foo.com" should be notified by email about their gift "QuietGift"
+
+  Scenario: Can't give a gift to a protected user
+    Given the user "giftee1" is a protected user
+    When I am logged in as "gifter"
+      And I post the work "Rude Gift" as a gift for "giftee1"
+    Then I should see "Sorry! We couldn't save this work because:You can't give a gift to that user."
+      And 0 emails should be delivered to "giftee1@foo.com"

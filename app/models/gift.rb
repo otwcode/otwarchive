@@ -37,6 +37,16 @@ class Gift < ApplicationRecord
     end
   end
 
+  validate :user_allows_gifts
+  # If the recipient is a protected user, it should not be possible to give them
+  # a gift work unless the work fulfills a gift exchange assignment for them.
+  def user_allows_gifts
+    return unless pseud&.user&.is_protected_user?
+    return if work.challenge_assignments&.map(&:requesting_pseud).include?(pseud)
+
+    errors.add(:base, ts("You can't give a gift to that user."))
+  end
+
   scope :for_pseud, lambda {|pseud| where("pseud_id = ?", pseud.id)}
 
   scope :for_user, lambda {|user| where("pseud_id IN (?)", user.pseuds.collect(&:id).flatten)}

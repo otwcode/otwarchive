@@ -594,3 +594,16 @@ Feature: Gift Exchange Challenge
     When I go to "Bad Gift Exchange" collection's page
       And I follow "My Assignments" within "#dashboard"
     Then I should not see the image "src" text "/images/envelope_icon.gif"
+
+  Scenario: A user can give a gift to a protected user only if the work fulfills an assignment.
+    Given basic tags
+      And the user "recip" exists and is activated
+      And the user "recip" is a protected user
+      And I am logged in as "gifter"
+      And I have an assignment for the user "recip" in the collection "exchange_collection"
+    When I fulfill my assignment
+    Then I should see "For recip."
+    When I follow "Edit"
+      And I uncheck "exchange_collection (recip)"
+      And I press "Post"
+    Then I should see "You can't give a gift to that user."
