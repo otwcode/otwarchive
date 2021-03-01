@@ -271,6 +271,7 @@ class UsersController < ApplicationController
     visible_bookmarks = @user.bookmarks.send(visible_method)
 
     visible_works = visible_works.revealed.non_anon
+    visible_series = visible_series.exclude_anonymous
     @fandoms = if @user == User.orphan_account
                  []
                else

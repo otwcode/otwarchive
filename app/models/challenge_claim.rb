@@ -1,13 +1,19 @@
 class ChallengeClaim < ApplicationRecord
   include ActiveModel::ForbiddenAttributesProtection
-  # We use "-1" to represent all the requested items matching
-  ALL = -1
 
   belongs_to :claiming_user, class_name: "User", inverse_of: :request_claims
   belongs_to :collection
   belongs_to :request_signup, class_name: "ChallengeSignup"
   belongs_to :request_prompt, class_name: "Prompt"
   belongs_to :creation, polymorphic: true
+
+  before_create :inherit_fields_from_request_prompt
+  def inherit_fields_from_request_prompt
+    return unless request_prompt
+
+    self.collection = request_prompt.collection
+    self.request_signup = request_prompt.challenge_signup
+  end
 
   scope :for_request_signup, lambda {|signup|
     where('request_signup_id = ?', signup.id)
@@ -122,10 +128,6 @@ class ChallengeClaim < ApplicationRecord
       title += " (#{self.request_byline})"
     end
     return title
-  end
-
-  def claiming_user
-    User.find_by(id: claiming_user_id)
   end
 
   def claiming_pseud

@@ -57,6 +57,17 @@ en:
         update: "Update"
       update:
         success: "Archive settings were successfully updated."
+  admin_posts:
+    admin_post_form:
+      comment_permissions:
+        label: Who can comment on this admin post
+      language:
+        label: Choose a language
+      tags:
+        label: Tags
+      translated_post:
+        footnote: Comment permissions from the selected post will replace any permissions selected on this page.
+        label: Translation of
   admins:
     index:
       page_title: "Hi, %{login}!"
@@ -69,6 +80,34 @@ en:
   home:
     donate:
       page_title: "Donate or Volunteer"
+  kudos:
+    user_links:
+      more_link:
+        one: "%{count} more user"
+        other: "%{count} more users"
+    guest_header:
+      one: "%{count} guest has also left kudos"
+      other: "%{count} guests have also left kudos"
+  comments:
+    commentable:
+      actions:
+        comment: "Comment"
+      permissions:
+        options:
+          disable_all: No one can comment
+          disable_anon: Only registered users can comment
+          enable_all: Registered users and guests can comment
+        admin_post:
+          alt_action: "You can however %{support_link} with any feedback or questions."
+          disable_all: "Sorry, this news post doesn't allow comments."
+          disable_anon: "Sorry, this news post doesn't allow non-Archive users to comment."
+          support_link: "contact Support"
+        work:
+          alt_action: "You can however still leave Kudos!"
+          disable_all: "Sorry, this work doesn't allow comments."
+          disable_anon: "Sorry, this work doesn't allow non-Archive users to comment."
+          hidden: "Sorry, you can't add or edit comments on a hidden work."
+          unrevealed: "Sorry, you can't add or edit comments on an unrevealed work."
   layouts:
     proxy_notice:
       faux_heading: "Important message:"
