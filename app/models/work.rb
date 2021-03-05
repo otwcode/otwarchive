@@ -151,6 +151,7 @@ class Work < ApplicationRecord
   # doesn't have access to challenge_assignments or challenge_claims when it
   # runs its initial validation check.
   validate :validate_new_recipients
+
   def validate_new_recipients
     return if self.new_recipients.blank?
 
@@ -160,7 +161,6 @@ class Work < ApplicationRecord
       pseud = Pseud.parse_byline(name, assume_matching_login: true).first
 
       next unless pseud&.user&.is_protected_user?
-
       next if self.challenge_assignments.map(&:requesting_pseud).include?(pseud)
       next if self.challenge_claims.reject { |c| c.request_prompt.anonymous? }.map(&:requesting_pseud).include?(pseud)
 
