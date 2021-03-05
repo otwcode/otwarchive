@@ -176,6 +176,7 @@ class Work < ApplicationRecord
 
   # If a gift doesn't validate, show the error. This will include the attribute
   # name, i.e. "Gifts", until we update to Rails 6 and can override it.
+  # This handles exisiting gifts.
   validates_associated :gifts, on: :update,
     message: ->(object, data) do
       data[:value][0].errors.full_messages[0]
