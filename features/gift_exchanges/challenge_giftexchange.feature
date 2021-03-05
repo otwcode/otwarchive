@@ -595,8 +595,8 @@ Feature: Gift Exchange Challenge
       And I follow "My Assignments" within "#dashboard"
     Then I should not see the image "src" text "/images/envelope_icon.gif"
 
-  Scenario: A user can give a gift to a protected user if the work is connected
-  to an assignment.
+  Scenario: If a work is connected to an assignment for a protected user, the
+  protected user is still automatically added as a gift recipient.
     Given basic tags
       And the user "recip" exists and is activated
       And the user "recip" is a protected user
@@ -608,3 +608,19 @@ Feature: Gift Exchange Challenge
       And I uncheck "exchange_collection (recip)"
       And I press "Post"
     Then I should see "You can't give a gift to recip."
+
+  Scenario: A user can explicitly give a gift to a protected user if the work is
+  connected to an assignment.
+    Given basic tags
+      And the user "recip" exists and is activated
+      And the user "recip" is a protected user
+      And I am logged in as "gifter"
+      And I have an assignment for the user "recip" in the collection "exchange_collection"
+    When I start to fulfill my assignment
+      And I fill in "Gift this work to" with "recip"
+      And I press "Post"
+    Then I should see "For recip."
+    When I follow "Edit"
+      And I uncheck "exchange_collection (recip)"
+      And I press "Post"
+    Then I should see "You can't give a gift to recip"
