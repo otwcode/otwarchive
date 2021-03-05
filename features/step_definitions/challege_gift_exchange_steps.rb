@@ -309,7 +309,7 @@ Given "I have an assignment for the user {string} in the collection {string}" do
   giver = User.current_user
   recip = User.find_by(login: recip_login)
   collection = FactoryBot.create(:collection, name: collection_name, title: collection_name)
-  assignment = FactoryBot.create(:challenge_assignment, sent_at: Time.now, collection_id: collection.id)
+  assignment = FactoryBot.create(:challenge_assignment, sent_at: Time.zone.now, collection_id: collection.id)
   assignment.offer_signup.update_column(:pseud_id, giver.default_pseud_id)
   assignment.request_signup.update_column(:pseud_id, recip.default_pseud_id)
   assignment.reload
