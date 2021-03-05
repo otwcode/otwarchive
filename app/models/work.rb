@@ -160,8 +160,7 @@ class Work < ApplicationRecord
 
       pseud = Pseud.parse_byline(name, assume_matching_login: true).first
 
-      next unless pseud&.user.is_protected_user?
-      next unless self.challenge_assignments.present? || self.challenge_claims.present?
+      next unless pseud&.user&.is_protected_user?
 
       next if self.challenge_assignments.map(&:requesting_pseud).include?(pseud)
       next if self.challenge_claims.reject { |c| c.request_prompt.anonymous? }.map(&:requesting_pseud).include?(pseud)
