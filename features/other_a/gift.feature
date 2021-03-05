@@ -38,13 +38,19 @@ Feature: Create Gifts
     Then I should see "GiftStory1 by gifter for giftee1"
       And I should not see "GiftStory2 by gifter for giftee1"
 
-  Scenario: Gifts page for pseud recipient should show pseud's gifts
+  Scenario: Gifts page for user should show gifts given to their pseud
+    Given I give the work to "g1 (giftee1)"
+      And I press "Post"
+    When I go to giftee1's gifts page
+    Then I should see "GiftStory1 by gifter for g1 (giftee1)"
+
+  Scenario: Gifts page for recipient without account should show their gifts
     Given I give the work to "g1"
       And I press "Post"
     When I go to the gifts page for the recipient g1
     Then I should see "GiftStory1 by gifter for g1"
 
-  Scenario: Gifts page for recipient when logged out should show gifts visible to all
+  Scenario: When logged out, gifts page for recipient without account should show gifts visible to all
     When I give the work to "g1"
       And I press "Post"
       And I set up the draft "GiftStory2" as a gift to "g1"
