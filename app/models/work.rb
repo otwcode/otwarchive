@@ -152,7 +152,6 @@ class Work < ApplicationRecord
   # runs its initial validation check.
   validate :validate_new_recipients
   def validate_new_recipients
-    # binding.pry
     return if self.new_recipients.blank?
 
     self.new_recipients.split(",").each do |name|
