@@ -504,4 +504,4 @@ Feature: Prompt Meme Challenge
     And I start to fulfill my claim
     And I fill in "Gift this work to" with "prompter, bystander"
     And I press "Post"
-  Then I should see "You can't give a work to bystander."
+  Then I should see "You can't give a gift to bystander."
