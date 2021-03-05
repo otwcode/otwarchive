@@ -37,14 +37,19 @@ class Gift < ApplicationRecord
     end
   end
 
-  validate :user_allows_gifts
+  validate :user_allows_gifts, on: :update
   # If the recipient is a protected user, it should not be possible to give them
-  # a gift work unless the work fulfills a gift exchange assignment for them.
+  # a gift work unless it fulfills a gift exchange assignment or non-anonymous
+  # prompt meme claim for the recipient.
+  # We only run this on update because the necessary challenge_assignments and
+  # challenge_claims information isn't available when we first create a work
+  # (and the gifts for it).
   def user_allows_gifts
-    return unless pseud&.user&.is_protected_user?
-    return if work.challenge_assignments&.map(&:requesting_pseud).include?(pseud)
+    return unless self.pseud&.user&.is_protected_user?
+    return if self.work.challenge_assignments.map(&:requesting_pseud).include?(self.pseud)
+    return if self.work.challenge_claims.reject { |c| c.request_prompt.anonymous? }.map(&:requesting_pseud).include?(self.pseud)
 
-    errors.add(:base, ts("You can't give a gift to that user."))
+    errors.add(:base, ts("You can't give a gift to #{self.pseud.name}."))
   end
 
   scope :for_pseud, lambda {|pseud| where("pseud_id = ?", pseud.id)}

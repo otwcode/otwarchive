@@ -147,15 +147,37 @@ class Work < ApplicationRecord
   # Run Taggable#check_for_invalid_tags as a validation.
   validate :check_for_invalid_tags
 
+  # We don't want the work to save if the gifts aren't valid, but recipients=
+  # doesn't have access to challenge_assignments or challenge_claims when it
+  # runs its initial validation check.
+  validate :validate_new_recipients
+  def validate_new_recipients
+    # binding.pry
+    return if self.new_recipients.blank?
+
+    self.new_recipients.split(",").each do |name|
+      next if self.gifts.for_name_or_byline(name).present?
+
+      pseud = Pseud.parse_byline(name, assume_matching_login: true).first
+
+      next unless pseud&.user.is_protected_user?
+      next unless self.challenge_assignments.present? || self.challenge_claims.present?
+
+      next if self.challenge_assignments.map(&:requesting_pseud).include?(pseud)
+      next if self.challenge_claims.reject { |c| c.request_prompt.anonymous? }.map(&:requesting_pseud).include?(pseud)
+
+      self.errors.add(:base, ts("You can't give a gift to #{name}."))
+    end
+  end
+
   enum comment_permissions: {
     enable_all: 0,
     disable_anon: 1,
     disable_all: 2
   }, _suffix: :comments
 
-  # If an existing gift doesn't validate, show the error. This will include
-  # the attribute name, i.e. "Gifts", at the start of the message, but we can't
-  # have everything.
+  # If a gift doesn't validate, show the error. This will include the attribute
+  # name, i.e. "Gifts", until we update to Rails 6 and can override it.
   validates_associated :gifts, on: :update,
     message: ->(object, data) do
       data[:value][0].errors.full_messages[0]
@@ -454,7 +476,6 @@ class Work < ApplicationRecord
         gifts << gift # new gifts are added after saving, not now
         new_recipients << name unless self.posted # all recipients are new if work not posted
       else
-        # check that the gift would be valid
         g = Gift.new(work: self, recipient: name)
         if g.valid?
           new_recipients << name # new gifts are added after saving, not now

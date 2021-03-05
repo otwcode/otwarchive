@@ -228,7 +228,7 @@ Feature: Create Gifts
       And I edit the work "Yuck"
       And I give the work to "associate, associate2 (associate)"
       And I post the work without preview
-    Then I should see "You cannot give a gift to the same user twice."
+    Then I should see "You seem to already have given this work to that user."
       And I should not see "For associate, associate2"
       And 0 emails should be delivered to "associate@foo.com"
 
@@ -313,5 +313,5 @@ Feature: Create Gifts
     Given the user "giftee1" is a protected user
     When I am logged in as "gifter"
       And I post the work "Rude Gift" as a gift for "giftee1"
-    Then I should see "Sorry! We couldn't save this work because:You can't give a gift to that user."
+    Then I should see "Sorry! We couldn't save this work because:You can't give a gift to giftee1."
       And 0 emails should be delivered to "giftee1@foo.com"

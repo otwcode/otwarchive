@@ -595,7 +595,8 @@ Feature: Gift Exchange Challenge
       And I follow "My Assignments" within "#dashboard"
     Then I should not see the image "src" text "/images/envelope_icon.gif"
 
-  Scenario: A user can give a gift to a protected user only if the work fulfills an assignment.
+  Scenario: A user can give a gift to a protected user if the work is connected
+  to an assignment.
     Given basic tags
       And the user "recip" exists and is activated
       And the user "recip" is a protected user
@@ -606,4 +607,4 @@ Feature: Gift Exchange Challenge
     When I follow "Edit"
       And I uncheck "exchange_collection (recip)"
       And I press "Post"
-    Then I should see "You can't give a gift to that user."
+    Then I should see "You can't give a gift to recip."
