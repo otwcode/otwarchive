@@ -395,3 +395,17 @@ Feature: Create Works
     When I follow "Next Chapter"
     Then I should see "barbaz, foobar"
       And I should not see "Chapter by"
+
+  Scenario: Creating a new work with missing title and content
+    Given basic tags
+      And I am logged in
+    When I go to the new work page
+      And I select "English" from "Choose a language"
+      And I fill in "Fandoms" with "Dallas"
+      And I press "Post"
+    Given I wait 1 seconds
+    Then I should see a button with text "Please wait..."
+      And I should not see a button with text "Post"
+    Given I wait 1 seconds
+    Then I should see a button with text "Post"
+      And I should not see a button with text "Please wait..."

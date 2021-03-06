@@ -362,6 +362,20 @@ jQuery.fn.preventDoubleSubmit = function() {
   });
 };
 
+// re-enable button after 2 seconds disabled
+window.addEventListener("load", () => {
+  const btns = document.querySelectorAll(
+    ".actions input[type='submit']"
+  );
+  btns.forEach((element) => {
+    element.addEventListener("click", (event) => {
+      setTimeout(function() {
+        $j.rails.enableFormElement($j('input[data-disable-with]'));
+      }, 2000);
+    });
+  });
+});
+
 // add attributes that are only needed in the primary menus and when JavaScript is enabled
 function setupDropdown(){
   $j('#header').find('.dropdown').attr("aria-haspopup", true);
