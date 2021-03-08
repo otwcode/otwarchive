@@ -385,7 +385,7 @@ describe Work do
 
     let(:work) { build(:work) }
 
-    before(:each) do
+    before do
       work.recipients = recipient1 + "," + recipient2
     end
 
