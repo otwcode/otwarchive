@@ -459,8 +459,8 @@ class Work < ApplicationRecord
   end
 
   def recipients=(recipient_names)
-    gifts = [] # rebuild the list of associated gifts using the new list of names
     new_gifts = []
+    gifts = [] # rebuild the list of associated gifts using the new list of names
     # add back in the rejected gift recips; we don't let users delete rejected gifts in order to prevent regifting
     recip_names = recipient_names.split(',') + self.gifts.are_rejected.collect(&:recipient)
     recip_names.uniq.each do |name|
@@ -470,9 +470,9 @@ class Work < ApplicationRecord
         gifts << gift # new gifts are added after saving, not now
         new_gifts << gift unless self.posted # all gifts are new if work not posted
       else
-        g = self.gifts.build(work: self, recipient: name)
+        g = self.gifts.new(work: self, recipient: name)
         if g.valid?
-          new_gifts << g
+          new_gifts << g # new gifts are added after saving, not now
         else
           g.errors.full_messages.each { |msg| self.errors.add(:base, msg) }
         end
@@ -492,7 +492,9 @@ class Work < ApplicationRecord
     return if self.new_gifts.blank?
 
     self.new_gifts.each do |gift|
-      gift.save if self.gifts.for_name_or_byline(gift.recipient).empty?
+      next if self.gifts.for_name_or_byline(gift.recipient).present?
+
+      Gift.create(recipient: gift.recipient, work: self)
     end
   end
 
