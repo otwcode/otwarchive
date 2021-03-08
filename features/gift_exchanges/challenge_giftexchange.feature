@@ -625,4 +625,4 @@ Feature: Gift Exchange Challenge
     When I follow "Edit"
       And I uncheck "exchange_collection (recip)"
       And I press "Post"
-    Then I should see "For recip"
+    Then I should see "For recip."

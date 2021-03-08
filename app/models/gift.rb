@@ -37,26 +37,6 @@ class Gift < ApplicationRecord
     end
   end
 
-  # If the recipient is a protected user, it should not be possible to give them
-  # a gift work unless it fulfills a gift exchange assignment or non-anonymous
-  # prompt meme claim for the recipient.
-  # We only run this on create because we need to be able to update a gift (e.g.
-  # to reject it) and the work it belongs to (e.g. to reveal it or remove the
-  # protected recipient).
-  # This check is duplicated as revalidate_new_gifts in the work model because
-  # we have to check the validity of gifts before we save the work. For the
-  # other gift validations, we can build the gift and call .valid?, but this
-  # validation relies on work.challenge_claims and work.challenge_assignments,
-  # which are not available to this model until after the work is saved.
-  validate :user_allows_gifts, on: :create
-  def user_allows_gifts
-    return unless self.pseud&.user&.is_protected_user?
-    return if self.work.challenge_assignments.map(&:requesting_pseud).include?(self.pseud)
-    return if self.work.challenge_claims.reject { |c| c.request_prompt.anonymous? }.map(&:requesting_pseud).include?(self.pseud)
-
-    errors.add(:base, ts("You can't give a gift to #{self.pseud.name}."))
-  end
-
   scope :for_pseud, lambda {|pseud| where("pseud_id = ?", pseud.id)}
 
   scope :for_user, lambda {|user| where("pseud_id IN (?)", user.pseuds.collect(&:id).flatten)}

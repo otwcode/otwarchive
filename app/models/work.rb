@@ -147,15 +147,19 @@ class Work < ApplicationRecord
   # Run Taggable#check_for_invalid_tags as a validation.
   validate :check_for_invalid_tags
 
-  # We don't want the work to save if the gifts aren't valid, but recipients=
-  # doesn't have access to challenge_assignments or challenge_claims when it
-  # runs its initial validation check, so we still have some invalid gifts at
-  # this point.
-  # This duplicates the user_allows_gifts validation in the gift model; refer
-  # to that for more notes.
-  validate :revalidate_new_gifts
+  # If the recipient is a protected user, it should not be possible to give them
+  # a gift work unless it fulfills a gift exchange assignment or non-anonymous
+  # prompt meme claim for the recipient.
+  # We don't want the work to save if the gift shouldn't exist, but the gift
+  # model can't access a work's challenge_assignments or challenge_claims until
+  # the work and its assignments and claims are saved. Gifts are created after
+  # the work is saved, so it's too late then to prevent the work from saving.
+  # Additionally, the work's assignments and claims don't appear to be available
+  # by the time gift validations run, which means the gift is never created if
+  # the user is a protected user.
+  validate :new_recipients_allow_gifts
 
-  def revalidate_new_gifts
+  def new_recipients_allow_gifts
     return if self.new_gifts.blank?
 
     self.new_gifts.each do |gift|
