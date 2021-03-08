@@ -608,7 +608,7 @@ Feature: Gift Exchange Challenge
     When I follow "Edit"
       And I uncheck "exchange_collection (recip)"
       And I press "Post"
-    Then I should see "You can't give a gift to recip."
+    Then I should see "For recip."
 
   Scenario: A user can explicitly give a gift to a protected user if the work is
   connected to an assignment. The recipient remains attached even if the work is
@@ -625,4 +625,4 @@ Feature: Gift Exchange Challenge
     When I follow "Edit"
       And I uncheck "exchange_collection (recip)"
       And I press "Post"
-    Then I should see "You can't give a gift to recip"
+    Then I should see "For recip"
