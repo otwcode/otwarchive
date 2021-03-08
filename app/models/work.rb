@@ -485,7 +485,7 @@ class Work < ApplicationRecord
 
   def recipients(for_form = false)
     names = (for_form ? self.gifts.not_rejected : self.gifts).collect(&:recipient)
-    names << self.new_gifts.collect(&:recipient) unless self.new_gifts.blank?
+    names << self.new_gifts.collect(&:recipient) if self.new_gifts.present?
     names.flatten.uniq.join(",")
   end
 
