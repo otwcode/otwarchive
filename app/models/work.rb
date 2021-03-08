@@ -164,7 +164,6 @@ class Work < ApplicationRecord
 
     self.new_gifts.each do |gift|
       next unless gift.pseud&.user&.is_protected_user?
-      next if self.completes_visible_assignment_or_claim_for?(gift.pseud)
       next if self.challenge_assignments.map(&:requesting_pseud).include?(gift.pseud)
       next if self.challenge_claims.reject { |c| c.request_prompt.anonymous? }.map(&:requesting_pseud).include?(gift.pseud)
 
@@ -457,11 +456,6 @@ class Work < ApplicationRecord
     self.challenge_assignments =
       ids.map { |id| id.blank? ? nil : ChallengeAssignment.find(id) }.compact.
       select { |assign| (self.users + [User.current_user]).compact.include?(assign.offering_user) }
-  end
-
-  def completes_visible_assignment_or_claim_for?(pseud)
-    return if self.challenge_assignments.map(&:requesting_pseud).include?(pseud)
-    return if self.challenge_claims.reject { |c| c.request_prompt.anonymous? }.map(&:requesting_pseud).include?(pseud)
   end
 
   def recipients=(recipient_names)
