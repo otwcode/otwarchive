@@ -596,7 +596,8 @@ Feature: Gift Exchange Challenge
     Then I should not see the image "src" text "/images/envelope_icon.gif"
 
   Scenario: If a work is connected to an assignment for a protected user, the
-  protected user is still automatically added as a gift recipient.
+  protected user is still automatically added as a gift recipient. The recipient
+  remains attached even if the work is later disconnected from the assignment.
     Given basic tags
       And the user "recip" exists and is activated
       And the user "recip" is a protected user
@@ -610,7 +611,8 @@ Feature: Gift Exchange Challenge
     Then I should see "You can't give a gift to recip."
 
   Scenario: A user can explicitly give a gift to a protected user if the work is
-  connected to an assignment.
+  connected to an assignment. The recipient remains attached even if the work is
+  later disconnected from the assignment.
     Given basic tags
       And the user "recip" exists and is activated
       And the user "recip" is a protected user

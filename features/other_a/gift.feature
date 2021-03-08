@@ -321,3 +321,18 @@ Feature: Create Gifts
       And I post the work "Rude Gift" as a gift for "giftee1"
     Then I should see "Sorry! We couldn't save this work because:You can't give a gift to giftee1."
       And 0 emails should be delivered to "giftee1@example.com"
+
+  Scenario: A protected user can refuse existing gifts
+    Given I am logged in as "gifter"
+      And I post the work "Rude Gift" as a gift for "giftee1"
+      And the user "giftee1" is a protected user
+    When I am logged in as "giftee1"
+      And I go to my gifts page
+      And I follow "Refuse Gift"
+    Then I should see "This work will no longer be listed among your gifts."
+      And I should not see "Rude Gift"
+    When I follow "Refused Gifts"
+    Then I should see "Rude Gift"
+      And I should not see "by gifter for giftee1"
+    When I view the work "Rude Gift"
+    Then I should not see "For giftee1."

@@ -29,8 +29,8 @@ module CreationNotifier
   # we also need to check to see if the work is in a collection
   # only notify a recipient once for each work
   def notify_recipients
-    if self.posted && !self.new_recipients.blank? && !self.unrevealed?
-      recipient_pseuds = Pseud.parse_bylines(self.new_recipients, assume_matching_login: true)[:pseuds]
+    if self.posted && !self.new_gifts.blank? && !self.unrevealed?
+      recipient_pseuds = Pseud.parse_bylines(self.new_gifts.collect(&:recipient).join(","), assume_matching_login: true)[:pseuds]
       # check user prefs to see which recipients want to get gift notifications
       # (since each user has only one preference item, this removes duplicates)
       recip_ids = Preference.where(user_id: recipient_pseuds.map(&:user_id),

@@ -461,7 +461,7 @@ Feature: Prompt Meme Challenge
     And I should see "Fandom: Stargate Atlantis"
     And I should see "Anonymous" within ".byline"
 
-  Scenario: A user can give a gift to a protected user if the work is connected to a claim of a non-anonymous prompt belonging to the recipient
+  Scenario: A user can give a gift to a protected user if the work is connected to a claim of a non-anonymous prompt belonging to the recipient, and the recipient remains attached even if the work is later disconnected from the claim
 
   Given I have Battle 12 prompt meme fully set up
     And the user "prompter" exists and is activated
@@ -476,7 +476,7 @@ Feature: Prompt Meme Challenge
   When I follow "Edit"
     And I uncheck "Battle 12 (prompter)"
     And I press "Post"
-  Then I should see "You can't give a gift to prompter."
+  Then I should see "For prompter."
 
   Scenario: A user cannot give a gift to a protected user if the work is connected to a claim of an anonymous prompt belonging to the recipient
 

@@ -69,7 +69,7 @@ class Work < ApplicationRecord
   # Virtual attribute to use as a placeholder for pseuds before the work has been saved
   # Can't write to work.pseuds until the work has an id
   attr_accessor :new_parent, :url_for_parent
-  attr_accessor :new_recipients
+  attr_accessor :new_gifts
 
   # return title.html_safe to overcome escaping done by sanitiser
   def title
@@ -149,22 +149,22 @@ class Work < ApplicationRecord
 
   # We don't want the work to save if the gifts aren't valid, but recipients=
   # doesn't have access to challenge_assignments or challenge_claims when it
-  # runs its initial validation check.
-  validate :validate_new_recipients
+  # runs its initial validation check, so we still have some invalid gifts at
+  # this point.
+  # This duplicates the user_allows_gifts validation in the gift model; refer
+  # to that for more notes.
+  validate :revalidate_new_gifts
 
-  def validate_new_recipients
-    return if self.new_recipients.blank?
+  def revalidate_new_gifts
+    return if self.new_gifts.blank?
 
-    self.new_recipients.split(",").each do |name|
-      next if self.gifts.for_name_or_byline(name).present?
+    self.new_gifts.each do |gift|
+      next unless gift.pseud&.user&.is_protected_user?
+      next if self.completes_visible_assignment_or_claim_for?(gift.pseud)
+      next if self.challenge_assignments.map(&:requesting_pseud).include?(gift.pseud)
+      next if self.challenge_claims.reject { |c| c.request_prompt.anonymous? }.map(&:requesting_pseud).include?(gift.pseud)
 
-      pseud = Pseud.parse_byline(name, assume_matching_login: true).first
-
-      next unless pseud&.user&.is_protected_user?
-      next if self.challenge_assignments.map(&:requesting_pseud).include?(pseud)
-      next if self.challenge_claims.reject { |c| c.request_prompt.anonymous? }.map(&:requesting_pseud).include?(pseud)
-
-      self.errors.add(:base, ts("You can't give a gift to #{name}."))
+      self.errors.add(:base, ts("You can't give a gift to #{gift.pseud.name}."))
     end
   end
 
@@ -173,15 +173,6 @@ class Work < ApplicationRecord
     disable_anon: 1,
     disable_all: 2
   }, _suffix: :comments
-
-  # If a gift doesn't validate, show the error. This will include the attribute
-  # name, i.e. "Gifts", until we update to Rails 6 and can override it.
-  # This handles exisiting gifts.
-  validates_associated :gifts,
-    on: :update,
-    message: ->(_object, data) do
-      data[:value][0].errors.full_messages[0]
-    end
 
   ########################################################################
   # HOOKS
@@ -194,7 +185,7 @@ class Work < ApplicationRecord
   after_save :post_first_chapter
   before_save :set_word_count
 
-  after_save :save_chapters, :save_parents, :save_new_recipients
+  after_save :save_chapters, :save_parents, :save_new_gifts
 
   before_create :set_anon_unrevealed
   after_create :notify_after_creation
@@ -464,9 +455,14 @@ class Work < ApplicationRecord
       select { |assign| (self.users + [User.current_user]).compact.include?(assign.offering_user) }
   end
 
+  def completes_visible_assignment_or_claim_for?(pseud)
+    return if self.challenge_assignments.map(&:requesting_pseud).include?(pseud)
+    return if self.challenge_claims.reject { |c| c.request_prompt.anonymous? }.map(&:requesting_pseud).include?(pseud)
+  end
+
   def recipients=(recipient_names)
-    new_recipients = [] # collect names of new recipients
     gifts = [] # rebuild the list of associated gifts using the new list of names
+    new_gifts = []
     # add back in the rejected gift recips; we don't let users delete rejected gifts in order to prevent regifting
     recip_names = recipient_names.split(',') + self.gifts.are_rejected.collect(&:recipient)
     recip_names.uniq.each do |name|
@@ -474,39 +470,30 @@ class Work < ApplicationRecord
       gift = self.gifts.for_name_or_byline(name).first
       if gift
         gifts << gift # new gifts are added after saving, not now
-        new_recipients << name unless self.posted # all recipients are new if work not posted
       else
-        g = Gift.new(work: self, recipient: name)
+        g = self.gifts.build(work: self, recipient: name)
         if g.valid?
-          new_recipients << name # new gifts are added after saving, not now
+          new_gifts << g
         else
           g.errors.full_messages.each { |msg| self.errors.add(:base, msg) }
         end
       end
     end
-    self.new_recipients = new_recipients.uniq.join(",")
     self.gifts = gifts
+    self.new_gifts = new_gifts
   end
 
   def recipients(for_form = false)
     names = (for_form ? self.gifts.not_rejected : self.gifts).collect(&:recipient)
-    unless self.new_recipients.blank?
-      self.new_recipients.split(",").each do |name|
-        names << name unless names.include? name
-      end
-    end
-    names.join(",")
+    names << self.new_gifts.collect(&:recipient) unless self.new_gifts.blank?
+    names.flatten.uniq.join(",")
   end
 
-  def save_new_recipients
-    unless self.new_recipients.blank?
-      self.new_recipients.split(',').each do |name|
-        gift = self.gifts.for_name_or_byline(name).first
-        unless gift.present?
-          g = Gift.new(recipient: name, work: self)
-          g.save
-        end
-      end
+  def save_new_gifts
+    return if self.new_gifts.blank?
+
+    self.new_gifts.each do |gift|
+      gift.save if self.gifts.for_name_or_byline(gift.recipient).empty?
     end
   end
 

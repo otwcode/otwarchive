@@ -378,34 +378,35 @@ describe Work do
     end
   end
 
-  describe "new recipients virtual attribute"  do
+  describe "new gifts virtual attribute"  do
 
     before(:each) do
       @recipient1 = create(:user)
       @recipient2 = create(:user)
       @recipient3 = create(:user)
+      @recipient3_pseud2 = create(:pseud, user_id: @recipient3.id)
 
       @work = build(:work)
       @work.recipients = @recipient1.pseuds.first.name + "," + @recipient2.pseuds.first.name
     end
 
-    it "should be the same as recipients when they are first added" do
-      expect(@work.new_recipients).to eq(@work.recipients)
+    it "contains gifts for the same recipients when they are first added" do
+      expect(@work.new_gifts.collect(&:recipient)).to eq([@recipient1.pseuds.first.name, @recipient2.pseuds.first.name])
     end
 
-    it "should only contain the new recipient if replacing the previous recipient" do
+    it "only contains a gift for the new recipient if replacing the previous recipients" do
       @work.recipients = @recipient3.pseuds.first.name
-      expect(@work.new_recipients).to eq(@recipient3.pseuds.first.name)
+      expect(@work.new_gifts.collect(&:recipient)).to eq([@recipient3.pseuds.first.name])
     end
 
-    it "simple assignment should work" do
+    it "simple assignment works" do
       @work.recipients = @recipient2.pseuds.first.name
-      expect(@work.new_recipients).to eq(@recipient2.pseuds.first.name)
+      expect(@work.new_gifts.collect(&:recipient)).to eq([@recipient2.pseuds.first.name])
     end
 
-    it "recipients should be unique" do
+    it "only contains one gift if the same recipient is entered twice" do
       @work.recipients = @recipient2.pseuds.first.name + "," + @recipient2.pseuds.first.name
-      expect(@work.new_recipients).to eq(@recipient2.pseuds.first.name)
+      expect(@work.new_gifts.collect(&:recipient)).to eq([@recipient2.pseuds.first.name])
     end
   end
 
