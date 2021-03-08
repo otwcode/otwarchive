@@ -474,6 +474,7 @@ class Work < ApplicationRecord
       gift = self.gifts.for_name_or_byline(name).first
       if gift
         gifts << gift # new gifts are added after saving, not now
+        new_gifts << gift unless self.posted # all gifts are new if work not posted
       else
         g = self.gifts.build(work: self, recipient: name)
         if g.valid?
