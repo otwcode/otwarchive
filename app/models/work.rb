@@ -777,10 +777,10 @@ class Work < ApplicationRecord
       # For posted works, the word count is visible to people other than the creator and 
       # should only include posted chapters. For drafts, we can count everything.
       self.word_count = if self.posted
-        Chapter.select("SUM(word_count) AS work_word_count").where(work_id: self.id, posted: true).first.work_word_count
-      else
-        Chapter.select("SUM(word_count) AS work_word_count").where(work_id: self.id).first.work_word_count
-      end
+                          Chapter.select("SUM(word_count) AS work_word_count").where(work_id: self.id, posted: true).first.work_word_count
+                        else
+                          Chapter.select("SUM(word_count) AS work_word_count").where(work_id: self.id).first.work_word_count
+                        end
     end
   end
 
