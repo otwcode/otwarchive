@@ -641,15 +641,13 @@ class Work < ApplicationRecord
   def post_first_chapter
     chapter_one = self.first_chapter
     # is work just posted and has first chap been posted yet?
-    if self.saved_change_to_posted? && self.posted 
-      if chapter_one && !chapter_one.posted
-        chapter_one.published_at = Date.today unless self.backdate
-        # AO3-3498: chapter shouldn't get unposted for multichap draft when the work is posted
-        chapter_one.posted = true
-        chapter_one.save
-        Rails.logger.debug("first chapter saved")
-      end
-    end
+    return unless self.saved_change_to_posted? && self.posted
+    return if chapter_one&.posted
+
+    chapter_one.published_at = Date.today unless self.backdate
+    # AO3-3498: chapter shouldn't get unposted for multichap draft when the work is posted
+    chapter_one.posted = true
+    chapter_one.save
   end
 
   # Virtual attribute for first chapter
@@ -776,10 +774,12 @@ class Work < ApplicationRecord
       end
     else
       # AO3-3498: work created but not posted = draft so get word count for draft
-      if !self.posted
-        self.word_count = Chapter.select("SUM(word_count) AS work_word_count").where(work_id: self.id).first.work_word_count
+      # For posted works, the word count is visible to people other than the creator and 
+      # should only include posted chapters. For drafts, we can count everything.
+      self.word_count = if self.posted
+        Chapter.select("SUM(word_count) AS work_word_count").where(work_id: self.id, posted: true).first.work_word_count
       else
-        self.word_count = Chapter.select("SUM(word_count) AS work_word_count").where(work_id: self.id, posted: true).first.work_word_count
+        Chapter.select("SUM(word_count) AS work_word_count").where(work_id: self.id).first.work_word_count
       end
     end
   end

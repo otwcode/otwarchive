@@ -631,8 +631,8 @@ class WorksController < ApplicationController
       redirect_to(edit_user_work_path(@user, @work)) && return
     end
 
-    # AO3-3498: after posting/saving the work and chapter, 
-    # work's word count needs to be updated with the chapter's word count
+    # AO3-3498: since a work's word count is calculated in a before_save and the chapter is posted in an after_save, 
+    # work's word count needs to be updated with the chapter's word count after the chapter is posted
     @work.set_word_count
     @work.save
 
