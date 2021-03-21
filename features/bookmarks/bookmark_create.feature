@@ -410,7 +410,7 @@ Scenario: Can use "Show Most Recent Bookmarks" from the bookmarks page
     And I should not see "Love it" within ".recent"
     And I should see "Show Most Recent Bookmarks" within "li.bookmark"
 
-Scenario: A bookmark with duplicate tags other than capitalization has only one lowercase tag saved
+Scenario: A bookmark with duplicate tags other than capitalization has only first version of tag saved
   Given I am logged in as "bookmark_user"
     When I am on bookmark_user's user page
       And I post the work "Revenge of the Sith"
