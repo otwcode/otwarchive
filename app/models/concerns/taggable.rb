@@ -98,7 +98,16 @@ module Taggable
       string.strip!
       next if string.blank?
 
-      self.tags << (Tag.find_by_name(string) || UnsortedTag.create(name: string))
+      # AO3-6145: if tag isn't found, it needs to be created and added to the array
+      # if a tag already exists (case-insensitive) in self.tags then don't add anything to tags list
+      # otherwise the returned tags list has duplicates and throws a RecordNotUnique error when trying to save them
+      tag = Tag.find_by_name(string.downcase)
+      unless tag    # no tag found so create a new one and add to tags array
+        self.tags << UnsortedTag.create(name: string.downcase)
+      end
+      if tag && !self.tags.include?(tag)   # tag exists and isn't part of tags array
+        self.tags << tag
+      end
     end
 
     self.tags
