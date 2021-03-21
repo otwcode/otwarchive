@@ -102,12 +102,12 @@ module Taggable
       # if a tag already exists (case-insensitive) in self.tags then don't add anything to tags list
       # otherwise the returned tags list has duplicates and throws a RecordNotUnique error when trying to save them
       tag = Tag.find_by_name(string)
-      unless tag    # no tag found so create a new one and add to tags array
-        self.tags << UnsortedTag.create(name: string)
-      end
-      if tag && !self.tags.include?(tag)   # tag exists and isn't part of tags array
-        self.tags << tag
-      end
+      # no tag found so create a new one and add to tags array
+      self.tags << UnsortedTag.create(name: string) unless tag
+
+      # tag exists and isn't part of tags array
+      self.tags << tag if tag && !self.tags.include?(tag)
+
     end
 
     self.tags
