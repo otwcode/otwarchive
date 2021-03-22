@@ -76,65 +76,87 @@ Feature: Work Drafts
       And I should see "drafter"
       And I should not see "Preview"
 
-    Scenario: Deleting drafts from drafts page
-      Given I am logged in as "drafter" with password "something"
-        And the draft "draft to delete"
-      When I am on drafter's works page
-      Then I should see "Drafts (1)"
-      When I follow "Drafts (1)"
-      Then I should see "draft to delete"
-        And I should see "Post Draft" within "#main .own.work.blurb .actions"
-        And I should see "Delete Draft" within "#main .own.work.blurb .actions"
-      When I follow "Delete Draft"
-      Then I should not see "All bookmarks, comments, and kudos will be lost."
-        And I should not see "Orphan Work Instead"
-      When I press "Yes, Delete Draft"
-      Then I should see "Your work draft to delete was deleted"
+  Scenario: Deleting drafts from drafts page
+    Given I am logged in as "drafter" with password "something"
+      And the draft "draft to delete"
+    When I am on drafter's works page
+    Then I should see "Drafts (1)"
+    When I follow "Drafts (1)"
+    Then I should see "draft to delete"
+      And I should see "Post Draft" within "#main .own.work.blurb .actions"
+      And I should see "Delete Draft" within "#main .own.work.blurb .actions"
+    When I follow "Delete Draft"
+    Then I should not see "All bookmarks, comments, and kudos will be lost."
+      And I should not see "Orphan Work Instead"
+    When I press "Yes, Delete Draft"
+    Then I should see "Your work draft to delete was deleted"
 
-    Scenario: Saving changes to an existing draft without posting and then double check that it is saved and I didn't get the success message erroneously
-      Given I am logged in as "drafty" with password "breezeinhere"
-        And the draft "Windbag"
-      When I am on drafty's works page
-      Then I should see "Drafts (1)"
-      When I follow "Drafts (1)"
-      Then I should see "Windbag"
-        And I should see "Edit" within "#main .own.work.blurb .actions"
-      When I follow "Edit"
-        Then I should see "Edit Work"
-      When I fill in "content" with "My draft has changed!"
-        And I press "Save As Draft"
-      Then I should see "This work is a draft and has not been posted"
-        And I should see "My draft has changed!"
-      When I am on drafty's works page
-      Then I should see "Drafts (1)"
-      When I follow "Drafts (1)"
-      Then I should see "Windbag"
-      When I follow "Windbag"
-      Then I should see "My draft has changed!"
+  Scenario: Saving changes to an existing draft without posting and then double check that it is saved and I didn't get the success message erroneously
+    Given I am logged in as "drafty" with password "breezeinhere"
+      And the draft "Windbag"
+    When I am on drafty's works page
+    Then I should see "Drafts (1)"
+    When I follow "Drafts (1)"
+    Then I should see "Windbag"
+      And I should see "Edit" within "#main .own.work.blurb .actions"
+    When I follow "Edit"
+      Then I should see "Edit Work"
+    When I fill in "content" with "My draft has changed!"
+      And I press "Save As Draft"
+    Then I should see "This work is a draft and has not been posted"
+      And I should see "My draft has changed!"
+    When I am on drafty's works page
+    Then I should see "Drafts (1)"
+    When I follow "Drafts (1)"
+    Then I should see "Windbag"
+    When I follow "Windbag"
+    Then I should see "My draft has changed!"
 
-    Scenario: Editing a draft and previewing it should warn that it has not been saved.
-      Given I am logged in as "ringadingding"
-        And the draft "Walking Into Mordor"
-      When I edit the draft "Walking Into Mordor"
-        And I press "Preview"
-      Then I should see "Please post your work or save as draft if you want to keep them."
+  Scenario: Editing a draft and previewing it should warn that it has not been saved.
+    Given I am logged in as "ringadingding"
+      And the draft "Walking Into Mordor"
+    When I edit the draft "Walking Into Mordor"
+      And I press "Preview"
+    Then I should see "Please post your work or save as draft if you want to keep them."
 
-    Scenario: A chaptered draft should be able to have beginning and end notes, and it should display them.
-      Given I am logged in as "composer"
-        And I post the chaptered draft "Epic in Progress"
-      When I edit the draft "Epic in Progress"
-        And I add the beginning notes "Some beginning notes."
-        And I add the end notes "Some end notes."
-        And I press "Save As Draft"
-      Then I should see "Some beginning notes."
-        And I should see "See the end of the work for more notes."
-      When I follow "more notes"
-      Then I should see "Some end notes."
+  Scenario: A chaptered draft should be able to have beginning and end notes, and it should display them.
+    Given I am logged in as "composer"
+      And I post the chaptered draft "Epic in Progress"
+    When I edit the draft "Epic in Progress"
+      And I add the beginning notes "Some beginning notes."
+      And I add the end notes "Some end notes."
+      And I press "Save As Draft"
+    Then I should see "Some beginning notes."
+      And I should see "See the end of the work for more notes."
+    When I follow "more notes"
+    Then I should see "Some end notes."
 
-      Scenario: If a chaptered draft belongs to a series, the series should be listed on the draft
-        Given I am logged in as "two_can_sam"
-          And I post the chaptered draft "Cereal Serial"
-        When I add the draft "Cereal Serial" to series "Aisle 5"
-          And I follow "Next Chapter"
-        Then I should see "Series this work belongs to:"
-          And I should see "Aisle 5"
+  Scenario: If a chaptered draft belongs to a series, the series should be listed on the draft
+    Given I am logged in as "two_can_sam"
+      And I post the chaptered draft "Cereal Serial"
+    When I add the draft "Cereal Serial" to series "Aisle 5"
+      And I follow "Next Chapter"
+    Then I should see "Series this work belongs to:"
+      And I should see "Aisle 5"
+
+  
+  Scenario: A co-creator, invited or approved, should be able to view chapters in a draft work
+    Given I am logged in as "test_user"
+      And the following activated users exist
+        | login          | email                 |
+        | coauthor       | coauthor@example.org  |
+      And the user "coauthor" allows co-creators
+      And I set up the draft "Unicorns are everywhere"
+      And I fill in "content" with "Help there are unicorns everywhere"
+      And I check "Add co-creators?"
+      And I fill in "pseud_byline" with "coauthor"
+    When I press "Preview"
+      And I press "Save As Draft"
+    When a chapter is set up for "Unicorns are everywhere"
+      And I press "Preview"
+      And I press "Save As Draft"
+    When I am logged in as "coauthor"
+      And I go to my co-creator requests page
+      And I follow "Unicorns are everywhere"
+    Then I should see "This chapter is a draft and hasn't been posted yet!"
+      And I should see "Chapter 1"
