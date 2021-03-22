@@ -640,12 +640,11 @@ class Work < ApplicationRecord
   # If the work is posted, the first chapter should be posted too
   def post_first_chapter
     chapter_one = self.first_chapter
-    # is work just posted and has first chap been posted yet?
+
     return unless self.saved_change_to_posted? && self.posted
     return if chapter_one&.posted
 
     chapter_one.published_at = Date.today unless self.backdate
-    # AO3-3498: chapter shouldn't get unposted for multichap draft when the work is posted
     chapter_one.posted = true
     chapter_one.save
   end
@@ -773,8 +772,7 @@ class Work < ApplicationRecord
         self.word_count += chapter.set_word_count
       end
     else
-      # AO3-3498: work created but not posted = draft so get word count for draft
-      # For posted works, the word count is visible to people other than the creator and 
+      # AO3-3498: For posted works, the word count is visible to people other than the creator and 
       # should only include posted chapters. For drafts, we can count everything.
       self.word_count = if self.posted
                           Chapter.select("SUM(word_count) AS work_word_count").where(work_id: self.id, posted: true).first.work_word_count
