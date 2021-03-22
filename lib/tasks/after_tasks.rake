@@ -735,6 +735,11 @@ namespace :After do
     puts("Converted #{updated_chapter_count} chapter(s).") && STDOUT.flush
   end
 
+  desc "Update the mapping for the work index"
+  task(update_work_mapping: :environment) do
+    WorkIndexer.create_mapping
+  end
+
   # This is the end that you have to put new tasks above.
 end
 
