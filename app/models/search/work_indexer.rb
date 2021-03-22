@@ -17,6 +17,10 @@ class WorkIndexer < Indexer
     {
       "work" => {
         properties: {
+          creator_join: {
+            type: :join,
+            relations: { work: :creator }
+          },
           title: {
             type: "text",
             analyzer: "simple"
