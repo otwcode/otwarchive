@@ -412,13 +412,10 @@ Scenario: Can use "Show Most Recent Bookmarks" from the bookmarks page
 
 Scenario: A bookmark with duplicate tags other than capitalization has only first version of tag saved
   Given I am logged in as "bookmark_user"
-    When I am on bookmark_user's user page
-      And I post the work "Revenge of the Sith"
-    Then I should see "Bookmark"
-    When I follow "Bookmark"
-      And I fill in "bookmark_notes" with "I liked this story"
-      And I fill in "bookmark_tag_string" with "my tags,My Tags"
-      And I press "Create"
-    Then I should see "Bookmark was successfully created"
-      And I should see "Bookmarker's Tags: my tags"
-      And I should not see "Bookmarker's Tags: My Tags"
+  When I post the work "Revenge of the Sith"
+    And I follow "Bookmark"
+    And I fill in "Your tags" with "my tags,My Tags"
+    And I press "Create"
+  Then I should see "Bookmark was successfully created"
+    And I should see "Bookmarker's Tags: my tags"
+    And I should not see "Bookmarker's Tags: My Tags"

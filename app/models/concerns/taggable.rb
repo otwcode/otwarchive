@@ -88,7 +88,7 @@ module Taggable
     # Make sure that we trigger the callback for our taggings.
     self.taggings.destroy_all
 
-    self.tags = []
+    tags = []
 
     # Replace unicode full-width commas
     tag_string.gsub!(/\uff0c|\u3001/, ",")
@@ -98,19 +98,12 @@ module Taggable
       string.strip!
       next if string.blank?
 
-      # AO3-6145: if tag isn't found, it needs to be created and added to the array
-      # if a tag already exists (case-insensitive) in self.tags then don't add anything to tags list
-      # otherwise the returned tags list has duplicates and throws a RecordNotUnique error when trying to save them
-      tag = Tag.find_by_name(string)
-      # no tag found so create a new one and add to tags array
-      self.tags << UnsortedTag.create(name: string) unless tag
-
-      # tag exists and isn't part of tags array
-      self.tags << tag if tag && !self.tags.include?(tag)
-
+      # AO3-6145: tags list has duplicates that need to be removed or
+      # it throws a RecordNotUnique error when trying to save them
+      tags << (Tag.find_by_name(string) || UnsortedTag.create(name: string))
     end
 
-    self.tags
+    self.tags = tags.uniq
   end
 
   alias category_strings= category_string=
