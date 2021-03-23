@@ -98,8 +98,6 @@ module Taggable
       string.strip!
       next if string.blank?
 
-      # AO3-6145: tags list has duplicates that need to be removed or
-      # it throws a RecordNotUnique error when trying to save them
       tags << (Tag.find_by_name(string) || UnsortedTag.create(name: string))
     end
 
