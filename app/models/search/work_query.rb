@@ -154,7 +154,7 @@ class WorkQuery < Query
   end
 
   def user_filter
-    return unless user_ids.present?
+    return if user_ids.blank?
 
     if viewing_own_collected_works_page?
       {

@@ -103,7 +103,7 @@ class WorkIndexer < Indexer
     else
       {
         user_ids: work.user_ids,
-        pseud_ids: work.pseud_ids,
+        pseud_ids: work.pseud_ids
       }
     end
   end
