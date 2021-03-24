@@ -362,19 +362,30 @@ jQuery.fn.preventDoubleSubmit = function() {
   });
 };
 
-// re-enable button after 2 seconds disabled
+// submit shouldn't be blocked if there are no errors
 window.addEventListener("load", () => {
   const btns = document.querySelectorAll(
     ".actions input[type='submit']"
   );
-  btns.forEach((element) => {
-    element.addEventListener("click", (event) => {
+  btns.forEach(function(element) {
+    element.addEventListener("click", function(event) {
+      scrollToFirstErrorField();
+
       setTimeout(function() {
         $j.rails.enableFormElement($j('input[data-disable-with]'));
       }, 2000);
     });
   });
 });
+
+function scrollToFirstErrorField() {
+  var errorField = $j(".LV_invalid_field").first();
+  if (errorField.length != 0) {
+    $j('html, body').animate({
+      scrollTop: errorField.offset().top
+    }, 1000);
+  }
+}
 
 // add attributes that are only needed in the primary menus and when JavaScript is enabled
 function setupDropdown(){
