@@ -362,28 +362,19 @@ jQuery.fn.preventDoubleSubmit = function() {
   });
 };
 
-// submit shouldn't be blocked if there are no errors
-window.addEventListener("load", () => {
-  const btns = document.querySelectorAll(
-    ".actions input[type='submit']"
-  );
-  btns.forEach(function(element) {
-    element.addEventListener("click", function(event) {
-      scrollToFirstErrorField();
-
-      setTimeout(function() {
-        $j.rails.enableFormElement($j('input[data-disable-with]'));
-      }, 2000);
-    });
-  });
-});
-
-function scrollToFirstErrorField() {
+function scrollToErrorIfFound() {
   var errorField = $j(".LV_invalid_field").first();
-  if (errorField.length != 0) {
+  if (errorField.length !== 0) {
     $j('html, body').animate({
       scrollTop: errorField.offset().top
     }, 1000);
+  }
+}
+
+// submit shouldn't be blocked if there are no errors
+function enableSubmit() {
+  if ($j(".LV_invalid_field").first().length === 0) {
+    $j.rails.enableFormElement($j('input[data-disable-with]'));
   }
 }
 
