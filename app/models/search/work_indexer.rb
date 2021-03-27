@@ -94,10 +94,10 @@ class WorkIndexer < Indexer
       language_id: object.language&.short,
       series: series_data(object),
       creator_join: { name: :work }
-    ).merge(creator_document(object))
+    ).merge(creator_data(object))
   end
 
-  def creator_document(work)
+  def creator_data(work)
     if work.anonymous? || work.unrevealed?
       {}
     else
