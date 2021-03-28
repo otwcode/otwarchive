@@ -91,18 +91,18 @@ describe BookmarkSearchForm, bookmark_search: true do
     end
 
     describe "searching" do
-      let(:language) { create(:language, short: "ptBR") }
-
-      let(:work1) { create(:work) }
-      let(:work2) { create(:work, language_id: language.id) }
-
-      let!(:bookmark1) { create(:bookmark, bookmarkable: work1) }
-      let!(:bookmark2) { create(:bookmark, bookmarkable: work2) }
-
-      before { run_all_indexing_jobs }
-
       context "by work language" do
+        let(:language) { create(:language, short: "ptBR") }
+
+        let(:work1) { create(:work) }
+        let(:work2) { create(:work, language_id: language.id) }
+
+        let!(:bookmark1) { create(:bookmark, bookmarkable: work1) }
+        let!(:bookmark2) { create(:bookmark, bookmarkable: work2) }
+
         let(:unused_language) { create(:language, short: "tlh") }
+
+        before { run_all_indexing_jobs }
 
         it "returns work bookmarkables with specified language" do
           # "Work language" dropdown, with short names
@@ -128,6 +128,88 @@ describe BookmarkSearchForm, bookmark_search: true do
           results = bsf.bookmarkable_search_results
           expect(results).not_to include work1
           expect(results).to include work2
+        end
+      end
+
+      context "using pseud_ids in the bookmarkable query" do
+        let(:pseud) { create(:pseud) }
+        let(:collection) { create(:collection) }
+
+        let(:work) { create(:work, authors: [pseud], collections: [collection]) }
+        let(:series) { create(:series, authors: [pseud], works: [work]) }
+
+        let!(:bookmark1) { create(:bookmark, bookmarkable: work) }
+        let!(:bookmark2) { create(:bookmark, bookmarkable: series) }
+
+        before { run_all_indexing_jobs }
+
+        context "when a work & series are anonymous" do
+          let(:collection) { create(:anonymous_collection) }
+
+          it "doesn't include the work or the series" do
+            results = BookmarkSearchForm.new(bookmarkable_query: "pseud_ids: #{pseud.id}").bookmarkable_search_results
+            expect(results).not_to include work
+            expect(results).not_to include series
+          end
+        end
+
+        context "when a work & series are unrevealed" do
+          let(:collection) { create(:unrevealed_collection) }
+
+          it "doesn't include the work or the series" do
+            results = BookmarkSearchForm.new(bookmarkable_query: "pseud_ids: #{pseud.id}").bookmarkable_search_results
+            expect(results).not_to include work
+            expect(results).not_to include series
+          end
+        end
+
+        context "when a work & series are neither unrevealed nor anonymous" do
+          it "includes the work and the series" do
+            results = BookmarkSearchForm.new(bookmarkable_query: "pseud_ids: #{pseud.id}").bookmarkable_search_results
+            expect(results).to include work
+            expect(results).to include series
+          end
+        end
+      end
+
+      context "using user_ids in the bookmarkable query" do
+        let(:user) { create(:user) }
+        let(:collection) { create(:collection) }
+
+        let(:work) { create(:work, authors: [user.default_pseud], collections: [collection]) }
+        let(:series) { create(:series, authors: [user.default_pseud], works: [work]) }
+
+        let!(:bookmark1) { create(:bookmark, bookmarkable: work) }
+        let!(:bookmark2) { create(:bookmark, bookmarkable: series) }
+
+        before { run_all_indexing_jobs }
+
+        context "when a work & series are anonymous" do
+          let(:collection) { create(:anonymous_collection) }
+
+          it "doesn't include the work or the series" do
+            results = BookmarkSearchForm.new(bookmarkable_query: "user_ids: #{user.id}").bookmarkable_search_results
+            expect(results).not_to include work
+            expect(results).not_to include series
+          end
+        end
+
+        context "when a work & series are unrevealed" do
+          let(:collection) { create(:unrevealed_collection) }
+
+          it "doesn't include the work or the series" do
+            results = BookmarkSearchForm.new(bookmarkable_query: "user_ids: #{user.id}").bookmarkable_search_results
+            expect(results).not_to include work
+            expect(results).not_to include series
+          end
+        end
+
+        context "when a work & series are neither unrevealed nor anonymous" do
+          it "includes the work and the series" do
+            results = BookmarkSearchForm.new(bookmarkable_query: "user_ids: #{user.id}").bookmarkable_search_results
+            expect(results).to include work
+            expect(results).to include series
+          end
         end
       end
     end
