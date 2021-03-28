@@ -26,6 +26,9 @@ class GiftExchange < ApplicationRecord
     maximum: ArchiveConfig.INFO_MAX, too_long: ts("must be less than %{max} letters long.", max: ArchiveConfig.INFO_MAX)
   }
 
+  after_destroy :reindex_collection
+  after_update :reindex_collection, if: :should_reindex_collection?
+
   PROMPT_TYPES.each do |type|
     %w(required allowed).each do |setting|
       prompt_limit_field = "#{type}_num_#{setting}"

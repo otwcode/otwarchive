@@ -66,7 +66,7 @@ class TagsController < ApplicationController
       flash[:error] = ts('Please log in as admin')
       redirect_to(tag_wranglings_path) && return
     end
-    # if tag is NOT wrangled, prepare to show works and bookmarks that are using it
+    # if tag is NOT wrangled, prepare to show works, collections, and bookmarks that are using it
     if !@tag.canonical && !@tag.merger
       if logged_in? # current_user.is_a?User
         @works = @tag.works.visible_to_registered_user.paginate(page: params[:page])
@@ -76,6 +76,7 @@ class TagsController < ApplicationController
         @works = @tag.works.visible_to_all.paginate(page: params[:page])
       end
       @bookmarks = @tag.bookmarks.visible.paginate(page: params[:page])
+      @collections = @tag.collections.paginate(page: params[:page])
     end
     # cache the children, since it's a possibly massive query
     @tag_children = Rails.cache.fetch "views/tags/#{@tag.cache_key}/children" do
@@ -212,12 +213,13 @@ class TagsController < ApplicationController
     end
 
     @counts = {}
-    @uses = ['Works', 'Drafts', 'Bookmarks', 'Private Bookmarks', 'External Works', 'Taggings Count']
+    @uses = ['Works', 'Drafts', 'Bookmarks', 'Private Bookmarks', 'External Works', 'Collections', 'Taggings Count']
     @counts['Works'] = @tag.visible_works_count
     @counts['Drafts'] = @tag.works.unposted.count
     @counts['Bookmarks'] = @tag.visible_bookmarks_count
     @counts['Private Bookmarks'] = @tag.bookmarks.not_public.count
     @counts['External Works'] = @tag.visible_external_works_count
+    @counts['Collections'] = @tag.collections.count
     @counts['Taggings Count'] = @tag.taggings_count
 
     @parents = @tag.parents.order(:name).group_by { |tag| tag[:type] }

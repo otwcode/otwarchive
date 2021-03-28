@@ -110,6 +110,19 @@
               presence: false, maximum_length: ArchiveConfig.SUMMARY_MAX) %>
         <%= generate_countdown_html("collection_description", ArchiveConfig.SUMMARY_MAX) %>
       </dd>
+
+      <dt><%= collection_form.label :tag_list, ts("Collection Tags") %></dt>
+      <dd>
+        <%= collection_form.text_field :tag_string, autocomplete_options('tag') %>
+        <p class="footnote">
+          <%= ts("Enter up to %{max} tags to describe the content of your collection.", max: ArchiveConfig.COLLECTION_TAGS_MAX) %>
+        </p>
+      </dd>
+
+      <dt><%= collection_form.check_box :multifandom %></dt>
+      <dd>
+        <%= collection_form.label :multifandom, ts("Use this if your collection is not fandom-specific.") %>
+      </dd>
     </dl>
   </fieldset>
 

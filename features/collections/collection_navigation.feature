@@ -90,20 +90,6 @@ Feature: Basic collection navigation
     Then I should not see "High School Musical"
       And I should see "Steven's Universe"
 
-  Scenario: A collection's fandom count shouldn't include inherited metatags.
-    Given I have the collection "MCU Party"
-      And a canonical fandom "The Avengers"
-      And a canonical fandom "MCU"
-      And "MCU" is a metatag of the fandom "The Avengers"
-      And I am logged in as "mcu_fan"
-      And I post the work "Ensemble Piece" with fandom "The Avengers" in the collection "MCU Party"
-
-    When I go to the collections page
-    Then I should see "Fandoms: 1"
-
-    When I go to "MCU Party" collection's page
-    Then I should see "Fandoms (1)"
-
   Scenario: Browse tags within a collection (or not)
     Given I have a collection "Randomness"
       And a canonical fandom "Naruto"
