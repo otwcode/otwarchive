@@ -7,6 +7,7 @@ RUN apt-get update             && \
         default-mysql-client      \
         phantomjs                 \
         pwgen                     \
+        shared-mime-info          \
         wkhtmltopdf               \
         zip
 
