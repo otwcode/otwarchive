@@ -193,13 +193,11 @@ class WorksController < ApplicationController
     if params[:view_adult]
       cookies[:view_adult] = "true"
     elsif @work.adult? && !see_adult?
-      Rails.logger.info "adult work"
       render('_adult', layout: 'application') && return
     end
 
     # Users must explicitly okay viewing of entire work
     if @work.chaptered?
-      Rails.logger.info params.inspect
       if params[:view_full_work] || (logged_in? && current_user.preference.try(:view_full_works))
         @chapters = @work.chapters_in_order(
           include_drafts: (logged_in_as_admin? ||
@@ -207,7 +205,6 @@ class WorksController < ApplicationController
         )
       else
         flash.keep
-        Rails.logger.info "redirect to chapter"
         redirect_to([@work, @chapter, { only_path: true }]) && return
       end
     end
@@ -221,7 +218,6 @@ class WorksController < ApplicationController
                       current_user.subscriptions.build(subscribable: @work)
     end
 
-    Rails.logger.info "render show"
     render :show
     Reading.update_or_create(@work, current_user) if current_user
   end
