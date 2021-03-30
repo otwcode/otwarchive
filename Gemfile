@@ -66,7 +66,7 @@ gem 'aws-sdk'
 gem 'css_parser'
 
 gem "terrapin"
-gem 'paperclip', '>= 5.2.0'
+gem "kt-paperclip", ">= 5.2.0"
 
 # for looking up image dimensions quickly
 gem 'fastimage'
