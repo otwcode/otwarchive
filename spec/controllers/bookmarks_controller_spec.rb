@@ -55,6 +55,52 @@ describe BookmarksController do
     end
   end
 
+  describe "create" do
+    let(:work) { create(:work) }
+
+    context "when user is not logged in" do
+      it "redirects to login" do
+        post :create, params: { work_id: work.id }
+        it_redirects_to_user_login
+      end
+    end
+
+    context "when user is logged in" do
+      let(:user) { create(:user) }
+
+      before do
+        fake_login_known_user(user)
+      end
+
+      context "when pseud user wants to bookmark work with doesn't belong to the user" do
+        let(:otheruser) { create(:user) }
+
+        it "fails to bookmark" do
+          post :create, params: { work_id: work.id, bookmark: { pseud_id: otheruser.default_pseud.id } }
+          it_redirects_to_with_error(root_path, "You can't bookmark with that pseud.")
+        end
+      end
+
+      context "when pseud user wants to bookmark work with pseud that belongs to the user" do
+        context "when user already bookmarked the work before" do
+          let!(:old_bookmark) { create(:bookmark, bookmarkable: work, pseud: user.default_pseud) }
+          let(:pseud) { create(:pseud, user: user) }
+
+          it "creates bookmark correctly when bookmarking with other own pseud" do
+            post :create, params: { work_id: work.id, bookmark: { pseud_id: pseud.id } }
+
+            bookmark = assigns(:bookmark)
+            it_redirects_to_with_notice(bookmark_path(bookmark),
+                                        "Bookmark was successfully created. It should appear in bookmark listings within the next few minutes.")
+            expect(bookmark.bookmarkable_id).to eq(work.id)
+            expect(bookmark.bookmarkable_type).to eq("Work")
+            expect(bookmark.pseud.id).to eq(pseud.id)
+          end
+        end
+      end
+    end
+  end
+
   describe "edit" do
     context "with javascript" do
       let(:bookmark) { create(:bookmark) }
