@@ -193,7 +193,7 @@ class BookmarksController < ApplicationController
        render :new and return
     end
     if @bookmark.errors.empty?
-      if @bookmarkable.save && @bookmark.save
+      if @bookmark.validate && @bookmarkable.save && @bookmark.save
         flash[:notice] = ts('Bookmark was successfully created. It should appear in bookmark listings within the next few minutes.')
         redirect_to(bookmark_path(@bookmark)) && return
       end

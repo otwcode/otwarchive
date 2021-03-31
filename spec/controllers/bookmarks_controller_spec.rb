@@ -96,6 +96,13 @@ describe BookmarksController do
             expect(bookmark.bookmarkable_type).to eq("Work")
             expect(bookmark.pseud.id).to eq(pseud.id)
           end
+
+          it "gives error message when bookmarking with the same pseud as beore" do
+            post :create, params: { work_id: work.id, bookmark: { pseud_id: user.default_pseud.id } }
+
+            expect(response).to render_template("new")
+            expect(assigns(:bookmark).errors.full_messages).to include "Pseud ^You have already bookmarked that."
+          end
         end
       end
     end
@@ -109,6 +116,35 @@ describe BookmarksController do
         fake_login_known_user(bookmark.pseud.user)
         get :edit, params: { id: bookmark.id, format: :js }, xhr: true
         expect(response).to render_template("bookmark_form_dynamic")
+      end
+    end
+  end
+
+  describe "update" do
+    context "when updating old bookmarks created for the same pseud (AO3-5565)" do
+      before do
+        # disable bookmarks validations to simulate previously created bookmarks
+        allow_any_instance_of(Bookmark).to receive(:validate).and_return(true)
+        allow_any_instance_of(Bookmark).to receive(:valid?).and_return(true)
+
+        fake_login_known_user(bookmark.pseud.user)
+      end
+
+      let!(:bookmark) { create(:bookmark, bookmarker_notes: "My first Bookmark") }
+      let!(:bookmark2) { create(:bookmark, bookmarkable_id: bookmark.bookmarkable_id, pseud: bookmark.pseud, bookmarker_notes: "My second Bookmark") }
+
+      it "first created bookmark can be updated" do
+        put :update, params: { bookmark: { bookmarker_notes: "Updated first bookmark", pseud_id: bookmark.pseud.id }, id: bookmark.id }
+        it_redirects_to_with_notice(bookmark_path(bookmark), "Bookmark was successfully updated.")
+        puts bookmark.bookmarker_notes
+        expect(assigns(:bookmark).bookmarker_notes).to include("Updated first bookmark")
+      end
+
+      it "second created bookmark can be updated" do
+        put :update, params: { bookmark: { bookmarker_notes: "Updated second bookmark", pseud_id: bookmark.pseud.id }, id: bookmark2.id }
+        it_redirects_to_with_notice(bookmark_path(bookmark2), "Bookmark was successfully updated.")
+        puts bookmark.bookmarker_notes
+        expect(assigns(:bookmark).bookmarker_notes).to include("Updated second bookmark")
       end
     end
   end
