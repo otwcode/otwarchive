@@ -208,7 +208,7 @@ class BookmarksController < ApplicationController
     new_collections = []
     unapproved_collections = []
     errors = []
-    bookmark_params[:collection_names].split(',').map {|name| name.strip}.uniq.each do |collection_name|
+    bookmark_params[:collection_names] && bookmark_params[:collection_names].split(",").map(&:strip).uniq.each do |collection_name|
       collection = Collection.find_by(name: collection_name)
       if collection.nil?
         errors << ts("#{collection_name} does not exist.")
