@@ -114,18 +114,6 @@ describe Tag do
       tag.unwrangleable = true
       expect(tag).not_to be_valid
     end
-
-    it "is not valid for fandom type tag" do
-      tag = FactoryBot.create(:fandom, name: "NewFandom")
-      tag.unwrangleable = true
-      expect(tag).not_to be_valid
-    end
-
-    it "is not valid for a tag with no fandom" do
-      tag = Freeform.create(name: "NewTag")
-      tag.unwrangleable = true
-      expect(tag).not_to be_valid
-    end
   end
 
   context "when checking for synonym/name change" do

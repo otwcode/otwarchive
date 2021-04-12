@@ -224,14 +224,7 @@ Otwarchive::Application.routes.draw do
       post :end_banner
       post :end_tos_prompt
     end
-    resources :assignments, controller: "challenge_assignments", only: [:index] do
-      collection do
-        patch :update_multiple
-      end
-      member do
-        get :default
-      end
-    end
+    resources :assignments, controller: "challenge_assignments", only: [:index]
     resources :claims, controller: "challenge_claims", only: [:index]
     resources :bookmarks
     resources :collection_items, only: [:index, :update, :destroy] do
@@ -431,7 +424,7 @@ Otwarchive::Application.routes.draw do
         get :confirm_delete
       end
     end
-    resources :assignments, controller: "challenge_assignments", except: [:new, :edit, :update] do
+    resources :assignments, controller: "challenge_assignments", only: [:index, :show] do
       collection do
         get :confirm_purge
         get :generate
@@ -440,6 +433,9 @@ Otwarchive::Application.routes.draw do
         get :send_out
         put :update_multiple
         get :default_all
+      end
+      member do
+        get :default
       end
     end
     resources :claims, controller: "challenge_claims" do
@@ -625,10 +621,6 @@ Otwarchive::Application.routes.draw do
   # TODO: rewrite the autocomplete controller to deal with the fact that
   # there are fifty different actions going on in there
   get '/autocomplete/:action' => 'autocomplete#%{action}'
-
-  get '/assignments/no_challenge' => 'challenge_assignments#no_challenge'
-  get '/assignments/no_user' => 'challenge_assignments#no_user'
-  get '/assignments/no_assignment' => 'challenge_assignments#no_assignment'
 
   get '/challenges/no_collection' => 'challenges#no_collection'
   get '/challenges/no_challenge' => 'challenges#no_challenge'

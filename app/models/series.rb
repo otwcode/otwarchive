@@ -225,12 +225,14 @@ class Series < ApplicationRecord
       methods: [
         :revised_at, :posted, :tag, :filter_ids, :rating_ids,
         :archive_warning_ids, :category_ids, :fandom_ids, :character_ids,
-        :relationship_ids, :freeform_ids, :pseud_ids, :creators,
+        :relationship_ids, :freeform_ids, :creators,
         :word_count, :work_types]
     ).merge(
       language_id: language&.short,
       anonymous: anonymous?,
       unrevealed: unrevealed?,
+      pseud_ids: anonymous? || unrevealed? ? nil : pseud_ids,
+      user_ids: anonymous? || unrevealed? ? nil : user_ids,
       bookmarkable_type: 'Series',
       bookmarkable_join: { name: "bookmarkable" }
     )

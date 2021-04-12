@@ -106,7 +106,8 @@ Given /^I am logged in as a tag wrangler$/ do
   username = "wrangler"
   step %{I am logged in as "#{username}"}
   user = User.find_by(login: username)
-  user.tag_wrangler = '1'
+  role = Role.find_or_create_by(name: "tag_wrangler")
+  user.roles = [role]
 end
 
 Given /^the tag wrangler "([^\"]*)" with password "([^\"]*)" is wrangler of "([^\"]*)"$/ do |user, password, fandomname|
@@ -120,7 +121,8 @@ Given /^the tag wrangler "([^\"]*)" with password "([^\"]*)" is wrangler of "([^
     tw.save
   end
 
-  tw.tag_wrangler = '1'
+  role = Role.find_or_create_by(name: "tag_wrangler")
+  tw.roles = [role]
 
   step %{I am logged in as "#{user}" with password "#{password}"}
 
@@ -407,7 +409,7 @@ Then(/^the "([^"]*)" tag should (be|not be) unwrangleable$/) do |tagname, unwran
 end
 
 Then(/^the "([^"]*)" tag should be in the "([^"]*)" fandom$/) do |tagname, fandom_name|
-  tag = Tag.find_by(name: tagname) 
+  tag = Tag.find_by(name: tagname)
   fandom = Fandom.find_by(name: fandom_name)
   assert tag.has_parent?(fandom)
 end

@@ -432,18 +432,6 @@ function prepareDeleteLinks() {
 
 /// Kudos
 $j(document).ready(function() {
-  $j('#kudos_summary').click(function(e) {
-    e.preventDefault();
-    $j(this).hide();
-    $j('.kudos_expanded').show();
-  });
-
-  $j('#kudos_collapser').click(function(e) {
-    e.preventDefault();
-    $j('#kudos_summary').show();
-    $j('.kudos_expanded').hide();
-  });
-
   $j('#kudo_submit').on("click", function(event) {
     event.preventDefault();
 
