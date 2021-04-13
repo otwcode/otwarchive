@@ -1160,10 +1160,10 @@ GEM
       webrobots (>= 0.0.9, < 0.2)
     method_source (1.0.0)
     mime-types (2.99.3)
-    mini_mime (1.0.2)
     mimemagic (0.3.10)
       nokogiri (~> 1)
       rake
+    mini_mime (1.0.2)
     mini_portile2 (2.5.0)
     minitest (5.14.2)
     mono_logger (1.1.0)
@@ -1490,7 +1490,7 @@ DEPENDENCIES
   will_paginate (>= 3.0.2)
 
 RUBY VERSION
-   ruby 2.6.5p114
+   ruby 2.7.3p183
 
 BUNDLED WITH
    1.17.3
