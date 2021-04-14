@@ -740,6 +740,24 @@ namespace :After do
     WorkIndexer.create_mapping
   end
 
+  desc "Fix works imported with a noncanonical Teen & Up Audiences rating tag"
+  task(fix_teen_and_up_imported_rating: :environment) do
+    borked_rating_tag = Rating.find_by!(name: "Teen & Up Audiences")
+    canonical_rating_tag = Rating.find_by!(name: ArchiveConfig.RATING_TEEN_TAG_NAME)
+
+    works_using_tag = borked_rating_tag.works
+    works_using_tag.each do |work|
+      work.ratings << canonical_rating_tag
+      work.ratings = work.ratings - [borked_rating_tag]
+      work.save!
+      # do we need to trigger reindexing?
+    end
+
+    if borked_rating_tag.works.count == 0
+      borked_rating_tag.destroy!
+    end
+  end
+
   # This is the end that you have to put new tasks above.
 end
 

@@ -153,3 +153,34 @@ describe "rake After:replace_dewplayer_embeds" do
     end.to output("Couldn't convert 1 chapter(s): #{dewplayer_work.first_chapter.id}\nConverted 0 chapter(s).\n").to_stdout
   end
 end
+
+describe "rake After:fix_teen_and_up_imported_rating" do
+  let(:noncanonical_teen_rating) { Rating.create(name: "Teen & Up Audiences") }
+  let(:canonical_gen_rating) { Rating.find_or_create_by(name: ArchiveConfig.RATING_GENERAL_TAG_NAME)}
+  let!(:canonical_teen_rating) { Rating.find_or_create_by(name: ArchiveConfig.RATING_TEEN_TAG_NAME) }
+  let(:work_with_noncanonical_rating) { create(:work) }
+  let(:work_with_canonical_and_noncanonical_ratings) { create(:work) }
+
+  before do
+    work_with_noncanonical_rating.ratings = [noncanonical_teen_rating]
+    work_with_noncanonical_rating.save!
+    work_with_canonical_and_noncanonical_ratings.ratings = [noncanonical_teen_rating, canonical_gen_rating]
+    work_with_canonical_and_noncanonical_ratings.save!
+  end
+
+  it "updates the works' ratings to the canonical teen rating" do
+    subject.invoke
+
+    work_with_noncanonical_rating.reload
+    work_with_canonical_and_noncanonical_ratings.reload
+
+    expect(work_with_noncanonical_rating.ratings.to_a).to eql([canonical_teen_rating])
+    expect(work_with_canonical_and_noncanonical_ratings.ratings.to_a).to match_array([canonical_teen_rating, canonical_gen_rating])
+  end
+
+  it "destroys the noncanonical rating if no works are using it" do
+    subject.invoke
+
+    expect(Tag.exists?(name: "Teen & Up Audiences")).to eql(false)
+  end
+end
