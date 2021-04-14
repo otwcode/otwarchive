@@ -794,6 +794,16 @@ namespace :After do
     STDOUT.flush
   end
 
+  desc "Clean up noncanonical category tags"
+  task(clean_up_noncanonical_categories: :environment) do
+    canonical_categories = %w[Gen M/M F/F F/M Multi Other]
+    Category.where.not(name: canonical_categories).each do |tag|
+      tag.update_column(:type, "Freeform")
+      puts "Noncanonical Category tag #{tag.name} was changed into an Additional Tag."
+    end
+    STDOUT.flush
+  end
+
   # This is the end that you have to put new tasks above.
 end
 

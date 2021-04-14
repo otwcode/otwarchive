@@ -109,7 +109,7 @@ describe "rake After:update_indexed_stat_counter_kudo_count", work_search: true 
   end
 
   it "updates kudos_count on StatCounter" do
-    expect do 
+    expect do
       subject.invoke
     end.to change {
       stat_counter.reload.kudos_count
@@ -120,7 +120,7 @@ describe "rake After:update_indexed_stat_counter_kudo_count", work_search: true 
     expect do
       subject.invoke
       run_all_indexing_jobs
-    end.to change { 
+    end.to change {
       WorkSearchForm.new(kudos_count: work.kudos.count.to_s).search_results.size
     }.from(0).to(1)
   end
@@ -216,5 +216,38 @@ describe "rake After:clean_up_noncanonical_ratings" do
 
     # Doesn't add the default rating to works that have other ratings
     expect(work_with_canonical_and_noncanonical_ratings.ratings.to_a).to eql([canonical_teen_rating])
+  end
+end
+
+describe "rake After:clean_up_noncanonical_categories" do
+  let(:noncanonical_category_tag) { Category.create(name: "Borked category tag") }
+  let(:canonical_category_tag) { Category.find_or_create_by(name: ArchiveConfig.CATEGORY_GEN_TAG_NAME) }
+  let(:work_with_noncanonical_categ) { create(:work) }
+  let(:work_with_canonical_and_noncanonical_categs) { create(:work) }
+
+  before do
+    work_with_noncanonical_categ.categories = [noncanonical_category_tag]
+    work_with_noncanonical_categ.save!
+    work_with_canonical_and_noncanonical_categs.categories = [noncanonical_category_tag, canonical_category_tag]
+    work_with_canonical_and_noncanonical_categs.save!
+  end
+
+  it "changes and replaces the noncanonical category tags" do
+    subject.invoke
+
+    work_with_noncanonical_categ.reload
+    work_with_canonical_and_noncanonical_categs.reload
+
+    # Changes the noncanonical categories into freeforms
+    noncanonical_category_tag = Tag.find_by(name: "Borked category tag")
+    expect(noncanonical_category_tag).to be_a(Freeform)
+    expect(work_with_noncanonical_categ.freeforms.to_a).to include(noncanonical_category_tag)
+    expect(work_with_canonical_and_noncanonical_categs.freeforms.to_a).to include(noncanonical_category_tag)
+
+    # Leaves the works that had no other categories without a category
+    expect(work_with_noncanonical_categ.categories.to_a).to eql([])
+
+    # Leaves the works that had other categories with those categories
+    expect(work_with_canonical_and_noncanonical_categs.categories.to_a).to eql([canonical_category_tag])
   end
 end
