@@ -1,12 +1,12 @@
 source 'https://rubygems.org'
 
-ruby '2.6.5'
+ruby '2.7.3'
 
 gem 'test-unit', '~> 3.2'
 
 gem 'bundler'
 
-gem "rails", "~> 5.2.4"
+gem "rails", "~> 5.2.5"
 gem "rack", "~> 2.1", ">= 2.1.4"
 gem "sprockets", "< 4"
 
