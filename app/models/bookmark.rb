@@ -12,9 +12,16 @@ class Bookmark < ApplicationRecord
   validates_length_of :bookmarker_notes,
     maximum: ArchiveConfig.NOTES_MAX, too_long: ts("must be less than %{max} letters long.", max: ArchiveConfig.NOTES_MAX)
 
-  validates :pseud_id, uniqueness: { scope: [:bookmarkable_id, :bookmarkable_type],
-                                     message: ts("^You have already bookmarked that."),
-                                     on: :create }
+  validate :not_already_bookmarked_by_user, on: :create
+  def not_already_bookmarked_by_user
+    return unless self.pseud && self.bookmarkable
+
+    bookmarks = Bookmark.join_bookmarkable.where(bookmarkable_id: self.bookmarkable_id)
+    bookmarkers = bookmarks.pluck(:pseud_id)
+    return unless Pseud.where(id: bookmarkers, user_id: self.pseud.user_id).exists?
+
+    errors.add(:base, ts("You have already bookmarked that."))
+  end
 
   default_scope -> { order("bookmarks.id DESC") } # id's stand in for creation date
 
