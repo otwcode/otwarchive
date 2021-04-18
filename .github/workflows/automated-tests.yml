@@ -31,7 +31,7 @@ jobs:
           - 3306:3306
 
       elasticsearch:
-        image: elasticsearch:6.8.9
+        image: elasticsearch:7.12.0
         ports:
           - 9200:9200
 
