@@ -2,12 +2,12 @@ class Indexer
 
   BATCH_SIZE = 1000
   INDEXERS_FOR_CLASS = {
-    Work: %w(WorkIndexer WorkCreatorIndexer BookmarkedWorkIndexer),
-    Bookmark: %w(BookmarkIndexer),
-    Tag: %w(TagIndexer),
-    Pseud: %w(PseudIndexer),
-    Series: %w(BookmarkedSeriesIndexer),
-    ExternalWork: %w(BookmarkedExternalWorkIndexer)
+    Work: %w[WorkIndexer WorkCreatorIndexer BookmarkedWorkIndexer],
+    Bookmark: %w[BookmarkIndexer],
+    Tag: %w[TagIndexer],
+    Pseud: %w[PseudIndexer],
+    Series: %w[BookmarkedSeriesIndexer],
+    ExternalWork: %w[BookmarkedExternalWorkIndexer]
   }.freeze
 
   delegate :klass, :index_name, :document_type, to: :class
