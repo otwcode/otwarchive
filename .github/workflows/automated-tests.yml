@@ -34,8 +34,7 @@ jobs:
         image: elasticsearch:7.12.0
         ports:
           - 9200:9200
-        environment:
-          - discovery.type=single-node
+        options: -e="discovery.type=single-node"
 
       memcached:
         image: memcached:1.5
