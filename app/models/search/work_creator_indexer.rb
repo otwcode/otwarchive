@@ -18,7 +18,7 @@ class WorkCreatorIndexer < Indexer
   end
 
   def document_id(id)
-    id.ends_with?("creator") ? id : "#{id}-creator"
+    id.to_s.ends_with?("creator") ? id : "#{id}-creator"
   end
 
   def parent_id(id, _object)
