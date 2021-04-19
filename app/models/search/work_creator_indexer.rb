@@ -12,14 +12,13 @@ class WorkCreatorIndexer < Indexer
   def routing_info(id)
     {
       "_index" => index_name,
-      "_type" => document_type,
       "_id" => document_id(id),
       "routing" => parent_id(id, nil)
     }
   end
 
   def document_id(id)
-    "#{id}-creator"
+    id.ends_with?("creator") ? id : "#{id}-creator"
   end
 
   def parent_id(id, _object)
