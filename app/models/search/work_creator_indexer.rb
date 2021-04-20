@@ -9,6 +9,11 @@ class WorkCreatorIndexer < Indexer
     WorkIndexer.mapping
   end
 
+  # When we fail, we don't want to just keep adding the -klass suffix.
+  def self.find_elasticsearch_ids(ids)
+    ids.map(&:to_i)
+  end
+
   def routing_info(id)
     {
       "_index" => index_name,
@@ -18,7 +23,7 @@ class WorkCreatorIndexer < Indexer
   end
 
   def document_id(id)
-    id.to_s.ends_with?("creator") ? id : "#{id}-creator"
+    "#{id}-creator"
   end
 
   def parent_id(id, _object)
