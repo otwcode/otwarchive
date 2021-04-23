@@ -605,8 +605,9 @@ class Work < ApplicationRecord
         errors.add(:base, ts("You can't add a work to that series."))
         return
       end
-      self.series << old_series unless (old_series.blank? || self.series.include?(old_series))
-      self.adjust_series_restriction
+      unless old_series.blank? || self.series.include?(old_series)
+        self.serial_works.build(series: old_series)
+      end
     elsif !attributes[:title].blank?
       new_series = Series.new
       new_series.title = attributes[:title]
@@ -616,8 +617,7 @@ class Work < ApplicationRecord
         # on the serial work will do the rest.
         new_series.creatorships.build(pseud: pseud)
       end
-      new_series.save
-      self.series << new_series
+      self.serial_works.build(series: new_series)
     end
   end
 
