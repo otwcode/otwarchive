@@ -11,7 +11,8 @@ class Query
     begin
       $elasticsearch.search(
         index: index_name,
-        body: generated_query
+        body: generated_query,
+        track_total_hits: true
       )
     rescue Elasticsearch::Transport::Transport::Errors::BadRequest
       { error: "Your search failed because of a syntax error. Please try again." }
