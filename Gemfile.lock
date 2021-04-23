@@ -1126,6 +1126,7 @@ GEM
     hashdiff (1.0.1)
     highline (2.0.3)
     htmlentities (4.3.4)
+    http-accept (1.7.0)
     http-cookie (1.0.3)
       domain_name (~> 0.5)
     httparty (0.16.2)
@@ -1165,7 +1166,9 @@ GEM
       webrick (~> 1.7)
       webrobots (>= 0.0.9, < 0.2)
     method_source (1.0.0)
-    mime-types (2.99.3)
+    mime-types (3.3.1)
+      mime-types-data (~> 3.2015)
+    mime-types-data (3.2021.0225)
     mimemagic (0.3.10)
       nokogiri (~> 1)
       rake
@@ -1284,10 +1287,11 @@ GEM
       redis (>= 3.3)
       resque (>= 1.26)
       rufus-scheduler (~> 3.2)
-    rest-client (1.8.0)
+    rest-client (2.1.0)
+      http-accept (>= 1.7.0, < 2.0)
       http-cookie (>= 1.0.2, < 2.0)
-      mime-types (>= 1.16, < 3.0)
-      netrc (~> 0.7)
+      mime-types (>= 1.16, < 4.0)
+      netrc (~> 0.8)
     rollout (2.4.3)
     rspec (3.8.0)
       rspec-core (~> 3.8.0)
@@ -1465,7 +1469,7 @@ DEPENDENCIES
   redis-namespace
   resque (>= 1.14.0)
   resque-scheduler
-  rest-client (~> 1.8.0)
+  rest-client (~> 2.1.0)
   rollout
   rspec (~> 3.8)
   rspec-rails (~> 3.8.2)
