@@ -239,6 +239,7 @@ Feature: Search Bookmarks
       And I should not see "english work"
 
   Scenario: Inputting bad queries
+    Given I have bookmarks to search
     When I fill in "Any field on work" with "bad~query~~!!!"
       And I press "Search Bookmarks"
-    Then I should see "No results found. You may want to edit your search to make it less specific."
+    Then I should see "Your search failed because of a syntax error. Please try again."
