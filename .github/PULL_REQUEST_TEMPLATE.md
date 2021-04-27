@@ -29,7 +29,7 @@ Are there other relevant issues/pull requests/mailing list discussions?
 
 ## Credit
 
-What name and pronouns should we use to credit you in the [Archive of Our Own's Release Notes](https://archiveofourown.org/admin_posts?tag=1)?*
+What name and pronouns should we use to credit you in the [Archive of Our Own's Release Notes](https://archiveofourown.org/admin_posts?tag=1)?
 
 If you have a Jira account, please include the same name in the "Full name"
 field on your Jira profile, so we can assign you the issues you're working on.
