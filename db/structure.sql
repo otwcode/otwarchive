@@ -58,7 +58,7 @@ CREATE TABLE `_comments_old` (
   KEY `index_comments_parent` (`parent_id`,`parent_type`),
   KEY `comments_by_thread` (`thread`),
   KEY `index_comments_on_ip_address` (`ip_address`)
-) ENGINE=InnoDB AUTO_INCREMENT=393231964 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `_works_old`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -106,7 +106,7 @@ CREATE TABLE `_works_old` (
   KEY `complete_works` (`complete`,`posted`,`hidden_by_admin`),
   KEY `index_works_on_ip_address` (`ip_address`),
   KEY `index_works_on_spam` (`spam`)
-) ENGINE=InnoDB AUTO_INCREMENT=27959583 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `abuse_reports`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -125,7 +125,7 @@ CREATE TABLE `abuse_reports` (
   `language` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `username` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1047564 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `admin_activities`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -141,7 +141,7 @@ CREATE TABLE `admin_activities` (
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=320862 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `admin_banners`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -153,7 +153,7 @@ CREATE TABLE `admin_banners` (
   `banner_type` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `active` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=306 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `admin_blacklisted_emails`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -165,7 +165,7 @@ CREATE TABLE `admin_blacklisted_emails` (
   `updated_at` datetime NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `index_admin_blacklisted_emails_on_email` (`email`)
-) ENGINE=InnoDB AUTO_INCREMENT=837 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `admin_post_taggings`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -178,7 +178,7 @@ CREATE TABLE `admin_post_taggings` (
   `updated_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `index_admin_post_taggings_on_admin_post_id` (`admin_post_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=44835 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `admin_post_tags`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -190,7 +190,7 @@ CREATE TABLE `admin_post_tags` (
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=244 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `admin_posts`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -209,7 +209,7 @@ CREATE TABLE `admin_posts` (
   PRIMARY KEY (`id`),
   KEY `index_admin_posts_on_post_id` (`translated_post_id`),
   KEY `index_admin_posts_on_created_at` (`created_at`)
-) ENGINE=InnoDB AUTO_INCREMENT=19494 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `admin_settings`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -240,7 +240,7 @@ CREATE TABLE `admin_settings` (
   `disabled_support_form_text_sanitizer_version` smallint(6) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `index_admin_settings_on_last_updated_by` (`last_updated_by`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `admins`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -257,7 +257,7 @@ CREATE TABLE `admins` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `index_admins_on_email` (`email`),
   UNIQUE KEY `index_admins_on_login` (`login`)
-) ENGINE=InnoDB AUTO_INCREMENT=841 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `api_keys`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -272,7 +272,7 @@ CREATE TABLE `api_keys` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `index_api_keys_on_name` (`name`),
   UNIQUE KEY `index_api_keys_on_access_token` (`access_token`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `ar_internal_metadata`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -298,7 +298,7 @@ CREATE TABLE `archive_faq_translations` (
   PRIMARY KEY (`id`),
   KEY `index_archive_faq_translations_on_archive_faq_id` (`archive_faq_id`),
   KEY `index_archive_faq_translations_on_locale` (`locale`)
-) ENGINE=InnoDB AUTO_INCREMENT=3147 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `archive_faqs`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -314,7 +314,7 @@ CREATE TABLE `archive_faqs` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `index_archive_faqs_on_slug` (`slug`),
   KEY `index_archive_faqs_on_position` (`position`)
-) ENGINE=InnoDB AUTO_INCREMENT=126 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `audits`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -341,7 +341,7 @@ CREATE TABLE `audits` (
   KEY `user_index` (`user_id`,`user_type`),
   KEY `index_audits_on_created_at` (`created_at`),
   KEY `index_audits_on_request_uuid` (`request_uuid`)
-) ENGINE=InnoDB AUTO_INCREMENT=318731274 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `bookmarks`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -365,7 +365,7 @@ CREATE TABLE `bookmarks` (
   KEY `index_bookmarks_on_pseud_id` (`pseud_id`),
   KEY `index_bookmarkable_pseud` (`bookmarkable_id`,`bookmarkable_type`,`pseud_id`),
   KEY `index_bookmarks_on_private_and_hidden_by_admin_and_created_at` (`private`,`hidden_by_admin`,`created_at`)
-) ENGINE=InnoDB AUTO_INCREMENT=711395298 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `challenge_assignments`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -393,7 +393,7 @@ CREATE TABLE `challenge_assignments` (
   KEY `assignments_on_pinch_hitter_id` (`pinch_hitter_id`),
   KEY `assignments_on_defaulted_at` (`defaulted_at`),
   KEY `index_challenge_assignments_on_collection_id` (`collection_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2494032 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `challenge_claims`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -416,7 +416,7 @@ CREATE TABLE `challenge_claims` (
   KEY `index_challenge_claims_on_claiming_user_id` (`claiming_user_id`),
   KEY `index_challenge_claims_on_request_signup_id` (`request_signup_id`),
   KEY `index_challenge_claims_on_collection_id` (`collection_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=200454 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `challenge_signups`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -432,7 +432,7 @@ CREATE TABLE `challenge_signups` (
   PRIMARY KEY (`id`),
   KEY `signups_on_pseud_id` (`pseud_id`),
   KEY `index_challenge_signups_on_collection_id` (`collection_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=307782 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `chapters`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -459,7 +459,7 @@ CREATE TABLE `chapters` (
   PRIMARY KEY (`id`),
   KEY `works_chapter_index` (`work_id`),
   KEY `index_chapters_on_work_id` (`work_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=76198005 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `collection_items`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -481,7 +481,7 @@ CREATE TABLE `collection_items` (
   KEY `collection_items_unrevealed` (`unrevealed`),
   KEY `collection_items_anonymous` (`anonymous`),
   KEY `collection_items_item_id` (`item_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=14012112 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `collection_participants`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -497,7 +497,7 @@ CREATE TABLE `collection_participants` (
   UNIQUE KEY `by collection and pseud` (`collection_id`,`pseud_id`),
   KEY `participants_by_collection_and_role` (`collection_id`,`participant_role`),
   KEY `participants_pseud_id` (`pseud_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=959040 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `collection_preferences`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -517,7 +517,7 @@ CREATE TABLE `collection_preferences` (
   `email_notify` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `index_collection_preferences_on_collection_id` (`collection_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=485166 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `collection_profiles`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -537,7 +537,7 @@ CREATE TABLE `collection_profiles` (
   `assignment_notification` text COLLATE utf8mb4_unicode_ci,
   PRIMARY KEY (`id`),
   KEY `index_collection_profiles_on_collection_id` (`collection_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=485166 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `collections`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -566,7 +566,7 @@ CREATE TABLE `collections` (
   PRIMARY KEY (`id`),
   KEY `index_collections_on_name` (`name`),
   KEY `index_collections_on_parent_id` (`parent_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=485358 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `comments`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -602,7 +602,7 @@ CREATE TABLE `comments` (
   KEY `index_comments_parent` (`parent_id`,`parent_type`),
   KEY `comments_by_thread` (`thread`),
   KEY `index_comments_on_ip_address` (`ip_address`)
-) ENGINE=InnoDB AUTO_INCREMENT=418464618 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `common_taggings`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -617,7 +617,7 @@ CREATE TABLE `common_taggings` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `index_common_tags` (`common_tag_id`,`filterable_type`,`filterable_id`),
   KEY `index_common_taggings_on_filterable_id` (`filterable_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=65243835 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `creatorships`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -633,7 +633,7 @@ CREATE TABLE `creatorships` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `creation_id_creation_type_pseud_id` (`creation_id`,`creation_type`,`pseud_id`),
   KEY `index_creatorships_pseud` (`pseud_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=116632215 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `delayed_jobs`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -668,7 +668,7 @@ CREATE TABLE `external_author_names` (
   `updated_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `index_external_author_names_on_external_author_id` (`external_author_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=84469 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `external_authors`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -685,7 +685,7 @@ CREATE TABLE `external_authors` (
   PRIMARY KEY (`id`),
   KEY `index_external_authors_on_user_id` (`user_id`),
   KEY `index_external_authors_on_email` (`email`)
-) ENGINE=InnoDB AUTO_INCREMENT=40522 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `external_creatorships`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -702,7 +702,7 @@ CREATE TABLE `external_creatorships` (
   KEY `index_external_creatorships_on_creation_id_and_creation_type` (`creation_id`,`creation_type`),
   KEY `index_external_creatorships_on_external_author_name_id` (`external_author_name_id`),
   KEY `index_external_creatorships_on_archivist_id` (`archivist_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=216181 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `external_works`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -720,7 +720,7 @@ CREATE TABLE `external_works` (
   `summary_sanitizer_version` smallint(6) NOT NULL DEFAULT '0',
   `language_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=798069 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `fannish_next_of_kins`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -732,7 +732,7 @@ CREATE TABLE `fannish_next_of_kins` (
   `kin_email` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `index_fannish_next_of_kins_on_user_id` (`user_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1632 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `favorite_tags`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -743,7 +743,7 @@ CREATE TABLE `favorite_tags` (
   `tag_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `index_favorite_tags_on_user_id_and_tag_id` (`user_id`,`tag_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=23519040 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `feedbacks`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -764,7 +764,7 @@ CREATE TABLE `feedbacks` (
   `language` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `rollout` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=309483 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `filter_counts`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -780,7 +780,7 @@ CREATE TABLE `filter_counts` (
   UNIQUE KEY `index_filter_counts_on_filter_id` (`filter_id`),
   KEY `index_unhidden_works_count` (`unhidden_works_count`),
   KEY `index_public_works_count` (`public_works_count`)
-) ENGINE=InnoDB AUTO_INCREMENT=3726741 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `filter_taggings`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -796,7 +796,7 @@ CREATE TABLE `filter_taggings` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `index_filter_taggings_on_filter_and_filterable` (`filter_id`,`filterable_type`,`filterable_id`),
   KEY `index_filter_taggings_filterable` (`filterable_id`,`filterable_type`)
-) ENGINE=InnoDB AUTO_INCREMENT=751193496 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `gift_exchanges`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -833,7 +833,7 @@ CREATE TABLE `gift_exchanges` (
   `signup_instructions_offers_sanitizer_version` smallint(6) NOT NULL DEFAULT '0',
   `requests_summary_visible` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=10113 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `gifts`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -850,7 +850,7 @@ CREATE TABLE `gifts` (
   KEY `index_gifts_on_recipient_name` (`recipient_name`),
   KEY `index_gifts_on_work_id` (`work_id`),
   KEY `index_gifts_on_pseud_id` (`pseud_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2437068 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `inbox_comments`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -867,7 +867,7 @@ CREATE TABLE `inbox_comments` (
   KEY `index_inbox_comments_on_read_and_user_id` (`read`,`user_id`),
   KEY `index_inbox_comments_on_feedback_comment_id` (`feedback_comment_id`),
   KEY `index_inbox_comments_on_user_id` (`user_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=401016195 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `innodb_monitor`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -899,7 +899,7 @@ CREATE TABLE `invitations` (
   KEY `index_invitations_on_external_author_id` (`external_author_id`),
   KEY `index_invitations_on_creator_id_and_creator_type` (`creator_id`,`creator_type`),
   KEY `index_invitations_on_token` (`token`)
-) ENGINE=InnoDB AUTO_INCREMENT=41639646 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `invite_requests`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -915,7 +915,7 @@ CREATE TABLE `invite_requests` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `index_invite_requests_on_simplified_email` (`simplified_email`),
   KEY `index_invite_requests_on_email` (`email`)
-) ENGINE=InnoDB AUTO_INCREMENT=17425671 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `known_issues`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -929,7 +929,7 @@ CREATE TABLE `known_issues` (
   `created_at` datetime DEFAULT NULL,
   `content_sanitizer_version` smallint(6) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `kudos`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -947,7 +947,7 @@ CREATE TABLE `kudos` (
   UNIQUE KEY `index_kudos_on_commentable_and_ip_address` (`commentable_id`,`commentable_type`,`ip_address`),
   KEY `index_kudos_on_ip_address` (`ip_address`),
   KEY `index_kudos_on_user_id` (`user_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2983314309 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `languages`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -962,7 +962,7 @@ CREATE TABLE `languages` (
   PRIMARY KEY (`id`),
   KEY `index_languages_on_short` (`short`),
   KEY `index_languages_on_sortable_name` (`sortable_name`)
-) ENGINE=InnoDB AUTO_INCREMENT=174 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `locales`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -981,7 +981,7 @@ CREATE TABLE `locales` (
   KEY `index_locales_on_iso` (`iso`),
   KEY `index_locales_on_short` (`short`),
   KEY `index_locales_on_language_id` (`language_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=142 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `log_items`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -1001,7 +1001,7 @@ CREATE TABLE `log_items` (
   KEY `index_log_items_on_user_id` (`user_id`),
   KEY `index_log_items_on_admin_id` (`admin_id`),
   KEY `index_log_items_on_role_id` (`role_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=20070384 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `meta_taggings`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -1016,7 +1016,7 @@ CREATE TABLE `meta_taggings` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `index_meta_taggings_on_meta_tag_id_and_sub_tag_id` (`meta_tag_id`,`sub_tag_id`),
   KEY `index_meta_taggings_on_sub_tag_id` (`sub_tag_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1205931 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `moderated_works`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -1030,7 +1030,7 @@ CREATE TABLE `moderated_works` (
   `updated_at` datetime NOT NULL,
   PRIMARY KEY (`id`),
   KEY `index_moderated_works_on_work_id` (`work_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=263937 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `open_id_authentication_associations`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -1044,7 +1044,7 @@ CREATE TABLE `open_id_authentication_associations` (
   `server_url` blob,
   `secret` blob,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=232 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `open_id_authentication_nonces`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -1055,7 +1055,7 @@ CREATE TABLE `open_id_authentication_nonces` (
   `server_url` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `salt` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3953 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `owned_set_taggings`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -1068,7 +1068,7 @@ CREATE TABLE `owned_set_taggings` (
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=60273 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `owned_tag_sets`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -1090,7 +1090,7 @@ CREATE TABLE `owned_tag_sets` (
   `freeform_nomination_limit` int(11) NOT NULL DEFAULT '0',
   `usable` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6615 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `potential_match_settings`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -1115,7 +1115,7 @@ CREATE TABLE `potential_match_settings` (
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=10173 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `potential_matches`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -1134,7 +1134,7 @@ CREATE TABLE `potential_matches` (
   KEY `index_potential_matches_on_collection_id` (`collection_id`),
   KEY `index_potential_matches_on_offer_signup_id` (`offer_signup_id`),
   KEY `index_potential_matches_on_request_signup_id` (`request_signup_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=27830730 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `preferences`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -1174,7 +1174,7 @@ CREATE TABLE `preferences` (
   PRIMARY KEY (`id`),
   KEY `index_preferences_on_user_id` (`user_id`),
   KEY `index_preferences_on_skin_id` (`skin_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=10829796 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `profiles`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -1191,7 +1191,7 @@ CREATE TABLE `profiles` (
   `about_me_sanitizer_version` smallint(6) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `index_profiles_on_user_id` (`user_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=10829586 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `prompt_memes`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -1219,7 +1219,7 @@ CREATE TABLE `prompt_memes` (
   `updated_at` datetime DEFAULT NULL,
   `anonymous` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=11064 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `prompt_restrictions`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -1269,7 +1269,7 @@ CREATE TABLE `prompt_restrictions` (
   `title_required` tinyint(1) NOT NULL DEFAULT '0',
   `title_allowed` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=31635 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `prompts`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -1303,7 +1303,7 @@ CREATE TABLE `prompts` (
   KEY `index_prompts_on_collection_id` (`collection_id`),
   KEY `index_prompts_on_optional_tag_set_id` (`optional_tag_set_id`),
   KEY `index_prompts_on_challenge_signup_id` (`challenge_signup_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2083521 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `pseuds`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -1327,7 +1327,7 @@ CREATE TABLE `pseuds` (
   PRIMARY KEY (`id`),
   KEY `index_pseuds_on_user_id_and_name` (`user_id`,`name`),
   KEY `index_psueds_on_name` (`name`)
-) ENGINE=InnoDB AUTO_INCREMENT=11478210 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `question_translations`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -1346,7 +1346,7 @@ CREATE TABLE `question_translations` (
   PRIMARY KEY (`id`),
   KEY `index_question_translations_on_question_id` (`question_id`),
   KEY `index_question_translations_on_locale` (`locale`)
-) ENGINE=InnoDB AUTO_INCREMENT=49671 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `questions`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -1363,7 +1363,7 @@ CREATE TABLE `questions` (
   `position` int(11) DEFAULT '1',
   PRIMARY KEY (`id`),
   KEY `index_questions_on_archive_faq_id_and_position` (`archive_faq_id`,`position`)
-) ENGINE=InnoDB AUTO_INCREMENT=2481 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `readings`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -1382,7 +1382,7 @@ CREATE TABLE `readings` (
   PRIMARY KEY (`id`),
   KEY `index_readings_on_work_id` (`work_id`),
   KEY `index_readings_on_user_id` (`user_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=9452474688 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `related_works`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -1399,7 +1399,7 @@ CREATE TABLE `related_works` (
   PRIMARY KEY (`id`),
   KEY `index_related_works_on_parent_id_and_parent_type` (`parent_id`,`parent_type`),
   KEY `index_related_works_on_work_id` (`work_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=717474 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `roles`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -1415,7 +1415,7 @@ CREATE TABLE `roles` (
   KEY `index_roles_on_authorizable_id_and_authorizable_type` (`authorizable_id`,`authorizable_type`),
   KEY `index_roles_on_authorizable_type` (`authorizable_type`),
   KEY `index_roles_on_name` (`name`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `roles_users`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -1464,7 +1464,7 @@ CREATE TABLE `serial_works` (
   PRIMARY KEY (`id`),
   KEY `index_serial_works_on_work_id` (`work_id`),
   KEY `index_serial_works_on_series_id` (`series_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=7493022 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `series`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -1482,7 +1482,7 @@ CREATE TABLE `series` (
   `summary_sanitizer_version` smallint(6) NOT NULL DEFAULT '0',
   `series_notes_sanitizer_version` smallint(6) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2276151 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `set_taggings`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -1496,7 +1496,7 @@ CREATE TABLE `set_taggings` (
   PRIMARY KEY (`id`),
   KEY `index_set_taggings_on_tag_id` (`tag_id`),
   KEY `index_set_taggings_on_tag_set_id` (`tag_set_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=19956810 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `skin_parents`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -1509,7 +1509,7 @@ CREATE TABLE `skin_parents` (
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=111141 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `skins`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -1557,7 +1557,7 @@ CREATE TABLE `skins` (
   KEY `index_skins_on_author_id` (`author_id`),
   KEY `index_skins_on_in_chooser` (`in_chooser`),
   KEY `index_skins_on_title` (`title`)
-) ENGINE=InnoDB AUTO_INCREMENT=615540 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `stat_counters`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -1573,7 +1573,7 @@ CREATE TABLE `stat_counters` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `index_hit_counters_on_work_id` (`work_id`),
   KEY `index_hit_counters_on_hit_count` (`hit_count`)
-) ENGINE=InnoDB AUTO_INCREMENT=30253890 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `subscriptions`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -1588,7 +1588,7 @@ CREATE TABLE `subscriptions` (
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`),
   KEY `subscribable` (`subscribable_id`,`subscribable_type`)
-) ENGINE=InnoDB AUTO_INCREMENT=455780085 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `tag_nominations`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -1614,7 +1614,7 @@ CREATE TABLE `tag_nominations` (
   KEY `index_tag_nominations_on_type_and_fandom_nomination_id` (`type`,`fandom_nomination_id`),
   KEY `index_tag_nominations_on_type_and_synonym` (`type`,`synonym`),
   KEY `index_tag_nominations_on_type_and_tagname` (`type`,`tagname`)
-) ENGINE=InnoDB AUTO_INCREMENT=3669459 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `tag_set_associations`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -1627,7 +1627,7 @@ CREATE TABLE `tag_set_associations` (
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1855572 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `tag_set_nominations`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -1639,7 +1639,7 @@ CREATE TABLE `tag_set_nominations` (
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=194136 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `tag_set_ownerships`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -1652,7 +1652,7 @@ CREATE TABLE `tag_set_ownerships` (
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=10869 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `tag_sets`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -1662,7 +1662,7 @@ CREATE TABLE `tag_sets` (
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4080057 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `taggings`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -1678,7 +1678,7 @@ CREATE TABLE `taggings` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `index_taggings_polymorphic` (`tagger_id`,`tagger_type`,`taggable_id`,`taggable_type`),
   KEY `index_taggings_taggable` (`taggable_id`,`taggable_type`)
-) ENGINE=InnoDB AUTO_INCREMENT=661345740 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `tags`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -1707,7 +1707,7 @@ CREATE TABLE `tags` (
   KEY `index_tags_on_type` (`type`),
   KEY `index_tags_on_sortable_name` (`sortable_name`),
   KEY `index_tags_on_taggings_count_cache` (`taggings_count_cache`)
-) ENGINE=InnoDB AUTO_INCREMENT=57690402 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `user_invite_requests`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -1723,7 +1723,7 @@ CREATE TABLE `user_invite_requests` (
   `updated_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `index_user_invite_requests_on_user_id` (`user_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=78256 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `users`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -1763,7 +1763,7 @@ CREATE TABLE `users` (
   UNIQUE KEY `index_users_on_unlock_token` (`unlock_token`),
   UNIQUE KEY `index_users_on_confirmation_token` (`confirmation_token`),
   UNIQUE KEY `index_users_on_email` (`email`)
-) ENGINE=InnoDB AUTO_INCREMENT=10844196 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `work_links`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -1824,7 +1824,7 @@ CREATE TABLE `works` (
   KEY `complete_works` (`complete`,`posted`,`hidden_by_admin`),
   KEY `index_works_on_ip_address` (`ip_address`),
   KEY `index_works_on_spam` (`spam`)
-) ENGINE=InnoDB AUTO_INCREMENT=30862269 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `wrangling_assignments`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -1836,7 +1836,7 @@ CREATE TABLE `wrangling_assignments` (
   PRIMARY KEY (`id`),
   KEY `wrangling_assignments_by_fandom_id` (`fandom_id`),
   KEY `wrangling_assignments_by_user_id` (`user_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=195924 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `wrangling_guidelines`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -1851,7 +1851,7 @@ CREATE TABLE `wrangling_guidelines` (
   `position` int(11) DEFAULT NULL,
   `content_sanitizer_version` smallint(6) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
 /*!40101 SET character_set_client = @saved_cs_client */;
 SET @@SESSION.SQL_LOG_BIN = @MYSQLDUMP_TEMP_LOG_BIN;
 /*!50112 SET @disable_bulk_load = IF (@is_rocksdb_supported, 'SET SESSION rocksdb_bulk_load = @old_rocksdb_bulk_load', 'SET @dummy_rocksdb_bulk_load = 0') */;
