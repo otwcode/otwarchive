@@ -2,13 +2,29 @@
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8mb4 */;
+/*!40101 SET NAMES utf8 */;
 /*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
 /*!40103 SET TIME_ZONE='+00:00' */;
 /*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+/*!50717 SELECT COUNT(*) INTO @rocksdb_has_p_s_session_variables FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = 'performance_schema' AND TABLE_NAME = 'session_variables' */;
+/*!50717 SET @rocksdb_get_is_supported = IF (@rocksdb_has_p_s_session_variables, 'SELECT COUNT(*) INTO @rocksdb_is_supported FROM performance_schema.session_variables WHERE VARIABLE_NAME=\'rocksdb_bulk_load\'', 'SELECT 0') */;
+/*!50717 PREPARE s FROM @rocksdb_get_is_supported */;
+/*!50717 EXECUTE s */;
+/*!50717 DEALLOCATE PREPARE s */;
+/*!50717 SET @rocksdb_enable_bulk_load = IF (@rocksdb_is_supported, 'SET SESSION rocksdb_bulk_load = 1', 'SET @rocksdb_dummy_bulk_load = 0') */;
+/*!50717 PREPARE s FROM @rocksdb_enable_bulk_load */;
+/*!50717 EXECUTE s */;
+/*!50717 DEALLOCATE PREPARE s */;
+SET @MYSQLDUMP_TEMP_LOG_BIN = @@SESSION.SQL_LOG_BIN;
+SET @@SESSION.SQL_LOG_BIN= 0;
+SET @@GLOBAL.GTID_PURGED='2e71d2e3-14b4-ee17-4fa7-75f7727da296:1-3820646762,
+3d1637cb-4e17-ee17-7133-45bcd3181e25:1-429989896,
+40817411-eb7a-11e8-a64f-ac1f6b0e0748:1-201,
+45bb10cb-f4eb-ee18-4844-a97ff06858a8:1795349556-1890319630,
+f3e83367-976b-ee15-52e1-78698b7f0d3b:1-1222945998:1223238227-1573456972';
 DROP TABLE IF EXISTS `abuse_reports`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
@@ -106,6 +122,7 @@ CREATE TABLE `admin_posts` (
   `content_sanitizer_version` smallint(6) NOT NULL DEFAULT '0',
   `translated_post_id` int(11) DEFAULT NULL,
   `language_id` int(11) DEFAULT NULL,
+  `comment_permissions` tinyint(4) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `index_admin_posts_on_post_id` (`translated_post_id`),
   KEY `index_admin_posts_on_created_at` (`created_at`)
@@ -131,7 +148,6 @@ CREATE TABLE `admin_settings` (
   `cache_expiration` bigint(20) DEFAULT '10',
   `tag_wrangling_off` tinyint(1) NOT NULL DEFAULT '0',
   `default_skin_id` int(11) DEFAULT NULL,
-  `stats_updated_at` datetime DEFAULT NULL,
   `request_invite_enabled` tinyint(1) NOT NULL DEFAULT '0',
   `creation_requires_invite` tinyint(1) NOT NULL DEFAULT '0',
   `downloads_enabled` tinyint(1) DEFAULT '1',
@@ -154,7 +170,10 @@ CREATE TABLE `admins` (
   `login` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `encrypted_password` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `password_salt` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  `roles` text COLLATE utf8mb4_unicode_ci,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `index_admins_on_email` (`email`),
+  UNIQUE KEY `index_admins_on_login` (`login`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `api_keys`;
@@ -459,6 +478,8 @@ CREATE TABLE `collections` (
   `description_sanitizer_version` smallint(6) NOT NULL DEFAULT '0',
   `icon_alt_text` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT '',
   `icon_comment_text` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT '',
+  `multifandom` tinyint(1) DEFAULT NULL,
+  `open_doors` tinyint(1) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `index_collections_on_name` (`name`),
   KEY `index_collections_on_parent_id` (`parent_id`)
@@ -491,6 +512,7 @@ CREATE TABLE `comments` (
   `parent_type` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `comment_content_sanitizer_version` smallint(6) NOT NULL DEFAULT '0',
   `unreviewed` tinyint(1) NOT NULL DEFAULT '0',
+  `iced` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `index_comments_commentable` (`commentable_id`,`commentable_type`),
   KEY `index_comments_on_pseud_id` (`pseud_id`),
@@ -654,7 +676,6 @@ CREATE TABLE `feedbacks` (
   `category` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `comment_sanitizer_version` smallint(6) NOT NULL DEFAULT '0',
   `summary_sanitizer_version` smallint(6) NOT NULL DEFAULT '0',
-  `approved` tinyint(1) NOT NULL DEFAULT '0',
   `ip_address` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `username` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `language` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
@@ -690,8 +711,8 @@ CREATE TABLE `filter_taggings` (
   `updated_at` datetime DEFAULT NULL,
   `inherited` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
-  KEY `index_filter_taggings_filterable` (`filterable_id`,`filterable_type`),
-  KEY `index_filter_taggings_on_filter_id_and_filterable_type` (`filter_id`,`filterable_type`)
+  UNIQUE KEY `index_filter_taggings_on_filter_and_filterable` (`filter_id`,`filterable_type`,`filterable_id`),
+  KEY `index_filter_taggings_filterable` (`filterable_id`,`filterable_type`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `gift_exchanges`;
@@ -831,17 +852,18 @@ DROP TABLE IF EXISTS `kudos`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `kudos` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `pseud_id` int(11) DEFAULT NULL,
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `commentable_id` int(11) DEFAULT NULL,
   `commentable_type` varchar(255) CHARACTER SET utf8 DEFAULT NULL,
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
   `ip_address` varchar(255) CHARACTER SET utf8 DEFAULT NULL,
+  `user_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `index_kudos_on_pseud_id` (`pseud_id`),
+  UNIQUE KEY `index_kudos_on_commentable_and_user` (`commentable_id`,`commentable_type`,`user_id`),
+  UNIQUE KEY `index_kudos_on_commentable_and_ip_address` (`commentable_id`,`commentable_type`,`ip_address`),
   KEY `index_kudos_on_ip_address` (`ip_address`),
-  KEY `index_kudos_on_commentable_id_and_commentable_type_and_pseud_id` (`commentable_id`,`commentable_type`,`pseud_id`)
+  KEY `index_kudos_on_user_id` (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `languages`;
@@ -1054,10 +1076,7 @@ CREATE TABLE `preferences` (
   `automatically_approve_collections` tinyint(1) NOT NULL DEFAULT '0',
   `collection_emails_off` tinyint(1) NOT NULL DEFAULT '0',
   `collection_inbox_off` tinyint(1) NOT NULL DEFAULT '0',
-  `hide_private_hit_count` tinyint(1) NOT NULL DEFAULT '0',
-  `hide_public_hit_count` tinyint(1) NOT NULL DEFAULT '0',
   `recipient_emails_off` tinyint(1) NOT NULL DEFAULT '0',
-  `hide_all_hit_counts` tinyint(1) NOT NULL DEFAULT '0',
   `view_full_works` tinyint(1) NOT NULL DEFAULT '0',
   `time_zone` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `plain_text_skin` tinyint(1) NOT NULL DEFAULT '0',
@@ -1464,7 +1483,6 @@ CREATE TABLE `stat_counters` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `work_id` int(11) DEFAULT NULL,
   `hit_count` int(11) NOT NULL DEFAULT '0',
-  `last_visitor` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `download_count` int(11) NOT NULL DEFAULT '0',
   `comments_count` int(11) NOT NULL DEFAULT '0',
   `kudos_count` int(11) NOT NULL DEFAULT '0',
@@ -1702,8 +1720,6 @@ CREATE TABLE `works` (
   `backdate` tinyint(1) NOT NULL DEFAULT '0',
   `endnotes` text COLLATE utf8mb4_unicode_ci,
   `imported_from_url` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `hit_count_old` int(11) NOT NULL DEFAULT '0',
-  `last_visitor_old` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `complete` tinyint(1) NOT NULL DEFAULT '0',
   `summary_sanitizer_version` smallint(6) NOT NULL DEFAULT '0',
   `notes_sanitizer_version` smallint(6) NOT NULL DEFAULT '0',
@@ -1711,11 +1727,11 @@ CREATE TABLE `works` (
   `work_skin_id` int(11) DEFAULT NULL,
   `in_anon_collection` tinyint(1) NOT NULL DEFAULT '0',
   `in_unrevealed_collection` tinyint(1) NOT NULL DEFAULT '0',
-  `anon_commenting_disabled` tinyint(1) NOT NULL DEFAULT '0',
   `ip_address` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `spam` tinyint(1) NOT NULL DEFAULT '0',
   `spam_checked_at` datetime DEFAULT NULL,
   `moderated_commenting_enabled` tinyint(1) NOT NULL DEFAULT '0',
+  `comment_permissions` tinyint(4) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `index_works_on_language_id` (`language_id`),
   KEY `index_works_on_imported_from_url` (`imported_from_url`),
@@ -1754,6 +1770,11 @@ CREATE TABLE `wrangling_guidelines` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
 /*!40101 SET character_set_client = @saved_cs_client */;
+SET @@SESSION.SQL_LOG_BIN = @MYSQLDUMP_TEMP_LOG_BIN;
+/*!50112 SET @disable_bulk_load = IF (@is_rocksdb_supported, 'SET SESSION rocksdb_bulk_load = @old_rocksdb_bulk_load', 'SET @dummy_rocksdb_bulk_load = 0') */;
+/*!50112 PREPARE s FROM @disable_bulk_load */;
+/*!50112 EXECUTE s */;
+/*!50112 DEALLOCATE PREPARE s */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -2085,6 +2106,22 @@ INSERT INTO `schema_migrations` (version) VALUES
 ('20190405191806'),
 ('20190421213603'),
 ('20190423215601'),
-('20190611212339');
+('20190611212339'),
+('20200115232918'),
+('20200210013551'),
+('20200221045607'),
+('20200325021219'),
+('20200406185632'),
+('20200406190444'),
+('20200412142208'),
+('20200415010506'),
+('20200423205608'),
+('20200504132624'),
+('20200613211440'),
+('20200707213354'),
+('20200814233538'),
+('20200829050124'),
+('20201210140123'),
+('20201214013251');
 
 
