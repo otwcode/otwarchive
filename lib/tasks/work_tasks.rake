@@ -35,5 +35,4 @@ namespace :work do
       end
     end
   end
-
 end
