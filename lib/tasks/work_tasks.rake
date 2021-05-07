@@ -30,7 +30,7 @@ namespace :work do
   task(:not_rated => :environment) do
     Work.find_each do |work|
       if work.rating_string.blank?
-        work.rating_string = 'Not Rated'
+        work.rating_string = "Not Rated"
         work.save
       end
     end
