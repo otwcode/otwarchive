@@ -10,7 +10,7 @@ Feature: Tag wrangling
       And I go to the manage users page
       And I fill in "Name" with "dizmo"
       And I press "Find"
-    Then I should see "dizmo" within "#admin_users_table"    
+    Then I should see "dizmo" within "#admin_users_table"
     # admin making user tag wrangler
     When I check "user_roles_1"
       And I press "Update"
@@ -33,7 +33,7 @@ Feature: Tag wrangling
       And I should see "Relationships by fandom (1)"
     When I follow <link_text>
     Then I should see <heading>
-    
+
     Examples:
       | link_text                     | heading                            |
       | "Wranglers"                   | "Tag Wrangling Assignments"        |
@@ -41,7 +41,7 @@ Feature: Tag wrangling
       | "Characters by fandom (2)"    | "Mass Wrangle New/Unwrangled Tags" |
       | "Relationships by fandom (1)" | "Mass Wrangle New/Unwrangled Tags" |
       | "Fandoms by media (3)"        | "Mass Wrangle New/Unwrangled Tags" |
-      
+
   Scenario: Edit tag page
     Given the tag wrangling setup
       And I am logged in as a tag wrangler
@@ -55,10 +55,6 @@ Feature: Tag wrangling
       And I should see "Unwrangleable"
       And I should see "Fandom"
       And I should see "Meta"
-    When I go to the "Stargate SG-1" tag edit page
-    Then I should see "Edit Stargate SG-1 Tag"
-      # Fandoms cannot be unwrangleable
-      And I should not see "Unwrangleable"
 
   Scenario: Making a fandom canonical and assigning media to it
     Given the tag wrangling setup
@@ -107,7 +103,7 @@ Feature: Tag wrangling
     Then I should see "Tag was updated"
       And the "Daniel Jackson" tag should not be canonical
       And the "Daniel Jackson" tag should be in the "Stargate SG-1" fandom
-    
+
   Scenario: Merging canonical and non-canonical character tags
     Given the tag wrangling setup
       And I have a canonical "TV Shows" fandom tag named "Stargate SG-1"
@@ -121,7 +117,7 @@ Feature: Tag wrangling
     When I view the tag "Stargate SG-1"
     Then I should see "Jack O'Neil"
       And I should see "Jack O'Neill"
-      
+
   Scenario Outline: Creating new non-canonical tags
     Given I am logged in as a tag wrangler
       And I go to my wrangling page
@@ -132,7 +128,7 @@ Feature: Tag wrangling
     Then I should see "Tag was successfully created"
       And the "MyNewTag" tag should be a <type> tag
       And the "MyNewTag" tag should not be canonical
-    
+
     Examples:
       | type        |
       | "Fandom"    |
@@ -149,12 +145,12 @@ Feature: Tag wrangling
     Then I should see "Tag was successfully created"
       And the "MyNewTag" tag should be a <type> tag
       And the "MyNewTag" tag should be canonical
-    
+
     Examples:
       | type        |
       | "Fandom"    |
       | "Character" |
-    
+
   Scenario: Trying to assign a non-canonical fandom to a character
     Given the tag wrangling setup
       And a non-canonical fandom "Stargate Atlantis"
@@ -166,7 +162,7 @@ Feature: Tag wrangling
     Then I should see "Cannot add association to 'Stargate Atlantis':"
       And I should see "Parent tag is not canonical."
       And I should not see "Stargate Atlantis" within "form"
-    
+
   Scenario: Assigning a fandom to a non-canonical relationship tag
     Given the tag wrangling setup
       And I have a canonical "TV Shows" fandom tag named "Stargate Atlantis"
@@ -178,7 +174,7 @@ Feature: Tag wrangling
     When I follow "JackDaniel"
     Then I should see "Stargate Atlantis"
 
-  Scenario: Creating a canonical merger and adding characters to a non-canonical relationship 
+  Scenario: Creating a canonical merger and adding characters to a non-canonical relationship
     Given I have a canonical "TV Shows" fandom tag named "RWBY"
       And a canonical character "Blake Belladonna" in fandom "RWBY"
       And a canonical character "Yang Xiao Long" in fandom "RWBY"

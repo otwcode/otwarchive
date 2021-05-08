@@ -477,6 +477,9 @@ CHARACTER_COUNT_SCRIPTS: ["Han", "Hiragana", "Katakana", "Thai"]
 SECONDS_UNTIL_WORK_INDEX_EXPIRE: 1800
 SECONDS_UNTIL_BOOKMARK_INDEX_EXPIRE: 1800
 
+# Cache duration for comment counts:
+SECONDS_UNTIL_COMMENT_COUNTS_EXPIRE: 3600
+
 # Batch size used for the RedisHitCounter class:
 HIT_COUNT_BATCH_SIZE: 100
 

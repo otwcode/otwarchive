@@ -77,6 +77,17 @@ Feature: User dashboard
     And I should see "Oldest Work"
     And I should see "Newest Work"
 
+  Scenario: The user dashboard should not list anonymous works by the user
+  Given I have the anonymous collection "Anon Treasury"
+    And I am logged in as "meatloaf"
+    And I post the work "Anon Work" to the collection "Anon Treasury"
+  When I go to meatloaf's user page
+  Then I should not see "Recent Works"
+  When I post the work "New Work"
+    And I go to meatloaf's user page
+  Then I should see "Recent works"
+    And I should not see "Anon Work" within "#user-works"
+
   Scenario: The user dashboard should list up to five of the user's series and link to more
   Given I am logged in as "meatloaf"
     And I post the work "My Work"
@@ -98,6 +109,18 @@ Feature: User dashboard
   Then I should see "6 Series by meatloaf"
     And I should see "Oldest Series"
     And I should see "Newest Series"
+
+  Scenario: The user dashboard should not list anonymous series by the user
+  Given I have the anonymous collection "Anon Treasury"
+    And I am logged in as "meatloaf"
+    And I post the work "Anon Work" to the collection "Anon Treasury"
+    And I add the work "Anon Work" to series "Anon Series"
+  When I go to meatloaf's user page
+  Then I should not see "Recent Series"
+  When I add the work "New Work" to series "Cool Series"
+    And I go to meatloaf's user page
+  Then I should see "Recent series"
+    And I should not see "Anon Series" within "#user-series"
 
   Scenario: The user dashboard should list up to five of the user's bookmarks and link to more
   Given dashboard counts expire after 10 seconds

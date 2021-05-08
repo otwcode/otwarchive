@@ -154,7 +154,18 @@ class WorkQuery < Query
   end
 
   def user_filter
-    terms_filter(:user_ids, user_ids) if user_ids.present?
+    return if user_ids.blank?
+
+    if viewing_own_collected_works_page?
+      {
+        has_child: {
+          type: "creator",
+          query: terms_filter(:private_user_ids, user_ids)
+        }
+      }
+    else
+      terms_filter(:user_ids, user_ids)
+    end
   end
 
   def pseud_filter
@@ -300,6 +311,11 @@ class WorkQuery < Query
     options[:collected]
   end
 
+  def viewing_own_collected_works_page?
+    collected? && options[:works_parent].present? &&
+      options[:works_parent] == User.current_user
+  end
+
   def include_restricted?
     User.current_user.present? || options[:show_restricted]
   end
@@ -314,7 +330,7 @@ class WorkQuery < Query
   # OR if the user is viewing their own collected works
   def include_anon?
     (user_ids.blank? && pseud_ids.blank?) ||
-      (collected? && options[:works_parent].present? && options[:works_parent] == User.current_user)
+      viewing_own_collected_works_page?
   end
 
   def user_ids

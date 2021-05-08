@@ -635,13 +635,21 @@ describe WorksController, work_search: true do
 
       before { run_all_indexing_jobs }
 
-      it "returns unrevealed works in collections for guests" do
+      it "doesn't return unrevealed works in collections for guests" do
         get :collected, params: { user_id: collected_user.login }
-        expect(assigns(:works)).to include(work, unrevealed_work)
+        expect(assigns(:works)).to include(work)
+        expect(assigns(:works)).not_to include(unrevealed_work)
       end
 
-      it "returns unrevealed works in collections for logged-in users" do
+      it "doesn't return unrevealed works in collections for logged-in users" do
         fake_login
+        get :collected, params: { user_id: collected_user.login }
+        expect(assigns(:works)).to include(work)
+        expect(assigns(:works)).not_to include(unrevealed_work)
+      end
+
+      it "returns unrevealed works in collections for the author" do
+        fake_login_known_user(collected_user)
         get :collected, params: { user_id: collected_user.login }
         expect(assigns(:works)).to include(work, unrevealed_work)
       end
