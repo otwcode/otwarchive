@@ -153,3 +153,23 @@ describe "rake After:replace_dewplayer_embeds" do
     end.to output("Couldn't convert 1 chapter(s): #{dewplayer_work.first_chapter.id}\nConverted 0 chapter(s).\n").to_stdout
   end
 end
+
+describe "rake After:add_default_rating_to_works" do
+  let(:rated_work) { create(:work, rating_string: ArchiveConfig.RATING_MATURE_TAG_NAME) }
+  let(:no_rating_work) { create(:work, rating_string: ArchiveConfig.RATING_MATURE_TAG_NAME) }
+
+  before do
+    no_rating_work.tag_groups.delete("Rating")
+    no_rating_work.save
+  end
+
+  it "sets default rating on work which is missing a rating" do
+    subject.invoke
+    expect(no_rating_work.rating_string).to eq(ArchiveConfig.RATING_DEFAULT_TAG_NAME)
+  end
+
+  it "does not modify works which already have a rating" do
+    subject.invoke
+    expect(rated_work.rating_string).to eq(ArchiveConfig.RATING_MATURE_TAG_NAME)
+  end
+end

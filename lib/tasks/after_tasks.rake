@@ -749,15 +749,15 @@ namespace :After do
 
     Work.in_batches do |batch|
       batch_number += 1
-      progress_msg = "Batch #{batch_number} of #{total_batches} complete"
+      
       batch.each do |work|
-        next unless work.rating_string.present?
+        next if work.rating_string.present?
 
         work.rating_string = ArchiveConfig.RATING_DEFAULT_TAG_NAME
         work.save
-        puts("Set work #{work.id} to #{ArchiveConfig.RATING_DEFAULT_TAG_NAME}") && STDOUT.flush
+        puts("Added default rating to work #{work.id}") && STDOUT.flush
       end
-      puts(progress_msg) && STDOUT.flush
+      puts("Batch #{batch_number} of #{total_batches} complete") && STDOUT.flush
     end
     puts && STDOUT.flush
   end
