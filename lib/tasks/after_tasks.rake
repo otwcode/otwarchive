@@ -742,12 +742,23 @@ namespace :After do
 
   desc "Add 'Not Rated' to works missing a rating"
   task(add_default_rating_to_works: :environment) do
-    Work.find_each do |work|
-      if work.rating_string.blank?
+    work_count = Work.all.size
+    total_batches = (work_count + 999) / 1000
+    puts("Checking #{work_count} works in #{total_batches} batches") && STDOUT.flush
+    batch_number = 0
+
+    Work.in_batches do |batch|
+      batch_number += 1
+      progress_msg = "Batch #{batch_number} of #{total_batches} complete"
+      batch.each do |work|
+        next unless work.rating_string.blank?
         work.rating_string = ArchiveConfig.RATING_DEFAULT_TAG_NAME
         work.save
+        puts("Saved work #{work.id} as #{ArchiveConfig.RATING_DEFAULT_TAG_NAME}") && STDOUT.flush
       end
+      puts(progress_msg) && STDOUT.flush
     end
+    puts && STDOUT.flush
   end
 
   # This is the end that you have to put new tasks above.
