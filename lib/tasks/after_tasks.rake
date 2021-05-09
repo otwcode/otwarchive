@@ -751,10 +751,11 @@ namespace :After do
       batch_number += 1
       progress_msg = "Batch #{batch_number} of #{total_batches} complete"
       batch.each do |work|
-        next unless work.rating_string.blank?
+        next unless work.rating_string.present?
+
         work.rating_string = ArchiveConfig.RATING_DEFAULT_TAG_NAME
         work.save
-        puts("Saved work #{work.id} as #{ArchiveConfig.RATING_DEFAULT_TAG_NAME}") && STDOUT.flush
+        puts("Set work #{work.id} to #{ArchiveConfig.RATING_DEFAULT_TAG_NAME}") && STDOUT.flush
       end
       puts(progress_msg) && STDOUT.flush
     end
