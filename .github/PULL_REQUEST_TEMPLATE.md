@@ -10,7 +10,7 @@
 
 ## Issue
 
-https://otwarchive.atlassian.net/browse/AO3-XXXX (please fill in issue number and remove this comment)
+https://otwarchive.atlassian.net/browse/AO3-XXXX (Please fill in issue number and remove this comment.)
 
 ## Purpose
 
@@ -20,8 +20,8 @@ What does this PR do?
 
 How can the Archive's QA team verify that this is working as you intended?
 
-(If you have a Jira account with access, please update or comment on the issue
-with any new or missing testing instructions.)
+If you have a Jira account with access, please update or comment on the issue
+with any new or missing testing instructions instead.
 
 ## References
 
@@ -29,12 +29,10 @@ Are there other relevant issues/pull requests/mailing list discussions?
 
 ## Credit
 
-*What name do you want us to use to credit your work in the [Archive of Our Own's Release Notes](https://archiveofourown.org/admin_posts?tag=1)?*
+What name and pronouns should we use to credit you in the [Archive of Our Own's Release Notes](https://archiveofourown.org/admin_posts?tag=1)?
 
-(If you have a Jira account, please include the same name in the "Full name"
-field on your Jira profile, so we can assign you the issues you're working on.)
+If you have a Jira account, please include the same name in the "Full name"
+field on your Jira profile, so we can assign you the issues you're working on.
 
-*What pronouns do you prefer (she/her, he/him, zie/hir etc)?*
-
-(If you do not fill in this section, we will use your GitHub account name and
-they/them pronouns to avoid making assumptions about your gender.)
+*Please note that if you do not fill in this section, we will use your GitHub account name and
+they/them pronouns.*
