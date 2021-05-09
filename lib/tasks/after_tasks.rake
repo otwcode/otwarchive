@@ -740,6 +740,16 @@ namespace :After do
     WorkIndexer.create_mapping
   end
 
+  desc "Add 'Not Rated' to works missing a rating"
+  task(add_default_rating_to_works: :environment) do
+    Work.find_each do |work|
+      if work.rating_string.blank?
+        work.rating_string = ArchiveConfig.RATING_DEFAULT_TAG_NAME
+        work.save
+      end
+    end
+  end
+
   # This is the end that you have to put new tasks above.
 end
 

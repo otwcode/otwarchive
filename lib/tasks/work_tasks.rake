@@ -24,15 +24,4 @@ namespace :work do
       end
     end
   end
-
-  # AO3-6065
-  desc "Add 'Not Rated' to works missing a rating"
-  task(:not_rated => :environment) do
-    Work.find_each do |work|
-      if work.rating_string.blank?
-        work.rating_string = "Not Rated"
-        work.save
-      end
-    end
-  end
 end
