@@ -53,7 +53,7 @@ class ChaptersController < ApplicationController
       @comments = @chapter.comments.reviewed
 
       @page_title = @work.unrevealed? ? ts("Mystery Work - Chapter %{position}", position: @chapter.position.to_s) :
-        get_page_title(@tag_groups["Fandom"][0].name,
+        get_page_title(@tag_groups.include?("Fandom") ? t(".no_fandom") : @tag_groups["Fandom"][0].name,
           @work.anonymous? ? ts("Anonymous") : @work.pseuds.sort.collect(&:byline).join(', '),
           @work.title + " - Chapter " + @chapter.position.to_s)
 

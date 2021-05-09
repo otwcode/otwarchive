@@ -1,5 +1,7 @@
 ---
 en:
+  chapters:
+    no_fandom: No fandom specified
   comments:
     check_frozen:
       error: Sorry, you cannot reply to a frozen comment.
