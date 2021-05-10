@@ -731,7 +731,7 @@ describe ChaptersController do
 
       it "for the first chapter" do
         get :show, params: { work_id: work.id, id: @chapter1 }
-        expect(response).to have_http_status(200)
+        expect(response).to have_http_status(:ok)
         expect(assigns(:page_title)).to include(assigns(:work).title)
         expect(assigns(:page_title)).to include("No fandom specified")
         expect(assigns(:page_title)).to include(" - Chapter 1")
@@ -739,47 +739,53 @@ describe ChaptersController do
 
       it "for subsequent chapters" do
         get :show, params: { work_id: work.id, id: @chapter2 }
-        expect(response).to have_http_status(200)
+        expect(response).to have_http_status(:ok)
         expect(assigns(:page_title)).to include(assigns(:work).title)
         expect(assigns(:page_title)).to include("No fandom specified")
         expect(assigns(:page_title)).to include(" - Chapter 2")
       end
     end
+  end
 
-    context "update_positions" do
-      context "when user is logged out" do
-        it "errors and redirects to login" do
-          post :update_positions, params: { work_id: work.id, chapter: [@chapter1, @chapter3, @chapter2] }
-          it_redirects_to_with_error(new_user_session_path, "Sorry, you don't have permission to access the page you were trying to reach. Please log in.")
+  describe "update_positions" do
+    before do
+      @chapter1 = work.chapters.first
+      @chapter2 = create(:chapter, work: work, posted: true, position: 2, authors: [user.pseuds.first])
+      @chapter3 = create(:chapter, work: work, posted: true, position: 3, authors: [user.pseuds.first])
+    end
+
+    context "when user is logged out" do
+      it "errors and redirects to login" do
+        post :update_positions, params: { work_id: work.id, chapter: [@chapter1, @chapter3, @chapter2] }
+        it_redirects_to_with_error(new_user_session_path, "Sorry, you don't have permission to access the page you were trying to reach. Please log in.")
+      end
+    end
+
+    context "when work owner is logged in" do
+      before do
+        fake_login_known_user(user)
+      end
+
+      context "when passing params[:chapters]" do
+        it "updates the positions of the chapters" do
+          post :update_positions, params: { work_id: work.id, chapters: [1, 3, 2] }
+          expect(@chapter1.reload.position).to eq(1)
+          expect(@chapter2.reload.position).to eq(3)
+          expect(@chapter3.reload.position).to eq(2)
+        end
+
+        it "gives a notice and redirects to work" do
+          post :update_positions, params: { work_id: work.id, chapters: [1, 3, 2] }
+          it_redirects_to_with_notice(work, "Chapter order has been successfully updated.")
         end
       end
 
-      context "when work owner is logged in" do
-        before do
-          fake_login_known_user(user)
-        end
-
-        context "when passing params[:chapters]" do
-          it "updates the positions of the chapters" do
-            post :update_positions, params: { work_id: work.id, chapters: [1, 3, 2] }
-            expect(@chapter1.reload.position).to eq(1)
-            expect(@chapter2.reload.position).to eq(3)
-            expect(@chapter3.reload.position).to eq(2)
-          end
-
-          it "gives a notice and redirects to work" do
-            post :update_positions, params: { work_id: work.id, chapters: [1, 3, 2] }
-            it_redirects_to_with_notice(work, "Chapter order has been successfully updated.")
-          end
-        end
-
-        context "when passing params[:chapter]" do
-          it "updates the positions of the chapters" do
-            post :update_positions, params: { work_id: work.id, chapter: [@chapter1, @chapter3, @chapter2], format: :js }
-            expect(@chapter1.reload.position).to eq(1)
-            expect(@chapter2.reload.position).to eq(3)
-            expect(@chapter3.reload.position).to eq(2)
-          end
+      context "when passing params[:chapter]" do
+        it "updates the positions of the chapters" do
+          post :update_positions, params: { work_id: work.id, chapter: [@chapter1, @chapter3, @chapter2], format: :js }
+          expect(@chapter1.reload.position).to eq(1)
+          expect(@chapter2.reload.position).to eq(3)
+          expect(@chapter3.reload.position).to eq(2)
         end
       end
     end
