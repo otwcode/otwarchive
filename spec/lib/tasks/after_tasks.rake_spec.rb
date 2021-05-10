@@ -174,11 +174,6 @@ describe "rake After:add_default_rating_to_works" do
   context "for a rated work" do
     let(:work) { create(:work, rating_string: ArchiveConfig.RATING_EXPLICIT_TAG_NAME) }
   
-    before do
-      work.save
-      work.ratings.reload
-    end
-  
     it "does not modify works which already have a rating" do
       subject.invoke
       work.ratings.reload
