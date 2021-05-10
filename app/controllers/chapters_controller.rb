@@ -1,6 +1,6 @@
 class ChaptersController < ApplicationController
   # only registered users and NOT admin should be able to create new chapters
-  before_action :users_only, except: [:index, :show, :destroy, :confirm_delete]
+  before_action :users_only, except: [ :index, :show, :destroy, :confirm_delete ]
   before_action :check_user_status, only: [:new, :create, :edit, :update]
   before_action :load_work
   # only authors of a work should be able to edit its chapters
@@ -33,8 +33,9 @@ class ChaptersController < ApplicationController
       render "works/_adult", layout: "application" and return
     end
 
-    redirect_to url_for(controller: :chapters, action: :show, work_id: @work.id, id: params[:selected_id]) and return if params[:selected_id]
-
+    if params[:selected_id]
+      redirect_to url_for(controller: :chapters, action: :show, work_id: @work.id, id: params[:selected_id]) and return
+    end
     @chapters = @work.chapters_in_order(
       include_content: false,
       include_drafts: (logged_in_as_admin? ||
@@ -45,8 +46,8 @@ class ChaptersController < ApplicationController
     else
       chapter_position = @chapters.index(@chapter)
       if @chapters.length > 1
-        @previous_chapter = @chapters[chapter_position - 1] unless chapter_position.zero?
-        @next_chapter = @chapters[chapter_position + 1]
+        @previous_chapter = @chapters[chapter_position-1] unless chapter_position == 0
+        @next_chapter = @chapters[chapter_position+1]
       end
       @commentable = @work
       @comments = @chapter.comments.reviewed
@@ -64,7 +65,7 @@ class ChaptersController < ApplicationController
 
       if current_user.respond_to?(:subscriptions)
         @subscription = current_user.subscriptions.where(subscribable_id: @work.id,
-                                                         subscribable_type: "Work").first ||
+                                                         subscribable_type: 'Work').first ||
                         current_user.subscriptions.build(subscribable: @work)
       end
       # update the history.
@@ -85,14 +86,14 @@ class ChaptersController < ApplicationController
 
   # GET /work/:work_id/chapters/1/edit
   def edit
-    return unless params["remove"] == "me"
-
-    @chapter.creatorships.for_user(current_user).destroy_all
-    if @work.chapters.any? { |c| current_user.is_author_of?(c) }
-      flash[:notice] = ts("You have been removed as a creator from the chapter.")
-      redirect_to @work
-    else # remove from work if no longer co-creator on any chapter
-      redirect_to edit_work_path(@work, remove: "me")
+    if params["remove"] == "me"
+      @chapter.creatorships.for_user(current_user).destroy_all
+      if @work.chapters.any? { |c| current_user.is_author_of?(c) }
+        flash[:notice] = ts("You have been removed as a creator from the chapter.")
+        redirect_to @work
+      else # remove from work if no longer co-creator on any chapter
+        redirect_to edit_work_path(@work, remove: "me")
+      end
     end
   end
 
@@ -226,7 +227,7 @@ class ChaptersController < ApplicationController
       else
         flash[:error] = ts("Something went wrong. Please try again.")
       end
-      redirect_to controller: "works", action: "show", id: @work
+      redirect_to controller: 'works', action: 'show', id: @work
     end
   end
 
@@ -241,7 +242,7 @@ class ChaptersController < ApplicationController
   # fetch work these chapters belong to from db
   def load_work
     @work = params[:work_id] ? Work.find_by(id: params[:work_id]) : Chapter.find_by(id: params[:id]).try(:work)
-    if @work.blank?
+    unless @work.present?
       flash[:error] = ts("Sorry, we couldn't find the work you were looking for.")
       redirect_to root_path and return
     end
@@ -253,21 +254,28 @@ class ChaptersController < ApplicationController
   # chapter is specified, or if the specified chapter doesn't exist.
   def load_chapter
     @chapter = @work.chapters.find_by(id: params[:id])
-    return if @chapter
 
-    flash[:error] = ts("Sorry, we couldn't find the chapter you were looking for.")
-    redirect_to work_path(@work)
+    unless @chapter
+      flash[:error] = ts("Sorry, we couldn't find the chapter you were looking for.")
+      redirect_to work_path(@work)
+    end
   end
+
 
   def post_chapter
-    @work.update_attribute(:posted, true) unless @work.posted
-    flash[:notice] = ts("Chapter has been posted!")
+    if !@work.posted
+      @work.update_attribute(:posted, true)
+    end
+    flash[:notice] = ts('Chapter has been posted!')
   end
+
+  private
 
   def chapter_params
     params.require(:chapter).permit(:title, :position, :wip_length, :"published_at(3i)",
                                     :"published_at(2i)", :"published_at(1i)", :summary,
                                     :notes, :endnotes, :content, :published_at,
                                     author_attributes: [:byline, ids: [], coauthors: []])
+
   end
 end
