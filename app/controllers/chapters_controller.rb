@@ -57,7 +57,7 @@ class ChaptersController < ApplicationController
         fandom = @tag_groups["Fandom"].empty? ? t(".no_fandom") : @tag_groups["Fandom"][0].name
         title_fandom = @tag_groups["Fandom"].size > 3 ? t(".multifandom") : fandom
         author = @work.anonymous? ? t(".anonymous") : @work.pseuds.sort.collect(&:byline).join(", ")
-        @page_title = get_page_title(title_fandom, author, t(".chapter_position", position: @chapter.position.to_s))
+        @page_title = get_page_title(title_fandom, author, @work.title + t(".chapter_position", position: @chapter.position.to_s))
       end
 
       @kudos = @work.kudos.with_user.includes(:user)
