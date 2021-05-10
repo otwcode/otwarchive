@@ -50,16 +50,15 @@ class ChaptersController < ApplicationController
       end
       @commentable = @work
       @comments = @chapter.comments.reviewed
-      fandoms = @tag_groups["Fandom"]
-      page_title_fandom = if fandoms.size > 3
-                            t(".multifandom")
-                          else
-                            fandoms.empty? ? t(".no_fandom") : fandoms[0].name
-                          end
-      @page_title = @work.unrevealed? ? ts("Mystery Work - Chapter %{position}", position: @chapter.position.to_s) :
-        get_page_title(page_title_fandom,
-                       @work.anonymous? ? ts("Anonymous") : @work.pseuds.sort.collect(&:byline).join(", "),
-                       @work.title + " - Chapter " + @chapter.position.to_s)
+
+      if @work.unrevealed?
+        @page_title = t(".unrevealed") + t(".chapter_position", position: @chapter.position.to_s)
+      else
+        fandom = @tag_groups["Fandom"].empty? ? t(".no_fandom") : @tag_groups["Fandom"][0].name
+        title_fandom = @tag_groups["Fandom"].size > 3 ? t(".multifandom") : fandom
+        author = @work.anonymous? ? t(".anonymous") : @work.pseuds.sort.collect(&:byline).join(", ")
+        @page_title = get_page_title(title_fandom, author, t(".chapter_position", position: @chapter.position.to_s))
+      end
 
       @kudos = @work.kudos.with_user.includes(:user)
 
