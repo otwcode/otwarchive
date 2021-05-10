@@ -155,21 +155,38 @@ describe "rake After:replace_dewplayer_embeds" do
 end
 
 describe "rake After:add_default_rating_to_works" do
-  let(:rated_work) { create(:work, rating_string: ArchiveConfig.RATING_MATURE_TAG_NAME) }
-  let(:no_rating_work) { create(:work, rating_string: ArchiveConfig.RATING_MATURE_TAG_NAME) }
+  context "for a work missing rating" do 
+    let(:work) { create(:work, rating_string: ArchiveConfig.RATING_EXPLICIT_TAG_NAME) }
 
-  before do
-    no_rating_work.tag_groups.delete("Rating")
-    no_rating_work.save
+    before do
+      work.taggings.delete_all
+      work.save
+      work.ratings.reload
+      expect(work.ratings.reload.map(&:name)).to eq([])
+    end
+
+    it "sets default rating on work which is missing a rating" do
+      subject.invoke
+      work.ratings.reload
+      expect(work.rating_string).to include(ArchiveConfig.RATING_DEFAULT_TAG_NAME)
+    end
   end
 
-  it "sets default rating on work which is missing a rating" do
-    subject.invoke
-    expect(no_rating_work.rating_string).to eq(ArchiveConfig.RATING_DEFAULT_TAG_NAME)
-  end
-
-  it "does not modify works which already have a rating" do
-    subject.invoke
-    expect(rated_work.rating_string).to eq(ArchiveConfig.RATING_MATURE_TAG_NAME)
-  end
+  context "for a rated work" do
+    let(:work) { create(:work, rating_string: ArchiveConfig.RATING_EXPLICIT_TAG_NAME) }
+  
+      before do
+        work.save
+        work.ratings.reload
+        expect(work.ratings.reload.map(&:name)).to include(ArchiveConfig.RATING_EXPLICIT_TAG_NAME)
+      end
+  
+      it "does not modify works which already have a rating" do
+        subject.invoke
+        work.ratings.reload
+        expect(work.ratings.reload.map(&:name)).to include(ArchiveConfig.RATING_EXPLICIT_TAG_NAME)
+        expect(work.ratings.reload.map(&:name)).not_to include(ArchiveConfig.RATING_DEFAULT_TAG_NAME)
+      end
+    end
+  
 end
