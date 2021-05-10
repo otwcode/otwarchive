@@ -51,10 +51,12 @@ RSpec.configure do |config|
     Category.find_or_create_by_name(ArchiveConfig.CATEGORY_SLASH_TAG_NAME).update(canonical: true)
     Rating.find_or_create_by_name(ArchiveConfig.RATING_DEFAULT_TAG_NAME).update(canonical: true)
     Rating.find_or_create_by_name(ArchiveConfig.RATING_EXPLICIT_TAG_NAME).update(canonical: true)
+    Rating.find_or_create_by_name(ArchiveConfig.RATING_MATURE_TAG_NAME).update(canonical: true)
+    Rating.find_or_create_by_name(ArchiveConfig.RATING_TEEN_TAG_NAME).update(canonical: true)
+    Rating.find_or_create_by_name(ArchiveConfig.RATING_GENERAL_TAG_NAME).update(canonical: true)
     # Needs these for the API tests.
     ArchiveWarning.find_or_create_by_name(ArchiveConfig.WARNING_DEFAULT_TAG_NAME).update(canonical: true)
     ArchiveWarning.find_or_create_by_name(ArchiveConfig.WARNING_NONCON_TAG_NAME).update(canonical: true)
-    Rating.find_or_create_by_name(ArchiveConfig.RATING_GENERAL_TAG_NAME).update(canonical: true)
   end
 
   config.before :each do
