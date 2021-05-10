@@ -715,11 +715,8 @@ describe ChaptersController do
   end
 
   describe "multi-chapter work" do
-    before do
-      @chapter1 = work.chapters.first
-      @chapter2 = create(:chapter, work: work, posted: true, position: 2, authors: [user.pseuds.first])
-      @chapter3 = create(:chapter, work: work, posted: true, position: 3, authors: [user.pseuds.first])
-    end
+    let(:chapter1) { work.chapters.first }
+    let(:chapter2) { create(:chapter, work: work, posted: true, position: 2, authors: [user.pseuds.first]) }
 
     context "missing tags don't cause errors when displayed chapter by chapter" do
       before do
@@ -730,7 +727,7 @@ describe ChaptersController do
       end
 
       it "for the first chapter" do
-        get :show, params: { work_id: work.id, id: @chapter1 }
+        get :show, params: { work_id: work.id, id: chapter1 }
         expect(response).to have_http_status(:ok)
         expect(assigns(:page_title)).to include(assigns(:work).title)
         expect(assigns(:page_title)).to include("No fandom specified")
@@ -738,7 +735,7 @@ describe ChaptersController do
       end
 
       it "for subsequent chapters" do
-        get :show, params: { work_id: work.id, id: @chapter2 }
+        get :show, params: { work_id: work.id, id: chapter2 }
         expect(response).to have_http_status(:ok)
         expect(assigns(:page_title)).to include(assigns(:work).title)
         expect(assigns(:page_title)).to include("No fandom specified")
