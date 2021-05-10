@@ -167,7 +167,7 @@ describe "rake After:add_default_rating_to_works" do
     it "sets default rating on work which is missing a rating" do
       subject.invoke
       work.ratings.reload
-      expect(work.rating_string).to include(ArchiveConfig.RATING_DEFAULT_TAG_NAME)
+      expect(work.rating_string).to eq(ArchiveConfig.RATING_DEFAULT_TAG_NAME)
     end
   end
 
@@ -177,8 +177,7 @@ describe "rake After:add_default_rating_to_works" do
     it "does not modify works which already have a rating" do
       subject.invoke
       work.ratings.reload
-      expect(work.ratings.reload.map(&:name)).to include(ArchiveConfig.RATING_EXPLICIT_TAG_NAME)
-      expect(work.ratings.reload.map(&:name)).not_to include(ArchiveConfig.RATING_DEFAULT_TAG_NAME)
+      expect(work.rating_string).to eq(ArchiveConfig.RATING_EXPLICIT_TAG_NAME)
     end
   end
   
