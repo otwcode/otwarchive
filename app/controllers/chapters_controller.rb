@@ -55,8 +55,9 @@ class ChaptersController < ApplicationController
       if @work.unrevealed?
         @page_title = t(".unrevealed") + t(".chapter_position", position: @chapter.position.to_s)
       else
-        fandom = @tag_groups["Fandom"].empty? ? t(".no_fandom") : @tag_groups["Fandom"][0].name
-        title_fandom = @tag_groups["Fandom"].size > 3 ? t(".multifandom") : fandom
+        fandoms = @tag_groups["Fandom"]
+        fandom = fandoms.empty? ? t(".unspecified_fandom") : fandoms[0].name
+        title_fandom = fandoms.size > 3 ? t(".multifandom") : fandom
         author = @work.anonymous? ? t(".anonymous") : @work.pseuds.sort.collect(&:byline).join(", ")
         @page_title = get_page_title(title_fandom, author, @work.title + t(".chapter_position", position: @chapter.position.to_s))
       end
