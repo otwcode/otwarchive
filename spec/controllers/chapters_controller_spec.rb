@@ -195,6 +195,26 @@ describe ChaptersController do
       expect(assigns[:page_title]).to eq("page title")
     end
 
+    context "when multi-chapter work is missing tags" do
+      let(:chapter1) { work.chapters.first }
+      let(:chapter2) { create(:chapter, work: work, posted: true, position: 2) }
+
+      before do
+        work.taggings.delete_all
+        work.save
+        work.reload
+        fake_login_known_user(user)
+      end
+
+      it "can still render chapter by chapter" do
+        get :show, params: { work_id: work.id, id: chapter1 }
+        expect(response).to have_http_status(:ok)
+        expect(assigns(:page_title)).to include(assigns(:work).title)
+        expect(assigns(:page_title)).to include("No fandom specified")
+        expect(assigns(:page_title)).to include(" - Chapter 1")
+      end
+    end
+
     it "assigns @kudos to non-anonymous kudos" do
       kudo = create(:kudo, commentable: work, user: create(:user))
       create(:kudo, commentable: work)
@@ -710,36 +730,6 @@ describe ChaptersController do
           put :update, params: { work_id: work.id, id: work.chapters.first.id, chapter: chapter_attributes }
           it_redirects_to_with_error(work_path(work), "Sorry, you don't have permission to access the page you were trying to reach.")
         end
-      end
-    end
-  end
-
-  describe "multi-chapter work" do
-    let(:chapter1) { work.chapters.first }
-    let(:chapter2) { create(:chapter, work: work, posted: true, position: 2, authors: [user.pseuds.first]) }
-
-    context "missing tags don't cause errors when displayed chapter by chapter" do
-      before do
-        work.taggings.delete_all
-        work.save
-        work.reload
-        fake_login_known_user(user)
-      end
-
-      it "for the first chapter" do
-        get :show, params: { work_id: work.id, id: chapter1 }
-        expect(response).to have_http_status(:ok)
-        expect(assigns(:page_title)).to include(assigns(:work).title)
-        expect(assigns(:page_title)).to include("No fandom specified")
-        expect(assigns(:page_title)).to include(" - Chapter 1")
-      end
-
-      it "for subsequent chapters" do
-        get :show, params: { work_id: work.id, id: chapter2 }
-        expect(response).to have_http_status(:ok)
-        expect(assigns(:page_title)).to include(assigns(:work).title)
-        expect(assigns(:page_title)).to include("No fandom specified")
-        expect(assigns(:page_title)).to include(" - Chapter 2")
       end
     end
   end
