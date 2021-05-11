@@ -740,7 +740,7 @@ namespace :After do
     WorkIndexer.create_mapping
   end
 
-  desc "Add 'Not Rated' to works missing a rating"
+  desc "Add default rating to works missing a rating"
   task(add_default_rating_to_works: :environment) do
     work_count = Work.all.size
     total_batches = (work_count + 999) / 1000
