@@ -746,6 +746,7 @@ namespace :After do
     total_batches = (work_count + 999) / 1000
     puts("Checking #{work_count} works in #{total_batches} batches") && STDOUT.flush
     batch_number = 0
+    updated_works = []
 
     Work.in_batches do |batch|
       batch_number += 1
@@ -755,11 +756,11 @@ namespace :After do
 
         work.rating_string = ArchiveConfig.RATING_DEFAULT_TAG_NAME
         work.save
-        puts("Added default rating to work #{work.id}") && STDOUT.flush
+        updated_works << work.id
       end
       puts("Batch #{batch_number} of #{total_batches} complete") && STDOUT.flush
     end
-    puts && STDOUT.flush
+    puts("Added default rating to works: #{updated_works}") && STDOUT.flush
   end
 
   # This is the end that you have to put new tasks above.
