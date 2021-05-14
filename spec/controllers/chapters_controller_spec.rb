@@ -195,23 +195,13 @@ describe ChaptersController do
       expect(assigns[:page_title]).to eq("page title")
     end
 
-    context "when multi-chapter work is missing tags" do
-      let(:chapter1) { work.chapters.first }
-      let(:chapter2) { create(:chapter, work: work, posted: true, position: 2) }
-
-      before do
-        work.taggings.delete_all
-        work.save
-        work.reload
-        fake_login_known_user(user)
-      end
-
-      it "can still render chapter by chapter" do
-        get :show, params: { work_id: work.id, id: chapter1 }
+    context "when work has no fandom" do
+      it "assigns @page_title with a placeholder for the fandom" do
+        allow_any_instance_of(Work).to receive(:tag_groups).and_return("Fandom" => [])
+        expect_any_instance_of(ChaptersController).to receive(:get_page_title).with("No fandom specified", user.pseuds.first.name, "#{work.title} - Chapter 1").and_return("page title")
+        get :show, params: { work_id: work.id, id: work.chapters.first.id }
         expect(response).to have_http_status(:ok)
-        expect(assigns(:page_title)).to include(assigns(:work).title)
-        expect(assigns(:page_title)).to include("No fandom specified")
-        expect(assigns(:page_title)).to include(" - Chapter 1")
+        expect(assigns[:page_title]).to eq("page title")
       end
     end
 
