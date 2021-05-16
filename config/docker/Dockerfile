@@ -1,4 +1,4 @@
-FROM ruby:2.6.5
+FROM ruby:2.7.3
 
 # Install additional packages
 RUN apt-get update             && \
@@ -7,6 +7,7 @@ RUN apt-get update             && \
         default-mysql-client      \
         phantomjs                 \
         pwgen                     \
+        shared-mime-info          \
         wkhtmltopdf               \
         zip
 

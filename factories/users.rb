@@ -2,7 +2,7 @@ require "faker"
 
 FactoryBot.define do
   sequence(:login) do |n|
-    "#{Faker::Lorem.characters(8)}#{n}"
+    "#{Faker::Lorem.characters(number: 8)}#{n}"
   end
 
   sequence :email do |n|
@@ -41,6 +41,10 @@ FactoryBot.define do
 
     factory :tag_wrangler do
       roles { [Role.find_or_create_by(name: "tag_wrangler")] }
+    end
+
+    factory :translation_admin do
+      roles { [Role.find_or_create_by(name: "translation_admin")] }
     end
   end
 end

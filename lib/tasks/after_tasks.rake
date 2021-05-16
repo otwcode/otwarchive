@@ -707,27 +707,37 @@ namespace :After do
 
   desc "Replace Archive-hosted Dewplayer embeds with HTML5 audio tags"
   task(replace_dewplayer_embeds: :environment) do
+    dewplayer_embed_regex = /<embed .*dewplayer/
     updated_chapter_count = 0
-    errored_chapters = []
+    skipped_chapters = []
 
     Chapter.find_each do |chapter|
       puts(chapter.id) && STDOUT.flush if (chapter.id % 1000).zero?
-      if chapter.content.match /<embed .*dewplayer/
+      if chapter.content.match(dewplayer_embed_regex)
         begin
           chapter.content_sanitizer_version = -1
-          chapter.sanitize_field(chapter, :content)
-          updated_chapter_count += 1
+          if chapter.sanitize_field(chapter, :content).match(dewplayer_embed_regex)
+            # The embed(s) are still there.
+            skipped_chapters << chapter.id
+          else
+            updated_chapter_count += 1
+          end
         rescue StandardError
-          errored_chapters << chapter.id
+          skipped_chapters << chapter.id
         end
       end
     end
 
-    if errored_chapters.any?
-      puts("Couldn't update #{errored_chapters.size} chapter(s): #{errored_chapters.join(',')}")
+    if skipped_chapters.any?
+      puts("Couldn't convert #{skipped_chapters.size} chapter(s): #{skipped_chapters.join(',')}")
       STDOUT.flush
     end
-    puts("Updated #{updated_chapter_count} chapter(s).") && STDOUT.flush
+    puts("Converted #{updated_chapter_count} chapter(s).") && STDOUT.flush
+  end
+
+  desc "Update the mapping for the work index"
+  task(update_work_mapping: :environment) do
+    WorkIndexer.create_mapping
   end
 
   # This is the end that you have to put new tasks above.

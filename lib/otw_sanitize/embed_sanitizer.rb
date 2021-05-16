@@ -160,7 +160,7 @@ module OTWSanitize
         fragment.p do
           mp3_urls.each_with_index do |url, i|
             fragment.br unless i.zero?
-            fragment.audio(src: url)
+            fragment.audio(src: url.strip)
           end
         end
       end

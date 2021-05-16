@@ -88,7 +88,7 @@ module Taggable
     # Make sure that we trigger the callback for our taggings.
     self.taggings.destroy_all
 
-    self.tags = []
+    tags = []
 
     # Replace unicode full-width commas
     tag_string.gsub!(/\uff0c|\u3001/, ",")
@@ -98,10 +98,10 @@ module Taggable
       string.strip!
       next if string.blank?
 
-      self.tags << (Tag.find_by_name(string) || UnsortedTag.create(name: string))
+      tags << (Tag.find_by_name(string) || UnsortedTag.create(name: string))
     end
 
-    self.tags
+    self.tags = tags.uniq
   end
 
   alias category_strings= category_string=

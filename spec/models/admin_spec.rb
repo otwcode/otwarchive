@@ -43,13 +43,13 @@ describe Admin, :ready do
 
   context "length of login" do
     it "if under #{ArchiveConfig.LOGIN_LENGTH_MIN} long characters" do
-      expect { create(:admin, login: Faker::Lorem.characters(ArchiveConfig.LOGIN_LENGTH_MIN - 1)) }.to \
+      expect { create(:admin, login: Faker::Lorem.characters(number: ArchiveConfig.LOGIN_LENGTH_MIN - 1)) }.to \
         raise_error(ActiveRecord::RecordInvalid, \
                     "Validation failed: Login is too short (minimum is #{ArchiveConfig.LOGIN_LENGTH_MIN} characters)")
     end
 
     it "is invalid if over #{ArchiveConfig.LOGIN_LENGTH_MAX + 1} characters" do
-      expect { create(:admin, login: Faker::Lorem.characters(ArchiveConfig.LOGIN_LENGTH_MAX + 1)) }.to \
+      expect { create(:admin, login: Faker::Lorem.characters(number: ArchiveConfig.LOGIN_LENGTH_MAX + 1)) }.to \
         raise_error(ActiveRecord::RecordInvalid, \
                     "Validation failed: Login is too long (maximum is #{ArchiveConfig.LOGIN_LENGTH_MAX} characters)")
     end
@@ -57,13 +57,13 @@ describe Admin, :ready do
 
   context "length of password" do
     it "is invalid if under #{ArchiveConfig.PASSWORD_LENGTH_MIN - 1} characters" do
-      expect { create(:admin, password: Faker::Lorem.characters(ArchiveConfig.PASSWORD_LENGTH_MIN - 1)) }.to \
+      expect { create(:admin, password: Faker::Lorem.characters(number: ArchiveConfig.PASSWORD_LENGTH_MIN - 1)) }.to \
         raise_error(ActiveRecord::RecordInvalid, \
                     "Validation failed: Password is too short (minimum is #{ArchiveConfig.PASSWORD_LENGTH_MIN} characters)")
     end
 
     it "is invalid if over #{ArchiveConfig.PASSWORD_LENGTH_MAX + 1} characters" do
-      expect { create(:admin, password: Faker::Lorem.characters(ArchiveConfig.PASSWORD_LENGTH_MAX + 1)) }.to \
+      expect { create(:admin, password: Faker::Lorem.characters(number: ArchiveConfig.PASSWORD_LENGTH_MAX + 1)) }.to \
         raise_error(ActiveRecord::RecordInvalid, \
                     "Validation failed: Password is too long (maximum is #{ArchiveConfig.PASSWORD_LENGTH_MAX} characters)")
     end

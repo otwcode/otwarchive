@@ -21,7 +21,7 @@ Feature: Admin Actions to Post News
     When I am logged in as "happyuser"
       And I go to the admin-posts page
     When all emails have been delivered
-      And I follow "Comment"
+      And I follow "Default Admin Post"
       And I fill in "Comment" with "Excellent, my dear!"
       And I press "Comment"
     # notification to the admin list for admin post
@@ -42,7 +42,7 @@ Feature: Admin Actions to Post News
     Given I have posted an admin post
     When I am logged in as "happyuser"
       And I go to the admin-posts page
-    When I follow "Comment"
+    When I follow "Default Admin Post"
       And I fill in "Comment" with "Excellent, my dear!"
       And I press "Comment"
     When I log out
@@ -96,10 +96,12 @@ Feature: Admin Actions to Post News
     Given I am logged in as a "communications" admin
     When I follow "Admin Posts"
       And I follow "Post AO3 News"
-      Then I should see "New AO3 News Post"
+    Then I should see "New AO3 News Post"
+      And I should see "Comment permissions from the selected post will replace any permissions selected on this page."
     When I fill in "admin_post_title" with "Good news, everyone!"
       And I fill in "content" with "I've taught the toaster to feel love."
       And I fill in "Tags" with "quotes, futurama"
+      And I choose "No one can comment"
       And I press "Post"
     Then I should see "Admin Post was successfully created."
       And I should see "toaster" within "div.admin.home"

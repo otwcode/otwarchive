@@ -62,28 +62,23 @@ class Rack::Attack
   login_limit = ArchiveConfig.RATE_LIMIT_LOGIN_ATTEMPTS
   login_period = ArchiveConfig.RATE_LIMIT_LOGIN_PERIOD
 
-  # Throttle POST requests to /login by IP address
+  # Throttle POST requests to /users/login by IP address
   #
   # Key: "rack::attack:#{Time.now.to_i/:period}:logins/ip:#{req.ip}"
-  throttle('logins/ip', limit: login_limit, period: login_period) do |req|
-    if req.path == '/login' && req.post?
-      req.ip
-    end
+  throttle("logins/ip", limit: login_limit, period: login_period) do |req|
+    req.ip if req.path == "/users/login" && req.post?
   end
 
-  # Throttle POST requests to /login by email param
+  # Throttle POST requests to /users/login by login param (user name or email)
   #
-  # Key: "rack::attack:#{Time.now.to_i/:period}:logins/email:#{req.email}"
+  # Key: "rack::attack:#{Time.now.to_i/:period}:logins/email:#{login}"
   #
   # Note: This creates a problem where a malicious user could intentionally
   # throttle logins for another user and force their login requests to be
   # denied, but that's not very common and shouldn't happen to you. (Knock
   # on wood!)
   throttle("logins/email", limit: login_limit, period: login_period) do |req|
-    if req.path == '/login' && req.post?
-      # return the email if present, nil otherwise
-      req.params['email'].presence
-    end
+    req.params.dig("user", "login").presence if req.path == "/users/login" && req.post?
   end
 
   ### Custom Throttle Response ###

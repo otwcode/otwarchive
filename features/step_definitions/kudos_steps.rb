@@ -1,5 +1,22 @@
 ### GIVEN
 
+Given "a work {string} with {int} kudo(s)" do |title, count|
+  step "I start a new session"
+  step "basic tags"
+
+  work = FactoryBot.create(:work, title: title)
+
+  count.times do |i|
+    user = User.find_by(login: "fan#{i + 1}") ||
+           FactoryBot.create(:user, login: "fan#{i + 1}")
+    work.kudos.create(user: user)
+  end
+end
+
+Given "the maximum number of kudos to show is {int}" do |count|
+  allow(ArchiveConfig).to receive(:MAX_KUDOS_TO_SHOW).and_return(count)
+end
+
 ### WHEN
 
 When /^I leave kudos on "([^\"]*)"$/ do |work_title|
