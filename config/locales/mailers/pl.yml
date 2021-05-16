@@ -1,6 +1,24 @@
 ---
 pl:
   mailer:
+    general:
+      footer:
+        general:
+          html:
+            donate_link_text: Waszym darowiznom
+            part1: Jeśli ta wiadomość została wysłana do Ciebie przez pomyłkę, prosimy
+              o %{support_link}.
+            part2: AO3 jest prowadzonym i wspieranym przez fanów archiwum, które działa
+              dzięki %{donate_link}.
+            support_link_text: kontakt ze Wsparciem
+          text:
+            part1: Jeśli ta wiadomość została wysłana do Ciebie przez pomyłkę, prosimy
+              o kontakt ze Wsparciem poprzez %{support_url}.
+            part2: 'AO3 jest prowadzonym i wspieranym przez fanów archiwum, które
+              działa dzięki waszym darowiznom: %{donate_url}.'
+        sent_at: Wysłano o %{sent_at}.
+      signature:
+        app_short_name: AO3
     kudos:
       guest:
         few: "%{count} gości"
@@ -77,19 +95,6 @@ pl:
     change_email:
       part1: "%{login}, adres email powiązany z Twoim kontem został zmieniony na %{email}"
       subject: "[%{app_name}] Email został zmieniony"
-    creatorship_invitation:
-      html:
-        creation: "%{creation_link} autorstwa %{pseud_links}"
-        instructions: Możesz zaakceptować lub odrzucić to zaproszenie na swojej stronie
-          %{page_name}.
-        page_name: Zaproszeń do Tworzenia
-      intro: 'Użytkownik %{inviting_user} zaprosił Twój pseudonim %{pseud} do listy
-        współtwórców %{type}:'
-      subject: "[%{app_name}] Zaproszenie do współtworzenia"
-      text:
-        creation: "%{title} (%{url}) autorstwa %{pseuds}"
-        instructions: 'Możesz zaakceptować lub odrzucić to zaproszenie na swojej stronie
-          Zaproszeń do Tworzenia: %{url}'
     creatorship_notification:
       explanation: Gdy jesteś współtwórcą pracy, możesz zostać dodana/y do nowych
         rozdziałów bez względu na Twoje ustawienia współtworzenia. Będziesz również
@@ -102,7 +107,7 @@ pl:
       intro: 'Użytkownik %{adding_user} dodał twój pseudonim %{pseud} jako współtwórcę
         następującej zawartości (%{type}):
 
-'
+        '
       subject: "[%{app_name}] Powiadomienie o Współautorstwie"
       text:
         creation: "%{title} (%{url}) autorstwa %{pseuds}"

@@ -1,12 +1,5 @@
 ---
 pt-BR:
-  activerecord:
-    errors:
-      messages:
-        record_invalid: 'A validação falhou: %{errors}'
-        restrict_dependent_destroy:
-          has_many: Não é possível excluir o registro pois existem %{record} dependentes
-          has_one: Não é possível excluir o registro pois existe um %{record} dependente
   date:
     abbr_day_names:
     - dom
@@ -17,7 +10,7 @@ pt-BR:
     - sex
     - sáb
     abbr_month_names:
-    - 
+    -
     - jan
     - fev
     - mar
@@ -43,7 +36,7 @@ pt-BR:
       long: "%d de %B de %Y"
       short: "%d de %B"
     month_names:
-    - 
+    -
     - janeiro
     - fevereiro
     - março
@@ -106,44 +99,6 @@ pt-BR:
       month: Mês
       second: Segundo
       year: Ano
-  errors:
-    format: "%{attribute} %{message}"
-    messages:
-      accepted: deve ser aceito
-      blank: não pode ficar em branco
-      confirmation: não é igual a %{attribute}
-      empty: não pode ficar vazio
-      equal_to: deve ser igual a %{count}
-      even: deve ser par
-      exclusion: não está disponível
-      greater_than: deve ser maior que %{count}
-      greater_than_or_equal_to: deve ser maior ou igual a %{count}
-      inclusion: não está incluído na lista
-      invalid: não é válido
-      less_than: deve ser menor que %{count}
-      less_than_or_equal_to: deve ser menor ou igual a %{count}
-      model_invalid: 'A validação falhou: %{errors}'
-      not_an_integer: não é um número inteiro
-      not_a_number: não é um número
-      odd: deve ser ímpar
-      other_than: deve ser diferente de %{count}
-      present: deve ficar em branco
-      required: é obrigatório(a)
-      taken: já está em uso
-      too_long:
-        one: 'é muito longo (máximo: 1 caracter)'
-        other: 'é muito longo (máximo: %{count} caracteres)'
-      too_short:
-        one: 'é muito curto (mínimo: 1 caracter)'
-        other: 'é muito curto (mínimo: %{count} caracteres)'
-      wrong_length:
-        one: não possui o tamanho esperado (1 caracter)
-        other: não possui o tamanho esperado (%{count} caracteres)
-    template:
-      body: 'Por favor, verifique o(s) seguinte(s) campo(s):'
-      header:
-        one: 'Não foi possível gravar %{model}: 1 erro'
-        other: 'Não foi possível gravar %{model}: %{count} erros'
   helpers:
     select:
       prompt: Por favor selecione

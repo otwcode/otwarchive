@@ -46,18 +46,6 @@ cs:
     change_email:
       part1: "%{login}, email spojený s vaším účtem byl změněn na %{email}"
       subject: "[%{app_name}] Email byl změněn"
-    creatorship_invitation:
-      html:
-        creation: "%{creation_link} od %{pseud_links}"
-        instructions: Pozvání můžete přijmout nebo odmítnout na vaší stránce %{page_name}.
-        page_name: Pozvání autora
-      intro: 'Uživatel %{inviting_user} pozval váš pseudonym %{pseud} na seznam spoluautorů
-        následující práce %{type}:'
-      subject: "[%{app_name}] Pozvání spoluautora"
-      text:
-        creation: "%{title} (%{url}) od %{pseuds}"
-        instructions: 'Pozvání můžete přijmout nebo odmítnout na vaší stránce Pozvání
-          autora: %{url}'
     creatorship_notification:
       explanation: Pokud jste spoluautorem práce, můžete být přidáni jako spoluautor
         nových kapitol nehledě na vaše nastavení preferencí ohledně spoluautorství.

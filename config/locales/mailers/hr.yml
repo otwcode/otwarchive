@@ -15,9 +15,6 @@ hr:
             part2: 'AO3 je arhiv od fanova za fanove, te ovisi o vašim donacijama:
               %{donate_url}.'
         sent_at: Poslano na %{sent_at}.
-        sent_by:
-          html: Šalje <b>%{sent_by}</b>.
-          text: Šalje %{sent_by}.
       signature:
         app_short_name: AO3
     kudos:
@@ -97,19 +94,6 @@ hr:
     change_email:
       part1: "%{login}, e-mail povezan s vašim računom je promijenjen u %{email}"
       subject: "[%{app_name}] Promijenjen e-mail"
-    creatorship_invitation:
-      html:
-        creation: "%{creation_link}, autora %{pseud_links}"
-        instructions: Možete prihvatiti ili odbiti ovu pozivnicu na vašoj stranici
-          %{page_name}.
-        page_name: Pozivnice kreatora
-      intro: 'Korisnik %{inviting_user} je poslao zahtjev da vaš pseudonim %{pseud}
-        bude na listi sukreatora na sljedećim %{type}:'
-      subject: "[%{app_name}] Pozivnica sukreatora"
-      text:
-        creation: "%{title} (%{url}), autora %{pseuds}"
-        instructions: 'Možete prihvatiti ili odbiti ovaj poziv na vašoj stranici Pozivnica
-          kreatora: %{url}'
     creatorship_notification:
       explanation: Kada ste sukreator nekog djela, možete biti dodani novim poglavljima
         bez obzira na vaše postavke. Također ćete biti dodani serijalu kojem je dodano
@@ -240,15 +224,8 @@ hr:
           prijatelje na %{invitation_page}.
       closing: Pozdrav,
       greeting: Bok %{login}!
-      html: |-
-        <p> Bok %{login}! </p>
-        <p> %{total} novu/e pozivnicu/e, koja/e se može/gu iskoristiti za stvaranje novih računa na arhivi. Možete pozvati prijatelje na %{invitation_page}. </p>
-        <p> Pozdrav, <br> %{archive_name}</p>
       invitation_page_link_text: vaša stranica pozivnica
       subject: "[%{app_name}] Nove pozivnice"
-      txt: "Bok %{login}\nSamo smo vam htjeli javiti da imate %{total} novu/e pozivnicu/e,
-        koja/e se može/gu iskoristiti za stvaranje novih računa na arhivi. Možete
-        pozvati prijatelje na %{invitation_page}.\nPozdrav, \n%{archive_name}"
     invite_request_declined:
       greeting: Dragi %{user},
       main:
@@ -259,7 +236,8 @@ hr:
       signoff: Srdačan pozdrav,
       subject: "[%{app_name}] Zahtjev za dodatnim pozivnim kodom odbijen"
     signup_notification:
-      activate_your_account: aktivirajte svoj račun
+      activate_your_account: Slijedite ovu poveznicu kako bi aktivirali svoj korisnički
+        račun
       admin_posts: Postovi admina Arhiva
       bye: Nadamo se da uživate u korištenju Arhiva.
       contact_support: kontaktirajte naš tim za Korisničku podršku
@@ -270,8 +248,8 @@ hr:
           djela, napraviti preplate putem e-maila kako biste bili obaviješteni kada
           vaši omiljeni autori učitaju novo djelo ili ažuriraju već postojeće, postavite
           postavke da biste prilagodili način na koji stranica izgleda i radi za vas,
-          pratite djela koja ste pogledali na Arhivu putem svoje povijesti i još mnogo
-          toga.
+          pratite djela kojima ste pristupilii na Arhivu putem svoje povijesti i još
+          mnogo toga.
         part3: Postoji puno informacija i savjeta o tome kako koristiti Arhiv putem
           stranice “%{faq_link}”. Naći ćete najnovije vijesti o razvoju web lokacije
           putem stranice “%{admin_posts_link}”. Ako vam je potrebna dodatna pomoć,

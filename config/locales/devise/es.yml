@@ -1,14 +1,2 @@
 ---
-es:
-  users:
-    mailer:
-      reset_password_instructions:
-        expiration: Si este enlace para cambio de contraseña no se utiliza en una
-          semana, expirará y deberás solicitar uno nuevo.
-        intro: "%{user}, alguien ha solicitado restablecer la contraseña de tu cuenta.
-          Sigue el enlace a continuación e ingresa tu nueva contraseña para realizar
-          el cambio:"
-        link_title: Cambiar mi contraseña.
-        subject: "[%{app_name}] Cambio de contraseña"
-        unrequested: Si no solicitaste un cambio de contraseña, puedes ignorar este
-          correo electrónico y tu contraseña previa seguirá en funciones.
+es: {}

@@ -4,23 +4,12 @@ hu:
     general:
       footer:
         general:
-          html: |-
-            <p>
-            Ha tévedésből kaptad ezt az emailt, <a href="%{support_url}" style="color:#ffffff; text-decoration:underline">lépj kapcsolatba a Támogatással</a>.
-            </p>
-
-            <p>
-            Az Archive of Our Own egy rajongók által működtetett és támogatott archívum, amely  <a href="%{donate_url}" style="color:#ffffff; text-decoration:underline">a Te adományaidból épül</a>.
-            </p>
           text:
             part1: 'Ha tévedésből kaptad ezt az emailt, lépj kapcsolatba a Támogatással:
               %{support_url}.'
             part2: 'Az Archive of Our Own egy rajongók által működtetett és támogatott
               archívum, amely a Te adományaidból épül: %{donate_url}.'
         sent_at: 'Dátum: %{sent_at}.'
-        sent_by:
-          html: 'Feladó: <b>%{sent_by}</b>.'
-          text: 'Feladó: %{sent_by}.'
     kudos:
       guest:
         one: egy vendég
@@ -81,34 +70,26 @@ hu:
         remove: 'Ha tévedésből adtak hozzá, vagy nem akarod, hogy alkotóként szerepelj,
           akkor a %{type} szerkesztésével eltávolíthatod magad az alkotók közül: %{url}'
     delete_work_notification:
-      hello: Kedves %{user},
+      hello: Kedves %{user}!
       html:
         part1_other: "%{pseud} kérésére töröltük %{title} című munkádat."
         part1_yourself: Kérésedre töröltük %{title} című munkádat.
         part2: Ha kérdésed van, kérjük, %{support}.
-      part2: Ha kérdésed van, kérjük, %{support}.
+      part2: Ha kérdésed van, %{support}.
       part3: A szóban forgó munkádat csatoltuk az e-mailhez.
       subject: "[%{app_name}] Munkádat töröltük"
       support: lépj kapcsolatba a Támogatással
       text:
         part1_other: '%{pseud} kérésére töröltük "%{title}" című munkádat.'
         part1_yourself: Kérésedre töröltük "%{title}" című munkádat.
-        part2: Ha kérdésed van, kérjük, %{support} (%{url}).
+        part2: Ha kérdésed van, %{support} (%{url}).
     invite_increase_notification:
       body:
-        one: 'Örömmel tudatjuk veled, hogy van %{count} új meghívód, amely(ek)et új
-          fiók(ok) létrehozására használhatsz az archívumban. Itt hívhatsz meg barátokat:
+        one: 'Örömmel tudatjuk veled, hogy van %{count} új meghívód, amelyet új fiók
+          létrehozására használhatsz az archívumban. Itt hívhatsz meg barátokat: %{invitation_page}.'
+        other: 'Örömmel tudatjuk veled, hogy van %{count} új meghívód, amelyeket új
+          fiókok létrehozására használhatsz az archívumban. Itt hívhatsz meg barátokat:
           %{invitation_page}.'
-        other: 'Örömmel tudatjuk veled, hogy van %{count} új meghívód, amely(ek)et
-          új fiók(ok) létrehozására használhatsz az archívumban. Itt hívhatsz meg
-          barátokat: %{invitation_page}.'
       closing: 'Üdvözlettel:'
       greeting: Szia %{login}!
-      html: |-
-        <p> Szia %{login}! </p>
-        <p> Örömmel tudatjuk veled, hogy van %{total} új meghívód, amely(ek)et új fiók(ok) létrehozására használhatsz az archívumban. Itt hívhatsz meg barátokat: %{invitation_page}. </p>
-        <p> Üdvözlettel:, <br> %{archive_name}</p>
       subject: "[%{app_name}] Új Meghívók"
-      txt: "Szia %{login}\nÖrömmel tudatjuk veled, hogy van %{total} új meghívód,
-        amely(ek)et új fiók(ok) létrehozására használhatsz az archívumban. Itt hívhatsz
-        meg barátokat: %{invitation_page}.\nÜdvözlettel: \n%{archive_name}"

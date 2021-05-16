@@ -16,9 +16,6 @@ sv:
             part2: 'AO3 är ett arkiv som drivs och stöds av fans och som är beroende
               av era gåvor: %{donate_url}.'
         sent_at: Skickat %{sent_at}.
-        sent_by:
-          html: Skickat av <b>%{sent_by}</b>.
-          text: Skickat av %{sent_by}.
       signature:
         app_short_name: AO3
     kudos:
@@ -92,19 +89,6 @@ sv:
       part1: "%{login}, e-postadressen som är knuten till ditt konto har ändrats till
         %{email}"
       subject: "[%{app_name}] E-postadressen har ändrats"
-    creatorship_invitation:
-      html:
-        creation: "%{creation_link} av %{pseud_links}"
-        instructions: Du kan acceptera eller avvisa denna inbjudan på din %{page_name}
-          -sida.
-        page_name: Inbjudningar som medskapare
-      intro: 'Användaren %{inviting_user} har bjudit in din pseudonym %{pseud} att
-        stå som medskapare på följande %{type}:'
-      subject: "[%{app_name}] Inbjudan till medskapare"
-      text:
-        creation: "%{title} (%{url}) av %{pseuds}"
-        instructions: 'Du kan acceptera eller avvisa denna inbjudan på din sida för
-          Inbjudningar som medskapare: %{url}'
     creatorship_notification:
       explanation: När du är medskapare till ett verk kan du bli tillagd på nya kapitel
         oavsett vilka medskaparinställningar du har. Du kommer även att bli tillagd
@@ -138,6 +122,20 @@ sv:
         creation: "%{title} (%{url}) av %{pseuds}"
         remove: 'Om du blivit tillagd av misstag eller inte vill vara listad som skapare
           kan du redigera %{type} för att ta bort dig själv som skapare: %{url}'
+    delete_work_notification:
+      hello: Kära %{user},
+      html:
+        part1_other: Ditt verk "%{title}" togs bort på begäran av %{pseud}.
+        part1_yourself: Ditt verk %{title} togs bort enligt din begäran.
+        part2: Om du har frågor, vänligen %{support}.
+      part2: Om du har frågor, vänligen %{support}.
+      part3: Bifogat finns en kopia av ditt verk för din kännedom.
+      subject: "[%{app_name}] Ditt verk har tagits bort"
+      support: kontakta Support
+      text:
+        part1_other: Ditt verk "%{title}" togs bort på begäran av %{pseud}.
+        part1_yourself: Ditt verk "%{title}" togs bort enligt din begäran.
+        part2: Om du har frågor, vänligen %{support} (%{url}).
     invitation_to_claim:
       greeting: Hälsningar från %{app_name}!
       html:

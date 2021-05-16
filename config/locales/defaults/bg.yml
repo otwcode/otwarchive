@@ -1,9 +1,5 @@
 ---
 bg:
-  activerecord:
-    errors:
-      messages:
-        record_invalid: 'имаше грешки: %{errors}'
   date:
     abbr_day_names:
     - нед
@@ -14,7 +10,7 @@ bg:
     - пет
     - съб
     abbr_month_names:
-    - 
+    -
     - ян.
     - фев.
     - март
@@ -40,7 +36,7 @@ bg:
       long: "%d %B %Y"
       short: "%d %b"
     month_names:
-    - 
+    -
     - януари
     - февруари
     - март
@@ -100,31 +96,6 @@ bg:
       month: Месец
       second: Секунда
       year: Година
-  errors:
-    format: "%{attribute} %{message}"
-    messages:
-      accepted: трябва да се потвърди
-      blank: не може да е без стойност
-      confirmation: не съответства на потвърждението
-      empty: не може да е празно
-      equal_to: трябва да има стойност, равна на %{count}
-      even: трябва да е нечетно
-      exclusion: съдържа предварително зададена стойност
-      greater_than: трябва да има стойност, по-голяма от %{count}
-      greater_than_or_equal_to: трябва да има стойност, по-голяма или равна на %{count}
-      inclusion: съдържа непредвидена стойност
-      invalid: съдържа невярна стойност
-      less_than: трябва да има стойност, по-малка от %{count}
-      less_than_or_equal_to: трябва да има стойност, по-малка или равна на %{count}
-      not_an_integer: не е цяло число
-      not_a_number: не е число
-      odd: трябва да е четно
-      taken: вече съществува
-    template:
-      body: 'Възникнаха проблеми със следните полета:'
-      header:
-        one: "%{model}: записът е неуспешен заради 1 грешка"
-        other: "%{model}: записът е неуспешен заради %{count} грешки"
   helpers:
     select:
       prompt: Моля отбележете

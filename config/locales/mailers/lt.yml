@@ -3,11 +3,4 @@ lt:
   user_mailer:
     invite_increase_notification:
       closing: Grazie,
-      html: |-
-        <p> Ciao %{login}! </p>
-        <p> volevamo farti sapere che hai %{total} nuovo/i invito/i che possono essere usati per creare nuovi account nell’archivio. Puoi invitare i tuoi amici andando alla pagina%{invitation_page}. </p>
-        <p> Grazie, <br> %{archive_name}</p>
       subject: "[%{app_name}] Nuovi inviti"
-      txt: "Ciao %{login}\nVolevamo farti sapere che hai %{total} nuovo/ii invito/i
-        che possono essere usati per creare nuovi account nell’archivio. Puoi invitare
-        i tuoi amici andando alla pagina %{invitation_page}.\n Grazie, \n%{archive_name}"

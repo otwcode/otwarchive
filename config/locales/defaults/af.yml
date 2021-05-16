@@ -1,12 +1,5 @@
 ---
 af:
-  activerecord:
-    errors:
-      messages:
-        record_invalid: 'Validering het misluk: %{errors}'
-        restrict_dependent_destroy:
-          has_many: Kan rekord nie skrap nie omdat afhanklike %{record} bestaan
-          has_one: Kan rekord nie skrap nie omdat 'n afhanklike %{record} bestaan
   date:
     abbr_day_names:
     - Son
@@ -17,7 +10,7 @@ af:
     - Vry
     - Sat
     abbr_month_names:
-    - 
+    -
     - Jan
     - Feb
     - Mar
@@ -43,7 +36,7 @@ af:
       long: "%B %d, %Y"
       short: "%b %d"
     month_names:
-    - 
+    -
     - Januarie
     - Februarie
     - Maart
@@ -106,44 +99,6 @@ af:
       month: Maand
       second: Sekondes
       year: Jaar
-  errors:
-    format: "%{attribute} %{message}"
-    messages:
-      accepted: moet aanvaar word
-      blank: mag nie leeg wees nie
-      confirmation: pas nie by bevestiging nie
-      empty: mag nie leeg wees nie
-      equal_to: moet gelyk wees aan %{count}
-      even: moet ewe wees
-      exclusion: is bespreek
-      greater_than: moet meer wees as %{count}
-      greater_than_or_equal_to: moet meer of gelykstaande wees aan %{count}
-      inclusion: is nie by die lys ingesluit nie
-      invalid: is ongeldig
-      less_than: moet minder wees as %{count}
-      less_than_or_equal_to: moet minder of gelykstaande wees aan %{count}
-      model_invalid: 'Validering het misluk: %{errors}'
-      not_an_integer: moet 'n heelgetal wees
-      not_a_number: is nie 'n getal nie
-      odd: moet onewe wees
-      other_than: moet anders wees as %{count}
-      present: moet leeg wees
-      required: moet bestaan
-      taken: is reeds geneem
-      too_long:
-        one: is te lank (maksimum is 1 karakter)
-        other: is te lank (maksimum is %{count} karakters)
-      too_short:
-        one: is te kort (minimum is 1 karakter)
-        other: is te kort (minimum is %{count} karakters)
-      wrong_length:
-        one: is die verkeerde lengte (moet 1 karakter wees)
-        other: is die verkeerde lengte (moet %{count} karakters wees)
-    template:
-      body: 'There were problems with the following fields:'
-      header:
-        one: 1 fout het verhoed dat hierdie %{model} gestoor kon word
-        other: "%{count} foute het verhoed dat hierdie %{model} gestoor kon word"
   helpers:
     select:
       prompt: Kies asseblief

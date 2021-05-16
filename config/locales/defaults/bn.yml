@@ -10,7 +10,7 @@ bn:
     - শুক্রবার
     - শনিবার
     abbr_month_names:
-    - 
+    -
     - জানুয়ারি
     - ফেব্রুয়ারি
     - মার্চ
@@ -36,7 +36,7 @@ bn:
       long: "%e de %B de %Y"
       short: "%e de %b"
     month_names:
-    - 
+    -
     - জানুয়ারি
     - ফেব্রুয়ারি
     - মার্চ
@@ -93,30 +93,6 @@ bn:
       month: মাস
       second: সেকেন্ড
       year: বছর
-  errors:
-    format: "%{attribute} %{message}"
-    messages:
-      accepted: গ্রাহ্য করতে হবে
-      blank: ফাঁকা রাখা যাবে না
-      confirmation: অনুমোদনের সঙ্গে মিলছে না
-      empty: খালি রাখা যাবে না
-      equal_to: "%{count} এর সঙ্গে সমান হতে হবে"
-      even: জোড় হতে হবে
-      exclusion: রিসার্ভ করা আছে
-      greater_than: "%{count} থেকে বড়ো হতে হবে"
-      greater_than_or_equal_to: "%{count} থেকে বড়ো অথবা তার সমান হতে হবে"
-      inclusion: লিস্টে অন্তর্ভুক্ত নয়
-      invalid: সঠিক নয়
-      less_than: "%{count} থেকে ছোটো হতে হবে"
-      less_than_or_equal_to: "%{count} থেকে ছোটো অথবা তার সমান হতে হবে"
-      not_a_number: নম্বর নয়
-      odd: বেজোড় হতে হবে
-      taken: আগেই নিয়ে নেওয়া হয়েছে
-    template:
-      body: 'এই ফিল্ডগুলোতে কিছু সমস্যা দেখা দিয়েছে:'
-      header:
-        one: ১ টি ত্রুটির কারনে %{model} সংরক্ষন করা সম্ভব হয়নি
-        other: "%{count} টি ত্রুটির কারনে %{model} সংরক্ষন করা সম্ভব হয়নি"
   number:
     currency:
       format:

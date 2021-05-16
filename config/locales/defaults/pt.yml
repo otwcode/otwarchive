@@ -1,12 +1,5 @@
 ---
 pt:
-  activerecord:
-    errors:
-      messages:
-        record_invalid: 'A validação falhou: %{errors}'
-        restrict_dependent_destroy:
-          has_many: Não pode ser eliminado por existirem dependências de %{record}
-          has_one: Não pode ser eliminado por existir uma dependência de %{record}
   date:
     abbr_day_names:
     - dom
@@ -17,7 +10,7 @@ pt:
     - sex
     - sáb
     abbr_month_names:
-    - 
+    -
     - jan
     - fev
     - mar
@@ -43,7 +36,7 @@ pt:
       long: "%d de %B de %Y"
       short: "%d de %B"
     month_names:
-    - 
+    -
     - janeiro
     - fevereiro
     - março
@@ -106,35 +99,6 @@ pt:
       month: Mês
       second: Segundo
       year: Ano
-  errors:
-    format: "%{attribute} %{message}"
-    messages:
-      accepted: tem de ser aceite
-      blank: não pode estar em branco
-      confirmation: não coincide com a confirmação
-      empty: não pode estar vazio
-      equal_to: tem de ser igual a %{count}
-      even: tem de ser par
-      exclusion: é reservado
-      greater_than: tem de ser maior que %{count}
-      greater_than_or_equal_to: tem de ser maior ou igual a %{count}
-      inclusion: não está incluído na lista
-      invalid: é inválido
-      less_than: tem de ser menor que %{count}
-      less_than_or_equal_to: tem de ser menor ou igual a %{count}
-      model_invalid: 'A validação falhou: %{errors}'
-      not_an_integer: tem de ser um inteiro
-      not_a_number: não é um número
-      odd: tem de ser ímpar
-      other_than: tem de ser diferente de %{count}
-      present: não pode estar em branco
-      required: é obrigatório
-      taken: não está disponível
-    template:
-      body: 'Por favor, verifique os seguintes campos:'
-      header:
-        one: 1 erro impediu guardar este %{model}
-        other: "%{count} erros impediram guardar este %{model}"
   helpers:
     select:
       prompt: Por favor seleccione

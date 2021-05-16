@@ -1,12 +1,5 @@
 ---
 sr:
-  activerecord:
-    errors:
-      messages:
-        record_invalid: 'Валидација није успела: %{errors}'
-        restrict_dependent_destroy:
-          has_many: Није могуће обрисати запис јер постоје зависни %{record}
-          has_one: Није могуће обрисати запис јер постоји зависан %{record}
   date:
     abbr_day_names:
     - Нед
@@ -17,7 +10,7 @@ sr:
     - Пет
     - Суб
     abbr_month_names:
-    - 
+    -
     - Јан
     - Феб
     - Мар
@@ -43,7 +36,7 @@ sr:
       long: "%B %e, %Y"
       short: "%e %b"
     month_names:
-    - 
+    -
     - Јануар
     - Фабруар
     - Март
@@ -114,48 +107,6 @@ sr:
       month: Месец
       second: Секунд
       year: Година
-  errors:
-    format: Поље %{attribute} %{message}
-    messages:
-      accepted: мора бити прихваћено
-      blank: не сме бити празано
-      confirmation: се не слаже са потврдом
-      empty: не сме бити празано
-      equal_to: мора бити једнако %{count}
-      even: мора бити парно
-      exclusion: је резервисано
-      greater_than: мора бити веће од %{count}
-      greater_than_or_equal_to: мора бити веће или једнако %{count}
-      inclusion: није у листи
-      invalid: није исправно
-      less_than: мора бити мање од %{count}
-      less_than_or_equal_to: мора бити мање или једнако %{count}
-      model_invalid: 'Валидација није успела: %{errors}'
-      not_an_integer: није цео број
-      not_a_number: није број
-      odd: мора бити непарно
-      other_than: мора бити различито од %{count}
-      present: мора бити празно
-      required: мора постојати
-      taken: је већ заузето
-      too_long:
-        few: је предугачко (максимум је %{count} знака)
-        one: је предугачко (максимум је %{count} знак)
-        other: је предугачко (максимум је %{count} знакова)
-      too_short:
-        few: је прекратко (минимум је %{count} знака)
-        one: је прекратко (минимум је %{count} знак)
-        other: је прекратко (минимум је %{count} знакова)
-      wrong_length:
-        few: није одговарајуће дужине (треба бити %{count} знака)
-        one: није одговарајуће дужине (треба бити %{count} знак)
-        other: није одговарајуће дужине (треба бити %{count} знакова)
-    template:
-      body: 'Молим Вас да проверите следећа поља:'
-      header:
-        few: 'Нисам успео сачувати %{model}: %{count} грешке.'
-        one: 'Нисам успео сачувати %{model}: %{count} грешка.'
-        other: 'Нисам успео сачувати %{model}: %{count} грешки.'
   helpers:
     select:
       prompt: Изаберите

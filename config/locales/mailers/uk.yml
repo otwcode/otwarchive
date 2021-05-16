@@ -16,9 +16,6 @@ uk:
             part2: 'АО3 – це керований та забезпечуваний фанатами архів, який залежить
               від Ваших пожертв: %{donate_url}.'
         sent_at: Відправлено %{sent_at}.
-        sent_by:
-          html: Відправлено <b>%{sent_by}</b>.
-          text: Відправлено %{sent_by}.
       signature:
         app_short_name: AO3
     kudos:

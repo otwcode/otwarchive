@@ -1,6 +1,23 @@
 ---
 ro:
   mailer:
+    general:
+      footer:
+        general:
+          html:
+            donate_link_text: donațiile tale
+            part1: Dacă ai primit acest mesaj din greșeală te rugăm %{support_link}.
+            part2: AO3 este o arhivă administrată și susținută de fani care se bazează
+              pe %{donate_link}.
+            support_link_text: să contactezi echipa de Suport Tehnic
+          text:
+            part1: Dacă ai primit acest mesaj din greșeală te rugăm să contactezi
+              echipa de Suport Tehnic la %{support_url}.
+            part2: 'AO3 este o arhivă administrată și susținută de fani care se bazează
+              pe donațiile tale: %{donate_url}.'
+        sent_at: Trimis la %{sent_at}.
+      signature:
+        app_short_name: AO3
     kudos:
       guest:
         few: "%{count} vizitatori"
@@ -49,18 +66,6 @@ ro:
       part1: "%{login}, adresa de e-mail asociată cu contul tău a fost schimbată la
         %{email}"
       subject: "[%{app_name}] Adresa de e-mail schimbată"
-    creatorship_invitation:
-      html:
-        creation: "%{creation_link} de %{pseud_links}"
-        instructions: Poți accepta sau refuza această invitație pe pagina ta de %{page_name}.
-        page_name: Invitații de creator
-      intro: 'Utilizatorul %{inviting_user} te-a invitat să adaugi pseudonimul tău
-        %{pseud} ca și co-creator la %{type}:'
-      subject: "[%{app_name}] Invitație de co-creator"
-      text:
-        creation: "%{title} (%{url}) de %{pseuds}"
-        instructions: 'Poți accepta sau refuza această invitație pe pagina ta de Invitații
-          de Creator: %{url}'
     creatorship_notification:
       explanation: Când apari drept co-creator la o lucrare, poți fi adăugat(ă) la
         capitole noi, indiferent de setările tale pentru co-creator. De asemenea,
@@ -94,6 +99,20 @@ ro:
         remove: 'Dacă ai fost adăugat(ă) din greșeală sau nu dorești să apari pe lista
           de creatori, poți să editezi %{type} pentru a te elimina din lista de creatori:
           %{url}'
+    delete_work_notification:
+      hello: Dragă %{user},
+      html:
+        part1_other: Lucrarea ta %{title} a fost ștearsă la cererea lui %{pseud}.
+        part1_yourself: Lucrarea ta %{title} a fost ștearsă la cererea ta.
+        part2: Dacă ai întrebări, te rugăm  %{support}.
+      part2: Dacă ai întrebări, te rugăm  %{support}.
+      part3: Atașată este o copie a lucrării tale ca și referință.
+      subject: "[%{app_name}] Lucrarea ta a fost ștearsă"
+      support: să contactezi echipa de Suport Tehnic
+      text:
+        part1_other: Lucrarea ta "%{title}" a fost ștearsă la cererea lui %{pseud}.
+        part1_yourself: Lucrarea ta "%{title}" a fost ștearsă la cererea ta.
+        part2: Dacă ai întrebări, te rugăm %{support} (%{url}).
     invitation_to_claim:
       greeting: Salutări din partea %{app_name}!
       html:

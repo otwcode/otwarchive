@@ -1,14 +1,6 @@
 ---
 nl:
   mailer:
-    general:
-      footer:
-        general:
-          html: |2
-
-            <p>Is dit bericht niet voor jou bedoeld? <a href="%{support_url}" style="color:#ffffff; text-decoration:underline">Neem dan contact op met Support</a>.</p>
-
-            AO3 is een door fans ondersteund archief dat afhankelijk is van <a href="%{donate_url}" style="color:#ffffff; text-decoration:underline">jouw donaties</a>.</p>
     kudos:
       guest:
         one: een bezoeker
@@ -91,6 +83,19 @@ nl:
         remove: 'Als je per ongeluk werd toegevoegd of niet als producent bekend wil
           staan, dan kan je het %{type} aanpassen om jezelf te verwijderen als producent:
           %{url}'
+    delete_work_notification:
+      hello: Beste %{user},
+      html:
+        part1_other: Jouw werk %{title} werd verwijderd op verzoek van %{pseud}.
+        part1_yourself: Jouw werk %{title} werd verwijderd op jouw verzoek.
+        part2: Als je vragen hebt, %{support}.
+      part3: Bijgevoegd is een kopie van jouw werk ter referentie.
+      subject: "[%{app_name}] Jouw werk is verwijderd"
+      support: contacteer Support
+      text:
+        part1_other: Jouw werk "%{title}" werd verwijderd op verzoek van %{pseud}.
+        part1_yourself: Jouw werk "%{title}" werd verwijderd op jouw verzoek.
+        part2: Als je vragen hebt, %{support} (%{url}).
     invite_request_declined:
       greeting: Beste %{user},
       main:

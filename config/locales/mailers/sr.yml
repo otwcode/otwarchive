@@ -35,19 +35,6 @@ sr:
     change_email:
       part1: "%{login}, email који је повезан са Вашим налогом је промењен у %{email}"
       subject: "[%{app_name}] Email је промењен"
-    creatorship_invitation:
-      html:
-        creation: "%{creation_link} од %{pseud_links}"
-        instructions: Можете прихватити или одбити ову позивницу на својој страници
-          за %{page_name}.
-        page_name: Позивнице за ауторе
-      intro: 'Корисник %{inviting_user} је позвао Ваш псеудоним %{pseud} да се наведе
-        као коаутор на следећем %{type}:'
-      subject: "[%{app_name}] Позивница за коаутора"
-      text:
-        creation: "%{title} (%{url}) од %{pseuds}"
-        instructions: 'Можете прихватити или одбити ову позивницу на својој страници
-          за Позивнице за ауторе: %{url}'
     creatorship_notification:
       explanation: Када сте коаутор неког дела, можете бити додани новим главама без
         обзира на ваша подешавања о коауторству. Бићете додани и на сваки серијал

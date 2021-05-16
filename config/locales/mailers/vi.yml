@@ -17,9 +17,6 @@ vi:
             part2: 'AO3 là một kho lưu trữ được điều hành và hỗ trợ bởi fan phụ thuộc
               vào quyên góp của bạn: %{donate_url}.'
         sent_at: Gửi vào %{sent_at}.
-        sent_by:
-          html: Được gửi bởi <b>%{sent_by}</b>.
-          text: Được gửi bởi %{sent_by}.
       signature:
         app_short_name: AO3
     kudos:
@@ -89,19 +86,6 @@ vi:
       part1: "%{login}, email dùng để đăng ký tài khoản của bạn đã được đổi thành
         %{email}"
       subject: "[%{app_name}] Thay đổi email"
-    creatorship_invitation:
-      html:
-        creation: "%{creation_link} bởi %{pseud_links}"
-        instructions: Bạn có thể chấp nhận hoặc từ chối lời mời này trên trang %{page_name}
-          của bạn.
-        page_name: Lời mời Đồng sáng tác
-      intro: 'Người dùng %{inviting_user} đã thêm bạn, %{pseud}, là người đồng sáng
-        tác của tác phẩm sau: %{type}:'
-      subject: "[%{app_name}] Lời mời đồng sáng tác"
-      text:
-        creation: "%{title} (%{url}) bởi %{pseuds}"
-        instructions: 'Bạn có thể chấp nhận hoặc từ chối lời mời này trên trang Lời
-          mời Đồng sáng tác: %{url}'
     creatorship_notification:
       explanation: Khi là người đồng sáng tạo của một tác phẩm, bạn sẽ được thêm vào
         các chương mới bất kể cài đặt đồng sáng tạo của bạn. Bạn cũng sẽ được thêm
@@ -257,14 +241,7 @@ vi:
           %{invitation_page}.
       closing: Thân ái,
       greeting: Xin chào %{login}!
-      html: |-
-        <p> Xin chào %{login}! </p>
-        <p> Chúng tôi muốn cho bạn biết rằng bạn đang có %{total} thư mời, có thể được sử dụng để tạo tài khoản mới ở Kho tàng. Bạn có thể mời bạn bè tại %{invitation_page}. </p>
-        <p> Thân ái, <br> %{archive_name}</p>
       subject: "[%{app_name}] Thư mời mới"
-      txt: "Xin chào %{login}\nChúng tôi muốn cho bạn biết rằng bạn đang có %{total}
-        thư mời, có thể được sử dụng để tạo tài khoản mới ở Kho tàng. Bạn có thể mời
-        bạn bè tại %{invitation_page}.\nThân ái, \n%{archive_name}\n"
     invite_request_declined:
       greeting: "%{user} thân mến,"
       main:

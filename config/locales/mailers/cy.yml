@@ -17,9 +17,6 @@ cy:
               ei rhedeg a’i chefnogi gan ffaniau, sy’n dibynu ar eich cyfranniadau:
               %{donate_url}.'
         sent_at: Anfonwyd am %{sent_at}.
-        sent_by:
-          html: Anfonwyd gan <b>%{sent_by}</b>.
-          text: Anfonwyd gan %{sent_by}.
       signature:
         app_short_name: AO3
     kudos:
@@ -62,19 +59,6 @@ cy:
     change_email:
       part1: "%{login}, newidwyd yr ebost cysylltiedig i'ch cyfrif i %{email}"
       subject: "[%{app_name}] Newidiad Ebost"
-    creatorship_invitation:
-      html:
-        creation: "%{creation_link} gan %{pseud_links}"
-        instructions: Gallwch dderbyn neu wrthod y gwahoddiad hwn ar eich tudalen
-          %{page_name}.
-        page_name: Gwahoddiadau Creüydd
-      intro: 'Mae’r defnyddydd %{inviting_user} wedi gwahodd eich ffugenw %{pseud}
-        i gael ei restru fel cyd-greüydd ar y %{type} canlynol:'
-      subject: "[%{app_name}] Gwahoddiad cyd-greüydd"
-      text:
-        creation: "%{title} (%{url}) gan %{pseuds}"
-        instructions: 'Gallwch dderbyn neu wrthod y gwahoddiad hwn ar eich tudalen
-          Gwahoddiadau Creüydd: %{url}'
     creatorship_notification:
       explanation: 'Pan rydych yn gyd-greüydd ar waith, gallwch cael eich ychwwnegu
         i benodau newydd waeth beth yw eich gosodiadau cyd-greu. Byddwch hefyd yn

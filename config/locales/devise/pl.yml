@@ -1,14 +1,2 @@
 ---
-pl:
-  users:
-    mailer:
-      reset_password_instructions:
-        expiration: Jeżeli w ciągu tygodnia nie wykorzystasz tego linku do zresetowania
-          hasła, straci on swoją ważność i konieczne będzie wygenerowanie nowego.
-        intro: "%{user}, ktoś zażądał zmiany hasła do Twojego konta. Możesz ustawić
-          nowe zabezpieczenie dla swojego konta, przechodząc w poniższe łącze i wprowadzając
-          nowe hasło:"
-        link_title: Zmień moje hasło.
-        subject: "[%{app_name}] Zmień swoje hasło"
-        unrequested: Jeśli nie prosiłaś/eś o zmianę hasła, możesz zignorować tę wiadomość,
-          a Twoje dotychczasowe hasło nadal będzie funkcjonować.
+pl: {}

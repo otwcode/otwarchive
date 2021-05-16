@@ -16,9 +16,6 @@ ar:
             part2: 'AO3 هو أرشيف يدار من قبل المعجبين ويدعم من قبلهم أيضاً ويعتمد
               استمراره على تبرعاتكم: %{donate_url}.'
         sent_at: أرسل في %{sent_at}.
-        sent_by:
-          html: أرسل من قبل <b>%{sent_by}</b>.
-          text: أرسل من قبل %{sent_by}.
       signature:
         app_short_name: AO3
     kudos:
@@ -43,6 +40,30 @@ ar:
       para1: 'تم إرسال البلاغ التالي إلى فريق السياسات والتعسُّفات:'
       subject: "[%{app_name}] بلاغك إلى لجنة السياسات والتعسّفات"
       url_para: 'رابط الصفحة التي تحتوي على التعسُّف:'
+    challenge_assignment_notification:
+      any: أي من الموجود
+      description: 'الوصف:'
+      due: 'موعد تسليم المهمة:'
+      html:
+        footer: إنك تتلقى هذا البريد لانك اشتركت في تحدي %{title}. للمزيد من المعلومات
+          حول هذا التحدي ولمعلومات التواصل مع المشرفين، قم بزيارة %{footer_link}.
+        footer_link: صفحة التحدي الرئيسية
+        look_up: يمكنك الوصول إلى مهمتك من خلال %{link}.
+        look_up_link: صفحة Assignments (المهمات) الخاصة بك
+        part1: تم تعيينك للطلب الآتي في تحدي %{link} على AO3!
+      optional_tags: 'وسوم اختيارية:'
+      prompts: 'المحفزات:'
+      prompt_url: 'عنوان المحفز:'
+      recipient: 'المتلقي:'
+      recipient_missing: 'لا يوجد: تواصل مع أحد المشرفين للحصول على المساعدة!'
+      subject: "[%{app_name}][%{collection_title}] مهمّتك!"
+      text:
+        footer: إنك تتلقى هذا البريد لأنك اشتركت في تحدي  %{title} (%{url}). للمزيد
+          من المعلومات حول هذا التحدي ولمعلومات التواصل مع المشرفين، قم بزيارة %{profile_url}.
+        look_up: يمكنك الوصول إلى مهمتك من خلال صحفة Assignments (المهمات) الخاصة
+          بك على %{link}.
+        part1: تم تعيينك للطلب الآتي في تحدي %{collection_title} (%{collection_url})
+          على الأرشيف من جانبنا (AO3)!
     change_email:
       part1: "%{login}، تم تغيير البريد الالكتروني المرتبط بحسابك إلى %{email}"
       subject: "[%{app_name}] تم تغيير بريد الالكتروني"
@@ -61,6 +82,35 @@ ar:
         creation: "%{title} (%{url}) إنتاج %{pseuds}"
         remove: " إذا تمت إضافتك بالخطأ او إن لم تكن ترغب بتسجيل اسمك كمنتج مشارك،
           يمكنك تعديل الـ %{type} لإزالة نفسك من قائمة المنتجين: %{url}"
+    creatorship_notification_archivist:
+      explanation: بما أنه يعمل بصفته الرسمية كمؤرشف لمشروع الأبواب المفتوحة، يمكنه
+        اضافتك دون دعوة، حتى إن عطّلت خاصية المنتج المشارك.
+      html:
+        creation: "%{creation_link} من إنتاج %{pseud_links}"
+        edit: تحرير %{type}
+        remove: إن تمت إضافتك بالخطأ، أو إن لم ترغب في إدراج اسمك المستعار كمنتج،
+          باستطاعتك %{edit} لإزالة نفسك من قائمة المنتجين
+      intro: 'أضاف المستخدم %{archivist} اسمك المستعار %{pseud} كمنتج مشارك في %{type}
+        التالي:'
+      subject: "[%{app_name}] إشعار منتج مشارك من أمين الأرشيف المستورد"
+      text:
+        creation: "%{title} (%{url}) من إنتاج %{pseuds}"
+        remove: 'إن تمت إضافتك بالخطأ، أو إن لم ترغب في إدراج اسمك المستعار كمنتج،
+          باستطاعتك تحرير %{type} لإزالة نفسك من قائمة المنتجين: %{url}'
+    delete_work_notification:
+      hello: مرحباً %{user}،
+      html:
+        part1_other: تم حذف عملك %{title} بناءاً على طلب %{pseud}.
+        part1_yourself: تم حذف عملك %{title} بناءاً على طلبك.
+        part2: إن كان لديك أيّة تساؤلات، نرجو منك %{support}.
+      part2: إن كان لديك أيّة تساؤلات، نرجو منك %{support}.
+      part3: تم إرفاق نسخة من عملك كمرجِع.
+      subject: "[%{app_name}] تم حذف عملك"
+      support: التواصل مع لجنة الدعم
+      text:
+        part1_other: تم حذف عملك "%{title}" بناءاً على طلب %{pseud}.
+        part1_yourself: تم حذف عملك "%{title}" بناءاً على طلبك.
+        part2: إن كان لديك أيّة تساؤلات، نرجو منك %{support} (%{url}).
     invite_increase_notification:
       body:
         other: نود إعلامك بأنه لديك %{count} دعوة(ات) جديدة يمكنك استخدامها لإنشاء
@@ -68,3 +118,12 @@ ar:
       closing: " مع التحية، "
       greeting: " مرحباً %{login}"
       subject: " [%{app_name}] دعوات جديدة"
+    invite_request_declined:
+      greeting: عزيزي/عزيزتي%{user},
+      main:
+        one: يؤسفنا إعلامك بأنه ليس من الممكن تلبية طلبك لدعوة جديدة حالياً.
+        other: " يؤسفنا إعلامك بأنه ليس من الممكن تلبية طلبك لـ%{count} دعوات جديدة
+          حالياً."
+      reason: 'كان طلبك:'
+      signoff: تحياتنا،
+      subject: " [%{app_name}] طلب دعوة إضافية مرفوض"

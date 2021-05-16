@@ -1,6 +1,22 @@
 ---
 ca:
   mailer:
+    general:
+      footer:
+        general:
+          html:
+            donate_link_text: " les vostres donacions "
+            part1: Si has rebut aquest missatge per error, %{support_link}.
+            part2: L’AO3 és un arxiu dirigit i mantingut per fans que sobreviu gràcies
+              a %{donate_link}.
+            support_link_text: contacta amb Suport
+          text:
+            part1: Si has rebut aquest missatge per error, contacta amb Suport a %{support_url}.
+            part2: 'L’AO3 és un arxiu dirigit i mantingut per fans que sobreviu gràcies
+              a les vostres donacions: %{donate_url}.'
+        sent_at: Enviat a %{sent_at}.
+      signature:
+        app_short_name: AO3
     kudos:
       guest:
         one: 1 convidat/da
@@ -24,41 +40,57 @@ ca:
     admin_deleted_work_notification:
       abuse_committee: contacta amb el nostre Comitè de Polítiques i Prevenció de
         l’Abús
-      bye: Adjunta hi ha una copia de la teva obra com a referència.
-      hello: Hola %{user},
+      bye: S’adjunta una còpia de la teva obra com a referència.
+      hello: Estimat/da %{user},
       html:
-        part1: La teva obra %{title} ha estat eliminada de l’Arxiu per un administrador/a.
+        part1: La teva obra %{title} ha estat eliminada de l’AO3 per un administrador/a
+          del lloc web.
         part2: Si la teva obra formava part d’un projecte importat per l’equip d’Open
           Doors (Projecte de Portes Obertes), contacta amb %{opendoors_link} per a
           qualsevol altra pregunta.
-        part3: Si és possible que la teva obra violés els Termes i Condicions de Servei
-          de l’Arxiu, visita %{abuse_link}.
-      opendoors: contacta amb Open Doors (Projecte de Portes Obertes)
+        part3: Si és possible que la teva obra hagi violat els Termes i condicions
+          de servei de l’AO3, visita %{abuse_link}.
+      opendoors: 'contacta amb Open Doors '
       subject: "[%{app_name}] La teva obra ha estat eliminada per un administrador/a"
       text:
-        part1: La teva obra "%{title}" ha estat eliminada de l’Arxiu per un administrador/a.
+        part1: La teva obra "%{title}" ha estat eliminada de l’AO3 per un administrador/a
+          del lloc web.
         part2: Si la teva obra formava part d’un projecte importat per l’equip d’Open
           Doors (Projecte de Portes Obertes), contacta amb Open Doors (%{opendoors_link})
           per a qualsevol altra pregunta.
-        part3: Si és possible que la teva obra violés els Termes i Condicions de Servei
-          de l’Arxiu, posa’t en contacte amb el Comité de Polítiques i Prevenció de
+        part3: Si és possible que la teva obra violés els Termes i condicions de servei
+          de l’AO3, posa’t en contacte amb el Comitè de Polítiques i Prevenció de
           l’Abús (%{abuse_link}).
+    challenge_assignment_notification:
+      any: Qualsevol
+      description: 'Descripció:'
+      due: 'Aquesta tasca venç el:'
+      html:
+        footer: Estàs rebent aquest correu electrònic perquè et vas inscriure al repte
+          %{title}. Per a més informació sobre aquest repte i informació de contacte
+          dels moderadors/es, visita %{footer_link}.
+        footer_link: la pàgina de perfil del repte
+        look_up: Pots consultar aquesta tasca a %{link}.
+        look_up_link: la teva pàgina d’Assignments (Tasques)
+        part1: Se t’ha assignat la següent petició del repte %{link} a l’AO3!
+      optional_tags: 'Etiquetes opcionals:'
+      prompts: 'Premisses:'
+      prompt_url: 'URL de la premissa:'
+      recipient: 'Destinatari/ària:'
+      recipient_missing: 'Cap: posa’t en contacte amb un/a moderador/a per obtenir
+        ajuda!'
+      subject: "[%{app_name}][%{collection_title}] La teva tasca!"
+      text:
+        footer: Estàs rebent aquest correu electrònic perquè et vas inscriure al repte
+          %{title} (%{url}). Per a més informació sobre aquest repte i informació
+          de contacte dels moderadors, visita %{profile_url}.
+        look_up: Pots consultar aquesta tasca a la teva pàgina d’Assignments (Tasques)
+          a %{link}.
+        part1: Se t’ha assignat la següent petició del repte %{collection_title} (%{collection_url})
+          a l’AO3!
     change_email:
       part1: "%{login}, l’email associat amb aquest compte ha canviat a  %{email}"
       subject: "[%{app_name}] Canvi d’email\n"
-    creatorship_invitation:
-      html:
-        creation: "%{creation_link} de %{pseud_links}"
-        instructions: Pots acceptar o rebutjar aquesta invitació a la teva pàgina
-          d’ %{page_name}.
-        page_name: Invitacions a creador/a
-      intro: 'L’usuari/a %{inviting_user} ha convidat el teu pseudònim %{pseud} a
-        ser registrat com a cocreador/a del/de la següent %{type}:'
-      subject: "[%{app_name}] Invitació a cocreador/a"
-      text:
-        creation: "%{title} (%{url}) de %{pseuds}"
-        instructions: 'Pots acceptar o rebutjar aquesta invitació a la teva pàgina
-          d’Invitacions a creador/a: %{url}'
     creatorship_notification:
       explanation: Quan ets cocreador/a d’una obra, se’t pot afegir a nous capítols
         independentment de la configuració de la cocreació que tinguis al teu perfil.
@@ -91,6 +123,21 @@ ca:
         creation: "%{title} (%{url}) de %{pseuds}"
         remove: 'Si has sigut afegit/da per error o no vols ser registrat/da com a
           creador/a, pots editar el/la %{type} per eliminar-te com a creador/a: %{url}'
+    delete_work_notification:
+      hello: Estimat/da %{user},
+      html:
+        part1_other: La teva obra %{title} ha estat eliminada a petició de %{pseud}.
+        part1_yourself: La teva obra %{title} ha estat eliminada a petició teva.
+        part2: Si us plau, si tens cap pregunta %{support}.
+      part3: Pots trobar adjunta una còpia de la teva obra com a referència.
+      subject: "[%{app_name}] La teva obra ha estat eliminada"
+      support: contacta amb Suport
+      text:
+        part1_other: |-
+          La
+          4 teva obra "%{title}" ha estat eliminada a petició de %{pseud}.
+        part1_yourself: La teva obra "%{title}" ha estat eliminada a petició teva.
+        part2: Si us plau, si tens cap pregunta %{support} (%{url}).
     invitation_to_claim:
       greeting: Salutacions des de %{app_name}!
       html:
@@ -181,7 +228,7 @@ ca:
           visibles. Si necessites ajuda per desbloquejar, deixar orfes o eliminar
           les teves obres, contacta amb Suport de l’AO3.
 
-'
+          '
         part5: 'Reclama o elimina les teves obres aquí: %{claim_url}'
         part7: Si aquestes obres són teves però no les vols, les pots deixar orfes
           (de manera que es mantenen a l’AO3 però el teu nom queda eliminat) o esborrar-les
@@ -205,14 +252,7 @@ ca:
           un/a amic/ga a %{invitation_page}.
       closing: Gràcies,
       greeting: Hola %{login}!
-      html: |-
-        <p> Hola %{login}! </p>\n\
-        <p> Tan sols volíem fer-te saber que tens %{total} invitació/ns nova/es, les quals pots fer servir per crear nous comptes a l’arxiu. Pots convidar un/a amic/ga a %{invitation_page}. </p>
-        <p> Gràcies, <br> %{archive_name}</p>
       subject: "[%{app_name}] Noves invitacions\n"
-      txt: "Hola %{login}\nTan sols volíem fer-te saber que tens %{total} invitació/ns
-        nova/es, les quals pots fer servir per crear nous comptes a l’arxiu. Pots
-        convidar un/a amic/ga a %{invitation_page}.\nGràcies, \n%{archive_name}"
     invite_request_declined:
       greeting: Estimat/ada %{user},
       main:
@@ -224,35 +264,35 @@ ca:
       signoff: Salutacions,
       subject: "[%{app_name}] Sol·licitud de codi d’invitació adicional declinada"
     signup_notification:
-      activate_your_account: activa el teu compte
-      admin_posts: Publicacions d’administradors de l’Arxiu
+      activate_your_account: segueix aquest enllaç per activar el teu compte
+      admin_posts: Notícies de l’AO3
       bye: Esperem que estiguis gaudint amb l’Arxiu.
       contact_support: contacta amb l’equip de Suport
-      faq: pàgina de FAQ
+      faq: pàgina de Preguntes freqüents (FAQ)
       html:
         part1: Si us plau %{activate_account_link}.
-        part2: Un cop el teu compte estigui actiu, podràs publicar les teves pròpies
-          obres de fan, configurar les subscripcions per correu electrònic per avisar-te
-          quan hi hagi cap actualització dels/les teus/es creadors/es i obres preferits,
-          configurar les preferències per personalitzar l’aspecte de la pàgina, seguir
-          les obres que has vist a l’Arxiu mitjançant l’historial, i molt més.
-        part3: Hi ha molta informació i consells sobre com fer servir l’Arxiu a %{faq_link}.
+        part2: Un cop el teu compte estigui activat, podràs publicar les teves obres
+          de fan, configurar les teves subscripcions per a que t’avisem per correu
+          electrònic quan hi hagi cap actualització de les teves obres i creadors
+          o creadores preferides, personalitzar l’aspecte de la pàgina, controlar
+          a quines obres has accedit a l’AO3 fent servir el teu historial, i molt
+          més.
+        part3: Hi ha molta informació i consells sobre com fer servir l’AO3 a %{faq_link}.
           A  %{admin_posts_link} trobaràs les últimes notícies sobre el desenvolupament
-          de la pàgina. Si necessites més ajuda, trobes un error o tens preguntes
-          o suggeriments, %{contact_support_link}, on t’ajudaran de bon grat.text
-      subject: "[%{app_name}] Confirmació"
+          del lloc web. Si necessites més ajuda, trobes un error o tens preguntes
+          o suggeriments, %{contact_support_link}, on t’ajudaran de bon grat.
+      subject: "[%{app_name}] Confirmació "
       text:
-        part1: 'Si us plau, activa el teu compte: %{activate_account_url}'
-        part2: Un cop el teu compte estigui actiu, podràs publicar les teves pròpies
-          obres de fan, configurar les subscripcions per correu electrònic per avisar-te
-          quan hi hagi cap actualització dels/les teus/es creadors/es i obres preferits,
-          configurar les preferències per personalitzar l’aspecte de la pàgina, seguir
-          les obres que has vist a l’Arxiu mitjançant l’historial, i molt més.
-        part3: 'Pots trobar molta informació i consells sobre com fer servir l’Arxiu
-          a la pàgina de FAQ: %{faq_url}. A %{admin_posts_url}, trobaràs les últimes
-          notícies sobre el desenvolupament de la pàgina. Si necessites més ajuda,
-          trobes un error o tens preguntes o suggeriments, contacta amb Suport, on
-          t’ajudaran de bon grat: %{contact_support_url}.
-
-'
-      welcome: Benvingut/da a l’Archive of Our Own, %{login}!
+        part1: 'Segueix aquest enllaç per activar el teu compte: %{activate_account_url}'
+        part2: Un cop el teu compte estigui activat, podràs publicar les teves obres
+          de fan, configurar les teves subscripcions per a que t’avisem per correu
+          electrònic quan hi hagi cap actualització de les teves obres i creadors
+          o creadores preferides, personalitzar l’aspecte de la pàgina, controlar
+          a quines obres has accedit a l’AO3 fent servir el teu historial, i molt
+          més.
+        part3: 'Disposes de molta informació i consells sobre com fer servir l’AO3
+          a la pàgina de FAQ %{faq_url}. Trobaràs les últimes notícies sobre el desenvolupament
+          del lloc web a %{admin_posts_url}. Si necessites més ajuda, trobes un error
+          o tens preguntes o suggeriments, contacta amb Suport, on t’ajudaran de bon
+          grat: %{contact_support_url}.'
+      welcome: Benvingut/da a l’Archive of Our Own - AO3, %{login}!

@@ -42,23 +42,36 @@ de:
         part3: Wenn es der Fall sein sollte, dass Dein Werk die Nutzungsbedingungen
           des Archivs verletzt hat, kontaktiere bitte unser “Richtlinien und Missbrauch”-Komitee
           (%{abuse_link}).
+    challenge_assignment_notification:
+      any: Jegliche
+      description: 'Beschreibung:'
+      due: 'Diese Aufgabe ist fällig am:'
+      html:
+        footer: Du erhältst diese E-Mail, weil Du Dich für die Herausforderung %{title}
+          angemeldet hast. Mehr Einzelheiten zu dieser Herausforderung, sowie die
+          Kontaktinformationen der Moderator*innen findest Du auf der %{footer_link}.
+        footer_link: Profilseite der Herausforderung
+        look_up: Du kannst diese Aufgabe auf %{link} anschauen.
+        look_up_link: deine Assignments (Aufgaben) Seite
+        part1: Dir wurde folgender Wunsch in der Herausforderung %{link} im AO3 zugewiesen!
+      optional_tags: 'Optionale Tags:'
+      prompts: 'Anregungen:'
+      prompt_url: 'URL der Anregung:'
+      recipient: 'Empfänger*in:'
+      recipient_missing: 'Niemand: bitte eine*n Moderator*in um Hilfe!'
+      subject: "[%{app_name}][%{collection_title}] Deine Aufgabe!"
+      text:
+        footer: Du erhältst diese E-Mail, weil Du Dich für die Herausforderung %{title}
+          (%{url}) angemeldet hast. Für mehr Einzelheiten zu dieser Herausforderung,
+          sowie Kontaktinformationen der Moderator*innen gehe bitte zu %{profile_url}.
+        look_up: Du kannst diese Aufgabe auf der Assignments (Aufgaben) Seite unter
+          %{link} ansehen.
+        part1: Dir wurde folgender Wunsch in der Herausforderung %{collection_title}
+          (%{collection_url}) im AO3 zugewiesen!
     change_email:
       part1: "%{login}, die mit Deinem Konto verknüpfte E-Mail-Adresse wurde zu %{email}
         geändert"
       subject: "[%{app_name}] E-Mail-Adresse wurde geändert"
-    creatorship_invitation:
-      html:
-        creation: "%{creation_link} von %{pseud_links}"
-        instructions: Du kannst diese Einladung auf Deiner %{page_name}-Seite annehmen
-          oder ablehnen.
-        page_name: Schöpfer*innen-Einladungen
-      intro: "%{inviting_user} hat Dein Pseudonym %{pseud} eingeladen, bei dem folgenden
-        %{type} als Mitschöpfer*in aufgeführt zu werden:"
-      subject: "[%{app_name}] Mitschöpfer*innen-Einladung"
-      text:
-        creation: "%{title} (%{url}) von %{pseuds}"
-        instructions: 'Du kannst diese Einladung auf Deiner Schöpfer*innen-Einladungsseite
-          annehmen oder ablehnen: %{url}'
     creatorship_notification:
       explanation: Wenn Du Mitschöpfer*in eines Werkes bist, kannst Du zu neuen Kapiteln
         hinzugefügt werden, unabhängig von Deinen Einstellungen für Mitschöpfungen.
@@ -77,6 +90,19 @@ de:
         remove: 'Wenn Du versehentlich hinzugefügt wurdest oder nicht als SchöpferIn
           aufgeführt werden möchtest, kannst Du das %{type} ändern, um Dich selbst
           als Schöpfer*in zu entfernen: %{url}'
+    delete_work_notification:
+      hello: Hallo %{user},
+      html:
+        part1_other: Dein Werk %{title} wurde gemäß Anfrage von %{pseud} gelöscht.
+        part1_yourself: Dein Werk %{title} wurde gemäß Deiner Anfrage gelöscht.
+        part2: Wenn Du Fragen hast, %{support}.
+      part3: Anbei ist eine Kopie Deines Werkes, als Referenz für Dich.
+      subject: "[%{app_name}] Dein Werk wurde gelöscht"
+      support: kontaktiere den Support
+      text:
+        part1_other: Dein Werk \"%{title}\" wurde gemäß Anfrage von %{pseud} gelöscht.
+        part1_yourself: Dein Werk \"%{title}\" wurde gemäß Deiner Anfrage gelöscht.
+        part2: Falls Du Fragen hast, bitte %{support} (%{url}).
     invitation_to_claim:
       greeting: Hallo vom %{app_name}!
       html:
@@ -191,18 +217,7 @@ de:
           Du kannst FreundInnen einladen unter %{invitation_page}.
       closing: Grüße
       greeting: " Hallo, %{login}!"
-      html: |-
-        <p> Hallo, %{login}! </p>
-        <p> wir wollten Dir nur Bescheid sagen, dass Du %{total} neue Einladung(en) hast, die man zur Erstellung neuer Benutzerkonten im Archiv verwenden kann. Du kannst FreundInnen einladen unter %{invitation_page}. </p>
-        <p> Grüße, <br> %{archive_name}</p>
       subject: "[%{app_name}] Neue Einladungen"
-      txt: |-
-        Hallo, %{login}
-
-        wir wollten Dir nur Bescheid sagen, dass Du %{total} neue Einladung(en) hast, die man zur Erstellung neuer Benutzerkonten im Archiv verwenden kann. Du kannst FreundInnen einladen unter %{invitation_page}.
-
-        Grüße
-        %{archive_name}
     invite_request_declined:
       greeting: Hallo %{user},
       main:

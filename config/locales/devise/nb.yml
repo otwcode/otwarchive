@@ -1,14 +1,2 @@
 ---
-nb:
-  users:
-    mailer:
-      reset_password_instructions:
-        expiration: Hvis du ikke bruker denne lenken til å tilbakestille passordet
-          ditt innen en uke, vil lenken utløpe, og du må be om en ny en.
-        intro: "%{user}, noen har bedt om å tilbakestille passordet til kontoen din.
-          Du kan endre passordet til kontoen din ved å følge lenken under og fylle
-          inn det nye passordet ditt:"
-        link_title: Endre passordet mitt.
-        subject: "[%{app_name}] Tilbakestill passordet ditt"
-        unrequested: Hvis du ikke ba om å tilbakestille passordet ditt, kan du ignorere
-          denne e-posten og det tidligere passordet ditt vil fortsette å fungere.
+nb: {}

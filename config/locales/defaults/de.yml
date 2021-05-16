@@ -1,13 +1,5 @@
 ---
 de:
-  activerecord:
-    errors:
-      messages:
-        record_invalid: 'Gültigkeitsprüfung ist fehlgeschlagen: %{errors}'
-        restrict_dependent_destroy:
-          has_many: Datensatz kann nicht gelöscht werden, da abhängige %{record} existieren.
-          has_one: Datensatz kann nicht gelöscht werden, da ein abhängiger %{record}-Datensatz
-            existiert.
   date:
     abbr_day_names:
     - So
@@ -18,7 +10,7 @@ de:
     - Fr
     - Sa
     abbr_month_names:
-    - 
+    -
     - Jan
     - Feb
     - Mär
@@ -44,7 +36,7 @@ de:
       long: "%e. %B %Y"
       short: "%e. %b"
     month_names:
-    - 
+    -
     - Januar
     - Februar
     - März
@@ -107,44 +99,6 @@ de:
       month: Monat
       second: Sekunde
       year: Jahr
-  errors:
-    format: "%{attribute} %{message}"
-    messages:
-      accepted: muss akzeptiert werden
-      blank: muss ausgefüllt werden
-      confirmation: stimmt nicht mit %{attribute} überein
-      empty: muss ausgefüllt werden
-      equal_to: muss genau %{count} sein
-      even: muss gerade sein
-      exclusion: ist nicht verfügbar
-      greater_than: muss größer als %{count} sein
-      greater_than_or_equal_to: muss größer oder gleich %{count} sein
-      inclusion: ist kein gültiger Wert
-      invalid: ist nicht gültig
-      less_than: muss kleiner als %{count} sein
-      less_than_or_equal_to: muss kleiner oder gleich %{count} sein
-      model_invalid: 'Gültigkeitsprüfung ist fehlgeschlagen: %{errors}'
-      not_an_integer: muss ganzzahlig sein
-      not_a_number: ist keine Zahl
-      odd: muss ungerade sein
-      other_than: darf nicht gleich %{count} sein
-      present: darf nicht ausgefüllt werden
-      required: muss ausgefüllt werden
-      taken: ist bereits vergeben
-      too_long:
-        one: ist zu lang (mehr als 1 Zeichen)
-        other: ist zu lang (mehr als %{count} Zeichen)
-      too_short:
-        one: ist zu kurz (weniger als 1 Zeichen)
-        other: ist zu kurz (weniger als %{count} Zeichen)
-      wrong_length:
-        one: hat die falsche Länge (muss genau 1 Zeichen haben)
-        other: hat die falsche Länge (muss genau %{count} Zeichen haben)
-    template:
-      body: 'Bitte überprüfen Sie die folgenden Felder:'
-      header:
-        one: 'Konnte %{model} nicht speichern: ein Fehler.'
-        other: 'Konnte %{model} nicht speichern: %{count} Fehler.'
   helpers:
     select:
       prompt: Bitte wählen

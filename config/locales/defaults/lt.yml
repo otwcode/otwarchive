@@ -1,12 +1,5 @@
 ---
 lt:
-  activerecord:
-    errors:
-      messages:
-        record_invalid: 'Nepraeitos patikros: %{errors}'
-        restrict_dependent_destroy:
-          has_many: Negalima ištrinti įrašų nes priklausomi %{record} egzistuoja
-          has_one: Negalima ištrinti įrašo nes priklausomas %{record} egzistuoja
   date:
     abbr_day_names:
     - Sek
@@ -17,7 +10,7 @@ lt:
     - Pen
     - Šeš
     abbr_month_names:
-    - 
+    -
     - Sau
     - Vas
     - Kov
@@ -43,7 +36,7 @@ lt:
       long: "%B %d, %Y"
       short: "%b %d"
     month_names:
-    - 
+    -
     - sausio
     - vasario
     - kovo
@@ -114,42 +107,6 @@ lt:
       month: Mėnuo
       second: Sekundės
       year: Metai
-  errors:
-    format: "%{attribute} %{message}"
-    messages:
-      accepted: turi būti patvirtintas
-      blank: negali būti tuščias
-      confirmation: neteisingai pakartotas
-      empty: negali būti tuščias
-      equal_to: turi būti lygus %{count}
-      even: turi būti lyginis skaičius
-      exclusion: yra rezervuotas
-      greater_than: turi būti didesnis už %{count}
-      greater_than_or_equal_to: turi būti didesnis arba lygus %{count}
-      inclusion: nenumatyta reikšmė
-      invalid: neteisingas
-      less_than: turi būti mažesnis už %{count}
-      less_than_or_equal_to: turi būti mažesnis arba lygus %{count}
-      not_an_integer: privalo būti sveikas skaičius
-      not_a_number: ne skaičius
-      odd: turi būti nelyginis skaičius
-      other_than: privalo būti kitoks nei %{count}
-      present: turi būti tuščias
-      taken: jau užimtas
-      too_long:
-        few: per ilgas (daugiausiai %{count} simboliai)
-        one: per ilgas (daugiausiai %{count} simbolis)
-        other: per ilgas (daugiausiai %{count} simbolių)
-      too_short:
-        few: per trumpas (mažiausiai %{count} simboliai)
-        one: per trumpas (mažiausiai %{count} simbolis)
-        other: per trumpas (mažiausiai %{count} simbolių)
-    template:
-      body: 'Šiuose laukuose yra klaidų:'
-      header:
-        few: Išsaugant objektą %{model} rastos %{count} klaidos
-        one: Išsaugant objektą %{model} rasta %{count} klaida
-        other: Išsaugant objektą %{model} rasta %{count} klaidų
   helpers:
     select:
       prompt: Prašom pasirinkti

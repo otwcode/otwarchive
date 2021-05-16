@@ -1,9 +1,5 @@
 ---
 mk:
-  activerecord:
-    errors:
-      messages:
-        record_invalid: 'неуспешна валидација: %{errors}'
   date:
     abbr_day_names:
     - Нед
@@ -14,7 +10,7 @@ mk:
     - Пет
     - Саб
     abbr_month_names:
-    - 
+    -
     - Јан
     - Фев
     - Мар
@@ -40,7 +36,7 @@ mk:
       long: "%B %e, %Y"
       short: "%e %b"
     month_names:
-    - 
+    -
     - Јануари
     - Февруари
     - Март
@@ -100,40 +96,6 @@ mk:
       month: Месец
       second: Секунди
       year: Година
-  errors:
-    format: "%{attribute} %{message}"
-    messages:
-      accepted: мора да биде прифатен
-      blank: мора да биде зададен
-      confirmation: не се совпаѓа со својата потврда
-      empty: мора да биде зададен
-      equal_to: мора да биде еднакво на %{count}
-      even: мора да биде парно
-      exclusion: не е достапно
-      greater_than: мора да биде поголемо од %{count}
-      greater_than_or_equal_to: мора да биде поголемо или еднакво на %{count}
-      inclusion: не е во листата
-      invalid: не е исправен
-      less_than: мора да биде помало од %{count}
-      less_than_or_equal_to: мора да биде помало или еднакво на %{count}
-      not_an_integer: не е цел број
-      not_a_number: 'не е број '
-      odd: мора да биде непарно
-      taken: е зафатено
-      too_long:
-        one: е предолг (не повеќе од %{count} карактер)
-        other: е предолг (не повеќе од %{count} карактери)
-      too_short:
-        one: е прекраток (не помалку од %{count} карактер)
-        other: е прекраток (не помалку од %{count} карактери)
-      wrong_length:
-        one: несоодветна должина (мора да имате %{count} карактер)
-        other: несоодветна должина (мора да имате %{count} карактери)
-    template:
-      body: 'Ве молиме проверете ги следните полиња:'
-      header:
-        one: 'Не успеав да го зачувам %{model}: %{count} грешка.'
-        other: 'Не успеав да го зачувам %{model}: %{count} грешки.'
   helpers:
     select:
       prompt: Одберете

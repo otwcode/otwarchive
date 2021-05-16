@@ -1,14 +1,2 @@
 ---
-pt:
-  users:
-    mailer:
-      reset_password_instructions:
-        expiration: Se não utilizares este link para repor a tua palavra-passe dentro
-          de uma semana, o link expirará e terás de pedir um novo.
-        intro: "%{user}, alguém pediu uma reposição da palavra-passe da tua conta.
-          Podes alterar a tua palavra-passe seguindo o link abaixo e inserindo a tua
-          nova palavra-passe:"
-        link_title: Mudar a minha palavra-passe.
-        subject: "[%{app_name}] Repõe a tua palavra-passe"
-        unrequested: Se não pediste uma reposição de palavra-passe, podes ignorar
-          este email e a tua antiga palavra-passe continuará a funcionar.
+pt: {}

@@ -1,13 +1,2 @@
 ---
-sl:
-  users:
-    mailer:
-      reset_password_instructions:
-        expiration: Če te povezave za spremembo gesla ne uporabite v roku enega tedna,
-          bo ta potekla in zahtevati boste morali novo.
-        intro: "%{user}, nekdo je zahteval ponastavitev vašega gesla. Svoje geslo
-          lahko spremenite tako, da greste na sledečo povezavi in vnesete novo geslo:"
-        link_title: Spremeni moje geslo.
-        subject: "[%{app_name}] Ponastavite svoje geslo "
-        unrequested: Če ponastavitve gesla niste zahtevali, lahko prezrete to e-sporočilo
-          in vaše trenutno geslo bo ostalo veljavno.
+sl: {}

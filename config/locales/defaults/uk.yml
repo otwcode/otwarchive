@@ -1,12 +1,5 @@
 ---
 uk:
-  activerecord:
-    errors:
-      messages:
-        record_invalid: 'Виникли помилки: %{errors}'
-        restrict_dependent_destroy:
-          has_many: 'Неможливо видалити запис, так як існують залежності: %{record}'
-          has_one: 'Неможливо видалити запис, так як існує залежність: %{record}'
   date:
     abbr_day_names:
     - нд.
@@ -17,7 +10,7 @@ uk:
     - пт.
     - сб.
     abbr_month_names:
-    - 
+    -
     - січ.
     - лют.
     - бер.
@@ -43,7 +36,7 @@ uk:
       long: "%d %B %Y"
       short: "%d %b"
     month_names:
-    - 
+    -
     - Січня
     - Лютого
     - Березня
@@ -130,52 +123,6 @@ uk:
       month: Місяць
       second: Секунда
       year: Рік
-  errors:
-    format: "%{attribute} %{message}"
-    messages:
-      accepted: має бути прийнятий
-      blank: не може бути пустим
-      confirmation: не збігається з підтвердженням
-      empty: не може бути порожнім
-      equal_to: має дорівнювати %{count}
-      even: має бути парним
-      exclusion: зарезервовано
-      greater_than: має бути більше ніж %{count}
-      greater_than_or_equal_to: має бути більше ніж або дорівнювати %{count}
-      inclusion: не включено до переліку
-      invalid: недійсний
-      less_than: має бути менше ніж %{count}
-      less_than_or_equal_to: має бути менше ніж або дорівнювати %{count}
-      model_invalid: 'Виникли помилки: %{errors}'
-      not_an_integer: не є цілим числом
-      not_a_number: не число
-      odd: має бути непарним
-      other_than: має відрізнятись від %{count}
-      present: має бути пустим
-      required: не може бути порожнім
-      taken: вже зайнятий
-      too_long:
-        few: занадто довгий (максимум %{count} знаки)
-        many: занадто довгий (максимум %{count} знаків)
-        one: занадто довгий (максимум %{count} знак)
-        other: занадто довгий (максимум %{count} знаку)
-      too_short:
-        few: занадто короткий (мінімум %{count} знаки)
-        many: занадто короткий (мінімум %{count} знаків)
-        one: занадто короткий (мінімум %{count} знак)
-        other: занадто короткий (мінімум %{count} знаку)
-      wrong_length:
-        few: неправильна довжина (має бути %{count} знаки)
-        many: неправильна довжина (має бути %{count} знаків)
-        one: неправильна довжина (має бути %{count} знак)
-        other: неправильна довжина (має бути %{count} знаку)
-    template:
-      body: 'Помилки виявлено в таких полях:'
-      header:
-        few: "%{model} не збережено через %{count} помилки"
-        many: "%{model} не збережено через %{count} помилок"
-        one: "%{model} не збережено через %{count} помилку"
-        other: "%{model} не збережено через %{count} помилки"
   helpers:
     select:
       prompt: 'Оберіть: '

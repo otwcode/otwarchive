@@ -1,13 +1,5 @@
 ---
 id:
-  activerecord:
-    errors:
-      messages:
-        record_invalid: 'Validasi gagal: %{errors}'
-        restrict_dependent_destroy:
-          has_many: Tidak bisa menghapus record karena terdapat %{record} yang bergantung
-          has_one: Tidak bisa menghapus record karena terdapat satu %{record} yang
-            bergantung
   date:
     abbr_day_names:
     - Min
@@ -18,7 +10,7 @@ id:
     - Jum
     - Sab
     abbr_month_names:
-    - 
+    -
     - Jan
     - Feb
     - Mar
@@ -44,7 +36,7 @@ id:
       long: "%A, %d %B %Y"
       short: "%d.%m.%Y"
     month_names:
-    - 
+    -
     - Januari
     - Februari
     - Maret
@@ -95,40 +87,6 @@ id:
       month: Bulan
       second: Detik
       year: Tahun
-  errors:
-    format: "%{attribute} %{message}"
-    messages:
-      accepted: harus diterima
-      blank: tidak boleh kosong
-      confirmation: tidak sesuai dengan %{attribute}
-      empty: tidak boleh kosong
-      equal_to: harus sama dengan %{count}
-      even: harus genap
-      exclusion: sudah digunakan
-      greater_than: harus lebih besar dari %{count}
-      greater_than_or_equal_to: harus sama atau lebih besar dari %{count}
-      inclusion: tidak termasuk
-      invalid: tidak valid
-      less_than: harus lebih kecil dari %{count}
-      less_than_or_equal_to: harus sama atau lebih kecil dari %{count}
-      model_invalid: 'Validasi gagal: %{errors}'
-      not_an_integer: harus bilangan bulat
-      not_a_number: bukan angka
-      odd: harus ganjil
-      other_than: harus selain %{count}
-      present: harus kosong
-      required: harus ada
-      taken: sudah digunakan
-      too_long:
-        other: terlalu panjang (maksimum %{count} karakter)
-      too_short:
-        other: terlalu pendek (minimum %{count} karakter)
-      wrong_length:
-        other: jumlah karakter salah (seharusnya %{count} karakter)
-    template:
-      body: 'Ada masalah dengan field berikut:'
-      header:
-        other: "%{count} kesalahan mengakibatkan %{model} ini tidak bisa disimpan"
   helpers:
     select:
       prompt: Silakan pilih

@@ -1,12 +1,5 @@
 ---
 sv:
-  activerecord:
-    errors:
-      messages:
-        record_invalid: 'Ett fel uppstod: %{errors}'
-        restrict_dependent_destroy:
-          has_many: Kan inte ta bort poster då beroende %{record} finns
-          has_one: Kan inte ta bort post då beroende %{record} finns
   date:
     abbr_day_names:
     - sön
@@ -17,7 +10,7 @@ sv:
     - fre
     - lör
     abbr_month_names:
-    - 
+    -
     - jan
     - feb
     - mar
@@ -43,7 +36,7 @@ sv:
       long: "%e %B %Y"
       short: "%e %b"
     month_names:
-    - 
+    -
     - januari
     - februari
     - mars
@@ -106,35 +99,6 @@ sv:
       month: Månad
       second: Sekund
       year: År
-  errors:
-    format: "%{attribute} %{message}"
-    messages:
-      accepted: måste vara accepterad
-      blank: måste anges
-      confirmation: stämmer inte överens
-      empty: får ej vara tom
-      equal_to: måste vara lika med %{count}
-      even: måste vara jämnt
-      exclusion: är reserverat
-      greater_than: måste vara större än %{count}
-      greater_than_or_equal_to: måste vara större än eller lika med %{count}
-      inclusion: finns inte i listan
-      invalid: har fel format
-      less_than: måste vara mindre än %{count}
-      less_than_or_equal_to: måste vara mindre än eller lika med %{count}
-      model_invalid: 'Validering misslyckades: %{errors}'
-      not_an_integer: måste vara ett heltal
-      not_a_number: är inte ett nummer
-      odd: måste vara udda
-      other_than: måste vara annat än %{count}
-      present: får inte anges
-      required: måste finnas
-      taken: används redan
-    template:
-      body: 'Det var problem med följande fält:'
-      header:
-        one: Ett fel förhindrade denna %{model} från att sparas
-        other: "%{count} fel förhindrade denna %{model} från att sparas"
   helpers:
     select:
       prompt: Välj

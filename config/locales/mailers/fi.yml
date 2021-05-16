@@ -16,9 +16,6 @@ fi:
             part2: 'Archive of Our Own (Oma arkisto) on fanien pyörittämä ja tukema
               arkisto, joka toimii lahjoitustenne varassa: %{donate_url}.'
         sent_at: Lähetetty %{sent_at}.
-        sent_by:
-          html: Lähettäjä <b>%{sent_by}</b>.
-          text: Lähettäjä %{sent_by}.
       signature:
         app_short_name: AO3
     kudos:
@@ -62,17 +59,6 @@ fi:
     change_email:
       part1: "%{login}, tunnuksesi uudeksi sähköpostiosoitteeksi on asetettu %{email}"
       subject: "[%{app_name}] Sähköpostiosoite muutettu"
-    creatorship_invitation:
-      html:
-        creation: "%{creation_link}, tekijä %{pseud_links}"
-        instructions: Voit hyväksyä tai hylätä kutsun %{page_name} -sivullasi.
-        page_name: Tekijäkutsut
-      intro: 'Käyttäjä %{inviting_user} on kutsunut nimimerkkisi %{pseud} listattavaksi
-        kanssatekijänä seuraavaan teokseen: %{type}:'
-      subject: "[%{app_name}] Kutsu kanssatekijäksi"
-      text:
-        creation: "%{title} (%{url}), tekijä %{pseuds}"
-        instructions: 'Voit hyväksyä tai hylätä kutsun Tekijäkutsut-sivullasi: %{url}'
     creatorship_notification:
       explanation: Teoksen kanssatekijnä sinut voidaan lisätä uusiin lukuihin riippumatta
         tilisi kanssatekijyysasetuksista. Sinut lisätään myös kaikkiin sarjoihin,
@@ -99,6 +85,20 @@ fi:
         remove: 'Jos haluat poistaa itsesi tekijöistä, koska sinut on lisätty tekijäksi
           virheellisesti tai et halua olla nimettynä tekijänä, %{type} on muokattavissa
           linkin kautta: %{url}'
+    delete_work_notification:
+      hello: Hyvä %{user},
+      html:
+        part1_other: teoksesi %{title} on poistettu nimimerkin %{pseud} pyynnöstä.
+        part1_yourself: teoksesi %{title} on poistettu pyynnöstäsi.
+        part2: Jos sinulla on kysyttävää, ole hyvä ja  %{support}.
+      part2: Jos sinulla on kysyttävää, ole hyvä ja  %{support}.
+      part3: Kopio teoksesta on liitetty viestiin sinua varten.
+      subject: "[%{app_name}] Teoksesi on poistettu"
+      support: ota yhteyttä Käyttäjätukeen
+      text:
+        part1_other: teoksesi "%{title}" on poistettu nimimerkin %{pseud} pyynnöstä.
+        part1_yourself: teoksesi "%{title}" on poistettu pyynnöstäsi.
+        part2: Jos sinulla on kysyttävää, ole hyvä ja %{support} (%{url}).
     invite_increase_notification:
       body:
         one: Halusimme vain kertoa, että sinulla on %{count} kpl uusia kutsuja, joilla
@@ -110,9 +110,6 @@ fi:
       closing: Terveisin,
       greeting: Hei %{login}!
       subject: "[%{app_name}] Uusia kutsuja"
-      txt: "Hei %{login}\nHalusimme vain kertoa, että sinulla on %{total} kpl uusia
-        kutsuja, joilla arkistoon voi luoda uusia tunnuksia. Voit kutsua ystävän mukaan
-        sivulla %{invitation_page}.\nTerveisin, \n%{archive_name}"
     invite_request_declined:
       greeting: Hyvä %{user}
       main:

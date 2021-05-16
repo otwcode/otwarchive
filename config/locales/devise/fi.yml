@@ -1,13 +1,2 @@
 ---
-fi:
-  users:
-    mailer:
-      reset_password_instructions:
-        expiration: Jos et käytä tätä linkkiä salasanasi vaihtamiseen viikon kuluessa,
-          se vanhenee, ja sinun on pyydettävä uusi linkki.
-        intro: "%{user}, tilisi salasana on pyydetty asettamaan uudelleen. Voit vaihtaa
-          salasanan seuraamalla alla olevaa linkkiä ja syöttämällä uuden salasanasi:"
-        link_title: Vaihda salasanani.
-        subject: "[%{app_name}] Aseta uusi salasana"
-        unrequested: Jos et pyytänyt salasanan uudelleen asetusta, voit jättää tämän
-          viestin huomioimatta, ja vanha salasanasi pysyy voimassa.
+fi: {}

@@ -16,9 +16,6 @@ fr:
             part2: 'Le site Archive of Our Own est une archive gérée et financée par
               les fans, qui dépend de vos dons : %{donate_url}.'
         sent_at: Envoyé à %{sent_at}.
-        sent_by:
-          html: Envoyé par <b>%{sent_by}</b>.
-          text: Envoyé par %{sent_by}.
       signature:
         app_short_name: AO3
     kudos:
@@ -95,19 +92,6 @@ fr:
       part1: "%{login}, l’adresse e-mail associée à votre compte a été remplacée par
         %{email}"
       subject: "[%{app_name}] Changement d’adresse e-mail"
-    creatorship_invitation:
-      html:
-        creation: "%{creation_link} par %{pseud_links}"
-        instructions: Vous pouvez accepter ou refuser cette invitation sur votre page
-          %{page_name}.
-        page_name: Invitations à la Co-création
-      intro: 'L''utilisateur-trice %{inviting_user} a invité votre pseudo %{pseud}
-        à être listé en tant que co-créateur-trice du/de la/de l'' %{type} suivant-e:'
-      subject: "[%{app_name}] Invitation à la co-création"
-      text:
-        creation: "%{title} (%{url}) par %{pseuds}"
-        instructions: 'Vous pouvez accepter ou refuser cette invitation sur votre
-          page Invitations à la Co-création : %{url}'
     creatorship_notification:
       explanation: Lorsque vous êtes co-créateur-trice d’une œuvre, votre nom peut
         être ajouté à de nouveaux chapitres quels que soient les paramètres de la
@@ -191,7 +175,7 @@ fr:
           supprimez pas ! Merci de simplement %{open_doors_link} et nous reprendrons
           la main.
 
-'
+          '
         part4: En fonction de l’archive, il se peut que vos œuvres aient été importées
           de façon à n’être accessibles qu’aux utilisateur-trice-s enregistré-e-s
           (afin qu’elles n’apparaissent pas parmi les résultats de recherche Google).
@@ -208,7 +192,7 @@ fr:
           le faire directement en suivant le lien de revendication plus haut. (Si
           vous avez besoin d’aide, veuillez %{support_link}.)
 
-'
+          '
         part9: Si vous aimeriez qu’Open Doors mette à jour le lien de redirection
           afin qu’il renvoie vers votre œuvre préexistante, veuillez supprimer la
           copie importée et %{open_doors_link} en précisant le nom de votre compte
@@ -255,7 +239,7 @@ fr:
           pas à ces endroits, ou dans cet email, veuillez contacter le Comité Support
           Technique ici : %{support_link}.
 
-'
+          '
         part3: S’il y a erreur et que ces œuvres ne vous appartiennent pas, ne les
           supprimez pas ! Merci de simplement contacter Open Doors (%{open_doors_link})
           et nous reprendrons la main.
@@ -268,7 +252,7 @@ fr:
           veuillez contacter le Comité Support Technique d’AO3.
         part5: 'Vous pouvez revendiquer ou supprimer vos œuvres ici : %{claim_url}.
 
-'
+          '
         part7: 'Si ces œuvres vous appartiennent bien mais que vous ne souhaitez pas
           les revendiquer, vous pouvez les rendre orphelines (afin qu’elles restent
           sur AO3 sans que votre nom y soit associé) ou les supprimer (afin qu’elles
@@ -278,7 +262,7 @@ fr:
           vous avez besoin d’aide, veuillez contacter le Comité Support Technique
           ici : %{support_link}.)
 
-'
+          '
         part9: 'Si vous aimeriez qu’Open Doors mette à jour le lien de redirection
           afin qu’il renvoie vers votre œuvre préexistante, veuillez supprimer la
           copie importée et contacter Open Doors ici : %{open_doors_link}, en précisant
@@ -297,16 +281,7 @@ fr:
           : %{invitation_page}."
       closing: Cordialement,
       greeting: 'Bonjour %{login} ! '
-      html: |-
-        <p> Bonjour %{login} ! </p>\n\
-                  <p> Nous vous envoyons ce message pour vous informer que vous possédez %{total} nouvelle(s) invitation(s), permettant de créer de nouveaux comptes sur l’archive. Vous pouvez aussi inviter un-e ami-e à l’adresse suivante : %{invitation_page}. </p>\n\
-                  <p> Cordialement, <br> %{archive_name}</p>
       subject: "[%{app_name}] Nouvelles Invitations"
-      txt: |-
-        Bonjour %{login} !
-                 Nous vous envoyons ce message pour vous informer que vous possédez %{total}  nouvelle(s) invitation(s), permettant de créer de nouveaux comptes sur l’archive. Vous pouvez aussi inviter un-e ami-e à l’adresse suivante : %{invitation_page}.
-                  Cordialement,
-                  %{archive_name}
     invite_request_declined:
       greeting: Cher/Chère %{user},
       main:
@@ -318,8 +293,8 @@ fr:
       signoff: Cordialement,
       subject: "[%{app_name}] Demande de Code d’Invitation Supplémentaire Rejetée"
     signup_notification:
-      activate_your_account: activer votre compte
-      admin_posts: billets publiés par les admins
+      activate_your_account: suivez ce lien pour activer votre compte
+      admin_posts: Actualités d’AO3
       bye: Nous espérons que vous vous plairez sur AO3.
       contact_support: contacter notre Support Technique
       faq: FAQ
@@ -339,7 +314,7 @@ fr:
           qui est toujours ravi d’aider.
       subject: "[%{app_name}] Confirmation"
       text:
-        part1: 'Veuillez activer votre compte : %{activate_account_url}'
+        part1: 'Veuillez suivre ce lien pour activer votre compte : %{activate_account_url}'
         part2: Une fois que votre compte est activé, vous pouvez notamment publier
           vos œuvres de fans, paramétrer les abonnements par e-mail pour être averti-e
           des mises à jour de vos créateur-trice-s et œuvres préféré-e-s, définir
@@ -348,9 +323,11 @@ fr:
           historique, et bien plus encore.
         part3: 'Vous trouverez une multitude d’informations et de conseils sur l’utilisation
           d’AO3 sur notre FAQ à l’adresse suivante : %{faq_url}. Vous pouvez trouver
-          les dernières actualités publiées par les admins  eet concernant le développement
+          les dernières actualités publiées par les admins  et concernant le développement
           du site à l’adresse suivante : %{admin_posts_url}. Si vous avez besoin d’aide,
           trouvez un bug, souhaitez nous poser des questions ou nous faire part de
           vos commentaires, veuillez contacter notre équipe du Support Technique,
-          qui est toujours ravie d’aider : %{contact_support_url}.'
+          qui est toujours ravie d’aider : %{contact_support_url}.
+
+          '
       welcome: Bienvenue sur Archive of Our Own, %{login} !

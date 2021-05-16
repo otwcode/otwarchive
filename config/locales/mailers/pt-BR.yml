@@ -16,9 +16,6 @@ pt-BR:
             part2: 'O Archive of Our Own – AO3 (Nosso Próprio Arquivo) é um arquivo
               administrado e financiado por fãs que depende das suas doações: %{donate_url}.'
         sent_at: Enviado às %{sent_at}.
-        sent_by:
-          html: Enviado por <b>%{sent_by}</b>.
-          text: Enviado por %{sent_by}.
       signature:
         app_short_name: AO3
     kudos:
@@ -94,18 +91,6 @@ pt-BR:
     change_email:
       part1: "%{login}, o e-mail associado com a sua conta foi alterado para %{email}."
       subject: "[%{app_name}] Mudança de endereço de e-mail efetuada"
-    creatorship_invitation:
-      html:
-        creation: "%{creation_link} por %{pseud_links}"
-        instructions: Você pode aceitar ou recusar esse convite na sua página %{page_name}.
-        page_name: Creator Invitations (Convites de Artistas)
-      intro: "%{inviting_user} convidou você para listar seu pseudônimo %{pseud} como
-        coartista do(a) seguinte %{type}:"
-      subject: "[%{app_name}] Convite de coartista"
-      text:
-        creation: "%{title} (%{url}) por %{pseuds}"
-        instructions: 'Você pode aceitar ou recusar esse convite na sua página Creator
-          Invitations (Convites de Artistas): %{url}'
     creatorship_notification:
       explanation: Após seu pseudônimo ter sido adicionado como coartista em uma obra,
         novos capítulos desta obra poderão ser atribuídos a você independentemente
@@ -263,19 +248,8 @@ pt-BR:
           a página %{invitation_page}.
       closing: Atenciosamente,
       greeting: Olá, %{login}!
-      html: "<p>Olá, %{login}! </p>\n<p>Só pra avisar que você tem um total de %{total}
-        convite(s), que podem ser usados para criar novas contas no AO3. Para convidar
-        alguém, visite a página %{invitation_page}. </p>\n\n<p>Atenciosamente, <br>
-        \n%{archive_name}</p>"
       invitation_page_link_text: sua página de convites
       subject: "[%{app_name}] Novos convites"
-      txt: |-
-        Olá, %{login}!
-
-        Só pra avisar que você tem um total de %{total} convite(s), que podem ser usados para criar novas contas no AO3. Para convidar alguém, visite a página %{invitation_page}.
-
-         Atenciosamente,
-         %{archive_name}
     invite_request_declined:
       greeting: Olá, %{user},
       main:

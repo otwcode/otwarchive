@@ -1,9 +1,5 @@
 ---
 cy:
-  activerecord:
-    errors:
-      messages:
-        record_invalid: 'Gwirio wedi methu: %{errors}'
   date:
     abbr_day_names:
     - Sul
@@ -14,7 +10,7 @@ cy:
     - Gwe
     - Sad
     abbr_month_names:
-    - 
+    -
     - Ion
     - Chw
     - Maw
@@ -40,7 +36,7 @@ cy:
       long: "%B %d, %Y"
       short: "%b %d"
     month_names:
-    - 
+    -
     - Ionawr
     - Chwefror
     - Mawrth
@@ -144,33 +140,6 @@ cy:
       month: Mis
       second: Eiliad
       year: Blwyddyn
-  errors:
-    format: "%{attribute} %{message}"
-    messages:
-      accepted: angen ei dderbyn
-      blank: methu bod yn wag
-      confirmation: heb fod yn gyfateb
-      empty: methu bod yn wag
-      equal_to: angen bod yn %{count}
-      even: rhaid bod yn eilrif
-      exclusion: wedi cadw
-      greater_than: angen bod yn fwy na %{count}
-      greater_than_or_equal_to: angen bod yr un maint neu fwy na %{count}
-      inclusion: heb fod yn y rhestr
-      invalid: heb fod yn nheilwng
-      less_than: angen bod yn llai na %{count}
-      less_than_or_equal_to: angen bod yr un maint neu lai na %{count}
-      not_an_integer: heb fod yn rhif llawn
-      not_a_number: heb fod yn rhif
-      odd: rhaid bod yn odrif
-      taken: wedi'i gymryd yn barod
-    template:
-      body: 'Cafwyd broblemau gyda''r meysydd canlynol:'
-      header:
-        many: Atalwyd y %{model} hwn rhag ei gadw gan %{count} nam
-        one: Atalwyd y %{model} hwn rhag ei gadw gan 1 nam
-        other: Atalwyd y %{model} hwn rhag ei gadw gan %{count} nam
-        two: Atalwyd y %{model} hwn rhag ei gadw gan %{count} nam
   helpers:
     select:
       prompt: Dewiswch

@@ -1,14 +1,5 @@
 ---
 it:
-  activerecord:
-    errors:
-      messages:
-        record_invalid: 'Validazione fallita: %{errors}'
-        restrict_dependent_destroy:
-          has_many: Il record non può essere cancellato perchè esistono %{record}
-            dipendenti
-          has_one: Il record non può essere cancellato perchè esiste un %{record}
-            dipendente
   date:
     abbr_day_names:
     - dom
@@ -19,7 +10,7 @@ it:
     - ven
     - sab
     abbr_month_names:
-    - 
+    -
     - gen
     - feb
     - mar
@@ -45,7 +36,7 @@ it:
       long: "%d %B %Y"
       short: "%d %b"
     month_names:
-    - 
+    -
     - gennaio
     - febbraio
     - marzo
@@ -108,43 +99,6 @@ it:
       month: Mese
       second: Secondi
       year: Anno
-  errors:
-    format: "%{attribute} %{message}"
-    messages:
-      accepted: deve essere accettata
-      blank: non può essere lasciato in bianco
-      confirmation: non coincide con %{attribute}
-      empty: non può essere vuoto
-      equal_to: deve essere uguale a %{count}
-      even: deve essere pari
-      exclusion: è riservato
-      greater_than: deve essere maggiore di %{count}
-      greater_than_or_equal_to: deve essere maggiore o uguale a %{count}
-      inclusion: non è compreso tra le opzioni disponibili
-      invalid: non è valido
-      less_than: deve essere minore di %{count}
-      less_than_or_equal_to: deve essere minore o uguale a %{count}
-      not_an_integer: non è un numero intero
-      not_a_number: non è un numero
-      odd: deve essere dispari
-      other_than: devono essere di numero diverso da %{count}
-      present: deve essere lasciato in bianco
-      required: deve esistere
-      taken: è già presente
-      too_long:
-        one: è troppo lungo (il massimo è 1 carattere)
-        other: è troppo lungo (il massimo è %{count} caratteri)
-      too_short:
-        one: è troppo corto (il minimo è 1 carattere)
-        other: è troppo corto (il minimo è %{count} caratteri)
-      wrong_length:
-        one: è della lunghezza sbagliata (deve essere di 1 carattere)
-        other: è della lunghezza sbagliata (deve essere di %{count} caratteri)
-    template:
-      body: 'Ricontrolla i seguenti campi:'
-      header:
-        one: 'Non posso salvare questo %{model}: 1 errore'
-        other: 'Non posso salvare questo %{model}: %{count} errori.'
   helpers:
     select:
       prompt: Seleziona...

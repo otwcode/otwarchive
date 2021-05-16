@@ -16,9 +16,6 @@ es:
             part2: 'El AO3 es un archivo administrado y sostenido por fans que depende
               de tus donaciones: %{donate_url}.'
         sent_at: Enviado a las %{sent_at}.
-        sent_by:
-          html: Enviado por <b>%{sent_by}</b>.
-          text: Enviado por %{sent_by}.
       signature:
         app_short_name: AO3
     kudos:
@@ -94,18 +91,6 @@ es:
       part1: "%{login}, el correo electrónico asociado a tu cuenta ha sido modificado
         a %{email}"
       subject: "[%{app_name}] Cambio de correo electrónico"
-    creatorship_invitation:
-      html:
-        creation: "%{creation_link} por %{pseud_links}"
-        instructions: Puedes aceptar o rechazar esta invitación en tu página de %{page_name}.
-        page_name: Invitaciones de creadorxs
-      intro: La cuenta de usuarix %{inviting_user} ha invitado a tu pseudónimo %{pseud}
-        a aparecer como co-creadorx en la siguiente %{type}
-      subject: "[%{app_name}] Invitación de co-creadorx"
-      text:
-        creation: "%{title} (%{url}) por %{pseuds}"
-        instructions: 'Puedes aceptar o rechazar esta invitación en tu página Invitaciones
-          de creador: %{url}'
     creatorship_notification:
       explanation: Cuando eres co-creadorx de una obra te pueden añadir a nuevos capítulos,
         sin importar tu configuración de co-creación. También se añadirá tu  pseudónimo
@@ -139,6 +124,20 @@ es:
         creation: "%{title} (%{url}) por %{pseuds}"
         remove: 'Si se te ha añadido por error o no quieres aparecer como creadorx,
           puedes %{edit} la %{type} para eliminarte como creadorx: %{url}'
+    delete_work_notification:
+      hello: 'Estimadx %{user}:'
+      html:
+        part1_other: Tu obra %{title} fue eliminada a petición de %{pseud}.
+        part1_yourself: Tu obra %{title} fue eliminada como solicitaste.
+        part2: Si tienes alguna pregunta, por favor, %{support}.
+      part2: Si tienes alguna pregunta, por favor, %{support}.
+      part3: Hemos adjuntado una copia de la obra como referencia.
+      subject: "[%{app_name}] Tu obra ha sido eliminada"
+      support: ponte en contacto con Soporte Técnico
+      text:
+        part1_other: Tu obra "%{title}" fue eliminada a petición de %{pseud}.
+        part1_yourself: Tu obra "%{title}" fue eliminada como solicitaste.
+        part2: Si tienes alguna pregunta, por favor,  %{support} (%{url}).
     invitation_to_claim:
       greeting: "¡Hola desde %{app_name}!"
       html:
@@ -191,7 +190,7 @@ es:
         @transformativeworks.org a tu lista autorizada y comprueba la carpeta de spam
         para asegurarte de que has recibido nuestra respuesta.
 
-'
+        '
       part6: 'las obras subidas incluyen:'
       part8: Para conservar las listas de recomendaciones y los marcadores, las direcciones
         web del archivo importado pueden redirigir a las copias importadas de dichas
@@ -208,7 +207,7 @@ es:
           o renunciar a ellas) si lo prefieres. Si todavía no tienes una cuenta con
           otro correo electrónico, ¡nos gustaría invitarte!
 
-'
+          '
         part10: Si tienes otras obras en el archivo importado asociadas a una dirección
           de correo electrónico a la que ya no puedes acceder, por favor ponte en
           contacto con Puertas Abiertas con cualquier información que pueda ayudarnos
@@ -229,7 +228,7 @@ es:
           Simplemente ponte en contacto con Puertas Abiertas (%{open_doors_link})
           y lo solucionaremos.
 
-'
+          '
         part4: Dependiendo del archivo, tus obras pueden haber sido importadas de
           forma que solo lxs usuarixs registradxs pueden verlas (para que no aparezcan
           en búsquedas de Google). Si es así, solo pueden acceder a las obras lxs
@@ -259,56 +258,48 @@ es:
           amigxs en %{invitation_page}.
       closing: Saludos,
       greeting: " ¡Hola %{login}!"
-      html: |-
-        <p> ¡Hola %{login}! </p>\n\
-                  <p> Queremos informarte que tienes %{total} invitación(es) nueva(s) que puedes utilizar para crear nuevas cuentas en el AO3. Puedes invitar a tus amigxs en %{invitation_page}. </p>\n\
-                  <p> Saludos, <br> %{archive_name}</p>
       subject: "[%{app_name}] Nuevas Invitaciones"
-      txt: "Hola %{login}\nQueremos informarte que tienes %{total} invitación(es)
-        nueva(s) que puedes utilizar para crear nuevas cuentas en el archivo. Puedes
-        invitar a tus amigxs en %{invitation_page}.\nSaludos, \n%{archive_name}\n"
     invite_request_declined:
       greeting: Queridx %{user},
       main:
         one: 'Lamentamos informarte que en este momento no podemos satisfacer tu solicitud
           de una nueva invitación.
 
-'
+          '
         other: Lamentamos informarte que en este momento no podemos satisfacer tu
           solicitud de %{count} nuevas invitaciones.
       reason: 'Tu solicitud era:'
       signoff: " Un saludo,"
       subject: "[%{app_name}] Solicitud de código de invitación adicional rechazada"
     signup_notification:
-      activate_your_account: activa tu cuenta
-      admin_posts: Publicaciones de lxs administradorxs del Archivo
-      bye: Esperamos que hayas disfrutado el Archivo.
-      contact_support: contacta a nuestro equipo de Soporte Técnico
+      activate_your_account: Sigue este enlace para activar tu cuenta
+      admin_posts: Noticias del AO3
+      bye: Esperamos que disfrutes el AO3.
+      contact_support: contacta a Soporte Técnico
       faq: FAQ
       html:
         part1: Por favor %{activate_account_link}.
         part2: Una vez que tu cuenta esté funcionando, podrás publicar obras de fans,
-          suscribirte para para recibir notificaciones por email cuando tus autorxs
-          favoritxs publican o cuando se actualizan tus obras favoritas, establecer
-          preferencias para personalizar el sitio a tu gusto, estar al tanto de las
-          obras que has visto en el Archivo por medio de tu historial y mucho más.
-        part3: Hay mucha información y recomendaciones para el uso del Archivo en
-          nuestras %{faq_link}. Podrás encontrar las últimas noticias sobre los cambios
-          al sitio en nuestras %{admin_posts_link}. Si necesitas más ayuda, encuentras
-          un error o tienes preguntas o comentarios, por favor %{contact_support_link},
-          quienes con gusto te ayudarán.
+          suscribirte para recibir notificaciones por email cuando tus autorxs favoritxs
+          publican o cuando se actualizan tus obras favoritas, establecer preferencias
+          para personalizar el sitio a tu gusto, estar al tanto de las obras a las
+          que has accedido en el AO3 por medio de tu historial y mucho más.
+        part3: Hay mucha información y recomendaciones para el uso del AO3 en nuestras
+          %{faq_link}. Podrás encontrar las últimas noticias sobre los cambios al
+          sitio en %{admin_posts_link}. Si necesitas más ayuda, encuentras un error
+          o tienes preguntas o comentarios, por favor %{contact_support_link}, quienes
+          con gusto te ayudarán.
       subject: "[%{app_name}] Confirmación"
       text:
-        part1: 'Por favor activa tu cuenta: %{activate_account_url}'
+        part1: 'Por favor sigue este enlace para activar tu cuenta: %{activate_account_url}'
         part2: Una vez que tu cuenta esté funcionando, podrás publicar obras de fans,
           suscribirte para recibir notificaciones por email cuando tus autorxs favoritxs
           publican o cuando se actualizan tus obras favoritas, establecer preferencias
-          para personalizar el sitio a tu gusto, estar al tanto de las obras que has
-          visto en el Archivo por medio de tu historial y mucho más.
-        part3: 'Hay mucha información y recomendaciones para el uso del Archivo en
-          nuestras FAQ en %{faq_url}. Podrás encontrar las últimas noticias sobre
-          los cambios al sitio en nuestras publicaciones de administradorxs del Archivo
-          en %{admin_posts_url}. Si necesitas más ayuda, encuentras un error o tienes
-          preguntas o comentarios, por favor contacta a nuestro equipo de Soporte
-          Técnico, quienes con gusto te ayudarán: %{contact_support_url}.'
+          para personalizar el sitio a tu gusto, estar al tanto de las obras a las
+          que has accedido en el AO3 por medio de tu historial y mucho más.
+        part3: 'Hay mucha información y recomendaciones para el uso del AO3 en nuestras
+          FAQ en %{faq_url}. Podrás encontrar las últimas noticias sobre los cambios
+          al sitio en Noticias del AO3 en %{admin_posts_url}. Si necesitas más ayuda,
+          encuentras un error o tienes preguntas o comentarios, por favor contacta
+          a nuestro equipo de Soporte Técnico, quienes con gusto te ayudarán: %{contact_support_url}.'
       welcome: "¡Te damos la bienvenida a Archive of Our Own, %{login}!"

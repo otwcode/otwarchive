@@ -1,9 +1,5 @@
 ---
 sk:
-  activerecord:
-    errors:
-      messages:
-        record_invalid: 'Validácia neúspešná: %{errors}'
   date:
     abbr_day_names:
     - Ne
@@ -14,7 +10,7 @@ sk:
     - Pi
     - So
     abbr_month_names:
-    - 
+    -
     - Jan
     - Feb
     - Mar
@@ -40,7 +36,7 @@ sk:
       long: "%d. %B %Y"
       short: "%d %b"
     month_names:
-    - 
+    -
     - Január
     - Február
     - Marec
@@ -111,34 +107,6 @@ sk:
       month: Mesiac
       second: Sekunda
       year: Rok
-  errors:
-    format: "%{attribute} %{message}"
-    messages:
-      accepted: musí byť potvrdené
-      blank: je povinná položka
-      confirmation: nebolo potvrdené
-      empty: nesmie byť prázdny/e
-      equal_to: sa musí rovnať %{count}
-      even: musí byť párne číslo
-      exclusion: je vyhradené pre iný účel
-      greater_than: musí byť väčšie ako %{count}
-      greater_than_or_equal_to: musí byť väčšie alebo rovné %{count}
-      inclusion: nie je v zozname povolených hodnôt
-      invalid: nie je platná hodnota
-      less_than: musí byť menšie ako %{count}
-      less_than_or_equal_to: musí byť menšie alebo rovné %{count}
-      not_an_integer: musí byť celé číslo
-      not_a_number: nie je číslo
-      odd: musí byť nepárne číslo
-      taken: ste už použili
-    template:
-      body: 'Nasledujúce polia obsahujú chybne vyplnené údaje:'
-      header:
-        few: Pri ukladaní objektu %{model} došlo k %{count} chybám a nebolo ho možné
-          uložiť
-        one: Pri ukladaní objektu %{model} došlo k chybám a nebolo ho možné uložiť
-        other: Pri ukladaní objektu %{model} došlo k %{count} chybám a nebolo ho možné
-          uložiť
   helpers:
     select:
       prompt: Prosím vyberte si

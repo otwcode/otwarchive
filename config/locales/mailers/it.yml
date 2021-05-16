@@ -16,9 +16,6 @@ it:
             part2: 'AO3 è un archivio supportato e gestito dai fan che dipende dalle
               vostre donazioni: %{donate_url}.'
         sent_at: Inviato a %{sent_at}.
-        sent_by:
-          html: Inviato da <b>%{sent_by}</b>.
-          text: Inviato da %{sent_by}.
       signature:
         app_short_name: AO3
     kudos:
@@ -27,7 +24,7 @@ it:
         other: "%{count} ospiti"
       html:
         left_kudos:
-          one: "%{givers_list} ha lasciato kudos per <i>%{commentable_link}</i>."
+          one: "%{givers_list} ha lasciato kudos per <i>%{commentable_link}</i>"
           other: "%{givers_list} hanno lasciato kudos per <i>%{commentable_link}</i>."
       text:
         left_kudos:
@@ -95,18 +92,6 @@ it:
       part1: "%{login}, l’indirizzo email associato al tuo account è stato modificato
         in %{email}"
       subject: "[%{app_name}] Modifica indirizzo email"
-    creatorship_invitation:
-      html:
-        creation: "%{creation_link} di %{pseud_links}"
-        instructions: Puoi accettare o rifiutare questo invito sulla tua pagina %{page_name}.
-        page_name: Inviti Autore
-      intro: 'L’utente %{inviting_user} ha invitato il tuo pseudonimo %{pseud} ad
-        essere inserito come co-autore del seguente lavoro %{type}:'
-      subject: "[%{app_name}] Invito Co-autore"
-      text:
-        creation: "%{title} (%{url}) di %{pseuds}\n"
-        instructions: 'Puoi accettare o rifiutare questo invito sulla tua pagina di
-          Inviti Autore: %{url}'
     creatorship_notification:
       explanation: Quando sei coautore di un lavoro, puoi essere aggiunto a nuovi
         capitoli indipendentemente dalle tue impostazioni riguardanti le creazioni
@@ -253,7 +238,7 @@ it:
           il reindirizzamento. (Se vuoi cambiare il reindirizzamento di più lavori,
           puoi elencarli tutti in una singola email.)
 
-'
+          '
     invite_increase_notification:
       body:
         one: Volevamo farti sapere che hai %{count} nuovo invito che può essere usato
@@ -264,15 +249,8 @@ it:
           andando alla %{invitation_page}.
       closing: Grazie,
       greeting: Ciao %{login}!
-      html: |-
-        <p> Ciao %{login}! </p>
-        <p>volevamo farti sapere che hai %{total} nuovo/i invito/i che possono essere usati per creare nuovi account nell’archivio. Puoi invitare i tuoi amici andando alla pagina%{invitation_page}. </p>
-        <p> Grazie, <br> %{archive_name}</p>
       invitation_page_link_text: pagina degli inviti
       subject: "[%{app_name}] Nuovi inviti"
-      txt: "Ciao %{login}\n\nVolevamo farti sapere che hai %{total} nuovo/i invito/i
-        che possono essere usati per creare nuovi account nell’archivio. Puoi invitare
-        i tuoi amici andando alla pagina %{invitation_page}.\n\nGrazie, \n%{archive_name}"
     invite_request_declined:
       greeting: Ciao %{user},
       main:
@@ -284,10 +262,10 @@ it:
       signoff: Saluti,
       subject: "[%{app_name}] Richiesta per un Codice Invito aggiuntivo rifiutata"
     signup_notification:
-      activate_your_account: attiva il tuo account
-      admin_posts: post degli amministratori dell’Archivio
+      activate_your_account: segui questo link per attivare il tuo account
+      admin_posts: News di AO3
       bye: Speriamo ti divertirai a usare l’Archivio.
-      contact_support: mettiti in contatto con il team di Supporto
+      contact_support: contatta il Supporto
       faq: FAQ
       html:
         part1: Per favore %{activate_account_link}.
@@ -302,9 +280,9 @@ it:
           del sito nei nostri %{admin_posts_link}. Se hai bisogno di aiuto, incontri
           un bug, o hai altre domande o commenti, per favore %{contact_support_link},
           che sarà sempre felice di aiutarti.
-      subject: "[%{app_name}] Conferma"
+      subject: "[%{app_name}] Conferma "
       text:
-        part1: 'Per favore attiva il tuo account: %{activate_account_url}'
+        part1: 'Per favore segui questo link per attivare il tuo account: %{activate_account_url}'
         part2: Non appena il tuo account sarà funzionante, potrai postare i tuoi fanwork,
           impostare le iscrizioni via email che ti permetteranno di sapere quando
           i tuoi autori preferiti pubblicano del materiale o quando i tuoi lavori
@@ -313,8 +291,8 @@ it:
           attraverso la tua cronologia, e molto altro ancora.
         part3: 'Ci sono molte informazioni e suggerimenti su come usare l’Archivio
           nelle nostre FAQ su %{faq_link}. Troverai le ultime notizie riguardo agli
-          sviluppi del sito nei nostri post degli amministratori su %{admin_posts_link}.
-          Se hai bisogno di aiuto, incontri un bug, o hai altre domande o commenti,
-          per favore mettiti in contatto con il team di Supporto, che sarà sempre
-          felice di aiutarti: %{contact_support_link}. '
+          sviluppi del sito su News di AO3 su %{admin_posts_link}. Se hai bisogno
+          di aiuto, incontri un bug, o hai altre domande o commenti, per favore mettiti
+          in contatto con il team di Supporto, che sarà sempre felice di aiutarti:
+          %{contact_support_link}.'
       welcome: Benvenut@ su un Archivio Tutto Per Noi, %{login}!

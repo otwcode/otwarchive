@@ -1,15 +1,2 @@
 ---
-da:
-  users:
-    mailer:
-      reset_password_instructions:
-        expiration: Hvis du ikke benytter dette link til at nulstille dit password
-          inden for en uge, vil det udløbe, og du vil være nødt til at anmode om et
-          nyt.
-        intro: "%{user}, nogen har anmodet om en nulstilling af password for din konto.
-          Du kan ændre dit password ved at følge linket nedenfor og indtaste dit nye
-          password:"
-        link_title: Ændr mit password.
-        subject: "[%{app_name}] Nulstil dit password"
-        unrequested: Hvis du ikke anmodede om nulstilling af password, kan du ignorere
-          denne e-mail, og dit tidligere password vil stadig fungere.
+da: {}

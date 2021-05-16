@@ -1,16 +1,9 @@
 ---
 nl:
-  activerecord:
-    errors:
-      messages:
-        record_invalid: 'Validatie mislukt: %{errors}'
-        restrict_dependent_destroy:
-          has_many: Kan item niet verwijderen omdat afhankelijke %{record} bestaan
-          has_one: Kan item niet verwijderen omdat %{record} afhankelijk is
   date:
     abbr_day_names: "-Zo -Ma -Di -Wo -Do -Vrij -Za"
     abbr_month_names:
-    - 
+    -
     - jan
     - feb
     - mrt
@@ -29,7 +22,7 @@ nl:
       long: "%e %B %Y"
       short: "%e %b"
     month_names:
-    - 
+    -
     - januari
     - februari
     - maart
@@ -92,44 +85,6 @@ nl:
       month: maand
       second: seconde
       year: jaar
-  errors:
-    format: "%{attribute} %{message}"
-    messages:
-      accepted: moet worden geaccepteerd
-      blank: moet opgegeven zijn
-      confirmation: komt niet overeen met %{attribute}
-      empty: moet opgegeven zijn
-      equal_to: moet gelijk zijn aan %{count}
-      even: moet even zijn
-      exclusion: is gereserveerd
-      greater_than: moet groter zijn dan %{count}
-      greater_than_or_equal_to: moet groter dan of gelijk zijn aan %{count}
-      inclusion: is niet in de lijst opgenomen
-      invalid: is ongeldig
-      less_than: moet minder zijn dan %{count}
-      less_than_or_equal_to: moet minder dan of gelijk zijn aan %{count}
-      model_invalid: 'Validatie mislukt: %{errors}'
-      not_an_integer: moet een geheel getal zijn
-      not_a_number: is geen getal
-      odd: moet oneven zijn
-      other_than: moet anders zijn dan %{count}
-      present: moet leeg zijn
-      required: moet bestaan
-      taken: is al in gebruik
-      too_long:
-        one: is te lang (maximaal %{count} teken)
-        other: is te lang (maximaal %{count} tekens)
-      too_short:
-        one: is te kort (minimaal %{count} teken)
-        other: is te kort (minimaal %{count} tekens)
-      wrong_length:
-        one: heeft onjuiste lengte (moet 1 teken lang zijn)
-        other: heeft onjuiste lengte (moet %{count} tekens lang zijn)
-    template:
-      body: 'Er zijn problemen met de volgende velden:'
-      header:
-        one: "%{model} niet opgeslagen: 1 fout gevonden"
-        other: "%{model} niet opgeslagen: %{count} fouten gevonden"
   helpers:
     select:
       prompt: Maak een keuze

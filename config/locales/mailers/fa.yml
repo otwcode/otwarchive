@@ -17,9 +17,6 @@ fa:
             part2: 'Archive of Our Own (آرشیوی از آن خودمان) آرشیویست که توسط هواداران
               اداره و حمایت می شود که به کمکهای مالی شما تکیه می کند: %{donate_url}.'
         sent_at: فرستاده شده در %{sent_at}.
-        sent_by:
-          html: فرستاده شده توسط <b>%{sent_by}</b>.
-          text: فرستاده شده توسط %{sent_by}.
       signature:
         app_short_name: AO3
     kudos:
@@ -91,19 +88,6 @@ fa:
     change_email:
       part1: "%{login}، ایمیل مرتبط با اکانت شما به ایمیل %{email} تغییر یافته است."
       subject: "[%{app_name}] تغییر ایمیل"
-    creatorship_invitation:
-      html:
-        creation: "%{creation_link} توسط %{pseud_links}"
-        instructions: شما می توانید با مراجعه به صفحه ی %{page_name} خودتان این دعوتنامه
-          را پذیرفته یا رد کنید.
-        page_name: دعوتنامه های تهیه کنندگی
-      intro: 'کاربر %{inviting_user} نام مستعار شما %{pseud} را دعوت کرده است تا به
-        عنوان تهیه کننده ی همکار برای اثر ذیل ذکر شوید %{type}:'
-      subject: "[%{app_name}] دعوتنامه ی تهیه کنندگی  همکار"
-      text:
-        creation: "%{title} (%{url}) توسط %{pseuds}"
-        instructions: 'شما می توانید با مراجعه به صفحه ی دعوتنامه های تهیه کنندگی
-          خودتان این دعوتنامه را پذیرفته یا رد کنید: %{url}'
     creatorship_notification:
       explanation: زمانی که شما تهیه کننده ی همکار یک اثر هستید، صرفه نظر از تنظیمات
         همکاریتان، می توانید به فصل های جدید اثر اضافه شوید. شما همچنین به سری هایی
@@ -257,16 +241,8 @@ fa:
           کرد. شما می توانید دوستی را در %{invitation_page} دعوت کنید.
       closing: 'خوش باشید، '
       greeting: سلام %{login}
-      html: |-
-        <p dir="rtl"> سلام %{login}! </p>\n\
-        <p dir="rtl"> ما فقط می خواستیم به شما اطلاع دهیم که شما %{total} دعوتنامه (دعوتنامه های) جدید دارید که می توان از آنها برای ایجاد اکانتهای جدید در آرشیو استفاده کرد. شما می توانید دوستی را در %{invitation_page} دعوت کنید. </p>\n\
-        <p dir="rtl"> خوش باشید، <br> %{archive_name}</p>
       invitation_page_link_text: صفحه ی دعوتنامه های شما
       subject: "[%{app_name}] دعوتنامه های جدید"
-      txt: "سلام %{login}\nما فقط می خواستیم به شما اطلاع دهیم که شما %{total} دعوتنامه
-        (دعوتنامه های) جدید دارید که می توان از آنها برای ایجاد اکانتهای جدید در آرشیو
-        استفاده کرد. شما می توانید دوستی را در %{invitation_page} دعوت کنید.\nخوش
-        باشید، \n%{archive_name}"
     invite_request_declined:
       greeting: "%{user} عزیز،"
       main:

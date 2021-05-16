@@ -1,14 +1,2 @@
 ---
-nl:
-  users:
-    mailer:
-      reset_password_instructions:
-        expiration: Als je deze link niet binnen één week gebruikt om je wachtwoord
-          opnieuw in te stellen, zal de link vervallen en moet je een nieuwe aanvragen.
-        intro: "%{user}, iemand heeft een wachtwoordherstel voor je account  aangevraagd.
-          Je kan je wachtwoord veranderen door de onderstaande link te volgen en een
-          nieuw wachtwoord in te voeren"
-        link_title: Verander mijn wachtwoord.
-        subject: "[%{app_name}] Stel je wachtwoord opnieuw in"
-        unrequested: Als je geen wachtwoordherstel hebt aangevraagd, kan je deze e-mail
-          negeren en zal je vorige wachtwoord blijven werken.
+nl: {}

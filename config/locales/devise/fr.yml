@@ -1,14 +1,2 @@
 ---
-fr:
-  users:
-    mailer:
-      reset_password_instructions:
-        expiration: Ce lien est valable une semaine. S’il n’est pas utilisé dans ce
-          délai, il arrivera à expiration et vous devrez alors en demander un nouveau.
-        intro: "%{user}, nous avons reçu une demande de réinitialisation du mot de
-          passe de votre compte. Pour le modifier, suivez le lien ci-dessous et entrez
-          votre nouveau mot de passe :"
-        link_title: Modifier mon mot de passe.
-        subject: "[%{app_name}] Réinitialisation du mot de passe"
-        unrequested: Si vous n’êtes pas à l’origine de cette demande, veuillez ignorer
-          ce message. Votre ancien mot de passe restera alors valide.
+fr: {}

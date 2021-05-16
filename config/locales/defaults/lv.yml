@@ -1,9 +1,5 @@
 ---
 lv:
-  activerecord:
-    errors:
-      messages:
-        record_invalid: 'Pārbaude neizdevās: %{errors}'
   date:
     abbr_day_names:
     - Sv.
@@ -14,7 +10,7 @@ lv:
     - Pk.
     - S.
     abbr_month_names:
-    - 
+    -
     - Janv
     - Febr
     - Marts
@@ -40,7 +36,7 @@ lv:
       long: "%Y. gada %e. %B"
       short: "%e. %B"
     month_names:
-    - 
+    -
     - janvārī
     - ferbruārī
     - martā
@@ -111,44 +107,6 @@ lv:
       month: mēnesis
       second: sekunde
       year: gads
-  errors:
-    format: "%{attribute} %{message}"
-    messages:
-      accepted: ir jāpiekrīt
-      blank: ir jābūt aizpildītam
-      confirmation: nesakrīt ar apstiprinājumu
-      empty: ir jābūt aizpildītam
-      equal_to: ir jābūt vienādam ar %{count}
-      even: ir jābūt pāra skaitlim
-      exclusion: nav pieejams
-      greater_than: ir jābūt lielākam par %{count}
-      greater_than_or_equal_to: ir jābūt lielākam vai vienādam ar %{count}
-      inclusion: nav iekļauts sarakstā
-      invalid: nav derīgs
-      less_than: ir jābūt mazākam par %{count}
-      less_than_or_equal_to: ir jābūt mazākam vai vienādam ar %{count}
-      not_an_integer: ir jābūt veselam skaitlim
-      not_a_number: nav skaitlis
-      odd: ir jābūt nepāra skaitlim
-      taken: ir jau aizņemts
-      too_long:
-        one: ir par garu (maksimums ir %{count} simbols)
-        other: ir par garu (maksimums ir %{count} simboli)
-        zero: ir par garu (maksimums ir %{count} simboli)
-      too_short:
-        one: ir par īsu (minimums ir %{count} simbols)
-        other: ir par īsu (minimums ir %{count} simboli)
-        zero: ir par īsu (minimums ir %{count} simboli)
-      wrong_length:
-        one: ir nepareizs garums (jābūt %{count} simbolam)
-        other: ir nepareizs garums (jābūt %{count} simboliem)
-        zero: ir nepareizs garums (jābūt %{count} simboliem)
-    template:
-      body: 'Problēmas ir šajos ievades laukos:'
-      header:
-        one: Dēļ %{count} kļūdas šis %{model} netika saglabāts
-        other: Dēļ %{count} kļūdām šis %{model} netika saglabāts
-        zero: Dēļ %{count} kļūdām šis %{model} netika saglabāts
   helpers:
     select:
       prompt: Lūdzu izvēlies

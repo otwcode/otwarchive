@@ -13,9 +13,6 @@ ja:
             part1: 間違ってこのメッセージを受けた場合はユーザーサポート（委員会）（%{support_url}）までご連絡ください。
             part2: みんなのアーカイブ（AO3）はファンによって運営され、ファンに支えられているアーカイブです。AO3は皆様からのご寄付に頼っています：%{donate_url}。
         sent_at: "%{sent_at}に送信されました。"
-        sent_by:
-          html: "<b>%{sent_by}</b>より。"
-          text: "%{sent_by}より。"
       signature:
         app_short_name: AO3
     kudos:
@@ -37,16 +34,6 @@ ja:
     change_email:
       part1: "%{login}, あなたのアカウントのメールアドレスは%{email}に変更されました。"
       subject: "[%{app_name}] メールアドレス変更のお知らせ"
-    creatorship_invitation:
-      html:
-        creation: "%{pseud_links}による%{creation_link} "
-        instructions: "%{page_name}ページで招待を受け入れるか拒否することができます。"
-        page_name: 合作者の招待
-      intro: "%{inviting_user}さんはあなたのペンネーム %{pseud} を以下の作品の合作者として招待しました%{type}:"
-      subject: "[%{app_name}] 合作者の招待"
-      text:
-        creation: " %{title} (%{url}) by %{pseuds}"
-        instructions: 合作者招待ページで招待を受け入れるか拒否することができます： %{url}
     creatorship_notification:
       explanation: あなたが作品の合作者の場合は、あなたの共同制作の設定に関わらず、新しいチャプターにあなたのペンネームが合作者として追加され得ます。また、作品が加えられたシリーズにも追加されます.
       html:

@@ -3,18 +3,7 @@ sl:
   mailer:
     general:
       footer:
-        general:
-          html: |-
-            <p>Če ste prejeli to sporočilo po pomoti, prosimo <a href="%{support_url}" style="color:#ffffff; text-decoration:underline">kontaktirajte Podporo</a>.</p>
-
-            <p>Naš lastni arhiv upravljajo in vzdržujejo fani, zato potrebuje <a href="%{donate_url}" style="color:#ffffff; text-decoration:underline">vaše donacije</a>.</p>
-          text: "Če ste prejeli to sporočilo po pomoti, prosimo kontaktirajte Podporo
-            na %{support_url}.\n              \nNaš lastni arhiv upravljajo in vzdržujejo
-            fani, zato potrebuje vaše donacije: %{donate_url}."
         sent_at: Poslano ob %{sent_at}.
-        sent_by:
-          html: Poslal/-a <b>%{sent_by}</b>.
-          text: Poslal/-a %{sent_by}.
   user_mailer:
     abuse_report:
       description_para: 'Opis zlorabe:'

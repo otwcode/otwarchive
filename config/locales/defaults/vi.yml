@@ -1,12 +1,5 @@
 ---
 vi:
-  activerecord:
-    errors:
-      messages:
-        record_invalid: 'Có các lỗi sau: %{errors}'
-        restrict_dependent_destroy:
-          has_many: Không thể xóa do tồn tại một số đối tượng phụ thuộc %{record}
-          has_one: Không thể xóa do tồn tại đối tượng phụ thuộc %{record}
   date:
     abbr_day_names:
     - CN
@@ -17,7 +10,7 @@ vi:
     - Thứ 6
     - Thứ 7
     abbr_month_names:
-    - 
+    -
     - Thg 1
     - Thg 2
     - Thg 3
@@ -43,7 +36,7 @@ vi:
       long: "%d %B, %Y"
       short: "%d %b"
     month_names:
-    - 
+    -
     - Tháng một
     - Tháng hai
     - Tháng ba
@@ -92,32 +85,6 @@ vi:
       month: Tháng
       second: Giây
       year: Năm
-  errors:
-    format: "%{attribute} %{message}"
-    messages:
-      accepted: phải được đồng ý
-      blank: không thể để trắng
-      confirmation: không khớp với xác nhận
-      empty: không thể rỗng
-      equal_to: phải bằng %{count}
-      even: phải là số chẵn
-      exclusion: đã được giành trước
-      greater_than: phải lớn hơn %{count}
-      greater_than_or_equal_to: phải lớn hơn hoặc bằng %{count}
-      inclusion: không có trong danh sách
-      invalid: không hợp lệ
-      less_than: phải nhỏ hơn %{count}
-      less_than_or_equal_to: phải nhỏ hơn hoặc bằng %{count}
-      not_an_integer: phải là một số nguyên
-      not_a_number: không phải là số
-      odd: phải là số lẻ
-      other_than: cần phải khác %{count}
-      present: cần phải để trắng
-      taken: đã có
-    template:
-      body: 'Có lỗi với các mục sau:'
-      header:
-        other: "%{count} lỗi ngăn không cho lưu %{model} này"
   helpers:
     select:
       prompt: Vui lòng chọn

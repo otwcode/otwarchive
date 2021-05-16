@@ -1,9 +1,5 @@
 ---
 ka:
-  activerecord:
-    errors:
-      messages:
-        record_invalid: 'დადასტურება წარუმატებელია: %{errors}'
   date:
     abbr_day_names:
     - კვ
@@ -14,7 +10,7 @@ ka:
     - პარ
     - შაბ
     abbr_month_names:
-    - 
+    -
     - იანვ
     - თებ
     - მარტი
@@ -40,7 +36,7 @@ ka:
       long: "%d %B %Y"
       short: "%d %b"
     month_names:
-    - 
+    -
     - იანვარი
     - თებერვალი
     - მარტი
@@ -103,44 +99,6 @@ ka:
       month: თვე
       second: წამი
       year: წელი
-  errors:
-    format: "%{attribute} %{message}"
-    messages:
-      accepted: უნდა იყოს დადასტურებული
-      blank: არ შეიძლება იყოს ცარიელი
-      confirmation: ველი %{attribute}-ს არ ემთხვევა
-      empty: არ შეიძლება იყოს ცარიელი
-      equal_to: უნდა უდრიდეს %{count}-ს
-      even: უნდა იყოს ლუწი
-      exclusion: რეზერვირებულია
-      greater_than: უნდა იყოს %{count}-ზე მეტი
-      greater_than_or_equal_to: უნდა იყოს %{count}-ზე მეტი ან ტოლი
-      inclusion: არ არის სიაში
-      invalid: არასწორია
-      less_than: უნდა იყოს %{count}-ზე ნაკლები
-      less_than_or_equal_to: უნდა იყოს %{count}-ზე ნაკლები ან ტოლი
-      model_invalid: 'დადასტურება წარუმატებელია: %{errors}'
-      not_an_integer: არ არის მთელი რიცხვი
-      not_a_number: არ არის რიცხვი
-      odd: უნდა იყოს კენტი
-      other_than: უნდა განსხვავდებოდეს %{count}-გან
-      present: უნდა იყოს ცარიელი
-      required: უნდა არსებობდეს
-      taken: უკვე დაკავებულია
-      too_long:
-        one: არის ძალიან გრძელი (მაქსიმუმია 1 სიმბოლო)
-        other: არის მეტისმეტად დიდი სიგრძის (მაქსიმუმია %{count} სიმბოლო)
-      too_short:
-        one: არის ძალიან მოკლე (მინიმუმია 1 სიმბოლო)
-        other: არის ძალიან მოკლე (მინიმუმია %{count} სიმბოლო)
-      wrong_length:
-        one: არის არასწორი სიგრძის (უნდა იყოს ზუსტად 1 სიბმოლო)
-        other: არის არასწორი სიგრძის (უნდა იყოს ზუსტად %{count} სიბმოლო)
-    template:
-      body: 'შეიქმნა პრობლემები შემდეგ ველებთან დაკავშირებით:'
-      header:
-        one: "%{model}-ს შენახვა ვერ განხორციელდა 1 შეცდომის გამო"
-        other: "%{model}-ს შენახვა ვერ განხორციელდა %{count} შეცდომის გამო"
   helpers:
     select:
       prompt: გთხოვთ აირჩიოთ

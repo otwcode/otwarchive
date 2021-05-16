@@ -1,13 +1,2 @@
 ---
-ro:
-  users:
-    mailer:
-      reset_password_instructions:
-        expiration: Dacă nu folosești acest link în următoarele șapte zile pentru
-          a-ți reseta parola, va trebui să ceri un link nou.
-        intro: "%{user}, cineva a solicitat resetarea parolei pentru contul tău. Pentru
-          a-ți schimba parola, urmează link-ul de mai jos și introdu o parolă nouă:"
-        link_title: Schimbă parola.
-        subject: "[%{app_name}] Resetează-ți parola"
-        unrequested: Dacă nu ai solicitat schimbarea parolei, ignoră acest e-mail
-          și continuă să-ți folosești parola actuală.
+ro: {}

@@ -1,12 +1,5 @@
 ---
 ar:
-  activerecord:
-    errors:
-      messages:
-        record_invalid: 'فشل التحقّق من: %{errors}'
-        restrict_dependent_destroy:
-          has_many: لا يمكن حذف السجل لوجود سجلات تعتمد عليه %{record}
-          has_one: لا يمكن حذف السجل لوجود سجل يعتمد عليه %{record}
   date:
     abbr_day_names:
     - الأحد
@@ -17,7 +10,7 @@ ar:
     - الجمعة
     - السّبت
     abbr_month_names:
-    - 
+    -
     - يناير
     - فبراير
     - مارس
@@ -43,7 +36,7 @@ ar:
       long: "%e %B، %Y"
       short: "%e %b"
     month_names:
-    - 
+    -
     - يناير
     - فبراير
     - مارس
@@ -147,57 +140,6 @@ ar:
       month: الشهر
       second: ثانية
       year: السنة
-  errors:
-    format: "%{message}"
-    messages:
-      accepted: يجب أن تقبل %{attribute}
-      blank: لا يمكن أن يكون محتوى %{attribute} فارغاً
-      confirmation: محتوى %{attribute} لا يتوافق مع %{attribute}
-      empty: لا يمكن أن يكون محتوى %{attribute} فارغاً
-      equal_to: يجب أن يساوي طول %{attribute} %{count}
-      even: يجب أن يكون عدد %{attribute} زوجياً
-      exclusion: حقل %{attribute} محجوز
-      greater_than: ميجب أن يكون عدد %{attribute} أكبر من %{count}
-      greater_than_or_equal_to: يجب أن يكون عدد %{attribute} أكبر أو يساوي %{count}
-      inclusion: "%{attribute} غير وارد في القائمة"
-      invalid: محتوى %{attribute} غير صالح
-      less_than: يجب أن يكون عدد %{attribute} أصغر من %{count}
-      less_than_or_equal_to: يجب أن يكون عدد %{attribute} أصغر أو  يساوي %{count}
-      not_an_integer: يجب أن يكون عدد %{attribute} عدد صحيحاً
-      not_a_number: يجب أن يكون محتوى %{attribute} رقماً
-      odd: يجب أن يكون عدد %{attribute} عدداً فردياً
-      present: يجب ترك حقل %{attribute} فارغاً
-      taken: حقل %{attribute} محجوز مسبقاً
-      too_long:
-        few: محتوى %{attribute} أطول من اللّازم (الحد الأقصى هو %{count} حروف)
-        many: محتوى %{attribute} أطول من اللّازم (الحد الأقصى هو %{count} حرف)
-        one: محتوى %{attribute} أطول من اللّازم (الحد الأقصى هو حرف واحد)
-        other: محتوى %{attribute} أطول من اللّازم (الحد الأقصى هو %{count} حرف)
-        two: محتوى %{attribute} أطول من اللّازم (الحد الأقصى هو حرفان)
-        zero: محتوى %{attribute} أطول من اللّازم (الحد الأقصى هو ولا حرف)
-      too_short:
-        few: محتوى %{attribute} أقصر من اللّازم (الحد الأدنى هو %{count} حروف)
-        many: محتوى %{attribute} أقصر من اللّازم (الحد الأدنى هو %{count} حرف)
-        one: محتوى %{attribute} أقصر من اللّازم (الحد الأدنى هو حرف واحد)
-        other: محتوى %{attribute} أقصر من اللّازم (الحد الأدنى هو %{count} حرف)
-        two: محتوى %{attribute} أقصر من اللّازم (الحد الأدنى هو حرفان)
-        zero: محتوى %{attribute} أقصر من اللّازم (الحد الأدنى هو ولا حرف)
-      wrong_length:
-        few: طول %{attribute} غير مطابق للحد المطلوب (يجب أن يكون %{count} أحرف)
-        many: طول %{attribute} غير مطابق للحد المطلوب (يجب أن يكون %{count} حرف)
-        one: طول %{attribute} غير مطابق للحد المطلوب (يجب أن يكون حرف واحد)
-        other: طول %{attribute} غير مطابق للحد المطلوب (يجب أن يكون %{count} حرف)
-        two: طول %{attribute} غير مطابق للحد المطلوب (يجب أن يكون حرفان)
-        zero: طول %{attribute} غير مطابق للحد المطلوب (يجب أن يكون ولا حرف)
-    template:
-      body: يُرجى التحقّق من الحقول التّالية:%{attribute}
-      header:
-        few: ليس بالامكان حفظ %{model} لسبب وجود %{count} أخطاء.
-        many: ليس بالامكان حفظ %{model} لسبب وجود %{count} خطأ.
-        one: ليس بالامكان حفظ %{model} لسبب وجود خطأ واحد.
-        other: ليس بالامكان حفظ %{model} لسبب وجود %{count} خطأ.
-        two: ليس بالامكان حفظ %{model} لسبب وجود خطئان.
-        zero: ليس بالامكان حفظ %{model} لسبب ولا خطأ.
   helpers:
     select:
       prompt: يُرجى الاختيار

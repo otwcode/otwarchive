@@ -1,9 +1,5 @@
 ---
 ro:
-  activerecord:
-    errors:
-      messages:
-        record_invalid: Validare nereuşită %{errors}
   date:
     abbr_day_names:
     - Dum
@@ -14,7 +10,7 @@ ro:
     - Vin
     - Sâm
     abbr_month_names:
-    - 
+    -
     - Ian
     - Feb
     - Mar
@@ -40,7 +36,7 @@ ro:
       long: "%d %B %Y"
       short: "%d %b"
     month_names:
-    - 
+    -
     - Ianuarie
     - Februarie
     - Martie
@@ -111,32 +107,6 @@ ro:
       month: Luna
       second: Secunda
       year: Anul
-  errors:
-    format: "%{attribute} %{message}"
-    messages:
-      accepted: trebuie dat acceptul
-      blank: nu poate fi gol
-      confirmation: nu este confirmat
-      empty: nu poate fi gol
-      equal_to: trebuie să fie egal cu %{count}
-      even: trebuie să fie impar
-      exclusion: este rezervat
-      greater_than: trebuie să fie mai mare decât %{count}
-      greater_than_or_equal_to: trebuie să fie mai mare sau egal cu %{count}
-      inclusion: nu este inclus în listă
-      invalid: este invalid
-      less_than: trebuie să fie mai mic decât %{count}
-      less_than_or_equal_to: trebuie să fie mai mic sau egal cu %{count}
-      not_an_integer: trebuie să fie un mumăr întreg
-      not_a_number: nu este un număr
-      odd: trebuie să fie par
-      taken: este deja folosit
-    template:
-      body: 'Încearcă să corectezi urmatoarele câmpuri:'
-      header:
-        few: 'Nu am putut salva acest %{model}: %{count} erori.'
-        one: 'Nu am putut salva acest %{model}: o eroare'
-        other: 'Nu am putut salva acest %{model}: %{count} erori.'
   helpers:
     select:
       prompt: Alegeţi

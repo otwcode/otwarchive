@@ -43,19 +43,6 @@ nb:
     change_email:
       part1: "%{login}, e-posten knyttet til din konto har blitt endret til %{email}"
       subject: "[%{app_name}] E-post endret"
-    creatorship_invitation:
-      html:
-        creation: "%{creation_link} av %{pseud_links}"
-        instructions: Du kan godta eller avvise denne invitasjonen på siden din for
-          %{page_name}.
-        page_name: skaper-invitasjoner
-      intro: 'Brukeren %{inviting_user} har invitert pseudonymet ditt %{pseud} til
-        å bli listet opp som medskaper på følgende %{type}:'
-      subject: "[%{app_name}] Medskaper-invitasjon"
-      text:
-        creation: "%{title} (%{url}) av %{pseuds}"
-        instructions: 'Du kan godta eller avvise denne invitasjonen på siden din for
-          skaper-invitasjoner: %{url}'
     creatorship_notification:
       explanation: Når du er medskaper på et verk kan du bli lagt til på nye kapitler
         uavhengig av dine medskaper-innstillinger. Du blir også lagt til på alle serier

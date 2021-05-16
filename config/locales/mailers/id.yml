@@ -69,19 +69,6 @@ id:
       part1: "%{login}, alamat surel yang diasosiasikan dengan akun Anda telah diganti
         ke %{email}"
       subject: "[%{app_name}] Alamat surel telah diganti"
-    creatorship_invitation:
-      html:
-        creation: "%{creation_link} oleh %{pseud_links}"
-        instructions: Anda dapat menerima atau menolak undangan ini di halaman %{page_name}
-          Anda.
-        page_name: Undangan Rekan Pencipta
-      intro: "%{inviting_user} telah mengundang nama alias %{pseud} Anda untuk menjadi
-        rekan pencipta untuk %{type} berikut:"
-      subject: "[%{app_name}] Undangan untuk menjadi rekan pencipta"
-      text:
-        creation: "%{title} (%{url}) oleh %{pseuds}"
-        instructions: 'Anda dapat menerima atau menolak undangan ini di halaman Undangan
-          Rekan Pencipta Anda: %{url}'
     creatorship_notification:
       explanation: Ketika Anda menjadi seorang rekan pencipta sebuah karya, Anda dapat
         ditambahkan pada bab-bab terbaru dalam karya terlepas dari pengaturan pembuatan
@@ -126,12 +113,12 @@ id:
         part1_yourself: Karya Anda, %{title}, telah dihapus atas permintaan Anda.
         part2: Jika Anda memiliki pertanyaan, silakan %{support}.
       part2: Jika Anda memiliki pertanyaan, silakan %{support}.
-      part3: Attached is a copy of your work for your reference.
+      part3: Terlampir salinan karya Anda sebagai referensi.
       subject: "[%{app_name}] Karya Anda telah dihapus"
       support: hubungi Komite Dukungan
       text:
-        part1_other: Karya Anda, \"%{title}\", telah dihapus atas permintaan %{pseud}.
-        part1_yourself: Karya Anda, \"%{title}\", telah dihapus atas permintaan Anda.
+        part1_other: Karya Anda, "%{title}", telah dihapus atas permintaan %{pseud}.
+        part1_yourself: Karya Anda, "%{title}", telah dihapus atas permintaan Anda.
         part2: Jika Anda memiliki pertanyaan, silakan %{support} (%{url}).
     invitation_to_claim:
       greeting: Halo dari %{app_name}!
@@ -247,15 +234,7 @@ id:
           - AO3 (Arsip Milik Kita). Anda dapat mengundang teman Anda di %{invitation_page}.
       closing: Salam,
       greeting: " Hi %{login}!"
-      html: |-
-        <p> Halo %{login}! </p>\n\
-                  <p> Kami hanya ingin memberitahu Anda, bahwa Anda memiliki %{total} undangan baru yang dapat digunakan untuk membuat akun baru di Archive of Our Own - AO3 (Arsip Milik Kita). Anda dapat mengundang teman Anda di %{invitation_page}. </p>\n\
-                  <p> Salam, <br> %{archive_name}</p>
       subject: "[%{app_name}] Undangan Baru"
-      txt: "Halo %{login}\n          Kami hanya ingin memberitahu Anda,  bahwa Anda
-        memiliki %{total} undangan baru yang dapat digunakan untuk membuat akun baru
-        di Archive of Our Own - AO3 (Arsip Milik Kita). Anda dapat mengundang teman
-        Anda di %{invitation_page}.\n          Salam, \n          %{archive_name}\n"
     invite_request_declined:
       greeting: Yang terhormat %{user},
       main:

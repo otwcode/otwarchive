@@ -13,9 +13,6 @@ zh-CN:
             part1: 如果您收到错误信息，请通过%{support_url}联系支持团队。
             part2: AO3是由同人爱好者运作并支持、由您的捐赠资助运行的作品库：%{donate_url}。
         sent_at: 于%{sent_at}发送。
-        sent_by:
-          html: 由<b>%{sent_by}</b>发送。
-          text: 由%{sent_by}发送。
       signature:
         app_short_name: AO3
     kudos:
@@ -74,16 +71,6 @@ zh-CN:
     change_email:
       part1: "%{login},，与您的账号关联的邮箱地址已改为%{email}"
       subject: "[%{app_name}]邮箱地址更换"
-    creatorship_invitation:
-      html:
-        creation: 由%{pseud_links}创作的%{creation_link}
-        instructions: 您可以在您的%{page_name} 页面接受或拒绝此邀请。
-        page_name: 创作者邀请
-      intro: '用户%{inviting_user}邀请您的账户 %{pseud}成为以下作品的共同创作者 %{type}:'
-      subject: "[%{app_name}]共同创作者邀请"
-      text:
-        creation: 由%{pseuds}创作的%{title} (%{url})
-        instructions: 您可以在您的创作者邀请页面接受或拒绝此邀请：%{url}
     creatorship_notification:
       explanation: 作为某一作品的共同创作者, 您可能被列为作品新章节的作者，无论您在个人设置中是否允许他人邀请您成为共同创作者， 您也会被自动列为作品所属系列的作者之一。
       html:
@@ -154,7 +141,7 @@ zh-CN:
           of Our Own - AO3（AO3作品库）账号，我们也借此机会诚邀您加入！
         part10: '如果您在同一个作品库上还发布有其他作品，且已无法登录这些作品所属的邮箱账户，请联系Open Doors，并提供能够帮助我们验证您的作者身份的信息。
 
-'
+          '
         part11: 如有其它疑问，请点击此链接%{support_link}。
         part13: |-
           祝好，

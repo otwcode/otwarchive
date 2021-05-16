@@ -1,13 +1,2 @@
 ---
-cs:
-  users:
-    mailer:
-      reset_password_instructions:
-        expiration: Pokud tento odkaz nepoužijete ke změně hesla do sedmi dnů, vyprší
-          a budete si muset zažádat o nový.
-        intro: "%{user}, byl vznesen požadavek na změnu hesla pro váš účet. Své heslo
-          můžete změnit kliknutím na následující odkaz a vyplněním nového hesla:"
-        link_title: Změnit heslo.
-        subject: "[%{app_name}] Změňte své heslo"
-        unrequested: Pokud jste si změnu hesla nevyžádal/a, můžete tento email ignorovat
-          a vaše stávající heslo zůstane platné.
+cs: {}

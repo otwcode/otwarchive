@@ -1,9 +1,5 @@
 ---
 th:
-  activerecord:
-    errors:
-      messages:
-        record_invalid: 'ไม่ผ่านการตรวจสอบ: %{errors}'
   date:
     abbr_day_names:
     - อา
@@ -14,7 +10,7 @@ th:
     - ศ
     - ส
     abbr_month_names:
-    - 
+    -
     - ม.ค.
     - ก.พ.
     - มี.ค.
@@ -40,7 +36,7 @@ th:
       long: "%d %B %Y"
       short: "%d %b"
     month_names:
-    - 
+    -
     - มกราคม
     - กุมภาพันธ์
     - มีนาคม
@@ -67,28 +63,6 @@ th:
       month: เดือน
       second: วินาที
       year: ปี
-  errors:
-    format: "%{attribute} %{message}"
-    messages:
-      accepted: ต้องถูกยอมรับ
-      blank: ต้องไม่เว้นว่างเอาไว้
-      confirmation: ไม่ตรงกับการยืนยัน
-      empty: ต้องไม่เว้นว่างเอาไว้
-      equal_to: ต้องมีค่าเท่ากับ %{count}
-      even: ต้องเป็นจำนวนคู่
-      exclusion: ไม่ได้รับอนุญาตให้ใช้
-      greater_than: ต้องมากกว่า %{count}
-      greater_than_or_equal_to: ต้องมากกว่าหรือเท่ากับ %{count}
-      inclusion: ไม่ได้อยู่ในรายการ
-      invalid: ไม่ถูกต้อง
-      less_than: ต้องมีค่าน้อยกว่า %{count}
-      less_than_or_equal_to: ต้องมีค่าน้อยกว่าหรือเท่ากับ %{count}
-      not_an_integer: ไม่ใช่จำนวนเต็ม
-      not_a_number: ไม่ใช่ตัวเลข
-      odd: ต้องเป็นจำนวนคี่
-      taken: ถูกใช้ไปแล้ว
-    template:
-      body: 'โปรดตรวจสอบข้อมูลในช่องต่อไปนี้:'
   helpers:
     select:
       prompt: โปรดเลือก

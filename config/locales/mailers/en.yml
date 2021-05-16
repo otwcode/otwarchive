@@ -16,9 +16,6 @@ en:
             part2: 'The Archive of Our Own is a fan-run and fan-supported archive
               that relies on your donations: %{donate_url}.'
         sent_at: Sent at %{sent_at}.
-        sent_by:
-          html: Sent by <b>%{sent_by}</b>.
-          text: Sent by %{sent_by}.
       signature:
         app_short_name: AO3
     kudos:
@@ -132,19 +129,6 @@ en:
       part1: "%{login}, the email associated with your account has been changed to
         %{email}"
       subject: "[%{app_name}] Email changed"
-    creatorship_invitation:
-      html:
-        creation: "%{creation_link} by %{pseud_links}"
-        instructions: You can accept or reject this invitation on your %{page_name}
-          page.
-        page_name: Creator Invitations
-      intro: 'The user %{inviting_user} has invited your pseud %{pseud} to be listed
-        as a co-creator on the following %{type}:'
-      subject: "[%{app_name}] Co-creator invitation"
-      text:
-        creation: "%{title} (%{url}) by %{pseuds}"
-        instructions: 'You can accept or reject this invitation on your Creator Invitations
-          page: %{url}'
     creatorship_notification:
       explanation: When you're a co-creator on a work, you can be added to new chapters
         regardless of your co-creation settings. You will also be added to any series
@@ -330,19 +314,8 @@ en:
           a friend at %{invitation_page}.
       closing: Cheers,
       greeting: Hi %{login}!
-      html: |-
-        <p> Hi %{login}! </p>
-        <p> We just wanted to let you know that you have %{total} new invitation(s), which can be used to create new accounts at the archive. You can invite a friend at %{invitation_page}. </p>
-        <p> Cheers, <br> %{archive_name} </p>
       invitation_page_link_text: your invitations page
       subject: "[%{app_name}] New Invitations"
-      txt: |-
-        Hi %{login}
-        We just wanted to let you know that you have %{total} new invitation(s),
-        which can be used to create new accounts at the archive. You can invite a
-        friend at %{invitation_page}.
-        Cheers,
-        %{archive_name}
     invite_request_declined:
       greeting: Dear %{user},
       main:

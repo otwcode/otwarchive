@@ -1,12 +1,5 @@
 ---
 hr:
-  activerecord:
-    errors:
-      messages:
-        record_invalid: 'Validacija nije uspjela: %{errors}'
-        restrict_dependent_destroy:
-          has_many: Nije moguće izbrisati zapis jer postoje ovisni %{record}
-          has_one: Nije moguće izbrisati zapis jer postoji ovisan %{record}
   date:
     abbr_day_names:
     - Ned
@@ -17,7 +10,7 @@ hr:
     - Pet
     - Sub
     abbr_month_names:
-    - 
+    -
     - Sij
     - Veǉ
     - Ožu
@@ -43,7 +36,7 @@ hr:
       long: "%e. %B %Y."
       short: "%e.%-m."
     month_names:
-    - 
+    -
     - Siječanj
     - Veljača
     - Ožujak
@@ -114,46 +107,6 @@ hr:
       month: Mjesec
       second: Sekunde
       year: Godina
-  errors:
-    format: "%{attribute} %{message}"
-    messages:
-      accepted: mora biti prihvaćen
-      blank: ne smije biti prazan
-      confirmation: se ne slaže sa svojom potvrdom
-      empty: ne smije biti prazan
-      equal_to: mora biti jednak %{count}
-      even: mora biti paran
-      exclusion: je rezerviran
-      greater_than: mora biti veći od %{count}
-      greater_than_or_equal_to: mora biti veći ili jednak %{count}
-      inclusion: nije u listi
-      invalid: nije ispravan
-      less_than: mora biti manji od %{count}
-      less_than_or_equal_to: mora biti manji ili jednak %{count}
-      not_an_integer: nije cijeli broj
-      not_a_number: nije broj
-      odd: mora biti neparan
-      other_than: mora biti različit od %{count}
-      present: mora biti prazan
-      taken: je već zauzet
-      too_long:
-        few: je predugačak (maksimum je %{count} znaka)
-        one: je predugačak (maksimum je %{count} znak)
-        other: je predugačak (maksimum je %{count} znakova)
-      too_short:
-        few: je prekratak (minimum je %{count} znaka)
-        one: je prekratak (minimum je %{count} znak)
-        other: je prekratak (minimum je %{count} znakova)
-      wrong_length:
-        few: nije odgovarajuće duljine (treba biti %{count} znaka)
-        one: nije odgovarajuće duljine (treba biti %{count} znak)
-        other: nije odgovarajuće duljine (treba biti %{count} znakova)
-    template:
-      body: 'Sljedeća polja su neispravno popunjena:'
-      header:
-        few: "%{count} greške su spriječile %{model} da se spremi"
-        one: "%{count} greška je spriječila %{model} da se spremi"
-        other: "%{count} grešaka je spriječilo %{model} da se spremi"
   helpers:
     select:
       prompt: Izaberite

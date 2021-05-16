@@ -15,9 +15,6 @@ da:
             part2: 'AO3 er et fan-styret og fan-støttet arkiv, der er afhængig af
               dine bidrag: %{donate_url}.'
         sent_at: Sendt %{sent_at}.
-        sent_by:
-          html: Sendt af <b>%{sent_by}</b>.
-          text: Sendt af %{sent_by}.
       signature:
         app_short_name: AO3
     kudos:
@@ -57,22 +54,36 @@ da:
           kan du kontakte Åbne Døre (%{opendoors_link}), hvis du har spørgsmål.
         part3: Hvis det er muligt, at dit værk har overtrådt Arkivets Brugsbetingelser,
           kan du kontakte vores komité for Retningslinjer & Misbrug (%{abuse_link}).
+    challenge_assignment_notification:
+      any: Hvilken som helst
+      description: 'Beskrivelse: '
+      due: 'Denne opgave har deadline den:'
+      html:
+        footer: Du modtager denne e-mail, fordi du tilmeldte dig %{title}-udfordringen.
+          For mere information om denne udfordring og moderatorernes kontaktinformation,
+          gå til %{footer_link}.
+        footer_link: Udfordringens profilside
+        look_up: Du kan se denne opgave på %{link}.
+        look_up_link: din Assignments (Opgave) side
+        part1: Du er blevet tildelt følgende forespørgsel i %{link}-udfordringen på
+          Archive of Our Own!
+      optional_tags: 'Valgfrie tags:'
+      prompts: 'Inspiration: '
+      prompt_url: 'URL til inspiration:'
+      recipient: 'Modtager:'
+      recipient_missing: 'Ingen: kontakt en moderator for hjælp!'
+      subject: "[%{app_name}][%{collection_title}] Din opgave!"
+      text:
+        footer: Du modtager denne e-mail, fordi du tilmeldte dig %{title}-udfordringen
+          (%{url}).For mere information om denne udfordring og moderatorernes kontaktinformation,
+          gå til %{footer_link}.
+        look_up: Du kan se denne opgave på din Assignments (Opgave) side på %{link}.
+        part1: Du er blevet tildelt følgende forespørgsel i %{collection_title} (%{collection_url})-udfordringen
+          på Archive of Our Own!
     change_email:
       part1: "%{login}, e-mailadressen, der er tilknyttet din konto, er blevet ændret
         til %{email}"
       subject: "[%{app_name}] E-mail ændret"
-    creatorship_invitation:
-      html:
-        creation: "%{creation_link} af %{pseud_links}"
-        instructions: Du kan acceptere eller afvise denne invitation på din %{page_name}-side.
-        page_name: Invitation til ophavsperson
-      intro: 'Brugeren %{inviting_user} har inviteret dit pseudonym %{pseud} til at
-        stå som medskaber på følgende %{type}:'
-      subject: "[%{app_name}] Invitation til medskaber"
-      text:
-        creation: "%{title} (%{url}) af %{pseuds}"
-        instructions: 'Du kan acceptere eller afvise denne invitation på din Invitation
-          til ophavsperson-side: %{url}'
     creatorship_notification:
       explanation: Når du er medskaber på et værk, kan du blive tilføjet til nye kapitler
         uanset dine indstillinger for at være medskaber. Du vil også blive tilføjet
@@ -106,6 +117,19 @@ da:
         remove: 'Hvis du er blevet tilføjet ved en fejl eller ikke ønsker at være
           noteret som ophavsperson, kan du redigere %{type} for at fjerne dig selv
           som ophavsperson: %{url}'
+    delete_work_notification:
+      hello: Kære %{user},
+      html:
+        part1_other: Dit værk %{title} er blevet slettet efter anmodning fra %{pseud}.
+        part1_yourself: Dit værk %{title} er blevet slettet på din anmodning.
+        part2: Hvis du har spørgsmål, kan du %{support}.
+      part3: Vedhæftet finder du en kopi af dit værk til din orientering.
+      subject: "[%{app_name}] Dit værk er blevet slettet"
+      support: kontakte Support
+      text:
+        part1_other: Dit værk \"%{title}\" er blevet slettet efter anmodning fra %{pseud}.
+        part1_yourself: Dit værk \"%{title}\" er blevet slettet på din anmodning.
+        part2: Hvis du har spørgsmål, kan du %{support} (%{url}).
     invite_increase_notification:
       body:
         one: Vi ville bare lige fortælle, at du har %{count} ny invitation, som kan
@@ -116,34 +140,47 @@ da:
       closing: Hilsen,
       greeting: Hej %{login}!
       subject: "[%{app_name}] Nye invitationer"
+    invite_request_declined:
+      greeting: Kære %{user},
+      main:
+        one: 'Vi må desværre meddele dig, at din anmodning om en ny invitation ikke
+          kan opfyldes på nuværende tidspunkt.
+
+          '
+        other: Vi må desværre meddele dig, at din anmodning om %{count} nye invitationer
+          ikke kan opfyldes på nuværende tidspunkt.
+      reason: 'Din anmodning var: '
+      signoff: 'Venlig hilsen,
+
+        '
+      subject: "[%{app_name}] Anmodning om yderligere invitationer afvist"
     signup_notification:
-      activate_your_account: Aktivér din konto
-      admin_posts: Indlæg fra arkivets administratorer
-      bye: Vi håber, at du bliver glad for at bruge Arkivet.
+      activate_your_account: følg dette link for at aktivere din konto
+      admin_posts: AO3 nyheder
+      bye: Vi håber, at du bliver glad for at bruge AO3.
       contact_support: kontakte vores Support-team
       faq: FAQ
       html:
         part1: Venligst %{activate_account_link}.
         part2: Når din konto er sat op, kan du publicere fanværker, oprette e-mailnotifikationer,
           der fortæller dig, hvornår dine favoritskabere eller -værker opdaterer,
-          indstille, hvordan hjemmesiden ser ud og fungerer for dig, holde styr på,
-          hvilke værker du har set på Arkivet gennem din historik og meget mere.
-        part3: Der er masser af information om og råd til, hvordan du kan bruge Arkivet
+          indstille hvordan hjemmesiden ser ud og fungerer for dig, holde styr på,
+          hvilke værker du har set på AO3 gennem din historik og meget mere.
+        part3: Der er masser af information om og råd til, hvordan du kan bruge AO3
           i vores %{faq_link}. Du kan finde de seneste nyheder om hjemmesidens udvikling
-          i vores %{admin_posts_link}. Hvis du har brug for mere hjælp, løber ind
-          i en fejl eller har spørgsmål eller kommentarer, kan du %{contact_support_link},
+          på %{admin_posts_link}. Hvis du har brug for mere hjælp, løber ind i en
+          fejl eller har spørgsmål eller kommentarer, kan du %{contact_support_link},
           som altid gerne vil hjælpe.
       subject: "[%{app_name}] bekræftelse"
       text:
-        part1: 'Aktivér din konto: %{activate_account_url}'
+        part1: 'Følg venligst dette link for at aktivere din konto: %{activate_account_url}'
         part2: Når din konto er sat op, kan du publicere fanværker, oprette e-mailnotifikationer,
           der fortæller dig, hvornår dine favoritskabere eller -værker opdaterer,
           indstille, hvordan hjemmesiden ser ud og fungerer for dig, holde styr på,
-          hvilke værker du har set på Arkivet gennem din historik og meget mere.
-        part3: 'Der er masser af information om og råd til, hvordan du kan bruge Arkivet
+          hvilke værker du har set på AO3 gennem din historik og meget mere.
+        part3: 'Der er masser af information om og råd til, hvordan du kan bruge AO3
           i vores FAQ her %{faq_url}. Du kan finde de seneste nyheder om hjemmesidens
-          udvikling i vores indlæg fra arkivets administratorer her %{admin_posts_url}.
-          Hvis du har brug for mere hjælp, løber ind i en fejl eller har spørgsmål
-          eller kommentarer, kan du kontakte vores Support-team, som altid gerne vil
-          hjælpe: %{contact_support_url}.'
+          udvikling på %{admin_posts_url}. Hvis du har brug for mere hjælp, løber
+          ind i en fejl eller har spørgsmål eller kommentarer, kan du tage fat i vores
+          Support-team, som altid gerne vil hjælpe, ved at: %{contact_support_url}.'
       welcome: Velkommen til Archive of Our Own, %{login}!

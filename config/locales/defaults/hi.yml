@@ -1,9 +1,5 @@
 ---
 hi:
-  activerecord:
-    errors:
-      messages:
-        record_invalid: 'सत्यापन विफल: %{errors}'
   date:
     abbr_day_names:
     - रवि
@@ -14,7 +10,7 @@ hi:
     - शुक्र
     - शनि
     abbr_month_names:
-    - 
+    -
     - जन
     - फर
     - मार्च
@@ -40,7 +36,7 @@ hi:
       long: "%B %d, %Y"
       short: "%b %d"
     month_names:
-    - 
+    -
     - जनवरी
     - फरवरी
     - मार्च
@@ -100,31 +96,6 @@ hi:
       month: माह
       second: सेकेंड
       year: वर्ष
-  errors:
-    format: "%{attribute} %{message}"
-    messages:
-      accepted: स्वीकार किया जाना जरूरी
-      blank: खाली नहीं रह सकता है
-      confirmation: पुष्टिकरण मेल नहीं खाता
-      empty: रिक्त नहीं रह सकता है
-      equal_to: "%{count} के लिए बराबर होना चाहिए"
-      even: सम होना चाहिए
-      exclusion: आरक्षित है
-      greater_than: "%{count} से अधिक होना चाहिए"
-      greater_than_or_equal_to: "%{count} से बड़ा या बराबर होना आवश्यक है"
-      inclusion: सूची में शामिल नहीं है
-      invalid: अवैध है
-      less_than: "%{count} से कम होना चाहिए"
-      less_than_or_equal_to: "%{count} से कम या बराबर होना आवश्यक है"
-      not_an_integer: एक पूर्णांक होना चाहिए
-      not_a_number: कोई संख्या नहीं है
-      odd: विसम होना चाहिए
-      taken: पहले ही ले लिया गया है
-    template:
-      body: 'निम्नलिखित क्षेत्रों के साथ समस्या थी:'
-      header:
-        one: इस %{model} को सहेजे जाना एक त्रुटि के कारण नहीं हुआ
-        other: इस %{model} को सहेजे जाना %{count} त्रुटि के कारण नहीं हुआ
   helpers:
     select:
       prompt: कृपया चुनें

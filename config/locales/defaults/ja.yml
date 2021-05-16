@@ -1,12 +1,5 @@
 ---
 ja:
-  activerecord:
-    errors:
-      messages:
-        record_invalid: 'バリデーションに失敗しました: %{errors}'
-        restrict_dependent_destroy:
-          has_many: "%{record}が存在しているので削除できません"
-          has_one: "%{record}が存在しているので削除できません"
   date:
     abbr_day_names:
     - 日
@@ -17,7 +10,7 @@ ja:
     - 金
     - 土
     abbr_month_names:
-    - 
+    -
     - 1月
     - 2月
     - 3月
@@ -43,7 +36,7 @@ ja:
       long: "%Y年%m月%d日(%a)"
       short: "%m/%d"
     month_names:
-    - 
+    -
     - 1月
     - 2月
     - 3月
@@ -94,34 +87,6 @@ ja:
       month: 月
       second: 秒
       year: 年
-  errors:
-    format: "%{attribute}%{message}"
-    messages:
-      accepted: を受諾してください
-      blank: を入力してください
-      confirmation: と%{attribute}の入力が一致しません
-      empty: を入力してください
-      equal_to: は%{count}にしてください
-      even: は偶数にしてください
-      exclusion: は予約されています
-      greater_than: は%{count}より大きい値にしてください
-      greater_than_or_equal_to: は%{count}以上の値にしてください
-      inclusion: は一覧にありません
-      invalid: は不正な値です
-      less_than: は%{count}より小さい値にしてください
-      less_than_or_equal_to: は%{count}以下の値にしてください
-      model_invalid: 'バリデーションに失敗しました: %{errors}'
-      not_an_integer: は整数で入力してください
-      not_a_number: は数値で入力してください
-      odd: は奇数にしてください
-      other_than: は%{count}以外の値にしてください
-      present: は入力しないでください
-      required: を入力してください
-      taken: はすでに存在します
-    template:
-      body: 次の項目を確認してください
-      header:
-        other: "%{model}に%{count}個のエラーが発生しました"
   helpers:
     select:
       prompt: 選択してください

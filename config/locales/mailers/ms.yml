@@ -42,19 +42,6 @@ ms:
       part1: "%{login}, emel yang dikaitkan dengan akaun anda kini telah diubah kepada
         %{email}"
       subject: "[%{app_name}] Emel diubah"
-    creatorship_invitation:
-      html:
-        creation: "%{creation_link} oleh %{pseud_links}"
-        instructions: Anda boleh menerima atau menolak jemputan ini pada halaman %{page_name}
-          anda.
-        page_name: Jemputan Pereka
-      intro: 'Pengguna %{inviting_user} telah menjemput nama samaran anda %{pseud}  bagi
-        disenaraikan sebagai pereka bersama untuk yang berikut %{type} :'
-      subject: "[%{app_name}] Jemputan Pereka Bersama"
-      text:
-        creation: "%{title} (%{url}) oleh %{pseuds}"
-        instructions: 'Anda boleh menerima atau menolak jemputan ini pada halaman
-          Jemputan Pereka anda: %{url}'
     creatorship_notification:
       explanation: Apabila anda menjadi seorang pereka bersama untuk sesebuah karya,
         anda boleh dimasukkan pada bab-bab baru, tanpa mengira tetapan pereka bersama
