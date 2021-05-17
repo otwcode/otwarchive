@@ -1,13 +1,5 @@
 ---
 id:
-  activerecord:
-    errors:
-      messages:
-        record_invalid: 'Validasi gagal: %{errors}'
-        restrict_dependent_destroy:
-          has_one: Tidak bisa menghapus record karena terdapat satu %{record} yang
-            bergantung
-          has_many: Tidak bisa menghapus record karena terdapat %{record} yang bergantung
   date:
     abbr_day_names:
     - Min
@@ -18,7 +10,7 @@ id:
     - Jum
     - Sab
     abbr_month_names:
-    - 
+    -
     - Jan
     - Feb
     - Mar
@@ -44,7 +36,7 @@ id:
       long: "%A, %d %B %Y"
       short: "%d.%m.%Y"
     month_names:
-    - 
+    -
     - Januari
     - Februari
     - Maret
@@ -64,86 +56,37 @@ id:
   datetime:
     distance_in_words:
       about_x_hours:
-        one: sekitar satu jam
         other: sekitar %{count} jam
       about_x_months:
-        one: sekitar sebulan
         other: sekitar %{count} bulan
       about_x_years:
-        one: sekitar setahun
         other: sekitar %{count} tahun
       almost_x_years:
-        one: hampir setahun
         other: hampir %{count} tahun
       half_a_minute: setengah menit
-      less_than_x_seconds:
-        zero: kurang dari 1 detik
-        one: kurang dari 1 detik
-        other: kurang dari %{count} detik
       less_than_x_minutes:
-        zero: kurang dari 1 menit
-        one: kurang dari 1 menit
         other: kurang dari  %{count} menit
+        zero: kurang dari 1 menit
+      less_than_x_seconds:
+        other: kurang dari %{count} detik
+        zero: kurang dari 1 detik
       over_x_years:
-        one: lebih dari setahun
         other: lebih dari %{count} tahun
-      x_seconds:
-        one: satu detik
-        other: "%{count} detik"
-      x_minutes:
-        one: satu menit
-        other: "%{count} menit"
       x_days:
-        one: sehari
         other: "%{count} hari"
+      x_minutes:
+        other: "%{count} menit"
       x_months:
-        one: sebulan
         other: "%{count} bulan"
+      x_seconds:
+        other: "%{count} detik"
     prompts:
-      second: Detik
-      minute: Menit
-      hour: Jam
       day: Hari
+      hour: Jam
+      minute: Menit
       month: Bulan
+      second: Detik
       year: Tahun
-  errors:
-    format: "%{attribute} %{message}"
-    messages:
-      accepted: harus diterima
-      blank: tidak boleh kosong
-      confirmation: tidak sesuai dengan %{attribute}
-      empty: tidak boleh kosong
-      equal_to: harus sama dengan %{count}
-      even: harus genap
-      exclusion: sudah digunakan
-      greater_than: harus lebih besar dari %{count}
-      greater_than_or_equal_to: harus sama atau lebih besar dari %{count}
-      inclusion: tidak termasuk
-      invalid: tidak valid
-      less_than: harus lebih kecil dari %{count}
-      less_than_or_equal_to: harus sama atau lebih kecil dari %{count}
-      model_invalid: 'Validasi gagal: %{errors}'
-      not_a_number: bukan angka
-      not_an_integer: harus bilangan bulat
-      odd: harus ganjil
-      other_than: harus selain %{count}
-      present: harus kosong
-      required: harus ada
-      taken: sudah digunakan
-      too_long:
-        one: terlalu panjang (maksimum 1 karakter)
-        other: terlalu panjang (maksimum %{count} karakter)
-      too_short:
-        one: terlalu pendek (minimum 1 karakter)
-        other: terlalu pendek (minimum %{count} karakter)
-      wrong_length:
-        one: jumlah karakter salah (seharusnya 1 karakter)
-        other: jumlah karakter salah (seharusnya %{count} karakter)
-    template:
-      body: 'Ada masalah dengan field berikut:'
-      header:
-        one: 1 kesalahan mengakibatkan %{model} ini tidak bisa disimpan
-        other: "%{count} kesalahan mengakibatkan %{model} ini tidak bisa disimpan"
   helpers:
     select:
       prompt: Silakan pilih
@@ -176,9 +119,7 @@ id:
           quadrillion: Quadriliun
           thousand: Ribu
           trillion: Triliun
-          unit: ''
       format:
-        delimiter: ''
         precision: 3
         significant: true
         strip_insignificant_zeros: true
@@ -186,7 +127,6 @@ id:
         format: "%n %u"
         units:
           byte:
-            one: Byte
             other: Byte
           gb: GB
           kb: KB
@@ -194,11 +134,7 @@ id:
           tb: TB
     percentage:
       format:
-        delimiter: ''
         format: "%n%"
-    precision:
-      format:
-        delimiter: ''
   support:
     array:
       last_word_connector: ", dan "

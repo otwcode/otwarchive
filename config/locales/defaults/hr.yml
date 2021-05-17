@@ -1,12 +1,5 @@
 ---
 hr:
-  activerecord:
-    errors:
-      messages:
-        record_invalid: 'Validacija nije uspjela: %{errors}'
-        restrict_dependent_destroy:
-          has_one: Nije moguće izbrisati zapis jer postoji ovisan %{record}
-          has_many: Nije moguće izbrisati zapis jer postoje ovisni %{record}
   date:
     abbr_day_names:
     - Ned
@@ -17,7 +10,7 @@ hr:
     - Pet
     - Sub
     abbr_month_names:
-    - 
+    -
     - Sij
     - Veǉ
     - Ožu
@@ -43,7 +36,7 @@ hr:
       long: "%e. %B %Y."
       short: "%e.%-m."
     month_names:
-    - 
+    -
     - Siječanj
     - Veljača
     - Ožujak
@@ -63,112 +56,57 @@ hr:
   datetime:
     distance_in_words:
       about_x_hours:
-        one: oko %{count} sat
         few: oko %{count} sata
-        many: oko %{count} sati
+        one: oko %{count} sat
         other: oko %{count} sati
       about_x_months:
-        one: oko %{count} mjesec
         few: oko %{count} mjeseca
-        many: oko %{count} mjeseci
+        one: oko %{count} mjesec
         other: oko %{count} mjeseci
       about_x_years:
-        one: oko %{count} godine
         few: oko %{count} godine
-        many: oko %{count} godina
+        one: oko %{count} godine
         other: oko %{count} godina
       almost_x_years:
-        one: skoro %{count} godina
         few: skoro %{count} godine
-        many: skoro %{count} godina
+        one: skoro %{count} godina
         other: skoro %{count} godina
       half_a_minute: pola minute
-      less_than_x_seconds:
-        one: manje od %{count} sekunde
-        few: manje od %{count} sekunde
-        many: manje od %{count} sekundi
-        other: manje od %{count} sekundi
       less_than_x_minutes:
-        one: manje od %{count} minute
         few: manje od %{count} minute
-        many: manje od %{count} minuta
+        one: manje od %{count} minute
         other: manje od %{count} minuta
+      less_than_x_seconds:
+        few: manje od %{count} sekunde
+        one: manje od %{count} sekunde
+        other: manje od %{count} sekundi
       over_x_years:
-        one: preko %{count} godine
         few: preko %{count} godine
-        many: preko %{count} godina
+        one: preko %{count} godine
         other: preko %{count} godina
-      x_seconds:
-        one: "%{count} sekunda"
-        few: "%{count} sekunde"
-        many: "%{count} sekundi"
-        other: "%{count} sekundi"
-      x_minutes:
-        one: "%{count} minuta"
-        few: "%{count} minute"
-        many: "%{count} minuta"
-        other: "%{count} minuta"
       x_days:
-        one: "%{count} dan"
         few: "%{count} dana"
-        many: "%{count} dana"
+        one: "%{count} dan"
         other: "%{count} dana"
+      x_minutes:
+        few: "%{count} minute"
+        one: "%{count} minuta"
+        other: "%{count} minuta"
       x_months:
-        one: "%{count} mjesec"
         few: "%{count} mjeseca"
-        many: "%{count} mjeseci"
+        one: "%{count} mjesec"
         other: "%{count} mjeseci"
+      x_seconds:
+        few: "%{count} sekunde"
+        one: "%{count} sekunda"
+        other: "%{count} sekundi"
     prompts:
-      second: Sekunde
-      minute: Minuta
-      hour: Sat
       day: Dan
+      hour: Sat
+      minute: Minuta
       month: Mjesec
+      second: Sekunde
       year: Godina
-  errors:
-    format: "%{attribute} %{message}"
-    messages:
-      accepted: mora biti prihvaćen
-      blank: ne smije biti prazan
-      confirmation: se ne slaže sa svojom potvrdom
-      empty: ne smije biti prazan
-      equal_to: mora biti jednak %{count}
-      even: mora biti paran
-      exclusion: je rezerviran
-      greater_than: mora biti veći od %{count}
-      greater_than_or_equal_to: mora biti veći ili jednak %{count}
-      inclusion: nije u listi
-      invalid: nije ispravan
-      less_than: mora biti manji od %{count}
-      less_than_or_equal_to: mora biti manji ili jednak %{count}
-      not_a_number: nije broj
-      not_an_integer: nije cijeli broj
-      odd: mora biti neparan
-      other_than: mora biti različit od %{count}
-      present: mora biti prazan
-      taken: je već zauzet
-      too_long:
-        one: je predugačak (maksimum je %{count} znak)
-        few: je predugačak (maksimum je %{count} znaka)
-        many: je predugačak (maksimum je %{count} znakova)
-        other: je predugačak (maksimum je %{count} znakova)
-      too_short:
-        one: je prekratak (minimum je %{count} znak)
-        few: je prekratak (minimum je %{count} znaka)
-        many: je prekratak (minimum je %{count} znakova)
-        other: je prekratak (minimum je %{count} znakova)
-      wrong_length:
-        one: nije odgovarajuće duljine (treba biti %{count} znak)
-        few: nije odgovarajuće duljine (treba biti %{count} znaka)
-        many: nije odgovarajuće duljine (treba biti %{count} znakova)
-        other: nije odgovarajuće duljine (treba biti %{count} znakova)
-    template:
-      body: 'Sljedeća polja su neispravno popunjena:'
-      header:
-        one: "%{count} greška je spriječila %{model} da se spremi"
-        few: "%{count} greške su spriječile %{model} da se spremi"
-        many: "%{count} grešaka je spriječilo %{model} da se spremi"
-        other: "%{count} grešaka je spriječilo %{model} da se spremi"
   helpers:
     select:
       prompt: Izaberite
@@ -201,9 +139,7 @@ hr:
           quadrillion: Bilijarda
           thousand: Tisuća
           trillion: Bilijun
-          unit: ''
       format:
-        delimiter: ''
         precision: 3
         significant: true
         strip_insignificant_zeros: true
@@ -211,9 +147,8 @@ hr:
         format: "%n %u"
         units:
           byte:
-            one: bajt
             few: bajta
-            many: bajtova
+            one: bajt
             other: bajtova
           gb: GB
           kb: KB
@@ -221,11 +156,7 @@ hr:
           tb: TB
     percentage:
       format:
-        delimiter: ''
         format: "%n%"
-    precision:
-      format:
-        delimiter: ''
   support:
     array:
       last_word_connector: " i "

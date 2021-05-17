@@ -1,13 +1,5 @@
 ---
 fa:
-  activerecord:
-    errors:
-      messages:
-        record_invalid: رکورد نامعتبر است %{errors}
-        restrict_dependent_destroy:
-          has_one: نمی توان رکورد را حذف کرد بخاطر اینکه یک %{record} وابسته وجود
-            دارد
-          has_many: نمی توان رکورد را حذف کرد بخاطر اینکه %{record} وابسته وجود دارد
   date:
     abbr_day_names:
     - ی
@@ -18,7 +10,7 @@ fa:
     - ج
     - ش
     abbr_month_names:
-    - 
+    -
     - ژانویه
     - فوریه
     - مارس
@@ -44,7 +36,7 @@ fa:
       long: "%e %B %Y"
       short: "%m/%d"
     month_names:
-    - 
+    -
     - ژانویه
     - فوریه
     - مارس
@@ -76,69 +68,37 @@ fa:
         one: حدود یک سال
         other: حدود %{count} سال
       half_a_minute: نیم دقیقه
-      less_than_x_seconds:
-        one: یک ثانیه
-        other: کمتر  از %{count} ثانیه
       less_than_x_minutes:
         one: کمتر از یک دقیقه
         other: کمتر از %{count} دقیقه
+      less_than_x_seconds:
+        one: یک ثانیه
+        other: کمتر  از %{count} ثانیه
       over_x_years:
         one: بیش از یک سال
         other: بیش از %{count} سال
-      x_seconds:
-        one: یک ثانیه
-        other: "%{count} ثانیه"
-      x_minutes:
-        one: یک دقیقه
-        other: "%{count} دقیقه"
       x_days:
         one: یک روز
         other: "%{count} روز"
+      x_minutes:
+        one: یک دقیقه
+        other: "%{count} دقیقه"
       x_months:
         one: یک ماه
         other: "%{count} ماه"
+      x_seconds:
+        one: یک ثانیه
+        other: "%{count} ثانیه"
       x_years:
         one: 1 سال
         other: "%{count} سال"
     prompts:
-      second: ثانیه
-      minute: دقیقه
-      hour: ساعت
       day: روز
+      hour: ساعت
+      minute: دقیقه
       month: ماه
+      second: ثانیه
       year: سال
-  errors:
-    format: "%{attribute} %{message}"
-    messages:
-      accepted: باید پذیرفته شود
-      blank: نباید خالی باشد
-      confirmation: با تایید نمی‌خواند
-      empty: نمی‌تواند خالی باشد
-      equal_to: باید برابر %{count} باشد
-      even: باید زوج باشد
-      exclusion: رزرو است
-      greater_than: باید بزرگتر از %{count} باشد
-      greater_than_or_equal_to: باید بزرگتر یا برابر %{count} باشد
-      inclusion: در لیست موجود نیست
-      invalid: نامعتبر است
-      less_than: باید کمتر از %{count} باشد
-      less_than_or_equal_to: باید کمتر یا برابر %{count} باشد
-      model_invalid: رکورد نامعتبر است %{errors}
-      not_a_number: عدد نیست
-      not_an_integer: عدد صحیح نیست
-      odd: باید فرد باشد
-      other_than: باید غیر از %{count} باشد
-      present: باید خالی باشد
-      required: باید وجود داشته باشد
-      taken: پیشتر گرفته شده
-      too_long: بلند است (حداکثر %{count} کاراکتر)
-      too_short: کوتاه است (حداقل %{count} کاراکتر)
-      wrong_length: نااندازه است (باید %{count} کاراکتر باشد)
-    template:
-      body: 'موارد زیر مشکل داشت:'
-      header:
-        one: 1 خطا جلوی ذخیره این %{model} را گرفت
-        other: "%{count} خطا جلوی ذخیره این %{model} را گرفت"
   helpers:
     select:
       prompt: لطفا انتخاب کنید
@@ -171,9 +131,7 @@ fa:
           quadrillion: کادریلیون
           thousand: هزار
           trillion: تریلیون
-          unit: ''
       format:
-        delimiter: ''
         precision: 1
         significant: true
         strip_insignificant_zeros: true
@@ -187,12 +145,6 @@ fa:
           kb: کیلوبایت
           mb: مگابایت
           tb: ترابایت
-    percentage:
-      format:
-        delimiter: ''
-    precision:
-      format:
-        delimiter: ''
   support:
     array:
       last_word_connector: " و "

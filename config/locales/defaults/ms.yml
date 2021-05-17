@@ -1,9 +1,5 @@
 ---
 ms:
-  activerecord:
-    errors:
-      messages:
-        record_invalid: 'Pengesahan gagal: %{errors}'
   date:
     abbr_day_names:
     - Ahd
@@ -14,7 +10,7 @@ ms:
     - Jum
     - Sab
     abbr_month_names:
-    - 
+    -
     - Jan
     - Feb
     - Mac
@@ -40,7 +36,7 @@ ms:
       long: "%d %B, %Y"
       short: "%d %b"
     month_names:
-    - 
+    -
     - Januari
     - Febuari
     - Mac
@@ -60,80 +56,35 @@ ms:
   datetime:
     distance_in_words:
       about_x_hours:
-        one: lebih kurang 1 jam
         other: lebih kurang %{count} jam
       about_x_months:
-        one: lebih kurang 1 bulan
         other: lebih kurang %{count} bulan
       about_x_years:
-        one: lebih kurang 1 tahun
         other: lebih kurang %{count} tahun
       almost_x_years:
-        one: hampir 1 tahun
         other: hampir %{count} tahun
       half_a_minute: setengah minit
-      less_than_x_seconds:
-        one: kurang dari satu saat
-        other: kurang dari %{count} saat
       less_than_x_minutes:
-        one: kurang dari satu minit
         other: kurang dari %{count} minit
+      less_than_x_seconds:
+        other: kurang dari %{count} saat
       over_x_years:
-        one: lebih 1 tahun
         other: lebih %{count} tahun
-      x_seconds:
-        one: 1 saat
-        other: "%{count} saat"
-      x_minutes:
-        one: 1 minit
-        other: "%{count} minit"
       x_days:
-        one: 1 hari
         other: "%{count} hari"
+      x_minutes:
+        other: "%{count} minit"
       x_months:
-        one: 1 bulan
         other: "%{count} bulan"
+      x_seconds:
+        other: "%{count} saat"
     prompts:
-      second: Saat
-      minute: Minit
-      hour: Jam
       day: Hari
+      hour: Jam
+      minute: Minit
       month: Bulan
+      second: Saat
       year: Tahun
-  errors:
-    format: "%{attribute} %{message}"
-    messages:
-      accepted: wajib diterima
-      blank: tidak boleh dikosongkan
-      confirmation: tidak sama dengan penegasan
-      empty: tidak boleh dikosongkan
-      equal_to: mesti sama dengan %{count}
-      even: mesti genap
-      exclusion: telah terpelihara
-      greater_than: mesti lebih dari %{count}
-      greater_than_or_equal_to: mesti melibihi atau sama dengan %{count}
-      inclusion: tidak termasuk dalam senarai
-      invalid: adalah tidak laku
-      less_than: mesti kurang daripada %{count}
-      less_than_or_equal_to: mesti kurang daripada atat sama dengan %{count}
-      not_a_number: bukan nombor
-      not_an_integer: mestilah integer
-      odd: mesti ganjil
-      taken: telah digunakan
-      too_long:
-        one: terlalu panjang (maksima adalah 1 karakter)
-        other: terlalu panjang (maksima adalah %{count} karakter)
-      too_short:
-        one: terlalu pendek (minima adalah 1 karakter)
-        other: terlalu pendek (minima adalah %{count} karakter)
-      wrong_length:
-        one: mempunyai panjang yang salah (sepatutnya 1 karakter sahaja)
-        other: mempunyai panjang yang salah(sepatutnya %{count} karakter sahaja)
-    template:
-      body: 'Terdapat masalah dengan medan data tersebut:'
-      header:
-        one: 1 ralat menhalang  %{model} ini dari disimpan
-        other: "%{count} ralat menhalang %{model} ini dari disimpan"
   helpers:
     select:
       prompt: Sila pilih
@@ -166,9 +117,7 @@ ms:
           quadrillion: Juta-juta
           thousand: Ribu
           trillion: Trilion
-          unit: ''
       format:
-        delimiter: ''
         precision: 3
         significant: true
         strip_insignificant_zeros: true
@@ -176,18 +125,11 @@ ms:
         format: "%n %u"
         units:
           byte:
-            one: Bait
             other: Bait
           gb: GB
           kb: KB
           mb: MB
           tb: TB
-    percentage:
-      format:
-        delimiter: ''
-    precision:
-      format:
-        delimiter: ''
   support:
     array:
       last_word_connector: ", dan "

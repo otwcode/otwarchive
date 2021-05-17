@@ -1,9 +1,5 @@
 ---
 ca:
-  activerecord:
-    errors:
-      messages:
-        record_invalid: 'La validació ha fallat: %{errors}'
   date:
     abbr_day_names:
     - Dg
@@ -14,7 +10,7 @@ ca:
     - Dv
     - Ds
     abbr_month_names:
-    - 
+    -
     - Gen
     - Feb
     - Mar
@@ -40,7 +36,7 @@ ca:
       long: "%d de %B de %Y"
       short: "%d de %b"
     month_names:
-    - 
+    -
     - Gener
     - Febrer
     - Març
@@ -72,65 +68,37 @@ ca:
         one: quasi 1 any
         other: quasi %{count} anys
       half_a_minute: mig minut
-      less_than_x_seconds:
-        one: menys d'1 segon
-        other: menys de %{count} segons
       less_than_x_minutes:
         one: menys d'1 minut
         other: menys de %{count} minuts
+      less_than_x_seconds:
+        one: menys d'1 segon
+        other: menys de %{count} segons
       over_x_years:
         one: més d'1 any
         other: més de %{count} anys
-      x_seconds:
-        one: 1 segon
-        other: "%{count} segons"
-      x_minutes:
-        one: 1 minut
-        other: "%{count} minuts"
       x_days:
         one: 1 dia
         other: "%{count} dies"
+      x_minutes:
+        one: 1 minut
+        other: "%{count} minuts"
       x_months:
         one: 1 mes
         other: "%{count} mesos"
+      x_seconds:
+        one: 1 segon
+        other: "%{count} segons"
       x_years:
         one: 1 year
         other: "%{count} years"
     prompts:
-      second: segon
-      minute: minut
-      hour: hora
       day: dia
+      hour: hora
+      minute: minut
       month: mes
+      second: segon
       year: any
-  errors:
-    format: "%{attribute} %{message}"
-    messages:
-      accepted: ha de ser acceptat
-      blank: no pot estar en blanc
-      confirmation: no coincideix
-      empty: no pot estar buit
-      equal_to: ha de ser igual a %{count}
-      even: ha de ser parell
-      exclusion: està reservat
-      greater_than: ha de ser més gran que %{count}
-      greater_than_or_equal_to: ha de ser més gran o igual a %{count}
-      inclusion: no està inclós a la llista
-      invalid: no és vàlid
-      less_than: ha de ser menor que %{count}
-      less_than_or_equal_to: ha de ser menor o igual a %{count}
-      not_a_number: no és un número
-      not_an_integer: ha de ser un enter
-      odd: ha de ser senar
-      taken: no està disponible
-      too_long: és massa llarg (%{count} caràcters màxim)
-      too_short: és massa curt (%{count} caràcters mínim)
-      wrong_length: no té la longitud correcta (%{count} caràcters exactament)
-    template:
-      body: 'Hi ha hagut problemes amb els següents camps:'
-      header:
-        one: No s'ha pogut desar aquest/a %{model} perquè hi ha 1 error
-        other: No s'ha pogut desar aquest/a %{model} perquè hi ha hagut %{count} errors
   helpers:
     select:
       prompt: Si us plau tria
@@ -163,9 +131,7 @@ ca:
           quadrillion: quadrilió
           thousand: mil
           trillion: trilió
-          unit: ''
       format:
-        delimiter: ''
         precision: 1
         significant: true
         strip_insignificant_zeros: true
@@ -179,12 +145,6 @@ ca:
           kb: KB
           mb: MB
           tb: TB
-    percentage:
-      format:
-        delimiter: ''
-    precision:
-      format:
-        delimiter: ''
   support:
     array:
       last_word_connector: ", i "

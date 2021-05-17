@@ -1,0 +1,235 @@
+---
+ro:
+  mailer:
+    general:
+      footer:
+        general:
+          html:
+            donate_link_text: donațiile tale
+            part1: Dacă ai primit acest mesaj din greșeală te rugăm %{support_link}.
+            part2: AO3 este o arhivă administrată și susținută de fani care se bazează
+              pe %{donate_link}.
+            support_link_text: să contactezi echipa de Suport Tehnic
+          text:
+            part1: Dacă ai primit acest mesaj din greșeală te rugăm să contactezi
+              echipa de Suport Tehnic la %{support_url}.
+            part2: 'AO3 este o arhivă administrată și susținută de fani care se bazează
+              pe donațiile tale: %{donate_url}.'
+        sent_at: Trimis la %{sent_at}.
+      signature:
+        app_short_name: AO3
+    kudos:
+      guest:
+        few: "%{count} vizitatori"
+        one: un vizitator
+        other: "%{count} vizitatori"
+      html:
+        left_kudos:
+          few: "%{givers_list} au lăsat kudos pentru <i>%{commentable_link}</i>."
+          one: "%{givers_list} a lăsat kudos pentru <i>%{commentable_link}</i>."
+          other: "%{givers_list} au lăsat kudos pentru <i>%{commentable_link}</i>."
+      text:
+        left_kudos:
+          few: "%{givers_list} au lăsat kudos pentru %{commentable_link}."
+          one: "%{givers_list} a lăsat kudos pentru %{commentable_link}."
+          other: "%{givers_list} au lăsat kudos pentru %{commentable_link}."
+      you_have: "[%{app_name}] Ai primit kudos!"
+  user_mailer:
+    abuse_report:
+      description_para: 'Descrierea abuzului:'
+      para1: 'Următorul raport de abuz a fost trimis către echipa de Politici și Abuz:'
+      subject: "[%{app_name}] Raportul tău către Politici și Abuz"
+      url_para: 'Link-ul paginii pe care se regăsește abuzul:'
+    admin_deleted_work_notification:
+      abuse_committee: contactează Comitetul de Politici și Abuz
+      bye: Îți trimitem în atașament o copie a lucrării tale, ca reper.
+      hello: Dragă %{user},
+      html:
+        part1: Lucrarea ta %{title} a fost ștearsă din Arhivă de către un administrator
+          al site-ului.
+        part2: Dacă lucrarea ta făcea parte dintr-un proiect de importare gestionat
+          de echipa noastră Open Doors, te rugăm %{opendoors_link} dacă ai întrebări
+          suplimentare.
+        part3: Dacă e posibil ca lucrarea ta să fi încălcat Termenii de Servicii ai
+          Arhivei, %{abuse_link}.
+      opendoors: contactează Open Doors
+      subject: "[%{app_name}] Lucrarea ta a fost ștearsă de către un administrator"
+      text:
+        part1: Lucrarea ta %{title} a fost ștearsă din Arhivă de către un administrator
+          al site-ului.
+        part2: Dacă lucrarea ta făcea parte dintr-un proiect de importare gestionat
+          de echipa noastră Open Doors, te rugăm contactează Open Doors (%{opendoors_link})
+          dacă ai întrebări suplimentare.
+        part3: Dacă e posibil ca lucrarea ta să fi încălcat Termenii de Servicii ai
+          Arhivei, te rugăm contactează Comitetul de Politici și Abuz (%{abuse_link}).
+    change_email:
+      part1: "%{login}, adresa de e-mail asociată cu contul tău a fost schimbată la
+        %{email}"
+      subject: "[%{app_name}] Adresa de e-mail schimbată"
+    creatorship_notification:
+      explanation: Când apari drept co-creator la o lucrare, poți fi adăugat(ă) la
+        capitole noi, indiferent de setările tale pentru co-creator. De asemenea,
+        vei fi adăugat(ă) la orice serie la care se adaugă lucrarea.
+      html:
+        creation: "%{creation_link} de %{pseud_links}"
+        edit: edita %{type}
+        remove: Dacă ai fost adăugat(ă) din greșeală sau nu dorești să apari drept
+          creator, poți %{edit} pentru a te scoate de pe lista de creatori.
+      intro: Utilizatorul %{adding_user} a listat pseudonimul tău %{pseud} drept co-creator
+        la următoarea %{type}
+      subject: "[%{app_name}] Notificare Co-creator"
+      text:
+        creation: "%{title} (%{url}) by %{pseuds}"
+        remove: 'Dacă ai fost adăugat(ă) din greșeală sau nu dorești să apari drept
+          creator, poți edita %{type} pentru a te scoate de pe lista de creatori:
+          %{url}'
+    creatorship_notification_archivist:
+      explanation: Deoarece își exercită capacitatea oficială de arhivar al Uși Deschise,
+        poate să te adauge fără invitație, chiar dacă ai funcția de co-creație dezactivată.
+      html:
+        creation: "%{creation_link} de %{pseud_links}\n"
+        edit: editează %{type}
+        remove: Dacă ai fost adăugat(ă) din greșeală sau nu dorești să apari pe lista
+          de creatori, poți să %{edit} pentru a te elimina din lista de creatori.
+      intro: 'Utilizatorul %{archivist} ți-a adăugat pseudonimul %{pseud} drept co-creator
+        la următoarele lucrări %{type}:'
+      subject: "[%{app_name}] Notificare de co-creator de la arhivar"
+      text:
+        creation: "%{title} (%{url}) de %{pseuds}"
+        remove: 'Dacă ai fost adăugat(ă) din greșeală sau nu dorești să apari pe lista
+          de creatori, poți să editezi %{type} pentru a te elimina din lista de creatori:
+          %{url}'
+    delete_work_notification:
+      hello: Dragă %{user},
+      html:
+        part1_other: Lucrarea ta %{title} a fost ștearsă la cererea lui %{pseud}.
+        part1_yourself: Lucrarea ta %{title} a fost ștearsă la cererea ta.
+        part2: Dacă ai întrebări, te rugăm  %{support}.
+      part2: Dacă ai întrebări, te rugăm  %{support}.
+      part3: Atașată este o copie a lucrării tale ca și referință.
+      subject: "[%{app_name}] Lucrarea ta a fost ștearsă"
+      support: să contactezi echipa de Suport Tehnic
+      text:
+        part1_other: Lucrarea ta "%{title}" a fost ștearsă la cererea lui %{pseud}.
+        part1_yourself: Lucrarea ta "%{title}" a fost ștearsă la cererea ta.
+        part2: Dacă ai întrebări, te rugăm %{support} (%{url}).
+    invitation_to_claim:
+      greeting: Salutări din partea %{app_name}!
+      html:
+        ao3_news: Știri AO3
+        contact_open_doors: să contactezi Ușile Deschise
+        contact_support: să contactezi echipa de Suport Tehnic AO3
+        faq_page: pagina Întrebări Frecvente
+        open_doors: Uși Deschise
+        part1: 'Ai primit acest e-mail pentru că o arhivă a fost importată recent
+          de către %{open_doors_link} în %{app_link} (%{app_short_name}) și considerăm
+          că următoarele lucrări îți aparțin. Dorim să îți oferim șansa de a revendica
+          (sau șterge/abandona) aceste lucrări, dacă vrei. Și dacă nu ai deja un cont
+          înregistrat folosind un e-mail diferit, să te invităm la bord! '
+        part10: Dacă ai alte lucrări în arhiva importată înregistrate cu adrese de
+          e-mail pe care nu le mai poți accesa, te rugăm %{open_doors_link} și să
+          furnizezi orice informație care ne poate ajuta să-ți verificăm identitatea.
+        part11: Pentru alte întrebări, te rugăm %{support_link}.
+        part13: Cu drag,
+        part14: Echipa Ușilor Deschise
+        part15: Organizația pentru Lucrări Transformative
+        part2: Poți citi anunțuri despre mutări recente ale arhivelor la %{news_link}
+          și informații suplimentare pe %{open_doors_faq_link} sau %{open_doors_tutorial_link}
+          ale Ușilor Deschise. Pentru orice întrebări care nu sunt incluse în FAQ,
+          tutoriale sau în acest e-mail, te rugăm %{support_link}.
+        part3: Dacă am greșit și aceste lucrări nu îți aparțin, te rugăm să nu le
+          ștergi! Te rugăm doar %{open_doors_link} și ne vom ocupa noi.
+        part4: În funcție de arhivă, lucrările tale ar fi putut fi importate în mod
+          restricționat numai utilizatorilor înregistrați (pentru a le păstra în afara
+          căutărilor Google). Dacă acesta este cazul, lucrările vor putea fi accesate
+          doar de către utilizatorii logați și doar dacă nu vei alege să le faci complet
+          vizibile. Pentru ajutor cu deblocarea, abandonarea sau ștergerea lucrărilor
+          tale, te rugăm %{support_link}.
+        part5: Revendică sau șterge-ți lucrările aici.
+        part7: Dacă aceste lucrări îți aparțin, dar nu le vrei, le poți abandona (ca
+          să rămână pe AO3, dar cu numele tău șters) sau șterge (ca să le ștergi în
+          totalitate de pe AO3). Nu trebuie să adaugi aceste lucrări la niciun cont
+          ca să le abandonezi sau să le ștergi--poți să faci acest lucru direct prin
+          accesarea link-ului de revendicare de mai sus. (Pentru ajutor, te rugăm
+          %{support_link}.)
+        part9: Dacă ți-ai dori ca Ușile Deschise să actualizeze redirecționarea pentru
+          a îndrepta către lucrările tale preexistente, te rugăm să ștergi copia importată
+          și %{open_doors_link} cu numele contului tău de pe AO3, numele contului
+          tău în arhiva importată și titlul și URL-ul lucrării către care ți-ai dori
+          să se facă redirecționarea. (Dacă ai lucrări multiple la care ți-ai dori
+          să schimbi redirecționările, le poți lista pe toate într-un singur e-mail.)
+        tutorial_page: pagina de tutorial
+      part12: Dacă ne contactezi, te rugăm să adaugi la lista autorizată adresele
+        de e-mail de la @transformativeworks.org și să verifici folderele de spam
+        pentru a ne găsi răspunsul.
+      part6: 'Lucrările încărcate includ:'
+      part8: 'Pentru a recomanda liste sau semne de carte, adresele web ale arhivei
+        importate pot redirecționa către copia importată a acestor lucrări doar pentru
+        o perioadă limitată de timp (verifică postarea anunțului pentru arhiva ta
+        ca să te asiguri). Dacă ai încărcat deja o copie a acestor lucrări și NU ai
+        folosit funcția de importare din URL, vor exista două copii ale aceleiași
+        lucrări în arhivă. '
+      subject: "[%{app_name}] Invitație de a revendica lucrări"
+      text:
+        part1: 'Ai primit acest e-mail pentru că o arhivă a fost importată recent
+          de către Open Doors (%{open_doors_link}) în %{app_name} (%{app_short_name}
+          - %{app_url}) și considerăm că următoarele lucrări îți aparțin. Dorim să
+          îți oferim șansa de a revendica (sau șterge/abandona) aceste lucrări, dacă
+          vrei. Și dacă nu ai deja un cont înregistrat folosind un e-mail diferit,
+          să te invităm la bord! '
+        part10: Dacă ai alte lucrări în arhiva importată înregistrate cu adrese de
+          e-mail pe care nu le mai poți accesa, te rugăm să contactezi Ușile Deschise
+          și să furnizezi orice informație care ne poate ajuta să-ți verificăm identitatea.
+        part11: Pentru alte întrebări, te rugăm contactează echipa de Suport Tehnic
+          AO3 la %{support_link}.
+        part13: |-
+          Cu drag,
+          Echipa Ușilor Deschise
+          Organizația pentru Lucrări Transformative
+        part2: Poți citi anunțuri despre mutări recente ale arhivelor la Știri AO3
+          (%{news_link}) și informații suplimentare pe pagina Întrebări Frecvente
+          (%{open_doors_faq_link}) sau pagina de tutorial (%{open_doors_tutorial_link})
+          ale Ușilor Deschise. Pentru orice întrebări care nu sunt incluse în FAQ,
+          tutoriale sau în acest e-mail, te rugăm  să contactezi echipa de Suport
+          Tehnic AO3 la %{support_link}.
+        part3: Dacă am greșit și aceste lucrări nu îți aparțin, te rugăm să nu le
+          ștergi! Te rugăm doar să contactezi Ușile Deschise (%{open_doors_link})
+          și ne vom ocupa noi.
+        part4: În funcție de arhivă, lucrările tale ar fi putut fi importate în mod
+          restricționat numai utilizatorilor înregistrați (pentru a le păstra în afara
+          căutărilor Google). Dacă acesta este cazul, lucrările vor putea fi accesate
+          doar de către utilizatorii logați și doar dacă nu vei alege să le faci complet
+          vizibile. Pentru ajutor cu deblocarea, abandonarea sau ștergerea lucrărilor
+          tale, te rugăm să contactezi echipa de Suport Tehnic AO3.
+        part5: 'Revendică sau șterge-ti lucrările aici: %{claim_url}'
+        part7: Dacă aceste lucrări îți aparțin, dar nu le vrei, le poți abandona (ca
+          să rămână pe AO3, dar cu numele tău șters) sau șterge (ca să le ștergi în
+          totalitate de pe AO3). Nu trebuie să adaugi aceste lucrări la niciun cont
+          ca să le abandonezi sau să le ștergi--poți să faci acest lucru direct prin
+          accesarea link-ului de revendicare de mai sus. (Pentru ajutor, te rugăm
+          să contactezi echipa de Suport Tehnic AO3 la %{support_link}.)
+        part9: Dacă ți-ai dori ca Ușile Deschise să actualizeze redirecționarea pentru
+          a îndrepta către lucrările tale preexistente, te rugăm să ștergi copia importată
+          și să contactezi Ușile Deschise la %{open_doors_link} cu numele contului
+          tău de pe AO3, numele contului tău în arhiva importată și titlul și URL-ul
+          lucrării către care ți-ai dori să se facă redirecționarea. (Dacă ai lucrări
+          multiple la care ți-ai dori să schimbi redirecționările, le poți lista pe
+          toate într-un singur e-mail.)
+    invite_increase_notification:
+      body:
+        other: 'Vrem să te anunțăm că ai %{count} invitații noi care pot fi folosite
+          pentru a crea conturi noi de arhivă. Poți invita un prieten la: %{invitation_page}.'
+      closing: Salutări,
+      greeting: Bună %{login}!
+      subject: "[%{app_name}] Invitații noi"
+    invite_request_declined:
+      greeting: Dragă %{user},
+      main:
+        one: Te informăm cu regret că solicitarea pentru o nouă invitație nu poate
+          fi procesată pentru moment.
+        other: Te informăm cu regret că solicitarea pentru %{count} noi invitații
+          nu poate fi procesată pentru moment.
+      reason: 'Solicitarea ta a fost:'
+      signoff: Cu respect,
+      subject: "[%{app_name}] Solicitarea pentru codul de invitație suplimentar a
+        fost respinsă"

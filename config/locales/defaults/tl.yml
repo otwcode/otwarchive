@@ -1,9 +1,5 @@
 ---
 tl:
-  activerecord:
-    errors:
-      messages:
-        record_invalid: 'Nabigo ang pagpapatunay: %{errors}'
   date:
     abbr_day_names:
     - Lin
@@ -14,7 +10,7 @@ tl:
     - Biy
     - Sab
     abbr_month_names:
-    - 
+    -
     - Ene
     - Peb
     - Mar
@@ -40,7 +36,7 @@ tl:
       long: ika-%d ng %B, %Y
       short: ika-%d ng %b
     month_names:
-    - 
+    -
     - Enero
     - Pebrero
     - Marso
@@ -72,68 +68,34 @@ tl:
         one: halos isang taon
         other: halos %{count} taon
       half_a_minute: kalahating minuto
-      less_than_x_seconds:
-        one: mas mababa sa isang segundo
-        other: mas mababa sa %{count} segundo
       less_than_x_minutes:
         one: mas mababa sa isang minuto
         other: mas mababa sa %{count} minuto
+      less_than_x_seconds:
+        one: mas mababa sa isang segundo
+        other: mas mababa sa %{count} segundo
       over_x_years:
         one: higit sa isang taon
         other: higit %{count} taon
-      x_seconds:
-        one: isang segundo
-        other: "%{count} segundo"
-      x_minutes:
-        one: isang minuto
-        other: "%{count} minuto"
       x_days:
         one: isang araw
         other: "%{count} araw"
+      x_minutes:
+        one: isang minuto
+        other: "%{count} minuto"
       x_months:
         one: isang buwan
         other: "%{count} buwan"
+      x_seconds:
+        one: isang segundo
+        other: "%{count} segundo"
     prompts:
-      second: segundo
-      minute: minuto
-      hour: oras
       day: araw
+      hour: oras
+      minute: minuto
       month: buwan
+      second: segundo
       year: taon
-  errors:
-    format: "%{attribute} ay %{message}"
-    messages:
-      accepted: dapat na tanggapin
-      blank: hindi maaaring walang laman
-      confirmation: hindi tumutugma ang pagpapatunay
-      empty: hindi maaaring walang laman
-      equal_to: dapat na katumba sa %{count}
-      even: dapat maging even
-      exclusion: nakalaan na
-      greater_than: dapat na mas higit sa %{count}
-      greater_than_or_equal_to: dapat na mas higit sa o katumbas ng %{count}
-      inclusion: hindi kasama sa listahan
-      invalid: hindi wasto
-      less_than: dapat na mas mababa sa %{count}
-      less_than_or_equal_to: dapat na mas mababa sa o katumbas ng %{count}
-      not_a_number: hindi isang numero
-      not_an_integer: dapat na isang integer
-      odd: dapat maging odd
-      taken: ginagamit na
-      too_long:
-        one: masyadong mahaba (pinakamadami ay %{count} character)
-        other: masyadong mahaba (pinakamadami ay %{count} character)
-      too_short:
-        one: masyadong maikli (pinakakonti ay %{count} character)
-        other: masyadong maikli (pinakakonti ay %{count} character)
-      wrong_length:
-        one: ang maling haba (ito ay dapat eksaktong %{count} character)
-        other: ang maling haba (ito ay dapat eksaktong %{count} character)
-    template:
-      body: 'May mga problema sa mga sumusunod na patlang:'
-      header:
-        one: hindi maaaring i-save ang %{model} na ito dahil sa isang error
-        other: hindi maaaring i-save ang %{model} na ito dahil sa %{count} error
   helpers:
     select:
       prompt: Mangyaring pumili
@@ -166,9 +128,7 @@ tl:
           quadrillion: kuwadrilyon
           thousand: libo
           trillion: trilyon
-          unit: ''
       format:
-        delimiter: ''
         precision: 1
         significant: true
         strip_insignificant_zeros: true
@@ -182,12 +142,6 @@ tl:
           kb: KB
           mb: MB
           tb: TB
-    percentage:
-      format:
-        delimiter: ''
-    precision:
-      format:
-        delimiter: ''
   support:
     array:
       last_word_connector: ", at"

@@ -1,12 +1,5 @@
 ---
 da:
-  activerecord:
-    errors:
-      messages:
-        record_invalid: 'Godkendelse gik galt: %{errors}'
-        restrict_dependent_destroy:
-          has_one: Kunne ikke slette posten fordi en afhængig %{record} findes
-          has_many: Kunne ikke slette posten fordi afhængige %{record} findes
   date:
     abbr_day_names:
     - søn
@@ -17,7 +10,7 @@ da:
     - fre
     - lør
     abbr_month_names:
-    - 
+    -
     - jan
     - feb
     - mar
@@ -43,7 +36,7 @@ da:
       long: "%e. %B %Y"
       short: "%e. %b %Y"
     month_names:
-    - 
+    -
     - januar
     - februar
     - marts
@@ -75,75 +68,37 @@ da:
         one: næsten et år
         other: næsten %{count} år
       half_a_minute: et halvt minut
-      less_than_x_seconds:
-        one: mindre end et sekund
-        other: mindre end %{count} sekunder
       less_than_x_minutes:
         one: mindre end et minut
         other: mindre end %{count} minutter
+      less_than_x_seconds:
+        one: mindre end et sekund
+        other: mindre end %{count} sekunder
       over_x_years:
         one: mere end et år
         other: mere end %{count} år
-      x_seconds:
-        one: et sekund
-        other: "%{count} sekunder"
-      x_minutes:
-        one: et minut
-        other: "%{count} minutter"
       x_days:
         one: en dag
         other: "%{count} dage"
+      x_minutes:
+        one: et minut
+        other: "%{count} minutter"
       x_months:
         one: en måned
         other: "%{count} måneder"
+      x_seconds:
+        one: et sekund
+        other: "%{count} sekunder"
       x_years:
         one: et år
         other: "%{count} år"
     prompts:
-      second: Sekund
-      minute: Minut
-      hour: Time
       day: Dag
+      hour: Time
+      minute: Minut
       month: Måned
+      second: Sekund
       year: År
-  errors:
-    format: "%{attribute} %{message}"
-    messages:
-      accepted: skal accepteres
-      blank: skal udfyldes
-      confirmation: stemmer ikke overens med bekræftelse
-      empty: må ikke udelades
-      equal_to: skal være %{count}
-      even: skal være et lige tal
-      exclusion: er reserveret
-      greater_than: skal være større end %{count}
-      greater_than_or_equal_to: skal være større end, eller lig med, %{count}
-      inclusion: er ikke på listen
-      invalid: er ikke gyldig
-      less_than: skal være mindre end %{count}
-      less_than_or_equal_to: skal være mindre end, eller lig med, %{count}
-      model_invalid: 'Godkendelse gik galt: %{errors}'
-      not_a_number: er ikke et tal
-      not_an_integer: er ikke et heltal
-      odd: skal være et ulige tal
-      other_than: skal være forskellig fra %{count}
-      present: skal være tom
-      required: skal eksistere
-      taken: er allerede brugt
-      too_long:
-        one: er for lang (højst 1 tegn)
-        other: er for lang (højst %{count} tegn)
-      too_short:
-        one: er for kort (mindst 1 tegn)
-        other: er for kort (mindst %{count} tegn)
-      wrong_length:
-        one: har forkert længde (skulle være 1 tegn)
-        other: har forkert længde (skulle være %{count} tegn)
-    template:
-      body: 'Der var problemer med følgende felter:'
-      header:
-        one: En fejl forhindrede %{model} i at blive gemt
-        other: "%{count} fejl forhindrede %{model} i at blive gemt"
   helpers:
     select:
       prompt: Vælg...
@@ -176,9 +131,7 @@ da:
           quadrillion: Billiard
           thousand: Tusind
           trillion: Billion
-          unit: ''
       format:
-        delimiter: ''
         precision: 3
         significant: true
         strip_insignificant_zeros: true
@@ -194,20 +147,14 @@ da:
           tb: TB
     percentage:
       format:
-        delimiter: ''
         format: "%n%"
-    precision:
-      format:
-        delimiter: ''
   support:
     array:
       last_word_connector: " og "
       two_words_connector: " og "
       words_connector: ", "
   time:
-    am: ''
     formats:
       default: "%e. %B %Y, %H.%M"
       long: "%A d. %e. %B %Y, %H.%M"
       short: "%e. %b %Y, %H.%M"
-    pm: ''

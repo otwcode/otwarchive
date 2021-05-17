@@ -1,0 +1,298 @@
+---
+it:
+  mailer:
+    general:
+      footer:
+        general:
+          html:
+            donate_link_text: vostre donazioni
+            part1: Se hai ricevuto questo messaggio per errore, per favore %{support_link}.
+            part2: AO3 è un archivio supportato e gestito dai fan che dipende dalle
+              %{donate_link}.
+            support_link_text: contatta Supporto
+          text:
+            part1: Se hai ricevuto questo messaggio per errore, contatta Supporto
+              all'indirizzo %{support_url}.
+            part2: 'AO3 è un archivio supportato e gestito dai fan che dipende dalle
+              vostre donazioni: %{donate_url}.'
+        sent_at: Inviato a %{sent_at}.
+      signature:
+        app_short_name: AO3
+    kudos:
+      guest:
+        one: un ospite
+        other: "%{count} ospiti"
+      html:
+        left_kudos:
+          one: "%{givers_list} ha lasciato kudos per <i>%{commentable_link}</i>"
+          other: "%{givers_list} hanno lasciato kudos per <i>%{commentable_link}</i>."
+      text:
+        left_kudos:
+          one: "%{givers_list} ha lasciato kudos per %{commentable_link}."
+          other: "%{givers_list} hanno lasciato kudos per %{commentable_link}."
+      you_have: "[%{app_name}] Hai dei kudos!"
+  user_mailer:
+    abuse_report:
+      description_para: 'Descrizione dell’infrazione:'
+      para1: 'Il seguente verbale di infrazione è stato inoltrato al team Norme &
+        Violazioni:'
+      subject: "[%{app_name}] Il Tuo Verbale di Norme & Violazioni"
+      url_para: 'URL della pagina in cui si trova l’infrazione:'
+    admin_deleted_work_notification:
+      abuse_committee: contatta il nostro Comitato Norme & Violazioni
+      bye: In allegato puoi trovare una copia del tuo lavoro a cui fare riferimento.
+      hello: Caro %{user},
+      html:
+        part1: Il tuo lavoro %{title} è stato rimosso dall’Archivio da un amministratore
+          del sito.
+        part2: Se il tuo lavoro faceva parte di un progetto di importazione gestito
+          dal nostro team Porte Aperte, per favore %{opendoors_link} per ulteriori
+          domande.
+        part3: Se ritieni possibile che il tuo lavoro abbia violato i Termini di Servizio
+          dell’Archivio, per favore %{abuse_link}.
+      opendoors: contatta Porte Aperte
+      subject: "[%{app_name}] Il tuo lavoro è stato rimosso da un amministratore"
+      text:
+        part1: Il tuo lavoro "%{title}" è stato rimosso dall’Archivio da un amministratore
+          del sito.
+        part2: Se il tuo lavoro faceva parte di un progetto di importazione gestito
+          dal nostro team Porte Aperte, per favore contatta Porte Aperte (%{opendoors_link})
+          per ulteriori domande.
+        part3: Se ritieni possibile che il tuo lavoro abbia violato i Termini di Servizio
+          dell’Archivio, per favore contatta il nostro Comitato Norme & Violazioni
+          (%{abuse_link}).
+    challenge_assignment_notification:
+      any: Qualsiasi
+      description: 'Descrizione:'
+      due: 'La scadenza è:'
+      html:
+        footer: Ricevi questa email perché hai effettuato l’iscrizione alla challenge
+          %{title}. Per altre informazioni su questa challenge e per visualizzare
+          i contatti dei moderatori ti preghiamo di visitare il link %{footer_link}.
+        footer_link: la pagina profilo della challenge
+        look_up: Puoi vedere cosa ti è stato assegnato aprendo il link %{link}.
+        look_up_link: pagina i tuoi Assignments (Incarichi)
+        part1: Ti è stata assegnata la seguente richiesta nella challenge %{link}
+          su Archive of Our Own!
+      optional_tags: 'Tag facoltative:'
+      prompts: 'Prompt:'
+      prompt_url: 'URL del prompt:'
+      recipient: 'Destinatario:'
+      recipient_missing: 'Nessuno: contatta un moderatore per ricevere assistenza!'
+      subject: "[%{app_name}][%{collection_title}] Il tuo incarico!"
+      text:
+        footer: Ricevi questa email perché hai effettuato l’iscrizione alla challenge
+          %{title} (%{url}). Per altre informazioni sulla challenge e per visualizzare
+          i contatti dei moderatori ti preghiamo di visitare il link %{profile_url}.
+        look_up: Puoi trovare questo incarico nella tua pagina Assignments (Incarichi)
+          al link %{link}.
+        part1: Ti è stata assegnata la seguente richiesta nella challenge %{collection_title}
+          (%{collection_url}) su AO3!
+    change_email:
+      part1: "%{login}, l’indirizzo email associato al tuo account è stato modificato
+        in %{email}"
+      subject: "[%{app_name}] Modifica indirizzo email"
+    creatorship_notification:
+      explanation: Quando sei coautore di un lavoro, puoi essere aggiunto a nuovi
+        capitoli indipendentemente dalle tue impostazioni riguardanti le creazioni
+        congiunte. Sarai altresì aggiunto a qualsiasi serie cui venga aggiunto il
+        lavoro in questione.
+      html:
+        creation: "%{creation_link} di %{pseud_links}"
+        edit: modificare il/la %{type}
+        remove: Se pensi ci sia un errore o se non desideri essere elencato come creatore,
+          puoi %{edit} per rimuovere il tuo pseudonimo come creatore.
+      intro: 'L’utente %{adding_user} ha indicato il tuo pseudonimo %{pseud} come
+        coautore di %{type} per:'
+      subject: "[%{app_name}] Notifica di coautore"
+      text:
+        creation: "%{title} (%{url}) di %{pseuds}"
+        remove: 'Se il tuo pseudonimo è stato aggiunto per errore o se non desideri
+          essere elencato come creatore, puoi modificare il/la %{type} e rimuovere
+          il tuo pseudonimo come creatore: %{url}'
+    creatorship_notification_archivist:
+      explanation: 'poiché questo utente agisce nel suo ruolo ufficiale di archivista
+        di Porte Aperte, ha l’autorizzazione ad aggiungerti senza un invito, anche
+        se hai la co-creazione disabilitata. '
+      html:
+        creation: "%{creation_link} da %{pseud_links}"
+        edit: modifica il %{type}
+        remove: Se ritieni che questa modifica sia avvenuta per errore e non desideri
+          che il tuo pseudonimo venga indicato come autore, puoi %{edit} per rimuoverti
+          dalla lista degli autori.
+      intro: 'L’utente %{archivist} ha aggiunto il tuo pseudonimo %{pseud} come co-autore
+        del seguente %{type}:'
+      subject: "[%{app_name}] Notifica di co-autore da parte di un archivista"
+      text:
+        creation: "%{title} (%{url}) di %{pseuds}"
+        remove: 'Se ritieni che questa modifica sia avvenuta per errore e non desideri
+          che il tuo pseudonimo venga indicato come autore, puoi modificare il %{type}
+          e rimuoverti dalla lista degli autori: %{url}'
+    delete_work_notification:
+      hello: Ciao %{user},
+      html:
+        part1_other: Il tuo lavoro %{title} è stato cancellato come richiesto da %{pseud}.
+        part1_yourself: Il tuo lavoro %{title} è stato cancellato come da tua richiesta.
+        part2: Se dovessi avere dei dubbi, per favore %{support}.
+      part2: Se dovessi avere dei dubbi, per favore %{support}.
+      part3: In allegato trovi una copia del tuo lavoro da poter consultare.
+      subject: "[%{app_name}] Il tuo lavoro è stato cancellato"
+      support: contatta Supporto
+      text:
+        part1_other: Il tuo lavoro "%{title}" è stato cancellato come richiesto da
+          %{pseud}.
+        part1_yourself: Il tuo lavoro "%{title}" è stato cancellato come da tua richiesta.
+        part2: Se dovessi avere dei dubbi, per favore %{support} (%{url}).
+    invitation_to_claim:
+      greeting: Ciao da %{app_name}!
+      html:
+        ao3_news: AO3 News
+        contact_open_doors: contatta Open Doors
+        contact_support: contatta il Supporto di AO3
+        faq_page: pagina delle FAQ
+        open_doors: Open Doors (Porte Aperte)
+        part1: 'Stai ricevendo questa email perché un archivio è stato di recente
+          importato da %{open_doors_link} in %{app_link} (%{app_short_name}), e crediamo
+          che tu sia l’autore dei seguenti lavori. Vorremmo darti la possibilità di
+          rivendicarli (o cancellarli/renderli orfani). E, se non hai già un account
+          con un altro indirizzo email, ci piacerebbe invitarti! '
+        part10: 'Se hai altri lavori nell’archivio importato sotto un diverso indirizzo
+          email a cui non hai più accesso, %{open_doors_link} con qualunque informazione
+          che possa aiutare a verificare la tua identità di autore di tali lavori. '
+        part11: Per altre domande, per favore %{support_link}.
+        part13: Saluti,
+        part14: il team di Open Doors
+        part15: Organizzazione per i Lavori Trasformativi
+        part2: Puoi leggere gli annunci riguardanti i più recenti trasferimenti di
+          archivi su  %{news_link}, e troverai ulteriori informazioni sulla  %{open_doors_faq_link}
+          di Open Doors o sulla %{open_doors_tutorial_link}. Se non trovi risposta
+          alla tua domanda nelle FAQ, nella guida o in questa email, per favore %{support_link}.
+        part3: Se si tratta di un errore e questi non sono i tuoi lavori, per favore
+          non cancellarli! Semplicemente %{open_doors_link} e risolveremo il problema.
+        part4: A seconda dell’archivio, i tuoi lavori potrebbero essere stati importati
+          in modo da essere visibili solo agli utenti registrati (in modo da escluderli
+          dalle ricerche via Google). In tal caso, i lavori saranno accessibili solo
+          da utenti che abbiano effettuato il log in, a meno che tu non scelga di
+          renderli visibili a tutti. Se ti serve aiuto su come sbloccare, rendere
+          orfani o cancellare i tuoi lavori, per favore %{support_link}.
+        part5: Qui puoi rivendicare o cancellare i tuoi lavori.
+        part7: 'Se sei l’autore di questi lavori, ma non li vuoi più, li puoi rendere
+          orfani (così che rimangano su AO3 ma senza il tuo nome) o puoi cancellarli
+          (verranno in tal caso completamente rimossi da AO3). Non c’è bisogno di
+          aggiungerli a un account per renderli orfani o cancellarli: puoi farlo direttamente
+          dal link qui sopra. (Se hai bisogno di aiuto, per favore %{support_link}.)'
+        part9: Se desideri che Open Doors aggiorni il reindirizzamento per puntare
+          al tuo lavoro pre-esistente, cancella la copia importata e  %{open_doors_link}
+          specificando il nome del tuo profilo su  AO3, quello sull’archivio importato
+          e il titolo e URL del lavoro al quale vuoi che punti il reindirizzamento.
+          (Se vuoi cambiare il reindirizzamento di più lavori, puoi elencarli tutti
+          in una singola email.)
+        tutorial_page: guida
+      part12: Nel caso tu decida di contattarci, ricordati per favore di aggiungere
+        alla tua whitelist  gli indirizzi email provenienti da  @transformativeworks.org
+        e controlla che la nostra risposta non sia finita nella cartella antispam.
+      part6: 'I lavori postati comprendono:'
+      part8: Per mantenere intatte le rec list e i preferiti, l’indirizzo web dell’archivio
+        importato potrebbe - per un breve periodo - reindirizzare alle copie importate
+        di questi lavori (per essere sicur@, controlla l’annuncio relativo al tuo
+        archivio). Se hai già pubblicato una copia di questi lavori e NON hai usato
+        la funzione per importare automaticamente dall’URL, ci saranno due copie dello
+        stesso lavoro nell’archivio.
+      subject: "[%{app_name}] Invito a rivendicare i tuoi lavori"
+      text:
+        part1: 'Stai ricevendo questa email perché un archivio è stato di recente
+          importato da Open Doors (%{open_doors_link}) in %{app_name} (%{app_short_name}
+          - %{app_url}), e crediamo che tu sia l’autore dei seguenti lavori. Vorremmo
+          darti la possibilità di rivendicarli (o cancellarli/renderli orfani). E,
+          se non hai già un account con un altro indirizzo email, ci piacerebbe invitarti! '
+        part10: 'Se hai altri lavori nell’archivio importato sotto un diverso indirizzo
+          email a cui non hai più accesso, contatta Open Doors con qualunque informazione
+          che possa aiutare a verificare la tua identità di autore di tali lavori. '
+        part11: Per altre domande, per favore  contatta il team Supporto di AO3 %{support_link}.
+        part13: "Saluti,\nil team Open Doors, \nOrganizzazione per i Lavori Trasformativi "
+        part2: Puoi leggere gli annunci riguardanti i più recenti trasferimenti di
+          archivi su  AO3 News (%{news_link}), e troverai ulteriori informazioni sulla  pagina
+          delle FAQ di Open Doors (%{open_doors_faq_link}) o sulla guida (%{open_doors_tutorial_link}).  Se
+          non trovi risposta alla tua domanda nelle FAQ, nella guida o in questa email,
+          per favore contatta il team Supporto  %{support_link}.
+        part3: Se si tratta di un errore e questi non sono i tuoi lavori, per favore
+          non cancellarli! Semplicemente contatta Open Doors (%{open_doors_link})
+          e risolveremo il problema.
+        part4: 'A seconda dell’archivio, i tuoi lavori potrebbero essere stati importati
+          in modo da essere solo visibili agli utenti registrati (ed esclusi dalle
+          ricerche via Google). In tal caso, i lavori saranno accessibili solo da
+          utenti che abbiano effettuato l’accesso, a meno che tu non scelga di renderli
+          visibili a tutti. Se ti serve aiuto su come sbloccare, rendere orfani o
+          cancellare i tuoi lavori, per favore contatta il Supporto di AO3. '
+        part5: 'Qui puoi rivendicare o cancellare i tuoi lavori: %{claim_url}'
+        part7: 'Se sei l’autore di questi lavori, ma non li vuoi più, li puoi rendere
+          orfani (così che rimangano su AO3 ma senza il tuo nome) o puoi cancellarli
+          (verranno in tal caso completamente rimossi da AO3). Non c’è bisogno di
+          aggiungerli a un account per renderli orfani o cancellarli: puoi farlo direttamente
+          dal link qui sopra. (Se hai bisogno di aiuto, per favore contatta il team
+          Supporto %{support_link}.)'
+        part9: 'Se desideri che Open Doors aggiorni il reindirizzamento per puntare
+          al tuo lavoro pre-esistente, cancella la copia importata e contatta Open
+          Doors %{open_doors_link} specificando il nome del tuo profilo su  AO3, quello
+          sull’archivio importato e il titolo e URL del lavoro al quale vuoi che punti
+          il reindirizzamento. (Se vuoi cambiare il reindirizzamento di più lavori,
+          puoi elencarli tutti in una singola email.)
+
+          '
+    invite_increase_notification:
+      body:
+        one: Volevamo farti sapere che hai %{count} nuovo invito che può essere usato
+          per creare un nuovo account nell’archivio. Puoi invitare i tuoi amici andando
+          alla %{invitation_page}.
+        other: Volevamo farti sapere che hai %{count} nuovi inviti che possono essere
+          usati per creare nuovi account nell’archivio. Puoi invitare i tuoi amici
+          andando alla %{invitation_page}.
+      closing: Grazie,
+      greeting: Ciao %{login}!
+      invitation_page_link_text: pagina degli inviti
+      subject: "[%{app_name}] Nuovi inviti"
+    invite_request_declined:
+      greeting: Ciao %{user},
+      main:
+        one: Ci dispiace doverti informare che al momento la tua richiesta per un
+          ulteriore codice invito non può essere accettata.
+        other: Ci dispiace doverti informare che al momento la tua richiesta per %{count}
+          nuovi inviti non può essere al momento accettata.
+      reason: 'La tua richiesta è stata:'
+      signoff: Saluti,
+      subject: "[%{app_name}] Richiesta per un Codice Invito aggiuntivo rifiutata"
+    signup_notification:
+      activate_your_account: segui questo link per attivare il tuo account
+      admin_posts: News di AO3
+      bye: Speriamo ti divertirai a usare l’Archivio.
+      contact_support: contatta il Supporto
+      faq: FAQ
+      html:
+        part1: Per favore %{activate_account_link}.
+        part2: Non appena il tuo account sarà funzionante, potrai postare i tuoi fanwork,
+          impostare le iscrizioni via email che ti permetteranno di sapere quando
+          i tuoi autori preferiti pubblicano del materiale o quando i tuoi lavori
+          preferiti vengono aggiornati, scegliere come preferisci che il sito ti appaia
+          e funzioni, tenere traccia dei fanwork che hai visualizzato sull’Archivio
+          attraverso la tua cronologia e molto altro ancora.
+        part3: Ci sono molte informazioni e suggerimenti su come usare l’Archivio
+          nelle nostre %{faq_link}. Troverai le ultime notizie riguardo agli sviluppi
+          del sito nei nostri %{admin_posts_link}. Se hai bisogno di aiuto, incontri
+          un bug, o hai altre domande o commenti, per favore %{contact_support_link},
+          che sarà sempre felice di aiutarti.
+      subject: "[%{app_name}] Conferma "
+      text:
+        part1: 'Per favore segui questo link per attivare il tuo account: %{activate_account_url}'
+        part2: Non appena il tuo account sarà funzionante, potrai postare i tuoi fanwork,
+          impostare le iscrizioni via email che ti permetteranno di sapere quando
+          i tuoi autori preferiti pubblicano del materiale o quando i tuoi lavori
+          preferiti vengono aggiornati, scegliere come preferisci che il sito ti appaia
+          e funzioni, tenere traccia dei fanwork che hai visualizzato sull’Archivio
+          attraverso la tua cronologia, e molto altro ancora.
+        part3: 'Ci sono molte informazioni e suggerimenti su come usare l’Archivio
+          nelle nostre FAQ su %{faq_link}. Troverai le ultime notizie riguardo agli
+          sviluppi del sito su News di AO3 su %{admin_posts_link}. Se hai bisogno
+          di aiuto, incontri un bug, o hai altre domande o commenti, per favore mettiti
+          in contatto con il team di Supporto, che sarà sempre felice di aiutarti:
+          %{contact_support_link}.'
+      welcome: Benvenut@ su un Archivio Tutto Per Noi, %{login}!

@@ -1,0 +1,86 @@
+---
+ja:
+  mailer:
+    general:
+      footer:
+        general:
+          html:
+            donate_link_text: 皆様からのご寄付
+            part1: 間違ってこのメッセージを受けた場合はユーザーサポート（委員会）までご連絡してください%{support_link}
+            part2: 'みんなのアーカイブ（AO3）はファンによって運営され、ファンに支えられているアーカイブです。AO3は%{donate_link}に頼っています。 '
+            support_link_text: ユーザーサポート（委員会）までご連絡ください
+          text:
+            part1: 間違ってこのメッセージを受けた場合はユーザーサポート（委員会）（%{support_url}）までご連絡ください。
+            part2: みんなのアーカイブ（AO3）はファンによって運営され、ファンに支えられているアーカイブです。AO3は皆様からのご寄付に頼っています：%{donate_url}。
+        sent_at: "%{sent_at}に送信されました。"
+      signature:
+        app_short_name: AO3
+    kudos:
+      guest:
+        other: ゲスト%{count}名
+      html:
+        left_kudos:
+          other: "%{givers_list} があなたの作品 <i>%{commentable_link}</i>に拍手を送りました。"
+      text:
+        left_kudos:
+          other: "%{givers_list} があなたの作品 %{commentable_link}に拍手を送りました。"
+      you_have: "[%{app_name}] さん、拍手を受けとりました！"
+  user_mailer:
+    abuse_report:
+      description_para: 違反行為についての説明：
+      para1: 次の違反報告は迷惑・不正行為対策委員会に送信されました。
+      subject: "[%{app_name}] あなたの迷惑・不正行為対策報告"
+      url_para: 違反行為があるページのURLは：
+    change_email:
+      part1: "%{login}, あなたのアカウントのメールアドレスは%{email}に変更されました。"
+      subject: "[%{app_name}] メールアドレス変更のお知らせ"
+    creatorship_notification:
+      explanation: あなたが作品の合作者の場合は、あなたの共同制作の設定に関わらず、新しいチャプターにあなたのペンネームが合作者として追加され得ます。また、作品が加えられたシリーズにも追加されます.
+      html:
+        creation: "%{pseud_links}による%{creation_link} "
+        edit: "%{type}を編集する  "
+        remove: 間違って合作者に追加された場合や、合作者としてリストに追加されたくない場合は、%{edit}により合作者として自身を削除することができます。
+      intro: "%{adding_user}さんは以下の作品の合作者としてあなたのペンネーム%{pseud} を追加しました %{type}"
+      subject: "[%{app_name}] 合作者のお知らせ"
+      text:
+        creation: "%{pseuds} による%{title} (%{url})"
+        remove: 間違って合作者に追加された場合や、合作者としてリストに追加されたくない場合は、%{type}を編集して自身を合作者から削除することができます：
+          %{url}
+    creatorship_notification_archivist:
+      explanation: 公式活動中のオープンドアプロジェクト管理人は、あなたが合作者機能を無効化している場合でも、招待なしであなたを合作者として追加する権限があります。
+      html:
+        creation: "%{pseud_links}による%{creation_link}"
+        edit: "%{type}を編集する"
+        remove: 間違って合作者に追加された場合や、合作者としてリストに追加されたくない場合は、%{edit}合作者として自身を削除することができます。
+          %{edit}
+      intro: "%{archivist} さんは以下の作品の合作者としてあなたのペンネーム%{pseud}を追加しました%{type}:"
+      subject: "[%{app_name}] 合作者追加のお知らせ"
+      text:
+        creation: "%{pseuds}による%{title} (%{url})  "
+        remove: 間違って合作者に追加された場合や、合作者としてリストに追加されたくない場合は、%{type}を編集して自身を合作者から削除することができます：
+          %{url}
+    invite_increase_notification:
+      body:
+        other: あなたは新しい招待状が%{count} 枚あることをお知らせいたします。招待状はアーカイブで新しいアカウントを作成するために使えます。%{invitation_page}で友達を招待することもできます。
+      closing: よろしくお願いいたします。
+      greeting: こんにちは %{login}さん。
+    signup_notification:
+      activate_your_account: アカウントを有効化
+      admin_posts: 管理者の投稿をアーカイブする
+      bye: AO3の利用が楽しいものとなりますよう願っています。
+      contact_support: ユーザーサポートに連絡
+      faq: FAQ
+      html:
+        part1: こちらよりどうぞ %{activate_account_link}
+        part2: アカウントが有効化されると、ファン作品を投稿したり、お気に入りの作者や作品が更新された時にメール通知するフォローを設定したり、サイトの見た目や機能が自分好みになるよう設定からカスタマイズしたり、AO3でどの作品を閲覧したか履歴を確認したり、他にも沢山のことができるようになります。
+        part3: 私たちの %{faq_link} には、AO3の使い方に関する沢山の情報やアドバイスが掲載されています。 サイトの最新の更新状況は %{admin_posts_link}
+          にて確認できます。サポートが必要な場合、バグを見つけた場合、またはご質問やコメントがある場合は、%{contact_support_link}
+          へご連絡下さいましたら喜んでお手伝いいたします。
+      subject: "[%{app_name}] 確認"
+      text:
+        part1: 'アカウントを有効化して下さい: %{activate_account_url}'
+        part2: アカウントが有効化されると、ファン作品を投稿したり、お気に入りの作者や作品が更新された時にメール通知するフォローを設定したり、サイトの見た目や機能が自分好みになるよう設定からカスタマイズしたり、AO3でどの作品を閲覧したか履歴を確認したり、他にも沢山のことができるようになります。
+        part3: 私たちの %{faq_url} には、AO3の使い方に関する沢山の情報やアドバイスが掲載されています。 サイトの最新の更新状況は%{admin_posts_url}
+          にて確認できます。サポートが必要な場合、バグを見つけた場合、またはご質問やコメントがある場合は、私たちのサポートスタッフが喜んでお手伝いいたしますので、こちらへご連絡下さいませ：
+          %{contact_support_url}.
+      welcome: Archive of Our Own – AO3（みんなのアーカイブ）へようこそ、 %{login} さん！

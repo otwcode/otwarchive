@@ -1,0 +1,110 @@
+---
+sl:
+  mailer:
+    general:
+      footer:
+        sent_at: Poslano ob %{sent_at}.
+  user_mailer:
+    abuse_report:
+      description_para: 'Opis zlorabe:'
+      para1: 'Sledeče poročilo je bilo posredovano ekipi za Pravila in zlorabo:'
+      subject: "[%{app_name}] Vaše poročilo odboru za Pravila in zlorabo"
+      url_para: 'Naslov spletne strani, kjer se nahaja zloraba:'
+    admin_deleted_work_notification:
+      abuse_committee: stopite v stik z Odborom za pravila in zlorabo
+      bye: V priponki najdete kopijo vašega dela za vašo referenco.
+      hello: Spoštovani %{user},
+      html:
+        part1: Vaše delo %{title} je z Arhiva odstranil administrator.
+        part2: Če je bilo vaše delo del projekta pod nadzorom naše Open Doors (Odprta
+          vrata) ekipe, prosimo, da %{opendoors_link} z nadaljnjimi vprašanji.
+        part3: Če je možno, da je vaše delo kršilo Pogoje uporabe Arhiva, %{abuse_link}.
+      opendoors: stopite v stik z Open Doors (Odprta vrata)
+      subject: "[%{app_name}] Vaše delo je odstranil administrator"
+      text:
+        part1: Vaše delo %{title} je z Arhiva odstranil administrator.
+        part2: Če je bilo vaše delo del projekta pod nadzorom naše Open Doors (Odprta
+          vrata) ekipe, prosimo, da stopite v stik z Open Doors (Odprta vrata) (%{opendoors_link})
+          z nadaljnjimi vprašanji.
+        part3: Če je možno, da je vaše delo kršilo Pogoje uporabe Arhiva, prosimo,
+          da vstopite v stik z Odborom za pravila in zlorabo (%{abuse_link}).
+    creatorship_notification_archivist:
+      explanation: Uporabnik/-ica vas lahko v svoji uradni kapaciteti kot arhivist/-ka
+        za “Open Doors” (Odprta Vrata) doda brez povabila, tudi če imate soustvarjanje
+        onemogočeno.
+      html:
+        creation: "%{creation_link} avtoric/-jev %{pseud_links}"
+        edit: uredite %{type}
+        remove: Če ste bili dodani po pomoti ali preprosto ne želite biti navedeni
+          kot ustvarjalka/-ec, lahko %{edit} in se odstranite.
+      intro: 'Uporabnik/-ica %{archivist} je dodal/a vaš psevdonim %{pseud} kot soustvarjalko/-ca
+        sledečega dela %{type}:'
+      subject: "[%{app_name}] Obvestilo arhivistke/-a soustvarjalke/-ca"
+      text:
+        creation: "%{title} (%{url}) avtoric/-jev %{pseuds}"
+        remove: 'Če ste bili dodani po pomoti ali preprosto ne želite biti navedeni
+          kot ustvarjalka/-ec, lahko uredite %{type} in se odstranite: %{url}'
+    delete_work_notification:
+      hello: Spoštovani %{user},
+      html:
+        part1_other: Vaše delo %{title} je bilo izbrisano na zahtevo %{pseud}.
+        part1_yourself: Vaše delo %{title} je bilo izbrisano na vašo zahtevo.
+        part2: Če imate vprašanja, prosimo, %{support}.
+      part2: Če imate vprašanja, prosimo, %{support}.
+      part3: V priponki lahko najdete kopijo svojega dela.
+      subject: "[%{app_name}] Vaše delo je bilo izbrisano"
+      support: kontaktirajte pomoč uporabnikom
+      text:
+        part1_other: Vaše delo "%{title}" je bilo izbrisano na zahtevo %{pseud}.
+        part1_yourself: Vaše delo "%{title}" je bilo izbrisano na vašo zahtevo.
+        part2: Če imate vprašanja, prosimo, %{support} (%{url}).
+    invite_increase_notification:
+      closing: Lep pozdrav,
+      greeting: Pozdravljeni %{login}!
+      subject: "[%{app_name}] Nova povabila"
+    invite_request_declined:
+      greeting: Spoštovani %{user},
+      main:
+        few: Žal vam sporočamo, da vam trenutno ne moremo posredovati zaželenega števila
+          (%{count}) kod za povabila.
+        one: Žal vam sporočamo, da vam trenutno ne moremo posredovati nove kode za
+          povabilo.
+        other: Žal vam sporočamo, da vam trenutno ne moremo posredovati zaželenega
+          števila (%{count}) kod za povabila.
+        two: Žal vam sporočamo, da vam trenutno ne moremo posredovati zaželenega števila
+          (%{count}) kod za povabila.
+      reason: 'Vaša prošnja:'
+      signoff: Lep pozdrav,
+      subject: "[%{app_name}] Prošnja za dodatne kode za povabila zavrnjena"
+    signup_notification:
+      activate_your_account: aktivirajte svoj račun
+      admin_posts: objavah administratorjev arhiva
+      bye: Upamo, da boste uživali v uporabi AO3.
+      contact_support: stopite v stik z našo ekipo za pomoč uporabnikom
+      faq: pogostih vprašanjih
+      html:
+        part1: Prosimo, %{activate_account_link}.
+        part2: Ko aktivirate svoj račun, lahko objavljate svoja fan-dela, nastavite
+          e-poštne naročnine, da boste obveščeni o najnovejših posodobitvah vaših
+          najljubših ustvarjalcev in del, nastavite preference, da si prilagodite
+          delovanje in izgled strani, vodite evidenco del, ki ste si jih ogledovali
+          v AO3 preko vaše zgodovine, in še veliko več.
+        part3: Veliko informacij in nasvetov o tem kako uporabljati AO3 najdete v
+          naših %{faq_link}. Najnovejše novice o razvoju strani najdete v %{admin_posts_link}.
+          Če potrebujete pomoč, naletite na napako, ali imate vprašanja ali komentarje,
+          prosimo, %{contact_support_link}, katere člani so vedno na voljo, da vam
+          pomagajo.
+      subject: Potrditev računa [%{app_name}]
+      text:
+        part1: 'Prosimo, aktivirajte svoj račun: %{activate_account_url}.'
+        part2: Ko aktivirate svoj račun, lahko objavljate svoja fan-dela, nastavite
+          e-poštne naročnine, da boste obveščeni o najnovejših posodobitvah vaših
+          najljubših ustvarjalcev in del, nastavite preference, da si prilagodite
+          delovanje in izgled strani, vodite evidenco del, ki ste si jih ogledovali
+          v AO3 preko vaše zgodovine, in še veliko več.
+        part3: Veliko informacij in nasvetov o tem kako uporabljati AO3 najdete v
+          naših %{faq_url}. Najnovejše novice o razvoju strani najdete v %{admin_posts_url}.
+          Če potrebujete pomoč, naletite na napako, ali imate vprašanja ali komentarje,
+          prosimo, %{contact_support_url}, katere člani so vedno na voljo, da vam
+          pomagajo.
+      welcome: Pozdravljeni v Archive of Our Own, %{login}!
