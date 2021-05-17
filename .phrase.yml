@@ -3,10 +3,6 @@ phrase:
   file_format: yml
   push:
     sources:
-      # defaults
-      - file: ./config/locales/defaults/<locale_name>.yml
-        params:
-          update_translations: true
       # devise
       - file: ./config/locales/devise/<locale_name>.yml
         params:
