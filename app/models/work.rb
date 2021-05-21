@@ -605,8 +605,9 @@ class Work < ApplicationRecord
         errors.add(:base, ts("You can't add a work to that series."))
         return
       end
-      self.series << old_series unless (old_series.blank? || self.series.include?(old_series))
-      self.adjust_series_restriction
+      unless old_series.blank? || self.series.include?(old_series)
+        self.serial_works.build(series: old_series)
+      end
     elsif !attributes[:title].blank?
       new_series = Series.new
       new_series.title = attributes[:title]
@@ -616,8 +617,7 @@ class Work < ApplicationRecord
         # on the serial work will do the rest.
         new_series.creatorships.build(pseud: pseud)
       end
-      new_series.save
-      self.series << new_series
+      self.serial_works.build(series: new_series)
     end
   end
 
@@ -1182,12 +1182,14 @@ class Work < ApplicationRecord
       methods: [
         :tag, :filter_ids, :rating_ids, :archive_warning_ids, :category_ids,
         :fandom_ids, :character_ids, :relationship_ids, :freeform_ids,
-        :pseud_ids, :creators, :collection_ids, :work_types
+        :creators, :collection_ids, :work_types
       ]
     ).merge(
       language_id: language&.short,
       anonymous: anonymous?,
       unrevealed: unrevealed?,
+      pseud_ids: anonymous? || unrevealed? ? nil : pseud_ids,
+      user_ids: anonymous? || unrevealed? ? nil : user_ids,
       bookmarkable_type: 'Work',
       bookmarkable_join: { name: "bookmarkable" }
     )

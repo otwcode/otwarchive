@@ -48,8 +48,7 @@ Feature: Archivist bulk imports
     When I import the work "http://rebecca2525.livejournal.com/3562.html"
     Then I should see "We have notified the author(s) you imported works for"
       And I should see "rebecca2525 [archived by archivist]"
-    When the system processes jobs
-    Then 1 email should be delivered to "rebecca2525@livejournal.com"
+      And 1 email should be delivered to "rebecca2525@livejournal.com"
       And the email should contain invitation warnings from "archivist" for work "Importing Test" in fandom "Lewis"
 
   Scenario: Import a work for multiple authors without accounts should display all in the byline
@@ -62,7 +61,6 @@ Feature: Archivist bulk imports
   Scenario: Import a work for multiple authors without accounts should send emails to all authors
     When I go to the import page
       And I import the work "http://ao3testing.dreamwidth.org/593.html" by "name1" with email "a@ao3.org" and by "name2" with email "b@ao3.org"
-    When the system processes jobs
     Then 1 email should be delivered to "a@ao3.org"
       And 1 email should be delivered to "b@ao3.org"
 
@@ -106,7 +104,6 @@ Feature: Archivist bulk imports
 
   Scenario: Importing only sends one email even if there are many works
     When I import the works "http://ao3testing.dreamwidth.org/593.html, http://ao3testing.dreamwidth.org/325.html"
-      And the system processes jobs
     Then 1 email should be delivered to "ao3testing@dreamwidth.org"
 
   Scenario: Importing for an existing Archive author should have correct byline and email
@@ -126,7 +123,6 @@ Feature: Archivist bulk imports
   Scenario: Importing for an email address that's not associated with an existing Archive account, but that does belong to a user, allows the user to claim the works and add them to their account
     Given the user "creator" exists and is activated
     When I import the work "http://ao3testing.dreamwidth.org/593.html" by "creator" with email "not_creators_account_email@example.com"
-      And the system processes jobs
       And all indexing jobs have been run
     Then 1 email should be delivered to "not_creators_account_email@example.com"
     When I am logged in as "creator"
@@ -144,9 +140,8 @@ Feature: Archivist bulk imports
     When I import the work "http://ao3testing.dreamwidth.org/593.html"
     Then I should see import confirmation
       And I should see "Story"
-    When the system processes jobs
-  # Importer assumes dreamwidth email for works from there
-    Then 1 email should be delivered to "ao3testing@dreamwidth.org"
+      # Importer assumes dreamwidth email for works from there
+      And 1 email should be delivered to "ao3testing@dreamwidth.org"
       And the email should contain invitation warnings from "archivist" for work "Story" in fandom "Testing"
 
   Scenario: Import a single work as an archivist specifying an external author
@@ -156,20 +151,17 @@ Feature: Archivist bulk imports
       And I should see "Story"
       And I should see "randomtestname"
       And I should see "We have notified the author(s) you imported works for. If any were missed, you can also add co-authors manually."
-    When the system processes jobs
-    Then 1 email should be delivered to "random@example.com"
+      And 1 email should be delivered to "random@example.com"
 
   Scenario: Import a single work as an archivist specifying an external author with an invalid name
     When I import the work "http://ao3testing.dreamwidth.org/593.html" by "ra_ndo!m-t??est n@me." with email "random@example.com"
     Then I should see import confirmation
     And I should see "ra_ndom-test n@me."
-    When the system processes jobs
-    Then 1 email should be delivered to "random@example.com"
+    And 1 email should be delivered to "random@example.com"
 
   Scenario: Claim a work and create a new account in response to an invite
     Given account creation is enabled
     When I import the work "http://ao3testing.dreamwidth.org/593.html" by "randomtestname" with email "random@example.com"
-      And the system processes jobs
     Then 1 email should be delivered to "random@example.com"
       And the email should contain "Claim or remove your works"
     When I am logged out
@@ -220,7 +212,6 @@ Feature: Archivist bulk imports
 
   Scenario: Delete an imported work and choose not to be notified of future imports of your works
     When I import the work "http://ao3testing.dreamwidth.org/593.html" by "randomtestname" with email "random@example.com"
-      And the system processes jobs
     Then 1 email should be delivered to "random@example.com"
       And the email should contain "Claim or remove your works"
     When I am logged out
@@ -230,12 +221,60 @@ Feature: Archivist bulk imports
     When I choose "Please remove my works from the archive entirely."
       And I check "Do not email me in the future when works are imported with this email address."
       And I press "Update"
-    Then I should see "Your imported stories have been deleted. Your preferences have been saved."
+    Then I should be on the homepage
+      And I should see "Your imported stories have been deleted. Your preferences have been saved."
     When the email queue is clear
       And I am logged in as "archivist"
       And I import the work "http://ao3testing.dreamwidth.org/325.html" by "randomtestname" with email "random@example.com"
-      And the system processes jobs
      Then 0 emails should be delivered to "random@example.com"
+
+  Scenario: Leave an imported work in the archivist's care
+    When I import the work "http://ao3testing.dreamwidth.org/593.html" by "randomtestname" with email "random@example.com"
+    Then 1 email should be delivered to "random@example.com"
+      And the email should contain "Claim or remove your works"
+    When I am logged out
+      And I follow "Claim or remove your works" in the email
+    Then I should see "Claiming Your Imported Works"
+      And I should see "An archive including some of your work(s) has been moved to the Archive of Our Own. Please let us know what you'd like us to do with them."
+    When I choose "Leave my works in the care of the archivist."
+      And I press "Update"
+    Then I should be on the homepage
+      And I should see "Okay, we'll leave things the way they are! You can use the email link any time if you change your mind. Your preferences have been saved."
+
+  Scenario: Leave an imported work in the archivist's care and choose not to be notified of future imports of your works
+    When I import the work "http://ao3testing.dreamwidth.org/593.html" by "randomtestname" with email "random@example.com"
+    Then 1 email should be delivered to "random@example.com"
+      And the email should contain "Claim or remove your works"
+    When I am logged out
+      And I follow "Claim or remove your works" in the email
+    Then I should see "Claiming Your Imported Works"
+      And I should see "An archive including some of your work(s) has been moved to the Archive of Our Own. Please let us know what you'd like us to do with them."
+    When I choose "Leave my works in the care of the archivist."
+      And I check "Do not email me in the future when works are imported with this email address."
+      And I press "Update"
+    Then I should be on the homepage
+      And I should see "Okay, we'll leave things the way they are! You can use the email link any time if you change your mind. Your preferences have been saved."
+    When the email queue is clear
+      And I am logged in as "archivist"
+      And I import the work "http://ao3testing.dreamwidth.org/325.html" by "randomtestname" with email "random@example.com"
+     Then 0 emails should be delivered to "random@example.com"
+
+  Scenario: Leave an imported work in the archivist's care and do not allow future imports with your email address
+    When I import the work "http://ao3testing.dreamwidth.org/593.html" by "randomtestname" with email "random@example.com"
+    Then 1 email should be delivered to "random@example.com"
+      And the email should contain "Claim or remove your works"
+    When I am logged out
+      And I follow "Claim or remove your works" in the email
+    Then I should see "Claiming Your Imported Works"
+      And I should see "An archive including some of your work(s) has been moved to the Archive of Our Own. Please let us know what you'd like us to do with them."
+    When I choose "Leave my works in the care of the archivist."
+      And I check "From now on, do not import works with this email address."
+      And I press "Update"
+    Then I should be on the homepage
+      And I should see "Okay, we'll leave things the way they are! You can use the email link any time if you change your mind. Your preferences have been saved."
+    When I am logged in as "archivist"
+      And I import the work "http://ao3testing.dreamwidth.org/325.html" by "randomtestname" with email "random@example.com"
+    Then I should see "We couldn't successfully import that work, sorry: Author randomtestname at random@example.com does not allow importing their work to this archive."
 
   Scenario: Importing straight into a collection
     Given I have a collection "Club"
@@ -244,13 +283,12 @@ Feature: Archivist bulk imports
       And I press "Import"
     Then I should see "We have notified the author(s) you imported works for. If any were missed, you can also add co-authors manually."
     When I press "Edit"
-    And I fill in "work_collection_names" with "Club"
-    And I press "Post"
+      And I fill in "work_collection_names" with "Club"
+      And I press "Post"
     Then I should see "Story"
-    And I should see "randomtestname"
-    And I should see "Club"
-    When the system processes jobs
-    Then 1 email should be delivered to "random@example.com"
+      And I should see "randomtestname"
+      And I should see "Club"
+      And 1 email should be delivered to "random@example.com"
 
   Scenario: Should not be able to import for others unless the box is checked
     When I go to the import page
@@ -300,7 +338,6 @@ Feature: Archivist bulk imports
       And the default ratings exist
       And I am logged in as "archivist"
     When I import the work "http://ao3testing.dreamwidth.org/593.html" by "randomtestname" with email "random@example.com"
-      And the system processes jobs
       And I am logged in as "OpenDoors"
       And I go to the Open Doors external authors page
     Then I should see "random@example.com"

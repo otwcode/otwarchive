@@ -644,12 +644,26 @@ When /^I follow the recent chapter link for the work "([^\"]*)"$/ do |work|
   find("#work_#{work_id} dd.chapters a").click
 end
 
-When /^the statistics for the work "([^"]*)" are updated$/ do |title|
-  step %{the statistics for all works are updated}
-  step %{all indexing jobs have been run}
+When "I follow the kudos link for the work {string}" do |work|
+  work = Work.find_by(title: work)
+  find("#work_#{work.id} dd.kudos a").click
+end
+
+When "I follow the comments link for the work {string}" do |work|
+  work = Work.find_by(title: work)
+  find("#work_#{work.id} dd.comments a").click
+end
+
+When "the cache for the work {string} is cleared" do |title|
   work = Work.find_by(title: title)
   # Touch the work to actually expire the cache
   work.touch
+end
+
+When "the statistics for the work {string} are updated" do |title|
+  step %{the statistics for all works are updated}
+  step %{all indexing jobs have been run}
+  step %{the cache for the work "#{title}" is cleared}
 end
 
 When /^the hit counts for all works are updated$/ do
@@ -703,4 +717,14 @@ end
 
 Then /^the Remove Me As Chapter Co-Creator option should not be on the ([\d]+)(?:st|nd|rd|th) chapter$/ do |chapter_number|
   step %{I should not see "Remove Me As Chapter Co-Creator" within "ul#sortable_chapter_list > li:nth-of-type(#{chapter_number})"}
+end
+
+Then "I should see {string} within the work blurb of {string}" do |content, work|
+  work = Work.find_by(title: work)
+  step %{I should see "#{content}" within "li#work_#{work.id}"}
+end
+
+Then "I should not see {string} within the work blurb of {string}" do |content, work|
+  work = Work.find_by(title: work)
+  step %{I should not see "#{content}" within "li#work_#{work.id}"}
 end

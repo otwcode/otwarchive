@@ -299,6 +299,7 @@ class WorksController < ApplicationController
     end
 
     @work = Work.new(work_params)
+
     @chapter = @work.first_chapter
     @chapter.attributes = work_params[:chapter_attributes] if work_params[:chapter_attributes]
     @work.ip_address = request.remote_ip

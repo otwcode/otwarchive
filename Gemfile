@@ -1,12 +1,12 @@
 source 'https://rubygems.org'
 
-ruby '2.6.5'
+ruby '2.7.3'
 
 gem 'test-unit', '~> 3.2'
 
 gem 'bundler'
 
-gem "rails", "~> 5.2.4"
+gem "rails", "~> 5.2.5"
 gem "rack", "~> 2.1", ">= 2.1.4"
 gem "sprockets", "< 4"
 
@@ -56,17 +56,17 @@ gem 'sanitize', '>= 4.6.5'
 # https://otwarchive.atlassian.net/browse/AO3-4957
 # https://github.com/rubys/nokogumbo/issues/50
 gem 'nokogumbo', '1.4.9'
-gem 'rest-client', '~> 1.8.0', require: 'rest_client'
+gem "rest-client", "~> 2.1.0", require: "rest_client"
 gem 'resque', '>=1.14.0'
 gem 'resque-scheduler'
 gem 'after_commit_everywhere'
 #gem 'daemon-spawn', require: 'daemon_spawn'
 gem 'elasticsearch', '6.8.0'
-gem 'aws-sdk'
+gem "aws-sdk-s3"
 gem 'css_parser'
 
 gem "terrapin"
-gem 'paperclip', '>= 5.2.0'
+gem "kt-paperclip", ">= 5.2.0"
 
 # for looking up image dimensions quickly
 gem 'fastimage'
