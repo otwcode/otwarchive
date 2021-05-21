@@ -315,7 +315,7 @@ LiveValidation.prototype = {
     validate: function(){
       if(!this.element.disabled){
         var isValid = this.doValidations();
-        if(isValid){
+        if (isValid) {
           this.onValid();
           enableSubmit();
           return true;
@@ -323,7 +323,7 @@ LiveValidation.prototype = {
           this.onInvalid();
           return false;
         }
-      }else{
+      } else {
         return true;
       }
     },
@@ -903,4 +903,20 @@ var Validate = {
     	this.name = 'ValidationError';
     }
 
+}
+
+function scrollToErrorIfFound() {
+  var errorField = $j(".LV_invalid_field").first();
+  if (errorField.length !== 0) {
+    $j("html, body").animate({
+      scrollTop: errorField.offset().top
+    }, 1000);
+  }
+}
+
+// submit shouldn't be blocked if there are no errors
+function enableSubmit() {
+  if ($j(".LV_invalid_field").first().length === 0) {
+    $j.rails.enableFormElement($j("input[data-disable-with]"));
+  }
 }

@@ -362,22 +362,6 @@ jQuery.fn.preventDoubleSubmit = function() {
   });
 };
 
-function scrollToErrorIfFound() {
-  var errorField = $j(".LV_invalid_field").first();
-  if (errorField.length !== 0) {
-    $j('html, body').animate({
-      scrollTop: errorField.offset().top
-    }, 1000);
-  }
-}
-
-// submit shouldn't be blocked if there are no errors
-function enableSubmit() {
-  if ($j(".LV_invalid_field").first().length === 0) {
-    $j.rails.enableFormElement($j('input[data-disable-with]'));
-  }
-}
-
 // add attributes that are only needed in the primary menus and when JavaScript is enabled
 function setupDropdown(){
   $j('#header').find('.dropdown').attr("aria-haspopup", true);
