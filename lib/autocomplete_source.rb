@@ -29,15 +29,15 @@ module AutocompleteSource
   end
 
   def autocomplete_value
-    ActiveSupport::Inflector.transliterate("#{id}#{AUTOCOMPLETE_DELIMITER}#{name}" + (self.respond_to?(:title) ? "#{AUTOCOMPLETE_DELIMITER}#{title}" : ""))
+    "#{id}#{AUTOCOMPLETE_DELIMITER}#{name}" + (self.respond_to?(:title) ? "#{AUTOCOMPLETE_DELIMITER}#{title}" : "")
   end
 
   def autocomplete_value_was
-    ActiveSupport::Inflector.transliterate("#{id}#{AUTOCOMPLETE_DELIMITER}#{name_was}" + (self.respond_to?(:title) ? "#{AUTOCOMPLETE_DELIMITER}#{title_was}" : ""))
+    "#{id}#{AUTOCOMPLETE_DELIMITER}#{name_was}" + (self.respond_to?(:title) ? "#{AUTOCOMPLETE_DELIMITER}#{title_was}" : "")
   end
 
   def autocomplete_value_before_last_save
-    ActiveSupport::Inflector.transliterate("#{id}#{AUTOCOMPLETE_DELIMITER}#{name_before_last_save}" + (self.respond_to?(:title) ? "#{AUTOCOMPLETE_DELIMITER}#{title_before_last_save}" : ""))
+    "#{id}#{AUTOCOMPLETE_DELIMITER}#{name_before_last_save}" + (self.respond_to?(:title) ? "#{AUTOCOMPLETE_DELIMITER}#{title_before_last_save}" : "")
   end
 
   def autocomplete_score

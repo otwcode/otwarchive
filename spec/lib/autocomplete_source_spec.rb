@@ -64,7 +64,7 @@ shared_examples_for "an autocompleting tag" do
 
     describe "#autocomplete_value" do
       it "includes id and name" do
-        expect(auto.autocomplete_value).to eq(ActiveSupport::Inflector.transliterate("#{auto.id}: #{auto.name}"))
+        expect(auto.autocomplete_value).to eq("#{auto.id}: #{auto.name}")
       end
     end
 

@@ -117,6 +117,10 @@ Feature: Display autocomplete for tags
     When I enter "é" in the "Characters" autocomplete field
     Then I should see "Éowyn (Tolkien)" in the autocomplete
       And I should see "Tybalt (Rómeó és Júlia)" in the autocomplete
+    When I enter "e" in the "Characters" autocomplete field
+    Then I should see "Éowyn (Tolkien)" in the autocomplete
+      And I should see "Tybalt (Rómeó és Júlia)" in the autocomplete
+
 
   @javascript
   Scenario: Other non-ASCII uppercase letters should appear in the autocomplete.
@@ -127,6 +131,8 @@ Feature: Display autocomplete for tags
       And I go to the new work page
 
     When I enter "ø" in the "Fandoms" autocomplete field
+    Then I should see "Østenfor sol og vestenfor måne" in the autocomplete
+    When I enter "ostenfor" in the "Fandoms" autocomplete field
     Then I should see "Østenfor sol og vestenfor måne" in the autocomplete
 
   @javascript
@@ -140,12 +146,15 @@ Feature: Display autocomplete for tags
     When I choose "Lord of the Rings" from the "Fandoms" autocomplete
       And I enter "É" in the "Characters" autocomplete field
     Then I should see "Éowyn" in the autocomplete
+    When I enter "e" in the "Characters" autocomplete field
+    Then I should see "Éowyn" in the autocomplete
 
   @javascript
   Scenario: Search terms are highlighted in autocomplete results
     Given I am logged in
       And basic tags
       And a canonical relationship "Cassian Andor & Jyn Erso"
+      And a canonical character "Éowyn"
       And I go to the new work page
 
     When I enter "Jyn" in the "Relationships" autocomplete field
@@ -159,6 +168,9 @@ Feature: Display autocomplete for tags
 
     When I enter "Cassian Andor & Jyn Erso" in the "Relationships" autocomplete field
     Then I should see HTML "<b>Cassian</b> <b>Andor</b> &amp; <b>Jyn</b> <b>Erso</b>" in the autocomplete
+
+    When I enter "é" in the "Characters" autocomplete field
+    Then I should see HTML "<b>É</b>owyn" in the autocomplete
 
     # AO3-4976 There should not be stray semicolons if the query has...
     # ...trailing spaces
