@@ -2,40 +2,65 @@ require 'spec_helper'
 require 'autocomplete_source'
 
 shared_examples_for "an autocompleting tag" do
-  let(:auto) { described_class.new(name: "Autobot") }
+  context "without diacritics" do
+    let(:auto) { described_class.new(name: "Autobot") }
 
-  describe '#autocomplete_prefixes' do
-    it "should return an array that includes the class name" do
-      expect(auto.autocomplete_prefixes).to include("autocomplete_tag_all")
+    describe '#autocomplete_prefixes' do
+      it "should return an array that includes the class name" do
+        expect(auto.autocomplete_prefixes).to include("autocomplete_tag_all")
+      end
+    end
+
+    describe '#autocomplete_search_string' do
+      it "should be equal to its name" do
+        expect(auto.autocomplete_search_string).to eq(auto.name)
+      end
+    end
+
+    describe '#autocomplete_value' do
+      it "should include id and name" do
+        expect(auto.autocomplete_value).to eq("#{auto.id}: #{auto.name}")
+      end
+    end
+
+    describe '#autocomplete_score' do
+      it "should return zero" do
+        expect(auto.autocomplete_score).to eq(0)
+      end
+    end
+
+    describe '#add_to_autocomplete' do
+      it "should add itself to the autocomplete"
+    end
+
+    describe '#remove_from_autocomplete' do
+      it "should remove itself from the autocomplete"
     end
   end
 
-  describe '#autocomplete_search_string' do
-    it "should be equal to its name" do
-      expect(auto.autocomplete_search_string).to eq(auto.name)
+  context "with diacritics" do
+    let(:auto) { described_class.new(name: "Âutobot2") }
+
+    describe '#autocomplete_search_string' do
+      it "should be equal to its name" do
+        expect(auto.autocomplete_search_string).to eq(ActiveSupport::Inflector.transliterate(auto.name))
+      end
+    end
+
+    describe '#autocomplete_value' do
+      it "should include id and name" do
+        expect(auto.autocomplete_value).to eq(ActiveSupport::Inflector.transliterate("#{auto.id}: #{auto.name}"))
+      end
+    end
+
+    describe '#add_to_autocomplete' do
+      it "should add itself to the autocomplete"
+    end
+
+    describe '#remove_from_autocomplete' do
+      it "should remove itself from the autocomplete"
     end
   end
-
-  describe '#autocomplete_value' do
-    it "should include id and name" do
-      "#{auto.id}: #{auto.name}"
-    end
-  end
-
-  describe '#autocomplete_score' do
-    it "should return zero" do
-      expect(auto.autocomplete_score).to eq(0)
-    end
-  end
-
-  describe '#add_to_autocomplete' do
-    it "should add itself to the autocomplete"
-  end
-
-  describe '#remove_from_autocomplete' do
-    it "should remove itself from the autocomplete"
-  end
-
 end
 
 shared_examples_for "an autocompletable class with a title" do

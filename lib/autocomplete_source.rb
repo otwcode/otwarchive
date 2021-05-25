@@ -13,31 +13,31 @@ module AutocompleteSource
 
   # override to define any autocomplete prefix spaces where this object should live
   def autocomplete_prefixes
-    ["autocomplete_#{self.class.name.downcase}"]
+    [ActiveSupport::Inflector.transliterate("autocomplete_#{self.class.name.downcase}")]
   end
 
   def autocomplete_search_string
-    name.to_s
+    ActiveSupport::Inflector.transliterate(name.to_s)
   end
 
   def autocomplete_search_string_was
-    name_was.to_s
+    ActiveSupport::Inflector.transliterate(name_was.to_s)
   end
 
   def autocomplete_search_string_before_last_save
-    name_before_last_save.to_s
+    ActiveSupport::Inflector.transliterate(name_before_last_save.to_s)
   end
 
   def autocomplete_value
-    "#{id}#{AUTOCOMPLETE_DELIMITER}#{name}" + (self.respond_to?(:title) ? "#{AUTOCOMPLETE_DELIMITER}#{title}" : "")
+    ActiveSupport::Inflector.transliterate("#{id}#{AUTOCOMPLETE_DELIMITER}#{name}" + (self.respond_to?(:title) ? "#{AUTOCOMPLETE_DELIMITER}#{title}" : ""))
   end
 
   def autocomplete_value_was
-    "#{id}#{AUTOCOMPLETE_DELIMITER}#{name_was}" + (self.respond_to?(:title) ? "#{AUTOCOMPLETE_DELIMITER}#{title_was}" : "")
+    ActiveSupport::Inflector.transliterate("#{id}#{AUTOCOMPLETE_DELIMITER}#{name_was}" + (self.respond_to?(:title) ? "#{AUTOCOMPLETE_DELIMITER}#{title_was}" : ""))
   end
 
   def autocomplete_value_before_last_save
-    "#{id}#{AUTOCOMPLETE_DELIMITER}#{name_before_last_save}" + (self.respond_to?(:title) ? "#{AUTOCOMPLETE_DELIMITER}#{title_before_last_save}" : "")
+    ActiveSupport::Inflector.transliterate("#{id}#{AUTOCOMPLETE_DELIMITER}#{name_before_last_save}" + (self.respond_to?(:title) ? "#{AUTOCOMPLETE_DELIMITER}#{title_before_last_save}" : ""))
   end
 
   def autocomplete_score
@@ -52,11 +52,11 @@ module AutocompleteSource
         # We put each prefix and the word + completion token into the set of all completions,
         # with score 0 so they just get sorted lexicographically --
         # this will be used to quickly find all possible completions in this space
-        REDIS_AUTOCOMPLETE.zadd(self.class.autocomplete_completion_key(prefix), 0, word_piece)
+        REDIS_AUTOCOMPLETE.zadd(ActiveSupport::Inflector.transliterate(self.class.autocomplete_completion_key(prefix)), 0, word_piece)
 
         # We put each complete search string into a separate set indexed by word with specified score
         if self.class.is_complete_word?(word_piece)
-          REDIS_AUTOCOMPLETE.zadd(self.class.autocomplete_score_key(prefix, word_piece), score, autocomplete_value)
+          REDIS_AUTOCOMPLETE.zadd(ActiveSupport::Inflector.transliterate(self.class.autocomplete_score_key(prefix, word_piece)), score, autocomplete_value)
         end
       end
     end
@@ -82,7 +82,7 @@ module AutocompleteSource
     # and returns an array of stripped and lowercase words for actual searching or use in keys
     def get_search_terms(search_term)
       terms = search_term.is_a?(Array) ? search_term.map {|term| term.split(',')}.flatten : (search_term.blank? ? [] : search_term.split(','))
-      terms.map { |term| term.strip.downcase }
+      terms.map { |term| ActiveSupport::Inflector.transliterate(term.strip.downcase) }
     end
 
     def parse_autocomplete_value(current_autocomplete_value)
@@ -207,15 +207,15 @@ module AutocompleteSource
     end
 
     def autocomplete_score_key(autocomplete_prefix, word)
-      autocomplete_prefix + "_" + AUTOCOMPLETE_SCORE_KEY + "_" + get_word(word)
+      ActiveSupport::Inflector.transliterate(autocomplete_prefix + "_" + AUTOCOMPLETE_SCORE_KEY + "_" + get_word(word))
     end
 
     def autocomplete_completion_key(autocomplete_prefix)
-      autocomplete_prefix + "_" + AUTOCOMPLETE_COMPLETION_KEY
+      ActiveSupport::Inflector.transliterate(autocomplete_prefix + "_" + AUTOCOMPLETE_COMPLETION_KEY)
     end
 
     def autocomplete_cache_key(autocomplete_prefix, search_param)
-      autocomplete_prefix + "_" + AUTOCOMPLETE_CACHE_KEY + "_" + search_param
+      ActiveSupport::Inflector.transliterate(autocomplete_prefix + "_" + AUTOCOMPLETE_CACHE_KEY + "_" + search_param)
     end
 
     # Split a string into words.
@@ -223,7 +223,7 @@ module AutocompleteSource
       # Use the ActiveSupport::Multibyte::Chars class to handle downcasing
       # instead of the basic string class, because it can handle downcasing
       # letters with accents or other diacritics.
-      normalized = string.mb_chars.downcase.to_s
+      normalized = ActiveSupport::Inflector.transliterate(string.mb_chars.downcase.to_s)
 
       # Split on one or more spaces, ampersand, slash, double quotation mark,
       # opening parenthesis, closing parenthesis (just in case), tilde, hyphen
@@ -237,7 +237,7 @@ module AutocompleteSource
       words = autocomplete_phrase_split(string)
 
       words.each do |word|
-        prefixes << word + AUTOCOMPLETE_WORD_TERMINATOR
+        prefixes << ActiveSupport::Inflector.transliterate(word) + AUTOCOMPLETE_WORD_TERMINATOR
         word.length.downto(1).each do |last_index|
           prefixes << word.slice(0, last_index)
         end
