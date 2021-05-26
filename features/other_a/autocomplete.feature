@@ -48,6 +48,22 @@ Feature: Display autocomplete for tags
       And the collection item autocomplete field should list matching collections
 
   @javascript
+  Scenario: Work co-author and association autocompletes should work with pseuds containing diacrictics
+    Given basic tags
+      And a set of users for testing autocomplete
+      And "coauthor" has the pseud "çola"
+      And I am logged in
+      And I go to the new work page
+    Then the coauthor autocomplete field should list matching users
+    When I enter "c" in the "pseud_byline_autocomplete" autocomplete field
+    Then the pseud autocomplete should contain "çola (coauthor)"
+      And the pseud autocomplete should contain "coauthor"
+    When I enter "ç" in the "pseud_byline_autocomplete" autocomplete field
+    Then the pseud autocomplete should contain "çola (coauthor)"
+      And the pseud autocomplete should contain "coauthor"
+
+
+  @javascript
   Scenario: Collection autocomplete shows collection title and name
     Given I have the collection "Issue" with name "jb_fletcher"
       And I have the collection "Ïssue" with name "robert_stack"
@@ -170,9 +186,6 @@ Feature: Display autocomplete for tags
     Then I should see HTML "<b>Cassian</b> <b>Andor</b> &amp; <b>Jyn</b> <b>Erso</b>" in the autocomplete
 
     When I enter "é" in the "Characters" autocomplete field
-    Then I should see HTML "<b>É</b>owyn" in the autocomplete
-
-    When I enter "E" in the "Characters" autocomplete field
     Then I should see HTML "<b>É</b>owyn" in the autocomplete
 
     # AO3-4976 There should not be stray semicolons if the query has...
