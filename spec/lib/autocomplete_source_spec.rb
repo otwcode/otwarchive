@@ -96,6 +96,7 @@ end
 describe Fandom do
   let(:tag_type) { "Fandom" }
   let(:autocomplete_cache_key) { "autocomplete_tag_fandom_completion" }
+  
   it_behaves_like "an autocompleting tag"
 end
 
