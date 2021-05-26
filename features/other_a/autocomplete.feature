@@ -50,7 +50,7 @@ Feature: Display autocomplete for tags
   @javascript
   Scenario: Collection autocomplete shows collection title and name
     Given I have the collection "Issue" with name "jb_fletcher"
-      And I have the collection "Issue" with name "robert_stack"
+      And I have the collection "Ïssue" with name "robert_stack"
       And I am logged in as "Scott" with password "password"
       And I post the work "All The Nice Things"
       And I view the work "All The Nice Things"
@@ -170,6 +170,9 @@ Feature: Display autocomplete for tags
     Then I should see HTML "<b>Cassian</b> <b>Andor</b> &amp; <b>Jyn</b> <b>Erso</b>" in the autocomplete
 
     When I enter "é" in the "Characters" autocomplete field
+    Then I should see HTML "<b>É</b>owyn" in the autocomplete
+
+    When I enter "E" in the "Characters" autocomplete field
     Then I should see HTML "<b>É</b>owyn" in the autocomplete
 
     # AO3-4976 There should not be stray semicolons if the query has...
