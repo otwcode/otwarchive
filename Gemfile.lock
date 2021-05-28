@@ -274,7 +274,7 @@ GEM
     mimemagic (0.3.10)
       nokogiri (~> 1)
       rake
-    mini_mime (1.0.3)
+    mini_mime (1.1.0)
     mini_portile2 (2.5.1)
     minitest (5.14.4)
     mono_logger (1.1.0)
@@ -454,7 +454,7 @@ GEM
       climate_control (>= 0.0.3, < 1.0)
     test-unit (3.3.6)
       power_assert
-    thor (1.0.1)
+    thor (1.1.0)
     thread_safe (0.3.6)
     tilt (2.0.10)
     timecop (0.9.1)
@@ -564,7 +564,7 @@ DEPENDENCIES
   rack (~> 2.1, >= 2.1.4)
   rack-attack
   rack-dev-mark (>= 0.7.8)
-  rails (~> 5.2.6)
+  rails (~> 5.2)
   rails-controller-testing
   rails-observers!
   redis (~> 3.3.5)
