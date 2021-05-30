@@ -19,7 +19,9 @@ VOLUME /otwa
 # Install ruby packages
 COPY Gemfile .
 COPY Gemfile.lock .
-RUN gem install bundler -v 1.17.3 && bundle install
+RUN gem install bundler -v 1.17.3
+RUN alias bundle="bundle _1.17.3_" && alias bundler="bundler _1.17.3_"
+RUN bundle install
 
 # Default command to run in a new container
 EXPOSE 3000
