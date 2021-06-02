@@ -70,4 +70,17 @@ describe Feedback do
       expect(safe_report.save).to be_truthy
     end
   end
+
+  context "with IP address" do
+    let(:ip) { Faker::Internet.ip_v4_address }
+    let(:feedback) { create(:feedback, ip_address: ip) }
+
+    it "has IP in Akismet attributes" do
+      expect(feedback.akismet_attributes[:user_ip]).to eq(ip)
+    end
+
+    it "does not store IP in the database" do
+      expect(Feedback.find_by(id: feedback.id)[:ip_address]).to eq(nil)
+    end
+  end
 end
