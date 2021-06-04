@@ -161,7 +161,7 @@ class Collection < ApplicationRecord
 
   validates :tags_after_saving,
             length: { maximum: ArchiveConfig.COLLECTION_TAGS_MAX,
-                      message: "^Sorry, a collection can only have %{count} tags."}
+                      message: "^Sorry, a collection can only have %{count} tags." }
 
   scope :top_level, -> { where(parent_id: nil) }
   scope :closed, -> { joins(:collection_preference).where("collection_preferences.closed = ?", true) }

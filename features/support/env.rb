@@ -13,6 +13,8 @@ end
 # categories before we define the database cleaner hooks, so that we aren't
 # constantly erasing and recreating all ratings/warnings/categories:
 Before do
+  # TODO: Combine these three tag steps and remove them from all scenarios,
+  # since they're already run at the start of every scenario:
   step %{the default ratings exist}
   step %{the basic warnings exist}
   step %{the basic categories exist}

@@ -15,6 +15,7 @@ module Taggable
     end
   end
 
+  # Used in works and external works:
   Tag::VISIBLE.each do |type|
     klass = type.constantize
     underscore = type.underscore
@@ -35,6 +36,7 @@ module Taggable
     alias_method "#{underscore}_strings=", "#{underscore}_string="
   end
 
+  # Used in bookmarks and collections:
   def tag_strings
     tags_after_saving.map(&:name)
   end
@@ -112,6 +114,8 @@ module Taggable
   # Split the tag_string, and look up the tags for each of those tag names. We
   # ignore tag type for this one, and create UnsortedTags for any tag names
   # that we can't find.
+  #
+  # Used in bookmarks and collections.
   def parse_tags(tag_string)
     tag_names = split_tag_string(tag_string)
 

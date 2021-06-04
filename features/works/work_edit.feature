@@ -177,21 +177,14 @@ Feature: Edit Works
       And I press "Post"
     Then I should see "Work was successfully updated"
 
-  Scenario: Previewing shows changes to tags
+  Scenario: Previewing shows changes to tags, but cancelling afterwards doesn't save those changes
     Given I am logged in as a random user
       And I post the work "Work 1" with fandom "testing"
     When I edit the work "Work 1"
       And I fill in "Fandoms" with "foobar"
       And I press "Preview"
     Then I should see "Fandom: foobar"
-
-  Scenario: Cancelling after preview doesn't change tags
-    Given I am logged in as a random user
-      And I post the work "Work 1" with fandom "testing"
-    When I edit the work "Work 1"
-      And I fill in "Fandoms" with "foobar"
-      And I press "Preview"
-      And I press "Cancel"
+    When I press "Cancel"
       And I view the work "Work 1"
     Then I should see "Fandom: testing"
       And I should not see "Fandom: foobar"
