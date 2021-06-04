@@ -46,15 +46,15 @@ RSpec.configure do |config|
     DatabaseCleaner.strategy = :transaction
     DatabaseCleaner.clean
     Indexer.all.map(&:prepare_for_testing)
-    ArchiveWarning.find_or_create_by_name(ArchiveConfig.WARNING_CHAN_TAG_NAME).update(canonical: true)
-    ArchiveWarning.find_or_create_by_name(ArchiveConfig.WARNING_NONE_TAG_NAME).update(canonical: true)
-    Category.find_or_create_by_name(ArchiveConfig.CATEGORY_SLASH_TAG_NAME).update(canonical: true)
-    Rating.find_or_create_by_name(ArchiveConfig.RATING_DEFAULT_TAG_NAME).update(canonical: true)
-    Rating.find_or_create_by_name(ArchiveConfig.RATING_EXPLICIT_TAG_NAME).update(canonical: true)
+    ArchiveWarning.find_or_create_by!(name: ArchiveConfig.WARNING_CHAN_TAG_NAME, canonical: true)
+    ArchiveWarning.find_or_create_by!(name: ArchiveConfig.WARNING_NONE_TAG_NAME, canonical: true)
+    Category.find_or_create_by!(name: ArchiveConfig.CATEGORY_SLASH_TAG_NAME, canonical: true)
+    Rating.find_or_create_by!(name: ArchiveConfig.RATING_DEFAULT_TAG_NAME, canonical: true)
+    Rating.find_or_create_by!(name: ArchiveConfig.RATING_EXPLICIT_TAG_NAME, canonical: true)
     # Needs these for the API tests.
-    ArchiveWarning.find_or_create_by_name(ArchiveConfig.WARNING_DEFAULT_TAG_NAME).update(canonical: true)
-    ArchiveWarning.find_or_create_by_name(ArchiveConfig.WARNING_NONCON_TAG_NAME).update(canonical: true)
-    Rating.find_or_create_by_name(ArchiveConfig.RATING_GENERAL_TAG_NAME).update(canonical: true)
+    ArchiveWarning.find_or_create_by!(name: ArchiveConfig.WARNING_DEFAULT_TAG_NAME, canonical: true)
+    ArchiveWarning.find_or_create_by!(name: ArchiveConfig.WARNING_NONCON_TAG_NAME, canonical: true)
+    Rating.find_or_create_by!(name: ArchiveConfig.RATING_GENERAL_TAG_NAME, canonical: true)
   end
 
   config.before :each do

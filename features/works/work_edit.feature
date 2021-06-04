@@ -177,6 +177,25 @@ Feature: Edit Works
       And I press "Post"
     Then I should see "Work was successfully updated"
 
+  Scenario: Previewing shows changes to tags
+    Given I am logged in as a random user
+      And I post the work "Work 1" with fandom "testing"
+    When I edit the work "Work 1"
+      And I fill in "Fandoms" with "foobar"
+      And I press "Preview"
+    Then I should see "Fandom: foobar"
+
+  Scenario: Cancelling after preview doesn't change tags
+    Given I am logged in as a random user
+      And I post the work "Work 1" with fandom "testing"
+    When I edit the work "Work 1"
+      And I fill in "Fandoms" with "foobar"
+      And I press "Preview"
+      And I press "Cancel"
+      And I view the work "Work 1"
+    Then I should see "Fandom: testing"
+      And I should not see "Fandom: foobar"
+
   Scenario: A work cannot be edited to remove its fandom
     Given basic tags
       And I am logged in as a random user
@@ -184,7 +203,9 @@ Feature: Edit Works
     When I edit the work "Work 1"
       And I fill in "Fandoms" with ""
       And I press "Post"
-    Then I should see "Sorry! We couldn't save this work because:Please add all required tags. Fandom is missing."
+    Then I should see "Sorry! We couldn't save this work because:Please fill in at least one fandom."
+    When I view the work "Work 1"
+    Then I should see "Fandom: testing"
 
   Scenario: User can cancel editing a work
     Given I am logged in as a random user
@@ -193,7 +214,25 @@ Feature: Edit Works
       And I fill in "Fandoms" with ""
       And I press "Cancel"
     When I view the work "Work 1"
-      Then I should see "Fandom: testing"
+    Then I should see "Fandom: testing"
+
+  Scenario: A work cannot be edited to remove its only warning
+    Given I am logged in as a random user
+      And I post the work "Work 1"
+    When I edit the work "Work 1"
+      And I uncheck "No Archive Warnings Apply"
+      And I press "Post"
+    Then I should see "Sorry! We couldn't save this work because:Please select at least one warning."
+    When I view the work "Work 1"
+    Then I should see "Archive Warning: No Archive Warnings Apply"
+
+  Scenario: A work can be edited to remove all categories
+    Given I am logged in as a random user
+      And I post the work "Work 1" with category "F/F"
+    When I edit the work "Work 1"
+      And I uncheck "F/F"
+      And I press "Post"
+    Then I should not see "F/F"
 
   Scenario: When editing a work, the title field should not escape HTML
     Given I have a work "What a title! :< :& :>"

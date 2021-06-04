@@ -233,7 +233,7 @@ describe WorksController, work_search: true do
       post :create, params: { work: work_attributes }
       expect(response).to render_template("new")
       expect(assigns[:work].errors.full_messages).to \
-        include "Please add all required tags. Warning is missing."
+        include /Only canonical warning tags are allowed./
     end
 
     it "renders new if the work has noncanonical rating" do
@@ -241,7 +241,15 @@ describe WorksController, work_search: true do
       post :create, params: { work: work_attributes }
       expect(response).to render_template("new")
       expect(assigns[:work].errors.full_messages).to \
-        include "Please add all required tags."
+        include /Only canonical rating tags are allowed./
+    end
+
+    it "renders new if the work has noncanonical category" do
+      work_attributes = attributes_for(:work).except(:posted).merge(category_strings: ["Category"])
+      post :create, params: { work: work_attributes }
+      expect(response).to render_template("new")
+      expect(assigns[:work].errors.full_messages).to \
+        include /Only canonical category tags are allowed./
     end
   end
 
@@ -249,7 +257,8 @@ describe WorksController, work_search: true do
     let(:work) { create(:work) }
 
     it "doesn't error when a work has no fandoms" do
-      work_no_fandoms = create(:work, fandoms: [])
+      work_no_fandoms = build(:work, fandom_string: "")
+      work_no_fandoms.save!(validate: false)
       fake_login
 
       get :show, params: { id: work_no_fandoms.id }

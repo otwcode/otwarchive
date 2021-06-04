@@ -35,15 +35,6 @@ module WorksHelper
     work.gifts.not_rejected.includes(:pseud).map { |gift| link_to(h(gift.recipient), gift.pseud ? user_gifts_path(gift.pseud.user) : gifts_path(recipient: gift.recipient_name)) }.join(", ").html_safe
   end
 
-  # select the default warning if this is a new work
-  def check_archive_warning(work, warning)
-    if work.nil? || work.archive_warning_strings.empty?
-      warning.name == nil
-    else
-      work.archive_warning_strings.include?(warning.name)
-    end
-  end
-
   # select default rating if this is a new work
   def rating_selected(work)
     work.nil? || work.rating_string.empty? ? ArchiveConfig.RATING_DEFAULT_TAG_NAME : work.rating_string

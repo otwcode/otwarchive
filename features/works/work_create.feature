@@ -303,7 +303,7 @@ Feature: Create Works
       And I fill in "content" with "It wasn't my fault, you know."
       And I press "Post"
     Then I should see "We couldn't save this work"
-      And I should see "Please add all required tags. Warning is missing."
+      And I should see "Please select at least one warning."
     When I check "No Archive Warnings Apply"
       And I press "Post"
     Then I should see "Work was successfully posted."
