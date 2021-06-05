@@ -47,7 +47,7 @@ describe Feedback do
       end
   
       it "does not store IP in the database" do
-        expect(Feedback.find_by(id: feedback.id)[:ip_address]).to be_nil
+        expect(Feedback.find(feedback.id)[:ip_address]).to be_nil
       end
     end
 
