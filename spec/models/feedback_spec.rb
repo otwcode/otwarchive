@@ -38,6 +38,19 @@ describe Feedback do
       end
     end
 
+    context "with IP address" do
+      let(:ip) { Faker::Internet.ip_v4_address }
+      let(:feedback) { create(:feedback, ip_address: ip) }
+  
+      it "has IP in Akismet attributes" do
+        expect(feedback.akismet_attributes[:user_ip]).to eq(ip)
+      end
+  
+      it "does not store IP in the database" do
+        expect(Feedback.find_by(id: feedback.id)[:ip_address]).to be_nil
+      end
+    end
+
     let(:no_email_provided) { build(:feedback, email: nil) }
     it "is invalid if an email is not provided" do
       expect(no_email_provided.save).to be_falsey
@@ -68,19 +81,6 @@ describe Feedback do
     it "is valid even with spam if logged in and providing correct email" do
       User.current_user = legit_user
       expect(safe_report.save).to be_truthy
-    end
-  end
-
-  context "with IP address" do
-    let(:ip) { Faker::Internet.ip_v4_address }
-    let(:feedback) { create(:feedback, ip_address: ip) }
-
-    it "has IP in Akismet attributes" do
-      expect(feedback.akismet_attributes[:user_ip]).to eq(ip)
-    end
-
-    it "does not store IP in the database" do
-      expect(Feedback.find_by(id: feedback.id)[:ip_address]).to eq(nil)
     end
   end
 end
