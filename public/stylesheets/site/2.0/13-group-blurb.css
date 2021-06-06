@@ -268,8 +268,8 @@ eg collections, users, skins, instead of the 4-icon list
 
 /*various little mods*/
 
-.blurb .header {
-  word-wrap: break-word;
+.heading {
+    word-wrap: break-word;
 }
 
 /* mod: ITEM
