@@ -171,7 +171,7 @@ describe "rake After:fix_tags_with_extra_spaces" do
     subject.invoke
 
     borked_tag.reload
-    expect(borked_tag.name).to eql("Borked_tag")
+    expect(borked_tag.name).to eql("Borked_tag_")
   end
 
   it "handles tags with quotes" do

@@ -757,6 +757,9 @@ namespace :After do
         old_tag_name = tag.name
         new_tag_name = old_tag_name.gsub(/[[:space:]]/, "_")
 
+        while Tag.find_by_name(new_tag_name) do
+          new_tag_name << "_"
+        end
         tag.update_attribute(:name, new_tag_name)
 
         report_row = [tag.id, old_tag_name, new_tag_name].join(",") + "\n"
