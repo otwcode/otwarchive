@@ -178,7 +178,7 @@ describe "rake After:fix_tags_with_extra_spaces" do
     borked_tag.update_column(:name, "\u00A0\"'quotes'\"")
     expect do
       subject.invoke
-    end.to output("Inspecting 9 tags in 1 batches\nBatch 1 of 1 complete\nTag ID,Old tag name,New tag name\n#{borked_tag.id},\u00A0\"'quotes'\",_\"'quotes'\"\n").to_stdout
+    end.to output(/.*Tag ID,Old tag name,New tag name\n#{borked_tag.id},\u00A0\"'quotes'\",_\"'quotes'\"\n$/).to_stdout
 
     borked_tag.reload
     expect(borked_tag.name).to eql("_\"'quotes'\"")
