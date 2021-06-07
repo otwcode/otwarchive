@@ -166,7 +166,7 @@ describe "rake After:fix_tags_with_extra_spaces" do
   end
 
   it "handles duplicated names" do
-    existing_tag = Freeform.create(name: "Borked_tag")
+    Freeform.create(name: "Borked_tag")
     borked_tag.update_column(:name, "Borked\u00A0tag")
     subject.invoke
 
