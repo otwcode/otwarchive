@@ -153,3 +153,15 @@ describe "rake After:replace_dewplayer_embeds" do
     end.to output("Couldn't convert 1 chapter(s): #{dewplayer_work.first_chapter.id}\nConverted 0 chapter(s).\n").to_stdout
   end
 end
+
+describe "rake After:fix_tags_with_extra_spaces" do
+  let(:borked_tag) { Freeform.create(name: "whatever") }
+
+  it "replaces the spaces with the same number of underscores" do
+    borked_tag.update_column(:name, "\u00A0\u2002\u2003\u202F\u205FBorked\u00A0\u2002\u2003\u202Ftag\u00A0\u2002\u2003\u202F\u205F")
+    subject.invoke
+
+    borked_tag.reload
+    expect(borked_tag.name).to eql("_____Borked____tag_____")
+  end
+end
