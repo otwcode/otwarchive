@@ -46,6 +46,10 @@ Given /^I wait (\d+) seconds?$/ do |number|
   Kernel::sleep number.to_i
 end
 
+When "all AJAX requests are complete" do
+  wait_for_ajax if @javascript
+end
+
 When 'the system processes jobs' do
   #resque runs inline during testing. see resque.rb in initializers/gem-plugin_config
   #Delayed::Worker.new.work_off
@@ -119,10 +123,18 @@ Then /^I should see (a|an) "([^"]*)" button(?: within "([^"]*)")?$/ do |_article
   end
 end
 
+Then /^I should see a button with text "([^"]*)"$/ do |text|
+  page.should have_xpath("//input[@value='#{text}']")
+end
+
 Then /^I should not see (a|an) "([^"]*)" button(?: within "([^"]*)")?$/ do |_article, text, selector|
   with_scope(selector) do
     page.should_not have_xpath("//input[@value='#{text}']")
   end
+end
+
+Then /^I should not see a button with text "([^"]*)"$/ do |text|
+  page.should_not have_xpath("//input[@value='#{text}']")
 end
 
 When /^"([^\"]*)" is fixed$/ do |what|

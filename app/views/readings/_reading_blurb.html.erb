@@ -1,5 +1,5 @@
 <% # expects "work" and "reading" %>
-<li <% unless reading.work.nil? %>id="work_<%= work.id %>"<% end %> class="<% if reading.work.nil? %>deleted <% end %><% if is_author_of?(work) %>own <% end %>reading work blurb group" role="article">
+<li <% unless work.nil? %>id="work_<%= work.id %>"<% end %> class="<% if work.nil? %>deleted <% end %><% if is_author_of?(work) %>own <% end %>reading work <%= css_classes_for_creation_blurb(work) %>" role="article">
 
   <% unless reading.work.nil? %>
 
@@ -10,7 +10,7 @@
   <div class="user module group">
     <h4 class="viewed heading">
 
-      <% if reading.work.nil? %>
+      <% if work.nil? %>
 
         <%= ts('(Deleted work, last visited %{date})', date: set_format_for_date(reading.last_viewed)) %>
 
@@ -18,9 +18,9 @@
 
         <span><%= ts('Last visited:') %></span> <%= set_format_for_date(reading.last_viewed) %>
 
-        <% if reading.major_version_read != reading.work.major_version %>
+        <% if reading.major_version_read != work.major_version %>
           <%= ts('(Update available.)') %>
-        <% elsif reading.minor_version_read != reading.work.minor_version %>
+        <% elsif reading.minor_version_read != work.minor_version %>
           <%= ts('(Minor edits made since then.)') %>
         <% else %>
           <%= ts('(Latest version.)') %>

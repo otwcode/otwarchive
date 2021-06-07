@@ -206,7 +206,7 @@ class Api::V2::WorksController < Api::V2::BaseController
       collection_names: work_params[:collection_names],
       title: work_params[:title],
       fandom: work_params[:fandoms],
-      archive_warning: work_params[:archive_warnings],
+      archive_warning: work_params[:warnings],
       character: work_params[:characters],
       rating: work_params[:rating],
       relationship: work_params[:relationships],

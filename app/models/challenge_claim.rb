@@ -1,7 +1,5 @@
 class ChallengeClaim < ApplicationRecord
   include ActiveModel::ForbiddenAttributesProtection
-  # We use "-1" to represent all the requested items matching
-  ALL = -1
 
   belongs_to :claiming_user, class_name: "User", inverse_of: :request_claims
   belongs_to :collection
@@ -9,9 +7,12 @@ class ChallengeClaim < ApplicationRecord
   belongs_to :request_prompt, class_name: "Prompt"
   belongs_to :creation, polymorphic: true
 
-  # have to override the == operator or else two claims by same user on same user's prompts are equal
-  def ==(other)
-    super(other) && other.request_prompt_id == self.request_prompt_id
+  before_create :inherit_fields_from_request_prompt
+  def inherit_fields_from_request_prompt
+    return unless request_prompt
+
+    self.collection = request_prompt.collection
+    self.request_signup = request_prompt.challenge_signup
   end
 
   scope :for_request_signup, lambda {|signup|
@@ -114,13 +115,6 @@ class ChallengeClaim < ApplicationRecord
     self.creation && (item = get_collection_item) && item.approved?
   end
 
-  include Comparable
-  def <=>(other)
-    return -1 if self.request_signup.nil? && other.request_signup
-    return 1 if other.request_signup.nil? && self.request_signup
-    return self.request_byline.downcase <=> other.request_byline.downcase
-  end
-
   def title
     if !self.request_prompt.title.blank?
       title = request_prompt.title
@@ -134,10 +128,6 @@ class ChallengeClaim < ApplicationRecord
       title += " (#{self.request_byline})"
     end
     return title
-  end
-
-  def claiming_user
-    User.find_by(id: claiming_user_id)
   end
 
   def claiming_pseud

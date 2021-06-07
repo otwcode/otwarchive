@@ -1,5 +1,6 @@
 class Collection < ApplicationRecord
   include ActiveModel::ForbiddenAttributesProtection
+  include Filterable
   include UrlHelpers
   include WorksOwner
 
@@ -43,12 +44,12 @@ class Collection < ApplicationRecord
   # We need to get rid of all of these if the challenge is destroyed
   after_save :clean_up_challenge
   def clean_up_challenge
-    if self.challenge.nil?
-      assignments.each {|assignment| assignment.destroy}
-      potential_matches.each {|potential_match| potential_match.destroy}
-      signups.each {|signup| signup.destroy}
-      prompts.each {|prompt| prompt.destroy}
-    end
+    return if self.challenge_id
+
+    assignments.each(&:destroy)
+    potential_matches.each(&:destroy)
+    signups.each(&:destroy)
+    prompts.each(&:destroy)
   end
 
   has_many :collection_items, dependent: :destroy
@@ -60,9 +61,6 @@ class Collection < ApplicationRecord
 
   has_many :bookmarks, through: :collection_items, source: :item, source_type: 'Bookmark'
   has_many :approved_bookmarks, -> { where('collection_items.user_approval_status = ? AND collection_items.collection_approval_status = ?', CollectionItem::APPROVED, CollectionItem::APPROVED) }, through: :collection_items, source: :item, source_type: 'Bookmark'
-
-  has_many :fandoms, -> { distinct }, through: :approved_works
-  has_many :filters, -> { distinct }, through: :approved_works
 
   has_many :collection_participants, dependent: :destroy
   accepts_nested_attributes_for :collection_participants, allow_destroy: true
@@ -173,36 +171,6 @@ class Collection < ApplicationRecord
   scope :prompt_meme, -> { where(challenge_type: 'PromptMeme') }
   scope :name_only, -> { select("collections.name") }
   scope :by_title, -> { order(:title) }
-
-  scope :approved, -> {
-    includes(:collection_items)
-      .where(
-        collection_items: {
-          user_approval_status: CollectionItem::APPROVED,
-          collection_approval_status: CollectionItem::APPROVED
-        }
-      )
-      .references(:collection_items)
-  }
-  scope :user_approved, -> {
-    includes(:collection_items)
-      .where(
-        collection_items: {
-          user_approval_status: CollectionItem::APPROVED
-        }
-      )
-      .references(:collection_items)
-  }
-  scope :rejected, -> {
-    includes(:collection_items)
-      .where(
-        collection_items: {
-          user_approval_status: CollectionItem::REJECTED
-        }
-      )
-      .references(:collection_items)
-  }
-
 
   before_validation :cleanup_url
   def cleanup_url
@@ -440,20 +408,11 @@ class Collection < ApplicationRecord
 
   def notify_maintainers(subject, message)
     # send maintainers a notice via email
-    UserMailer.collection_notification(self.id, subject, message).deliver
+    UserMailer.collection_notification(self.id, subject, message).deliver_later
   end
 
+  include AsyncWithResque
   @queue = :collection
-  # This will be called by a worker when a job needs to be processed
-  def self.perform(id, method, *args)
-    find(id).send(method, *args)
-  end
-
-  # We can pass this any Collection instance method that we want to
-  # run later.
-  def async(method, *args)
-    Resque.enqueue(Collection, id, method, *args)
-  end
 
   def reveal!
     async(:reveal_collection_items)

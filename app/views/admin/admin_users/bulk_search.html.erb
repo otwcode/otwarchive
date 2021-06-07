@@ -15,7 +15,7 @@
         <dt class="required"><%= label_tag "emails", ts("Email addresses *") %></dt>
         <dd class="required"><%= text_area_tag "emails", @emails ? @emails.join("\n") : "", rows: 10, cols: 70, "aria-describedby" => "email-field-description" %>
           <p class="footnote" id="email-field-description">
-            <%= ts("Emails to find; <strong>one URL per line.</strong>").html_safe %>
+            <%= ts("Email addresses to find; <strong>one per line.</strong>").html_safe %>
           </p>
         </dd>
       </dl>
@@ -30,12 +30,13 @@
     </fieldset>
   <% end %>
 
-  <% if @not_found || @users %>
-    <p><%= ts("#{@emails.size} emails searched. #{@emails.size - @not_found.size} found. #{@not_found.size} not found.") %></p>
+  <% if @results[:not_found_emails] || @results[:users] %>
+    <p><%= ts("#{pluralize(@results[:total], "email")} entered. #{@results[:searched]} searched. " + 
+              "#{@results[:found_users].size} found. #{@results[:not_found_emails].size} not found. #{pluralize(@results[:duplicates], "duplicate")}.") %></p>
 
-    <% unless @not_found.empty? %>
+    <% if @results[:not_found_emails]&.any? %>
       <h3 class="heading"><%= ts("Not found") %></h3>
-      <p><%= @not_found.join(",") %></p>
+      <p><%= @results[:not_found_emails].join(", ") %></p>
     <% end %>
 
     <% if @users %>

@@ -118,6 +118,7 @@ class TagSet < ApplicationRecord
     return unless tags_to_remove.present?
     self.set_taggings.where(tag_id: tags_to_remove.map(&:id)).delete_all
     remove_tags_from_autocomplete(tags_to_remove)
+    owned_tag_set&.touch
   end
 
   def add_to_set(tags_to_add)
@@ -128,6 +129,7 @@ class TagSet < ApplicationRecord
       self.set_taggings.create(tag_id: tag.id)
     end
     add_tags_to_autocomplete(tags_to_add)
+    owned_tag_set&.touch
   end
 
   # Tags must already exist unless they are being added to an owned tag set

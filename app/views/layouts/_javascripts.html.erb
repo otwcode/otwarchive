@@ -33,10 +33,18 @@
       return elem === doc.activeElement && !!(elem.type || elem.href);
     }
   </script>
+  <!--
+    Disable jQuery animations, because the autocomplete dropdown cannot be
+    clicked while it's in the slideDown animation. This causes intermittent
+    failures in JavaScript-based autocomplete tests.
+  -->
+  <script type="text/javascript">
+    jQuery.fx.off = true;
+  </script>
 <% end %>
 
 <script type="text/javascript">$j = jQuery.noConflict();</script>
-<%= javascript_include_tag "jquery.scrollTo.min", "jquery.livequery.min", "rails", "application", "bootstrap/bootstrap-dropdown.min", "jquery-shuffle", "jquery.tokeninput.min", "jquery.trap.min", "ao3modal.min", "jquery.cookie",  skip_pipeline: true %>
+<%= javascript_include_tag "jquery.scrollTo.min", "jquery.livequery.min", "rails", "application", "bootstrap/bootstrap-dropdown.min", "jquery-shuffle", "jquery.tokeninput.min", "jquery.trap.min", "ao3modal.min", "js.cookie.min", skip_pipeline: true %>
 
 <%= javascript_include_tag "filters.min", skip_pipeline: true %>
 
@@ -52,17 +60,62 @@
     params[:controller] == "abuse_reports" && params[:action] == "new" ||
     params[:controller] == "feedbacks" && params[:action] == "new" %>
   <%= javascript_tag do %>
+    <% # localStorage support check we only need for guests. %>
+    <% unless current_user %>
+      // We can't rely on !window.localStorage to test localStorage support in
+      // browsers like Safari 9, which technically support it, but which have a
+      // storage length of 0 in private mode.
+      // Credit: https://github.com/getgrav/grav-plugin-admin/commit/cfe2188f10c4ca604e03c96f3e21537fda1cdf9a
+      function isSupported() {
+          var item = "localStoragePolyfill";
+          try {
+              localStorage.setItem(item, item);
+              localStorage.removeItem(item);
+              return true;
+          } catch (e) {
+              return false;
+          }
+      }
+
+      function acceptTOS() {
+        if (isSupported()) {
+          localStorage.setItem("accepted_tos", "<%= @current_tos_version %>");
+        } else {
+          Cookies.set("accepted_tos", "<%= @current_tos_version %>", { expires: 365 });
+        }
+      }
+    <% end %>
+
     $j(document).ready(function() {
-      <% # Users who haven't accepted this TOS and guests who don't have the cookie need
-         # the popup. We have to use JavaScript to check the cookie or risk issues
-         # when full page caching is enabled %>
       <% if current_user %>
+        <% # Users who haven't accepted this TOS need the popup. %>
         $j("body").prepend("<%= escape_javascript(render "layouts/tos_prompt") %>");
+      <% elsif params[:tos] == "yes" %>
+        <% # Guests can bypass the popup using ?tos=yes in the URLs. %>
+        acceptTOS();
       <% else %>
-        if ($j.cookie("accepted_tos") != <%= @current_tos_version.to_s %>) {
+        <% # Otherwise, guests who don't have the localStorage item or the
+           # cookie need the popup.
+           # We have to use JavaScript to remember their choice or risk issues
+           # when full page caching is enabled. %>
+        if (localStorage.getItem("accepted_tos") !== "<%= @current_tos_version %>" && Cookies.get("accepted_tos") !== "<%= @current_tos_version %>") {
           $j("body").prepend("<%= escape_javascript(render "layouts/tos_prompt") %>");
         }
       <% end %>
+    });
+  <% end %>
+<% end %>
+
+<% # Renders layouts/proxy_notice below skip links in layouts/application. %>
+<% if %w(staging production).include?(Rails.env) %>
+  <%= javascript_tag do %>
+    $j(document).ready(function() {
+      var permitted_hosts = <%= ArchiveConfig.PERMITTED_HOSTS.to_json.html_safe %>;
+      var current_host = window.location.hostname;
+
+      if (!permitted_hosts.includes(current_host) && Cookies.get("proxy_notice") !== "0" && window.location.protocol !== "file:") {
+        $j("#skiplinks").after("<%= escape_javascript(render "layouts/proxy_notice") %>");
+      }
     });
   <% end %>
 <% end %>

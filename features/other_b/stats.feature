@@ -26,17 +26,3 @@ Feature: User statistics
   Then "Don Solves More Crime" should appear before "Don Solves Crime"
   When I follow "Date"
   Then "Don Solves Crime" should appear before "Don Solves More Crime"
-
-  Scenario: Do not show hit counts on stats page when user has set preference to hide hit counts on their own works
-  
-  Given I am logged in as "NUMB3RSfan"
-    And I set my preferences to hide hit counts on my works
-  When I go to my stats page
-  Then I should not see "Hits"
-  
-  Scenario: Do not show hit counts on stats page when user has set preference to hide all hit counts
-  
-  Given I am logged in as "NUMB3RSfan"
-    And I set my preferences to hide all hit counts
-  When I go to my stats page
-  Then I should not see "Hits"

@@ -49,32 +49,6 @@ class WorkSearchForm
 
   attr_accessor :options
 
-  # Make a direct request to the elasticsearch count api
-  def self.count_for_user(user)
-    WorkQuery.new(user_ids: [user.id]).count
-  end
-
-  def self.count_for_pseuds(pseuds)
-    WorkQuery.new(pseud_ids: pseuds.map(&:id)).count
-  end
-
-  def self.user_count(user)
-    cached_count(user) || count_for_user(user)
-  end
-
-  def self.pseud_count(pseud)
-    cached_count(pseud) || count_for_pseuds([pseud])
-  end
-
-  def self.cached_count(owner)
-    status = User.current_user ? 'logged_in' : 'logged_out'
-    key = "#{owner.works_index_cache_key}_#{status}_page"
-    works = Rails.cache.read(key)
-    if works.present?
-      works.total_entries
-    end
-  end
-
   ATTRIBUTES.each do |filterable|
     define_method(filterable) { options[filterable] }
   end
@@ -247,4 +221,35 @@ class WorkSearchForm
     end
   end
 
+  ###############
+  # COUNTING
+  ###############
+
+  def self.count_for_user(user)
+    Rails.cache.fetch(count_cache_key(user), count_cache_options) do
+      WorkQuery.new(user_ids: [user.id]).count
+    end
+  end
+
+  def self.count_for_pseud(pseud)
+    Rails.cache.fetch(count_cache_key(pseud), count_cache_options) do
+      WorkQuery.new(pseud_ids: [pseud.id]).count
+    end
+  end
+
+  # If we want to invalidate cached work counts whenever the owner (which for
+  # this method can only be a user or a pseud) has a new work, we can use
+  # "#{owner.works_index_cache_key}" instead of "#{owner.class.name.underscore}_#{owner.id}".
+  # See lib/works_owner.rb.
+  def self.count_cache_key(owner)
+    status = User.current_user ? 'logged_in' : 'logged_out'
+    "work_count_#{owner.class.name.underscore}_#{owner.id}_#{status}"
+  end
+
+  def self.count_cache_options
+    {
+      expires_in: ArchiveConfig.SECONDS_UNTIL_DASHBOARD_COUNTS_EXPIRE.seconds,
+      race_condition_ttl: 10.seconds
+    }
+  end
 end

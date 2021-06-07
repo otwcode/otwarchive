@@ -1,5 +1,5 @@
 <% # expects "admin_post" %>
-<div class="header">
+<div <% if rtl_language?(admin_post.language) %>dir="rtl"<% end %> class="header">
   <h3 class="heading">
     <%= link_to admin_post.title.html_safe, admin_post %>
   </h3>
@@ -34,6 +34,6 @@
     <% end %>
   </dl>
 </div>
-<div class="userstuff">
-  <%=raw sanitize_field(admin_post, :content) %>
+<div <% if rtl_language?(admin_post.language) %>dir="rtl"<% end %> class="userstuff">
+  <%= raw sanitize_field(admin_post, :content) %>
 </div>

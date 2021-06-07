@@ -28,7 +28,7 @@ class UserInviteRequest < ApplicationRecord
       self.quantity.times do
         self.user.invitations.create
       end
-      UserMailer.invite_increase_notification(self.user.id, self.quantity).deliver
+      UserMailer.invite_increase_notification(self.user.id, self.quantity).deliver_after_commit
     end
   end
 end

@@ -2,10 +2,10 @@
 
 require "spec_helper"
 
-describe TagQuery do
+describe TagQuery, tag_search: true do
   context "searching tags by draft status" do
     let!(:work) do
-      create(:posted_work,
+      create(:work,
              fandom_string: "jjba,imas",
              character_string: "bruno,koume",
              relationship_string: "bruabba,koume/ryo",
@@ -36,7 +36,7 @@ describe TagQuery do
       expect(results).to contain_exactly("action")
 
       # draft-only tags appear on another posted work
-      create(:posted_work,
+      create(:work,
              fandom_string: "zombie land saga",
              character_string: "saki",
              relationship_string: "saki/ai",
@@ -100,7 +100,7 @@ describe TagQuery do
     # Make tag wrangled; it should be reindexed without using queues
     before do
       create(:common_tagging, common_tag_id: wrangled_tag.id)
-      refresh_index_without_updating "tag"
+      TagIndexer.refresh_index
     end
 
     it "matches wrangled tags" do

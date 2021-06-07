@@ -27,28 +27,6 @@ module BookmarksHelper
     end
   end
 
-  def get_bookmark_link_text(bookmarkable, blurb=false)
-    @bookmark = bookmark_if_exists(bookmarkable)
-    case bookmarkable.class.to_s
-    when blurb == true
-      @bookmark ? ts("Saved") : ts("Save")
-    when "Series"
-      @bookmark ? ts("Edit Series Bookmark") : ts("Bookmark Series")
-    when "ExternalWork"
-      @bookmark ? ts("Edit Bookmark") : ts("Add A New Bookmark")
-    else
-      @bookmark ? ts("Edit Bookmark") : ts("Bookmark")
-    end
-  end
-
-  # Link to bookmark
-  def bookmark_link(bookmarkable, blurb=false)
-    return "" unless logged_in?
-    url = get_bookmark_path(bookmarkable)
-    text = get_bookmark_link_text(bookmarkable, blurb)
-    link_to text, url
-  end
-
   def link_to_user_bookmarkable_bookmarks(bookmarkable)
     id_symbol = (bookmarkable.class.to_s.underscore + '_id').to_sym
     link_to "You have saved multiple bookmarks for this item", {controller: :bookmarks, action: :index, id_symbol => bookmarkable, existing: true}
@@ -93,17 +71,13 @@ module BookmarksHelper
   end
 
   def bookmark_form_path(bookmark, bookmarkable)
-    if bookmark && bookmark.new_record?
-      return "" unless bookmarkable
-      case bookmarkable.class.to_s
-      when "Work"
-        work_bookmarks_path(bookmarkable)
-      when "ExternalWork"
+    if bookmark.new_record?
+      if bookmarkable.new_record?
         bookmarks_path
-      when "Series"
-        series_bookmarks_path(bookmarkable)
+      else
+        polymorphic_path([bookmarkable, bookmark])
       end
-    elsif bookmark
+    else
       bookmark_path(bookmark)
     end
   end

@@ -35,11 +35,11 @@ Given /^I have bookmarks to search$/ do
   freeform2 = FactoryBot.create(:freeform, name: "rare")
 
   # set up some works
-  work1 = FactoryBot.create(:posted_work, title: "First work", freeform_string: freeform2.name)
-  work2 = FactoryBot.create(:posted_work, title: "second work")
-  work3 = FactoryBot.create(:posted_work, title: "third work")
-  work4 = FactoryBot.create(:posted_work, title: "fourth")
-  work5 = FactoryBot.create(:posted_work, title: "fifth")
+  work1 = FactoryBot.create(:work, title: "First work", freeform_string: freeform2.name)
+  work2 = FactoryBot.create(:work, title: "second work")
+  work3 = FactoryBot.create(:work, title: "third work")
+  work4 = FactoryBot.create(:work, title: "fourth")
+  work5 = FactoryBot.create(:work, title: "fifth")
 
   # set up an external work
   external1 = FactoryBot.create(:external_work, title: "Skies Grown Darker")
@@ -97,11 +97,11 @@ Given /^I have bookmarks to search$/ do
 end
 
 Given /^I have bookmarks to search by any field$/ do
-  work1 = FactoryBot.create(:posted_work,
+  work1 = FactoryBot.create(:work,
                              title: "Comfort",
                              freeform_string: "hurt a little comfort but only so much")
-  work2 = FactoryBot.create(:posted_work, title: "Hurt and that's it")
-  work3 = FactoryBot.create(:posted_work, title: "Fluff")
+  work2 = FactoryBot.create(:work, title: "Hurt and that's it")
+  work3 = FactoryBot.create(:work, title: "Fluff")
 
   external1 = FactoryBot.create(:external_work,
                                  title: "External Whump",
@@ -141,7 +141,7 @@ Given /^I have bookmarks to search by dates$/ do
   series1 = nil
   external1 = nil
   Timecop.freeze(901.days.ago) do
-    work1 = FactoryBot.create(:posted_work, title: "Old work")
+    work1 = FactoryBot.create(:work, title: "Old work")
     FactoryBot.create(:bookmark,
                        bookmarkable_id: work1.id,
                        bookmarker_notes: "Old bookmark of old work")
@@ -170,7 +170,7 @@ Given /^I have bookmarks to search by dates$/ do
                      bookmarkable_type: "ExternalWork",
                      bookmarker_notes: "New bookmark of old external work")
 
-  work2 = FactoryBot.create(:posted_work, title: "New work")
+  work2 = FactoryBot.create(:work, title: "New work")
   FactoryBot.create(:bookmark,
                      bookmarkable_id: work2.id,
                      bookmarker_notes: "New bookmark of new work")
@@ -191,8 +191,8 @@ Given /^I have bookmarks to search by dates$/ do
 end
 
 Given /^I have bookmarks of various completion statuses to search$/ do
-  complete_work = FactoryBot.create(:posted_work, title: "Finished Work")
-  incomplete_work = FactoryBot.create(:posted_work, title: "Incomplete Work", complete: false, expected_number_of_chapters: 2)
+  complete_work = FactoryBot.create(:work, title: "Finished Work")
+  incomplete_work = FactoryBot.create(:work, title: "Incomplete Work", complete: false, expected_number_of_chapters: 2)
 
   complete_series = FactoryBot.create(:series_with_a_work, title: "Complete Series", complete: true)
   incomplete_series = FactoryBot.create(:series_with_a_work, title: "Incomplete Series", complete: false)
@@ -214,7 +214,7 @@ Given /^I have bookmarks of old series to search$/ do
   creator = User.find_by(login: "creator").default_pseud
 
   Timecop.freeze(30.days.ago) do
-    older_work = FactoryBot.create(:posted_work, title: "WIP in a Series", authors: [creator])
+    older_work = FactoryBot.create(:work, title: "WIP in a Series", authors: [creator])
     older_series = FactoryBot.create(:series, title: "Older WIP Series", works: [older_work])
     FactoryBot.create(:bookmark,
                        bookmarkable_id: older_series.id,
@@ -232,15 +232,15 @@ end
 # Freeform is omitted because there is no freeform option on the bookmark external work form
 Given /^bookmarks of all types tagged with the (character|relationship|fandom) tag "(.*?)"$/ do |tag_type, tag|
   work = if tag_type == "character"
-           FactoryBot.create(:posted_work,
+           FactoryBot.create(:work,
                               title: "BookmarkedWork",
                               character_string: tag)
          elsif tag_type == "relationship"
-           FactoryBot.create(:posted_work,
+           FactoryBot.create(:work,
                               title: "BoomarkedWork",
                               relationship_string: tag)
          elsif tag_type == "fandom"
-           FactoryBot.create(:posted_work,
+           FactoryBot.create(:work,
                               title: "BookmarkedWork",
                               fandom_string: tag)
          end
@@ -248,17 +248,17 @@ Given /^bookmarks of all types tagged with the (character|relationship|fandom) t
   FactoryBot.create(:bookmark, bookmarkable_id: work.id, bookmarkable_type: "Work")
 
   step %{bookmarks of external works and series tagged with the #{tag_type} tag "#{tag}"}
-end 
+end
 
 # Freeform is omitted because there is no freeform option on the bookmark external work form
 Given /^bookmarks of external works and series tagged with the (character|relationship|fandom) tag "(.*?)"$/ do |tag_type, tag|
   # Series get their tags from works, so we have to create the work first
   work = if tag_type == "character"
-           FactoryBot.create(:posted_work, character_string: tag)
+           FactoryBot.create(:work, character_string: tag)
          elsif tag_type == "relationship"
-           FactoryBot.create(:posted_work, relationship_string: tag)
+           FactoryBot.create(:work, relationship_string: tag)
          elsif tag_type == "fandom"
-           FactoryBot.create(:posted_work, fandom_string: tag)
+           FactoryBot.create(:work, fandom_string: tag)
          end
 
   # We're going to need to use the series ID, so make the series
@@ -295,8 +295,8 @@ Given /^"(.*?)" has bookmarks of works in various languages$/ do |user|
   lang_en = Language.find_by(name: "English")
   lang_de = Language.find_by(name: "Deutsch")
 
-  work1 = FactoryBot.create(:posted_work, title: "english work", language_id: lang_en.id)
-  work2 = FactoryBot.create(:posted_work, title: "german work", language_id: lang_de.id)
+  work1 = FactoryBot.create(:work, title: "english work", language_id: lang_en.id)
+  work2 = FactoryBot.create(:work, title: "german work", language_id: lang_de.id)
 
   FactoryBot.create(:bookmark, bookmarkable_id: work1.id, pseud_id: user_pseud.id)
   FactoryBot.create(:bookmark, bookmarkable_id: work2.id, pseud_id: user_pseud.id)
@@ -381,6 +381,12 @@ When(/^I attempt to transfer my bookmark of "([^"]*)" to a pseud that is not min
   pseud_id = User.find_by(login: "not_the_bookmarker").pseuds.first.id
   find("#bookmark_pseud_id", visible: false).set(pseud_id)
   click_button "Update"
+end
+
+When(/^I use the bookmarklet on a previously bookmarked URL$/) do
+  url = ExternalWork.first.url
+  visit new_external_work_path(params: { url_from_external: url })
+  step %{all AJAX requests are complete}
 end
 
 Then /^the bookmark on "([^\"]*)" should have tag "([^\"]*)"$$/ do |title, tag|

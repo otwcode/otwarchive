@@ -14,7 +14,12 @@ class AbuseReport < ApplicationRecord
 
   validate :check_for_spam
   def check_for_spam
-    errors.add(:base, ts("This report looks like spam to our system!")) if Akismetor.spam?(akismet_attributes)
+    approved = logged_in_with_matching_email? || !Akismetor.spam?(akismet_attributes)
+    errors.add(:base, ts("This report looks like spam to our system!")) unless approved
+  end
+
+  def logged_in_with_matching_email?
+    User.current_user.present? && User.current_user.email == email
   end
 
   def akismet_attributes
@@ -58,8 +63,8 @@ class AbuseReport < ApplicationRecord
                             multiline: true
 
   def email_and_send
-    AdminMailer.abuse_report(id).deliver
-    UserMailer.abuse_report(id).deliver
+    AdminMailer.abuse_report(id).deliver_later
+    UserMailer.abuse_report(id).deliver_later
     send_report
   end
 

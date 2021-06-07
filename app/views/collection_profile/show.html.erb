@@ -87,7 +87,7 @@
   <!--subnav-->
   <% if @collection.user_is_owner?(current_user) || @collection.user_is_maintainer?(current_user) %>
     <h3 class="landmark heading"><%= ts('Actions') %></h3>
-    <ul class="navigation actions" role="menu">
+    <ul class="navigation actions">
 
       <% if @collection.challenge # add maintainer-specific custom navigation for the challenge %>
         <%= render :partial => "challenge/#{challenge_class_name(@collection)}/challenge_navigation_maintainer" %>
@@ -97,15 +97,9 @@
         <li><%= link_to ts('Collection Settings'), edit_collection_path(@collection) %></li>
 
         <% if @collection.challenge %>
-          <li><%= link_to ts('Delete Challenge'),
-                          if @collection.prompt_meme?
-                            collection_prompt_meme_path(@collection)
-                          else
-                            collection_gift_exchange_path(@collection)
-                          end,
-                          data: {confirm: ts('Are you certain you want to delete the challenge from this collection? All sign-ups, assignments, and settings will be lost. (Works will remain in the collection.)')},                          :method => :delete %>
-          </li>
+          <li><%= render "challenge/shared/challenge_form_delete" %></li>
         <% end %>
+          
         <li><%= link_to ts('Delete Collection'),
                       confirm_delete_collection_path(@collection),
                       data: {confirm: ts('Are you sure you want to delete this collection? All collection settings will be lost. (Works will not be deleted.)')} %>

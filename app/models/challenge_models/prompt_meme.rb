@@ -45,11 +45,10 @@ class PromptMeme < ApplicationRecord
   before_destroy :clear_challenge_references
 
   def user_allowed_to_see_signups?(user)
-    return true
+    true
   end
 
   def user_allowed_to_see_claims?(user)
-    return true
+    user_allowed_to_see_assignments?(user)
   end
-
 end

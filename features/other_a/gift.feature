@@ -23,16 +23,16 @@ Feature: Create Gifts
 
   Scenario: Gifts page for recipient should show recipient's gifts
     When I give the work to "giftee1"
-      And I press "Post Without Preview"
+      And I press "Post"
       And I go to the gifts page for the recipient giftee1
     Then I should see "GiftStory1 by gifter for giftee1"
 
   Scenario: Gifts page for recipient when logged out should show recipient's gifts if visible to all
     When I give the work to "giftee1"
-      And I press "Post Without Preview"
+      And I press "Post"
       And I set up the draft "GiftStory2" as a gift to "giftee1"
       And I lock the work
-      And I press "Post Without Preview"
+      And I press "Post"
       And I log out
       And I go to the gifts page for the recipient giftee1
     Then I should see "GiftStory1 by gifter for giftee1"
@@ -40,16 +40,16 @@ Feature: Create Gifts
 
   Scenario: Gifts page for pseud recipient should show pseud's gifts
     Given I give the work to "g1"
-      And I press "Post Without Preview"
+      And I press "Post"
     When I go to the gifts page for the recipient g1
     Then I should see "GiftStory1 by gifter for g1"
 
   Scenario: Gifts page for recipient when logged out should show gifts visible to all
     When I give the work to "g1"
-      And I press "Post Without Preview"
+      And I press "Post"
       And I set up the draft "GiftStory2" as a gift to "g1"
       And I lock the work
-      And I press "Post Without Preview"
+      And I press "Post"
       And I log out
     When I go to the gifts page for the recipient g1
     Then I should see "GiftStory1 by gifter for g1"
@@ -57,7 +57,7 @@ Feature: Create Gifts
 
   Scenario: Giving a work as a gift when posting directly
     Given I give the work to "giftee1"
-    When I press "Post Without Preview"
+    When I press "Post"
     Then I should see "For giftee1"
       And "giftee1@foo.com" should be notified by email about their gift "GiftStory1"
 
@@ -81,15 +81,15 @@ Feature: Create Gifts
       And "giftee1@foo.com" should be notified by email about their gift "GiftStory1"
 
   Scenario: Edit an existing work to add a recipient, then post directly
-    Given I press "Post Without Preview"
+    Given I press "Post"
       And I follow "Edit"
       And I give the work to "giftee1"
-    When I press "Post Without Preview"
+    When I press "Post"
     Then I should see "For giftee1"
       And "giftee1@foo.com" should be notified by email about their gift "GiftStory1"
 
   Scenario: Edit an existing work to add a recipient, then post after previewing
-    Given I press "Post Without Preview"
+    Given I press "Post"
       And I follow "Edit"
       And I give the work to "giftee1"
     When I press "Preview"
@@ -105,10 +105,10 @@ Feature: Create Gifts
 
   Scenario: Give two gifts to the same recipient
     Given I give the work to "giftee1"
-      And I press "Post Without Preview"
+      And I press "Post"
       And I set up the draft "GiftStory2"
       And I give the work to "giftee1"
-    When I press "Post Without Preview"
+    When I press "Post"
       And I follow "giftee1"
     Then I should see "Gifts for giftee1"
       And I should see "GiftStory1"
@@ -116,13 +116,13 @@ Feature: Create Gifts
 
   Scenario: Add another recipient to a posted gift
     Given I give the work to "giftee1"
-      And I press "Post Without Preview"
+      And I press "Post"
       And I should see "For giftee1"
       And "giftee1@foo.com" should be notified by email about their gift "GiftStory1"
       And all emails have been delivered
       And I follow "Edit"
       And I give the work to "giftee1, giftee2"
-    When I press "Post Without Preview"
+    When I press "Post"
     Then I should see "For giftee1, giftee2"
       And 0 emails should be delivered to "giftee1@foo.com"
       And "giftee2@foo.com" should be notified by email about their gift "GiftStory1"
@@ -134,21 +134,21 @@ Feature: Create Gifts
       And 0 emails should be delivered to "giftee1@foo.com"
       And I press "Edit"
       And I give the work to "giftee1, giftee2"
-    When I press "Post Without Preview"
+    When I press "Post"
     Then I should see "For giftee1, giftee2"
       And "giftee1@foo.com" should be notified by email about their gift "GiftStory1"
       And "giftee2@foo.com" should be notified by email about their gift "GiftStory1"
 
   Scenario: Add two recipients, post, then remove one
     Given I give the work to "giftee1, giftee2"
-      And I press "Post Without Preview"
+      And I press "Post"
       And I should see "For giftee1, giftee2"
       And "giftee1@foo.com" should be notified by email about their gift "GiftStory1"
       And "giftee2@foo.com" should be notified by email about their gift "GiftStory1"
       And all emails have been delivered
       And I follow "Edit"
       And I give the work to "giftee1"
-    When I press "Post Without Preview"
+    When I press "Post"
     Then I should see "For giftee1"
       And I should not see "giftee2"
       And 0 emails should be delivered to "giftee1@foo.com"
@@ -161,7 +161,7 @@ Feature: Create Gifts
       And 0 emails should be delivered
       And I press "Edit"
       And I give the work to "giftee1"
-    When I press "Post Without Preview"
+    When I press "Post"
     Then I should see "For giftee1"
       And I should not see "giftee2"
       And "giftee1@foo.com" should be notified by email about their gift "GiftStory1"
@@ -169,13 +169,13 @@ Feature: Create Gifts
 
   Scenario: Edit a posted work to replace one recipient with another
     Given I give the work to "giftee1"
-      And I press "Post Without Preview"
+      And I press "Post"
       And I should see "For giftee1"
       And "giftee1@foo.com" should be notified by email about their gift "GiftStory1"
       And all emails have been delivered
       And I follow "Edit"
       And I give the work to "giftee2"
-    When I press "Post Without Preview"
+    When I press "Post"
     Then I should see "For giftee2"
       And I should not see "giftee1"
       And 0 emails should be delivered to "giftee1@foo.com"
@@ -188,7 +188,7 @@ Feature: Create Gifts
       And 0 emails should be delivered
       And I press "Edit"
       And I give the work to "giftee2"
-    When I press "Post Without Preview"
+    When I press "Post"
     Then I should see "For giftee2"
       And I should not see "giftee1"
       And 0 emails should be delivered to "giftee1@foo.com"
@@ -202,17 +202,17 @@ Feature: Create Gifts
       And the email should contain "The user gifter has invited your pseud gifter2 to be listed as a co-creator on the following work"
       And the email should not contain "translation missing"
     When all emails have been delivered
-      And the user "gifter2" accepts all co-creator invites
+      And the user "gifter2" accepts all co-creator requests
       And I press "Post"
     Then 1 email should be delivered to "giftee1"
       And the email should link to gifter's user url
       And the email should not contain "&lt;a href=&quot;http://archiveofourown.org/users/gifter/pseuds/gifter&quot;"
-      And the email should link to gifter2's user url 
+      And the email should link to gifter2's user url
       And the email should not contain "&lt;a href=&quot;http://archiveofourown.org/users/gifter2/pseuds/gifter2&quot;"
 
   Scenario: A gift work should have an associations list
     Given I give the work to "associate"
-    When I press "Post Without Preview"
+    When I press "Post"
     Then I should find a list for associations
       And I should see "For associate"
 
@@ -231,7 +231,7 @@ Feature: Create Gifts
     Then I should see "You cannot give a gift to the same user twice."
       And I should not see "For associate, associate2"
       And 0 emails should be delivered to "associate@foo.com"
-      
+
   Scenario: A user should be able to refuse a gift
     Given I have given the work to "associate"
       And I am logged in as "someone_else"
@@ -252,7 +252,7 @@ Feature: Create Gifts
     When I view the work "GiftStory1"
     Then I should not see "For associate"
       And I should not see "For ."
-        
+
   Scenario: A user should be able to re-accept a gift
     Given I have refused the work
       And I am on my gifts page
@@ -288,8 +288,8 @@ Feature: Create Gifts
     When I am logged in as "gifter" with password "something"
       And I post the work "QuietGift" as a gift for "giftee1, giftee2"
     Then 0 emails should be delivered to "giftee1@foo.com"
-      And "giftee2@foo.com" should be notified by email about their gift "QuietGift" 
- 
+      And "giftee2@foo.com" should be notified by email about their gift "QuietGift"
+
   Scenario: Opt to disable notifications, then receive a gift posted to a non-hidden collection
     Given I am logged in as "giftee1" with password "something"
       And I set my preferences to turn off notification emails for gifts
@@ -297,8 +297,8 @@ Feature: Create Gifts
     When I am logged in as "gifter" with password "something"
       And I post the work "QuietGift" in the collection "Open Skies" as a gift for "giftee1, giftee2"
     Then 0 emails should be delivered to "giftee1@foo.com"
-      And "giftee2@foo.com" should be notified by email about their gift "QuietGift" 
- 
+      And "giftee2@foo.com" should be notified by email about their gift "QuietGift"
+
   Scenario: Opt to disable notifications, then receive a gift posted to a hidden collection and later revealed
     Given I am logged in as "giftee1" with password "something"
       And I set my preferences to turn off notification emails for gifts
@@ -307,5 +307,4 @@ Feature: Create Gifts
       And I post the work "QuietGift" in the collection "Hidden Treasures" as a gift for "giftee1, giftee2"
       And I reveal works for "Hidden Treasures"
     Then 0 emails should be delivered to "giftee1@foo.com"
-      And "giftee2@foo.com" should be notified by email about their gift "QuietGift" 
-  
+      And "giftee2@foo.com" should be notified by email about their gift "QuietGift"

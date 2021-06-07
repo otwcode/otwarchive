@@ -19,7 +19,7 @@ module WorksHelper
     if (bookmark_count = work.public_bookmarks_count) > 0
       list.concat([[ts('Bookmarks:'), 'bookmarks', link_to(bookmark_count.to_s, work_bookmarks_path(work))]])
     end
-    list.concat([[ts('Hits:'), 'hits', work.hits]]) if show_hit_count?(work)
+    list.concat([[ts('Hits:'), 'hits', work.hits]])
 
     if work.chaptered? && work.revised_at
       prefix = work.is_wip ? ts('Updated:') : ts('Completed:')
@@ -28,17 +28,6 @@ module WorksHelper
     end
     list = list.map { |list_item| content_tag(:dt, list_item.first, class: list_item.second) + content_tag(:dd, list_item.last.to_s, class: list_item.second) }.join.html_safe
     content_tag(:dl, list.to_s, class: 'stats').html_safe
-  end
-
-  def show_hit_count?(work)
-    return false if logged_in? && current_user.preference.try(:hide_all_hit_counts)
-    author_wants_to_see_hits = is_author_of?(work) && !current_user.preference.try(:hide_private_hit_count)
-    all_authors_want_public_hits = work.users.select { |u| u.preference.try(:hide_public_hit_count) }.empty?
-    author_wants_to_see_hits || (!is_author_of?(work) && all_authors_want_public_hits)
-  end
-
-  def show_hit_count_to_public?(work)
-    !Preference.where(user_id: work.pseuds.pluck(:user_id), hide_public_hit_count: true).exists?
   end
 
   def recipients_link(work)
@@ -73,15 +62,14 @@ module WorksHelper
     end
   end
 
-  # Passes value of series ID back to form when an error occurs on posting.
-  # Thanks to the way that series_attributes= is defined, series are saved
-  # and added to the work even before the work is saved. The only time that the
-  # series isn't added is when the work is a new record, and therefore the
-  # SerialWork can't be created.
-  def work_series_id(work)
-    if work.new_record? && (series = work.series.first)
-      series.id
-    end
+  # Determines whether or not "manage series" dropdown should appear
+  def check_series_box(work)
+    work.series.present? || work_series_value(:id).present? || work_series_value(:title).present?
+  end
+
+  # Passes value of fields for work series back to form when an error occurs on posting
+  def work_series_value(field)
+    params.dig :work, :series_attributes, field
   end
 
   def language_link(work)
@@ -196,5 +184,20 @@ module WorksHelper
 
   def sorted_languages
     Language.default_order
+  end
+
+  # For works that are more than 1 chapter, returns "current #/expected #" of chapters
+  # (e.g. 3/5, 2/?), with the current # linked to that chapter. If the work is 1 chapter,
+  # returns the un-linked version.
+  def chapter_total_display_with_link(work)
+    total_posted_chapters = work.number_of_posted_chapters
+    if total_posted_chapters > 1
+      link_to(total_posted_chapters.to_s,
+              work_chapter_path(work, work.last_posted_chapter.id)) +
+        "/" +
+        work.wip_length.to_s
+    else
+      work.chapter_total_display
+    end
   end
 end

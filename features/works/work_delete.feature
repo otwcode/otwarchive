@@ -13,6 +13,17 @@ Feature: Delete Works
     When I go to newbie's user page
     Then I should not see "All Hell Breaks Loose"
 
+  Scenario: Deleting a work with escapable characters in title
+    Given I am logged in as "newbie"
+      And I post the work "All Hell <b>Breaks</b> Loose"
+    When I delete the work "All Hell <b>Breaks</b> Loose"
+    Then I should see "Your work All Hell <b>Breaks</b> Loose was deleted."
+      And "newbie" should be notified by email about the deletion of "All Hell &lt;b&gt;Breaks&lt;/b&gt; Loose"
+    When I go to the works page
+    Then I should not see "All Hell <b>Breaks</b> Loose"
+    When I go to newbie's user page
+    Then I should not see "All Hell <b>Breaks</b> Loose"
+
   Scenario: Deleting minimally valid work when you have more than one pseud
     Given basic tags
       And I am logged in as "newbie"
@@ -53,6 +64,7 @@ Feature: Delete Works
       And all emails have been delivered
       And I select "Not Rated" from "Rating"
       And I check "No Archive Warnings Apply"
+      And I select "English" from "Choose a language"
       And I check "F/M"
       And I fill in "Fandoms" with "Supernatural"
       And I fill in "Work Title" with "All Something Breaks Loose"
@@ -87,7 +99,7 @@ Feature: Delete Works
       And I should see "No Archive Warnings Apply"
       And I should not see "Choose Not To Use Archive Warnings"
       And I should see "Category: F/M"
-      And I should see "Characters: Sam Winchester, Dean Winchester"
+      And I should see "Characters: Sam WinchesterDean Winchester"
       And I should see "Relationship: Harry/Ginny"
       And I should see "For Someone else, recipient"
       And I should see "Collections: Collection 1, Collection 2"
@@ -102,7 +114,7 @@ Feature: Delete Works
       And I should see "Pseud2" within ".byline"
       And I should see "Pseud3" within ".byline"
       But I should not see "coauthor" within ".byline"
-    When the user "coauthor" accepts all creator invitations
+    When the user "coauthor" accepts all co-creator requests
       And I view the work "All Something Breaks Loose"
     Then I should see "coauthor" within ".byline"
     When I follow "Add Chapter"
@@ -137,7 +149,7 @@ Feature: Delete Works
       And I should see "Pseud3" within ".byline"
       But I should not see "cosomeone" within ".byline"
       And 1 email should be delivered to "cosomeone@example.org"
-    When the user "cosomeone" accepts all creator invites
+    When the user "cosomeone" accepts all co-creator requests
       And I view the work "All Something Breaks Loose"
     Then I should see "cosomeone" within ".byline"
     When all emails have been delivered
@@ -155,7 +167,8 @@ Feature: Delete Works
       And I fill in "Notes" with "My thoughts on the work"
       And I press "Create"
     Then I should see "Bookmark was successfully created"
-    When I go to the bookmarks page
+    When all indexing jobs have been run
+      And I go to the bookmarks page
     Then I should see "All Something Breaks Loose"
     When I am logged in as "thorough"
       And I go to giftee's user page
@@ -171,8 +184,8 @@ Feature: Delete Works
     When I go to thorough's user page
     Then I should not see "All Something Breaks Loose"
     # This is correct behaviour - bookmark details are preserved even though the work is gone
-    Then all indexing jobs have been run
-    Then I go to the bookmarks page
+    When all indexing jobs have been run
+      And I go to the bookmarks page
     Then I should not see "All Something Breaks Loose"
     When I go to someone_else's bookmarks page
     Then I should not see "All Something Breaks Loose"
