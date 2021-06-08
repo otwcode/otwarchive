@@ -740,6 +740,70 @@ namespace :After do
     WorkIndexer.create_mapping
   end
 
+  desc "Fix works imported with a noncanonical Teen & Up Audiences rating tag"
+  task(fix_teen_and_up_imported_rating: :environment) do
+    borked_rating_tag = Rating.find_by!(name: "Teen & Up Audiences")
+    canonical_rating_tag = Rating.find_by!(name: ArchiveConfig.RATING_TEEN_TAG_NAME)
+
+    works_using_tag = borked_rating_tag.works
+    works_using_tag.each do |work|
+      work.ratings << canonical_rating_tag
+      work.ratings = work.ratings - [borked_rating_tag]
+      work.save!
+      # do we need to trigger reindexing?
+    end
+
+    if borked_rating_tag.works.count == 0
+      borked_rating_tag.destroy!
+    end
+  end
+
+  desc "Clean up noncanonical rating tags"
+  task(clean_up_noncanonical_ratings: :environment) do
+    canonical_ratings = ["Not Rated", "Explicit", "Mature", "Teen And Up Audiences", "General Audiences"]
+    canonical_not_rated_tag = Rating.find_by!(name: ArchiveConfig.RATING_DEFAULT_TAG_NAME)
+
+    noncanonical_ratings = Rating.where.not(name: canonical_ratings)
+    puts "There are #{noncanonical_ratings.size} noncanonical rating tags."
+
+    if noncanonical_ratings.size > 0
+      puts "The following noncanonical Ratings will be changed into Additional Tags:"
+      puts noncanonical_ratings.map(&:name).join("\n")
+    end
+
+    work_ids = []
+    noncanonical_ratings.each do |tag|
+      works_using_tag = tag.works
+
+      tag.update_column(:type, "Freeform")
+
+      works_using_tag.each do |work|
+        if work.ratings.empty?
+          work_ids << work.id
+          work.ratings = [canonical_not_rated_tag]
+          work.save!
+        end
+      end
+    end
+
+    if work_ids.size > 0
+      puts "The following works were left without a rating and received the Not Rated rating:"
+      puts work_ids.join(", ")
+    end
+
+    STDOUT.flush
+  end
+
+  desc "Clean up noncanonical category tags"
+  task(clean_up_noncanonical_categories: :environment) do
+    canonical_categories = %w[Gen M/M F/F F/M Multi Other]
+    Category.where.not(name: canonical_categories).each do |tag|
+      tag.update_column(:type, "Freeform")
+      puts "Noncanonical Category tag #{tag.name} was changed into an Additional Tag."
+    end
+    STDOUT.flush
+  end
+
   # This is the end that you have to put new tasks above.
 end
 
