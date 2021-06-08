@@ -759,7 +759,7 @@ namespace :After do
     noncanonical_ratings = Rating.where(canonical: false)
     puts "There are #{noncanonical_ratings.size} noncanonical rating tags."
 
-    if !noncanonical_ratings.empty?
+    unless noncanonical_ratings.empty?
       puts "The following noncanonical Ratings will be changed into Additional Tags:"
       puts noncanonical_ratings.map(&:name).join("\n")
     end
@@ -779,7 +779,7 @@ namespace :After do
       end
     end
 
-    if !work_ids.empty?
+    unless work_ids.empty?
       puts "The following works were left without a rating and received the Not Rated rating:"
       puts work_ids.join(", ")
     end
