@@ -156,7 +156,7 @@ end
 
 describe "rake After:fix_teen_and_up_imported_rating" do
   let(:noncanonical_teen_rating) { Rating.create(name: "Teen & Up Audiences") }
-  let(:canonical_gen_rating) { Rating.find_or_create_by(name: ArchiveConfig.RATING_GENERAL_TAG_NAME)}
+  let(:canonical_gen_rating) { Rating.find_or_create_by(name: ArchiveConfig.RATING_GENERAL_TAG_NAME) }
   let!(:canonical_teen_rating) { Rating.find_or_create_by(name: ArchiveConfig.RATING_TEEN_TAG_NAME) }
   let(:work_with_noncanonical_rating) { create(:work) }
   let(:work_with_canonical_and_noncanonical_ratings) { create(:work) }
