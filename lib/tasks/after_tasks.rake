@@ -768,7 +768,7 @@ namespace :After do
     noncanonical_ratings.each do |tag|
       works_using_tag = tag.works
 
-      tag.update_column(:type, "Freeform")
+      tag.update_attribute(:type, "Freeform")
 
       works_using_tag.each do |work|
         next unless work.ratings.empty?
@@ -790,7 +790,7 @@ namespace :After do
   desc "Clean up noncanonical category tags"
   task(clean_up_noncanonical_categories: :environment) do
     Category.where(canonical: false).each do |tag|
-      tag.update_column(:type, "Freeform")
+      tag.update_attribute(:type, "Freeform")
       puts "Noncanonical Category tag #{tag.name} was changed into an Additional Tag."
     end
     STDOUT.flush
