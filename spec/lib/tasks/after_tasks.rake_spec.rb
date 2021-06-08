@@ -155,9 +155,9 @@ describe "rake After:replace_dewplayer_embeds" do
 end
 
 describe "rake After:fix_teen_and_up_imported_rating" do
-  let(:noncanonical_teen_rating) { Rating.create(name: "Teen & Up Audiences") }
-  let(:canonical_gen_rating) { Rating.find_or_create_by(name: ArchiveConfig.RATING_GENERAL_TAG_NAME) }
-  let!(:canonical_teen_rating) { Rating.find_or_create_by(name: ArchiveConfig.RATING_TEEN_TAG_NAME) }
+  let(:noncanonical_teen_rating) { Rating.create(name: "Teen & Up Audiences", canonical: false) }
+  let(:canonical_gen_rating) { Rating.find_or_create_by(name: ArchiveConfig.RATING_GENERAL_TAG_NAME, canonical: true) }
+  let!(:canonical_teen_rating) { Rating.find_or_create_by(name: ArchiveConfig.RATING_TEEN_TAG_NAME, canonical: true) }
   let(:work_with_noncanonical_rating) { create(:work) }
   let(:work_with_canonical_and_noncanonical_ratings) { create(:work) }
 
@@ -182,7 +182,7 @@ end
 describe "rake After:clean_up_noncanonical_ratings" do
   let(:noncanonical_rating) { Rating.create(name: "Borked rating tag", canonical: false) }
   let(:canonical_teen_rating) { Rating.create(name: ArchiveConfig.RATING_TEEN_TAG_NAME, canonical: true) }
-  let(:default_rating) { Rating.create(name: ArchiveConfig.RATING_DEFAULT_TAG_NAME, canonical: true) }
+  let!(:default_rating) { Rating.create(name: ArchiveConfig.RATING_DEFAULT_TAG_NAME, canonical: true) }
   let(:work_with_noncanonical_rating) { create(:work) }
   let(:work_with_canonical_and_noncanonical_ratings) { create(:work) }
 
