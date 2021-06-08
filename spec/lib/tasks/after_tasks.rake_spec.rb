@@ -177,12 +177,6 @@ describe "rake After:fix_teen_and_up_imported_rating" do
     expect(work_with_noncanonical_rating.ratings.to_a).to eql([canonical_teen_rating])
     expect(work_with_canonical_and_noncanonical_ratings.ratings.to_a).to match_array([canonical_teen_rating, canonical_gen_rating])
   end
-
-  it "destroys the noncanonical rating if no works are using it" do
-    subject.invoke
-
-    expect(Tag.exists?(name: "Teen & Up Audiences")).to eql(false)
-  end
 end
 
 describe "rake After:clean_up_noncanonical_ratings" do
