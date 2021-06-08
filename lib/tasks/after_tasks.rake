@@ -755,10 +755,8 @@ namespace :After do
 
   desc "Clean up noncanonical rating tags"
   task(clean_up_noncanonical_ratings: :environment) do
-    canonical_ratings = ["Not Rated", "Explicit", "Mature", "Teen And Up Audiences", "General Audiences"]
     canonical_not_rated_tag = Rating.find_by!(name: ArchiveConfig.RATING_DEFAULT_TAG_NAME)
-
-    noncanonical_ratings = Rating.where.not(name: canonical_ratings)
+    noncanonical_ratings = Rating.where(canonical: false)
     puts "There are #{noncanonical_ratings.size} noncanonical rating tags."
 
     if noncanonical_ratings.size > 0
