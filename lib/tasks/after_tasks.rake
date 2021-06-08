@@ -791,8 +791,7 @@ namespace :After do
 
   desc "Clean up noncanonical category tags"
   task(clean_up_noncanonical_categories: :environment) do
-    canonical_categories = %w[Gen M/M F/F F/M Multi Other]
-    Category.where.not(name: canonical_categories).each do |tag|
+    Category.where(canonical: false).each do |tag|
       tag.update_column(:type, "Freeform")
       puts "Noncanonical Category tag #{tag.name} was changed into an Additional Tag."
     end

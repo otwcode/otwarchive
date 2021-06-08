@@ -180,9 +180,9 @@ describe "rake After:fix_teen_and_up_imported_rating" do
 end
 
 describe "rake After:clean_up_noncanonical_ratings" do
-  let(:noncanonical_rating) { Rating.create(name: "Borked rating tag") }
-  let(:canonical_teen_rating) { Rating.find_or_create_by(name: ArchiveConfig.RATING_TEEN_TAG_NAME) }
-  let!(:default_rating) { Rating.find_or_create_by(name: ArchiveConfig.RATING_DEFAULT_TAG_NAME) }
+  let(:noncanonical_rating) { Rating.create(name: "Borked rating tag", canonical: false) }
+  let(:canonical_teen_rating) { Rating.find_or_create_by(name: ArchiveConfig.RATING_TEEN_TAG_NAME, canonical: true) }
+  let!(:default_rating) { Rating.find_or_create_by(name: ArchiveConfig.RATING_DEFAULT_TAG_NAME, canonical: true) }
   let(:work_with_noncanonical_rating) { create(:work) }
   let(:work_with_canonical_and_noncanonical_ratings) { create(:work) }
 
@@ -214,8 +214,8 @@ describe "rake After:clean_up_noncanonical_ratings" do
 end
 
 describe "rake After:clean_up_noncanonical_categories" do
-  let(:noncanonical_category_tag) { Category.create(name: "Borked category tag") }
-  let(:canonical_category_tag) { Category.find_or_create_by(name: ArchiveConfig.CATEGORY_GEN_TAG_NAME) }
+  let(:noncanonical_category_tag) { Category.create(name: "Borked category tag", canonical: false) }
+  let(:canonical_category_tag) { Category.find_or_create_by(name: ArchiveConfig.CATEGORY_GEN_TAG_NAME, canonical: true) }
   let(:work_with_noncanonical_categ) { create(:work) }
   let(:work_with_canonical_and_noncanonical_categs) { create(:work) }
 
