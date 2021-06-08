@@ -750,11 +750,6 @@ namespace :After do
       work.ratings << canonical_rating_tag
       work.ratings = work.ratings - [borked_rating_tag]
       work.save!
-      # do we need to trigger reindexing?
-    end
-
-    if borked_rating_tag.works.count == 0
-      borked_rating_tag.destroy!
     end
   end
 
