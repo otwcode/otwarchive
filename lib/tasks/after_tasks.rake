@@ -742,7 +742,7 @@ namespace :After do
 
   desc "Add default rating to works missing a rating"
   task(add_default_rating_to_works: :environment) do
-    work_count = Work.all.size
+    work_count = Work.count
     total_batches = (work_count + 999) / 1000
     puts("Checking #{work_count} works in #{total_batches} batches") && STDOUT.flush
     batch_number = 0
@@ -752,9 +752,9 @@ namespace :After do
       batch_number += 1
       
       batch.each do |work|
-        next if work.rating_string.present?
+        next unless work.ratings.empty?
 
-        work.rating_string = ArchiveConfig.RATING_DEFAULT_TAG_NAME
+        work.ratings << Rating.find_by!(name: ArchiveConfig.RATING_DEFAULT_TAG_NAME)
         work.save
         updated_works << work.id
       end

@@ -155,7 +155,7 @@ describe "rake After:replace_dewplayer_embeds" do
 end
 
 describe "rake After:add_default_rating_to_works" do
-  context "for a work missing rating" do 
+  context "for a work missing rating" do
     let(:work) { create(:work, rating_string: ArchiveConfig.RATING_EXPLICIT_TAG_NAME) }
 
     before do
