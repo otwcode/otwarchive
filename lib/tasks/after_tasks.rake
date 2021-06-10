@@ -774,10 +774,11 @@ namespace :After do
     end
 
     work_ids = []
+    invalid_works = []
     noncanonical_ratings.each do |tag|
       works_using_tag = tag.works
       tag.update_attribute(:type, "Freeform")
-      invalid_works = []
+
       works_using_tag.each do |work|
         next unless work.ratings.empty?
 
