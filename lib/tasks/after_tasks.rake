@@ -744,13 +744,22 @@ namespace :After do
   task(fix_teen_and_up_imported_rating: :environment) do
     borked_rating_tag = Rating.find_by!(name: "Teen & Up Audiences")
     canonical_rating_tag = Rating.find_by!(name: ArchiveConfig.RATING_TEEN_TAG_NAME)
-
     works_using_tag = borked_rating_tag.works
+    invalid_works = []
     works_using_tag.each do |work|
       work.ratings << canonical_rating_tag
       work.ratings = work.ratings - [borked_rating_tag]
-      work.save!
+      invalid_works << work.id if work.save == false
     end
+
+    unless invalid_works.empty?
+      puts "The following works failed validations and could not be saved:"
+      puts invalid_works.join(", ")
+      STDOUT.flush
+    end
+
+    puts "Converted #{borked_rating_tag.name} rating tag on #{works_using_tag.size - invalid_works.size} works"
+    STDOUT.flush
   end
 
   desc "Clean up noncanonical rating tags"
@@ -767,24 +776,28 @@ namespace :After do
     work_ids = []
     noncanonical_ratings.each do |tag|
       works_using_tag = tag.works
-
       tag.update_attribute(:type, "Freeform")
-
+      invalid_works = []
       works_using_tag.each do |work|
         next unless work.ratings.empty?
 
         work_ids << work.id
         work.ratings = [canonical_not_rated_tag]
-        work.save!
+        invalid_works << work.id if work.save == false
       end
     end
 
     unless work_ids.empty?
       puts "The following works were left without a rating and received the Not Rated rating:"
       puts work_ids.join(", ")
+      STDOUT.flush
     end
 
-    STDOUT.flush
+    unless invalid_works.empty?
+      puts "The following works failed validations and could not be saved:"
+      puts invalid_works.join(", ")
+      STDOUT.flush
+    end
   end
 
   desc "Clean up noncanonical category tags"
