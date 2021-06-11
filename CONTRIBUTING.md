@@ -32,7 +32,14 @@ Please [contact the AO3 Support team](https://archiveofourown.org/support).
 
 **We only accept pull requests for issues we have already added to [Jira](https://otwarchive.atlassian.net)**,
 with the exception of spelling corrections and documentation improvements
-(e.g. any Markdown files).
+(e.g. any Markdown files). 
+
+If you'd like the ability to comment on, assign, and transition issues, 
+you're welcome to create a Jira account! (It makes things a bit easier for us
+on the organizational side if the Full Name on your Jira account either closely
+matches the name you'd like us to credit in the release notes or includes it in
+parentheses, e.g. "Nickname (CREDIT NAME).") We'll give you permissions when
+you create your first pull request.
 
 Please check out our development wiki for more information on:
 

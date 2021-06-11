@@ -6,7 +6,7 @@ gem 'test-unit', '~> 3.2'
 
 gem 'bundler'
 
-gem "rails", "~> 5.2.5"
+gem "rails", "~> 5.2"
 gem "rack", "~> 2.1", ">= 2.1.4"
 gem "sprockets", "< 4"
 
@@ -62,7 +62,7 @@ gem 'resque-scheduler'
 gem 'after_commit_everywhere'
 #gem 'daemon-spawn', require: 'daemon_spawn'
 gem 'elasticsearch', '6.8.0'
-gem 'aws-sdk'
+gem "aws-sdk-s3"
 gem 'css_parser'
 
 gem "terrapin"
@@ -147,8 +147,8 @@ group :test do
   gem 'timecop'
   gem 'cucumber-timecop', require: false
   # Code coverage
-  gem 'simplecov', '~> 0.14.0'
-  gem "codecov", "~> 0.2.0", require: false
+  gem "simplecov"
+  gem "codecov", require: false
   gem 'email_spec', '1.6.0'
 end
 

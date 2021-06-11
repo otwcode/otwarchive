@@ -123,10 +123,18 @@ Then /^I should see (a|an) "([^"]*)" button(?: within "([^"]*)")?$/ do |_article
   end
 end
 
+Then /^I should see a button with text "([^"]*)"$/ do |text|
+  page.should have_xpath("//input[@value='#{text}']")
+end
+
 Then /^I should not see (a|an) "([^"]*)" button(?: within "([^"]*)")?$/ do |_article, text, selector|
   with_scope(selector) do
     page.should_not have_xpath("//input[@value='#{text}']")
   end
+end
+
+Then /^I should not see a button with text "([^"]*)"$/ do |text|
+  page.should_not have_xpath("//input[@value='#{text}']")
 end
 
 When /^"([^\"]*)" is fixed$/ do |what|
