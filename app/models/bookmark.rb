@@ -16,9 +16,7 @@ class Bookmark < ApplicationRecord
   def not_already_bookmarked_by_user
     return unless self.pseud && self.bookmarkable
 
-    bookmarks = Bookmark.join_bookmarkable.where(bookmarkable_id: self.bookmarkable_id)
-    bookmarkers = bookmarks.pluck(:pseud_id)
-    return unless Pseud.where(id: bookmarkers, user_id: self.pseud.user_id).exists?
+    return if self.pseud.user.bookmarks.where(bookmarkable: self.bookmarkable).empty?
 
     errors.add(:base, ts("You have already bookmarked that."))
   end
