@@ -1,14 +1,21 @@
 require "spec_helper"
 
 describe "Rack::Attack" do
+  around do |example|
+    default_store = Rack::Attack.cache.store
+    Rack::Attack.cache.store = ActiveSupport::Cache::MemoryStore.new
+    example.run
+    Rack::Attack.cache.store = default_store
+  end
+
   before { freeze_time }
 
   def unique_ip_env
-    { "REMOTE_ADDR" => Faker::Internet.unique.ip_v4_address }
+    { "REMOTE_ADDR" => Faker::Internet.unique.public_ip_v4_address }
   end
 
   def unique_user_params
-    { user: { login: Faker::Name.unique.first_name, password: "secret" } }
+    { user: { login: generate(:login), password: "secret" } }
   end
 
   it "test utility returns valid parameters for successful user login attempts" do
