@@ -1062,14 +1062,6 @@ class Work < ApplicationRecord
 
   scope :owned_by, lambda {|user| select("DISTINCT works.*").joins({pseuds: :user}).where('users.id = ?', user.id)}
 
-  # Note: these scopes DO include the works in the children of the specified collection
-  scope :in_collection, lambda {|collection|
-    select("DISTINCT works.*").
-        joins(:collection_items).
-        where('collection_items.collection_id IN (?) AND collection_items.user_approval_status = ? AND collection_items.collection_approval_status = ?',
-              [collection.id] + collection.children.collect(&:id), CollectionItem::APPROVED, CollectionItem::APPROVED)
-  }
-
   def self.in_series(series)
     joins(:series).
     where("series.id = ?", series.id)

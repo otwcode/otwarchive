@@ -54,13 +54,13 @@ class Collection < ApplicationRecord
 
   has_many :collection_items, dependent: :destroy
   accepts_nested_attributes_for :collection_items, allow_destroy: true
-  has_many :approved_collection_items, -> { where('collection_items.user_approval_status = ? AND collection_items.collection_approval_status = ?', CollectionItem::APPROVED, CollectionItem::APPROVED) }, class_name: "CollectionItem"
+  has_many :approved_collection_items, -> { approved_by_both }, class_name: "CollectionItem"
 
   has_many :works, through: :collection_items, source: :item, source_type: 'Work'
-  has_many :approved_works, -> { where('collection_items.user_approval_status = ? AND collection_items.collection_approval_status = ? AND works.posted = true', CollectionItem::APPROVED, CollectionItem::APPROVED) }, through: :collection_items, source: :item, source_type: 'Work'
+  has_many :approved_works, -> { posted }, through: :approved_collection_items, source: :item, source_type: "Work"
 
   has_many :bookmarks, through: :collection_items, source: :item, source_type: 'Bookmark'
-  has_many :approved_bookmarks, -> { where('collection_items.user_approval_status = ? AND collection_items.collection_approval_status = ?', CollectionItem::APPROVED, CollectionItem::APPROVED) }, through: :collection_items, source: :item, source_type: 'Bookmark'
+  has_many :approved_bookmarks, through: :approved_collection_items, source: :item, source_type: "Bookmark"
 
   has_many :collection_participants, dependent: :destroy
   accepts_nested_attributes_for :collection_participants, allow_destroy: true
@@ -281,8 +281,7 @@ class Collection < ApplicationRecord
   end
 
   def all_approved_works
-    work_ids = all_items.where(item_type: "Work", user_approval_status: CollectionItem::APPROVED,
-      collection_approval_status: CollectionItem::APPROVED).pluck(:item_id)
+    work_ids = all_items.approved_by_both.where(item_type: "Work").pluck(:item_id)
     Work.where(id: work_ids, posted: true)
   end
 
@@ -313,11 +312,7 @@ class Collection < ApplicationRecord
   # the current user. Excludes bookmarks of deleted works/series.
   def all_bookmarked_items_count
     # The set of all bookmarks in this collection and its children.
-    # Note that "approved_by_collection" forces the bookmarks to be approved
-    # both by the collection AND by the user.
-    bookmarks = Bookmark.is_public.joins(:collection_items).
-                merge(CollectionItem.approved_by_collection).
-                where(collection_items: { collection_id: children.ids + [id] })
+    bookmarks = Bookmark.is_public.in_collection(self)
 
     logged_in = User.current_user.present?
 
