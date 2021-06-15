@@ -314,17 +314,18 @@ LiveValidation.prototype = {
      */
     validate: function(){
       if(!this.element.disabled){
-		var isValid = this.doValidations();
-		if(isValid){
-			this.onValid();
-			return true;
-		}else {
-			this.onInvalid();
-			return false;
-		}
-	  }else{
-      return true;
-    }
+        var isValid = this.doValidations();
+        if (isValid) {
+          this.onValid();
+          enableSubmit();
+          return true;
+        } else {
+          this.onInvalid();
+          return false;
+        }
+      } else {
+        return true;
+      }
     },
 	
  /**
@@ -490,6 +491,10 @@ LiveValidationForm.prototype = {
    	  // AO3: don't freeze the form if the user has clicked on the 'cancel' button -elz, 3/2/09, Enigel 3/7/11
       var buttonClicked = document.activeElement || this.explicitOriginalTarget;  
       if (buttonClicked.name == 'cancel_button') ret = true;
+      else if (!ret) {
+        scrollToErrorIfFound();
+        enableSubmit();
+      }
       return ret;
     }
   },
@@ -898,4 +903,20 @@ var Validate = {
     	this.name = 'ValidationError';
     }
 
+}
+
+function scrollToErrorIfFound() {
+  var errorField = $j(".LV_invalid_field").first();
+  if (errorField.length !== 0) {
+    $j("html, body").animate({
+      scrollTop: errorField.offset().top
+    }, 1000);
+  }
+}
+
+// submit shouldn't be blocked if there are no errors
+function enableSubmit() {
+  if ($j(".LV_invalid_field").first().length === 0) {
+    $j.rails.enableFormElement($j("input[data-disable-with]"));
+  }
 }

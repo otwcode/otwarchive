@@ -632,6 +632,11 @@ class WorksController < ApplicationController
       redirect_to(edit_user_work_path(@user, @work)) && return
     end
 
+    # AO3-3498: since a work's word count is calculated in a before_save and the chapter is posted in an after_save, 
+    # work's word count needs to be updated with the chapter's word count after the chapter is posted
+    @work.set_word_count
+    @work.save
+
     if !@collection.nil? && @collection.moderated?
       redirect_to work_path(@work), notice: ts('Work was submitted to a moderated collection. It will show up in the collection once approved.')
     else
