@@ -207,9 +207,15 @@ Feature: Display autocomplete for tags
       And a canonical freeform "AU - Canon"
       And a canonical freeform "AU - Cats"
       And a canonical freeform "Science Fiction & Fantasy"
+      And a canonical freeform "日月"
+      And a canonical freeform "大小"
       And I go to the new work page
 
     When I enter "AU - Ca" in the "Additional Tags" autocomplete field
     Then I should see "AU - Canon" in the autocomplete
       And I should see "AU - Cats" in the autocomplete
       But I should not see "Science Fiction & Fantasy" in the autocomplete
+    When I enter "日" in the "Additional Tags" autocomplete field
+    Then I should see "日月" in the autocomplete
+      But I should not see "大小" in the autocomplete
+
