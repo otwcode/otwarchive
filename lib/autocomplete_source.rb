@@ -19,6 +19,7 @@ module AutocompleteSource
       # No need for special handling of "?" since it is not modified by transliteration
       result << (tl == "?" ? char : tl)
     end
+    result
   end
 
   # override to define any autocomplete prefix spaces where this object should live
