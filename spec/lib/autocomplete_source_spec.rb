@@ -57,7 +57,7 @@ shared_examples_for "an autocompleting tag" do
     let(:auto) { FactoryBot.create(:tag, name: "Àutobot2", type: tag_type) }
 
     describe "#autocomplete_search_string" do
-      it "is equal to its name" do
+      it "is equal to its transliterated name" do
         expect(auto.autocomplete_search_string).to eq(ActiveSupport::Inflector.transliterate(auto.name))
       end
     end
@@ -88,6 +88,43 @@ shared_examples_for "an autocompleting tag" do
         auto.remove_from_autocomplete
         ac = REDIS_AUTOCOMPLETE.zrange(autocomplete_cache_key, 0, -1)
         expect(ac).not_to include("#{ActiveSupport::Inflector.transliterate(auto.name.downcase)},,")
+      end
+    end
+  end
+
+  context "with non-Latin characters" do
+    let(:tag1) { FactoryBot.create(:tag, name: "日月", type: tag_type) }
+    let(:tag2) { FactoryBot.create(:tag, name: "大小àç?", type: tag_type) }
+
+    describe "#autocomplete_search_string" do
+      it "transliterates only Latin characters" do
+        expect(tag2.autocomplete_search_string).to eq("大小ac?")
+      end
+    end
+
+    describe "#add_to_autocomplete" do
+      it "adds itself to the autocomplete" do
+        tag1.add_to_autocomplete
+        tag2.add_to_autocomplete
+        ac = REDIS_AUTOCOMPLETE.zrange(autocomplete_cache_key, 0, -1)
+
+        (1..ac.length).each do |i|
+          search_string = tag1.name.slice(0, i)
+          expect(ac).to include(search_string.to_s)
+        end
+
+        expect(ac).to include("#{tag1.name},,")
+      end
+    end
+
+    describe "#remove_from_autocomplete" do
+      it "removes itself from the autocomplete" do
+        tag1.add_to_autocomplete
+        tag1.remove_from_autocomplete
+        tag2.add_to_autocomplete
+        ac = REDIS_AUTOCOMPLETE.zrange(autocomplete_cache_key, 0, -1)
+        expect(ac).not_to include("#{tag1.name},,")
+        expect(ac).to include("大小ac?,,")
       end
     end
   end
