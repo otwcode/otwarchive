@@ -15,9 +15,10 @@ module AutocompleteSource
     result = ""
     input.to_s.each_char do |char|
       tl = ActiveSupport::Inflector.transliterate(char)
+      # Don't transliterate characters which are not supported (e.g. non-Latin characters).
+      # No need for special handling of "?" since it is not modified by transliteration
       result << (tl == "?" ? char : tl)
     end
-    return result
   end
 
   # override to define any autocomplete prefix spaces where this object should live
