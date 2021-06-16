@@ -267,6 +267,7 @@ describe BookmarksController do
         get :show, params: { id: bookmark }
         expect(response).to have_http_status(:success)
         expect(response.body).to include(chaptered_work.title)
+        expect(assigns(:work)).to eq(chaptered_work)
         expect(assigns(:bookmark)).to eq(bookmark)
       end
     end
