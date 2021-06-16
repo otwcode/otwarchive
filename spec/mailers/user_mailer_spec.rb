@@ -435,6 +435,7 @@ describe UserMailer do
 
   describe "invited_to_collection_notification" do
     subject(:email) { UserMailer.invited_to_collection_notification(other_user.id, work.id, collection.id).deliver }
+
     let(:collection) { create(:collection) }
     let(:other_user) { create(:user) }
     let(:work) { create(:work, authors: [other_user.default_pseud]) }
