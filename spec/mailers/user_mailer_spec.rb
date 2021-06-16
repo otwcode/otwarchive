@@ -434,11 +434,10 @@ describe UserMailer do
   end
 
   describe "invited_to_collection_notification" do
+    subject(:email) { UserMailer.invited_to_collection_notification(other_user.id, work.id, collection.id).deliver }
     let(:collection) { create(:collection) }
     let(:other_user) { create(:user) }
     let(:work) { create(:work, authors: [other_user.default_pseud]) }
-
-    subject(:email) { UserMailer.invited_to_collection_notification(other_user.id, work.id, collection.id).deliver }
 
     # Test the headers
     it_behaves_like "an email with a valid sender"
@@ -467,11 +466,11 @@ describe UserMailer do
   end
 
   describe "added_to_collection_notification" do
+    subject(:email) { UserMailer.added_to_collection_notification(other_user.id, work.id, collection.id).deliver }
+
     let(:collection) { create(:collection) }
     let(:other_user) { create(:user) }
     let(:work) { create(:work, authors: [other_user.default_pseud]) }
-
-    subject(:email) { UserMailer.added_to_collection_notification(other_user.id, work.id, collection.id).deliver }
 
     # Test the headers
     it_behaves_like "an email with a valid sender"
