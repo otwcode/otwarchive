@@ -1,7 +1,7 @@
 require "spec_helper"
 
 describe UserMailer do
-  describe "creatorship invitation" do
+  describe "creatorship_invitation" do
     title = Faker::Book.title
 
     subject(:email) { UserMailer.creatorship_invitation(work_creatorship.id, author.id).deliver }
