@@ -635,7 +635,6 @@ describe WorksController, work_search: true do
         get :collected, params: { user_id: collected_user.login }
         expect(assigns(:works)).to include(work, anonymous_work)
       end
-
     end
 
     context "with restricted works" do
