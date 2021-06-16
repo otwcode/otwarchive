@@ -7,9 +7,9 @@ describe WorksController do
   include RedirectExpectationHelper
 
   let(:user) { create(:user) }
-  let!(:work) { create(:work, authors: [user.default_pseud]) }
+  let(:work) { create(:work, authors: [user.default_pseud]) }
 
-  context "preview_tags" do
+  describe "preview_tags" do
     it "renders preview tags" do
       fake_login_known_user(user)
 

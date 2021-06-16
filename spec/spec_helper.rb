@@ -193,9 +193,3 @@ def suspend_resque_workers
   # Resume the original Resque.enqueue_to behavior.
   allow(Resque).to receive(:enqueue_to).and_call_original
 end
-
-def create_archivist
-  user = create(:user)
-  user.roles << Role.create(name: "archivist")
-  user
-end

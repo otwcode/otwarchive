@@ -28,46 +28,14 @@ Feature: Edit Multiple Works
       And I should see "Lovely"
 
   Scenario: I can edit multiple works at once
-  Given I am logged in as "author"
-    And I post the work "Glorious" with fandom "SGA"
-    And I post the work "Excellent" with fandom "Star Trek"
-    And I go to my works page
-  When I follow "Edit Works"
-  Then I should see "Edit Multiple Works"
-    And I should see "All"
-    And I should see "None"
-  When I select "Glorious" for editing
-    And I select "Excellent" for editing
-    And I press "Edit"
-  Then I should see "Your edits will be applied to all of the following works"
-    And I should see "Glorious"
-    And I should see "Excellent"
-  When I set the fandom to "Random"
-   And I press "Update All Works"
-  Then I should see "Your edits were put through"
-    And I should see "Random"
-    And I should not see "SGA"
-    And I should not see "Star Trek"
-  When I view the work "Glorious"
-  Then I should see "Random"
-    And I should not see "SGA"
-  When I view the work "Excellent"
-  Then I should see "Random"
-    And I should not see "Star Trek"
-
-  Scenario: I can edit multiple works at once using a pseud
-    Given "author" has the pseud "shadow"
-      And I am logged in as "author"
-      And I post the work "Glorious" with fandom "SGA" using the pseud "shadow"
-      And I post the work "Excellent" with fandom "Star Trek" using the pseud "shadow"
-      And I post the work "Pristine" with fandom "Naruto"
-      And I go to my "shadow" pseud page
+    Given I am logged in as "author"
+      And I post the work "Glorious" with fandom "SGA"
+      And I post the work "Excellent" with fandom "Star Trek"
+      And I go to my works page
     When I follow "Edit Works"
     Then I should see "Edit Multiple Works"
       And I should see "All"
       And I should see "None"
-      And I should not see "Pristine"
-      And I should not see "Naruto"
     When I select "Glorious" for editing
       And I select "Excellent" for editing
       And I press "Edit"

@@ -178,7 +178,7 @@ describe WorksController, work_search: true do
 
   describe "edit" do
     let(:user) { create(:user) }
-    let(:work) { create(:work, authors: [user.default_pseud], posted: true) }
+    let!(:work) { create(:work, authors: [user.default_pseud]) }
 
     before do
       fake_login_known_user(user)
@@ -190,9 +190,9 @@ describe WorksController, work_search: true do
     end
   end
 
-  context "destroy" do
+  describe "destroy" do
     let(:user) { create(:user) }
-    let!(:work) { create(:work, authors: [user.default_pseud], posted: true) }
+    let!(:work) { create(:work, authors: [user.default_pseud]) }
 
     before do
       fake_login_known_user(user)
@@ -203,8 +203,6 @@ describe WorksController, work_search: true do
 
       delete :destroy, params: { id: work }
       expect(flash[:error]).to eq("We couldn't delete that right now, sorry! Please try again later.")
-
-      allow_any_instance_of(Work).to receive(:destroy).and_call_original
     end
   end
 
@@ -249,13 +247,13 @@ describe WorksController, work_search: true do
         include "Invalid creator: Could not find a pseud *impossible*."
     end
 
-    xit "renders new if edit is pressed" do
+    it "renders new if edit is pressed" do
       work_attributes = attributes_for(:work)
       post :create, params: { work: work_attributes, edit_button: true }
       expect(response).to render_template("new")
     end
 
-    context "cancel button is pressed" do
+    context "with cancel_button params" do
       before do
         work_attributes = attributes_for(:work)
         post :create, params: { work: work_attributes, cancel_button: true }
@@ -342,9 +340,9 @@ describe WorksController, work_search: true do
     end
 
     it "redirects to tag page for noncanonical tags" do
-      unsorted_tag = create(:unsorted_tag)
-      get :index, params: { id: work, tag_id: unsorted_tag.name }
-      expect(response).to redirect_to(tag_path(unsorted_tag))
+      noncanonical_tag = create(:character_tag)
+      get :index, params: { id: work, tag_id: noncanonical_tag.name }
+      expect(response).to redirect_to(tag_path(noncanonical_tag))
     end
 
     it "redirects to tags works page for noncanonical merged tags page" do
@@ -404,8 +402,8 @@ describe WorksController, work_search: true do
 
       context "with a valid owner tag" do
         before do
-          fandom2 = create(:canonical_fandom)
-          work2 = create(:work, fandom_string: fandom2.name)
+          let!(:fandom2) { create(:canonical_fandom) }
+          let!(:work2) { create(:work, fandom_string: fandom2.name) }
           run_all_indexing_jobs
         end
 
@@ -420,7 +418,7 @@ describe WorksController, work_search: true do
           expect(assigns(:works).items).not_to include(work)
         end
 
-        context "when disabling filtering" do
+        context "when suspend_filter_counts is on" do
           before do
             allow(controller).to receive(:fetch_admin_settings).and_return(true)
             AdminSetting.first.update_attribute(:suspend_filter_counts, true)
@@ -638,23 +636,6 @@ describe WorksController, work_search: true do
         expect(assigns(:works)).to include(work, anonymous_work)
       end
 
-      context "when filtering is disabled" do
-        before do
-          allow(controller).to receive(:fetch_admin_settings).and_return(true)
-          admin_settings = AdminSetting.new(disable_filtering: true)
-          controller.instance_variable_set("@admin_settings", admin_settings)
-        end
-
-        after do
-          allow(controller).to receive(:fetch_admin_settings).and_call_original
-        end
-
-        xit "should show results" do
-          get :collected, params: { user_id: collected_user.login, work_search: { query: "fandom_ids:#{collected_fandom.id}" } }
-          expect(assigns(:works)).to include(@unrestricted_work_2_in_collection)
-          expect(assigns(:works)).to include(@unrestricted_work_in_collection)
-        end
-      end
     end
 
     context "with restricted works" do
