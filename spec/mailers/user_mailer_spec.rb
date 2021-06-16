@@ -25,7 +25,7 @@ describe UserMailer do
     describe "HTML version" do
       it "has the correct content" do
         expect(email).to have_html_part_content("to be listed as a co-creator")
-        expect(email).to have_html_part_content("You can accept or reject this request on your CoCreator Requests page.")
+        expect(email).to have_html_part_content("You can accept or reject this request on your Co-Creator Requests page.")
       end
     end
 
