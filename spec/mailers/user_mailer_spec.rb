@@ -1,10 +1,10 @@
 require "spec_helper"
 
 describe UserMailer do
-  describe "creatorship_invitation" do
+  describe "creatorship_request" do
     title = Faker::Book.title
 
-    subject(:email) { UserMailer.creatorship_invitation(work_creatorship.id, author.id).deliver }
+    subject(:email) { UserMailer.creatorship_request(work_creatorship.id, author.id).deliver }
 
     let(:author) { create(:user) }
     let(:second_author) { create(:user) }
@@ -15,7 +15,7 @@ describe UserMailer do
     it_behaves_like "an email with a valid sender"
 
     it "has the correct subject line" do
-      subject = "[#{ArchiveConfig.APP_SHORT_NAME}] Co-creator invitation"
+      subject = "[#{ArchiveConfig.APP_SHORT_NAME}] Co-creator request"
       expect(email).to have_subject(subject)
     end
 
