@@ -415,7 +415,7 @@ describe WorksController, work_search: true do
         end
 
         it "shows different results on second page" do
-          get :index, params: { tag_id: @fandom.name, page: 2 }
+          get :index, params: { tag_id: fandom.name, page: 2 }
           expect(assigns(:works).items).not_to include(work)
         end
 
@@ -438,12 +438,12 @@ describe WorksController, work_search: true do
         end
 
         context "with restricted works" do
-          let!(:work2) { create(:work, fandom_string: @fandom.name, restricted: true) }
+          let!(:work2) { create(:work, fandom_string: fandom.name, restricted: true) }
           before do
             run_all_indexing_jobs
           end
 
-          it "shows restricted works to guests" do
+          it "shows only unrestricted works to guests" do
             get :index, params: { tag_id: fandom.name }
             expect(assigns(:works).items).to include(work)
             expect(assigns(:works).items).not_to include(work2)
