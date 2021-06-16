@@ -32,10 +32,6 @@ FactoryBot.define do
     factory :draft do
       posted { false }
     end
-
-    factory :posted_work do
-      posted { true }
-    end
   end
 
   factory :external_work do
