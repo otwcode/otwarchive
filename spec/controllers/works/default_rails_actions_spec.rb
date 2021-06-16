@@ -248,7 +248,8 @@ describe WorksController, work_search: true do
     end
 
     it "renders new if edit is pressed" do
-      work_attributes = attributes_for(:work)
+      work_attributes = attributes_for(:work).except(:posted)
+      # returns a failure unpermitted param :posted, so removed it following same method as above
       post :create, params: { work: work_attributes, edit_button: true }
       expect(response).to render_template("new")
     end
@@ -340,7 +341,7 @@ describe WorksController, work_search: true do
     end
 
     it "redirects to tag page for noncanonical tags" do
-      noncanonical_tag = create(:character_tag)
+      noncanonical_tag = create(:character)
       get :index, params: { id: work, tag_id: noncanonical_tag.name }
       expect(response).to redirect_to(tag_path(noncanonical_tag))
     end
@@ -401,9 +402,9 @@ describe WorksController, work_search: true do
       end
 
       context "with a valid owner tag" do
+        let!(:fandom2) { create(:canonical_fandom) }
+        let!(:work2) { create(:work, fandom_string: fandom2.name) }
         before do
-          let!(:fandom2) { create(:canonical_fandom) }
-          let!(:work2) { create(:work, fandom_string: fandom2.name) }
           run_all_indexing_jobs
         end
 
@@ -437,8 +438,8 @@ describe WorksController, work_search: true do
         end
 
         context "with restricted works" do
+          let!(:work2) { create(:work, fandom_string: @fandom.name, restricted: true) }
           before do
-            let!(:work2) { create(:work, fandom_string: @fandom.name, restricted: true) }
             run_all_indexing_jobs
           end
 
