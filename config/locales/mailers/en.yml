@@ -18,7 +18,7 @@ en:
       guest:
         one: a guest
         other: "%{count} guests"
-      you_have: "[%{app_name}] You've got kudos!"
+      subject: "[%{app_name}] You've got kudos!"
       html:
         left_kudos:
           one: "%{givers_list} left kudos on %{commentable_link}."
