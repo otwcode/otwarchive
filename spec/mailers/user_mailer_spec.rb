@@ -2,13 +2,11 @@ require "spec_helper"
 
 describe UserMailer do
   describe "creatorship_request" do
-    title = Faker::Book.title
-
     subject(:email) { UserMailer.creatorship_request(work_creatorship.id, author.id).deliver }
 
     let(:author) { create(:user) }
     let(:second_author) { create(:user) }
-    let(:work) { create(:work, title: title, authors: [author.default_pseud, second_author.default_pseud]) }
+    let(:work) { create(:work, authors: [author.default_pseud, second_author.default_pseud]) }
     let(:work_creatorship) { Creatorship.find_by(creation_id: work.id, pseud_id: second_author.default_pseud.id) }
 
     # Test the headers
@@ -27,24 +25,24 @@ describe UserMailer do
     describe "HTML version" do
       it "has the correct content" do
         expect(email).to have_html_part_content("to be listed as a co-creator")
+        expect(email).to have_html_part_content("You can accept or reject this invitation on your Creator Invitations page.")
       end
     end
 
     describe "text version" do
       it "has the correct content" do
         expect(email).to have_text_part_content("to be listed as a co-creator")
+        expect(email).to have_text_part_content("You can accept or reject this invitation on your Creator Invitations page:")
       end
     end
   end
 
   describe "creatorship_notification" do
-    title = Faker::Book.title
-
     subject(:email) { UserMailer.creatorship_notification(work_creatorship.id, author.id).deliver }
 
     let(:author) { create(:user) }
     let(:second_author) { create(:user) }
-    let(:work) { create(:work, title: title, authors: [author.default_pseud, second_author.default_pseud]) }
+    let(:work) { create(:work, authors: [author.default_pseud, second_author.default_pseud]) }
     let(:work_creatorship) { Creatorship.find_by(creation_id: work.id, pseud_id: second_author.default_pseud.id) }
 
     # Test the headers
@@ -63,24 +61,24 @@ describe UserMailer do
     describe "HTML version" do
       it "has the correct content" do
         expect(email).to have_html_part_content("to be listed as a creator")
+        expect(email).to have_html_part_content("remove yourself as creator.")
       end
     end
 
     describe "text version" do
       it "has the correct content" do
         expect(email).to have_text_part_content("to be listed as a creator")
+        expect(email).to have_text_part_content("remove yourself as creator:")
       end
     end
   end
 
   describe "creatorship_notification_archivist" do
-    title = Faker::Book.title
-
     subject(:email) { UserMailer.creatorship_notification_archivist(work_creatorship.id, author.id).deliver }
 
     let(:author) { create(:user) }
     let(:second_author) { create(:user) }
-    let(:work) { create(:work, title: title, authors: [author.default_pseud, second_author.default_pseud]) }
+    let(:work) { create(:work, authors: [author.default_pseud, second_author.default_pseud]) }
     let(:work_creatorship) { Creatorship.find_by(creation_id: work.id, pseud_id: second_author.default_pseud.id) }
 
     # Test the headers
@@ -99,12 +97,14 @@ describe UserMailer do
     describe "HTML version" do
       it "has the correct content" do
         expect(email).to have_html_part_content("to be listed as a creator")
+        expect(email).to have_html_part_content("remove yourself as creator.")
       end
     end
 
     describe "text version" do
       it "has the correct content" do
         expect(email).to have_text_part_content("to be listed as a creator")
+        expect(email).to have_text_part_content("remove yourself as creator:")
       end
     end
   end

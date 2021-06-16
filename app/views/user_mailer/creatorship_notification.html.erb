@@ -1,19 +1,8 @@
 <% creation_type = @creation.model_name.human.downcase %>
 <% content_for :message do %>
   <p>
-    <% if creation_type == "work" %>
-      <%= t(".intro_work", adding_user: @adding_user.login,
-          pseud: @creatorship.pseud.name) %>
-    <% elsif creation_type == "chapter" %>
-      <%= t(".intro_chapter", adding_user: @adding_user.login,
-          pseud: @creatorship.pseud.name) %>
-    <% elsif creation_type == "series" %>
-      <%= t(".intro_series", adding_user: @adding_user.login,
-          pseud: @creatorship.pseud.name) %>
-    <% else %>
-      <%= t(".intro", type: creation_type, adding_user: @adding_user.login,
-          pseud: @creatorship.pseud.name) %>
-    <% end %>
+    <%= t(".intro_#{creation_type}", adding_user: @adding_user.login, pseud: @creatorship.pseud.name) %>
+
   </p>
 
   <p>
@@ -27,14 +16,6 @@
   </p>
 
   <p>
-    <% if creation_type == "work" %>
-      <%= t(".html.remove_work", edit: style_link(t(".html.edit_work"), edit_polymorphic_url(@creation))).html_safe %>
-    <% elsif creation_type == "chapter" %>
-      <%= t(".html.remove_chapter", edit: style_link(t(".html.edit_chapter"), edit_polymorphic_url(@creation))).html_safe %>
-    <% elsif creation_type == "series" %>
-      <%= t(".html.remove_series", edit: style_link(t(".html.edit_series"), edit_polymorphic_url(@creation))).html_safe %>
-    <% else %>
-      <%= t(".html.remove", edit: style_link(t(".html.edit", type: creation_type), edit_polymorphic_url(@creation))).html_safe %>
-    <% end %>
+    <%= t(".html.remove_#{creation_type}", edit: style_link(t(".html.edit_#{creation_type}"), edit_polymorphic_url(@creation))).html_safe %>
   </p>
 <% end %>
