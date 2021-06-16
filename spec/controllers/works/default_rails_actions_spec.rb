@@ -438,7 +438,7 @@ describe WorksController, work_search: true do
 
         context "with restricted works" do
           before do
-            work2 = create(:work, fandom_string: @fandom.name, restricted: true)
+            let!(:work2) { create(:work, fandom_string: @fandom.name, restricted: true) }
             run_all_indexing_jobs
           end
 
@@ -537,11 +537,11 @@ describe WorksController, work_search: true do
 
   describe "update" do
     let(:update_user) { create(:user) }
-    let!(:update_work) {
+    let!(:update_work) do
       work = create(:work, authors: [update_user.default_pseud], posted: true)
       create(:chapter, work: work)
       work
-    }
+    end
 
     before do
       fake_login_known_user(update_user)
