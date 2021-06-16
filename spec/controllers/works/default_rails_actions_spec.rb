@@ -404,6 +404,7 @@ describe WorksController, work_search: true do
       context "with a valid owner tag" do
         let!(:fandom2) { create(:canonical_fandom) }
         let!(:work2) { create(:work, fandom_string: fandom2.name) }
+
         before do
           run_all_indexing_jobs
         end
@@ -439,6 +440,7 @@ describe WorksController, work_search: true do
 
         context "with restricted works" do
           let!(:work2) { create(:work, fandom_string: fandom.name, restricted: true) }
+
           before do
             run_all_indexing_jobs
           end
