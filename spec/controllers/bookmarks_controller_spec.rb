@@ -263,7 +263,7 @@ describe BookmarksController do
       end
 
       it "finds a work from a bookmark" do
-        render_views
+        #render_views
         get :show, params: { id: bookmark }
         expect(response).to have_http_status(:success)
         expect(response.body).to include(chaptered_work.title)
@@ -279,6 +279,7 @@ describe BookmarksController do
     let!(:bookmark2) { create(:bookmark, bookmarkable_id: work.id, bookmarker_notes: "Different") }
     let!(:bookmark3) { create(:bookmark, bookmarkable_id: work.id, bookmarker_notes: "I think this is great") }
 
+    # wouldn't normally need to render views in a controller test, but it's the only way to get the js response
     render_views
 
     it "shows 4 most recent bookmarks in js" do
