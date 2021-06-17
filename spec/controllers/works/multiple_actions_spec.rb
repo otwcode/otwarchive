@@ -131,7 +131,7 @@ describe WorksController do
         put :update_multiple, params: params
       end
 
-      xit "redirects to the user multiple work path with an error" do
+      it "redirects to the edit multiple user works path with an error" do
         it_redirects_to_with_error(edit_multiple_user_works_path(multiple_works_user),
                                    flash[:error]).to match("The work Work 1 could not be edited: Summary must be less than")
       end

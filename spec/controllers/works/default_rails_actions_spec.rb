@@ -247,9 +247,8 @@ describe WorksController, work_search: true do
         include "Invalid creator: Could not find a pseud *impossible*."
     end
 
-    it "renders new if edit is pressed" do
+    it "renders new if edit_button params set" do
       work_attributes = attributes_for(:work).except(:posted)
-      # returns a failure unpermitted param :posted, so removed it following same method as above
       post :create, params: { work: work_attributes, edit_button: true }
       expect(response).to render_template("new")
     end
@@ -347,9 +346,7 @@ describe WorksController, work_search: true do
     end
 
     it "redirects to tags works page for noncanonical merged tags page" do
-      noncanonical_fandom = create(:fandom, canonical: false)
-      noncanonical_fandom.syn_string = fandom.name
-      noncanonical_fandom.save
+      noncanonical_fandom = create(:fandom, merger_id: fandom.id)
       get :index, params: { id: work, tag_id: noncanonical_fandom.name }
       expect(response).to redirect_to(tag_works_path(fandom))
     end
@@ -432,7 +429,7 @@ describe WorksController, work_search: true do
             allow(controller).to receive(:fetch_admin_settings).and_call_original
           end
 
-          it "shows results when filters are disabled" do
+          it "shows the work in the index" do
             get :index, params: { tag_id: fandom.name }
             expect(assigns(:works)).to include(work)
           end
@@ -445,7 +442,7 @@ describe WorksController, work_search: true do
             run_all_indexing_jobs
           end
 
-          it "shows only unrestricted works to guests" do
+          it "hides them from guests, showing only unrestricted works" do
             get :index, params: { tag_id: fandom.name }
             expect(assigns(:works).items).to include(work)
             expect(assigns(:works).items).not_to include(work2)
@@ -541,7 +538,7 @@ describe WorksController, work_search: true do
   describe "update" do
     let(:update_user) { create(:user) }
     let!(:update_work) do
-      work = create(:work, authors: [update_user.default_pseud], posted: true)
+      work = create(:work, authors: [update_user.default_pseud])
       create(:chapter, work: work)
       work
     end
