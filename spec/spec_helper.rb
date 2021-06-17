@@ -3,12 +3,6 @@ ENV["RAILS_ENV"] ||= "test"
 require File.expand_path("../config/environment", __dir__)
 require "simplecov"
 
-if ENV["CI"] == "true"
-  # Only when running CI:
-  require "codecov"
-  SimpleCov.formatter = SimpleCov::Formatter::Codecov
-end
-
 require "rspec/rails"
 require "factory_bot"
 require "database_cleaner"

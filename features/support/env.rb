@@ -3,12 +3,6 @@
 
 require "simplecov"
 
-if ENV["CI"] == "true"
-  # Only when running CI:
-  require "codecov"
-  SimpleCov.formatter = SimpleCov::Formatter::Codecov
-end
-
 # Make sure that we define the hook for creating all ratings, warnings, and
 # categories before we define the database cleaner hooks, so that we aren't
 # constantly erasing and recreating all ratings/warnings/categories:

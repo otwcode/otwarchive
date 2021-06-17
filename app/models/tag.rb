@@ -286,22 +286,6 @@ class Tag < ApplicationRecord
   # Tags that don't have sub tags
   scope :non_meta_tag, -> { joins(:sub_taggings).where("meta_taggings.id IS NULL").group("tags.id") }
 
-
-  # Complicated query alert!
-  # What we're doing here:
-  # - we get all the tags of any type used on works (the first two lines of the join)
-  # - we then chop that down to only the tags used on works that are tagged with our one given tag
-  #   (the last line of the join, and the where clause)
-  scope :related_tags_for_all, lambda {|tags|
-    joins("INNER JOIN taggings ON (tags.id = taggings.tagger_id)
-           INNER JOIN works ON (taggings.taggable_id = works.id AND taggings.taggable_type = 'Work')
-           INNER JOIN taggings taggings2 ON (works.id = taggings2.taggable_id AND taggings2.taggable_type = 'Work')").
-    where("taggings2.tagger_id IN (?)", tags.collect(&:id)).
-    group("tags.id")
-  }
-
-  scope :related_tags, lambda {|tag| related_tags_for_all([tag])}
-
   scope :by_popularity, -> { order('taggings_count_cache DESC') }
   scope :by_name, -> { order('sortable_name ASC') }
   scope :by_date, -> { order('created_at DESC') }
@@ -326,14 +310,6 @@ class Tag < ApplicationRecord
   }
 
   scope :starting_with, lambda {|letter| where('SUBSTR(name,1,1) = ?', letter)}
-
-  scope :filters_with_count, lambda { |work_ids|
-    select("tags.*, count(distinct works.id) as count").
-    joins(:filtered_works).
-    where("works.id IN (?)", work_ids).
-    order(:name).
-    group(:id)
-  }
 
   scope :visible_to_all_with_count, -> {
     joins(:filter_count).
@@ -771,10 +747,6 @@ class Tag < ApplicationRecord
     self.external_works.where(hidden_by_admin: false).count
   end
 
-  def visible_taggables_count
-    visible_works_count + visible_bookmarks_count + visible_external_works_count
-  end
-
   def banned
     self.is_a?(Banned)
   end
@@ -1048,14 +1020,6 @@ class Tag < ApplicationRecord
         syn.update_attributes(merger_id: self.id)
       end
     end
-  end
-
-  def indirect_bookmarks(rec=false)
-    cond = rec ? {rec: true, private: false, hidden_by_admin: false} : {private: false, hidden_by_admin: false}
-    work_bookmarks = Bookmark.where(bookmarkable_id: self.work_ids, bookmarkable_type: 'Work').merge(cond)
-    ext_work_bookmarks = Bookmark.where(bookmarkable_id: self.external_work_ids, bookmarkable_type: 'ExternalWork').merge(cond)
-    series_bookmarks = [] # can't tag a series directly? # Bookmark.where(bookmarkable_id: self.series_ids, bookmarkable_type: 'Series').merge(cond)
-    (work_bookmarks + ext_work_bookmarks + series_bookmarks)
   end
 
   #################################

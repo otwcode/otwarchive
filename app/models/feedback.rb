@@ -1,6 +1,7 @@
 # Class which holds feedback sent to the archive administrators about the archive as a whole
 class Feedback < ApplicationRecord
   include ActiveModel::ForbiddenAttributesProtection
+  attr_accessor :ip_address
 
   # note -- this has NOTHING to do with the Comment class!
   # This is just the name of the text field in the Feedback
