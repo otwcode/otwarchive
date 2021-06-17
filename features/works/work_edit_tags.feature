@@ -95,8 +95,7 @@ Feature: Edit tags on a work
     Then I should see "Preview Tags"
       And I should not see the default work content
     When "AO3-3455" is fixed
-      # And I should see "classic"
+      And I should see "classic" within "Additional Tags"
     When I press "Edit"
     Then I should see "Edit Work Tags"
-    When "AO3-3455" is fixed
-      # And I should see "classic"
+      And I should see "classic" within "Additional Tags"

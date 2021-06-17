@@ -345,22 +345,7 @@ describe WorksController, work_search: true do
       expect(response).to redirect_to(tag_path(noncanonical_tag))
     end
 
-    it "redirects to tags works page for noncanonical merged tags page" do
-      noncanonical_fandom = create(:fandom, merger_id: fandom.id)
-      get :index, params: { id: work, tag_id: noncanonical_fandom.name }
-      expect(response).to redirect_to(tag_works_path(fandom))
-    end
-
-    it "redirects to collection tags works page for noncanonical merged tags page" do
-      noncanonical_fandom = create(:fandom, canonical: false)
-      noncanonical_fandom.syn_string = fandom.name
-      noncanonical_fandom.save
-      collection = create(:collection)
-      get :index, params: { id: work, tag_id: noncanonical_fandom.name, collection_id: collection }
-      expect(response).to redirect_to(collection_tag_works_path(collection, fandom))
-    end
-
-    describe "without caching" do
+    context "without caching" do
       before do
         AdminSetting.first.update_attribute(:enable_test_caching, false)
       end
@@ -376,9 +361,22 @@ describe WorksController, work_search: true do
         get :index
         expect(assigns(:works)).to include(work2)
       end
+      
+      it "when tag is a synonym redirects to the merger's work index" do
+        noncanonical_fandom = create(:fandom, merger: fandom)
+        get :index, params: { id: work, tag_id: noncanonical_fandom.name }
+        expect(response).to redirect_to(tag_works_path(fandom))
+      end
+      
+      it "when tag is a synonym when collection is specified redirects to the merger's collection works index" do
+        noncanonical_fandom = create(:fandom, canonical: false, merger: fandom)
+        collection = create(:collection)
+        get :index, params: { id: work, tag_id: noncanonical_fandom.name, collection_id: collection }
+        expect(response).to redirect_to(collection_tag_works_path(collection, fandom))
+      end
     end
 
-    describe "with caching" do
+    context "with caching" do
       before do
         AdminSetting.first.update_attribute(:enable_test_caching, true)
       end
