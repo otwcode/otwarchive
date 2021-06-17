@@ -1,13 +1,13 @@
 <% content_for :message do %>
 <%= t(".greeting", name: @user.default_pseud.byline) %>
 
-<%= t(".part1", collection: @collection.title, work: @work.title.html_safe ) %>
+<%= t(".part1", collection: @collection.title, work: @work.title.html_safe) %>
 
 <%= t(".part2") %>
 
 <%= t(".text.part3", collection_items_url: user_collection_items_url(@user) + "?approved=true") %>
 
-<%= t(".text.part4", link: user_preferences_url(@user)) %>
+<%= t(".text.part4", preferences_url: user_preferences_url(@user)) %>
 
 <%= t(".bye") %>
 <% end %>

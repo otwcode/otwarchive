@@ -5,9 +5,9 @@
 
   <p><%= t(".part2") %></p>
 
-  <p><%= t(".html.part3", link: style_link(t(".html.link_text").html_safe, user_collection_items_url(@user) + "?approved=true").html_safe).html_safe %></p>
+  <p><%= t(".html.part3", approved_items: style_link(t(".html.approved_items_text").html_safe, user_collection_items_url(@user) + "?approved=true").html_safe).html_safe %></p>
 
-  <p><%= t(".html.part4", prefs: style_link(t(".html.preferences"), user_preferences_url(@user)), quote: style_quote(t(".html.quote_link")).html_safe).html_safe %>
+  <p><%= t(".html.part4", prefs: style_link(t(".html.preferences_text"), user_preferences_url(@user)), quote: style_quote(t(".html.quoted_preference_name")).html_safe).html_safe %>
   </p>
 
   <p><%= t(".bye") %></p>

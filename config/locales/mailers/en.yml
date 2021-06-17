@@ -257,13 +257,13 @@ en:
       bye: "Thanks!"
       text:
         part2: "To approve or reject this request, please visit your \"Collection Items\" page: %{collection_items_url}."
-        part3: "If in future you would prefer to automatically approve requests to add your works to collections, please edit your Preferences (%{link}) and tick the box next to \"Automatically agree to your work being collected by others in the Archive.\"."
+        part3: "If in future you would prefer to automatically approve requests to add your works to collections, please edit your Preferences (%{preferences_url}) and tick the box next to \"Automatically agree to your work being collected by others in the Archive.\"."
       html:
-        part2: "To approve or reject this request, please visit your %{link}."
-        link_text: "Collection Items page"
+        part2: "To approve or reject this request, please visit your %{collection_items}."
+        collection_items_text: "Collection Items page"
         part3: "If in future you would prefer to automatically approve requests to add your works to collections, please edit your %{prefs} and tick the box next to: %{quote}"
-        preferences: "Preferences"
-        quote_link: "Automatically agree to your work being collected by others in the Archive."
+        preferences_text: "Preferences"
+        quoted_preference_name: "Automatically agree to your work being collected by others in the Archive."
 
     added_to_collection_notification:
       subject: "[%{app_name}][%{collection}] Your work was added to a collection"
@@ -273,10 +273,10 @@ en:
       bye: "Thanks!"
       text:
         part3: "If you would like to remove your work from this collection, please visit your \"Approved Collection Items\" page: %{collection_items_url}."
-        part4: "If in future you would prefer to individually accept or reject requests to add your works to collections, please edit your Preferences, (%{link}) and untick the box next to \"Automatically agree to your work being collected by others in the Archive.\"."
+        part4: "If in future you would prefer to individually accept or reject requests to add your works to collections, please edit your Preferences, (%{preferences_url}) and untick the box next to \"Automatically agree to your work being collected by others in the Archive.\"."
       html:
-        part3: "If you would like to remove your work from this collection, please visit your %{link}."
-        link_text: "Approved Collection Items page"
+        part3: "If you would like to remove your work from this collection, please visit your %{approved_items}."
+        approved_items_text: "Approved Collection Items page"
         part4: "If in future you would prefer to individually accept or reject requests to add your works to collections, please edit your %{prefs} and untick the box next to: %{quote}"
-        preferences: "Preferences"
-        quote_link: "Automatically agree to your work being collected by others in the Archive."
+        preferences_text: "Preferences"
+        quoted_preference_name: "Automatically agree to your work being collected by others in the Archive."
