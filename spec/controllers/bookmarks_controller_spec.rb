@@ -269,7 +269,7 @@ describe BookmarksController do
         # expect(response.body).to include(chaptered_work.title) fails
         # expect(assigns(:work)).to eq(chaptered_work) fails
         expect(assigns(:bookmark)).to eq(bookmark)
-        expect(assigns(:bookmark).bookmarkable) to eq(chaptered_work)
+        expect(assigns(:bookmark).bookmarkable).to eq(chaptered_work)
       end
     end
   end
