@@ -124,34 +124,6 @@ describe WorksController do
       end
     end
 
-    context "when work parameters are invalid" do
-      context "when field is not meant to be mass-edited" do
-        let(:work_params) { { work: { summary: "a" * (ArchiveConfig.SUMMARY_MAX) } } }
-
-        before do
-          put :update_multiple, params: params
-        end
-
-        it "redirects to the edit multiple user works path with an error" do
-          it_redirects_to_with_error(edit_multiple_user_works_path(multiple_works_user),
-                                     flash[:error]).to match("The work Work 1 could not be edited: Summary should not be changed here")
-        end
-      end
-
-      context "when value is invalid" do
-        let(:work_params) { { work: { comment_permissions: "invalid_value" } } }
-
-        before do
-          put :update_multiple, params: params
-        end
-
-        it "redirects to the edit multiple user works path with an error" do
-          it_redirects_to_with_error(edit_multiple_user_works_path(multiple_works_user),
-                                     flash[:error]).to match("The work Work 1 could not be edited: Invalid value for comment permissions")
-        end
-      end
-    end
-
     context "updating creators" do
       let(:pseud_to_invite) do
         user = FactoryBot.create(:user)
