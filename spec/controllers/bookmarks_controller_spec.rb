@@ -263,11 +263,8 @@ describe BookmarksController do
       end
 
       it "finds a work from a bookmark" do
-        # render_views can't go here, has to go in context block
         get :show, params: { id: bookmark }
         expect(response).to have_http_status(:success)
-        # expect(response.body).to include(chaptered_work.title) fails
-        # expect(assigns(:work)).to eq(chaptered_work) fails
         expect(assigns(:bookmark)).to eq(bookmark)
         expect(assigns(:bookmark).bookmarkable).to eq(chaptered_work)
       end
