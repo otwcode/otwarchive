@@ -318,7 +318,7 @@ When /^I bookmark the work "(.*?)"(?: as "(.*?)")?(?: with the note "(.*?)")?(?:
 end
 
 When /^I bookmark the work "(.*?)"(?: as "(.*?)")?(?: with the note "(.*?)")?(?: with the tags "(.*?)")? from new bookmark page$/ do |title, pseud, note, tags|
-  step %{I open the new bookmark page for work "#{title}"}
+  step %{I go to the new bookmark page for work "#{title}"}
   submit_bookmark_form(pseud, note, tags)
 end
 
@@ -361,11 +361,6 @@ When /^I open the bookmarkable work "([^\"]*)"$/ do |title|
     work = Work.find_by(title: title)
   end
   visit work_path(work)
-end
-
-When "I open the new bookmark page for work {string}" do |title|
-  work = Work.find_by(title: title)
-  visit new_work_bookmark_path(work)
 end
 
 When /^I add my bookmark to the collection "([^\"]*)"$/ do |collection_name|
