@@ -170,10 +170,10 @@ class Tag < ApplicationRecord
   validates_length_of :name, minimum: 1, message: "cannot be blank."
   validates_length_of :name,
     maximum: ArchiveConfig.TAG_MAX,
-    message: "of tag is too long -- try using less than #{ArchiveConfig.TAG_MAX} characters or using commas to separate your tags."
+    message: "^Tag name '%{value}' is too long -- try using less than %{count} characters or using commas to separate your tags."
   validates_format_of :name,
     with: /\A[^,*<>^{}=`\\%]+\z/,
-    message: 'of a tag cannot include the following restricted characters: , &#94; * < > { } = ` \\ %'
+    message: "^Tag name '%{value}' cannot include the following restricted characters: , &#94; * < > { } = ` \\ %"
 
   validates_presence_of :sortable_name
 
@@ -226,7 +226,7 @@ class Tag < ApplicationRecord
 
   def flush_work_cache
     self.work_ids.each do |work|
-      Work.expire_work_tag_groups_id(work)
+      Work.expire_work_blurb_version(work)
     end
   end
 

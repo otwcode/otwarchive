@@ -14,25 +14,31 @@ Given /^basic tags$/ do
 end
 
 Given /^the default ratings exist$/ do
-  ratings = [ArchiveConfig.RATING_DEFAULT_TAG_NAME,
-             ArchiveConfig.RATING_GENERAL_TAG_NAME,
-             ArchiveConfig.RATING_TEEN_TAG_NAME,
-             ArchiveConfig.RATING_MATURE_TAG_NAME,
-             ArchiveConfig.RATING_EXPLICIT_TAG_NAME]
-  ratings.each do |rating|
-    Rating.find_or_create_by(name: rating, canonical: true)
+  # TODO: "Not Rated" should be adult, to match the behavior in production, but
+  # there are many tests that rely on being able to view a "Not Rated" work
+  # without clicking through the adult content warning. So until those tests
+  # are fixed, we leave "Not Rated" as a non-adult rating.
+  [
+    ArchiveConfig.RATING_DEFAULT_TAG_NAME,
+    ArchiveConfig.RATING_GENERAL_TAG_NAME,
+    ArchiveConfig.RATING_TEEN_TAG_NAME
+  ].each do |rating|
+    Rating.find_or_create_by!(name: rating, canonical: true)
   end
-end
 
-Given(/^an adult canonical rating exists with name: "([^"]*)"$/) do |rating|
-  Rating.find_or_create_by(name: rating, canonical: true, adult: true)
+  [
+    ArchiveConfig.RATING_MATURE_TAG_NAME,
+    ArchiveConfig.RATING_EXPLICIT_TAG_NAME
+  ].each do |rating|
+    Rating.find_or_create_by!(name: rating, canonical: true, adult: true)
+  end
 end
 
 Given /^the basic warnings exist$/ do
   warnings = [ArchiveConfig.WARNING_DEFAULT_TAG_NAME,
               ArchiveConfig.WARNING_NONE_TAG_NAME]
   warnings.each do |warning|
-    ArchiveWarning.find_or_create_by_name(warning).update(canonical: true)
+    ArchiveWarning.find_or_create_by!(name: warning, canonical: true)
   end
 end
 
@@ -43,13 +49,13 @@ Given /^all warnings exist$/ do
               ArchiveConfig.WARNING_NONCON_TAG_NAME,
               ArchiveConfig.WARNING_CHAN_TAG_NAME]
   warnings.each do |warning|
-    ArchiveWarning.find_or_create_by_name(warning).update(canonical: true)
+    ArchiveWarning.find_or_create_by!(name: warning, canonical: true)
   end
 end
 
 Given /^the basic categories exist$/ do
   %w(Gen Other F/F Multi F/M M/M).each do |category|
-    Category.find_or_create_by(name: category).update(canonical: true)
+    Category.find_or_create_by!(name: category, canonical: true)
   end
 end
 
