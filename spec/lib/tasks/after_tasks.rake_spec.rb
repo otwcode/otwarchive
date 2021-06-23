@@ -170,21 +170,14 @@ describe "rake After:fix_teen_and_up_imported_rating" do
 end
 
 describe "rake After:clean_up_noncanonical_categories" do
-  let(:noncanonical_category_tag) { Category.create(name: "Borked category tag", canonical: false) }
-  let(:canonical_category_tag) { Category.find_or_create_by(name: ArchiveConfig.CATEGORY_GEN_TAG_NAME, canonical: true) }
-  let(:work_with_noncanonical_categ) { create(:work) }
-  let(:work_with_canonical_and_noncanonical_categs) { create(:work) }
-
-  before do
-    work_with_noncanonical_categ.categories = [noncanonical_category_tag]
-    work_with_noncanonical_categ.save!
-    work_with_canonical_and_noncanonical_categs.categories = [noncanonical_category_tag, canonical_category_tag]
-    work_with_canonical_and_noncanonical_categs.save!
-  end
+  # Must use let!() for all of these here, as these are preconditions to running the task
+  let!(:noncanonical_category_tag) { Category.create(name: "Borked category tag", canonical: false) }
+  let!(:canonical_category_tag) { Category.find_or_create_by(name: ArchiveConfig.CATEGORY_GEN_TAG_NAME, canonical: true) }
+  let!(:work_with_noncanonical_categ) { create(:work, categories: [noncanonical_category_tag]) }
+  let!(:work_with_canonical_and_noncanonical_categs) { create(:work, categories: [noncanonical_category_tag, canonical_category_tag]) }
 
   it "changes and replaces the noncanonical category tags" do
     subject.invoke
-
     work_with_noncanonical_categ.reload
     work_with_canonical_and_noncanonical_categs.reload
 
@@ -195,9 +188,9 @@ describe "rake After:clean_up_noncanonical_categories" do
     expect(work_with_canonical_and_noncanonical_categs.freeforms.to_a).to include(noncanonical_category_tag)
 
     # Leaves the works that had no other categories without a category
-    expect(work_with_noncanonical_categ.categories.to_a).to eql([])
+    expect(work_with_noncanonical_categ.categories.to_a).to be_empty
 
     # Leaves the works that had other categories with those categories
-    expect(work_with_canonical_and_noncanonical_categs.categories.to_a).to eql([canonical_category_tag])
+    expect(work_with_canonical_and_noncanonical_categs.categories.to_a).to contain_exactly(canonical_category_tag)
   end
 end
