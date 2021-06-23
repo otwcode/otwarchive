@@ -175,40 +175,6 @@ describe "rake After:fix_teen_and_up_imported_rating" do
   end
 end
 
-describe "rake After:clean_up_noncanonical_ratings" do
-  let(:noncanonical_rating) { Rating.create(name: "Borked rating tag", canonical: false) }
-  let(:canonical_teen_rating) { Rating.create(name: ArchiveConfig.RATING_TEEN_TAG_NAME, canonical: true) }
-  let!(:default_rating) { Rating.create(name: ArchiveConfig.RATING_DEFAULT_TAG_NAME, canonical: true) }
-  let(:work_with_noncanonical_rating) { create(:work) }
-  let(:work_with_canonical_and_noncanonical_ratings) { create(:work) }
-
-  before do
-    work_with_noncanonical_rating.ratings = [noncanonical_rating]
-    work_with_noncanonical_rating.save!
-    work_with_canonical_and_noncanonical_ratings.ratings = [noncanonical_rating, canonical_teen_rating]
-    work_with_canonical_and_noncanonical_ratings.save!
-  end
-
-  it "changes and replaces the noncanonical rating tags" do
-    subject.invoke
-
-    work_with_noncanonical_rating.reload
-    work_with_canonical_and_noncanonical_ratings.reload
-
-    # Changes the noncanonical ratings into freeforms
-    noncanonical_rating = Tag.find_by(name: "Borked rating tag")
-    expect(noncanonical_rating).to be_a(Freeform)
-    expect(work_with_noncanonical_rating.freeforms.to_a).to include(noncanonical_rating)
-    expect(work_with_canonical_and_noncanonical_ratings.freeforms.to_a).to include(noncanonical_rating)
-
-    # Adds the default rating to works left without any other rating
-    expect(work_with_noncanonical_rating.rating_string).to eq(default_rating.name)
-
-    # Doesn't add the default rating to works that have other ratings
-    expect(work_with_canonical_and_noncanonical_ratings.ratings.to_a).to eql([canonical_teen_rating])
-  end
-end
-
 describe "rake After:clean_up_noncanonical_categories" do
   let(:noncanonical_category_tag) { Category.create(name: "Borked category tag", canonical: false) }
   let(:canonical_category_tag) { Category.find_or_create_by(name: ArchiveConfig.CATEGORY_GEN_TAG_NAME, canonical: true) }
