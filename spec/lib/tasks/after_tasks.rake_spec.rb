@@ -155,18 +155,12 @@ describe "rake After:replace_dewplayer_embeds" do
 end
 
 describe "rake After:fix_teen_and_up_imported_rating" do
-  let(:noncanonical_teen_rating) { Rating.create(name: "Teen & Up Audiences", canonical: false) }
-  let(:canonical_gen_rating) { Rating.find_or_create_by(name: ArchiveConfig.RATING_GENERAL_TAG_NAME, canonical: true) }
-  let!(:canonical_teen_rating) { Rating.find_or_create_by(name: ArchiveConfig.RATING_TEEN_TAG_NAME, canonical: true) }
-  let(:work_with_noncanonical_rating) { create(:work) }
-  let(:work_with_canonical_and_noncanonical_ratings) { create(:work) }
-
-  before do
-    work_with_noncanonical_rating.ratings = [noncanonical_teen_rating]
-    work_with_noncanonical_rating.save!
-    work_with_canonical_and_noncanonical_ratings.ratings = [noncanonical_teen_rating, canonical_gen_rating]
-    work_with_canonical_and_noncanonical_ratings.save!
-  end
+  # Must use let!() for all of these here, as these are preconditions to running the task
+  let!(:noncanonical_teen_rating) { Rating.create(name: "Teen & Up Audiences") }
+  let!(:canonical_gen_rating) { Rating.find_or_create_by!(name: ArchiveConfig.RATING_GENERAL_TAG_NAME, canonical: true) }
+  let!(:canonical_teen_rating) { Rating.find_or_create_by!(name: ArchiveConfig.RATING_TEEN_TAG_NAME, canonical: true) }
+  let!(:work_with_noncanonical_rating) { create(:work, ratings: [noncanonical_teen_rating]) }
+  let!(:work_with_canonical_and_noncanonical_ratings) { create(:work, ratings: [noncanonical_teen_rating, canonical_gen_rating]) }
 
   it "updates the works' ratings to the canonical teen rating" do
     subject.invoke
