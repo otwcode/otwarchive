@@ -750,6 +750,7 @@ namespace :After do
       work.ratings << canonical_rating_tag
       work.ratings = work.ratings - [borked_rating_tag]
       invalid_works << work.id if work.save == false
+      print(".") && STDOUT.flush
     end
 
     unless invalid_works.empty?

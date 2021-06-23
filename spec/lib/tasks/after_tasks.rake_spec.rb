@@ -170,12 +170,8 @@ describe "rake After:fix_teen_and_up_imported_rating" do
 
   it "updates the works' ratings to the canonical teen rating" do
     subject.invoke
-
-    work_with_noncanonical_rating.reload
-    work_with_canonical_and_noncanonical_ratings.reload
-
-    expect(work_with_noncanonical_rating.ratings.to_a).to eql([canonical_teen_rating])
-    expect(work_with_canonical_and_noncanonical_ratings.ratings.to_a).to match_array([canonical_teen_rating, canonical_gen_rating])
+    expect(work_with_noncanonical_rating.reload.ratings.to_a).to contain_exactly(canonical_teen_rating)
+    expect(work_with_canonical_and_noncanonical_ratings.reload.ratings.to_a).to contain_exactly(canonical_teen_rating, canonical_gen_rating)
   end
 end
 
