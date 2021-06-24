@@ -772,6 +772,35 @@ namespace :After do
     STDOUT.flush
   end
 
+  desc "Fix tags with extra spaces"
+  task(fix_tags_with_extra_spaces: :environment) do
+    total_tags = Tag.count
+    total_batches = (total_tags + 999) / 1000
+    puts "Inspecting #{total_tags} tags in #{total_batches} batches"
+
+    report_string = ["Tag ID", "Old tag name", "New tag name"].to_csv
+    Tag.find_in_batches.with_index do |batch, index|
+      batch_number = index + 1
+      progress_msg = "Batch #{batch_number} of #{total_batches} complete"
+
+      batch.each do |tag|
+        next unless tag.name != tag.name.squish
+
+        old_tag_name = tag.name
+        new_tag_name = old_tag_name.gsub(/[[:space:]]/, "_")
+
+        new_tag_name << "_" while Tag.find_by(name: new_tag_name)
+        tag.update_attribute(:name, new_tag_name)
+
+        report_row = [tag.id, old_tag_name, new_tag_name].to_csv
+        report_string += report_row
+      end
+
+      puts(progress_msg) && STDOUT.flush
+    end
+    puts(report_string) && STDOUT.flush
+  end
+
   # This is the end that you have to put new tasks above.
 end
 

@@ -202,11 +202,11 @@ describe WorksController do
       end
     end
 
-    context "with category_string" do    
+    context "with category_strings" do
       context "when string doesn't match a canonical Category name" do
         let(:work_params) {
           { 
-            work: { category_string: ["Nonexistent Category"] } 
+            work: { category_strings: ["Nonexistent Category"] }
           }
         }
 
@@ -223,7 +223,7 @@ describe WorksController do
 
       context "when string matches a canonical Category name" do
         let(:work_params) {
-          { work: { category_string: [ArchiveConfig.CATEGORY_SLASH_TAG_NAME] } }
+          { work: { category_strings: [ArchiveConfig.CATEGORY_SLASH_TAG_NAME] } }
         }
 
         before do

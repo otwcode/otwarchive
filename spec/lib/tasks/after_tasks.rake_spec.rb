@@ -194,3 +194,34 @@ describe "rake After:clean_up_noncanonical_categories" do
     expect(work_with_canonical_and_noncanonical_categs.categories.to_a).to contain_exactly(canonical_category_tag)
   end
 end
+
+describe "rake After:fix_tags_with_extra_spaces" do
+  let(:borked_tag) { Freeform.create(name: "whatever") }
+
+  it "replaces the spaces with the same number of underscores" do
+    borked_tag.update_column(:name, "\u00A0\u2002\u2003\u202F\u205FBorked\u00A0\u2002\u2003\u202Ftag\u00A0\u2002\u2003\u202F\u205F")
+    subject.invoke
+
+    borked_tag.reload
+    expect(borked_tag.name).to eql("_____Borked____tag_____")
+  end
+
+  it "handles duplicated names" do
+    Freeform.create(name: "Borked_tag")
+    borked_tag.update_column(:name, "Borked\u00A0tag")
+    subject.invoke
+
+    borked_tag.reload
+    expect(borked_tag.name).to eql("Borked_tag_")
+  end
+
+  it "handles tags with quotes" do
+    borked_tag.update_column(:name, "\u00A0\"'quotes'\"")
+    expect do
+      subject.invoke
+    end.to output(/.*Tag ID,Old tag name,New tag name\n#{borked_tag.id},\"\u00A0\"\"'quotes'\"\"\",\"_\"\"'quotes'\"\"\"\n$/).to_stdout
+
+    borked_tag.reload
+    expect(borked_tag.name).to eql("_\"'quotes'\"")
+  end
+end
