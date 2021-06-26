@@ -112,4 +112,15 @@ describe Collection do
       expect(collection.all_bookmarked_items_count).to eq 3
     end
   end
+
+  describe "save" do
+    let(:collection) { create(:collection) }
+
+    it "checks the tag limit" do
+      collection.tag_string = "1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11"
+      expect(collection.save).to be_falsey
+      expect(collection.errors.full_messages).to \
+        include /Sorry, a collection can only have 10 tags./
+    end
+  end
 end

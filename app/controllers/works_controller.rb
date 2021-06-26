@@ -310,7 +310,6 @@ class WorksController < ApplicationController
 
     # If Edit or Cancel is pressed, bail out and display relevant form
     if params[:edit_button] || work_cannot_be_saved?
-      set_work_tag_error_messages
       render :new
     else
       @work.posted = @chapter.posted = true if params[:post_button]
@@ -377,7 +376,6 @@ class WorksController < ApplicationController
     set_work_form_fields
 
     if params[:edit_button] || work_cannot_be_saved?
-      set_work_tag_error_messages
       render :edit
     elsif params[:preview_button]
       unless @work.posted?
@@ -416,12 +414,12 @@ class WorksController < ApplicationController
     @work.attributes = work_tag_params
 
     if params[:edit_button] || work_cannot_be_saved?
-      set_work_tag_error_messages
       render :edit_tags
     elsif params[:preview_button]
+      @preview_mode = true
       render :preview_tags
     elsif params[:save_button]
-      Work.expire_work_tag_groups_id(@work.id)
+      @work.save
       flash[:notice] = ts('Tags were successfully updated.')
       redirect_to(@work)
     else # Save As Draft
@@ -632,6 +630,11 @@ class WorksController < ApplicationController
       redirect_to(edit_user_work_path(@user, @work)) && return
     end
 
+    # AO3-3498: since a work's word count is calculated in a before_save and the chapter is posted in an after_save, 
+    # work's word count needs to be updated with the chapter's word count after the chapter is posted
+    @work.set_word_count
+    @work.save
+
     if !@collection.nil? && @collection.moderated?
       redirect_to work_path(@work), notice: ts('Work was submitted to a moderated collection. It will show up in the collection once approved.')
     else
@@ -787,20 +790,7 @@ class WorksController < ApplicationController
   # Check whether we should display :new or :edit instead of previewing or
   # saving the user's changes.
   def work_cannot_be_saved?
-    !(@work.errors.empty? &&
-      @work.valid? &&
-      @work.has_required_tags?)
-  end
-
-  def set_work_tag_error_messages
-    unless @work.has_required_tags?
-      error_message = 'Please add all required tags.'
-      error_message << ' Fandom is missing.' if @work.fandoms.blank?
-
-      error_message << ' Warning is missing.' if @work.archive_warnings.blank?
-
-      @work.errors.add(:base, error_message)
-    end
+    !(@work.errors.empty? && @work.valid?)
   end
 
   def set_work_form_fields
@@ -888,7 +878,7 @@ class WorksController < ApplicationController
       character: params[:work][:character_string],
       rating: params[:work][:rating_string],
       relationship: params[:work][:relationship_string],
-      category: params[:work][:category_string],
+      category: params[:work][:category_strings],
       freeform: params[:work][:freeform_string],
       notes: params[:notes],
       encoding: params[:encoding],
@@ -903,7 +893,7 @@ class WorksController < ApplicationController
   def work_params
     params.require(:work).permit(
       :rating_string, :fandom_string, :relationship_string, :character_string,
-      :archive_warning_string, :category_string, :expected_number_of_chapters, :revised_at,
+      :archive_warning_string, :category_string, :expected_number_of_chapters,
       :freeform_string, :summary, :notes, :endnotes, :collection_names, :recipients, :wip_length,
       :backdate, :language_id, :work_skin_id, :restricted, :comment_permissions,
       :moderated_commenting_enabled, :title, :pseuds_to_add, :collections_to_add,
@@ -911,7 +901,7 @@ class WorksController < ApplicationController
       collections_to_remove: [],
       challenge_assignment_ids: [],
       challenge_claim_ids: [],
-      category_string: [],
+      category_strings: [],
       archive_warning_strings: [],
       author_attributes: [:byline, ids: [], coauthors: []],
       series_attributes: [:id, :title],
@@ -927,7 +917,7 @@ class WorksController < ApplicationController
     params.require(:work).permit(
       :rating_string, :fandom_string, :relationship_string, :character_string,
       :archive_warning_string, :category_string, :freeform_string, :language_id,
-      category_string: [],
+      category_strings: [],
       archive_warning_strings: []
     )
   end

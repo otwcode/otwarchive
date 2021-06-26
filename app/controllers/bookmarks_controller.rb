@@ -188,7 +188,7 @@ class BookmarksController < ApplicationController
   def create
     @bookmarkable ||= ExternalWork.new(external_work_params)
     @bookmark = @bookmarkable.bookmarks.build(bookmark_params)
-    if @bookmarkable.new_record? && @bookmarkable.fandoms.blank?
+    if @bookmarkable.new_record? && @bookmarkable.fandom_string.blank?
        @bookmark.errors.add(:base, "Fandom tag is required")
        render :new and return
     end
@@ -251,15 +251,12 @@ class BookmarksController < ApplicationController
     flash[:notice] = (flash[:notice]).html_safe unless flash[:notice].blank?
     flash[:error] = (flash[:error]).html_safe unless flash[:error].blank?
 
-    if errors.empty?
-      if @bookmark.update_attributes(bookmark_params)
-        flash[:notice] ||= ""
-        flash[:notice] = ts(" Bookmark was successfully updated. ").html_safe + flash[:notice]
-        flash[:notice] = (flash[:notice]).html_safe unless flash[:notice].blank?
-        redirect_to(@bookmark)
-      end
+    if @bookmark.update(bookmark_params) && errors.empty?
+      flash[:notice] ||= ""
+      flash[:notice] = ts(" Bookmark was successfully updated. ").html_safe + flash[:notice]
+      flash[:notice] = flash[:notice].html_safe
+      redirect_to(@bookmark)
     else
-      @bookmark.update_attributes(bookmark_params)
       @bookmarkable = @bookmark.bookmarkable
       render :edit and return
     end
