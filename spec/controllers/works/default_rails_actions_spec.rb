@@ -664,4 +664,37 @@ describe WorksController, work_search: true do
       end
     end
   end
+
+  describe "destroy" do
+    let(:work) { create(:work) }
+    let(:work_title) { work.title }
+
+    context "when a work has consecutive deleted comments in a thread" do
+      before do
+        thread_depth = 4
+        chapter = work.first_chapter
+
+        commentable = chapter
+        comments = []
+        thread_depth.times do
+          commentable = create(:comment, commentable: commentable, parent: chapter)
+          comments << commentable
+        end
+
+        # Delete all but the last comment in the thread.
+        # We should have (thread_depth - 1) consecutive deleted comment placeholders.
+        comments.reverse.drop(1).each(&:destroy_or_mark_deleted)
+
+        fake_login_known_user(work.users.first)
+      end
+
+      it "deletes the work and redirects to the user's works with a notice" do
+        delete :destroy, params: { id: work.id }
+
+        it_redirects_to_with_notice(user_works_path(controller.current_user), "Your work #{work_title} was deleted.")
+        expect { work.reload }.to raise_exception(ActiveRecord::RecordNotFound)
+        expect(Comment.count).to eq(0)
+      end
+    end
+  end
 end
