@@ -109,7 +109,7 @@ describe "rake After:update_indexed_stat_counter_kudo_count", work_search: true 
   end
 
   it "updates kudos_count on StatCounter" do
-    expect do 
+    expect do
       subject.invoke
     end.to change {
       stat_counter.reload.kudos_count
@@ -120,7 +120,7 @@ describe "rake After:update_indexed_stat_counter_kudo_count", work_search: true 
     expect do
       subject.invoke
       run_all_indexing_jobs
-    end.to change { 
+    end.to change {
       WorkSearchForm.new(kudos_count: work.kudos.count.to_s).search_results.size
     }.from(0).to(1)
   end
@@ -151,6 +151,65 @@ describe "rake After:replace_dewplayer_embeds" do
     expect do
       subject.invoke
     end.to output("Couldn't convert 1 chapter(s): #{dewplayer_work.first_chapter.id}\nConverted 0 chapter(s).\n").to_stdout
+  end
+end
+
+describe "rake After:fix_teen_and_up_imported_rating" do
+  let!(:noncanonical_teen_rating) do 
+    tag = Rating.create(name: "Teen & Up Audiences")
+    tag.canonical = false
+    tag.save!(validate: false)
+    return tag
+  end
+  let!(:canonical_gen_rating) { Rating.find_or_create_by!(name: ArchiveConfig.RATING_GENERAL_TAG_NAME, canonical: true) }
+  let!(:canonical_teen_rating) { Rating.find_or_create_by!(name: ArchiveConfig.RATING_TEEN_TAG_NAME, canonical: true) }
+  let!(:work_with_noncanonical_rating) { create(:work, rating_string: noncanonical_teen_rating.name) }
+  let!(:work_with_canonical_and_noncanonical_ratings) { create(:work, rating_string: [noncanonical_teen_rating.name, ArchiveConfig.RATING_GENERAL_TAG_NAME].join(",")) }
+
+  it "updates the works' ratings to the canonical teen rating" do
+    subject.invoke
+    expect(work_with_noncanonical_rating.reload.ratings.to_a).to contain_exactly(canonical_teen_rating)
+    expect(work_with_canonical_and_noncanonical_ratings.reload.ratings.to_a).to contain_exactly(canonical_teen_rating, canonical_gen_rating)
+  end
+end
+
+describe "rake After:clean_up_noncanonical_categories" do
+  let!(:canonical_category_tag) { Category.find_or_create_by(name: ArchiveConfig.CATEGORY_GEN_TAG_NAME, canonical: true) }
+  let!(:noncanonical_category_tag) do
+    tag = Category.create(name: "Borked category tag")
+    tag.canonical = false
+    tag.save!(validate: false)
+    return tag
+  end
+  let!(:work_with_noncanonical_categ) do 
+    work = create(:work)
+    work.categories = [noncanonical_category_tag]
+    work.save!(validate: false)
+    return work
+  end
+  let!(:work_with_canonical_and_noncanonical_categs) do
+    work = create(:work)
+    work.categories = [noncanonical_category_tag, canonical_category_tag]
+    work.save!(validate: false)
+    return work
+  end
+
+  it "changes and replaces the noncanonical category tags" do
+    subject.invoke
+    work_with_noncanonical_categ.reload
+    work_with_canonical_and_noncanonical_categs.reload
+
+    # Changes the noncanonical categories into freeforms
+    noncanonical_category_tag = Tag.find_by(name: "Borked category tag")
+    expect(noncanonical_category_tag).to be_a(Freeform)
+    expect(work_with_noncanonical_categ.freeforms.to_a).to include(noncanonical_category_tag)
+    expect(work_with_canonical_and_noncanonical_categs.freeforms.to_a).to include(noncanonical_category_tag)
+
+    # Leaves the works that had no other categories without a category
+    expect(work_with_noncanonical_categ.categories.to_a).to be_empty
+
+    # Leaves the works that had other categories with those categories
+    expect(work_with_canonical_and_noncanonical_categs.categories.to_a).to contain_exactly(canonical_category_tag)
   end
 end
 

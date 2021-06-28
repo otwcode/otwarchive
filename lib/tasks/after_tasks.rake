@@ -740,6 +740,38 @@ namespace :After do
     WorkIndexer.create_mapping
   end
 
+  desc "Fix works imported with a noncanonical Teen & Up Audiences rating tag"
+  task(fix_teen_and_up_imported_rating: :environment) do
+    borked_rating_tag = Rating.find_by!(name: "Teen & Up Audiences")
+    canonical_rating_tag = Rating.find_by!(name: ArchiveConfig.RATING_TEEN_TAG_NAME)
+    works_using_tag = borked_rating_tag.works
+    invalid_works = []
+    works_using_tag.each do |work|
+      work.ratings << canonical_rating_tag
+      work.ratings = work.ratings - [borked_rating_tag]
+      invalid_works << work.id if work.save == false
+      print(".") && STDOUT.flush
+    end
+
+    unless invalid_works.empty?
+      puts "The following works failed validations and could not be saved:"
+      puts invalid_works.join(", ")
+      STDOUT.flush
+    end
+
+    puts "Converted #{borked_rating_tag.name} rating tag on #{works_using_tag.size - invalid_works.size} works"
+    STDOUT.flush
+  end
+
+  desc "Clean up noncanonical category tags"
+  task(clean_up_noncanonical_categories: :environment) do
+    Category.where(canonical: false).each do |tag|
+      tag.update_attribute(:type, "Freeform")
+      puts "Noncanonical Category tag #{tag.name} was changed into an Additional Tag."
+    end
+    STDOUT.flush
+  end
+
   desc "Fix tags with extra spaces"
   task(fix_tags_with_extra_spaces: :environment) do
     total_tags = Tag.count
