@@ -54,11 +54,12 @@ shared_examples_for "an autocompleting tag" do
   end
 
   context "with diacritics" do
-    let(:auto) { FactoryBot.create(:tag, name: "Àutobot2", type: tag_type) }
+    let(:auto) { FactoryBot.create(:tag, name: "Àŭ̸̫tobot2", type: tag_type) }
+    let(:transliterated_name) { "Autobot2" }
 
     describe "#autocomplete_search_string" do
       it "is equal to its transliterated name" do
-        expect(auto.autocomplete_search_string).to eq(ActiveSupport::Inflector.transliterate(auto.name))
+        expect(auto.autocomplete_search_string).to eq(transliterated_name)
       end
     end
 
@@ -74,11 +75,11 @@ shared_examples_for "an autocompleting tag" do
         ac = REDIS_AUTOCOMPLETE.zrange(autocomplete_cache_key, 0, -1)
 
         (1..ac.length).each do |i|
-          search_string = ActiveSupport::Inflector.transliterate(auto.name.downcase.slice(0, i))
-          expect(ac).to include(search_string.to_s)
+          search_string = transliterated_name.downcase.slice(0, i)
+          expect(ac).to include(search_string)
         end
 
-        expect(ac).to include("#{ActiveSupport::Inflector.transliterate(auto.name.downcase)},,")
+        expect(ac).to include("#{transliterated_name.downcase},,")
       end
     end
 
@@ -87,7 +88,7 @@ shared_examples_for "an autocompleting tag" do
         auto.add_to_autocomplete
         auto.remove_from_autocomplete
         ac = REDIS_AUTOCOMPLETE.zrange(autocomplete_cache_key, 0, -1)
-        expect(ac).not_to include("#{ActiveSupport::Inflector.transliterate(auto.name.downcase)},,")
+        expect(ac).not_to include("#{transliterated_name.downcase},,")
       end
     end
   end

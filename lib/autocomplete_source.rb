@@ -12,8 +12,9 @@ module AutocompleteSource
   AUTOCOMPLETE_WORD_TERMINATOR = ",,".freeze
 
   def transliterate(input)
+    input = input.to_s.mb_chars.normalize(:kd).gsub(/[\u0300-\u036F]/,"")
     result = ""
-    input.to_s.each_char do |char|
+    input.each_char do |char|
       tl = ActiveSupport::Inflector.transliterate(char)
       # Don't transliterate characters which are not supported (e.g. non-Latin characters).
       # No need for special handling of "?" since it is not modified by transliteration
@@ -235,7 +236,7 @@ module AutocompleteSource
       # Use the ActiveSupport::Multibyte::Chars class to handle downcasing
       # instead of the basic string class, because it can handle downcasing
       # letters with accents or other diacritics.
-      normalized = self.transliterate(string.mb_chars.downcase.to_s)
+      normalized = self.transliterate(string).downcase.to_s
 
       # Split on one or more spaces, ampersand, slash, double quotation mark,
       # opening parenthesis, closing parenthesis (just in case), tilde, hyphen
