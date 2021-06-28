@@ -12,7 +12,7 @@ module AutocompleteSource
   AUTOCOMPLETE_WORD_TERMINATOR = ",,".freeze
 
   def transliterate(input)
-    input = input.to_s.mb_chars.normalize(:kd).gsub(/[\u0300-\u036F]/,"")
+    input = input.to_s.mb_chars.normalize(:kd).gsub(/[\u0300-\u036F]/, "")
     result = ""
     input.each_char do |char|
       tl = ActiveSupport::Inflector.transliterate(char)
@@ -94,7 +94,7 @@ module AutocompleteSource
     # takes either an array or string of search terms (typically extra values passed in through live params, like fandom)
     # and returns an array of stripped and lowercase words for actual searching or use in keys
     def get_search_terms(search_term)
-      terms = search_term.is_a?(Array) ? search_term.map {|term| term.split(',')}.flatten : (search_term.blank? ? [] : search_term.split(','))
+      terms = search_term.is_a?(Array) ? search_term.map { |term| term.split(",")}.flatten : (search_term.blank? ? [] : search_term.split(","))
       terms.map { |term| self.transliterate(term.strip.downcase) }
     end
 
