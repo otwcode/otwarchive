@@ -155,15 +155,16 @@ describe "rake After:replace_dewplayer_embeds" do
 end
 
 describe "rake After:fix_teen_and_up_imported_rating" do
-  let!(:noncanonical_teen_rating) { Rating.create(name: "Teen & Up Audiences", canonical: true) }
+  let!(:noncanonical_teen_rating) do 
+    tag = Rating.create(name: "Teen & Up Audiences")
+    tag.canonical = false
+    tag.save!(validate: false)
+    return tag
+  end
   let!(:canonical_gen_rating) { Rating.find_or_create_by!(name: ArchiveConfig.RATING_GENERAL_TAG_NAME, canonical: true) }
   let!(:canonical_teen_rating) { Rating.find_or_create_by!(name: ArchiveConfig.RATING_TEEN_TAG_NAME, canonical: true) }
   let!(:work_with_noncanonical_rating) { create(:work, rating_string: noncanonical_teen_rating.name) }
   let!(:work_with_canonical_and_noncanonical_ratings) { create(:work, rating_string: [noncanonical_teen_rating.name, ArchiveConfig.RATING_GENERAL_TAG_NAME].join(",")) }
-
-  before do
-    noncanonical_teen_rating.update_attribute(:canonical, false)
-  end
 
   it "updates the works' ratings to the canonical teen rating" do
     subject.invoke
@@ -173,13 +174,24 @@ describe "rake After:fix_teen_and_up_imported_rating" do
 end
 
 describe "rake After:clean_up_noncanonical_categories" do
-  let!(:noncanonical_category_tag) { Category.create(name: "Borked category tag", canonical: true) }
   let!(:canonical_category_tag) { Category.find_or_create_by(name: ArchiveConfig.CATEGORY_GEN_TAG_NAME, canonical: true) }
-  let!(:work_with_noncanonical_categ) { create(:work, categories: [noncanonical_category_tag]) }
-  let!(:work_with_canonical_and_noncanonical_categs) { create(:work, categories: [noncanonical_category_tag, canonical_category_tag]) }
-
-  before do
-    noncanonical_category_tag.update_attribute(:canonical, false)
+  let!(:noncanonical_category_tag) do
+    tag = Category.create(name: "Borked category tag")
+    tag.canonical = false
+    tag.save!(validate: false)
+    return tag
+  end
+  let!(:work_with_noncanonical_categ) do 
+    work = create(:work)
+    work.categories = [noncanonical_category_tag]
+    work.save!(validate: false)
+    return work
+  end
+  let!(:work_with_canonical_and_noncanonical_categs) do
+    work = create(:work)
+    work.categories = [noncanonical_category_tag, canonical_category_tag]
+    work.save!(validate: false)
+    return work
   end
 
   it "changes and replaces the noncanonical category tags" do
