@@ -49,6 +49,11 @@ When(/^I view the(?: ([^"]*)) collection items page for "(.*?)"$/) do |item_stat
   end
 end
 
+When "the collection counts have expired" do
+  step "all indexing jobs have been run"
+  step "it is currently 5 minutes from now"
+end
+
 Given /^mod1 lives in Alaska$/ do
   step %{I am logged in as "mod1"}
   step %{I go to mod1 preferences page}
@@ -183,6 +188,7 @@ Then /^the collection "(.*)" should be deleted/ do |collection|
 end
 
 Then /^the work "([^\"]*)" should be hidden from me$/ do |title|
+  step "all indexing jobs have been run"
   work = Work.find_by(title: title)
   visit work_path(work)
   page.should have_content("Mystery Work")
@@ -213,6 +219,7 @@ Then /^the author of "([^\"]*)" should be visible to me on the work page$/ do |t
 end
 
 Then /^the author of "([^\"]*)" should be publicly visible$/ do |title|
+  step "all indexing jobs have been run"
   work = Work.find_by(title: title)
   byline = work.users.first.pseuds.first.byline
   visit work_path(work)
@@ -225,6 +232,7 @@ Then /^the author of "([^\"]*)" should be publicly visible$/ do |title|
 end
 
 Then /^the author of "([^\"]*)" should be hidden from me$/ do |title|
+  step "all indexing jobs have been run"
   work = Work.find_by(title: title)
   visit work_path(work)
   page.should_not have_content(work.users.first.pseuds.first.byline)
