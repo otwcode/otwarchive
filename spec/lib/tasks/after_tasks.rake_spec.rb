@@ -156,27 +156,26 @@ end
 
 describe "rake After:add_default_rating_to_works" do
   context "for a work missing rating" do
-    let(:work) { create(:work, rating_string: ArchiveConfig.RATING_EXPLICIT_TAG_NAME) }
-
-    before do
-      work.taggings.delete_all
-      work.save
-      work.ratings.reload
+    let!(:unrated_work) do
+      work = create(:work)
+      work.ratings = []
+      work.save!(validate: false)
+      return work
     end
 
     it "sets default rating on work which is missing a rating" do
       subject.invoke
-      work.ratings.reload
-      expect(work.rating_string).to eq(ArchiveConfig.RATING_DEFAULT_TAG_NAME)
+      unrated_work.reload
+      expect(unrated_work.rating_string).to eq(ArchiveConfig.RATING_DEFAULT_TAG_NAME)
     end
   end
 
   context "for a rated work" do
-    let(:work) { create(:work, rating_string: ArchiveConfig.RATING_EXPLICIT_TAG_NAME) }
+    let!(:work) { create(:work, rating_string: ArchiveConfig.RATING_EXPLICIT_TAG_NAME) }
   
     it "does not modify works which already have a rating" do
       subject.invoke
-      work.ratings.reload
+      work.reload
       expect(work.rating_string).to eq(ArchiveConfig.RATING_EXPLICIT_TAG_NAME)
     end
   end
