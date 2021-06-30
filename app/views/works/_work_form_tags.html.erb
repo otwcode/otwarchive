@@ -28,10 +28,15 @@
       <fieldset class="warnings">
         <!--<legend class="landmark">Warning</legend>-->
         <ul>
-          <% for tag in ArchiveWarning.canonical.by_name %>
+          <%= collection_check_boxes(
+            :work, :archive_warning_strings,
+            ArchiveWarning.canonical.by_name,
+            :name, :name,
+            include_hidden: !include_blank
+          ) do |builder| %>
             <li>
-              <%= check_box_tag "work[archive_warning_strings][]", tag.name, include_blank ? false : check_archive_warning(@work, tag), :id => "work_archive_warning_strings_#{tag.id}" %>
-              <%= label_tag "work_archive_warning_strings_#{tag.id}", tag.name %>
+              <%= builder.check_box %>
+              <%= builder.label %>
             </li>
           <% end %>
         </ul>
@@ -58,12 +63,17 @@
       <fieldset>
         <!--<legend class="landmark">Category</legend>-->
         <ul>
-          <% for tag in Category.canonical.by_name.sort %>
+          <%= collection_check_boxes(
+            :work, :category_strings,
+            Category.canonical.by_name.sort,
+            :name, :name,
+            include_hidden: !include_blank
+          ) do |builder| %>
             <li>
-              <%= check_box_tag "work[category_string][]", tag.name, include_blank ? false : @work.category_strings.include?(tag.name), :id => "work_category_string_#{tag.id}" %>
-              <%= label_tag "work_category_string_#{tag.id}", tag.name %>
+              <%= builder.check_box %>
+              <%= builder.label %>
             </li>
-          <% end %> 
+          <% end %>
         </ul>
       </fieldset>
     </dd>

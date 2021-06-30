@@ -1,5 +1,11 @@
 ---
 en:
+  chapters:
+    anonymous: Anonymous
+    chapter_position: " - Chapter %{position}"
+    multifandom: Multifandom
+    unrevealed: Mystery Work
+    unspecified_fandom: No fandom specified
   comments:
     check_frozen:
       error: Sorry, you cannot reply to a frozen comment.

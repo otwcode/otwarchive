@@ -1,5 +1,10 @@
+if ENV["CI"] == "true"
+  require "codecov"
+  SimpleCov.formatter = SimpleCov::Formatter::Codecov
+  Codecov.pass_ci_if_error = true
+end
+
 SimpleCov.start "rails" do
-  # any custom configs like groups and filters can be here at a central place
   add_filter "/factories/"
   merge_timeout 7200
   command_name ENV["TEST_GROUP"].gsub(/[^\w]/, "_") if ENV["TEST_GROUP"]
