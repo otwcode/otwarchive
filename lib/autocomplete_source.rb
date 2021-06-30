@@ -94,12 +94,11 @@ module AutocompleteSource
     # takes either an array or string of search terms (typically extra values passed in through live params, like fandom)
     # and returns an array of stripped and lowercase words for actual searching or use in keys
     def get_search_terms(search_term)
-      #terms = search_term.is_a?(Array) ? search_term.map { |term| term.split(",") }.flatten : (search_term.blank? ? [] : search_term.split(","))
-      if search_term.is_a?(Array)
-        terms = search_term.map { |term| term.split(",") }.flatten
-      else
-        terms = search_term.blank? ? [] : search_term.split(",")
-      end
+      terms = if search_term.is_a?(Array)
+                search_term.map { |term| term.split(",") }.flatten
+              else
+                search_term.blank? ? [] : search_term.split(",")
+              end
       terms.map { |term| self.transliterate(term.strip.downcase) }
     end
 
