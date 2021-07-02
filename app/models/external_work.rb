@@ -84,15 +84,6 @@ class ExternalWork < ApplicationRecord
     destroyed? || (saved_changes.keys & pertinent_attributes).present?
   end
 
-  #######################################################################
-  # TAGGING
-  # External works are taggable objects.
-  #######################################################################
-
-  def tag_groups
-    self.tags.group_by { |t| t.type.to_s }
-  end
-
   ######################
   # SEARCH
   ######################

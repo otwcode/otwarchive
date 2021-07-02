@@ -303,7 +303,7 @@ Feature: Create Works
       And I fill in "content" with "It wasn't my fault, you know."
       And I press "Post"
     Then I should see "We couldn't save this work"
-      And I should see "Please add all required tags. Warning is missing."
+      And I should see "Please select at least one warning."
     When I check "No Archive Warnings Apply"
       And I press "Post"
     Then I should see "Work was successfully posted."
@@ -395,17 +395,3 @@ Feature: Create Works
     When I follow "Next Chapter"
     Then I should see "barbaz, foobar"
       And I should not see "Chapter by"
-
-  @javascript
-  Scenario: Please wait should disappear after fixing errors when creating work
-    Given basic tags
-      And I am logged in as "test_user"
-    When I go to the new work page
-      And I fill in "Work Title" with "Unicorns Abound"
-      And I select "English" from "Choose a language"
-      And I fill in "Fandoms" with "Dallas"
-      And I press "Post"
-    Then I should see "Brevity is the soul of wit, but your content does have to be at least 10 characters long."
-      And I should see a button with text "Please wait..."
-    When I fill in "content" with "help there are unicorns everywhere"
-    Then I should see a button with text "Post"
