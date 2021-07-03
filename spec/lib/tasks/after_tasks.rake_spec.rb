@@ -154,6 +154,33 @@ describe "rake After:replace_dewplayer_embeds" do
   end
 end
 
+describe "rake After:add_default_rating_to_works" do
+  context "for a work missing rating" do
+    let!(:unrated_work) do
+      work = create(:work)
+      work.ratings = []
+      work.save!(validate: false)
+      return work
+    end
+
+    it "sets default rating on work which is missing a rating" do
+      subject.invoke
+      unrated_work.reload
+      expect(unrated_work.rating_string).to eq(ArchiveConfig.RATING_DEFAULT_TAG_NAME)
+    end
+  end
+
+  context "for a rated work" do
+    let!(:work) { create(:work, rating_string: ArchiveConfig.RATING_EXPLICIT_TAG_NAME) }
+  
+    it "does not modify works which already have a rating" do
+      subject.invoke
+      work.reload
+      expect(work.rating_string).to eq(ArchiveConfig.RATING_EXPLICIT_TAG_NAME)
+    end
+  end
+end
+  
 describe "rake After:fix_teen_and_up_imported_rating" do
   let!(:noncanonical_teen_rating) do 
     tag = Rating.create(name: "Teen & Up Audiences")
