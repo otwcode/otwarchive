@@ -768,29 +768,6 @@ namespace :After do
     end
     puts(report_string) && STDOUT.flush
   end
-
-  desc "Add default rating to works missing a rating"
-  task(add_default_rating_to_works: :environment) do
-    work_count = Work.count
-    total_batches = (work_count + 999) / 1000
-    puts("Checking #{work_count} works in #{total_batches} batches") && STDOUT.flush
-    batch_number = 0
-    updated_works = []
-
-    Work.in_batches do |batch|
-      batch_number += 1
-      
-      batch.each do |work|
-        next unless work.ratings.empty?
-
-        work.ratings << Rating.find_by!(name: ArchiveConfig.RATING_DEFAULT_TAG_NAME)
-        work.save
-        updated_works << work.id
-      end
-      puts("Batch #{batch_number} of #{total_batches} complete") && STDOUT.flush
-    end
-    puts("Added default rating to works: #{updated_works}") && STDOUT.flush
-  end
   
   desc "Fix works imported with a noncanonical Teen & Up Audiences rating tag"
   task(fix_teen_and_up_imported_rating: :environment) do
@@ -822,6 +799,29 @@ namespace :After do
       puts "Noncanonical Category tag #{tag.name} was changed into an Additional Tag."
     end
     STDOUT.flush
+  end
+
+  desc "Add default rating to works missing a rating"
+  task(add_default_rating_to_works: :environment) do
+    work_count = Work.count
+    total_batches = (work_count + 999) / 1000
+    puts("Checking #{work_count} works in #{total_batches} batches") && STDOUT.flush
+    batch_number = 0
+    updated_works = []
+
+    Work.in_batches do |batch|
+      batch_number += 1
+      
+      batch.each do |work|
+        next unless work.ratings.empty?
+
+        work.ratings << Rating.find_by!(name: ArchiveConfig.RATING_DEFAULT_TAG_NAME)
+        work.save
+        updated_works << work.id
+      end
+      puts("Batch #{batch_number} of #{total_batches} complete") && STDOUT.flush
+    end
+    puts("Added default rating to works: #{updated_works}") && STDOUT.flush
   end
 
   # This is the end that you have to put new tasks above.
