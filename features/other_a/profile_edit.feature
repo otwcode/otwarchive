@@ -86,6 +86,9 @@ Scenario: Changing email address -- can't be the same as another user's
   When I enter a duplicate email
   Then I should see "Email has already been taken"
     And 0 emails should be delivered
+    # Regression test for AO3-5049
+    And I should not see "Email addresses don't match!"
+    And I should not see "foo@ao3.org"
 
 Scenario: Date of birth - under age
 
