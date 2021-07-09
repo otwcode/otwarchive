@@ -108,11 +108,7 @@ module CommentsHelper
 
   def get_visible_comments(commentable)
     visible_comments = commentable.comments.reviewed
-
-    unless logged_in_as_admin?
-      visible_comments = visible_comments.where(approved: true)
-    end
-
+    visible_comments = visible_comments.where(approved: true) unless logged_in_as_admin?
     visible_comments
   end
 
