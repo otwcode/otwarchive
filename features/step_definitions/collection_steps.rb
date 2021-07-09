@@ -219,13 +219,13 @@ Then /^the author of "([^\"]*)" should be visible to me on the work page$/ do |t
 end
 
 Then /^the author of "([^\"]*)" should be publicly visible$/ do |title|
-  step "all indexing jobs have been run"
   work = Work.find_by(title: title)
   byline = work.users.first.pseuds.first.byline
   visit work_path(work)
   step %{I should see "#{byline}" within "title"}
   step %{I should see "#{byline}" within ".byline"}
   if work.collections.first
+    step "all indexing jobs have been run"
     visit collection_path(work.collections.first)
     page.should have_content("#{title} by #{byline}")
   end
