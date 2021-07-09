@@ -26,7 +26,6 @@ Feature: Basic collection navigation
     And I fill in "Post to Collections / Challenges" with "my_collection"
     And I press "Preview"
     And I press "Post"
-    And all indexing jobs have been run
     And the collection counts have expired
     And I follow "My Collection"
   When I follow "Profile"

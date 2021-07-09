@@ -51,7 +51,7 @@ end
 
 When "the collection counts have expired" do
   step "all indexing jobs have been run"
-  step "it is currently 5 minutes from now"
+  step "it is currently #{ArchiveConfig.SECONDS_UNTIL_COLLECTION_COUNTS_EXPIRE} seconds from now"
 end
 
 Given /^mod1 lives in Alaska$/ do
@@ -188,7 +188,6 @@ Then /^the collection "(.*)" should be deleted/ do |collection|
 end
 
 Then /^the work "([^\"]*)" should be hidden from me$/ do |title|
-  step "all indexing jobs have been run"
   work = Work.find_by(title: title)
   visit work_path(work)
   page.should have_content("Mystery Work")
@@ -196,6 +195,7 @@ Then /^the work "([^\"]*)" should be hidden from me$/ do |title|
   page.should have_content("This work is part of an ongoing challenge and will be revealed soon!")
   page.should_not have_content(Sanitize.clean(work.chapters.first.content))
   if work.collections.first
+    step "all indexing jobs have been run"
     visit collection_path(work.collections.first)
     page.should_not have_content(title)
     page.should have_content("Mystery Work")
