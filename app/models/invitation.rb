@@ -73,7 +73,10 @@ class Invitation < ApplicationRecord
           # send invitations actively sent by a user synchronously to avoid delays
           UserMailer.invitation(self.id).deliver_now
         end
-        self.sent_at = Time.now
+
+        # We cannot simple use "self.sent_at = Time.now" since that change is not persisted when this
+        # function is called during after_save. Using update_column, it is.
+        self.update_column(:sent_at, Time.now)
       rescue Exception => exception
         errors.add(:base, "Notification email could not be sent: #{exception.message}")
       end

@@ -78,5 +78,20 @@ describe Invitation, :ready do
         end
       end
     end
+
+    # Regression test for AO3-6094
+    context "Sending an invitation to a valid email" do
+      let(:invite) {build(:invitation, invitee_email: "foo@example.com")}
+      it "succeeds and 'sent_at' is set" do
+        expect(invite.save).to be_truthy
+        expect(invite.id).to_not be_nil
+
+        # Reload invite to make sure that change to invite.sent_at is actually persisted
+        # on the database (not just on the 'invite' object currently being created).
+        reloaded_invite = Invitation.find_by(id: invite.id)
+        expect(reloaded_invite).to_not be_nil
+        expect(reloaded_invite.sent_at).not_to be_nil
+      end
+    end
   end
 end
