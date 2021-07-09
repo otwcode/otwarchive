@@ -106,6 +106,16 @@ module CommentsHelper
         remote: true)
   end
 
+  def get_visible_comments(commentable)
+    visible_comments = commentable.comments.reviewed
+
+    unless logged_in_as_admin?
+      visible_comments = visible_comments.where(approved: true)
+    end
+
+    visible_comments
+  end
+
   #### HELPERS FOR CHECKING WHICH BUTTONS/FORMS TO DISPLAY #####
 
   def can_reply_to_comment?(comment)

@@ -14,6 +14,11 @@ Given /^I have the receive no comment notifications setup$/ do
   user.preference.save
 end
 
+Given "the last {int} comments on the work {string} are spam" do |n, work_name|
+  work = Work.includes(:comments).find_by(title: work_name)
+  work.comments.ordered_by_date.limit(n).find_each(&:mark_as_spam!)
+end
+
 # THEN
 
 Then /^the comment's posted date should be nowish$/ do
@@ -38,6 +43,11 @@ Then /^I should see Last Edited in the right timezone$/ do
   zone = Time.current.in_time_zone(Time.zone).zone
   step %{I should see "#{zone}" within ".comment .posted"}
   step %{I should see "Last Edited"}
+end
+
+Then "I should see {int} comments" do |expected_comment_count|
+  actual_comment_count = page.all("li.comment").count
+  assert actual_comment_count == expected_comment_count
 end
 
 # WHEN

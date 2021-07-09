@@ -4,7 +4,7 @@
     <% if comment.approved? || logged_in_as_admin? %>
 
       <%= render 'comments/single_comment', single_comment: comment %>
-      <% child_comments = comment.comments.reviewed %>
+      <% child_comments = get_visible_comments(comment) %>
 
       <% if child_comments && child_comments.count > 0 %>
         <!-- cut off the recursion when we get too deep, but not if there's just one last measly comment left -->
