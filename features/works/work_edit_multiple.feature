@@ -158,6 +158,7 @@ Feature: Edit Multiple Works
     Given I am logged in as "author"
       And I add the pseud "My New Pseud"
       And I edit the multiple works "First" and "Second"
+      And it is currently 1 second from now
     When I select "My New Pseud" from "Creator/Pseud(s)"
       And I press "Update All Works"
     Then I should see "Your edits were put through"
