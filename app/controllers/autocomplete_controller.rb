@@ -138,7 +138,7 @@ class AutocompleteController < ApplicationController
 
   # encodings for importing
   def encoding
-    encodings = Encoding.name_list.select {|e| e.match(/#{ Regexp.escape(params[:term]) }/i)}
+    encodings = Encoding.name_list.select { |e| e.match(/#{Regexp.escape(params[:term])}/i) }
     render_output(encodings)
   end
 
