@@ -73,8 +73,6 @@ Feature: Create and Edit Series
       And I press "Update"
     Then I should see "Complete: Yes"
 
-  # TODO: Enable caching after AO3-5041.
-  @disable_caching
   Scenario: A work can be in two series
     Given I am logged in as "author"
       And I post the work "Sweetie Belle" as part of a series "Ponies"
@@ -224,8 +222,6 @@ Feature: Create and Edit Series
       And I press "Yes, Delete Series"
     Then I should see "Series was successfully deleted."
 
-  # TODO: Enable caching after AO3-5041.
-  @disable_caching
   Scenario: A work's series information is visible and up to date when previewing the work while posting or editing
     Given I am logged in as "author"
       And I add the pseud "Pointless Pseud"

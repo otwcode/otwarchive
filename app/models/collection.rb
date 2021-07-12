@@ -159,6 +159,10 @@ class Collection < ApplicationRecord
   validates_format_of :header_image_url, allow_blank: true, with: URI::regexp(%w(http https)), message: ts("is not a valid URL.")
   validates_format_of :header_image_url, allow_blank: true, with: /\.(png|gif|jpg)$/, message: ts("can only point to a gif, jpg, or png file."), multiline: true
 
+  validates :tags_after_saving,
+            length: { maximum: ArchiveConfig.COLLECTION_TAGS_MAX,
+                      message: "^Sorry, a collection can only have %{count} tags." }
+
   scope :top_level, -> { where(parent_id: nil) }
   scope :closed, -> { joins(:collection_preference).where("collection_preferences.closed = ?", true) }
   scope :not_closed, -> { joins(:collection_preference).where("collection_preferences.closed = ?", false) }

@@ -57,7 +57,6 @@ Scenario: The recent chapter link in a work's blurb should show the adult
 content notice to visitors who are not logged in
 
   Given I am logged in as a random user
-    And an adult canonical rating exists with name: "Mature"
     And a canonical fandom "Canonical Fandom"
     And I post the 3 chapter work "WIP" with fandom "Canonical Fandom" with rating "Mature"
   When I am logged out
@@ -71,7 +70,6 @@ Scenario: The recent chapter link in a work's blurb should honor the logged-in
 user's "Show me adult content without checking" preference
 
   Given I am logged in as a random user
-    And an adult canonical rating exists with name: "Mature"
     And a canonical fandom "Canonical Fandom"
     And I post the 2 chapter work "WIP" with fandom "Canonical Fandom" with rating "Mature"
   When I am logged in as "adultuser"
