@@ -2,7 +2,7 @@
 
 require "faker"
 
-FactoryGirl.define do
+FactoryBot.define do
   factory :gift do
     user { create(:user) }
     work { create(:work) }

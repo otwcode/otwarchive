@@ -3,7 +3,7 @@ require 'spec_helper'
 describe Collection do
 
   before do
-    @collection = FactoryGirl.create(:collection)
+    @collection = FactoryBot.create(:collection)
   end
 
   describe "collections with challenges" do
@@ -77,7 +77,7 @@ describe Collection do
     let(:collection) { create(:collection) }
 
     it "does not include bookmarks of deleted works" do
-      work = create(:posted_work)
+      work = create(:work)
       create(:bookmark, collections: [collection], bookmarkable: work)
       expect do
         work.destroy
@@ -85,7 +85,7 @@ describe Collection do
     end
 
     it "does not include multiple bookmarks of the same work" do
-      work = create(:posted_work)
+      work = create(:work)
       create(:bookmark, collections: [collection], bookmarkable: work)
       create(:bookmark, collections: [collection], bookmarkable: work)
       expect(collection.all_bookmarked_items_count).to eq 1
@@ -97,7 +97,7 @@ describe Collection do
     end
 
     it "includes bookmarks of restricted works only when logged-in" do
-      work = create(:posted_work, restricted: true)
+      work = create(:work, restricted: true)
       create(:bookmark, collections: [collection], bookmarkable: work)
       expect do
         User.current_user = User.new
@@ -105,7 +105,7 @@ describe Collection do
     end
 
     it "counts bookmarks of all types" do
-      %i[posted_work series_with_a_work external_work].each do |factory|
+      %i[work series_with_a_work external_work].each do |factory|
         item = create(factory)
         create(:bookmark, collections: [collection], bookmarkable: item)
       end

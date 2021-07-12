@@ -15,7 +15,7 @@ Scenario: freeforms wrangling - syns, mergers, autocompletes, metatags
   # create a new canonical freeform from tag wrangling interface
   When I follow "New Tag"
     And I fill in "Name" with "Alternate Universe Pirates"
-    And I choose "Freeform"
+    And I choose "Additional Tag"
     And I check "Canonical"
     And I press "Create Tag"
   Then I should see "Tag was successfully created"
@@ -25,7 +25,7 @@ Scenario: freeforms wrangling - syns, mergers, autocompletes, metatags
   # create a new non-canonical freeform from tag wrangling interface
   When I follow "New Tag"
     And I fill in "Name" with "Pirates! in Spaaaaace! AU"
-    And I choose "Freeform"
+    And I choose "Additional Tag"
     And I press "Create Tag"
   Then I should see "Tag was successfully created"
     And the "Canonical" checkbox should not be checked
@@ -42,13 +42,9 @@ Scenario: freeforms wrangling - syns, mergers, autocompletes, metatags
 
   # creating non-canonical freeforms from work posting
   When I go to the new work page
-    And I select "Not Rated" from "Rating"
-    And I check "No Archive Warnings Apply"
+    And I fill in the basic work information for "Silliness"
     And I fill in "Fandoms" with "Torchwood"
-    And I fill in "Work Title" with "Silliness"
     And I fill in "Additional Tags" with "Pirate AU, Arrr-verse"
-    And I fill in "content" with "And then everyone was kidnapped by an alien bus."
-    And I press "Preview"
     And I press "Post"
   Then I should see "Work was successfully posted."
 
@@ -72,17 +68,17 @@ Scenario: freeforms wrangling - syns, mergers, autocompletes, metatags
   When I follow "Arrr-verse"
   Then I should see "No Fandom"
 
-  # metatags and subtags, transference thereof to a new canonical
+  # metatags and subtags, transference thereof to a new canonical by an admin
   When I follow "Edit Alternate Universe Pirates"
     And I fill in "MetaTags" with "Alternate Universe"
     And I press "Save changes"
-  Then I should see "Invalid meta tag 'Alternate Universe':"
-    And I should see "Meta tag does not exist."
+  Then I should see "Invalid metatag 'Alternate Universe':"
+    And I should see "Metatag does not exist."
     And I should not see "Alternate Universe" within "form"
   When I follow "New Tag"
     And I fill in "Name" with "Alternate Universe"
     And I check "Canonical"
-    And I choose "Freeform"
+    And I choose "Additional Tag"
     And I press "Create Tag"
     And I fill in "Fandoms" with "No Fandom"
     And I choose "Alternate Universe Pirates" from the "SubTags" autocomplete
@@ -98,7 +94,9 @@ Scenario: freeforms wrangling - syns, mergers, autocompletes, metatags
   Then I should see "Tag was updated"
   When I follow "Alternate Universe Pirates"
   Then I should see "Alternate Universe Space Pirates"
-  When I fill in "Synonym of" with "Alternate Universe Pirrrates"
+  When I am logged in as an admin
+    And I edit the tag "Alternate Universe Pirates"
+    And I fill in "Synonym of" with "Alternate Universe Pirrrates"
     And I press "Save changes"
   Then I should see "Tag was updated"
     And I should not see "Alternate Universe Space Pirates"
@@ -111,13 +109,15 @@ Scenario: freeforms wrangling - syns, mergers, autocompletes, metatags
     And I should see "Alternate Universe Pirates"
 
   # trying to syn a non-canonical to another non-canonical
-  When I follow "New Tag"
+  When I am logged in as "Enigel" with password "wrangulate!"
+    And I edit the tag "Alternate Universe Pirates"
+    And I follow "New Tag"
     And I fill in "Name" with "Drabble"
-    And I choose "Freeform"
+    And I choose "Additional Tag"
     And I press "Create Tag"
     And I follow "New Tag"
     And I fill in "Name" with "100 words"
-    And I choose "Freeform"
+    And I choose "Additional Tag"
     And I press "Create Tag"
     And I fill in "Synonym of" with "Drabble"
     And I press "Save changes"

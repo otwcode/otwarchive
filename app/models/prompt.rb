@@ -1,6 +1,9 @@
 class Prompt < ApplicationRecord
   include ActiveModel::ForbiddenAttributesProtection
 
+  include UrlHelpers
+  include TagTypeHelper
+
   # -1 represents all matching
   ALL = -1
 
@@ -26,7 +29,7 @@ class Prompt < ApplicationRecord
   accepts_nested_attributes_for :optional_tag_set
   has_many :optional_tags, through: :optional_tag_set, source: :tag
 
-  has_many :request_claims, class_name: "ChallengeClaim", foreign_key: 'request_prompt_id'
+  has_many :request_claims, class_name: "ChallengeClaim", foreign_key: "request_prompt_id", inverse_of: :request_prompt, dependent: :destroy
 
   # SCOPES
 
@@ -40,14 +43,6 @@ class Prompt < ApplicationRecord
     joins("JOIN set_taggings ON set_taggings.tag_set_id = prompts.tag_set_id").
     where("set_taggings.tag_id = ?", tag.id)
   }
-
-  # CALLBACKS
-
-  before_destroy :clear_claims
-  def clear_claims
-    # remove this prompt reference from any existing assignments
-    request_claims.each {|claim| claim.destroy}
-  end
 
   # VALIDATIONS
 
@@ -99,12 +94,13 @@ class Prompt < ApplicationRecord
         # get the tags of this type the user has specified
         taglist = tag_set ? eval("tag_set.#{tag_type}_taglist") : []
         tag_count = taglist.count
+        tag_label = tag_type_label_name(tag_type).downcase
 
         # check if user has chosen the "Any" option
         if self.send("any_#{tag_type}")
           if tag_count > 0
-            errors.add(:base, ts("^You have specified tags for %{tag_type} in your %{prompt_type} but also chose 'Any,' which will override them! Please only choose one or the other.",
-                                tag_type: tag_type, prompt_type: prompt_type))
+            errors.add(:base, ts("^You have specified tags for %{tag_label} in your %{prompt_type} but also chose 'Any,' which will override them! Please only choose one or the other.",
+                                tag_label: tag_label, prompt_type: prompt_type))
           end
           next
         end
@@ -117,13 +113,13 @@ class Prompt < ApplicationRecord
               ts("none") :
               "(#{tag_count}) -- " + taglist.collect(&:name).join(ArchiveConfig.DELIMITER_FOR_OUTPUT)
           if allowed == 0
-            errors.add(:base, ts("^#{prompt_type}: Your #{prompt_type} cannot include any #{tag_type} tags, but you have included %{taglist}.",
+            errors.add(:base, ts("^#{prompt_type}: Your #{prompt_type} cannot include any #{tag_label} tags, but you have included %{taglist}.",
               taglist: taglist_string))
           elsif required == allowed
-            errors.add(:base, ts("^#{prompt_type}: Your #{prompt_type} must include exactly %{required} #{tag_type} tags, but you have included #{tag_count} #{tag_type} tags in your current #{prompt_type}.",
+            errors.add(:base, ts("^#{prompt_type}: Your #{prompt_type} must include exactly %{required} #{tag_label} tags, but you have included #{tag_count} #{tag_label} tags in your current #{prompt_type}.",
               required: required))
           else
-            errors.add(:base, ts("^#{prompt_type}: Your #{prompt_type} must include between %{required} and %{allowed} #{tag_type} tags, but you have included #{tag_count} #{tag_type} tags in your current #{prompt_type}.",
+            errors.add(:base, ts("^#{prompt_type}: Your #{prompt_type} must include between %{required} and %{allowed} #{tag_label} tags, but you have included #{tag_count} #{tag_label} tags in your current #{prompt_type}.",
               required: required, allowed: allowed))
           end
         end
@@ -145,16 +141,16 @@ class Prompt < ApplicationRecord
         elsif restriction.has_tags?(tag_type)
           disallowed_taglist = tag_set.send("#{tag_type}_taglist") - restriction.tags(tag_type)
           unless disallowed_taglist.empty?
-            errors.add(:base, ts("^These %{tag_type} tags in your %{prompt_type} are not allowed in this challenge: %{taglist}",
-              tag_type: tag_type,
+            errors.add(:base, ts("^These %{tag_label} tags in your %{prompt_type} are not allowed in this challenge: %{taglist}",
+              tag_label: tag_type_label_name(tag_type).downcase,
               prompt_type: self.class.name.downcase,
               taglist: disallowed_taglist.collect(&:name).join(ArchiveConfig.DELIMITER_FOR_OUTPUT)))
           end
         else
           noncanonical_taglist = tag_set.send("#{tag_type}_taglist").reject {|t| t.canonical}
           unless noncanonical_taglist.empty?
-            errors.add(:base, ts("^These %{tag_type} tags in your %{prompt_type} are not canonical and cannot be used in this challenge: %{taglist}. To fix this, please ask your challenge moderator to set up a tag set for the challenge. New tags can be added to the tag set manually by the moderator or through open nominations.",
-              tag_type: tag_type,
+            errors.add(:base, ts("^These %{tag_label} tags in your %{prompt_type} are not canonical and cannot be used in this challenge: %{taglist}. To fix this, please ask your challenge moderator to set up a tag set for the challenge. New tags can be added to the tag set manually by the moderator or through open nominations.",
+              tag_label: tag_type_label_name(tag_type).downcase,
               prompt_type: self.class.name.downcase,
               taglist: noncanonical_taglist.collect(&:name).join(ArchiveConfig.DELIMITER_FOR_OUTPUT)))
           end
@@ -177,9 +173,9 @@ class Prompt < ApplicationRecord
           # check for tag set associations
           disallowed_taglist.reject! {|tag| TagSetAssociation.where(tag_id: tag.id, parent_tag_id: tag_set.fandom_taglist).exists?}
           unless disallowed_taglist.empty?
-            errors.add(:base, ts("^These %{tag_type} tags in your %{prompt_type} are not in the selected fandom(s), %{fandom}: %{taglist} (Your moderator may be able to fix this.)",
+            errors.add(:base, ts("^These %{tag_label} tags in your %{prompt_type} are not in the selected fandom(s), %{fandom}: %{taglist} (Your moderator may be able to fix this.)",
                               prompt_type: self.class.name.downcase,
-                              tag_type: tag_type, fandom: tag_set.fandom_taglist.collect(&:name).join(ArchiveConfig.DELIMITER_FOR_OUTPUT),
+                              tag_label: tag_type_label_name(tag_type).downcase, fandom: tag_set.fandom_taglist.collect(&:name).join(ArchiveConfig.DELIMITER_FOR_OUTPUT),
                               taglist: disallowed_taglist.collect(&:name).join(ArchiveConfig.DELIMITER_FOR_OUTPUT)))
           end
         end
@@ -216,17 +212,6 @@ class Prompt < ApplicationRecord
 
   def fulfilled_claims
     self.request_claims.fulfilled
-  end
-
-  # We want to have all the matching methods defined on
-  # TagSet available here, too, without rewriting them,
-  # so we just pass them through method_missing
-  def method_missing(method, *args, &block)
-    super || (tag_set && tag_set.respond_to?(method) ? tag_set.send(method) : super)
-  end
-
-  def respond_to?(method, include_private = false)
-    super || tag_set.respond_to?(method, include_private)
   end
 
   # Computes the "full" tag set (tag_set + optional_tag_set), and stores the

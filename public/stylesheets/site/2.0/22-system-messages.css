@@ -29,7 +29,7 @@ div.error {
     border-radius: 0.25em;
 }
 
-.notice, .comment_notice, ul.notes, .caution, .error, .comment_error, .alert.flash {
+.notice, .comment_notice, .kudos_notice, ul.notes, .caution, .error, .comment_error, .kudos_error, .alert.flash {
   background: #d1e1ef;
   border: 1px solid #c2d2df;
   margin: 0.643em auto;
@@ -44,8 +44,7 @@ div.error {
   color: #000;
   border-color: #d89e36;
 }
-
-.error, .comment_error, .alert.flash {
+.error, .comment_error, .kudos_error, .alert.flash {
   background: #efd1d1;
   border-color: #900;
     box-shadow: 1px 1px 2px;

@@ -100,11 +100,11 @@ Feature: Creating and editing tag sets
   Scenario: A user should be able to add and remove warning tags for a tag set they own
   Given the basic warnings exist
     And I am logged in
-    And I set up the tag set "Warnings" with the warning tags "Choose Not To Use Archive Warnings"
-  When I add the warning tags "No Archive Warnings Apply" to the tag set "Warnings"
+    And I set up the tag set "Archive Warnings" with the warning tags "Choose Not To Use Archive Warnings"
+  When I add the warning tags "No Archive Warnings Apply" to the tag set "Archive Warnings"
   Then I should see "Choose Not To Use Archive Warnings"
     And I should see "No Archive Warnings Apply"
-  When I remove the warning tags "Choose Not To Use Archive Warnings" from the tag set "Warnings"
+  When I remove the warning tags "Choose Not To Use Archive Warnings" from the tag set "Archive Warnings"
   Then I should see "No Archive Warnings Apply"
     And I should not see "Choose Not To Use Archive Warnings"
 
@@ -164,7 +164,7 @@ Feature: Creating and editing tag sets
   When I expand the unassociated characters and relationships
   Then "Sharon Raydor" should be an unassociated tag
 
-  Scenario: A moderator can't change the tag set's nomination settings if there 
+  Scenario: A moderator can't change the tag set's nomination settings if there
   are already nominations
   Given I have the nominated tag set "Nominated Tags"
     And I am logged in as "tagsetter"
@@ -173,4 +173,3 @@ Feature: Creating and editing tag sets
     And I fill in "Character nomination limit" with "1"
     And I submit
   Then I should see "You cannot make changes to nomination settings when nominations already exist. Please review and delete existing nominations first."
-  

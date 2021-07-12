@@ -35,18 +35,8 @@ class FilterCount < ApplicationRecord
   # DELAYED JOBS
   ####################
 
+  include AsyncWithResque
   @queue = :utilities
-
-  # This will be called by a worker when it's trying to perform a delayed task.
-  # This just calls the passed-in class method with the passed-in arguments.
-  def self.perform(method, *args)
-    send(method, *args)
-  end
-
-  # Queue up a method to be called later.
-  def self.async(method, *args)
-    Resque.enqueue(self, method, *args)
-  end
 
   ####################
   # QUEUE MANAGEMENT
@@ -65,8 +55,11 @@ class FilterCount < ApplicationRecord
   # Queue up a list of filters (or filter IDs) to have their filter counts
   # recalculated in the next periodic task.
   def self.enqueue_filters(filters)
-    return if suspended?
-    ids = filters.map { |filter| filter.respond_to?(:id) ? filter.id : filter }
+    return if suspended? || filters.blank?
+
+    ids = filters.map do |filter|
+      filter.respond_to?(:id) ? filter.id : filter
+    end.uniq
 
     # Separate the large filters from the small filters, so that they can be
     # processed at different intervals.

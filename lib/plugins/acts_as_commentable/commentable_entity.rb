@@ -23,17 +23,44 @@ module CommentableEntity
 
   # These below have all been redefined to work for the archive
 
-  # redefined for our archive to also not include
-  # hidden-by-admin comments.
-  # returns number of visible (not deleted) comments
-  def count_visible_comments
+  # The total number of visible comments on this commentable, not including
+  # deleted comments, spam comments, unreviewed comments, and comments hidden
+  # by an admin.
+  #
+  # This is the uncached version, and should only be used when calculating an
+  # accurate value is important (e.g. when updating the StatCounter in the
+  # database).
+  def count_visible_comments_uncached
     self.total_comments.where(
       hidden_by_admin: false,
       is_deleted: false,
       unreviewed: false,
       approved: true
     ).count
+  end
+
+  # The total number of visible comments on this commentable. Cached to reduce
+  # computation. The cache is manually expired whenever a comment is added,
+  # removed, or changes visibility, but the cache also expires after a fixed
+  # amount of time in case of issues with the cache (e.g. stale data when
+  # calculating the count).
+  def count_visible_comments
+    @count_visible_comments ||=
+      Rails.cache.fetch(count_visible_comments_key,
+                        expires_in: ArchiveConfig.SECONDS_UNTIL_COMMENT_COUNTS_EXPIRE.seconds,
+                        race_condition_ttl: 10.seconds) do
+        count_visible_comments_uncached
+      end
   end  
+
+  def count_visible_comments_key
+    "#{self.class.table_name}/#{self.id}/count_visible_comments"
+  end
+
+  def expire_comments_count
+    @count_visible_comments = nil
+    Rails.cache.delete(count_visible_comments_key)
+  end
 
   # Return the name of this commentable object
   # Should be overridden in the implementing class if necessary

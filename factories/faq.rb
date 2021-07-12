@@ -1,6 +1,6 @@
 require "faker"
 
-FactoryGirl.define do
+FactoryBot.define do
   sequence(:faq_title) do |n|
     "The #{n} FAQ"
   end

@@ -44,12 +44,8 @@ Scenario: fandoms wrangling - syns, mergers, autocompletes, metatags
 
   # creating non-canonical fandoms from work posting
   When I go to the new work page
-    And I select "Not Rated" from "Rating"
-    And I check "No Archive Warnings Apply"
+    And I fill in the basic work information for "Silliness"
     And I fill in "Fandoms" with "SG1, the whole Stargate franchise, Stargates SG-1"
-    And I fill in "Work Title" with "Silliness"
-    And I fill in "content" with "And then everyone was kidnapped by an alien bus."
-    And I press "Preview"
     And I press "Post"
   Then I should see "Work was successfully posted."
 
@@ -80,12 +76,12 @@ Scenario: fandoms wrangling - syns, mergers, autocompletes, metatags
   When I follow "Stargates SG-1"
   Then I should see "TV Shows"
 
-  # metatags and subtags, transference thereof to a new canonical
+  # metatags and subtags, transference thereof to a new canonical by an admin
   When I edit the tag "Stargate Atlantis"
     And I fill in "MetaTags" with "Stargate Franchise"
     And I press "Save changes"
-  Then I should see "Invalid meta tag 'Stargate Franchise':"
-    And I should see "Meta tag does not exist."
+  Then I should see "Invalid metatag 'Stargate Franchise':"
+    And I should see "Metatag does not exist."
     And I should not see "Stargate Franchise" within "form"
   When I follow "New Tag"
     And I fill in "Name" with "Stargate Franchise"
@@ -114,7 +110,9 @@ Scenario: fandoms wrangling - syns, mergers, autocompletes, metatags
     And I follow "Stargate SG-1"
   Then I should see "Stargate SG-1: Ark of Truth" within "div#child_SubTag_associations_to_remove_checkboxes"
     And I should see "Stargate Franchise" within "div#parent_MetaTag_associations_to_remove_checkboxes"
-  When I fill in "Synonym of" with "Stargate SG-1: Greatest Show in the Universe"
+  When I am logged in as an admin
+    And I edit the tag "Stargate SG-1"
+    And I fill in "Synonym of" with "Stargate SG-1: Greatest Show in the Universe"
     And I press "Save changes"
   Then I should see "Tag was updated"
     And I should not see "Stargate SG-1: Ark of Truth"
@@ -128,7 +126,9 @@ Scenario: fandoms wrangling - syns, mergers, autocompletes, metatags
     And I should see "Stargate Franchise"
 
   # trying to syn a non-canonical to another non-canonical
-  When I follow "New Tag"
+  When I am logged in as "Enigel" with password "wrangulate!"
+    And I edit the tag "Stargate SG-1: Greatest Show in the Universe"
+    And I follow "New Tag"
     And I fill in "Name" with "White Collar"
     And I choose "Fandom"
     And I press "Create Tag"
@@ -148,7 +148,6 @@ Scenario: fandoms wrangling - syns, mergers, autocompletes, metatags
 Scenario: Checking the media pages
 
   Given basic tags
-    And tag wrangling is on
     And a media exists with name: "TV Shows", canonical: true
     And a media exists with name: "Video Games", canonical: true
     And a media exists with name: "Books", canonical: true

@@ -4,14 +4,13 @@
   <% offer_signup = assignment.offer_signup %>
   <tr>
     <th scope="row">
-      <%= assignment_form.hidden_field :collection_id, :value => @collection.id %>
       <%= link_to assignment.id, collection_assignment_path(@collection, assignment) %>
     </th>
     <td id="request_signup_for_<%= assignment.id %>">
       <% if offer_signup %>
         <% # offer an autocomplete of potential matches %>
         <%= assignment_form.text_field :request_signup_pseud, autocomplete_options("potential_requests?signup_id=#{offer_signup.id}", 
-          :autocomplete_min_chars => 0, :autocomplete_token_limit => 1, :size => ArchiveConfig.POTENTIAL_MATCHES_MAX) %>
+          data: { autocomplete_min_chars: 0, autocomplete_token_limit: 1 }, size: ArchiveConfig.POTENTIAL_MATCHES_MAX) %>
       <% else %>
         <%= request_signup.pseud.byline %>
       <% end %>
@@ -21,7 +20,7 @@
       <% if request_signup %>
         <% # offer an autocomplete of potential matches %>
         <%= assignment_form.text_field :offer_signup_pseud, autocomplete_options("potential_offers?signup_id=#{request_signup.id}", 
-          :autocomplete_min_chars => 0, :autocomplete_token_limit => 1, :size => ArchiveConfig.POTENTIAL_MATCHES_MAX) %>
+          data: { autocomplete_min_chars: 0, autocomplete_token_limit: 1 }, size: ArchiveConfig.POTENTIAL_MATCHES_MAX) %>
       <% else %>
         <%= offer_signup.pseud.byline %>
       <% end %>
@@ -29,7 +28,7 @@
     
     <% unless params[:no_recipient] %>
       <td><!--BACK END this td should probably be titled, but what with?-->
-        <%= assignment_form.text_field :pinch_hitter_byline, autocomplete_options("pseud", :autocomplete_token_limit => 1, :size => 20) %>
+        <%= assignment_form.text_field :pinch_hitter_byline, autocomplete_options("pseud", data: { autocomplete_token_limit: 1 }, size: 20) %>
       </td>
     <% end %>
   </tr>

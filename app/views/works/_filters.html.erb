@@ -26,16 +26,16 @@
         </dt>
         <dd class="<%= filter_action %> tags group">
           <dl>
-            <% %w(rating warning category fandom character relationship freeform).each do |tag_type| %>
-              <dt id="toggle_<%= filter_action %>_<%= tag_type %>_tags" class="filter-toggle <%= tag_type %> tags">
+            <% %w(rating archive_warning category fandom character relationship freeform).each do |tag_type| %>
+              <dt id="toggle_<%= filter_action %>_<%= tag_type %>_tags" class="filter-toggle <%= tag_type_css_class(tag_type) %> tags">
                 <% # For accessibility, include filter action (e.g. Include) as landmark text %>
                 <% # The space needs to be in the landmark to keep the text aligned %>
                 <%= ts("<span class=\"landmark\">%{filter_action} </span>%{tag_type}",
                     filter_action: filter_action.titleize,
-                    tag_type: tag_type_label(tag_type)
+                    tag_type: tag_type_label_name(tag_type).pluralize
                     ).html_safe %>
               </dt>
-              <dd id="<%= filter_action %>_<%= tag_type %>_tags" class="expandable <%= tag_type %> tags">
+              <dd id="<%= filter_action %>_<%= tag_type %>_tags" class="expandable <%= tag_type_css_class(tag_type) %> tags">
                 <ul>
                   <% @facets[tag_type].each do |tag| %>
                     <li>
@@ -154,7 +154,7 @@
             <%= f.label :language_id, ts("Language") %>
           </dt>
           <dd class="language">
-            <%= f.collection_select(:language_id, Language.default_order, :id, :name, include_blank: true) %>
+            <%= f.collection_select(:language_id, Language.default_order, :short, :name, include_blank: true) %>
           </dd>
         </dl>
       </dd>

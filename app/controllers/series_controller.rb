@@ -47,7 +47,8 @@ class SeriesController < ApplicationController
   # GET /series/1
   # GET /series/1.xml
   def show
-    @serial_works = @series.serial_works.includes(:work).where('works.posted = ?', true).references(:works).order(:position).select{ |sw| sw.work.visible(User.current_user) }
+    @works = @series.works_in_order.posted.select(&:visible?)
+
     # sets the page title with the data for the series
     @page_title = @series.unrevealed? ? ts("Mystery Series") : get_page_title(@series.allfandoms.collect(&:name).join(', '), @series.anonymous? ? ts("Anonymous") : @series.allpseuds.collect(&:byline).join(', '), @series.title)
     if current_user.respond_to?(:subscriptions)
@@ -65,11 +66,6 @@ class SeriesController < ApplicationController
 
   # GET /series/1/edit
   def edit
-    @pseuds = current_user.pseuds
-    @coauthors = @series.pseuds.select{ |p| p.user.id != current_user.id}
-    to_select = @series.pseuds.blank? ? [current_user.default_pseud] : @series.pseuds
-    @selected_pseuds = to_select.collect {|pseud| pseud.id.to_i }
-
     if params["remove"] == "me"
       pseuds_with_author_removed = @series.pseuds - current_user.pseuds
       if pseuds_with_author_removed.empty?
@@ -77,7 +73,7 @@ class SeriesController < ApplicationController
       else
         begin
           @series.remove_author(current_user)
-          flash[:notice] = ts("You have been removed as an author from the series and its works.")
+          flash[:notice] = ts("You have been removed as a creator from the series and its works.")
           redirect_to @series
         rescue Exception => error
           flash[:error] = error.message
@@ -107,28 +103,11 @@ class SeriesController < ApplicationController
   # PUT /series/1
   # PUT /series/1.xml
   def update
-    unless params[:series][:author_attributes][:ids]
-      flash[:error] = ts("Sorry, you cannot remove yourself entirely as an author of a series right now.")
-      redirect_to edit_series_path(@series) and return
-    end
-
-    if params[:pseud] && params[:pseud][:byline] && params[:pseud][:byline] != "" && params[:series][:author_attributes]
-      valid_pseuds = Pseud.parse_bylines(params[:pseud][:byline])[:pseuds] # an array
-      valid_pseuds.each do |valid_pseud|
-        existing_ids = series_params[:author_attributes][:ids]
-        params[:series][:author_attributes][:ids] = existing_ids.push(valid_pseud.id) rescue nil
-      end
-      params[:pseud][:byline] = ""
-    end
-
-    if @series.update_attributes(series_params)
+    @series.attributes = series_params
+    if @series.errors.empty? && @series.save
       flash[:notice] = ts('Series was successfully updated.')
       redirect_to(@series)
     else
-      @pseuds = current_user.pseuds
-      @coauthors = @series.pseuds.select{ |p| p.user.id != current_user.id}
-      to_select = @series.pseuds.blank? ? [current_user.default_pseud] : @series.pseuds
-      @selected_pseuds = to_select.collect {|pseud| pseud.id.to_i }
       render action: "edit"
     end
   end
@@ -171,10 +150,7 @@ class SeriesController < ApplicationController
   def series_params
     params.require(:series).permit(
       :title, :summary, :series_notes, :complete,
-      author_attributes: [
-        ids: [],
-        coauthors: []
-      ]
+      author_attributes: [:byline, ids: [], coauthors: []]
     )
   end
 end

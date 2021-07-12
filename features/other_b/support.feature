@@ -39,7 +39,7 @@ Feature: Filing a support request
     And I fill in "Your email (required)" with ""
     And all emails have been delivered
     And I press "Send"
-  Then I should see "Email does not seem to be a valid address."
+  Then I should see "Email should look like an email address."
     And "Deutsch" should be selected within "Select language (required)"
     And I fill in "Your email (required)" with "test@archiveofourown.org"
     And I press "Send"

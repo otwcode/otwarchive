@@ -23,7 +23,7 @@ class User < ApplicationRecord
   acts_as_authorized_user
   acts_as_authorizable
   has_many :roles_users
-  has_many :roles, through: :roles_users
+  has_many :roles, through: :roles_users, dependent: :destroy
 
   ### BETA INVITATIONS ###
   has_many :invitations, as: :creator
@@ -42,9 +42,6 @@ class User < ApplicationRecord
 
   has_many :favorite_tags, dependent: :destroy
 
-  # MUST be before the pseuds association, or the 'dependent' destroys the pseuds before they can be removed from kudos
-  before_destroy :remove_pseud_from_kudos
-
   has_many :pseuds, dependent: :destroy
   validates_associated :pseuds
 
@@ -58,6 +55,7 @@ class User < ApplicationRecord
   has_many :work_skins, foreign_key: "author_id", dependent: :nullify
 
   before_create :create_default_associateds
+  before_destroy :remove_user_from_kudos
 
   after_update :update_pseud_name
   after_update :log_change_if_login_was_edited
@@ -83,64 +81,21 @@ class User < ApplicationRecord
   has_many :bookmarks, through: :pseuds
   has_many :bookmark_collection_items, through: :bookmarks, source: :collection_items
   has_many :comments, through: :pseuds
-  has_many :kudos, through: :pseuds
+  has_many :kudos
 
   # Nested associations through creatorships got weird after 3.0.x
+  has_many :creatorships, through: :pseuds
 
-  def works
-    Work.select("DISTINCT works.*").
-    joins("INNER JOIN `creatorships` ON `works`.`id` = `creatorships`.`creation_id`
-      INNER JOIN `pseuds` ON `creatorships`.`pseud_id` = `pseuds`.`id`").
-    where("`pseuds`.`user_id` = ? AND `creatorships`.`creation_type` = 'Work'", self.id)
-  end
+  has_many :works, -> { distinct }, through: :pseuds
+  has_many :series, -> { distinct }, through: :pseuds
+  has_many :chapters, through: :pseuds
 
-  def series
-    Series.select("DISTINCT series.*").
-    joins("INNER JOIN `creatorships` ON `series`.`id` = `creatorships`.`creation_id`
-      INNER JOIN `pseuds` ON `creatorships`.`pseud_id` = `pseuds`.`id`").
-    where("`pseuds`.`user_id` = ? AND `creatorships`.`creation_type` = 'Series'", self.id)
-  end
+  has_many :related_works, through: :works
+  has_many :parent_work_relationships, through: :works
 
-  def chapters
-    Chapter.joins("INNER JOIN `creatorships` ON `chapters`.`id` = `creatorships`.`creation_id`
-      INNER JOIN `pseuds` ON `creatorships`.`pseud_id` = `pseuds`.`id`").
-    where("`pseuds`.`user_id` = ? AND `creatorships`.`creation_type` = 'Chapter'", self.id)
-  end
-
-  def related_works
-    RelatedWork.joins("INNER JOIN `works` ON `related_works`.`parent_id` = `works`.`id`
-      AND `related_works`.`parent_type` = 'Work'
-      INNER JOIN `creatorships` ON `works`.`id` = `creatorships`.`creation_id`
-      INNER JOIN `pseuds` ON `creatorships`.`pseud_id` = `pseuds`.`id`").
-    where("`pseuds`.`user_id` = ? AND `creatorships`.`creation_type` = 'Work'", self.id)
-  end
-
-  def parent_work_relationships
-    RelatedWork.joins("INNER JOIN `works` ON `related_works`.`work_id` = `works`.`id`
-      INNER JOIN `creatorships` ON `works`.`id` = `creatorships`.`creation_id`
-      INNER JOIN `pseuds` ON `creatorships`.`pseud_id` = `pseuds`.`id`").
-    where("`pseuds`.`user_id` = ? AND `creatorships`.`creation_type` = 'Work'", self.id)
-  end
-
-  def tags
-    Tag.joins("INNER JOIN `taggings` ON `tags`.`id` = `taggings`.`tagger_id`
-      INNER JOIN `works` ON `taggings`.`taggable_id` = `works`.`id` AND `taggings`.`taggable_type` = 'Work'
-      INNER JOIN `creatorships` ON `works`.`id` = `creatorships`.`creation_id`
-      INNER JOIN `pseuds` ON `creatorships`.`pseud_id` = `pseuds`.`id`").
-    where("`pseuds`.`user_id` = ? AND `creatorships`.`creation_type` = 'Work'", self.id)
-  end
-
-  def filters
-    Tag.joins("INNER JOIN `filter_taggings` ON `tags`.`id` = `filter_taggings`.`filter_id`
-      INNER JOIN `works` ON `filter_taggings`.`filterable_id` = `works`.`id` AND `filter_taggings`.`filterable_type` = 'Work'
-      INNER JOIN `creatorships` ON `works`.`id` = `creatorships`.`creation_id`
-      INNER JOIN `pseuds` ON `creatorships`.`pseud_id` = `pseuds`.`id`").
-    where("`pseuds`.`user_id` = ? AND `creatorships`.`creation_type` = 'Work'", self.id)
-  end
-
-  def direct_filters
-    filters.where("filter_taggings.inherited = false")
-  end
+  has_many :tags, through: :works
+  has_many :filters, through: :works
+  has_many :direct_filters, through: :works
 
   has_many :bookmark_tags, through: :bookmarks, source: :tags
 
@@ -177,10 +132,10 @@ class User < ApplicationRecord
     end
   end
 
-  def remove_pseud_from_kudos
-    # NB: updates the kudos to remove the pseud, but the cache will not expire, and there's also issue 2198
-    pseuds_list = pseuds.map(&:id)
-    Kudo.where(["pseud_id IN (?)", pseuds_list]).update_all("pseud_id = NULL") if pseuds_list.present?
+  def remove_user_from_kudos
+    # TODO: AO3-5054 Expire kudos cache when deleting a user.
+    # TODO: AO3-2195 Display orphaned kudos (no users; no IPs so not counted as guest kudos).
+    Kudo.where(user: self).update_all(user_id: nil)
   end
 
   def read_inbox_comments
@@ -303,10 +258,17 @@ class User < ApplicationRecord
   end
 
   def self.search_multiple_by_email(emails = [])
-    users = User.where(email: emails)
-    found_emails = users.map(&:email)
-    not_found = emails - found_emails
-    [users, not_found]
+    # Normalise and dedupe emails
+    all_emails = emails.map(&:downcase)
+    unique_emails = all_emails.uniq
+    # Find users and their email addresses
+    users = User.where(email: unique_emails)
+    found_emails = users.map(&:email).map(&:downcase)
+    # Remove found users from the total list of unique emails and count duplicates
+    not_found_emails = unique_emails - found_emails
+    num_duplicates = emails.size - unique_emails.size
+
+    [users, not_found_emails, num_duplicates]
   end
 
   ### AUTHENTICATION AND PASSWORDS
@@ -350,9 +312,13 @@ class User < ApplicationRecord
 
   # removes ALL unposted works
   def wipeout_unposted_works
-    works.where(posted: false).each do |w|
-      w.destroy
-    end
+    works.where(posted: false).destroy_all
+  end
+
+  # Removes all of the user's series that don't have any listed works.
+  def destroy_empty_series
+    series.left_joins(:serial_works).where(serial_works: { id: nil }).
+      destroy_all
   end
 
   # Retrieve the current default pseud
@@ -391,32 +357,6 @@ class User < ApplicationRecord
     User.fetch_orphan_account if ArchiveConfig.ORPHANING_ALLOWED
   end
 
-  # Allow admins to set roles and change email
-  def admin_update(attributes)
-    if User.current_user.is_a?(Admin)
-      success = true
-      success = set_roles(attributes[:roles])
-      if success && attributes[:email]
-        self.email = attributes[:email]
-        success = self.save(validate: false)
-      end
-      success
-    end
-  end
-
-  private
-
-  # Set the roles for this user
-  def set_roles(role_list)
-    if role_list
-      self.roles = Role.find(role_list)
-    else
-      self.roles = []
-    end
-  end
-
-  public
-
   # Is this user an authorized translation admin?
   def translation_admin
     self.is_translation_admin?
@@ -424,11 +364,6 @@ class User < ApplicationRecord
 
   def is_translation_admin?
     has_role?(:translation_admin)
-  end
-
-  # Set translator role for this user and log change
-  def translation_admin=(should_be_translation_admin)
-    set_role("translation_admin", should_be_translation_admin == "1")
   end
 
   # Is this user an authorized tag wrangler?
@@ -440,11 +375,6 @@ class User < ApplicationRecord
     has_role?(:tag_wrangler)
   end
 
-  # Set tag wrangler role for this user and log change
-  def tag_wrangler=(should_be_tag_wrangler)
-    set_role("tag_wrangler", should_be_tag_wrangler == "1")
-  end
-
   # Is this user an authorized archivist?
   def archivist
     self.is_archivist?
@@ -454,9 +384,15 @@ class User < ApplicationRecord
     has_role?(:archivist)
   end
 
-  # Set archivist role for this user and log change
-  def archivist=(should_be_archivist)
-    set_role("archivist", should_be_archivist == "1")
+  # Is this user a protected user? These are users experiencing certain types
+  # of harassment. For now, this is only used to prevent harassment via repeated
+  # password reset requests.
+  def protected_user
+    self.is_protected_user?
+  end
+
+  def is_protected_user?
+    has_role?(:protected_user)
   end
 
   # Creates log item tracking changes to user

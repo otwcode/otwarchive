@@ -1,8 +1,8 @@
 class Series < ApplicationRecord
   include ActiveModel::ForbiddenAttributesProtection
   include Bookmarkable
-  include Creatable
   include Searchable
+  include Creatable
 
   has_many :serial_works, dependent: :destroy
   has_many :works, through: :serial_works
@@ -11,10 +11,6 @@ class Series < ApplicationRecord
 
   has_many :taggings, as: :taggable, dependent: :destroy
   has_many :tags, through: :taggings, source: :tagger, source_type: 'Tag'
-
-  has_many :creatorships, as: :creation
-  has_many :pseuds, through: :creatorships
-  has_many :users, -> { distinct }, through: :pseuds
 
   has_many :subscriptions, as: :subscribable, dependent: :destroy
 
@@ -26,9 +22,6 @@ class Series < ApplicationRecord
   validates_length_of :title,
     maximum: ArchiveConfig.TITLE_MAX,
     too_long: ts("must be less than %{max} letters long.", max: ArchiveConfig.TITLE_MAX)
-
-  after_create :notify_after_creation
-  before_update :notify_before_update
 
   # return title.html_safe to overcome escaping done by sanitiser
   def title
@@ -46,9 +39,8 @@ class Series < ApplicationRecord
     too_long: ts("must be less than %{max} letters long.", max: ArchiveConfig.NOTES_MAX)
 
   after_save :adjust_restricted
-
-  attr_accessor :authors
-  attr_accessor :authors_to_remove
+  after_update :expire_caches
+  after_update_commit :update_work_index
 
   scope :visible_to_registered_user, -> { where(hidden_by_admin: false).order('series.updated_at DESC') }
   scope :visible_to_all, -> { where(hidden_by_admin: false, restricted: false).order('series.updated_at DESC') }
@@ -61,12 +53,16 @@ class Series < ApplicationRecord
   }
 
   scope :for_pseuds, lambda {|pseuds|
-    joins("INNER JOIN creatorships ON (series.id = creatorships.creation_id AND creatorships.creation_type = 'Series')").
+    joins(:approved_creatorships).
     where("creatorships.pseud_id IN (?)", pseuds.collect(&:id))
   }
 
   def posted_works
     self.works.posted
+  end
+
+  def works_in_order
+    works.order("serial_works.position")
   end
 
   # Get the filters for the works in this series
@@ -85,18 +81,24 @@ class Series < ApplicationRecord
   end
 
   # visibility aped from the work model
-  def visible(current_user=User.current_user)
-    if current_user.is_a?(Admin) || (current_user.is_a?(User) && current_user.is_author_of?(self))
-      return self
-    elsif current_user == :false || !current_user
-      return self unless self.restricted || self.hidden_by_admin
-    elsif (!self.hidden_by_admin && !self.posted_works.empty?)
-      return self
+  def visible?(user = User.current_user)
+    return true if user.is_a?(Admin)
+
+    if posted && !hidden_by_admin
+      user.is_a?(User) || !restricted
+    else
+      user_is_owner_or_invited?(user)
     end
   end
 
-  def visible?(user=User.current_user)
-    self.visible(user) == self
+  # Override the default definition to check whether the user was invited to
+  # any works in the series.
+  def user_is_owner_or_invited?(user)
+    return false unless user.is_a?(User)
+    return true if super
+
+    works.joins(:creatorships).merge(user.creatorships).exists? ||
+      works.joins(chapters: :creatorships).merge(user.creatorships).exists?
   end
 
   def visible_work_count
@@ -142,6 +144,11 @@ class Series < ApplicationRecord
     destroyed? || (saved_changes.keys & pertinent_attributes).present?
   end
 
+  def expire_caches
+    # Expire cached work blurbs and metas if series title changes
+    self.works.each(&:touch) if saved_change_to_title?
+  end
+
   # Change the positions of the serial works in the series
   def reorder_list(positions)
     SortableList.new(self.serial_works.in_order).reorder_list(positions)
@@ -156,41 +163,21 @@ class Series < ApplicationRecord
     works.collect(&:pseuds).flatten.compact.uniq.sort
   end
 
-  # return list of users on this series
-  def owners
-    self.authors.collect(&:user)
-  end
-
-  # Virtual attribute for pseuds
-  def author_attributes=(attributes)
-    selected_pseuds = Pseud.find(attributes[:ids])
-    (self.authors ||= []) << selected_pseuds
-    # if current user has selected different pseuds
-    current_user = User.current_user
-    if current_user.is_a? User
-      self.authors_to_remove = current_user.pseuds & (self.pseuds - selected_pseuds)
-    end
-    self.authors << Pseud.find(attributes[:ambiguous_pseuds]) if attributes[:ambiguous_pseuds]
-    if !attributes[:byline].blank?
-      results = Pseud.parse_bylines(attributes[:byline], keep_ambiguous: true)
-      self.authors << results[:pseuds]
-      self.invalid_pseuds = results[:invalid_pseuds]
-      self.ambiguous_pseuds = results[:ambiguous_pseuds]
-    end
-    self.authors.flatten!
-    self.authors.uniq!
-  end
-
-  # Remove a user as an author of this series
+  # Remove a user (and all their pseuds) as an author of this series.
+  #
+  # We call Work#remove_author before destroying the series creatorships to
+  # make sure that we can handle tricky chapter creatorship cases.
   def remove_author(author_to_remove)
-    pseuds_with_author_removed = self.pseuds - author_to_remove.pseuds
+    pseuds_with_author_removed = pseuds.where.not(user_id: author_to_remove.id)
     raise Exception.new("Sorry, we can't remove all authors of a series.") if pseuds_with_author_removed.empty?
-    Series.transaction do
-      self.pseuds = pseuds_with_author_removed
-      authored_works_in_series = (author_to_remove.works & self.works)
+    transaction do
+      authored_works_in_series = self.works.merge(author_to_remove.works)
+
       authored_works_in_series.each do |work|
         work.remove_author(author_to_remove)
       end
+
+      creatorships.where(pseud: author_to_remove.pseuds).destroy_all
     end
   end
 
@@ -231,18 +218,28 @@ class Series < ApplicationRecord
   def bookmarkable_json
     as_json(
       root: false,
-      only: [:title, :summary, :hidden_by_admin, :restricted, :created_at,
-        :complete],
-      methods: [:revised_at, :posted, :tag, :filter_ids, :rating_ids,
-        :warning_ids, :category_ids, :fandom_ids, :character_ids,
-        :relationship_ids, :freeform_ids, :pseud_ids, :creators, :language_id,
+      only: [
+        :title, :summary, :hidden_by_admin, :restricted, :created_at,
+        :complete
+      ],
+      methods: [
+        :revised_at, :posted, :tag, :filter_ids, :rating_ids,
+        :archive_warning_ids, :category_ids, :fandom_ids, :character_ids,
+        :relationship_ids, :freeform_ids, :creators,
         :word_count, :work_types]
     ).merge(
+      language_id: language&.short,
       anonymous: anonymous?,
       unrevealed: unrevealed?,
+      pseud_ids: anonymous? || unrevealed? ? nil : pseud_ids,
+      user_ids: anonymous? || unrevealed? ? nil : user_ids,
       bookmarkable_type: 'Series',
       bookmarkable_join: { name: "bookmarkable" }
     )
+  end
+
+  def update_work_index
+    self.works.each(&:enqueue_to_index) if saved_change_to_title?
   end
 
   def word_count
@@ -250,8 +247,8 @@ class Series < ApplicationRecord
   end
 
   # FIXME: should series have their own language?
-  def language_id
-    works.first.language_id if works.present?
+  def language
+    works.first.language if works.present?
   end
 
   def posted
@@ -276,8 +273,8 @@ class Series < ApplicationRecord
   def rating_ids
     filters_for_facets.select{ |t| t.type.to_s == 'Rating' }.map{ |t| t.id }
   end
-  def warning_ids
-    filters_for_facets.select{ |t| t.type.to_s == 'Warning' }.map{ |t| t.id }
+  def archive_warning_ids
+    filters_for_facets.select{ |t| t.type.to_s == 'ArchiveWarning' }.map{ |t| t.id }
   end
   def category_ids
     filters_for_facets.select{ |t| t.type.to_s == 'Category' }.map{ |t| t.id }
@@ -293,10 +290,6 @@ class Series < ApplicationRecord
   end
   def freeform_ids
     filters_for_facets.select{ |t| t.type.to_s == 'Freeform' }.map{ |t| t.id }
-  end
-
-  def pseud_ids
-    creatorships.pluck :pseud_id
   end
 
   def creators

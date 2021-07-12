@@ -85,6 +85,7 @@ class TagWranglersController < ApplicationController
     wrangler = User.find_by(login: params[:id])
     assignment = WranglingAssignment.where(user_id: wrangler.id, fandom_id: params[:fandom_id]).first
     assignment.destroy
+    flash[:notice] = "Wranglers were successfully unassigned!"
     redirect_to tag_wranglers_path(media_id: params[:media_id], fandom_string: params[:fandom_string], wrangler_id: params[:wrangler_id])
   end
 end

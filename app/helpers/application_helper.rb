@@ -99,7 +99,7 @@ module ApplicationHelper
   def byline(creation, options={})
     if creation.respond_to?(:anonymous?) && creation.anonymous?
       anon_byline = ts("Anonymous").html_safe
-      if options[:visibility] != "public" && (logged_in_as_admin? || is_author_of?(creation)) 
+      if options[:visibility] != "public" && (logged_in_as_admin? || is_author_of?(creation))
         anon_byline += " [#{non_anonymous_byline(creation, options[:only_path])}]".html_safe
       end
       return anon_byline
@@ -109,6 +109,12 @@ module ApplicationHelper
 
   def non_anonymous_byline(creation, url_path = nil)
     only_path = url_path.nil? ? true : url_path
+
+    if @preview_mode
+      # Skip cache in preview mode
+      return byline_text(creation, only_path)
+    end
+
     Rails.cache.fetch("#{creation.cache_key}/byline-nonanon/#{only_path.to_s}") do
       byline_text(creation, only_path)
     end
@@ -118,9 +124,7 @@ module ApplicationHelper
     if creation.respond_to?(:author)
       creation.author
     else
-      pseuds = []
-      pseuds << creation.authors if creation.authors
-      pseuds << creation.pseuds if creation.pseuds && (!@preview_mode || creation.authors.blank?)
+      pseuds = @preview_mode ? creation.pseuds_after_saving : creation.pseuds.to_a
       pseuds = pseuds.flatten.uniq.sort
 
       archivists = Hash.new []
@@ -294,12 +298,14 @@ module ApplicationHelper
   def autocomplete_options(method, options={})
     {
       class: "autocomplete",
-      autocomplete_method: (method.is_a?(Array) ? method.to_json : "/autocomplete/#{method}"),
-      autocomplete_hint_text: ts("Start typing for suggestions!"),
-      autocomplete_no_results_text: ts("(No suggestions found)"),
-      autocomplete_min_chars: 1,
-      autocomplete_searching_text: ts("Searching...")
-    }.merge(options)
+      data: {
+        autocomplete_method: (method.is_a?(Array) ? method.to_json : "/autocomplete/#{method}"),
+        autocomplete_hint_text: ts("Start typing for suggestions!"),
+        autocomplete_no_results_text: ts("(No suggestions found)"),
+        autocomplete_min_chars: 1,
+        autocomplete_searching_text: ts("Searching...")
+      }
+    }.deep_merge(options)
   end
 
   # see http://asciicasts.com/episodes/197-nested-model-form-part-2
@@ -556,5 +562,46 @@ module ApplicationHelper
   # checkbox or radio designs
   def label_indicator_and_text(text)
     content_tag(:span, "", class: "indicator", "aria-hidden": "true") + content_tag(:span, text)
+  end
+
+  # Display a collection of radio buttons, wrapped in an unordered list.
+  #
+  # The parameter option_array should be a list of pairs, where the first
+  # element in each pair is the radio button's value, and the second element in
+  # each pair is the radio button's label.
+  def radio_button_list(form, field_name, option_array)
+    content_tag(:ul) do
+      form.collection_radio_buttons(field_name, option_array, :first, :second,
+                                    include_hidden: false) do |builder|
+        content_tag(:li, builder.label { builder.radio_button + builder.text })
+      end
+    end
+  end
+
+  # Identifier for creation, formatted external-work-12, series-12, work-12.
+  def creation_id_for_css_classes(creation)
+    return unless %w[ExternalWork Series Work].include?(creation.class.name)
+
+    "#{creation.class.name.underscore.dasherize}-#{creation.id}"
+  end
+
+  # Array of creator ids, formatted user-123, user-126.
+  # External works are not created by users, so we can skip this.
+  # TODO: AO3-6132 to add creator ids to series blurbs.
+  def creator_ids_for_css_classes(creation)
+    return [] unless creation.is_a?(Work)
+    return [] if creation.anonymous? || creation.unrevealed?
+
+    creation.users.pluck(:id).uniq.map { |id| "user-#{id}" }
+  end
+
+  def css_classes_for_creation_blurb(creation)
+    return if creation.nil?
+
+    Rails.cache.fetch("#{creation.cache_key_with_version}/blurb_css_classes") do
+      creation_id = creation_id_for_css_classes(creation)
+      creator_ids = creator_ids_for_css_classes(creation).join(" ")
+      "blurb group #{creation_id} #{creator_ids}".strip
+    end
   end
 end # end of ApplicationHelper

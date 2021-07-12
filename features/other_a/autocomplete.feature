@@ -92,6 +92,56 @@ Feature: Display autocomplete for tags
       And the pseud autocomplete should not contain "different_user (funny)"
 
   @javascript
+  Scenario: Characters in a fandom with non-ASCII uppercase letters should appear in the autocomplete.
+
+    Given basic tags
+      And I am logged in
+      And a canonical character "Bear" in fandom "Østenfor sol og vestenfor måne"
+      And a canonical character "Beatrice" in fandom "Much Ado About Nothing"
+      And I go to the new work page
+
+    When I choose "Østenfor sol og vestenfor måne" from the "Fandoms" autocomplete
+      And I enter "Bea" in the "Characters" autocomplete field
+    Then I should see "Bear" in the autocomplete
+      But I should not see "Beatrice" in the autocomplete
+
+  @javascript
+  Scenario: Accented uppercase letters should appear in the autocomplete.
+
+    Given basic tags
+      And I am logged in
+      And a canonical character "Éowyn (Tolkien)"
+      And a canonical character "Tybalt (Rómeó és Júlia)"
+      And I go to the new work page
+
+    When I enter "é" in the "Characters" autocomplete field
+    Then I should see "Éowyn (Tolkien)" in the autocomplete
+      And I should see "Tybalt (Rómeó és Júlia)" in the autocomplete
+
+  @javascript
+  Scenario: Other non-ASCII uppercase letters should appear in the autocomplete.
+
+    Given basic tags
+      And I am logged in
+      And a canonical fandom "Østenfor sol og vestenfor måne"
+      And I go to the new work page
+
+    When I enter "ø" in the "Fandoms" autocomplete field
+    Then I should see "Østenfor sol og vestenfor måne" in the autocomplete
+
+  @javascript
+  Scenario: Characters with a non-ASCII uppercase letter will appear in fandom-specific autocompletes.
+
+    Given basic tags
+      And I am logged in
+      And a canonical character "Éowyn" in fandom "Lord of the Rings"
+      And I go to the new work page
+
+    When I choose "Lord of the Rings" from the "Fandoms" autocomplete
+      And I enter "É" in the "Characters" autocomplete field
+    Then I should see "Éowyn" in the autocomplete
+
+  @javascript
   Scenario: Search terms are highlighted in autocomplete results
     Given I am logged in
       And basic tags

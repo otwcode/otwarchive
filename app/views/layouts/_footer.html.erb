@@ -2,8 +2,8 @@
 <div id="footer" role="contentinfo" class="region">
 	<h3 class="landmark heading"><%= ts('Footer', key: 'footer') %></h3>
   <ul class="navigation actions" role="navigation">
-    <% unless !(logged_in? || logged_in_as_admin?) %>
-      <% cache(skin_cache_footer_key, skip_digest: true) do %>
+    <% if logged_in? || logged_in_as_admin? %>
+      <% cache(skin_chooser_key, skip_digest: true) do %>
         <% unless Skin.in_chooser.empty? %>
           <li class="module group">
             <h4 class="heading"><%= ts('Customize', key: 'footer') %></h4>

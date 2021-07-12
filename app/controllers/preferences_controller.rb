@@ -21,6 +21,7 @@ class PreferencesController < ApplicationController
     @preference = @user.preference
     @user.preference.attributes = preference_params
     @available_skins = (current_user.skins.site_skins + Skin.approved_skins.site_skins).uniq
+    @available_locales = Locale.where(email_enabled: true)
 
     if params[:preference][:skin_id].present?
       # unset session skin if user changed their skin
@@ -29,7 +30,7 @@ class PreferencesController < ApplicationController
 
     if @user.preference.save
       flash[:notice] = ts('Your preferences were successfully updated.')
-      redirect_to @user
+      redirect_to user_path(@user)
     else
       flash[:error] = ts('Sorry, something went wrong. Please try that again.')
       render action: :index
@@ -53,9 +54,6 @@ class PreferencesController < ApplicationController
       :time_zone,
       :preferred_locale,
       :work_title_format,
-      :hide_all_hit_counts,
-      :hide_private_hit_count,
-      :hide_public_hit_count,
       :comment_emails_off,
       :comment_inbox_off,
       :comment_copy_to_self_off,
@@ -67,7 +65,8 @@ class PreferencesController < ApplicationController
       :recipient_emails_off,
       :history_enabled,
       :first_login,
-      :banner_seen
+      :banner_seen,
+      :allow_cocreator
     )
   end
 end

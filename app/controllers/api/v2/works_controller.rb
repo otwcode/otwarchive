@@ -183,7 +183,7 @@ class Api::V2::WorksController < Api::V2::BaseController
     external_authors = success_works.map(&:external_authors).flatten.uniq
     external_authors&.each do |external_author|
       external_author.find_or_invite(archivist)
-      # One of the external author pseuds is its email address so filter that one out 
+      # One of the external author pseuds is its email address so filter that one out
       author_names = external_author.names.reject { |a| a.name == external_author.email }.map(&:name).flatten.join(", ")
       notified_authors << author_names
     end
@@ -206,7 +206,7 @@ class Api::V2::WorksController < Api::V2::BaseController
       collection_names: work_params[:collection_names],
       title: work_params[:title],
       fandom: work_params[:fandoms],
-      warning: work_params[:warnings],
+      archive_warning: work_params[:warnings],
       character: work_params[:characters],
       rating: work_params[:rating],
       relationship: work_params[:relationships],

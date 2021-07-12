@@ -21,17 +21,17 @@
     </dd>
 
     <dt class="warning required">
-      <label><%= Warning::NAME.pluralize %>*</label>
+      <label><%= ArchiveWarning::NAME.pluralize %>*</label>
       <%= link_to_help "warning-help" %>
     </dt>
     <dd class="warning required">
       <fieldset class="warnings">
         <!--<legend class="landmark">Warning</legend>-->
         <ul>
-          <% for tag in Warning.canonical.by_name %>
+          <% for tag in ArchiveWarning.canonical.by_name %>
             <li>
-              <%= check_box_tag "work[warning_strings][]", tag.name, include_blank ? false : check_warning(@work, tag), :id => "work_warning_strings_#{tag.id}" %>
-              <%= label_tag "work_warning_strings_#{tag.id}", tag.name %>
+              <%= check_box_tag "work[archive_warning_strings][]", tag.name, include_blank ? false : check_archive_warning(@work, tag), :id => "work_archive_warning_strings_#{tag.id}" %>
+              <%= label_tag "work_archive_warning_strings_#{tag.id}", tag.name %>
             </li>
           <% end %>
         </ul>
@@ -75,9 +75,9 @@
     <dd class="relationship" title="<%= ts('relationships') %>">
       <%= text_field_tag "work[relationship_string]", include_blank ? "" : @work.relationship_string, 
                          autocomplete_options("relationship_in_fandom",
-                           :id => "work_relationship",
-                           :title => ts('relationships'),
-                           :autocomplete_live_params => 'fandom=work_fandom') %>
+                           id: "work_relationship",
+                           title: ts('relationships'),
+                           data: { autocomplete_live_params: "fandom=work_fandom" }) %>
     </dd>
 
     <dt class="character" title="<%= ts('characters') %>">
@@ -87,9 +87,9 @@
     <dd class="character" title="<%= ts('characters') %>">
       <%= text_field_tag "work[character_string]", include_blank ? "" : @work.character_string, 
                         autocomplete_options('character_in_fandom', 
-                          :id => "work_character",
-                          :title => ts('characters'),
-                          :autocomplete_live_params => 'fandom=work_fandom') %>
+                          id: "work_character",
+                          title: ts('characters'),
+                          data: { autocomplete_live_params: "fandom=work_fandom" }) %>
     </dd>
 
     <dt class="freeform" title="<%= ts('additional tags') %>">

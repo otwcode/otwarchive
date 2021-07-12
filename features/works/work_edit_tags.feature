@@ -23,15 +23,15 @@ Feature: Edit tags on a work
   When I follow "Edit Tags"
   Then I should see "Edit Work Tags for "
     And I should see "Testerwork"
-    And I should not see "Save Without Posting"
+    And I should not see "Save As Draft"
   When I fill in "Fandoms" with "Stargate SG-1, Hana Yori Dango"
     And I fill in "Additional Tags" with "Alternate Universe"
-    And I press "Post Without Preview"
+    And I press "Post"
   Then I should see "Stargate SG-1"
     And I should see "Hana Yori Dango"
     And I should see "Alternate Universe"
     And I should see "Work was successfully updated"
-  
+
   Scenario: Edit tags on a draft
   Given I am logged in as "imit" with password "tagyoure"
     And the draft "Freeze Tag"
@@ -44,13 +44,13 @@ Feature: Edit tags on a work
     Then I should see "Edit Work Tags"
   When I fill in "Fandoms" with "Games, Anthropomorphic"
     And I fill in "Additional Tags" with "The cooler version of tag"
-    And I press "Save Without Posting"
+    And I press "Save As Draft"
   Then I should see "Tags were successfully updated"
     And I should see "This work is a draft and has not been posted"
     And I should see "Games"
     And I should see "Anthropomorphic"
     And I should see "The cooler version of tag"
- 
+
   Scenario: Ampersands and angle brackets should display in work titles on Edit Tags page
   Given I have loaded the fixtures
     And I am logged in as "testuser2" with password "testuser2"
@@ -71,7 +71,7 @@ Feature: Edit tags on a work
     And I view the work "Work 1"
     And I follow "Edit Tags"
   When I fill in "Fandoms" with ""
-    And I press "Post Without Preview"
+    And I press "Post"
     Then I should see "Sorry! We couldn't save this work because:Please add all required tags. Fandom is missing."
 
   Scenario: User can cancel editing a work's tags

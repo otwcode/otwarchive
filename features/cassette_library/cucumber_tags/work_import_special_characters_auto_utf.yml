@@ -54,9 +54,9 @@ http_interactions:
       message: OK
     headers:
       Date:
-      - Thu, 09 Jun 2016 20:42:48 GMT
+      - Thu, 14 Feb 2019 23:13:33 GMT
       Server:
-      - Apache/2.4.10
+      - Apache/2.4.35
       Last-Modified:
       - Fri, 14 Jan 2011 09:00:19 GMT
       Etag:
@@ -65,8 +65,6 @@ http_interactions:
       - bytes
       Content-Length:
       - '276'
-      Connection:
-      - close
       Content-Type:
       - text/html
     body:
@@ -80,5 +78,5 @@ http_interactions:
         IMOcIMOpIMOoIMOIIMOJIMO8IMO2IMOkIMOfIMOxPC9wPgo8L2JvZHk+Cjwv
         aHRtbD4K
     http_version: 
-  recorded_at: Thu, 09 Jun 2016 20:42:48 GMT
-recorded_with: VCR 3.0.1
+  recorded_at: Thu, 14 Feb 2019 23:13:33 GMT
+recorded_with: VCR 3.0.3

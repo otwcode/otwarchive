@@ -8,9 +8,11 @@ class Preference < ApplicationRecord
     message: ts("can only contain letters, numbers, spaces, and some limited punctuation (comma, period, dash, underscore)."),
     multiline: true
 
+  validate :can_use_skin, if: :skin_id_changed?
+
   before_create :set_default_skin
   def set_default_skin
-    self.skin = Skin.default
+    self.skin_id = AdminSetting.current.default_skin_id
   end
 
   def self.disable_work_skin?(param)
@@ -20,7 +22,10 @@ class Preference < ApplicationRecord
      return User.current_user.try(:preference).try(:disable_work_skins)
   end
 
-  def hide_hit_counts
-    self.try(:hide_all_hit_counts) || self.try(:hide_private_hit_count)
+  def can_use_skin
+    return if skin_id == AdminSetting.default_skin_id ||
+              (skin.is_a?(Skin) && skin.approved_or_owned_by?(user))
+
+    errors.add(:base, "You don't have permission to use that skin!")
   end
 end

@@ -229,7 +229,7 @@ class OwnedTagSetsController < ApplicationController
         :id,
         :from_owned_tag_set, :fandom_tagnames_to_add, :character_tagnames_to_add,
         :relationship_tagnames_to_add, :freeform_tagnames_to_add,
-        character_tagnames: [], rating_tagnames: [], warning_tagnames: [],
+        character_tagnames: [], rating_tagnames: [], archive_warning_tagnames: [],
         category_tagnames: [], fandom_tags_to_remove: [], character_tags_to_remove: [],
         relationship_tags_to_remove: [], freeform_tags_to_remove: []
       ]
