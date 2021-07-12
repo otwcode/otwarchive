@@ -1,2 +1,0 @@
-The skins/ directory stores cached skins created via the admin interface, one per folder. Its contents are automatically generated from the database and/or 
-from the site skins, and changes will be overwritten, so please do not edit files here!

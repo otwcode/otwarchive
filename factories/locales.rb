@@ -1,6 +1,6 @@
 require "faker"
 
-FactoryGirl.define do
+FactoryBot.define do
   sequence(:locale_iso) do |n|
     "en-WAT#{n}"
   end
@@ -10,7 +10,7 @@ FactoryGirl.define do
   end
 
   factory :locale do
-    language Language.default
+    language { Language.default }
     iso { generate(:locale_iso) }
     name { generate(:locale_name) }
   end

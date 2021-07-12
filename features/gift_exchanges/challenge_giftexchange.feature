@@ -49,11 +49,10 @@ Feature: Gift Exchange Challenge
     Then I should see "My Gift Exchange"
 
   Scenario: Change timezone for a gift exchange
-    Given I am logged in as "mod1"
-      And time is frozen at 1/1/2019
-      And I have created the gift exchange "My Gift Exchange"
-      And I am on "My Gift Exchange" gift exchange edit page
-    When I select "(GMT-08:00) Pacific Time (US & Canada)" from "Time zone:"
+    Given time is frozen at 1/1/2019
+      And the gift exchange "My Gift Exchange" is ready for signups
+    When I go to "My Gift Exchange" gift exchange edit page
+      And I select "(GMT-08:00) Pacific Time (US & Canada)" from "Time zone"
       And I submit
     Then I should see "Challenge was successfully updated"
       And I should see the correct time zone for "Pacific Time (US & Canada)"
@@ -294,11 +293,8 @@ Feature: Gift Exchange Challenge
       And everyone has their assignments for "Second Challenge"
     When I am logged in as "myname1"
       And I start to fulfill my assignment
-      And "AO3-4571" is fixed
-    # "I start to fulfill" will use the first Fulfill option on the page
-    # which will be for the oldest assignment
-    # Then the "Awesome Gift Exchange (myname3)" checkbox should be checked
-    #   And the "Second Challenge (myname3)" checkbox should not be checked
+    Then the "Awesome Gift Exchange (myname3)" checkbox should be checked
+      And the "Second Challenge (myname3)" checkbox should not be checked
 
   Scenario: User has more than one pseud on signup form
     Given "myname1" has the pseud "othername"
@@ -501,7 +497,7 @@ Feature: Gift Exchange Challenge
         | categories | 0       | 1       | 0     |
       And the user "badgirlsdoitwell" signs up for "EmailTest" with the following prompts
         | type    | characters | fandoms  | freeforms | ratings | categories |
-        | request | any        | the show | fic, art  | mature  |            |
+        | request | any        | the show | fic, art  | Mature  |            |
         | offer   | villain    | the show | fic       |         |            |
       And the user "sweetiepie" signs up for "EmailTest" with the following prompts
         | type    | characters | fandoms  | freeforms | ratings | categories |
@@ -518,7 +514,7 @@ Feature: Gift Exchange Challenge
         And the email should contain "Character:"
         And the email should contain "Any"
         And the email should contain "Rating:"
-        And the email should contain "mature"
+        And the email should contain "Mature"
         And the email should not contain "Relationships:"
         And the email should not contain "Warnings:"
         And the email should not contain "Category:"
@@ -536,11 +532,13 @@ Feature: Gift Exchange Challenge
         And the email should not contain "Warnings:"
         And the email should not contain "Optional Tags:"
 
-  Scenario: A mod can delete a gift exchange and all the assignments and
+  Scenario: A mod can delete a gift exchange without needing Javascript and all the assignments and
   sign-ups will be deleted with it, but the collection will remain
     Given everyone has their assignments for "Bad Gift Exchange"
       And I am logged in as "mod1"
     When I delete the challenge "Bad Gift Exchange"
+    Then I should see "Are you sure you want to delete the challenge from the collection Bad Gift Exchange? All sign-ups, assignments, and settings will be lost. (Works and bookmarks will remain in the collection.)"
+    When I press "Yes, Delete Challenge"
     Then I should see "Challenge settings were deleted."
       And I should not see the gift exchange dashboard for "Bad Gift Exchange"
       And no one should have an assignment for "Bad Gift Exchange"
@@ -587,3 +585,12 @@ Feature: Gift Exchange Challenge
     Then I should see "Are you sure you want to purge all assignments for Bad Gift Exchange?"
     When I press "Yes, Purge Assignments"
     Then I should see "Assignments purged!"
+
+  Scenario: The My Assignments page that a user sees when they have multiple
+  assignments in a single exchange does not include an email link.
+    Given everyone has their assignments for "Bad Gift Exchange"
+      And I am logged in as "write_in_giver"
+      And "write_in_giver" has two pinchhit assignments in the gift exchange "Bad Gift Exchange"
+    When I go to "Bad Gift Exchange" collection's page
+      And I follow "My Assignments" within "#dashboard"
+    Then I should not see the image "src" text "/images/envelope_icon.gif"

@@ -1,5 +1,4 @@
-class Admin::SpamController < ApplicationController
-  before_action :admin_only
+class Admin::SpamController < Admin::BaseController
 
   def index
     conditions =  case params[:show]

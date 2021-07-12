@@ -1,5 +1,4 @@
-class Admin::ApiController < ApplicationController
-  before_action :admin_only
+class Admin::ApiController < Admin::BaseController
   before_action :check_for_cancel, only: [:create, :update]
 
   def index

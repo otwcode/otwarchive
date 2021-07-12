@@ -235,8 +235,9 @@ Feature: Collection
       And I add the work "Cone of Silence" to the collection "Various Penguins"
     When I edit the work "Cone of Silence"
       And I follow "2" within "div#main.works-edit.region"
-      And I add the co-author "Amos"
-      And I press "Post Without Preview"
+      And I invite the co-author "Amos"
+      And I press "Post"
+      And the user "Amos" accepts all co-creator requests
     Then the author of "Cone of Silence" should be visible to me on the work page
     When I am logged out
     Then the author of "Cone of Silence" should be hidden from me
@@ -367,7 +368,7 @@ Feature: Collection
       And I should see "Anonymous [creator]"
 
     When I press "Cancel"
-    
+
     Then I should see "The work was not updated."
 
     When I view the work "My Work"
@@ -444,12 +445,90 @@ Feature: Collection
     When I am logged in as "creator"
       And I set up the draft "Secret Work"
       And I fill in "Collections" with "Anonymizing,Fluffy"
-      And I press "Post Without Preview"
+      And I press "Post"
       And I go to my works page
     Then I should not see "Secret Work"
 
     When I edit the work "Secret Work"
       And I fill in "Collections" with "Holidays,Fluffy"
-      And I press "Post Without Preview"
+      And I press "Post"
       And I go to my works page
     Then I should see "Secret Work"
+
+  Scenario: Changing a collection item to anonymous triggers a notification
+    Given a collection "Changeable"
+      And I am logged in as "creator"
+      And I post the work "Lovely" in the collection "Changeable"
+      And all emails have been delivered
+
+    When I am logged in as the owner of "Changeable"
+      And I go to "Changeable" collection edit page
+      And I check "This collection is anonymous"
+      And I press "Update"
+      And I view the approved collection items page for "Changeable"
+      And I check "Anonymous"
+      And I submit
+    Then "creator" should be emailed
+      And the email should have "Your work was made anonymous" in the subject
+      And the email should contain "Anonymous works are included in tag listings, but not on your works page."
+      And the email should not contain "translation missing"
+
+  Scenario: Changing a collection item to unrevealed triggers a notification
+    Given a collection "Changeable"
+      And I am logged in as "creator"
+      And I post the work "Lovely" in the collection "Changeable"
+      And all emails have been delivered
+
+    When I am logged in as the owner of "Changeable"
+      And I go to "Changeable" collection edit page
+      And I check "This collection is unrevealed"
+      And I press "Update"
+      And I view the approved collection items page for "Changeable"
+      And I check "Unrevealed"
+      And I submit
+    Then "creator" should be emailed
+      And the email should have "Your work was made unrevealed" in the subject
+      And the email should contain "Unrevealed works are not included in tag listings or on your works page."
+      And the email should not contain "translation missing"
+
+  Scenario: Changing a collection item to anonymous and unrevealed triggers a notification
+    Given a collection "Changeable"
+      And I am logged in as "creator"
+      And I post the work "Lovely" in the collection "Changeable"
+      And all emails have been delivered
+
+    When I am logged in as the owner of "Changeable"
+      And I go to "Changeable" collection edit page
+      And I check "This collection is anonymous"
+      And I check "This collection is unrevealed"
+      And I press "Update"
+      And I view the approved collection items page for "Changeable"
+      And I check "Anonymous"
+      And I check "Unrevealed"
+      And I submit
+    Then "creator" should be emailed
+      And the email should have "Your work was made anonymous and unrevealed" in the subject
+      And the email should contain "Unrevealed works are not included in tag listings or on your works page."
+      And the email should contain "The collection maintainers may later reveal your work but leave it anonymous."
+      And the email should not contain "translation missing"
+
+  @javascript
+  Scenario: Work share modal should not reveal anonymous authors
+    Given I have the anonymous collection "Anonymous Hugs"
+    When I am logged in as "first_user"
+      And I post the work "Old Snippet" to the collection "Anonymous Hugs" as a gift for "third_user"
+    When I am logged out
+      And I view the work "Old Snippet"
+    Then I should see "Share"
+    When I follow "Share"
+    Then I should see "by Anonymous" within "#modal"
+
+  Scenario: Work share button should not display for unrevealed works
+    Given I have the hidden collection "Hidden Treasury"
+    When I am logged in as "first_user"
+      And I post the work "Old Snippet" to the collection "Hidden Treasury"
+    Then the work "Old Snippet" should be visible to me
+      And I should not see "Share"
+    When I am logged in as "moderator"
+    Then the work "Old Snippet" should be visible to me
+      And I should not see "Share"

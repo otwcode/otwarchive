@@ -14,7 +14,7 @@
 <% chars = prompt.any_character ? t(".any") : tag_list(tag_groups["Character"]) %>
 <% ships = prompt.any_relationship ? t(".any") : tag_list(tag_groups["Relationship"]) %>
 <% ratings = prompt.any_rating ? t(".any") : (tag_groups["Rating"] ? get_title_string(tag_groups["Rating"]) : nil) %>
-<% warnings = prompt.any_warning ? t(".any") : (tag_groups["Warning"] ? get_title_string(tag_groups["Warning"]) : nil) %>
+<% warnings = prompt.any_archive_warning ? t(".any") : (tag_groups["ArchiveWarning"] ? get_title_string(tag_groups["ArchiveWarning"]) : nil) %>
 <% categories = prompt.any_category ? t(".any") : (tag_groups["Category"] ? get_title_string(tag_groups["Category"]) : nil) %>
 <% atags = prompt.any_freeform ? t(".any") : tag_list(tag_groups["Freeform"]) %>
 <% otags = prompt.optional_tag_set ? tag_list(prompt.optional_tag_set.tags) : nil %>
@@ -26,7 +26,7 @@
 <%= Character.human_attribute_name("name_with_colon", count: prompt.any_character ? 1 : tag_groups["Character"].count) %> <%= chars %><% end %><% if ships %>
 <%= Relationship.human_attribute_name("name_with_colon", count: prompt.any_relationship ? 1 : tag_groups["Relationship"].count) %> <%= ships %><% end %><% if ratings %>
 <%= Rating.human_attribute_name("name_with_colon") %> <%= ratings %><% end %><% if warnings %>
-<%= Warning.human_attribute_name("name_with_colon", count: prompt.any_warning ? 1 : tag_groups["Warning"].count) %> <%= warnings %><% end %><% if categories %>
+<%= ArchiveWarning.human_attribute_name("name_with_colon", count: prompt.any_archive_warning ? 1 : tag_groups["ArchiveWarning"].count) %> <%= warnings %><% end %><% if categories %>
 <%= Category.human_attribute_name("name_with_colon", count: prompt.any_category ? 1 : tag_groups["Category"].count) %> <%= categories %><% end %><% if atags %>
 <%= Freeform.human_attribute_name("name_with_colon", count: prompt.any_freeform ? 1 : tag_groups["Freeform"].count) %> <%= atags %><% end %><% if otags %>
 <%= t ".optional_tags" %> <%= otags %><% end %><% if prompt.url && !prompt.url.blank? %>

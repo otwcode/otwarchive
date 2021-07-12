@@ -6,8 +6,14 @@
       <%= ts("This chapter is a draft and hasn't been posted yet!") %>
     </p>
   <% end %>
+  <% if chapter.user_has_creator_invite?(current_user) %>
+    <p class="notice">
+      <%= ts("You've been invited to become a co-creator of this chapter. To accept or reject the request, visit your %{creator_requests_page}.",
+             creator_requests_page: link_to(ts("Co-Creator Requests page"), user_creatorships_path(current_user))).html_safe %>
+    </p>
+  <% end %>
   <!-- chapter management -->
-  <% if is_author_of?(@work) && !@downloading && !@preview_mode%>
+  <% if logged_in? && is_author_of?(@work) && !@preview_mode%>
     <%= render "chapters/chapter_management", chapter: chapter, work: @work %>
   <% end %>
 
@@ -19,7 +25,7 @@
     </h3>
 
     <!-- only display byline if different from the main byline -->
-    <% if (!chapter.pseuds.blank? && (chapter.pseuds != @work.pseuds) && (!@work.anonymous?)) || @preview_mode %>
+    <% if (!chapter.pseuds.blank? && (chapter.pseuds.sort != @work.pseuds.sort) && (!@work.anonymous?)) || @preview_mode %>
       <h4 class="heading byline">
         <%= ts('Chapter by') %> <%= byline(chapter).html_safe %>
       </h4>
@@ -57,9 +63,7 @@
 
   <!--main content-->
   <div class="userstuff module" role="article">
-    <% unless @downloading %>
-      <h3 class="landmark heading" id="work"><%= ts("Chapter Text") %></h3>
-    <% end %>
+    <h3 class="landmark heading" id="work"><%= ts("Chapter Text") %></h3>
     <%=raw sanitize_field(chapter, :content) %>
   </div>
   <!--/main-->

@@ -10,7 +10,8 @@ Feature: Import Works from LJ
       And I am logged in as "cosomeone"
     When I go to the import page
       And I fill in "urls" with "http://rebecca2525.livejournal.com/3562.html"
-    When I press "Import"
+      And I select "English" from "Choose a language"
+      And I press "Import"
     Then I should see "Preview"
       And I should see "Lewis" within "dd.fandom"
       And I should see "General Audiences" within "dd.rating"
@@ -31,7 +32,7 @@ Feature: Import Works from LJ
     When I press "Post"
     Then I should see "Work was successfully posted."
     When I am on cosomeone's user page
-      Then I should see "Importing Test"
+    Then I should see "Importing Test"
 
   @import_lj_tables
   Scenario: Creating a new work from an LJ story that has tables
@@ -43,7 +44,8 @@ Feature: Import Works from LJ
       And I am logged in as "cosomeone"
     When I go to the import page
       And I fill in "urls" with "http://rebecca2525.livejournal.com/3591.html"
-    When I press "Import"
+      And I select "English" from "Choose a language"
+      And I press "Import"
     Then I should see "Preview"
       And I should see "Lewis" within "dd.fandom"
       And I should see "General Audiences" within "dd.rating"
@@ -64,7 +66,7 @@ Feature: Import Works from LJ
     When I press "Post"
     Then I should see "Work was successfully posted."
     When I am on cosomeone's user page
-      Then I should see "Importing Test"
+    Then I should see "Importing Test"
 
   @import_lj_no_backdate
   Scenario: Creating a new work from an LJ story without backdating it
@@ -72,7 +74,8 @@ Feature: Import Works from LJ
       And I am logged in as a random user
     When I go to the import page
       And I fill in "urls" with "http://rebecca2525.livejournal.com/3562.html"
-    When I press "Import"
+      And I select "English" from "Choose a language"
+      And I press "Import"
     Then I should see "Preview"
       And I should see "Importing Test"
     When I press "Edit"
@@ -80,7 +83,7 @@ Feature: Import Works from LJ
       And I should see "Importing Test"
     When I set the publication date to today
       And I check "No Archive Warnings Apply"
-    When I press "Preview"
+      And I press "Preview"
     Then I should see "Importing Test"
     When I press "Post"
     Then I should see "Work was successfully posted."
@@ -95,7 +98,8 @@ Feature: Import Works from LJ
     When "AO3-4179" is fixed
     #When I go to the import page
     #  And I fill in "urls" with "http://community.livejournal.com/rarelitslash/271960.html"
-    #When I press "Import"
+    #  And I select "English" from "Choose a language"
+    #  And I press "Import"
     #Then I should see "Preview"
     #  And I should see "Poirot - Agatha Christie" within "dd.fandom"
     #  And I should see "General Audiences" within "dd.rating"
@@ -116,16 +120,17 @@ Feature: Import Works from LJ
     #When I press "Post"
     #Then I should see "Work was successfully posted."
     #When I am on cosomeone's user page
-    #  Then I should see "Mrs Stanwood's Birthday Party"
-      
+    #Then I should see "Mrs Stanwood's Birthday Party"
+
   @import_lj_underscores
   Scenario: Importing from a journal with underscores in the name
     Given basic tags
       And I am logged in as "cosomeone"
     When I go to the import page
       And I fill in "urls" with "http://ao3_testing.livejournal.com/557.html"
-    When I press "Import"
-      Then I should see "Preview"
+      And I select "English" from "Choose a language"
+      And I press "Import"
+    Then I should see "Preview"
 
   @import_lj_multi_chapter
   Scenario: Creating a new multichapter work from an LJ story
@@ -134,12 +139,13 @@ Feature: Import Works from LJ
       And I set my time zone to "UTC"
     When I go to the import page
       And I fill in "urls" with
-         """
-         http://rebecca2525.livejournal.com/3562.html
-         http://rebecca2525.livejournal.com/4024.html
-         """
+        """
+        http://rebecca2525.livejournal.com/3562.html
+        http://rebecca2525.livejournal.com/4024.html
+        """
+      And I select "English" from "Choose a language"
       And I choose "import_multiple_chapters"
-    When I press "Import"
+      And I press "Import"
     Then I should see "Preview"
       And I should see "Lewis" within "dd.fandom"
       And I should see "General Audiences" within "dd.rating"
@@ -163,4 +169,4 @@ Feature: Import Works from LJ
       And I should see "MOAR TESTING! :)" within "div.notes"
       And I should see "Importing Test Part 2" within "h3.title"
     When I am on cosomeone's user page
-      Then I should see "Importing Test"
+    Then I should see "Importing Test"

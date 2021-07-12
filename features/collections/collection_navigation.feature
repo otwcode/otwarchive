@@ -21,6 +21,7 @@ Feature: Basic collection navigation
     And I fill in "Fandoms" with "New Fandom"
     And I fill in "Additional Tags" with "Free"
     And I fill in "Work Title" with "Work for my collection"
+    And I select "English" from "Choose a language"
     And I fill in "content" with "First because I'm the mod"
     And I fill in "Post to Collections / Challenges" with "my_collection"
     And I press "Preview"
@@ -64,7 +65,7 @@ Feature: Basic collection navigation
     And I post the work "Sesame Street" in the collection "My ABCs"
     And I edit the work "Sesame Street"
     And I fill in "Fandoms" with "A League of Their Own, Merlin, Teen Wolf, The Borgias"
-    And I press "Post Without Preview"
+    And I press "Post"
     And I go to "My ABCs" collection's page
     And I follow "Fandoms ("
   Then "The Borgias" should appear before "A League of Their Own"
@@ -76,7 +77,7 @@ Feature: Basic collection navigation
       And I have a canonical "TV Shows" fandom tag named "Steven's Universe"
       And I have a canonical "Movies" fandom tag named "High School Musical"
     When I am logged in as "Brian" with password "They called him Brian"
-      And I post the work "Stronger than you" with fandom "Steven's Universe" in the collection "We all sing together" 
+      And I post the work "Stronger than you" with fandom "Steven's Universe" in the collection "We all sing together"
       And I post the work "Breaking Free" with fandom "High School Musical" in the collection "We all sing together"
       And I go to "We all sing together" collection's page
       And I follow "Fandoms ("

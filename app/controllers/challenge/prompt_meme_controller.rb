@@ -79,7 +79,7 @@ class Challenge::PromptMemeController < ChallengesController
         :relationship_num_required, :relationship_num_allowed, :require_unique_relationship,
         :rating_num_required, :rating_num_allowed, :require_unique_rating,
         :freeform_num_required, :freeform_num_allowed, :require_unique_freeform,
-        :warning_num_required, :warning_num_allowed, :require_unique_warning,
+        :archive_warning_num_required, :archive_warning_num_allowed, :require_unique_archive_warning,
         :tag_sets_to_remove, :tag_sets_to_add, :character_restrict_to_fandom,
         :character_restrict_to_tag_set, :relationship_restrict_to_fandom,
         :relationship_restrict_to_tag_set, tag_sets_to_remove: []

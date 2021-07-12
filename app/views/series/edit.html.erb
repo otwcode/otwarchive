@@ -28,7 +28,7 @@
       </dd>
       
       <!-- Add coauthors-->
-      <%= render 'pseuds/byline', :form => f, :type => 'series' %>
+      <%= render 'pseuds/byline', form: f, object: @series %>
       
       <dt class="summary">
         <%= f.label :summary, ts("Series Description", :max => ArchiveConfig.SUMMARY_MAX.to_s) %>

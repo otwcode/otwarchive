@@ -13,9 +13,9 @@ class PromptRestriction < ApplicationRecord
 
   # VALIDATION
   %w(fandom_num_required category_num_required rating_num_required character_num_required
-    relationship_num_required freeform_num_required warning_num_required
+    relationship_num_required freeform_num_required archive_warning_num_required
     fandom_num_allowed category_num_allowed rating_num_allowed character_num_allowed
-    relationship_num_allowed freeform_num_allowed warning_num_allowed).each do |tag_limit_field|
+    relationship_num_allowed freeform_num_allowed archive_warning_num_allowed).each do |tag_limit_field|
       validates_numericality_of tag_limit_field, only_integer: true, less_than_or_equal_to: ArchiveConfig.PROMPT_TAGS_MAX, greater_than_or_equal_to: 0
   end
 

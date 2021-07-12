@@ -5,7 +5,7 @@ describe ExternalWorksController do
     url = "http://ao3testing.dreamwidth.org/593.html"
 
     before(:each) do
-      @external_work = FactoryGirl.create(:external_work, url: url)
+      @external_work = FactoryBot.create(:external_work, url: url)
     end
 
     context "URL that has an external work" do
@@ -20,7 +20,7 @@ describe ExternalWorksController do
       end
 
       before do
-        @external_work2 = FactoryGirl.create(:external_work, url: url)
+        @external_work2 = FactoryBot.create(:external_work, url: url)
       end
 
       it "responds with the first matching work" do

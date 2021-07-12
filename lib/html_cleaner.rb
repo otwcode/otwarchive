@@ -154,10 +154,11 @@ module HtmlCleaner
       # We're allowing users to use HTML in this field
       transformers = []
       if ArchiveConfig.FIELDS_ALLOWING_VIDEO_EMBEDS.include?(field.to_s)
-        transformers << Sanitize::Transformers::ALLOW_VIDEO_EMBEDS
+        transformers << OTWSanitize::EmbedSanitizer.transformer
+        transformers << OTWSanitize::MediaSanitizer.transformer
       end
       if ArchiveConfig.FIELDS_ALLOWING_CSS.include?(field.to_s)
-        transformers << Sanitize::Transformers::ALLOW_USER_CLASSES
+        transformers << OTWSanitize::UserClassSanitizer.transformer
       end
       # Now that we know what transformers we need, let's sanitize the unfrozen value
       if ArchiveConfig.FIELDS_ALLOWING_CSS.include?(field.to_s)
@@ -171,6 +172,11 @@ module HtmlCleaner
       doc = Nokogiri::HTML::Document.new
       doc.encoding = "UTF-8"
       unfrozen_value = doc.fragment(unfrozen_value).to_xhtml
+
+      # Hack! the herald angels sing
+      # TODO: AO3-5801 Switch to an HTML5 serializer that doesn't add invalid closing tags
+      # to track and source elements.
+      unfrozen_value.gsub!(%r{</(source|track)>}, "")
     else
       # clean out all tags
       unfrozen_value = Sanitize.clean(fix_bad_characters(unfrozen_value))
@@ -217,8 +223,8 @@ module HtmlCleaner
 
   # Tags whose content we don't touch
   def dont_touch_content_tag?(tag)
-    %w(a abbr acronym address br dl h1 h2 h3 h4 h5 h6 hr img ol p
-       pre table ul).include?(tag)
+    %w(a abbr acronym address audio br dl h1 h2 h3 h4 h5 h6 hr img ol p
+       pre source table track video ul).include?(tag)
   end
 
   # Tags that don't contain content
@@ -235,14 +241,14 @@ module HtmlCleaner
 
   # Tags that can't be inside p tags
   def put_outside_p_tag?(tag)
-    %w(dl h1 h2 h3 h4 h5 h6 hr ol p pre table ul).include?(tag)
+    %w(audio dl h1 h2 h3 h4 h5 h6 hr ol p pre source table track ul video).include?(tag)
   end
 
   # Tags before and after which we don't want to convert linebreaks
   # into br's and p's
   def no_break_before_after_tag?(tag)
-    %w(blockquote br center dl div h1 h2 h3 h4 h5 h6
-       hr ol p pre table ul).include?(tag)
+    %w(audio blockquote br center dl div h1 h2 h3 h4 h5 h6
+       hr ol p pre source table track ul video).include?(tag)
   end
 
   # Traverse a Nokogiri document tree recursively in order to insert
@@ -348,15 +354,8 @@ module HtmlCleaner
   end
 
   def add_paragraphs_to_text(text)
-    # By default, Nokogiri closes unclosed tags very late, often at
-    # the end of the document. We want runaway tags closed at the end
-    # of the line
     doc = Nokogiri::XML.parse("<myroot>#{text}</myroot>")
     doc.errors.each do |error|
-      match = error.message.match(/Premature end of data in tag (\w+) line (\d+)/)
-
-      text = close_unclosed_tag(text, match[1], match[2]) if match
-
       match = error.message.match(/Opening and ending tag mismatch: (\w+) line (\d+) and myroot/)
       text = close_unclosed_tag(text, match[1], match[2]) if match
     end
@@ -405,6 +404,6 @@ module HtmlCleaner
 
   def add_break_between_paragraphs(value)
     return "" if value.blank?
-    value.gsub(/\s*<\/p>\s*<p>s*/, "</p><br /><p>")
+    value.gsub(%r{\s*</p>\s*<p>\s*}, "</p><br /><p>")
   end
 end

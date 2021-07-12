@@ -58,7 +58,7 @@ Feature: Edit Works Dates
 #      And I should not see "this is my second chapter"
 #      And I should see Updated today
 
-  # The entire work is backdated. Now, I want to edit chapter two to have a "Chapter Publication 
+  # The entire work is backdated. Now, I want to edit chapter two to have a "Chapter Publication
   # Date" date set to January 16th, 2013. This should not affect the work's published date, but
   # the work's updated date should change to match the most recent chapter pub date
 #    When I follow "Next Chapter"
@@ -73,3 +73,13 @@ Feature: Edit Works Dates
 #    When I follow "Full-page index"
 #      Then I should see "1. Chapter 1 (1990-01-01)"
 #      And I should see "2. Chapter 2 (2013-01-16)"
+
+  Scenario: Users cannot backdate a work back to the future
+    Given it is currently 1/1/2019
+      And I am logged in as a random user
+      And I post the work "Beauty and the Beast 2077"
+    When I edit the work "Beauty and the Beast 2077"
+      And I check "Set a different publication date"
+      And I select "December" from "work_chapter_attributes_published_at_2i"
+      And I press "Post"
+    Then I should see "Sorry! We couldn't save this work because:Publication date can't be in the future."

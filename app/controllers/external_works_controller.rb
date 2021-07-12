@@ -20,7 +20,12 @@ class ExternalWorksController < ApplicationController
   end
 
   def index
-    if params[:show] == 'duplicates'
+    if params[:show] == "duplicates"
+      unless logged_in_as_admin?
+        access_denied
+        return
+      end
+
       @external_works = ExternalWork.duplicate.order("created_at DESC").paginate(page: params[:page])
     else
       @external_works = ExternalWork.order("created_at DESC").paginate(page: params[:page])
@@ -32,6 +37,7 @@ class ExternalWorksController < ApplicationController
   end
 
   def edit
+    authorize @external_work, policy_class: UserCreationPolicy
     @external_work = ExternalWork.find(params[:id])
     @work = @external_work
   end
@@ -58,7 +64,7 @@ class ExternalWorksController < ApplicationController
   def work_params
     params.require(:work).permit(
       :rating_string, :fandom_string, :relationship_string, :character_string,
-      :freeform_string, category_string: [], warning_strings: []
+      :freeform_string, category_strings: [], archive_warning_strings: []
     )
   end
 end

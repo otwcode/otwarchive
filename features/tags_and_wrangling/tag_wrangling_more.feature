@@ -22,7 +22,7 @@ Feature: Tag wrangling: assigning wranglers, using the filters on the Wranglers 
     Then I should see "Edit"
     When I follow "Edit" within ".header"
     Then I should see "Edit first fandom Tag"
-    
+
     # assigning media to a fandom
     When I fill in "tag[media_string]" with "TV Shows"
       And I press "Save changes"
@@ -33,7 +33,7 @@ Feature: Tag wrangling: assigning wranglers, using the filters on the Wranglers 
     When I follow "Wranglers"
     Then I should see "Tag Wrangling Assignments"
       And I should see "first fandom"
-    
+
     # assigning a fandom to oneself
     When I fill in "tag_fandom_string" with "first fandom"
       And I press "Assign"
@@ -42,7 +42,7 @@ Feature: Tag wrangling: assigning wranglers, using the filters on the Wranglers 
     Then I should see "first fandom"
       And I should see "dizmo" within "ul.wranglers"
     Given I add the fandom "first fandom" to the character "Person A"
-    
+
     # checking that wrangling home shows unfilterables
     When I follow "Wrangling Home"
     Then I should see "first fandom"
@@ -50,11 +50,11 @@ Feature: Tag wrangling: assigning wranglers, using the filters on the Wranglers 
     When I follow "first fandom"
     Then I should see "Wrangle Tags for first fandom"
       And I should see "Characters (1)"
-    
+
     When I log out
       And I am logged in as "Enigel" with password "wrangulator"
       And I follow "Tag Wrangling"
-    
+
     # assigning another wrangler to a fandom
     When I follow "Wranglers"
       And I fill in "fandom_string" with "Ghost"
@@ -88,7 +88,8 @@ Feature: Tag wrangling: assigning wranglers, using the filters on the Wranglers 
       And I am logged in as "tangler" with password "wr@ngl3r"
     When I am on the wranglers page
       And I follow "x"
-    Then "Testing" should not be assigned to the wrangler "tangler"
+    Then I should see "Wranglers were successfully unassigned!"
+      And "Testing" should not be assigned to the wrangler "tangler"
     When I edit the tag "Testing"
     Then I should see "Sign Up"
 
@@ -101,7 +102,8 @@ Feature: Tag wrangling: assigning wranglers, using the filters on the Wranglers 
     When I am logged in as "wranglerette"
       And I am on the wranglers page
       And I follow "x"
-    Then "Testing" should not be assigned to the wrangler "tangler"
+    Then I should see "Wranglers were successfully unassigned!"
+      And "Testing" should not be assigned to the wrangler "tangler"
     When I edit the tag "Testing"
     Then I should see "Sign Up"
 
@@ -205,9 +207,9 @@ Feature: Tag wrangling: assigning wranglers, using the filters on the Wranglers 
       | login          |
       | wranglerette   |
     When I am logged in as "wranglerette"
-    Then visiting "/tags/this_is_an_unknown_tag/edit" should fail with an error
-      And visiting "/tags/this_is_an_unknown_tag/show" should fail with an error
-      And visiting "/tags/this_is_an_unknown_tag/feed.atom" should fail with an error
+    Then visiting "/tags/this_is_an_unknown_tag/edit" should fail with a not found error
+      And visiting "/tags/this_is_an_unknown_tag" should fail with a not found error
+      And visiting "/tags/this_is_an_unknown_tag/feed.atom" should fail with a not found error
 
   Scenario: Banned tags can only be viewed by an admin
     Given the following typed tags exists

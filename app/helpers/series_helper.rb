@@ -7,16 +7,14 @@ module SeriesHelper
 
   # this should only show prev and next works visible to the current user
   def series_data_for_work(work)
-    series = work.series.select { |s| s.visible?(current_user) }
+    series = work.serial_works.map(&:series).compact
     series.map do |serial|
-      serial_works = serial.serial_works
-                           .includes(:work)
-                           .where('works.posted = ?', true)
-                           .order(:position)
-                           .references(:works)
-                           .select { |sw| sw.work.visible(current_user) }
-                           .map(&:work)
-      visible_position = serial_works.index(work) || serial_works.length
+      works_in_series = serial.works_in_order.posted.select(
+        # Include only the fields needed to calculate visibility:
+        :id, :restricted, :hidden_by_admin, :posted
+      ).select(&:visible?)
+
+      visible_position = works_in_series.index(work) || works_in_series.length
       unless !visible_position
         # Span used at end of previous_link and beginning of next_link to prevent extra
         # whitespace around main_link if next or previous link is missing. It also allows
@@ -27,7 +25,7 @@ module SeriesHelper
         # with a left-pointing arrow before "Previous"
         previous_link = if visible_position > 0
                           link_to(ts("&#8592; Previous Work").html_safe,
-                                  serial_works[visible_position - 1],
+                                  works_in_series[visible_position - 1],
                                   class: "previous") + divider_span
                         else
                           "".html_safe
@@ -42,9 +40,9 @@ module SeriesHelper
         # This is empty if there is no next work, otherwise it is
         # <span class="divider"> </span><a href class="next">Next Work</a>
         # with a right-pointing arrow after "Work"
-        next_link = if visible_position < serial_works.size - 1
+        next_link = if visible_position < works_in_series.size - 1
                       divider_span + link_to(ts("Next Work &#8594;").html_safe,
-                                             serial_works[visible_position + 1],
+                                             works_in_series[visible_position + 1],
                                              class: "next")
                     else
                       "".html_safe
@@ -73,12 +71,12 @@ module SeriesHelper
     end
   end
 
-  # Generates confirmation message for 'remove me as author'
+  # Generates confirmation message for "Remove Me As Co-Creator"
   def series_removal_confirmation(series, user)
     if !(series.work_pseuds & user.pseuds).empty?
-      "You're listed as an author of works in this series. Do you want to remove yourself as an author of this series and all of its works?"
+      ts("You're listed as a creator of works in this series. Do you want to remove yourself as a creator of this series and all of its works?")
     else
-      "Are you sure you want to be removed as an author of this series?"
+      ts("Are you sure you want to be removed as a creator of this series?")
     end
   end
 

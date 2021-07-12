@@ -1,7 +1,7 @@
 require 'spec_helper'
 require 'support/login_macros'
 
-describe ExternalAuthor, type: :model do
+describe ExternalAuthor do
   include LoginMacros
 
   describe "find_or_invite" do

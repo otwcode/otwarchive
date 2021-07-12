@@ -1,6 +1,6 @@
 <div class="intro module">
   <h2 class="heading"><%= ts("A fan-created, fan-run, nonprofit, noncommercial archive for transformative fanworks, like fanfiction, fanart, fan videos, and podfic") %></h2>
-  <p class="stats"><%= ts("more than %{fandom_count} fandoms | %{user_count} users | %{work_count} works", fandom_count: content_tag(:span, @fandom_count, class: "count"), user_count: content_tag(:span, @user_count, class: "count"), work_count: content_tag(:span, @work_count, class: "count")).html_safe %></p>
+  <p class="stats"><%= ts("more than %{fandom_count} fandoms | %{user_count} users | %{work_count} works", fandom_count: content_tag(:span, number_with_delimiter(@fandom_count), class: "count"), user_count: content_tag(:span, number_with_delimiter(@user_count), class: "count"), work_count: content_tag(:span, number_with_delimiter(@work_count), class: "count")).html_safe %></p>
   <p class="parent"><%= ts("The Archive of Our Own is a project of the") %> <%= link_to ts("Organization for Transformative Works"), "http://transformativeworks.org" %>.</p>
 
   <div class="account module">

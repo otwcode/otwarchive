@@ -1,45 +1,50 @@
-require 'faker'
+require "faker"
 
-FactoryGirl.define do
+FactoryBot.define do
   sequence(:login) do |n|
-    "#{Faker::Lorem.characters(8)}#{n}"
+    "#{Faker::Lorem.characters(number: 8)}#{n}"
   end
 
   sequence :email do |n|
-    Faker::Internet.email(name="#{Faker::Name.first_name}_#{n}")
-  end
-  sequence :admin_login do |n|
-    "testadmin#{n}"
+    Faker::Internet.email(name: "#{Faker::Name.first_name}_#{n}")
   end
 
   factory :role do
+    sequence(:name) { |n| "#{Faker::Company.profession}_#{n}" }
   end
 
   factory :user do
     login { generate(:login) }
-    password "password"
-    age_over_13 '1'
-    terms_of_service '1'
-    password_confirmation { |u| u.password }
+    password { "password" }
+    age_over_13 { "1" }
+    terms_of_service { "1" }
+    password_confirmation(&:password)
     email { generate(:email) }
 
+    # By default, create activated users who can log in, since we use
+    # devise :confirmable.
+    confirmed_at { Faker::Time.backward }
 
-    factory :duplicate_user do
-      login nil
-      email nil
+    trait :unconfirmed do
+      confirmed_at { nil }
     end
 
-    factory :invited_user do
-      login {generate(:login)}
-      invitation_token nil
+    # Roles
+
+    factory :archivist do
+      roles { [Role.find_or_create_by(name: "archivist")] }
     end
 
     factory :opendoors_user do
-      roles { [create(:role, name: "opendoors")] }
+      roles { [Role.find_or_create_by(name: "opendoors")] }
     end
-    
-    factory :archivist do
-      roles { [ Role.find_or_create_by(name: "archivist")] }
+
+    factory :tag_wrangler do
+      roles { [Role.find_or_create_by(name: "tag_wrangler")] }
+    end
+
+    factory :translation_admin do
+      roles { [Role.find_or_create_by(name: "translation_admin")] }
     end
   end
 end

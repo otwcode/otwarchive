@@ -19,14 +19,14 @@ Feature: Tag wrangling
   Scenario: Admin can remove a user's wrangling privileges from the manage users page (this will leave assignments intact)
 
     Given the tag wrangler "tangler" with password "wr@ngl3r" is wrangler of "Testing"
-    When I am logged in as an admin
+    When I am logged in as a "tag_wrangling" admin
       And I am on the manage users page
     When I fill in "Name" with "tangler"
       And I press "Find"
     Then I should see "tangler" within "#admin_users_table"
     When I uncheck the "Tag Wrangler" role checkbox
       And I press "Update"
-    Then I should see "User was successfully updated." 
+    Then I should see "User was successfully updated."
       And "tangler" should not be a tag wrangler
       And "Testing" should be assigned to the wrangler "tangler"
 
@@ -36,6 +36,7 @@ Feature: Tag wrangling
     When I am logged in as an admin
       And I am on the wranglers page
       And I follow "x"
-    Then "Testing" should not be assigned to the wrangler "tangler"
+    Then I should see "Wranglers were successfully unassigned!"
+      And "Testing" should not be assigned to the wrangler "tangler"
     When I edit the tag "Testing"
     Then I should see "Sign Up"

@@ -9,6 +9,12 @@ module MailerHelper
     link_to(body.html_safe, url, html_options)
   end
 
+  # For work, chapter, and series titles
+  def style_creation_link(title, url, html_options = {})
+    html_options[:style] = "color:#990000"
+    ("<i><b>" + link_to(title.html_safe, url, html_options) + "</b></i>").html_safe
+  end
+
   def style_footer_link(body, url, html_options = {})
     html_options[:style] = "color:#FFFFFF"
     link_to(body.html_safe, url, html_options)
@@ -82,5 +88,34 @@ module MailerHelper
     # Escape each line with h(), then join with <br>s and mark as html_safe to
     # ensure that the <br>s aren't escaped.
     html.split("\n").map { |line_of_text| h(line_of_text) }.join('<br>').html_safe
+  end
+
+  # The title used in creatorship_notification and creatorship_request
+  # emails.
+  def creation_title(creation)
+    if creation.is_a?(Chapter)
+      ts("Chapter %{position} of %{title}",
+         position: creation.position, title: creation.work.title)
+    else
+      creation.title
+    end
+  end
+
+  # The bylines used in subscription emails to prevent exposing the name(s) of
+  # anonymous creator(s).
+  def creator_links(work)
+    if work.anonymous?
+      "Anonymous"
+    else
+      work.pseuds.map { |p| style_pseud_link(p) }.to_sentence.html_safe
+    end
+  end
+
+  def creator_text(work)
+    if work.anonymous?
+      "Anonymous"
+    else
+      work.pseuds.map { |p| text_pseud(p) }.to_sentence.html_safe
+    end
   end
 end # end of MailerHelper

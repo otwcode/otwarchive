@@ -3,8 +3,8 @@
 require "spec_helper"
 
 describe AdminHelper do
-  let!(:admin) { FactoryGirl.create(:admin) }
-  let!(:admin_activity) { FactoryGirl.create(:admin_activity, admin: admin) }
+  let!(:admin) { FactoryBot.create(:admin) }
+  let!(:admin_activity) { FactoryBot.create(:admin_activity, admin: admin) }
 
   describe "admin activity login string" do
     it "contains the admin's login" do

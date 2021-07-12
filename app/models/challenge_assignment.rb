@@ -166,20 +166,6 @@ class ChallengeAssignment < ApplicationRecord
   end
   alias_method :defaulted?, :defaulted
 
-  include Comparable
-  # sort in order that puts assignments with no request ahead of assignments with no offer,
-  # ahead of assignments with both request and offer, and within each group sorts by
-  # request byline and then offer byline.
-  def <=>(other)
-    return -1 if self.request_signup.nil? && other.request_signup
-    return 1 if other.request_signup.nil? && self.request_signup
-    return -1 if self.offer_signup.nil? && other.offer_signup
-    return 1 if other.offer_signup.nil? && self.offer_signup
-    cmp = self.request_byline.downcase <=> other.request_byline.downcase
-    return cmp if cmp != 0
-    self.offer_byline.downcase <=> other.offer_byline.downcase
-  end
-
   def offer_signup_pseud=(pseud_byline)
     if pseud_byline.blank?
       self.offer_signup = nil
@@ -281,7 +267,7 @@ class ChallengeAssignment < ApplicationRecord
       save
       assigned_to = self.offer_signup ? self.offer_signup.pseud.user : (self.pinch_hitter ? self.pinch_hitter.user : nil)
       request = self.request_signup || self.pinch_request_signup
-      UserMailer.challenge_assignment_notification(collection.id, assigned_to.id, self.id).deliver if assigned_to && request
+      UserMailer.challenge_assignment_notification(collection.id, assigned_to.id, self.id).deliver_later if assigned_to && request
     end
   end
 
@@ -391,7 +377,7 @@ class ChallengeAssignment < ApplicationRecord
       end
     end
     REDIS_GENERAL.del(progress_key(collection))
-    UserMailer.potential_match_generation_notification(collection.id).deliver
+    UserMailer.potential_match_generation_notification(collection.id).deliver_later
   end
 
   # go through the request's potential matches in order from best to worst and try and assign

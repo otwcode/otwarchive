@@ -31,7 +31,7 @@
       <legend><%= ts("Set Preferences") %></legend>
       <h3 class="landmark heading"><%= ts("Set Preferences") %></h3>
       <dl>
-        <dt><%= f.label :tag_list, ts("Tags") %></dt>
+        <dt><%= f.label :tag_list, t(".tags.label") %></dt>
         <dd>
           <%= f.text_field :tag_list, autocomplete_options('admin_post_tags') %>
           <p class="character_counter">
@@ -39,7 +39,7 @@
           </p>
         </dd>
         <dt>
-          <%= f.label :language_id, ts("Choose a language") %>
+          <%= f.label :language_id, t(".language.label") %>
         </dt>
         <dd>
           <select id="admin_post_language_id" name="admin_post[language_id]">
@@ -47,13 +47,34 @@
           </select>
         </dd>
         <dt>
-          <%= f.label :translated_post_id, ts("Translation of") %>
+          <%= f.label :translated_post_id, t(".translated_post.label") %>
         </dt>
         <dd>
           <%= f.text_field :translated_post_id,
-          autocomplete_options('admin_posts', 
+          autocomplete_options('admin_posts',
                           title: ts('translation of'),
-                          autocomplete_token_limit: 1) %>
+                          data: { autocomplete_token_limit: 1 }) %>
+          <% unless @admin_post.translated_post %>
+            <p class="footnote"><%= t(".translated_post.footnote") %></p>
+          <% end %>
+        </dd>
+        <dt class="permissions comments">
+          <%= t(".comment_permissions.label") %>
+        </dt>
+        <dd class="permissions comments">
+          <% if @admin_post.translated_post %>
+            <p><%= t("comments.commentable.permissions.options.#{@admin_post.comment_permissions}") %></p>
+          <% else %>
+            <fieldset>
+              <%=
+                radio_button_list(f, :comment_permissions, [
+                  [:enable_all, t("comments.commentable.permissions.options.enable_all")],
+                  [:disable_anon, t("comments.commentable.permissions.options.disable_anon")],
+                  [:disable_all, t("comments.commentable.permissions.options.disable_all")]
+                ])
+              %>
+            </fieldset>
+          <% end %>
         </dd>
       </dl>
     </fieldset>

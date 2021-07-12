@@ -1,14 +1,16 @@
 class BookmarksController < ApplicationController
   before_action :load_collection
-  before_action :load_owner, only: [ :index ]
-  before_action :load_bookmarkable, only: [ :index, :new, :create, :fetch_recent, :hide_recent ]
+  before_action :load_owner, only: [:index]
+  before_action :load_bookmarkable, only: [:index, :new, :create, :fetch_recent, :hide_recent]
   before_action :users_only, only: [:new, :create, :edit, :update]
   before_action :check_user_status, only: [:new, :create, :edit, :update]
-  before_action :load_bookmark, only: [ :show, :edit, :update, :destroy, :fetch_recent, :hide_recent, :confirm_delete ]
-  before_action :check_visibility, only: [ :show ]
-  before_action :check_ownership, only: [ :edit, :update, :destroy, :confirm_delete ]
+  before_action :load_bookmark, only: [:show, :edit, :update, :destroy, :fetch_recent, :hide_recent, :confirm_delete, :share]
+  before_action :check_visibility, only: [:show, :share]
+  before_action :check_ownership, only: [:edit, :update, :destroy, :confirm_delete, :share]
 
   before_action :check_pseud_ownership, only: [:create, :update]
+
+  skip_before_action :store_location, only: [:share]
 
   def check_pseud_ownership
     if params[:bookmark][:pseud_id]
@@ -60,7 +62,7 @@ class BookmarksController < ApplicationController
 
   def index
     if @bookmarkable
-      access_denied unless is_admin? || @bookmarkable.visible
+      access_denied unless is_admin? || @bookmarkable.visible?
       @bookmarks = @bookmarkable.bookmarks.is_public.paginate(page: params[:page], per_page: ArchiveConfig.ITEMS_PER_PAGE)
     else
       base_options = {
@@ -122,7 +124,7 @@ class BookmarksController < ApplicationController
           tags = Tag.where(id: excluded_tag_ids + excluded_bookmark_tag_ids)
           tags.each do |tag|
             if excluded_tag_ids.include?(tag.id.to_s)
-              key = tag.class.to_s.downcase
+              key = tag.class.to_s.underscore
               @facets[key] ||= []
               @facets[key] << QueryFacet.new(tag.id, tag.name, 0)
             end
@@ -134,11 +136,11 @@ class BookmarksController < ApplicationController
           end
         end
       elsif use_caching?
-        @bookmarks = Rails.cache.fetch("bookmarks/index/latest/v2_true", expires_in: 10.minutes) do
+        @bookmarks = Rails.cache.fetch("bookmarks/index/latest/v2_true", expires_in: ArchiveConfig.SECONDS_UNTIL_BOOKMARK_INDEX_EXPIRE.seconds) do
           search = BookmarkSearchForm.new(show_private: false, show_restricted: false, sort_column: 'created_at')
           results = search.search_results
           flash_search_warnings(results)
-          @bookmarks = results.to_a
+          results.to_a
         end
       else
         @bookmarks = Bookmark.latest.includes(:bookmarkable, :pseud, :tags, :collections).to_a
@@ -184,16 +186,16 @@ class BookmarksController < ApplicationController
   # POST /bookmarks
   # POST /bookmarks.xml
   def create
-    @bookmark = Bookmark.new(bookmark_params)
-    @bookmarkable = @bookmark.bookmarkable
-    if @bookmarkable.new_record? && @bookmarkable.fandoms.blank?
+    @bookmarkable ||= ExternalWork.new(external_work_params)
+    @bookmark = @bookmarkable.bookmarks.build(bookmark_params)
+    if @bookmarkable.new_record? && @bookmarkable.fandom_string.blank?
        @bookmark.errors.add(:base, "Fandom tag is required")
        render :new and return
     end
     if @bookmark.errors.empty?
       if @bookmarkable.save && @bookmark.save
         flash[:notice] = ts('Bookmark was successfully created. It should appear in bookmark listings within the next few minutes.')
-        redirect_to(@bookmark) and return
+        redirect_to(bookmark_path(@bookmark)) && return
       end
     end
     @bookmarkable.errors.full_messages.each { |msg| @bookmark.errors.add(:base, msg) }
@@ -249,17 +251,29 @@ class BookmarksController < ApplicationController
     flash[:notice] = (flash[:notice]).html_safe unless flash[:notice].blank?
     flash[:error] = (flash[:error]).html_safe unless flash[:error].blank?
 
-    if errors.empty?
-      if @bookmark.update_attributes(bookmark_params)
-        flash[:notice] ||= ""
-        flash[:notice] = ts(" Bookmark was successfully updated. ").html_safe + flash[:notice]
-        flash[:notice] = (flash[:notice]).html_safe unless flash[:notice].blank?
-        redirect_to(@bookmark)
-      end
+    if @bookmark.update(bookmark_params) && errors.empty?
+      flash[:notice] ||= ""
+      flash[:notice] = ts(" Bookmark was successfully updated. ").html_safe + flash[:notice]
+      flash[:notice] = flash[:notice].html_safe
+      redirect_to(@bookmark)
     else
-      @bookmark.update_attributes(bookmark_params)
       @bookmarkable = @bookmark.bookmarkable
       render :edit and return
+    end
+  end
+
+  # GET /bookmarks/1/share
+  def share
+    if request.xhr?
+      if @bookmark.bookmarkable.is_a?(Work) && @bookmark.bookmarkable.unrevealed?
+        render template: "errors/404", status: :not_found
+      else
+        render layout: false
+      end
+    else
+      # Avoid getting an unstyled page if JavaScript is disabled
+      flash[:error] = ts("Sorry, you need to have JavaScript enabled for this.")
+      redirect_back(fallback_location: root_path)
     end
   end
 
@@ -358,12 +372,14 @@ class BookmarksController < ApplicationController
 
   def bookmark_params
     params.require(:bookmark).permit(
-      :bookmarkable_id, :bookmarkable_type,
-      :pseud_id, :bookmarker_notes, :tag_string, :collection_names, :private, :rec,
-      external: [
-        :url, :author, :title, :fandom_string, :rating_string, :relationship_string,
-        :character_string, :summary, category_string: []
-      ]
+      :pseud_id, :bookmarker_notes, :tag_string, :collection_names, :private, :rec
+    )
+  end
+
+  def external_work_params
+    params.require(:external_work).permit(
+      :url, :author, :title, :fandom_string, :rating_string, :relationship_string,
+      :character_string, :summary, category_strings: []
     )
   end
 
@@ -385,7 +401,8 @@ class BookmarksController < ApplicationController
       :other_bookmark_tag_names,
       :excluded_bookmark_tag_names,
       rating_ids: [],
-      warning_ids: [],
+      warning_ids: [], # backwards compatibility
+      archive_warning_ids: [],
       category_ids: [],
       fandom_ids: [],
       character_ids: [],
@@ -394,5 +411,4 @@ class BookmarksController < ApplicationController
       tag_ids: [],
     )
   end
-
 end
