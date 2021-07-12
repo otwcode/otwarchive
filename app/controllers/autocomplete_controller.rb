@@ -138,7 +138,7 @@ class AutocompleteController < ApplicationController
 
   # encodings for importing
   def encoding
-    encodings = Encoding.name_list.select {|e| e.match(/#{ Regexp.escape(params[:term]) }/i)}
+    encodings = Encoding.name_list.select { |e| e.match(/#{Regexp.escape(params[:term])}/i) }
     render_output(encodings)
   end
 
@@ -169,7 +169,7 @@ class AutocompleteController < ApplicationController
     pmatches = return_requests ?
       signup.offer_potential_matches.sort.reverse.map {|pm| pm.request_signup.pseud.byline} :
       signup.request_potential_matches.sort.reverse.map {|pm| pm.offer_signup.pseud.byline}
-    pmatches.select! {|pm| pm.match(/#{ Regexp.escape(search_param) }/)} if search_param.present?
+    pmatches.select! { |pm| pm.match(/#{Regexp.escape(search_param)}/) } if search_param.present?
     render_output(pmatches)
   end
 

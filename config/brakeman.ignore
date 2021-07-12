@@ -674,6 +674,7 @@
       "confidence": "Weak",
       "note": ""
     },
+    {
       "warning_type": "Cross Site Scripting",
       "warning_code": 2,
       "fingerprint": "4f78e7c315b88714e75a021b21acc1f20dd1148c558a4c8d1ad2b5378ab73165",
