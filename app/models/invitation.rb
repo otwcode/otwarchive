@@ -74,8 +74,7 @@ class Invitation < ApplicationRecord
           UserMailer.invitation(self.id).deliver_now
         end
 
-        # We cannot simple use "self.sent_at = Time.now" since that change is not persisted when this
-        # function is called during after_save. Using update_column, it is.
+        # Skip callbacks within after_save by using update_column to avoid a callback loop
         self.update_column(:sent_at, Time.now)
       rescue Exception => exception
         errors.add(:base, "Notification email could not be sent: #{exception.message}")
