@@ -85,7 +85,7 @@ Feature: Create bookmarks of external works
   Scenario Outline: A user can enter a valid non-ASCII URL to create a bookmark on an external work
     Given I am logged in as "first_bookmark_user"
       And the default ratings exist
-      And all pages on the website "<url>" return status 200
+      And all pages on the host "<url>" return status 200
     When I go to first_bookmark_user's bookmarks page
     Then I should not see "Testing bookmark <title>"
     When I follow "Bookmark External Work"
