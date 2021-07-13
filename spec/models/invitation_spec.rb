@@ -84,10 +84,7 @@ describe Invitation, :ready do
 
       it "succeeds and 'sent_at' is set" do
         expect(invite.save).to be_truthy
-        expect(invite.id).not_to be_nil
-
-        invite.reload
-        expect(invite.sent_at).not_to be_nil
+        expect(invite.reload.sent_at).not_to be_nil
       end
     end
   end
