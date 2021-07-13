@@ -82,6 +82,27 @@ Feature: Create bookmarks of external works
     Then I should see "Bookmark was successfully deleted."
       And I should not see "Stuck with You"
 
+  Scenario Outline: A user can enter a valid non-ASCII URL to create a bookmark on an external work
+    Given I am logged in as "first_bookmark_user"
+      And the default ratings exist
+      And all pages on the website "<url>" return status 200
+    When I go to first_bookmark_user's bookmarks page
+    Then I should not see "Testing bookmark <title>"
+    When I follow "Bookmark External Work"
+      And I fill in "URL" with "<url>"
+      And I fill in "Creator" with "foo"
+      And I fill in "Title" with "<title>"
+      And I fill in "Fandoms" with "Popslash"
+      And I press "Create"
+    Then I should not see "could not be reached"
+
+    Examples:
+    | url                         | title |
+    | https://example.com/ö       | Ö     |
+    | https://example.com/á       | á     |
+    | https://example.com/?utf8=✓ | check |
+    | https://example.com/a,b,c   | comma |
+
   Scenario: Bookmark External Work link should be available to logged in users, but not logged out users
     Given a fandom exists with name: "Testing BEW Button", canonical: true
       And I am logged in as "markie" with password "theunicorn"

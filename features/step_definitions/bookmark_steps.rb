@@ -5,6 +5,12 @@ Given /^mock websites with no content$/ do
   WebMock.stub_request(:head, "http://example.org/404").to_return(status: 404)
 end
 
+Given "all pages on the host {string} return status 200" do |url|
+  WebMock.disable_net_connect!
+  parsed_url = Addressable::URI.parse(url)
+  WebMock.stub_request(:any, %r[https?://#{parsed_url.host}.*]).to_return(status: 200)
+end
+
 Given /^I have a bookmark for "([^\"]*)"$/ do |title|
   step %{I start a new bookmark for "#{title}"}
   fill_in("bookmark_tag_string", with: DEFAULT_BOOKMARK_TAGS)
