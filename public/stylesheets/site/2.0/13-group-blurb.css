@@ -268,10 +268,6 @@ eg collections, users, skins, instead of the 4-icon list
 
 /*various little mods*/
 
-.collection .name {
-    word-wrap: break-word;
-}
-
 /* mod: ITEM
 blurbs on the manage collection items pages, mostly reseting styles inherited from interactions (forms)
 */

@@ -134,6 +134,7 @@ Feature: Admin Actions for Works, Comments, Series, Bookmarks
       And I fill in "Characters" with "Admin-Added Character"
       And I fill in "Additional Tags" with "Admin-Added Freeform"
       And I check "M/M"
+      And it is currently 1 second from now
     When I press "Update External work"
     Then I should see "Admin-Added Creator"
       And I should see "Admin-Added Title"

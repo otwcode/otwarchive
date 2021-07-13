@@ -70,6 +70,7 @@ class Work < ApplicationRecord
   # Can't write to work.pseuds until the work has an id
   attr_accessor :new_parent, :url_for_parent
   attr_accessor :new_gifts
+  attr_accessor :preview_mode
 
   # return title.html_safe to overcome escaping done by sanitiser
   def title
@@ -135,6 +136,13 @@ class Work < ApplicationRecord
     end
   end
 
+  validates :fandom_string,
+            presence: { message: "^Please fill in at least one fandom." }
+  validates :archive_warning_string,
+            presence: { message: "^Please select at least one warning." }
+  validates :rating_string,
+            presence: { message: "^Please choose a rating." }
+
   # rephrases the "chapters is invalid" message
   after_validation :check_for_invalid_chapters
   def check_for_invalid_chapters
@@ -143,9 +151,6 @@ class Work < ApplicationRecord
       self.errors.delete(:chapters)
     end
   end
-
-  # Run Taggable#check_for_invalid_tags as a validation.
-  validate :check_for_invalid_tags
 
   # If the recipient is a protected user, it should not be possible to give them
   # a gift work unless it fulfills a gift exchange assignment or non-anonymous
@@ -193,7 +198,6 @@ class Work < ApplicationRecord
   before_create :set_anon_unrevealed
   after_create :notify_after_creation
 
-  before_update :validate_tags
   after_update :adjust_series_restriction, :notify_after_update
 
   before_save :hide_spam
@@ -248,10 +252,8 @@ class Work < ApplicationRecord
       tag.update_tag_cache
     end
 
-    Work.expire_work_tag_groups_id(id)
+    Work.expire_work_blurb_version(id)
     Work.flush_find_by_url_cache unless imported_from_url.blank?
-
-    Work.expire_work_tag_groups_id(self.id)
   end
 
   def update_pseud_index
@@ -275,29 +277,16 @@ class Work < ApplicationRecord
     taggings.each(&:update_search)
   end
 
-  def self.work_blurb_tag_cache_key(id)
+  def self.work_blurb_version_key(id)
     "/v3/work_blurb_tag_cache_key/#{id}"
   end
 
-  def self.work_blurb_tag_cache(id)
-    Rails.cache.fetch(Work.work_blurb_tag_cache_key(id), raw: true) { rand(1..1000) }
+  def self.work_blurb_version(id)
+    Rails.cache.fetch(Work.work_blurb_version_key(id), raw: true) { rand(1..1000) }
   end
 
-  def self.expire_work_tag_groups_id(id)
-    Rails.cache.delete(Work.tag_groups_key_id(id))
-    Rails.cache.increment(Work.work_blurb_tag_cache_key(id))
-  end
-
-  def expire_work_tag_groups
-    Rails.cache.delete(self.tag_groups_key)
-  end
-
-  def self.tag_groups_key_id(id)
-    "/v3/work_tag_groups/#{id}"
-  end
-
-  def tag_groups_key
-    Work.tag_groups_key_id(self.id)
+  def self.expire_work_blurb_version(id)
+    Rails.cache.increment(Work.work_blurb_version_key(id))
   end
 
   # When works are done being reindexed, expire the appropriate caches
@@ -622,8 +611,9 @@ class Work < ApplicationRecord
         errors.add(:base, ts("You can't add a work to that series."))
         return
       end
-      self.series << old_series unless (old_series.blank? || self.series.include?(old_series))
-      self.adjust_series_restriction
+      unless old_series.blank? || self.series.include?(old_series)
+        self.serial_works.build(series: old_series)
+      end
     elsif !attributes[:title].blank?
       new_series = Series.new
       new_series.title = attributes[:title]
@@ -633,8 +623,7 @@ class Work < ApplicationRecord
         # on the serial work will do the rest.
         new_series.creatorships.build(pseud: pseud)
       end
-      new_series.save
-      self.series << new_series
+      self.serial_works.build(series: new_series)
     end
   end
 
@@ -657,11 +646,13 @@ class Work < ApplicationRecord
   # If the work is posted, the first chapter should be posted too
   def post_first_chapter
     chapter_one = self.first_chapter
-    if self.saved_change_to_posted? || (chapter_one && chapter_one.posted != self.posted)
-      chapter_one.published_at = Date.today unless self.backdate
-      chapter_one.posted = self.posted
-      chapter_one.save
-    end
+
+    return unless self.saved_change_to_posted? && self.posted
+    return if chapter_one&.posted
+
+    chapter_one.published_at = Date.today unless self.backdate
+    chapter_one.posted = true
+    chapter_one.save
   end
 
   # Virtual attribute for first chapter
@@ -787,7 +778,13 @@ class Work < ApplicationRecord
         self.word_count += chapter.set_word_count
       end
     else
-      self.word_count = Chapter.select("SUM(word_count) AS work_word_count").where(work_id: self.id, posted: true).first.work_word_count
+      # AO3-3498: For posted works, the word count is visible to people other than the creator and
+      # should only include posted chapters. For drafts, we can count everything.
+      self.word_count = if self.posted
+                          Chapter.select("SUM(word_count) AS work_word_count").where(work_id: self.id, posted: true).first.work_word_count
+                        else
+                          Chapter.select("SUM(word_count) AS work_word_count").where(work_id: self.id).first.work_word_count
+                        end
     end
   end
 
@@ -795,31 +792,6 @@ class Work < ApplicationRecord
   # TAGGING
   # Works are taggable objects.
   #######################################################################
-
-  def tag_groups
-    Rails.cache.fetch(self.tag_groups_key) do
-      if self.placeholder_tags && !self.placeholder_tags.empty?
-        result = self.placeholder_tags.values.flatten.group_by { |t| t.type.to_s }
-      else
-        result = self.tags.group_by { |t| t.type.to_s }
-      end
-      result["Fandom"] ||= []
-      result["Rating"] ||= []
-      result["ArchiveWarning"] ||= []
-      result["Relationship"] ||= []
-      result["Character"] ||= []
-      result["Freeform"] ||= []
-      result
-    end
-  end
-
-  # Check to see that a work is tagged appropriately
-  def has_required_tags?
-    return false if self.fandom_string.blank?
-    return false if self.archive_warning_string.blank?
-    return false if self.rating_string.blank?
-    return true
-  end
 
   # When the filters on a work change, we need to perform some extra checks.
   def self.reindex_for_filter_changes(ids, filter_taggings, queue)
@@ -1199,12 +1171,14 @@ class Work < ApplicationRecord
       methods: [
         :tag, :filter_ids, :rating_ids, :archive_warning_ids, :category_ids,
         :fandom_ids, :character_ids, :relationship_ids, :freeform_ids,
-        :pseud_ids, :creators, :collection_ids, :work_types
+        :creators, :collection_ids, :work_types
       ]
     ).merge(
       language_id: language&.short,
       anonymous: anonymous?,
       unrevealed: unrevealed?,
+      pseud_ids: anonymous? || unrevealed? ? nil : pseud_ids,
+      user_ids: anonymous? || unrevealed? ? nil : user_ids,
       bookmarkable_type: 'Work',
       bookmarkable_join: { name: "bookmarkable" }
     )

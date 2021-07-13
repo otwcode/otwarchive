@@ -94,5 +94,9 @@ module Otwarchive
 
     # Use "mailer" instead of "mailers" as the Resque queue for emails:
     config.action_mailer.deliver_later_queue_name = :mailer
+
+    # Use URL safe CSRF due to a bug in Rails v5.2.5 release.  See the v5.2.6 release notes:
+    # https://github.com/rails/rails/blob/5-2-stable/actionpack/CHANGELOG.md
+    config.action_controller.urlsafe_csrf_tokens = true
   end
 end

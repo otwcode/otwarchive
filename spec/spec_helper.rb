@@ -3,12 +3,6 @@ ENV["RAILS_ENV"] ||= "test"
 require File.expand_path("../config/environment", __dir__)
 require "simplecov"
 
-if ENV["CI"] == "true"
-  # Only when running CI:
-  require "codecov"
-  SimpleCov.formatter = SimpleCov::Formatter::Codecov
-end
-
 require "rspec/rails"
 require "factory_bot"
 require "database_cleaner"
@@ -46,15 +40,20 @@ RSpec.configure do |config|
     DatabaseCleaner.strategy = :transaction
     DatabaseCleaner.clean
     Indexer.all.map(&:prepare_for_testing)
-    ArchiveWarning.find_or_create_by_name(ArchiveConfig.WARNING_CHAN_TAG_NAME).update(canonical: true)
-    ArchiveWarning.find_or_create_by_name(ArchiveConfig.WARNING_NONE_TAG_NAME).update(canonical: true)
-    Category.find_or_create_by_name(ArchiveConfig.CATEGORY_SLASH_TAG_NAME).update(canonical: true)
-    Rating.find_or_create_by_name(ArchiveConfig.RATING_DEFAULT_TAG_NAME).update(canonical: true)
-    Rating.find_or_create_by_name(ArchiveConfig.RATING_EXPLICIT_TAG_NAME).update(canonical: true)
+    ArchiveWarning.find_or_create_by!(name: ArchiveConfig.WARNING_CHAN_TAG_NAME, canonical: true)
+    ArchiveWarning.find_or_create_by!(name: ArchiveConfig.WARNING_NONE_TAG_NAME, canonical: true)
+    Category.find_or_create_by!(name: ArchiveConfig.CATEGORY_SLASH_TAG_NAME, canonical: true)
+
+    # TODO: The "Not Rated" tag ought to be marked as adult, but we want to
+    # keep the adult status of the tag consistent with the features, so for now
+    # we have a non-adult "Not Rated" tag:
+    Rating.find_or_create_by!(name: ArchiveConfig.RATING_DEFAULT_TAG_NAME, canonical: true)
+
+    Rating.find_or_create_by!(name: ArchiveConfig.RATING_EXPLICIT_TAG_NAME, canonical: true, adult: true)
     # Needs these for the API tests.
-    ArchiveWarning.find_or_create_by_name(ArchiveConfig.WARNING_DEFAULT_TAG_NAME).update(canonical: true)
-    ArchiveWarning.find_or_create_by_name(ArchiveConfig.WARNING_NONCON_TAG_NAME).update(canonical: true)
-    Rating.find_or_create_by_name(ArchiveConfig.RATING_GENERAL_TAG_NAME).update(canonical: true)
+    ArchiveWarning.find_or_create_by!(name: ArchiveConfig.WARNING_DEFAULT_TAG_NAME, canonical: true)
+    ArchiveWarning.find_or_create_by!(name: ArchiveConfig.WARNING_NONCON_TAG_NAME, canonical: true)
+    Rating.find_or_create_by!(name: ArchiveConfig.RATING_GENERAL_TAG_NAME, canonical: true)
   end
 
   config.before :each do

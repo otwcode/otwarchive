@@ -497,7 +497,7 @@ Feature: Gift Exchange Challenge
         | categories | 0       | 1       | 0     |
       And the user "badgirlsdoitwell" signs up for "EmailTest" with the following prompts
         | type    | characters | fandoms  | freeforms | ratings | categories |
-        | request | any        | the show | fic, art  | mature  |            |
+        | request | any        | the show | fic, art  | Mature  |            |
         | offer   | villain    | the show | fic       |         |            |
       And the user "sweetiepie" signs up for "EmailTest" with the following prompts
         | type    | characters | fandoms  | freeforms | ratings | categories |
@@ -514,7 +514,7 @@ Feature: Gift Exchange Challenge
         And the email should contain "Character:"
         And the email should contain "Any"
         And the email should contain "Rating:"
-        And the email should contain "mature"
+        And the email should contain "Mature"
         And the email should not contain "Relationships:"
         And the email should not contain "Warnings:"
         And the email should not contain "Category:"
