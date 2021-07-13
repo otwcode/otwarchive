@@ -206,7 +206,7 @@ class CommentsController < ApplicationController
   end
 
   def index
-    return redirect_to '/404' unless @commentable.present?
+    return redirect_to "/404" if @commentable.blank?
 
     @comments = @commentable.comments.reviewed.page(params[:page])
     if @commentable.class == Comment
