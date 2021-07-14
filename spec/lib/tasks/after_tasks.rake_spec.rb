@@ -172,7 +172,7 @@ describe "rake After:add_default_rating_to_works" do
 
   context "for a rated work" do
     let!(:work) { create(:work, rating_string: ArchiveConfig.RATING_EXPLICIT_TAG_NAME) }
-  
+
     it "does not modify works which already have a rating" do
       subject.invoke
       work.reload
@@ -180,9 +180,9 @@ describe "rake After:add_default_rating_to_works" do
     end
   end
 end
-  
+
 describe "rake After:fix_teen_and_up_imported_rating" do
-  let!(:noncanonical_teen_rating) do 
+  let!(:noncanonical_teen_rating) do
     tag = Rating.create(name: "Teen & Up Audiences")
     tag.canonical = false
     tag.save!(validate: false)
@@ -201,18 +201,15 @@ describe "rake After:fix_teen_and_up_imported_rating" do
 end
 
 describe "rake After:clean_up_noncanonical_ratings" do
-  let(:noncanonical_rating) { Rating.create(name: "Borked rating tag", canonical: false) }
-  let(:canonical_teen_rating) { Rating.create(name: ArchiveConfig.RATING_TEEN_TAG_NAME, canonical: true) }
-  let!(:default_rating) { Rating.create(name: ArchiveConfig.RATING_DEFAULT_TAG_NAME, canonical: true) }
-  let(:work_with_noncanonical_rating) { create(:work) }
-  let(:work_with_canonical_and_noncanonical_ratings) { create(:work) }
-
-  before do
-    work_with_noncanonical_rating.ratings = [noncanonical_rating]
-    work_with_noncanonical_rating.save!
-    work_with_canonical_and_noncanonical_ratings.ratings = [noncanonical_rating, canonical_teen_rating]
-    work_with_canonical_and_noncanonical_ratings.save!
+  let!(:noncanonical_rating) do
+    tag = Rating.create(name: "Borked rating tag", canonical: false)
+    tag.save!(validate: false)
+    tag
   end
+  let!(:canonical_teen_rating) { Rating.find_or_create_by!(name: ArchiveConfig.RATING_TEEN_TAG_NAME, canonical: true) }
+  let!(:default_rating) { Rating.find_or_create_by!(name: ArchiveConfig.RATING_DEFAULT_TAG_NAME, canonical: true) }
+  let!(:work_with_noncanonical_rating) { create(:work, rating_string: noncanonical_rating.name) }
+  let!(:work_with_canonical_and_noncanonical_ratings) { create(:work, rating_string: [noncanonical_rating.name, canonical_teen_rating.name]) }
 
   it "changes and replaces the noncanonical rating tags" do
     subject.invoke
@@ -223,14 +220,14 @@ describe "rake After:clean_up_noncanonical_ratings" do
     # Changes the noncanonical ratings into freeforms
     noncanonical_rating = Tag.find_by(name: "Borked rating tag")
     expect(noncanonical_rating).to be_a(Freeform)
-    expect(work_with_noncanonical_rating.freeforms.to_a).to include(noncanonical_rating)
-    expect(work_with_canonical_and_noncanonical_ratings.freeforms.to_a).to include(noncanonical_rating)
+    expect(work_with_noncanonical_rating.freeforms.to_a).to contain_exactly(noncanonical_rating)
+    expect(work_with_canonical_and_noncanonical_ratings.freeforms.to_a).to contain_exactly(noncanonical_rating)
 
     # Adds the default rating to works left without any other rating
-    expect(work_with_noncanonical_rating.rating_string).to eq(default_rating.name)
+    expect(work_with_noncanonical_rating.ratings.to_a).to contain_exactly(default_rating)
 
     # Doesn't add the default rating to works that have other ratings
-    expect(work_with_canonical_and_noncanonical_ratings.ratings.to_a).to eql([canonical_teen_rating])
+    expect(work_with_canonical_and_noncanonical_ratings.ratings.to_a).to contain_exactly(canonical_teen_rating)
   end
 end
 
@@ -242,7 +239,7 @@ describe "rake After:clean_up_noncanonical_categories" do
     tag.save!(validate: false)
     return tag
   end
-  let!(:work_with_noncanonical_categ) do 
+  let!(:work_with_noncanonical_categ) do
     work = create(:work)
     work.categories = [noncanonical_category_tag]
     work.save!(validate: false)
