@@ -798,7 +798,7 @@ namespace :After do
     noncanonical_ratings = Rating.where(canonical: false)
     puts "There are #{noncanonical_ratings.size} noncanonical rating tags."
 
-    exit if noncanonical_ratings.empty?
+    next if noncanonical_ratings.empty?
 
     puts "The following noncanonical Ratings will be changed into Additional Tags:"
     puts noncanonical_ratings.map(&:name).join("\n")
