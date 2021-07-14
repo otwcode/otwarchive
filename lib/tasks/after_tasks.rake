@@ -792,6 +792,45 @@ namespace :After do
     STDOUT.flush
   end
 
+  desc "Clean up noncanonical rating tags"
+  task(clean_up_noncanonical_ratings: :environment) do
+    canonical_not_rated_tag = Rating.find_by!(name: ArchiveConfig.RATING_DEFAULT_TAG_NAME)
+    noncanonical_ratings = Rating.where(canonical: false)
+    puts "There are #{noncanonical_ratings.size} noncanonical rating tags."
+
+    unless noncanonical_ratings.empty?
+      puts "The following noncanonical Ratings will be changed into Additional Tags:"
+      puts noncanonical_ratings.map(&:name).join("\n")
+    end
+
+    work_ids = []
+    invalid_works = []
+    noncanonical_ratings.each do |tag|
+      works_using_tag = tag.works
+      tag.update_attribute(:type, "Freeform")
+
+      works_using_tag.each do |work|
+        next unless work.ratings.empty?
+
+        work_ids << work.id
+        work.ratings = [canonical_not_rated_tag]
+        invalid_works << work.id if work.save == false
+      end
+    end
+
+    unless work_ids.empty?
+      puts "The following works were left without a rating and received the Not Rated rating:"
+      puts work_ids.join(", ")
+      STDOUT.flush
+    end
+
+    unless invalid_works.empty?
+      puts "The following works failed validations and could not be saved:"
+      puts invalid_works.join(", ")
+      STDOUT.flush
+    end
+  end
+
   desc "Clean up noncanonical category tags"
   task(clean_up_noncanonical_categories: :environment) do
     Category.where(canonical: false).each do |tag|
