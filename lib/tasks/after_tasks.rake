@@ -773,23 +773,31 @@ namespace :After do
   task(fix_teen_and_up_imported_rating: :environment) do
     borked_rating_tag = Rating.find_by!(name: "Teen & Up Audiences")
     canonical_rating_tag = Rating.find_by!(name: ArchiveConfig.RATING_TEEN_TAG_NAME)
-    works_using_tag = borked_rating_tag.works
-    invalid_works = []
-    works_using_tag.find_each do |work|
+
+    work_ids = []
+    invalid_work_ids = []
+    borked_rating_tag.works.find_each do |work|
       work.ratings << canonical_rating_tag
       work.ratings = work.ratings - [borked_rating_tag]
-      invalid_works << work.id unless work.save
+      if work.save
+        work_ids << work.id
+      else
+        invalid_work_ids << work.id
+      end
       print(".") && STDOUT.flush
     end
 
-    unless invalid_works.empty?
-      puts "The following works failed validations and could not be saved:"
-      puts invalid_works.join(", ")
+    unless work_ids.empty?
+      puts "Converted '#{borked_rating_tag.name}' rating tag on #{work_ids.size} works:"
+      puts work_ids.join(", ")
       STDOUT.flush
     end
 
-    puts "Converted '#{borked_rating_tag.name}' rating tag on #{works_using_tag.size - invalid_works.size} works"
-    STDOUT.flush
+    unless invalid_work_ids.empty?
+      puts "The following #{invalid_work_ids.size} works failed validations and could not be saved:"
+      puts invalid_work_ids.join(", ")
+      STDOUT.flush
+    end
   end
 
   desc "Clean up noncanonical rating tags"
@@ -818,17 +826,18 @@ namespace :After do
         else
           invalid_work_ids << work.id
         end
+        print(".") && STDOUT.flush
       end
     end
 
     unless work_ids.empty?
-      puts "The following works were left without a rating and successfully received the Not Rated rating:"
+      puts "The following #{work_ids.size} works were left without a rating and successfully received the Not Rated rating:"
       puts work_ids.join(", ")
       STDOUT.flush
     end
 
     unless invalid_work_ids.empty?
-      puts "The following works failed validations and could not be saved:"
+      puts "The following #{invalid_work_ids.size} works failed validations and could not be saved:"
       puts invalid_work_ids.join(", ")
       STDOUT.flush
     end
