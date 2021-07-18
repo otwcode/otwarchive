@@ -169,3 +169,18 @@ Scenario: character wrangling - syns, mergers, characters, autocompletes
   When I fill in "Synonym of" with "Doctor Who"
     And I press "Save changes"
   Then I should see "Doctor Who is a fandom. Synonyms must belong to the same category."
+
+
+Scenario: Error messages show correct links even if tags contain special characters
+
+  Given the following activated tag wrangler exists
+    | login  | password    |
+    | Enigel | wrangulate! |
+    And a character exists with name: "Evelyn \"Evie\" Carnahan", canonical: false
+    And a character exists with name: "Evelyn \"Evy\" Carnahan", canonical: false
+    And I am logged in as "Enigel" with password "wrangulate!"
+  When I edit the tag 'Evelyn "Evy" Carnahan'
+    And I fill in "Synonym of" with 'Evelyn "Evie" Carnahan'
+    And I press "Save changes"
+  Then I should see a link titled 'Evelyn "Evie" Carnahan' to the URL "/tags/Evelyn%20%22Evie%22%20Carnahan/edit"
+    And I should see "is not a canonical tag. Please make it canonical before adding synonyms to it."

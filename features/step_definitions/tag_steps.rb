@@ -229,7 +229,7 @@ When /^I check the (?:mass )?wrangling option for "([^"]*)"$/ do |tagname|
   check("selected_tags_#{tag.id}")
 end
 
-When /^I edit the tag "([^\"]*)"$/ do |tag|
+When "I edit the tag {string}" do |tag|
   tag = Tag.find_by!(name: tag)
   visit tag_path(tag)
   within(".header") do
