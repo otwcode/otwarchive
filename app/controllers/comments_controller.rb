@@ -210,6 +210,7 @@ class CommentsController < ApplicationController
 
     @comments = @commentable.comments.reviewed.page(params[:page])
     return unless @commentable.class == Comment
+    
     # we link to the parent object at the top
     @commentable = @commentable.ultimate_parent
   end
