@@ -206,13 +206,12 @@ class CommentsController < ApplicationController
   end
 
   def index
-    return redirect_to "/404" if @commentable.blank?
+    return raise_not_found if @commentable.blank?
 
     @comments = @commentable.comments.reviewed.page(params[:page])
-    if @commentable.class == Comment
-      # we link to the parent object at the top
-      @commentable = @commentable.ultimate_parent
-    end
+    return unless @commentable.class == Comment
+    # we link to the parent object at the top
+    @commentable = @commentable.ultimate_parent
   end
 
   def unreviewed
