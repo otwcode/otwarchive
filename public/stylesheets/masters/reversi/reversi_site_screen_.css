@@ -665,6 +665,7 @@ form.search input[type="text"] {
 
 .notice, 
 .comment_notice,
+.kudos_notice,
 ul.notes,
 .qtip-content {
   background: #333;
@@ -681,6 +682,7 @@ ul.notes,
 
 .error,
 .comment_error,
+.kudos_error,
 .alert.flash {
   background: #663333;
   border-color: #804040;
