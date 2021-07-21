@@ -36,22 +36,37 @@ class SkinParent < ApplicationRecord
 
   end
 
-  def self.get_all_parent_ids(skin_id)
-    parent_ids = SkinParent.where(child_skin_id: skin_id).pluck(:parent_skin_id)
-    ret = parent_ids
-    parent_ids.each do |parent_id_val|
-      ret += SkinParent.get_all_parent_ids(parent_id_val)
+  # Takes as argument the ID of the skin to start at, and a block that should
+  # take a list of skin IDs and produce a list of "adjacent" skin IDs (i.e.
+  # parents or children).
+  def self.search_skin_ids(root_id)
+    found = Set.new([root_id])
+    boundary = [root_id]
+
+    until boundary.empty?
+      new_boundary = yield boundary
+
+      boundary = []
+
+      new_boundary.each do |skin_id|
+        boundary << skin_id if found.add?(skin_id)
+      end
     end
-    return ret
+
+    found.delete(root_id)
+    found.to_a
+  end
+
+  def self.get_all_parent_ids(skin_id)
+    search_skin_ids(skin_id) do |skin_ids|
+      SkinParent.where(child_skin_id: skin_ids).pluck(:parent_skin_id)
+    end
   end
 
   def self.get_all_child_ids(skin_id)
-    child_ids = SkinParent.where(parent_skin_id: skin_id).pluck(:child_skin_id)
-    ret = child_ids
-    child_ids.each do |child_id_val|
-      ret += SkinParent.get_all_child_ids(child_id_val)
+    search_skin_ids(skin_id) do |skin_ids|
+      SkinParent.where(parent_skin_id: skin_ids).pluck(:child_skin_id)
     end
-    return ret
   end
 
    def parent_skin_title

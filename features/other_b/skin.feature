@@ -20,7 +20,7 @@ Feature: Non-public site and work skins
     And I should not see "(Not yet reviewed)"
 
   Scenario: A logged-out user should not be able to create skins.
-  Given I am logged out
+  Given I am a visitor
   When I go to the new skin page
     Then I should see "Sorry, you don't have permission"
 
@@ -212,6 +212,7 @@ Feature: Non-public site and work skins
     And I create the skin "Ugly Skin"
   When I go to "Ugly Skin" skin page
     And I follow "Delete"
+    And I press "Yes, Delete Skin"
   Then I should see "The skin was deleted."
     And I should be on skinner's skins page
     And I should not see "Ugly Skin"
@@ -223,6 +224,7 @@ Feature: Non-public site and work skins
     And I change my skin to "Ugly Skin"
   When I go to skinner's skins page
     And I follow "Delete"
+    And I press "Yes, Delete Skin"
   Then I should see "The skin was deleted."
   When I go to skinner's preferences page
   Then "Default" should be selected within "preference_skin_id"
@@ -286,3 +288,52 @@ Feature: Non-public site and work skins
   When I change my skin to "my skin"
     And I edit the skin "my skin"
   Then I should see a "Revert to Default Skin" button
+
+  Scenario: When a cached skin is the child of a cached skin, and the parent is updated, the child reflects the changes to the parent
+    Given I am logged in as "skin_maker"
+      And I have a skin "Child Skin" with a parent "Parent Skin"
+      And the skin "Child Skin" is cached
+      And the skin "Parent Skin" is cached
+      And I change my skin to "Child Skin"
+    # Only admins can edit cached skins:
+    When I am logged in as an admin
+      And I edit the skin "Parent Skin"
+      And I fill in "CSS" with "body { background: cyan; }"
+      And I press "Update"
+    Then the filesystem cache of the skin "Child Skin" should include "background: cyan;"
+    When I am logged in as "skin_maker"
+    Then the page should have the cached skin "Child Skin"
+
+  Scenario: When a cached skin is the child of an uncached skin, and the parent is updated, the child reflects the changes to the parent
+    Given I am logged in as "skin_maker"
+      And I have a skin "Child Skin" with a parent "Parent Skin"
+      And the skin "Child Skin" is cached
+      And I change my skin to "Child Skin"
+    When I edit the skin "Parent Skin"
+      And I fill in "CSS" with "body { background: cyan; }"
+      And I press "Update"
+    Then the filesystem cache of the skin "Child Skin" should include "background: cyan;"
+      And the page should have the cached skin "Child Skin"
+
+  Scenario: When an uncached skin is the child of a cached skin, and the parent is updated, the child reflects the changes to the parent
+    Given I am logged in as "skin_maker"
+      And I have a skin "Child Skin" with a parent "Parent Skin"
+      And the skin "Parent Skin" is cached
+      And I change my skin to "Child Skin"
+    # Only admins can edit cached skins:
+    When I am logged in as an admin
+      And I edit the skin "Parent Skin"
+      And I fill in "CSS" with "body { background: cyan; }"
+      And I press "Update"
+    Then the filesystem cache of the skin "Parent Skin" should include "background: cyan;"
+    When I am logged in as "skin_maker"
+    Then the page should have the cached skin "Parent Skin"
+
+  Scenario: When an uncached skin is the child of an uncached skin, and the parent is updated, the child reflects the changes to the parent
+    Given I am logged in as "skin_maker"
+      And I have a skin "Child Skin" with a parent "Parent Skin"
+      And I change my skin to "Child Skin"
+    When I edit the skin "Parent Skin"
+      And I fill in "CSS" with "body { background: cyan; }"
+      And I press "Update"
+    Then I should see "background: cyan;"

@@ -214,11 +214,13 @@ end
 
 Then /^the author of "([^\"]*)" should be publicly visible$/ do |title|
   work = Work.find_by(title: title)
+  byline = work.users.first.pseuds.first.byline
   visit work_path(work)
-  page.should have_content("by <a href=\"#{user_url(work.users.first)}\"><strong>#{work.users.first.pseuds.first.byline}")
+  step %{I should see "#{byline}" within "title"}
+  step %{I should see "#{byline}" within ".byline"}
   if work.collections.first
     visit collection_path(work.collections.first)
-    page.should have_content("#{title} by #{work.users.first.pseuds.first.byline}")
+    page.should have_content("#{title} by #{byline}")
   end
 end
 
@@ -226,7 +228,8 @@ Then /^the author of "([^\"]*)" should be hidden from me$/ do |title|
   work = Work.find_by(title: title)
   visit work_path(work)
   page.should_not have_content(work.users.first.pseuds.first.byline)
-  page.should have_content("by Anonymous")
+  step %{I should see "Anonymous" within "title"}
+  step %{I should see "Anonymous" within ".byline"}
   visit collection_path(work.collections.first)
   page.should_not have_content("#{title} by #{work.users.first.pseuds.first.byline}")
   page.should have_content("#{title} by Anonymous")

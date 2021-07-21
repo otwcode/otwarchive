@@ -5,7 +5,7 @@
 
   <!--subnav-->
   <p class="note">
-    <%= ts("To fix common errors with this user's Subscriptions and Stats pages, and to reindex their works and bookmarks, choose \"Troubleshoot Account.\"")%></p>
+    <%= ts("To fix common errors with this user's Subscriptions and Stats pages, and to reindex their works and bookmarks, choose \"Troubleshoot Account.\"") %></p>
   <ul class="navigation actions" role="navigation">
     <li>
       <%= link_to ts("Manage User Invitations"), manage_user_invitations_path(user_id: @user.login) %>
@@ -21,7 +21,7 @@
       <%= button_to ts("Activate User Account"), { action: "activate", id: @user }, disabled: @user.active? %>
     </li>
     <li>
-      <%= link_to ts("Manage User Roles"), { action: "index", query: @user.login, role: '0' } %>
+      <%= link_to ts("Manage User Roles"), { action: "index", name: @user.login, role: "0" } %>
     </li>
   </ul>
   <!--/subnav-->
@@ -30,7 +30,7 @@
   <h3 class="heading"><%= ts("Abuse Administration") %></h3>
   <%= form_tag action: "update_status", controller: "admin/admin_users" do %>
     <%= hidden_field_tag "user_login", @user.login %>
-    <fieldset>
+    <fieldset<% unless policy(@user).can_judge_users? %> disabled="disabled"<% end %>>
       <legend><%= ts("Fannish Next of Kin") %></legend>
       <h4 class="heading"><%= ts("Fannish Next of Kin") %></h4>
       <dl>
@@ -48,10 +48,14 @@
         </dd>
       </dl>
     </fieldset>
-    <fieldset>
+    <fieldset<% unless policy(@user).can_judge_users? %> disabled="disabled"<% end %>>
       <legend><%= ts("Warnings and Suspensions") %></legend>
       <h4 class="heading"><%= ts("Warnings and Suspensions") %></h4>
       <ul>
+        <li>
+          <%= radio_button_tag "admin_action", "note" %>
+          <%= label_tag "admin_action_note", ts("Record note") %>
+        </li>
         <li>
           <%= radio_button_tag "admin_action", "warn" %>
           <%= label_tag "admin_action_warn", ts("Record warning") %>
@@ -66,9 +70,9 @@
             <%= text_field_tag "suspend_days", "", class: "number", size: 2, disabled: @user.banned? %>
             <%= live_validation_for_field("suspend_days", presence: false, numericality: true) %>
           <% end %>
-        </li> 
+        </li>
         <li>
-          <% if @user.banned? %> 
+          <% if @user.banned? %>
             <%= radio_button_tag "admin_action", "unban", false %>
             <%= label_tag "admin_action_unban", ts("Lift permanent suspension, effective immediately.") %>
           <% else %>
@@ -82,7 +86,7 @@
         </li>
       </ul>
     </fieldset>
-    <fieldset>
+    <fieldset<% unless policy(@user).can_judge_users? %> disabled="disabled"<% end %>>
       <legend><%= ts("Notes") %></legend>
       <h4 class="heading"><%= label_tag "admin_note", ts("Notes") %></h4>
       <p class="note">

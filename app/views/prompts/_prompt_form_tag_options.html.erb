@@ -54,10 +54,14 @@
         <% autocomplete_method += "&include_wrangled=false" if restriction.restricted?(tag_type, "tag_set") %>
         <dd title="<%= ts("choose #{tag_name.pluralize.downcase} from your selected fandoms") %>">
           <%= tag_set_form.text_field "#{tag_type}_tagnames",
-                            autocomplete_options(autocomplete_method, :autocomplete_min_chars => 0, :autocomplete_token_limit => num_allowed,
-                                    :autocomplete_hint_text => ts("Please select a fandom first!"),
-                                    :autocomplete_searching_text => ts("Searching by fandom..."),
-                                    :autocomplete_live_params => "fandom=#{@fandom_tag_id}") %>
+                            autocomplete_options(autocomplete_method, 
+                              data: {
+                                autocomplete_min_chars: 0,
+                                autocomplete_token_limit: num_allowed,
+                                autocomplete_hint_text: ts("Please select a fandom first!"),
+                                autocomplete_searching_text: ts("Searching by fandom..."),
+                                autocomplete_live_params: "fandom=#{@fandom_tag_id}"
+                            }) %>
           <%= tag_set_form.hidden_field :updated_at, :value => Time.now %>
         </dd>
       <% else # all other cases %>
@@ -80,7 +84,8 @@
           <% else # we have set options but too many for tickyboxes, do autocomplete instead %>
             <dd title="<%= ts("choose #{tag_name.pluralize.downcase} from the challenge options") %>">
               <%= tag_set_form.text_field "#{tag_type}_tagnames",
-                  autocomplete_options("tags_in_sets?tag_type=#{tag_type}&tag_set=#{restriction.tag_set_ids.join(',')}", :autocomplete_token_limit => num_allowed) %>
+                  autocomplete_options("tags_in_sets?tag_type=#{tag_type}&tag_set=#{restriction.tag_set_ids.join(',')}",
+                    data: { autocomplete_token_limit: num_allowed }) %>
               <p class="actions" role="button">
                 <% # TODO: would be nice to improve this for the case of multiple tag sets, currently it links to just an index of all the tag sets for this challenge %>
                 <%= link_to( ts("List %{taglist_size} %{tag_name}", :taglist_size => restriction.tags(tag_type).count, :tag_name => tag_name.pluralize.titleize),
@@ -91,7 +96,7 @@
           <% end %>
         <% else # no specified tags so let's just go with standard autocomplete %>
           <dd title="<%= ts("choose #{tag_name.pluralize.downcase} from canonical archive tags") %>">
-            <%= tag_set_form.text_field "#{tag_type}_tagnames", autocomplete_options(tag_type, :autocomplete_token_limit => num_allowed) %>
+            <%= tag_set_form.text_field "#{tag_type}_tagnames", autocomplete_options(tag_type, data: { autocomplete_token_limit: num_allowed }) %>
             <%= tag_set_form.hidden_field :updated_at, :value => Time.now %>
           </dd>
         <% end %>

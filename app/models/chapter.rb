@@ -68,10 +68,12 @@ class Chapter < ApplicationRecord
           end
         end
       end
-      # We're caching the chapter positions in the comment blurbs
-      # so we need to expire them
+      # We're caching the chapter positions in the comment blurbs and the last
+      # chapter link in the work blurbs so we need to expire the blurbs and the
+      # work indexes.
       if positions_changed
         work.comments.each{ |c| c.touch }
+        work.expire_caches
       end
     end
   end
@@ -190,5 +192,10 @@ class Chapter < ApplicationRecord
   # Return the name to link comments to for this object
   def commentable_name
     self.work.title
+  end
+
+  def expire_comments_count
+    super
+    work&.expire_comments_count
   end
 end

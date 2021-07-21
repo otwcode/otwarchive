@@ -13,13 +13,13 @@ Feature: Edit Works
       And all indexing jobs have been run
     # This isn't my work
     When I view the work "fourth"
-    Then I should not see "Edit"  
+    Then I should not see "Edit"
     When I am on testuser's works page
     # These are my works and should all have edit links on the blurbs
     Then I should see "Edit"
     When I follow "First work"
     # This is my individual work and should have an edit link on the show page
-    Then I should see "first fandom" 
+    Then I should see "first fandom"
       And I should see "Edit"
       # make sure this tag isn't on before we add it
       And I should not see "new tag"
@@ -77,7 +77,7 @@ Feature: Edit Works
       And I follow "Edit"
       And I select "testy" from "work_author_attributes_ids"
       And I unselect "testuser" from "work_author_attributes_ids"
-      And I press "Post Without Preview"
+      And I press "Post"
     Then I should see "testy"
       And I should not see "testuser,"
 
@@ -87,35 +87,30 @@ Feature: Edit Works
       | login          | password   |
       | Scott          | password   |
       And I have a moderated collection "Digital Hoarders 2013" with name "digital_hoarders_2013"
-      And I am logged out
     When I am logged in as "Scott" with password "password"
       And I post the work "Murder in Milan" in the collection "Digital Hoarders 2013"
     Then I should see "You have submitted your work to the moderated collection 'Digital Hoarders 2013'. It will not become a part of the collection until it has been approved by a moderator."
-      And I am logged out
-      And I am logged in as "moderator"
+    When I am logged in as "moderator"
       And I go to "Digital Hoarders 2013" collection's page
       And I follow "Collection Settings"
       And I uncheck "This collection is moderated"
       And I press "Update"
     Then I should see "Collection was successfully updated"
-      And I am logged out
     When I am logged in as "Scott"
       And I post the work "Murder by Numbers" in the collection "Digital Hoarders 2013"
     Then I should see "Work was successfully posted"
-      And I am logged out
     When I am logged in as "moderator"
       And I go to "Digital Hoarders 2013" collection's page
       And I follow "Collection Settings"
       And I check "This collection is moderated"
       And I press "Update"
     Then I should see "Collection was successfully updated"
-      And I am logged out
     When I am logged in as "Scott"
       And I edit the work "Murder by Numbers"
-      And I press "Post Without Preview"
+      And I press "Post"
       And I should see "Work was successfully updated"
     Then I should not see "You have submitted your work to the moderated collection 'Digital Hoarders 2013'. It will not become a part of the collection until it has been approved by a moderator."
-      
+
   Scenario: Previewing edits to a posted work should not refer to the work as a draft
     Given I am logged in as "editor"
       And I post the work "Load of Typos"
@@ -138,8 +133,10 @@ Feature: Edit Works
     When I am logged in as "coauthor"
       And I follow "Dialogue" in the email
     Then I should not see "Edit"
-    When I follow "Creator Invitations page"
+    When I follow "Co-Creator Requests page"
       And I check "selected[]"
+      # Expire cached byline
+      And it is currently 1 second from now
       And I press "Accept"
     Then I should see "You are now listed as a co-creator on Dialogue."
     When I follow "Dialogue"
@@ -177,8 +174,20 @@ Feature: Edit Works
       And I should see "Coauthor's Work Skin" within "#work_work_skin_id"
       And I should not see "Random User's Work Skin" within "#work_work_skin_id"
     When I select "Coauthor's Work Skin" from "Select Work Skin"
-      And I press "Post Without Preview"
+      And I press "Post"
     Then I should see "Work was successfully updated"
+
+  Scenario: Previewing shows changes to tags, but cancelling afterwards doesn't save those changes
+    Given I am logged in as a random user
+      And I post the work "Work 1" with fandom "testing"
+    When I edit the work "Work 1"
+      And I fill in "Fandoms" with "foobar"
+      And I press "Preview"
+    Then I should see "Fandom: foobar"
+    When I press "Cancel"
+      And I view the work "Work 1"
+    Then I should see "Fandom: testing"
+      And I should not see "Fandom: foobar"
 
   Scenario: A work cannot be edited to remove its fandom
     Given basic tags
@@ -186,8 +195,10 @@ Feature: Edit Works
       And I post the work "Work 1" with fandom "testing"
     When I edit the work "Work 1"
       And I fill in "Fandoms" with ""
-      And I press "Post Without Preview"
-    Then I should see "Sorry! We couldn't save this work because:Please add all required tags. Fandom is missing."
+      And I press "Post"
+    Then I should see "Sorry! We couldn't save this work because:Please fill in at least one fandom."
+    When I view the work "Work 1"
+    Then I should see "Fandom: testing"
 
   Scenario: User can cancel editing a work
     Given I am logged in as a random user
@@ -196,7 +207,25 @@ Feature: Edit Works
       And I fill in "Fandoms" with ""
       And I press "Cancel"
     When I view the work "Work 1"
-      Then I should see "Fandom: testing"
+    Then I should see "Fandom: testing"
+
+  Scenario: A work cannot be edited to remove its only warning
+    Given I am logged in as a random user
+      And I post the work "Work 1"
+    When I edit the work "Work 1"
+      And I uncheck "No Archive Warnings Apply"
+      And I press "Post"
+    Then I should see "Sorry! We couldn't save this work because:Please select at least one warning."
+    When I view the work "Work 1"
+    Then I should see "Archive Warning: No Archive Warnings Apply"
+
+  Scenario: A work can be edited to remove all categories
+    Given I am logged in as a random user
+      And I post the work "Work 1" with category "F/F"
+    When I edit the work "Work 1"
+      And I uncheck "F/F"
+      And I press "Post"
+    Then I should not see "F/F"
 
   Scenario: When editing a work, the title field should not escape HTML
     Given I have a work "What a title! :< :& :>"
@@ -219,7 +248,7 @@ Feature: Edit Works
     When I press "Post"
     Then I should see "Work was successfully posted. It should appear in work listings within the next few minutes."
       But I should not see "Michael"
-    When the user "Burnham" accepts all creator invites
+    When the user "Burnham" accepts all co-creator requests
       And I view the work "Thats not my Spock"
     Then I should see "Michael (Burnham), testuser"
     When the user "Burnham" disallows co-creators
@@ -242,7 +271,7 @@ Feature: Edit Works
       And I press "Post"
     Then I should see "Work was successfully posted. It should appear in work listings within the next few minutes."
       But I should not see "Michael"
-    When the user "Burnham" accepts all co-creator invites
+    When the user "Burnham" accepts all co-creator requests
       And I view the work "Thats not my Spock"
     Then I should see "Michael (Burnham), testuser"
     When the user "Burnham" disallows co-creators
@@ -257,6 +286,6 @@ Feature: Edit Works
     Then I should see "Work was successfully updated"
       And I should see "Michael (Burnham), testuser"
       But I should not see "Georgiou"
-    When the user "Georgiou" accepts all co-creator invites
+    When the user "Georgiou" accepts all co-creator requests
       And I view the work "Thats not my Spock, it has too much beard"
     Then I should see "Georgiou, Michael (Burnham), testuser"

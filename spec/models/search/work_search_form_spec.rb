@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe WorkSearchForm do
+describe WorkSearchForm, work_search: true do
   describe "#process_options" do
     it "removes blank options" do
       options = { foo: nil, bar: '', baz: false, boo: true }
@@ -115,7 +115,7 @@ describe WorkSearchForm do
       FactoryBot.create(:collection, id: 1)
     end
 
-    let(:language) { create(:language, short: "ca") }
+    let(:language) { create(:language, short: "ptPT") }
 
     let!(:work) do
       FactoryBot.create(:work,
@@ -124,10 +124,8 @@ describe WorkSearchForm do
                          summary: "An unexpected journey",
                          fandom_string: "The Hobbit",
                          character_string: "Bilbo Baggins",
-                         posted: true,
                          expected_number_of_chapters: 3,
-                         complete: false,
-                         language_id: Language.default.id)
+                         complete: false)
     end
 
     let!(:second_work) do
@@ -137,7 +135,6 @@ describe WorkSearchForm do
                          summary: "Mr and Mrs Dursley, of number four Privet Drive...",
                          fandom_string: "Harry Potter",
                          character_string: "Harry Potter, Ron Weasley, Hermione Granger",
-                         posted: true,
                          language_id: language.id)
     end
 
@@ -177,6 +174,64 @@ describe WorkSearchForm do
       results = WorkSearchForm.new(query: "\"Season/Series 99\"").search_results
       expect(results).not_to include work
       expect(results).to include second_work
+    end
+
+    describe "when searching using user_ids in the query" do
+      let(:user_id) { second_work.user_ids.first }
+
+      context "when the work is in an anonymous collection" do
+        let(:collection) { create(:anonymous_collection) }
+
+        it "doesn't include the work" do
+          work_search = WorkSearchForm.new(query: "user_ids: #{user_id}")
+          expect(work_search.search_results).not_to include second_work
+        end
+      end
+
+      context "when the work is in an unrevealed collection" do
+        let(:collection) { create(:unrevealed_collection) }
+
+        it "doesn't include the work" do
+          work_search = WorkSearchForm.new(query: "user_ids: #{user_id}")
+          expect(work_search.search_results).not_to include second_work
+        end
+      end
+
+      context "when the work is neither anonymous or unrevealed" do
+        it "includes the work" do
+          work_search = WorkSearchForm.new(query: "user_ids: #{user_id}")
+          expect(work_search.search_results).to include second_work
+        end
+      end
+    end
+
+    describe "when searching using pseud_ids in the query" do
+      let(:pseud_id) { second_work.pseud_ids.first }
+
+      context "when the work is in an anonymous collection" do
+        let(:collection) { create(:anonymous_collection) }
+
+        it "doesn't include the work" do
+          work_search = WorkSearchForm.new(query: "pseud_ids: #{pseud_id}")
+          expect(work_search.search_results).not_to include second_work
+        end
+      end
+
+      context "when the work is in an unrevealed collection" do
+        let(:collection) { create(:unrevealed_collection) }
+
+        it "doesn't include the work" do
+          work_search = WorkSearchForm.new(query: "pseud_ids: #{pseud_id}")
+          expect(work_search.search_results).not_to include second_work
+        end
+      end
+
+      context "when the work is neither anonymous or unrevealed" do
+        it "includes the work" do
+          work_search = WorkSearchForm.new(query: "pseud_ids: #{pseud_id}")
+          expect(work_search.search_results).to include second_work
+        end
+      end
     end
 
     describe "when searching unposted works" do
@@ -249,25 +304,25 @@ describe WorkSearchForm do
 
       it "should only return works in that language" do
         # "Language" dropdown, with short names
-        results = WorkSearchForm.new(language_id: "ca").search_results
+        results = WorkSearchForm.new(language_id: "ptPT").search_results
         expect(results).not_to include work
         expect(results).to include second_work
 
         # "Language" dropdown, with IDs (backward compatibility)
         wsf = WorkSearchForm.new(language_id: language.id)
-        expect(wsf.language_id).to eq("ca")
+        expect(wsf.language_id).to eq("ptPT")
         results = wsf.search_results
         expect(results).not_to include work
         expect(results).to include second_work
 
         # "Any field" or "Search within results", with short names
-        results = WorkSearchForm.new(query: "language_id: ca").search_results
+        results = WorkSearchForm.new(query: "language_id: ptPT").search_results
         expect(results).not_to include work
         expect(results).to include second_work
 
         # "Any field" or "Search within results", with IDs (backward compatibility)
         wsf = WorkSearchForm.new(query: "language_id: #{language.id} OR language_id: #{unused_language.id}")
-        expect(wsf.query).to eq("language_id: ca OR language_id: tlh")
+        expect(wsf.query).to eq("language_id: ptPT OR language_id: tlh")
         results = wsf.search_results
         expect(results).not_to include work
         expect(results).to include second_work
@@ -482,8 +537,8 @@ describe WorkSearchForm do
   describe "searching for authors who changes username" do
     let!(:user) { create(:user, login: "81_white_chain") }
     let!(:second_pseud) { create(:pseud, name: "peacekeeper", user: user) }
-    let!(:work_by_default_pseud) { create(:posted_work, authors: [user.default_pseud]) }
-    let!(:work_by_second_pseud) { create(:posted_work, authors: [second_pseud]) }
+    let!(:work_by_default_pseud) { create(:work, authors: [user.default_pseud]) }
+    let!(:work_by_second_pseud) { create(:work, authors: [second_pseud]) }
 
     before { run_all_indexing_jobs }
 
@@ -510,7 +565,7 @@ describe WorkSearchForm do
     describe "by authors" do
       before do
         %w(21st_wombat 007aardvark).each do |pseud_name|
-          create(:posted_work, authors: [create(:pseud, name: pseud_name)])
+          create(:work, authors: [create(:pseud, name: pseud_name)])
         end
         run_all_indexing_jobs
       end
@@ -534,8 +589,8 @@ describe WorkSearchForm do
       let!(:user_2) { create(:user, login: "ruth") }
 
       before do
-        create(:posted_work, authors: [user_1.default_pseud])
-        create(:posted_work, authors: [user_2.default_pseud])
+        create(:work, authors: [user_1.default_pseud])
+        create(:work, authors: [user_2.default_pseud])
         run_all_indexing_jobs
       end
 

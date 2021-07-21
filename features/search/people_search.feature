@@ -47,7 +47,7 @@ Feature: Search pseuds
       And all indexing jobs have been run
     When I edit the work "Drabble Collection"
       And I fill in "Fandom" with "MCU, Ghost Soup"
-      And I press "Post Without Preview"
+      And I press "Post"
       And all indexing jobs have been run
       And I go to the search people page
       And I fill in "Fandom" with "Ghost Soup"
@@ -61,7 +61,7 @@ Feature: Search pseuds
       And all indexing jobs have been run
     When I edit the work "Drabble Collection"
       And I fill in "Fandom" with "MCU"
-      And I press "Post Without Preview"
+      And I press "Post"
       And all indexing jobs have been run
       And I go to the search people page
       And I fill in "Fandom" with "Ghost Soup"
@@ -75,14 +75,14 @@ Feature: Search pseuds
       And all indexing jobs have been run
     When I edit the work "Drabble Collection"
       And I invite the co-author "alice"
-      And I press "Post Without Preview"
+      And I press "Post"
       And all indexing jobs have been run
       And I go to the search people page
       And I fill in "Fandom" with "Ghost Soup"
       And I press "Search People"
     Then I should see "testuser" within "ol.pseud.group"
       But I should not see "alice" within "ol.pseud.group"
-    When the user "alice" accepts all co-creator invites
+    When the user "alice" accepts all co-creator requests
       And all indexing jobs have been run
       And I go to the search people page
       And I fill in "Fandom" with "Ghost Soup"

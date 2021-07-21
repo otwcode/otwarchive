@@ -54,18 +54,23 @@
                   </span>
                 </li>
               <% end %>
+              <% if feedback_comment.iced? %>
+                <li><%= frozen_comment_indicator %></li>
+              <% end %>
               <% if feedback_comment.unreviewed? %>
                 <li class="approve review" id="review_comment_link_<%= feedback_comment.id %>">
                   <%= render 'inbox/approve_button', feedback_comment: feedback_comment, approved_from: "inbox" %>
                 </li>
-              <% else %>
+              <% elsif !feedback_comment.iced? %>
                 <li>
                   <%= render 'inbox/reply_button', feedback_comment: feedback_comment %>
                 </li>
               <% end %>
-
-              <li class="action">
-                <%= check_box_tag "inbox_comments[]", inbox_comment.id, false, :title => ts("select this comment"), :id => "inbox_comments_#{inbox_comment.id}" %>
+              <li>
+                <%= label_tag "inbox_comments_#{inbox_comment.id}" do %>
+                  <%= check_box_tag "inbox_comments[]", inbox_comment.id, false, id: "inbox_comments_#{inbox_comment.id}" %>
+                  <%= ts("Select") %>
+                <% end %>
               </li>
             </ul>
           </li>

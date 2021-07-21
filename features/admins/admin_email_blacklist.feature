@@ -36,7 +36,7 @@ Scenario: Blacklisted email addresses should not be usable in guest comments
   When I post the comment "I loved this" on the work "New Work" as a guest with email "foo@bar.com"
   Then I should see "has been blocked at the owner's request"
     And I should not see "Comments (1)"
-  When I fill in "Email" with "someone@bar.com"
+  When I fill in "Guest email" with "someone@bar.com"
     And I press "Comment"
   Then I should see "Comments (1)"
 

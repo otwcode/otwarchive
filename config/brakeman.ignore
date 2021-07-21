@@ -96,6 +96,25 @@
       "note": ""
     },
     {
+      "warning_type": "Cross Site Scripting",
+      "warning_code": 2,
+      "fingerprint": "04a2dece009c698540960269d024b874a42b71cf8e06e3216c41f8807e57f9b9",
+      "check_name": "CrossSiteScripting",
+      "message": "Unescaped model attribute",
+      "file": "app/views/kudos/index.html.erb",
+      "line": 9,
+      "link": "http://brakemanscanner.org/docs/warning_types/cross_site_scripting",
+      "code": "Work.find(params[:work_id]).kudos.includes(:user).with_user.map do\n link_to(kudo.user.login, kudo.user)\n end.to_sentence",
+      "render_path": [{"type":"controller","class":"KudosController","method":"index","line":11,"file":"app/controllers/kudos_controller.rb"}],
+      "location": {
+        "type": "template",
+        "template": "kudos/index"
+      },
+      "user_input": "Work.find(params[:work_id]).kudos",
+      "confidence": "Weak",
+      "note": ""
+    },
+    {
       "warning_type": "Redirect",
       "warning_code": 18,
       "fingerprint": "124a90c49fb5093fbfd833c3f1c3b8ae345145e9887aa8561a4d4687499486e3",
@@ -296,7 +315,7 @@
       "line": 16,
       "link": "http://brakemanscanner.org/docs/warning_types/cross_site_scripting",
       "code": "sanitize_field(Work.find_by(:id => params[:id]).first_chapter, :content)",
-      "render_path": [{"type":"controller","class":"WorksController","method":"update","line":371,"file":"app/controllers/works_controller.rb"}],
+      "render_path": [{"type":"controller","class":"WorksController","method":"update","line":370,"file":"app/controllers/works_controller.rb"}],
       "location": {
         "type": "template",
         "template": "works/preview"
@@ -312,7 +331,7 @@
       "check_name": "FileAccess",
       "message": "Model attribute used in file name",
       "file": "app/models/skin.rb",
-      "line": 445,
+      "line": 459,
       "link": "http://brakemanscanner.org/docs/warning_types/file_access/",
       "code": "File.open((\"#{(Skin.site_skins_dir + version)}/\" + \"preview.png\"), \"rb\")",
       "render_path": null,
@@ -332,7 +351,7 @@
       "check_name": "FileAccess",
       "message": "Model attribute used in file name",
       "file": "app/models/skin.rb",
-      "line": 459,
+      "line": 473,
       "link": "http://brakemanscanner.org/docs/warning_types/file_access/",
       "code": "File.open((\"#{(Skin.site_skins_dir + version)}/\" + \"preview.png\"), \"rb\")",
       "render_path": null,
@@ -585,7 +604,7 @@
       "check_name": "FileAccess",
       "message": "Model attribute used in file name",
       "file": "app/models/skin.rb",
-      "line": 516,
+      "line": 530,
       "link": "http://brakemanscanner.org/docs/warning_types/file_access/",
       "code": "File.open((Skin.site_skins_dir + \"preview.png\"), \"rb\")",
       "render_path": null,
@@ -633,6 +652,25 @@
         "template": "works/_work_header_notes"
       },
       "user_input": "Work.find_by(:id => params[:work_id])",
+      "confidence": "Weak",
+      "note": ""
+    },
+    {
+      "warning_type": "Cross Site Scripting",
+      "warning_code": 2,
+      "fingerprint": "4c2812ecba16106adca83fe060ad8671affa5d656e84eab329ba363745b06fae",
+      "check_name": "CrossSiteScripting",
+      "message": "Unescaped model attribute",
+      "file": "app/views/users/confirmation.html.erb",
+      "line": 14,
+      "link": "http://brakemanscanner.org/docs/warning_types/cross_site_scripting",
+      "code": "ts(\"<strong>Important!</strong> You must confirm your email address within %{days_before_purge} days, or your account will expire. If this happens, you can sign up again using the same invitation.\", :days_before_purge => (if AdminSetting.current.days_to_purge_unactivated? then\n  (AdminSetting.current.days_to_purge_unactivated * 7)\nelse\n  ArchiveConfig.DAYS_TO_PURGE_UNACTIVATED\nend))",
+      "render_path": [{"type":"controller","class":"Users::RegistrationsController","method":"notify_and_show_confirmation_screen","line":46,"file":"app/controllers/users/registrations_controller.rb"}],
+      "location": {
+        "type": "template",
+        "template": "users/confirmation"
+      },
+      "user_input": "AdminSetting.current.days_to_purge_unactivated",
       "confidence": "Weak",
       "note": ""
     },
@@ -974,7 +1012,7 @@
       "line": 11,
       "link": "http://brakemanscanner.org/docs/warning_types/cross_site_scripting",
       "code": "ts(\"Are you sure you want to <strong><em>delete</em></strong> all the works and comments created by this user,\\n           along with their %{bookmarks} bookmarks, %{series} series, and %{collections} collections? This <strong>cannot be undone</strong>.\", :bookmarks => User.find_by(:login => params[:id]).bookmarks.size, :series => User.find_by(:login => params[:id]).series.size, :collections => User.find_by(:login => params[:id]).collections.size)",
-      "render_path": [{"type":"controller","class":"Admin::AdminUsersController","method":"confirm_delete_user_creations","line":96,"file":"app/controllers/admin/admin_users_controller.rb"}],
+      "render_path": [{"type":"controller","class":"Admin::AdminUsersController","method":"confirm_delete_user_creations","line":106,"file":"app/controllers/admin/admin_users_controller.rb"}],
       "location": {
         "type": "template",
         "template": "admin/admin_users/confirm_delete_user_creations"
@@ -990,7 +1028,7 @@
       "check_name": "ValidationRegex",
       "message": "Insufficient validation for 'name' using /\\p{Alnum}/. Use \\A and \\z as anchors",
       "file": "app/models/pseud.rb",
-      "line": 67,
+      "line": 66,
       "link": "http://brakemanscanner.org/docs/warning_types/format_validation/",
       "code": null,
       "render_path": null,
@@ -1047,7 +1085,7 @@
       "check_name": "FileAccess",
       "message": "Model attribute used in file name",
       "file": "app/models/skin.rb",
-      "line": 413,
+      "line": 427,
       "link": "http://brakemanscanner.org/docs/warning_types/file_access/",
       "code": "File.open((\"#{(Skin.site_skins_dir + version)}/\" + skin_file), &:readline)",
       "render_path": null,
@@ -1109,7 +1147,7 @@
       "line": 7,
       "link": "http://brakemanscanner.org/docs/warning_types/cross_site_scripting",
       "code": "ts(\"Are you sure you want to <strong><em>delete</em></strong> \\\"%{work_title}\\\" <strong><em>permanently</em></strong>? This <strong>cannot be undone</strong>.\", :work_title => Work.find_by(:id => params[:id]).title)",
-      "render_path": [{"type":"controller","class":"WorksController","method":"confirm_delete","line":429,"file":"app/controllers/works_controller.rb"}],
+      "render_path": [{"type":"controller","class":"WorksController","method":"confirm_delete","line":428,"file":"app/controllers/works_controller.rb"}],
       "location": {
         "type": "template",
         "template": "works/confirm_delete"
@@ -1153,57 +1191,6 @@
         "template": "layouts/_banner"
       },
       "user_input": "AdminBanner.where(:active => true).last",
-      "confidence": "Weak",
-      "note": ""
-    },
-    {
-      "warning_type": "Cross Site Scripting",
-      "warning_code": 2,
-      "fingerprint": "80956874bb517bc1a8d91a9e56c8ab08fb829db9c24b85cddb2691db51e9b9c0",
-      "check_name": "CrossSiteScripting",
-      "message": "Unescaped model attribute",
-      "file": "app/views/external_works/_work_module.html.erb",
-      "line": 17,
-      "link": "http://brakemanscanner.org/docs/warning_types/cross_site_scripting",
-      "code": "(Work.find(params[:work_id]) or (Chapter.find(params[:chapter_id]).work or (ExternalWork.find(params[:external_work_id]) or Series.find(params[:series_id])))).fandom_tags.collect do\n link_to_tag_works(tag)\n end.join(\", \")",
-      "render_path": [
-        {
-          "type": "controller",
-          "class": "BookmarksController",
-          "method": "index",
-          "line": 148,
-          "file": "app/controllers/bookmarks_controller.rb"
-        },
-        {
-          "type": "template",
-          "name": "bookmarks/index",
-          "line": 59,
-          "file": "app/views/bookmarks/index.html.erb"
-        },
-        {
-          "type": "template",
-          "name": "bookmarks/_bookmarks",
-          "line": 23,
-          "file": "app/views/bookmarks/_bookmarks.html.erb"
-        },
-        {
-          "type": "template",
-          "name": "bookmarks/_bookmarkable_blurb",
-          "line": 13,
-          "file": "app/views/bookmarks/_bookmarkable_blurb.html.erb"
-        },
-        {
-          "type": "template",
-          "name": "bookmarks/_bookmark_item_module",
-          "line": 3,
-          "file": "app/views/bookmarks/_bookmark_item_module.html.erb"
-        }
-      ],
-      "location": {
-        "type": "template",
-        "template": "external_works/_work_module"
-      },
-      "user_input": "Work.find(params[:work_id])",
       "confidence": "Weak",
       "note": ""
     },
@@ -1369,7 +1356,7 @@
       "check_name": "FileAccess",
       "message": "Model attribute used in file name",
       "file": "app/models/skin.rb",
-      "line": 217,
+      "line": 223,
       "link": "http://brakemanscanner.org/docs/warning_types/file_access/",
       "code": "FileUtils.mkdir_p((Skin.skins_dir + skin_dirname))",
       "render_path": null,
@@ -1389,7 +1376,7 @@
       "check_name": "FileAccess",
       "message": "Model attribute used in file name",
       "file": "app/models/skin.rb",
-      "line": 243,
+      "line": 249,
       "link": "http://brakemanscanner.org/docs/warning_types/file_access/",
       "code": "FileUtils.rm_rf((Skin.skins_dir + skin_dirname))",
       "render_path": null,
@@ -1448,7 +1435,7 @@
       "check_name": "FileAccess",
       "message": "Model attribute used in file name",
       "file": "app/models/skin.rb",
-      "line": 234,
+      "line": 240,
       "link": "http://brakemanscanner.org/docs/warning_types/file_access/",
       "code": "File.open(((Skin.skins_dir + skin_dirname) + \"#{2}_#{(\"\" or next_skin.get_sheet_role)}.css\"), \"w\")",
       "render_path": null,
@@ -1575,25 +1562,6 @@
       },
       "user_input": "User.find_by(:login => params[:user_id]).subscriptions.build(subscription_params).subscribable",
       "confidence": "High",
-      "note": ""
-    },
-    {
-      "warning_type": "Cross Site Scripting",
-      "warning_code": 2,
-      "fingerprint": "be9c158f0cf37661f67085fc1140ea30289797dda66c9612697487d2d7ca4384",
-      "check_name": "CrossSiteScripting",
-      "message": "Unescaped model attribute",
-      "file": "app/views/kudos/index.html.erb",
-      "line": 9,
-      "link": "http://brakemanscanner.org/docs/warning_types/cross_site_scripting",
-      "code": "Work.find(params[:work_id]).kudos.includes(:pseud => :user).with_pseud.map do\n link_to(kudo.pseud.byline, kudo.pseud.user)\n end.to_sentence",
-      "render_path": [{"type":"controller","class":"KudosController","method":"index","line":11,"file":"app/controllers/kudos_controller.rb"}],
-      "location": {
-        "type": "template",
-        "template": "kudos/index"
-      },
-      "user_input": "Work.find(params[:work_id]).kudos",
-      "confidence": "Weak",
       "note": ""
     },
     {
@@ -1948,7 +1916,7 @@
       "check_name": "FileAccess",
       "message": "Model attribute used in file name",
       "file": "app/models/skin.rb",
-      "line": 514,
+      "line": 528,
       "link": "http://brakemanscanner.org/docs/warning_types/file_access/",
       "code": "File.open(((Skin.site_skins_dir + Skin.get_current_version) + \"/preview.png\"), \"rb\")",
       "render_path": null,
@@ -2025,7 +1993,7 @@
       "check_name": "FileAccess",
       "message": "Model attribute used in file name",
       "file": "app/models/skin.rb",
-      "line": 224,
+      "line": 230,
       "link": "http://brakemanscanner.org/docs/warning_types/file_access/",
       "code": "File.open(((Skin.skins_dir + skin_dirname) + \"#{1}_#{\"\"}.css\"), \"w\")",
       "render_path": null,
@@ -2037,27 +2005,8 @@
       "user_input": "((Skin.skins_dir + skin_dirname) + \"#{1}_#{\"\"}.css\")",
       "confidence": "Medium",
       "note": ""
-    },
-    {
-      "warning_type": "Cross Site Scripting",
-      "warning_code": 2,
-      "fingerprint": "fc5488b7f49a45176e39345f3f21356882a47161efadee214554e6d418edb9a0",
-      "check_name": "CrossSiteScripting",
-      "message": "Unescaped model attribute",
-      "file": "app/views/users/confirmation.html.erb",
-      "line": 14,
-      "link": "http://brakemanscanner.org/docs/warning_types/cross_site_scripting",
-      "code": "ts(\"<strong>Important!</strong> You must verify your account within %{days_before_purge} days, or your registration will expire.\", :days_before_purge => (if AdminSetting.current.days_to_purge_unactivated? then\n  (AdminSetting.current.days_to_purge_unactivated * 7)\nelse\n  ArchiveConfig.DAYS_TO_PURGE_UNACTIVATED\nend))",
-      "render_path": [{"type":"controller","class":"Users::RegistrationsController","method":"notify_and_show_confirmation_screen","line":46,"file":"app/controllers/users/registrations_controller.rb"}],
-      "location": {
-        "type": "template",
-        "template": "users/confirmation"
-      },
-      "user_input": "AdminSetting.current.days_to_purge_unactivated",
-      "confidence": "Weak",
-      "note": ""
     }
   ],
-  "updated": "2019-09-12 23:17:01 -0400",
+  "updated": "2020-02-09 23:33:40 +0000",
   "brakeman_version": "3.7.2"
 }

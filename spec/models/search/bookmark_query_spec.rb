@@ -131,6 +131,6 @@ describe BookmarkQuery do
 
   it "should allow you to filter for bookmarks by language" do
     q = BookmarkQuery.new(language_id: "ig")
-    expect(q.filters).to include(has_parent: { parent_type: "bookmarkable", query: { term: { language_id: "ig" } } })
+    expect(q.filters).to include(has_parent: { parent_type: "bookmarkable", query: { term: { "language_id.keyword": "ig" } } })
   end
 end
