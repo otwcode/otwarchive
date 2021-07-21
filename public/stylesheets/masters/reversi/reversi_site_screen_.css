@@ -603,6 +603,13 @@ li.comment {
   background: #222;
 }
 
+/* 8. ZONE: SYSTEM: PROXY NOTICE */
+
+#proxy-notice {
+  background: #663333;
+  border-bottom-color: #804040;
+}
+
 /* 18-ZONE-SEARCH-BROWSE */
 
 form.search input[type="text"] {
