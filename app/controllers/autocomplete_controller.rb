@@ -136,12 +136,6 @@ class AutocompleteController < ApplicationController
     render_output(ExternalWork.where(["url LIKE ?", '%' + params[:term] + '%']).limit(10).order(:url).pluck(:url))
   end
 
-  # encodings for importing
-  def encoding
-    encodings = Encoding.name_list.select { |e| e.match(/#{Regexp.escape(params[:term])}/i) }
-    render_output(encodings)
-  end
-
   # people signed up for a challenge
   def challenge_participants
     search_param = params[:term]
