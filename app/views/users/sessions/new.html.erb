@@ -4,9 +4,9 @@
     <%= ts("This work is only available to registered users of the Archive.") %>
     <%= ts("If you already have an Archive of Our Own account, log in now.") %>
       <% if @admin_settings.invite_from_queue_enabled? && @admin_settings.creation_requires_invite? %>
-        <%= t("users.restricted.no_account") %> <%= link_to t("users.login.request_invite"), invite_requests_path %>
+        <%= t(".restricted.no_account", request_invite_link: link_to(t(".restricted.request_invite"), invite_requests_path)).html_safe %>
       <% elsif @admin_settings.account_creation_enabled? && !@admin_settings.creation_requires_invite? %>
-        <%= link_to t("users.restricted.signup"), signup_path %>
+        <%= link_to t(".restricted.signup"), signup_path %>
       <% end %>
   </p>
 <% elsif params[:restricted_commenting] %>
@@ -15,9 +15,9 @@
     <%= ts("Commenting on this work is only available to registered users of the Archive.") %>
     <%= ts("If you already have an Archive of Our Own account, log in now.") %>
     <% if @admin_settings.invite_from_queue_enabled? && @admin_settings.creation_requires_invite? %>
-      <%= t("users.restricted.no_account") %> <%= link_to t("users.login.request_invite"), invite_requests_path %>
+      <%= t(".restricted.no_account", request_invite_link: link_to(t(".restricted.request_invite"), invite_requests_path)).html_safe %>
     <% elsif @admin_settings.account_creation_enabled? && !@admin_settings.creation_requires_invite? %>
-      <%= link_to t("users.restricted.signup"), signup_path %>
+      <%= link_to t(".restricted.signup"), signup_path %>
     <% end %>
   </p>
 <% else %>
@@ -25,8 +25,7 @@
   <p>
     <strong><%= ts("Reminder:") %></strong>
     <%= ts("This site is in beta. Things may break or crash without notice.") %>
-    <%= t("users.login.beta_reminder.report_bugs") %>
-    <%= link_to t("users.login.beta_reminder.feedback_link"), feedbacks_path %>!
+    <%= t(".reminder.report_bugs", give_feedback_link: link_to(t(".reminder.give_feedback"), feedbacks_path)).html_safe %>
   </p>
 <% end %>
 
@@ -35,10 +34,10 @@
 </div>
 
 <p>
-  <%= t("users.login.forgot_password") %> <%= link_to t("users.login.reset_password"), new_user_password_path %>
+  <%= t(".login.forgot", reset_password_link: link_to(t(".login.reset_password"), new_user_password_path)).html_safe %>
   <% if @admin_settings.invite_from_queue_enabled? && @admin_settings.creation_requires_invite? %>
-    <br \><%= t("users.login.no_account") %> <%= link_to t("users.login.request_invite"), invite_requests_path %>
+    <br \><%= t(".login.no_account", join_link: link_to(t(".login.request_invite"), invite_requests_path)).html_safe %>
   <% elsif @admin_settings.account_creation_enabled? && !@admin_settings.creation_requires_invite? %>
-    <br \><%= t("users.login.no_account") %> <%= link_to t("users.login.create_account"), signup_path %>
+    <br \><%= t(".login.no_account", join_link: link_to(t(".login.create_account"), signup_path)).html_safe %>
   <% end %>
 </p>

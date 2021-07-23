@@ -115,18 +115,21 @@ en:
       point2: "The entity that set up the proxy site can see what you submit, including your IP address. If you log in through the proxy site, it can see your password."
       button: "Dismiss Notice"
   users:
-    login:
-      forgot_password: "Forgot your password or user name?"
-      reset_password: "Reset password"
-      no_account: "Don't have an account?"
-      create_account: "Create an account now."
-      request_invite: "Request an invitation to join."
-      beta_reminder:
-        report_bugs: "Please report any pesky bugs and"
-        feedback_link: "give us your feedback"
-    restricted:
-      no_account: "If you don't have an account, you can"
-      signup: "Or join us for free - it's easy."
+    sessions:
+      new:
+        restricted:
+          no_account: "If you don't have an account, you can %{request_invite_link}."
+          request_invite: "request an invitation to join"
+          signup: "Or join us for free - it's easy."
+        login:
+          forgot: "Forgot your password or user name? %{reset_password_link}."
+          reset_password: "Reset password"
+          no_account: "Don't have an account? %{join_link}."
+          request_invite: "Request an invitation to join"
+          create_account: "Create an account now"
+        reminder:
+          report_bugs: "Please report any pesky bugs and %{give_feedback_link}!"
+          give_feedback: "give us your feedback"
     delete_preview:
       heading: "What do you want to do with your works?"
       orphan: "orphan"
