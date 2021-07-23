@@ -118,16 +118,23 @@ en:
     sessions:
       new:
         restricted:
+          sorry: "Sorry!"
+          work_unavailable: "This work is only available to registered users of the Archive."
+          commenting_unavailable: "Commenting on this work is only available to registered users of the Archive."
+          account_exists: "If you already have an Archive of Our Own account, log in now."
           no_account: "If you don't have an account, you can %{request_invite_link}."
           request_invite: "request an invitation to join"
           signup: "Or join us for free - it's easy."
         login:
+          log_in: "Log in"
           forgot: "Forgot your password or user name? %{reset_password_link}."
           reset_password: "Reset password"
           no_account: "Don't have an account? %{join_link}."
           request_invite: "Request an invitation to join"
           create_account: "Create an account now"
-        reminder:
+        beta_reminder:
+          reminder: "Reminder:"
+          warning: "This site is in beta. Things may break or crash without notice."
           report_bugs: "Please report any pesky bugs and %{give_feedback_link}!"
           give_feedback: "give us your feedback"
     delete_preview:

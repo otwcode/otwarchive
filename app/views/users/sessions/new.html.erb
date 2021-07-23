@@ -1,8 +1,8 @@
 <% if params[:restricted] %>
-  <h3 class="heading"><%= ts("Sorry!") %></h3>
+  <h3 class="heading"><%= t(".restricted.sorry") %></h3>
   <p>
-    <%= ts("This work is only available to registered users of the Archive.") %>
-    <%= ts("If you already have an Archive of Our Own account, log in now.") %>
+    <%= t(".restricted.work_unavailable") %>
+    <%= t(".restricted.account_exists") %>
     <% if @admin_settings.invite_from_queue_enabled? && @admin_settings.creation_requires_invite? %>
       <%= t(".restricted.no_account", request_invite_link: link_to(t(".restricted.request_invite"), invite_requests_path)).html_safe %>
     <% elsif @admin_settings.account_creation_enabled? && !@admin_settings.creation_requires_invite? %>
@@ -10,10 +10,10 @@
     <% end %>
   </p>
 <% elsif params[:restricted_commenting] %>
-  <h3 class="heading"><%= ts("Sorry!") %></h3>
+  <h3 class="heading"><%= t(".restricted.sorry") %></h3>
   <p>
-    <%= ts("Commenting on this work is only available to registered users of the Archive.") %>
-    <%= ts("If you already have an Archive of Our Own account, log in now.") %>
+    <%= t(".restricted.commenting_unavailable") %>
+    <%= t(".restricted.account_exists") %>
     <% if @admin_settings.invite_from_queue_enabled? && @admin_settings.creation_requires_invite? %>
       <%= t(".restricted.no_account", request_invite_link: link_to(t(".restricted.request_invite"), invite_requests_path)).html_safe %>
     <% elsif @admin_settings.account_creation_enabled? && !@admin_settings.creation_requires_invite? %>
@@ -21,11 +21,11 @@
     <% end %>
   </p>
 <% else %>
-  <h3 class="heading"><%= ts("Log in") %></h3>
+  <h3 class="heading"><%= t(".login.log_in") %></h3>
   <p>
-    <strong><%= ts("Reminder:") %></strong>
-    <%= ts("This site is in beta. Things may break or crash without notice.") %>
-    <%= t(".reminder.report_bugs", give_feedback_link: link_to(t(".reminder.give_feedback"), feedbacks_path)).html_safe %>
+    <strong><%= t(".beta_reminder.reminder") %></strong>
+    <%= t(".beta_reminder.warning") %>
+    <%= t(".beta_reminder.report_bugs", give_feedback_link: link_to(t(".beta_reminder.give_feedback"), feedbacks_path)).html_safe %>
   </p>
 <% end %>
 
