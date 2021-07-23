@@ -3,11 +3,11 @@
   <p>
     <%= ts("This work is only available to registered users of the Archive.") %>
     <%= ts("If you already have an Archive of Our Own account, log in now.") %>
-      <% if @admin_settings.invite_from_queue_enabled? && @admin_settings.creation_requires_invite? %>
-        <%= t(".restricted.no_account", request_invite_link: link_to(t(".restricted.request_invite"), invite_requests_path)).html_safe %>
-      <% elsif @admin_settings.account_creation_enabled? && !@admin_settings.creation_requires_invite? %>
-        <%= link_to t(".restricted.signup"), signup_path %>
-      <% end %>
+    <% if @admin_settings.invite_from_queue_enabled? && @admin_settings.creation_requires_invite? %>
+      <%= t(".restricted.no_account", request_invite_link: link_to(t(".restricted.request_invite"), invite_requests_path)).html_safe %>
+    <% elsif @admin_settings.account_creation_enabled? && !@admin_settings.creation_requires_invite? %>
+      <%= link_to t(".restricted.signup"), signup_path %>
+    <% end %>
   </p>
 <% elsif params[:restricted_commenting] %>
   <h3 class="heading"><%= ts("Sorry!") %></h3>
