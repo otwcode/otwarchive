@@ -1,7 +1,7 @@
 <% content_for :message do %>
   <p><%= t(".hello", name: style_bold(@user.login)).html_safe %></p>
 
-  <p><%= t(".html.part1", title: style_creation_link(@work.title, @work_url)).html_safe %></p>
+  <p><%= t(".html.part1", title: style_creation_link(@work.title, @work)).html_safe %></p>
 
   <p><%= t '.html.part2' %></p>
 
