@@ -1,5 +1,5 @@
 <% content_for :message do %>
-<%= t("mailer.general.greeting.formal", user: @user.login) %>
+<%= t("mailer.general.greeting.formal", name: @user.login) %>
 
 <%= (@work.pseuds.count > 1 && @user != User.current_user) ?
 t('.text.part1_other',
