@@ -510,7 +510,7 @@ describe UserMailer do
     it_behaves_like "an email with a valid sender"
 
     it "has the correct subject line" do
-      subject = "[#{ArchiveConfig.APP_SHORT_NAME}] Your work has been hidden by the Abuse team"
+      subject = "[#{ArchiveConfig.APP_SHORT_NAME}] Your work has been hidden by the Policy & Abuse team"
       expect(email.subject).to eq(subject)
     end
 
@@ -524,7 +524,6 @@ describe UserMailer do
         expect(email).to have_html_part_content("Dear <b")
         expect(email).to have_html_part_content("#{user.login}</b>,")
         expect(email).to have_html_part_content("> has been reported")
-        expect(email).to have_html_part_content(">The AO3 Policy & Abuse team</b>")
       end
     end
 
@@ -532,7 +531,6 @@ describe UserMailer do
       it "has the correct content" do
         expect(email).to have_text_part_content("Dear #{user.login},")
         expect(email).to have_text_part_content(") has been reported")
-        expect(email).to have_text_part_content("The AO3 Policy & Abuse team")
       end
     end
   end
@@ -561,7 +559,6 @@ describe UserMailer do
         expect(email).to have_html_part_content("Dear <b")
         expect(email).to have_html_part_content("#{user.login}</b>,")
         expect(email).to have_html_part_content("> has been flagged by our automated system")
-        expect(email).to have_html_part_content(">The AO3 Policy & Abuse team</b>")
       end
     end
 
@@ -569,7 +566,6 @@ describe UserMailer do
       it "has the correct content" do
         expect(email).to have_text_part_content("Dear #{user.login},")
         expect(email).to have_text_part_content(") has been flagged by our automated system")
-        expect(email).to have_text_part_content("The AO3 Policy & Abuse team")
       end
     end
   end

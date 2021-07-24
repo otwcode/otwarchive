@@ -408,7 +408,7 @@ class UserMailer < ActionMailer::Base
 
     mail(
         to: @user.email,
-        subject: "[#{ArchiveConfig.APP_SHORT_NAME}] Your work has been hidden by the Abuse team"
+        subject: "[#{ArchiveConfig.APP_SHORT_NAME}] Your work has been hidden by the Policy & Abuse team"
     )
   end
 
