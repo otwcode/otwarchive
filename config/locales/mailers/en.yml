@@ -52,7 +52,7 @@ en:
         part3: "If it's possible your work violated the Archive's Terms of Service, please contact our Abuse Committee (%{abuse_link})."
     admin_hidden_work_notification:
       subject: "[%{app_name}] Your work has been hidden by the Abuse Team"
-      hello: "Dear %{user},"
+      hello: "Dear %{name},"
       tos: "Terms of Service"
       abuse_committee: "contact Policy & Abuse"
       sincerely: "Sincerely,"
