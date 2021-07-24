@@ -64,11 +64,11 @@ en:
         part4: "If your work was hidden due to being in violation of the Archive of Our Own's %{tos_link}, you will be required to take action to correct the violation. Failure to bring your work into compliance with the Terms of Service may lead to your work being deleted from the Archive."
         part5: "If you are uncertain why your work was hidden, and you have not received further communication regarding this matter, please %{abuse_link} directly."
       text:
-        part1: "Your work \%{title}\ has been hidden by the Policy & Abuse team and is no longer publicly accessible."
+        part1: "Your work \%{title}\ (%{work_url}) has been hidden by the Policy & Abuse team and is no longer publicly accessible."
         part2: "While your work is hidden, you will still be able to access it through the link provided above, but it will not be listed on your works page, and it won't be available to other users of the Archive."
         part3: "Please check your email, including your spam folder, as the Policy & Abuse team may have already contacted you explaining why your work was hidden."
-        part4: "If your work was hidden due to being in violation of the Archive of Our Own's (%{tos_link}), you will be required to take action to correct the violation. Failure to bring your work into compliance with the Terms of Service may lead to your work being deleted from the Archive."
-        part5: "If you are uncertain why your work was hidden, and you have not received further communication regarding this matter, please contact Policy & Abuse (%{abuse_link}) directly."
+        part4: "If your work was hidden due to being in violation of the Archive of Our Own's Terms of Service (%{tos_link}), you will be required to take action to correct the violation. Failure to bring your work into compliance with the Terms of Service may lead to your work being deleted from the Archive."
+        part5: "If you are uncertain why your work was hidden, and you have not received further communication regarding this matter, please contact Policy & Abuse directly: (%{abuse_link})"
     delete_work_notification:
       subject: "[%{app_name}] Your work has been deleted"
       support: "contact Support"
