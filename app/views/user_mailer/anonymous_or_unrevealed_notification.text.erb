@@ -1,5 +1,5 @@
 <% content_for :message do %>
-<%= t("mailer.general.greeting.formal", user: @user.login) %>
+<%= t("mailer.general.greeting.formal", name: @user.login) %>
 
 <%= t(".changed_status.#{@status}",
       collection: @collection.title,
