@@ -1,12 +1,17 @@
 <% content_for :message do %>
-    Dear <%= @user.default_pseud.byline %>,
+<%= t '.hello', user: @user.default_pseud.byline %>
 
-    Your work "<%= @work.title.html_safe %>" (<%= work_url(@work) %>) has been reported to the Abuse Team as a violation of the Archive of Our Own's Terms of Service (<%= root_url + "tos" %>).
+<%= t('.text.part1', title: @work.title) %>
 
-    We are investigating the matter and will contact you once the investigation has been completed. While the work is under investigation it has been hidden; only you will be able to access it.
+<%= t '.text.part2' %>
 
-    If you have any questions, please contact our Abuse Team (<%= root_url + "abuse_reports/new" %>).
+<%= t '.text.part3' %>
 
-    Sincerely,
-    AO3 Abuse
+<%= t('.text.part4', tos_link: 'http://archiveofourown.org/tos') %>
+
+<%= t('.text.part5', abuse_link: 'http://archiveofourown.org/abuse_reports/new') %>
+
+<%= t '.sincerely' %>
+
+<%= t '.sender' %>
 <% end %>   
