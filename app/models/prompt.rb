@@ -7,12 +7,6 @@ class Prompt < ApplicationRecord
   # -1 represents all matching
   ALL = -1
 
-  # number of checkbox options to keep visible by default in form
-  OPTIONS_TO_SHOW = 3
-
-  # maximum number of options to allow to be shown via checkboxes
-  MAX_OPTIONS_FOR_CHECKBOXES = 10
-
   # ASSOCIATIONS
 
   belongs_to :collection
@@ -29,7 +23,7 @@ class Prompt < ApplicationRecord
   accepts_nested_attributes_for :optional_tag_set
   has_many :optional_tags, through: :optional_tag_set, source: :tag
 
-  has_many :request_claims, class_name: "ChallengeClaim", foreign_key: 'request_prompt_id'
+  has_many :request_claims, class_name: "ChallengeClaim", foreign_key: "request_prompt_id", inverse_of: :request_prompt, dependent: :destroy
 
   # SCOPES
 
@@ -37,20 +31,10 @@ class Prompt < ApplicationRecord
 
   scope :in_collection, lambda {|collection| where(collection_id: collection.id) }
 
-  scope :unused, -> { where(used_up: false) }
-
   scope :with_tag, lambda { |tag|
     joins("JOIN set_taggings ON set_taggings.tag_set_id = prompts.tag_set_id").
     where("set_taggings.tag_id = ?", tag.id)
   }
-
-  # CALLBACKS
-
-  before_destroy :clear_claims
-  def clear_claims
-    # remove this prompt reference from any existing assignments
-    request_claims.each {|claim| claim.destroy}
-  end
 
   # VALIDATIONS
 
@@ -193,19 +177,6 @@ class Prompt < ApplicationRecord
 
   # INSTANCE METHODS
 
-  # make sure we are not blank
-  def blank?
-    return false if (url || description)
-    tagcount = 0
-    [tag_set, optional_tag_set].each do |set|
-      if set
-        tagcount += set.taglist.size + (TagSet::TAG_TYPES.collect {|type| eval("set.#{type}_taglist.size")}.sum)
-      end
-    end
-    return false if tagcount > 0
-    true # everything empty
-  end
-
   def can_delete?
     if challenge_signup && !challenge_signup.can_delete?(self)
       false
@@ -220,17 +191,6 @@ class Prompt < ApplicationRecord
 
   def fulfilled_claims
     self.request_claims.fulfilled
-  end
-
-  # We want to have all the matching methods defined on
-  # TagSet available here, too, without rewriting them,
-  # so we just pass them through method_missing
-  def method_missing(method, *args, &block)
-    super || (tag_set && tag_set.respond_to?(method) ? tag_set.send(method) : super)
-  end
-
-  def respond_to?(method, include_private = false)
-    super || tag_set.respond_to?(method, include_private)
   end
 
   # Computes the "full" tag set (tag_set + optional_tag_set), and stores the
@@ -298,44 +258,9 @@ class Prompt < ApplicationRecord
     end
   end
 
-  def self.reset_positions_in_collection!(collection)
-    minpos = collection.prompts.minimum(:position) - 1
-    collection.prompts.by_position.each do |prompt|
-      prompt.position = prompt.position - minpos
-      prompt.save
-    end
-  end
-
   # tag groups
   def tag_groups
     self.tag_set ? self.tag_set.tags.group_by { |t| t.type.to_s } : {}
-  end
-
-  # Takes an array of tags and returns a comma-separated list, without the markup
-  def tag_list(tags)
-    tags = tags.uniq.compact
-    if !tags.blank? && tags.respond_to?(:collect)
-      last_tag = tags.pop
-      tag_list = tags.collect{|tag|  tag.name + ", "}.join
-      tag_list += last_tag.name
-      tag_list.html_safe
-    else
-      ""
-    end
-  end
-
-  # gets the list of tags for this prompt
-  def tag_unlinked_list
-    list = ""
-    TagSet::TAG_TYPES.each do |type|
-      eval("@show_request_#{type}_tags = (self.collection.challenge.request_restriction.#{type}_num_allowed > 0)")
-      if eval("@show_request_#{type}_tags")
-          if self && self.tag_set && !self.tag_set.with_type(type).empty?
-              list += " - " + tag_list(self.tag_set.with_type(type))
-          end
-      end
-    end
-    return list
   end
 
   def claim_by(user)

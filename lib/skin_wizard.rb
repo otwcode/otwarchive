@@ -221,6 +221,7 @@ module SkinWizard
         .qtip-content,
         .notice:not(.required),
         .comment_notice,
+        .kudos_notice,
         ul.notes,
         .caution,
         .notice a {

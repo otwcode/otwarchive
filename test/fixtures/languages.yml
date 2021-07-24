@@ -3,6 +3,8 @@ English:
   id: 1
   name: English
   short: en
+  support_available: true
+  abuse_support_available: true
 French:
   id: 2
   name: Français

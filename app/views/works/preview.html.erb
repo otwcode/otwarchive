@@ -18,13 +18,13 @@
     </div>
 
     <% inspired_by = get_inspired_by(@work) %>
-    <% if !@work.endnotes.blank? || !@work.series.blank? || !inspired_by.empty? %>
+    <% if !@work.endnotes.blank? || !@work.serial_works.blank? || !inspired_by.empty? %>
     <!--afterword-->
     <div class="afterword preface group" role="complementary">
       <% unless @work.endnotes.blank? %>
         <%= render "works/work_endnotes" %>
       <% end %>
-      <% unless @work.series.blank? %>
+      <% unless @work.serial_works.blank? %>
         <%= render "works/work_series_links" %>
       <% end %>
       <% unless inspired_by.empty? %>

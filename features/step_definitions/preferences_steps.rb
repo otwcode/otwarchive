@@ -84,7 +84,7 @@ When /^I set my preferences to turn off the banner showing on every page$/ do
   user.preference.save
 end
 
-When /^I set my preferences to turn off viewing history$/ do
+When /^I set my preferences to turn off history$/ do
   user = User.current_user
   user.preference.history_enabled = false
   user.preference.save

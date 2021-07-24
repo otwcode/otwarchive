@@ -1,12 +1,12 @@
 source 'https://rubygems.org'
 
-ruby '2.6.5'
+ruby '2.7.3'
 
 gem 'test-unit', '~> 3.2'
 
 gem 'bundler'
 
-gem "rails", "~> 5.2.4"
+gem "rails", "~> 5.2"
 gem "rack", "~> 2.1", ">= 2.1.4"
 gem "sprockets", "< 4"
 
@@ -56,17 +56,17 @@ gem 'sanitize', '>= 4.6.5'
 # https://otwarchive.atlassian.net/browse/AO3-4957
 # https://github.com/rubys/nokogumbo/issues/50
 gem 'nokogumbo', '1.4.9'
-gem 'rest-client', '~> 1.8.0', require: 'rest_client'
+gem "rest-client", "~> 2.1.0", require: "rest_client"
 gem 'resque', '>=1.14.0'
 gem 'resque-scheduler'
 gem 'after_commit_everywhere'
 #gem 'daemon-spawn', require: 'daemon_spawn'
 gem 'elasticsearch', '6.8.0'
-gem 'aws-sdk'
+gem "aws-sdk-s3"
 gem 'css_parser'
 
 gem "terrapin"
-gem 'paperclip', '>= 5.2.0'
+gem "kt-paperclip", ">= 5.2.0"
 
 # for looking up image dimensions quickly
 gem 'fastimage'
@@ -140,15 +140,15 @@ group :test do
   gem 'cucumber-rails', require: false
   gem 'launchy'    # So you can do Then show me the page
   gem 'delorean'
-  gem 'faker', '~> 1.6.3'
+  gem "faker"
   # Record and replay data from external URLs
   gem 'vcr', '~> 3.0', '>= 3.0.1'
   gem 'webmock', '~> 3.7.6'
   gem 'timecop'
   gem 'cucumber-timecop', require: false
   # Code coverage
-  gem 'simplecov', '~> 0.14.0'
-  gem "codecov", "~> 0.2.0", require: false
+  gem "simplecov"
+  gem "codecov", require: false
   gem 'email_spec', '1.6.0'
 end
 

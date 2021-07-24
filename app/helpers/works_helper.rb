@@ -35,15 +35,6 @@ module WorksHelper
     work.gifts.not_rejected.includes(:pseud).map { |gift| link_to(h(gift.recipient), gift.pseud ? user_gifts_path(gift.pseud.user) : gifts_path(recipient: gift.recipient_name)) }.join(", ").html_safe
   end
 
-  # select the default warning if this is a new work
-  def check_archive_warning(work, warning)
-    if work.nil? || work.archive_warning_strings.empty?
-      warning.name == nil
-    else
-      work.archive_warning_strings.include?(warning.name)
-    end
-  end
-
   # select default rating if this is a new work
   def rating_selected(work)
     work.nil? || work.rating_string.empty? ? ArchiveConfig.RATING_DEFAULT_TAG_NAME : work.rating_string
@@ -62,15 +53,14 @@ module WorksHelper
     end
   end
 
-  # Passes value of series ID back to form when an error occurs on posting.
-  # Thanks to the way that series_attributes= is defined, series are saved
-  # and added to the work even before the work is saved. The only time that the
-  # series isn't added is when the work is a new record, and therefore the
-  # SerialWork can't be created.
-  def work_series_id(work)
-    if work.new_record? && (series = work.series.first)
-      series.id
-    end
+  # Determines whether or not "manage series" dropdown should appear
+  def check_series_box(work)
+    work.series.present? || work_series_value(:id).present? || work_series_value(:title).present?
+  end
+
+  # Passes value of fields for work series back to form when an error occurs on posting
+  def work_series_value(field)
+    params.dig :work, :series_attributes, field
   end
 
   def language_link(work)

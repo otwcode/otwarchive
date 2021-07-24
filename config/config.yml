@@ -430,42 +430,6 @@ ACTION_NOTE: 11
 ELASTICSEARCH_PREFIX: 'ao3'
 
 
-##### For dumping the seed database and NOT clearing emails on stage
-
-# users who have webdavs or asked to be added
-# or who have problematic works which need testing
-DUMP_SEEDS: [
-            "Amancham", "Anneli", "ariana_paris", "astolat", "Atalan", "awils1",
-            "aworldinside", "bingeling", "Cesy", "cesytest", "Celandine",
-            "Chandri", "daymarket",  "eel", "elz", "erda", "Enigel",
-            "fairywearsbootz", "hele", "Hope", "insomniac_amy", "Jaetion",
-            "jennyst", "Jenn_Calaelen", "justira", "jetta_e_rus", "karanguni",
-            "Kitsune", "krytella", "Lal", "lim", "Lisztful", "macey_muse", "mumble",
-            "open_doors", "Rebecca", "RKlyne", "Rustler", "Shay_Guy", "Sidra",
-            "signalvsnoise", "staranise", "Stowaway", "testy", "Tel",
-            "tomatopudding", "tuff_ghost", "velocitygrass", "xparrot", "yaobikuni",
-            "zelempa", "zoemathemata", "Zooey_Glass", "zlabya", "zz9pzza"
-]
-
-# seeds who want their email address preserved for testing
-DUMP_EMAIL: [
-          "admin-amelia", "admin-elz", "admin-emilie", "admin-franny",
-          "admin-kielix", "admin-shalott", "admin-sidra",
-          "Amancham", "astolat", "aworldinside", "bingeling", "cesy",
-          "cesytest", "elz", "Enigel", "hele", "Lal", "mumble", "open_doors",
-          "Sidra", "testy", "velocitygrass", "xparrot", "Zooey_Glass" ,
-          "zz9pzza"
-]
-
-# a bunch of bigger collections (>250 works)
-# probably would be scooped up anyway, but just in case
-DUMP_COLLECTION_SEEDS: [
-          "yuletide2009", "ladieschoice", "yuletidemadness2009", "female_focus",
-          "crossgen_slash", "PornBattleIX", "Remix2010", "yuletide2010", "fic_promptly",
-          "chromatic_yuletide_2010", "Fandom_Stocking", "yuletidemadness2010", "PornBattleXI",
-          "Remix2011", "PornBattleXII"
-]
-
 # List of Unicode scripts where spaces are not used as separators, and
 # character counts should be used for word counts.
 # Check if a script is supported by the version of Ruby we use:
@@ -476,6 +440,9 @@ CHARACTER_COUNT_SCRIPTS: ["Han", "Hiragana", "Katakana", "Thai"]
 # Cache durations for work and bookmark searches (in seconds)
 SECONDS_UNTIL_WORK_INDEX_EXPIRE: 1800
 SECONDS_UNTIL_BOOKMARK_INDEX_EXPIRE: 1800
+
+# Cache duration for comment counts:
+SECONDS_UNTIL_COMMENT_COUNTS_EXPIRE: 3600
 
 # Batch size used for the RedisHitCounter class:
 HIT_COUNT_BATCH_SIZE: 100

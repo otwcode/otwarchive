@@ -1,28 +1,23 @@
 class ChallengeAssignmentsController < ApplicationController
-
   before_action :users_only
-  before_action :load_collection, except: [:index, :default]
-  before_action :collection_owners_only, except: [:index, :show, :default]
-  before_action :load_assignment_from_id, only: [:show, :default]
 
+  before_action :load_collection, except: [:index]
   before_action :load_challenge, except: [:index]
+  before_action :collection_owners_only, except: [:index, :show, :default]
+
+  before_action :load_assignment_from_id, only: [:show, :default]
+  before_action :owner_only, only: [:default]
+
   before_action :check_signup_closed, except: [:index]
   before_action :check_assignments_not_sent, only: [:generate, :set, :send_out]
-  before_action :check_assignments_sent, only: [:create, :default, :purge, :confirm_purge]
-
-  before_action :load_user, only: [:default]
-  before_action :owner_only, only: [:default]
+  before_action :check_assignments_sent, only: [:default, :purge, :confirm_purge]
 
 
   # PERMISSIONS AND STATUS CHECKING
 
   def load_challenge
-    if @collection
-      @challenge = @collection.challenge
-    elsif @challenge_assignment
-      @challenge = @challenge_assignment.collection.challenge
-    end
-    no_challenge and return unless @challenge
+    @challenge = @collection.challenge if @collection
+    no_challenge unless @challenge
   end
 
   def no_challenge
@@ -32,36 +27,14 @@ class ChallengeAssignmentsController < ApplicationController
   end
 
   def load_assignment_from_id
-    @challenge_assignment = ChallengeAssignment.find(params[:id])
-    no_assignment and return unless @challenge_assignment
-  end
-
-  def no_assignment
-    flash[:error] = t('challenge_assignments.no_assignment', default: "What assignment did you want to work on?")
-    if @collection
-      redirect_to collection_path(@collection) rescue redirect_to '/'
-    else
-      redirect_to user_path(@user) rescue redirect_to '/'
-    end
-    false
-  end
-
-  def load_user
-    @user = User.find_by(login: params[:user_id]) if params[:user_id]
-    no_user and return unless @user
-  end
-
-  def no_user
-    flash[:error] = t("challenge_assignments.no_user", default: "What user were you trying to work with?")
-    redirect_to "/" and return
-    false
+    @challenge_assignment = @collection.assignments.find(params[:id])
   end
 
   def owner_only
-    unless @user == @challenge_assignment.offering_pseud.user
-      flash[:error] = t("challenge_assignments.not_owner", default: "You aren't the owner of that assignment.")
-      redirect_to "/" and return false
-    end
+    return if current_user == @challenge_assignment.offering_pseud.user
+
+    flash[:error] = t("challenge_assignments.not_owner", default: "You aren't the owner of that assignment.")
+    redirect_to root_path
   end
 
   def check_signup_closed
@@ -92,10 +65,6 @@ class ChallengeAssignmentsController < ApplicationController
     flash[:error] = t('challenge_assignments.assignments_not_sent', default: "Assignments have not been sent! You might want matching instead.")
     redirect_to collection_path(@collection) rescue redirect_to '/'
     false
-  end
-
-  def allowed_to_destroy
-    @challenge_assignment.user_allowed_to_destroy?(current_user) || not_allowed
   end
 
 
@@ -169,8 +138,15 @@ class ChallengeAssignmentsController < ApplicationController
 
   def set
     # update all the assignments
-    # see http://asciicasts.com/episodes/198-edit-multiple-individually
-    @assignments = ChallengeAssignment.update(challenge_assignment_params[:challenge_assignments].keys, challenge_assignment_params[:challenge_assignments].values).reject {|a| a.errors.empty?}
+    all_assignment_params = challenge_assignment_params.transform_keys(&:to_i)
+
+    @assignments = []
+
+    @collection.assignments.where(id: all_assignment_params.keys).each do |assignment|
+      assignment_params = all_assignment_params[assignment.id]
+      @assignments << assignment unless assignment.update(assignment_params)
+    end
+
     ChallengeAssignment.update_placeholder_assignments!(@collection)
     if @assignments.empty?
       flash[:notice] = "Assignments updated"
@@ -197,7 +173,7 @@ class ChallengeAssignmentsController < ApplicationController
     params.each_pair do |key, val|
       action, id = key.split(/_/)
       next unless %w(approve default undefault cover).include?(action)
-      assignment = ChallengeAssignment.where(id: id).first
+      assignment = @collection.assignments.find_by(id: id)
       unless assignment
         @errors << ts("Couldn't find assignment with id #{id}!")
         next
@@ -247,28 +223,19 @@ class ChallengeAssignmentsController < ApplicationController
         "Signed-up participant #{@challenge_assignment.offer_byline} has defaulted on their assignment for #{@challenge_assignment.request_byline}. " +
         "You may want to assign a pinch hitter on the collection assignments page: #{collection_assignments_url(@challenge_assignment.collection)}")
     flash[:notice] = "We have notified the collection maintainers that you had to default on your assignment."
-    redirect_to user_assignments_path(@user)
+    redirect_to user_assignments_path(current_user)
   end
 
   private
 
   def challenge_assignment_params
-    # Ideally, the param structure would be updated to allow for a more secure
-    # method of permitting params. Currently based off a railscast for editing
-    # multiple records individually prior to the advent of strong params.
-    params.permit(
-      :utf8,
-      :_method,
-      :commit,
-      :collection_id,
+    params.slice(:challenge_assignments).permit(
       challenge_assignments: [
-        :id,
-        :collection_id,
         :request_signup_pseud,
         :offer_signup_pseud,
         :pinch_hitter_byline
       ]
-    )
+    ).require(:challenge_assignments)
   end
 
 end

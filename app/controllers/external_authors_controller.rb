@@ -64,11 +64,8 @@ class ExternalAuthorsController < ApplicationController
 
     flash[:notice] = ""
     if params[:imported_stories] == "nothing"
-      flash[:notice] += "Okay, we'll leave things the way they are! You can use the email link any time if you change your mind."
-      redirect_to root_path
-      return
-    end
-    if params[:imported_stories] == "orphan"
+      flash[:notice] += "Okay, we'll leave things the way they are! You can use the email link any time if you change your mind. "
+    elsif params[:imported_stories] == "orphan"
       # orphan the works
       @external_author.orphan(params[:remove_pseud])
       flash[:notice] += "Your imported stories have been orphaned. Thank you for leaving them in the archive! "
@@ -77,9 +74,14 @@ class ExternalAuthorsController < ApplicationController
       @external_author.delete_works
       flash[:notice] += "Your imported stories have been deleted. "
     end
-    @invitation.mark_as_redeemed if @invitation && !params[:imported_stories].blank?
 
-    if @external_author.update_attributes(external_author_params[:external_author] || {})
+    if @invitation &&
+       params[:imported_stories].present? &&
+       params[:imported_stories] != "nothing"
+      @invitation.mark_as_redeemed
+    end
+
+    if @external_author.update(external_author_params[:external_author] || {})
       flash[:notice] += "Your preferences have been saved."
       redirect_to @user ? user_external_authors_path(@user) : root_path
     else

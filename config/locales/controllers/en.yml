@@ -1,0 +1,27 @@
+---
+en:
+  chapters:
+    anonymous: Anonymous
+    chapter_position: " - Chapter %{position}"
+    multifandom: Multifandom
+    unrevealed: Mystery Work
+    unspecified_fandom: No fandom specified
+  comments:
+    check_frozen:
+      error: Sorry, you cannot reply to a frozen comment.
+    check_permission_to_edit:
+      error:
+        frozen: Frozen comments cannot be edited.
+    freeze:
+      error: Sorry, that comment thread could not be frozen.
+      permission_denied: Sorry, you don't have permission to freeze that comment thread.
+      success: Comment thread successfully frozen!
+    unfreeze:
+      error: Sorry, that comment thread could not be unfrozen.
+      permission_denied: Sorry, you don't have permission to unfreeze that comment thread.
+      success: Comment thread successfully unfrozen!
+  users:
+    passwords:
+      create:
+        contact_abuse: contact Policy & Abuse
+        reset_blocked: Password resets are disabled for that user. For more information, please %{contact_abuse_link}.
