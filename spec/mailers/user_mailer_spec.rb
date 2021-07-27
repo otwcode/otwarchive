@@ -4,11 +4,12 @@ describe UserMailer do
   describe "claim_notification" do
     title = "Façade"
     title2 = Faker::Book.title
+
+    subject(:email) { UserMailer.claim_notification(author.id, [work.id, work2.id], true) }
+
     let(:author) { create(:user) }
     let(:work) { create(:work, title: title, authors: [author.pseuds.first]) }
     let(:work2) { create(:work, title: title2, authors: [author.pseuds.first]) }
-
-    subject(:email) { UserMailer.claim_notification(author.id, [work.id, work2.id], true).deliver }
 
     # Shared content tests for both email types
     shared_examples_for "a claim notification" do
@@ -65,6 +66,8 @@ describe UserMailer do
     title = Faker::Book.title
     title2 = Faker::Book.title
 
+    subject(:email) { UserMailer.invitation_to_claim(invitation.id, archivist.login) }
+
     let(:archivist) { create(:user) }
     let(:external_author) { create(:external_author) }
 
@@ -92,8 +95,6 @@ describe UserMailer do
              creation_id: work2.id,
              external_author_name_id: external_author_name.id)
     end
-
-    subject(:email) { UserMailer.invitation_to_claim(invitation.id, archivist.login).deliver }
 
     # Shared content tests for both email types
     shared_examples_for "an invitation to claim content" do
@@ -150,10 +151,10 @@ describe UserMailer do
   
   describe "invitation" do
     context "when sent by a user" do
+      subject(:email) { UserMailer.invitation(invitation.id) }
+
       let(:user) { create(:user) }
       let(:invitation) { create(:invitation, creator: user) }
-
-      subject(:email) { UserMailer.invitation(invitation.id).deliver }
 
       # Test the headers
       it_behaves_like "an email with a valid sender"
@@ -184,9 +185,9 @@ describe UserMailer do
     end
 
     context "when sent from the queue or by an admin" do
-      let(:invitation) { create(:invitation) }
+      subject(:email) { UserMailer.invitation(invitation.id) }
 
-      subject(:email) { UserMailer.invitation(invitation.id).deliver }
+      let(:invitation) { create(:invitation) }
 
       # Test the headers
       it_behaves_like "an email with a valid sender"
@@ -218,13 +219,13 @@ describe UserMailer do
   end
 
   describe "challenge_assignment_notification" do
+    subject(:email) { UserMailer.challenge_assignment_notification(collection.id, otheruser.id, open_assignment.id) }
+
     let!(:gift_exchange) { create(:gift_exchange) }
     let!(:collection) { create(:collection, challenge: gift_exchange, challenge_type: "GiftExchange") }
     let!(:otheruser) { create(:user) }
     let!(:offer) { create(:challenge_signup, collection: collection, pseud: otheruser.default_pseud) }
     let!(:open_assignment) { create(:challenge_assignment, collection: collection, offer_signup: offer) }
-
-    subject(:email) { UserMailer.challenge_assignment_notification(collection.id, otheruser.id, open_assignment.id).deliver }
 
     # Test the headers
     it_behaves_like "an email with a valid sender"
@@ -253,11 +254,11 @@ describe UserMailer do
   end
 
   describe "invite_request_declined" do
+    subject(:email) { UserMailer.invite_request_declined(user.id, total, reason) }
+
     let(:user) { create(:user) }
     let(:total) { 2 }
     let(:reason) { "You smell" }
-
-    subject(:email) { UserMailer.invite_request_declined(user.id, total, reason).deliver }
 
     # Test the headers
     it_behaves_like "an email with a valid sender"
@@ -286,9 +287,9 @@ describe UserMailer do
   end
 
   describe "signup_notification" do
-    let(:user) { create(:user, :unconfirmed) }
+    subject(:email) { UserMailer.signup_notification(user.id) }
 
-    subject(:email) { UserMailer.signup_notification(user.id).deliver }
+    let(:user) { create(:user, :unconfirmed) }
 
     # Test the headers
     it_behaves_like "an email with a valid sender"
@@ -322,9 +323,9 @@ describe UserMailer do
     let!(:user) { create(:user) }
 
     context "when 1 invitation is issued" do
-      let(:count) { 1 }
+      subject(:email) { UserMailer.invite_increase_notification(user.id, count) }
 
-      subject(:email) { UserMailer.invite_increase_notification(user.id, count).deliver }
+      let(:count) { 1 }
 
       # Test the headers
       it_behaves_like "an email with a valid sender"
@@ -352,9 +353,9 @@ describe UserMailer do
     end
 
     context "when multiple invitations are issued" do
-      let(:count) { 5 }
+      subject(:email) { UserMailer.invite_increase_notification(user.id, count) }
 
-      subject(:email) { UserMailer.invite_increase_notification(user.id, count).deliver }
+      let(:count) { 5 }
 
       # Test the headers
       it_behaves_like "an email with a valid sender"
@@ -383,11 +384,11 @@ describe UserMailer do
   end
 
   describe "batch_subscription_notification" do
+    subject(:email) { UserMailer.batch_subscription_notification(subscription.id, ["Work_#{work.id}", "Chapter_#{chapter.id}"].to_json) }
+
     let(:work) { create(:work, summary: "<p>Paragraph <u>one</u>.</p><p>Paragraph 2.</p>") }
     let(:chapter) { create(:chapter, work: work, posted: true, summary: "<p><b>Another</b> HTML summary.</p>") } 
     let(:subscription) { create(:subscription, subscribable: work) }
-
-    subject(:email) { UserMailer.batch_subscription_notification(subscription.id, ["Work_#{work.id}", "Chapter_#{chapter.id}"].to_json).deliver }
 
     # Test the headers
     it_behaves_like "an email with a valid sender"
