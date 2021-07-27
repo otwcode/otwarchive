@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'spec_helper'
+require "spec_helper"
 
 describe AdminMailer do
   describe "send_spam_alert" do
@@ -8,24 +8,24 @@ describe AdminMailer do
 
     let(:spam1) do
       create(:work, spam: true, title: "First Spam",
-                           authors: [spam_user.default_pseud])
+                    authors: [spam_user.default_pseud])
     end
 
     let(:spam2) do
       create(:work, spam: true, title: "Second Spam",
-                           authors: [spam_user.default_pseud])
+                    authors: [spam_user.default_pseud])
     end
 
     let(:spam3) do
       create(:work, spam: true, title: "Third Spam",
-                           authors: [spam_user.default_pseud])
+                    authors: [spam_user.default_pseud])
     end
 
     let(:other_user) { create(:user) }
 
     let(:other_spam) do
       create(:work, spam: true, title: "Mistaken Spam",
-                           authors: [other_user.default_pseud])
+                    authors: [other_user.default_pseud])
     end
 
     let!(:report) do
@@ -125,9 +125,7 @@ describe AdminMailer do
           }
         end
 
-        it "aborts delivery" do
-          expect(email.message).to be_a(ActionMailer::Base::NullMail)
-        end
+        it_behaves_like "an unsent email"
       end
     end
   end
