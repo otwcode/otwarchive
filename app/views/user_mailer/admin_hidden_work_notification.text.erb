@@ -1,13 +1,13 @@
 <% content_for :message do %>
 <%= t(".hello", name: @user.login) %>
 
-<%= t('.text.hidden', title: @work.title, work_url: @work) %>
+<%= t(".text.hidden", title: @work.title, work_url: @work) %>
 
-<%= t '.access' %>
+<%= t ".access" %>
 
-<%= t '.check_mail' %>
+<%= t ".check_mail" %>
 
-<%= t('.text.tos_violation', tos_url: tos_url) %>
+<%= t(".text.tos_violation", tos_url: tos_url) %>
 
-<%= t('.text.help', contact_abuse_url: new_abuse_report_url) %>
+<%= t(".text.help", contact_abuse_url: new_abuse_report_url) %>
 <% end %>

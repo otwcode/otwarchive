@@ -51,14 +51,12 @@ en:
         part2: "If your work was part of an import project managed by our Open Doors team, please contact Open Doors (%{opendoors_link}) with any further questions."
         part3: "If it's possible your work violated the Archive's Terms of Service, please contact our Abuse Committee (%{abuse_link})."
     admin_hidden_work_notification:
-      subject: "[%{app_name}] Your work has been hidden by the Policy & Abuse Team"
+      subject: "[%{app_name}] Your work has been hidden by the Policy & Abuse team"
       hello: "Dear %{name},"
       tos: "Terms of Service"
-      abuse_committee: "contact Policy & Abuse"
+      contact_abuse: "contact Policy & Abuse"
       access: "While your work is hidden, you will still be able to access it through the link provided above, but it will not be listed on your works page, and it won't be available to other users of the Archive."
       check_email: "Please check your email, including your spam folder, as the Policy & Abuse team may have already contacted you explaining why your work was hidden."
-      sincerely: "Sincerely,"
-      sender: "AO3 Abuse"
       html:
         hidden: "Your work %{title} has been hidden by the Policy & Abuse team and is no longer publicly accessible."
         tos_violation: "If your work was hidden due to being in violation of the Archive of Our Own's %{tos_link}, you will be required to take action to correct the violation. Failure to bring your work into compliance with the Terms of Service may lead to your work being deleted from the Archive."
