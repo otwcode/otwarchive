@@ -238,11 +238,6 @@ Then /^I should see a link "([^\"]*)"$/ do |name|
   page.body.should =~ /#{Regexp.escape(text)}/m
 end
 
-Then "I should see a link titled {string} to the URL {string}" do |title, path|
-  text = "<a href=\"#{path}\">#{title}</a>"
-  page.body.should =~ /#{Regexp.escape(text)}/m
-end
-
 Then /^I should not see a link "([^\"]*)"$/ do |name|
   text = name + "</a>"
   page.body.should_not =~ /#{Regexp.escape(text)}/m
