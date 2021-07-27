@@ -24,7 +24,7 @@ Feature: Admin Actions for Works, Comments, Series, Bookmarks
       And logged in users should not see the hidden work "ToS Violation" by "regular_user"
       And "regular_user" should see their work "ToS Violation" is hidden
       And 1 email should be delivered
-      And the email should contain "you will be required to take action to correct the violation"
+      And the email should contain "Abuse team may have already contacted you explaining why your work was hidden"
 
   Scenario: Can unhide works
     Given I am logged in as "regular_user"

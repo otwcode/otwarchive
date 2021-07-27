@@ -1,17 +1,13 @@
 <% content_for :message do %>
 <%= t(".hello", name: @user.login) %>
 
-<%= t('.text.part1', title: @work.title, work_url: @work) %>
+<%= t('.text.hidden', title: @work.title, work_url: @work) %>
 
-<%= t '.text.part2' %>
+<%= t '.access' %>
 
-<%= t '.text.part3' %>
+<%= t '.check_mail' %>
 
-<%= t('.text.part4', tos_link: 'http://archiveofourown.org/tos') %>
+<%= t('.text.tos_violation', tos_url: tos_url) %>
 
-<%= t('.text.part5', abuse_link: 'http://archiveofourown.org/abuse_reports/new') %>
-
-<%= t '.sincerely' %>
-
-<%= t '.sender' %>
-<% end %>   
+<%= t('.text.help', contact_abuse_url: new_abuse_report_url) %>
+<% end %>

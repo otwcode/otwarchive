@@ -408,7 +408,7 @@ class UserMailer < ActionMailer::Base
 
     mail(
         to: @user.email,
-        subject: t("user_mailer.admin_hidden_work_notification.subject", app_name: ArchiveConfig.APP_SHORT_NAME)
+        subject: default_i18n_subject(app_name: ArchiveConfig.APP_SHORT_NAME)
     )
   end
 

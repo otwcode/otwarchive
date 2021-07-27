@@ -47,7 +47,7 @@ module MailerHelper
   end
 
   def tos_link(text)
-    style_link(text, root_url + "tos")
+    style_link(text, tos_url)
   end
 
   def opendoors_link(text)

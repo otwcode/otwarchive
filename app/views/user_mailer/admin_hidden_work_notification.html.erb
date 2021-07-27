@@ -1,17 +1,13 @@
 <% content_for :message do %>
   <p><%= t(".hello", name: style_bold(@user.login)).html_safe %></p>
 
-  <p><%= t(".html.part1", title: style_creation_link(@work.title, @work)).html_safe %></p>
+  <p><%= t(".html.hidden", title: style_creation_link(@work.title, @work)).html_safe %></p>
 
-  <p><%= t '.html.part2' %></p>
+  <p><%= t '.access' %></p>
 
-  <p><%= t '.html.part3' %></p>
+  <p><%= t '.check_mail' %></p>
 
-  <p><%= t('.html.part4', tos_link: tos_link(t '.tos')).html_safe %></p>
+  <p><%= t('.html.tos_violation', tos_link: tos_link(t '.tos')).html_safe %></p>
 
-  <p><%= t('.html.part5', abuse_link: abuse_link(t '.abuse_committee')).html_safe %></p>
-
-  <p><%= t '.sincerely' %></p>
-
-  <p><%= style_bold(t '.sender') %></p>
+  <p><%= t('.html.help', contact_abuse_link: abuse_link(t '.abuse_committee')).html_safe %></p>
 <% end %>
