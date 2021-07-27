@@ -439,7 +439,7 @@ describe UserMailer do
     context "when username is present" do
       let(:feedback) { create(:feedback) }
 
-      subject(:email) { UserMailer.feedback(feedback.id).deliver }
+      subject(:email) { UserMailer.feedback(feedback.id) }
 
       # Test the headers
       it_behaves_like "an email with a valid sender"
@@ -470,7 +470,7 @@ describe UserMailer do
     context "when username is not present" do
       let(:feedback) { create(:feedback, username: "A. Name") }
 
-      subject(:email) { UserMailer.feedback(feedback.id).deliver }
+      subject(:email) { UserMailer.feedback(feedback.id) }
 
       # Test the headers
       it_behaves_like "an email with a valid sender"
@@ -504,7 +504,7 @@ describe UserMailer do
     let(:user) { create(:user) }
     let(:work) { create(:work, authors: [user.pseuds.first]) }
 
-    subject(:email) { UserMailer.admin_hidden_work_notification(work.id, user.id).deliver }
+    subject(:email) { UserMailer.admin_hidden_work_notification(work.id, user.id) }
 
     # Test the headers
     it_behaves_like "an email with a valid sender"
@@ -539,7 +539,7 @@ describe UserMailer do
     let(:user) { create(:user) }
     let(:work) { create(:work, authors: [user.pseuds.first]) }
 
-    subject(:email) { UserMailer.admin_spam_work_notification(work.id, user.id).deliver }
+    subject(:email) { UserMailer.admin_spam_work_notification(work.id, user.id) }
 
     # Test the headers
     it_behaves_like "an email with a valid sender"
@@ -575,7 +575,7 @@ describe UserMailer do
     let(:user) { create(:user) }
     let(:work) { create(:work, authors: [user.pseuds.first]) }
 
-    subject(:email) { UserMailer.invited_to_collection_notification(user.id, work.id, collection.id).deliver }
+    subject(:email) { UserMailer.invited_to_collection_notification(user.id, work.id, collection.id) }
 
     # Test the headers
     it_behaves_like "an email with a valid sender"
@@ -609,7 +609,7 @@ describe UserMailer do
     let(:user) { create(:user) }
     let(:work) { create(:work, authors: [user.pseuds.first]) }
 
-    subject(:email) { UserMailer.added_to_collection_notification(user.id, work.id, collection.id).deliver }
+    subject(:email) { UserMailer.added_to_collection_notification(user.id, work.id, collection.id) }
 
     # Test the headers
     it_behaves_like "an email with a valid sender"
@@ -644,7 +644,7 @@ describe UserMailer do
       let(:work) { create(:work) }
       let(:collection) { create(:collection) }
 
-      subject(:email) { UserMailer.recipient_notification(user.id, work.id, collection.id).deliver }
+      subject(:email) { UserMailer.recipient_notification(user.id, work.id, collection.id) }
 
       # Test the headers
       it_behaves_like "an email with a valid sender"
@@ -675,7 +675,7 @@ describe UserMailer do
       let(:user) { create(:user) }
       let(:work) { create(:work) }
 
-      subject(:email) { UserMailer.recipient_notification(user.id, work.id).deliver }
+      subject(:email) { UserMailer.recipient_notification(user.id, work.id) }
 
       # Test the headers
       it_behaves_like "an email with a valid sender"
@@ -706,7 +706,7 @@ describe UserMailer do
   describe "potential_match_generation_notification" do
     let(:collection) { create(:collection) }
 
-    subject(:email) { UserMailer.potential_match_generation_notification(collection.id).deliver }
+    subject(:email) { UserMailer.potential_match_generation_notification(collection.id) }
 
     # Test the headers
     it_behaves_like "an email with a valid sender"
@@ -740,7 +740,7 @@ describe UserMailer do
     let(:collection) { create(:collection) }
     let(:signup) { create(:challenge_signup) }
 
-    subject(:email) { UserMailer.invalid_signup_notification(collection.id, [signup.id]).deliver }
+    subject(:email) { UserMailer.invalid_signup_notification(collection.id, [signup.id]) }
 
     # Test the headers
     it_behaves_like "an email with a valid sender"
