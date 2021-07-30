@@ -148,7 +148,7 @@ describe UserMailer do
       end
     end
   end
-  
+
   describe "invitation" do
     context "when sent by a user" do
       subject(:email) { UserMailer.invitation(invitation.id) }
@@ -318,7 +318,7 @@ describe UserMailer do
       end
     end
   end
-  
+
   describe "invite_increase_notification" do
     let!(:user) { create(:user) }
 
@@ -387,7 +387,7 @@ describe UserMailer do
     subject(:email) { UserMailer.batch_subscription_notification(subscription.id, ["Work_#{work.id}", "Chapter_#{chapter.id}"].to_json) }
 
     let(:work) { create(:work, summary: "<p>Paragraph <u>one</u>.</p><p>Paragraph 2.</p>") }
-    let(:chapter) { create(:chapter, work: work, posted: true, summary: "<p><b>Another</b> HTML summary.</p>") } 
+    let(:chapter) { create(:chapter, work: work, posted: true, summary: "<p><b>Another</b> HTML summary.</p>") }
     let(:subscription) { create(:subscription, subscribable: work) }
 
     # Test the headers
@@ -430,6 +430,41 @@ describe UserMailer do
 
       it "reformats HTML from the chapter summary" do
         expect(email).to have_text_part_content("*Another* HTML summary.")
+      end
+    end
+  end
+
+  describe "admin_hidden_work_notification" do
+    subject(:email) { UserMailer.admin_hidden_work_notification(work.id, user.id) }
+
+    let(:user) { create(:user) }
+    let(:work) { create(:work, authors: [user.pseuds.first]) }
+
+    # Test the headers
+    it_behaves_like "an email with a valid sender"
+
+    it "has the correct subject line" do
+      subject = "[#{ArchiveConfig.APP_SHORT_NAME}] Your work has been hidden by the Policy & Abuse team"
+      expect(email.subject).to eq(subject)
+    end
+
+    # Test both body contents
+    it_behaves_like "a multipart email"
+
+    it_behaves_like "a translated email"
+
+    describe "HTML version" do
+      it "has the correct content" do
+        expect(email).to have_html_part_content("Dear <b")
+        expect(email).to have_html_part_content("#{user.login}</b>,")
+        expect(email).to have_html_part_content("> has been hidden")
+      end
+    end
+
+    describe "text version" do
+      it "has the correct content" do
+        expect(email).to have_text_part_content("Dear #{user.login},")
+        expect(email).to have_text_part_content(") has been hidden")
       end
     end
   end

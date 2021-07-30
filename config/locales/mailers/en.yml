@@ -31,7 +31,7 @@ en:
     invite_increase_notification:
       subject: "[%{app_name}] New Invitations"
       greeting: "Hi %{login}!"
-      body: 
+      body:
         one: "We just wanted to let you know that you have %{count} new invitation, which can be used to create a new account at the Archive. You can invite a friend at %{invitation_page}."
         other: "We just wanted to let you know that you have %{count} new invitations, which can be used to create new accounts at the Archive. You can invite a friend at %{invitation_page}."
       invitation_page_link_text: your invitations page
@@ -50,6 +50,21 @@ en:
         part1: "Your work \"%{title}\" was deleted from the Archive by a site admin."
         part2: "If your work was part of an import project managed by our Open Doors team, please contact Open Doors (%{opendoors_link}) with any further questions."
         part3: "If it's possible your work violated the Archive's Terms of Service, please contact our Abuse Committee (%{abuse_link})."
+    admin_hidden_work_notification:
+      subject: "[%{app_name}] Your work has been hidden by the Policy & Abuse team"
+      hello: "Dear %{name},"
+      tos: "Terms of Service"
+      contact_abuse: "contact Policy & Abuse"
+      access: "While your work is hidden, you will still be able to access it through the link provided above, but it will not be listed on your works page, and it won't be available to other users of the Archive."
+      check_email: "Please check your email, including your spam folder, as the Policy & Abuse team may have already contacted you explaining why your work was hidden."
+      html:
+        hidden: "Your work %{title} has been hidden by the Policy & Abuse team and is no longer publicly accessible."
+        tos_violation: "If your work was hidden due to being in violation of the Archive of Our Own's %{tos_link}, you will be required to take action to correct the violation. Failure to bring your work into compliance with the Terms of Service may lead to your work being deleted from the Archive."
+        help: "If you are uncertain why your work was hidden, and you have not received further communication regarding this matter, please %{contact_abuse_link} directly."
+      text:
+        hidden: "Your work %{title} (%{work_url}) has been hidden by the Policy & Abuse team and is no longer publicly accessible."
+        tos_violation: "If your work was hidden due to being in violation of the Archive of Our Own's Terms of Service (%{tos_url}), you will be required to take action to correct the violation. Failure to bring your work into compliance with the Terms of Service may lead to your work being deleted from the Archive."
+        help: "If you are uncertain why your work was hidden, and you have not received further communication regarding this matter, please contact Policy & Abuse directly: %{contact_abuse_url}."
     delete_work_notification:
       subject: "[%{app_name}] Your work has been deleted"
       support: "contact Support"
@@ -117,20 +132,20 @@ en:
         part3: |-
                   There's lots of information and advice on how to use the Archive in our FAQ
                   at %{faq_url}. You'll find the latest news about site developments on AO3 News at
-                  %{admin_posts_url}. If you need more help, run into a bug, or have questions or 
+                  %{admin_posts_url}. If you need more help, run into a bug, or have questions or
                   comments, please contact Support, who are always happy to help out:
                   %{contact_support_url}.
       html:
         part1: "Please %{activate_account_link}."
         part2: |-
-                  Once your account is up and running, you can post your fanworks, set up email 
-                  subscriptions to let you know when your favorite creators or works have updated, 
-                  set preferences to customize the way the site looks and works for you, keep 
+                  Once your account is up and running, you can post your fanworks, set up email
+                  subscriptions to let you know when your favorite creators or works have updated,
+                  set preferences to customize the way the site looks and works for you, keep
                   track of the works you've accessed on the Archive via your history, and much more.
         part3: |-
-                  There's lots of information and advice on how to use the Archive in our %{faq_link}. 
-                  You'll find the latest news about site developments on %{admin_posts_link}. 
-                  If you need more help, run into a bug, or have questions or comments, please 
+                  There's lots of information and advice on how to use the Archive in our %{faq_link}.
+                  You'll find the latest news about site developments on %{admin_posts_link}.
+                  If you need more help, run into a bug, or have questions or comments, please
                   %{contact_support_link}, who are always happy to help out.
     invitation:
       subject: "[%{app_name}] Invitation"
