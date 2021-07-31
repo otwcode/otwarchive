@@ -6,7 +6,7 @@ class Bookmark < ApplicationRecord
   include Responder
   include Taggable
 
-  belongs_to :bookmarkable, polymorphic: true
+  belongs_to :bookmarkable, polymorphic: true, inverse_of: :bookmarks
   belongs_to :pseud
 
   validates_length_of :bookmarker_notes,
@@ -19,6 +19,21 @@ class Bookmark < ApplicationRecord
     return if self.pseud.user.bookmarks.where(bookmarkable: self.bookmarkable).empty?
 
     errors.add(:base, ts("You have already bookmarked that."))
+  end
+
+  validate :check_new_external_work
+  def check_new_external_work
+    return unless bookmarkable.is_a?(ExternalWork) && bookmarkable.new_record?
+
+    if bookmarkable.fandom_string.blank?
+      errors.add(:base, "Fandom tag is required")
+    end
+
+    if bookmarkable.invalid?
+      bookmarkable.errors.full_messages.each do |message|
+        errors.add(:base, message)
+      end
+    end
   end
 
   default_scope -> { order("bookmarks.id DESC") } # id's stand in for creation date

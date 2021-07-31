@@ -187,19 +187,13 @@ class BookmarksController < ApplicationController
   # POST /bookmarks.xml
   def create
     @bookmarkable ||= ExternalWork.new(external_work_params)
-    @bookmark = @bookmarkable.bookmarks.build(bookmark_params)
-    if @bookmarkable.new_record? && @bookmarkable.fandom_string.blank?
-       @bookmark.errors.add(:base, "Fandom tag is required")
-       render :new and return
+    @bookmark = Bookmark.new(bookmark_params.merge(bookmarkable: @bookmarkable))
+    if @bookmark.errors.empty? && @bookmark.save
+      flash[:notice] = ts("Bookmark was successfully created. It should appear in bookmark listings within the next few minutes.")
+      redirect_to(bookmark_path(@bookmark))
+    else
+      render :new
     end
-    if @bookmark.errors.empty?
-      if @bookmark.validate && @bookmarkable.save && @bookmark.save
-        flash[:notice] = ts('Bookmark was successfully created. It should appear in bookmark listings within the next few minutes.')
-        redirect_to(bookmark_path(@bookmark)) && return
-      end
-    end
-    @bookmarkable.errors.full_messages.each { |msg| @bookmark.errors.add(:base, msg) }
-    render action: "new" and return
   end
 
   # PUT /bookmarks/1

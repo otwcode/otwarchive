@@ -84,6 +84,14 @@ module Taggable
     end
   end
 
+  # Returns the number of tags of type Fandom, Character, Relationship, or
+  # Freeform.
+  def user_defined_tags_count
+    tags_after_saving.count do |tag|
+      Tag::USER_DEFINED.include?(tag.type)
+    end
+  end
+
   private
 
   # Take the list of tags after saving, and filter by type:

@@ -289,3 +289,28 @@ Feature: Edit Works
     When the user "Georgiou" accepts all co-creator requests
       And I view the work "Thats not my Spock, it has too much beard"
     Then I should see "Georgiou, Michael (Burnham), testuser"
+
+  Scenario: You cannot edit a work to add too many tags
+    Given the user-defined tag limit is 7
+      And the work "Over the Limit"
+      And I am logged in as the author of "Over the Limit"
+    When I edit the work "Over the Limit"
+      And I fill in "Fandoms" with "Fandom 1, Fandom 2"
+      And I fill in "Characters" with "Character 1, Character 2"
+      And I fill in "Relationships" with "Relationship 1, Relationship 2"
+      And I fill in "Additional Tags" with "Additional Tag 1, Additional Tag 2"
+      And I press "Post"
+    Then I should see "Fandom, relationship, character, and additional tags must not add up to more than 7. Your work has 8 of these tags, so you must remove 1 of them."
+
+  Scenario: If a work has too many tags, you cannot update it without removing tags
+    Given the user-defined tag limit is 7
+      And the work "Over the Limit"
+      And the work "Over the Limit" has 2 fandom tags
+      And the work "Over the Limit" has 2 character tags
+      And the work "Over the Limit" has 2 relationship tags
+      And the work "Over the Limit" has 2 freeform tags
+      And I am logged in as the author of "Over the Limit"
+    When I edit the work "Over the Limit"
+      And I fill in "Title" with "Over the Limit Redux"
+      And I press "Post"
+    Then I should see "Fandom, relationship, character, and additional tags must not add up to more than 7. Your work has 8 of these tags, so you must remove 1 of them."

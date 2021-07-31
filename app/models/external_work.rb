@@ -32,6 +32,9 @@ class ExternalWork < ApplicationRecord
                                too_long: ts('^Creator must be less than %{max} characters long.',
                                             max: AUTHOR_LENGTH_MAX)
 
+  validates :user_defined_tags_count,
+            at_most: { maximum: Proc.new { ArchiveConfig.USER_DEFINED_TAGS_LIMIT } }
+
   # TODO: External works should have fandoms, but they currently don't get added through the
   # post new work form so we can't validate them
   #validates_presence_of :fandoms
