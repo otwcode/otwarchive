@@ -789,6 +789,7 @@ describe UserMailer do
     describe "text version" do
       it "has the correct content" do
         expect(email).to have_text_part_content("invalid sign-ups in your challenge \"#{collection.title}\"")
+      end
 
       it "contains the comment and the URL reported" do
         expect(email).to have_text_part_content(report.comment)
