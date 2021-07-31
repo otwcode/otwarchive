@@ -49,16 +49,16 @@ en:
     admin_deleted_work_notification:
       subject: "[%{app_name}] Your work has been deleted by an admin"
       opendoors: "contact Open Doors"
-      abuse_team: "contact our Policy & Abuse team"
+      contact_abuse: "contact our Policy & Abuse team"
       bye: "Attached is a copy of your work for your reference."
       html:
         part1: "Your work %{title} was deleted from the Archive by a site admin."
         part2: "If your work was part of an import project managed by our Open Doors team, please %{opendoors_link} with any further questions."
-        tos_violation: "If it's possible your work violated the Archive's Terms of Service, please %{abuse_link}."
+        tos_violation: "If it's possible your work violated the Archive's Terms of Service, please %{contact_abuse_link}."
       text:
         part1: "Your work \"%{title}\" was deleted from the Archive by a site admin."
         part2: "If your work was part of an import project managed by our Open Doors team, please contact Open Doors (%{opendoors_link}) with any further questions."
-        tos_violation: "If it's possible your work violated the Archive's Terms of Service, please contact our Policy & Abuse team (%{abuse_link})."
+        tos_violation: "If it's possible your work violated the Archive's Terms of Service, please contact our Policy & Abuse team (%{contact_abuse_url})."
     admin_hidden_work_notification:
       subject: "[%{app_name}] Your work has been hidden by the Policy & Abuse team"
       tos: "Terms of Service"
