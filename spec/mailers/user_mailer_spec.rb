@@ -476,7 +476,7 @@ describe UserMailer do
     let(:email) { UserMailer.abuse_report(report.id) }
 
     it "has the correct subject" do
-      expect(email).to have_subject "[#{ArchiveConfig.APP_SHORT_NAME}] Your Abuse Report"
+      expect(email).to have_subject "[#{ArchiveConfig.APP_SHORT_NAME}] Your abuse report"
     end
 
     it "delivers to the user who filed the report" do
@@ -491,6 +491,13 @@ describe UserMailer do
       it "contains the comment and the URL reported" do
         expect(email).to have_html_part_content(report.comment)
         expect(email).to have_html_part_content(report.url)
+      end
+    end
+
+    describe "text version" do
+      it "contains the comment and the URL reported" do
+        expect(email).to have_text_part_content(report.comment)
+        expect(email).to have_text_part_content(report.url)
       end
     end
   end
@@ -789,11 +796,6 @@ describe UserMailer do
     describe "text version" do
       it "has the correct content" do
         expect(email).to have_text_part_content("invalid sign-ups in your challenge \"#{collection.title}\"")
-      end
-
-      it "contains the comment and the URL reported" do
-        expect(email).to have_text_part_content(report.comment)
-        expect(email).to have_text_part_content(report.url)
       end
     end
   end
