@@ -21,16 +21,11 @@ DAYS_UNTIL_RESET_PASSWORD_LINK_EXPIRES: 7
 
 # email addresses
 RETURN_ADDRESS: 'do-not-reply@example.org'
-SUPPORT_ADDRESS: 'support@example.org'
-ABUSE_ADDRESS: 'abuse@example.org'
 SPAM_ALERT_ADDRESS: 'abuse-discuss@example.org'
 SPAM_THRESHOLD: 15
 ADMIN_ADDRESS: 'admin@example.org'
-QUESTION_ADDRESS: 'questions@example.org'
-WEBMASTER_ADDRESS: 'webmaster@example.org'
-ERROR_ADDRESS: errors@example.org
 FEEDBACK_ADDRESS: feedback@example.org
-ERROR_PREFIX: "[ERROR] "
+
 # Because the default email addresses are fake,
 # email delivery is turned off by default, even for production.
 # The log file will nonetheless show "Sent mail:"
