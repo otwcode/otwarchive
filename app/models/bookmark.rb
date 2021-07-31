@@ -25,14 +25,12 @@ class Bookmark < ApplicationRecord
   def check_new_external_work
     return unless bookmarkable.is_a?(ExternalWork) && bookmarkable.new_record?
 
-    if bookmarkable.fandom_string.blank?
-      errors.add(:base, "Fandom tag is required")
-    end
+    errors.add(:base, "Fandom tag is required") if bookmarkable.fandom_string.blank?
 
-    if bookmarkable.invalid?
-      bookmarkable.errors.full_messages.each do |message|
-        errors.add(:base, message)
-      end
+    return if bookmarkable.valid?
+
+    bookmarkable.errors.full_messages.each do |message|
+      errors.add(:base, message)
     end
   end
 
