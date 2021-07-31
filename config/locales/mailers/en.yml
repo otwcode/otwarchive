@@ -61,7 +61,6 @@ en:
         tos_violation: "If it's possible your work violated the Archive's Terms of Service, please contact our Policy & Abuse team (%{abuse_link})."
     admin_hidden_work_notification:
       subject: "[%{app_name}] Your work has been hidden by the Policy & Abuse team"
-      hello: "Dear %{name},"
       tos: "Terms of Service"
       contact_abuse: "contact Policy & Abuse"
       access: "While your work is hidden, you will still be able to access it through the link provided above, but it will not be listed on your works page, and it won't be available to other users of the Archive."
