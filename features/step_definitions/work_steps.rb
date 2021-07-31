@@ -244,7 +244,7 @@ Given /^the spam work "([^\"]*)"$/ do |work|
 end
 
 Given "the user-defined tag limit is {int}" do |count|
-  allow(ArchiveConfig).to receive(:USER_DEFINED_TAGS_LIMIT).and_return(count)
+  allow(ArchiveConfig).to receive(:USER_DEFINED_TAGS_MAX).and_return(count)
 end
 
 Given "the work {string} has {int} {word} tag(s)" do |title, count, type|

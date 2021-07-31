@@ -33,7 +33,7 @@ class ExternalWork < ApplicationRecord
                                             max: AUTHOR_LENGTH_MAX)
 
   validates :user_defined_tags_count,
-            at_most: { maximum: proc { ArchiveConfig.USER_DEFINED_TAGS_LIMIT } }
+            at_most: { maximum: proc { ArchiveConfig.USER_DEFINED_TAGS_MAX } }
 
   # TODO: External works should have fandoms, but they currently don't get added through the
   # post new work form so we can't validate them

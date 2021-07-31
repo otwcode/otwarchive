@@ -153,7 +153,7 @@ class Work < ApplicationRecord
   end
 
   validates :user_defined_tags_count,
-            at_most: { maximum: proc { ArchiveConfig.USER_DEFINED_TAGS_LIMIT } }
+            at_most: { maximum: proc { ArchiveConfig.USER_DEFINED_TAGS_MAX } }
 
   enum comment_permissions: {
     enable_all: 0,

@@ -69,7 +69,7 @@
   <legend><%= ts("Creator's Tags") %></legend>
   <p>
     <%= ts("Creator's Tags (comma separated, %{max} characters per tag). Only a fandom is required. Fandom, relationship, and character tags must not add up to more than %{limit}. Category and rating tags do not count toward this limit.",
-           limit: ArchiveConfig.USER_DEFINED_TAGS_LIMIT,
+           limit: ArchiveConfig.USER_DEFINED_TAGS_MAX,
            max: ArchiveConfig.TAG_MAX) %>
   </p>
   <dl>
