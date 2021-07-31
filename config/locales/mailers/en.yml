@@ -226,7 +226,7 @@ en:
         part10: "If you had other works on the imported archive under an e-mail address you can no longer access, please %{open_doors_link} with any information that can help verify your identity."
         part11: "For other inquiries, please %{support_link}."
     invite_request_declined:
-      subject: "[%{app_name}] Additional invite code request declined"
+      subject: "[%{app_name}] Additional invitation request declined"
       reason: "Your request was:"
       main:
         one: "We regret to inform you that your request for a new invitation cannot be fulfilled at this time."

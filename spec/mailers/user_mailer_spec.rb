@@ -266,7 +266,7 @@ describe UserMailer do
     it_behaves_like "an email with a valid sender"
 
     it "has the correct subject line" do
-      subject = "[#{ArchiveConfig.APP_SHORT_NAME}] Additional invite code request declined"
+      subject = "[#{ArchiveConfig.APP_SHORT_NAME}] Additional invitation request declined"
       expect(email).to have_subject(subject)
     end
 
