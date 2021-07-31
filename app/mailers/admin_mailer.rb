@@ -5,17 +5,6 @@ class AdminMailer < ActionMailer::Base
   helper :mailer
   default from: "Archive of Our Own " + "<#{ArchiveConfig.RETURN_ADDRESS}>"
 
-  def abuse_report(abuse_report_id)
-    abuse_report = AbuseReport.find(abuse_report_id)
-    @email = abuse_report.email
-    @url = abuse_report.url
-    @comment = abuse_report.comment
-    mail(
-      to: ArchiveConfig.ABUSE_ADDRESS,
-      subject: "[#{ArchiveConfig.APP_SHORT_NAME}] Admin Abuse Report"
-    )
-  end
-
   def feedback(feedback_id)
     @feedback = Feedback.find(feedback_id)
     mail(

@@ -468,4 +468,35 @@ describe UserMailer do
       end
     end
   end
+
+  describe "abuse_report" do
+    let(:report) { create(:abuse_report) }
+    let(:email) { UserMailer.abuse_report(report.id) }
+
+    it "has the correct subject" do
+      expect(email).to have_subject "[#{ArchiveConfig.APP_SHORT_NAME}] Your Abuse Report"
+    end
+
+    it "delivers to the user who filed the report" do
+      expect(email).to deliver_to(report.email)
+    end
+
+    it_behaves_like "an email with a valid sender"
+
+    it_behaves_like "a multipart email"
+
+    describe "HTML version" do
+      it "contains the comment and the URL reported" do
+        expect(email).to have_html_part_content(report.comment)
+        expect(email).to have_html_part_content(report.url)
+      end
+    end
+
+    describe "text version" do
+      it "contains the comment and the URL reported" do
+        expect(email).to have_text_part_content(report.comment)
+        expect(email).to have_text_part_content(report.url)
+      end
+    end
+  end
 end
