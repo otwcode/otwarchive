@@ -215,7 +215,7 @@ class UserMailer < ActionMailer::Base
     @collection = Collection.find(collection_id)
     mail(
       to: @collection.get_maintainers_email,
-      subject: "[#{ArchiveConfig.APP_SHORT_NAME}][#{@collection.title}] Potential assignment generation complete"
+      subject: "[#{ArchiveConfig.APP_SHORT_NAME}][#{@collection.title}] Potential match generation complete"
     )
   end
 
