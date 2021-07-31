@@ -12,6 +12,15 @@ class Bookmark < ApplicationRecord
   validates_length_of :bookmarker_notes,
     maximum: ArchiveConfig.NOTES_MAX, too_long: ts("must be less than %{max} letters long.", max: ArchiveConfig.NOTES_MAX)
 
+  validate :not_already_bookmarked_by_user, on: :create
+  def not_already_bookmarked_by_user
+    return unless self.pseud && self.bookmarkable
+
+    return if self.pseud.user.bookmarks.where(bookmarkable: self.bookmarkable).empty?
+
+    errors.add(:base, ts("You have already bookmarked that."))
+  end
+
   default_scope -> { order("bookmarks.id DESC") } # id's stand in for creation date
 
   # renaming scope :public -> :is_public because otherwise it overlaps with the "public" keyword

@@ -73,7 +73,9 @@ class Invitation < ApplicationRecord
           # send invitations actively sent by a user synchronously to avoid delays
           UserMailer.invitation(self.id).deliver_now
         end
-        self.sent_at = Time.now
+
+        # Skip callbacks within after_save by using update_column to avoid a callback loop
+        self.update_column(:sent_at, Time.now)
       rescue Exception => exception
         errors.add(:base, "Notification email could not be sent: #{exception.message}")
       end

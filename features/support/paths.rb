@@ -226,6 +226,8 @@ module NavigationHelpers
     when /^the first bookmark for the work "(.*?)"$/i
       work = Work.find_by(title: Regexp.last_match(1))
       bookmark_path(work.bookmarks.first)
+    when /^the new bookmark page for work "(.*?)"$/i
+      new_work_bookmark_path(Work.find_by(title: Regexp.last_match(1)))
     when /^the tag comments? page for "(.*)"$/i
       tag_comments_path(Tag.find_by_name($1))
     when /^the work comments? page for "(.*?)"$/i
