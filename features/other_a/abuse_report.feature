@@ -17,7 +17,7 @@ Feature: Filing an abuse report
   Then I should see "Your abuse report was sent to the Abuse team."
     # Receiving a copy of the abuse report is no longer a choice for the user.
     # The email is sent automatically.
-    And 2 email should be delivered
+    And 1 email should be delivered
 
   Scenario: URL is auto-filled on abuse report
 
@@ -40,7 +40,7 @@ Feature: Filing an abuse report
     And I fill in "Your email (required)" with "otheruser@example.org"
     And I press "Submit"
   Then I should see "Your abuse report was sent to the Abuse team."
-    And 2 email should be delivered
+    And 1 email should be delivered
 
   Scenario: File a request and enter blank email
 
@@ -59,4 +59,4 @@ Feature: Filing an abuse report
   Then I fill in "Your email" with "valid@archiveofourown.org"
     And I press "Submit"
     And I should see "Your abuse report was sent to the Abuse team."
-    And 2 email should be delivered
+    And 1 email should be delivered

@@ -373,6 +373,16 @@ Scenario: Editing a bookmark's tags should expire the bookmark cache
     And the cache of the bookmark on "Really Good Thing" should not expire if I have not edited the bookmark
     And the cache of the bookmark on "Really Good Thing" should expire after I edit the bookmark tags
 
+Scenario: User can't bookmark same work twice
+  Given the work "Haven"
+    And I am logged in as "Mara"
+    And I add the pseud "Audrey"
+    And I bookmark the work "Haven" as "Mara"
+  When I bookmark the work "Haven" as "Mara" from new bookmark page
+  Then I should see "You have already bookmarked that."
+  When I bookmark the work "Haven" as "Audrey" from new bookmark page
+  Then I should see "You have already bookmarked that."
+
 Scenario: I cannot create a bookmark that I don't own
   Given the work "Random Work"
   When I attempt to create a bookmark of "Random Work" with a pseud that is not mine

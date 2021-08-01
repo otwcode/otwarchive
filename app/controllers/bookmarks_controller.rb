@@ -193,7 +193,7 @@ class BookmarksController < ApplicationController
        render :new and return
     end
     if @bookmark.errors.empty?
-      if @bookmarkable.save && @bookmark.save
+      if @bookmark.validate && @bookmarkable.save && @bookmark.save
         flash[:notice] = ts('Bookmark was successfully created. It should appear in bookmark listings within the next few minutes.')
         redirect_to(bookmark_path(@bookmark)) && return
       end
@@ -208,7 +208,7 @@ class BookmarksController < ApplicationController
     new_collections = []
     unapproved_collections = []
     errors = []
-    bookmark_params[:collection_names].split(',').map {|name| name.strip}.uniq.each do |collection_name|
+    bookmark_params[:collection_names]&.split(",")&.map(&:strip)&.uniq&.each do |collection_name|
       collection = Collection.find_by(name: collection_name)
       if collection.nil?
         errors << ts("#{collection_name} does not exist.")
@@ -234,17 +234,16 @@ class BookmarksController < ApplicationController
       flash[:error] = ts("We couldn't add your submission to the following collections: ") + errors.join("<br />")
     end
 
-    flash[:notice] = "" unless new_collections.empty? && unapproved_collections.empty?
     unless new_collections.empty?
-      flash[:notice] += ts("Added to collection(s): %{collections}.",
+      flash[:notice] = ts("Added to collection(s): %{collections}.",
                           collections: new_collections.collect(&:title).join(", "))
     end
     unless unapproved_collections.empty?
-      flash[:notice] ||= ""
+      flash[:notice] = flash[:notice] ? flash[:notice] + " " : ""
       flash[:notice] += if unapproved_collections.size > 1
-                          ts(" You have submitted your bookmark to moderated collections (%{all_collections}). It will not become a part of those collections until it has been approved by a moderator.", all_collections: unapproved_collections.map { |f| f.title }.join(', '))
+                          ts("You have submitted your bookmark to moderated collections (%{all_collections}). It will not become a part of those collections until it has been approved by a moderator.", all_collections: unapproved_collections.map(&:title).join(", "))
                         else
-                          ts(" You have submitted your bookmark to the moderated collection '%{collection}'. It will not become a part of the collection until it has been approved by a moderator.", collection: unapproved_collections.first.title)
+                          ts("You have submitted your bookmark to the moderated collection '%{collection}'. It will not become a part of the collection until it has been approved by a moderator.", collection: unapproved_collections.first.title)
                         end
     end
 
@@ -252,8 +251,8 @@ class BookmarksController < ApplicationController
     flash[:error] = (flash[:error]).html_safe unless flash[:error].blank?
 
     if @bookmark.update(bookmark_params) && errors.empty?
-      flash[:notice] ||= ""
-      flash[:notice] = ts(" Bookmark was successfully updated. ").html_safe + flash[:notice]
+      flash[:notice] = flash[:notice] ? " " + flash[:notice] : ""
+      flash[:notice] = ts("Bookmark was successfully updated.").html_safe + flash[:notice]
       flash[:notice] = flash[:notice].html_safe
       redirect_to(@bookmark)
     else
