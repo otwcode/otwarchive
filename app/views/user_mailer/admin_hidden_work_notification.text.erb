@@ -1,7 +1,7 @@
 <% content_for :message do %>
 <%= t(".hello", name: @user.login) %>
 
-<%= t(".text.hidden", title: @work.title, work_url: @work) %>
+<%= t(".text.hidden", title: @work.title, work_url: work_url(@work)) %>
 
 <%= t ".access" %>
 
