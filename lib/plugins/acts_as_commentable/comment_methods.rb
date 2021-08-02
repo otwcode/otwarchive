@@ -2,20 +2,12 @@ module CommentMethods
 
   def self.included(comment)
     comment.class_eval do
-      #extend ClassMethods
       include InstanceMethods
 
       before_destroy :fix_threading_on_destroy
       after_destroy :check_can_destroy_parent
     end
   end
-  #
-  # module ClassMethods
-  #   # Returns the last thread number assigned
-  #   def max_thread
-  #     Comment.maximum(:thread)
-  #   end
-  # end
 
   module InstanceMethods
 
@@ -141,6 +133,10 @@ module CommentMethods
     # children. If our parent was marked as deleted (but not actually
     # destroyed), we may be able to destroy it.
     def check_can_destroy_parent
+      # We're in the middle of a cascade deletion (e.g. a work is being destroyed),
+      # so don't try to recursively reload and check our parents.
+      return if destroyed_by_association
+
       immediate_parent = commentable.reload
 
       return unless immediate_parent.is_a?(Comment)

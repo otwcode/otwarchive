@@ -42,5 +42,9 @@ FactoryBot.define do
     factory :tag_wrangler do
       roles { [Role.find_or_create_by(name: "tag_wrangler")] }
     end
+
+    factory :translation_admin do
+      roles { [Role.find_or_create_by(name: "translation_admin")] }
+    end
   end
 end

@@ -46,6 +46,10 @@ module MailerHelper
     style_link(text, root_url + "abuse_reports/new")
   end
 
+  def tos_link(text)
+    style_link(text, tos_url)
+  end
+
   def opendoors_link(text)
     style_link(text, "http://opendoors.transformativeworks.org/contact-open-doors/")
   end

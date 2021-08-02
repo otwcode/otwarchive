@@ -222,7 +222,7 @@ Feature: Create Works
       And I press "Preview"
     Then I should see "Sorry! We couldn't save this work because:"
       And I should see a collection not found message for "collection1"
-      And "My new series" should be selected within "Choose one of your existing series:"
+      And I should see "My new series" in the "Or create and use a new one:" input
       And I should not see "Remove Work From Series"
 
   Scenario: Creating a new work in an existing series with some invalid things should return to the new work page with an error message and series information still filled in
@@ -303,7 +303,7 @@ Feature: Create Works
       And I fill in "content" with "It wasn't my fault, you know."
       And I press "Post"
     Then I should see "We couldn't save this work"
-      And I should see "Please add all required tags. Warning is missing."
+      And I should see "Please select at least one warning."
     When I check "No Archive Warnings Apply"
       And I press "Post"
     Then I should see "Work was successfully posted."

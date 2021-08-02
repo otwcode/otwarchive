@@ -195,6 +195,16 @@ describe ChaptersController do
       expect(assigns[:page_title]).to eq("page title")
     end
 
+    context "when work has no fandom" do
+      it "assigns @page_title with a placeholder for the fandom" do
+        allow_any_instance_of(Work).to receive(:tag_groups).and_return("Fandom" => [])
+        expect_any_instance_of(ChaptersController).to receive(:get_page_title).with("No fandom specified", user.pseuds.first.name, "#{work.title} - Chapter 1").and_return("page title")
+        get :show, params: { work_id: work.id, id: work.chapters.first.id }
+        expect(response).to have_http_status(:ok)
+        expect(assigns[:page_title]).to eq("page title")
+      end
+    end
+
     it "assigns @kudos to non-anonymous kudos" do
       kudo = create(:kudo, commentable: work, user: create(:user))
       create(:kudo, commentable: work)

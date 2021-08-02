@@ -373,6 +373,16 @@ Scenario: Editing a bookmark's tags should expire the bookmark cache
     And the cache of the bookmark on "Really Good Thing" should not expire if I have not edited the bookmark
     And the cache of the bookmark on "Really Good Thing" should expire after I edit the bookmark tags
 
+Scenario: User can't bookmark same work twice
+  Given the work "Haven"
+    And I am logged in as "Mara"
+    And I add the pseud "Audrey"
+    And I bookmark the work "Haven" as "Mara"
+  When I bookmark the work "Haven" as "Mara" from new bookmark page
+  Then I should see "You have already bookmarked that."
+  When I bookmark the work "Haven" as "Audrey" from new bookmark page
+  Then I should see "You have already bookmarked that."
+
 Scenario: I cannot create a bookmark that I don't own
   Given the work "Random Work"
   When I attempt to create a bookmark of "Random Work" with a pseud that is not mine
@@ -409,3 +419,13 @@ Scenario: Can use "Show Most Recent Bookmarks" from the bookmarks page
   Then I should not see "bookmarker1" within ".recent"
     And I should not see "Love it" within ".recent"
     And I should see "Show Most Recent Bookmarks" within "li.bookmark"
+
+Scenario: A bookmark with duplicate tags other than capitalization has only first version of tag saved
+  Given I am logged in as "bookmark_user"
+  When I post the work "Revenge of the Sith"
+    And I follow "Bookmark"
+    And I fill in "Your tags" with "my tags,My Tags"
+    And I press "Create"
+  Then I should see "Bookmark was successfully created"
+    And I should see "Bookmarker's Tags: my tags"
+    And I should not see "Bookmarker's Tags: My Tags"

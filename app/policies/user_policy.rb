@@ -15,7 +15,7 @@ class UserPolicy < ApplicationPolicy
   # Define which roles can update which attributes.
   ALLOWED_ATTRIBUTES_BY_ROLES = {
     "open_doors" => [roles: []],
-    "policy_and_abuse" => %i[email],
+    "policy_and_abuse" => [:email, roles: []],
     "superadmin" => [:email, roles: []],
     "support" => %i[email],
     "tag_wrangling" => [roles: []]
