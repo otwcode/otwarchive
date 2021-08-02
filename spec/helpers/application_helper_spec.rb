@@ -43,14 +43,12 @@ describe ApplicationHelper do
     end
 
     context "when creation is Series" do
-      let(:empty_series) { create(:series) }
-      let(:user1) { empty_series.users.first }
-      # Note: The factory is set up so series with works have two users.
-      let(:series_with_work) { create(:series_with_a_work) }
-      let(:user2) { series_with_work.users.first }
+      let(:series) { create(:series_with_a_work) }
+      let(:user1) { series.users.first }
+      let(:work) { series.works.first }
 
       it "returns array of strings for series" do
-        result = helper.creator_ids_for_css_classes(empty_series)
+        result = helper.creator_ids_for_css_classes(series)
         expect(result).to eq(["user-#{user1.id}"])
       end
 
@@ -58,22 +56,24 @@ describe ApplicationHelper do
         let(:user1_pseud2) { create(:pseud, user: user1) }
 
         before do
-          empty_series.creatorships.find_or_create_by(pseud_id: user1_pseud2.id)
+          series.creatorships.find_or_create_by(pseud_id: user1_pseud2.id)
         end
 
         it "returns array of strings with one user" do
-          result = helper.creator_ids_for_css_classes(empty_series)
+          result = helper.creator_ids_for_css_classes(series)
           expect(result).to eq(["user-#{user1.id}"])
         end
       end
 
       context "with pseuds from multiple users" do
+        let(:user2) { create(:user) }
+
         before do
-          empty_series.creatorships.find_or_create_by(pseud_id: user2.default_pseud_id)
+          series.creatorships.find_or_create_by(pseud_id: user2.default_pseud_id)
         end
 
         it "returns array of strings with all users" do
-          result = helper.creator_ids_for_css_classes(empty_series)
+          result = helper.creator_ids_for_css_classes(series)
           expect(result).to eq(["user-#{user1.id}", "user-#{user2.id}"])
         end
       end
@@ -81,10 +81,10 @@ describe ApplicationHelper do
       context "when series is anonymous" do
         let(:collection) { create(:anonymous_collection) }
 
-        before { series_with_work.works.first.collections << collection }
+        before { work.collections << collection }
 
         it "returns empty array" do
-          result = helper.creator_ids_for_css_classes(series_with_work)
+          result = helper.creator_ids_for_css_classes(series)
           expect(result).to be_empty
         end
       end
@@ -92,11 +92,11 @@ describe ApplicationHelper do
       context "when work is unrevealed" do
         let(:collection) { create(:unrevealed_collection) }
 
-        before { series_with_work.works.first.collections << collection }
+        before { work.collections << collection }
 
         it "returns array of strings" do
-          result = helper.creator_ids_for_css_classes(series_with_work)
-          expect(result).to eq(["user-#{user2.id}"])
+          result = helper.creator_ids_for_css_classes(series)
+          expect(result).to eq(["user-#{user1.id}"])
         end
       end
     end
@@ -191,13 +191,9 @@ describe ApplicationHelper do
     end
 
     context "when creation is Series" do
-      # Note: The factory is set up so series with works have two users.
-      # We're using let! because otherwise the user assignment gets messed up
-      # quite easily, e.g. adding the third user to the series results in user3
-      # being the last user on the series, thus making user2 and user3 the same.
-      let!(:series) { create(:series_with_a_work) }
-      let!(:work) { series.works.first }
-      let!(:user1) { series.users.first }
+      let(:series) { create(:series_with_a_work) }
+      let(:work) { series.works.first }
+      let(:user1) { series.users.first }
       let(:user2) { create(:user) }
 
       it "returns string with default classes and creation and creator info" do
