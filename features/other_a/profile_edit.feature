@@ -50,6 +50,13 @@ Scenario: Changing email address - entering an incorrect password
   Then I should see "Your password was incorrect"
     And 0 emails should be delivered
 
+Scenario: Changing email address - entering non-matching new email addresses
+
+  When I enter non-matching emails
+  Then I should see "Email addresses don't match!"
+    And 0 emails should be delivered
+    And I should see "bar@ao3.org"
+
 Scenario: Changing email address and viewing
 
   When I change my email
