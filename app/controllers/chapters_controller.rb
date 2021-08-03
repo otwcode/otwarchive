@@ -237,6 +237,13 @@ class ChaptersController < ApplicationController
   # Check whether we should display :new or :edit instead of previewing or
   # saving the user's changes.
   def chapter_cannot_be_saved?
+    # The chapter can only be saved if the work can be saved:
+    if @work.invalid?
+      @work.errors.full_messages.each do |message|
+        @chapter.errors.add(:base, message)
+      end
+    end
+
     @chapter.errors.any? || @chapter.invalid?
   end
 
