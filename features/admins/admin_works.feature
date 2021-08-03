@@ -346,3 +346,17 @@ Feature: Admin Actions for Works, Comments, Series, Bookmarks
       And I should see "Violation"
     When I view the series "Violation"
     Then I should see "Violation"
+
+  Scenario: Admins can see when a work has too many tags
+    Given the user-defined tag limit is 7
+      And the work "Under the Limit"
+      And the work "Over the Limit"
+      And the work "Over the Limit" has 2 fandom tags
+      And the work "Over the Limit" has 2 character tags
+      And the work "Over the Limit" has 2 relationship tags
+      And the work "Over the Limit" has 2 freeform tags
+    When I am logged in as an admin
+      And I view the work "Under the Limit"
+    Then I should see "Over Tag Limit: No"
+    When I view the work "Over the Limit"
+    Then I should see "Over Tag Limit: Yes"

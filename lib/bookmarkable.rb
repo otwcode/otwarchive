@@ -2,7 +2,7 @@ module Bookmarkable
 
   def self.included(bookmarkable)
     bookmarkable.class_eval do
-      has_many :bookmarks, as: :bookmarkable
+      has_many :bookmarks, as: :bookmarkable, inverse_of: :bookmarkable
       has_many :user_tags, through: :bookmarks, source: :tags
       after_update :update_bookmarks_index
       after_update :update_bookmarker_pseuds_index

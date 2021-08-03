@@ -429,3 +429,32 @@ Scenario: A bookmark with duplicate tags other than capitalization has only firs
   Then I should see "Bookmark was successfully created"
     And I should see "Bookmarker's Tags: my tags"
     And I should not see "Bookmarker's Tags: My Tags"
+
+  Scenario: Users can bookmark a work with too many tags
+    Given the user-defined tag limit is 5
+      And the work "Over the Limit"
+      And the work "Over the Limit" has 6 fandom tags
+      And I am logged in as "bookmarker"
+    When I bookmark the work "Over the Limit"
+    Then I should see "Bookmark was successfully created"
+
+  Scenario: Users can bookmark a pre-existing external work with too many tags
+    Given the user-defined tag limit is 5
+      And I am logged in as "bookmarker1"
+      And I bookmark the external work "Over the Limit"
+      And the external work "Over the Limit" has 6 fandom tags
+      And I am logged in as "bookmarker2"
+    When I go to bookmarker1's bookmarks page
+      And I follow "Save"
+      And I press "Create"
+    Then I should see "Bookmark was successfully created"
+
+  Scenario: Users cannot bookmark a new external work with too many tags
+    Given the user-defined tag limit is 5
+      And I am logged in as "bookmarker"
+    When I set up an external work
+      And I fill in "Fandoms" with "Fandom 1, Fandom 2"
+      And I fill in "Characters" with "Character 1, Character 2"
+      And I fill in "Relationships" with "Relationship 1, Relationship 2"
+      And I press "Create"
+    Then I should see "Fandom, relationship, and character tags must not add up to more than 5. You have entered 6 of these tags, so you must remove 1 of them."

@@ -2,7 +2,11 @@
   <legend><%= ts('Tags') %></legend>
   <h3 class="landmark heading"><%= ts('Tags') %></h3>
 
-  <p class="note"><%= ts('Tags are comma separated, %{max} characters per tag.', :max => ArchiveConfig.TAG_MAX) %></p>
+  <p class="note">
+    <%= ts("Tags are comma separated, %{max} characters per tag. Fandom, relationship, character, and additional tags must not add up to more than %{limit}. Archive warning, category, and rating tags do not count toward this limit.",
+           limit: ArchiveConfig.USER_DEFINED_TAGS_MAX,
+           max: ArchiveConfig.TAG_MAX) %>
+  </p>
 
   <dl>
     <dt class="rating required">
