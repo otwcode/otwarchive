@@ -1,5 +1,5 @@
 <!--Descriptive page name, messages and instructions-->
-<h2 class="heading"><%= ts("Creator Invitations") %></h2>
+<h2 class="heading"><%= ts("Co-Creator Requests") %></h2>
 <!--/descriptions-->
 
 <!--subnav-->
@@ -8,7 +8,7 @@
 <!--main content-->
 <%= will_paginate @creatorships %>
 <% if @creatorships.blank? %>
-  <p><%= ts("No creator invitations found.") %></p>
+  <p><%= ts("No co-creator requests found.") %></p>
 <% else %>
   <%= form_tag user_creatorships_path(@user, page: params[:page]), method: :put do %>
     <fieldset class="actions">
@@ -23,7 +23,7 @@
     </fieldset>
 
     <fieldset class="creatorships">
-      <legend><%= ts("List of Creator Invitations") %></legend>
+      <legend><%= ts("List of Co-Creator Requests") %></legend>
 
       <table>
         <tr>

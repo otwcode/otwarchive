@@ -261,9 +261,8 @@ Feature: Prompt Meme Challenge
     And I check "Battle 12"
     And I press "Preview"
   Then I should see "In response to a prompt by"
-    When "AO3-3455" is fixed
-  #  And I should see "Collections:"
-   # And I should see "Battle 12"
+    And I should see "Collections:"
+    And I should see "Battle 12"
   When I press "Update"
   Then I should see "Work was successfully updated"
     And I should not see "draft"
@@ -335,9 +334,8 @@ Feature: Prompt Meme Challenge
   Then I should see "Draft was successfully created"
     And I should see "In response to a prompt by myname4"
     And 0 emails should be delivered
-    When "AO3-3455" is fixed
-  #  And I should see "Collections:"
-   # And I should see "Battle 12"
+    And I should see "Collections:"
+    And I should see "Battle 12"
   When I view the work "Existing work"
   Then I should see "draft"
 
@@ -382,7 +380,7 @@ Feature: Prompt Meme Challenge
   Then 1 email should be delivered to "myname3"
     And the email should contain "The user myname2 has invited your pseud myname3 to be listed as a co-creator on the following work"
     And the email should not contain "translation missing"
-  When the user "myname3" accepts all co-creator invites
+  When the user "myname3" accepts all co-creator requests
     And I am logged in as "mod1"
     And I reveal the authors of the "Battle 12" challenge
     And I reveal the "Battle 12" challenge

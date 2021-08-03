@@ -1,4 +1,4 @@
-<li class="work blurb group" id="work_<%= external_work.id %>" role="article">
+<li id="external_work_<%= external_work.id %>" class="<%= css_classes_for_creation_blurb(external_work) %>" role="article">
 
   <!--title, author, fandom-->
   <div class="header module">
@@ -14,7 +14,7 @@
       <% fandoms = external_work.tag_groups["Fandom"] %>
       <%= fandoms.collect{ |tag| link_to_tag_works(tag) }.join(", ").html_safe if fandoms %>
     </h5>
-    
+
     <p class="notice"><%= ts("This work isn't hosted on the Archive so this blurb might not be complete or accurate.") %></p>
 
     <%= get_symbols_for(external_work) %>
@@ -27,7 +27,7 @@
     <%= blurb_tag_block(external_work) %>
   </ul>
 
-  <!--summary-->	
+  <!--summary-->
   <% unless external_work.summary.blank? %>
     <h6 class="landmark heading"><%= ts('Summary') %></h6>
     <blockquote class="userstuff summary">

@@ -295,7 +295,7 @@ class UserMailer < ActionMailer::Base
   end
 
   # Sends email when a user is added as an unapproved/pending co-creator
-  def creatorship_invitation(creatorship_id, inviting_user_id)
+  def creatorship_request(creatorship_id, inviting_user_id)
     @creatorship = Creatorship.find(creatorship_id)
     @inviting_user = User.find(inviting_user_id)
     @user = @creatorship.pseud.user
@@ -303,7 +303,7 @@ class UserMailer < ActionMailer::Base
     I18n.with_locale(Locale.find(@user.preference.preferred_locale).iso) do
       mail(
         to: @user.email,
-        subject: t("user_mailer.creatorship_invitation.subject",
+        subject: t("user_mailer.creatorship_request.subject",
                    app_name: ArchiveConfig.APP_SHORT_NAME)
       )
     end
@@ -408,7 +408,7 @@ class UserMailer < ActionMailer::Base
 
     mail(
         to: @user.email,
-        subject: "[#{ArchiveConfig.APP_SHORT_NAME}] Your work has been hidden by the Abuse Team"
+        subject: default_i18n_subject(app_name: ArchiveConfig.APP_SHORT_NAME)
     )
   end
 

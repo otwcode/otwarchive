@@ -99,7 +99,7 @@ module ApplicationHelper
   def byline(creation, options={})
     if creation.respond_to?(:anonymous?) && creation.anonymous?
       anon_byline = ts("Anonymous").html_safe
-      if options[:visibility] != "public" && (logged_in_as_admin? || is_author_of?(creation)) 
+      if options[:visibility] != "public" && (logged_in_as_admin? || is_author_of?(creation))
         anon_byline += " [#{non_anonymous_byline(creation, options[:only_path])}]".html_safe
       end
       return anon_byline
@@ -575,6 +575,33 @@ module ApplicationHelper
                                     include_hidden: false) do |builder|
         content_tag(:li, builder.label { builder.radio_button + builder.text })
       end
+    end
+  end
+
+  # Identifier for creation, formatted external-work-12, series-12, work-12.
+  def creation_id_for_css_classes(creation)
+    return unless %w[ExternalWork Series Work].include?(creation.class.name)
+
+    "#{creation.class.name.underscore.dasherize}-#{creation.id}"
+  end
+
+  # Array of creator ids, formatted user-123, user-126.
+  # External works are not created by users, so we can skip this.
+  # TODO: AO3-6132 to add creator ids to series blurbs.
+  def creator_ids_for_css_classes(creation)
+    return [] unless creation.is_a?(Work)
+    return [] if creation.anonymous? || creation.unrevealed?
+
+    creation.users.pluck(:id).uniq.map { |id| "user-#{id}" }
+  end
+
+  def css_classes_for_creation_blurb(creation)
+    return if creation.nil?
+
+    Rails.cache.fetch("#{creation.cache_key_with_version}/blurb_css_classes") do
+      creation_id = creation_id_for_css_classes(creation)
+      creator_ids = creator_ids_for_css_classes(creation).join(" ")
+      "blurb group #{creation_id} #{creator_ids}".strip
     end
   end
 end # end of ApplicationHelper

@@ -17,6 +17,10 @@ class WorkIndexer < Indexer
     {
       "work" => {
         properties: {
+          creator_join: {
+            type: :join,
+            relations: { work: :creator }
+          },
           title: {
             type: "text",
             analyzer: "simple"
@@ -75,8 +79,6 @@ class WorkIndexer < Indexer
         :freeform_ids,
         :filter_ids,
         :tag,
-        :pseud_ids,
-        :user_ids,
         :collection_ids,
         :hits,
         :comments_count,
@@ -90,8 +92,20 @@ class WorkIndexer < Indexer
       ]
     ).merge(
       language_id: object.language&.short,
-      series: series_data(object)
-    )
+      series: series_data(object),
+      creator_join: { name: :work }
+    ).merge(creator_data(object))
+  end
+
+  def creator_data(work)
+    if work.anonymous? || work.unrevealed?
+      {}
+    else
+      {
+        user_ids: work.user_ids,
+        pseud_ids: work.pseud_ids
+      }
+    end
   end
 
   # Pluck the desired series data and then turn it back

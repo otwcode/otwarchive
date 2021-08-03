@@ -1,30 +1,3 @@
-#
-# For a detailed explanation of roles (ie :web, :app, etc) see:
-# http://stackoverflow.com/questions/1155218/what-exactly-is-a-role-in-capistrano
-#
-# The :primary attribute is used for tasks we only want to run on one machine
-# 
-require 'capistrano/gitflow_version'
-
-# define servers and their roles and attributes
-server "ao3-app01", :app, :db, :schedulers
-server "ao3-front01", :web
-server "ao3-app19", :app
-server "ao3-app16", :app
-server "ao3-front03", :web
-server "ao3-app06", :app, :workers, :schedulers
-server "ao3-app07", :app, :workers, :schedulers
-server "ao3-front02", :web
-server "ao3-app12", :app
-server "ao3-app09", :app
-server "ao3-app15", :app, primary: true
-server "ao3-app20", :app
-server "ao3-front04", :web
-server "ao3-app17", :app, :workers, :schedulers
-server "ao3-app18", :app, :workers, :schedulers
-server "ao3-app14", :app
-server "ao3-front05", :web
-
 # ORDER OF EVENTS
 # Calling "cap deploy" runs:
 #   deploy:update which runs:
@@ -33,6 +6,12 @@ server "ao3-front05", :web
 #   deploy:restart
 #
 # Calling "cap deploy:migrations" inserts the task "deploy:migrate" before deploy:symlink 
+
+require "capistrano/gitflow_version"
+
+fetch(:servers).each do |s|
+  server s[:host], *s[:roles], s[:options] || {}
+end
 
 # our tasks which are production specific
 namespace :production_only do

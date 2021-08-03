@@ -103,16 +103,14 @@ describe Tag do
   end
 
   context "unwrangleable" do
-    it "should not be valid as canonical and unwrangleable" do
+    it "is not valid for a canonical tag" do
       tag = Freeform.create(name: "wrangled", canonical: true)
-
       tag.unwrangleable = true
       expect(tag).not_to be_valid
     end
 
-    it "should not be valid as unsorted and unwrangleable" do
+    it "is not valid for an unsorted tag" do
       tag = FactoryBot.create(:unsorted_tag)
-
       tag.unwrangleable = true
       expect(tag).not_to be_valid
     end

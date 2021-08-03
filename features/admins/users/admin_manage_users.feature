@@ -31,10 +31,16 @@ Feature: Admin Actions to manage users
     # Then show me the html
     Then I should see "User was successfully updated"
       And the "user_roles_1" checkbox should be checked
-    When I uncheck "user_roles_1"
+    When I follow "Details"
+    Then I should see "Role Added: tag_wrangler"
+      And I should see "Change made by testadmin-superadmin"
+    When I follow "Manage User Roles"
+      And I uncheck "user_roles_1"
       And I press "Update"
     Then I should see "User was successfully updated"
       And the "user_roles_1" checkbox should not be checked
+    When I follow "Details"
+    Then I should see "Role Removed: tag_wrangler"
 
   Scenario: Troubleshooting a user displays a message
     Given the user "mrparis" exists and is activated
@@ -52,9 +58,7 @@ Feature: Admin Actions to manage users
       And the user "mrparis" should be activated
 
   Scenario: A admin can send an activation email for a user account
-    Given the following users exist
-      | login  | password  | email                | confirmation_token |
-      | torres | something | torres@starfleet.org | fake_code          |
+    Given the user "torres" exists and is not activated
       And I am logged in as a "support" admin
       And all emails have been delivered
     When I go to the abuse administration page for "torres"

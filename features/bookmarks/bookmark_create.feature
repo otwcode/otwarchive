@@ -238,74 +238,70 @@ Scenario: Adding bookmark to non-existent collection (AO3-4338)
     And I should see "does not exist."
 
 Scenario: Adding bookmarks to closed collections (Issue 3083)
-  Given I am logged in as "moderator" with password "password"
+  Given I am logged in as "moderator"
     And I have a closed collection "Unsolved Mysteries" with name "unsolved_mysteries"
     And I have a closed collection "Rescue 911" with name "rescue_911"
-    And I am logged in as "moderator" with password "password"
+    And I am logged in as "moderator"
     And I post the work "Hooray for Homicide"
     And I post the work "Sing a Song of Murder"
     And I go to "Unsolved Mysteries" collection's page
     # As a moderator, create a bookmark in a closed collection
-  Then I view the work "Hooray for Homicide"
+  When I view the work "Hooray for Homicide"
     And I follow "Bookmark"
     And I fill in "bookmark_collection_names" with "unsolved_mysteries"
     And I press "Create"
-    And I should see "Bookmark was successfully created"
+  Then I should see "Bookmark was successfully created"
     # Now, with the exising bookmark, as a mod, add it to a different closed collection
-    And I follow "Edit"
+  When I follow "Edit"
     And I fill in "bookmark_collection_names" with "rescue_911"
     And I press "Update"
   Then I should see "Bookmark was successfully updated"
-  Then I view the work "Sing a Song of Murder"
+  When I view the work "Sing a Song of Murder"
     And I follow "Bookmark"
     And I press "Create"
-    And I should see "Bookmark was successfully created"
+  Then I should see "Bookmark was successfully created"
     # Use the 'Add To Collections' button to add the bookmark to a closed collection AFTER creating said bookmark
-    And I follow "Add To Collection"
+  When I follow "Add To Collection"
     And I fill in "collection_names" with "unsolved_mysteries"
     And I press "Add"
-    And I should see "Added to collection(s): Unsolved Mysteries"
+  Then I should see "Added to collection(s): Unsolved Mysteries"
     # Still as the moderator, try to edit the bookmark which is IN a closed collection already
   When I follow "Edit"
     And I fill in "bookmark_notes" with "This is my edited bookmark"
     And I press "Update"
   Then I should see "Bookmark was successfully updated."
-    And I am logged out
     # Log in as a regular (totally awesome!) user
-  Then I am logged in as "RobertStack" with password "password"
+  When I am logged in as "RobertStack"
     And I view the work "Sing a Song of Murder"
     And I follow "Bookmark"
     And I fill in "bookmark_collection_names" with "rescue_911"
     And I press "Create"
-    And I should see "Sorry! We couldn't save this bookmark because:"
+  Then I should see "Sorry! We couldn't save this bookmark because:"
     And I should see "The collection rescue_911 is not currently open."
-  Then I view the work "Hooray for Homicide"
+  When I view the work "Hooray for Homicide"
     And I follow "Bookmark"
     And I press "Create"
-    And I should see "Bookmark was successfully created"
-    And I follow "Add To Collection"
+  Then I should see "Bookmark was successfully created"
+  Then I follow "Add To Collection"
     And I fill in "collection_names" with "rescue_911"
     And I press "Add"
-    And I should see "We couldn't add your submission to the following collection(s): Rescue 911 is closed to new submissions."
+  Then I should see "We couldn't add your submission to the following collection(s): Rescue 911 is closed to new submissions."
     # Now, as a regular user try to add that existing bookmark to a closed collection from the 'Edit' page of a bookmark
-    And I follow "Edit"
+  When I follow "Edit"
     And I fill in "bookmark_collection_names" with "rescue_911"
     And I press "Update"
-    And I should see "We couldn't add your submission to the following collections: Rescue 911 is closed to new submissions."
-    And I am logged out
+  Then I should see "We couldn't add your submission to the following collections: Rescue 911 is closed to new submissions."
   # Create a collection, put a bookmark in it, close the collection, then try
   # to edit that bookmark
-  Then I open the collection with the title "Rescue 911"
-    And I am logged out
-  Then I am logged in as "Scott" with password "password"
+  When I open the collection with the title "Rescue 911"
+    And I am logged in as "Scott"
     And I view the work "Sing a Song of Murder"
     And I follow "Bookmark"
     And I fill in "bookmark_collection_names" with "rescue_911"
     And I press "Create"
-    And I should see "Bookmark was successfully created"
-    And I am logged out
+  Then I should see "Bookmark was successfully created"
   When I close the collection with the title "Rescue 911"
-    And I am logged in as "Scott" with password "password"
+    And I am logged in as "Scott"
     And I view the work "Sing a Song of Murder"
     And I follow "Edit Bookmark"
     And I fill in "bookmark_notes" with "This is a user editing a closed collection bookmark"
@@ -377,6 +373,16 @@ Scenario: Editing a bookmark's tags should expire the bookmark cache
     And the cache of the bookmark on "Really Good Thing" should not expire if I have not edited the bookmark
     And the cache of the bookmark on "Really Good Thing" should expire after I edit the bookmark tags
 
+Scenario: User can't bookmark same work twice
+  Given the work "Haven"
+    And I am logged in as "Mara"
+    And I add the pseud "Audrey"
+    And I bookmark the work "Haven" as "Mara"
+  When I bookmark the work "Haven" as "Mara" from new bookmark page
+  Then I should see "You have already bookmarked that."
+  When I bookmark the work "Haven" as "Audrey" from new bookmark page
+  Then I should see "You have already bookmarked that."
+
 Scenario: I cannot create a bookmark that I don't own
   Given the work "Random Work"
   When I attempt to create a bookmark of "Random Work" with a pseud that is not mine
@@ -413,3 +419,42 @@ Scenario: Can use "Show Most Recent Bookmarks" from the bookmarks page
   Then I should not see "bookmarker1" within ".recent"
     And I should not see "Love it" within ".recent"
     And I should see "Show Most Recent Bookmarks" within "li.bookmark"
+
+Scenario: A bookmark with duplicate tags other than capitalization has only first version of tag saved
+  Given I am logged in as "bookmark_user"
+  When I post the work "Revenge of the Sith"
+    And I follow "Bookmark"
+    And I fill in "Your tags" with "my tags,My Tags"
+    And I press "Create"
+  Then I should see "Bookmark was successfully created"
+    And I should see "Bookmarker's Tags: my tags"
+    And I should not see "Bookmarker's Tags: My Tags"
+
+  Scenario: Users can bookmark a work with too many tags
+    Given the user-defined tag limit is 5
+      And the work "Over the Limit"
+      And the work "Over the Limit" has 6 fandom tags
+      And I am logged in as "bookmarker"
+    When I bookmark the work "Over the Limit"
+    Then I should see "Bookmark was successfully created"
+
+  Scenario: Users can bookmark a pre-existing external work with too many tags
+    Given the user-defined tag limit is 5
+      And I am logged in as "bookmarker1"
+      And I bookmark the external work "Over the Limit"
+      And the external work "Over the Limit" has 6 fandom tags
+      And I am logged in as "bookmarker2"
+    When I go to bookmarker1's bookmarks page
+      And I follow "Save"
+      And I press "Create"
+    Then I should see "Bookmark was successfully created"
+
+  Scenario: Users cannot bookmark a new external work with too many tags
+    Given the user-defined tag limit is 5
+      And I am logged in as "bookmarker"
+    When I set up an external work
+      And I fill in "Fandoms" with "Fandom 1, Fandom 2"
+      And I fill in "Characters" with "Character 1, Character 2"
+      And I fill in "Relationships" with "Relationship 1, Relationship 2"
+      And I press "Create"
+    Then I should see "Fandom, relationship, and character tags must not add up to more than 5. You have entered 6 of these tags, so you must remove 1 of them."

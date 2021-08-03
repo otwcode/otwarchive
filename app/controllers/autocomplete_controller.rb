@@ -136,12 +136,6 @@ class AutocompleteController < ApplicationController
     render_output(ExternalWork.where(["url LIKE ?", '%' + params[:term] + '%']).limit(10).order(:url).pluck(:url))
   end
 
-  # encodings for importing
-  def encoding
-    encodings = Encoding.name_list.select {|e| e.match(/#{params[:term]}/i)}
-    render_output(encodings)
-  end
-
   # people signed up for a challenge
   def challenge_participants
     search_param = params[:term]
@@ -169,7 +163,7 @@ class AutocompleteController < ApplicationController
     pmatches = return_requests ?
       signup.offer_potential_matches.sort.reverse.map {|pm| pm.request_signup.pseud.byline} :
       signup.request_potential_matches.sort.reverse.map {|pm| pm.offer_signup.pseud.byline}
-    pmatches.select! {|pm| pm.match(/#{search_param}/)} if search_param.present?
+    pmatches.select! { |pm| pm.match(/#{Regexp.escape(search_param)}/) } if search_param.present?
     render_output(pmatches)
   end
 

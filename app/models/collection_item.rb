@@ -109,7 +109,7 @@ class CollectionItem < ApplicationRecord
 
       # For a more helpful error message, raise an error saying that the work
       # is invalid if we fail to save it.
-      raise ActiveRecord::RecordInvalid, work unless work.save
+      raise ActiveRecord::RecordInvalid, work unless work.save(validate: false)
     end
   end
 

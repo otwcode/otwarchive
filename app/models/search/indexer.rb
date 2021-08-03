@@ -2,7 +2,7 @@ class Indexer
 
   BATCH_SIZE = 1000
   INDEXERS_FOR_CLASS = {
-    "Work" => %w(WorkIndexer BookmarkedWorkIndexer),
+    "Work" => %w(WorkIndexer WorkCreatorIndexer BookmarkedWorkIndexer),
     "Bookmark" => %w(BookmarkIndexer),
     "Tag" => %w(TagIndexer),
     "Pseud" => %w(PseudIndexer),
@@ -28,7 +28,8 @@ class Indexer
       BookmarkIndexer,
       PseudIndexer,
       TagIndexer,
-      WorkIndexer
+      WorkIndexer,
+      WorkCreatorIndexer
     ]
   end
 
@@ -175,6 +176,8 @@ class Indexer
   end
 
   def batch
+    return @batch if @batch
+
     @batch = []
     ids.each do |id|
       object = objects[id.to_i]
@@ -189,6 +192,8 @@ class Indexer
   end
 
   def index_documents
+    return if batch.empty?
+
     $elasticsearch.bulk(body: batch)
   end
 

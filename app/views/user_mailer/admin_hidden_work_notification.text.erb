@@ -1,12 +1,13 @@
 <% content_for :message do %>
-    Dear <%= @user.default_pseud.byline %>,
+<%= t(".hello", name: @user.login) %>
 
-    Your work "<%= @work.title.html_safe %>" (<%= work_url(@work) %>) has been reported to the Abuse Team as a violation of the Archive of Our Own's Terms of Service (<%= root_url + "tos" %>).
+<%= t(".text.hidden", title: @work.title, work_url: work_url(@work)) %>
 
-    We are investigating the matter and will contact you once the investigation has been completed. While the work is under investigation it has been hidden; only you will be able to access it.
+<%= t ".access" %>
 
-    If you have any questions, please contact our Abuse Team (<%= root_url + "abuse_reports/new" %>).
+<%= t ".check_email" %>
 
-    Sincerely,
-    AO3 Abuse
-<% end %>   
+<%= t(".text.tos_violation", tos_url: tos_url) %>
+
+<%= t(".text.help", contact_abuse_url: new_abuse_report_url) %>
+<% end %>

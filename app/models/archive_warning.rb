@@ -1,4 +1,5 @@
 class ArchiveWarning < Tag
+  validates :canonical, presence: { message: "^Only canonical warning tags are allowed." }
 
   NAME = ArchiveConfig.WARNING_CATEGORY_NAME
 

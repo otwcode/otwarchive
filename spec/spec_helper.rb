@@ -2,12 +2,6 @@ ENV["RAILS_ENV"] ||= "test"
 
 require File.expand_path("../config/environment", __dir__)
 require "simplecov"
-SimpleCov.command_name "rspec-" + (ENV["TEST_RUN"] || "")
-if ENV["CI"] == "true" && ENV["TRAVIS"] == "true"
-  # Only on Travis...
-  require "codecov"
-  SimpleCov.formatter = SimpleCov::Formatter::Codecov
-end
 
 require "rspec/rails"
 require "factory_bot"
@@ -32,12 +26,13 @@ RSpec.configure do |config|
     c.syntax = [:should, :expect]
   end
 
+  # TODO: Remove gems delorean and timecop now that Rails has time-travel helpers.
+  config.include ActiveSupport::Testing::TimeHelpers
   config.include FactoryBot::Syntax::Methods
   config.include EmailSpec::Helpers
   config.include EmailSpec::Matchers
   config.include Devise::Test::ControllerHelpers, type: :controller
   config.include Devise::Test::IntegrationHelpers, type: :request
-  config.include Capybara::DSL
   config.include TaskExampleGroup, type: :task
 
   config.before :suite do
@@ -45,21 +40,29 @@ RSpec.configure do |config|
     DatabaseCleaner.strategy = :transaction
     DatabaseCleaner.clean
     Indexer.all.map(&:prepare_for_testing)
-    ArchiveWarning.find_or_create_by_name(ArchiveConfig.WARNING_CHAN_TAG_NAME).update(canonical: true)
-    ArchiveWarning.find_or_create_by_name(ArchiveConfig.WARNING_NONE_TAG_NAME).update(canonical: true)
-    Category.find_or_create_by_name(ArchiveConfig.CATEGORY_SLASH_TAG_NAME).update(canonical: true)
-    Rating.find_or_create_by_name(ArchiveConfig.RATING_DEFAULT_TAG_NAME).update(canonical: true)
-    Rating.find_or_create_by_name(ArchiveConfig.RATING_EXPLICIT_TAG_NAME).update(canonical: true)
+    ArchiveWarning.find_or_create_by!(name: ArchiveConfig.WARNING_CHAN_TAG_NAME, canonical: true)
+    ArchiveWarning.find_or_create_by!(name: ArchiveConfig.WARNING_NONE_TAG_NAME, canonical: true)
+    Category.find_or_create_by!(name: ArchiveConfig.CATEGORY_SLASH_TAG_NAME, canonical: true)
+
+    # TODO: The "Not Rated" tag ought to be marked as adult, but we want to
+    # keep the adult status of the tag consistent with the features, so for now
+    # we have a non-adult "Not Rated" tag:
+    Rating.find_or_create_by!(name: ArchiveConfig.RATING_DEFAULT_TAG_NAME, canonical: true)
+
+    Rating.find_or_create_by!(name: ArchiveConfig.RATING_EXPLICIT_TAG_NAME, canonical: true, adult: true)
     # Needs these for the API tests.
-    ArchiveWarning.find_or_create_by_name(ArchiveConfig.WARNING_DEFAULT_TAG_NAME).update(canonical: true)
-    ArchiveWarning.find_or_create_by_name(ArchiveConfig.WARNING_NONCON_TAG_NAME).update(canonical: true)
-    Rating.find_or_create_by_name(ArchiveConfig.RATING_GENERAL_TAG_NAME).update(canonical: true)
+    ArchiveWarning.find_or_create_by!(name: ArchiveConfig.WARNING_DEFAULT_TAG_NAME, canonical: true)
+    ArchiveWarning.find_or_create_by!(name: ArchiveConfig.WARNING_NONCON_TAG_NAME, canonical: true)
+    Rating.find_or_create_by!(name: ArchiveConfig.RATING_GENERAL_TAG_NAME, canonical: true)
   end
 
   config.before :each do
     DatabaseCleaner.start
     User.current_user = nil
     clean_the_database
+
+    # Clears used values for all generators.
+    Faker::UniqueGenerator.clear
 
     # Assume all spam checks pass by default.
     allow(Akismetor).to receive(:spam?).and_return(false)
@@ -141,8 +144,6 @@ RSpec.configure do |config|
     metadata[:type] = :task
   end
 
-  # Set default formatter to print out the description of each test as it runs
-  config.color = true
   config.formatter = :documentation
 
   config.file_fixture_path = "spec/support/fixtures"

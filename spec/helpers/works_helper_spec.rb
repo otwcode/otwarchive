@@ -25,7 +25,7 @@ describe WorksHelper do
 
     context "for a multifandom work" do
       it "should not try to include all the fandoms" do
-        @work.fandom_string = "Testing, Battlestar Galactica, Naruto"
+        @work.update(fandom_string: "Testing, Battlestar Galactica, Naruto")
         expect(helper.get_tweet_text(@work)).to match "Multifandom"
         expect(helper.get_tweet_text(@work)).not_to match "Battlestar"
       end

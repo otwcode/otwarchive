@@ -46,6 +46,10 @@ module MailerHelper
     style_link(text, root_url + "abuse_reports/new")
   end
 
+  def tos_link(text)
+    style_link(text, tos_url)
+  end
+
   def opendoors_link(text)
     style_link(text, "http://opendoors.transformativeworks.org/contact-open-doors/")
   end
@@ -90,7 +94,7 @@ module MailerHelper
     html.split("\n").map { |line_of_text| h(line_of_text) }.join('<br>').html_safe
   end
 
-  # The title used in creatorship_notification and creatorship_invitation
+  # The title used in creatorship_notification and creatorship_request
   # emails.
   def creation_title(creation)
     if creation.is_a?(Chapter)
