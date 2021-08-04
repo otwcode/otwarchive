@@ -590,10 +590,9 @@ module ApplicationHelper
   def creator_ids_for_css_classes(creation)
     return [] unless %w[Series Work].include?(creation.class.name)
     return [] if creation.anonymous?
-    # Although series.unrevealed? can be true, the series blurb is unaltered
-    # and only appears in bookmarks, to which we do not yet add creator classes.
-    # Because you can see the creator names in the blurb, we should add classes
-    # for them as well.
+    # Although series.unrevealed? can be true, the creators are not concealed
+    # in the blurb. Therefore, we do not not special handling for unrevealed
+    # series.
     return [] if creation.is_a?(Work) && creation.unrevealed?
 
     creation.users.pluck(:id).uniq.map { |id| "user-#{id}" }
