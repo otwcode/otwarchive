@@ -591,7 +591,7 @@ module ApplicationHelper
     return [] unless %w[Series Work].include?(creation.class.name)
     return [] if creation.anonymous?
     # Although series.unrevealed? can be true, the creators are not concealed
-    # in the blurb. Therefore, we do not not special handling for unrevealed
+    # in the blurb. Therefore, we do not special handling for unrevealed
     # series.
     return [] if creation.is_a?(Work) && creation.unrevealed?
 
