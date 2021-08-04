@@ -290,7 +290,7 @@ class Work < ApplicationRecord
     Collection.expire_ids(collection_ids)
   end
 
-  # TODO: We can use touch_all once we update to Rails 6.
+  # TODO: AO3-6085 We can use touch_all once we update to Rails 6.
   def touch_series
     series.each(&:touch) if saved_change_to_in_anon_collection?
   end

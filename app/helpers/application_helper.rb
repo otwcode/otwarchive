@@ -587,7 +587,6 @@ module ApplicationHelper
 
   # Array of creator ids, formatted user-123, user-126.
   # External works are not created by users, so we can skip this.
-  # TODO: AO3-6132 to add creator ids to series blurbs.
   def creator_ids_for_css_classes(creation)
     return [] unless %w[Series Work].include?(creation.class.name)
     return [] if creation.anonymous?
