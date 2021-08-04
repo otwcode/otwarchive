@@ -85,6 +85,12 @@
              <%= @work.spam? %>
           <% end %>
         </dd>
+        <dt class="limit">
+          <%= ts("Over Tag Limit:") %>
+        </dt>
+        <dd class="limit">
+          <%= @work.user_defined_tags_count > ArchiveConfig.USER_DEFINED_TAGS_MAX ? ts("Yes") : ts("No") %>
+        </dd>
         <% if @work.gifts.are_rejected.exists? %>
           <dt class="gift">
             <%= ts('Refused As Gift:') %>

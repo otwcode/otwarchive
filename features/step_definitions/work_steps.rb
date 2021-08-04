@@ -243,6 +243,15 @@ Given /^the spam work "([^\"]*)"$/ do |work|
   w.update_attribute(:hidden_by_admin, true)
 end
 
+Given "the user-defined tag limit is {int}" do |count|
+  allow(ArchiveConfig).to receive(:USER_DEFINED_TAGS_MAX).and_return(count)
+end
+
+Given "the work {string} has {int} {word} tag(s)" do |title, count, type|
+  work = Work.find_by(title: title)
+  work.send("#{type.pluralize}=", FactoryBot.create_list(type.to_sym, count))
+end
+
 ### WHEN
 
 When /^I view the ([\d]+)(?:st|nd|rd|th) chapter$/ do |chapter_no|

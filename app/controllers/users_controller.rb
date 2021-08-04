@@ -172,7 +172,7 @@ class UsersController < ApplicationController
 
       if new_email != params[:email_confirmation]
         flash[:error] = ts("Email addresses don't match! Please retype and try again")
-        return
+        render :change_email and return
       end
 
       old_email = @user.email
