@@ -211,11 +211,12 @@ class UserMailer < ActionMailer::Base
     )
   end
 
+  # This is sent at the end of matching, i.e., after assignments are generated.
   def potential_match_generation_notification(collection_id)
     @collection = Collection.find(collection_id)
     mail(
       to: @collection.get_maintainers_email,
-      subject: "[#{ArchiveConfig.APP_SHORT_NAME}][#{@collection.title}] Potential match generation complete"
+      subject: "[#{ArchiveConfig.APP_SHORT_NAME}][#{@collection.title}] Potential assignment generation complete"
     )
   end
 
