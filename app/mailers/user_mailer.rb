@@ -212,6 +212,7 @@ class UserMailer < ActionMailer::Base
   end
 
   # This is sent at the end of matching, i.e., after assignments are generated.
+  # It is also sent when assignments are regenerated.
   def potential_match_generation_notification(collection_id)
     @collection = Collection.find(collection_id)
     mail(
