@@ -19,11 +19,11 @@ module AutocompleteSource
       # If transliterate returns "?", the original character is either unsupported 
       # (e.g. a non-Latin character) or was actually a question mark.
       # In both cases, we should keep the original.
-      if tl == "?"
-        result << char
-      else
-        result << tl
-      end
+      result << if tl == "?"
+                  char
+                else
+                  tl
+                end
     end
     result
   end
