@@ -193,9 +193,9 @@ Feature: Delete Works
       And I should see "My thoughts on the work"
 
   Scenario: A work with too many tags can be deleted
-    Given the user-defined tag limit is 5
+    Given the user-defined tag limit is 2
       And the work "Over the Limit"
-      And the work "Over the Limit" has 6 fandom tags
+      And the work "Over the Limit" has 3 fandom tags
     When I am logged in as the author of "Over the Limit"
       And I delete the work "Over the Limit"
     Then I should see "Your work Over the Limit was deleted."

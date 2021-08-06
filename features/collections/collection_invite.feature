@@ -88,10 +88,10 @@ Feature: Collection
   Then I should not see "A Death in Hong Kong"
 
   Scenario: A work with too many tags can be invited to a collection
-    Given the user-defined tag limit is 5
+    Given the user-defined tag limit is 2
       And the collection "Favorites"
       And the work "Over the Limit"
-      And the work "Over the Limit" has 6 fandom tags
+      And the work "Over the Limit" has 3 fandom tags
     When I am logged in as "moderator"
       And I add the work "Over the Limit" to the collection "Favorites"
     Then I should see "This work has been invited to your collection (Favorites)."
