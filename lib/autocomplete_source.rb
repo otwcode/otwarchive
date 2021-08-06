@@ -16,9 +16,14 @@ module AutocompleteSource
     result = ""
     input.each_char do |char|
       tl = ActiveSupport::Inflector.transliterate(char)
-      # Don't transliterate characters which are not supported (e.g. non-Latin characters).
-      # No need for special handling of "?" since it is not modified by transliteration
-      result << (tl == "?" ? char : tl)
+      # If transliterate returns "?", the original character is either unsupported 
+      # (e.g. a non-Latin character) or was actually a question mark.
+      # In both cases, we should keep the original.
+      if tl == "?"
+        result << char
+      else
+        result << tl
+      end
     end
     result
   end
