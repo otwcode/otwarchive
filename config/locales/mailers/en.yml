@@ -76,7 +76,6 @@ en:
     delete_work_notification:
       subject: "[%{app_name}] Your work has been deleted"
       support: "contact Support"
-      part2: "If you have questions, please %{support}."
       part3: "Attached is a copy of your work for your reference."
       html:
         part2: "If you have questions, please %{support}."
