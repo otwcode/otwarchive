@@ -63,7 +63,6 @@ class AbuseReport < ApplicationRecord
                             multiline: true
 
   def email_and_send
-    AdminMailer.abuse_report(id).deliver_later
     UserMailer.abuse_report(id).deliver_later
     send_report
   end

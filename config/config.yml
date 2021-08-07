@@ -21,16 +21,11 @@ DAYS_UNTIL_RESET_PASSWORD_LINK_EXPIRES: 7
 
 # email addresses
 RETURN_ADDRESS: 'do-not-reply@example.org'
-SUPPORT_ADDRESS: 'support@example.org'
-ABUSE_ADDRESS: 'abuse@example.org'
 SPAM_ALERT_ADDRESS: 'abuse-discuss@example.org'
 SPAM_THRESHOLD: 15
 ADMIN_ADDRESS: 'admin@example.org'
-QUESTION_ADDRESS: 'questions@example.org'
-WEBMASTER_ADDRESS: 'webmaster@example.org'
-ERROR_ADDRESS: errors@example.org
 FEEDBACK_ADDRESS: feedback@example.org
-ERROR_PREFIX: "[ERROR] "
+
 # Because the default email addresses are fake,
 # email delivery is turned off by default, even for production.
 # The log file will nonetheless show "Sent mail:"
@@ -106,6 +101,9 @@ PASSWORD_LENGTH_MAX: 40
 
 # The maximum number of tags you can add to a collection
 COLLECTION_TAGS_MAX: 10
+
+# The maximum number of user-defined tags you can add to a work or external work
+USER_DEFINED_TAGS_MAX: 75
 
 # max number of tags of each type allowed in challenge prompts (requests/offers)
 # increasing this number can lead to slower automated matching
@@ -429,42 +427,6 @@ ACTION_NOTE: 11
 # indexes
 ELASTICSEARCH_PREFIX: 'ao3'
 
-
-##### For dumping the seed database and NOT clearing emails on stage
-
-# users who have webdavs or asked to be added
-# or who have problematic works which need testing
-DUMP_SEEDS: [
-            "Amancham", "Anneli", "ariana_paris", "astolat", "Atalan", "awils1",
-            "aworldinside", "bingeling", "Cesy", "cesytest", "Celandine",
-            "Chandri", "daymarket",  "eel", "elz", "erda", "Enigel",
-            "fairywearsbootz", "hele", "Hope", "insomniac_amy", "Jaetion",
-            "jennyst", "Jenn_Calaelen", "justira", "jetta_e_rus", "karanguni",
-            "Kitsune", "krytella", "Lal", "lim", "Lisztful", "macey_muse", "mumble",
-            "open_doors", "Rebecca", "RKlyne", "Rustler", "Shay_Guy", "Sidra",
-            "signalvsnoise", "staranise", "Stowaway", "testy", "Tel",
-            "tomatopudding", "tuff_ghost", "velocitygrass", "xparrot", "yaobikuni",
-            "zelempa", "zoemathemata", "Zooey_Glass", "zlabya", "zz9pzza"
-]
-
-# seeds who want their email address preserved for testing
-DUMP_EMAIL: [
-          "admin-amelia", "admin-elz", "admin-emilie", "admin-franny",
-          "admin-kielix", "admin-shalott", "admin-sidra",
-          "Amancham", "astolat", "aworldinside", "bingeling", "cesy",
-          "cesytest", "elz", "Enigel", "hele", "Lal", "mumble", "open_doors",
-          "Sidra", "testy", "velocitygrass", "xparrot", "Zooey_Glass" ,
-          "zz9pzza"
-]
-
-# a bunch of bigger collections (>250 works)
-# probably would be scooped up anyway, but just in case
-DUMP_COLLECTION_SEEDS: [
-          "yuletide2009", "ladieschoice", "yuletidemadness2009", "female_focus",
-          "crossgen_slash", "PornBattleIX", "Remix2010", "yuletide2010", "fic_promptly",
-          "chromatic_yuletide_2010", "Fandom_Stocking", "yuletidemadness2010", "PornBattleXI",
-          "Remix2011", "PornBattleXII"
-]
 
 # List of Unicode scripts where spaces are not used as separators, and
 # character counts should be used for word counts.
