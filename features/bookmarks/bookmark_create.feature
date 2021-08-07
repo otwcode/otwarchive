@@ -431,18 +431,18 @@ Scenario: A bookmark with duplicate tags other than capitalization has only firs
     And I should not see "Bookmarker's Tags: My Tags"
 
   Scenario: Users can bookmark a work with too many tags
-    Given the user-defined tag limit is 5
+    Given the user-defined tag limit is 2
       And the work "Over the Limit"
-      And the work "Over the Limit" has 6 fandom tags
+      And the work "Over the Limit" has 3 fandom tags
       And I am logged in as "bookmarker"
     When I bookmark the work "Over the Limit"
     Then I should see "Bookmark was successfully created"
 
   Scenario: Users can bookmark a pre-existing external work with too many tags
-    Given the user-defined tag limit is 5
+    Given the user-defined tag limit is 2
       And I am logged in as "bookmarker1"
       And I bookmark the external work "Over the Limit"
-      And the external work "Over the Limit" has 6 fandom tags
+      And the external work "Over the Limit" has 3 fandom tags
       And I am logged in as "bookmarker2"
     When I go to bookmarker1's bookmarks page
       And I follow "Save"
