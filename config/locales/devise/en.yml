@@ -71,11 +71,3 @@ en:
       not_saved:
         one: "1 error prohibited this %{resource} from being saved:"
         other: "%{count} errors prohibited this %{resource} from being saved:"
-  users:
-    mailer:
-      reset_password_instructions:
-        subject: "[%{app_name}] Reset your password"
-        intro: "%{user}, someone has requested a password reset for your account. You can change your account password by following the link below and entering your new password:"
-        link_title: "Change my password."
-        expiration: "If you do not use this link to reset your password within a week, it will expire, and you will have to request a new one."
-        unrequested: "If you did not request this password reset, you may ignore this email and your previous password will continue to work."

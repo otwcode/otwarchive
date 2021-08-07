@@ -257,3 +257,9 @@ en:
         html: "For more information, visit our %{faq_link}."
         text: "For more information, visit our Collections and Challenges FAQ: %{faq_url}"
       faq_link_text: "Collections and Challenges FAQ"
+    reset_password_instructions:
+      subject: "[%{app_name}] Reset your password"
+      intro: "Someone has requested a password reset for your account. You can change your account password by following the link below and entering your new password:"
+      link_title: "Change my password."
+      expiration: "If you do not use this link to reset your password within a week, it will expire, and you will have to request a new one."
+      unrequested: "If you did not request this password reset, you may ignore this email and your previous password will continue to work."
