@@ -70,6 +70,7 @@ class Work < ApplicationRecord
   # Can't write to work.pseuds until the work has an id
   attr_accessor :new_parent, :url_for_parent
   attr_accessor :new_recipients
+  attr_accessor :preview_mode
 
   # return title.html_safe to overcome escaping done by sanitiser
   def title
@@ -135,6 +136,13 @@ class Work < ApplicationRecord
     end
   end
 
+  validates :fandom_string,
+            presence: { message: "^Please fill in at least one fandom." }
+  validates :archive_warning_string,
+            presence: { message: "^Please select at least one warning." }
+  validates :rating_string,
+            presence: { message: "^Please choose a rating." }
+
   # rephrases the "chapters is invalid" message
   after_validation :check_for_invalid_chapters
   def check_for_invalid_chapters
@@ -144,8 +152,8 @@ class Work < ApplicationRecord
     end
   end
 
-  # Run Taggable#check_for_invalid_tags as a validation.
-  validate :check_for_invalid_tags
+  validates :user_defined_tags_count,
+            at_most: { maximum: proc { ArchiveConfig.USER_DEFINED_TAGS_MAX } }
 
   enum comment_permissions: {
     enable_all: 0,
@@ -169,7 +177,6 @@ class Work < ApplicationRecord
   before_create :set_anon_unrevealed
   after_create :notify_after_creation
 
-  before_update :validate_tags
   after_update :adjust_series_restriction, :notify_after_update
 
   before_save :hide_spam
@@ -224,10 +231,8 @@ class Work < ApplicationRecord
       tag.update_tag_cache
     end
 
-    Work.expire_work_tag_groups_id(id)
+    Work.expire_work_blurb_version(id)
     Work.flush_find_by_url_cache unless imported_from_url.blank?
-
-    Work.expire_work_tag_groups_id(self.id)
   end
 
   def update_pseud_index
@@ -251,29 +256,16 @@ class Work < ApplicationRecord
     taggings.each(&:update_search)
   end
 
-  def self.work_blurb_tag_cache_key(id)
+  def self.work_blurb_version_key(id)
     "/v3/work_blurb_tag_cache_key/#{id}"
   end
 
-  def self.work_blurb_tag_cache(id)
-    Rails.cache.fetch(Work.work_blurb_tag_cache_key(id), raw: true) { rand(1..1000) }
+  def self.work_blurb_version(id)
+    Rails.cache.fetch(Work.work_blurb_version_key(id), raw: true) { rand(1..1000) }
   end
 
-  def self.expire_work_tag_groups_id(id)
-    Rails.cache.delete(Work.tag_groups_key_id(id))
-    Rails.cache.increment(Work.work_blurb_tag_cache_key(id))
-  end
-
-  def expire_work_tag_groups
-    Rails.cache.delete(self.tag_groups_key)
-  end
-
-  def self.tag_groups_key_id(id)
-    "/v3/work_tag_groups/#{id}"
-  end
-
-  def tag_groups_key
-    Work.tag_groups_key_id(self.id)
+  def self.expire_work_blurb_version(id)
+    Rails.cache.increment(Work.work_blurb_version_key(id))
   end
 
   # When works are done being reindexed, expire the appropriate caches
@@ -786,31 +778,6 @@ class Work < ApplicationRecord
   # TAGGING
   # Works are taggable objects.
   #######################################################################
-
-  def tag_groups
-    Rails.cache.fetch(self.tag_groups_key) do
-      if self.placeholder_tags && !self.placeholder_tags.empty?
-        result = self.placeholder_tags.values.flatten.group_by { |t| t.type.to_s }
-      else
-        result = self.tags.group_by { |t| t.type.to_s }
-      end
-      result["Fandom"] ||= []
-      result["Rating"] ||= []
-      result["ArchiveWarning"] ||= []
-      result["Relationship"] ||= []
-      result["Character"] ||= []
-      result["Freeform"] ||= []
-      result
-    end
-  end
-
-  # Check to see that a work is tagged appropriately
-  def has_required_tags?
-    return false if self.fandom_string.blank?
-    return false if self.archive_warning_string.blank?
-    return false if self.rating_string.blank?
-    return true
-  end
 
   # When the filters on a work change, we need to perform some extra checks.
   def self.reindex_for_filter_changes(ids, filter_taggings, queue)

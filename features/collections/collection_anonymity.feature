@@ -532,3 +532,14 @@ Feature: Collection
     When I am logged in as "moderator"
     Then the work "Old Snippet" should be visible to me
       And I should not see "Share"
+
+  Scenario: Works that are over the tag limit can be revealed
+    Given the user-defined tag limit is 2
+      And I have the hidden collection "Hidden Gems"
+      And I am logged in as "creator"
+      And I post the work "Over the Limit" in the collection "Hidden Gems"
+      And the work "Over the Limit" has 3 fandom tags
+    When I reveal works for "Hidden Gems"
+      And I log out
+      And I view the work "Over the Limit"
+    Then I should see "Over the Limit"

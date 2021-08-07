@@ -1,4 +1,4 @@
-<% cache("/v3/#{work.cache_key}-#{Work.work_blurb_tag_cache(work.id)}-meta-#{hide_warnings?(work) ? 'nowarn' : 'showwarn'}-#{hide_freeform?(work)  ? 'nofreeform' : 'showfreeform'}", skip_digest: true) do %>
+<% cache_unless(@preview_mode, "/v3/#{work.cache_key}-#{Work.work_blurb_version(work.id)}-meta-#{hide_warnings?(work) ? 'nowarn' : 'showwarn'}-#{hide_freeform?(work)  ? 'nofreeform' : 'showfreeform'}", skip_digest: true) do %>
 <h3 class="landmark heading"><%= ts("Work Header") %></h3>
 
 <div class="wrapper">
@@ -84,6 +84,12 @@
           <% else %>
              <%= @work.spam? %>
           <% end %>
+        </dd>
+        <dt class="limit">
+          <%= ts("Over Tag Limit:") %>
+        </dt>
+        <dd class="limit">
+          <%= @work.user_defined_tags_count > ArchiveConfig.USER_DEFINED_TAGS_MAX ? ts("Yes") : ts("No") %>
         </dd>
         <% if @work.gifts.are_rejected.exists? %>
           <dt class="gift">

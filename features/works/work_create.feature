@@ -303,7 +303,7 @@ Feature: Create Works
       And I fill in "content" with "It wasn't my fault, you know."
       And I press "Post"
     Then I should see "We couldn't save this work"
-      And I should see "Please add all required tags. Warning is missing."
+      And I should see "Please select at least one warning."
     When I check "No Archive Warnings Apply"
       And I press "Post"
     Then I should see "Work was successfully posted."
@@ -396,16 +396,13 @@ Feature: Create Works
     Then I should see "barbaz, foobar"
       And I should not see "Chapter by"
 
-  @javascript
-  Scenario: Please wait should disappear after fixing errors when creating work
-    Given basic tags
-      And I am logged in as "test_user"
-    When I go to the new work page
-      And I fill in "Work Title" with "Unicorns Abound"
-      And I select "English" from "Choose a language"
-      And I fill in "Fandoms" with "Dallas"
+  Scenario: You cannot create a work with too many tags
+    Given the user-defined tag limit is 7
+      And I am logged in as a random user
+    When I set up the draft "Over the Limit"
+      And I fill in "Fandoms" with "Fandom 1, Fandom 2"
+      And I fill in "Characters" with "Character 1, Character 2"
+      And I fill in "Relationships" with "Relationship 1, Relationship 2"
+      And I fill in "Additional Tags" with "Additional Tag 1, Additional Tag 2"
       And I press "Post"
-    Then I should see "Brevity is the soul of wit, but your content does have to be at least 10 characters long."
-      And I should see a button with text "Please wait..."
-    When I fill in "content" with "help there are unicorns everywhere"
-    Then I should see a button with text "Post"
+    Then I should see "Fandom, relationship, character, and additional tags must not add up to more than 7. Your work has 8 of these tags, so you must remove 1 of them."

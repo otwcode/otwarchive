@@ -169,12 +169,13 @@ class SkinsController < ApplicationController
 
   def skin_params
     params.require(:skin).permit(
-        :title, :description, :public, :css, :role, :ie_condition, :unusable,
-        :font, :base_em, :margin, :paragraph_margin, :background_color,
-        :foreground_color, :headercolor, :accent_color, :icon,
-        {media: []},
-        skin_parents_attributes:
-            [:id, :position, :parent_skin_id, :parent_skin_title, :child_skin_id, :_destroy],
+      :title, :description, :public, :css, :role, :ie_condition, :unusable,
+      :font, :base_em, :margin, :paragraph_margin, :background_color,
+      :foreground_color, :headercolor, :accent_color, :icon,
+      media: [],
+      skin_parents_attributes: [
+        :id, :position, :parent_skin_id, :parent_skin_title, :_destroy
+      ]
     )
   end
 

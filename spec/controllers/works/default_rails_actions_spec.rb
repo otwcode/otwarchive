@@ -233,7 +233,7 @@ describe WorksController, work_search: true do
       post :create, params: { work: work_attributes }
       expect(response).to render_template("new")
       expect(assigns[:work].errors.full_messages).to \
-        include "Please add all required tags. Warning is missing."
+        include /Only canonical warning tags are allowed./
     end
 
     it "renders new if the work has noncanonical rating" do
@@ -241,7 +241,15 @@ describe WorksController, work_search: true do
       post :create, params: { work: work_attributes }
       expect(response).to render_template("new")
       expect(assigns[:work].errors.full_messages).to \
-        include "Please add all required tags."
+        include /Only canonical rating tags are allowed./
+    end
+
+    it "renders new if the work has noncanonical category" do
+      work_attributes = attributes_for(:work).except(:posted).merge(category_strings: ["Category"])
+      post :create, params: { work: work_attributes }
+      expect(response).to render_template("new")
+      expect(assigns[:work].errors.full_messages).to \
+        include /Only canonical category tags are allowed./
     end
   end
 
@@ -249,7 +257,8 @@ describe WorksController, work_search: true do
     let(:work) { create(:work) }
 
     it "doesn't error when a work has no fandoms" do
-      work_no_fandoms = create(:work, fandoms: [])
+      work_no_fandoms = build(:work, fandom_string: "")
+      work_no_fandoms.save!(validate: false)
       fake_login
 
       get :show, params: { id: work_no_fandoms.id }
@@ -652,6 +661,39 @@ describe WorksController, work_search: true do
         fake_login_known_user(collected_user)
         get :collected, params: { user_id: collected_user.login }
         expect(assigns(:works)).to include(work, unrevealed_work)
+      end
+    end
+  end
+
+  describe "destroy" do
+    let(:work) { create(:work) }
+    let(:work_title) { work.title }
+
+    context "when a work has consecutive deleted comments in a thread" do
+      before do
+        thread_depth = 4
+        chapter = work.first_chapter
+
+        commentable = chapter
+        comments = []
+        thread_depth.times do
+          commentable = create(:comment, commentable: commentable, parent: chapter)
+          comments << commentable
+        end
+
+        # Delete all but the last comment in the thread.
+        # We should have (thread_depth - 1) consecutive deleted comment placeholders.
+        comments.reverse.drop(1).each(&:destroy_or_mark_deleted)
+
+        fake_login_known_user(work.users.first)
+      end
+
+      it "deletes the work and redirects to the user's works with a notice" do
+        delete :destroy, params: { id: work.id }
+
+        it_redirects_to_with_notice(user_works_path(controller.current_user), "Your work #{work_title} was deleted.")
+        expect { work.reload }.to raise_exception(ActiveRecord::RecordNotFound)
+        expect(Comment.count).to eq(0)
       end
     end
   end
