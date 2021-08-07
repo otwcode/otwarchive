@@ -4,23 +4,23 @@ phrase:
   push:
     sources:
       # devise
-      - file: ./config/locales/devise/<locale_name>.yml
+      - file: ./config/locales/devise/en.yml
         params:
           update_translations: true
       # mailers
-      - file: ./config/locales/mailers/<locale_name>.yml
+      - file: ./config/locales/mailers/en.yml
         params:
           update_translations: true
       # models
-      - file: ./config/locales/models/<locale_name>.yml
+      - file: ./config/locales/models/en.yml
         params:
           update_translations: true
       # validators
-      - file: ./config/locales/validators/<locale_name>.yml
+      - file: ./config/locales/validators/en.yml
         params:
           update_translations: true
       # views
-      - file: ./config/locales/views/<locale_name>.yml
+      - file: ./config/locales/views/en.yml
         params:
           update_translations: true
   pull:
