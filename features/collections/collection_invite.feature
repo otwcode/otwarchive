@@ -87,7 +87,7 @@ Feature: Collection
   When I view the approved collection items page for "anon hidden collection"
   Then I should not see "A Death in Hong Kong"
 
-  Scenario: A work with too many tags can be invited to a collection
+  Scenario: A work with too many tags can be invited to a collection, and the user can accept the invitation
     Given the user-defined tag limit is 2
       And the collection "Favorites"
       And the work "Over the Limit"
@@ -95,3 +95,10 @@ Feature: Collection
     When I am logged in as "moderator"
       And I add the work "Over the Limit" to the collection "Favorites"
     Then I should see "This work has been invited to your collection (Favorites)."
+    When I am logged in as the author of "Over the Limit"
+      And I accept the invitation for my work in the collection "Favorites"
+      And I submit
+    Then I should see "Collection status updated!"
+      And I should not see "Over the Limit"
+    When I view the work "Over the Limit"
+    Then I should see "Favorites"
