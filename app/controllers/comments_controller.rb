@@ -22,6 +22,7 @@ class CommentsController < ApplicationController
   before_action :check_parent_comment_permissions, only: [:new, :create, :add_comment_reply]
   before_action :check_unreviewed, only: [:add_comment_reply]
   before_action :check_frozen, only: [:new, :create, :add_comment_reply]
+  before_action :check_not_replying_to_spam, only: [:new, :create, :add_comment_reply]
   before_action :check_permission_to_review, only: [:unreviewed]
   before_action :check_permission_to_access_single_unreviewed, only: [:show]
   before_action :check_permission_to_moderate, only: [:approve, :reject]
@@ -121,6 +122,13 @@ class CommentsController < ApplicationController
     return unless @commentable.respond_to?(:iced?) && @commentable.iced?
 
     flash[:error] = t("comments.check_frozen.error")
+    redirect_back(fallback_location: root_path)
+  end
+
+  def check_not_replying_to_spam
+    return unless @commentable.respond_to?(:approved?) && !@commentable.approved?
+
+    flash[:error] = t("comments.check_not_replying_to_spam.error")
     redirect_back(fallback_location: root_path)
   end
 
