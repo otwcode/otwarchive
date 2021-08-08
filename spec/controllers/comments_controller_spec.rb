@@ -2117,7 +2117,7 @@ describe CommentsController do
     it "redirects to 404 when not logged in as admin" do
       get :index
 
-      expect(response.status).to eq(404)
+      it_redirects_to_simple("/404")
     end
 
     it "redirects to 404 when logged in as admin" do
@@ -2125,7 +2125,7 @@ describe CommentsController do
 
       get :index
 
-      expect(response.status).to eq(404)
+      it_redirects_to_simple("/404")
     end
   end
 
