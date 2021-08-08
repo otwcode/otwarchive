@@ -117,7 +117,7 @@ class CollectionItem < ApplicationRecord
   after_update :update_item_for_status_change
   def update_item_for_status_change
     if saved_change_to_user_approval_status? || saved_change_to_collection_approval_status?
-      item.save!
+      item.save!(validate: false)
     end
   end
 
