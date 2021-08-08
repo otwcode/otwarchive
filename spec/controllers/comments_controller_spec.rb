@@ -384,21 +384,15 @@ describe CommentsController do
         end
       end
 
-      # TODO: AO3-6038 Because this is quite wrong.
       context "when the commentable is spam" do
-        let(:comment) { create(:comment, approved: false) }
+        let(:spam_comment) { create(:comment) }
+        before { spam_comment.update_attribute(:approved, false) }
 
-        it "creates comment, gives success notice, and marks previous comment as approved" do
-          post :create, params: { comment_id: comment.id, comment: anon_comment_attributes }
+        it "shows an error and redirects if commentable is a comment marked as spam" do
+          post :create, params: { comment_id: spam_comment.id, comment: anon_comment_attributes }
 
-          latest_comment = Comment.last
-          expect(latest_comment.commentable).to eq comment
-          expect(latest_comment.name).to eq anon_comment_attributes[:name]
-          expect(latest_comment.email).to eq anon_comment_attributes[:email]
-          expect(latest_comment.comment_content).to include anon_comment_attributes[:comment_content]
-
-          expect(flash[:comment_notice]).to eq "Comment created!"
-          expect(comment.reload.approved).to be_truthy
+          it_redirects_to_with_error("/where_i_came_from",
+                                     "Sorry, you can't reply to a comment that has been marked as spam.")
         end
       end
     end
