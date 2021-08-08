@@ -386,6 +386,7 @@ describe CommentsController do
 
       context "when the commentable is spam" do
         let(:spam_comment) { create(:comment) }
+
         before { spam_comment.update_attribute(:approved, false) }
 
         it "shows an error and redirects if commentable is a comment marked as spam" do
