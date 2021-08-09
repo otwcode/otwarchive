@@ -168,17 +168,23 @@ class UsersController < ApplicationController
 
   def changed_email
     if !params[:new_email].blank? && reauthenticate
-      @old_email = @user.email
-      @user.email = params[:new_email]
-      @new_email = params[:new_email]
-      @confirm_email = params[:email_confirmation]
+      new_email = params[:new_email]
 
-      if @new_email == @confirm_email && @user.save
-        flash[:notice] = ts('Your email has been successfully updated')
-        UserMailer.change_email(@user.id, @old_email, @new_email).deliver_later
+      if new_email != params[:email_confirmation]
+        flash[:error] = ts("Email addresses don't match! Please retype and try again")
+        render :change_email and return
+      end
+
+      old_email = @user.email
+      @user.email = new_email
+
+      if @user.save
+        flash[:notice] = ts("Your email has been successfully updated")
+        UserMailer.change_email(@user.id, old_email, new_email).deliver_later
         @user.create_log_item(options = { action: ArchiveConfig.ACTION_NEW_EMAIL })
       else
-        flash[:error] = ts("Email addresses don't match! Please retype and try again")
+        # Make sure that on failure, the form still shows the old email as the "current" one.
+        @user.email = old_email
       end
     end
 
