@@ -27,8 +27,6 @@ class CommentsController < ApplicationController
   before_action :check_permission_to_moderate, only: [:approve, :reject]
   before_action :check_permission_to_modify_frozen_status, only: [:freeze, :unfreeze]
 
-  cache_sweeper :comment_sweeper
-
   def check_pseud_ownership
     return unless params[:comment][:pseud_id]
     pseud = Pseud.find(params[:comment][:pseud_id])
@@ -206,20 +204,13 @@ class CommentsController < ApplicationController
   end
 
   def index
-    if !@commentable.nil?
-      @comments = @commentable.comments.reviewed.page(params[:page])
-      if @commentable.class == Comment
-        # we link to the parent object at the top
-        @commentable = @commentable.ultimate_parent
-      end
-    else
-      if logged_in_as_admin?
-        @comments = Comment.top_level.not_deleted.limit(ArchiveConfig.ITEMS_PER_PAGE).ordered_by_date.include_pseud.select { |c| c.ultimate_parent.respond_to?(:visible?) && c.ultimate_parent.visible?(current_user) }
-      else
-        redirect_back_or_default(root_path)
-        flash[:error] = ts("Sorry, you don't have permission to access that page.")
-      end
-    end
+    return raise_not_found if @commentable.blank?
+
+    @comments = @commentable.comments.reviewed.page(params[:page])
+    return unless @commentable.class == Comment
+
+    # we link to the parent object at the top
+    @commentable = @commentable.ultimate_parent
   end
 
   def unreviewed

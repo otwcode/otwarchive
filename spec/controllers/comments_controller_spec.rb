@@ -2114,15 +2114,18 @@ describe CommentsController do
   end
 
   describe "GET #index" do
-    it "errors when not logged in as admin" do
+    it "redirects to 404 when not logged in as admin" do
       get :index
-      expect(flash[:error]).to eq "Sorry, you don't have permission to access that page."
+
+      it_redirects_to_simple("/404")
     end
 
-    it "renders :index template when logged in as admin" do
+    it "redirects to 404 when logged in as admin" do
       fake_login_admin(create(:admin))
+
       get :index
-      expect(response).to render_template("index")
+
+      it_redirects_to_simple("/404")
     end
   end
 
