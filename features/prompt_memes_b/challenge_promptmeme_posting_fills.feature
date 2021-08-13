@@ -461,39 +461,39 @@ Feature: Prompt Meme Challenge
     And I should see "Anonymous" within ".byline"
     And I should see a link "prompt"
 
-  Scenario: Fic links to the prompt it fulfils, for all users
+  Scenario: Work links to the prompt it fulfils, for all users
 
   Given I have Battle 12 prompt meme fully set up
-  When I am logged in as "myname1"
-  When I sign up for Battle 12 with combination B
+    And I am logged in as "myname1"
+    And I sign up for Battle 12 with combination B
     And I am logged in as "myname4"
     And I claim a prompt from "Battle 12"
-  When I fulfill my claim
-  When I reveal works for "Battle 12"
-  When I view the work "Fulfilled Story"
+    And I fulfill my claim
+    And I reveal works for "Battle 12"
+    And I view the work "Fulfilled Story"
   Then I should see "Fulfilled Story"
     And I should see "In response to a prompt by Anonymous"
     And I should see a link "prompt"
-    And I follow "prompt"
-    And I should see "Request by Anonymous"
+  When I follow "prompt"
+  Then I should see "Request by Anonymous"
   When I am logged in as "myname2"
     And I view the work "Fulfilled Story"
   Then I should see "Fulfilled Story"
     And I should see "In response to a prompt by Anonymous"
     And I should see a link "prompt"
-    And I follow "prompt"
-    And I should see "Request by Anonymous"
+  When I follow "prompt"
+  Then I should see "Request by Anonymous"
   When I am logged in as "mod"
     And I view the work "Fulfilled Story"
   Then I should see "Fulfilled Story"
     And I should see "In response to a prompt by Anonymous"
     And I should see a link "prompt"
-    And I follow "prompt"
-    And I should see "Request by Anonymous"
+  When I follow "prompt"
+  Then I should see "Request by Anonymous"
   When I log out
     And I view the work "Fulfilled Story"
   Then I should see "Fulfilled Story"
     And I should see "In response to a prompt by Anonymous"
     And I should see a link "prompt"
-    And I follow "prompt"
-    And I should see "Request by Anonymous"
+  When I follow "prompt"
+  Then I should see "Request by Anonymous"
