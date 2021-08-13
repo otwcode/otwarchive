@@ -506,6 +506,7 @@ GEM
     unf_ext (0.0.7.7)
     unicode (0.4.4.4)
     unicode-display_width (1.7.0)
+    unicode_utils (1.4.0)
     unicorn (5.5.5)
       kgio (~> 2.6)
       raindrops (~> 0.7)
@@ -627,6 +628,7 @@ DEPENDENCIES
   transaction_isolation (= 1.0.5)
   transaction_retry
   unicode
+  unicode_utils (>= 1.4.0)
   unicorn (~> 5.5)
   unidecoder
   vcr (~> 3.0, >= 3.0.1)

@@ -1,4 +1,4 @@
-# encoding: UTF-8
+# encoding: utf-8
 require 'spec_helper'
 
 describe Tag do
@@ -147,6 +147,16 @@ describe Tag do
         @tag.save
 
         @tag.name = "Weiß Kreuz"
+        @tag.check_synonym
+        expect(@tag.errors).not_to be_empty
+        expect(@tag.save).to be_falsey
+      end
+
+      it "should ignore capitalization of ß" do
+        @tag.name = "Weiß Kreuz"
+        @tag.save
+
+        @tag.name = "WeiSS Kreuz"
         @tag.check_synonym
         expect(@tag.errors).to be_empty
         expect(@tag.save).to be_truthy
