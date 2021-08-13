@@ -190,9 +190,7 @@ class Tag < ApplicationRecord
     if !self.new_record? && self.name_changed?
       # ordinary wranglers can change case and accents but not punctuation or the actual letters in the name
       # admins can change tags with no restriction
-      unless User.current_user.is_a?(Admin) || (self.name.downcase == self.name_was.downcase) || (self.name.mb_chars.normalize(:kd).gsub(/[\u0300-\u036F]/u,'').downcase.to_s == self.name_was.mb_chars.normalize(:kd).gsub(/[\u0300-\u036F]/u,'').downcase.to_s)
-        self.errors.add(:name, "can only be changed by an admin.")
-      end
+      self.errors.add(:name, "can only be changed by an admin.") unless User.current_user.is_a?(Admin) || (self.name.downcase == self.name_was.downcase) || (self.name.mb_chars.normalize(:kd).gsub(/[\u0300-\u036F]/u, "").downcase.to_s == self.name_was.mb_chars.normalize(:kd).gsub(/[\u0300-\u036F]/u, "").downcase.to_s)
     end
     if self.merger_id
       if self.canonical?
