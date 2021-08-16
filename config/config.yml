@@ -460,6 +460,7 @@ PERMITTED_HOSTS: [
   "archiveofourown.org",
   "download.archiveofourown.org",
   "insecure.archiveofourown.org",
+  "secure.archiveofourown.org",
   "www.archiveofourown.org",
   # Staging
   "insecure-test.archiveofourown.org",
