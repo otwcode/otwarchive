@@ -457,6 +457,9 @@ FILTER_UPDATE_BATCH_SIZE: 100
 # environment.
 PERMITTED_HOSTS: [
   # Production
+  "104.153.64.122",
+  "208.85.241.152",
+  "208.85.241.157",
   "archiveofourown.org",
   "download.archiveofourown.org",
   "insecure.archiveofourown.org",
