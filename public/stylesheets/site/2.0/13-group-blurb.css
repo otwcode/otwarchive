@@ -334,11 +334,13 @@ blurbs on the manage collection items pages, mostly reseting styles inherited fr
 
 .bookmark div.user, .bookmark div.recent {
   clear: right;
+  box-sizing: border-box;
 }
 
 .bookmark .user {
   border: 1px solid #ccc;
   margin-top: 0.643em;
+  padding: 0.429em 0.75em;
   overflow: hidden;
 }
 
@@ -369,6 +371,11 @@ blurbs on the manage collection items pages, mostly reseting styles inherited fr
 
 .bookmark .user .datetime, .bookmark .work .datetime {
   top: 0;
+}
+
+.bookmark div.user .datetime {
+  top: 0.75em;
+  right: 0.75em;
 }
 
 .bookmark .short .status {
