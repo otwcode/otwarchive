@@ -1,3 +1,4 @@
+# coding: utf-8
 require 'spec_helper'
 
 describe Tag do
@@ -140,17 +141,6 @@ describe Tag do
         tag.check_synonym
         expect(tag.errors).to be_empty
         expect(tag.save).to be_truthy
-      end
-
-      it "is careful with the ß" do
-        tag = Tag.new
-        tag.name = "Wei Kreuz"
-        tag.save
-
-        tag.name = "Weiß Kreuz"
-        tag.check_synonym
-        expect(tag.errors).not_to be_empty
-        expect(tag.save).to be_falsey
       end
 
       it "ignores the capitalization of ß" do

@@ -187,12 +187,16 @@ class Tag < ApplicationRecord
     self.errors.add(:unwrangleable, "can't be set on an unsorted tag.") if is_a?(UnsortedTag)
   end
 
+  def normalize_for_tag_comparison(string)
+    UnicodeUtils.casefold(string).mb_chars.normalize(:kd).gsub(/[\u0300-\u036F]/u, "")
+  end
+
   before_validation :check_synonym
   def check_synonym
     if !self.new_record? && self.name_changed?
       # ordinary wranglers can change case and accents but not punctuation or the actual letters in the name
       # admins can change tags with no restriction
-      self.errors.add(:name, "can only be changed by an admin.") unless User.current_user.is_a?(Admin) || (self.name.downcase == self.name_was.downcase) || (UnicodeUtils.casefold(self.name).mb_chars.normalize(:kd).gsub(/[\u0300-\u036F]/u, "").to_s == UnicodeUtils.casefold(self.name_was).mb_chars.normalize(:kd).gsub(/[\u0300-\u036F]/u, "").to_s)
+      self.errors.add(:name, "can only be changed by an admin.") unless User.current_user.is_a?(Admin) || self.normalize_for_tag_comparison(self.name) == self.normalize_for_tag_comparison(self.name_was)
     end
     if self.merger_id
       if self.canonical?
