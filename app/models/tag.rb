@@ -490,7 +490,7 @@ class Tag < ApplicationRecord
     score ||= autocomplete_score
     if self.is_a?(Character) || self.is_a?(Relationship)
       parents.each do |parent|
-        REDIS_AUTOCOMPLETE.zadd("autocomplete_fandom_#{parent.name.downcase}_#{type.downcase}", score, autocomplete_value) if parent.is_a?(Fandom)
+        REDIS_AUTOCOMPLETE.zadd(self.transliterate("autocomplete_fandom_#{parent.name.downcase}_#{type.downcase}"), score, autocomplete_value) if parent.is_a?(Fandom)
       end
     end
     super
@@ -500,7 +500,7 @@ class Tag < ApplicationRecord
     super
     if self.is_a?(Character) || self.is_a?(Relationship)
       parents.each do |parent|
-        REDIS_AUTOCOMPLETE.zrem("autocomplete_fandom_#{parent.name.downcase}_#{type.downcase}", autocomplete_value) if parent.is_a?(Fandom)
+        REDIS_AUTOCOMPLETE.zrem(self.transliterate("autocomplete_fandom_#{parent.name.downcase}_#{type.downcase}"), autocomplete_value) if parent.is_a?(Fandom)
       end
     end
   end
@@ -509,7 +509,7 @@ class Tag < ApplicationRecord
     super
     if self.is_a?(Character) || self.is_a?(Relationship)
       parents.each do |parent|
-        REDIS_AUTOCOMPLETE.zrem("autocomplete_fandom_#{parent.name.downcase}_#{type.downcase}", autocomplete_value_before_last_save) if parent.is_a?(Fandom)
+        REDIS_AUTOCOMPLETE.zrem(self.transliterate("autocomplete_fandom_#{parent.name.downcase}_#{type.downcase}"), autocomplete_value_before_last_save) if parent.is_a?(Fandom)
       end
     end
   end
@@ -536,10 +536,10 @@ class Tag < ApplicationRecord
     fandoms.each do |single_fandom|
       if search_param.blank?
         # just return ALL the characters
-        results += REDIS_AUTOCOMPLETE.zrevrange("autocomplete_fandom_#{single_fandom}_#{tag_type}", 0, -1)
+        results += REDIS_AUTOCOMPLETE.zrevrange(self.transliterate("autocomplete_fandom_#{single_fandom}_#{tag_type}"), 0, -1)
       else
         search_regex = Tag.get_search_regex(search_param)
-        results += REDIS_AUTOCOMPLETE.zrevrange("autocomplete_fandom_#{single_fandom}_#{tag_type}", 0, -1).select {|tag| tag.match(search_regex)}
+        results += REDIS_AUTOCOMPLETE.zrevrange(self.transliterate("autocomplete_fandom_#{single_fandom}_#{tag_type}"), 0, -1).select { |tag| tag.match(search_regex) }
       end
     end
     if options[:fallback] && results.empty? && search_param.length > 0
