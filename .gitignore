@@ -75,3 +75,6 @@ coverage
 redis-cucumber-dump.rdb
 
 .rspec
+docker-compose.yml
+config/docker/database.yml
+.vscode/settings.json
