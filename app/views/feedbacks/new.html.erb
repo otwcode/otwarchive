@@ -53,7 +53,7 @@
           <%= f.collection_select(:language, @support_languages, :name, :name, { selected: @feedback.language || Language.default.name }) %>
         </dd>
         <dt class="required">
-          <%= f.label :summary, ts("Brief summary (required)") %>
+          <%= f.label :summary, ts("Brief summary of your question or problem (required)") %>
         </dt>
         <dd class="required">
           <%= f.text_field :summary, size: 60, class: "observe_textlength" %>
@@ -62,15 +62,15 @@
                 failureMessage: ts("Please enter a brief summary of your message")) %>
         </dd>
         <dt class="required">
-          <%= f.label :comment, ts("Your comment (required)") %>
+          <%= f.label :comment, ts("Your question or problem (required)") %>
         </dt>
         <dd class="required">
-          <%= f.text_area :comment, cols: 60, "aria-describedby" => "comment-field-description" %>
-          <%= live_validation_for_field("feedback_comment",
-                failureMessage: ts("Please enter your feedback")) %>
           <p class="footnote" id="comment-field-description">
             <%= ts("Please be as specific as possible, including error messages and/or links") %>
           </p>
+          <%= f.text_area :comment, cols: 60, "aria-describedby" => "comment-field-description" %>
+          <%= live_validation_for_field("feedback_comment",
+                failureMessage: ts("Please enter your feedback")) %>
         </dd>
       </dl>
     </fieldset>
