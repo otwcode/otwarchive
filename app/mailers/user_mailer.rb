@@ -207,15 +207,17 @@ class UserMailer < ActionMailer::Base
     @invalid_signups = invalid_signup_ids
     mail(
       to: @collection.get_maintainers_email,
-      subject: "[#{ArchiveConfig.APP_SHORT_NAME}][#{@collection.title}] Invalid Sign-ups Found"
+      subject: "[#{ArchiveConfig.APP_SHORT_NAME}][#{@collection.title}] Invalid sign-ups found"
     )
   end
 
+  # This is sent at the end of matching, i.e., after assignments are generated.
+  # It is also sent when assignments are regenerated.
   def potential_match_generation_notification(collection_id)
     @collection = Collection.find(collection_id)
     mail(
       to: @collection.get_maintainers_email,
-      subject: "[#{ArchiveConfig.APP_SHORT_NAME}][#{@collection.title}] Potential Assignment Generation Complete"
+      subject: "[#{ArchiveConfig.APP_SHORT_NAME}][#{@collection.title}] Potential assignment generation complete"
     )
   end
 
@@ -351,7 +353,7 @@ class UserMailer < ActionMailer::Base
       I18n.with_locale(Locale.find(user.preference.preferred_locale).iso) do
         mail(
           to: user.email,
-          subject: "[#{ArchiveConfig.APP_SHORT_NAME}] A Response to your Prompt"
+          subject: "[#{ArchiveConfig.APP_SHORT_NAME}] A response to your prompt"
         )
       end
     end

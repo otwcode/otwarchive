@@ -1,5 +1,5 @@
 <% content_for :message do %>
-Hello, <%= @user.login %>!
+<%= t("mailer.general.greeting.informal.addressed", name: @user.login) %>
 
 A gift work has been posted for you<% if @collection then %> in the <%= "#{@collection.title}" %> collection<% end %> at the Archive of Our Own!
 

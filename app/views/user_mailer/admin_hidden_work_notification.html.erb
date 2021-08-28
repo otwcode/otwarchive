@@ -1,11 +1,11 @@
 <% content_for :message do %>
-  <p><%= t(".hello", name: style_bold(@user.login)).html_safe %></p>
+  <p><%= t("mailer.general.greeting.formal", name: style_bold(@user.login)).html_safe %></p>
 
   <p><%= t(".html.hidden", title: style_creation_link(@work.title, @work)).html_safe %></p>
 
-  <p><%= t ".access" %></p>
+  <p><%= t(".access") %></p>
 
-  <p><%= t ".check_email" %></p>
+  <p><%= t(".check_email") %></p>
 
   <p><%= t(".html.tos_violation", tos_link: tos_link(t ".tos")).html_safe %></p>
 
