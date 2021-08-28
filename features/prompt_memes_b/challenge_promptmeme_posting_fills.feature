@@ -42,6 +42,7 @@ Feature: Prompt Meme Challenge
   Then I should see "Kinky Story"
     And I should find a list for associations
     And I should see "In response to a prompt by Anonymous in the promptcollection collection"
+    And I should see a link "prompt"
     And 1 email should be delivered to "my1@e.org"
 # TODO: when work_anonymous is implemented, test that the prompt filler can be anon too
 
@@ -458,3 +459,41 @@ Feature: Prompt Meme Challenge
   Then I should see "In response to a prompt by myname4"
     And I should see "Fandom: Stargate Atlantis"
     And I should see "Anonymous" within ".byline"
+    And I should see a link "prompt"
+
+  Scenario: Work links to the prompt it fulfils, for all users
+
+  Given I have Battle 12 prompt meme fully set up
+    And I am logged in as "myname1"
+    And I sign up for Battle 12 with combination B
+    And I am logged in as "myname4"
+    And I claim a prompt from "Battle 12"
+    And I fulfill my claim
+    And I reveal works for "Battle 12"
+    And I view the work "Fulfilled Story"
+  Then I should see "Fulfilled Story"
+    And I should see "In response to a prompt by Anonymous"
+    And I should see a link "prompt"
+  When I follow "prompt"
+  Then I should see "Request by Anonymous"
+  When I am logged in as "myname2"
+    And I view the work "Fulfilled Story"
+  Then I should see "Fulfilled Story"
+    And I should see "In response to a prompt by Anonymous"
+    And I should see a link "prompt"
+  When I follow "prompt"
+  Then I should see "Request by Anonymous"
+  When I am logged in as "mod"
+    And I view the work "Fulfilled Story"
+  Then I should see "Fulfilled Story"
+    And I should see "In response to a prompt by Anonymous"
+    And I should see a link "prompt"
+  When I follow "prompt"
+  Then I should see "Request by Anonymous"
+  When I log out
+    And I view the work "Fulfilled Story"
+  Then I should see "Fulfilled Story"
+    And I should see "In response to a prompt by Anonymous"
+    And I should see a link "prompt"
+  When I follow "prompt"
+  Then I should see "Request by Anonymous"

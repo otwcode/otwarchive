@@ -1,23 +1,9 @@
 <!--Descriptive page name, messages and instructions-->
-<% if @commentable.nil? %>
-  <!-- the most recent comments -->
-  <% cache(logged_in? ? 'latest_comments' : 'latest_comments_public', skip_digest: true) do %>
-    <h2 class="heading"><%= t('.viewing_last', :default => "Viewing %{count} recent comments", :count => @comments.length) %></h2>
-    <ol class="comment index group">
-      <% for comment in @comments %>
-        <% if comment.approved or logged_in? %>
-          <%= render :partial => 'comments/single_comment_abbreviated', :locals => {:single_comment => comment} %>
-        <% end %>
-      <% end %>
-    </ol>
-  <% end %>
-<% else %>
-  <h2 class="heading"><%= title_for_comment_page(@commentable) %></h2> 
+<h2 class="heading"><%= title_for_comment_page(@commentable) %></h2> 
 <!--/descriptions-->
 
 <!--main content-->
-  <%= render :partial => 'comments/commentable', :locals => { :commentable => @commentable } %>
-<% end %>
+<%= render "comments/commentable", commentable: @commentable %>
 <!--main content-->
 
 <!--subnav-->

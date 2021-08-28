@@ -55,6 +55,100 @@ describe BookmarksController do
     end
   end
 
+  describe "create" do
+    let(:work) { create(:work) }
+
+    context "when user is not logged in" do
+      it "redirects to login" do
+        post :create, params: { work_id: work.id }
+        it_redirects_to_user_login
+      end
+    end
+
+    context "when user is logged in" do
+      let(:user) { create(:user) }
+      let(:pseud) { user.default_pseud }
+
+      before do
+        fake_login_known_user(user)
+      end
+
+      context "when pseud doesn't belong to the user" do
+        let(:other_user) { create(:user) }
+
+        it "fails to bookmark the work" do
+          post :create, params: { work_id: work.id, bookmark: { pseud_id: other_user.default_pseud.id } }
+          it_redirects_to_with_error(root_path, "You can't bookmark with that pseud.")
+        end
+      end
+
+      context "when user never bookmarked the work before" do
+        shared_examples "all is correct" do
+          it "bookmarks successfully" do
+            post :create, params: { work_id: work.id, bookmark: { pseud_id: pseud.id } }
+
+            bookmark = assigns(:bookmark)
+            success_msg = "Bookmark was successfully created. It should appear in bookmark listings within the next few minutes."
+            it_redirects_to_with_notice(bookmark_path(bookmark), success_msg)
+            expect(bookmark.bookmarkable_id).to eq(work.id)
+            expect(bookmark.bookmarkable_type).to eq("Work")
+            expect(bookmark.pseud.id).to eq(pseud.id)
+          end
+        end
+
+        context "when user bookmarks a work" do
+          it_behaves_like "all is correct"
+        end
+
+        context "when user wants to bookmark a second work" do
+          let(:other_work) { create(:work) }
+          let!(:other_bookmark) { create(:bookmark, bookmarkable: other_work, pseud: pseud) }
+
+          it_behaves_like "all is correct"
+        end
+
+        context "when two users want to bookmark the same work" do
+          let(:other_user) { create(:user) }
+          let!(:other_bookmark) { create(:bookmark, bookmarkable: work, pseud: other_user.default_pseud) }
+
+          it_behaves_like "all is correct"
+        end
+
+        context "when user wants to bookmark a work with same id as bookmarked for other bookmarkable type" do
+          # no series created yet, all IDs are free
+          let(:series_with_same_id) { create(:series, id: work.id) }
+          let!(:series_bookmark) { create(:bookmark, bookmarkable: series_with_same_id, pseud: pseud) }
+
+          it_behaves_like "all is correct"
+        end
+      end
+
+      context "when user bookmarked the work before" do
+        shared_examples "work is already bookmarked by the user" do
+          it "fails to bookmark the work" do
+            post :create, params: { work_id: work.id, bookmark: { pseud_id: pseud.id } }
+
+            expect(response).to render_template("new")
+            expect(assigns(:bookmark).errors.full_messages).to include "You have already bookmarked that."
+          end
+        end
+
+        context "when user uses same pseud" do
+          let!(:old_bookmark) { create(:bookmark, bookmarkable: work, pseud: pseud) }
+
+          it_behaves_like "work is already bookmarked by the user"
+        end
+
+        context "when user uses different pseud" do
+          let(:other_pseud) { create(:pseud, user: user) }
+          let!(:old_bookmark) { create(:bookmark, bookmarkable: work, pseud: other_pseud) }
+
+          it_behaves_like "work is already bookmarked by the user"
+        end
+      end
+    end
+  end
+
   describe "edit" do
     context "with javascript" do
       let(:bookmark) { create(:bookmark) }
@@ -63,6 +157,38 @@ describe BookmarksController do
         fake_login_known_user(bookmark.pseud.user)
         get :edit, params: { id: bookmark.id, format: :js }, xhr: true
         expect(response).to render_template("bookmark_form_dynamic")
+      end
+    end
+  end
+
+  describe "update" do
+    context "when user updates old bookmarks created for the same bookmarkable (AO3-5565)" do
+      before do
+        # disable bookmarks validations to simulate previously created bookmarks
+        allow_any_instance_of(Bookmark).to receive(:validate).and_return(true)
+        allow_any_instance_of(Bookmark).to receive(:valid?).and_return(true)
+
+        fake_login_known_user(bookmark.pseud.user)
+      end
+
+      let(:user) { create(:user) }
+      let(:pseud) { user.default_pseud }
+      let(:other_pseud) { create(:pseud, user: user) }
+      let!(:bookmark) { create(:bookmark, pseud: pseud, bookmarker_notes: "My first Bookmark") }
+      let!(:bookmark2) { create(:bookmark, bookmarkable_id: bookmark.bookmarkable_id, pseud: other_pseud, bookmarker_notes: "My second Bookmark") }
+
+      it "first created bookmark can be updated" do
+        put :update, params: { bookmark: { bookmarker_notes: "Updated first bookmark", pseud_id: other_pseud.id }, id: bookmark.id }
+        it_redirects_to_with_notice(bookmark_path(bookmark), "Bookmark was successfully updated.")
+        expect(assigns(:bookmark).bookmarker_notes).to include("Updated first bookmark")
+        expect(assigns(:bookmark).pseud_id).to eq(other_pseud.id)
+      end
+
+      it "second created bookmark can be updated" do
+        put :update, params: { bookmark: { bookmarker_notes: "Updated second bookmark", pseud_id: other_pseud.id }, id: bookmark2.id }
+        it_redirects_to_with_notice(bookmark_path(bookmark2), "Bookmark was successfully updated.")
+        expect(assigns(:bookmark).bookmarker_notes).to include("Updated second bookmark")
+        expect(assigns(:bookmark).pseud_id).to eq(other_pseud.id)
       end
     end
   end

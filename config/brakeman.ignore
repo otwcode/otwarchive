@@ -675,26 +675,6 @@
       "note": ""
     },
     {
-      "warning_type": "Denial of Service",
-      "warning_code": 76,
-      "fingerprint": "4d73121092fa0a2969beb6a30406f1eaf92368c96a003244f8a9495a9010d1a3",
-      "check_name": "RegexDoS",
-      "message": "Parameter value used in regex",
-      "file": "app/controllers/autocomplete_controller.rb",
-      "line": 141,
-      "link": "http://brakemanscanner.org/docs/warning_types/denial_of_service/",
-      "code": "/#{params[:term]}/i",
-      "render_path": null,
-      "location": {
-        "type": "method",
-        "class": "AutocompleteController",
-        "method": "encoding"
-      },
-      "user_input": "params[:term]",
-      "confidence": "High",
-      "note": ""
-    },
-    {
       "warning_type": "Cross Site Scripting",
       "warning_code": 2,
       "fingerprint": "4f78e7c315b88714e75a021b21acc1f20dd1148c558a4c8d1ad2b5378ab73165",
@@ -1095,26 +1075,6 @@
         "method": "Skin.load_site_css"
       },
       "user_input": "(Skin.site_skins_dir + version)",
-      "confidence": "High",
-      "note": ""
-    },
-    {
-      "warning_type": "Denial of Service",
-      "warning_code": 76,
-      "fingerprint": "77deaa30a5237709bf458d4d64dbedfebc8a669bd5c72274b2e65ba2d9d9ea92",
-      "check_name": "RegexDoS",
-      "message": "Parameter value used in regex",
-      "file": "app/controllers/autocomplete_controller.rb",
-      "line": 172,
-      "link": "http://brakemanscanner.org/docs/warning_types/denial_of_service/",
-      "code": "/#{params[:term]}/",
-      "render_path": null,
-      "location": {
-        "type": "method",
-        "class": "AutocompleteController",
-        "method": "potential_matches"
-      },
-      "user_input": "params[:term]",
       "confidence": "High",
       "note": ""
     },

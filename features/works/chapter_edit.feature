@@ -595,3 +595,19 @@ Feature: Edit chapters
       And I follow "Chapter 2"
       And I follow "Edit Chapter"
       And I should see "Remove Me As Chapter Co-Creator"
+
+  Scenario: You can't add a chapter to a work with too many tags
+    Given the user-defined tag limit is 7
+      And I am logged in as a random user
+      And I post the work "Over the Limit"
+      And the work "Over the Limit" has 2 fandom tags
+      And the work "Over the Limit" has 2 character tags
+      And the work "Over the Limit" has 2 relationship tags
+      And the work "Over the Limit" has 2 freeform tags
+    When I follow "Add Chapter"
+      And I fill in "content" with "this is my second chapter"
+      And I press "Post"
+    Then I should see "Fandom, relationship, character, and additional tags must not add up to more than 7. Your work has 8 of these tags, so you must remove 1 of them."
+    When I view the work "Over the Limit"
+    Then I should see "1/1"
+      And I should not see "Next Chapter"

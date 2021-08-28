@@ -167,6 +167,13 @@ group :development do
   gem 'active_record_query_trace', '~> 1.6', '>= 1.6.1'
 end
 
+group :linters do
+  gem "erb_lint", "0.0.29"
+  gem "rubocop", "0.83.0"
+  gem "rubocop-rails", "2.6.0"
+  gem "rubocop-rspec", "1.41.0"
+end
+
 group :test, :development, :staging do
   gem 'bullet', '>= 5.7.3'
 end

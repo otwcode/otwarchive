@@ -1,6 +1,6 @@
 class PromptsController < ApplicationController
 
-  before_action :users_only
+  before_action :users_only, except: [:show]
   before_action :load_collection, except: [:index]
   before_action :load_challenge, except: [:index]
   before_action :load_prompt_from_id, only: [:show, :edit, :update, :destroy]

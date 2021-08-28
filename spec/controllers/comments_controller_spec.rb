@@ -384,21 +384,16 @@ describe CommentsController do
         end
       end
 
-      # TODO: AO3-6038 Because this is quite wrong.
       context "when the commentable is spam" do
-        let(:comment) { create(:comment, approved: false) }
+        let(:spam_comment) { create(:comment) }
 
-        it "creates comment, gives success notice, and marks previous comment as approved" do
-          post :create, params: { comment_id: comment.id, comment: anon_comment_attributes }
+        before { spam_comment.update_attribute(:approved, false) }
 
-          latest_comment = Comment.last
-          expect(latest_comment.commentable).to eq comment
-          expect(latest_comment.name).to eq anon_comment_attributes[:name]
-          expect(latest_comment.email).to eq anon_comment_attributes[:email]
-          expect(latest_comment.comment_content).to include anon_comment_attributes[:comment_content]
+        it "shows an error and redirects if commentable is a comment marked as spam" do
+          post :create, params: { comment_id: spam_comment.id, comment: anon_comment_attributes }
 
-          expect(flash[:comment_notice]).to eq "Comment created!"
-          expect(comment.reload.approved).to be_truthy
+          it_redirects_to_with_error("/where_i_came_from",
+                                     "Sorry, you can't reply to a comment that has been marked as spam.")
         end
       end
     end
@@ -2114,15 +2109,18 @@ describe CommentsController do
   end
 
   describe "GET #index" do
-    it "errors when not logged in as admin" do
+    it "redirects to 404 when not logged in as admin" do
       get :index
-      expect(flash[:error]).to eq "Sorry, you don't have permission to access that page."
+
+      it_redirects_to_simple("/404")
     end
 
-    it "renders :index template when logged in as admin" do
+    it "redirects to 404 when logged in as admin" do
       fake_login_admin(create(:admin))
+
       get :index
-      expect(response).to render_template("index")
+
+      it_redirects_to_simple("/404")
     end
   end
 
