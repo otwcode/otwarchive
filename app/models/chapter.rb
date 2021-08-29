@@ -85,7 +85,7 @@ class Chapter < ApplicationRecord
   def fix_positions_before_destroy
     if work&.persisted? && position
       chapters = work.chapters.where(["position > ?", position])
-      chapters.each{|c| c.update_attribute(:position, c.position + 1)}
+      chapters.each { |c| c.update_attribute(:position, c.position - 1) }
     end
   end
 
