@@ -36,7 +36,7 @@
       <li><%= ts("General site policy questions") %></li>
     </ul>
     <p><%= ts("<strong>We respond to every report we receive, but we are a small volunteer team.</strong> For this reason, we ask you to not submit multiple reports regarding any one issue, or encourage other people to report the same issue, unless there is additional information to offer.").html_safe %></p>
-    <p><%= ts("<strong>We can answer Support inquiries in %{list}.</strong> Please allow for additional delay for responses in any language other than English."), list: @support_languages.map(&:name).to_sentence).html_safe %></p>
+    <p><%= ts("<strong>We can answer Support inquiries in %{list}.</strong> Please allow for additional delay for responses in any language other than English.", list: @support_languages.map(&:name).to_sentence).html_safe %></p>
   </div>
   <%= form_for(@feedback, html: {class: "post feedback"}) do |f| %>
     <fieldset>
