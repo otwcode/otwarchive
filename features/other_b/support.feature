@@ -35,7 +35,7 @@ Feature: Filing a support request
     And I follow "Support and Feedback"
   When I select "Deutsch" from "feedback_language"
     And I fill in "Brief summary" with "Just a brief note"
-    And I fill in "Your comment" with "Men have their old boys' network, but we have the OTW. You guys rock!"
+    And I fill in "Your question or problem" with "Men have their old boys' network, but we have the OTW. You guys rock!"
     And I fill in "Your email (required)" with ""
     And all emails have been delivered
     And I press "Send"
