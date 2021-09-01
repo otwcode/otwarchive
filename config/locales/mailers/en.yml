@@ -257,6 +257,10 @@ en:
         html: "For more information, visit our %{faq_link}."
         text: "For more information, visit our Collections and Challenges FAQ: %{faq_url}"
       faq_link_text: "Collections and Challenges FAQ"
+    recipient_notification:
+      subject:
+        collection: "[%{app_name}][%{collection_title}] A gift work for you from %{collection_title}"
+        no_collection: "[%{app_name}] A gift work for you"
   users:
     mailer:
       reset_password_instructions:

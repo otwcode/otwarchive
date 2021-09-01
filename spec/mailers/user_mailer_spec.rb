@@ -682,7 +682,7 @@ describe UserMailer do
       it_behaves_like "an email with a valid sender"
 
       it "has the correct subject line" do
-        subject = "[#{ArchiveConfig.APP_SHORT_NAME}][#{collection.title}] A Gift Work For You From #{collection.title}"
+        subject = "[#{ArchiveConfig.APP_SHORT_NAME}][#{collection.title}] A gift work for you from #{collection.title}"
         expect(email).to have_subject(subject)
       end
 
@@ -713,7 +713,7 @@ describe UserMailer do
       it_behaves_like "an email with a valid sender"
 
       it "has the correct subject line" do
-        subject = "[#{ArchiveConfig.APP_SHORT_NAME}] A Gift Work For You "
+        subject = "[#{ArchiveConfig.APP_SHORT_NAME}] A gift work for you"
         expect(email).to have_subject(subject)
       end
 
