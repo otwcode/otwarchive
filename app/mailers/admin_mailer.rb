@@ -13,7 +13,7 @@ class AdminMailer < ActionMailer::Base
       subject: "[#{ArchiveConfig.APP_SHORT_NAME}] Support - #{strip_html_breaks_simple(@feedback.summary)}"
     )
   end
-  
+
   # Sends email to an admin when a new comment is created on an admin post
   def comment_notification(comment_id)
     # admin = Admin.find(admin_id)
