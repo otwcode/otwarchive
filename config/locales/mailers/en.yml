@@ -70,7 +70,7 @@ en:
         tos_violation: "If your work was hidden due to being in violation of the Archive of Our Own's %{tos_link}, you will be required to take action to correct the violation. Failure to bring your work into compliance with the Terms of Service may lead to your work being deleted from the Archive."
         help: "If you are uncertain why your work was hidden, and you have not received further communication regarding this matter, please %{contact_abuse_link} directly."
       text:
-        hidden: "Your work %{title} (%{work_url}) has been hidden by the Policy & Abuse team and is no longer publicly accessible."
+        hidden: "Your work \"%{title}\" (%{work_url}) has been hidden by the Policy & Abuse team and is no longer publicly accessible."
         tos_violation: "If your work was hidden due to being in violation of the Archive of Our Own's Terms of Service (%{tos_url}), you will be required to take action to correct the violation. Failure to bring your work into compliance with the Terms of Service may lead to your work being deleted from the Archive."
         help: "If you are uncertain why your work was hidden, and you have not received further communication regarding this matter, please contact Policy & Abuse directly: %{contact_abuse_url}."
     delete_work_notification:
@@ -215,7 +215,7 @@ en:
         ao3_news: "AO3 News"
         faq_page: "FAQ page"
         tutorial_page: "tutorial page"
-        contact_support: "contact AO3 support"
+        contact_support: "contact AO3 Support"
         part3: "If this is a mistake and these are not your works, please don't delete them! Please just %{open_doors_link} and we will sort it out."
         contact_open_doors: "contact Open Doors"
         part4: "Depending on the archive, your works may have been imported restricted to registered users only (to keep them out of Google searches). If this is the case, the works will only be accessible by logged-in users unless you choose to make them fully visible. For help unlocking, orphaning, or deleting your works, please %{support_link}."

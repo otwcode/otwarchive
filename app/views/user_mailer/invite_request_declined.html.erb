@@ -5,8 +5,6 @@
   <p><%= t(".reason") %></p>
   <p><%= style_quote(@reason) %></p>
 
-  <p><%= t("mailer.general.closing.formal") %></p>
-  <p><%= style_link(t("mailer.general.signature.app_short_name"), root_url) %></p>
+  <p><%= t("mailer.general.closing.formal") %><br />
+  <%= t("mailer.general.signature.app_short_name") %></p>
 <% end %>
-
-
