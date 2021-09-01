@@ -1,6 +1,11 @@
 <% content_for :message do %>
   <p>
-    Hi <%= @username.present? ? @username + "!" : "!" %>
+    <% if @username.present? %>
+      <%= t("mailer.general.greeting.informal.addressed",
+            name: style_bold(@username)).html_safe %>
+    <% else %>
+      <%= t("mailer.general.greeting.informal.unaddressed") %>
+    <% end %>
   </p>
 
   <p>
@@ -10,7 +15,7 @@
     the information you submitted through the Technical Support and Feedback
     form:
   </p>
-  
+
   <%= style_quote("<b>" + (raw @summary) + "</b>" + (raw @comment)) %>
 
   <p>
@@ -19,8 +24,8 @@
   </p>
 
   <p>
-    Regards,<br/>
-    the AO3 Support team
+    <%= t("mailer.general.closing.formal") %><br/>
+    <%= style_bold(t("mailer.general.signature.support")) %>
   </p>
 <% end %>
 

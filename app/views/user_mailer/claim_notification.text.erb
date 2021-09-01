@@ -1,5 +1,5 @@
 <% content_for :message do %>
-  Hello from the Archive of Our Own!
+  <%= t("mailer.general.greeting.introductory") %>
 
   You're receiving this e-mail because you had works in a fanworks archive that has been imported by Open Doors (http://opendoors.transformativeworks.org) into the Archive of Our Own (AO3 - <%= root_url %>). Because this e-mail address is connected to one registered on the imported archive, the associated fanworks (listed below) have been automatically added to your AO3 account.
 
@@ -24,7 +24,7 @@
 
   If you're contacting us, please add email addresses from @transformativeworks.org to your list of safe contacts and check your spam folders for our reply.
 
-  Best,
-  The Open Doors team
-  Organization for Transformative Works
+  <%= t("mailer.general.closing.informal") %>
+  <%= t("mailer.general.signature.open_doors") %>
+  <%= t("mailer.general.signature.parent_org") %>
 <% end %>

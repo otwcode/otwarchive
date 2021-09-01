@@ -9,10 +9,15 @@ module MailerHelper
     link_to(body.html_safe, url, html_options)
   end
 
-  # For work, chapter, and series titles
+  # For work, chapter, and series links
   def style_creation_link(title, url, html_options = {})
     html_options[:style] = "color:#990000"
     ("<i><b>" + link_to(title.html_safe, url, html_options) + "</b></i>").html_safe
+  end
+
+  # For work, chapter, and series titles
+  def style_creation_title(title)
+    ("<i><b style=\"color:#990000\">" + title.html_safe + "</b></i>").html_safe
   end
 
   def style_footer_link(body, url, html_options = {})

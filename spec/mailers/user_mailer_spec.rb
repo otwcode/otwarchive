@@ -15,6 +15,7 @@ describe UserMailer do
     shared_examples_for "a claim notification" do
       it "contains the text for a claim email" do
         expect(part).to include("You're receiving this e-mail because you had works in a fanworks archive that has been imported")
+        expect(part).to include("The Open Doors team")
       end
     end
 
@@ -100,6 +101,7 @@ describe UserMailer do
     shared_examples_for "an invitation to claim content" do
       it "contains the text for an invitation claim email" do
         expect(part).to include("You're receiving this e-mail because an archive has recently been imported by")
+        expect(part).to include("The Open Doors team")
       end
     end
 
@@ -231,7 +233,7 @@ describe UserMailer do
     it_behaves_like "an email with a valid sender"
 
     it "has the correct subject line" do
-      subject = "[#{ArchiveConfig.APP_SHORT_NAME}][#{collection.title}] Your Assignment!"
+      subject = "[#{ArchiveConfig.APP_SHORT_NAME}][#{collection.title}] Your assignment!"
       expect(email).to have_subject(subject)
     end
 
@@ -264,7 +266,7 @@ describe UserMailer do
     it_behaves_like "an email with a valid sender"
 
     it "has the correct subject line" do
-      subject = "[#{ArchiveConfig.APP_SHORT_NAME}] Additional Invite Code Request Declined"
+      subject = "[#{ArchiveConfig.APP_SHORT_NAME}] Additional invitation request declined"
       expect(email).to have_subject(subject)
     end
 
@@ -331,7 +333,7 @@ describe UserMailer do
       it_behaves_like "an email with a valid sender"
 
       it "has the correct subject line" do
-        expect(email.subject).to eq("[#{ArchiveConfig.APP_SHORT_NAME}] New Invitations")
+        expect(email.subject).to eq("[#{ArchiveConfig.APP_SHORT_NAME}] New invitations")
       end
 
       # Test both body contents
@@ -361,7 +363,7 @@ describe UserMailer do
       it_behaves_like "an email with a valid sender"
 
       it "has the correct subject line" do
-        expect(email.subject).to eq("[#{ArchiveConfig.APP_SHORT_NAME}] New Invitations")
+        expect(email.subject).to eq("[#{ArchiveConfig.APP_SHORT_NAME}] New invitations")
       end
 
       # Test both body contents
@@ -474,7 +476,7 @@ describe UserMailer do
     let(:email) { UserMailer.abuse_report(report.id) }
 
     it "has the correct subject" do
-      expect(email).to have_subject "[#{ArchiveConfig.APP_SHORT_NAME}] Your Abuse Report"
+      expect(email).to have_subject "[#{ArchiveConfig.APP_SHORT_NAME}] Your abuse report"
     end
 
     it "delivers to the user who filed the report" do
@@ -496,6 +498,304 @@ describe UserMailer do
       it "contains the comment and the URL reported" do
         expect(email).to have_text_part_content(report.comment)
         expect(email).to have_text_part_content(report.url)
+      end
+    end
+  end
+
+  describe "feedback" do
+    context "when username is present" do
+      subject(:email) { UserMailer.feedback(feedback.id) }
+
+      let(:feedback) { create(:feedback) }
+
+      # Test the headers
+      it_behaves_like "an email with a valid sender"
+
+      it "has the correct subject line" do
+        subject = "[#{ArchiveConfig.APP_SHORT_NAME}] Support - #{feedback.summary}"
+        expect(email).to have_subject(subject)
+      end
+
+      # Test both body contents
+      it_behaves_like "a multipart email"
+
+      describe "HTML version" do
+        it "has the correct content" do
+          expect(email).to have_html_part_content("Hi!")
+          expect(email).to have_html_part_content(">The AO3 Support team</b>")
+        end
+      end
+
+      describe "text version" do
+        it "has the correct content" do
+          expect(email).to have_text_part_content("Hi!")
+          expect(email).to have_text_part_content("The AO3 Support team")
+        end
+      end
+    end
+
+    context "when username is not present" do
+      subject(:email) { UserMailer.feedback(feedback.id) }
+
+      let(:feedback) { create(:feedback, username: "A. Name") }
+
+      # Test the headers
+      it_behaves_like "an email with a valid sender"
+
+      it "has the correct subject line" do
+        subject = "[#{ArchiveConfig.APP_SHORT_NAME}] Support - #{feedback.summary}"
+        expect(email).to have_subject(subject)
+      end
+
+      # Test both body contents
+      it_behaves_like "a multipart email"
+
+      describe "HTML version" do
+        it "has the correct content" do
+          expect(email).to have_html_part_content("Hi, <b")
+          expect(email).to have_html_part_content("#{feedback.username}</b>")
+          expect(email).to have_html_part_content(">The AO3 Support team</b>")
+        end
+      end
+
+      describe "text version" do
+        it "has the correct content" do
+          expect(email).to have_text_part_content("Hi, #{feedback.username}!")
+          expect(email).to have_text_part_content("The AO3 Support team")
+        end
+      end
+    end
+  end
+
+  describe "admin_spam_work_notification" do
+    subject(:email) { UserMailer.admin_spam_work_notification(work.id, user.id) }
+
+    let(:user) { create(:user) }
+    let(:work) { create(:work, authors: [user.pseuds.first]) }
+
+    # Test the headers
+    it_behaves_like "an email with a valid sender"
+
+    it "has the correct subject line" do
+      subject = "[#{ArchiveConfig.APP_SHORT_NAME}] Your work was hidden as spam"
+      expect(email.subject).to eq(subject)
+    end
+
+    # Test both body contents
+    it_behaves_like "a multipart email"
+
+    it_behaves_like "a translated email"
+
+    describe "HTML version" do
+      it "has the correct content" do
+        expect(email).to have_html_part_content("Dear <b")
+        expect(email).to have_html_part_content("#{user.login}</b>,")
+        expect(email).to have_html_part_content("> has been flagged by our automated system")
+      end
+    end
+
+    describe "text version" do
+      it "has the correct content" do
+        expect(email).to have_text_part_content("Dear #{user.login},")
+        expect(email).to have_text_part_content(") has been flagged by our automated system")
+      end
+    end
+  end
+
+  describe "invited_to_collection_notification" do
+    subject(:email) { UserMailer.invited_to_collection_notification(user.id, work.id, collection.id) }
+
+    let(:collection) { create(:collection) }
+    let(:user) { create(:user) }
+    let(:work) { create(:work, authors: [user.pseuds.first]) }
+
+    # Test the headers
+    it_behaves_like "an email with a valid sender"
+
+    it "has the correct subject line" do
+      subject = "[#{ArchiveConfig.APP_SHORT_NAME}][#{collection.title}] Request to include work in a collection"
+      expect(email.subject).to eq(subject)
+    end
+
+    # Test both body contents
+    it_behaves_like "a multipart email"
+
+    it_behaves_like "a translated email"
+
+    describe "HTML version" do
+      it "has the correct content" do
+        expect(email).to have_html_part_content("Dear <b")
+        expect(email).to have_html_part_content("#{user.login}</b>,")
+      end
+    end
+
+    describe "text version" do
+      it "has the correct content" do
+        expect(email).to have_text_part_content("Dear #{user.login},")
+      end
+    end
+  end
+
+  describe "added_to_collection_notification" do
+    subject(:email) { UserMailer.added_to_collection_notification(user.id, work.id, collection.id) }
+
+    let(:collection) { create(:collection) }
+    let(:user) { create(:user) }
+    let(:work) { create(:work, authors: [user.pseuds.first]) }
+
+    # Test the headers
+    it_behaves_like "an email with a valid sender"
+
+    it "has the correct subject line" do
+      subject = "[#{ArchiveConfig.APP_SHORT_NAME}][#{collection.title}] Your work was added to a collection"
+      expect(email.subject).to eq(subject)
+    end
+
+    # Test both body contents
+    it_behaves_like "a multipart email"
+
+    it_behaves_like "a translated email"
+
+    describe "HTML version" do
+      it "has the correct content" do
+        expect(email).to have_html_part_content("Dear <b")
+        expect(email).to have_html_part_content("#{user.login}</b>,")
+      end
+    end
+
+    describe "text version" do
+      it "has the correct content" do
+        expect(email).to have_text_part_content("Dear #{user.login},")
+      end
+    end
+  end
+
+  describe "recipient_notification" do
+    context "when collection is present" do
+      subject(:email) { UserMailer.recipient_notification(user.id, work.id, collection.id) }
+
+      let(:user) { create(:user) }
+      let(:work) { create(:work) }
+      let(:collection) { create(:collection) }
+
+      # Test the headers
+      it_behaves_like "an email with a valid sender"
+
+      it "has the correct subject line" do
+        subject = "[#{ArchiveConfig.APP_SHORT_NAME}][#{collection.title}] A Gift Work For You From #{collection.title}"
+        expect(email).to have_subject(subject)
+      end
+
+      # Test both body contents
+      it_behaves_like "a multipart email"
+
+      describe "HTML version" do
+        it "has the correct content" do
+          expect(email).to have_html_part_content("Hi, <b")
+          expect(email).to have_html_part_content("#{user.login}</b>")
+        end
+      end
+
+      describe "text version" do
+        it "has the correct content" do
+          expect(email).to have_text_part_content("Hi, #{user.login}!")
+        end
+      end
+    end
+
+    context "when no collection is present" do
+      subject(:email) { UserMailer.recipient_notification(user.id, work.id) }
+
+      let(:user) { create(:user) }
+      let(:work) { create(:work) }
+
+      # Test the headers
+      it_behaves_like "an email with a valid sender"
+
+      it "has the correct subject line" do
+        subject = "[#{ArchiveConfig.APP_SHORT_NAME}] A Gift Work For You "
+        expect(email).to have_subject(subject)
+      end
+
+      # Test both body contents
+      it_behaves_like "a multipart email"
+
+      describe "HTML version" do
+        it "has the correct content" do
+          expect(email).to have_html_part_content("Hi, <b")
+          expect(email).to have_html_part_content("#{user.login}</b>")
+        end
+      end
+
+      describe "text version" do
+        it "has the correct content" do
+          expect(email).to have_text_part_content("Hi, #{user.login}")
+        end
+      end
+    end
+  end
+
+  describe "potential_match_generation_notification" do
+    subject(:email) { UserMailer.potential_match_generation_notification(collection.id) }
+
+    let(:collection) { create(:collection) }
+
+    # Test the headers
+    it_behaves_like "an email with a valid sender"
+
+    it "has the correct subject line" do
+      subject = "[#{ArchiveConfig.APP_SHORT_NAME}][#{collection.title}] Potential assignment generation complete"
+      expect(email.subject).to eq(subject)
+    end
+
+    # Test both body contents
+    it_behaves_like "a multipart email"
+
+    it_behaves_like "a translated email"
+
+    describe "HTML version" do
+      it "has the correct content" do
+        expect(email).to have_html_part_content("potential assignments for your challenge collection, <")
+        expect(email).to have_html_part_content("challenge's <")
+      end
+    end
+
+    describe "text version" do
+      it "has the correct content" do
+        expect(email).to have_text_part_content("potential assignments for your challenge collection \"#{collection.title}\"")
+        expect(email).to have_text_part_content("challenge's Matching page:")
+      end
+    end
+  end
+
+  describe "invalid_signup_notification" do
+    subject(:email) { UserMailer.invalid_signup_notification(collection.id, [signup.id]) }
+
+    let(:collection) { create(:collection) }
+    let(:signup) { create(:challenge_signup) }
+
+    # Test the headers
+    it_behaves_like "an email with a valid sender"
+
+    it "has the correct subject line" do
+      subject = "[#{ArchiveConfig.APP_SHORT_NAME}][#{collection.title}] Invalid sign-ups found"
+      expect(email.subject).to eq(subject)
+    end
+
+    # Test both body contents
+    it_behaves_like "a multipart email"
+
+    it_behaves_like "a translated email"
+
+    describe "HTML version" do
+      it "has the correct content" do
+        expect(email).to have_html_part_content("invalid sign-ups in your challenge <")
+      end
+    end
+
+    describe "text version" do
+      it "has the correct content" do
+        expect(email).to have_text_part_content("invalid sign-ups in your challenge \"#{collection.title}\"")
       end
     end
   end
