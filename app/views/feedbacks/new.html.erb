@@ -21,8 +21,8 @@
 <% else %>
   <h3 class="heading"><%= ts("Please use this form for questions about how to use the Archive and for reporting any technical problems.") %></h3>
   <div class="userstuff">
-    <p><%= ts("For current updates on Archive performance or downtime, please check out our Twitter feed: <a href='https://twitter.com/ao3_status'>@AO3_status</a>.").html_safe %></p>
-    <p><%= ts("For reports of violations of the Terms of Service such as harassment, spam, or plagiarism, or if you believe your account has been hacked, please <a href='/abuse_reports/new'>contact our Policy and Abuse team</a> instead. We cannot act on these reports or provide information about Policy and Abuse cases.").html_safe %></p>
+    <p><%= ts("For current updates on Archive performance or downtime, please check out our Twitter feed: %{twitter_link}.",  twitter_link: link_to(ts("@AO3_Status"), "https://twitter.com/AO3_Status")).html_safe %></p>
+    <p><%= ts("For reports of violations of the Terms of Service such as harassment, spam, or plagiarism, or if you believe your account has been hacked, please %{contact_abuse_link} instead. We cannot act on these reports or provide information about Policy and Abuse cases.", contact_abuse_link: link_to(ts("contact our Policy and Abuse team"), new_abuse_report_path)).html_safe %></p>
     <p><%= ts("Some issues you can contact Support about include:") %></p>
     <ul>
       <li><%= ts("Bugs, errors, or unexpected site behavior") %></li>
