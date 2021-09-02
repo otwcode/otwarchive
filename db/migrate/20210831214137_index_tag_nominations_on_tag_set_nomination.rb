@@ -1,4 +1,4 @@
-class IndexTagNominationsAndTagSetNominations < ActiveRecord::Migration[5.2]
+class IndexTagNominationsOnTagSetNomination < ActiveRecord::Migration[5.2]
   def up
     if Rails.env.staging? || Rails.env.production?
       database = TagNomination.connection.current_database
@@ -21,9 +21,6 @@ class IndexTagNominationsAndTagSetNominations < ActiveRecord::Migration[5.2]
     else
       add_index :tag_nominations, [:tag_set_nomination_id, :type]
     end
-
-    add_index :tag_set_nominations, [:owned_tag_set_id]
-    add_index :tag_set_nominations, [:pseud_id, :owned_tag_set_id]
   end
 
   def down
@@ -48,8 +45,5 @@ class IndexTagNominationsAndTagSetNominations < ActiveRecord::Migration[5.2]
     else
       remove_index :tag_nominations, [:tag_set_nomination_id, :type]
     end
-
-    remove_index :tag_set_nominations, [:owned_tag_set_id]
-    remove_index :tag_set_nominations, [:pseud_id, :owned_tag_set_id]
   end
 end
