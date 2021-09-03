@@ -261,6 +261,14 @@ en:
       subject:
         collection: "[%{app_name}][%{collection_title}] A gift work for you from %{collection_title}"
         no_collection: "[%{app_name}] A gift work for you"
+    collection_notification:
+      assignments_sent:
+        subject: "Assignments sent"
+        complete: "All assignments have now been sent out."
+      html:
+        received_message: "You have received a message about your collection %{collection_link}:"
+      text:
+        received_message: "You have received a message about your collection \"%{collection_title}\" (%{collection_url}):"
   users:
     mailer:
       reset_password_instructions:

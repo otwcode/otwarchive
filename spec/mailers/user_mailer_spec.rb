@@ -799,4 +799,39 @@ describe UserMailer do
       end
     end
   end
+
+  describe "collection_notification" do
+    subject(:email) { UserMailer.collection_notification(collection.id, subject_text, message_text) }
+
+    let(:collection) { create(:collection) }
+    let(:subject_text) { Faker::Hipster.sentence }
+    let(:message_text) { Faker::Hipster.paragraph }
+
+    # Test the headers
+    it_behaves_like "an email with a valid sender"
+
+    it "has the correct subject line" do
+      subject = "[#{ArchiveConfig.APP_SHORT_NAME}][#{collection.title}] #{subject_text}"
+      expect(email.subject).to eq(subject)
+    end
+
+    # Test both body contents
+    it_behaves_like "a multipart email"
+
+    it_behaves_like "a translated email"
+
+    describe "HTML version" do
+      it "has the correct content" do
+        expect(email).to have_html_part_content("your collection <")
+        expect(email).to have_html_part_content("#{message_text}</blockquote>")
+      end
+    end
+
+    describe "text version" do
+      it "has the correct content" do
+        expect(email).to have_text_part_content("your collection \"#{collection.title}\"")
+        expect(email).to have_text_part_content(message_text)
+      end
+    end
+  end
 end
