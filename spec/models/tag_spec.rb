@@ -2,10 +2,6 @@
 require 'spec_helper'
 
 describe Tag do
-  before(:each) do
-    @tag = Tag.new
-  end
-
   after(:each) do
     User.current_user = nil
   end
@@ -84,22 +80,25 @@ describe Tag do
   end
 
   it "should not be valid without a name" do
-    expect(@tag.save).not_to be_truthy
+    tag = Tag.new
+    expect(tag.save).not_to be_truthy
 
-    @tag.name = "something or other"
-    expect(@tag.save).to be_truthy
+    tag.name = "something or other"
+    expect(tag.save).to be_truthy
   end
 
   it "should not be valid if too long" do
-    @tag.name = "a" * 101
-    expect(@tag.save).not_to be_truthy
-    expect(@tag.errors[:name].join).to match(/too long/)
+    tag = Tag.new
+    tag.name = "a" * 101
+    expect(tag.save).not_to be_truthy
+    expect(tag.errors[:name].join).to match(/too long/)
   end
 
   it "should not be valid with disallowed characters" do
-    @tag.name = "bad<tag"
-    expect(@tag.save).to be_falsey
-    expect(@tag.errors[:name].join).to match(/restricted characters/)
+    tag = Tag.new
+    tag.name = "bad<tag"
+    expect(tag.save).to be_falsey
+    expect(tag.errors[:name].join).to match(/restricted characters/)
   end
 
   context "unwrangleable" do
@@ -123,53 +122,58 @@ describe Tag do
       end
 
       it "should ignore capitalisation" do
-        @tag.name = "yuletide"
-        @tag.save
+        tag = Tag.new
+        tag.name = "yuletide"
+        tag.save
 
-        @tag.name = "Yuletide"
-        @tag.check_synonym
-        expect(@tag.errors).to be_empty
-        expect(@tag.save).to be_truthy
+        tag.name = "Yuletide"
+        tag.check_synonym
+        expect(tag.errors).to be_empty
+        expect(tag.save).to be_truthy
       end
 
-      it "should ignore accented characters" do
-        @tag.name = "Amelie"
-        @tag.save
+      it "ignores accented characters" do
+        tag = Tag.new
+        tag.name = "Amelie"
+        tag.save
 
-        @tag.name = "Amélie"
-        @tag.check_synonym
-        expect(@tag.errors).to be_empty
-        expect(@tag.save).to be_truthy
+        tag.name = "Amélie"
+        tag.check_synonym
+        expect(tag.errors).to be_empty
+        expect(tag.save).to be_truthy
       end
 
-      it "should be careful with the ß" do
-        @tag.name = "Wei Kreuz"
-        @tag.save
+      it "ignores the capitalization of ß" do
+        tag = Tag.new
+        tag.name = "Weiß Kreuz"
+        tag.save
 
-        @tag.name = "Weiß Kreuz"
-        @tag.check_synonym
-        expect(@tag.errors).to be_empty
-        expect(@tag.save).to be_truthy
+        tag.name = "WeiSS Kreuz"
+        tag.check_synonym
+        expect(tag.errors).to be_empty
+        expect(tag.save).to be_truthy
       end
 
       it "should not ignore punctuation" do
-        @tag.name = "Snatch."
-        @tag.save
+        tag = Tag.new
+        tag.name = "Snatch."
+        tag.save
 
-        @tag.name = "Snatch"
-        @tag.check_synonym
-        expect(@tag.errors).not_to be_empty
-        expect(@tag.save).to be_falsey
+        tag.name = "Snatch"
+        tag.check_synonym
+        expect(tag.errors).not_to be_empty
+        expect(tag.save).to be_falsey
       end
 
       it "should not ignore whitespace" do
-        @tag.name = "JohnSheppard"
-        @tag.save
+        tag = Tag.new
+        tag.name = "JohnSheppard"
+        tag.save
 
-        @tag.name = "John Sheppard"
-        @tag.check_synonym
-        expect(@tag.errors).not_to be_empty
-        expect(@tag.save).to be_falsey
+        tag.name = "John Sheppard"
+        tag.check_synonym
+        expect(tag.errors).not_to be_empty
+        expect(tag.save).to be_falsey
       end
 
       it 'autocomplete should work' do
@@ -197,13 +201,14 @@ describe Tag do
       end
 
       it "should allow any change" do
-        @tag.name = "yuletide.ssé"
-        @tag.save
+        tag = Tag.new
+        tag.name = "yuletide.ssé"
+        tag.save
 
-        @tag.name = "Yuletide ße something"
-        @tag.check_synonym
-        expect(@tag.errors).to be_empty
-        expect(@tag.save).to be_truthy
+        tag.name = "Yuletide ße something"
+        tag.check_synonym
+        expect(tag.errors).to be_empty
+        expect(tag.save).to be_truthy
       end
     end
   end
