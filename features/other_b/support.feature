@@ -45,3 +45,4 @@ Feature: Filing a support request
     And I press "Send"
   Then I should see "Your message was sent to the Archive team - thank you!"
     And 2 emails should be delivered
+    
