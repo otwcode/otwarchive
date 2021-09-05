@@ -8,7 +8,5 @@ Here are the invalid sign-ups:
   <%= collection_signup_url(@collection, signup_id) %>
 <% end %>
 
-AO3 (<%= root_url %>)
-
 <% content_for :sent_at do %><%= Time.now.to_s(:time_for_mailers) %><% end %>
 <% end %>
