@@ -176,6 +176,64 @@ describe WorkSearchForm, work_search: true do
       expect(results).to include second_work
     end
 
+    describe "when searching using user_ids in the query" do
+      let(:user_id) { second_work.user_ids.first }
+
+      context "when the work is in an anonymous collection" do
+        let(:collection) { create(:anonymous_collection) }
+
+        it "doesn't include the work" do
+          work_search = WorkSearchForm.new(query: "user_ids: #{user_id}")
+          expect(work_search.search_results).not_to include second_work
+        end
+      end
+
+      context "when the work is in an unrevealed collection" do
+        let(:collection) { create(:unrevealed_collection) }
+
+        it "doesn't include the work" do
+          work_search = WorkSearchForm.new(query: "user_ids: #{user_id}")
+          expect(work_search.search_results).not_to include second_work
+        end
+      end
+
+      context "when the work is neither anonymous or unrevealed" do
+        it "includes the work" do
+          work_search = WorkSearchForm.new(query: "user_ids: #{user_id}")
+          expect(work_search.search_results).to include second_work
+        end
+      end
+    end
+
+    describe "when searching using pseud_ids in the query" do
+      let(:pseud_id) { second_work.pseud_ids.first }
+
+      context "when the work is in an anonymous collection" do
+        let(:collection) { create(:anonymous_collection) }
+
+        it "doesn't include the work" do
+          work_search = WorkSearchForm.new(query: "pseud_ids: #{pseud_id}")
+          expect(work_search.search_results).not_to include second_work
+        end
+      end
+
+      context "when the work is in an unrevealed collection" do
+        let(:collection) { create(:unrevealed_collection) }
+
+        it "doesn't include the work" do
+          work_search = WorkSearchForm.new(query: "pseud_ids: #{pseud_id}")
+          expect(work_search.search_results).not_to include second_work
+        end
+      end
+
+      context "when the work is neither anonymous or unrevealed" do
+        it "includes the work" do
+          work_search = WorkSearchForm.new(query: "pseud_ids: #{pseud_id}")
+          expect(work_search.search_results).to include second_work
+        end
+      end
+    end
+
     describe "when searching unposted works" do
       before(:each) do
         work.update_attribute(:posted, false)

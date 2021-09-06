@@ -62,6 +62,9 @@ module Otwarchive
     # Configure sensitive parameters which will be filtered from the log file.
     config.filter_parameters += [:content, :password, :terms_of_service_non_production]
 
+    # Disable dumping schemas after migrations.
+    config.active_record.dump_schema_after_migration = false
+
     # Use SQL instead of Active Record's schema dumper when creating the test database.
     # This is necessary if your schema can't be completely dumped by the schema dumper,
     # like if you have constraints or database-specific column types
@@ -92,5 +95,9 @@ module Otwarchive
 
     # Use "mailer" instead of "mailers" as the Resque queue for emails:
     config.action_mailer.deliver_later_queue_name = :mailer
+
+    # Use URL safe CSRF due to a bug in Rails v5.2.5 release.  See the v5.2.6 release notes:
+    # https://github.com/rails/rails/blob/5-2-stable/actionpack/CHANGELOG.md
+    config.action_controller.urlsafe_csrf_tokens = true
   end
 end

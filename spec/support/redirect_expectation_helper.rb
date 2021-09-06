@@ -42,10 +42,22 @@ module RedirectExpectationHelper
     expect(flash[:comment_error]).to be_blank
   end
 
+  def it_redirects_to_with_kudos_notice(path, notice)
+    it_redirects_to_simple(path)
+    expect(flash[:kudos_notice]).to eq notice
+    expect(flash[:kudos_error]).to be_blank
+  end
+
   def it_redirects_to_with_comment_error(path, error)
     it_redirects_to_simple(path)
     expect(flash[:comment_error]).to eq error
     expect(flash[:comment_notice]).to be_blank
+  end
+
+  def it_redirects_to_with_kudos_error(path, error)
+    it_redirects_to_simple(path)
+    expect(flash[:kudos_error]).to eq error
+    expect(flash[:kudos_notice]).to be_blank
   end
 
   def it_redirects_to_simple(path)

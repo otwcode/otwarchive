@@ -1,6 +1,6 @@
 <% content_for :message do %>
 
-  <p>Hello, <%= style_bold(@user.login) %>!</p>
+  <p><%= t("mailer.general.greeting.informal.addressed", name: style_bold(@user.login)).html_safe %></p>
 
   <p>
     A gift work has been posted for you <%= @collection ? " in the #{@collection.title} collection " : "" %>at the Archive of Our Own!
@@ -19,14 +19,14 @@
       <%= style_bold("Fandom:") %> <%= @work.fandom_string %>
     <% end %>
   </p>
-  
+
   <% unless @work.summary.blank? %>
     <%= style_bold("Summary:") %>
     <%= style_quote(raw sanitize_field(@work, :summary)) %>
   <% end %>
-  
+
   <% if @collection && !@collection.gift_notification.blank? %>
     <p><%= @collection.gift_notification %></p>
   <% end %>
-  
+
 <% end %>

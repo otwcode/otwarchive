@@ -1,5 +1,5 @@
 class Tagging < ApplicationRecord
-  belongs_to :tagger, polymorphic: true, inverse_of: :taggings
+  belongs_to :tagger, polymorphic: true, inverse_of: :taggings, autosave: true
   belongs_to :taggable, polymorphic: true, touch: true, inverse_of: :taggings
 
   validates_presence_of :tagger, :taggable

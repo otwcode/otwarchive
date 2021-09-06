@@ -115,7 +115,7 @@ class CollectionsController < ApplicationController
           redirect_to new_collection_gift_exchange_path(@collection) and return
         end
       else
-        redirect_to(@collection)
+        redirect_to collection_path(@collection)
       end
     else
       @challenge_type = params[:challenge_type]
@@ -150,7 +150,7 @@ class CollectionsController < ApplicationController
           end
         end
       end
-      redirect_to(@collection)
+      redirect_to collection_path(@collection)
     else
       render action: "edit"
     end

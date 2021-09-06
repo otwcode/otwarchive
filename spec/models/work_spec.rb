@@ -27,14 +27,12 @@ describe Work do
   context "invalid title" do
     it { expect(build(:work, title: nil)).to be_invalid }
 
-    let(:too_short) { ArchiveConfig.TITLE_MIN - 1 }
     it "cannot be shorter than ArchiveConfig.TITLE_MIN" do
-      expect(build(:work, title: Faker::Lorem.characters(too_short))).to be_invalid
+      expect(build(:work, title: Faker::Lorem.characters(number: ArchiveConfig.TITLE_MIN - 1))).to be_invalid
     end
 
-    let(:too_long) { ArchiveConfig.TITLE_MAX + 1 }
     it "cannot be longer than ArchiveConfig.TITLE_MAX" do
-      expect(build(:work, title: Faker::Lorem.characters(too_long))).to be_invalid
+      expect(build(:work, title: Faker::Lorem.characters(number: ArchiveConfig.TITLE_MAX + 1))).to be_invalid
     end
   end
 
@@ -63,23 +61,20 @@ describe Work do
   end
 
   context "invalid summary" do
-    let(:too_long) { ArchiveConfig.SUMMARY_MAX + 1 }
     it "cannot be longer than ArchiveConfig.SUMMARY_MAX" do
-      expect(build(:work, title: Faker::Lorem.characters(too_long))).to be_invalid
+      expect(build(:work, title: Faker::Lorem.characters(number: ArchiveConfig.SUMMARY_MAX + 1))).to be_invalid
     end
   end
 
   context "invalid notes" do
-    let(:too_long) { ArchiveConfig.NOTES_MAX + 1 }
     it "cannot be longer than ArchiveConfig.NOTES_MAX" do
-      expect(build(:work, title: Faker::Lorem.characters(too_long))).to be_invalid
+      expect(build(:work, title: Faker::Lorem.characters(number: ArchiveConfig.NOTES_MAX + 1))).to be_invalid
     end
   end
 
   context "invalid endnotes" do
-    let(:too_long) { ArchiveConfig.NOTES_MAX + 1 }
     it "cannot be longer than ArchiveConfig.NOTES_MAX" do
-      expect(build(:work, title: Faker::Lorem.characters(too_long))).to be_invalid
+      expect(build(:work, title: Faker::Lorem.characters(number: ArchiveConfig.NOTES_MAX + 1))).to be_invalid
     end
   end
 

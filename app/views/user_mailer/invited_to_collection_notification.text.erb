@@ -1,5 +1,5 @@
 <% content_for :message do %>
-Dear <%= @user.default_pseud.byline %>,
+<%= t("mailer.general.greeting.formal", name: @user.login) %>
 
 The collection maintainers of <%= @collection.title %> would like to include your work (<%= @work.title.html_safe %>) in their collection!
 
@@ -9,5 +9,4 @@ If in future you would prefer to automatically approve requests to add your
 works to collections, please edit your Preferences (<%= "#{root_url}users/#{@user.default_pseud.name}/preferences" %>)
 and tick the box next to "Automatically agree to your work being collected by others in the Archive.".
 
-Thanks!
 <% end %>

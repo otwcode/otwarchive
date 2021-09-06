@@ -432,18 +432,6 @@ function prepareDeleteLinks() {
 
 /// Kudos
 $j(document).ready(function() {
-  $j('#kudos_summary').click(function(e) {
-    e.preventDefault();
-    $j(this).hide();
-    $j('.kudos_expanded').show();
-  });
-
-  $j('#kudos_collapser').click(function(e) {
-    e.preventDefault();
-    $j('#kudos_summary').show();
-    $j('.kudos_expanded').hide();
-  });
-
   $j('#kudo_submit').on("click", function(event) {
     event.preventDefault();
 
@@ -466,7 +454,7 @@ $j(document).ready(function() {
           msg = "You can't leave guest kudos on a restricted work.";
         }
 
-        $j('#kudos_message').addClass('comment_error').text(msg);
+        $j('#kudos_message').addClass('kudos_error').text(msg);
       },
       success: function(data) {
         $j('#kudos_message').addClass('notice').text('Thank you for leaving kudos!');
@@ -475,13 +463,13 @@ $j(document).ready(function() {
   });
 
   // Scroll to the top of the comments section when loading additional pages via Ajax in comment pagination.
-  $j('#comments_placeholder').find('.pagination').find('a[data-remote]').livequery('click.rails', function(e){
+  $j('#comments_placeholder').on('click.rails', '.pagination a[data-remote]', function(e){
     $j.scrollTo('#comments_placeholder');
   });
 
-  // Scroll to the top of the feedback section when loading comments via AJAX
-  $j("#show_comments_link_top").find('a[href*="show_comments"]').livequery('click.rails', function(e){
-    $j.scrollTo('#feedback');
+  // Scroll to the top of the comments section when loading comments via AJAX
+  $j("#show_comments_link_top").on('click.rails', 'a[href*="show_comments"]', function(e){
+    $j.scrollTo('#comments');
   });
 });
 

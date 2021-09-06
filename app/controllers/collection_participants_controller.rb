@@ -1,11 +1,11 @@
 class CollectionParticipantsController < ApplicationController
+  before_action :users_only
   before_action :load_collection
-  before_action :load_participant_and_collection, only: [:update, :destroy]
+  before_action :load_participant, only: [:update, :destroy]
   before_action :allowed_to_promote, only: [:update]
   before_action :allowed_to_destroy, only: [:destroy]
   before_action :has_other_owners, only: [:update, :destroy]
   before_action :collection_maintainers_only, only: [:index, :add, :update]
-  before_action :users_only, only: [:join]
 
   cache_sweeper :collection_sweeper
 
@@ -15,24 +15,16 @@ class CollectionParticipantsController < ApplicationController
     false
   end
 
-  def no_participant
-    flash[:error] = t('no_participant', default: "Which participant did you want to work with?")
-    redirect_to root_path
+  def load_collection
+    @collection = Collection.find_by!(name: params[:collection_id])
   end
 
-  def load_participant_and_collection
-    if params[:collection_participant]
-      @participant = CollectionParticipant.find_by(id: collection_participant_params[:id])
-      @new_role = collection_participant_params[:participant_role]
-    else
-      @participant = CollectionParticipant.find_by(id: params[:id])
-    end
-
-    no_participant and return unless @participant
-    @collection = @participant.collection
+  def load_participant
+    @participant = @collection.collection_participants.find(params[:id])
   end
 
   def allowed_to_promote
+    @new_role = collection_participant_params[:participant_role]
     @participant.user_allowed_to_promote?(current_user, @new_role) || not_allowed(@collection)
   end
 
@@ -139,9 +131,6 @@ class CollectionParticipantsController < ApplicationController
   private
 
   def collection_participant_params
-    params.require(:collection_participant).permit(
-      :id, :participant_role, :collection_id
-    )
+    params.require(:collection_participant).permit(:participant_role)
   end
-
 end

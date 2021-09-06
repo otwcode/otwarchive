@@ -42,6 +42,7 @@ Feature: Prompt Meme Challenge
   Then I should see "Kinky Story"
     And I should find a list for associations
     And I should see "In response to a prompt by Anonymous in the promptcollection collection"
+    And I should see a link "prompt"
     And 1 email should be delivered to "my1@e.org"
 # TODO: when work_anonymous is implemented, test that the prompt filler can be anon too
 
@@ -261,9 +262,8 @@ Feature: Prompt Meme Challenge
     And I check "Battle 12"
     And I press "Preview"
   Then I should see "In response to a prompt by"
-    When "AO3-3455" is fixed
-  #  And I should see "Collections:"
-   # And I should see "Battle 12"
+    And I should see "Collections:"
+    And I should see "Battle 12"
   When I press "Update"
   Then I should see "Work was successfully updated"
     And I should not see "draft"
@@ -335,9 +335,8 @@ Feature: Prompt Meme Challenge
   Then I should see "Draft was successfully created"
     And I should see "In response to a prompt by myname4"
     And 0 emails should be delivered
-    When "AO3-3455" is fixed
-  #  And I should see "Collections:"
-   # And I should see "Battle 12"
+    And I should see "Collections:"
+    And I should see "Battle 12"
   When I view the work "Existing work"
   Then I should see "draft"
 
@@ -382,7 +381,7 @@ Feature: Prompt Meme Challenge
   Then 1 email should be delivered to "myname3"
     And the email should contain "The user myname2 has invited your pseud myname3 to be listed as a co-creator on the following work"
     And the email should not contain "translation missing"
-  When the user "myname3" accepts all co-creator invites
+  When the user "myname3" accepts all co-creator requests
     And I am logged in as "mod1"
     And I reveal the authors of the "Battle 12" challenge
     And I reveal the "Battle 12" challenge
@@ -460,3 +459,41 @@ Feature: Prompt Meme Challenge
   Then I should see "In response to a prompt by myname4"
     And I should see "Fandom: Stargate Atlantis"
     And I should see "Anonymous" within ".byline"
+    And I should see a link "prompt"
+
+  Scenario: Work links to the prompt it fulfils, for all users
+
+  Given I have Battle 12 prompt meme fully set up
+    And I am logged in as "myname1"
+    And I sign up for Battle 12 with combination B
+    And I am logged in as "myname4"
+    And I claim a prompt from "Battle 12"
+    And I fulfill my claim
+    And I reveal works for "Battle 12"
+    And I view the work "Fulfilled Story"
+  Then I should see "Fulfilled Story"
+    And I should see "In response to a prompt by Anonymous"
+    And I should see a link "prompt"
+  When I follow "prompt"
+  Then I should see "Request by Anonymous"
+  When I am logged in as "myname2"
+    And I view the work "Fulfilled Story"
+  Then I should see "Fulfilled Story"
+    And I should see "In response to a prompt by Anonymous"
+    And I should see a link "prompt"
+  When I follow "prompt"
+  Then I should see "Request by Anonymous"
+  When I am logged in as "mod"
+    And I view the work "Fulfilled Story"
+  Then I should see "Fulfilled Story"
+    And I should see "In response to a prompt by Anonymous"
+    And I should see a link "prompt"
+  When I follow "prompt"
+  Then I should see "Request by Anonymous"
+  When I log out
+    And I view the work "Fulfilled Story"
+  Then I should see "Fulfilled Story"
+    And I should see "In response to a prompt by Anonymous"
+    And I should see a link "prompt"
+  When I follow "prompt"
+  Then I should see "Request by Anonymous"

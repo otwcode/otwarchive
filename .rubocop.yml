@@ -10,7 +10,7 @@ AllCops:
       - "(?:^|/)factories/"
       - "(?:^|/)features/"
       - "(?:^|/)spec/"
-  TargetRubyVersion: 2.6
+  TargetRubyVersion: 2.7
 
 Bundler/OrderedGems:
   Enabled: false
@@ -160,6 +160,9 @@ RSpec/NestedGroups:
 RSpec/PredicateMatcher:
   Enabled: false
 
+Style/AndOr:
+  EnforcedStyle: conditionals
+
 Style/ClassAndModuleChildren:
   Enabled: false
 
@@ -198,3 +201,6 @@ Style/StringLiterals:
 
 Style/SymbolArray:
   Enabled: false
+
+Style/TernaryParentheses:
+  EnforcedStyle: require_parentheses_when_complex

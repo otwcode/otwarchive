@@ -11,7 +11,7 @@ describe "API v2 BookmarksController", type: :request, bookmark_search: true do
                summary: "<p>blah blah blah</p>",
                fandom_string: "Testing",
                rating_string: "General Audiences",
-               category_string: ["M/M"],
+               category_string: "M/M",
                relationship_string: "Starsky/Hutch",
                character_string: "Starsky,hutch",
                bookmarker_notes: "<p>Notes</p>",

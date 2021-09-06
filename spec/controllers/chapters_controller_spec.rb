@@ -195,6 +195,16 @@ describe ChaptersController do
       expect(assigns[:page_title]).to eq("page title")
     end
 
+    context "when work has no fandom" do
+      it "assigns @page_title with a placeholder for the fandom" do
+        allow_any_instance_of(Work).to receive(:tag_groups).and_return("Fandom" => [])
+        expect_any_instance_of(ChaptersController).to receive(:get_page_title).with("No fandom specified", user.pseuds.first.name, "#{work.title} - Chapter 1").and_return("page title")
+        get :show, params: { work_id: work.id, id: work.chapters.first.id }
+        expect(response).to have_http_status(:ok)
+        expect(assigns[:page_title]).to eq("page title")
+      end
+    end
+
     it "assigns @kudos to non-anonymous kudos" do
       kudo = create(:kudo, commentable: work, user: create(:user))
       create(:kudo, commentable: work)
@@ -248,7 +258,7 @@ describe ChaptersController do
       end
 
       it "assigns @subscription to user's subscription when user is subscribed to work" do
-        subscription = create(:subscription, subscribable: work, user: @current_user)
+        subscription = create(:subscription, subscribable: work, user: controller.current_user)
         get :show, params: { work_id: work, id: work.chapters.first.id }
         expect(assigns[:subscription]).to eq(subscription)
       end
@@ -259,7 +269,7 @@ describe ChaptersController do
       end
 
       it "updates the reading history" do
-        expect(Reading).to receive(:update_or_create).with(work, @current_user)
+        expect(Reading).to receive(:update_or_create).with(work, controller.current_user)
         get :show, params: { work_id: work.id, id: work.chapters.first.id }
       end
     end
@@ -379,13 +389,11 @@ describe ChaptersController do
   end
 
   describe "create" do
-    before do
-      @chapter_attributes = { content: "This doesn't matter" }
-    end
+    let(:chapter_attributes) { { content: "This doesn't matter" } }
 
     context "when user is logged out" do
       it "errors and redirects to login" do
-        post :create, params: { work_id: work.id, chapter: @chapter_attributes }
+        post :create, params: { work_id: work.id, chapter: chapter_attributes }
         it_redirects_to_with_error(new_user_session_path, "Sorry, you don't have permission to access the page you were trying to reach. Please log in.")
       end
     end
@@ -393,40 +401,40 @@ describe ChaptersController do
     context "when work owner is logged in" do
       before do
         fake_login_known_user(user)
-        @chapter_attributes[:author_attributes] = { ids: [user.pseuds.first.id] }
+        chapter_attributes[:author_attributes] = { ids: [user.pseuds.first.id] }
       end
 
       it "errors and redirects to user page when user is banned" do
         fake_login_known_user(banned_user)
-        post :create, params: { work_id: banned_users_work.id, chapter: @chapter_attributes }
+        post :create, params: { work_id: banned_users_work.id, chapter: chapter_attributes }
         it_redirects_to_simple(user_path(banned_user))
         expect(flash[:error]).to include("Your account has been banned.")
       end
 
       it "does not allow a user to submit only a pseud that is not theirs" do
         user2 = create(:user)
-        @chapter_attributes[:author_attributes] = { ids: [user2.pseuds.first.id] }
-        expect { post :create, params: { work_id: work.id, chapter: @chapter_attributes } }.to_not change(Chapter, :count)
+        chapter_attributes[:author_attributes] = { ids: [user2.pseuds.first.id] }
+        expect { post :create, params: { work_id: work.id, chapter: chapter_attributes } }.not_to change { Chapter.count }
         expect(response).to render_template("new")
         expect(assigns[:chapter].errors.full_messages).to \
           include "You're not allowed to use that pseud."
       end
 
       it "adds a new chapter" do
-        expect { post :create, params: { work_id: work.id, chapter: @chapter_attributes } }.to change(Chapter, :count)
+        expect { post :create, params: { work_id: work.id, chapter: chapter_attributes } }.to change { Chapter.count }
         expect(work.chapters.count).to eq 2
       end
 
       it "updates the works wip length when given" do
-        @chapter_attributes[:wip_length] = 3
+        chapter_attributes[:wip_length] = 3
         expect(work.wip_length).to eq 1
-        post :create, params: { work_id: work.id, chapter: @chapter_attributes }
+        post :create, params: { work_id: work.id, chapter: chapter_attributes }
         expect(assigns[:work].wip_length).to eq 3
       end
 
       it "renders new if chapter has invalid pseuds" do
-        @chapter_attributes[:author_attributes] = { byline: "*impossible*" }
-        post :create, params: { work_id: work.id, chapter: @chapter_attributes }
+        chapter_attributes[:author_attributes] = { byline: "*impossible*" }
+        post :create, params: { work_id: work.id, chapter: chapter_attributes }
         expect(response).to render_template(:new)
         expect(assigns[:chapter].errors.full_messages).to \
           include("Invalid creator: Could not find a pseud *impossible*.")
@@ -435,43 +443,43 @@ describe ChaptersController do
       it "renders new if chapter has ambiguous pseuds" do
         create(:pseud, name: "ambiguous")
         create(:pseud, name: "ambiguous")
-        @chapter_attributes[:author_attributes] = { byline: "ambiguous" }
-        post :create, params: { work_id: work.id, chapter: @chapter_attributes }
+        chapter_attributes[:author_attributes] = { byline: "ambiguous" }
+        post :create, params: { work_id: work.id, chapter: chapter_attributes }
         expect(response).to render_template(:new)
         expect(assigns[:chapter].errors.full_messages).to \
           include("Invalid creator: The pseud ambiguous is ambiguous.")
       end
 
       it "renders new if the edit button has been clicked" do
-        post :create, params: { work_id: work.id, chapter: @chapter_attributes, edit_button: true }
+        post :create, params: { work_id: work.id, chapter: chapter_attributes, edit_button: true }
         expect(response).to render_template(:new)
       end
 
       it "redirects if the cancel button has been clicked" do
-        post :create, params: { work_id: work.id, chapter: @chapter_attributes, cancel_button: true }
+        post :create, params: { work_id: work.id, chapter: chapter_attributes, cancel_button: true }
         expect(response).to have_http_status :redirect
       end
 
       it "updates the work's major version" do
         expect(work.major_version).to eq(1)
-        post :create, params: { work_id: work.id, chapter: @chapter_attributes }
+        post :create, params: { work_id: work.id, chapter: chapter_attributes }
         expect(assigns[:work].major_version).to eq(2)
       end
 
       context "when the post button is clicked" do
         context "when the chapter and work are valid" do
           it "posts the chapter" do
-            post :create, params: { work_id: work.id, chapter: @chapter_attributes, post_without_preview_button: true }
+            post :create, params: { work_id: work.id, chapter: chapter_attributes, post_without_preview_button: true }
             expect(assigns[:chapter].posted).to be true
           end
 
           it "posts the work if the work was not posted before" do
-            post :create, params: { work_id: unposted_work.id, chapter: @chapter_attributes, post_without_preview_button: true }
+            post :create, params: { work_id: unposted_work.id, chapter: chapter_attributes, post_without_preview_button: true }
             expect(assigns[:work].posted).to be true
           end
 
           it "gives a notice and redirects to the posted chapter" do
-            post :create, params: { work_id: work.id, chapter: @chapter_attributes, post_without_preview_button: true }
+            post :create, params: { work_id: work.id, chapter: chapter_attributes, post_without_preview_button: true }
             it_redirects_to_with_notice(work_chapter_path(work_id: work.id, id: assigns[:chapter].id), "Chapter has been posted!")
           end
         end
@@ -494,7 +502,7 @@ describe ChaptersController do
 
           old_updated_at = work.updated_at
 
-          post :create, params: { work_id: work.id, chapter: @chapter_attributes, post_without_preview_button: true }
+          post :create, params: { work_id: work.id, chapter: chapter_attributes, post_without_preview_button: true }
           expect(assigns[:work].updated_at).not_to eq(old_updated_at)
         end
       end
@@ -502,17 +510,17 @@ describe ChaptersController do
       context "when the preview button is clicked" do
         context "when the chapter and work are valid" do
           it "does not post the chapter" do
-            post :create, params: { work_id: work.id, chapter: @chapter_attributes, preview_button: true }
+            post :create, params: { work_id: work.id, chapter: chapter_attributes, preview_button: true }
             expect(assigns[:chapter].posted).to be false
           end
 
           it "gives a notice that the chapter is a draft and redirects to the chapter preview" do
-            post :create, params: { work_id: work.id, chapter: @chapter_attributes, preview_button: true }
+            post :create, params: { work_id: work.id, chapter: chapter_attributes, preview_button: true }
             it_redirects_to_with_notice(preview_work_chapter_path(work_id: work.id, id: assigns[:chapter].id), "This is a draft chapter in a posted work. It will be kept unless the work is deleted.")
           end
 
           it "gives a notice that the work and chapter are drafts and redirects to the chapter preview" do
-            post :create, params: { work_id: unposted_work.id, chapter: @chapter_attributes, preview_button: true }
+            post :create, params: { work_id: unposted_work.id, chapter: chapter_attributes, preview_button: true }
             it_redirects_to_simple(preview_work_chapter_path(work_id: unposted_work.id, id: assigns[:chapter].id))
             expect(flash[:notice]).to include("This is a draft chapter in an unposted work")
           end
@@ -538,11 +546,11 @@ describe ChaptersController do
 
       context "when the user tries to add themselves as a coauthor" do
         before do
-          @chapter_attributes[:author_attributes] = { ids: [user.pseuds.first.id, @current_user.pseuds.first.id] }
+          chapter_attributes[:author_attributes] = { ids: [user.pseuds.first.id, controller.current_user.pseuds.first.id] }
         end
 
         it "errors and redirects to work" do
-          post :create, params: { work_id: work.id, chapter: @chapter_attributes }
+          post :create, params: { work_id: work.id, chapter: chapter_attributes }
           it_redirects_to_with_error(work_path(work), "Sorry, you don't have permission to access the page you were trying to reach.")
         end
       end
@@ -550,13 +558,11 @@ describe ChaptersController do
   end
 
   describe "update" do
-    before do
-      @chapter_attributes = { content: "This doesn't matter" }
-    end
+    let(:chapter_attributes) { { content: "This doesn't matter" } }
 
     context "when user is logged out" do
       it "errors and redirects to login" do
-        put :update, params: { work_id: work.id, id: work.chapters.first.id, chapter: @chapter_attributes }
+        put :update, params: { work_id: work.id, id: work.chapters.first.id, chapter: chapter_attributes }
         it_redirects_to_with_error(new_user_session_path, "Sorry, you don't have permission to access the page you were trying to reach. Please log in.")
       end
     end
@@ -568,30 +574,30 @@ describe ChaptersController do
 
       it "errors and redirects to user page when user is banned" do
         fake_login_known_user(banned_user)
-        put :update, params: { work_id: banned_users_work.id, id: banned_users_work.chapters.first.id, chapter: @chapter_attributes }
+        put :update, params: { work_id: banned_users_work.id, id: banned_users_work.chapters.first.id, chapter: chapter_attributes }
         it_redirects_to_simple(user_path(banned_user))
         expect(flash[:error]).to include("Your account has been banned.")
       end
 
       it "does not allow a user to submit only a pseud that is not theirs" do
         user2 = create(:user)
-        @chapter_attributes[:author_attributes] = { ids: [user2.pseuds.first.id] }
-        put :update, params: { work_id: work.id, id: work.chapters.first.id, chapter: @chapter_attributes }
+        chapter_attributes[:author_attributes] = { ids: [user2.pseuds.first.id] }
+        put :update, params: { work_id: work.id, id: work.chapters.first.id, chapter: chapter_attributes }
         expect(response).to render_template("edit")
         expect(assigns[:chapter].errors.full_messages).to \
           include "You're not allowed to use that pseud."
       end
 
       it "updates the work's wip length when given" do
-        @chapter_attributes[:wip_length] = 3
+        chapter_attributes[:wip_length] = 3
         expect(work.wip_length).to eq 1
-        put :update, params: { work_id: work.id, id: work.chapters.first.id, chapter: @chapter_attributes }
+        put :update, params: { work_id: work.id, id: work.chapters.first.id, chapter: chapter_attributes }
         expect(assigns[:work].wip_length).to eq 3
       end
 
       it "renders edit if chapter has invalid pseuds" do
-        @chapter_attributes[:author_attributes] = { byline: "*impossible*" }
-        put :update, params: { work_id: work.id, id: work.chapters.first.id, chapter: @chapter_attributes }
+        chapter_attributes[:author_attributes] = { byline: "*impossible*" }
+        put :update, params: { work_id: work.id, id: work.chapters.first.id, chapter: chapter_attributes }
         expect(response).to render_template(:edit)
         expect(assigns[:chapter].errors.full_messages).to \
           include("Invalid creator: Could not find a pseud *impossible*.")
@@ -600,8 +606,8 @@ describe ChaptersController do
       it "renders edit if chapter has ambiguous pseuds" do
         create(:pseud, name: "ambiguous")
         create(:pseud, name: "ambiguous")
-        @chapter_attributes[:author_attributes] = { byline: "ambiguous" }
-        put :update, params: { work_id: work.id, id: work.chapters.first.id, chapter: @chapter_attributes }
+        chapter_attributes[:author_attributes] = { byline: "ambiguous" }
+        put :update, params: { work_id: work.id, id: work.chapters.first.id, chapter: chapter_attributes }
         expect(response).to render_template(:edit)
         expect(assigns[:chapter].errors.full_messages).to \
           include("Invalid creator: The pseud ambiguous is ambiguous.")
@@ -609,61 +615,61 @@ describe ChaptersController do
 
       context "when the preview button is clicked" do
         it "assigns preview_mode to true" do
-          put :update, params: { work_id: work.id, id: work.chapters.first.id, chapter: @chapter_attributes, preview_button: true }
+          put :update, params: { work_id: work.id, id: work.chapters.first.id, chapter: chapter_attributes, preview_button: true }
           expect(assigns[:preview_mode]).to be true
         end
 
         it "gives a notice if the chapter has been posted and renders preview" do
-          put :update, params: { work_id: work.id, id: work.chapters.first.id, chapter: @chapter_attributes, preview_button: true }
+          put :update, params: { work_id: work.id, id: work.chapters.first.id, chapter: chapter_attributes, preview_button: true }
           expect(response).to render_template(:preview)
           expect(flash[:notice]).to include "This is a preview of what this chapter will look like after your changes have been applied."
         end
 
         it "gives a notice if the chapter has not been posted and renders preview" do
           unposted_chapter = create(:chapter, work: work, authors: [user.pseuds.first])
-          put :update, params: { work_id: work.id, id: unposted_chapter.id, chapter: @chapter_attributes, preview_button: true }
+          put :update, params: { work_id: work.id, id: unposted_chapter.id, chapter: chapter_attributes, preview_button: true }
           expect(response).to render_template(:preview)
           expect(flash[:notice]).to include "This is a draft chapter in a posted work."
         end
       end
 
       it "redirects if the cancel button has been clicked" do
-        put :update, params: { work_id: work.id, id: work.chapters.first.id, chapter: @chapter_attributes, cancel_button: true }
+        put :update, params: { work_id: work.id, id: work.chapters.first.id, chapter: chapter_attributes, cancel_button: true }
         expect(response).to have_http_status :redirect
       end
 
       it "renders edit if the edit button has been clicked" do
-        put :update, params: { work_id: work.id, id: work.chapters.first.id, chapter: @chapter_attributes, edit_button: true }
+        put :update, params: { work_id: work.id, id: work.chapters.first.id, chapter: chapter_attributes, edit_button: true }
         expect(response).to render_template(:edit)
       end
 
       it "updates the work's minor version" do
         expect(work.minor_version).to eq(0)
-        put :update, params: { work_id: work.id, id: work.chapters.first.id, chapter: @chapter_attributes }
+        put :update, params: { work_id: work.id, id: work.chapters.first.id, chapter: chapter_attributes }
         expect(assigns[:work].minor_version).to eq(1)
       end
 
       context "when the post button is clicked" do
         context "when the chapter and work are valid" do
           it "posts the chapter" do
-            put :update, params: { work_id: work.id, id: work.chapters.first.id, chapter: @chapter_attributes, post_button: true }
+            put :update, params: { work_id: work.id, id: work.chapters.first.id, chapter: chapter_attributes, post_button: true }
             expect(assigns[:chapter].posted).to be true
           end
 
           it "posts the work if the work was not posted before" do
             pending "multi-chapter works should post when chapter is posted"
-            put :update, params: { work_id: unposted_work.id, id: unposted_work.chapters.first.id, chapter: @chapter_attributes, post_button: true }
+            put :update, params: { work_id: unposted_work.id, id: unposted_work.chapters.first.id, chapter: chapter_attributes, post_button: true }
             expect(assigns[:work].posted).to be true
           end
 
           it "gives a notice if the chapter was already posted and redirects to the posted chapter" do
-            put :update, params: { work_id: work.id, id: work.chapters.first.id, chapter: @chapter_attributes, post_button: true }
+            put :update, params: { work_id: work.id, id: work.chapters.first.id, chapter: chapter_attributes, post_button: true }
             it_redirects_to_with_notice(work_chapter_path(work_id: work.id, id: work.chapters.first.id), "Chapter was successfully updated.")
           end
 
           it "gives a notice if the chapter was not already posted and redirects to the posted chapter" do
             unposted_chapter = create(:chapter, work: work, authors: [user.pseuds.first])
-            put :update, params: { work_id: work.id, id: unposted_chapter.id, chapter: @chapter_attributes, post_button: true }
+            put :update, params: { work_id: work.id, id: unposted_chapter.id, chapter: chapter_attributes, post_button: true }
             it_redirects_to_with_notice(work_chapter_path(work_id: work.id, id: unposted_chapter.id), "Chapter was successfully posted.")
           end
         end
@@ -687,14 +693,14 @@ describe ChaptersController do
 
           old_updated_at = work.updated_at
 
-          put :update, params: { work_id: work.id, id: work.chapters.first.id, chapter: @chapter_attributes, post_button: true }
+          put :update, params: { work_id: work.id, id: work.chapters.first.id, chapter: chapter_attributes, post_button: true }
           expect(assigns[:work].updated_at).not_to eq(old_updated_at)
         end
       end
 
       context "when the post button is clicked" do
         it "posts the chapter" do
-          put :update, params: { work_id: work.id, id: work.chapters.first.id, chapter: @chapter_attributes, post_without_preview_button: true }
+          put :update, params: { work_id: work.id, id: work.chapters.first.id, chapter: chapter_attributes, post_without_preview_button: true }
           expect(assigns[:chapter].posted).to be true
         end
       end
@@ -707,11 +713,11 @@ describe ChaptersController do
 
       context "when the user tries to add themselves as a coauthor" do
         before do
-          @chapter_attributes[:author_attributes] = { ids: [user.pseuds.first.id, @current_user.pseuds.first.id] }
+          chapter_attributes[:author_attributes] = { ids: [user.pseuds.first.id, controller.current_user.pseuds.first.id] }
         end
 
         it "errors and redirects to work" do
-          put :update, params: { work_id: work.id, id: work.chapters.first.id, chapter: @chapter_attributes }
+          put :update, params: { work_id: work.id, id: work.chapters.first.id, chapter: chapter_attributes }
           it_redirects_to_with_error(work_path(work), "Sorry, you don't have permission to access the page you were trying to reach.")
         end
       end
