@@ -182,7 +182,7 @@ en:
       due: "This assignment is due at:"
       any: "Any"
       text:
-        part1: "You have been assigned the following request in the %{collection_title} (%{collection_url}) challenge at the Archive of Our Own!"
+        part1: "You have been assigned the following request in the \"%{collection_title}\" (%{collection_url}) challenge at the Archive of Our Own!"
         look_up: "You can look up this assignment from your Assignments page at %{link}."
         footer: "You're receiving this email because you signed up for the %{title} challenge (%{url}). For more information about this challenge and contact information for the moderators, please visit %{profile_url}."
       html:
@@ -236,9 +236,15 @@ en:
         anonymous_unrevealed: "[%{app_name}] Your work was made anonymous and unrevealed"
         unrevealed: "[%{app_name}] Your work was made unrevealed"
       changed_status:
-        anonymous: "The collection maintainers of %{collection} have changed the status of your work %{work} to anonymous."
-        anonymous_unrevealed: "The collection maintainers of %{collection} have changed the status of your work %{work} to anonymous and unrevealed."
-        unrevealed: "The collection maintainers of %{collection} have changed the status of your work %{work} to unrevealed."
+        anonymous:
+          html: "The collection maintainers of %{collection_link} have changed the status of your work %{work_link} to anonymous."
+          text: "The collection maintainers of \"%{collection_title}\" (%{collection_url}) have changed the status of your work \"%{work_title}\" (%{work_url}) to anonymous."
+        anonymous_unrevealed:
+          html: "The collection maintainers of %{collection_link} have changed the status of your work %{work_link} to anonymous and unrevealed."
+          text: "The collection maintainers of \"%{collection_title}\" (%{collection_url}) have changed the status of your work \"%{work_title}\" (%{work_url}) to anonymous and unrevealed."
+        unrevealed:
+          html: "The collection maintainers of %{collection_link} have changed the status of your work %{work_link} to unrevealed."
+          text: "The collection maintainers of \"%{collection_title}\" (%{collection_url}) have changed the status of your work \"%{work_title}\" (%{work_url}) to unrevealed."
       anonymous_info: "Anonymous works are included in tag listings, but not on your works page. On the work, your user name will be replaced with \"Anonymous.\""
       unrevealed_info: "Unrevealed works are not included in tag listings or on your works page. Anyone who follows a link to the work will receive a notice that it is currently unrevealed, and they will be unable to access its content."
       anonymous_unrevealed_info: "The collection maintainers may later reveal your work but leave it anonymous. People who subscribe to you will not be notified of this change. Your work will be included in tag listings, but not on your works page. On the work, your user name will be replaced with \"Anonymous.\""
