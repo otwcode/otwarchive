@@ -769,13 +769,12 @@ $.TokenList = function (input, url_or_data, settings) {
                 return;
             }
 
-            transliterated = new RegExp(/[\u00A0-\u036F]/, "g")
-            termbit = termbit.replace(/([.?*+^$[\]\\(){}-])/g, "\\$1").replace(transliterated, ".");
-
+            termbit = termbit.replace(/([.?*+^$[\]\\(){}-])/g, "\\$1").replace(/[\u00A0-\u036F]/g, ".");
+    
             if (newvalue.search(/[\u00A0-\u036F]/) >= 0) {
 
                 for (let i = 0; i <= (newvalue.length - termbit.length); i++) {
-                    matcher = newvalue.substr(i, termbit.length).replace(transliterated, ".");
+                    matcher = newvalue.substr(i, termbit.length).replace(/[\u00A0-\u036F]/g, ".");
 
                     if (termbit.search(new RegExp(matcher, "i") >= 0)) {
                         end = i + termbit.length
