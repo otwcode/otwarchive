@@ -70,7 +70,7 @@ en:
         tos_violation: "If your work was hidden due to being in violation of the Archive of Our Own's %{tos_link}, you will be required to take action to correct the violation. Failure to bring your work into compliance with the Terms of Service may lead to your work being deleted from the Archive."
         help: "If you are uncertain why your work was hidden, and you have not received further communication regarding this matter, please %{contact_abuse_link} directly."
       text:
-        hidden: "Your work %{title} (%{work_url}) has been hidden by the Policy & Abuse team and is no longer publicly accessible."
+        hidden: "Your work \"%{title}\" (%{work_url}) has been hidden by the Policy & Abuse team and is no longer publicly accessible."
         tos_violation: "If your work was hidden due to being in violation of the Archive of Our Own's Terms of Service (%{tos_url}), you will be required to take action to correct the violation. Failure to bring your work into compliance with the Terms of Service may lead to your work being deleted from the Archive."
         help: "If you are uncertain why your work was hidden, and you have not received further communication regarding this matter, please contact Policy & Abuse directly: %{contact_abuse_url}."
     delete_work_notification:
@@ -182,7 +182,7 @@ en:
       due: "This assignment is due at:"
       any: "Any"
       text:
-        part1: "You have been assigned the following request in the %{collection_title} (%{collection_url}) challenge at the Archive of Our Own!"
+        part1: "You have been assigned the following request in the \"%{collection_title}\" (%{collection_url}) challenge at the Archive of Our Own!"
         look_up: "You can look up this assignment from your Assignments page at %{link}."
         footer: "You're receiving this email because you signed up for the %{title} challenge (%{url}). For more information about this challenge and contact information for the moderators, please visit %{profile_url}."
       html:
@@ -215,7 +215,7 @@ en:
         ao3_news: "AO3 News"
         faq_page: "FAQ page"
         tutorial_page: "tutorial page"
-        contact_support: "contact AO3 support"
+        contact_support: "contact AO3 Support"
         part3: "If this is a mistake and these are not your works, please don't delete them! Please just %{open_doors_link} and we will sort it out."
         contact_open_doors: "contact Open Doors"
         part4: "Depending on the archive, your works may have been imported restricted to registered users only (to keep them out of Google searches). If this is the case, the works will only be accessible by logged-in users unless you choose to make them fully visible. For help unlocking, orphaning, or deleting your works, please %{support_link}."
@@ -236,9 +236,15 @@ en:
         anonymous_unrevealed: "[%{app_name}] Your work was made anonymous and unrevealed"
         unrevealed: "[%{app_name}] Your work was made unrevealed"
       changed_status:
-        anonymous: "The collection maintainers of %{collection} have changed the status of your work %{work} to anonymous."
-        anonymous_unrevealed: "The collection maintainers of %{collection} have changed the status of your work %{work} to anonymous and unrevealed."
-        unrevealed: "The collection maintainers of %{collection} have changed the status of your work %{work} to unrevealed."
+        anonymous:
+          html: "The collection maintainers of %{collection_link} have changed the status of your work %{work_link} to anonymous."
+          text: "The collection maintainers of \"%{collection_title}\" (%{collection_url}) have changed the status of your work \"%{work_title}\" (%{work_url}) to anonymous."
+        anonymous_unrevealed:
+          html: "The collection maintainers of %{collection_link} have changed the status of your work %{work_link} to anonymous and unrevealed."
+          text: "The collection maintainers of \"%{collection_title}\" (%{collection_url}) have changed the status of your work \"%{work_title}\" (%{work_url}) to anonymous and unrevealed."
+        unrevealed:
+          html: "The collection maintainers of %{collection_link} have changed the status of your work %{work_link} to unrevealed."
+          text: "The collection maintainers of \"%{collection_title}\" (%{collection_url}) have changed the status of your work \"%{work_title}\" (%{work_url}) to unrevealed."
       anonymous_info: "Anonymous works are included in tag listings, but not on your works page. On the work, your user name will be replaced with \"Anonymous.\""
       unrevealed_info: "Unrevealed works are not included in tag listings or on your works page. Anyone who follows a link to the work will receive a notice that it is currently unrevealed, and they will be unable to access its content."
       anonymous_unrevealed_info: "The collection maintainers may later reveal your work but leave it anonymous. People who subscribe to you will not be notified of this change. Your work will be included in tag listings, but not on your works page. On the work, your user name will be replaced with \"Anonymous.\""
@@ -257,6 +263,18 @@ en:
         html: "For more information, visit our %{faq_link}."
         text: "For more information, visit our Collections and Challenges FAQ: %{faq_url}"
       faq_link_text: "Collections and Challenges FAQ"
+    recipient_notification:
+      subject:
+        collection: "[%{app_name}][%{collection_title}] A gift work for you from %{collection_title}"
+        no_collection: "[%{app_name}] A gift work for you"
+    collection_notification:
+      assignments_sent:
+        subject: "Assignments sent"
+        complete: "All assignments have now been sent out."
+      html:
+        received_message: "You have received a message about your collection %{collection_link}:"
+      text:
+        received_message: "You have received a message about your collection \"%{collection_title}\" (%{collection_url}):"
   users:
     mailer:
       reset_password_instructions:

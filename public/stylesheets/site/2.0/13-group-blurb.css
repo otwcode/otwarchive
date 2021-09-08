@@ -369,8 +369,9 @@ blurbs on the manage collection items pages, mostly reseting styles inherited fr
 	min-height: 30px;
 }
 
-.bookmark .user .heading {
+.bookmark .user .byline {
   margin-top: 0.375em;
+  margin-right: 5.25em;
 }
 
 .bookmark .user .datetime, .bookmark .work .datetime {
@@ -378,8 +379,8 @@ blurbs on the manage collection items pages, mostly reseting styles inherited fr
 }
 
 .bookmark div.user .datetime {
-  top: 0.75em;
-  right: 0.75em;
+  top: 0.875em;
+  right: 0.875em;
 }
 
 .bookmark .short .status {

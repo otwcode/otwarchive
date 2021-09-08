@@ -682,7 +682,7 @@ describe UserMailer do
       it_behaves_like "an email with a valid sender"
 
       it "has the correct subject line" do
-        subject = "[#{ArchiveConfig.APP_SHORT_NAME}][#{collection.title}] A Gift Work For You From #{collection.title}"
+        subject = "[#{ArchiveConfig.APP_SHORT_NAME}][#{collection.title}] A gift work for you from #{collection.title}"
         expect(email).to have_subject(subject)
       end
 
@@ -713,7 +713,7 @@ describe UserMailer do
       it_behaves_like "an email with a valid sender"
 
       it "has the correct subject line" do
-        subject = "[#{ArchiveConfig.APP_SHORT_NAME}] A Gift Work For You "
+        subject = "[#{ArchiveConfig.APP_SHORT_NAME}] A gift work for you"
         expect(email).to have_subject(subject)
       end
 
@@ -796,6 +796,108 @@ describe UserMailer do
     describe "text version" do
       it "has the correct content" do
         expect(email).to have_text_part_content("invalid sign-ups in your challenge \"#{collection.title}\"")
+      end
+    end
+  end
+
+  describe "collection_notification" do
+    subject(:email) { UserMailer.collection_notification(collection.id, subject_text, message_text) }
+
+    let(:collection) { create(:collection) }
+    let(:subject_text) { Faker::Hipster.sentence }
+    let(:message_text) { Faker::Hipster.paragraph }
+
+    # Test the headers
+    it_behaves_like "an email with a valid sender"
+
+    it "has the correct subject line" do
+      subject = "[#{ArchiveConfig.APP_SHORT_NAME}][#{collection.title}] #{subject_text}"
+      expect(email.subject).to eq(subject)
+    end
+
+    # Test both body contents
+    it_behaves_like "a multipart email"
+
+    it_behaves_like "a translated email"
+
+    describe "HTML version" do
+      it "has the correct content" do
+        expect(email).to have_html_part_content("your collection <")
+        expect(email).to have_html_part_content("#{message_text}</blockquote>")
+      end
+    end
+
+    describe "text version" do
+      it "has the correct content" do
+        expect(email).to have_text_part_content("your collection \"#{collection.title}\"")
+        expect(email).to have_text_part_content(message_text)
+      end
+    end
+  end
+
+  describe "prompter_notification" do
+    context "when collection is present" do
+      subject(:email) { UserMailer.prompter_notification(work.id, collection.id) }
+
+      let(:collection) { create(:collection) }
+      let(:claim) { create(:challenge_claim, request_signup: create(:prompt_meme_signup)) }
+      let(:work) { create(:work, challenge_claims: [claim]) }
+
+      # Test the headers
+      it_behaves_like "an email with a valid sender"
+
+      it "has the correct subject line" do
+        subject = "[#{ArchiveConfig.APP_SHORT_NAME}] A response to your prompt"
+        expect(email).to have_subject(subject)
+      end
+
+      # Test both body contents
+      it_behaves_like "a multipart email"
+
+      describe "HTML version" do
+        it "has the correct content" do
+          expect(email).to have_html_part_content("A response to your prompt")
+          expect(email).to have_html_part_content("#{collection.title}</a>")
+        end
+      end
+
+      describe "text version" do
+        it "has the correct content" do
+          expect(email).to have_text_part_content("A response to your prompt")
+          expect(email).to have_text_part_content("\"#{collection.title}\" collection (#{collection_url(collection)})")
+        end
+      end
+    end
+
+    context "when no collection is present" do
+      subject(:email) { UserMailer.prompter_notification(work.id) }
+
+      let(:claim) { create(:challenge_claim, request_signup: create(:prompt_meme_signup)) }
+      let(:work) { create(:work, challenge_claims: [claim]) }
+
+      # Test the headers
+      it_behaves_like "an email with a valid sender"
+
+      it "has the correct subject line" do
+        subject = "[#{ArchiveConfig.APP_SHORT_NAME}] A response to your prompt"
+        expect(email).to have_subject(subject)
+      end
+
+      # Test both body contents
+      it_behaves_like "a multipart email"
+
+      describe "HTML version" do
+        it "has the correct content" do
+          expect(email).to have_html_part_content("posted at the Archive")
+          expect(email).not_to have_html_part_content("collection")
+        end
+      end
+
+      describe "text version" do
+        it "has the correct content" do
+          expect(email).to have_text_part_content("posted at the Archive")
+          expect(email).not_to have_text_part_content("collection")
+        end
       end
     end
   end
