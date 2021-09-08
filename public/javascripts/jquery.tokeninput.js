@@ -777,9 +777,9 @@ $.TokenList = function (input, url_or_data, settings) {
                     matcher = newvalue.substr(i, termbit.length).replace(/[\u00A0-\u036F]/g, ".");
 
                     if (termbit.search(new RegExp(matcher, "i") >= 0)) {
-                        end = i + termbit.length
-                        newvalue = newvalue.slice(0, i) + "<b>" + newvalue.slice(i, end) + "</b>" + newvalue.slice(end)
-                        break
+                        end = i + termbit.length;
+                        newvalue = newvalue.slice(0, i) + "<b>" + newvalue.slice(i, end) + "</b>" + newvalue.slice(end);
+                        break;
                     }
                 }
             } else {
