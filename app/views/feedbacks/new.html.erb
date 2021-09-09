@@ -19,11 +19,24 @@
     <%= raw sanitize_field(@admin_setting, :disabled_support_form_text) %>
   </div>
 <% else %>
-  <h3 class="heading"><%= ts("Please use this form for questions about how to use the Archive and to report any technical problems. We are always glad to hear from our users!") %></h3>
+  <h3 class="heading"><%= ts("Please use this form for questions about how to use the Archive and for reporting any technical problems.") %></h3>
   <div class="userstuff">
-    <p><%= ts("If your question or problem concerns potential violations of the Terms of Service, control of Orphaned Works, or issues requiring identity verification such as regaining access to a lost account, please %{contact_abuse_link} instead.", contact_abuse_link: link_to(ts("contact our Policy and Abuse team"), new_abuse_report_path)).html_safe %></p>
-    <p><%= ts("For current updates on Archive performance, please check out our Twitter feed: <a href=\"http://twitter.com/ao3_status\">@AO3_status</a>.").html_safe %></p>
-    <p><%= ts("<strong>We can answer Support inquiries in %{list}.</strong> Please allow for up to one week delay for responses in any language other than English.", list: @support_languages.map(&:name).to_sentence).html_safe %></p>
+    <p><%= ts("For current updates on Archive performance or downtime, please check out our Twitter feed: %{twitter_link}.",  twitter_link: link_to(ts("@AO3_Status"), "https://twitter.com/AO3_Status")).html_safe %></p>
+    <p><%= ts("For reports of violations of the Terms of Service such as harassment, spam, or plagiarism, or if you believe your account has been hacked, please %{contact_abuse_link} instead. We cannot act on these reports or provide information about Policy and Abuse cases.", contact_abuse_link: link_to(ts("contact our Policy and Abuse team"), new_abuse_report_path)).html_safe %></p>
+    <p><%= ts("Some issues you can contact Support about include:") %></p>
+    <ul>
+      <li><%= ts("Bugs, errors, or unexpected site behavior") %></li>
+      <li><%= ts("Questions about how to use the site") %></li>
+      <li><%= ts("Problems setting up your account") %></li>
+      <li><%= ts("Lost password or email preventing access to your account") %></li>
+      <li><%= ts("Requests to canonize or change tags") %></li>
+      <li><%= ts("Feature requests for future development") %></li>
+      <li><%= ts("Questions about orphaned works") %></li>
+      <li><%= ts("Works labeled with the wrong language") %></li>
+      <li><%= ts("General site policy questions") %></li>
+    </ul>
+    <p><%= ts("<strong>We respond to every report we receive, but we are a small volunteer team.</strong> For this reason, we ask you to not submit multiple reports regarding any one issue, or encourage other people to report the same issue, unless there is additional information to offer.").html_safe %></p>
+    <p><%= ts("<strong>We can answer Support inquiries in %{list}.</strong> Please allow for additional delay for responses in any language other than English.", list: @support_languages.map(&:name).to_sentence).html_safe %></p>
   </div>
   <%= form_for(@feedback, html: {class: "post feedback"}) do |f| %>
     <fieldset>
@@ -53,7 +66,7 @@
           <%= f.collection_select(:language, @support_languages, :name, :name, { selected: @feedback.language || Language.default.name }) %>
         </dd>
         <dt class="required">
-          <%= f.label :summary, ts("Brief summary (required)") %>
+          <%= f.label :summary, ts("Brief summary of your question or problem (required)") %>
         </dt>
         <dd class="required">
           <%= f.text_field :summary, size: 60, class: "observe_textlength" %>
@@ -62,15 +75,15 @@
                 failureMessage: ts("Please enter a brief summary of your message")) %>
         </dd>
         <dt class="required">
-          <%= f.label :comment, ts("Your comment (required)") %>
+          <%= f.label :comment, ts("Your question or problem (required)") %>
         </dt>
         <dd class="required">
-          <%= f.text_area :comment, cols: 60, "aria-describedby" => "comment-field-description" %>
-          <%= live_validation_for_field("feedback_comment",
-                failureMessage: ts("Please enter your feedback")) %>
           <p class="footnote" id="comment-field-description">
             <%= ts("Please be as specific as possible, including error messages and/or links") %>
           </p>
+          <%= f.text_area :comment, cols: 60, "aria-describedby" => "comment-field-description" %>
+          <%= live_validation_for_field("feedback_comment",
+                failureMessage: ts("Please enter your feedback")) %>
         </dd>
       </dl>
     </fieldset>

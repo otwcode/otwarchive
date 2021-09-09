@@ -500,6 +500,25 @@
       "note": ""
     },
     {
+      "warning_type": "Cross Site Scripting",
+      "warning_code": 2,
+      "fingerprint": "3cb7375c51e216cad79452d3c9f4c244274ddc4e51c0c3298204bc49dd497cd6",
+      "check_name": "CrossSiteScripting",
+      "message": "Unescaped model attribute",
+      "file": "app/views/feedbacks/new.html.erb",
+      "line": 39,
+      "link": "http://brakemanscanner.org/docs/warning_types/cross_site_scripting",
+      "code": "ts(\"<strong>We can answer Support inquiries in %{list}.</strong> Please allow for additional delay for responses in any language other than English.\", :list => Language.where(:support_available => true).default_order.map(&:name).to_sentence)",
+      "render_path": [{"type":"controller","class":"FeedbacksController","method":"create","line":30,"file":"app/controllers/feedbacks_controller.rb"}],
+      "location": {
+        "type": "template",
+        "template": "feedbacks/new"
+      },
+      "user_input": "Language.where(:support_available => true).default_order",
+      "confidence": "Weak",
+      "note": ""
+    },
+    {
       "warning_type": "Remote Code Execution",
       "warning_code": 24,
       "fingerprint": "3d66ffcf48e7509ecd8c6e3d47442515354cf51d16f487306551161eb14e9e6b",
@@ -1507,25 +1526,6 @@
     {
       "warning_type": "Cross Site Scripting",
       "warning_code": 2,
-      "fingerprint": "c0d6768f84985475005d8982a8e124d2ae8486a2a28c6544fa11ce877f6aabe6",
-      "check_name": "CrossSiteScripting",
-      "message": "Unescaped model attribute",
-      "file": "app/views/feedbacks/new.html.erb",
-      "line": 26,
-      "link": "http://brakemanscanner.org/docs/warning_types/cross_site_scripting",
-      "code": "ts(\"<strong>We can answer Support inquiries in %{list}.</strong> Please allow for up to one week delay for responses in any language other than English.\", :list => Language.where(:support_available => true).default_order.map(&:name).to_sentence)",
-      "render_path": [{"type":"controller","class":"FeedbacksController","method":"create","line":30,"file":"app/controllers/feedbacks_controller.rb"}],
-      "location": {
-        "type": "template",
-        "template": "feedbacks/new"
-      },
-      "user_input": "Language.where(:support_available => true).default_order",
-      "confidence": "Weak",
-      "note": ""
-    },
-    {
-      "warning_type": "Cross Site Scripting",
-      "warning_code": 2,
       "fingerprint": "c224d55c86e29a44a8e20d9c4977f7448050c374dd4467e0c27057357974e302",
       "check_name": "CrossSiteScripting",
       "message": "Unescaped model attribute",
@@ -1908,6 +1908,6 @@
       "note": ""
     }
   ],
-  "updated": "2021-08-30 17:22:12 -0400",
+  "updated": "2021-09-01 16:35:03 +0700",
   "brakeman_version": "3.7.2"
 }
