@@ -182,7 +182,7 @@ en:
       due: "This assignment is due at:"
       any: "Any"
       text:
-        part1: "You have been assigned the following request in the \"%{collection_title}\" (%{collection_url}) challenge at the Archive of Our Own!"
+        assignment: "You have been assigned the following request in the \"%{collection_title}\" challenge (%{collection_url}) at the Archive of Our Own!"
         look_up: "You can look up this assignment from your Assignments page at %{link}."
         footer: "You're receiving this email because you signed up for the %{title} challenge (%{url}). For more information about this challenge and contact information for the moderators, please visit %{profile_url}."
       html:

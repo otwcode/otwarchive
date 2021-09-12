@@ -1,5 +1,5 @@
 <% content_for :message do %>
-<%= t ".text.part1", collection_title: @collection.title, collection_url: collection_url(@collection) %>
+<%= t ".text.assignment", collection_title: @collection.title, collection_url: collection_url(@collection) %>
 
 <%= t ".recipient" %> <%= @request.nil? ? t(".recipient_missing") : text_pseud(@request.pseud) %>
 
