@@ -11,7 +11,7 @@ describe MailerHelper do
   describe "#work_tag_metadata" do
     {
       "Fandom" => ["Fandom: ", "Fandoms: "],
-      "Rating" => ["Rating: ", "Rating: "],
+      "Rating" => ["Rating: ", "Ratings: "],
       "ArchiveWarning" => ["Warning: ", "Warnings: "],
       "Relationship" => ["Relationship: ", "Relationships: "],
       "Character" => ["Character: ", "Characters: "],
@@ -41,7 +41,7 @@ describe MailerHelper do
   describe "#work_tag_metadata_label" do
     {
       "Fandom" => ["Fandom: ", "Fandoms: "],
-      "Rating" => ["Rating: ", "Rating: "],
+      "Rating" => ["Rating: ", "Ratings: "],
       "ArchiveWarning" => ["Warning: ", "Warnings: "],
       "Relationship" => ["Relationship: ", "Relationships: "],
       "Character" => ["Character: ", "Characters: "],
@@ -160,7 +160,7 @@ describe MailerHelper do
     end
 
     {
-      "Rating" => ["Rating:", "Rating:"],
+      "Rating" => ["Rating:", "Ratings:"],
       "ArchiveWarning" => ["Warning:", "Warnings:"],
       "Relationship" => ["Relationship:", "Relationships:"],
       "Character" => ["Character:", "Characters:"],

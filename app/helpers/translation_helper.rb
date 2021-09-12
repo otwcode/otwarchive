@@ -60,4 +60,11 @@ def time_ago_in_words(from_time, include_seconds = false)
 
 alias distance_of_time_in_words_to_now time_ago_in_words
 
+  # Take some text and add whatever punctuation, symbols, and/or spacing
+  # we use to separate a metadata property from its value, e.g., "Property: ",
+  # "Propriété : ".
+  def metadata_property(text)
+    text.html_safe + t("mailer.general.metadata_label_indicator")
+  end
+
 end

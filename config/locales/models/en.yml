@@ -42,7 +42,9 @@ en:
         one: "Additional Tag"
         other: "Additional Tags"
       pseud: "Pseud"
-      rating: "Rating"
+      rating:
+        one: "Rating"
+        other: "Ratings"
       relationship:
         one: "Relationship"
         other: "Relationships"

@@ -135,12 +135,7 @@ module MailerHelper
   def work_tag_metadata_label(tags)
     return if tags.empty?
     type = tags.first.type
-    # Rating has no pluralization.
-    if type == "Rating"
-      t("activerecord.models.rating") + t("mailer.general.metadata_label_indicator")
-    else
-      t("activerecord.models.#{type.underscore}", count: tags.count) + t("mailer.general.metadata_label_indicator")
-    end
+    t("activerecord.models.#{type.underscore}", count: tags.count) + t("mailer.general.metadata_label_indicator")
   end
 
   # We don't use .to_sentence because these aren't links and we risk making any
