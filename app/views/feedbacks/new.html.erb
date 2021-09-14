@@ -78,7 +78,7 @@
           <%= f.label :comment, ts("Your question or problem (required)") %>
         </dt>
         <dd class="required">
-          <p class="footnote" id="comment-field-description">
+          <p id="comment-field-description">
             <%= ts("Please be as specific as possible, including error messages and/or links") %>
           </p>
           <%= f.text_area :comment, cols: 60, "aria-describedby" => "comment-field-description" %>
