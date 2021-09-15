@@ -41,7 +41,7 @@
   <%= form_for(@feedback, html: {class: "post feedback"}) do |f| %>
     <fieldset>
       <legend><%= t(".form.legend.contact_info") %></legend>
-      <p class="notice" id="email-field-description">
+      <p class="notice">
         <%= t(".form.ip") %>
       </p>
       <dl>
@@ -51,7 +51,7 @@
         </dd>
         <dt class="required"><%= f.label :email, t(".form.email.label") %></dt>
         <dd class="required">
-          <%= f.text_field :email, size: 60, "aria-describedby" => "email-field-description" %>
+          <%= f.text_field :email, size: 60 %>
         </dd>
       </dl>
     </fieldset>
