@@ -191,7 +191,6 @@ en:
         faqs: FAQs & Tutorials
         release_notes: Release Notes
         known_issues: Known Issues
-      small_team: We respond to every report we receive, but we are a small volunteer team.
       status:
         current: 'For current updates on Archive performance or downtime, please check out our Twitter feed: %{twitter_link}.'
         twitter: '@AO3_Status'
