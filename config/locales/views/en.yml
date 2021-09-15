@@ -191,12 +191,13 @@ en:
         faqs: FAQs & Tutorials
         release_notes: Release Notes
         known_issues: Known Issues
-      contact_abuse: contact our Policy and Abuse team
       small_team: We respond to every report we receive, but we are a small volunteer team.
       status:
-        current: 'For current updates on Archive performance or downtime, please check out our Twitter feed: %{status_twitter_link}.'
+        current: 'For current updates on Archive performance or downtime, please check out our Twitter feed: %{twitter_link}.'
         twitter: '@AO3_Status'
-      abuse: For reports of violations of the Terms of Service such as harassment, spam, or plagiarism, or if you believe your account has been hacked, please %{contact_abuse_link} instead. We cannot act on these reports or provide information about Policy and Abuse cases.
+      abuse:
+        reports: For reports of violations of the Terms of Service such as harassment, spam, or plagiarism, or if you believe your account has been hacked, please %{contact_link} instead. We cannot act on these reports or provide information about Policy and Abuse cases.
+        contact: contact our Policy and Abuse team
       reportable:
         intro: 'Some issues you can contact Support about include:'
         bugs: Bugs, errors, or unexpected site behavior
