@@ -657,25 +657,6 @@
     {
       "warning_type": "Cross Site Scripting",
       "warning_code": 2,
-      "fingerprint": "4f78e7c315b88714e75a021b21acc1f20dd1148c558a4c8d1ad2b5378ab73165",
-      "check_name": "CrossSiteScripting",
-      "message": "Unescaped model attribute",
-      "file": "app/views/abuse_reports/new.html.erb",
-      "line": 31,
-      "link": "http://brakemanscanner.org/docs/warning_types/cross_site_scripting",
-      "code": "ts(\"<strong>We can answer Abuse reports in %{list}.</strong> Please allow for an additional delay for responses\\n            in any language other than English.\", :list => Language.where(:abuse_support_available => true).default_order.map(&:name).to_sentence)",
-      "render_path": [{"type":"controller","class":"AbuseReportsController","method":"create","line":23,"file":"app/controllers/abuse_reports_controller.rb"}],
-      "location": {
-        "type": "template",
-        "template": "abuse_reports/new"
-      },
-      "user_input": "Language.where(:abuse_support_available => true).default_order",
-      "confidence": "Weak",
-      "note": ""
-    },
-    {
-      "warning_type": "Cross Site Scripting",
-      "warning_code": 2,
       "fingerprint": "4fb400b7bf3636d332686edfe800d418c29f8229587690d6a7724789600f49f1",
       "check_name": "CrossSiteScripting",
       "message": "Unescaped model attribute",
@@ -1249,6 +1230,25 @@
       },
       "user_input": null,
       "confidence": "High",
+      "note": ""
+    },
+    {
+      "warning_type": "Cross Site Scripting",
+      "warning_code": 2,
+      "fingerprint": "989c498b72a408d1131482d595850cdad4a03ab0fa1c7bbd3ce1067b46c4d0b0",
+      "check_name": "CrossSiteScripting",
+      "message": "Unescaped model attribute",
+      "file": "app/views/abuse_reports/new.html.erb",
+      "line": 25,
+      "link": "http://brakemanscanner.org/docs/warning_types/cross_site_scripting",
+      "code": "t(\".languages_html\", :list => Language.where(:abuse_support_available => true).default_order.map(&:name).to_sentence)",
+      "render_path": [{"type":"controller","class":"AbuseReportsController","method":"create","line":23,"file":"app/controllers/abuse_reports_controller.rb"}],
+      "location": {
+        "type": "template",
+        "template": "abuse_reports/new"
+      },
+      "user_input": "Language.where(:abuse_support_available => true).default_order",
+      "confidence": "Weak",
       "note": ""
     },
     {
@@ -1908,6 +1908,6 @@
       "note": ""
     }
   ],
-  "updated": "2021-09-01 16:35:03 +0700",
+  "updated": "2021-09-17 16:29:36 -0400",
   "brakeman_version": "3.7.2"
 }
