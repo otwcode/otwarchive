@@ -46,6 +46,9 @@ When /^I change my email$/ do
   click_button("Change Email")
 end
 
+When /^I enter my password$/ do
+  fill_in("password_check", with: "password")
+end
 
 When /^I view my profile$/ do
   visit user_path(User.current_user)
