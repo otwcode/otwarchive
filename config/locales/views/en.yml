@@ -232,3 +232,49 @@ en:
           error: Please enter your feedback
           description: Please be as specific as possible, including error messages and/or links
         ip: Our spam filter does collect IP addresses, but we never see them.
+  abuse_reports:
+    new:
+      heading:
+        page_title: Report Abuse
+      purview:
+        about: The Abuse committee looks after all of your concerns regarding content and user behavior which breach the Archive %{tos_link}. For technical help, please %{support_link}.
+        tos: Terms of Service
+        support: contact Support
+      do_not_spam_html: <strong>We investigate every report we receive.</strong> For this reason, we ask you to not submit several reports regarding any one issue unless you have additional information to offer. We also ask that you do not encourage other users to submit a report regarding content you have already reported. Doing so slows down our response and reaction time considerably, as we are a small volunteer-based committee.
+      reportable:
+        intro: 'Please submit a report via this form if you have not submitted this report within the past sixty (60) days, and you:'
+        fnok:
+          concerning: would like to contact us regarding your %{fnok_link}, or
+          fnok: Fannish Next of Kin
+        hack: believe that your account has been hacked, or that someone is trying to hack your account, or
+        tos: believe you have found content uploaded to the Archive which breaches our Terms of Service, or
+        dmca:
+          claim: would like to lodge a DMCA claim - please review our %{dmca_link}
+          policy: DMCA Policy
+      languages_html: <strong>We can answer Abuse reports in %{list}.</strong> Please allow for an additional delay for responses in any language other than English.
+      form:
+        legend:
+          abuse: Link and Describe Abuse
+        landmark:
+          send: Send to Abuse Team
+        submit:
+          active: Submit
+        name:
+          label: Your name (optional)
+        email:
+          label: Your email (required)
+          description: We cannot act on reports without a valid email address.
+        language:
+          label: Select language (required)
+        summary:
+          label: Brief summary of Terms of Service Violation (required)
+          error: Please enter a brief summary of your message
+        comment:
+          label: Your comment (required)
+          error: Please describe your concern.
+          description: Please include all relevant URLs and what about the content violates the Archive %{tos_link}. The more thorough the information the quicker we can start investigating.
+          tos: Terms of Service
+        link:
+          label: Link to the page you are reporting (required)
+          error: Please enter the link to the page you are reporting.
+          description: If you came here from the abuse link at the bottom of the page, this will be filled in for you.
