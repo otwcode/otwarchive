@@ -1,0 +1,341 @@
+---
+he:
+  activerecord:
+    errors:
+      messages:
+        record_invalid: 'האימות נכשל: %{errors}'
+  date:
+    abbr_day_names:
+    - א
+    - ב
+    - ג
+    - ד
+    - ה
+    - ו
+    - ש
+    abbr_month_names:
+    -
+    - ינו
+    - פבר
+    - מרץ
+    - אפר
+    - מאי
+    - יונ
+    - יול
+    - אוג
+    - ספט
+    - אוק
+    - נוב
+    - דצמ
+    day_names:
+    - ראשון
+    - שני
+    - שלישי
+    - רביעי
+    - חמישי
+    - שישי
+    - שבת
+    formats:
+      default: "%d-%m-%Y"
+      long: "%e ב%B, %Y"
+      short: "%e %b"
+    month_names:
+    -
+    - ינואר
+    - פברואר
+    - מרץ
+    - אפריל
+    - מאי
+    - יוני
+    - יולי
+    - אוגוסט
+    - ספטמבר
+    - אוקטובר
+    - נובמבר
+    - דצמבר
+    order:
+    - :day
+    - :month
+    - :year
+  datetime:
+    distance_in_words:
+      about_x_hours:
+        one: בערך שעה אחת
+        other: בערך %{count} שעות
+      about_x_months:
+        one: בערך חודש אחד
+        other: בערך %{count} חודשים
+      about_x_years:
+        one: בערך שנה אחת
+        other: בערך %{count} שנים
+      almost_x_years:
+        one: כמעט שנה
+        other: כמעט %{count} שנים
+      half_a_minute: חצי דקה
+      less_than_x_minutes:
+        one: פחות מדקה אחת
+        other: פחות מ- %{count} דקות
+        zero: פחות מדקה אחת
+      less_than_x_seconds:
+        one: פחות משניה אחת
+        other: פחות מ- %{count} שניות
+        zero: פחות משניה אחת
+      over_x_years:
+        one: מעל שנה אחת
+        other: מעל %{count} שנים
+      x_days:
+        one: יום אחד
+        other: "%{count} ימים"
+      x_minutes:
+        one: דקה אחת
+        other: "%{count} דקות"
+      x_months:
+        one: חודש אחד
+        other: "%{count} חודשים"
+      x_seconds:
+        one: שניה אחת
+        other: "%{count} שניות"
+    prompts:
+      day: יום
+      hour: שעה
+      minute: דקה
+      month: חודש
+      second: שניות
+      year: שנה
+  errors:
+    format: "%{attribute} %{message}"
+    messages:
+      accepted: חייב באישור
+      blank: לא יכול להיות ריק
+      confirmation: לא תואם לאישורו
+      empty: לא יכול להיות ריק
+      equal_to: חייב להיות שווה ל- %{count}
+      even: חייב להיות זוגי
+      exclusion: לא זמין
+      greater_than: חייב להיות גדול מ- %{count}
+      greater_than_or_equal_to: חייב להיות גדול או שווה ל- %{count}
+      inclusion: לא נכלל ברשימה
+      invalid: לא תקין
+      less_than: חייב להיות קטן מ- %{count}
+      less_than_or_equal_to: חייב להיות קטן או שווה ל- %{count}
+      not_an_integer: חייב להיות מספר שלם
+      not_a_number: חייב להיות מספר
+      odd: חייב להיות אי זוגי
+      taken: כבר בשימוש
+    template:
+      body: 'אנא בדוק את השדות הבאים:'
+      header:
+        one: 'לא ניתן לשמור את ה%{model}: שגיאה אחת'
+        other: 'לא ניתן לשמור את ה%{model}: %{count} שגיאות.'
+  helpers:
+    select:
+      prompt: נא לבחור
+    submit:
+      create: יצירת %{model}
+      submit: שמור %{model}
+      update: עדכון %{model}
+  mailer:
+    kudos:
+      guest:
+        one: אורחת
+        other: "%{count} אורחות"
+      html:
+        left_kudos:
+          one: "%{givers_list} השאירה קודוס על <i>%{commentable_link}</i>."
+          other: "%{givers_list} השאירו קודוס על <i>%{commentable_link}</i>."
+      text:
+        left_kudos:
+          one: "%{givers_list} השאירה קודוס על %{commentable_link}."
+          other: "%{givers_list} השאירו קודוס על %{commentable_link}."
+      you_have: "[%{app_name}] קיבלת קודוס!"
+  number:
+    currency:
+      format:
+        delimiter: ","
+        format: "%n %u"
+        precision: 2
+        separator: "."
+        significant: false
+        strip_insignificant_zeros: false
+        unit: "₪"
+    format:
+      delimiter: ","
+      precision: 3
+      separator: "."
+      significant: false
+      strip_insignificant_zeros: false
+    human:
+      decimal_units:
+        format: "%n %u"
+        units:
+          billion: מיליארד
+          million: מיליון
+          quadrillion: קודריליון
+          thousand: אלף
+          trillion: טריליון
+      format:
+        precision: 3
+        significant: true
+        strip_insignificant_zeros: true
+      storage_units:
+        format: "%n %u"
+        units:
+          byte:
+            one: בייט
+            other: בתים
+          gb: ג'יגה-בייט
+          kb: קילו-בייט
+          mb: מגה-בייט
+          tb: טרה-בייט
+  support:
+    array:
+      last_word_connector: " ו"
+      two_words_connector: " ו"
+      words_connector: ", "
+  time:
+    am: am
+    formats:
+      default: "%a %d %b %H:%M:%S %Z %Y"
+      long: "%d ב%B, %Y %H:%M"
+      short: "%d %b %H:%M"
+    pm: pm
+  user_mailer:
+    abuse_report:
+      description_para: 'פירוט ההפרה:'
+      para1: 'דו&quot;ח השימוש לרעה הבא נשלח לצוות מדיניות ושימוש לרעה:'
+      subject: "[%{app_name}] דו&quot;ח המדיניות ושימוש לרעה שלך"
+      url_para: 'כתובת האתר של הדף בו מתקיימת ההפרה:'
+    admin_deleted_work_notification:
+      abuse_committee: צור/צרי קשר עם ועדת מדיניות ושימוש לרעה
+      bye: לנוחיותך, מצורף בזאת עותק של יצירתך.
+      hello: "%{user} שלום,"
+      html:
+        part1: יצירתך %{title} נמחקה מהארכיון על ידי אדמין/נית.
+        part2: אם יצירתך הייתה שייכת למיזם שיובא לארכיון על ידי Open Doors (דלתות
+          פתוחות), אנא %{opendoors_link} לשאלות נוספות.
+        part3: אם ייתכן שיצירתך הפרה את תנאי השימוש של הארכיון, אנא %{abuse_link}.
+      opendoors: 'צור/צרי קשר עם דלתות פתוחות '
+      subject: "[%{app_name}] יצירתך נמחקה על ידי אדמין/נית"
+      text:
+        part1: יצירתך "%{title}" נמחקה מהארכיון על ידי אדמין/נית.
+        part2: אם יצירתך הייתה שייכת למיזם שיובא לארכיון על ידי Open Doors (דלתות
+          פתוחות), אנא צור/צרי קשר עם דלתות פתוחות (%{opendoors_link}) לשאלות נוספות.
+        part3: אם ייתכן שיצירתך הפרה את תנאי השימוש של הארכיון, אנא צור/צרי קשר עם
+          ועדת מדיניות ושימוש לרעה (%{abuse_link}).
+    challenge_assignment_notification:
+      any: הכול
+      description: 'תיאור:'
+      due: 'תאריך ההגשה של המשימה הוא:'
+      html:
+        footer: דוא"ל זה נשלח כיוון שנרשמת לאתגר %{title}. מידע נוסף על אתגר זה ופרטי
+          יצירת קשר עם המנהלות שלו זמינים ב%{footer_link}.
+        footer_link: עמוד הפרופיל של האתגר
+        look_up: ניתן לאתר משימה זו ב%{link}.
+        look_up_link: עמוד ה-Assignments (המשימות) שלך
+        part1: קיבלת את הבקשה הבאה באתגר %{link} בארכיון משלנו!
+      optional_tags: 'תגיות אופציונאליות:'
+      prompts: 'פרומפטים:'
+      prompt_url: 'כתובת האתר (URL) של הפרומפט:'
+      recipient: 'מקבלת:'
+      recipient_missing: 'ללא: צור/י קשר עם מנהלת האתגר לקבלת סיוע!'
+      subject: "[%{app_name}][%{collection_title}]המשימה שלך!"
+      text:
+        footer: דוא"ל זה נשלח כיוון שנרשמת לאתגר %{title} (%{url}). מידע נוסף על אתגר
+          זה ופרטי יצירת קשר עם המנהלות שלו זמינים ב%{profile_url}.
+        look_up: ניתן למצוא משימה זו בעמוד ה-Assignments (המשימות) שלך בקישור %{link}.
+        part1: קיבלת את הבקשה הבאה באתגר %{collection_title}(%{collection_url}) בארכיון
+          משלנו!
+    change_email:
+      part1: "%{login} כתובת הדוא&quot;ל המשוייכת לחשבונך שונתה ל- %{email}"
+      subject: "[%{app_name}] כתובת הדוא&quot;ל שונתה"
+    creatorship_notification:
+      explanation: כיוצר/ת שותף/ה ליצירה, ניתן להוסיפך לפרקים חדשים, ללא תלות בהגדרות
+        היוצר/ת השותף/ה שלך. כמו כן, תוסף/י לכל סדרה אליה תתווסף היצירה.
+      html:
+        creation: "%{creation_link} מאת %{pseud_links}"
+        edit: לערוך את ה%{type}
+        remove: אם הוספת בטעות, או שאינך רוצה להיות רשום/ה כיוצר/ת, באפשרותך %{edit}
+          על מנת להסיר את עצמך כיוצר/ת.
+      intro: 'המשתמש/ת %{adding_user} רשם/ה את שם העט שלך %{pseud} כיוצר/ת שותף/ה
+        ל%{type} הבא/ה:'
+      subject: "[%{app_name}] התראת יוצר/ת שותף/ה"
+      text:
+        creation: "%{title} (%{url}) מאת %{pseuds}"
+        remove: 'אם הוספת בטעות, או שאינך רוצה להיות רשום/ה כיוצר/ת, באפשרותך לערוך
+          את ה%{type} על מנת להסיר את עצמך כיוצר/ת: %{url}'
+    creatorship_notification_archivist:
+      explanation: כיוון שהיא פועלת במסגרת תפקידה כארכיונאית של Open Doors (דלתות
+        פתוחות), יש ביכולתה לשייך את שם העט שלך ללא הזמנה, גם אם ביטלת את האפשרות
+        להגדירך כיוצר/ת שותף/ה.
+      html:
+        creation: "%{creation_link} מאת %{pseud_links}"
+        edit: לערוך את ה%{type}
+        remove: אם נוספות בטעות, אם אם אינך רוצה להופיע כיוצר/ת, באפשרותך %{edit}
+          על מנת להסיר את עצמך.
+      intro: 'המשתמשת %{archivist} הוסיפה את שם העט שלך %{pseud} בתור יוצר/ת שותף/ה
+        של ה%{type}:'
+      subject: "[%{app_name}] התראה על הוספתך כיוצר/ת שותף/ה על ידי ארכיונאית"
+      text:
+        creation: 'creation: %{title} (%{url}) מאת %{pseuds}'
+        remove: 'אם נוספת בטעות, או אם אינך רוצה להופיע כיוצר/ת, באפשרותך לערוך את
+          ה%{type} על מנת להסיר את עצמך: %{url}'
+    delete_work_notification:
+      hello: שלום, %{user},
+      html:
+        part1_other: יצירתך %{title} נמחקה על פי הבקשה של %{pseud}.
+        part1_yourself: יצירתך %{title} נמחקה על פי בקשתך.
+        part2: אם יש לך שאלות, אנא %{support}
+      part3: לנוחיותך, מצורף בזאת עותק של יצירתך.
+      subject: "[%{app_name}] יצירתך נמחקה"
+      support: צור/צרי קשר עם צוות התמיכה
+      text:
+        part1_other: יצירתך "%{title}" נמחקה על פי הבקשה של %{pseud}.
+        part1_yourself: יצירתךך "%{title}" נמחקה על פי בקשתך.
+        part2: אם יש לך שאלות, אנא %{support} (%{url}).
+    invite_increase_notification:
+      body:
+        one: רק רצינו ליידע אותך שקיבלת הזמנה חדשה %{count}, בה ניתן להשתמש על מנת
+          ליצור חשבון חדש בארכיון. באפשרותך להזמין חברים/ות דרך הדף %{invitation_page}.
+        other: רק רצינו ליידע אותך שקיבלת %{count} הזמנות חדשות, בהן ניתן להשתמש על
+          מנת ליצור חשבון חדש בארכיון. באפשרותך להזמין חברים/ות דרך הדף %{invitation_page}.
+      closing: " בברכה,"
+      greeting: " שלום %{login}!"
+      invitation_page_link_text: דף ההזמנות שלך
+      subject: "[%{app_name}] הזמנות חדשות"
+    invite_request_declined:
+      greeting: "%{user} שלום,"
+      main:
+        one: צר לנו לבשר לך כי אין באפשרותנו להיענות לבקשתך להזמנה חדשה כעת.
+        other: צר לנו לבשר לך כי אין באפשרותנו להיענות לבקשתך ל-%{count} הזמנות חדשות
+          כעת.
+      reason: 'תוכן בקשתך:'
+      signoff: בברכה,
+      subject: "[%{app_name}] בקשתך לקוד הזמנה נוסף נדחתה"
+    signup_notification:
+      activate_your_account: לחץ/י על קישור זה כדי להפעיל את חשבונך
+      admin_posts: חדשות AO3
+      bye: כולנו תקווה שתהנה/י מהשימוש באתר.
+      contact_support: צרו קשר עם התמיכה
+      faq: שאלות נפוצות
+      html:
+        part1: אנא %{activate_account_link}.
+        part2: ברגע שחשבונך יופעל, תוכל/י לפרסם יצירות, להגדיר רישומים לקבלת עדכונים
+          בדוא&quot;ל כדי לקבל הודעה כאשר חשבונות או יצירות מועדפים מתעדכנים, להגדיר
+          העדפות כדי להתאים באופן אישי את אופן ההצגה של האתר, לעקוב אחר היצירות אליהן
+          ניגשת בעבר באמצעות ההיסטוריה, ודברים רבים נוספים.
+        part3: מידע ועצות בנוגע לשימוש בארכיון זמינים ב%{faq_link}. את החדשות האחרונות
+          אודות פיתוח האתר ניתן למצוא ב%{admin_posts_link}. אם דרושה לך עזרה נוספת,
+          אם נתקלת בבעייה באתר או אם יש לך שאלות או הערות, אנא %{contact_support_link},
+          שתמיד שמח לעזור.
+      subject: "[%{app_name}] אישור "
+      text:
+        part1: 'אנא לחץ/י על קישור זה כדי להפעיל את חשבונך: %{activate_account_url}'
+        part2: ברגע שחשבונך יופעל, תוכל/י לפרסם יצירות, להגדיר רישומים לקבלת עדכונים
+          בדוא&quot;ל כדי לקבל הודעה כאשר חשבונות או יצירות מועדפים מתעדכנים, להגדיר
+          העדפות כדי להתאים באופן אישי את אופן ההצגה של האתר, לעקוב אחר היצירות אליהן
+          ניגשת בעבר באמצעות ההיסטוריה, ודברים רבים נוספים.
+        part3: 'מידע ועצות בנוגע לשימוש בארכיון זמינים בשאלות הנפוצות שלנו ב-%{faq_url}.
+          את החדשות האחרונות אודות פיתוח האתר ניתן למצוא בחדשות AO3 %{admin_posts_url}.
+          אם דרושה לך עזרה נוספת, אם נתקלת בבעייה באתר או אם יש לך שאלות או הערות,
+          אנא צור/צרי קשר עם צוות התמיכה שלנו, שתמיד שמח לעזור: %{contact_support_url}'
+      welcome: "ברוכים הבאים לארכיון משלנו, %{login}!\n   "

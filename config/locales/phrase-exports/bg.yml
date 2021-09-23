@@ -1,0 +1,247 @@
+---
+bg:
+  activerecord:
+    errors:
+      messages:
+        record_invalid: 'имаше грешки: %{errors}'
+  date:
+    abbr_day_names:
+    - нед
+    - пон
+    - вт
+    - ср
+    - чет
+    - пет
+    - съб
+    abbr_month_names:
+    -
+    - ян.
+    - фев.
+    - март
+    - апр.
+    - май
+    - юни
+    - юли
+    - авг.
+    - сеп.
+    - окт.
+    - ноем.
+    - дек.
+    day_names:
+    - неделя
+    - понеделник
+    - вторник
+    - сряда
+    - четвъртък
+    - петък
+    - събота
+    formats:
+      default: "%d.%m.%Y"
+      long: "%d %B %Y"
+      short: "%d %b"
+    month_names:
+    -
+    - януари
+    - февруари
+    - март
+    - април
+    - май
+    - юни
+    - юли
+    - август
+    - септември
+    - октомври
+    - ноември
+    - декември
+    order:
+    - :day
+    - :month
+    - :year
+  datetime:
+    distance_in_words:
+      about_x_hours:
+        one: около 1 час
+        other: около %{count} часа
+      about_x_months:
+        one: около 1 месец
+        other: около %{count} месеца
+      about_x_years:
+        one: около 1 година
+        other: около %{count} години
+      almost_x_years:
+        one: почти 1 година
+        other: почти %{count} години
+      half_a_minute: половин минута
+      less_than_x_minutes:
+        one: по-малко от 1 минута
+        other: по-малко от %{count} минути
+      less_than_x_seconds:
+        one: по-малко от 1 секунда
+        other: по-малко от %{count} секунди
+      over_x_years:
+        one: над 1 година
+        other: над %{count} години
+      x_days:
+        one: 1 ден
+        other: "%{count} дни"
+      x_minutes:
+        one: 1 минута
+        other: "%{count} минути"
+      x_months:
+        one: 1 месец
+        other: "%{count} месеца"
+      x_seconds:
+        one: 1 секунда
+        other: "%{count} секунди"
+    prompts:
+      day: Ден
+      hour: Час
+      minute: Минута
+      month: Месец
+      second: Секунда
+      year: Година
+  errors:
+    format: "%{attribute} %{message}"
+    messages:
+      accepted: трябва да се потвърди
+      blank: не може да е без стойност
+      confirmation: не съответства на потвърждението
+      empty: не може да е празно
+      equal_to: трябва да има стойност, равна на %{count}
+      even: трябва да е нечетно
+      exclusion: съдържа предварително зададена стойност
+      greater_than: трябва да има стойност, по-голяма от %{count}
+      greater_than_or_equal_to: трябва да има стойност, по-голяма или равна на %{count}
+      inclusion: съдържа непредвидена стойност
+      invalid: съдържа невярна стойност
+      less_than: трябва да има стойност, по-малка от %{count}
+      less_than_or_equal_to: трябва да има стойност, по-малка или равна на %{count}
+      not_an_integer: не е цяло число
+      not_a_number: не е число
+      odd: трябва да е четно
+      taken: вече съществува
+    template:
+      body: 'Възникнаха проблеми със следните полета:'
+      header:
+        one: "%{model}: записът е неуспешен заради 1 грешка"
+        other: "%{model}: записът е неуспешен заради %{count} грешки"
+  helpers:
+    select:
+      prompt: Моля отбележете
+    submit:
+      create: Създай %{model}
+      submit: Запази %{model}
+      update: Обнови %{model}
+  number:
+    currency:
+      format:
+        delimiter: " "
+        format: "%n %u"
+        precision: 2
+        separator: ","
+        significant: false
+        strip_insignificant_zeros: false
+        unit: лв.
+    format:
+      delimiter: " "
+      precision: 3
+      separator: ","
+      significant: false
+      strip_insignificant_zeros: false
+    human:
+      decimal_units:
+        format: "%n %u"
+        units:
+          billion: милиарда
+          million: милиона
+          quadrillion: квадрилиона
+          thousand: хиляди
+          trillion: трилиона
+      format:
+        precision: 1
+        significant: true
+        strip_insignificant_zeros: true
+      storage_units:
+        format: "%n %u"
+        units:
+          byte:
+            one: Байт
+            other: Байта
+          gb: ГБ
+          kb: КБ
+          mb: МБ
+          tb: ТБ
+  support:
+    array:
+      last_word_connector: " и "
+      two_words_connector: " и "
+      words_connector: ", "
+  time:
+    am: преди обяд
+    formats:
+      default: "%a, %d %b %Y, %H:%M:%S %z"
+      long: "%d %B %Y, %H:%M"
+      short: "%d %b, %H:%M"
+    pm: следобед
+  user_mailer:
+    abuse_report:
+      description_para: 'Описание на нарушението:'
+      para1: 'На екип Нарушения беше изпратен следният сигнал:'
+      subject: "[%{app_name}] Твоят сигнал за нарушение"
+      url_para: 'URL на страницата, на която се намира нарушението:'
+    change_email:
+      part1: "%{login}, имейлът, който използваш за акаунта си, беше променен на %{email}"
+      subject: "[%{app_name}] Промяна на имейл"
+    delete_work_notification:
+      hello: Скъпи %{user},
+      html:
+        part1_other: Твоята творба %{title} е изтрита по заявка на %{pseud}.
+        part1_yourself: Твоята творба %{title} беше изтрита по твоя заявка.
+        part2: 'Ако имаш въпроси, моля %{support}. '
+      part2: 'Ако имаш въпроси, моля %{support}. '
+      part3: Приложено е копие от вашето произведение за справка..
+      subject: "[%{app_name}] Твоята творба беше  изтрита"
+      support: свържи се с Отдел Поддръжка
+      text:
+        part1_other: Твоята творба “%{title}" е изтрита по заявка на %{pseud}.
+        part1_yourself: Твоята творба "%{title}" е изтрита по твоя заявка.
+        part2: Ако имаш въпроси, моля %{support} (%{url}).
+    invitation:
+      been_invited: Имаш покана да се присъединиш към нашия бета проект!
+      greeting: Привет от Archive of Our Own – AO3 (Нашият архив) !
+      has_invited: "%{user_name} те покани да се присъединиш към нашия бета проект!"
+      html:
+        faq_link: Повече информация можеш да намериш в %{faq_link}.
+        faq_link_text: нашите Често Задавани Въпроси
+        part3: 'Ако желаеш да се присъединиш, моля да се регистрираш на следния уеб
+          адрес: %{invitation_link}'
+      part1: Archive of Our Own – AO3 (Нашият архив) е безплатен, некомерсиален архив,
+        изграден от и за феновете. Ние сме мултифенска общност, която приветства всякакъв
+        вид фенско творчество, сред което фен фикшън, фенарт, фен видеа и аудиофикове.
+        Използваме софтуера с отворен код otwarchive, а сървърите ни са притежание
+        на организацията с нестопанска цел OTW (Организация за преобразуващи произведения),
+        чиято дейност включва защита на правата на феновете и опазване на фенското
+        творчество.
+      part2: Освен това имаме много страхотни функции, които ще ти помогнат да намериш
+        фенските творби, които търсиш, както и да публикуваш и споделяш твоите собствени
+        произведения. Предстоят ни и още много нови неща! Твоите отзиви сега, по време
+        на бета периода, ще ни помогнат в изграждането на един още по-добър архив.
+        \o/
+      subject: "[%{app_name}] Покана"
+      text:
+        faq_link: Повече информация можеш да намериш в нашите Често Задавани Въпроси
+          на %{faq_link}.
+        part3: 'Ако желаеш да се присъединиш, моля да се регистрираш на следния уеб
+          адрес: %{invitation_link}'
+    invite_increase_notification:
+      body:
+        one: Искаме да те информираме, че имаш %{count} нова покана, която може да
+          използваш за създаването на нов акаунт в AO3. Можеш да поканиш приятел през
+          %{invitation_page}.
+        other: Искаме да те информираме, че имаш %{count} нови покани, които може
+          да използваш за създаването на нови акаунти в AO3. Можеш да поканиш приятел
+          през %{invitation_page}.
+      closing: Поздрави,
+      greeting: Привет, %{login}!
+      invitation_page_link_text: твоята страница с покани
+      subject: "[%{app_name}] Нови покани"
