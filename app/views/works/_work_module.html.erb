@@ -1,7 +1,7 @@
 <% # expects "work" %>
 
 <% if work.unrevealed? && !is_author_of?(work) %>
-  <%= render 'works/mystery_blurb', :item => work, :unrevealed => true %>
+  <%= render "works/mystery_blurb", item: work %>
 <% else %>
 
   <!--title, author, fandom-->
