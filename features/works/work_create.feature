@@ -395,3 +395,14 @@ Feature: Create Works
     When I follow "Next Chapter"
     Then I should see "barbaz, foobar"
       And I should not see "Chapter by"
+
+  Scenario: You cannot create a work with too many tags
+    Given the user-defined tag limit is 7
+      And I am logged in as a random user
+    When I set up the draft "Over the Limit"
+      And I fill in "Fandoms" with "Fandom 1, Fandom 2"
+      And I fill in "Characters" with "Character 1, Character 2"
+      And I fill in "Relationships" with "Relationship 1, Relationship 2"
+      And I fill in "Additional Tags" with "Additional Tag 1, Additional Tag 2"
+      And I press "Post"
+    Then I should see "Fandom, relationship, character, and additional tags must not add up to more than 7. Your work has 8 of these tags, so you must remove 1 of them."

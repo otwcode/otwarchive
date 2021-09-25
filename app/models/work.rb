@@ -152,6 +152,9 @@ class Work < ApplicationRecord
     end
   end
 
+  validates :user_defined_tags_count,
+            at_most: { maximum: proc { ArchiveConfig.USER_DEFINED_TAGS_MAX } }
+
   # If the recipient is a protected user, it should not be possible to give them
   # a gift work unless it fulfills a gift exchange assignment or non-anonymous
   # prompt meme claim for the recipient.

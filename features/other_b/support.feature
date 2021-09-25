@@ -10,7 +10,7 @@ Feature: Filing a support request
   When I follow "Support and Feedback"
   When I select "Deutsch" from "feedback_language"
     And I fill in "Brief summary" with "Just a brief note"
-    And I fill in "Your comment" with "Men have their old boys' network, but we have the OTW. You guys rock!"
+    And I fill in "Your question or problem" with "Men have their old boys' network, but we have the OTW. You guys rock!"
     And all emails have been delivered
     And I press "Send"
   Then I should see "Your message was sent to the Archive team - thank you!"
@@ -20,7 +20,7 @@ Feature: Filing a support request
     And the email should say what time it was sent
   When I follow "Support and Feedback"
     And I fill in "Brief summary" with "you suck"
-    And I fill in "Your comment" with "blah blah blah"
+    And I fill in "Your question or problem" with "blah blah blah"
     And I fill in "Your email (required)" with "test@archiveofourown.org"
     And I select "Deutsch" from "feedback_language"
     And all emails have been delivered
@@ -35,7 +35,7 @@ Feature: Filing a support request
     And I follow "Support and Feedback"
   When I select "Deutsch" from "feedback_language"
     And I fill in "Brief summary" with "Just a brief note"
-    And I fill in "Your comment" with "Men have their old boys' network, but we have the OTW. You guys rock!"
+    And I fill in "Your question or problem" with "Men have their old boys' network, but we have the OTW. You guys rock!"
     And I fill in "Your email (required)" with ""
     And all emails have been delivered
     And I press "Send"
@@ -45,3 +45,4 @@ Feature: Filing a support request
     And I press "Send"
   Then I should see "Your message was sent to the Archive team - thank you!"
     And 2 emails should be delivered
+    

@@ -1,7 +1,7 @@
 <% content_for :message do %>
-Hello, <%= @user.login %>!
+<%= t("mailer.general.greeting.informal.addressed", name: @user.login) %>
 
-A gift work has been posted for you<% if @collection then %> in the <%= "#{@collection.title}" %> collection<% end %> at the Archive of Our Own!
+A gift work has been posted for you<% if @collection %> in the "<%= @collection.title %>" collection (<%= collection_url(@collection) %>)<% end %> at the Archive of Our Own!
 
 "<%= @work.title.html_safe %>" (<%= @work.word_count %> words)
 <%= @collection ? collection_work_url(@collection, @work) : work_url(@work) %>

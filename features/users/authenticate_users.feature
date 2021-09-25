@@ -21,7 +21,7 @@ Feature: User Authentication
     Then I should see "Check your email for instructions on how to reset your password."
       And 1 email should be delivered
       And the email should contain "sam"
-      And the email should contain "someone has requested a password reset for your account"
+      And the email should contain "Someone has requested a password reset for your account"
       And the email should not contain "translation missing"
 
     # existing password should still work

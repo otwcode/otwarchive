@@ -109,7 +109,7 @@ class CollectionItem < ApplicationRecord
 
       # For a more helpful error message, raise an error saying that the work
       # is invalid if we fail to save it.
-      raise ActiveRecord::RecordInvalid, work unless work.save
+      raise ActiveRecord::RecordInvalid, work unless work.save(validate: false)
     end
   end
 
@@ -117,7 +117,7 @@ class CollectionItem < ApplicationRecord
   after_update :update_item_for_status_change
   def update_item_for_status_change
     if saved_change_to_user_approval_status? || saved_change_to_collection_approval_status?
-      item.save!
+      item.save!(validate: false)
     end
   end
 

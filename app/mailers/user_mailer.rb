@@ -207,15 +207,17 @@ class UserMailer < ActionMailer::Base
     @invalid_signups = invalid_signup_ids
     mail(
       to: @collection.get_maintainers_email,
-      subject: "[#{ArchiveConfig.APP_SHORT_NAME}][#{@collection.title}] Invalid Sign-ups Found"
+      subject: "[#{ArchiveConfig.APP_SHORT_NAME}][#{@collection.title}] Invalid sign-ups found"
     )
   end
 
+  # This is sent at the end of matching, i.e., after assignments are generated.
+  # It is also sent when assignments are regenerated.
   def potential_match_generation_notification(collection_id)
     @collection = Collection.find(collection_id)
     mail(
       to: @collection.get_maintainers_email,
-      subject: "[#{ArchiveConfig.APP_SHORT_NAME}][#{@collection.title}] Potential Assignment Generation Complete"
+      subject: "[#{ArchiveConfig.APP_SHORT_NAME}][#{@collection.title}] Potential assignment generation complete"
     )
   end
 
@@ -328,14 +330,22 @@ class UserMailer < ActionMailer::Base
   end
 
   # Emails a recipient to say that a gift has been posted for them
-  def recipient_notification(user_id, work_id, collection_id=nil)
+  def recipient_notification(user_id, work_id, collection_id = nil)
     @user = User.find(user_id)
     @work = Work.find(work_id)
     @collection = Collection.find(collection_id) if collection_id
+    subject = if @collection
+                t("user_mailer.recipient_notification.subject.collection",
+                  app_name: ArchiveConfig.APP_SHORT_NAME,
+                  collection_title: @collection.title)
+              else
+                t("user_mailer.recipient_notification.subject.no_collection",
+                  app_name: ArchiveConfig.APP_SHORT_NAME)
+              end
     I18n.with_locale(Locale.find(@user.preference.preferred_locale).iso) do
       mail(
         to: @user.email,
-        subject: "[#{ArchiveConfig.APP_SHORT_NAME}]#{@collection ? '[' + @collection.title + ']' : ''} A Gift Work For You #{@collection ? 'From ' + @collection.title : ''}"
+        subject: subject
       )
     end
     ensure
@@ -351,7 +361,7 @@ class UserMailer < ActionMailer::Base
       I18n.with_locale(Locale.find(user.preference.preferred_locale).iso) do
         mail(
           to: user.email,
-          subject: "[#{ArchiveConfig.APP_SHORT_NAME}] A Response to your Prompt"
+          subject: "[#{ArchiveConfig.APP_SHORT_NAME}] A response to your prompt"
         )
       end
     end
@@ -408,7 +418,7 @@ class UserMailer < ActionMailer::Base
 
     mail(
         to: @user.email,
-        subject: "[#{ArchiveConfig.APP_SHORT_NAME}] Your work has been hidden by the Abuse Team"
+        subject: default_i18n_subject(app_name: ArchiveConfig.APP_SHORT_NAME)
     )
   end
 
