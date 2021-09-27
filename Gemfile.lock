@@ -289,7 +289,7 @@ GEM
       nokogiri (~> 1)
       rake
     mini_mime (1.1.0)
-    mini_portile2 (2.5.1)
+    mini_portile2 (2.6.1)
     minitest (5.14.4)
     mono_logger (1.1.0)
     multi_json (1.15.0)
@@ -312,8 +312,8 @@ GEM
     netrc (0.11.0)
     newrelic_rpm (6.11.0.365)
     nio4r (2.5.7)
-    nokogiri (1.11.6)
-      mini_portile2 (~> 2.5.0)
+    nokogiri (1.12.5)
+      mini_portile2 (~> 2.6.1)
       racc (~> 1.4)
     nokogumbo (1.4.9)
       nokogiri
