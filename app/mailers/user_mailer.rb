@@ -429,7 +429,7 @@ class UserMailer < ActionMailer::Base
       )
     end
     ensure
-     I18n.locale = I18n.default_locale
+      I18n.locale = I18n.default_locale
   end
 
   def admin_spam_work_notification(creation_id, user_id)
