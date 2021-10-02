@@ -70,8 +70,6 @@ class UserMailer < ActionMailer::Base
                    app_name: ArchiveConfig.APP_SHORT_NAME)
       )
     end
-  ensure
-    I18n.locale = I18n.default_locale
   end
 
   # Sends an invitation to join the archive
@@ -115,8 +113,6 @@ class UserMailer < ActionMailer::Base
         subject: "[#{ArchiveConfig.APP_SHORT_NAME}] Works uploaded"
       )
     end
-    ensure
-      I18n.locale = I18n.default_locale
   end
 
   # Sends a batched subscription notification
@@ -160,8 +156,6 @@ class UserMailer < ActionMailer::Base
         subject: "[#{ArchiveConfig.APP_SHORT_NAME}] #{subject}"
       )
     end
-    ensure
-      I18n.locale = I18n.default_locale
   end
 
   # Emails a user to say they have been given more invitations for their friends
@@ -174,8 +168,6 @@ class UserMailer < ActionMailer::Base
         subject: "#{t 'user_mailer.invite_increase_notification.subject', app_name: ArchiveConfig.APP_SHORT_NAME}"
       )
     end
-    ensure
-      I18n.locale = I18n.default_locale
   end
 
   # Emails a user to say that their request for invitation codes has been declined
@@ -189,8 +181,6 @@ class UserMailer < ActionMailer::Base
         subject: t('user_mailer.invite_request_declined.subject', app_name: ArchiveConfig.APP_SHORT_NAME)
       )
     end
-    ensure
-      I18n.locale = I18n.default_locale
   end
 
   # TODO: This may be sent to multiple users simultaneously. We need to ensure
