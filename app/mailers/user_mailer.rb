@@ -228,7 +228,7 @@ class UserMailer < ActionMailer::Base
     @assigned_user = User.find(assigned_user_id)
     assignment = ChallengeAssignment.find(assignment_id)
     @request = (assignment.request_signup || assignment.pinch_request_signup)
-    I18n.with_locale(Locale.find(@user.preference.preferred_locale).iso) do
+    I18n.with_locale(Locale.find(@assigned_user.preference.preferred_locale).iso) do
       mail(
         to: @assigned_user.email,
         subject: default_i18n_subject(app_name: ArchiveConfig.APP_SHORT_NAME, collection_title: @collection.title)
