@@ -37,6 +37,10 @@ Otwarchive::Application.configure do
   # Inline ActiveJob when testing:
   config.active_job.queue_adapter = :inline
 
+  # Enable locale fallbacks for I18n (makes lookups for any locale fall back to
+  # the I18n.default_locale when a translation can not be found)
+  config.i18n.fallbacks = true
+
   # Print deprecation notices to the stderr
   config.active_support.deprecation = :stderr
 

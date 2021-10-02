@@ -27,19 +27,21 @@ Feature: Admin Actions to Post FAQs
     Then I should see "New Content, yay"
       And I should not see "Some text"
 
-  Scenario: Post a FAQ that is a translation of another
+  Scenario: Post a translated FAQ for a locale, then change the locale's code.
     Given basic languages
-    When I am logged in as an admin
-    When I follow "Admin Posts"
-      And I follow "Archive FAQ" within "#header"
+      And I am logged in as an admin
+
+    # Post "en" FAQ
+    When I go to the archive_faqs page
       And I follow "New FAQ Category"
       And I fill in "Question*" with "What is AO3?"
       And I fill in "Answer*" with "Some text, that is sufficiently long to pass validation."
       And I fill in "Category name*" with "New subsection"
       And I fill in "Anchor name*" with "whatisao3"
-    When I press "Post"
+      And I press "Post"
     Then I should see "ArchiveFaq was successfully created"
 
+    # Translate FAQ to "de"
     When I follow "Archive FAQ"
       And I select "Deutsch" from "language_id"
       And I press "Go" within "div#inner.wrapper"
@@ -50,16 +52,38 @@ Feature: Admin Actions to Post FAQs
       And I check "Question translated"
       And I press "Post"
     Then I should see "ArchiveFaq was successfully updated."
-      # The user has previously selected German as their language
       And I should not see "New subsection"
       And I should see "Neuer Abschnitt"
       And I should see "Was ist AO3?"
       And I should see "Einige Text"
 
-    When I follow "Archive FAQ"
-      And I select "English" from "language_id"
-      And I press "Go" within "div#inner.wrapper"
-    Then I should not see "Neuer Abschnitt"
-    When I follow "New subsection"
-      And I should see "What is AO3?"
+    # Change locale "de" to "ger"
+    When I go to the locales page
+      And I follow "Edit"
+    Then I should see "Deutsch" in the "Name" input
+    When I fill in "locale_iso" with "ger"
+      And I press "Update Locale"
+    Then I should see "Your locale was successfully updated."
+      And I should see "Deutsch ger"
+
+    # The current session preference remains "de", the category name falls back to the default locale,
+    # but no "de" questions will be found.
+    When I go to the archive_faqs page
+      And I follow "New subsection"
+    Then I should not see "What is AO3?"
+      And I should not see "Was ist AO3?"
+
+    # Log out and view FAQs; the default locale should be used
+    When I log out
+      And I go to the archive_faqs page
+      And I follow "New subsection"
+    Then I should see "What is AO3?"
       And I should see "Some text"
+
+    # Select "ger"
+    When I go to the archive_faqs page
+      And I select "Deutsch" from "language_id"
+      And I press "Go" within "div#inner.wrapper"
+      And I follow "Neuer Abschnitt"
+    Then I should see "Was ist AO3?"
+      And I should see "Einige Text"
