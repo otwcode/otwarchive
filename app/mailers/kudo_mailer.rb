@@ -44,8 +44,6 @@ class KudoMailer < ActionMailer::Base
         subject: t('mailer.kudos.you_have', app_name: ArchiveConfig.APP_SHORT_NAME)
       )
     end
-    ensure
-      I18n.locale = I18n.default_locale
   end
 
   def guest_kudos(guest_count)

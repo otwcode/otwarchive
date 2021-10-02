@@ -234,8 +234,6 @@ class UserMailer < ActionMailer::Base
         subject: default_i18n_subject(app_name: ArchiveConfig.APP_SHORT_NAME, collection_title: @collection.title)
       )
     end
-    ensure
-      I18n.locale = I18n.default_locale
   end
 
   # Asks a user to validate and activate their new account
@@ -247,8 +245,6 @@ class UserMailer < ActionMailer::Base
         subject: t('user_mailer.signup_notification.subject', app_name: ArchiveConfig.APP_SHORT_NAME)
       )
     end
-    ensure
-      I18n.locale = I18n.default_locale
   end
 
   # Confirms to a user that their email was changed
@@ -262,8 +258,6 @@ class UserMailer < ActionMailer::Base
         subject: t('user_mailer.change_email.subject', app_name: ArchiveConfig.APP_SHORT_NAME)
       )
     end
-    ensure
-      I18n.locale = I18n.default_locale
   end
 
   ### WORKS NOTIFICATIONS ###
@@ -281,8 +275,6 @@ class UserMailer < ActionMailer::Base
                    app_name: ArchiveConfig.APP_SHORT_NAME)
       )
     end
-  ensure
-    I18n.locale = I18n.default_locale
   end
 
   # Sends email when a user is added as a co-creator
@@ -298,8 +290,6 @@ class UserMailer < ActionMailer::Base
                    app_name: ArchiveConfig.APP_SHORT_NAME)
       )
     end
-  ensure
-    I18n.locale = I18n.default_locale
   end
 
   # Sends email when a user is added as an unapproved/pending co-creator
@@ -315,8 +305,6 @@ class UserMailer < ActionMailer::Base
                    app_name: ArchiveConfig.APP_SHORT_NAME)
       )
     end
-  ensure
-    I18n.locale = I18n.default_locale
   end
 
   # Sends emails to creators whose stories were listed as the inspiration of another work
@@ -331,8 +319,6 @@ class UserMailer < ActionMailer::Base
         subject: "[#{ArchiveConfig.APP_SHORT_NAME}] Related work notification"
       )
     end
-    ensure
-      I18n.locale = I18n.default_locale
   end
 
   # Emails a recipient to say that a gift has been posted for them
@@ -354,8 +340,6 @@ class UserMailer < ActionMailer::Base
         subject: subject
       )
     end
-    ensure
-      I18n.locale = I18n.default_locale
   end
 
   # Emails a prompter to say that a response has been posted to their prompt
@@ -371,8 +355,6 @@ class UserMailer < ActionMailer::Base
         )
       end
     end
-    ensure
-      I18n.locale = I18n.default_locale
   end
 
   # Sends email to creators when a creation is deleted
@@ -392,8 +374,6 @@ class UserMailer < ActionMailer::Base
         subject: t('user_mailer.delete_work_notification.subject', app_name: ArchiveConfig.APP_SHORT_NAME)
       )
     end
-    ensure
-      I18n.locale = I18n.default_locale
   end
 
   # Sends email to creators when a creation is deleted by an admin
@@ -413,8 +393,6 @@ class UserMailer < ActionMailer::Base
         subject: t('user_mailer.admin_deleted_work_notification.subject', app_name: ArchiveConfig.APP_SHORT_NAME)
       )
     end
-    ensure
-      I18n.locale = I18n.default_locale
   end
 
   # Sends email to creators when a creation is hidden by an admin
@@ -428,8 +406,6 @@ class UserMailer < ActionMailer::Base
         subject: default_i18n_subject(app_name: ArchiveConfig.APP_SHORT_NAME)
       )
     end
-    ensure
-      I18n.locale = I18n.default_locale
   end
 
   def admin_spam_work_notification(creation_id, user_id)
