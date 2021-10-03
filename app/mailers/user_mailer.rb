@@ -17,7 +17,7 @@ class UserMailer < ActionMailer::Base
 
   default from: "Archive of Our Own " + "<#{ArchiveConfig.RETURN_ADDRESS}>"
 
-  # Send an email letting authors know their work has been added to a collection
+  # Send an email letting creators know their work has been added to a collection
   def added_to_collection_notification(user_id, work_id, collection_id)
     @user = User.find(user_id)
     @work = Work.find(work_id)
@@ -70,8 +70,6 @@ class UserMailer < ActionMailer::Base
                    app_name: ArchiveConfig.APP_SHORT_NAME)
       )
     end
-  ensure
-    I18n.locale = I18n.default_locale
   end
 
   # Sends an invitation to join the archive
@@ -115,8 +113,6 @@ class UserMailer < ActionMailer::Base
         subject: "[#{ArchiveConfig.APP_SHORT_NAME}] Works uploaded"
       )
     end
-    ensure
-      I18n.locale = I18n.default_locale
   end
 
   # Sends a batched subscription notification
@@ -160,8 +156,6 @@ class UserMailer < ActionMailer::Base
         subject: "[#{ArchiveConfig.APP_SHORT_NAME}] #{subject}"
       )
     end
-    ensure
-      I18n.locale = I18n.default_locale
   end
 
   # Emails a user to say they have been given more invitations for their friends
@@ -174,8 +168,6 @@ class UserMailer < ActionMailer::Base
         subject: "#{t 'user_mailer.invite_increase_notification.subject', app_name: ArchiveConfig.APP_SHORT_NAME}"
       )
     end
-    ensure
-      I18n.locale = I18n.default_locale
   end
 
   # Emails a user to say that their request for invitation codes has been declined
@@ -189,10 +181,10 @@ class UserMailer < ActionMailer::Base
         subject: t('user_mailer.invite_request_declined.subject', app_name: ArchiveConfig.APP_SHORT_NAME)
       )
     end
-    ensure
-      I18n.locale = I18n.default_locale
   end
 
+  # TODO: This may be sent to multiple users simultaneously. We need to ensure
+  # each user gets the email for their preferred locale.
   def collection_notification(collection_id, subject, message)
     @message = message
     @collection = Collection.find(collection_id)
@@ -226,10 +218,12 @@ class UserMailer < ActionMailer::Base
     @assigned_user = User.find(assigned_user_id)
     assignment = ChallengeAssignment.find(assignment_id)
     @request = (assignment.request_signup || assignment.pinch_request_signup)
-    mail(
-      to: @assigned_user.email,
-      subject: t("user_mailer.challenge_assignment_notification.subject", app_name: ArchiveConfig.APP_SHORT_NAME, collection_title: @collection.title)
-    )
+    I18n.with_locale(Locale.find(@assigned_user.preference.preferred_locale).iso) do
+      mail(
+        to: @assigned_user.email,
+        subject: default_i18n_subject(app_name: ArchiveConfig.APP_SHORT_NAME, collection_title: @collection.title)
+      )
+    end
   end
 
   # Asks a user to validate and activate their new account
@@ -241,8 +235,6 @@ class UserMailer < ActionMailer::Base
         subject: t('user_mailer.signup_notification.subject', app_name: ArchiveConfig.APP_SHORT_NAME)
       )
     end
-    ensure
-      I18n.locale = I18n.default_locale
   end
 
   # Confirms to a user that their email was changed
@@ -256,8 +248,6 @@ class UserMailer < ActionMailer::Base
         subject: t('user_mailer.change_email.subject', app_name: ArchiveConfig.APP_SHORT_NAME)
       )
     end
-    ensure
-      I18n.locale = I18n.default_locale
   end
 
   ### WORKS NOTIFICATIONS ###
@@ -275,8 +265,6 @@ class UserMailer < ActionMailer::Base
                    app_name: ArchiveConfig.APP_SHORT_NAME)
       )
     end
-  ensure
-    I18n.locale = I18n.default_locale
   end
 
   # Sends email when a user is added as a co-creator
@@ -292,8 +280,6 @@ class UserMailer < ActionMailer::Base
                    app_name: ArchiveConfig.APP_SHORT_NAME)
       )
     end
-  ensure
-    I18n.locale = I18n.default_locale
   end
 
   # Sends email when a user is added as an unapproved/pending co-creator
@@ -309,11 +295,9 @@ class UserMailer < ActionMailer::Base
                    app_name: ArchiveConfig.APP_SHORT_NAME)
       )
     end
-  ensure
-    I18n.locale = I18n.default_locale
   end
 
-  # Sends emails to authors whose stories were listed as the inspiration of another work
+  # Sends emails to creators whose stories were listed as the inspiration of another work
   def related_work_notification(user_id, related_work_id)
     @user = User.find(user_id)
     @related_work = RelatedWork.find(related_work_id)
@@ -325,8 +309,6 @@ class UserMailer < ActionMailer::Base
         subject: "[#{ArchiveConfig.APP_SHORT_NAME}] Related work notification"
       )
     end
-    ensure
-      I18n.locale = I18n.default_locale
   end
 
   # Emails a recipient to say that a gift has been posted for them
@@ -348,8 +330,6 @@ class UserMailer < ActionMailer::Base
         subject: subject
       )
     end
-    ensure
-      I18n.locale = I18n.default_locale
   end
 
   # Emails a prompter to say that a response has been posted to their prompt
@@ -365,11 +345,9 @@ class UserMailer < ActionMailer::Base
         )
       end
     end
-    ensure
-      I18n.locale = I18n.default_locale
   end
 
-  # Sends email to authors when a creation is deleted
+  # Sends email to creators when a creation is deleted
   # NOTE: this must be sent synchronously! otherwise the work will no longer be there to send
   # TODO refactor to make it asynchronous by passing the content in the method
   def delete_work_notification(user, work)
@@ -386,11 +364,9 @@ class UserMailer < ActionMailer::Base
         subject: t('user_mailer.delete_work_notification.subject', app_name: ArchiveConfig.APP_SHORT_NAME)
       )
     end
-    ensure
-      I18n.locale = I18n.default_locale
   end
 
-  # Sends email to authors when a creation is deleted by an Admin
+  # Sends email to creators when a creation is deleted by an admin
   # NOTE: this must be sent synchronously! otherwise the work will no longer be there to send
   # TODO refactor to make it asynchronous by passing the content in the method
   def admin_deleted_work_notification(user, work)
@@ -407,19 +383,19 @@ class UserMailer < ActionMailer::Base
         subject: t('user_mailer.admin_deleted_work_notification.subject', app_name: ArchiveConfig.APP_SHORT_NAME)
       )
     end
-    ensure
-      I18n.locale = I18n.default_locale
   end
 
-  # Sends email to authors when a creation is hidden by an Admin
+  # Sends email to creators when a creation is hidden by an admin
   def admin_hidden_work_notification(creation_id, user_id)
     @user = User.find_by(id: user_id)
     @work = Work.find_by(id: creation_id)
 
-    mail(
+    I18n.with_locale(Locale.find(@user.preference.preferred_locale).iso) do
+      mail(
         to: @user.email,
         subject: default_i18n_subject(app_name: ArchiveConfig.APP_SHORT_NAME)
-    )
+      )
+    end
   end
 
   def admin_spam_work_notification(creation_id, user_id)
