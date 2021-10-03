@@ -88,11 +88,6 @@ Given /^the support form is enabled$/ do
   click_button("Update")
 end
 
-Given /^I have posted a FAQ$/ do
-  step("I am logged in as an admin")
-  step %{I make a 1st FAQ post}
-end
-
 Given /^I have posted known issues$/ do
   step %{I am logged in as an admin}
   step %{I follow "Admin Posts"}
@@ -199,16 +194,6 @@ When /^I make an admin post without paragraphs$/ do
   visit new_admin_post_path
   fill_in("admin_post_title", with: "Admin Post Without Paragraphs")
   fill_in("content", with: "<ul><li>This post</li><li>is just</li><li>a list</li></ul>")
-  click_button("Post")
-end
-
-When /^I make a(?: (\d+)(?:st|nd|rd|th)?)? FAQ post$/ do |n|
-  n = 1 if n.zero?
-  visit new_archive_faq_path
-  fill_in("Question*", with: "Number #{n} Question.")
-  fill_in("Answer*", with: "Number #{n} posted FAQ, this is.")
-  fill_in("Category name*", with: "Number #{n} FAQ")
-  fill_in("Anchor name*", with: "Number#{n}anchor")
   click_button("Post")
 end
 
