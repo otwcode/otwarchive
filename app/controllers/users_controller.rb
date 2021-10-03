@@ -170,17 +170,14 @@ class UsersController < ApplicationController
     if !params[:new_email].blank? && reauthenticate
       new_email = params[:new_email]
 
-      # Please note: This comparison is not technically
-      # correct. According to RFC 5321, the local part of
-      # an email address is case sensitive, while the
-      # domain is case insensitive. That said, all major
-      # email providers treat the local part as case
-      # insensitive, so it would probably cause more confusion
-      # if we did this correctly.
+      # Please note: This comparison is not technically correct. According to
+      # RFC 5321, the local part of an email address is case sensitive, while the
+      # domain is case insensitive. That said, all major email providers treat
+      # the local part as case insensitive, so it would probably cause more
+      # confusion if we did this correctly.
       #
-      # Also, email addresses are validated on the client, and
-      # will only contain a limited subset of ASCII, so we don't
-      # need to do a unicode casefolding pass.
+      # Also, email addresses are validated on the client, and will only contain
+      # a limited subset of ASCII, so we don't need to do a unicode casefolding pass.
       if new_email.downcase != params[:email_confirmation].downcase
         flash.now[:error] = ts("Email addresses don't match! Please retype and try again")
         render :change_email and return
