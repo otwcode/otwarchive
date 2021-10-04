@@ -1,6 +1,6 @@
 <div class="mystery header picture module">
-  <h4 class="heading"><%= item.is_a?(Work) ? ts("Mystery Work") : ts("Mystery Series") %></h4>
-  <% if item.is_a?(Work) && !item.approved_collections.unrevealed.empty? %>
+  <h4 class="heading"><%= ts("Mystery Work") %></h4>
+  <% if item.approved_collections.unrevealed.present? %>
     <h5 class="heading"><%= h(ts("Part of ")) + item.approved_collections.unrevealed.map { |challenge| link_to(challenge.title, collection_path(challenge)) }.join(", ").html_safe %></h5>
   <% end %>
   <div class="icon"></div>
