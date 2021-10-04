@@ -25,7 +25,7 @@ phrase:
           update_translations: true
   pull:
     targets:
-      - file: ./config/locales/phrase-exports/afr.yml
+      - file: ./config/locales/phrase-exports/af.yml
         params:
           locale_id: af
       - file: ./config/locales/phrase-exports/ar.yml
@@ -64,6 +64,9 @@ phrase:
       - file: ./config/locales/phrase-exports/fi.yml
         params:
           locale_id: fi
+      - file: ./config/locales/phrase-exports/fil.yml
+        params:
+          locale_id: tl
       - file: ./config/locales/phrase-exports/fr.yml
         params:
           locale_id: fr
@@ -88,12 +91,12 @@ phrase:
       - file: ./config/locales/phrase-exports/ja.yml
         params:
           locale_id: ja
-      - file: ./config/locales/phrase-exports/kir.yml
-        params:
-          locale_id: ky
       - file: ./config/locales/phrase-exports/ko.yml
         params:
           locale_id: ko
+      - file: ./config/locales/phrase-exports/ky.yml
+        params:
+          locale_id: ky
       - file: ./config/locales/phrase-exports/lt.yml
         params:
           locale_id: lt
@@ -109,12 +112,12 @@ phrase:
       - file: ./config/locales/phrase-exports/ms.yml
         params:
           locale_id: ms
+      - file: ./config/locales/phrase-exports/nb.yml
+        params:
+          locale_id: nb
       - file: ./config/locales/phrase-exports/nl.yml
         params:
           locale_id: nl
-      - file: ./config/locales/phrase-exports/no.yml
-        params:
-          locale_id: nb
       - file: ./config/locales/phrase-exports/pl.yml
         params:
           locale_id: pl
@@ -133,7 +136,7 @@ phrase:
       - file: ./config/locales/phrase-exports/sk.yml
         params:
           locale_id: sk
-      - file: ./config/locales/phrase-exports/slv.yml
+      - file: ./config/locales/phrase-exports/sl.yml
         params:
           locale_id: sl
       - file: ./config/locales/phrase-exports/sr.yml
@@ -142,13 +145,13 @@ phrase:
       - file: ./config/locales/phrase-exports/sv.yml
         params:
           locale_id: sv
-      - file: ./config/locales/phrase-exports/tha.yml
+      - file: ./config/locales/phrase-exports/th.yml
         params:
           locale_id: th
       - file: ./config/locales/phrase-exports/tr.yml
         params:
           locale_id: tr
-      - file: ./config/locales/phrase-exports/UKR.yml
+      - file: ./config/locales/phrase-exports/uk.yml
         params:
           locale_id: uk
       - file: ./config/locales/phrase-exports/vi.yml
