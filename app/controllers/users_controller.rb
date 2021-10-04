@@ -179,7 +179,7 @@ class UsersController < ApplicationController
       # Also, email addresses are validated on the client, and will only contain
       # a limited subset of ASCII, so we don't need to do a unicode casefolding pass.
       if new_email.downcase != params[:email_confirmation].downcase
-        flash.now[:error] = ts("Email addresses don't match! Please retype and try again")
+        flash.now[:error] = ts("Email addresses don't match! Please retype and try again.")
         render :change_email and return
       end
 
