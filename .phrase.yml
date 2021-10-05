@@ -66,7 +66,7 @@ phrase:
           locale_id: fi
       - file: ./config/locales/phrase-exports/fil.yml
         params:
-          locale_id: tl
+          locale_id: fil
       - file: ./config/locales/phrase-exports/fr.yml
         params:
           locale_id: fr
@@ -108,7 +108,7 @@ phrase:
           locale_id: mk
       - file: ./config/locales/phrase-exports/mr.yml
         params:
-          locale_id: mr-IN
+          locale_id: mr
       - file: ./config/locales/phrase-exports/ms.yml
         params:
           locale_id: ms
