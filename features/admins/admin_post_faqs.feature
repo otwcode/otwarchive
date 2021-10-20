@@ -43,7 +43,7 @@ Feature: Admin Actions to Post FAQs
 
     # Translate FAQ to "de"
     When I follow "Archive FAQ"
-      And I select "Deutsch" from "language_id"
+      And I select "Deutsch" from "Language:"
       And I press "Go" within "div#inner.wrapper"
       And I follow "Edit"
       And I fill in "Question*" with "Was ist AO3?"
@@ -66,12 +66,9 @@ Feature: Admin Actions to Post FAQs
     Then I should see "Your locale was successfully updated."
       And I should see "Deutsch ger"
 
-    # The current session preference remains "de", the category name falls back to the default locale,
-    # but no "de" questions will be found.
+    # The session preference is "de", which no longer exists; the default locale should be used
     When I go to the archive_faqs page
-      And I follow "New subsection"
-    Then I should not see "What is AO3?"
-      And I should not see "Was ist AO3?"
+    Then "English (US)" should be selected within "Language:"
 
     # Log out and view FAQs; the default locale should be used
     When I log out
@@ -82,7 +79,7 @@ Feature: Admin Actions to Post FAQs
 
     # Select "ger"
     When I go to the archive_faqs page
-      And I select "Deutsch" from "language_id"
+      And I select "Deutsch" from "Language:"
       And I press "Go" within "div#inner.wrapper"
       And I follow "Neuer Abschnitt"
     Then I should see "Was ist AO3?"
