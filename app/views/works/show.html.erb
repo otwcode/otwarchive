@@ -30,7 +30,7 @@
 <!--/subnav-->
 
 <!-- BEGIN revealed -->
-<% if !@work.unrevealed? || logged_in_as_admin? || @work.user_is_owner_or_invited?(current_user) || can_see_work(@work, current_user) %>
+<% if !@work.unrevealed? || logged_in_as_admin? || can_see_unrevealed_work(@work, current_user) %>
 <!-- BEGIN work -->
 <!--work description, metadata, notes and messages-->
   <%= render partial: 'works/work_header' %>
