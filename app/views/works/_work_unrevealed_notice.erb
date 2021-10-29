@@ -2,11 +2,11 @@
   <%= ts("This work is part of an ongoing challenge and will be revealed soon!") %>
   <% if @work.user_is_owner_or_invited?(current_user) %>
     <%= ts("You can find details here: ") %>
-    <%= @work.collections.unrevealed.collect { |challenge| link_to(challenge.title, collection_path(challenge)) }.join(", ").html_safe %>
+    <%= show_collections_data(@work.collections.unrevealed) %>
   <% else %>
     <% if @work.approved_collections.unrevealed.present? %>
       <%= ts("You can find details here: ") %>
-      <%= @work.approved_collections.unrevealed.collect { |challenge| link_to(challenge.title, collection_path(challenge)) }.join(", ").html_safe %>
+      <%= show_collections_data(@work.approved_collections.unrevealed) %>
     <% end %>
   <% end %>
 </p>
