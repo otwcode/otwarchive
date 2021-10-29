@@ -16,7 +16,7 @@
 <% end %>
 <!--/subnav-->
 
-<% if !@work.unrevealed? || logged_in_as_admin? || can_see_unrevealed_work(@work, current_user) %>
+<% if !@work.unrevealed? || logged_in_as_admin? || can_access_unrevealed_work(@work, current_user) %>
   <!-- BEGIN work -->
   <div class="work"><p class="landmark"><a name="top">&nbsp;</a></p>
     <%= render :partial => 'works/work_header' %>

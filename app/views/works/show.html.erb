@@ -27,7 +27,7 @@
 <!--/subnav-->
 
 <!-- BEGIN revealed -->
-<% if !@work.unrevealed? || logged_in_as_admin? || can_see_unrevealed_work(@work, current_user) %>
+<% if !@work.unrevealed? || logged_in_as_admin? || can_access_unrevealed_work(@work, current_user) %>
 <!-- BEGIN work -->
 <!--work description, metadata, notes and messages-->
   <%= render partial: 'works/work_header' %>

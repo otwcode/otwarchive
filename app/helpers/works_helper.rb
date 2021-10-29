@@ -72,8 +72,8 @@ module WorksHelper
   end
 
   # Check whether this non-admin user has permission to view the unrevealed work
-  def can_see_unrevealed_work(work, user)
-    # Authors and invited can see their works
+  def can_access_unrevealed_work(work, user)
+    # Creators and invited can see their works
     return true if work.user_is_owner_or_invited?(user)
 
     # Moderators can see unrevealed works:
