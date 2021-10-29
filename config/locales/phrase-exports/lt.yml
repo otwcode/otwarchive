@@ -1,0 +1,6 @@
+---
+lt:
+  user_mailer:
+    invite_increase_notification:
+      closing: Grazie,
+      subject: "[%{app_name}] Nuovi inviti"

@@ -1,0 +1,223 @@
+---
+ko:
+  mailer:
+    kudos:
+      guest:
+        other: "%{count} 방문자"
+      html:
+        left_kudos:
+          other: "<i>%{commentable_link}</i>에 %{givers_list}이(가) 좋아요(kudos)를 남겼습니다."
+      text:
+        left_kudos:
+          other: "%{commentable_link}에 %{givers_list}이(가) 좋아요(kudos)를 남겼습니다."
+      you_have: "[%{app_name}] 회원님의 게시물에 좋아요(kudos)가 있습니다!"
+  users:
+    mailer:
+      reset_password_instructions:
+        expiration: 일주일 안에 링크를 통해 비밀번호를 재설정하지 않을시, 현재 링크가 만료되며 새로운 링크를 요청하셔야 합니다.
+        intro: '누군가가 %{user}님의 계정의 비밀번호 재설정을 요청하였습니다. 아래 링크에서 새로운 비밀번호를 입력하여 비밀번호를
+          변경하실 수 있습니다. '
+        link_title: 비밀번호 변경하기
+        subject: "[%{app_name}] 비밀번호 재설정"
+        unrequested: 비밀번호 재설정을 요청하지 않으셨다면 이 이메일을 무시하셔도 됩니다. 비밀번호가 변경되지 않습니다.
+  user_mailer:
+    abuse_report:
+      description_para: '남용 행위에 대한 설명:'
+      para1: '다음 남용 보고서가 정책관리 팀에 접수되었습니다:'
+      subject: "[%{app_name}] 회원님의 권리 남용 보고서입니다"
+      url_para: '남용 행위가 담긴 페이지의 링크:'
+    admin_deleted_work_notification:
+      abuse_committee: 정책관리 위원회에 연락하기
+      bye: 회원님을 위해 작품의 복사본이 첨부되어 있습니다.
+      hello: "%{user}회원님,"
+      html:
+        part1: 회원님의 %{title} 작품이 사이트 관리자에 의해 Archive of Our Own - AO3(우리만의 아카이브)에서
+          삭제되었습니다.
+        part2: 만약 회원님의 작품이 Open Doors(오픈 도어 프로젝트) 팀이 관리하는 반입 프로젝트에 속해있었다면,  %{opendoors_link}를
+          통해 문의해 주십시오.
+        part3: 만약 회원님의 작품이 AO3의 이용약관을 어겼을 가능성이 있다면, %{abuse_link}를 통해 문의해 주십시오.
+      opendoors: 오픈 도어 프로젝트에 연락하기
+      subject: "[%{app_name}]님의 작품이 관리자에 의해 삭제되었습니다"
+      text:
+        part1: 회원님의 “%{title}” 작품이 사이트 관리자에 의해 Archive of Our Own - AO3(우리만의 아카이브)에서
+          삭제되었습니다.
+        part2: 만약 회원님의 작품이 Open Doors(오픈 도어 프로젝트) 팀이 관리하는 반입 프로젝트에 속해있었다면, (%{opendoors_link})를
+          통해 오픈 도어 프로젝트에 문의해 주십시오.
+        part3: 만약 회원님의 작품이 AO3의 이용약관을 어겼을 가능성이 있다면, (%{abuse_link})를 통해 정책관리 위원회에
+          문의해 주십시오.
+    challenge_assignment_notification:
+      any: 기타 자유
+      description: '설명:'
+      due: '이 챌린지 과제의 마감일:'
+      html:
+        footer: "%{title} 챌린지에 등록하셨기에 이 이메일을 받으셨습니다. 이 도전에 대한 자세한 내용과 진행자의 연락처는 %{footer_link}를
+          통해 찾으실 수 있습니다."
+        footer_link: 챌린지 프로파일 페이지
+        look_up: 이 챌린지 과제는 %{link}에서 찾으실 수 있습니다.
+        look_up_link: 회원님의 Assignments (챌린지 과제) 페이지
+        part1: 회원님께서는 Archive of Our Own – AO3(우리만의 아카이브) %{link} 챌린지에서 다음과 같은 요청을
+          맡게 되셨습니다!
+      optional_tags: '선택 태그:'
+      prompts: '소재:'
+      prompt_url: '소재 URL:'
+      recipient: '받는 사람:'
+      recipient_missing: '없음: 관리자에게 도움을 요청하세요!'
+      subject: "[%{app_name}][%{collection_title}] 회원님의 챌린지 과제입니다!"
+      text:
+        footer: "%{title} 챌린지(%{url})에 등록하셨기에 이 이메일을 받으셨습니다. 이 챌린지에 대한 자세한 내용과 진행자의
+          연락처는 %{profile_url}를 통해 찾으실 수 있습니다."
+        look_up: 이 챌린지 과제는 회원님의 Assignments (챌린지 과제) 페이지 링크%{link} 에서 찾아보실 수 있습니다.
+        part1: 다음은 회원님이 맡게 되신 Archive of Our Own – AO3(우리만의 아카이브) %{collection_title}
+          (%{collection_url}) 챌린지의 요청입니다!
+    change_email:
+      part1: "%{login}님, 회원님의 계정과 연계된 이메일 주소가 %{email}으로 변경되었습니다."
+      subject: "[%{app_name}] 이메일 주소 변경"
+    creatorship_notification:
+      explanation: 어떤 작품의 공동 창작자가 되면 회원님의 공동 창작 설정과 관계 없이 신규 챕터에 공동 창작자로 추가됩니다. 또한
+        해당 작품을 포함하는 모든 시리즈에도 등록됩니다.
+      html:
+        creation: "%{creation_link}, %{pseud_links} 작(作)"
+        edit: "%{type} 수정하기"
+        remove: 의도치 않게 등록 되었거나 창작자로 등록되기를 희망하지 않으신다면 %{edit}를 통해 회원님을 창작자에서 제외하실 수
+          있습니다.
+      intro: "%{adding_user}님이 회원님의 사용자명 %{pseud}을(를) 다음 작품의 공동 창작자로 등록했습니다 %{type}"
+      subject: "[%{app_name}] 공동 창작자 알림"
+      text:
+        creation: "%{title} (%{url}), %{pseuds} 작(作)"
+        remove: '혹 의도치 않게 등록이 되었거나 창작자로 등록되기를 희망하지 않으신다면 %{type}를 수정하여 직접 창작자에서 제외하실
+          수 있습니다: %{url}'
+    creatorship_notification_archivist:
+      explanation: Open Doors (오픈 도어)의 공식적인 임무를 진행하는 아키비스트는 사용자님이 ‘나를 공동 창작자로 추가’
+        설정을 비활성화 시켰더라도 초대 없이 추가할 수 있습니다.
+      html:
+        creation: "%{pseud_links}의 %{creation_link}"
+        edit: "%{type} 수정하기"
+        remove: 실수로 또는 원치 않게 창작자로 추가됐을 경우, ‘수정하기’(%{edit})를 이용하여 사용자님의 필명을 작품 창작자
+          명단에서 삭제할 수 있습니다.
+      intro: '아키비스트 %{archivist} 님이 다음 %{type}에 사용자님의 필명 %{pseud}을 공동 창작자로 추가하였습니다:'
+      subject: "[%{app_name}] 아키비스트 2인 창작자 알림"
+      text:
+        creation: "%{pseuds}의 %{title} (%{url})"
+        remove: '실수로 또는 원치 않게 창작자로 추가됐을 경우, %{type}를 수정하여 사용자님의 필명을 작품 창작자 명단에서 삭제할
+          수 있습니다: %{url}'
+    delete_work_notification:
+      hello: 친애하는 %{user}님께,
+      html:
+        part1_other: "%{pseud} 의 요청으로 회원님의 작품 %{title}이 삭제되었습니다."
+        part1_yourself: 회원님의 요청으로 회원님의 작품 %{title}이 삭제되었습니다.
+        part2: 질문이 있으시다면, %{support}에 연락해 주세요.
+      part3: 참고를 위해 작품의 복사본을 첨부해 드립니다.
+      subject: "[%{app_name}] 회원님의 작품이 삭제되었습니다"
+      support: 지원 위원회에 연락해 주세요
+      text:
+        part1_other: '%{pseud}의 요청으로 회원님의 작품 "%{title}"이 삭제되었습니다.'
+        part1_yourself: 회원님의 요청으로 회원님의 작품 "%{title}"이 삭제되었습니다.
+        part2: 질문이 있으시다면, %{support}(%{url})에 연락해 주세요.
+    invitation_to_claim:
+      greeting: "%{app_name}에서 환영합니다!"
+      html:
+        ao3_news: AO3 뉴스
+        contact_open_doors: 오픈 도어 연락하기
+        contact_support: AO3 지원 연락하기
+        faq_page: 자주 묻는 질문답변
+        open_doors: Open Doors (오픈 도어 프로젝트)
+        part1: 최근 %{open_doors_link}의 아카이브가 %{app_link}(%{app_short_name}) 쪽으로 이전됐으며,
+          다음 작품이 귀하의 작품이라 생각되어 이메일을 보냅니다. 원하신다면 작품의 소유권을 회복(또는 삭제/고립)할 기회를 드리고 싶습니다.
+          또한 다른 이메일로 이미 회원이 아니신 경우, 저희 아카이브에 초대하고 싶습니다!
+        part10: 만약 이전된 아카이브에 다른 작품을 갖고 계시지만 연결된 이메일 주소에 접속이 불가능하신 경우, 창작자 증명이 가능한
+          자료와 함께 %{open_doors_link} 주소로 연락해 주십시오.
+        part11: 다른 도움이 필요하신 경우, %{support_link} 링크로 연락 주십시오.
+        part13: 최선을 다하는,
+        part14: 오픈 도어 팀
+        part15: 변형적 작품 단체
+        part2: "%{news_link} 의 발표를 통해 최근의 아카이브 이전 소식을 확인할 수 있으며, 오픈 도어의 %{open_doors_faq_link}
+          또는 %{open_doors_tutorial_link} 페이지를 통해 오픈 도어 프로젝트의 추가적인 정보를 얻을 수 있습니다. 자주
+          묻는 질문답변, 튜토리얼, 또는 본 이메일 이상의 정보가 필요할 경우, %{support_link}를 이용해 주세요."
+        part3: 만약 이메일이 잘못 보내졌고 본인의 작품이 아닌 경우, 부디 삭제하지 말아주세요! %{open_doors_link}를 통해
+          알려주시면 저희가 문제를 해결하겠습니다.
+        part4: 아카이브에 따라서, 이전된 작품이 (구글 검색을 피하기 위해) 회원 등록된 사용자에게만 공개되었을 수도 있습니다. 그럴
+          경우, 작품 소유자가 완전 공개로 선택하지 않은 작품은 오직 로그인한 사용자에게만 공개됩니다. 작품의 완전 공개, 고립, 또는 삭제를
+          위해서 %{support_link}를 이용해 주세요.
+        part5: 작품 소유권을 되찾거나 포기하는 법.
+        part7: 만약 이 작품의 창작자면서도 소유권을 포기하고 싶은 경우, 작품 소유권을 포기해 작품을 (AO3에 작품이 보관되지만, 창작자의
+          이름은 등재되지 않게) 고립시킬 수 있고 또는 (AO3에서 작품이 영구삭제) 삭제할 수 있습니다. 이상과 같은 작업을 위해 기존
+          계정에 작품을 연관시킬 필요도 없습니다--다음 위의 링크에서 바로 하실 수 있습니다.(도움이 필요하다면 %{support_link}에
+          연락해 주세요.)
+        part9: 만약 오픈 도어의 재연결 주소를 기존의 작품 페이지로 하고 싶으실 경우, 이전된 작품 복사본을 지우시고, %{open_doors_link}에
+          회원님의 AO3 계정 이름, 이전된 아카이브의 계정, 그리고 연결을 원하는 팬작품의 제목과 URL 주소를 기입해 주세요. (만약
+          재연결 주소 변경이 필요한 작품이 다수일 경우, 한번의 메일로 목록을 주시면 됩니다.)
+        tutorial_page: 튜토리얼 페이지
+      part12: 만약 저희와 연락하고 싶으시다면,  @transformativeworks.org의 이메일 주소를 스팸이 아닌 것으로 분류하신
+        뒤 저희 답변을 스팸 폴더에서 찾아봐 주세요.
+      part6: '게시한 작품은 다음을 포함합니다:'
+      part8: 추천 목록과 북마크를 저장하기 위해, 이전된 아카이브의 웹주소는 이전된 작품 복사본의 주소로 당분간 연결됩니다(아카이브의 공지사항을
+        확인해주세요). 만약 이미 작품의 복사본을 등록했고 URL의 이전 기능을 사용하지 않았을 경우, 아카이브에 작품의 복사본 2개가 있을
+        것입니다.
+      subject: "[%{app_name}] 작품 등록하기에 초대합니다"
+      text:
+        part1: 최근 Open Doors (오픈 도어 프로젝트) (%{open_doors_link})를 통해 이전된 아카이브 %{app_name}(%{app_short_name}
+          - %{app_url})에서 다음 작품들이 회원님의 작품인 것으로 추측되어 이메일 드립니다. 원하신다면 작품의 소유권을 회복(또는
+          삭제/고립)할 기회를 드리고 싶습니다. 그리고 만약 이미 아카이브에 다른 이메일 주소로 회원이 아니시라면, 저희 아카이브에 초대하고
+          싶습니다!
+        part10: 만약 이전된 아카이브에 접속할 수 없는 이메일 계정으로 여러 작품이 있으실 경우, 창작자 증명이 가능한 자료와 함께 오픈
+          도어로 연락 주십시오.
+        part11: 그 외 다른 도움이 필요하신 경우, %{support_link} 통해서 AO3 서포트로 연락 주십시오.
+        part13: |
+          최선을 다하는,
+          오픈 도어 프로젝트 팀
+          변형적 작품 단체
+        part2: 최근의 아카이브 뉴스에 관해 AO3 뉴스(%{news_link})에서 읽으실 수 있으며, 오픈 도어 FAQ 페이지(%{open_doors_faq_link})
+          나 튜토리얼 메뉴(%{open_doors_tutorial_link})를 통해 추가적인 정보를 얻으실 수 있습니다. FAQ, 튜토리얼,
+          그리고 본 이메일에 답이 없는 질문이 있을 경우, %{support_link}로 통해서 지원 위원회로 연락 주십시오.
+        part3: 만약 본 메일이 실수이고 작품의 창작자가 아니시라면, 부디 삭제하지 말아주십시오! 오픈 도어 프로젝트(%{open_doors_link})로
+          연락주시면 저희가 해결하겠습니다.
+        part4: 아카이브에 따라, 작품이 (구글 검색을 피하기 위해)등록된 회원에게만 공개된 경우도 있습니다. 만약 그런 상황이라면, 작품의
+          전면 공개를 하지 않는 이상 작품은 계속해서 로그인 된 회원에게만 공개됩니다. 작품의 전면공개, 고립하기, 삭제하기 등에 도움이
+          필요하시다면 AO3 지원 위원회로 연락주십시오.
+        part5: '작품 창작자로 등록하거나 삭제하는 링크: %{claim_url}'
+        part7: 만약 이 작품의 창작자면서도 소유권을 포기하고 싶으실 경우, 작품을 고립(작품은 AO3에 남지만, 작가 이름이 익명으로
+          처리)할 수 있고 또는 삭제(작품이 AO3에 남지 않고 완전히 삭제)할 수도 있습니다. 작품을 고립하거나 삭제하기 위해 계정에 등록할
+          필요 없습니다-- 위의 링크를 통해 하실 수 있습니다. (도움이 필요하신 경우, %{support_link} 서포트로 연락 주십시오.)
+        part9: 만약 오픈 도어에서 기존 작품으로 연결되는 링크를 업데이트 하길 원하신 다면, 이전된 작품 복사본을 지우시고, %{open_doors_link}로
+          통해서 오픈 도어에게 연락해 AO3 계정 이름, 이전된 아카이브의 계정 이름, 그리고 작품의 제목과 URL 주소를 알려주세요. (만약
+          링크할 작품이 여러개라도, 한 이메일로 목록을 주시면 됩니다.)
+    invite_increase_notification:
+      body:
+        other: 우리는 회원님께서 %{count}  개의 새 초대권을 얻으셨으며, 이를 아카이브에서 새로운 계정을 만드는 데 사용할 수
+          있다는 것을 알려드리고자 합니다. 당신은 %{invitation_page}를 통해 친구를 초대할 수 있습니다.
+      closing: 즐거운 경험이기를,
+      greeting: '안녕하세요%{login}! '
+      subject: "[%{app_name}] 새로운 초대권"
+    invite_request_declined:
+      greeting: 친애하는 %{user}님,
+      main:
+        other: 안타깝게도 회원님이 요청하신  %{count} 추가 초청 코드는 현재 발급해드리기 어렵습니다.
+      reason: '회원님의 요청:'
+      signoff: 올림
+      subject: "[%{app_name}] 추가 초청 코드 요청이 거부되었습니다"
+    signup_notification:
+      activate_your_account: 계정 활성화를 위해 링크를 눌러주세요
+      admin_posts: AO3 뉴스
+      bye: 아카이브 사용하시면서 즐겁기 바랍니다.
+      contact_support: 서포트 팀과 연락하기
+      faq: FAQ
+      html:
+        part1: "%{activate_account_link} 해주세요."
+        part2: 일단 계정이 활성화된 후, 회원님은 팬작품을 게시할 수 있고, 이메일을 통해 좋아하는 작가나 작품의 업데이트를 알림받을
+          수 있고, 사이트 사용화면을 마음에 들게 꾸밀 수 있고, 히스토리를 통해 과거에 열람한 아카이브의 작품을 확인할 수 있고, 그 밖에도
+          많은 것을 할 수 있습니다.
+        part3: "%{faq_link}에는 아카이브를 어떻게 활용할 수 있는지 도와드리는 정보가 가득합니다. 사이트의 발달 상황에 대한
+          가장 최신의 소식은 %{admin_posts_link}를 통해 접할 수 있습니다. 만약 더 많은 도움이 필요하신 경우 또는 질문이나
+          제안이 있으실 경우에는 %{contact_support_link}를 이용해 주세요. 언제나 도와드릴 준비가 되어있습니다."
+      subject: "[%{app_name}] 확정연락"
+      text:
+        part1: '당신의 계정을 활성화하려면 다음 링크를 눌러주세요: %{activate_account_url}'
+        part2: '일단 계정이 활성화된 후, 회원님은 팬작품을 게시할 수 있고, 이메일을 통해 좋아하는 작가나 작품의 업데이트를 알림받을
+          수 있고, 사이트 사용화면을 마음에 들게 꾸밀 수 있고, 히스토리를 통해 과거에 열람한 아카이브의 작품을 확인할 수 있고, 그 밖에도
+          많은 것을 할 수 있습니다.
+
+          '
+        part3: " %{faq_url}에는 아카이브를 어떻게 활용할 수 있는지 도와드리는 정보가 가득합니다. 사이트의 발달 상황에 대한
+          가장 최신 소식, AO3 뉴스는 %{admin_posts_url}를 통해 접할 수 있습니다. 만약 더 많은 도움이 필요하신 경우
+          또는 질문이나 제안이 있으실 경우에는 %{contact_support_url}를 이용해 주세요. 언제나 도와드릴 준비가 되어있습니다."
+      welcome: 우리만의 아카이브에 오신 것을 환영합니다, %{login}님!
