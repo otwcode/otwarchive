@@ -66,7 +66,8 @@ en:
       tags:
         label: Tags
       translated_post:
-        footnote: Comment permissions from the selected post will replace any permissions selected on this page.
+        footnote_comment_permissions: Comment permissions from the selected post will replace any permissions selected on this page.
+        footnote_tags: Tags from the selected post will replace any tags entered on this page.
         label: Translation of
   admins:
     index:
