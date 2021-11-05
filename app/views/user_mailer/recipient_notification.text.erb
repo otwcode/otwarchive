@@ -3,7 +3,7 @@
 
 A gift work has been posted for you<% if @collection %> in the "<%= @collection.title %>" collection (<%= collection_url(@collection) %>)<% end %> at the Archive of Our Own!
 
-"<%= @work.title.html_safe %>" (<%= @work.word_count %> words)
+"<%= @work.title.html_safe %>"‎ (<%= @work.word_count %> words)
 <%= @collection ? collection_work_url(@collection, @work) : work_url(@work) %>
 
 by <%= @work.anonymous? ? "an anonymous responder" : (@work.pseuds.map{|p| text_pseud(p)}.to_sentence) %>
