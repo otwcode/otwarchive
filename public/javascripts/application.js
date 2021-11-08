@@ -442,7 +442,7 @@ $j(document).ready(function() {
       error: function(jqXHR, textStatus, errorThrown) {
         var msg = 'Sorry, we were unable to save your kudos';
 
-        // When we hit the rate limit, the response is a plain text 429.
+        // When we hit the rate limit, the response from Rack::Attack is a plain text 429.
         if (jqXHR.status == "429") {
           msg = "Sorry, you can't leave more kudos right now. Please try again in a few minutes.";
         } else {
