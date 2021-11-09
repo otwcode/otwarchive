@@ -13,6 +13,6 @@
   <p><%= t(".explanation") %></p>
 
   <p>
-    <%= t(".html.remove_#{creation_type}", edit: style_link(t(".html.edit_#{creation_type}"), edit_polymorphic_url(@creation))).html_safe %>
+    <%= t(".html.remove_#{creation_type}", edit_#{creation_type}_link: style_link(t(".html.edit_#{creation_type}"), edit_polymorphic_url(@creation))).html_safe %>
   </p>
 <% end %>
