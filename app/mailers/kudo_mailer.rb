@@ -14,7 +14,6 @@ class KudoMailer < ActionMailer::Base
     @kudo_givers = {}
     user = User.find(user_id)
     kudos_hash = JSON.parse(user_kudos)
-    @kh = JSON.parse(user_kudos)
 
     I18n.with_locale(Locale.find(user.preference.preferred_locale).iso) do
       kudos_hash.each_pair do |commentable_info, kudo_givers_hash|
@@ -24,8 +23,8 @@ class KudoMailer < ActionMailer::Base
         next unless commentable
 
         # If we have a commentable, extract names and process guest kudos text - skip if no kudos givers
-        names = kudo_givers_hash['names']
-        guest_count = kudo_givers_hash['guest_count']
+        names = kudo_givers_hash["names"]
+        guest_count = kudo_givers_hash["guest_count"]
         kudo_givers = []
 
         if !names.nil? && names.size > 0
@@ -47,7 +46,7 @@ class KudoMailer < ActionMailer::Base
       end
       mail(
         to: user.email,
-        subject: t('mailer.kudos.you_have', app_name: ArchiveConfig.APP_SHORT_NAME)
+        subject: t("mailer.kudos.you_have", app_name: ArchiveConfig.APP_SHORT_NAME)
       )
     end
     ensure
