@@ -10,9 +10,11 @@ class KudoMailer < ActionMailer::Base
   #   guest_count: number of guest kudos
   def batch_kudo_notification(user_id, user_kudos)
     @commentables = []
+    @kudo_counts = {}
     @kudo_givers = {}
     user = User.find(user_id)
     kudos_hash = JSON.parse(user_kudos)
+    @kh = JSON.parse(user_kudos)
 
     I18n.with_locale(Locale.find(user.preference.preferred_locale).iso) do
       kudos_hash.each_pair do |commentable_info, kudo_givers_hash|
@@ -27,16 +29,20 @@ class KudoMailer < ActionMailer::Base
         kudo_givers = []
 
         if !names.nil? && names.size > 0
-          kudo_givers = names
+          # dup so we don't add "a guest" or "5 guests" to the original names
+          # array. If we do that, our kudo_count will be too high whenever we
+          # have both named and guest kudos.
+          kudo_givers = names.dup
           kudo_givers << guest_kudos(guest_count) unless guest_count == 0
-          @kudos_count = names.size + guest_count
+          kudo_count = names.size + guest_count
         else
           kudo_givers << guest_kudos(guest_count).capitalize unless guest_count == 0
-          @kudos_count = guest_count
+          kudo_count = guest_count
         end
         next if kudo_givers.empty?
 
         @commentables << commentable
+        @kudo_counts[commentable_info] = kudo_count
         @kudo_givers[commentable_info] = kudo_givers
       end
       mail(
@@ -44,6 +50,8 @@ class KudoMailer < ActionMailer::Base
         subject: t('mailer.kudos.you_have', app_name: ArchiveConfig.APP_SHORT_NAME)
       )
     end
+    ensure
+      I18n.locale = I18n.default_locale
   end
 
   def guest_kudos(guest_count)
