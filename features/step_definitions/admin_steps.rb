@@ -144,7 +144,7 @@ Given /^I have posted an admin post without paragraphs$/ do
   step("I log out")
 end
 
-Given /^I have posted an admin post with tags "([^\"]*)"$/ do |tags|
+Given /^I have posted an admin post with tags "(.*?)"$/ do |tags|
   step(%{I am logged in as a "communications" admin})
   visit new_admin_post_path
   fill_in("admin_post_title", with: "Default Admin Post")
@@ -253,7 +253,7 @@ When /^I uncheck the "([^\"]*)" role checkbox$/ do |role|
   uncheck("user_roles_#{role_id}")
 end
 
-When (/^I make a translation of an admin post( with tags "([^\"]*)")?$/) do |tags|
+When /^I make a translation of an admin post( with tags "(.*?)")?$/ do |tags|
   admin_post = AdminPost.find_by(title: "Default Admin Post")
   # If post doesn't exist, assume we want to reference a non-existent post
   admin_post_id = !admin_post.nil? ? admin_post.id : 0
@@ -280,11 +280,11 @@ Then (/^the translation information should still be filled in$/) do
   step %{"Deutsch" should be selected within "Choose a language"}
 end
 
-Then (/^I should see a translated admin post( with tags "([^\"]*)")?$/) do |tags|
+Then /^I should see a translated admin post( with tags "(.*?)")?$/ do |tags|
   tags = tags.split(/, ?/) if tags
   step %{I go to the admin-posts page}
   step %{I should see "Default Admin Post"}
-  step %{I should see "Tags: #{tags.join(" ")}"} if tags
+  step %{I should see "Tags: #{tags.join(' ')}"} if tags
   step %{I should see "Translations: Deutsch"}
   step %{I follow "Default Admin Post"}
   step %{I should see "Deutsch" within "dd.translations"}
