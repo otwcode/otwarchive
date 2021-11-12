@@ -6,26 +6,24 @@ class TagIndexer < Indexer
 
   def self.mapping
     {
-      tag: {
-        properties: {
-          name: {
-            type: "text",
-            analyzer: "tag_name_analyzer",
-            fields: {
-              exact: {
-                type:     "text",
-                analyzer: "exact_tag_analyzer"
-              },
-              keyword: {
-                type: "keyword",
-                normalizer: "keyword_lowercase"
-              }
+      properties: {
+        name: {
+          type: "text",
+          analyzer: "tag_name_analyzer",
+          fields: {
+            exact: {
+              type: "text",
+              analyzer: "exact_tag_analyzer"
+            },
+            keyword: {
+              type: "keyword",
+              normalizer: "keyword_lowercase"
             }
-          },
-          tag_type: { type: "keyword" },
-          sortable_name: { type: "keyword" },
-          uses: { type: "integer" }
-        }
+          }
+        },
+        tag_type: { type: "keyword" },
+        sortable_name: { type: "keyword" },
+        uses: { type: "integer" }
       }
     }
   end

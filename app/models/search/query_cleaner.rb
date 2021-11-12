@@ -54,7 +54,7 @@ class QueryCleaner
       term += '_count' unless term == 'hits'
       term = term.to_sym
 
-      value = m[1].gsub(/^(\:|\=)/, '').strip # get rid of : and =
+      value = m[1].gsub(/^(:|=)/, '').strip # get rid of : and =
       # don't overwrite if submitting from advanced search?
       params[term] = value if params[term].nil? || params[term].empty?
     end
