@@ -35,10 +35,12 @@ en:
         left_kudos:
           one: "%{givers_list} left kudos on %{commentable_link}."
           other: "%{givers_list} left kudos on %{commentable_link}."
+          single_guest: "A guest left kudos on %{commentable_link}."
       text:
         left_kudos:
           one: "%{givers_list} left kudos on %{commentable_link}."
           other: "%{givers_list} left kudos on %{commentable_link}."
+          single_guest: "A guest left kudos on %{commentable_link}."
   user_mailer:
     invite_increase_notification:
       subject: "[%{app_name}] New invitations"

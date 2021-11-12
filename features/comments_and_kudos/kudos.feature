@@ -141,6 +141,7 @@ Feature: Kudos
 
     Given I am logged in as "myname1"
       And I post the work "Another Awesome Story"
+      And I post the work "Meh Story"
       And all emails have been delivered
       And the kudos queue is cleared
       And I am logged in as "myname2"
@@ -152,6 +153,7 @@ Feature: Kudos
       And I am logged out
       And I leave kudos on "Awesome Story"
       And I leave kudos on "Another Awesome Story"
+      And I leave kudos on "Meh Story"
     When kudos are sent
     Then 1 email should be delivered to "myname1@foo.com"
       And the email should contain "myname2"
@@ -159,3 +161,5 @@ Feature: Kudos
       And the email should contain "guest"
       And the email should contain "Awesome Story"
       And the email should contain "Another Awesome Story"
+      And the email should contain "Meh Story"
+      And the email should not contain "translation missing"
