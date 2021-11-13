@@ -11,14 +11,14 @@
       # that happens, kudo_count ends up too high whenever both named and guest
       # kudos are present.
       givers = names.dup
-      givers << t("mailer.kudos.guest", count: guest_count) unless guest_count.zero?
+      givers << t(".guest", count: guest_count) unless guest_count.zero?
       givers_list = givers.map { |k| style_bold(k) }.to_sentence.html_safe
     %>
 
     <% if kudo_count == 1 && guest_count == 1 %>
-      <%= t("mailer.kudos.html.left_kudos.single_guest", commentable_link: commentable_link.html_safe).html_safe %>
+      <%= t(".html.left_kudos.single_guest", commentable_link: commentable_link.html_safe).html_safe %>
     <% else %>
-      <%= t("mailer.kudos.html.left_kudos", givers_list: givers_list, commentable_link: commentable_link.html_safe, count: kudo_count).html_safe %>
+      <%= t(".html.left_kudos", givers_list: givers_list, commentable_link: commentable_link.html_safe, count: kudo_count).html_safe %>
     <% end %>
 
     <% if (index < @commentables.length - 1) %>

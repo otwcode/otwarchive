@@ -157,6 +157,7 @@ Feature: Kudos
       And I leave kudos on "Meh Story"
     When kudos are sent
     Then 1 email should be delivered to "myname1@foo.com"
+      And the email should have "You've got kudos!" in the subject
       And the email should contain "myname2"
       And the email should contain "someone_else"
       And the email should contain "a guest"

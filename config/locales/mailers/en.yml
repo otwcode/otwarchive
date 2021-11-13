@@ -26,11 +26,12 @@ en:
             part1: "If you've received this message in error, please contact Support at %{support_url}."
             part2: "The Archive of Our Own is a fan-run and fan-supported archive that relies on your donations: %{donate_url}."
         sent_at: "Sent at %{sent_at}."
-    kudos:
+  kudo_mailer:
+    batch_kudo_notification:
+      subject: "[%{app_name}] You've got kudos!"
       guest:
         one: a guest
         other: "%{count} guests"
-      you_have: "[%{app_name}] You've got kudos!"
       html:
         left_kudos:
           one: "%{givers_list} left kudos on %{commentable_link}."
