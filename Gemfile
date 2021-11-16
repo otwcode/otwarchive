@@ -38,6 +38,7 @@ gem 'redis-namespace'
 # Used to convert strings to ascii
 gem 'unicode'
 gem 'unidecoder'
+gem 'unicode_utils', '>=1.4.0'
 
 # Lograge is opinionated, very opinionated.
 gem "lograge" # https://github.com/roidrage/lograge
@@ -61,7 +62,7 @@ gem 'resque', '>=1.14.0'
 gem 'resque-scheduler'
 gem 'after_commit_everywhere'
 #gem 'daemon-spawn', require: 'daemon_spawn'
-gem 'elasticsearch', '6.8.0'
+gem "elasticsearch", "7.15.0"
 gem "aws-sdk-s3"
 gem 'css_parser'
 
@@ -165,6 +166,13 @@ group :development do
   gem 'factory_bot_rails'
   gem 'bundler-audit'
   gem 'active_record_query_trace', '~> 1.6', '>= 1.6.1'
+end
+
+group :linters do
+  gem "erb_lint", "0.0.29"
+  gem "rubocop", "0.83.0"
+  gem "rubocop-rails", "2.6.0"
+  gem "rubocop-rspec", "1.41.0"
 end
 
 group :test, :development, :staging do

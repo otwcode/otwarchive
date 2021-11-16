@@ -43,3 +43,15 @@ Feature: Collectible items in moderated collections
       And I view the awaiting approval collection items page for "Various Penguins"
     Then I should see "Bookmark of deleted item"
       And I should see "This has been deleted, sorry!"
+
+  Scenario: A work with too many tags can be approved
+    Given the user-defined tag limit is 2
+      And I post the work "Over the Limit" to the collection "Various Penguins"
+      And the work "Over the Limit" has 3 fandom tags
+    When I am logged in as the owner of "Various Penguins"
+      And I approve the work "Over the Limit" in the collection "Various Penguins"
+      And I submit
+    Then I should see "Collection status updated!"
+      And I should not see "Over the Limit"
+    When I view the work "Over the Limit"
+    Then I should see "Various Penguins"

@@ -9,6 +9,8 @@ en:
   comments:
     check_frozen:
       error: Sorry, you cannot reply to a frozen comment.
+    check_not_replying_to_spam:
+      error: Sorry, you can't reply to a comment that has been marked as spam.
     check_permission_to_edit:
       error:
         frozen: Frozen comments cannot be edited.

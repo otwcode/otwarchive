@@ -18,7 +18,7 @@ class PseudQuery < Query
   end
 
   def filters
-    [collection_filter, fandom_filter].compact
+    [collection_filter, fandom_filter].flatten.compact
   end
 
   def queries

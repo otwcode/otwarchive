@@ -191,3 +191,11 @@ Feature: Delete Works
     Then I should not see "All Something Breaks Loose"
       And I should see "This has been deleted, sorry!"
       And I should see "My thoughts on the work"
+
+  Scenario: A work with too many tags can be deleted
+    Given the user-defined tag limit is 2
+      And the work "Over the Limit"
+      And the work "Over the Limit" has 3 fandom tags
+    When I am logged in as the author of "Over the Limit"
+      And I delete the work "Over the Limit"
+    Then I should see "Your work Over the Limit was deleted."

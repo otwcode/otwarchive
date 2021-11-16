@@ -571,8 +571,9 @@ Feature: Collection
   When I reload the page
   # 5 gift notification emails are delivered for the 5 stories that have been posted so far (4 standard, 1 pinch-hit, 1 still a draft)
   Then 5 emails should be delivered
-    And the email should contain "A gift work has been posted for you"
-    And the email should contain "in the Yuletide collection at the Archive of Our Own"
+    And the email should contain "A gift work has been posted for you in the"
+    And the email should contain "Yuletide"
+    And the email should contain "at the Archive of Our Own"
     And the email should contain "by an anonymous responder"
     And the email should not contain "by myname1"
     And the email should not contain "by myname2"

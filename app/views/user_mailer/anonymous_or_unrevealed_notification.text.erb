@@ -1,9 +1,11 @@
 <% content_for :message do %>
-<%= t(".greeting", user: @user.default_pseud.byline) %>
+<%= t("mailer.general.greeting.formal", name: @user.login) %>
 
-<%= t(".changed_status.#{@status}",
-      collection: @collection.title,
-      work: @work.title) %>
+<%= t(".changed_status.#{@status}.text",
+      collection_title: @collection.title,
+      collection_url: collection_url(@collection),
+      work_title: @work.title,
+      work_url: work_url(@work)) %>
 
 <% if @becoming_anonymous && @becoming_unrevealed %>
 <%= t(".unrevealed_info") %>
@@ -19,6 +21,6 @@
       collection_items_url: user_collection_items_url(@user, approved: true)) %>
 
 <%= t(".more_info.text",
-      faq_url: archive_faq_url("collections-and-challenges",
+      faq_url: archive_faq_url("collections",
                                anchor: :collectionoptions)) %>
 <% end %>

@@ -169,6 +169,14 @@ When /^I accept the invitation for my work in the collection "([^\"]*)"$/ do |co
   step %{I select "Approved" from "collection_items_#{collection_item_id}_user_approval_status"}
 end
 
+When "I approve the work {string} in the collection {string}" do |work, collection|
+  work = Work.find_by(title: work)
+  collection = Collection.find_by(title: collection)
+  item_id = CollectionItem.find_by(item: work, collection: collection).id
+  visit collection_items_path(collection)
+  step %{I select "Approved" from "collection_items_#{item_id}_collection_approval_status"}
+end
+
 ### THEN
 
 Then /^"([^"]*)" collection exists$/ do |title|

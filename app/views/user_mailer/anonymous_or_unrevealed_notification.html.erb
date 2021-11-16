@@ -1,9 +1,9 @@
 <% content_for :message do %>
-  <p><%= t(".greeting", user: style_bold(@user.default_pseud.byline)).html_safe %></p>
+  <p><%= t("mailer.general.greeting.formal", name: style_bold(@user.login)).html_safe %></p>
 
-  <p><%= t(".changed_status.#{@status}",
-           collection: style_link(@collection.title, collection_url(@collection)),
-           work: style_creation_link(@work.title, work_url(@work))).html_safe %></p>
+  <p><%= t(".changed_status.#{@status}.html",
+           collection_link: style_link(@collection.title, collection_url(@collection)),
+           work_link: style_creation_link(@work.title, work_url(@work))).html_safe %></p>
 
   <% if @becoming_anonymous && @becoming_unrevealed %>
     <p><%= t(".unrevealed_info") %></p>
@@ -21,6 +21,6 @@
 
   <p><%= t(".more_info.html",
            faq_link: style_link(t(".faq_link_text"),
-                                archive_faq_url("collections-and-challenges",
+                                archive_faq_url("collections",
                                                 anchor: :collectionoptions))) %></p>
 <% end %>

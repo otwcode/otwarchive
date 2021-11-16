@@ -11,8 +11,8 @@ class Query
     begin
       $elasticsearch.search(
         index: index_name,
-        type: document_type,
-        body: generated_query
+        body: generated_query,
+        track_total_hits: true
       )
     rescue Elasticsearch::Transport::Transport::Errors::BadRequest
       { error: "Your search failed because of a syntax error. Please try again." }
@@ -104,7 +104,7 @@ class Query
 
   # Sort by relevance by default, override in subclasses as necessary
   def sort
-    { "_score" => { order: "desc" }}
+    { _score: { order: "desc" } }
   end
 
   # Search query with filters

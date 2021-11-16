@@ -269,7 +269,9 @@ Feature: Gift Exchange Challenge
     Then I should not see "Assignments are now being sent out"
     # 4 users and the mod should get emails :)
       And 1 email should be delivered to "mod1"
+      And the email should have "Assignments sent" in the subject
       And the email should contain "You have received a message about your collection"
+      And the email should not contain "translation missing"
       And 1 email should be delivered to "myname1"
       And the email should contain "You have been assigned the following request"
       And the email should contain "Fandom:"
