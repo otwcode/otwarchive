@@ -31,10 +31,12 @@ jobs:
           - 3306:3306
 
       elasticsearch:
-        image: elasticsearch:7.12.0
+        image: docker.elastic.co/elasticsearch/elasticsearch:7.15.2
         ports:
           - 9200:9200
-        options: -e="discovery.type=single-node"
+        options: >-
+          -e="discovery.type=single-node"
+          -e="xpack.security.enabled=false"
 
       memcached:
         image: memcached:1.5
