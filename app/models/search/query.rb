@@ -36,7 +36,6 @@ class Query
   def sample(count: 5)
     response = $elasticsearch.search(
       index: index_name,
-      type: document_type,
       body: {
         query: {
           function_score: {
@@ -56,7 +55,6 @@ class Query
   def aggregation_search(aggregation)
     $elasticsearch.search(
       index: index_name,
-      type: document_type,
       body: {
         query: filtered_query,
         size: 0, # aggregations only
