@@ -1,19 +1,61 @@
 ---
 he:
   mailer:
+    general:
+      closing:
+        formal: בברכה,
+        informal: בברכה,
+      footer:
+        general:
+          html:
+            donate_link_text: תרומות
+            part1: אם קיבלת את ההודעה הזו בטעות, אנא %{support_link}.
+            part2: AO3 הוא ארכיון המנוהל ונתמך על ידי מעריצים ומעריצות ומסתמך על %{donate_link}.
+            support_link_text: צור/צרי קשר עם צוות התמיכה שלנו
+          text:
+            part1: אם קיבלת את ההודעה הזו בטעות, אנא צור/צרי קשר עם צוות התמיכה שלנו
+              ב-%{support_url}.
+            part2: 'AO3 הוא ארכיון המנוהל ונתמך על ידי מעריצים ומעריצות ומסתמך על
+              תרומות: %{donate_url}.'
+        sent_at: נשלח בשעה %{sent_at}.
+      greeting:
+        formal: שלום, %{name},
+        informal:
+          addressed: היי %{name}!
+          unaddressed: היי!
+        introductory: 'שלום מ-Archive of Our Own – AO3 (ארכיון משלנו)!
+
+          '
+      signature:
+        app_short_name: AO3
+        open_doors: צוות Open Doors (דלתות פתוחות)
+        parent_org: Organization for Transformative Works – OTW (ארגון למען יצירות
+          טרנספורמטיביות)
+        support: צוות התמיכה של AO3
     kudos:
       guest:
         one: אורחת
         other: "%{count} אורחות"
       html:
         left_kudos:
-          one: "%{givers_list} השאירה קודוס על <i>%{commentable_link}</i>."
-          other: "%{givers_list} השאירו קודוס על <i>%{commentable_link}</i>."
+          one: "%{givers_list} השאירה קודוס על %{commentable_link}."
+          other: "%{givers_list} השאירו קודוס על %{commentable_link}."
       text:
         left_kudos:
           one: "%{givers_list} השאירה קודוס על %{commentable_link}."
           other: "%{givers_list} השאירו קודוס על %{commentable_link}."
       you_have: "[%{app_name}] קיבלת קודוס!"
+  users:
+    mailer:
+      reset_password_instructions:
+        expiration: אם לא תשתמש/י בקישור לאיפוס הסיסמה בתוך שבוע, יפוג תוקף הקישור
+          ויהיה עליך לשלוח בקשה חדשה לאיפוס סיסמה.
+        intro: " קיבלנו בקשה לאיפוס סיסמה בחשבונך. באפשרותך לשנות את הסיסמה על ידי
+          כניסה לקישור הבא והזנת הסיסמה החדשה:"
+        link_title: שינוי סיסמה.
+        subject: "[%{app_name}] איפוס סיסמה"
+        unrequested: אם לא ביקשת לשנות את סיסמתך, התעלם/י מדוא&quot;ל זה והסיסמה הנוכחית
+          שלך תמשיך לשמש אותך כמקודם.
   user_mailer:
     abuse_report:
       description_para: 'פירוט ההפרה:'
@@ -21,22 +63,21 @@ he:
       subject: "[%{app_name}] דו&quot;ח המדיניות ושימוש לרעה שלך"
       url_para: 'כתובת האתר של הדף בו מתקיימת ההפרה:'
     admin_deleted_work_notification:
-      abuse_committee: צור/צרי קשר עם ועדת מדיניות ושימוש לרעה
       bye: לנוחיותך, מצורף בזאת עותק של יצירתך.
-      hello: "%{user} שלום,"
+      contact_abuse: צור/צרי קשר עם ועדת מדיניות ושימוש לרעה
       html:
         part1: יצירתך %{title} נמחקה מהארכיון על ידי אדמין/נית.
         part2: אם יצירתך הייתה שייכת למיזם שיובא לארכיון על ידי Open Doors (דלתות
           פתוחות), אנא %{opendoors_link} לשאלות נוספות.
-        part3: אם ייתכן שיצירתך הפרה את תנאי השימוש של הארכיון, אנא %{abuse_link}.
+        tos_violation: אם ייתכן שיצירתך הפרה את תנאי השימוש של הארכיון, אנא %{contact_abuse_link}.
       opendoors: 'צור/צרי קשר עם דלתות פתוחות '
       subject: "[%{app_name}] יצירתך נמחקה על ידי אדמין/נית"
       text:
         part1: יצירתך "%{title}" נמחקה מהארכיון על ידי אדמין/נית.
         part2: אם יצירתך הייתה שייכת למיזם שיובא לארכיון על ידי Open Doors (דלתות
           פתוחות), אנא צור/צרי קשר עם דלתות פתוחות (%{opendoors_link}) לשאלות נוספות.
-        part3: אם ייתכן שיצירתך הפרה את תנאי השימוש של הארכיון, אנא צור/צרי קשר עם
-          ועדת מדיניות ושימוש לרעה (%{abuse_link}).
+        tos_violation: אם ייתכן שיצירתך הפרה את תנאי השימוש של הארכיון, אנא צור/צרי
+          קשר עם ועדת מדיניות ושימוש לרעה (%{contact_abuse_url}).
     challenge_assignment_notification:
       any: הכול
       description: 'תיאור:'
@@ -55,11 +96,11 @@ he:
       recipient_missing: 'ללא: צור/י קשר עם מנהלת האתגר לקבלת סיוע!'
       subject: "[%{app_name}][%{collection_title}]המשימה שלך!"
       text:
+        assignment: קיבלת את הבקשה הבאה באתגר %{collection_title}(%{collection_url})
+          בארכיון משלנו!
         footer: דוא"ל זה נשלח כיוון שנרשמת לאתגר %{title} (%{url}). מידע נוסף על אתגר
           זה ופרטי יצירת קשר עם המנהלות שלו זמינים ב%{profile_url}.
         look_up: ניתן למצוא משימה זו בעמוד ה-Assignments (המשימות) שלך בקישור %{link}.
-        part1: קיבלת את הבקשה הבאה באתגר %{collection_title}(%{collection_url}) בארכיון
-          משלנו!
     change_email:
       part1: "%{login} כתובת הדוא&quot;ל המשוייכת לחשבונך שונתה ל- %{email}"
       subject: "[%{app_name}] כתובת הדוא&quot;ל שונתה"
@@ -94,8 +135,19 @@ he:
         creation: 'creation: %{title} (%{url}) מאת %{pseuds}'
         remove: 'אם נוספת בטעות, או אם אינך רוצה להופיע כיוצר/ת, באפשרותך לערוך את
           ה%{type} על מנת להסיר את עצמך: %{url}'
+    creatorship_request:
+      html:
+        creation: "%{creation_link} מאת %{pseud_links}"
+        instructions: " את ההזמנה תוכל/י לקבל או לדחות בדף %{page_name} שלך. "
+        page_name: Co-Creator Requests (בקשות להוספת יוצר/ת שותף/ה)
+      intro: 'המשתמש/ת %{inviting_user} מזמין/ה אותך לרשום את שם העט שלך, %{pseud}
+        כיוצר/ת שותף/ה של %{type}:'
+      subject: "[%{app_name}] בקשה להוספתך כיוצר/ת שותף/ה"
+      text:
+        creation: "%{title} (%{url}) מאת %{pseuds}"
+        instructions: 'את ההזמנה תוכל/י לקבל או לדחות בדף Co-Creator Requests (בקשות
+          להוספת יוצר/ת שותף/ה) שלך: %{url}'
     delete_work_notification:
-      hello: שלום, %{user},
       html:
         part1_other: יצירתך %{title} נמחקה על פי הבקשה של %{pseud}.
         part1_yourself: יצירתך %{title} נמחקה על פי בקשתך.
@@ -113,18 +165,14 @@ he:
           ליצור חשבון חדש בארכיון. באפשרותך להזמין חברים/ות דרך הדף %{invitation_page}.
         other: רק רצינו ליידע אותך שקיבלת %{count} הזמנות חדשות, בהן ניתן להשתמש על
           מנת ליצור חשבון חדש בארכיון. באפשרותך להזמין חברים/ות דרך הדף %{invitation_page}.
-      closing: " בברכה,"
-      greeting: " שלום %{login}!"
       invitation_page_link_text: דף ההזמנות שלך
       subject: "[%{app_name}] הזמנות חדשות"
     invite_request_declined:
-      greeting: "%{user} שלום,"
       main:
         one: צר לנו לבשר לך כי אין באפשרותנו להיענות לבקשתך להזמנה חדשה כעת.
         other: צר לנו לבשר לך כי אין באפשרותנו להיענות לבקשתך ל-%{count} הזמנות חדשות
           כעת.
       reason: 'תוכן בקשתך:'
-      signoff: בברכה,
       subject: "[%{app_name}] בקשתך לקוד הזמנה נוסף נדחתה"
     signup_notification:
       activate_your_account: לחץ/י על קישור זה כדי להפעיל את חשבונך

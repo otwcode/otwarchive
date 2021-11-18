@@ -2,6 +2,9 @@
 fa:
   mailer:
     general:
+      closing:
+        formal: با احترام،
+        informal: با آرزوی بهترین ها،
       footer:
         general:
           html:
@@ -17,22 +20,44 @@ fa:
             part2: 'Archive of Our Own (آرشیوی از آن خودمان) آرشیویست که توسط هواداران
               اداره و حمایت می شود که به کمکهای مالی شما تکیه می کند: %{donate_url}.'
         sent_at: فرستاده شده در %{sent_at}.
+      greeting:
+        formal: "‪%{name}‬ عزیز،"
+        informal:
+          addressed: سلام، %{name}!
+          unaddressed: سلام!
+        introductory: سلامی از Archive of Our Own – AO3 (آرشیوی از آن خودمان)!
       signature:
         app_short_name: AO3
+        open_doors: تیم Open Doors (درهای باز)
+        parent_org: Organization for Transformative Works – OTW (سازمانی برای آثار
+          دگرگون شونده)
+        support: تیم پشتیبانی AO3
     kudos:
       guest:
         one: 'یک مهمان
 
           '
         other: "%{count} مهمان"
+        zero: |-
+          یک مهمان
+
+          %{count} مهمان
       html:
         left_kudos:
-          one: "%{givers_list} برای <i>%{commentable_link}</i> کودوس و قدردانی فرستاد."
-          other: "%{givers_list} برای <i>%{commentable_link}</i> کودوس و قدردانی فرستادند."
+          one: "%{givers_list} برای %{commentable_link} کودوس و قدردانی فرستاد."
+          other: "%{givers_list} برای %{commentable_link} کودوس و قدردانی فرستادند."
+          zero: |-
+            %{givers_list} برای %{commentable_link} کودوس و قدردانی فرستاد.
+
+            %{givers_list} برای %{commentable_link} کودوس و قدردانی فرستادند.
       text:
         left_kudos:
           one: "%{givers_list} برای %{commentable_link} کودوس و قدردانی فرستاد."
           other: "%{givers_list} برای %{commentable_link} کودوس و قدردانی فرستادند."
+          zero: |-
+            %{givers_list} برای %{commentable_link} کودوس و قدردانی فرستاد.
+
+            %{givers_list} برای %{commentable_link} کودوس و قدردانی فرستادند.
       you_have: "[%{app_name}] شما کودوس و قدردانی دریافت کردید!"
   user_mailer:
     abuse_report:
@@ -41,23 +66,17 @@ fa:
       subject: "[%{app_name}] گزارش تخطی شما"
       url_para: 'آدرس اینترنتی صفحه ای که در آن تخطی رخ داده است:'
     admin_deleted_work_notification:
-      abuse_committee: با کمیته ی اختیارات ما تماس بگیرید
       bye: ضمیمه شده یک کپی از اثر شما برای مراجعه شماست.
-      hello: "%{user} عزیز،"
       html:
         part1: اثر شما %{title} از آرشیو توسط یک ادمین سایت حذف شده است.
         part2: اگر اثر شما بخشی از یک پروژه ی واردات که توسط تیم درهای باز ما مدیریت
           شده است بوده، لطفا در صورت داشتن سوالهای بیشتر %{opendoors_link}.
-        part3: اگر امکان دارد که اثر شما شرایط خدمت آرشیو را زیر سوال برده باشد، لطفا
-          %{abuse_link}.
       opendoors: با درهای باز تماس بگیرید
       subject: "[%{app_name}] اثر شما توسط یک ادمین حذف شده است"
       text:
         part1: اثر شما "%{title}" از آرشیو توسط یک ادمین سایت حذف شده است.
         part2: اگر اثر شما بخشی از یک پروژه ی واردات که توسط تیم درهای باز ما مدیریت
           شده است بوده، لطفا در صورت داشتن سوالهای بیشتر با درهای باز تماس بگیرید(%{opendoors_link}).
-        part3: اگر امکان دارد که اثر شما شرایط خدمت آرشیو را زیر سوال برده باشد، لطفا
-          با کمیته ی اختیارات ما تماس بگیرید (%{abuse_link}).
     challenge_assignment_notification:
       any: هرچیزی
       description: 'شرح:'
@@ -82,8 +101,6 @@ fa:
           %{profile_url} را ببینید.
         look_up: شما می توانید این ماموریت را از پیج Assignments (ماموریت هایتان)
           در %{link} ببینید.
-        part1: درخواست ذیل در چالش %{collection_title} (%{collection_url}) در AO3
-          به شما محول شده است!
     change_email:
       part1: "%{login}، ایمیل مرتبط با اکانت شما به ایمیل %{email} تغییر یافته است."
       subject: "[%{app_name}] تغییر ایمیل"
@@ -122,12 +139,10 @@ fa:
           ذکر شوید می توانید %{type} را ویرایش کنید تا خودتان را به عنوان خالق حذف
           کنید: %{url}'
     delete_work_notification:
-      hello: "%{user} عزیز،"
       html:
         part1_other: اثر شما %{title} به درخواست %{pseud} حذف شد.
         part1_yourself: اثر شما %{title} به درخواست خودتان حذف شد.
         part2: اگر سوالی دارید لطفا %{support}.
-      part2: اگر سوالی دارید لطفا %{support}.
       part3: یک کپی از اثر شما به عنوان مرجع به این ایمیل ضمیمه شده است.
       subject: "[%{app_name}] اثر شما حذف شده است"
       support: با پشتیبانی تماس بگیرید
@@ -135,8 +150,9 @@ fa:
         part1_other: اثر شما "%{title}" به درخواست %{pseud} حذف شد.
         part1_yourself: اثر شما "%{title}" به درخواست خودتان حذف شد.
         part2: اگر سوالی دارید لطفا %{support} (%{url}).
+    invitation:
+      subject: "[%{app_name}] دعوتنامه"
     invitation_to_claim:
-      greeting: سلامی از طرف %{app_name}!
       html:
         ao3_news: اخبار AO3
         contact_open_doors: با درهای باز تماس بگیرید
@@ -153,9 +169,6 @@ fa:
           اند که دیگر به آن دسترسی ندارید، لطفا با هرگونه اطلاعاتی که به ما کمک می
           کند تا هویت شما را شناسایی کنیم %{open_doors_link}.
         part11: برای سوالات دیگر لطفا %{support_link}.
-        part13: با آرزوی بهترینها،
-        part14: تیم Open Doors (درهای باز)
-        part15: Organization for Transformative Works (سازمانی برای آثار دگرگون شونده)
         part2: شما می توانید اعلانیه های مربوط به انتقال آرشیوها اخیر را در %{news_link}
           بخوانید و اطلاعات بیشتر را در %{open_doors_faq_link} یا %{open_doors_tutorial_link}
           Open Doors (درهای باز) بیابید. برای هرگونه سوالی که در سوالات متداول، آموزشها
@@ -203,10 +216,6 @@ fa:
           اند که دیگر به آن دسترسی ندارید، لطفا با هرگونه اطلاعاتی که به ما کمک می
           کند تا هویت شما را شناسایی کنیم با Open Doors (درهای باز) تماس بگیرید.
         part11: برای سوالات دیگر لطفا با پشتیبانی AO3 در %{support_link} تماس بگیرید.
-        part13: |
-          با آرزوی بهترینها،
-          تیم Open Doors (درهای باز)
-          Organization for Transformative Works (سازمانی برای آثار دگرگون شونده)
         part2: شما می توانید اعلانیه های مربوط به انتقال آرشیو اخیر را در اخبار AO3
           (%{news_link}) بخوانید و اطلاعات بیشتر را در صفحه ی سوالات متداول (%{open_doors_faq_link})
           یا صفحه ی آموزشهای (%{open_doors_tutorial_link}) Open Doors (درهای باز)
@@ -239,18 +248,14 @@ fa:
         zero: ما فقط می خواستیم به شما اطلاع دهیم که شما %{count} دعوتنامه (دعوتنامه
           های) جدید دارید که می توان از آنها برای ایجاد اکانتهای جدید در آرشیو استفاده
           کرد. شما می توانید دوستی را در %{invitation_page} دعوت کنید.
-      closing: 'خوش باشید، '
-      greeting: سلام %{login}
       invitation_page_link_text: صفحه ی دعوتنامه های شما
       subject: "[%{app_name}] دعوتنامه های جدید"
     invite_request_declined:
-      greeting: "%{user} عزیز،"
       main:
         zero: |-
           ما ناراحتیم از اینکه به شما اطلاع می دهیم که درخواست شما برای یک دعوتنامه ی جدید در زمان حال قابل عملی شدن نیست.
           ما ناراحتیم از اینکه به شما اطلاع می دهیم که درخواست شما برای %{count} دعوتنامه ی جدید در زمان حال قابل عملی شدن نیست.
       reason: 'درخواست شما این بود که:'
-      signoff: با احترام،
       subject: "[%{app_name}] درخواست کد دعوتنامه ی اضافی رد شد"
     signup_notification:
       activate_your_account: این لینک را برای فعالسازی اکانت خود دنبال کنید

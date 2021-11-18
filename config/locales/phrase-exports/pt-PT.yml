@@ -2,6 +2,9 @@
 pt-PT:
   mailer:
     general:
+      closing:
+        formal: Atenciosamente,
+        informal: Os melhores cumprimentos,
       footer:
         general:
           html:
@@ -15,21 +18,42 @@ pt-PT:
             part2: 'O AO3 é um arquivo gerido e suportado por fãs que depende das
               tuas doações: %{donate_url}.'
         sent_at: Enviado às %{sent_at}.
+      greeting:
+        formal: Olá %{name},
+        informal:
+          addressed: Olá, %{name}!
+          unaddressed: Olá!
+        introductory: Olá do Archive of Our Own – AO3 (O Nosso Próprio Arquivo)!
       signature:
         app_short_name: AO3
+        open_doors: A equipa do Open Doors (Portas Abertas)
+        parent_org: Organization for Transformative Works – OTW (Organização para
+          Obras Transformativas)
+        support: A equipa de Suporte do AO3
     kudos:
       guest:
         one: uma pessoa convidada
         other: "%{count} pessoas convidadas"
       html:
         left_kudos:
-          one: "%{givers_list} deixou kudos em <i>%{commentable_link}</i>."
-          other: "%{givers_list} deixaram kudos em <i>%{commentable_link}</i>."
+          one: "%{givers_list} deixou kudos em %{commentable_link}."
+          other: "%{givers_list} deixaram kudos em %{commentable_link}."
       text:
         left_kudos:
           one: "%{givers_list} deixou kudos em %{commentable_link}."
           other: "%{givers_list} deixaram kudos em %{commentable_link}."
       you_have: "[%{app_name}] Recebeste kudos!"
+  users:
+    mailer:
+      reset_password_instructions:
+        expiration: Se não utilizares este link para repor a tua palavra-passe dentro
+          de uma semana, o link expirará e terás de pedir um novo.
+        intro: 'Alguém pediu uma reposição da palavra-passe da tua conta. Podes alterar
+          a tua palavra-passe seguindo o link abaixo e inserindo a tua nova palavra-passe:'
+        link_title: Mudar a minha palavra-passe.
+        subject: "[%{app_name}] Repõe a tua palavra-passe"
+        unrequested: Se não pediste uma reposição de palavra-passe, podes ignorar
+          este email e a tua antiga palavra-passe continuará a funcionar.
   user_mailer:
     abuse_report:
       description_para: 'Descrição do abuso:'
@@ -37,17 +61,16 @@ pt-PT:
       subject: "[%{app_name}] A Tua Denúncia de Abuso"
       url_para: 'O URL da página onde se encontra o abuso:'
     admin_deleted_work_notification:
-      abuse_committee: contacta o nosso Comité de Políticas e Abuso
       bye: Foi anexada uma cópia da obra para tua referência.
-      hello: Olá %{user},
+      contact_abuse: contacta o nosso Comité de Políticas e Abuso
       html:
         part1: A tua obra %{title} foi eliminada do Arquivo por uma pessoa administradora
           do site.
         part2: Se a tua obra fazia parte de um projeto importado gerido pela nossa
           equipa do Open Doors (Portas Abertas), por favor %{opendoors_link} com as
           tuas questões.
-        part3: Se é possível que a tua obra tenha violado os Termos de Serviço do
-          Arquivo, por favor %{abuse_link}.
+        tos_violation: Se é possível que a tua obra tenha violado os Termos de Serviço
+          do Arquivo, por favor %{contact_abuse_link}.
       opendoors: contacta o Open Doors (Portas Abertas)
       subject: "[%{app_name}] A tua obra foi eliminada por uma pessoa administradora"
       text:
@@ -56,8 +79,8 @@ pt-PT:
         part2: Se a tua obra fazia parte de um projeto importado gerido pela nossa
           equipa do Open Doors (Portas Abertas), por favor contacta o Portas Abertas
           (%{opendoors_link}) com quaisquer questões que tenhas.
-        part3: Se é possível que a tua obra tenha violado os Termos de Serviço do
-          Arquivo, por favor contacta o nosso Comité de Políticas e Abuso (%{abuse_link}).
+        tos_violation: Se é possível que a tua obra tenha violado os Termos de Serviço
+          do Arquivo, por favor contacta o nosso Comité de Políticas e Abuso (%{contact_abuse_url}).
     challenge_assignment_notification:
       any: Qualquer
       description: 'Descrição:'
@@ -77,13 +100,13 @@ pt-PT:
       recipient_missing: 'Ninguém: contacta uma pessoa moderadora para obter ajuda!'
       subject: "[%{app_name}][%{collection_title}] A Tua Tarefa!"
       text:
+        assignment: Foi-te atribuída a seguinte tarefa no desafio "%{collection_title}"
+          (%{collection_url})  no AO3!
         footer: Estás a receber este email porque te inscreveste no desafio %{title}
           (%{url}). Para mais informação acerca deste desafio e os detalhes de contacto
           das pessoas moderadoras, por favor visita %{profile_url}.
         look_up: Podes encontrar esta tarefa na tua página Assignments (Tarefas) em
           %{link}.
-        part1: Foi-te atribuída a seguinte tarefa no desafio %{collection_title} (%{collection_url})
-          no AO3!
     change_email:
       part1: "%{login}, o endereço de email associado à tua conta foi mudado para
         %{email}"
@@ -122,13 +145,23 @@ pt-PT:
         remove: 'Se te adicionaram por engano ou não quiseres aparecer como pessoa
           criadora, podes editar a %{type} para te removeres como pessoa criadora:
           %{url}'
+    creatorship_request:
+      html:
+        creation: "%{creation_link} por %{pseud_links}"
+        instructions: Podes aceitar ou rejeitar este pedido na tua %{page_name} página.
+        page_name: Co-Creator Requests (Pedidos de Pessoa Co-Criadora)
+      intro: 'A pessoa utilizadora %{inviting_user} convidou o teu pseudo %{pseud}
+        a ser registado como pessoa co-criadora no seguinte %{type}:'
+      subject: "[%{app_name}] Pedido de pessoa co-criadora"
+      text:
+        creation: "%{title} (%{url}) por %{pseuds}"
+        instructions: 'Podes aceitar ou rejeitar este pedido na tua página de Co-Creator
+          Requests (Pedidos de Pessoa Co-Criadora): %{url}'
     delete_work_notification:
-      hello: Olá %{user},
       html:
         part1_other: A tua obra %{title} foi apagada a pedido de %{pseud}.
         part1_yourself: A tua obra %{title} foi apagada a teu pedido.
         part2: Se tiveres alguma pergunta, por favor %{support}.
-      part2: Se tiveres alguma pergunta, por favor %{support}.
       part3: Segue em anexo uma cópia da tua obra para tua referência.
       subject: "[%{app_name}] A tua obra foi apagada"
       support: contacta a equipa de Suporte
@@ -137,7 +170,6 @@ pt-PT:
         part1_yourself: A tua obra "%{title}" foi apagada a teu pedido.
         part2: Se tiveres alguma questão, por favor %{support} (%{url}).
     invitation_to_claim:
-      greeting: Saudações do %{app_name}!
       html:
         ao3_news: Notícias do AO3
         contact_open_doors: contacta o Open Doors (Portas Abertas)
@@ -154,9 +186,6 @@ pt-PT:
           ao qual já não tens acesso, por favor %{open_doors_link} com toda a informação
           que possa ajudar a verificar a tua identidade.
         part11: Para outras questões, por favor %{support_link}.
-        part13: Atenciosamente,
-        part14: A equipa do Portas Abertas
-        part15: Organization for Transformative Works (Organização para Obras Transformativas)
         part2: Podes ler as publicações acerca das mudanças de arquivo recentes nas
           %{news_link} e podes ainda aceder a informação adicional sobre o Portas
           Abertas na %{open_doors_faq_link} ou na %{open_doors_tutorial_link}. Para
@@ -207,10 +236,6 @@ pt-PT:
           com toda a informação que possa ajudar a verificar a tua identidade.
         part11: Para outras questões, por favor entra em contacto com a equipa de
           Suporte do AO3 em %{support_link}.
-        part13: |
-          Atenciosamente,
-          A equipa do Portas Abertas
-          Organization for Transformative Works (Organização para Obras Transformativas)
         part2: 'Podes ler as publicações acerca das mudanças de arquivos recentes
           nas Notícias do AO3 (%{news_link}), e podes aceder a informação adicional
           sobre o Portas Abertas na página de Perguntas Frequentes (FAQs) (%{open_doors_faq_link})
@@ -245,22 +270,19 @@ pt-PT:
       body:
         one: Queremos apenas informar-te de que tens %{count} novo convite, que pode
           ser utilizado para criar uma nova conta no AO3. Podes convidar uma pessoa
-          amiga na %{invitation_page}.
+          amiga em %{invitation_page}.
         other: Queremos apenas informar-te de que tens %{count} novos convites, que
           podem ser utilizados para criar novas contas no AO3. Podes convidar pessoas
           amigas na %{invitation_page}.
-      closing: Cumprimentos,
-      greeting: Olá %{login}!
+      invitation_page_link_text: tua página de convites
       subject: "[%{app_name}] Novos Convites"
     invite_request_declined:
-      greeting: Olá, %{user},
       main:
         one: Lamentamos informar que, de momento, não podemos satisfazer o teu pedido
           de um novo convite.
         other: Lamentamos informar que, de momento, não podemos satisfazer o teu pedido
           de %{count} novos convites.
       reason: 'O teu pedido foi:'
-      signoff: Cumprimentos,
       subject: "[%{app_name}] Pedido de Código de Convite Adicional Recusado"
     signup_notification:
       activate_your_account: segue este link para ativar a tua conta

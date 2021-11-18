@@ -2,6 +2,9 @@
 it:
   mailer:
     general:
+      closing:
+        formal: Cordialità,
+        informal: Un saluto,
       footer:
         general:
           html:
@@ -16,21 +19,43 @@ it:
             part2: 'AO3 è un archivio supportato e gestito dai fan che dipende dalle
               vostre donazioni: %{donate_url}.'
         sent_at: Inviato a %{sent_at}.
+      greeting:
+        formal: Salve %{name},
+        informal:
+          addressed: Ciao, %{name}!
+          unaddressed: Ciao!
+        introductory: Un saluto da Archive of Our Own – AO3 (Archivio tutto per noi)!
       signature:
         app_short_name: AO3
+        open_doors: La squadra di Open Doors (Porte Aperte)
+        parent_org: Organization for Transformative Works – OTW (Organizzazione per
+          i Lavori Trasformativi)
+        support: La squadra di Supporto AO3
     kudos:
       guest:
         one: un ospite
         other: "%{count} ospiti"
       html:
         left_kudos:
-          one: "%{givers_list} ha lasciato kudos per <i>%{commentable_link}</i>."
-          other: "%{givers_list} hanno lasciato kudos per <i>%{commentable_link}</i>."
+          one: "%{givers_list} ha lasciato kudos per %{commentable_link}."
+          other: "%{givers_list} hanno lasciato kudos per %{commentable_link}."
       text:
         left_kudos:
           one: "%{givers_list} ha lasciato kudos per %{commentable_link}."
           other: "%{givers_list} hanno lasciato kudos per %{commentable_link}."
       you_have: "[%{app_name}] Hai dei kudos!"
+  users:
+    mailer:
+      reset_password_instructions:
+        expiration: Se non utilizzi questo link per reimpostare la tua password entro
+          una settimana, esso scadrà e dovrai richiederne uno nuovo.
+        intro: 'È stato richiesto di reimpostare la password del tuo account. Puoi
+          cambiare la tua password cliccando il seguente link e immettendo la tua
+          nuova password:'
+        link_title: Cambia la mia password.
+        subject: "[%{app_name}] Reimposta la tua password"
+        unrequested: Se la richiesta di reimpostare la password non è tua, puoi ignorare
+          questa email e la tua password attuale continuerà a funzionare.
   user_mailer:
     abuse_report:
       description_para: 'Descrizione dell’infrazione:'
@@ -39,17 +64,16 @@ it:
       subject: "[%{app_name}] Il Tuo Verbale di Norme & Violazioni"
       url_para: 'URL della pagina in cui si trova l’infrazione:'
     admin_deleted_work_notification:
-      abuse_committee: contatta il nostro Comitato Norme & Violazioni
       bye: In allegato puoi trovare una copia del tuo lavoro a cui fare riferimento.
-      hello: Caro %{user},
+      contact_abuse: contatta il nostro Comitato Norme & Violazioni
       html:
         part1: Il tuo lavoro %{title} è stato rimosso dall’Archivio da un amministratore
           del sito.
         part2: Se il tuo lavoro faceva parte di un progetto di importazione gestito
           dal nostro team Porte Aperte, per favore %{opendoors_link} per ulteriori
           domande.
-        part3: Se ritieni possibile che il tuo lavoro abbia violato i Termini di Servizio
-          dell’Archivio, per favore %{abuse_link}.
+        tos_violation: Se ritieni possibile che il tuo lavoro abbia violato i Termini
+          di Servizio dell’Archivio, per favore %{contact_abuse_link}.
       opendoors: contatta Porte Aperte
       subject: "[%{app_name}] Il tuo lavoro è stato rimosso da un amministratore"
       text:
@@ -58,9 +82,9 @@ it:
         part2: Se il tuo lavoro faceva parte di un progetto di importazione gestito
           dal nostro team Porte Aperte, per favore contatta Porte Aperte (%{opendoors_link})
           per ulteriori domande.
-        part3: Se ritieni possibile che il tuo lavoro abbia violato i Termini di Servizio
-          dell’Archivio, per favore contatta il nostro Comitato Norme & Violazioni
-          (%{abuse_link}).
+        tos_violation: Se ritieni possibile che il tuo lavoro abbia violato i Termini
+          di Servizio dell’Archivio, per favore contatta il nostro Comitato Norme
+          & Violazioni (%{contact_abuse_url}).
     challenge_assignment_notification:
       any: Qualsiasi
       description: 'Descrizione:'
@@ -81,13 +105,13 @@ it:
       recipient_missing: 'Nessuno: contatta un moderatore per ricevere assistenza!'
       subject: "[%{app_name}][%{collection_title}] Il tuo incarico!"
       text:
+        assignment: Ti è stata assegnata la seguente richiesta nella challenge "%{collection_title}"
+          (%{collection_url})  su AO3!
         footer: Ricevi questa email perché hai effettuato l’iscrizione alla challenge
           %{title} (%{url}). Per altre informazioni sulla challenge e per visualizzare
           i contatti dei moderatori ti preghiamo di visitare il link %{profile_url}.
         look_up: Puoi trovare questo incarico nella tua pagina Assignments (Incarichi)
           al link %{link}.
-        part1: Ti è stata assegnata la seguente richiesta nella challenge %{collection_title}
-          (%{collection_url}) su AO3!
     change_email:
       part1: "%{login}, l’indirizzo email associato al tuo account è stato modificato
         in %{email}"
@@ -128,13 +152,24 @@ it:
         remove: 'Se ritieni che questa modifica sia avvenuta per errore e non desideri
           che il tuo pseudonimo venga indicato come autore, puoi modificare il %{type}
           e rimuoverti dalla lista degli autori: %{url}'
+    creatorship_request:
+      html:
+        creation: "%{creation_link} di %{pseud_links}"
+        instructions: Puoi accettare o rifiutare questa richiesta sulla tua pagina
+          %{page_name}.
+        page_name: Co-Creator Requests (Richieste di Co-Creatore)
+      intro: 'L’utente %{inviting_user} ha invitato il tuo pseudonimo %{pseud} ad
+        essere elencato come co-creatore per il seguente %{type}:'
+      subject: "[%{app_name}] Richiesta di Co-creatore"
+      text:
+        creation: "%{title} (%{url}) di %{pseuds}"
+        instructions: 'Puoi accettare o rifiutare questa richiesta sulla tua pagina
+          Co-Creator Requests (Richieste di Co-Creatore): %{url}'
     delete_work_notification:
-      hello: Ciao %{user},
       html:
         part1_other: Il tuo lavoro %{title} è stato cancellato come richiesto da %{pseud}.
         part1_yourself: Il tuo lavoro %{title} è stato cancellato come da tua richiesta.
         part2: Se dovessi avere dei dubbi, per favore %{support}.
-      part2: Se dovessi avere dei dubbi, per favore %{support}.
       part3: In allegato trovi una copia del tuo lavoro da poter consultare.
       subject: "[%{app_name}] Il tuo lavoro è stato cancellato"
       support: contatta Supporto
@@ -144,7 +179,6 @@ it:
         part1_yourself: Il tuo lavoro "%{title}" è stato cancellato come da tua richiesta.
         part2: Se dovessi avere dei dubbi, per favore %{support} (%{url}).
     invitation_to_claim:
-      greeting: Ciao da %{app_name}!
       html:
         ao3_news: AO3 News
         contact_open_doors: contatta Open Doors
@@ -160,9 +194,6 @@ it:
           email a cui non hai più accesso, %{open_doors_link} con qualunque informazione
           che possa aiutare a verificare la tua identità di autore di tali lavori. '
         part11: Per altre domande, per favore %{support_link}.
-        part13: Saluti,
-        part14: il team di Open Doors
-        part15: Organizzazione per i Lavori Trasformativi
         part2: Puoi leggere gli annunci riguardanti i più recenti trasferimenti di
           archivi su  %{news_link}, e troverai ulteriori informazioni sulla  %{open_doors_faq_link}
           di Open Doors o sulla %{open_doors_tutorial_link}. Se non trovi risposta
@@ -209,7 +240,6 @@ it:
           email a cui non hai più accesso, contatta Open Doors con qualunque informazione
           che possa aiutare a verificare la tua identità di autore di tali lavori. '
         part11: Per altre domande, per favore  contatta il team Supporto di AO3 %{support_link}.
-        part13: "Saluti,\nil team Open Doors, \nOrganizzazione per i Lavori Trasformativi "
         part2: Puoi leggere gli annunci riguardanti i più recenti trasferimenti di
           archivi su  AO3 News (%{news_link}), e troverai ulteriori informazioni sulla  pagina
           delle FAQ di Open Doors (%{open_doors_faq_link}) o sulla guida (%{open_doors_tutorial_link}).  Se
@@ -247,19 +277,15 @@ it:
         other: Volevamo farti sapere che hai %{count} nuovi inviti che possono essere
           usati per creare nuovi account su AO3. Puoi invitare i tuoi amici recandoti
           sulla pagina %{invitation_page}.
-      closing: Un saluto,
-      greeting: Ciao %{login}!
       invitation_page_link_text: la tua pagina degli inviti
       subject: "[%{app_name}] Nuovi inviti"
     invite_request_declined:
-      greeting: Ciao %{user},
       main:
         one: Ci dispiace doverti informare che al momento la tua richiesta per un
           ulteriore codice invito non può essere accettata.
         other: Ci dispiace doverti informare che al momento la tua richiesta per %{count}
-          nuovi inviti non può essere al momento accettata.
+          nuovi inviti non può essere accettata.
       reason: 'La tua richiesta è stata:'
-      signoff: Saluti,
       subject: "[%{app_name}] Richiesta per un Codice Invito aggiuntivo rifiutata"
     signup_notification:
       activate_your_account: segui questo link per attivare il tuo account

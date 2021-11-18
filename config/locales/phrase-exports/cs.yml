@@ -1,28 +1,63 @@
 ---
 cs:
   mailer:
+    general:
+      closing:
+        formal: S pozdravem,
+        informal: S pozdravem,
+      footer:
+        general:
+          html:
+            donate_link_text: na vaše příspěvky
+            part1: Pokud jste obdrželi tuto zprávu omylem, prosím %{support_link}.
+            part2: AO3 je fanoušky vedený a podporovaný archiv, který spoléhá %{donate_link}.
+            support_link_text: kontaktujte Podporu
+          text:
+            part1: Pokud jste obdrželi tuto zprávu omylem, prosím kontaktujte Podporu
+              na %{support_url}.
+            part2: 'AO3 je fanoušky vedený a podporovaný archiv, který spoléhá na
+              vaše příspěvky: %{donate_url}.'
+        sent_at: Odesláno v %{sent_at}.
+      greeting:
+        formal: Dobrý den, %{name},
+        informal:
+          addressed: Ahoj %{name},
+          unaddressed: Ahoj,
+        introductory: Zdravíme z Archive of Our Own - AO3 (Našeho vlastního archivu
+          - AO3),
+      signature:
+        app_short_name: AO3
+        open_doors: The Open Doors team (tým Otevřených dvěří)
+        parent_org: Organization for Transformative Works - OTW (Společnost pro transformativní
+          tvorbu)
+        support: Podpora AO3
     kudos:
       guest:
         few: "%{count} návštěvníci"
         one: návštěvník
         other: "%{count} návštěvníků"
-        zero: |-
-          návštěvník
-          %{count} návštěvníci/návštěvníků
       html:
         left_kudos:
-          few: "%{givers_list} zanechali kudos u<i>%{commentable_link}</i>."
-          one: "%{givers_list} zanechal/a kudos u <i>%{commentable_link}</i>."
-          other: "%{givers_list} zanechali kudos u<i>%{commentable_link}</i>."
-          zero: |-
-            %{givers_list} zanechal/a kudos za <i>%{commentable_link}</i>.
-            %{givers_list} zanechal/a kudos za<i>%{commentable_link}</i>.
+          few: "%{givers_list} zanechali kudos u %{commentable_link}."
+          one: "%{givers_list} zanechal/a kudos u %{commentable_link}."
+          other: "%{givers_list} zanechali kudos u %{commentable_link}."
       text:
         left_kudos:
           few: "%{givers_list} zanechali kudos u %{commentable_link}."
           one: "%{givers_list} zanechal/a kudos u %{commentable_link}."
           other: "%{givers_list} zanechali kudos u %{commentable_link}."
       you_have: "[%{app_name}] Máte nové kudos!"
+  users:
+    mailer:
+      reset_password_instructions:
+        expiration: Pokud tento odkaz nepoužijete ke změně hesla do sedmi dnů, vyprší
+          a budete si muset zažádat o nový.
+        intro: 'Byl vznesen požadavek na změnu hesla pro váš účet. Své heslo můžete
+          změnit kliknutím na následující odkaz a vyplněním nového hesla:'
+        link_title: Změnit heslo.
+        subject: "[%{app_name}] Změňte své heslo"
+        unrequested: Pokud jste si změnu hesla nevyžádal/a, můžete tento email ignorovat
+          a vaše stávající heslo zůstane platné.
   user_mailer:
     abuse_report:
       description_para: 'Popis porušení zásad:'
@@ -31,23 +66,23 @@ cs:
       subject: "[%{app_name}] Vaše nahlášení porušení pravidel a zásad serveru"
       url_para: 'URL stránky, na které se porušení zásad nachází:'
     admin_deleted_work_notification:
-      abuse_committee: kontaktujte Dohled na dodržování pravidel a zásad serveru
       bye: V příloze najdete svoji práci.
-      hello: Vážená/ý %{user},
+      contact_abuse: kontaktujte Dohled na dodržování pravidel a zásad serveru
       html:
         part1: Vaše práce s názvem %{title} byla z Archivu smazána administrátorem.
         part2: V případě, že byla vaše práce součástí projektu Open Doors, obraťte
           se s případnými dotazy na %{opendoors_link}.
-        part3: V případě, že je možné, že vaše práce porušila Smluvní podmínky Archivu,
-          obraťte se prosím na %{abuse_link}.
+        tos_violation: V případě, že je možné, že vaše práce porušila Smluvní podmínky
+          Archivu, obraťte se prosím na %{contact_abuse_link}.
       opendoors: kontaktujte Open Doors
       subject: "[%{app_name}] Vaše práce byla smazána administrátorem"
       text:
         part1: Vaše práce s názvem \"%{title}\" byla z Archivu smazána administrátorem.
         part2: V případě, že byla vaše práce součástí projektu Open Doors, obraťte
           se s případnými dotazy na Open Doors (%{opendoors_link}).
-        part3: V případě, že je možné, že vaše práce porušila Smluvní podmínky Archivu,
-          obraťte se prosím na Dohled na dodržování pravidel a zásad serveru (%{abuse_link}).
+        tos_violation: V případě, že je možné, že vaše práce porušila Smluvní podmínky
+          Archivu, obraťte se prosím na Dohled na dodržování pravidel a zásad serveru
+          (%{contact_abuse_url}).
     challenge_assignment_notification:
       any: Jakékoliv
       description: 'Popis:'
@@ -66,12 +101,12 @@ cs:
       recipient_missing: 'Žádný: pro pomoc kontaktujte moderátora!'
       subject: "[%{app_name}][%{collection_title}] Vaše zadání!"
       text:
+        assignment: Bylo vám přidělena následující žádost ve výzvě "%{collection_title}"
+          (%{collection_url})  v AO3!
         footer: |-
           Tento e-mail jste obdrželi, protože jste se přihlásili do výzvy %{title} (%{url}). Více informací o této výzvě a kontakty na moderátory můžete najít na
            %{profile_url}.
         look_up: Toto zadání najdete na stránce Assignments (Zadání) pod odkazem%{link}.
-        part1: Bylo vám přidělena následující žádost ve výzvě %{collection_title}
-          (%{collection_url}) v AO3!
     change_email:
       part1: "%{login}, email spojený s vaším účtem byl změněn na %{email}"
       subject: "[%{app_name}] Email byl změněn"
@@ -107,8 +142,19 @@ cs:
         creation: "%{title} (%{url}) od %{pseuds}"
         remove: 'Pokud jste byli přidáni omylem nebo nechcete být uváděni jako autor,
           můžete %{type} upravit, abyste se autorství zřekli: %{url}'
+    creatorship_request:
+      html:
+        creation: "%{creation_link} od %{pseud_links}"
+        instructions: Tuto pozvánku můžete přijmout nebo odmítnout na stránce %{page_name}.
+        page_name: Co-Creator Requests (Pozvánky ke spoluautorství)
+      intro: 'Uživatel %{inviting_user} chce přidat váš pseudonym %{pseud} jako spoluautora
+        pro následující %{type}:'
+      subject: "[%{app_name}] Pozvánka ke spoluautorství"
+      text:
+        creation: "%{title} (%{url}) od %{pseuds}"
+        instructions: 'Tuto pozvánku můžete přijmout nebo odmítnout na stránce Co-Creator
+          Requests (Pozvánky ke spoluautorství): %{url}'
     delete_work_notification:
-      hello: Vážený/á %{user},
       html:
         part1_other: Vaše práce %{title} byla smazána na žádost %{pseud}.
         part1_yourself: Vaše práce %{title} byla na vaši žádost smazána.
@@ -121,7 +167,6 @@ cs:
         part1_yourself: Vaše práce \"%{title}\" byla na vaši žádost smazána.
         part2: Pokud máte nějaké otázky, prosím %{support} (%{url}).
     invitation_to_claim:
-      greeting: Zdravíme z %{app_name}!
       html:
         ao3_news: AO3 News
         contact_open_doors: kontaktujte Open Doors
@@ -137,9 +182,6 @@ cs:
           e-mailovou adresou, k níž již nemáte přístup, prosím kontaktujte %{open_doors_link}
           s jakoukoliv informací, která by mohla pomoci ověřit vaši identitu.
         part11: S dalšími dotazy prosím kontaktujte  %{support_link}.
-        part13: S pozdravem
-        part14: Tým projektu Open Doors
-        part15: Organization for Transformative Works
         part2: Oznámení o nedávných přesunech archivů si můžete přečíst na %{news_link}
           a další informace najdete pod %{open_doors_faq_link} projektu Open Doors
           nebo na  %{open_doors_tutorial_link}. Pokud nenajdete odpovědi na své otázky
@@ -186,10 +228,6 @@ cs:
           e-mailovou adresou, k níž již nemáte přístup, prosím kontaktujte Open Doors
           s jakoukoliv informací, která by mohla pomoci ověřit vaši identitu.
         part11: S dalšími dotazy prosím kontaktujte Podporu AO3 na %{support_link}.
-        part13: |-
-          S pozdravem
-          Tým projektu Open Doors
-          Organization for Transformative Works
         part2: Oznámení o nedávných přesunech archivu si můžete přečíst na AO3 News
           (%{news_link}) a další informace najdete na Open Doors' FAQ – stránce často
           kladených otázek k projektu Otevřené dveře (%{open_doors_faq_link}) nebo
@@ -218,15 +256,18 @@ cs:
           prací, můžete je všechny vyjmenovat v jednom emailu.)
     invite_increase_notification:
       body:
+        few: 'Rádi bychom vám sdělili, že máte následující počet nových pozvánek:
+          %{count}. Tyto pozvánky lze využít k vytvoření nových účtů na archivu. Své
+          přátele můžete pozvat na: %{invitation_page}'
+        one: 'Rádi bychom vám sdělili, že máte %{count} novou pozvánku, kterou lze
+          využít k vytvoření nových účtů na archivu. Své přátele můžete pozvat na:
+          %{invitation_page}'
         other: 'Rádi bychom vám sdělili, že máte následující počet nových pozvánek:
           %{count}. Tyto pozvánky lze využít k vytvoření nových účtů na archivu. Své
-          přátele můžete pozvat na %{invitation_page}'
-      closing: S pozdravem,
-      greeting: 'Ahoj %{login}! '
-      invitation_page_link_text: stránce Invitations (Pozvánky)
+          přátele můžete pozvat na: %{invitation_page}'
+      invitation_page_link_text: stránka s vašimi pozvánkami
       subject: "[%{app_name}] Nové pozvánky"
     invite_request_declined:
-      greeting: Vážený/á %{user},
       main:
         few: S lítostí vám oznamujeme, že vaší žádosti o %{count} nové pozvánky nemůže
           být v současné době vyhověno.
@@ -235,7 +276,6 @@ cs:
         other: S lítostí vám oznamujeme, že vaší žádosti o %{count} nových pozvánek
           nemůže být v současné době vyhověno.
       reason: 'Vaše žádost byla:'
-      signoff: S pozdravy
       subject: "[%{app_name}] Žádost o dodatečnou pozvánku zamítnuta"
     signup_notification:
       activate_your_account: 'Pro aktivaci vašeho účtu klikněte na tento odkaz '

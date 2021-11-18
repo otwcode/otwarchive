@@ -2,34 +2,59 @@
 ca:
   mailer:
     general:
+      closing:
+        formal: Cordialment,
+        informal: Salutacions,
       footer:
         general:
           html:
             donate_link_text: " les vostres donacions "
             part1: Si has rebut aquest missatge per error, %{support_link}.
-            part2: L’AO3 és un arxiu dirigit i mantingut per fans que sobreviu gràcies
+            part2: L’AO3 és un arxiu gestionat i mantingut per fans que sobreviu gràcies
               a %{donate_link}.
             support_link_text: contacta amb Suport
           text:
             part1: Si has rebut aquest missatge per error, contacta amb Suport a %{support_url}.
-            part2: 'L’AO3 és un arxiu dirigit i mantingut per fans que sobreviu gràcies
-              a les vostres donacions: %{donate_url}.'
-        sent_at: Enviat a %{sent_at}.
+            part2: 'L’AO3 és un arxiu gestionat i mantingut per fans que sobreviu
+              gràcies a les vostres donacions: %{donate_url}.'
+        sent_at: Enviat a les %{sent_at}.
+      greeting:
+        formal: Estimat/da %{name},
+        informal:
+          addressed: Hola, %{name}!
+          unaddressed: Hola!
+        introductory: Hola de part de l'Archive of Our Own – AO3 (Un Arxiu Propi)!
       signature:
         app_short_name: AO3
+        open_doors: L'equip d'Open Doors (Projecte de Portes Obertes)
+        parent_org: Organization for Transformative Works – OTW (Organització per
+          a les Obres Transformatives)
+        support: L'equip de Suport de l’AO3
     kudos:
       guest:
         one: 1 convidat/da
         other: "%{count} convidats/des"
       html:
         left_kudos:
-          one: "%{givers_list} ha deixat kudos a <i>%{commentable_link}</i>."
-          other: "%{givers_list} han deixat kudos a <i>%{commentable_link}</i>."
+          one: "%{givers_list} ha deixat kudos a %{commentable_link}."
+          other: "%{givers_list} han deixat kudos a %{commentable_link}."
       text:
         left_kudos:
           one: "%{givers_list} ha deixat kudos a %{commentable_link}."
           other: "%{givers_list} han deixat kudos a %{commentable_link}."
       you_have: "[%{app_name}] T’han deixat kudos!"
+  users:
+    mailer:
+      reset_password_instructions:
+        expiration: Si no fas servir l’enllaç per canviar la teva contrasenya en una
+          setmana, aquest expirarà, i n’hauràs de sol·licitar un de nou.
+        intro: 'Algú ha sol·licitat un canvi de contrasenya pel teu compte. Pots canviar
+          la contrasenya associada al teu compte clicant a l’enllaç a continuació
+          i introduïnt la teva nova contrasenya:'
+        link_title: Canvia la meva contrasenya.
+        subject: "[%{app_name}] Canvia la teva contrasenya"
+        unrequested: Si no has sol·licitat un canvi de contrasenya, pots ignorar aquest
+          correu electrònic i la teva contrasenya anterior continuarà funcionant.
   user_mailer:
     abuse_report:
       description_para: 'Descripció de l’abús:'
@@ -38,18 +63,16 @@ ca:
       subject: "[%{app_name}] La teva denúncia de Polítiques i Prevenció de l’Abús"
       url_para: 'URL de la pàgina on es troba l’abús:'
     admin_deleted_work_notification:
-      abuse_committee: contacta amb el nostre Comitè de Polítiques i Prevenció de
-        l’Abús
       bye: S’adjunta una còpia de la teva obra com a referència.
-      hello: Estimat/da %{user},
+      contact_abuse: contacta amb el nostre Comitè de Polítiques i Prevenció de l’Abús
       html:
         part1: La teva obra %{title} ha estat eliminada de l’AO3 per un administrador/a
           del lloc web.
         part2: Si la teva obra formava part d’un projecte importat per l’equip d’Open
           Doors (Projecte de Portes Obertes), contacta amb %{opendoors_link} per a
           qualsevol altra pregunta.
-        part3: Si és possible que la teva obra hagi violat els Termes i condicions
-          de servei de l’AO3, visita %{abuse_link}.
+        tos_violation: Si és possible que la teva obra hagi violat els Termes i condicions
+          de servei de l’AO3, visita %{contact_abuse_link}.
       opendoors: 'contacta amb Open Doors '
       subject: "[%{app_name}] La teva obra ha estat eliminada per un administrador/a"
       text:
@@ -58,9 +81,9 @@ ca:
         part2: Si la teva obra formava part d’un projecte importat per l’equip d’Open
           Doors (Projecte de Portes Obertes), contacta amb Open Doors (%{opendoors_link})
           per a qualsevol altra pregunta.
-        part3: Si és possible que la teva obra violés els Termes i condicions de servei
-          de l’AO3, posa’t en contacte amb el Comitè de Polítiques i Prevenció de
-          l’Abús (%{abuse_link}).
+        tos_violation: Si és possible que la teva obra violés els Termes i condicions
+          de servei de l’AO3, posa’t en contacte amb el Comitè de Polítiques i Prevenció
+          de l’Abús (%{contact_abuse_url}).
     challenge_assignment_notification:
       any: Qualsevol
       description: 'Descripció:'
@@ -81,13 +104,13 @@ ca:
         ajuda!'
       subject: "[%{app_name}][%{collection_title}] La teva tasca!"
       text:
+        assignment: Se t’ha assignat la següent petició del repte "%{collection_title}"
+          (%{collection_url})  a l’AO3!
         footer: Estàs rebent aquest correu electrònic perquè et vas inscriure al repte
           %{title} (%{url}). Per a més informació sobre aquest repte i informació
           de contacte dels moderadors, visita %{profile_url}.
         look_up: Pots consultar aquesta tasca a la teva pàgina d’Assignments (Tasques)
           a %{link}.
-        part1: Se t’ha assignat la següent petició del repte %{collection_title} (%{collection_url})
-          a l’AO3!
     change_email:
       part1: "%{login}, l’email associat amb aquest compte ha canviat a  %{email}"
       subject: "[%{app_name}] Canvi d’email\n"
@@ -123,8 +146,19 @@ ca:
         creation: "%{title} (%{url}) de %{pseuds}"
         remove: 'Si has sigut afegit/da per error o no vols ser registrat/da com a
           creador/a, pots editar el/la %{type} per eliminar-te com a creador/a: %{url}'
+    creatorship_request:
+      html:
+        creation: "%{creation_link} de %{pseud_links}"
+        instructions: Pots acceptar o rebutjar aquesta petició a la pàgina %{page_name}.
+        page_name: Co-Creator Requests (Peticions de cocreador/a)
+      intro: 'L’usuari/a %{inviting_user} ha convidat el teu pseudònim %{pseud} a
+        ser cocreador/a del/de la següent %{type}:'
+      subject: "[%{app_name}] Petició de cocreador/a"
+      text:
+        creation: "%{title} (%{url}) de %{pseuds}"
+        instructions: 'Pots acceptar o rebutjar aquesta petició a la pàgina Co-Creator
+          Requests (Peticions de cocreador/a): %{url}'
     delete_work_notification:
-      hello: Estimat/da %{user},
       html:
         part1_other: La teva obra %{title} ha estat eliminada a petició de %{pseud}.
         part1_yourself: La teva obra %{title} ha estat eliminada a petició teva.
@@ -139,7 +173,6 @@ ca:
         part1_yourself: La teva obra "%{title}" ha estat eliminada a petició teva.
         part2: Si us plau, si tens cap pregunta %{support} (%{url}).
     invitation_to_claim:
-      greeting: Salutacions des de %{app_name}!
       html:
         ao3_news: notícies de l’AO3
         contact_open_doors: contacta amb l’Open Doors
@@ -156,9 +189,6 @@ ca:
           correu a la qual ja no tens accés, contacta amb %{open_doors_link} amb qualsevol
           informació que pugui ajudar a verificar la teva identitat, si us plau.
         part11: Per a qualsevol altre dubte, contacta amb %{support_link}.
-        part13: Atentament,
-        part14: L’equip d’Open Doors
-        part15: Organització per a les Obres Transformatives
         part2: Pots llegir els anuncis sobre trasllats recents a l’arxiu a %{news_link},
           i trobar informació addicional a %{open_doors_faq_link} de l’Open Doors
           o bé a %{open_doors_tutorial_link}. Per a qualsevol pregunta respecte a
@@ -208,10 +238,6 @@ ca:
           correu a la qual ja no tens accés, contacta amb l’Open Doors amb qualsevol
           informació que pugui ajudar a verificar la teva identitat, si us plau.
         part11: Per a qualsevol altre dubte, contacta amb Suport de l’AO3 a %{support_link}.
-        part13: |
-          Atentament,
-          L’equip d’Open Doors
-          Organització per a les Obres Transformatives
         part2: Pots llegir els anuncis sobre trasllats recents a l’arxiu a les notícies
           de l’AO3 (%{news_link}), i trobar informació addicional a la pàgina de preguntes
           freqüents de l’Open Doors (%{open_doors_faq_link}) o bé a la pàgina de tutorials
@@ -247,19 +273,15 @@ ca:
         other: Tan sols et volíem fer saber que tens %{count} invitacions noves, que
           pots fer servir per crear nous comptes a l’AO3. Pots convidar una amistat
           a %{invitation_page}.
-      closing: Gràcies,
-      greeting: Hola %{login}!
       invitation_page_link_text: la teva pàgina d’invitacions
       subject: "[%{app_name}] Noves invitacions"
     invite_request_declined:
-      greeting: Estimat/estimada %{user},
       main:
         one: Lamentem informar-te que la teva sol·licitud d’una nova invitació no
           es pot satisfer en aquests moments.
         other: Lamentem informar-te que la teva sol·licitud de %{count} noves invitacions
           no es pot satisfer en aquests moments.
       reason: 'La teva sol·licitud era:'
-      signoff: Salutacions,
       subject: "[%{app_name}] Sol·licitud de codi d’invitació adicional rebutjada"
     signup_notification:
       activate_your_account: segueix aquest enllaç per activar el teu compte

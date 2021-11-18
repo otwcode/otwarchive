@@ -2,22 +2,34 @@
 ar:
   mailer:
     general:
+      closing:
+        formal: بكل إخلاص وتقدير،
+        informal: مع التحية،
       footer:
         general:
           html:
             donate_link_text: تبرعاتك
-            part1: "<p>\nفي حال تلقيك هذه الرسالة بالخطأ، رجاءاً %{support_link} \n</p>"
+            part1: في حال تلقيك هذه الرسالة بالخطأ، رجاءاً %{support_link}.
             part2: AO3 هو أرشيف يدار من قبل المعجبين ويدعم من قبلهم أيضاً ويعتمد استمراره
               على %{donate_link}.
             support_link_text: تواصل مع لجنة الدعم
           text:
             part1: في حال تلقيك هذه الرسالة بالخطأ، رجاءاً تواصل مع لجنة الدعم على
-              %{support_url}.
+              الرابط %{support_url}.
             part2: 'AO3 هو أرشيف يدار من قبل المعجبين ويدعم من قبلهم أيضاً ويعتمد
               استمراره على تبرعاتكم: %{donate_url}.'
         sent_at: أرسل في %{sent_at}.
+      greeting:
+        formal: حضرة المستخدم(ة) %{name}،
+        informal:
+          addressed: مرحباً %{name}!
+          unaddressed: مرحباً!
+        introductory: مرحباً من Archive of Our Own – AO3 (الأرشيف من جانبنا)
       signature:
         app_short_name: AO3
+        open_doors: فريق Open Doors (الأبواب المفتوحة)
+        parent_org: Organization for Transformative Works – OTW (منظمة الأعمال التحويلية)
+        support: فريق لجنة الدعم في AO3
     kudos:
       guest:
         few: "%{count} ضيوف"
@@ -27,6 +39,12 @@ ar:
         two: ضيفان
       html:
         left_kudos:
+          few: 'حصلت على علامات امتياز للعمل %{commentable_link} من %{givers_list}.
+
+            '
+          many: 'حصلت على علامات امتياز للعمل %{commentable_link} من %{givers_list}.
+
+            '
           one: حصلت على علامة امتياز للعمل <i>%{commentable_link}</i> من %{givers_list}.
           other: 'حصلت على علامات امتياز للعمل <i>%{commentable_link}</i> من %{givers_list}.
 
@@ -34,6 +52,12 @@ ar:
           two: حصلت على علامتي امتياز للعمل <i>%{commentable_link}</i> من %{givers_list}.
       text:
         left_kudos:
+          few: 'حصلت على علامات امتياز للعمل %{commentable_link} من %{givers_list}.
+
+            '
+          many: 'حصلت على علامات امتياز للعمل %{commentable_link} من %{givers_list}.
+
+            '
           one: حصلت على علامة امتياز للعمل %{commentable_link} من %{givers_list}.
           other: حصلت على علامات امتياز للعمل %{commentable_link} من %{givers_list}.
           two: حصلت على علامتي امتياز للعمل %{commentable_link} من %{givers_list}.
@@ -43,8 +67,8 @@ ar:
       reset_password_instructions:
         expiration: إذا لم تستخدم الرابط الملحق لإعادة تعيين كلمة السر الخاصة بك خلال
           أسبوع واحد، فستنتهي صلاحيته، وستحتاج إلى طلب رابط جديد.
-        intro: " %{user}, طلب أحدهم إعادة تعيين كلمة سر حسابك. يمكنك إعادة تعيين كلمة
-          السر لحسابك باتّباع الرابط التالي وإدخال كلمة السر الجديدة:"
+        intro: 'طلب أحدهم إعادة تعيين كلمة سر حسابك. يمكنك إعادة تعيين كلمة السر لحسابك
+          باتّباع الرابط التالي وإدخال كلمة السر الجديدة:'
         link_title: " إعادة تعيين كلمة السر."
         subject: "[%{app_name}] إعادة تعيين كلمة السر الخاصة بك"
         unrequested: " إذا لم ترسل هذا الطلب لإعادة تعيين كلمة السر، فيمكنك تجاهل
@@ -56,14 +80,13 @@ ar:
       subject: "[%{app_name}] بلاغك إلى لجنة السياسات والتعسّفات"
       url_para: 'رابط الصفحة التي تحتوي على التعسُّف:'
     admin_deleted_work_notification:
-      abuse_committee: التواصل مع لجنة السياسات والتعسفات
       bye: تم إلحاق نسخة من عملك كَمَرجِع.
-      hello: عزيزي/تي %{user}،
+      contact_abuse: التواصل مع لجنة السياسات والتعسفات
       html:
         part1: تم حذف عملك %{title} من الأرشيف من قبل أحد المشرفين.
         part2: في حال كان عملك جزءاً من أحد مشاريع الاستيراد التي يديرها فريق الأبواب
           المفتوحة، نرجو منك %{opendoors_link} وطرح كافة تساؤلاتك.
-        part3: في حال انتهك عملك أحد شروط الخدمة للأرشيف، نرجو منك %{abuse_link}.
+        tos_violation: في حال انتهك عملك أحد شروط الخدمة للأرشيف، نرجو منك %{contact_abuse_link}.
       opendoors: التواصل مع لجنة الأبواب المفتوحة
       subject: "[%{app_name}] تم حذف عملك من قبل أحد المشرفين"
       text:
@@ -71,8 +94,8 @@ ar:
         part2: في حال كان عملك جزءاً من أحد مشاريع الاستيراد التي يديرها فريق الأبواب
           المفتوحة، نرجو منك التواصل مع لجنة الأبواب المفتوحة (%{opendoors_link})
           وطرح كافة تساؤلاتك.
-        part3: في حال انتهك عملك أحد شروط الخدمة للأرشيف، نرجو منك التواصل مع لجنة
-          السياسات والتعسفات (%{abuse_link}).
+        tos_violation: في حال انتهك عملك أحد شروط الخدمة للأرشيف، نرجو منك التواصل
+          مع لجنة السياسات والتعسفات (%{contact_abuse_url}).
     challenge_assignment_notification:
       any: أي من الموجود
       description: 'الوصف:'
@@ -86,20 +109,20 @@ ar:
         part1: تم تعيينك للطلب الآتي في تحدي %{link} على AO3!
       optional_tags: 'وسوم اختيارية:'
       prompts: 'المحفزات:'
-      prompt_url: 'عنوان المحفز:'
+      prompt_url: 'رابط المحفز:'
       recipient: 'المتلقي:'
       recipient_missing: 'لا يوجد: تواصل مع أحد المشرفين للحصول على المساعدة!'
       subject: "[%{app_name}][%{collection_title}] مهمّتك!"
       text:
+        assignment: تم تعيينك للطلب الآتي في تحدي %{collection_title} (%{collection_url})  على
+          الأرشيف من جانبنا (AO3)!
         footer: إنك تتلقى هذا البريد لأنك اشتركت في تحدي  %{title} (%{url}). للمزيد
           من المعلومات حول هذا التحدي ولمعلومات التواصل مع المشرفين، قم بزيارة %{profile_url}.
         look_up: يمكنك الوصول إلى مهمتك من خلال صحفة Assignments (المهمات) الخاصة
           بك على %{link}.
-        part1: تم تعيينك للطلب الآتي في تحدي %{collection_title} (%{collection_url})
-          على الأرشيف من جانبنا (AO3)!
     change_email:
       part1: "%{login}، تم تغيير البريد الالكتروني المرتبط بحسابك إلى %{email}"
-      subject: "[%{app_name}] تم تغيير بريد الالكتروني"
+      subject: "[%{app_name}] تم تغيير البريد الالكتروني"
     creatorship_notification:
       explanation: عندما تكون منتجاً مشاركا لعمل ما، سيتم إضافتك إلى جميع الفصول بغض
         النظر عن إعداداتك كمنتج مشارك. كما ستتم إضافتك إلى أية سلسلة يضاف العمل إليها.
@@ -130,13 +153,22 @@ ar:
         creation: "%{title} (%{url}) من إنتاج %{pseuds}"
         remove: 'إن تمت إضافتك بالخطأ، أو إن لم ترغب في إدراج اسمك المستعار كمنتج،
           باستطاعتك تحرير %{type} لإزالة نفسك من قائمة المنتجين: %{url}'
+    creatorship_request:
+      html:
+        creation: "%{creation_link} من قبل %{pseud_links}"
+        instructions: يمكنك قبول هذا الطلب أو رفضه في صفحة %{page_name} الخاصة بك.
+        page_name: Co-Creator Requests (طلبات المنتج المشارك)
+      intro: 'دعا المستخدم %{inviting_user} اسمك المستعار %{pseud} لكي يُسجل بوصفه
+        منتجًا مشاركًا في الـ%{type} التالي:'
+      text:
+        creation: "%{title} (%{url}) من قبل %{pseuds}"
+        instructions: 'يمكنك قبول هذا الطلب أو رفضه في صفحة Co-Creator Requests (طلبات
+          المنتج المشارك) الخاصة بك: %{url}'
     delete_work_notification:
-      hello: مرحباً %{user}،
       html:
         part1_other: تم حذف عملك %{title} بناءاً على طلب %{pseud}.
         part1_yourself: تم حذف عملك %{title} بناءاً على طلبك.
         part2: إن كان لديك أيّة تساؤلات، نرجو منك %{support}.
-      part2: إن كان لديك أيّة تساؤلات، نرجو منك %{support}.
       part3: تم إرفاق نسخة من عملك كمرجِع.
       subject: "[%{app_name}] تم حذف عملك"
       support: التواصل مع لجنة الدعم
@@ -145,7 +177,6 @@ ar:
         part1_yourself: تم حذف عملك "%{title}" بناءاً على طلبك.
         part2: إن كان لديك أيّة تساؤلات، نرجو منك %{support} (%{url}).
     invitation_to_claim:
-      greeting: مرحباً من %{app_name}!
       html:
         ao3_news: أخبار AO3
         contact_open_doors: تواصل مع لجنة الأبواب المفتوحة
@@ -161,9 +192,6 @@ ar:
           لم يعد بإمكانك أن تصله، رجاءً %{open_doors_link} بأي معلومات يمكنها أن تساعد
           في التحقق من هويتك.
         part11: لإستفسرات أخرى، رجاءً %{support_link}.
-        part13: " مع التحية،"
-        part14: فريق الأبواب المفتوحة
-        part15: منظمة الأعمال التحويلية
         part2: تستطيع قراءة الإعلانات عن أحدث الاستيرادات إلى الأرشيف  على %{news_link}،
           وتستطيع العثور على معلومات إضافية عن الأبواب المفتوحة من خلال %{open_doors_faq_link}
           أو %{open_doors_tutorial_link}. لأي أسئلة لم يتم الإجابة عنها في الاسئلة
@@ -207,10 +235,6 @@ ar:
           لم يعد بإمكانك أن تصله، رجاءً تواصل مع لجنة الأبواب المفتوحة بأي معلومات
           يمكنها أن تساعد في التحقق من هويتك.
         part11: لإستفسرات أخرى، رجاءً تواصل مع فريق دعم AO3 على %{support_link}.
-        part13: |
-          مع التحية،
-          فريق الأبواب المفتوحة
-          منظمة الأعمال التحويلية
         part2: تستطيع قراءة الإعلانات عن أحدث الاستيرادات إلى الأرشيف  على أخبار AO3
           (%{news_link})، وتستطيع العثور على معلومات إضافية عن الأبواب المفتوحة من
           خلال صفحة الأسئلة المتداولة (%{open_doors_faq_link}) أو صفحة الدليل التوجيهي
@@ -249,12 +273,9 @@ ar:
           في الأرشيف. بإمكانك دعوة صديق من خلال %{invitation_page}.
 
           '
-      closing: مع التحية،
-      greeting: " مرحباً %{login}!"
-      invitation_page_link_text: صفحة دعواتك
+      invitation_page_link_text: صفحة Invitations (دعواتك)
       subject: "[%{app_name}] دعوات جديدة"
     invite_request_declined:
-      greeting: إلى %{user} العزيز(ة)،
       main:
         few: نأسف لإبلاغك أنه لا يمكن تلبية طلبك للحصول على %{count} دعوات جديدة في
           هذا الوقت.
@@ -267,7 +288,6 @@ ar:
           الوقت.
         zero: 'كان طلبك:'
       reason: 'كان طلبك:'
-      signoff: مع التحية،
       subject: "[%{app_name}] طلب دعوة إضافية مرفوض"
     signup_notification:
       activate_your_account: اتبع هذا الرابط لتفعيل حسابك

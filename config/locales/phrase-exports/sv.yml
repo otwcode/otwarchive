@@ -2,6 +2,9 @@
 sv:
   mailer:
     general:
+      closing:
+        formal: Med vänliga hälsningar,
+        informal: Vänliga hälsningar,
       footer:
         general:
           html:
@@ -16,21 +19,44 @@ sv:
             part2: 'AO3 är ett arkiv som drivs och stöds av fans och som är beroende
               av era gåvor: %{donate_url}.'
         sent_at: Skickat %{sent_at}.
+      greeting:
+        formal: Bästa %{name},
+        informal:
+          addressed: Hej, %{name}!
+          unaddressed: Hej!
+        introductory: Hej från Archive of Our Own – AO3 (Vårt eget arkiv)!
       signature:
         app_short_name: AO3
+        open_doors: Open Doors (Öppna dörrar)-teamet
+        parent_org: Organization for Transformative Works – OTW (Organisationen för
+          transformativa verk)
+        support: AO3:s support-team
     kudos:
       guest:
         one: en gäst
         other: "%{count} gäster"
       html:
         left_kudos:
-          one: "%{givers_list} lämnade beröm om<i>%{commentable_link}</i>."
-          other: "%{givers_list} lämnade beröm om<i>%{commentable_link}</i>."
+          one: "%{givers_list} lämnade beröm om %{commentable_link}."
+          other: "%{givers_list} lämnade beröm om %{commentable_link}."
       text:
         left_kudos:
           one: "%{givers_list} lämnade beröm om %{commentable_link}."
           other: "%{givers_list} lämnade beröm om %{commentable_link}."
       you_have: "[%{app_name}] Du har fått beröm!"
+  users:
+    mailer:
+      reset_password_instructions:
+        expiration: Om du inte använder den här länken för att återställa ditt lösenord
+          inom en vecka kommer den att gå ut och du behöver begära en ny länk.
+        intro: 'Någon har begärt en återställning av ditt kontos lösenord. Du kan
+          ändra ditt lösenord genom att följa länken nedan och skriva in ditt nya
+          lösenord:'
+        link_title: Ändra mitt lösenord.
+        subject: "[%{app_name}] Återställ ditt lösenord"
+        unrequested: Om det inte var du som begärde återställning av ditt lösenord
+          så kan du bortse från det här mailet. Ditt tidigare lösenord kommer att
+          fortsätta fungera.
   user_mailer:
     abuse_report:
       description_para: 'Beskrivning av missbruket:'
@@ -38,16 +64,15 @@ sv:
       subject: "[%{app_name}] Din rapport om policy eller missbruk"
       url_para: 'URL för sidan som missbruket finns på:'
     admin_deleted_work_notification:
-      abuse_committee: kontakta vår kommitté Policy & Missbruk
       bye: Som hänvisning har vi bifogat en kopia av ditt verk.
-      hello: Hej %{user}!
+      contact_abuse: kontakta vår kommitté Policy & Missbruk
       html:
         part1: Ditt verk %{title} har blivit raderat från AO3 av en av webbplatsens
           administratörer.
         part2: Om ditt verk var en del av ett importprojekt som hanteras av vårt Öppna
           Dörrar-team, var vänlig %{opendoors_link} om du har frågor.
-        part3: Om det är möjligt att ditt verk bröt mot AO3s användarvillkor, var
-          vänlig %{abuse_link}.
+        tos_violation: Om det är möjligt att ditt verk bröt mot AO3s användarvillkor,
+          var vänlig %{contact_abuse_link}.
       opendoors: kontakta Öppna Dörrar
       subject: "[%{app_name}] Ditt verk har blivit raderat av en administratör"
       text:
@@ -56,8 +81,8 @@ sv:
         part2: Om ditt verk var en del av ett importprojekt som hanteras av vårt Öppna
           Dörrar-team, var vänlig kontakta Öppna Dörrar (%{opendoors_link}) om du
           har frågor.
-        part3: Om det är möjligt att ditt verk bröt mot AO3s användarvillkor, var
-          vänlig kontakta vår kommitté Policy & Missbruk (%{abuse_link}).
+        tos_violation: Om det är möjligt att ditt verk bröt mot AO3s användarvillkor,
+          var vänlig kontakta vår kommitté Policy & Missbruk (%{contact_abuse_url}).
     anonymous_or_unrevealed_notification:
       anonymous_info: Anonyma verk ingår i tagglistor, men inte på din sida med verk.
         På verket kommer ditt användarnamn ersättas med “Anonymous” (Anonym).
@@ -66,15 +91,6 @@ sv:
         bli meddelade om denna förändring. När ditt verk har blivit avslöjat kommer
         verket finnas med i taggsidor, men inte på din sida med verk. På verket kommer
         ditt användarnamn att ersättas med "Anonymous" (Anonymt).
-      changed_status:
-        anonymous: De som är ansvariga för samlingen %{collection} har ändrat status
-          på ditt verk %{work} till anonym.
-        anonymous_unrevealed: De som är ansvariga för samlingen %{collection} har
-          ändrat status på ditt verk %{work} till anonymt och dolt.
-        unrevealed: 'De som är ansvariga för samlingen %{collection} har ändrat status
-          på ditt verk %{work} till dolt.
-
-          '
       collection_items_link_text: sidan för Approved Collection Items (Godkända samlingsobjekt)
       do_not_want:
         anonymous:
@@ -98,7 +114,6 @@ sv:
             Collection Items (Godkända samlingsobjekt) för att ta bort den från samlingen:
             %{collection_items_url} '
       faq_link_text: Vanliga frågor om samlingar och utmaningar
-      greeting: Bästa %{user},
       more_info:
         html: För mer information, var god läs våra %{faq_link}.
         text: 'För mer information var god läs våra Vanliga frågor om samlingar och
@@ -130,13 +145,13 @@ sv:
       recipient_missing: 'Ingen: kontakta en moderator för att få hjälp!'
       subject: "[%{app_name}][%{collection_title}] Ditt Uppdrag!"
       text:
+        assignment: Du har blivit tilldelad följande förfrågan i "%{collection_title}"
+          (%{collection_url}) -utmaningen på AO3!
         footer: Du får det här mailet för att du har anmält dig till %{title}-utmaningen
           (%{url}). För mer information om den här utmaningen och kontaktuppgifter
           till moderatorerna, vänligen besök  %{profile_url}.
         look_up: Du kan nå ditt uppdrag via din sida för Assignments (Uppdrag) på
           %{link}.
-        part1: Du har blivit tilldelad följande förfrågan i %{collection_title} (%{collection_url})-utmaningen
-          på AO3!
     change_email:
       part1: "%{login}, e-postadressen som är knuten till ditt konto har ändrats till
         %{email}"
@@ -187,12 +202,10 @@ sv:
         instructions: 'Du kan acceptera eller avslå förfrågan på din sida för Co-Creator
           Requests (Medskaparförfrågan): %{url}'
     delete_work_notification:
-      hello: Kära %{user},
       html:
         part1_other: Ditt verk "%{title}" togs bort på begäran av %{pseud}.
         part1_yourself: Ditt verk %{title} togs bort enligt din begäran.
         part2: Om du har frågor, vänligen %{support}.
-      part2: Om du har frågor, vänligen %{support}.
       part3: Bifogat finns en kopia av ditt verk för din kännedom.
       subject: "[%{app_name}] Ditt verk har tagits bort"
       support: kontakta Support
@@ -201,7 +214,6 @@ sv:
         part1_yourself: Ditt verk "%{title}" togs bort enligt din begäran.
         part2: Om du har frågor, vänligen %{support} (%{url}).
     invitation_to_claim:
-      greeting: Hälsningar från %{app_name}!
       html:
         ao3_news: AO3 nyheter
         contact_open_doors: kontakta Öppna dörrar
@@ -217,9 +229,6 @@ sv:
           du inte längre har tillgång till, vänligen %{open_doors_link} med information
           som kan hjälpa till att verifiera din identitet.
         part11: För andra frågor, vänligen %{support_link}.
-        part13: Vänligen,
-        part14: Teamet för Öppna dörrar
-        part15: Organisationen för transformativa verk
         part2: Du kan läsa tillkännagivanden om arkiv som nyligen flyttats på %{news_link},
           och hitta ytterligare information på Öppna dörrars %{open_doors_faq_link}
           eller på %{open_doors_tutorial_link}. Om du har frågor som inte besvaras
@@ -264,10 +273,6 @@ sv:
           du inte längre har tillgång till, vänligen kontakta Öppna dörrar med information
           som kan hjälpa till att verifiera din identitet.
         part11: För andra frågor, vänligen kontakta AO3 support via %{support_link}.
-        part13: |-
-          Vänligen,
-          Teamet för Öppna dörrar
-          Organisationen för transformativa verk
         part2: Du kan läsa tillkännagivanden rörande arkivflyttar på AO3 nyheter (%{news_link}),
           och hitta ytterligare information på Öppna dörrars sida med vanliga frågor
           och svar %{open_doors_faq_link} eller på handledningssidan %{open_doors_tutorial_link}.
@@ -296,24 +301,21 @@ sv:
           dessa i samma mail.)
     invite_increase_notification:
       body:
-        one: Vi vill bara berätta för dig att du har %{count} ny(a) inbjudan/inbjudningar
-          som kan användas för att skapa nya konton i arkivet. Du kan bjuda in en
-          vän via %{invitation_page}.
-        other: Vi vill bara berätta för dig att du har %{count} ny(a) inbjudan/inbjudningar
-          som kan användas för att skapa nya konton i arkivet. Du kan bjuda in en
-          vän via %{invitation_page}.
-      closing: Med vänlig hälsning
-      greeting: Hej %{login}!
+        one: Vi vill bara berätta för dig att du har %{count} ny inbjudan som kan
+          användas för att skapa ett nytt konto på AO3. Du kan bjuda in en vän via
+          %{invitation_page}.
+        other: Vi vill bara berätta för dig att du har %{count} nya inbjudningar som
+          kan användas för att skapa nya konton på AO3. Du kan bjuda in en vän via
+          %{invitation_page}.
+      invitation_page_link_text: din sida för inbjudningar
       subject: "[%{app_name}] Nya inbjudningar"
     invite_request_declined:
-      greeting: Kära %{user},
       main:
         one: Vi måste tyvärr informera dig om att din förfrågan om en ny inbjudningskod
           inte kan uppfyllas just nu.
         other: Vi måste tyvärr informera dig om att din förfrågan om %{count} nya
           inbjudningskoder inte kan uppfyllas just nu.
       reason: 'Din förfrågan var:'
-      signoff: Hälsningar,
       subject: "[%{app_name}] Ansökan om ytterligare inbjudningskod nekad"
     signup_notification:
       activate_your_account: Följ på denna länk för att aktivera ditt konto

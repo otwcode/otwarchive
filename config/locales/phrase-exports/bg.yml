@@ -1,21 +1,134 @@
 ---
 bg:
+  mailer:
+    general:
+      closing:
+        formal: С уважение,
+        informal: Поздрави,
+      footer:
+        general:
+          html:
+            donate_link_text: вашите дарения
+            part1: Ако си получил/а това съобщение по погрешка, моля, %{support_link}.
+            part2: AO3 е архив, който се управлява и поддържа от фенове и разчита
+              на %{donate_link}.
+            support_link_text: свържи се с екип Поддръжка
+          text:
+            part1: Ако си получил/а това съобщение по погрешка, моля, свържи се с
+              екип Поддръжка на %{support_url}.
+            part2: 'AO3 е архив, който се управлява и поддържа от фенове и разчита
+              на вашите дарения: %{donate_url}.'
+        sent_at: Изпратено в %{sent_at}.
+      greeting:
+        formal: Привет, %{name},
+        informal:
+          addressed: Здравей, %{name}!
+          unaddressed: Здравей!
+        introductory: Привет от Archive of Our Own – AO3 (Нашият архив)!
+      signature:
+        app_short_name: AO3
+        open_doors: Екипът на Open Doors (Отворени врати)
+        parent_org: Organization for Transformative Works – OTW (Организация за преобразуващи
+          произведения)
+        support: Екип Поддръжка на AO3
+    kudos:
+      guest:
+        one: един гост
+        other: "%{count} гости"
+      html:
+        left_kudos:
+          one: "%{givers_list} остави кудос за %{commentable_link}."
+          other: "%{givers_list} оставиха кудос за %{commentable_link}."
+      text:
+        left_kudos:
+          one: "%{givers_list} остави кудос за %{commentable_link}."
+          other: "%{givers_list} оставиха кудос за %{commentable_link}."
+      you_have: "[%{app_name}] Имаш кудос!"
+  users:
+    mailer:
+      reset_password_instructions:
+        expiration: Ако в рамките на една седмица не използваш този линк, той ще стане
+          невалиден и ще трябва да заявиш промяната наново.
+        intro: 'някой е заявил нулиране на паролата за твоя профил. Можеш да смениш
+          паролата на профила си като кликнеш на долния линк и въведеш нова парола:'
+        link_title: Смяна на моята парола.
+        subject: "[%{app_name}] Смяна на твоята парола"
+        unrequested: Ако тази заявка не е направена от теб, може да игнорираш този
+          имейл, а досегашната ти парола ще остане валидна.
   user_mailer:
     abuse_report:
       description_para: 'Описание на нарушението:'
       para1: 'На екип Нарушения беше изпратен следният сигнал:'
       subject: "[%{app_name}] Твоят сигнал за нарушение"
       url_para: 'URL на страницата, на която се намира нарушението:'
+    admin_deleted_work_notification:
+      bye: Прилагаме копие от произведението ти за информация.
+      contact_abuse: свържи се с нашия комитет Политики и нарушения
+      html:
+        part1: Твоето произведение %{title} беше изтрито от AO3 от администратор на
+          сайта.
+        part2: Ако това произведение е било част от проект за присъединяване на творби
+          към АО3, който се управлява от екипа на Open Doors (Отворени врати), моля,
+          %{opendoors_link}, ако имаш допълнителни въпроси.
+        tos_violation: Ако е възможно произведението ти да е нарушило Правилата за
+          ползване на AO3, моля, %{contact_abuse_link}.
+      opendoors: свържи се с Open Doors
+      subject: "[%{app_name}] Произведението ти беше изтрито от администратор"
+      text:
+        part1: Твоето произведение "%{title}" беше изтрито от AO3 от администратор
+          на сайта.
+        part2: Ако това произведение е било част от проект за присъединяване на творби
+          към АО3, който се управлява от екипа на Open Doors (Отворени врати), моля,
+          свържи се с Open Doors (%{opendoors_link}), ако имаш допълнителни въпроси.
+        tos_violation: Ако е възможно произведението ти да е нарушило Правилата за
+          ползване на AO3, моля, свържи се с нашия комитет Политики и нарушения (%{contact_abuse_url}).
+    challenge_assignment_notification:
+      any: Всички
+      description: 'Описание:'
+      due: 'Краен срок за изпълнение на задачата:'
+      html:
+        footer: Получаваш този имейл във връзка с твоята регистрация в предизвикателството
+          %{title}. За повече информация относно предизвикателството и за това как
+          да се свържеш с модераторите, моля виж %{footer_link}.
+        footer_link: страницата на предизвикателството
+        look_up: Можеш да намериш тази задача на %{link}.
+        look_up_link: страницата на твоите Assignments (Задачи)
+        part1: Възложена ти е следната заявка от предизвикателството %{link} в АО3!
+      optional_tags: 'Тагове по избор:'
+      prompts: 'Идеи:'
+      prompt_url: 'URL на идея:'
+      recipient: 'Получател:'
+      recipient_missing: 'Няма получател: свържи се с модератор за помощ!'
+      subject: "[%{app_name}][%{collection_title}] Твоята задача!"
+      text:
+        assignment: Възложена ти е следната заявка от предизвикателството "%{collection_title}"
+          (%{collection_url}) в АО3!
+        footer: Получаваш този имейл във връзка с твоята регистрация в предизвикателството
+          %{title} (%{url}). За повече информация относно предизвикателството и за
+          това как да се свържеш с модераторите, моля виж %{profile_url}.
+        look_up: Можеш да намериш тази задача на страницата на твоите Assignments
+          (Задачи) на %{link}.
     change_email:
       part1: "%{login}, имейлът, който използваш за акаунта си, беше променен на %{email}"
       subject: "[%{app_name}] Промяна на имейл"
+    creatorship_request:
+      html:
+        creation: "%{creation_link} от %{pseud_links}"
+        instructions: Можеш да приемеш или откажеш тази покана на твоята %{page_name}
+          страница.
+        page_name: Co-Creator Requests (Покани за съавторство)
+      intro: 'Потребителят %{inviting_user} е изпратил покана твоят псевдоним %{pseud}
+        да бъде включен към списъка с автори на %{type}:'
+      subject: "[%{app_name}] Покана за съавторство "
+      text:
+        creation: "%{title} (%{url}) от %{pseuds}"
+        instructions: Можеш да приемеш или откажеш тази покана на твоята страница
+          Co-Creator Requests (Покани за съавторство) %{url}.
     delete_work_notification:
-      hello: Скъпи %{user},
       html:
         part1_other: Твоята творба %{title} е изтрита по заявка на %{pseud}.
         part1_yourself: Твоята творба %{title} беше изтрита по твоя заявка.
         part2: 'Ако имаш въпроси, моля %{support}. '
-      part2: 'Ако имаш въпроси, моля %{support}. '
       part3: Приложено е копие от вашето произведение за справка..
       subject: "[%{app_name}] Твоята творба беше  изтрита"
       support: свържи се с Отдел Поддръжка
@@ -25,7 +138,6 @@ bg:
         part2: Ако имаш въпроси, моля %{support} (%{url}).
     invitation:
       been_invited: Имаш покана да се присъединиш към нашия бета проект!
-      greeting: Привет от Archive of Our Own – AO3 (Нашият архив) !
       has_invited: "%{user_name} те покани да се присъединиш към нашия бета проект!"
       html:
         faq_link: Повече информация можеш да намериш в %{faq_link}.
@@ -58,7 +170,13 @@ bg:
         other: Искаме да те информираме, че имаш %{count} нови покани, които може
           да използваш за създаването на нови акаунти в AO3. Можеш да поканиш приятел
           през %{invitation_page}.
-      closing: Поздрави,
-      greeting: Привет, %{login}!
       invitation_page_link_text: твоята страница с покани
       subject: "[%{app_name}] Нови покани"
+    invite_request_declined:
+      main:
+        one: За съжаление твоето искане за нова покана не може да бъде изпълнено в
+          този момент.
+        other: За съжаление твоето искане за %{count} нови покани не може да бъде
+          изпълнено в този момент.
+      reason: 'Твоето искане:'
+      subject: "[%{app_name}] Отхвърлено искане за допълнителен код за покана"
