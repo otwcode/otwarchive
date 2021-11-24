@@ -12,9 +12,11 @@ class PaginationListLinkRenderer < WillPaginate::ActionView::LinkRenderer
 
   def to_html
     html = pagination.map do |item|
-      item.is_a?(Fixnum) ?
-        page_number(item, @options[:remote]) :
+      if item.is_a?(Integer)
+        page_number(item, @options[:remote])
+      else
         send(item)
+      end
     end.join(@options[:link_separator])
 
     @options[:container] ? html_container(html) : html

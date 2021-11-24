@@ -8,6 +8,7 @@ When /^"([^"]*)" posts the fulfilling draft "([^"]*)" in "([^"]*)"$/ do |name, t
   step %{I fill in "Fandoms" with "#{fandom}"}
   step %{I select "Not Rated" from "Rating"}
   step %{I check "No Archive Warnings Apply"}
+  step %{I select "English" from "Choose a language"}
   step %{I fill in "content" with "This is an exciting story about #{fandom}"}
   step %{I press "Preview"}
 end

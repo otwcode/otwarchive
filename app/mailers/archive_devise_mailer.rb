@@ -17,7 +17,5 @@ class ArchiveDeviseMailer < Devise::Mailer
       devise_mail(record, :reset_password_instructions,
                   options.merge(subject: subject))
     end
-  ensure
-    I18n.locale = I18n.default_locale
   end
 end

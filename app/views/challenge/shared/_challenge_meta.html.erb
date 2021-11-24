@@ -18,8 +18,7 @@
 
 <% elsif Time.now < (challenge.signups_close_at || 1.day.ago) %>
   <dt><%= ts("Sign-up:")%></dt>
-  <dd><strong><%= ts("Closed")%></strong> 
-    <span class="datetime">(on <%= time_in_zone(challenge.signups_close_at, zone) %>)</span></dd>
+  <dd><strong><%= ts("Closed")%></strong></dd>
 <% end %>
 
 <dt><%= ts("Assignments Due:")%></dt>
@@ -31,7 +30,7 @@
 <% end %>
 
 <% if @collection.anonymous? %>
-  <dt><%= ts("Authors Revealed:")%></dt>
+  <dt><%= ts("Creators Revealed:")%></dt>
   <dd class="datetime"><%= time_in_zone(challenge.authors_reveal_at, zone) %></dd>
 <% end %>
 

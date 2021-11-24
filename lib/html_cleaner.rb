@@ -172,6 +172,11 @@ module HtmlCleaner
       doc = Nokogiri::HTML::Document.new
       doc.encoding = "UTF-8"
       unfrozen_value = doc.fragment(unfrozen_value).to_xhtml
+
+      # Hack! the herald angels sing
+      # TODO: AO3-5801 Switch to an HTML5 serializer that doesn't add invalid closing tags
+      # to track and source elements.
+      unfrozen_value.gsub!(%r{</(source|track)>}, "")
     else
       # clean out all tags
       unfrozen_value = Sanitize.clean(fix_bad_characters(unfrozen_value))
@@ -349,15 +354,8 @@ module HtmlCleaner
   end
 
   def add_paragraphs_to_text(text)
-    # By default, Nokogiri closes unclosed tags very late, often at
-    # the end of the document. We want runaway tags closed at the end
-    # of the line
     doc = Nokogiri::XML.parse("<myroot>#{text}</myroot>")
     doc.errors.each do |error|
-      match = error.message.match(/Premature end of data in tag (\w+) line (\d+)/)
-
-      text = close_unclosed_tag(text, match[1], match[2]) if match
-
       match = error.message.match(/Opening and ending tag mismatch: (\w+) line (\d+) and myroot/)
       text = close_unclosed_tag(text, match[1], match[2]) if match
     end

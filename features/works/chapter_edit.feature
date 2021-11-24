@@ -19,6 +19,7 @@ Feature: Edit chapters
   Then I should see "Post New Work"
   When I select "Not Rated" from "Rating"
     And I check "No Archive Warnings Apply"
+    And I select "English" from "Choose a language"
     And I fill in "Fandoms" with "New Fandom"
     And I fill in "Work Title" with "New Epic Work"
     And I fill in "content" with "Well, maybe not so epic."
@@ -204,6 +205,7 @@ Feature: Edit chapters
   Then I should see "Post New Work"
     And I select "General Audiences" from "Rating"
     And I check "No Archive Warnings Apply"
+    And I select "English" from "Choose a language"
     And I fill in "Fandoms" with "If You Give an X a Y"
     And I fill in "Work Title" with "If You Give Users a Draft Feature"
     And I fill in "content" with "They will expect it to work."
@@ -283,7 +285,7 @@ Feature: Edit chapters
       And I invite the co-author "sabrina"
       And I post the chapter
     Then I should not see "sabrina"
-    When the user "sabrina" accepts all co-creator invites
+    When the user "sabrina" accepts all co-creator requests
       And I view the work "Summer Friends"
     Then I should see "karma, sabrina"
       And I should see "Chapter by karma"
@@ -310,7 +312,7 @@ Feature: Edit chapters
       And 1 email should be delivered to "amy"
       And the email should contain "The user karma has invited your pseud amy to be listed as a co-creator on the following chapter"
       And the email should not contain "translation missing"
-    When the user "amy" accepts all co-creator invites
+    When the user "amy" accepts all co-creator requests
       And I view the work "Forever Friends"
     Then I should see "amy, karma"
       And I should see "Chapter by karma"
@@ -332,6 +334,8 @@ Feature: Edit chapters
     When I follow "Edit Chapter"
     Then the "sabrina" checkbox should not be checked
     When I check "sabrina"
+      # Expire cached byline
+      And it is currently 1 second from now
       And I post the chapter
     Then I should not see "Chapter by karma"
       And 1 email should be delivered to "sabrina"
@@ -349,30 +353,41 @@ Feature: Edit chapters
     Then the "sabrina" checkbox should be checked and disabled
 
 
-  Scenario: Removing yourself as a co-creator from the chapter edit page
+  Scenario: Removing yourself as a co-creator from the chapter edit page when
+  you've co-created multiple chapters on the work removes you only from that 
+  specific chapter. Removing yourself as a co-creator from the chapter edit page
+  of the last chapter you've co-created also removes you from the work.
 
     Given the work "OP's Work" by "originalposter" with chapter two co-authored with "opsfriend"
+      And a chapter with the co-author "opsfriend" is added to "OP's Work"
       And I am logged in as "opsfriend"
     When I view the work "OP's Work"
-      And I view the 2nd chapter
+      And I view the 3rd chapter
       And I follow "Edit Chapter"
     When I follow "Remove Me As Chapter Co-Creator"
-    Then I should see "You have been removed as a creator from the chapter"
+    Then I should see "You have been removed as a creator from the chapter."
       And I should see "Chapter 1"
-    When I view the 2nd chapter
-    Then I should see "Chapter 2"
+    When I view the 3rd chapter
+    Then I should see "Chapter 3"
       And I should see "Chapter by originalposter"
+    When I follow "Previous Chapter"
+      And I follow "Edit Chapter"
+      And I follow "Remove Me As Chapter Co-Creator"
+    Then I should see "You have been removed as a creator from the work."
+    When I view the work "OP's Work"
+    Then I should not see "Edit Chapter"
 
 
   Scenario: Removing yourself as a co-creator from the chapter manage page
 
     Given the work "OP's Work" by "originalposter" with chapter two co-authored with "opsfriend"
+      And a chapter with the co-author "opsfriend" is added to "OP's Work"
       And I am logged in as "opsfriend"
     When I view the work "OP's Work"
       And I follow "Edit"
       And I follow "Manage Chapters"
     When I follow "Remove Me As Chapter Co-Creator"
-    Then I should see "You have been removed as a creator from the chapter"
+    Then I should see "You have been removed as a creator from the chapter."
       And I should see "Chapter 1"
     When I view the 2nd chapter
     Then I should see "Chapter by originalposter"
@@ -426,14 +441,14 @@ Feature: Edit chapters
       And I set up the draft "Rusty Has Two Moms"
       And I invite the co-author "brenda"
       And I post the work without preview
-      And the user "brenda" accepts all co-creator invites
+      And the user "brenda" accepts all co-creator requests
     When a chapter is set up for "Rusty Has Two Moms"
       And I invite the co-author "sharon"
       And I check "brenda"
       And I post the chapter
     Then I should see "brenda, rusty"
       And I should not see "Chapter by"
-    When the user "sharon" accepts all co-creator invites
+    When the user "sharon" accepts all co-creator requests
       And I view the work "Rusty Has Two Moms"
     Then I should see "brenda, rusty, sharon"
       And I should see "Chapter by brenda, rusty"
@@ -461,8 +476,8 @@ Feature: Edit chapters
       And I should not see "sharon"
       But 1 email should be delivered to "brenda"
       And 1 email should be delivered to "thegoodmom"
-    When the user "brenda" accepts all co-creator invites
-      And the user "thegoodmom" accepts all co-creator invites
+    When the user "brenda" accepts all co-creator requests
+      And the user "thegoodmom" accepts all co-creator requests
       And I view the work "Rusty Has Two Moms"
     Then I should see "brenda, rusty, sharon (thegoodmom)"
 
@@ -478,7 +493,7 @@ Feature: Edit chapters
       And I set up the draft "Rusty Has Two Moms"
       And I invite the co-author "brenda"
       And I post the work without preview
-      And the user "brenda" accepts all co-creator invites
+      And the user "brenda" accepts all co-creator requests
     When a chapter is set up for "Rusty Has Two Moms"
       And I invite the co-author "sharon"
       And I check "brenda"
@@ -487,7 +502,7 @@ Feature: Edit chapters
     When I select "thegoodmom" from "There's more than one user with the pseud sharon."
       And I press "Post"
     Then I should see "brenda, rusty"
-    When the user "thegoodmom" accepts all co-creator invites
+    When the user "thegoodmom" accepts all co-creator requests
       And I view the work "Rusty Has Two Moms"
     Then I should see "brenda, rusty, sharon (thegoodmom)"
 
@@ -531,7 +546,7 @@ Feature: Edit chapters
     When I am logged in as "brenda"
       And I follow "Rusty Has Two Moms" in the email
     Then I should not see "Edit"
-    When I follow "Creator Invitations page"
+    When I follow "Co-Creator Requests page"
       And I check "selected[]"
       And I press "Accept"
     Then I should see "You are now listed as a co-creator on Chapter 2 of Rusty Has Two Moms."
@@ -564,7 +579,7 @@ Feature: Edit chapters
       And I invite the co-author "thegoodmom"
       And I post the work without preview
     Then I should see "Work was successfully posted."
-    When the user "thegoodmom" accepts all co-creator invites
+    When the user "thegoodmom" accepts all co-creator requests
       And I view the work "Rusty Has Two Moms"
     Then I should see "rusty, thegoodmom"
     When the user "thegoodmom" disallows co-creators
@@ -580,3 +595,19 @@ Feature: Edit chapters
       And I follow "Chapter 2"
       And I follow "Edit Chapter"
       And I should see "Remove Me As Chapter Co-Creator"
+
+  Scenario: You can't add a chapter to a work with too many tags
+    Given the user-defined tag limit is 7
+      And I am logged in as a random user
+      And I post the work "Over the Limit"
+      And the work "Over the Limit" has 2 fandom tags
+      And the work "Over the Limit" has 2 character tags
+      And the work "Over the Limit" has 2 relationship tags
+      And the work "Over the Limit" has 2 freeform tags
+    When I follow "Add Chapter"
+      And I fill in "content" with "this is my second chapter"
+      And I press "Post"
+    Then I should see "Fandom, relationship, character, and additional tags must not add up to more than 7. Your work has 8 of these tags, so you must remove 1 of them."
+    When I view the work "Over the Limit"
+    Then I should see "1/1"
+      And I should not see "Next Chapter"

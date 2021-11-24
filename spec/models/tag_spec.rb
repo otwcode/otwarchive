@@ -2,10 +2,6 @@
 require 'spec_helper'
 
 describe Tag do
-  before(:each) do
-    @tag = Tag.new
-  end
-
   after(:each) do
     User.current_user = nil
   end
@@ -84,35 +80,36 @@ describe Tag do
   end
 
   it "should not be valid without a name" do
-    expect(@tag.save).not_to be_truthy
+    tag = Tag.new
+    expect(tag.save).not_to be_truthy
 
-    @tag.name = "something or other"
-    expect(@tag.save).to be_truthy
+    tag.name = "something or other"
+    expect(tag.save).to be_truthy
   end
 
   it "should not be valid if too long" do
-    @tag.name = "a" * 101
-    expect(@tag.save).not_to be_truthy
-    expect(@tag.errors[:name].join).to match(/too long/)
+    tag = Tag.new
+    tag.name = "a" * 101
+    expect(tag.save).not_to be_truthy
+    expect(tag.errors[:name].join).to match(/too long/)
   end
 
   it "should not be valid with disallowed characters" do
-    @tag.name = "bad<tag"
-    expect(@tag.save).to be_falsey
-    expect(@tag.errors[:name].join).to match(/restricted characters/)
+    tag = Tag.new
+    tag.name = "bad<tag"
+    expect(tag.save).to be_falsey
+    expect(tag.errors[:name].join).to match(/restricted characters/)
   end
 
   context "unwrangleable" do
-    it "should not be valid as canonical and unwrangleable" do
+    it "is not valid for a canonical tag" do
       tag = Freeform.create(name: "wrangled", canonical: true)
-
       tag.unwrangleable = true
       expect(tag).not_to be_valid
     end
 
-    it "should not be valid as unsorted and unwrangleable" do
+    it "is not valid for an unsorted tag" do
       tag = FactoryBot.create(:unsorted_tag)
-
       tag.unwrangleable = true
       expect(tag).not_to be_valid
     end
@@ -125,53 +122,58 @@ describe Tag do
       end
 
       it "should ignore capitalisation" do
-        @tag.name = "yuletide"
-        @tag.save
+        tag = Tag.new
+        tag.name = "yuletide"
+        tag.save
 
-        @tag.name = "Yuletide"
-        @tag.check_synonym
-        expect(@tag.errors).to be_empty
-        expect(@tag.save).to be_truthy
+        tag.name = "Yuletide"
+        tag.check_synonym
+        expect(tag.errors).to be_empty
+        expect(tag.save).to be_truthy
       end
 
-      it "should ignore accented characters" do
-        @tag.name = "Amelie"
-        @tag.save
+      it "ignores accented characters" do
+        tag = Tag.new
+        tag.name = "Amelie"
+        tag.save
 
-        @tag.name = "Amélie"
-        @tag.check_synonym
-        expect(@tag.errors).to be_empty
-        expect(@tag.save).to be_truthy
+        tag.name = "Amélie"
+        tag.check_synonym
+        expect(tag.errors).to be_empty
+        expect(tag.save).to be_truthy
       end
 
-      it "should be careful with the ß" do
-        @tag.name = "Wei Kreuz"
-        @tag.save
+      it "ignores the capitalization of ß" do
+        tag = Tag.new
+        tag.name = "Weiß Kreuz"
+        tag.save
 
-        @tag.name = "Weiß Kreuz"
-        @tag.check_synonym
-        expect(@tag.errors).to be_empty
-        expect(@tag.save).to be_truthy
+        tag.name = "WeiSS Kreuz"
+        tag.check_synonym
+        expect(tag.errors).to be_empty
+        expect(tag.save).to be_truthy
       end
 
       it "should not ignore punctuation" do
-        @tag.name = "Snatch."
-        @tag.save
+        tag = Tag.new
+        tag.name = "Snatch."
+        tag.save
 
-        @tag.name = "Snatch"
-        @tag.check_synonym
-        expect(@tag.errors).not_to be_empty
-        expect(@tag.save).to be_falsey
+        tag.name = "Snatch"
+        tag.check_synonym
+        expect(tag.errors).not_to be_empty
+        expect(tag.save).to be_falsey
       end
 
       it "should not ignore whitespace" do
-        @tag.name = "JohnSheppard"
-        @tag.save
+        tag = Tag.new
+        tag.name = "JohnSheppard"
+        tag.save
 
-        @tag.name = "John Sheppard"
-        @tag.check_synonym
-        expect(@tag.errors).not_to be_empty
-        expect(@tag.save).to be_falsey
+        tag.name = "John Sheppard"
+        tag.check_synonym
+        expect(tag.errors).not_to be_empty
+        expect(tag.save).to be_falsey
       end
 
       it 'autocomplete should work' do
@@ -199,13 +201,14 @@ describe Tag do
       end
 
       it "should allow any change" do
-        @tag.name = "yuletide.ssé"
-        @tag.save
+        tag = Tag.new
+        tag.name = "yuletide.ssé"
+        tag.save
 
-        @tag.name = "Yuletide ße something"
-        @tag.check_synonym
-        expect(@tag.errors).to be_empty
-        expect(@tag.save).to be_truthy
+        tag.name = "Yuletide ße something"
+        tag.check_synonym
+        expect(tag.errors).to be_empty
+        expect(tag.save).to be_truthy
       end
     end
   end
@@ -249,7 +252,7 @@ describe Tag do
 
   describe "has_posted_works?" do
     before do
-      create(:posted_work, fandom_string: "love live,jjba")
+      create(:work, fandom_string: "love live,jjba")
       create(:draft, fandom_string: "zombie land saga,jjba")
     end
 
@@ -457,19 +460,42 @@ describe Tag do
 
   describe "multiple tags of the same type" do
     before do
-      # set up three tags of the same type
-      @canonical_tag = FactoryBot.create(:canonical_fandom)
-      @syn_tag = FactoryBot.create(:fandom)
-      @sub_tag = FactoryBot.create(:canonical_fandom)
+      # set up four tags of the same type
+      @canonical_tag = create(:canonical_fandom)
+      @syn_tag = create(:fandom)
+      @sub_tag = create(:canonical_fandom)
+      @canonical_syn_tag = create(:canonical_fandom)
     end
 
-    it "should let you make a tag the synonym of a canonical one" do
-      @syn_tag.syn_string = @canonical_tag.name
-      @syn_tag.save
+    context "when logged in as admin" do
+      it "lets you make a canonical tag the synonym of a canonical one" do
+        User.current_user = create(:admin)
+        @canonical_syn_tag.syn_string = @canonical_tag.name
+        @canonical_syn_tag.save
 
-      expect(@syn_tag.merger).to eq(@canonical_tag)
+        expect(@canonical_syn_tag.merger).to eq(@canonical_tag)
+        @canonical_tag = Tag.find(@canonical_tag.id)
+        expect(@canonical_tag.mergers).to eq([@canonical_syn_tag])
+      end
+    end
+
+    it "lets you make a noncanonical tag the synonym of a canonical one" do
+      @noncanonical_syn_tag = create(:fandom)
+      @noncanonical_syn_tag.syn_string = @canonical_tag.name
+      @noncanonical_syn_tag.save
+
+      expect(@noncanonical_syn_tag.merger).to eq(@canonical_tag)
       @canonical_tag = Tag.find(@canonical_tag.id)
-      expect(@canonical_tag.mergers).to eq([@syn_tag])
+      expect(@canonical_tag.mergers).to eq([@noncanonical_syn_tag])
+    end
+
+    it "doesn't let you make a canonical tag the synonym of a canonical one" do
+      @canonical_syn_tag.syn_string = @canonical_tag.name
+      @canonical_syn_tag.save
+
+      expect(@canonical_syn_tag.merger).to eq(nil)
+      @canonical_tag = Tag.find(@canonical_tag.id)
+      expect(@canonical_tag.mergers).to eq([])
     end
 
     it "should let you make a canonical tag the subtag of another canonical one" do
@@ -477,49 +503,6 @@ describe Tag do
 
       expect(@canonical_tag.sub_tags).to eq([@sub_tag])
       expect(@sub_tag.meta_tags).to eq([@canonical_tag])
-    end
-
-    describe "with a synonym and a subtag" do
-      before do
-        @syn_tag.syn_string = @canonical_tag.name
-        @syn_tag.save
-        @sub_tag.meta_tag_string = @canonical_tag.name
-      end
-
-      describe "and works under each" do
-        before do
-          # create works with all three tags
-          @direct_work = FactoryBot.create(:work, fandom_string: @canonical_tag.name)
-          @syn_work = FactoryBot.create(:work, fandom_string: @syn_tag.name)
-          @sub_work = FactoryBot.create(:work, fandom_string: @sub_tag.name)
-        end
-
-        xit "should find all works that would need to be reindexed" do
-          # get all the work ids that it would queue
-          expect(@syn_tag.all_filtered_work_ids).to eq([@syn_work.id])
-          expect(@sub_tag.all_filtered_work_ids).to eq([@sub_work.id])
-          expect(@canonical_tag.all_filtered_work_ids).to eq([@direct_work.id, @syn_work.id, @sub_work.id])
-
-          # make sure the canonical tag continues to have the right ids even if set to non-canonical
-          @canonical_tag.canonical = false
-          expect(@canonical_tag.all_filtered_work_ids).to match_array([@direct_work.id, @syn_work.id, @sub_work.id])
-        end
-      end
-
-      describe "and bookmarks under each" do
-        before do
-          # create bookmarks with all three tags
-          @direct_bm = FactoryBot.create(:bookmark, tag_string: @canonical_tag.name)
-          @syn_bm = FactoryBot.create(:bookmark, tag_string: @syn_tag.name)
-          @sub_bm = FactoryBot.create(:bookmark, tag_string: @sub_tag.name)
-        end
-
-        it "should find all bookmarks that would need to be reindexed" do
-          expect(@syn_tag.all_bookmark_ids).to eq([@syn_bm.id])
-          expect(@sub_tag.all_bookmark_ids).to eq([@sub_bm.id])
-          expect(@canonical_tag.all_bookmark_ids).to match_array([@direct_bm.id, @syn_bm.id, @sub_bm.id])
-        end
-      end
     end
   end
 end

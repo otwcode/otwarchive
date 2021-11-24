@@ -28,7 +28,7 @@ class ChaptersController < ApplicationController
   def show
     @tag_groups = @work.tag_groups
     if params[:view_adult]
-      session[:adult] = true
+      cookies[:view_adult] = "true"
     elsif @work.adult? && !see_adult?
       render "works/_adult", layout: "application" and return
     end
@@ -52,12 +52,17 @@ class ChaptersController < ApplicationController
       @commentable = @work
       @comments = @chapter.comments.reviewed
 
-      @page_title = @work.unrevealed? ? ts("Mystery Work - Chapter %{position}", position: @chapter.position.to_s) :
-        get_page_title(@tag_groups["Fandom"][0].name,
-          @work.anonymous? ? ts("Anonymous") : @work.pseuds.sort.collect(&:byline).join(', '),
-          @work.title + " - Chapter " + @chapter.position.to_s)
+      if @work.unrevealed?
+        @page_title = t(".unrevealed") + t(".chapter_position", position: @chapter.position.to_s)
+      else
+        fandoms = @tag_groups["Fandom"]
+        fandom = fandoms.empty? ? t(".unspecified_fandom") : fandoms[0].name
+        title_fandom = fandoms.size > 3 ? t(".multifandom") : fandom
+        author = @work.anonymous? ? t(".anonymous") : @work.pseuds.sort.collect(&:byline).join(", ")
+        @page_title = get_page_title(title_fandom, author, @work.title + t(".chapter_position", position: @chapter.position.to_s))
+      end
 
-      @kudos = @work.kudos.with_pseud.includes(pseud: :user).order("created_at DESC")
+      @kudos = @work.kudos.with_user.includes(:user)
 
       if current_user.respond_to?(:subscriptions)
         @subscription = current_user.subscriptions.where(subscribable_id: @work.id,
@@ -66,12 +71,6 @@ class ChaptersController < ApplicationController
       end
       # update the history.
       Reading.update_or_create(@work, current_user) if current_user
-
-      # TEMPORARY hack-like thing to fix the fact that chaptered works weren't hit-counted or added to history at all
-      if chapter_position == 0
-        Rails.logger.debug "Chapter remote addr: #{request.remote_ip}"
-        @work.increment_hit_count(request.remote_ip)
-      end
 
       respond_to do |format|
         format.html
@@ -90,8 +89,12 @@ class ChaptersController < ApplicationController
   def edit
     if params["remove"] == "me"
       @chapter.creatorships.for_user(current_user).destroy_all
-      flash[:notice] = ts("You have been removed as a creator from the chapter")
-      redirect_to @work
+      if @work.chapters.any? { |c| current_user.is_author_of?(c) }
+        flash[:notice] = ts("You have been removed as a creator from the chapter.")
+        redirect_to @work
+      else # remove from work if no longer co-creator on any chapter
+        redirect_to edit_work_path(@work, remove: "me")
+      end
     end
   end
 
@@ -122,7 +125,7 @@ class ChaptersController < ApplicationController
           redirect_to [@work, @chapter]
         else
           draft_flash_message(@work)
-          redirect_to [:preview, @work, @chapter]
+          redirect_to preview_work_chapter_path(@work, @chapter)
         end
       else
         render :new
@@ -159,7 +162,7 @@ class ChaptersController < ApplicationController
       @work.set_revised_at_by_chapter(@chapter)
       if @chapter.save && @work.save
         flash[:notice] = ts("Chapter was successfully #{posted_changed ? 'posted' : 'updated'}.")
-        redirect_to [@work, @chapter]
+        redirect_to work_chapter_path(@work, @chapter)
       else
         render :edit
       end
@@ -234,6 +237,13 @@ class ChaptersController < ApplicationController
   # Check whether we should display :new or :edit instead of previewing or
   # saving the user's changes.
   def chapter_cannot_be_saved?
+    # The chapter can only be saved if the work can be saved:
+    if @work.invalid?
+      @work.errors.full_messages.each do |message|
+        @chapter.errors.add(:base, message)
+      end
+    end
+
     @chapter.errors.any? || @chapter.invalid?
   end
 

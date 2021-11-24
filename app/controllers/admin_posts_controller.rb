@@ -1,4 +1,4 @@
-class AdminPostsController < ApplicationController
+class AdminPostsController < Admin::BaseController
 
   before_action :admin_only, except: [:index, :show]
   before_action :load_languages, except: [:show, :destroy]
@@ -45,16 +45,19 @@ class AdminPostsController < ApplicationController
   # GET /admin_posts/new.xml
   def new
     @admin_post = AdminPost.new
+    authorize @admin_post
   end
 
   # GET /admin_posts/1/edit
   def edit
     @admin_post = AdminPost.find(params[:id])
+    authorize @admin_post
   end
 
   # POST /admin_posts
   def create
     @admin_post = AdminPost.new(admin_post_params)
+    authorize @admin_post
     if @admin_post.save
       flash[:notice] = ts("Admin Post was successfully created.")
       redirect_to(@admin_post)
@@ -66,6 +69,7 @@ class AdminPostsController < ApplicationController
   # PUT /admin_posts/1
   def update
     @admin_post = AdminPost.find(params[:id])
+    authorize @admin_post
     if @admin_post.update_attributes(admin_post_params)
       flash[:notice] = ts("Admin Post was successfully updated.")
       redirect_to(@admin_post)
@@ -77,6 +81,7 @@ class AdminPostsController < ApplicationController
   # DELETE /admin_posts/1
   def destroy
     @admin_post = AdminPost.find(params[:id])
+    authorize @admin_post
     @admin_post.destroy
     redirect_to(admin_posts_path)
   end
@@ -91,8 +96,7 @@ class AdminPostsController < ApplicationController
 
   def admin_post_params
     params.require(:admin_post).permit(
-      :admin_id, :title, :content, :translated_post_id, :language_id, :tag_list
+      :admin_id, :title, :content, :translated_post_id, :language_id, :tag_list, :comment_permissions
     )
   end
-
 end

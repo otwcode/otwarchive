@@ -1,9 +1,7 @@
 <% content_for :message do %>
 
-  <p>Dear Collection Maintainers!</p>
-
   <p>
-    You have received a message about your collection <%= style_link(@collection.title, collection_url(@collection)) %>:
+    <%= t(".html.received_message", collection_link: style_link(@collection.title, collection_url(@collection))).html_safe %>
   </p>
 
   <%= style_quote(raw @message) %>

@@ -9,10 +9,10 @@
     <% # The edit link should show up if signups are open and the current user owns the prompt, OR if the challenge is a gift exchange and signups are closed and the current user is the maintainer %>
     <% if (challenge.signup_open && user == current_user) || (collection.challenge_type == "GiftExchange" && !challenge.signup_open && collection.user_is_maintainer?(current_user)) %>
       <li>
-        <%= link_to(ts('Edit Sign-up'), edit_collection_signup_path(collection, challenge_signup)) %>
+        <%= link_to(ts("Edit Sign-up"), edit_collection_signup_path(collection, challenge_signup)) %>
       </li>
       <li>
-        <%= link_to(ts('Edit Prompt'), edit_collection_prompt_path(collection, prompt)) %>
+        <%= link_to(ts("Edit Prompt"), edit_collection_prompt_path(collection, prompt)) %>
       </li>
     <% end %>
 
@@ -21,16 +21,16 @@
     <li>
       <%= link_to ts("Delete Prompt"),
         collection_prompt_path(collection, prompt),
-        data: {confirm: ts("Are you sure? All information in this prompt will be lost.")},
-        :method => :delete %>
+        data: { confirm: ts("Are you sure? All information in this prompt will be lost.") },
+        method: :delete %>
     </li>
     <% end %>
     <% # Moderators should be able to delete entire sign-ups from the /requests page in PromptMemes.  %>
     <% if collection.user_is_maintainer?(current_user) && collection.challenge_type == "PromptMeme" %>
       <li><%= link_to ts("Delete Sign-up"),
                   collection_signup_path(collection, challenge_signup),
-                  data: {confirm: ts("Are you sure? All prompts in this sign-up will be lost.")},
-                  :method => :delete %>
+                  data: { confirm: ts("Are you sure? All prompts in this sign-up will be lost.") },
+                  method: :delete %>
       </li>
     <% end %>
 
@@ -43,18 +43,11 @@
           <li><%= link_to ts("Fulfill"), new_collection_work_path(collection, :claim_id => claim.id) %></li>
         <% end %>
         <% # The drop claim link should show up if the current user has claimed the prompt %>
-        <li><%= link_to ts("Drop Claim"), collection_claim_path(collection, claim), data: {confirm: ts('Do you really want to delete this claim?')}, :method => :delete %></li>
+        <li><%= link_to ts("Drop Claim"), collection_claim_path(collection, claim), data: { confirm: ts("Do you really want to drop this claim?") }, method: :delete %></li>
         <% # The claim link should show up if the user has not already claimed the prompt %>
         <% else %>
         <li>
-          <% new_claim = ChallengeClaim.new %>
-            <%= form_for [collection, new_claim], :url => collection_claims_path(collection) do |claim_form| %>
-                <%= claim_form.hidden_field :collection_id, :value => collection.id %>
-                <%= claim_form.hidden_field :request_signup_id, :value => challenge_signup.id %>
-                <%= claim_form.hidden_field :request_prompt_id, :value => prompt.id %>
-                <%= claim_form.hidden_field :claiming_user_id, :value => current_user.id %>
-                <%= submit_tag ts("Claim"), :id => "prompt_" + prompt.id.to_s %>
-            <% end %>
+          <%= button_to ts("Claim"), collection_claims_path(collection, prompt_id: prompt.id) %>
         </li>
       <% end %>
     <% end %>

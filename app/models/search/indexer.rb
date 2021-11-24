@@ -2,12 +2,12 @@ class Indexer
 
   BATCH_SIZE = 1000
   INDEXERS_FOR_CLASS = {
-    "Work" => %w(WorkIndexer BookmarkedWorkIndexer),
-    "Bookmark" => %w(BookmarkIndexer),
-    "Tag" => %w(TagIndexer),
-    "Pseud" => %w(PseudIndexer),
-    "Series" => %w(BookmarkedSeriesIndexer),
-    "ExternalWork" => %w(BookmarkedExternalWorkIndexer)
+    Work: %w[WorkIndexer WorkCreatorIndexer BookmarkedWorkIndexer],
+    Bookmark: %w[BookmarkIndexer],
+    Tag: %w[TagIndexer],
+    Pseud: %w[PseudIndexer],
+    Series: %w[BookmarkedSeriesIndexer],
+    ExternalWork: %w[BookmarkedExternalWorkIndexer]
   }.freeze
 
   delegate :klass, :index_name, :document_type, to: :class
@@ -18,6 +18,19 @@ class Indexer
 
   def self.klass
     raise "Must be defined in subclass"
+  end
+
+  def self.all
+    [
+      BookmarkedExternalWorkIndexer,
+      BookmarkedSeriesIndexer,
+      BookmarkedWorkIndexer,
+      BookmarkIndexer,
+      PseudIndexer,
+      TagIndexer,
+      WorkIndexer,
+      WorkCreatorIndexer
+    ]
   end
 
   # Originally added to allow IndexSweeper to find the Elasticsearch document
@@ -34,7 +47,7 @@ class Indexer
     end
   end
 
-  def self.create_index(shards = 5)
+  def self.create_index(shards: 5)
     $elasticsearch.indices.create(
       index: index_name,
       body: {
@@ -51,21 +64,36 @@ class Indexer
     )
   end
 
+  def self.prepare_for_testing
+    raise "Wrong environment for test prep!" unless Rails.env.test?
+
+    delete_index
+    # Relevance sorting is unpredictable with multiple shards
+    # and small amounts of data
+    create_index(shards: 1)
+  end
+
+  def self.refresh_index
+    # Refreshes are resource-intensive, we use them only in tests.
+    raise "Wrong environment for index refreshes!" unless Rails.env.test?
+
+    return unless $elasticsearch.indices.exists(index: index_name)
+
+    $elasticsearch.indices.refresh(index: index_name)
+  end
+
   # Note that the index must exist before you can set the mapping
   def self.create_mapping
     $elasticsearch.indices.put_mapping(
       index: index_name,
-      type: document_type,
       body: mapping
     )
   end
 
   def self.mapping
     {
-      document_type: {
-        properties: {
-          # add properties in subclasses
-        }
+      properties: {
+        # add properties in subclasses
       }
     }
   end
@@ -79,8 +107,8 @@ class Indexer
       }
     }
   end
-  
-  def self.index_all(options={})
+
+  def self.index_all(options = {})
     unless options[:skip_delete]
       delete_index
       create_index
@@ -92,7 +120,7 @@ class Indexer
     total = (indexables.count / BATCH_SIZE) + 1
     i = 1
     indexables.find_in_batches(batch_size: BATCH_SIZE) do |group|
-      puts "Queueing #{klass} batch #{i} of #{total}"
+      puts "Queueing #{klass} batch #{i} of #{total}" unless Rails.env.test?
       AsyncIndexer.new(self, :world).enqueue_ids(group.map(&:id))
       i += 1
     end
@@ -116,7 +144,7 @@ class Indexer
   # Returns an array of indexers
   def self.for_object(object)
     name = object.is_a?(Tag) ? 'Tag' : object.class.to_s
-    (INDEXERS_FOR_CLASS[name] || []).map(&:constantize)
+    (INDEXERS_FOR_CLASS[name.to_sym] || []).map(&:constantize)
   end
 
   # Should be called after a batch update, with the IDs that were successfully
@@ -145,6 +173,8 @@ class Indexer
   end
 
   def batch
+    return @batch if @batch
+
     @batch = []
     ids.each do |id|
       object = objects[id.to_i]
@@ -159,13 +189,14 @@ class Indexer
   end
 
   def index_documents
+    return if batch.empty?
+
     $elasticsearch.bulk(body: batch)
   end
 
   def index_document(object)
     info = {
       index: index_name,
-      type: document_type,
       id: document_id(object.id),
       body: document(object)
     }
@@ -177,9 +208,8 @@ class Indexer
 
   def routing_info(id)
     {
-      '_index' => index_name,
-      '_type' => document_type,
-      '_id' => id
+      "_index" => index_name,
+      "_id" => id
     }
   end
 

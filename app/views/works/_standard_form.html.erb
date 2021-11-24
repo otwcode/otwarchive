@@ -157,7 +157,7 @@
       <!-- Series checkbox (storyseriescheck) -->
       <!-- Checking this box causes the "manage series" dropdown to appear; unchecking it causes it to disappear. -->
       <dt class="serial">
-        <%= check_box_tag "series-options-show", "1", !@work.series.blank?, class: "toggle_formfield" %>
+        <%= check_box_tag "series-options-show", "1", check_series_box(@work), class: "toggle_formfield" %>
       </dt>
       <dd class="serial">
         <%= label_tag "series-options-show", ts("This work is part of a series") %>
@@ -169,27 +169,29 @@
             <%= fields_for "work[series_attributes]" do |s| %>
               <dt><%= s.label "id", ts("Choose one of your existing series:") %></dt>
               <dd>
-                <%= s.collection_select(:id, @series, :id, :title, { selected: work_series_id(@work), prompt: true }) %>
+                <%= s.collection_select(:id, @series, :id, :title, { selected: work_series_value(:id), prompt: true }) %>
               </dd>
 
               <dt><%= s.label :title, ts("Or create and use a new one:") %></dt>
-              <dd><%= s.text_field :title %></dd>
+              <dd><%= s.text_field :title, value: work_series_value(:title) %></dd>
             <% end %>
 
             <% unless @serial_works.blank? || @work.new_record? %>
               <dt><%= ts("Current Series") %></dt>
               <% for serial in @serial_works %>
-                <dd>
-                  <ul class="actions" role="navigation">
-                    <li>
-                      <%= link_to serial.series.title, serial.series %>
-                    </li>
-                    <li>
-                      <%= link_to ts("Remove Work From Series"), serial_work_path(serial),
-                              method: :delete %>
-                    </li>
-                  </ul>
-                </dd>
+                <% unless serial.new_record? %>
+                  <dd>
+                    <ul class="actions" role="navigation">
+                      <li>
+                        <%= link_to serial.series.title, serial.series %>
+                      </li>
+                      <li>
+                        <%= link_to ts("Remove Work From Series"), serial_work_path(serial),
+                                method: :delete %>
+                      </li>
+                    </ul>
+                  </dd>
+                <% end %>
               <% end %>
             <% end %>
           </dl>
@@ -266,14 +268,6 @@
         <%= link_to_help "registered-users" %>
       </dd>
 
-      <dt class="anonymous comments">
-        <%= f.check_box :anon_commenting_disabled %>
-      </dt>
-      <dd class="anonymous comments">
-        <%= f.label :anon_commenting_disabled, ts("Disable anonymous commenting") %>
-        <%= link_to_help "comments-anonymous" %>
-      </dd>
-
       <dt class="moderated comments">
         <%= f.check_box :moderated_commenting_enabled %>
       </dt>
@@ -281,6 +275,23 @@
         <%= f.label :moderated_commenting_enabled, ts("Enable comment moderation") %>
         <%= link_to_help "comments-moderated" %>
       </dd>
+
+      <dt class="permissions comments">
+        <%= ts("Who can comment on this work") %>
+        <%= link_to_help "who-can-comment-on-this-work" %>
+      </dt>
+      <dd class="permissions comments">
+        <fieldset>
+          <%=
+            radio_button_list(f, :comment_permissions, [
+              [:enable_all, ts("Registered users and guests can comment")],
+              [:disable_anon, ts("Only registered users can comment")],
+              [:disable_all, ts("No one can comment")]
+            ])
+          %>
+        </fieldset>
+      </dd>
+
     </dl>
   </fieldset>
   <% unless @chapters %>

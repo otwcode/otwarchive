@@ -53,28 +53,47 @@ Feature: User dashboard
     And I should see "Stargatte SG-oops" within "#user-works"
 
   Scenario: The user dashboard should list up to five of the user's works and link to more
-  Given I am logged in as "meatloaf"
+  Given dashboard counts expire after 10 seconds
+    And I am logged in as "meatloaf"
     And I post the works "Oldest Work, Work 2, Work 3, Work 4, Work 5"
   When I go to meatloaf's user page
   Then I should see "Recent works"
     And I should see "Oldest Work"
     And I should see "Work 5"
-    And I should not see "Works (5)" within "#user-works"
+    And I should see "Works (5)" within "#dashboard"
+    And I should not see "Works (" within "#user-works"
   When I post the work "Newest Work"
     And all indexing jobs have been run
     And I go to meatloaf's user page
   Then I should see "Newest Work"
     And I should not see "Oldest Work"
-    And I should see "Works (6)" within "#dashboard"
+    And I should see "Works (5)" within "#dashboard"
+    And I should see "Works (5)" within "#user-works"
+  When I wait 11 seconds
+    And I reload the page
+  Then I should see "Works (6)" within "#dashboard"
   When I follow "Works (6)" within "#user-works"
   Then I should see "6 Works by meatloaf"
     And I should see "Oldest Work"
     And I should see "Newest Work"
 
+  Scenario: The user dashboard should not list anonymous works by the user
+  Given I have the anonymous collection "Anon Treasury"
+    And I am logged in as "meatloaf"
+    And I post the work "Anon Work" to the collection "Anon Treasury"
+  When I go to meatloaf's user page
+  Then I should not see "Recent Works"
+  When I post the work "New Work"
+    And I go to meatloaf's user page
+  Then I should see "Recent works"
+    And I should not see "Anon Work" within "#user-works"
+
   Scenario: The user dashboard should list up to five of the user's series and link to more
   Given I am logged in as "meatloaf"
     And I post the work "My Work"
   When I add the work "My Work" to the series "Oldest Series"
+    # Make sure all other series are more recent
+    And it is currently 1 second from now
     And I add the work "My Work" to the series "Series 2"
     And I add the work "My Work" to the series "Series 3"
     And I add the work "My Work" to the series "Series 4"
@@ -87,12 +106,25 @@ Feature: User dashboard
   Then I should see "Newest Series" within "#user-series"
     And I should not see "Oldest Series" within "#user-series"
   When I follow "Series (6)" within "#user-series"
-  Then I should see "meatloaf's Series"
+  Then I should see "6 Series by meatloaf"
     And I should see "Oldest Series"
     And I should see "Newest Series"
 
+  Scenario: The user dashboard should not list anonymous series by the user
+  Given I have the anonymous collection "Anon Treasury"
+    And I am logged in as "meatloaf"
+    And I post the work "Anon Work" to the collection "Anon Treasury"
+    And I add the work "Anon Work" to series "Anon Series"
+  When I go to meatloaf's user page
+  Then I should not see "Recent Series"
+  When I add the work "New Work" to series "Cool Series"
+    And I go to meatloaf's user page
+  Then I should see "Recent series"
+    And I should not see "Anon Series" within "#user-series"
+
   Scenario: The user dashboard should list up to five of the user's bookmarks and link to more
-  Given I am logged in as "fruitpie"
+  Given dashboard counts expire after 10 seconds
+    And I am logged in as "fruitpie"
     And I post the works "Work One, Work Two, Work Three, Work Four, Work Five, Work Six"
   When I am logged in as "meatloaf"
     And I bookmark the works "Work One, Work Two, Work Three, Work Four, Work Five"
@@ -103,14 +135,31 @@ Feature: User dashboard
     And I go to meatloaf's user page
   Then I should see "Work Six" within "#user-bookmarks"
     And I should not see "Work One" within "#user-bookmarks"
-    And I should see "Bookmarks (6)" within "#dashboard"
+    And I should see "Bookmarks (5)" within "#dashboard"
+  When I wait 11 seconds
+    And I reload the page
+  Then I should see "Bookmarks (6)" within "#dashboard"
   When I follow "Bookmarks (6)" within "#user-bookmarks"
   Then I should see "6 Bookmarks by meatloaf"
     And I should see "Work One"
     And I should see "Work Six"
 
+  Scenario Outline: The dashboard/works/bookmarks pages for a non-default pseud should display both pseud and username
+  Given "meatloaf" has the pseud "gravy"
+  When I go to meatloaf's <page_name> page
+  Then I should not see "(meatloaf)" within "<selector>"
+  When I go to the <page_name> page for user "meatloaf" with pseud "gravy"
+  Then I should see "gravy (meatloaf)" within "<selector>"
+  Examples:
+    | page_name | selector                  |
+    | user      | #main .primary h2         |
+    | works     | .works-index .heading     |
+    | bookmarks | .bookmarks-index .heading |
+    | series    | .series-index .heading    |
+
   Scenario: The dashboard for a specific pseud should only list the creations owned by that pseud
-  Given I am logged in as "meatloaf"
+  Given dashboard counts expire after 10 seconds
+    And I am logged in as "meatloaf"
     And I post the works "Oldest Work, Work 2, Work 3, Work 4, Work 5"
     And I add the work "Oldest Work" to series "Oldest Series"
     And I bookmark the work "Oldest Work"
@@ -118,15 +167,19 @@ Feature: User dashboard
     And I bookmark the work "Work 5" as "gravy"
     And I go to meatloaf's user page
     And I follow "gravy" within ".pseud .expandable li"
+  Then I should see "Works (0)" within "#dashboard"
+    And I should see "Bookmarks (0)" within "#dashboard"
+  When I wait 11 seconds
+    And I reload the page
   Then I should see "Recent works"
     And I should see "Pseud's Work 1"
     And I should see "Works (1)" within "#dashboard"
     And I should not see "Works (" within "#user-works"
     And I should not see "Oldest Work" within "#user-works"
-  Then I should see "Recent series"
+    And I should see "Recent series"
     And I should see "Pseud Series A" within "#user-series"
     And I should not see "Oldest Series"
-  Then I should see "Recent bookmarks"
+    And I should see "Recent bookmarks"
     And I should see "Work 5" within "#user-bookmarks"
     And I should see "Bookmarks (1)" within "#dashboard"
 

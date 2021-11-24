@@ -46,6 +46,7 @@ class PseudsController < ApplicationController
     end
 
     visible_works = visible_works.revealed.non_anon
+    visible_series = visible_series.exclude_anonymous
 
     @fandoms = \
       Fandom.select("tags.*, count(DISTINCT works.id) as work_count").

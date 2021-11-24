@@ -13,8 +13,12 @@ Feature: Import Works
     Then I should see "Import New Work"
     When I fill in "urls" with "http://import-site-without-tags"
       And I press "Import"
+    Then I should see "Language cannot be blank."
+    When I select "Deutsch" from "Choose a language"
+      And I press "Import"
     Then I should see "Preview"
       And I should see "Untitled Imported Work"
+      And I should see "Language: Deutsch"
       And I should not see "A work has already been imported from http://import-site-without-tags"
       And I should see "No Fandom"
       And I should see "Chose Not To"
@@ -26,6 +30,7 @@ Feature: Import Works
 
   Scenario: With override disabled and tag detection enabled, tags should be detected
     When I start importing "http://import-site-with-tags" with a mock website
+      And I select "Deutsch" from "Choose a language"
       And I select "Explicit" from "Rating"
       And I check "No Archive Warnings Apply"
       And I fill in "Fandoms" with "Idol RPF"
@@ -37,6 +42,7 @@ Feature: Import Works
     When I press "Import"
     Then I should see "Preview"
       And I should see "Detected Title"
+      And I should see "Language: Deutsch"
       And I should see "Explicit"
       And I should see "Archive Warning: Underage"
       And I should see "Fandom: Detected Fandom"
@@ -50,6 +56,7 @@ Feature: Import Works
 
   Scenario: With override and tag detection enabled, provided tags should be used when tags are entered
     When I start importing "http://import-site-with-tags" with a mock website
+      And I select "Deutsch" from "Choose a language"
       And I check "override_tags"
       And I choose "detect_tags_true"
       And I select "Mature" from "Rating"
@@ -63,6 +70,7 @@ Feature: Import Works
     When I press "Import"
       Then I should see "Preview"
       And I should see "Detected Title"
+      And I should see "Language: Deutsch"
       And I should see "Rating: Mature"
       And I should see "Archive Warning: No Archive Warnings"
       And I should see "Fandom: Idol RPF"
@@ -76,24 +84,26 @@ Feature: Import Works
 
   Scenario: With override and tag detection enabled, both provided and detected tags should be used when not all tags are entered
     When I start importing "http://import-site-with-tags" with a mock website
-    And I check "override_tags"
-    And I choose "detect_tags_true"
-    And I select "Mature" from "Rating"
-    And I check "No Archive Warnings Apply"
-    And I fill in "Characters" with "Adam Lambert, Kris Allen"
-    And I fill in "Additional Tags" with "kinkmeme"
-    And I fill in "Notes at the beginning" with "This is a <i>note</i>"
-    When I press "Import"
+      And I select "Deutsch" from "Choose a language"
+      And I check "override_tags"
+      And I choose "detect_tags_true"
+      And I select "Mature" from "Rating"
+      And I check "No Archive Warnings Apply"
+      And I fill in "Characters" with "Adam Lambert, Kris Allen"
+      And I fill in "Additional Tags" with "kinkmeme"
+      And I fill in "Notes at the beginning" with "This is a <i>note</i>"
+      And I press "Import"
     Then I should see "Preview"
-    And I should see "Detected Title"
-    And I should see "Rating: Mature"
-    And I should see "Archive Warning: No Archive Warnings"
-    And I should see "Fandom: Detected Fandom"
-    And I should see "Relationship: Detected 1/Detected 2"
-    And I should see "Characters: Adam LambertKris Allen"
-    And I should see "Additional Tags: kinkmeme"
-    And I should see "Notes: This is a note"
-    And I should not see "Category: M/M"
+      And I should see "Detected Title"
+      And I should see "Language: Deutsch"
+      And I should see "Rating: Mature"
+      And I should see "Archive Warning: No Archive Warnings"
+      And I should see "Fandom: Detected Fandom"
+      And I should see "Relationship: Detected 1/Detected 2"
+      And I should see "Characters: Adam LambertKris Allen"
+      And I should see "Additional Tags: kinkmeme"
+      And I should see "Notes: This is a note"
+      And I should not see "Category: M/M"
     When I press "Post"
     Then I should see "Work was successfully posted."
 
@@ -102,13 +112,39 @@ Feature: Import Works
       And I check "override_tags"
       And I choose "detect_tags_false"
     When I press "Import"
-      Then I should see "Detected Title"
+    Then I should see "Detected Title"
       And I should see "Rating: Not Rated"
       And I should see "Archive Warning: Creator Chose Not To Use Archive Warnings"
       And I should see "Fandom: No Fandom"
       And I should not see "Relationship:"
       And I should not see "Additional Tags:"
       And I should not see "Relationship: Detected 1/Detected 2"
+
+  Scenario: Admins see IP address on imported works
+    Given I import "http://import-site-with-tags" with a mock website
+      And I press "Post"
+    When I am logged in as an admin
+      And I go to the "Detected Title" work page
+    Then I should see "IP Address: 127.0.0.1"
+
+  Scenario: Admins see IP address on works imported without preview
+    Given I start importing "http://import-site-with-tags" with a mock website
+      And I check "Post without previewing"
+      And I press "Import"
+    When I am logged in as an admin
+      And I go to the "Detected Title" work page
+    Then I should see "IP Address: 127.0.0.1"
+
+  Scenario: Admins see IP address on multi-chapter works imported without preview
+    Given I import the urls with mock websites as chapters without preview
+      """
+      http://import-site-without-tags
+      http://second-import-site-without-tags
+      """
+    When I am logged in as an admin
+      And I go to the "Untitled Imported Work" work page
+    Then I should see "Chapters:2/2"
+      And I should see "IP Address: 127.0.0.1"
 
   Scenario: Importing multiple works with backdating
     When I import the urls
@@ -125,27 +161,27 @@ Feature: Import Works
       And I should see "2010-01-11"
 
   Scenario: Importing a new multichapter work with backdating should have correct chapter index dates
-    Given basic tags
-    And the following activated user exists
-      | login          | password    |
-      | cosomeone      | something   |
-    And I am logged in as "cosomeone" with password "something"
-    And I set my time zone to "UTC"
+    Given basic languages
+      And basic tags
+      And I am logged in
+      And I set my time zone to "UTC"
     When I go to the import page
-    And I fill in "urls" with
-         """
-         http://rebecca2525.dreamwidth.org/3506.html
-         http://rebecca2525.dreamwidth.org/4024.html
-         """
-    And I choose "import_multiple_chapters"
-    When I press "Import"
-      Then I should see "Preview"
+      And I fill in "urls" with
+        """
+        http://rebecca2525.dreamwidth.org/3506.html
+        http://rebecca2525.dreamwidth.org/4024.html
+        """
+      And I choose "Chapters in a single work"
+      And I select "Deutsch" from "Choose a language"
+      And I press "Import"
+    Then I should see "Preview"
     When I press "Post"
-      Then I should see "Published:2000-01-10"
-      Then I should see "Completed:2000-01-22"
+    Then I should see "Language: Deutsch"
+      And I should see "Published:2000-01-10"
+      And I should see "Completed:2000-01-22"
     When I follow "Chapter Index"
-      Then I should see "1. Chapter 1 (2000-01-10)"
-      Then I should see "2. Importing Test Part 2 (2000-01-22)"
+    Then I should see "1. Chapter 1 (2000-01-10)"
+      And I should see "2. Importing Test Part 2 (2000-01-22)"
 
   Scenario: Imported multichapter work should have the correct word count
     Given I import the urls with mock websites as chapters without preview
@@ -208,6 +244,8 @@ Feature: Import Works
       And I should see "Das Maß aller Dinge" within "h2.title"
       And I should see "Ä Ö Ü é è È É ü ö ä ß ñ"
 
+  # TODO: scarvesandcoffee.net is 403.
+  @wip
   Scenario: Import a chaptered work from an efiction site
   When I import "http://www.scarvesandcoffee.net/viewstory.php?sid=9570"
   Then I should see "Preview"
@@ -216,18 +254,13 @@ Feature: Import Works
     And I follow "Next Chapter →"
   Then I should see "Chapter 2"
 
-  Scenario: Imported works should be English language by default
-    When I import "http://www.intimations.org/fanfic/idol/Huddling.html"
-    Then I should see "Preview"
-      And I should see "English"
-
   Scenario: Searching for an imported work by URL will redirect you to the work
-    When I import "http://www.scarvesandcoffee.net/viewstory.php?sid=9570"
+    When I import "http://import-site-with-tags" with a mock website
       And I press "Post"
       And I go to the redirect page
-      And I fill in "Original URL of work" with "http://www.scarvesandcoffee.net/viewstory.php?sid=9570"
+      And I fill in "Original URL of work" with "http://import-site-with-tags"
       And I press "Go"
-    Then I should see "This is what Blaine's been thinking written in poems."
+    Then I should see "Detected Title"
 
   Scenario: Import URLs as chapters of a single work and post from drafts page
     Given I import the urls with mock websites as chapters

@@ -1,10 +1,11 @@
-# modifying to_text_area_tag and text_area_tag to strip paragraph/br tags and convert them back into newlines for editing purposes
+# frozen_string_literal: true
+
+# modifying to_text_area_tag and text_area_tag to strip paragraph/br tags
+# and convert them back into newlines for editing purposes
 module ActionView
   module Helpers
     module Tags
-
       class TextArea
-
         # added method to yank <p> and <br> tags and replace with newlines
         # this needs to reverse "add_paragraph_tags_to_text" from our html_cleaner library
         def strip_html_breaks(content, name="")
@@ -38,30 +39,11 @@ module ActionView
             options["cols"], options["rows"] = size.split("x") if size.respond_to?(:split)
           end
 
-          content = options.delete("value") { value_before_type_cast(object) }
+          content = options.delete("value") { value_before_type_cast }
           content = strip_html_breaks(content, options['name'])
 
           content_tag("textarea", content, options)
         end
-
-        # Deprecated in Rails 4
-        # def text_area_tag_with_html_breaks(name, content = nil, options = {})
-        #   options.stringify_keys!
-        #
-        #   if size = options.delete("size")
-        #     options["cols"], options["rows"] = size.split("x") if size.respond_to?(:split)
-        #   end
-        #
-        #   content = strip_html_breaks(content, name) # ADDED
-        #
-        #   escape = options.key?("escape") ? options.delete("escape") : true
-        #   content = ERB::Util.html_escape(content) if escape
-        #
-        #   binding.pry
-        #   content_tag :textarea, content.to_s.html_safe, { "name" => name, "id" => sanitize_to_id(name) }.update(options)
-        # end
-        #
-        # alias_method_chain :text_area_tag, :html_breaks
       end
     end
   end

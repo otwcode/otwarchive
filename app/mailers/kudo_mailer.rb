@@ -1,6 +1,4 @@
 class KudoMailer < ActionMailer::Base
-  include Resque::Mailer # see README in this directory
-
   layout 'mailer'
   helper :mailer
   default from: "Archive of Our Own " + "<#{ArchiveConfig.RETURN_ADDRESS}>"
@@ -46,8 +44,6 @@ class KudoMailer < ActionMailer::Base
         subject: t('mailer.kudos.you_have', app_name: ArchiveConfig.APP_SHORT_NAME)
       )
     end
-    ensure
-      I18n.locale = I18n.default_locale
   end
 
   def guest_kudos(guest_count)

@@ -21,6 +21,7 @@ Feature: Basic collection navigation
     And I fill in "Fandoms" with "New Fandom"
     And I fill in "Additional Tags" with "Free"
     And I fill in "Work Title" with "Work for my collection"
+    And I select "English" from "Choose a language"
     And I fill in "content" with "First because I'm the mod"
     And I fill in "Post to Collections / Challenges" with "my_collection"
     And I press "Preview"

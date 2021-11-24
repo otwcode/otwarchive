@@ -1,0 +1,303 @@
+---
+pl:
+  mailer:
+    general:
+      footer:
+        general:
+          html:
+            donate_link_text: Waszym darowiznom
+            part1: Jeśli ta wiadomość została wysłana do Ciebie przez pomyłkę, prosimy
+              o %{support_link}.
+            part2: AO3 jest prowadzonym i wspieranym przez fanów archiwum, które działa
+              dzięki %{donate_link}.
+            support_link_text: kontakt ze Wsparciem
+          text:
+            part1: Jeśli ta wiadomość została wysłana do Ciebie przez pomyłkę, prosimy
+              o kontakt ze Wsparciem poprzez %{support_url}.
+            part2: 'AO3 jest prowadzonym i wspieranym przez fanów archiwum, które
+              działa dzięki waszym darowiznom: %{donate_url}.'
+        sent_at: Wysłano o %{sent_at}.
+      signature:
+        app_short_name: AO3
+    kudos:
+      guest:
+        few: "%{count} gości"
+        many: "%{count} gości"
+        one: 1 gościa
+        other: "%{count} gości"
+      html:
+        left_kudos:
+          few: Kudos dla <i>%{commentable_link}</i> od %{givers_list}.
+          many: Kudos dla <i>%{commentable_link}</i> od %{givers_list}.
+          one: Kudos dla <i>%{commentable_link}</i> od %{givers_list}.
+          other: Kudos dla <i>%{commentable_link}</i> od %{givers_list}.
+      text:
+        left_kudos:
+          few: Kudos dla %{commentable_link} od %{givers_list}.
+          many: Kudos dla %{commentable_link} od %{givers_list}.
+          one: Kudos dla %{commentable_link} od %{givers_list}.
+          other: Kudos dla %{commentable_link} od %{givers_list}.
+      you_have: "[%{app_name}] Masz kudos!"
+  user_mailer:
+    abuse_report:
+      description_para: 'Opis nadużycia:'
+      para1: 'Poniższy raport został wysłany do zespołu Nadużyć:'
+      subject: "[%{app_name}] Twój Raport Nadużyć"
+      url_para: 'URL strony, na której doszło do nadużycia:'
+    admin_deleted_work_notification:
+      abuse_committee: skontaktuj się z naszą Komisją ds. Zasad i Nadużyć
+      bye: Dołączamy kopię Twojej pracy, abyś mogła/mógł się do niej odnieść.
+      hello: Droga/i %{user},
+      html:
+        part1: Twoja praca %{title} została usunięta z Archiwum przez administratora
+          strony.
+        part2: Jeśli Twoja praca była częścią projektu importu zarządzanego przez
+          naszą grupę Open Doors (Drzwi Otwartych), prosimy o %{opendoors_link} w
+          razie dalszych pytań.
+        part3: Jeśli podejrzewasz, że Twoja twórczość mogła złamać Regulamin Serwisu
+          AO3, prosimy, %{abuse_link}.
+      opendoors: skontaktowanie się z Drzwiami Otwartymi
+      subject: "[%{app_name}] Twoja praca została usunięta przez administratora"
+      text:
+        part1: Twoja praca "%{title}" została usunięta z Archiwum przez administratora
+          strony.
+        part2: Jeśli Twoja praca była częścią projektu importu zarządzanego przez
+          naszą grupę Drzwi Otwartych, prosimy o skontaktowanie się z Drzwiami Otwartymi
+          (%{opendoors_link}) w razie dalszych pytań.
+        part3: Jeśli podejrzewasz, że Twoja twórczość mogła złamać Regulamin Serwisu
+          AO3, prosimy, skontaktuj się z naszą Komisją ds. Zasad i Nadużyć (%{abuse_link}).
+    challenge_assignment_notification:
+      any: Pełna dowolność
+      description: 'Opis:'
+      due: 'To zadanie należy wykonać do:'
+      html:
+        footer: Otrzymałaś/eś ten e-mail ponieważ zapisałaś/eś się do wyzwania %{title}.
+          Aby dowiedzieć się więcej na temat tego wyzwania i by móc skontaktować się
+          z moderatorami, proszę przejdź do  %{footer_link}.
+        footer_link: strony profilowej wyzwania
+        look_up: Możesz sprawdzić swoje zadanie na %{link}.
+        look_up_link: twojej stronie Assignments (Zadań)
+        part1: Przypisane zostało Ci następujące zadanie w wyzwaniu %{link} na Naszym
+          Własnym Archiwum!
+      optional_tags: 'Opcjonalne Tagi:'
+      prompts: 'Prompty:'
+      prompt_url: 'URL promptu:'
+      recipient: 'Odbiorca:'
+      recipient_missing: 'Brak: skontaktuj się z moderatorem aby uzyskać pomoc!'
+      subject: "[%{app_name}][%{collection_title}] Twoje Zadanie!"
+      text:
+        footer: Otrzymałaś/eś ten e-mail ponieważ zapisałaś/eś się do wyzwania %{title}
+          (%{url}). Aby dowiedzieć się więcej na temat tego wyzwania i by móc skontaktować
+          się z moderatorami, proszę przejdź do %{profile_url}.
+        look_up: Możesz sprawdzić to zadanie na twojej stronie Assignments (Zadań)
+          na %{link}.
+        part1: Przypisane zostało Ci następujące zadanie w wyzwaniu %{collection_title}
+          (%{collection_url}) na Naszym Własnym Archiwum!
+    change_email:
+      part1: "%{login}, adres email powiązany z Twoim kontem został zmieniony na %{email}"
+      subject: "[%{app_name}] Email został zmieniony"
+    creatorship_notification:
+      explanation: Gdy jesteś współtwórcą pracy, możesz zostać dodana/y do nowych
+        rozdziałów bez względu na Twoje ustawienia współtworzenia. Będziesz również
+        dodana/y do wszelkich serii, do których dodana jest praca
+      html:
+        creation: "%{creation_link} autorstwa %{pseud_links}"
+        edit: edytuj %{type}
+        remove: Jeśli dodano cię przez pomyłkę, lub nie chcesz widnieć jako współtwórca,
+          możesz %{edit} by usunąć siebie jako twórcę.
+      intro: 'Użytkownik %{adding_user} dodał twój pseudonim %{pseud} jako współtwórcę
+        następującej zawartości (%{type}):
+
+        '
+      subject: "[%{app_name}] Powiadomienie o Współautorstwie"
+      text:
+        creation: "%{title} (%{url}) autorstwa %{pseuds}"
+        remove: 'Jeśli dodano Cię przez pomyłkę, lub nie chcesz widnieć jako współtwórca,
+          możesz edytować %{type} by usunąć siebie jako twórcę: %{url}'
+    creatorship_notification_archivist:
+      explanation: Ponieważ działa w zakresie swoich oficjalnych uprawnień archiwisty
+        Drzwi Otwartych, może dodać Cię bez zaproszenia, nawet jeśli masz wyłączone
+        współtworzenie.
+      html:
+        creation: "%{creation_link} autorstwa %{pseud_links}"
+        edit: edytować zawartość (%{type})
+        remove: Jeśli zostałaś/eś dodana/y przez przypadek lub nie chcesz być wymieniona/y
+          jako twórca, możesz %{edit} aby usunąć siebie jako twórcę.
+      intro: 'Użytkownik %{archivist} dodał Twój pseudonim %{pseud} jako współtwórcę
+        poniższej zawartości (%{type}):'
+      subject: "[%{app_name}] Powiadomienie od archiwisty o współtworzeniu"
+      text:
+        creation: "%{title} (%{url}) autorstwa %{pseuds}"
+        remove: 'Jeśli zostałaś/eś dodana/y przez przypadek lub nie chcesz być wymieniona/y
+          jako twórca, możesz edytować tą zawartość (%{type}) aby usunąć siebie jako
+          twórcę: %{url}'
+    delete_work_notification:
+      hello: Droga/i %{user},
+      html:
+        part1_other: Wasza wspólna praca %{title} została usunięta na wniosek %{pseud}.
+        part1_yourself: Twoja praca %{title} została usunięta na Twój wniosek.
+        part2: Jeśli masz jakiekolwiek pytania, prosimy %{support}.
+      part3: Dołączamy do wglądu kopię Twojej pracy.
+      subject: "[%{app_name}] Twoja praca została usunięta"
+      support: skontaktuj się ze Wsparciem
+      text:
+        part1_other: Wasza wspólna praca "%{title}" została usunięta na wniosek %{pseud}.
+        part1_yourself: Twoja praca "%{title}" została usunięta na Twój wniosek.
+        part2: Jeśli masz jakiekolwiek pytania, prosimy %{support} (%{url}).
+    invitation_to_claim:
+      greeting: Witamy z %{app_name}!
+      html:
+        ao3_news: Aktualnościach AO3
+        contact_open_doors: skontaktowanie się z Drzwiami Otwartymi
+        contact_support: skontaktuj się ze Wsparciem AO3
+        faq_page: stronie FAQ
+        open_doors: Drzwi Otwarte
+        part1: Otrzymałaś/eś tego e-maila, ponieważ %{open_doors_link} niedawno  dokonały
+          importu archiwum do %{app_link} (%{app_short_name}), i wierzymy, że poniższe
+          prace należą do Ciebie. Chcielibyśmy dać Ci szansę przejęcia (lub usunięcia/osierocenia)
+          tych prac, jeśli sobie tego zażyczysz. A jeśli nie posiadasz jeszcze konta
+          pod innym adresem e-mail, chcielibyśmy zaprosić Cię na pokład!
+        part10: Jeśli na zaimportowanym archiwum posiadasz inne prace, przypisane
+          do adresu e-mail, do którego nie masz już dostępu, prosimy o %{open_doors_link}
+          i podanie jakichkolwiek informacji, mogących pomóc w potwierdzeniu Twoich
+          roszczeń.
+        part11: W razie dalszych wątpliwości, prosimy %{support_link}.
+        part13: Z najlepszymi życzeniami,
+        part14: Drużyna Drzwi Otwartych
+        part15: Organizacja na rzecz Twórczości Przeobrażonej
+        part2: Ogłoszenia o ostatnich działaniach możesz przeczytać w %{news_link},
+          a więcej informacji znajdziesz na %{open_doors_faq_link} oraz %{open_doors_tutorial_link}
+          Drzwi Otwartych. W razie pytań, na które nie znalazłaś/eś odpowiedzi w FAQ,
+          samouczku ani tym e-mailu, prosimy %{support_link}.
+        part3: Jeśli nastąpiła pomyłka i poniższe prace nie należą do Ciebie, nie
+          usuwaj ich! Prosimy o %{open_doors_link}, a my wszystko uporządkujemy.
+        part4: W zależności od archiwum, Twoje prace mogły zostać zaimportowane z
+          ograniczeniem dostępności wyłącznie do zarejestrowanych użytkowników (aby
+          utrzymać je poza zasięgiem wyszukiwania w Google). W takim wypadku prace
+          będą osiągalne tylko dla zalogowanych użytkowników, o ile nie zdecydujesz
+          się uczynić je ogólnodostępnymi. Aby uzyskać pomoc w odblokowaniu, osieroceniu
+          bądź usunięciu Twoich prac, prosimy %{support_link}.
+        part5: Tutaj przejmij lub usuń swoje prace.
+        part7: Jeśli powyższe prace należą do Ciebie, ale nie chcesz ich przejąć,
+          możesz je osierocić (wówczas pozostaną one dostępne na AO3, lecz Twój pseudonim
+          zostania z nich usunięty) lub skasować (by zostały całkowicie usunięte z
+          AO3). Aby usunąć lub osierocić prace nie musisz dodawać ich do żadnego konta
+          - możesz zrobić to bezpośrednio z powyższego linku do przejęcia. (Żeby uzyskać
+          wsparcie, prosimy %{support_link}.)
+        part9: Jeśli wolisz, żeby Drzwi Otwarte zaktualizowały link przekierowujący
+          tak, aby prowadził do już istniejącej pracy, prosimy o usunięcie zaimportowanej
+          kopii i %{open_doors_link}, podając nazwę swojego konta AO3, nazwę konta
+          na importowanym archiwum, oraz tytuł i URL pracy, do której ma prowadzić
+          link. (Jeśli dotyczy to kilku prac, możesz wyliczyć je wszystkie w jednej
+          wiadomości).
+        tutorial_page: stronie samouczka
+      part12: W razie kontaktowania się z nami, prosimy o dodanie adresów mailowych
+        zawierających @transformativeworks.org do listy zaufanych nadawców oraz o
+        sprawdzenie, czy nasza odpowiedź nie znajduje się w folderze spam.
+      part6: 'W zamieszczonych pracach znalazły się:'
+      part8: Aby zachować listy z rekomendacjami oraz zakładki, adres internetowy
+        zaimportowanego archiwum może przez jakiś czas jeszcze przekierowywać do zaimportowanej
+        kopii (dla pewności, sprawdź post z ogłoszeniem dotyczącym Twojego archiwum).
+        Jeśli już zamieściłaś/eś kopie tych prac i NIE użyłaś/eś funkcji importowania
+        z URL, na archiwum znajdą się dwie kopie tej samej pracy.
+      subject: "[%{app_name}] Zaproszenie do przejęcia prac"
+      text:
+        part1: Otrzymałaś/eś tego e-maila z ponieważ Drzwi Otwarte (%{open_doors_link})
+          niedawno  dokonały importu archiwum do %{app_name} (%{app_short_name} -
+          %{app_url}), i wierzymy, że poniższe prace należą do Ciebie. Chcielibyśmy
+          dać Ci szansę przejęcia (lub usunięcia/osierocenia) tych prac, jeśli sobie
+          tego zażyczysz. A jeśli nie posiadasz jeszcze konta pod innym adresem e-mail,
+          chcielibyśmy zaprosić Cię na pokład!
+        part10: Jeśli na zaimportowanym archiwum posiadasz inne prace, przypisane
+          do adresu e-mail, do którego nie masz już dostępu, prosimy o skontaktowanie
+          się z Drzwiami Otwartymi i podanie jakichkolwiek informacji, mogących pomóc
+          w potwierdzeniu Twoich roszczeń.
+        part11: W razie dalszych wątpliwości, prosimy skontaktuj się ze Wsparciem
+          AO3 przez stronę %{support_link}.
+        part13: |-
+          Z najlepszymi życzeniami,
+          Drużyna Drzwi Otwartych
+          Organizacja na rzecz Twórczości Przeobrażonej
+        part2: Ogłoszenia o ostatnich działaniach możesz przeczytać w Aktualnościach
+          AO3 (%{news_link}), a więcej informacji znajdziesz na stronie FAQ Drzwi
+          Otwartych (%{open_doors_faq_link}) oraz stronach samouczka (%{open_doors_tutorial_link}).
+          W przypadku pytań, na które nie znalazłaś/eś odpowiedzi w FAQ, samouczku
+          ani tym e-mailu, prosimy skontaktuj się ze Wsparciem poprzez stronę %{support_link}.
+        part3: Jeśli nastąpiła pomyłka i poniższe prace nie należą do Ciebie, nie
+          usuwaj ich! Prosimy o skontaktowanie się z Drzwiami Otwartymi (%{open_doors_link}),
+          a my wszystko uporządkujemy.
+        part4: W zależności od archiwum, Twoje prace mogły zostać zaimportowane z
+          ograniczeniem dostępności wyłącznie do zarejestrowanych użytkowników (aby
+          utrzymać je poza zasięgiem wyszukiwania w Google). W takim wypadku prace
+          będą osiągalne tylko dla zalogowanych użytkowników, o ile nie zdecydujesz
+          się uczynić je ogólnodostępnymi. Aby uzyskać pomoc w odblokowaniu, osieroceniu
+          bądź usunięciu Twoich prac, prosimy skontaktuj się ze Wsparciem AO3.
+        part5: 'Tutaj przejmij lub usuń swoje prace: %{claim_url}'
+        part7: Jeśli powyższe prace należą do Ciebie, ale nie chcesz ich przejąć,
+          możesz je osierocić (wówczas pozostaną one dostępne na AO3, lecz Twój pseudonim
+          zostania z nich usunięty) lub skasować (by zostały całkowicie usunięte z
+          AO3). Aby usunąć lub osierocić prace nie musisz dodawać ich do żadnego konta
+          - możesz zrobić to bezpośrednio z powyższego linku do przejęcia. (Żeby uzyskać
+          wsparcie, prosimy skontaktuj się ze Wsparciem poprzez stronę %{support_link}.)
+        part9: Jeśli wolisz, żeby Drzwi Otwarte zaktualizowały link przekierowujący
+          tak, aby prowadził do już istniejącej pracy, prosimy o usunięcie zaimportowanej
+          kopii i skontaktowanie się z Drzwiami Otwartymi przez stronę %{open_doors_link},
+          podając nazwę swojego konta AO3, nazwę konta na importowanym archiwum, oraz
+          tytuł i URL pracy, do której ma prowadzić link. (Jeśli dotyczy to kilku
+          prac, możesz wyliczyć je wszystkie w jednej wiadomości).
+    invite_increase_notification:
+      body:
+        few: Masz %{count} nowe zaproszenia, które mogą być użyte do stworzenia nowych
+          kont na AO3. Możesz zaprosić kogoś przez %{invitation_page}.
+        many: Masz %{count} nowych zaproszeń, które mogą być użyte do stworzenia nowych
+          kont na AO3. Możesz zaprosić kogoś przez %{invitation_page}.
+        one: Masz %{count} nowe zaproszenie, które może być użyte do stworzenia nowego
+          konta na AO3. Możesz zaprosić kogoś przez %{invitation_page}.
+      closing: Pozdrawiamy,
+      greeting: Cześć %{login}!
+      invitation_page_link_text: swoją stronę z zaproszeniami
+      subject: "[%{app_name}] Nowe zaproszenia"
+    invite_request_declined:
+      greeting: Droga/Drogi %{user},
+      main:
+        few: Z przykrością informujemy, że Twoja prośba o %{count} nowe zaproszenia
+          w chwili obecnej nie może zostać zrealizowana.
+        many: Z przykrością informujemy, że Twoja prośba o %{count} nowych zaproszeń
+          w chwili obecnej nie może zostać zrealizowana.
+        one: Z przykrością informujemy, że Twoja prośba o nowe zaproszenie w chwili
+          obecnej nie może zostać zrealizowana.
+      reason: 'Treść Twojej prośby:'
+      signoff: Pozdrawiamy,
+      subject: "[%{app_name}] Prośba o dodatkowe zaproszenia została odrzucona"
+    signup_notification:
+      activate_your_account: aktywuj swoje konto
+      admin_posts: archiwalnych postach adminów
+      bye: Mamy nadzieję, że jesteś zadowolona/y z Archiwum.
+      contact_support: skontaktuj się z naszym zespołem Wsparcia
+      faq: FAQ
+      html:
+        part1: Prosimy, %{activate_account_link}.
+        part2: Kiedy twoje konto będzie już działać, możesz publikować swoje prace,
+          ustawić subskrypcje, by dostawać powiadomienia mailowe, kiedy twój/a ulubiony
+          autor/ka coś opublikuje lub ulubione prace zostaną zaktualizowane, ustawić
+          preferencje, by spersonalizować wygląd strony i to jak działa ona dla ciebie,
+          śledzić prace czytane w Archiwum za pomocą historii oraz wiele innych.
+        part3: Możesz znaleźć wiele informacji i rad na temat używania Archiwum w
+          naszym %{faq_link}. Najnowsze wiadomości o rozwoju strony znajdziesz w naszych
+          %{admin_posts_link}. Jeśli potrzebujesz pomocy, natkniesz się na bugi lub
+          masz inne pytania lub komentarze, prosimy  %{contact_support_link}, który
+          jest zawsze chętny do pomocy.
+      subject: "[%{app_name}] Potwierdzenie"
+      text:
+        part1: 'Prosimy o aktywację konta: %{activate_account_url}'
+        part2: Kiedy twoje konto będzie już działać, możesz publikować swoje prace,
+          ustawić subskrybcje, by dostać powiadomienie mailowe, kiedy twój/a ulubiony
+          autor/ka coś opublikuje lub ulubione prace zostaną zaktualizowane, ustawić
+          preferencje, by spersonalizować wygląd strony i to jak działa ona dla ciebie,
+          śledzić prace czytane w Archiwum za pomocą historii oraz wiele innych.
+        part3: Możesz znaleźć wiele informacji i rad na temat używania Archiwum w
+          naszym %{faq_url}. Najnowsze wiadomości o rozwoju strony znajdziesz w naszych
+          %{admin_posts_url}. Jeśli potrzebujesz pomocy, natkniesz się na bugi lub
+          masz inne pytania lub komentarze, prosimy  %{contact_support_url}, którzy
+          są zawsze chętni do pomocy.
+      welcome: Witaj w Naszym Własnym Archiwum, %{login}!

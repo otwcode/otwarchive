@@ -24,7 +24,7 @@
       <%= byline(work, visibility: "public") %>
 
 <% #### CACHE show/hide ####, if you update the key edit lib/tasks/memcached.rake %>
-<% cache("#{work.cache_key}-#{Work.work_blurb_tag_cache(work.id)}-#{hide_warnings?(work) ? 'nowarn' : 'showwarn'}-#{hide_freeform?(work)  ? 'nofreeform' : 'showfreeform'}-v7", skip_digest: true) do %>
+<% cache("#{work.cache_key}-#{Work.work_blurb_version(work.id)}-#{hide_warnings?(work) ? 'nowarn' : 'showwarn'}-#{hide_freeform?(work)  ? 'nofreeform' : 'showfreeform'}-v8", skip_digest: true) do %>
 
       <% tag_groups = work.tag_groups %>
 
@@ -85,13 +85,13 @@
     <dt class="words"><%= ts('Words') %>:</dt>
     <dd class="words"><%= number_with_delimiter(work.word_count) %></dd>
     <dt class="chapters"><%= ts('Chapters') %>:</dt>
-    <dd class="chapters"><%= work.chapter_total_display %></dd>
+    <dd class="chapters"><%= chapter_total_display_with_link(work) %></dd>
 
 <% end %>
 <% #### END CACHE show/hide %>
 
-<% #### CACHE stats #### %>
-<% cache("#{work.cache_key}/stats", :expires_in => 1.hour, skip_digest: true) do %>
+<% #### CACHE stats ####, if you update the key edit features/step_definitions/work_search_steps.rb %>
+<% cache("#{work.cache_key}/stats-v2", expires_in: 1.hour, skip_digest: true) do %>
   <% unless work.approved_collections.empty? %>
     <dt class="collections"><%= ts('Collections') %>:</dt>
     <dd class="collections"><%= link_to work.approved_collections.length, work_collections_path(work) %></dd>
@@ -99,25 +99,21 @@
 
   <% if work.count_visible_comments > 0 %>
     <dt class="comments"><%= ts('Comments') %>:</dt>
-    <dd class="comments"><%= link_to work.count_visible_comments,
-                (@collection && false) ? collection_work_path(@collection, work, :anchor => "comments", :show_comments => true) : (work.chapter_total_display.to_i > 1 ? work_path(work, :anchor => "comments", :show_comments => true, :view_full_work => 'true') : work_path(work, :anchor => "comments", :show_comments => true)) %></dd>
+    <dd class="comments"><%= link_to work.count_visible_comments, work.chapter_total_display.to_i > 1 ? work_path(work, anchor: "comments", show_comments: true, view_full_work: "true") : work_path(work, anchor: "comments", show_comments: true) %></dd>
   <% end %>
+
   <% if work.all_kudos_count > 0 %>
     <dt class="kudos"><%= ts('Kudos') %>:</dt>
-    <dd class="kudos"><%= link_to work.all_kudos_count.to_s,
-        (@collection && false) ? collection_work_path(@collection, work, :anchor => "comments") : 
-          (work.chapter_total_display.to_i > 1 ? work_path(work, :anchor => "comments", :view_full_work => 'true') : 
-            work_path(work, :anchor => "comments")) %></dd>
+    <dd class="kudos"><%= link_to work.all_kudos_count.to_s, work.chapter_total_display.to_i > 1 ? work_path(work, anchor: "kudos", view_full_work: "true") : work_path(work, anchor: "kudos") %></dd>
+
   <% end %>
   <% if (bookmark_count = work.public_bookmarks_count) > 0 %>
     <dt class="bookmarks"><%= ts('Bookmarks') %>:</dt>
     <dd class="bookmarks"><%= link_to_bookmarkable_bookmarks(work, bookmark_count.to_s) %></dd>
   <% end %>
 
-  <% if show_hit_count_to_public?(work) %>
-    <dt class="hits"><%= ts("Hits") %>:</dt>
-    <dd class="hits"><%= work.hits %></dd>
-  <% end %>
+  <dt class="hits"><%= ts("Hits") %>:</dt>
+  <dd class="hits"><%= work.hits %></dd>
 <% end %>
 <% #### END CACHE stats #### %>
 

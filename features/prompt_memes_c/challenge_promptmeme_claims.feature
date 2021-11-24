@@ -418,12 +418,16 @@ Feature: Prompt Meme Challenge
       And I fill in "Sign-up opens:" with "2010-09-20 12:40AM"
       And I fill in "Sign-up closes:" with "2010-09-22 12:40AM"
       And I submit
-      And I should see "If sign-ups are open, sign-up close date cannot be in the past."
-    Then I fill in "Sign-up opens:" with "2022-09-20 12:40AM"
+    Then I should see "If sign-ups are open, sign-up close date cannot be in the past."
+    When I fill in "Sign-up opens:" with "2022-09-20 12:40AM"
       And I fill in "Sign-up closes:" with "2010-09-22 12:40AM"
       And I submit
-      And I should see "If sign-ups are open, sign-up open date cannot be in the future."
-    Then I fill in "Sign-up opens:" with "2010-09-22 12:40AM"
+    Then I should see "If sign-ups are open, sign-up open date cannot be in the future."
+    When I fill in "Sign-up opens:" with "2010-09-22 12:40AM"
       And I fill in "Sign-up closes:" with "2010-09-20 12:40AM"
       And I submit
-      And I should see "Close date cannot be before open date."
+    Then I should see "Close date cannot be before open date."
+    When I fill in "Sign-up opens:" with ""
+      And I use tomorrow as the "Sign-up closes" date
+      And I submit
+    Then I should see "Challenge was successfully created."

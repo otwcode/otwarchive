@@ -4,6 +4,12 @@ class AdminPost < ApplicationRecord
   self.per_page = 8 # option for WillPaginate
 
   acts_as_commentable
+  enum comment_permissions: {
+    enable_all: 0,
+    disable_anon: 1,
+    disable_all: 2
+  }, _suffix: :comments
+
   belongs_to :language
   belongs_to :translated_post, class_name: 'AdminPost'
   has_many :translations, class_name: 'AdminPost', foreign_key: 'translated_post_id'
@@ -32,7 +38,8 @@ class AdminPost < ApplicationRecord
 
   scope :for_homepage, -> { order("created_at DESC").limit(ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_ON_HOMEPAGE) }
 
-  after_save :expire_cached_home_admin_posts
+  before_save :inherit_translated_post_comment_permissions
+  after_save :expire_cached_home_admin_posts, :update_translation_comment_permissions
   after_destroy :expire_cached_home_admin_posts
 
   # Return the name to link comments to for this object
@@ -68,6 +75,23 @@ class AdminPost < ApplicationRecord
   def expire_cached_home_admin_posts
     unless Rails.env.development?
       Rails.cache.delete("home/index/home_admin_posts")
+    end
+  end
+
+  def inherit_translated_post_comment_permissions
+    return if translated_post.blank?
+
+    self.comment_permissions = translated_post.comment_permissions
+  end
+
+  def update_translation_comment_permissions
+    return if translations.blank?
+
+    transaction do
+      translations.find_each do |post|
+        post.comment_permissions = self.comment_permissions
+        post.save
+      end
     end
   end
 end

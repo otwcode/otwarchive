@@ -38,7 +38,7 @@ describe ChallengeAssignment do
         # Setting challenge_assignment_ids only works if the authors are saved,
         # or the current user owns the assignment in question.
         User.current_user = @author.user
-        @work = create(:work, authors: [@author], posted: false, collection_names: @collection.name, challenge_assignment_ids: [@assignment.id])
+        @work = create(:draft, authors: [@author], collection_names: @collection.name, challenge_assignment_ids: [@assignment.id])
 
         @assignment.reload
       end

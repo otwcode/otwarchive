@@ -1,13 +1,13 @@
 require "spec_helper"
 
-describe PseudSearchForm do
+describe PseudSearchForm, pseud_search: true do
   context "searching pseuds in a fandom" do
     let(:fandom_kp) { create(:canonical_fandom) }
     let(:fandom_mlaatr) { create(:canonical_fandom) }
-    let!(:work_1) { create(:posted_work, fandoms: [fandom_kp]) }
-    let!(:work_2) { create(:posted_work, fandoms: [fandom_kp], restricted: true) }
-    let!(:work_3) { create(:posted_work, fandoms: [fandom_mlaatr]) }
-    let!(:work_4) { create(:posted_work, fandoms: [fandom_mlaatr], restricted: true) }
+    let!(:work_1) { create(:work, fandoms: [fandom_kp]) }
+    let!(:work_2) { create(:work, fandoms: [fandom_kp], restricted: true) }
+    let!(:work_3) { create(:work, fandoms: [fandom_mlaatr]) }
+    let!(:work_4) { create(:work, fandoms: [fandom_mlaatr], restricted: true) }
 
     before { run_all_indexing_jobs }
 
@@ -34,9 +34,9 @@ describe PseudSearchForm do
     let(:fandom_mlaatr) { create(:canonical_fandom) }
     let(:user) { create(:user) }
 
-    let!(:work_1) { create(:posted_work, fandoms: [fandom_kp, fandom_mlaatr]) }
-    let!(:work_2) { create(:posted_work, fandoms: [fandom_kp], authors: [user.default_pseud]) }
-    let!(:work_3) { create(:posted_work, fandoms: [fandom_mlaatr], authors: [user.default_pseud], restricted: true) }
+    let!(:work_1) { create(:work, fandoms: [fandom_kp, fandom_mlaatr]) }
+    let!(:work_2) { create(:work, fandoms: [fandom_kp], authors: [user.default_pseud]) }
+    let!(:work_3) { create(:work, fandoms: [fandom_mlaatr], authors: [user.default_pseud], restricted: true) }
 
     before { run_all_indexing_jobs }
 
@@ -85,7 +85,7 @@ describe PseudSearchForm do
     let(:bookmarker) { create(:pseud, name: "bookmarkermit") }
 
     it "updates when bookmarked work changes restricted status" do
-      work = create(:posted_work)
+      work = create(:work)
       expect(work.restricted).to be_falsy
 
       bookmark = create(:bookmark, bookmarkable_id: work.id, pseud: bookmarker)
@@ -145,7 +145,7 @@ describe PseudSearchForm do
     end
 
     {
-      Work: :posted_work,
+      Work: :work,
       Series: :series_with_a_work,
       ExternalWork: :external_work
     }.each_pair do |type, factory|

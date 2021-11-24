@@ -16,16 +16,16 @@
 <% end %>
 <% if @work.user_has_creator_invite?(current_user) %>
   <p class="notice">
-    <%= ts("You've been invited to become a co-creator of this work. To accept or reject the invitation, visit your %{creator_invitations_page}.",
-           creator_invitations_page: link_to(ts("Creator Invitations page"), user_creatorships_path(current_user))).html_safe %>
+    <%= ts("You've been invited to become a co-creator of this work. To accept or reject the request, visit your %{creator_requests_page}.",
+           creator_requests_page: link_to(ts("Co-Creator Requests page"), user_creatorships_path(current_user))).html_safe %>
   </p>
 <% end %>
 
 <!--/descriptions-->
 
 <!--subnav-->
-<% if logged_in_as_admin? %>
-  <%= render :partial => 'admin/admin_options', :locals => {:item => @work} %>
+<% if can_access_admin_options? %>
+  <%= render "admin/admin_options", item: @work %>
 <% end %>
 <!--/subnav-->
 
@@ -33,10 +33,7 @@
 <% if !@work.unrevealed? || logged_in_as_admin? || @work.user_is_owner_or_invited?(current_user) || can_see_work(@work, current_user) %>
 <!-- BEGIN work -->
 <!--work description, metadata, notes and messages-->
-  <%= render :partial => 'works/work_header' %>
-  <% if logged_in_as_admin? %>
-    <%= render :partial => 'admin/admin_options', :locals => {:item => @work} %>
-  <% end %>
+  <%= render partial: 'works/work_header' %>
 <!--/descriptions-->
 
 <!--chapter content-->
@@ -80,3 +77,5 @@
 <!-- END comment section -->
 <% end %>
 <!-- END revealed -->
+
+<%= render "hit_count/include" %>

@@ -13,13 +13,14 @@ module Collectible
                after_add: :set_visibility,
                after_remove: :set_visibility,
                before_remove: :destroy_collection_item
-      has_many :approved_collections, -> { Collection.approved },
-               through: :collection_items,
+      has_many :approved_collections,
+               through: :approved_collection_items,
                source: :collection
-      has_many :user_approved_collections, -> { Collection.user_approved },
-               through: :collection_items,
+      has_many :user_approved_collections,
+               through: :user_approved_collection_items,
                source: :collection
-      has_many :rejected_collections, -> { Collection.rejected },
+      has_many :rejected_collections,
+               -> { CollectionItem.rejected_by_user },
                through: :collection_items,
                source: :collection
 

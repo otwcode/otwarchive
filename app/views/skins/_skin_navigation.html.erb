@@ -4,7 +4,7 @@
 <h3 class="landmark heading"><%= ts('Navigation') %></h3>
 <ul class="navigation actions" role="navigation">
 
-  <% if session[:site_skin] || (logged_in? && current_user.preference.skin_id != Skin.default.id) %>
+  <% if session[:site_skin] || (logged_in? && current_user.preference.skin_id != AdminSetting.default_skin_id) %>
     <li><%= render "revert_skin_form" %></li>
   <% end %>
 

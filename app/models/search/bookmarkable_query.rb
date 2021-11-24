@@ -46,7 +46,6 @@ class BookmarkableQuery < Query
 
     $elasticsearch.search(
       index: index_name,
-      type: document_type,
       body: modified_query
     )["aggregations"]
   end
@@ -101,7 +100,7 @@ class BookmarkableQuery < Query
     if sort_column == "bookmarkable_date"
       { revised_at: { order: sort_direction, unmapped_type: "date" } }
     else
-      { "_score" => { order: sort_direction } }
+      { _score: { order: sort_direction } }
     end
   end
 
@@ -219,7 +218,7 @@ class BookmarkableQuery < Query
   end
 
   def language_filter
-    term_filter(:language_id, options[:language_id]) if options[:language_id].present?
+    term_filter(:"language_id.keyword", options[:language_id]) if options[:language_id].present?
   end
 
   def filter_id_filter
