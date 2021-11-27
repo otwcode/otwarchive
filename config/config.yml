@@ -40,7 +40,7 @@ SMTP_SERVER: localhost
 SMTP_PORT: 25
 SMTP_DOMAIN: localhost
 SMTP_OPENSSL_VERIFY_MODE: none
-SMTP_ENABLE_STARTTTLS_AUTO: false
+SMTP_ENABLE_STARTTLS_AUTO: false
 # if required for email authentication
 #SMTP_USER:
 #SMTP_PASSWORD:
