@@ -5,9 +5,9 @@
 
   <p>
     <% if @collection.nil? %>
-      <%= style_creation_link(@work.title, work_url(@work)) %> (<%= @work.word_count %> words)
+      <bdi><%= style_creation_link(@work.title, work_url(@work)) %></bdi> (<%= @work.word_count %> words)
     <% else %>
-      <%= style_creation_link(@work.title, collection_work_url(@collection, @work)) %> (<%= @work.word_count %> words)
+      <bdi><%= style_creation_link(@work.title, collection_work_url(@collection, @work)) %></bdi> (<%= @work.word_count %> words)
     <% end %>
     <br>
     by <%= @work.anonymous? ? style_bold("an anonymous responder") : (@work.pseuds.map{|p| style_pseud_link(p)}.to_sentence.html_safe) %>

@@ -11,15 +11,16 @@
       <% if creation.is_a?(Work) %>
         <%= this_work.backdate ? "backdated" : "new" %> work:
       <% else %>
-        new chapter of <i><b><%= work_link %></b></i> (<%= this_work.word_count %> words):
+          new chapter of <bdi><i><b><%= work_link %></b></i></bdi> (<%= this_work.word_count %> words):
       <% end %>
     <% end %>
 
     <p>
-      <i>
-        <%= style_bold(creation.is_a?(Work) ? work_link :
-          style_link(creation.full_chapter_title.html_safe, work_chapter_url(this_work, creation))) %>
-      </i> (<%= creation.word_count%> words)
+      <bdi>
+        <i>
+          <%= style_bold(creation.is_a?(Work) ? work_link :
+            style_link(creation.full_chapter_title.html_safe, work_chapter_url(this_work, creation))) %>
+        </i></bdi> (<%= creation.word_count%> words)
 
       <% unless @seen[this_work.id] %>
         <br>
