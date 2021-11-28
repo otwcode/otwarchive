@@ -1,9 +1,16 @@
-In the event of catastrophe, the default locale files can be restored to their
-original state with a [manual install from rails-i18n](https://github.com/svenfuchs/rails-i18n#manual-installation).
+The contents of the following folders should not be edited.
 
-When restoring or updating, mr-IN and tl should be renamed mr and fil
-respectively.
+## `phrase-exports/`
 
-The contents of these default locale files should not be edited.
+These files are updated by Phrase. Refer to `.phrase.yml`.
 
-We are currently using the files from rails-i18n version 6.0.0.
+## `rails-i18n/`
+
+We use locale files, pluralization and transliteration rules from the installed
+gem [rails-i18n](https://github.com/svenfuchs/rails-i18n).
+
+We [manually install](https://github.com/svenfuchs/rails-i18n#manual-installation)
+the following locales from rails-i18n version 6.0.0 in order to rename them:
+
+- "mr-IN" to "mr"
+- "tl" to "fil"

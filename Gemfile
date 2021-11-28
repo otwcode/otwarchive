@@ -7,6 +7,7 @@ gem 'test-unit', '~> 3.2'
 gem 'bundler'
 
 gem "rails", "~> 5.2"
+gem "rails-i18n"
 gem "rack", "~> 2.1", ">= 2.1.4"
 gem "sprockets", "< 4"
 
@@ -97,9 +98,6 @@ gem 'timeliness'
 
 # for generating graphs
 gem 'google_visualr', git: 'https://github.com/winston/google_visualr'
-
-# Copycopter to aid translation
-# gem 'copycopter_client', '~> 2.0.1'
 
 # Globalize for translations
 # Must use master branch and activemodel-serializers-xml for Rails 5 upgrade
