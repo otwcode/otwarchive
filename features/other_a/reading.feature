@@ -46,7 +46,7 @@ Feature: Reading count
       And I should see "Last visited: 25 May 2010"
 
     When I follow "Preferences"
-      And I uncheck "Turn on Viewing History"
+      And I uncheck "Turn on History"
       And I press "Update"
       And all indexing jobs have been run
     Then I should not see "My History"
@@ -57,7 +57,7 @@ Feature: Reading count
     Then I should see "You have reading history disabled"
       And I should not see "some work"
 
-    When I check "Turn on Viewing History"
+    When I check "Turn on History"
       And I press "Update"
     Then I should see "Your preferences were successfully updated."
 
@@ -183,7 +183,7 @@ Feature: Reading count
   Given the work "Maybe Tomorrow"
     And I am logged in as "testy"
   When I mark the work "Maybe Tomorrow" for later
-    And I set my preferences to turn off viewing history
+    And I set my preferences to turn off history
   When I go to the homepage
   Then I should not see "Is it later already?"
     And I should not see "Some works you've marked for later."

@@ -7,7 +7,7 @@ module SeriesHelper
 
   # this should only show prev and next works visible to the current user
   def series_data_for_work(work)
-    series = work.series.select(&:visible?)
+    series = work.serial_works.map(&:series).compact
     series.map do |serial|
       works_in_series = serial.works_in_order.posted.select(
         # Include only the fields needed to calculate visibility:

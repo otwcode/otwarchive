@@ -16,7 +16,7 @@ describe KudosController do
         context "when kudos are given from work" do
           it "redirects to referer with a notice" do
             post :create, params: { kudo: { commentable_id: work.id, commentable_type: "Work" } }
-            it_redirects_to_with_comment_notice(referer, "Thank you for leaving kudos!")
+            it_redirects_to_with_kudos_notice(referer, "Thank you for leaving kudos!")
           end
 
           it "does not save user on kudos" do
@@ -28,7 +28,7 @@ describe KudosController do
         context "when kudos are given from chapter" do
           it "redirects to referer with a notice" do
             post :create, params: { kudo: { commentable_id: work.first_chapter.id, commentable_type: "Chapter" } }
-            it_redirects_to_with_comment_notice(referer, "Thank you for leaving kudos!")
+            it_redirects_to_with_kudos_notice(referer, "Thank you for leaving kudos!")
           end
 
           it "does not save user on kudos" do
@@ -44,7 +44,7 @@ describe KudosController do
 
         it "redirects to referer with a notice" do
           post :create, params: { kudo: { commentable_id: work.id, commentable_type: "Work" } }
-          it_redirects_to_with_comment_notice(referer, "Thank you for leaving kudos!")
+          it_redirects_to_with_kudos_notice(referer, "Thank you for leaving kudos!")
         end
 
         it "saves user on kudos" do
@@ -58,7 +58,7 @@ describe KudosController do
           it "redirects to referer with an error" do
             post :create, params: { kudo: { commentable_id: work.id, commentable_type: "Work" } }
             # TODO: AO3-5635 Fix this error message.
-            it_redirects_to_with_comment_error(referer, "User ^You have already left kudos here. :)")
+            it_redirects_to_with_kudos_error(referer, "User ^You have already left kudos here. :)")
           end
 
           context "when duplicate database inserts happen despite Rails validations" do
@@ -74,7 +74,7 @@ describe KudosController do
 
             it "redirects to referer with an error" do
               post :create, params: { kudo: { commentable_id: work.id, commentable_type: "Work" } }
-              it_redirects_to_with_comment_error(referer, "You have already left kudos here. :)")
+              it_redirects_to_with_kudos_error(referer, "You have already left kudos here. :)")
             end
 
             context "with format: :js" do
@@ -92,7 +92,7 @@ describe KudosController do
 
         it "redirects to referer with an error" do
           post :create, params: { kudo: { commentable_id: work.id, commentable_type: "Work" } }
-          it_redirects_to_with_comment_error(referer, "You can't leave kudos on your own work.")
+          it_redirects_to_with_kudos_error(referer, "You can't leave kudos on your own work.")
         end
 
         it "does not save kudos" do
@@ -114,7 +114,7 @@ describe KudosController do
         referer = root_path
         request.headers["HTTP_REFERER"] = referer
         post :create, params: { kudo: { commentable_id: "333", commentable_type: "Work" } }
-        it_redirects_to_with_comment_error(referer, "We couldn't save your kudos, sorry!")
+        it_redirects_to_with_kudos_error(referer, "We couldn't save your kudos, sorry!")
       end
 
       context "with format: :js" do
@@ -132,7 +132,7 @@ describe KudosController do
         referer = work_path(work)
         request.headers["HTTP_REFERER"] = referer
         post :create, params: { kudo: { commentable_id: work.id, commentable_type: "Work" } }
-        it_redirects_to_with_comment_error(referer, "You can't leave guest kudos on a restricted work.")
+        it_redirects_to_with_kudos_error(referer, "You can't leave guest kudos on a restricted work.")
       end
 
       context "with format: :js" do

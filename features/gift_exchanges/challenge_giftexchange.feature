@@ -269,7 +269,9 @@ Feature: Gift Exchange Challenge
     Then I should not see "Assignments are now being sent out"
     # 4 users and the mod should get emails :)
       And 1 email should be delivered to "mod1"
+      And the email should have "Assignments sent" in the subject
       And the email should contain "You have received a message about your collection"
+      And the email should not contain "translation missing"
       And 1 email should be delivered to "myname1"
       And the email should contain "You have been assigned the following request"
       And the email should contain "Fandom:"
@@ -497,7 +499,7 @@ Feature: Gift Exchange Challenge
         | categories | 0       | 1       | 0     |
       And the user "badgirlsdoitwell" signs up for "EmailTest" with the following prompts
         | type    | characters | fandoms  | freeforms | ratings | categories |
-        | request | any        | the show | fic, art  | mature  |            |
+        | request | any        | the show | fic, art  | Mature  |            |
         | offer   | villain    | the show | fic       |         |            |
       And the user "sweetiepie" signs up for "EmailTest" with the following prompts
         | type    | characters | fandoms  | freeforms | ratings | categories |
@@ -514,7 +516,7 @@ Feature: Gift Exchange Challenge
         And the email should contain "Character:"
         And the email should contain "Any"
         And the email should contain "Rating:"
-        And the email should contain "mature"
+        And the email should contain "Mature"
         And the email should not contain "Relationships:"
         And the email should not contain "Warnings:"
         And the email should not contain "Category:"

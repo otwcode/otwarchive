@@ -37,10 +37,10 @@ module Otwarchive
 
     I18n.config.enforce_available_locales = false
     I18n.config.available_locales = [
-      :en, :af, :ar, :bg, :bn, :ca, :cs, :cy, :da, :de, :el, :es, :fa, :fi, :fr,
-      :he, :hi, :hr, :hu, :id, :it, :ja, :ka, :ko, :lt, :lv, :mk, :"mr-IN", :ms,
-      :nb, :nl, :pl, :"pt-BR", :"pt-PT", :ro, :ru, :sk, :sl, :sr, :sv, :th, :tl,
-      :tr, :uk, :vi, :"zh-CN"
+      :en, :af, :ar, :bg, :bn, :ca, :cs, :cy, :da, :de, :el, :es, :fa, :fi,
+      :fil, :fr, :he, :hi, :hr, :hu, :id, :it, :ja, :ko, :ky, :lt, :lv, :mk,
+      :mr, :ms, :nb, :nl, :pl, :"pt-BR", :"pt-PT", :ro, :ru, :sk, :sl, :sr, :sv,
+      :th, :tr, :uk, :vi, :"zh-CN"
     ]
 
     # Set Time.zone default to the specified zone and make Active Record auto-convert to this zone.
@@ -51,6 +51,10 @@ module Otwarchive
     # The default locale is :en and all translations from config/locales/**/*.rb,yml are auto loaded.
     config.i18n.load_path += Dir[Rails.root.join("config/locales/**/*.{rb,yml}")]
     # config.i18n.default_locale = :de
+
+    # Enable locale fallbacks for I18n (makes lookups for any locale fall back to
+    # the I18n.default_locale when a translation can not be found)
+    config.i18n.fallbacks = true
 
     # JavaScript files you want as :defaults (application.js is always included).
     # config.action_view.javascript_expansions[:defaults] = %w(jquery rails)
@@ -94,5 +98,9 @@ module Otwarchive
 
     # Use "mailer" instead of "mailers" as the Resque queue for emails:
     config.action_mailer.deliver_later_queue_name = :mailer
+
+    # Use URL safe CSRF due to a bug in Rails v5.2.5 release.  See the v5.2.6 release notes:
+    # https://github.com/rails/rails/blob/5-2-stable/actionpack/CHANGELOG.md
+    config.action_controller.urlsafe_csrf_tokens = true
   end
 end

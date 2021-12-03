@@ -5,17 +5,6 @@ class AdminMailer < ActionMailer::Base
   helper :mailer
   default from: "Archive of Our Own " + "<#{ArchiveConfig.RETURN_ADDRESS}>"
 
-  def abuse_report(abuse_report_id)
-    abuse_report = AbuseReport.find(abuse_report_id)
-    @email = abuse_report.email
-    @url = abuse_report.url
-    @comment = abuse_report.comment
-    mail(
-      to: ArchiveConfig.ABUSE_ADDRESS,
-      subject: "[#{ArchiveConfig.APP_SHORT_NAME}] Admin Abuse Report"
-    )
-  end
-
   def feedback(feedback_id)
     @feedback = Feedback.find(feedback_id)
     mail(
@@ -24,7 +13,7 @@ class AdminMailer < ActionMailer::Base
       subject: "[#{ArchiveConfig.APP_SHORT_NAME}] Support - #{strip_html_breaks_simple(@feedback.summary)}"
     )
   end
-  
+
   # Sends email to an admin when a new comment is created on an admin post
   def comment_notification(comment_id)
     # admin = Admin.find(admin_id)

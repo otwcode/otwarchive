@@ -3,13 +3,8 @@ Feature: Preferences
 
   Scenario: View and edit preferences - show/hide mature content warning
 
-  Given an adult canonical rating exists with name: "Mature"
-  When I am logged in as "mywarning1"
-  And I post the work "Adult Work by mywarning1"
-  When I edit the work "Adult Work by mywarning1"
-    And I select "Mature" from "Rating"
-    And I press "Preview"
-    And I press "Update"
+  Given I am logged in as "mywarning1"
+    And I post the work "Adult Work by mywarning1" with rating "Mature"
   When I am logged in as "mywarning2"
     And I go to my preferences page
     And I check "Show me adult content without checking."

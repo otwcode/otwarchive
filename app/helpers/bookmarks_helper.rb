@@ -27,11 +27,6 @@ module BookmarksHelper
     end
   end
 
-  def link_to_user_bookmarkable_bookmarks(bookmarkable)
-    id_symbol = (bookmarkable.class.to_s.underscore + '_id').to_sym
-    link_to "You have saved multiple bookmarks for this item", {controller: :bookmarks, action: :index, id_symbol => bookmarkable, existing: true}
-  end
-
   # tag_bookmarks_path was behaving badly for tags with slashes
   def link_to_tag_bookmarks(tag)
     {controller: 'bookmarks', action: 'index', tag_id: tag}
