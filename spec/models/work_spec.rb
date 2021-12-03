@@ -464,6 +464,40 @@ describe Work do
     end
   end
 
+  describe "#wip_length_equals" do
+    it "updating chapter count via expected_number_of_chapters ignores any safeguard logic" do
+      work = create(:work)
+      create(:chapter, work: work)
+      work.reload
+
+      work.expected_number_of_chapters = 1
+      expect(work.wip_length).to eq(work.expected_number_of_chapters)
+
+      work.expected_number_of_chapters = 2
+      expect(work.wip_length).to eq(work.expected_number_of_chapters)
+
+      work.expected_number_of_chapters = 3
+      expect(work.wip_length).to eq(work.expected_number_of_chapters)
+    end
+    it "updating chapter count via wip_length sets a sensible expected_number_of_chapters value" do
+      work = create(:work)
+      create(:chapter, work: work)
+      work.reload
+
+      work.wip_length = 1
+      expect(work.expected_number_of_chapters).to be_nil
+      expect(work.wip_length).to eq("?")
+
+      work.wip_length = 2
+      expect(work.expected_number_of_chapters).to eq(2)
+      expect(work.wip_length).to eq(work.expected_number_of_chapters)
+
+      work.wip_length = 3
+      expect(work.expected_number_of_chapters).to eq(3)
+      expect(work.wip_length).to eq(work.expected_number_of_chapters)
+    end
+  end
+
   describe "#hide_spam" do
     before do
       @admin_setting = AdminSetting.first || AdminSetting.create
