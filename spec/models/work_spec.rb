@@ -479,6 +479,7 @@ describe Work do
       work.expected_number_of_chapters = 3
       expect(work.wip_length).to eq(work.expected_number_of_chapters)
     end
+
     it "updating chapter count via wip_length sets a sensible expected_number_of_chapters value" do
       work = create(:work)
       create(:chapter, work: work)
