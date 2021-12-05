@@ -129,6 +129,11 @@
   	  <%= f.label :automatically_approve_collections, ts("Automatically agree to your work being collected by others in the Archive.") %>
   	</li>
 
+    <li>
+      <%= f.check_box :allow_gifts %>
+      <%= f.label :allow_gifts, ts("Allow others to give me gift works outside gift exchanges and prompt memes.") %>
+    </li>
+
   	<li>
     	  <%= f.check_box :collection_emails_off %>
     	  <%= f.label :collection_emails_off, ts('Turn off emails from collections.') %>

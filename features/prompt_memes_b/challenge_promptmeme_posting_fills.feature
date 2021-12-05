@@ -498,11 +498,11 @@ Feature: Prompt Meme Challenge
   When I follow "prompt"
   Then I should see "Request by Anonymous"
 
-  Scenario: A user can give a gift to a protected user if the work is connected to a claim of a non-anonymous prompt belonging to the recipient, and the recipient remains attached even if the work is later disconnected from the claim
+  Scenario: A creator can give a gift to a user who disallows gifts if the work is connected to a claim of a non-anonymous prompt belonging to the recipient, and the recipient remains attached even if the work is later disconnected from the claim
 
   Given I have Battle 12 prompt meme fully set up
     And the user "prompter" exists and is activated
-    And the user "prompter" is a protected user
+    And the user "prompter" disallows gifts
     And "prompter" has signed up for Battle 12 with combination A
   When I am logged in as "gifter"
     And I claim a prompt from "Battle 12"
@@ -515,11 +515,11 @@ Feature: Prompt Meme Challenge
     And I press "Post"
   Then I should see "For prompter."
 
-  Scenario: A user cannot give a gift to a protected user if the work is connected to a claim of an anonymous prompt belonging to the recipient
+  Scenario: A creator cannot give a gift to a user who disallows gifts if the work is connected to a claim of an anonymous prompt belonging to the recipient
 
   Given I have Battle 12 prompt meme fully set up
     And the user "prompter" exists and is activated
-    And the user "prompter" is a protected user
+    And the user "prompter" disallows gifts
     And "prompter" has signed up for Battle 12 with combination B
   When I am logged in as "gifter"
     And I claim a prompt from "Battle 12"
@@ -528,14 +528,14 @@ Feature: Prompt Meme Challenge
     And I press "Post"
   Then I should see "You can't give a gift to prompter."
 
-  Scenario: A user cannot give a gift to a protected user if the work is connected to a claim of a non-anonymous prompt belonging to a different user
+  Scenario: A creator cannot give a gift to a user who disallows gifts if the work is connected to a claim of a non-anonymous prompt belonging to a different user
 
   Given I have Battle 12 prompt meme fully set up
     And the user "prompter" exists and is activated
-    And the user "prompter" is a protected user
+    And the user prompter disallows gifts
     And "prompter" has signed up for Battle 12 with combination A
     And the user "bystander" exists and is activated
-    And the user "bystander" is a protected user
+    And the user "bystander" disallows gifts
   When I am logged in as "gifter"
     And I claim a prompt from "Battle 12"
     And I start to fulfill my claim

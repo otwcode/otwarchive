@@ -597,12 +597,12 @@ Feature: Gift Exchange Challenge
       And I follow "My Assignments" within "#dashboard"
     Then I should not see the image "src" text "/images/envelope_icon.gif"
 
-  Scenario: If a work is connected to an assignment for a protected user, the
-  protected user is still automatically added as a gift recipient. The recipient
+  Scenario: If a work is connected to an assignment for a user who disallows
+  gifts, user is still automatically added as a gift recipient. The recipient
   remains attached even if the work is later disconnected from the assignment.
     Given basic tags
       And the user "recip" exists and is activated
-      And the user "recip" is a protected user
+      And the user "recip" disallows gifts
       And I am logged in as "gifter"
       And I have an assignment for the user "recip" in the collection "exchange_collection"
     When I fulfill my assignment
@@ -612,12 +612,12 @@ Feature: Gift Exchange Challenge
       And I press "Post"
     Then I should see "For recip."
 
-  Scenario: A user can explicitly give a gift to a protected user if the work is
-  connected to an assignment. The recipient remains attached even if the work is
-  later disconnected from the assignment.
+  Scenario: A user can explicitly give a gift to a user who disallows gifts if
+  the work is connected to an assignment. The recipient remains attached even if
+  the work is later disconnected from the assignment.
     Given basic tags
       And the user "recip" exists and is activated
-      And the user "recip" is a protected user
+      And the user "recip" disallows gifts
       And I am logged in as "gifter"
       And I have an assignment for the user "recip" in the collection "exchange_collection"
     When I start to fulfill my assignment
