@@ -13,6 +13,8 @@ Feature: Create Gifts
       | giftee2    | something   | giftee2@example.com  |
       | associate  | something   | associate@example.com |
       And "giftee1" has the pseud "g1"
+      And the user "giftee1" allows gifts
+      And the user "giftee2" allows gifts
       And I am logged in as "gifter" with password "something"
       And I set up the draft "GiftStory1"
 
