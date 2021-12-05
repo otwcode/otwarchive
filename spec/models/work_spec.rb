@@ -378,7 +378,7 @@ describe Work do
     end
   end
 
-  describe "new gifts virtual attribute"  do
+  describe "new gifts virtual attribute" do
     let(:recipient1) { create(:user).pseuds.first.name }
     let(:recipient2) { create(:user).pseuds.first.name }
     let(:recipient3) { create(:user).pseuds.first.name }
