@@ -171,7 +171,7 @@ class Work < ApplicationRecord
     return if self.new_gifts.blank?
 
     self.new_gifts.each do |gift|
-      next if gift.pseud&.user&.preference.allow_gifts?
+      next if gift.pseud&.user&.preference&.allow_gifts?
       next if self.challenge_assignments.map(&:requesting_pseud).include?(gift.pseud)
       next if self.challenge_claims.reject { |c| c.request_prompt.anonymous? }.map(&:requesting_pseud).include?(gift.pseud)
 

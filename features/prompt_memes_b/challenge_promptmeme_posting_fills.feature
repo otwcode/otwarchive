@@ -532,7 +532,7 @@ Feature: Prompt Meme Challenge
 
   Given I have Battle 12 prompt meme fully set up
     And the user "prompter" exists and is activated
-    And the user prompter disallows gifts
+    And the user "prompter" disallows gifts
     And "prompter" has signed up for Battle 12 with combination A
     And the user "bystander" exists and is activated
     And the user "bystander" disallows gifts
