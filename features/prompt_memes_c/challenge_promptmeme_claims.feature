@@ -445,7 +445,7 @@ Feature: Prompt Meme Challenge
   a prompt meme.
     Given I have Battle 12 prompt meme fully set up
       And I am logged in as "participant"
-      And the user "participant" sallows gifts
+      And the user "participant" allows gifts
     When I go to "Battle 12" collection's page
      And I follow "Prompt Form"
     Then I should not see "Signing up for this challenge will allow users to give you gift works"
