@@ -597,6 +597,24 @@ Feature: Gift Exchange Challenge
       And I follow "My Assignments" within "#dashboard"
     Then I should not see the image "src" text "/images/envelope_icon.gif"
 
+  Scenario: A user who disallows gift works is cautioned about signing up for
+  an exchange.
+    Given the gift exchange "Some Gift Exchange" is ready for signups
+      And I am logged in as "participant"
+      And the user "participant" disallows gifts
+    When I go to "Some Gift Exchange" collection's page
+     And I follow "Sign-up Form"
+    Then I should see "Signing up for this challenge will allow users to give you gift works"
+
+  Scenario: A user who allows gift works is not cautioned about signing up for
+  an exchange.
+    Given the gift exchange "Some Gift Exchange" is ready for signups
+      And I am logged in as "participant"
+      And the user "participant" allows gifts
+    When I go to "Some Gift Exchange" collection's page
+     And I follow "Sign-up Form"
+    Then I should not see "Signing up for this challenge will allow users to give you gift works"
+
   Scenario: If a work is connected to an assignment for a user who disallows
   gifts, user is still automatically added as a gift recipient. The recipient
   remains attached even if the work is later disconnected from the assignment.
