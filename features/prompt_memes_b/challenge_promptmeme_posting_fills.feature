@@ -526,7 +526,7 @@ Feature: Prompt Meme Challenge
     And I start to fulfill my claim
     And I fill in "Gift this work to" with "prompter"
     And I press "Post"
-  Then I should see "You can't give a gift to prompter."
+  Then I should see "prompter does not accept gifts."
 
   Scenario: A creator cannot give a gift to a user who disallows gifts if the work is connected to a claim of a non-anonymous prompt belonging to a different user
 
@@ -541,4 +541,4 @@ Feature: Prompt Meme Challenge
     And I start to fulfill my claim
     And I fill in "Gift this work to" with "prompter, bystander"
     And I press "Post"
-  Then I should see "You can't give a gift to bystander."
+  Then I should see "bystander does not accept gifts."
