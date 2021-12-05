@@ -176,7 +176,7 @@ class Work < ApplicationRecord
       next if self.challenge_assignments.map(&:requesting_pseud).include?(gift.pseud)
       next if self.challenge_claims.reject { |c| c.request_prompt.anonymous? }.map(&:requesting_pseud).include?(gift.pseud)
 
-      self.errors.add(:base, ts("#{gift.pseud.name} does not accept gifts."))
+      self.errors.add(:base, ts("#{gift.pseud.byline} does not accept gifts."))
     end
   end
 
