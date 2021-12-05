@@ -183,7 +183,7 @@ class Work < ApplicationRecord
   after_save :moderate_spam
   after_save :notify_of_hiding
 
-  after_save :notify_recipients, :expire_caches, :update_pseud_index, :update_tag_index
+  after_save :notify_recipients, :expire_caches, :update_pseud_index, :update_tag_index, :touch_series
   after_destroy :expire_caches, :update_pseud_index
 
   before_destroy :send_deleted_work_notification, prepend: true
@@ -291,6 +291,11 @@ class Work < ApplicationRecord
     User.expire_ids(pseuds.map(&:user_id).uniq)
     Tag.expire_ids(tag_ids)
     Collection.expire_ids(collection_ids)
+  end
+
+  # TODO: AO3-6085 We can use touch_all once we update to Rails 6.
+  def touch_series
+    series.each(&:touch) if saved_change_to_in_anon_collection?
   end
 
   after_destroy :destroy_chapters_in_reverse
