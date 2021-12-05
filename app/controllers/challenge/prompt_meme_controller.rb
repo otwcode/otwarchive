@@ -4,18 +4,8 @@ class Challenge::PromptMemeController < ChallengesController
   before_action :load_collection
   before_action :load_challenge, except: [:new, :create]
   before_action :collection_owners_only, only: [:new, :create, :edit, :update, :destroy]
-  before_action :set_time_zone, only: [:create, :edit, :update]
 
   # ACTIONS
-
-  # we use this to make the times get set in the moderator's specified timezone
-  def set_time_zone
-    if params[:prompt_meme] && prompt_meme_params[:time_zone]
-      Time.zone = prompt_meme_params[:time_zone]
-    elsif @challenge && @challenge.time_zone
-      Time.zone = @challenge.time_zone
-    end
-  end
 
   # is actually a blank page - should it be redirected to collection profile?
   def show
