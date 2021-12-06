@@ -19,9 +19,9 @@ hr:
               %{donate_url}.'
         sent_at: Poslano na %{sent_at}.
       greeting:
-        formal: Dragi ‪%{name}‬,
+        formal: Dragi %{name},
         informal:
-          addressed: Bok, ‪%{name}‬!
+          addressed: Bok, %{name}!
           unaddressed: Bok!
         introductory: Pozdrav od Našeg vlastitog arhiva!
       signature:
@@ -32,7 +32,7 @@ hr:
     kudos:
       guest:
         few: "%{count} gostiju"
-        one: "‪%{count}‬ gost"
+        one: "%{count} gost"
         other: "%{count} gostiju"
       html:
         left_kudos:

@@ -11,7 +11,7 @@ pt-BR:
       form:
         comment:
           description: Por favor inclua todas as URLs relevantes e detalhe qual aspecto
-            do conteúdo viola os ‪%{tos_link} do AO3. Quanto mais completa a informação
+            do conteúdo viola os %{tos_link} do AO3. Quanto mais completa a informação
             enviada, mais rápido poderemos efetuar a investigação necessária.
           error: Por favor descreva o problema.
           label: Seu comentário (campo obrigatório)
@@ -58,7 +58,7 @@ pt-BR:
           policy: diretrizes sobre o DMCA
         fnok:
           concerning: caso queira entrar em contato conosco sobre a pessoa que é sua
-            ‪%{fnok_link}‬, ou
+            %{fnok_link}, ou
           fnok: Fannish Next of Kin (herdeira no fandom)
         hack: caso você ache que sua conta foi hackeada ou que alguém está tentando
           hackear sua conta, ou
@@ -209,7 +209,7 @@ pt-BR:
         legend:
           actions: Ações
           disable_support_form: Desabilitar formulário de Suporte
-        queue_status: "%{number} receberão convites no dia ‪%{date}‬."
+        queue_status: "%{number} receberão convites no dia %{date}."
         update: Atualizar
       update:
         success: As configurações do AO3 foram atualizadas com sucesso.
@@ -288,9 +288,9 @@ pt-BR:
         locked: Sua conta foi bloqueada por 5 minutes devido a um excesso de tentativas
           de login mal-sucedidas.
         not_found_in_database: A senha ou a conta que você digitou não estão de acordo
-          com nosso banco de dados. Por favor tente novamente ou <a href="‪%{reset_path}">redefina
+          com nosso banco de dados. Por favor tente novamente ou <a href="%{reset_path}">redefina
           sua senha</a>. Se você não consegue efetuar login mesmo assim, visite <a
-          href="‪%{problems_path}">Problemas ao logar?</a> para maiores informações.
+          href="%{problems_path}">Problemas ao logar?</a> para maiores informações.
         timeout: Sua sessão expirou. Por favor efetue login novamente para continuar.
         unauthenticated: Você precisa efetuar login ou criar uma conta para prosseguir.
     mailer:
@@ -327,13 +327,13 @@ pt-BR:
       not_locked: não estava bloqueado
       not_saved:
         one: Um erro impediu que esse %{resource} fosse salvo.
-        other: "‪%{count}‬ erros impediram que esse ‪%{resource} fosse salvo."
+        other: "%{count} erros impediram que esse %{resource} fosse salvo."
   feedbacks:
     new:
       abuse:
         reports: No caso de denúncias de violações de nossos Termos de Serviço como
           assédio, spam ou plágio, ou se você acha que sua conta pode ter sido hackeada,
-          por favor, ‪%{contact_link}‬. Não podemos agir em resposta a esse tipo de
+          por favor, %{contact_link}. Não podemos agir em resposta a esse tipo de
           denúncia ou dar mais informações sobre denúncias enviadas à equipe de Diretrizes
           e Abuso.
       do_not_spam_html: "<strong>Respondemos todas as solicitações que recebemos,
@@ -369,7 +369,7 @@ pt-BR:
           reference: Links para referência
         page_title: Suporte e Feedback
       languages_html: "<strong>Podemos responder a solicitações de Suporte nos seguintes
-        idiomas: ‪%{list}. Por favor leve em consideração que respostas em línguas
+        idiomas: %{list}. Por favor leve em consideração que respostas em línguas
         além do inglês podem demorar mais.</strong>"
       navigation:
         faqs: FAQ e tutoriais
@@ -397,11 +397,11 @@ pt-BR:
   kudos:
     guest_header:
       one: "%{count} visitante também deixou kudos"
-      other: "‪%{count} visitantes também deixaram kudos"
+      other: "%{count} visitantes também deixaram kudos"
     user_links:
       more_link:
         one: mais %{count} usuárie
-        other: " mais ‪%{count}‬ usuáries"
+        other: mais %{count} usuáries
   layouts:
     proxy_notice:
       button: Desabilitar aviso
@@ -498,8 +498,8 @@ pt-BR:
       co_creations:
         legend: Obras que você criou com outras pessoas
         orphan_info: Você não pode deletar essas obras, pois são compartilhadas com
-          demais coartistas. Pode, no entanto ‪%{orphan_link} as obras ou remover
-          completamente seu nome como coartista.
+          coartistas. Pode, no entanto, %{orphan_link} as obras ou remover completamente
+          seu nome como coartista.
         summary: 'Você é coartista em %{work_count} obra(s) com as seguintes pessoas:
           %{co_creators}.'
       heading: O que você quer fazer com suas obras?
@@ -673,10 +673,10 @@ pt-BR:
         complete: Todas as tarefas foram enviadas.
         subject: Tarefas enviadas
       html:
-        received_message: 'Você recebeu uma mensagem sobre sua coleção ‪%{collection_link}‬:'
+        received_message: 'Você recebeu uma mensagem sobre sua coleção %{collection_link}:'
       text:
-        received_message: 'Você recebeu uma mensagem sobre sua coleção "‪%{collection_title}‬"
-          (‪%{collection_url}‬):'
+        received_message: 'Você recebeu uma mensagem sobre sua coleção "%{collection_title}"
+          (%{collection_url}):'
     creatorship_notification:
       explanation: Após seu pseudônimo ter sido adicionado como coartista em uma obra,
         novos capítulos desta obra poderão ser atribuídos a você independentemente
@@ -867,8 +867,8 @@ pt-BR:
       subject: "[%{app_name}] Pedido de convite adicional negado"
     recipient_notification:
       subject:
-        collection: "[‪%{app_name}‬] Uma obra de presente para você da coleção ‪%{collection_title}‬"
-        no_collection: "[‪%{app_name}‬] Uma obra de presente para você"
+        collection: "[%{app_name}] Uma obra de presente para você da coleção %{collection_title}"
+        no_collection: "[%{app_name}] Uma obra de presente para você"
     signup_notification:
       activate_your_account: siga este link para ativar sua conta
       admin_posts: Notícias do AO3

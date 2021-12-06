@@ -159,7 +159,7 @@ nl:
         part2: Als je vragen hebt, %{support} (%{url}).
     invite_increase_notification:
       body:
-        one: We willen je laten weten dat je een‬ nieuwe uitnodiging hebt, waarmee
+        one: We willen je laten weten dat je een nieuwe uitnodiging hebt, waarmee
           een account kan aangemaakt worden op AO3. Je kan een vriend uitnodigen via
           %{invitation_page}.
         other: We willen je laten weten dat je %{count} nieuwe uitnodigingen hebt,
