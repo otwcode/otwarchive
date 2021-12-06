@@ -2,6 +2,9 @@
 fi:
   mailer:
     general:
+      closing:
+        formal: Terveisin,
+        informal: Parhain terveisin,
       footer:
         general:
           html:
@@ -16,21 +19,42 @@ fi:
             part2: 'Archive of Our Own (Oma arkisto) on fanien pyörittämä ja tukema
               arkisto, joka toimii lahjoitustenne varassa: %{donate_url}.'
         sent_at: Lähetetty %{sent_at}.
+      greeting:
+        formal: Hei %{name},
+        informal:
+          addressed: Hei, %{name}!
+          unaddressed: Hei!
+        introductory: Tervehdys Archive of Our Own – AO3:lta (Oma arkisto)!
       signature:
         app_short_name: AO3
+        open_doors: Open Doors (Avoimet ovet) -tiimi
+        parent_org: Organization for Transformative Works – OTW (Transformatiivisten
+          teosten järjestö)
+        support: AO3 Käyttäjätukitiimi
     kudos:
       guest:
         one: vieras
         other: "%{count} vierasta"
       html:
         left_kudos:
-          one: "%{givers_list} kehui teosta  <i>%{commentable_link}</i>."
-          other: "%{givers_list} kehuivat teosta <i>%{commentable_link}</i>."
+          one: "%{givers_list} kehui teosta  %{commentable_link}."
+          other: "%{givers_list} kehuivat teosta %{commentable_link}."
       text:
         left_kudos:
           one: "%{givers_list} kehui teosta %{commentable_link}."
           other: "%{givers_list} kehuivat teosta %{commentable_link}."
       you_have: "[%{app_name}] Sinulle on kehuja!"
+  users:
+    mailer:
+      reset_password_instructions:
+        expiration: Jos et käytä tätä linkkiä salasanasi vaihtamiseen viikon kuluessa,
+          se vanhenee, ja sinun on pyydettävä uusi linkki.
+        intro: 'Tilisi salasana on pyydetty asettamaan uudelleen. Voit vaihtaa salasanan
+          seuraamalla alla olevaa linkkiä ja syöttämällä uuden salasanasi:'
+        link_title: Vaihda salasanani.
+        subject: "[%{app_name}] Aseta uusi salasana"
+        unrequested: Jos et pyytänyt salasanan uudelleen asetusta, voit jättää tämän
+          viestin huomioimatta, ja vanha salasanasi pysyy voimassa.
   user_mailer:
     abuse_report:
       description_para: 'Kuvaus väärinkäytöksestä:'
@@ -39,14 +63,14 @@ fi:
       subject: "[%{app_name}] Ilmoituksesi Säännöt ja väärinkäytökset -toimikunnalle"
       url_para: 'Osoite, jossa väärinkäytös on:'
     admin_deleted_work_notification:
-      abuse_committee: ota yhteyttä Säännöt ja väärinkäytökset -toimikuntaan
       bye: Tähän viestiin on liitetty tiedoksesi kopio teoksestasi.
-      hello: Hyvä %{user}
+      contact_abuse: ota yhteyttä Säännöt ja väärinkäytökset -toimikuntaan
       html:
         part1: Sivuston ylläpitäjä on poistanut teoksesi %{title} AO3:sta.
         part2: Jos teoksesi kuului Open Doors (Avoimet ovet) -toimikunnan tuomaan
           projektiin, ole hyvä ja %{opendoors_link}, jos sinulla on kysymyksiä.
-        part3: Jos teoksesi saattoi rikkoa AO3:n Käyttöehtoja, ole hyvä ja %{abuse_link}.
+        tos_violation: Jos teoksesi saattoi rikkoa AO3:n Käyttöehtoja, ole hyvä ja
+          %{contact_abuse_link}.
       opendoors: ota yhteyttä Open Doors -toimikuntaan
       subject: "[%{app_name}] Ylläpitäjä on poistanut teoksesi"
       text:
@@ -54,8 +78,8 @@ fi:
         part2: Jos teoksesi kuului Open Doors (Avoimet ovet) -toimikunnan tuomaan
           projektiin, ole hyvä ja ota yhteyttä Open Doors -toimikuntaan (%{opendoors_link}),
           jos sinulla on kysymyksiä.
-        part3: Jos teoksesi saattoi rikkoa AO3:n Käyttöehtoja, ole hyvä ja ota yhteyttä
-          Säännöt ja väärinkäytökset -toimikuntaan (%{abuse_link}).
+        tos_violation: Jos teoksesi saattoi rikkoa AO3:n Käyttöehtoja, ole hyvä ja
+          ota yhteyttä Säännöt ja väärinkäytökset -toimikuntaan (%{contact_abuse_url}).
     challenge_assignment_notification:
       any: Milloin tahansa
       description: 'Kuvaus:'
@@ -75,13 +99,13 @@ fi:
       recipient_missing: 'Ei vastaanottajaa: ota yhteyttä valvojaan!'
       subject: "[%{app_name}][%{collection_title}] Tehtävänantosi!"
       text:
+        assignment: Sinulle on annettu toteutettavaksi pyyntö Archive of Our Own:n
+          haasteessa "%{collection_title}" (%{collection_url}) !
         footer: Olet saanut tämän viestin koska ilmoittauduit mukaan haasteeseen %{title}
           (%{url}). Lisätietoa tästä haasteesta ja sen valvojien yhteystiedot löytyvät
           osoitteesta %{profile_url}.
         look_up: Voit tarkastella tehtävänannon yksityiskohtia Assignments (Tehtävänannot)
           -sivulta osoitteessa %{link}.
-        part1: Sinulle on annettu toteutettavaksi pyyntö Archive of Our Own:n haasteessa
-          %{collection_title} (%{collection_url})!
     change_email:
       part1: "%{login}, tunnuksesi uudeksi sähköpostiosoitteeksi on asetettu %{email}"
       subject: "[%{app_name}] Sähköpostiosoite muutettu"
@@ -91,11 +115,16 @@ fi:
         joihin teos lisätään.
       html:
         creation: "%{creation_link}, tekijä(t) %{pseud_links}"
+        edit: muokata teosta
         remove: Jos sinut on lisätty virheellisesti tai et halua, että sinut ilmoitetaan
           tekijäksi, voit  %{edit} poistaaksesi itsesi tekijöistä.
+      intro: 'Käyttäjä %{adding_user} on ilmoittanut nimimerkkisi %{pseud} kanssatekijäksi
+        seuraavaan teokseen:'
       subject: "[%{app_name}] Ilmoitus kanssatekijäksi lisäämisestä"
       text:
         creation: "%{title} (%{url}), tekijä(t) %{pseuds}"
+        remove: 'Jos sinut on lisätty virheellisesti tai et halua, että sinut ilmoitetaan
+          tekijäksi, voit muokata teosta poistaaksesi itsesi tekijöistä: %{url}'
     creatorship_notification_archivist:
       explanation: Koska hän teki näin virallisessa Open Doors -arkistonhoitajan roolissaan,
         hän pystyi lisäämään sinut ilman kutsua, vaikka sinulla olisi toiseksi tekijäksi
@@ -105,19 +134,31 @@ fi:
         edit: "%{type} on muokattavissa"
         remove: Jos haluat poistaa itsesi tekijöistä, koska sinut on lisätty tekijäksi
           virheellisesti  tai et halua olla nimettynä tekijänä, %{edit} linkin kautta.
+      intro: 'Käyttäjä %{archivist} on lisännyt nimimerkkisi %{pseud} toiseksi tekijäksi
+        seuraavaan:'
       subject: "[%{app_name}] Arkistonhoitajan ilmoitus toiseksi tekijäksi lisäämisestä"
       text:
         creation: "%{pseuds}: %{title} (%{url})"
         remove: 'Jos haluat poistaa itsesi tekijöistä, koska sinut on lisätty tekijäksi
           virheellisesti tai et halua olla nimettynä tekijänä, %{type} on muokattavissa
           linkin kautta: %{url}'
+    creatorship_request:
+      html:
+        creation: "%{creation_link} tekijältä %{pseud_links}"
+        instructions: Voit hyväksyä tai hylätä kutsun %{page_name} -sivullasi.
+        page_name: Co-Creator Requests (Pyynnöt kanssatekijäksi)
+      intro: 'Käyttäjä %{inviting_user} on pyytänyt käyttäjänimesi %{pseud} lisäämistä
+        kanssatekijäksi seuraavaan %{type}:'
+      subject: "[%{app_name}] Kutsu kanssatekijäksi"
+      text:
+        creation: "%{title} (%{url}) tekijältä %{pseuds}"
+        instructions: 'Voit hyväksyä tai hylätä kutsun Co-Creator Requests (Pyynnöt
+          kanssatekijäksi) -sivullasi: %{url}'
     delete_work_notification:
-      hello: Hyvä %{user},
       html:
         part1_other: teoksesi %{title} on poistettu nimimerkin %{pseud} pyynnöstä.
         part1_yourself: teoksesi %{title} on poistettu pyynnöstäsi.
         part2: Jos sinulla on kysyttävää, ole hyvä ja  %{support}.
-      part2: Jos sinulla on kysyttävää, ole hyvä ja  %{support}.
       part3: Kopio teoksesta on liitetty viestiin sinua varten.
       subject: "[%{app_name}] Teoksesi on poistettu"
       support: ota yhteyttä Käyttäjätukeen
@@ -126,7 +167,6 @@ fi:
         part1_yourself: teoksesi "%{title}" on poistettu pyynnöstäsi.
         part2: Jos sinulla on kysyttävää, ole hyvä ja %{support} (%{url}).
     invitation_to_claim:
-      greeting: "%{app_name} lähettää terveisiä!"
       html:
         ao3_news: AO3:n uutiset
         contact_open_doors: ota yhteyttä Open Doorsiin
@@ -143,9 +183,6 @@ fi:
           sähköpostiosoitteeseen, johon sinulla ei enää ole pääsyä, ole hyvä ja %{open_doors_link}
           mahdollisten todisteiden kanssa.
         part11: Jos sinulla on muuta kysyttävää, ole hyvä ja %{support_link}.
-        part13: Ystävällisesti,
-        part14: Open Doors -tiimi
-        part15: OTW (Transformatiivisten teosten järjestö)
         part2: Voit lukea viimeaikaisista arkistosiirroista sivulta %{news_link} ja
           löytää enemmän tietoa Open Doorsin %{open_doors_faq_link} tai %{open_doors_tutorial_link}.
           Jos sinulla on kysymyksiä, joihin et löydä vastauksia UKK:sta, tutoriaaleista
@@ -191,10 +228,6 @@ fi:
           yhteyttä Open Doorsiin mahdollisten todisteiden kanssa.
         part11: Jos sinulla on muuta kysyttävää, ole hyvä ja ota yhteyttä AO3:n Käyttäjätukeen
           osoitteessa %{support_link}.
-        part13: |
-          Ystävällisesti,
-          Open Doors -tiimi
-          OTW (Transformatiivisten teosten järjestö)
         part2: Voit lukea viimeaikaisista arkistosiirroista AO3:n uutisista (%{news_link})
           ja löytää enemmän tietoa Open Doorsin UKK-sivulta (%{open_doors_faq_link})
           tai tutoriaaleista (%{open_doors_tutorial_link}). Jos sinulla on kysymyksiä,
@@ -227,19 +260,15 @@ fi:
           voi luoda uuden tunnuksen. Voit kutsua ystävän mukaan %{invitation_page}.
         other: Halusimme vain kertoa, että sinulla on %{count} kpl uusia kutsuja,
           joilla arkistoon voi luoda uusia tunnuksia. Voit kutsua ystäviä mukaan %{invitation_page}.
-      closing: Terveisin,
-      greeting: Hei %{login}!
       invitation_page_link_text: kutsusivullasi
       subject: "[%{app_name}] Uusia kutsuja"
     invite_request_declined:
-      greeting: Hyvä %{user}
       main:
         one: Valitettavasti joudumme ilmoittamaan, että emme voi myöntää sinulle uutta
           kutsua.
         other: Valitettavasti joudumme ilmoittamaan, että emme voi myöntää sinulle
           %{count} uutta kutsua.
       reason: 'Pyyntösi oli:'
-      signoff: Terveisin
       subject: "[%{app_name}] Pyyntösi ylimääräisistä kutsukoodeista on hylätty"
     signup_notification:
       activate_your_account: käytä tätä linkkiä aktivoidaksesi käyttäjätilisi

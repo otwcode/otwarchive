@@ -1,6 +1,36 @@
 ---
 id:
   mailer:
+    general:
+      closing:
+        formal: Dengan hormat,
+        informal: Salam,
+      footer:
+        general:
+          html:
+            donate_link_text: donasi Anda
+            part1: Jika Anda tidak seharusnya menerima pesan ini, silakan %{support_link}.
+            part2: AO3 adalah arsip yang dikelola dan didukung oleh sesama fan dan
+              bergantung pada %{donate_link}.
+            support_link_text: hubungi Komite Bantuan
+          text:
+            part1: Jika Anda tidak seharusnya menerima pesan ini, silakan hubungi
+              Komite Bantuan di %{support_url}.
+            part2: 'AO3 adalah arsip yang dikelola dan didukung oleh sesama fan dan
+              bergantung pada donasi Anda: %{donate_url}.'
+        sent_at: Dikirimkan pada %{sent_at}.
+      greeting:
+        formal: Halo %{name},
+        informal:
+          addressed: Halo %{name}!
+          unaddressed: Halo!
+        introductory: Halo dari Archive of Our Own – AO3 (Arsip Milik Kita)!
+      signature:
+        app_short_name: AO3
+        open_doors: Tim Open Doors (Pintu Terbuka)
+        parent_org: Organization for Transformative Works – OTW (Organisasi untuk
+          Karya Transformatif)
+        support: Komite Dukungan AO3
     kudos:
       guest:
         other: "%{count} tamu"
@@ -11,6 +41,19 @@ id:
         left_kudos:
           other: "%{givers_list} memberikan jempol pada %{commentable_link}."
       you_have: "[%{app_name}] Anda mendapatkan jempol!"
+  users:
+    mailer:
+      reset_password_instructions:
+        expiration: Tautan ini akan kadaluarsa jika Anda tidak menggunakannya untuk
+          mengubah kata sandi Anda dalam seminggu. Jika itu terjadi, Anda perlu meminta
+          tautan baru.
+        intro: 'Seseorang telah meminta agar kata sandi akun Anda diatur ulang. Kata
+          sandi akun Anda dapat Anda ubah dengan mengikuti tautan berikut dan memasukkan
+          kata sandi yang baru:'
+        link_title: Ubah kata sandi saya.
+        subject: "[%{app_name}] Atur ulang kata sandi Anda"
+        unrequested: Jika tidak pernah meminta kata sandi Anda diatur ulang, mohon
+          abaikan surel ini. Kata sandi lama Anda akan tetap berfungsi.
   user_mailer:
     abuse_report:
       description_para: 'Deskripsi pelanggaran:'
@@ -18,16 +61,15 @@ id:
       subject: "[%{app_name}] Laporan Pelanggaran Anda"
       url_para: 'Alamat URL halaman yang mengandung pelanggaran:'
     admin_deleted_work_notification:
-      abuse_committee: hubungi Komite Pelanggaran kami
       bye: Terlampir adalah salinan karya Anda sebagai referensi.
-      hello: Kepada %{user},
+      contact_abuse: hubungi Komite Pelanggaran kami
       html:
         part1: Karya Anda, %{title}, telah dihapus dari Arsip oleh administrator situs.
         part2: Jika karya Anda merupakan bagian dari proyek impor yang diatur oleh
           tim Open Doors (Pintu Terbuka) kami, silakan %{opendoors_link} dengan pertanyaan
           lebih lanjut.
-        part3: Jika ada kemungkinan karya Anda melanggar Ketentuan Layanan Arsip,
-          silakan %{abuse_link}.
+        tos_violation: Jika ada kemungkinan karya Anda melanggar Ketentuan Layanan
+          Arsip, silakan %{contact_abuse_link}.
       opendoors: hubungi tim Pintu Terbuka
       subject: "[%{app_name}] Karya Anda telah dihapus oleh seorang administrator"
       text:
@@ -36,8 +78,99 @@ id:
         part2: Jika karya Anda merupakan bagian dari proyek impor yang diatur oleh
           tim Open Doors (Pintu Terbuka) kami, silakan hubungi tim Pintu Terbuka (%{opendoors_link})
           dengan pertanyaan lebih lanjut.
-        part3: Jika ada kemungkinan karya Anda melanggar Ketentuan Layanan Arsip,
-          silakan hubungi Komite Pelanggaran kami (%{abuse_link}).
+        tos_violation: Jika ada kemungkinan karya Anda melanggar Ketentuan Layanan
+          Arsip, silakan hubungi Komite Pelanggaran kami (%{contact_abuse_url}).
+    admin_hidden_work_notification:
+      access: Anda masih bisa mengakses karya tersebut melalui tautan di atas. Namun
+        karya tersebut tidak terdaftar dalam halaman karya Anda dan tidak tersedia
+        untuk pengguna AO3 lainnya.
+      check_email: Silakan periksa email Anda, termasuk kotak spam, karena Komite
+        Kebijakan dan Pelanggaran mungkin sudah mengirimkan alasan karya Anda disembunyikan.
+      contact_abuse: hubungi Komite Kebijakan dan Pelanggaran
+      html:
+        help: Jika Anda tidak yakin alasan karya Anda disembunyikan dan Anda belum
+          menerima komunikasi terkait hal ini, silakan %{contact_abuse_link} secara
+          langsung.
+        hidden: Karya Anda, %{title}, telah disembunyikan oleh Komite Kebijakan dan
+          Pelanggaran dan tidak dapat diakses publik lagi.
+        tos_violation: Jika karya Anda disembunyikan karena melanggar %{tos_link}
+          AO3, maka Anda harus melakukan tindakan untuk memperbaiki pelanggaran tersebut.
+          Karya Anda akan dihapus dari AO3 jika tidak mengikuti Ketentuan Layanan.
+      subject: "[%{app_name}] Karya Anda telah disembunyikan oleh Komite Kebijakan
+        dan Pelanggaran"
+      text:
+        help: 'Jika Anda tidak yakin alasan karya Anda disembunyikan dan Anda belum
+          menerima komunikasi terkait hal ini, silakan hubungi Komite Kebijakan dan
+          Pelanggaran secara langsung:  %{contact_abuse_url}.'
+        hidden: Karya Anda, "%{title}" (%{work_url}), telah disembunyikan oleh Komite
+          Kebijakan dan Pelanggaran dan tidak dapat diakses publik lagi.
+        tos_violation: Jika karya Anda disembunyikan karena melanggar Ketentuan Layanan
+          AO3 (%{tos_url}), maka Anda harus melakukan tindakan untuk memperbaiki pelanggaran
+          tersebut. Karya Anda akan dihapus dari AO3 jika tidak mengikuti Ketentuan
+          Layanan.
+      tos: Ketentuan Layanan
+    anonymous_or_unrevealed_notification:
+      anonymous_info: Karya anonim tetap terlihat dalam daftar tag (label), namun
+        tidak dalam halaman karya Anda. Di karya tersebut, nama pengguna Anda akan
+        digantikan dengan "Anonymous" (Anonim).
+      anonymous_unrevealed_info: Moderator koleksi bisa saja akan membuka karya Anda
+        namun tetap membuatnya anonim. Akun yang berlangganan dengan Anda tidak akan
+        menerima notifikasi atas perubahan ini. Setelah dibuka, karya Anda akan termasuk
+        dalam daftar tag (label), tapi tidak dalam halaman karya Anda. Di karya tersebut,
+        nama pengguna Anda akan digantikan dengan "Anonymous" (Anonim).
+      changed_status:
+        anonymous:
+          html: Moderator koleksi %{collection_link} telah mengubah status karya Anda,
+            %{work_link}, menjadi anonim.
+          text: Moderator Koleksi "%{collection_title}" (%{collection_url}) telah
+            mengubah status karya anda "%{work_title}" (%{work_url}) menjadi anonim
+        anonymous_unrevealed:
+          html: 'Moderator koleksi %{collection_link} telah mengubah status karya
+            Anda,  %{work_link}, menjadi anonim dan unrevealed (tersembunyi). '
+          text: Moderator Koleksi "%{collection_title}" (%{collection_url}) telah
+            mengubah status karya anda "%{work_title}" (%{work_url}) menjadi anonim
+            dan unrevealed (tersembunyi)
+        unrevealed:
+          html: Moderator koleksi %{collection_link} telah mengubah status karya Anda,
+            %{work_link}, menjadi unrevealed (tersembunyi).
+          text: Moderator Koleksi "%{collection_title}" (%{collection_url}) telah
+            mengubah status karya anda "%{work_title}" (%{work_url}) menjadi unrevealed
+            (tersembunyi)
+      collection_items_link_text: 'halaman Approved Collection Items (Artikel Koleksi
+        yang Disetujui) '
+      do_not_want:
+        anonymous:
+          html: Jika Anda tidak ingin karya Anda dibuat menjadi anonim, silakan kunjungi
+            %{collection_items_link} untuk menghapus karya tersebut dari koleksi ini.
+          text: 'Jika Anda tidak ingin karya Anda dibuat anonim, silakan kunjungi
+            halaman Approved Collection Items (Artikel Koleksi yang Disetujui) untuk
+            menghapus karya tersebut dari koleksi ini: %{collection_items_url}'
+        anonymous_unrevealed:
+          html: Jika Anda tidak ingin karya Anda dibuat anonim dan disembunyikan,
+            silakan kunjungi %{collection_items_link} untuk menghapus karya tersebut
+            dari koleksi ini.
+          text: 'Jika Anda tidak ingin karya Anda dibuat anonim dan disembunyikan,
+            silakan kunjungi halaman Approved Collection Items (Artikel Koleksi yang
+            Disetujui) untuk menghapus karya tersebut dari koleksi ini: %{collection_items_url}'
+        unrevealed:
+          html: Jika Anda tidak ingin karya Anda disembunyikan, silakan kunjungi %{collection_items_link}
+            untuk menghapus karya tersebut dari koleksi ini.
+          text: 'Jika Anda tidak ingin karya Anda disembunyikan, silakan kunjungi
+            halaman Approved Collection Items (Artikel Koleksi yang Disetujui) untuk
+            menghapus karya tersebut dari koleksi ini: %{collection_items_url}'
+      faq_link_text: Pertanyaan Umum tentang Koleksi
+      more_info:
+        html: Untuk informasi lebih lanjut, silakan kunjungi %{faq_link}.
+        text: 'Untuk informasi lebih lanjut, silakan kunjungi Pertanyaan Umum tentang
+          Koleksi: %{faq_url}'
+      subject:
+        anonymous: "[%{app_name}] Karya Anda telah dibuat anonim"
+        anonymous_unrevealed: "[%{app_name}] Karya Anda telah dibuat anonim dan disembunyikan"
+        unrevealed: "[%{app_name}] Karya Anda telah disembunyikan"
+      unrevealed_info: Karya tersembunyi tidak akan terlihat dalam daftar tag (label)
+        maupun halaman karya Anda. Semua orang yang membuka tautan ke karya tersebut
+        tidak akan dapat melihat kontennya dan akan menerima notifikasi bahwa karya
+        tersebut saat ini sedang disembunyikan.
     challenge_assignment_notification:
       any: Apapun
       description: 'Deskripsi:'
@@ -58,17 +191,27 @@ id:
       recipient_missing: 'Tidak tersedia: mohon kontak moderator untuk bantuan!'
       subject: "[%{app_name}][%{collection_title}] Tugas Anda!"
       text:
+        assignment: Anda telah diberikan tugas untuk memenuhi permintaan berikut dalam
+          challenge "%{collection_title}" (%{collection_url})  di Arsip Milik Kita!
         footer: Anda menerima surel ini karena Anda telah mendaftarkan diri untuk
           mengikuti Challenge %{title} (%{url}). Untuk informasi lebih lanjut terkait
           challenge ini atau untuk mengontak moderator, silakan kunjungi %{profile_url}.
         look_up: Anda dapat melihat tugas ini dari halaman Assignments (Tugas) di
           %{link}.
-        part1: Anda telah diberikan tugas untuk memenuhi permintaan berikut dalam
-          challenge %{collection_title} (%{collection_url}) di Arsip Milik Kita!
     change_email:
       part1: "%{login}, alamat surel yang diasosiasikan dengan akun Anda telah diganti
         ke %{email}"
       subject: "[%{app_name}] Alamat surel telah diganti"
+    collection_notification:
+      assignments_sent:
+        complete: Seluruh Assignment (tugas) telah dikirimkan.
+        subject: Assignment (tugas) telah dikirim
+      html:
+        received_message: 'Anda menerima pesan tentang collection (koleksi) %{collection_link}
+          Anda:'
+      text:
+        received_message: 'Anda menerima pesan tentang collection (koleksi) %{collection_link}
+          Anda:'
     creatorship_notification:
       explanation: Ketika Anda menjadi seorang rekan pencipta sebuah karya, Anda dapat
         ditambahkan pada bab-bab terbaru dalam karya terlepas dari pengaturan pembuatan
@@ -106,13 +249,24 @@ id:
         remove: 'Jika ada kesalahan dalam penunjukan ini atau Anda tidak ingin ditunjuk
           sebagai pencipta, Anda dapat menyunting %{type} ini untuk menghapus alias
           Anda sebagai pencipta: %{url}'
+    creatorship_request:
+      html:
+        creation: "%{creation_link} oleh %{pseud_links}"
+        instructions: Anda dapat menerima atau menolak undangan ini di halaman %{page_name}
+          Anda.
+        page_name: Co-Creator Requests (Undangan Rekan Kreator)
+      intro: "%{inviting_user} telah mengundang Anda untuk menjadi rekan kreator di
+        bawah alias %{pseud} pada %{type} berikut: "
+      subject: "[%{app_name}] Undangan rekan kreator"
+      text:
+        creation: "%{title} (%{url}) oleh %{pseuds}"
+        instructions: 'Anda dapat menerima atau menolak undangan ini di halaman Co-Creator
+          Requests (Undangan Rekan Kreator) Anda: %{url}'
     delete_work_notification:
-      hello: Kepada %{user},
       html:
         part1_other: Karya Anda, %{title}, telah dihapus atas permintaan %{pseud}.
         part1_yourself: Karya Anda, %{title}, telah dihapus atas permintaan Anda.
         part2: Jika Anda memiliki pertanyaan, silakan %{support}.
-      part2: Jika Anda memiliki pertanyaan, silakan %{support}.
       part3: Terlampir salinan karya Anda sebagai referensi.
       subject: "[%{app_name}] Karya Anda telah dihapus"
       support: hubungi Komite Dukungan
@@ -122,7 +276,6 @@ id:
         part2: Jika Anda memiliki pertanyaan, silakan %{support} (%{url}).
     invitation:
       been_invited: Kamu telah diundang untuk menjadi beta kami!
-      greeting: Halo, salam kenal dari %{app_name}!
       has_invited: "%{user_name} telah mengundangmu untuk bergabung menjadi beta kami!"
       html:
         faq_link: Untuk informasi lebih lanjut, silahkan cek%{faq_link}.
@@ -146,7 +299,6 @@ id:
         part3: 'Jika kamu berminat untuk bergabung dengan kami, silahkan daftar di
           halaman berikut: %{invitation_link}'
     invitation_to_claim:
-      greeting: Halo dari %{app_name}!
       html:
         ao3_news: Berita AO3
         contact_open_doors: hubungi tim Open Doors
@@ -163,10 +315,6 @@ id:
           alamat surel yang sudah tidak dapat Anda akses, silakan %{open_doors_link}
           dengan menyertakan informasi apapun yang dapat memverifikasi identitas Anda.
         part11: Untuk pertanyaan-pertanyaan lain, silakan %{support_link}.
-        part13: Hormat kami,
-        part14: Tim Open Doors (Pintu Terbuka)
-        part15: Organization for Transformative Works - OTW (Organisasi untuk Karya
-          Transformatif)
         part2: Anda dapat membaca pengumuman tentang kegiatan pengarsipan terbaru
           di %{news_link}, serta mendapat informasi tambahan di %{open_doors_faq_link}
           tentang Open Doors atau di %{open_doors_tutorial_link}. Untuk pertanyaan-pertanyaan
@@ -222,10 +370,6 @@ id:
           Anda.
         part11: Untuk pertanyaan-pertanyaan lain, silakan hubungi tim Dukungan AO3
           di %{support_link}.
-        part13: |-
-          Hormat Kami,
-          Tim Open Doors (Pintu Terbuka)
-          Organization for Transformative Works - OTW (Organisasi untuk Karya Transformatif)
         part2: 'Anda dapat membaca pengumuman tentang kegiatan pengarsipan terbaru
           di Berita AO3 (%{news_link}), serta mendapat informasi tambahan di halaman
           Pertanyaan Umum tentang Open Doors (%{open_doors_faq_link}) atau di halaman
@@ -264,17 +408,13 @@ id:
         other: 'Kami hanya ingin memberitahu Anda bahwa Anda memiliki %{count} undangan
           baru yang dapat digunakan untuk membuat akun baru di AO3 (Arsip Milik Kita).
           Anda dapat mengundang teman Anda di %{invitation_page}. '
-      closing: Salam,
-      greeting: Halo %{login}!
       invitation_page_link_text: Halaman undangan Anda
       subject: "[%{app_name}] Undangan Baru"
     invite_request_declined:
-      greeting: Yang terhormat %{user},
       main:
         other: Kami mohon maaf karena permintaan Anda untuk %{count} undangan baru
           tidak dapat kami penuhi saat ini.
       reason: 'Permintaan Anda adalah:'
-      signoff: Salam,
       subject: "[%{app_name}] Permintaan Kode Undangan Tambahan Ditolak"
     signup_notification:
       activate_your_account: Ikuti tautan ini untuk mengaktifkan akun Anda.

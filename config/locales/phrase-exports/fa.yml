@@ -2,6 +2,9 @@
 fa:
   mailer:
     general:
+      closing:
+        formal: با احترام،
+        informal: با آرزوی بهترین ها،
       footer:
         general:
           html:
@@ -17,8 +20,18 @@ fa:
             part2: 'Archive of Our Own (آرشیوی از آن خودمان) آرشیویست که توسط هواداران
               اداره و حمایت می شود که به کمکهای مالی شما تکیه می کند: %{donate_url}.'
         sent_at: فرستاده شده در %{sent_at}.
+      greeting:
+        formal: "%{name} عزیز،"
+        informal:
+          addressed: سلام، %{name}!
+          unaddressed: سلام!
+        introductory: سلامی از Archive of Our Own – AO3 (آرشیوی از آن خودمان)!
       signature:
         app_short_name: AO3
+        open_doors: تیم Open Doors (درهای باز)
+        parent_org: Organization for Transformative Works – OTW (سازمانی برای آثار
+          دگرگون شونده)
+        support: تیم پشتیبانی AO3
     kudos:
       guest:
         one: 'یک مهمان
@@ -27,13 +40,25 @@ fa:
         other: "%{count} مهمان"
       html:
         left_kudos:
-          one: "%{givers_list} برای <i>%{commentable_link}</i> کودوس و قدردانی فرستاد."
-          other: "%{givers_list} برای <i>%{commentable_link}</i> کودوس و قدردانی فرستادند."
+          one: "%{givers_list} برای %{commentable_link} کودوس و قدردانی فرستاد."
+          other: "%{givers_list} برای %{commentable_link} کودوس و قدردانی فرستادند."
       text:
         left_kudos:
           one: "%{givers_list} برای %{commentable_link} کودوس و قدردانی فرستاد."
           other: "%{givers_list} برای %{commentable_link} کودوس و قدردانی فرستادند."
       you_have: "[%{app_name}] شما کودوس و قدردانی دریافت کردید!"
+  users:
+    mailer:
+      reset_password_instructions:
+        expiration: اگر شما از این لینک برای ریست کردن پسوردتان تا یک هفته استفاده
+          نکنید، این لینک منقضی می شود و مجبورید دوباره درخواست یک لینک جدید را بدهید.
+        intro: 'فردی برای اکانت شما درخواست ریست کردن پسورد داده است. شما می توانید
+          پسورد اکانتتان را با دنبال کردن لینک زیر و وارد کردن پسورد جدیدتان، تغییر
+          دهید:'
+        link_title: پسوردم را تغییر دهید.
+        subject: "[%{app_name}] پسوردتان را ريست كنيد"
+        unrequested: اگر شما برای ریست کردن پسوردتان درخواست نداده اید می توانید این
+          ایمیل را نادیده بگیرید و پسورد سابقتان به کار کردن ادامه خواهد داد.
   user_mailer:
     abuse_report:
       description_para: 'شرح تخطی:'
@@ -41,31 +66,85 @@ fa:
       subject: "[%{app_name}] گزارش تخطی شما"
       url_para: 'آدرس اینترنتی صفحه ای که در آن تخطی رخ داده است:'
     admin_deleted_work_notification:
-      abuse_committee: با کمیته ی اختیارات ما تماس بگیرید
       bye: ضمیمه شده یک کپی از اثر شما برای مراجعه شماست.
-      hello: "%{user} عزیز،"
       html:
         part1: اثر شما %{title} از آرشیو توسط یک ادمین سایت حذف شده است.
         part2: اگر اثر شما بخشی از یک پروژه ی واردات که توسط تیم درهای باز ما مدیریت
           شده است بوده، لطفا در صورت داشتن سوالهای بیشتر %{opendoors_link}.
-        part3: اگر امکان دارد که اثر شما شرایط خدمت آرشیو را زیر سوال برده باشد، لطفا
-          %{abuse_link}.
       opendoors: با درهای باز تماس بگیرید
       subject: "[%{app_name}] اثر شما توسط یک ادمین حذف شده است"
       text:
         part1: اثر شما "%{title}" از آرشیو توسط یک ادمین سایت حذف شده است.
         part2: اگر اثر شما بخشی از یک پروژه ی واردات که توسط تیم درهای باز ما مدیریت
           شده است بوده، لطفا در صورت داشتن سوالهای بیشتر با درهای باز تماس بگیرید(%{opendoors_link}).
-        part3: اگر امکان دارد که اثر شما شرایط خدمت آرشیو را زیر سوال برده باشد، لطفا
-          با کمیته ی اختیارات ما تماس بگیرید (%{abuse_link}).
+    anonymous_or_unrevealed_notification:
+      anonymous_info: آثار ناشناس در لیست های تگ آورده می شوند ولی بر روی صفحه ی آثار
+        شما ظاهر نمی شوند. بر روی اثر، نام کاربری شما با "Anonymous" (ناشناس) جایگزین
+        خواهد شد.
+      anonymous_unrevealed_info: نگهدارندگان مجموعه ممکن است بعدا اثر شما را آشکار
+        کنند ولی آن را ناشناس باقی بگذارند. افرادی که مشترک شما هستند از این تغییر
+        مطلع نخواهند شد. زمانی که اثر شما آشکار شود در لیست های تگ ذکر خواهد شد ولی
+        در صفحه ی آثار شما ظاهر نخواهد شد. بر روی اثر نام کاربری شما با "Anonymous"
+        (ناشناس) جایگزین خواهد شد.
+      changed_status:
+        anonymous:
+          html: نگهدارندگان مجموعه ی %{collection_link} وضعیت اثر شما، %{work_link}،
+            را به ناشناس تغییر داده اند.
+          text: نگهداران مجموعه ی "%{collection_title}" (%{collection_url}) وضعیت
+            اثر شما "%{work_title}" (%{work_url}) را به ناشناس تغییر داده اند.
+        anonymous_unrevealed:
+          html: نگهدارندگان مجموعه ی %{collection_link} وضعیت اثر شما، %{work_link}،
+            را به ناشناس و پنهان تغییر داده اند.
+          text: نگهداران مجموعه ی "%{collection_title}" (%{collection_url}) وضعیت
+            اثر شما "%{work_title}" (%{work_url}) را به ناشناس و پنهان تغییر داده
+            اند.
+        unrevealed:
+          html: نگهدارندگان مجموعه ی %{collection_link} وضعیت اثر شما، %{work_link}،
+            را به پنهان تغییر داده اند.
+          text: نگهداران مجموعه ی "%{collection_title}" (%{collection_url}) وضعیت
+            اثر شما "%{work_title}" (%{work_url}) را به پنهان تغییر داده اند.
+      collection_items_link_text: صفحه ی Approved Collection Items (موارد مورد تایید
+        مجموعه)
+      do_not_want:
+        anonymous:
+          html: اگر نمی خواهید که اثرتان ناشناس باشد، لطفا به %{collection_items_link}
+            تان سر بزنید تا آن را از این مجموعه حذف کنید.
+          text: 'اگر نمی خواهید که اثرتان ناشناس باشد، لطفا به صفحه ی Approved Collection
+            Items (موارد مورد تایید مجموعه) تان سر بزنید تا آن را از این مجموعه حذف
+            کنید: %{collection_items_url}'
+        anonymous_unrevealed:
+          html: اگر نمی خواهید که اثرتان ناشناس و پنهان باشد، لطفا به %{collection_items_link}
+            تان سر بزنید تا آن را از این مجموعه حذف کنید.
+          text: 'اگر نمی خواهید که اثرتان ناشناس و پنهان باشد، لطفا به صفحه ی Approved
+            Collection Items (موارد مورد تایید مجموعه) تان سر بزنید تا آن را از این
+            مجموعه حذف کنید: %{collection_items_url}'
+        unrevealed:
+          html: اگر نمی خواهید که اثرتان پنهان باشد، لطفا به %{collection_items_link}
+            تان سر بزنید تا آن را از این مجموعه حذف کنید.
+          text: 'اگر نمی خواهید که اثرتان پنهان باشد، لطفا به صفحه ی Approved Collection
+            Items (موارد مورد تایید مجموعه) تان سر بزنید تا آن را از این مجموعه حذف
+            کنید: %{collection_items_url}'
+      faq_link_text: سوالات متداول مجموعه ها
+      more_info:
+        html: برای اطلاعات بیشتر، به %{faq_link}ی ما سری بزنید.
+        text: 'برای اطلاعات بیشتر به سوالات متداول مجموعه ها سری بزنید: %{faq_url}'
+      subject:
+        anonymous: "[%{app_name}] وضعیت اثر شما به ناشناس تغییر پیدا کرد"
+        anonymous_unrevealed: "[%{app_name}] وضعیت اثر شما به ناشناس و پنهان تغییر
+          پیدا کرد"
+        unrevealed: "[%{app_name}] وضعیت اثر شما به پنهان تغییر پیدا کرد"
+      unrevealed_info: آثار پنهان آثاری هستند که در لیست های تگ و صفحه ی آثار شما
+        ظاهر نمی شوند. هرکسی که لینکی را به این اثر دنبال کند یک اطلاعیه دریافت خواهد
+        کرد که این اثر در حال حاضر پنهان است و آنها نخواهند توانست که به محتوای آن
+        دست یابند.
     challenge_assignment_notification:
       any: هرچیزی
       description: 'شرح:'
-      due: 'موعد انجام این ماموریت تا:'
+      due: 'موعد انجام این وظیفه تا:'
       html:
         footer: شما این ایمیل را به دلیل ثبت نام در چالش %{title} دریافت کرده اید.
-          برای اطلاعات بیشتر در مورد این چالش و اطلاعات تماس مدیران لطفا %{footer_link}
-          را ببینید.
+          برای اطلاعات بیشتر در مورد این چالش و اطلاعات تماس مدیران، لطفا به %{footer_link}
+          سری بزنید.
         footer_link: صفحه ی پروفایل چالش
         look_up: شما می توانید این ماموریت را در %{link} ببینید.
         look_up_link: پیج Assignments (ماموریت هایتان)
@@ -75,18 +154,28 @@ fa:
       prompt_url: 'آدرس اینترنتی درخواست:'
       recipient: 'گیرنده:'
       recipient_missing: 'هیچکس: برای کمک با یک مدیر تماس بگیرید!'
-      subject: "[%{app_name}][%{collection_title}] ماموریت شما!"
+      subject: "[%{app_name}][%{collection_title}] وظیفه شما!"
       text:
+        assignment: درخواست ذیل در چالش "%{collection_title}" (%{collection_url})  در
+          AO3 به شما محول شده است!
         footer: شما این ایمیل را به دلیل ثبت نام در چالش %{title} (%{url}) دریافت
           کرده اید. برای اطلاعات بیشتر در مورد این چالش و اطلاعات تماس مدیران لطفا
           %{profile_url} را ببینید.
-        look_up: شما می توانید این ماموریت را از پیج Assignments (ماموریت هایتان)
-          در %{link} ببینید.
-        part1: درخواست ذیل در چالش %{collection_title} (%{collection_url}) در AO3
-          به شما محول شده است!
+        look_up: شما می توانید این وظیفه را در پیج Assignments (وظایف) خود در %{link}
+          جست و جو کنید.
     change_email:
       part1: "%{login}، ایمیل مرتبط با اکانت شما به ایمیل %{email} تغییر یافته است."
       subject: "[%{app_name}] تغییر ایمیل"
+    collection_notification:
+      assignments_sent:
+        complete: اکنون تمامی وظایف فرستاده شده اند.
+        subject: " وظایف فرستاده شده"
+      html:
+        received_message: 'شما پیامی راجع به مجموعه تان %{collection_link} دریافت
+          کرده اید:'
+      text:
+        received_message: 'شما پیامی راجع به مجموعه تان "%{collection_title}" (%{collection_url})
+          دریافت کرده اید:'
     creatorship_notification:
       explanation: زمانی که شما تهیه کننده ی همکار یک اثر هستید، صرفه نظر از تنظیمات
         همکاریتان، می توانید به فصل های جدید اثر اضافه شوید. شما همچنین به سری هایی
@@ -121,13 +210,24 @@ fa:
         remove: 'اگر شما به اشتباه اضافه شده اید یا نمی خواهید که به عنوان تهیه کننده
           ذکر شوید می توانید %{type} را ویرایش کنید تا خودتان را به عنوان خالق حذف
           کنید: %{url}'
+    creatorship_request:
+      html:
+        creation: "%{creation_link} توسط %{pseud_links}"
+        instructions: شما می توانید این درخواست را در صفحه ی %{page_name} تان پذیرفته
+          یا رد کنید.
+        page_name: Co-Creator Requests (درخواست های پدیدآورنده ی همکار)
+      intro: 'کاربر %{inviting_user} نام مستعار شما، %{pseud}، را برای لیست شدن به
+        عنوان پدیدآورنده ی همکار در %{type} زیر دعوت کرده است:'
+      subject: "[%{app_name}] درخواست پدیدآورنده ی همکار"
+      text:
+        creation: "%{title} (%{url}) توسط %{pseuds}"
+        instructions: 'شما می توانید این درخواست را در صفحه ی Co-Creator Requests
+          (درخواست های پدیدآورنده ی همکار) تان پذیرفته یا رد کنید: %{url}'
     delete_work_notification:
-      hello: "%{user} عزیز،"
       html:
         part1_other: اثر شما %{title} به درخواست %{pseud} حذف شد.
         part1_yourself: اثر شما %{title} به درخواست خودتان حذف شد.
         part2: اگر سوالی دارید لطفا %{support}.
-      part2: اگر سوالی دارید لطفا %{support}.
       part3: یک کپی از اثر شما به عنوان مرجع به این ایمیل ضمیمه شده است.
       subject: "[%{app_name}] اثر شما حذف شده است"
       support: با پشتیبانی تماس بگیرید
@@ -135,8 +235,9 @@ fa:
         part1_other: اثر شما "%{title}" به درخواست %{pseud} حذف شد.
         part1_yourself: اثر شما "%{title}" به درخواست خودتان حذف شد.
         part2: اگر سوالی دارید لطفا %{support} (%{url}).
+    invitation:
+      subject: "[%{app_name}] دعوتنامه"
     invitation_to_claim:
-      greeting: سلامی از طرف %{app_name}!
       html:
         ao3_news: اخبار AO3
         contact_open_doors: با درهای باز تماس بگیرید
@@ -153,9 +254,6 @@ fa:
           اند که دیگر به آن دسترسی ندارید، لطفا با هرگونه اطلاعاتی که به ما کمک می
           کند تا هویت شما را شناسایی کنیم %{open_doors_link}.
         part11: برای سوالات دیگر لطفا %{support_link}.
-        part13: با آرزوی بهترینها،
-        part14: تیم Open Doors (درهای باز)
-        part15: Organization for Transformative Works (سازمانی برای آثار دگرگون شونده)
         part2: شما می توانید اعلانیه های مربوط به انتقال آرشیوها اخیر را در %{news_link}
           بخوانید و اطلاعات بیشتر را در %{open_doors_faq_link} یا %{open_doors_tutorial_link}
           Open Doors (درهای باز) بیابید. برای هرگونه سوالی که در سوالات متداول، آموزشها
@@ -203,10 +301,6 @@ fa:
           اند که دیگر به آن دسترسی ندارید، لطفا با هرگونه اطلاعاتی که به ما کمک می
           کند تا هویت شما را شناسایی کنیم با Open Doors (درهای باز) تماس بگیرید.
         part11: برای سوالات دیگر لطفا با پشتیبانی AO3 در %{support_link} تماس بگیرید.
-        part13: |
-          با آرزوی بهترینها،
-          تیم Open Doors (درهای باز)
-          Organization for Transformative Works (سازمانی برای آثار دگرگون شونده)
         part2: شما می توانید اعلانیه های مربوط به انتقال آرشیو اخیر را در اخبار AO3
           (%{news_link}) بخوانید و اطلاعات بیشتر را در صفحه ی سوالات متداول (%{open_doors_faq_link})
           یا صفحه ی آموزشهای (%{open_doors_tutorial_link}) Open Doors (درهای باز)
@@ -235,22 +329,10 @@ fa:
           تماس بگیرید. (اگر شما می خواهید این تغییر را برای چندین اثر انجام دهید می
           توانید آنها را در یک ایمیل لیست کنید.)
     invite_increase_notification:
-      body:
-        zero: ما فقط می خواستیم به شما اطلاع دهیم که شما %{count} دعوتنامه (دعوتنامه
-          های) جدید دارید که می توان از آنها برای ایجاد اکانتهای جدید در آرشیو استفاده
-          کرد. شما می توانید دوستی را در %{invitation_page} دعوت کنید.
-      closing: 'خوش باشید، '
-      greeting: سلام %{login}
       invitation_page_link_text: صفحه ی دعوتنامه های شما
       subject: "[%{app_name}] دعوتنامه های جدید"
     invite_request_declined:
-      greeting: "%{user} عزیز،"
-      main:
-        zero: |-
-          ما ناراحتیم از اینکه به شما اطلاع می دهیم که درخواست شما برای یک دعوتنامه ی جدید در زمان حال قابل عملی شدن نیست.
-          ما ناراحتیم از اینکه به شما اطلاع می دهیم که درخواست شما برای %{count} دعوتنامه ی جدید در زمان حال قابل عملی شدن نیست.
       reason: 'درخواست شما این بود که:'
-      signoff: با احترام،
       subject: "[%{app_name}] درخواست کد دعوتنامه ی اضافی رد شد"
     signup_notification:
       activate_your_account: این لینک را برای فعالسازی اکانت خود دنبال کنید
