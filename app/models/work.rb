@@ -129,8 +129,8 @@ class Work < ApplicationRecord
     return unless first_chapter
 
     if !self.first_chapter.published_at
-      self.first_chapter.published_at = Date.today
-    elsif self.first_chapter.published_at > Date.today
+      self.first_chapter.published_at = Date.current
+    elsif self.first_chapter.published_at > Date.current
       errors.add(:base, ts("Publication date can't be in the future."))
       throw :abort
     end
@@ -537,8 +537,16 @@ class Work < ApplicationRecord
 
   def set_revised_at(date=nil)
     date ||= self.chapters.where(posted: true).maximum('published_at') ||
-        self.revised_at || self.created_at || DateTime.now
-    date = date.instance_of?(Date) ? DateTime::jd(date.jd, 12, 0, 0) : date
+             self.revised_at || self.created_at || Time.current
+
+    if date.instance_of?(Date)
+      # We need a time, not a Date. So if the date is today, set it to the
+      # current time; otherwise, set it to noon UTC (so that almost every
+      # single time zone will have the revised_at date match the published_at
+      # date, and those that don't will have revised_at follow published_at).
+      date = (date == Date.current) ? Time.current : date.to_time(:utc).noon
+    end
+
     self.revised_at = date
   end
 
@@ -546,8 +554,8 @@ class Work < ApplicationRecord
     return if self.posted? && !chapter.posted?
     # Invalidate chapter count cache
     self.invalidate_work_chapter_count(self)
-    if (self.new_record? || chapter.posted_changed?) && chapter.published_at == Date.today
-      self.set_revised_at(Time.now) # a new chapter is being posted, so most recent update is now
+    if (self.new_record? || chapter.posted_changed?) && chapter.published_at == Date.current
+      self.set_revised_at(Time.current) # a new chapter is being posted, so most recent update is now
     elsif self.revised_at.nil? ||
         (chapter.published_at && chapter.published_at > self.revised_at.to_date) ||
         chapter.published_at_changed? && chapter.published_at_was == self.revised_at.to_date
@@ -580,14 +588,14 @@ class Work < ApplicationRecord
         chapter.published_at = self.created_at.to_date
       else # pub date may have changed without user's explicitly setting backdate option
         # so reset it to the previous value:
-        chapter.published_at = chapter.published_at_was || Date.today
+        chapter.published_at = chapter.published_at_was || Date.current
       end
     end
   end
 
   def default_date
     backdate = first_chapter.try(:published_at) if self.backdate
-    backdate || Date.today
+    backdate || Date.current
   end
 
   ########################################################################
@@ -641,7 +649,7 @@ class Work < ApplicationRecord
     return unless self.saved_change_to_posted? && self.posted
     return if chapter_one&.posted
 
-    chapter_one.published_at = Date.today unless self.backdate
+    chapter_one.published_at = Date.current unless self.backdate
     chapter_one.posted = true
     chapter_one.save
   end
