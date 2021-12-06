@@ -299,6 +299,8 @@ pt-BR:
       reset_password_instructions:
         subject: "[%{app_name}] Link para redefinir senha criado"
     omniauth_callbacks:
+      failure: 'Não foi possível autenticar você de %{kind} por causa da seguinte
+        razão: "%{reason}".'
       success: Acesso da conta %{kind} autenticado com sucesso.
     passwords:
       updated: Sua senha foi alterada com sucesso. Login efetuado.

@@ -21,7 +21,7 @@ fa:
               اداره و حمایت می شود که به کمکهای مالی شما تکیه می کند: %{donate_url}.'
         sent_at: فرستاده شده در %{sent_at}.
       greeting:
-        formal: "‪%{name}‬ عزیز،"
+        formal: "%{name} عزیز،"
         informal:
           addressed: سلام، %{name}!
           unaddressed: سلام!
