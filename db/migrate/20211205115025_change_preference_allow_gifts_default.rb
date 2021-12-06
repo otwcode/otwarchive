@@ -7,7 +7,7 @@ class ChangePreferenceAllowGiftsDefault < ActiveRecord::Migration[5.2]
         Schema Change Command:
 
         pt-online-schema-change D=#{database},t=preferences \\
-          --alter "ALTER allow_gifts SET DEFAULT 0" \\
+          --alter "ALTER COLUMN allow_gifts SET DEFAULT 0" \\
           --no-drop-old-table \\
           -uroot --ask-pass --chunk-size=5k --max-flow-ctl 0 --pause-file /tmp/pauseme \\
           --max-load Threads_running=15 --critical-load Threads_running=100 \\
@@ -31,7 +31,7 @@ class ChangePreferenceAllowGiftsDefault < ActiveRecord::Migration[5.2]
         Schema Change Command:
 
         pt-online-schema-change D=#{database},t=preferences \\
-          --alter "ALTER allow_gifts SET DEFAULT 1" \\
+          --alter "ALTER COLUMN allow_gifts SET DEFAULT 1" \\
           --no-drop-old-table \\
           -uroot --ask-pass --chunk-size=5k --max-flow-ctl 0 --pause-file /tmp/pauseme \\
           --max-load Threads_running=15 --critical-load Threads_running=100 \\
