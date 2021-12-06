@@ -2,8 +2,35 @@
 sl:
   mailer:
     general:
+      closing:
+        formal: S spoštovanjem,
+        informal: Z lepimi pozdravi,
       footer:
+        general:
+          html:
+            donate_link_text: vaše donacije
+            part1: Če ste prejeli to sporočilo po pomoti, prosimo %{support_link}.
+            part2: Naš lastni arhiv upravljajo in vzdržujejo fani, zato se zanaša
+              na%{donate_link}.
+            support_link_text: kontaktirajte Pomoč uporabnikom
+          text:
+            part1: Če ste prejeli to sporočilo po pomoti, prosimo kontaktirajte Pomoč
+              uporabnikom preko %{support_url}.
+            part2: 'Naš lastni arhiv upravljajo in vzdržujejo fani, zato se zanaša
+              na vaše donacije: %{donate_url}.'
         sent_at: Poslano ob %{sent_at}.
+      greeting:
+        formal: Spoštovani %{name},
+        informal:
+          addressed: Zdravo, %{name}!
+          unaddressed: Zdravo
+        introductory: Lep pozdrav iz Archive Of Our Own - AO3 (Našega lastnega arhiva)!
+      signature:
+        app_short_name: AO3
+        open_doors: Ekipa Open Doors (Odprta vrata)
+        parent_org: Organization for Transformative Works - OTW (Organizacija za tranformativna
+          dela)
+        support: AO3 ekipa za pomoč uporabnikom
     kudos:
       guest:
         few: "%{count} gosti_je"
@@ -12,16 +39,17 @@ sl:
         two: "%{count} gosta_ji"
       html:
         left_kudos:
-          few: "%{givers_list} so všečkali_e <i>%{commentable_link}</i>."
-          one: "%{givers_list} je všečkal_a <i>%{commentable_link}</i>."
-          other: "%{givers_list} je všečkalo <i>%{commentable_link}</i>."
-          two: "%{givers_list} sta všečkala_i <i>%{commentable_link}</i>."
+          few: "%{givers_list} so všečkali_e %{commentable_link}."
+          one: "%{givers_list} je všečkal_a %{commentable_link}."
+          other: "%{givers_list} je všečkalo %{commentable_link}."
+          two: "%{givers_list} sta všečkala_i %{commentable_link}."
       text:
         left_kudos:
-          few: "%{givers_list} so všečkali_e <i>%{commentable_link}</i>."
-          one: "%{givers_list} je všečkal_a <i>%{commentable_link}</i>."
-          other: "%{givers_list} je všečkalo <i>%{commentable_link}</i>."
-          two: "%{givers_list} sta všečkala_i <i>%{commentable_link}</i>."
+          few: "%{givers_list} so všečkali_e %{commentable_link}."
+          one: "%{givers_list} je všečkal_a %{commentable_link}."
+          other: "%{givers_list} je všečkalo %{commentable_link}."
+          two: "%{givers_list} sta všečkala_i %{commentable_link}."
+      you_have: "[%{app_name}] Všečke imate!"
   user_mailer:
     abuse_report:
       description_para: 'Opis zlorabe:'
@@ -29,15 +57,14 @@ sl:
       subject: "[%{app_name}] Vaše poročilo odboru za Pravila in zlorabo"
       url_para: 'Naslov spletne strani, kjer se nahaja zloraba:'
     admin_deleted_work_notification:
-      abuse_committee: stopite v stik z Odborom za pravila in zlorabo.
       bye: V priponki najdete kopijo vašega dela za vašo referenco.
-      hello: Spoštovani %{user},
+      contact_abuse: stopite v stik z Odborom za pravila in zlorabo.
       html:
         part1: administrator je vaše delo %{title} odstranil iz AO3.
         part2: 'Če je bilo vaše delo del uvoženega projekta pod nadzorom naše ekipe
           Open Doors (Odprtih vrat), vas prosimo, da %{opendoors_link}  z nadaljnjimi
           vprašanji '
-        part3: Če je vaše delo morda kršilo Pogoje uporabe AO3, prosimo %{abuse_link}.
+        tos_violation: Če je vaše delo morda kršilo Pogoje uporabe AO3, prosimo %{contact_abuse_link}.
       opendoors: Open Doors (Odprta vrata) %{opendoors_link} z dodatnimi vprašanji.
       subject: "[%{app_name}] Administrator je odstranil vaše delo"
       text:
@@ -45,27 +72,58 @@ sl:
         part2: Če je bilo vaše delo del projekta pod nadzorom naše ekipe Open Doors
           (Odprtih vrat), prosimo, da z nadaljnjimi vprašanji kontaktirate  Open Doors
           (Odprta vrata) (%{opendoors_link}).
-        part3: Če je vaše delo morda kršilo Pogoje uporabe AO3, prosimo stopite v
-          stik z Odborom za pravila in zlorabo (%{abuse_link}).
+        tos_violation: Če je vaše delo morda kršilo Pogoje uporabe AO3, prosimo stopite
+          v stik z Odborom za pravila in zlorabo (%{contact_abuse_url}).
+    admin_hidden_work_notification:
+      access: Medtem ko je vaše delo skrito, do njega lahko še vedno dostopate preko
+        zgornje povezave, a ne bo dostopno preko vaše strani z deli in ne bo dostopno
+        drugim uporabnikom AO3-ja.
+      check_email: Prosimo preverite vašo elektronsko pošto, vključno s predalom za
+        vsiljeno pošto, saj vas je ekipa za pravila in zlorabo morda že stopila v
+        stik z vami in razložila, zakaj je bilo vaše delo skrito.
+      contact_abuse: stopite v stik z ekipo za pravila in zlorabo
+      html:
+        help: Če ne veste, zakaj je bilo vaše delo skrito in niste dobili nobenega
+          nadaljnjega sporočila o tej zadevi, prosimo %{contact_abuse_link}.
+        hidden: Ekipa za pravila in zlorabo je skrila vaše delo %{title} in ni več
+          javno dostopno.
+        tos_violation: Če je bilo vaše delo skrito, ker je bilo sporno z %{tos_link}
+          AO3, boste morali to kršitev odpraviti. Če tega ne storite, bo vaše delo
+          morda odstranjeno iz AO3.
+      subject: "[%{app_name}] Ekipa za pravila in zlorabo je skrila vaše delo "
+      text:
+        help: Ekipa za pravila in zlorabo je skrila vaše delo "%{title}" (%{work_url})
+          in ni več javno dostopno.
+        hidden: Ekipa za pravila in zlorabo je skrila vaše delo "%{title}" (%{work_url})
+          in ni več javno dostopno.
+        tos_violation: Če je bilo vaše delo skrito, ker je bilo sporno s pogoji uporabe
+          (%{tos_url}) AO3, boste morali to kršitev odpraviti. Če tega ne storite,
+          bo vaše delo morda odstranjeno iz AO3.
+      tos: Pogoji uporabe
     anonymous_or_unrevealed_notification:
-      anonymous_info: "Anonimna dela so vključena v seznam oznak, ne pa na vaši strani
-        z deli. Na delu bo vaše uporabniško ime nadomeščeno z “Anonymous” (Anonimno).\n\n"
-      anonymous_unrevealed_info: "Vzdrževalci zbirke bodo morda kasneje razkrili vaše
+      anonymous_info: Anonimna dela so vključena v seznam oznak, ne pa na vaši strani
+        z deli. Na delu bo vaše uporabniško ime nadomeščeno z “Anonymous” (Anonimno).
+      anonymous_unrevealed_info: Vzdrževalci zbirke bodo morda kasneje razkrili vaše
         delo in ga hkrati pustili anonimnega. Kdor je naročen na vaše vsebine o tej
         spremembi ne bo obveščen. Ko je delo enkrat razkrito, bo prikazano v seznamu
         oznak, vendar ga ne bo na vaši strani z deli. Na delu bo vaše uporabniško
-        ime nadomeščeno z “Anonymous” (Anonimno).\n\n"
+        ime nadomeščeno z “Anonymous” (Anonimno).
       changed_status:
-        anonymous: 'Vzdrževalci zbirke %{collection} so spremenili status vašega dela
-          %{work} v anonimnega.
-
-          '
-        anonymous_unrevealed: Vzdrževalci zbirke %{collection} so spremenili status
-          vašega dela %{work} v anonimnega in nerazkritega.
-        unrevealed: 'Vzdrževalci zbirke %{collection} so spremenili status vašega
-          dela %{work} v nerazkritega.
-
-          '
+        anonymous:
+          html: Vzdrževalci zbirke %{collection_link} so spremenili status vašega
+            dela %{work_link} v anonimnega.
+          text: Vzdrževalci zbirke "%{collection_title}" (%{collection_url}) so status
+            vašega dela "%{work_title}" (%{work_url}) spremenili v anonimnega.
+        anonymous_unrevealed:
+          html: Vzdrževalci zbirke %{collection_link} so spremenili status vašega
+            dela %{work_link} v anonimnega in nerazkritega.
+          text: Vzdrževalci zbirke "%{collection_title}" (%{collection_url}) so status
+            vašega dela "%{work_title}" (%{work_url}) spremenili v anonimnega in nerazkritega.
+        unrevealed:
+          html: Vzdrževalci zbirke %{collection_link} so spremenili status vašega
+            dela %{work_link} v nerazkritega.
+          text: Vzdrževalci zbirke "%{collection_title}" (%{collection_url}) so status
+            vašega dela "%{work_title}" (%{work_url}) spremenili v nerazkritega.
       collection_items_link_text: Approved Collection Items page (Stran odobrenih
         elementov v zbirki)
       do_not_want:
@@ -94,7 +152,6 @@ sl:
             obiščite Approved Collection Items page (Stran odobrenih elementov v zbirki),
             da ga odstranite iz te zbirke: %{collection_items_url}"
       faq_link_text: Pogosta vprašanja glede zbirk in izzivov
-      greeting: Spoštovani %{user},
       more_info:
         html: Za več informacij obiščite naša %{faq_link}.
         text: 'Za več informacij obiščite naša Pogosta vprašanja glede zbirk in izzivov:
@@ -125,16 +182,41 @@ sl:
       recipient_missing: 'Nič: kontaktirajte moderatorko_ja za pomoč!'
       subject: "[%{app_name}][%{collection_title}] Vaša naloga!"
       text:
+        assignment: Dodeljena vam je bila naslednja naloga v izzivu "%{collection_title}"
+          (%{collection_url})  v AO3!
         footer: To elektronsko pošto ste prejeli, ker ste se prijavili na izziv %{title}
           (%{url}). Za več informacij o temu izzivu in za kontaktne podatke moderatork_jev,
           prosimo obiščite %{profile_url}.
         look_up: Nalogo si lahko ogledate na strani Assignments (Naloge) na %{link}.
-        part1: Dodeljena vam je bila naslednja naloga v izzivu %{collection_title}
-          (%{collection_url}) v AO3!
     change_email:
       part1: "%{login}, e-poštni naslov povezan z vašim računom je bil spremenjen
         v %{email}"
       subject: "[%{app_name}] Sprememba e-poštnega naslova"
+    collection_notification:
+      assignments_sent:
+        complete: Vse naloge so bile poslane.
+        subject: Naloge so bile poslane
+      html:
+        received_message: 'Prejeli ste obvestilo glede svoje zbirke %{collection_link}:'
+      text:
+        received_message: 'Prejeli ste obvestilo glede svoje zbirke "%{collection_title}"
+          (%{collection_url}):'
+    creatorship_notification:
+      explanation: Kot soustvarjalec_ka dela ste lahko dodani v nova poglavja ne glede
+        na vaše nastavitve o soustvarjalstvu. Dodani boste tudi v vse serije, v katere
+        je delo dodano.
+      html:
+        creation: "%{creation_link} od %{pseud_links}"
+        edit: uredite %{type}
+        remove: Če ste bili dodani po pomoti ali ne želite biti navedeni kot ustvarjalec_ka,
+          lahko %{edit}, da odstranite navedbo.
+      intro: Uporabnik_ca %{adding_user} je dodal_a vaš pseudonim %{pseud} kot soustvarjalca_ko
+        sledečega %{type}
+      subject: "[%{app_name}] Obvestilo o soustvarjalstvu"
+      text:
+        creation: "%{title} (%{url}) od %{pseuds}"
+        remove: 'Če ste bili dodani po pomoti ali ne želite biti navedeni kot ustvarjalec_ka,
+          lahko uredite %{type}, da odstranite navedbo: %{url}'
     creatorship_notification_archivist:
       explanation: Uporabnik/-ica vas lahko v svoji uradni kapaciteti kot arhivist/-ka
         za “Open Doors” (Odprta Vrata) doda brez povabila, tudi če imate soustvarjanje
@@ -164,12 +246,10 @@ sl:
         instructions: 'Prošnjo lahko sprejmete ali zavrnete na vaši strani Co-Creator
           Requests (Prošnje za status soustvarjalca): %{url}'
     delete_work_notification:
-      hello: Spoštovani %{user},
       html:
         part1_other: Vaše delo %{title} je bilo izbrisano na zahtevo %{pseud}.
         part1_yourself: Vaše delo %{title} je bilo izbrisano na vašo zahtevo.
         part2: Če imate vprašanja, prosimo, %{support}.
-      part2: Če imate vprašanja, prosimo, %{support}.
       part3: V priponki lahko najdete kopijo svojega dela.
       subject: "[%{app_name}] Vaše delo je bilo izbrisano"
       support: kontaktirajte pomoč uporabnikom
@@ -178,7 +258,6 @@ sl:
         part1_yourself: Vaše delo "%{title}" je bilo izbrisano na vašo zahtevo.
         part2: Če imate vprašanja, prosimo, %{support} (%{url}).
     invitation_to_claim:
-      greeting: Pozdravljamo Vas iz %{app_name}!
       html:
         ao3_news: AO3 novice
         contact_open_doors: kontaktirajte Odprta vrata
@@ -194,9 +273,6 @@ sl:
           do katerega ne morete več dostopati, prosimo,  %{open_doors_link} z kakršnimi
           koli informacijami, ki bi nam lahko pomagale potrditi vašo identiteto.
         part11: Za druga vprašanja, prosimo, %{support_link}.
-        part13: Lep pozdrav,
-        part14: Ekipa Odprtih vrat
-        part15: Organizacija za transformativna dela
         part2: Obvestila o nedavnih premikih arhivov lahko preberete na %{news_link},
           dodatne informacije pa lahko najdete na Odprtih vratih %{open_doors_faq_link}
           ali %{open_doors_tutorial_link}. Za vprašanja, na katere ni odgovora na
@@ -242,10 +318,6 @@ sl:
           koli informacijami, ki bi nam lahko pomagale potrditi vašo identiteto.
         part11: Za druga vprašanja, prosimo, kontaktirajte AO3 podporo uporabnikom
           na %{support_link}.
-        part13: |
-          Lep pozdrav,
-          Ekipa Odprtih vrat,
-          Organizacija za transformativna dela
         part2: Obvestila o nedavnih premikih arhivov lahko preberete na AO3 novicah
           (%{news_link}), dodatne informacije pa lahko najdete na strani Odprtih vratih
           s pogostimi vprašanji (%{open_doors_faq_link}) ali v vodiču (%{open_doors_tutorial_link}).
@@ -272,23 +344,33 @@ sl:
           (Če imate več del, za katera bi radi spremenili preusmeritve, jih lahko
           navedete v enem e-mailu.)
     invite_increase_notification:
-      closing: Lep pozdrav,
-      greeting: Pozdravljeni %{login}!
+      body:
+        few: Sporočamo vam, da imate %{count} nova povabila za ustvarjanje novega
+          uporabniškega računa AO3. Podarite jih lahko na %{invitation_page}.
+        one: Sporočamo vam, da imate %{count} novo povabilo za ustvarjanje novega
+          uporabniškega računa AO3. Podarite ga lahko na %{invitation_page}.
+        other: Sporočamo vam, da imate %{count} novih povabil za ustvarjanje novega
+          uporabniškega računa AO3. Podarite jih lahko na %{invitation_page}.
+        two: Sporočamo vam, da imate %{count} novi povabili za ustvarjanje novega
+          uporabniškega računa AO3. Podarite jih lahko na %{invitation_page}.
+      invitation_page_link_text: vaša stran s povabili
       subject: "[%{app_name}] Nova povabila"
     invite_request_declined:
-      greeting: Spoštovani %{user},
       main:
-        few: Žal vam sporočamo, da vam trenutno ne moremo posredovati zaželenega števila
-          (%{count}) kod za povabila.
-        one: Žal vam sporočamo, da vam trenutno ne moremo posredovati nove kode za
-          povabilo.
-        other: Žal vam sporočamo, da vam trenutno ne moremo posredovati zaželenega
-          števila (%{count}) kod za povabila.
-        two: Žal vam sporočamo, da vam trenutno ne moremo posredovati zaželenega števila
-          (%{count}) kod za povabila.
+        few: Žal vam sporočamo, da vam trenutno ne moremo posredovati %{count} kod
+          za povabila.
+        one: Žal vam sporočamo, da vam trenutno ne moremo posredovati %{count} nove
+          kode za povabilo.
+        other: Žal vam sporočamo, da vam trenutno ne moremo posredovati %{count} kod
+          za povabila.
+        two: Žal vam sporočamo, da vam trenutno ne moremo posredovati %{count} kod
+          za povabila.
       reason: 'Vaša prošnja:'
-      signoff: Lep pozdrav,
       subject: "[%{app_name}] Prošnja za dodatne kode za povabila zavrnjena"
+    recipient_notification:
+      subject:
+        collection: "[%{app_name}][%{collection_title}] Podarjeno delo za vas iz %{collection_title}"
+        no_collection: "[%{app_name}] Podarjeno delo za vas"
     signup_notification:
       activate_your_account: kliknite na naslednjo povezavo, da aktivirate vaš račun
       admin_posts: AO3 Novice
