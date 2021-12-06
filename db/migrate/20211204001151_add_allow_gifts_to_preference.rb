@@ -23,7 +23,6 @@ class AddAllowGiftsToPreference < ActiveRecord::Migration[5.2]
     end
   end
 
-
   def down
     if Rails.env.staging? || Rails.env.production?
       database = Preference.connection.current_database
