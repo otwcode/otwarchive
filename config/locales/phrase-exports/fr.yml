@@ -39,10 +39,10 @@ fr:
       html:
         left_kudos:
           one: "%{givers_list} a félicité votre œuvre %{commentable_link}."
-          other: "%{givers_list} ont félicité votre œuvre %{commentable_link}.\n"
+          other: "%{givers_list} ont félicité votre œuvre %{commentable_link}."
       text:
         left_kudos:
-          one: "%{givers_list} a félicité votre œuvre %{commentable_link}.\n"
+          one: "%{givers_list} a félicité votre œuvre %{commentable_link}."
           other: "%{givers_list} ont félicité votre œuvre %{commentable_link}."
       you_have: "[%{app_name}] Vous avez reçu des félicitations !"
   users:

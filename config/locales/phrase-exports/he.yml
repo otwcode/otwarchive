@@ -117,10 +117,8 @@ he:
             יש לבקר בדף Approved Collection Items (יצירות מאושרות מאוספים) שלך בכדי
             להסיר אותה מאוסף זה: %{collection_items_url}'
         unrevealed:
-          html: 'אם אין ברצונך שהיצירה שלך תירשם כיצירה שטרם נחשפה, יש לבקר ב%{collection_items_link}
+          html: אם אין ברצונך שהיצירה שלך תירשם כיצירה שטרם נחשפה, יש לבקר ב%{collection_items_link}
             שלך כדי להסיר אותה מאוסף זה.
-
-            '
           text: 'אם אין ברצונך שהיצירה שלך תירשם כיצירה שטרם נחשפה, יש לבקר בדף Approved
             Collection Items (יצירות מאושרות באוספים) שלך כדי להסיר אותה מאוסף זה:
             %{collection_items_url}'
@@ -164,7 +162,7 @@ he:
       subject: "[%{app_name}] כתובת הדוא&quot;ל שונתה"
     collection_notification:
       assignments_sent:
-        complete: 'כל המטלות נשלחו כעת. '
+        complete: כל המטלות נשלחו כעת.
         subject: המטלות נשלחו
       html:
         received_message: 'קיבלת הודעה לגבי האוסף שלך %{collection_link}:'

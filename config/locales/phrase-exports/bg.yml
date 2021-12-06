@@ -128,7 +128,7 @@ bg:
         page_name: Co-Creator Requests (Покани за съавторство)
       intro: 'Потребителят %{inviting_user} е изпратил покана твоят псевдоним %{pseud}
         да бъде включен към списъка с автори на %{type}:'
-      subject: "[%{app_name}] Покана за съавторство "
+      subject: "[%{app_name}] Покана за съавторство"
       text:
         creation: "%{title} (%{url}) от %{pseuds}"
         instructions: Можеш да приемеш или откажеш тази покана на твоята страница

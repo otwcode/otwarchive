@@ -120,8 +120,8 @@ hr:
         ne na popisu djela. Na djelu,vaše će ime biti zamijenjeno s "Anonymous" (anonimno). '
       changed_status:
         anonymous:
-          html: 'Održavači kolekcije %{collection_link}  promijenili su status vašeg
-            djela %{work_link} u anonimno. '
+          html: Održavači kolekcije %{collection_link}  promijenili su status vašeg
+            djela %{work_link} u anonimno.
           text: Održavači kolekcije "%{collection_title}" (%{collection_url}) promijenili
             su status vašeg djela "%{work_title}" (%{work_url}) u anonimno.
         anonymous_unrevealed:
@@ -278,7 +278,7 @@ hr:
     invitation_to_claim:
       html:
         ao3_news: AO3 Vijesti
-        contact_open_doors: " kontaktiraj Otvorena vrata"
+        contact_open_doors: kontaktiraj Otvorena vrata
         contact_support: kontaktiraj AO3 korisničku podršku
         faq_page: stranica najčešćih pitanja
         open_doors: Open doors (Otvorena vrata)
