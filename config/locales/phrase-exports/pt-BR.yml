@@ -11,7 +11,7 @@ pt-BR:
       form:
         comment:
           description: Por favor inclua todas as URLs relevantes e detalhe qual aspecto
-            do conteúdo viola os ‪%{tos_link}‬ do AO3. Quanto mais completa a informação
+            do conteúdo viola os ‪%{tos_link} do AO3. Quanto mais completa a informação
             enviada, mais rápido poderemos efetuar a investigação necessária.
           error: Por favor descreva o problema.
           label: Seu comentário (campo obrigatório)
@@ -46,15 +46,15 @@ pt-BR:
       purview:
         about: O comitê de Diretrizes e Abuso é responsável por todas as questões
           relacionadas ao conteúdo  do AO3 e ao comportamento de quem utiliza o site
-          em violação aos ‪%{tos_link}‬ do site. Para ajuda com questões técnicas,
-          por favor ‪%{support_link}‬.
+          em violação aos %{tos_link} do site. Para ajuda com questões técnicas, por
+          favor %{support_link}.
         support: entre em contato com a equipe de Suporte
         tos: Termos de Serviço
       reportable:
         dmca:
           claim: caso queira dar entrada com uma reivindicação baseada no Digital
             Millennium Copyright Act (DMCA, sigla em inglês) americano — por favor
-            leia nossas‪ %{dmca_link}‬
+            leia nossas %{dmca_link}
           policy: diretrizes sobre o DMCA
         fnok:
           concerning: caso queira entrar em contato conosco sobre a pessoa que é sua
@@ -188,7 +188,7 @@ pt-BR:
     blacklist:
       emails_found:
         one: um e-mail localizado
-        other: "‪%{count}‬ e-mails localizados"
+        other: "%{count} e-mails localizados"
     settings:
       index:
         fields:
@@ -209,7 +209,7 @@ pt-BR:
         legend:
           actions: Ações
           disable_support_form: Desabilitar formulário de Suporte
-        queue_status: "‪%{number}‬ receberão convites no dia ‪%{date}‬."
+        queue_status: "%{number} receberão convites no dia ‪%{date}‬."
         update: Atualizar
       update:
         success: As configurações do AO3 foram atualizadas com sucesso.
@@ -222,7 +222,7 @@ pt-BR:
         responsabilidades na OTW. Se você tiver alguma pergunta sobre o que pode ou
         não fazer com informações que você encontrar aqui, entre em contato com presidentes
         do seu comitê.
-      page_title: Oi, ‪%{login}‬!
+      page_title: Oi, %{login}!
       roles:
         heading: 'Suas permissões como admin:'
         none: No momento você não tem nenhuma permissão de admin associada à sua conta.
@@ -288,9 +288,9 @@ pt-BR:
         locked: Sua conta foi bloqueada por 5 minutes devido a um excesso de tentativas
           de login mal-sucedidas.
         not_found_in_database: A senha ou a conta que você digitou não estão de acordo
-          com nosso banco de dados. Por favor tente novamente ou <a href="‪%{reset_path}‬">redefina
+          com nosso banco de dados. Por favor tente novamente ou <a href="‪%{reset_path}">redefina
           sua senha</a>. Se você não consegue efetuar login mesmo assim, visite <a
-          href="‪%{problems_path}‬">Problemas ao logar?</a> para maiores informações.
+          href="‪%{problems_path}">Problemas ao logar?</a> para maiores informações.
         timeout: Sua sessão expirou. Por favor efetue login novamente para continuar.
         unauthenticated: Você precisa efetuar login ou criar uma conta para prosseguir.
     mailer:
@@ -326,15 +326,16 @@ pt-BR:
       not_found: não encontrado
       not_locked: não estava bloqueado
       not_saved:
-        one: Um erro impediu que esse ‪%{resource}‬ fosse salvo.
-        other: "‪%{count}‬ erros impediram que esse ‪%{resource}‬ fosse salvo."
+        one: Um erro impediu que esse %{resource} fosse salvo.
+        other: "‪%{count}‬ erros impediram que esse ‪%{resource} fosse salvo."
   feedbacks:
     new:
       abuse:
         reports: No caso de denúncias de violações de nossos Termos de Serviço como
           assédio, spam ou plágio, ou se você acha que sua conta pode ter sido hackeada,
-          por favor ‪%{contact_link}‬. Não podemos reagir a essas denúncias ou dar
-          mais informações sobre denúncias enviadas à equipe de Diretrizes e Abuso..
+          por favor, ‪%{contact_link}‬. Não podemos agir em resposta a esse tipo de
+          denúncia ou dar mais informações sobre denúncias enviadas à equipe de Diretrizes
+          e Abuso.
       do_not_spam_html: "<strong>Respondemos todas as solicitações que recebemos,
         mas somos uma pequena equipe voluntária.</strong> Por isso, pedimos que você
         não nos envie mais de uma mensagem sobre o mesmo problema ou encoraje outras
@@ -368,7 +369,7 @@ pt-BR:
           reference: Links para referência
         page_title: Suporte e Feedback
       languages_html: "<strong>Podemos responder a solicitações de Suporte nos seguintes
-        idiomas: ‪%{list}‬. Por favor leve em consideração que respostas em línguas
+        idiomas: ‪%{list}. Por favor leve em consideração que respostas em línguas
         além do inglês podem demorar mais.</strong>"
       navigation:
         faqs: FAQ e tutoriais
@@ -395,11 +396,11 @@ pt-BR:
       page_title: Doe ou faça parte da nossa equipe voluntária
   kudos:
     guest_header:
-      one: "‪%{count}‬ visitante também deixou kudos"
-      other: "‪%{count}‬ visitantes também deixaram kudos"
+      one: "%{count} visitante também deixou kudos"
+      other: "‪%{count} visitantes também deixaram kudos"
     user_links:
       more_link:
-        one: " mais ‪%{count}‬ usuárie"
+        one: mais %{count} usuárie
         other: " mais ‪%{count}‬ usuáries"
   layouts:
     proxy_notice:
@@ -456,7 +457,7 @@ pt-BR:
       you_have: "[%{app_name}] Você recebeu kudos!"
   skins:
     confirm_delete:
-      confirm_html: Tem certeza que quer <strong><em>apagar</em></strong> a skin "‪%{skin_title}‬"?
+      confirm_html: Tem certeza que quer <strong><em>apagar</em></strong> a skin "%{skin_title}"?
   troubleshooting:
     show:
       fix_associations:
@@ -497,10 +498,10 @@ pt-BR:
       co_creations:
         legend: Obras que você criou com outras pessoas
         orphan_info: Você não pode deletar essas obras, pois são compartilhadas com
-          demais coartistas. Pode, no entanto, ‪%{orphan_link}‬ as obras ou remover
+          demais coartistas. Pode, no entanto ‪%{orphan_link} as obras ou remover
           completamente seu nome como coartista.
-        summary: 'Você é coartista em ‪%{work_count}‬ obra(s) com as seguintes pessoas:
-          ‪%{co_creators}‬.'
+        summary: 'Você é coartista em %{work_count} obra(s) com as seguintes pessoas:
+          %{co_creators}.'
       heading: O que você quer fazer com suas obras?
       options:
         delete: Apagar completamente
@@ -512,13 +513,13 @@ pt-BR:
       orphan: orfanar
       orphaning: orfanar
       sole_creations:
-        collections_summary: 'Você tem ‪%{collection_count}‬ coleção (ou coleções)
-          associadas aos seguintes pseudônimos: ‪%{pseuds}‬.'
-        legend: Obras e coleções que você criou por si só
-        options_info: Você pode apagá-las, mas por favor considere a opção de ‪%{orphaning_link}‬
+        collections_summary: 'Você tem %{collection_count} coleção (ou coleções) associadas
+          aos seguintes pseudônimos: %{pseuds}.'
+        legend: Obras e coleções que você postou somente sob seu próprio nome
+        options_info: Você pode apagá-las, mas por favor considere a opção de %{orphaning_link}
           ao invés disso!
-        works_summary: 'Você tem ‪%{work_count}‬ obra(s) com os pseudônimos a seguir:
-          ‪%{pseuds}‬.'
+        works_summary: 'Você tem %{work_count} obra(s) com os pseudônimos a seguir:
+          %{pseuds}.'
       submit: Salvar
     mailer:
       reset_password_instructions:
@@ -534,10 +535,9 @@ pt-BR:
       login_banner:
         dismiss: Desabilitar banner de forma permanente
         help_link: Aprenda algumas dicas sobre como usar o AO3
-        help_text: Para mais informações sobre como usar o site, ‪%{link_faq}‬! Se
-          precisar de ajuda técnica, ‪%{link_support}‬. Se passar por algum incidente
-          de assédio ou se tiver perguntas específicas sobre nossos ‪%{link_tos}‬,
-          ‪%{link_abuse}‬.
+        help_text: Para mais informações sobre como usar o site, %{link_faq}! Se precisar
+          de ajuda técnica, %{link_support}. Se passar por algum incidente de assédio
+          ou se tiver perguntas específicas sobre nossos %{link_tos}, %{link_abuse}.
         help_title: Banner de ajuda após o primeiro login
         hide: Desabilitar banner de ajuda para quem efetua login pela primeira vez
         link_abuse: entre em contato com a nossa equipe de Diretrizes e Abuso
@@ -546,7 +546,7 @@ pt-BR:
           Feedback
         link_tos: Termos de Serviço
         welcome_text: Oi! Parece que você efetuou login no AO3 pela primeira vez.
-          ‪%{help_link}‬ ou desabilite permanentemente essa mensagem de boas-vindas.
+          %{help_link} ou desabilite permanentemente essa mensagem de boas-vindas.
   user_mailer:
     abuse_report:
       description_para: 'Descrição da violação:'
