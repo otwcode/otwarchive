@@ -509,6 +509,8 @@ describe WorksController, work_search: true do
       expect(update_work.user_has_creator_invite?(no_co_creator)).to be_falsey
     end
 
+    # If the time zone in config/application.rb is changed to something other
+    # than "Eastern Time (US & Canada", these tests will need adjusting:
     context "when redating to the present" do
       let!(:update_work) do
         # November 30, 2 PM UTC -- no time zone oddities here
