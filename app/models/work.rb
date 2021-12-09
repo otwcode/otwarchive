@@ -463,7 +463,7 @@ class Work < ApplicationRecord
         gifts << gift # new gifts are added after saving, not now
         new_gifts << gift unless self.posted # all gifts are new if work not posted
       else
-        g = self.gifts.new(work: self, recipient: name)
+        g = self.gifts.new(recipient: name)
         if g.valid?
           new_gifts << g # new gifts are added after saving, not now
         else
