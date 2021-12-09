@@ -487,9 +487,9 @@ class Work < ApplicationRecord
     self.new_gifts.each do |gift|
       next if self.gifts.for_name_or_byline(gift.recipient).present?
 
-      # Let's see why we had to use Gift.create
-      gift.save
-      # Gift.create(recipient: gift.recipient, work: self)
+      # Recreate the gift once the work is saved. This ensures the work_id is
+      # set properly.
+      Gift.create(recipient: gift.recipient, work: self)
     end
   end
 
