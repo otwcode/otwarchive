@@ -630,7 +630,7 @@ class WorksController < ApplicationController
       redirect_to(edit_user_work_path(@user, @work)) && return
     end
 
-    # AO3-3498: since a work's word count is calculated in a before_save and the chapter is posted in an after_save, 
+    # AO3-3498: since a work's word count is calculated in a before_save and the chapter is posted in an after_save,
     # work's word count needs to be updated with the chapter's word count after the chapter is posted
     @work.set_word_count
     @work.save
@@ -893,7 +893,7 @@ class WorksController < ApplicationController
   def work_params
     params.require(:work).permit(
       :rating_string, :fandom_string, :relationship_string, :character_string,
-      :archive_warning_string, :category_string, :expected_number_of_chapters,
+      :archive_warning_string, :category_string,
       :freeform_string, :summary, :notes, :endnotes, :collection_names, :recipients, :wip_length,
       :backdate, :language_id, :work_skin_id, :restricted, :comment_permissions,
       :moderated_commenting_enabled, :title, :pseuds_to_add, :collections_to_add,
