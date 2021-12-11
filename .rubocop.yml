@@ -107,6 +107,8 @@ RSpec/ContextWording:
 
 RSpec/DescribeClass:
   Exclude:
+    # Exception for specs about I18n configurations
+    - 'spec/lib/i18n/**/*.rb'
     # Exception for rake specs, where the top level describe uses a task name
     - 'spec/lib/tasks/*.rake_spec.rb'
     # Exception for integration specs, which may not test a specific class
