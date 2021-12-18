@@ -147,7 +147,8 @@ Feature: Admin Actions to Post News
     Then I should not see the input with id "admin_post_tag_list"
      And I should not see "Tags from the selected post will replace any tags entered on this page."
     When I go to the admin-posts page
-     And I follow "Edit"
+    Then "ooops" should not be an option within "Tag"
+    When I follow "Edit"
     Then I should see the input with id "admin_post_tag_list"
     When I fill in "Tags" with "updated1, updated2"
      And I press "Post"
