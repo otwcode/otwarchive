@@ -601,7 +601,7 @@ module ApplicationHelper
   def css_classes_for_creation_blurb(creation)
     return if creation.nil?
 
-    Rails.cache.fetch("#{creation.cache_key_with_version}/blurb_css_classes") do
+    Rails.cache.fetch("#{creation.cache_key_with_version}/blurb_css_classes-v2") do
       creation_id = creation_id_for_css_classes(creation)
       creator_ids = creator_ids_for_css_classes(creation).join(" ")
       "blurb group #{creation_id} #{creator_ids}".strip
