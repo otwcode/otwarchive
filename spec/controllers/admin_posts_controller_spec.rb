@@ -25,6 +25,11 @@ describe AdminPostsController do
           expect(response).to render_template(:new)
           expect(assigns[:admin_post].errors.full_messages).to include("Translated post does not exist")
         end
+
+        it "doesn't create new tags" do
+          post :create, params: { admin_post: { translated_post_id: 0, tag_list: "badtag" } }.merge(base_params)
+          expect(AdminPostTag.find_by(name: "badtag")).to be_nil
+        end
       end
     end
   end
