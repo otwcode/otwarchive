@@ -199,12 +199,12 @@ GEM
     docile (1.4.0)
     domain_name (0.5.20190701)
       unf (>= 0.0.5, < 1.0.0)
-    elasticsearch (7.15.0)
-      elasticsearch-api (= 7.15.0)
-      elasticsearch-transport (= 7.15.0)
-    elasticsearch-api (7.15.0)
+    elasticsearch (7.16.1)
+      elasticsearch-api (= 7.16.1)
+      elasticsearch-transport (= 7.16.1)
+    elasticsearch-api (7.16.1)
       multi_json
-    elasticsearch-transport (7.15.0)
+    elasticsearch-transport (7.16.1)
       faraday (~> 1)
       multi_json
     email_spec (1.6.0)
@@ -576,7 +576,7 @@ DEPENDENCIES
   delorean
   devise
   devise-async
-  elasticsearch (= 7.15.0)
+  elasticsearch (= 7.16.1)
   email_spec (= 1.6.0)
   erb_lint (= 0.0.29)
   escape_utils (= 1.2.1)
