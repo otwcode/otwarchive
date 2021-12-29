@@ -180,6 +180,7 @@ describe InviteRequestsController do
 
     context "when logged in as admin" do
       let(:ip) { "127.0.0.1" }
+      let(:ip_2) { "128.0.0.1" }
       let!(:invite_request_1) { create(:invite_request, position: 9001) }
       let!(:invite_request_2) { create(:invite_request, position: 2) }
       let!(:invite_request_3) { create(:invite_request, position: 7) }
@@ -204,7 +205,9 @@ describe InviteRequestsController do
       it "searches invitations by ip" do
         invite_request_4.ip_address = ip
         invite_request_4.save
-        get :manage, params: { query: "127.0.0.1" }
+        invite_request_1.ip_address = ip_2
+        invite_request_1.save
+        get :manage, params: { query: ip }
         expect(response).to render_template("manage")
         expect(assigns(:invite_requests)).to eq([invite_request_4])
       end
