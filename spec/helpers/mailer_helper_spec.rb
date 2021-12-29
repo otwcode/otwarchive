@@ -8,33 +8,9 @@ describe MailerHelper do
     end
   end
 
-  describe "#work_tag_metadata" do
-    {
-      "Fandom" => ["Fandom: ", "Fandoms: "],
-      "Rating" => ["Rating: ", "Ratings: "],
-      "ArchiveWarning" => ["Warning: ", "Warnings: "],
-      "Relationship" => ["Relationship: ", "Relationships: "],
-      "Character" => ["Character: ", "Characters: "],
-      "Freeform" => ["Additional Tag: ", "Additional Tags: "]
-    }.each_pair do |klass, labels|
-      context "when given one #{klass.underscore.humanize.downcase.singularize}" do
-        let(:tag) { create(:tag, type: klass) }
-        let(:tags) { [tag] }
-
-        it "returns \"#{labels[0]}\" followed by the tag name" do
-          expect(work_tag_metadata(tags)).to eq("#{labels[0]}#{tag.name}")
-        end
-      end
-
-      context "when given multiple #{klass.underscore.humanize.downcase.pluralize}" do
-        let(:tag1) { create(:tag, type: klass) }
-        let(:tag2) { create(:tag, type: klass) }
-        let(:tags) { [tag1, tag2] }
-
-        it "returns \"#{labels[1]}\" followed by a comma-separated list of tag names" do
-          expect(work_tag_metadata(tags)).to eq("#{labels[1]}#{tag1.name}, #{tag2.name}")
-        end
-      end
+  describe "#work_metadata_label" do
+    it "appends the metadata indicator to a string" do
+      expect(work_metadata_label("Text")).to eq("Text: ")
     end
   end
 
@@ -88,7 +64,37 @@ describe MailerHelper do
     end
   end
 
-   describe "#style_work_tag_metadata_list" do
+  describe "#work_tag_metadata" do
+    {
+      "Fandom" => ["Fandom: ", "Fandoms: "],
+      "Rating" => ["Rating: ", "Ratings: "],
+      "ArchiveWarning" => ["Warning: ", "Warnings: "],
+      "Relationship" => ["Relationship: ", "Relationships: "],
+      "Character" => ["Character: ", "Characters: "],
+      "Freeform" => ["Additional Tag: ", "Additional Tags: "]
+    }.each_pair do |klass, labels|
+      context "when given one #{klass.underscore.humanize.downcase.singularize}" do
+        let(:tag) { create(:tag, type: klass) }
+        let(:tags) { [tag] }
+
+        it "returns \"#{labels[0]}\" followed by the tag name" do
+          expect(work_tag_metadata(tags)).to eq("#{labels[0]}#{tag.name}")
+        end
+      end
+
+      context "when given multiple #{klass.underscore.humanize.downcase.pluralize}" do
+        let(:tag1) { create(:tag, type: klass) }
+        let(:tag2) { create(:tag, type: klass) }
+        let(:tags) { [tag1, tag2] }
+
+        it "returns \"#{labels[1]}\" followed by a comma-separated list of tag names" do
+          expect(work_tag_metadata(tags)).to eq("#{labels[1]}#{tag1.name}, #{tag2.name}")
+        end
+      end
+    end
+  end
+
+  describe "#style_work_tag_metadata_list" do
     context "when given one fandom" do
       let(:fandom) { create(:fandom) }
       let(:fandoms) { [fandom] }
