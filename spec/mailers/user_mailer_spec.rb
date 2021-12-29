@@ -695,14 +695,12 @@ describe UserMailer do
         it "has the correct content" do
           expect(email).to have_html_part_content("Hi, <b")
           expect(email).to have_html_part_content("#{user.login}</b>")
-          expect(email).to have_html_part_content("FAIL")
         end
       end
 
       describe "text version" do
         it "has the correct content" do
           expect(email).to have_text_part_content("Hi, #{user.login}!")
-          expect(email).to have_text_part_content("FAIL")
         end
       end
     end
