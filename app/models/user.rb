@@ -115,6 +115,7 @@ class User < ApplicationRecord
   has_many :wrangling_assignments, dependent: :destroy
   has_many :fandoms, through: :wrangling_assignments
   has_many :wrangled_tags, class_name: "Tag", as: :last_wrangler
+  has_one :last_wrangling_activity, dependent: :destroy
 
   has_many :inbox_comments, dependent: :destroy
   has_many :feedback_comments, -> { where(is_deleted: false, approved: true).order(created_at: :desc) }, through: :inbox_comments
