@@ -175,6 +175,9 @@ class User < ApplicationRecord
                       with: /\A[A-Za-z0-9]\w*[A-Za-z0-9]\Z/
   validates_uniqueness_of :login, case_sensitive: false, message: ts("has already been taken")
 
+  # AO3-6040 Prevents a username from being registered or renamed-to if the username is reserved
+  validates :login, reserved_username: true
+
   validates :email, email_veracity: true, email_format: true
 
   # Virtual attribute for age check and terms of service

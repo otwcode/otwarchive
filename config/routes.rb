@@ -156,6 +156,7 @@ Otwarchive::Application.routes.draw do
         get :confirm_delete
       end
     end
+    resources :reserved_usernames, only: [:index, :new, :create, :destroy]
     resources :blacklisted_emails, only: [:index, :new, :create, :destroy]
     resources :settings
     resources :skins do

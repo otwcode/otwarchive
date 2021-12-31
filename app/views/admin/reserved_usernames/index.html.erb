@@ -1,0 +1,62 @@
+<div class="admin">
+  <!--Descriptive page name, messages and instructions-->
+  <h2 class="heading"><%= t("admin.admin_reserved_username.index.page_heading", default: "Manage Reserved Usernames") %></h2>
+
+  <ul class="notes">
+    <li><%= ts("Reserved user names cannot be used in guest comments, nor can a user change their username (or pseud) to them.") %></li>
+    <li><%= ts("They do not affect any user who currently has a name on this list.") %></li>
+  </ul>
+  <!--/descriptions-->
+
+  <!--main content-->
+  <h3 class="heading"><%= ts("Add user names to reserved list") %></h3>
+
+  <%= form_for(@admin_reserved_username, html: { class: "simple post" }) do |f| %>
+    <%= error_messages_for @admin_reserved_username %>
+    <fieldset>
+      <p>
+        <%= f.label :username, ts("Username to add") %>
+        <%= f.text_field :username %>
+        <%= f.submit ts("Add To Reserved List") %>
+      </p>
+    </fieldset>
+  <% end %>
+
+  <h3 class="heading"><%= ts("Find reserved user names")%></h3>
+
+  <!-- search form -->
+  <%= form_tag url_for(controller: "admin/reserved_usernames", action: "index"),
+               method: :get, class: "simple search", role: "search" do %>
+    <fieldset>
+      <p>
+        <%= label_tag "query", ts("Username to find") %>
+        <%= text_field_tag "query", params[:query] %>
+        <%= submit_tag ts("Search Reserved List") %>
+      </p>
+    </fieldset>
+  <% end %>
+
+  <!-- list of search results -->
+  <% if @admin_reserved_usernames %>
+    <div class="results module">
+      <h3 class="heading">
+        <%= t("admin.reserved.usernames_found", count: @admin_reserved_usernames.count) %>
+      </h3>
+      <% if @admin_reserved_usernames.count > 0 %>
+        <ol class="usernames index group">
+          <% @admin_reserved_usernames.each do |reserved_username| %>
+          <li>
+            <%= link_to ts("Remove %{username}", username: reserved_username.username),
+                        reserved_username,
+                        method: :delete,
+                        data: { confirm: ts("Are you sure you want to remove %{username} from the reserved list?",
+                                username: reserved_username.username) } %>
+          </li>
+          <% end %>
+        </ul>
+        <%= will_paginate @admin_reserved_usernames %>
+      <% end %>
+    </div>
+  <% end %>
+  <!--/content-->
+</div>

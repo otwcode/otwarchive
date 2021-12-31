@@ -77,6 +77,9 @@ class Pseud < ApplicationRecord
   validates_length_of :icon_comment_text, allow_blank: true, maximum: ArchiveConfig.ICON_COMMENT_MAX,
     too_long: ts("must be less than %{max} characters long.", max: ArchiveConfig.ICON_COMMENT_MAX)
 
+  # AO3-6040 Prevents a pseud from being registered or renamed-to if the username is reserved
+  validates :name, reserved_username: true
+
   after_update :check_default_pseud
   after_update :expire_caches
   after_commit :reindex_creations

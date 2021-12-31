@@ -30,6 +30,7 @@
       <li><%= span_if_current ts("Wrangling Guidelines", key: "header"), wrangling_guidelines_path %></li>
     </ul>
   </li>
+  <li><%= link_to ts("Reserved Names", key: "header"), admin_reserved_usernames_path %></li>
   <li><%= link_to ts("Blacklist", key: "header"), admin_blacklisted_emails_path %></li>
   <li><%= link_to ts("Spam", key: "header"), admin_spam_index_path %></li>
   <% if policy(AdminSetting).can_view_settings? %>
