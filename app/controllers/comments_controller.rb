@@ -290,6 +290,7 @@ class CommentsController < ApplicationController
           else
             flash[:comment_notice] = ts("Comment created!")
           end
+          record_last_wrangling_activity
           respond_to do |format|
             format.html do
               if request.referer&.match(/inbox/)
@@ -328,6 +329,7 @@ class CommentsController < ApplicationController
     updated_comment_params = comment_params.merge(edited_at: Time.current)
     if @comment.update_attributes(updated_comment_params)
       flash[:comment_notice] = ts('Comment was successfully updated.')
+      record_last_wrangling_activity
       respond_to do |format|
         format.html do
           redirect_to comment_path(@comment) and return if @comment.unreviewed?
@@ -356,12 +358,15 @@ class CommentsController < ApplicationController
     elsif unreviewed
       # go back to the rest of the unreviewed comments
       flash[:notice] = ts("Comment deleted.")
+      record_last_wrangling_activity
       redirect_back(fallback_location: unreviewed_work_comments_path(@comment.commentable))
     elsif parent_comment
       flash[:comment_notice] = ts("Comment deleted.")
+      record_last_wrangling_activity
       redirect_to_comment(parent_comment)
     else
       flash[:comment_notice] = ts("Comment deleted.")
+      record_last_wrangling_activity
       redirect_to_all_comments(parent, {show_comments: true})
     end
   end
@@ -632,5 +637,15 @@ class CommentsController < ApplicationController
 
   def filter_params
     params.permit!
+  end
+
+  # Update the current user's last tag wrangling activity timestamp
+  # if the comment belongs to a tag and they are not an admin.
+  def record_last_wrangling_activity
+    if !logged_in_as_admin? && current_user&.is_tag_wrangler? && @comment.ultimate_parent.is_a?(Tag)
+      last_activity = LastWranglingActivity.find_or_initialize_by(user: current_user)
+      last_activity.performed_at = Time.now
+      last_activity.save
+    end
   end
 end
