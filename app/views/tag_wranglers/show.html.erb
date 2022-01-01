@@ -18,7 +18,7 @@
     <% else %>
       <p><%= ts('Fandoms assigned to you via the ') %> <%= link_to ts('tag wranglers page'), tag_wranglers_path %>. <%= ts('The unwrangled count is the number of unwrangled tags which were used on works in the given fandom.') %></p>
       <% if (@wrangler == @current_user || logged_in_as_admin?) && @wrangler.last_wrangling_activity %>
-        <p><%= ts("%{wrangler_login} last wrangled at ", wrangler_login: @wrangler.login) %> <span class="datetime"><%= l(@wrangler.last_wrangling_activity.performed_at, format: :short) %></span>.</p>
+        <p><%= ts("%{wrangler_login} last wrangled at ", wrangler_login: @wrangler.login) %> <span class="datetime"><%= time_in_zone(@wrangler.last_wrangling_activity.performed_at) %></span>.</p>
       <% end %>
       <table summary="<%= ts('Overview of your assigned fandoms and how many unfilterable and unwrangled tags belong to each assigned fandom.') %>">
         <caption><%= ts('Unfilterable and Unwrangled Tag Counts for Your Assigned Fandoms') %></caption>
