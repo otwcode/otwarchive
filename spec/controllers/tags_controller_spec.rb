@@ -5,11 +5,12 @@ describe TagsController do
   include RedirectExpectationHelper
 
   let(:user) { create(:tag_wrangler) }
+
   before { fake_login_known_user(user) }
 
   shared_examples "last wrangling activity" do
     it "sets the last wrangling activity time to now" do
-      expect(user.last_wrangling_activity.performed_at).to be_within(1.second).of Time.now
+      expect(user.last_wrangling_activity.performed_at).to be_within(1.second).of Time.now.utc
     end
   end
 
@@ -20,6 +21,7 @@ describe TagsController do
 
     context "successful creation by a tag wrangler" do
       before { post :create, params: { tag: tag_params } }
+
       include_examples "last wrangling activity"
     end
 
@@ -115,7 +117,7 @@ describe TagsController do
         put :mass_update, params: { id: @fandom1.name, show: 'freeforms', status: 'unwrangled', fandom_string: @fandom2.name, selected_tags: [@freeform1.id] }
       end
 
-      it "should be successful" do
+      it "updates the tags successfully" do
         get :wrangle, params: { id: @fandom1.name, show: 'freeforms', status: 'unwrangled' }
         expect(assigns(:tags)).not_to include(@freeform1)
 
@@ -131,7 +133,7 @@ describe TagsController do
         put :mass_update, params: { id: @fandom1.name, show: 'freeforms', status: 'unwrangled', fandom_string: "#{@fandom2.name},#{@fandom3.name}", selected_tags: [@freeform1.id] }
       end
 
-      it "should be successful" do
+      it "updates the tags successfully" do
         @freeform1.reload
         expect(@freeform1.fandoms).to include(@fandom2)
         expect(@freeform1.fandoms).not_to include(@fandom3)
@@ -145,7 +147,7 @@ describe TagsController do
         put :mass_update, params: { id: @fandom1.name, show: 'characters', status: 'unwrangled', fandom_string: "#{@fandom1.name},#{@fandom2.name}", selected_tags: [@character1.id] }
       end
 
-      it "should be successful" do
+      it "updates the tags successfully" do
         @character1.reload
         expect(@character1.fandoms).to include(@fandom1)
         expect(@character1.fandoms).to include(@fandom2)
@@ -159,7 +161,7 @@ describe TagsController do
         put :mass_update, params: { id: @fandom1.name, show: 'characters', status: 'unwrangled', fandom_string: "#{@fandom1.name}", selected_tags: [@character1.id], canonicals: [@character1.id] }
       end
 
-      it "should be successful" do
+      it "updates the tags successfully" do
         @character1.reload
         expect(@character1.fandoms).to include(@fandom1)
         expect(@character1).to be_canonical
@@ -173,7 +175,7 @@ describe TagsController do
         put :mass_update, params: { id: @fandom1.name, show: 'characters', status: 'unfilterable', fandom_string: "#{@fandom2.name}", selected_tags: [@character2.id], canonicals: [@character2.id] }
       end
 
-      it "should be successful" do
+      it "updates the tags successfully" do
         @character2.reload
         expect(@character2.fandoms).to include(@fandom2)
         expect(@character2).not_to be_canonical
@@ -187,7 +189,7 @@ describe TagsController do
         put :mass_update, params: { id: @character3.name, remove_associated: [@character2.id] }
       end
 
-      it "should be successful" do
+      it "updates the tags successfully" do
         expect(flash[:notice]).to eq "The following tags were successfully removed: #{@character2.name}"
         expect(flash[:error]).to be_nil
         expect(@character3.mergers).to eq []

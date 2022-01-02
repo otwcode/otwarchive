@@ -26,8 +26,8 @@ class RolesUser < ApplicationRecord
   # user's last wrangling activity as well.
   after_destroy :clean_wrangler_activity
   def clean_wrangler_activity
-    if role.name == "tag_wrangler"
-      user.last_wrangling_activity = nil
-    end
+    return unless role.name == "tag_wrangler"
+
+    user.last_wrangling_activity = nil
   end
 end

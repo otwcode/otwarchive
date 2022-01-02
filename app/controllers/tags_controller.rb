@@ -401,10 +401,10 @@ class TagsController < ApplicationController
   # Update the current user's LastWrangling activity to track a wrangling action,
   # unless the current user is an administrator.
   def record_last_wrangling_activity
-    unless logged_in_as_admin?
-      last_activity = LastWranglingActivity.find_or_initialize_by(user: current_user)
-      last_activity.performed_at = Time.now
-      last_activity.save
-    end
+    return if logged_in_as_admin?
+
+    last_activity = LastWranglingActivity.find_or_initialize_by(user: current_user)
+    last_activity.performed_at = Time.now.utc
+    last_activity.save
   end
 end
