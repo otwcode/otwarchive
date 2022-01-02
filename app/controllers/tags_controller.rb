@@ -403,8 +403,7 @@ class TagsController < ApplicationController
   def record_last_wrangling_activity
     return if logged_in_as_admin?
 
-    last_activity = LastWranglingActivity.find_or_initialize_by(user: current_user)
-    last_activity.performed_at = Time.now.utc
-    last_activity.save
+    last_activity = LastWranglingActivity.find_or_create_by(user: current_user)
+    last_activity.touch
   end
 end

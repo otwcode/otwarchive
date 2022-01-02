@@ -8,9 +8,7 @@ class CreateLastWranglingActivities < ActiveRecord::Migration[5.2]
                    dependent: :destroy,
                    index: { unique: true }
 
-      t.timestamp :performed_at,
-                  null: false,
-                  default: -> { "CURRENT_TIMESTAMP" }
+      t.timestamps
     end
   end
 end
