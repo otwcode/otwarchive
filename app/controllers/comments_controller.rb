@@ -642,9 +642,10 @@ class CommentsController < ApplicationController
   # Update the current user's last tag wrangling activity timestamp
   # if the comment belongs to a tag and they are not an admin.
   def record_last_wrangling_activity
-    if !logged_in_as_admin? && current_user&.is_tag_wrangler? && @comment.ultimate_parent.is_a?(Tag)
-      last_activity = LastWranglingActivity.find_or_create_by(user: current_user)
-      last_activity.touch
-    end
+    is_wrangling_activity = !logged_in_as_admin? && current_user&.is_tag_wrangler? && @comment.ultimate_parent.is_a?(Tag)
+    return unless is_wrangling_activity
+
+    last_activity = LastWranglingActivity.find_or_create_by(user: current_user)
+    last_activity.touch
   end
 end
