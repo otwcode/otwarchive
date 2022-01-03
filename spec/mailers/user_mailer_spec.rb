@@ -977,5 +977,4 @@ describe UserMailer do
       end
     end
   end
-
 end
