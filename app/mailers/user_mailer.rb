@@ -353,15 +353,12 @@ class UserMailer < ActionMailer::Base
   def delete_work_notification(user, work)
     @user = user
     @work = work
-
-    Rails.logger.error "****** START *****"
     @download = Download.new(@work, mime_type: "text/html")
     @download.generate
     @html = File.read(@download.html_file_path)
-    #Rails.logger.error MailerHelper.to_plain_text(@html)
     attachments["#{@download.file_name}.html"] = { content: @html, encoding: "base64" }
-    #attachments["#{filename}.txt"] = { content: to_plain_text(@html_content) }
-    Rails.logger.error "****** END *****"
+    @txt = ActionController::Base.helpers.strip_tags(@html)
+    attachments["#{@download.file_name}.txt"] = { content: @txt, encoding: "base64" }
 
     I18n.with_locale(Locale.find(@user.preference.preferred_locale).iso) do
       mail(
