@@ -1,5 +1,7 @@
 class AutocompleteController < ApplicationController
   respond_to :json
+  include AutocompleteSource
+  include ClassMethods
 
   skip_before_action :store_location
   skip_before_action :set_current_user, except: [:collection_parent_name, :owned_tag_sets, :site_skins]
@@ -21,6 +23,32 @@ class AutocompleteController < ApplicationController
   #########################################
   ############# LOOKUP ACTIONS GO HERE
 
+  def highlight_tags(search_param, results)
+    terms = autocomplete_phrase_split(transliterate(search_param).downcase)
+    highlighted = []
+    results.each do |result|
+      name = Tag.name_from_autocomplete(result)
+
+      highlighted_name = []
+      name.split.each do |word|
+        word_highlighted = false
+        terms.each do |term|
+          if transliterate(word).downcase.starts_with? term
+            highlighted_word = "<b>" + word[0, term.size] + "</b>" + word[term.size..]
+            highlighted_name << highlighted_word
+            word_highlighted = true
+            break
+          end
+        end
+
+        highlighted_name << word unless word_highlighted
+      end
+
+      highlighted << highlighted_name.join(" ")
+    end
+    highlighted
+  end
+
   # PSEUDS
   def pseud
     if params[:term].blank?
@@ -36,7 +64,7 @@ class AutocompleteController < ApplicationController
   private
     def tag_output(search_param, tag_type)
       tags = Tag.autocomplete_lookup(search_param: search_param, autocomplete_prefix: "autocomplete_tag_#{tag_type}")
-      render_output tags.map {|r| Tag.name_from_autocomplete(r)}
+      render_output highlight_tags(search_param, tags)
     end
   public
   # these are all basically duplicates but make our calls to autocomplete more readable
@@ -50,7 +78,7 @@ class AutocompleteController < ApplicationController
   ## TAGS IN FANDOMS
   private
     def tag_in_fandom_output(params)
-      render_output(Tag.autocomplete_fandom_lookup(params).map {|r| Tag.name_from_autocomplete(r)})
+      render_output highlight_tags(params[:term], Tag.autocomplete_fandom_lookup(params))
     end
   public
   def tag_in_fandom; tag_in_fandom_output(params); end

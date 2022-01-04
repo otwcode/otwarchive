@@ -790,7 +790,7 @@ $.TokenList = function (input, url_or_data, settings) {
                 .hide();
 
             $.each(results, function(index, value) {
-                var this_li = $("<li role=\"option\">" + highlight_term(escapeHTML(value.name), query) + "</li>") // was role=\"menuitem\"
+                var this_li = $("<li role=\"option\">" + value.name + "</li>") // was role=\"menuitem\"
                                   .appendTo(dropdown_ul);
 
                 if(index % 2) {

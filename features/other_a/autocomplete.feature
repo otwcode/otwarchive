@@ -188,6 +188,12 @@ Feature: Display autocomplete for tags
     When I enter "é" in the "Characters" autocomplete field
     Then I should see HTML "<b>É</b>owyn" in the autocomplete
 
+    When I enter "e" in the "Characters" autocomplete field
+    Then I should see HTML "<b>É</b>owyn" in the autocomplete
+
+    When I enter "èowyn" in the "Characters" autocomplete field
+    Then I should see HTML "<b>Éowyn</b>" in the autocomplete
+
     # AO3-4976 There should not be stray semicolons if the query has...
     # ...trailing spaces
     When I enter "Jyn " in the "Relationships" autocomplete field
