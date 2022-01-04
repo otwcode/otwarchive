@@ -35,6 +35,7 @@ class AutocompleteController < ApplicationController
         terms.each do |term|
           if transliterate(word).downcase.starts_with? term
             highlighted_word = "<b>" + word[0, term.size] + "</b>" + word[term.size..]
+            # This only highlights start of words, but AC only matches with start of words
             highlighted_name << highlighted_word
             word_highlighted = true
             break
@@ -62,11 +63,14 @@ class AutocompleteController < ApplicationController
 
   ## TAGS
   private
-    def tag_output(search_param, tag_type)
-      tags = Tag.autocomplete_lookup(search_param: search_param, autocomplete_prefix: "autocomplete_tag_#{tag_type}")
-      render_output highlight_tags(search_param, tags)
-    end
+
+  def tag_output(search_param, tag_type)
+    tags = Tag.autocomplete_lookup(search_param: search_param, autocomplete_prefix: "autocomplete_tag_#{tag_type}")
+    render_output highlight_tags(search_param, tags)
+  end
+
   public
+
   # these are all basically duplicates but make our calls to autocomplete more readable
   def tag; tag_output(params[:term], params[:type] || "all"); end
   def fandom; tag_output(params[:term], "fandom"); end
@@ -74,17 +78,18 @@ class AutocompleteController < ApplicationController
   def relationship; tag_output(params[:term], "relationship"); end
   def freeform; tag_output(params[:term], "freeform"); end
 
-
   ## TAGS IN FANDOMS
   private
-    def tag_in_fandom_output(params)
-      render_output highlight_tags(params[:term], Tag.autocomplete_fandom_lookup(params))
-    end
+
+  def tag_in_fandom_output(params)
+    render_output highlight_tags(params[:term], Tag.autocomplete_fandom_lookup(params))
+  end
+
   public
+
   def tag_in_fandom; tag_in_fandom_output(params); end
   def character_in_fandom; tag_in_fandom_output(params.merge({tag_type: "character"})); end
   def relationship_in_fandom; tag_in_fandom_output(params.merge({tag_type: "relationship"})); end
-
 
   ## TAGS IN SETS
   #
@@ -237,7 +242,7 @@ class AutocompleteController < ApplicationController
     end
   end
 
-private
+  private
 
   # Because of the respond_to :json at the top of the controller, this will return a JSON-encoded
   # response which the autocomplete javascript on the other end should be able to handle :)
