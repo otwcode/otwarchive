@@ -35,10 +35,11 @@ class AutocompleteController < ApplicationController
         terms.each do |term|
           # This only highlights start of words, but AC only matches with start of words
           next unless transliterate(word).downcase.starts_with? term
+
           highlighted_word = "<b>" + word[0, term.size] + "</b>" + word[term.size..]
           highlighted_name << highlighted_word
           word_highlighted = true
-          break
+          break # Prevents duplicate words by stopping as soon as we have a match
         end
 
         highlighted_name << word unless word_highlighted
