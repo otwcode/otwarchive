@@ -764,11 +764,11 @@ $.TokenList = function (input, url_or_data, settings) {
     // but we need to do this in order to escape potential HTML in user entered
     // tags (only allow bold)
     function highlight_term(value) {
-        var newvalue = escapeHTML(value)
-        newvalue = value.replace(/<b>/g, "<b>")
-        newvalue = newvalue.replace(/<\/b>/g, "</b>")
-        return newvalue;
+        return escapeHTML(value)
+            .replace(new RegExp(escapeHTML("<b>"), "g"), "<b>")
+            .replace(new RegExp(escapeHTML("</b>"), "g"), "</b>");
     }
+
 
     // Populate the results dropdown with some results
     function populate_dropdown (query, results) {
