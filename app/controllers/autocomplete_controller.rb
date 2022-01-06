@@ -45,7 +45,7 @@ class AutocompleteController < ApplicationController
         highlighted_name << word unless word_highlighted
       end
 
-      highlighted << highlighted_name.join(" ")
+      highlighted << { "id": name, "name": highlighted_name.join(" ")}
     end
     highlighted
   end

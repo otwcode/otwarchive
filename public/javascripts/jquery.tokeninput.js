@@ -512,7 +512,7 @@ $.TokenList = function (input, url_or_data, settings) {
             return;
         }
 
-        var this_token = $("<li>"+ escapeHTML(value) +" </li>")
+        var this_token = $("<li>"+ escapeHTML(id) +" </li>")
           .addClass(settings.classes.token)
           .insertBefore(input_token);
 
