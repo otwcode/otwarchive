@@ -83,6 +83,34 @@ fr:
           supplémentaire.
         tos_violation: S’il est possible que votre œuvre ait enfreint les Conditions
           d’Utilisation, veuillez contacter notre Comité Modération (%{contact_abuse_url}).
+    admin_hidden_work_notification:
+      access: Durant cette période, vous pourrez toujours y accéder grâce au lien
+        fourni ci-dessus, toutefois elle ne fera pas partie de la liste de vos œuvres
+        et ne sera pas accessible aux autres utilisateur-trice-s d’AO3.
+      check_email: 'Vérifiez vos e-mails, y compris le dossier des indésirables, car
+        le Comité Modération vous a peut-être déjà contacté-e pour vous en expliquer
+        la raison. '
+      contact_abuse: contacter le Comité Modération
+      html:
+        help: Si vous ignorez pour quelle raison votre œuvre a été cachée et que vous
+          n’avez pas reçu de communication à ce sujet, merci de contacter %{contact_abuse_link}
+          directement.
+        hidden: 'Votre œuvre %{title} a été cachée par le Comité Modération et n’est
+          plus accessible au public. '
+        tos_violation: 'Si votre œuvre a été cachée suite à une violation des %{tos_link}
+          d’AO3, vous devrez corriger cette violation. À défaut, vous encourez le
+          risque qu’elle soit supprimée. '
+      subject: "[%{app_name}] Votre œuvre a été cachée par le Comité Modération"
+      text:
+        help: 'Si vous ignorez pour quelle raison votre œuvre a été cachée et que
+          vous n’avez pas reçu de communication à ce sujet, merci de contacter le
+          Comité Modération directement : %{contact_abuse_url}.'
+        hidden: Votre œuvre "%{title}" (%{work_url}) a été cachée par le Comité Modération
+          et n’est plus accessible au public.
+        tos_violation: Si votre œuvre a été cachée suite à une violation des Conditions
+          d’Utilisation d’AO3 (%{tos_url}), vous devez corriger cette violation. À
+          défaut, vous encourez le risque qu’elle soit supprimée.
+      tos: Conditions d’Utilisation
     anonymous_or_unrevealed_notification:
       anonymous_info: Les œuvres anonymes apparaissent dans les listes de tags mais
         pas sur la page rassemblant vos œuvres. Sur l'œuvre, votre nom d'utilisateur-trice
@@ -179,6 +207,16 @@ fr:
       part1: "%{login}, l’adresse e-mail associée à votre compte a été remplacée par
         %{email}"
       subject: "[%{app_name}] Changement d’adresse e-mail"
+    collection_notification:
+      assignments_sent:
+        complete: Toutes les tâches ont été envoyées.
+        subject: Tâches envoyées
+      html:
+        received_message: 'Vous avez reçu un message à propos de votre collection
+          %{collection_link} :'
+      text:
+        received_message: 'Vous avez reçu un message à propos de votre collection
+          "%{collection_title}" (%{collection_url}) :'
     creatorship_notification:
       explanation: Lorsque vous êtes co-créateur-trice d’une œuvre, votre nom peut
         être ajouté à de nouveaux chapitres quels que soient les paramètres de la
@@ -394,6 +432,11 @@ fr:
           nouvelles invitations ne peut être satisfaite pour le moment.
       reason: 'Votre demande était la suivante :'
       subject: "[%{app_name}] Demande de Code d’Invitation Supplémentaire Rejetée"
+    recipient_notification:
+      subject:
+        collection: "[%{app_name}][%{collection_title}] Une œuvre cadeau pour vous
+          dans %{collection_title}"
+        no_collection: "[%{app_name}] Une œuvre cadeau pour vous"
     signup_notification:
       activate_your_account: suivez ce lien pour activer votre compte
       admin_posts: Actualités d’AO3

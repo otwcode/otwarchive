@@ -561,20 +561,20 @@ pt-BR:
           do site.
         part2: Se sua obra era parte de um projeto de importação gerenciado pela nossa
           equipe do Open Doors (Portas Abertas), por favor %{opendoors_link} caso
-          tenha alguma dúvida.
+          tenha mais perguntas
         tos_violation: Caso seja possível que sua obra tenha violado os Termos de
           Serviço do AO3, por favor %{contact_abuse_link}.
-      opendoors: entre em contato com a equipe do projeto Portas Abertas
-      subject: "[%{app_name}] Sua obra foi apagada por um membro da equipe de administração
-        do AO3"
+      opendoors: entre em contato com o Portas Abertas
+      subject: "[%{app_name}] Sua obra foi apagada pela administração do AO3"
       text:
         part1: Sua obra "%{title}" foi apagada do AO3 por um membro da equipe de administração
           do site.
         part2: Se sua obra era parte de um projeto de importação gerenciado pela nossa
           equipe do Open Doors (Portas Abertas), por favor entre em contato com o
-          projeto  (%{opendoors_link}) caso tenha mais perguntas.
+          Portas Abertas  (%{opendoors_link}) caso tenha mais perguntas.
         tos_violation: Se é possível que sua obra tenha violado os Termos de Serviço
-          do AO3, por favor entre em contato com o comitê de Diretrizes e Abuso (%{contact_abuse_url}).
+          do AO3, por favor entre em contato com a nossa equipe de Diretrizes e Abuso
+          (%{contact_abuse_url}).
     admin_hidden_work_notification:
       tos: Termos de Serviço
     anonymous_or_unrevealed_notification:
@@ -666,7 +666,7 @@ pt-BR:
         look_up: 'Você pode ver mais detalhes sobre esta tarefa na sua página de Assignments
           (Tarefas): %{link}.'
     change_email:
-      part1: "%{login}, o e-mail associado com a sua conta foi alterado para %{email}."
+      part1: "%{login}, o e-mail associado à sua conta foi alterado para %{email}."
       subject: "[%{app_name}] Mudança de endereço de e-mail efetuada"
     collection_notification:
       assignments_sent:
@@ -852,9 +852,8 @@ pt-BR:
       body:
         one: Só pra avisar que você tem um novo convite, que pode ser usado para criar
           uma nova conta no AO3. Para convidar alguém, visite a %{invitation_page}.
-        other: Só pra avisar que você tem um total de %{count} novos convites, que
-          podem ser usados para criar novas contas no AO3. Para convidar alguém, visite
-          a %{invitation_page}.
+        other: 'Só pra avisar que você tem %{count} novos convites, que podem ser
+          usados para criar novas contas no AO3. Para convidar alguém, visite a %{invitation_page}. '
       invitation_page_link_text: sua página de Invitations (Convites)
       subject: "[%{app_name}] Novos convites"
     invite_request_declined:

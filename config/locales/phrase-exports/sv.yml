@@ -65,24 +65,53 @@ sv:
       url_para: 'URL för sidan som missbruket finns på:'
     admin_deleted_work_notification:
       bye: Som hänvisning har vi bifogat en kopia av ditt verk.
-      contact_abuse: kontakta vår kommitté Policy & Missbruk
+      contact_abuse: kontakta vår kommitté för Policy och missbruk
       html:
         part1: Ditt verk %{title} har blivit raderat från AO3 av en av webbplatsens
           administratörer.
         part2: Om ditt verk var en del av ett importprojekt som hanteras av vårt Öppna
-          Dörrar-team, var vänlig %{opendoors_link} om du har frågor.
-        tos_violation: Om det är möjligt att ditt verk bröt mot AO3s användarvillkor,
+          dörrar-team, var vänlig %{opendoors_link} om du har frågor.
+        tos_violation: Om det är möjligt att ditt verk bröt mot AO3:s användarvillkor,
           var vänlig %{contact_abuse_link}.
-      opendoors: kontakta Öppna Dörrar
+      opendoors: kontakta Öppna dörrar
       subject: "[%{app_name}] Ditt verk har blivit raderat av en administratör"
       text:
         part1: Ditt verk "%{title}" har blivit raderat från AO3 av en av webbplatsens
           administratörer.
         part2: Om ditt verk var en del av ett importprojekt som hanteras av vårt Öppna
-          Dörrar-team, var vänlig kontakta Öppna Dörrar (%{opendoors_link}) om du
+          dörrar-team, var vänlig kontakta Öppna dörrar (%{opendoors_link}) om du
           har frågor.
-        tos_violation: Om det är möjligt att ditt verk bröt mot AO3s användarvillkor,
-          var vänlig kontakta vår kommitté Policy & Missbruk (%{contact_abuse_url}).
+        tos_violation: Om det är möjligt att ditt verk bröt mot AO3:s användarvillkor,
+          var vänlig kontakta vår kommitté för Policy och missbruk (%{contact_abuse_url}).
+    admin_hidden_work_notification:
+      access: Fastän ditt verk är dolt kan du fortfarande nå det genom länken ovan,
+        men det kommer inte att finnas med på listan över dina verk och det är inte
+        tillgängligt för andra som använder AO3.
+      check_email: Var vänlig kolla din e-post, inklusive din mapp för skräppost,
+        eftersom teamet för Policy & Missbruk redan kan ha kontaktat dig för att förklara
+        varför ditt verk är dolt.
+      contact_abuse: kontakta Policy & Missbruk
+      html:
+        help: Om du är osäker på varför ditt verk blivit dolt och vi inte har kommunicerat
+          med dig på annat sätt angående detta, var vänlig %{contact_abuse_link} direkt.
+        hidden: Ditt verk %{title} har blivit dolt av teamet för Policy & Missbruk
+          och är inte längre tillgängligt för allmänheten.
+        tos_violation: Om ditt verk har dolts på grund av ett brott mot AO3s %{tos_link},
+          så kommer du att behöva åtgärda problemet. Om du inte korrigerar ditt verk
+          så att det stämmer överens med användarvillkoren så kan verket komma att
+          raderas från AO3.
+      subject: "[%{app_name}] Ditt verk har blivit dolt av teamet för Policy & Missbruk"
+      text:
+        help: 'Om du är osäker på varför ditt verk har blivit dolt och vi inte har
+          kommunicerat med dig på annat sätt angående detta, var vänlig kontakta Policy
+          & Missbruk direkt: %{contact_abuse_url}.'
+        hidden: Ditt verk "%{title}" (%{work_url})  har blivit dolt av teamet för
+          Policy & Missbruk och är inte längre tillgängligt för allmänheten.
+        tos_violation: Om ditt verk har dolts på grund av ett brott mot AO3s användarvillkor
+          (%{tos_url}), så kommer du att behöva åtgärda problemet. Om du inte korrigerar
+          ditt verk så att det stämmer överens med användarvillkoren så kan verket
+          komma att raderas från AO3.
+      tos: Användarvillkor
     anonymous_or_unrevealed_notification:
       anonymous_info: Anonyma verk ingår i tagglistor, men inte på din sida med verk.
         På verket kommer ditt användarnamn ersättas med “Anonymous” (Anonym).
@@ -130,7 +159,7 @@ sv:
           text: 'Om du inte vill att ditt verk ska döljas, var god besök sidan Approved
             Collection Items (Godkända samlingsobjekt) för att ta bort den från samlingen:
             %{collection_items_url} '
-      faq_link_text: Vanliga frågor om samlingar och utmaningar
+      faq_link_text: Vanliga frågor om samlingar
       more_info:
         html: För mer information, var god läs våra %{faq_link}.
         text: 'För mer information var god läs våra Vanliga frågor om samlingar: %{faq_url}'
@@ -172,6 +201,15 @@ sv:
       part1: "%{login}, e-postadressen som är knuten till ditt konto har ändrats till
         %{email}"
       subject: "[%{app_name}] E-postadressen har ändrats"
+    collection_notification:
+      assignments_sent:
+        complete: Alla uppdrag har nu skickats ut.
+        subject: Uppdragen utskickade
+      html:
+        received_message: 'Du har fått ett meddelande om din samling "%{collection_title}"
+          (%{collection_url}):'
+      text:
+        received_message: 'Du har fått ett meddelande om din samling %{collection_link}:'
     creatorship_notification:
       explanation: När du är medskapare till ett verk kan du bli tillagd på nya kapitel
         oavsett vilka medskaparinställningar du har. Du kommer även att bli tillagd
@@ -220,14 +258,14 @@ sv:
     delete_work_notification:
       html:
         part1_other: Ditt verk "%{title}" togs bort på begäran av %{pseud}.
-        part1_yourself: Ditt verk %{title} togs bort enligt din begäran.
+        part1_yourself: Ditt verk %{title} togs bort på din begäran.
         part2: Om du har frågor, vänligen %{support}.
       part3: Bifogat finns en kopia av ditt verk för din kännedom.
       subject: "[%{app_name}] Ditt verk har tagits bort"
       support: kontakta Support
       text:
         part1_other: Ditt verk "%{title}" togs bort på begäran av %{pseud}.
-        part1_yourself: Ditt verk "%{title}" togs bort enligt din begäran.
+        part1_yourself: Ditt verk "%{title}" togs bort på din begäran.
         part2: Om du har frågor, vänligen %{support} (%{url}).
     invitation_to_claim:
       html:

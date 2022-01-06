@@ -80,6 +80,96 @@ tr:
         tos_violation: Eğer eserinizin AO3’ün Kullanım Şartlarını ihlal etmiş olma
           ihtimali var ise lütfen Poliçe ve Kötüye Kullanım Komitesi (%{contact_abuse_url})
           ile iletişime geçin.
+    admin_hidden_work_notification:
+      access: Eseriniz gizli olmasına rağmen, yukarıda verilen link üzerinden ona
+        erişim sağlayabileceksiniz, ancak, çalışma sayfanızda listelenmeyecek ve AO3'ün
+        diğer kullanıcıları tarafından erişilemeyecek halde olacak.
+      check_email: Poliçe ve Kötüye Kullanım Komitesi eserinizin neden gizlendiğini
+        açıklamak için sizinle daha önce iletişime geçmiş olabileceğinden, lütfen
+        spam klasörünüz de dahil olmak üzere, e-postanızı kontrol edin.
+      contact_abuse: Poliçe ve Kötüye Kullanım Komitesi’yle iletişime geçin
+      html:
+        help: Eserinizin neden gizlendiğinden emin değilseniz ve bu konuyla ilgili
+          başka bilgi almadıysanız, lütfen doğrudan %{contact_abuse_link}.
+        hidden: "%{title} adlı eseriniz Poliçe ve Kötüye Kullanım Komitesi tarafından
+          gizlenmiştir ve artık herkese açık değildir."
+        tos_violation: Eseriniz, AO3’ün %{tos_link} ihlali nedeniyle gizlendiyse,
+          ihlali düzeltmek için harekete geçmeniz gerekecektir. Eserinizin Kullanım
+          Şartları’na uygun hale getirilmemesi, eserinizin AO3'ten silinmesine neden
+          olabilir.
+      subject: "[%{app_name}] eseriniz Poliçe ve Kötüye Kullanım Komitesi tarafından
+        gizlenmiştir"
+      text:
+        help: 'Eserinizin neden gizlendiğinden emin değilseniz ve bu konuyla ilgili
+          başka bilgi almadıysanız, lütfen doğrudan Poliçe ve Kötüye Kullanım Komitesi’yle
+          iletişime geçin: %{contact_abuse_url}.'
+        hidden: '"%{title}" (%{work_url}) adlı eseriniz Poliçe ve Kötüye Kullanım
+          Komitesi tarafından gizlenmiştir ve artık herkese açık değildir.'
+        tos_violation: Eseriniz, AO3 Kullanım Şartları’nın (%{tos_url}) ihlali nedeniyle
+          gizlendiyse, ihlali düzeltmek için harekete geçmeniz gerekecektir. Eserinizin
+          Kullanım Şartları’na uygun hale getirilmemesi, eserinizin AO3'ten silinmesine
+          neden olabilir.
+      tos: Kullanım Şartları
+    anonymous_or_unrevealed_notification:
+      anonymous_info: Anonim eserler etiket listelerine dahil edilir, ancak sizin
+        eserler sayfanızda gösterilmez. Eserde bulunan kullanıcı adınız ise "Anonymous"
+        (Anonim) olarak değiştirilir.
+      anonymous_unrevealed_info: İlerleyen dönemlerde koleksiyon sorumluları eserinizin
+        durumunu gizli olmaktan çıkarıp eseri genele açabilir, ancak eserin anonim
+        durumunu koruyabilir. Size abone olan kişiler böylesi bir değişiklikten haberdar
+        edilmez. Eser genel erişime açıldığında, eseriniz etiket listelerine dahil
+        edilir, ancak sizin eserler sayfanızda gösterilmez. Eserde kullanıcı adınız
+        "Anonymous" (Anonim) ile değiştirilir.
+      changed_status:
+        anonymous:
+          html: "%{collection_link} koleksiyonunu sorumluları, %{work_link} eserinizin
+            durumunu anonim olarak değiştirdi."
+          text: '"%{collection_title}" (%{collection_url}) koleksiyonunun sorumluları
+            "%{work_title}" (%{work_url}) eserinizin durumunu anonim olarak değiştirdi. '
+        anonymous_unrevealed:
+          html: "%{collection_link}’ın koleksiyon sorumluları, %{work_link} eserinizin
+            durumunu anonim ve gizli olarak değiştirdi."
+          text: '"%{collection_title}" (%{collection_url}) koleksiyonunun sorumluları"%{work_title}"
+            (%{work_url}) eserinizin durumunu anonim ve gizli olarak değiştirdi.'
+        unrevealed:
+          html: "%{collection_link}’ın koleksiyon sorumluları, %{work_link} eserinizin
+            durumunu gizli olarak değiştirdi."
+          text: ' "%{collection_title}" (%{collection_url})  koleksiyonunun sorumluları  "%{work_title}"
+            (%{work_url}) eserinizin durumunu gizli olarak değiştirdi.'
+      collection_items_link_text: Approved Collection Items (Onaylı Koleksiyon Öğeleri)
+        sayfası
+      do_not_want:
+        anonymous:
+          html: Eserinizin anonim ve gizli olmasını istemiyorsanız, eserinizi bu koleksiyondan
+            çıkarmak için lütfen %{collection_items_link} sayfasını ziyaret ediniz.
+          text: 'Eserinizin anonim olmasını istemiyorsanız, eserinizi bu koleksiyondan
+            çıkarmak için Approved Collection Items (Onaylı Koleksiyon Öğeleri) sayfanızı
+            ziyaret edebilirsiniz: %{collection_items_url}'
+        anonymous_unrevealed:
+          html: 'Eserinizin anonim ve gizli olmasını istemiyorsanız, eserinizi bu
+            koleksiyondan çıkarmak için Approved Collection Items (Onaylı Koleksiyon
+            Öğeleri) sayfanızı ziyaret edebilirsiniz: %{collection_items_url}'
+          text: 'Eserinizin anonim ve gizli olmasını istemiyorsanız, eserinizi bu
+            koleksiyondan çıkarmak için Approved Collection Items (Onaylı Koleksiyon
+            Öğeleri) sayfanızı ziyaret edebilirsiniz: %{collection_items_url}'
+        unrevealed:
+          html: Eserinizin gizli olmasını istemiyorsanız, eserinizi bu koleksiyondan
+            çıkarmak için lütfen %{collection_items_link} sayfasını ziyaret ediniz.
+          text: 'Eserinizin gizli olmasını istemiyorsanız, eserinizi bu koleksiyondan
+            çıkarmak için Approved Collection Items (Onaylı Koleksiyon Öğeleri) sayfanızı
+            ziyaret edebilirsiniz: %{collection_items_url}'
+      faq_link_text: Koleksiyonlar SSS
+      more_info:
+        html: Daha fazla bilgi için, %{faq_link} sayfasına göz atabilirsiniz.
+        text: 'Daha fazla bilgi için, Koleksiyonlar SSS sayfasına göz atabilirsiniz:
+          %{faq_url}'
+      subject:
+        anonymous: "[%{app_name}] Eseriniz anonim hale getirildi"
+        anonymous_unrevealed: "[%{app_name}] Eseriniz anonim ve gizli hale getirildi"
+        unrevealed: "[%{app_name}] Eseriniz gizli hale getirildi"
+      unrevealed_info: Gizli eserler etiket listelerinde veya eser sayfanızda yer
+        almaz. Eser bağlantısını takip eden herkes, eserin şu anda gizli olduğuna
+        dair bir bildirimle karşılaşır ve içeriğine erişim sağlayamazlar.
     challenge_assignment_notification:
       any: Herhangi bir
       description: 'Tanım:'
@@ -130,3 +220,26 @@ tr:
         creation: "%{pseuds} tarafından %{title} (%{url})"
         instructions: 'Bu isteği Co-Creator Requests (Eş-Yazar İstekleri) sayfanızdan
           kabul edebilir veya reddedebilirsiniz: %{url}'
+    invite_increase_notification:
+      body:
+        one: AO3'te yeni bir hesap oluşturmak için kullanabileceğiniz %{count} yeni
+          davetiyeniz olduğunu size bildirmek istedik. Dilerseniz %{invitation_page}
+          üzerinden bir arkadaşınızı davet edebilirsiniz.
+        other: AO3'te yeni hesaplar oluşturmak için kullanabileceğiniz %{count} yeni
+          davetiyeniz olduğunu size bildirmek istedik. Dilerseniz %{invitation_page}
+          üzerinden bir arkadaşınızı davet edebilirsiniz.
+      invitation_page_link_text: Invitations (Davetiyeler) sayfanız
+      subject: "[%{app_name}] Yeni Davetiyeler"
+    invite_request_declined:
+      main:
+        one: Yeni bir davete ilişkin talebinizi şu anda yerine getiremeyeceğimizi
+          üzülerek bildiriyoruz.
+        other: "%{count} yeni davet talebinizi şu anda yerine getiremeyeceğimizi üzülerek
+          bildiriyoruz."
+      reason: 'Talebiniz şöyleydi:'
+      subject: "[%{app_name}] İlave Davet Kodu İsteğiniz Reddedildi"
+    recipient_notification:
+      subject:
+        collection: "[%{app_name}][%{collection_title}] %{collection_title} tarafından
+          size hediye edilmiş bir eser"
+        no_collection: "[%{app_name}] Size hediye edilmiş bir eser"

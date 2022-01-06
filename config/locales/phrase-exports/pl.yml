@@ -179,6 +179,15 @@ pl:
     change_email:
       part1: "%{login}, adres email powiązany z Twoim kontem został zmieniony na %{email}"
       subject: "[%{app_name}] Email został zmieniony"
+    collection_notification:
+      assignments_sent:
+        complete: Wszystkie zadania zostały wysłane.
+        subject: Wysłane zadania
+      html:
+        received_message: 'Masz nową wiadomość dotyczącą Twojej kolekcji %{collection_link}:'
+      text:
+        received_message: 'Masz nową wiadomość dotyczącą Twojej kolekcji "%{collection_title}"
+          (%{collection_url}):'
     creatorship_notification:
       explanation: Gdy jesteś współtwórcą pracy, możesz zostać dodana/y do nowych
         rozdziałów bez względu na Twoje ustawienia współtworzenia. Będziesz również

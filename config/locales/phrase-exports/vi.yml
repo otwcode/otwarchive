@@ -105,7 +105,7 @@ vi:
           %{contact_abuse_url}.'
         hidden: Tác phẩm "%{title}" (%{work_url}) đã bị ẩn bởi Ban Xử Lý Lạm Quyền
           và không còn ở chế độ mở truy cập công khai.
-        tos_violation: 'Nếu tác phẩm của bạn bị ẩn do vi phạm Điều Khoản Dịch Vụ (%{tos_link})
+        tos_violation: 'Nếu tác phẩm của bạn bị ẩn do vi phạm Điều Khoản Dịch Vụ (%{tos_url})
           của AO3, bạn sẽ được yêu cầu có hành động điều chỉnh để khắc phục. Không
           xử lý vi phạm về Điều Khoản Dịch Vụ có thể dẫn tới việc tác phẩm của bạn
           bị xóa khỏi AO3. '

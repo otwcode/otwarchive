@@ -245,6 +245,10 @@ ja:
         other: 申し訳ございませんが、あなたのリクエストされた%{count} 件の新しい招待コードは、今回は承認できませんでした。
       reason: あなたのリクエストは以下の通りでした。
       subject: "[%{app_name}]追加招待コードのリクエストが拒否されました"
+    recipient_notification:
+      subject:
+        collection: "[%{app_name}][%{collection_title}] %{collection_title}からあなたへのプレゼント作品が届きました"
+        no_collection: "[%{app_name}] あなたへのプレゼント作品が届きました"
     signup_notification:
       activate_your_account: このリンクに従いアアカウントを有効化してください
       admin_posts: AO3ニュース

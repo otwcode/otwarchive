@@ -12,7 +12,7 @@ fi:
             part1: Jos olet saanut tämän viestin virheellisesti, ole hyvä ja %{support_link}.
             part2: Archive of Our Own (Oma arkisto) on fanien pyörittämä ja tukema
               arkisto, joka toimii %{donate_link} varassa.
-            support_link_text: Ota yhteyttä Käyttäjätukeen
+            support_link_text: ota yhteyttä Käyttäjätukeen
           text:
             part1: Jos olet saanut tämän viestin virheellisesti, ole hyvä ja ota yhteyttä
               Käyttäjätukeen osoitteessa %{support_url}.
@@ -80,6 +80,91 @@ fi:
           jos sinulla on kysymyksiä.
         tos_violation: Jos teoksesi saattoi rikkoa AO3:n Käyttöehtoja, ole hyvä ja
           ota yhteyttä Säännöt ja väärinkäytökset -toimikuntaan (%{contact_abuse_url}).
+    admin_hidden_work_notification:
+      access: Teoksen ollessa piilotettuna voit tarkastella sitä yllä olevan linkin
+        kautta, mutta se ei näy teokset-sivullasi eikä se ole muiden AO3-käyttäjien
+        saatavilla.
+      check_email: Tarkistathan sähköpostisi, myös roskapostikansion, sillä Säännöt
+        ja väärinkäytökset -toimikunta on saattanut jo ottaa yhteyttä ja selittää,
+        miksi teoksesi on piilotettu.
+      contact_abuse: ota yhteyttä Säännöt ja väärinkäytökset -toimikuntaan
+      html:
+        help: Mikäli olet epävarma siitä, miksi teoksesi piilotettiin, etkä ole saanut
+          yhteydenottoa asiaan liittyen, %{contact_abuse_link}.
+        hidden: Säännöt ja väärinkäytökset -toimikunta on piilottanut teoksesi %{title},
+          eikä se ole enää julkisesti saatavilla.
+        tos_violation: Mikäli teoksesi piilotettiin siksi, että se rikkoi AO3:n %{tos_link},
+          sinun tulee toimia rikkeen korjaamiseksi. Mikäli et muuta teostasi Käyttöehtojen
+          mukaiseksi, se saatetaan poistaa AO3:sta.
+      subject: "[%{app_name}] Säännöt ja väärinkäytökset -toimikunta on piilottanut
+        teoksesi"
+      text:
+        help: 'Mikäli olet epävarma siitä, miksi teoksesi piilotettiin, etkä ole saanut
+          yhteydenottoa asiaan liittyen, ota yhteyttä Säännöt ja väärinkäytökset -toimikuntaan:
+          %{contact_abuse_url}.'
+        hidden: Säännöt ja rikkomukset -toimikunta on piilottanut teoksesi “%{title}"
+          (%{work_url}) eikä se ole enää julkisesti saatavilla.
+        tos_violation: Mikäli teoksesi piilotettiin siksi, että se rikkoi AO3:n Käyttöehtoja
+          (%{tos_url}), sinun tulee toimia rikkeen korjaamiseksi. Mikäli et muuta
+          teostasi Käyttöehtojen mukaiseksi, se saatetaan poistaa AO3:sta.
+      tos: Käyttöehtoja
+    anonymous_or_unrevealed_notification:
+      anonymous_info: Anonyymit teokset näkyvät teoslistauksissa mutta eivät omalla
+        teossivullasi. Teoksessa käyttäjänimesi tilalla lukee “Anonymous” (anonyymi).
+      anonymous_unrevealed_info: Kokoelman ylläpitäjät saattavat myöhemmin paljastaa
+        teoksesi mutta jättää sen anonyymiksi. Teoksiesi ilmoitukset tilanneet eivät
+        saa ilmoitusta tästä muutoksesta. Paljastamisen jälkeen teoksesi näkyy avainsanalistauksissa
+        mutta ei teossivullasi. Teoksessa käyttäjänimesi tilalla lukee “Anonymous”
+        (anonyymi).
+      changed_status:
+        anonymous:
+          html: Kokoelman %{collection_link} ylläpitäjät ovat muuttaneet teoksesi
+            %{work_link} tilan anonyymiksi.
+          text: Kokoelman "%{collection_title}" (%{collection_url}) ylläpitäjät ovat
+            muuttaneet teoksesi "%{work_title}" (%{work_url}) tilan anonyymiksi.
+        anonymous_unrevealed:
+          html: Kokoelman  %{collection_link} ylläpitäjät ovat muuttaneet teoksesi
+            %{work_link} tilan anonyymiksi ja paljastamattomaksi.
+          text: Kokoelman "%{collection_title}" (%{collection_url}) ylläpitäjät ovat
+            muuttaneet teoksesi "%{work_title}" (%{work_url}) tilan anonyymiksi ja
+            paljastamattomaksi.
+        unrevealed:
+          html: 'Kokoelman %{collection_link} ylläpitäjät ovat muuttaneet teoksesi
+            %{work_link} tilan paljastattomaksi. '
+          text: Kokoelman "%{collection_title}" (%{collection_url}) ylläpitäjät ovat
+            muuttaneet teoksesi "%{work_title}" (%{work_url}) tilan paljastamattomaksi.
+      collection_items_link_text: Approved Collection Items (Hyväksytyt kokoelmateokset)
+        -sivullasi
+      do_not_want:
+        anonymous:
+          html: "Jos et halua teoksesi olevan paljastamaton, käy \n%{collection_items_link}
+            poistaaksesi sen tästä kokoelmasta."
+          text: 'Jos et halua teoksesi olevan anonyymi, käy Approved Collection Items
+            (Hyväksytyt kokoelmateokset) -sivullasi poistaaksesi sen tästä kokoelmasta:
+            %{collection_items_url}'
+        anonymous_unrevealed:
+          html: Jos et halua teoksesi olevan anonyymi ja paljastamaton, käy %{collection_items_link}
+            poistaaksesi sen tästä kokoelmasta.
+          text: 'Jos et halua teoksesi olevan anonyymi ja paljastamaton, käy Approved
+            Collection Items (Hyväksytyt kokoelmateokset) -sivullasi poistaaksesi
+            sen tästä kokoelmasta: %{collection_items_url}'
+        unrevealed:
+          html: "Jos et halua teoksesi olevan paljastamaton, käy \n%{collection_items_link}
+            poistaaksesi sen tästä kokoelmasta."
+          text: 'Jos et halua teoksesi olevan paljastamaton, käy Approved Collection
+            Items (Hyväksytyt kokoelmateokset) -sivullasi poistaaksesi sen tästä kokoelmasta:
+            %{collection_items_url}'
+      faq_link_text: Kokoelmat-UKK:sta
+      more_info:
+        html: Lisätietoa %{faq_link}.
+        text: 'Lisätietoa Kokoelmat-UKK:sta: %{faq_url}'
+      subject:
+        anonymous: "[%{app_name}] Teoksestasi on tehty anonyymi"
+        anonymous_unrevealed: "[%{app_name}] Teoksestasi tehtiin anonyymi ja paljastamaton"
+        unrevealed: "[%{app_name}] Teoksesi tehtiin paljastamattomaksi"
+      unrevealed_info: 'Paljastamattomat teokset eivät näy avainsanalistauksissa tai
+        teossivullasi. Kaikki, jotka pääsevät teokseen linkin kautta, saavat ilmoituksen,
+        että se on toistaiseksi paljastamaton eivätkä pääse käsiksi sen sisältöön. '
     challenge_assignment_notification:
       any: Milloin tahansa
       description: 'Kuvaus:'
@@ -109,6 +194,15 @@ fi:
     change_email:
       part1: "%{login}, tunnuksesi uudeksi sähköpostiosoitteeksi on asetettu %{email}"
       subject: "[%{app_name}] Sähköpostiosoite muutettu"
+    collection_notification:
+      assignments_sent:
+        complete: Kaikki tehtävänannot on nyt lähetetty.
+        subject: Tehtävänannot lähetetty
+      html:
+        received_message: 'Olet saanut kokoelmaasi %{collection_link} koskevan viestin:'
+      text:
+        received_message: 'Olet saanut kokoelmaasi "%{collection_title}" (%{collection_url})
+          koskevan viestin:'
     creatorship_notification:
       explanation: Teoksen kanssatekijnä sinut voidaan lisätä uusiin lukuihin riippumatta
         tilisi kanssatekijyysasetuksista. Sinut lisätään myös kaikkiin sarjoihin,
@@ -270,6 +364,11 @@ fi:
           %{count} uutta kutsua.
       reason: 'Pyyntösi oli:'
       subject: "[%{app_name}] Pyyntösi ylimääräisistä kutsukoodeista on hylätty"
+    recipient_notification:
+      subject:
+        collection: "[%{app_name}][%{collection_title}] Lahjateos sinulle kokoelmassa
+          %{collection_title}"
+        no_collection: "[%{app_name}] Sinulle on lahjoitettu teos"
     signup_notification:
       activate_your_account: käytä tätä linkkiä aktivoidaksesi käyttäjätilisi
       admin_posts: AO3:n uutisista

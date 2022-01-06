@@ -1,6 +1,37 @@
 ---
 de:
   mailer:
+    general:
+      closing:
+        formal: Mit freundlichen Grüßen
+        informal: Viele Grüße
+      footer:
+        general:
+          html:
+            donate_link_text: Deine Spenden
+            part1: Solltest Du diese Nachricht irrtümlicherweise erhalten haben, bitte
+              %{support_link}.
+            part2: Das AO3 ist ein Archiv von Fans für Fans, das auf %{donate_link}
+              angewiesen ist.
+            support_link_text: wende Dich an den Support
+          text:
+            part1: Solltest Du diese Nachricht irrtümlicherweise erhalten haben, wende
+              dich bitte unter %{support_url} an den Support.
+            part2: 'Das AO3 ist ein Archiv von Fans für Fans, das auf Deine Spenden
+              angewiesen ist: %{donate_url}.'
+        sent_at: Gesendet %{sent_at}.
+      greeting:
+        formal: Hallo, %{name},
+        informal:
+          addressed: Hallo, %{name}!
+          unaddressed: Hallo!
+        introductory: Hallo vom Archive of Our Own – AO3 (Ein Eigenes Archiv)
+      signature:
+        app_short_name: AO3
+        open_doors: Das “Open Doors”- (Offene Türen) Team
+        parent_org: Organization for Transformative Works – OTW (Organisation für
+          Transformative Werke)
+        support: Das AO3-Support-Team
     kudos:
       guest:
         one: ein Gast

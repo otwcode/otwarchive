@@ -9,7 +9,7 @@ hr:
         general:
           html:
             donate_link_text: Vaše donacije
-            part1: Ako ste ovu poruku primili pogreškom, molimo vas da %{support_link}.
+            part1: Ako ste ovu poruku primili pogreškom, molimo Vas da %{support_link}.
             part2: AO3 je arhiv od fanova za fanove, te ovisi o %{donate_link}.
             support_link_text: kontaktirate korisničku podršku
           text:
@@ -196,6 +196,15 @@ hr:
     change_email:
       part1: "%{login}, e-mail povezan s vašim računom je promijenjen u %{email}"
       subject: "[%{app_name}] Promijenjen e-mail"
+    collection_notification:
+      assignments_sent:
+        complete: Poslani su svi zadaci.
+        subject: Zadaci poslani
+      html:
+        received_message: 'Dobili ste poruku o vašoj kolekciji %{collection_link}:'
+      text:
+        received_message: 'Dobili ste poruku o vašoj kolekciji "%{collection_title}"
+          (%{collection_url}):'
     creatorship_notification:
       explanation: Kada ste sukreator nekog djela, možete biti dodani novim poglavljima
         bez obzira na vaše postavke. Također ćete biti dodani serijalu kojem je dodano
@@ -251,7 +260,7 @@ hr:
       text:
         part1_other: Vaše djelo "%{title}" je izbrisano na zahtjev %{pseud}.
         part1_yourself: Vaše djelo "%{title}"  je izbrisano na vaš zahtjev.
-        part2: "[%{app_name}] Vaše djelo je izbrisano od strane administratora"
+        part2: Ako imate pitanja, molimo %{support} (%{url}).
     invitation:
       been_invited: Pozvani ste da se pridružite našoj otvorenoj beti!
       has_invited: "%{user_name} Vas je pozvao da se pridružite našoj beti!"
@@ -379,6 +388,10 @@ hr:
           poziva trenutno ne može biti odobren.
       reason: 'Vaš zahtjev je bio:'
       subject: "[%{app_name}] Zahtjev za dodatnim pozivnim kodom odbijen"
+    recipient_notification:
+      subject:
+        collection: "[%{app_name}][%{collection_title}] Poklon za Vas od %{collection_title}"
+        no_collection: "[%{app_name}] Poklon za Vas"
     signup_notification:
       activate_your_account: Slijedite ovu poveznicu kako bi aktivirali svoj korisnički
         račun
