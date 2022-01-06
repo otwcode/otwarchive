@@ -33,19 +33,18 @@ class AutocompleteController < ApplicationController
       name.split.each do |word|
         word_highlighted = false
         terms.each do |term|
-          if transliterate(word).downcase.starts_with? term
-            highlighted_word = "<b>" + word[0, term.size] + "</b>" + word[term.size..]
-            # This only highlights start of words, but AC only matches with start of words
-            highlighted_name << highlighted_word
-            word_highlighted = true
-            break
-          end
+          # This only highlights start of words, but AC only matches with start of words
+          next unless transliterate(word).downcase.starts_with? term
+          highlighted_word = "<b>" + word[0, term.size] + "</b>" + word[term.size..]
+          highlighted_name << highlighted_word
+          word_highlighted = true
+          break
         end
 
         highlighted_name << word unless word_highlighted
       end
 
-      highlighted << { "id": name, "name": highlighted_name.join(" ")}
+      highlighted << { "id": name, "name": highlighted_name.join(" ") }
     end
     highlighted
   end
