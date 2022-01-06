@@ -79,6 +79,36 @@ da:
           kan du kontakte Åbne Døre (%{opendoors_link}), hvis du har spørgsmål.
         tos_violation: Hvis det er muligt, at dit værk har overtrådt AO3’s Brugsbetingelser,
           kan du kontakte vores komité for Retningslinjer & Misbrug (%{contact_abuse_url}).
+    admin_hidden_work_notification:
+      access: Mens dit værk er skjult, kan du stadig tilgå det via det ovenstående
+        link, men det vil ikke være synligt på din værkside, og det vil ikke være
+        tilgængeligt for andre AO3-brugere.
+      check_email: 'Tjek venligst din e-mail, inklusive din spammappe, da Retningslinjer
+        & Misbrug-teamet allerede kan have kontaktet dig og forklaret grunden til,
+        at dit værk er blevet skjult. '
+      contact_abuse: kontakte Retningslinjer & Misbrug
+      html:
+        help: 'Hvis du er i tvivl om, hvorfor dit værk er blevet skjult, og du ikke
+          har modtaget nogen beskeder vedrørende dette emne, kan du %{contact_abuse_link}
+          direkte. '
+        hidden: 'Dit værk %{title} er blevet skjult af Retningslinjer & Misbrug-teamet
+          og er ikke længere offentligt tilgængeligt. '
+        tos_violation: 'Hvis dit værk er blevet skjult, fordi det var i strid med
+          AO3’s %{tos_link}, er du nødt til først at rette op på forsømmelsen. Hvis
+          du ikke formår at tilpasse dit værk, så det overholder Brugsbetingelserne,
+          kan det i sidste ende resultere i, at dit værk bliver slettet fra AO3. '
+      subject: "[%{app_name}] Dit værk er blevet skjult af Retningslinjer & Misbrug-teamet"
+      text:
+        help: 'Hvis du er i tvivl om, hvorfor dit værk er blevet skjult, og du ikke
+          har modtaget nogen beskeder vedrørende dette emne, kan du kontakte Retningslinjer
+          & Misbrug direkte: %{contact_abuse_link}'
+        hidden: 'Din værk "%{title}" (%{work_url}) er blevet skjult af Retningslinjer
+          & Misbrug-teamet og er ikke længere offentligt tilgængeligt. '
+        tos_violation: 'Hvis dit værk blev skjult, fordi det var i strid med AO3’s
+          Brugsbetingelser (%{tos_url}), er du nødt til at rette op på forsømmelsen.
+          Hvis du ikke formår at tilpassedit værk, så det overholder Brugsbetingelserne,
+          kan det i sidste ende resultere i, at dit værk bliver slettet fra AO3. '
+      tos: Brugsbetingelser
     anonymous_or_unrevealed_notification:
       anonymous_info: Anonyme værker er inkluderet i tag-lister, men ikke på din side
         for værker. På værket vil dit brugernavn blive erstattet med  "Anonymous"
@@ -160,7 +190,7 @@ da:
           (%{collection_url}) -udfordringen på Archive of Our Own!
         footer: Du modtager denne e-mail, fordi du tilmeldte dig %{title}-udfordringen
           (%{url}).For mere information om denne udfordring og moderatorernes kontaktinformation,
-          gå til %{footer_link}.
+          gå til %{profile_url}.
         look_up: Du kan se denne opgave på din Assignments (Opgave) side på %{link}.
     change_email:
       part1: "%{login}, e-mailadressen, der er tilknyttet din konto, er blevet ændret

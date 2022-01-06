@@ -117,6 +117,68 @@ it:
           tuo lavoro in accordo con i Termini di Servizio, la conseguenza potrebbe
           essere la cancellazione del tuo lavoro da AO3.
       tos: Termini di Servizio
+    anonymous_or_unrevealed_notification:
+      anonymous_info: I lavori anonimi sono inclusi negli elenchi di tag, ma non sulla
+        pagina dei tuoi lavori. Nella pagina del lavoro, il tuo nome utente sarà sostituito
+        da “Anonymous” (Anonimo).
+      anonymous_unrevealed_info: I manutentori della collezione potranno in seguito
+        rivelare il tuo lavoro ma lasciarlo anonimo. I tuoi iscritti non verranno
+        notificati di questo cambiamento. Una volta rivelato, il tuo lavoro sarà incluso
+        negli elenchi di tag, ma non sui lavori della tua pagina. Nella pagina del
+        lavoro, il tuo nome utente sarà sostituito da “Anonymous” (Anonimo).
+      changed_status:
+        anonymous:
+          html: I manutentori della collezione %{collection_link} hanno cambiato lo
+            stato del tuo lavoro %{work_link} in anonimo.
+          text: I manutentori della collezione "%{collection_title}" (%{collection_url})
+            hanno cambiato lo stato del tuo lavoro "%{work_title}" (%{work_url}) in
+            anonimo.
+        anonymous_unrevealed:
+          html: I manutentori della collezione %{collection_link} hanno cambiato lo
+            stato del tuo lavoro %{work_link} in anonimo e non rivelato.
+          text: I manutentori della collezione"%{collection_title}" (%{collection_url})
+            hanno cambiato lo stato del tuo lavoro "%{work_title}" (%{work_url}) in
+            anonimo e non rivelato.
+        unrevealed:
+          html: I manutentori della collezione %{collection_link} hanno cambiato lo
+            stato del tuo lavoro %{work_link} in non rivelato.
+          text: I manutentori della collezione "%{collection_title}" (%{collection_url})
+            hanno cambiato lo stato del tuo lavoro "%{work_title}" (%{work_url}) in
+            non rivelato.
+      collection_items_link_text: pagina “Approved Collection Items” (Elementi approvati
+        della collezione)
+      do_not_want:
+        anonymous:
+          html: Se non vuoi che il tuo lavoro resti anonimo, per favore visita la
+            tua %{collection_items_link} per rimuoverlo da questa collezione.
+          text: 'Se non vuoi che il tuo lavoro sia anonimo, per favore visita la tua
+            pagina Approved Collection Items (Elementi approvati della collezione)
+            per rimuoverlo da questa collezione: %{collection_items_url}'
+        anonymous_unrevealed:
+          html: Se non vuoi che il tuo lavoro sia anonimo e non rivelato, per favore
+            visita la tua %{collection_items_link} per rimuoverlo da questa collezione.
+          text: 'Se non vuoi che il tuo lavoro sia anonimo e non rivelato, per favore
+            visita la tua pagina Approved Collection Items (Elementi approvati della
+            collezione) per rimuoverlo da questa collezione: %{collection_items_url}'
+        unrevealed:
+          html: Se non vuoi che il tuo lavoro sia non rivelato, per favore visita
+            la tua %{collection_items_link} per rimuoverlo da questa collezione.
+          text: 'Se non vuoi che il tuo lavoro sia non rivelato, per favore visita
+            la tua pagina Approved Collection Items (Elementi approvati della collezione)
+            per rimuoverlo da questa collezione: %{collection_items_url}'
+      faq_link_text: FAQ sulle Collezioni
+      more_info:
+        html: Per maggiori informazioni visita le nostre %{faq_link}.
+        text: 'Per maggiori informazioni, visita le nostre FAQ sulle Collezioni: %{faq_url}'
+      subject:
+        anonymous: "[%{app_name}] Il tuo lavoro è stato reso anonimo"
+        anonymous_unrevealed: "[%{app_name}] Il tuo lavoro è stato reso anonimo e
+          non rivelato"
+        unrevealed: "[%{app_name}] Il tuo lavoro è stato reso non rivelato"
+      unrevealed_info: I lavori non rivelati non sono inclusi negli elenchi di tag
+        o sulla pagina dei tuoi lavori. Chiunque raggiunga il lavoro attraverso un
+        link riceverà una notifica che il lavoro è attualmente non rivelato, e non
+        saranno in grado di accedere al suo contenuto.
     challenge_assignment_notification:
       any: Qualsiasi
       description: 'Descrizione:'
@@ -148,6 +210,15 @@ it:
       part1: "%{login}, l’indirizzo email associato al tuo account è stato modificato
         in %{email}"
       subject: "[%{app_name}] Modifica indirizzo email"
+    collection_notification:
+      assignments_sent:
+        complete: Tutti gli incarichi sono stati inviati.
+        subject: Incarichi inviati
+      html:
+        received_message: 'Hai ricevuto un messaggio riguardo la tua collezione %{collection_link}:'
+      text:
+        received_message: 'Hai ricevuto un messaggio riguardo la tua collezione "%{collection_title}"
+          (%{collection_url}):'
     creatorship_notification:
       explanation: Quando sei coautore di un lavoro, puoi essere aggiunto a nuovi
         capitoli indipendentemente dalle tue impostazioni riguardanti le creazioni
@@ -304,12 +375,11 @@ it:
     invite_increase_notification:
       body:
         one: Volevamo farti sapere che hai %{count} nuovo invito che può essere usato
-          per creare un nuovo account su AO3. Puoi invitare un amico recandoti sulla
-          pagina %{invitation_page}.
+          per creare un nuovo account su AO3. Puoi invitare un amico recandoti %{invitation_page}.
         other: Volevamo farti sapere che hai %{count} nuovi inviti che possono essere
           usati per creare nuovi account su AO3. Puoi invitare i tuoi amici recandoti
-          sulla pagina %{invitation_page}.
-      invitation_page_link_text: la tua pagina degli inviti
+          %{invitation_page}.
+      invitation_page_link_text: sulla tua pagina degli inviti
       subject: "[%{app_name}] Nuovi inviti"
     invite_request_declined:
       main:

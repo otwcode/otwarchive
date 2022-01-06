@@ -174,6 +174,15 @@ pt-PT:
       part1: "%{login}, o endereço de email associado à tua conta foi mudado para
         %{email}"
       subject: "[%{app_name}] Mudança de email"
+    collection_notification:
+      assignments_sent:
+        complete: Já foram enviadas todas as tarefas.
+        subject: Tarefas enviadas
+      html:
+        received_message: 'Recebeste uma mensagem acerca da tua coleção %{collection_link}:'
+      text:
+        received_message: 'Recebeste uma mensagem acerca da tua coleção "%{collection_title}"
+          (%{collection_url}):'
     creatorship_notification:
       explanation: Quando és pessoa cocriadora numa obra, podes ser adicionada a novos
         capítulos, independentemente das tuas definições de cocriação. Podes ainda

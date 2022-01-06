@@ -11,7 +11,7 @@ sl:
             donate_link_text: vaše donacije
             part1: Če ste prejeli to sporočilo po pomoti, prosimo %{support_link}.
             part2: Naš lastni arhiv upravljajo in vzdržujejo fani, zato se zanaša
-              na%{donate_link}.
+              na %{donate_link}.
             support_link_text: kontaktirajte Pomoč uporabnikom
           text:
             part1: Če ste prejeli to sporočilo po pomoti, prosimo kontaktirajte Pomoč
@@ -33,23 +33,34 @@ sl:
         support: AO3 ekipa za pomoč uporabnikom
     kudos:
       guest:
-        few: "%{count} gosti_je"
-        one: "%{count} gost_ja"
-        other: "%{count} gostov_ij"
-        two: "%{count} gosta_ji"
+        few: "%{count} gosti/je"
+        one: "%{count} gost/ja"
+        other: "%{count} gostov/ij"
+        two: "%{count} gosta/ji"
       html:
         left_kudos:
-          few: "%{givers_list} so všečkali_e %{commentable_link}."
-          one: "%{givers_list} je všečkal_a %{commentable_link}."
+          few: "%{givers_list} so všečkali/e %{commentable_link}."
+          one: "%{givers_list} je všečkal/a %{commentable_link}."
           other: "%{givers_list} je všečkalo %{commentable_link}."
-          two: "%{givers_list} sta všečkala_i %{commentable_link}."
+          two: "%{givers_list} sta všečkala/i %{commentable_link}."
       text:
         left_kudos:
-          few: "%{givers_list} so všečkali_e %{commentable_link}."
-          one: "%{givers_list} je všečkal_a %{commentable_link}."
+          few: "%{givers_list} so všečkali/e %{commentable_link}."
+          one: "%{givers_list} je všečkal/a %{commentable_link}."
           other: "%{givers_list} je všečkalo %{commentable_link}."
-          two: "%{givers_list} sta všečkala_i %{commentable_link}."
-      you_have: "[%{app_name}] Všečke imate!"
+          two: "%{givers_list} sta všečkala/i %{commentable_link}."
+      you_have: "[%{app_name}] Imate všečke!"
+  users:
+    mailer:
+      reset_password_instructions:
+        expiration: Če te povezave za spremembo gesla ne uporabite v roku enega tedna,
+          bo ta potekla in zahtevati boste morali novo.
+        intro: 'Nekdo je zahteval ponastavitev vašega gesla. Svoje geslo lahko spremenite
+          tako, da greste na sledečo povezavi in vnesete novo geslo:'
+        link_title: Spremeni moje geslo.
+        subject: "[%{app_name}] Ponastavite svoje geslo"
+        unrequested: Če ponastavitve gesla niste zahtevali, lahko prezrete to e-sporočilo
+          in vaše trenutno geslo bo ostalo veljavno.
   user_mailer:
     abuse_report:
       description_para: 'Opis zlorabe:'
@@ -62,10 +73,10 @@ sl:
       html:
         part1: administrator je vaše delo %{title} odstranil iz AO3.
         part2: 'Če je bilo vaše delo del uvoženega projekta pod nadzorom naše ekipe
-          Open Doors (Odprtih vrat), vas prosimo, da %{opendoors_link}  z nadaljnjimi
+          Open Doors (Odprtih vrat), vas prosimo, da %{opendoors_link} z nadaljnjimi
           vprašanji '
         tos_violation: Če je vaše delo morda kršilo Pogoje uporabe AO3, prosimo %{contact_abuse_link}.
-      opendoors: Open Doors (Odprta vrata) %{opendoors_link} z dodatnimi vprašanji.
+      opendoors: Open Doors (Odprta vrata) z dodatnimi vprašanji.
       subject: "[%{app_name}] Administrator je odstranil vaše delo"
       text:
         part1: Administrator je vaše delo %{title} odstranil iz AO3.
@@ -90,10 +101,11 @@ sl:
         tos_violation: Če je bilo vaše delo skrito, ker je bilo sporno z %{tos_link}
           AO3, boste morali to kršitev odpraviti. Če tega ne storite, bo vaše delo
           morda odstranjeno iz AO3.
-      subject: "[%{app_name}] Ekipa za pravila in zlorabo je skrila vaše delo "
+      subject: "[%{app_name}] Ekipa za pravila in zlorabo je skrila vaše delo"
       text:
-        help: Ekipa za pravila in zlorabo je skrila vaše delo "%{title}" (%{work_url})
-          in ni več javno dostopno.
+        help: 'Če ne veste, zakaj je bilo vaše delo skrito in niste dobili nobenega
+          nadaljnjega sporočila o tej zadevi, prosimo stopite v stik z ekipo za pravila
+          in zlorabo: %{contact_abuse_url}.'
         hidden: Ekipa za pravila in zlorabo je skrila vaše delo "%{title}" (%{work_url})
           in ni več javno dostopno.
         tos_violation: Če je bilo vaše delo skrito, ker je bilo sporno s pogoji uporabe
@@ -148,9 +160,9 @@ sl:
             da ga odstranite iz te zbirke.
 
             '
-          text: "[%{app_name}] Všečke imate!Če ne želite, da je vaše delo narazkrito,
-            obiščite Approved Collection Items page (Stran odobrenih elementov v zbirki),
-            da ga odstranite iz te zbirke: %{collection_items_url}"
+          text: 'Če ne želite, da je vaše delo narazkrito, obiščite stran Approved
+            Collection Items (Odobreni elementi v zbirki), da ga odstranite iz te
+            zbirke: %{collection_items_url}'
       faq_link_text: Pogosta vprašanja glede zbirk in izzivov
       more_info:
         html: Za več informacij obiščite naša %{faq_link}.
@@ -183,7 +195,7 @@ sl:
       subject: "[%{app_name}][%{collection_title}] Vaša naloga!"
       text:
         assignment: Dodeljena vam je bila naslednja naloga v izzivu "%{collection_title}"
-          (%{collection_url})  v AO3!
+          (%{collection_url}) v AO3!
         footer: To elektronsko pošto ste prejeli, ker ste se prijavili na izziv %{title}
           (%{url}). Za več informacij o temu izzivu in za kontaktne podatke moderatork_jev,
           prosimo obiščite %{profile_url}.

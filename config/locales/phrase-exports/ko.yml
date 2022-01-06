@@ -1,6 +1,34 @@
 ---
 ko:
   mailer:
+    general:
+      closing:
+        formal: 진심을 담아
+        informal: 진심을 담아
+      footer:
+        general:
+          html:
+            donate_link_text: 회원님의 기부금
+            part1: 이 메시지를 잘못 받았다고 생각하시면 지원 위원회에 연락%{support_link} 해 주세요.
+            part2: 'Archive of Our Own(우리만의 아카이브)는 팬이 직접 운영 및 제공하는 아카이브로 %{donate_link}에
+              의존하고 있습니다: '
+            support_link_text: 지원 위원회에 연락하기
+          text:
+            part1: 이 메시지를 잘못 받으셨다면 %{support_url} 링크로 지원 위원회에 연락해 주세요.
+            part2: 'Archive of Our Own(우리만의 아카이브)는 팬이 직접 운영 및 제공하는 아카이브로 여러분의 기부금에
+              의존하고 있습니다: %{donate_url}'
+        sent_at: "%{sent_at}에게로 전송됨."
+      greeting:
+        formal: "%{name} 님께"
+        informal:
+          addressed: "%{name} 님 안녕하세요!"
+          unaddressed: 안녕하세요!
+        introductory: Archive of Our Own – AO3 (우리만의 아카이브)에서 인사 드립니다!
+      signature:
+        app_short_name: AO3
+        open_doors: The Open Doors (오픈도어 프로젝트) 팀 드림
+        parent_org: Organization for Transformative Works – OTW (변형적 작품 단체) 드림
+        support: AO3 지원 위원회 드림
     kudos:
       guest:
         other: "%{count} 방문자"
@@ -45,6 +73,53 @@ ko:
           통해 오픈 도어 프로젝트에 문의해 주십시오.
         tos_violation: 만약 회원님의 작품이 AO3의 이용약관을 어겼을 가능성이 있다면, (%{contact_abuse_url})를
           통해 정책관리 위원회에 문의해 주십시오.
+    anonymous_or_unrevealed_notification:
+      anonymous_info: 익명 작품들은 태그 목록에 포함되지만 회원님의 작품 페이지에는 포함되지 않습니다. 작품 페이지에서 회원님의
+        이름이 "Anonymous" (익명)으로 대체됩니다.
+      anonymous_unrevealed_info: 추후 관리자가 회원님의 작품을 익명 작품으로서 공개할 수도 있습니다. 회원님을 구독하고
+        있는 사용자들에게는 해당 변경사항이 알려지지 않습니다. 공개 시에는 회원님의 작품이 태그 목록에 포함되나 회원님의 작품 페이지에는 나타나지
+        않습니다. 작품 상에서는 회원님의 유저 이름이 "Anonymous" (익명)로 표기됩니다.
+      changed_status:
+        anonymous:
+          html: "%{collection_link} 컬렉션 관리자가 회원님의 작품 %{work_link}을(를) 익명 작품으로 전환했습니다."
+          text: ' "%{collection_title}" (%{collection_url}) 콜렉션 관리자들이 회원님의 작품 "%{work_title}"
+            (%{work_url}) 를/을 익명 저자로 처리했습니다.'
+        anonymous_unrevealed:
+          html: "%{collection_link} 컬렉션 관리자가 회원님의 작품을 %{work_link} 을(를) 익명 및 비공개로
+            전환했습니다."
+          text: ' "%{collection_title}" (%{collection_url}) 콜렉션 관리자들이 회원님의 작품 "%{work_title}"
+            (%{work_url}) 를/을 익명 저자이자 비공개 등록으로 처리했습니다.'
+        unrevealed:
+          html: "%{collection_link} 컬렉션 관리자가 회원님의 작품 %{work_link}을(를) 비공개로 전환했습니다."
+          text: ' "%{collection_title}" (%{collection_url}) 콜렉션 관리자들이 회원님의 작품 "%{work_title}"
+            (%{work_url}) 를/을 비공개 등록으로 처리했습니다.'
+      collection_items_link_text: Approved Collection Items (등록된 컬렉션 작품 목록) 페이지
+      do_not_want:
+        anonymous:
+          html: 작품의 익명 처리를 원치 않으신다면 회원님의 컬렉션 목록 링크 %{collection_items_link} 에 접속하여
+            해당 컬렉션에서 작품을 제외해 주시기 바랍니다.
+          text: '작품 익명 처리를 원치 않으신다면 회원님의 Approved Collection Items (승인된 컬렉션 목록) 페이지에
+            접속하셔서 해당 컬렉션에서 작품을 제외해 주시기 바랍니다: %{collection_items_url}'
+        anonymous_unrevealed:
+          html: 작품 익명 및 비공개 처리를 원치 않으신다면 회원님의 컬렉션 목록 링크 %{collection_items_link} 에
+            접속하여 해당 컬렉션에서 작품을 제외해 주시기 바랍니다.
+          text: '작품 익명 및 비공개 처리를 원치 않으신다면 회원님의 Approved Collection Items (승인된 컬렉션
+            목록) 페이지에 접속하셔서 해당 컬렉션에서 작품을 제외해 주시기 바랍니다: %{collection_items_url}'
+        unrevealed:
+          html: 작품 비공개를 원치 않으시다면  회원님의 컬렉션 목록 링크 %{collection_items_link} 에 접속하여 해당
+            컬렉션에서 작품을 제외해 주시기 바랍니다.
+          text: '작품 비공개 처리를 원치 않으신다면 회원님의 Approved Collection Items (승인된 컬렉션 목록) 페이지에
+            접속하셔서 해당 컬렉션에서 작품을 제외해 주시기 바랍니다: %{collection_items_url}'
+      faq_link_text: 컬렉션 FAQ 페이지
+      more_info:
+        html: 더 자세한 사항은 %{faq_link}를 참고해 주세요.
+        text: '더 자세한 사항은 컬렉션 FAQ를 참고해 주세요: %{faq_url}'
+      subject:
+        anonymous: "[%{app_name}] 회원님의 작품이 익명 처리되었습니다."
+        anonymous_unrevealed: "[%{app_name}] 회원님의 작품이 익명 및 비공개 처리되었습니다."
+        unrevealed: "[%{app_name}] 회원님의 작품이 비공개 처리 되었습니다"
+      unrevealed_info: 비공개 작품은 태그 목록 및 회원님의 작품 페이지에 나타나지 않습니다. 해당 작품 링크로 접속하는 모든 이용자에게는
+        작품이 비공개임을 알리는 공지가 뜨며 작품 내용을 조회할 수 없습니다.
     challenge_assignment_notification:
       any: 기타 자유
       description: '설명:'
@@ -194,6 +269,11 @@ ko:
         other: 안타깝게도 회원님이 요청하신 추가 초청 코드 %{count} 개는 현재 발급해 드리기 어렵습니다.
       reason: '회원님의 요청:'
       subject: "[%{app_name}] 추가 초청 코드 요청이 거부되었습니다"
+    recipient_notification:
+      subject:
+        collection: "[%{app_name}][%{collection_title}] %{collection_title} 내 회원님을
+          위한 선물 작품이 있습니다"
+        no_collection: "[%{app_name}] 회원님을 위한 선물 작품이 있습니다"
     signup_notification:
       activate_your_account: 계정 활성화를 위해 링크를 눌러주세요
       admin_posts: AO3 뉴스

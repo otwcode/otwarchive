@@ -85,6 +85,36 @@ ms:
           persoalan.
         tos_violation: Jika terdapat kemungkinan karya anda telah melanggar Syarat-Syarat
           Perkhidmatan AO3, sila hubungi Jawatankuasa Polisi & Aduan kami (%{contact_abuse_url}).
+    admin_hidden_work_notification:
+      access: Ketika karya anda disembunyikan, anda masih boleh mengakses menerusi
+        capaian yang diberikan di atas, tetapi ia tidak akan disenaraikan di halaman
+        karya anda, dan tidak akan dipaparkan kepada pengguna AO3 yang lain.
+      check_email: Sila semak e-mel anda, termasuk folder spam, kerana pasukan Polisi
+        & Aduan mungkin telah menghubungi anda berkenaan mengapa karya anda disembunyikan.
+      contact_abuse: hubungi Polisi & Aduan
+      html:
+        help: Sekiranya anda tidak pasti mengapa karya anda disembunyikan dan anda
+          masih belum menerima hubungan lanjut tentang hal ini, sila hubungi %{contact_abuse_link}
+          secara langsung.
+        hidden: " Karya anda %{title} telah disembunyikan oleh pasukan Polisi & Aduan
+          dan tidak dapat diakses oleh pihak umum lagi."
+        tos_violation: Sekiranya karya anda disembunyikan kerana melanggar %{tos_link}
+          AO3, anda akan perlu mengambil tindakan untuk membetulkan pelanggaran tersebut.
+          Kegagalan karya anda mematuhi Syarat-syarat Perkhidmatan mungkin akan menyebabkan
+          karya anda dipadam daripada AO3.
+      subject: "[%{app_name}] Karya anda telah disembunyikan oleh pasukan Polisi &
+        Aduan"
+      text:
+        help: 'Sekiranya anda tidak pasti mengapa karya anda disembunyikan dan anda
+          masih belum menerima hubungan lanjut tentang hal ini, sila hubungi Polisi
+          & Aduan secara langsung: %{contact_abuse_url}.'
+        hidden: Karya anda "%{title}" (%{work_url}) telah disembunyikan oleh pasukan
+          Polisi & Aduan dan tidak dapat diakses oleh umum lagi.
+        tos_violation: Sekiranya karya anda disembunyikan kerana melanggar Syarat-syarat
+          Perkhidmatan AO3 (%{tos_url}), anda akan perlu mengambil tindakan untuk
+          membetulkan pelanggaran tersebut. Kegagalan karya anda mematuhi Syarat-syarat
+          Perkhidmatan mungkin akan menyebabkan karya anda dipadam daripada AO3.
+      tos: 'Syarat-syarat Perkhidmatan '
     anonymous_or_unrevealed_notification:
       anonymous_info: Karya tidak bernama termasuk dalam senarai tag, tetapi tidak
         pada halaman karya anda. Pada karya tersebut, nama pengguna anda akan digantikan

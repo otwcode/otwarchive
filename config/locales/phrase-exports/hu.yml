@@ -161,6 +161,16 @@ hu:
     change_email:
       part1: "%{login}, a fiókodhoz tartozó email cím a következőre változott: %{email}"
       subject: "[%{app_name}] Megváltozott email cím"
+    collection_notification:
+      assignments_sent:
+        complete: Minden feladat kiküldésre került.
+        subject: Feladatok kiküldve
+      html:
+        received_message: 'Üzeneted érkezett a(z) %{collection_link} gyűjteményed
+          kapcsán:'
+      text:
+        received_message: 'Üzeneted érkezett a(z) "%{collection_title}" (%{collection_url})
+          gyűjteményed kapcsán:'
     creatorship_notification:
       explanation: Ha egy mű társalkotója vagy, akkor új fejezetekhez adhatnak hozzá
         függetlenül a társalkotói beállításaidtól. Minden olyan sorozathoz is hozzá
