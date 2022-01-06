@@ -760,6 +760,16 @@ $.TokenList = function (input, url_or_data, settings) {
         }
     }
 
+    // Highlight the query part of the search term, already provided by server
+    // but we need to do this in order to escape potential HTML in user entered
+    // tags (only allow bold)
+    function highlight_term(value) {
+        var newvalue = escapeHTML(value)
+        newvalue = value.replace(/<b>/g, "<b>")
+        newvalue = newvalue.replace(/<\/b>/g, "</b>")
+        return newvalue;
+    }
+
     // Populate the results dropdown with some results
     function populate_dropdown (query, results) {
         if(results && results.length) {
@@ -776,7 +786,7 @@ $.TokenList = function (input, url_or_data, settings) {
                 .hide();
 
             $.each(results, function(index, value) {
-                var this_li = $("<li role=\"option\">" + value.name + "</li>") // was role=\"menuitem\"
+                var this_li = $("<li role=\"option\">" + highlight_term(value.name) + "</li>") // was role=\"menuitem\"
                                   .appendTo(dropdown_ul);
 
                 if(index % 2) {
