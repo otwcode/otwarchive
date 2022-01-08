@@ -137,7 +137,7 @@ pl:
           text: 'Jeżeli nie chcesz, żeby Twoja praca była nieujawniona, prosimy przejdź
             do Twojej strony Approved Collection Items (Kolekcji Zatwierdzonych Elementów),
             by usunąć ją z tej kolekcji: %{collection_items_url}'
-      faq_link_text: 'FAQ Kolekcji '
+      faq_link_text: FAQ Kolekcji
       more_info:
         html: Aby uzyskać więcej informacji, odwiedź nasze FAQ %{faq_link}.
         text: 'Aby uzyskać więcej informacji, odwiedź nasze FAQ Kolekcji: %{faq_url}'
@@ -198,9 +198,7 @@ pl:
         remove: Jeśli dodano cię przez pomyłkę, lub nie chcesz widnieć jako współtwórca,
           możesz %{edit} by usunąć siebie jako twórcę.
       intro: 'Użytkownik %{adding_user} dodał twój pseudonim %{pseud} jako współtwórcę
-        następującej zawartości (%{type}):
-
-        '
+        następującej zawartości (%{type}):'
       subject: "[%{app_name}] Powiadomienie o Współautorstwie"
       text:
         creation: "%{title} (%{url}) autorstwa %{pseuds}"

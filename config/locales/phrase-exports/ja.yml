@@ -21,7 +21,7 @@ ja:
         informal:
           addressed: こんにちは、%{name}さん！
           unaddressed: こんにちは！
-        introductory: " AO3（みんなのアーカイブ）からこんにちは！"
+        introductory: AO3（みんなのアーカイブ）からこんにちは！
       signature:
         app_short_name: AO3
         open_doors: The Open Doors (オープンドア) チーム
@@ -89,9 +89,7 @@ ja:
           html: 作品の状況を匿名・未公開に変更したくない場合は、あなたの%{collection_items_link}ページで作品をコレクションから削除してください。
           text: 作品の状況を匿名・未公開に変更したくない場合は、あなたのApproved Collection Items（承認済みのコレクション作品）ページで作品をコレクションから削除してください：%{collection_items_url}
         unrevealed:
-          html: '作品の状況を未公開に変更したくない場合は、あなたの%{collection_items_link}ページで作品をコレクションから削除してください。
-
-            '
+          html: 作品の状況を未公開に変更したくない場合は、あなたの%{collection_items_link}ページで作品をコレクションから削除してください。
           text: 作品の状況を未公開に変更したくない場合は、あなたのApproved Collection Items（承認済みのコレクション作品）ページで作品をコレクションから削除してください：%{collection_items_url}
       faq_link_text: コレクションと企画FAQ
       more_info:
@@ -111,9 +109,7 @@ ja:
         footer_link: チャレンジのプロフィールページ
         look_up: この課題は%{link}からご確認いただけます。
         look_up_link: あなたのAssignments（課題）ページ
-        part1: 'Archive of Our Own – AO3（みんなのアーカイブ）の %{link}チャレンジで、あなたは次のリクエストに割り当てられました。
-
-          '
+        part1: Archive of Our Own – AO3（みんなのアーカイブ）の %{link}チャレンジで、あなたは次のリクエストに割り当てられました。
       optional_tags: タグ（必須ではありません）：
       prompts: お題：
       prompt_url: お題URL：
@@ -140,7 +136,7 @@ ja:
       explanation: あなたが作品の合作者の場合は、あなたの共同制作の設定に関わらず、新しいチャプターにあなたのペンネームが合作者として追加され得ます。また、作品が加えられたシリーズにも追加されます.
       html:
         creation: "%{pseud_links}による%{creation_link} "
-        edit: "%{type}を編集する  "
+        edit: "%{type}を編集する"
         remove: 間違って合作者に追加された場合や、合作者としてリストに追加されたくない場合は、%{edit}により合作者として自身を削除することができます。
       intro: "%{adding_user}さんは以下の作品の合作者としてあなたのペンネーム%{pseud} を追加しました %{type}"
       subject: "[%{app_name}] 合作者のお知らせ"
@@ -158,7 +154,7 @@ ja:
       intro: "%{archivist} さんは以下の作品の合作者としてあなたのペンネーム%{pseud}を追加しました%{type}:"
       subject: "[%{app_name}] 合作者追加のお知らせ"
       text:
-        creation: "%{pseuds}による%{title} (%{url})  "
+        creation: "%{pseuds}による%{title} (%{url})"
         remove: 間違って合作者に追加された場合や、合作者としてリストに追加されたくない場合は、%{type}を編集して自身を合作者から削除することができます：
           %{url}
     creatorship_request:

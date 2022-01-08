@@ -105,8 +105,8 @@ sv:
         help: 'Om du är osäker på varför ditt verk har blivit dolt och vi inte har
           kommunicerat med dig på annat sätt angående detta, var vänlig kontakta Policy
           & Missbruk direkt: %{contact_abuse_url}.'
-        hidden: Ditt verk "%{title}" (%{work_url})  har blivit dolt av teamet för
-          Policy & Missbruk och är inte längre tillgängligt för allmänheten.
+        hidden: Ditt verk "%{title}" (%{work_url}) har blivit dolt av teamet för Policy
+          & Missbruk och är inte längre tillgängligt för allmänheten.
         tos_violation: Om ditt verk har dolts på grund av ett brott mot AO3s användarvillkor
           (%{tos_url}), så kommer du att behöva åtgärda problemet. Om du inte korrigerar
           ditt verk så att det stämmer överens med användarvillkoren så kan verket
@@ -146,10 +146,8 @@ sv:
             Approved Collection Items (Godkända samlingsobjekt) för att ta bort det
             från samlingen: %{collection_items_url}'
         anonymous_unrevealed:
-          html: 'Om du inte vill att ditt verk ska vara anonymt och dolt, var god
-            besök %{collection_items_link} för att ta bort det från den här samlingen.
-
-            '
+          html: Om du inte vill att ditt verk ska vara anonymt och dolt, var god besök
+            %{collection_items_link} för att ta bort det från den här samlingen.
           text: 'Om du inte vill att ditt verk ska vara anonymt eller dolt, var god
             besök sidan Approved Collection Items (Godkända samlingsobjekt) för att
             ta bort den från samlingen: %{collection_items_url} '
@@ -397,13 +395,11 @@ sv:
       subject: "[%{app_name}] Bekräftelse"
       text:
         part1: 'Var vänlig följ denna länk för att aktivera ditt konto: %{activate_account_url}'
-        part2: 'När ditt konto väl är färdigställt kan du lägga upp dina verk, ordna
+        part2: När ditt konto väl är färdigställt kan du lägga upp dina verk, ordna
           mail-prenumerationer så att du vet när dina favoritskapare eller favoritverk
           uppdateras, göra egna inställningar för hur sajten ska se ut och fungera
           för dig, hålla koll på vilka verk du har gått in på eller läst på Arkivet
           via din historik, och mycket mer.
-
-          '
         part3: 'Det finns massor av information och råd om hur du använder Arkivet
           i våra Vanliga frågor här: %{faq_url}. Du hittar de senaste nyheterna om
           sajtens utveckling på AO3 Nyheter här: %{admin_posts_url}. Om du behöver

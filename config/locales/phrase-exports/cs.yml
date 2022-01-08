@@ -34,16 +34,19 @@ cs:
     kudos:
       guest:
         few: "%{count} návštěvníci"
+        many: "%{count} návštěvníků"
         one: návštěvník
         other: "%{count} návštěvníků"
       html:
         left_kudos:
           few: "%{givers_list} zanechali kudos u %{commentable_link}."
+          many: "%{givers_list} zanechali kudos u %{commentable_link}."
           one: "%{givers_list} zanechal/a kudos u %{commentable_link}."
           other: "%{givers_list} zanechali kudos u %{commentable_link}."
       text:
         left_kudos:
           few: "%{givers_list} zanechali kudos u %{commentable_link}."
+          many: "%{givers_list} zanechali kudos u %{commentable_link}."
           one: "%{givers_list} zanechal/a kudos u %{commentable_link}."
           other: "%{givers_list} zanechali kudos u %{commentable_link}."
       you_have: "[%{app_name}] Máte nové kudos!"
@@ -189,10 +192,10 @@ cs:
       subject: "[%{app_name}][%{collection_title}] Vaše zadání!"
       text:
         assignment: Bylo vám přidělena následující žádost ve výzvě "%{collection_title}"
-          (%{collection_url})  v AO3!
-        footer: |-
-          Tento e-mail jste obdrželi, protože jste se přihlásili do výzvy %{title} (%{url}). Více informací o této výzvě a kontakty na moderátory můžete najít na
-           %{profile_url}.
+          (%{collection_url}) v AO3!
+        footer: Tento e-mail jste obdrželi, protože jste se přihlásili do výzvy %{title}
+          (%{url}). Více informací o této výzvě a kontakty na moderátory můžete najít
+          na  %{profile_url}.
         look_up: Toto zadání najdete na stránce Assignments (Zadání) pod odkazem%{link}.
     change_email:
       part1: "%{login}, email spojený s vaším účtem byl změněn na %{email}"
@@ -351,21 +354,26 @@ cs:
           prací, můžete je všechny vyjmenovat v jednom emailu.)
     invite_increase_notification:
       body:
-        few: 'Rádi bychom vám sdělili, že máte následující počet nových pozvánek:
-          %{count}. Tyto pozvánky lze využít k vytvoření nových účtů na archivu. Své
-          přátele můžete pozvat na: %{invitation_page}'
-        one: 'Rádi bychom vám sdělili, že máte %{count} novou pozvánku, kterou lze
-          využít k vytvoření nových účtů na archivu. Své přátele můžete pozvat na:
-          %{invitation_page}'
-        other: 'Rádi bychom vám sdělili, že máte následující počet nových pozvánek:
-          %{count}. Tyto pozvánky lze využít k vytvoření nových účtů na archivu. Své
-          přátele můžete pozvat na: %{invitation_page}'
-      invitation_page_link_text: stránka s vašimi pozvánkami
+        few: Rádi bychom vám sdělili, že máte %{count} nové pozvánky. Tyto pozvánky
+          lze využít k vytvoření nových účtů na Archivu. Své přátele můžete pozvat
+          na %{invitation_page}.
+        many: Rádi bychom vám sdělili, že máte %{count} nových pozvánek. Tyto pozvánky
+          lze využít k vytvoření nových účtů na Archivu. Své přátele můžete pozvat
+          na %{invitation_page}.
+        one: Rádi bychom vám sdělili, že máte %{count} novou pozvánku, kterou lze
+          využít k vytvoření nových účtů na Archivu. Své přátele můžete pozvat na
+          %{invitation_page}.
+        other: Rádi bychom vám sdělili, že máte %{count} nových pozvánek. Tyto pozvánky
+          lze využít k vytvoření nových účtů na Archivu. Své přátele můžete pozvat
+          na %{invitation_page}.
+      invitation_page_link_text: vaší stránce s pozvánkami
       subject: "[%{app_name}] Nové pozvánky"
     invite_request_declined:
       main:
         few: S lítostí vám oznamujeme, že vaší žádosti o %{count} nové pozvánky nemůže
           být v současné době vyhověno.
+        many: S lítostí vám oznamujeme, že vaší žádosti o %{count} nových pozvánek
+          nemůže být v současné době vyhověno.
         one: S lítostí vám oznamujeme, že vaší žádosti o novou pozvánku nemůže být
           v současné době vyhověno.
         other: S lítostí vám oznamujeme, že vaší žádosti o %{count} nových pozvánek

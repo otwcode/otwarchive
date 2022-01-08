@@ -166,7 +166,7 @@ cy:
           %{faq_url}'
       subject:
         anonymous: "[%{app_name}] Gwnaed eich gwaith yn ddienw"
-        anonymous_unrevealed: " [%{app_name}] Gwnaed eich gwaith yn ddienw ac yn anamlygadwy"
+        anonymous_unrevealed: "[%{app_name}] Gwnaed eich gwaith yn ddienw ac yn anamlygadwy"
         unrevealed: "[%{app_name}] Gwnaed eich gwaith yn anamlygadwy"
       unrevealed_info: Nid yw gwaith anamlygadwy wedi'i gynnwys mewn rhestrau tag
         neu ar eich tudalen waith. Bydd pobl sy'n dilyn cysylltu i'r gwaith yn derbyn
@@ -206,14 +206,14 @@ cy:
         complete: Mae pob aseiniad yn awr wedi’i hanfon.
         subject: Aseiniadau wedi’i hanfon
       html:
-        received_message: 'Rydych wedi derbyn neges amdan eich casgliad %{collection_link}: '
+        received_message: 'Rydych wedi derbyn neges amdan eich casgliad %{collection_link}:'
       text:
         received_message: 'Rydych wedi derbyn neges amdan eich casgliad "%{collection_title}"
           (%{collection_url}):'
     creatorship_notification:
-      explanation: 'Pan rydych yn gyd-greüydd ar waith, gallwch cael eich ychwwnegu
+      explanation: Pan rydych yn gyd-greüydd ar waith, gallwch cael eich ychwwnegu
         i benodau newydd waeth beth yw eich gosodiadau cyd-greu. Byddwch hefyd yn
-        cael eich ychwanegu i unrhyw gyfres mae’r gwaith yn cael ei ychwanegu ati. '
+        cael eich ychwanegu i unrhyw gyfres mae’r gwaith yn cael ei ychwanegu ati.
       html:
         creation: "%{creation_link} gan %{pseud_links}"
         edit: Golygu’r %{type}
@@ -407,7 +407,7 @@ cy:
       contact_support: cysylltwch â’n tîm Cefnogaeth
       faq: tudalen Holiadau Cyffredin
       html:
-        part1: "\"%{activate_account_link}."
+        part1: "%{activate_account_link}."
         part2: Unwaith mae eich cyfrif wedi’i osod, gallwch postio eich ffanweithiau,
           gosod tanysgrifiadau ebost i adael i chi gwybod pan mae eich ffanweithiau
           neu greüydd hoff wedi diweddaru, gosod dewisadau i addasu’r ffordd mae’r
