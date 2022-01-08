@@ -44,9 +44,7 @@ uk:
           other: "%{givers_list} залишили kudos на %{commentable_link}."
       text:
         left_kudos:
-          few: 'Кудос для %{commentable_link} від %{givers_list}.
-
-            '
+          few: Кудос для %{commentable_link} від %{givers_list}.
           many: Кудос для %{commentable_link} від %{givers_list}.
           one: Кудос для %{commentable_link} від %{givers_list}.
           other: "%{givers_list} залишили kudos на %{commentable_link}."
@@ -151,7 +149,7 @@ uk:
       subject: "[%{app_name}] Електронну адресу змінено"
     collection_notification:
       assignments_sent:
-        complete: 'Усі завдання було щойно розіслано. '
+        complete: Усі завдання було щойно розіслано.
         subject: Завдання надіслано
       html:
         received_message: 'Ви отримали повідомлення про Вашу колекцію %{collection_link}:'

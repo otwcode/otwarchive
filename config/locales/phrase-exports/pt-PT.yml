@@ -109,8 +109,8 @@ pt-PT:
           text: As pessoas responsáveis por manter a coleção "%{collection_title}"
             (%{collection_url}) alteraram o estado da tua obra "%{work_title}" (%{work_url})
             para “não revelada”.
-      collection_items_link_text: 'página de Approved Collection Items (Itens de Coleção
-        Aprovados) '
+      collection_items_link_text: página de Approved Collection Items (Itens de Coleção
+        Aprovados)
       do_not_want:
         anonymous:
           html: Se não queres que a tua obra seja anónima, por favor visita a tua

@@ -144,22 +144,16 @@ sl:
             da ga odstranite iz te zbirke.
           text: 'Če ne želite, da je vaše delo anonimno, obiščite Approved Collection
             Items page (Stran odobrenih elementov v zbirki), da ga odstranite iz te
-            zbirke: %{collection_items_url}
-
-            '
+            zbirke: %{collection_items_url}'
         anonymous_unrevealed:
-          html: 'Če ne želite, da je vaše delo anonimno in nerazkrito, obiščite vašo
+          html: Če ne želite, da je vaše delo anonimno in nerazkrito, obiščite vašo
             %{collection_items_link}, da ga odstranite iz te zbirke.
-
-            '
           text: 'Če ne želite, da je vaše delo anonimno in nerazkrito, obiščite Approved
             Collection Items page (Stran odobrenih elementov v zbirki), da ga odstranite
             iz te zbirke: %{collection_items_url}'
         unrevealed:
-          html: 'Če ne želite, da je vaše delo nerazkrito, obiščite vašo %{collection_items_link},
+          html: Če ne želite, da je vaše delo nerazkrito, obiščite vašo %{collection_items_link},
             da ga odstranite iz te zbirke.
-
-            '
           text: 'Če ne želite, da je vaše delo narazkrito, obiščite stran Approved
             Collection Items (Odobreni elementi v zbirki), da ga odstranite iz te
             zbirke: %{collection_items_url}'
@@ -401,7 +395,7 @@ sl:
           Če potrebujete pomoč, naletite na napako, ali imate vprašanja ali komentarje,
           prosimo, %{contact_support_link}, katere člani so vedno na voljo, da vam
           pomagajo.
-      subject: "[%{app_name}] Potrditev računa "
+      subject: "[%{app_name}] Potrditev računa"
       text:
         part1: 'Prosimo, kliknite na naslednji link, da aktivirate svoj račun: %{activate_account_url}.'
         part2: Ko aktivirate svoj račun, lahko objavljate svoja fan-dela, nastavite

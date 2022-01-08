@@ -24,13 +24,11 @@ ms:
         informal:
           addressed: Hai, %{name}!
           unaddressed: Hai!
-        introductory: 'Helo daripada Archive of Our Own – AO3 (Arkib Milik Kita)!
-
-          '
+        introductory: Helo daripada Archive of Our Own – AO3 (Arkib Milik Kita)!
       signature:
         app_short_name: AO3
-        open_doors: 'Pasukan The Open Doors (Projek Pemeliharaan Bahan-Bahan Digital
-          dan Bukan Digital) '
+        open_doors: Pasukan The Open Doors (Projek Pemeliharaan Bahan-Bahan Digital
+          dan Bukan Digital)
         parent_org: Organization for Transformative Works – OTW (Organisasi Karya-Karya
           Transformatif)
         support: Pasukan Bantuan AO3
@@ -96,8 +94,8 @@ ms:
         help: Sekiranya anda tidak pasti mengapa karya anda disembunyikan dan anda
           masih belum menerima hubungan lanjut tentang hal ini, sila hubungi %{contact_abuse_link}
           secara langsung.
-        hidden: " Karya anda %{title} telah disembunyikan oleh pasukan Polisi & Aduan
-          dan tidak dapat diakses oleh pihak umum lagi."
+        hidden: Karya anda %{title} telah disembunyikan oleh pasukan Polisi & Aduan
+          dan tidak dapat diakses oleh pihak umum lagi.
         tos_violation: Sekiranya karya anda disembunyikan kerana melanggar %{tos_link}
           AO3, anda akan perlu mengambil tindakan untuk membetulkan pelanggaran tersebut.
           Kegagalan karya anda mematuhi Syarat-syarat Perkhidmatan mungkin akan menyebabkan
@@ -114,7 +112,7 @@ ms:
           Perkhidmatan AO3 (%{tos_url}), anda akan perlu mengambil tindakan untuk
           membetulkan pelanggaran tersebut. Kegagalan karya anda mematuhi Syarat-syarat
           Perkhidmatan mungkin akan menyebabkan karya anda dipadam daripada AO3.
-      tos: 'Syarat-syarat Perkhidmatan '
+      tos: Syarat-syarat Perkhidmatan
     anonymous_or_unrevealed_notification:
       anonymous_info: Karya tidak bernama termasuk dalam senarai tag, tetapi tidak
         pada halaman karya anda. Pada karya tersebut, nama pengguna anda akan digantikan
@@ -166,7 +164,7 @@ ms:
           text: 'Jika anda tidak mahu karya anda sebagai tidak dipamerkan, sila lawat
             laman Approved Collection Items (Butiran Koleksi Diluluskan) anda untuk
             mengeluarkannya daripada koleksi ini: %{collection_items_url}'
-      faq_link_text: 'FAQ Koleksi '
+      faq_link_text: FAQ Koleksi
       more_info:
         html: Untuk maklumat lebih anjut, sila lawat %{faq_link} kami.
         text: 'Untuk maklumat lebih lanjut, sila lawati FAQ Koleksi kami: %{faq_url}'
@@ -193,8 +191,8 @@ ms:
         part1: Anda telah ditugaskan dengan permintaan yang dinyatakan pada cabaran
           %{link} di Arkib Milik Kita!
       optional_tags: 'Tag Pilihan:'
-      prompts: "<i>Prompt</i>:"
-      prompt_url: 'URL <i>Prompt</i>:'
+      prompts: 'Prompt:'
+      prompt_url: 'URL Prompt:'
       recipient: 'Penerima:'
       recipient_missing: 'Tiada: hubungi moderator untuk bantuan!'
       subject: "[%{app_name}][%{collection_title}] Tugasan Anda!"
@@ -230,8 +228,8 @@ ms:
           %{url}'
     creatorship_notification_archivist:
       explanation: Atas sebab mereka bertindak atas peranan rasmi mereka sebagai pengurus
-        arkib <i>Open Doors</i>, mereka dibenarkan untuk melantik anda tanpa jemputan,
-        walaupun anda memilih untuk menolak perekaan bersama.
+        arkib Open Doors, mereka dibenarkan untuk melantik anda tanpa jemputan, walaupun
+        anda memilih untuk menolak perekaan bersama.
       html:
         creation: "%{creation_link} oleh %{pseud_links}"
         edit: mengedit %{type} tersebut
@@ -274,10 +272,10 @@ ms:
     invitation_to_claim:
       html:
         ao3_news: Berita AO3
-        contact_open_doors: hubungi <i>Open Doors</i>
+        contact_open_doors: hubungi Open Doors
         contact_support: hubungi bantuan AO3
         faq_page: laman FAQ
-        open_doors: "<i>Open Doors</i>"
+        open_doors: Open Doors
         part1: Anda telah menerima e-mel ini kerana sebuah arkib telah diimport oleh
           %{open_doors_link} ke dalam %{app_link} (%{app_short_name}) baru-baru ini,
           dan kami percaya hasil karya peminat tersebut adalah milik anda. Kami ingin
@@ -291,8 +289,8 @@ ms:
         part11: Untuk pertanyaan lain, sila %{support_link}.
         part2: Anda boleh membaca pengumuman mengenai pergerakan arkib terkini di
           %{news_link}, dan mencari maklumat tambahan tentang %{open_doors_faq_link}
-          atau %{open_doors_tutorial_link} <i>Open Doors</i>. Untuk sebarang soalan
-          yang tidak dijawab di dalam FAQ, tutorial, atau e-mel ini, sila %{support_link}.
+          atau %{open_doors_tutorial_link} Open Doors. Untuk sebarang soalan yang
+          tidak dijawab di dalam FAQ, tutorial, atau e-mel ini, sila %{support_link}.
         part3: Jika ini merupakan suatu kesilapan dan karya-karya ini bukan milik
           anda, sila jangan padamkannya! Sila %{open_doors_link} dan kami akan selesaikannya.
         part4: Bergantung kepada arkib, karya-karya anda yang diimport mungkin dihadkan
@@ -308,17 +306,15 @@ ms:
           dari AO3). Anda tidak perlu menambah karya-karya tersebut ke mana-mana akaun
           untuk meyatimkan atau memadamkan mereka--anda boleh lakukannya terus melalui
           pautan tuntutan di atas. (Untuk bantuan, sila %{support_link}.)
-        part9: Jika anda ingin pihak <i>Open Doors</i> untuk mengemas kini pengalihan
-          untuk menuju ke karya anda yang sedia ada, sila padamkan salinan yang telah
-          dimuat naik, dan %{open_doors_link} dengan nama akaun AO3 anda, nama akaun
-          anda pada arkib yang diimport, dan tajuk dan URL hasil karya peminat anda
-          yang anda ingin tujukan pengalihan tersebut. (Jika anda mempunyai pelbagai
-          karya yang anda ingin ubah pengalihan, anda boleh senaraikannya dalam satu
-          e-mel.)
+        part9: Jika anda ingin pihak Open Doors untuk mengemas kini pengalihan untuk
+          menuju ke karya anda yang sedia ada, sila padamkan salinan yang telah dimuat
+          naik, dan %{open_doors_link} dengan nama akaun AO3 anda, nama akaun anda
+          pada arkib yang diimport, dan tajuk dan URL hasil karya peminat anda yang
+          anda ingin tujukan pengalihan tersebut. (Jika anda mempunyai pelbagai karya
+          yang anda ingin ubah pengalihan, anda boleh senaraikannya dalam satu e-mel.)
         tutorial_page: laman tutorial
-      part12: Jika anda menghubungi kami, sila <i>whitelist</i> alamat-alamat e-mel
-        daripada @transformativeworks.org dan semak folder spam anda untuk balasan
-        kami.
+      part12: Jika anda menghubungi kami, sila whitelist alamat-alamat e-mel daripada
+        @transformativeworks.org dan semak folder spam anda untuk balasan kami.
       part6: 'Karya-karya yang dimuat naik termasuk:'
       part8: Untuk memelihara senarai cadangan dan penanda laman, alamat-alamat laman
         web dari arkib yang diimport mungkin akan berubah hala ke salinan untuk karya-karya
@@ -329,19 +325,19 @@ ms:
       subject: "[%{app_name}] Jemputan untuk menuntut karya"
       text:
         part1: Anda menerima e-mel ini kerana sebuah arkib baru sahaja diimport oleh
-          <i>Open Doors</i> (%{open_doors_link}) ke dalam %{app_name} (%{app_short_name}
+          Open Doors (%{open_doors_link}) ke dalam %{app_name} (%{app_short_name}
           - %{app_url}), dan kami percaya bahawa hasil kerja peminat berikut adalah
           milik anda. Kami ingin memberikan peluang kepada anda untuk menuntut (atau
           memadam/menyatim) karya-karya tersebut jika anda mahu. Dan jika anda belum
           lagi mempunyai akaun dengan e-mel berbeza, kami ingin menjemput anda untuk
           menyertai kami!
         part10: Jika anda mempunyai karya-karya lain pada arkib yang diimport dengan
-          alamat e-mel lain yang anda tidak dapat akses, sila hubungi <i>Open Doors</i>
-          dengan apa-apa maklumat yang boleh membantu mengesahkan identiti anda.
+          alamat e-mel lain yang anda tidak dapat akses, sila hubungi Open Doors dengan
+          apa-apa maklumat yang boleh membantu mengesahkan identiti anda.
         part11: Untuk pertanyaan lanjut, sila hubungi Bantuan AO3 di %{support_link}.
         part2: Anda boleh membaca pengumuman mengenai pergerakan arkib terbaru di
           Berita AO3 (%{news_link}), dan mencari maklumat tambahan tentang laman FAQ
-          <i>Open Doors</i> (%{open_doors_faq_link}) atau laman tutorial (%{open_doors_tutorial_link}).
+          Open Doors (%{open_doors_faq_link}) atau laman tutorial (%{open_doors_tutorial_link}).
           Untuk sebarang soalan yang tidak dijawab di dalam FAQ, tutorial, atau e-mel
           ini, sila hubungi Bantuan di %{support_link}.
         part3: Jika ini merupakan suatu kesilapan dan karya-karya ini bukan milik
@@ -360,13 +356,13 @@ ms:
           AO3). Anda tidak perlu menambahkan karya-karya tersebut ke mana-mana akaun
           untuk meyatimkan atau memadamkan mereka--anda boleh lakukan terus daripada
           pautan tuntut di atas. (Untuk bantuan, sila hubungi Bantuan di %{support_link}.)
-        part9: Jika anda ingin <i>Open Doors</i> untuk mengemas kini pengalihan untuk
-          menuju ke karya anda yang sedia ada, sila padamkan salinan yang telah dimuat
-          naik, dan hubungi <i>Open Doors</i> di %{open_doors_link} dengan akaun AO3
-          anda, nama akaun anda pada arkib yang diimport, dan tajuk dan URL hasil
-          kerja peminat anda yang anda ingin tujukan pengalihan tersebut. (Jika anda
-          mempunyai pelbagai karya yang anda ingin ubah pengalihan, anda boleh senaraikannya
-          dalam satu e-mel.)
+        part9: Jika anda ingin Open Doors untuk mengemas kini pengalihan untuk menuju
+          ke karya anda yang sedia ada, sila padamkan salinan yang telah dimuat naik,
+          dan hubungi Open Doors di %{open_doors_link} dengan akaun AO3 anda, nama
+          akaun anda pada arkib yang diimport, dan tajuk dan URL hasil kerja peminat
+          anda yang anda ingin tujukan pengalihan tersebut. (Jika anda mempunyai pelbagai
+          karya yang anda ingin ubah pengalihan, anda boleh senaraikannya dalam satu
+          e-mel.)
     invite_increase_notification:
       body:
         other: Kami ingin memaklumkan bahawa anda mempunyai %{count} jemputan baharu
@@ -402,7 +398,7 @@ ms:
           laman di  %{admin_posts_link} kami. Jika anda memerlukan lebih pertolongan,
           menghadapi ralat perisian dalaman atau mempunyai soalan atau komen, sila
           %{contact_support_link}, yang sentiasa bersedia untuk menolong.
-      subject: "[%{app_name}] Pengesahan "
+      subject: "[%{app_name}] Pengesahan"
       text:
         part1: 'Sila ikuti pautan ini untuk aktifkan akaun anda: %{activate_account_url}'
         part2: Setelah akaun anda diaktifkan, anda boleh menerbitkan hasil kerja peminat,

@@ -12,7 +12,7 @@ tr:
             part1: Eğer bu mesajı bir hata sonucu aldıysanız lütfen %{support_link}.
             part2: AO3 hayranlar tarafından yönetilen ve desteklenen bir arşivdir;
               varlığını sürdürmesini sağlayan şey %{donate_link}.
-            support_link_text: 'Teknik Destek ile iletişime geçin. '
+            support_link_text: Teknik Destek ile iletişime geçin.
           text:
             part1: Eğer bu mesajı bir hata sonucu aldıysanız lütfen %{support_url}
               adresinden Teknik Destek ile iletişime geçin.
@@ -134,8 +134,8 @@ tr:
         unrevealed:
           html: "%{collection_link}’ın koleksiyon sorumluları, %{work_link} eserinizin
             durumunu gizli olarak değiştirdi."
-          text: ' "%{collection_title}" (%{collection_url})  koleksiyonunun sorumluları  "%{work_title}"
-            (%{work_url}) eserinizin durumunu gizli olarak değiştirdi.'
+          text: '"%{collection_title}" (%{collection_url}) koleksiyonunun sorumluları
+            "%{work_title}" (%{work_url}) eserinizin durumunu gizli olarak değiştirdi.'
       collection_items_link_text: Approved Collection Items (Onaylı Koleksiyon Öğeleri)
         sayfası
       do_not_want:
@@ -148,7 +148,7 @@ tr:
         anonymous_unrevealed:
           html: 'Eserinizin anonim ve gizli olmasını istemiyorsanız, eserinizi bu
             koleksiyondan çıkarmak için Approved Collection Items (Onaylı Koleksiyon
-            Öğeleri) sayfanızı ziyaret edebilirsiniz: %{collection_items_url}'
+            Öğeleri) sayfanızı ziyaret edebilirsiniz: %{collection_items_link}'
           text: 'Eserinizin anonim ve gizli olmasını istemiyorsanız, eserinizi bu
             koleksiyondan çıkarmak için Approved Collection Items (Onaylı Koleksiyon
             Öğeleri) sayfanızı ziyaret edebilirsiniz: %{collection_items_url}'

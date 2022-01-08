@@ -38,15 +38,11 @@ nl:
       html:
         left_kudos:
           one: Je hebt kudos gekregen van %{givers_list} voor %{commentable_link}.
-          other: 'Je hebt kudos gekregen van %{givers_list} voor %{commentable_link}.
-
-            '
+          other: Je hebt kudos gekregen van %{givers_list} voor %{commentable_link}.
       text:
         left_kudos:
           one: Je hebt kudos gekregen van %{givers_list} voor %{commentable_link}.
-          other: 'Je hebt kudos gekregen van %{givers_list} voor %{commentable_link}.
-
-            '
+          other: Je hebt kudos gekregen van %{givers_list} voor %{commentable_link}.
       you_have: "[%{app_name}] Kudos!"
   users:
     mailer:

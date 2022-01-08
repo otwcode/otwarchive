@@ -270,9 +270,7 @@ ca:
       subject: "[%{app_name}] La teva obra ha estat eliminada"
       support: contacta amb Suport
       text:
-        part1_other: |-
-          La
-          4 teva obra "%{title}" ha estat eliminada a petició de %{pseud}.
+        part1_other: La 4 teva obra "%{title}" ha estat eliminada a petició de %{pseud}.
         part1_yourself: La teva obra "%{title}" ha estat eliminada a petició teva.
         part2: Si us plau, si tens cap pregunta %{support} (%{url}).
     invitation_to_claim:

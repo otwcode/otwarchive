@@ -364,14 +364,12 @@ it:
           aggiungerli a un account per renderli orfani o cancellarli: puoi farlo direttamente
           dal link qui sopra. (Se hai bisogno di aiuto, per favore contatta il team
           Supporto %{support_link}.)'
-        part9: 'Se desideri che Open Doors aggiorni il reindirizzamento per puntare
+        part9: Se desideri che Open Doors aggiorni il reindirizzamento per puntare
           al tuo lavoro pre-esistente, cancella la copia importata e contatta Open
           Doors %{open_doors_link} specificando il nome del tuo profilo su  AO3, quello
           sull’archivio importato e il titolo e URL del lavoro al quale vuoi che punti
           il reindirizzamento. (Se vuoi cambiare il reindirizzamento di più lavori,
           puoi elencarli tutti in una singola email.)
-
-          '
     invite_increase_notification:
       body:
         one: Volevamo farti sapere che hai %{count} nuovo invito che può essere usato
