@@ -1,8 +1,4 @@
-class KudoMailer < ActionMailer::Base
-  layout 'mailer'
-  helper :mailer
-  default from: "Archive of Our Own " + "<#{ArchiveConfig.RETURN_ADDRESS}>"
-
+class KudoMailer < ApplicationMailer
   # send a batched-up notification
   # user_kudos is a hash of arrays converted to JSON string format
   # [commentable_type]_[commentable_id] =>
