@@ -22,6 +22,9 @@
 <% end %>
 
 <%= form_for([@collection, @challenge_signup], :url => (@challenge_signup.new_record? ? collection_signups_path(@collection) : collection_signup_path(@collection))) do |signup_form| %>
+  <% unless @current_user&.preference&.allow_gifts? %>
+    <p class="caution notice"><%= ts("Signing up for this challenge will allow users to give you gift works in response to your requests. However, you can always %{refuse_faq}.", refuse_faq: link_to("refuse a gift", archive_faq_path("your-account", anchor: "refusegift"))).html_safe %></p>
+  <% end %>
   <% if @collection.challenge_type == "GiftExchange" %>
       <p class="notes notice"><%= ts("Challenge maintainers will have access to the email address associated with your AO3 account for the purpose of communicating with you about the challenge.") %></p>
   <% end %>

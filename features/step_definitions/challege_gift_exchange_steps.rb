@@ -116,7 +116,7 @@ Given /^"(.*?)" has two pinchhit assignments in the gift exchange "(.*?)"$/ do |
   collection = Collection.find_by(title: collection_title)
   user = User.find_by(login: user)
   assignments = ChallengeAssignment.where(collection_id: collection.id).limit(2)
-  assignments.each do |a| 
+  assignments.each do |a|
     a.pinch_hitter_id = user.default_pseud_id
     a.save
     a.reload
@@ -303,6 +303,16 @@ Given /^everyone has their assignments for "([^\"]*)"$/ do |challenge_title|
   step %{the gift exchange "#{challenge_title}" is ready for matching}
   step %{I have generated matches for "#{challenge_title}"}
   step %{I have sent assignments for "#{challenge_title}"}
+end
+
+Given "I have an assignment for the user {string} in the collection {string}" do |recip_login, collection_name|
+  giver = User.current_user
+  recip = User.find_by(login: recip_login)
+  collection = FactoryBot.create(:collection, name: collection_name, title: collection_name)
+  assignment = FactoryBot.create(:challenge_assignment, sent_at: Time.zone.now, collection_id: collection.id)
+  assignment.offer_signup.update_column(:pseud_id, giver.default_pseud_id)
+  assignment.request_signup.update_column(:pseud_id, recip.default_pseud_id)
+  assignment.reload
 end
 
 ### Fulfilling assignments
