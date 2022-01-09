@@ -12,6 +12,7 @@ Given /^I have related works setup$/ do
 
   FactoryBot.create(:work, title: "Worldbuilding", authors: inspiration.pseuds)
   FactoryBot.create(:work, title: "Worldbuilding Two", authors: inspiration.pseuds)
+  FactoryBot.create(:work, title: "Worldbuilding Restricted", authors: inspiration.pseuds, restricted: true)
 end
 
 Given /^an inspiring parent work has been posted$/ do
@@ -61,6 +62,10 @@ end
 # when for remixes / related works
 
 When /^I post a related work as remixer$/ do
+  step %{I post a related work for "Worldbuilding" as remixer}
+end
+
+When /^I post a related work for "(.*?)" as remixer$/ do |inspiration|
   step %{I am logged in as "remixer"}
     step %{I go to the new work page}
     step %{I select "Not Rated" from "Rating"}
@@ -69,7 +74,7 @@ When /^I post a related work as remixer$/ do
     step %{I fill in "Fandoms" with "Stargate"}
     step %{I fill in "Work Title" with "Followup"}
     step %{I fill in "content" with "That could be an amusing crossover."}
-    step %{I list the work "Worldbuilding" as inspiration}
+    step %{I list the work "#{inspiration}" as inspiration}
     step %{I press "Preview"}
   step %{I press "Post"}
 end

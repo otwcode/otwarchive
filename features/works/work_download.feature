@@ -89,6 +89,22 @@ Feature: Download a work
     And I should be able to download all versions of "Many Fandom Work"
 
 
+  Scenario: Download work shows restricted inspiring work when logged in
+
+    Given I have related works setup
+    When I post a related work for "Worldbuilding Restricted" as remixer
+      And I download "Followup"
+    Then I should see the inspiring parent work link
+
+
+  Scenario: Download work hides restricted inspiring work when anonymous
+
+    Given I have related works setup
+    When I post a related work for "Worldbuilding Restricted" as remixer
+      And I log out
+      And I download "Followup"
+    Then I should see restricted inspiring work placeholder
+
   Scenario: Download option is unavailable if work is unrevealed.
 
   Given there is a work "Blabla" in an unrevealed collection "Unrevealed"
