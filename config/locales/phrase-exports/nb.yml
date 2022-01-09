@@ -153,7 +153,7 @@ nb:
           gå til %{footer_link}.
         footer_link: utfordringens profilside
         look_up: Du kan finne dette oppdraget på %{link}.
-        look_up_link: " Assignments (oppdrag)-siden din"
+        look_up_link: Assignments (oppdrag)-siden din
         part1: Du har fått følgende i oppdrag i %{link}-utfordringen på Archive of
           Our Own (Vårt eget arkiv)!
       optional_tags: 'Valgfrie tagger:'
@@ -172,6 +172,15 @@ nb:
     change_email:
       part1: "%{login}, e-posten knyttet til din konto har blitt endret til %{email}"
       subject: "[%{app_name}] E-post endret"
+    collection_notification:
+      assignments_sent:
+        complete: Alle oppdrag er nå sendt ut.
+        subject: Oppdrag utsendt
+      html:
+        received_message: 'Du har fått en melding om samlingen din %{collection_link}:'
+      text:
+        received_message: 'Du har fått en melding om samlingen din "%{collection_title}"
+          (%{collection_url}):'
     creatorship_notification:
       explanation: Når du er medskaper på et verk kan du bli lagt til på nye kapitler
         uavhengig av dine medskaper-innstillinger. Du blir også lagt til på alle serier

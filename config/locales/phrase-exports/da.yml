@@ -21,7 +21,7 @@ da:
       greeting:
         formal: Kære %{name},
         informal:
-          addressed: Hej, %{name}!
+          addressed: Hej %{name}!
           unaddressed: Hej!
         introductory: Hej fra Archive of Our Own – AO3 (Vores Eget Arkiv)!
       signature:
@@ -79,20 +79,51 @@ da:
           kan du kontakte Åbne Døre (%{opendoors_link}), hvis du har spørgsmål.
         tos_violation: Hvis det er muligt, at dit værk har overtrådt AO3’s Brugsbetingelser,
           kan du kontakte vores komité for Retningslinjer & Misbrug (%{contact_abuse_url}).
+    admin_hidden_work_notification:
+      access: Mens dit værk er skjult, kan du stadig tilgå det via det ovenstående
+        link, men det vil ikke være synligt på din værkside, og det vil ikke være
+        tilgængeligt for andre AO3-brugere.
+      check_email: Tjek venligst din e-mail, inklusive din spammappe, da Retningslinjer
+        & Misbrug-teamet allerede kan have kontaktet dig og forklaret grunden til,
+        at dit værk er blevet skjult.
+      contact_abuse: kontakte Retningslinjer & Misbrug
+      html:
+        help: 'Hvis du er i tvivl om, hvorfor dit værk er blevet skjult, og du ikke
+          har modtaget nogen beskeder vedrørende dette emne, kan du %{contact_abuse_link}
+          direkte. '
+        hidden: Dit værk %{title} er blevet skjult af Retningslinjer & Misbrug-teamet
+          og er ikke længere offentligt tilgængeligt.
+        tos_violation: Hvis dit værk er blevet skjult, fordi det var i strid med AO3’s
+          %{tos_link}, er du nødt til først at rette op på forsømmelsen. Hvis du ikke
+          formår at tilpasse dit værk, så det overholder Brugsbetingelserne, kan det
+          i sidste ende resultere i, at dit værk bliver slettet fra AO3.
+      subject: "[%{app_name}] Dit værk er blevet skjult af Retningslinjer & Misbrug-teamet"
+      text:
+        help: 'Hvis du er i tvivl om, hvorfor dit værk er blevet skjult, og du ikke
+          har modtaget nogen beskeder vedrørende dette emne, kan du kontakte Retningslinjer
+          & Misbrug direkte: %{contact_abuse_url}'
+        hidden: Din værk "%{title}" (%{work_url}) er blevet skjult af Retningslinjer
+          & Misbrug-teamet og er ikke længere offentligt tilgængeligt.
+        tos_violation: Hvis dit værk blev skjult, fordi det var i strid med AO3’s
+          Brugsbetingelser (%{tos_url}), er du nødt til at rette op på forsømmelsen.
+          Hvis du ikke formår at tilpassedit værk, så det overholder Brugsbetingelserne,
+          kan det i sidste ende resultere i, at dit værk bliver slettet fra AO3.
+      tos: Brugsbetingelser
     anonymous_or_unrevealed_notification:
       anonymous_info: Anonyme værker er inkluderet i tag-lister, men ikke på din side
         for værker. På værket vil dit brugernavn blive erstattet med  "Anonymous"
         (Anonym).
-      anonymous_unrevealed_info: Ikke-offentliggjorte værker er ikke inkluderet i
-        tag-listerne eller på din side for værker. Enhver, som følger et link til
-        værket vil få en meddelelse om, at det på nuværende tidspunkt ikke er offentliggjort,
-        og de vil ikke være i stand til at få adgang til dets indhold.
+      anonymous_unrevealed_info: Vedligeholderne vil måske senere afsløre dit værk,
+        men holde det anonymt. Folk, som abonnerer på dig, vil ikke få en notifikation
+        om denne ændring. Når det er afsløret, vil dit værk blive inkluderet i tag-lister,
+        men ikke på din side for værker. På værket vil dit brugernavn blive erstattet
+        med "Anonymous" (Anonym).
       changed_status:
         anonymous:
           html: Vedligeholderne af %{collection_link} har ændret statussen på dit
             værk %{work_link} til anonymt.
-          text: 'Vedligeholderne af "%{collection_title}" (%{collection_url}) har
-            ændret statussen på dit værk "%{work_title}" (%{work_url}) til anonymt. '
+          text: Vedligeholderne af "%{collection_title}" (%{collection_url}) har ændret
+            statussen på dit værk "%{work_title}" (%{work_url}) til anonymt.
         anonymous_unrevealed:
           html: Vedligeholderne af %{collection_link} har ændret statussen på dit
             værk %{work_link} til anonymt og ikke-offentliggjort.
@@ -133,7 +164,7 @@ da:
         anonymous_unrevealed: "[%{app_name}] Dit værk er gjort anonymt og ikke-offentligt."
         unrevealed: "[%{app_name}] Dit værk blev til et ikke-offentliggjort værk"
       unrevealed_info: Ikke-offentliggjorte værker er ikke inkluderet i tag-listerne
-        eller på din side for værker. Enhver, som følger et link til værket vil få
+        eller på din side for værker. Enhver, som følger et link til værket, vil få
         en meddelelse om, at det på nuværende tidspunkt ikke er offentliggjort, og
         de vil ikke være i stand til at få adgang til dets indhold.
     challenge_assignment_notification:
@@ -150,7 +181,7 @@ da:
         part1: Du er blevet tildelt følgende forespørgsel i %{link}-udfordringen på
           Archive of Our Own!
       optional_tags: 'Valgfrie tags:'
-      prompts: 'Inspiration: '
+      prompts: 'Inspiration:'
       prompt_url: 'URL til inspiration:'
       recipient: 'Modtager:'
       recipient_missing: 'Ingen: kontakt en moderator for hjælp!'
@@ -160,7 +191,7 @@ da:
           (%{collection_url}) -udfordringen på Archive of Our Own!
         footer: Du modtager denne e-mail, fordi du tilmeldte dig %{title}-udfordringen
           (%{url}).For mere information om denne udfordring og moderatorernes kontaktinformation,
-          gå til %{footer_link}.
+          gå til %{profile_url}.
         look_up: Du kan se denne opgave på din Assignments (Opgave) side på %{link}.
     change_email:
       part1: "%{login}, e-mailadressen, der er tilknyttet din konto, er blevet ændret
@@ -168,7 +199,7 @@ da:
       subject: "[%{app_name}] E-mail ændret"
     collection_notification:
       assignments_sent:
-        complete: 'Alle opgavetildelinger er blevet afsendt.  '
+        complete: Alle opgavetildelinger er blevet afsendt.
         subject: Opgavetildelinger afsendt
       html:
         received_message: 'Du har modtaget en besked vedrørende din samling %{collection_link}:'
@@ -230,8 +261,8 @@ da:
       subject: "[%{app_name}] Dit værk er blevet slettet"
       support: kontakte Support
       text:
-        part1_other: Dit værk \"%{title}\" er blevet slettet efter anmodning fra %{pseud}.
-        part1_yourself: Dit værk \"%{title}\" er blevet slettet på din anmodning.
+        part1_other: Dit værk "%{title}" er blevet slettet efter anmodning fra %{pseud}.
+        part1_yourself: Dit værk "%{title}" er blevet slettet på din anmodning.
         part2: Hvis du har spørgsmål, kan du %{support} (%{url}).
     invitation_to_claim:
       html:
@@ -331,7 +362,7 @@ da:
         other: Vi ville bare lige fortælle, at du har %{count} ny(e) invitation(er),
           som kan bruges til at oprette nye konti på AO3. Du kan invitere en ven på
           %{invitation_page}.
-      invitation_page_link_text: 'your Invitations page (din invitationsside) '
+      invitation_page_link_text: din Invitations (Invitationer)-side
       subject: "[%{app_name}] Nye invitationer"
     invite_request_declined:
       main:

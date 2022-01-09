@@ -34,16 +34,19 @@ cs:
     kudos:
       guest:
         few: "%{count} návštěvníci"
+        many: "%{count} návštěvníků"
         one: návštěvník
         other: "%{count} návštěvníků"
       html:
         left_kudos:
           few: "%{givers_list} zanechali kudos u %{commentable_link}."
+          many: "%{givers_list} zanechali kudos u %{commentable_link}."
           one: "%{givers_list} zanechal/a kudos u %{commentable_link}."
           other: "%{givers_list} zanechali kudos u %{commentable_link}."
       text:
         left_kudos:
           few: "%{givers_list} zanechali kudos u %{commentable_link}."
+          many: "%{givers_list} zanechali kudos u %{commentable_link}."
           one: "%{givers_list} zanechal/a kudos u %{commentable_link}."
           other: "%{givers_list} zanechali kudos u %{commentable_link}."
       you_have: "[%{app_name}] Máte nové kudos!"
@@ -77,12 +80,40 @@ cs:
       opendoors: kontaktujte Open Doors
       subject: "[%{app_name}] Vaše práce byla smazána administrátorem"
       text:
-        part1: Vaše práce s názvem \"%{title}\" byla z Archivu smazána administrátorem.
+        part1: Vaše práce s názvem "%{title}" byla z Archivu smazána administrátorem.
         part2: V případě, že byla vaše práce součástí projektu Open Doors, obraťte
           se s případnými dotazy na Open Doors (%{opendoors_link}).
         tos_violation: V případě, že je možné, že vaše práce porušila Smluvní podmínky
           Archivu, obraťte se prosím na Dohled na dodržování pravidel a zásad serveru
           (%{contact_abuse_url}).
+    admin_hidden_work_notification:
+      access: Na stránku se skrytou prací se dostanete pomocí odkazu přiloženého výše,
+        nebude ale dostupná ostatním uživatelům AO3, a to ani ze stránky s přehledem
+        vašich prací.
+      check_email: Je možné, že vás výbor pro Dohled již kontaktoval ohledně důvodu
+        pro skrytí této práce, zkontrolujte proto prosím svoji e-mailovou schránku,
+        a to včetně složky s nevyžádanou poštou (spam).
+      contact_abuse: kontaktujte prosím výbor pro Dohled
+      html:
+        help: Pokud si nejste jisti, proč byla vaše práce skryta, a neobdrželi jste
+          další informace, na tento e-mail neodpovídejte, ale %{contact_abuse_link}.
+        hidden: Vaše práce %{title} byla skryta výborem pro Dohled nad dodržováním
+          pravidel a zásad serveru a není proto nadále veřejně dostupná.
+        tos_violation: Pokud byla vaše práce skryta z důvodu porušení %{tos_link}
+          AO3, budete muset práci upravit tak, aby s nimi byla v souladu. Pokud tak
+          neučiníte, hrozí, že bude vaše práce smazána.
+      subject: "[%{app_name}] Vaše práce byla skryta výborem pro Dohled nad dodržováním
+        pravidel a zásad serveru"
+      text:
+        help: 'Pokud si nejste jisti, proč byla vaše práce skryta, a neobdrželi jste
+          další informace, na tento e-mail neodpovídejte, ale kontaktujte prosím výbor
+          pro Dohled: %{contact_abuse_url}.'
+        hidden: Vaše práce "%{title}" (%{work_url}) byla skryta výborem pro Dohled
+          nad dodržováním pravidel a zásad serveru, a není proto nadále veřejně dostupná.
+        tos_violation: Pokud byla vaše práce skryta z důvodu porušení smluvních podmínek
+          AO3 (%{tos_url}), budete muset práci upravit tak, aby s nimi byla v souladu.
+          Jestli tak neučiníte, hrozí, že bude vaše práce smazána.
+      tos: smluvních podmínek
     anonymous_or_unrevealed_notification:
       anonymous_info: Anonymní díla jsou zahrnuta do seznamu tagů, ale nejsou uvedena
         na stránce s vašimi díly. U daného díla bude vaše uživatelské jméno nahrazeno
@@ -161,14 +192,22 @@ cs:
       subject: "[%{app_name}][%{collection_title}] Vaše zadání!"
       text:
         assignment: Bylo vám přidělena následující žádost ve výzvě "%{collection_title}"
-          (%{collection_url})  v AO3!
-        footer: |-
-          Tento e-mail jste obdrželi, protože jste se přihlásili do výzvy %{title} (%{url}). Více informací o této výzvě a kontakty na moderátory můžete najít na
-           %{profile_url}.
+          (%{collection_url}) v AO3!
+        footer: Tento e-mail jste obdrželi, protože jste se přihlásili do výzvy %{title}
+          (%{url}). Více informací o této výzvě a kontakty na moderátory můžete najít
+          na  %{profile_url}.
         look_up: Toto zadání najdete na stránce Assignments (Zadání) pod odkazem%{link}.
     change_email:
       part1: "%{login}, email spojený s vaším účtem byl změněn na %{email}"
       subject: "[%{app_name}] Email byl změněn"
+    collection_notification:
+      assignments_sent:
+        complete: Všechna zadání byla rozeslána.
+        subject: Zadání rozeslána
+      html:
+        received_message: 'Máte novou zprávu o vaší sbírce %{collection_link}:'
+      text:
+        received_message: 'Máte novou zprávu o vaší sbírce "%{collection_title}" (%{collection_url}):'
     creatorship_notification:
       explanation: Pokud jste spoluautorem práce, můžete být přidáni jako spoluautor
         nových kapitol nehledě na vaše nastavení preferencí ohledně spoluautorství.
@@ -218,12 +257,12 @@ cs:
         part1_other: Vaše práce %{title} byla smazána na žádost %{pseud}.
         part1_yourself: Vaše práce %{title} byla na vaši žádost smazána.
         part2: Pokud máte nějaké otázky, prosím %{support}.
-      part3: Kopie vaší práce je přiložena.
+      part3: Kopii své práce najdete v příloze.
       subject: "[%{app_name}] Vaše práce byla smazána"
       support: kontaktujte Podporu
       text:
-        part1_other: Vaše práce \"%{title}\" byla smazána na žádost %{pseud}.
-        part1_yourself: Vaše práce \"%{title}\" byla na vaši žádost smazána.
+        part1_other: Vaše práce "%{title}" byla smazána na žádost %{pseud}.
+        part1_yourself: Vaše práce "%{title}" byla na vaši žádost smazána.
         part2: Pokud máte nějaké otázky, prosím %{support} (%{url}).
     invitation_to_claim:
       html:
@@ -315,21 +354,26 @@ cs:
           prací, můžete je všechny vyjmenovat v jednom emailu.)
     invite_increase_notification:
       body:
-        few: 'Rádi bychom vám sdělili, že máte následující počet nových pozvánek:
-          %{count}. Tyto pozvánky lze využít k vytvoření nových účtů na archivu. Své
-          přátele můžete pozvat na: %{invitation_page}'
-        one: 'Rádi bychom vám sdělili, že máte %{count} novou pozvánku, kterou lze
-          využít k vytvoření nových účtů na archivu. Své přátele můžete pozvat na:
-          %{invitation_page}'
-        other: 'Rádi bychom vám sdělili, že máte následující počet nových pozvánek:
-          %{count}. Tyto pozvánky lze využít k vytvoření nových účtů na archivu. Své
-          přátele můžete pozvat na: %{invitation_page}'
-      invitation_page_link_text: stránka s vašimi pozvánkami
+        few: Rádi bychom vám sdělili, že máte %{count} nové pozvánky. Tyto pozvánky
+          lze využít k vytvoření nových účtů na Archivu. Své přátele můžete pozvat
+          na %{invitation_page}.
+        many: Rádi bychom vám sdělili, že máte %{count} nových pozvánek. Tyto pozvánky
+          lze využít k vytvoření nových účtů na Archivu. Své přátele můžete pozvat
+          na %{invitation_page}.
+        one: Rádi bychom vám sdělili, že máte %{count} novou pozvánku, kterou lze
+          využít k vytvoření nových účtů na Archivu. Své přátele můžete pozvat na
+          %{invitation_page}.
+        other: Rádi bychom vám sdělili, že máte %{count} nových pozvánek. Tyto pozvánky
+          lze využít k vytvoření nových účtů na Archivu. Své přátele můžete pozvat
+          na %{invitation_page}.
+      invitation_page_link_text: vaší stránce s pozvánkami
       subject: "[%{app_name}] Nové pozvánky"
     invite_request_declined:
       main:
         few: S lítostí vám oznamujeme, že vaší žádosti o %{count} nové pozvánky nemůže
           být v současné době vyhověno.
+        many: S lítostí vám oznamujeme, že vaší žádosti o %{count} nových pozvánek
+          nemůže být v současné době vyhověno.
         one: S lítostí vám oznamujeme, že vaší žádosti o novou pozvánku nemůže být
           v současné době vyhověno.
         other: S lítostí vám oznamujeme, že vaší žádosti o %{count} nových pozvánek

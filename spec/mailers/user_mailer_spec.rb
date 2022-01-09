@@ -297,7 +297,7 @@ describe UserMailer do
     it_behaves_like "an email with a valid sender"
 
     it "has the correct subject line" do
-      subject = "[#{ArchiveConfig.APP_SHORT_NAME}] Confirmation"
+      subject = "[#{ArchiveConfig.APP_SHORT_NAME}] Activate your account"
       expect(email).to have_subject(subject)
     end
 

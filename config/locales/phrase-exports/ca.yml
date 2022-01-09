@@ -84,6 +84,38 @@ ca:
         tos_violation: Si és possible que la teva obra violés els Termes i condicions
           de servei de l’AO3, posa’t en contacte amb el Comitè de Polítiques i Prevenció
           de l’Abús (%{contact_abuse_url}).
+    admin_hidden_work_notification:
+      access: 'Mentre la teva obra estigui oculta, podràs seguir accedint-hi mitjançant
+        l’enllaç proporcionat a dalt, però ja no estarà llistada a la teva pàgina
+        d’obres i ja no estarà disponible per als altres usuaris/àries de l’AO3. '
+      check_email: Revisa el teu correu electrònic, inclosa la teva carpeta de correu
+        brossa, ja que és possible que l’equip de Polítiques i Prevenció de l'Abús
+        d’AO3 ja s’hagi posat en contacte amb tu per explicar-te per què s’ha ocultat
+        la teva obra.
+      contact_abuse: contacta amb Polítiques i Prevenció de l'Abús d'AO3
+      html:
+        help: Si no tens clar per què ha estat ocultada la teva obra i no has rebut
+          cap comunicació al respecte, %{contact_abuse_link} directament.
+        hidden: La teva obra %{title} ha estat ocultada per l’equip de Polítiques
+          i Prevenció de l'Abús d’AO3 i ja no és d’accés públic.
+        tos_violation: Si la teva obra ha estat ocultada degut a una violació dels
+          %{tos_link} de l’AO3, hauràs d’emprendre les mesures exigides per corregir
+          la infracció. L’incompliment dels Termes i condicions de servei pot comportar
+          que la teva obra sigui eliminada de l’AO3.
+      subject: "[%{app_name}] La teva obra ha estat ocultada per l’equip de Polítiques
+        i Prevenció de l'Abús d’AO3"
+      text:
+        help: 'Si no tens clar per què ha estat ocultada la teva obra i no has rebut
+          cap comunicació al respecte, contacta amb Polítiques i Prevenció de l''Abús
+          d''AO3 directament: %{contact_abuse_url}'
+        hidden: La teva obra "%{title}" (%{work_url}) ha estat ocultada per l’equip
+          de Polítiques i Prevenció de l'Abús d'AO3 i ja no és d’accés públic.
+        tos_violation: Si la teva obra ha estat ocultada degut a una violació dels
+          Termes i condicions de servei (%{tos_url}) de l’AO3, hauràs d’emprendre
+          les mesures exigides per corregir la infracció. L’incompliment dels Termes
+          i condicions de servei pot comportar que la teva obra sigui eliminada de
+          l’AO3.
+      tos: Termes i condicions de servei
     anonymous_or_unrevealed_notification:
       anonymous_info: Les obres anònimes s’inclouen a les llistes d’etiquetes però
         no a la pàgina de les teves obres. Dins l’obra, el teu nom d’usuària o usuari
@@ -176,6 +208,15 @@ ca:
     change_email:
       part1: "%{login}, l’email associat amb aquest compte ha canviat a  %{email}"
       subject: "[%{app_name}] Canvi d’email"
+    collection_notification:
+      assignments_sent:
+        complete: S’han enviat totes les tasques.
+        subject: Tasques enviades
+      html:
+        received_message: 'Has rebut un missatge sobre la col·lecció %{collection_link}:'
+      text:
+        received_message: 'Has rebut un missatge sobre la col·lecció "%{collection_title}"
+          (%{collection_url}):'
     creatorship_notification:
       explanation: Quan ets cocreador/a d’una obra, se’t pot afegir a nous capítols
         independentment de la configuració de la cocreació que tinguis al teu perfil.
@@ -229,9 +270,7 @@ ca:
       subject: "[%{app_name}] La teva obra ha estat eliminada"
       support: contacta amb Suport
       text:
-        part1_other: |-
-          La
-          4 teva obra "%{title}" ha estat eliminada a petició de %{pseud}.
+        part1_other: La 4 teva obra "%{title}" ha estat eliminada a petició de %{pseud}.
         part1_yourself: La teva obra "%{title}" ha estat eliminada a petició teva.
         part2: Si us plau, si tens cap pregunta %{support} (%{url}).
     invitation_to_claim:
@@ -344,7 +383,12 @@ ca:
         other: Lamentem informar-te que la teva sol·licitud de %{count} noves invitacions
           no es pot satisfer en aquests moments.
       reason: 'La teva sol·licitud era:'
-      subject: "[%{app_name}] Sol·licitud de codi d’invitació adicional rebutjada"
+      subject: "[%{app_name}] Sol·licitud de codi d’invitació addicional rebutjada"
+    recipient_notification:
+      subject:
+        collection: "[%{app_name}][%{collection_title}] Una obra de regal per a tu
+          de %{collection_title}"
+        no_collection: "[%{app_name}] Una obra de regal per a tu"
     signup_notification:
       activate_your_account: segueix aquest enllaç per activar el teu compte
       admin_posts: Notícies de l’AO3

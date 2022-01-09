@@ -172,8 +172,8 @@ class Chapter < ApplicationRecord
   # Checks the chapter published_at date isn't in the future
   def validate_published_at
     if !self.published_at
-      self.published_at = Date.today
-    elsif self.published_at > Date.today
+      self.published_at = Date.current
+    elsif self.published_at > Date.current
       errors.add(:base, ts("Publication date can't be in the future."))
       throw :abort
     end

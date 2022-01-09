@@ -1,6 +1,37 @@
 ---
 de:
   mailer:
+    general:
+      closing:
+        formal: Mit freundlichen Grüßen
+        informal: Viele Grüße
+      footer:
+        general:
+          html:
+            donate_link_text: Deine Spenden
+            part1: Solltest Du diese Nachricht irrtümlicherweise erhalten haben, bitte
+              %{support_link}.
+            part2: Das AO3 ist ein Archiv von Fans für Fans, das auf %{donate_link}
+              angewiesen ist.
+            support_link_text: wende Dich an den Support
+          text:
+            part1: Solltest Du diese Nachricht irrtümlicherweise erhalten haben, wende
+              dich bitte unter %{support_url} an den Support.
+            part2: 'Das AO3 ist ein Archiv von Fans für Fans, das auf Deine Spenden
+              angewiesen ist: %{donate_url}.'
+        sent_at: Gesendet %{sent_at}.
+      greeting:
+        formal: Hallo, %{name},
+        informal:
+          addressed: Hallo, %{name}!
+          unaddressed: Hallo!
+        introductory: Hallo vom Archive of Our Own – AO3 (Ein Eigenes Archiv)
+      signature:
+        app_short_name: AO3
+        open_doors: Das “Open Doors”- (Offene Türen) Team
+        parent_org: Organization for Transformative Works – OTW (Organisation für
+          Transformative Werke)
+        support: Das AO3-Support-Team
     kudos:
       guest:
         one: ein Gast
@@ -126,8 +157,8 @@ de:
       subject: "[%{app_name}] Dein Werk wurde gelöscht"
       support: kontaktiere den Support
       text:
-        part1_other: Dein Werk \"%{title}\" wurde gemäß Anfrage von %{pseud} gelöscht.
-        part1_yourself: Dein Werk \"%{title}\" wurde gemäß Deiner Anfrage gelöscht.
+        part1_other: Dein Werk "%{title}" wurde gemäß Anfrage von %{pseud} gelöscht.
+        part1_yourself: Dein Werk "%{title}" wurde gemäß Deiner Anfrage gelöscht.
         part2: Falls Du Fragen hast, bitte %{support} (%{url}).
     invitation_to_claim:
       html:
@@ -184,7 +215,7 @@ de:
         sicher zu gehen). Wenn Du diese Werke schon einmal hochgeladen hast und dabei
         NICHT die Funktion "Import von URL" benutzt hast, gibt es nun zwei Versionen
         des Werkes im Archiv.
-      subject: " [%{app_name}] Einladung zur Inanspruchnahme von Werken"
+      subject: "[%{app_name}] Einladung zur Inanspruchnahme von Werken"
       text:
         part1: 'Du bekommst diese E-Mail, da kürzlich ein Archiv durch Open Doors
           (Offene Türen: %{open_doors_link}) in das %{app_name} (%{app_short_name}
@@ -229,16 +260,12 @@ de:
           für mehrere Werke ändern möchtest, kannst Du sie alle in einer E-Mail auflisten.)
     invite_increase_notification:
       body:
-        one: 'wir wollten Dir nur Bescheid sagen, dass Du eine neue Einladung hast,
+        one: wir wollten Dir nur Bescheid sagen, dass Du eine neue Einladung hast,
           die man zur Erstellung neuer Benutzerkonten im Archiv verwenden kann. Du
           kannst FreundInnen einladen unter %{invitation_page}.
-
-          '
-        other: 'wir wollten Dir nur Bescheid sagen, dass Du %{count} neue Einladungen
+        other: wir wollten Dir nur Bescheid sagen, dass Du %{count} neue Einladungen
           hast, die man zur Erstellung neuer Benutzerkonten im Archiv verwenden kann.
           Du kannst FreundInnen einladen unter %{invitation_page}.
-
-          '
       subject: "[%{app_name}] Neue Einladungen"
     invite_request_declined:
       main:
@@ -246,7 +273,7 @@ de:
           erfüllen.
         other: Leider können wir Deine Anfrage für %{count} neue Einladungen zurzeit
           nicht erfüllen.
-      reason: 'Deine Anfrage war: '
+      reason: 'Deine Anfrage war:'
       subject: "[%{app_name}] Ihre Anfrage nach zusätzlichen Einladungscodes wurde
         abgelehnt"
     signup_notification:

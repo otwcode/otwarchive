@@ -184,7 +184,8 @@ We only use error messages for LiveValidation. Style spoofs the system error mes
   background: #efd1d1;
   border: 1px solid #900;
   color: #900;
-  margin: 0.643em auto;
+  margin-top: 0.643em;
+  margin-right: 13em;
   padding: 0.25em 0.375em;
     box-shadow: 1px 1px 2px;
     border-radius: 0.25em;

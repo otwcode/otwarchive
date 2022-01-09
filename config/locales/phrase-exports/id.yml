@@ -30,7 +30,7 @@ id:
         open_doors: Tim Open Doors (Pintu Terbuka)
         parent_org: Organization for Transformative Works – OTW (Organisasi untuk
           Karya Transformatif)
-        support: Komite Dukungan AO3
+        support: Komite Bantuan AO3
     kudos:
       guest:
         other: "%{count} tamu"
@@ -44,16 +44,16 @@ id:
   users:
     mailer:
       reset_password_instructions:
-        expiration: Tautan ini akan kadaluarsa jika Anda tidak menggunakannya untuk
-          mengubah kata sandi Anda dalam seminggu. Jika itu terjadi, Anda perlu meminta
-          tautan baru.
-        intro: 'Seseorang telah meminta agar kata sandi akun Anda diatur ulang. Kata
-          sandi akun Anda dapat Anda ubah dengan mengikuti tautan berikut dan memasukkan
-          kata sandi yang baru:'
+        expiration: Tautan ini akan kadaluarsa jika tidak digunakan untuk mengubah
+          kata sandi Anda dalam satu minggu. Setelah itu, Anda perlu meminta tautan
+          baru.
+        intro: 'Terdapat permintaan pengaturan ulang kata sandi Anda. Kata sandi akun
+          Anda dapat diubah dengan mengikuti tautan berikut dan memasukkan kata sandi
+          yang baru:'
         link_title: Ubah kata sandi saya.
         subject: "[%{app_name}] Atur ulang kata sandi Anda"
-        unrequested: Jika tidak pernah meminta kata sandi Anda diatur ulang, mohon
-          abaikan surel ini. Kata sandi lama Anda akan tetap berfungsi.
+        unrequested: Jika Anda tidak pernah meminta pengaturan ulang kata sandi Anda,
+          silakan abaikan surel ini. Kata sandi lama Anda akan tetap berfungsi.
   user_mailer:
     abuse_report:
       description_para: 'Deskripsi pelanggaran:'
@@ -62,24 +62,23 @@ id:
       url_para: 'Alamat URL halaman yang mengandung pelanggaran:'
     admin_deleted_work_notification:
       bye: Terlampir adalah salinan karya Anda sebagai referensi.
-      contact_abuse: hubungi Komite Pelanggaran kami
+      contact_abuse: hubungi Komite Kebijakan dan Pelanggaran kami
       html:
-        part1: Karya Anda, %{title}, telah dihapus dari Arsip oleh administrator situs.
+        part1: Karya Anda, %{title}, telah dihapus dari AO3 oleh admin situs.
         part2: Jika karya Anda merupakan bagian dari proyek impor yang diatur oleh
-          tim Open Doors (Pintu Terbuka) kami, silakan %{opendoors_link} dengan pertanyaan
-          lebih lanjut.
+          Komite Open Doors (Pintu Terbuka) kami, silakan %{opendoors_link} dengan
+          pertanyaan lebih lanjut.
         tos_violation: Jika ada kemungkinan karya Anda melanggar Ketentuan Layanan
-          Arsip, silakan %{contact_abuse_link}.
-      opendoors: hubungi tim Pintu Terbuka
-      subject: "[%{app_name}] Karya Anda telah dihapus oleh seorang administrator"
+          AO3, silakan %{contact_abuse_link}.
+      opendoors: hubungi Komite Pintu Terbuka
+      subject: "[%{app_name}] Karya Anda telah dihapus oleh admin"
       text:
-        part1: Karya Anda, "%{title}", telah dihapus dari Arsip oleh administrator
-          situs.
+        part1: Karya Anda, "%{title}", telah dihapus dari AO3 oleh admin situs.
         part2: Jika karya Anda merupakan bagian dari proyek impor yang diatur oleh
-          tim Open Doors (Pintu Terbuka) kami, silakan hubungi tim Pintu Terbuka (%{opendoors_link})
-          dengan pertanyaan lebih lanjut.
+          Komite Open Doors (Pintu Terbuka) kami, silakan hubungi Komite Pintu Terbuka
+          (%{opendoors_link}) dengan pertanyaan lebih lanjut.
         tos_violation: Jika ada kemungkinan karya Anda melanggar Ketentuan Layanan
-          Arsip, silakan hubungi Komite Pelanggaran kami (%{contact_abuse_url}).
+          AO3, silakan hubungi Komite Kebijakan dan Pelanggaran kami (%{contact_abuse_url}).
     admin_hidden_work_notification:
       access: Anda masih bisa mengakses karya tersebut melalui tautan di atas. Namun
         karya tersebut tidak terdaftar dalam halaman karya Anda dan tidak tersedia
@@ -177,25 +176,25 @@ id:
       due: 'Tenggat waktu tugas ini adalah:'
       html:
         footer: Anda menerima surel ini karena Anda telah mendaftarkan diri untuk
-          mengikuti Challenge %{title}. Untuk informasi lebih lanjut terkait challenge
-          ini atau untuk mengontak moderator, silahkan kunjungi %{footer_link}.
-        footer_link: halaman profil challenge
-        look_up: Anda dapat melihat tugas ini pada %{link}.
+          mengikuti tantangan %{title}. Untuk informasi lebih lanjut terkait tantangan
+          ini atau untuk informasi kontak moderator, silakan kunjungi %{footer_link}.
+        footer_link: halaman profil tantangan
+        look_up: Anda dapat melihat tugas ini dari %{link}.
         look_up_link: halaman Assignments (Tugas) Anda
         part1: Anda telah ditugaskan untuk memenuhi permintaan berikut dalam challenge
-          %{link} di Archive of Our Own (Arsip Milik Kita)!
-      optional_tags: 'Label Pilihan:'
-      prompts: 'Prompt:'
-      prompt_url: 'URL Prompt:'
+          (tantangan) %{link} di AO3!
+      optional_tags: 'Tag (Label) Opsional:'
+      prompts: 'Prompt (Ide Karya):'
+      prompt_url: 'URL Prompt (Ide Karya):'
       recipient: 'Penerima:'
-      recipient_missing: 'Tidak tersedia: mohon kontak moderator untuk bantuan!'
+      recipient_missing: 'Tidak tersedia: kontak moderator untuk bantuan!'
       subject: "[%{app_name}][%{collection_title}] Tugas Anda!"
       text:
         assignment: Anda telah diberikan tugas untuk memenuhi permintaan berikut dalam
-          challenge "%{collection_title}" (%{collection_url})  di Arsip Milik Kita!
+          challenge (tantangan) "%{collection_title}" (%{collection_url})  di AO3!
         footer: Anda menerima surel ini karena Anda telah mendaftarkan diri untuk
-          mengikuti Challenge %{title} (%{url}). Untuk informasi lebih lanjut terkait
-          challenge ini atau untuk mengontak moderator, silakan kunjungi %{profile_url}.
+          mengikuti tantangan %{title} (%{url}). Untuk informasi lebih lanjut terkait
+          tantangan ini atau untuk informasi kontak moderator, silakan kunjungi %{profile_url}.
         look_up: Anda dapat melihat tugas ini dari halaman Assignments (Tugas) di
           %{link}.
     change_email:
@@ -269,7 +268,7 @@ id:
         part2: Jika Anda memiliki pertanyaan, silakan %{support}.
       part3: Terlampir salinan karya Anda sebagai referensi.
       subject: "[%{app_name}] Karya Anda telah dihapus"
-      support: hubungi Komite Dukungan
+      support: hubungi Komite Bantuan
       text:
         part1_other: Karya Anda, "%{title}", telah dihapus atas permintaan %{pseud}.
         part1_yourself: Karya Anda, "%{title}", telah dihapus atas permintaan Anda.
@@ -405,17 +404,22 @@ id:
           Anda dapat menuliskan semua tautan tersebut dalam satu surel.)
     invite_increase_notification:
       body:
-        other: 'Kami hanya ingin memberitahu Anda bahwa Anda memiliki %{count} undangan
-          baru yang dapat digunakan untuk membuat akun baru di AO3 (Arsip Milik Kita).
-          Anda dapat mengundang teman Anda di %{invitation_page}. '
-      invitation_page_link_text: Halaman undangan Anda
+        other: 'Kami hanya ingin memberitahu bahwa Anda memiliki %{count} undangan
+          baru yang dapat digunakan untuk membuat akun baru di AO3. Anda dapat mengundang
+          teman Anda di %{invitation_page}. '
+      invitation_page_link_text: halaman Invitations (Undangan) Anda
       subject: "[%{app_name}] Undangan Baru"
     invite_request_declined:
       main:
         other: Kami mohon maaf karena permintaan Anda untuk %{count} undangan baru
           tidak dapat kami penuhi saat ini.
       reason: 'Permintaan Anda adalah:'
-      subject: "[%{app_name}] Permintaan Kode Undangan Tambahan Ditolak"
+      subject: "[%{app_name}] Permintaan kode undangan tambahan ditolak"
+    recipient_notification:
+      subject:
+        collection: "[%{app_name}][%{collection_title}] Karya hadiah untuk Anda dari
+          %{collection_title}"
+        no_collection: "[%{app_name}] Karya hadiah untuk Anda"
     signup_notification:
       activate_your_account: Ikuti tautan ini untuk mengaktifkan akun Anda.
       admin_posts: Berita AO3

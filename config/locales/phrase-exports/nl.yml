@@ -38,15 +38,11 @@ nl:
       html:
         left_kudos:
           one: Je hebt kudos gekregen van %{givers_list} voor %{commentable_link}.
-          other: 'Je hebt kudos gekregen van %{givers_list} voor %{commentable_link}.
-
-            '
+          other: Je hebt kudos gekregen van %{givers_list} voor %{commentable_link}.
       text:
         left_kudos:
           one: Je hebt kudos gekregen van %{givers_list} voor %{commentable_link}.
-          other: 'Je hebt kudos gekregen van %{givers_list} voor %{commentable_link}.
-
-            '
+          other: Je hebt kudos gekregen van %{givers_list} voor %{commentable_link}.
       you_have: "[%{app_name}] Kudos!"
   users:
     mailer:
@@ -111,6 +107,14 @@ nl:
       part1: "%{login}, het e-mailadres dat aan je account is gekoppeld, werd gewijzigd
         naar %{email}"
       subject: "[%{app_name}] E-mail gewijzigd"
+    collection_notification:
+      assignments_sent:
+        complete: Alle taken zijn verstuurd.
+        subject: Taken verstuurd
+      html:
+        received_message: 'Je hebt een bericht ontvangen over je collectie %{collection_link}:'
+      text:
+        received_message: 'Je hebt een bericht ontvangen over je collectie %{collection_link}:'
     creatorship_notification:
       explanation: Als medeproducent van een werk, kan je worden toegevoegd aan nieuwe
         hoofdstukken ongeacht je instellingen. Je zal ook worden toegevoegd aan series

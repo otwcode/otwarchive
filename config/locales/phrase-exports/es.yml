@@ -77,7 +77,7 @@ es:
       opendoors: contacta a Open Doors (Puertas Abiertas)
       subject: "[%{app_name}] Tu obra ha sido eliminada por unx administradorx"
       text:
-        part1: Tu obra \"%{title}\" ha sido eliminada por unx administradorx del sitio.
+        part1: Tu obra "%{title}" ha sido eliminada por unx administradorx del sitio.
         part2: Si tu obra es parte de un proyecto administrado por nuestro equipo
           de Open Doors (Puertas Abiertas), por favor contacta a Open Doors (%{opendoors_link})
           si tienes más preguntas.
@@ -250,7 +250,7 @@ es:
       text:
         creation: "%{title} (%{url}) por %{pseuds}"
         remove: 'Si se te ha añadido por error o no quieres aparecer como creadorx,
-          puedes %{edit} la %{type} para eliminarte como creadorx: %{url}'
+          puedes editar la %{type} para eliminarte como creadorx: %{url}'
     creatorship_request:
       html:
         creation: "%{creation_link} de %{pseud_links}"
@@ -389,6 +389,11 @@ es:
           solicitud de %{count} nuevas invitaciones.
       reason: 'Tu solicitud era:'
       subject: "[%{app_name}] Solicitud de código de invitación adicional rechazada"
+    recipient_notification:
+      subject:
+        collection: "[%{app_name}][%{collection_title}] Tienes una obra de regalo
+          de %{collection_title}"
+        no_collection: "[%{app_name}] Tienes una obra de regalo"
     signup_notification:
       activate_your_account: Sigue este enlace para activar tu cuenta
       admin_posts: Noticias del AO3
