@@ -1,12 +1,11 @@
 require 'open3'
 
 class DownloadWriter
-  attr_reader :download, :work, :user
+  attr_reader :download, :work
 
-  def initialize(download, user)
+  def initialize(download)
     @download = download
     @work = download.work
-    @user = user
   end
 
   def write
@@ -30,8 +29,7 @@ class DownloadWriter
       assigns: {
         work: work,
         page_title: download.page_title,
-        chapters: download.chapters,
-        current_user: user
+        chapters: download.chapters
       }
     )
 

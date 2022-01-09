@@ -1,20 +1,3 @@
-When /^I download "(.*?)"$/ do |title|
-  work = Work.find_by(title: title)
-  visit work_url(work)
-  step %{I follow "HTML"}
-end
-
-Then /^I should see the inspiring parent work link$/ do
-  parent = Work.find_by(title: "Worldbuilding Restricted")
-  inspired_link = "<a href=\"#{work_url(parent)}\">#{parent.title.html_safe}</a>"
-  page.body.should =~ /Inspired by #{Regexp.escape(inspired_link)}/m
-end
-
-Then /^I should see restricted inspiring work placeholder$/ do
-  step %{I should see the text with tags '[Restricted Work]'}
-  step %{I should not see the text with tags 'Worldbuilding'}
-end
-
 Then /^I should receive a file of type "(.*?)"$/ do |filetype|
   mime_type = filetype == "azw3" ? "application/x-mobi8-ebook" : MIME::Types.type_for("foo.#{filetype}").first
   expect(page.response_headers['Content-Disposition']).to match(/filename=.+\.#{filetype}/)

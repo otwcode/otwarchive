@@ -9,7 +9,7 @@ class DownloadsController < ApplicationController
   def show
     respond_to :html, :pdf, :mobi, :epub, :azw3
     @download = Download.new(@work, mime_type: request.format)
-    @download.generate(@current_user)
+    @download.generate
 
     # Make sure we were able to generate the download.
     unless @download.exists?

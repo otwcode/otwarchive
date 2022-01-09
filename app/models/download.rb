@@ -9,8 +9,8 @@ class Download
     @mime_type = @file_type == "azw3" ? "application/x-mobi8-ebook" : MIME::Types.type_for(@file_type).first
   end
 
-  def generate(user = nil)
-    DownloadWriter.new(self, user).write
+  def generate
+    DownloadWriter.new(self).write
     self
   end
 
