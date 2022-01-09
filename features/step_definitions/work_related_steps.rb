@@ -67,15 +67,15 @@ end
 
 When /^I post a related work for "(.*?)" as remixer$/ do |inspiration|
   step %{I am logged in as "remixer"}
-    step %{I go to the new work page}
-    step %{I select "Not Rated" from "Rating"}
-    step %{I check "No Archive Warnings Apply"}
-    step %{I select "English" from "Choose a language"}
-    step %{I fill in "Fandoms" with "Stargate"}
-    step %{I fill in "Work Title" with "Followup"}
-    step %{I fill in "content" with "That could be an amusing crossover."}
-    step %{I list the work "#{inspiration}" as inspiration}
-    step %{I press "Preview"}
+  step %{I go to the new work page}
+  step %{I select "Not Rated" from "Rating"}
+  step %{I check "No Archive Warnings Apply"}
+  step %{I select "English" from "Choose a language"}
+  step %{I fill in "Fandoms" with "Stargate"}
+  step %{I fill in "Work Title" with "Followup"}
+  step %{I fill in "content" with "That could be an amusing crossover."}
+  step %{I list the work "#{inspiration}" as inspiration}
+  step %{I press "Preview"}
   step %{I press "Post"}
 end
 
