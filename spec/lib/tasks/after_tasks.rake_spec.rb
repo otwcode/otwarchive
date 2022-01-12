@@ -317,7 +317,7 @@ describe "rake After:reset_revised_at_on_backdated_works" do
         .and avoid_changing { work.reload.revised_at }
     end
 
-    it "resets revised_at if arbitrary set in the past" do
+    it "resets revised_at if arbitrarily set in the past" do
       work.update_column(:revised_at, 10.years.ago)
 
       expect do
@@ -343,6 +343,14 @@ describe "rake After:reset_revised_at_on_backdated_works" do
       end.to change { work.reload.updated_at }
         .and change { work.reload.revised_at }
       expect(work.revised_at.to_date).to eq(Date.new(2021, 12, 5))
+    end
+
+    it "outputs work IDs that fail validations" do
+      allow_any_instance_of(Work).to receive(:save).and_return(false)
+
+      expect do
+        subject.invoke
+      end.to output(/The following 1 work\(s\) failed validations and could not be saved:\n#{work.id}/).to_stdout
     end
   end
 end
