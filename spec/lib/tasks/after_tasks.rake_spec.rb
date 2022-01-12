@@ -301,3 +301,48 @@ describe "rake After:fix_tags_with_extra_spaces" do
     expect(borked_tag.name).to eql("_\"'quotes'\"")
   end
 end
+
+describe "rake After:reset_revised_at_on_backdated_works" do
+  let!(:work) do
+    travel_to(1.day.ago) do
+      create(:work)
+    end
+  end
+
+  context "on non-backdated works" do
+    it "does nothing" do
+      expect do
+        subject.invoke
+      end.to avoid_changing { work.reload.updated_at }
+        .and avoid_changing { work.reload.revised_at }
+    end
+
+    it "resets revised_at if arbitrary set in the past" do
+      work.update_column(:revised_at, 10.years.ago)
+
+      expect do
+        subject.invoke
+      end.to change { work.reload.updated_at }
+        .and change { work.reload.revised_at }
+      expect(work.revised_at.to_date).to be >= work.published_at
+    end
+  end
+
+  context "on backdated works" do
+    before do
+      travel_to(1.day.ago) do
+        work.update!({ backdate: true, chapter_attributes: { published_at: "2021-12-05" } })
+      end
+    end
+
+    it "resets revised_at to be consistent with published_at" do
+      work.update_column(:revised_at, Time.current)
+
+      expect do
+        subject.invoke
+      end.to change { work.reload.updated_at }
+        .and change { work.reload.revised_at }
+      expect(work.revised_at.to_date).to eq(Date.new(2021, 12, 5))
+    end
+  end
+end
