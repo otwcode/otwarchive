@@ -318,12 +318,12 @@ class UserMailer < ActionMailer::Base
     @collection = Collection.find(collection_id) if collection_id
     I18n.with_locale(Locale.find(@user.preference.preferred_locale).iso) do
       subject = if @collection
-                   t("user_mailer.recipient_notification.subject.collection",
-                     app_name: ArchiveConfig.APP_SHORT_NAME,
-                     collection_title: @collection.title)
+                  t("user_mailer.recipient_notification.subject.collection",
+                    app_name: ArchiveConfig.APP_SHORT_NAME,
+                    collection_title: @collection.title)
                 else
-                   t("user_mailer.recipient_notification.subject.no_collection",
-                     app_name: ArchiveConfig.APP_SHORT_NAME)
+                  t("user_mailer.recipient_notification.subject.no_collection",
+                    app_name: ArchiveConfig.APP_SHORT_NAME)
                 end
       mail(
         to: @user.email,
