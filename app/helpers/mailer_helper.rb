@@ -134,6 +134,7 @@ module MailerHelper
 
   def work_tag_metadata_label(tags)
     return if tags.empty?
+
     type = tags.first.type
     t("activerecord.models.#{type.underscore}", count: tags.count) + t("mailer.general.metadata_label_indicator")
   end
@@ -142,12 +143,14 @@ module MailerHelper
   # connector word (e.g., "and") look like part of the final tag.
   def work_tag_metadata_list(tags)
     return if tags.empty?
+
     tags.pluck(:name).join(t("support.array.words_connector"))
   end
 
   # Spacing is dealt with in locale files, e.g. " : " for French.
   def work_tag_metadata(tags)
     return if tags.empty?
+
     "#{work_tag_metadata_label(tags)}#{work_tag_metadata_list(tags)}"
   end
 
@@ -157,6 +160,7 @@ module MailerHelper
 
   def style_work_tag_metadata_list(tags)
     return if tags.empty?
+
     type = tags.first.type
     # Fandom tags are linked and to_sentence'd.
     if type == "Fandom"
@@ -169,6 +173,7 @@ module MailerHelper
   # Spacing is dealt with in locale files, e.g. " : " for French.
   def style_work_tag_metadata(tags)
     return if tags.empty?
+
     label = style_bold(work_tag_metadata_label(tags))
     "#{label}#{style_work_tag_metadata_list(tags)}".html_safe
   end

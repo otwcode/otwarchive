@@ -66,5 +66,4 @@ alias distance_of_time_in_words_to_now time_ago_in_words
   def metadata_property(text)
     text.html_safe + t("mailer.general.metadata_label_indicator")
   end
-
 end
