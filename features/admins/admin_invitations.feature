@@ -352,13 +352,11 @@ Feature: Admin Actions to Manage Invitations
 
   Scenario: An admin can delete an invitation
     Given an invitation for "test@example.com" exists
-      And an invitation for "test@example.com" exists
       And I am logged in as a "policy_and_abuse" admin
     When I follow "Invite New Users"
       And I fill in "track_invitation_invitee_email" with "test@example.com"
       And I press "Go"
-    Then I should see "Delete"
-    When I follow "Delete"
+      And I follow "Delete"
     Then I should see "Invitation successfully destroyed"
       And I should be on the invite new users page
 
