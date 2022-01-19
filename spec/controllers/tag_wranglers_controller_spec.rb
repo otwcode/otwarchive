@@ -11,7 +11,7 @@ describe TagWranglersController do
   describe "create" do
     context "when logged in as a wrangler" do
       before do
-        wrangler = create(:wrangler)
+        wrangler = create(:tag_wrangler)
         fake_login_known_user(wrangler)
       end
 
@@ -26,7 +26,7 @@ describe TagWranglersController do
   describe "destroy" do
     context "when logged in as a wrangler" do
       before do
-        wrangler = create(:wrangler)
+        wrangler = create(:tag_wrangler)
         fake_login_known_user(wrangler)
       end
 
