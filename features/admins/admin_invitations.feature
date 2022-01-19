@@ -350,8 +350,10 @@ Feature: Admin Actions to Manage Invitations
       And I press "Update Invitation"
     Then I should see "oldman@ds9.com" in the "invitation_invitee_email" input
 
-  Scenario: An admin can delete an invitation
+  Scenario: An admin can delete an invitation from the results page when there
+  are multiple invitations found for the search criteria
     Given an invitation for "test@example.com" exists
+      And an invitation for "test@example.com" exists
       And I am logged in as a "policy_and_abuse" admin
     When I follow "Invite New Users"
       And I fill in "track_invitation_invitee_email" with "test@example.com"
