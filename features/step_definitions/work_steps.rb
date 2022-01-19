@@ -510,6 +510,15 @@ When /^I list the work "([^"]*)" as inspiration$/ do |title|
   url_of_work = work_url(work).sub("www.example.com", ArchiveConfig.APP_HOST)
   fill_in("work_parent_attributes_url", with: url_of_work)
 end
+
+When /^I list an external work as inspiration$/ do
+  check("parent-options-show")
+  fill_in("work_parent_attributes_url", with: "https://example.com")
+  fill_in("work_parent_attributes_title", with: "Example External")
+  fill_in("work_parent_attributes_author", with: "External Author")
+  select("English", from: "work[parent_attributes][language_id]")
+end
+
 When /^I set the publication date to today$/ do
   today = Date.current
   month = today.strftime("%B")
