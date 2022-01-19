@@ -80,7 +80,7 @@ describe InvitationsController do
           fake_login
           get :show, params: { user_id: user.login, id: invitation.id }
 
-          it_redirects_to_with_error(user_path(@current_user), "Sorry, you don't have permission to access the page you were trying to reach.")
+          it_redirects_to_with_error(user_path(controller.current_user), "Sorry, you don't have permission to access the page you were trying to reach.")
         end
       end
 
@@ -127,7 +127,7 @@ describe InvitationsController do
           fake_login
           get :show, params: { id: invitation.id }
 
-          it_redirects_to_with_error(user_path(@current_user), "Sorry, you don't have permission to access the page you were trying to reach.")
+          it_redirects_to_with_error(user_path(controller.current_user), "Sorry, you don't have permission to access the page you were trying to reach.")
         end
       end
 
@@ -181,7 +181,7 @@ describe InvitationsController do
       post :create, params: { user_id: invitee.login, invitation: { invitee_email: invitee.email, number_of_invites: 1 } }
 
       it_redirects_to_with_error(
-        user_path(@current_user),
+        user_path(controller.current_user),
         "Sorry, you don't have permission to access the page you were trying to reach."
       )
     end
@@ -217,7 +217,7 @@ describe InvitationsController do
       delete :destroy, params: { id: invitation.id }
 
       it_redirects_to_with_error(
-        user_path(@current_user),
+        user_path(controller.current_user),
         "Sorry, you don't have permission to access the page you were trying to reach."
       )
     end

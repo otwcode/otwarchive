@@ -22,7 +22,7 @@ Feature: Admin Actions to Manage Invitations
       And I check "Users can request invitations"
       And I check "Invite from queue enabled (People can add themselves to the queue and invitations are sent out automatically)"
       And I press "Update"
-      And I am logged out as an admin
+      And I log out
     When I go to the home page
     Then I should see "Get Invited!"
       And I should see "You can join by getting an invitation from another user or from our automated invite queue. All fans and fanworks are welcome!"
@@ -37,7 +37,7 @@ Feature: Admin Actions to Manage Invitations
       And I check "Users can request invitations"
       And I uncheck "Invite from queue enabled (People can add themselves to the queue and invitations are sent out automatically)"
       And I press "Update"
-      And I am logged out as an admin
+      And I log out
     When I go to the home page
     Then I should not see "Get Invited!"
       And I should not see "You can join by getting an invitation from another user or from our automated invite queue. All fans and fanworks are welcome!"
@@ -52,7 +52,7 @@ Feature: Admin Actions to Manage Invitations
       And I uncheck "Users can request invitations"
       And I check "Invite from queue enabled (People can add themselves to the queue and invitations are sent out automatically)"
       And I press "Update"
-      And I am logged out as an admin
+      And I log out
     When I go to the home page
     Then I should see "Get Invited!"
       And I should see "You can join by getting an invitation from our automated invite queue. All fans and fanworks are welcome!"
@@ -71,7 +71,7 @@ Feature: Admin Actions to Manage Invitations
       And I check "Users can request invitations"
       And I check "Invite from queue enabled (People can add themselves to the queue and invitations are sent out automatically)"
       And I press "Update"
-      And I am logged out as an admin
+      And I log out
     When I go to the home page
     Then I should not see "Get Invited!"
       And I should not see "You can join by getting an invitation from another user or from our automated invite queue. All fans and fanworks are welcome!"
@@ -86,7 +86,7 @@ Feature: Admin Actions to Manage Invitations
       And I check "Users can request invitations"
       And I check "Invite from queue enabled (People can add themselves to the queue and invitations are sent out automatically)"
       And I press "Update"
-      And I am logged out as an admin
+      And I log out
     When I go to the home page
     Then I should see "Get Invited!"
       And I should see "You can join by getting an invitation from another user or from our automated invite queue. All fans and fanworks are welcome!"
@@ -101,7 +101,7 @@ Feature: Admin Actions to Manage Invitations
       And I uncheck "Users can request invitations"
       And I uncheck "Invite from queue enabled (People can add themselves to the queue and invitations are sent out automatically)"
       And I press "Update"
-      And I am logged out as an admin
+      And I log out
     When I go to the home page
     Then I should not see "Get Invited!"
       And I should not see "You can join by getting an invitation from another user or from our automated invite queue. All fans and fanworks are welcome!"
@@ -121,7 +121,7 @@ Feature: Admin Actions to Manage Invitations
       And I uncheck "Users can request invitations"
       And I check "Invite from queue enabled (People can add themselves to the queue and invitations are sent out automatically)"
       And I press "Update"
-      And I am logged out as an admin
+      And I log out
     When I go to the home page
     Then I should not see "Get Invited!"
       And I should not see "You can join by getting an invitation from another user or from our automated invite queue. All fans and fanworks are welcome!"
@@ -136,7 +136,7 @@ Feature: Admin Actions to Manage Invitations
       And I check "Users can request invitations"
       And I check "Invite from queue enabled (People can add themselves to the queue and invitations are sent out automatically)"
       And I press "Update"
-      And I am logged out as an admin
+      And I log out
     When I go to the home page
     Then I should not see "Get Invited!"
       And I should not see "You can join by getting an invitation from another user or from our automated invite queue. All fans and fanworks are welcome!"
@@ -150,7 +150,7 @@ Feature: Admin Actions to Manage Invitations
       And I check "Users can request invitations"
       And I uncheck "Invite from queue enabled (People can add themselves to the queue and invitations are sent out automatically)"
       And I press "Update"
-      And I am logged out as an admin
+      And I log out
     When I go to the home page
     Then I should not see "Get Invited!"
       And I should not see "You can join by getting an invitation from another user or from our automated invite queue. All fans and fanworks are welcome!"
@@ -165,7 +165,7 @@ Feature: Admin Actions to Manage Invitations
       And I uncheck "Users can request invitations"
       And I check "Invite from queue enabled (People can add themselves to the queue and invitations are sent out automatically)"
       And I press "Update"
-      And I am logged out as an admin
+      And I log out
     When I go to the home page
     Then I should see "Get Invited!"
       And I should see "You can join by getting an invitation from our automated invite queue. All fans and fanworks are welcome!"
@@ -180,7 +180,7 @@ Feature: Admin Actions to Manage Invitations
       And I uncheck "Users can request invitations"
       And I uncheck "Invite from queue enabled (People can add themselves to the queue and invitations are sent out automatically)"
       And I press "Update"
-      And I am logged out as an admin
+      And I log out
     When I go to the home page
     Then I should not see "Get Invited!"
       And I should not see "You can join by getting an invitation from another user or from our automated invite queue. All fans and fanworks are welcome!"
@@ -198,7 +198,7 @@ Feature: Admin Actions to Manage Invitations
       And I uncheck "Users can request invitations"
       And I uncheck "Invite from queue enabled (People can add themselves to the queue and invitations are sent out automatically)"
       And I press "Update"
-      And I am logged out as an admin
+      And I log out
     When I go to the home page
     Then I should not see "Get Invited!"
       And I should not see "You can join by getting an invitation from another user or from our automated invite queue. All fans and fanworks are welcome!"
@@ -213,7 +213,7 @@ Feature: Admin Actions to Manage Invitations
       And I check "Users can request invitations"
       And I uncheck "Invite from queue enabled (People can add themselves to the queue and invitations are sent out automatically)"
       And I press "Update"
-      And I am logged out as an admin
+      And I log out
     When I go to the home page
     Then I should not see "Get Invited!"
       And I should not see "You can join by getting an invitation from another user or from our automated invite queue. All fans and fanworks are welcome!"
@@ -228,7 +228,7 @@ Feature: Admin Actions to Manage Invitations
       And I uncheck "Users can request invitations"
       And I check "Invite from queue enabled (People can add themselves to the queue and invitations are sent out automatically)"
       And I press "Update"
-      And I am logged out as an admin
+      And I log out
     When I go to the home page
     Then I should not see "Get Invited!"
       And I should not see "You can join by getting an invitation from another user or from our automated invite queue. All fans and fanworks are welcome!"
@@ -247,7 +247,7 @@ Feature: Admin Actions to Manage Invitations
       And I uncheck "Users can request invitations"
       And I uncheck "Invite from queue enabled (People can add themselves to the queue and invitations are sent out automatically)"
       And I press "Update"
-      And I am logged out as an admin
+      And I log out
     When I go to the home page
     Then I should not see "Get Invited!"
       And I should not see "You can join by getting an invitation from another user or from our automated invite queue. All fans and fanworks are welcome!"

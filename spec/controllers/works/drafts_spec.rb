@@ -73,7 +73,7 @@ describe WorksController do
 
       it "redirects to the current user's dashboard with an error message" do
         get :drafts, params: { user_id: drafts_user.login }
-        it_redirects_to_with_error(user_path(User.current_user),
+        it_redirects_to_with_error(user_path(controller.current_user),
                                    "You can only see your own drafts, sorry!")
       end
     end

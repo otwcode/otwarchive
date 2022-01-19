@@ -2,7 +2,11 @@
   <legend><%= ts('Tags') %></legend>
   <h3 class="landmark heading"><%= ts('Tags') %></h3>
 
-  <p class="note"><%= ts('Tags are comma separated, %{max} characters per tag.', :max => ArchiveConfig.TAG_MAX) %></p>
+  <p class="note">
+    <%= ts("Tags are comma separated, %{max} characters per tag. Fandom, relationship, character, and additional tags must not add up to more than %{limit}. Archive warning, category, and rating tags do not count toward this limit.",
+           limit: ArchiveConfig.USER_DEFINED_TAGS_MAX,
+           max: ArchiveConfig.TAG_MAX) %>
+  </p>
 
   <dl>
     <dt class="rating required">
@@ -28,10 +32,15 @@
       <fieldset class="warnings">
         <!--<legend class="landmark">Warning</legend>-->
         <ul>
-          <% for tag in ArchiveWarning.canonical.by_name %>
+          <%= collection_check_boxes(
+            :work, :archive_warning_strings,
+            ArchiveWarning.canonical.by_name,
+            :name, :name,
+            include_hidden: !include_blank
+          ) do |builder| %>
             <li>
-              <%= check_box_tag "work[archive_warning_strings][]", tag.name, include_blank ? false : check_archive_warning(@work, tag), :id => "work_archive_warning_strings_#{tag.id}" %>
-              <%= label_tag "work_archive_warning_strings_#{tag.id}", tag.name %>
+              <%= builder.check_box %>
+              <%= builder.label %>
             </li>
           <% end %>
         </ul>
@@ -58,12 +67,17 @@
       <fieldset>
         <!--<legend class="landmark">Category</legend>-->
         <ul>
-          <% for tag in Category.canonical.by_name.sort %>
+          <%= collection_check_boxes(
+            :work, :category_strings,
+            Category.canonical.by_name.sort,
+            :name, :name,
+            include_hidden: !include_blank
+          ) do |builder| %>
             <li>
-              <%= check_box_tag "work[category_string][]", tag.name, include_blank ? false : @work.category_strings.include?(tag.name), :id => "work_category_string_#{tag.id}" %>
-              <%= label_tag "work_category_string_#{tag.id}", tag.name %>
+              <%= builder.check_box %>
+              <%= builder.label %>
             </li>
-          <% end %> 
+          <% end %>
         </ul>
       </fieldset>
     </dd>

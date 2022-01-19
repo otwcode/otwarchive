@@ -471,6 +471,16 @@ describe TagSetNominationsController do
             get :show, params: { id: tag_set_nomination.id, tag_set_id: owned_tag_set.id }
             expect(response).to render_template('show')
           end
+
+          context "when the nomination is from a different tag set" do
+            let(:owned_tag_set) { create(:owned_tag_set) }
+
+            it "redirects and returns an error message" do
+              get :show, params: { id: tag_set_nomination.id, tag_set_id: owned_tag_set.id }
+              it_redirects_to_with_error(tag_set_path(owned_tag_set),
+                                         "Which nominations did you want to work with?")
+            end
+          end
         end
       end
     end
@@ -715,6 +725,15 @@ describe TagSetNominationsController do
               to eq(['New Relationship 0'])
             expect(assigns(:tag_set_nomination).freeform_nominations.map(&:tagname)).to eq(['New Freeform 0'])
           end
+
+          context "when the nomination is from a different tag set" do
+            let(:owned_tag_set) { create(:owned_tag_set) }
+
+            it "redirects and returns an error message" do
+              it_redirects_to_with_error(tag_set_path(owned_tag_set),
+                                         "Which nominations did you want to work with?")
+            end
+          end
         end
 
         def add_character_nominations(num)
@@ -790,7 +809,6 @@ describe TagSetNominationsController do
                  tag_set_id: owned_tag_set.id,
                  tag_set_nomination: {
                    pseud_id: random_user.default_pseud.id,
-                   owned_tag_set_id: owned_tag_set.id,
                    character_nominations_attributes: {
                      "0": {
                        tagname: "Character A",
@@ -849,7 +867,6 @@ describe TagSetNominationsController do
             post :create, params: {
                  tag_set_id: owned_tag_set.id,
                  tag_set_nomination: { pseud_id: random_user.default_pseud.id,
-                                       owned_tag_set_id: owned_tag_set.id,
                                        fandom_nominations_attributes: {
                                          '0': { tagname: 'New Fandom',
                                                 character_nominations_attributes: {
@@ -888,15 +905,13 @@ describe TagSetNominationsController do
           end
 
           it 'renders the new template' do
-            post :create, params: { tag_set_id: owned_tag_set.id, tag_set_nomination: { pseud_id: random_user.default_pseud.id,
-                                                                              owned_tag_set_id: owned_tag_set.id } }
+            post :create, params: { tag_set_id: owned_tag_set.id, tag_set_nomination: { pseud_id: random_user.default_pseud.id } }
             expect(response).to render_template('new')
           end
 
           it 'builds a new tag set nomination' do
-            expect { post :create, params: { tag_set_id: owned_tag_set.id, tag_set_nomination: { pseud_id: random_user.default_pseud.id,
-                                                                                       owned_tag_set_id: owned_tag_set.id } } }.
-              not_to change { owned_tag_set.tag_set_nominations.count }
+            expect { post :create, params: { tag_set_id: owned_tag_set.id, tag_set_nomination: { pseud_id: random_user.default_pseud.id } } }
+              .not_to change { owned_tag_set.tag_set_nominations.count }
             expect(assigns(:tag_set_nomination).new_record?).to be_truthy
             expect(assigns(:tag_set_nomination).pseud).to eq(random_user.default_pseud)
             expect(assigns(:tag_set_nomination).owned_tag_set).to eq(owned_tag_set)
@@ -907,8 +922,7 @@ describe TagSetNominationsController do
             owned_tag_set.update_column(:character_nomination_limit, 2)
             owned_tag_set.update_column(:relationship_nomination_limit, 3)
             owned_tag_set.update_column(:freeform_nomination_limit, 1)
-            post :create, params: { tag_set_id: owned_tag_set.id, tag_set_nomination: { pseud_id: random_user.default_pseud.id,
-                                                                              owned_tag_set_id: owned_tag_set.id } }
+            post :create, params: { tag_set_id: owned_tag_set.id, tag_set_nomination: { pseud_id: random_user.default_pseud.id } }
 
             expect(assigns(:tag_set_nomination).fandom_nominations.size).to eq(1)
             expect(assigns(:tag_set_nomination).fandom_nominations[0].character_nominations.size).to eq(2)
@@ -1011,7 +1025,6 @@ describe TagSetNominationsController do
                    id: tag_set_nom.id,
                    tag_set_nomination: {
                      pseud_id: tag_set_nom.pseud.id,
-                     owned_tag_set_id: owned_tag_set.id,
                      character_nominations_attributes: {
                        "0": {
                          id: character_nom.id,
@@ -1072,7 +1085,6 @@ describe TagSetNominationsController do
                   tag_set_id: owned_tag_set.id,
                   id: tag_set_nomination.id,
                   tag_set_nomination: { pseud_id: tag_nominator_pseud.id,
-                                        owned_tag_set_id: owned_tag_set.id,
                                         fandom_nominations_attributes: {
                                           '0': { tagname: 'Renamed Fandom',
                                                  id: fandom_nom.id,
@@ -1107,8 +1119,7 @@ describe TagSetNominationsController do
               put :update, params: {
                   tag_set_id: owned_tag_set.id,
                   id: tag_set_nomination.id,
-                  tag_set_nomination: { pseud_id: tag_nominator_pseud.id,
-                                        owned_tag_set_id: owned_tag_set.id }
+                  tag_set_nomination: { pseud_id: tag_nominator_pseud.id }
                 }
             end
 
@@ -1136,7 +1147,6 @@ describe TagSetNominationsController do
                 tag_set_id: owned_tag_set.id,
                 id: tag_set_nomination.id,
                 tag_set_nomination: { pseud_id: mod_pseud.id,
-                                      owned_tag_set_id: owned_tag_set.id,
                                       fandom_nominations_attributes: {
                                         '0': { tagname: 'Renamed Fandom',
                                                id: fandom_nom.id,
@@ -1157,6 +1167,20 @@ describe TagSetNominationsController do
           it 'redirects and returns a success message' do
             it_redirects_to_with_notice(tag_set_nomination_path(owned_tag_set, tag_set_nomination),
                                         'Your nominations were successfully updated.')
+          end
+
+          context "when the nomination is from a different tag set" do
+            let(:owned_tag_set) { create(:owned_tag_set) }
+
+            it "redirects and returns an error message" do
+              it_redirects_to_with_error(tag_set_path(owned_tag_set),
+                                         "Which nominations did you want to work with?")
+            end
+
+            it "doesn't update the nominations" do
+              expect(fandom_nom.reload.tagname).not_to eq("Renamed Fandom")
+              expect(character_nom.reload.tagname).not_to eq("Renamed Character")
+            end
           end
         end
       end
@@ -1194,18 +1218,19 @@ describe TagSetNominationsController do
       end
 
       context 'valid params' do
-        before do
-          allow(TagSetNomination).to receive(:find_by_id) { tag_set_nomination }
-        end
-
         context 'user is not moderator of tag set' do
           before do
             fake_login_known_user(tag_nominator.reload)
           end
 
           context 'at least one tag nomination associated with tag_set_nomination is reviewed' do
+            let(:fandom_nomination) do
+              FandomNomination.create(tag_set_nomination: tag_set_nomination,
+                                      tagname: "New Fandom")
+            end
+
             before do
-              allow(tag_set_nomination).to receive(:unreviewed?) { false }
+              fandom_nomination.update_column(:rejected, true)
             end
 
             it 'does not delete the tag set nomination' do
@@ -1221,10 +1246,6 @@ describe TagSetNominationsController do
           end
 
           context 'all tag nominations associated with tag_set_nomination are unreviewed' do
-            before do
-              allow(tag_set_nomination).to receive(:unreviewed?) { true }
-            end
-
             it 'deletes the tag set nomination' do
               expect { delete :destroy, params: { id: tag_set_nomination.id, tag_set_id: owned_tag_set.id } }.
                 to change { TagSetNomination.count }.by(-1)
@@ -1239,7 +1260,6 @@ describe TagSetNominationsController do
 
         context 'user is moderator of tag set' do
           before do
-            allow(tag_set_nomination).to receive(:unreviewed?) { false }
             fake_login_known_user(moderator.reload)
           end
 
@@ -1251,6 +1271,21 @@ describe TagSetNominationsController do
           it 'redirects and returns a success message' do
             delete :destroy, params: { id: tag_set_nomination.id, tag_set_id: owned_tag_set.id }
             it_redirects_to_with_notice(tag_set_path(owned_tag_set), 'Your nominations were deleted.')
+          end
+
+          context "when the nomination is from a different tag set" do
+            let(:owned_tag_set) { create(:owned_tag_set) }
+
+            it "redirects and returns an error message" do
+              delete :destroy, params: { id: tag_set_nomination.id, tag_set_id: owned_tag_set.id }
+              it_redirects_to_with_error(tag_set_path(owned_tag_set),
+                                         "Which nominations did you want to work with?")
+            end
+
+            it "doesn't delete the nomination" do
+              delete :destroy, params: { id: tag_set_nomination.id, tag_set_id: owned_tag_set.id }
+              expect { tag_set_nomination.reload }.not_to raise_exception
+            end
           end
         end
       end

@@ -10,7 +10,8 @@ class ExternalWork < ApplicationRecord
 
   belongs_to :language
 
-  scope :duplicate, -> { group("url HAVING count(DISTINCT id) > 1") }
+  # .duplicate.count.size returns the number of URLs with multiple external works
+  scope :duplicate, -> { group(:url).having("count(DISTINCT id) > 1") }
 
   AUTHOR_LENGTH_MAX = 500
 
@@ -30,6 +31,9 @@ class ExternalWork < ApplicationRecord
   validates_length_of :author, maximum: AUTHOR_LENGTH_MAX,
                                too_long: ts('^Creator must be less than %{max} characters long.',
                                             max: AUTHOR_LENGTH_MAX)
+
+  validates :user_defined_tags_count,
+            at_most: { maximum: proc { ArchiveConfig.USER_DEFINED_TAGS_MAX } }
 
   # TODO: External works should have fandoms, but they currently don't get added through the
   # post new work form so we can't validate them
@@ -81,15 +85,6 @@ class ExternalWork < ApplicationRecord
   def should_reindex_pseuds?
     pertinent_attributes = %w[id hidden_by_admin]
     destroyed? || (saved_changes.keys & pertinent_attributes).present?
-  end
-
-  #######################################################################
-  # TAGGING
-  # External works are taggable objects.
-  #######################################################################
-
-  def tag_groups
-    self.tags.group_by { |t| t.type.to_s }
   end
 
   ######################

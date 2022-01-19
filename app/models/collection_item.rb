@@ -109,7 +109,7 @@ class CollectionItem < ApplicationRecord
 
       # For a more helpful error message, raise an error saying that the work
       # is invalid if we fail to save it.
-      raise ActiveRecord::RecordInvalid, work unless work.save
+      raise ActiveRecord::RecordInvalid, work unless work.save(validate: false)
     end
   end
 
@@ -117,7 +117,7 @@ class CollectionItem < ApplicationRecord
   after_update :update_item_for_status_change
   def update_item_for_status_change
     if saved_change_to_user_approval_status? || saved_change_to_collection_approval_status?
-      item.save!
+      item.save!(validate: false)
     end
   end
 
@@ -185,16 +185,6 @@ class CollectionItem < ApplicationRecord
             UserMailer.invited_to_collection_notification(email_author.id, item.id, collection.id).deliver_now
           end
         end
-      end
-    end
-  end
-
-  after_update :notify_of_status_change
-  def notify_of_status_change
-    if saved_change_to_unrevealed? && item.respond_to?(:new_recipients)
-      # making sure notify_recipients in the work model has not already notified
-      if item.new_recipients.present?
-        notify_of_reveal
       end
     end
   end

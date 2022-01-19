@@ -18,9 +18,7 @@ Otwarchive::Application.configure do
 
   config.action_mailer.perform_caching = true
 
-  memcached_servers = "127.0.0.1:11211"
-  memcached_servers = YAML.load_file(Rails.root.join("config/local.yml")).fetch("MEMCACHED_SERVERS", memcached_servers) if File.file?(Rails.root.join("config/local.yml"))
-  config.cache_store = :mem_cache_store, memcached_servers,
+  config.cache_store = :mem_cache_store, ArchiveConfig.MEMCACHED_SERVERS,
                        { namespace: "ao3-v1-test", compress: true, pool_size: 10, raise_errors: true }
 
   # Raise exceptions instead of rendering exception templates
@@ -36,11 +34,6 @@ Otwarchive::Application.configure do
 
   # Inline ActiveJob when testing:
   config.active_job.queue_adapter = :inline
-
-  # Use SQL instead of Active Record's schema dumper when creating the test database.
-  # This is necessary if your schema can't be completely dumped by the schema dumper,
-  # like if you have constraints or database-specific column types
-  # config.active_record.schema_format = :sql
 
   # Print deprecation notices to the stderr
   config.active_support.deprecation = :stderr
