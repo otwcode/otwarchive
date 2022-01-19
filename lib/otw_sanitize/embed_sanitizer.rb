@@ -1,11 +1,14 @@
 # frozen_string_literal: true
 
+require "addressable/uri"
+require "cgi"
+
 module OTWSanitize
   # Creates a Sanitize transformer to sanitize embedded media
   class EmbedSanitizer
     WHITELIST_REGEXES = {
       ao3:              %r{^archiveofourown\.org/},
-      archiveorg:       %r{^archive\.org/},
+      archiveorg:       %r{^archive\.org\/embed/},
       criticalcommons:  %r{^criticalcommons\.org/},
       dailymotion:      %r{^dailymotion\.com/},
       eighttracks:      %r{^8tracks\.com/},
@@ -27,13 +30,16 @@ module OTWSanitize
     ].freeze
 
     SUPPORTS_HTTPS = %i[
-      ao3 archiveorg dailymotion eighttracks podfic
-      soundcloud spotify viddertube vimeo youtube
+      ao3 archiveorg dailymotion eighttracks ning podfic
+      soundcloud spotify viddersnet viddertube vimeo youtube
     ].freeze
 
     # Creates a callable transformer for the sanitizer to use
     def self.transformer
       lambda do |env|
+        # Don't continue if this node is already safelisted.
+        return if env[:is_whitelisted]
+
         new(env[:node]).sanitized_node
       end
     end
@@ -50,6 +56,11 @@ module OTWSanitize
       return unless source_url && source
 
       ensure_https
+
+      # If a Dewplayer embed has been replaced with <audio> tags, return
+      # without safelisting them so the Sanitize transformer for <audio>
+      # tags can modify them later.
+      return if replace_dewplayer
 
       if parent_name == 'object'
         sanitize_object
@@ -100,15 +111,60 @@ module OTWSanitize
       else
         url = node['src']
       end
+      @source_url = standardize_url(url)
+    end
+
+    def standardize_url(url)
       # strip off optional protocol and www
       protocol_regex = %r{^(?:https?:)?//(?:www\.)?}i
-      @source_url = url&.gsub(protocol_regex, '')
+      # normalize the url
+      url = url&.gsub(protocol_regex, "")
+      Addressable::URI.parse(url).normalize.to_s rescue nil
     end
 
     # For sites that support https, ensure we use a secure embed
     def ensure_https
       return unless supports_https? && node['src'].present?
       node['src'] = node['src'].gsub("http:", "https:")
+      if allows_flashvars? && node['flashvars'].present?
+        node['flashvars'] = node['flashvars'].gsub("http:", "https:")
+        node['flashvars'] = node['flashvars'].gsub("http%3A", "https%3A")
+      end
+    end
+
+    # If the embed is hosted on the Archive, it's Dewplayer and can be replaced
+    # with <audio> tag(s).
+    #
+    # Refer to https://archiveofourown.org/admin_posts/250.
+    def replace_dewplayer
+      return unless source == :ao3 && node_name == "embed" && source_url.downcase.include?("dewplayer")
+
+      flashvars = node["flashvars"]
+      return if flashvars.blank?
+
+      mp3_urls = []
+      flashvars.split(/&/).each do |pairs|
+        key, value = pairs.split("=", 2)
+        next unless key == "mp3" && value
+
+        # URL-decode the flashvars value if necessary.
+        value = Addressable::URI.unencode(value) if value =~ /^https?%3A/
+
+        # Dewplayer allows specifying multiple sources.
+        mp3_urls.concat(value.split("|"))
+      end
+      return if mp3_urls.blank?
+
+      audio_fragment = Nokogiri::HTML::DocumentFragment.parse ""
+      Nokogiri::HTML::Builder.with(audio_fragment) do |fragment|
+        fragment.p do
+          mp3_urls.each_with_index do |url, i|
+            fragment.br unless i.zero?
+            fragment.audio(src: url.strip)
+          end
+        end
+      end
+      node.replace(audio_fragment)
     end
 
     # We're now certain that this is an embed from a trusted source, but we
@@ -150,7 +206,7 @@ module OTWSanitize
         disable_scripts(node)
         node['flashvars'] = "" unless allows_flashvars?
       end
-      { node_whitelist: [node, parent] }
+      { node_whitelist: [node] }
     end
 
     # disable script access and networking

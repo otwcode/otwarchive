@@ -62,33 +62,49 @@
     <% end %>
   </ul>
 
+
   <div id="kudos_message"></div>
-
-  <h3 class="landmark heading"><a name="comments"><%= ts("Comments") %></a></h3>
-
-  <%= flash_div :comment_error, :comment_notice %>
+  <%= flash_div :kudos_error, :kudos_notice %>
 
   <% if @work && (@chapter.blank? || @chapter.posted?) %>
     <%= render "kudos/kudos", :kudos => @kudos, :guest_kudos_count => @work.guest_kudos_count, :commentable => @work %>
   <% end %>
 
+
+  <h3 class="landmark heading"><a id="comments"><%= ts("Comments") %></a></h3>
+  <%= flash_div :comment_error, :comment_notice %>
+
   <% commentable_parent = find_parent(commentable) %>
-  <% if !logged_in? && commentable_parent.is_a?(Work) && commentable_parent.anon_commenting_disabled %>
+  <% if commentable_parent.is_a?(AdminPost) && commentable_parent.disable_all_comments? %>
     <p class="notice">
-      <%= ts("Sorry, this work doesn't allow non-Archive users to comment. You can however still leave Kudos!") %>
+      <%= t(".permissions.admin_post.disable_all") %>
+    </p>
+  <% elsif commentable_parent.is_a?(AdminPost) && commentable_parent.disable_anon_comments? && !logged_in? %>
+    <p class="notice">
+      <%= t(".permissions.admin_post.disable_anon") %>
+      <%= t(".permissions.admin_post.alt_action", support_link: link_to(t(".permissions.admin_post.support_link"), new_feedback_report_path)).html_safe %>
+    </p>
+  <% elsif commentable_parent.is_a?(Work) && commentable_parent.disable_all_comments? %>
+    <p class="notice">
+      <%= t(".permissions.work.disable_all") %>
+    </p>
+  <% elsif commentable_parent.is_a?(Work) && commentable_parent.disable_anon_comments? && !logged_in? %>
+    <p class="notice">
+      <%= t(".permissions.work.disable_anon") %>
+      <%= t(".permissions.work.alt_action") %>
     </p>
   <% elsif commentable_parent.is_a?(Work) && commentable_parent.hidden_by_admin? %>
     <p class="notice">
-      <%= ts("Sorry, you can't add or edit comments on a hidden work.") %>
+      <%= t(".permissions.work.hidden") %>
     </p>
   <% elsif commentable_parent.is_a?(Work) && commentable_parent.in_unrevealed_collection %>
     <p class="notice">
-      <%= ts("Sorry, you can't add or edit comments on an unrevealed work.") %>
+      <%= t(".permissions.work.unrevealed") %>
     </p>
   <% else %>
     <div id="add_comment_placeholder" title="top level comment">
       <div id="add_comment">
-        <%= render 'comments/comment_form', {:comment => Comment.new, :commentable => commentable, :button_name => ts('Comment')} %>
+        <%= render 'comments/comment_form', {:comment => Comment.new, :commentable => commentable, :button_name => t(".actions.comment")} %>
       </div>
     </div>
   <% end %>

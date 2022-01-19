@@ -49,11 +49,10 @@ Feature: Gift Exchange Challenge
     Then I should see "My Gift Exchange"
 
   Scenario: Change timezone for a gift exchange
-    Given I am logged in as "mod1"
-      And time is frozen at 1/1/2019
-      And I have created the gift exchange "My Gift Exchange"
-      And I am on "My Gift Exchange" gift exchange edit page
-    When I select "(GMT-08:00) Pacific Time (US & Canada)" from "Time zone:"
+    Given time is frozen at 1/1/2019
+      And the gift exchange "My Gift Exchange" is ready for signups
+    When I go to "My Gift Exchange" gift exchange edit page
+      And I select "(GMT-08:00) Pacific Time (US & Canada)" from "Time zone"
       And I submit
     Then I should see "Challenge was successfully updated"
       And I should see the correct time zone for "Pacific Time (US & Canada)"
@@ -270,7 +269,9 @@ Feature: Gift Exchange Challenge
     Then I should not see "Assignments are now being sent out"
     # 4 users and the mod should get emails :)
       And 1 email should be delivered to "mod1"
+      And the email should have "Assignments sent" in the subject
       And the email should contain "You have received a message about your collection"
+      And the email should not contain "translation missing"
       And 1 email should be delivered to "myname1"
       And the email should contain "You have been assigned the following request"
       And the email should contain "Fandom:"
@@ -498,7 +499,7 @@ Feature: Gift Exchange Challenge
         | categories | 0       | 1       | 0     |
       And the user "badgirlsdoitwell" signs up for "EmailTest" with the following prompts
         | type    | characters | fandoms  | freeforms | ratings | categories |
-        | request | any        | the show | fic, art  | mature  |            |
+        | request | any        | the show | fic, art  | Mature  |            |
         | offer   | villain    | the show | fic       |         |            |
       And the user "sweetiepie" signs up for "EmailTest" with the following prompts
         | type    | characters | fandoms  | freeforms | ratings | categories |
@@ -515,7 +516,7 @@ Feature: Gift Exchange Challenge
         And the email should contain "Character:"
         And the email should contain "Any"
         And the email should contain "Rating:"
-        And the email should contain "mature"
+        And the email should contain "Mature"
         And the email should not contain "Relationships:"
         And the email should not contain "Warnings:"
         And the email should not contain "Category:"
@@ -533,11 +534,13 @@ Feature: Gift Exchange Challenge
         And the email should not contain "Warnings:"
         And the email should not contain "Optional Tags:"
 
-  Scenario: A mod can delete a gift exchange and all the assignments and
+  Scenario: A mod can delete a gift exchange without needing Javascript and all the assignments and
   sign-ups will be deleted with it, but the collection will remain
     Given everyone has their assignments for "Bad Gift Exchange"
       And I am logged in as "mod1"
     When I delete the challenge "Bad Gift Exchange"
+    Then I should see "Are you sure you want to delete the challenge from the collection Bad Gift Exchange? All sign-ups, assignments, and settings will be lost. (Works and bookmarks will remain in the collection.)"
+    When I press "Yes, Delete Challenge"
     Then I should see "Challenge settings were deleted."
       And I should not see the gift exchange dashboard for "Bad Gift Exchange"
       And no one should have an assignment for "Bad Gift Exchange"
@@ -593,3 +596,48 @@ Feature: Gift Exchange Challenge
     When I go to "Bad Gift Exchange" collection's page
       And I follow "My Assignments" within "#dashboard"
     Then I should not see the image "src" text "/images/envelope_icon.gif"
+
+  Scenario: A user who disallows gift works is cautioned about signing up for
+  an exchange, and a user who allows them is not.
+    Given the gift exchange "Some Gift Exchange" is ready for signups
+      And I am logged in as "participant"
+      And the user "participant" disallows gifts
+    When I go to "Some Gift Exchange" collection's page
+      And I follow "Sign-up Form"
+    Then I should see "Signing up for this challenge will allow users to give you gift works"
+    When the user "participant" allows gifts
+      And I go to "Some Gift Exchange" collection's page
+      And I follow "Sign-up Form"
+    Then I should not see "Signing up for this challenge will allow users to give you gift works"
+
+  Scenario: If a work is connected to an assignment for a user who disallows
+  gifts, user is still automatically added as a gift recipient. The recipient
+  remains attached even if the work is later disconnected from the assignment.
+    Given basic tags
+      And the user "recip" exists and is activated
+      And the user "recip" disallows gifts
+      And I am logged in as "gifter"
+      And I have an assignment for the user "recip" in the collection "exchange_collection"
+    When I fulfill my assignment
+    Then I should see "For recip."
+    When I follow "Edit"
+      And I uncheck "exchange_collection (recip)"
+      And I press "Post"
+    Then I should see "For recip."
+
+  Scenario: A user can explicitly give a gift to a user who disallows gifts if
+  the work is connected to an assignment. The recipient remains attached even if
+  the work is later disconnected from the assignment.
+    Given basic tags
+      And the user "recip" exists and is activated
+      And the user "recip" disallows gifts
+      And I am logged in as "gifter"
+      And I have an assignment for the user "recip" in the collection "exchange_collection"
+    When I start to fulfill my assignment
+      And I fill in "Gift this work to" with "recip"
+      And I press "Post"
+    Then I should see "For recip."
+    When I follow "Edit"
+      And I uncheck "exchange_collection (recip)"
+      And I press "Post"
+    Then I should see "For recip."

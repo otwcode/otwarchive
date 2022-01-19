@@ -1,30 +1,23 @@
-ENV["RAILS_ENV"] ||= 'test'
+ENV["RAILS_ENV"] ||= "test"
 
-require File.expand_path("../../config/environment", __FILE__)
-require 'simplecov'
-SimpleCov.command_name "rspec-" + (ENV['TEST_RUN'] || '')
-if ENV["CI"] == "true" && ENV["TRAVIS"] == "true"
-  # Only on Travis...
-  require "codecov"
-  SimpleCov.formatter = SimpleCov::Formatter::Codecov
-end
+require File.expand_path("../config/environment", __dir__)
+require "simplecov"
 
-require 'rspec/rails'
-require 'factory_bot'
-require 'database_cleaner'
-require 'email_spec'
+require "rspec/rails"
+require "factory_bot"
+require "database_cleaner"
+require "email_spec"
+require "webmock/rspec"
 
 DatabaseCleaner.start
-
 DatabaseCleaner.clean
-
 
 # Requires supporting ruby files with custom matchers and macros, etc,
 # in spec/support/ and its subdirectories.
-Dir[Rails.root.join("spec/support/**/*.rb")].each {|f| require f}
+Dir[Rails.root.join("spec/support/**/*.rb")].sort.each { |f| require f }
 
 FactoryBot.find_definitions
-FactoryBot.definition_file_paths = %w(factories)
+FactoryBot.definition_file_paths = %w[factories]
 
 RSpec.configure do |config|
   config.mock_with :rspec
@@ -33,33 +26,98 @@ RSpec.configure do |config|
     c.syntax = [:should, :expect]
   end
 
+  # TODO: Remove gems delorean and timecop now that Rails has time-travel helpers.
+  config.include ActiveSupport::Testing::TimeHelpers
   config.include FactoryBot::Syntax::Methods
   config.include EmailSpec::Helpers
   config.include EmailSpec::Matchers
   config.include Devise::Test::ControllerHelpers, type: :controller
-  config.include Capybara::DSL
+  config.include Devise::Test::IntegrationHelpers, type: :request
   config.include TaskExampleGroup, type: :task
 
   config.before :suite do
     Rails.application.load_tasks
     DatabaseCleaner.strategy = :transaction
     DatabaseCleaner.clean
+    Indexer.all.map(&:prepare_for_testing)
+    ArchiveWarning.find_or_create_by!(name: ArchiveConfig.WARNING_CHAN_TAG_NAME, canonical: true)
+    ArchiveWarning.find_or_create_by!(name: ArchiveConfig.WARNING_NONE_TAG_NAME, canonical: true)
+    Category.find_or_create_by!(name: ArchiveConfig.CATEGORY_SLASH_TAG_NAME, canonical: true)
+
+    # TODO: The "Not Rated" tag ought to be marked as adult, but we want to
+    # keep the adult status of the tag consistent with the features, so for now
+    # we have a non-adult "Not Rated" tag:
+    Rating.find_or_create_by!(name: ArchiveConfig.RATING_DEFAULT_TAG_NAME, canonical: true)
+
+    Rating.find_or_create_by!(name: ArchiveConfig.RATING_EXPLICIT_TAG_NAME, canonical: true, adult: true)
+    # Needs these for the API tests.
+    ArchiveWarning.find_or_create_by!(name: ArchiveConfig.WARNING_DEFAULT_TAG_NAME, canonical: true)
+    ArchiveWarning.find_or_create_by!(name: ArchiveConfig.WARNING_NONCON_TAG_NAME, canonical: true)
+    Rating.find_or_create_by!(name: ArchiveConfig.RATING_GENERAL_TAG_NAME, canonical: true)
   end
 
   config.before :each do
     DatabaseCleaner.start
     User.current_user = nil
     clean_the_database
+
+    # Clears used values for all generators.
+    Faker::UniqueGenerator.clear
+
+    # Reset global locale setting.
+    I18n.locale = I18n.default_locale
+
+    # Assume all spam checks pass by default.
+    allow(Akismetor).to receive(:spam?).and_return(false)
   end
 
   config.after :each do
     DatabaseCleaner.clean
-    delete_test_indices
   end
 
   config.after :suite do
     DatabaseCleaner.clean_with :truncation
-    delete_test_indices
+    Indexer.all.map(&:delete_index)
+  end
+
+  config.before :each, bookmark_search: true do
+    BookmarkIndexer.prepare_for_testing
+  end
+
+  config.after :each, bookmark_search: true do
+    BookmarkIndexer.delete_index
+  end
+
+  config.before :each, pseud_search: true do
+    PseudIndexer.prepare_for_testing
+  end
+
+  config.after :each, pseud_search: true do
+    PseudIndexer.delete_index
+  end
+
+  config.before :each, tag_search: true do
+    TagIndexer.prepare_for_testing
+  end
+
+  config.after :each, tag_search: true do
+    TagIndexer.delete_index
+  end
+
+  config.before :each, work_search: true do
+    WorkIndexer.prepare_for_testing
+  end
+
+  config.after :each, work_search: true do
+    WorkIndexer.delete_index
+  end
+
+  config.before :each, default_skin: true do
+    AdminSetting.current.update_attribute(:default_skin, Skin.default)
+  end
+
+  config.before :each, type: :controller do
+    @request.host = "www.example.com"
   end
 
   # If you're not using ActiveRecord, or you'd prefer not to run each of your
@@ -85,82 +143,62 @@ RSpec.configure do |config|
   #       # Equivalent to being in spec/controllers
   #     end
   config.infer_spec_type_from_file_location!
-  config.define_derived_metadata(file_path: %r{/spec/miscellaneous/lib/tasks/}) do |metadata|
+  config.define_derived_metadata(file_path: %r{/spec/lib/tasks/}) do |metadata|
     metadata[:type] = :task
   end
-  config.define_derived_metadata(file_path: %r{/spec/miscellaneous/helpers/}) do |metadata|
-    metadata[:type] = :helper
-  end
 
-  # Set default formatter to print out the description of each test as it runs
-  config.color = true
   config.formatter = :documentation
 
   config.file_fixture_path = "spec/support/fixtures"
 end
 
+RSpec::Matchers.define_negated_matcher :avoid_changing, :change
+
 def clean_the_database
   # Now clear memcached
   Rails.cache.clear
-  # Now reset redis ...
+
+  # Clear Redis
+  REDIS_AUTOCOMPLETE.flushall
   REDIS_GENERAL.flushall
+  REDIS_HITS.flushall
   REDIS_KUDOS.flushall
   REDIS_RESQUE.flushall
   REDIS_ROLLOUT.flushall
-  REDIS_AUTOCOMPLETE.flushall
-
-  ['work', 'bookmark', 'pseud', 'tag'].each do |index|
-    update_and_refresh_indexes index
-  end
-end
-
-def update_and_refresh_indexes(klass_name, shards = 5)
-  indexer_class = "#{klass_name.capitalize.constantize}Indexer".constantize
-
-  indexer_class.delete_index
-  indexer_class.create_index(shards)
-
-  if klass_name == 'bookmark'
-    bookmark_indexers = {
-      BookmarkedExternalWorkIndexer => ExternalWork,
-      BookmarkedSeriesIndexer => Series,
-      BookmarkedWorkIndexer => Work
-    }
-
-    bookmark_indexers.each do |indexer, bookmarkable|
-      indexer.new(bookmarkable.all.pluck(:id)).index_documents if bookmarkable.any?
-    end
-  end
-
-  indexer = indexer_class.new(klass_name.capitalize.constantize.all.pluck(:id))
-  indexer.index_documents if klass_name.capitalize.constantize.any?
-
-  $elasticsearch.indices.refresh(index: "ao3_test_#{klass_name}s")
-end
-
-def refresh_index_without_updating(klass_name)
-  $elasticsearch.indices.refresh(index: "ao3_test_#{klass_name}s")
 end
 
 def run_all_indexing_jobs
   %w[main background stats].each do |reindex_type|
     ScheduledReindexJob.perform reindex_type
   end
-  %w[work bookmark pseud tag].each do |index|
-    refresh_index_without_updating index
-  end
+  Indexer.all.map(&:refresh_index)
 end
 
-def delete_index(index)
-  index_name = "ao3_test_#{index}s"
-  if $elasticsearch.indices.exists? index: index_name
-    $elasticsearch.indices.delete index: index_name
-  end
-end
+# Suspend resque workers for the duration of the block, then resume after the
+# contents of the block have run. Simulates what happens when there's a lot of
+# jobs already in the queue, so there's a long delay between jobs being
+# enqueued and jobs being run.
+def suspend_resque_workers
+  # Set up an array to keep track of delayed actions.
+  queue = []
 
-def delete_test_indices
-  indices = $elasticsearch.indices.get_mapping.keys.select { |key| key.match("test") }
-  indices.each do |index|
-    $elasticsearch.indices.delete(index: index)
+  # Override the default Resque.enqueue_to behavior.
+  #
+  # The first argument is which queue the job is supposed to be added to, but
+  # it doesn't matter for our purposes, so we ignore it.
+  allow(Resque).to receive(:enqueue_to) do |_, klass, *args|
+    queue << [klass, args]
   end
+
+  # Run the code inside the block.
+  yield
+
+  # Empty out the queue and perform all of the operations.
+  while queue.any?
+    klass, args = queue.shift
+    klass.perform(*args)
+  end
+
+  # Resume the original Resque.enqueue_to behavior.
+  allow(Resque).to receive(:enqueue_to).and_call_original
 end

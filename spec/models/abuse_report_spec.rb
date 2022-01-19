@@ -2,12 +2,6 @@ require 'spec_helper'
 
 describe AbuseReport do
   context "when report is not spam" do
-
-    # Assume all of these reports pass the spam check
-    before(:each) do
-      allow(Akismetor).to receive(:spam?).and_return(false)
-    end
-
     context "valid reports" do
       it "is valid" do
         expect(build(:abuse_report)).to be_valid
@@ -254,11 +248,22 @@ describe AbuseReport do
   end
 
   context "when report is spam" do
+    let(:legit_user) { create(:user) }
     let(:spam_report) { build(:abuse_report, username: 'viagra-test-123') }
-    it "is not valid if Akismet flags it as spam" do
+    let(:safe_report) { build(:abuse_report, username: 'viagra-test-123', email: legit_user.email) }
+
+    before do
       allow(Akismetor).to receive(:spam?).and_return(true)
+    end
+
+    it "is not valid if Akismet flags it as spam" do
       expect(spam_report.save).to be_falsey
       expect(spam_report.errors[:base]).to include("This report looks like spam to our system!")
+    end
+
+    it "is valid even with spam if logged in and providing correct email" do
+      User.current_user = legit_user
+      expect(safe_report.save).to be_truthy
     end
   end
 end

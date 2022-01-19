@@ -13,7 +13,9 @@ Feature: Delete a comment
       And I post the comment "Fail comment" on the work "Awesome story"
       And I delete the comment
     Then I should see "Comment deleted."
-    
+      And I should not see "Comments:"
+      And I should not see a link "Hide Comments (1)"
+
   Scenario: User deletes a comment they added to a work and which is the parent of another comment
     When I am logged in as "author"
       And I post the work "Awesome story"
@@ -24,6 +26,8 @@ Feature: Delete a comment
     Then I should see "Comment deleted."
       And I should see "(Previous comment deleted.)"
       And I should see "I didn't mean that"
+      And I should see "Comments:1"
+      And I should see a link "Hide Comments (1)"
       
   Scenario: Author deletes a comment another user added to their work
     When I am logged in as "author"
@@ -34,6 +38,8 @@ Feature: Delete a comment
       And I view the work "Awesome story" with comments
       And I delete the comment
     Then I should see "Comment deleted."
+      And I should not see "Comments:"
+      And I should not see a link "Hide Comments (1)"
     
   Scenario: Author deletes a parent comment that another user added to their work
     When I am logged in as "author"
@@ -47,6 +53,8 @@ Feature: Delete a comment
     Then I should see "Comment deleted."
       And I should see "(Previous comment deleted.)"
       And I should see "I didn't mean that"
+      And I should see "Comments:1"
+      And I should see a link "Hide Comments (1)"
 
   Scenario: Deleting higher-level comments in a deep comment thread should still allow readers to access the deeper comments.
 

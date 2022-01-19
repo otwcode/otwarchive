@@ -18,6 +18,20 @@ Given(/^the user "(.*?)" allows co-creators$/) do |login|
   user.preference.save
 end
 
+Given "the user {string} disallows gifts" do |login|
+  user = User.where(login: login).first
+  user = find_or_create_new_user(login, DEFAULT_PASSWORD) if user.nil?
+  user.preference.allow_gifts = false
+  user.preference.save
+end
+
+Given "the user {string} allows gifts" do |login|
+  user = User.where(login: login).first
+  user = find_or_create_new_user(login, DEFAULT_PASSWORD) if user.nil?
+  user.preference.allow_gifts = true
+  user.preference.save
+end
+
 When /^I set my preferences to turn off notification emails for comments$/ do
   user = User.current_user
   user.preference.comment_emails_off = true
@@ -46,18 +60,6 @@ When /^I set my preferences to hide freeform$/ do
   step %{I follow "My Preferences"}
   check("preference_hide_freeform")
   click_button("Update")
-end
-
-When /^I set my preferences to hide all hit counts$/ do
-  user = User.current_user
-  user.preference.hide_all_hit_counts = true
-  user.preference.save
-end
-
-When /^I set my preferences to hide hit counts on my works$/ do
-  user = User.current_user
-  user.preference.hide_private_hit_count = true
-  user.preference.save
 end
 
 When /^I set my preferences to hide the share buttons on my work$/ do
@@ -96,7 +98,7 @@ When /^I set my preferences to turn off the banner showing on every page$/ do
   user.preference.save
 end
 
-When /^I set my preferences to turn off viewing history$/ do
+When /^I set my preferences to turn off history$/ do
   user = User.current_user
   user.preference.history_enabled = false
   user.preference.save
@@ -125,4 +127,16 @@ When /^I set my preferences to hide both warnings and freeforms$/ do
   check("preference_hide_warnings")
   check("preference_hide_freeform")
   click_button("Update")
+end
+
+When /^I set my preferences to show adult content without warning$/ do
+  user = User.current_user
+  user.preference.adult = true
+  user.preference.save
+end
+
+When /^I set my preferences to warn before showing adult content$/ do
+  user = User.current_user
+  user.preference.adult = false
+  user.preference.save
 end

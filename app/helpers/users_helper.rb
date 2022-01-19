@@ -15,16 +15,6 @@ module UsersHelper
     current_user.is_a?(User) ? current_user.maintained_collections.present? : false
   end
 
-  # print all works that belong to a given pseud
-  def print_works(pseud)
-    result = ''
-    conditions = logged_in? ? 'posted = 1' : 'posted = 1 AND restricted = 0 OR restricted IS NULL'
-    pseud.works.find(:all, order: 'works.revised_at DESC', conditions: conditions).each do |work|
-      result += (render partial: 'works/work_blurb', locals: { work: work })
-    end
-    result
-  end
-
   def sidebar_pseud_link_text(user, pseud)
     text = if current_page?(user)
              ts('Pseuds')
@@ -73,33 +63,36 @@ module UsersHelper
 
   # Prints link to bookmarks page with user-appropriate number of bookmarks
   # (The total should reflect the number of bookmarks the user can actually see.)
-  def print_bookmarks_link(user, pseud = nil)
-    return print_pseud_bookmarks_link(pseud) if pseud.present? && !pseud.new_record?
+  def bookmarks_link(user, pseud = nil)
+    return pseud_bookmarks_link(pseud) if pseud.present? && !pseud.new_record?
+
     total = BookmarkSearchForm.count_for_user(user)
     span_if_current ts('Bookmarks (%{bookmark_number})', bookmark_number: total.to_s), user_bookmarks_path(@user)
   end
 
-  def print_pseud_bookmarks_link(pseud)
-    total = BookmarkSearchForm.count_for_pseuds([pseud])
+  def pseud_bookmarks_link(pseud)
+    total = BookmarkSearchForm.count_for_pseud(pseud)
     span_if_current ts('Bookmarks (%{bookmark_number})', bookmark_number: total.to_s), user_pseud_bookmarks_path(@user, pseud)
   end
 
   # Prints link to works page with user-appropriate number of works
   # (The total should reflect the number of works the user can actually see.)
-  def print_works_link(user, pseud = nil)
-    return print_pseud_works_link(pseud) if pseud.present? && !pseud.new_record?
-    total = WorkSearchForm.user_count(user)
+  def works_link(user, pseud = nil)
+    return pseud_works_link(pseud) if pseud.present? && !pseud.new_record?
+
+    total = WorkSearchForm.count_for_user(user)
     span_if_current ts('Works (%{works_number})', works_number: total.to_s), user_works_path(@user)
   end
 
-  def print_pseud_works_link(pseud)
-    total = WorkSearchForm.pseud_count(pseud)
+  def pseud_works_link(pseud)
+    total = WorkSearchForm.count_for_pseud(pseud)
     span_if_current ts('Works (%{works_number})', works_number: total.to_s), user_pseud_works_path(@user, pseud)
   end
 
   # Prints link to series page with user-appropriate number of series
-  def print_series_link(user, pseud = nil)
-    return print_pseud_series_link(pseud) if pseud.present? && !pseud.new_record?
+  def series_link(user, pseud = nil)
+    return pseud_series_link(pseud) if pseud.present? && !pseud.new_record?
+
     if current_user.nil?
       total = Series.visible_to_all.exclude_anonymous.for_pseuds(user.pseuds).length
     else
@@ -108,7 +101,7 @@ module UsersHelper
     span_if_current ts('Series (%{series_number})', series_number: total.to_s), user_series_index_path(@user)
   end
 
-  def print_pseud_series_link(pseud)
+  def pseud_series_link(pseud)
     if current_user.nil?
       total = Series.visible_to_all.exclude_anonymous.for_pseuds([pseud]).length
     else
@@ -117,7 +110,7 @@ module UsersHelper
     span_if_current ts('Series (%{series_number})', series_number: total.to_s), user_pseud_series_index_path(@user, pseud)
   end
 
-  def print_gifts_link(user)
+  def gifts_link(user)
     if current_user.nil?
       gift_number = user.gift_works.visible_to_all.distinct.count
     else
@@ -135,30 +128,6 @@ module UsersHelper
       items += visible_recs == 1 ? link_to(visible_recs.to_s + ' rec', user_pseud_bookmarks_path(pseud.user, pseud, recs_only: true)) : link_to(visible_recs.to_s + ' recs', user_pseud_bookmarks_path(pseud.user, pseud, recs_only: true))
     end
     items.html_safe
-  end
-
-  #  def print_pseud_drafts_link(pseud)
-  #    total = pseud.unposted_works.size
-  #    link_to_unless_current t('my_drafts', default:"Drafts") + " (#{total})", drafts_user_pseud_works_path(@user, pseud)
-  #  end
-
-  def authors_header(collection, what = 'People')
-    if collection.total_pages < 2
-      case collection.size
-      when 0
-        "0 #{what}"
-      when 1
-        "1 #{what.singularize}"
-      else
-        collection.total_entries.to_s + " #{what}"
-      end
-    else
-      %( %d - %d of %d ) %[
-        collection.offset + 1,
-        collection.offset + collection.length,
-        collection.total_entries
-      ] + what
-    end
   end
 
   def log_item_action_name(action)
@@ -184,6 +153,8 @@ module UsersHelper
       t('users_helper.log_email_change', default: 'Email Changed')
     elsif action == ArchiveConfig.ACTION_TROUBLESHOOT
       t('users_helper.log_troubleshot', default: 'Account Troubleshot')
+    elsif action == ArchiveConfig.ACTION_NOTE
+      t('users_helper.log_note', default: 'Note Added')
     end
   end
 

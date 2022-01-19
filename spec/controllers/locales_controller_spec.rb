@@ -4,9 +4,7 @@ describe LocalesController do
   include LoginMacros
   include RedirectExpectationHelper
   let(:user) { create(:user) }
-  let(:translation_admin) do
-    create(:user) { |u| u.translation_admin = "1" }
-  end
+  let(:translation_admin) { create(:translation_admin) }
 
   describe "GET #index" do
     it "displays the default locale" do

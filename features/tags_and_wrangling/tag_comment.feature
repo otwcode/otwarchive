@@ -129,27 +129,17 @@ I'd like to comment on a tag'
       And the email should contain "left the following comment on"
       And the email should contain "the tag"
 
-    # check that the links in the email go where they should; this is wonky and I don't know why
-    # I'm having the tests only check the html based email for now
-    When I follow "Go to the thread starting from this comment" in the email
-    Then I should see "Reading Comments on Eroica"
+    When I am logged in as "Enigel" with password "wrangulator"
+      And I follow "Go to the thread starting from this comment" in the email
+    Then I should see "Comment on Eroica"
       And I should see "really clever stuff"
-      And I log out
     When I follow "Read all comments on Eroica" in the email
-      And I fill in "User name or email:" with "Cesy"
-      And I fill in "Password:" with "wrangulator"
-      And I press "Log In"
     Then I should see "Reading Comments on Eroica"
       And I should see "really clever stuff"
-      And I log out
     When I follow "Reply to this comment" in the email
-      And I fill in "User name or email:" with "Enigel"
-      And I fill in "Password:" with "wrangulator"
-      And I press "Log In"
-    Then I should see "Reading Comments on Eroica"
+    Then I should see "Comment on Eroica"
       And I should see "really clever stuff"
       And all emails have been delivered
-      And I am logged in as "Enigel" with password "wrangulator"
 
     When I view the tag "Doctor Who"
       And I follow "0 comments"

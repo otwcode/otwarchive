@@ -249,7 +249,7 @@ namespace :After do
 #  task(:invite_external_authors => :environment) do
 #    Invitation.where("sent_at is NULL").where("external_author_id IS NOT NULL").each do |invite|
 #      archivist = invite.external_author.external_creatorships.collect(&:archivist).collect(&:login).uniq.join(", ")
-#      UserMailer.invitation_to_claim(invite, archivist).deliver
+#      UserMailer.invitation_to_claim(invite, archivist).deliver_now
 #      invite.sent_at = Time.now
 #      invite.save
 #    end
@@ -582,6 +582,21 @@ namespace :After do
     end
   end
 
+  desc "Enforce HTTPS where available for embedded media from ning.com and vidders.net"
+  task(enforce_https_viddersnet: :environment) do
+    Chapter.find_each do |chapter|
+      puts chapter.id if (chapter.id % 1000).zero?
+      if chapter.content.match /<(embed|iframe) .*(ning\.com|vidders\.net)/
+        begin
+          chapter.content_sanitizer_version = -1
+          chapter.sanitize_field(chapter, :content)
+        rescue StandardError
+          puts "couldn't update chapter #{chapter.id}"
+        end
+      end
+    end
+  end
+
   desc "Fix crossover status for works with two fandom tags."
   task(crossover_reindex_works_with_two_fandoms: :environment) do
     # Find all works with two fandom tags:
@@ -631,7 +646,263 @@ namespace :After do
     end
     puts && STDOUT.flush
   end
-end # this is the end that you have to put new tasks above
+
+  desc "Update each user's kudos with the user's id"
+  task(add_user_id_to_kudos: :environment) do
+    total_users = User.all.size
+    total_batches = (total_users + 999) / 1000
+    puts "Updating #{total_users} users' kudos in #{total_batches} batches"
+
+    User.includes(:pseuds).find_in_batches.with_index do |batch, index|
+      batch_number = index + 1
+      progress_msg = "Batch #{batch_number} of #{total_batches} complete"
+      batch.each do |user|
+        Kudo.where(pseud_id: user.pseud_ids, user_id: nil)
+          .update_all(user_id: user.id)
+      end
+      puts(progress_msg) && STDOUT.flush
+    end
+    puts && STDOUT.flush
+  end
+
+  desc "Update kudo counts on indexed works"
+  task(update_indexed_stat_counter_kudo_count: :environment) do
+    counters = StatCounter.where("kudos_count > ?", 0)
+    total_batches = (counters.size + 999) / 1000
+    batch_number = 0
+
+    counters.find_in_batches do |batch|
+      batch_number += 1
+      progress_msg = "Batch #{batch_number} of #{total_batches} complete"
+      batch.each do |counter|
+        next unless counter.work
+
+        counter.kudos_count = counter.work.kudos.count
+        next unless counter.kudos_count_changed?
+
+        # Counters will be queued for reindexing.
+        counter.save
+      end
+      puts(progress_msg) && STDOUT.flush
+    end
+    puts && STDOUT.flush
+  end
+
+  desc "Clean up the Redis info from the old hit count code."
+  task(remove_old_redis_hit_count_data: :environment) do
+    REDIS_GENERAL.scan_each(match: "work_stats:*") do |key|
+      REDIS_GENERAL.del(key)
+    end
+  end
+
+  desc "Copy anon_commenting_disabled to comment_permissions."
+  task(copy_anon_commenting_disabled_to_comment_permissions: :environment) do
+    Work.in_batches do |batch|
+      batch.update_all("comment_permissions = anon_commenting_disabled")
+      print(".") && STDOUT.flush
+    end
+
+    puts && STDOUT.flush
+  end
+
+  desc "Replace Archive-hosted Dewplayer embeds with HTML5 audio tags"
+  task(replace_dewplayer_embeds: :environment) do
+    dewplayer_embed_regex = /<embed .*dewplayer/
+    updated_chapter_count = 0
+    skipped_chapters = []
+
+    Chapter.find_each do |chapter|
+      puts(chapter.id) && STDOUT.flush if (chapter.id % 1000).zero?
+      if chapter.content.match(dewplayer_embed_regex)
+        begin
+          chapter.content_sanitizer_version = -1
+          if chapter.sanitize_field(chapter, :content).match(dewplayer_embed_regex)
+            # The embed(s) are still there.
+            skipped_chapters << chapter.id
+          else
+            updated_chapter_count += 1
+          end
+        rescue StandardError
+          skipped_chapters << chapter.id
+        end
+      end
+    end
+
+    if skipped_chapters.any?
+      puts("Couldn't convert #{skipped_chapters.size} chapter(s): #{skipped_chapters.join(',')}")
+      STDOUT.flush
+    end
+    puts("Converted #{updated_chapter_count} chapter(s).") && STDOUT.flush
+  end
+
+  desc "Update the mapping for the work index"
+  task(update_work_mapping: :environment) do
+    WorkIndexer.create_mapping
+  end
+
+  desc "Fix tags with extra spaces"
+  task(fix_tags_with_extra_spaces: :environment) do
+    total_tags = Tag.count
+    total_batches = (total_tags + 999) / 1000
+    puts "Inspecting #{total_tags} tags in #{total_batches} batches"
+
+    report_string = ["Tag ID", "Old tag name", "New tag name"].to_csv
+    Tag.find_in_batches.with_index do |batch, index|
+      batch_number = index + 1
+      progress_msg = "Batch #{batch_number} of #{total_batches} complete"
+
+      batch.each do |tag|
+        next unless tag.name != tag.name.squish
+
+        old_tag_name = tag.name
+        new_tag_name = old_tag_name.gsub(/[[:space:]]/, "_")
+
+        new_tag_name << "_" while Tag.find_by(name: new_tag_name)
+        tag.update_attribute(:name, new_tag_name)
+
+        report_row = [tag.id, old_tag_name, new_tag_name].to_csv
+        report_string += report_row
+      end
+
+      puts(progress_msg) && STDOUT.flush
+    end
+    puts(report_string) && STDOUT.flush
+  end
+
+  desc "Fix works imported with a noncanonical Teen & Up Audiences rating tag"
+  task(fix_teen_and_up_imported_rating: :environment) do
+    borked_rating_tag = Rating.find_by!(name: "Teen & Up Audiences")
+    canonical_rating_tag = Rating.find_by!(name: ArchiveConfig.RATING_TEEN_TAG_NAME)
+
+    work_ids = []
+    invalid_work_ids = []
+    borked_rating_tag.works.find_each do |work|
+      work.ratings << canonical_rating_tag
+      work.ratings = work.ratings - [borked_rating_tag]
+      if work.save
+        work_ids << work.id
+      else
+        invalid_work_ids << work.id
+      end
+      print(".") && STDOUT.flush
+    end
+
+    unless work_ids.empty?
+      puts "Converted '#{borked_rating_tag.name}' rating tag on #{work_ids.size} works:"
+      puts work_ids.join(", ")
+      STDOUT.flush
+    end
+
+    unless invalid_work_ids.empty?
+      puts "The following #{invalid_work_ids.size} works failed validations and could not be saved:"
+      puts invalid_work_ids.join(", ")
+      STDOUT.flush
+    end
+  end
+
+  desc "Clean up noncanonical rating tags"
+  task(clean_up_noncanonical_ratings: :environment) do
+    canonical_not_rated_tag = Rating.find_by!(name: ArchiveConfig.RATING_DEFAULT_TAG_NAME)
+    noncanonical_ratings = Rating.where(canonical: false)
+    puts "There are #{noncanonical_ratings.size} noncanonical rating tags."
+
+    next if noncanonical_ratings.empty?
+
+    puts "The following noncanonical Ratings will be changed into Additional Tags:"
+    puts noncanonical_ratings.map(&:name).join("\n")
+
+    work_ids = []
+    invalid_work_ids = []
+    noncanonical_ratings.find_each do |tag|
+      works_using_tag = tag.works
+      tag.update_attribute(:type, "Freeform")
+
+      works_using_tag.find_each do |work|
+        next unless work.ratings.empty?
+
+        work.ratings = [canonical_not_rated_tag]
+        if work.save
+          work_ids << work.id
+        else
+          invalid_work_ids << work.id
+        end
+        print(".") && STDOUT.flush
+      end
+    end
+
+    unless work_ids.empty?
+      puts "The following #{work_ids.size} works were left without a rating and successfully received the Not Rated rating:"
+      puts work_ids.join(", ")
+      STDOUT.flush
+    end
+
+    unless invalid_work_ids.empty?
+      puts "The following #{invalid_work_ids.size} works failed validations and could not be saved:"
+      puts invalid_work_ids.join(", ")
+      STDOUT.flush
+    end
+  end
+
+  desc "Clean up noncanonical category tags"
+  task(clean_up_noncanonical_categories: :environment) do
+    Category.where(canonical: false).find_each do |tag|
+      tag.update_attribute(:type, "Freeform")
+      puts "Noncanonical Category tag '#{tag.name}' was changed into an Additional Tag."
+    end
+    STDOUT.flush
+  end
+
+  desc "Add default rating to works missing a rating"
+  task(add_default_rating_to_works: :environment) do
+    work_count = Work.count
+    total_batches = (work_count + 999) / 1000
+    puts("Checking #{work_count} works in #{total_batches} batches") && STDOUT.flush
+    updated_works = []
+
+    Work.find_in_batches.with_index do |batch, index|
+      batch_number = index + 1
+
+      batch.each do |work|
+        next unless work.ratings.empty?
+
+        work.ratings << Rating.find_by!(name: ArchiveConfig.RATING_DEFAULT_TAG_NAME)
+        work.save
+        updated_works << work.id
+      end
+      puts("Batch #{batch_number} of #{total_batches} complete") && STDOUT.flush
+    end
+    puts("Added default rating to works: #{updated_works}") && STDOUT.flush
+  end
+
+  desc "Reset blurb date (revised_at) on backdated works"
+  task(reset_revised_at_on_backdated_works: :environment) do
+    # Fix all backdated works, as well as works with an arbitrary revised_at set
+    # in the past (possibly because of AO3-6187). Skip works failing validations.
+    works = Work.where("backdate OR revised_at < created_at")
+    work_count = works.count
+    total_batches = (work_count + 999) / 1000
+    puts("Checking #{work_count} works in #{total_batches} batches") && STDOUT.flush
+
+    invalid_work_ids = []
+    works.find_in_batches.with_index do |batch, index|
+      batch_number = index + 1
+
+      batch.each do |work|
+        work.revised_at = nil
+        invalid_work_ids << work.id unless work.save
+      end
+      puts("Batch #{batch_number} of #{total_batches} complete") && STDOUT.flush
+    end
+
+    unless invalid_work_ids.empty?
+      puts "The following #{invalid_work_ids.size} work(s) failed validations and could not be saved:"
+      puts invalid_work_ids.join(", ")
+      STDOUT.flush
+    end
+  end
+
+  # This is the end that you have to put new tasks above.
+end
 
 ##################
 # ADD NEW MIGRATE TASKS TO THIS LIST ONCE THEY ARE WORKING

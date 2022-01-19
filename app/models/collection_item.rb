@@ -109,7 +109,7 @@ class CollectionItem < ApplicationRecord
 
       # For a more helpful error message, raise an error saying that the work
       # is invalid if we fail to save it.
-      raise ActiveRecord::RecordInvalid, work unless work.save
+      raise ActiveRecord::RecordInvalid, work unless work.save(validate: false)
     end
   end
 
@@ -117,7 +117,7 @@ class CollectionItem < ApplicationRecord
   after_update :update_item_for_status_change
   def update_item_for_status_change
     if saved_change_to_user_approval_status? || saved_change_to_collection_approval_status?
-      item.save!
+      item.save!(validate: false)
     end
   end
 
@@ -127,7 +127,7 @@ class CollectionItem < ApplicationRecord
                     self.collection.collection_preference.email_notify
 
     if email_notify && !self.collection.email.blank?
-      CollectionMailer.item_added_notification(item_id, collection_id, item_type).deliver
+      CollectionMailer.item_added_notification(item_id, collection_id, item_type).deliver_later
     end
   end
 
@@ -164,7 +164,7 @@ class CollectionItem < ApplicationRecord
             approve_by_user
             users.each do |email_user|
               unless email_user.preference.collection_emails_off
-                UserMailer.added_to_collection_notification(email_user.id, item.id, collection.id).deliver!
+                UserMailer.added_to_collection_notification(email_user.id, item.id, collection.id).deliver_now
               end
             end
             break
@@ -182,19 +182,9 @@ class CollectionItem < ApplicationRecord
         # so we send an email to all the works owners
         item.users.each do |email_author|
           unless email_author.preference.collection_emails_off
-            UserMailer.invited_to_collection_notification(email_author.id, item.id, collection.id).deliver!
+            UserMailer.invited_to_collection_notification(email_author.id, item.id, collection.id).deliver_now
           end
         end
-      end
-    end
-  end
-
-  after_update :notify_of_status_change
-  def notify_of_status_change
-    if saved_change_to_unrevealed? && item.respond_to?(:new_recipients)
-      # making sure notify_recipients in the work model has not already notified
-      if item.new_recipients.present?
-        notify_of_reveal
       end
     end
   end
@@ -214,14 +204,9 @@ class CollectionItem < ApplicationRecord
     }.join(", ")
   end
 
-  def remove=(value)
-    if value == "1"
-      self.destroy
-    end
-  end
-
+  attr_writer :remove
   def remove
-    ""
+    @remove || ""
   end
 
   def title
@@ -303,13 +288,13 @@ class CollectionItem < ApplicationRecord
       recipient_pseuds = Pseud.parse_bylines(self.recipients, assume_matching_login: true)[:pseuds]
       recipient_pseuds.each do |pseud|
         unless pseud.user.preference.recipient_emails_off
-          UserMailer.recipient_notification(pseud.user.id, self.item.id, self.collection.id).deliver
+          UserMailer.recipient_notification(pseud.user.id, self.item.id, self.collection.id).deliver_after_commit
         end
       end
 
       # also notify prompters of responses to their prompt
       if item_type == "Work" && !item.challenge_claims.blank?
-        UserMailer.prompter_notification(self.item.id, self.collection.id).deliver
+        UserMailer.prompter_notification(self.item.id, self.collection.id).deliver_after_commit
       end
 
       # also notify the owners of any parent/inspired-by works
@@ -318,6 +303,33 @@ class CollectionItem < ApplicationRecord
           relationship.notify_parent_owners
         end
       end
+    end
+  end
+
+  after_update :notify_of_unrevealed_or_anonymous
+  def notify_of_unrevealed_or_anonymous
+    # This CollectionItem's anonymous/unrevealed status can only affect the
+    # item's status if (a) the CollectionItem is approved by the user and (b)
+    # the item is a work. (Bookmarks can't be anonymous/unrevealed at the
+    # moment.)
+    return unless approved_by_user? && item.is_a?(Work)
+
+    # Check whether anonymous/unrevealed is becoming true, when the work
+    # currently has it set to false:
+    newly_anonymous = (saved_change_to_anonymous?(to: true) && !item.anonymous?)
+    newly_unrevealed = (saved_change_to_unrevealed?(to: true) && !item.unrevealed?)
+
+    return unless newly_unrevealed || newly_anonymous
+
+    # Don't notify if it's one of the work creators who is changing the work's
+    # status.
+    return if item.users.include?(User.current_user)
+
+    item.users.each do |user|
+      UserMailer.anonymous_or_unrevealed_notification(
+        user.id, item.id, collection.id,
+        anonymous: newly_anonymous, unrevealed: newly_unrevealed
+      ).deliver_after_commit
     end
   end
 end

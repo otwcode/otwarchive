@@ -26,7 +26,7 @@ class TagSetNominationsController < ApplicationController
   end
 
   def load_nomination
-    @tag_set_nomination = TagSetNomination.find_by_id(params[:id])
+    @tag_set_nomination = @tag_set.tag_set_nominations.find_by(id: params[:id])
     unless @tag_set_nomination
       flash[:error] = ts("Which nominations did you want to work with?")
       redirect_to tag_set_path(@tag_set) and return
@@ -99,7 +99,7 @@ class TagSetNominationsController < ApplicationController
   end
 
   def create
-    @tag_set_nomination = TagSetNomination.new(tag_set_nomination_params)
+    @tag_set_nomination = @tag_set.tag_set_nominations.build(tag_set_nomination_params)
     if @tag_set_nomination.save
       flash[:notice] = ts('Your nominations were successfully submitted.')
       redirect_to tag_set_nomination_path(@tag_set, @tag_set_nomination)
@@ -148,7 +148,7 @@ class TagSetNominationsController < ApplicationController
       # all char and rel tags happen under fandom noms
       @nominations_count[:fandom] = @tag_set.fandom_nominations.unreviewed.count
       more_noms = true if  @nominations_count[:fandom] > @nom_limit
-      @nominations[:fandom] = more_noms ? base_nom_query("fandom").order("RAND()") : base_nom_query("fandom").order(:tagname)
+      @nominations[:fandom] = more_noms ? base_nom_query("fandom").random_order : base_nom_query("fandom").order(:tagname)
       if (@limit[:character] > 0 || @limit[:relationship] > 0)
         @nominations[:cast] = base_nom_query(%w(character relationship)).
           join_fandom_nomination.
@@ -163,7 +163,7 @@ class TagSetNominationsController < ApplicationController
       @nominations[:character] = base_nom_query("character") if @limit[:character] > 0
       @nominations[:relationship] = base_nom_query("relationship") if @limit[:relationship] > 0
       if more_noms
-        parent_tagnames = TagNomination.for_tag_set(@tag_set).unreviewed.order("RAND()").limit(100).pluck(:parent_tagname).uniq.first(30)
+        parent_tagnames = TagNomination.for_tag_set(@tag_set).unreviewed.random_order.limit(100).pluck(:parent_tagname).uniq.first(30)
         @nominations[:character] = @nominations[:character].where(parent_tagname: parent_tagnames) if @limit[:character] > 0
         @nominations[:relationship] = @nominations[:relationship].where(parent_tagname: parent_tagnames) if @limit[:relationship] > 0
       end
@@ -172,7 +172,7 @@ class TagSetNominationsController < ApplicationController
     end
     @nominations_count[:freeform] =  @tag_set.freeform_nominations.unreviewed.count
     more_noms = true if @nominations_count[:freeform] > @nom_limit
-    @nominations[:freeform] = (more_noms ? base_nom_query("freeform").order("RAND()") : base_nom_query("freeform").order(:tagname)) if @limit[:freeform] > 0
+    @nominations[:freeform] = (more_noms ? base_nom_query("freeform").random_order : base_nom_query("freeform").order(:tagname)) unless @limit[:freeform].zero?
 
     if more_noms
       flash[:notice] = ts("There are too many nominations to show at once, so here's a randomized selection! Additional nominations will appear after you approve or reject some.")
@@ -340,7 +340,6 @@ class TagSetNominationsController < ApplicationController
   def tag_set_nomination_params
     params.require(:tag_set_nomination).permit(
       :pseud_id,
-      :owned_tag_set_id,
       fandom_nominations_attributes: [
         :id,
         :tagname,

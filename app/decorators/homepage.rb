@@ -44,13 +44,13 @@ class Homepage
   def readings
     return unless logged_in? && @user.preference.try(:history_enabled?)
     if Rails.env.development?
-      @readings ||= @user.readings.order("RAND()").
+      @readings ||= @user.readings.random_order.
           limit(ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_ON_HOMEPAGE).
           where(toread: true).
           all
     else
       @readings ||= Rails.cache.fetch("home/index/#{@user.id}/home_marked_for_later") do
-        @user.readings.order("RAND()").
+        @user.readings.random_order.
           limit(ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_ON_HOMEPAGE).
           where(toread: true).
           to_a

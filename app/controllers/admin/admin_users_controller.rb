@@ -1,9 +1,8 @@
-class Admin::AdminUsersController < ApplicationController
+class Admin::AdminUsersController < Admin::BaseController
   include ExportsHelper
 
-  before_action :admin_only
-
   def index
+    authorize User
     @role_values = @roles.map{ |role| [role.name.humanize.titlecase, role.name] }
     @role = Role.find_by(name: params[:role]) if params[:role]
     @users = User.search_by_role(
@@ -13,17 +12,28 @@ class Admin::AdminUsersController < ApplicationController
   end
 
   def bulk_search
+    authorize User
     @emails = params[:emails].split if params[:emails]
-    unless @emails.nil? || @emails.blank?
-      all_users, @not_found = User.search_multiple_by_email(@emails)
-      @users = all_users.paginate(page: params[:page] || 1)
+    if @emails.present?
+      found_users, not_found_emails, duplicates = User.search_multiple_by_email(@emails)
+      @users = found_users.paginate(page: params[:page] || 1)
+      
       if params[:download_button]
         header = [%w(Email Username)]
-        found = all_users.map { |u| [u.email, u.login] }
-        not_found = @not_found.map { |email| [email, ""] }
+        found = found_users.map { |u| [u.email, u.login] }
+        not_found = not_found_emails.map { |email| [email, ""] }
         send_csv_data(header + found + not_found, "bulk_user_search_#{Time.now.strftime("%Y-%m-%d-%H%M")}.csv")
         flash.now[:notice] = ts("Downloaded CSV")
       end
+      @results = {
+        total: @emails.size,
+        searched: found_users.size + not_found_emails.size,
+        found_users: found_users,
+        not_found_emails: not_found_emails,
+        duplicates: duplicates
+      }
+    else
+      @results = {}
     end
   end
 
@@ -37,33 +47,32 @@ class Admin::AdminUsersController < ApplicationController
   def show
     @hide_dashboard = true
     @user = User.find_by(login: params[:id])
+    authorize @user
     unless @user
       redirect_to action: "index", query: params[:query], role: params[:role] and return
     end
     @log_items = @user.log_items.sort_by(&:created_at).reverse
   end
 
-  # GET admin/users/1/edit
-  def edit
-    @user = User.find_by(login: params[:id])
-    unless @user
-      redirect_to action: "index", query: params[:query], role: params[:role]
-    end
-  end
-
   # POST admin/users/update
   def update
-    @user = User.find_by(login: params[:id])
-    if @user.admin_update(params[:user])
+    @user = authorize User.find_by(login: params[:id])
+
+    attributes = permitted_attributes(@user)
+    @user.email = attributes[:email] if attributes[:email].present?
+    @user.roles = Role.where(id: attributes[:roles]) if attributes[:roles].present?
+
+    if @user.save
       flash[:notice] = ts("User was successfully updated.")
     else
-      flash[:error] = ts("There was an error updating user %{name}", name: params[:id])
+      flash[:error] = ts("The user %{name} could not be updated: %{errors}", name: params[:id], errors: @user.errors.full_messages.join(" "))
     end
     redirect_to request.referer || root_path
   end
 
   def update_status
     @user = User.find_by(login: params[:user_login])
+    authorize @user
     @user_manager = UserManager.new(current_admin, params)
     if @user_manager.save
       flash[:notice] = @user_manager.success_message
@@ -88,6 +97,7 @@ class Admin::AdminUsersController < ApplicationController
   end
 
   def confirm_delete_user_creations
+    authorize @user
     @works = @user.works.paginate(page: params[:works_page])
     @comments = @user.comments.paginate(page: params[:comments_page])
     @bookmarks = @user.bookmarks
@@ -96,6 +106,7 @@ class Admin::AdminUsersController < ApplicationController
   end
 
   def destroy_user_creations
+    authorize @user
     creations = @user.works + @user.bookmarks + @user.collections + @user.comments
     creations.each do |creation|
       AdminActivity.log_action(current_admin, creation, action: "destroy spam", summary: creation.inspect)
@@ -108,6 +119,8 @@ class Admin::AdminUsersController < ApplicationController
 
   def troubleshoot
     @user = User.find_by(login: params[:id])
+    authorize @user
+
     @user.fix_user_subscriptions
     @user.set_user_work_dates
     @user.reindex_user_creations
@@ -119,6 +132,8 @@ class Admin::AdminUsersController < ApplicationController
 
   def activate
     @user = User.find_by(login: params[:id])
+    authorize @user
+
     @user.activate
     if @user.active?
       @user.create_log_item( options = { action: ArchiveConfig.ACTION_ACTIVATE, note: "Manually Activated", admin_id: current_admin.id })
@@ -132,10 +147,10 @@ class Admin::AdminUsersController < ApplicationController
 
   def send_activation
     @user = User.find_by(login: params[:id])
+    authorize @user
     # send synchronously to avoid getting caught in mail queue
-    UserMailer.signup_notification(@user.id).deliver!
+    UserMailer.signup_notification(@user.id).deliver_now
     flash[:notice] = ts("Activation email sent")
     redirect_to action: :show
   end
-
 end

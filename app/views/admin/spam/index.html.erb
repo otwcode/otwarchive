@@ -84,5 +84,5 @@
 <!--/content-->
 
 <% content_for :footer_js do %>
-  <%= javascript_include_tag "select_all" %>
+  <%= javascript_include_tag "select_all", skip_pipeline: true %>
 <% end %>

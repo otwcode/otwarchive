@@ -42,7 +42,7 @@
           <%= submit_tag ts("I agree/consent to its terms"),
                 disabled: true,
                 id: "accept_tos" %>
-        </p>        
+        </p>
       <% end %>
     <% end %>
 
@@ -67,8 +67,7 @@
         button.attr("disabled", !this.checked);
         if (this.checked) {
           button.on("click", function() {
-            // Expires in 20 years, like a Rails permanent cookie
-            $j.cookie("accepted_tos", "<%= @current_tos_version %>", { expires: 7300, path: "/" });
+            acceptTOS();
             outer.removeClass("hidden").removeAttr("aria-hidden");
             $j.when(container.fadeOut(500)).done(function() {
               container.remove();

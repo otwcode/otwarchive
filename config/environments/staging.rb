@@ -19,7 +19,7 @@ Otwarchive::Application.configure do
 
   # If you have no front-end server that supports something like X-Sendfile,
   # just comment this out and Rails will serve the files
-  
+
   # Disable IP spoofing protection
   config.action_dispatch.ip_spoofing_check = false
 
@@ -31,8 +31,8 @@ Otwarchive::Application.configure do
   # config.logger = SyslogLogger.new
 
   # Use a different cache store in production
-  config.cache_store = :dalli_store, YAML.load_file("#{Rails.root}/config/local.yml")['MEMCACHED_SERVERS'],
-                          {  namespace:  'ao3-v1', expires_in: 0,  compress: true , pool_size: 5 }
+  config.cache_store = :mem_cache_store, ArchiveConfig.MEMCACHED_SERVERS,
+                       { namespace: "ao3-v1", compress: true, pool_size: 5 }
 
   # Disable Rails's static asset server
   # In production, Apache or nginx will already do this
@@ -47,25 +47,12 @@ Otwarchive::Application.configure do
   # Enable threaded mode
   # config.threadsafe!
 
-  # Enable locale fallbacks for I18n (makes lookups for any locale fall back to
-  # the I18n.default_locale when a translation can not be found)
-  config.i18n.fallbacks = true
-
   # Send deprecation notices to registered listeners
   config.active_support.deprecation = :notify
 
   # Make it clear we are on staging
   config.rack_dev_mark.enable = true
-  config.rack_dev_mark.theme = [:title, Rack::DevMark::Theme::GithubForkRibbon.new(position: 'left', fixed: 'true', color: 'orange' )]
-
-
-#  # run after initialization so have access to ArchiveConfig
-#  config.after_initialize do
-#    config.middleware.use ExceptionNotifier,
-#      email_prefix: ArchiveConfig.ERROR_PREFIX,
-#      sender_address: ArchiveConfig.RETURN_ADDRESS,
-#      exception_recipients: ArchiveConfig.ERROR_ADDRESS
-#  end
+  config.rack_dev_mark.theme = [:title, Rack::DevMark::Theme::GithubForkRibbon.new(position: "left", fixed: "true", color: "orange")]
 
   config.after_initialize do
     Bullet.enable = true

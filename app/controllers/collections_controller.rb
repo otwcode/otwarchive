@@ -71,7 +71,7 @@ class CollectionsController < ApplicationController
     if @collection.collection_preference.show_random? || params[:show_random]
       # show a random selection of works/bookmarks
       @works = Work.in_collection(@collection).visible.random_order.limit(ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD).includes(:pseuds, :tags, :series, :language, :approved_collections)
-      visible_bookmarks = @collection.approved_bookmarks.visible.order('RAND()').limit(ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD * 2)
+      visible_bookmarks = @collection.approved_bookmarks.visible.random_order.limit(ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD * 2)
     else
       # show recent
       @works = Work.in_collection(@collection).visible.ordered_by_date_desc.limit(ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD).includes(:pseuds, :tags, :series, :language, :approved_collections)
@@ -115,7 +115,7 @@ class CollectionsController < ApplicationController
           redirect_to new_collection_gift_exchange_path(@collection) and return
         end
       else
-        redirect_to(@collection)
+        redirect_to collection_path(@collection)
       end
     else
       @challenge_type = params[:challenge_type]
@@ -150,7 +150,7 @@ class CollectionsController < ApplicationController
           end
         end
       end
-      redirect_to(@collection)
+      redirect_to collection_path(@collection)
     else
       render action: "edit"
     end

@@ -1,8 +1,8 @@
 <!--Descriptive page name, messages and instructions-->
 <% if @series.user_has_creator_invite?(current_user) %>
   <p class="notice">
-    <%= ts("You've been invited to become a co-creator of this series. To accept or reject the invitation, visit your %{creator_invitations_page}.",
-           creator_invitations_page: link_to(ts("Creator Invitations page"), user_creatorships_path(current_user))).html_safe %>
+    <%= ts("You've been invited to become a co-creator of this series. To accept or reject the request, visit your %{creator_requests_page}.",
+           creator_requests_page: link_to(ts("Co-Creator Requests page"), user_creatorships_path(current_user))).html_safe %>
   </p>
 <% end %>
 <h2 class="heading">
@@ -17,6 +17,10 @@
   <% end %>
 </h2>
 <!--/descriptions-->
+
+<% if can_access_admin_options? %>
+  <div><%= render "admin/admin_options", item: @series %></div>
+<% end %>
 
 <!--subnav-->
 <% if logged_in? %>
@@ -52,7 +56,7 @@
     <% end %>
 
     <dt class="stats"><%= ts("Stats:") %></dt>
-    <dd class="stats"> 
+    <dd class="stats">
       <dl class="stats">
         <dt><%= ts("Words:") %></dt>
         <dd><%= number_with_delimiter(@series.visible_word_count) %></dd>
@@ -79,16 +83,9 @@
   </div>
 <% end %>
 
-<% if logged_in_as_admin? %>
-<!-- BEGIN admin options -->
-  <%= render "admin/admin_options", item: @series %>
-<% end %>
-
 <h3 class="landmark heading"><%= ts("Listing Series") %></h3>
 <ul class="series work index group">
-  <% for serial in @serial_works %>
-    <%= render "works/work_blurb", work: serial.work %>
-  <% end %>
+  <%= render partial: "works/work_blurb", collection: @works, as: :work %>
 </ul>
 <!--/content-->
 

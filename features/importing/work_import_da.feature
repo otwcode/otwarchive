@@ -11,7 +11,8 @@ Feature: Import Works from deviantart
       And I am logged in as "cosomeone"
     When I go to the import page
       And I fill in "urls" with "http://bingeling.deviantart.com/art/Flooded-45971613"
-    When I press "Import"
+      And I select "English" from "Choose a language"
+      And I press "Import"
     Then I should see "Preview"
       # And I should see the image "src" text "https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/intermediary/f/917f216b-24af-41f8-9802-7ab80f56d2f2/drdbx9-adee7105-ed30-4e62-a66d-4f78dfa36879.jpg"
       And I should see the image "src" text "https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/917f216b-24af-41f8-9802-7ab80f56d2f2/drdbx9-adee7105-ed30-4e62-a66d-4f78dfa36879.jpg?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiJcL2ZcLzkxN2YyMTZiLTI0YWYtNDFmOC05ODAyLTdhYjgwZjU2ZDJmMlwvZHJkYng5LWFkZWU3MTA1LWVkMzAtNGU2Mi1hNjZkLTRmNzhkZmEzNjg3OS5qcGcifV1dLCJhdWQiOlsidXJuOnNlcnZpY2U6ZmlsZS5kb3dubG9hZCJdfQ.rcJ-cfuf5xgyl97ztUJVOYQ2PmHgc6P_FWCirRiUKFU"
@@ -27,17 +28,18 @@ Feature: Import Works from deviantart
       And I should not see "deviant"
       And I should not see "Visit the Artist"
       And I should not see "Download Image"
-     When I press "Post"
-     Then I should see "Work was successfully posted."
-     When I am on cosomeone's user page
-     Then I should see "bingeling"
+    When I press "Post"
+    Then I should see "Work was successfully posted."
+    When I am on cosomeone's user page
+    Then I should see "bingeling"
 
   Scenario: Creating a new art work from a deviantart gallery link fails - it needs the direct link
     Given basic tags
       And I am logged in as "cosomeone"
     When I go to the import page
       And I fill in "urls" with "http://bingeling.deviantart.com/gallery/#/drdbx9"
-    When I press "Import"
+      And I select "English" from "Choose a language"
+      And I press "Import"
     Then I should not see "Preview"
       And I should see "Chapter 1 of"
       And I should see "is blank."
@@ -47,7 +49,8 @@ Feature: Import Works from deviantart
       And I am logged in as "cosomeone"
     When I go to the import page
       And I fill in "urls" with "http://cesy12.deviantart.com/art/AO3-testing-text-196158032"
-    When I press "Import"
+      And I select "English" from "Choose a language"
+      And I press "Import"
     Then I should see "Preview"
       And I should see "Scraps"
       And I should see "Published:2011-02-04"

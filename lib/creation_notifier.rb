@@ -29,18 +29,18 @@ module CreationNotifier
   # we also need to check to see if the work is in a collection
   # only notify a recipient once for each work
   def notify_recipients
-    if self.posted && !self.new_recipients.blank? && !self.unrevealed?
-      recipient_pseuds = Pseud.parse_bylines(self.new_recipients, assume_matching_login: true)[:pseuds]
-      # check user prefs to see which recipients want to get gift notifications
-      # (since each user has only one preference item, this removes duplicates)
-      recip_ids = Preference.where(user_id: recipient_pseuds.map(&:user_id),
+    return unless self.posted && self.new_gifts.present? && !self.unrevealed?
+
+    recipient_pseuds = Pseud.parse_bylines(self.new_gifts.collect(&:recipient).join(","), assume_matching_login: true)[:pseuds]
+    # check user prefs to see which recipients want to get gift notifications
+    # (since each user has only one preference item, this removes duplicates)
+    recip_ids = Preference.where(user_id: recipient_pseuds.map(&:user_id),
                                    recipient_emails_off: false).pluck(:user_id)
-      recip_ids.each do |userid|
-        if self.collections.empty? || self.collections.first.nil?
-          UserMailer.recipient_notification(userid, self.id).deliver
-        else
-          UserMailer.recipient_notification(userid, self.id, self.collections.first.id).deliver
-        end
+    recip_ids.each do |userid|
+      if self.collections.empty? || self.collections.first.nil?
+        UserMailer.recipient_notification(userid, self.id).deliver_after_commit
+      else
+        UserMailer.recipient_notification(userid, self.id, self.collections.first.id).deliver_after_commit
       end
     end
   end
@@ -48,7 +48,7 @@ module CreationNotifier
   # notify people subscribed to this creation or its authors
   def notify_subscribers
     work = self.respond_to?(:work) ? self.work : self
-    if work && !work.unrevealed? && !work.anonymous?
+    if work && !work.unrevealed?
       Subscription.for_work(work).each do |subscription|
         RedisMailQueue.queue_subscription(subscription, self)
       end
@@ -85,9 +85,9 @@ module CreationNotifier
   def notify_prompters
     if !self.challenge_claims.empty? && !self.unrevealed?
       if self.collections.first.nil?
-        UserMailer.prompter_notification(self.id,).deliver
+        UserMailer.prompter_notification(self.id,).deliver_after_commit
       else
-        UserMailer.prompter_notification(self.id, self.collections.first.id).deliver
+        UserMailer.prompter_notification(self.id, self.collections.first.id).deliver_after_commit
       end
     end
   end

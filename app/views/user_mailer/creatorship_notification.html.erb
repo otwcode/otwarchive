@@ -1,7 +1,8 @@
 <% creation_type = @creation.model_name.human.downcase %>
 <% content_for :message do %>
-  <p><%= t(".intro", type: creation_type, adding_user: @adding_user.login,
-           pseud: @creatorship.pseud.name) %></p>
+  <p>
+    <%= t(".intro_#{creation_type}", adding_user: @adding_user.login, pseud: @creatorship.pseud.name) %>
+  </p>
 
   <p>
     <%= t(".html.creation",
@@ -14,7 +15,6 @@
   </p>
 
   <p>
-    <%= t(".html.remove",
-    edit: style_link(t(".html.edit", type: creation_type), edit_polymorphic_url(@creation))).html_safe %>
+    <%= t(".html.remove_#{creation_type}", "edit_#{creation_type}_link": style_link(t(".html.edit_#{creation_type}"), edit_polymorphic_url(@creation))).html_safe %>
   </p>
 <% end %>

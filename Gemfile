@@ -1,24 +1,19 @@
 source 'https://rubygems.org'
 
-ruby '2.6.5'
+ruby '2.7.3'
 
 gem 'test-unit', '~> 3.2'
 
 gem 'bundler'
 
-gem 'rails', '~> 5.1.6.2'
+gem "rails", "~> 5.2"
+gem "rails-i18n"
+gem "rack", "~> 2.1", ">= 2.1.4"
+gem "sprockets", "< 4"
 
 gem 'rails-observers', git: 'https://github.com/rails/rails-observers'
 gem 'actionpack-page_caching'
 gem 'rails-controller-testing'
-#gem 'activerecord-deprecated_finders'
-
-# the published gem does not include fixes that are in Rails
-# specifically https://github.com/rails/strong_parameters/issues/16
-# gem 'strong_parameters', git: 'https://github.com/rails/strong_parameters.git',  ref: '904af2910c57b71bc992e8364aa48896be230c2f'
-
-# Bundle edge Rails instead:
-# gem 'rails', git: 'git://github.com/rails/rails.git'
 
 # Database
 # gem 'sqlite3-ruby', require: 'sqlite3'
@@ -36,7 +31,7 @@ gem 'rack-attack'
 
 # Version of redis-rb gem
 # We are currently running Redis 3.2.1 (7/2018)
-gem 'redis', ">=3.0"
+gem "redis", "~> 3.3.5"
 gem 'redis-namespace'
 
 # Here are all our application-specific gems
@@ -44,6 +39,7 @@ gem 'redis-namespace'
 # Used to convert strings to ascii
 gem 'unicode'
 gem 'unidecoder'
+gem 'unicode_utils', '>=1.4.0'
 
 # Lograge is opinionated, very opinionated.
 gem "lograge" # https://github.com/roidrage/lograge
@@ -62,17 +58,17 @@ gem 'sanitize', '>= 4.6.5'
 # https://otwarchive.atlassian.net/browse/AO3-4957
 # https://github.com/rubys/nokogumbo/issues/50
 gem 'nokogumbo', '1.4.9'
-gem 'rest-client', '~> 1.8.0', require: 'rest_client'
+gem "rest-client", "~> 2.1.0", require: "rest_client"
 gem 'resque', '>=1.14.0'
-gem 'resque_mailer'
 gem 'resque-scheduler'
+gem 'after_commit_everywhere'
 #gem 'daemon-spawn', require: 'daemon_spawn'
-gem 'elasticsearch', '>=6.0.0'
-gem 'aws-sdk'
+gem "elasticsearch", "7.16.1"
+gem "aws-sdk-s3"
 gem 'css_parser'
 
-gem 'cocaine'
-gem 'paperclip', '>= 5.2.0'
+gem "terrapin"
+gem "kt-paperclip", ">= 5.2.0"
 
 # for looking up image dimensions quickly
 gem 'fastimage'
@@ -84,13 +80,11 @@ gem 'bcrypt'
 
 # A highly updated version of the authorization plugin
 gem 'permit_yo'
+gem "pundit"
 
 # fix for annoying UTF-8 error messages as per this:
 # http://openhood.com/rack/ruby/2010/07/15/rack-test-warning/
 gem 'escape_utils', '1.2.1'
-
-# Replaced by nativce pluck method as of Rails 4
-# gem 'valium'
 
 gem 'timeliness'
 
@@ -105,12 +99,9 @@ gem 'timeliness'
 # for generating graphs
 gem 'google_visualr', git: 'https://github.com/winston/google_visualr'
 
-# Copycopter to aid translation
-# gem 'copycopter_client', '~> 2.0.1'
-
 # Globalize for translations
 # Must use master branch and activemodel-serializers-xml for Rails 5 upgrade
-gem 'globalize', git: 'https://github.com/panorama-berlin/globalize'
+gem 'globalize', git: 'https://github.com/globalize/globalize'
 gem 'activemodel-serializers-xml'
 
 # Add a clean notifier that shows we are on dev or test
@@ -136,28 +127,27 @@ gem 'dalli'
 gem 'kgio', '2.10.0'
 
 group :test do
-  gem 'rspec', '~> 3.4'
-  gem 'rspec-rails', '~> 3.6.0'
+  gem 'rspec', '~> 3.8'
+  gem 'rspec-rails', '~> 3.8.2'
   gem 'pickle'
   gem 'shoulda'
   gem 'capybara', '~> 2.16.1'
-  gem 'database_cleaner', '1.6.0'
-  gem 'cucumber', '~> 2.4.0'
+  gem 'cucumber', '~> 3.1'
+  gem 'database_cleaner'
   gem 'poltergeist'
   gem 'capybara-screenshot'
-  gem 'cucumber-rails', '~> 1.5', require: false
-  gem 'gherkin'
+  gem 'cucumber-rails', require: false
   gem 'launchy'    # So you can do Then show me the page
   gem 'delorean'
-  gem 'faker', '~> 1.6.3'
+  gem "faker"
   # Record and replay data from external URLs
   gem 'vcr', '~> 3.0', '>= 3.0.1'
   gem 'webmock', '~> 3.7.6'
   gem 'timecop'
   gem 'cucumber-timecop', require: false
   # Code coverage
-  gem 'simplecov', '~> 0.14.0'
-  gem 'codecov', '~> 0.1.10', require: false
+  gem "simplecov"
+  gem "codecov", require: false
   gem 'email_spec', '1.6.0'
 end
 
@@ -174,6 +164,13 @@ group :development do
   gem 'factory_bot_rails'
   gem 'bundler-audit'
   gem 'active_record_query_trace', '~> 1.6', '>= 1.6.1'
+end
+
+group :linters do
+  gem "erb_lint", "0.0.29"
+  gem "rubocop", "0.83.0"
+  gem "rubocop-rails", "2.6.0"
+  gem "rubocop-rspec", "1.41.0"
 end
 
 group :test, :development, :staging do
