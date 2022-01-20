@@ -1,9 +1,5 @@
-class AdminMailer < ActionMailer::Base
+class AdminMailer < ApplicationMailer
   include HtmlCleaner
-
-  layout 'mailer'
-  helper :mailer
-  default from: "Archive of Our Own " + "<#{ArchiveConfig.RETURN_ADDRESS}>"
 
   def feedback(feedback_id)
     @feedback = Feedback.find(feedback_id)

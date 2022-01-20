@@ -69,7 +69,7 @@ class Work < ApplicationRecord
   # Virtual attribute to use as a placeholder for pseuds before the work has been saved
   # Can't write to work.pseuds until the work has an id
   attr_accessor :new_parent, :url_for_parent
-  attr_accessor :new_recipients
+  attr_accessor :new_gifts
   attr_accessor :preview_mode
 
   # return title.html_safe to overcome escaping done by sanitiser
@@ -155,6 +155,31 @@ class Work < ApplicationRecord
   validates :user_defined_tags_count,
             at_most: { maximum: proc { ArchiveConfig.USER_DEFINED_TAGS_MAX } }
 
+  # If the recipient doesn't allow gifts, it should not be possible to give them
+  # a gift work unless it fulfills a gift exchange assignment or non-anonymous
+  # prompt meme claim for the recipient.
+  # We don't want the work to save if the gift shouldn't exist, but the gift
+  # model can't access a work's challenge_assignments or challenge_claims until
+  # the work and its assignments and claims are saved. Gifts are created after
+  # the work is saved, so it's too late then to prevent the work from saving.
+  # Additionally, the work's assignments and claims don't appear to be available
+  # by the time gift validations run, which means the gift is never created if
+  # the user doesn't allow them.
+  validate :new_recipients_allow_gifts
+
+  def new_recipients_allow_gifts
+    return if self.new_gifts.blank?
+
+    self.new_gifts.each do |gift|
+      next if gift.pseud.blank?
+      next if gift.pseud&.user&.preference&.allow_gifts?
+      next if self.challenge_assignments.map(&:requesting_pseud).include?(gift.pseud)
+      next if self.challenge_claims.reject { |c| c.request_prompt.anonymous? }.map(&:requesting_pseud).include?(gift.pseud)
+
+      self.errors.add(:base, ts("#{gift.pseud.byline} does not accept gifts."))
+    end
+  end
+
   enum comment_permissions: {
     enable_all: 0,
     disable_anon: 1,
@@ -172,7 +197,7 @@ class Work < ApplicationRecord
   after_save :post_first_chapter
   before_save :set_word_count
 
-  after_save :save_chapters, :save_parents, :save_new_recipients
+  after_save :save_chapters, :save_parents, :save_new_gifts
 
   before_create :set_anon_unrevealed
   after_create :notify_after_creation
@@ -432,7 +457,7 @@ class Work < ApplicationRecord
   end
 
   def recipients=(recipient_names)
-    new_recipients = [] # collect names of new recipients
+    new_gifts = []
     gifts = [] # rebuild the list of associated gifts using the new list of names
     # add back in the rejected gift recips; we don't let users delete rejected gifts in order to prevent regifting
     recip_names = recipient_names.split(',') + self.gifts.are_rejected.collect(&:recipient)
@@ -441,40 +466,35 @@ class Work < ApplicationRecord
       gift = self.gifts.for_name_or_byline(name).first
       if gift
         gifts << gift # new gifts are added after saving, not now
-        new_recipients << name unless self.posted # all recipients are new if work not posted
+        new_gifts << gift unless self.posted # all gifts are new if work not posted
       else
-        # check that the gift would be valid
-        g = Gift.new(work: self, recipient: name)
+        g = self.gifts.new(recipient: name)
         if g.valid?
-          new_recipients << name # new gifts are added after saving, not now
+          new_gifts << g # new gifts are added after saving, not now
         else
-          errors.add(:base, ts("You cannot give a gift to the same user twice."))
+          g.errors.full_messages.each { |msg| self.errors.add(:base, msg) }
         end
       end
     end
-    self.new_recipients = new_recipients.uniq.join(",")
     self.gifts = gifts
+    self.new_gifts = new_gifts
   end
 
   def recipients(for_form = false)
     names = (for_form ? self.gifts.not_rejected : self.gifts).collect(&:recipient)
-    unless self.new_recipients.blank?
-      self.new_recipients.split(",").each do |name|
-        names << name unless names.include? name
-      end
-    end
-    names.join(",")
+    names << self.new_gifts.collect(&:recipient) if self.new_gifts.present?
+    names.flatten.uniq.join(",")
   end
 
-  def save_new_recipients
-    unless self.new_recipients.blank?
-      self.new_recipients.split(',').each do |name|
-        gift = self.gifts.for_name_or_byline(name).first
-        unless gift.present?
-          g = Gift.new(recipient: name, work: self)
-          g.save
-        end
-      end
+  def save_new_gifts
+    return if self.new_gifts.blank?
+
+    self.new_gifts.each do |gift|
+      next if self.gifts.for_name_or_byline(gift.recipient).present?
+
+      # Recreate the gift once the work is saved. This ensures the work_id is
+      # set properly.
+      Gift.create(recipient: gift.recipient, work: self)
     end
   end
 
@@ -777,7 +797,7 @@ class Work < ApplicationRecord
         self.word_count += chapter.set_word_count
       end
     else
-      # AO3-3498: For posted works, the word count is visible to people other than the creator and 
+      # AO3-3498: For posted works, the word count is visible to people other than the creator and
       # should only include posted chapters. For drafts, we can count everything.
       self.word_count = if self.posted
                           Chapter.select("SUM(word_count) AS work_word_count").where(work_id: self.id, posted: true).first.work_word_count

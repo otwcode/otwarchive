@@ -26,6 +26,7 @@ Feature: Collection
     Given I have the hidden collection "Hidden Treasury"
       And "second_user" subscribes to author "first_user"
       And the user "third_user" exists and is activated
+      And the user "third_user" allows gifts
       And all emails have been delivered
     When I am logged in as "first_user"
       And I post the work "New Snippet" to the collection "Hidden Treasury" as a gift for "third_user"
@@ -54,6 +55,8 @@ Feature: Collection
       And "second_user" subscribes to author "first_user"
       And the user "third_user" exists and is activated
       And the user "fourth_user" exists and is activated
+      And the user "third_user" allows gifts
+      And the user "fourth_user" allows gifts
       And all emails have been delivered
     When I am logged in as "first_user"
       And I post the work "First Snippet" to the collection "Hidden Treasury" as a gift for "third_user"
@@ -132,6 +135,7 @@ Feature: Collection
     Given I have the anonymous collection "Anonymous Hugs"
       And "second_user" subscribes to author "first_user"
       And the user "third_user" exists and is activated
+      And the user "third_user" allows gifts
       And all emails have been delivered
     When I am logged in as "first_user"
       And I post the work "Old Snippet" to the collection "Anonymous Hugs" as a gift for "third_user"
@@ -153,9 +157,10 @@ Feature: Collection
     Given I have the anonymous collection "Anonymous Hugs"
       And "second_user" subscribes to author "first_user"
       And the user "third_user" exists and is activated
+      And the user "third_user" allows gifts
       And I am logged in as "first_user"
       And I post the work "First Snippet" to the collection "Anonymous Hugs" as a gift for "third_user"
-      And I post the work "Second Snippet" to the collection "Anonymous Hugs" as a gift for "fourth_user"
+      And I post the work "Second Snippet" to the collection "Anonymous Hugs" as a gift for "not a user"
     When subscription notifications are sent
     Then "second_user" should not be emailed
     When I am logged in as "moderator"
@@ -516,7 +521,7 @@ Feature: Collection
   Scenario: Work share modal should not reveal anonymous authors
     Given I have the anonymous collection "Anonymous Hugs"
     When I am logged in as "first_user"
-      And I post the work "Old Snippet" to the collection "Anonymous Hugs" as a gift for "third_user"
+      And I post the work "Old Snippet" to the collection "Anonymous Hugs"
     When I am logged out
       And I view the work "Old Snippet"
     Then I should see "Share"

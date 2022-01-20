@@ -189,16 +189,6 @@ class CollectionItem < ApplicationRecord
     end
   end
 
-  after_update :notify_of_status_change
-  def notify_of_status_change
-    if saved_change_to_unrevealed? && item.respond_to?(:new_recipients)
-      # making sure notify_recipients in the work model has not already notified
-      if item.new_recipients.present?
-        notify_of_reveal
-      end
-    end
-  end
-
   after_destroy :expire_caches
   def expire_caches
     if self.item.respond_to?(:expire_caches)
