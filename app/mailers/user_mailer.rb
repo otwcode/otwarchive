@@ -355,8 +355,9 @@ class UserMailer < ActionMailer::Base
     @work = work
     download = Download.new(@work, mime_type: "text/html")
     html = DownloadWriter.new(download).generate_html
-    attachments["#{download.file_name}.html"] = html
-    attachments["#{download.file_name}.txt"] = ActionController::Base.helpers.strip_tags(html)
+    txt = ActionController::Base.helpers.strip_tags(html)
+    attachments["#{download.file_name}.html"] = { content: html, encoding: "base64" }
+    attachments["#{download.file_name}.txt"] = { content: txt, encoding: "base64" }
 
     I18n.with_locale(Locale.find(@user.preference.preferred_locale).iso) do
       mail(
@@ -372,10 +373,11 @@ class UserMailer < ActionMailer::Base
   def admin_deleted_work_notification(user, work)
     @user = user
     @work = work
-    @download = Download.new(@work, mime_type: "text/html")
-    @download.generate
-    attachments["#{@download.file_name}.html"] = File.read(@download.html_file_path)
-    attachments["#{@download.file_name}.txt"] = ActionController::Base.helpers.strip_tags(File.read(@download.html_file_path))
+    download = Download.new(@work, mime_type: "text/html")
+    html = DownloadWriter.new(download).generate_html
+    txt = ActionController::Base.helpers.strip_tags(html)
+    attachments["#{download.file_name}.html"] = { content: html, encoding: "base64" }
+    attachments["#{download.file_name}.txt"] = { content: txt, encoding: "base64" }
 
     I18n.with_locale(Locale.find(@user.preference.preferred_locale).iso) do
       mail(
