@@ -18,7 +18,7 @@ class DownloadWriter
     renderer = ApplicationController.renderer.new(
       http_host: ArchiveConfig.APP_HOST
     )
-    html = renderer.render(
+    renderer.render(
       template: 'downloads/show',
       layout: 'barebones',
       assigns: {
@@ -35,7 +35,7 @@ class DownloadWriter
   def generate_html_download
     return if download.exists?
 
-    File.open(download.html_file_path, 'w:UTF-8') { |f| f.write(generate_html) }
+    File.open(download.html_file_path, "w:UTF-8") { |f| f.write(generate_html) }
   end
 
   # transform HTML version into ebook version
