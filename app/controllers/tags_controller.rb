@@ -196,7 +196,6 @@ class TagsController < ApplicationController
         flash[:notice] = ts('Tag was successfully created.')
       end
       @tag.update_attribute(:canonical, tag_params[:canonical])
-      record_last_wrangling_activity
       redirect_to edit_tag_path(@tag)
     else
       render(action: 'new') && return
@@ -254,7 +253,6 @@ class TagsController < ApplicationController
 
     if @tag.errors.empty? && @tag.save
       flash[:notice] = ts('Tag was updated.')
-      record_last_wrangling_activity
       redirect_to edit_tag_path(@tag)
     else
       @parents = @tag.parents.order(:name).group_by { |tag| tag[:type] }
@@ -381,8 +379,6 @@ class TagsController < ApplicationController
 
     flash[:notice] = notice_messages.join('<br />').html_safe unless notice_messages.empty?
     flash[:error] = error_messages.join('<br />').html_safe unless error_messages.empty?
-
-    record_last_wrangling_activity
     redirect_to url_for({ controller: :tags, action: :wrangle, id: params[:id] }.merge(options))
   end
 
@@ -396,14 +392,5 @@ class TagsController < ApplicationController
       :freeform_string,
       associations_to_remove: []
     )
-  end
-
-  # Update the current user's LastWrangling activity to track a wrangling action,
-  # unless the current user is an administrator.
-  def record_last_wrangling_activity
-    return if logged_in_as_admin?
-
-    last_activity = LastWranglingActivity.find_or_create_by(user: current_user)
-    last_activity.touch
   end
 end

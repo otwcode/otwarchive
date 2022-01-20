@@ -505,4 +505,90 @@ describe Tag do
       expect(@sub_tag.meta_tags).to eq([@canonical_tag])
     end
   end
+
+  describe "last wrangling activity" do
+    context "as tag wrangler" do
+      shared_examples "updates last wrangling activity" do
+        it "tracks last wrangling activity" do
+          expect(User.current_user.last_wrangling_activity.updated_at).to be_within(10.seconds).of Time.now.utc
+        end
+      end
+
+      before do
+        User.current_user = create(:tag_wrangler)
+      end
+
+      describe "#create" do
+        before { create(:character) }
+
+        include_examples "updates last wrangling activity"
+      end
+
+      describe "#update" do
+        let(:tag) do
+          Timecop.travel(1.year.ago) { create(:character) }
+        end
+
+        before do
+          tag.update(canonical: !tag.canonical)
+          User.current_user.reload
+        end
+
+        include_examples "updates last wrangling activity"
+      end
+
+      describe "#destroy" do
+        let(:tag) do
+          Timecop.travel(1.year.ago) { create(:character) }
+        end
+
+        before do
+          tag.destroy
+          User.current_user.reload
+        end
+
+        include_examples "updates last wrangling activity"
+      end
+    end
+
+    shared_examples "does not update last wrangling activity" do
+      it "does not last wrangling activity" do
+        expect(LastWranglingActivity.all).to be_empty
+      end
+    end
+
+    [
+      ["regular user", FactoryBot.create(:user)],
+      ["admin", FactoryBot.create(:admin)],
+      ["nil", nil]
+    ].each do |role, user|
+      context "as #{role}" do
+        before do
+          User.current_user = user
+        end
+
+        describe "#create" do
+          before { create(:character) }
+
+          include_examples "does not update last wrangling activity"
+        end
+
+        describe "#update" do
+          let(:tag) { create(:character) }
+
+          before { tag.update(name: "New Tag Name") }
+
+          include_examples "does not update last wrangling activity"
+        end
+
+        describe "#destroy" do
+          let(:tag) { create(:character) }
+
+          before { tag.destroy }
+
+          include_examples "does not update last wrangling activity"
+        end
+      end
+    end
+  end
 end

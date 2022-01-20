@@ -8,8 +8,7 @@ describe RolesUser do
 
       it "clears last wrangler activity" do
         user.roles = []
-        expect(user.last_wrangling_activity).to be_nil
-        expect(LastWranglingActivity.find_by(user_id: user.id)).to be_nil
+        expect(LastWranglingActivity.find_by(user: user)).to be_nil
       end
 
       it "does not clear last wrangler activity for a different role" do
