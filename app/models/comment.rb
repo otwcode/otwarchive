@@ -179,6 +179,13 @@ class Comment < ApplicationRecord
         end
       end
     end
+
+    return unless self.comment_owner&.is_tag_wrangler? && self.ultimate_parent.is_a?(Tag)
+
+    # Record last wrangling activity if the parent is a tag and the commentor
+    # is a tag wrangler
+    last_activity = LastWranglingActivity.find_or_create_by(user: self.comment_owner)
+    last_activity.touch
   end
 
   protected

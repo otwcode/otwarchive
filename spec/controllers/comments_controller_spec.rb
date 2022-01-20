@@ -11,18 +11,6 @@ describe CommentsController do
     request.env["HTTP_REFERER"] = "/where_i_came_from"
   end
 
-  shared_examples "no last wrangling activity" do
-    it "does not create a last wrangling activity" do
-      expect(LastWranglingActivity.all).to be_empty
-    end
-  end
-
-  shared_examples "last wrangling activity" do
-    it "creates a last wrangling activity" do
-      expect(user.last_wrangling_activity.updated_at).to be_within(10.seconds).of Time.now.utc
-    end
-  end
-
   describe "GET #add_comment_reply" do
     context "when comment is unreviewed" do
       it "redirects logged out user to login path with an error" do
@@ -218,12 +206,10 @@ describe CommentsController do
       let(:fandom) { create(:fandom) }
 
       context "when logged in as an admin" do
-        before do
-          fake_login_admin(create(:admin))
-          post :create, params: { tag_id: fandom.name, comment: anon_comment_attributes }
-        end
+        before { fake_login_admin(create(:admin)) }
 
         it "posts the comment and shows it in context" do
+          post :create, params: { tag_id: fandom.name, comment: anon_comment_attributes }
           comment = Comment.last
           expect(comment.commentable).to eq fandom
           expect(comment.name).to eq anon_comment_attributes[:name]
@@ -233,19 +219,13 @@ describe CommentsController do
                                anchor: "comment_#{comment.id}")
           expect(response).to redirect_to path
         end
-
-        include_examples "no last wrangling activity"
       end
 
       context "when logged in as a tag wrangler" do
-        let(:user) { create(:tag_wrangler) }
-
-        before do
-          fake_login_known_user(user)
-          post :create, params: { tag_id: fandom.name, comment: anon_comment_attributes }
-        end
+        before { fake_login_known_user(create(:tag_wrangler)) }
 
         it "posts the comment and shows it in context" do
+          post :create, params: { tag_id: fandom.name, comment: anon_comment_attributes }
           comment = Comment.last
           expect(comment.commentable).to eq fandom
           expect(comment.name).to eq anon_comment_attributes[:name]
@@ -255,8 +235,6 @@ describe CommentsController do
                                anchor: "comment_#{comment.id}")
           expect(response).to redirect_to path
         end
-
-        include_examples "last wrangling activity"
       end
 
       context "when logged in as a random user" do
@@ -285,26 +263,6 @@ describe CommentsController do
     end
 
     context "when the commentable is a work" do
-      context "when the poster is anonymous" do
-        let(:work) { create(:work) }
-
-        before { post :create, params: { work_id: work.id, comment: anon_comment_attributes } }
-
-        include_examples "no last wrangling activity"
-      end
-
-      context "when the poster is a tag wrangler" do
-        let(:work) { create(:work) }
-        let(:user) { create(:tag_wrangler) }
-
-        before do
-          fake_login_known_user(user)
-          post :create, params: { work_id: work.id, comment: anon_comment_attributes }
-        end
-
-        include_examples "no last wrangling activity"
-      end
-
       context "when the work is restricted" do
         let(:work) { create(:work, restricted: true) }
 
@@ -346,30 +304,6 @@ describe CommentsController do
     end
 
     context "when the commentable is an admin post" do
-      context "as a random user" do
-        let(:admin_post) { create(:admin_post) }
-        let(:user) { create(:user) }
-
-        before do
-          fake_login_known_user(user)
-          post :create, params: { admin_post_id: admin_post.id, comment: anon_comment_attributes }
-        end
-
-        include_examples "no last wrangling activity"
-      end
-
-      context "as a tag wrangler" do
-        let(:admin_post) { create(:admin_post) }
-        let(:user) { create(:tag_wrangler) }
-
-        before do
-          fake_login_known_user(user)
-          post :create, params: { admin_post_id: admin_post.id, comment: anon_comment_attributes }
-        end
-
-        include_examples "no last wrangling activity"
-      end
-
       context "where all comments are disabled" do
         let(:admin_post) { create(:admin_post, comment_permissions: :disable_all) }
 
@@ -440,33 +374,6 @@ describe CommentsController do
         end
       end
 
-      context "on a tag" do
-        let(:fandom) { create(:fandom) }
-        let(:comment) { create(:comment, commentable: fandom) }
-
-        context "as a tag wrangler" do
-          let(:user) { create(:tag_wrangler) }
-
-          before do
-            fake_login_known_user(user)
-            post :create, params: { comment_id: comment.id, comment: anon_comment_attributes }
-          end
-
-          include_examples "last wrangling activity"
-        end
-
-        context "as an admin" do
-          let(:admin) { create(:admin) }
-
-          before do
-            fake_login_admin(admin)
-            post :create, params: { comment_id: comment.id, comment: anon_comment_attributes }
-          end
-
-          include_examples "no last wrangling activity"
-        end
-      end
-
       context "when the commentable is frozen" do
         let(:comment) { create(:comment, iced: true) }
 
@@ -488,58 +395,6 @@ describe CommentsController do
           it_redirects_to_with_error("/where_i_came_from",
                                      "Sorry, you can't reply to a comment that has been marked as spam.")
         end
-      end
-    end
-  end
-
-  describe "PUT #update" do
-    def self.update_comment_content
-      before { put :update, params: { id: comment.id, comment: { pseud_id: comment.pseud.id, comment_content: "New content" } } }
-    end
-
-    shared_examples "non-tag parents" do
-      context "comment ultimate parent is an AdminPost" do
-        let(:comment) { create(:comment, :on_admin_post, pseud: user.pseuds.first) }
-
-        update_comment_content
-        include_examples "no last wrangling activity"
-      end
-
-      context "comment ultimate parent is a Work" do
-        let(:comment) { create(:comment, pseud: user.pseuds.first) }
-
-        update_comment_content
-        include_examples "no last wrangling activity"
-      end
-    end
-
-    context "commentor is a random user" do
-      let(:user) { create(:user) }
-
-      before { fake_login_known_user(user) }
-
-      include_examples "non-tag parents"
-
-      context "comment ultimate parent is a Tag" do
-        let(:comment) { create(:comment, :on_tag, pseud: user.pseuds.first) }
-
-        update_comment_content
-        include_examples "no last wrangling activity"
-      end
-    end
-
-    context "commentor is a tag wrangler" do
-      let(:user) { create(:tag_wrangler) }
-
-      before { fake_login_known_user(user) }
-
-      include_examples "non-tag parents"
-
-      context "comment ultimate parent is a Tag" do
-        let(:comment) { create(:comment, :on_tag, pseud: user.pseuds.first) }
-
-        update_comment_content
-        include_examples "last wrangling activity"
       end
     end
   end
@@ -1985,19 +1840,15 @@ describe CommentsController do
 
           %w[superadmin board policy_and_abuse communications support].each do |admin_role|
             context "with role #{admin_role}" do
-              before do
+              it "destroys comment and redirects with success message" do
                 admin.update(roles: [admin_role])
                 fake_login_admin(admin)
                 delete :destroy, params: { id: comment.id }
-              end
 
-              it "destroys comment and redirects with success message" do
                 expect(flash[:comment_notice]).to eq("Comment deleted.")
                 it_redirects_to_simple(admin_post_path(comment.ultimate_parent, show_comments: true, anchor: :comments))
                 expect { comment.reload }.to raise_exception(ActiveRecord::RecordNotFound)
               end
-
-              include_examples "no last wrangling activity"
             end
           end
         end
@@ -2014,18 +1865,14 @@ describe CommentsController do
           end
 
           context "when user owns comment" do
-            before do
+            it "destroys comment and redirects with success message" do
               fake_login_known_user(comment.pseud.user)
               delete :destroy, params: { id: comment.id }
-            end
 
-            it "destroys comment and redirects with success message" do
               expect(flash[:comment_notice]).to eq("Comment deleted.")
               it_redirects_to_simple(admin_post_path(comment.ultimate_parent, show_comments: true, anchor: :comments))
               expect { comment.reload }.to raise_exception(ActiveRecord::RecordNotFound)
             end
-
-            include_examples "no last wrangling activity"
           end
         end
       end
@@ -2058,19 +1905,15 @@ describe CommentsController do
 
           %w[superadmin board policy_and_abuse communications support].each do |admin_role|
             context "with the #{admin_role} role" do
-              before do
+              it "destroys comment and redirects with success message" do
                 admin.update(roles: [admin_role])
                 fake_login_admin(admin)
                 delete :destroy, params: { id: comment.id }
-              end
 
-              it "destroys comment and redirects with success message" do
                 expect(flash[:comment_notice]).to eq("Comment deleted.")
                 it_redirects_to_simple(comments_path(tag_id: comment.ultimate_parent, anchor: :comments))
                 expect { comment.reload }.to raise_exception(ActiveRecord::RecordNotFound)
               end
-
-              include_examples "no last wrangling activity"
             end
           end
         end
@@ -2099,36 +1942,28 @@ describe CommentsController do
           end
 
           context "when user has tag wrangler role" do
-            let(:user) { create(:tag_wrangler) }
-            let(:frozen_wrangler_comment) { create(:comment, :on_tag, iced: true, pseud: user.pseuds.first) }
+            let(:tag_wrangler) { create(:user, roles: [Role.new(name: "tag_wrangler")]) }
+            let(:frozen_wrangler_comment) { create(:comment, :on_tag, iced: true, pseud: tag_wrangler.pseuds.first) }
 
             context "when user does not own comment" do
-              before do
-                fake_login_known_user(user)
-                delete :destroy, params: { id: comment.id }
-              end
-
               it "doesn't destroy comment and redirects with error" do
+                fake_login_known_user(tag_wrangler)
+                delete :destroy, params: { id: comment.id }
+
                 it_redirects_to_with_error(comment, "Sorry, you don't have permission to access the page you were trying to reach.")
                 expect { comment.reload }.not_to raise_exception
               end
-
-              include_examples "no last wrangling activity"
             end
 
             context "when user owns comment" do
-              before do
-                fake_login_known_user(user)
-                delete :destroy, params: { id: frozen_wrangler_comment.id }
-              end
-
               it "destroys comment and redirects with success message" do
+                fake_login_known_user(tag_wrangler)
+                delete :destroy, params: { id: frozen_wrangler_comment.id }
+
                 expect(flash[:comment_notice]).to eq("Comment deleted.")
                 it_redirects_to_simple(comments_path(tag_id: frozen_wrangler_comment.ultimate_parent, anchor: :comments))
                 expect { frozen_wrangler_comment.reload }.to raise_exception(ActiveRecord::RecordNotFound)
               end
-
-              include_examples "last wrangling activity"
             end
           end
         end
@@ -2175,19 +2010,15 @@ describe CommentsController do
 
           %w[superadmin policy_and_abuse].each do |admin_role|
             context "with the #{admin_role} role" do
-              before do
+              it "destroys comment and redirects with success message" do
                 admin.update(roles: [admin_role])
                 fake_login_admin(admin)
                 delete :destroy, params: { id: comment.id }
-              end
 
-              it "destroys comment and redirects with success message" do
                 expect(flash[:comment_notice]).to eq("Comment deleted.")
                 it_redirects_to_simple(work_path(comment.ultimate_parent, show_comments: true, anchor: :comments))
                 expect { comment.reload }.to raise_exception(ActiveRecord::RecordNotFound)
               end
-
-              include_examples "no last wrangling activity"
             end
           end
         end
@@ -2204,33 +2035,25 @@ describe CommentsController do
           end
 
           context "when user owns comment" do
-            before do
+            it "destroys comment and redirects with success message" do
               fake_login_known_user(comment.pseud.user)
               delete :destroy, params: { id: comment.id }
-            end
 
-            it "destroys comment and redirects with success message" do
               expect(flash[:comment_notice]).to eq("Comment deleted.")
               it_redirects_to_simple(work_path(comment.ultimate_parent, show_comments: true, anchor: :comments))
               expect { comment.reload }.to raise_exception(ActiveRecord::RecordNotFound)
             end
-
-            include_examples "no last wrangling activity"
           end
 
           context "when user owns work" do
-            before do
+            it "destroys comment and redirects with success message" do
               fake_login_known_user(comment.ultimate_parent.pseuds.first.user)
               delete :destroy, params: { id: comment.id }
-            end
 
-            it "destroys comment and redirects with success message" do
               expect(flash[:comment_notice]).to eq("Comment deleted.")
               it_redirects_to_simple(work_path(comment.ultimate_parent, show_comments: true, anchor: :comments))
               expect { comment.reload }.to raise_exception(ActiveRecord::RecordNotFound)
             end
-
-            include_examples "no last wrangling activity"
           end
         end
       end

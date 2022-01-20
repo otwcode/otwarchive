@@ -28,6 +28,6 @@ class RolesUser < ApplicationRecord
   def clean_wrangler_activity
     return unless role.name == "tag_wrangler"
 
-    user.last_wrangling_activity = nil
+    user.last_wrangling_activity.destroy
   end
 end
