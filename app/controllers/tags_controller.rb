@@ -379,6 +379,7 @@ class TagsController < ApplicationController
 
     flash[:notice] = notice_messages.join('<br />').html_safe unless notice_messages.empty?
     flash[:error] = error_messages.join('<br />').html_safe unless error_messages.empty?
+
     redirect_to url_for({ controller: :tags, action: :wrangle, id: params[:id] }.merge(options))
   end
 
