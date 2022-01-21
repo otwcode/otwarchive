@@ -777,4 +777,78 @@ describe WorksController, work_search: true do
       end
     end
   end
+
+  describe "navigate" do
+    describe "hidden works" do
+      let(:author) { create(:user) }
+      let!(:work) { create(:work, authors: [author.pseuds.first]) }
+
+      shared_examples "only author and admin can view chapter index page" do
+        shared_examples "user can't see chapter index" do
+          it "redirects user to login page with error message" do
+            get :navigate, params: { id: work.id }
+            it_redirects_to_with_error(redirects_to, error_message)
+          end
+        end
+
+        shared_examples "user can see chapter index" do
+          it "renders the page" do
+            get :navigate, params: { id: work.id }
+            expect(response).to render_template(:navigate)
+            expect(assigns(:chapters)).to include(work.chapters.first)
+          end
+        end
+
+        context "when logged out" do
+          it_behaves_like "user can't see chapter index" do
+            let(:error_message) { "Sorry, you don't have permission to access the page you were trying to reach. Please log in." }
+            let(:redirects_to) { from_unrevealed ? root_path : new_user_session_path }
+          end
+        end
+
+        context "when logged in as a random user" do
+          let(:user) { create(:user) }
+
+          before { fake_login_known_user(user) }
+
+          it_behaves_like "user can't see chapter index" do
+            let(:error_message) { "Sorry, you don't have permission to access the page you were trying to reach." }
+            let(:redirects_to) { from_unrevealed ? root_path : user_path(user) }
+          end
+        end
+
+        context "when logged in as the work's owner" do
+          let(:user) { work.users.first }
+
+          before { fake_login_known_user(user) }
+
+          it_behaves_like "user can see chapter index"
+        end
+
+        context "when logged in as an admin" do
+          let(:user) { create(:admin, roles: ["policy_and_abuse"]) }
+
+          before { fake_login_admin(user) }
+
+          it_behaves_like "user can see chapter index"
+        end
+      end
+
+      context "on an unrevealed work" do
+        before { work.update!(collection_names: create(:unrevealed_collection).name) }
+
+        it_behaves_like "only author and admin can view chapter index page" do
+          let!(:from_unrevealed) { true }
+        end
+      end
+
+      context "on a work hidden by an admin" do
+        before { work.update_column(:hidden_by_admin, true) }
+
+        it_behaves_like "only author and admin can view chapter index page" do
+          let!(:from_unrevealed) { false }
+        end
+      end
+    end
+  end
 end

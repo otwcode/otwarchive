@@ -62,15 +62,7 @@ class CommentsController < ApplicationController
   end
 
   def check_parent
-    parent = find_parent
-    # Only admins and the owner can see comments on something hidden by an admin.
-    if parent.respond_to?(:hidden_by_admin) && parent.hidden_by_admin
-      logged_in_as_admin? || current_user_owns?(parent) || access_denied(redirect: root_path)
-    end
-    # Only admins and the owner can see comments on unrevealed works.
-    if parent.respond_to?(:in_unrevealed_collection) && parent.in_unrevealed_collection
-      logged_in_as_admin? || current_user_owns?(parent) || access_denied(redirect: root_path)
-    end
+    check_parent_visibility(find_parent)
   end
 
   def check_modify_parent

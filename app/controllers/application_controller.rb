@@ -462,6 +462,18 @@ public
     end
   end
 
+  # Checks if user is allowed to see related page if parent page is hidden or in hidden collection
+  def check_parent_visibility(parent)
+    # Only admins and the owner can see related pages on something hidden by an admin.
+    if parent.respond_to?(:hidden_by_admin) && parent.hidden_by_admin
+      logged_in_as_admin? || current_user_owns?(parent) || access_denied(redirect: root_path)
+    end
+    # Only admins and the owner can see related pages on unrevealed works.
+    if parent.respond_to?(:in_unrevealed_collection) && parent.in_unrevealed_collection
+      logged_in_as_admin? || current_user_owns?(parent) || access_denied(redirect: root_path)
+    end
+  end
+
   # Make sure user is allowed to access tag wrangling pages
   def check_permission_to_wrangle
     if @admin_settings.tag_wrangling_off? && !logged_in_as_admin?

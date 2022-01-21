@@ -6,6 +6,7 @@ class KudosController < ApplicationController
 
   def index
     @work = Work.find(params[:work_id])
+    check_parent_visibility(@work)
     @kudos = @work.kudos.includes(:user).with_user
     @guest_kudos_count = @work.kudos.by_guest.count
 

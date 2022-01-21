@@ -243,6 +243,7 @@ class WorksController < ApplicationController
   end
 
   def navigate
+    check_parent_visibility(@work)
     @chapters = @work.chapters_in_order(
       include_content: false,
       include_drafts: (logged_in_as_admin? ||

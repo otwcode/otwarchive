@@ -386,4 +386,228 @@ describe BookmarksController do
       end
     end
   end
+
+  describe "hidden works" do
+    let!(:work) { create(:work) }
+    let!(:bookmark) { create(:bookmark, bookmarkable_id: work.id) }
+
+    let!(:random_work) { create(:work) }
+
+    shared_examples "only author and admin can view restricted pages" do |logout_cases, random_cases, bookmarker_cases, author_cases, admin_cases|
+      shared_examples "user access" do |cases|
+        default_variations = {
+          new: [:from_work],
+          show: [:from_root, :from_work, :from_random_work, :from_bookmarker],
+          edit: [:from_root, :from_work, :from_random_work],
+          index: [:from_root, :from_work, :from_bookmarker],
+          confirm_delete: [:from_root]
+        }
+
+        let(:goto) do
+          lambda do |action, from|
+            params = {}
+
+            case from
+            when :from_work
+              params[:work_id] = work.id
+            when :from_random_work
+              params[:work_id] = random_work.id
+            when :from_bookmarker
+              run_all_indexing_jobs
+              params[:user_id] = bookmark.pseud.user
+            end
+
+            case action
+            when :new
+              get :new, params: params
+            when :edit
+              params[:id] = bookmark
+              get :edit, params: params
+            when :index
+              get :index, params: params
+            when :show
+              params[:id] = bookmark
+              get :show, params: params
+            when :confirm_delete
+              params[:id] = bookmark
+              get :confirm_delete, params: params
+            else
+              raise "Unknown action"
+            end
+          end
+        end
+
+        cases.each do |test|
+          # overwrite possible variations if they are provided explicitly
+          variations =
+            if test[:variation]
+              { test[:action] => [test[:variation]] }
+            else
+              default_variations
+            end
+
+          variations[test[:action]].each do |from|
+            context "user goes to #{test[:action]} bookmark #{from}" do
+              before { goto.call(test[:action], from) }
+
+              case test[:result]
+              when :redirect_to_root
+                it "redirects user to root page with error message" do
+                  it_redirects_to_with_error(root_path, "Sorry, you don't have permission to access the page you were trying to reach.")
+                end
+              when :redirect_to_root_with_login_request
+                it "redirects user to root page with login request" do
+                  it_redirects_to_with_error(root_path, "Sorry, you don't have permission to access the page you were trying to reach. Please log in.")
+                end
+              when :redirect_to_login
+                it "redirects user to login page with error message" do
+                  it_redirects_to_with_error(new_user_session_path, "Sorry, you don't have permission to access the page you were trying to reach. Please log in.")
+                end
+              when :redirect_to_user
+                it "redirects user to user page with error message" do
+                  it_redirects_to_with_error(user_path(user), "Sorry, you don't have permission to access the page you were trying to reach.")
+                end
+              when :redirect_to_work_with_edit_error_message
+                it "redirects user to work page with error message" do
+                  it_redirects_to_with_error(work_path(work), edit_error_message)
+                end
+              when :render
+                it "renders expected template" do
+                  expect(response).to render_template(test[:action])
+                end
+              when :render_with_bookmark
+                it "renders expected template with bookmark included" do
+                  expect(response).to render_template(test[:action])
+                  expect(assigns(:bookmarks)).to include(bookmark)
+                end
+              when :render_without_bookmark
+                it "renders expected template without bookmark" do
+                  expect(response).to render_template(test[:action])
+                  expect(assigns(:bookmarks)).not_to include(bookmark)
+                end
+              else
+                raise "Unknown outcome"
+              end
+            end
+          end
+        end
+      end
+
+      context "when logged out" do
+        cases = logout_cases || [
+          { action: :new, result: :redirect_to_login },
+          { action: :show, result: :redirect_to_root_with_login_request }
+        ]
+        it_behaves_like "user access", cases
+      end
+
+      context "when logged in as a random user" do
+        let(:user) { create(:user) }
+
+        before { fake_login_known_user(user) }
+
+        cases = random_cases || [
+          { action: :new, result: :redirect_to_root },
+          { action: :show, result: :redirect_to_root }
+        ]
+        it_behaves_like "user access", cases
+      end
+
+      context "when logged in as the bookmarker" do
+        let(:user) { bookmark.pseud.user }
+
+        before { fake_login_known_user(user) }
+
+        cases = bookmarker_cases || [
+          { action: :new, result: :redirect_to_root },
+          { action: :edit, result: :redirect_to_root },
+          { action: :show, result: :redirect_to_root },
+          { action: :confirm_delete, result: :redirect_to_root }
+        ]
+        it_behaves_like "user access", cases
+      end
+
+      context "when logged in as the work's owner" do
+        let(:user) { work.users.first }
+
+        before { fake_login_known_user(user) }
+
+        cases = author_cases || [
+          { action: :new, result: :redirect_to_work_with_edit_error_message },
+          { action: :edit, result: :redirect_to_work_with_edit_error_message },
+          { action: :show, result: :render }
+        ]
+        it_behaves_like "user access", cases
+      end
+
+      context "when logged in as an admin" do
+        let(:user) { create(:admin, roles: ["policy_and_abuse"]) }
+
+        before { fake_login_admin(user) }
+
+        cases = admin_cases || [
+          { action: :new, result: :redirect_to_login },
+          { action: :edit, result: :redirect_to_login },
+          { action: :show, result: :render }
+        ]
+        it_behaves_like "user access", cases
+      end
+    end
+
+    context "on an unrevealed work" do
+      before { work.update!(collection_names: create(:unrevealed_collection).name) }
+
+      context "for default actions" do
+        it_behaves_like "only author and admin can view restricted pages" do
+          let(:edit_error_message) { "Sorry, you can't add or edit bookmarks on an unrevealed work." }
+        end
+      end
+
+      context "for index" do
+        special_cases = [
+          { action: :index, result: :render_with_bookmark }
+        ]
+        it_behaves_like "only author and admin can view restricted pages", special_cases, special_cases, special_cases, special_cases, special_cases
+      end
+    end
+
+    context "on a work hidden by an admin" do
+      before { work.update_column(:hidden_by_admin, true) }
+
+      context "for default actions" do
+        it_behaves_like "only author and admin can view restricted pages" do
+          let(:edit_error_message) { "Sorry, you can't add or edit bookmarks on a hidden work." }
+        end
+      end
+
+      context "for index" do
+        logout_cases = [
+          { action: :index, variation: :from_root, result: :render_without_bookmark },
+          { action: :index, variation: :from_work, result: :redirect_to_login },
+          { action: :index, variation: :from_bookmarker, result: :render_without_bookmark }
+        ]
+        random_cases = [
+          { action: :index, variation: :from_root, result: :render_without_bookmark },
+          { action: :index, variation: :from_work, result: :redirect_to_user },
+          { action: :index, variation: :from_bookmarker, result: :render_without_bookmark }
+        ]
+        bookmarker_cases = [
+          { action: :index, variation: :from_root, result: :render_without_bookmark },
+          { action: :index, variation: :from_work, result: :redirect_to_user },
+          { action: :index, variation: :from_bookmarker, result: :render_without_bookmark }
+        ]
+        author_cases = [
+          { action: :index, variation: :from_root, result: :render_without_bookmark },
+          { action: :index, variation: :from_work, result: :render_with_bookmark },
+          { action: :index, variation: :from_bookmarker, result: :render_without_bookmark }
+        ]
+        admin_cases = [
+          { action: :index, variation: :from_root, result: :render_without_bookmark },
+          { action: :index, variation: :from_work, result: :render_with_bookmark },
+          { action: :index, variation: :from_bookmarker, result: :render_without_bookmark }
+        ]
+        it_behaves_like "only author and admin can view restricted pages", logout_cases, random_cases, bookmarker_cases, author_cases, admin_cases
+      end
+    end
+  end
 end

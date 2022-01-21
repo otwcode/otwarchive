@@ -1,10 +1,12 @@
 class BookmarksController < ApplicationController
   before_action :load_collection
   before_action :load_owner, only: [:index]
-  before_action :load_bookmarkable, only: [:index, :new, :create, :fetch_recent, :hide_recent]
+  before_action :load_bookmark, only: [:show, :edit, :update, :destroy, :fetch_recent, :hide_recent, :confirm_delete, :share]
+  before_action :load_bookmarkable, only: [:index, :show, :new, :edit, :create, :fetch_recent, :hide_recent]
   before_action :users_only, only: [:new, :create, :edit, :update]
   before_action :check_user_status, only: [:new, :create, :edit, :update]
-  before_action :load_bookmark, only: [:show, :edit, :update, :destroy, :fetch_recent, :hide_recent, :confirm_delete, :share]
+  before_action :check_parent, only: [:new, :show, :edit, :confirm_delete]
+  before_action :check_modify_parent, only: [:new, :edit]
   before_action :check_visibility, only: [:show, :share]
   before_action :check_ownership, only: [:edit, :update, :destroy, :confirm_delete, :share]
 
@@ -19,6 +21,20 @@ class BookmarksController < ApplicationController
         flash[:error] = ts("You can't bookmark with that pseud.")
         redirect_to root_path and return
       end
+    end
+  end
+
+  def check_modify_parent
+    parent = find_parent
+    # No one can create or update comments on something hidden by an admin.
+    if parent.respond_to?(:hidden_by_admin) && parent.hidden_by_admin
+      flash[:error] = ts("Sorry, you can't add or edit bookmarks on a hidden work.")
+      redirect_to work_path(parent)
+    end
+    # No one can create or update comments on unrevealed works.
+    if parent.respond_to?(:in_unrevealed_collection) && parent.in_unrevealed_collection
+      flash[:error] = ts("Sorry, you can't add or edit bookmarks on an unrevealed work.")
+      redirect_to work_path(parent)
     end
   end
 
@@ -39,6 +55,18 @@ class BookmarksController < ApplicationController
     @bookmark = Bookmark.find(params[:id])
     @check_ownership_of = @bookmark
     @check_visibility_of = @bookmark
+  end
+
+  def find_parent
+    if @bookmark.present?
+      @bookmark.bookmarkable
+    else
+      @bookmarkable
+    end
+  end
+
+  def check_parent
+    check_parent_visibility(find_parent)
   end
 
   def search

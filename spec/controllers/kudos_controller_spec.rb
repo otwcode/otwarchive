@@ -10,6 +10,7 @@ describe KudosController do
     context "when work is public" do
       let(:work) { create(:work) }
       let(:referer) { work_path(work) }
+
       before { request.headers["HTTP_REFERER"] = referer }
 
       context "when kudos giver is a guest" do
@@ -40,6 +41,7 @@ describe KudosController do
 
       context "when kudos giver is logged in" do
         let(:user) { create(:user) }
+
         before { fake_login_known_user(user) }
 
         it "redirects to referer with a notice" do
@@ -141,6 +143,74 @@ describe KudosController do
           expect(JSON.parse(response.body)["errors"]["guest_on_restricted"]).to include("^You can't leave guest kudos on a restricted work.")
         end
       end
+    end
+  end
+
+  describe "hidden works" do
+    let(:author) { create(:user) }
+    let!(:work) { create(:work, authors: [author.pseuds.first]) }
+    let(:admirer) { create(:user) }
+    let!(:kudo) { create(:kudo, user: admirer, commentable: work) }
+
+    shared_examples "only author and admin can view kudos index page" do
+      shared_examples "user can't see kudos" do
+        it "redirects user to login page with error message" do
+          get :index, params: { work_id: work.id }
+          it_redirects_to_with_error(root_path, error_message)
+        end
+      end
+
+      shared_examples "user can see kudos" do
+        it "renders the page" do
+          get :index, params: { work_id: work.id }
+          expect(response).to render_template(:index)
+          expect(assigns(:kudos)).to include(kudo)
+        end
+      end
+
+      context "when logged out" do
+        it_behaves_like "user can't see kudos" do
+          let(:error_message) { "Sorry, you don't have permission to access the page you were trying to reach. Please log in." }
+        end
+      end
+
+      context "when logged in as a random user" do
+        let(:user) { create(:user) }
+
+        before { fake_login_known_user(user) }
+
+        it_behaves_like "user can't see kudos" do
+          let(:error_message) { "Sorry, you don't have permission to access the page you were trying to reach." }
+        end
+      end
+
+      context "when logged in as the work's owner" do
+        let(:user) { work.users.first }
+
+        before { fake_login_known_user(user) }
+
+        it_behaves_like "user can see kudos"
+      end
+
+      context "when logged in as an admin" do
+        let(:user) { create(:admin, roles: ["policy_and_abuse"]) }
+
+        before { fake_login_admin(user) }
+
+        it_behaves_like "user can see kudos"
+      end
+    end
+
+    context "on an unrevealed work" do
+      before { work.update!(collection_names: create(:unrevealed_collection).name) }
+
+      it_behaves_like "only author and admin can view kudos index page"
+    end
+
+    context "on a work hidden by an admin" do
+      before { work.update_column(:hidden_by_admin, true) }
+
+      it_behaves_like "only author and admin can view kudos index page"
     end
   end
 end
