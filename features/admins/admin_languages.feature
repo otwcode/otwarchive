@@ -46,6 +46,6 @@ Scenario: Adding a language to the Support form
     And I check "Support available"
     And I press "Update Language"
   Then I should see "Language was successfully updated."
-  When I follow "Technical Support and Feedback"
+  When I follow "Technical Support & Feedback"
   Then I should see "Sindarin" within "select#feedback_language"
     And I should not see "Klingon" within "select#feedback_language"
