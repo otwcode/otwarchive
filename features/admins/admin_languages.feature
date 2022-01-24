@@ -29,7 +29,7 @@ Scenario: Adding Abuse support for a language
     And I check "Abuse support available"
     And I press "Update Language"
   Then I should see "Language was successfully updated."
-  When I follow "Report Abuse"
+  When I follow "Policy Questions & Abuse Reports"
   Then I should see "Arabic" within "select#abuse_report_language"
     And I should not see "Espanol" within "select#abuse_report_language"
 
