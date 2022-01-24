@@ -179,7 +179,7 @@ We only use error messages for LiveValidation. Style spoofs the system error mes
   font-weight: 900;
   position: absolute;
   margin-top: 0.643em;
-  margin-right: 13em;
+  margin-right: 15em;
 }
 
 .LV_invalid {
