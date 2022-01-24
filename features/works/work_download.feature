@@ -93,14 +93,16 @@ Feature: Download a work
 
     Given I have related works setup
     When I post a related work as remixer
-      And I download "Followup"
+      And I view the work "Followup"
+      And I follow "HTML"
     Then I should see the inspiring parent work link
 
   Scenario: Download work shows inspiring external inspiring work link
 
     Given I have related works setup
     When I post a related work as remixer for an external work
-      And I download "Followup"
+      And I view the work "Followup"
+      And I follow "HTML"
     Then I should see the external inspiring work link
 
 
