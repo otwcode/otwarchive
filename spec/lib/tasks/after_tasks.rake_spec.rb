@@ -64,9 +64,9 @@ describe "rake After:unhide_invited_works" do
   context "when invited works are incorrectly anonymous or unrevealed" do
     before do
       # Screw up collection items
-      invited_anonymous_work.collection_items.first.update_columns(user_approval_status: CollectionItem::NEUTRAL)
-      invited_unrevealed_work.collection_items.first.update_columns(user_approval_status: CollectionItem::NEUTRAL)
-      invited_anonymous_unrevealed_work.collection_items.first.update_columns(user_approval_status: CollectionItem::NEUTRAL)
+      invited_anonymous_work.collection_items.first.update_columns(user_approval_status: "unreviewed")
+      invited_unrevealed_work.collection_items.first.update_columns(user_approval_status: "unreviewed")
+      invited_anonymous_unrevealed_work.collection_items.first.update_columns(user_approval_status: "unreviewed")
     end
 
     it "updates the anonymous and unrevealed status of invited works" do

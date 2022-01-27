@@ -357,17 +357,9 @@ class Tag < ApplicationRecord
       visible_to_registered_user_with_count : visible_to_all_with_count
   }
 
-  # a complicated join -- we only want to get the tags on approved, posted works in the collection
-  COLLECTION_JOIN =  "INNER JOIN filter_taggings ON ( tags.id = filter_taggings.filter_id )
-                      INNER JOIN works ON ( filter_taggings.filterable_id = works.id AND filter_taggings.filterable_type = 'Work')
-                      INNER JOIN collection_items ON ( works.id = collection_items.item_id AND collection_items.item_type = 'Work'
-                                                       AND works.posted = 1
-                                                       AND collection_items.collection_approval_status = '#{CollectionItem::APPROVED}'
-                                                       AND collection_items.user_approval_status = '#{CollectionItem::APPROVED}' ) "
-
-  scope :for_collections, lambda {|collections|
-    joins(COLLECTION_JOIN).
-    where("collection_items.collection_id IN (?)", collections.collect(&:id))
+  scope :for_collections, lambda { |collections|
+    joins(filtered_works: :approved_collection_items).merge(Work.posted)
+      .where("collection_items.collection_id IN (?)", collections.collect(&:id))
   }
 
   scope :for_collection, lambda { |collection| for_collections([collection]) }

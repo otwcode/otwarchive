@@ -594,7 +594,7 @@ class WorksController < ApplicationController
       next unless @work.collection_items.present?
       @work.collection_items.each do |collection_item|
         next unless collection_item.collection == collection
-        if collection_item.user_approval_status == 1 && collection_item.collection_approval_status.zero?
+        if collection_item.approved_by_user? && collection_item.unreviewed_by_collection?
           moderated_collections << collection
         end
       end
