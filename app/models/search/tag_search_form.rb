@@ -7,8 +7,13 @@ class TagSearchForm
   ATTRIBUTES = [
     :query,
     :name,
-    :tag_type,
-    :canonical
+    :canonical,
+    :fandom_names,
+    :fandom_ids,
+    :type,
+    :created_at,
+    :uses,
+    :sort_column
   ]
 
   attr_accessor :options
@@ -30,4 +35,15 @@ class TagSearchForm
     @searcher.search_results
   end
 
+  def sort_columns
+    options[:sort_column] || "name"
+  end
+
+  def sort_options
+    [
+      ["Name", "name"],
+      ["Date Created", "created_at"],
+      ["Uses", "uses"]
+    ]
+  end
 end
