@@ -59,6 +59,21 @@ Given /^the basic categories exist$/ do
   end
 end
 
+Given /^a set of works for tag sort by use exists$/ do
+  hash = {  "10 uses" => 10,
+            "8 uses" => 8,
+            "also 8 uses" => 8,
+            "5 uses" => 5,
+            "2 uses" => 2 }
+
+  # Create specified number of works that use the tag
+  hash.each do |freeform, uses|
+    uses.times do
+      FactoryBot.create(:work, freeform_string: freeform)
+    end
+  end
+end
+
 Given /^I have a canonical "([^\"]*)" fandom tag named "([^\"]*)"$/ do |media, fandom|
   fandom = Fandom.find_or_create_by_name(fandom)
   fandom.update(canonical: true)
@@ -376,6 +391,13 @@ Then /^I should not see the tag search result "([^\"]*)"(?: within "([^"]*)")?$/
     with_scope(selector) do
       page.has_no_text?(result)
     end
+end
+
+Then /^the ([\d]+)(?:st|nd|rd|th) tag result should contain "([^"]*)"$/ do |n, text|
+  selector = "ol.tag > li:nth-of-type(#{n})"
+  with_scope(selector) do
+    page.should have_content(text)
+  end
 end
 
 Then /^"([^\"]*)" should not be a tag wrangler$/ do |username|
