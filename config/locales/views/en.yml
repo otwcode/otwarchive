@@ -301,3 +301,9 @@ en:
           label: Link to the page you are reporting (required)
           error: Please enter the link to the page you are reporting.
           description: If you came here from the abuse link at the bottom of the page, this will be filled in for you.
+  tags:
+    index:
+      about:
+        popular: These are some of the most popular tags used on the Archive. To find more tags, %{search_tags_link}.
+        random: These are some random tags used on the Archive. To find more tags, %{search_tags_link}.
+      search_tags: try our tag search
