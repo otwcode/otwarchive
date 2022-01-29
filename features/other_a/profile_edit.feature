@@ -44,6 +44,22 @@ Scenario: Changing email address - entering an invalid email address
   Then I should see "Email does not seem to be a valid address"
     And 0 emails should be delivered
 
+Scenario: Changing email address - case-insensitive confirmation
+
+  When I follow "Change Email"
+    And I fill in "New Email" with "foo@example.com"
+    And I fill in "Confirm New Email" with "FoO@example.com"
+    And I fill in "Password" with "password"
+    And I press "Change Email"
+  Then I should see "Your email has been successfully updated"
+    And 1 email should be delivered to "bar@ao3.org"
+    And all emails have been delivered
+    And the email should contain "the email associated with your account has been changed to"
+    And the email should contain "foo@example.com"
+    And the email should not contain "translation missing"
+  When I change my preferences to display my email address
+  Then I should see "My email address: foo@example.com"
+
 Scenario: Changing email address - entering an incorrect password
 
   When I enter an incorrect password

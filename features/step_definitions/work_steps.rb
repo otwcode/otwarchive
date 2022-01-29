@@ -511,7 +511,7 @@ When /^I list the work "([^"]*)" as inspiration$/ do |title|
   fill_in("work_parent_attributes_url", with: url_of_work)
 end
 When /^I set the publication date to today$/ do
-  today = Time.new
+  today = Date.current
   month = today.strftime("%B")
 
   if page.has_selector?("#backdate-options-show")
@@ -689,22 +689,22 @@ end
 
 ### THEN
 Then /^I should see Updated today$/ do
-  today = Time.zone.today.to_s
+  today = Date.current.to_s
   step "I should see \"Updated:#{today}\""
 end
 
 Then /^I should not see Updated today$/ do
-  today = Date.today.to_s
+  today = Date.current.to_s
   step "I should not see \"Updated:#{today}\""
 end
 
 Then /^I should see Completed today$/ do
-  today = Time.zone.today.to_s
+  today = Date.current.to_s
   step "I should see \"Completed:#{today}\""
 end
 
 Then /^I should not see Completed today$/ do
-  today = Date.today.to_s
+  today = Date.current.to_s
   step "I should not see \"Completed:#{today}\""
 end
 

@@ -54,13 +54,13 @@ class Collection < ApplicationRecord
 
   has_many :collection_items, dependent: :destroy
   accepts_nested_attributes_for :collection_items, allow_destroy: true
-  has_many :approved_collection_items, -> { where('collection_items.user_approval_status = ? AND collection_items.collection_approval_status = ?', CollectionItem::APPROVED, CollectionItem::APPROVED) }, class_name: "CollectionItem"
+  has_many :approved_collection_items, -> { approved_by_both }, class_name: "CollectionItem"
 
   has_many :works, through: :collection_items, source: :item, source_type: 'Work'
-  has_many :approved_works, -> { where('collection_items.user_approval_status = ? AND collection_items.collection_approval_status = ? AND works.posted = true', CollectionItem::APPROVED, CollectionItem::APPROVED) }, through: :collection_items, source: :item, source_type: 'Work'
+  has_many :approved_works, -> { posted }, through: :approved_collection_items, source: :item, source_type: "Work"
 
   has_many :bookmarks, through: :collection_items, source: :item, source_type: 'Bookmark'
-  has_many :approved_bookmarks, -> { where('collection_items.user_approval_status = ? AND collection_items.collection_approval_status = ?', CollectionItem::APPROVED, CollectionItem::APPROVED) }, through: :collection_items, source: :item, source_type: 'Bookmark'
+  has_many :approved_bookmarks, through: :approved_collection_items, source: :item, source_type: "Bookmark"
 
   has_many :collection_participants, dependent: :destroy
   accepts_nested_attributes_for :collection_participants, allow_destroy: true

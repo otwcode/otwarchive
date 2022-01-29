@@ -21,7 +21,7 @@
           </p>
         </dd>
         <dt id="managePublicationDate"><%= f.label :published_at, ts("Chapter Publication Date") %>  <%= link_to_help "backdating-help" %></dt>
-        <dd class="datetime"><%= f.date_select "published_at", start_year: Date.today.year, end_year: 1950, default: @work.default_date, order: [:day, :month, :year] %></dd>
+        <dd class="datetime"><%= f.date_select "published_at", start_year: Date.current.year, end_year: 1950, default: @work.default_date, order: [:day, :month, :year] %></dd>
       </dl>
     </fieldset>
 

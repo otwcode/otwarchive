@@ -8,6 +8,10 @@ Bundler.require(*Rails.groups)
 
 module Otwarchive
   class Application < Rails::Application
+    app_config = YAML.load_file(Rails.root.join("config/config.yml"))
+    app_config.merge!(YAML.load_file(Rails.root.join("config/local.yml"))) if File.exist?(Rails.root.join("config/local.yml"))
+    ::ArchiveConfig = OpenStruct.new(app_config)
+
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration should go into files in config/initializers
     # -- all .rb files in that directory are automatically loaded.
@@ -62,8 +66,6 @@ module Otwarchive
     # Configure the default encoding used in templates for Ruby 1.9.
     config.encoding = "utf-8"
 
-    config.action_mailer.default_url_options = { host: "archiveofourown.org" }
-
     config.action_view.automatically_disable_submit_tag = false
 
     # Configure sensitive parameters which will be filtered from the log file.
@@ -96,8 +98,26 @@ module Otwarchive
     # Use Resque to run ActiveJobs (including sending delayed mail):
     config.active_job.queue_adapter = :resque
 
+    config.action_mailer.default_url_options = { host: ArchiveConfig.APP_HOST }
+
     # Use "mailer" instead of "mailers" as the Resque queue for emails:
     config.action_mailer.deliver_later_queue_name = :mailer
+
+    config.action_mailer.delivery_method = :smtp
+    config.action_mailer.smtp_settings = {
+      address: ArchiveConfig.SMTP_SERVER,
+      domain: ArchiveConfig.SMTP_DOMAIN,
+      port: ArchiveConfig.SMTP_PORT,
+      enable_starttls_auto: ArchiveConfig.SMTP_ENABLE_STARTTLS_AUTO,
+      openssl_verify_mode: ArchiveConfig.SMTP_OPENSSL_VERIFY_MODE
+    }
+    if ArchiveConfig.SMTP_AUTHENTICATION
+      config.action_mailer.smtp_settings.merge!({
+                                                  user_name: ArchiveConfig.SMTP_USER,
+                                                  password: ArchiveConfig.SMTP_PASSWORD,
+                                                  authentication: ArchiveConfig.SMTP_AUTHENTICATION
+                                                })
+    end
 
     # Use URL safe CSRF due to a bug in Rails v5.2.5 release.  See the v5.2.6 release notes:
     # https://github.com/rails/rails/blob/5-2-stable/actionpack/CHANGELOG.md

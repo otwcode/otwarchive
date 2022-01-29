@@ -1,19 +1,62 @@
 ---
 de:
   mailer:
+    general:
+      closing:
+        formal: Mit freundlichen Grüßen
+        informal: Viele Grüße
+      footer:
+        general:
+          html:
+            donate_link_text: Deine Spenden
+            part1: Solltest Du diese Nachricht irrtümlicherweise erhalten haben, bitte
+              %{support_link}.
+            part2: Das AO3 ist ein Archiv von Fans für Fans, das auf %{donate_link}
+              angewiesen ist.
+            support_link_text: wende Dich an den Support
+          text:
+            part1: Solltest Du diese Nachricht irrtümlicherweise erhalten haben, wende
+              dich bitte unter %{support_url} an den Support.
+            part2: 'Das AO3 ist ein Archiv von Fans für Fans, das auf Deine Spenden
+              angewiesen ist: %{donate_url}.'
+        sent_at: Gesendet %{sent_at}.
+      greeting:
+        formal: Hallo, %{name},
+        informal:
+          addressed: Hallo, %{name}!
+          unaddressed: Hallo!
+        introductory: Hallo vom Archive of Our Own – AO3 (Ein Eigenes Archiv)
+      signature:
+        app_short_name: AO3
+        open_doors: Das “Open Doors”- (Offene Türen) Team
+        parent_org: Organization for Transformative Works – OTW (Organisation für
+          Transformative Werke)
+        support: Das AO3-Support-Team
     kudos:
       guest:
         one: ein Gast
         other: "%{count} Gäste"
       html:
         left_kudos:
-          one: "%{givers_list} hat Kudos für <i>%{commentable_link}</i> hinterlassen."
-          other: "%{givers_list} haben Kudos für <i>%{commentable_link}</i> hinterlassen."
+          one: "%{givers_list} hat Kudos für %{commentable_link} hinterlassen."
+          other: "%{givers_list} haben Kudos für %{commentable_link} hinterlassen."
       text:
         left_kudos:
           one: "%{givers_list} hat Kudos für  %{commentable_link} hinterlassen."
           other: "%{givers_list} haben Kudos für  %{commentable_link} hinterlassen."
       you_have: "[%{app_name}] Du hast Kudos erhalten!"
+  users:
+    mailer:
+      reset_password_instructions:
+        expiration: Wenn Du den Link zur Passwortzurücksetzung nicht innerhalb der
+          nächsten sieben Tage nutzt, verfällt er und Du musst einen neuen anfordern.
+        intro: 'jemand hat ein neues Passwort für Dein Nutzerkonto angefordert. Du
+          kannst Dein Passwort ändern, indem Du den untenstehenden Link anklickst
+          und Dein neues Passwort eingibst:'
+        link_title: Passwort ändern.
+        subject: "[%{app_name}] Setze Dein Passwort zurück"
+        unrequested: Wenn Du keine Zurücksetzung Deines Passworts beantragt hast,
+          kannst Du diese E-Mail ignorieren und Dein altes Passwort bleibt gültig.
   user_mailer:
     abuse_report:
       description_para: 'Beschreibung des Missbrauchs:'
@@ -22,15 +65,14 @@ de:
       subject: "[%{app_name}] Deine Richtlinien- und Missbrauchsmeldung"
       url_para: 'Die URL der Seite, auf der sich der Missbrauch befindet:'
     admin_deleted_work_notification:
-      abuse_committee: kontaktiere bitte unser "Richtlinien und Missbrauch"-Komitee
       bye: Anbei ist eine Kopie Deines Werkes als Referenz.
-      hello: Hallo %{user},
+      contact_abuse: kontaktiere bitte unser “Richtlinien und Missbrauch”-Komitee
       html:
         part1: Dein Werk %{title} wurde von einem*r Webadministrator*in AO3 gelöscht.
         part2: Falls Dein Werk Teil eines Import-Projektes durch unser Open Doors-
           (Offene Türen) Komitee war, %{opendoors_link} für alle weiteren Fragen.
-        part3: Wenn Dein Werk eventuell die Nutzungsbedingungen des AO3 verletzt hat,
-          %{abuse_link}.
+        tos_violation: Wenn Dein Werk eventuell die Nutzungsbedingungen des AO3 verletzt
+          hat, %{contact_abuse_link}.
       opendoors: kontaktiere bitte das “Offene Türen”-Komitee
       subject: "[%{app_name}] Dein Werk wurde von einem/r Webadministrator*in gelöscht"
       text:
@@ -38,8 +80,8 @@ de:
         part2: Falls Dein Werk Teil eines Import-Projektes durch unser Open Doors-
           (Offene Türen) Komitee war, kontaktiere bitte Offene Türen (%{opendoors_link})
           für alle weiteren Fragen.
-        part3: Wenn Dein Werk eventuell die Nutzungsbedingungen des AO3 verletzt hat,
-          kontaktiere bitte unser Richtlinien und Missbrauch-Komitee (%{abuse_link}).
+        tos_violation: Wenn Dein Werk eventuell die Nutzungsbedingungen des AO3 verletzt
+          hat, kontaktiere bitte unser Richtlinien und Missbrauch-Komitee (%{contact_abuse_url}).
     challenge_assignment_notification:
       any: Jegliche
       description: 'Beschreibung:'
@@ -59,16 +101,16 @@ de:
       recipient_missing: 'Niemand: bitte eine*n Moderator*in um Hilfe!'
       subject: "[%{app_name}][%{collection_title}] Deine Aufgabe!"
       text:
+        assignment: Dir wurde folgender Wunsch in der Herausforderung "%{collection_title}"
+          (%{collection_url})  im AO3 zugewiesen!
         footer: Du erhältst diese E-Mail, weil Du Dich für die Herausforderung %{title}
           (%{url}) angemeldet hast. Für mehr Einzelheiten zu dieser Herausforderung,
           sowie Kontaktinformationen der Moderator*innen gehe bitte zu %{profile_url}.
         look_up: Du kannst diese Aufgabe auf der Assignments (Aufgaben) Seite unter
           %{link} ansehen.
-        part1: Dir wurde folgender Wunsch in der Herausforderung %{collection_title}
-          (%{collection_url}) im AO3 zugewiesen!
     change_email:
       part1: "%{login}, die mit Deinem Konto verknüpfte E-Mail-Adresse wurde zu %{email}
-        geändert"
+        geändert."
       subject: "[%{app_name}] E-Mail-Adresse wurde geändert"
     creatorship_notification:
       explanation: Wenn Du Mitschöpfer*in eines Werkes bist, kannst Du zu neuen Kapiteln
@@ -88,8 +130,25 @@ de:
         remove: 'Wenn Du versehentlich hinzugefügt wurdest oder nicht als SchöpferIn
           aufgeführt werden möchtest, kannst Du das %{type} ändern, um Dich selbst
           als Schöpfer*in zu entfernen: %{url}'
+    creatorship_notification_archivist:
+      explanation: In der Funktion als ArchivistIn darf er/sie Dich ohne Einladung
+        hinzufügen, selbst wenn Du die Option, als MitschöpferIn geführt zu werden,
+        deaktiviert hast.
+      html:
+        creation: "%{creation_link} von %{pseud_links}"
+        edit: das %{type} ändern
+        remove: Falls Du irrtümlicherweise hinzugefügt wurdest oder nicht als SchöpferIn
+          angezeigt werden möchtest, kannst Du %{edit}, um Dich als SchöpferIn zu
+          entfernen.
+      intro: 'Der/Die BenutzerIn %{archivist} hat Dein Pseudonym %{pseud} als MitschöpferIn
+        zu folgendem %{type} hinzugefügt:'
+      subject: "[%{app_name}] Benachrichtigung MitschöpferIn durch ArchivistIn"
+      text:
+        creation: "%{title} (%{url}) von %{pseuds}"
+        remove: 'Falls Du irrtümlicherweise hinzugefügt wurdest oder nicht als SchöpferIn
+          angezeigt werden möchtest, kannst Du das %{type} ändern, um Dich als SchöpferIn
+          zu entfernen: %{url}'
     delete_work_notification:
-      hello: Hallo %{user},
       html:
         part1_other: Dein Werk %{title} wurde gemäß Anfrage von %{pseud} gelöscht.
         part1_yourself: Dein Werk %{title} wurde gemäß Deiner Anfrage gelöscht.
@@ -98,11 +157,10 @@ de:
       subject: "[%{app_name}] Dein Werk wurde gelöscht"
       support: kontaktiere den Support
       text:
-        part1_other: Dein Werk \"%{title}\" wurde gemäß Anfrage von %{pseud} gelöscht.
-        part1_yourself: Dein Werk \"%{title}\" wurde gemäß Deiner Anfrage gelöscht.
+        part1_other: Dein Werk "%{title}" wurde gemäß Anfrage von %{pseud} gelöscht.
+        part1_yourself: Dein Werk "%{title}" wurde gemäß Deiner Anfrage gelöscht.
         part2: Falls Du Fragen hast, bitte %{support} (%{url}).
     invitation_to_claim:
-      greeting: Hallo vom %{app_name}!
       html:
         ao3_news: AO3 Neuigkeiten
         contact_open_doors: kontaktiere bitte Open Doors
@@ -121,10 +179,6 @@ de:
           hast, %{open_doors_link} mit jeglichen Informationen, die dabei helfen können,
           Deine Identität zu verifizieren.
         part11: Für alle weiteren Fragen, %{support_link}.
-        part13: Grüße
-        part14: Das Open Doors-Team
-        part15: Organization for Transformative Works (OTW - Organisation für Transformative
-          Werke)
         part2: Du findest Ankündigungen zu kürzlichen Archiv-Umzügen unter %{news_link}
           und weitere Informationen auf %{open_doors_faq_link} oder %{open_doors_tutorial_link}
           von Open Doors. Für Fragen, die weder in den FAQ, den Anleitungen, noch
@@ -161,7 +215,7 @@ de:
         sicher zu gehen). Wenn Du diese Werke schon einmal hochgeladen hast und dabei
         NICHT die Funktion "Import von URL" benutzt hast, gibt es nun zwei Versionen
         des Werkes im Archiv.
-      subject: " [%{app_name}] Einladung zur Inanspruchnahme von Werken"
+      subject: "[%{app_name}] Einladung zur Inanspruchnahme von Werken"
       text:
         part1: 'Du bekommst diese E-Mail, da kürzlich ein Archiv durch Open Doors
           (Offene Türen: %{open_doors_link}) in das %{app_name} (%{app_short_name}
@@ -175,7 +229,6 @@ de:
           hast, kontaktiere bitte Open Doors mit sämtlichen Informationen, die dabei
           helfen können, Deine Identität zu verifizieren.
         part11: Für alle weiteren Fragen kontaktiere bitte den AO3-Support unter %{support_link}.
-        part13: "Grüße,\ndas Open Doors Team\nOrganization for Transformative Works "
         part2: Du findest Ankündigungen zu kürzlichen Archiv-Umzügen unter AO3-Neuigkeiten
           (%{news_link}) und weitere Informationen auf Open Doors FAQ-Seite (%{open_doors_faq_link})
           oder der Anleitungsseite (%{open_doors_tutorial_link}). Für Fragen, die
@@ -207,28 +260,20 @@ de:
           für mehrere Werke ändern möchtest, kannst Du sie alle in einer E-Mail auflisten.)
     invite_increase_notification:
       body:
-        one: 'wir wollten Dir nur Bescheid sagen, dass Du eine neue Einladung hast,
+        one: wir wollten Dir nur Bescheid sagen, dass Du eine neue Einladung hast,
           die man zur Erstellung neuer Benutzerkonten im Archiv verwenden kann. Du
           kannst FreundInnen einladen unter %{invitation_page}.
-
-          '
-        other: 'wir wollten Dir nur Bescheid sagen, dass Du %{count} neue Einladungen
+        other: wir wollten Dir nur Bescheid sagen, dass Du %{count} neue Einladungen
           hast, die man zur Erstellung neuer Benutzerkonten im Archiv verwenden kann.
           Du kannst FreundInnen einladen unter %{invitation_page}.
-
-          '
-      closing: Grüße,
-      greeting: " Hallo, %{login}!"
       subject: "[%{app_name}] Neue Einladungen"
     invite_request_declined:
-      greeting: Hallo %{user},
       main:
-        one: Leider können wir Deine Anfrage für  eine neue Einladung zurzeit nicht
+        one: Leider können wir Deine Anfrage für eine neue Einladung zurzeit nicht
           erfüllen.
         other: Leider können wir Deine Anfrage für %{count} neue Einladungen zurzeit
           nicht erfüllen.
-      reason: 'Deine Anfrage war: '
-      signoff: Beste Grüße,
+      reason: 'Deine Anfrage war:'
       subject: "[%{app_name}] Ihre Anfrage nach zusätzlichen Einladungscodes wurde
         abgelehnt"
     signup_notification:

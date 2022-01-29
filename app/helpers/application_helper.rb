@@ -587,10 +587,13 @@ module ApplicationHelper
 
   # Array of creator ids, formatted user-123, user-126.
   # External works are not created by users, so we can skip this.
-  # TODO: AO3-6132 to add creator ids to series blurbs.
   def creator_ids_for_css_classes(creation)
-    return [] unless creation.is_a?(Work)
-    return [] if creation.anonymous? || creation.unrevealed?
+    return [] unless %w[Series Work].include?(creation.class.name)
+    return [] if creation.anonymous?
+    # Although series.unrevealed? can be true, the creators are not concealed
+    # in the blurb. Therefore, we do not need special handling for unrevealed
+    # series.
+    return [] if creation.is_a?(Work) && creation.unrevealed?
 
     creation.users.pluck(:id).uniq.map { |id| "user-#{id}" }
   end
@@ -598,7 +601,7 @@ module ApplicationHelper
   def css_classes_for_creation_blurb(creation)
     return if creation.nil?
 
-    Rails.cache.fetch("#{creation.cache_key_with_version}/blurb_css_classes") do
+    Rails.cache.fetch("#{creation.cache_key_with_version}/blurb_css_classes-v2") do
       creation_id = creation_id_for_css_classes(creation)
       creator_ids = creator_ids_for_css_classes(creation).join(" ")
       "blurb group #{creation_id} #{creator_ids}".strip

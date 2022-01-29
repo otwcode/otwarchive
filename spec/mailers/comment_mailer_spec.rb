@@ -4,6 +4,16 @@ describe CommentMailer do
   let(:comment) { create(:comment) }
   let(:user) { create(:user) }
 
+  shared_examples "it retries when the comment doesn't exist" do
+    it "tries to send the email 3 times, then fails silently" do
+      comment.delete
+
+      assert_performed_jobs 3, only: ApplicationMailerJob do
+        subject.deliver_later
+      end
+    end
+  end
+
   shared_examples "a notification email with a link to the comment" do
     describe "HTML email" do
       it "has a link to the comment" do
@@ -65,6 +75,7 @@ describe CommentMailer do
     subject(:email) { CommentMailer.comment_notification(user, comment) }
 
     it_behaves_like "an email with a valid sender"
+    it_behaves_like "it retries when the comment doesn't exist"
     it_behaves_like "a notification email with a link to the comment"
     it_behaves_like "a notification email with a link to reply to the comment"
 
@@ -96,6 +107,7 @@ describe CommentMailer do
     subject(:email) { CommentMailer.edited_comment_notification(user, comment) }
 
     it_behaves_like "an email with a valid sender"
+    it_behaves_like "it retries when the comment doesn't exist"
     it_behaves_like "a notification email with a link to the comment"
     it_behaves_like "a notification email with a link to reply to the comment"
 
@@ -130,6 +142,7 @@ describe CommentMailer do
     let(:comment) { create(:comment, commentable: parent_comment) }
 
     it_behaves_like "an email with a valid sender"
+    it_behaves_like "it retries when the comment doesn't exist"
     it_behaves_like "a notification email with a link to the comment"
     it_behaves_like "a notification email with a link to reply to the comment"
     it_behaves_like "a notification email with a link to the comment's thread"
@@ -165,6 +178,7 @@ describe CommentMailer do
     let(:comment) { create(:comment, commentable: parent_comment) }
 
     it_behaves_like "an email with a valid sender"
+    it_behaves_like "it retries when the comment doesn't exist"
     it_behaves_like "a notification email with a link to the comment"
     it_behaves_like "a notification email with a link to reply to the comment"
     it_behaves_like "a notification email with a link to the comment's thread"
@@ -197,6 +211,7 @@ describe CommentMailer do
     subject(:email) { CommentMailer.comment_sent_notification(comment) }
 
     it_behaves_like "an email with a valid sender"
+    it_behaves_like "it retries when the comment doesn't exist"
     it_behaves_like "a notification email with a link to the comment"
 
     context "when the comment is a reply to another comment" do

@@ -9,7 +9,7 @@ module UrlHelpers
     return true if url.match("fanfiction.net")
     Timeout::timeout(timeout_in_seconds) {
       begin
-        url = URI.parse(url)
+        url = Addressable::URI.parse(url)
         response_code = Net::HTTP.start(url.host, url.port) {|http| http.head(url.path.blank? ? '/' : url.path).code}
         active_status = %w(200 301 302)
         active_status.include? response_code

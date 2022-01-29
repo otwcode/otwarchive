@@ -98,6 +98,7 @@ Feature: Admin Actions to Post News
       And I follow "Post AO3 News"
     Then I should see "New AO3 News Post"
       And I should see "Comment permissions from the selected post will replace any permissions selected on this page."
+      And I should see "Tags from the selected post will replace any tags entered on this page."
     When I fill in "admin_post_title" with "Good news, everyone!"
       And I fill in "content" with "I've taught the toaster to feel love."
       And I fill in "Tags" with "quotes, futurama"
@@ -108,12 +109,12 @@ Feature: Admin Actions to Post News
       And I should see "futurama" within "dd.tags"
 
   Scenario: Admin posts can be filtered by tags and languages
-    Given I have posted an admin post with tags
+    Given I have posted an admin post with tags "quotes, futurama"
       And basic languages
       And I am logged in as a "translation" admin
-    When I make a translation of an admin post with tags
+    When I make a translation of an admin post
       And I am logged in as "ordinaryuser"
-    Then I should see a translated admin post with tags
+    Then I should see a translated admin post with tags "quotes, futurama"
 
     When I follow "News"
     Then "futurama" should be an option within "Tag"
@@ -134,6 +135,25 @@ Feature: Admin Actions to Post News
       And I should see "Deutsch Woerter"
       And "quotes" should be selected within "Tag"
       And "Deutsch" should be selected within "Language"
+
+  Scenario: Translation of an admin post keeps tags of original post
+    Given I have posted an admin post with tags "original1, original2"
+      And basic languages
+      And I am logged in as a "translation" admin
+    When I make a translation of an admin post with tags "ooops"
+    Then I should see "original1 original2" within "dd.tags"
+     And I should not see "ooops"
+    When I follow "Edit Post"
+    Then I should not see the input with id "admin_post_tag_list"
+     And I should not see "Tags from the selected post will replace any tags entered on this page."
+    When I go to the admin-posts page
+    Then "ooops" should not be an option within "Tag"
+    When I follow "Edit"
+    Then I should see the input with id "admin_post_tag_list"
+    When I fill in "Tags" with "updated1, updated2"
+     And I press "Post"
+     And I am logged in as "ordinaryuser"
+    Then I should see a translated admin post with tags "updated1, updated2"
 
   Scenario: If an admin post has characters like & and < and > in the title, the escaped version will not show on the various admin post pages
     Given I am logged in as a "communications" admin

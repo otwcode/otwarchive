@@ -2,43 +2,61 @@
 hr:
   mailer:
     general:
+      closing:
+        formal: Srdačno,
+        informal: Lijep pozdrav,
       footer:
         general:
           html:
             donate_link_text: Vaše donacije
-            part1: Ako ste ovu poruku primili pogreškom, molimo vas odite na %{support_link}.
+            part1: Ako ste ovu poruku primili pogreškom, molimo Vas da %{support_link}.
             part2: AO3 je arhiv od fanova za fanove, te ovisi o %{donate_link}.
-            support_link_text: Kontaktirajte korisničku podršku
+            support_link_text: kontaktirate korisničku podršku
           text:
             part1: Ako ste ovu poruku primili pogreškom, molimo vas, javite se korisničkoj
               podršci na %{support_url}.
             part2: 'AO3 je arhiv od fanova za fanove, te ovisi o vašim donacijama:
               %{donate_url}.'
         sent_at: Poslano na %{sent_at}.
+      greeting:
+        formal: Dragi %{name},
+        informal:
+          addressed: Bok, %{name}!
+          unaddressed: Bok!
+        introductory: Pozdrav od Našeg vlastitog arhiva!
       signature:
         app_short_name: AO3
+        open_doors: Tim Otvorenih vrata
+        parent_org: Organizacija za transformativna djela
+        support: AO3 Korisnička podrška
     kudos:
       guest:
         few: "%{count} gostiju"
         one: "%{count} gost"
         other: "%{count} gostiju"
-        zero: |-
-          gost
-          %{count} gostiju
       html:
         left_kudos:
-          few: "%{givers_list} ostavili su kudos na <i>%{commentable_link}</i>."
-          one: "%{givers_list} ostavio/la je kudos na <i>%{commentable_link}</i>."
-          other: "%{givers_list} ostavili su kudos na <i>%{commentable_link}</i>."
-          zero: |-
-            %{givers_list} ostavio/la je kudos na <i>%{commentable_link}</i>.
-            %{givers_list} ostavili su kudos na <i>%{commentable_link}</i>.
+          few: "%{givers_list} ostavili su kudos na %{commentable_link}."
+          one: "%{givers_list} ostavio/la je kudos na %{commentable_link}."
+          other: "%{givers_list} ostavili su kudos na %{commentable_link}."
       text:
         left_kudos:
           few: "%{givers_list} ostavili su kudos na %{commentable_link}."
           one: "%{givers_list} ostavio/la je kudos na %{commentable_link}."
           other: "%{givers_list} ostavili su kudos na %{commentable_link}."
       you_have: "[%{app_name}] Dobili ste kudos!"
+  users:
+    mailer:
+      reset_password_instructions:
+        expiration: Ako ne iskoristite ovu poveznicu za resetiranje lozinke unutar
+          tjedan dana, isteći će i morati ćete zatražiti novu poveznicu.
+        intro: 'Netko je zatražio resetiranje lozinke za Vaš korisnički račun. Svoju
+          lozinku možete promijeniti tako da pratite poveznicu ispod i unesete Vašu
+          novu lozinku:'
+        link_title: Promijeni moju lozinku.
+        subject: "[%{app_name}] Resetirajte svoju lozinku"
+        unrequested: Ako Vi niste zatražili resetiranje lozinke, možete ignorirati
+          ovaj email i Vaša će prijašnja lozinka nastaviti funkcionirati.
   user_mailer:
     abuse_report:
       description_para: 'Opis prijavljenog sadržaja:'
@@ -46,15 +64,14 @@ hr:
       subject: "[%{app_name}] Vaša prijava Pravilima & zloupotrebi"
       url_para: 'URL stranice na kojoj se nalazi prijavljeni sadržaj:'
     admin_deleted_work_notification:
-      abuse_committee: kontaktirajte naše vijeće za Zloupotrebu
       bye: Priložena je kopija vašeg djela za vašu referencu.
-      hello: Dragi %{user},
+      contact_abuse: kontaktirajte naše vijeće za Zloupotrebu
       html:
         part1: Vaše djelo %{title} je izbrisano sa Arhive od strane administratora.
         part2: Ako je vaše djelo bilo dio uvoznog projekta kojim upravlja naš tim
           Otvorenih vrata, molimo %{opendoors_link} za sva daljnja pitanja.
-        part3: Ako je moguće da je vaše djelo prekršilo Uvjete korištenja Arhive,
-          molimo %{abuse_link}.
+        tos_violation: Ako je moguće da je vaše djelo prekršilo Uvjete korištenja
+          Arhive, molimo %{contact_abuse_link}.
       opendoors: kontaktirajte Otvorena vrata
       subject: "[%{app_name}] Vaše djelo je izbrisano od strane admina"
       text:
@@ -62,56 +79,92 @@ hr:
         part2: Ako je vaše djelo bilo dio uvoznog projekta kojim upravlja Open Doors
           (Otvorena vrata), molimo kontaktirajte Otvorena vrata (%{opendoors_link})
           za sva daljnja pitanja.
-        part3: Ako je moguće da je vaše djelo prekršilo Uvjete korištenja Arhive,
-          molimo kontaktirajte vijeće za Zloupotrebu (%{abuse_link}).
+        tos_violation: Ako je moguće da je vaše djelo prekršilo Uvjete korištenja
+          Arhive, molimo kontaktirajte vijeće za Zloupotrebu (%{contact_abuse_url}).
+    admin_hidden_work_notification:
+      access: " Dok je vaše djelo skriveno, još uvijek mu možete pristupiti preko
+        gornjeg linka, ali neće biti prikazano na vašoj stranici djela, i neće biti
+        dostupno drugim AO3 korisnicima."
+      check_email: Molimo provjerite vaš mail, uključujući vašu spam mapu, jer tim
+        za Pravila & zlouporabu vas je možda već kontaktirao objašnjavajući zašto
+        je vaše djelo skriveno.
+      contact_abuse: kontaktirajte Pravila & zlouporabu
+      html:
+        help: Ako niste sigurni zašto je vaše djelo skriveno, i niste dobili daljnje
+          informacije o tome, molimo %{contact_abuse_link} direktno.
+        hidden: Vaše djelo %{title} je sakrio tim za Pravila & zlouporabu i više nije
+          javno dostupno.
+        tos_violation: Ako je vaše djelo skriveno jer krši AO3 %{tos_link}, morati
+          ćete poduzeti mjere kako bi ispravili prekršaj. Neuspjeh dovođenja vašeg
+          djela u sklad sa Uvjetima korištenja može dovesti do brisanja vašeg djela
+          sa AO3.
+      subject: "[%{app_name}] Vaše djelo je sakrio tim za Pravila & zlouporabu"
+      text:
+        help: 'Ako niste sigurni zašto je vaše djelo skriveno, i niste dobili daljnje
+          informacije o tome, molimo kontaktirajte Pravila & zlouporabu direktno:
+          %{contact_abuse_url}.'
+        hidden: Vaše djelo "%{title}" (%{work_url}) je sakrio tim za Pravila & zlouporabu
+          i više nije javno dostupno.
+        tos_violation: Ako je vaše djelo skriveno zbog toga što krši AO3 Uvjete korištenja
+          (%{tos_url}), morati ćete poduzeti mjere kako bi ispravili prekršaj. Neuspjeh
+          dovođenja vašeg djela u sklad sa Uvjetima korištenja može dovesti do brisanja
+          vašeg djela sa AO3.
+      tos: Uvjete korištenja
     anonymous_or_unrevealed_notification:
       anonymous_info: Anonimna djela uključena su u popis oznaka, ali ne i na vašoj
         stranici djela. Na djelu će vaše korisničko ime biti zamijenjeno s "Anonymous"
         (anonimno).
-      anonymous_unrevealed_info: 'Održavači kolekcije mogu kasnije otkriti Vaše djelo,
-        ali ga ostaviti anonimno. Osobe koje imaju pretplatu na Vas će biti obaviještene
-        o tome. Jednom otkriveno, Vaše djelo će biti uključeno na popisu oznaka, ali
-        ne na popisu djela. Na djelu, Vaše će ime biti zamijenjeno sa "Anonymous"
-        (anonimno). '
+      anonymous_unrevealed_info: 'Održavači kolekcije mogu kasnije otkriti vaše djelo,
+        ali ga ostaviti anonimno. Osobe koje imaju pretplatu na vas bit će obaviještene
+        o tome. Jednom otkriveno, vaše djelo bit će uključeno na popisu oznaka, ali
+        ne na popisu djela. Na djelu,vaše će ime biti zamijenjeno s "Anonymous" (anonimno). '
       changed_status:
-        anonymous: Održavači kolekcije %{collection} Održavači kolekcije %{work} na
-          anonimno
-        anonymous_unrevealed: Održavači kolekcije %{collection} su promijenili status
-          Vašeg djela %{work} na anonimno i skirveno.
-        unrevealed: Održavači kolekcije %{collection} će promijeniti status Vašeg
-          djela %{work} u skriveno.
+        anonymous:
+          html: Održavači kolekcije %{collection_link}  promijenili su status vašeg
+            djela %{work_link} u anonimno.
+          text: Održavači kolekcije "%{collection_title}" (%{collection_url}) promijenili
+            su status vašeg djela "%{work_title}" (%{work_url}) u anonimno.
+        anonymous_unrevealed:
+          html: Održavači kolekcije %{collection_link} promijenili su status Vašeg
+            djela %{work_link} u anonimno i skriveno.
+          text: Održavači kolekcije "%{collection_title}" (%{collection_url}) promijenili
+            su status vašeg djela "%{work_title}" (%{work_url}) u anonimno i skriveno.
+        unrevealed:
+          html: Održavači kolekcije %{collection_link} će promijeniti status vašeg
+            djela %{work_link} u skriveno.
+          text: Održavači kolekcije "%{collection_title}" (%{collection_url}) promijenili
+            su status vašeg djela "%{work_title}" (%{work_url}) u skriveno.
       collection_items_link_text: Approved Collection Items (odobrene stavke kolekcije)
       do_not_want:
         anonymous:
           html: Ako ne želite da vaše djelo bude anonimno, molimo posjetite %{collection_items_link}
-            kako bi ga maknuli iz kolekcije.
-          text: 'Ako ne želite da Vaše djelo bude anonimno, molimo posjetite Approved
-            Collection Items (odobrene stavke kolekcije) kako bi ga maknuli iz te
-            kolekcije: %{collection_items_url}'
+            kako biste ga maknuli iz kolekcije.
+          text: 'Ako ne želite da vaše djelo bude anonimno, molimo posjetite Approved
+            Collection Items (odobrene stavke kolekcije) kako biste ga maknuli iz
+            te kolekcije: %{collection_items_url}'
         anonymous_unrevealed:
-          html: Ako ne želite da Vaše djelo bude anonimno i skriveno, molimo posjetite
-            %{collection_items_link} kako bi ga maknuli iz te kolekcije.
-          text: 'Ako ne želite da Vaše djelo bude anonimno i skriveno, molimo posjetite
-            Approved Collection Items (odobrene stavke kolekcije) kako bi ga maknuli
+          html: Ako ne želite da vaše djelo bude anonimno i skriveno, molimo posjetite
+            %{collection_items_link} kako biste ga maknuli iz te kolekcije.
+          text: 'Ako ne želite da vaše djelo bude anonimno i skriveno, molimo posjetite
+            Approved Collection Items (odobrene stavke kolekcije) kako biste ga maknuli
             iz te kolekcije: %{collection_items_url}'
         unrevealed:
-          html: Ako ne želite da Vaše djelo bude skriveno, molim posjetite %{collection_items_link}
-            kako bi ga maknuli iz te kolekcije.
-          text: 'Ako ne želite da Vaše djelo bude skriveno, molimo posjetite Approved
-            Collection Items (odobrene stavke kolekcije) kako bi ga maknuli iz te
-            kolekcije: %{collection_items_url}'
-      faq_link_text: Kolekcije i izazovi - najčešća pitanja i odgovori
-      greeting: Dragi %{user},
+          html: Ako ne želite da vaše djelo bude skriveno, molimo posjetite %{collection_items_link}
+            kako biste ga maknuli iz te kolekcije.
+          text: 'Ako ne želite da vaše djelo bude skriveno, molimo posjetite Approved
+            Collection Items (odobrene stavke kolekcije) kako biste ga maknuli iz
+            te kolekcije: %{collection_items_url}'
+      faq_link_text: Kolekcije - najčešća pitanja i odgovori
       more_info:
         html: Za više informacija, posjetite %{faq_link}.
-        text: 'Za više informacija, posjetite Kolekcije i izazovi - najčešća pitanja
-          i odgovori: %{faq_url}'
+        text: 'Za više informacija, posjetite Kolekcije - najčešća pitanja i odgovori:
+          %{faq_url}'
       subject:
         anonymous: "[%{app_name}] Vaše djelo je anonimno"
         anonymous_unrevealed: "[%{app_name}] Vaše djelo je anonimno i skriveno"
         unrevealed: "[%{app_name}] Vaše je djelo skriveno"
-      unrevealed_info: Skrivena djela nisu uključena u popise oznaka ili na Vašoj
-        stranici. Tko god slijedi link na djelo, primiti će poruku da je privremeno
+      unrevealed_info: Skrivena djela nisu uključena u popise oznaka ili na vašoj
+        stranici. Tko god slijedi link na djelo, primit će poruku da je privremeno
         nedostupno, i tom sadržaju neće biti dozvoljen pristup.
     challenge_assignment_notification:
       any: Bilo koji
@@ -133,16 +186,25 @@ hr:
       recipient_missing: 'Ne postoji: kontaktirajte moderatora za pomoć!'
       subject: "[%{app_name}][%{collection_title}] Tvoj zadatak!"
       text:
+        assignment: Dobili ste sljedeću molbu u "%{collection_title}" (%{collection_url})  izazovu
+          kod Archive of Our Own – AO3 (Našeg vlastitog arhiva)!
         footer: Dobili ste ovaj email jer ste se prijavili za %{title} izazov (%{url}).
           Za više informacija o ovom izazovu i kontaktne informacije za moderatore,
           molimo vas da posjetite %{profile_url}.
         look_up: Možete pogledati svoje zadatke s vaše Assignments (Zadaci) stranice
           na %{link}.
-        part1: Dobili ste sljedeću molbu u %{collection_title} (%{collection_url})
-          izazovu kod Archive of Our Own – AO3 (Našeg vlastitog arhiva)!
     change_email:
       part1: "%{login}, e-mail povezan s vašim računom je promijenjen u %{email}"
       subject: "[%{app_name}] Promijenjen e-mail"
+    collection_notification:
+      assignments_sent:
+        complete: Poslani su svi zadaci.
+        subject: Zadaci poslani
+      html:
+        received_message: 'Dobili ste poruku o vašoj kolekciji %{collection_link}:'
+      text:
+        received_message: 'Dobili ste poruku o vašoj kolekciji "%{collection_title}"
+          (%{collection_url}):'
     creatorship_notification:
       explanation: Kada ste sukreator nekog djela, možete biti dodani novim poglavljima
         bez obzira na vaše postavke. Također ćete biti dodani serijalu kojem je dodano
@@ -174,8 +236,20 @@ hr:
         creation: "%{title} (%{url}) za %{pseuds}"
         remove: 'Ako ste dodani greškom ili ne želite biti navedeni kao kreator, možete
           urediti %{type} kako biste se uklonili s popisa kreatora: %{url}'
+    creatorship_request:
+      html:
+        creation: "%{creation_link} od %{pseud_links}"
+        instructions: Možete prihvatiti ili odbiti ovaj zahtjev na svojoj %{page_name}
+          stranici.
+        page_name: Co-Creator Requests (Zahtjevi sukreatora)
+      intro: 'Korisnik %{inviting_user} je pozvao vaš pseudonim %{pseud} kako bi bio
+        zapisan kao sukreator na sljedećem %{type}:'
+      subject: "[%{app_name}] Zahtjev sukreatora"
+      text:
+        creation: "%{title} (%{url}) od %{pseuds}"
+        instructions: 'Možete prihvatiti ili odbiti ovaj zahtjev na svojoj Co-Creator
+          Requests (Zahtjevi sukreatora) stranici: %{url}'
     delete_work_notification:
-      hello: Dragi %{user},
       html:
         part1_other: Vaše djelo %{title} je izbrisano na zahtjev %{pseud}.
         part1_yourself: Vaše djelo %{title} je izbrisano na vaš zahtjev
@@ -186,10 +260,9 @@ hr:
       text:
         part1_other: Vaše djelo "%{title}" je izbrisano na zahtjev %{pseud}.
         part1_yourself: Vaše djelo "%{title}"  je izbrisano na vaš zahtjev.
-        part2: "[%{app_name}] Vaše djelo je izbrisano od strane administratora"
+        part2: Ako imate pitanja, molimo %{support} (%{url}).
     invitation:
       been_invited: Pozvani ste da se pridružite našoj otvorenoj beti!
-      greeting: Pozdrav od Našeg vlastitog arhiva!
       has_invited: "%{user_name} Vas je pozvao da se pridružite našoj beti!"
       html:
         faq_link: Za više informacija, molimo provjerite %{faq_link}.
@@ -212,10 +285,9 @@ hr:
         part3: 'Ako se želite pridružiti, molim prijavite se na sljedećoj adresi:
           %{invitation_link}'
     invitation_to_claim:
-      greeting: Pozdrav od %{app_name}!
       html:
         ao3_news: AO3 Vijesti
-        contact_open_doors: " kontaktiraj Otvorena vrata"
+        contact_open_doors: kontaktiraj Otvorena vrata
         contact_support: kontaktiraj AO3 korisničku podršku
         faq_page: stranica najčešćih pitanja
         open_doors: Open doors (Otvorena vrata)
@@ -228,9 +300,6 @@ hr:
           nemate pristup, molimo %{open_doors_link} s informacijama koje mogu pomoći
           u potvrdi vašeg identiteta.
         part11: Za druga pitanja, molimo %{support_link}.
-        part13: Lijep pozdrav,
-        part14: Tim Otvorenih vrata
-        part15: Organizacija za transformativna djela
         part2: Nove obavijesti o nedavnim potezima arhiva možete pročitati na %{news_link},
           a dodatne informacije možete pronaći na Otvorena vrata - %{open_doors_faq_link}
           ili %{open_doors_tutorial_link}. Za svaka pitanja neodgovorena na stranici
@@ -272,10 +341,6 @@ hr:
           nemate pristup, molimo kontaktirajte Otvorena vrata s informacijama koje
           mogu pomoći u potvrdi vašeg identiteta.
         part11: Za druga pitanja, molimo kontaktirajte AO3 Podršku na  %{support_link}.
-        part13: |
-          Lijep pozdrav,
-          Tim Otvorenih vrata
-          Organizacija za transformativna djela
         part2: Nove obavijesti o nedavnim potezima arhiva možete pročitati na AO3
           Vijestima (%{news_link}), te pronaći dodatne informacije na najčešćim pitanjima
           Otvorenih vrata (%{open_doors_faq_link}) ili na stranici s uputstvima (%{open_doors_tutorial_link}).
@@ -302,18 +367,18 @@ hr:
           koja želite da budu preusmjerena, možete ih sva navesti u jednom mailu.)
     invite_increase_notification:
       body:
+        few: Samo vas želimo obavijestiti da imate %{count} nove pozivnice, koje se
+          mogu koristiti za izradu novih računna na AO3. Možete pozvati prijatelje
+          na %{invitation_page}.
         one: Samo Vas želimo obavijestiti da imate %{count} novu pozivnicu, koje se
           mogu koristiti za izradu novih računa na AO3. Možete pozvati prijatelje
           na %{invitation_page}.
         other: Samo vas želimo obavijestiti da imate %{count} nove pozivnice, koje
           se mogu koristiti za izradu novih računna na AO3. Možete pozvati prijatelje
           na %{invitation_page}.
-      closing: Lijep pozdrav,
-      greeting: Bok %{login}!
       invitation_page_link_text: vaša stranica pozivnica
       subject: "[%{app_name}] Nove pozivnice"
     invite_request_declined:
-      greeting: Dragi %{user},
       main:
         few: Žao nam je što vas moramo obavijestiti da vaš zahtjev za %{count} novih
           poziva trenutno ne može biti odobren.
@@ -321,12 +386,12 @@ hr:
           trenutno ne može biti odobren. '
         other: Žao nam je što vas moramo obavijestiti da vaš zahtjev za %{count} novih
           poziva trenutno ne može biti odobren.
-        zero: |-
-          Žao nam je što vas moramo obavijestiti da vaš zahtjev za novim pozivom ne može biti odobren u ovom trenutku.
-          Žao nam je što vas moramo obavijestiti da vaš zahtjev za %{count} novih poziva ne može biti odobren u ovom trenutku.
       reason: 'Vaš zahtjev je bio:'
-      signoff: Srdačan pozdrav,
       subject: "[%{app_name}] Zahtjev za dodatnim pozivnim kodom odbijen"
+    recipient_notification:
+      subject:
+        collection: "[%{app_name}][%{collection_title}] Poklon za Vas od %{collection_title}"
+        no_collection: "[%{app_name}] Poklon za Vas"
     signup_notification:
       activate_your_account: Slijedite ovu poveznicu kako bi aktivirali svoj korisnički
         račun
