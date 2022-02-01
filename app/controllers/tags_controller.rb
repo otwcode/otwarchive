@@ -395,15 +395,15 @@ class TagsController < ApplicationController
 
   def tag_search_params
     params.require(:tag_search).permit(
-    :query,
-    :name,
-    :fandom_names,
-    :type,
-    :fandom_ids,
-    :canonical,
-    :created_at,
-    :uses,
-    :sort_column
+      :query,
+      :name,
+      :fandom_names,
+      :type,
+      :fandom_ids,
+      :canonical,
+      :created_at,
+      :uses,
+      :sort_column
     )
   end
 end
