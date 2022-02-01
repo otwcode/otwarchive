@@ -92,17 +92,25 @@ Then /^I should see a success message$/ do
   step %{I should see "success"}
 end
 
-# img attributes
-Then /^I should see the image "([^"]*)" text "([^"]*)"(?: within "([^"]*)")?$/ do |attribute, text, selector|
+def assure_xpath_present(tag, attribute, value, selector)
   with_scope(selector) do
-    page.should have_xpath("//img[@#{attribute}='#{text}']")
+    page.should have_xpath("//#{tag}[@#{attribute}='#{value}']")
   end
 end
 
-Then /^I should not see the image "([^"]*)" text "([^"]*)"(?: within "([^"]*)")?$/ do |attribute, text, selector|
+def assure_xpath_not_present(tag, attribute, value, selector)
   with_scope(selector) do
-    page.should_not have_xpath("//img[@#{attribute}='#{text}']")
+    page.should_not have_xpath("//#{tag}[@#{attribute}='#{value}']")
   end
+end
+
+# img attributes
+Then /^I should see the image "([^"]*)" text "([^"]*)"(?: within "([^"]*)")?$/ do |attribute, text, selector|
+  assure_xpath_present("img", attribute, text, selector)
+end
+
+Then /^I should not see the image "([^"]*)" text "([^"]*)"(?: within "([^"]*)")?$/ do |attribute, text, selector|
+  assure_xpath_not_present("img", attribute, text, selector)
 end
 
 Then /^"([^"]*)" should be selected within "([^"]*)"$/ do |value, field|
@@ -118,15 +126,11 @@ Then /^I should see "([^"]*)" in the "([^"]*)" input/ do |content, labeltext|
 end
 
 Then /^I should see (a|an) "([^"]*)" button(?: within "([^"]*)")?$/ do |_article, text, selector|
-  with_scope(selector) do
-    page.should have_xpath("//input[@value='#{text}']")
-  end
+  assure_xpath_present("input", "value", text, selector)
 end
 
 Then /^I should not see (a|an) "([^"]*)" button(?: within "([^"]*)")?$/ do |_article, text, selector|
-  with_scope(selector) do
-    page.should_not have_xpath("//input[@value='#{text}']")
-  end
+  assure_xpath_not_present("input", "value", text, selector)
 end
 
 When /^"([^\"]*)" is fixed$/ do |what|
@@ -155,12 +159,13 @@ Then /^the "([^"]*)" checkbox(?: within "([^"]*)")? should not be disabled$/ do 
   end
 end
 
-Then /^I should not see the field "([^"]*)"(?: within "([^"]*)")?$/ do |id, selector|
-  with_scope(selector) do
-    page.should_not have_xpath("//input[@#{id}='#{id}']")
-  end
+Then /^I should see the input with id "([^"]*)"(?: within "([^"]*)")?$/ do |id, selector|
+  assure_xpath_present("input", "id", id, selector)
 end
 
+Then /^I should not see the input with id "([^"]*)"(?: within "([^"]*)")?$/ do |id, selector|
+  assure_xpath_not_present("input", "id", id, selector)
+end
 
 When /^I check the (\d+)(?:st|nd|rd|th) checkbox with the value "([^"]*)"$/ do |index, value|
   check(page.all("input[type='checkbox']").select {|el| el['value'] == value}[(index.to_i-1)]['id'])

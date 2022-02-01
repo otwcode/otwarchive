@@ -57,7 +57,6 @@ Scenario: The recent chapter link in a work's blurb should show the adult
 content notice to visitors who are not logged in
 
   Given I am logged in as a random user
-    And an adult canonical rating exists with name: "Mature"
     And a canonical fandom "Canonical Fandom"
     And I post the 3 chapter work "WIP" with fandom "Canonical Fandom" with rating "Mature"
   When I am logged out
@@ -71,7 +70,6 @@ Scenario: The recent chapter link in a work's blurb should honor the logged-in
 user's "Show me adult content without checking" preference
 
   Given I am logged in as a random user
-    And an adult canonical rating exists with name: "Mature"
     And a canonical fandom "Canonical Fandom"
     And I post the 2 chapter work "WIP" with fandom "Canonical Fandom" with rating "Mature"
   When I am logged in as "adultuser"
@@ -118,3 +116,34 @@ chapter when the chapters are reordered.
   When I browse the "Canonical Fandom" works
     And I follow the recent chapter link for the work "My WIP"
   Then I should be on the 2nd chapter of the work "My WIP"
+
+  Scenario: Kudos link from from work browsing leads to full work page
+  Given the chaptered work with 2 chapters "Awesome Work"
+  When I am logged in as "reader"
+    And I go to the works page
+  Then I should not see "Kudos: 1" within the work blurb of "Awesome Work"
+  When I view the work "Awesome Work"
+    And I leave kudos on "Awesome Work"
+  Then I should see "reader left kudos on this work!"
+  When I am logged out
+    And the cache for the work "Awesome Work" is cleared
+    And I go to the works page
+  Then I should see "Kudos: 1" within the work blurb of "Awesome Work"
+  When I follow the kudos link for the work "Awesome Work"
+  Then I should be on the work "Awesome Work"
+    And I should see "reader left kudos on this work!"
+
+  Scenario: Comments link from from work browsing leads to full work page
+  Given the chaptered work with 2 chapters "Awesome Work"
+  When I am logged in as "reader"
+    And I go to the works page
+  Then I should not see "Comments: 1" within the work blurb of "Awesome Work"
+  When I post the comment "Bravo!" on the work "Awesome Work"
+  Then I should see "Bravo!"
+  When I am logged out
+    And the cache for the work "Awesome Work" is cleared
+    And I go to the works page
+  Then I should see "Comments: 1" within the work blurb of "Awesome Work"
+  When I follow the comments link for the work "Awesome Work"
+  Then I should be on the work "Awesome Work"
+    And I should see "Bravo!"

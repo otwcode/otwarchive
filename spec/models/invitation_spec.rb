@@ -78,5 +78,14 @@ describe Invitation, :ready do
         end
       end
     end
+
+    context "Sending an invitation to a valid email" do
+      let(:invite) { build(:invitation, invitee_email: "foo@example.com") }
+
+      it "succeeds and 'sent_at' is set" do
+        expect(invite.save).to be_truthy
+        expect(invite.reload.sent_at).not_to be_nil
+      end
+    end
   end
 end

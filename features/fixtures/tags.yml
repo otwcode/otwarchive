@@ -58,9 +58,11 @@ rating3:
   id: 13
   name: Mature
   type: Rating
+  adult: true
   canonical: true
 rating4:
   id: 14
   name: Explicit
   type: Rating
+  adult: true
   canonical: true

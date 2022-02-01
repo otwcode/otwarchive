@@ -75,7 +75,7 @@ describe InviteRequestsController do
       end
 
       it "assigns an IP address to the request" do
-        post :create, params: { invite_request: { email: generate(:email) } }        
+        post :create, params: { invite_request: { email: generate(:email) } }
         expect(assigns(:invite_request).ip_address).to eq(ip)
       end
     end
@@ -179,16 +179,45 @@ describe InviteRequestsController do
     end
 
     context "when logged in as admin" do
-      let!(:invite_request_1) { create(:invite_request, position: 9001) }
+      let(:ip) { "127.0.0.1" }
+      let(:ip_2) { "128.0.0.1" }
+      let!(:invite_request_1) { create(:invite_request, position: 9001, ip_address: ip_2) }
       let!(:invite_request_2) { create(:invite_request, position: 2) }
       let!(:invite_request_3) { create(:invite_request, position: 7) }
+      let!(:invite_request_4) do
+        create(
+          :invite_request,
+          position: 500,
+          email: "hello_world@gmail.com",
+          ip_address: ip
+        )
+      end
 
-      before { fake_login_admin(admin) }
+      before do
+        fake_login_admin(admin)
+      end
+
+      it "searches invitations by email" do
+        get :manage, params: { query: "hello_world" }
+        expect(response).to render_template("manage")
+        expect(assigns(:invite_requests)).to eq([invite_request_4])
+      end
+
+      it "searches invitations by ip" do
+        get :manage, params: { query: ip }
+        expect(response).to render_template("manage")
+        expect(assigns(:invite_requests)).to eq([invite_request_4])
+      end
 
       it "renders with invite requests in order" do
         get :manage
         expect(response).to render_template("manage")
-        expect(assigns(:invite_requests)).to eq([invite_request_2, invite_request_3, invite_request_1])
+        expect(assigns(:invite_requests)).to eq([
+          invite_request_2,
+          invite_request_3,
+          invite_request_4,
+          invite_request_1
+        ])
       end
     end
   end

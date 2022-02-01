@@ -166,6 +166,12 @@ Given(/^I coauthored the work "(.*?)" as "(.*?)" with "(.*?)"$/) do |title, logi
   work.creatorships.unapproved.each(&:accept!)
 end
 
+Given /^"(.*?)" has an empty series "(.*?)"$/ do |login, title|
+  series = Series.new(title: title)
+  series.creatorships.build(pseud: User.find_by(login: login).default_pseud)
+  series.save
+end
+
 Given "the user {string} is a protected user" do |login|
   user = User.find_by(login: login)
   user.roles = [Role.find_or_create_by(name: "protected_user")]

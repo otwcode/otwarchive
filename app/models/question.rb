@@ -2,6 +2,8 @@ class Question < ApplicationRecord
   acts_as_list
 
   translates :question, :content, :is_translated
+  translation_class.include(Globalized)
+
   skip_callback :save, :before, :update_sanitizer_version
   belongs_to :archive_faq
 

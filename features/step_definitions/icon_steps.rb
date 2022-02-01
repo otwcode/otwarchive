@@ -14,6 +14,9 @@ Given /^I have an icon uploaded$/ do
 end
 
 ### WHEN
+When "I attach an icon with the extension {string}" do |extension|
+  step %{I attach the file "features/fixtures/icon.#{extension}" to "icon"}
+end
 
 When /^I add an icon to the collection "([^"]*)"$/ do |title|
   step %{I am logged in as "moderator"}

@@ -5,6 +5,12 @@ Given /^mock websites with no content$/ do
   WebMock.stub_request(:head, "http://example.org/404").to_return(status: 404)
 end
 
+Given "all pages on the host {string} return status 200" do |url|
+  WebMock.disable_net_connect!
+  parsed_url = Addressable::URI.parse(url)
+  WebMock.stub_request(:any, %r[https?://#{parsed_url.host}.*]).to_return(status: 200)
+end
+
 Given /^I have a bookmark for "([^\"]*)"$/ do |title|
   step %{I start a new bookmark for "#{title}"}
   fill_in("bookmark_tag_string", with: DEFAULT_BOOKMARK_TAGS)
@@ -304,13 +310,22 @@ Given /^"(.*?)" has bookmarks of works in various languages$/ do |user|
   step %{all indexing jobs have been run}
 end
 
-When /^I bookmark the work "(.*?)"(?: as "(.*?)")?(?: with the note "(.*?)")?(?: with the tags "(.*?)")?$/ do |title, pseud, note, tags|
-  step %{I start a new bookmark for "#{title}"}
+def submit_bookmark_form(pseud, note, tags)
   select(pseud, from: "bookmark_pseud_id") unless pseud.nil?
   fill_in("bookmark_notes", with: note) unless note.nil?
   fill_in("bookmark_tag_string", with: tags) unless tags.nil?
   click_button("Create")
   step %{all indexing jobs have been run}
+end
+
+When /^I bookmark the work "(.*?)"(?: as "(.*?)")?(?: with the note "(.*?)")?(?: with the tags "(.*?)")?$/ do |title, pseud, note, tags|
+  step %{I start a new bookmark for "#{title}"}
+  submit_bookmark_form(pseud, note, tags)
+end
+
+When /^I bookmark the work "(.*?)"(?: as "(.*?)")?(?: with the note "(.*?)")?(?: with the tags "(.*?)")? from new bookmark page$/ do |title, pseud, note, tags|
+  step %{I go to the new bookmark page for work "#{title}"}
+  submit_bookmark_form(pseud, note, tags)
 end
 
 When /^I bookmark the series "([^\"]*)"$/ do |series_title|

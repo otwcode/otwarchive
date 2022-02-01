@@ -40,28 +40,9 @@ module CollectionsHelper
     collection.challenge.class.name.demodulize.tableize.singularize
   end
   
-  def show_collections_data(work)
-    collections = work.approved_collections
-    collections.collect {|coll| link_to coll.title, collection_path(coll)}.join(ArchiveConfig.DELIMITER_FOR_OUTPUT).html_safe
+  def show_collections_data(collections)
+    collections.collect { |coll| link_to coll.title, collection_path(coll) }.join(ArchiveConfig.DELIMITER_FOR_OUTPUT).html_safe
   end
-
-
-  # def collection_item_approval_radio_buttons(form, collection_item)
-  #   fieldname = @user ? :user_approval_status : :collection_approval_status
-  #   status = collection_item.send(fieldname)
-  #   content_tag(:li, 
-  #     (form.label fieldname do 
-  #       ts("Approve") +
-  #       form.radio_button fieldname, CollectionItem::APPROVED, checked: (status == CollectionItem::APPROVED)
-  #     end), 
-  #     class: "action status") + 
-  #   content_tag(:li, 
-  #     (form.label fieldname do
-  #       ts("Reject") +
-  #       form.radio_button fieldname, CollectionItem::REJECTED, checked: (status == CollectionItem::REJECTED)
-  #     end),
-  #     class: "action status")
-  # end
 
   def challenge_assignment_byline(assignment)
     if assignment.offer_signup && assignment.offer_signup.pseud

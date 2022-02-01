@@ -53,6 +53,11 @@ Given "{string} has bookmarked an external work" do |user|
   click_button("Create")
 end
 
+Given "the external work {string} has {int} {word} tag(s)" do |title, count, type|
+  work = ExternalWork.find_by(title: title)
+  work.send("#{type.pluralize}=", FactoryBot.create_list(type.to_sym, count))
+end
+
 When /^I view the external work "([^\"]*)"$/ do |external_work|
   external_work = ExternalWork.find_by_title(external_work)
   visit external_work_url(external_work)

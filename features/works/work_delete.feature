@@ -55,6 +55,8 @@ Feature: Delete Works
         | recipient      | recipient@example.org |
       And the user "coauthor" allows co-creators
       And the user "cosomeone" allows co-creators
+      And the user "giftee" allows gifts
+      And the user "recipient" allows gifts
       And I have a collection "Collection 1" with name "collection1"
       And I have a collection "Collection 2" with name "collection2"
       And I am logged in as "thorough"
@@ -191,3 +193,11 @@ Feature: Delete Works
     Then I should not see "All Something Breaks Loose"
       And I should see "This has been deleted, sorry!"
       And I should see "My thoughts on the work"
+
+  Scenario: A work with too many tags can be deleted
+    Given the user-defined tag limit is 2
+      And the work "Over the Limit"
+      And the work "Over the Limit" has 3 fandom tags
+    When I am logged in as the author of "Over the Limit"
+      And I delete the work "Over the Limit"
+    Then I should see "Your work Over the Limit was deleted."

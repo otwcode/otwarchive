@@ -22,36 +22,34 @@ class BookmarkIndexer < Indexer
 
   def self.mapping
     {
-      "bookmark" => {
-        "properties" => {
-          "bookmarkable_join" => {
-            "type" => "join",
-            "relations" => {
-              "bookmarkable" => "bookmark"
-            }
-          },
-          "title" => {
-            "type" => "text",
-            "analyzer" => "simple"
-          },
-          "creators" => {
-            "type" => "text",
-            "analyzer" => "simple"
-          },
-          "work_types" => {
-            "type" => "keyword"
-          },
-          "bookmarkable_type" => {
-            "type" => "keyword"
-          },
-          "bookmarker" => {
-            type: "text",
-            analyzer: "simple"
-          },
-          "tag" => {
-            "type" => "text",
-            "analyzer" => "simple"
+      properties: {
+        bookmarkable_join: {
+          type: "join",
+          relations: {
+            bookmarkable: "bookmark"
           }
+        },
+        title: {
+          type: "text",
+          analyzer: "simple"
+        },
+        creators: {
+          type: "text",
+          analyzer: "simple"
+        },
+        work_types: {
+          type: "keyword"
+        },
+        bookmarkable_type: {
+          type: "keyword"
+        },
+        bookmarker: {
+          type: "text",
+          analyzer: "simple"
+        },
+        tag: {
+          type: "text",
+          analyzer: "simple"
         }
       }
     }
@@ -65,7 +63,6 @@ class BookmarkIndexer < Indexer
     object = objects[id.to_i]
     {
       "_index" => index_name,
-      "_type" => document_type,
       "_id" => id,
       "routing" => parent_id(id, object)
     }
