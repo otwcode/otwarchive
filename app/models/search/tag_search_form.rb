@@ -42,7 +42,7 @@ class TagSearchForm
   def sort_options
     [
       %w[Name name],
-      %w[Date Created created_at],
+      %w[Date\ Created created_at],
       %w[Uses uses]
     ]
   end

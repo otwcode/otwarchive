@@ -42,5 +42,5 @@ Feature: Large searches
       And 1 tag is displayed per search page
     When I go to the search tags page
       And I choose "Freeform"
-      And I press "Search tags"
+      And I press "Search Tags"
     Then I should see "4 Found"
