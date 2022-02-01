@@ -41,6 +41,6 @@ Feature: Large searches
       And the max search result count is 2
       And 1 tag is displayed per search page
     When I go to the search tags page
-      And I select "Freeform"
+      And I choose "Freeform"
       And I press "Search tags"
     Then I should see "4 Found"
