@@ -8,7 +8,7 @@ module LoginMacros
   def fake_login_known_user(user)
     # The application expects users to have passed through the login form
     # and had the correct cookies set. We skip that in tests.
-    allow(controller).to receive(:logout_if_not_user_credentials)
+    allow_any_instance_of(ApplicationController).to receive(:logout_if_not_user_credentials).and_return(false)
 
     sign_in user, scope: :user
   end

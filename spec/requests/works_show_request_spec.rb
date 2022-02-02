@@ -1,6 +1,8 @@
 require "spec_helper"
 
 describe "Works#show" do
+  include LoginMacros
+
   let(:work) { create(:work) }
   let(:chapter) { work.chapters.first }
 
@@ -11,7 +13,8 @@ describe "Works#show" do
     end
 
     context "when logged in as an admin" do
-      before { sign_in create(:admin), scope: :admin }
+      let(:admin) { create(:admin) }
+      before { fake_login_admin(admin) }
 
       it "displays the unposted chapter" do
         get work_url(work)
@@ -22,10 +25,7 @@ describe "Works#show" do
     end
 
     context "when logged in as a random user" do
-      before do
-        allow_any_instance_of(ApplicationController).to receive(:logout_if_not_user_credentials).and_return(false)
-        sign_in create(:user), scope: :user
-      end
+      before { fake_login }
 
       it "displays the first posted chapter" do
         get work_url(work)
@@ -38,10 +38,7 @@ describe "Works#show" do
     context "when logged in as the work creator" do
       let(:user) { work.creatorships.first.pseud.user }
 
-      before do
-        allow_any_instance_of(ApplicationController).to receive(:logout_if_not_user_credentials).and_return(false)
-        sign_in user, scope: :user
-      end
+      before { fake_login_known_user(user) }
 
       it "displays the unposted chapter" do
         get work_url(work)
@@ -56,8 +53,7 @@ describe "Works#show" do
 
       before do
         work.creatorships.find_or_create_by(pseud: user.default_pseud, approved: false)
-        allow_any_instance_of(ApplicationController).to receive(:logout_if_not_user_credentials).and_return(false)
-        sign_in user, scope: :user
+        fake_login_known_user(user)
       end
 
       it "displays the unposted chapter" do
