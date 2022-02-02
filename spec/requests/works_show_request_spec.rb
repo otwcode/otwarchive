@@ -1,6 +1,5 @@
 require "spec_helper"
 
-
 describe "Works#show" do
   let(:work) { create(:work) }
   let(:chapter) { work.chapters.first }
