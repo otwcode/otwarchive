@@ -14,6 +14,7 @@ describe "Works#show" do
 
     context "when logged in as an admin" do
       let(:admin) { create(:admin) }
+
       before { fake_login_admin(admin) }
 
       it "displays the unposted chapter" do
