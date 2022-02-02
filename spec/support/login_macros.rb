@@ -10,12 +10,10 @@ module LoginMacros
     # and had the correct cookies set. We skip that in tests.
     allow(controller).to receive(:logout_if_not_user_credentials)
 
-    @request.env["devise.mapping"] = Devise.mappings[:user]
     sign_in user, scope: :user
   end
 
   def fake_login_admin(admin)
-    @request.env["devise.mapping"] = Devise.mappings[:admin]
     sign_in admin, scope: :admin
   end
 
