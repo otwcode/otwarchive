@@ -874,33 +874,6 @@ namespace :After do
     puts("Added default rating to works: #{updated_works}") && STDOUT.flush
   end
 
-  desc "Reset blurb date (revised_at) on backdated works"
-  task(reset_revised_at_on_backdated_works: :environment) do
-    # Fix all backdated works, as well as works with an arbitrary revised_at set
-    # in the past (possibly because of AO3-6187). Skip works failing validations.
-    works = Work.where("backdate OR revised_at < created_at")
-    work_count = works.count
-    total_batches = (work_count + 999) / 1000
-    puts("Checking #{work_count} works in #{total_batches} batches") && STDOUT.flush
-
-    invalid_work_ids = []
-    works.find_in_batches.with_index do |batch, index|
-      batch_number = index + 1
-
-      batch.each do |work|
-        work.revised_at = nil
-        invalid_work_ids << work.id unless work.save
-      end
-      puts("Batch #{batch_number} of #{total_batches} complete") && STDOUT.flush
-    end
-
-    unless invalid_work_ids.empty?
-      puts "The following #{invalid_work_ids.size} work(s) failed validations and could not be saved:"
-      puts invalid_work_ids.join(", ")
-      STDOUT.flush
-    end
-  end
-
   # This is the end that you have to put new tasks above.
 end
 
