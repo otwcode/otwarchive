@@ -784,11 +784,11 @@ class WorksController < ApplicationController
   end
 
   def load_first_chapter
-    if @work.user_is_owner_or_invited?(current_user) || logged_in_as_admin?
-      @chapter = @work.first_chapter
-    else
-      @chapter = @work.chapters.in_order.posted.first
-    end
+    @chapter = if @work.user_is_owner_or_invited?(current_user) || logged_in_as_admin?
+                 @work.first_chapter
+               else
+                 @work.chapters.in_order.posted.first
+               end
   end
 
   # Check whether we should display :new or :edit instead of previewing or
