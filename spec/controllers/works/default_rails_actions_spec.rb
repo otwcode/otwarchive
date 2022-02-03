@@ -513,13 +513,6 @@ describe WorksController, work_search: true do
       let(:update_work) { create(:work, authors: [update_user.default_pseud]) }
       let(:update_chapter) { update_work.first_chapter }
 
-      before do
-        # These are on the same day in UTC, but in the time zone set by
-        # Rails, they are on different days:
-        update_work.update_column(:revised_at, Time.utc(2022, 1, 1, 3))
-        update_chapter.update_column(:published_at, Date.new(2022, 1, 1))
-      end
-
       let(:attributes) do
         {
           backdate: "1",
@@ -527,6 +520,13 @@ describe WorksController, work_search: true do
             published_at: "2021-09-01"
           }
         }
+      end
+
+      before do
+        # These are on the same day in UTC, but in the time zone set by
+        # Rails, they are on different days:
+        update_work.update_column(:revised_at, Time.utc(2022, 1, 1, 3))
+        update_chapter.update_column(:published_at, Date.new(2022, 1, 1))
       end
 
       it "can be backdated" do
