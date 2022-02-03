@@ -509,6 +509,34 @@ describe WorksController, work_search: true do
       expect(update_work.user_has_creator_invite?(no_co_creator)).to be_falsey
     end
 
+    context "when the work has broken dates" do
+      let(:update_work) { create(:work, authors: [update_user.default_pseud]) }
+      let(:update_chapter) { update_work.first_chapter }
+
+      before do
+        # These are on the same day in UTC, but in the time zone set by
+        # Rails, they are on different days:
+        update_work.update_column(:revised_at, Time.utc(2022, 1, 1, 3))
+        update_chapter.update_column(:published_at, Date.new(2022, 1, 1))
+      end
+
+      let(:attributes) do
+        {
+          backdate: "1",
+          chapter_attributes: {
+            published_at: "2021-09-01"
+          }
+        }
+      end
+
+      it "can be backdated" do
+        put :update, params: { id: update_work.id, work: attributes }
+
+        expect(update_chapter.reload.published_at).to eq(Date.new(2021, 9, 1))
+        expect(update_work.reload.revised_at).to eq(Time.utc(2021, 9, 1, 12)) # noon UTC
+      end
+    end
+
     # If the time zone in config/application.rb is changed to something other
     # than "Eastern Time (US & Canada)", these tests will need adjusting:
     context "when redating to the present" do
