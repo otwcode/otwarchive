@@ -241,9 +241,9 @@ module ApplicationHelper
         direction = options[:desc_default] ? 'DESC' : 'ASC'
       end
       link_to_unless condition, ((direction == 'ASC' ? '&#8593;&#160;' : '&#8595;&#160;') + title).html_safe,
-          request.parameters.merge( {sort_column: column, sort_direction: direction} ), {class: css_class, title: (direction == 'ASC' ? ts('sort up') : ts('sort down'))}
+          current_path_with(sort_column: column, sort_direction: direction), {class: css_class, title: (direction == 'ASC' ? ts('sort up') : ts('sort down'))}
     else
-      link_to_unless params[:sort_column].nil?, title, url_for(params.merge sort_column: nil, sort_direction: nil)
+      link_to_unless params[:sort_column].nil?, title, current_path_with(sort_column: nil, sort_direction: nil)
     end
   end
 
@@ -605,6 +605,49 @@ module ApplicationHelper
       creation_id = creation_id_for_css_classes(creation)
       creator_ids = creator_ids_for_css_classes(creation).join(" ")
       "blurb group #{creation_id} #{creator_ids}".strip
+    end
+  end
+
+  # Returns the current path, with some modified parameters. Modeled after
+  # WillPaginate::ActionView::LinkRenderer to try to prevent any additional
+  # security risks.
+  def current_path_with(**kwargs)
+    # Only throw in the query params if this is a GET request, because POST and
+    # such don't pass their params in the URL.
+    path_params = if request.get? || request.head?
+                    permit_all_except(params, [:script_name, :original_script_name])
+                  else
+                    {}
+                  end
+
+    path_params.deep_merge!(kwargs)
+    path_params[:only_path] = true # prevent shenanigans
+
+    url_for(path_params)
+  end
+
+  # Creates a new hash with all keys except those marked as blocked.
+  #
+  # This is a bit of a hack, but without this we'd have to either (a) make a
+  # list of all permitted params each time current_path_with is called, or (b)
+  # call params.permit! and effectively disable strong parameters for any code
+  # called after current_path_with.
+  def permit_all_except(params, blocked_keys)
+    if params.respond_to?(:each_pair)
+      {}.tap do |result|
+        params.each_pair do |key, value|
+          key = key.to_sym
+          next if blocked_keys.include?(key)
+
+          result[key] = permit_all_except(value, blocked_keys)
+        end
+      end
+    elsif params.respond_to?(:map)
+      params.map do |entry|
+        permit_all_except(entry, blocked_keys)
+      end
+    else # not a hash or an array, just a flat value
+      params
     end
   end
 end # end of ApplicationHelper
