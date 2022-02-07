@@ -126,6 +126,8 @@ gem 'connection_pool'
 gem 'dalli'
 gem 'kgio', '2.10.0'
 
+gem 'mimemagic', '0.3.10'
+
 group :test do
   gem 'rspec-rails', '~> 4.0.1'
   gem 'pickle'

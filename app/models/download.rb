@@ -1,4 +1,5 @@
 class Download
+  require 'mimemagic'
   attr_reader :work, :file_type, :mime_type
 
   def initialize(work, options = {})
