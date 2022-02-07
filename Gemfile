@@ -126,7 +126,7 @@ gem 'kgio', '2.10.0'
 gem "mimemagic", "0.3.10"
 
 group :test do
-  gem 'rspec-rails', '~> 4.0.1'
+  gem "rspec-rails", "~> 4.0.1"
   gem 'pickle'
   gem 'shoulda'
   gem 'capybara', '~> 2.16.1'
