@@ -3,6 +3,10 @@ phrase:
   file_format: yml
   push:
     sources:
+      # controllers
+      - file: ./config/locales/controllers/en.yml
+        params:
+          update_translations: true
       # devise
       - file: ./config/locales/devise/en.yml
         params:
@@ -64,6 +68,9 @@ phrase:
       - file: ./config/locales/phrase-exports/fi.yml
         params:
           locale_id: fi
+      - file: ./config/locales/phrase-exports/fil.yml
+        params:
+          locale_id: fil
       - file: ./config/locales/phrase-exports/fr.yml
         params:
           locale_id: fr
@@ -88,12 +95,12 @@ phrase:
       - file: ./config/locales/phrase-exports/ja.yml
         params:
           locale_id: ja
-      - file: ./config/locales/phrase-exports/ka.yml
-        params:
-          locale_id: ka
       - file: ./config/locales/phrase-exports/ko.yml
         params:
           locale_id: ko
+      - file: ./config/locales/phrase-exports/ky.yml
+        params:
+          locale_id: ky
       - file: ./config/locales/phrase-exports/lt.yml
         params:
           locale_id: lt
@@ -103,9 +110,9 @@ phrase:
       - file: ./config/locales/phrase-exports/mk.yml
         params:
           locale_id: mk
-      - file: ./config/locales/phrase-exports/mr-IN.yml
+      - file: ./config/locales/phrase-exports/mr.yml
         params:
-          locale_id: mr-IN
+          locale_id: mr
       - file: ./config/locales/phrase-exports/ms.yml
         params:
           locale_id: ms
@@ -145,9 +152,6 @@ phrase:
       - file: ./config/locales/phrase-exports/th.yml
         params:
           locale_id: th
-      - file: ./config/locales/phrase-exports/tl.yml
-        params:
-          locale_id: tl
       - file: ./config/locales/phrase-exports/tr.yml
         params:
           locale_id: tr

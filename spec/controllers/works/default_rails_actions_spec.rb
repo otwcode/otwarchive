@@ -508,6 +508,58 @@ describe WorksController, work_search: true do
       expect(update_work.pseuds.reload).not_to include(no_co_creator.default_pseud)
       expect(update_work.user_has_creator_invite?(no_co_creator)).to be_falsey
     end
+
+    # If the time zone in config/application.rb is changed to something other
+    # than "Eastern Time (US & Canada)", these tests will need adjusting:
+    context "when redating to the present" do
+      let!(:update_work) do
+        # November 30, 2 PM UTC -- no time zone oddities here
+        travel_to(Time.utc(2021, 11, 30, 14)) do
+          create(:work, authors: [update_user.default_pseud])
+        end
+      end
+
+      let(:attributes) do
+        {
+          backdate: "1",
+          chapter_attributes: {
+            published_at: "2021-12-05"
+          }
+        }
+      end
+
+      before do
+        travel_to(redate_time)
+
+        # Simulate the system time being UTC:
+        allow(Time).to receive(:now).and_return(redate_time)
+        allow(DateTime).to receive(:now).and_return(redate_time)
+        allow(Date).to receive(:today).and_return(redate_time.to_date)
+
+        put :update, params: { id: update_work.id, work: attributes }
+      end
+
+      context "between midnight Eastern and midnight UTC" do
+        # December 5, 3 AM UTC -- still December 4 in Eastern Time
+        let(:redate_time) { Time.utc(2021, 12, 5, 3) }
+
+        it "prevents setting the publication date to the future" do
+          expect(response).to render_template :edit
+          expect(assigns[:work].errors.full_messages).to \
+            include("Publication date can't be in the future.")
+        end
+      end
+
+      context "before noon UTC" do
+        # December 5, 6 AM UTC -- before noon, but after midnight in both time zones
+        let(:redate_time) { Time.utc(2021, 12, 5, 6) }
+
+        it "doesn't set revised_at to the future" do
+          update_work.reload
+          expect(update_work.revised_at).to be <= Time.current
+        end
+      end
+    end
   end
 
   describe "collected" do

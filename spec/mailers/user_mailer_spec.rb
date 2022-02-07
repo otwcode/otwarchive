@@ -1,6 +1,114 @@
 require "spec_helper"
 
 describe UserMailer do
+  describe "creatorship_request" do
+    subject(:email) { UserMailer.creatorship_request(work_creatorship.id, author.id).deliver }
+
+    let(:author) { create(:user) }
+    let(:second_author) { create(:user) }
+    let(:work) { create(:work, authors: [author.default_pseud, second_author.default_pseud]) }
+    let(:work_creatorship) { Creatorship.find_by(creation_id: work.id, pseud_id: second_author.default_pseud.id) }
+
+    # Test the headers
+    it_behaves_like "an email with a valid sender"
+
+    it "has the correct subject line" do
+      subject = "[#{ArchiveConfig.APP_SHORT_NAME}] Co-creator request"
+      expect(email).to have_subject(subject)
+    end
+
+    # Test both body contents
+    it_behaves_like "a multipart email"
+
+    it_behaves_like "a translated email"
+
+    describe "HTML version" do
+      it "has the correct content" do
+        expect(email).to have_html_part_content("to be listed as a co-creator")
+        expect(email).to have_html_part_content(" page.")
+      end
+    end
+
+    describe "text version" do
+      it "has the correct content" do
+        expect(email).to have_text_part_content("to be listed as a co-creator")
+        expect(email).to have_text_part_content("You can accept or reject this request on your Co-Creator Requests page:")
+      end
+    end
+  end
+
+  describe "creatorship_notification" do
+    subject(:email) { UserMailer.creatorship_notification(work_creatorship.id, author.id).deliver }
+
+    let(:author) { create(:user) }
+    let(:second_author) { create(:user) }
+    let(:work) { create(:work, authors: [author.default_pseud, second_author.default_pseud]) }
+    let(:work_creatorship) { Creatorship.find_by(creation_id: work.id, pseud_id: second_author.default_pseud.id) }
+
+    # Test the headers
+    it_behaves_like "an email with a valid sender"
+
+    it "has the correct subject line" do
+      subject = "[#{ArchiveConfig.APP_SHORT_NAME}] Co-creator notification"
+      expect(email).to have_subject(subject)
+    end
+
+    # Test both body contents
+    it_behaves_like "a multipart email"
+
+    it_behaves_like "a translated email"
+
+    describe "HTML version" do
+      it "has the correct content" do
+        expect(email).to have_html_part_content("to be listed as a creator")
+        expect(email).to have_html_part_content("remove yourself as creator.")
+      end
+    end
+
+    describe "text version" do
+      it "has the correct content" do
+        expect(email).to have_text_part_content("to be listed as a creator")
+        expect(email).to have_text_part_content("remove yourself as creator:")
+      end
+    end
+  end
+
+  describe "creatorship_notification_archivist" do
+    subject(:email) { UserMailer.creatorship_notification_archivist(work_creatorship.id, author.id).deliver }
+
+    let(:author) { create(:user) }
+    let(:second_author) { create(:user) }
+    let(:work) { create(:work, authors: [author.default_pseud, second_author.default_pseud]) }
+    let(:work_creatorship) { Creatorship.find_by(creation_id: work.id, pseud_id: second_author.default_pseud.id) }
+
+    # Test the headers
+    it_behaves_like "an email with a valid sender"
+
+    it "has the correct subject line" do
+      subject = "[#{ArchiveConfig.APP_SHORT_NAME}] Archivist co-creator notification"
+      expect(email).to have_subject(subject)
+    end
+
+    # Test both body contents
+    it_behaves_like "a multipart email"
+
+    it_behaves_like "a translated email"
+
+    describe "HTML version" do
+      it "has the correct content" do
+        expect(email).to have_html_part_content("to be listed as a creator")
+        expect(email).to have_html_part_content("remove yourself as creator.")
+      end
+    end
+
+    describe "text version" do
+      it "has the correct content" do
+        expect(email).to have_text_part_content("to be listed as a creator")
+        expect(email).to have_text_part_content("remove yourself as creator:")
+      end
+    end
+  end
+
   describe "claim_notification" do
     title = "Façade"
     title2 = Faker::Book.title
@@ -297,7 +405,7 @@ describe UserMailer do
     it_behaves_like "an email with a valid sender"
 
     it "has the correct subject line" do
-      subject = "[#{ArchiveConfig.APP_SHORT_NAME}] Confirmation"
+      subject = "[#{ArchiveConfig.APP_SHORT_NAME}] Activate your account"
       expect(email).to have_subject(subject)
     end
 
@@ -831,6 +939,73 @@ describe UserMailer do
       it "has the correct content" do
         expect(email).to have_text_part_content("your collection \"#{collection.title}\"")
         expect(email).to have_text_part_content(message_text)
+      end
+    end
+  end
+
+  describe "prompter_notification" do
+    context "when collection is present" do
+      subject(:email) { UserMailer.prompter_notification(work.id, collection.id) }
+
+      let(:collection) { create(:collection) }
+      let(:claim) { create(:challenge_claim, request_signup: create(:prompt_meme_signup)) }
+      let(:work) { create(:work, challenge_claims: [claim]) }
+
+      # Test the headers
+      it_behaves_like "an email with a valid sender"
+
+      it "has the correct subject line" do
+        subject = "[#{ArchiveConfig.APP_SHORT_NAME}] A response to your prompt"
+        expect(email).to have_subject(subject)
+      end
+
+      # Test both body contents
+      it_behaves_like "a multipart email"
+
+      describe "HTML version" do
+        it "has the correct content" do
+          expect(email).to have_html_part_content("A response to your prompt")
+          expect(email).to have_html_part_content("#{collection.title}</a>")
+        end
+      end
+
+      describe "text version" do
+        it "has the correct content" do
+          expect(email).to have_text_part_content("A response to your prompt")
+          expect(email).to have_text_part_content("\"#{collection.title}\" collection (#{collection_url(collection)})")
+        end
+      end
+    end
+
+    context "when no collection is present" do
+      subject(:email) { UserMailer.prompter_notification(work.id) }
+
+      let(:claim) { create(:challenge_claim, request_signup: create(:prompt_meme_signup)) }
+      let(:work) { create(:work, challenge_claims: [claim]) }
+
+      # Test the headers
+      it_behaves_like "an email with a valid sender"
+
+      it "has the correct subject line" do
+        subject = "[#{ArchiveConfig.APP_SHORT_NAME}] A response to your prompt"
+        expect(email).to have_subject(subject)
+      end
+
+      # Test both body contents
+      it_behaves_like "a multipart email"
+
+      describe "HTML version" do
+        it "has the correct content" do
+          expect(email).to have_html_part_content("posted at the Archive")
+          expect(email).not_to have_html_part_content("collection")
+        end
+      end
+
+      describe "text version" do
+        it "has the correct content" do
+          expect(email).to have_text_part_content("posted at the Archive")
+          expect(email).not_to have_text_part_content("collection")
+        end
       end
     end
   end

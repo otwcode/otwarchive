@@ -1,9 +1,6 @@
 <!--page description, messages-->
 <% if @work.unrevealed? %>
-  <p class="notice">
-    <%= ts("This work is part of an ongoing challenge and will be revealed soon! You can find details here: ") %>
-    <%= @work.collections.unrevealed.collect {|challenge| link_to(challenge.title, collection_path(challenge))}.join(", ").html_safe %>
-  </p>
+  <%= render "works/work_unrevealed_notice" %>
 <% end %>
 <% if @work.user_has_creator_invite?(current_user) %>
   <p class="notice">
@@ -19,7 +16,7 @@
 <% end %>
 <!--/subnav-->
 
-<% if !@work.unrevealed? || logged_in_as_admin? || @work.user_is_owner_or_invited?(current_user) || can_see_work(@work, current_user) %>
+<% if !@work.unrevealed? || logged_in_as_admin? || can_access_unrevealed_work(@work, current_user) %>
   <!-- BEGIN work -->
   <div class="work"><p class="landmark"><a name="top">&nbsp;</a></p>
     <%= render :partial => 'works/work_header' %>

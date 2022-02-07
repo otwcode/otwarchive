@@ -81,10 +81,13 @@ module ChallengeCore
     def override_datetime_setters
       %w(signups_open_at signups_close_at assignments_due_at works_reveal_at authors_reveal_at).each do |datetime_attr|
         define_method("#{datetime_attr}_string") do
-          self.send(datetime_attr).try(:strftime, ArchiveConfig.DEFAULT_DATETIME_FORMAT)
+          return unless (datetime = self[datetime_attr])
+
+          datetime.in_time_zone(time_zone.presence || Time.zone).strftime(ArchiveConfig.DEFAULT_DATETIME_FORMAT)
         end
+
         define_method("#{datetime_attr}_string=") do |datetimestring|
-          self.send("#{datetime_attr}=", Timeliness.parse(datetimestring, zone: (self.time_zone || Time.zone)))
+          self[datetime_attr] = Timeliness.parse(datetimestring, zone: (time_zone.presence || Time.zone))
         end
       end
     end

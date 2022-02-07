@@ -64,7 +64,8 @@ Feature: Nominating and reviewing nominations for a tag set
   Then I should see "Not Yet Reviewed (may be edited or deleted)"
     And I should see "Floobry"
   When I follow "Edit"
-    And I fill in "tag_set_nomination_fandom_nominations_attributes_0_tagname" with "Bloob"
+  Then I should see the input with id "tag_set_nomination_fandom_nominations_attributes_0_tagname" within "div#main"
+  When I fill in "tag_set_nomination_fandom_nominations_attributes_0_tagname" with "Bloob"
   When I press "Submit"
   Then I should see "Your nominations were successfully updated"
   Given I am logged in as "tagsetter"
@@ -79,7 +80,7 @@ Feature: Nominating and reviewing nominations for a tag set
     And I follow "My Nominations"
   Then I should see "Partially Reviewed (unreviewed nominations may be edited)"
   When I follow "Edit"
-  Then I should not see the field "tag_set_nomination_fandom_nominations_attributes_0_tagname" within "div#main"
+  Then I should not see the input with id "tag_set_nomination_fandom_nominations_attributes_0_tagname" within "div#main"
 
   Scenario: You should be able to edit your nominated characters when the tagset doesn't allow fandom nominations
   Given I am logged in as "tagsetter"

@@ -12,7 +12,10 @@ class Pseud < ApplicationRecord
     bucket: %w(staging production).include?(Rails.env) ? YAML.load_file("#{Rails.root}/config/s3.yml")['bucket'] : "",
     default_url: "/images/skins/iconsets/default/icon_user.png"
 
-  validates_attachment_content_type :icon, content_type: /image\/\S+/, allow_nil: true
+  validates_attachment_content_type :icon,
+                                    content_type: %w[image/gif image/jpeg image/png],
+                                    allow_nil: true
+
   validates_attachment_size :icon, less_than: 500.kilobytes, allow_nil: true
 
   NAME_LENGTH_MIN = 1

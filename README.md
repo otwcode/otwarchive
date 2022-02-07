@@ -20,6 +20,10 @@ We welcome pull requests for bugs described in our issue tracker. Please see our
 * [Developer Documentation](https://github.com/otwcode/otwarchive/wiki)
 * [Commit Policy](https://github.com/otwcode/otwarchive/wiki/Commit-policy)
 
+API
+----------
+There is currently no API for the OTW-Archive software. While it is something we're considering for the future, we ask that contributors instead focus on issues already in our [Jira issue tracker](https://otwarchive.atlassian.net/).
+
 License and Acknowledgments
 ----------
 The Archive code is licensed under [GPL](https://www.gnu.org/licenses/gpl-2.0.html) by the [Organization for Transformative Works](https://www.transformativeworks.org/).

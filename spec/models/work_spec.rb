@@ -378,34 +378,34 @@ describe Work do
     end
   end
 
-  describe "new recipients virtual attribute"  do
+  describe "new gifts virtual attribute" do
+    let(:recipient1) { create(:user).pseuds.first.name }
+    let(:recipient2) { create(:user).pseuds.first.name }
+    let(:recipient3) { create(:user).pseuds.first.name }
 
-    before(:each) do
-      @recipient1 = create(:user)
-      @recipient2 = create(:user)
-      @recipient3 = create(:user)
+    let(:work) { build(:work) }
 
-      @work = build(:work)
-      @work.recipients = @recipient1.pseuds.first.name + "," + @recipient2.pseuds.first.name
+    before do
+      work.recipients = recipient1 + "," + recipient2
     end
 
-    it "should be the same as recipients when they are first added" do
-      expect(@work.new_recipients).to eq(@work.recipients)
+    it "contains gifts for the same recipients when they are first added" do
+      expect(work.new_gifts.collect(&:recipient)).to eq([recipient1, recipient2])
     end
 
-    it "should only contain the new recipient if replacing the previous recipient" do
-      @work.recipients = @recipient3.pseuds.first.name
-      expect(@work.new_recipients).to eq(@recipient3.pseuds.first.name)
+    it "only contains a gift for the new recipient if replacing the previous recipients" do
+      work.recipients = recipient3
+      expect(work.new_gifts.collect(&:recipient)).to eq([recipient3])
     end
 
-    it "simple assignment should work" do
-      @work.recipients = @recipient2.pseuds.first.name
-      expect(@work.new_recipients).to eq(@recipient2.pseuds.first.name)
+    it "simple assignment works" do
+      work.recipients = recipient2
+      expect(work.new_gifts.collect(&:recipient)).to eq([recipient2])
     end
 
-    it "recipients should be unique" do
-      @work.recipients = @recipient2.pseuds.first.name + "," + @recipient2.pseuds.first.name
-      expect(@work.new_recipients).to eq(@recipient2.pseuds.first.name)
+    it "only contains one gift if the same recipient is entered twice" do
+      work.recipients = recipient2 + "," + recipient2
+      expect(work.new_gifts.collect(&:recipient)).to eq([recipient2])
     end
   end
 

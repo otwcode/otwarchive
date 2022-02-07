@@ -35,7 +35,7 @@ Otwarchive::Application.configure do
   # config.logger = SyslogLogger.new
 
   # Use a different cache store in production
-  config.cache_store = :mem_cache_store, local_config["MEMCACHED_SERVERS"],
+  config.cache_store = :mem_cache_store, ArchiveConfig.MEMCACHED_SERVERS,
                        { namespace: "ao3-v1", compress: true, pool_size: 5 }
 
   # Disable Rails's static asset server
@@ -50,10 +50,6 @@ Otwarchive::Application.configure do
 
   # Enable threaded mode
   # config.threadsafe!
-
-  # Enable locale fallbacks for I18n (makes lookups for any locale fall back to
-  # the I18n.default_locale when a translation can not be found)
-  config.i18n.fallbacks = true
 
   # Send deprecation notices to registered listeners
   config.active_support.deprecation = :notify

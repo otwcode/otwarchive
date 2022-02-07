@@ -39,6 +39,8 @@ PERFORM_DELIVERIES: false
 SMTP_SERVER: localhost
 SMTP_PORT: 25
 SMTP_DOMAIN: localhost
+SMTP_OPENSSL_VERIFY_MODE: none
+SMTP_ENABLE_STARTTLS_AUTO: false
 # if required for email authentication
 #SMTP_USER:
 #SMTP_PASSWORD:
@@ -55,7 +57,7 @@ OTWLOGO: 'OTWLogo.png'
 OTWALT_LOGO: 'OTW Logo:closing the circle of the copyright symbol, it symbolizes our creative engagement with media: participating and not just consuming.'
 REVISION: ''
 ES_URL: 'http://127.0.0.1:9400'
-MEMCACHED_URL: '127.0.0.1'
+MEMCACHED_SERVERS: '127.0.0.1:11211'
 
 # tag settings
 DELIMITER_FOR_INPUT: ','  # if you change this, you will need to change
@@ -387,9 +389,6 @@ ORPHANING_ALLOWED: true
 # Create subfolders for each supported language
 # (eg, /help/fr/ contains the French versions of the help)
 HELP_DIRECTORY: '/help'
-
-# only use if you are running your app completely in a subfolder of your domain
-#PRODUCTION_URL_ROOT: "/archive"
 
 # production caching
 #PRODUCTION_CACHE: "memory"

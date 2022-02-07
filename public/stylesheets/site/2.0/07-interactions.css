@@ -178,13 +178,14 @@ We only use error messages for LiveValidation. Style spoofs the system error mes
 .LV_validation_message {
   font-weight: 900;
   position: absolute;
+  margin-top: 0.643em;
+  margin-right: 15em;
 }
 
 .LV_invalid {
   background: #efd1d1;
   border: 1px solid #900;
   color: #900;
-  margin: 0.643em auto;
   padding: 0.25em 0.375em;
     box-shadow: 1px 1px 2px;
     border-radius: 0.25em;

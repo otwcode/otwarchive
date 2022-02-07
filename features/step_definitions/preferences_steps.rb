@@ -18,6 +18,20 @@ Given(/^the user "(.*?)" allows co-creators$/) do |login|
   user.preference.save
 end
 
+Given "the user {string} disallows gifts" do |login|
+  user = User.where(login: login).first
+  user = find_or_create_new_user(login, DEFAULT_PASSWORD) if user.nil?
+  user.preference.allow_gifts = false
+  user.preference.save
+end
+
+Given "the user {string} allows gifts" do |login|
+  user = User.where(login: login).first
+  user = find_or_create_new_user(login, DEFAULT_PASSWORD) if user.nil?
+  user.preference.allow_gifts = true
+  user.preference.save
+end
+
 When /^I set my preferences to turn off notification emails for comments$/ do
   user = User.current_user
   user.preference.comment_emails_off = true
