@@ -116,10 +116,7 @@ jobs:
         run: ./script/gh-actions/configure_database.sh
 
       - name: Make database
-        run: bundle exec rake db:create db:schema:load
-
-      - name: Migrate database
-        run: bundle exec rake db:migrate
+        run: bundle exec rake db:create db:schema:load db:migrate
 
       - name: Run test group
         run: bundle exec ${{ matrix.tests.command }}
