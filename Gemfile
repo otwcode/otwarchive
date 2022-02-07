@@ -57,7 +57,7 @@ gem 'sanitize', '>= 4.6.5'
 # Until there is a working solution to
 # https://otwarchive.atlassian.net/browse/AO3-4957
 # https://github.com/rubys/nokogumbo/issues/50
-gem 'nokogumbo', '1.4.9'
+gem 'nokogumbo', '~> 1.4.9'
 gem "rest-client", "~> 2.1.0", require: "rest_client"
 gem 'resque', '>=1.14.0'
 gem 'resque-scheduler'
