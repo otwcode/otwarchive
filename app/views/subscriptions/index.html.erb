@@ -38,20 +38,24 @@
 <dl class="subscription index group">
   <% @subscriptions.each do |subscription| %>
     <dt>
-      <%= link_to(subscription.name, subscription.subscribable) %>
+      <% if subscription.subscribable.nil? %>
+      <%= t(".deleted") %>
+      <% else %>
+        <%= link_to(subscription.name, subscription.subscribable) %>
+      <% end %>
       <% if params[:type].blank? && subscription.subscribable_type == "Work" %>
-        <%= ts('(Work)') %>
+        <%= t(".work") %>
       <% end %>
       <% if params[:type].blank? && subscription.subscribable_type == "Series" %>
-        <%= ts('(Series)') %>
+        <%= t(".series") %>
       <% end %>
-      <% unless subscription.subscribable_type == "User" %>
-        <%= ts('by %{creators}', :creators => byline(subscription.subscribable)).html_safe %>
+      <% unless subscription.subscribable.nil? || subscription.subscribable_type == "User" %>
+        <%= t(".byline", :creators => byline(subscription.subscribable)).html_safe %>
       <% end %>
     </dt>
     <dd>
       <%= form_for [current_user, subscription], :html => {:method => :delete} do |f| %>
-        <%= f.submit ts('Unsubscribe from %{name}', :name => subscription.name).html_safe %>
+        <%= f.submit t(".unsubscribe", :name => subscription.name).html_safe %>
       <% end %>
     </dd>
   <% end %>

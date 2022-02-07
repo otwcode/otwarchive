@@ -301,3 +301,10 @@ en:
           label: Link to the page you are reporting (required)
           error: Please enter the link to the page you are reporting.
           description: If you came here from the abuse link at the bottom of the page, this will be filled in for you.
+  subscriptions:
+    index:
+      byline: "by %{creators}"
+      deleted: "DELETED"
+      series: "(Series)"
+      work: "(Work)"
+      unsubscribe: "Unsubscribe from %{name}"
