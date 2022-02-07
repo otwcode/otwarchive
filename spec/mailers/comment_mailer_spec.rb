@@ -8,7 +8,7 @@ describe CommentMailer do
     it "tries to send the email 3 times, then fails silently" do
       comment.delete
 
-      assert_performed_jobs 3, only: ApplicationMailerJob do
+      assert_performed_jobs 3, only: ActionMailer::MailDeliveryJob do
         subject.deliver_later
       end
     end
