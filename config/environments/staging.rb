@@ -1,9 +1,7 @@
 Otwarchive::Application.configure do
   # Settings specified here will take precedence over those in config/environment.rb
 
-  local_config = YAML.load_file(Rails.root.join("config/local.yml"))
-
-  config.hosts = local_config["PERMITTED_HOSTS"]
+  config.hosts = ArchiveConfig.PERMITTED_HOSTS
 
   # The production environment is meant for finished, "live" apps.
   # Code is not reloaded between requests
