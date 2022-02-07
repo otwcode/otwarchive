@@ -547,7 +547,7 @@ class Work < ApplicationRecord
   # provide an interface to increment major version number
   # resets minor_version to 0
   def update_major_version
-    self.update({major_version: self.major_version+1, minor_version: 0})
+    self.update({ major_version: self.major_version + 1, minor_version: 0 })
   end
 
   # provide an interface to increment minor version number
