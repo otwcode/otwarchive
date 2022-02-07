@@ -1,5 +1,5 @@
 class ApplicationMailer < ActionMailer::Base
-  self.delivery_job = ActionMailer::MailDeliveryJob
+  self.delivery_job = ApplicationMailerJob
 
   layout "mailer"
   helper :mailer
