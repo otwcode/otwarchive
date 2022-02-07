@@ -65,12 +65,9 @@ module Otwarchive
     # Disable dumping schemas after migrations.
     config.active_record.dump_schema_after_migration = false
 
-    # Use SQL instead of Active Record's schema dumper when creating the test database.
-    # This is necessary if your schema can't be completely dumped by the schema dumper,
-    # like if you have constraints or database-specific column types
-    config.active_record.schema_format = :sql
     # Allows belongs_to associations to be optional
     config.active_record.belongs_to_required_by_default = false
+
     # Keeps updated_at in cache keys
     config.active_record.cache_versioning = false
 
