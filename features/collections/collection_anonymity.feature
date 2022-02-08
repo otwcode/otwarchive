@@ -562,7 +562,7 @@ Feature: Collection
       And I add the work "Work" to the collection "Hidden Moderated Not Approved"
 
     When I am logged out
-     And I view the collection "Welcome"
+     And I go to "Welcome" collection's page
     Then I should see "Mystery Work"
      And I should not see "Part of"
 
@@ -576,7 +576,7 @@ Feature: Collection
      And I submit
 
     When I am logged out
-     And I view the collection "Welcome"
+     And I go to "Welcome" collection's page
     Then I should see "Mystery Work"
      And I should see "Part of Hidden Moderated Approved, Just Hidden, Hidden and Anonymous"
      And I should not see "Hidden Moderated Not Approved"
