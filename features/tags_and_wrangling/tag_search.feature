@@ -49,35 +49,34 @@ Feature: Search Tags
 
 	Scenario: Search for tag in canonical fandom(s)
 	  Given I have no tags
-		And a fandom exists with name: "Fandom A", canonical: true
-		And a fandom exists with name: "Fandom B", canonical: true
-		And I add the fandom "Fandom A" to the character "Anna Anderson"
-		And I add the fandom "Fandom A" to the character "Abby Anderson"
-		And I add the fandom "Fandom B" to the character "Abby Anderson"
-		And a character exists with name: "Null Anderson"
-		And all indexing jobs have been run
-	 # Tag in one canonical fandom
-	When I am on the search tags page
-		And I fill in "Tag name" with "Anderson"
-		And I fill in "Fandom" with "Fandom A"
+        And a fandom exists with name: "Fandom A", canonical: true
+        And a fandom exists with name: "Fandom B", canonical: true
+        And I add the fandom "Fandom A" to the character "Anna Anderson"
+        And I add the fandom "Fandom A" to the character "Abby Anderson"
+        And I add the fandom "Fandom B" to the character "Abby Anderson"
+        And a character exists with name: "Null Anderson"
+        And all indexing jobs have been run
+	  # Tag in one canonical fandom
+      When I am on the search tags page
+        And I fill in "Tag name" with "Anderson"
+        And I fill in "Fandom" with "Fandom A"
         And I press "Search Tags"
-	Then I should see "2 Found"
-		And I should see the tag search result "Anna Anderson"
-		And I should see the tag search result "Abby Anderson"
-		And I should not see the tag search result "Null Anderson"
-	 # Tag in multiple canonical fandoms
-	  When I am on the search tags page
-		And I fill in "Tag name" with "Anderson"
-		And I fill in "Fandom" with "Fandom A, Fandom B"
+        Then I should see "2 Found"
+        And I should see the tag search result "Anna Anderson"
+        And I should see the tag search result "Abby Anderson"
+        And I should not see the tag search result "Null Anderson"
+      # Tag in multiple canonical fandoms
+      When I am on the search tags page
+        And I fill in "Tag name" with "Anderson"
+        And I fill in "Fandom" with "Fandom A, Fandom B"
         And I press "Search Tags"
       Then I should see "1 Found"
-		And I should see the tag search result "Abby Anderson"
-		And I should not see the tag search result "Anna Anderson"
-		And I should not see the tag search result "Null Anderson"
+        And I should see the tag search result "Abby Anderson"
+        And I should not see the tag search result "Anna Anderson"
+        And I should not see the tag search result "Null Anderson"
 
 	Scenario: Search by Type of tags
-      Given I have no tags
-        And a fandom exists with name: "first fandom"
+      Given I have no tags And a fandom exists with name: "first fandom"
         And a character exists with name: "first character"
         And a relationship exists with name: "first last/someone else"
         And a freeform exists with name: "first fic please be nice"
@@ -146,22 +145,22 @@ Feature: Search Tags
         And I should see the tag search result "Fandom: Not Canon Fandom (0)"
         And I should see the tag search result "Character: Canon Character (0)"
 
-	Scenario: Search and sort by Date Created
+    Scenario: Search and sort by Date Created
       Given I have no tags
         And a freeform exists with name: "created first", created_at: "2008-01-01 20:00:00 Z"
-		And a freeform exists with name: "created second", created_at: "2009-01-01 20:00:00 Z"
-		And a freeform exists with name: "created third", created_at: "2010-01-01 20:00:00 Z"
-		And a freeform exists with name: "created fourth", created_at: "2011-01-01 20:00:00 Z"
+        And a freeform exists with name: "created second", created_at: "2009-01-01 20:00:00 Z"
+        And a freeform exists with name: "created third", created_at: "2010-01-01 20:00:00 Z"
+        And a freeform exists with name: "created fourth", created_at: "2011-01-01 20:00:00 Z"
         And all indexing jobs have been run
       When I am on the search tags page
         And I fill in "Tag name" with "created"
-		And I select "Date Created" from "tag_search_sort_column"
+        And I select "Date Created" from "tag_search_sort_column"
         And I press "Search Tags"
       Then I should see "4 Found"
-		  And the 1st tag result should contain "created fourth"
-		  And the 2nd tag result should contain "created third"
-		  And the 3rd tag result should contain "created second"
-		  And the 4th tag result should contain "created first"
+        And the 1st tag result should contain "created fourth"
+        And the 2nd tag result should contain "created third"
+        And the 3rd tag result should contain "created second"
+        And the 4th tag result should contain "created first"
 
 	Scenario: Search and sort by Uses
       Given I have no tags
@@ -171,19 +170,19 @@ Feature: Search Tags
         And a freeform exists with name: "5 uses"
         And a freeform exists with name: "2 uses"
         And a freeform exists with name: "0 uses"
-		And a set of works for tag sort by use exists
+        And a set of works for tag sort by use exists
         And all indexing jobs have been run
       When I am on the search tags page
-	    And I fill in "Tag name" with "uses"
-		And I select "Uses" from "tag_search_sort_column"
+        And I fill in "Tag name" with "uses"
+        And I select "Uses" from "tag_search_sort_column"
         And I press "Search Tags"
       Then I should see "6 Found"
-		And the 1st tag result should contain "10 uses"
-		And the 2nd tag result should contain "8 uses"
-		And the 3rd tag result should contain "8 uses"
-		And the 4th tag result should contain "5 uses"
-		And the 5th tag result should contain "2 uses"
-		And the 6th tag result should contain "0 uses"
+        And the 1st tag result should contain "10 uses"
+        And the 2nd tag result should contain "8 uses"
+        And the 3rd tag result should contain "8 uses"
+        And the 4th tag result should contain "5 uses"
+        And the 5th tag result should contain "2 uses"
+        And the 6th tag result should contain "0 uses"
 
       # If this was a bug, it's fixed now?
       # When I am on the search tags page
