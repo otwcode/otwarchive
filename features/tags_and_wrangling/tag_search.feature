@@ -76,7 +76,8 @@ Feature: Search Tags
         And I should not see the tag search result "Null Anderson"
 
 	Scenario: Search by Type of tags
-      Given I have no tags And a fandom exists with name: "first fandom"
+      Given I have no tags
+	    And a fandom exists with name: "first fandom"
         And a character exists with name: "first character"
         And a relationship exists with name: "first last/someone else"
         And a freeform exists with name: "first fic please be nice"
