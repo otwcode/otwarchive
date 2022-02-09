@@ -74,6 +74,16 @@ body .narrow-shown {
   margin-left: 45px;
 }
 
+#header .dropdown, #greeting .user {
+	position: static;
+}
+
+#header .menu {
+  width: 100vw;
+  position: absolute;
+  left: 0;
+}
+
 /* 04 region dashboard */
 
 #dashboard, #dashboard.own {
