@@ -103,7 +103,6 @@ pre {
 .blurb .blurb,
 .blurb .actions a,
 #header li a,
-#header li .current,
 #footer li a,
 #header .open .menu {
   display: block;
@@ -111,7 +110,6 @@ pre {
 
 #header .navigation,
 #header li a,
-#header li .current,
 #footer ul,
 #footer li a {
   float: none;
