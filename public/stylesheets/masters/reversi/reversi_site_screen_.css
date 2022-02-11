@@ -68,9 +68,7 @@ form dl {
 
 #header a,
 #header a:visited,
-#header .current,
 #header .primary .open a,
-#header .primary .menu .current,
 #header .primary .dropdown:hover a,
 #header .primary .dropdown a:focus,
 #header #search input:hover,
@@ -80,8 +78,7 @@ form dl {
 
 #header .heading a,
 #header .user a:hover,
-#header .user a:focus,
-#header .user .current {
+#header .user a:focus {
   color: #5998D6;
 }
 
