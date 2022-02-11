@@ -39,7 +39,7 @@
   <% @subscriptions.each do |subscription| %>
     <dt>
       <% if subscription.subscribable.nil? %>
-      <%= t(".deleted") %>
+        <%= subscription.name %>
       <% else %>
         <%= link_to(subscription.name, subscription.subscribable) %>
       <% end %>

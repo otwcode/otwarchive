@@ -304,7 +304,6 @@ en:
   subscriptions:
     index:
       byline: "by %{creators}"
-      deleted: "DELETED"
       series: "(Series)"
       work: "(Work)"
       unsubscribe: "Unsubscribe from %{name}"
