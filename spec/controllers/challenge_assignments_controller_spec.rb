@@ -376,7 +376,7 @@ describe ChallengeAssignmentsController do
              defaulted_at: Faker::Time.backward)
     end
 
-    context "when logged in as a maintainer of the collection" do
+    context "when logged in as a maintainer of the collection", work_search: true, bookmark_search: true do
       render_views
 
       let(:user) { collection_owner }

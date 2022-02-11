@@ -945,13 +945,11 @@ describe ChaptersController do
       end
 
       context "when work has more than one chapter" do
-        before do
-          @chapter2 = create(:chapter, work: work, posted: true, position: 2, authors: [user.pseuds.first])
-        end
+        let!(:chapter2) { create(:chapter, work: work, posted: true, position: 2, authors: [user.pseuds.first]) }
 
         it "updates the work's minor version" do
           expect(work.minor_version).to eq(0)
-          delete :destroy, params: { work_id: work.id, id: @chapter2.id }
+          delete :destroy, params: { work_id: work.id, id: chapter2.id }
           expect(assigns[:work].minor_version).to eq(1)
         end
 
@@ -962,26 +960,57 @@ describe ChaptersController do
 
           old_updated_at = work.updated_at
 
-          delete :destroy, params: { work_id: work.id, id: @chapter2.id }
+          delete :destroy, params: { work_id: work.id, id: chapter2.id }
           expect(assigns[:work].updated_at).not_to eq(old_updated_at)
         end
 
         it "gives a notice that the chapter was deleted and redirects to work" do
-          delete :destroy, params: { work_id: work.id, id: @chapter2.id }
+          delete :destroy, params: { work_id: work.id, id: chapter2.id }
           it_redirects_to_with_notice(work, "The chapter was successfully deleted.")
         end
 
         it "gives a notice that the draft chapter was deleted if the chapter was a draft and redirects to work" do
-          @chapter2.posted = false
-          @chapter2.save
-          delete :destroy, params: { work_id: work.id, id: @chapter2.id }
+          chapter2.posted = false
+          chapter2.save
+          delete :destroy, params: { work_id: work.id, id: chapter2.id }
           it_redirects_to_with_notice(work, "The chapter draft was successfully deleted.")
         end
 
         it "errors and redirects to work when chapter is not deleted" do
           allow_any_instance_of(Chapter).to receive(:destroy).and_return(false)
-          delete :destroy, params: { work_id: work.id, id: @chapter2.id }
+          delete :destroy, params: { work_id: work.id, id: chapter2.id }
           it_redirects_to_with_error(work, "Something went wrong. Please try again.")
+        end
+
+        it "does not reorder chapters when deleting the last chapter" do
+          chapter1 = work.chapters.first
+          delete :destroy, params: { work_id: work.id, id: chapter2.id }
+          expect(work.reload.chapters_in_order).to eq([chapter1])
+          expect(work.reload.chapters_in_order.first.position).to eq(1)
+        end
+
+        it "updates chapter positions when deleting the first chapter of a two chapter work" do
+          delete :destroy, params: { work_id: work.id, id: work.chapters.first.id }
+          expect(work.reload.chapters_in_order).to eq([chapter2])
+          expect(work.reload.chapters_in_order.first.position).to eq(1)
+        end
+
+        it "maintains chapter order when deleting the first chapter of a >3 chapter work" do
+          chapter3 = create(:chapter, work: work, posted: true, position: 3, authors: [user.pseuds.first])
+          chapter4 = create(:chapter, work: work, posted: true, position: 4, authors: [user.pseuds.first])
+          chapter5 = create(:chapter, work: work, posted: true, position: 5, authors: [user.pseuds.first])
+          delete :destroy, params: { work_id: work.id, id: work.chapters.first.id }
+          expect(work.reload.chapters_in_order).to eq([chapter2, chapter3, chapter4, chapter5])
+          expect(work.reload.chapters_in_order.map(&:position)).to eq([1, 2, 3, 4])
+        end
+
+        it "reorders chapters properly when deleting a mid-work chapter" do
+          chapter1 = work.chapters.first
+          chapter3 = create(:chapter, work: work, posted: true, position: 3, authors: [user.pseuds.first])
+          chapter4 = create(:chapter, work: work, posted: true, position: 4, authors: [user.pseuds.first])
+          delete :destroy, params: { work_id: work.id, id: chapter2.id }
+          expect(work.reload.chapters_in_order).to eq([chapter1, chapter3, chapter4])
+          expect(work.reload.chapters_in_order.map(&:position)).to eq([1, 2, 3])
         end
       end
     end

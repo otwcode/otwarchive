@@ -22,4 +22,9 @@ class Locale < ApplicationRecord
     Locale.find_by(iso: locale[:iso].to_s) || language.locales.create(iso: locale[:iso].to_s, name: locale[:name].to_s, main: 1)
   end
 
+  after_update :update_translations, if: :saved_change_to_iso?
+  def update_translations
+    ArchiveFaq::Translation.where(locale: iso_before_last_save).update_all(locale: iso)
+    Question::Translation.where(locale: iso_before_last_save).update_all(locale: iso)
+  end
 end

@@ -10,7 +10,7 @@
     </blockquote>
     <% if current_user.nil? %>
       <p class="submit">
-        <%= link_to "&times;".html_safe, url_for(params.permit!.merge :hide_banner => true, :anchor => params[:anchor]), :class => 'showme action', :title => ts("hide banner") %>
+        <%= link_to "&times;".html_safe, current_path_with(hide_banner: true), :class => 'showme action', :title => ts("hide banner") %>
       </p>
     <% else %>
       <%= form_tag end_banner_user_path(current_user), :method => :post, :remote => true do %>

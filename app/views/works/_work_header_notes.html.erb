@@ -50,7 +50,7 @@
     <% # prompts %>
     <% @work.challenge_claims.each do |claim| %>
       <% unless claim.request_prompt.nil? %>
-        <li><%= ts("In response to a prompt by") %>
+        <li><%= ts("In response to a ") %><%= link_to("prompt", collection_prompt_path(claim.collection, claim.request_prompt)) %> <%= ts("by") %>
           <% if claim.request_prompt.anonymous? %>
             <%= ts("Anonymous in the ") %><%= link_to(claim.collection.name, collection_path(claim.collection)) %>
           <% else %>

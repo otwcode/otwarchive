@@ -269,7 +269,9 @@ Feature: Gift Exchange Challenge
     Then I should not see "Assignments are now being sent out"
     # 4 users and the mod should get emails :)
       And 1 email should be delivered to "mod1"
+      And the email should have "Assignments sent" in the subject
       And the email should contain "You have received a message about your collection"
+      And the email should not contain "translation missing"
       And 1 email should be delivered to "myname1"
       And the email should contain "You have been assigned the following request"
       And the email should contain "Fandom:"
@@ -594,3 +596,48 @@ Feature: Gift Exchange Challenge
     When I go to "Bad Gift Exchange" collection's page
       And I follow "My Assignments" within "#dashboard"
     Then I should not see the image "src" text "/images/envelope_icon.gif"
+
+  Scenario: A user who disallows gift works is cautioned about signing up for
+  an exchange, and a user who allows them is not.
+    Given the gift exchange "Some Gift Exchange" is ready for signups
+      And I am logged in as "participant"
+      And the user "participant" disallows gifts
+    When I go to "Some Gift Exchange" collection's page
+      And I follow "Sign-up Form"
+    Then I should see "Signing up for this challenge will allow users to give you gift works"
+    When the user "participant" allows gifts
+      And I go to "Some Gift Exchange" collection's page
+      And I follow "Sign-up Form"
+    Then I should not see "Signing up for this challenge will allow users to give you gift works"
+
+  Scenario: If a work is connected to an assignment for a user who disallows
+  gifts, user is still automatically added as a gift recipient. The recipient
+  remains attached even if the work is later disconnected from the assignment.
+    Given basic tags
+      And the user "recip" exists and is activated
+      And the user "recip" disallows gifts
+      And I am logged in as "gifter"
+      And I have an assignment for the user "recip" in the collection "exchange_collection"
+    When I fulfill my assignment
+    Then I should see "For recip."
+    When I follow "Edit"
+      And I uncheck "exchange_collection (recip)"
+      And I press "Post"
+    Then I should see "For recip."
+
+  Scenario: A user can explicitly give a gift to a user who disallows gifts if
+  the work is connected to an assignment. The recipient remains attached even if
+  the work is later disconnected from the assignment.
+    Given basic tags
+      And the user "recip" exists and is activated
+      And the user "recip" disallows gifts
+      And I am logged in as "gifter"
+      And I have an assignment for the user "recip" in the collection "exchange_collection"
+    When I start to fulfill my assignment
+      And I fill in "Gift this work to" with "recip"
+      And I press "Post"
+    Then I should see "For recip."
+    When I follow "Edit"
+      And I uncheck "exchange_collection (recip)"
+      And I press "Post"
+    Then I should see "For recip."

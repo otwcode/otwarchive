@@ -60,6 +60,8 @@ Feature: Create Works
         | recipient      | recipient@example.org |
       And the user "coauthor" allows co-creators
       And the user "cosomeone" allows co-creators
+      And the user "giftee" allows gifts
+      And the user "recipient" allows gifts
       And I have a collection "Collection 1" with name "collection1"
       And I have a collection "Collection 2" with name "collection2"
       And I am logged in as "thorough"
@@ -395,3 +397,14 @@ Feature: Create Works
     When I follow "Next Chapter"
     Then I should see "barbaz, foobar"
       And I should not see "Chapter by"
+
+  Scenario: You cannot create a work with too many tags
+    Given the user-defined tag limit is 7
+      And I am logged in as a random user
+    When I set up the draft "Over the Limit"
+      And I fill in "Fandoms" with "Fandom 1, Fandom 2"
+      And I fill in "Characters" with "Character 1, Character 2"
+      And I fill in "Relationships" with "Relationship 1, Relationship 2"
+      And I fill in "Additional Tags" with "Additional Tag 1, Additional Tag 2"
+      And I press "Post"
+    Then I should see "Fandom, relationship, character, and additional tags must not add up to more than 7. Your work has 8 of these tags, so you must remove 1 of them."

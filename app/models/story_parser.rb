@@ -304,7 +304,7 @@ class StoryParser
     work.ip_address = options[:ip_address]
     work.expected_number_of_chapters = work.chapters.length
     work.revised_at = work.chapters.last.published_at
-    if work.revised_at && work.revised_at.to_date < Date.today
+    if work.revised_at && work.revised_at.to_date < Date.current
       work.backdate = true
     end
 
@@ -904,7 +904,7 @@ class StoryParser
         date = Time.at(Regex.last_match[1].to_i)
       end
       date ||= Date.parse(date_string)
-      return '' if date > Date.today
+      return '' if date > Date.current
       return date
     rescue ArgumentError, TypeError
       return ''

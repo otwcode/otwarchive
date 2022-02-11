@@ -43,9 +43,9 @@
         <dt><%= ts("Challenges/Subcollections:") %></dt>
         <dd><%= link_to(@challenges_count, collection_collections_path(collection)) %></dd>
       <% end %>
-      <% if (@works_count = collection.all_approved_works_count) > 0 %>
+      <% if (@works_count = SearchCounts.work_count_for_collection(collection)) > 0 %>
         <dt><%= ts("Fandoms:") %></dt>
-        <dd><%= link_to(collection.all_fandoms_count, collection_fandoms_path(collection)) %></dd>
+        <dd><%= link_to(SearchCounts.fandom_count_for_collection(collection), collection_fandoms_path(collection)) %></dd>
       <% end %>
       <% if collection.challenge? && collection.prompt_meme? %>
         <dt><%= ts("Prompts:") %></dt>
@@ -53,7 +53,7 @@
       <% end %>
       <dt><%= ts("Works:") %></dt>
       <dd><%= link_to(@works_count, collection_works_path(collection)) %></dd>
-      <% if (@bookmarks_count = collection.all_bookmarked_items_count) > 0 %>
+      <% if (@bookmarks_count = SearchCounts.bookmarkable_count_for_collection(collection)) > 0 %>
         <dt><%= ts("Bookmarked Items:") %></dt>
         <dd><%= link_to(@bookmarks_count, collection_bookmarks_path(collection)) %></dd>
       <% end %>

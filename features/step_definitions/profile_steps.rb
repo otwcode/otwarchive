@@ -63,6 +63,14 @@ When /^I enter an invalid email$/ do
 end
 
 
+When "I enter non-matching emails" do
+  click_link("Change Email")
+  fill_in("new_email", with: "correct@example.com")
+  fill_in("email_confirmation", with: "invalid@example.com")
+  fill_in("password_check", with: "password")
+  click_button("Change Email")
+end
+
 When /^I enter a duplicate email$/ do
   user = FactoryBot.create(:user, login: "testuser2", password: "password", email: "foo@ao3.org")
   step %{confirmation emails have been delivered}
@@ -73,7 +81,6 @@ When /^I enter a duplicate email$/ do
   fill_in("password_check", with: "password")
   click_button("Change Email")
 end
-
 
 When /^I enter a birthdate that shows I am under age$/ do
   date = 13.years.ago + 1.day

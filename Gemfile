@@ -7,6 +7,7 @@ gem 'test-unit', '~> 3.2'
 gem 'bundler'
 
 gem "rails", "~> 5.2"
+gem "rails-i18n"
 gem "rack", "~> 2.1", ">= 2.1.4"
 gem "sprockets", "< 4"
 
@@ -38,6 +39,7 @@ gem 'redis-namespace'
 # Used to convert strings to ascii
 gem 'unicode'
 gem 'unidecoder'
+gem 'unicode_utils', '>=1.4.0'
 
 # Lograge is opinionated, very opinionated.
 gem "lograge" # https://github.com/roidrage/lograge
@@ -61,7 +63,7 @@ gem 'resque', '>=1.14.0'
 gem 'resque-scheduler'
 gem 'after_commit_everywhere'
 #gem 'daemon-spawn', require: 'daemon_spawn'
-gem 'elasticsearch', '6.8.0'
+gem "elasticsearch", "7.16.1"
 gem "aws-sdk-s3"
 gem 'css_parser'
 
@@ -96,9 +98,6 @@ gem 'timeliness'
 
 # for generating graphs
 gem 'google_visualr', git: 'https://github.com/winston/google_visualr'
-
-# Copycopter to aid translation
-# gem 'copycopter_client', '~> 2.0.1'
 
 # Globalize for translations
 # Must use master branch and activemodel-serializers-xml for Rails 5 upgrade
@@ -165,6 +164,13 @@ group :development do
   gem 'factory_bot_rails'
   gem 'bundler-audit'
   gem 'active_record_query_trace', '~> 1.6', '>= 1.6.1'
+end
+
+group :linters do
+  gem "erb_lint", "0.0.29"
+  gem "rubocop", "0.83.0"
+  gem "rubocop-rails", "2.6.0"
+  gem "rubocop-rspec", "1.41.0"
 end
 
 group :test, :development, :staging do

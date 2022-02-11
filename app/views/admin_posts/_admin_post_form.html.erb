@@ -33,10 +33,18 @@
       <dl>
         <dt><%= f.label :tag_list, t(".tags.label") %></dt>
         <dd>
-          <%= f.text_field :tag_list, autocomplete_options('admin_post_tags') %>
-          <p class="character_counter">
-            <%= ts("Comma separated, %{max} characters per tag", :max => ArchiveConfig.TAG_MAX) %>
-          </p>
+          <% if @admin_post.translated_post %>
+            <ul class="tags commas">
+              <% for tag in @admin_post.tags %>
+                <li><%= link_to tag.name, admin_posts_path(tag: tag.id), class: "tag" %></li>
+              <% end %>
+            </ul>
+          <% else %>
+            <%= f.text_field :tag_list, autocomplete_options("admin_post_tags") %>
+            <p class="character_counter">
+              <%= ts("Comma separated, %{max} characters per tag", max: ArchiveConfig.TAG_MAX) %>
+            </p>
+          <% end %>
         </dd>
         <dt>
           <%= f.label :language_id, t(".language.label") %>
@@ -55,7 +63,8 @@
                           title: ts('translation of'),
                           data: { autocomplete_token_limit: 1 }) %>
           <% unless @admin_post.translated_post %>
-            <p class="footnote"><%= t(".translated_post.footnote") %></p>
+            <p class="footnote"><%= t(".translated_post.footnote_comment_permissions") %></p>
+            <p class="footnote"><%= t(".translated_post.footnote_tags") %></p>
           <% end %>
         </dd>
         <dt class="permissions comments">

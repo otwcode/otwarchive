@@ -243,6 +243,15 @@ Given /^the spam work "([^\"]*)"$/ do |work|
   w.update_attribute(:hidden_by_admin, true)
 end
 
+Given "the user-defined tag limit is {int}" do |count|
+  allow(ArchiveConfig).to receive(:USER_DEFINED_TAGS_MAX).and_return(count)
+end
+
+Given "the work {string} has {int} {word} tag(s)" do |title, count, type|
+  work = Work.find_by(title: title)
+  work.send("#{type.pluralize}=", FactoryBot.create_list(type.to_sym, count))
+end
+
 ### WHEN
 
 When /^I view the ([\d]+)(?:st|nd|rd|th) chapter$/ do |chapter_no|
@@ -502,7 +511,7 @@ When /^I list the work "([^"]*)" as inspiration$/ do |title|
   fill_in("work_parent_attributes_url", with: url_of_work)
 end
 When /^I set the publication date to today$/ do
-  today = Time.new
+  today = Date.current
   month = today.strftime("%B")
 
   if page.has_selector?("#backdate-options-show")
@@ -680,22 +689,22 @@ end
 
 ### THEN
 Then /^I should see Updated today$/ do
-  today = Time.zone.today.to_s
+  today = Date.current.to_s
   step "I should see \"Updated:#{today}\""
 end
 
 Then /^I should not see Updated today$/ do
-  today = Date.today.to_s
+  today = Date.current.to_s
   step "I should not see \"Updated:#{today}\""
 end
 
 Then /^I should see Completed today$/ do
-  today = Time.zone.today.to_s
+  today = Date.current.to_s
   step "I should see \"Completed:#{today}\""
 end
 
 Then /^I should not see Completed today$/ do
-  today = Date.today.to_s
+  today = Date.current.to_s
   step "I should not see \"Completed:#{today}\""
 end
 

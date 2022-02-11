@@ -1,6 +1,10 @@
 <% content_for :message do %>
 
-Hi <%= @username.present? ? @username + "!" : "!" %>
+<% if @username.present? %>
+<%= t("mailer.general.greeting.informal.addressed", name: @username) %>
+<% else %>
+<%= t("mailer.general.greeting.informal.unaddressed") %>
+<% end %>
 
 We're working hard to reply to everyone, and we'll respond to you as soon as we can.
 Your communication is greatly valued, and it will be reviewed and answered
@@ -17,8 +21,8 @@ information you submitted through the Technical Support and Feedback form:
 If you have additional questions or information, do not hesitate to send in
 another ticket.
 
-Regards,
-the AO3 Support team
+<%= t("mailer.general.closing.formal") %>
+<%= t("mailer.general.signature.support") %>
 <% end %>
 
 <% content_for :sent_at do %><%= Time.now.to_s(:time_for_mailers) %><% end %>

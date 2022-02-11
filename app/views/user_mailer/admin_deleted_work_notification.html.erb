@@ -1,11 +1,11 @@
 <% content_for :message do %>
-  <p><%= t '.hello', user: @user.default_pseud.byline %></p>
-  
-  <p><%= t('.html.part1', title: "<i>#{style_bold(@work.title.html_safe)}</i>".html_safe).html_safe %></p>
-  
+  <p><%= t("mailer.general.greeting.formal", name: style_bold(@user.login)).html_safe %></p>
+
+  <p><%= t('.html.part1', title: style_creation_title(@work.title)).html_safe %></p>
+
   <p><%= t('.html.part2', opendoors_link: opendoors_link(t '.opendoors')).html_safe %></p>
- 
-  <p><%= t('.html.part3', abuse_link: abuse_link(t '.abuse_committee')).html_safe %></p>
-  
+
+  <p><%= t(".html.tos_violation", contact_abuse_link: abuse_link(t(".contact_abuse"))).html_safe %></p>
+
   <p><%= t '.bye' %></p>
 <% end %>

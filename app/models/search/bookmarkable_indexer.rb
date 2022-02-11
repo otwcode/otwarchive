@@ -19,9 +19,8 @@ class BookmarkableIndexer < Indexer
 
   def routing_info(id)
     {
-      '_index' => index_name,
-      '_type' => document_type,
-      '_id' => document_id(id)
+      "_index" => index_name,
+      "_id" => document_id(id)
     }
   end
 

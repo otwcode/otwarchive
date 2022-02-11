@@ -1,5 +1,12 @@
 <% # expects "work" and "reading" %>
-<li <% unless work.nil? %>id="work_<%= work.id %>"<% end %> class="<% if work.nil? %>deleted <% end %><% if is_author_of?(work) %>own <% end %>reading work <%= css_classes_for_creation_blurb(work) %>" role="article">
+<% css_classes = if work.nil?
+                   "deleted reading work blurb group"
+                 elsif is_author_of?(work)
+                   "own reading work #{css_classes_for_creation_blurb(work)}"
+                 else
+                   "reading work #{css_classes_for_creation_blurb(work)}"
+                 end %>
+<li <% unless work.nil? %>id="work_<%= work.id %>"<% end %> class="<%= css_classes %>" role="article">
 
   <% unless reading.work.nil? %>
 

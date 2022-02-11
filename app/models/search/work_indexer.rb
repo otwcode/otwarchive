@@ -15,44 +15,42 @@ class WorkIndexer < Indexer
 
   def self.mapping
     {
-      "work" => {
-        properties: {
-          creator_join: {
-            type: :join,
-            relations: { work: :creator }
-          },
-          title: {
-            type: "text",
-            analyzer: "simple"
-          },
-          creators: {
-            type: "text"
-          },
-          tag: {
-            type: "text"
-          },
-          series: {
-            type: "object"
-          },
-          authors_to_sort_on: {
-            type: "keyword"
-          },
-          title_to_sort_on: {
-            type: "keyword"
-          },
-          imported_from_url: {
-            type: "keyword"
-          },
-          work_types: {
-            type: "keyword"
-          },
-          posted: { type: "boolean" },
-          restricted: { type: "boolean" },
-          hidden_by_admin: { type: "boolean" },
-          complete: { type: "boolean" },
-          in_anon_collection: { type: "boolean" },
-          in_unrevealed_collection: { type: "boolean" }
-        }
+      properties: {
+        creator_join: {
+          type: :join,
+          relations: { work: :creator }
+        },
+        title: {
+          type: "text",
+          analyzer: "simple"
+        },
+        creators: {
+          type: "text"
+        },
+        tag: {
+          type: "text"
+        },
+        series: {
+          type: "object"
+        },
+        authors_to_sort_on: {
+          type: "keyword"
+        },
+        title_to_sort_on: {
+          type: "keyword"
+        },
+        imported_from_url: {
+          type: "keyword"
+        },
+        work_types: {
+          type: "keyword"
+        },
+        posted: { type: "boolean" },
+        restricted: { type: "boolean" },
+        hidden_by_admin: { type: "boolean" },
+        complete: { type: "boolean" },
+        in_anon_collection: { type: "boolean" },
+        in_unrevealed_collection: { type: "boolean" }
       }
     }
   end
