@@ -75,7 +75,7 @@ body .narrow-shown {
 }
 
 #header .dropdown, #greeting .user {
-	position: static;
+  position: static;
 }
 
 #header .menu {
