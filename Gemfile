@@ -123,6 +123,7 @@ gem 'connection_pool'
 gem 'dalli'
 gem 'kgio', '2.10.0'
 
+# TODO: AO3-6297 Update the download code so we can remove mimemagic.
 gem "mimemagic", "0.3.10"
 
 group :test do
