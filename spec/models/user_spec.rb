@@ -127,6 +127,20 @@ describe User do
     end
   end
 
+  describe "#update" do
+    let(:existing_user) { create(:user) }
+
+    it "sets renamed_at if username changed" do
+      existing_user.update(login: "new_username")
+      expect(existing_user.renamed_at).to be_within(1.minute).of(Time.now.utc)
+    end
+
+    it "does not set renamed_at when username not changed" do
+      existing_user.update(email: "newemail@example.com")
+      expect(existing_user.renamed_at).to be_nil
+    end
+  end
+
   describe ".search_multiple_by_email" do
     let(:user_bundle) { create_list(:user, 5) }
 
