@@ -576,17 +576,14 @@ class Work < ApplicationRecord
     self.invalidate_work_chapter_count(self)
     if (self.new_record? || chapter.posted_changed?) && chapter.published_at == Date.current
       self.set_revised_at(Time.current) # a new chapter is being posted, so most recent update is now
-    elsif self.revised_at.nil? ||
-        (chapter.published_at && chapter.published_at > self.revised_at.to_date) ||
-        chapter.published_at_changed? && chapter.published_at_was == self.revised_at.to_date
-      # revised_at should be (re)evaluated to reflect the chapter's pub date
+    else
+      # Calculate the most recent chapter publication date:
       max_date = self.chapters.where('id != ? AND posted = 1', chapter.id).maximum('published_at')
       max_date = max_date.nil? ? chapter.published_at : [max_date, chapter.published_at].max
-      self.set_revised_at(max_date)
-    # else
-      # In all other cases, we don't want to touch revised_at, since the chapter's pub date doesn't
-      # affect it. Setting revised_at to any Date will change its time to 12:00, likely changing the
-      # work's position in date-sorted indexes, so don't do it unnecessarily.
+
+      # Update revised_at to match the chapter publication date unless the
+      # dates already match:
+      set_revised_at(max_date) unless revised_at && revised_at.to_date == max_date
     end
   end
 

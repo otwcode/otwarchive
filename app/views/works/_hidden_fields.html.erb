@@ -38,7 +38,7 @@
   <%= s.hidden_field :title, value: "#{work_series_value(:title)}" %>
 <% end %>
 <%= form.hidden_field :backdate, :value => "#{@work.backdate}" %>
-<%= form.hidden_field :expected_number_of_chapters, :value => "#{@work.expected_number_of_chapters}" %>
+<%= form.hidden_field :wip_length, :value => "#{@work.wip_length}" %>
 <%= form.hidden_field :restricted, :value => "#{@work.restricted}" %>
 <%= form.hidden_field :comment_permissions, :value => "#{@work.comment_permissions}" %>
 <%= form.hidden_field :language_id, :value => "#{@work.language_id}" %>

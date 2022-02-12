@@ -12,7 +12,11 @@ Feature: Collectible items
     When I add my work to the collection
     Then I should see "Added"
     When I go to "Various Penguins" collection's page
-    Then I should see "Works (1)"
+    Then I should see "Works (0)" within "#dashboard"
+      And I should see "Blabla"
+    When the collection counts have expired
+      And I reload the page
+    Then I should see "Works (1)" within "#dashboard"
       And I should see "Blabla"
 
   Scenario: Add my chaptered work to a collection
@@ -20,7 +24,11 @@ Feature: Collectible items
     When I add my work to the collection
     Then I should see "Added"
     When I go to "Various Penguins" collection's page
-    Then I should see "Works (1)"
+    Then I should see "Works (0)" within "#dashboard"
+      And I should see "Blabla"
+    When the collection counts have expired
+      And I reload the page
+    Then I should see "Works (1)" within "#dashboard"
       And I should see "Blabla"
 
   Scenario: Add my bookmark to a collection
@@ -28,6 +36,10 @@ Feature: Collectible items
     When I add my bookmark to the collection "Various_Penguins"
     Then I should see "Added"
     When I go to "Various Penguins" collection's page
+    Then I should see "Bookmarked Items (0)" within "#dashboard"
+      And I should see "Tundra penguins"
+    When the collection counts have expired
+      And I reload the page
     Then I should see "Bookmarked Items (1)" within "#dashboard"
       And I should see "Tundra penguins"
 

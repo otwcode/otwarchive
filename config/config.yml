@@ -441,6 +441,10 @@ SECONDS_UNTIL_BOOKMARK_INDEX_EXPIRE: 1800
 # Cache duration for comment counts:
 SECONDS_UNTIL_COMMENT_COUNTS_EXPIRE: 3600
 
+# Cache duration for various collection-related counts (# of works, # of
+# bookmarks, # of fandoms):
+SECONDS_UNTIL_COLLECTION_COUNTS_EXPIRE: 300
+
 # Batch size used for the RedisHitCounter class:
 HIT_COUNT_BATCH_SIZE: 100
 

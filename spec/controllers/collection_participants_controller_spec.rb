@@ -110,7 +110,7 @@ describe CollectionParticipantsController do
         end
       end
 
-      context "where the user is a maintainer" do
+      context "where the user is a maintainer", work_search: true, bookmark_search: true do
         render_views
         let(:current_role) { CollectionParticipant::MODERATOR }
 
