@@ -481,7 +481,7 @@ namespace :After do
       end
 
       if skin.headercolor.present?
-        wizard_css += "#header .main a, #header .main .current, #header .main input, #header .search input {border-color: transparent;} "
+        wizard_css += "#header .main a, #header .main input, #header .search input {border-color: transparent;} "
         wizard_css += "#header, #header ul.main, #footer {background: #{skin.headercolor}; border-color: #{skin.headercolor}; box-shadow: none;} "
       end
 
