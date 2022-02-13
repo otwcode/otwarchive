@@ -57,6 +57,7 @@ class User < ApplicationRecord
   before_create :create_default_associateds
   before_destroy :remove_user_from_kudos
 
+  before_update :add_renamed_at, if: :will_save_change_to_login?
   after_update :update_pseud_name
   after_update :log_change_if_login_was_edited
 
@@ -522,12 +523,13 @@ class User < ApplicationRecord
     reindex_user_creations
   end
 
-  def log_change_if_login_was_edited
-    return unless saved_change_to_login?
-
-    create_log_item(action: ArchiveConfig.ACTION_RENAME, note: "Old Username: #{login_before_last_save}; New Username: #{login}")
-    self.update_attribute(:renamed_at, Time.now.utc)
+  def add_renamed_at
+    self.renamed_at = Time.now.utc
   end
+
+   def log_change_if_login_was_edited
+     create_log_item(options = { action: ArchiveConfig.ACTION_RENAME, note: "Old Username: #{login_before_last_save}; New Username: #{login}" }) if saved_change_to_login?
+   end
 
   def remove_stale_from_autocomplete
     Rails.logger.debug "Removing stale from autocomplete: #{autocomplete_search_string_was}"
