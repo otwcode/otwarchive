@@ -473,3 +473,7 @@ PERMITTED_HOSTS: [
   "test.archiveofourown.org",
   "testdownload.archiveofourown.org"
 ]
+
+USERNAME_CHANGE:
+  TIMES: 1
+  INTERVAL_DAYS: 7

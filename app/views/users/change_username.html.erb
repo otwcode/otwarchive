@@ -4,7 +4,9 @@
 <div class="caution">
   <p>
     <strong><%= ts("Please use this feature with caution.") %></strong>
-    <%= ts("You can change your user name %{times} time every %{days} days.", times: 1, days: 7) %>
+    <%= ts("You can change your user name %{times} time every %{days} days.",
+      times: ArchiveConfig.USERNAME_CHANGE["TIMES"],
+      days: ArchiveConfig.USERNAME_CHANGE["INTERVAL_DAYS"]) %>
     <% if @user.renamed_at %>
       <%= ts("You last changed your user name on %{renamed_at}.", renamed_at: l(@user.renamed_at, format: :long)) %>
     <% end %>
