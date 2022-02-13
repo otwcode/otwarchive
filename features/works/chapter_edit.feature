@@ -153,7 +153,7 @@ Feature: Edit chapters
     And I follow "Edit"
   Then I should see "5 (Draft)"
   When I follow "Manage Chapters"
-  Then I should see "Chapter 5"
+  Then I should see "Chapter 5 (Draft)"
   When I view the work "New Epic Work"
     Then I should see "4/5"
   When I select "5." from "selected_id"
