@@ -604,11 +604,11 @@ Feature: Gift Exchange Challenge
       And the user "participant" disallows gifts
     When I go to "Some Gift Exchange" collection's page
       And I follow "Sign-up Form"
-    Then I should see "Signing up for this challenge will allow users to give you gift works"
+    Then I should see "assigned users to gift works to you regardless of your preference settings"
     When the user "participant" allows gifts
       And I go to "Some Gift Exchange" collection's page
       And I follow "Sign-up Form"
-    Then I should not see "Signing up for this challenge will allow users to give you gift works"
+    Then I should not see "assigned users to gift works to you regardless of your preference settings"
 
   Scenario: If a work is connected to an assignment for a user who disallows
   gifts, user is still automatically added as a gift recipient. The recipient

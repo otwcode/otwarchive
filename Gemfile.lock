@@ -127,7 +127,7 @@ GEM
       html_tokenizer (~> 0.0.6)
       parser (>= 2.4)
       smart_properties
-    brakeman (3.7.2)
+    brakeman (5.2.1)
     builder (3.2.4)
     bullet (7.0.1)
       activesupport (>= 3.0.0)
@@ -594,7 +594,7 @@ DEPENDENCIES
   awesome_print
   aws-sdk-s3
   bcrypt
-  brakeman (= 3.7.2)
+  brakeman
   bullet (>= 5.7.3)
   bundler
   bundler-audit

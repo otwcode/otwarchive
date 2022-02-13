@@ -15,6 +15,7 @@ stdout
 REVISION
 
 # /config/
+/config/brakeman.ignore
 /config/database.yml
 /config/local.yml
 /config/backup.yml

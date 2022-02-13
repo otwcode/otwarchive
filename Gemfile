@@ -152,7 +152,7 @@ end
 
 group :test, :development do
   gem 'awesome_print'
-  gem 'brakeman', '3.7.2'
+  gem 'brakeman'
   gem 'pry-byebug'
   gem 'whiny_validation'
   gem 'factory_bot', '~> 5.0.2'
