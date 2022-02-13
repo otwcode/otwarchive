@@ -748,6 +748,14 @@ describe ChaptersController do
           expect(@chapter4.reload.position).to eq(4)
         end
 
+        it "preserves ordering for empty values" do
+          post :update_positions, params: { work_id: work.id, chapters: ["", "", "", 1] }
+          expect(@chapter1.reload.position).to eq(2)
+          expect(@chapter2.reload.position).to eq(3)
+          expect(@chapter3.reload.position).to eq(4)
+          expect(@chapter4.reload.position).to eq(1)
+        end
+
         it "gives a notice and redirects to work" do
           post :update_positions, params: { work_id: work.id, chapters: [1, 3, 2, 4] }
           it_redirects_to_with_notice(work, "Chapter order has been successfully updated.")
