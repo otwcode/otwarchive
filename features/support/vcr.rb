@@ -16,33 +16,33 @@ VCR.configure do |c|
 end
 
 VCR.cucumber_tags do |t|
-  t.tags '@archivist_import', use_scenario_name: true
+  t.tags "@archivist_import", use_scenario_name: true
 
-  t.tags '@work_import_multi_work_backdate'
-  t.tags '@work_import_multi_chapter_backdate'
-  t.tags '@work_import_special_characters_auto_utf'
-  t.tags '@work_import_special_characters_auto_latin'
-  t.tags '@work_import_special_characters_man_latin'
-  t.tags '@work_import_special_characters_man_cp'
-  t.tags '@work_import_special_characters_man_utf'
+  t.tags "@work_import_multi_work_backdate"
+  t.tags "@work_import_multi_chapter_backdate"
+  t.tags "@work_import_special_characters_auto_utf"
+  t.tags "@work_import_special_characters_auto_latin"
+  t.tags "@work_import_special_characters_man_latin"
+  t.tags "@work_import_special_characters_man_cp"
+  t.tags "@work_import_special_characters_man_utf"
 
-  t.tags '@import_da_title_link'
-  t.tags '@import_da_gallery_link'
-  t.tags '@import_da_fic'
+  t.tags "@import_da_title_link"
+  t.tags "@import_da_gallery_link"
+  t.tags "@import_da_fic"
 
-  t.tags '@import_dw'
-  t.tags '@import_dw_tables'
-  t.tags '@import_dw_tables_no_backdate'
-  t.tags '@import_dw_comm'
-  t.tags '@import_dw_multi_chapter'
+  t.tags "@import_dw"
+  t.tags "@import_dw_tables"
+  t.tags "@import_dw_tables_no_backdate"
+  t.tags "@import_dw_comm"
+  t.tags "@import_dw_multi_chapter"
 
-  t.tags '@import_ffn'
-  t.tags '@import_ffn_multi_chapter'
+  t.tags "@import_ffn"
+  t.tags "@import_ffn_multi_chapter"
 
-  t.tags '@import_lj'
-  t.tags '@import_lj_tables'
-  t.tags '@import_lj_no_backdate'
-  t.tags '@import_lj_comm'
-  t.tags '@import_lj_multi_chapter'
-  t.tags '@import_lj_underscores'
+  t.tags "@import_lj"
+  t.tags "@import_lj_tables"
+  t.tags "@import_lj_no_backdate"
+  t.tags "@import_lj_comm"
+  t.tags "@import_lj_multi_chapter"
+  t.tags "@import_lj_underscores"
 end
