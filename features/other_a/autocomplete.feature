@@ -98,14 +98,18 @@ Feature: Display autocomplete for tags
       And the pseud autocomplete should not contain "new_user"
       And the pseud autocomplete should contain "different_user"
       And the pseud autocomplete should contain "funny (different_user)"
-    When I change my username to "funny"
-    Then the pseud autocomplete should not contain "funny (different_user)"
-      And the pseud autocomplete should contain "funny"
-      And the pseud autocomplete should contain "different_user (funny)"
-    When I try to delete my account as funny
+    When I try to delete my account as different_user
     Then a user account should not exist for "funny"
       And the pseud autocomplete should not contain "funny"
       And the pseud autocomplete should not contain "different_user (funny)"
+
+  Scenario: Pseuds should be listed in autocomplete when username changes to pseud
+    Given I am logged in as "new_user"
+      And I add the pseud "funny"
+    When I change my username to "funny"
+    Then the pseud autocomplete should not contain "funny (new_user)"
+      And the pseud autocomplete should contain "funny"
+      And the pseud autocomplete should contain "new_user (funny)"
 
   @javascript
   Scenario: Characters in a fandom with non-ASCII uppercase letters should appear in the autocomplete.
