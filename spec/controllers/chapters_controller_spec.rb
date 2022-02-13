@@ -712,16 +712,14 @@ describe ChaptersController do
   end
 
   describe "update_positions" do
-    before do
-      @chapter1 = work.chapters.first
-      @chapter2 = create(:chapter, :draft, work: work, position: 2, authors: [user.pseuds.first])
-      @chapter3 = create(:chapter, work: work, position: 3, authors: [user.pseuds.first])
-      @chapter4 = create(:chapter, work: work, position: 4, authors: [user.pseuds.first])
-    end
+    let(:chapter1) { work.chapters.first }
+    let!(:chapter2) { create(:chapter, :draft, work: work, position: 2, authors: [user.pseuds.first]) }
+    let!(:chapter3) { create(:chapter, work: work, position: 3, authors: [user.pseuds.first]) }
+    let!(:chapter4) { create(:chapter, work: work, position: 4, authors: [user.pseuds.first]) }
 
     context "when user is logged out" do
       it "errors and redirects to login" do
-        post :update_positions, params: { work_id: work.id, chapter: [@chapter1, @chapter3, @chapter2] }
+        post :update_positions, params: { work_id: work.id, chapter: [chapter1, chapter3, chapter2, chapter4] }
         it_redirects_to_with_error(new_user_session_path, "Sorry, you don't have permission to access the page you were trying to reach. Please log in.")
       end
     end
@@ -734,26 +732,26 @@ describe ChaptersController do
       context "when passing params[:chapters]" do
         it "updates the positions of the chapters" do
           post :update_positions, params: { work_id: work.id, chapters: [1, 3, 2, 4] }
-          expect(@chapter1.reload.position).to eq(1)
-          expect(@chapter2.reload.position).to eq(3)
-          expect(@chapter3.reload.position).to eq(2)
-          expect(@chapter4.reload.position).to eq(4)
+          expect(chapter1.reload.position).to eq(1)
+          expect(chapter2.reload.position).to eq(3)
+          expect(chapter3.reload.position).to eq(2)
+          expect(chapter4.reload.position).to eq(4)
         end
 
         it "preserves ordering if order values are all empty" do
           post :update_positions, params: { work_id: work.id, chapters: ["", "", "", ""] }
-          expect(@chapter1.reload.position).to eq(1)
-          expect(@chapter2.reload.position).to eq(2)
-          expect(@chapter3.reload.position).to eq(3)
-          expect(@chapter4.reload.position).to eq(4)
+          expect(chapter1.reload.position).to eq(1)
+          expect(chapter2.reload.position).to eq(2)
+          expect(chapter3.reload.position).to eq(3)
+          expect(chapter4.reload.position).to eq(4)
         end
 
         it "preserves ordering for empty values" do
           post :update_positions, params: { work_id: work.id, chapters: ["", "", "", 1] }
-          expect(@chapter1.reload.position).to eq(2)
-          expect(@chapter2.reload.position).to eq(3)
-          expect(@chapter3.reload.position).to eq(4)
-          expect(@chapter4.reload.position).to eq(1)
+          expect(chapter1.reload.position).to eq(2)
+          expect(chapter2.reload.position).to eq(3)
+          expect(chapter3.reload.position).to eq(4)
+          expect(chapter4.reload.position).to eq(1)
         end
 
         it "gives a notice and redirects to work" do
@@ -764,11 +762,11 @@ describe ChaptersController do
 
       context "when passing params[:chapter]" do
         it "updates the positions of the chapters" do
-          post :update_positions, params: { work_id: work.id, chapter: [@chapter1, @chapter3, @chapter2, @chapter4], format: :js }
-          expect(@chapter1.reload.position).to eq(1)
-          expect(@chapter2.reload.position).to eq(3)
-          expect(@chapter3.reload.position).to eq(2)
-          expect(@chapter4.reload.position).to eq(4)
+          post :update_positions, params: { work_id: work.id, chapter: [chapter1, chapter3, chapter2, chapter4], format: :js }
+          expect(chapter1.reload.position).to eq(1)
+          expect(chapter2.reload.position).to eq(3)
+          expect(chapter3.reload.position).to eq(2)
+          expect(chapter4.reload.position).to eq(4)
         end
       end
     end
