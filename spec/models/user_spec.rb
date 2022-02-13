@@ -139,6 +139,44 @@ describe User do
       existing_user.update(email: "newemail@example.com")
       expect(existing_user.renamed_at).to be_nil
     end
+
+    context "username recently changed" do
+      before do
+        Timecop.freeze
+        existing_user.update(login: "#{existing_user.login}2")
+      end
+
+      after do
+        Timecop.return
+      end
+
+      it "does not allow another rename" do
+        expect(existing_user.update(login: "new")).to be_falsey
+        localized_renamed_at = I18n.l(Time.now.in_time_zone(existing_user.renamed_at.time_zone), format: :long)
+        expect(existing_user.errors[:user_name].first).to eq(
+          "can only be changed 1 time every 7 days. You last changed your user name on #{localized_renamed_at}"
+        )
+      end
+
+      it "allows changing email" do
+        new_email = "#{existing_user.email}2"
+        existing_user.update(email: new_email)
+        expect(existing_user.email).to eq(new_email)
+      end
+    end
+
+    context "username changed outside window" do
+      before do
+        Timecop.travel(ArchiveConfig.USERNAME_CHANGE["INTERVAL_DAYS"].days.ago) do
+          existing_user.update(login: "#{existing_user.login}2")
+        end
+      end
+
+      it "allows another rename" do
+        expect(existing_user.update(login: "new")).to be_truthy
+        expect(existing_user.login).to eq("new")
+      end
+    end
   end
 
   describe ".search_multiple_by_email" do

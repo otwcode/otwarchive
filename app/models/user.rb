@@ -174,6 +174,7 @@ class User < ApplicationRecord
                       message: ts("must begin and end with a letter or number; it may also contain underscores but no other characters."),
                       with: /\A[A-Za-z0-9]\w*[A-Za-z0-9]\Z/
   validates_uniqueness_of :login, case_sensitive: false, message: ts("has already been taken")
+  validate :login, :check_username_already_changed
 
   validates :email, email_veracity: true, email_format: true
 
@@ -531,6 +532,17 @@ class User < ApplicationRecord
   def remove_stale_from_autocomplete
     Rails.logger.debug "Removing stale from autocomplete: #{autocomplete_search_string_was}"
     self.class.remove_from_autocomplete(self.autocomplete_search_string_was, self.autocomplete_prefixes, self.autocomplete_value_was)
+  end
+
+  def check_username_already_changed
+    change_interval_days = ArchiveConfig.USERNAME_CHANGE["INTERVAL_DAYS"]
+    return unless renamed_at && change_interval_days.days.ago <= renamed_at
+
+    errors.add(:user_name,
+      ts("can only be changed %{times} time every %{days} days. You last changed your user name on %{renamed_at}",
+        times: ArchiveConfig.USERNAME_CHANGE["TIMES"],
+        days: change_interval_days,
+        renamed_at: I18n.l(renamed_at, format: :long)))
   end
 
 end
