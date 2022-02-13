@@ -525,7 +525,7 @@ class User < ApplicationRecord
   def log_change_if_login_was_edited
     return unless saved_change_to_login?
 
-    create_log_item(options = { action: ArchiveConfig.ACTION_RENAME, note: "Old Username: #{login_before_last_save}; New Username: #{login}" })
+    create_log_item(action: ArchiveConfig.ACTION_RENAME, note: "Old Username: #{login_before_last_save}; New Username: #{login}")
     self.update_attribute(:renamed_at, Time.now.utc)
   end
 
@@ -544,5 +544,4 @@ class User < ApplicationRecord
                   days: change_interval_days,
                   renamed_at: I18n.l(renamed_at, format: :long)))
   end
-
 end
