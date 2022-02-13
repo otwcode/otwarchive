@@ -539,10 +539,10 @@ class User < ApplicationRecord
     return unless renamed_at && change_interval_days.days.ago <= renamed_at
 
     errors.add(:user_name,
-      ts("can only be changed %{times} time every %{days} days. You last changed your user name on %{renamed_at}",
-        times: ArchiveConfig.USERNAME_CHANGE["TIMES"],
-        days: change_interval_days,
-        renamed_at: I18n.l(renamed_at, format: :long)))
+               ts("can only be changed %{times} time every %{days} days. You last changed your user name on %{renamed_at}",
+                  times: ArchiveConfig.USERNAME_CHANGE["TIMES"],
+                  days: change_interval_days,
+                  renamed_at: I18n.l(renamed_at, format: :long)))
   end
 
 end
