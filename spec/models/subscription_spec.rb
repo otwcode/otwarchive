@@ -82,7 +82,7 @@ describe Subscription do
     end
 
     it "has a name" do
-      expect(subscription.name).to eq("DELETED")
+      expect(subscription.name).to eq("Deleted item")
     end
   end
 
