@@ -6,7 +6,7 @@ class Admin::AdminUsersController < Admin::BaseController
     @role_values = @roles.map{ |role| [role.name.humanize.titlecase, role.name] }
     @role = Role.find_by(name: params[:role]) if params[:role]
     @users = User.search_by_role(
-      @role, params[:name], params[:email],
+      @role, params[:name], params[:email], params[:user_id],
       inactive: params[:inactive], exact: params[:exact], page: params[:page]
     )
   end

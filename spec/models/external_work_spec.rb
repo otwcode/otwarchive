@@ -31,7 +31,11 @@ describe ExternalWork do
 
     URLS.each do |url|
       let(:valid_url) {build(:external_work, url: url)}
+
       it "saves the external work" do
+        # prevent connection failures -- all we care about is the format
+        WebMock.stub_request(:any, url)
+
         expect(valid_url.save).to be_truthy
       end
     end

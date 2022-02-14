@@ -11,14 +11,16 @@ Feature: Collectible items in closed collections
     Given I post the work "Blabla"
     When I add my work to the collection
     Then I should see "is closed"
-    When I go to "Various Penguins" collection's page
-    Then I should see "Works (0)"
+    When the collection counts have expired
+      And I go to "Various Penguins" collection's page
+    Then I should see "Works (0)" within "#dashboard"
       And I should not see "Blabla"
 
   Scenario: Add my bookmark to a closed collection
     Given I have a bookmark for "Tundra penguins"
     When I add my bookmark to the collection "Various_Penguins"
     Then I should see "is closed"
-    When I go to "Various Penguins" collection's page
-    Then I should see "Bookmarked Items (0)"
+    When the collection counts have expired
+      And I go to "Various Penguins" collection's page
+    Then I should see "Bookmarked Items (0)" within "#dashboard"
       And I should not see "Tundra penguins"
