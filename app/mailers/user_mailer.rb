@@ -356,6 +356,8 @@ class UserMailer < ActionMailer::Base
     download = Download.new(@work, mime_type: "text/html")
     html = DownloadWriter.new(download).generate_html
     txt = ActionController::Base.helpers.strip_tags(html)
+    html = ::Mail::Encodings::Base64.encode(html)
+    txt = ::Mail::Encodings::Base64.encode(txt)
     attachments["#{download.file_name}.html"] = { content: html, encoding: "base64" }
     attachments["#{download.file_name}.txt"] = { content: txt, encoding: "base64" }
 
@@ -376,6 +378,8 @@ class UserMailer < ActionMailer::Base
     download = Download.new(@work, mime_type: "text/html")
     html = DownloadWriter.new(download).generate_html
     txt = ActionController::Base.helpers.strip_tags(html)
+    html = ::Mail::Encodings::Base64.encode(html)
+    txt = ::Mail::Encodings::Base64.encode(txt)
     attachments["#{download.file_name}.html"] = { content: html, encoding: "base64" }
     attachments["#{download.file_name}.txt"] = { content: txt, encoding: "base64" }
 
