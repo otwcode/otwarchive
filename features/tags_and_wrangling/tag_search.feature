@@ -47,148 +47,148 @@ Feature: Search Tags
       When I follow "first.fandom"
       Then I should see "This tag belongs to the Fandom Category"
 
-	Scenario: Search for tag in canonical fandom(s)
-	  Given I have no tags
-        And a canonical character "Anna Anderson" in fandom "Fandom A"
-        And a canonical character "Abby Anderson" in fandom "Fandom B"
-        And I add the fandom "Fandom A" to the character "Abby Anderson"
-        And a character exists with name: "Null Anderson"
-        And a fandom exists with name: "Not Canon Fandom", canonical: false
-        And all indexing jobs have been run
-	  # Tag in one canonical fandom
-      When I am on the search tags page
-        And I fill in "Tag name" with "Anderson"
-        And I fill in "Fandom" with "Fandom A"
-        And I press "Search Tags"
-        Then I should see "2 Found"
-        And I should see the tag search result "Anna Anderson"
-        And I should see the tag search result "Abby Anderson"
-        And I should not see the tag search result "Null Anderson"
-      # Tag in multiple canonical fandoms
-      When I am on the search tags page
-        And I fill in "Tag name" with "Anderson"
-        And I fill in "Fandom" with "Fandom A, Fandom B"
-        And I press "Search Tags"
-      Then I should see "1 Found"
-        And I should see the tag search result "Abby Anderson"
-        And I should not see the tag search result "Anna Anderson"
-        And I should not see the tag search result "Null Anderson"
-	  # Search with non-canonical fandom
-      When I am on the search tags page
-        And I fill in "Tag name" with "Anderson"
-        And I fill in "Fandom" with "Not Canon Fandom"
-        And I press "Search Tags"
-      Then I should see "0 Found"
-	  # Search with non-existent fandom
-      When I am on the search tags page
-        And I fill in "Tag name" with "Anderson"
-        And I fill in "Fandom" with "non-existent fandom"
-        And I press "Search Tags"
-      Then I should see "0 Found"
-
-	Scenario: Search by Type of tags
-      Given I have no tags
-	    And a fandom exists with name: "first fandom"
-        And a character exists with name: "first character"
-        And a relationship exists with name: "first last/someone else"
-        And a freeform exists with name: "first fic please be nice"
-        And all indexing jobs have been run
-      When I am on the search tags page
-        And I fill in "Tag name" with "first"
-        And I choose "Fandom"
-        And I press "Search Tags"
-      Then I should see "1 Found"
-        And I should see the tag search result "Fandom: first fandom"
-        And I should not see the tag search result "Character: first character"
-        And I should not see the tag search result "Relationship: first last/somone else"
-        And I should not see the tag search result "Freeform: first fic please be nice"
-      When I am on the search tags page
-        And I fill in "Tag name" with "first"
-        And I choose "Character"
-        And I press "Search Tags"
-      Then I should see "1 Found"
-        And I should see the tag search result "Character: first character"
-        And I should not see the tag search result "Fandom: first fandom"
-        And I should not see the tag search result "Relationship: first last/somone else"
-        And I should not see the tag search result "Freeform: first fic, please be nice"
-      When I am on the search tags page
-        And I fill in "Tag name" with "first"
-        And I choose "Relationship"
-        And I press "Search Tags"
-      Then I should see "1 Found"
-        And I should see the tag search result "Relationship: first last/somone else"
-        And I should not see the tag search result "Fandom: first fandom"
-        And I should not see the tag search result "Character: first character"
-        And I should not see the tag search result "Freeform: first fic, please be nice"
-      When I am on the search tags page
-        And I fill in "Tag name" with "first"
-        And I choose "Freeform"
-        And I press "Search Tags"
-      Then I should see "1 Found"
-        And I should see the tag search result "Freeform: first fic, please be nice"
-        And I should not see the tag search result "Fandom: first fandom"
-        And I should not see the tag search result "Character: first character"
-        And I should not see the tag search result "Relationship: first last/somone else"
-
-	Scenario: Search by wrangling status
-      Given I have no tags
-        And a fandom exists with name: "Not Canon Fandom", canonical: false
-        And a character exists with name: "Canon Character", canonical: true
-        And all indexing jobs have been run
-      When I am on the search tags page
-        And I fill in "Tag name" with "Canon"
-        And I choose "Canonical"
-        And I press "Search Tags"
-      Then I should see "1 Found"
-        And I should see the tag search result "Character: Canon Character (0)"
-        And I should not see the tag search result "Fandom: Not Canon Fandom (0)"
-      When I am on the search tags page
-        And I fill in "Tag name" with "Canon"
-        And I choose "Non-canonical"
-        And I press "Search Tags"
-      Then I should see "1 Found"
-        And I should see the tag search result "Fandom: Not Canon Fandom (0)"
-        And I should not see the tag search result "Character: Canon Character (0)"
-      When I am on the search tags page
-        And I fill in "Tag name" with "Canon"
-        And I choose "Any status"
-        And I press "Search Tags"
+  Scenario: Search for tag in canonical fandom(s)
+    Given I have no tags
+      And a canonical character "Anna Anderson" in fandom "Fandom A"
+      And a canonical character "Abby Anderson" in fandom "Fandom B"
+      And I add the fandom "Fandom A" to the character "Abby Anderson"
+      And a character exists with name: "Null Anderson"
+      And a fandom exists with name: "Not Canon Fandom", canonical: false
+      And all indexing jobs have been run
+    # Tag in one canonical fandom
+    When I am on the search tags page
+      And I fill in "Tag name" with "Anderson"
+      And I fill in "Fandom" with "Fandom A"
+      And I press "Search Tags"
       Then I should see "2 Found"
-        And I should see the tag search result "Fandom: Not Canon Fandom (0)"
-        And I should see the tag search result "Character: Canon Character (0)"
+      And I should see the tag search result "Anna Anderson"
+      And I should see the tag search result "Abby Anderson"
+      And I should not see the tag search result "Null Anderson"
+    # Tag in multiple canonical fandoms
+    When I am on the search tags page
+      And I fill in "Tag name" with "Anderson"
+      And I fill in "Fandom" with "Fandom A, Fandom B"
+      And I press "Search Tags"
+    Then I should see "1 Found"
+      And I should see the tag search result "Abby Anderson"
+      And I should not see the tag search result "Anna Anderson"
+      And I should not see the tag search result "Null Anderson"
+    # Search with non-canonical fandom
+    When I am on the search tags page
+      And I fill in "Tag name" with "Anderson"
+      And I fill in "Fandom" with "Not Canon Fandom"
+      And I press "Search Tags"
+    Then I should see "0 Found"
+    # Search with non-existent fandom
+    When I am on the search tags page
+      And I fill in "Tag name" with "Anderson"
+      And I fill in "Fandom" with "non-existent fandom"
+      And I press "Search Tags"
+    Then I should see "0 Found"
 
-    Scenario: Search and sort by Date Created
-      Given I have no tags
-        And a freeform exists with name: "created first", created_at: "2008-01-01 20:00:00 Z"
-        And a freeform exists with name: "created second", created_at: "2009-01-01 20:00:00 Z"
-        And a freeform exists with name: "created third", created_at: "2010-01-01 20:00:00 Z"
-        And a freeform exists with name: "created fourth", created_at: "2011-01-01 20:00:00 Z"
-        And all indexing jobs have been run
-      When I am on the search tags page
-        And I fill in "Tag name" with "created"
-        And I select "Date Created" from "Sort by"
-        And I press "Search Tags"
-      Then I should see "4 Found"
-        And the 1st tag result should contain "created fourth"
-        And the 2nd tag result should contain "created third"
-        And the 3rd tag result should contain "created second"
-        And the 4th tag result should contain "created first"
+  Scenario: Search by Type of tags
+    Given I have no tags
+      And a fandom exists with name: "first fandom"
+      And a character exists with name: "first character"
+      And a relationship exists with name: "first last/someone else"
+      And a freeform exists with name: "first fic please be nice"
+      And all indexing jobs have been run
+    When I am on the search tags page
+      And I fill in "Tag name" with "first"
+      And I choose "Fandom"
+      And I press "Search Tags"
+    Then I should see "1 Found"
+      And I should see the tag search result "Fandom: first fandom"
+      And I should not see the tag search result "Character: first character"
+      And I should not see the tag search result "Relationship: first last/somone else"
+      And I should not see the tag search result "Freeform: first fic please be nice"
+    When I am on the search tags page
+      And I fill in "Tag name" with "first"
+      And I choose "Character"
+      And I press "Search Tags"
+    Then I should see "1 Found"
+      And I should see the tag search result "Character: first character"
+      And I should not see the tag search result "Fandom: first fandom"
+      And I should not see the tag search result "Relationship: first last/somone else"
+      And I should not see the tag search result "Freeform: first fic, please be nice"
+    When I am on the search tags page
+      And I fill in "Tag name" with "first"
+      And I choose "Relationship"
+      And I press "Search Tags"
+    Then I should see "1 Found"
+      And I should see the tag search result "Relationship: first last/somone else"
+      And I should not see the tag search result "Fandom: first fandom"
+      And I should not see the tag search result "Character: first character"
+      And I should not see the tag search result "Freeform: first fic, please be nice"
+    When I am on the search tags page
+      And I fill in "Tag name" with "first"
+      And I choose "Freeform"
+      And I press "Search Tags"
+    Then I should see "1 Found"
+      And I should see the tag search result "Freeform: first fic, please be nice"
+      And I should not see the tag search result "Fandom: first fandom"
+      And I should not see the tag search result "Character: first character"
+      And I should not see the tag search result "Relationship: first last/somone else"
 
-	Scenario: Search and sort by Uses
-      Given I have no tags
-        And a set of works for tag sort by use exists
-        And all indexing jobs have been run
-      When I am on the search tags page
-        And I fill in "Tag name" with "uses"
-        And I select "Uses" from "Sort by"
-        And I press "Search Tags"
-      Then I should see "6 Found"
-        And the 1st tag result should contain "10 uses"
-        And the 2nd tag result should contain "8 uses"
-        And the 3rd tag result should contain "8 uses"
-        And the 4th tag result should contain "5 uses"
-        And the 5th tag result should contain "2 uses"
-        And the 6th tag result should contain "0 uses"
+  Scenario: Search by wrangling status
+    Given I have no tags
+      And a fandom exists with name: "Not Canon Fandom", canonical: false
+      And a character exists with name: "Canon Character", canonical: true
+      And all indexing jobs have been run
+    When I am on the search tags page
+      And I fill in "Tag name" with "Canon"
+      And I choose "Canonical"
+      And I press "Search Tags"
+    Then I should see "1 Found"
+      And I should see the tag search result "Character: Canon Character (0)"
+      And I should not see the tag search result "Fandom: Not Canon Fandom (0)"
+    When I am on the search tags page
+      And I fill in "Tag name" with "Canon"
+      And I choose "Non-canonical"
+      And I press "Search Tags"
+    Then I should see "1 Found"
+      And I should see the tag search result "Fandom: Not Canon Fandom (0)"
+      And I should not see the tag search result "Character: Canon Character (0)"
+    When I am on the search tags page
+      And I fill in "Tag name" with "Canon"
+      And I choose "Any status"
+      And I press "Search Tags"
+    Then I should see "2 Found"
+      And I should see the tag search result "Fandom: Not Canon Fandom (0)"
+      And I should see the tag search result "Character: Canon Character (0)"
+
+  Scenario: Search and sort by Date Created
+    Given I have no tags
+      And a freeform exists with name: "created first", created_at: "2008-01-01 20:00:00 Z"
+      And a freeform exists with name: "created second", created_at: "2009-01-01 20:00:00 Z"
+      And a freeform exists with name: "created third", created_at: "2010-01-01 20:00:00 Z"
+      And a freeform exists with name: "created fourth", created_at: "2011-01-01 20:00:00 Z"
+      And all indexing jobs have been run
+    When I am on the search tags page
+      And I fill in "Tag name" with "created"
+      And I select "Date Created" from "Sort by"
+      And I press "Search Tags"
+    Then I should see "4 Found"
+      And the 1st tag result should contain "created fourth"
+      And the 2nd tag result should contain "created third"
+      And the 3rd tag result should contain "created second"
+      And the 4th tag result should contain "created first"
+
+  Scenario: Search and sort by Uses
+    Given I have no tags
+      And a set of works for tag sort by use exists
+      And all indexing jobs have been run
+    When I am on the search tags page
+      And I fill in "Tag name" with "uses"
+      And I select "Uses" from "Sort by"
+      And I press "Search Tags"
+    Then I should see "6 Found"
+      And the 1st tag result should contain "10 uses"
+      And the 2nd tag result should contain "8 uses"
+      And the 3rd tag result should contain "8 uses"
+      And the 4th tag result should contain "5 uses"
+      And the 5th tag result should contain "2 uses"
+      And the 6th tag result should contain "0 uses"
 
       # If this was a bug, it's fixed now?
       # When I am on the search tags page
