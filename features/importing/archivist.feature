@@ -1,3 +1,4 @@
+@archivist_import
 Feature: Archivist bulk imports
 
   Background:

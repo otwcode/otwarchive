@@ -439,8 +439,8 @@ Feature: Prompt Meme Challenge
       And the user "participant" disallows gifts
     When I go to "Battle 12" collection's page
       And I follow "Prompt Form"
-    Then I should see "Signing up for this challenge will allow users to give you gift works"
+    Then I should see "any user who claims your prompt to gift you a work in response to your prompt regardless of your preference settings"
     When the user "participant" allows gifts
       And I go to "Battle 12" collection's page
       And I follow "Prompt Form"
-    Then I should not see "Signing up for this challenge will allow users to give you gift works"
+    Then I should not see "any user who claims your prompt to gift you a work in response to your prompt regardless of your preference settings"
