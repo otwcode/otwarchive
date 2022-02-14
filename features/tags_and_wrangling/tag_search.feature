@@ -49,12 +49,11 @@ Feature: Search Tags
 
 	Scenario: Search for tag in canonical fandom(s)
 	  Given I have no tags
-        And a fandom exists with name: "Fandom A", canonical: true
-        And a fandom exists with name: "Fandom B", canonical: true
-        And I add the fandom "Fandom A" to the character "Anna Anderson"
+        And a canonical character "Anna Anderson" in fandom "Fandom A"
+        And a canonical character "Abby Anderson" in fandom "Fandom B"
         And I add the fandom "Fandom A" to the character "Abby Anderson"
-        And I add the fandom "Fandom B" to the character "Abby Anderson"
         And a character exists with name: "Null Anderson"
+        And a fandom exists with name: "Not Canon Fandom", canonical: false
         And all indexing jobs have been run
 	  # Tag in one canonical fandom
       When I am on the search tags page
@@ -74,6 +73,18 @@ Feature: Search Tags
         And I should see the tag search result "Abby Anderson"
         And I should not see the tag search result "Anna Anderson"
         And I should not see the tag search result "Null Anderson"
+	  # Search with non-canonical fandom
+      When I am on the search tags page
+        And I fill in "Tag name" with "Anderson"
+        And I fill in "Fandom" with "Not Canon Fandom"
+        And I press "Search Tags"
+      Then I should see "0 Found"
+	  # Search with non-existent fandom
+      When I am on the search tags page
+        And I fill in "Tag name" with "Anderson"
+        And I fill in "Fandom" with "non-existent fandom"
+        And I press "Search Tags"
+      Then I should see "0 Found"
 
 	Scenario: Search by Type of tags
       Given I have no tags
@@ -90,7 +101,7 @@ Feature: Search Tags
         And I should see the tag search result "Fandom: first fandom"
         And I should not see the tag search result "Character: first character"
         And I should not see the tag search result "Relationship: first last/somone else"
-        And I should not see the tag search result "Freeform: first fic, please be nice"
+        And I should not see the tag search result "Freeform: first fic please be nice"
       When I am on the search tags page
         And I fill in "Tag name" with "first"
         And I choose "Character"
@@ -155,7 +166,7 @@ Feature: Search Tags
         And all indexing jobs have been run
       When I am on the search tags page
         And I fill in "Tag name" with "created"
-        And I select "Date Created" from "tag_search_sort_column"
+        And I select "Date Created" from "Sort by"
         And I press "Search Tags"
       Then I should see "4 Found"
         And the 1st tag result should contain "created fourth"
@@ -165,17 +176,11 @@ Feature: Search Tags
 
 	Scenario: Search and sort by Uses
       Given I have no tags
-        And a freeform exists with name: "10 uses"
-        And a freeform exists with name: "8 uses"
-        And a freeform exists with name: "also 8 uses"
-        And a freeform exists with name: "5 uses"
-        And a freeform exists with name: "2 uses"
-        And a freeform exists with name: "0 uses"
         And a set of works for tag sort by use exists
         And all indexing jobs have been run
       When I am on the search tags page
         And I fill in "Tag name" with "uses"
-        And I select "Uses" from "tag_search_sort_column"
+        And I select "Uses" from "Sort by"
         And I press "Search Tags"
       Then I should see "6 Found"
         And the 1st tag result should contain "10 uses"

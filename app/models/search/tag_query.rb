@@ -122,7 +122,7 @@ class TagQuery < Query
 
     return if included_fandom_names.blank?
 
-    match_filter(:tag, included_fandom_names.join(" "))
+    match_filter(:name, included_fandom_names.join(" "))
   end
 
   ####################
