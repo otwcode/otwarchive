@@ -23,7 +23,6 @@ class TagQuery < Query
       character_filter,
       suggested_fandom_filter,
       suggested_character_filter,
-      named_fandom_inclusion_filter
     ].flatten.compact
   end
 
@@ -89,9 +88,6 @@ class TagQuery < Query
   end
 
   def fandom_filter
-    # Parse given fandom names and returns a list of ids found in the database.
-    options[:fandom_ids] ||= parse_named_tags(options[:fandom_names])[:ids] if options[:fandom_names]
-    
     options[:fandom_ids]&.map { |fandom_id| term_filter(:fandom_ids, fandom_id) }
   end
 
@@ -112,45 +108,6 @@ class TagQuery < Query
   # exclusion_filters section.
   def wrangled_filter
     { exists: { field: "fandom_ids" } } unless options[:wrangled].nil?
-  end
-
-  # This filter is used to restrict results to only include tags whose fandoms
-  # matches all of the fandom names provided. This is useful when the user
-  # enters a non-existent fandom, which would be discarded by fandom_filter.
-  def named_fandom_inclusion_filter
-    included_fandom_names ||= parse_named_tags(options[:fandom_names])[:missing] if options[:fandom_names]
-
-    return if included_fandom_names.blank?
-
-    match_filter(:name, included_fandom_names.join(" "))
-  end
-
-  ####################
-  # HELPERS
-  ####################
-
-  # Used by fandom_filter and named_fandom_inclusion_filter.
-  # Uses the database to look up all of the tag names listed in the passed-in
-  # field. Returns a hash with the following format:
-  #   {
-  #     ids: [1, 2, 3],
-  #     missing: ["missing tag name", "other missing"]
-  #   }
-  def parse_named_tags(field)
-    names = all_tag_names(field)
-    found = names ? Tag.where(name: names).pluck(:id, :name) : []
-
-    {
-      ids: found.map(&:first),
-      missing: (names - found.map(&:second)).uniq
-    }
-  end
-
-  # Used by parse_named_tags.
-  # Parse the options for a passed-in field, treating it as a comma-separated
-  # list of tags. Returns the list of tags, blank and duplicate tags removed.
-  def all_tag_names(field)
-    field.split(",").map(&:squish).reject(&:blank?).uniq
   end
 
   ################

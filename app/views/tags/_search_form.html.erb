@@ -9,10 +9,10 @@
         <%= f.text_field :name %>
       </dd>
       <dt>
-        <%= f.label :fandom_names, ts("Fandoms") %>
+        <%= f.label :fandoms, ts("Fandoms") %>
       </dt>
       <dd>
-        <%= f.text_field :fandom_names, autocomplete_options("fandoms", "aria-describedby" => "fandom-field-description") %>
+        <%= f.text_field :fandoms, autocomplete_options("fandoms", "aria-describedby" => "fandom-field-description") %>
         <p class="footnote" id="fandom-field-description">
           <%= ts("Find tags wrangled to specific canonical fandoms.") %>
         </p>

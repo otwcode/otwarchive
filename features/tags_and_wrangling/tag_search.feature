@@ -73,18 +73,30 @@ Feature: Search Tags
       And I should see the tag search result "Abby Anderson"
       And I should not see the tag search result "Anna Anderson"
       And I should not see the tag search result "Null Anderson"
-    # Search with non-canonical fandom
+    # Search with non-canonical fandom will yield no results
     When I am on the search tags page
       And I fill in "Tag name" with "Anderson"
       And I fill in "Fandom" with "Not Canon Fandom"
       And I press "Search Tags"
     Then I should see "0 Found"
-    # Search with non-existent fandom
+    # Search with non-existent fandom ignores non-existent fandom (like People Search)
     When I am on the search tags page
       And I fill in "Tag name" with "Anderson"
       And I fill in "Fandom" with "non-existent fandom"
       And I press "Search Tags"
-    Then I should see "0 Found"
+    Then I should see "3 Found"
+      And I should see the tag search result "Abby Anderson"
+      And I should see the tag search result "Anna Anderson"
+      And I should see the tag search result "Null Anderson"
+    # Search with non-existent fandom and canonical fandom filters by canonical fandom
+    When I am on the search tags page
+      And I fill in "Tag name" with "Anderson"
+      And I fill in "Fandom" with "non-existent fandom, Fandom A"
+      And I press "Search Tags"
+    Then I should see "2 Found"
+      And I should see the tag search result "Anna Anderson"
+      And I should see the tag search result "Abby Anderson"
+      And I should not see the tag search result "Null Anderson"
 
   Scenario: Search by Type of tags
     Given I have no tags

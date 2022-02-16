@@ -397,7 +397,7 @@ class TagsController < ApplicationController
     params.require(:tag_search).permit(
       :query,
       :name,
-      :fandom_names,
+      :fandoms,
       :type,
       :fandom_ids,
       :canonical,
