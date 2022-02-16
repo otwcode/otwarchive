@@ -24,11 +24,11 @@ es:
         informal:
           addressed: "¡Hola, %{name}!"
           unaddressed: "¡Hola!"
-        introductory: Saludos de parte del Archive of Our Own – AO3 (Un Archivo Propio)
+        introductory: Saludos de parte del Archive of Our Own – AO3 (Un Archivo Propio)
       signature:
         app_short_name: AO3
         open_doors: El equipo de Open Doors (Puertas Abiertas)
-        parent_org: Organization for Transformative Works – OTW (Organización para
+        parent_org: Organization for Transformative Works – OTW (Organización para
           las Obras Transformativas)
         support: El equipo de Soporte Técnico del AO3
     kudos:
@@ -38,7 +38,7 @@ es:
       html:
         left_kudos:
           one: "%{givers_list} dejó kudos en %{commentable_link}."
-          other: "%{givers_list} dejaron kudos en %{commentable_link}."
+          other: "%{givers_list} dejaron kudos en %{commentable_link}"
       text:
         left_kudos:
           one: "%{givers_list} dejó kudos en %{commentable_link}."
@@ -117,11 +117,9 @@ es:
           puede conllevar a la eliminación de tu obra del AO3.
       tos: Términos y Condiciones de Servicio
     anonymous_or_unrevealed_notification:
-      anonymous_info: 'Las obras anónimas están incluidas en los listados por etiquetas,
+      anonymous_info: Las obras anónimas están incluidas en los listados por etiquetas,
         pero no aparecerán en tu página de obras. Tu nombre de usuarix será reemplazado
         por "Anonymous" (Anónimo) en la obra.
-
-        '
       anonymous_unrevealed_info: Lxs encargadxs de la colección pueden revelar tu
         obra en el futuro pero dejarla anónima. Tus subscriptores no serán notificados
         acerca de este cambio. Una vez revelada, tu obra estará incluida en los listados
@@ -165,11 +163,11 @@ es:
           text: 'Si no quieres que tu obra esté sin revelar, por favor visita tu página
             de Approved Collection Items (Obras autorizadas para estar en una colección)
             para eliminarla de la colección: %{collection_items_url}'
-      faq_link_text: FAQs (preguntas frecuentes) de colecciones y desafíos
+      faq_link_text: FAQs (preguntas frecuentes) de colecciones
       more_info:
         html: Para más información, visita nuestras %{faq_link}.
         text: 'Para más información, visita nuestras FAQs (preguntas frecuentes) de
-          colecciones y desafíos: %{faq_url}'
+          colecciones: %{faq_url}'
       subject:
         anonymous: "[%{app_name}] Tu obra ahora es anónima"
         anonymous_unrevealed: "[%{app_name}] Tu obra ahora es anónima y está sin revelar"
@@ -199,7 +197,7 @@ es:
       subject: "[%{app_name}][%{collection_title}] ¡Tu tarea!"
       text:
         assignment: ¡Se te ha asignado la siguiente solicitud en el desafío "%{collection_title}"
-          (%{collection_url})  en el AO3 (Un Archivo Propio)!
+          (%{collection_url}) en el AO3 (Un Archivo Propio)!
         footer: Has recibido este correo porque participas del desafío %{title} (%{url}).
           Para más información sobre este desafío y sobre cómo contactar a lxs moderadorxs,
           por favor visita %{profile_url}.
@@ -220,44 +218,69 @@ es:
           (%{collection_url}):'
     creatorship_notification:
       explanation: Cuando eres co-creadorx de una obra te pueden añadir a nuevos capítulos,
-        sin importar tu configuración de co-creación. También se añadirá tu  pseudónimo
+        sin importar tu configuración de co-creación. También se añadirá tu pseudónimo
         a cualquier serie que incluya esta obra.
       html:
         creation: "%{creation_link} por %{pseud_links}"
-        edit: 'edita el siguiente contenido: %{type}'
-        remove: Si has sido añadidx por error o no quieres aparecer como creadorx,
-          puedes %{edit} para eliminarte como creadorx.
-      intro: 'La cuenta de usuarix %{adding_user} ha añadido tu pseudónimo %{pseud}
-        como co-creadorx del siguiente contenido: %{type}:'
+        edit_chapter: editar el capítulo
+        edit_series: editar la serie
+        remove_chapter: Si has sido añadidx por error o no quieres aparecer como creadorx,
+          puedes {edit_chapter_link} para eliminarte como creadorx.
+        remove_series: Si has sido agregado por error o no deseas ser incluidx como
+          co-creadorx, puedes %{edit_series_link} para eliminarte como creadorx.
+      intro_chapter: 'La cuenta de usuarix %{adding_user} ha añadido tu pseudónimo
+        %{pseud} como co-creadorx del siguiente capítulo:'
+      intro_series: 'Elx usuarix %{adding_user} ha incluido tu pseudónimo %{pseud}
+        como co-creadorx en la siguiente serie:'
       subject: "[%{app_name}] Notificación de co-creadorx"
       text:
         creation: "%{title} (%{url}) por %{pseuds}"
-        remove: 'Si has sido añadidx por error o no quieres aparecer como creadorx,
-          puedes editar el siguiente contenido: %{type}, para eliminarte como creadorx:
-          %{url}'
+        remove_chapter: 'Si has sido añadidx por error o no quieres aparecer como
+          creadorx, puedes editar el capítulo para eliminarte como creadorx: %{url}'
+        remove_series: 'Si has sido agregadx por error o no deseas aparecer como co-creadorx,
+          puedes editar la serie para eliminarte como creadorx: %{url}'
     creatorship_notification_archivist:
       explanation: Puesto que actúan en su capacidad oficial como archivistas de Open
         Doors (Puertas Abiertas), se les permite añadirte sin invitación, incluso
         si tienes la co-creación deshabilitada.
       html:
         creation: "%{creation_link} por %{pseud_links}"
-        edit: edita la %{type}
-        remove: Si se te ha añadido por error o no quieres aparecer como creadorx,
-          puedes %{edit} para eliminarte como creadorx.
-      intro: 'El/La usuarix %{archivist} ha añadido tu pseudónimo %{pseud} como co-creadorx
-        en la siguiente %{type}:'
+        edit_chapter: editar el capítulo
+        edit_series: editar la serie
+        edit_work: editar la obra
+        remove_chapter: Si se te ha añadido por error o no quieres aparecer como creadorx,
+          puedes %{edit_chapter_link}} para eliminarte como creadorx.
+        remove_series: Si se te ha añadido por error o no quieres aparecer como creadorx,
+          puedes %{edit_series_link} para eliminarte como creadorx.
+        remove_work: Si se te ha añadido por error o no quieres aparecer como creadorx,
+          puedes %{edit_work_link} para eliminarte como creadorx.
+      intro_chapter: 'El/La usuarix %{archivist} ha añadido tu pseudónimo %{pseud}
+        como co-creadorx en el siguiente capítulo:'
+      intro_series: 'El/La usuarix %{archivist} ha añadido tu pseudónimo %{pseud}
+        como co-creadorx en la siguiente serie:'
+      intro_work: 'El/La usuarix %{archivist} ha añadido tu pseudónimo %{pseud} como
+        co-creadorx en la siguiente obra %{type}:'
       subject: "[%{app_name}] Notificación de co-creadorx por parte de archivista"
       text:
         creation: "%{title} (%{url}) por %{pseuds}"
-        remove: 'Si se te ha añadido por error o no quieres aparecer como creadorx,
+        remove_chapter: 'Si se te ha añadido por error o no quieres aparecer como
+          creadorx, puedes editar el capítulo pare para eliminarte como creadorx:
+          %{url}'
+        remove_series: 'Si se te ha añadido por error o no quieres aparecer como creadorx,
+          puedes editar la serie para eliminarte como creadorx: %{url}'
+        remove_work: 'Si se te ha añadido por error o no quieres aparecer como creadorx,
           puedes editar la %{type} para eliminarte como creadorx: %{url}'
     creatorship_request:
       html:
         creation: "%{creation_link} de %{pseud_links}"
         instructions: Puedes aceptar o rechazar la solicitud en tu página de %{page_name}.
         page_name: Co-Creator Requests (Solicitudes de co-creadorx)
-      intro: 'Elx usuarix %{inviting_user} te invitó a agregar tu pseudónimo %{pseud}
-        como co-creadorx en lo siguiente %{type}:'
+      intro_chapter: 'La cuenta de %{inviting_user} ha invitado a tu pseudónimo %{pseud}
+        a ser listado como co-creador del siguiente capítulo:'
+      intro_series: 'La cuenta de %{inviting_user} ha invitado a tu pseudónimo %{pseud}
+        a ser listado como co-creador de la siguiente serie:'
+      intro_work: 'La cuenta de %{inviting_user} ha invitado a tu pseudónimo %{pseud}
+        a ser listado como co-creador de la siguiente obra:'
       subject: "[%{app_name}] Solicitud de co-creadorx"
       text:
         creation: "%{title} (%{url}) de %{pseuds}"
@@ -274,7 +297,7 @@ es:
       text:
         part1_other: Tu obra "%{title}" fue eliminada a petición de %{pseud}.
         part1_yourself: Tu obra "%{title}" fue eliminada como solicitaste.
-        part2: Si tienes alguna pregunta, por favor,  %{support} (%{url}).
+        part2: Si tienes alguna pregunta, por favor, %{support} (%{url}).
     invitation_to_claim:
       html:
         ao3_news: Noticias del AO3
@@ -282,42 +305,7 @@ es:
         contact_support: contacta a Soporte Técnico del AO3 (Un Archivo Propio)
         faq_page: página de FAQ (Preguntas frecuentes)
         open_doors: Open Doors (Puertas Abiertas)
-        part1: Has recibido este correo electrónico porque recientemente %{open_doors_link}
-          ha importado un archivo al %{app_link} (%{app_short_name}) y creemos que
-          estas obras fan pueden ser de tu autoría. Nos gustaría darte la oportunidad
-          de reclamarlas (o borrarlas o renunciar a ellas) si lo prefieres. Si aún
-          no tienes una cuenta con otro correo electrónico, ¡nos gustaría invitarte!
-        part10: Si tienes otras obras en el archivo importado asociadas a una dirección
-          de correo electrónico a la que ya no puedes acceder, por favor %{open_doors_link}
-          con cualquier información que pueda ayudarnos a verificar tu identidad.
-        part11: Para cualquier otra consulta, por favor, %{support_link}.
-        part2: Puedes encontrar anuncios sobre  mudanzas de archivos recientes en
-          %{news_link}, e información adicional en las FAQ (Preguntas frecuentes)
-          de Open Doors (Puertas Abiertas) en %{open_doors_faq_link} o en %{open_doors_tutorial_link}.
-          Si tienes preguntas que no están incluidas en las FAQ o en este correo electrónico,
-          por favor %{support_link}.
-        part3: |-
-          Si ocurrió un error y las obras no son tuyas, por favor, ¡no las
-          borres! Simplemente %{open_doors_link} y lo solucionaremos.
-        part4: Según el archivo, tus obras pueden haber sido importadas de manera
-          restringida para que solo usuarixs registradxs puedan verlas (para que no
-          aparezcan en búsquedas de Google). Si es así, solo aquellxs usuarixs que
-          hayan iniciado sesión pueden acceder a las obras, salvo que elijas hacerlas
-          visibles para todxs. Para obtener ayuda acerca de cómo hacer tus obras accesibles,
-          renunciar a ellas o borrarlas, por favor %{support_link}.
         part5: Reclama o elimina tus obras aquí.
-        part7: Si estas obras te pertenecen, pero no las quieres, puedes renunciar
-          a ellas (así permanecerán en el AO3, pero sin tu nombre) o eliminarlas (de
-          manera que se eliminen completamente del AO3). No necesitas añadir las obras
-          a una cuenta para renunciar a ellas o eliminarlas, puedes hacerlo mediante
-          el enlace para reclamar obras que aparece arriba (Si necesitas ayuda, por
-          favor %{support_link}).
-        part9: Si quieres que Open Doors (Puertas Abiertas) actualice la redirección
-          para que se dirija a tu obra ya publicada, por favor, borra la copia importada
-          y %{open_doors_link} con tu nombres de usuarix del AO3 y del archivo importado
-          y el título y URL de la obra fan a la que te gustaría que se dirigiese la
-          redirección (puedes enlistarlas en el mismo correo electrónico si tienes
-          varias cuya redirección quieras cambiar).
         tutorial_page: página de tutorial
       part12: Si vas a contactarnos, por favor incluye los correos electrónicos de
         @transformativeworks.org a tu lista autorizada de contactos y revisa la carpeta
@@ -356,7 +344,8 @@ es:
           en búsquedas de Google). Si es así, solo lxs usuarixs que hayan iniciado
           sesión pueden acceder a las obras, salvo que elijas hacerlas visibles para
           todxs. Para obtener ayuda acerca de cómo hacer tus obras accesibles, renunciar
-          a ellas o borrarlas, por favor, %{support_link}.
+          a ellas o borrarlas, por favor, contacta a Soporte Técnico del AO3 (Un Archivo
+          Propio).
         part5: 'Reclama o elimina tus obras aquí: %{claim_url}'
         part7: Si estas obras te pertenecen, pero no las quieres, puedes renunciar
           a ellas (de forma que permanecen en el AO3, pero sin tu nombre) o borrarlas
@@ -381,14 +370,12 @@ es:
       subject: "[%{app_name}] Nuevas Invitaciones"
     invite_request_declined:
       main:
-        one: 'Lamentamos informarte que en este momento no podemos satisfacer tu solicitud
+        one: Lamentamos informarte que en este momento no podemos satisfacer tu solicitud
           de una nueva invitación.
-
-          '
         other: Lamentamos informarte que en este momento no podemos satisfacer tu
           solicitud de %{count} nuevas invitaciones.
       reason: 'Tu solicitud era:'
-      subject: "[%{app_name}] Solicitud de código de invitación adicional rechazada"
+      subject: "[%{app_name}] Solicitud de código adicional de invitación rechazada"
     recipient_notification:
       subject:
         collection: "[%{app_name}][%{collection_title}] Tienes una obra de regalo
@@ -412,7 +399,6 @@ es:
           sitio en %{admin_posts_link}. Si necesitas más ayuda, encuentras un error
           o tienes preguntas o comentarios, por favor %{contact_support_link}, quienes
           con gusto te ayudarán.
-      subject: "[%{app_name}] Confirmación"
       text:
         part1: 'Por favor sigue este enlace para activar tu cuenta: %{activate_account_url}'
         part2: Una vez que tu cuenta esté funcionando, podrás publicar obras de fans,

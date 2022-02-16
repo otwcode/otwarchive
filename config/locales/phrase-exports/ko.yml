@@ -11,7 +11,7 @@ ko:
             donate_link_text: 회원님의 기부금
             part1: 이 메시지를 잘못 받았다고 생각하시면 지원 위원회에 연락%{support_link} 해 주세요.
             part2: 'Archive of Our Own(우리만의 아카이브)는 팬이 직접 운영 및 제공하는 아카이브로 %{donate_link}에
-              의존하고 있습니다: '
+              의존하고 있습니다:'
             support_link_text: 지원 위원회에 연락하기
           text:
             part1: 이 메시지를 잘못 받으셨다면 %{support_url} 링크로 지원 위원회에 연락해 주세요.
@@ -23,11 +23,11 @@ ko:
         informal:
           addressed: "%{name} 님 안녕하세요!"
           unaddressed: 안녕하세요!
-        introductory: Archive of Our Own – AO3 (우리만의 아카이브)에서 인사 드립니다!
+        introductory: Archive of Our Own – AO3 (우리만의 아카이브)에서 인사 드립니다!
       signature:
         app_short_name: AO3
         open_doors: The Open Doors (오픈도어 프로젝트) 팀 드림
-        parent_org: Organization for Transformative Works – OTW (변형적 작품 단체) 드림
+        parent_org: Organization for Transformative Works – OTW (변형적 작품 단체) 드림
         support: AO3 지원 위원회 드림
     kudos:
       guest:
@@ -43,8 +43,8 @@ ko:
     mailer:
       reset_password_instructions:
         expiration: 일주일 안에 링크를 통해 비밀번호를 재설정하지 않을시, 현재 링크가 만료되며 새로운 링크를 요청하셔야 합니다.
-        intro: '누군가가 회원님 계정의 비밀번호 재설정을 요청하였습니다. 아래 링크에서 새로운 비밀번호를 입력하여 비밀번호를 변경하실
-          수 있습니다. '
+        intro: 누군가가 회원님 계정의 비밀번호 재설정을 요청하였습니다. 아래 링크에서 새로운 비밀번호를 입력하여 비밀번호를 변경하실 수
+          있습니다.
         link_title: 비밀번호 변경하기
         subject: "[%{app_name}] 비밀번호 재설정"
         unrequested: 비밀번호 재설정을 요청하지 않으셨다면 이 이메일을 무시하셔도 됩니다. 비밀번호가 변경되지 않습니다.
@@ -60,7 +60,7 @@ ko:
       html:
         part1: 회원님의 %{title} 작품이 사이트 관리자에 의해 Archive of Our Own - AO3(우리만의 아카이브)에서
           삭제되었습니다.
-        part2: 만약 회원님의 작품이 Open Doors(오픈 도어 프로젝트) 팀이 관리하는 반입 프로젝트에 속해있었다면,  %{opendoors_link}를
+        part2: 만약 회원님의 작품이 Open Doors(오픈 도어 프로젝트) 팀이 관리하는 반입 프로젝트에 속해있었다면, %{opendoors_link}를
           통해 문의해 주십시오.
         tos_violation: 만약 회원님의 작품이 AO3의 이용약관을 어겼을 가능성이 있다면, %{contact_abuse_link}를
           통해 문의해 주십시오.
@@ -73,6 +73,27 @@ ko:
           통해 오픈 도어 프로젝트에 문의해 주십시오.
         tos_violation: 만약 회원님의 작품이 AO3의 이용약관을 어겼을 가능성이 있다면, (%{contact_abuse_url})를
           통해 정책관리 위원회에 문의해 주십시오.
+    admin_hidden_work_notification:
+      access: 작품이 비공개인 동안에는 위에 제공된 링크를 통해 조회하실 수는 있으나 회원님의 작품 페이지 목록에는 포함되지 않고 AO3
+        내 다른 사용자에게 공개되지 않습니다.
+      check_email: 정책 관리 위원회에서 회원님의 작품을 비공개한 사유를 설명하는 메일을 발송했을 수도 있으니 회원님의 메일함 및 스팸
+        보관함을 확인해 주시기 바랍니다.
+      contact_abuse: 정책 관리 위원회에 문의
+      html:
+        help: 회원님의 작품이 비공개 전환된 사유를 알 수 없거나 해당 사항에 대한 상세 연락을 받지 못하셨다면 직접 %{contact_abuse_link}해
+          주시기 바랍니다.
+        hidden: 정책 관리 위원회에서 회원님의 작품 %{title}을(를) 비공개로 전환하여 더 이상 공개적으로 조회할 수 없습니다.
+        tos_violation: AO3 내 %{tos_link} 규정 위반으로 작품이 비공개 되었다면 해당 위반사항을 시정하셔야 합니다.
+          작품이 이용 약관을 준수하도록 조치를 취하지 않으신다면 작품이 AO3에서 삭제될 수도 있습니다.
+      subject: "[%{app_name}] 정책 관리 위원회에서 회원님의 작품을 비공개 처리하였습니다"
+      text:
+        help: '회원님의 작품이 비공개 전환된 사유를 알 수 없거나 해당 사항에 대한 상세 연락을 받지 못하셨다면 직접 정책 관리 위원회에
+          문의해 주시기 바랍니다: %{contact_abuse_link}'
+        hidden: 정책 관리 위원회에서 회원님의 작품 "%{title}" (%{work_url})을(를) 비공개 전환하여 더 이상 공개적으로
+          조회할 수 없습니다.
+        tos_violation: AO3 내 %{tos_link} 규정 위반으로 작품이 비공개 되었다면 해당 위반사항을 시정하셔야 합니다.
+          작품이 이용 약관을 준수하도록 조치를 취하지 않으신다면 작품이 AO3에서 삭제될 수도 있습니다.
+      tos: 이용 약관
     anonymous_or_unrevealed_notification:
       anonymous_info: 익명 작품들은 태그 목록에 포함되지만 회원님의 작품 페이지에는 포함되지 않습니다. 작품 페이지에서 회원님의
         이름이 "Anonymous" (익명)으로 대체됩니다.
@@ -82,16 +103,16 @@ ko:
       changed_status:
         anonymous:
           html: "%{collection_link} 컬렉션 관리자가 회원님의 작품 %{work_link}을(를) 익명 작품으로 전환했습니다."
-          text: ' "%{collection_title}" (%{collection_url}) 콜렉션 관리자들이 회원님의 작품 "%{work_title}"
+          text: '"%{collection_title}" (%{collection_url}) 콜렉션 관리자들이 회원님의 작품 "%{work_title}"
             (%{work_url}) 를/을 익명 저자로 처리했습니다.'
         anonymous_unrevealed:
           html: "%{collection_link} 컬렉션 관리자가 회원님의 작품을 %{work_link} 을(를) 익명 및 비공개로
             전환했습니다."
-          text: ' "%{collection_title}" (%{collection_url}) 콜렉션 관리자들이 회원님의 작품 "%{work_title}"
+          text: '"%{collection_title}" (%{collection_url}) 콜렉션 관리자들이 회원님의 작품 "%{work_title}"
             (%{work_url}) 를/을 익명 저자이자 비공개 등록으로 처리했습니다.'
         unrevealed:
           html: "%{collection_link} 컬렉션 관리자가 회원님의 작품 %{work_link}을(를) 비공개로 전환했습니다."
-          text: ' "%{collection_title}" (%{collection_url}) 콜렉션 관리자들이 회원님의 작품 "%{work_title}"
+          text: '"%{collection_title}" (%{collection_url}) 콜렉션 관리자들이 회원님의 작품 "%{work_title}"
             (%{work_url}) 를/을 비공개 등록으로 처리했습니다.'
       collection_items_link_text: Approved Collection Items (등록된 컬렉션 작품 목록) 페이지
       do_not_want:
@@ -106,7 +127,7 @@ ko:
           text: '작품 익명 및 비공개 처리를 원치 않으신다면 회원님의 Approved Collection Items (승인된 컬렉션
             목록) 페이지에 접속하셔서 해당 컬렉션에서 작품을 제외해 주시기 바랍니다: %{collection_items_url}'
         unrevealed:
-          html: 작품 비공개를 원치 않으시다면  회원님의 컬렉션 목록 링크 %{collection_items_link} 에 접속하여 해당
+          html: 작품 비공개를 원치 않으시다면 회원님의 컬렉션 목록 링크 %{collection_items_link} 에 접속하여 해당
             컬렉션에서 작품을 제외해 주시기 바랍니다.
           text: '작품 비공개 처리를 원치 않으신다면 회원님의 Approved Collection Items (승인된 컬렉션 목록) 페이지에
             접속하셔서 해당 컬렉션에서 작품을 제외해 주시기 바랍니다: %{collection_items_url}'
@@ -140,52 +161,84 @@ ko:
       subject: "[%{app_name}][%{collection_title}] 회원님의 챌린지 과제입니다!"
       text:
         assignment: 다음은 회원님이 맡게 되신 Archive of Our Own – AO3(우리만의 아카이브) %{collection_title}
-          (%{collection_url})  챌린지의 요청입니다!
+          (%{collection_url}) 챌린지의 요청입니다!
         footer: "%{title} 챌린지(%{url})에 등록하셨기에 이 이메일을 받으셨습니다. 이 챌린지에 대한 자세한 내용과 진행자의
           연락처는 %{profile_url}를 통해 찾으실 수 있습니다."
         look_up: 이 챌린지 과제는 회원님의 Assignments (챌린지 과제) 페이지 링크%{link} 에서 찾아보실 수 있습니다.
     change_email:
       part1: "%{login}님, 회원님의 계정과 연계된 이메일 주소가 %{email}으로 변경되었습니다."
       subject: "[%{app_name}] 이메일 주소 변경"
+    collection_notification:
+      assignments_sent:
+        complete: 모든 챌린지 과제가 발송 완료되었습니다.
+        subject: 챌린지 과제 발송 완료
+      html:
+        received_message: '회원님의 컬렉션 %{collection_link}에 관한 메시지가 도착했습니다:'
+      text:
+        received_message: 회원님의 컬렉션 "%{collection_title}" (%{collection_url})에 관한 메시지가
+          도착했습니다.
     creatorship_notification:
       explanation: 어떤 작품의 공동 창작자가 되면 회원님의 공동 창작 설정과 관계 없이 신규 챕터에 공동 창작자로 추가됩니다. 또한
         해당 작품을 포함하는 모든 시리즈에도 등록됩니다.
       html:
         creation: "%{creation_link}, %{pseud_links} 작(作)"
-        edit: "%{type} 수정하기"
-        remove: 의도치 않게 등록 되었거나 창작자로 등록되기를 희망하지 않으신다면 %{edit}를 통해 회원님을 창작자에서 제외하실 수
-          있습니다.
-      intro: "%{adding_user}님이 회원님의 사용자명 %{pseud}을(를) 다음 작품의 공동 창작자로 등록했습니다 %{type}"
+        edit_chapter: 챕터 수정하기
+        edit_series: 시리즈 수정하기
+        remove_chapter: 의도치 않게 등록 되었거나 등록을 희망하지 않으신다면 %{edit_chapter_link}를 통해 회원님을
+          창작자에서 제외하실 수 있습니다.
+        remove_series: 의도치 않게 등록되었거나 등록을 원치 않으신다면 %{edit_series_link}를 통해 회원님을 창작자에서
+          제외할 수 있습니다.
+      intro_chapter: "%{adding_user} 님이 회원님의 필명 %{pseud}을(를) 다음 작품 챕터의 공동 창작자로 등록했습니다:"
+      intro_series: "%{adding_user} 님이 회원님의 필명 %{pseud}을(를) 다음 시리즈의 공동 창작자로 등록했습니다:"
       subject: "[%{app_name}] 공동 창작자 알림"
       text:
         creation: "%{title} (%{url}), %{pseuds} 작(作)"
-        remove: '혹 의도치 않게 등록이 되었거나 창작자로 등록되기를 희망하지 않으신다면 %{type}를 수정하여 직접 창작자에서 제외하실
-          수 있습니다: %{url}'
+        remove_chapter: '의도치 않게 등록 되었거나 등록을 원치 않으신다면 챕터를 수정하여 회원님을 창작자에서 제외할 수 있습니다
+          : %{url}'
+        remove_series: '의도치 않게 등록 되었거나 등록을 원치 않으신다면 시리즈를 수정하여 회원님을 창작자에서 제외할 수 있습니다r:
+          %{url}'
     creatorship_notification_archivist:
       explanation: Open Doors (오픈 도어)의 공식적인 임무를 진행하는 아키비스트는 사용자님이 ‘나를 공동 창작자로 추가’
         설정을 비활성화 시켰더라도 초대 없이 추가할 수 있습니다.
       html:
         creation: "%{pseud_links}의 %{creation_link}"
-        edit: "%{type} 수정하기"
-        remove: 실수로 또는 원치 않게 창작자로 추가됐을 경우, ‘수정하기’(%{edit})를 이용하여 사용자님의 필명을 작품 창작자
-          명단에서 삭제할 수 있습니다.
-      intro: '아키비스트 %{archivist} 님이 다음 %{type}에 사용자님의 필명 %{pseud}을 공동 창작자로 추가하였습니다:'
-      subject: "[%{app_name}] 아키비스트 2인 창작자 알림"
+        edit_chapter: 챕터 수정하기
+        edit_series: 시리즈 수정하기
+        edit_work: 작품 수정하기
+        remove_chapter: 회원님의 공동 창작자 등록이 오류로 인한 것이라면 %{edit_chapter_link} 링크를 통해 회원님의
+          창작자 등록을 취소하실 수 있습니다.
+        remove_series: 회원님의 공동 창작자 등록이 오류로 인한 것이라면 %{edit_series_link} 링크를 통해 창작자
+          등록을 취소하실 수 있습니다.
+        remove_work: 회원님의 공동 창작자 등록이 오류로 인한 것이라면 %{edit_work_link}링크를 통해 창작자 등록을 취소하실
+          수 있습니다.
+      intro_chapter: "%{archivist} 님이 회원님의 필명 %{pseud}을(를) 다음 작품 챕터의 공동 창작자로 등록했습니다:"
+      intro_series: "%{archivist} 님이 회원님의 필명 %{pseud}을(를) 다음 시리즈의 공동 창작자로 추가했습니다:"
+      intro_work: '아카이브 관리자 %{archivist} 님이 회원님의 필명 %{pseud}을(를) 다음 작품의 공동 창작자로 추가하였습니다:'
+      subject: "[%{app_name}] 아키비스트 공동 창작자 알림"
       text:
         creation: "%{pseuds}의 %{title} (%{url})"
-        remove: '실수로 또는 원치 않게 창작자로 추가됐을 경우, %{type}를 수정하여 사용자님의 필명을 작품 창작자 명단에서 삭제할
+        remove_chapter: '실수로 또는 원치 않게 창작자로 추가되었을 경우 챕터 수정을 통해 회원님의 필명을 창작자 명단에서 삭제할
+          수 있습니다: %{url}'
+        remove_series: '실수로 또는 원치 않게 창작자로 추가되었을 경우 시리즈 수정을 통해 회원님의 필명을 창작자 명단에서 삭제할
+          수 있습니다: %{url}'
+        remove_work: '실수로 또는 원치 않게 창작자로 추가됐을 경우 작품 수정을 통해 회원님의 필명을 작품 창작자 명단에서 삭제할
           수 있습니다: %{url}'
     creatorship_request:
       html:
         creation: "%{pseud_links}의 %{creation_link}"
         instructions: 회원님의 %{page_name} 페이지에서 본 요청을 수락 또는 거절할 수 있습니다.
         page_name: Co-Creator Requests (공동 창작자 요청)
-      intro: "%{inviting_user} 회원님서 회원님의 필명 %{pseud} 을(를) 다음 작품 %{type}의 공동 창작자로 등록되도록
-        초대했습니다:"
+      intro_chapter: "%{inviting_user} 회원님이 회원님의 창작자명 %{pseud} 을(를) 다음 챕터의 공동 창작자로
+        등록하기를 요청했습니다:"
+      intro_series: "%{inviting_user} 회원님이 회원님의 창작자명 %{pseud}을(를) 다음 시리즈의 공동 창작자로
+        등록하기를 요청했습니다:"
+      intro_work: "%{inviting_user} 회원님이 회원님의 창작자명 %{pseud}을(를) 다음 작품의 공동 창작자로 등록하기를
+        요청했습니다:"
       subject: "[%{app_name}] 공동 창작자 등록 요청"
       text:
-        creation: "%{pseud_links}의 %{creation_link}"
-        instructions: 회원님의 %{page_name} 페이지에서 본 요청을 수락 또는 거절할 수 있습니다.
+        creation: "%{pseuds}의; %{title} (%{url})"
+        instructions: '회원님의 Co-Creator Requests (공동 창작자 요청) 페이지에서 본 요청을 수락 또는 거절할
+          수 있습니다: %{url}'
     delete_work_notification:
       html:
         part1_other: "%{pseud} 의 요청으로 회원님의 작품 %{title}이 삭제되었습니다."
@@ -205,28 +258,7 @@ ko:
         contact_support: AO3 지원 연락하기
         faq_page: 자주 묻는 질문답변
         open_doors: Open Doors (오픈 도어 프로젝트)
-        part1: 최근 %{open_doors_link}의 아카이브가 %{app_link}(%{app_short_name}) 쪽으로 이전됐으며,
-          다음 작품이 귀하의 작품이라 생각되어 이메일을 보냅니다. 원하신다면 작품의 소유권을 회복(또는 삭제/고립)할 기회를 드리고 싶습니다.
-          또한 다른 이메일로 이미 회원이 아니신 경우, 저희 아카이브에 초대하고 싶습니다!
-        part10: 만약 이전된 아카이브에 다른 작품을 갖고 계시지만 연결된 이메일 주소에 접속이 불가능하신 경우, 창작자 증명이 가능한
-          자료와 함께 %{open_doors_link} 주소로 연락해 주십시오.
-        part11: 다른 도움이 필요하신 경우, %{support_link} 링크로 연락 주십시오.
-        part2: "%{news_link} 의 발표를 통해 최근의 아카이브 이전 소식을 확인할 수 있으며, 오픈 도어의 %{open_doors_faq_link}
-          또는 %{open_doors_tutorial_link} 페이지를 통해 오픈 도어 프로젝트의 추가적인 정보를 얻을 수 있습니다. 자주
-          묻는 질문답변, 튜토리얼, 또는 본 이메일 이상의 정보가 필요할 경우, %{support_link}를 이용해 주세요."
-        part3: 만약 이메일이 잘못 보내졌고 본인의 작품이 아닌 경우, 부디 삭제하지 말아주세요! %{open_doors_link}를 통해
-          알려주시면 저희가 문제를 해결하겠습니다.
-        part4: 아카이브에 따라서, 이전된 작품이 (구글 검색을 피하기 위해) 회원 등록된 사용자에게만 공개되었을 수도 있습니다. 그럴
-          경우, 작품 소유자가 완전 공개로 선택하지 않은 작품은 오직 로그인한 사용자에게만 공개됩니다. 작품의 완전 공개, 고립, 또는 삭제를
-          위해서 %{support_link}를 이용해 주세요.
         part5: 작품 소유권을 되찾거나 포기하는 법.
-        part7: 만약 이 작품의 창작자면서도 소유권을 포기하고 싶은 경우, 작품 소유권을 포기해 작품을 (AO3에 작품이 보관되지만, 창작자의
-          이름은 등재되지 않게) 고립시킬 수 있고 또는 (AO3에서 작품이 영구삭제) 삭제할 수 있습니다. 이상과 같은 작업을 위해 기존
-          계정에 작품을 연관시킬 필요도 없습니다--다음 위의 링크에서 바로 하실 수 있습니다.(도움이 필요하다면 %{support_link}에
-          연락해 주세요.)
-        part9: 만약 오픈 도어의 재연결 주소를 기존의 작품 페이지로 하고 싶으실 경우, 이전된 작품 복사본을 지우시고, %{open_doors_link}에
-          회원님의 AO3 계정 이름, 이전된 아카이브의 계정, 그리고 연결을 원하는 팬작품의 제목과 URL 주소를 기입해 주세요. (만약
-          재연결 주소 변경이 필요한 작품이 다수일 경우, 한번의 메일로 목록을 주시면 됩니다.)
         tutorial_page: 튜토리얼 페이지
       part12: 만약 저희와 연락하고 싶으시다면,  @transformativeworks.org의 이메일 주소를 스팸이 아닌 것으로 분류하신
         뒤 저희 답변을 스팸 폴더에서 찾아봐 주세요.
@@ -288,7 +320,6 @@ ko:
         part3: "%{faq_link}에는 아카이브를 어떻게 활용할 수 있는지 도와드리는 정보가 가득합니다. 사이트의 발달 상황에 대한
           가장 최신의 소식은 %{admin_posts_link}를 통해 접할 수 있습니다. 만약 더 많은 도움이 필요하신 경우 또는 질문이나
           제안이 있으실 경우에는 %{contact_support_link}를 이용해 주세요. 언제나 도와드릴 준비가 되어있습니다."
-      subject: "[%{app_name}] 확정연락"
       text:
         part1: '당신의 계정을 활성화하려면 다음 링크를 눌러주세요: %{activate_account_url}'
         part2: 일단 계정이 활성화된 후, 회원님은 팬작품을 게시할 수 있고, 이메일을 통해 좋아하는 작가나 작품의 업데이트를 알림받을
