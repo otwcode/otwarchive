@@ -24,8 +24,6 @@ gem 'mysql2', '0.5.2'
 # at the latest version to avoid errors
 gem 'transaction_isolation', '1.0.5'
 gem 'transaction_retry'
-#https://github.com/winebarrel/activerecord-mysql-reconnect
-gem 'activerecord-mysql-reconnect', '~> 0.4.1'
 
 gem 'rack-attack'
 
