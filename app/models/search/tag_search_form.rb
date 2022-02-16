@@ -37,8 +37,9 @@ class TagSearchForm
   end
 
   def set_fandoms
-    return unless @options[:fandoms].present?
-    names = @options[:fandoms].split(',').map(&:squish)
+    return if @options[:fandoms].blank?
+
+    names = @options[:fandoms].split(",").map(&:squish)
     @options[:fandom_ids] = Tag.where(name: names).pluck(:id)
   end
 

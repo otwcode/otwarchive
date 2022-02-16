@@ -22,7 +22,7 @@ class TagQuery < Query
       fandom_filter,
       character_filter,
       suggested_fandom_filter,
-      suggested_character_filter,
+      suggested_character_filter
     ].flatten.compact
   end
 
