@@ -60,6 +60,8 @@ class KudosController < ApplicationController
           if !current_user.present? && commentable&.restricted?
             error_message = "You can't leave guest kudos on a restricted work."
           end
+          # If user is suspended or banned, JavaScript disabled, redirect user to dashboard with message instead.
+          return if check_user_status
           flash[:kudos_error] = ts(error_message)
           redirect_to request.referer and return
         end

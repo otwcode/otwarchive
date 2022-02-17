@@ -142,5 +142,45 @@ describe KudosController do
         end
       end
     end
+
+    context "when kudos giver is suspended" do
+      let(:work) { create(:work, restricted: true) }
+      let(:suspended_user) { create(:user, suspended: true, suspended_until: 4.days.from_now) }
+
+      before { fake_login_known_user(suspended_user) }
+
+      it "errors and redirects to user page" do
+        post :create, params: { kudo: { commentable_id: work.id, commentable_type: "Work" } }
+        it_redirects_to_simple(user_path(suspended_user))
+        expect(flash[:error]).to include("Your account has been suspended")
+      end
+
+      context "with format: :js" do
+        it "returns an error in JSON format" do
+          post :create, params: { kudo: { commentable_id: work.id, commentable_type: "Work" }, format: :js }
+          expect(JSON.parse(response.body)["errors"]["cannot_be_suspended"]).to include("You cannot leave kudos while your account is suspended.")
+        end
+      end
+    end
+
+    context "when kudos giver is banned" do
+      let(:work) { create(:work, restricted: true) }
+      let(:banned_user) { create(:user, banned: true) }
+
+      before { fake_login_known_user(banned_user) }
+
+      it "errors and redirects to user page" do
+        post :create, params: { kudo: { commentable_id: work.id, commentable_type: "Work" } }
+        it_redirects_to_simple(user_path(banned_user))
+        expect(flash[:error]).to include("Your account has been banned.")
+      end
+
+      context "with format: :js" do
+        it "returns an error in JSON format" do
+          post :create, params: { kudo: { commentable_id: work.id, commentable_type: "Work" }, format: :js }
+          expect(JSON.parse(response.body)["errors"]["cannot_be_suspended"]).to include("You cannot leave kudos while your account is suspended.")
+        end
+      end
+    end
   end
 end
