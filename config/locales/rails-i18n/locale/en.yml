@@ -1,0 +1,6 @@
+---
+en:
+  time:
+    formats:
+      # this returns: hour:minuteAM/PM Timezone Mon/Tue day# January/February 4-digit Year
+      time_for_mailers: "%I:%M%p %Z %a %d %B %Y"

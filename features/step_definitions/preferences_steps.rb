@@ -140,3 +140,7 @@ When /^I set my preferences to warn before showing adult content$/ do
   user.preference.adult = false
   user.preference.save
 end
+
+Given /^the user locale is "([^"]*)"$/ do |locale|
+  I18n.locale = locale
+end

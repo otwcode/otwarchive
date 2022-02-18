@@ -25,4 +25,4 @@ another ticket.
 <%= t("mailer.general.signature.support") %>
 <% end %>
 
-<% content_for :sent_at do %><%= Time.now.to_s(:time_for_mailers) %><% end %>
+<% content_for :sent_at do %><%= l Time.now, :format => :time_for_mailers %><% end %>
