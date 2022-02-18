@@ -117,10 +117,6 @@ gem 'audited', '~> 4.4'
 # For controlling application behavour dynamically
 gem 'rollout'
 
-#  Place the New Relic gem as low in the list as possible, allowing the
-#  frameworks above it to be instrumented when the gem initializes.
-gem 'newrelic_rpm'
-
 #   Use update memcached client with kinder, gentler I/O for Ruby
 gem 'connection_pool'
 gem 'dalli'
@@ -185,3 +181,9 @@ gem 'rvm-capistrano'
 gem 'unicorn', '~> 5.5', require: false
 # Use god as the monitor
 gem 'god', '~> 0.13.7'
+
+group :staging, :production do
+  #  Place the New Relic gem as low in the list as possible, allowing the
+  #  frameworks above it to be instrumented when the gem initializes.
+  gem 'newrelic_rpm'
+end
