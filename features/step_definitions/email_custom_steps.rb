@@ -40,8 +40,8 @@ Then(/^"([^\"]*)" should receive (\d+) emails?$/) do |user, count|
 end
 
 Then /^the email should say what time it was sent$/ do
-  nowish = I18n.l(Time.now, :format => :time_for_mailers)
-  sentence = I18n.t('mailer.general.footer.sent_at', :sent_at => nowish)
+  nowish = I18n.l(Time.now.utc, { format: :time_for_mailers })
+  sentence = I18n.t("mailer.general.footer.sent_at", { sent_at: nowish })
   step %{the email should contain "#{sentence}"}
   step %{the email should not contain "sent_at"}
 end
