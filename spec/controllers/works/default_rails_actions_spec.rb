@@ -559,7 +559,7 @@ describe WorksController, work_search: true do
       before do
         travel_to(redate_time)
 
-        # Simulate the system time being Europe/Samara:
+        # Simulate the system time being UTC:
         allow(Time).to receive(:now).and_return(redate_time)
         allow(DateTime).to receive(:now).and_return(redate_time)
         allow(Date).to receive(:today).and_return(redate_time.to_date)
