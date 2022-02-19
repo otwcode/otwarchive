@@ -567,7 +567,6 @@ describe WorksController, work_search: true do
         put :update, params: { id: update_work.id, work: attributes }
       end
 
-      # We have a work posted at November 30, 2 PM UTC
       context "before midnight UTC and after midnight Samara" do
         # December 5, 3 AM Europe/Samara (UTC+04:00) -- still December 4 in UTC
         let(:redate_time) { Time.new(2021, 12, 5, 3, 0, 0, "+04:00") }
