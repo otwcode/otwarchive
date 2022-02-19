@@ -523,10 +523,10 @@ describe WorksController, work_search: true do
       end
 
       before do
-        # These are on the same day in UTC, but in the time zone set by
-        # Rails, they are on different days:
-        update_work.update_column(:revised_at, Time.utc(2022, 1, 1, 3))
-        update_chapter.update_column(:published_at, Date.new(2022, 1, 1))
+        # Work where chapter published_at did not override revised_at, times
+        # taken from AO3-5392
+        update_work.update_column(:revised_at, Time.new(2018, 4, 22, 23, 51, 42, "+04:00"))
+        update_chapter.update_column(:published_at, Date.new(2015, 7, 23))
       end
 
       it "can be backdated" do
@@ -538,7 +538,7 @@ describe WorksController, work_search: true do
     end
 
     # If the time zone in config/application.rb is changed to something other
-    # than "Eastern Time (US & Canada)", these tests will need adjusting:
+    # than the default (UTC), these tests will need adjusting:
     context "when redating to the present" do
       let!(:update_work) do
         # November 30, 2 PM UTC -- no time zone oddities here
@@ -559,7 +559,7 @@ describe WorksController, work_search: true do
       before do
         travel_to(redate_time)
 
-        # Simulate the system time being UTC:
+        # Simulate the system time being Europe/Samara:
         allow(Time).to receive(:now).and_return(redate_time)
         allow(DateTime).to receive(:now).and_return(redate_time)
         allow(Date).to receive(:today).and_return(redate_time.to_date)
@@ -567,9 +567,10 @@ describe WorksController, work_search: true do
         put :update, params: { id: update_work.id, work: attributes }
       end
 
-      context "between midnight Eastern and midnight UTC" do
-        # December 5, 3 AM UTC -- still December 4 in Eastern Time
-        let(:redate_time) { Time.utc(2021, 12, 5, 3) }
+      # We have a work posted at November 30, 2 PM UTC
+      context "before midnight UTC and after midnight Samara" do
+        # December 5, 3 AM Europe/Samara (UTC+04:00) -- still December 4 in UTC
+        let(:redate_time) { Time.new(2021, 12, 5, 3, 0, 0, "+04:00") }
 
         it "prevents setting the publication date to the future" do
           expect(response).to render_template :edit
@@ -579,8 +580,8 @@ describe WorksController, work_search: true do
       end
 
       context "before noon UTC" do
-        # December 5, 6 AM UTC -- before noon, but after midnight in both time zones
-        let(:redate_time) { Time.utc(2021, 12, 5, 6) }
+        # December 5, 6 AM Europe/Samara -- before noon, but after midnight in both time zones
+        let(:redate_time) { Time.new(2021, 12, 5, 6, 0, 0, "+04:00") }
 
         it "doesn't set revised_at to the future" do
           update_work.reload
