@@ -23,11 +23,11 @@ da:
         informal:
           addressed: Hej %{name}!
           unaddressed: Hej!
-        introductory: Hej fra Archive of Our Own – AO3 (Vores Eget Arkiv)!
+        introductory: Hej fra Archive of Our Own – AO3 (Vores Eget Arkiv)!
       signature:
         app_short_name: AO3
         open_doors: The Open Doors (Åbne døre) team
-        parent_org: Organization for Transformative Works – OTW (Organisationen for
+        parent_org: Organization for Transformative Works – OTW (Organisationen for
           Transformative Værker)
         support: AO3 Support-team
     kudos:
@@ -40,8 +40,8 @@ da:
           other: "%{givers_list} efterlod ros på %{commentable_link}."
       text:
         left_kudos:
-          one: "%{givers_list} efterlod ros på %{commentable_link}</i>."
-          other: "%{givers_list} efterlod ros på %{commentable_link}</i>."
+          one: "%{givers_list} efterlod ros på %{commentable_link}."
+          other: "%{givers_list} efterlod ros på %{commentable_link}."
       you_have: "[%{app_name}] Du har fået ros!"
   users:
     mailer:
@@ -74,7 +74,7 @@ da:
       opendoors: kontakte Åbne Døre
       subject: "[%{app_name}] Dit værk er blevet slettet af en administrator"
       text:
-        part1: Dit værk \"%{title}\" er blevet slettet fra AO3 af en administrator.
+        part1: Dit værk "%{title}" er blevet slettet fra AO3 af en administrator.
         part2: Hvis dit værk var en del af et importeringsprojekt fra Åbne Døre-holdet,
           kan du kontakte Åbne Døre (%{opendoors_link}), hvis du har spørgsmål.
         tos_violation: Hvis det er muligt, at dit værk har overtrådt AO3’s Brugsbetingelser,
@@ -199,7 +199,7 @@ da:
     collection_notification:
       assignments_sent:
         complete: Alle opgavetildelinger er blevet afsendt.
-        subject: Opgavetildelinger afsendt
+        subject: "[%{app_name}][%{collection_title}] Opgavetildelinger afsendt"
       html:
         received_message: 'Du har modtaget en besked vedrørende din samling %{collection_link}:'
       text:

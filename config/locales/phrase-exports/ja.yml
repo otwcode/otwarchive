@@ -187,6 +187,9 @@ ja:
         creation: "%{creation_link} 　作者：%{pseud_links}"
         instructions: "%{page_name}ページでこのリクエストを承認または拒否することができます。"
         page_name: Co-Creator Requests（合作者リクエスト）
+      intro_chapter: "%{inviting_user} さんはあなた（ペンネーム%{pseud}）を以下の章の合作者として招待しました："
+      intro_series: "%{inviting_user} さんはあなた（ペンネーム%{pseud}）を以下のシリーズの合作者として招待しました："
+      intro_work: "%{inviting_user} さんはあなた（ペンネーム%{pseud}）を以下の作品の合作者として招待しました："
       subject: "[%{app_name}] 合作者リクエスト"
       text:
         creation: "%{title}（%{url}）　作者：%{pseuds}"

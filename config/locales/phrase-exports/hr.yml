@@ -231,13 +231,35 @@ hr:
         remove_series: 'Ako ste pogreškom dodani ili ne želite biti navedeni kao kreator,možete
           urediti serijal kako biste maknuli sebe kao kreatora: %{url}'
     creatorship_notification_archivist:
-      explanation: Jer djeluju po službenoj dužnosti kao Open Doors arhivist, dozvoljeno
-        im je dodavati Vas bez poziva, čak i ako imate onemogućeno sukreatorstvo.
+      explanation: Budući da djeluju po službenoj dužnosti kao Open Doors arhivisti
+        (Otvorenih vrata), dozvoljeno im je dodavati Vas bez poziva, čak i ako imate
+        onemogućeno sukreatorstvo.
       html:
-        creation: "%{creation_link} za %{pseud_links}"
+        creation: "%{creation_link} od %{pseud_links}"
+        edit_chapter: uredi poglavlje
+        edit_series: uredi serijale
+        edit_work: uredi djelo
+        remove_chapter: Ako ste dodani greškom ili ne želite biti navedeni kao kreator,
+          možete se %{edit_chapter_link} ukloniti s popisa kreatora.
+        remove_series: Ako ste dodani greškom ili ne želite biti navedeni kao kreator,
+          možete se %{edit_series_link} ukloniti s popisa kreatora.
+        remove_work: Ako ste dodani greškom ili ne želite biti navedeni kao kreator,
+          možete se %{edit_work_link} ukloniti s popisa kreatora.
+      intro_chapter: 'Korisnik %{archivist} je dodao Vaš pseud %{pseud} kao sukreatora
+        sljedećih poglavlja:'
+      intro_series: 'Korisnik %{archivist} je dodao Vaš pseud %{pseud} kao sukreatora
+        sljedećih serijala:'
+      intro_work: 'Korisnik %{archivist} označio je Vaš pseudonim %{pseud} kao sukreatora
+        na sljedećem djelu:'
       subject: "[%{app_name}] Obavijest arhivista o dodavanju sukreatora"
       text:
-        creation: "%{title} (%{url}) za %{pseuds}"
+        creation: "%{title} (%{url}) od %{pseuds}"
+        remove_chapter: 'Ako ste dodani greškom ili ne želite biti navedeni kao kreator,
+          možete urediti poglavlje kako biste se uklonili s popisa kreatora: %{url}'
+        remove_series: 'Ako ste dodani greškom ili ne želite biti navedeni kao kreator,
+          možete urediti serijale kako biste se uklonili s popisa kreatora: %{url}'
+        remove_work: 'Ako ste dodani greškom ili ne želite biti navedeni kao kreator,
+          možete urediti djelo kako biste se uklonili s popisa kreatora: %{url}'
     creatorship_request:
       html:
         creation: "%{creation_link} od %{pseud_links}"

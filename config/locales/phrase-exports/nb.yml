@@ -282,11 +282,17 @@ nb:
         instructions: Du kan godkjenne eller avvise denne forespørselen på siden din
           for %{page_name}.
         page_name: Co-Creator Requests (medskaperforespørsler)
+      intro_chapter: 'Brukeren %{inviting_user} har invitert pseudonymet ditt %{pseud}
+        til å bli lagt til som medskaper på det følgende kapittelet:'
+      intro_series: 'Brukeren %{inviting_user} har invitert pseudonymet ditt %{pseud}
+        til å bli lagt til som medskaper på den følgende serien:'
+      intro_work: 'Brukeren %{inviting_user} har invitert pseudonymet ditt %{pseud}
+        til å bli lagt til som medskaper på det følgende verket:'
       subject: "[%{app_name}] Medskaperforespørsel"
       text:
         creation: "%{title} (%{url}) av %{pseuds}"
         instructions: 'Du kan godkjenne eller avvise denne forespørselen på siden
-          din Co-Creator Requests for medskaperforespørsler: %{url}'
+          din for Co-Creator Requests (medskaperforespørsler): %{url}'
     delete_work_notification:
       html:
         part1_other: Ditt verk %{title} ble slettet etter forespørsel fra %{pseud}.

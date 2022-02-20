@@ -152,6 +152,15 @@ th:
     change_email:
       part1: "%{login}, อีเมล์ที่เกี่ยวข้องกับบัญชีของคุณถูกเปลี่ยนเป็น %{email}"
       subject: "[%{app_name}] อีเมล์ถูกเปลี่ยนแล้ว"
+    collection_notification:
+      assignments_sent:
+        complete: ผลงานที่ได้รับมอบหมายทั้งหมดถูกส่งออกไปแล้ว
+        subject: ผลงานที่ได้รับมอบหมายถูกส่งออกไปแล้ว
+      html:
+        received_message: 'คุณได้รับข้อความเกี่ยวกับคอลเลกชันของคุณ %{collection_link}:'
+      text:
+        received_message: 'คุณได้รับข้อความเกี่ยวกับคอลเลกชันของคุณ "%{collection_title}"
+          (%{collection_url}):'
     creatorship_notification_archivist:
       explanation: เพราะพวกเขาอยู่ในฐานะผู้จัดเก็บเอกสารของโอเพ่นดอร์ พวกเขาจึงได้รับอนุญาตให้เพิ่มคุณเป็นผู้ร่วมสร้างแบบไม่ได้รับเชิญ
         แม้ว่าคุณจะปิดตัวเลือกสำหรับการสร้างผลงานร่วม

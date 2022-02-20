@@ -207,6 +207,39 @@ tr:
       text:
         received_message: '"%{collection_title}" koleksiyonunuz (%{collection_url})
           hakkında bir mesaj aldınız:'
+    creatorship_notification_archivist:
+      explanation: Open Doors (Açık Kapılar) arşivcileri, onlara verilen yetki dahilinde
+        ortaklığı devre dışı bırakmış olsanız bile sizi davetiyesiz ortak yaratıcı
+        olarak ekleme hakkına sahiptirler.
+      html:
+        creation: "%{pseud_links} tarafından %{creation_link} "
+        edit_chapter: bölümü düzenleyebilirsiniz
+        edit_series: seriyi düzenleyebilirsiniz
+        edit_work: eseri düzenleyebilirsiniz
+        remove_chapter: Eğer yanlışlıkla eklendiyseniz veya yaratıcı olarak listelenmek
+          istemiyorsanız kendinizi yaratıcılıktan çıkarmak için %{edit_chapter_link}.
+        remove_series: Eğer yanlışlıkla eklendiyseniz veya yaratıcı olarak listelenmek
+          istemiyorsanız kendinizi yaratıcılıktan çıkarmak için %{edit_series_link}.
+        remove_work: Eğer yanlışlıkla eklendiyseniz veya yaratıcı olarak listelenmek
+          istemiyorsanız kendinizi yaratıcılıktan çıkarmak için %{edit_work_link}.
+      intro_chapter: "%{archivist} kullanıcısı %{pseud} takma adınızı ortak yaratıcı
+        olarak aşağıdaki bölüme  ekledi:"
+      intro_series: "%{archivist} kullanıcısı %{pseud} takma adınızı ortak yaratıcı
+        olarak aşağıdaki seriye  ekledi:"
+      intro_work: "%{archivist} kullanıcısı %{pseud} takma adınızı ortak yaratıcı
+        olarak aşağıdaki esere  ekledi:"
+      subject: "[%{app_name}] Ortak yaratıcı arşivci bildirimi"
+      text:
+        creation: "%{pseuds} tarafından %{title} (%{url}) "
+        remove_chapter: " Eğer yanlışlıkla eklendiyseniz veya yaratıcı olarak listelenmek
+          istemiyorsanız kendinizi yaratıcılıktan çıkarmak için bölümü düzenleyebilirsiniz:
+          %{url}"
+        remove_series: 'Eğer yanlışlıkla eklendiyseniz veya yaratıcı olarak listelenmek
+          istemiyorsanız kendinizi yaratıcılıktan çıkarmak için seriyi düzenleyebilirsiniz:
+          %{url}'
+        remove_work: 'Eğer yanlışlıkla eklendiyseniz veya yaratıcı olarak listelenmek
+          istemiyorsanız kendinizi yaratıcılıktan çıkarmak için eseri düzenleyebilirsiniz:
+          %{url}'
     creatorship_request:
       html:
         creation: "%{pseud_links} tarafından %{creation_link} "

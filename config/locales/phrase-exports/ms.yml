@@ -191,8 +191,8 @@ ms:
         part1: Anda telah ditugaskan dengan permintaan yang dinyatakan pada cabaran
           %{link} di Arkib Milik Kita!
       optional_tags: 'Tag Pilihan:'
-      prompts: "<i>Prompt</i>:"
-      prompt_url: 'URL <i>Prompt</i>:'
+      prompts: 'Prompt:'
+      prompt_url: 'URL Prompt:'
       recipient: 'Penerima:'
       recipient_missing: 'Tiada: hubungi moderator untuk bantuan!'
       subject: "[%{app_name}][%{collection_title}] Tugasan Anda!"

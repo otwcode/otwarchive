@@ -453,7 +453,7 @@ pt-BR:
         left_kudos:
           one: "%{givers_list} deixou kudos em %{commentable_link}."
           other: "%{givers_list} deixaram kudos em %{commentable_link}."
-      you_have: "[%{app_name}] Você recebeu kudos!"
+      you_have: "[%{app_name}] Kudos pra você!"
   skins:
     confirm_delete:
       confirm_html: Tem certeza que quer <strong><em>apagar</em></strong> a skin "%{skin_title}"?
@@ -605,10 +605,10 @@ pt-BR:
       anonymous_info: Obras anônimas aparecem em todo o site, exceto na sua página
         pessoal. Na obra, seu nome será substituído por "Anonymous".
       anonymous_unrevealed_info: A administração da coleção poderá, posteriormente,
-        revelar a sua obra e continuar a mantê-la anônima. Nesse caso, pessoas que
-        recebem atualizações sobre suas obras não serão notificadas. Uma vez revelada,
-        sua obra aparecerá em todo o site, exceto na sua página pessoal. Enquanto
-        a obra permanecer anônima, seu nome nela aparecerá somente como "Anonymous".
+        revelar a sua obra, mas mantê-la anônima. Nesse caso, pessoas que recebem
+        atualizações sobre suas obras não serão notificadas. Uma vez revelada, sua
+        obra aparecerá em todo o site, exceto na sua página pessoal. Enquanto a obra
+        permanecer anônima, ela será atribuída a "Anonymous".
       changed_status:
         anonymous:
           html: A equipe de administração da coleção %{collection_link} mudou o status
@@ -666,11 +666,11 @@ pt-BR:
       description: 'Descrição:'
       due: 'Prazo:'
       html:
-        footer: Você está recebendo este email porque se inscreveu no desafio %{title}.
-          Para mais informações sobre o desafio e como entrar em contato com a moderação,
+        footer: Você recebeu esse email porque se inscreveu no desafio %{title}. Para
+          mais informações sobre o desafio e como entrar em contato com a moderação,
           acesse %{footer_link}.
         footer_link: a página do desafio
-        look_up: Para ver mais detalhes sobre essa tarefa, acesse %{link}.
+        look_up: Acesse mais detalhes sobre essa tarefa na %{link}.
         look_up_link: sua página de Assignments (Tarefas)
         part1: Você recebeu a seguinte tarefa no desafio %{link} no Archive of Our
           Own (AO3)!
@@ -684,10 +684,10 @@ pt-BR:
       text:
         assignment: Você recebeu a seguinte tarefa no desafio "%{collection_title}"
           (%{collection_url})  no Archive of Our Own (AO3)!
-        footer: Você está recebendo este email porque se inscreveu no desafio %{title}
-          (%{url}). Para mais informações sobre o desafio e como entrar em contato
-          com a moderação, acesse %{profile_url}.
-        look_up: 'Você pode ver mais detalhes sobre esta tarefa na sua página de Assignments
+        footer: Você recebeu esse email porque se inscreveu no desafio %{title} (%{url}).
+          Para mais informações sobre o desafio e como entrar em contato com a moderação,
+          acesse %{profile_url}.
+        look_up: 'Acesse mais detalhes sobre essa tarefa na sua página de Assignments
           (Tarefas): %{link}.'
     change_email:
       part1: "%{login}, o e-mail associado à sua conta foi alterado para %{email}."
@@ -720,7 +720,7 @@ pt-BR:
         coartista do seguinte capítulo:'
       intro_series: 'Seu pseudônimo %{pseud} foi adicionado por %{adding_user} como
         coartista da seguinte série:'
-      subject: "[%{app_name}] Notificação de coartista"
+      subject: "[%{app_name}] Sua conta foi adicionada como coartista"
       text:
         creation: "%{title} (%{url}) por %{pseuds}"
         remove_chapter: 'Caso isso tenha ocorrido por engano ou você não queira que
@@ -753,7 +753,7 @@ pt-BR:
         abaixo por %{archivist}:'
       intro_work: 'Seu pseudônimo %{pseud} foi adicionado como coartista da obra abaixo
         por %{archivist}:'
-      subject: "[%{app_name}] Notificação de coartista enviada por conta arquivista"
+      subject: "[%{app_name}] Uma conta arquivista adicionou você como coartista"
       text:
         creation: "%{title} (%{url}) por %{pseuds}"
         remove_chapter: 'Caso isso tenha ocorrido por engano ou você não queira que
@@ -776,7 +776,7 @@ pt-BR:
         ser mostrado como coartista da seguinte série:'
       intro_work: 'A conta %{inviting_user} convidou seu pseudônimo %{pseud} para
         ser mostrado como coartista da seguinte obra:'
-      subject: "[%{app_name}] Convite para ser coartista"
+      subject: "[%{app_name}] Você recebeu um convite para ser coartista"
       text:
         creation: "%{title} (%{url}) por %{pseuds}"
         instructions: 'Para aceitar ou recusar esse convite, acesse sua página de

@@ -24,11 +24,11 @@ ru:
         informal:
           addressed: Привет, %{name}!
           unaddressed: Привет!
-        introductory: Привет от Archive of Our Own – AO3 (Нашего Архива)!
+        introductory: Привет от Archive of Our Own – AO3 (Нашего Архива)!
       signature:
         app_short_name: АО3
         open_doors: Команда Open Doors (Открытые двери)
-        parent_org: Organization for Transformative Works – OTW (Организация Трансформационных
+        parent_org: Organization for Transformative Works – OTW (Организация Трансформационных
           Работ)
         support: Команда Технической поддержки АО3
     kudos:
@@ -76,7 +76,7 @@ ru:
       opendoors: свяжитесь с командой Открытых дверей
       subject: "[%{app_name}] Ваша работа была удалена администратором сайта"
       text:
-        part1: Ваша работа \"%{title}\" была удалена администратором AO3.
+        part1: Ваша работа "%{title}" была удалена администратором AO3.
         part2: Если данная работа была импортирована на AO3 как часть проекта Открытые
           двери, пожалуйста, свяжитесь с командой Открытых дверей (%{opendoors_link}),
           если возникнут дополнительные вопросы.

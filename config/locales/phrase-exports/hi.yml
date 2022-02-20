@@ -31,6 +31,19 @@ hi:
         parent_org: Organization for Transformative Works – OTW (परिवर्तनकारी कार्य
           हेतु संगठन)
         support: AO3 सहायता समिति
+    kudos:
+      guest:
+        one: अतिथि
+        other: "%{count} अतिथिगण"
+      html:
+        left_kudos:
+          one: "%{givers_list} ने %{commentable_link} पर कूडोस दिया हैं।"
+          other: "%{givers_list} ने %{commentable_link} पर कूडोस दिया हैं।"
+      text:
+        left_kudos:
+          one: "%{givers_list} ने %{commentable_link} पर कूडोस दिया हैं।"
+          other: "%{givers_list} ने %{commentable_link} पर कूडोस दिया हैं।"
+      you_have: "[%{app_name}] आपको कूडोस मिला हैं!"
   user_mailer:
     admin_hidden_work_notification:
       access: जब तक आपका कार्य छुपा हुआ है, आप उसे ऊपर दी हुई लिंक से उपलब्ध कर सकेंगे,
@@ -182,5 +195,5 @@ hi:
     recipient_notification:
       subject:
         collection: "[%{app_name}][%{collection_title}] आप के लिए एक उपहार कार्य  %{collection_title}
-          से।  "
+          से।"
         no_collection: "[%{app_name}] आप के लिए एक उपहार कार्य"

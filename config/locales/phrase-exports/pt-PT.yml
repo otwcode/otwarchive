@@ -227,9 +227,30 @@ pt-PT:
         a adicionar-te sem um convite, mesmo se tiveres desativado a opção de co-criação.
       html:
         creation: "%{creation_link} por %{pseud_links}"
+        edit_chapter: editar o capítulo
+        edit_series: editar a série
+        edit_work: editar a obra
+        remove_chapter: Se te adicionaram por engano ou não quiseres aparecer como
+          pessoa criadora, podes %{edit_chapter_link} para te removeres dele.
+        remove_series: Se te adicionaram por engano ou não quiseres aparecer como
+          pessoa criadora, podes %{edit_series_link} para te removeres dela.
+        remove_work: Se te adicionaram por engano ou não quiseres aparecer como pessoa
+          criadora, podes %{edit_work_link} para te removeres dela.
+      intro_chapter: 'A pessoa utilizadora %{archivist} adicionou o teu pseudónimo
+        %{pseud}  como pessoa co-criadora do seguinte capítulo:'
+      intro_series: 'A pessoa utilizadora %{archivist} adicionou o teu pseudónimo
+        %{pseud}  como pessoa co-criadora da seguinte série:'
+      intro_work: 'A pessoa utilizadora %{archivist} adicionou o teu pseudónimo %{pseud}
+        como pessoa co-criadora da seguinte obra:'
       subject: "[%{app_name}] Arquivista: Notificação de pessoa co-criadora"
       text:
         creation: "%{title} (%{url}) por %{pseuds}"
+        remove_chapter: 'Se te adicionaram por engano ou não quiseres aparecer como
+          pessoa criadora, podes editar o capítulo para te removeres dele: %{url}'
+        remove_series: 'Se te adicionaram por engano ou não quiseres aparecer como
+          pessoa criadora, podes editar a série para te removeres dela: %{url}'
+        remove_work: 'Se te adicionaram por engano ou não quiseres aparecer como pessoa
+          criadora, podes editar a obra para te removeres dela: %{url}'
     creatorship_request:
       html:
         creation: "%{creation_link} por %{pseud_links}"

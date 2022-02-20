@@ -172,14 +172,32 @@ ro:
         %{email}"
       subject: "[%{app_name}] Adresa de e-mail schimbată"
     creatorship_notification:
-      explanation: Când apari drept co-creator la o lucrare, poți fi adăugat(ă) la
-        capitole noi, indiferent de setările tale pentru co-creator. De asemenea,
-        vei fi adăugat(ă) la orice serie la care se adaugă lucrarea.
+      explanation: Când apari drept co-creator/ co-creatoare la o lucrare, poți fi
+        adăugat(ă) la capitole noi, indiferent de setările tale pentru co-creator.
+        De asemenea, vei fi adăugat(ă) la orice serie la care se adaugă lucrarea.
       html:
         creation: "%{creation_link} de %{pseud_links}"
-      subject: "[%{app_name}] Notificare Co-creator"
+        edit_chapter: edita capitolul
+        edit_series: edita seria
+        remove_chapter: Dacă ai fost adăugat(ă) din greșeală sau nu dorești să apari
+          drept creator/ creatoare, poți %{edit_chapter_link} pentru a te scoate de
+          pe lista de creatori.
+        remove_series: Dacă ai fost adăugat(ă) din greșeală sau nu dorești să apari
+          drept creator/ creatoare, poți %{edit_series_link} pentru a te scoate de
+          pe lista de creatori.
+      intro_chapter: 'Utilizatorul/ utilizatoarea %{adding_user} a adăugat pseudonimul
+        tău %{pseud} drept co-creator/ co-creatoare la următorul capitol:'
+      intro_series: 'Utilizatorul/ utlizatoarea %{adding_user} a adăugat pseudonimul
+        tău %{pseud} drept co-creator/ co-creatoare la următoarea serie:'
+      subject: "[%{app_name}] Notificare co-creator/ co-creatoare"
       text:
-        creation: "%{title} (%{url}) by %{pseuds}"
+        creation: "%{title} (%{url}) de %{pseuds}"
+        remove_chapter: 'Dacă ai fost adăugat(ă) din greșeală sau nu dorești să apari
+          drept creator/ creatoare, poți edita capitolul pentru a te scoate de pe
+          lista de creatori: %{url}'
+        remove_series: 'Dacă ai fost adăugat(ă) din greșeală sau nu dorești să apari
+          drept creator/ creatoare, poți edita seria pentru a te scoate de pe lista
+          de creatori: %{url}'
     creatorship_notification_archivist:
       explanation: Deoarece își exercită capacitatea oficială de arhivar al Uși Deschise,
         poate să te adauge fără invitație, chiar dacă ai funcția de co-creație dezactivată.
