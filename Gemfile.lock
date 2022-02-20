@@ -63,9 +63,6 @@ GEM
       activemodel (= 5.2.6)
       activesupport (= 5.2.6)
       arel (>= 9.0)
-    activerecord-mysql-reconnect (0.4.2)
-      activerecord
-      mysql2
     activestorage (5.2.6)
       actionpack (= 5.2.6)
       activerecord (= 5.2.6)
@@ -113,7 +110,7 @@ GEM
       html_tokenizer (~> 0.0.6)
       parser (>= 2.4)
       smart_properties
-    brakeman (3.7.2)
+    brakeman (5.2.1)
     builder (3.2.4)
     bullet (6.1.0)
       activesupport (>= 3.0.0)
@@ -549,7 +546,6 @@ DEPENDENCIES
   actionpack-page_caching
   active_record_query_trace (~> 1.6, >= 1.6.1)
   activemodel-serializers-xml
-  activerecord-mysql-reconnect (~> 0.4.1)
   acts_as_list (~> 0.9.7)
   addressable
   after_commit_everywhere
@@ -558,7 +554,7 @@ DEPENDENCIES
   awesome_print
   aws-sdk-s3
   bcrypt
-  brakeman (= 3.7.2)
+  brakeman
   bullet (>= 5.7.3)
   bundler
   bundler-audit

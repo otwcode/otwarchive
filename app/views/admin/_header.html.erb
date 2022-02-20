@@ -13,21 +13,21 @@
   <li class="dropdown">
     <%= link_to ts("Invitations", key: "header"), admin_invitations_path %>
     <ul class="menu" role="menu">
-      <li><%= span_if_current ts("Invite New Users", key: "header"), admin_invitations_path %></li>
-      <li><%= span_if_current ts("Manage Requests", key: "header"), user_invite_requests_path %></li>
-      <li><%= span_if_current ts("Manage Queue", key: "header"), manage_invite_requests_path %></li>
+      <li><%= link_to ts("Invite New Users", key: "header"), admin_invitations_path %></li>
+      <li><%= link_to ts("Manage Requests", key: "header"), user_invite_requests_path %></li>
+      <li><%= link_to ts("Manage Queue", key: "header"), manage_invite_requests_path %></li>
     </ul>
   </li>
   <li class="dropdown">
     <%= link_to ts("Admin Posts", key: "header"), admin_posts_path %>
     <ul class="menu" role="menu">
-      <li><%= span_if_current ts("AO3 News", key: "header"), admin_posts_path %></li>
+      <li><%= link_to ts("AO3 News", key: "header"), admin_posts_path %></li>
       <% if policy(AdminPost).can_post? %>
-        <li><%= span_if_current ts("Post AO3 News", key: "header"), new_admin_post_path %></li>
+        <li><%= link_to ts("Post AO3 News", key: "header"), new_admin_post_path %></li>
       <% end %>
-      <li><%= span_if_current ts("Archive FAQ", key: "header"), archive_faqs_path %></li>
-      <li><%= span_if_current ts("Known Issues", key: "header"), known_issues_path %></li>
-      <li><%= span_if_current ts("Wrangling Guidelines", key: "header"), wrangling_guidelines_path %></li>
+      <li><%= link_to ts("Archive FAQ", key: "header"), archive_faqs_path %></li>
+      <li><%= link_to ts("Known Issues", key: "header"), known_issues_path %></li>
+      <li><%= link_to ts("Wrangling Guidelines", key: "header"), wrangling_guidelines_path %></li>
     </ul>
   </li>
   <li><%= link_to ts("Blacklist", key: "header"), admin_blacklisted_emails_path %></li>
@@ -39,9 +39,9 @@
   <li class="dropdown">
     <%= link_to ts("Skins", key: "header"), admin_skins_path %>
     <ul class="menu" role="menu">
-      <li><%= span_if_current ts("Approval Queue", key: "header"), admin_skins_path %></li>
-      <li><%= span_if_current ts("Approved Skins", key: "header"), index_approved_admin_skins_path %></li>
-      <li><%= span_if_current ts("Rejected Skins", key: "header"), index_rejected_admin_skins_path %></li>
+      <li><%= link_to ts("Approval Queue", key: "header"), admin_skins_path %></li>
+      <li><%= link_to ts("Approved Skins", key: "header"), index_approved_admin_skins_path %></li>
+      <li><%= link_to ts("Rejected Skins", key: "header"), index_rejected_admin_skins_path %></li>
     </ul>
   </li>
   <li><%= link_to ts("Tag Wrangling", key: "header"), tag_wranglings_path %></li>
