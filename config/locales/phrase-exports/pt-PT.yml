@@ -102,7 +102,7 @@ pt-PT:
       text:
         help: 'Se não sabes porque é que a tua obra foi ocultada e não recebeste mais
           nenhuma comunicação sobre o assunto, por favor contacta a equipa de abuso
-          diretamente: %{contact_abuse_link}.'
+          diretamente: %{contact_abuse_url}.'
         hidden: A tua obra "%{title}" (%{work_url}) foi ocultada pela equipa de Políticas
           e Abuso e já não está acessível publicamente.
         tos_violation: Se a tua obra foi ocultada por infringir os Termos de Serviço

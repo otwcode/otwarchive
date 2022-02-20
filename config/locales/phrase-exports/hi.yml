@@ -128,7 +128,7 @@ hi:
       faq_link_text: संग्रह FAQ
       more_info:
         html: अधिक जानकारी के लिए, कृपया हमारे %{faq_link} को देखिये।
-        text: 'ज्यादा जानकारी के लिए, कृपया हमारे संग्रह FAQ: %{faq_link} को देखिये।'
+        text: 'ज्यादा जानकारी के लिए, कृपया हमारे संग्रह FAQ: %{faq_url} को देखिये।'
       subject:
         anonymous: "[%{app_name}] आपके कार्य को अज्ञात किया गया हैं।"
         anonymous_unrevealed: "[%{app_name}] आपके कार्य को अज्ञात और अप्रकाशित किया
@@ -156,7 +156,7 @@ hi:
       recipient_missing: 'कोई नहीं: मदद के लिए मंदक से संपर्क करें!'
       subject: "[%{app_name}][%{collection_title}] आपका असाइन्मेन्ट!"
       text:
-        assignment: आपको AO3 में "%{Collection_title}" (%{collection_url}) चुनौती
+        assignment: आपको AO3 में "%{collection_title}" (%{collection_url}) चुनौती
           में निम्नलिखित अनुरोध सौंपा गया है!
         footer: आपको यह ईमेल इसलिए प्राप्त हो रहा है क्योंकि आपने %{title} चुनौती
           (%{url}) के लिए साइन अप किया है। इस चुनौती के बारे में अधिक जानकारी और मंदकों

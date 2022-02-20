@@ -130,7 +130,7 @@ ro:
       more_info:
         html: Pentru mai multe informații vizitează %{faq_link}.
         text: 'Pentru mai multe informații vizitează Întrebări Frecvente despre Colecții:
-          %{faq_link}'
+          %{faq_url}'
       subject:
         anonymous: "[%{app_name}] Lucrarea ta a fost marcată ca anonimă"
         anonymous_unrevealed: "[%{app_name}] Lucrarea ta a fost marcată ca anonimă

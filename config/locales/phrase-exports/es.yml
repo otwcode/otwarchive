@@ -225,7 +225,7 @@ es:
         edit_chapter: editar el capítulo
         edit_series: editar la serie
         remove_chapter: Si has sido añadidx por error o no quieres aparecer como creadorx,
-          puedes {edit_chapter_link} para eliminarte como creadorx.
+          puedes %{edit_chapter_link} para eliminarte como creadorx.
         remove_series: Si has sido agregado por error o no deseas ser incluidx como
           co-creadorx, puedes %{edit_series_link} para eliminarte como creadorx.
       intro_chapter: 'La cuenta de usuarix %{adding_user} ha añadido tu pseudónimo
@@ -259,7 +259,7 @@ es:
       intro_series: 'El/La usuarix %{archivist} ha añadido tu pseudónimo %{pseud}
         como co-creadorx en la siguiente serie:'
       intro_work: 'El/La usuarix %{archivist} ha añadido tu pseudónimo %{pseud} como
-        co-creadorx en la siguiente obra %{type}:'
+        co-creadorx en la siguiente obra:'
       subject: "[%{app_name}] Notificación de co-creadorx por parte de archivista"
       text:
         creation: "%{title} (%{url}) por %{pseuds}"
@@ -269,7 +269,7 @@ es:
         remove_series: 'Si se te ha añadido por error o no quieres aparecer como creadorx,
           puedes editar la serie para eliminarte como creadorx: %{url}'
         remove_work: 'Si se te ha añadido por error o no quieres aparecer como creadorx,
-          puedes editar la %{type} para eliminarte como creadorx: %{url}'
+          puedes editar la obra para eliminarte como creadorx: %{url}'
     creatorship_request:
       html:
         creation: "%{creation_link} de %{pseud_links}"

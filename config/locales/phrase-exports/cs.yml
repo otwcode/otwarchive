@@ -255,9 +255,9 @@ cs:
       text:
         creation: "%{title} (%{url}) od %{pseuds}"
         remove_chapter: 'Pokud jste byli přidáni omylem nebo nechcete být uváděni
-          jako autor, můžete kapitolu upravit, abyste se autorství zřekli: %{url'
+          jako autor, můžete kapitolu upravit, abyste se autorství zřekli: %{url}'
         remove_series: 'Pokud jste byli přidáni omylem nebo nechcete být uváděni jako
-          autor, můžete sérii upravit, abyste se autorství zřekli: %{url'
+          autor, můžete sérii upravit, abyste se autorství zřekli: %{url}'
         remove_work: 'Pokud jste byli přidáni omylem nebo nechcete být uváděni jako
           autor, můžete práci upravit, abyste se autorství zřekli: %{url}'
     creatorship_request:

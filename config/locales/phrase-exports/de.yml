@@ -148,19 +148,19 @@ de:
             besuche bitte die %{collection_items_link} und entferne es aus der Sammlung.
           text: 'Wenn Du nicht möchtest, dass Dein Werk anonym angezeigt wird, dann
             besuche bitte Deine Approved Collection Items (Seite für genehmigte Objekte
-            einer Sammlung) und entferne es aus der Sammlung: %{collection_items_link}'
+            einer Sammlung) und entferne es aus der Sammlung: %{collection_items_url}'
         anonymous_unrevealed:
           html: Wenn Du nicht möchtest, dass Dein Werk anonym und verborgen ist, dann
             besuche bitte die %{collection_items_link} und entferne es aus der Sammlung.
           text: 'Wenn Du nicht möchtest, dass Dein Werk anonymisiert und verborgen
             wird, dann besuche bitte Deine Approved Collection Items (Seite für genehmigte
-            Objekte einer Sammlung) und entferne es aus der Sammlung: %{collection_items_link}'
+            Objekte einer Sammlung) und entferne es aus der Sammlung: %{collection_items_url}'
         unrevealed:
           html: Wenn Du nicht möchtest, dass Dein Werk verborgen ist, dann besuche
             bitte die %{collection_items_link} und entferne es aus der Sammlung.
           text: 'Wenn Du nicht möchtest, dass Dein Werk verborgen wird, dann besuche
             bitte Deine Approved Collection Items (Seite für genehmigte Objekte einer
-            Sammlung) und entferne es aus der Sammlung: %{collection_items_link}'
+            Sammlung) und entferne es aus der Sammlung: %{collection_items_url}'
       faq_link_text: Herausforderungen FAQ (Häufige Fragen)
       more_info:
         html: Weitere Informationen findest Du in unserer %{faq_link}.

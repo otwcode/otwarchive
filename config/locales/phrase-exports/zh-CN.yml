@@ -89,13 +89,13 @@ zh-CN:
       changed_status:
         anonymous:
           html: 作品集%{collection_link}的管理员已将您的作品%{work_link}设为匿名状态。
-          text: 作品集“%{collection_title}”（%{collection_url}）的管理员已将您的作品“%{work_title}”（%{work_url}）设为匿名状态。
+          text: 名为“%{collection_title}”的作品集（作品集链接为%{collection_url}）的管理员已将您名为“%{work_title}”（作品链接为%{work_url}）的作品设为匿名状态。
         anonymous_unrevealed:
           html: 作品集%{collection_link}的管理员已将您的作品%{work_link}设为匿名与非公开状态。
-          text: 作品集“%{collection_title}”（%{collection_url}）的管理员已将您的作品“%{work_title}”（%{work_url}）设为匿名与非公开状态。
+          text: 名为“%{collection_title}”的作品集（作品集链接为%{collection_url}）的管理员已将您名为“%{work_title}”（作品链接为%{work_url}）的作品设为匿名与非公开状态。
         unrevealed:
           html: 作品集%{collection_link}的管理员已将您的作品%{work_link}设为非公开状态。
-          text: 作品集“%{collection_title}”（%{collection_url}）的管理员已将您的作品“%{work_title}”（%{work_url}）设为非公开状态。
+          text: 名为“%{collection_title}”（作品集链接为%{collection_url}）的作品集的管理员已将您名为“%{work_title}”（作品链接为%{work_url}）的作品设为非公开状态。
       collection_items_link_text: Approved Collection Items（已通过作品集条目）页
       do_not_want:
         anonymous:

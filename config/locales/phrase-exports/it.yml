@@ -264,7 +264,7 @@ it:
           la serie e rimuoverti dalla lista degli autori: %{url}'
         remove_work: 'Se ritieni che questa modifica sia avvenuta per errore e non
           desideri che il tuo pseudonimo venga indicato come autore, puoi modificare
-          il %{type} e rimuoverti dalla lista degli autori: %{url}'
+          il lavoro e rimuoverti dalla lista degli autori: %{url}'
     creatorship_request:
       html:
         creation: "%{creation_link} di %{pseud_links}"

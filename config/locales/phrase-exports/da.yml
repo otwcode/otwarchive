@@ -211,9 +211,24 @@ da:
         til enhver serie, som værket bliver tilføjet.
       html:
         creation: "%{creation_link} af %{pseud_links}"
+        edit_chapter: redigere kapitlet
+        edit_series: redigere serien
+        remove_chapter: Hvis du er blevet tilføjet ved en fejl eller ikke vil stå
+          som skaber, kan du %{edit_chapter_link} for at fjerne dig selv som skaber.
+        remove_series: Hvis du er blevet tilføjet ved en fejl eller ikke vil stå som
+          medskaber, kan du %{edit_series_link} for at fjerne dig selv som skaber.
+      intro_chapter: 'Brugeren %{adding_user} har sat dit pseudonym %{pseud} som medskaber
+        på det følgende kapitel:'
+      intro_series: 'Brugeren %{adding_user} har sat dit pseudonym %{pseud} som medskaber
+        på følgende serie:'
       subject: "[%{app_name}] Notifikation til medskaber"
       text:
         creation: "%{title} (%{url}) af %{pseuds}"
+        remove_chapter: 'Hvis du er blevet tilføjet ved en fejl eller ikke vil stå
+          som skaber, kan du redigere kapitlet for at fjerne dig selv som skaber:
+          %{url}'
+        remove_series: 'Hvis du er blevet tilføjet ved en fejl eller ikke vil stå
+          som skaber, kan du redigere serien for at fjerne dig selv som skaber: %{url}'
     creatorship_notification_archivist:
       explanation: Fordi de opererer i en officiel funktion som arkivar for Åbne Døre,
         har de tilladelse til at tilføje dig uden en invitation, selvom du har deaktiveret

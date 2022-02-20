@@ -419,7 +419,7 @@ pt-BR:
       footer:
         general:
           html:
-            donate_link_text: doações de fãs.
+            donate_link_text: doações de fãs
             part1: Se você recebeu essa mensagem por engano, por favor %{support_link}.
             part2: O AO3 é um arquivo que depende do trabalho voluntário e das %{donate_link}.
             support_link_text: entre em contato com a nossa equipe de Suporte
@@ -568,8 +568,8 @@ pt-BR:
         part1: Sua obra "%{title}" foi apagada do AO3 por um membro da equipe de administração
           do site.
         part2: Se sua obra era parte de um projeto de importação ligado ao Open Doors
-          (Portas Abertas), por favor entre em contato com a equipe do Portas Abertas  (%{opendoors_link})
-          com qualquer dúvida.
+          (Portas Abertas), por favor entre em contato com a equipe do Portas Abertas
+          (%{opendoors_link}) com qualquer dúvida.
         tos_violation: Caso seja possível que sua obra tenha violado os Termos de
           Serviço do AO3, por favor entre em contato com a nossa equipe de Diretrizes
           e Abuso (%{contact_abuse_url}).
