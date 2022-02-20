@@ -185,24 +185,3 @@ Feature: Work Drafts
       When I follow "Next Chapter"
         And I press "Post Chapter"
       Then I should see "Words:16"
-
-  Scenario: A co-creator, invited or approved, should be able to view chapters in a draft work
-    Given I am logged in as "test_user"
-      And the following activated users exist
-        | login          | email                 |
-        | coauthor       | coauthor@example.org  |
-      And the user "coauthor" allows co-creators
-      And I set up the draft "Unicorns are everywhere"
-      And I fill in "content" with "Help there are unicorns everywhere"
-      And I check "Add co-creators?"
-      And I fill in "pseud_byline" with "coauthor"
-    When I press "Preview"
-      And I press "Save As Draft"
-    When a chapter is set up for "Unicorns are everywhere"
-      And I press "Preview"
-      And I press "Save As Draft"
-    When I am logged in as "coauthor"
-      And I go to my co-creator requests page
-      And I follow "Unicorns are everywhere"
-    Then I should see "This chapter is a draft and hasn't been posted yet!"
-      And I should see "Chapter 1"
