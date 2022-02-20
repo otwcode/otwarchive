@@ -75,9 +75,6 @@ GEM
     activerecord (6.0.4.6)
       activemodel (= 6.0.4.6)
       activesupport (= 6.0.4.6)
-    activerecord-mysql-reconnect (0.4.2)
-      activerecord
-      mysql2
     activestorage (6.0.4.6)
       actionpack (= 6.0.4.6)
       activejob (= 6.0.4.6)
@@ -585,7 +582,6 @@ DEPENDENCIES
   actionpack-page_caching
   active_record_query_trace (~> 1.6, >= 1.6.1)
   activemodel-serializers-xml
-  activerecord-mysql-reconnect (~> 0.4.1)
   acts_as_list (~> 0.9.7)
   addressable
   after_commit_everywhere
