@@ -178,8 +178,8 @@ zh-CN:
       subject: "[%{app_name}] 档案管理员添加共同创作者通知"
       text:
         creation: "%{title}（%{url}）作者为%{pseuds}"
-        remove_chapter: " 若添加有误，或您不想被列为创作者之一，您可以编辑章节将自己从共同创作者列表中移除：%{url}"
-        remove_series: " 若添加有误，或您不想被列为创作者之一，您可以编辑系列将自己从共同创作者列表中移除：%{url}"
+        remove_chapter: 若添加有误，或您不想被列为创作者之一，您可以编辑章节将自己从共同创作者列表中移除：%{url}
+        remove_series: 若添加有误，或您不想被列为创作者之一，您可以编辑系列将自己从共同创作者列表中移除：%{url}
         remove_work: 若添加有误，或您不想被列为创作者之一，您可以编辑作品将自己从共同创作者列表中移除：%{url}
     creatorship_request:
       html:

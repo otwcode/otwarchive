@@ -212,7 +212,7 @@ tr:
         ortaklığı devre dışı bırakmış olsanız bile sizi davetiyesiz ortak yaratıcı
         olarak ekleme hakkına sahiptirler.
       html:
-        creation: "%{pseud_links} tarafından %{creation_link} "
+        creation: "%{pseud_links} tarafından %{creation_link}"
         edit_chapter: bölümü düzenleyebilirsiniz
         edit_series: seriyi düzenleyebilirsiniz
         edit_work: eseri düzenleyebilirsiniz
@@ -230,10 +230,10 @@ tr:
         olarak aşağıdaki esere  ekledi:"
       subject: "[%{app_name}] Ortak yaratıcı arşivci bildirimi"
       text:
-        creation: "%{pseuds} tarafından %{title} (%{url}) "
-        remove_chapter: " Eğer yanlışlıkla eklendiyseniz veya yaratıcı olarak listelenmek
+        creation: "%{pseuds} tarafından %{title} (%{url})"
+        remove_chapter: 'Eğer yanlışlıkla eklendiyseniz veya yaratıcı olarak listelenmek
           istemiyorsanız kendinizi yaratıcılıktan çıkarmak için bölümü düzenleyebilirsiniz:
-          %{url}"
+          %{url}'
         remove_series: 'Eğer yanlışlıkla eklendiyseniz veya yaratıcı olarak listelenmek
           istemiyorsanız kendinizi yaratıcılıktan çıkarmak için seriyi düzenleyebilirsiniz:
           %{url}'

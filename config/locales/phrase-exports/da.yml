@@ -199,7 +199,7 @@ da:
     collection_notification:
       assignments_sent:
         complete: Alle opgavetildelinger er blevet afsendt.
-        subject: "[%{app_name}][%{collection_title}] Opgavetildelinger afsendt"
+        subject: Opgavetildelinger afsendt
       html:
         received_message: 'Du har modtaget en besked vedrørende din samling %{collection_link}:'
       text:

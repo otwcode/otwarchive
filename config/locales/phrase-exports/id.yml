@@ -423,7 +423,7 @@ id:
         part3: 'Terdapat banyak informasi dan saran mengenai cara penggunaan AO3 yang
           tersedia di Pertanyaan yang Sering Diajukan kami pada %{faq_url}. Anda dapat
           menemukan berita terbaru mengenai perkembangan situs di Berita AO3 pada
-          %{admin_posts_url}. Jika Anda membutuhkan bantuan, menemukan <i>bug</i>,
-          atau ingin mengajukan pertanyaan atau komentar, mohon hubungi tim Dukungan
-          kami, yang dengan senang hati akan membantu Anda: %{contact_support_url}.'
+          %{admin_posts_url}. Jika Anda membutuhkan bantuan, menemukan bug, atau ingin
+          mengajukan pertanyaan atau komentar, mohon hubungi tim Dukungan kami, yang
+          dengan senang hati akan membantu Anda: %{contact_support_url}.'
       welcome: Selamat datang di Archive of Our Own – AO3 (Arsip Milik Kita), %{login}!

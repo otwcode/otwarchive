@@ -247,6 +247,8 @@ hu:
         part1_other: '%{pseud} kérésére töröltük "%{title}" című munkádat.'
         part1_yourself: Kérésedre töröltük "%{title}" című munkádat.
         part2: Ha kérdésed van, %{support} (%{url}).
+    invitation:
+      subject: "[%{app_name}] Pozivnica"
     invitation_to_claim:
       html:
         ao3_news: AO3 Hírek
@@ -330,7 +332,7 @@ hu:
           a(z) %{collection_title} gyűjteményben"
         no_collection: "[%{app_name}] Egy ajándék munka a számodra"
     signup_notification:
-      activate_your_account: 'kövesd ezt a linket a felhasználói fiókod aktiválásához. '
+      activate_your_account: kövesd ezt a linket a felhasználói fiókod aktiválásához.
       admin_posts: Archívum Hírek
       bye: Reméljük, örömöd leled az Archívum használatában.
       contact_support: lépj kapcsolatba a Támogatással

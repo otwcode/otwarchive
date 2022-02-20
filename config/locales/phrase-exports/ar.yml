@@ -193,7 +193,7 @@ ar:
     collection_notification:
       assignments_sent:
         complete: تم ارسال جميع المهام.
-        subject: "[%{app_name}][%{collection_title}] تم ارسال المهام"
+        subject: تم ارسال المهام
       html:
         received_message: 'تلقيت رسالة بخصوص مجموعتك %{collection_link}:'
       text:
