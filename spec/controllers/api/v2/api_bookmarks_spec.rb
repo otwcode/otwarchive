@@ -21,7 +21,7 @@ describe "API v2 BookmarksController", type: :request, bookmark_search: true do
                rec: "0" }
 
   before do
-    mock_external
+    WebMock.stub_request(:any, "http://example.com")
   end
 
   after do
@@ -82,8 +82,6 @@ describe "API v2 BookmarksController", type: :request, bookmark_search: true do
       bookmark_response = JSON.parse(response.body, symbolize_names: true)[:bookmarks].first
       assert_equal bookmark_response[:archive_url], bookmark_url(first_bookmark)
     end
-
-    WebMock.allow_net_connect!
   end
 
   describe "Invalid API bookmark import" do
@@ -190,5 +188,4 @@ describe "API v2 BookmarksController", type: :request, bookmark_search: true do
       expect(bookmark_response[:status]).to eq :unprocessable_entity
     end
   end
-  WebMock.allow_net_connect!
 end

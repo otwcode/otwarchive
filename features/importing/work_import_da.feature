@@ -6,6 +6,7 @@ Feature: Import Works from deviantart
   As an author
   I want to create new works by importing them from deviantart
 
+  @import_da_title_link
   Scenario: Creating a new art work from a deviantart title link with automatic metadata
     Given basic tags
       And I am logged in as "cosomeone"
@@ -33,6 +34,7 @@ Feature: Import Works from deviantart
     When I am on cosomeone's user page
     Then I should see "bingeling"
 
+  @import_da_gallery_link
   Scenario: Creating a new art work from a deviantart gallery link fails - it needs the direct link
     Given basic tags
       And I am logged in as "cosomeone"
@@ -44,6 +46,7 @@ Feature: Import Works from deviantart
       And I should see "Chapter 1 of"
       And I should see "is blank."
 
+  @import_da_fic
   Scenario: Creating a new fic from deviantart import
     Given basic tags
       And I am logged in as "cosomeone"

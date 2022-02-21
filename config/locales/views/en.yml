@@ -301,3 +301,11 @@ en:
           label: Link to the page you are reporting (required)
           error: Please enter the link to the page you are reporting.
           description: If you came here from the abuse link at the bottom of the page, this will be filled in for you.
+  challenge_signups:
+    signup_form:
+      notice:
+        preference:
+          gift_exchange: Signing up for this challenge will allow assigned users to gift works to you regardless of your preference settings. If you wish to receive additional gifts from users who are not assigned to you, please %{preferences_link} to allow gifts from anyone. You can always %{refuse_link}.
+          preferences_link_text: update your preferences
+          prompt_meme: Signing up for this challenge will allow any user who claims your prompt to gift you a work in response to your prompt regardless of your preference settings. If you wish to receive additional gifts from users who have not claimed your prompts, please %{preferences_link} to allow gifts from anyone. You can always %{refuse_link}.
+          refuse_link_text: refuse a gift
