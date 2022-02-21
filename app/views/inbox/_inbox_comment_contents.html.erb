@@ -14,7 +14,7 @@
     </span>
   <% end %>
   <span class="posted datetime">
-    <%= distance_of_time_in_words_to_now(feedback_comment.created_at) %>
+    <%= t("inbox.comment_contents.posted", comment_created: distance_of_time_in_words_to_now(feedback_comment.created_at)) %>
   </span>
 </h4>
 
