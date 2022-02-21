@@ -131,8 +131,9 @@ describe User do
     let(:existing_user) { create(:user) }
 
     it "sets renamed_at if username is changed" do
+      freeze_time
       existing_user.update(login: "new_username")
-      expect(existing_user.renamed_at).to be_within(1.minute).of(Time.now.utc)
+      expect(existing_user.renamed_at).to eq(Time.current)
     end
 
     it "does not set renamed_at when username is not changed" do

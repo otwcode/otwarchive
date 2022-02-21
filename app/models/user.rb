@@ -540,9 +540,10 @@ class User < ApplicationRecord
     change_interval_days = ArchiveConfig.USER_RENAME_LIMIT_DAYS
     return unless renamed_at && change_interval_days.days.ago <= renamed_at
 
-    errors.add(:login, :changed_too_recently,
-                times: I18n.t("user.login.times", count: ArchiveConfig.USER_RENAME_LIMIT),
-                days: I18n.t("user.login.days", count: change_interval_days),
-                renamed_at: I18n.l(renamed_at, format: :long))
+    errors.add(:login,
+               :changed_too_recently,
+               times: I18n.t("user.login.times", count: ArchiveConfig.USER_RENAME_LIMIT),
+               days: I18n.t("user.login.days", count: change_interval_days),
+               renamed_at: I18n.l(renamed_at, format: :long))
   end
 end
