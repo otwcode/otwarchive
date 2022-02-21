@@ -130,45 +130,40 @@ describe User do
   describe "#update" do
     let(:existing_user) { create(:user) }
 
-    it "sets renamed_at if username changed" do
+    it "sets renamed_at if username is changed" do
       existing_user.update(login: "new_username")
       expect(existing_user.renamed_at).to be_within(1.minute).of(Time.now.utc)
     end
 
-    it "does not set renamed_at when username not changed" do
+    it "does not set renamed_at when username is not changed" do
       existing_user.update(email: "newemail@example.com")
       expect(existing_user.renamed_at).to be_nil
     end
 
     context "username recently changed" do
       before do
-        Timecop.freeze
-        existing_user.update(login: "#{existing_user.login}2")
-      end
-
-      after do
-        Timecop.return
+        freeze_time
+        existing_user.update(login: "new_login")
       end
 
       it "does not allow another rename" do
         expect(existing_user.update(login: "new")).to be_falsey
         localized_renamed_at = I18n.l(Time.now.in_time_zone(existing_user.renamed_at.time_zone), format: :long)
-        expect(existing_user.errors[:user_name].first).to eq(
+        expect(existing_user.errors[:login].first).to eq(
           "can only be changed 1 time every 7 days. You last changed your user name on #{localized_renamed_at}"
         )
       end
 
       it "allows changing email" do
-        new_email = "#{existing_user.email}2"
-        existing_user.update(email: new_email)
-        expect(existing_user.email).to eq(new_email)
+        existing_user.update(email: "new_email")
+        expect(existing_user.email).to eq("new_email")
       end
     end
 
-    context "username changed outside window" do
+    context "username was changed outside window" do
       before do
-        Timecop.travel(ArchiveConfig.USERNAME_CHANGE["INTERVAL_DAYS"].days.ago) do
-          existing_user.update(login: "#{existing_user.login}2")
+        travel_to ArchiveConfig.USER_RENAME_LIMIT_DAYS.days.ago do
+          existing_user.update(login: "new_username")
         end
       end
 

@@ -175,7 +175,7 @@ class User < ApplicationRecord
                       message: ts("must begin and end with a letter or number; it may also contain underscores but no other characters."),
                       with: /\A[A-Za-z0-9]\w*[A-Za-z0-9]\Z/
   validates_uniqueness_of :login, case_sensitive: false, message: ts("has already been taken")
-  validate :login, :check_username_already_changed
+  validate :login, :username_is_not_recently_changed
 
   validates :email, email_veracity: true, email_format: true
 
@@ -524,7 +524,7 @@ class User < ApplicationRecord
   end
 
   def add_renamed_at
-    self.renamed_at = Time.now.utc
+    self.renamed_at = Time.current
   end
 
    def log_change_if_login_was_edited
@@ -536,14 +536,13 @@ class User < ApplicationRecord
     self.class.remove_from_autocomplete(self.autocomplete_search_string_was, self.autocomplete_prefixes, self.autocomplete_value_was)
   end
 
-  def check_username_already_changed
-    change_interval_days = ArchiveConfig.USERNAME_CHANGE["INTERVAL_DAYS"]
+  def username_is_not_recently_changed
+    change_interval_days = ArchiveConfig.USER_RENAME_LIMIT_DAYS
     return unless renamed_at && change_interval_days.days.ago <= renamed_at
 
-    errors.add(:user_name,
-               ts("can only be changed %{times} time every %{days} days. You last changed your user name on %{renamed_at}",
-                  times: ArchiveConfig.USERNAME_CHANGE["TIMES"],
-                  days: change_interval_days,
-                  renamed_at: I18n.l(renamed_at, format: :long)))
+    errors.add(:login, :changed_too_recently,
+                times: I18n.t("user.login.times", count: ArchiveConfig.USER_RENAME_LIMIT),
+                days: I18n.t("user.login.days", count: change_interval_days),
+                renamed_at: I18n.l(renamed_at, format: :long))
   end
 end

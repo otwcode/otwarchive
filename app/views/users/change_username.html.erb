@@ -3,18 +3,18 @@
 <%= error_messages_for :user %>
 <div class="caution">
   <p>
-    <strong><%= ts("Please use this feature with caution.") %></strong>
-    <%= ts("You can change your user name %{times} time every %{days} days.",
-      times: ArchiveConfig.USERNAME_CHANGE["TIMES"],
-      days: ArchiveConfig.USERNAME_CHANGE["INTERVAL_DAYS"]) %>
+    <strong><%= t("users.change_username.caution") %></strong>
+    <%= t("users.change_username.change_window",
+      times: t("users.change_username.times", count: ArchiveConfig.USER_RENAME_LIMIT),
+      days: distance_of_time_in_words_to_now(ArchiveConfig.USER_RENAME_LIMIT_DAYS.days.ago)) %>
     <% if @user.renamed_at %>
-      <%= ts("You last changed your user name on %{renamed_at}.", renamed_at: l(@user.renamed_at, format: :long)) %>
+      <%= t("users.change_username.last_renamed", renamed_at: l(@user.renamed_at, format: :long)) %>
     <% end %>
   </p>
   <p>
-    <%= ts("For information on how changing your user name will affect your account, please check out the %{account_faq}. Note that changes to your username may take several days or longer to appear. If you are still seeing your old user name on your works, bookmarks, series, or collections after a week, please %{contact_support}.",
-    account_faq: (link_to ts("Account FAQ"), archive_faqs_path + "/your-account#namechange"),
-    contact_support: (link_to ts("contact Support"), new_feedback_report_path)
+    <%= t("users.change_username.more_info",
+    account_faq_link: (link_to t("users.change_username.account_faq"), archive_faq_path("your-account", anchor: "namechange")),
+    contact_support: (link_to t("contact Support"), new_feedback_report_path)
     ).html_safe %>
   </p>
 </div>
