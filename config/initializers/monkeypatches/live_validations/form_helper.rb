@@ -1,7 +1,9 @@
 module ActionView
 
   mattr_accessor :live_validations
-  ActionView::live_validations = true
+  # By default, don't do live validations; we'll specify only those fields we want
+  # live-validated in the views with live: true.
+  ActionView::live_validations = false
 
   module Helpers
     module FormHelper
