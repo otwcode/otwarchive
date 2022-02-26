@@ -354,8 +354,6 @@ GEM
     nokogiri (1.13.3)
       mini_portile2 (~> 2.8.0)
       racc (~> 1.4)
-    nokogumbo (2.0.5)
-      nokogiri (~> 1.8, >= 1.8.4)
     orm_adapter (0.5.0)
     parallel (1.21.0)
     parser (3.1.0.0)
@@ -631,7 +629,6 @@ DEPENDENCIES
   mysql2 (= 0.5.2)
   newrelic_rpm
   nokogiri (>= 1.8.5)
-  nokogumbo
   permit_yo
   phraseapp-in-context-editor-ruby (>= 1.0.6)
   pickle
