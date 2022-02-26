@@ -6,7 +6,7 @@ gem 'test-unit', '~> 3.2'
 
 gem 'bundler'
 
-gem "rails", "~> 5.2"
+gem "rails", "~> 6.0.4"
 gem "rails-i18n"
 gem "rack", "~> 2.1", ">= 2.1.4"
 gem "sprockets", "< 4"
@@ -52,10 +52,7 @@ gem 'whenever', '~>0.6.2', require: false
 gem 'nokogiri', '>= 1.8.5'
 gem 'mechanize'
 gem 'sanitize', '>= 4.6.5'
-# Until there is a working solution to
-# https://otwarchive.atlassian.net/browse/AO3-4957
-# https://github.com/rubys/nokogumbo/issues/50
-gem 'nokogumbo', '1.4.9'
+gem "nokogumbo"
 gem "rest-client", "~> 2.1.0", require: "rest_client"
 gem 'resque', '>=1.14.0'
 gem 'resque-scheduler'
@@ -120,9 +117,11 @@ gem 'connection_pool'
 gem 'dalli'
 gem 'kgio', '2.10.0'
 
+# TODO: AO3-6297 Update the download code so we can remove mimemagic.
+gem "mimemagic", "0.3.10"
+
 group :test do
-  gem 'rspec', '~> 3.8'
-  gem 'rspec-rails', '~> 3.8.2'
+  gem "rspec-rails", "~> 4.0.1"
   gem 'pickle'
   gem 'shoulda'
   gem 'capybara', '~> 2.16.1'
