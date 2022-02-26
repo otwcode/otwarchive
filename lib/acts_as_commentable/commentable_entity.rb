@@ -1,4 +1,4 @@
-module CommentableEntity
+module ActsAsCommentable::CommentableEntity
 
   def self.included(commentable)
     commentable.class_eval do

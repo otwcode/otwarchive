@@ -18,20 +18,19 @@ module Otwarchive
 
     config.load_defaults "6.0"
 
-    # Custom directories with classes and modules you want to be autoloadable.
-    # config.autoload_paths += %W(#{config.root}/extras)
+    # TODO: Remove in Rails 7.1, where it's false by default.
     config.add_autoload_paths_to_load_path = false
-    config.eager_load_paths += [Rails.root.join("lib")]
-    config.autoload_paths += [Rails.root.join("app/sweepers")]
+
     %w[
-      challenge_models
-      tagset_models
-      indexing
-      search
-      feedback_reporters
-      potential_matcher
+      app/models/challenge_models
+      app/models/feedback_reporters
+      app/models/indexing
+      app/models/potential_matcher
+      app/models/search
+      app/models/tagset_models
+      lib
     ].each do |dir|
-      config.autoload_paths << Rails.root.join("app/models/#{dir}")
+      config.eager_load_paths << Rails.root.join(dir)
     end
 
     # I18n validation deprecation warning fix
