@@ -11,7 +11,7 @@ module UrlHelpers
       begin
         url = Addressable::URI.parse(url)
         response_code = Net::HTTP.start(url.host, url.port) {|http| http.head(url.path.blank? ? '/' : url.path).code}
-        active_status = %w(200 301 302 307 308)
+        active_status = %w[200 301 302 307 308]
         active_status.include? response_code
       rescue
         false
