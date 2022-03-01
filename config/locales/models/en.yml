@@ -16,7 +16,9 @@ en:
             password_confirmation:
               confirmation: "doesn't match new password."
             login:
-              changed_too_recently: "can only be changed %{times} every %{days}. You last changed your user name on %{renamed_at}"
+              changed_too_recently:
+                one: "can only be changed once per day. You last changed your user name on %{renamed_at}."
+                other: "can only be changed once every %{count} days. You last changed your user name on %{renamed_at}."
         work:
           attributes:
             user_defined_tags_count:
@@ -111,11 +113,3 @@ en:
         user_defined_tags_count: "Fandom, relationship, and character tags"
       work:
         user_defined_tags_count: "Fandom, relationship, character, and additional tags"
-  user:
-    login:
-      days:
-        one: "1 day"
-        other: "%{count} days"
-      times:
-        one: "1 time"
-        other: "%{count} times"

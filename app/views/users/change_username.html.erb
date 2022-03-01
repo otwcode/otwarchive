@@ -4,18 +4,16 @@
 <div class="caution">
   <p>
     <strong><%= t("users.change_username.caution") %></strong>
-    <%= t("users.change_username.change_window",
-      times: t("users.change_username.times", count: ArchiveConfig.USER_RENAME_LIMIT),
-      days: distance_of_time_in_words_to_now(ArchiveConfig.USER_RENAME_LIMIT_DAYS.days.ago)) %>
+    <%= t("users.change_username.change_window", count: ArchiveConfig.USER_RENAME_LIMIT_DAYS) %>
     <% if @user.renamed_at %>
       <%= t("users.change_username.last_renamed", renamed_at: l(@user.renamed_at, format: :long)) %>
     <% end %>
   </p>
   <p>
     <%= t("users.change_username.more_info",
-    account_faq_link: (link_to t("users.change_username.account_faq"), archive_faq_path("your-account", anchor: "namechange")),
-    contact_support: (link_to t("contact Support"), new_feedback_report_path)
-    ).html_safe %>
+          account_faq_link: (link_to t("users.change_username.account_faq"), archive_faq_path("your-account", anchor: "namechange")),
+          contact_support: (link_to t("contact Support"), new_feedback_report_path)
+        ).html_safe %>
   </p>
 </div>
 <p class="note">

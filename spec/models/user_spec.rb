@@ -151,7 +151,7 @@ describe User do
         expect(existing_user.update(login: "new")).to be_falsey
         localized_renamed_at = I18n.l(Time.now.in_time_zone(existing_user.renamed_at.time_zone), format: :long)
         expect(existing_user.errors[:login].first).to eq(
-          "can only be changed 1 time every 7 days. You last changed your user name on #{localized_renamed_at}"
+          "can only be changed once every 7 days. You last changed your user name on #{localized_renamed_at}."
         )
       end
 

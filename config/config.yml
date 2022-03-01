@@ -474,5 +474,4 @@ PERMITTED_HOSTS: [
   "testdownload.archiveofourown.org"
 ]
 
-USER_RENAME_LIMIT: 1
 USER_RENAME_LIMIT_DAYS: 7

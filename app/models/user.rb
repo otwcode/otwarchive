@@ -542,8 +542,7 @@ class User < ApplicationRecord
 
     errors.add(:login,
                :changed_too_recently,
-               times: I18n.t("user.login.times", count: ArchiveConfig.USER_RENAME_LIMIT),
-               days: I18n.t("user.login.days", count: change_interval_days),
+               count: change_interval_days,
                renamed_at: I18n.l(renamed_at, format: :long))
   end
 end
