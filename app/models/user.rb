@@ -175,7 +175,7 @@ class User < ApplicationRecord
                       message: ts("must begin and end with a letter or number; it may also contain underscores but no other characters."),
                       with: /\A[A-Za-z0-9]\w*[A-Za-z0-9]\Z/
   validates_uniqueness_of :login, case_sensitive: false, message: ts("has already been taken")
-  validate :login, :username_is_not_recently_changed
+  validate :login, :username_is_not_recently_changed, if: :will_save_change_to_login?
 
   validates :email, email_veracity: true, email_format: true
 
