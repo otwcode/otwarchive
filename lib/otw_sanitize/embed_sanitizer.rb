@@ -10,28 +10,24 @@ module OtwSanitize
       ao3:              %r{^archiveofourown\.org/},
       archiveorg:       %r{^archive\.org\/embed/},
       criticalcommons:  %r{^criticalcommons\.org/},
-      dailymotion:      %r{^dailymotion\.com/},
       eighttracks:      %r{^8tracks\.com/},
       google:           %r{^google\.com/},
-      metacafe:         %r{^metacafe\.com/},
-      ning:             %r{^(static\.)?ning\.com/},
       podfic:           %r{^podfic\.com/},
       soundcloud:       %r{^(w\.)?soundcloud\.com/},
       spotify:          %r{^(open\.)?spotify\.com/},
       viddersnet:       %r{^vidders\.net/},
-      viddertube:       %r{^viddertube\.com/},
       vimeo:            %r{^(player\.)?vimeo\.com/},
       youtube:          %r{^youtube(-nocookie)?\.com/}
     }.freeze
 
     ALLOWS_FLASHVARS = %i[
       ao3 criticalcommons eighttracks google
-      ning podfic soundcloud spotify viddersnet
+      podfic soundcloud spotify viddersnet
     ].freeze
 
     SUPPORTS_HTTPS = %i[
-      ao3 archiveorg dailymotion eighttracks ning podfic
-      soundcloud spotify viddersnet viddertube vimeo youtube
+      ao3 archiveorg eighttracks podfic
+      soundcloud spotify viddersnet vimeo youtube
     ].freeze
 
     # Creates a callable transformer for the sanitizer to use
