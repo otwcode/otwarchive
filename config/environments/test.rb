@@ -6,7 +6,7 @@ Otwarchive::Application.configure do
   # your test database is "scratch space" for the test suite and is wiped
   # and recreated between test runs.  Don't rely on the data there!
   config.cache_classes = true
-  config.eager_load = true
+  config.eager_load = ENV["CI"].present?
 
   # Log error messages when you accidentally call methods on nil.
   # config.whiny_nils = true
@@ -42,7 +42,6 @@ Otwarchive::Application.configure do
   config.action_controller.action_on_unpermitted_parameters = :raise
 
   config.serve_static_files = true
-  config.eager_load = false
   config.assets.enabled = false
 
   # Make sure that we don't have a host mismatch:

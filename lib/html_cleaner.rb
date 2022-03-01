@@ -154,11 +154,11 @@ module HtmlCleaner
       # We're allowing users to use HTML in this field
       transformers = []
       if ArchiveConfig.FIELDS_ALLOWING_VIDEO_EMBEDS.include?(field.to_s)
-        transformers << OTWSanitize::EmbedSanitizer.transformer
-        transformers << OTWSanitize::MediaSanitizer.transformer
+        transformers << OtwSanitize::EmbedSanitizer.transformer
+        transformers << OtwSanitize::MediaSanitizer.transformer
       end
       if ArchiveConfig.FIELDS_ALLOWING_CSS.include?(field.to_s)
-        transformers << OTWSanitize::UserClassSanitizer.transformer
+        transformers << OtwSanitize::UserClassSanitizer.transformer
       end
       # Now that we know what transformers we need, let's sanitize the unfrozen value
       if ArchiveConfig.FIELDS_ALLOWING_CSS.include?(field.to_s)

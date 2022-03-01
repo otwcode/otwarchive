@@ -12,7 +12,7 @@ module AutocompleteSource
   AUTOCOMPLETE_WORD_TERMINATOR = ",,".freeze
 
   def transliterate(input)
-    input = input.to_s.mb_chars.normalize(:kd).gsub(/[\u0300-\u036F]/, "")
+    input = input.to_s.mb_chars.unicode_normalize(:nfkd).gsub(/[\u0300-\u036F]/, "")
     result = ""
     input.each_char do |char|
       tl = ActiveSupport::Inflector.transliterate(char)

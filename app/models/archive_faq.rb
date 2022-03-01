@@ -8,7 +8,7 @@ class ArchiveFaq < ApplicationRecord
   has_many :questions, -> { order(:position) }, dependent: :destroy
   accepts_nested_attributes_for :questions, allow_destroy: true
 
-  validates :slug, presence: true, uniqueness: true
+  validates :slug, presence: true, uniqueness: { case_sensitive: false }
 
   belongs_to :language
 
