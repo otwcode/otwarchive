@@ -33,7 +33,7 @@ Feature: Get messages in the inbox
     When I am logged in as "boxer" with password "10987tko"
       And I go to my inbox page
     Then I should see "cutman on Down for the Count"
-      And I should see "less than a minute ago"
+      And I should see "less than 1 minute ago"
 
   Scenario: Comments in my inbox should be filterable
     Given I am logged in as "boxer" with password "10987tko"
@@ -44,7 +44,7 @@ Feature: Get messages in the inbox
       And I choose "Show unread"
       And I press "Filter"
     Then I should see "guest on Down for the Count"
-      And I should see "less than a minute ago"
+      And I should see "less than 1 minute ago"
     When I choose "Show read"
       And I press "Filter"
     Then I should not see "guest on Down for the Count"
