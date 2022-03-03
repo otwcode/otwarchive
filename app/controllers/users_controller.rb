@@ -156,7 +156,7 @@ class UsersController < ApplicationController
   end
 
   def update
-    @user.profile.update_attributes(profile_params)
+    @user.profile.update(profile_params)
 
     if @user.profile.save
       flash[:notice] = ts('Your profile has been successfully updated')

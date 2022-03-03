@@ -547,7 +547,7 @@ class Work < ApplicationRecord
   # provide an interface to increment major version number
   # resets minor_version to 0
   def update_major_version
-    self.update_attributes({major_version: self.major_version+1, minor_version: 0})
+    self.update({ major_version: self.major_version + 1, minor_version: 0 })
   end
 
   # provide an interface to increment minor version number
@@ -918,7 +918,7 @@ class Work < ApplicationRecord
 
   def update_stat_counter
     counter = self.stat_counter || self.create_stat_counter
-    counter.update_attributes(
+    counter.update(
       kudos_count: self.kudos.count,
       comments_count: self.count_visible_comments_uncached,
       bookmarks_count: self.bookmarks.where(private: false).count
@@ -1142,7 +1142,7 @@ class Work < ApplicationRecord
   end
 
   def mark_as_ham!
-    update_attributes(spam: false, hidden_by_admin: false)
+    update(spam: false, hidden_by_admin: false)
     ModeratedWork.mark_approved(self)
     # don't submit ham reports unless in production mode
     Rails.env.production? && Akismetor.submit_ham(akismet_attributes)

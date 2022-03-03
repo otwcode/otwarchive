@@ -1,4 +1,4 @@
-module CommentMethods
+module ActsAsCommentable::CommentMethods
 
   def self.included(comment)
     comment.class_eval do
