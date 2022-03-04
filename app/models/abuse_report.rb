@@ -7,6 +7,7 @@ class AbuseReport < ApplicationRecord
   validates_presence_of :comment
   validates_presence_of :url
   validate :url_is_not_over_reported
+  validate :email_is_not_over_reporting
   validates_length_of :summary, maximum: ArchiveConfig.FEEDBACK_SUMMARY_MAX,
                                 too_long: ts('must be less than %{max}
                                              characters long.',
@@ -108,6 +109,20 @@ class AbuseReport < ApplicationRecord
       if existing_reports_total >= ArchiveConfig.ABUSE_REPORTS_PER_USER_MAX
         errors[:base] << message
       end
+    end
+  end
+
+  def email_is_not_over_reporting
+    message = ts("You have reached our daily reporting limit. To keep our
+                 volunteers from being overwhelmed, please do not seek out
+                 violations to report, but only report violations you encounter
+                 during your normal browsing.")
+    existing_reports_total = AbuseReport.where("created_at > ? AND
+                                                email LIKE ?",
+                                                1.day.ago,
+                                                email).count
+    if existing_reports_total >= ArchiveConfig.ABUSE_REPORTS_PER_EMAIL_MAX
+      errors[:base] << message
     end
   end
 end

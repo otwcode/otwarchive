@@ -245,6 +245,47 @@ describe AbuseReport do
         expect(report.valid?).to be_truthy
       end
     end
+
+    context "when email is valid" do
+      let(:report) { build(:abuse_report, email: "email@example.com") }
+      context "when email has submitted less than the maximum daily number of reports" do
+        before do
+          (ArchiveConfig.ABUSE_REPORTS_PER_EMAIL_MAX - 1).times do
+            create(:abuse_report, email: "email@example.com")
+          end
+          expect(AbuseReport.count).to eq((ArchiveConfig.ABUSE_REPORTS_PER_EMAIL_MAX - 1))
+        end
+
+        it "can be submitted" do
+          expect(report.save).to be_truthy
+          expect(report.errors[:base]).to be_empty
+        end
+      end
+
+      context "when email has submitted the maximum daily number of reports" do
+        before do
+          ArchiveConfig.ABUSE_REPORTS_PER_EMAIL_MAX.times do
+            create(:abuse_report, email: "email@example.com")
+          end
+          expect(AbuseReport.count).to eq(ArchiveConfig.ABUSE_REPORTS_PER_EMAIL_MAX)
+        end
+
+        it "can't be submitted" do
+          expect(report.save).to be_falsey
+          expect(report.errors[:base].first).to include("daily reporting limit")
+        end
+
+        context "when it's a day later" do
+          before { Timecop.freeze(1.day.from_now) }
+          after { Timecop.return }
+
+          it "can be submitted" do
+            expect(report.save).to be_truthy
+            expect(report.errors[:base]).to be_empty
+          end
+        end
+      end
+    end
   end
 
   context "when report is spam" do
