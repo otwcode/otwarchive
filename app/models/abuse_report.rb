@@ -113,16 +113,15 @@ class AbuseReport < ApplicationRecord
   end
 
   def email_is_not_over_reporting
-    message = ts("You have reached our daily reporting limit. To keep our
-                 volunteers from being overwhelmed, please do not seek out
-                 violations to report, but only report violations you encounter
-                 during your normal browsing.")
     existing_reports_total = AbuseReport.where("created_at > ? AND
-                                                email LIKE ?",
-                                                1.day.ago,
-                                                email).count
-    if existing_reports_total >= ArchiveConfig.ABUSE_REPORTS_PER_EMAIL_MAX
-      errors[:base] << message
-    end
+                                               email LIKE ?",
+                                               1.day.ago,
+                                               email).count
+    return if existing_reports_total < ArchiveConfig.ABUSE_REPORTS_PER_EMAIL_MAX
+
+    errors[:base] << ts("You have reached our daily reporting limit. To keep our
+                        volunteers from being overwhelmed, please do not seek
+                        out violations to report, but only report violations you
+                        encounter during your normal browsing.")
   end
 end
