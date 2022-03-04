@@ -7,7 +7,7 @@
         <% unless Skin.in_chooser.empty? %>
           <li class="module group">
             <h4 class="heading"><%= ts('Customize', key: 'footer') %></h4>
-            <ul id="skin_chooser" class="menu">
+            <ul class="menu">
               <li><%= link_to ts('Default', key: 'footer'), unset_skins_path %></li>
               <% Skin.in_chooser.order(:title).each do |s| %>
                 <li><%= link_to s.title, set_skin_path(s) %></li>
