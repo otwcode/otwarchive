@@ -30,13 +30,32 @@ describe ExternalWork do
     URLS = ["http://the--ivorytower.livejournal.com/153798.html"]
 
     URLS.each do |url|
-      let(:valid_url) {build(:external_work, url: url)}
+      # Test each of the possible valid response codes
+      WebMock.stub_request(:any, url).to_return({status: 200, body: "Success"}, {status: 301, body: "Moved Permanently"}, {status: 302, body: "Found"}, {status: 307, body: "Temporary Redirect"}, {status: 308, body: "Permanent Redirect"})
 
-      it "saves the external work" do
-        # prevent connection failures -- all we care about is the format
-        WebMock.stub_request(:any, url)
+      let(:valid_url_200) {build(:external_work, url: url)}
+      it "saves the external work when the URL has a 200 response code" do
+        expect(valid_url_200.save).to be_truthy
+      end
 
-        expect(valid_url.save).to be_truthy
+      let(:valid_url_301) {build(:external_work, url: url)}
+      it "saves the external work when the URL has a 301 response code" do
+        expect(valid_url_301.save).to be_truthy
+      end
+
+      let(:valid_url_302) {build(:external_work, url: url)}
+      it "saves the external work when the URL has a 302 response code" do
+        expect(valid_url_302.save).to be_truthy
+      end
+
+      let(:valid_url_307) {build(:external_work, url: url)}
+      it "saves the external work when the URL has a 307 response code" do
+        expect(valid_url_307.save).to be_truthy
+      end
+
+      let(:valid_url_308) {build(:external_work, url: url)}
+      it "saves the external work when the URL has a 308 response code" do
+        expect(valid_url_308.save).to be_truthy
       end
     end
   end
