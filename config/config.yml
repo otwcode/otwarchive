@@ -147,7 +147,7 @@ IMPORT_MAX_WORKS_BY_ARCHIVIST: 200
 ABUSE_REPORTS_PER_USER_MAX: 5
 # max number of abuse reports to accept for a given work URL
 ABUSE_REPORTS_PER_WORK_MAX: 5
-# max number of abuse reports an email can report
+# max number of abuse reports to accept from a given email
 ABUSE_REPORTS_PER_EMAIL_MAX: 5
 
 # number of items in various displays
