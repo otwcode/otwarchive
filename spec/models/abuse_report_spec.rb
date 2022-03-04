@@ -248,12 +248,12 @@ describe AbuseReport do
 
     context "when email is valid" do
       let(:report) { build(:abuse_report, email: "email@example.com") }
+
       context "when email has submitted less than the maximum daily number of reports" do
         before do
           (ArchiveConfig.ABUSE_REPORTS_PER_EMAIL_MAX - 1).times do
             create(:abuse_report, email: "email@example.com")
           end
-          expect(AbuseReport.count).to eq((ArchiveConfig.ABUSE_REPORTS_PER_EMAIL_MAX - 1))
         end
 
         it "can be submitted" do
@@ -267,7 +267,6 @@ describe AbuseReport do
           ArchiveConfig.ABUSE_REPORTS_PER_EMAIL_MAX.times do
             create(:abuse_report, email: "email@example.com")
           end
-          expect(AbuseReport.count).to eq(ArchiveConfig.ABUSE_REPORTS_PER_EMAIL_MAX)
         end
 
         it "can't be submitted" do
@@ -277,6 +276,7 @@ describe AbuseReport do
 
         context "when it's a day later" do
           before { Timecop.freeze(1.day.from_now) }
+
           after { Timecop.return }
 
           it "can be submitted" do
