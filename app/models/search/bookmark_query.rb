@@ -124,7 +124,7 @@ class BookmarkQuery < Query
   end
 
   def sort
-    sort_hash = { sort_column => { order: sort_direction } }
+    sort_hash = { sort_column => { order: sort_direction }, "id" => { order: sort_direction } }
 
     if %w(created_at bookmarkable_date).include?(sort_column)
       sort_hash[sort_column][:unmapped_type] = 'date'

@@ -270,7 +270,7 @@ class WorkQuery < Query
   def sort
     column = options[:sort_column].present? ? options[:sort_column] : default_sort
     direction = options[:sort_direction].present? ? options[:sort_direction] : 'desc'
-    sort_hash = { column => { order: direction } }
+    sort_hash = { column => { order: direction }, "id" => { order: direction } }
 
     if column == 'revised_at'
       sort_hash[column][:unmapped_type] = 'date'

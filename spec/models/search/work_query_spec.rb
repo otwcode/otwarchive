@@ -122,27 +122,27 @@ describe WorkQuery do
 
   it "should sort by relevance by default" do
     q = WorkQuery.new
-    expect(q.generated_query[:sort]).to eq({'_score' => { order: 'desc' }})
+    expect(q.generated_query[:sort]).to eq({ "_score" => { order: "desc" }, "id" => { order: "desc" } })
   end
 
   it "should allow you to sort by creator name" do
     q = WorkQuery.new(sort_column: 'authors_to_sort_on', sort_direction: 'asc')
-    expect(q.generated_query[:sort]).to eq({'authors_to_sort_on' => { order: 'asc'}})
+    expect(q.generated_query[:sort]).to eq({ "authors_to_sort_on" => { order: "asc" }, "id" => { order: "asc" } })
   end
 
   it "should allow you to sort by title" do
     q = WorkQuery.new(sort_column: 'title_to_sort_on')
-    expect(q.generated_query[:sort]).to eq({'title_to_sort_on' => { order: 'desc'}})
+    expect(q.generated_query[:sort]).to eq({ "title_to_sort_on" => { order: "desc" }, "id" => { order: "desc" } })
   end
 
   it "should allow you to sort by kudos" do
     q = WorkQuery.new(sort_column: 'kudos_count')
-    expect(q.generated_query[:sort]).to eq({'kudos_count' => { order: 'desc'}})
+    expect(q.generated_query[:sort]).to eq({ "kudos_count" => { order: "desc" }, "id" => { order: "desc" } })
   end
 
   it "should allow you to sort by comments" do
     q = WorkQuery.new(sort_column: 'comments_count')
-    expect(q.generated_query[:sort]).to eq({'comments_count' => { order: 'desc'}})
+    expect(q.generated_query[:sort]).to eq({ "comments_count" => { order: "desc" }, "id" => { order: "desc" } })
   end
 
   it "rescues absurd relative dates" do
@@ -175,5 +175,21 @@ describe WorkQuery do
     q = WorkQuery.new(date_from: "-2000-12-26", date_to: "20000-11-27")
     expect(q.date_range_filter.dig(:range, :revised_at, :gte)).to eq(Date.new(0, 12, 26))
     expect(q.date_range_filter.dig(:range, :revised_at, :lte)).to eq(Date.new(9999, 11, 27))
+  end
+
+  it "keeps sort order of tied works the same when work info is updated" do
+    user = FactoryBot.create(:user)
+    work1 = FactoryBot.create(:work, authors: [user.default_pseud])
+    work2 = FactoryBot.create(:work, authors: [user.default_pseud])
+    q = WorkQuery.new(sort_column: "authors_to_sort_on", sort_direction: "desc")
+
+    run_all_indexing_jobs
+    res = q.search_results.map(&:id)
+
+    [work1, work2].each do |work|
+      work.update(summary: "Updated")
+      run_all_indexing_jobs
+      expect(q.search_results.map(&:id)).to eq(res)
+    end
   end
 end

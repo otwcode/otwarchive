@@ -62,12 +62,32 @@ describe BookmarkSearchForm, bookmark_search: true do
         end
 
         it "changes when the work is updated" do
-          work2.update_attribute(:revised_at, Time.now)
+          work2.update_attribute(:revised_at, Time.current)
           run_all_indexing_jobs
           results = BookmarkSearchForm.new(
             parent: tag, sort_column: "bookmarkable_date"
           ).bookmarkable_search_results
           expect(results.map(&:title)).to eq ["Two", "One", "Three"]
+        end
+
+        it "doesn't change tied bookmarkables order on work update" do
+          works = [work1, work2, work3]
+          revised_at = Time.current
+          works.each do |work|
+            work.update_attribute(:revised_at, revised_at)
+          end
+          run_all_indexing_jobs
+          search = BookmarkSearchForm.new(
+            parent: tag, sort_column: "bookmarkable_date"
+          )
+          res = search.bookmarkable_search_results.map(&:title)
+
+          works.each do |work|
+            work.update(summary: "Updated")
+            work.update_attribute(:revised_at, revised_at)
+            run_all_indexing_jobs
+            expect(search.bookmarkable_search_results.map(&:title)).to eq(res)
+          end
         end
       end
 
@@ -86,6 +106,26 @@ describe BookmarkSearchForm, bookmark_search: true do
             parent: tag, sort_column: "created_at"
           ).bookmarkable_search_results
           expect(results.map(&:title)).to eq ["One", "Two", "Three"]
+        end
+
+        it "doesn't change tied bookmarkables order on work update" do
+          works = [work1, work2, work3]
+          bookmarks = [bookmark1, bookmark2, bookmark3]
+          created_at = Time.current
+          bookmarks.each do |bookmark|
+            bookmark.update_attribute(:created_at, created_at)
+          end
+          run_all_indexing_jobs
+          search = BookmarkSearchForm.new(
+            parent: tag, sort_column: "created_at"
+          )
+          res = search.bookmarkable_search_results.map(&:title)
+
+          works.each do |work|
+            work.update(summary: "Updated")
+            run_all_indexing_jobs
+            expect(search.bookmarkable_search_results.map(&:title)).to eq(res)
+          end
         end
       end
     end
@@ -242,6 +282,41 @@ describe BookmarkSearchForm, bookmark_search: true do
         expect(result).to be_nil
         result = BookmarkSearchForm.new(bookmarker: "cioelle").search_results.first
         expect(result).to eq bookmark
+      end
+    end
+
+    context("when sorting") do
+      let!(:time) { Time.current }
+      let(:work1) { create(:work, revised_at: time) }
+      let(:work2) { create(:work, revised_at: time) }
+      let!(:bookmark1) { create(:bookmark, bookmarkable: work1, pseud: bookmarker.default_pseud, created_at: time) }
+      let!(:bookmark2) { create(:bookmark, bookmarkable: work2, pseud: bookmarker.default_pseud, created_at: time) }
+
+      %w[created_at bookmarkable_date].each do |sort_column|
+        it "doesn't change tied order on work update when sorted by #{sort_column}" do
+          search = BookmarkSearchForm.new(bookmarker: bookmarker.default_pseud.name, sort_column: sort_column)
+          run_all_indexing_jobs
+          res = search.search_results.map(&:id)
+
+          [work1, work2].each do |work|
+            work.update(summary: "Updated")
+            work.update_attribute(:revised_at, time)
+            run_all_indexing_jobs
+            expect(search.search_results.map(&:id)).to eq(res)
+          end
+        end
+
+        it "doesn't change tied order on bookmark update when sorted by #{sort_column}" do
+          search = BookmarkSearchForm.new(bookmarker: bookmarker.default_pseud.name, sort_column: sort_column)
+          run_all_indexing_jobs
+          res = search.search_results.map(&:id)
+
+          [bookmark1, bookmark2].each do |bookmark|
+            bookmark.update(bookmarker_notes: "Updated")
+            run_all_indexing_jobs
+            expect(search.search_results.map(&:id)).to eq(res)
+          end
+        end
       end
     end
   end

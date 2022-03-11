@@ -54,7 +54,7 @@ class TagQuery < Query
       column = "name.keyword"
       direction ||= "asc"
     end
-    sort_hash = { column => { order: direction } }
+    sort_hash = { column => { order: direction }, "id" => { order: direction } }
 
     if column == "created_at"
       sort_hash[column][:unmapped_type] = "date"

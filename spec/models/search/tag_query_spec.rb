@@ -1,16 +1,17 @@
 require "spec_helper"
 
 describe TagQuery, tag_search: true do
+  let!(:time) { Time.current }
   let!(:tags) do
     tags = {
       char_abc: create(:character, name: "abc"),
       char_abc_d_minus: create(:character, name: "abc -d"),
       char_abc_d: create(:character, name: "abc d"),
-      fan_abcd: create(:fandom, name: "abcd"),
+      fan_abcd: create(:fandom, name: "abcd", created_at: time),
       fan_abc_d_minus: create(:fandom, name: "abc-d"),
       fan_yuri: create(:fandom, name: "Yuri!!! On Ice"),
       free_abcplus: create(:freeform, name: "abc+"),
-      free_abccc: create(:freeform, name: "abccc"),
+      free_abccc: create(:freeform, name: "abccc", created_at: time),
       free_abapos: create(:freeform, name: "ab'c d"),
       rel_slash: create(:relationship, name: "ab/cd"),
       rel_space: create(:relationship, name: "ab cd"),
@@ -155,5 +156,16 @@ describe TagQuery, tag_search: true do
     tag_query = TagQuery.new(name: "a*")
     results = tag_query.search_results
     expect(results.size).to eq 5
+  end
+
+  it "keeps sort order of tied tags the same when tag info is updated" do
+    tag_query = TagQuery.new(name: "abc*", sort_column: "created_at")
+    results = tag_query.search_results.map(&:id)
+
+    [tags[:fan_abcd], tags[:free_abccc]].each do |tag|
+      tag.update(canonical: true)
+      run_all_indexing_jobs
+      expect(tag_query.search_results.map(&:id)).to eq(results)
+    end
   end
 end
