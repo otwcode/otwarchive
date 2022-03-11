@@ -1,5 +1,5 @@
 ---
-mr-IN:
+mr:
   activerecord:
     errors:
       messages:
