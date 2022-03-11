@@ -157,8 +157,6 @@ describe AbuseReport do
       context "a month later" do
         before { travel(32.days) }
 
-        after { travel_back }
-
         it_behaves_like "alright", work_url
       end
     end
@@ -209,8 +207,6 @@ describe AbuseReport do
 
       context "a month later" do
         before { travel(32.days) }
-
-        after { travel_back }
 
         it_behaves_like "alright", user_url
       end
@@ -278,8 +274,6 @@ describe AbuseReport do
 
         context "when it's a day later" do
           before { travel(1.day) }
-
-          after { travel_back }
 
           it "can be submitted" do
             expect(report.save).to be_truthy
