@@ -155,8 +155,8 @@ describe AbuseReport do
       it_behaves_like "alright", "http://archiveofourown.org/users/someone"
 
       context "a month later" do
-        before { Timecop.freeze(32.days.from_now) }
-        after { Timecop.return }
+        before { travel(32.days) }
+        after { travel_back }
 
         it_behaves_like "alright", work_url
       end
@@ -207,8 +207,8 @@ describe AbuseReport do
       it_behaves_like "alright", "http://archiveofourown.org/works/789"
 
       context "a month later" do
-        before { Timecop.freeze(32.days.from_now) }
-        after { Timecop.return }
+        before { travel(32.days) }
+        after { travel_back }
 
         it_behaves_like "alright", user_url
       end
@@ -275,9 +275,9 @@ describe AbuseReport do
         end
 
         context "when it's a day later" do
-          before { Timecop.freeze(1.day.from_now) }
+          before { travel(1.day) }
 
-          after { Timecop.return }
+          after { travel_back }
 
           it "can be submitted" do
             expect(report.save).to be_truthy
