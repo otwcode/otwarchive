@@ -98,9 +98,9 @@ class BookmarkableQuery < Query
   # field and sort by score).
   def sort
     if sort_column == "bookmarkable_date"
-      { revised_at: { order: sort_direction, unmapped_type: "date" }, _id: { order: sort_direction } }
+      [{ "revised_at" => { order: sort_direction, unmapped_type: "date" } }, { "id" => { order: sort_direction } }]
     else
-      { _score: { order: sort_direction }, _id: { order: sort_direction } }
+      [{ "_score" => { order: sort_direction } }, { "id" => { order: sort_direction } }]
     end
   end
 
