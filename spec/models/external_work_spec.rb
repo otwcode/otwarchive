@@ -26,39 +26,18 @@ describe ExternalWork do
     end
   end
 
-  context "valid urls" do
-    URLS = ["http://the--ivorytower.livejournal.com/153798.html"]
-
-    URLS.each do |url|
-      # Test each of the possible valid response codes
-      let(:valid_url_200) { build(:external_work, url: url) }
-      it "saves the external work when the URL has a 200 response code" do
-        WebMock.stub_request(:any, url).to_return({ status: 200, body: "Success" })
-        expect(valid_url_200.save).to be_truthy
-      end
-
-      let(:valid_url_301) { build(:external_work, url: url) }
-      it "saves the external work when the URL has a 301 response code" do
-        WebMock.stub_request(:any, url).to_return({ status: 301, body: "Moved Permanently" })
-        expect(valid_url_301.save).to be_truthy
-      end
-
-      let(:valid_url_302) { build(:external_work, url: url) }
-      it "saves the external work when the URL has a 302 response code" do
-        WebMock.stub_request(:any, url).to_return({ status: 302, body: "Found" })
-        expect(valid_url_302.save).to be_truthy
-      end
-
-      let(:valid_url_307) { build(:external_work, url: url) }
-      it "saves the external work when the URL has a 307 response code" do
-        WebMock.stub_request(:any, url).to_return({ status: 307, body: "Temporary Redirect" })
-        expect(valid_url_307.save).to be_truthy
-      end
-
-      let(:valid_url_308) { build(:external_work, url: url) }
-      it "saves the external work when the URL has a 308 response code" do
-        WebMock.stub_request(:any, url).to_return({ status: 308, body: "Permanent Redirect" })
-        expect(valid_url_308.save).to be_truthy
+  context "for valid URLs" do
+    [200, 301, 302, 307, 308].each do |status|
+      context "returning #{status}" do
+        let(:external_work) { build(:external_work) }
+  
+        before do
+          WebMock.stub_request(:any, external_work.url).to_return(status: status)
+        end
+  
+        it "saves" do
+          expect(external_work.save).to be_truthy
+        end
       end
     end
   end
