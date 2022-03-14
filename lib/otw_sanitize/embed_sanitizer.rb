@@ -3,7 +3,7 @@
 require "addressable/uri"
 require "cgi"
 
-module OTWSanitize
+module OtwSanitize
   # Creates a Sanitize transformer to sanitize embedded media
   class EmbedSanitizer
     WHITELIST_REGEXES = {

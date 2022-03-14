@@ -1,6 +1,8 @@
 Otwarchive::Application.configure do
   # Settings specified here will take precedence over those in config/environment.rb
 
+  config.hosts = ArchiveConfig.PERMITTED_HOSTS
+
   # The production environment is meant for finished, "live" apps.
   # Code is not reloaded between requests
   config.cache_classes = true

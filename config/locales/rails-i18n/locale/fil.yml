@@ -14,7 +14,7 @@ fil:
     - Biy
     - Sab
     abbr_month_names:
-    - 
+    -
     - Ene
     - Peb
     - Mar
@@ -40,7 +40,7 @@ fil:
       long: ika-%d ng %B, %Y
       short: ika-%d ng %b
     month_names:
-    - 
+    -
     - Enero
     - Pebrero
     - Marso

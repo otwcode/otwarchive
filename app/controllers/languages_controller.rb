@@ -34,7 +34,7 @@ class LanguagesController < ApplicationController
 
   def update
     @language = Language.find_by(short: params[:id])
-    if @language.update_attributes(language_params)
+    if @language.update(language_params)
       flash[:notice] = t('successfully_updated', default: 'Language was successfully updated.')
       redirect_to @language
     else
