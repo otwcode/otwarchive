@@ -18,8 +18,6 @@ Feature: Filing an abuse report
     # Receiving a copy of the abuse report is no longer a choice for the user.
     # The email is sent automatically.
     And 1 email should be delivered
-    And the email should contain "The following abuse report has been sent to the Abuse team"
-    And the email should say what time it was sent
 
   Scenario: URL is auto-filled on abuse report
 
@@ -62,20 +60,3 @@ Feature: Filing an abuse report
     And I press "Submit"
     And I should see "Your abuse report was sent to the Abuse team."
     And 1 email should be delivered
-
-  Scenario: The confirmation email is translated
-
-  Given basic languages
-  When I am logged in as "otheruser"
-    And the user locale is "fr"
-    And I am on the home page
-    And I follow "Policy Questions & Abuse Reports"
-  Then I should see "The Abuse committee"
-  When I fill in "Your comment (required)" with "Cela est très mal, sacrebleu"
-    And I fill in "Brief summary of Terms of Service Violation (required)" with "Omelette sans fromage"
-    And I fill in "Link to the page you are reporting" with "http://www.archiveofourown.org/works"
-    And I press "Submit"
-  Then I should see "Your abuse report was sent to the Abuse team."
-    And 1 email should be delivered
-    And the email should contain "Le rapport d’abus suivant a été envoyé au Comité Modération"
-    And the email should say what time it was sent
