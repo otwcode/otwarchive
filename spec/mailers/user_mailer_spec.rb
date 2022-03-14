@@ -611,6 +611,7 @@ describe UserMailer do
 
     describe "translation" do
       before { Timecop.freeze("2022-03-14 13:27:09 +0000") }
+
       after { Timecop.return }
 
       it "formats the date rightfully in English" do
@@ -620,6 +621,7 @@ describe UserMailer do
 
       context "french" do
         before { I18n.locale = "fr" }
+
         after { I18n.locale = I18n.default_locale }
 
         it "formats the date rightfully in French" do
