@@ -1,5 +1,0 @@
----
-fr:
-  time:
-    formats:
-      time_for_mailers: "%H:%M %Z le %A %d %B %Y"

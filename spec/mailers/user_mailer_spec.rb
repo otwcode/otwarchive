@@ -612,8 +612,8 @@ describe UserMailer do
     describe "translation" do
       it "formats the date rightfully in English" do
         travel_to "2022-03-14 13:27:09 +0000" do
-          expect(email).to have_html_part_content("Sent at 01:27PM UTC Mon 14 March 2022.")
-          expect(email).to have_text_part_content("Sent at 01:27PM UTC Mon 14 March 2022.")
+          expect(email).to have_html_part_content("Sent at Mon, 14 Mar 2022 13:27:09 +0000.")
+          expect(email).to have_text_part_content("Sent at Mon, 14 Mar 2022 13:27:09 +0000.")
         end
       end
 
@@ -622,8 +622,8 @@ describe UserMailer do
 
         it "formats the date rightfully in French" do
           travel_to "2022-03-14 13:27:09 +0000" do
-            expect(email).to have_html_part_content("Envoyé à 13:27 UTC le lundi 14 mars 2022.")
-            expect(email).to have_text_part_content("Envoyé à 13:27 UTC le lundi 14 mars 2022.")
+            expect(email).to have_html_part_content("Envoyé à 14 mars 2022 13h 27min 09s.")
+            expect(email).to have_text_part_content("Envoyé à 14 mars 2022 13h 27min 09s.")
           end
         end
       end
