@@ -399,11 +399,11 @@ class TagsController < ApplicationController
       :name,
       :fandoms,
       :type,
-      :fandom_ids,
       :canonical,
       :created_at,
       :uses,
-      :sort_column
+      :sort_column,
+      :sort_direction
     )
   end
 end

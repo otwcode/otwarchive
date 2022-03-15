@@ -59,6 +59,14 @@
       <dd>
         <%= f.select :sort_column, options_for_select(@search.sort_options, @search.sort_column) %>
       </dd>
+      <dt>
+        <%= f.label :sort_direction, ts("Sort direction") %>
+      </dt>
+      <dd>
+        <%= f.select :sort_direction,
+          options_for_select([["Ascending", "asc"], ["Descending", "desc"]], @search.sort_direction),
+          { :include_blank => true } %>
+      </dd>
     </dl>
     <p class="submit actions"><%= f.submit ts("Search Tags") %></p>
   </fieldset>

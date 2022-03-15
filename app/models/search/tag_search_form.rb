@@ -9,11 +9,11 @@ class TagSearchForm
     :name,
     :canonical,
     :fandoms,
-    :fandom_ids,
     :type,
     :created_at,
     :uses,
-    :sort_column
+    :sort_column,
+    :sort_direction
   ]
 
   attr_accessor :options
@@ -47,11 +47,19 @@ class TagSearchForm
     options[:sort_column] || "name"
   end
 
+  def sort_direction
+    options[:sort_direction] || default_sort_direction
+  end
+
   def sort_options
     [
       %w[Name name],
       %w[Date\ Created created_at],
       %w[Uses uses]
     ]
+  end
+
+  def default_sort_direction
+    %w[name].include?(sort_column) ? "asc" : "desc"
   end
 end
