@@ -28,7 +28,7 @@ sv:
       signature:
         app_short_name: AO3
         open_doors: Open Doors (Öppna dörrar)-teamet
-        parent_org: Organization for Transformative Works – OTW (Organisationen för
+        parent_org: Organization for Transformative Works – OTW (Organisationen för
           transformativa verk)
         support: AO3:s support-team
     kudos:
@@ -65,24 +65,53 @@ sv:
       url_para: 'URL för sidan som missbruket finns på:'
     admin_deleted_work_notification:
       bye: Som hänvisning har vi bifogat en kopia av ditt verk.
-      contact_abuse: kontakta vår kommitté Policy & Missbruk
+      contact_abuse: kontakta vår kommitté för Policy och missbruk
       html:
         part1: Ditt verk %{title} har blivit raderat från AO3 av en av webbplatsens
           administratörer.
         part2: Om ditt verk var en del av ett importprojekt som hanteras av vårt Öppna
-          Dörrar-team, var vänlig %{opendoors_link} om du har frågor.
-        tos_violation: Om det är möjligt att ditt verk bröt mot AO3s användarvillkor,
+          dörrar-team, var vänlig %{opendoors_link} om du har frågor.
+        tos_violation: Om det är möjligt att ditt verk bröt mot AO3:s användarvillkor,
           var vänlig %{contact_abuse_link}.
-      opendoors: kontakta Öppna Dörrar
+      opendoors: kontakta Öppna dörrar
       subject: "[%{app_name}] Ditt verk har blivit raderat av en administratör"
       text:
         part1: Ditt verk "%{title}" har blivit raderat från AO3 av en av webbplatsens
           administratörer.
         part2: Om ditt verk var en del av ett importprojekt som hanteras av vårt Öppna
-          Dörrar-team, var vänlig kontakta Öppna Dörrar (%{opendoors_link}) om du
+          dörrar-team, var vänlig kontakta Öppna dörrar (%{opendoors_link}) om du
           har frågor.
-        tos_violation: Om det är möjligt att ditt verk bröt mot AO3s användarvillkor,
-          var vänlig kontakta vår kommitté Policy & Missbruk (%{contact_abuse_url}).
+        tos_violation: Om det är möjligt att ditt verk bröt mot AO3:s användarvillkor,
+          var vänlig kontakta vår kommitté för Policy och missbruk (%{contact_abuse_url}).
+    admin_hidden_work_notification:
+      access: Fastän ditt verk är dolt kan du fortfarande nå det genom länken ovan,
+        men det kommer inte att finnas med på listan över dina verk och det är inte
+        tillgängligt för andra som använder AO3.
+      check_email: Var vänlig kolla din e-post, inklusive din mapp för skräppost,
+        eftersom teamet för Policy och missbruk redan kan ha kontaktat dig för att
+        förklara varför ditt verk är dolt.
+      contact_abuse: kontakta Policy och missbruk
+      html:
+        help: Om du är osäker på varför ditt verk blivit dolt och vi inte har kommunicerat
+          med dig på annat sätt angående detta, var vänlig %{contact_abuse_link} direkt.
+        hidden: Ditt verk %{title} har blivit dolt av teamet för Policy och missbruk
+          och är inte längre tillgängligt för allmänheten.
+        tos_violation: Om ditt verk har dolts på grund av ett brott mot AO3:s %{tos_link},
+          så kommer du att behöva åtgärda problemet. Om du inte korrigerar ditt verk
+          så att det stämmer överens med användarvillkoren så kan verket komma att
+          raderas från AO3.
+      subject: "[%{app_name}] Ditt verk har blivit dolt av teamet för Policy och missbruk"
+      text:
+        help: 'Om du är osäker på varför ditt verk har blivit dolt och vi inte har
+          kommunicerat med dig på annat sätt angående detta, var vänlig kontakta Policy
+          och missbruk direkt: %{contact_abuse_url}.'
+        hidden: Ditt verk "%{title}" (%{work_url}) har blivit dolt av teamet för Policy
+          och missbruk och är inte längre tillgängligt för allmänheten.
+        tos_violation: Om ditt verk har dolts på grund av ett brott mot AO3:s användarvillkor
+          (%{tos_url}), så kommer du att behöva åtgärda problemet. Om du inte korrigerar
+          ditt verk så att det stämmer överens med användarvillkoren så kan verket
+          komma att raderas från AO3.
+      tos: användarvillkor
     anonymous_or_unrevealed_notification:
       anonymous_info: Anonyma verk ingår i tagglistor, men inte på din sida med verk.
         På verket kommer ditt användarnamn ersättas med “Anonymous” (Anonym).
@@ -96,18 +125,18 @@ sv:
           html: De som är ansvariga för samlingen %{collection_link} har ändrat status
             på ditt verk %{work_link} till anonym.
           text: De ansvariga för samlingen "%{collection_title}" (%{collection_url})
-            har ändrat status på ditt verk  "%{work_title}" (%{work_url}) till anonym.
+            har ändrat status på ditt verk "%{work_title}" (%{work_url}) till anonym.
         anonymous_unrevealed:
           html: De som är ansvariga för samlingen %{collection_link} har ändrat status
             på ditt verk %{work_link} till anonymt och dolt.
-          text: 'De ansvariga för samlingen "%{collection_title}" (%{collection_url})
+          text: De ansvariga för samlingen "%{collection_title}" (%{collection_url})
             har ändrat status på ditt verk "%{work_title}" (%{work_url}) till anonymt
-            och dolt. '
+            och dolt.
         unrevealed:
           html: De som är ansvariga för samlingen %{collection_link} har ändrat status
             på ditt verk %{work_link} till dolt.
-          text: 'De ansvariga för samlingen "%{collection_title}" (%{collection_url})
-            har ändrat status på ditt verk "%{work_title}" (%{work_url}) till dolt. '
+          text: De ansvariga för samlingen "%{collection_title}" (%{collection_url})
+            har ändrat status på ditt verk "%{work_title}" (%{work_url}) till dolt.
       collection_items_link_text: sidan för Approved Collection Items (Godkända samlingsobjekt)
       do_not_want:
         anonymous:
@@ -117,20 +146,18 @@ sv:
             Approved Collection Items (Godkända samlingsobjekt) för att ta bort det
             från samlingen: %{collection_items_url}'
         anonymous_unrevealed:
-          html: 'Om du inte vill att ditt verk ska vara anonymt och dolt, var god
-            besök %{collection_items_link} för att ta bort det från den här samlingen.
-
-            '
+          html: Om du inte vill att ditt verk ska vara anonymt och dolt, var god besök
+            %{collection_items_link} för att ta bort det från den här samlingen.
           text: 'Om du inte vill att ditt verk ska vara anonymt eller dolt, var god
             besök sidan Approved Collection Items (Godkända samlingsobjekt) för att
-            ta bort den från samlingen: %{collection_items_url} '
+            ta bort den från samlingen: %{collection_items_url}'
         unrevealed:
           html: Om du inte vill att ditt verk ska vara dolt, var god besök %{collection_items_link}
             för att ta bort det från den här samlingen.
           text: 'Om du inte vill att ditt verk ska döljas, var god besök sidan Approved
             Collection Items (Godkända samlingsobjekt) för att ta bort den från samlingen:
-            %{collection_items_url} '
-      faq_link_text: Vanliga frågor om samlingar och utmaningar
+            %{collection_items_url}'
+      faq_link_text: Vanliga frågor om samlingar
       more_info:
         html: För mer information, var god läs våra %{faq_link}.
         text: 'För mer information var god läs våra Vanliga frågor om samlingar: %{faq_url}'
@@ -151,7 +178,7 @@ sv:
           vänligen besök %{footer_link}.
         footer_link: uppdragets profilsida
         look_up: Du kan nå ditt uppdrag via %{link}.
-        look_up_link: Din sida för Assignments (Uppdrag)
+        look_up_link: din sida för Assignments (Uppdrag)
         part1: Du har blivit tilldelad följande förfrågan i %{link}-utmaningen på
           AO3!
       optional_tags: 'Valfria taggar:'
@@ -165,53 +192,93 @@ sv:
           (%{collection_url}) -utmaningen på AO3!
         footer: Du får det här mailet för att du har anmält dig till %{title}-utmaningen
           (%{url}). För mer information om den här utmaningen och kontaktuppgifter
-          till moderatorerna, vänligen besök  %{profile_url}.
+          till moderatorerna, vänligen besök %{profile_url}.
         look_up: Du kan nå ditt uppdrag via din sida för Assignments (Uppdrag) på
           %{link}.
     change_email:
       part1: "%{login}, e-postadressen som är knuten till ditt konto har ändrats till
         %{email}"
       subject: "[%{app_name}] E-postadressen har ändrats"
+    collection_notification:
+      assignments_sent:
+        complete: Alla uppdrag har nu skickats ut.
+        subject: Uppdragen utskickade
+      html:
+        received_message: 'Du har fått ett meddelande om din samling %{collection_link}:'
+      text:
+        received_message: 'Du har fått ett meddelande om din samling "%{collection_title}"
+          (%{collection_url}):'
     creatorship_notification:
       explanation: När du är medskapare till ett verk kan du bli tillagd på nya kapitel
         oavsett vilka medskaparinställningar du har. Du kommer även att bli tillagd
         som medskapare av eventuella serier som verket läggs till i.
       html:
         creation: "%{creation_link} av %{pseud_links}"
-        edit: redigera %{type}
-        remove: Om du blivit felaktigt tillagd eller om du inte vill vara listad som
-          skapare till verket kan du %{edit} för att ta bort dig själv.
-      intro: 'Användaren %{adding_user} har lagt till din pseudonym %{pseud} som medskapare
-        till följande %{type}:'
+        edit_chapter: redigera kapitlet
+        edit_series: redigera serien
+        remove_chapter: Om du blivit felaktigt tillagd eller om du inte vill vara
+          listad som skapare till verket kan du %{edit_chapter_link} för att ta bort
+          dig själv.
+        remove_series: Om du har blivit felaktigt tillagd eller inte vill vara listad
+          som skapare av verket, kan du %{edit_series_link} för att ta bort dig själv
+          som skapare.
+      intro_chapter: 'Användaren %{adding_user} har lagt till din pseudonym %{pseud}
+        som medskapare till följande kapitel:'
+      intro_series: 'Användaren %{adding_user} har angett din pseudonym %{pseud} som
+        medskapare av denna serie:'
       subject: "[%{app_name}] Avisering: Du är tillagd som medskapare"
       text:
         creation: "%{title} (%{url}) av %{pseuds}"
-        remove: 'Om du blivit felaktigt tillagd eller om du inte vill vara listad
-          som skapare till verket kan du redigera %{type} för att ta bort dig själv:
-          %{url}'
+        remove_chapter: 'Om du blivit felaktigt tillagd eller om du inte vill vara
+          listad som skapare till verket kan du redigera kapitlet för att ta bort
+          dig själv: %{url}'
+        remove_series: 'Om du blivit felaktigt tillagd eller om du inte vill vara
+          listad som skapare till verket kan du redigera serien för att ta bort dig
+          själv: %{url}'
     creatorship_notification_archivist:
       explanation: Eftersom hen agerar i sin roll som officiell arkivarie för Open
         Doors (Öppna dörrar) så får hen lägga till dig utan en inbjudan, även om du
         har stängt av medskapande.
       html:
         creation: "%{creation_link} av %{pseud_links}"
-        edit: Redigera %{type}
-        remove: Om du blivit tillagd av misstag eller inte vill vara listad som skapare
-          kan du %{edit} för att ta bort dig själv som skapare.
-      intro: 'Användaren %{archivist} har lagt till din pseudonym %{pseud} som medskapare
-        till följande %{type}:'
+        edit_chapter: redigera kapitlet
+        edit_series: redigera serien
+        edit_work: redigera verket
+        remove_chapter: Om du blivit tillagd av misstag eller inte vill vara listad
+          som skapare kan du %{edit_chapter_link} för att ta bort dig själv som skapare.
+        remove_series: Om du blivit tillagd av misstag eller inte vill vara listad
+          som skapare kan du %{edit_series_link} för att ta bort dig själv som skapare.
+        remove_work: Om du blivit tillagd av misstag eller inte vill vara listad som
+          skapare kan du %{edit_work_link} för att ta bort dig själv som skapare.
+      intro_chapter: 'Användaren %{archivist} har lagt till din pseudonym %{pseud}
+        som medskapare till följande kapitel:'
+      intro_series: 'Användaren %{archivist} har lagt till din pseudonym %{pseud}
+        som medskapare till följande serie:'
+      intro_work: 'Användaren %{archivist} har lagt till din pseudonym %{pseud} som
+        medskapare till följande verk:'
       subject: "[%{app_name}] En arkivarie har lagt till dig som medskapare"
       text:
         creation: "%{title} (%{url}) av %{pseuds}"
-        remove: 'Om du blivit tillagd av misstag eller inte vill vara listad som skapare
-          kan du redigera %{type} för att ta bort dig själv som skapare: %{url}'
+        remove_chapter: 'Om du blivit tillagd av misstag eller inte vill vara listad
+          som skapare kan du redigera kapitlet för att ta bort dig själv som skapare:
+          %{url}'
+        remove_series: 'Om du blivit tillagd av misstag eller inte vill vara listad
+          som skapare kan du redigera serien för att ta bort dig själv som skapare:
+          %{url}'
+        remove_work: 'Om du blivit tillagd av misstag eller inte vill vara listad
+          som skapare kan du redigera verket för att ta bort dig själv som skapare:
+          %{url}'
     creatorship_request:
       html:
         creation: "%{creation_link} av %{pseud_links}"
         instructions: Du kan acceptera eller avslå förfrågan på din sida för %{page_name}.
         page_name: Co-Creator Requests (Medskaparförfrågan)
-      intro: 'Användaren %{inviting_user} har bjudit in din pseudonym %{pseud} att
-        stå som medskapare på följande %{type}:'
+      intro_chapter: 'Användaren %{inviting_user} har bjudit in din pseud %{pseud}
+        att listas som medskapare på följande kapitel:'
+      intro_series: 'Användaren %{inviting_user} har bjudit in din pseud %{pseud}
+        att listas som medskapare på följande serier:'
+      intro_work: 'Användaren %{inviting_user} har bjudit in din pseud %{pseud} att
+        listas som medskapare på följande verk:'
       subject: "[%{app_name}] Medskaparförfrågan"
       text:
         creation: "%{title} (%{url}) av %{pseuds}"
@@ -220,14 +287,14 @@ sv:
     delete_work_notification:
       html:
         part1_other: Ditt verk "%{title}" togs bort på begäran av %{pseud}.
-        part1_yourself: Ditt verk %{title} togs bort enligt din begäran.
+        part1_yourself: Ditt verk %{title} togs bort på din begäran.
         part2: Om du har frågor, vänligen %{support}.
       part3: Bifogat finns en kopia av ditt verk för din kännedom.
       subject: "[%{app_name}] Ditt verk har tagits bort"
       support: kontakta Support
       text:
         part1_other: Ditt verk "%{title}" togs bort på begäran av %{pseud}.
-        part1_yourself: Ditt verk "%{title}" togs bort enligt din begäran.
+        part1_yourself: Ditt verk "%{title}" togs bort på din begäran.
         part2: Om du har frågor, vänligen %{support} (%{url}).
     invitation_to_claim:
       html:
@@ -236,37 +303,7 @@ sv:
         contact_support: kontakta AO3 support
         faq_page: Vanliga frågor och svar
         open_doors: Öppna dörrar
-        part1: Du har fått det här mailet för att ett arkiv nyligen har blivit importerat
-          av %{open_doors_link} till %{app_link} (%{app_short_name}), och vi tror
-          att följande verk tillhör dig. Vi vill ge dig möjlighet att göra anspråk
-          på (eller radera/anonymisera) dessa verk. Och om du inte redan har ett konto
-          med en annan mailadress vill vi välkomna dig ombord!
-        part10: Om du hade andra verk i det importerade arkivet under en mailadress
-          du inte längre har tillgång till, vänligen %{open_doors_link} med information
-          som kan hjälpa till att verifiera din identitet.
-        part11: För andra frågor, vänligen %{support_link}.
-        part2: Du kan läsa tillkännagivanden om arkiv som nyligen flyttats på %{news_link},
-          och hitta ytterligare information på Öppna dörrars %{open_doors_faq_link}
-          eller på %{open_doors_tutorial_link}. Om du har frågor som inte besvaras
-          i detta mail eller länkarna ovan, vänligen %{support_link}.
-        part3: Om det har skett ett misstag och dessa inte är dina verk, snälla radera
-          dem inte! Vänligen %{open_doors_link} så löser vi det.
-        part4: Beroende på arkivtyp kan dina verk ha blivit tillgängliga endast för
-          registrerade användare (för att exkludera dem från googlesökningar) vid
-          importen. Om så är fallet kommer verken endast vara tillgängliga för inloggade
-          användare om du inte väljer att göra dem synliga för alla. För hjälp med
-          att låsa upp, anonymisera eller radera dina verk, vänligen %{support_link}.
         part5: Gör anspråk på eller ta bort dina verk här.
-        part7: Om dessa verk tillhör dig men du inte vill hävda ägande kan du anonymisera
-          dem (så att de finns kvar på AO3 men utan ditt namn) eller radera dem (så
-          att de tas bort helt från AO3). Du behöver inte lägga till dessa verk till
-          något konto för att kunna anonymisera eller radera dem -- du kan göra det
-          direkt från anspråkslänken ovan. (För hjälp, vänligen %{support_link}.)
-        part9: Om du vill att Öppna dörrar ska uppdatera länken så att den riktas
-          mot ett av dina verk som redan finns, vänligen radera den importerade kopian
-          och %{open_doors_link} med namnet på ditt AO3-konto, ditt namn på det importerade
-          arkivet, samt titel och URL på verket som du omdirigerar länken till. (Om
-          du har många verk du vill rikta om kan du skriva dessa i samma mail.)
         tutorial_page: handledningssidan
       part12: Om du kontaktar oss, vänligen vitlista mailadresser från @transformativeworks.org
         och kontrollera om vårt svar finns i din skräppost.
@@ -356,16 +393,13 @@ sv:
           i våra %{admin_posts_link}. Om du behöver mer hjälp, stöter på en bugg,
           eller har frågor eller kommentarer, %{contact_support_link}, som alltid
           är glada att hjälpa till.
-      subject: "[%{app_name}] Bekräftelse"
       text:
         part1: 'Var vänlig följ denna länk för att aktivera ditt konto: %{activate_account_url}'
-        part2: 'När ditt konto väl är färdigställt kan du lägga upp dina verk, ordna
+        part2: När ditt konto väl är färdigställt kan du lägga upp dina verk, ordna
           mail-prenumerationer så att du vet när dina favoritskapare eller favoritverk
           uppdateras, göra egna inställningar för hur sajten ska se ut och fungera
           för dig, hålla koll på vilka verk du har gått in på eller läst på Arkivet
           via din historik, och mycket mer.
-
-          '
         part3: 'Det finns massor av information och råd om hur du använder Arkivet
           i våra Vanliga frågor här: %{faq_url}. Du hittar de senaste nyheterna om
           sajtens utveckling på AO3 Nyheter här: %{admin_posts_url}. Om du behöver

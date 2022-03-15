@@ -26,6 +26,7 @@ Feature: Collection
     Given I have the hidden collection "Hidden Treasury"
       And "second_user" subscribes to author "first_user"
       And the user "third_user" exists and is activated
+      And the user "third_user" allows gifts
       And all emails have been delivered
     When I am logged in as "first_user"
       And I post the work "New Snippet" to the collection "Hidden Treasury" as a gift for "third_user"
@@ -54,6 +55,8 @@ Feature: Collection
       And "second_user" subscribes to author "first_user"
       And the user "third_user" exists and is activated
       And the user "fourth_user" exists and is activated
+      And the user "third_user" allows gifts
+      And the user "fourth_user" allows gifts
       And all emails have been delivered
     When I am logged in as "first_user"
       And I post the work "First Snippet" to the collection "Hidden Treasury" as a gift for "third_user"
@@ -132,6 +135,7 @@ Feature: Collection
     Given I have the anonymous collection "Anonymous Hugs"
       And "second_user" subscribes to author "first_user"
       And the user "third_user" exists and is activated
+      And the user "third_user" allows gifts
       And all emails have been delivered
     When I am logged in as "first_user"
       And I post the work "Old Snippet" to the collection "Anonymous Hugs" as a gift for "third_user"
@@ -153,9 +157,10 @@ Feature: Collection
     Given I have the anonymous collection "Anonymous Hugs"
       And "second_user" subscribes to author "first_user"
       And the user "third_user" exists and is activated
+      And the user "third_user" allows gifts
       And I am logged in as "first_user"
       And I post the work "First Snippet" to the collection "Anonymous Hugs" as a gift for "third_user"
-      And I post the work "Second Snippet" to the collection "Anonymous Hugs" as a gift for "fourth_user"
+      And I post the work "Second Snippet" to the collection "Anonymous Hugs" as a gift for "not a user"
     When subscription notifications are sent
     Then "second_user" should not be emailed
     When I am logged in as "moderator"
@@ -516,7 +521,7 @@ Feature: Collection
   Scenario: Work share modal should not reveal anonymous authors
     Given I have the anonymous collection "Anonymous Hugs"
     When I am logged in as "first_user"
-      And I post the work "Old Snippet" to the collection "Anonymous Hugs" as a gift for "third_user"
+      And I post the work "Old Snippet" to the collection "Anonymous Hugs"
     When I am logged out
       And I view the work "Old Snippet"
     Then I should see "Share"
@@ -543,3 +548,75 @@ Feature: Collection
       And I log out
       And I view the work "Over the Limit"
     Then I should see "Over the Limit"
+
+  Scenario: Mystery blurb collections contain only unrevealed (approved or unmoderated) collections
+    Given I have the hidden moderated collection "Hidden Moderated Approved"
+      And I have the hidden moderated collection "Hidden Moderated Not Approved"
+      And I have the hidden collection "Just Hidden"
+      And I have the anonymous collection "Just Anonymous"
+      And I have the hidden anonymous collection "Hidden and Anonymous"
+      And I have the collection "Welcome"
+      And I am logged in as "author"
+      And I post the work "Work"
+      And I add the work "Work" to the collection "Welcome"
+      And I add the work "Work" to the collection "Hidden Moderated Not Approved"
+
+    When I am logged out
+     And I go to "Welcome" collection's page
+    Then I should see "Mystery Work"
+     And I should not see "Part of"
+
+    When I am logged in as "author"
+     And I add the work "Work" to the collection "Hidden Moderated Approved"
+     And I add the work "Work" to the collection "Just Hidden"
+     And I add the work "Work" to the collection "Just Anonymous"
+     And I add the work "Work" to the collection "Hidden and Anonymous"
+     And I am logged in as "moderator"
+     And I approve the work "Work" in the collection "Hidden Moderated Approved"
+     And I submit
+
+    When I am logged out
+     And I go to "Welcome" collection's page
+    Then I should see "Mystery Work"
+     And I should see "Part of Hidden Moderated Approved, Just Hidden, Hidden and Anonymous"
+     And I should not see "Hidden Moderated Not Approved"
+     And I should not see "Just Anonymous"
+     And I should not see "Welcome" within ".mystery"
+
+  Scenario: Unrevealed work collection message mentions collections relevant to user
+    Given I have the hidden moderated collection "Hidden Moderated 1"
+      And I have the hidden moderated collection "Hidden Moderated 2"
+      And I am logged in as "author"
+      And I post the chaptered work "Work"
+      And I add the work "Work" to the collection "Hidden Moderated 1"
+      And I add the work "Work" to the collection "Hidden Moderated 2"
+
+     When I view the work "Work"
+     Then I should see "You can find details here: Hidden Moderated 1, Hidden Moderated 2"
+     When I view the work "Work" in full mode
+     Then I should see "You can find details here: Hidden Moderated 1, Hidden Moderated 2"
+
+     When I am logged out
+      And I view the work "Work"
+     Then I should not see "You can find details here"
+     When I go to the work "Work" in full mode
+      And I should not see "You can find details here"
+
+     When I am logged in as "moderator"
+      And I approve the work "Work" in the collection "Hidden Moderated 1"
+      And I submit
+
+     When I view the work "Work"
+     Then I should see "You can find details here: Hidden Moderated 1"
+      And I should not see "Hidden Moderated 2"
+     When I go to the work "Work" in full mode
+     Then I should see "You can find details here: Hidden Moderated 1"
+      And I should not see "Hidden Moderated 2"
+
+     When I am logged out
+      And I view the work "Work"
+     Then I should see "You can find details here: Hidden Moderated 1"
+      And I should not see "Hidden Moderated 2"
+     When I go to the work "Work" in full mode
+     Then I should see "You can find details here: Hidden Moderated 1"
+      And I should not see "Hidden Moderated 2"

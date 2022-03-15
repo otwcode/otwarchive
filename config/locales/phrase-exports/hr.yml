@@ -8,10 +8,10 @@ hr:
       footer:
         general:
           html:
-            donate_link_text: Vaše donacije
-            part1: Ako ste ovu poruku primili pogreškom, molimo vas da %{support_link}.
+            donate_link_text: vaših donacija
+            part1: Ako ste ovu poruku primili pogreškom, molimo vas %{support_link}.
             part2: AO3 je arhiv od fanova za fanove, te ovisi o %{donate_link}.
-            support_link_text: kontaktirate korisničku podršku
+            support_link_text: kontaktirajte korisničku podršku
           text:
             part1: Ako ste ovu poruku primili pogreškom, molimo vas, javite se korisničkoj
               podršci na %{support_url}.
@@ -23,12 +23,13 @@ hr:
         informal:
           addressed: Bok, %{name}!
           unaddressed: Bok!
-        introductory: Pozdrav od Našeg vlastitog arhiva!
+        introductory: Pozdrav od Archive of Our Own – AO3 (Našeg vlastitog arhiva)!
       signature:
         app_short_name: AO3
-        open_doors: Tim Otvorenih vrata
-        parent_org: Organizacija za transformativna djela
-        support: AO3 Korisnička podrška
+        open_doors: Tim Open Doors (Otvorenih vrata)
+        parent_org: Organization for Transformative Works – OTW (Organizacija za transformativna
+          djela)
+        support: AO3 korisnička podrška
     kudos:
       guest:
         few: "%{count} gostiju"
@@ -73,7 +74,7 @@ hr:
         tos_violation: Ako je moguće da je vaše djelo prekršilo Uvjete korištenja
           Arhive, molimo %{contact_abuse_link}.
       opendoors: kontaktirajte Otvorena vrata
-      subject: "[%{app_name}] Vaše djelo je izbrisano od strane admina"
+      subject: "[%{app_name}] Vaše djelo je izbrisano od strane administratora"
       text:
         part1: Vaše djelo "%{title}" je izbrisano sa Arhive od strane administratora.
         part2: Ako je vaše djelo bilo dio uvoznog projekta kojim upravlja Open Doors
@@ -82,9 +83,9 @@ hr:
         tos_violation: Ako je moguće da je vaše djelo prekršilo Uvjete korištenja
           Arhive, molimo kontaktirajte vijeće za Zloupotrebu (%{contact_abuse_url}).
     admin_hidden_work_notification:
-      access: " Dok je vaše djelo skriveno, još uvijek mu možete pristupiti preko
-        gornjeg linka, ali neće biti prikazano na vašoj stranici djela, i neće biti
-        dostupno drugim AO3 korisnicima."
+      access: Dok je vaše djelo skriveno, još uvijek mu možete pristupiti preko gornjeg
+        linka, ali neće biti prikazano na vašoj stranici djela, i neće biti dostupno
+        drugim AO3 korisnicima.
       check_email: Molimo provjerite vaš mail, uključujući vašu spam mapu, jer tim
         za Pravila & zlouporabu vas je možda već kontaktirao objašnjavajući zašto
         je vaše djelo skriveno.
@@ -114,13 +115,13 @@ hr:
       anonymous_info: Anonimna djela uključena su u popis oznaka, ali ne i na vašoj
         stranici djela. Na djelu će vaše korisničko ime biti zamijenjeno s "Anonymous"
         (anonimno).
-      anonymous_unrevealed_info: 'Održavači kolekcije mogu kasnije otkriti vaše djelo,
+      anonymous_unrevealed_info: Održavači kolekcije mogu kasnije otkriti vaše djelo,
         ali ga ostaviti anonimno. Osobe koje imaju pretplatu na vas bit će obaviještene
         o tome. Jednom otkriveno, vaše djelo bit će uključeno na popisu oznaka, ali
-        ne na popisu djela. Na djelu,vaše će ime biti zamijenjeno s "Anonymous" (anonimno). '
+        ne na popisu djela. Na djelu,vaše će ime biti zamijenjeno s "Anonymous" (anonimno).
       changed_status:
         anonymous:
-          html: Održavači kolekcije %{collection_link}  promijenili su status vašeg
+          html: Održavači kolekcije %{collection_link} promijenili su status vašeg
             djela %{work_link} u anonimno.
           text: Održavači kolekcije "%{collection_title}" (%{collection_url}) promijenili
             su status vašeg djela "%{work_title}" (%{work_url}) u anonimno.
@@ -186,8 +187,8 @@ hr:
       recipient_missing: 'Ne postoji: kontaktirajte moderatora za pomoć!'
       subject: "[%{app_name}][%{collection_title}] Tvoj zadatak!"
       text:
-        assignment: Dobili ste sljedeću molbu u "%{collection_title}" (%{collection_url})  izazovu
-          kod Archive of Our Own – AO3 (Našeg vlastitog arhiva)!
+        assignment: Dobili ste sljedeću molbu u "%{collection_title}" (%{collection_url})
+          izazovu kod Archive of Our Own – AO3 (Našeg vlastitog arhiva)!
         footer: Dobili ste ovaj email jer ste se prijavili za %{title} izazov (%{url}).
           Za više informacija o ovom izazovu i kontaktne informacije za moderatore,
           molimo vas da posjetite %{profile_url}.
@@ -196,45 +197,81 @@ hr:
     change_email:
       part1: "%{login}, e-mail povezan s vašim računom je promijenjen u %{email}"
       subject: "[%{app_name}] Promijenjen e-mail"
+    collection_notification:
+      assignments_sent:
+        complete: Poslani su svi zadaci.
+        subject: Zadaci poslani
+      html:
+        received_message: 'Dobili ste poruku o vašoj kolekciji %{collection_link}:'
+      text:
+        received_message: 'Dobili ste poruku o vašoj kolekciji "%{collection_title}"
+          (%{collection_url}):'
     creatorship_notification:
       explanation: Kada ste sukreator nekog djela, možete biti dodani novim poglavljima
         bez obzira na vaše postavke. Također ćete biti dodani serijalu kojem je dodano
-        djelo
+        djelo.
       html:
         creation: "%{creation_link} od %{pseud_links}"
-        edit: uredi %{type}
-        remove: Ako ste pogreškom dodani ili ne želite biti navedeni kao kreator,
-          možete se %{edit} maknuti kao kreator.
-      intro: 'Korisnik %{adding_user} je naveo vaš pseudonim %{pseud} kao sukreatora
-        na sljedećem %{type}:'
+        edit_chapter: Uredite poglavlje
+        edit_series: Uredite serijal
+        remove_chapter: Ako ste pogreškom dodani ili ne želite biti navedeni kao kreator,
+          možete se %{edit_chapter_link} maknuti kao kreator.
+        remove_series: Ako ste pogreškom dodani ili ne želite biti navedeni kao kreator,
+          možete %{edit_series_link} kako biste maknuli sebe kao kreatora.
+      intro_chapter: 'Korisnik %{adding_user} je naveo vaš pseudonim %{pseud} kao
+        sukreatora na sljedećem poglavlju:'
+      intro_series: 'Korisnik %{adding_user} dodao je vaš pseudonim %{pseud} kao sukreatora
+        na sljedećem serijalu:'
       subject: "[%{app_name}] Obavijest sukreatora"
       text:
         creation: "%{title} (%{url}) od %{pseuds}"
-        remove: 'Ako ste pogreškom dodani ili ne želite biti navedeni kao kreator,
-          možete urediti %{type} kako biste se maknuli: %{url}'
+        remove_chapter: 'Ako ste pogreškom dodani ili ne želite biti navedeni kao
+          kreator, možete urediti poglavlje kako biste maknuli sebe kao kreatora:
+          %{url}'
+        remove_series: 'Ako ste pogreškom dodani ili ne želite biti navedeni kao kreator,možete
+          urediti serijal kako biste maknuli sebe kao kreatora: %{url}'
     creatorship_notification_archivist:
-      explanation: Jer djeluju po službenoj dužnosti kao Open Doors arhivist, dozvoljeno
-        im je dodavati Vas bez poziva, čak i ako imate onemogućeno sukreatorstvo.
+      explanation: Budući da djeluju po službenoj dužnosti kao Open Doors arhivisti
+        (Otvorenih vrata), dozvoljeno im je dodavati Vas bez poziva, čak i ako imate
+        onemogućeno sukreatorstvo.
       html:
-        creation: "%{creation_link} za %{pseud_links}"
-        edit: uredi %{type}
-        remove: Ako ste dodani greškom ili ne želite biti navedeni kao kreator, možete
-          se %{edit} ukloniti s popisa kreatora.
-      intro: 'Korisnik %{archivist} označio je Vaš pseudonim %{pseud} kao sukreatora
-        na sljedećem djelu %{type}:'
+        creation: "%{creation_link} od %{pseud_links}"
+        edit_chapter: uredi poglavlje
+        edit_series: uredi serijale
+        edit_work: uredi djelo
+        remove_chapter: Ako ste dodani greškom ili ne želite biti navedeni kao kreator,
+          možete se %{edit_chapter_link} ukloniti s popisa kreatora.
+        remove_series: Ako ste dodani greškom ili ne želite biti navedeni kao kreator,
+          možete se %{edit_series_link} ukloniti s popisa kreatora.
+        remove_work: Ako ste dodani greškom ili ne želite biti navedeni kao kreator,
+          možete se %{edit_work_link} ukloniti s popisa kreatora.
+      intro_chapter: 'Korisnik %{archivist} je dodao Vaš pseud %{pseud} kao sukreatora
+        sljedećih poglavlja:'
+      intro_series: 'Korisnik %{archivist} je dodao Vaš pseud %{pseud} kao sukreatora
+        sljedećih serijala:'
+      intro_work: 'Korisnik %{archivist} označio je Vaš pseudonim %{pseud} kao sukreatora
+        na sljedećem djelu:'
       subject: "[%{app_name}] Obavijest arhivista o dodavanju sukreatora"
       text:
-        creation: "%{title} (%{url}) za %{pseuds}"
-        remove: 'Ako ste dodani greškom ili ne želite biti navedeni kao kreator, možete
-          urediti %{type} kako biste se uklonili s popisa kreatora: %{url}'
+        creation: "%{title} (%{url}) od %{pseuds}"
+        remove_chapter: 'Ako ste dodani greškom ili ne želite biti navedeni kao kreator,
+          možete urediti poglavlje kako biste se uklonili s popisa kreatora: %{url}'
+        remove_series: 'Ako ste dodani greškom ili ne želite biti navedeni kao kreator,
+          možete urediti serijale kako biste se uklonili s popisa kreatora: %{url}'
+        remove_work: 'Ako ste dodani greškom ili ne želite biti navedeni kao kreator,
+          možete urediti djelo kako biste se uklonili s popisa kreatora: %{url}'
     creatorship_request:
       html:
         creation: "%{creation_link} od %{pseud_links}"
         instructions: Možete prihvatiti ili odbiti ovaj zahtjev na svojoj %{page_name}
           stranici.
         page_name: Co-Creator Requests (Zahtjevi sukreatora)
-      intro: 'Korisnik %{inviting_user} je pozvao vaš pseudonim %{pseud} kako bi bio
-        zapisan kao sukreator na sljedećem %{type}:'
+      intro_chapter: 'Korisnik %{inviting_user} je pozvao Vaš pseud %{pseud} da bude
+        dodan kao sukreator na sljedećem poglavlju:'
+      intro_series: 'Korisnik %{inviting_user} je pozvao Vaš pseud %{pseud} da bude
+        dodan kao sukreator na sljedećem serijalu:'
+      intro_work: 'Korisnik %{inviting_user} je pozvao Vaš pseud %{pseud} da bude
+        dodan kao sukreator na sljedećem djelu:'
       subject: "[%{app_name}] Zahtjev sukreatora"
       text:
         creation: "%{title} (%{url}) od %{pseuds}"
@@ -243,15 +280,15 @@ hr:
     delete_work_notification:
       html:
         part1_other: Vaše djelo %{title} je izbrisano na zahtjev %{pseud}.
-        part1_yourself: Vaše djelo %{title} je izbrisano na vaš zahtjev
+        part1_yourself: Vaše djelo %{title} je izbrisano na vaš zahtjev.
         part2: Ako imate pitanja, molimo %{support}.
       part3: U prilogu se nalazi kopija vašeg djela za referencu.
       subject: "[%{app_name}] Vaše djelo je izbrisano"
       support: kontaktirajte Korisničku podršku
       text:
         part1_other: Vaše djelo "%{title}" je izbrisano na zahtjev %{pseud}.
-        part1_yourself: Vaše djelo "%{title}"  je izbrisano na vaš zahtjev.
-        part2: "[%{app_name}] Vaše djelo je izbrisano od strane administratora"
+        part1_yourself: Vaše djelo "%{title}" je izbrisano na vaš zahtjev.
+        part2: Ako imate pitanja, molimo %{support} (%{url}).
     invitation:
       been_invited: Pozvani ste da se pridružite našoj otvorenoj beti!
       has_invited: "%{user_name} Vas je pozvao da se pridružite našoj beti!"
@@ -269,7 +306,7 @@ hr:
       part2: Također, imamo puno opcija za pronalaženje djela koje želite, te za postavljanje
         i dijeljenje Vaših djela s ostalima. I još više toga dolazi uskoro! Vaše povratne
         informacije tijekom bete mogu nam pomoći u izgradnji još bolje arhive. \o/
-      subject: 'Pozivnica od Našeg vlastitog arhiva '
+      subject: "[%{app_name}] הזמנה"
       text:
         faq_link: Za više informacija, molimo provjerite naša najčešća pitanja na
           %{faq_link}.
@@ -282,37 +319,7 @@ hr:
         contact_support: kontaktiraj AO3 korisničku podršku
         faq_page: stranica najčešćih pitanja
         open_doors: Open doors (Otvorena vrata)
-        part1: Primili ste ovaj e-mail jer je arhiv nedavno učitan od strane %{open_doors_link}
-          u %{app_link} (%{app_short_name}), i vjerujemo da sljedeća fan djela pripadaju
-          vama. Želimo vam pružiti priliku da položite prava na (ili da izbrišete/napustite)
-          ova djela. Ako već nemate račun pod drugim e-mailom, ovim vas putem želimo
-          pozvati da nam se pridružite!
-        part10: Ako ste na uvezenoj arhivi imali djela pod e-mail adresom kojoj više
-          nemate pristup, molimo %{open_doors_link} s informacijama koje mogu pomoći
-          u potvrdi vašeg identiteta.
-        part11: Za druga pitanja, molimo %{support_link}.
-        part2: Nove obavijesti o nedavnim potezima arhiva možete pročitati na %{news_link},
-          a dodatne informacije možete pronaći na Otvorena vrata - %{open_doors_faq_link}
-          ili %{open_doors_tutorial_link}. Za svaka pitanja neodgovorena na stranici
-          najćešćih pitanja ili u ovom e-mailu, molimo %{support_link}.
-        part3: Ako je ovo greška, i to nisu vaša djela, molimo vas da ih ne izbrišete!
-          Samo %{open_doors_link} i mi ćemo se pobrinuti oko toga.
-        part4: Ovisno o arhivi, moguće je da su vaša djela učitana samo za registrirane
-          korisnike (kako se ne bi pojavili na Google pretrazi). Ako je to slučaj,
-          djela će biti dostupna samo prijavljenim korisnicima, osim ako se ne odlučite
-          da budu potpuno vidljiva. Za pomoć s otključavanjem, napuštanjem ili brisanjem
-          vaših djela, molimo %{support_link}.
         part5: Položite prava na ili uklonite svoja djela ovdje.
-        part7: Ako djela pripadaju vama, ali ih ne želite, možete ih napustiti (tako
-          da ostanu na AO3-u bez vašeg imena) ili izbrisati (potpuno ih ukloniti s
-          AO3-a). Ne morate ih dodati na bilo koji račun kako biste ih napustili ili
-          izbrisali--možete učiniti to direktno preko linka gore. (Za pomoć, molimo
-          %{support_link}.)
-        part9: Ako želite da Otvorena vrata preusmjeruju na vaše već postojeće djelo,
-          molimo izbrišite učitanu kopiju i %{open_doors_link} s vašim AO3 korisničkim
-          imenom, imenom računa s uvezene arhive, te naslovom i URL-om fan djela na
-          koje želite biti preusmjereni. (Ako imate više djela koja želite da budu
-          preusmjerena, možete ih navesti sve u jednom mailu.)
         tutorial_page: uputstva
       part12: Ako nas kontaktirate, molimo stavite @transformativeworks.org na listu
         prihvaćenih adresa i provjerite mapu s neželjenom poštom za naš odgovor.
@@ -373,12 +380,16 @@ hr:
       main:
         few: Žao nam je što vas moramo obavijestiti da vaš zahtjev za %{count} novih
           poziva trenutno ne može biti odobren.
-        one: 'Žao nam je što vas moramo obavijestiti da vaš zahtjev za novim pozivom
-          trenutno ne može biti odobren. '
+        one: Žao nam je što vas moramo obavijestiti da vaš zahtjev za novim pozivom
+          trenutno ne može biti odobren.
         other: Žao nam je što vas moramo obavijestiti da vaš zahtjev za %{count} novih
           poziva trenutno ne može biti odobren.
       reason: 'Vaš zahtjev je bio:'
       subject: "[%{app_name}] Zahtjev za dodatnim pozivnim kodom odbijen"
+    recipient_notification:
+      subject:
+        collection: "[%{app_name}][%{collection_title}] Poklon za Vas od %{collection_title}"
+        no_collection: "[%{app_name}] Poklon za Vas"
     signup_notification:
       activate_your_account: Slijedite ovu poveznicu kako bi aktivirali svoj korisnički
         račun
@@ -399,7 +410,6 @@ hr:
           putem stranice %{admin_posts_link}. Ako vam je potrebna dodatna pomoć, naišli
           ste na bug ili imate pitanja ili komentare, molimo %{contact_support_link},
           koji su uvijek spremni pomoći.
-      subject: "[%{app_name}] Potvrda"
       text:
         part1: 'Molimo slijedite ovu poveznicu kako bi aktivirali svoj račun: %{activate_account_url}'
         part2: Nakon što je vaš račun otvoren i aktiviran, možete objaviti svoja fan

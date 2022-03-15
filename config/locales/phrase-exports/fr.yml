@@ -24,12 +24,12 @@ fr:
         informal:
           addressed: Bonjour, %{name} !
           unaddressed: Bonjour !
-        introductory: Bonjour de la part d’Archive of Our Own – AO3 (Notre Propre
+        introductory: Bonjour de la part d’Archive of Our Own – AO3 (Notre Propre
           Archive) !
       signature:
         app_short_name: AO3
         open_doors: L’équipe du Projet Open Doors
-        parent_org: Organization for Transformative Works – OTW (Organisation pour
+        parent_org: Organization for Transformative Works – OTW (Organisation pour
           les Œuvres Transformatives)
         support: L’équipe de Support Technique d’AO3
     kudos:
@@ -79,24 +79,54 @@ fr:
         part1: Votre œuvre "%{title}" a été supprimée de l’Archive par un-e administrateur-trice
           du site.
         part2: Si votre œuvre faisait partie d’un projet d’importation réalisé par
-          Open Doors, veuillez contacter Open Doors %{opendoors_link} pour toute question
-          supplémentaire.
+          Open Doors, veuillez contacter Open Doors (Portes Ouvertes) (%{opendoors_link})
+          pour toute question supplémentaire.
         tos_violation: S’il est possible que votre œuvre ait enfreint les Conditions
           d’Utilisation, veuillez contacter notre Comité Modération (%{contact_abuse_url}).
+    admin_hidden_work_notification:
+      access: Durant cette période, vous pourrez toujours y accéder grâce au lien
+        fourni ci-dessus, toutefois elle ne fera pas partie de la liste de vos œuvres
+        et ne sera pas accessible aux autres utilisateur-trice-s d’AO3.
+      check_email: Vérifiez vos e-mails, y compris le dossier des indésirables, car
+        le Comité Modération vous a peut-être déjà contacté-e pour vous en expliquer
+        la raison.
+      contact_abuse: contacter le Comité Modération
+      html:
+        help: Si vous ignorez pour quelle raison votre œuvre a été cachée et que vous
+          n’avez pas reçu de communication à ce sujet, merci de contacter %{contact_abuse_link}
+          directement.
+        hidden: Votre œuvre %{title} a été cachée par le Comité Modération et n’est
+          plus accessible au public.
+        tos_violation: Si votre œuvre a été cachée suite à une violation des %{tos_link}
+          d’AO3, vous devrez corriger cette violation. À défaut, vous encourez le
+          risque qu’elle soit supprimée.
+      subject: "[%{app_name}] Votre œuvre a été cachée par le Comité Modération"
+      text:
+        help: 'Si vous ignorez pour quelle raison votre œuvre a été cachée et que
+          vous n’avez pas reçu de communication à ce sujet, merci de contacter le
+          Comité Modération directement : %{contact_abuse_url}.'
+        hidden: Votre œuvre "%{title}" (%{work_url}) a été cachée par le Comité Modération
+          et n’est plus accessible au public.
+        tos_violation: Si votre œuvre a été cachée suite à une violation des Conditions
+          d’Utilisation d’AO3 (%{tos_url}), vous devez corriger cette violation. À
+          défaut, vous encourez le risque qu’elle soit supprimée.
+      tos: Conditions d’Utilisation
     anonymous_or_unrevealed_notification:
       anonymous_info: Les œuvres anonymes apparaissent dans les listes de tags mais
         pas sur la page rassemblant vos œuvres. Sur l'œuvre, votre nom d'utilisateur-trice
         sera remplacé par "Anonymous" (Anonyme).
-      anonymous_unrevealed_info: Les personnes qui maintiennent %{collection_link}
-        ont changé le statut de votre œuvre %{work_link} pour en faire une œuvre anonyme
-        non révélée.
+      anonymous_unrevealed_info: Il se peut que les personnes qui maintiennent la
+        collection révèlent votre œuvre tout en la laissant anonyme. Les personnes
+        abonnées à vos mises à jour ne recevront pas de notification lors de ce changement.
+        Une fois révélée, votre œuvre sera incluse dans les listes de tags mais pas
+        dans la page regroupant vos œuvres. Sur l'œuvre, votre nom d'utilisateur-trice
+        sera remplacé par "Anonymous" (Anonyme).
       changed_status:
         anonymous:
           html: Les personnes qui maintiennent %{collection_link} ont changé le statut
             de votre œuvre %{work_link} en anonyme.
-          text: |-
-            Les personnes qui maintiennent "%{collection_title}" (%{collection_url})
-             ont changé le statut de votre œuvre "%{work_title}" (%{work_url}) en anonyme.
+          text: Les personnes qui maintiennent "%{collection_title}" (%{collection_url})
+            ont changé le statut de votre œuvre "%{work_title}" (%{work_url}) en anonyme.
         anonymous_unrevealed:
           html: Les personnes qui maintiennent %{collection_link} ont changé le statut
             de votre œuvre %{work_link} pour en faire une œuvre anonyme non révélée.
@@ -107,33 +137,31 @@ fr:
           html: Les personnes qui maintiennent %{collection_link} ont changé le statut
             de votre œuvre %{work_link} pour en faire une œuvre non révélée.
           text: Les personnes qui maintiennent "%{collection_title}" (%{collection_url})
-            ont changé le statut de votre œuvre "%{work_title}" (%{work_url})  pour
+            ont changé le statut de votre œuvre "%{work_title}" (%{work_url}) pour
             en faire une œuvre non révélée.
-      collection_items_link_text: Approved Collection Items page (page des Objets  approuvés
-        dans une Collection)
+      collection_items_link_text: Approved Collection Items page (page des Objets
+        approuvés dans une Collection)
       do_not_want:
         anonymous:
           html: Si vous ne souhaitez pas que votre œuvre soit anonyme, veuillez consulter
             votre %{collection_items_link} afin de la retirer de cette collection.
           text: 'Si vous ne souhaitez pas que votre œuvre soit anonyme, veuillez consulter
-            votre Approved Collection Items page (page des Objets dans une Collection
-            approuvée par un/une modérateur-trice) afin de la retirer de cette collection
-            : %{collection_items_url}'
+            votre Approved Collection Items page (page des Objets approuvés dans une
+            Collection) afin de la retirer de cette collection : %{collection_items_url}'
         anonymous_unrevealed:
           html: Si vous ne souhaitez pas que votre œuvre soit anonyme et non révélée,
             veuillez consulter votre %{collection_items_link} afin de la retirer de
             cette collection.
           text: 'Si vous ne souhaitez pas que votre œuvre soit anonyme et non révélée,
             veuillez consulter votre Approved Collection Items page (page des Objets
-            dans une Collection approuvée par un/une modérateur-trice) afin de la
-            retirer de cette collection : %{collection_items_url}'
+            approuvés dans une Collection) afin de la retirer de cette collection
+            : %{collection_items_url}'
         unrevealed:
           html: Si vous ne souhaitez pas que votre œuvre soit non révélée, veuillez
             consulter votre %{collection_items_link} afin de la retirer de cette collection.
           text: 'Si vous ne souhaitez pas que votre œuvre soit non révélée, veuillez
-            consulter votre Approved Collection Items page (page des Objets dans une
-            Collection approuvée par un/une modérateur-trice) afin de la retirer de
-            cette collection : %{collection_items_url}'
+            consulter votre Approved Collection Items page (page des Objets approuvés
+            dans une Collection) afin de la retirer de cette collection : %{collection_items_url}'
       faq_link_text: FAQ Collections
       more_info:
         html: Pour plus d'information, consultez notre %{faq_link}.
@@ -169,9 +197,9 @@ fr:
       subject: "[%{app_name}][%{collection_title}] Vous Avez Reçu une Tâche !"
       text:
         assignment: La demande suivante vous a été attribuée dans le cadre du défi
-          "%{collection_title}" (%{collection_url})  sur Archive of Our Own !
+          "%{collection_title}" (%{collection_url}) sur Archive of Our Own !
         footer: Vous avez reçu cet e-mail car vous vous êtes inscrit-e au défi %{title}
-          (%{url}).  Pour plus d’informations sur ce défi et savoir comment contacter
+          (%{url}). Pour plus d’informations sur ce défi et savoir comment contacter
           les modérateur-trice-s, veuillez consulter %{profile_url}.
         look_up: Vous pouvez retrouver cette tâche dans votre page Assignments (Tâches)
           à l’adresse %{link}.
@@ -179,6 +207,16 @@ fr:
       part1: "%{login}, l’adresse e-mail associée à votre compte a été remplacée par
         %{email}"
       subject: "[%{app_name}] Changement d’adresse e-mail"
+    collection_notification:
+      assignments_sent:
+        complete: Toutes les tâches ont été envoyées.
+        subject: Tâches envoyées
+      html:
+        received_message: 'Vous avez reçu un message à propos de votre collection
+          %{collection_link} :'
+      text:
+        received_message: 'Vous avez reçu un message à propos de votre collection
+          "%{collection_title}" (%{collection_url}) :'
     creatorship_notification:
       explanation: Lorsque vous êtes co-créateur-trice d’une œuvre, votre nom peut
         être ajouté à de nouveaux chapitres quels que soient les paramètres de la
@@ -186,43 +224,73 @@ fr:
         serait annexée.
       html:
         creation: "%{creation_link} par %{pseud_links}"
-        edit: modifier le/la %{type}
-        remove: Si votre nom a été ajouté par erreur ou si vous ne voulez pas qu’il
-          figure en tant que co-créateur-trice, vous pouvez %{edit} afin d’être retiré-e
-          des co-créateur-trice-s.
-      intro: L’utilisateur-trice %{adding_user} a ajouté votre pseudo %{pseud} en
-        tant que co-créateur-trice pour le/la %{type} suivant-e
+        edit_chapter: modifier le chapitre
+        edit_series: modifier la série
+        remove_chapter: Si votre nom a été ajouté par erreur ou si vous ne souhaitez
+          pas figurer en tant que créateur-trice, vous pouvez %{edit_chapter_link}
+          et en retirer votre nom.
+        remove_series: Si votre nom a été ajouté par erreur ou si vous ne souhaitez
+          pas figurer en tant que créateur-trice, vous pouvez %{edit_series_link}
+          et en retirer votre nom.
+      intro_chapter: 'L’utilisateur-trice %{adding_user} a ajouté votre pseudo %{pseud}
+        en tant que co-créateur-trice pour le chapitre suivant :'
+      intro_series: 'L’utilisateur-trice %{adding_user} a ajouté votre pseudo %{pseud}
+        en tant que co-créateur-trice pour la série suivante :'
       subject: "[%{app_name}] Notification de Co-création"
       text:
         creation: "%{title} (%{url}) par %{pseuds}"
-        remove: 'Si votre nom a été ajouté par erreur ou si vous ne voulez pas qu’il
-          figure en tant que co-créateur-trice, vous pouvez modifier le/la %{type}
-          afin d’être retiré-e des co-créateur-trice-s : %{url}'
+        remove_chapter: 'Si votre nom a été ajouté par erreur ou si vous ne souhaitez
+          pas figurer en tant que créateur-trice, vous pouvez modifier le chapitre
+          et en retirer votre nom : %{url}'
+        remove_series: 'Si votre nom a été ajouté par erreur ou si vous ne souhaitez
+          pas figurer en tant que créateur-trice, vous pouvez modifier la série et
+          en retirer votre nom : %{url}'
     creatorship_notification_archivist:
       explanation: L’utilisateur-trice, en sa qualité d’archiviste officiel-le d’Open
         Doors (Portes Ouvertes), a la possibilité de vous ajouter sans invitation,
         même si vous avez désactivé la co-création.
       html:
-        creation: "%{creation_link} par %{pseud_links}"
-        edit: modifier le/la %{type}
-        remove: Si votre nom a été ajouté par erreur ou si vous ne voulez pas qu’il
-          figure en tant que co-créateur-trice, vous pouvez %{edit} afin d’être retiré-e
-          des co-créateur-trice-s.
-      intro: 'L’utilisateur-trice %{archivist} a ajouté votre pseudo %{pseud} en tant
-        que co-créateur-trice  du/de la/de l'' %{type} suivant-e :'
+        creation: "%{creation_link} de %{pseud_links}"
+        edit_chapter: modifier le chapitre
+        edit_series: modifier la série
+        edit_work: modifier l'œuvre
+        remove_chapter: Si vous avez été ajouté-e par erreur ou ne souhaitez pas apparaître
+          comme créateur-trice, vous pouvez %{edit_chapter_link} pour retirer votre
+          pseudo.
+        remove_series: Si vous avez été ajouté-e par erreur ou ne souhaitez pas apparaître
+          comme créateur-trice, vous pouvez %{edit_series_link} pour retirer votre
+          pseudo.
+        remove_work: Si vous avez été ajouté-e par erreur ou ne souhaitez pas apparaître
+          comme créateur-trice, vous pouvez %{edit_work_link} pour retirer votre pseudo.
+      intro_chapter: 'L’utilisateur-trice %{archivist} a ajouté votre pseudo %{pseud}
+        en tant que co-créateur-trice du chapitre suivant :'
+      intro_series: 'L’utilisateur-trice %{archivist} a ajouté votre pseudo %{pseud}
+        en tant que co-créateur-trice de la série suivante :'
+      intro_work: 'L’utilisateur-trice %{archivist} a ajouté votre pseudo %{pseud}
+        en tant que co-créateur-trice de l’œuvre suivante :'
       subject: "[%{app_name}] Notification d’ajout en tant que co-créateur-trice"
       text:
-        creation: "%{title} (%{url}) par %{pseuds}"
-        remove: 'Si votre nom a été ajouté par erreur ou si vous ne voulez pas qu’il
-          figure en tant que co-créateur-trice, vous pouvez modifier le/la %{type}
-          afin d’être retiré-e des co-créateur-trice-s : %{url}'
+        creation: "%{title} (%{url}) de %{pseuds}"
+        remove_chapter: 'Si vous avez été ajouté-e par erreur ou ne souhaitez pas
+          apparaître comme créateur-trice, vous pouvez modifier le chapitre pour retirer
+          votre pseudo : %{url}'
+        remove_series: 'Si vous avez été ajouté-e par erreur ou ne souhaitez pas apparaître
+          comme créateur-trice, vous pouvez modifier la série pour retirer votre pseudo
+          : %{url}'
+        remove_work: 'Si vous avez été ajouté-e par erreur ou ne souhaitez pas apparaître
+          comme co-créateur-trice, vous pouvez modifier l''œuvre pour retirer votre
+          pseudo : %{url}'
     creatorship_request:
       html:
         creation: "%{creation_link} par %{pseud_links}"
         instructions: Vous pouvez accepter ou refuser cette demande sur la page %{page_name}.
         page_name: Co-Creator Requests (Demandes de Co-création)
-      intro: 'L’utilisateur-trice %{inviting_user} vous a invité, sous le pseudo %{pseud},
-        à devenir co-créateur-trice pour l''œuvre suivante %{type} :'
+      intro_chapter: 'L’utilisateur-trice %{inviting_user} a invité votre pseudo %{pseud}
+        à apparaître en co-création du chapitre suivant :'
+      intro_series: 'L’utilisateur-trice %{inviting_user} a invité votre pseudo %{pseud}
+        à apparaître en co-création de la série suivante :'
+      intro_work: 'L’utilisateur-trice %{inviting_user} a invité votre pseudo %{pseud}
+        à apparaître en co-création de l’œuvre suivante :'
       subject: "[%{app_name}] Demande de Co-création"
       text:
         creation: "%{title} (%{url}) par %{pseuds}"
@@ -274,48 +342,7 @@ fr:
         contact_support: contacter le Comité Support Technique d’AO3
         faq_page: FAQ
         open_doors: Open Doors (Portes Ouvertes)
-        part1: Vous recevez cet e-mail car une archive a récemment été importée par
-          %{open_doors_link} sur %{app_link} (%{app_short_name}), et il nous semble
-          que les œuvres de fans listées ci-après vous appartiennent. Nous aimerions
-          vous donner l’occasion de revendiquer ces œuvres (ou de les supprimer, ou
-          encore de les rendre orphelines, c’est-à-dire de rompre la relation entre
-          elles et vous) si vous le souhaitez. Et si vous n’avez pas déjà un compte
-          AO3 sous une adresse différente, nous voudrions vous convier à bord !
-        part10: Si certaines de vos œuvres de l’archive importée étaient associées
-          à une adresse e-mail à laquelle vous n’avez plus accès, veuillez %{open_doors_link}
-          en mentionnant toute information susceptible de contribuer à confirmer votre
-          identité.
-        part11: Pour toute autre demande, veuillez %{support_link}.
-        part2: Vous pouvez consulter les dernières annonces d’importation d’archives
-          sur %{news_link}, et vous trouverez des informations supplémentaires dans
-          la %{open_doors_faq_link} ou les %{open_doors_tutorial_link}. Si la réponse
-          à vos questions ne se trouve pas à ces endroits, ou dans cet email, veuillez
-          %{support_link}.
-        part3: S’il y a erreur et que ces œuvres ne vous appartiennent pas, ne les
-          supprimez pas ! Merci de simplement %{open_doors_link} et nous reprendrons
-          la main.
-        part4: En fonction de l’archive, il se peut que vos œuvres aient été importées
-          de façon à n’être accessibles qu’aux utilisateur-trice-s enregistré-e-s
-          (afin qu’elles n’apparaissent pas parmi les résultats de recherche Google).
-          Si c’est le cas, les œuvres seront restreintes aux utilisateur-trice-s connecté-e-s,
-          à moins que vous ne les rendiez accessibles à tous/toutes. Si vous avez
-          besoin d’aide pour cela, pour supprimer ou rendre orphelines vos œuvres,
-          veuillez %{support_link}.
         part5: Vous pouvez revendiquer ou supprimer vos œuvres ici.
-        part7: Si ces œuvres vous appartiennent bien mais que vous ne souhaitez pas
-          les revendiquer, vous pouvez les rendre orphelines (afin qu’elles restent
-          sur AO3 sans que votre nom y soit associé) ou les supprimer (afin qu’elles
-          disparaissent entièrement d’AO3). Il n’est pas nécessaire d’ajouter ces
-          œuvres à un compte pour les rendre orphelines ou les supprimer, vous pouvez
-          le faire directement en suivant le lien de revendication plus haut. (Si
-          vous avez besoin d’aide, veuillez %{support_link}.)
-        part9: Si vous aimeriez qu’Open Doors mette à jour le lien de redirection
-          afin qu’il renvoie vers votre œuvre préexistante, veuillez supprimer la
-          copie importée et %{open_doors_link} en précisant le nom de votre compte
-          AO3, le nom de votre compte sur l’archive importée, ainsi que le titre et
-          l’URL de l’œuvre vers laquelle vous aimeriez que le lien redirige. (Si vous
-          souhaitez changer le lien de redirection de plusieurs œuvres, vous pouvez
-          rassembler tous les renseignements dans un seul e-mail.)
         tutorial_page: tutoriels
       part12: Si vous nous contactez, veuillez autoriser les e-mails provenant de
         @transformativeworks.org et vérifiez que notre réponse n’arrive pas dans votre
@@ -394,6 +421,11 @@ fr:
           nouvelles invitations ne peut être satisfaite pour le moment.
       reason: 'Votre demande était la suivante :'
       subject: "[%{app_name}] Demande de Code d’Invitation Supplémentaire Rejetée"
+    recipient_notification:
+      subject:
+        collection: "[%{app_name}][%{collection_title}] Une œuvre cadeau pour vous
+          dans %{collection_title}"
+        no_collection: "[%{app_name}] Une œuvre cadeau pour vous"
     signup_notification:
       activate_your_account: suivez ce lien pour activer votre compte
       admin_posts: Actualités d’AO3
@@ -414,7 +446,6 @@ fr:
           avez besoin d’aide, faites face à un bug, souhaitez nous poser des questions
           ou nous faire part de vos commentaires, veuillez %{contact_support_link},
           qui est toujours ravi d’aider.
-      subject: "[%{app_name}] Confirmation"
       text:
         part1: 'Veuillez suivre ce lien pour activer votre compte : %{activate_account_url}'
         part2: Une fois que votre compte est activé, vous pouvez notamment publier

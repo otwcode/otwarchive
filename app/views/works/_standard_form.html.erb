@@ -230,7 +230,7 @@
               <dt><%= label_tag "published_at", ts("Set publication date") %></dt>
               <dd id="managePublicationDate" class="datetime" title="<%= ts("set date") %>">
                 <!--BACK END, this select box does not seem to be acquiring the label published_at -->
-                <%= c.date_select("published_at", :start_year => Date.today.year, :end_year => 1950, :default => Date.today, :value => @chapter.published_at, :order => [:day, :month, :year]) %>
+                <%= c.date_select("published_at", :start_year => Date.current.year, :end_year => 1950, :default => Date.current, :value => @chapter.published_at, :order => [:day, :month, :year]) %>
               </dd>
             </dl>
           </fieldset>

@@ -116,6 +116,28 @@ en:
       point2: "The entity that set up the proxy site can see what you submit, including your IP address. If you log in through the proxy site, it can see your password."
       button: "Dismiss Notice"
   users:
+    sessions:
+      new:
+        restricted:
+          sorry: "Sorry!"
+          work_unavailable: "This work is only available to registered users of the Archive."
+          commenting_unavailable: "Commenting on this work is only available to registered users of the Archive."
+          account_exists: "If you already have an Archive of Our Own account, log in now."
+          no_account: "If you don't have an account, you can %{request_invite_link}."
+          request_invite: "request an invitation to join"
+          signup: "Or join us for free - it's easy."
+        login:
+          log_in: "Log in"
+          forgot: "Forgot your password or user name? %{reset_password_link}."
+          reset_password: "Reset password"
+          no_account: "Don't have an account? %{join_link}."
+          request_invite: "Request an invitation to join"
+          create_account: "Create an account now"
+        beta_reminder:
+          reminder: "Reminder:"
+          warning: "This site is in beta. Things may break or crash without notice."
+          report_bugs: "Please report any pesky bugs and %{give_feedback_link}!"
+          give_feedback: "give us your feedback"
     delete_preview:
       heading: "What do you want to do with your works?"
       orphan: "orphan"
@@ -279,3 +301,11 @@ en:
           label: Link to the page you are reporting (required)
           error: Please enter the link to the page you are reporting.
           description: If you came here from the abuse link at the bottom of the page, this will be filled in for you.
+  challenge_signups:
+    signup_form:
+      notice:
+        preference:
+          gift_exchange: Signing up for this challenge will allow assigned users to gift works to you regardless of your preference settings. If you wish to receive additional gifts from users who are not assigned to you, please %{preferences_link} to allow gifts from anyone. You can always %{refuse_link}.
+          preferences_link_text: update your preferences
+          prompt_meme: Signing up for this challenge will allow any user who claims your prompt to gift you a work in response to your prompt regardless of your preference settings. If you wish to receive additional gifts from users who have not claimed your prompts, please %{preferences_link} to allow gifts from anyone. You can always %{refuse_link}.
+          refuse_link_text: refuse a gift

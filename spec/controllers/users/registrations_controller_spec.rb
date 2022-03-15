@@ -75,7 +75,7 @@ describe Users::RegistrationsController do
 
         before do
           invitation.mark_as_redeemed(previous_user)
-          previous_user.update_attributes(invitation_id: invitation.id)
+          previous_user.update(invitation_id: invitation.id)
         end
 
         it "redirects with an error" do

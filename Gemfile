@@ -6,7 +6,7 @@ gem 'test-unit', '~> 3.2'
 
 gem 'bundler'
 
-gem "rails", "~> 5.2"
+gem "rails", "~> 6.0.4"
 gem "rails-i18n"
 gem "rack", "~> 2.1", ">= 2.1.4"
 gem "sprockets", "< 4"
@@ -24,8 +24,6 @@ gem 'mysql2', '0.5.2'
 # at the latest version to avoid errors
 gem 'transaction_isolation', '1.0.5'
 gem 'transaction_retry'
-#https://github.com/winebarrel/activerecord-mysql-reconnect
-gem 'activerecord-mysql-reconnect', '~> 0.4.1'
 
 gem 'rack-attack'
 
@@ -54,16 +52,12 @@ gem 'whenever', '~>0.6.2', require: false
 gem 'nokogiri', '>= 1.8.5'
 gem 'mechanize'
 gem 'sanitize', '>= 4.6.5'
-# Until there is a working solution to
-# https://otwarchive.atlassian.net/browse/AO3-4957
-# https://github.com/rubys/nokogumbo/issues/50
-gem 'nokogumbo', '1.4.9'
 gem "rest-client", "~> 2.1.0", require: "rest_client"
 gem 'resque', '>=1.14.0'
 gem 'resque-scheduler'
 gem 'after_commit_everywhere'
 #gem 'daemon-spawn', require: 'daemon_spawn'
-gem "elasticsearch", "7.15.0"
+gem "elasticsearch", "7.16.1"
 gem "aws-sdk-s3"
 gem 'css_parser'
 
@@ -117,18 +111,16 @@ gem 'audited', '~> 4.4'
 # For controlling application behavour dynamically
 gem 'rollout'
 
-#  Place the New Relic gem as low in the list as possible, allowing the
-#  frameworks above it to be instrumented when the gem initializes.
-gem 'newrelic_rpm'
-
 #   Use update memcached client with kinder, gentler I/O for Ruby
 gem 'connection_pool'
 gem 'dalli'
 gem 'kgio', '2.10.0'
 
+# TODO: AO3-6297 Update the download code so we can remove mimemagic.
+gem "mimemagic", "0.3.10"
+
 group :test do
-  gem 'rspec', '~> 3.8'
-  gem 'rspec-rails', '~> 3.8.2'
+  gem "rspec-rails", "~> 4.0.1"
   gem 'pickle'
   gem 'shoulda'
   gem 'capybara', '~> 2.16.1'
@@ -153,7 +145,7 @@ end
 
 group :test, :development do
   gem 'awesome_print'
-  gem 'brakeman', '3.7.2'
+  gem 'brakeman'
   gem 'pry-byebug'
   gem 'whiny_validation'
   gem 'factory_bot', '~> 5.0.2'
@@ -185,3 +177,9 @@ gem 'rvm-capistrano'
 gem 'unicorn', '~> 5.5', require: false
 # Use god as the monitor
 gem 'god', '~> 0.13.7'
+
+group :staging, :production do
+  # Place the New Relic gem as low in the list as possible, allowing the
+  # frameworks above it to be instrumented when the gem initializes.
+  gem "newrelic_rpm"
+end

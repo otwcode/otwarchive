@@ -4,7 +4,7 @@ pl:
     general:
       closing:
         formal: Z wyrazami szacunku,
-        informal: Pozdrawiam,
+        informal: Pozdrawiamy,
       footer:
         general:
           html:
@@ -18,14 +18,14 @@ pl:
             part1: Jeśli ta wiadomość została wysłana do Ciebie przez pomyłkę, prosimy
               o kontakt ze Wsparciem poprzez %{support_url}.
             part2: 'AO3 jest prowadzonym i wspieranym przez fanów archiwum, które
-              działa dzięki waszym darowiznom: %{donate_url}.'
+              działa dzięki Waszym darowiznom: %{donate_url}.'
         sent_at: Wysłano o %{sent_at}.
       greeting:
-        formal: 'Szanowna/y %{name}, '
+        formal: Szanowna/y %{name},
         informal:
           addressed: Cześć, %{name}!
           unaddressed: Cześć!
-        introductory: Cześć z Archive of Our Own - AO3 (Naszego Własnego Archiwum)!
+        introductory: Pozdrowienia z Archive of Our Own – AO3 (Naszego Własnego Archiwum)!
       signature:
         app_short_name: AO3
         open_doors: Zespół Open Doors (Drzwi Otwartych)
@@ -90,9 +90,37 @@ pl:
         tos_violation: Jeśli podejrzewasz, że Twoja twórczość mogła złamać Regulamin
           Serwisu AO3, prosimy, skontaktuj się z naszą Komisją ds. Zasad i Nadużyć
           (%{contact_abuse_url}).
+    admin_hidden_work_notification:
+      access: Gdy twoja praca jest ukryta, nadal masz do niej dostęp poprzez link
+        podany wyżej, ale nie jest ona wymieniona na liście Twoich prac, ani nie jest
+        dostępna dla innych użytkowników AO3.
+      check_email: Prosimy, sprawdź swojego maila, w tym folder spam, gdyż zespół
+        Zasad i Nadużyć mógł już się z Tobą skontaktować, aby wyjaśnić, dlaczego Twoja
+        praca została ukryta.
+      contact_abuse: kontakt z Zasadami i Nadużyciami
+      html:
+        help: Jeśli nie masz pewności, dlaczego Twoja praca została ukryta i nie dotarła
+          do Ciebie dalsza korespondencja w tej sprawie, prosimy o bezpośredni %{contact_abuse_link}.
+        hidden: Twoja praca %{title} została ukryta przez zespół Zasad i Nadużyć i
+          nie jest już publicznie dostępna.
+        tos_violation: Jeśli Twoja praca została ukryta z powodu naruszenia %{tos_link}
+          AO3, musisz podjąć kroki, aby skorygować naruszenie. Nieskorygowana niezgodność
+          z Regulaminem Serwisu może doprowadzić do usunięcia Twojej pracy z AO3.
+      subject: "[%{app_name}] Twoja praca została ukryta przez zespół Zasad i Nadużyć."
+      text:
+        help: 'Jeśli nie masz pewności, dlaczego Twoja praca została ukryta i nie
+          dotarła do Ciebie dalsza korespondencja w tej sprawie, prosimy o bezpośredni
+          kontakt z Zasadami i Nadużyciami: %{contact_abuse_url}.'
+        hidden: Twoja praca "%{title}" (%{work_url}) została ukryta przez zespół Zasad
+          i Nadużyć i nie jest już publicznie dostępna.
+        tos_violation: Jeśli Twoja praca została ukryta z powodu naruszenia Regulaminu
+          Serwisu AO3 (%{tos_url}), musisz podjąć kroki, aby skorygować naruszenie.
+          Nieskorygowana niezgodność z Regulaminem Serwisu może doprowadzić do usunięcia
+          Twojej pracy z AO3.
+      tos: Regulaminu Serwisu
     anonymous_or_unrevealed_notification:
       anonymous_info: Prace anonimowe pojawiają się w wynikach wyszukiwania tagów,
-        ale nie na stronie z twoimi pracami. Twoja nazwa użytkownika przy pracy zostanie
+        ale nie na stronie z Twoimi pracami. Twoja nazwa użytkownika przy pracy zostanie
         zastąpiona przez "Anonymous" (Anonimowe).
       anonymous_unrevealed_info: Opiekunowie kolekcji mogą później ujawnić Twoją pracę,
         nadal pozostawiając ją anonimową. Twoi subskrybenci nie zostaną powiadomieni
@@ -129,26 +157,26 @@ pl:
             prosimy przejdź do Twojej %{collection_items_link}, by usunąć ją z tej
             kolekcji.
           text: 'Jeżeli nie chcesz, żeby Twoja praca była anonimowa i nieujawniona,
-            prosimy przejdź do Twojej strony Approved Collection Items (Kolekcji Zatwierdzonych
-            Elementów), by usunąć ją z tej kolekcji: %{collection_items_url}'
+            prosimy przejdź do Twojej strony Approved Collection Items Zatwierdzonych
+            Elementów Kolekcji), by usunąć ją z tej kolekcji: %{collection_items_url}'
         unrevealed:
           html: Jeżeli nie chcesz, aby Twoja praca była nieujawniona, prosimy o odwiedzenie
             Twojej %{collection_items_link} w celu usunięcia pracy z kolekcji.
           text: 'Jeżeli nie chcesz, żeby Twoja praca była nieujawniona, prosimy przejdź
-            do Twojej strony Approved Collection Items (Kolekcji Zatwierdzonych Elementów),
+            do Twojej strony Approved Collection Items (Zatwierdzonych Elementów Kolekcji),
             by usunąć ją z tej kolekcji: %{collection_items_url}'
-      faq_link_text: 'FAQ Kolekcji '
+      faq_link_text: FAQ Kolekcji
       more_info:
-        html: Aby uzyskać więcej informacji, odwiedź nasze FAQ %{faq_link}.
+        html: Aby uzyskać więcej informacji, odwiedź nasze %{faq_link}.
         text: 'Aby uzyskać więcej informacji, odwiedź nasze FAQ Kolekcji: %{faq_url}'
       subject:
         anonymous: "[%{app_name}] Twoja praca stała się anonimową"
         anonymous_unrevealed: "[%{app_name}] Twoja praca stała się anonimową i nieujawnioną"
         unrevealed: "[%{app_name}] Twoja praca stała się nieujawnioną"
-      unrevealed_info: Nieujawnione prace nie pojawiają się w wynikach tagów ani na
-        stronie Twoich prac. Każdy, kto wejdzie w link do pracy, otrzyma wiadomość,
-        że praca jest aktualnie nieujawniona, i nie będzie w stanie uzyskać dostępu
-        do jej treści.
+      unrevealed_info: Nieujawnione prace nie pojawiają się w wynikach wyszukiwania
+        tagów ani na stronie Twoich prac. Każdy, kto wejdzie w link do pracy, otrzyma
+        wiadomość, że praca jest aktualnie nieujawniona, i nie będzie w stanie uzyskać
+        dostępu do jej treści.
     challenge_assignment_notification:
       any: Pełna dowolność
       description: 'Opis:'
@@ -156,10 +184,10 @@ pl:
       html:
         footer: Otrzymałaś/eś ten e-mail ponieważ zapisałaś/eś się do wyzwania %{title}.
           Aby dowiedzieć się więcej na temat tego wyzwania i by móc skontaktować się
-          z moderatorami, proszę przejdź do  %{footer_link}.
+          z moderatorami, proszę przejdź do %{footer_link}.
         footer_link: strony profilowej wyzwania
         look_up: Możesz sprawdzić swoje zadanie na %{link}.
-        look_up_link: twojej stronie Assignments (Zadań)
+        look_up_link: Twojej stronie Assignments (Zadań)
         part1: Przypisane zostało Ci następujące zadanie w wyzwaniu %{link} na Naszym
           Własnym Archiwum!
       optional_tags: 'Opcjonalne Tagi:'
@@ -170,63 +198,73 @@ pl:
       subject: "[%{app_name}][%{collection_title}] Twoje Zadanie!"
       text:
         assignment: Przypisane zostało Ci następujące zadanie w wyzwaniu "%{collection_title}"
-          (%{collection_url})  na Naszym Własnym Archiwum!
+          (%{collection_url}) na Naszym Własnym Archiwum!
         footer: Otrzymałaś/eś ten e-mail ponieważ zapisałaś/eś się do wyzwania %{title}
           (%{url}). Aby dowiedzieć się więcej na temat tego wyzwania i by móc skontaktować
           się z moderatorami, proszę przejdź do %{profile_url}.
-        look_up: Możesz sprawdzić to zadanie na twojej stronie Assignments (Zadań)
+        look_up: Możesz sprawdzić to zadanie na Twojej stronie Assignments (Zadań)
           na %{link}.
     change_email:
       part1: "%{login}, adres email powiązany z Twoim kontem został zmieniony na %{email}"
       subject: "[%{app_name}] Email został zmieniony"
+    collection_notification:
+      assignments_sent:
+        complete: Wszystkie zadania zostały wysłane.
+        subject: Wysłane zadania
+      html:
+        received_message: 'Masz nową wiadomość dotyczącą Twojej kolekcji %{collection_link}:'
+      text:
+        received_message: 'Masz nową wiadomość dotyczącą Twojej kolekcji "%{collection_title}"
+          (%{collection_url}):'
     creatorship_notification:
       explanation: Gdy jesteś współtwórcą pracy, możesz zostać dodana/y do nowych
         rozdziałów bez względu na Twoje ustawienia współtworzenia. Będziesz również
-        dodana/y do wszelkich serii, do których dodana jest praca
+        dodana/y do wszelkich serii, do których należy praca.
       html:
         creation: "%{creation_link} autorstwa %{pseud_links}"
-        edit: edytuj %{type}
-        remove: Jeśli dodano cię przez pomyłkę, lub nie chcesz widnieć jako współtwórca,
-          możesz %{edit} by usunąć siebie jako twórcę.
-      intro: 'Użytkownik %{adding_user} dodał twój pseudonim %{pseud} jako współtwórcę
-        następującej zawartości (%{type}):
-
-        '
+        edit_chapter: edytować rozdział
+        edit_series: edytować serię
+        remove_chapter: Jeśli dodano cię przez pomyłkę lub nie chcesz widnieć jako
+          współtwórca, możesz %{edit_chapter_link}, by usunąć siebie jako twórcę.
+        remove_series: Jeśli dodano cię przez pomyłkę lub nie chcesz widnieć jako
+          współtwórca, możesz %{edit_series_link}, by usunąć siebie jako twórcę.
+      intro_chapter: 'Użytkownik %{adding_user} dodał Twój pseudonim %{pseud} jako
+        współtwórcę następującego rozdziału:'
+      intro_series: 'Użytkownik %{adding_user} dodał Twój pseudonim %{pseud} jako
+        współtwórcę następującej serii:'
       subject: "[%{app_name}] Powiadomienie o Współautorstwie"
       text:
         creation: "%{title} (%{url}) autorstwa %{pseuds}"
-        remove: 'Jeśli dodano Cię przez pomyłkę, lub nie chcesz widnieć jako współtwórca,
-          możesz edytować %{type} by usunąć siebie jako twórcę: %{url}'
+        remove_chapter: 'Jeśli dodano Cię przez pomyłkę lub nie chcesz widnieć jako
+          współtwórca, możesz edytować rozdział, by usunąć siebie jako twórcę: %{url}'
+        remove_series: 'Jeśli dodano Cię przez pomyłkę lub nie chcesz widnieć jako
+          współtwórca, możesz edytować serię, by usunąć siebie jako twórcę: %{url}'
     creatorship_notification_archivist:
       explanation: Ponieważ działa w zakresie swoich oficjalnych uprawnień archiwisty
         Drzwi Otwartych, może dodać Cię bez zaproszenia, nawet jeśli masz wyłączone
         współtworzenie.
       html:
         creation: "%{creation_link} autorstwa %{pseud_links}"
-        edit: edytować zawartość (%{type})
-        remove: Jeśli zostałaś/eś dodana/y przez przypadek lub nie chcesz być wymieniona/y
-          jako twórca, możesz %{edit} aby usunąć siebie jako twórcę.
-      intro: 'Użytkownik %{archivist} dodał Twój pseudonim %{pseud} jako współtwórcę
-        poniższej zawartości (%{type}):'
       subject: "[%{app_name}] Powiadomienie od archiwisty o współtworzeniu"
       text:
         creation: "%{title} (%{url}) autorstwa %{pseuds}"
-        remove: 'Jeśli zostałaś/eś dodana/y przez przypadek lub nie chcesz być wymieniona/y
-          jako twórca, możesz edytować tą zawartość (%{type}) aby usunąć siebie jako
-          twórcę: %{url}'
     creatorship_request:
       html:
         creation: "%{creation_link} autorstwa %{pseud_links}"
         instructions: Możesz zaakceptować lub odrzucić tę propozycję na Twojej stronie
           %{page_name}.
-        page_name: Co-Creator Requests (Propozycji współtworzenia)
-      intro: "%{inviting_user} proponuje, aby Twój pseudonim %{pseud} był wymieniony
-        jako współtworzący następującą treść (%{type}):"
+        page_name: Co-Creator Requests (Propozycji Współtworzenia)
+      intro_chapter: 'Użytkownik %{inviting_user} zaprasza Twój pseudonim %{pseud}
+        do dołączenia do listy współtwórców poniższego rozdziału:'
+      intro_series: 'Użytkownik %{inviting_user} zaprasza Twój pseudonim %{pseud}
+        do dołączenia do listy współtwórców poniższej serii:'
+      intro_work: 'Użytkownik %{inviting_user} zaprasza Twój pseudonim %{pseud} do
+        dołączenia do listy współtwórców poniższej pracy:'
       subject: "[%{app_name}] Propozycja współtworzenia"
       text:
         creation: "%{title} (%{url}) autorstwa %{pseuds}"
         instructions: 'Możesz zaakceptować lub odrzucić tę propozycję na Twojej stronie
-          Co-Creator Requests (Propozycji współtworzenia): %{url}'
+          Co-Creator Requests (Propozycji Współtworzenia): %{url}'
     delete_work_notification:
       html:
         part1_other: Wasza wspólna praca %{title} została usunięta na wniosek %{pseud}.
@@ -246,41 +284,7 @@ pl:
         contact_support: skontaktuj się ze Wsparciem AO3
         faq_page: stronie FAQ
         open_doors: Drzwi Otwarte
-        part1: Otrzymałaś/eś tego e-maila, ponieważ %{open_doors_link} niedawno  dokonały
-          importu archiwum do %{app_link} (%{app_short_name}), i wierzymy, że poniższe
-          prace należą do Ciebie. Chcielibyśmy dać Ci szansę przejęcia (lub usunięcia/osierocenia)
-          tych prac, jeśli sobie tego zażyczysz. A jeśli nie posiadasz jeszcze konta
-          pod innym adresem e-mail, chcielibyśmy zaprosić Cię na pokład!
-        part10: Jeśli na zaimportowanym archiwum posiadasz inne prace, przypisane
-          do adresu e-mail, do którego nie masz już dostępu, prosimy o %{open_doors_link}
-          i podanie jakichkolwiek informacji, mogących pomóc w potwierdzeniu Twoich
-          roszczeń.
-        part11: W razie dalszych wątpliwości, prosimy %{support_link}.
-        part2: Ogłoszenia o ostatnich działaniach możesz przeczytać w %{news_link},
-          a więcej informacji znajdziesz na %{open_doors_faq_link} oraz %{open_doors_tutorial_link}
-          Drzwi Otwartych. W razie pytań, na które nie znalazłaś/eś odpowiedzi w FAQ,
-          samouczku ani tym e-mailu, prosimy %{support_link}.
-        part3: Jeśli nastąpiła pomyłka i poniższe prace nie należą do Ciebie, nie
-          usuwaj ich! Prosimy o %{open_doors_link}, a my wszystko uporządkujemy.
-        part4: W zależności od archiwum, Twoje prace mogły zostać zaimportowane z
-          ograniczeniem dostępności wyłącznie do zarejestrowanych użytkowników (aby
-          utrzymać je poza zasięgiem wyszukiwania w Google). W takim wypadku prace
-          będą osiągalne tylko dla zalogowanych użytkowników, o ile nie zdecydujesz
-          się uczynić je ogólnodostępnymi. Aby uzyskać pomoc w odblokowaniu, osieroceniu
-          bądź usunięciu Twoich prac, prosimy %{support_link}.
         part5: Tutaj przejmij lub usuń swoje prace.
-        part7: Jeśli powyższe prace należą do Ciebie, ale nie chcesz ich przejąć,
-          możesz je osierocić (wówczas pozostaną one dostępne na AO3, lecz Twój pseudonim
-          zostania z nich usunięty) lub skasować (by zostały całkowicie usunięte z
-          AO3). Aby usunąć lub osierocić prace nie musisz dodawać ich do żadnego konta
-          - możesz zrobić to bezpośrednio z powyższego linku do przejęcia. (Żeby uzyskać
-          wsparcie, prosimy %{support_link}.)
-        part9: Jeśli wolisz, żeby Drzwi Otwarte zaktualizowały link przekierowujący
-          tak, aby prowadził do już istniejącej pracy, prosimy o usunięcie zaimportowanej
-          kopii i %{open_doors_link}, podając nazwę swojego konta AO3, nazwę konta
-          na importowanym archiwum, oraz tytuł i URL pracy, do której ma prowadzić
-          link. (Jeśli dotyczy to kilku prac, możesz wyliczyć je wszystkie w jednej
-          wiadomości).
         tutorial_page: stronie samouczka
       part12: W razie kontaktowania się z nami, prosimy o dodanie adresów mailowych
         zawierających @transformativeworks.org do listy zaufanych nadawców oraz o
@@ -344,14 +348,18 @@ pl:
       subject: "[%{app_name}] Nowe zaproszenia"
     invite_request_declined:
       main:
-        few: Z przykrością informujemy, że Twoja prośba o  %{count} nowe zaproszenia
+        few: Z przykrością informujemy, że Twoja prośba o %{count} nowe zaproszenia
           w chwili obecnej nie może zostać zrealizowana.
-        many: Z przykrością informujemy, że Twoja prośba o  %{count} nowych zaproszeń
+        many: Z przykrością informujemy, że Twoja prośba o %{count} nowych zaproszeń
           w chwili obecnej nie może zostać zrealizowana.
         one: Z przykrością informujemy, że Twoja prośba o nowe zaproszenie w chwili
           obecnej nie może zostać zrealizowana.
       reason: 'Treść Twojej prośby:'
       subject: "[%{app_name}] Prośba o dodatkowe zaproszenia została odrzucona"
+    recipient_notification:
+      subject:
+        collection: "[%{app_name}][%{collection_title}] Obdarowano Cię pracą w %{collection_title}"
+        no_collection: "[%{app_name}] Obdarowano Cię pracą"
     signup_notification:
       activate_your_account: aktywuj swoje konto
       admin_posts: archiwalnych postach adminów
@@ -370,7 +378,6 @@ pl:
           %{admin_posts_link}. Jeśli potrzebujesz pomocy, natkniesz się na bugi lub
           masz inne pytania lub komentarze, prosimy  %{contact_support_link}, który
           jest zawsze chętny do pomocy.
-      subject: "[%{app_name}] Potwierdzenie"
       text:
         part1: 'Prosimy o aktywację konta: %{activate_account_url}'
         part2: Kiedy twoje konto będzie już działać, możesz publikować swoje prace,

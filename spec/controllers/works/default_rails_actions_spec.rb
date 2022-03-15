@@ -508,6 +508,86 @@ describe WorksController, work_search: true do
       expect(update_work.pseuds.reload).not_to include(no_co_creator.default_pseud)
       expect(update_work.user_has_creator_invite?(no_co_creator)).to be_falsey
     end
+
+    context "when the work has broken dates" do
+      let(:update_work) { create(:work, authors: [update_user.default_pseud]) }
+      let(:update_chapter) { update_work.first_chapter }
+
+      let(:attributes) do
+        {
+          backdate: "1",
+          chapter_attributes: {
+            published_at: "2021-09-01"
+          }
+        }
+      end
+
+      before do
+        # Work where chapter published_at did not override revised_at, times
+        # taken from AO3-5392
+        update_work.update_column(:revised_at, Time.new(2018, 4, 22, 23, 51, 42, "+04:00"))
+        update_chapter.update_column(:published_at, Date.new(2015, 7, 23))
+      end
+
+      it "can be backdated" do
+        put :update, params: { id: update_work.id, work: attributes }
+
+        expect(update_chapter.reload.published_at).to eq(Date.new(2021, 9, 1))
+        expect(update_work.reload.revised_at).to eq(Time.utc(2021, 9, 1, 12)) # noon UTC
+      end
+    end
+
+    # If the time zone in config/application.rb is changed to something other
+    # than the default (UTC), these tests will need adjusting:
+    context "when redating to the present" do
+      let!(:update_work) do
+        # November 30, 2 PM UTC -- no time zone oddities here
+        travel_to(Time.utc(2021, 11, 30, 14)) do
+          create(:work, authors: [update_user.default_pseud])
+        end
+      end
+
+      let(:attributes) do
+        {
+          backdate: "1",
+          chapter_attributes: {
+            published_at: "2021-12-05"
+          }
+        }
+      end
+
+      before do
+        travel_to(redate_time)
+
+        # Simulate the system time being UTC:
+        allow(Time).to receive(:now).and_return(redate_time)
+        allow(DateTime).to receive(:now).and_return(redate_time)
+        allow(Date).to receive(:today).and_return(redate_time.to_date)
+
+        put :update, params: { id: update_work.id, work: attributes }
+      end
+
+      context "before midnight UTC and after midnight Samara" do
+        # December 5, 3 AM Europe/Samara (UTC+04:00) -- still December 4 in UTC
+        let(:redate_time) { Time.new(2021, 12, 5, 3, 0, 0, "+04:00") }
+
+        it "prevents setting the publication date to the future" do
+          expect(response).to render_template :edit
+          expect(assigns[:work].errors.full_messages).to \
+            include("Publication date can't be in the future.")
+        end
+      end
+
+      context "before noon UTC" do
+        # December 5, 6 AM Europe/Samara -- before noon, but after midnight in both time zones
+        let(:redate_time) { Time.new(2021, 12, 5, 6, 0, 0, "+04:00") }
+
+        it "doesn't set revised_at to the future" do
+          update_work.reload
+          expect(update_work.revised_at).to be <= Time.current
+        end
+      end
+    end
   end
 
   describe "collected" do

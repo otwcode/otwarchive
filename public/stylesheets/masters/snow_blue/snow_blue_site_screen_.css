@@ -51,7 +51,6 @@ input.LV_invalid_field:active,
 textarea.LV_invalid_field:hover,
 textarea.LV_invalid_field:active,
 #header .primary a,
-#header .primary .current,
 #header .primary input,
 #header .search input {
   border-color: #347391 !important;

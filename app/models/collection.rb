@@ -54,13 +54,13 @@ class Collection < ApplicationRecord
 
   has_many :collection_items, dependent: :destroy
   accepts_nested_attributes_for :collection_items, allow_destroy: true
-  has_many :approved_collection_items, -> { where('collection_items.user_approval_status = ? AND collection_items.collection_approval_status = ?', CollectionItem::APPROVED, CollectionItem::APPROVED) }, class_name: "CollectionItem"
+  has_many :approved_collection_items, -> { approved_by_both }, class_name: "CollectionItem"
 
   has_many :works, through: :collection_items, source: :item, source_type: 'Work'
-  has_many :approved_works, -> { where('collection_items.user_approval_status = ? AND collection_items.collection_approval_status = ? AND works.posted = true', CollectionItem::APPROVED, CollectionItem::APPROVED) }, through: :collection_items, source: :item, source_type: 'Work'
+  has_many :approved_works, -> { posted }, through: :approved_collection_items, source: :item, source_type: "Work"
 
   has_many :bookmarks, through: :collection_items, source: :item, source_type: 'Bookmark'
-  has_many :approved_bookmarks, -> { where('collection_items.user_approval_status = ? AND collection_items.collection_approval_status = ?', CollectionItem::APPROVED, CollectionItem::APPROVED) }, through: :collection_items, source: :item, source_type: 'Bookmark'
+  has_many :approved_bookmarks, through: :approved_collection_items, source: :item, source_type: "Bookmark"
 
   has_many :collection_participants, dependent: :destroy
   accepts_nested_attributes_for :collection_participants, allow_destroy: true
@@ -246,7 +246,7 @@ class Collection < ApplicationRecord
   end
 
   def autocomplete_score
-    all_approved_works_count + all_approved_bookmarks_count
+    all_items.approved_by_collection.approved_by_user.count
   end
   ## END AUTOCOMPLETE
 
@@ -282,68 +282,6 @@ class Collection < ApplicationRecord
 
   def all_items
     CollectionItem.where(collection_id: ([self.id] + self.children.pluck(:id)))
-  end
-
-  def all_approved_works
-    work_ids = all_items.where(item_type: "Work", user_approval_status: CollectionItem::APPROVED,
-      collection_approval_status: CollectionItem::APPROVED).pluck(:item_id)
-    Work.where(id: work_ids, posted: true)
-  end
-
-  def all_approved_works_count
-    if !User.current_user.nil?
-      count = self.approved_works.count
-      self.children.each {|child| count += child.approved_works.count}
-      count
-    else
-      count = self.approved_works.where(restricted: false).count
-      self.children.each {|child| count += child.approved_works.where(restricted: false).count}
-      count
-    end
-  end
-
-  def all_approved_bookmarks
-    (self.approved_bookmarks + (self.children ? self.children.collect(&:approved_bookmarks).flatten : [])).uniq
-  end
-
-  def all_approved_bookmarks_count
-    count = self.approved_bookmarks.where(private: false).count
-    self.children.each {|child| count += child.approved_bookmarks.where(private: false).count}
-    count
-  end
-
-  # Return the count of all bookmarkable items (works, series, external works)
-  # that are in this collection (or any of its children) and visible to
-  # the current user. Excludes bookmarks of deleted works/series.
-  def all_bookmarked_items_count
-    # The set of all bookmarks in this collection and its children.
-    # Note that "approved_by_collection" forces the bookmarks to be approved
-    # both by the collection AND by the user.
-    bookmarks = Bookmark.is_public.joins(:collection_items).
-                merge(CollectionItem.approved_by_collection).
-                where(collection_items: { collection_id: children.ids + [id] })
-
-    logged_in = User.current_user.present?
-
-    [
-      logged_in ? Work.visible_to_registered_user : Work.visible_to_all,
-      logged_in ? Series.visible_to_registered_user : Series.visible_to_all,
-      ExternalWork.visible_to_all
-    ].map do |relation|
-      relation.joins(:bookmarks).merge(bookmarks).distinct.
-        count("bookmarks.bookmarkable_id")
-    end.sum
-  end
-
-  def all_fandoms
-    # We want filterable fandoms, but not inherited metatags:
-    Fandom.for_collections([self] + children).
-      where('filter_taggings.inherited = 0').distinct
-  end
-
-  def all_fandoms_count
-    # Rails now handles .uniq.count correctly, so we can make this simpler:
-    all_fandoms.count
   end
 
   def maintainers
@@ -398,10 +336,6 @@ class Collection < ApplicationRecord
   end
   def prompt_meme?
     return self.challenge_type == "PromptMeme"
-  end
-
-  def not_empty?
-    self.all_approved_works.count > 0 || self.children.count > 0 || self.all_approved_bookmarks.count > 0
   end
 
   def get_maintainers_email

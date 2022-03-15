@@ -66,12 +66,12 @@ module UsersHelper
   def bookmarks_link(user, pseud = nil)
     return pseud_bookmarks_link(pseud) if pseud.present? && !pseud.new_record?
 
-    total = BookmarkSearchForm.count_for_user(user)
+    total = SearchCounts.bookmark_count_for_user(user)
     span_if_current ts('Bookmarks (%{bookmark_number})', bookmark_number: total.to_s), user_bookmarks_path(@user)
   end
 
   def pseud_bookmarks_link(pseud)
-    total = BookmarkSearchForm.count_for_pseud(pseud)
+    total = SearchCounts.bookmark_count_for_pseud(pseud)
     span_if_current ts('Bookmarks (%{bookmark_number})', bookmark_number: total.to_s), user_pseud_bookmarks_path(@user, pseud)
   end
 
@@ -80,12 +80,12 @@ module UsersHelper
   def works_link(user, pseud = nil)
     return pseud_works_link(pseud) if pseud.present? && !pseud.new_record?
 
-    total = WorkSearchForm.count_for_user(user)
+    total = SearchCounts.work_count_for_user(user)
     span_if_current ts('Works (%{works_number})', works_number: total.to_s), user_works_path(@user)
   end
 
   def pseud_works_link(pseud)
-    total = WorkSearchForm.count_for_pseud(pseud)
+    total = SearchCounts.work_count_for_pseud(pseud)
     span_if_current ts('Works (%{works_number})', works_number: total.to_s), user_pseud_works_path(@user, pseud)
   end
 

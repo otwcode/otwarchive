@@ -45,7 +45,7 @@ class ExternalWorksController < ApplicationController
   def update
     @external_work = ExternalWork.find(params[:id])
     @external_work.attributes = work_params
-    if @external_work.update_attributes(external_work_params)
+    if @external_work.update(external_work_params)
       flash[:notice] = t('successfully_updated', default: 'External work was successfully updated.')
       redirect_to(@external_work)
     else

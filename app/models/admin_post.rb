@@ -59,7 +59,7 @@ class AdminPost < ApplicationRecord
   end
 
   def tag_list=(list)
-    return if translated_post.present?
+    return if translated_post_id.present?
 
     self.tags = list.split(",").uniq.collect { |t|
       AdminPostTag.fetch(name: t.strip, language_id: self.language_id, post: self)

@@ -42,7 +42,7 @@ class WranglingGuidelinesController < ApplicationController
   def update
     @wrangling_guideline = WranglingGuideline.find(params[:id])
 
-    if @wrangling_guideline.update_attributes(wrangling_guideline_params)
+    if @wrangling_guideline.update(wrangling_guideline_params)
       flash[:notice] = ts('Wrangling Guideline was successfully updated.')
       redirect_to(@wrangling_guideline)
     else
