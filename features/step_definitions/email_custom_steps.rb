@@ -42,7 +42,7 @@ end
 Then /^the email should say what time it was sent$/ do
   # Rails default: https://github.com/rails/rails/blob/v7.0.2.3/activesupport/lib/active_support/locale/en.yml#L25
   # But truncated to the day so the test don't need to run under a second to pass
-  nowish = Time.now.strftime('%a, %d %b %Y')
+  nowish = Time.now.utc.strftime('%a, %d %b %Y')
   step %{the email should contain "Sent at #{nowish}"}
   step %{the email should not contain "sent_at"}
 end
