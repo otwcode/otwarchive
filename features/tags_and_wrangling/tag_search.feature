@@ -169,7 +169,7 @@ Feature: Search Tags
       And I should see the tag search result "Fandom: Not Canon Fandom (0)"
       And I should see the tag search result "Character: Canon Character (0)"
 
-  Scenario: Search and sort by Date Created
+  Scenario: Search and sort by Date Created in descending and ascending order
     Given I have no tags
       And a freeform exists with name: "created first", created_at: "2008-01-01 20:00:00 Z"
       And a freeform exists with name: "created second", created_at: "2009-01-01 20:00:00 Z"
@@ -185,8 +185,15 @@ Feature: Search Tags
       And the 2nd tag result should contain "created third"
       And the 3rd tag result should contain "created second"
       And the 4th tag result should contain "created first"
+    When I select "Ascending" from "Sort direction"
+      And I press "Search Tags"
+    Then I should see "4 Found"
+      And the 1st tag result should contain "created first"
+      And the 2nd tag result should contain "created second"
+      And the 3rd tag result should contain "created third"
+      And the 4th tag result should contain "created fourth"
 
-  Scenario: Search and sort by Uses
+  Scenario: Search and sort by Uses in descending and ascending order
     Given I have no tags
       And a set of works for tag sort by use exists
       And all indexing jobs have been run
@@ -201,6 +208,15 @@ Feature: Search Tags
       And the 4th tag result should contain "5 uses"
       And the 5th tag result should contain "2 uses"
       And the 6th tag result should contain "0 uses"
+    When I select "Ascending" from "Sort direction"
+      And I press "Search Tags"
+    Then I should see "6 Found"
+      And the 1st tag result should contain "0 uses"
+      And the 2nd tag result should contain "2 uses"
+      And the 3rd tag result should contain "5 uses"
+      And the 4th tag result should contain "8 uses"
+      And the 5th tag result should contain "8 uses"
+      And the 6th tag result should contain "10 uses"
 
       # If this was a bug, it's fixed now?
       # When I am on the search tags page
