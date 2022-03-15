@@ -72,7 +72,7 @@ class CollectionParticipantsController < ApplicationController
   end
 
   def update
-    if @participant.update_attributes(collection_participant_params)
+    if @participant.update(collection_participant_params)
       flash[:notice] = t('collection_participants.update_success', default: "Updated %{participant}.", participant: @participant.pseud.name)
     else
       flash[:error] = t('collection_participants.update_failure', default: "Couldn't update %{participant}.", participant: @participant.pseud.name)

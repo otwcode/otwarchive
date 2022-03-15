@@ -24,11 +24,11 @@ fi:
         informal:
           addressed: Hei, %{name}!
           unaddressed: Hei!
-        introductory: Tervehdys Archive of Our Own – AO3:lta (Oma arkisto)!
+        introductory: Tervehdys Archive of Our Own – AO3:lta (Oma arkisto)!
       signature:
         app_short_name: AO3
         open_doors: Open Doors (Avoimet ovet) -tiimi
-        parent_org: Organization for Transformative Works – OTW (Transformatiivisten
+        parent_org: Organization for Transformative Works – OTW (Transformatiivisten
           teosten järjestö)
         support: AO3 Käyttäjätukitiimi
     kudos:
@@ -37,7 +37,7 @@ fi:
         other: "%{count} vierasta"
       html:
         left_kudos:
-          one: "%{givers_list} kehui teosta  %{commentable_link}."
+          one: "%{givers_list} kehui teosta %{commentable_link}."
           other: "%{givers_list} kehuivat teosta %{commentable_link}."
       text:
         left_kudos:
@@ -123,22 +123,22 @@ fi:
           text: Kokoelman "%{collection_title}" (%{collection_url}) ylläpitäjät ovat
             muuttaneet teoksesi "%{work_title}" (%{work_url}) tilan anonyymiksi.
         anonymous_unrevealed:
-          html: Kokoelman  %{collection_link} ylläpitäjät ovat muuttaneet teoksesi
+          html: Kokoelman %{collection_link} ylläpitäjät ovat muuttaneet teoksesi
             %{work_link} tilan anonyymiksi ja paljastamattomaksi.
           text: Kokoelman "%{collection_title}" (%{collection_url}) ylläpitäjät ovat
             muuttaneet teoksesi "%{work_title}" (%{work_url}) tilan anonyymiksi ja
             paljastamattomaksi.
         unrevealed:
-          html: 'Kokoelman %{collection_link} ylläpitäjät ovat muuttaneet teoksesi
-            %{work_link} tilan paljastattomaksi. '
+          html: Kokoelman %{collection_link} ylläpitäjät ovat muuttaneet teoksesi
+            %{work_link} tilan paljastattomaksi.
           text: Kokoelman "%{collection_title}" (%{collection_url}) ylläpitäjät ovat
             muuttaneet teoksesi "%{work_title}" (%{work_url}) tilan paljastamattomaksi.
       collection_items_link_text: Approved Collection Items (Hyväksytyt kokoelmateokset)
         -sivullasi
       do_not_want:
         anonymous:
-          html: "Jos et halua teoksesi olevan paljastamaton, käy \n%{collection_items_link}
-            poistaaksesi sen tästä kokoelmasta."
+          html: Jos et halua teoksesi olevan anonyymi, käy %{collection_items_link}
+            poistaaksesi sen tästä kokoelmasta.
           text: 'Jos et halua teoksesi olevan anonyymi, käy Approved Collection Items
             (Hyväksytyt kokoelmateokset) -sivullasi poistaaksesi sen tästä kokoelmasta:
             %{collection_items_url}'
@@ -149,8 +149,8 @@ fi:
             Collection Items (Hyväksytyt kokoelmateokset) -sivullasi poistaaksesi
             sen tästä kokoelmasta: %{collection_items_url}'
         unrevealed:
-          html: "Jos et halua teoksesi olevan paljastamaton, käy \n%{collection_items_link}
-            poistaaksesi sen tästä kokoelmasta."
+          html: Jos et halua teoksesi olevan paljastamaton, käy %{collection_items_link}
+            poistaaksesi sen tästä kokoelmasta.
           text: 'Jos et halua teoksesi olevan paljastamaton, käy Approved Collection
             Items (Hyväksytyt kokoelmateokset) -sivullasi poistaaksesi sen tästä kokoelmasta:
             %{collection_items_url}'
@@ -162,9 +162,9 @@ fi:
         anonymous: "[%{app_name}] Teoksestasi on tehty anonyymi"
         anonymous_unrevealed: "[%{app_name}] Teoksestasi tehtiin anonyymi ja paljastamaton"
         unrevealed: "[%{app_name}] Teoksesi tehtiin paljastamattomaksi"
-      unrevealed_info: 'Paljastamattomat teokset eivät näy avainsanalistauksissa tai
+      unrevealed_info: Paljastamattomat teokset eivät näy avainsanalistauksissa tai
         teossivullasi. Kaikki, jotka pääsevät teokseen linkin kautta, saavat ilmoituksen,
-        että se on toistaiseksi paljastamaton eivätkä pääse käsiksi sen sisältöön. '
+        että se on toistaiseksi paljastamaton eivätkä pääse käsiksi sen sisältöön.
     challenge_assignment_notification:
       any: Milloin tahansa
       description: 'Kuvaus:'
@@ -209,40 +209,29 @@ fi:
         joihin teos lisätään.
       html:
         creation: "%{creation_link}, tekijä(t) %{pseud_links}"
-        edit: muokata teosta
-        remove: Jos sinut on lisätty virheellisesti tai et halua, että sinut ilmoitetaan
-          tekijäksi, voit  %{edit} poistaaksesi itsesi tekijöistä.
-      intro: 'Käyttäjä %{adding_user} on ilmoittanut nimimerkkisi %{pseud} kanssatekijäksi
-        seuraavaan teokseen:'
       subject: "[%{app_name}] Ilmoitus kanssatekijäksi lisäämisestä"
       text:
         creation: "%{title} (%{url}), tekijä(t) %{pseuds}"
-        remove: 'Jos sinut on lisätty virheellisesti tai et halua, että sinut ilmoitetaan
-          tekijäksi, voit muokata teosta poistaaksesi itsesi tekijöistä: %{url}'
     creatorship_notification_archivist:
       explanation: Koska hän teki näin virallisessa Open Doors -arkistonhoitajan roolissaan,
         hän pystyi lisäämään sinut ilman kutsua, vaikka sinulla olisi toiseksi tekijäksi
         lisääminen poissa käytöstä.
       html:
         creation: "%{pseud_links}: %{creation_link}"
-        edit: "%{type} on muokattavissa"
-        remove: Jos haluat poistaa itsesi tekijöistä, koska sinut on lisätty tekijäksi
-          virheellisesti  tai et halua olla nimettynä tekijänä, %{edit} linkin kautta.
-      intro: 'Käyttäjä %{archivist} on lisännyt nimimerkkisi %{pseud} toiseksi tekijäksi
-        seuraavaan:'
       subject: "[%{app_name}] Arkistonhoitajan ilmoitus toiseksi tekijäksi lisäämisestä"
       text:
         creation: "%{pseuds}: %{title} (%{url})"
-        remove: 'Jos haluat poistaa itsesi tekijöistä, koska sinut on lisätty tekijäksi
-          virheellisesti tai et halua olla nimettynä tekijänä, %{type} on muokattavissa
-          linkin kautta: %{url}'
     creatorship_request:
       html:
         creation: "%{creation_link} tekijältä %{pseud_links}"
         instructions: Voit hyväksyä tai hylätä kutsun %{page_name} -sivullasi.
         page_name: Co-Creator Requests (Pyynnöt kanssatekijäksi)
-      intro: 'Käyttäjä %{inviting_user} on pyytänyt käyttäjänimesi %{pseud} lisäämistä
-        kanssatekijäksi seuraavaan %{type}:'
+      intro_chapter: 'Käyttäjä %{inviting_user} on kutsunut nimimerkkisi %{pseud}
+        listattavaksi seuraavan luvun kanssatekijäksi:'
+      intro_series: 'Käyttäjä %{inviting_user} on kutsunut nimimerkkisi %{pseud} listattavaksi
+        seuraavan sarjan kanssatekijäksi:'
+      intro_work: 'Käyttäjä %{inviting_user} on kutsunut nimimerkkisi %{pseud} listattavaksi
+        seuraavan teoksen kanssatekijäksi:'
       subject: "[%{app_name}] Kutsu kanssatekijäksi"
       text:
         creation: "%{title} (%{url}) tekijältä %{pseuds}"
@@ -252,7 +241,7 @@ fi:
       html:
         part1_other: teoksesi %{title} on poistettu nimimerkin %{pseud} pyynnöstä.
         part1_yourself: teoksesi %{title} on poistettu pyynnöstäsi.
-        part2: Jos sinulla on kysyttävää, ole hyvä ja  %{support}.
+        part2: Jos sinulla on kysyttävää, ole hyvä ja %{support}.
       part3: Kopio teoksesta on liitetty viestiin sinua varten.
       subject: "[%{app_name}] Teoksesi on poistettu"
       support: ota yhteyttä Käyttäjätukeen
@@ -267,39 +256,7 @@ fi:
         contact_support: ota yhteyttä AO3 käyttäjätukeen
         faq_page: UKK-sivu
         open_doors: Open Doors (Avoimet ovet)
-        part1: Saat tämän sähköpostin, koska %{open_doors_link} on tuonut AO3:een
-          teoksia ulkoisesta arkistosta %{app_link} (%{app_short_name}) ja uskomme
-          seuraavien faniteosten kuuluvan sinulle. Haluamme antaa sinulle mahdollisuuden
-          ilmoittaa, että teokset kuuluvat sinulle (tai poistaa tai hylätä ne). Jos
-          sinulla ei vielä ole tunnusta toisella sähköpostiosoitteella, haluamme myös
-          kutsua sinut mukaan!
-        part10: Jos sinulla oli tuodussa arkistossa muita teoksia, jotka on liitetty
-          sähköpostiosoitteeseen, johon sinulla ei enää ole pääsyä, ole hyvä ja %{open_doors_link}
-          mahdollisten todisteiden kanssa.
-        part11: Jos sinulla on muuta kysyttävää, ole hyvä ja %{support_link}.
-        part2: Voit lukea viimeaikaisista arkistosiirroista sivulta %{news_link} ja
-          löytää enemmän tietoa Open Doorsin %{open_doors_faq_link} tai %{open_doors_tutorial_link}.
-          Jos sinulla on kysymyksiä, joihin et löydä vastauksia UKK:sta, tutoriaaleista
-          tai tästä sähköpostista, ole hyvä ja %{support_link}.
-        part3: Jos olemme tehneet virheen eivätkä nämä ole sinun teoksiasi, ole hyvä
-          äläkä poista niitä! %{open_doors_link}, niin selvitämme asian.
-        part4: Joistakin arkistoista tuodut teokset on voitu asettaa vain rekisteröityneiden
-          käyttäjien saataville (jotta ne eivät näy Google-hauissa). Siinä tapauksessa
-          vain sisäänkirjautuneet käyttäjät pääsevät niihin, ellet itse aseta niitä
-          täysin avoimiksi. Jos haluat apua teostesi avaamiseen, hylkäämiseen tai
-          poistamiseen, ole hyvä ja %{support_link}.
         part5: Ilmoita omistajuudesta tai poista teoksesi.
-        part7: Jos nämä teokset kuuluvat sinulle, mutta et halua niitä, voit hylätä
-          (jolloin ne jäävät AO3:een, mutta nimeäsi ei ilmoiteta niiden yhteydessä)
-          tai poistaa (jolloin ne katoavat kokonaan AO3:sta) ne. Sinun ei tarvitse
-          lisätä näitä teoksia millekään tunnukselle hylätäksesi tai poistaaksesi
-          ne–voit tehdä sen suoraan yllä olevan ilmoituslinkin kautta. (Jos haluat
-          apua, ole hyvä ja %{support_link}.)
-        part9: Jos haluat Open Doorsin päivittävän edelleenohjauksen jo lisäämääsi
-          teokseen, ole hyvä ja poista tuotu kopio ja %{open_doors_link}. Ilmoita
-          AO3-käyttäjätunnuksesi, tuodun arkiston käyttäjätunnuksesi sekä sen faniteoksen
-          nimi ja URL, johon haluat uudelleenohjauksen osoittavan. (Jos haluat siirtää
-          usean faniteoksen uudelleenohjaukset, voit listata ne kaikki samaan sähköpostiin.)
         tutorial_page: ohjesivu
       part12: Jos otat meihin yhteyttä, ole hyvä ja lisää @transformativeworks.org
         sallittujen lähettäjien listalle ja tarkista, onko vastauksemme päätynyt roskapostikansioon.
@@ -372,7 +329,7 @@ fi:
     signup_notification:
       activate_your_account: käytä tätä linkkiä aktivoidaksesi käyttäjätilisi
       admin_posts: AO3:n uutisista
-      bye: 'Käytä tätä linkkiä tunnuksesi aktivointiin: %{activate_account_url}'
+      bye: Toivomme, että nautit AO3:n käytöstä.
       contact_support: ota yhteyttä Käyttäjätukeemme
       faq: UKK:mme
       html:
@@ -384,14 +341,11 @@ fi:
           tiedot sivuston muutoksista löydät  %{admin_posts_link}. Jos tarvitset apua
           tai törmäät bugiin, tai sinulla on kysymyksiä tai kommentteja, ole hyvä
           ja  %{contact_support_link}, joka auttaa aina mielellään."
-      subject: "[%{app_name}] Vahvistus"
       text:
         part1: 'Aktivoi tunnuksesi: %{activate_account_url}'
-        part2: UKK:mme osoitteessa %{faq_url} sisältää paljon tietoa ja neuvoja AO3:n
-          käyttöön. Uusimmat tiedot sivuston muutoksista löydät AO3:n uutisista osoitteessa
-          %{admin_posts_url}. Jos tarvitset apua tai törmäät bugiin, tai sinulla on
-          kysymyksiä tai kommentteja, ole hyvä ja ota yhteyttä Käyttäjätukeemme, joka
-          auttaa aina mielellään osoitteessa %{contact_support_url}.
+        part2: Kun tunnuksesi on valmis, voit julkaista faniteoksiasi, tilata suosikkitekijöidesi
+          ja -teostesi päivitykset sähköpostiisi, muuttaa sivuston ulkonäköä ja toimintoja
+          asetuksistasi, pitää kirjaa AO3:ssa avaamistasi teoksista ja paljon muuta.
         part3: UKK:mme osoitteessa %{faq_url} sisältää paljon tietoa ja neuvoja AO3:n
           käyttöön. Uusimmat tiedot sivuston muutoksista löydät AO3:n uutisista osoitteessa
           %{admin_posts_url}. Jos tarvitset apua tai törmäät bugiin, tai sinulla on

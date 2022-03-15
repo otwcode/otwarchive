@@ -120,6 +120,3 @@ class QueryResult
                                    ).html_safe
   end
 end
-
-class QueryFacet < Struct.new(:id, :name, :count)
-end

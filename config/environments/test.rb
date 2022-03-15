@@ -6,7 +6,7 @@ Otwarchive::Application.configure do
   # your test database is "scratch space" for the test suite and is wiped
   # and recreated between test runs.  Don't rely on the data there!
   config.cache_classes = true
-  config.eager_load = true
+  config.eager_load = ENV["CI"].present?
 
   # Log error messages when you accidentally call methods on nil.
   # config.whiny_nils = true
@@ -38,18 +38,10 @@ Otwarchive::Application.configure do
   # Print deprecation notices to the stderr
   config.active_support.deprecation = :stderr
 
-  # https://github.com/winebarrel/activerecord-mysql-reconnect
-  config.active_record.enable_retry = true
-  config.active_record.execution_tries = 20 # times
-  config.active_record.execution_retry_wait = 0.3 # sec
-  # :rw Retry in all SQL, but does not retry if Lost connection has happened in write SQL
-  config.active_record.retry_mode = :rw
-
   # Configure strong parameters to raise an exception if an unpermitted attribute is used
   config.action_controller.action_on_unpermitted_parameters = :raise
 
   config.serve_static_files = true
-  config.eager_load = false
   config.assets.enabled = false
 
   # Make sure that we don't have a host mismatch:
