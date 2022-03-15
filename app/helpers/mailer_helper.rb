@@ -132,6 +132,27 @@ module MailerHelper
     text.html_safe + t("mailer.general.metadata_label_indicator")
   end
 
+  # Spacing is dealt with in locale files, e.g. " : " for French.
+  def work_tag_metadata(tags)
+    return if tags.empty?
+
+    "#{work_tag_metadata_label(tags)}#{work_tag_metadata_list(tags)}"
+  end
+
+  def style_work_metadata_label(text)
+    style_bold(work_metadata_label(text))
+  end
+
+  # Spacing is dealt with in locale files, e.g. " : " for French.
+  def style_work_tag_metadata(tags)
+    return if tags.empty?
+
+    label = style_bold(work_tag_metadata_label(tags))
+    "#{label}#{style_work_tag_metadata_list(tags)}".html_safe
+  end
+
+  private
+
   def work_tag_metadata_label(tags)
     return if tags.empty?
 
@@ -147,17 +168,6 @@ module MailerHelper
     tags.pluck(:name).join(t("support.array.words_connector"))
   end
 
-  # Spacing is dealt with in locale files, e.g. " : " for French.
-  def work_tag_metadata(tags)
-    return if tags.empty?
-
-    "#{work_tag_metadata_label(tags)}#{work_tag_metadata_list(tags)}"
-  end
-
-  def style_work_metadata_label(text)
-    style_bold(work_metadata_label(text))
-  end
-
   def style_work_tag_metadata_list(tags)
     return if tags.empty?
 
@@ -168,13 +178,5 @@ module MailerHelper
     else
       work_tag_metadata_list(tags)
     end
-  end
-
-  # Spacing is dealt with in locale files, e.g. " : " for French.
-  def style_work_tag_metadata(tags)
-    return if tags.empty?
-
-    label = style_bold(work_tag_metadata_label(tags))
-    "#{label}#{style_work_tag_metadata_list(tags)}".html_safe
   end
 end # end of MailerHelper
