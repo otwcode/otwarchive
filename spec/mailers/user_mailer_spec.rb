@@ -622,8 +622,6 @@ describe UserMailer do
       context "french" do
         before { I18n.locale = "fr" }
 
-        after { I18n.locale = I18n.default_locale }
-
         it "formats the date rightfully in French" do
           expect(email).to have_html_part_content("Envoyé à 13:27 UTC le lundi 14 mars 2022.")
           expect(email).to have_text_part_content("Envoyé à 13:27 UTC le lundi 14 mars 2022.")
