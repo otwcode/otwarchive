@@ -176,20 +176,4 @@ describe WorkQuery do
     expect(q.date_range_filter.dig(:range, :revised_at, :gte)).to eq(Date.new(0, 12, 26))
     expect(q.date_range_filter.dig(:range, :revised_at, :lte)).to eq(Date.new(9999, 11, 27))
   end
-
-  it "keeps sort order of tied works the same when work info is updated" do
-    user = FactoryBot.create(:user)
-    work1 = FactoryBot.create(:work, authors: [user.default_pseud])
-    work2 = FactoryBot.create(:work, authors: [user.default_pseud])
-    q = WorkQuery.new(sort_column: "authors_to_sort_on", sort_direction: "desc")
-
-    run_all_indexing_jobs
-    res = q.search_results.map(&:id)
-
-    [work1, work2].each do |work|
-      work.update(summary: "Updated")
-      run_all_indexing_jobs
-      expect(q.search_results.map(&:id)).to eq(res)
-    end
-  end
 end
