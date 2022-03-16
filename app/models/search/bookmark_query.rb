@@ -124,13 +124,13 @@ class BookmarkQuery < Query
   end
 
   def sort
-    sort_array = [{ sort_column => { order: sort_direction } }, { "id" => { order: sort_direction } }]
+    sort_hash = { sort_column => { order: sort_direction } }
 
     if %w(created_at bookmarkable_date).include?(sort_column)
-      sort_array[0][sort_column][:unmapped_type] = "date"
+      sort_hash[sort_column][:unmapped_type] = 'date'
     end
 
-    sort_array
+    [sort_hash, { id: { order: sort_direction } }]
   end
 
   def aggregations

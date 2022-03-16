@@ -270,13 +270,13 @@ class WorkQuery < Query
   def sort
     column = options[:sort_column].present? ? options[:sort_column] : default_sort
     direction = options[:sort_direction].present? ? options[:sort_direction] : 'desc'
-    sort_array = [{ column => { order: direction } }, { "id" => { order: direction } }]
+    sort_hash = { column => { order: direction } }
 
     if column == 'revised_at'
-      sort_array[0][column][:unmapped_type] = "date"
+      sort_hash[column][:unmapped_type] = 'date'
     end
 
-    sort_array
+    [sort_hash, { id: { order: direction } }]
   end
 
   # When searching outside of filters, use relevance instead of date
