@@ -13,119 +13,121 @@ describe BookmarkSearchForm, bookmark_search: true do
 
   describe "bookmarkable_search_results" do
     describe "sorting" do
-      let(:tag) { create(:canonical_fandom) }
+      context "when everything is created at a different time" do
+        let(:tag) { create(:canonical_fandom) }
 
-      let!(:work1) do
-        Delorean.time_travel_to 40.minutes.ago do
-          create(:work, title: "One", fandom_string: tag.name)
-        end
-      end
-
-      let!(:work2) do
-        Delorean.time_travel_to 60.minutes.ago do
-          create(:work, title: "Two", fandom_string: tag.name)
-        end
-      end
-
-      let!(:work3) do
-        Delorean.time_travel_to 50.minutes.ago do
-          create(:work, title: "Three", fandom_string: tag.name)
-        end
-      end
-
-      let!(:bookmark1) do
-        Delorean.time_travel_to 30.minutes.ago do
-          create(:bookmark, bookmarkable: work1)
-        end
-      end
-
-      let!(:bookmark2) do
-        Delorean.time_travel_to 10.minutes.ago do
-          create(:bookmark, bookmarkable: work2)
-        end
-      end
-
-      let!(:bookmark3) do
-        Delorean.time_travel_to 20.minutes.ago do
-          create(:bookmark, bookmarkable: work3)
-        end
-      end
-
-      before { run_all_indexing_jobs }
-
-      context "by Date Updated" do
-        it "returns bookmarkables in the correct order" do
-          results = BookmarkSearchForm.new(
-            parent: tag, sort_column: "bookmarkable_date"
-          ).bookmarkable_search_results
-          expect(results.map(&:title)).to eq ["One", "Three", "Two"]
-        end
-
-        it "changes when the work is updated" do
-          work2.update_attribute(:revised_at, Time.current)
-          run_all_indexing_jobs
-          results = BookmarkSearchForm.new(
-            parent: tag, sort_column: "bookmarkable_date"
-          ).bookmarkable_search_results
-          expect(results.map(&:title)).to eq ["Two", "One", "Three"]
-        end
-
-        it "doesn't change tied bookmarkables order on work update" do
-          works = [work1, work2, work3]
-          revised_at = Time.current
-          works.each do |work|
-            work.update_attribute(:revised_at, revised_at)
+        let!(:work1) do
+          Delorean.time_travel_to 40.minutes.ago do
+            create(:work, title: "One", fandom_string: tag.name)
           end
-          run_all_indexing_jobs
-          search = BookmarkSearchForm.new(
-            parent: tag, sort_column: "bookmarkable_date"
-          )
-          res = search.bookmarkable_search_results.map(&:title)
+        end
 
-          works.each do |work|
-            work.update(summary: "Updated")
-            # revised_at should stay the same, but assure it anyway as it is tested sorting option
-            work.update_attribute(:revised_at, revised_at)
+        let!(:work2) do
+          Delorean.time_travel_to 60.minutes.ago do
+            create(:work, title: "Two", fandom_string: tag.name)
+          end
+        end
+
+        let!(:work3) do
+          Delorean.time_travel_to 50.minutes.ago do
+            create(:work, title: "Three", fandom_string: tag.name)
+          end
+        end
+
+        let!(:bookmark1) do
+          Delorean.time_travel_to 30.minutes.ago do
+            create(:bookmark, bookmarkable: work1)
+          end
+        end
+
+        let!(:bookmark2) do
+          Delorean.time_travel_to 10.minutes.ago do
+            create(:bookmark, bookmarkable: work2)
+          end
+        end
+
+        let!(:bookmark3) do
+          Delorean.time_travel_to 20.minutes.ago do
+            create(:bookmark, bookmarkable: work3)
+          end
+        end
+
+        before { run_all_indexing_jobs }
+
+        context "by Date Updated" do
+          it "returns bookmarkables in the correct order" do
+            results = BookmarkSearchForm.new(
+              parent: tag, sort_column: "bookmarkable_date"
+            ).bookmarkable_search_results
+            expect(results.map(&:title)).to eq ["One", "Three", "Two"]
+          end
+
+          it "changes when the work is updated" do
+            work2.update_attribute(:revised_at, Time.current)
             run_all_indexing_jobs
-            expect(search.bookmarkable_search_results.map(&:title)).to eq(res)
+            results = BookmarkSearchForm.new(
+              parent: tag, sort_column: "bookmarkable_date"
+            ).bookmarkable_search_results
+            expect(results.map(&:title)).to eq ["Two", "One", "Three"]
+          end
+        end
+
+        context "by Date Bookmarked" do
+          it "returns bookmarkables in the correct order" do
+            results = BookmarkSearchForm.new(
+              parent: tag, sort_column: "created_at"
+            ).bookmarkable_search_results
+            expect(results.map(&:title)).to eq ["Two", "Three", "One"]
+          end
+
+          it "changes when a new bookmark is created" do
+            create(:bookmark, bookmarkable: work1)
+            run_all_indexing_jobs
+            results = BookmarkSearchForm.new(
+              parent: tag, sort_column: "created_at"
+            ).bookmarkable_search_results
+            expect(results.map(&:title)).to eq ["One", "Two", "Three"]
           end
         end
       end
 
-      context "by Date Bookmarked" do
-        it "returns bookmarkables in the correct order" do
-          results = BookmarkSearchForm.new(
-            parent: tag, sort_column: "created_at"
-          ).bookmarkable_search_results
-          expect(results.map(&:title)).to eq ["Two", "Three", "One"]
-        end
+      context "when everything is created and updated at the same time" do
+        before { freeze_time }
 
-        it "changes when a new bookmark is created" do
-          create(:bookmark, bookmarkable: work1)
-          run_all_indexing_jobs
-          results = BookmarkSearchForm.new(
-            parent: tag, sort_column: "created_at"
-          ).bookmarkable_search_results
-          expect(results.map(&:title)).to eq ["One", "Two", "Three"]
-        end
+        let(:tag) { create(:canonical_fandom) }
+        let!(:work1) { create(:work, fandom_string: tag.name) }
+        let!(:work2) { create(:work, fandom_string: tag.name) }
+        let!(:bookmark1) { create(:bookmark, bookmarkable: work1) }
+        let!(:bookmark2) { create(:bookmark, bookmarkable: work2) }
 
-        it "doesn't change tied bookmarkables order on work update" do
-          works = [work1, work2, work3]
-          bookmarks = [bookmark1, bookmark2, bookmark3]
-          created_at = Time.current
-          bookmarks.each do |bookmark|
-            bookmark.update_attribute(:created_at, created_at)
-          end
-          run_all_indexing_jobs
-          search = BookmarkSearchForm.new(
-            parent: tag, sort_column: "created_at"
-          )
-          res = search.bookmarkable_search_results.map(&:title)
-
-          works.each do |work|
-            work.update(summary: "Updated")
+        context "doesn't change tied bookmarkables order on work update" do
+          it "when sorted by Date Updated" do
+            search = BookmarkSearchForm.new(
+              parent: tag, sort_column: "bookmarkable_date"
+            )
             run_all_indexing_jobs
-            expect(search.bookmarkable_search_results.map(&:title)).to eq(res)
+            res = search.bookmarkable_search_results.map(&:id)
+
+            [work1, work2].each do |work|
+              work.update(summary: "Updated")
+              run_all_indexing_jobs
+              expect(search.bookmarkable_search_results.map(&:id)).to eq(res)
+            end
+          end
+
+          it "when sorted by Date Bookmarked" do
+            run_all_indexing_jobs
+            search = BookmarkSearchForm.new(
+              parent: tag, sort_column: "created_at"
+            )
+            run_all_indexing_jobs
+            res = search.bookmarkable_search_results.map(&:id)
+
+            [work1, work2].each do |work|
+              work.update(summary: "Updated")
+              run_all_indexing_jobs
+              expect(search.bookmarkable_search_results.map(&:id)).to eq(res)
+            end
           end
         end
       end
@@ -258,14 +260,13 @@ describe BookmarkSearchForm, bookmark_search: true do
 
   describe "search_results" do
     describe "sorting" do
-      let!(:const_time) { Time.current }
-      let!(:work1) { create(:work, revised_at: const_time) }
-      let!(:work2) { create(:work, revised_at: const_time) }
-      let(:bookmarker) { create(:user) }
-      let!(:bookmark1) { create(:bookmark, bookmarkable: work1, pseud: bookmarker.default_pseud, created_at: const_time) }
-      let!(:bookmark2) { create(:bookmark, bookmarkable: work2, pseud: bookmarker.default_pseud, created_at: const_time) }
+      before { freeze_time }
 
-      before { run_all_indexing_jobs }
+      let!(:work1) { create(:work) }
+      let!(:work2) { create(:work) }
+      let(:bookmarker) { create(:user) }
+      let!(:bookmark1) { create(:bookmark, bookmarkable: work1, pseud: bookmarker.default_pseud) }
+      let!(:bookmark2) { create(:bookmark, bookmarkable: work2, pseud: bookmarker.default_pseud) }
 
       context "doesn't change tied bookmark order on work/bookmark update" do
         %w[created_at bookmarkable_date].each do |sort_column|
@@ -278,8 +279,6 @@ describe BookmarkSearchForm, bookmark_search: true do
 
             [work1, work2].each do |work|
               work.update(summary: "Updated")
-              # revised_at should stay the same, but assure it anyway as it is tested sorting option
-              work.update_attribute(:revised_at, const_time)
               run_all_indexing_jobs
               expect(search.search_results.map(&:id)).to eq(res)
             end
