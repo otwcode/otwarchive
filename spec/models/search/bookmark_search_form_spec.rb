@@ -69,6 +69,27 @@ describe BookmarkSearchForm, bookmark_search: true do
           ).bookmarkable_search_results
           expect(results.map(&:title)).to eq ["Two", "One", "Three"]
         end
+
+        it "doesn't change tied bookmarkables order on work update" do
+          works = [work1, work2, work3]
+          revised_at = Time.current
+          works.each do |work|
+            work.update_attribute(:revised_at, revised_at)
+          end
+          run_all_indexing_jobs
+          search = BookmarkSearchForm.new(
+            parent: tag, sort_column: "bookmarkable_date"
+          )
+          res = search.bookmarkable_search_results.map(&:title)
+
+          works.each do |work|
+            work.update(summary: "Updated")
+            # revised_at should stay the same, but assure it anyway as it is tested sorting option
+            work.update_attribute(:revised_at, revised_at)
+            run_all_indexing_jobs
+            expect(search.bookmarkable_search_results.map(&:title)).to eq(res)
+          end
+        end
       end
 
       context "by Date Bookmarked" do
@@ -86,6 +107,26 @@ describe BookmarkSearchForm, bookmark_search: true do
             parent: tag, sort_column: "created_at"
           ).bookmarkable_search_results
           expect(results.map(&:title)).to eq ["One", "Two", "Three"]
+        end
+
+        it "doesn't change tied bookmarkables order on work update" do
+          works = [work1, work2, work3]
+          bookmarks = [bookmark1, bookmark2, bookmark3]
+          created_at = Time.current
+          bookmarks.each do |bookmark|
+            bookmark.update_attribute(:created_at, created_at)
+          end
+          run_all_indexing_jobs
+          search = BookmarkSearchForm.new(
+            parent: tag, sort_column: "created_at"
+          )
+          res = search.bookmarkable_search_results.map(&:title)
+
+          works.each do |work|
+            work.update(summary: "Updated")
+            run_all_indexing_jobs
+            expect(search.bookmarkable_search_results.map(&:title)).to eq(res)
+          end
         end
       end
     end
@@ -218,44 +259,13 @@ describe BookmarkSearchForm, bookmark_search: true do
   describe "search_results" do
     describe "sorting" do
       let!(:const_time) { Time.current }
-      let(:tag) { create(:canonical_fandom) }
-      let!(:work1) { create(:work, fandom_string: tag.name, revised_at: const_time) }
-      let!(:work2) { create(:work, fandom_string: tag.name, revised_at: const_time) }
+      let!(:work1) { create(:work, revised_at: const_time) }
+      let!(:work2) { create(:work, revised_at: const_time) }
       let(:bookmarker) { create(:user) }
       let!(:bookmark1) { create(:bookmark, bookmarkable: work1, pseud: bookmarker.default_pseud, created_at: const_time) }
       let!(:bookmark2) { create(:bookmark, bookmarkable: work2, pseud: bookmarker.default_pseud, created_at: const_time) }
 
       before { run_all_indexing_jobs }
-
-      context "doesn't change tied bookmarkables order on work update" do
-        it "when sorted by Date Updated" do
-          search = BookmarkSearchForm.new(
-            parent: tag, sort_column: "bookmarkable_date"
-          )
-          res = search.bookmarkable_search_results.map(&:id)
-
-          [work1, work2].each do |work|
-            work.update(summary: "Updated")
-            expect(work.revised_at).to be_within(1.second).of const_time
-            run_all_indexing_jobs
-            expect(search.bookmarkable_search_results.map(&:id)).to eq(res)
-          end
-        end
-
-        it "when sorted by Date Bookmarked" do
-          run_all_indexing_jobs
-          search = BookmarkSearchForm.new(
-            parent: tag, sort_column: "created_at"
-          )
-          res = search.bookmarkable_search_results.map(&:id)
-
-          [work1, work2].each do |work|
-            work.update(summary: "Updated")
-            run_all_indexing_jobs
-            expect(search.bookmarkable_search_results.map(&:id)).to eq(res)
-          end
-        end
-      end
 
       context "doesn't change tied bookmark order on work/bookmark update" do
         %w[created_at bookmarkable_date].each do |sort_column|
@@ -268,7 +278,8 @@ describe BookmarkSearchForm, bookmark_search: true do
 
             [work1, work2].each do |work|
               work.update(summary: "Updated")
-              expect(work.revised_at).to be_within(1.second).of const_time
+              # revised_at should stay the same, but assure it anyway as it is tested sorting option
+              work.update_attribute(:revised_at, const_time)
               run_all_indexing_jobs
               expect(search.search_results.map(&:id)).to eq(res)
             end
