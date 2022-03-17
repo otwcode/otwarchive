@@ -3,16 +3,16 @@
 <%= error_messages_for :user %>
 <div class="caution">
   <p>
-    <strong><%= t("users.change_username.caution") %></strong>
-    <%= t("users.change_username.change_window", count: ArchiveConfig.USER_RENAME_LIMIT_DAYS) %>
+    <strong><%= t(".caution") %></strong>
+    <%= t(".change_window", count: ArchiveConfig.USER_RENAME_LIMIT_DAYS) %>
     <% if @user.renamed_at %>
-      <%= t("users.change_username.last_renamed", renamed_at: l(@user.renamed_at, format: :long)) %>
+      <%= t(".last_renamed", renamed_at: l(@user.renamed_at, format: :long)) %>
     <% end %>
   </p>
   <p>
-    <%= t("users.change_username.more_info",
-          account_faq_link: (link_to t("users.change_username.account_faq"), archive_faq_path("your-account", anchor: "namechange")),
-          contact_support: (link_to t("contact Support"), new_feedback_report_path)
+    <%= t(".more_info",
+          account_faq_link: (link_to t(".account_faq"), archive_faq_path("your-account", anchor: "namechange")),
+          contact_support_link: (link_to t(".contact_support"), new_feedback_report_path)
         ).html_safe %>
   </p>
 </div>

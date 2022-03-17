@@ -141,7 +141,7 @@ describe User do
       expect(existing_user.renamed_at).to be_nil
     end
 
-    context "username recently changed" do
+    context "username was recently changed" do
       before do
         freeze_time
         existing_user.update(login: "new_login")
@@ -149,7 +149,7 @@ describe User do
 
       it "does not allow another rename" do
         expect(existing_user.update(login: "new")).to be_falsey
-        localized_renamed_at = I18n.l(Time.now.in_time_zone(existing_user.renamed_at.time_zone), format: :long)
+        localized_renamed_at = I18n.l(existing_user.renamed_at, format: :long)
         expect(existing_user.errors[:login].first).to eq(
           "can only be changed once every 7 days. You last changed your user name on #{localized_renamed_at}."
         )
