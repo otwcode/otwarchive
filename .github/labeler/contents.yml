@@ -1,12 +1,3 @@
-# Label to be added when the PR is updated:
-"Awaiting Review":
-  - "**/*"
-
-# Labels to be removed when the PR is updated:
-"Reviewed: Ready to Merge": []
-"Reviewed: Action Needed": []
-
-# Labels based on which files are modified:
 "Gem Updates":
   - "Gemfile"
   - "Gemfile.lock"
