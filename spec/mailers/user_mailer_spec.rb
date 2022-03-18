@@ -1,14 +1,6 @@
 require "spec_helper"
 
 describe UserMailer do
-  shared_examples "it retries and fails on" do |error|
-    it "retries 3 times and ultimately fails with a #{error}" do
-      assert_performed_jobs 3, only: ApplicationMailerJob do
-        expect { subject.deliver_later }.to raise_exception(error)
-      end
-    end
-  end
-
   describe "creatorship_request" do
     subject(:email) { UserMailer.creatorship_request(work_creatorship.id, author.id) }
 
