@@ -398,7 +398,7 @@ end
 Then /^the ([\d]+)(?:st|nd|rd|th) tag result should contain "(.*?)"$/ do |n, text|
   selector = "ol.tag > li:nth-of-type(#{n})"
   with_scope(selector) do
-    page.should have_content(text)
+    expect(page).to have_content(text)
   end
 end
 

@@ -47,9 +47,15 @@ Feature: Search Tags
       When I follow "first.fandom"
       Then I should see "This tag belongs to the Fandom Category"
 
+      When I am on the search tags page
+      # possibly a bug rather than desired behaviour, to be discussed later
+        And I fill in "Tag name" with "first"
+        And I press "Search Tags"
+      Then I should see "0 Found"
+        And I should not see "Fandom: first.fandom (0)"
+
   Scenario: Search for tag in canonical fandom(s)
-    Given I have no tags
-      And a canonical character "Anna Anderson" in fandom "Fandom A"
+    Given a canonical character "Anna Anderson" in fandom "Fandom A"
       And a canonical character "Abby Anderson" in fandom "Fandom B"
       And I add the fandom "Fandom A" to the character "Abby Anderson"
       And a character exists with name: "Null Anderson"
@@ -99,8 +105,7 @@ Feature: Search Tags
       And I should not see the tag search result "Null Anderson"
 
   Scenario: Search by Type of tags
-    Given I have no tags
-      And a fandom exists with name: "first fandom"
+    Given a fandom exists with name: "first fandom"
       And a character exists with name: "first character"
       And a relationship exists with name: "first last/someone else"
       And a freeform exists with name: "first fic please be nice"
@@ -143,8 +148,7 @@ Feature: Search Tags
       And I should not see the tag search result "Relationship: first last/somone else"
 
   Scenario: Search by wrangling status
-    Given I have no tags
-      And a fandom exists with name: "Not Canon Fandom", canonical: false
+    Given a fandom exists with name: "Not Canon Fandom", canonical: false
       And a character exists with name: "Canon Character", canonical: true
       And all indexing jobs have been run
     When I am on the search tags page
@@ -170,8 +174,7 @@ Feature: Search Tags
       And I should see the tag search result "Character: Canon Character (0)"
 
   Scenario: Search and sort by Date Created in descending and ascending order
-    Given I have no tags
-      And a freeform exists with name: "created first", created_at: "2008-01-01 20:00:00 Z"
+    Given a freeform exists with name: "created first", created_at: "2008-01-01 20:00:00 Z"
       And a freeform exists with name: "created second", created_at: "2009-01-01 20:00:00 Z"
       And a freeform exists with name: "created third", created_at: "2010-01-01 20:00:00 Z"
       And a freeform exists with name: "created fourth", created_at: "2011-01-01 20:00:00 Z"
@@ -194,8 +197,7 @@ Feature: Search Tags
       And the 4th tag result should contain "created fourth"
 
   Scenario: Search and sort by Uses in descending and ascending order
-    Given I have no tags
-      And a set of works for tag sort by use exists
+    Given a set of works for tag sort by use exists
       And all indexing jobs have been run
     When I am on the search tags page
       And I fill in "Tag name" with "uses"
@@ -217,11 +219,3 @@ Feature: Search Tags
       And the 4th tag result should contain "8 uses"
       And the 5th tag result should contain "8 uses"
       And the 6th tag result should contain "10 uses"
-
-      # If this was a bug, it's fixed now?
-      # When I am on the search tags page
-      # possibly a bug rather than desired behaviour, to be discussed later
-      #   And I fill in "Tag name" with "first"
-      #   And I press "Search Tags"
-      # Then I should see "0 Found"
-      #   And I should not see "Fandom: first.fandom (0)"

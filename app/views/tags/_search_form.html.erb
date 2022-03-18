@@ -12,7 +12,7 @@
         <%= f.label :fandoms, ts("Fandoms") %>
       </dt>
       <dd>
-        <%= f.text_field :fandoms, autocomplete_options("fandoms", "aria-describedby" => "fandom-field-description") %>
+        <%= f.text_field :fandoms, autocomplete_options("fandom", "aria-describedby" => "fandom-field-description") %>
         <p class="footnote" id="fandom-field-description">
           <%= ts("Find tags wrangled to specific canonical fandoms.") %>
         </p>
@@ -21,7 +21,7 @@
       <dd>
         <fieldset>
           <ul>
-          <% types = Tag::USER_DEFINED %>
+            <% types = Tag::USER_DEFINED %>
             <% types.each do |type| %>
               <li>
                 <%= f.radio_button :type, type %>
