@@ -486,7 +486,7 @@ public
     if model.to_s.downcase == 'work'
       allowed = %w(author title date created_at word_count hit_count)
     elsif model.to_s.downcase == 'tag'
-      allowed = %w(name created_at taggings_count_cache uses)
+      allowed = %w(name created_at taggings_count_cache)
     elsif model.to_s.downcase == 'collection'
       allowed = %w(collections.title collections.created_at)
     elsif model.to_s.downcase == 'prompt'

@@ -11,7 +11,6 @@ class TagSearchForm
     :fandoms,
     :type,
     :created_at,
-    :uses,
     :sort_column,
     :sort_direction
   ]
@@ -55,7 +54,6 @@ class TagSearchForm
     [
       %w[Name name],
       %w[Date\ Created created_at],
-      %w[Uses uses]
     ]
   end
 

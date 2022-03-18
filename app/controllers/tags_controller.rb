@@ -401,7 +401,6 @@ class TagsController < ApplicationController
       :type,
       :canonical,
       :created_at,
-      :uses,
       :sort_column,
       :sort_direction
     )

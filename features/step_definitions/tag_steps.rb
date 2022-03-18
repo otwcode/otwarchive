@@ -59,23 +59,6 @@ Given /^the basic categories exist$/ do
   end
 end
 
-Given /^a set of works for tag sort by use exists$/ do
-  hash = {  "10 uses" => 10,
-            "8 uses" => 8,
-            "also 8 uses" => 8,
-            "5 uses" => 5,
-            "2 uses" => 2 }
-
-  # Create specified number of works that use the tag
-  hash.each do |freeform, uses|
-    uses.times do
-      FactoryBot.create(:work, freeform_string: freeform)
-    end
-  end
-
-  step %{a freeform exists with name: "0 uses"}
-end
-
 Given /^I have a canonical "([^\"]*)" fandom tag named "([^\"]*)"$/ do |media, fandom|
   fandom = Fandom.find_or_create_by_name(fandom)
   fandom.update(canonical: true)
