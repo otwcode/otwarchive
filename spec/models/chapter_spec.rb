@@ -11,9 +11,9 @@ describe Chapter do
     expect(build(:chapter, content: nil)).to be_invalid
   end
 
-  it "is unposted by default" do
+  it "is posted by default when produced by a factory" do
     chapter = create(:chapter)
-    chapter.posted.should == false
+    expect(chapter.posted).to be_truthy
   end
 
   describe "save" do
