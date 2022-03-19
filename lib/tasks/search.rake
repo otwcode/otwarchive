@@ -19,7 +19,7 @@ namespace :search do
     WorkCreatorIndexer.index_from_db
   end
 
-  desc "Recreate boomark index"
+  desc "Recreate bookmark index"
   task(index_bookmarks: :environment) do
     BookmarkIndexer.index_all
   end
@@ -74,7 +74,7 @@ namespace :search do
     end
   end
 
-  desc "Reindex psueds"
+  desc "Reindex pseuds"
   task timed_pseud: :environment do
     time = ENV["TIME_PERIOD"] || "NOW() - INTERVAL 1 DAY"
     Pseud.where("pseuds.updated_at >  #{time}").select(:id).find_in_batches(batch_size: BATCH_SIZE) do |group|
