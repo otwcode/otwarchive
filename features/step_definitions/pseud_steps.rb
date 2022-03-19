@@ -1,7 +1,7 @@
 Given /^"([^"]*)" has the pseud "([^"]*)"$/ do |username, pseud|
   step %{I am logged in as "#{username}"}
   step %{"#{username}" creates the pseud "#{pseud}"}
-  step %{I am logged out}
+  step %{I start a new session}
 end
 
 When /^I change the pseud "([^\"]*)" to "([^\"]*)"/ do |old_pseud, new_pseud|

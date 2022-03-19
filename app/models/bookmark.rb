@@ -4,14 +4,35 @@ class Bookmark < ApplicationRecord
   include Collectible
   include Searchable
   include Responder
+  include Taggable
 
-  belongs_to :bookmarkable, polymorphic: true
+  belongs_to :bookmarkable, polymorphic: true, inverse_of: :bookmarks
   belongs_to :pseud
-  has_many :taggings, as: :taggable, inverse_of: :taggable, dependent: :destroy
-  has_many :tags, through: :taggings, source: :tagger, source_type: 'Tag'
 
   validates_length_of :bookmarker_notes,
     maximum: ArchiveConfig.NOTES_MAX, too_long: ts("must be less than %{max} letters long.", max: ArchiveConfig.NOTES_MAX)
+
+  validate :not_already_bookmarked_by_user, on: :create
+  def not_already_bookmarked_by_user
+    return unless self.pseud && self.bookmarkable
+
+    return if self.pseud.user.bookmarks.where(bookmarkable: self.bookmarkable).empty?
+
+    errors.add(:base, ts("You have already bookmarked that."))
+  end
+
+  validate :check_new_external_work
+  def check_new_external_work
+    return unless bookmarkable.is_a?(ExternalWork) && bookmarkable.new_record?
+
+    errors.add(:base, "Fandom tag is required") if bookmarkable.fandom_string.blank?
+
+    return if bookmarkable.valid?
+
+    bookmarkable.errors.full_messages.each do |message|
+      errors.add(:base, message)
+    end
+  end
 
   default_scope -> { order("bookmarks.id DESC") } # id's stand in for creation date
 
@@ -21,13 +42,6 @@ class Bookmark < ApplicationRecord
   scope :not_private, -> { where(private: false) }
   scope :since, lambda { |*args| where("bookmarks.created_at > ?", (args.first || 1.week.ago)) }
   scope :recs, -> { where(rec: true) }
-
-  scope :in_collection, lambda {|collection|
-    select("DISTINCT bookmarks.*").
-    joins(:collection_items).
-    where('collection_items.collection_id IN (?) AND collection_items.user_approval_status = ? AND collection_items.collection_approval_status = ?',
-            [collection.id] + collection.children.collect(&:id), CollectionItem::APPROVED, CollectionItem::APPROVED)
-  }
 
   scope :join_work, -> {
     joins("LEFT JOIN works ON (bookmarks.bookmarkable_id = works.id AND bookmarks.bookmarkable_type = 'Work')").
@@ -156,41 +170,6 @@ class Bookmark < ApplicationRecord
   # Returns the number of bookmarks on an item visible to the current user
   def self.count_visible_bookmarks(bookmarkable, current_user=:false)
     bookmarkable.bookmarks.visible.size
-  end
-
-  # Virtual attribute for external works
-  def external=(attributes)
-    unless attributes.values.to_s.blank?
-      !self.bookmarkable ? self.bookmarkable = ExternalWork.new(attributes) : self.bookmarkable.attributes = attributes
-    end
-  end
-
-  def tag_string
-    tags.map{|tag| tag.name}.join(ArchiveConfig.DELIMITER_FOR_OUTPUT)
-  end
-
-  def tag_string=(tag_string)
-    # Make sure that we trigger the callback for our taggings.
-    self.taggings.destroy_all
-
-    self.tags = []
-
-    # Replace unicode full-width commas
-    tag_string.gsub!(/\uff0c|\u3001/, ',')
-    tag_array = tag_string.split(ArchiveConfig.DELIMITER_FOR_INPUT)
-
-    tag_array.each do |string|
-      string.strip!
-      unless string.blank?
-        tag = Tag.find_by_name(string)
-        if tag
-          self.tags << tag
-        else
-          self.tags << UnsortedTag.create(name: string)
-        end
-      end
-    end
-    return self.tags
   end
 
   # TODO: Is this necessary anymore?

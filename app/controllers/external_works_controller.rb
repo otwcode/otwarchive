@@ -20,7 +20,12 @@ class ExternalWorksController < ApplicationController
   end
 
   def index
-    if params[:show] == 'duplicates'
+    if params[:show] == "duplicates"
+      unless logged_in_as_admin?
+        access_denied
+        return
+      end
+
       @external_works = ExternalWork.duplicate.order("created_at DESC").paginate(page: params[:page])
     else
       @external_works = ExternalWork.order("created_at DESC").paginate(page: params[:page])
@@ -40,7 +45,7 @@ class ExternalWorksController < ApplicationController
   def update
     @external_work = ExternalWork.find(params[:id])
     @external_work.attributes = work_params
-    if @external_work.update_attributes(external_work_params)
+    if @external_work.update(external_work_params)
       flash[:notice] = t('successfully_updated', default: 'External work was successfully updated.')
       redirect_to(@external_work)
     else
@@ -58,8 +63,8 @@ class ExternalWorksController < ApplicationController
 
   def work_params
     params.require(:work).permit(
-        :rating_string, :fandom_string, :relationship_string, :character_string,
-        :freeform_string, category_string: [], archive_warning_strings: []
+      :rating_string, :fandom_string, :relationship_string, :character_string,
+      :freeform_string, category_strings: [], archive_warning_strings: []
     )
   end
 end

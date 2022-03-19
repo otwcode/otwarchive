@@ -1,8 +1,4 @@
-class KudoMailer < ActionMailer::Base
-  layout 'mailer'
-  helper :mailer
-  default from: "Archive of Our Own " + "<#{ArchiveConfig.RETURN_ADDRESS}>"
-
+class KudoMailer < ApplicationMailer
   # send a batched-up notification
   # user_kudos is a hash of arrays converted to JSON string format
   # [commentable_type]_[commentable_id] =>
@@ -44,8 +40,6 @@ class KudoMailer < ActionMailer::Base
         subject: t('mailer.kudos.you_have', app_name: ArchiveConfig.APP_SHORT_NAME)
       )
     end
-    ensure
-      I18n.locale = I18n.default_locale
   end
 
   def guest_kudos(guest_count)

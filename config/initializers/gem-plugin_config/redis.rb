@@ -1,15 +1,10 @@
 require 'redis_test_setup'
 include RedisTestSetup
 
-if ENV['TRAVIS']
-  rails_root = ENV['TRAVIS_BUILD_DIR']
-  rails_env = 'test'
-else
-  rails_root = ENV['RAILS_ROOT'] || File.dirname(__FILE__) + '/../../..'
-  rails_env = ENV['RAILS_ENV'] || 'development'
-end
+rails_root = ENV["RAILS_ROOT"] || File.dirname(__FILE__) + "/../../.."
+rails_env = ENV["RAILS_ENV"] || "development"
 
-unless ENV['TRAVIS']
+unless ENV["CI"]
   if rails_env == "test" && !ENV["OTWA_NO_START_REDIS"]
     # https://gist.github.com/441072
     start_redis!(rails_root, :cucumber)

@@ -26,7 +26,7 @@ class TagSetNominationsController < ApplicationController
   end
 
   def load_nomination
-    @tag_set_nomination = TagSetNomination.find_by_id(params[:id])
+    @tag_set_nomination = @tag_set.tag_set_nominations.find_by(id: params[:id])
     unless @tag_set_nomination
       flash[:error] = ts("Which nominations did you want to work with?")
       redirect_to tag_set_path(@tag_set) and return
@@ -99,7 +99,7 @@ class TagSetNominationsController < ApplicationController
   end
 
   def create
-    @tag_set_nomination = TagSetNomination.new(tag_set_nomination_params)
+    @tag_set_nomination = @tag_set.tag_set_nominations.build(tag_set_nomination_params)
     if @tag_set_nomination.save
       flash[:notice] = ts('Your nominations were successfully submitted.')
       redirect_to tag_set_nomination_path(@tag_set, @tag_set_nomination)
@@ -111,7 +111,7 @@ class TagSetNominationsController < ApplicationController
 
 
   def update
-    if @tag_set_nomination.update_attributes(tag_set_nomination_params)
+    if @tag_set_nomination.update(tag_set_nomination_params)
       flash[:notice] = ts("Your nominations were successfully updated.")
       redirect_to tag_set_nomination_path(@tag_set, @tag_set_nomination)
     else
@@ -340,7 +340,6 @@ class TagSetNominationsController < ApplicationController
   def tag_set_nomination_params
     params.require(:tag_set_nomination).permit(
       :pseud_id,
-      :owned_tag_set_id,
       fandom_nominations_attributes: [
         :id,
         :tagname,

@@ -13,6 +13,17 @@ Feature: Delete Works
     When I go to newbie's user page
     Then I should not see "All Hell Breaks Loose"
 
+  Scenario: Deleting a work with escapable characters in title
+    Given I am logged in as "newbie"
+      And I post the work "All Hell <b>Breaks</b> Loose"
+    When I delete the work "All Hell <b>Breaks</b> Loose"
+    Then I should see "Your work All Hell <b>Breaks</b> Loose was deleted."
+      And "newbie" should be notified by email about the deletion of "All Hell &lt;b&gt;Breaks&lt;/b&gt; Loose"
+    When I go to the works page
+    Then I should not see "All Hell <b>Breaks</b> Loose"
+    When I go to newbie's user page
+    Then I should not see "All Hell <b>Breaks</b> Loose"
+
   Scenario: Deleting minimally valid work when you have more than one pseud
     Given basic tags
       And I am logged in as "newbie"
@@ -44,6 +55,8 @@ Feature: Delete Works
         | recipient      | recipient@example.org |
       And the user "coauthor" allows co-creators
       And the user "cosomeone" allows co-creators
+      And the user "giftee" allows gifts
+      And the user "recipient" allows gifts
       And I have a collection "Collection 1" with name "collection1"
       And I have a collection "Collection 2" with name "collection2"
       And I am logged in as "thorough"
@@ -103,7 +116,7 @@ Feature: Delete Works
       And I should see "Pseud2" within ".byline"
       And I should see "Pseud3" within ".byline"
       But I should not see "coauthor" within ".byline"
-    When the user "coauthor" accepts all creator invitations
+    When the user "coauthor" accepts all co-creator requests
       And I view the work "All Something Breaks Loose"
     Then I should see "coauthor" within ".byline"
     When I follow "Add Chapter"
@@ -138,7 +151,7 @@ Feature: Delete Works
       And I should see "Pseud3" within ".byline"
       But I should not see "cosomeone" within ".byline"
       And 1 email should be delivered to "cosomeone@example.org"
-    When the user "cosomeone" accepts all creator invites
+    When the user "cosomeone" accepts all co-creator requests
       And I view the work "All Something Breaks Loose"
     Then I should see "cosomeone" within ".byline"
     When all emails have been delivered
@@ -180,3 +193,11 @@ Feature: Delete Works
     Then I should not see "All Something Breaks Loose"
       And I should see "This has been deleted, sorry!"
       And I should see "My thoughts on the work"
+
+  Scenario: A work with too many tags can be deleted
+    Given the user-defined tag limit is 2
+      And the work "Over the Limit"
+      And the work "Over the Limit" has 3 fandom tags
+    When I am logged in as the author of "Over the Limit"
+      And I delete the work "Over the Limit"
+    Then I should see "Your work Over the Limit was deleted."

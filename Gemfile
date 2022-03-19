@@ -1,12 +1,13 @@
 source 'https://rubygems.org'
 
-ruby '2.6.5'
+ruby '2.7.3'
 
 gem 'test-unit', '~> 3.2'
 
 gem 'bundler'
 
-gem "rails", "~> 5.2.4"
+gem "rails", "~> 6.0.4"
+gem "rails-i18n"
 gem "rack", "~> 2.1", ">= 2.1.4"
 gem "sprockets", "< 4"
 
@@ -23,8 +24,6 @@ gem 'mysql2', '0.5.2'
 # at the latest version to avoid errors
 gem 'transaction_isolation', '1.0.5'
 gem 'transaction_retry'
-#https://github.com/winebarrel/activerecord-mysql-reconnect
-gem 'activerecord-mysql-reconnect', '~> 0.4.1'
 
 gem 'rack-attack'
 
@@ -38,6 +37,7 @@ gem 'redis-namespace'
 # Used to convert strings to ascii
 gem 'unicode'
 gem 'unidecoder'
+gem 'unicode_utils', '>=1.4.0'
 
 # Lograge is opinionated, very opinionated.
 gem "lograge" # https://github.com/roidrage/lograge
@@ -52,21 +52,17 @@ gem 'whenever', '~>0.6.2', require: false
 gem 'nokogiri', '>= 1.8.5'
 gem 'mechanize'
 gem 'sanitize', '>= 4.6.5'
-# Until there is a working solution to
-# https://otwarchive.atlassian.net/browse/AO3-4957
-# https://github.com/rubys/nokogumbo/issues/50
-gem 'nokogumbo', '1.4.9'
-gem 'rest-client', '~> 1.8.0', require: 'rest_client'
+gem "rest-client", "~> 2.1.0", require: "rest_client"
 gem 'resque', '>=1.14.0'
 gem 'resque-scheduler'
 gem 'after_commit_everywhere'
 #gem 'daemon-spawn', require: 'daemon_spawn'
-gem 'elasticsearch', '6.8.0'
-gem 'aws-sdk'
+gem "elasticsearch", "7.16.1"
+gem "aws-sdk-s3"
 gem 'css_parser'
 
 gem "terrapin"
-gem 'paperclip', '>= 5.2.0'
+gem "kt-paperclip", ">= 5.2.0"
 
 # for looking up image dimensions quickly
 gem 'fastimage'
@@ -97,9 +93,6 @@ gem 'timeliness'
 # for generating graphs
 gem 'google_visualr', git: 'https://github.com/winston/google_visualr'
 
-# Copycopter to aid translation
-# gem 'copycopter_client', '~> 2.0.1'
-
 # Globalize for translations
 # Must use master branch and activemodel-serializers-xml for Rails 5 upgrade
 gem 'globalize', git: 'https://github.com/globalize/globalize'
@@ -118,18 +111,16 @@ gem 'audited', '~> 4.4'
 # For controlling application behavour dynamically
 gem 'rollout'
 
-#  Place the New Relic gem as low in the list as possible, allowing the
-#  frameworks above it to be instrumented when the gem initializes.
-gem 'newrelic_rpm'
-
 #   Use update memcached client with kinder, gentler I/O for Ruby
 gem 'connection_pool'
 gem 'dalli'
 gem 'kgio', '2.10.0'
 
+# TODO: AO3-6297 Update the download code so we can remove mimemagic.
+gem "mimemagic", "0.3.10"
+
 group :test do
-  gem 'rspec', '~> 3.8'
-  gem 'rspec-rails', '~> 3.8.2'
+  gem "rspec-rails", "~> 4.0.1"
   gem 'pickle'
   gem 'shoulda'
   gem 'capybara', '~> 2.16.1'
@@ -140,21 +131,21 @@ group :test do
   gem 'cucumber-rails', require: false
   gem 'launchy'    # So you can do Then show me the page
   gem 'delorean'
-  gem 'faker', '~> 1.6.3'
+  gem "faker"
   # Record and replay data from external URLs
   gem 'vcr', '~> 3.0', '>= 3.0.1'
   gem 'webmock', '~> 3.7.6'
   gem 'timecop'
   gem 'cucumber-timecop', require: false
   # Code coverage
-  gem 'simplecov', '~> 0.14.0'
-  gem "codecov", "~> 0.2.0", require: false
+  gem "simplecov"
+  gem "codecov", require: false
   gem 'email_spec', '1.6.0'
 end
 
 group :test, :development do
   gem 'awesome_print'
-  gem 'brakeman', '3.7.2'
+  gem 'brakeman'
   gem 'pry-byebug'
   gem 'whiny_validation'
   gem 'factory_bot', '~> 5.0.2'
@@ -165,6 +156,13 @@ group :development do
   gem 'factory_bot_rails'
   gem 'bundler-audit'
   gem 'active_record_query_trace', '~> 1.6', '>= 1.6.1'
+end
+
+group :linters do
+  gem "erb_lint", "0.0.29"
+  gem "rubocop", "0.83.0"
+  gem "rubocop-rails", "2.6.0"
+  gem "rubocop-rspec", "1.41.0"
 end
 
 group :test, :development, :staging do
@@ -179,3 +177,9 @@ gem 'rvm-capistrano'
 gem 'unicorn', '~> 5.5', require: false
 # Use god as the monitor
 gem 'god', '~> 0.13.7'
+
+group :staging, :production do
+  # Place the New Relic gem as low in the list as possible, allowing the
+  # frameworks above it to be instrumented when the gem initializes.
+  gem "newrelic_rpm"
+end

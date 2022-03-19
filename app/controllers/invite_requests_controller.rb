@@ -43,10 +43,12 @@ class InviteRequestsController < ApplicationController
   def manage
     @invite_requests = InviteRequest.order(:position).page(params[:page])
     if params[:query].present?
-      @invite_requests = InviteRequest.where("simplified_email LIKE ?",
-                                             "%#{params[:query]}%")
-                                      .order(:position)
-                                      .page(params[:page])
+      query = "%#{params[:query]}%"
+      @invite_requests = InviteRequest.where("simplified_email LIKE ? " \
+                                             "OR ip_address LIKE ?",
+                                             query,
+                                             query)
+        .order(:position).page(params[:page])
     end
   end
 

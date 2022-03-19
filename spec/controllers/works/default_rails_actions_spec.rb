@@ -233,7 +233,7 @@ describe WorksController, work_search: true do
       post :create, params: { work: work_attributes }
       expect(response).to render_template("new")
       expect(assigns[:work].errors.full_messages).to \
-        include "Please add all required tags. Warning is missing."
+        include /Only canonical warning tags are allowed./
     end
 
     it "renders new if the work has noncanonical rating" do
@@ -241,7 +241,15 @@ describe WorksController, work_search: true do
       post :create, params: { work: work_attributes }
       expect(response).to render_template("new")
       expect(assigns[:work].errors.full_messages).to \
-        include "Please add all required tags."
+        include /Only canonical rating tags are allowed./
+    end
+
+    it "renders new if the work has noncanonical category" do
+      work_attributes = attributes_for(:work).except(:posted).merge(category_strings: ["Category"])
+      post :create, params: { work: work_attributes }
+      expect(response).to render_template("new")
+      expect(assigns[:work].errors.full_messages).to \
+        include /Only canonical category tags are allowed./
     end
   end
 
@@ -249,7 +257,8 @@ describe WorksController, work_search: true do
     let(:work) { create(:work) }
 
     it "doesn't error when a work has no fandoms" do
-      work_no_fandoms = create(:work, fandoms: [])
+      work_no_fandoms = build(:work, fandom_string: "")
+      work_no_fandoms.save!(validate: false)
       fake_login
 
       get :show, params: { id: work_no_fandoms.id }
@@ -499,6 +508,86 @@ describe WorksController, work_search: true do
       expect(update_work.pseuds.reload).not_to include(no_co_creator.default_pseud)
       expect(update_work.user_has_creator_invite?(no_co_creator)).to be_falsey
     end
+
+    context "when the work has broken dates" do
+      let(:update_work) { create(:work, authors: [update_user.default_pseud]) }
+      let(:update_chapter) { update_work.first_chapter }
+
+      let(:attributes) do
+        {
+          backdate: "1",
+          chapter_attributes: {
+            published_at: "2021-09-01"
+          }
+        }
+      end
+
+      before do
+        # Work where chapter published_at did not override revised_at, times
+        # taken from AO3-5392
+        update_work.update_column(:revised_at, Time.new(2018, 4, 22, 23, 51, 42, "+04:00"))
+        update_chapter.update_column(:published_at, Date.new(2015, 7, 23))
+      end
+
+      it "can be backdated" do
+        put :update, params: { id: update_work.id, work: attributes }
+
+        expect(update_chapter.reload.published_at).to eq(Date.new(2021, 9, 1))
+        expect(update_work.reload.revised_at).to eq(Time.utc(2021, 9, 1, 12)) # noon UTC
+      end
+    end
+
+    # If the time zone in config/application.rb is changed to something other
+    # than the default (UTC), these tests will need adjusting:
+    context "when redating to the present" do
+      let!(:update_work) do
+        # November 30, 2 PM UTC -- no time zone oddities here
+        travel_to(Time.utc(2021, 11, 30, 14)) do
+          create(:work, authors: [update_user.default_pseud])
+        end
+      end
+
+      let(:attributes) do
+        {
+          backdate: "1",
+          chapter_attributes: {
+            published_at: "2021-12-05"
+          }
+        }
+      end
+
+      before do
+        travel_to(redate_time)
+
+        # Simulate the system time being UTC:
+        allow(Time).to receive(:now).and_return(redate_time)
+        allow(DateTime).to receive(:now).and_return(redate_time)
+        allow(Date).to receive(:today).and_return(redate_time.to_date)
+
+        put :update, params: { id: update_work.id, work: attributes }
+      end
+
+      context "before midnight UTC and after midnight Samara" do
+        # December 5, 3 AM Europe/Samara (UTC+04:00) -- still December 4 in UTC
+        let(:redate_time) { Time.new(2021, 12, 5, 3, 0, 0, "+04:00") }
+
+        it "prevents setting the publication date to the future" do
+          expect(response).to render_template :edit
+          expect(assigns[:work].errors.full_messages).to \
+            include("Publication date can't be in the future.")
+        end
+      end
+
+      context "before noon UTC" do
+        # December 5, 6 AM Europe/Samara -- before noon, but after midnight in both time zones
+        let(:redate_time) { Time.new(2021, 12, 5, 6, 0, 0, "+04:00") }
+
+        it "doesn't set revised_at to the future" do
+          update_work.reload
+          expect(update_work.revised_at).to be <= Time.current
+        end
+      end
+    end
   end
 
   describe "collected" do
@@ -635,15 +724,56 @@ describe WorksController, work_search: true do
 
       before { run_all_indexing_jobs }
 
-      it "returns unrevealed works in collections for guests" do
+      it "doesn't return unrevealed works in collections for guests" do
+        get :collected, params: { user_id: collected_user.login }
+        expect(assigns(:works)).to include(work)
+        expect(assigns(:works)).not_to include(unrevealed_work)
+      end
+
+      it "doesn't return unrevealed works in collections for logged-in users" do
+        fake_login
+        get :collected, params: { user_id: collected_user.login }
+        expect(assigns(:works)).to include(work)
+        expect(assigns(:works)).not_to include(unrevealed_work)
+      end
+
+      it "returns unrevealed works in collections for the author" do
+        fake_login_known_user(collected_user)
         get :collected, params: { user_id: collected_user.login }
         expect(assigns(:works)).to include(work, unrevealed_work)
       end
+    end
+  end
 
-      it "returns unrevealed works in collections for logged-in users" do
-        fake_login
-        get :collected, params: { user_id: collected_user.login }
-        expect(assigns(:works)).to include(work, unrevealed_work)
+  describe "destroy" do
+    let(:work) { create(:work) }
+    let(:work_title) { work.title }
+
+    context "when a work has consecutive deleted comments in a thread" do
+      before do
+        thread_depth = 4
+        chapter = work.first_chapter
+
+        commentable = chapter
+        comments = []
+        thread_depth.times do
+          commentable = create(:comment, commentable: commentable, parent: chapter)
+          comments << commentable
+        end
+
+        # Delete all but the last comment in the thread.
+        # We should have (thread_depth - 1) consecutive deleted comment placeholders.
+        comments.reverse.drop(1).each(&:destroy_or_mark_deleted)
+
+        fake_login_known_user(work.users.first)
+      end
+
+      it "deletes the work and redirects to the user's works with a notice" do
+        delete :destroy, params: { id: work.id }
+
+        it_redirects_to_with_notice(user_works_path(controller.current_user), "Your work #{work_title} was deleted.")
+        expect { work.reload }.to raise_exception(ActiveRecord::RecordNotFound)
+        expect(Comment.count).to eq(0)
       end
     end
   end

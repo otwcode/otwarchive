@@ -49,6 +49,12 @@ When /^(?:|I )follow "([^"]*)"(?: within "([^"]*)")?$/ do |link, selector|
   end
 end
 
+When /^(?:|I )follow '([^']*)'(?: within "([^"]*)")?$/ do |link, selector|
+  with_scope(selector) do
+    click_link(link)
+  end
+end
+
 When /^(?:|I )fill in "([^"]*)" with "([^"]*)"(?: within "([^"]*)")?$/ do |field, value, selector|
   with_scope(selector) do
     fill_in(field, with: value)
@@ -253,7 +259,7 @@ Then /^the "([^"]*)" field(?: within "([^"]*)")? should not contain "([^"]*)"$/ 
   end
 end
 
-Then /^the "(.*?)" checkbox(?: within "(.*?)")? should be checked( and disabled)?$/ do |label, selector, disabled|
+Then /^the "(.*?)" (checkbox|radio button)(?: within "(.*?)")? should be checked( and disabled)?$/ do |label, _input_type, selector, disabled|
   with_scope(selector) do
     assert has_checked_field?(label, disabled: disabled.present?)
   end

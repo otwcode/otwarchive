@@ -432,18 +432,6 @@ function prepareDeleteLinks() {
 
 /// Kudos
 $j(document).ready(function() {
-  $j('#kudos_summary').click(function(e) {
-    e.preventDefault();
-    $j(this).hide();
-    $j('.kudos_expanded').show();
-  });
-
-  $j('#kudos_collapser').click(function(e) {
-    e.preventDefault();
-    $j('#kudos_summary').show();
-    $j('.kudos_expanded').hide();
-  });
-
   $j('#kudo_submit').on("click", function(event) {
     event.preventDefault();
 
@@ -451,22 +439,27 @@ $j(document).ready(function() {
       type: 'POST',
       url: '/kudos.js',
       data: jQuery('#new_kudo').serialize(),
-      error: function(jqXHR, textStatus, errorThrown ) {
+      error: function(jqXHR, textStatus, errorThrown) {
         var msg = 'Sorry, we were unable to save your kudos';
-        var data = $j.parseJSON(jqXHR.responseText);
 
-        if (data.errors && (data.errors.ip_address || data.errors.user_id)) {
-          msg = "You have already left kudos here. :)";
+        // When we hit the rate limit, the response from Rack::Attack is a plain text 429.
+        if (jqXHR.status == "429") {
+          msg = "Sorry, you can't leave more kudos right now. Please try again in a few minutes.";
+        } else {
+          var data = $j.parseJSON(jqXHR.responseText);
+
+          if (data.errors && (data.errors.ip_address || data.errors.user_id)) {
+            msg = "You have already left kudos here. :)";
+          }
+          if (data.errors && data.errors.cannot_be_author) {
+            msg = "You can't leave kudos on your own work.";
+          }
+          if (data.errors && data.errors.guest_on_restricted) {
+            msg = "You can't leave guest kudos on a restricted work.";
+          }
         }
 
-        if (data.errors && data.errors.cannot_be_author) {
-          msg = "You can't leave kudos on your own work.";
-        }
-        if (data.errors && data.errors.guest_on_restricted) {
-          msg = "You can't leave guest kudos on a restricted work.";
-        }
-
-        $j('#kudos_message').addClass('comment_error').text(msg);
+        $j('#kudos_message').addClass('kudos_error').text(msg);
       },
       success: function(data) {
         $j('#kudos_message').addClass('notice').text('Thank you for leaving kudos!');
@@ -475,13 +468,13 @@ $j(document).ready(function() {
   });
 
   // Scroll to the top of the comments section when loading additional pages via Ajax in comment pagination.
-  $j('#comments_placeholder').find('.pagination').find('a[data-remote]').livequery('click.rails', function(e){
+  $j('#comments_placeholder').on('click.rails', '.pagination a[data-remote]', function(e){
     $j.scrollTo('#comments_placeholder');
   });
 
-  // Scroll to the top of the feedback section when loading comments via AJAX
-  $j("#show_comments_link_top").find('a[href*="show_comments"]').livequery('click.rails', function(e){
-    $j.scrollTo('#feedback');
+  // Scroll to the top of the comments section when loading comments via AJAX
+  $j("#show_comments_link_top").on('click.rails', 'a[href*="show_comments"]', function(e){
+    $j.scrollTo('#comments');
   });
 });
 

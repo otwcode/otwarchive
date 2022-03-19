@@ -195,7 +195,7 @@ describe Admin::ApiController do
 
         context "where the update is unsuccessful" do
           before do
-            allow_any_instance_of(ApiKey).to receive(:update_attributes).and_return(false)
+            allow_any_instance_of(ApiKey).to receive(:update).and_return(false)
           end
 
           it "shows the edit view" do

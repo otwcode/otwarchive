@@ -146,6 +146,7 @@ Feature: Import Works
     Then I should see "Chapters:2/2"
       And I should see "IP Address: 127.0.0.1"
 
+  @work_import_multi_work_backdate
   Scenario: Importing multiple works with backdating
     When I import the urls
         """
@@ -160,6 +161,7 @@ Feature: Import Works
     Then I should see "Preview"
       And I should see "2010-01-11"
 
+  @work_import_multi_chapter_backdate
   Scenario: Importing a new multichapter work with backdating should have correct chapter index dates
     Given basic languages
       And basic tags
@@ -213,12 +215,14 @@ Feature: Import Works
       And I should see "Das Maß aller Dinge" within "h2.title"
       And I should see "Ä Ö Ü é è È É ü ö ä ß ñ"
 
+  @work_import_special_characters_auto_latin
   Scenario: Import a work with special characters (latin-1, autodetect from page encoding)
     When I import "http://www.rbreu.de/otwtest/latin1_specified.html"
     Then I should see "Preview"
       And I should see "Das Maß aller Dinge" within "h2.title"
       And I should see "Ä Ö Ü é è È É ü ö ä ß ñ"
 
+  @work_import_special_characters_man_latin
   Scenario: Import a work with special characters (latin-1, must set manually)
     When I start importing "http://www.rbreu.de/otwtest/latin1_notspecified.html"
       And I select "ISO-8859-1" from "encoding"
@@ -227,6 +231,7 @@ Feature: Import Works
       And I should see "Das Maß aller Dinge" within "h2.title"
       And I should see "Ä Ö Ü é è È É ü ö ä ß ñ"
 
+  @work_import_special_characters_man_cp
   Scenario: Import a work with special characters (cp-1252, must set manually)
     When I start importing "http://rbreu.de/otwtest/cp1252.txt"
       And I select "Windows-1252" from "encoding"
@@ -236,6 +241,7 @@ Feature: Import Works
       And I should see "So—what’s up?"
       And I should see "“Something witty.”"
 
+  @work_import_special_characters_man_utf
   Scenario: Import a work with special characters (utf-8, must overwrite wrong page encoding)
     When I start importing "http://www.rbreu.de/otwtest/utf8_notspecified.html"
       And I select "UTF-8" from "encoding"
@@ -244,6 +250,8 @@ Feature: Import Works
       And I should see "Das Maß aller Dinge" within "h2.title"
       And I should see "Ä Ö Ü é è È É ü ö ä ß ñ"
 
+  # TODO: scarvesandcoffee.net is 403.
+  @wip
   Scenario: Import a chaptered work from an efiction site
   When I import "http://www.scarvesandcoffee.net/viewstory.php?sid=9570"
   Then I should see "Preview"
@@ -253,12 +261,12 @@ Feature: Import Works
   Then I should see "Chapter 2"
 
   Scenario: Searching for an imported work by URL will redirect you to the work
-    When I import "http://www.scarvesandcoffee.net/viewstory.php?sid=9570"
+    When I import "http://import-site-with-tags" with a mock website
       And I press "Post"
       And I go to the redirect page
-      And I fill in "Original URL of work" with "http://www.scarvesandcoffee.net/viewstory.php?sid=9570"
+      And I fill in "Original URL of work" with "http://import-site-with-tags"
       And I press "Go"
-    Then I should see "This is what Blaine's been thinking written in poems."
+    Then I should see "Detected Title"
 
   Scenario: Import URLs as chapters of a single work and post from drafts page
     Given I import the urls with mock websites as chapters

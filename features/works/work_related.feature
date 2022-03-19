@@ -372,7 +372,7 @@ Scenario: When a user is notified that a co-authored work has been inspired by a
   Then I should not see "misterdeejay"
     But 1 email should be delivered to "misterdeejay"
     And the email should contain "The user inspired has invited your pseud misterdeejay to be listed as a co-creator on the following work"
-  When the user "misterdeejay" accepts all creator invites
+  When the user "misterdeejay" accepts all co-creator requests
     And I edit the work "Seedling of an Idea"
     And I list the work "Seed of an Idea" as inspiration
     And I preview the work

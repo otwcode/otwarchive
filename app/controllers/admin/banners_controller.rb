@@ -41,7 +41,7 @@ class Admin::BannersController < Admin::BaseController
   def update
     @admin_banner = AdminBanner.find(params[:id])
 
-    if !@admin_banner.update_attributes(admin_banner_params)
+    if !@admin_banner.update(admin_banner_params)
       render action: 'edit'
     elsif params[:admin_banner_minor_edit]
       flash[:notice] = ts('Updating banner for users who have not already dismissed it. This may take some time.')

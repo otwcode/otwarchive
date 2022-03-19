@@ -66,7 +66,8 @@ class PreferencesController < ApplicationController
       :history_enabled,
       :first_login,
       :banner_seen,
-      :allow_cocreator
+      :allow_cocreator,
+      :allow_gifts
     )
   end
 end

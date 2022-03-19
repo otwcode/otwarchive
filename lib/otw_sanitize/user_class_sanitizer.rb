@@ -2,10 +2,11 @@
 
 # allow users to specify class attributes in their html
 # scrub invalid class names
-module OTWSanitize
+module OtwSanitize
   class UserClassSanitizer
     def self.transformer
       lambda do |env|
+        # Check this node even if it is already safelisted.
         new(env[:node]).sanitized_node
       end
     end

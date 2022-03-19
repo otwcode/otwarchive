@@ -6,10 +6,20 @@ en:
           attributes:
             pseud_id:
               taken: "is already listed as a creator."
+        external_work:
+          attributes:
+            user_defined_tags_count:
+              at_most:
+                "must not add up to more than %{count}. You have entered %{value} of these tags, so you must remove %{diff} of them."
         user:
           attributes:
             password_confirmation:
               confirmation: "doesn't match new password."
+        work:
+          attributes:
+            user_defined_tags_count:
+              at_most:
+                "must not add up to more than %{count}. Your work has %{value} of these tags, so you must remove %{diff} of them."
     models:
       archive_warning:
         one: "Warning"
@@ -95,3 +105,7 @@ en:
       work/chapters:
         content: "Content"
         base: "Invalid chapter:"
+      external_work:
+        user_defined_tags_count: "Fandom, relationship, and character tags"
+      work:
+        user_defined_tags_count: "Fandom, relationship, character, and additional tags"

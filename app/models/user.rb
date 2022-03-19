@@ -23,7 +23,7 @@ class User < ApplicationRecord
   acts_as_authorized_user
   acts_as_authorizable
   has_many :roles_users
-  has_many :roles, through: :roles_users
+  has_many :roles, through: :roles_users, dependent: :destroy
 
   ### BETA INVITATIONS ###
   has_many :invitations, as: :creator
@@ -219,10 +219,11 @@ class User < ApplicationRecord
     where("challenge_claims.id IN (?)", claims_ids)
   end
 
-  # Find users with a particular role and/or by name and/or by email
+  # Find users with a particular role and/or by name, email, and/or id
   # Options: inactive, page, exact
-  def self.search_by_role(role, name, email, options = {})
-    return if role.blank? && name.blank? && email.blank?
+  def self.search_by_role(role, name, email, user_id, options = {})
+    return if role.blank? && name.blank? && email.blank? && user_id.blank?
+
     users = User.distinct.order(:login)
     if options[:inactive]
       users = users.where("confirmed_at IS NULL")
@@ -235,6 +236,9 @@ class User < ApplicationRecord
     end
     if email.present?
       users = users.filter_by_email(email, options[:exact])
+    end
+    if user_id.present?
+      users = users.where(["users.id = ?", user_id])
     end
     users.paginate(page: options[:page] || 1)
   end
@@ -366,11 +370,6 @@ class User < ApplicationRecord
     has_role?(:translation_admin)
   end
 
-  # Set translator role for this user and log change
-  def translation_admin=(should_be_translation_admin)
-    set_role("translation_admin", should_be_translation_admin == "1")
-  end
-
   # Is this user an authorized tag wrangler?
   def tag_wrangler
     self.is_tag_wrangler?
@@ -378,11 +377,6 @@ class User < ApplicationRecord
 
   def is_tag_wrangler?
     has_role?(:tag_wrangler)
-  end
-
-  # Set tag wrangler role for this user and log change
-  def tag_wrangler=(should_be_tag_wrangler)
-    set_role("tag_wrangler", should_be_tag_wrangler == "1")
   end
 
   # Is this user an authorized archivist?
@@ -394,9 +388,15 @@ class User < ApplicationRecord
     has_role?(:archivist)
   end
 
-  # Set archivist role for this user and log change
-  def archivist=(should_be_archivist)
-    set_role("archivist", should_be_archivist == "1")
+  # Is this user a protected user? These are users experiencing certain types
+  # of harassment. For now, this is only used to prevent harassment via repeated
+  # password reset requests.
+  def protected_user
+    self.is_protected_user?
+  end
+
+  def is_protected_user?
+    has_role?(:protected_user)
   end
 
   # Creates log item tracking changes to user

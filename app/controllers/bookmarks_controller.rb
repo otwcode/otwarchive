@@ -186,20 +186,14 @@ class BookmarksController < ApplicationController
   # POST /bookmarks
   # POST /bookmarks.xml
   def create
-    @bookmark = Bookmark.new(bookmark_params)
-    @bookmarkable = @bookmark.bookmarkable
-    if @bookmarkable.new_record? && @bookmarkable.fandoms.blank?
-       @bookmark.errors.add(:base, "Fandom tag is required")
-       render :new and return
+    @bookmarkable ||= ExternalWork.new(external_work_params)
+    @bookmark = Bookmark.new(bookmark_params.merge(bookmarkable: @bookmarkable))
+    if @bookmark.errors.empty? && @bookmark.save
+      flash[:notice] = ts("Bookmark was successfully created. It should appear in bookmark listings within the next few minutes.")
+      redirect_to(bookmark_path(@bookmark))
+    else
+      render :new
     end
-    if @bookmark.errors.empty?
-      if @bookmarkable.save && @bookmark.save
-        flash[:notice] = ts('Bookmark was successfully created. It should appear in bookmark listings within the next few minutes.')
-        redirect_to(bookmark_path(@bookmark)) && return
-      end
-    end
-    @bookmarkable.errors.full_messages.each { |msg| @bookmark.errors.add(:base, msg) }
-    render action: "new" and return
   end
 
   # PUT /bookmarks/1
@@ -208,7 +202,7 @@ class BookmarksController < ApplicationController
     new_collections = []
     unapproved_collections = []
     errors = []
-    bookmark_params[:collection_names].split(',').map {|name| name.strip}.uniq.each do |collection_name|
+    bookmark_params[:collection_names]&.split(",")&.map(&:strip)&.uniq&.each do |collection_name|
       collection = Collection.find_by(name: collection_name)
       if collection.nil?
         errors << ts("#{collection_name} does not exist.")
@@ -234,32 +228,28 @@ class BookmarksController < ApplicationController
       flash[:error] = ts("We couldn't add your submission to the following collections: ") + errors.join("<br />")
     end
 
-    flash[:notice] = "" unless new_collections.empty? && unapproved_collections.empty?
     unless new_collections.empty?
-      flash[:notice] += ts("Added to collection(s): %{collections}.",
+      flash[:notice] = ts("Added to collection(s): %{collections}.",
                           collections: new_collections.collect(&:title).join(", "))
     end
     unless unapproved_collections.empty?
-      flash[:notice] ||= ""
+      flash[:notice] = flash[:notice] ? flash[:notice] + " " : ""
       flash[:notice] += if unapproved_collections.size > 1
-                          ts(" You have submitted your bookmark to moderated collections (%{all_collections}). It will not become a part of those collections until it has been approved by a moderator.", all_collections: unapproved_collections.map { |f| f.title }.join(', '))
+                          ts("You have submitted your bookmark to moderated collections (%{all_collections}). It will not become a part of those collections until it has been approved by a moderator.", all_collections: unapproved_collections.map(&:title).join(", "))
                         else
-                          ts(" You have submitted your bookmark to the moderated collection '%{collection}'. It will not become a part of the collection until it has been approved by a moderator.", collection: unapproved_collections.first.title)
+                          ts("You have submitted your bookmark to the moderated collection '%{collection}'. It will not become a part of the collection until it has been approved by a moderator.", collection: unapproved_collections.first.title)
                         end
     end
 
     flash[:notice] = (flash[:notice]).html_safe unless flash[:notice].blank?
     flash[:error] = (flash[:error]).html_safe unless flash[:error].blank?
 
-    if errors.empty?
-      if @bookmark.update_attributes(bookmark_params)
-        flash[:notice] ||= ""
-        flash[:notice] = ts(" Bookmark was successfully updated. ").html_safe + flash[:notice]
-        flash[:notice] = (flash[:notice]).html_safe unless flash[:notice].blank?
-        redirect_to(@bookmark)
-      end
+    if @bookmark.update(bookmark_params) && errors.empty?
+      flash[:notice] = flash[:notice] ? " " + flash[:notice] : ""
+      flash[:notice] = ts("Bookmark was successfully updated.").html_safe + flash[:notice]
+      flash[:notice] = flash[:notice].html_safe
+      redirect_to(@bookmark)
     else
-      @bookmark.update_attributes(bookmark_params)
       @bookmarkable = @bookmark.bookmarkable
       render :edit and return
     end
@@ -375,12 +365,14 @@ class BookmarksController < ApplicationController
 
   def bookmark_params
     params.require(:bookmark).permit(
-      :bookmarkable_id, :bookmarkable_type,
-      :pseud_id, :bookmarker_notes, :tag_string, :collection_names, :private, :rec,
-      external: [
-        :url, :author, :title, :fandom_string, :rating_string, :relationship_string,
-        :character_string, :summary, category_string: []
-      ]
+      :pseud_id, :bookmarker_notes, :tag_string, :collection_names, :private, :rec
+    )
+  end
+
+  def external_work_params
+    params.require(:external_work).permit(
+      :url, :author, :title, :fandom_string, :rating_string, :relationship_string,
+      :character_string, :summary, category_strings: []
     )
   end
 

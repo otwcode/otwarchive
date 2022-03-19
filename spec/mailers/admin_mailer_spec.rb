@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'spec_helper'
+require "spec_helper"
 
 describe AdminMailer do
   describe "send_spam_alert" do
@@ -8,24 +8,24 @@ describe AdminMailer do
 
     let(:spam1) do
       create(:work, spam: true, title: "First Spam",
-                           authors: [spam_user.default_pseud])
+                    authors: [spam_user.default_pseud])
     end
 
     let(:spam2) do
       create(:work, spam: true, title: "Second Spam",
-                           authors: [spam_user.default_pseud])
+                    authors: [spam_user.default_pseud])
     end
 
     let(:spam3) do
       create(:work, spam: true, title: "Third Spam",
-                           authors: [spam_user.default_pseud])
+                    authors: [spam_user.default_pseud])
     end
 
     let(:other_user) { create(:user) }
 
     let(:other_spam) do
       create(:work, spam: true, title: "Mistaken Spam",
-                           authors: [other_user.default_pseud])
+                    authors: [other_user.default_pseud])
     end
 
     let!(:report) do
@@ -125,9 +125,7 @@ describe AdminMailer do
           }
         end
 
-        it "aborts delivery" do
-          expect(email.message).to be_a(ActionMailer::Base::NullMail)
-        end
+        it_behaves_like "an unsent email"
       end
     end
   end
@@ -167,56 +165,6 @@ describe AdminMailer do
 
       it "contains the summary" do
         expect(email).to have_text_part_content(feedback.summary)
-      end
-    end
-  end
-
-  describe "abuse_report" do
-    let(:report) { create(:abuse_report) }
-    let(:email) { AdminMailer.abuse_report(report.id) }
-    let(:email2) { UserMailer.abuse_report(report.id) }
-
-    it "has the correct subject" do
-      expect(email).to have_subject "[#{ArchiveConfig.APP_SHORT_NAME}] Admin Abuse Report"
-    end
-
-    it "delivers to the correct address" do
-      expect(email).to deliver_to ArchiveConfig.ABUSE_ADDRESS
-    end
-
-    it "ccs the user who filed the report" do
-      expect(email2).to deliver_to(report.email)
-    end
-
-    it_behaves_like "an email with a valid sender"
-
-    it_behaves_like "a multipart email"
-
-    describe "HTML version" do
-      it "contains the comment" do
-        expect(email).to have_html_part_content(report.comment)
-      end
-
-      it "contains the email address" do
-        expect(email).to have_html_part_content(report.email)
-      end
-
-      it "contains the url of the page with abuse" do
-        expect(email).to have_html_part_content(report.url)
-      end
-    end
-
-    describe "text version" do
-      it "contains the comment" do
-        expect(email).to have_text_part_content(report.comment)
-      end
-
-      it "contains the email address" do
-        expect(email).to have_text_part_content(report.email)
-      end
-
-      it "contains the url of the page with abuse" do
-        expect(email).to have_text_part_content(report.url)
       end
     end
   end

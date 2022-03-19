@@ -24,3 +24,9 @@ shared_examples_for "an email with a valid sender" do
     expect(email).to deliver_from("Archive of Our Own <#{ArchiveConfig.RETURN_ADDRESS}>")
   end
 end
+
+shared_examples_for "an unsent email" do
+  it "is not delivered" do
+    expect(email.message).to be_a(ActionMailer::Base::NullMail)
+  end
+end

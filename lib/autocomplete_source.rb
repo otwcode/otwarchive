@@ -11,21 +11,38 @@ module AutocompleteSource
   # from collection titles
   AUTOCOMPLETE_WORD_TERMINATOR = ",,".freeze
 
+  def transliterate(input)
+    input = input.to_s.mb_chars.unicode_normalize(:nfkd).gsub(/[\u0300-\u036F]/, "")
+    result = ""
+    input.each_char do |char|
+      tl = ActiveSupport::Inflector.transliterate(char)
+      # If transliterate returns "?", the original character is either unsupported 
+      # (e.g. a non-Latin character) or was actually a question mark.
+      # In both cases, we should keep the original.
+      result << if tl == "?"
+                  char
+                else
+                  tl
+                end
+    end
+    result
+  end
+
   # override to define any autocomplete prefix spaces where this object should live
   def autocomplete_prefixes
-    ["autocomplete_#{self.class.name.downcase}"]
+    [self.transliterate("autocomplete_#{self.class.name.downcase}")]
   end
 
   def autocomplete_search_string
-    name.to_s
+    self.transliterate(name)
   end
 
   def autocomplete_search_string_was
-    name_was.to_s
+    self.transliterate(name_was)
   end
 
   def autocomplete_search_string_before_last_save
-    name_before_last_save.to_s
+    self.transliterate(name_before_last_save)
   end
 
   def autocomplete_value
@@ -52,11 +69,11 @@ module AutocompleteSource
         # We put each prefix and the word + completion token into the set of all completions,
         # with score 0 so they just get sorted lexicographically --
         # this will be used to quickly find all possible completions in this space
-        REDIS_AUTOCOMPLETE.zadd(self.class.autocomplete_completion_key(prefix), 0, word_piece)
+        REDIS_AUTOCOMPLETE.zadd(self.transliterate(self.class.autocomplete_completion_key(prefix)), 0, word_piece)
 
         # We put each complete search string into a separate set indexed by word with specified score
         if self.class.is_complete_word?(word_piece)
-          REDIS_AUTOCOMPLETE.zadd(self.class.autocomplete_score_key(prefix, word_piece), score, autocomplete_value)
+          REDIS_AUTOCOMPLETE.zadd(self.transliterate(self.class.autocomplete_score_key(prefix, word_piece)), score, autocomplete_value)
         end
       end
     end
@@ -72,6 +89,7 @@ module AutocompleteSource
   end
 
   module ClassMethods
+    include AutocompleteSource
 
     # returns a properly escaped and case-insensitive regexp for a more manual search
     def get_search_regex(search_param)
@@ -81,8 +99,12 @@ module AutocompleteSource
     # takes either an array or string of search terms (typically extra values passed in through live params, like fandom)
     # and returns an array of stripped and lowercase words for actual searching or use in keys
     def get_search_terms(search_term)
-      terms = search_term.is_a?(Array) ? search_term.map {|term| term.split(',')}.flatten : (search_term.blank? ? [] : search_term.split(','))
-      terms.map { |term| term.strip.downcase }
+      terms = if search_term.is_a?(Array)
+                search_term.map { |term| term.split(",") }.flatten
+              else
+                search_term.blank? ? [] : search_term.split(",")
+              end
+      terms.map { |term| self.transliterate(term.strip.downcase) }
     end
 
     def parse_autocomplete_value(current_autocomplete_value)
@@ -207,15 +229,15 @@ module AutocompleteSource
     end
 
     def autocomplete_score_key(autocomplete_prefix, word)
-      autocomplete_prefix + "_" + AUTOCOMPLETE_SCORE_KEY + "_" + get_word(word)
+      self.transliterate(autocomplete_prefix + "_" + AUTOCOMPLETE_SCORE_KEY + "_" + get_word(word))
     end
 
     def autocomplete_completion_key(autocomplete_prefix)
-      autocomplete_prefix + "_" + AUTOCOMPLETE_COMPLETION_KEY
+      self.transliterate(autocomplete_prefix + "_" + AUTOCOMPLETE_COMPLETION_KEY)
     end
 
     def autocomplete_cache_key(autocomplete_prefix, search_param)
-      autocomplete_prefix + "_" + AUTOCOMPLETE_CACHE_KEY + "_" + search_param
+      self.transliterate(autocomplete_prefix + "_" + AUTOCOMPLETE_CACHE_KEY + "_" + search_param)
     end
 
     # Split a string into words.
@@ -223,7 +245,7 @@ module AutocompleteSource
       # Use the ActiveSupport::Multibyte::Chars class to handle downcasing
       # instead of the basic string class, because it can handle downcasing
       # letters with accents or other diacritics.
-      normalized = string.mb_chars.downcase.to_s
+      normalized = self.transliterate(string).downcase.to_s
 
       # Split on one or more spaces, ampersand, slash, double quotation mark,
       # opening parenthesis, closing parenthesis (just in case), tilde, hyphen
@@ -237,7 +259,7 @@ module AutocompleteSource
       words = autocomplete_phrase_split(string)
 
       words.each do |word|
-        prefixes << word + AUTOCOMPLETE_WORD_TERMINATOR
+        prefixes << self.transliterate(word) + AUTOCOMPLETE_WORD_TERMINATOR
         word.length.downto(1).each do |last_index|
           prefixes << word.slice(0, last_index)
         end

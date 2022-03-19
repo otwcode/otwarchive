@@ -1,6 +1,7 @@
 class Comment < ApplicationRecord
   include ActiveModel::ForbiddenAttributesProtection
   include HtmlCleaner
+  include AfterCommitEverywhere
 
   belongs_to :pseud
   belongs_to :commentable, polymorphic: true
@@ -19,7 +20,7 @@ class Comment < ApplicationRecord
     maximum: ArchiveConfig.COMMENT_MAX,
     too_long: ts("must be less than %{count} characters long.", count: ArchiveConfig.COMMENT_MAX)
 
-  validate :check_for_spam
+  validate :check_for_spam, on: :create
 
   def check_for_spam
     errors.add(:base, ts("This comment looks like spam to our system, sorry! Please try again, or create an account to comment.")) unless check_for_spam?
@@ -28,6 +29,7 @@ class Comment < ApplicationRecord
   validates :comment_content, uniqueness: {
     scope: [:commentable_id, :commentable_type, :name, :email, :pseud_id],
     unless: :is_deleted?,
+    case_sensitive: false,
     message: ts("^This comment has already been left on this work. (It may not appear right away for performance reasons.)")
   }
 
@@ -54,6 +56,18 @@ class Comment < ApplicationRecord
     }
   end
 
+  after_create :expire_parent_comments_count
+  after_update :expire_parent_comments_count, if: :saved_change_to_visibility?
+  after_destroy :expire_parent_comments_count
+  def expire_parent_comments_count
+    after_commit { parent&.expire_comments_count }
+  end
+
+  def saved_change_to_visibility?
+    pertinent_attributes = %w[is_deleted hidden_by_admin unreviewed approved]
+    (saved_changes.keys & pertinent_attributes).present?
+  end
+
   before_create :set_depth
   before_create :set_thread_for_replies
   before_create :set_parent_and_unreviewed
@@ -63,18 +77,22 @@ class Comment < ApplicationRecord
   after_create :update_work_stats
   after_destroy :update_work_stats
 
+  # If a comment has changed too much, we might need to put it back in moderation:
+  before_update :recheck_unreviewed
+  def recheck_unreviewed
+    return unless edited_at_changed? &&
+                  comment_content_changed? &&
+                  moderated_commenting_enabled? &&
+                  !is_creator_comment? &&
+                  content_too_different?(comment_content, comment_content_was)
+
+    self.unreviewed = true
+  end
+
   after_update :after_update
   def after_update
     users = []
     admins = []
-
-    if self.saved_change_to_edited_at? && self.saved_change_to_comment_content? && self.moderated_commenting_enabled? && !self.is_creator_comment?
-      # we might need to put it back into moderation
-      if content_too_different?(comment_content, comment_content_before_last_save)
-        # we use update_column because we don't want to invoke this callback again
-        self.update_column(:unreviewed, true)
-      end
-    end
 
     if self.saved_change_to_edited_at? || (self.saved_change_to_unreviewed? && !self.unreviewed?)
       # Reply to owner of parent comment if this is a reply comment
@@ -260,7 +278,7 @@ class Comment < ApplicationRecord
         # if I'm replying to a comment you left for me, mark your comment as replied to in my inbox
         if self.comment_owner
           if (inbox_comment = self.comment_owner.inbox_comments.find_by(feedback_comment_id: parent_comment.id))
-            inbox_comment.update_attributes(replied_to: true, read: true)
+            inbox_comment.update(replied_to: true, read: true)
           end
         end
 
@@ -393,6 +411,16 @@ class Comment < ApplicationRecord
     update_attribute(:approved, true)
     # don't submit ham reports unless in production mode
     Rails.env.production? && Akismetor.submit_ham(akismet_attributes)
+  end
+
+  # Freeze single comment.
+  def mark_frozen!
+    update_attribute(:iced, true)
+  end
+
+  # Unfreeze single comment.
+  def mark_unfrozen!
+    update_attribute(:iced, false)
   end
 
   def sanitized_content

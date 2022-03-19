@@ -143,8 +143,8 @@ describe WorkSearchForm, work_search: true do
       second_work.collection_ids = [collection.id]
       second_work.save
 
-      work.stat_counter.update_attributes(kudos_count: 1200, comments_count: 120, bookmarks_count: 12)
-      second_work.stat_counter.update_attributes(kudos_count: 999, comments_count: 99, bookmarks_count: 9)
+      work.stat_counter.update(kudos_count: 1200, comments_count: 120, bookmarks_count: 12)
+      second_work.stat_counter.update(kudos_count: 999, comments_count: 99, bookmarks_count: 9)
       run_all_indexing_jobs
     end
 
@@ -174,6 +174,64 @@ describe WorkSearchForm, work_search: true do
       results = WorkSearchForm.new(query: "\"Season/Series 99\"").search_results
       expect(results).not_to include work
       expect(results).to include second_work
+    end
+
+    describe "when searching using user_ids in the query" do
+      let(:user_id) { second_work.user_ids.first }
+
+      context "when the work is in an anonymous collection" do
+        let(:collection) { create(:anonymous_collection) }
+
+        it "doesn't include the work" do
+          work_search = WorkSearchForm.new(query: "user_ids: #{user_id}")
+          expect(work_search.search_results).not_to include second_work
+        end
+      end
+
+      context "when the work is in an unrevealed collection" do
+        let(:collection) { create(:unrevealed_collection) }
+
+        it "doesn't include the work" do
+          work_search = WorkSearchForm.new(query: "user_ids: #{user_id}")
+          expect(work_search.search_results).not_to include second_work
+        end
+      end
+
+      context "when the work is neither anonymous or unrevealed" do
+        it "includes the work" do
+          work_search = WorkSearchForm.new(query: "user_ids: #{user_id}")
+          expect(work_search.search_results).to include second_work
+        end
+      end
+    end
+
+    describe "when searching using pseud_ids in the query" do
+      let(:pseud_id) { second_work.pseud_ids.first }
+
+      context "when the work is in an anonymous collection" do
+        let(:collection) { create(:anonymous_collection) }
+
+        it "doesn't include the work" do
+          work_search = WorkSearchForm.new(query: "pseud_ids: #{pseud_id}")
+          expect(work_search.search_results).not_to include second_work
+        end
+      end
+
+      context "when the work is in an unrevealed collection" do
+        let(:collection) { create(:unrevealed_collection) }
+
+        it "doesn't include the work" do
+          work_search = WorkSearchForm.new(query: "pseud_ids: #{pseud_id}")
+          expect(work_search.search_results).not_to include second_work
+        end
+      end
+
+      context "when the work is neither anonymous or unrevealed" do
+        it "includes the work" do
+          work_search = WorkSearchForm.new(query: "pseud_ids: #{pseud_id}")
+          expect(work_search.search_results).to include second_work
+        end
+      end
     end
 
     describe "when searching unposted works" do
@@ -390,10 +448,10 @@ describe WorkSearchForm, work_search: true do
 
     describe "when searching by word count" do
       before(:each) do
-        work.chapters.first.update_attributes(content: "This is a work with a word count of ten.", posted: true)
+        work.chapters.first.update(content: "This is a work with a word count of ten.", posted: true)
         work.save
 
-        second_work.chapters.first.update_attributes(content: "This is a work with a word count of fifteen which is more than ten.", posted: true)
+        second_work.chapters.first.update(content: "This is a work with a word count of fifteen which is more than ten.", posted: true)
         second_work.save
 
         run_all_indexing_jobs

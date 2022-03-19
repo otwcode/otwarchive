@@ -46,6 +46,7 @@ class PseudsController < ApplicationController
     end
 
     visible_works = visible_works.revealed.non_anon
+    visible_series = visible_series.exclude_anonymous
 
     @fandoms = \
       Fandom.select("tags.*, count(DISTINCT works.id) as work_count").
@@ -104,7 +105,7 @@ class PseudsController < ApplicationController
   def update
     @pseud = @user.pseuds.find_by(name: params[:id])
     default = @user.default_pseud
-    if @pseud.update_attributes(pseud_params)
+    if @pseud.update(pseud_params)
       # if setting this one as default, unset the attribute of the current default pseud
       if @pseud.is_default and not(default == @pseud)
         # if setting this one as default, unset the attribute of the current active pseud

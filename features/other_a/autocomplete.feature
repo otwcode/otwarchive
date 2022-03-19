@@ -48,9 +48,25 @@ Feature: Display autocomplete for tags
       And the collection item autocomplete field should list matching collections
 
   @javascript
+  Scenario: Work co-author and association autocompletes should work with pseuds containing diacrictics
+    Given basic tags
+      And a set of users for testing autocomplete
+      And "coauthor" has the pseud "çola"
+      And I am logged in
+      And I go to the new work page
+    Then the coauthor autocomplete field should list matching users
+    When I enter "c" in the "pseud_byline_autocomplete" autocomplete field
+    Then the pseud autocomplete should contain "çola (coauthor)"
+      And the pseud autocomplete should contain "coauthor"
+    When I enter "ç" in the "pseud_byline_autocomplete" autocomplete field
+    Then the pseud autocomplete should contain "çola (coauthor)"
+      And the pseud autocomplete should contain "coauthor"
+
+
+  @javascript
   Scenario: Collection autocomplete shows collection title and name
     Given I have the collection "Issue" with name "jb_fletcher"
-      And I have the collection "Issue" with name "robert_stack"
+      And I have the collection "Ïssue" with name "robert_stack"
       And I am logged in as "Scott" with password "password"
       And I post the work "All The Nice Things"
       And I view the work "All The Nice Things"
@@ -117,6 +133,10 @@ Feature: Display autocomplete for tags
     When I enter "é" in the "Characters" autocomplete field
     Then I should see "Éowyn (Tolkien)" in the autocomplete
       And I should see "Tybalt (Rómeó és Júlia)" in the autocomplete
+    When I enter "e" in the "Characters" autocomplete field
+    Then I should see "Éowyn (Tolkien)" in the autocomplete
+      And I should see "Tybalt (Rómeó és Júlia)" in the autocomplete
+
 
   @javascript
   Scenario: Other non-ASCII uppercase letters should appear in the autocomplete.
@@ -127,6 +147,8 @@ Feature: Display autocomplete for tags
       And I go to the new work page
 
     When I enter "ø" in the "Fandoms" autocomplete field
+    Then I should see "Østenfor sol og vestenfor måne" in the autocomplete
+    When I enter "ostenfor" in the "Fandoms" autocomplete field
     Then I should see "Østenfor sol og vestenfor måne" in the autocomplete
 
   @javascript
@@ -140,12 +162,15 @@ Feature: Display autocomplete for tags
     When I choose "Lord of the Rings" from the "Fandoms" autocomplete
       And I enter "É" in the "Characters" autocomplete field
     Then I should see "Éowyn" in the autocomplete
+    When I enter "e" in the "Characters" autocomplete field
+    Then I should see "Éowyn" in the autocomplete
 
   @javascript
   Scenario: Search terms are highlighted in autocomplete results
     Given I am logged in
       And basic tags
       And a canonical relationship "Cassian Andor & Jyn Erso"
+      And a canonical character "Éowyn"
       And I go to the new work page
 
     When I enter "Jyn" in the "Relationships" autocomplete field
@@ -159,6 +184,9 @@ Feature: Display autocomplete for tags
 
     When I enter "Cassian Andor & Jyn Erso" in the "Relationships" autocomplete field
     Then I should see HTML "<b>Cassian</b> <b>Andor</b> &amp; <b>Jyn</b> <b>Erso</b>" in the autocomplete
+
+    When I enter "é" in the "Characters" autocomplete field
+    Then I should see HTML "<b>É</b>owyn" in the autocomplete
 
     # AO3-4976 There should not be stray semicolons if the query has...
     # ...trailing spaces
@@ -179,9 +207,15 @@ Feature: Display autocomplete for tags
       And a canonical freeform "AU - Canon"
       And a canonical freeform "AU - Cats"
       And a canonical freeform "Science Fiction & Fantasy"
+      And a canonical freeform "日月"
+      And a canonical freeform "大小"
       And I go to the new work page
 
     When I enter "AU - Ca" in the "Additional Tags" autocomplete field
     Then I should see "AU - Canon" in the autocomplete
       And I should see "AU - Cats" in the autocomplete
       But I should not see "Science Fiction & Fantasy" in the autocomplete
+    When I enter "日" in the "Additional Tags" autocomplete field
+    Then I should see "日月" in the autocomplete
+      But I should not see "大小" in the autocomplete
+
