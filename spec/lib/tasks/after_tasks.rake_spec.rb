@@ -303,28 +303,22 @@ describe "rake After:fix_tags_with_extra_spaces" do
 end
 
 describe "rake After:delete_invalid_pseud_icon_data" do
-  let!(:valid_pseud) do
-    create(
-      :pseud,
-      icon_alt_text: "hi",
-      icon_comment_text: "okay",
-      icon: File.new(Rails.root.join("features/fixtures/icon.gif"))
-    )
-  end
-  let(:invalid_pseud) do
-    create(
-      :pseud,
-      icon: File.new(Rails.root.join("features/fixtures/icon.gif"))
-    )
-  end
+  let(:valid_pseud) { create(:user).default_pseud }
+  let(:invalid_pseud) { create(:user).default_pseud }
 
   before do
     stub_const("ArchiveConfig", OpenStruct.new(ArchiveConfig))
     ArchiveConfig.ICON_ALT_MAX = 5
     ArchiveConfig.ICON_COMMENT_MAX = 3
+
+    valid_pseud.icon = File.new(Rails.root.join("features/fixtures/icon.gif"))
+    valid_pseud.icon_alt_text = "hi"
+    valid_pseud.icon_comment_text = "okay"
   end
 
   it "removes invalid icon" do
+    invalid_pseud.icon = File.new(Rails.root.join("features/fixtures/icon.gif"))
+    invalid_pseud.save
     invalid_pseud.update_column(:icon_content_type, "not/valid")
     subject.invoke
 
@@ -354,6 +348,7 @@ describe "rake After:delete_invalid_pseud_icon_data" do
   end
 
   it "updates multiple invalid fields on the same pseud" do
+    invalid_pseud.icon = File.new(Rails.root.join("features/fixtures/icon.gif"))
     invalid_pseud.update_columns(icon_content_type: "not/valid",
                                  icon_alt_text: "not valid",
                                  icon_comment_text: "not valid")
