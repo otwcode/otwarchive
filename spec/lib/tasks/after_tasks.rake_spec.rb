@@ -360,6 +360,7 @@ describe "rake After:fix_invalid_pseud_icon_data" do
 
   it "updates multiple invalid fields on the same pseud" do
     invalid_pseud.icon = File.new(Rails.root.join("features/fixtures/icon.gif"))
+    invalid_pseud.save
     invalid_pseud.update_columns(icon_content_type: "not/valid",
                                  icon_alt_text: "not valid",
                                  icon_comment_text: "not valid")
@@ -367,6 +368,7 @@ describe "rake After:fix_invalid_pseud_icon_data" do
 
     invalid_pseud.reload
     expect(invalid_pseud.icon.exists?).to be_falsey
+    expect(invalid_pseud.icon_content_type).to be_nil
     expect(invalid_pseud.icon_alt_text).to be_empty
     expect(invalid_pseud.icon_comment_text).to be_empty
   end
