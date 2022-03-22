@@ -308,12 +308,14 @@ describe "rake After:delete_invalid_pseud_icon_data" do
            icon_alt_text: "hi",
            icon_comment_text: "okay",
            icon: File.new(
-             Rails.root.join("public/images/feed-icon-14x14.png")))
+             Rails.root.join("public/images/feed-icon-14x14.png"))
+          )
   end
   let(:invalid_pseud) do
     create(:pseud,
            icon: File.new(
-             Rails.root.join("public/images/feed-icon-14x14.png")))
+             Rails.root.join("public/images/feed-icon-14x14.png"))
+          )
   end
 
   before do
