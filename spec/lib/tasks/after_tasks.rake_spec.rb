@@ -303,16 +303,22 @@ describe "rake After:fix_tags_with_extra_spaces" do
 end
 
 describe "rake After:delete_invalid_pseud_icon_data" do
-  let!(:valid_pseud) { create(:pseud,
-                              icon_alt_text: "hi",
-                              icon_comment_text: "okay",
-                              icon: File.new(
-                                Rails.root.join("public/images/feed-icon-14x14.png")
-                              )) }
-  let(:invalid_pseud) { create(:pseud,
-                               icon: File.new(
-                                 Rails.root.join("public/images/feed-icon-14x14.png")
-                               )) }
+  let!(:valid_pseud) do
+    create(:pseud,
+      icon_alt_text: "hi",
+      icon_comment_text: "okay",
+      icon: File.new(
+        Rails.root.join("public/images/feed-icon-14x14.png")
+      )
+    )
+  end
+  let(:invalid_pseud) do
+    create(:pseud,
+      icon: File.new(
+        Rails.root.join("public/images/feed-icon-14x14.png")
+      )
+    )
+  end
 
   before do
     ArchiveConfig.ICON_ALT_MAX = 5
