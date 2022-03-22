@@ -892,7 +892,7 @@ namespace :After do
 
     invalid_pseuds.each do |pseud|
       # Change icon content type to jpeg if it's jpg.
-      pseud.icon_content_type = "image/jpeg" if pseud.icon_content_type = "image/jpg"
+      pseud.icon_content_type = "image/jpeg" if pseud.icon_content_type == "image/jpg"
       # Delete the icon if it's not a valid type.
       pseud.icon = nil unless (valid_types + ["image/jpg"]).include?(pseud.icon_content_type)
       # Delete the icon alt text if it's too long.
