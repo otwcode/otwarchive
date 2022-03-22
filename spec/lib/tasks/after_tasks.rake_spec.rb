@@ -302,7 +302,7 @@ describe "rake After:fix_tags_with_extra_spaces" do
   end
 end
 
-describe "rake After:delete_invalid_pseud_icon_data" do
+describe "rake After:fix_invalid_pseud_icon_data" do
   let(:valid_pseud) { create(:user).default_pseud }
   let(:invalid_pseud) { create(:user).default_pseud }
 
@@ -345,6 +345,17 @@ describe "rake After:delete_invalid_pseud_icon_data" do
     invalid_pseud.reload
     expect(invalid_pseud.icon_comment_text).to be_empty
     expect(valid_pseud.icon_comment_text).to eq("okay")
+  end
+
+  it "updates icon_content_type from jpg to jpeg" do
+    invalid_pseud.icon = File.new(Rails.root.join("features/fixtures/icon.jpg"))
+    invalid_pseud.save
+    invalid_pseud.update_column(:icon_content_type, "image/jpg")
+    subject.invoke
+
+    invalid_pseud.reload
+    expect(invalid_pseud.icon.exists?).to be_truthy
+    expect(invalid_pseud.icon_content_type).to eq("image/jpeg")
   end
 
   it "updates multiple invalid fields on the same pseud" do

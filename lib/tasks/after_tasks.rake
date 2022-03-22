@@ -874,8 +874,8 @@ namespace :After do
     puts("Added default rating to works: #{updated_works}") && STDOUT.flush
   end
 
-  desc "Delete invalid icon data from pseuds"
-  task(delete_invalid_pseud_icon_data: :environment) do
+  desc "Fix pseuds with invalid icon data"
+  task(fix_invalid_pseud_icon_data: :environment) do
     # From validates_attachment_content_type in pseuds model.
     valid_types = %w[image/gif image/jpeg image/png]
 
@@ -891,8 +891,10 @@ namespace :After do
     puts("Updating #{invalid_pseuds_count} pseuds") && STDOUT.flush
 
     invalid_pseuds.each do |pseud|
+      # Change icon content type to jpeg if it's jpg.
+      pseud.icon_content_type = "image/jpeg" if pseud.icon_content_type = "image/jpg"
       # Delete the icon if it's not a valid type.
-      pseud.icon = nil unless valid_types.include?(pseud.icon_content_type)
+      pseud.icon = nil unless (valid_types + ["image/jpg"]).include?(pseud.icon_content_type)
       # Delete the icon alt text if it's too long.
       pseud.icon_alt_text = "" if pseud.icon_alt_text.length > ArchiveConfig.ICON_ALT_MAX
       # Delete the icon comment if it's too long.
