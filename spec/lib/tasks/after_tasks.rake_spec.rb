@@ -319,6 +319,7 @@ describe "rake After:delete_invalid_pseud_icon_data" do
   end
 
   before do
+    stub_const("ArchiveConfig", OpenStruct.new(ArchiveConfig))
     ArchiveConfig.ICON_ALT_MAX = 5
     ArchiveConfig.ICON_COMMENT_MAX = 3
   end
@@ -331,7 +332,7 @@ describe "rake After:delete_invalid_pseud_icon_data" do
     expect(invalid_pseud.icon.exists?).to be_falsey
     expect(invalid_pseud.icon_content_type).to be_nil
     expect(valid_pseud.icon.exists?).to be_truthy
-    expect(valid_pseud.icon_content_type).to eq("image/png")
+    expect(valid_pseud.icon_content_type).to eq("image/gif")
   end
 
   it "removes invalid icon_alt_text" do
