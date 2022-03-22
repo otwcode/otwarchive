@@ -887,6 +887,8 @@ namespace :After do
     invalid_pseuds = [pseuds_with_invalid_icons, pseuds_with_invalid_text].flatten.uniq
     invalid_pseuds_count = invalid_pseuds.count
 
+    skipped_pseud_ids = []
+
     # Update the pseuds.
     puts("Updating #{invalid_pseuds_count} pseuds") && STDOUT.flush
 
@@ -899,8 +901,12 @@ namespace :After do
       pseud.icon_alt_text = "" if pseud.icon_alt_text.length > ArchiveConfig.ICON_ALT_MAX
       # Delete the icon comment if it's too long.
       pseud.icon_comment_text = "" if pseud.icon_comment_text.length > ArchiveConfig.ICON_COMMENT_MAX
-      pseud.save
+      skipped_pseud_ids << pseud.id unless pseud.save
       print(".") && STDOUT.flush
+    end
+    if skipped_pseud_ids.any?
+      puts
+      puts("Couldn't update #{skipped_pseud_ids.size} pseud(s): #{skipped_pseud_ids.join(',')}") && STDOUT.flush
     end
   end
 
