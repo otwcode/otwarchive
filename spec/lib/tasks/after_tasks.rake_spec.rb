@@ -306,9 +306,13 @@ describe "rake After:delete_invalid_pseud_icon_data" do
   let!(:valid_pseud) { create(:pseud,
                               icon_alt_text: "hi",
                               icon_comment_text: "okay",
-                              icon: File.new("#{Rails.root}/public/images/feed-icon-14x14.png")) }
+                              icon: File.new(
+                                Rails.root.join("public/images/feed-icon-14x14.png")
+                              )) }
   let(:invalid_pseud) { create(:pseud,
-                               icon: File.new("#{Rails.root}/public/images/feed-icon-14x14.png")) }
+                               icon: File.new(
+                                 Rails.root.join("public/images/feed-icon-14x14.png")
+                               )) }
 
   before do
     ArchiveConfig.ICON_ALT_MAX = 5

@@ -892,19 +892,11 @@ namespace :After do
 
     invalid_pseuds.each do |pseud|
       # Delete the icon if it's not a valid type.
-      unless valid_types.include?(pseud.icon_content_type)
-        pseud.icon = nil
-      end
-
+      pseud.icon = nil unless valid_types.include?(pseud.icon_content_type)
       # Delete the icon alt text if it's too long.
-      if pseud.icon_alt_text.length > ArchiveConfig.ICON_ALT_MAX
-        pseud.icon_alt_text = ""
-      end
-
+      pseud.icon_alt_text = "" if pseud.icon_alt_text.length > ArchiveConfig.ICON_ALT_MAX
       # Delete the icon comment if it's too long.
-      if pseud.icon_comment_text.length > ArchiveConfig.ICON_COMMENT_MAX
-        pseud.icon_comment_text = ""
-      end
+      pseud.icon_comment_text = "" if pseud.icon_comment_text.length > ArchiveConfig.ICON_COMMENT_MAX
       pseud.save
       print(".") && STDOUT.flush
     end
