@@ -301,3 +301,55 @@ describe "rake After:fix_tags_with_extra_spaces" do
     expect(borked_tag.name).to eql("_\"'quotes'\"")
   end
 end
+
+describe "rake After:delete_invalid_pseud_icon_data" do
+  let!(:valid_pseud) { create(:pseud,
+                              icon_alt_text: "hi",
+                              icon_comment_text: "okay",
+                              icon: File.new("#{Rails.root}/public/images/feed-icon-14x14.png")) }
+  let(:invalid_pseud) { create(:pseud,
+                               icon: File.new("#{Rails.root}/public/images/feed-icon-14x14.png")) }
+
+  before do
+    ArchiveConfig.ICON_ALT_MAX = 5
+    ArchiveConfig.ICON_COMMENT_MAX = 3
+  end
+
+  it "removes invalid icon" do
+    invalid_pseud.update_column(:icon_content_type, "not/valid")
+    subject.invoke
+
+    invalid_pseud.reload
+    expect(invalid_pseud.icon).to be_nil
+    expect(invalid_pseud.icon_content_type).to be_nil
+    expect(valid_pseud.icon_content_type).to eq("image/png")
+  end
+
+  it "removes invalid icon_alt_text" do
+    invalid_pseud.update_column(:icon_alt_text, "not valid")
+    subject.invoke
+
+    invalid_pseud.reload
+    expect(invalid_pseud.icon_alt_text).to be_empty
+    expect(valid_pseud.icon_alt_text).to eq("hi")
+  end
+
+  it "removes invalid icon_comment_text" do
+    invalid_pseud.update_column(:icon_comment_text, "not valid")
+    subject.invoke
+
+    invalid_pseud.reload
+    expect(invalid_pseud.icon_comment_text).to be_empty
+    expect(valid_pseud.icon_comment_text).to eq("okay")
+  end
+
+  it "updates multiple invalid fields on the same pseud" do
+    invalid_pseud.update_columns(icon_comment_text: "not valid",
+                                 icon_alt_text: "not valid")
+    subject.invoke
+
+    invalid_pseud.reload
+    expect(invalid_pseud.icon_alt_text).to be_empty
+    expect(invalid_pseud.icon_comment_text).to be_empty
+  end
+end
