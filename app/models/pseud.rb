@@ -8,9 +8,9 @@ class Pseud < ApplicationRecord
     path: if Rails.env.production?
             ":attachment/:id/:style.:extension"
           elsif Rails.env.staging?
-            "staging/:attachment/:id/:style.:extension"
+            ":rails_env/:attachment/:id/:style.:extension"
           else
-            ":rails_root/public:url"
+            ":rails_root/public/system/:rails_env/:class/:attachment/:id_partition/:style/:filename"
           end,
     storage: %w(staging production).include?(Rails.env) ? :s3 : :filesystem,
     s3_protocol: "https",
