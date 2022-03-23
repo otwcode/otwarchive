@@ -15,10 +15,10 @@ en:
           attributes:
             commentable:
               author_on_own_work: "You can't leave kudos on your own work."
-              blank: "We couldn't save your kudos, sorry!"
+              blank: "What did you want to leave kudos on?"
               guest_on_restricted: "You can't leave guest kudos on a restricted work."
             commentable_type:
-              inclusion: "We couldn't save your kudos, sorry!"
+              inclusion: "What did you want to leave kudos on?"
           format: "%{message}"
           taken: "You have already left kudos here. :)"
         user:

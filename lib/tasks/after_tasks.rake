@@ -899,10 +899,9 @@ namespace :After do
       print(".") && STDOUT.flush
     end
 
-    puts && STDOUT.flush
-    if skipped_kudo_ids.any?
-      puts("Couldn't update #{skipped_kudo_ids.size} kudo(s): #{skipped_kudo_ids.join(',')}") && STDOUT.flush
-    end
+    puts
+    puts("Couldn't update #{skipped_kudo_ids.size} kudo(s): #{skipped_kudo_ids.join(',')}") if skipped_kudo_ids.any?
+    STDOUT.flush
   end
 
   # This is the end that you have to put new tasks above.

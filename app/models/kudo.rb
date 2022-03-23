@@ -13,7 +13,18 @@ class Kudo < ApplicationRecord
             if: proc { |c| VALID_COMMENTABLE_TYPES.include?(c.commentable_type) }
 
   validate :cannot_be_author
+  def cannot_be_author
+    return unless user&.is_author_of?(commentable)
+
+    errors.add(:commentable, :author_on_own_work)
+  end
+
   validate :guest_cannot_kudos_restricted_work
+  def guest_cannot_kudos_restricted_work
+    return unless user.blank? && commentable.is_a?(Work) && commentable.restricted?
+
+    errors.add(:commentable, :guest_on_restricted)
+  end
 
   validates :ip_address,
             uniqueness: { scope: [:commentable_id, :commentable_type], case_sensitive: false },
@@ -51,17 +62,5 @@ class Kudo < ApplicationRecord
     else
       "guest"
     end
-  end
-
-  def cannot_be_author
-    return unless user&.is_author_of?(commentable)
-
-    errors.add(:commentable, :author_on_own_work)
-  end
-
-  def guest_cannot_kudos_restricted_work
-    return unless user.blank? && commentable.is_a?(Work) && commentable.restricted?
-
-    errors.add(:commentable, :guest_on_restricted)
   end
 end

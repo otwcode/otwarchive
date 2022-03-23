@@ -29,7 +29,7 @@ describe KudosController do
         context "when kudos are given from chapter" do
           it "redirects to referer with an error" do
             post :create, params: { kudo: { commentable_id: work.first_chapter.id, commentable_type: "Chapter" } }
-            it_redirects_to_with_kudos_error(referer, "We couldn't save your kudos, sorry!")
+            it_redirects_to_with_kudos_error(referer, "What did you want to leave kudos on?")
           end
 
           it "does not save kudos" do
@@ -114,13 +114,13 @@ describe KudosController do
         referer = root_path
         request.headers["HTTP_REFERER"] = referer
         post :create, params: { kudo: { commentable_id: "333", commentable_type: "Work" } }
-        it_redirects_to_with_kudos_error(referer, "We couldn't save your kudos, sorry!")
+        it_redirects_to_with_kudos_error(referer, "What did you want to leave kudos on?")
       end
 
       context "with format: :js" do
         it "returns an error in JSON format" do
           post :create, params: { kudo: { commentable_id: "333", commentable_type: "Work" }, format: :js }
-          expect(JSON.parse(response.body)["error_message"]).to include("We couldn't save your kudos, sorry!")
+          expect(JSON.parse(response.body)["error_message"]).to include("What did you want to leave kudos on?")
         end
       end
     end
