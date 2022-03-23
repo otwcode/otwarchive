@@ -182,6 +182,7 @@ Feature: Search Tags
     When I am on the search tags page
       And I fill in "Tag name" with "created"
       And I select "Date Created" from "Sort by"
+      And I select "Descending" from "Sort direction"
       And I press "Search Tags"
     Then I should see "4 Found"
       And the 1st tag result should contain "created fourth"
