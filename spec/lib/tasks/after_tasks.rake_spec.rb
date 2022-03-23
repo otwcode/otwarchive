@@ -101,7 +101,7 @@ end
 describe "rake After:update_indexed_stat_counter_kudo_count", work_search: true do
   let(:work) { create(:work) }
   let(:stat_counter) { work.stat_counter }
-  let!(:kudo_bundle) { create_list(:kudo, 2, commentable_id: work.id) }
+  let!(:kudo_bundle) { create_list(:kudo, 2, commentable: work) }
 
   before do
     stat_counter.update_column(:kudos_count, 3)
@@ -299,5 +299,53 @@ describe "rake After:fix_tags_with_extra_spaces" do
 
     borked_tag.reload
     expect(borked_tag.name).to eql("_\"'quotes'\"")
+  end
+end
+
+describe "rake After:clean_up_chapter_kudos" do
+  let(:work) { create(:work) }
+  let!(:work_kudo) { create(:kudo, commentable: work) }
+  let!(:chapter_kudo) do
+    kudo = create(:kudo, commentable: work)
+    kudo.update_columns(commentable_type: "Chapter", commentable_id: work.first_chapter.id)
+    kudo
+  end
+
+  it "destroys chapter kudos if the chapter does not exist" do
+    work.first_chapter.delete
+
+    expect do
+      subject.invoke
+    end.to avoid_changing { work_kudo.reload.updated_at }
+    expect { chapter_kudo.reload }.to raise_exception(ActiveRecord::RecordNotFound)
+  end
+
+  it "transfers chapter kudos to the chapter's work" do
+    subject.invoke
+    expect(chapter_kudo.reload.commentable).to eq(work)
+  end
+
+  it "orphan chapter kudos if there is already a work kudo from the same IP address" do
+    ip_address = Faker::Internet.ip_v4_address
+    work_kudo.update(ip_address: ip_address)
+    chapter_kudo.update_column(:ip_address, ip_address)
+
+    expect do
+      subject.invoke
+    end.to change { chapter_kudo.reload.commentable }.from(work.first_chapter).to(work)
+      .and change { chapter_kudo.reload.ip_address }.from(ip_address).to(nil)
+      .and avoid_changing { work_kudo.reload.updated_at }
+  end
+
+  it "orphan chapter kudos if there is already a work kudo from the same user ID" do
+    user_id = create(:user).id
+    work_kudo.update(user_id: user_id)
+    chapter_kudo.update_column(:user_id, user_id)
+
+    expect do
+      subject.invoke
+    end.to change { chapter_kudo.reload.commentable }.from(work.first_chapter).to(work)
+      .and change { chapter_kudo.reload.user_id }.from(user_id).to(nil)
+      .and avoid_changing { work_kudo.reload.updated_at }
   end
 end
