@@ -32,7 +32,7 @@ class Kudo < ApplicationRecord
 
   validates :user_id,
             uniqueness: { scope: [:commentable_id, :commentable_type], case_sensitive: false },
-            if: proc { |kudo| !kudo.user.nil? }
+            if: proc { |kudo| kudo.user.present? }
 
   scope :with_user, -> { where("user_id IS NOT NULL") }
   scope :by_guest, -> { where("user_id IS NULL") }
