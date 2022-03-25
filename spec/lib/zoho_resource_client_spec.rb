@@ -78,6 +78,50 @@ describe ZohoResourceClient do
     end
   end
 
+  describe "#find_ticket" do
+    context "for an existing ticket" do
+      before do
+        WebMock.stub_request(:get, /zoho/)
+          .with(query: hash_including({ ticketNumber: "480000" }))
+          .to_return(headers: { content_type: "application/json" }, body: '{"data":[{"ticketNumber":"480000"}]}')
+      end
+
+      it "returns the ticket content" do
+        expect(subject.find_ticket(480_000).fetch("ticketNumber")).to eq("480000")
+
+        expect(WebMock).to have_requested(:get, "https://desk.zoho.com/api/v1/tickets/search")
+          .with(
+            headers: expected_request_headers,
+            query: { ticketNumber: "480000", limit: 1, sortBy: "modifiedTime" }
+          )
+      end
+    end
+
+    context "when no ticket was found" do
+      before do
+        WebMock.stub_request(:get, /zoho/)
+          .with(query: hash_including({ ticketNumber: "480000" }))
+          .to_return(status: 204)
+      end
+
+      it "returns nil" do
+        expect(subject.find_ticket(480_000)).to be_nil
+      end
+    end
+
+    context "when Zoho returns an error" do
+      before do
+        WebMock.stub_request(:get, /zoho/)
+          .with(query: hash_including({ ticketNumber: "4" }))
+          .to_return(status: 422, headers: { content_type: "application/json" }, body: '{"errorCode":"UNPROCESSABLE_ENTITY"}')
+      end
+
+      it "returns nil" do
+        expect(subject.find_ticket(4)).to be_nil
+      end
+    end
+  end
+
   describe "#create_ticket" do
     let(:ticket_attributes) do
       { foo: "bar" }

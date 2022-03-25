@@ -3,7 +3,8 @@ class UsersController < ApplicationController
 
   before_action :check_user_status, only: [:edit, :update]
   before_action :load_user, except: [:activate, :delete_confirmation, :index]
-  before_action :check_ownership, except: [:activate, :delete_confirmation, :index, :show]
+  before_action :check_ownership, except: [:activate, :delete_confirmation, :edit, :index, :show, :update]
+  before_action :check_ownership_or_admin, only: [:edit, :update]
   skip_before_action :store_location, only: [:end_first_login]
 
   # This is meant to rescue from race conditions that sometimes occur on user creation
@@ -56,6 +57,7 @@ class UsersController < ApplicationController
 
   # GET /users/1/edit
   def edit
+    authorize @user.profile if logged_in_as_admin?
   end
 
   def changed_password
@@ -156,9 +158,15 @@ class UsersController < ApplicationController
   end
 
   def update
-    @user.profile.update(profile_params)
+    authorize @user.profile if logged_in_as_admin?
 
-    if @user.profile.save
+    if @user.profile.update(profile_params)
+      if logged_in_as_admin?
+        link = view_context.link_to("##{@user.profile.abuse_ticket_number}", @user.profile.abuse_ticket_url)
+        AdminActivity.log_action(current_admin, @user,
+                                 action: "edit profile",
+                                 summary: "Abuse ticket #{link}")
+      end
       flash[:notice] = ts('Your profile has been successfully updated')
       redirect_to user_profile_path(@user)
     else
@@ -379,7 +387,7 @@ class UsersController < ApplicationController
   def profile_params
     params.require(:profile_attributes).permit(
       :title, :location, :"date_of_birth(1i)", :"date_of_birth(2i)",
-      :"date_of_birth(3i)", :date_of_birth, :about_me
+      :"date_of_birth(3i)", :date_of_birth, :about_me, :abuse_ticket_number
     )
   end
 end

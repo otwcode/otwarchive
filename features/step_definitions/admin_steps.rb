@@ -167,6 +167,11 @@ Given /^I have posted an admin post with comments disabled$/ do
   step %{I log out}
 end
 
+Given "an abuse ticket ID exists" do
+  allow_any_instance_of(ZohoResourceClient).to receive(:find_ticket)
+    .and_return({ "departmentId" => ArchiveConfig.ABUSE_ZOHO_DEPARTMENT_ID })
+end
+
 ### WHEN
 
 When /^I visit the last activities item$/ do

@@ -109,3 +109,5 @@ en:
         user_defined_tags_count: "Fandom, relationship, and character tags"
       work:
         user_defined_tags_count: "Fandom, relationship, character, and additional tags"
+  attributes:
+    abuse_ticket_number: "Abuse ticket ID"
