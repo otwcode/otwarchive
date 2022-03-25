@@ -374,7 +374,7 @@ describe BookmarksController do
 
   describe "show" do
     let(:chaptered_work) { create(:work, title: "Cool title") }
-    let(:chapter2) { create(:chapter, work: chaptered_work, position: 2, posted: true, title: "Second title") }
+    let(:chapter2) { create(:chapter, work: chaptered_work, position: 2, title: "Second title") }
     let(:bookmark) { create(:bookmark, bookmarkable_id: chaptered_work.id) }
 
     context "when logged in" do
