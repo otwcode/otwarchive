@@ -87,7 +87,7 @@ describe AbuseReport do
       let(:report) { build(:abuse_report, url: url) }
       it "can't be submitted" do
         expect(report.save).to be_falsey
-        expect(report.errors[:base].first).to include("URL has already been reported.")
+        expect(report.errors[:base].first).to include("This page has already been reported.")
       end
     end
 

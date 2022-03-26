@@ -86,9 +86,9 @@ class AbuseReport < ApplicationRecord
   # make sure it isn't reported more than ABUSE_REPORTS_PER_WORK_MAX
   # or ABUSE_REPORTS_PER_USER_MAX times per month
   def url_is_not_over_reported
-    message = ts('This page has already been reported. Our volunteers
-                  only need one report in order to investigate and resolve
-                  an issue, so please be patient and do not submit another report.')
+    message = ts('This page has already been reported. Our volunteers only
+                 need one report in order to investigate and resolve an issue,
+                 so please be patient and do not submit another report.')
     if url =~ /\/works\/\d+/
       # use "/works/123/" to avoid matching chapter or external work ids
       work_params_only = url.match(/\/works\/\d+\//).to_s
