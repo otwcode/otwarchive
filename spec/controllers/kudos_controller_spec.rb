@@ -120,7 +120,7 @@ describe KudosController do
       context "with format: :js" do
         it "returns an error in JSON format" do
           post :create, params: { kudo: { commentable_id: "333", commentable_type: "Work" }, format: :js }
-          expect(JSON.parse(response.body)["error_message"]).to include("What did you want to leave kudos on?")
+          expect(JSON.parse(response.body)["error_message"]).to eq("What did you want to leave kudos on?")
         end
       end
     end
@@ -138,7 +138,7 @@ describe KudosController do
       context "with format: :js" do
         it "returns an error in JSON format" do
           post :create, params: { kudo: { commentable_id: work.id, commentable_type: "Work" }, format: :js }
-          expect(JSON.parse(response.body)["error_message"]).to include("You can't leave guest kudos on a restricted work.")
+          expect(JSON.parse(response.body)["error_message"]).to eq("You can't leave guest kudos on a restricted work.")
         end
       end
     end
