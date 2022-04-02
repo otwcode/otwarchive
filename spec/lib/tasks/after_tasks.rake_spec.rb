@@ -26,7 +26,7 @@ describe "rake After:reset_word_counts" do
   end
 
   context "when a work has multiple chapters" do
-    let(:chapter) { create(:chapter, work: en_work, posted: true, position: 2, content: "A few more words never hurt.") }
+    let(:chapter) { create(:chapter, work: en_work, position: 2, content: "A few more words never hurt.") }
 
     before do
       # Screw up the word counts
@@ -64,9 +64,9 @@ describe "rake After:unhide_invited_works" do
   context "when invited works are incorrectly anonymous or unrevealed" do
     before do
       # Screw up collection items
-      invited_anonymous_work.collection_items.first.update_columns(user_approval_status: CollectionItem::NEUTRAL)
-      invited_unrevealed_work.collection_items.first.update_columns(user_approval_status: CollectionItem::NEUTRAL)
-      invited_anonymous_unrevealed_work.collection_items.first.update_columns(user_approval_status: CollectionItem::NEUTRAL)
+      invited_anonymous_work.collection_items.first.update_columns(user_approval_status: "unreviewed")
+      invited_unrevealed_work.collection_items.first.update_columns(user_approval_status: "unreviewed")
+      invited_anonymous_unrevealed_work.collection_items.first.update_columns(user_approval_status: "unreviewed")
     end
 
     it "updates the anonymous and unrevealed status of invited works" do
@@ -299,58 +299,5 @@ describe "rake After:fix_tags_with_extra_spaces" do
 
     borked_tag.reload
     expect(borked_tag.name).to eql("_\"'quotes'\"")
-  end
-end
-
-describe "rake After:reset_revised_at_on_backdated_works" do
-  let!(:work) do
-    travel_to(1.day.ago) do
-      create(:work)
-    end
-  end
-
-  context "on non-backdated works" do
-    it "does nothing" do
-      expect do
-        subject.invoke
-      end.to avoid_changing { work.reload.updated_at }
-        .and avoid_changing { work.reload.revised_at }
-    end
-
-    it "resets revised_at if arbitrarily set in the past" do
-      work.update_column(:revised_at, 10.years.ago)
-
-      expect do
-        subject.invoke
-      end.to change { work.reload.updated_at }
-        .and change { work.reload.revised_at }
-      expect(work.revised_at.to_date).to be >= work.published_at
-    end
-  end
-
-  context "on backdated works" do
-    before do
-      travel_to(1.day.ago) do
-        work.update!({ backdate: true, chapter_attributes: { published_at: "2021-12-05" } })
-      end
-    end
-
-    it "resets revised_at to be consistent with published_at" do
-      work.update_column(:revised_at, Time.current)
-
-      expect do
-        subject.invoke
-      end.to change { work.reload.updated_at }
-        .and change { work.reload.revised_at }
-      expect(work.revised_at.to_date).to eq(Date.new(2021, 12, 5))
-    end
-
-    it "outputs work IDs that fail validations" do
-      allow_any_instance_of(Work).to receive(:save).and_return(false)
-
-      expect do
-        subject.invoke
-      end.to output(/The following 1 work\(s\) failed validations and could not be saved:\n#{work.id}/).to_stdout
-    end
   end
 end

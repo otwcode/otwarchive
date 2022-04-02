@@ -111,7 +111,7 @@ class Skin < ApplicationRecord
   end
 
   validates_presence_of :title
-  validates_uniqueness_of :title, message: ts('must be unique')
+  validates_uniqueness_of :title, message: ts('must be unique'), case_sensitive: true
 
   validates_numericality_of :margin, :base_em, allow_nil: true
   validate :valid_font

@@ -144,7 +144,7 @@ class PromptsController < ApplicationController
   end
 
   def update
-    if @prompt.update_attributes(prompt_params)
+    if @prompt.update(prompt_params)
       flash[:notice] = ts("Prompt was successfully updated.")
       redirect_to collection_signup_path(@collection, @challenge_signup)
     else

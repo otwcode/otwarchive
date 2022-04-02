@@ -438,7 +438,7 @@ class StoryParser
     chapter_params = work_params.delete_if do |name, _param|
       !@chapter.attribute_names.include?(name.to_s) || !@chapter.send(name.to_s).blank?
     end
-    @chapter.update_attributes(chapter_params)
+    @chapter.update(chapter_params)
     @chapter
   end
 

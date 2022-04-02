@@ -14,7 +14,10 @@ class Admin < ApplicationRecord
   has_many :invitations, as: :creator
   has_many :wrangled_tags, class_name: 'Tag', as: :last_wrangler
 
-  validates :login, presence: true, uniqueness: true, length: { in: ArchiveConfig.LOGIN_LENGTH_MIN..ArchiveConfig.LOGIN_LENGTH_MAX }
+  validates :login,
+            presence: true,
+            uniqueness: { case_sensitive: false },
+            length: { in: ArchiveConfig.LOGIN_LENGTH_MIN..ArchiveConfig.LOGIN_LENGTH_MAX }
   validates_presence_of :password_confirmation, if: :new_record?
   validates_confirmation_of :password, if: :new_record?
 

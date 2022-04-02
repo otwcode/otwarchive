@@ -136,7 +136,7 @@ Given /^the chaptered work(?: with ([\d]+) chapters)?(?: with ([\d]+) comments?)
   # In order to make sure that the chapter positions are valid, we have to set
   # them manually. So we can't use create_list, and have to loop instead:
   (n_chapters.to_i - 1).times do |index|
-    FactoryBot.create(:chapter, work: work, posted: true, position: index + 2)
+    FactoryBot.create(:chapter, work: work, position: index + 2)
   end
 
   # Make sure that the word count is set properly:

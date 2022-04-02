@@ -11,7 +11,7 @@ describe ExternalWorksController do
     context "URL that has an external work" do
       it "responds with json" do
         get :fetch, params: { external_work_url: url, format: :json }
-        expect(response.content_type).to eq "application/json"
+        expect(response.content_type).to match("application/json")
       end
 
       it "responds with the matching work" do
@@ -35,7 +35,7 @@ describe ExternalWorksController do
 
       it "responds with json" do
         get :fetch, params: { external_work_url: url_2, format: :json }
-        expect(response.content_type).to eq "application/json"
+        expect(response.content_type).to match("application/json")
       end
 
       it "responds with blank" do

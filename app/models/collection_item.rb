@@ -1,38 +1,31 @@
 class CollectionItem < ApplicationRecord
   include ActiveModel::ForbiddenAttributesProtection
 
-  NEUTRAL = 0
-  APPROVED = 1
-  REJECTED = -1
-
-  LABEL = {}
-  LABEL[NEUTRAL] = ""
-  LABEL[APPROVED] = ts("Approved")
-  LABEL[REJECTED] = ts("Rejected")
-
-  APPROVAL_OPTIONS = [ [LABEL[NEUTRAL], NEUTRAL],
-                       [LABEL[APPROVED], APPROVED],
-                       [LABEL[REJECTED], REJECTED] ]
+  APPROVAL_OPTIONS = [
+    ["", :unreviewed],
+    [ts("Approved"), :approved],
+    [ts("Rejected"), :rejected]
+  ]
 
   belongs_to :collection, inverse_of: :collection_items
   belongs_to :item, polymorphic: :true, inverse_of: :collection_items, touch: true
   belongs_to :work,  class_name: "Work", foreign_key: "item_id", inverse_of: :collection_items
   belongs_to :bookmark, class_name: "Bookmark", foreign_key: "item_id"
 
-  has_many :approved_collections, -> {
-    where('collection_items.user_approval_status = ? AND collection_items.collection_approval_status = ?', CollectionItem::APPROVED, CollectionItem::APPROVED)
-   }, through: :collection_items, source: :collection
-
   validates_uniqueness_of :collection_id, scope: [:item_id, :item_type],
     message: ts("already contains this item.")
 
-  validates_numericality_of :user_approval_status, allow_blank: true, only_integer: true
-  validates_inclusion_of :user_approval_status, in: [-1, 0, 1], allow_blank: true,
-    message: ts("is not a valid approval status.")
+  enum user_approval_status: {
+    rejected: -1,
+    unreviewed: 0,
+    approved: 1
+  }, _suffix: :by_user
 
-  validates_numericality_of :collection_approval_status, allow_blank: true, only_integer: true
-  validates_inclusion_of :collection_approval_status, in: [-1, 0, 1], allow_blank: true,
-    message: ts("is not a valid approval status.")
+  enum collection_approval_status: {
+    rejected: -1,
+    unreviewed: 0,
+    approved: 1
+  }, _suffix: :by_collection
 
   validate :collection_is_open, on: :create
   def collection_is_open
@@ -53,33 +46,8 @@ class CollectionItem < ApplicationRecord
     where("(item_id IN (?) AND item_type = 'Work') OR (item_id IN (?) AND item_type = 'Bookmark')", work_ids, bookmark_ids)
   end
 
-  def self.approved_by_user
-    where(user_approval_status: APPROVED)
-  end
-
-  def self.rejected_by_user
-    where(user_approval_status: REJECTED)
-  end
-
-  def self.unreviewed_by_user
-    where(user_approval_status: NEUTRAL)
-  end
-
-  def self.approved_by_collection
-    where(collection_approval_status: APPROVED).where(user_approval_status: APPROVED)
-  end
-
-  def self.invited_by_collection
-    where(collection_approval_status: APPROVED).where(user_approval_status: NEUTRAL)
-  end
-
-  def self.rejected_by_collection
-    where(collection_approval_status: REJECTED)
-  end
-
-  def self.unreviewed_by_collection
-    where(collection_approval_status: NEUTRAL)
-  end
+  scope :invited_by_collection, -> { approved_by_collection.unreviewed_by_user }
+  scope :approved_by_both, -> { approved_by_collection.approved_by_user }
 
   before_save :set_anonymous_and_unrevealed
   def set_anonymous_and_unrevealed
@@ -243,18 +211,17 @@ class CollectionItem < ApplicationRecord
     user.is_author_of?(self.item) || self.collection.user_is_maintainer?(user)
   end
 
-  def approve_by_user ; self.user_approval_status = APPROVED ; end
-  def reject_by_user ; self.user_approval_status = REJECTED ; end
-  def approved_by_user? ; self.user_approval_status == APPROVED ; end
-  def rejected_by_user? ; self.user_approval_status == REJECTED ; end
+  def approve_by_user
+    self.user_approval_status = :approved
+  end
 
-  def approve_by_collection ; self.collection_approval_status = APPROVED ; end
-  def reject_by_collection ; self.collection_approval_status = REJECTED ; end
-  def approved_by_collection? ; self.collection_approval_status == APPROVED ; end
-  def rejected_by_collection? ; self.collection_approval_status == REJECTED ; end
+  def approve_by_collection
+    self.collection_approval_status = :approved
+  end
 
-  def approved? ; approved_by_user? && approved_by_collection? ; end
-  def rejected? ; rejected_by_user? && rejected_by_collection? ; end
+  def approved?
+    approved_by_user? && approved_by_collection?
+  end
 
   def reject(user)
     reject_by_user if user && user.is_author_of?(item)

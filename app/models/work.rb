@@ -547,7 +547,7 @@ class Work < ApplicationRecord
   # provide an interface to increment major version number
   # resets minor_version to 0
   def update_major_version
-    self.update_attributes({major_version: self.major_version+1, minor_version: 0})
+    self.update({ major_version: self.major_version + 1, minor_version: 0 })
   end
 
   # provide an interface to increment minor version number
@@ -576,17 +576,14 @@ class Work < ApplicationRecord
     self.invalidate_work_chapter_count(self)
     if (self.new_record? || chapter.posted_changed?) && chapter.published_at == Date.current
       self.set_revised_at(Time.current) # a new chapter is being posted, so most recent update is now
-    elsif self.revised_at.nil? ||
-        (chapter.published_at && chapter.published_at > self.revised_at.to_date) ||
-        chapter.published_at_changed? && chapter.published_at_was == self.revised_at.to_date
-      # revised_at should be (re)evaluated to reflect the chapter's pub date
+    else
+      # Calculate the most recent chapter publication date:
       max_date = self.chapters.where('id != ? AND posted = 1', chapter.id).maximum('published_at')
       max_date = max_date.nil? ? chapter.published_at : [max_date, chapter.published_at].max
-      self.set_revised_at(max_date)
-    # else
-      # In all other cases, we don't want to touch revised_at, since the chapter's pub date doesn't
-      # affect it. Setting revised_at to any Date will change its time to 12:00, likely changing the
-      # work's position in date-sorted indexes, so don't do it unnecessarily.
+
+      # Update revised_at to match the chapter publication date unless the
+      # dates already match:
+      set_revised_at(max_date) unless revised_at && revised_at.to_date == max_date
     end
   end
 
@@ -921,7 +918,7 @@ class Work < ApplicationRecord
 
   def update_stat_counter
     counter = self.stat_counter || self.create_stat_counter
-    counter.update_attributes(
+    counter.update(
       kudos_count: self.kudos.count,
       comments_count: self.count_visible_comments_uncached,
       bookmarks_count: self.bookmarks.where(private: false).count
@@ -1062,14 +1059,6 @@ class Work < ApplicationRecord
 
   scope :owned_by, lambda {|user| select("DISTINCT works.*").joins({pseuds: :user}).where('users.id = ?', user.id)}
 
-  # Note: these scopes DO include the works in the children of the specified collection
-  scope :in_collection, lambda {|collection|
-    select("DISTINCT works.*").
-        joins(:collection_items).
-        where('collection_items.collection_id IN (?) AND collection_items.user_approval_status = ? AND collection_items.collection_approval_status = ?',
-              [collection.id] + collection.children.collect(&:id), CollectionItem::APPROVED, CollectionItem::APPROVED)
-  }
-
   def self.in_series(series)
     joins(:series).
     where("series.id = ?", series.id)
@@ -1153,7 +1142,7 @@ class Work < ApplicationRecord
   end
 
   def mark_as_ham!
-    update_attributes(spam: false, hidden_by_admin: false)
+    update(spam: false, hidden_by_admin: false)
     ModeratedWork.mark_approved(self)
     # don't submit ham reports unless in production mode
     Rails.env.production? && Akismetor.submit_ham(akismet_attributes)

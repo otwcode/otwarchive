@@ -43,13 +43,6 @@ class Bookmark < ApplicationRecord
   scope :since, lambda { |*args| where("bookmarks.created_at > ?", (args.first || 1.week.ago)) }
   scope :recs, -> { where(rec: true) }
 
-  scope :in_collection, lambda {|collection|
-    select("DISTINCT bookmarks.*").
-    joins(:collection_items).
-    where('collection_items.collection_id IN (?) AND collection_items.user_approval_status = ? AND collection_items.collection_approval_status = ?',
-            [collection.id] + collection.children.collect(&:id), CollectionItem::APPROVED, CollectionItem::APPROVED)
-  }
-
   scope :join_work, -> {
     joins("LEFT JOIN works ON (bookmarks.bookmarkable_id = works.id AND bookmarks.bookmarkable_type = 'Work')").
     merge(Work.visible_to_all)
