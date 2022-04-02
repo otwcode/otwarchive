@@ -10,7 +10,7 @@ Otwarchive::Application.configure do
   memcached_servers = "127.0.0.1:11211"
   memcached_servers = YAML.load_file(Rails.root.join("config/local.yml")).fetch("MEMCACHED_SERVERS", memcached_servers) if File.file?(Rails.root.join("config/local.yml"))
   config.cache_store = :mem_cache_store, memcached_servers,
-                       { namespace: "ao3-v1-dev", compress: true, pool_size: 10 }
+                       { namespace: "ao3-v2-dev", compress: true, pool_size: 10 }
 
   # Log error messages when you accidentally call methods on nil.
   # config.whiny_nils = true
