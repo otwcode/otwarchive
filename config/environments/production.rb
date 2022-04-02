@@ -34,7 +34,7 @@ Otwarchive::Application.configure do
 
   # Use a different cache store in production
   config.cache_store = :mem_cache_store, ArchiveConfig.MEMCACHED_SERVERS,
-                       { namespace: "ao3-v1", compress: true, pool_size: 10 }
+                       { namespace: "ao3-v2", compress: true, pool_size: 10 }
 
   # Disable Rails's static asset server
   # In production, Apache or nginx will already do this

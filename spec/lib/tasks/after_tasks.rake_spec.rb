@@ -26,7 +26,7 @@ describe "rake After:reset_word_counts" do
   end
 
   context "when a work has multiple chapters" do
-    let(:chapter) { create(:chapter, work: en_work, posted: true, position: 2, content: "A few more words never hurt.") }
+    let(:chapter) { create(:chapter, work: en_work, position: 2, content: "A few more words never hurt.") }
 
     before do
       # Screw up the word counts

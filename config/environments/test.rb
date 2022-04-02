@@ -19,7 +19,7 @@ Otwarchive::Application.configure do
   config.action_mailer.perform_caching = true
 
   config.cache_store = :mem_cache_store, ArchiveConfig.MEMCACHED_SERVERS,
-                       { namespace: "ao3-v1-test", compress: true, pool_size: 10, raise_errors: true }
+                       { namespace: "ao3-v2-test", compress: true, pool_size: 10, raise_errors: true }
 
   # Raise exceptions instead of rendering exception templates
   config.action_dispatch.show_exceptions = false
