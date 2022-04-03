@@ -5,12 +5,9 @@ class FandomsController < ApplicationController
     if @collection
       @media = Media.canonical.by_name - [Media.find_by(name: ArchiveConfig.MEDIA_NO_TAG_NAME)] - [Media.find_by(name: ArchiveConfig.MEDIA_UNCATEGORIZED_NAME)]
       @page_subtitle = @collection.title
-      if params[:medium_id]
-        @medium = Media.find_by_name(params[:medium_id])
-        @fandoms = @medium.fandoms.canonical if @medium
-      end
-      @fandoms = (@fandoms || Fandom).where("filter_taggings.inherited = 0").by_name.
-                  for_collections_with_count([@collection] + @collection.children)
+      @medium = Media.find_by_name(params[:medium_id]) if params[:medium_id]
+      @counts = SearchCounts.fandom_ids_for_collection(@collection)
+      @fandoms = (@medium ? @medium.fandoms : Fandom.all).where(id: @counts.keys).by_name
     elsif params[:medium_id]
       if @medium = Media.find_by_name(params[:medium_id])
          @page_subtitle = @medium.name

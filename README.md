@@ -12,6 +12,8 @@ Development of the OTW-Archive software is an ongoing labor of love. You can see
 
 You can find more information about the [history and future of the AO3 project on the OTW website](https://www.transformativeworks.org/archive_of_our_own/).
 
+If you wish to use this software, SquidgeWorld has generously provided [setup notes](https://squidgeworld.org/works/34491).
+
 How to Contribute
 ----------
 We welcome pull requests for bugs described in our issue tracker. Please see our [Contributing Guidelines](https://github.com/otwcode/otwarchive/blob/master/CONTRIBUTING.md) for further information!
@@ -19,6 +21,10 @@ We welcome pull requests for bugs described in our issue tracker. Please see our
 * [Bug Tracker](https://otwarchive.atlassian.net/projects/AO3/issues)
 * [Developer Documentation](https://github.com/otwcode/otwarchive/wiki)
 * [Commit Policy](https://github.com/otwcode/otwarchive/wiki/Commit-policy)
+
+API
+----------
+There is currently no API for the OTW-Archive software. While it is something we're considering for the future, we ask that contributors instead focus on issues already in our [Jira issue tracker](https://otwarchive.atlassian.net/).
 
 License and Acknowledgments
 ----------

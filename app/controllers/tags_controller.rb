@@ -312,7 +312,7 @@ class TagsController < ApplicationController
       tags = Tag.where(id: params[:canonicals])
 
       tags.each do |tag_to_canonicalize|
-        if tag_to_canonicalize.update_attributes(canonical: true)
+        if tag_to_canonicalize.update(canonical: true)
           saved_canonicals << tag_to_canonicalize
         else
           not_saved_canonicals << tag_to_canonicalize

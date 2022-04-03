@@ -220,36 +220,4 @@ class WorkSearchForm
       'desc'
     end
   end
-
-  ###############
-  # COUNTING
-  ###############
-
-  def self.count_for_user(user)
-    Rails.cache.fetch(count_cache_key(user), count_cache_options) do
-      WorkQuery.new(user_ids: [user.id]).count
-    end
-  end
-
-  def self.count_for_pseud(pseud)
-    Rails.cache.fetch(count_cache_key(pseud), count_cache_options) do
-      WorkQuery.new(pseud_ids: [pseud.id]).count
-    end
-  end
-
-  # If we want to invalidate cached work counts whenever the owner (which for
-  # this method can only be a user or a pseud) has a new work, we can use
-  # "#{owner.works_index_cache_key}" instead of "#{owner.class.name.underscore}_#{owner.id}".
-  # See lib/works_owner.rb.
-  def self.count_cache_key(owner)
-    status = User.current_user ? 'logged_in' : 'logged_out'
-    "work_count_#{owner.class.name.underscore}_#{owner.id}_#{status}"
-  end
-
-  def self.count_cache_options
-    {
-      expires_in: ArchiveConfig.SECONDS_UNTIL_DASHBOARD_COUNTS_EXPIRE.seconds,
-      race_condition_ttl: 10.seconds
-    }
-  end
 end

@@ -165,3 +165,18 @@ Feature: Tag Wrangling - special cases
       | .    |
       | &    |
       | ?    |
+
+  Scenario: Error messages show correct links even if tags contain special characters
+
+    Given the following activated tag wrangler exists
+      | login  | password    |
+      | Enigel | wrangulate! |
+      And a character exists with name: "Evelyn \"Evie\" Carnahan", canonical: false
+      And a character exists with name: "Evelyn \"Evy\" Carnahan", canonical: false
+      And I am logged in as "Enigel" with password "wrangulate!"
+    When I edit the tag 'Evelyn "Evy" Carnahan'
+      And I fill in "Synonym of" with 'Evelyn "Evie" Carnahan'
+      And I press "Save changes"
+    Then I should see "is not a canonical tag. Please make it canonical before adding synonyms to it."
+    When I follow 'Evelyn "Evie" Carnahan'
+    Then I should be on the 'Evelyn "Evie" Carnahan' tag edit page

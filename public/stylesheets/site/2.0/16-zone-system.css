@@ -194,7 +194,7 @@ SUBSECTIONS:
 
 /* mod: logged-in */
 
-.logged-in .splash .module {
+.logged-in .splash > .module {
   float: left;
   margin: 0 1% 1.571em 1%;
   width: 48%;

@@ -3,20 +3,22 @@ on:
   push:
     branches:
       - master
+      - main
   pull_request:
     branches:
       - master
+      - main
   workflow_dispatch:
 
 jobs:
   automated-tests:
-    name: ${{ matrix.tests.command }}
+    name: ${{ matrix.tests.command }} ${{ matrix.tests.arguments }}
     runs-on: ubuntu-latest
 
     env:
       CI: true
       RAILS_ENV: test
-      TEST_GROUP: ${{ matrix.tests.command }}
+      TEST_GROUP: ${{ matrix.tests.command }} ${{ matrix.tests.arguments }}
       CUCUMBER_RETRY: 1
       CUCUMBER_FORMAT: Ao3Cucumber::Formatter
       SPEC_OPTS: --force-color
@@ -31,9 +33,12 @@ jobs:
           - 3306:3306
 
       elasticsearch:
-        image: elasticsearch:6.8.9
+        image: docker.elastic.co/elasticsearch/elasticsearch:7.16.1
         ports:
           - 9200:9200
+        options: >-
+          -e="discovery.type=single-node"
+          -e="xpack.security.enabled=false"
 
       memcached:
         image: memcached:1.5
@@ -44,31 +49,48 @@ jobs:
       fail-fast: false
       matrix:
         tests:
-          - command: rake db:otwseed
-            cucumber: 'false'
-          - command: rspec spec/controllers
-            cucumber: 'false'
-          - command: rspec spec/models
-            cucumber: 'false'
-          - command: rspec --exclude-pattern 'spec/{controllers,models}/**/*.rb'
-            cucumber: 'false'
-          - command: cucumber features/admins
-          - command: cucumber features/bookmarks
-          - command: cucumber features/collections
-          - command: cucumber features/comments_and_kudos
-          - command: cucumber features/gift_exchanges
-          - command: cucumber features/importing
-          - command: cucumber features/other_a
-          - command: cucumber features/other_b
-          - command: cucumber features/prompt_memes_a
-          - command: cucumber features/prompt_memes_b
-          - command: cucumber features/prompt_memes_c
-          - command: cucumber features/search
-          - command: cucumber features/tag_sets
-          - command: cucumber features/tags_and_wrangling
-          - command: cucumber features/users
-          - command: cucumber features/works
-            ebook: 'true'
+          - command: rake
+            arguments: db:otwseed
+          - command: rspec
+            arguments: spec/controllers
+          - command: rspec
+            arguments: spec/models
+          - command: rspec
+            arguments: --exclude-pattern 'spec/{controllers,models}/**/*.rb'
+          - command: cucumber
+            arguments: features/admins
+          - command: cucumber
+            arguments: features/bookmarks
+          - command: cucumber
+            arguments: features/collections
+          - command: cucumber
+            arguments: features/comments_and_kudos
+          - command: cucumber
+            arguments: features/gift_exchanges
+          - command: cucumber
+            arguments: features/importing
+            vcr: true
+          - command: cucumber
+            arguments: features/other_a
+          - command: cucumber
+            arguments: features/other_b
+          - command: cucumber
+            arguments: features/prompt_memes_a
+          - command: cucumber
+            arguments: features/prompt_memes_b
+          - command: cucumber
+            arguments: features/prompt_memes_c
+          - command: cucumber
+            arguments: features/search
+          - command: cucumber
+            arguments: features/tag_sets
+          - command: cucumber
+            arguments: features/tags_and_wrangling
+          - command: cucumber
+            arguments: features/users
+          - command: cucumber
+            arguments: features/works
+            ebook: true
 
     steps:
       - name: Check out code
@@ -83,19 +105,39 @@ jobs:
           ./script/gh-actions/multiple_redis.sh
 
       - name: Install phantomjs
-        if: ${{ matrix.tests.cucumber != 'false' }}
+        if: ${{ matrix.tests.command == 'cucumber' }}
         run: sudo apt-get install -y phantomjs
 
       - name: Cache wkhtmltopdf package
-        if: ${{ matrix.tests.ebook == 'true' }}
+        if: ${{ matrix.tests.ebook }}
         uses: actions/cache@v2
         with:
           path: wkhtmltopdf
           key: wkhtmltopdf-${{ hashFiles('script/gh-actions/ebook_converters.sh') }}
 
       - name: Install ebook converters
-        if: ${{ matrix.tests.ebook == 'true' }}
+        if: ${{ matrix.tests.ebook }}
         run: ./script/gh-actions/ebook_converters.sh
+
+      - name: Cache VCR cassettes
+        if: ${{ matrix.tests.vcr }}
+        uses: actions/cache@v2
+        with:
+          path: features/cassette_library
+
+          # Unfortunately, the actions/cache@v2 version doesn't allow the cache
+          # key to be overwritten if there's an exact match. So instead we add
+          # a unique identifier to the key to always force a "cache miss", and
+          # restore from related keys to make sure that we still get to load a
+          # recent version of the cached folder. More explanation here:
+          #
+          # https://github.com/actions/cache/issues/109#issuecomment-558771281
+          #
+          # It's hacky, but until the cache action is more configurable, it's
+          # the best we can do.
+          key: cassette-library-${{ hashFiles(matrix.tests.arguments) }}-${{ github.run_id }}-${{ github.run_attempt }}
+          restore-keys: |
+            cassette-library-${{ hashFiles(matrix.tests.arguments) }}-
 
       - name: Set up Ruby and run bundle install
         uses: ruby/setup-ruby@v1
@@ -115,10 +157,10 @@ jobs:
         run: bundle exec rake db:create db:schema:load db:migrate
 
       - name: Run test group
-        run: bundle exec ${{ matrix.tests.command }}
+        run: bundle exec ${{ matrix.tests.command }} ${{ matrix.tests.arguments }}
 
       - name: Upload failure screenshots
-        if: ${{ failure() && matrix.tests.cucumber != 'false' }}
+        if: ${{ failure() && matrix.tests.command == 'cucumber' }}
         uses: actions/upload-artifact@v2
         with:
           name: test failures ${{ hashFiles('tmp/capybara/*') }}

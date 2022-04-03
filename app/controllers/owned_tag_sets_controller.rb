@@ -158,7 +158,7 @@ class OwnedTagSetsController < ApplicationController
   end
 
   def update
-    if @tag_set.update_attributes(owned_tag_set_params) && @tag_set.tag_set.save!
+    if @tag_set.update(owned_tag_set_params) && @tag_set.tag_set.save!
       flash[:notice] = ts("Tag Set was successfully updated.")
       redirect_to tag_set_path(@tag_set)
     else

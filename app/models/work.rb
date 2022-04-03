@@ -69,7 +69,8 @@ class Work < ApplicationRecord
   # Virtual attribute to use as a placeholder for pseuds before the work has been saved
   # Can't write to work.pseuds until the work has an id
   attr_accessor :new_parent, :url_for_parent
-  attr_accessor :new_recipients
+  attr_accessor :new_gifts
+  attr_accessor :preview_mode
 
   # return title.html_safe to overcome escaping done by sanitiser
   def title
@@ -128,12 +129,19 @@ class Work < ApplicationRecord
     return unless first_chapter
 
     if !self.first_chapter.published_at
-      self.first_chapter.published_at = Date.today
-    elsif self.first_chapter.published_at > Date.today
+      self.first_chapter.published_at = Date.current
+    elsif self.first_chapter.published_at > Date.current
       errors.add(:base, ts("Publication date can't be in the future."))
       throw :abort
     end
   end
+
+  validates :fandom_string,
+            presence: { message: "^Please fill in at least one fandom." }
+  validates :archive_warning_string,
+            presence: { message: "^Please select at least one warning." }
+  validates :rating_string,
+            presence: { message: "^Please choose a rating." }
 
   # rephrases the "chapters is invalid" message
   after_validation :check_for_invalid_chapters
@@ -144,8 +152,33 @@ class Work < ApplicationRecord
     end
   end
 
-  # Run Taggable#check_for_invalid_tags as a validation.
-  validate :check_for_invalid_tags
+  validates :user_defined_tags_count,
+            at_most: { maximum: proc { ArchiveConfig.USER_DEFINED_TAGS_MAX } }
+
+  # If the recipient doesn't allow gifts, it should not be possible to give them
+  # a gift work unless it fulfills a gift exchange assignment or non-anonymous
+  # prompt meme claim for the recipient.
+  # We don't want the work to save if the gift shouldn't exist, but the gift
+  # model can't access a work's challenge_assignments or challenge_claims until
+  # the work and its assignments and claims are saved. Gifts are created after
+  # the work is saved, so it's too late then to prevent the work from saving.
+  # Additionally, the work's assignments and claims don't appear to be available
+  # by the time gift validations run, which means the gift is never created if
+  # the user doesn't allow them.
+  validate :new_recipients_allow_gifts
+
+  def new_recipients_allow_gifts
+    return if self.new_gifts.blank?
+
+    self.new_gifts.each do |gift|
+      next if gift.pseud.blank?
+      next if gift.pseud&.user&.preference&.allow_gifts?
+      next if self.challenge_assignments.map(&:requesting_pseud).include?(gift.pseud)
+      next if self.challenge_claims.reject { |c| c.request_prompt.anonymous? }.map(&:requesting_pseud).include?(gift.pseud)
+
+      self.errors.add(:base, ts("#{gift.pseud.byline} does not accept gifts."))
+    end
+  end
 
   enum comment_permissions: {
     enable_all: 0,
@@ -164,19 +197,18 @@ class Work < ApplicationRecord
   after_save :post_first_chapter
   before_save :set_word_count
 
-  after_save :save_chapters, :save_parents, :save_new_recipients
+  after_save :save_chapters, :save_parents, :save_new_gifts
 
   before_create :set_anon_unrevealed
   after_create :notify_after_creation
 
-  before_update :validate_tags
   after_update :adjust_series_restriction, :notify_after_update
 
   before_save :hide_spam
   after_save :moderate_spam
   after_save :notify_of_hiding
 
-  after_save :notify_recipients, :expire_caches, :update_pseud_index, :update_tag_index
+  after_save :notify_recipients, :expire_caches, :update_pseud_index, :update_tag_index, :touch_series
   after_destroy :expire_caches, :update_pseud_index
 
   before_destroy :send_deleted_work_notification, prepend: true
@@ -224,10 +256,8 @@ class Work < ApplicationRecord
       tag.update_tag_cache
     end
 
-    Work.expire_work_tag_groups_id(id)
+    Work.expire_work_blurb_version(id)
     Work.flush_find_by_url_cache unless imported_from_url.blank?
-
-    Work.expire_work_tag_groups_id(self.id)
   end
 
   def update_pseud_index
@@ -251,29 +281,16 @@ class Work < ApplicationRecord
     taggings.each(&:update_search)
   end
 
-  def self.work_blurb_tag_cache_key(id)
+  def self.work_blurb_version_key(id)
     "/v3/work_blurb_tag_cache_key/#{id}"
   end
 
-  def self.work_blurb_tag_cache(id)
-    Rails.cache.fetch(Work.work_blurb_tag_cache_key(id), raw: true) { rand(1..1000) }
+  def self.work_blurb_version(id)
+    Rails.cache.fetch(Work.work_blurb_version_key(id), raw: true) { rand(1..1000) }
   end
 
-  def self.expire_work_tag_groups_id(id)
-    Rails.cache.delete(Work.tag_groups_key_id(id))
-    Rails.cache.increment(Work.work_blurb_tag_cache_key(id))
-  end
-
-  def expire_work_tag_groups
-    Rails.cache.delete(self.tag_groups_key)
-  end
-
-  def self.tag_groups_key_id(id)
-    "/v3/work_tag_groups/#{id}"
-  end
-
-  def tag_groups_key
-    Work.tag_groups_key_id(self.id)
+  def self.expire_work_blurb_version(id)
+    Rails.cache.increment(Work.work_blurb_version_key(id))
   end
 
   # When works are done being reindexed, expire the appropriate caches
@@ -299,6 +316,11 @@ class Work < ApplicationRecord
     User.expire_ids(pseuds.map(&:user_id).uniq)
     Tag.expire_ids(tag_ids)
     Collection.expire_ids(collection_ids)
+  end
+
+  # TODO: AO3-6085 We can use touch_all once we update to Rails 6.
+  def touch_series
+    series.each(&:touch) if saved_change_to_in_anon_collection?
   end
 
   after_destroy :destroy_chapters_in_reverse
@@ -435,7 +457,7 @@ class Work < ApplicationRecord
   end
 
   def recipients=(recipient_names)
-    new_recipients = [] # collect names of new recipients
+    new_gifts = []
     gifts = [] # rebuild the list of associated gifts using the new list of names
     # add back in the rejected gift recips; we don't let users delete rejected gifts in order to prevent regifting
     recip_names = recipient_names.split(',') + self.gifts.are_rejected.collect(&:recipient)
@@ -444,40 +466,35 @@ class Work < ApplicationRecord
       gift = self.gifts.for_name_or_byline(name).first
       if gift
         gifts << gift # new gifts are added after saving, not now
-        new_recipients << name unless self.posted # all recipients are new if work not posted
+        new_gifts << gift unless self.posted # all gifts are new if work not posted
       else
-        # check that the gift would be valid
-        g = Gift.new(work: self, recipient: name)
+        g = self.gifts.new(recipient: name)
         if g.valid?
-          new_recipients << name # new gifts are added after saving, not now
+          new_gifts << g # new gifts are added after saving, not now
         else
-          errors.add(:base, ts("You cannot give a gift to the same user twice."))
+          g.errors.full_messages.each { |msg| self.errors.add(:base, msg) }
         end
       end
     end
-    self.new_recipients = new_recipients.uniq.join(",")
     self.gifts = gifts
+    self.new_gifts = new_gifts
   end
 
   def recipients(for_form = false)
     names = (for_form ? self.gifts.not_rejected : self.gifts).collect(&:recipient)
-    unless self.new_recipients.blank?
-      self.new_recipients.split(",").each do |name|
-        names << name unless names.include? name
-      end
-    end
-    names.join(",")
+    names << self.new_gifts.collect(&:recipient) if self.new_gifts.present?
+    names.flatten.uniq.join(",")
   end
 
-  def save_new_recipients
-    unless self.new_recipients.blank?
-      self.new_recipients.split(',').each do |name|
-        gift = self.gifts.for_name_or_byline(name).first
-        unless gift.present?
-          g = Gift.new(recipient: name, work: self)
-          g.save
-        end
-      end
+  def save_new_gifts
+    return if self.new_gifts.blank?
+
+    self.new_gifts.each do |gift|
+      next if self.gifts.for_name_or_byline(gift.recipient).present?
+
+      # Recreate the gift once the work is saved. This ensures the work_id is
+      # set properly.
+      Gift.create(recipient: gift.recipient, work: self)
     end
   end
 
@@ -530,7 +547,7 @@ class Work < ApplicationRecord
   # provide an interface to increment major version number
   # resets minor_version to 0
   def update_major_version
-    self.update_attributes({major_version: self.major_version+1, minor_version: 0})
+    self.update({ major_version: self.major_version + 1, minor_version: 0 })
   end
 
   # provide an interface to increment minor version number
@@ -540,8 +557,16 @@ class Work < ApplicationRecord
 
   def set_revised_at(date=nil)
     date ||= self.chapters.where(posted: true).maximum('published_at') ||
-        self.revised_at || self.created_at || DateTime.now
-    date = date.instance_of?(Date) ? DateTime::jd(date.jd, 12, 0, 0) : date
+             self.revised_at || self.created_at || Time.current
+
+    if date.instance_of?(Date)
+      # We need a time, not a Date. So if the date is today, set it to the
+      # current time; otherwise, set it to noon UTC (so that almost every
+      # single time zone will have the revised_at date match the published_at
+      # date, and those that don't will have revised_at follow published_at).
+      date = (date == Date.current) ? Time.current : date.to_time(:utc).noon
+    end
+
     self.revised_at = date
   end
 
@@ -549,19 +574,16 @@ class Work < ApplicationRecord
     return if self.posted? && !chapter.posted?
     # Invalidate chapter count cache
     self.invalidate_work_chapter_count(self)
-    if (self.new_record? || chapter.posted_changed?) && chapter.published_at == Date.today
-      self.set_revised_at(Time.now) # a new chapter is being posted, so most recent update is now
-    elsif self.revised_at.nil? ||
-        (chapter.published_at && chapter.published_at > self.revised_at.to_date) ||
-        chapter.published_at_changed? && chapter.published_at_was == self.revised_at.to_date
-      # revised_at should be (re)evaluated to reflect the chapter's pub date
+    if (self.new_record? || chapter.posted_changed?) && chapter.published_at == Date.current
+      self.set_revised_at(Time.current) # a new chapter is being posted, so most recent update is now
+    else
+      # Calculate the most recent chapter publication date:
       max_date = self.chapters.where('id != ? AND posted = 1', chapter.id).maximum('published_at')
       max_date = max_date.nil? ? chapter.published_at : [max_date, chapter.published_at].max
-      self.set_revised_at(max_date)
-    # else
-      # In all other cases, we don't want to touch revised_at, since the chapter's pub date doesn't
-      # affect it. Setting revised_at to any Date will change its time to 12:00, likely changing the
-      # work's position in date-sorted indexes, so don't do it unnecessarily.
+
+      # Update revised_at to match the chapter publication date unless the
+      # dates already match:
+      set_revised_at(max_date) unless revised_at && revised_at.to_date == max_date
     end
   end
 
@@ -583,14 +605,14 @@ class Work < ApplicationRecord
         chapter.published_at = self.created_at.to_date
       else # pub date may have changed without user's explicitly setting backdate option
         # so reset it to the previous value:
-        chapter.published_at = chapter.published_at_was || Date.today
+        chapter.published_at = chapter.published_at_was || Date.current
       end
     end
   end
 
   def default_date
     backdate = first_chapter.try(:published_at) if self.backdate
-    backdate || Date.today
+    backdate || Date.current
   end
 
   ########################################################################
@@ -640,11 +662,13 @@ class Work < ApplicationRecord
   # If the work is posted, the first chapter should be posted too
   def post_first_chapter
     chapter_one = self.first_chapter
-    if self.saved_change_to_posted? || (chapter_one && chapter_one.posted != self.posted)
-      chapter_one.published_at = Date.today unless self.backdate
-      chapter_one.posted = self.posted
-      chapter_one.save
-    end
+
+    return unless self.saved_change_to_posted? && self.posted
+    return if chapter_one&.posted
+
+    chapter_one.published_at = Date.current unless self.backdate
+    chapter_one.posted = true
+    chapter_one.save
   end
 
   # Virtual attribute for first chapter
@@ -770,7 +794,13 @@ class Work < ApplicationRecord
         self.word_count += chapter.set_word_count
       end
     else
-      self.word_count = Chapter.select("SUM(word_count) AS work_word_count").where(work_id: self.id, posted: true).first.work_word_count
+      # AO3-3498: For posted works, the word count is visible to people other than the creator and
+      # should only include posted chapters. For drafts, we can count everything.
+      self.word_count = if self.posted
+                          Chapter.select("SUM(word_count) AS work_word_count").where(work_id: self.id, posted: true).first.work_word_count
+                        else
+                          Chapter.select("SUM(word_count) AS work_word_count").where(work_id: self.id).first.work_word_count
+                        end
     end
   end
 
@@ -778,31 +808,6 @@ class Work < ApplicationRecord
   # TAGGING
   # Works are taggable objects.
   #######################################################################
-
-  def tag_groups
-    Rails.cache.fetch(self.tag_groups_key) do
-      if self.placeholder_tags && !self.placeholder_tags.empty?
-        result = self.placeholder_tags.values.flatten.group_by { |t| t.type.to_s }
-      else
-        result = self.tags.group_by { |t| t.type.to_s }
-      end
-      result["Fandom"] ||= []
-      result["Rating"] ||= []
-      result["ArchiveWarning"] ||= []
-      result["Relationship"] ||= []
-      result["Character"] ||= []
-      result["Freeform"] ||= []
-      result
-    end
-  end
-
-  # Check to see that a work is tagged appropriately
-  def has_required_tags?
-    return false if self.fandom_string.blank?
-    return false if self.archive_warning_string.blank?
-    return false if self.rating_string.blank?
-    return true
-  end
 
   # When the filters on a work change, we need to perform some extra checks.
   def self.reindex_for_filter_changes(ids, filter_taggings, queue)
@@ -913,7 +918,7 @@ class Work < ApplicationRecord
 
   def update_stat_counter
     counter = self.stat_counter || self.create_stat_counter
-    counter.update_attributes(
+    counter.update(
       kudos_count: self.kudos.count,
       comments_count: self.count_visible_comments_uncached,
       bookmarks_count: self.bookmarks.where(private: false).count
@@ -1054,14 +1059,6 @@ class Work < ApplicationRecord
 
   scope :owned_by, lambda {|user| select("DISTINCT works.*").joins({pseuds: :user}).where('users.id = ?', user.id)}
 
-  # Note: these scopes DO include the works in the children of the specified collection
-  scope :in_collection, lambda {|collection|
-    select("DISTINCT works.*").
-        joins(:collection_items).
-        where('collection_items.collection_id IN (?) AND collection_items.user_approval_status = ? AND collection_items.collection_approval_status = ?',
-              [collection.id] + collection.children.collect(&:id), CollectionItem::APPROVED, CollectionItem::APPROVED)
-  }
-
   def self.in_series(series)
     joins(:series).
     where("series.id = ?", series.id)
@@ -1145,7 +1142,7 @@ class Work < ApplicationRecord
   end
 
   def mark_as_ham!
-    update_attributes(spam: false, hidden_by_admin: false)
+    update(spam: false, hidden_by_admin: false)
     ModeratedWork.mark_approved(self)
     # don't submit ham reports unless in production mode
     Rails.env.production? && Akismetor.submit_ham(akismet_attributes)

@@ -28,7 +28,7 @@ class CollectionItemsController < ApplicationController
       @collection_items = @collection.collection_items.include_for_works
       @collection_items = case
                           when params[:approved]
-                            @collection_items.approved_by_collection
+                            @collection_items.approved_by_both
                           when params[:rejected]
                             @collection_items.rejected_by_collection
                           when params[:invited]
@@ -40,7 +40,7 @@ class CollectionItemsController < ApplicationController
       @collection_items = CollectionItem.for_user(@user).includes(:collection)
       @collection_items = case
                           when params[:approved]
-                            @collection_items.approved_by_user.approved_by_collection
+                            @collection_items.approved_by_both
                           when params[:rejected]
                             @collection_items.rejected_by_user
                           else
@@ -108,8 +108,8 @@ class CollectionItemsController < ApplicationController
       elsif @item.is_a?(Work) && @item.anonymous? && !current_user.is_author_of?(@item)
         errors << ts("%{collection_title}, because you don't own this item and the item is anonymous.", collection_title: collection.title)
       # add the work to a collection, and try to save it
-      elsif @item.add_to_collection(collection) && @item.save
-        # approved_by_user and approved_by_collection are both true
+      elsif @item.add_to_collection(collection) && @item.save(validate: false)
+        # approved_by_user? and approved_by_collection? are both true
         if @item.approved_collections.include?(collection)
           new_collections << collection
         # if the current_user is a maintainer of the collection then approved_by_user must have been false (which means

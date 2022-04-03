@@ -66,7 +66,8 @@ en:
       tags:
         label: Tags
       translated_post:
-        footnote: Comment permissions from the selected post will replace any permissions selected on this page.
+        footnote_comment_permissions: Comment permissions from the selected post will replace any permissions selected on this page.
+        footnote_tags: Tags from the selected post will replace any tags entered on this page.
         label: Translation of
   admins:
     index:
@@ -115,6 +116,28 @@ en:
       point2: "The entity that set up the proxy site can see what you submit, including your IP address. If you log in through the proxy site, it can see your password."
       button: "Dismiss Notice"
   users:
+    sessions:
+      new:
+        restricted:
+          sorry: "Sorry!"
+          work_unavailable: "This work is only available to registered users of the Archive."
+          commenting_unavailable: "Commenting on this work is only available to registered users of the Archive."
+          account_exists: "If you already have an Archive of Our Own account, log in now."
+          no_account: "If you don't have an account, you can %{request_invite_link}."
+          request_invite: "request an invitation to join"
+          signup: "Or join us for free - it's easy."
+        login:
+          log_in: "Log in"
+          forgot: "Forgot your password or user name? %{reset_password_link}."
+          reset_password: "Reset password"
+          no_account: "Don't have an account? %{join_link}."
+          request_invite: "Request an invitation to join"
+          create_account: "Create an account now"
+        beta_reminder:
+          reminder: "Reminder:"
+          warning: "This site is in beta. Things may break or crash without notice."
+          report_bugs: "Please report any pesky bugs and %{give_feedback_link}!"
+          give_feedback: "give us your feedback"
     delete_preview:
       heading: "What do you want to do with your works?"
       orphan: "orphan"
@@ -180,3 +203,109 @@ en:
   skins:
     confirm_delete:
       confirm_html: Are you sure you want to <strong><em>delete</em></strong> the skin "%{skin_title}"?
+  feedbacks:
+    new:
+      heading:
+        page_title: Support and Feedback
+        instructions: Please use this form for questions about how to use the Archive and for reporting any technical problems.
+        landmark:
+          reference: Reference Links
+      navigation:
+        faqs: FAQs & Tutorials
+        release_notes: Release Notes
+        known_issues: Known Issues
+      status:
+        current: 'For current updates on Archive performance or downtime, please check out our Twitter feed: %{twitter_link}.'
+        twitter: '@AO3_Status'
+      abuse:
+        reports: For reports of violations of the Terms of Service such as harassment, spam, or plagiarism, or if you believe your account has been hacked, please %{contact_link} instead. We cannot act on these reports or provide information about Policy and Abuse cases.
+        contact: contact our Policy and Abuse team
+      reportable:
+        intro: 'Some issues you can contact Support about include:'
+        bugs: Bugs, errors, or unexpected site behavior
+        site_questions: Questions about how to use the site
+        account_creation: Problems setting up your account
+        lost_access: Lost password or email preventing access to your account
+        tag_changes: Requests to canonize or change tags
+        new_features: Feature requests for future development
+        orphaned_works: Questions about orphaned works
+        work_language: Works labeled with the wrong language
+        policy_questions: General site policy questions
+      do_not_spam_html: <strong>We respond to every report we receive, but we are a small volunteer team.</strong> For this reason, we ask you to not submit multiple reports regarding any one issue, or encourage other people to report the same issue, unless there is additional information to offer.
+      languages_html: <strong>We can answer Support inquiries in %{list}.</strong> Please allow for additional delay for responses in any language other than English.
+      form:
+        legend:
+          contact_info: Contact Information
+          feedback: Describe Your Feedback
+          send: Send Your Feedback
+        submit:
+          active: Send
+          disabled: Please wait...
+        name:
+          label: Your name (optional)
+        email:
+          label: Your email (required)
+        language:
+          label: Select language (required)
+        summary:
+          label: Brief summary of your question or problem (required)
+          error: Please enter a brief summary of your message
+        comment:
+          label: Your question or problem (required)
+          error: Please enter your feedback
+          description: Please be as specific as possible, including error messages and/or links
+        ip: Our spam filter does collect IP addresses, but we never see them.
+  abuse_reports:
+    new:
+      heading:
+        page_title: Report Abuse
+      purview:
+        about: The Abuse committee looks after all of your concerns regarding content and user behavior which breach the Archive %{tos_link}. For technical help, please %{support_link}.
+        tos: Terms of Service
+        support: contact Support
+      do_not_spam_html: <strong>We investigate every report we receive.</strong> For this reason, we ask you to not submit several reports regarding any one issue unless you have additional information to offer. We also ask that you do not encourage other users to submit a report regarding content you have already reported. Doing so slows down our response and reaction time considerably, as we are a small volunteer-based committee.
+      reportable:
+        intro: 'Please submit a report via this form if you have not submitted this report within the past sixty (60) days, and you:'
+        fnok:
+          concerning: would like to contact us regarding your %{fnok_link}, or
+          fnok: Fannish Next of Kin
+        hack: believe that your account has been hacked, or that someone is trying to hack your account, or
+        tos: believe you have found content uploaded to the Archive which breaches our Terms of Service, or
+        dmca:
+          claim: would like to lodge a DMCA claim - please review our %{dmca_link}
+          policy: DMCA Policy
+      languages_html: <strong>We can answer Abuse reports in %{list}.</strong> Please allow for an additional delay for responses in any language other than English.
+      form:
+        legend:
+          abuse: Link and Describe Abuse
+        landmark:
+          send: Send to Abuse Team
+        submit:
+          active: Submit
+        name:
+          label: Your name (optional)
+        email:
+          label: Your email (required)
+          description: We cannot act on reports without a valid email address.
+        language:
+          label: Select language (required)
+        summary:
+          label: Brief summary of Terms of Service Violation (required)
+          error: Please enter a brief summary of your message
+        comment:
+          label: Your comment (required)
+          error: Please describe your concern.
+          description: Please include all relevant URLs and what about the content violates the Archive %{tos_link}. The more thorough the information the quicker we can start investigating.
+          tos: Terms of Service
+        link:
+          label: Link to the page you are reporting (required)
+          error: Please enter the link to the page you are reporting.
+          description: If you came here from the abuse link at the bottom of the page, this will be filled in for you.
+  challenge_signups:
+    signup_form:
+      notice:
+        preference:
+          gift_exchange: Signing up for this challenge will allow assigned users to gift works to you regardless of your preference settings. If you wish to receive additional gifts from users who are not assigned to you, please %{preferences_link} to allow gifts from anyone. You can always %{refuse_link}.
+          preferences_link_text: update your preferences
+          prompt_meme: Signing up for this challenge will allow any user who claims your prompt to gift you a work in response to your prompt regardless of your preference settings. If you wish to receive additional gifts from users who have not claimed your prompts, please %{preferences_link} to allow gifts from anyone. You can always %{refuse_link}.
+          refuse_link_text: refuse a gift

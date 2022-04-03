@@ -53,6 +53,7 @@ a:focus img {
 h1, h2, h3, h4, h5, h6, .heading {
   font-family: Georgia, serif;
   font-weight: 400;
+    word-wrap: break-word;
 }
 
 h1 {

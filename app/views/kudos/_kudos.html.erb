@@ -1,4 +1,5 @@
 <% # expects local variables kudos, guest_kudos_count, commentable %>
+<h3 class="landmark heading"><%= ts("Kudos") %></h3>
 <div id="kudos">
   <% has_user_kudos = kudos.exists? %>
   <% if has_user_kudos || guest_kudos_count > 0 %>

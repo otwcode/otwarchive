@@ -64,8 +64,7 @@ namespace :Tag do
         work.archive_warnings << default_warning if work.archive_warnings.count <= 1
       end
 
-      warning.becomes!(Freeform)
-      warning.save!
+      warning.update_attribute(:type, "Freeform")
     end
   end
 

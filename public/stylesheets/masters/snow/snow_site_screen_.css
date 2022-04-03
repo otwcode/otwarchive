@@ -45,8 +45,7 @@ form dt,
 .current,
 a.current,
 .current a:visited,
-.search span.tip,
-#header ul.primary .current {
+.search span.tip {
   border-color: #fff;
 }
 

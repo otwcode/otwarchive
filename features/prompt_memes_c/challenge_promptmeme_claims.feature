@@ -431,3 +431,16 @@ Feature: Prompt Meme Challenge
       And I use tomorrow as the "Sign-up closes" date
       And I submit
     Then I should see "Challenge was successfully created."
+
+  Scenario: A user who disallows gift works is cautioned about signing up for
+  a prompt meme, and a user who allows them is not.
+    Given I have Battle 12 prompt meme fully set up
+      And I am logged in as "participant"
+      And the user "participant" disallows gifts
+    When I go to "Battle 12" collection's page
+      And I follow "Prompt Form"
+    Then I should see "any user who claims your prompt to gift you a work in response to your prompt regardless of your preference settings"
+    When the user "participant" allows gifts
+      And I go to "Battle 12" collection's page
+      And I follow "Prompt Form"
+    Then I should not see "any user who claims your prompt to gift you a work in response to your prompt regardless of your preference settings"

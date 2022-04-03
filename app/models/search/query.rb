@@ -11,8 +11,8 @@ class Query
     begin
       $elasticsearch.search(
         index: index_name,
-        type: document_type,
-        body: generated_query
+        body: generated_query,
+        track_total_hits: true
       )
     rescue Elasticsearch::Transport::Transport::Errors::BadRequest
       { error: "Your search failed because of a syntax error. Please try again." }
@@ -32,9 +32,77 @@ class Query
     )['count']
   end
 
+  # Retrieve a randomly sampled selection of results:
+  def sample(count: 5)
+    response = $elasticsearch.search(
+      index: index_name,
+      body: {
+        query: {
+          function_score: {
+            query: filtered_query,
+            random_score: {},
+            boost_mode: "replace"
+          }
+        },
+        size: count
+      }
+    )
+
+    QueryResult.new(klass, response, { page: 1, per_page: count })
+  end
+
+  # Perform a specific aggregation:
+  def aggregation_search(aggregation)
+    $elasticsearch.search(
+      index: index_name,
+      body: {
+        query: filtered_query,
+        size: 0, # aggregations only
+        aggs: { aggregation: aggregation }
+      }
+    ).dig("aggregations", "aggregation")
+  end
+
+  # Use a composite aggregation to get all values that a particular field can
+  # take on. Returns a hash mapping from values to counts.
+  def field_values(field_name, batch_size: 100)
+    aggregation = {
+      composite: {
+        size: batch_size,
+        sources: [{ field_value: { terms: { field: field_name } } }]
+      }
+    }
+
+    counts = {}
+
+    loop do
+      results = aggregation_search(aggregation)
+
+      results["buckets"].each do |info|
+        counts[info.dig("key", "field_value")] = info.dig("doc_count")
+      end
+
+      after_key = results["after_key"]
+      return counts if after_key.nil?
+
+      aggregation[:composite][:after] = after_key
+    end
+  end
+
+  # Return (an approximation of) the number of distinct values that a
+  # particular field can take on:
+  def field_count(field_name, precision_threshold: 1000)
+    aggregation_search(
+      cardinality: {
+        field: field_name,
+        precision_threshold: precision_threshold
+      }
+    ).dig("value")
+  end
+
   # Sort by relevance by default, override in subclasses as necessary
   def sort
-    { "_score" => { order: "desc" }}
+    { _score: { order: "desc" } }
   end
 
   # Search query with filters

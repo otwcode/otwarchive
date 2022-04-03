@@ -4,7 +4,7 @@
 #
 # This will handle setting up config files, creating databases, and running migrations.
 #
-# After these oneoff tasks have been perfomed, on subsequent starts you can simply use:
+# After these oneoff tasks have been performed, on subsequent starts you can simply use:
 #
 # ```
 # docker-compose up -d web
@@ -38,7 +38,7 @@ services:
     volumes:
       - redis-data:/var/lib/redis:rw
   es:
-    image: docker.elastic.co/elasticsearch/elasticsearch:6.8.9
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.16.1
     ports:
       - "9200:9200"
       - "9300:9300"
@@ -50,6 +50,9 @@ services:
       - bootstrap.memory_lock=false
       - "ES_JAVA_OPTS=-Xms1500m -Xmx1500m"
       - discovery.type=single-node
+      # Silence "security features are not enabled" warnings
+      # https://github.com/elastic/elasticsearch/issues/78500
+      - xpack.security.enabled=false
   mc:
     image: memcached:1.5
     ports:

@@ -22,12 +22,11 @@ class CommentsController < ApplicationController
   before_action :check_parent_comment_permissions, only: [:new, :create, :add_comment_reply]
   before_action :check_unreviewed, only: [:add_comment_reply]
   before_action :check_frozen, only: [:new, :create, :add_comment_reply]
+  before_action :check_not_replying_to_spam, only: [:new, :create, :add_comment_reply]
   before_action :check_permission_to_review, only: [:unreviewed]
   before_action :check_permission_to_access_single_unreviewed, only: [:show]
   before_action :check_permission_to_moderate, only: [:approve, :reject]
   before_action :check_permission_to_modify_frozen_status, only: [:freeze, :unfreeze]
-
-  cache_sweeper :comment_sweeper
 
   def check_pseud_ownership
     return unless params[:comment][:pseud_id]
@@ -124,6 +123,13 @@ class CommentsController < ApplicationController
     redirect_back(fallback_location: root_path)
   end
 
+  def check_not_replying_to_spam
+    return unless @commentable.respond_to?(:approved?) && !@commentable.approved?
+
+    flash[:error] = t("comments.check_not_replying_to_spam.error")
+    redirect_back(fallback_location: root_path)
+  end
+
   def check_permission_to_review
     parent = find_parent
     return if logged_in_as_admin? || current_user_owns?(parent)
@@ -206,20 +212,13 @@ class CommentsController < ApplicationController
   end
 
   def index
-    if !@commentable.nil?
-      @comments = @commentable.comments.reviewed.page(params[:page])
-      if @commentable.class == Comment
-        # we link to the parent object at the top
-        @commentable = @commentable.ultimate_parent
-      end
-    else
-      if logged_in_as_admin?
-        @comments = Comment.top_level.not_deleted.limit(ArchiveConfig.ITEMS_PER_PAGE).ordered_by_date.include_pseud.select { |c| c.ultimate_parent.respond_to?(:visible?) && c.ultimate_parent.visible?(current_user) }
-      else
-        redirect_back_or_default(root_path)
-        flash[:error] = ts("Sorry, you don't have permission to access that page.")
-      end
-    end
+    return raise_not_found if @commentable.blank?
+
+    @comments = @commentable.comments.reviewed.page(params[:page])
+    return unless @commentable.class == Comment
+
+    # we link to the parent object at the top
+    @commentable = @commentable.ultimate_parent
   end
 
   def unreviewed
@@ -327,7 +326,7 @@ class CommentsController < ApplicationController
   # PUT /comments/1.xml
   def update
     updated_comment_params = comment_params.merge(edited_at: Time.current)
-    if @comment.update_attributes(updated_comment_params)
+    if @comment.update(updated_comment_params)
       flash[:comment_notice] = ts('Comment was successfully updated.')
       respond_to do |format|
         format.html do

@@ -24,7 +24,7 @@ Feature: Admin Actions for Works, Comments, Series, Bookmarks
       And logged in users should not see the hidden work "ToS Violation" by "regular_user"
       And "regular_user" should see their work "ToS Violation" is hidden
       And 1 email should be delivered
-      And the email should contain "We are investigating the matter and will contact you"
+      And the email should contain "you will be required to take action to correct the violation"
 
   Scenario: Can unhide works
     Given I am logged in as "regular_user"
@@ -134,6 +134,7 @@ Feature: Admin Actions for Works, Comments, Series, Bookmarks
       And I fill in "Characters" with "Admin-Added Character"
       And I fill in "Additional Tags" with "Admin-Added Freeform"
       And I check "M/M"
+      And it is currently 1 second from now
     When I press "Update External work"
     Then I should see "Admin-Added Creator"
       And I should see "Admin-Added Title"
@@ -345,3 +346,17 @@ Feature: Admin Actions for Works, Comments, Series, Bookmarks
       And I should see "Violation"
     When I view the series "Violation"
     Then I should see "Violation"
+
+  Scenario: Admins can see when a work has too many tags
+    Given the user-defined tag limit is 7
+      And the work "Under the Limit"
+      And the work "Over the Limit"
+      And the work "Over the Limit" has 2 fandom tags
+      And the work "Over the Limit" has 2 character tags
+      And the work "Over the Limit" has 2 relationship tags
+      And the work "Over the Limit" has 2 freeform tags
+    When I am logged in as an admin
+      And I view the work "Under the Limit"
+    Then I should see "Over Tag Limit: No"
+    When I view the work "Over the Limit"
+    Then I should see "Over Tag Limit: Yes"

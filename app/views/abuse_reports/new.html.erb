@@ -1,5 +1,5 @@
 <!--Descriptive page name, messages and instructions-->
-<h2 class="heading"><%= ts("Report Abuse") %></h2>
+<h2 class="heading"><%= t(".heading.page_title") %></h2>
 <%= error_messages_for :abuse_report %>
 <!--/descriptions-->
 
@@ -8,81 +8,74 @@
 
 <!--main content-->
 <div class="userstuff">
-  <p><%= ts("The Abuse committee looks after all of your concerns regarding content and user behavior which breach the
-           Archive %{tos_link}. For technical help, please contact %{support_link}.",
-            tos_link: (link_to ts("Terms of Service"), tos_path), support_link: (link_to ts("Support"),
-                                                                                         new_feedback_report_path)).html_safe %></p>
-  <p><%= ts("<strong>We investigate every report we receive.</strong> For this reason, we ask you to not submit several
-           reports regarding any one issue unless you have additional information to offer. We also ask that you do not
-           encourage other users to submit a report regarding content you have already reported. Doing so slows down our
-           response and reaction time considerably, as we are a small volunteer-based committee.").html_safe %></p>
+  <p><%= t(".purview.about",
+            tos_link: (link_to t(".purview.tos"), tos_path),
+            support_link: (link_to t(".purview.support"), new_feedback_report_path)).html_safe %></p>
+  <p><%= t(".do_not_spam_html") %></p>
   <p>
-    <%= ts("Please submit a report via this form if you have not submitted this report within the past fourteen (14) days,
-          and you:") %>
+    <%= t(".reportable.intro") %>
   </p>
   <ul>
-    <li><%= ts("would like to contact us regarding your %{fnok}, or", fnok: (link_to ts("Fannish Next of Kin"), tos_faq_path(anchor: "next_of_kin"))).html_safe %></li>
-    <li><%= ts("have lost or forgotten your login details, or") %></li>
-    <li><%= ts("believe you have found content uploaded to the Archive which breaches our Terms of Service, or") %></li>
-    <li><%= ts("would like to lodge a DMCA claim - please review our %{dmca_link}", dmca_link:
-            (link_to ts("DMCA Policy"), dmca_path)).html_safe %></li>
+    <li><%= t(".reportable.fnok.concerning", fnok_link: (link_to t(".reportable.fnok.fnok"), tos_faq_path(anchor: "next_of_kin"))).html_safe %></li>
+    <li><%= t(".reportable.hack") %></li>
+    <li><%= t(".reportable.tos") %></li>
+    <li><%= t(".reportable.dmca.claim", dmca_link:
+            (link_to t(".reportable.dmca.policy"), dmca_path)).html_safe %></li>
   </ul>
-  <p><%= ts("<strong>We can answer Abuse reports in %{list}.</strong> Please allow for an additional delay for responses
-            in any language other than English.", list: @abuse_languages.map(&:name).to_sentence).html_safe %></p>
+  <p><%= t(".languages_html", list: @abuse_languages.map(&:name).to_sentence).html_safe %></p>
 </div>
 <%= form_for @abuse_report, class: "post" do |f| %>
   <fieldset>
-    <legend><%= ts("Link and Describe Abuse") %></legend>
+    <legend><%= t(".form.legend.abuse") %></legend>
     <dl>
-      <dt><%= f.label :username, ts("Your name (optional)") %></dt>
+      <dt><%= f.label :username, t(".form.name.label") %></dt>
       <dd><%= f.text_field :username %></dd>
-      <dt class="required"><%= f.label :email, ts("Your email (required)") %></dt>
+      <dt class="required"><%= f.label :email, t(".form.email.label") %></dt>
       <dd class="required">
         <%= f.text_field :email, "aria-describedby" => "email-field-description" %>
         <p class="footnote" id="email-field-description">
-          <%= ts("We cannot act on reports without a valid email address.") %>
+          <%= t(".form.email.description") %>
         </p>
       </dd>
       <dt class="required">
-        <%= f.label :language, ts("Select language (required)") %>
+        <%= f.label :language, t(".form.language.label") %>
       </dt>
       <dd class="required">
         <%= f.collection_select(:language, @abuse_languages, :name, :name, { selected: @abuse_report.language || Language.default.name }) %>
       </dd>
       <dt class="required">
-        <%= f.label :summary, ts("Brief summary of Terms of Service Violation (required)") %>
+        <%= f.label :summary, t(".form.summary.label") %>
       </dt>
       <dd class="required">
         <%= f.text_field :summary, class: "observe_textlength" %>
         <%= generate_countdown_html("abuse_report_summary", ArchiveConfig.FEEDBACK_SUMMARY_MAX_DISPLAYED) %>
         <%= live_validation_for_field("abuse_report_summary",
-                                      failureMessage: ts("Please enter a brief summary of your message")) %>
+                                      failureMessage: t(".form.summary.error")) %>
       </dd>
 
-      <dt class="required"><%= f.label :url, ts("Link to the page you are reporting (required)") %></dt>
+      <dt class="required"><%= f.label :url, t(".form.link.label") %></dt>
       <dd class="required">
         <%= f.text_field :url, size: 60, "aria-describedby" => "url-field-description" %>
         <%= live_validation_for_field("abuse_report_url",
-              failureMessage: ts("Please enter the link to the page you are reporting.")) %>
+              failureMessage: t(".form.link.error")) %>
         <p class="footnote" id="url-field-description">
-          <%= ts("If you came here from the abuse link at the bottom of the page, this will be filled in for you.") %>
+          <%= t(".form.link.description") %>
         </p>
       </dd>
       <dt class="required">
-        <%= f.label :comment, ts("Your comment (required)") %>
+        <%= f.label :comment, t(".form.comment.label") %>
       </dt>
       <dd class="required">
         <p id="comment-field-description">
-          <%= ts("Please include all relevant URLs and what about the content violates the Archive %{tos_link}. The more
-              thorough the information the quicker we can start investigating.",
-                  tos_link: (link_to ts("Terms of Service"), tos_path)).html_safe %>
+          <%= t(".form.comment.description",
+                  tos_link: (link_to t(".form.comment.tos"), tos_path)).html_safe %>
         </p>
         <%= f.text_area :comment, "aria-describedby" => "comment-field-description" %>
         <%= live_validation_for_field("abuse_report_comment",
-              failureMessage: ts("Please describe your concern.")) %>
+              failureMessage: t(".form.comment.error")) %>
       </dd>
-      <dt class="landmark"><%= ts("Send to Abuse Team") %></dt>
-      <dd class="submit actions"><%= f.submit ts("Submit") %></dd>
+      <dt class="landmark"><%= t(".form.landmark.send") %></dt>
+      <dd class="submit actions"><%= f.submit t(".form.submit.active") %></dd>
     </dl>
   </fieldset>
 

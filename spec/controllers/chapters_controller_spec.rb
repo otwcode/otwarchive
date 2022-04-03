@@ -46,13 +46,13 @@ describe ChaptersController do
       end
 
       it "assigns @chapters to only posted chapters" do
-        create(:chapter, work: work, posted: false)
+        create(:chapter, :draft, work: work)
         get :manage, params: { work_id: work.id }
         expect(assigns[:chapters]).to eq([work.chapters.first])
       end
 
       it "assigns @chapters to chapters in order" do
-        chapter = create(:chapter, work: work, position: 2, posted: true)
+        chapter = create(:chapter, work: work, position: 2)
         get :manage, params: { work_id: work.id }
         expect(assigns[:chapters]).to eq([work.chapters.first, chapter])
       end
@@ -81,13 +81,13 @@ describe ChaptersController do
       end
 
       it "assigns @chapters to only posted chapters" do
-        chapter = create(:chapter, work: work, posted: false)
+        chapter = create(:chapter, :draft, work: work)
         get :show, params: { work_id: work.id, id: chapter.id }
         expect(assigns[:chapters]).to eq([work.chapters.first])
       end
 
       it "errors and redirects to login when trying to view unposted chapter" do
-        chapter = create(:chapter, work: work, posted: false)
+        chapter = create(:chapter, :draft, work: work)
         get :show, params: { work_id: work.id, id: chapter.id }
         it_redirects_to_with_error(new_user_session_path, "Sorry, you don't have permission to access the page you were trying to reach. Please log in.")
       end
@@ -125,7 +125,7 @@ describe ChaptersController do
     end
 
     it "redirects to chapter with selected_id" do
-      chapter = create(:chapter, work: work, position: 2, posted: true)
+      chapter = create(:chapter, work: work, position: 2)
       get :show, params: { work_id: work.id, id: work.chapters.first, selected_id: chapter.id }
       it_redirects_to work_chapter_path(work_id: work.id, id: chapter.id)
     end
@@ -137,31 +137,31 @@ describe ChaptersController do
     end
 
     it "assigns @chapters to chapters in order" do
-      chapter = create(:chapter, work: work, position: 2, posted: true)
+      chapter = create(:chapter, work: work, position: 2)
       get :show, params: { work_id: work.id, id: chapter.id }
       expect(assigns[:chapters]).to eq([work.chapters.first, chapter])
     end
 
     it "assigns @previous_chapter when not on first chapter" do
-      chapter = create(:chapter, work: work, position: 2, posted: true)
+      chapter = create(:chapter, work: work, position: 2)
       get :show, params: { work_id: work.id, id: chapter.id }
       expect(assigns[:previous_chapter]).to eq(work.chapters.first)
     end
 
     it "does not assign @previous_chapter when on first chapter" do
-      create(:chapter, work: work, position: 2, posted: true)
+      create(:chapter, work: work, position: 2)
       get :show, params: { work_id: work.id, id: work.chapters.first.id }
       expect(assigns[:previous_chapter]).to be_nil
     end
 
     it "assigns @next_chapter when not on last chapter" do
-      chapter = create(:chapter, work: work, position: 2, posted: true)
+      chapter = create(:chapter, work: work, position: 2)
       get :show, params: { work_id: work.id, id: work.chapters.first.id }
       expect(assigns[:next_chapter]).to eq(chapter)
     end
 
     it "does not assign @next_chapter when on last chapter" do
-      chapter = create(:chapter, work: work, position: 2, posted: true)
+      chapter = create(:chapter, work: work, position: 2)
       get :show, params: { work_id: work.id, id: chapter.id }
       expect(assigns[:next_chapter]).to be_nil
     end
@@ -195,6 +195,16 @@ describe ChaptersController do
       expect(assigns[:page_title]).to eq("page title")
     end
 
+    context "when work has no fandom" do
+      it "assigns @page_title with a placeholder for the fandom" do
+        allow_any_instance_of(Work).to receive(:tag_groups).and_return("Fandom" => [])
+        expect_any_instance_of(ChaptersController).to receive(:get_page_title).with("No fandom specified", user.pseuds.first.name, "#{work.title} - Chapter 1").and_return("page title")
+        get :show, params: { work_id: work.id, id: work.chapters.first.id }
+        expect(response).to have_http_status(:ok)
+        expect(assigns[:page_title]).to eq("page title")
+      end
+    end
+
     it "assigns @kudos to non-anonymous kudos" do
       kudo = create(:kudo, commentable: work, user: create(:user))
       create(:kudo, commentable: work)
@@ -203,8 +213,8 @@ describe ChaptersController do
     end
 
     it "assigns instance variables correctly" do
-      second_chapter = create(:chapter, work: work, position: 2, posted: true)
-      third_chapter = create(:chapter, work: work, position: 3, posted: true)
+      second_chapter = create(:chapter, work: work, position: 2)
+      third_chapter = create(:chapter, work: work, position: 3)
       comment = create(:comment, commentable: second_chapter)
       kudo = create(:kudo, commentable: work, user: create(:user))
       tag = create(:fandom)
@@ -230,7 +240,7 @@ describe ChaptersController do
       end
 
       it "assigns @chapters to all chapters" do
-        chapter = create(:chapter, work: work, position: 2, posted: false)
+        chapter = create(:chapter, :draft, work: work, position: 2)
         get :show, params: { work_id: work.id, id: chapter.id }
         expect(assigns[:chapters]).to eq([work.chapters.first, chapter])
       end
@@ -242,7 +252,7 @@ describe ChaptersController do
       end
 
       it "assigns @chapters to only posted chapters" do
-        chapter = create(:chapter, work: work, posted: false)
+        chapter = create(:chapter, :draft, work: work)
         get :show, params: { work_id: work.id, id: chapter.id }
         expect(assigns[:chapters]).to eq([work.chapters.first])
       end
@@ -343,7 +353,7 @@ describe ChaptersController do
     context "with valid remove params" do
       context "when work is multichaptered and co-created" do
         let(:co_creator) { create(:user) }
-        let!(:co_created_chapter) { create(:chapter, work: work, posted: true, authors: [user.pseuds.first, co_creator.pseuds.first]) }
+        let!(:co_created_chapter) { create(:chapter, work: work, authors: [user.pseuds.first, co_creator.pseuds.first]) }
 
         context "when logged in user also owns other chapters" do
           before do
@@ -616,7 +626,7 @@ describe ChaptersController do
         end
 
         it "gives a notice if the chapter has not been posted and renders preview" do
-          unposted_chapter = create(:chapter, work: work, authors: [user.pseuds.first])
+          unposted_chapter = create(:chapter, :draft, work: work, authors: [user.pseuds.first])
           put :update, params: { work_id: work.id, id: unposted_chapter.id, chapter: chapter_attributes, preview_button: true }
           expect(response).to render_template(:preview)
           expect(flash[:notice]).to include "This is a draft chapter in a posted work."
@@ -658,7 +668,7 @@ describe ChaptersController do
           end
 
           it "gives a notice if the chapter was not already posted and redirects to the posted chapter" do
-            unposted_chapter = create(:chapter, work: work, authors: [user.pseuds.first])
+            unposted_chapter = create(:chapter, :draft, work: work, authors: [user.pseuds.first])
             put :update, params: { work_id: work.id, id: unposted_chapter.id, chapter: chapter_attributes, post_button: true }
             it_redirects_to_with_notice(work_chapter_path(work_id: work.id, id: unposted_chapter.id), "Chapter was successfully posted.")
           end
@@ -717,8 +727,8 @@ describe ChaptersController do
   describe "update_positions" do
     before do
       @chapter1 = work.chapters.first
-      @chapter2 = create(:chapter, work: work, posted: true, position: 2, authors: [user.pseuds.first])
-      @chapter3 = create(:chapter, work: work, posted: true, position: 3, authors: [user.pseuds.first])
+      @chapter2 = create(:chapter, work: work, position: 2, authors: [user.pseuds.first])
+      @chapter3 = create(:chapter, work: work, position: 3, authors: [user.pseuds.first])
     end
 
     context "when user is logged out" do
@@ -798,7 +808,7 @@ describe ChaptersController do
 
   describe "post" do
     before do
-      @chapter_to_post = create(:chapter, work: work, authors: [user.pseuds.first], position: 2)
+      @chapter_to_post = create(:chapter, :draft, work: work, authors: [user.pseuds.first], position: 2)
     end
 
     context "when user is logged out" do
@@ -935,13 +945,11 @@ describe ChaptersController do
       end
 
       context "when work has more than one chapter" do
-        before do
-          @chapter2 = create(:chapter, work: work, posted: true, position: 2, authors: [user.pseuds.first])
-        end
+        let!(:chapter2) { create(:chapter, work: work, position: 2, authors: [user.pseuds.first]) }
 
         it "updates the work's minor version" do
           expect(work.minor_version).to eq(0)
-          delete :destroy, params: { work_id: work.id, id: @chapter2.id }
+          delete :destroy, params: { work_id: work.id, id: chapter2.id }
           expect(assigns[:work].minor_version).to eq(1)
         end
 
@@ -952,26 +960,57 @@ describe ChaptersController do
 
           old_updated_at = work.updated_at
 
-          delete :destroy, params: { work_id: work.id, id: @chapter2.id }
+          delete :destroy, params: { work_id: work.id, id: chapter2.id }
           expect(assigns[:work].updated_at).not_to eq(old_updated_at)
         end
 
         it "gives a notice that the chapter was deleted and redirects to work" do
-          delete :destroy, params: { work_id: work.id, id: @chapter2.id }
+          delete :destroy, params: { work_id: work.id, id: chapter2.id }
           it_redirects_to_with_notice(work, "The chapter was successfully deleted.")
         end
 
         it "gives a notice that the draft chapter was deleted if the chapter was a draft and redirects to work" do
-          @chapter2.posted = false
-          @chapter2.save
-          delete :destroy, params: { work_id: work.id, id: @chapter2.id }
+          chapter2.posted = false
+          chapter2.save
+          delete :destroy, params: { work_id: work.id, id: chapter2.id }
           it_redirects_to_with_notice(work, "The chapter draft was successfully deleted.")
         end
 
         it "errors and redirects to work when chapter is not deleted" do
           allow_any_instance_of(Chapter).to receive(:destroy).and_return(false)
-          delete :destroy, params: { work_id: work.id, id: @chapter2.id }
+          delete :destroy, params: { work_id: work.id, id: chapter2.id }
           it_redirects_to_with_error(work, "Something went wrong. Please try again.")
+        end
+
+        it "does not reorder chapters when deleting the last chapter" do
+          chapter1 = work.chapters.first
+          delete :destroy, params: { work_id: work.id, id: chapter2.id }
+          expect(work.reload.chapters_in_order).to eq([chapter1])
+          expect(work.reload.chapters_in_order.first.position).to eq(1)
+        end
+
+        it "updates chapter positions when deleting the first chapter of a two chapter work" do
+          delete :destroy, params: { work_id: work.id, id: work.chapters.first.id }
+          expect(work.reload.chapters_in_order).to eq([chapter2])
+          expect(work.reload.chapters_in_order.first.position).to eq(1)
+        end
+
+        it "maintains chapter order when deleting the first chapter of a >3 chapter work" do
+          chapter3 = create(:chapter, work: work, position: 3, authors: [user.pseuds.first])
+          chapter4 = create(:chapter, work: work, position: 4, authors: [user.pseuds.first])
+          chapter5 = create(:chapter, work: work, position: 5, authors: [user.pseuds.first])
+          delete :destroy, params: { work_id: work.id, id: work.chapters.first.id }
+          expect(work.reload.chapters_in_order).to eq([chapter2, chapter3, chapter4, chapter5])
+          expect(work.reload.chapters_in_order.map(&:position)).to eq([1, 2, 3, 4])
+        end
+
+        it "reorders chapters properly when deleting a mid-work chapter" do
+          chapter1 = work.chapters.first
+          chapter3 = create(:chapter, work: work, position: 3, authors: [user.pseuds.first])
+          chapter4 = create(:chapter, work: work, position: 4, authors: [user.pseuds.first])
+          delete :destroy, params: { work_id: work.id, id: chapter2.id }
+          expect(work.reload.chapters_in_order).to eq([chapter1, chapter3, chapter4])
+          expect(work.reload.chapters_in_order.map(&:position)).to eq([1, 2, 3])
         end
       end
     end
