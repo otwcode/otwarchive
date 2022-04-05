@@ -5,7 +5,13 @@ class Pseud < ApplicationRecord
 
   has_attached_file :icon,
     styles: { standard: "100x100>" },
-    path: %w(staging production).include?(Rails.env) ? ":attachment/:id/:style.:extension" : ":rails_root/public:url",
+    path: if Rails.env.production?
+            ":attachment/:id/:style.:extension"
+          elsif Rails.env.staging?
+            ":rails_env/:attachment/:id/:style.:extension"
+          else
+            ":rails_root/public/system/:rails_env/:class/:attachment/:id_partition/:style/:filename"
+          end,
     storage: %w(staging production).include?(Rails.env) ? :s3 : :filesystem,
     s3_protocol: "https",
     s3_credentials: "#{Rails.root}/config/s3.yml",
