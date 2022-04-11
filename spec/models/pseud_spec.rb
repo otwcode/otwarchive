@@ -51,16 +51,15 @@ describe Pseud do
 
   describe "touch_comments" do
     let(:pseud) { create(:pseud) }
-    let!(:comment) { create(:comment, pseud_id: pseud.id) }
+    let!(:comment) { create(:comment, pseud: pseud) }
 
     it "modifies the updated_at of associated comments" do
       # Without this, the in-memory pseud has 0 comments and the test fails.
       pseud.reload
-      original_comment_updated_at = comment.updated_at
       travel(1.day)
-      pseud.name = "New Name"
-      pseud.save
-      expect(comment.reload.updated_at).not_to eq(original_comment_updated_at)
+      expect do
+        pseud.update(name: "New Name")
+      end.to change { comment.reload.updated_at }
     end
   end
 end
