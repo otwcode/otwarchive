@@ -10,7 +10,7 @@ describe Pseud do
   end
 
   it "is invalid if there are special characters" do
-    expect(build(:pseud, name: '*pseud*')).to be_invalid
+    expect(build(:pseud, name: "*pseud*")).to be_invalid
   end
 
   describe "save" do
