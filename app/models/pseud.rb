@@ -85,7 +85,7 @@ class Pseud < ApplicationRecord
 
   after_update :check_default_pseud
   after_update :expire_caches
-  after_commit :reindex_creations
+  after_commit :reindex_creations, :touch_comments
 
   scope :on_works, lambda {|owned_works|
     select("DISTINCT pseuds.*").
@@ -454,6 +454,10 @@ class Pseud < ApplicationRecord
     if saved_change_to_name?
       self.works.each{ |work| work.touch }
     end
+  end
+
+  def touch_comments
+    comments.touch_all
   end
 
   # Delete current icon (thus reverting to archive default icon)
