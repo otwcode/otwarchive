@@ -10,7 +10,7 @@ describe Pseud do
   end
 
   it "is invalid if there are special characters" do
-      expect(build(:pseud, name: '*pseud*')).to be_invalid
+    expect(build(:pseud, name: '*pseud*')).to be_invalid
   end
 
   describe "save" do
@@ -46,6 +46,21 @@ describe Pseud do
       @pseud.icon_comment_text = "Something that is too long blah blah blah blah blah blah this needs a mere 50 characters"
       expect(@pseud.save).to be_falsey
       @pseud.errors[:icon_comment_text].should_not be_empty
+    end
+  end
+
+  describe "touch_comments" do
+    let(:pseud) { create(:pseud) }
+    let!(:comment) { create(:comment, pseud_id: pseud.id) }
+
+    it "modifies the updated_at of associated comments" do
+      # Without this, the in-memory pseud has 0 comments and the test fails.
+      pseud.reload
+      original_comment_updated_at = comment.updated_at
+      travel(1.day)
+      pseud.name = "New Name"
+      pseud.save
+      expect(comment.reload.updated_at).not_to eq(original_comment_updated_at)
     end
   end
 end
