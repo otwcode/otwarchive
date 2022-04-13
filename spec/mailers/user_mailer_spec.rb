@@ -2,12 +2,24 @@ require "spec_helper"
 
 describe UserMailer do
   describe "creatorship_request" do
-    subject(:email) { UserMailer.creatorship_request(work_creatorship.id, author.id).deliver }
+    subject(:email) { UserMailer.creatorship_request(work_creatorship.id, author.id) }
 
     let(:author) { create(:user) }
     let(:second_author) { create(:user) }
     let(:work) { create(:work, authors: [author.default_pseud, second_author.default_pseud]) }
     let(:work_creatorship) { Creatorship.find_by(creation_id: work.id, pseud_id: second_author.default_pseud.id) }
+
+    context "when the creation is unavailable" do
+      before { work_creatorship.creation.delete }
+
+      include_examples "it retries and fails on", ActionView::Template::Error
+    end
+
+    context "when the pseud being invited is unavailable" do
+      before { work_creatorship.pseud.delete }
+
+      include_examples "it retries and fails on", NoMethodError
+    end
 
     # Test the headers
     it_behaves_like "an email with a valid sender"
@@ -38,12 +50,24 @@ describe UserMailer do
   end
 
   describe "creatorship_notification" do
-    subject(:email) { UserMailer.creatorship_notification(work_creatorship.id, author.id).deliver }
+    subject(:email) { UserMailer.creatorship_notification(work_creatorship.id, author.id) }
 
     let(:author) { create(:user) }
     let(:second_author) { create(:user) }
     let(:work) { create(:work, authors: [author.default_pseud, second_author.default_pseud]) }
     let(:work_creatorship) { Creatorship.find_by(creation_id: work.id, pseud_id: second_author.default_pseud.id) }
+
+    context "when the creation is unavailable" do
+      before { work_creatorship.creation.delete }
+
+      include_examples "it retries and fails on", ActionView::Template::Error
+    end
+
+    context "when the pseud being invited is unavailable" do
+      before { work_creatorship.pseud.delete }
+
+      include_examples "it retries and fails on", NoMethodError
+    end
 
     # Test the headers
     it_behaves_like "an email with a valid sender"
@@ -74,12 +98,24 @@ describe UserMailer do
   end
 
   describe "creatorship_notification_archivist" do
-    subject(:email) { UserMailer.creatorship_notification_archivist(work_creatorship.id, author.id).deliver }
+    subject(:email) { UserMailer.creatorship_notification_archivist(work_creatorship.id, author.id) }
 
     let(:author) { create(:user) }
     let(:second_author) { create(:user) }
     let(:work) { create(:work, authors: [author.default_pseud, second_author.default_pseud]) }
     let(:work_creatorship) { Creatorship.find_by(creation_id: work.id, pseud_id: second_author.default_pseud.id) }
+
+    context "when the creation is unavailable" do
+      before { work_creatorship.creation.delete }
+
+      include_examples "it retries and fails on", ActionView::Template::Error
+    end
+
+    context "when the pseud being invited is unavailable" do
+      before { work_creatorship.pseud.delete }
+
+      include_examples "it retries and fails on", NoMethodError
+    end
 
     # Test the headers
     it_behaves_like "an email with a valid sender"
@@ -499,6 +535,18 @@ describe UserMailer do
     let(:work) { create(:work, summary: "<p>Paragraph <u>one</u>.</p><p>Paragraph 2.</p>") }
     let(:chapter) { create(:chapter, work: work, summary: "<p><b>Another</b> HTML summary.</p>") }
     let(:subscription) { create(:subscription, subscribable: work) }
+
+    context "when the user is unavailable" do
+      before { subscription.user.delete }
+
+      include_examples "it retries and fails on", NoMethodError
+    end
+
+    context "when the user's preferences are unavailable" do
+      before { subscription.user.preference.delete }
+
+      include_examples "it retries and fails on", NoMethodError
+    end
 
     # Test the headers
     it_behaves_like "an email with a valid sender"
