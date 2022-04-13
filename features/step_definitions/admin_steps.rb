@@ -169,7 +169,7 @@ end
 
 Given "an abuse ticket ID exists" do
   allow_any_instance_of(ZohoResourceClient).to receive(:find_ticket)
-    .and_return({ "departmentId" => ArchiveConfig.ABUSE_ZOHO_DEPARTMENT_ID })
+    .and_return({ "status" => "Open", "departmentId" => ArchiveConfig.ABUSE_ZOHO_DEPARTMENT_ID })
 end
 
 ### WHEN
