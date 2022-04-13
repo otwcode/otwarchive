@@ -2,15 +2,15 @@ module Justifiable
   extend ActiveSupport::Concern
 
   included do
-    attr_accessor :abuse_ticket_number
-    attr_reader :abuse_ticket_url
+    attr_accessor :ticket_number
+    attr_reader :ticket_url
 
-    validates :abuse_ticket_number,
+    validates :ticket_number,
               presence: true,
               numericality: { only_integer: true },
               if: -> { enabled? }
 
-    validate :abuse_ticket_number_exists_in_tracker, if: -> { enabled? }
+    validate :ticket_number_exists_in_tracker, if: -> { enabled? }
   end
 
   private
@@ -20,20 +20,20 @@ module Justifiable
     User.current_user.is_a?(Admin) && changed?
   end
 
-  def abuse_ticket_number_exists_in_tracker
+  def ticket_number_exists_in_tracker
     # Skip ticket lookup if the previous validations fail
     return if errors.present?
 
     if ticket.present? && ticket.fetch("departmentId") == ArchiveConfig.ABUSE_ZOHO_DEPARTMENT_ID
-      @abuse_ticket_url = ticket["webUrl"]
+      @ticket_url = ticket["webUrl"]
       return
     end
 
-    errors.add(:abuse_ticket_number, :required)
+    errors.add(:ticket_number, :required)
   end
 
   def ticket
-    @ticket ||= zoho_resource_client.find_ticket(abuse_ticket_number)
+    @ticket ||= zoho_resource_client.find_ticket(ticket_number)
   end
 
   def zoho_resource_client

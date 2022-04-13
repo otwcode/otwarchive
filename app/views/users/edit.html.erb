@@ -51,10 +51,10 @@
       </dd>
 
       <% if policy(@user.profile).can_edit_profile? %>
-        <dt><%= p.label :abuse_ticket_number, "Abuse ticket ID", class: "required" %></dt>
+        <dt><%= p.label :ticket_number, class: "required" %></dt>
         <dd>
-          <%= p.text_field :abuse_ticket_number, class: "required" %>
-          <%= live_validation_for_field("profile_attributes_abuse_ticket_number", numericality: true) %>
+          <%= p.text_field :ticket_number, class: "required" %>
+          <%= live_validation_for_field("profile_attributes_ticket_number", numericality: true) %>
           <p class="footnote"><%= ts("Numbers only.") %></p>
         </dd>
       <% end %>

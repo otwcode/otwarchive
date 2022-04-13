@@ -36,17 +36,17 @@ Scenario: Change details as an admin
   When I go to editname profile page
     And I follow "Edit Profile"
     And I fill in "About Me" with "is it merely thy habit, to talk to dolls?"
-    And I fill in "Abuse ticket ID" with "fine"
+    And I fill in "Ticket ID" with "fine"
     And I press "Update"
-  Then I should see "Abuse ticket ID is not a number"
-    And the field labeled "Abuse ticket ID" should contain "fine"
-  When I fill in "Abuse ticket ID" with "480000"
+  Then I should see "Ticket ID is not a number"
+    And the field labeled "Ticket ID" should contain "fine"
+  When I fill in "Ticket ID" with "480000"
     And I press "Update"
   Then I should see "Your profile has been successfully updated"
     And I should see "is it merely thy habit, to talk to dolls?"
   When I visit the last activities item
   Then I should see "edit profile"
-    And I should see "Abuse ticket #480000"
+    And I should see "Ticket #480000"
     And I should see a link "#480000"
 
 Scenario: Changing email address requires reauthenticating

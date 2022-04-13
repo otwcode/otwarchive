@@ -162,10 +162,10 @@ class UsersController < ApplicationController
 
     if @user.profile.update(profile_params)
       if logged_in_as_admin?
-        link = view_context.link_to("##{@user.profile.abuse_ticket_number}", @user.profile.abuse_ticket_url)
+        link = view_context.link_to("##{@user.profile.ticket_number}", @user.profile.ticket_url)
         AdminActivity.log_action(current_admin, @user,
                                  action: "edit profile",
-                                 summary: "Abuse ticket #{link}")
+                                 summary: "Ticket #{link}")
       end
       flash[:notice] = ts('Your profile has been successfully updated')
       redirect_to user_profile_path(@user)
@@ -387,7 +387,7 @@ class UsersController < ApplicationController
   def profile_params
     params.require(:profile_attributes).permit(
       :title, :location, :"date_of_birth(1i)", :"date_of_birth(2i)",
-      :"date_of_birth(3i)", :date_of_birth, :about_me, :abuse_ticket_number
+      :"date_of_birth(3i)", :date_of_birth, :about_me, :ticket_number
     )
   end
 end
