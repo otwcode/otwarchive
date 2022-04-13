@@ -874,6 +874,42 @@ namespace :After do
     puts("Added default rating to works: #{updated_works}") && STDOUT.flush
   end
 
+  desc "Fix pseuds with invalid icon data"
+  task(fix_invalid_pseud_icon_data: :environment) do
+    # From validates_attachment_content_type in pseuds model.
+    valid_types = %w[image/gif image/jpeg image/png]
+
+    # If you change either of these, update lookup_invalid_pseuds.rb in
+    # otwcode/otw-scripts to ensure the proper users are notified.
+    pseuds_with_invalid_icons = Pseud.where("icon_file_name IS NOT NULL AND icon_content_type NOT IN (?)", valid_types)
+    pseuds_with_invalid_text = Pseud.where("CHAR_LENGTH(icon_alt_text) > ? OR CHAR_LENGTH(icon_comment_text) > ?", ArchiveConfig.ICON_ALT_MAX, ArchiveConfig.ICON_COMMENT_MAX)
+
+    invalid_pseuds = [pseuds_with_invalid_icons, pseuds_with_invalid_text].flatten.uniq
+    invalid_pseuds_count = invalid_pseuds.count
+
+    skipped_pseud_ids = []
+
+    # Update the pseuds.
+    puts("Updating #{invalid_pseuds_count} pseuds") && STDOUT.flush
+
+    invalid_pseuds.each do |pseud|
+      # Change icon content type to jpeg if it's jpg.
+      pseud.icon_content_type = "image/jpeg" if pseud.icon_content_type == "image/jpg"
+      # Delete the icon if it's not a valid type.
+      pseud.icon = nil unless (valid_types + ["image/jpg"]).include?(pseud.icon_content_type)
+      # Delete the icon alt text if it's too long.
+      pseud.icon_alt_text = "" if pseud.icon_alt_text.length > ArchiveConfig.ICON_ALT_MAX
+      # Delete the icon comment if it's too long.
+      pseud.icon_comment_text = "" if pseud.icon_comment_text.length > ArchiveConfig.ICON_COMMENT_MAX
+      skipped_pseud_ids << pseud.id unless pseud.save
+      print(".") && STDOUT.flush
+    end
+    if skipped_pseud_ids.any?
+      puts
+      puts("Couldn't update #{skipped_pseud_ids.size} pseud(s): #{skipped_pseud_ids.join(',')}") && STDOUT.flush
+    end
+  end
+
   # This is the end that you have to put new tasks above.
 end
 
