@@ -203,8 +203,7 @@
       </dt>
       <dd>
         <%= f.select :sort_direction,
-          options_for_select([["Ascending", "asc"], ["Descending", "desc"]], @search.sort_direction),
-          { :include_blank => true } %>
+          options_for_select([["Ascending", "asc"], ["Descending", "desc"]], @search.sort_direction) %>
       </dd>
     </dl>
     <p class="submit"><%= f.submit ts("Search") %></p>
