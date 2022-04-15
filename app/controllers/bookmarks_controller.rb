@@ -10,6 +10,8 @@ class BookmarksController < ApplicationController
 
   before_action :check_pseud_ownership, only: [:create, :update]
 
+  before_action :clear_set_filters, only: [:search, :index]
+
   skip_before_action :store_location, only: [:share]
 
   def check_pseud_ownership

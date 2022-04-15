@@ -519,6 +519,23 @@ public
     end
   end
 
+  def clear_set_filters
+    if params[:commit] == "Clear Filters"
+      if @user
+        redirect_to user_bookmarks_path(@user) if params[:bookmark_search].present?
+        redirect_to user_works_path(@user) if params[:work_search].present?
+      elsif @tag
+        redirect_to tag_bookmarks_path(@tag) if params[:bookmark_search].present?
+        redirect_to tag_works_path(@tag) if params[:work_search].present?
+      elsif @collection
+        redirect_to collection_bookmarks_path(@collection) if params[:bookmark_search].present?
+        redirect_to collection_works_path(@collection) if params[:work_search].present?
+      else
+        redirect_to collections_path
+      end
+    end
+  end
+
   # Don't get unnecessary data for json requests
   skip_before_action  :fetch_admin_settings,
                       :load_admin_banner,
