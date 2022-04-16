@@ -52,3 +52,28 @@ Feature: Gift Exchange Notification Emails
       And "participant2" should receive 1 email
       And the notification message to "participant1" should escape the ampersand
       And the notification message to "participant2" should escape the ampersand
+
+  Scenario: Assignment notifications with warning tags work.
+    Given I have set up the gift exchange "Dark Fic Exchange"
+      And I check "Sign-up open?"
+      And I allow warnings in my gift exchange
+      And I submit
+
+    When I am logged in as "participant1"
+      And I start signing up for "Dark Fic Exchange"
+      And I check "No Archive Warnings Apply"
+      And I submit
+    Then I should see "Sign-up was successfully created."
+
+    When I am logged in as "participant2"
+      And I start signing up for "Dark Fic Exchange"
+      And I check "No Archive Warnings Apply"
+      And I submit
+    Then I should see "Sign-up was successfully created."
+
+    When I close signups for "Dark Fic Exchange"
+      And I have generated matches for "Dark Fic Exchange"
+      And I have sent assignments for "Dark Fic Exchange"
+
+    Then "participant1" should receive 1 email
+      And the notification message to "participant1" should contain the no archive warnings tag

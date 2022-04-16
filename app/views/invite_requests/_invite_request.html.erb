@@ -6,7 +6,7 @@
 
 <!--main content-->
 <p>
-  <%= ts("You are currently number <strong>%{position}</strong> on our waiting list!", position: InviteRequest.where("position <= #{invite_request.position}").count).html_safe %>
+  <%= ts("You are currently number <strong>%{position}</strong> on our waiting list!", position: @position_in_queue).html_safe %>
   <% if @admin_settings.invite_from_queue_enabled? %>
     <%= ts("At our current rate, you should receive an invitation on or around: %{date}.", date: l(invite_request.proposed_fill_date, format: :long)) %>
   <% end %>

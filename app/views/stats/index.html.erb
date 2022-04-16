@@ -14,7 +14,7 @@
       <% if @current_year == year %>
         <span class="current"><%= year %></span>
       <% else %>
-        <%= link_to year, request.parameters.merge({:year => year}) %>
+        <%= link_to year, current_path_with(year: year) %>
       <% end %>
     </li>
   <% end %>
@@ -33,10 +33,8 @@
       <dt class="<%= html_class %>"><%= stat_text %></dt>
       <dd class="<%= html_class %>"><%= @totals[stat] %></dd>
     <% end %>
-    <% unless @user.preference.hide_hit_counts %>
-      <dt class="hits"><%= ts("Hits:") %></dt>
-      <dd class="hits"><%= @totals[:hits] %></dd>
-    <% end %>
+    <dt class="hits"><%= ts("Hits:") %></dt>
+    <dd class="hits"><%= @totals[:hits] %></dd>
   </dl>
 </div>
 
@@ -50,9 +48,7 @@
   <ul class="sorting actions" role="menu">
     <li><h4 class="heading"><%= ts('Sort By') %></h4></li>
     <li><%= sort_link ts("Date"), "date" %></li>
-    <% unless @user.preference.hide_hit_counts %>
-      <li><%= sort_link ts('Hits'), "hits", {:desc_default => true} %></li>
-    <% end %>
+    <li><%= sort_link ts('Hits'), "hits", {:desc_default => true} %></li>
     <li><%= sort_link ts('Kudos'), "kudos.count", {:desc_default => true} %></li>
     <li><%= sort_link ts('Comment Threads'), "comment_thread_count", {:desc_default => true} %></li>
     <li><%= sort_link ts('Bookmarks'), "bookmarks.count", {:desc_default => true} %></li>
@@ -61,8 +57,8 @@
   </ul>
 
   <ul class="view actions" role="menu">
-    <li><%= span_if_current ts("Fandoms View"), url_for(params.permit!.merge :flat_view => nil), params[:flat_view].blank? %></li>
-    <li><%= span_if_current ts("Flat View"), url_for(params.permit!.merge :flat_view => true) %></li>
+    <li><%= span_if_current ts("Fandoms View"), current_path_with(flat_view: nil), params[:flat_view].blank? %></li>
+    <li><%= span_if_current ts("Flat View"), current_path_with(flat_view: true) %></li>
   </ul>
 </div>
 
@@ -88,10 +84,8 @@
                     <dt class="subscriptions"><%= ts("Subscriptions:") %></dt>
                     <dd class="subscriptions"><%= work_subscriber_count %></dd>
                   <% end %>
-                  <% unless @user.preference.hide_hit_counts %>
-                    <dt class="hits"><%= ts("Hits:") %></dt>
-                    <dd class="hits"><%= work.hits %></dd>
-                  <% end %>
+                  <dt class="hits"><%= ts("Hits:") %></dt>
+                  <dd class="hits"><%= work.hits %></dd>
                   <% # dt ts("Downloads:") /dt dd work.downloads /dd %>
                   <dt class="kudos"><%= ts("Kudos:") %></dt>
                   <dd class="kudos"><%= work.kudos.count %></dd>

@@ -1,38 +1,31 @@
 class CollectionItem < ApplicationRecord
   include ActiveModel::ForbiddenAttributesProtection
 
-  NEUTRAL = 0
-  APPROVED = 1
-  REJECTED = -1
-
-  LABEL = {}
-  LABEL[NEUTRAL] = ""
-  LABEL[APPROVED] = ts("Approved")
-  LABEL[REJECTED] = ts("Rejected")
-
-  APPROVAL_OPTIONS = [ [LABEL[NEUTRAL], NEUTRAL],
-                       [LABEL[APPROVED], APPROVED],
-                       [LABEL[REJECTED], REJECTED] ]
+  APPROVAL_OPTIONS = [
+    ["", :unreviewed],
+    [ts("Approved"), :approved],
+    [ts("Rejected"), :rejected]
+  ]
 
   belongs_to :collection, inverse_of: :collection_items
   belongs_to :item, polymorphic: :true, inverse_of: :collection_items, touch: true
   belongs_to :work,  class_name: "Work", foreign_key: "item_id", inverse_of: :collection_items
   belongs_to :bookmark, class_name: "Bookmark", foreign_key: "item_id"
 
-  has_many :approved_collections, -> {
-    where('collection_items.user_approval_status = ? AND collection_items.collection_approval_status = ?', CollectionItem::APPROVED, CollectionItem::APPROVED)
-   }, through: :collection_items, source: :collection
-
   validates_uniqueness_of :collection_id, scope: [:item_id, :item_type],
     message: ts("already contains this item.")
 
-  validates_numericality_of :user_approval_status, allow_blank: true, only_integer: true
-  validates_inclusion_of :user_approval_status, in: [-1, 0, 1], allow_blank: true,
-    message: ts("is not a valid approval status.")
+  enum user_approval_status: {
+    rejected: -1,
+    unreviewed: 0,
+    approved: 1
+  }, _suffix: :by_user
 
-  validates_numericality_of :collection_approval_status, allow_blank: true, only_integer: true
-  validates_inclusion_of :collection_approval_status, in: [-1, 0, 1], allow_blank: true,
-    message: ts("is not a valid approval status.")
+  enum collection_approval_status: {
+    rejected: -1,
+    unreviewed: 0,
+    approved: 1
+  }, _suffix: :by_collection
 
   validate :collection_is_open, on: :create
   def collection_is_open
@@ -53,33 +46,8 @@ class CollectionItem < ApplicationRecord
     where("(item_id IN (?) AND item_type = 'Work') OR (item_id IN (?) AND item_type = 'Bookmark')", work_ids, bookmark_ids)
   end
 
-  def self.approved_by_user
-    where(user_approval_status: APPROVED)
-  end
-
-  def self.rejected_by_user
-    where(user_approval_status: REJECTED)
-  end
-
-  def self.unreviewed_by_user
-    where(user_approval_status: NEUTRAL)
-  end
-
-  def self.approved_by_collection
-    where(collection_approval_status: APPROVED).where(user_approval_status: APPROVED)
-  end
-
-  def self.invited_by_collection
-    where(collection_approval_status: APPROVED).where(user_approval_status: NEUTRAL)
-  end
-
-  def self.rejected_by_collection
-    where(collection_approval_status: REJECTED)
-  end
-
-  def self.unreviewed_by_collection
-    where(collection_approval_status: NEUTRAL)
-  end
+  scope :invited_by_collection, -> { approved_by_collection.unreviewed_by_user }
+  scope :approved_by_both, -> { approved_by_collection.approved_by_user }
 
   before_save :set_anonymous_and_unrevealed
   def set_anonymous_and_unrevealed
@@ -109,7 +77,7 @@ class CollectionItem < ApplicationRecord
 
       # For a more helpful error message, raise an error saying that the work
       # is invalid if we fail to save it.
-      raise ActiveRecord::RecordInvalid, work unless work.save
+      raise ActiveRecord::RecordInvalid, work unless work.save(validate: false)
     end
   end
 
@@ -117,7 +85,7 @@ class CollectionItem < ApplicationRecord
   after_update :update_item_for_status_change
   def update_item_for_status_change
     if saved_change_to_user_approval_status? || saved_change_to_collection_approval_status?
-      item.save!
+      item.save!(validate: false)
     end
   end
 
@@ -127,7 +95,7 @@ class CollectionItem < ApplicationRecord
                     self.collection.collection_preference.email_notify
 
     if email_notify && !self.collection.email.blank?
-      CollectionMailer.item_added_notification(item_id, collection_id, item_type).deliver
+      CollectionMailer.item_added_notification(item_id, collection_id, item_type).deliver_later
     end
   end
 
@@ -147,7 +115,7 @@ class CollectionItem < ApplicationRecord
       end
 
       # if at least one of the owners of the items automatically approves
-      # adding or is a member of the collection, go ahead and approve by user
+      # adding, go ahead and approve by user
       if !approved_by_user?
         case item_type
         when "Work"
@@ -157,14 +125,14 @@ class CollectionItem < ApplicationRecord
         end
 
         users.each do |user|
-          if user.preference.automatically_approve_collections || (collection && collection.user_is_posting_participant?(user))
+          if user.preference.automatically_approve_collections
             # if the work is being added by a collection maintainer and at
             # least ONE of the works owners allows automatic inclusion in
             # collections, add the work to the collection
             approve_by_user
             users.each do |email_user|
               unless email_user.preference.collection_emails_off
-                UserMailer.added_to_collection_notification(email_user.id, item.id, collection.id).deliver!
+                UserMailer.added_to_collection_notification(email_user.id, item.id, collection.id).deliver_now
               end
             end
             break
@@ -182,19 +150,9 @@ class CollectionItem < ApplicationRecord
         # so we send an email to all the works owners
         item.users.each do |email_author|
           unless email_author.preference.collection_emails_off
-            UserMailer.invited_to_collection_notification(email_author.id, item.id, collection.id).deliver!
+            UserMailer.invited_to_collection_notification(email_author.id, item.id, collection.id).deliver_now
           end
         end
-      end
-    end
-  end
-
-  after_update :notify_of_status_change
-  def notify_of_status_change
-    if saved_change_to_unrevealed? && item.respond_to?(:new_recipients)
-      # making sure notify_recipients in the work model has not already notified
-      if item.new_recipients.present?
-        notify_of_reveal
       end
     end
   end
@@ -214,14 +172,9 @@ class CollectionItem < ApplicationRecord
     }.join(", ")
   end
 
-  def remove=(value)
-    if value == "1"
-      self.destroy
-    end
-  end
-
+  attr_writer :remove
   def remove
-    ""
+    @remove || ""
   end
 
   def title
@@ -258,18 +211,17 @@ class CollectionItem < ApplicationRecord
     user.is_author_of?(self.item) || self.collection.user_is_maintainer?(user)
   end
 
-  def approve_by_user ; self.user_approval_status = APPROVED ; end
-  def reject_by_user ; self.user_approval_status = REJECTED ; end
-  def approved_by_user? ; self.user_approval_status == APPROVED ; end
-  def rejected_by_user? ; self.user_approval_status == REJECTED ; end
+  def approve_by_user
+    self.user_approval_status = :approved
+  end
 
-  def approve_by_collection ; self.collection_approval_status = APPROVED ; end
-  def reject_by_collection ; self.collection_approval_status = REJECTED ; end
-  def approved_by_collection? ; self.collection_approval_status == APPROVED ; end
-  def rejected_by_collection? ; self.collection_approval_status == REJECTED ; end
+  def approve_by_collection
+    self.collection_approval_status = :approved
+  end
 
-  def approved? ; approved_by_user? && approved_by_collection? ; end
-  def rejected? ; rejected_by_user? && rejected_by_collection? ; end
+  def approved?
+    approved_by_user? && approved_by_collection?
+  end
 
   def reject(user)
     reject_by_user if user && user.is_author_of?(item)
@@ -303,13 +255,13 @@ class CollectionItem < ApplicationRecord
       recipient_pseuds = Pseud.parse_bylines(self.recipients, assume_matching_login: true)[:pseuds]
       recipient_pseuds.each do |pseud|
         unless pseud.user.preference.recipient_emails_off
-          UserMailer.recipient_notification(pseud.user.id, self.item.id, self.collection.id).deliver
+          UserMailer.recipient_notification(pseud.user.id, self.item.id, self.collection.id).deliver_after_commit
         end
       end
 
       # also notify prompters of responses to their prompt
       if item_type == "Work" && !item.challenge_claims.blank?
-        UserMailer.prompter_notification(self.item.id, self.collection.id).deliver
+        UserMailer.prompter_notification(self.item.id, self.collection.id).deliver_after_commit
       end
 
       # also notify the owners of any parent/inspired-by works
@@ -318,6 +270,33 @@ class CollectionItem < ApplicationRecord
           relationship.notify_parent_owners
         end
       end
+    end
+  end
+
+  after_update :notify_of_unrevealed_or_anonymous
+  def notify_of_unrevealed_or_anonymous
+    # This CollectionItem's anonymous/unrevealed status can only affect the
+    # item's status if (a) the CollectionItem is approved by the user and (b)
+    # the item is a work. (Bookmarks can't be anonymous/unrevealed at the
+    # moment.)
+    return unless approved_by_user? && item.is_a?(Work)
+
+    # Check whether anonymous/unrevealed is becoming true, when the work
+    # currently has it set to false:
+    newly_anonymous = (saved_change_to_anonymous?(to: true) && !item.anonymous?)
+    newly_unrevealed = (saved_change_to_unrevealed?(to: true) && !item.unrevealed?)
+
+    return unless newly_unrevealed || newly_anonymous
+
+    # Don't notify if it's one of the work creators who is changing the work's
+    # status.
+    return if item.users.include?(User.current_user)
+
+    item.users.each do |user|
+      UserMailer.anonymous_or_unrevealed_notification(
+        user.id, item.id, collection.id,
+        anonymous: newly_anonymous, unrevealed: newly_unrevealed
+      ).deliver_after_commit
     end
   end
 end

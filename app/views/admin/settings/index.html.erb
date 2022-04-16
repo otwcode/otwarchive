@@ -1,96 +1,94 @@
 <!--Descriptive page name, messages and instructions-->
-<h2 class="heading"><%= ts('Archive Settings') %></h2>
+<h2 class="heading"><%= t(".heading") %></h2>
 <!--/descriptions-->
 
 <!--main content-->
-<%= form_for @admin_setting, :url => admin_setting_path(@admin_setting), html: { method: "put", class: "manage" } do |f| %>
+<%= form_for @admin_setting, html: { class: "verbose manage" } do |f| %>
   <%= error_messages_for @admin_setting %>
   <fieldset>
-    <legend><%= ts("Accounts and Invitations") %></legend>
-    <h3 class="landmark heading"><%= ts("Accounts and Invitations") %></h3>
+    <legend><%= t(".legend.account_and_invitations") %></legend>
     <dl>
+      <dt><%= admin_setting_checkbox(f, :account_creation_enabled) %></dt>
+      <dd><%= f.label :account_creation_enabled, t(".fields.account_creation_enabled") %></dd>
 
-      <dt><%= f.check_box :account_creation_enabled %></dt>
-      <dd><%= f.label :account_creation_enabled, ts("Account creation enabled") %></dd>
-      <dt><%= f.check_box :creation_requires_invite %></dt>
-      <dd><%= f.label :creation_requires_invite, ts("Account creation requires invitation") %></dd>
-      <dt><%= f.check_box :request_invite_enabled %></dt>
-      <dd><%= f.label :request_invite_enabled, ts("Users can request invitations") %></dd>
+      <dt><%= admin_setting_checkbox(f, :creation_requires_invite) %></dt>
+      <dd><%= f.label :creation_requires_invite, t(".fields.creation_requires_invite") %></dd>
 
-      <dt><%= f.check_box :invite_from_queue_enabled %></dt>
-      <dd><%= f.label :invite_from_queue_enabled, ts("Invite from queue enabled (People can add themselves to the queue and invitations are sent out automatically)") %></dd>
+      <dt><%= admin_setting_checkbox(f, :request_invite_enabled) %></dt>
+      <dd><%= f.label :request_invite_enabled, t(".fields.request_invite_enabled") %></dd>
 
-      <dt><%= f.label :invite_from_queue_number, ts("Number of people to invite from the queue at once") %></dt>
-      <dd><%= f.text_field :invite_from_queue_number, :size => "3" %></dd>
+      <dt><%= admin_setting_checkbox(f, :invite_from_queue_enabled) %></dt>
+      <dd><%= f.label :invite_from_queue_enabled, t(".fields.invite_from_queue_enabled") %></dd>
 
-      <dt><%= f.label :invite_from_queue_frequency, ts("How often (in days) should we invite people from the queue") %></dt>
-      <dd><%= f.text_field :invite_from_queue_frequency, :size => "3" %></dd>
+      <dt><%= f.label :invite_from_queue_number, t(".fields.invite_from_queue_number") %></dt>
+      <dd><%= admin_setting_text_field(f, :invite_from_queue_number, size: "3") %></dd>
 
-      <dt><%= f.label :days_to_purge_unactivated, ts("How many weeks you have to activate your account before we purge it") %></dt>
-      <dd><%= f.text_field :days_to_purge_unactivated, :size => "3" %></dd>
+      <dt><%= f.label :invite_from_queue_frequency, t(".fields.invite_from_queue_frequency") %></dt>
+      <dd><%= admin_setting_text_field(f, :invite_from_queue_frequency, size: "3") %></dd>
+
+      <dt><%= f.label :days_to_purge_unactivated, t(".fields.days_to_purge_unactivated") %></dt>
+      <dd><%= admin_setting_text_field(f, :days_to_purge_unactivated, size: "3") %></dd>
     </dl>
   </fieldset>
 
   <fieldset>
-    <legend><%= ts("Turn Off Support Form") %></legend>
-    <h3 class="landmark heading"><%= ts("Turn Off Support Form") %></h3>
+    <legend><%= t(".legend.disable_support_form") %></legend>
     <dl>
-      <dt><%= f.check_box :disable_support_form %></dt>
+      <dt><%= admin_setting_checkbox(f, :disable_support_form) %></dt>
       <dd>
-        <%= f.label :disable_support_form, ts("Turn off support form") %>
-        <legend><%= f.label :disabled_support_form_text, ts("Disabled support form text") %></legend>
-        <p><%= allowed_html_instructions %></p>
-        <%= f.text_area :disabled_support_form_text %>
+        <%= f.label :disable_support_form, t(".fields.disable_support_form") %>
+        <fieldset>
+          <legend><%= f.label :disabled_support_form_text, t(".fields.disabled_support_form_text") %></legend>
+          <p><%= allowed_html_instructions %></p>
+          <%= f.text_area :disabled_support_form_text,
+                disabled: admin_setting_disabled?(:disabled_support_form_text) %>
+        </fieldset>
       </dd>
     </dl>
   </fieldset>
-  
 
   <fieldset>
-    <legend><%= ts("Performance and Misc") %></legend>
-    <h3 class="landmark heading"><%= ts("Performance and Misc") %></h3>
+    <legend><%= t(".legend.performance_and_misc") %></legend>
     <dl>
+      <dt><%= admin_setting_checkbox(f, :suspend_filter_counts) %></dt>
+      <dd><%= f.label :suspend_filter_counts, t(".fields.suspend_filter_counts") %></dd>
 
-      <dt><%= f.check_box :disable_filtering %></dt>
-      <dd><%= f.label :disable_filtering, ts("Turn off filtering on index pages") %></dd>
+      <dt><%= admin_setting_checkbox(f, :tag_wrangling_off) %></dt>
+      <dd><%= f.label :tag_wrangling_off, t(".fields.tag_wrangling_off") %></dd>
 
-      <dt><%= f.check_box :suspend_filter_counts %></dt>
-      <dd><%= f.label :suspend_filter_counts, ts("Suspend some filter tracking due to high posting volume") %></dd>
+      <dt><%= admin_setting_checkbox(f, :downloads_enabled) %></dt>
+      <dd><%= f.label :downloads_enabled, t(".fields.downloads_enabled") %></dd>
 
-      <dt><%= f.check_box :tag_wrangling_off %></dt>
-      <dd><%= f.label :tag_wrangling_off, ts("Turn off tag wrangling for non-admins") %></dd>
+      <dt><%= admin_setting_checkbox(f, :enable_test_caching) %></dt>
+      <dd><%= f.label :enable_test_caching, t(".fields.enable_test_caching") %></dd>
 
-      <dt><%= f.check_box :downloads_enabled %></dt>
-      <dd><%= f.label :downloads_enabled, ts("Allow downloads") %></dd>
+      <dt><%= f.label :cache_expiration, t(".fields.cache_expiration") %></dt>
+      <dd><%= admin_setting_text_field(f, :cache_expiration, size: "3") %></dd>
 
-      <dt><%= f.check_box :enable_test_caching %></dt>
-      <dd><%= f.label :enable_test_caching, ts("Turn on caching (currently experimental)") %></dd>
-
-      <dt><%= f.label :cache_expiration, ts("How often (in minutes) should we refresh caching") %></dt>
-      <dd><%= f.text_field :cache_expiration, :size => "3" %></dd>
-
-      <dt><%= f.check_box :hide_spam %></dt>
-      <dd><%= f.label :hide_spam, ts("Automatically hide spam works") %></dd>
+      <dt><%= admin_setting_checkbox(f, :hide_spam) %></dt>
+      <dd><%= f.label :hide_spam, t(".fields.hide_spam") %></dd>
     </dl>
   </fieldset>
 
   <fieldset>
-    <legend><%= ts("Actions") %></legend>
-    <h3 class="landmark heading"><%= ts("Actions") %></h3>
-
-    <%= f.hidden_field :last_updated_by, :value => current_admin.id %>
-    <p class="submit actions"><%= f.submit ts('Update') %></p>
+    <legend><%= t(".legend.actions") %></legend>
+    <p class="submit actions"><%= f.submit t(".update") %></p>
   </fieldset>
-
 <% end %>
 
 <% if @admin_setting.invite_from_queue_enabled? %>
-  <p><%= ts("%{number} people are scheduled to be sent invitations on %{date}.", :number => @admin_setting.invite_from_queue_number, :date =>
-  l(@admin_setting.invite_from_queue_at.to_date, :format => :long)) %></p>
+  <p>
+    <%= t(".queue_status",
+          number: @admin_setting.invite_from_queue_number,
+          date: l(@admin_setting.invite_from_queue_at.to_date, format: :long)) %>
+  </p>
 
-  <p><%= ts("(The automatic task that invites people from the queue only runs once a day. Don't be alarmed if the date you see is yesterday's.
-  Do be alarmed if the date you see is more than one day in the past and the queue is supposed to be active.)") %></p>
+  <p><%= t(".queue_status_help") %></p>
 <% end %>
 
-<p><%= ts("Last updated on %{updated_at} by %{admin_name}.", :updated_at => @admin_setting.updated_at, :admin_name => @admin_setting.last_updated ? @admin_setting.last_updated.login : "---") %></p>
+<p>
+  <%= t(".last_updated_by_admin",
+        updated_at: @admin_setting.updated_at,
+        admin_name: @admin_setting.last_updated ? @admin_setting.last_updated.login : "---") %>
+</p>
 <!--/content-->

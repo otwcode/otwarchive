@@ -9,7 +9,7 @@ describe Work do
 
   context "when posted" do
     it "posts the first chapter" do
-      work = create(:posted_work)
+      work = create(:work)
       work.first_chapter.posted.should == true
     end
   end
@@ -27,14 +27,12 @@ describe Work do
   context "invalid title" do
     it { expect(build(:work, title: nil)).to be_invalid }
 
-    let(:too_short) {ArchiveConfig.TITLE_MIN - 1}
     it "cannot be shorter than ArchiveConfig.TITLE_MIN" do
-      expect(build(:work, title: Faker::Lorem.characters(too_short))).to be_invalid
+      expect(build(:work, title: Faker::Lorem.characters(number: ArchiveConfig.TITLE_MIN - 1))).to be_invalid
     end
 
-    let(:too_long) {ArchiveConfig.TITLE_MAX + 1}
     it "cannot be longer than ArchiveConfig.TITLE_MAX" do
-      expect(build(:work, title: Faker::Lorem.characters(too_long))).to be_invalid
+      expect(build(:work, title: Faker::Lorem.characters(number: ArchiveConfig.TITLE_MAX + 1))).to be_invalid
     end
   end
 
@@ -48,7 +46,7 @@ describe Work do
       expect(@work.title).to eq("Has Leading Spaces")
     end
 
-    let(:too_short) {ArchiveConfig.TITLE_MIN - 1}
+    let(:too_short) { ArchiveConfig.TITLE_MIN - 1 }
     it "errors if the title without leading spaces is shorter than #{ArchiveConfig.TITLE_MIN}" do
       expect {
         @work = create(:work, title: "     #{too_short}")
@@ -63,42 +61,57 @@ describe Work do
   end
 
   context "invalid summary" do
-    let(:too_long) {ArchiveConfig.SUMMARY_MAX + 1}
     it "cannot be longer than ArchiveConfig.SUMMARY_MAX" do
-      expect(build(:work, title: Faker::Lorem.characters(too_long))).to be_invalid
+      expect(build(:work, title: Faker::Lorem.characters(number: ArchiveConfig.SUMMARY_MAX + 1))).to be_invalid
     end
   end
 
   context "invalid notes" do
-    let(:too_long) {ArchiveConfig.NOTES_MAX + 1}
     it "cannot be longer than ArchiveConfig.NOTES_MAX" do
-      expect(build(:work, title: Faker::Lorem.characters(too_long))).to be_invalid
+      expect(build(:work, title: Faker::Lorem.characters(number: ArchiveConfig.NOTES_MAX + 1))).to be_invalid
     end
   end
 
-
   context "invalid endnotes" do
-    let(:too_long) {ArchiveConfig.NOTES_MAX + 1}
     it "cannot be longer than ArchiveConfig.NOTES_MAX" do
-      expect(build(:work, title: Faker::Lorem.characters(too_long))).to be_invalid
+      expect(build(:work, title: Faker::Lorem.characters(number: ArchiveConfig.NOTES_MAX + 1))).to be_invalid
+    end
+  end
+
+  context "invalid language" do
+    let(:deleted_language_id) do
+      briefly_lived_language = create(:language)
+      deleted_language_id = briefly_lived_language.id
+      briefly_lived_language.destroy
+      deleted_language_id
+    end
+
+    it "is valid with a supported language" do
+      work = build(:work, language_id: Language.default.id)
+      expect(work).to be_valid
+    end
+
+    it "is not valid with a language we don't support" do
+      work = build(:work, language_id: deleted_language_id)
+
+      expect(work).not_to be_valid
+      expect(work.errors.messages[:base]).to include("Language cannot be blank.")
+    end
+
+    it "is not valid without a language" do
+      work = build(:work, language_id: "")
+
+      expect(work).not_to be_valid
+      expect(work.errors.messages[:base]).to include("Language cannot be blank.")
     end
   end
 
   context "validate authors" do
-
-    # TODO: testing specific invalid pseuds should take place in pseud_spec
-    # However, we still want to make sure we can't save works without a valid pseud
-    it "does not save an invalid pseud with *", :pending do
-      @pseud = create(:pseud, name: "*pseud*")
-      @work = Work.new(attributes_for(:work, authors: ["*pseud*"]))
-      expect(@work.save).to be_falsey
-      expect(@work.errors[:base]).to include["These pseuds are invalid: *pseud*"]
-    end
-
     let(:invalid_work) { build(:no_authors) }
+
     it "does not save if author is blank" do
       expect(invalid_work.save).to be_falsey
-      expect(invalid_work.errors[:base]).to include "Work must have at least one author."
+      expect(invalid_work.errors[:base]).to include "Work must have at least one creator."
     end
   end
 
@@ -306,34 +319,37 @@ describe Work do
     let(:work) { build(:work) }
 
     context "when the pseuds start with special characters" do
-      it "should remove those characters" do
-        work.authors = [Pseud.new(name: "-jolyne")]
+      it "removes those characters" do
+        allow(work).to receive(:pseuds).and_return [Pseud.new(name: "-jolyne")]
         expect(work.authors_to_sort_on).to eq "jolyne"
 
-        work.authors = [Pseud.new(name: "_hermes")]
+        allow(work).to receive(:pseuds).and_return [Pseud.new(name: "_hermes")]
         expect(work.authors_to_sort_on).to eq "hermes"
       end
     end
 
     context "when the pseuds start with numbers" do
-      it "should not remove numbers" do
-        work.authors = [Pseud.new(name: "007james")]
+      it "does not remove numbers" do
+        allow(work).to receive(:pseuds).and_return [Pseud.new(name: "007james")]
         expect(work.authors_to_sort_on).to eq "007james"
       end
     end
 
     context "when the work is anonymous" do
-      it "should set the author sorting to Anonymous" do
+      it "returns Anonymous" do
         work.in_anon_collection = true
-        work.authors = [Pseud.new(name: "stealthy")]
+        allow(work).to receive(:pseuds).and_return [Pseud.new(name: "stealthy")]
         expect(work.authors_to_sort_on).to eq "Anonymous"
       end
     end
 
     context "when the work has multiple pseuds" do
-      it "should combine them with commas" do
-        work.authors = [Pseud.new(name: "diavolo"), Pseud.new(name: "doppio")]
+      it "sorts them like the byline then joins them with commas" do
+        allow(work).to receive(:pseuds).and_return [Pseud.new(name: "diavolo"), Pseud.new(name: "doppio")]
         expect(work.authors_to_sort_on).to eq "diavolo,  doppio"
+
+        allow(work).to receive(:pseuds).and_return [Pseud.new(name: "Tiziano"), Pseud.new(name: "squalo")]
+        expect(work.authors_to_sort_on).to eq "squalo,  tiziano"
       end
     end
   end
@@ -345,16 +361,16 @@ describe Work do
       before :each do
         @skin_author = create(:user)
         @second_author = create(:user)
-        @private_skin = create(:private_work_skin, author_id: @skin_author.id)
+        @private_skin = create(:work_skin, :private, author_id: @skin_author.id)
       end
 
-      let(:work_author) {@skin_author}
-      let(:work){build(:custom_work_skin, authors: [work_author.pseuds.first], work_skin_id: @private_skin.id)}
+      let(:work_author) { @skin_author }
+      let(:work) { build(:custom_work_skin, authors: [work_author.pseuds.first], work_skin_id: @private_skin.id) }
       it "can be used by the work skin author" do
         expect(work.save).to be_truthy
       end
 
-      let(:work){build(:custom_work_skin, authors: [@second_author.pseuds.first], work_skin_id: @private_skin.id)}
+      let(:work) { build(:custom_work_skin, authors: [@second_author.pseuds.first], work_skin_id: @private_skin.id) }
       it "cannot be used by another user" do
         work.work_skin_allowed
         expect(work.errors[:base]).to include("You do not have permission to use that custom work stylesheet.")
@@ -362,43 +378,35 @@ describe Work do
     end
   end
 
-  describe "new recipients virtual attribute"  do
+  describe "new gifts virtual attribute" do
+    let(:recipient1) { create(:user).pseuds.first.name }
+    let(:recipient2) { create(:user).pseuds.first.name }
+    let(:recipient3) { create(:user).pseuds.first.name }
 
-    before(:each) do
-      @author = create(:user)
-      @recipient1 = create(:user)
-      @recipient2 = create(:user)
-      @recipient3 = create(:user)
+    let(:work) { build(:work) }
 
-      @fandom1 = create(:fandom)
-      @chapter1 = create(:chapter)
-
-      @work = Work.new(title: "Title")
-      @work.fandoms << @fandom1
-      @work.authors = [@author.pseuds.first]
-      @work.recipients = @recipient1.pseuds.first.name + "," + @recipient2.pseuds.first.name
-      @work.chapters << @chapter1
+    before do
+      work.recipients = recipient1 + "," + recipient2
     end
 
-    it "should be the same as recipients when they are first added" do
-      expect(@work.new_recipients).to eq(@work.recipients)
+    it "contains gifts for the same recipients when they are first added" do
+      expect(work.new_gifts.collect(&:recipient)).to eq([recipient1, recipient2])
     end
 
-    it "should only contain the new recipient if replacing the previous recipient" do
-      @work.recipients = @recipient3.pseuds.first.name
-      expect(@work.new_recipients).to eq(@recipient3.pseuds.first.name)
+    it "only contains a gift for the new recipient if replacing the previous recipients" do
+      work.recipients = recipient3
+      expect(work.new_gifts.collect(&:recipient)).to eq([recipient3])
     end
 
-    it "simple assignment should work" do
-      @work.recipients = @recipient2.pseuds.first.name
-      expect(@work.new_recipients).to eq(@recipient2.pseuds.first.name)
+    it "simple assignment works" do
+      work.recipients = recipient2
+      expect(work.new_gifts.collect(&:recipient)).to eq([recipient2])
     end
 
-    it "recipients should be unique" do
-      @work.recipients = @recipient2.pseuds.first.name + "," + @recipient2.pseuds.first.name
-      expect(@work.new_recipients).to eq(@recipient2.pseuds.first.name)
+    it "only contains one gift if the same recipient is entered twice" do
+      work.recipients = recipient2 + "," + recipient2
+      expect(work.new_gifts.collect(&:recipient)).to eq([recipient2])
     end
-
   end
 
   describe "#find_by_url" do
@@ -445,28 +453,48 @@ describe Work do
 
   describe "#update_complete_status" do
     it "marks a work complete when it's been completed" do
-      work = create(:posted_work, expected_number_of_chapters: 1)
+      work = create(:work, expected_number_of_chapters: 1)
       expect(work.complete).to be_truthy
     end
 
     it "marks a work incomplete when it's no longer completed" do
-      work = create(:posted_work, expected_number_of_chapters: 1)
-      work.update_attributes!(expected_number_of_chapters: nil)
+      work = create(:work, expected_number_of_chapters: 1)
+      work.update!(expected_number_of_chapters: nil)
       expect(work.reload.complete).to be_falsey
+    end
+  end
+
+  describe "#wip_length" do
+    it "updating chapter count via wip_length sets a sensible expected_number_of_chapters value" do
+      work = create(:work)
+      create(:chapter, work: work)
+      work.reload
+
+      work.wip_length = 1
+      expect(work.expected_number_of_chapters).to be_nil
+      expect(work.wip_length).to eq("?")
+
+      work.wip_length = 2
+      expect(work.expected_number_of_chapters).to eq(2)
+      expect(work.wip_length).to eq(work.expected_number_of_chapters)
+
+      work.wip_length = 3
+      expect(work.expected_number_of_chapters).to eq(3)
+      expect(work.wip_length).to eq(work.expected_number_of_chapters)
     end
   end
 
   describe "#hide_spam" do
     before do
       @admin_setting = AdminSetting.first || AdminSetting.create
-      @work = create(:posted_work)
+      @work = create(:work)
     end
     context "when the admin setting is enabled" do
       before do
         @admin_setting.update_attribute(:hide_spam, true)
       end
       it "automatically hides spam works and sends an email" do
-        expect { @work.update_attributes!(spam: true) }.
+        expect { @work.update!(spam: true) }.
           to change { ActionMailer::Base.deliveries.count }.by(1)
         expect(@work.reload.hidden_by_admin).to be_truthy
         expect(ActionMailer::Base.deliveries.last.subject).to eq("[AO3] Your work was hidden as spam")
@@ -477,9 +505,86 @@ describe Work do
         @admin_setting.update_attribute(:hide_spam, false)
       end
       it "does not automatically hide spam works and does not send an email" do
-        expect { @work.update_attributes!(spam: true) }.
+        expect { @work.update!(spam: true) }.
           not_to change { ActionMailer::Base.deliveries.count }
         expect(@work.reload.hidden_by_admin).to be_falsey
+      end
+    end
+  end
+
+  describe "co-creator permissions" do
+    let(:creator) { create(:user) }
+    let(:co_creator) { create(:user) }
+    let(:no_co_creator) { create(:user) }
+
+    before do
+      # In order to enable co-creator checks (instead of just having everything
+      # be automatically approved), we need to make sure that User.current_user
+      # is not nil.
+      User.current_user = creator
+      co_creator.preference.update(allow_cocreator: true)
+      no_co_creator.preference.update(allow_cocreator: false)
+    end
+
+    it "allows normal users to invite others as chapter co-creators" do
+      work = create(:work, authors: creator.pseuds)
+      work.author_attributes = { byline: co_creator.login }
+      expect(work).to be_valid
+      expect(work.save).to be_truthy
+      expect(work.user_has_creator_invite?(co_creator)).to be_truthy
+    end
+
+    it "doesn't allow users to invite others who disallow co-creators" do
+      work = create(:work, authors: creator.pseuds)
+      work.author_attributes = { byline: no_co_creator.login }
+      expect(work).to be_invalid
+      expect(work.save).to be_falsey
+      expect(work.user_has_creator_invite?(no_co_creator)).to be_falsey
+    end
+  end
+
+  describe "#remove_author" do
+    let(:to_remove) { create(:user) }
+    let(:other) { create(:user) }
+
+    context "when all the pseuds on the work are owned by one user" do
+      let(:pseud1) { create(:pseud, user: to_remove) }
+      let(:pseud2) { create(:pseud, user: to_remove) }
+      let(:pseud3) { create(:pseud, user: to_remove) }
+
+      let!(:work) do
+        create(:work, authors: [pseud1, pseud2, pseud3])
+      end
+
+      let!(:solo1) { create(:chapter, work: work, authors: [pseud1]) }
+      let!(:solo2) { create(:chapter, work: work, authors: [pseud2]) }
+      let!(:solo3) { create(:chapter, work: work, authors: [pseud3]) }
+
+      before { work.reload }
+
+      it "raises an error" do
+        expect { work.remove_author(to_remove) }.to raise_exception(
+          "Sorry, we can't remove all creators of a work."
+        )
+      end
+    end
+
+    context "when the work has a chapter whose sole creator is being removed" do
+      let!(:work) do
+        create(:work, authors: [to_remove.default_pseud, other.default_pseud])
+      end
+
+      let!(:solo_chapter) do
+        create(:chapter, work: work, authors: [to_remove.default_pseud])
+      end
+
+      # Make sure we see the newest chapter:
+      before { work.reload }
+
+      it "sets the chapter's creators equal to the work's" do
+        work.remove_author(to_remove)
+        expect(work.pseuds.reload).to contain_exactly(other.default_pseud)
+        expect(solo_chapter.pseuds.reload).to contain_exactly(other.default_pseud)
       end
     end
   end

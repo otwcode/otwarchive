@@ -2,9 +2,10 @@ module UserHelpers
   def find_or_create_new_user(login, password, activate: true)
     user = User.find_by(login: login)
     if user.blank?
-      user = FactoryGirl.create(:user, login: login, password: password)
-      user.activate if activate
-      # Explicitly add pseud to autocomplete in test env as FactoryGirl is not
+      params = { login: login, password: password }
+      params[:confirmed_at] = nil unless activate
+      user = FactoryBot.create(:user, params)
+      # Explicitly add pseud to autocomplete in test env as FactoryBot is not
       # triggering Sweeper hooks
       user.pseuds.first.add_to_autocomplete
     else

@@ -2,6 +2,10 @@ class Freeform < Tag
 
   NAME = ArchiveConfig.FREEFORM_CATEGORY_NAME
 
+  def self.label_name
+    "Additional Tags"
+  end
+
   # Types of tags to which a freeform tag can belong via common taggings or meta taggings
   def parent_types
     ['Fandom', 'MetaTag']

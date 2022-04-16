@@ -8,6 +8,8 @@
 
 h1, h2, h3 {
     word-break: break-all;
+    /* not supported in all browsers, so we need break-all as a fallback */
+    word-break: break-word;
 }
 
 /* non-JavaScript states

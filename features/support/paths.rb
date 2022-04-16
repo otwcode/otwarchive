@@ -10,6 +10,8 @@ module NavigationHelpers
 
     when /the home\s?page/
       '/'
+    when /the media page/
+      media_path
     when /^the search bookmarks page$/i
       step %{all indexing jobs have been run}
       search_bookmarks_path
@@ -23,8 +25,14 @@ module NavigationHelpers
       step %{all indexing jobs have been run}
       search_people_path
     when /^the bookmarks page$/i
+      # This cached page only expires by time, not by any user action;
+      # just clear it every time.
+      Rails.cache.delete "bookmarks/index/latest/v2_true"
       bookmarks_path
     when /^the works page$/i
+      # This cached page only expires by time, not by any user action;
+      # just clear it every time.
+      Rails.cache.delete "works/index/latest/v1"
       works_path
     when /^the admin login page$/i
       new_admin_session_path
@@ -93,6 +101,8 @@ module NavigationHelpers
       user_inbox_path(User.current_user)
     when /my invitations page/
       user_invitations_path(User.current_user)
+    when /my co-creator requests page/
+      user_creatorships_path(User.current_user)
     when /the gifts page$/
       gifts_path
     when /the gifts page for the recipient (.*)$/
@@ -114,16 +124,32 @@ module NavigationHelpers
     when /^(.*?)(?:'s)? user page$/i
       user_path(id: $1)
     when /^(.*?)(?:'s)? "(.*)" pseud page$/i
+      # TODO: Avoid this in favor of 'the (user|dashboard) page for user "(.*)" with pseud "(.*)', and eventually remove. 
       user_pseud_path(user_id: $1, id: $2)
+    when /^the (user|dashboard) page for user "(.*?)" with pseud "(.*?)"$/i
+      user_pseud_path(user_id: Regexp.last_match(2), id: Regexp.last_match(3))
     when /^(.*?)(?:'s)? user url$/i
       user_url(id: $1)
     when /^([^ ]*?)(?:'s)? works page$/i
       step %{all indexing jobs have been run}
       user_works_path(user_id: $1)
+    when /^the works page for user "(.*?)" with pseud "(.*?)"$/i
+      step %{all indexing jobs have been run}
+      user_pseud_works_path(user_id: Regexp.last_match(1), pseud_id: Regexp.last_match(2))
     when /^the "(.*)" work page/
+      # TODO: Avoid this in favor of 'the work "title"', and eventually remove.
       work_path(Work.find_by(title: $1))
     when /^the work page with title (.*)/
+      # TODO: Avoid this in favor of 'the work "title"', and eventually remove.
       work_path(Work.find_by(title: $1))
+    when /^the work "(.*?)"$/
+      work_path(Work.find_by(title: $1))
+    when /^the work "(.*?)" in full mode$/
+      work_path(Work.find_by(title: $1), view_full_work: true)
+    when /^the ([\d]+)(?:st|nd|rd|th) chapter of the work "(.*?)"$/
+      work = Work.find_by(title: $2)
+      chapter = work.chapters_in_order(include_content: false)[$1.to_i - 1]
+      work_chapter_path(work, chapter)
     when /^the bookmarks page for user "(.*)" with pseud "(.*)"$/i
       step %{all indexing jobs have been run}
       user_pseud_bookmarks_path(user_id: $1, pseud_id: $2)
@@ -140,6 +166,9 @@ module NavigationHelpers
       user_readings_path(user_id: $1)
     when /^(.*?)(?:'s)? series page$/i
       user_series_index_path(user_id: $1)
+    when /^the series page for user "(.*?)" with pseud "(.*?)"$/i
+      step %{all indexing jobs have been run}
+      user_pseud_series_index_path(user_id: Regexp.last_match(1), pseud_id: Regexp.last_match(2))
     when /^(.*?)(?:'s)? stats page$/i
       user_stats_path(user_id: $1)
     when /^(.*?)(?:'s)? preferences page$/i
@@ -165,6 +194,7 @@ module NavigationHelpers
     when /^the new collection page/
       new_collection_path
     when /^"(.*)" collection's page$/i                         # e.g. when I go to "Collection name" collection's page
+      step %{all indexing jobs have been run} # reindex to show recent works/bookmarks
       collection_path(Collection.find_by(title: $1))
     when /^"(.*)" collection edit page$/i
       edit_collection_path(Collection.find_by(title: $1))
@@ -182,28 +212,29 @@ module NavigationHelpers
       edit_collection_gift_exchange_path(Collection.find_by(title: $1))
     when /^"(.*)" gift exchange matching page$/i
       collection_potential_matches_path(Collection.find_by(title: $1))
+    when /^the works tagged "(.*?)" in collection "(.*?)"$/i
+      step %{all indexing jobs have been run}
+      collection_tag_works_path(Collection.find_by(title: $2), Tag.find_by_name($1))
     when /^the works tagged "(.*)"$/i
       step %{all indexing jobs have been run}
       tag_works_path(Tag.find_by_name($1))
     when /^the bookmarks tagged "(.*)"$/i
       step %{all indexing jobs have been run}
       tag_bookmarks_path(Tag.find_by_name($1))
-    when /^the url for works tagged "(.*)"$/i
-      step %{all indexing jobs have been run}
-      tag_works_url(Tag.find_by_name($1))
     when /^the bookmarks in collection "(.*)"$/i
       step %{all indexing jobs have been run}
       collection_bookmarks_path(Collection.find_by(title: $1))
-    when /^the works tagged "(.*)" in collection "(.*)"$/i
-      step %{all indexing jobs have been run}
-      collection_tag_works_path(Collection.find_by(title: $2), Tag.find_by_name($1))
-    when /^the url for works tagged "(.*)" in collection "(.*)"$/i
-      step %{all indexing jobs have been run}
-      collection_tag_works_url(Collection.find_by(title: $2), Tag.find_by_name($1))
+    when /^the first bookmark for the work "(.*?)"$/i
+      work = Work.find_by(title: Regexp.last_match(1))
+      bookmark_path(work.bookmarks.first)
+    when /^the new bookmark page for work "(.*?)"$/i
+      new_work_bookmark_path(Work.find_by(title: Regexp.last_match(1)))
     when /^the tag comments? page for "(.*)"$/i
       tag_comments_path(Tag.find_by_name($1))
     when /^the work comments? page for "(.*?)"$/i
       work_comments_path(Work.find_by(title: $1), show_comments: true)
+    when /^the work kudos page for "(.*?)"$/i
+      work_kudos_path(Work.find_by(title: $1))
     when /^the FAQ reorder page$/i
       manage_archive_faqs_path
     when /^the Wrangling Guidelines reorder page$/i
@@ -238,12 +269,20 @@ module NavigationHelpers
       unassigned_fandoms_path
     when /^the "(.*)" tag page$/i
       tag_path(Tag.find_by_name($1))
+    when /^the '(.*)' tag edit page$/i
+      edit_tag_path(Tag.find_by(name: Regexp.last_match(1)))
+    when /^the "(.*)" tag edit page$/i
+      edit_tag_path(Tag.find_by(name: Regexp.last_match(1)))
     when /^the wrangling tools page$/
       tag_wranglings_path
     when /^the "(.*)" fandom relationship page$/i
       fandom_path($1)
     when /^the new external work page$/i
       new_external_work_path
+    when /^the external works page$/i
+      external_works_path
+    when /^the external works page with only duplicates$/i
+      external_works_path(show: :duplicates)
 
     # Admin Pages
     when /^the admin-posts page$/i

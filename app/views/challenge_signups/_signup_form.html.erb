@@ -22,8 +22,20 @@
 <% end %>
 
 <%= form_for([@collection, @challenge_signup], :url => (@challenge_signup.new_record? ? collection_signups_path(@collection) : collection_signup_path(@collection))) do |signup_form| %>
+  <% if !@current_user&.preference&.allow_gifts? %>
+    <p class="caution notice">
+      <%= t(".notice.preference.#{@collection.challenge_type.underscore}",
+          preferences_link: link_to(
+            t(".notice.preference.preferences_link_text"),
+            user_preferences_path(@current_user)),
+          refuse_link: link_to(
+            t(".notice.preference.refuse_link_text"),
+            archive_faq_path("your-account", anchor: "refusegift"))
+      ).html_safe %>
+    </p>
+  <% end %>
   <% if @collection.challenge_type == "GiftExchange" %>
-      <p class="notes notice"><%= ts("Challenge maintainers will have access to the email address associated with your AO3 account for the purpose of communicating with you about the challenge.") %></p>
+    <p class="notes notice"><%= ts("Challenge maintainers will have access to the email address associated with your AO3 account for the purpose of communicating with you about the challenge.") %></p>
   <% end %>
   <p class="required notice"><%= ts("* Required information") %></p>
   <% unless @challenge_signup.errors.empty? %>
@@ -50,7 +62,7 @@
     <% end %>
 
   <% @challenge_signup.send("#{prompt_type}").each_with_index do |prompt, index| %>
-      <%= error_messages_for(prompt).gsub(/\^/, '').html_safe unless !prompt.errors.present? %>
+      <%= error_messages_for(prompt).html_safe unless !prompt.errors.present? %>
     <%= signup_form.fields_for prompt_type.to_sym, prompt do |prompt_form| %>
       <%= render "prompts/prompt_form", :form => prompt_form, :index => index, :required => (index < @challenge.required(prompt_type)) %>
     <% end %>

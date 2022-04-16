@@ -4,12 +4,10 @@ class Chapter < ApplicationRecord
   include ActiveModel::ForbiddenAttributesProtection
   include HtmlCleaner
   include WorkChapterCountCaching
+  include CreationNotifier
   include Creatable
 
-  has_many :creatorships, as: :creation
-  has_many :pseuds, through: :creatorships
-
-  belongs_to :work
+  belongs_to :work, inverse_of: :chapters
   # acts_as_list scope: 'work_id = #{work_id}'
 
   acts_as_commentable
@@ -33,29 +31,30 @@ class Chapter < ApplicationRecord
   validates_length_of :content, maximum: ArchiveConfig.CONTENT_MAX,
     too_long: ts("cannot be more than %{max} characters long.", max: ArchiveConfig.CONTENT_MAX)
 
-  # Virtual attribute to use as a placeholder for pseuds before the chapter has been saved
-  # Can't write to chapter.pseuds until the chapter has an id
-  attr_accessor :authors
-  attr_accessor :authors_to_remove
-  attr_accessor :invalid_pseuds
-  attr_accessor :ambiguous_pseuds
   attr_accessor :wip_length_placeholder
 
-  before_save :validate_authors, :strip_title #, :clean_emdashes
+  before_validation :inherit_creatorships
+  def inherit_creatorships
+    if work && creatorships.empty? && current_user_pseuds.blank?
+      work.pseuds_after_saving.each do |pseud|
+        creatorships.build(pseud: pseud)
+      end
+    end
+  end
+
+  before_save :strip_title
   before_save :set_word_count
   before_save :validate_published_at
 
-#  before_update :clean_emdashes
-
   after_create :notify_after_creation
-  before_update :notify_before_update
+  after_update :notify_after_update
 
   scope :in_order, -> { order(:position) }
   scope :posted, -> { where(posted: true) }
 
   after_save :fix_positions
   def fix_positions
-    if work && !work.new_record?
+    if work&.persisted?
       positions_changed = false
       self.position ||= 1
       chapters = work.chapters.order(:position)
@@ -64,15 +63,17 @@ class Chapter < ApplicationRecord
         chapters.insert(self.position-1, self)
         chapters.compact.each_with_index do |chapter, i|
           if chapter.position != i+1
-            Chapter.where("id = #{chapter.id}").update_all("position = #{i+1}")
+            Chapter.where(["id = ?", chapter.id]).update_all(["position = ?", i + 1])
             positions_changed = true
           end
         end
       end
-      # We're caching the chapter positions in the comment blurbs
-      # so we need to expire them
+      # We're caching the chapter positions in the comment blurbs and the last
+      # chapter link in the work blurbs so we need to expire the blurbs and the
+      # work indexes.
       if positions_changed
         work.comments.each{ |c| c.touch }
+        work.expire_caches
       end
     end
   end
@@ -80,13 +81,11 @@ class Chapter < ApplicationRecord
   after_save :invalidate_chapter_count,
     if: Proc.new { |chapter| chapter.saved_change_to_posted? }
 
-  after_save :expire_cache_on_coauthor_removal
-
-  before_destroy :fix_positions_after_destroy, :invalidate_chapter_count
-  def fix_positions_after_destroy
-    if work && position
+  before_destroy :fix_positions_before_destroy, :invalidate_chapter_count
+  def fix_positions_before_destroy
+    if work&.persisted? && position
       chapters = work.chapters.where(["position > ?", position])
-      chapters.each{|c| c.update_attribute(:position, c.position + 1)}
+      chapters.each { |c| c.update_attribute(:position, c.position - 1) }
     end
   end
 
@@ -170,41 +169,11 @@ class Chapter < ApplicationRecord
     self.wip_length_placeholder = number
   end
 
-  # Virtual attribute for pseuds
-  def author_attributes=(attributes)
-    selected_pseuds = Pseud.find(attributes[:ids])
-    (self.authors ||= []) << selected_pseuds
-    # if current user has selected different pseuds
-    current_user = User.current_user
-    if current_user.is_a? User
-      self.authors_to_remove = current_user.pseuds & (self.pseuds - selected_pseuds)
-    end
-    self.authors << Pseud.find(attributes[:ambiguous_pseuds]) if attributes[:ambiguous_pseuds]
-    if !attributes[:byline].blank?
-      results = Pseud.parse_bylines(attributes[:byline], keep_ambiguous: true)
-      self.authors << results[:pseuds]
-      self.invalid_pseuds = results[:invalid_pseuds]
-      self.ambiguous_pseuds = results[:ambiguous_pseuds]
-    end
-    self.authors.flatten!
-    self.authors.uniq!
-  end
-
-  # Checks that chapter has at least one author
-  # Skip the initial creation of the first chapter, since that's covered in the works model
-  def validate_authors
-    return if self.new_record? && self.position == 1
-    if self.authors.blank? && self.pseuds.empty?
-      errors.add(:base, ts("Chapter must have at least one author."))
-      throw :abort
-    end
-  end
-
   # Checks the chapter published_at date isn't in the future
   def validate_published_at
     if !self.published_at
-      self.published_at = Date.today
-    elsif self.published_at > Date.today
+      self.published_at = Date.current
+    elsif self.published_at > Date.current
       errors.add(:base, ts("Publication date can't be in the future."))
       throw :abort
     end
@@ -225,17 +194,8 @@ class Chapter < ApplicationRecord
     self.work.title
   end
 
-  private
-
-  def expire_cache_on_coauthor_removal
-    if self.authors_to_remove.present?
-      self.touch
-    end
+  def expire_comments_count
+    super
+    work&.expire_comments_count
   end
-
-   # private
-   #
-   # def add_to_list_bottom
-   # end
-
 end

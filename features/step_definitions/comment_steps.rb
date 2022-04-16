@@ -72,10 +72,10 @@ When /^I post the comment "([^"]*)" on the work "([^"]*)"$/ do |comment_text, wo
 end
 
 When /^I post the comment "([^"]*)" on the work "([^"]*)" as a guest(?: with email "([^"]*)")?$/ do |comment_text, work, email|
-  step "I am logged out"
+  step "I start a new session"
   step "I set up the comment \"#{comment_text}\" on the work \"#{work}\""
-  fill_in("Name", with: "guest")
-  fill_in("Email", with: (email || "guest@foo.com"))
+  fill_in("Guest name", with: "guest")
+  fill_in("Guest email", with: (email || "guest@foo.com"))
   click_button "Comment"
 end
 
@@ -108,9 +108,9 @@ end
 
 When /^I comment on an admin post$/ do
   step "I go to the admin-posts page"
-    step %{I follow "Comment"}
-    step %{I fill in "comment[comment_content]" with "Excellent, my dear!"}
-    step %{I press "Comment"}
+  step %{I follow "Default Admin Post"}
+  step %{I fill in "comment[comment_content]" with "Excellent, my dear!"}
+  step %{I press "Comment"}
 end
 
 When /^I post a spam comment$/ do
@@ -130,7 +130,7 @@ When /^I post a guest comment$/ do
 end
 
 When /^all comments by "([^"]*)" are marked as spam$/ do |name|
-  Comment.where(name: name).update_all(approved: false)
+  Comment.where(name: name).find_each(&:mark_as_spam!)
 end
 
 When /^I compose an invalid comment(?: within "([^"]*)")?$/ do |selector|

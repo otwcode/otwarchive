@@ -1,3 +1,10 @@
 <% content_for :message do %>
-<%= t 'user_mailer.invite_increase_notification.html', login: style_bold(@user.login), total: @total, invitation_page:   style_link("your invitations page", user_invitations_url(@user)) , archive_name: style_link(ArchiveConfig.APP_SHORT_NAME, root_url)  %>
+  <p><%= t("mailer.general.greeting.informal.addressed", name: style_bold(@user.login)).html_safe %></p>
+
+  <p><%= t(".body", count: @total, invitation_page: style_link(t(".invitation_page_link_text"), user_invitations_url(@user))).html_safe %></p>
+
+  <p>
+    <%= t("mailer.general.closing.informal") %><br />
+    <%= t("mailer.general.signature.app_short_name") %>
+  </p>
 <% end %>

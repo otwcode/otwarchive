@@ -1,7 +1,7 @@
 require "spec_helper"
 require "controllers/api/api_helper"
 
-describe "API v2 BookmarksController", type: :request do
+describe "API v2 BookmarksController", type: :request, bookmark_search: true do
   include ApiHelper
 
   bookmark = { id: "123",
@@ -11,7 +11,7 @@ describe "API v2 BookmarksController", type: :request do
                summary: "<p>blah blah blah</p>",
                fandom_string: "Testing",
                rating_string: "General Audiences",
-               category_string: ["M/M"],
+               category_string: "M/M",
                relationship_string: "Starsky/Hutch",
                character_string: "Starsky,hutch",
                bookmarker_notes: "<p>Notes</p>",
@@ -21,7 +21,7 @@ describe "API v2 BookmarksController", type: :request do
                rec: "0" }
 
   before do
-    mock_external
+    WebMock.stub_request(:any, "http://example.com")
   end
 
   after do
@@ -82,8 +82,6 @@ describe "API v2 BookmarksController", type: :request do
       bookmark_response = JSON.parse(response.body, symbolize_names: true)[:bookmarks].first
       assert_equal bookmark_response[:archive_url], bookmark_url(first_bookmark)
     end
-
-    WebMock.allow_net_connect!
   end
 
   describe "Invalid API bookmark import" do
@@ -190,5 +188,4 @@ describe "API v2 BookmarksController", type: :request do
       expect(bookmark_response[:status]).to eq :unprocessable_entity
     end
   end
-  WebMock.allow_net_connect!
 end

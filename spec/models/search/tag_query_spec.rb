@@ -1,6 +1,6 @@
 require "spec_helper"
 
-describe TagQuery, type: :model do
+describe TagQuery, tag_search: true do
   let!(:tags) do
     tags = {
       char_abc: create(:character, name: "abc"),
@@ -17,7 +17,7 @@ describe TagQuery, type: :model do
       rel_quotes: create(:relationship, name: "ab \"cd\" ef"),
       rel_unicode: create(:relationship, name: "Dave ♦ Sawbuck")
     }
-    update_and_refresh_indexes("tag", 1)
+    run_all_indexing_jobs
     tags
   end
 
@@ -155,5 +155,20 @@ describe TagQuery, type: :model do
     tag_query = TagQuery.new(name: "a*")
     results = tag_query.search_results
     expect(results.size).to eq 5
+  end
+
+  it "filters tags by multiple fandom ids" do
+    q = TagQuery.new(fandom_ids: [6, 7])
+    expect(q.filters).to include({ term: { fandom_ids: 6 } }, { term: { fandom_ids: 7 } })
+  end
+
+  it "allows you to sort by Date Created" do
+    q = TagQuery.new(sort_column: "created_at")
+    expect(q.generated_query[:sort]).to eq({ "created_at" => { order: "desc", unmapped_type: "date" } })
+  end
+
+  it "allows you to sort by Date Created in ascending order" do
+    q = TagQuery.new(sort_column: "created_at", sort_direction: "asc")
+    expect(q.generated_query[:sort]).to eq({ "created_at" => { order: "asc", unmapped_type: "date" } })
   end
 end

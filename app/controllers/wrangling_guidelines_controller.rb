@@ -42,7 +42,7 @@ class WranglingGuidelinesController < ApplicationController
   def update
     @wrangling_guideline = WranglingGuideline.find(params[:id])
 
-    if @wrangling_guideline.update_attributes(wrangling_guideline_params)
+    if @wrangling_guideline.update(wrangling_guideline_params)
       flash[:notice] = ts('Wrangling Guideline was successfully updated.')
       redirect_to(@wrangling_guideline)
     else
@@ -53,7 +53,7 @@ class WranglingGuidelinesController < ApplicationController
   # reorder FAQs
   def update_positions
     if params[:wrangling_guidelines]
-      @wrangling_guidelines = WranglingGuideline.reorder(params[:wrangling_guidelines])
+      @wrangling_guidelines = WranglingGuideline.reorder_list(params[:wrangling_guidelines])
       flash[:notice] = ts('Wrangling Guidelines order was successfully updated.')
     end
     redirect_to(wrangling_guidelines_path)
@@ -63,7 +63,7 @@ class WranglingGuidelinesController < ApplicationController
   def destroy
     @wrangling_guideline = WranglingGuideline.find(params[:id])
     @wrangling_guideline.destroy
-
+    flash[:notice] = ts('Wrangling Guideline was successfully deleted.')
     redirect_to(wrangling_guidelines_path)
   end
 

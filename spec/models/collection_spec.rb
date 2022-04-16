@@ -3,7 +3,7 @@ require 'spec_helper'
 describe Collection do
 
   before do
-    @collection = FactoryGirl.create(:collection)
+    @collection = FactoryBot.create(:collection)
   end
 
   describe "collections with challenges" do
@@ -73,43 +73,14 @@ describe Collection do
     end # challenges type loop
   end
 
-  describe "all_bookmarked_items_count" do
+  describe "save" do
     let(:collection) { create(:collection) }
 
-    it "does not include bookmarks of deleted works" do
-      work = create(:posted_work)
-      create(:bookmark, collections: [collection], bookmarkable: work)
-      expect do
-        work.destroy
-      end.to change { collection.all_bookmarked_items_count }.from(1).to(0)
-    end
-
-    it "does not include multiple bookmarks of the same work" do
-      work = create(:posted_work)
-      create(:bookmark, collections: [collection], bookmarkable: work)
-      create(:bookmark, collections: [collection], bookmarkable: work)
-      expect(collection.all_bookmarked_items_count).to eq 1
-    end
-
-    it "doesn't include private bookmarks" do
-      create(:bookmark, collections: [collection], private: true)
-      expect(collection.all_bookmarked_items_count).to eq 0
-    end
-
-    it "includes bookmarks of restricted works only when logged-in" do
-      work = create(:posted_work, restricted: true)
-      create(:bookmark, collections: [collection], bookmarkable: work)
-      expect do
-        User.current_user = User.new
-      end.to change { collection.all_bookmarked_items_count }.from(0).to(1)
-    end
-
-    it "counts bookmarks of all types" do
-      %i[posted_work series_with_a_work external_work].each do |factory|
-        item = create(factory)
-        create(:bookmark, collections: [collection], bookmarkable: item)
-      end
-      expect(collection.all_bookmarked_items_count).to eq 3
+    it "checks the tag limit" do
+      collection.tag_string = "1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11"
+      expect(collection.save).to be_falsey
+      expect(collection.errors.full_messages).to \
+        include /Sorry, a collection can only have 10 tags./
     end
   end
 end

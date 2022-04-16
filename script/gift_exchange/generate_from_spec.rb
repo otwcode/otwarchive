@@ -31,7 +31,7 @@ PLURAL_TAG_TYPES = %w(
   relationships
   freeforms
   ratings
-  warnings
+  archive_warnings
   categories
 ).freeze
 
@@ -67,7 +67,7 @@ def load_tags(limits)
   script_path = File.expand_path(__FILE__)
   script_directory = File.dirname(script_path)
   tag_seed_path = File.join(script_directory, 'tag_seed.json')
-  
+
   tag_seed = JSON.load(File.open(tag_seed_path, 'r'))
 
   @all_tags = {}

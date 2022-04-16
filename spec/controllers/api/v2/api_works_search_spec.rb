@@ -9,9 +9,9 @@ def post_search_result(valid_params)
   JSON.parse(response.body, symbolize_names: true)
 end
 
-describe "API v2 WorksController - Search", type: :request do
+describe "API v2 WorksController - Search", type: :request, work_search: true do
   describe "valid work URL request" do
-    work = FactoryGirl.create(:posted_work, imported_from_url: "foo")
+    let!(:work) { create(:work, imported_from_url: "foo") }
     
     it "returns 200 OK" do
       valid_params = { works: [{ original_urls: %w(bar foo) }] }
@@ -37,6 +37,14 @@ describe "API v2 WorksController - Search", type: :request do
       expect(parsed_body[:works].first[:status]).to eq "found"
       expect(parsed_body[:works].first[:original_id]).to eq "123"
       expect(parsed_body[:works].first[:original_url]).to eq "foo"
+    end
+
+    it "returns human-readable messages as an array" do
+      valid_params = { works: [{ original_urls: [{ id: "123", url: "foo" }] }] }
+      parsed_body = post_search_result(valid_params)
+
+      expect(parsed_body[:works].first[:status]).to eq "found"
+      expect(parsed_body[:works].first[:messages]).to include("Work \"#{work.title}\", created on #{work.created_at.to_date.to_s(:iso_date)} was found at \"#{url_for(work)}\".")
     end
   
     it "returns an error when no works are provided" do
@@ -74,7 +82,7 @@ describe "API v2 WorksController - Search", type: :request do
       parsed_body = post_search_result(valid_params)
       
       expect(parsed_body[:works].first[:status]).to eq("not_found")
-      expect(parsed_body[:works].first).to include(:messages)
+      expect(parsed_body[:works].first[:messages]).to include("No work has been imported from \"bar\".")
     end
   
     it "only does an exact match on the original url" do
@@ -82,7 +90,7 @@ describe "API v2 WorksController - Search", type: :request do
       parsed_body = post_search_result(valid_params)
   
       expect(parsed_body[:works].first[:status]).to eq("not_found")
-      expect(parsed_body[:works].first).to include(:messages)
+      expect(parsed_body[:works].first[:messages]).to include("No work has been imported from \"fo\".")
       expect(parsed_body[:works].second[:status]).to eq("not_found")
       expect(parsed_body[:works].second).to include(:messages)
     end

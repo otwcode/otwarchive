@@ -47,7 +47,7 @@ Feature: Search pseuds
       And all indexing jobs have been run
     When I edit the work "Drabble Collection"
       And I fill in "Fandom" with "MCU, Ghost Soup"
-      And I press "Post Without Preview"
+      And I press "Post"
       And all indexing jobs have been run
       And I go to the search people page
       And I fill in "Fandom" with "Ghost Soup"
@@ -61,7 +61,7 @@ Feature: Search pseuds
       And all indexing jobs have been run
     When I edit the work "Drabble Collection"
       And I fill in "Fandom" with "MCU"
-      And I press "Post Without Preview"
+      And I press "Post"
       And all indexing jobs have been run
       And I go to the search people page
       And I fill in "Fandom" with "Ghost Soup"
@@ -74,8 +74,15 @@ Feature: Search pseuds
       And I post the work "Drabble Collection" with fandom "Ghost Soup"
       And all indexing jobs have been run
     When I edit the work "Drabble Collection"
-      And I add the co-author "alice"
-      And I press "Post Without Preview"
+      And I invite the co-author "alice"
+      And I press "Post"
+      And all indexing jobs have been run
+      And I go to the search people page
+      And I fill in "Fandom" with "Ghost Soup"
+      And I press "Search People"
+    Then I should see "testuser" within "ol.pseud.group"
+      But I should not see "alice" within "ol.pseud.group"
+    When the user "alice" accepts all co-creator requests
       And all indexing jobs have been run
       And I go to the search people page
       And I fill in "Fandom" with "Ghost Soup"
@@ -86,12 +93,11 @@ Feature: Search pseuds
   Scenario: Search by fandom updates when an author is removed from a work.
     Given a canonical fandom "Ghost Soup"
       And I am logged in as "testuser"
-      And I set up a draft "Drabble Collection" with fandom "Ghost Soup"
-      And I add the co-author "alice"
-      And I press "Post Without Preview"
+      And I post the work "Drabble Collection" with fandom "Ghost Soup"
+      And I add the co-author "alice" to the work "Drabble Collection"
       And all indexing jobs have been run
     When I edit the work "Drabble Collection"
-      And I follow "Remove Me As Author"
+      And I follow "Remove Me As Co-Creator"
       And all indexing jobs have been run
       And I go to the search people page
       And I fill in "Fandom" with "Ghost Soup"

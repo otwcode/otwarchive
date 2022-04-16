@@ -1,8 +1,8 @@
 # Use css parser to break up style blocks
 require 'css_parser'
-include CssParser
 
 module CssCleaner
+  include CssParser
 
   # constant regexps for css values
   ALPHA_REGEX = Regexp.new('[a-z\-]+')
@@ -104,7 +104,7 @@ module CssCleaner
   #   empty property returned.
   def sanitize_css_declaration_value(property, value)
     clean = ""
-    property.downcase!
+    property = property.downcase
     if property == "font-family"
       if !sanitize_css_font(value).blank?
         # preserve the original capitalization
@@ -202,7 +202,7 @@ module CssCleaner
     value_stripped = value.downcase.gsub(/(!important)/, '').strip
 
     # if it's a comma-separated set of valid values it's fine
-    return value if value_stripped =~ /^(#{VALUE_REGEX}\,?)+$/i
+    return value if value_stripped =~ /^(#{VALUE_REGEX}\,?\s*)+$/i
 
     # If it's explicitly in our keywords it's fine
     return value if value_stripped.split(',').all? {|subval| ArchiveConfig.SUPPORTED_CSS_KEYWORDS.include?(subval.strip)}

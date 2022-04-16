@@ -26,13 +26,18 @@ describe ExternalWork do
     end
   end
 
-  context "valid urls" do
-    URLS = ["http://the--ivorytower.livejournal.com/153798.html"]
-
-    URLS.each do |url|
-      let(:valid_url) {build(:external_work, url: url)}
-      it "saves the external work" do
-        expect(valid_url.save).to be_truthy
+  context "for valid URLs" do
+    [200, 301, 302, 307, 308].each do |status|
+      context "returning #{status}" do
+        let(:external_work) { build(:external_work) }
+  
+        before do
+          WebMock.stub_request(:any, external_work.url).to_return(status: status)
+        end
+  
+        it "saves" do
+          expect(external_work.save).to be_truthy
+        end
       end
     end
   end

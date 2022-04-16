@@ -1,6 +1,8 @@
 Otwarchive::Application.configure do
   # Settings specified here will take precedence over those in config/environment.rb
 
+  config.hosts = ArchiveConfig.PERMITTED_HOSTS
+
   # The production environment is meant for finished, "live" apps.
   # Code is not reloaded between requests
   config.cache_classes = true
@@ -19,7 +21,7 @@ Otwarchive::Application.configure do
 
   # If you have no front-end server that supports something like X-Sendfile,
   # just comment this out and Rails will serve the files
-  
+
   # Disable IP spoofing protection
   config.action_dispatch.ip_spoofing_check = false
 
@@ -31,8 +33,8 @@ Otwarchive::Application.configure do
   # config.logger = SyslogLogger.new
 
   # Use a different cache store in production
-  config.cache_store = :dalli_store, YAML.load_file("#{Rails.root}/config/local.yml")['MEMCACHED_SERVERS'],
-                          { namespace:  'ao3-v1', expires_in:  0, compress: true , pool_size: 10 }
+  config.cache_store = :mem_cache_store, ArchiveConfig.MEMCACHED_SERVERS,
+                       { namespace: "ao3-v2", compress: true, pool_size: 10 }
 
   # Disable Rails's static asset server
   # In production, Apache or nginx will already do this
@@ -47,26 +49,8 @@ Otwarchive::Application.configure do
   # Enable threaded mode
   # config.threadsafe!
 
-  # Enable locale fallbacks for I18n (makes lookups for any locale fall back to
-  # the I18n.default_locale when a translation can not be found)
-  config.i18n.fallbacks = true
-
   # Send deprecation notices to registered listeners
   config.active_support.deprecation = :notify
 
-#  # run after initialization so have access to ArchiveConfig
-#  config.after_initialize do
-#    config.middleware.use ExceptionNotifier,
-#      email_prefix: ArchiveConfig.ERROR_PREFIX,
-#      sender_address: ArchiveConfig.RETURN_ADDRESS,
-#      exception_recipients: ArchiveConfig.ERROR_ADDRESS
-#  end
-
-  # https://github.com/winebarrel/activerecord-mysql-reconnect
-  config.active_record.enable_retry = true
-  config.active_record.execution_tries = 20 # times
-  config.active_record.execution_retry_wait = 0.3 # sec
-  # :rw Retry in all SQL, but does not retry if Lost connection has happened in write SQL
-  config.active_record.retry_mode = :rw
-
+  config.middleware.use Rack::Attack
 end

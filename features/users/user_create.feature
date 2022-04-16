@@ -14,7 +14,7 @@ Feature: Sign Up for a new account
       And I fill in "<field>" with "<value>"
       And I press "Create Account"
     Then I should see "<error>"
-      And I should not see "Account Created!"
+      And I should not see "Almost Done!"
     Examples:
       | field                      | value          | error                                           |
       | user_registration_login                 | xx             | Login is too short (minimum is 3 characters)    |
@@ -28,7 +28,7 @@ Feature: Sign Up for a new account
   Scenario Outline: The user should see validation errors when signing up without filling in required fields.
     When I press "Create Account"
     Then I should see "<error>"
-      And I should not see "Account Created!"
+      And I should not see "Almost Done!"
     Examples:
       | field                 | error                                                               |
       | user_registration_age_over_13      | Sorry, you have to be over 13!                                      |
@@ -49,7 +49,7 @@ Feature: Sign Up for a new account
       And I fill in "Confirm password" with "password"
       And all emails have been delivered
       And I press "Create Account"
-    Then I should see "Account Created!"
+    Then I should see "Almost Done!"
       And 1 email should be delivered to "lyingrobot@example.com"
       And I should get a new user activation email
       And a new user account should exist
@@ -62,7 +62,7 @@ Feature: Sign Up for a new account
       And I fill in "user_registration_login" with "user1"
       And I press "Create Account"
     Then I should see "Login has already been taken"
-      And I should not see "Account Created!"
+      And I should not see "Almost Done!"
 
   Scenario: The user should not be able to sign up with a login that is already in use, no matter the case
     Given the following users exist
@@ -72,12 +72,12 @@ Feature: Sign Up for a new account
       And I fill in "user_registration_login" with "USER1"
       And I press "Create Account"
     Then I should see "Login has already been taken"
-      And I should not see "Account Created!"
+      And I should not see "Almost Done!"
 
   Scenario: The user should be able to create a new account with a valid email and password
     When I fill in the sign up form with valid data
       And all emails have been delivered
       And I press "Create Account"
-    Then I should see "Account Created!"
+    Then I should see "Almost Done!"
       And I should get a new user activation email
       And a new user account should exist

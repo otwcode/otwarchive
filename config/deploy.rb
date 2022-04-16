@@ -26,13 +26,14 @@
 #
 require './config/boot'
 require 'new_relic/recipes'
+require "active_support/core_ext/hash/keys"
 
 # takes care of the bundle install tasks
 require 'bundler/capistrano'
 
 # deploy to different environments with tags
 require 'capistrano/ext/multistage'
-set :stages, ["staging", "production", "i18n"]
+set :stages, %w[staging production]
 set :default_stage, "staging"
 #require 'capistrano/gitflow_version'
 
@@ -58,9 +59,10 @@ set :mail_to, "otw-coders@transformativeworks.org otw-testers@transformativework
 
 # git settings
 set :scm, :git
-set :repository, "git://github.com/otwcode/otwarchive.git"
+set :repository, "https://github.com/otwcode/otwarchive.git"
 set :deploy_via, :remote_cache
 
+set :servers, -> { YAML.load_file(File.join(__dir__, "servers.yml")).deep_symbolize_keys[fetch(:stage)] }
 
 # overwrite default capistrano deploy tasks
 namespace :deploy do

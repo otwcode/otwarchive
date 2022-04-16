@@ -8,9 +8,9 @@
 #    require File.dirname(__FILE__) + '/../../spec/blueprints' # or wherever your blueprints are
 #    Before { Sham.reset } # to reset Sham's seed between scenarios so each run has same random sequences
 #
-# For FactoryGirl add: features/support/factory_girl.rb
+# For FactoryBot add: features/support/factory_bot.rb
 #
-#    require 'factory_girl'
+#    require 'factory_bot'
 #    require File.dirname(__FILE__) + '/../../spec/factories' # or wherever your factories are
 #
 # You may also need to add gem dependencies on your factory of choice in <tt>config/environments/cucumber.rb</tt>

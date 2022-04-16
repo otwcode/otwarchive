@@ -70,17 +70,27 @@ class CollectionsController < ApplicationController
 
     if @collection.collection_preference.show_random? || params[:show_random]
       # show a random selection of works/bookmarks
-      @works = Work.in_collection(@collection).visible.random_order.limit(ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD).includes(:pseuds, :tags, :series, :language, collections: [:collection_items])
-      visible_bookmarks = @collection.approved_bookmarks.visible.order('RAND()').limit(ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD * 2)
+      @works = WorkQuery.new(
+        collection_ids: [@collection.id], show_restricted: is_registered_user?
+      ).sample(count: ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD)
+
+      @bookmarks = BookmarkQuery.new(
+        collection_ids: [@collection.id], show_restricted: is_registered_user?
+      ).sample(count: ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD)
     else
       # show recent
-      @works = Work.in_collection(@collection).visible.ordered_by_date_desc.limit(ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD).includes(:pseuds, :tags, :series, :language, collections: [:collection_items])
-      # visible_bookmarks = @collection.approved_bookmarks.visible(order: 'bookmarks.created_at DESC')
-      visible_bookmarks = Bookmark.in_collection(@collection).visible.order('bookmarks.created_at DESC').limit(ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD * 2)
-    end
-    # Having the number of items as a limit was finding the limited number of items, then visible ones within them
-    @bookmarks = visible_bookmarks[0...ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD]
+      @works = WorkQuery.new(
+        collection_ids: [@collection.id], show_restricted: is_registered_user?,
+        sort_column: "revised_at",
+        per_page: ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD
+      ).search_results
 
+      @bookmarks = BookmarkQuery.new(
+        collection_ids: [@collection.id], show_restricted: is_registered_user?,
+        sort_column: "created_at",
+        per_page: ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD
+      ).search_results
+    end
   end
 
   def new
@@ -109,11 +119,13 @@ class CollectionsController < ApplicationController
     if @collection.save
       flash[:notice] = ts('Collection was successfully created.')
       unless params[:challenge_type].blank?
-        # This is a challenge collection
-        # TODO: remove unsafe usage of eval, this is vulnerable and a security risk
-        redirect_to eval("new_collection_#{params[:challenge_type].demodulize.tableize.singularize}_path(@collection)") and return
+        if params[:challenge_type] == "PromptMeme"
+          redirect_to new_collection_prompt_meme_path(@collection) and return
+        elsif params[:challenge_type] == "GiftExchange"
+          redirect_to new_collection_gift_exchange_path(@collection) and return
+        end
       else
-        redirect_to(@collection)
+        redirect_to collection_path(@collection)
       end
     else
       @challenge_type = params[:challenge_type]
@@ -122,7 +134,7 @@ class CollectionsController < ApplicationController
   end
 
   def update
-    if @collection.update_attributes(collection_params)
+    if @collection.update(collection_params)
       flash[:notice] = ts('Collection was successfully updated.')
       if params[:challenge_type].blank?
         if @collection.challenge
@@ -134,17 +146,21 @@ class CollectionsController < ApplicationController
           if @collection.challenge.class.name != params[:challenge_type]
             flash[:error] = ts("Note: if you want to change the type of challenge, first please delete the existing challenge on the challenge page.")
           else
-            # editing existing challenge
-            # TODO: remove unsafe usage of eval, this is vulnerable and a security risk
-            redirect_to eval("edit_collection_#{params[:challenge_type].demodulize.tableize.singularize}_path(@collection)") and return
+            if params[:challenge_type] == "PromptMeme"
+              redirect_to edit_collection_prompt_meme_path(@collection) and return
+            elsif params[:challenge_type] == "GiftExchange"
+              redirect_to edit_collection_gift_exchange_path(@collection) and return
+            end
           end
         else
-          # adding a new challenge
-          # TODO: remove unsafe usage of eval, this is vulnerable and a security risk
-          redirect_to eval("new_collection_#{params[:challenge_type].demodulize.tableize.singularize}_path(@collection)") and return
+          if params[:challenge_type] == "PromptMeme"
+            redirect_to new_collection_prompt_meme_path(@collection) and return
+          elsif params[:challenge_type] == "GiftExchange"
+            redirect_to new_collection_gift_exchange_path(@collection) and return
+          end
         end
       end
-      redirect_to(@collection)
+      redirect_to collection_path(@collection)
     else
       render action: "edit"
     end

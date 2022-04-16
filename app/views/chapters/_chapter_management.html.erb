@@ -3,9 +3,9 @@
   <% unless chapter.posted? %>
     <li>
       <%= form_tag post_work_chapter_path(work, chapter) do %>
-      <%= submit_tag ts('Post Chapter') %>
+      <%= submit_tag ts("Post Chapter") %>
       <% end %>
     </li>
   <% end %>
-  <li><%= link_to ts('Edit Chapter'), [:edit, work, chapter] %></li>
+  <li><%= link_to ts("Edit Chapter"), [:edit, work, chapter] %></li>
 </ul>

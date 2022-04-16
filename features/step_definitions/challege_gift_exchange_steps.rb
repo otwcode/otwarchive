@@ -78,7 +78,7 @@ When /^I fill in single-fandom gift exchange challenge options$/ do
   fill_in("gift_exchange_request_restriction_attributes_relationship_num_allowed", with: "3")
   fill_in("gift_exchange_request_restriction_attributes_rating_num_allowed", with: "5")
   fill_in("gift_exchange_request_restriction_attributes_category_num_allowed", with: "5")
-  fill_in("gift_exchange_request_restriction_attributes_warning_num_allowed", with: "5")
+  fill_in("gift_exchange_request_restriction_attributes_archive_warning_num_allowed", with: "5")
   fill_in("gift_exchange_request_restriction_attributes_freeform_num_allowed", with: "2")
   fill_in("gift_exchange_offer_restriction_attributes_fandom_num_required", with: "1")
   fill_in("gift_exchange_offer_restriction_attributes_fandom_num_allowed", with: "1")
@@ -87,9 +87,16 @@ When /^I fill in single-fandom gift exchange challenge options$/ do
   select("1", from: "gift_exchange_potential_match_settings_attributes_num_required_characters")
   check("gift_exchange_offer_restriction_attributes_allow_any_rating")
   check("gift_exchange_offer_restriction_attributes_allow_any_category")
-  check("gift_exchange_offer_restriction_attributes_allow_any_warning")
+  check("gift_exchange_offer_restriction_attributes_allow_any_archive_warning")
   check("gift_exchange_offer_restriction_attributes_character_restrict_to_fandom")
   check("gift_exchange_offer_restriction_attributes_relationship_restrict_to_fandom")
+end
+
+When /^I allow warnings in my gift exchange$/ do
+  fill_in("gift_exchange_request_restriction_attributes_archive_warning_num_allowed", with: "1")
+  check("gift_exchange_request_restriction_attributes_allow_any_archive_warning")
+  fill_in("gift_exchange_offer_restriction_attributes_archive_warning_num_allowed", with: "1")
+  check("gift_exchange_offer_restriction_attributes_allow_any_archive_warning")
 end
 
 Then /^"([^\"]*)" gift exchange should be fully created$/ do |title|
@@ -102,6 +109,18 @@ Given /^the gift exchange "([^\"]*)" is ready for signups$/ do |title|
   step %{I am logged in as "mod1"}
   step %{I have created the gift exchange "#{title}"}
   step %{I open signups for "#{title}"}
+end
+
+# This is going to make broken assignments a la AO3-5748
+Given /^"(.*?)" has two pinchhit assignments in the gift exchange "(.*?)"$/ do |user, collection_title|
+  collection = Collection.find_by(title: collection_title)
+  user = User.find_by(login: user)
+  assignments = ChallengeAssignment.where(collection_id: collection.id).limit(2)
+  assignments.each do |a|
+    a.pinch_hitter_id = user.default_pseud_id
+    a.save
+    a.reload
+  end
 end
 
 ## Signing up
@@ -286,6 +305,16 @@ Given /^everyone has their assignments for "([^\"]*)"$/ do |challenge_title|
   step %{I have sent assignments for "#{challenge_title}"}
 end
 
+Given "I have an assignment for the user {string} in the collection {string}" do |recip_login, collection_name|
+  giver = User.current_user
+  recip = User.find_by(login: recip_login)
+  collection = FactoryBot.create(:collection, name: collection_name, title: collection_name)
+  assignment = FactoryBot.create(:challenge_assignment, sent_at: Time.zone.now, collection_id: collection.id)
+  assignment.offer_signup.update_column(:pseud_id, giver.default_pseud_id)
+  assignment.request_signup.update_column(:pseud_id, recip.default_pseud_id)
+  assignment.reload
+end
+
 ### Fulfilling assignments
 
 When /^I start to fulfill my assignment$/ do
@@ -295,6 +324,7 @@ When /^I start to fulfill my assignment$/ do
     step %{I fill in "Work Title" with "Fulfilled Story"}
     step %{I select "Not Rated" from "Rating"}
     step %{I check "No Archive Warnings Apply"}
+    step %{I select "English" from "Choose a language"}
     step %{I fill in "Fandom" with "Final Fantasy X"}
     step %{I fill in "content" with "This is a really cool story about Final Fantasy X"}
 end

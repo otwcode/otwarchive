@@ -1,5 +1,5 @@
 <% content_for :message do %>
-A response to your prompt has been posted<% if @collection then %> in the "<%= @collection.title %>" collection<% end %> at the Archive of Our Own!
+A response to your prompt has been posted<% if @collection %> in the "<%= @collection.title %>" collection (<%= collection_url(@collection) %>)<% end %> at the Archive of Our Own!
 
 "<%= @work.title.html_safe %>" (<%= @work.word_count %> words)
 <%= @collection ? collection_work_url(@collection, @work) : work_url(@work) %>

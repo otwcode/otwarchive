@@ -17,14 +17,14 @@
         <%= live_validation_for_field("work_title",
               maximum_length: ArchiveConfig.TITLE_MAX,
               minimum_length: ArchiveConfig.TITLE_MIN,
-              failureMessage: ts("We need a title! (At least %{min_length} characters long, please.)",
+              failureMessage: ts("We need a title! (At least %{min_length} character long, please.)",
                 min_length: ArchiveConfig.TITLE_MIN.to_s))
         %>
         <%= generate_countdown_html("work_title", ArchiveConfig.TITLE_MAX) %>
       </dd>
 
       <!-- Add coauthors-->
-      <%= render "pseuds/byline", form: f, type: "work" %>
+      <%= render "pseuds/byline", form: f, object: @work %>
 
       <dt class="summary">
         <%= f.label :summary, ts("Summary", max: ArchiveConfig.SUMMARY_MAX.to_s) %>
@@ -157,7 +157,7 @@
       <!-- Series checkbox (storyseriescheck) -->
       <!-- Checking this box causes the "manage series" dropdown to appear; unchecking it causes it to disappear. -->
       <dt class="serial">
-        <%= check_box_tag "series-options-show", "1", !@work.series.blank?, class: "toggle_formfield" %>
+        <%= check_box_tag "series-options-show", "1", check_series_box(@work), class: "toggle_formfield" %>
       </dt>
       <dd class="serial">
         <%= label_tag "series-options-show", ts("This work is part of a series") %>
@@ -179,17 +179,19 @@
             <% unless @serial_works.blank? || @work.new_record? %>
               <dt><%= ts("Current Series") %></dt>
               <% for serial in @serial_works %>
-                <dd>
-                  <ul class="actions" role="navigation">
-                    <li>
-                      <%= link_to serial.series.title, serial.series %>
-                    </li>
-                    <li>
-                      <%= link_to ts("Remove Work From Series"), serial_work_path(serial),
-                              method: :delete %>
-                    </li>
-                  </ul>
-                </dd>
+                <% unless serial.new_record? %>
+                  <dd>
+                    <ul class="actions" role="navigation">
+                      <li>
+                        <%= link_to serial.series.title, serial.series %>
+                      </li>
+                      <li>
+                        <%= link_to ts("Remove Work From Series"), serial_work_path(serial),
+                                method: :delete %>
+                      </li>
+                    </ul>
+                  </dd>
+                <% end %>
               <% end %>
             <% end %>
           </dl>
@@ -207,9 +209,9 @@
 
           <fieldset id="chapters-options">
             <dl>
-              <dt><%= ts("Chapter 1 of") %></dt>
+              <dt><%= f.label :wip_length, ts("Chapter 1 of") %></dt>
               <dd><%= f.text_field :wip_length, class: "number" %></dd>
-              <dt><%= ts("Chapter Title:") %></dt>
+              <dt><%= c.label :title, ts("Chapter Title:") %></dt>
               <dd><%= c.text_field :title, value: @chapter.title %></dd>
             </dl>
           </fieldset>
@@ -228,7 +230,7 @@
               <dt><%= label_tag "published_at", ts("Set publication date") %></dt>
               <dd id="managePublicationDate" class="datetime" title="<%= ts("set date") %>">
                 <!--BACK END, this select box does not seem to be acquiring the label published_at -->
-                <%= c.date_select("published_at", :start_year => Date.today.year, :end_year => 1950, :default => Date.today, :value => @chapter.published_at, :order => [:day, :month, :year]) %>
+                <%= c.date_select("published_at", :start_year => Date.current.year, :end_year => 1950, :default => Date.current, :value => @chapter.published_at, :order => [:day, :month, :year]) %>
               </dd>
             </dl>
           </fieldset>
@@ -266,14 +268,6 @@
         <%= link_to_help "registered-users" %>
       </dd>
 
-      <dt class="anonymous comments">
-        <%= f.check_box :anon_commenting_disabled %>
-      </dt>
-      <dd class="anonymous comments">
-        <%= f.label :anon_commenting_disabled, ts("Disable anonymous commenting") %>
-        <%= link_to_help "comments-anonymous" %>
-      </dd>
-
       <dt class="moderated comments">
         <%= f.check_box :moderated_commenting_enabled %>
       </dt>
@@ -281,6 +275,23 @@
         <%= f.label :moderated_commenting_enabled, ts("Enable comment moderation") %>
         <%= link_to_help "comments-moderated" %>
       </dd>
+
+      <dt class="permissions comments">
+        <%= ts("Who can comment on this work") %>
+        <%= link_to_help "who-can-comment-on-this-work" %>
+      </dt>
+      <dd class="permissions comments">
+        <fieldset>
+          <%=
+            radio_button_list(f, :comment_permissions, [
+              [:enable_all, ts("Registered users and guests can comment")],
+              [:disable_anon, ts("Only registered users can comment")],
+              [:disable_all, ts("No one can comment")]
+            ])
+          %>
+        </fieldset>
+      </dd>
+
     </dl>
   </fieldset>
   <% unless @chapters %>
@@ -329,14 +340,14 @@
     <ul class="actions">
       <% unless @work.new_record? || @work.posted? %>
         <li>
-          <%= submit_tag ts("Save Without Posting"), name: "save_button" %>
+          <%= submit_tag ts("Save As Draft"), name: "save_button" %>
         </li>
       <% end %>
       <li>
         <%= submit_tag ts("Preview"), name: "preview_button" %>
       </li>
       <li>
-        <%= submit_tag ts("Post Without Preview"), name: "post_button",
+        <%= submit_tag ts("Post"), name: "post_button",
               data: { disable_with: ts("Please wait...") } %>
       </li>
       <li>

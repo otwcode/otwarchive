@@ -3,6 +3,8 @@ begin
   # try to set language and locale using models (which use Archive Config)
   Language.default
   Locale.default
+rescue ActiveRecord::NoDatabaseError
+  # No database, this happens when we run rake db:create
 rescue ActiveRecord::ConnectionNotEstablished
   # no database connection
 rescue

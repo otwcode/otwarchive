@@ -1,12 +1,13 @@
 class AbuseReport < ApplicationRecord
   include ActiveModel::ForbiddenAttributesProtection
 
-  validates :email, email_veracity: { allow_blank: false }
+  validates :email, email_format: { allow_blank: false }
   validates_presence_of :language
   validates_presence_of :summary
   validates_presence_of :comment
   validates_presence_of :url
   validate :url_is_not_over_reported
+  validate :email_is_not_over_reporting
   validates_length_of :summary, maximum: ArchiveConfig.FEEDBACK_SUMMARY_MAX,
                                 too_long: ts('must be less than %{max}
                                              characters long.',
@@ -14,7 +15,12 @@ class AbuseReport < ApplicationRecord
 
   validate :check_for_spam
   def check_for_spam
-    errors.add(:base, ts("This report looks like spam to our system!")) if Akismetor.spam?(akismet_attributes)
+    approved = logged_in_with_matching_email? || !Akismetor.spam?(akismet_attributes)
+    errors.add(:base, ts("This report looks like spam to our system!")) unless approved
+  end
+
+  def logged_in_with_matching_email?
+    User.current_user.present? && User.current_user.email == email
   end
 
   def akismet_attributes
@@ -58,8 +64,7 @@ class AbuseReport < ApplicationRecord
                             multiline: true
 
   def email_and_send
-    AdminMailer.abuse_report(id).deliver
-    UserMailer.abuse_report(id).deliver
+    UserMailer.abuse_report(id).deliver_later
     send_report
   end
 
@@ -82,9 +87,9 @@ class AbuseReport < ApplicationRecord
   # make sure it isn't reported more than ABUSE_REPORTS_PER_WORK_MAX
   # or ABUSE_REPORTS_PER_USER_MAX times per month
   def url_is_not_over_reported
-    message = ts('URL has already been reported. To make sure the Abuse Team
-                 can handle reports quickly and efficiently, we limit the number
-                 of times a URL can be reported.')
+    message = ts('This page has already been reported. Our volunteers only
+                 need one report in order to investigate and resolve an issue,
+                 so please be patient and do not submit another report.')
     if url =~ /\/works\/\d+/
       # use "/works/123/" to avoid matching chapter or external work ids
       work_params_only = url.match(/\/works\/\d+\//).to_s
@@ -105,5 +110,18 @@ class AbuseReport < ApplicationRecord
         errors[:base] << message
       end
     end
+  end
+
+  def email_is_not_over_reporting
+    existing_reports_total = AbuseReport.where("created_at > ? AND
+                                               email LIKE ?",
+                                               1.day.ago,
+                                               email).count
+    return if existing_reports_total < ArchiveConfig.ABUSE_REPORTS_PER_EMAIL_MAX
+
+    errors[:base] << ts("You have reached our daily reporting limit. To keep our
+                        volunteers from being overwhelmed, please do not seek
+                        out violations to report, but only report violations you
+                        encounter during your normal browsing.")
   end
 end

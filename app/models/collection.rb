@@ -1,5 +1,6 @@
 class Collection < ApplicationRecord
   include ActiveModel::ForbiddenAttributesProtection
+  include Filterable
   include UrlHelpers
   include WorksOwner
 
@@ -43,26 +44,23 @@ class Collection < ApplicationRecord
   # We need to get rid of all of these if the challenge is destroyed
   after_save :clean_up_challenge
   def clean_up_challenge
-    if self.challenge.nil?
-      assignments.each {|assignment| assignment.destroy}
-      potential_matches.each {|potential_match| potential_match.destroy}
-      signups.each {|signup| signup.destroy}
-      prompts.each {|prompt| prompt.destroy}
-    end
+    return if self.challenge_id
+
+    assignments.each(&:destroy)
+    potential_matches.each(&:destroy)
+    signups.each(&:destroy)
+    prompts.each(&:destroy)
   end
 
   has_many :collection_items, dependent: :destroy
   accepts_nested_attributes_for :collection_items, allow_destroy: true
-  has_many :approved_collection_items, -> { where('collection_items.user_approval_status = ? AND collection_items.collection_approval_status = ?', CollectionItem::APPROVED, CollectionItem::APPROVED) }, class_name: "CollectionItem"
+  has_many :approved_collection_items, -> { approved_by_both }, class_name: "CollectionItem"
 
   has_many :works, through: :collection_items, source: :item, source_type: 'Work'
-  has_many :approved_works, -> { where('collection_items.user_approval_status = ? AND collection_items.collection_approval_status = ? AND works.posted = true', CollectionItem::APPROVED, CollectionItem::APPROVED) }, through: :collection_items, source: :item, source_type: 'Work'
+  has_many :approved_works, -> { posted }, through: :approved_collection_items, source: :item, source_type: "Work"
 
   has_many :bookmarks, through: :collection_items, source: :item, source_type: 'Bookmark'
-  has_many :approved_bookmarks, -> { where('collection_items.user_approval_status = ? AND collection_items.collection_approval_status = ?', CollectionItem::APPROVED, CollectionItem::APPROVED) }, through: :collection_items, source: :item, source_type: 'Bookmark'
-
-  has_many :fandoms, -> { distinct }, through: :approved_works
-  has_many :filters, -> { distinct }, through: :approved_works
+  has_many :approved_bookmarks, through: :approved_collection_items, source: :item, source_type: "Bookmark"
 
   has_many :collection_participants, dependent: :destroy
   accepts_nested_attributes_for :collection_participants, allow_destroy: true
@@ -161,6 +159,10 @@ class Collection < ApplicationRecord
   validates_format_of :header_image_url, allow_blank: true, with: URI::regexp(%w(http https)), message: ts("is not a valid URL.")
   validates_format_of :header_image_url, allow_blank: true, with: /\.(png|gif|jpg)$/, message: ts("can only point to a gif, jpg, or png file."), multiline: true
 
+  validates :tags_after_saving,
+            length: { maximum: ArchiveConfig.COLLECTION_TAGS_MAX,
+                      message: "^Sorry, a collection can only have %{count} tags." }
+
   scope :top_level, -> { where(parent_id: nil) }
   scope :closed, -> { joins(:collection_preference).where("collection_preferences.closed = ?", true) }
   scope :not_closed, -> { joins(:collection_preference).where("collection_preferences.closed = ?", false) }
@@ -174,36 +176,6 @@ class Collection < ApplicationRecord
   scope :name_only, -> { select("collections.name") }
   scope :by_title, -> { order(:title) }
 
-  scope :approved, -> {
-    includes(:collection_items)
-      .where(
-        collection_items: {
-          user_approval_status: CollectionItem::APPROVED,
-          collection_approval_status: CollectionItem::APPROVED
-        }
-      )
-      .references(:collection_items)
-  }
-  scope :user_approved, -> {
-    includes(:collection_items)
-      .where(
-        collection_items: {
-          user_approval_status: CollectionItem::APPROVED
-        }
-      )
-      .references(:collection_items)
-  }
-  scope :rejected, -> {
-    includes(:collection_items)
-      .where(
-        collection_items: {
-          user_approval_status: CollectionItem::REJECTED
-        }
-      )
-      .references(:collection_items)
-  }
-
-
   before_validation :cleanup_url
   def cleanup_url
     self.header_image_url = reformat_url(self.header_image_url) if self.header_image_url
@@ -211,10 +183,15 @@ class Collection < ApplicationRecord
 
   # Get only collections with running challenges
   def self.signup_open(challenge_type)
-    table = challenge_type.tableize
-    not_closed.where(challenge_type: challenge_type).
-      joins("INNER JOIN #{table} on #{table}.id = challenge_id").where("#{table}.signup_open = 1").
-      where("#{table}.signups_close_at > ?", Time.now).order("#{table}.signups_close_at DESC")
+    if challenge_type == "PromptMeme"
+      not_closed.where(challenge_type: challenge_type).
+        joins("INNER JOIN prompt_memes on prompt_memes.id = challenge_id").where("prompt_memes.signup_open = 1").
+        where("prompt_memes.signups_close_at > ?", Time.now).order("prompt_memes.signups_close_at DESC")
+    elsif challenge_type == "GiftExchange"
+      not_closed.where(challenge_type: challenge_type).
+        joins("INNER JOIN gift_exchanges on gift_exchanges.id = challenge_id").where("gift_exchanges.signup_open = 1").
+        where("gift_exchanges.signups_close_at > ?", Time.now).order("gift_exchanges.signups_close_at DESC")
+    end
   end
 
   scope :with_name_like, lambda {|name|
@@ -269,7 +246,7 @@ class Collection < ApplicationRecord
   end
 
   def autocomplete_score
-    all_approved_works_count + all_approved_bookmarks_count
+    all_items.approved_by_collection.approved_by_user.count
   end
   ## END AUTOCOMPLETE
 
@@ -305,68 +282,6 @@ class Collection < ApplicationRecord
 
   def all_items
     CollectionItem.where(collection_id: ([self.id] + self.children.pluck(:id)))
-  end
-
-  def all_approved_works
-    work_ids = all_items.where(item_type: "Work", user_approval_status: CollectionItem::APPROVED,
-      collection_approval_status: CollectionItem::APPROVED).pluck(:item_id)
-    Work.where(id: work_ids, posted: true)
-  end
-
-  def all_approved_works_count
-    if !User.current_user.nil?
-      count = self.approved_works.count
-      self.children.each {|child| count += child.approved_works.count}
-      count
-    else
-      count = self.approved_works.where(restricted: false).count
-      self.children.each {|child| count += child.approved_works.where(restricted: false).count}
-      count
-    end
-  end
-
-  def all_approved_bookmarks
-    (self.approved_bookmarks + (self.children ? self.children.collect(&:approved_bookmarks).flatten : [])).uniq
-  end
-
-  def all_approved_bookmarks_count
-    count = self.approved_bookmarks.where(private: false).count
-    self.children.each {|child| count += child.approved_bookmarks.where(private: false).count}
-    count
-  end
-
-  # Return the count of all bookmarkable items (works, series, external works)
-  # that are in this collection (or any of its children) and visible to
-  # the current user. Excludes bookmarks of deleted works/series.
-  def all_bookmarked_items_count
-    # The set of all bookmarks in this collection and its children.
-    # Note that "approved_by_collection" forces the bookmarks to be approved
-    # both by the collection AND by the user.
-    bookmarks = Bookmark.is_public.joins(:collection_items).
-                merge(CollectionItem.approved_by_collection).
-                where(collection_items: { collection_id: children.ids + [id] })
-
-    logged_in = User.current_user.present?
-
-    [
-      logged_in ? Work.visible_to_registered_user : Work.visible_to_all,
-      logged_in ? Series.visible_to_registered_user : Series.visible_to_all,
-      ExternalWork.visible_to_all
-    ].map do |relation|
-      relation.joins(:bookmarks).merge(bookmarks).distinct.
-        count("bookmarks.bookmarkable_id")
-    end.sum
-  end
-
-  def all_fandoms
-    # We want filterable fandoms, but not inherited metatags:
-    Fandom.for_collections([self] + children).
-      where('filter_taggings.inherited = 0').distinct
-  end
-
-  def all_fandoms_count
-    # Rails now handles .uniq.count correctly, so we can make this simpler:
-    all_fandoms.count
   end
 
   def maintainers
@@ -423,10 +338,6 @@ class Collection < ApplicationRecord
     return self.challenge_type == "PromptMeme"
   end
 
-  def not_empty?
-    self.all_approved_works.count > 0 || self.children.count > 0 || self.all_approved_bookmarks.count > 0
-  end
-
   def get_maintainers_email
     return self.email if !self.email.blank?
     return parent.email if parent && !parent.email.blank?
@@ -435,20 +346,11 @@ class Collection < ApplicationRecord
 
   def notify_maintainers(subject, message)
     # send maintainers a notice via email
-    UserMailer.collection_notification(self.id, subject, message).deliver
+    UserMailer.collection_notification(self.id, subject, message).deliver_later
   end
 
+  include AsyncWithResque
   @queue = :collection
-  # This will be called by a worker when a job needs to be processed
-  def self.perform(id, method, *args)
-    find(id).send(method, *args)
-  end
-
-  # We can pass this any Collection instance method that we want to
-  # run later.
-  def async(method, *args)
-    Resque.enqueue(Collection, id, method, *args)
-  end
 
   def reveal!
     async(:reveal_collection_items)

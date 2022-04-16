@@ -9,15 +9,15 @@ Feature: Admin Fannish Next Of Kind actions
       | login    | password   |
       | harrykim | diesalot   |
       | libby    | stillalive |
-      And I am logged in as an admin
+      And I am logged in as a "policy_and_abuse" admin
     When I go to the abuse administration page for "harrykim"
       And I fill in "Fannish next of kin's username" with "libby"
       And I fill in "Fannish next of kin's email" with "testy@foo.com"
       And I press "Update"
-    Then I should see "Fannish next of kin added."
+    Then I should see "Fannish next of kin was updated."
 
     When I go to the manage users page
-      And I fill in "Name or email" with "harrykim"
+      And I fill in "Name" with "harrykim"
       And I press "Find"
     Then I should see "libby"
 
@@ -26,7 +26,7 @@ Feature: Admin Fannish Next Of Kind actions
 
   Scenario: An invalid Fannish Next of Kin username is added
     Given the fannish next of kin "libby" for the user "harrykim"
-      And I am logged in as an admin
+      And I am logged in as a "policy_and_abuse" admin
     When I go to the abuse administration page for "harrykim"
       And I fill in "Fannish next of kin's username" with "userididnotcreate"
       And I press "Update"
@@ -34,7 +34,7 @@ Feature: Admin Fannish Next Of Kind actions
 
   Scenario: A blank Fannish Next of Kin username can't be added
     Given the fannish next of kin "libby" for the user "harrykim"
-      And I am logged in as an admin
+      And I am logged in as a "policy_and_abuse" admin
     When I go to the abuse administration page for "harrykim"
       And I fill in "Fannish next of kin's username" with ""
       And I press "Update"
@@ -42,7 +42,7 @@ Feature: Admin Fannish Next Of Kind actions
 
   Scenario: A blank Fannish Next of Kin email can't be added
     Given the fannish next of kin "libby" for the user "harrykim"
-      And I am logged in as an admin
+      And I am logged in as a "policy_and_abuse" admin
     When I go to the abuse administration page for "harrykim"
       And I fill in "Fannish next of kin's email" with ""
       And I press "Update"
@@ -51,22 +51,21 @@ Feature: Admin Fannish Next Of Kind actions
   Scenario: A Fannish Next of Kin is edited
     Given the fannish next of kin "libby" for the user "harrykim"
       And the user "newlibby" exists and is activated
-      And I am logged in as an admin
+      And I am logged in as a "policy_and_abuse" admin
     When I go to the abuse administration page for "harrykim"
       And I fill in "Fannish next of kin's username" with "newlibby"
       And I fill in "Fannish next of kin's email" with "newlibby@foo.com"
       And I press "Update"
-    Then I should see "Fannish next of kin user updated."
-      And I should see "Fannish next of kin email updated."
+    Then I should see "Fannish next of kin was updated."
 
   Scenario: A Fannish Next of Kin is removed
     Given the fannish next of kin "libby" for the user "harrykim"
-      And I am logged in as an admin
+      And I am logged in as a "policy_and_abuse" admin
     When I go to the abuse administration page for "harrykim"
       And I fill in "Fannish next of kin's username" with ""
       And I fill in "Fannish next of kin's email" with ""
       And I press "Update"
-    Then I should see "Fannish next of kin removed."
+    Then I should see "Fannish next of kin was updated."
 
   Scenario: A Fannish Next of Kin updates when the next of kin user changes their username
     Given the fannish next of kin "libby" for the user "harrykim"
@@ -76,9 +75,9 @@ Feature: Admin Fannish Next Of Kind actions
       And I fill in "Password" with "password"
       And I press "Change User Name"
     Then I should get confirmation that I changed my username
-    When I am logged in as an admin
+    When I am logged in as a "policy_and_abuse" admin
       And I go to the manage users page
-      And I fill in "Name or email" with "harrykim"
+      And I fill in "Name" with "harrykim"
       And I press "Find"
     Then I should see "newlibby"
 
@@ -90,16 +89,16 @@ Feature: Admin Fannish Next Of Kind actions
       And I fill in "Password" with "password"
       And I press "Change User Name"
     Then I should get confirmation that I changed my username
-    When I am logged in as an admin
+    When I am logged in as a "policy_and_abuse" admin
       And I go to the manage users page
-      And I fill in "Name or email" with "harrykim2"
+      And I fill in "Name" with "harrykim2"
       And I press "Find"
     Then I should see "libby"
 
   Scenario: A Fannish Next of Kin can update even after an invalid user is entered
     Given the fannish next of kin "libby" for the user "harrykim"
       And the user "harrysmom" exists and is activated
-      And I am logged in as an admin
+      And I am logged in as a "policy_and_abuse" admin
     When I go to the abuse administration page for "harrykim"
       And I fill in "Fannish next of kin's username" with "libbylibby"
       And I fill in "Fannish next of kin's email" with "libbylibby@example.com"
@@ -108,6 +107,6 @@ Feature: Admin Fannish Next Of Kind actions
     When I fill in "Fannish next of kin's username" with "harrysmom"
       And I fill in "Fannish next of kin's email" with "harrysmom@example.com"
       And I press "Update"
-    Then I should see "Fannish next of kin user updated."
+    Then I should see "Fannish next of kin was updated."
       And the "Fannish next of kin's username" field should contain "harrysmom"
       And the "Fannish next of kin's email" field should contain "harrysmom@example.com"

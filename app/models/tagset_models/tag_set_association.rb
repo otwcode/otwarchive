@@ -15,11 +15,11 @@ class TagSetAssociation < ApplicationRecord
   # sort by names stripping off the articles
   def self.by_name_without_articles(fieldname = "name")
     fieldname = "name" unless fieldname.match(/^([\w]+\.)?[\w]+$/)
-    order("case when lower(substring(#{fieldname} from 1 for 4)) = 'the ' then substring(#{fieldname} from 5)
+    order(Arel.sql("case when lower(substring(#{fieldname} from 1 for 4)) = 'the ' then substring(#{fieldname} from 5)
             when lower(substring(#{fieldname} from 1 for 2)) = 'a ' then substring(#{fieldname} from 3)
             when lower(substring(#{fieldname} from 1 for 3)) = 'an ' then substring(#{fieldname} from 4)
             else #{fieldname}
-            end")
+            end"))
   end
 
   def self.for_tag_set(tagset)

@@ -12,10 +12,8 @@ class Media < Tag
 
   # The media tag for unwrangled fandoms
   def self.uncategorized
-    self.find_or_create_by_name(ArchiveConfig.MEDIA_UNCATEGORIZED_NAME)
-  end
-
-  def add_association(tag)
-    tag.parents << self unless tag.parents.include?(self)
+    tag = self.find_or_create_by_name(ArchiveConfig.MEDIA_UNCATEGORIZED_NAME)
+    tag.update(canonical: true) unless tag.canonical
+    tag
   end
 end

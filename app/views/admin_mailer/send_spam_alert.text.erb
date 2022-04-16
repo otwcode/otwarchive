@@ -2,8 +2,8 @@
 
   The following accounts have a suspicious level of traffic:
 
-  <% @spam.each_pair do |user_id, info| %>
-    <% user = User.find(user_id) %>
+  <% @users.each do |user| %>
+    <% info = @spam[user.id] %>
     User <%= user.login %> (<%= user_works_url(user) %>) has a score of <%= info["score"] %>
 
     <% Work.where(id: info["work_ids"]).each do |work| %>

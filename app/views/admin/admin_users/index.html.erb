@@ -5,16 +5,34 @@
 
   <!--main content-->
   <%= form_tag url_for(controller: "admin/admin_users", action: "index"), method: :get, class: "search", role: "search" do %>
-    <p class="note"><%= ts("Search for a user by username, pseud or email, or search by role.") %></p>
     <dl>
-      <dt><%= label_tag "query", ts("Name or email") %></dt>
-      <dd><%= text_field_tag "query", params[:query] %></dd>
+      <dt><%= label_tag "name", ts("Name") %></dt>
+      <dd>
+        <%= text_field_tag "name", params[:name], "aria-describedby": "name-field-description" %>
+        <p class="footnote" id="name-field-description">
+          <%= ts("Search for users with matching usernames or pseuds.") %>
+        </p>
+      </dd>
+      <dt><%= label_tag "email", ts("Email") %></dt>
+      <dd><%= text_field_tag "email", params[:email] %></dd>
+      <dt><%= label_tag "user_id", ts("User ID") %></dt>
+      <dd>
+        <%= text_field_tag "user_id", params[:user_id], "aria-describedby": "user-id-field-description" %>
+        <p class="footnote" id="user-id-field-description">
+          <%= ts("Search for user with exact ID.") %>
+        </p>
+        </dd>
       <dt><%= label_tag "role", ts("Role") %></dt>
       <dd><%= select_tag "role", "<option></option>".html_safe + options_for_select(@role_values, @role.try(:name)) %></dd>
       <dt><%= label_tag "status", ts("Status") %></dt>
       <dd>
         <%= check_box_tag "inactive", "1", params[:inactive].present? %>
         <%= label_tag "inactive", ts("Not yet activated") %>
+      </dd>
+      <dt><%= label_tag "settings", ts("Search settings") %></dt>
+      <dd>
+        <%= check_box_tag "exact", "1", params[:exact].present? %>
+        <%= label_tag "exact", ts("Exact match only") %>
       </dd>
     </dl>
     <p class="submit"><%= submit_tag ts("Find") %></p>

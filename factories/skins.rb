@@ -1,15 +1,16 @@
 require 'faker'
-FactoryGirl.define do
+FactoryBot.define do
+  factory :work_skin do
+    author_id { FactoryBot.create(:user).id }
+    title { Faker::Lorem.word }
 
-  factory :private_work_skin, class: Skin do
-    author_id {FactoryGirl.create(:user).id}
-    title {Faker::Lorem.word}
-    type "WorkSkin"
-    public false
+    trait :private do
+      add_attribute(:public) { false }
+    end
 
-    factory :public_work_skin do
-      public true
-      official true
+    trait :public do
+      add_attribute(:public) { true }
+      official { true }
     end
   end
 end

@@ -36,15 +36,15 @@ $j(document).ready(function() {
 
 function get_token_input_options(self) {
   return {
-    searchingText: self.attr('autocomplete_searching_text'),
-    hintText: self.attr('autocomplete_hint_text'),
-    noResultsText: self.attr('autocomplete_no_results_text'),
-    minChars: self.attr('autocomplete_min_chars'),
+    searchingText: self.data('autocomplete-searching-text'),
+    hintText: self.data('autocomplete-hint-text'),
+    noResultsText: self.data('autocomplete-no-results-text'),
+    minChars: self.data('autocomplete-min-chars'),
     queryParam: "term",
     preventDuplicates: true,
-    tokenLimit: self.attr('autocomplete_token_limit'),
-    liveParams: self.attr('autocomplete_live_params'),
-    makeSortable: self.attr('autocomplete_sortable')
+    tokenLimit: self.data('autocomplete-token-limit'),
+    liveParams: self.data('autocomplete-live-params'),
+    makeSortable: self.data('autocomplete-sortable')
   };
 }
 
@@ -58,9 +58,9 @@ if (input.livequery) {
       var token_input_options = get_token_input_options(self);
       var method;
       try {
-          method = $.parseJSON(self.attr('autocomplete_method'));
+          method = $.parseJSON(self.data('autocomplete-method'));
       } catch (err) {
-          method = self.attr('autocomplete_method');
+          method = self.data('autocomplete-method');
       }
       self.tokenInput(method, token_input_options);
     });
@@ -432,18 +432,6 @@ function prepareDeleteLinks() {
 
 /// Kudos
 $j(document).ready(function() {
-  $j('#kudos_summary').click(function(e) {
-    e.preventDefault();
-    $j(this).hide();
-    $j('.kudos_expanded').show();
-  });
-
-  $j('#kudos_collapser').click(function(e) {
-    e.preventDefault();
-    $j('#kudos_summary').show();
-    $j('.kudos_expanded').hide();
-  });
-
   $j('#kudo_submit').on("click", function(event) {
     event.preventDefault();
 
@@ -451,22 +439,27 @@ $j(document).ready(function() {
       type: 'POST',
       url: '/kudos.js',
       data: jQuery('#new_kudo').serialize(),
-      error: function(jqXHR, textStatus, errorThrown ) {
+      error: function(jqXHR, textStatus, errorThrown) {
         var msg = 'Sorry, we were unable to save your kudos';
-        var data = $j.parseJSON(jqXHR.responseText);
 
-        if (data.errors && (data.errors.pseud_id || data.errors.ip_address)) {
-          msg = "You have already left kudos here. :)";
+        // When we hit the rate limit, the response from Rack::Attack is a plain text 429.
+        if (jqXHR.status == "429") {
+          msg = "Sorry, you can't leave more kudos right now. Please try again in a few minutes.";
+        } else {
+          var data = $j.parseJSON(jqXHR.responseText);
+
+          if (data.errors && (data.errors.ip_address || data.errors.user_id)) {
+            msg = "You have already left kudos here. :)";
+          }
+          if (data.errors && data.errors.cannot_be_author) {
+            msg = "You can't leave kudos on your own work.";
+          }
+          if (data.errors && data.errors.guest_on_restricted) {
+            msg = "You can't leave guest kudos on a restricted work.";
+          }
         }
 
-        if (data.errors && data.errors.cannot_be_author) {
-          msg = "You can't leave kudos on your own work.";
-        }
-        if (data.errors && data.errors.guest_on_restricted) {
-          msg = "You can't leave guest kudos on a restricted work.";
-        }
-
-        $j('#kudos_message').addClass('comment_error').text(msg);
+        $j('#kudos_message').addClass('kudos_error').text(msg);
       },
       success: function(data) {
         $j('#kudos_message').addClass('notice').text('Thank you for leaving kudos!');
@@ -475,13 +468,13 @@ $j(document).ready(function() {
   });
 
   // Scroll to the top of the comments section when loading additional pages via Ajax in comment pagination.
-  $j('#comments_placeholder').find('.pagination').find('a[data-remote]').livequery('click.rails', function(e){
+  $j('#comments_placeholder').on('click.rails', '.pagination a[data-remote]', function(e){
     $j.scrollTo('#comments_placeholder');
   });
 
-  // Scroll to the top of the feedback section when loading comments via AJAX
-  $j("#show_comments_link_top").find('a[href*="show_comments"]').livequery('click.rails', function(e){
-    $j.scrollTo('#feedback');
+  // Scroll to the top of the comments section when loading comments via AJAX
+  $j("#show_comments_link_top").on('click.rails', 'a[href*="show_comments"]', function(e){
+    $j.scrollTo('#comments');
   });
 });
 
@@ -659,7 +652,10 @@ function updateCachedTokens() {
       $j('input[name=authenticity_token]').each(function(){
         $j(this).attr('value', token);
       });
-      $j('meta[name=csrf-token]').attr('value', token);
+      $j('meta[name=csrf-token]').attr('content', token);
+      $j.event.trigger({ type: "loadedCSRF" });
     });
+  } else {
+    $j.event.trigger({ type: "loadedCSRF" });
   }
 }

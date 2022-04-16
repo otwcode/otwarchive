@@ -10,6 +10,7 @@ class InviteRequestsController < ApplicationController
   def show
     fetch_admin_settings # we normally skip this for js requests
     @invite_request = InviteRequest.find_by(email: params[:email])
+    @position_in_queue = InviteRequest.where(["position <= ?", @invite_request.position])&.count if @invite_request.present?
     unless (request.xml_http_request?) || @invite_request
       flash[:error] = "You can search for the email address you signed up with below. If you can't find it, your invitation may have already been emailed to that address; please check your email spam folder as your spam filters may have placed it there."
       redirect_to status_invite_requests_path and return
@@ -30,6 +31,7 @@ class InviteRequestsController < ApplicationController
     end
 
     @invite_request = InviteRequest.new(invite_request_params)
+    @invite_request.ip_address = request.remote_ip
     if @invite_request.save
       flash[:notice] = "You've been added to our queue! Yay! We estimate that you'll receive an invitation around #{@invite_request.proposed_fill_date}. We strongly recommend that you add do-not-reply@archiveofourown.org to your address book to prevent the invitation email from getting blocked as spam by your email provider."
       redirect_to invite_requests_path
@@ -41,10 +43,12 @@ class InviteRequestsController < ApplicationController
   def manage
     @invite_requests = InviteRequest.order(:position).page(params[:page])
     if params[:query].present?
-      @invite_requests = InviteRequest.where("simplified_email LIKE ?",
-                                             "%#{params[:query]}%")
-                                      .order(:position)
-                                      .page(params[:page])
+      query = "%#{params[:query]}%"
+      @invite_requests = InviteRequest.where("simplified_email LIKE ? " \
+                                             "OR ip_address LIKE ?",
+                                             query,
+                                             query)
+        .order(:position).page(params[:page])
     end
   end
 

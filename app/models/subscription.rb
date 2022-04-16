@@ -22,7 +22,7 @@ class Subscription < ApplicationRecord
             OR (subscribable_id IN (?) AND subscribable_type = 'Series')",
             work.id,
             work.pseuds.pluck(:user_id),
-            work.series.pluck(:id)]).
+            work.serial_works.pluck(:series_id)]).
     group(:user_id)
   }
 
@@ -38,11 +38,18 @@ class Subscription < ApplicationRecord
   end
 
   def subject_text(creation)
-    authors = creation.pseuds.map{ |p| p.byline }.to_sentence
+    authors = if self.class.anonymous_creation?(creation)
+                "Anonymous"
+              else
+                creation.pseuds.map(&:byline).to_sentence
+              end
     chapter_text = creation.is_a?(Chapter) ? "#{creation.chapter_header} of " : ""
     work_title = creation.is_a?(Chapter) ? creation.work.title : creation.title
     text = "#{authors} posted #{chapter_text}#{work_title}"
     text += subscribable_type == "Series" ? " in the #{self.name} series" : ""
   end
 
+  def self.anonymous_creation?(creation)
+    (creation.is_a?(Work) && creation.anonymous?) || (creation.is_a?(Chapter) && creation.work.anonymous?)
+  end
 end

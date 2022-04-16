@@ -1,26 +1,39 @@
-class Admin::AdminUsersController < ApplicationController
+class Admin::AdminUsersController < Admin::BaseController
   include ExportsHelper
 
-  before_action :admin_only
-
   def index
+    authorize User
     @role_values = @roles.map{ |role| [role.name.humanize.titlecase, role.name] }
     @role = Role.find_by(name: params[:role]) if params[:role]
-    @users = User.search_by_role(@role, params[:query], inactive: params[:inactive], page: params[:page])
+    @users = User.search_by_role(
+      @role, params[:name], params[:email], params[:user_id],
+      inactive: params[:inactive], exact: params[:exact], page: params[:page]
+    )
   end
 
   def bulk_search
+    authorize User
     @emails = params[:emails].split if params[:emails]
-    unless @emails.nil? || @emails.blank?
-      all_users, @not_found = User.search_multiple_by_email(@emails)
-      @users = all_users.paginate(page: params[:page] || 1)
+    if @emails.present?
+      found_users, not_found_emails, duplicates = User.search_multiple_by_email(@emails)
+      @users = found_users.paginate(page: params[:page] || 1)
+      
       if params[:download_button]
         header = [%w(Email Username)]
-        found = all_users.map { |u| [u.email, u.login] }
-        not_found = @not_found.map { |email| [email, ""] }
+        found = found_users.map { |u| [u.email, u.login] }
+        not_found = not_found_emails.map { |email| [email, ""] }
         send_csv_data(header + found + not_found, "bulk_user_search_#{Time.now.strftime("%Y-%m-%d-%H%M")}.csv")
         flash.now[:notice] = ts("Downloaded CSV")
       end
+      @results = {
+        total: @emails.size,
+        searched: found_users.size + not_found_emails.size,
+        found_users: found_users,
+        not_found_emails: not_found_emails,
+        duplicates: duplicates
+      }
+    else
+      @results = {}
     end
   end
 
@@ -34,146 +47,43 @@ class Admin::AdminUsersController < ApplicationController
   def show
     @hide_dashboard = true
     @user = User.find_by(login: params[:id])
+    authorize @user
     unless @user
       redirect_to action: "index", query: params[:query], role: params[:role] and return
     end
     @log_items = @user.log_items.sort_by(&:created_at).reverse
   end
 
-  # GET admin/users/1/edit
-  def edit
-    @user = User.find_by(login: params[:id])
-    unless @user
-      redirect_to action: "index", query: params[:query], role: params[:role]
+  # POST admin/users/update
+  def update
+    @user = authorize User.find_by(login: params[:id])
+
+    attributes = permitted_attributes(@user)
+    @user.email = attributes[:email] if attributes[:email].present?
+    @user.roles = Role.where(id: attributes[:roles]) if attributes[:roles].present?
+
+    if @user.save
+      flash[:notice] = ts("User was successfully updated.")
+    else
+      flash[:error] = ts("The user %{name} could not be updated: %{errors}", name: params[:id], errors: @user.errors.full_messages.join(" "))
     end
+    redirect_to request.referer || root_path
   end
 
-  # POST admin/users/update_user
-  def update_user
-    if params[:id]
-      @user = User.find_by(login: params[:id])
-      if @user.admin_update(params[:user])
-        flash[:notice] = ts("User was successfully updated.")
-        redirect_to(request.env["HTTP_REFERER"] || root_path)
+  def update_status
+    @user = User.find_by(login: params[:user_login])
+    authorize @user
+    @user_manager = UserManager.new(current_admin, params)
+    if @user_manager.save
+      flash[:notice] = @user_manager.success_message
+      if params[:admin_action] == "spamban"
+        redirect_to confirm_delete_user_creations_admin_user_path(@user)
       else
-        flash[:error] = ts("There was an error updating user %{name}", name: params[:id])
-        redirect_to(request.env["HTTP_REFERER"] || root_path)
+        redirect_to request.referer || root_path
       end
     else
-      @admin_note = params[:admin_note]
-      # default note for spammers
-      @admin_note = (@admin_note.blank? ? "Banned for spam" : @admin_note) if params[:admin_action] == "spamban"
-
-      @user = User.find_by(login: params[:user_login])
-      submitted_kin_user = User.find_by(login: params[:next_of_kin_name])
-
-      # there is a next of kin username, but no email
-      if params[:next_of_kin_name].present? && params[:next_of_kin_email].blank?
-        flash[:error] = ts("Fannish next of kin email is missing.")
-        redirect_to request.referer || root_path
-
-      # there is a next of kin email, but no username
-      elsif params[:next_of_kin_name].blank? && params[:next_of_kin_email].present?
-        flash[:error] = ts("Fannish next of kin user is missing.")
-        redirect_to request.referer || root_path
-
-      # there is a next of kin username, but it is not a valid user
-      elsif params[:next_of_kin_name].present? && submitted_kin_user.nil?
-        flash[:error] = ts("Fannish next of kin user is invalid.")
-        redirect_to request.referer || root_path
-
-      # there is an admin action selected, but no note entered
-      elsif params[:admin_action].present? && @admin_note.blank?
-        flash[:error] = ts("You must include notes in order to perform this action.")
-        redirect_to request.referer || root_path
-
-      # there is no length entered for the suspension
-      elsif params[:admin_action] == "suspend" && params[:suspend_days].blank?
-        flash[:error] = ts("Please enter the number of days for which the user should be suspended.")
-        redirect_to request.referer || root_path
-
-      # we made it through without any errors, so let's do some stuff
-      else
-        success_message = []
-
-        # find or create a fannish next of kin if the fields are filled in
-        if params[:next_of_kin_name].present? && params[:next_of_kin_email].present? && @user.fannish_next_of_kin.nil?
-          @user.fannish_next_of_kin = FannishNextOfKin.new(user_id: params[:user_login],
-                                                           kin_id: submitted_kin_user.id,
-                                                           kin_email: params[:next_of_kin_email])
-          success_message << ts("Fannish next of kin added.")
-        end
-
-        # update the next of kin user if the field is present and changed
-        if params[:next_of_kin_name].present? && !(submitted_kin_user.id == @user.fannish_next_of_kin.kin_id)
-          @user.fannish_next_of_kin.kin_id = submitted_kin_user.id
-          @user.fannish_next_of_kin.save
-          success_message << ts("Fannish next of kin user updated.")
-        end
-
-        # update the next of kin email is the field is present and changed
-        if params[:next_of_kin_email].present? && !(params[:next_of_kin_email] == @user.fannish_next_of_kin.kin_email)
-          @user.fannish_next_of_kin.kin_email = params[:next_of_kin_email]
-          @user.fannish_next_of_kin.save
-          success_message << ts("Fannish next of kin email updated.")
-        end
-
-        # delete the next of kin if the fields are blank and changed
-        if params[:next_of_kin_user].blank? && params[:next_of_kin_email].blank? && @user.fannish_next_of_kin
-          @user.fannish_next_of_kin.destroy
-          success_message << ts("Fannish next of kin removed.")
-        end
-
-        # create warning
-        if params[:admin_action] == "warn"
-          @user.create_log_item(action: ArchiveConfig.ACTION_WARN, note: @admin_note, admin_id: current_admin.id)
-          success_message << ts("Warning was recorded.")
-        end
-
-        # create suspension
-        if params[:admin_action] == "suspend"
-          @user.suspended = true
-          @suspension_days = params[:suspend_days].to_i
-          @user.suspended_until = @suspension_days.days.from_now
-          @user.create_log_item(action: ArchiveConfig.ACTION_SUSPEND, note: @admin_note, admin_id: current_admin.id, enddate: @user.suspended_until)
-          success_message << ts("User has been temporarily suspended.")
-        end
-
-        # create ban
-        if params[:admin_action] == "ban" || params[:admin_action] == "spamban"
-          @user.banned = true
-          @user.create_log_item(action: ArchiveConfig.ACTION_BAN, note: @admin_note, admin_id: current_admin.id)
-          success_message << ts("User has been permanently suspended.")
-        end
-
-        # unsuspended suspended user
-        if params[:admin_action] == "unsuspend" && @user.suspended?
-          @user.suspended = false
-          @user.suspended_until = nil
-          if !@user.suspended && @user.suspended_until.blank?
-            @user.create_log_item(action: ArchiveConfig.ACTION_UNSUSPEND, note: @admin_note, admin_id: current_admin.id)
-            success_message << ts("Suspension has been lifted.")
-          end
-        end
-
-        # unban banned user
-        if params[:admin_action] == "unban" && @user.banned?
-          @user.banned = false
-          if !@user.banned?
-            @user.create_log_item(action: ArchiveConfig.ACTION_UNSUSPEND, note: @admin_note, admin_id: current_admin.id)
-            success_message << ts("Suspension has been lifted.")
-          end
-        end
-
-        @user.save
-        flash[:notice] = success_message
-        if params[:admin_action] == "spamban"
-          redirect_to confirm_delete_user_creations_admin_user_path(@user)
-        else
-          redirect_to request.referer || root_path
-        end
-
-      end
+      flash[:error] = @user_manager.error_message
+      redirect_to request.referer || root_path
     end
   end
 
@@ -187,6 +97,7 @@ class Admin::AdminUsersController < ApplicationController
   end
 
   def confirm_delete_user_creations
+    authorize @user
     @works = @user.works.paginate(page: params[:works_page])
     @comments = @user.comments.paginate(page: params[:comments_page])
     @bookmarks = @user.bookmarks
@@ -195,6 +106,7 @@ class Admin::AdminUsersController < ApplicationController
   end
 
   def destroy_user_creations
+    authorize @user
     creations = @user.works + @user.bookmarks + @user.collections + @user.comments
     creations.each do |creation|
       AdminActivity.log_action(current_admin, creation, action: "destroy spam", summary: creation.inspect)
@@ -207,6 +119,8 @@ class Admin::AdminUsersController < ApplicationController
 
   def troubleshoot
     @user = User.find_by(login: params[:id])
+    authorize @user
+
     @user.fix_user_subscriptions
     @user.set_user_work_dates
     @user.reindex_user_creations
@@ -218,6 +132,8 @@ class Admin::AdminUsersController < ApplicationController
 
   def activate
     @user = User.find_by(login: params[:id])
+    authorize @user
+
     @user.activate
     if @user.active?
       @user.create_log_item( options = { action: ArchiveConfig.ACTION_ACTIVATE, note: "Manually Activated", admin_id: current_admin.id })
@@ -231,10 +147,10 @@ class Admin::AdminUsersController < ApplicationController
 
   def send_activation
     @user = User.find_by(login: params[:id])
+    authorize @user
     # send synchronously to avoid getting caught in mail queue
-    UserMailer.signup_notification(@user.id).deliver!
+    UserMailer.signup_notification(@user.id).deliver_now
     flash[:notice] = ts("Activation email sent")
     redirect_to action: :show
   end
-
 end

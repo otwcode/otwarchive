@@ -2,6 +2,7 @@ class ArchiveFaqsController < ApplicationController
 
   before_action :admin_only, except: [:index, :show]
   before_action :set_locale
+  before_action :validate_locale, if: :logged_in_as_admin?
   before_action :require_language_id
   around_action :with_locale
 
@@ -84,9 +85,6 @@ class ArchiveFaqsController < ApplicationController
       if @archive_faq.save
         flash[:notice] = 'ArchiveFaq was successfully created.'
         redirect_to(@archive_faq)
-        if @archive_faq.email_translations? && @archive_faq.new_record?
-          AdminMailer.created_faq(@archive_faq.id, current_admin.login).deliver
-        end
       else
         render action: "new"
       end
@@ -96,7 +94,7 @@ class ArchiveFaqsController < ApplicationController
   def update
     @archive_faq = ArchiveFaq.find_by(slug: params[:id])
 
-    if @archive_faq.update_attributes(archive_faq_params)
+    if @archive_faq.update(archive_faq_params)
       flash[:notice] = 'ArchiveFaq was successfully updated.'
       redirect_to(@archive_faq)
     else
@@ -107,7 +105,7 @@ class ArchiveFaqsController < ApplicationController
   # reorder FAQs
   def update_positions
     if params[:archive_faqs]
-      @archive_faqs = ArchiveFaq.reorder(params[:archive_faqs])
+      @archive_faqs = ArchiveFaq.reorder_list(params[:archive_faqs])
       flash[:notice] = ts("Archive FAQs order was successfully updated.")
     elsif params[:archive_faq]
       params[:archive_faq].each_with_index do |id, position|
@@ -129,9 +127,8 @@ class ArchiveFaqsController < ApplicationController
 
   # Set the locale as an instance variable first
   def set_locale
-    if params[:language_id] && session[:language_id] != params[:language_id]
-      session[:language_id] = params[:language_id]
-    end
+    session[:language_id] = params[:language_id].presence if session[:language_id] != params[:language_id].presence
+
     if current_user.present? && $rollout.active?(:set_locale_preference,
                                                  current_user)
       @i18n_locale = session[:language_id] || Locale.find(current_user.
@@ -141,11 +138,17 @@ class ArchiveFaqsController < ApplicationController
     end
   end
 
+  def validate_locale
+    return if Locale.exists?(iso: @i18n_locale)
+
+    flash[:error] = "The specified locale does not exist."
+    redirect_to url_for(request.query_parameters.merge(language_id: I18n.default_locale))
+  end
+
   def require_language_id
-    if params[:language_id].blank?
-      redirect_to url_for(request.query_parameters.merge(language_id:
-                                                         @i18n_locale.to_s))
-    end
+    return if params[:language_id].present?
+
+    redirect_to url_for(request.query_parameters.merge(language_id: @i18n_locale.to_s))
   end
 
   # Setting I18n.locale directly is not thread safe
@@ -169,7 +172,7 @@ class ArchiveFaqsController < ApplicationController
 
   def archive_faq_params
     params.require(:archive_faq).permit(
-      :title, :notify_translations,
+      :title,
       questions_attributes: [
         :id, :question, :anchor, :content, :screencast, :_destroy, :is_translated
       ]

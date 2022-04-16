@@ -1,16 +1,5 @@
 module TagsHelper
 
-  def tag_type_label(tag_type)
-    case tag_type
-    when 'tag'
-      "Bookmarker's Tags"
-    when 'freeform'
-      "Additional Tags"
-    else
-      tag_type.capitalize.pluralize
-    end
-  end
-
   # Takes an array of tags and returns a marked-up, comma-separated list of links to them
   def tag_link_list(tags, link_to_works=false)
     tags = tags.uniq.compact.map {|tag| content_tag(:li, link_to_works ? link_to_tag_works(tag) : link_to_tag(tag))}.join.html_safe
@@ -63,18 +52,18 @@ module TagsHelper
   end
 
   def link_to_tag(tag, options = {})
-    link_to_tag_with_text(tag, tag.is_a?(Warning) ? warning_display_name(tag.name) : tag.name, options)
+    link_to_tag_with_text(tag, tag.display_name, options)
   end
 
   def link_to_tag_works(tag, options = {})
-    link_to_tag_works_with_text(tag, tag.is_a?(Warning) ? warning_display_name(tag.name) : tag.name, options)
+    link_to_tag_works_with_text(tag, tag.display_name, options)
   end
 
   def link_to_tag_with_text(tag, link_text, options = {})
     if options[:full_path] 
-      link_to_with_tag_class(@collection ? collection_tag_url(@collection, tag) : tag_url(tag), link_text, options)
+      link_to_with_tag_class(tag_url(tag), link_text, options)
     else
-      link_to_with_tag_class(@collection ? collection_tag_path(@collection, tag) : tag_path(tag), link_text, options)
+      link_to_with_tag_class(tag_path(tag), link_text, options)
     end
   end
 
@@ -83,10 +72,11 @@ module TagsHelper
   end
 
   def link_to_tag_works_with_text(tag, link_text, options = {})
+    collection = options[:collection]
     if options[:full_path]
-      link_to_with_tag_class(@collection ? collection_tag_works_url(@collection, tag) : tag_works_url(tag), link_text, options)
+      link_to_with_tag_class(collection ? collection_tag_works_url(collection, tag) : tag_works_url(tag), link_text, options)
     else 
-      link_to_with_tag_class(@collection ? collection_tag_works_path(@collection, tag) : tag_works_path(tag), link_text, options)
+      link_to_with_tag_class(collection ? collection_tag_works_path(collection, tag) : tag_works_path(tag), link_text, options)
     end
   end
 
@@ -124,37 +114,20 @@ module TagsHelper
 
   # Link to show tags if they're currently hidden
   def show_hidden_tags_link(creation, tag_type)
-    text = ts("Show %{tag_type}", tag_type: (tag_type == 'freeforms' ? "additional tags" : tag_type))
+    text = ts("Show %{tag_type}", tag_type: (tag_type == 'freeforms' ? "additional tags" : tag_type.humanize.downcase.split.last))
     url = {controller: 'tags', action: 'show_hidden', creation_type: creation.class.to_s, creation_id: creation.id, tag_type: tag_type }
     link_to text, url, remote: true
   end
 
   # Makes filters show warnings display name
   def label_for_filter(tag_type, tag_info)
-    name = (tag_type == "warning") ? warning_display_name(tag_info[:name]) : tag_info[:name]
+    name = (tag_type == "archive_warning") ? warning_display_name(tag_info[:name]) : tag_info[:name]
     name + " (#{tag_info[:count]})"
   end
 
   # Changes display name of warnings in works blurb
   def warning_display_name(name)
-    case name
-    when ArchiveConfig.WARNING_DEFAULT_TAG_NAME
-      return ArchiveConfig.WARNING_DEFAULT_TAG_DISPLAY_NAME ? ArchiveConfig.WARNING_DEFAULT_TAG_DISPLAY_NAME.to_s : name
-    when ArchiveConfig.WARNING_NONE_TAG_NAME
-      return ArchiveConfig.WARNING_NONE_TAG_DISPLAY_NAME ? ArchiveConfig.WARNING_NONE_TAG_DISPLAY_NAME.to_s : name
-    when ArchiveConfig.WARNING_SOME_TAG_NAME
-      return ArchiveConfig.WARNING_SOME_TAG_DISPLAY_NAME ? ArchiveConfig.WARNING_SOME_TAG_DISPLAY_NAME.to_s : name
-    when ArchiveConfig.WARNING_VIOLENCE_TAG_NAME
-      return ArchiveConfig.WARNING_VIOLENCE_TAG_DISPLAY_NAME ? ArchiveConfig.WARNING_VIOLENCE_TAG_DISPLAY_NAME.to_s : name
-    when ArchiveConfig.WARNING_DEATH_TAG_NAME
-      return ArchiveConfig.WARNING_DEATH_TAG_DISPLAY_NAME ? ArchiveConfig.WARNING_DEATH_TAG_DISPLAY_NAME.to_s : name
-    when ArchiveConfig.WARNING_NONCON_TAG_NAME
-      return ArchiveConfig.WARNING_NONCON_TAG_DISPLAY_NAME ? ArchiveConfig.WARNING_NONCON_TAG_DISPLAY_NAME.to_s : name
-    when ArchiveConfig.WARNING_CHAN_TAG_NAME
-      return ArchiveConfig.WARNING_CHAN_TAG_DISPLAY_NAME ? ArchiveConfig.WARNING_CHAN_TAG_DISPLAY_NAME.to_s : name
-    else
-      return name
-    end
+    ArchiveWarning::DISPLAY_NAME_MAPPING[name] || name
   end
 
   # Individual results for a tag search
@@ -214,21 +187,17 @@ module TagsHelper
     sub_ul.html_safe
   end
 
-
   def blurb_tag_block(item, tag_groups=nil)
-    item_class = item.class.to_s.underscore
     tag_groups ||= item.tag_groups
-    categories = ['Warning', 'Relationship', 'Character', 'Freeform']
+    categories = ['ArchiveWarning', 'Relationship', 'Character', 'Freeform']
     tag_block = ""
 
     categories.each do |category|
       if tags = tag_groups[category]
         unless tags.empty?
-          class_name = category.downcase.pluralize
+          class_name = tag_block_class_name(category)
           if (class_name == "warnings" && hide_warnings?(item)) || (class_name == "freeforms" && hide_freeform?(item))
-            open_tags = "<li class='#{class_name}' id='#{item_class}_#{item.id}_category_#{class_name}'><strong>"
-            close_tags = "</strong></li>"
-            tag_block <<  open_tags + show_hidden_tags_link(item, class_name) + close_tags
+            tag_block << show_hidden_tag_link_list_item(item, category)
           elsif class_name == "warnings"
             open_tags = "<li class='#{class_name}'><strong>"
             close_tags = "</strong></li>"
@@ -242,6 +211,30 @@ module TagsHelper
       end
     end
     tag_block.html_safe
+  end
+
+  # Takes a tag category class name, e.g. Relationship, and returns a string.
+  # The returned string is plural and used for more than the HTML class
+  # attribute, which is why we don't use tag_type_css_class(tag_type).
+  def tag_block_class_name(category)
+    if category == "ArchiveWarning"
+      "warnings"
+    else
+      category.downcase.pluralize
+    end
+  end
+
+  # Wraps hidden tags toggle in <li> and <strong> tags for blurbs and work meta.
+  # options[:suppress_toggle_class] is used to skip placing an HTML class on the
+  # toggle in work meta. The class will still be on the tags.
+  def show_hidden_tag_link_list_item(item, category, options = {})
+    item_class = item.class.to_s.underscore
+    class_name = tag_block_class_name(category)
+    content_tag(:li,
+                content_tag(:strong, 
+                            show_hidden_tags_link(item, class_name)),
+                class: options[:suppress_toggle_class] ? nil : class_name,
+                id: "#{item_class}_#{item.id}_category_#{class_name}")
   end
 
   def get_title_string(tags, category_name = "")
@@ -265,7 +258,7 @@ module TagsHelper
     ratings = tag_groups['Rating']
     symbol_block << get_symbol_link(get_ratings_class(ratings), get_title_string(ratings, "rating"))
 
-    warnings = tag_groups['Warning']
+    warnings = tag_groups['ArchiveWarning']
     symbol_block << get_symbol_link(get_warnings_class(warnings), get_title_string(warnings))
 
     categories = tag_groups['Category']

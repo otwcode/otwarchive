@@ -6,7 +6,6 @@ Feature: Pseud dashboard
 
   Scenario: Fandoms on pseud dashboard
 
-  Given tag wrangling is on
   Given the following activated user exists
     | login           | password   |
     | myself          | password   |

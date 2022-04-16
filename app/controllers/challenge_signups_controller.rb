@@ -225,7 +225,7 @@ class ChallengeSignupsController < ApplicationController
   end
 
   def update
-    if @challenge_signup.update_attributes(challenge_signup_params)
+    if @challenge_signup.update(challenge_signup_params)
       flash[:notice] = ts('Sign-up was successfully updated.')
       redirect_to collection_signup_path(@collection, @challenge_signup)
     else
@@ -361,7 +361,7 @@ protected
       :any_freeform,
       :any_category,
       :any_rating,
-      :any_warning,
+      :any_archive_warning,
       :anonymous,
       :description,
       :_destroy,
@@ -373,14 +373,14 @@ protected
         :freeform_tagnames,
         :category_tagnames,
         :rating_tagnames,
-        :warning_tagnames,
+        :archive_warning_tagnames,
         :fandom_tagnames,
         character_tagnames: [],
         relationship_tagnames: [],
         freeform_tagnames: [],
         category_tagnames: [],
         rating_tagnames: [],
-        warning_tagnames: [],
+        archive_warning_tagnames: [],
         fandom_tagnames: [],
       ],
       optional_tag_set_attributes: [

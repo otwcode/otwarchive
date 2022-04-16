@@ -10,16 +10,18 @@
     .meta h2 { font-size: 1.25em; text-align: center; }
     .meta h2 { page-break-before: always; }
     .meta .byline { text-align: center; }
-    .meta dl.tags { border: 1px solid;  padding: 1em; }
+    .meta dl.tags { border: 1px solid; padding: 1em; }
     .meta dd { margin: -1em 0 0 10em; }
     .meta .endnote-link { font-size: .8em; }
-    #chapters  { font-family: "Nimbus Roman No9 L", "Times New Roman", serif; padding: 1em; }
-    .userstuff  { font-family: "Nimbus Roman No9 L", "Times New Roman", serif; padding: 1em; }
+    #chapters { font-family: "Nimbus Roman No9 L", "Times New Roman", serif; padding: 1em; }
+    .userstuff { font-family: "Nimbus Roman No9 L", "Times New Roman", serif; padding: 1em; }
+    /* Invisible headings to help Calibre make a Table of Contents */
+    .toc-heading { display: none; }
   </style>
 </head>
 <body>
 
-<%= yield  %>
-    
+<%= yield %>
+
 </body>
 </html>

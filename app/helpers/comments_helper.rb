@@ -109,11 +109,45 @@ module CommentsHelper
   #### HELPERS FOR CHECKING WHICH BUTTONS/FORMS TO DISPLAY #####
 
   def can_reply_to_comment?(comment)
-    !(comment.unreviewed? || no_anon_reply(comment) || comment_parent_hidden?(comment))
+    !(comment.unreviewed? || comment.iced? || parent_disallows_comments?(comment) || comment_parent_hidden?(comment))
   end
 
   def can_edit_comment?(comment)
-    is_author_of?(comment) && comment.count_all_comments == 0 && !comment_parent_hidden?(comment)
+    is_author_of?(comment) && !comment.iced? && comment.count_all_comments.zero? && !comment_parent_hidden?(comment)
+  end
+
+  # Only an admin with proper authorization can mark a spam comment ham.
+  def can_mark_comment_ham?(comment)
+    return unless comment.pseud.nil? && !comment.approved?
+
+    policy(comment).can_mark_comment_spam?
+  end
+
+  # An admin with proper authorization or a creator of the comment's ultimate
+  # parent (i.e. the work) can mark an approved comment as spam.
+  def can_mark_comment_spam?(comment)
+    return unless comment.pseud.nil? && comment.approved?
+
+    policy(comment).can_mark_comment_spam? || is_author_of?(comment.ultimate_parent)
+  end
+
+  # Comments can be deleted by admins with proper authorization, their creator
+  # (if the creator is a registered user), or the creator of the comment's
+  # ultimate parent.
+  def can_destroy_comment?(comment)
+    policy(comment).can_destroy_comment? ||
+      is_author_of?(comment) ||
+      is_author_of?(comment.ultimate_parent)
+  end
+
+  # Comments on works can be frozen by admins with proper authorization or the
+  # work creator.
+  # Comments on tags can be frozen by admins with proper authorization.
+  # Comments on admin posts can be frozen by any admin.
+  def can_freeze_comment?(comment)
+    policy(comment).can_freeze_comment? ||
+      comment.ultimate_parent.is_a?(Work) &&
+        is_author_of?(comment.ultimate_parent)
   end
 
   def comment_parent_hidden?(comment)
@@ -122,8 +156,12 @@ module CommentsHelper
       (parent.respond_to?(:in_unrevealed_collection) && parent.in_unrevealed_collection)
   end
 
-  def no_anon_reply(comment)
-    comment.ultimate_parent.is_a?(Work) && comment.ultimate_parent.anon_commenting_disabled && !logged_in?
+  def parent_disallows_comments?(comment)
+    parent = comment.ultimate_parent
+    return false unless parent.is_a?(Work) || parent.is_a?(AdminPost)
+
+    parent.disable_all_comments? ||
+      parent.disable_anon_comments? && !logged_in?
   end
 
   #### HELPERS FOR REPLYING TO COMMENTS #####
@@ -176,52 +214,14 @@ module CommentsHelper
       remote: true)
   end
 
-  # TO DO: create fallbacks to support non-JavaScript requests!
-  # return button to cancel adding a comment. kind of ugly because we want it
-  # to work for the comment form no matter where it appears, but oh well
-  def cancel_comment_button(comment, commentable)
-    if comment.new_record?
-      if commentable.class == comment.class
-        # canceling a reply to a comment
-        commentable_id = commentable.ultimate_parent.is_a?(Tag) ?
-                            :tag_id :
-                            "#{commentable.ultimate_parent.class.to_s.underscore}_id".to_sym
-        commentable_value = commentable.ultimate_parent.is_a?(Tag) ?
-                              commentable.ultimate_parent.name :
-                              commentable.ultimate_parent.id
-        link_to(
-          ts("Cancel"),
-          url_for(controller: :comments,
-                  action: :cancel_comment_reply,
-                  id: commentable.id,
-                  comment_id: params[:comment_id],
-                  commentable_id => commentable_value),
-          remote: true)
-       else
-        # canceling a reply to a different commentable thingy
-        commentable_id = commentable.is_a?(Tag) ?
-                            :tag_id :
-                            "#{commentable.class.to_s.underscore}_id".to_sym
-        commentable_value = commentable.is_a?(Tag) ?
-                              commentable.name :
-                              commentable.id
-        link_to(
-          ts("Cancel"),
-          url_for(controller: :comments,
-                  action: :cancel_comment,
-                  commentable_id => commentable_value),
-          remote: true)
-      end
-    else
-      # canceling an edit
-      link_to(
-        ts("Cancel"),
-        url_for(controller: :comments,
-                action: :cancel_comment_edit,
-                id: (comment.id),
-                comment_id: params[:comment_id]),
-        remote: true)
-    end
+  # canceling an edit
+  def cancel_edit_comment_link(comment)
+    link_to(ts("Cancel"),
+            url_for(controller: :comments,
+                    action: :cancel_comment_edit,
+                    id: comment.id,
+                    comment_id: params[:comment_id]),
+            remote: true)
   end
 
   # return html link to edit comment
@@ -240,6 +240,19 @@ module CommentsHelper
     else
       delete_comment_link(comment)
     end
+  end
+
+  def freeze_comment_button(comment)
+    if comment.iced?
+      button_to ts("Unfreeze Thread"), unfreeze_comment_path(comment), method: :put
+    else
+      button_to ts("Freeze Thread"), freeze_comment_path(comment), method: :put
+    end
+  end
+
+  # Not a link or button, but included with them.
+  def frozen_comment_indicator
+    content_tag(:span, ts("Frozen"), class: "frozen current")
   end
 
   # return html link to delete comments
@@ -271,43 +284,6 @@ module CommentsHelper
     else
       link_to(ts("Not Spam"), approve_comment_path(comment), method: :put)
     end
-  end
-
-  # non-JavaScript fallbacks for great justice!
-
-  def fallback_url_for_top_level(commentable, options = {})
-    default_options = {anchor: "comments"}
-    if commentable.is_a?(Tag)
-      default_options[:controller] = :comments
-      default_options[:action] = :index
-      default_options[:tag_id] = commentable.name
-    else
-      default_options[:controller] = commentable.class.to_s.underscore.pluralize
-      default_options[:action] = "show"
-      default_options[:id] = commentable.id
-    end
-    default_options[:add_comment] = params[:add_comment] if params[:add_comment]
-    default_options[:show_comments] = params[:show_comments] if params[:show_comments]
-
-    options = default_options.merge(options)
-    url_for(options)
-  end
-
-  def fallback_url_for_comment(comment, options = {})
-    default_options = {anchor: "comment_#{comment.id}"}
-    default_options[:action] = "show"
-    default_options[:show_comments] = true
-    default_options[:id] = comment.id if comment.ultimate_parent.is_a?(Tag)
-
-    options = default_options.merge(options)
-
-    if @thread_view # hopefully means we're on a Thread page
-      options[:id] = @thread_root if @thread_root
-      url_for(options)
-    else # Top Level Commentable
-      fallback_url_for_top_level(comment.ultimate_parent, options)
-    end
-
   end
 
   # find the parent of the commentable

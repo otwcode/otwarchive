@@ -16,10 +16,10 @@ class ExternalAuthorsController < ApplicationController
     elsif logged_in? && current_user.archivist
       @external_authors = ExternalCreatorship.where(archivist_id: current_user).collect(&:external_author).uniq
     elsif logged_in?
-      redirect_to user_external_authors_path(current_user) and return
+      redirect_to user_external_authors_path(current_user)
     else
       flash[:notice] = "You can't see that information."
-      redirect_to root_path and return
+      redirect_to root_path
     end
   end
 
@@ -32,14 +32,14 @@ class ExternalAuthorsController < ApplicationController
     @invitation = Invitation.find_by(token: token)
     unless @invitation
       flash[:error] = ts("You need an invitation to do that.")
-      redirect_to root_path and return
+      redirect_to root_path
+      return
     end
 
     @external_author = @invitation.external_author
-    unless @external_author
-      flash[:error] = ts("There are no stories to claim on this invitation. Did you want to sign up instead?")
-      redirect_to signup_path(@invitation.token) and return
-    end
+    return if @external_author
+    flash[:error] = ts("There are no stories to claim on this invitation. Did you want to sign up instead?")
+    redirect_to signup_path(@invitation.token)
   end
 
   def claim
@@ -58,13 +58,13 @@ class ExternalAuthorsController < ApplicationController
     @external_author = ExternalAuthor.find(params[:id])
     unless (@invitation && @invitation.external_author == @external_author) || @external_author.user == current_user
       flash[:error] = "You don't have permission to do that."
-      redirect_to root_path and return
+      redirect_to root_path
+      return
     end
 
     flash[:notice] = ""
     if params[:imported_stories] == "nothing"
-      flash[:notice] += "Okay, we'll leave things the way they are! You can use the email link any time if you change your mind."
-      redirect_to root_path and return
+      flash[:notice] += "Okay, we'll leave things the way they are! You can use the email link any time if you change your mind. "
     elsif params[:imported_stories] == "orphan"
       # orphan the works
       @external_author.orphan(params[:remove_pseud])
@@ -74,17 +74,18 @@ class ExternalAuthorsController < ApplicationController
       @external_author.delete_works
       flash[:notice] += "Your imported stories have been deleted. "
     end
-    @invitation.mark_as_redeemed if @invitation && !params[:imported_stories].blank?
 
-    if @external_author.update_attributes(external_author_params[:external_author] || {})
+    if @invitation &&
+       params[:imported_stories].present? &&
+       params[:imported_stories] != "nothing"
+      @invitation.mark_as_redeemed
+    end
+
+    if @external_author.update(external_author_params[:external_author] || {})
       flash[:notice] += "Your preferences have been saved."
-      if @user
-        redirect_to user_external_authors_path(@user)
-      else
-        redirect_to root_path
-      end
+      redirect_to @user ? user_external_authors_path(@user) : root_path
     else
-      flash[:error] += "There were problems saving your preferences."
+      flash[:error] = "There were problems saving your preferences."
       render action: "edit"
     end
   end

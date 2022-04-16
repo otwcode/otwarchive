@@ -23,7 +23,7 @@ class TagQuery < Query
       character_filter,
       suggested_fandom_filter,
       suggested_character_filter
-    ].compact
+    ].flatten.compact
   end
 
   def exclusion_filters
@@ -88,7 +88,7 @@ class TagQuery < Query
   end
 
   def fandom_filter
-    terms_filter(:fandom_ids, options[:fandom_ids]) if options[:fandom_ids]
+    options[:fandom_ids]&.map { |fandom_id| term_filter(:fandom_ids, fandom_id) }
   end
 
   def character_filter

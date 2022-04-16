@@ -98,7 +98,7 @@ Feature: Collection
     And I should see "Sign-up Closes:" within ".collection .meta"
     And I should see "Assignments Due:" within ".collection .meta"
     And I should see "Works Revealed:" within ".collection .meta"
-    And I should see "Authors Revealed:" within ".collection .meta"
+    And I should see "Creators Revealed:" within ".collection .meta"
     And I should see "Signed up:" within ".collection .meta"
     And I should see "0" within ".collection .meta"
     And I should see "Welcome to the exchange" within "#intro"
@@ -432,7 +432,7 @@ Feature: Collection
     And I fill in "Fandoms" with "Stargate Atlantis"
     And I select "Not Rated" from "Rating"
     And I check "No Archive Warnings Apply"
-    And I select "myname1" from "work_author_attributes_ids_"
+    And I select "English" from "Choose a language"
     And I fill in "content" with "This is an exciting story about Atlantis"
   When I press "Preview"
   Then I should see "Preview"
@@ -571,8 +571,9 @@ Feature: Collection
   When I reload the page
   # 5 gift notification emails are delivered for the 5 stories that have been posted so far (4 standard, 1 pinch-hit, 1 still a draft)
   Then 5 emails should be delivered
-    And the email should contain "A gift work has been posted for you"
-    And the email should contain "in the Yuletide collection at the Archive of Our Own"
+    And the email should contain "A gift work has been posted for you in the"
+    And the email should contain "Yuletide"
+    And the email should contain "at the Archive of Our Own"
     And the email should contain "by an anonymous responder"
     And the email should not contain "by myname1"
     And the email should not contain "by myname2"

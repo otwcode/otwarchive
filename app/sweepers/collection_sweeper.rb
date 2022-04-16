@@ -52,14 +52,9 @@ class CollectionSweeper < ActionController::Caching::Sweeper
 
   # Expire the collection blurb and profile
   def self.expire_collection_blurb_and_profile(collection)
-    # Expire all versions of the blurb: whether the new search is enabled or
-    # not, and whether the user is logged in or not.
-    # TODO: After the ES6 upgrade, re-evaluate whether it's necessary to keep
-    # the new-search/old-search distinction for enabling/disabling filtering
-    # (and probably change the name if it is kept).
-    %w[old-search new-search].product(%w[logged-in logged-out]).each do |pair|
-      search, logged_in = pair
-      cache_key = "collection-blurb-#{search}-#{logged_in}-#{collection.id}-v3"
+    # Expire both versions of the blurb, whether the user is logged in or not.
+    %w[logged-in logged-out].each do |logged_in|
+      cache_key = "collection-blurb-#{logged_in}-#{collection.id}-v3"
       ActionController::Base.new.expire_fragment(cache_key)
     end
 

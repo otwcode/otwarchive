@@ -4,18 +4,8 @@ class Challenge::GiftExchangeController < ChallengesController
   before_action :load_collection
   before_action :load_challenge, except: [:new, :create]
   before_action :collection_owners_only, only: [:new, :create, :edit, :update, :destroy]
-  before_action :set_time_zone, only: [:create, :edit, :update]
 
   # ACTIONS
-
-  # we use this to make the times get set in the moderator's specified timezone
-  def set_time_zone
-    if params[:gift_exchange] && gift_exchange_params[:time_zone]
-      Time.zone = gift_exchange_params[:time_zone]
-    elsif @challenge && @challenge.time_zone
-      Time.zone = @challenge.time_zone
-    end
-  end
 
   def show
   end
@@ -46,7 +36,7 @@ class Challenge::GiftExchangeController < ChallengesController
   end
 
   def update
-    if @challenge.update_attributes(gift_exchange_params)
+    if @challenge.update(gift_exchange_params)
       flash[:notice] = ts('Challenge was successfully updated.')
 
       # expire the cache on the signup form
@@ -86,8 +76,8 @@ class Challenge::GiftExchangeController < ChallengesController
         :rating_num_allowed, :allow_any_rating, :require_unique_rating,
         :category_num_required, :category_num_allowed, :allow_any_category,
         :require_unique_category, :freeform_num_required, :freeform_num_allowed,
-        :allow_any_freeform, :require_unique_freeform, :warning_num_required,
-        :warning_num_allowed, :allow_any_warning, :require_unique_warning
+        :allow_any_freeform, :require_unique_freeform, :archive_warning_num_required,
+        :archive_warning_num_allowed, :allow_any_archive_warning, :require_unique_archive_warning
       ],
       offer_restriction_attributes: [
         :id, :optional_tags_allowed, :title_required, :title_allowed,
@@ -99,8 +89,8 @@ class Challenge::GiftExchangeController < ChallengesController
         :rating_num_required, :rating_num_allowed, :rating_num_required, :allow_any_rating, :require_unique_rating,
         :category_num_required, :category_num_allowed, :allow_any_category,
         :require_unique_category, :freeform_num_required, :freeform_num_allowed,
-        :allow_any_freeform, :require_unique_freeform, :warning_num_required,
-        :warning_num_allowed, :allow_any_warning, :require_unique_warning,
+        :allow_any_freeform, :require_unique_freeform, :archive_warning_num_required,
+        :archive_warning_num_allowed, :allow_any_archive_warning, :require_unique_archive_warning,
         :tag_sets_to_add, :character_restrict_to_fandom,
         :character_restrict_to_tag_set, :relationship_restrict_to_fandom,
         :relationship_restrict_to_tag_set,
@@ -109,10 +99,10 @@ class Challenge::GiftExchangeController < ChallengesController
       potential_match_settings_attributes: [
         :id, :num_required_prompts, :num_required_fandoms, :num_required_characters,
         :num_required_relationships, :num_required_freeforms, :num_required_categories,
-        :num_required_ratings, :num_required_warnings, :include_optional_fandoms,
+        :num_required_ratings, :num_required_archive_warnings, :include_optional_fandoms,
         :include_optional_characters, :include_optional_relationships,
         :include_optional_freeforms, :include_optional_categories, :include_optional_ratings,
-        :include_optional_warnings
+        :include_optional_archive_warnings
       ]
     )
   end

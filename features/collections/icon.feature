@@ -1,13 +1,27 @@
 @users
 Feature: User icons
 
-  Scenario: Users should be able to upload icons
+  Scenario Outline: Users should be able to upload icons using an allowed image format
 
   Given I am editing a pseud
-  When I attach the file "features/fixtures/icon.gif" to "icon"
+  When I attach an icon with the extension "<extension>"
     And I press "Update"
   Then I should see "Pseud was successfully updated"
     And I should see the image "alt" text ""
+
+  Examples:
+      | extension |
+      | gif       |
+      | jpg       |
+      | png       |
+
+  Scenario: Users should not be able to upload icons using the .bmp format
+
+  Given I am editing a pseud
+  When I attach an icon with the extension "bmp"
+    And I press "Update"
+  Then I should see "Sorry! We couldn't save this pseud because:"
+    And I should see "Icon content type is invalid"
 
   Scenario: Users can change alt text
 
