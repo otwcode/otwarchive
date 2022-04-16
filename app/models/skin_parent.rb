@@ -12,10 +12,7 @@ class SkinParent < ApplicationRecord
 
   validate :no_site_parent
   def no_site_parent
-    if parent_skin.blank?
-      errors.clear
-      errors.add(:base, ts("^You can't have an empty parent skin."))
-    elsif parent_skin.get_role == "site" && !%w(override site).include?(child_skin.get_role)
+    if parent_skin.get_role == "site" && !%w(override site).include?(child_skin.get_role)
       errors.add(:base, ts("^You can't use %{title} as a parent unless replacing the default archive skin.", title: parent_skin.title))
     end
   end
