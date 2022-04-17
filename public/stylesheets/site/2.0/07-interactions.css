@@ -290,6 +290,10 @@ form li ul.autocomplete li.input {
     box-shadow: 0 0 3px #555;
 }
 
+.ui-draggable a {
+  cursor: default;
+}
+
 /* WIDGET: DATEPICKER, TIMEPICKER (todo, requires ARIA managed focus) */
 
 #ui-datepicker-div {
