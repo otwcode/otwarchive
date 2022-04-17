@@ -42,4 +42,16 @@ module SearchHelper
     ArchiveConfig.SEARCH_TIPS[rand(ArchiveConfig.SEARCH_TIPS.size)]
   end
 
+  def original_path
+    if @tag
+      return tag_works_path(@tag) if params[:work_search].present?
+      return tag_bookmarks_path(@tag) if params[:bookmark_search].present?
+    elsif @pseud
+      return user_pseud_works_path(@user, @pseud) if params[:work_search].present?
+      return user_pseud_bookmarks_path(@user, @pseud) if params[:bookmark_search].present?
+    elsif @user
+      return user_works_path(@user) if params[:work_search].present?
+      return user_bookmarks_path(@user) if params[:bookmark_search].present?
+    end
+  end
 end

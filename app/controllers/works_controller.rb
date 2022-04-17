@@ -16,8 +16,6 @@ class WorksController < ApplicationController
 
   before_action :load_first_chapter, only: [:show, :edit, :update, :preview]
 
-  before_action :clear_set_filters, only: [:search, :index]
-
   cache_sweeper :collection_sweeper
   cache_sweeper :feed_sweeper
 
