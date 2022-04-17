@@ -95,6 +95,14 @@ form.filters {
   padding: 0;
 }
 
+.filters .submit a {
+  margin: 1em 0;
+  padding-left: 0;
+  text-align: center;
+  width: 100%;
+  border-bottom: 1px solid #aaa;
+}
+
 .filters .submit input {
   height: 100%;
   margin: 1em 0;
