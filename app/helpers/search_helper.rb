@@ -43,7 +43,9 @@ module SearchHelper
   end
 
   def original_path
-    if @tag
+    if @collection
+      collections_path
+    elsif @tag
       return tag_works_path(@tag) if params[:work_search].present?
       return tag_bookmarks_path(@tag) if params[:bookmark_search].present?
     elsif @pseud
@@ -52,6 +54,8 @@ module SearchHelper
     elsif @user
       return user_works_path(@user) if params[:work_search].present?
       return user_bookmarks_path(@user) if params[:bookmark_search].present?
+
+      collected_user_works_path(@user)
     end
   end
 end
