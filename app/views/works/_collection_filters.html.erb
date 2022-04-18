@@ -38,7 +38,7 @@
         </dd>
       <% end %>
       <dt class="landmark"><%= ts("Submit") %></dt>
-      <dd class="submit actions"><%= link_to ts("Clear Filters"), original_path %></dd>
+      <dd class="submit actions"><%= link_to ts("Clear Filters"), collected_user_works_path(@user) %></dd>
       <dd class="submit actions"><%= f.submit ts("Sort and Filter") %></dd>
     </dl>
     <div>

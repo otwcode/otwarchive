@@ -42,20 +42,19 @@ module SearchHelper
     ArchiveConfig.SEARCH_TIPS[rand(ArchiveConfig.SEARCH_TIPS.size)]
   end
 
-  def original_path
-    if @collection
-      collections_path
-    elsif @tag
-      return tag_works_path(@tag) if params[:work_search].present?
-      return tag_bookmarks_path(@tag) if params[:bookmark_search].present?
-    elsif @pseud
-      return user_pseud_works_path(@user, @pseud) if params[:work_search].present?
-      return user_pseud_bookmarks_path(@user, @pseud) if params[:bookmark_search].present?
-    elsif @user
-      return user_works_path(@user) if params[:work_search].present?
-      return user_bookmarks_path(@user) if params[:bookmark_search].present?
-
-      collected_user_works_path(@user)
+  def original_path(var)
+    case var
+    when Tag, Fandom
+      return tag_works_path(var) if params[:work_search].present?
+      return tag_bookmarks_path(var) if params[:bookmark_search].present?
+    when Pseud
+      return user_pseud_works_path(var.user, var) if params[:work_search].present?
+      return user_pseud_bookmarks_path(var.user, var) if params[:bookmark_search].present?
+    when User
+      return user_works_path(var) if params[:work_search].present?
+      return user_bookmarks_path(var) if params[:bookmark_search].present?
+    else
+      "/"
     end
   end
 end
