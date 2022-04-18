@@ -145,7 +145,7 @@ Feature: Collection
     And I press "Sort and Filter"
   Then I should see "1 Collection"
     And I should see "Surprise Presents"
-  When I press "Clear Filters"
+  When I follow "Clear Filters"
   Then I should see "6 Collections"
     And the "Gift Exchange Challenge" checkbox within "#collection-filters" should not be checked
     And the "No" checkbox within "#collection-filters" should not be checked
