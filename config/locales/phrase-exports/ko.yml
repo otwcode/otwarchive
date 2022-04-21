@@ -23,11 +23,11 @@ ko:
         informal:
           addressed: "%{name} 님 안녕하세요!"
           unaddressed: 안녕하세요!
-        introductory: Archive of Our Own – AO3 (우리만의 아카이브)에서 인사 드립니다!
+        introductory: Archive of Our Own – AO3 (우리만의 아카이브)에서 인사 드립니다!
       signature:
         app_short_name: AO3
         open_doors: The Open Doors (오픈도어 프로젝트) 팀 드림
-        parent_org: Organization for Transformative Works – OTW (변형적 작품 단체) 드림
+        parent_org: Organization for Transformative Works – OTW (변형적 작품 단체) 드림
         support: AO3 지원 위원회 드림
     kudos:
       guest:
@@ -171,7 +171,7 @@ ko:
     collection_notification:
       assignments_sent:
         complete: 모든 챌린지 과제가 발송 완료되었습니다.
-        subject: 챌린지 과제 발송 완료
+        subject: "[%{app_name}][%{collection_title}] 챌린지 과제 발송 완료"
       html:
         received_message: '회원님의 컬렉션 %{collection_link}에 관한 메시지가 도착했습니다:'
       text:

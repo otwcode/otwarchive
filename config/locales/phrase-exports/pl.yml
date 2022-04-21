@@ -19,7 +19,7 @@ pl:
               o kontakt ze Wsparciem poprzez %{support_url}.
             part2: 'AO3 jest prowadzonym i wspieranym przez fanów archiwum, które
               działa dzięki Waszym darowiznom: %{donate_url}.'
-        sent_at: Wysłano o %{sent_at}.
+        sent_at: Wysłano w %{sent_at}.
       greeting:
         formal: Szanowna/y %{name},
         informal:
@@ -210,7 +210,7 @@ pl:
     collection_notification:
       assignments_sent:
         complete: Wszystkie zadania zostały wysłane.
-        subject: Wysłane zadania
+        subject: "[%{app_name}][%{collection_title}] Wysłane zadania"
       html:
         received_message: 'Masz nową wiadomość dotyczącą Twojej kolekcji %{collection_link}:'
       text:
@@ -245,9 +245,33 @@ pl:
         współtworzenie.
       html:
         creation: "%{creation_link} autorstwa %{pseud_links}"
+        edit_chapter: edytować rozdział
+        edit_series: edytować serię
+        edit_work: edytować pracę
+        remove_chapter: Jeśli dodano Cię przez przypadek lub nie chcesz by wymieniano
+          Cię jako twórcę, możesz %{edit_chapter_link} aby usunąć siebie jako twórcę.
+        remove_series: Jeśli dodano Cię przez przypadek lub nie chcesz by wymieniano
+          Cię jako twórcę, możesz %{edit_series_link} aby usunąć siebie jako twórcę.
+        remove_work: Jeśli dodano Cię przez przypadek lub nie chcesz by wymieniano
+          Cię jako twórcę, możesz %{edit_work_link} aby usunąć siebie jako twórcę.
+      intro_chapter: 'Użytkownik %{archivist} dodał/a twój pseudonim %{pseud} jako
+        współtwórcę następującego rozdziału:'
+      intro_series: 'Użytkownik %{archivist} dodał Twój pseudonim %{pseud} jako współtwórcę
+        następującej serii:'
+      intro_work: 'Użytkownik %{archivist} dodał Twój pseudonim %{pseud} jako współtwórcę
+        poniższej pracy:'
       subject: "[%{app_name}] Powiadomienie od archiwisty o współtworzeniu"
       text:
         creation: "%{title} (%{url}) autorstwa %{pseuds}"
+        remove_chapter: 'Jeśli dodano Cię przez przypadek lub nie chcesz by wymieniano
+          Cię jako twórcę, możesz edytować ten rozdział, aby usunąć siebie jako twórcę:
+          %{url}'
+        remove_series: 'Jeśli dodano Cię przez przypadek lub nie chcesz by wymieniano
+          Cię jako twórcę, możesz edytować tę serię, aby usunąć siebie jako twórcę:
+          %{url}'
+        remove_work: 'Jeśli dodano Cię przez przypadek lub nie chcesz by wymieniano
+          Cię jako twórcę, możesz edytować tę pracę, aby usunąć siebie jako twórcę:
+          %{url}'
     creatorship_request:
       html:
         creation: "%{creation_link} autorstwa %{pseud_links}"

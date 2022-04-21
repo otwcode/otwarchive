@@ -129,17 +129,17 @@ uk:
           html: Утримувачі колекції %{collection_link} змінили статус Вашої роботи
             %{work_link} на анонімний.
           text: Утримувачі колекції "%{collection_title}" (%{collection_url}) змінили
-            статус Вашої роботи  "%{work_title}" (%{work_url}) на анонімний.
+            статус Вашої роботи "%{work_title}" (%{work_url}) на анонімний.
         anonymous_unrevealed:
           html: Утримувачі колекції %{collection_link} змінили статус Вашої роботи
             %{work_link} на анонімний та закритий.
-          text: Утримувачі колекції "%{collection_title}"  (%{collection_url}) змінили
-            статус Вашої роботи  "%{work_title}" (%{work_url}) на анонімний та закритий.
+          text: Утримувачі колекції "%{collection_title}" (%{collection_url}) змінили
+            статус Вашої роботи "%{work_title}" (%{work_url}) на анонімний та закритий.
         unrevealed:
           html: Утримувачі колекції %{collection_link} змінили статус Вашої роботи
             %{work_link} на закритий.
-          text: Утримувачі колекції "%{collection_title}"  (%{collection_url}) змінили
-            статус Вашої роботи  "%{work_title}" (%{work_url}) на закритий.
+          text: Утримувачі колекції "%{collection_title}" (%{collection_url}) змінили
+            статус Вашої роботи "%{work_title}" (%{work_url}) на закритий.
       collection_items_link_text: Approved Collection Items page (сторінку Підтверджених
         робіт в колекціях)
       do_not_want:
@@ -194,7 +194,7 @@ uk:
       subject: "[%{app_name}][%{collection_title}] Ваше завдання!"
       text:
         assignment: Вам було призначено наступну заявку у виклику "%{collection_title}"
-          (%{collection_url})  у Archive of Our Own – AO3 (Нашому Власному Архіві)!
+          (%{collection_url}) у Archive of Our Own – AO3 (Нашому Власному Архіві)!
         footer: Ви отримали цей електронний лист, тому що Ви записались до виклику
           %{title} (%{url}). Щоб отримати більше інформації про цей виклик та контактну
           інформацію модераторів, перегляньте %{profile_url}.
@@ -207,7 +207,7 @@ uk:
     collection_notification:
       assignments_sent:
         complete: Усі завдання було щойно розіслано.
-        subject: Завдання надіслано
+        subject: "[%{app_name}][%{collection_title}] Завдання надіслано"
       html:
         received_message: 'Ви отримали повідомлення про Вашу колекцію %{collection_link}:'
       text:
@@ -396,7 +396,7 @@ uk:
       subject: "[%{app_name}] Вам відмовлено у додатковому коді запрошення"
     recipient_notification:
       subject:
-        collection: "[%{app_name}][%{collection_title}] Подарунок для Вас від  %{collection_title}"
+        collection: "[%{app_name}][%{collection_title}] Подарунок для Вас від %{collection_title}"
         no_collection: "[%{app_name}] Подарунок для Вас"
     signup_notification:
       activate_your_account: перейдіть за цим посиланням, щоб активувати Ваш обліковий

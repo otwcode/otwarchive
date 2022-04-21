@@ -17,7 +17,7 @@ cs:
               na %{support_url}.
             part2: 'AO3 je fanoušky vedený a podporovaný archiv, který spoléhá na
               vaše příspěvky: %{donate_url}.'
-        sent_at: Odesláno v %{sent_at}.
+        sent_at: Odesláno ve %{sent_at}.
       greeting:
         formal: Dobrý den, %{name},
         informal:
@@ -201,7 +201,7 @@ cs:
     collection_notification:
       assignments_sent:
         complete: Všechna zadání byla rozeslána.
-        subject: Zadání rozeslána
+        subject: "[%{app_name}][%{collection_title}] – Zadání rozeslána"
       html:
         received_message: 'Máte novou zprávu o vaší sbírce %{collection_link}:'
       text:

@@ -24,11 +24,11 @@ ru:
         informal:
           addressed: Привет, %{name}!
           unaddressed: Привет!
-        introductory: Привет от Archive of Our Own – AO3 (Нашего Архива)!
+        introductory: Привет от Archive of Our Own – AO3 (Нашего Архива)!
       signature:
         app_short_name: АО3
         open_doors: Команда Open Doors (Открытые двери)
-        parent_org: Organization for Transformative Works – OTW (Организация Трансформационных
+        parent_org: Organization for Transformative Works – OTW (Организация Трансформационных
           Работ)
         support: Команда Технической поддержки АО3
     kudos:
@@ -199,6 +199,15 @@ ru:
       part1: "%{login}, адрес электронной почты, привязанный к вашему аккаунту, был
         изменен на %{email}"
       subject: "[%{app_name}] Изменение адреса электронной почты"
+    collection_notification:
+      assignments_sent:
+        complete: Все задания были отправлены.
+        subject: "[%{app_name}][%{collection_title}] Задания отправлены"
+      html:
+        received_message: 'Вы получили сообщение о вашей коллекции %{collection_link}:'
+      text:
+        received_message: 'Вы получили сообщение о вашей коллекции "%{collection_title}"
+          (%{collection_url}):'
     creatorship_notification:
       explanation: Если вы указаны как соавтор для работы, вас могут добавить в соавторы
         следующих глав вне зависимости от ваших настроек. Вы также будете указаны

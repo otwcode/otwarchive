@@ -17,17 +17,17 @@ pt-PT:
               de Suporte em %{support_url}.
             part2: 'O AO3 é um arquivo gerido e suportado por fãs que depende das
               tuas doações: %{donate_url}.'
-        sent_at: Enviado às %{sent_at}.
+        sent_at: Enviada %{sent_at}.
       greeting:
         formal: Olá %{name},
         informal:
           addressed: Olá, %{name}!
           unaddressed: Olá!
-        introductory: Olá do Archive of Our Own – AO3 (O Nosso Próprio Arquivo)!
+        introductory: Olá do Archive of Our Own – AO3 (O Nosso Próprio Arquivo)!
       signature:
         app_short_name: AO3
         open_doors: A equipa do Open Doors (Portas Abertas)
-        parent_org: Organization for Transformative Works – OTW (Organização para
+        parent_org: Organization for Transformative Works – OTW (Organização para
           Obras Transformativas)
         support: A equipa de Suporte do AO3
     kudos:
@@ -206,7 +206,7 @@ pt-PT:
     collection_notification:
       assignments_sent:
         complete: Já foram enviadas todas as tarefas.
-        subject: Tarefas enviadas
+        subject: "[%{app_name}][%{collection_title}] Tarefas enviadas"
       html:
         received_message: 'Recebeste uma mensagem acerca da tua coleção %{collection_link}:'
       text:
@@ -218,9 +218,27 @@ pt-PT:
         ser adicionada a quaisquer séries às quais a obra for adicionada.
       html:
         creation: "%{creation_link} por %{pseud_links}"
+        edit_chapter: editar o capítulo
+        edit_series: editar a série
+        remove_chapter: Se te adicionaram por engano ou não quiseres aparecer como
+          pessoa criadora, podes %{edit_chapter_link} para te removeres como pessoa
+          criadora.
+        remove_series: Caso a tua adição tenha sido por erro, ou não queiras aparecer
+          como pessoa criadora, podes %{edit_series_link} para te retirares como pessoa
+          criadora.
+      intro_chapter: 'A pessoa utilizadora %{adding_user} listou o teu pseudónimo
+        %{pseud} como cocriador no seguinte capítulo:'
+      intro_series: 'A pessoa utilizadora %{adding_user} listou o teu pseudónimo %{pseud}
+        como cocriador no na seguinte série:'
       subject: "[%{app_name}] Notificação de Pessoa Cocriadora"
       text:
         creation: "%{title} (%{url}) por %{pseuds}"
+        remove_chapter: 'Se te adicionaram por engano ou não quiseres aparecer como
+          pessoa criadora, podes editar o capítulo para te removeres como pessoa criadora:
+          %{url}'
+        remove_series: 'Caso a tua adição tenha sido por erro, ou não queiras aparecer
+          como pessoa criadora, podes editar a série para te retirares como pessoa
+          criadora: %{url}'
     creatorship_notification_archivist:
       explanation: Como esta pessoa utilizadora está a agir de acordo com a sua função
         oficial de arquivista do Open Doors (Portas Abertas), ela está autorizada
@@ -237,9 +255,9 @@ pt-PT:
         remove_work: Se te adicionaram por engano ou não quiseres aparecer como pessoa
           criadora, podes %{edit_work_link} para te removeres dela.
       intro_chapter: 'A pessoa utilizadora %{archivist} adicionou o teu pseudónimo
-        %{pseud}  como pessoa co-criadora do seguinte capítulo:'
+        %{pseud} como pessoa co-criadora do seguinte capítulo:'
       intro_series: 'A pessoa utilizadora %{archivist} adicionou o teu pseudónimo
-        %{pseud}  como pessoa co-criadora da seguinte série:'
+        %{pseud} como pessoa co-criadora da seguinte série:'
       intro_work: 'A pessoa utilizadora %{archivist} adicionou o teu pseudónimo %{pseud}
         como pessoa co-criadora da seguinte obra:'
       subject: "[%{app_name}] Arquivista: Notificação de pessoa co-criadora"
@@ -257,7 +275,9 @@ pt-PT:
         instructions: Podes aceitar ou rejeitar este pedido na tua %{page_name} página.
         page_name: Co-Creator Requests (Pedidos de Pessoa Co-Criadora)
       intro_chapter: 'A pessoa utilizadora %{inviting_user} convidou o teu pseudónimo
-        %{pseud} para listado como pessoa co-criadora no seguinte capítulo:'
+        %{pseud} para listado como pessoa co-criadora do seguinte capítulo:'
+      intro_series: 'A pessoa utilizadora %{inviting_user} convidou o teu pseudónimo
+        %{pseud} para ser listado como pessoa co-criadora da seguinte série:'
       intro_work: 'A pessoa utilizadora %{inviting_user} convidou o teu pseudónimo
         %{pseud} para ser listado como pessoa co-criadora da seguinte obra:'
       subject: "[%{app_name}] Pedido de pessoa co-criadora"

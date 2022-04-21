@@ -28,7 +28,7 @@ sv:
       signature:
         app_short_name: AO3
         open_doors: Open Doors (Öppna dörrar)-teamet
-        parent_org: Organization for Transformative Works – OTW (Organisationen för
+        parent_org: Organization for Transformative Works – OTW (Organisationen för
           transformativa verk)
         support: AO3:s support-team
     kudos:
@@ -202,7 +202,7 @@ sv:
     collection_notification:
       assignments_sent:
         complete: Alla uppdrag har nu skickats ut.
-        subject: Uppdragen utskickade
+        subject: "[%{app_name}][%{collection_title}] Uppdragen utskickade"
       html:
         received_message: 'Du har fått ett meddelande om din samling %{collection_link}:'
       text:

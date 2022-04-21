@@ -12,7 +12,7 @@ tr:
             part1: Eğer bu mesajı bir hata sonucu aldıysanız lütfen %{support_link}.
             part2: AO3 hayranlar tarafından yönetilen ve desteklenen bir arşivdir,
               varlığını sürdürmesini sağlayan şey %{donate_link}.
-            support_link_text: Teknik Destek ile iletişime geçin.
+            support_link_text: Teknik Destek ile iletişime geçin
           text:
             part1: Eğer bu mesajı bir hata sonucu aldıysanız lütfen %{support_url}
               adresinden Teknik Destek ile iletişime geçin.
@@ -24,11 +24,11 @@ tr:
         informal:
           addressed: Merhaba %{name}!
           unaddressed: Merhaba!
-        introductory: Archive of Our Own – AO3 (Kendimize Ait Bir Arşiv)ten selamlar!
+        introductory: Archive of Our Own – AO3 (Kendimize Ait Bir Arşiv)ten selamlar!
       signature:
         app_short_name: AO3
         open_doors: Open Doors (Açık Kapılar) ekibi
-        parent_org: Organization for Transformative Works – OTW (Transformatif Eserler
+        parent_org: Organization for Transformative Works – OTW (Transformatif Eserler
           Derneği)
         support: AO3 Teknik Destek ekibi
     kudos:
@@ -134,8 +134,8 @@ tr:
         unrevealed:
           html: "%{collection_link}’ın koleksiyon sorumluları, %{work_link} eserinizin
             durumunu gizli olarak değiştirdi."
-          text: '"%{collection_title}" (%{collection_url})  koleksiyonunun sorumluları  "%{work_title}"
-            (%{work_url}) eserinizin durumunu gizli olarak değiştirdi.'
+          text: '"%{collection_title}" (%{collection_url}) koleksiyonunun sorumluları
+            "%{work_title}" (%{work_url}) eserinizin durumunu gizli olarak değiştirdi.'
       collection_items_link_text: Approved Collection Items (Onaylı Koleksiyon Öğeleri)
         sayfası
       do_not_want:
@@ -188,7 +188,7 @@ tr:
       recipient_missing: 'Hiç kimse: yardım için bir moderatörle iletişime geçin!'
       subject: "[%{app_name}][%{collection_title}] Göreviniz!"
       text:
-        assignment: AO3'teki "%{collection_title}" (%{collection_url})  oyununda size
+        assignment: AO3'teki "%{collection_title}" (%{collection_url}) oyununda size
           aşağıdaki istek atandı!
         footer: Bu e-postayı, %{title} oyununa (%{url}) kaydolduğunuz için aldınız.
           Bu oyun hakkında daha fazla bilgi ve moderatörlerin iletişim bilgileri için
@@ -201,12 +201,35 @@ tr:
     collection_notification:
       assignments_sent:
         complete: Bütün atamalar gönderildi.
-        subject: Atamalar gönderildi
+        subject: "[%{app_name}][%{collection_title}] Atamalar gönderildi"
       html:
         received_message: "%{collection_link} koleksiyonunuz hakkında bir mesaj aldınız:"
       text:
         received_message: '"%{collection_title}" koleksiyonunuz (%{collection_url})
           hakkında bir mesaj aldınız:'
+    creatorship_notification:
+      explanation: Bir eserin ortak yazarı olduğunuzda, ortak yazarlık ayarlarınızdan
+        bağımsız olarak yeni bölümlere ekleyebilirsiniz. Ayrıca çalışmanın eklendiği
+        herhangi bir diziye de ekleneceksiniz.
+      html:
+        creation: "%{pseud_links} tarafından %{creation_link}"
+        edit_chapter: bölümü düzenleyerek
+        edit_series: diziyi düzenleyerek
+        remove_chapter: Yanlışlıkla eklendiyseniz veya yazar olarak listelenmek istemiyorsanız,
+          %{edit_chapter_link} kendinizi yazarlıktan kaldırabilirsiniz.
+        remove_series: Yanlışlıkla eklendiyseniz veya yazar olarak listelenmek istemiyorsanız,
+          %{edit_series_link} kendinizi yazarlıktan kaldırabilirsiniz.
+      intro_chapter: "%{adding_user} kullanıcısı %{pseud} takma adınızı aşağıdaki
+        bölümde ortak yazar olarak listeledi:"
+      intro_series: "%{adding_user} kullanıcısı %{pseud} takma adınızı aşağıdaki dizide
+        ortak yazar olarak listeledi:"
+      subject: "[%{app_name}] Ortak yazar bildirimi"
+      text:
+        creation: "%{pseuds} tarafından %{title} (%{url})"
+        remove_chapter: 'Yanlışlıkla eklendiyseniz veya yazar olarak listelenmek istemiyorsanız,
+          kendinizi yazar olarak kaldırmak için bölümü düzenleyebilirsiniz: %{url}'
+        remove_series: 'Yanlışlıkla eklendiyseniz veya yazar olarak listelenmek istemiyorsanız,
+          kendinizi yazar olarak kaldırmak için diziyi düzenleyebilirsiniz: %{url}'
     creatorship_notification_archivist:
       explanation: Open Doors (Açık Kapılar) arşivcileri, onlara verilen yetki dahilinde
         ortaklığı devre dışı bırakmış olsanız bile sizi davetiyesiz ortak yaratıcı
@@ -223,11 +246,11 @@ tr:
         remove_work: Eğer yanlışlıkla eklendiyseniz veya yaratıcı olarak listelenmek
           istemiyorsanız kendinizi yaratıcılıktan çıkarmak için %{edit_work_link}.
       intro_chapter: "%{archivist} kullanıcısı %{pseud} takma adınızı ortak yaratıcı
-        olarak aşağıdaki bölüme  ekledi:"
+        olarak aşağıdaki bölüme ekledi:"
       intro_series: "%{archivist} kullanıcısı %{pseud} takma adınızı ortak yaratıcı
-        olarak aşağıdaki seriye  ekledi:"
+        olarak aşağıdaki seriye ekledi:"
       intro_work: "%{archivist} kullanıcısı %{pseud} takma adınızı ortak yaratıcı
-        olarak aşağıdaki esere  ekledi:"
+        olarak aşağıdaki esere ekledi:"
       subject: "[%{app_name}] Ortak yaratıcı arşivci bildirimi"
       text:
         creation: "%{pseuds} tarafından %{title} (%{url})"
@@ -242,9 +265,15 @@ tr:
           %{url}'
     creatorship_request:
       html:
-        creation: "%{pseud_links} tarafından %{creation_link} "
+        creation: "%{pseud_links} tarafından %{creation_link}"
         instructions: Bu isteği %{page_name} sayfanızdan kabul edebilir veya reddedebilirsiniz.
         page_name: Co-Creator Requests (Eş-Yazar İstekleri)
+      intro_chapter: 'Kullanıcı %{inviting_user}, %{pseud} takma adınızı eş-yazar
+        olarak aşağıdaki bölüme ekleme isteğinde bulundu:'
+      intro_series: 'Kullanıcı %{inviting_user}, %{pseud} takma adınızı eş-yazar olarak
+        aşağıdaki seriye ekleme isteğinde bulundu:'
+      intro_work: 'Kullanıcı %{inviting_user}, %{pseud} takma adınızı eş-yazar olarak
+        aşağıdaki esere ekleme isteğinde bulundu:'
       subject: "[%{app_name}] Eş-yazar isteği"
       text:
         creation: "%{pseuds} tarafından %{title} (%{url})"

@@ -64,23 +64,23 @@ de:
       subject: "[%{app_name}] Deine Richtlinien- und Missbrauchsmeldung"
       url_para: 'Die URL der Seite, auf der sich der Missbrauch befindet:'
     admin_deleted_work_notification:
-      bye: Anbei ist eine Kopie Deines Werkes als Referenz.
+      bye: Anbei ist eine Kopie deines Werkes als Referenz.
       contact_abuse: kontaktiere bitte unser “Richtlinien und Missbrauch”-Komitee
       html:
         part1: dein Werk %{title} wurde von einem*r Webadministrator*in des AO3 gelöscht.
-        part2: Falls Dein Werk Teil eines Import-Projektes durch unser Open Doors-
+        part2: Falls dein Werk Teil eines Import-Projektes durch unser Open Doors-
           (Offene Türen) Komitee war, %{opendoors_link} für alle weiteren Fragen.
-        tos_violation: Wenn Dein Werk eventuell die Nutzungsbedingungen des AO3 verletzt
+        tos_violation: Wenn dein Werk eventuell die Nutzungsbedingungen des AO3 verletzt
           hat, %{contact_abuse_link}.
       opendoors: kontaktiere bitte das “Offene Türen”-Komitee
-      subject: "[%{app_name}] dein Werk wurde von einem*r Webadministrator*in gelöscht"
+      subject: "[%{app_name}] Dein Werk wurde von einem*r Webadministrator*in gelöscht"
       text:
         part1: dein Werk "%{title}" wurde von einem*r Webadministrator*in des AO3
           gelöscht.
-        part2: Falls Dein Werk Teil eines Import-Projektes durch unser Open Doors-
+        part2: Falls dein Werk Teil eines Import-Projektes durch unser Open Doors-
           (Offene Türen) Komitee war, kontaktiere bitte Offene Türen (%{opendoors_link})
           für alle weiteren Fragen.
-        tos_violation: Wenn Dein Werk eventuell die Nutzungsbedingungen des AO3 verletzt
+        tos_violation: Wenn dein Werk eventuell die Nutzungsbedingungen des AO3 verletzt
           hat, kontaktiere bitte unser Richtlinien und Missbrauch-Komitee (%{contact_abuse_url}).
     admin_hidden_work_notification:
       access: Obwohl Dein Werk verborgen ist, kannst Du es immer noch über den oben
@@ -94,7 +94,7 @@ de:
         help: Wenn Du Dir nicht sicher bist, warum Dein Werk verborgen wurde und Du
           keine weitere Mitteilung in dieser Angelegenheit erhalten hast, dann %{contact_abuse_link}
           bitte direkt.
-        hidden: dein Werk %{title} wurde vom “Richtlinien und Missbrauch”-Komitee
+        hidden: Dein Werk %{title} wurde vom “Richtlinien und Missbrauch”-Komitee
           verborgen und ist nicht mehr öffentlich zugänglich.
         tos_violation: Wenn Dein Werk aufgrund eines Verstoßes gegen die %{tos_link}
           des AO3 verborgen wurde, musst Du Maßnahmen ergreifen, um den Verstoß zu
@@ -106,7 +106,7 @@ de:
         help: 'Wenn Du Dir nicht sicher bist, warum Dein Werk verborgen wurde und
           Du keine weitere Mitteilung in dieser Angelegenheit erhalten hast, dann
           kontaktiere das “Richtlinien und Missbrauch”-Komitee bitte direkt: %{contact_abuse_url}.'
-        hidden: dein Werk “%{title}” (%{work_url}) wurde vom “Richtlinien und Missbrauch”-Komitee
+        hidden: Dein Werk “%{title}” (%{work_url}) wurde vom “Richtlinien und Missbrauch”-Komitee
           verborgen und ist nicht mehr öffentlich zugänglich.
         tos_violation: Wenn Dein Werk aufgrund eines Verstoßes gegen die Nutzungsbedingungen
           des AO3 (%{tos_url}) verborgen wurde, musst Du Maßnahmen ergreifen, um den
@@ -134,7 +134,7 @@ de:
             Werks %{work_link} auf anonym und verborgen gesetzt.
           text: die Betreuer*innen von "%{collection_title}" (%{collection_url}) haben
             den Status Deines Werks "%{work_title}" (%{work_url}) auf anonym und verborgen
-            gesetzt..
+            gesetzt.
         unrevealed:
           html: die Betreuer*innen von %{collection_link} haben den Status Deines
             Werks %{work_link} auf verborgen gesetzt.
@@ -206,7 +206,7 @@ de:
     collection_notification:
       assignments_sent:
         complete: Alle Aufgaben wurden versendet.
-        subject: Aufgaben versendet
+        subject: "[%{app_name}][%{collection_title}] Aufgaben versendet"
       html:
         received_message: 'Du hast eine Nachricht zu Deiner Sammlung %{collection_link}
           erhalten:'
@@ -242,42 +242,69 @@ de:
           aufgeführt werden möchtest, kannst Du die Serie bearbeiten, um Dich selbst
           als Schöpfer*in zu entfernen: %{url}'
     creatorship_notification_archivist:
-      explanation: In der Funktion als ArchivistIn darf er/sie Dich ohne Einladung
-        hinzufügen, selbst wenn Du die Option, als MitschöpferIn geführt zu werden,
+      explanation: In der Funktion als Archivist*in darf er/sie Dich ohne Einladung
+        hinzufügen, selbst wenn Du die Option, als Mitschöpfer*in geführt zu werden,
         deaktiviert hast.
       html:
         creation: "%{creation_link} von %{pseud_links}"
-      subject: "[%{app_name}] Benachrichtigung MitschöpferIn durch ArchivistIn"
+        edit_chapter: das Kapitel editieren
+        edit_series: die Serie editieren
+        edit_work: das Werk editieren
+        remove_chapter: Falls Du irrtümlicherweise hinzugefügt wurdest oder nicht
+          als Schöpfer*in angezeigt werden möchtest, kannst Du %{edit_chapter_link},
+          um Dich als Schöpfer*in zu entfernen.
+        remove_series: Falls Du irrtümlicherweise hinzugefügt wurdest oder nicht als
+          Schöpfer*in angezeigt werden möchtest, kannst Du %{edit_series_link}, um
+          Dich als Schöpfer*in zu entfernen.
+        remove_work: Falls Du irrtümlicherweise hinzugefügt wurdest oder nicht als
+          Schöpfer*in angezeigt werden möchtest, kannst Du %{edit_work_link}, um Dich
+          als Schöpfer*in zu entfernen.
+      intro_chapter: 'Der/Die Benutzer*in %{archivist} hat Dein Pseudonym %{pseud}
+        als Mitschöpfer*in zu folgendem Kapitel hinzugefügt:'
+      intro_series: 'Der/Die Benutzer*in %{archivist} hat Dein Pseudonym %{pseud}
+        als Mitschöpfer*in zur folgenden Serie hinzugefügt:'
+      intro_work: 'Der/Die Benutzer*in %{archivist} hat Dein Pseudonym %{pseud} als
+        Mitschöpfer*in zu folgendem Werk hinzugefügt:'
+      subject: "[%{app_name}] Archivist*innen-Benachrichtigung zur Mitschöpferschaft"
       text:
         creation: "%{title} (%{url}) von %{pseuds}"
+        remove_chapter: 'Falls Du irrtümlicherweise hinzugefügt wurdest oder nicht
+          als Schöpfer*in angezeigt werden möchtest, kannst Du das Kapitel editieren,
+          um Dich als Schöpfer*in zu entfernen: %{url}'
+        remove_series: 'Falls Du irrtümlicherweise hinzugefügt wurdest oder nicht
+          als Schöpfer*in angezeigt werden möchtest, kannst Du die Serie editieren,
+          um Dich als Schöpfer*in zu entfernen: %{url}'
+        remove_work: 'Falls Du irrtümlicherweise hinzugefügt wurdest oder nicht als
+          Schöpfer*in angezeigt werden möchtest, kannst Du das Werk editieren, um
+          Dich als Schöpfer*in zu entfernen: %{url}'
     creatorship_request:
       html:
         creation: "%{creation_link} von %{pseud_links}"
-        instructions: Du kannst diese Anfrage auf Deiner “%{page_name}”-Seite annehmen
+        instructions: Du kannst diese Anfrage auf deiner “%{page_name}”-Seite annehmen
           oder ablehnen.
         page_name: Co-Creator Requests (Mitschöpfer*innen-Anfragen)
-      intro_chapter: 'Benutzer*in %{inviting_user} hat Dein Pseud %{pseud} eingeladen,
-        als Mitschöpfer*in des folgenden Kapitels aufgeführt zu werden:'
-      intro_series: 'Benutzer*in %{inviting_user} hat Dein Pseud %{pseud} eingeladen,
-        als Mitschöpfer*in der folgenden Serie aufgeführt zu werden:'
-      intro_work: 'Benutzer*in %{inviting_user} hat Dein Pseud %{pseud} eingeladen,
-        als Mitschöpfer*in des folgenden Werkes aufgeführt zu werden:'
+      intro_chapter: 'dein Pseud %{pseud} wurde von %{inviting_user} eingeladen, als
+        Mitschöpfer*in des folgenden Kapitels aufgeführt zu werden:'
+      intro_series: 'dein Pseud %{pseud} wurde von %{inviting_user} eingeladen, als
+        Mitschöpfer*in der folgenden Serie aufgeführt zu werden:'
+      intro_work: 'dein Pseud %{pseud} wurde von %{inviting_user} eingeladen, als
+        Mitschöpfer*in des folgenden Werkes aufgeführt zu werden:'
       subject: "[%{app_name}] Mitschöpfer*innen-Anfrage"
       text:
         creation: "%{title} (%{url}) von %{pseuds}"
-        instructions: 'Du kannst diese Anfrage auf Deiner “Co-Creator Requests”- (Mitschöpfer*innen-Anfragen)
+        instructions: 'Du kannst diese Anfrage auf deiner “Co-Creator Requests”- (Mitschöpfer*innen-Anfragen)
           Seite annehmen oder ablehnen: %{url}'
     delete_work_notification:
       html:
-        part1_other: dein Werk %{title} wurde gemäß Anfrage von %{pseud} gelöscht.
-        part1_yourself: dein Werk %{title} wurde gemäß Deiner Anfrage gelöscht.
+        part1_other: Dein Werk %{title} wurde gemäß Anfrage von %{pseud} gelöscht.
+        part1_yourself: Dein Werk %{title} wurde gemäß Deiner Anfrage gelöscht.
         part2: Wenn Du Fragen hast, %{support}.
       part3: Anbei ist eine Kopie Deines Werkes, als Referenz für Dich.
       subject: "[%{app_name}] Dein Werk wurde gelöscht"
-      support: kontaktiere den Support
+      support: kontaktiere bitte den Support
       text:
-        part1_other: dein Werk "%{title}" wurde gemäß Anfrage von %{pseud} gelöscht.
-        part1_yourself: dein Werk "%{title}" wurde gemäß Deiner Anfrage gelöscht.
+        part1_other: Dein Werk "%{title}" wurde gemäß Anfrage von %{pseud} gelöscht.
+        part1_yourself: Dein Werk "%{title}" wurde gemäß Deiner Anfrage gelöscht.
         part2: Falls Du Fragen hast, bitte %{support} (%{url}).
     invitation_to_claim:
       html:

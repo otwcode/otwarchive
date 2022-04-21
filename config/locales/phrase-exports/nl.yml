@@ -24,11 +24,11 @@ nl:
         informal:
           addressed: Hallo, %{name}!
           unaddressed: Hallo!
-        introductory: Hallo van Archive of Our Own – AO3 (Ons Eigen Archief)!
+        introductory: Hallo van Archive of Our Own – AO3 (Ons Eigen Archief)!
       signature:
         app_short_name: AO3
         open_doors: Open Doors (Open Deuren)
-        parent_org: Organization for Transformative Works – OTW (Organisatie voor
+        parent_org: Organization for Transformative Works – OTW (Organisatie voor
           Transformatieve Werken)
         support: AO3 Support
     kudos:
@@ -80,6 +80,37 @@ nl:
           Open Deuren (%{opendoors_link}).
         tos_violation: Als het mogelijk is dat jouw werk de servicevoorwaarden van
           AO3 schond, neem dan contact op met Beleid & Misbruik (%{contact_abuse_url}).
+    admin_hidden_work_notification:
+      access: Terwijl je werk verborgen is, is het voor jou toegankelijk via de bovenstaande
+        link maar het zal niet zichtbaar zijn op de pagina met jouw werken en niet
+        beschikbaar zijn voor andere gebruikers van AO3.
+      check_email: Controleer je e-mail, inclusief je spamfolder, want het Beleids-
+        en Misbruikteam kan al geprobeerd hebben om contact met je op te nemen om
+        uit te leggen waarom je werk is verborgen.
+      contact_abuse: neem dan contact op met het Beleids- en Misbruikteam
+      html:
+        help: Als je niet weet waarom je werk verborgen is en je hebt geen verdere
+          communicatie hierover ontvangen, %{contact_abuse_link}.
+        hidden: Jouw werk %{title} is verborgen door het Beleids- en Misbruikteam
+          en is niet meer publiek toegankelijk.
+        tos_violation: Als je werk verborgen is omdat het AO3's %{tos_link} overtreedt,
+          zal van jou verwacht worden dat je actie onderneemt om de overtreding te
+          corrigeren. Als je er niet in slaagt je werk inschikkelijk te maken met
+          de Servicevoorwaarden, kan dat ertoe leiden dat je werk verwijderd wordt
+          van AO3.
+      subject: "[%{app_name}] Jouw werk is verborgen door het Beleids- en Misbruikteam"
+      text:
+        help: 'Als je niet weet waarom je werk verborgen is en je hebt geen verdere
+          communicatie hierover ontvangen, neem dan rechtstreeks contact op met het
+          Beleids- en Misbruikteam: %{contact_abuse_link}.'
+        hidden: Jouw werk "%{title}" (%{work_url}) is verborgen door het Beleids-
+          en Misbruikteam en is niet meer publiek toegankelijk.
+        tos_violation: Als je werk verborgen is omdat het AO3's Servicevoorwaarden
+          (%{tos_url}) overtreedt, zal van jou verwacht worden dat je actie onderneemt
+          om de overtreding te corrigeren. Als je er niet in slaagt je werk inschikkelijk
+          te maken met de Servicevoorwaarden, kan dat ertoe leiden dat je werk verwijderd
+          wordt van AO3.
+      tos: Servicevoorwaarden
     anonymous_or_unrevealed_notification:
       anonymous_info: Anonieme werken worden wel weergegeven in taglijsten, maar niet
         op de pagina met jouw werken. Op het werk wordt je gebruikersnaam vervangen
@@ -176,7 +207,7 @@ nl:
     collection_notification:
       assignments_sent:
         complete: Alle taken zijn verstuurd.
-        subject: Taken verstuurd
+        subject: "[%{app_name}][%{collection_title}] Taken verstuurd"
       html:
         received_message: 'Je hebt een bericht ontvangen over je collectie %{collection_link}:'
       text:
@@ -294,7 +325,7 @@ nl:
       subject: "[%{app_name}] Verzoek uitnodigingscode geweigerd"
     recipient_notification:
       subject:
-        collection: "[%{app_name}][%{collection_title}] Een werk voor jou in  %{collection_title} "
+        collection: "[%{app_name}][%{collection_title}] Een werk voor jou in %{collection_title}"
         no_collection: "[%{app_name}] Een werk voor jou"
     signup_notification:
       activate_your_account: volg deze link om je account te activeren

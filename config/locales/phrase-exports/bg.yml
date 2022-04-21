@@ -138,8 +138,8 @@ bg:
           html: Организаторите на колекцията %{collection_link} промениха статуса
             на твоето произведение %{work_link} на неразкрито.
           text: Организаторите на колекцията “%{collection_title}” (%{collection_url})
-            са променили статуса на твоето произведене "%{work_title}" (%{work_url})  на
-            неразкрито.
+            са променили статуса на твоето произведене "%{work_title}" (%{work_url})
+            на неразкрито.
       collection_items_link_text: страницата Approved Collection Items (Одобрено съдържание
         в колекции)
       do_not_want:
@@ -206,7 +206,7 @@ bg:
     collection_notification:
       assignments_sent:
         complete: Всички задачи са изпратени.
-        subject: Задачите са изпратени
+        subject: "[%{app_name}][%{collection_title}] Задачите са изпратени"
       html:
         received_message: 'Имаш съобщение във връзка с твоята колекция %{collection_link}:'
       text:
@@ -296,7 +296,7 @@ bg:
         part1_yourself: Твоята творба %{title} беше изтрита по твоя заявка.
         part2: Ако имаш въпроси, моля, %{support}.
       part3: Прилагаме копие от произведението ти за информация.
-      subject: "[%{app_name}] Твоята творба беше  изтрита"
+      subject: "[%{app_name}] Твоята творба беше изтрита"
       support: свържи се с екип Поддръжка
       text:
         part1_other: Твоята творба “%{title}" е изтрита по заявка на %{pseud}.

@@ -200,7 +200,7 @@ hr:
     collection_notification:
       assignments_sent:
         complete: Poslani su svi zadaci.
-        subject: Zadaci poslani
+        subject: "[%{app_name}][%{collection_title}] Zadaci poslani"
       html:
         received_message: 'Dobili ste poruku o vašoj kolekciji %{collection_link}:'
       text:
