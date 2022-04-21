@@ -44,6 +44,9 @@ module SearchHelper
 
   def original_path(var)
     case var
+    when Collection
+      return collection_works_path(var) if params[:work_search].present?
+      return collection_bookmarks_path(var) if params[:bookmark_search].present?
     when Tag, Fandom
       return tag_works_path(var) if params[:work_search].present?
       return tag_bookmarks_path(var) if params[:bookmark_search].present?

@@ -136,9 +136,11 @@
         </ul>
       </dd>
       <dt class="landmark"><%= ts("Submit") %></dt>
-      <dd class="submit actions"><%= link_to ts("Clear Filters"), collections_path %></dd>
       <dd class="submit actions"><%= submit_tag ts("Sort and Filter") %></dd>
     </dl>
+    <p class="footnote">
+      <%= link_to ts("Clear Filters"), collections_path %>
+    </p>
   <% end %>
   <% # On narrow screens, link jumps to top of index when JavaScript is disabled and closes filters when JavaScript is enabled %>
   <p class="narrow-shown hidden">
