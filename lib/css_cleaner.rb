@@ -18,9 +18,9 @@ module CssCleaner
   SHAPE_NAME_REGEX = Regexp.new('rect', Regexp::IGNORECASE)
   SHAPE_FUNCTION_REGEX = Regexp.new("#{SHAPE_NAME_REGEX}#{PAREN_NUMBER_REGEX}")
 
-  RGBA_REGEX = Regexp.new('rgba?' + PAREN_NUMBER_REGEX.to_s, Regexp::IGNORECASE)
-  HSLA_REGEX = Regexp.new('hsla?' + PAREN_NUMBER_REGEX.to_s, Regexp::IGNORECASE)
-  COLOR_REGEX = Regexp.new('#[0-9a-f]{3,6}|' + ALPHA_REGEX.to_s + '|' + RGBA_REGEX.to_s + '|' + HSLA_REGEX.to_s)
+  RGBA_REGEX = Regexp.new("rgba?" + PAREN_NUMBER_REGEX.to_s, Regexp::IGNORECASE)
+  HSLA_REGEX = Regexp.new("hsla?" + PAREN_NUMBER_REGEX.to_s, Regexp::IGNORECASE)
+  COLOR_REGEX = Regexp.new("#[0-9a-f]{3,6}|" + ALPHA_REGEX.to_s + "|" + RGBA_REGEX.to_s + "|" + HSLA_REGEX.to_s)
   COLOR_STOP_FUNCTION_REGEX = Regexp.new('color-stop\s*\(' + NUMBER_WITH_UNIT_REGEX.to_s + '\s*\,?\s*' + COLOR_REGEX.to_s + '\s*\)', Regexp::IGNORECASE)
 
   # from the ICANN list at http://www.icann.org/en/registries/top-level-domains.htm
