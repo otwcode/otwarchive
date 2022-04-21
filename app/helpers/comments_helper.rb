@@ -286,6 +286,17 @@ module CommentsHelper
     end
   end
 
+  # gets the css user-<id> class name for the comment
+  def get_comment_user_css_class(comment)
+    if comment.pseud.nil?
+      'visitor'
+    elsif comment.pseud.user.is_author_of?(comment.ultimate_parent) && comment.ultimate_parent.anonymous?
+      'anonymous-creator'
+    else
+      comment.pseud.user.id
+    end
+  end
+
   # find the parent of the commentable
   def find_parent(commentable)
     if commentable.is_a?(Comment)
