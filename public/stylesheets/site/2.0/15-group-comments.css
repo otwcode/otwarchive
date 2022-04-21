@@ -61,7 +61,7 @@ div.comment, li.comment {
 fieldset.comments, .comment .userstuff {
   background: transparent;
   border: none;
-    box-shadow: none;
+  box-shadow: none;
 }
 
 .comment .userstuff {
@@ -80,6 +80,15 @@ fieldset.comments, .comment .userstuff {
 
 .comment .edited {
   margin: 1.286em 0.643em 0.25em;
+}
+
+.comment span.role {
+  font-weight: bold;
+  color: #900;
+}
+
+.comment.official {
+  background-color: #FCC;
 }
 
 /* mods */

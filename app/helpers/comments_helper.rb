@@ -49,6 +49,8 @@ module CommentsHelper
     if comment.pseud_id
       if comment.pseud.nil?
         ts("Account Deleted")
+      elsif comment.pseud.user.official
+        link_to (comment.pseud.byline + content_tag(:span, " (Official)", :class => "role")).html_safe, [comment.pseud.user, comment.pseud]
       else
         link_to comment.pseud.byline, [comment.pseud.user, comment.pseud]
       end

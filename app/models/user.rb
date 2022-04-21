@@ -388,6 +388,15 @@ class User < ApplicationRecord
     has_role?(:archivist)
   end
 
+  # Is this user an authorized official?
+  def official
+    self.is_official?
+  end
+
+  def is_official?
+    has_role?(:official)
+  end
+
   # Is this user a protected user? These are users experiencing certain types
   # of harassment. For now, this is only used to prevent harassment via repeated
   # password reset requests.
