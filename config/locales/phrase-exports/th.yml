@@ -176,7 +176,7 @@ th:
     collection_notification:
       assignments_sent:
         complete: ผลงานที่ได้รับมอบหมายทั้งหมดถูกส่งออกไปแล้ว
-        subject: "[%{app_name}][%{collection_title}] ผลงานที่ได้รับมอบหมายถูกส่งออกไปแล้ว"
+        subject: ผลงานที่ได้รับมอบหมายถูกส่งออกไปแล้ว
       html:
         received_message: 'คุณได้รับข้อความเกี่ยวกับคอลเลกชันของคุณ %{collection_link}:'
       text:

@@ -26,11 +26,11 @@ zh-CN:
         informal:
           addressed: 您好，%{name}！
           unaddressed: 您好！
-        introductory: Archive of Our Own – AO3（AO3作品库）向您问好！
+        introductory: Archive of Our Own – AO3（AO3作品库）向您问好！
       signature:
         app_short_name: AO3
         open_doors: Open Doors（Open Doors拯救计划）团队
-        parent_org: Organization for Transformative Works – OTW（OTW再创作组织）
+        parent_org: Organization for Transformative Works – OTW（OTW再创作组织）
         support: AO3支持委员会团队
     kudos:
       guest:
@@ -74,28 +74,28 @@ zh-CN:
       check_email: 条款执行和违反行为处理委员会可能已经联系您并对您作品被隐藏的原因进行了解释，因此请查看您的电邮信箱，包括垃圾邮件列表。
       contact_abuse: 联系条款执行和违反行为处理委员会
       html:
-        help: 如果您不确定为什么您的作品会被隐藏，并且没有收到有关此事的进一步联系，请直接%{contact_abuse_link}。
+        help: 如果您不确定为什么您的作品会被隐藏，并且没有收到有关此事的进一步联系，请直接%{contact_abuse_link}
         hidden: 您的作品%{title}已被条款执行和违反行为处理委员会隐藏并无法再被公开访问。
         tos_violation: 如果您的作品是因为违反AO3的服务条款（详细条款链接为：%{tos_link}）而被隐藏，您会被要求采取行动以纠正违规行为。如果您无法做出改动并让您的作品符合服务条款，您的作品可能会被从AO3作品库中删除。
       subject: "[%{app_name}] 您的作品已被条款执行和违反行为处理委员会隐藏"
       text:
         help: 如果您不确定为什么您的作品会被隐藏，并且没有收到有关此事的进一步联系，请直接联系条款执行和违反行为处理委员会：%{contact_abuse_url}
-        hidden: 您的作品“%{title}”（作品链接为：%{work_url}）已被条款执行和违反行为处理委员会隐藏并无法再被公开访问。
+        hidden: 您的作品"%{title}"（作品链接为：%{work_url}）已被条款执行和违反行为处理委员会隐藏并无法再被公开访问。
         tos_violation: 如果您的作品是因为违反AO3的服务条款（详细条款链接为：%{tos_url}）而被隐藏，您会被要求采取行动以纠正违规行为。如果您无法做出改动并让您的作品符合服务条款，您的作品可能会被从AO3作品库中删除。
       tos: 服务条款
     anonymous_or_unrevealed_notification:
-      anonymous_info: 匿名作品在标签列表中可见，但不会显示在您的作品页面上。在作品页，您的用户名将替换为“Anonymous”（佚名）。
-      anonymous_unrevealed_info: 管理员随后可能会公开您的作品，但仍保留匿名。订阅您账户的用户不会收到相关改动提示。作品一经公开，即会被收录到标签列表中，但不会显示在您的作品页面。在作品页，您的用户名将替换为“Anonymous”（佚名）。
+      anonymous_info: 匿名作品在标签列表中可见，但不会显示在您的作品页面上。在作品页，您的用户名将替换为"Anonymous"（佚名）。
+      anonymous_unrevealed_info: 管理员随后可能会公开您的作品，但仍保留匿名。订阅您账户的用户不会收到相关改动提示。作品一经公开，即会被收录到标签列表中，但不会显示在您的作品页面。在作品页，您的用户名将替换为"Anonymous"（佚名）。
       changed_status:
         anonymous:
           html: 作品集%{collection_link}的管理员已将您的作品%{work_link}设为匿名状态。
-          text: 名为“%{collection_title}”的作品集（作品集链接为%{collection_url}）的管理员已将您名为“%{work_title}”（作品链接为%{work_url}）的作品设为匿名状态。
+          text: 名为"%{collection_title}"的作品集（作品集链接为%{collection_url}）的管理员已将您名为"%{work_title}"（作品链接为%{work_url}）的作品设为匿名状态。
         anonymous_unrevealed:
           html: 作品集%{collection_link}的管理员已将您的作品%{work_link} 设为匿名与非公开状态.
-          text: 名为“%{collection_title}”的作品集（作品集链接为%{collection_url}）的管理员已将您名为“%{work_title}”（作品链接为%{work_url}）的作品设为匿名与非公开状态。
+          text: 名为"%{collection_title}"的作品集（作品集链接为%{collection_url}）的管理员已将您名为"%{work_title}"（作品链接为%{work_url}）的作品设为匿名与非公开状态。
         unrevealed:
           html: 作品集%{collection_link}的管理员已将您的作品%{work_link}设为非公开状态。
-          text: 名为“%{collection_title}”（作品集链接为%{collection_url}）的作品集的管理员已将您名为“%{work_title}”（作品链接为%{work_url}）的作品设为非公开状态。
+          text: 名为"%{collection_title}"（作品集链接为%{collection_url}）的作品集的管理员已将您名为"%{work_title}"（作品链接为%{work_url}）的作品设为非公开状态。
       collection_items_link_text: Approved Collection Items（已通过作品集条目）页
       do_not_want:
         anonymous:
@@ -142,11 +142,11 @@ zh-CN:
     collection_notification:
       assignments_sent:
         complete: 所有任务已发送。
-        subject: "[%{app_name}][%{collection_title}]任务已发送"
+        subject: 任务已发送
       html:
         received_message: 您收到一则有关您的作品集%{collection_link}的信息：
       text:
-        received_message: 您收到一则有关您的作品集“%{collection_title}”（%{collection_url}）的信息：
+        received_message: 您收到一则有关您的作品集"%{collection_title}"（%{collection_url}）的信息：
     creatorship_notification:
       explanation: 作为某一作品的共同创作者, 您可能被列为作品新章节的作者，无论您在个人设置中是否允许他人邀请您成为共同创作者， 您也会被自动列为作品所属系列的作者之一。
       html:

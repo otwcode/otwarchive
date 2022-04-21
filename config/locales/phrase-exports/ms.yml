@@ -211,7 +211,7 @@ ms:
     collection_notification:
       assignments_sent:
         complete: Semua tugasan telah dihantar
-        subject: "[%{app_name}][%{collection_title}] Tugasan dihantar"
+        subject: Tugasan dihantar
       html:
         received_message: 'Anda telah menerima pesanan tentang koleksi anda %{collection_link}:'
       text:

@@ -189,7 +189,7 @@ he:
     collection_notification:
       assignments_sent:
         complete: כל המטלות נשלחו כעת.
-        subject: "[%{app_name}][%{collection_title}] המטלות נשלחו"
+        subject: המטלות נשלחו
       html:
         received_message: 'קיבלת הודעה לגבי האוסף שלך %{collection_link}:'
       text:

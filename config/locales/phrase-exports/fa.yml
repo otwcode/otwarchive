@@ -199,7 +199,7 @@ fa:
     collection_notification:
       assignments_sent:
         complete: اکنون تمامی وظایف فرستاده شده اند.
-        subject: "[%{app_name}][%{collection_title}] وظایف فرستاده شده"
+        subject: وظایف فرستاده شده
       html:
         received_message: 'شما پیامی راجع به مجموعه تان %{collection_link} دریافت
           کرده اید:'

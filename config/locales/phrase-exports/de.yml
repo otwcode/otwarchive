@@ -206,7 +206,7 @@ de:
     collection_notification:
       assignments_sent:
         complete: Alle Aufgaben wurden versendet.
-        subject: "[%{app_name}][%{collection_title}] Aufgaben versendet"
+        subject: Aufgaben versendet
       html:
         received_message: 'Du hast eine Nachricht zu Deiner Sammlung %{collection_link}
           erhalten:'

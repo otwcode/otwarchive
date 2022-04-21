@@ -202,7 +202,7 @@ sv:
     collection_notification:
       assignments_sent:
         complete: Alla uppdrag har nu skickats ut.
-        subject: "[%{app_name}][%{collection_title}] Uppdragen utskickade"
+        subject: Uppdragen utskickade
       html:
         received_message: 'Du har fått ett meddelande om din samling %{collection_link}:'
       text:

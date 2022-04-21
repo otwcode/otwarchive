@@ -199,7 +199,7 @@ sl:
     collection_notification:
       assignments_sent:
         complete: Vse naloge so bile poslane.
-        subject: "[%{app_name}][%{collection_title}] Naloge so bile poslane"
+        subject: Naloge so bile poslane
       html:
         received_message: 'Prejeli ste obvestilo glede svoje zbirke %{collection_link}:'
       text:

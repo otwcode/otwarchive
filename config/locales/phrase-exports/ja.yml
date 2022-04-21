@@ -141,7 +141,7 @@ ja:
     collection_notification:
       assignments_sent:
         complete: すべての課題が割り当てられ、各参加者に送信されました。
-        subject: "[%{app_name}][%{collection_title}] 課題が送信されました"
+        subject: 課題が送信されました
       html:
         received_message: あなたのコレクション %{collection_link} に関するメッセージが届いています。
       text:

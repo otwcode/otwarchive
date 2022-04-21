@@ -206,7 +206,7 @@ pt-PT:
     collection_notification:
       assignments_sent:
         complete: Já foram enviadas todas as tarefas.
-        subject: "[%{app_name}][%{collection_title}] Tarefas enviadas"
+        subject: Tarefas enviadas
       html:
         received_message: 'Recebeste uma mensagem acerca da tua coleção %{collection_link}:'
       text:

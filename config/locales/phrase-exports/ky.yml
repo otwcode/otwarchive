@@ -209,7 +209,7 @@ ky:
     collection_notification:
       assignments_sent:
         complete: Бардык тапшырмалар азыр жөнөтүлдү.
-        subject: "[%{app_name}][%{collection_title}] Дайындоо жөнөтүлдү"
+        subject: Дайындоо жөнөтүлдү
       html:
         received_message: "%{collection_link} коллекциясы жөнүндө билдирүү алдыңыз:"
       text:

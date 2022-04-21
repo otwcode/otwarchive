@@ -204,7 +204,7 @@ id:
     collection_notification:
       assignments_sent:
         complete: Seluruh Assignment (tugas) telah dikirimkan.
-        subject: "[%{app_name}][%{collection_title}] Assignment (tugas) telah dikirim"
+        subject: Assignment (tugas) telah dikirim
       html:
         received_message: 'Anda menerima pesan tentang collection (koleksi) %{collection_link}
           Anda:'

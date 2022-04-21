@@ -205,7 +205,7 @@ sr:
     collection_notification:
       assignments_sent:
         complete: Сви задаци су послати.
-        subject: "[%{app_name}][%{collection_title}] Задаци послати"
+        subject: Задаци послати
       html:
         received_message: 'Примили сте поруку о својој збирци %{collection_link}:'
       text:

@@ -202,7 +202,7 @@ ru:
     collection_notification:
       assignments_sent:
         complete: Все задания были отправлены.
-        subject: "[%{app_name}][%{collection_title}] Задания отправлены"
+        subject: Задания отправлены
       html:
         received_message: 'Вы получили сообщение о вашей коллекции %{collection_link}:'
       text:

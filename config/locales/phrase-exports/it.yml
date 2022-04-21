@@ -213,7 +213,7 @@ it:
     collection_notification:
       assignments_sent:
         complete: Tutti gli incarichi sono stati inviati.
-        subject: "[%{app_name}][%{collection_title}] Incarichi inviati"
+        subject: Incarichi inviati
       html:
         received_message: 'Hai ricevuto un messaggio riguardo la tua collezione %{collection_link}:'
       text:

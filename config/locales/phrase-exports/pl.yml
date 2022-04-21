@@ -210,7 +210,7 @@ pl:
     collection_notification:
       assignments_sent:
         complete: Wszystkie zadania zostały wysłane.
-        subject: "[%{app_name}][%{collection_title}] Wysłane zadania"
+        subject: Wysłane zadania
       html:
         received_message: 'Masz nową wiadomość dotyczącą Twojej kolekcji %{collection_link}:'
       text:

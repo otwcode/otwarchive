@@ -209,7 +209,7 @@ vi:
     collection_notification:
       assignments_sent:
         complete: Tất cả nhiệm vụ đã được gửi.
-        subject: "[%{app_name}][%{collection_title}] Các nhiệm vụ đã được gửi"
+        subject: Các nhiệm vụ đã được gửi
       html:
         received_message: 'Bạn có một tin nhắn về bộ sưu tập %{collection_link} của
           bạn:'

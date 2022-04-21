@@ -205,7 +205,7 @@ cy:
     collection_notification:
       assignments_sent:
         complete: Mae pob aseiniad yn awr wedi'i hanfon.
-        subject: "[%{app_name}][%{collection_title}] Aseiniadau wedi'i hanfon"
+        subject: Aseiniadau wedi'i hanfon
       html:
         received_message: 'Rydych wedi derbyn neges amdan eich casgliad %{collection_link}:'
       text:

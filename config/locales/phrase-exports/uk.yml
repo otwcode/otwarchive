@@ -207,7 +207,7 @@ uk:
     collection_notification:
       assignments_sent:
         complete: Усі завдання було щойно розіслано.
-        subject: "[%{app_name}][%{collection_title}] Завдання надіслано"
+        subject: Завдання надіслано
       html:
         received_message: 'Ви отримали повідомлення про Вашу колекцію %{collection_link}:'
       text:

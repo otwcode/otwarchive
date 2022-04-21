@@ -201,7 +201,7 @@ cs:
     collection_notification:
       assignments_sent:
         complete: Všechna zadání byla rozeslána.
-        subject: "[%{app_name}][%{collection_title}] – Zadání rozeslána"
+        subject: Zadání rozeslána
       html:
         received_message: 'Máte novou zprávu o vaší sbírce %{collection_link}:'
       text:

@@ -197,7 +197,7 @@ fi:
     collection_notification:
       assignments_sent:
         complete: Kaikki tehtävänannot on nyt lähetetty.
-        subject: "[%{app_name}][%{collection_title}] Tehtävänannot lähetetty"
+        subject: Tehtävänannot lähetetty
       html:
         received_message: 'Olet saanut kokoelmaasi %{collection_link} koskevan viestin:'
       text:

@@ -206,7 +206,7 @@ bg:
     collection_notification:
       assignments_sent:
         complete: Всички задачи са изпратени.
-        subject: "[%{app_name}][%{collection_title}] Задачите са изпратени"
+        subject: Задачите са изпратени
       html:
         received_message: 'Имаш съобщение във връзка с твоята колекция %{collection_link}:'
       text:

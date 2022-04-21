@@ -201,7 +201,7 @@ tr:
     collection_notification:
       assignments_sent:
         complete: Bütün atamalar gönderildi.
-        subject: "[%{app_name}][%{collection_title}] Atamalar gönderildi"
+        subject: Atamalar gönderildi
       html:
         received_message: "%{collection_link} koleksiyonunuz hakkında bir mesaj aldınız:"
       text:

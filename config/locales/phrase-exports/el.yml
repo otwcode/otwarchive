@@ -214,7 +214,7 @@ el:
     collection_notification:
       assignments_sent:
         complete: Όλες οι αναθέσεις έχουν αποσταλεί.
-        subject: "[%{app_name}][%{collection_title}] Απεσταλμένες Αναθέσεις"
+        subject: Απεσταλμένες Αναθέσεις
       html:
         received_message: 'Έχετε λάβει ένα μήνυμα σχετικά με τη συλλογή σας %{collection_link}:'
       text:

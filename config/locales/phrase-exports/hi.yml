@@ -198,7 +198,7 @@ hi:
     collection_notification:
       assignments_sent:
         complete: अब सभी असाइनमेंट्स भेज दिए गए हैं।
-        subject: "[%{app_name}][%{collection_title}] भेजे गए असाइनमेंट्स"
+        subject: भेजे गए असाइनमेंट्स
       html:
         received_message: 'आपको अपने संग्रह के बारे में एक संदेश प्राप्त हुआ है %{collection_link}:'
       text:

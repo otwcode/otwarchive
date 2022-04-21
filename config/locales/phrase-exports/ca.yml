@@ -211,7 +211,7 @@ ca:
     collection_notification:
       assignments_sent:
         complete: S'han enviat totes les tasques.
-        subject: "[%{app_name}][%{collection_title}] Tasques enviades"
+        subject: Tasques enviades
       html:
         received_message: 'Has rebut un missatge sobre la col·lecció %{collection_link}:'
       text:

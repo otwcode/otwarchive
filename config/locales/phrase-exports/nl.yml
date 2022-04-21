@@ -207,7 +207,7 @@ nl:
     collection_notification:
       assignments_sent:
         complete: Alle taken zijn verstuurd.
-        subject: "[%{app_name}][%{collection_title}] Taken verstuurd"
+        subject: Taken verstuurd
       html:
         received_message: 'Je hebt een bericht ontvangen over je collectie %{collection_link}:'
       text:

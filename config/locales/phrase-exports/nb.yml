@@ -207,7 +207,7 @@ nb:
     collection_notification:
       assignments_sent:
         complete: Alle oppdrag er nå sendt ut.
-        subject: "[%{app_name}][%{collection_title}] Oppdrag utsendt"
+        subject: Oppdrag utsendt
       html:
         received_message: 'Du har fått en melding om samlingen din %{collection_link}:'
       text:

@@ -171,7 +171,7 @@ ko:
     collection_notification:
       assignments_sent:
         complete: 모든 챌린지 과제가 발송 완료되었습니다.
-        subject: "[%{app_name}][%{collection_title}] 챌린지 과제 발송 완료"
+        subject: 챌린지 과제 발송 완료
       html:
         received_message: '회원님의 컬렉션 %{collection_link}에 관한 메시지가 도착했습니다:'
       text:

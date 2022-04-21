@@ -202,7 +202,7 @@ hu:
     collection_notification:
       assignments_sent:
         complete: Minden feladat kiküldésre került.
-        subject: "[%{app_name}][%{collection_title}] Feladatok kiküldve"
+        subject: Feladatok kiküldve
       html:
         received_message: 'Üzeneted érkezett a(z) %{collection_link} gyűjteményed
           kapcsán:'
