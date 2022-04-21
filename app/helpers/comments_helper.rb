@@ -289,9 +289,9 @@ module CommentsHelper
   # gets the css user-<id> class name for the comment
   def get_comment_user_css_class(comment)
     if comment.pseud.nil?
-      'visitor'
+      "visitor"
     elsif comment.pseud.user.is_author_of?(comment.ultimate_parent) && comment.ultimate_parent.anonymous?
-      'anonymous-creator'
+      "anonymous-creator"
     else
       comment.pseud.user.id
     end
