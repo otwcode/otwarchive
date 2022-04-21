@@ -390,10 +390,6 @@ class User < ApplicationRecord
 
   # Is this user an authorized official?
   def official
-    self.is_official?
-  end
-
-  def is_official?
     has_role?(:official)
   end
 
