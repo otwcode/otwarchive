@@ -28,6 +28,10 @@ describe Skin do
         dd {color: blue;}
         /* end comment */",
 
+      "should allow hsl(a) colours" =>
+        "ol {color: hsl(100, 100, 100);}
+        li {color: hsla(100%, 100%, 100%, 1);}",
+      
       "should allow through border-radius (CSS3 property)" =>
         ".profile { border-radius: 5px }",
 
