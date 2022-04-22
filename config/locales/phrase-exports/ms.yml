@@ -278,7 +278,7 @@ ms:
           tidak ingin disenaraikan sebagai pereka, anda boleh menyunting siri tersebut
           untuk mengeluarkan diri anda sebagai pereka: %{url}'
         remove_work: 'Jika anda telah disertakan secara tidak sengaja ataupun anda
-          tidak ingin disenaraikan sebagai pereka, anda boleh menyunting %{type} tersebut
+          tidak ingin disenaraikan sebagai pereka, anda boleh menyunting karya tersebut
           untuk mengeluarkan diri anda sebagai pereka: %{url}'
     creatorship_request:
       html:

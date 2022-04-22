@@ -221,7 +221,7 @@ id:
         edit_chapter: menyunting chapter tersebut
         edit_series: menyunting series tersebut
         remove_chapter: Jika Anda ditambahkan akibat kesalahan atau Anda tidak ingin
-          didaftarkan sebagai kreator, Anda dapat %{edit_chapter_link untuk menghapus
+          didaftarkan sebagai kreator, Anda dapat %{edit_chapter_link} untuk menghapus
           status Anda sebagai kreator.
         remove_series: Jika Anda ditambahkan akibat kesalahan atau Anda tidak ingin
           didaftarkan sebagai kreator, Anda dapat %{edit_series_link} untuk menghapus

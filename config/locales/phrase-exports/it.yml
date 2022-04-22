@@ -345,21 +345,14 @@ it:
         contact_support: contatta il Supporto di AO3
         faq_page: pagina delle FAQ
         open_doors: Open Doors (Porte Aperte)
-        part1: Stai ricevendo questa email perché un archivio è stato di recente importato
-          da %{open_doors_link} in %{app_link} (%{app_short_name}), e crediamo che
-          tu sia l’autore dei seguenti lavori. Vorremmo darti la possibilità di rivendicarli
-          (o cancellarli/renderli orfani). E, se non hai già un account con un altro
-          indirizzo email, ci piacerebbe invitarti!
         part10: Se hai altri lavori nell’archivio importato sotto un diverso indirizzo
-          email a cui non hai più accesso, %{open_doors_link} con qualunque informazione
-          che possa aiutare a verificare la tua identità di autore di tali lavori.
+          email a cui non hai più accesso, %{contact_open_doors_link} con qualunque
+          informazione che possa aiutare a verificare la tua identità di autore di
+          tali lavori.
         part11: Per altre domande, per favore %{contact_support_link}.
-        part2: Puoi leggere gli annunci riguardanti i più recenti trasferimenti di
-          archivi su %{ao3_news_link}, e troverai ulteriori informazioni sulla %{faq_page_link}
-          di Porte Aperte o sulla %{tutorial_page_link}. Se non trovi risposta alla
-          tua domanda nelle FAQ, nella guida o in questa email, per favore %{contact_support_link}.
         part3: Se si tratta di un errore e questi non sono i tuoi lavori, per favore
-          non cancellarli! Semplicemente %{open_doors_link} e risolveremo il problema.
+          non cancellarli! Semplicemente %{contact_open_doors_link} e risolveremo
+          il problema.
         part4: A seconda dell’archivio, i tuoi lavori potrebbero essere stati importati
           in modo da essere visibili solo agli utenti registrati (in modo da escluderli
           dalle ricerche via Google). In tal caso, i lavori saranno accessibili solo
@@ -373,7 +366,7 @@ it:
           aggiungerli a un account per renderli orfani o cancellarli: puoi farlo direttamente
           dal link qui sopra. (Se hai bisogno di aiuto, per favore %{contact_support_link}.)'
         part9: Se desideri che Porte Aperte aggiorni il reindirizzamento per puntare
-          al tuo lavoro pre-esistente, cancella la copia importata e %{open_doors_link}
+          al tuo lavoro pre-esistente, cancella la copia importata e %{contact_open_doors_link}
           specificando il nome del tuo profilo su AO3, quello sull’archivio importato
           e il titolo e URL del lavoro al quale vuoi che punti il reindirizzamento.
           (Se vuoi cambiare il reindirizzamento di più lavori, puoi elencarli tutti

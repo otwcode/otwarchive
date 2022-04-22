@@ -102,7 +102,7 @@ nl:
       text:
         help: 'Als je niet weet waarom je werk verborgen is en je hebt geen verdere
           communicatie hierover ontvangen, neem dan rechtstreeks contact op met het
-          Beleids- en Misbruikteam: %{contact_abuse_link}.'
+          Beleids- en Misbruikteam: %{contact_abuse_url}.'
         hidden: Jouw werk "%{title}" (%{work_url}) is verborgen door het Beleids-
           en Misbruikteam en is niet meer publiek toegankelijk.
         tos_violation: Als je werk verborgen is omdat het AO3's Servicevoorwaarden

@@ -220,7 +220,7 @@ hu:
         remove_chapter: Ha tévedésből adtak hozzá, vagy nem akarod, hogy alkotóként
           szerepelj, akkor %{edit_chapter_link} eltávolíthatod magad az alkotók közül.
         remove_series: Ha tévedésből adtak hozzá, vagy nem akarod, hogy alkotóként
-          szerepelj, akkor %{edit_chapter_link} eltávolíthatod magad az alkotók közül.
+          szerepelj, akkor %{edit_series_link} eltávolíthatod magad az alkotók közül.
       intro_chapter: 'Egy %{adding_user} nevű felhasználó társalkotóként tüntette
         fel %{pseud} pszeudódat az alábbi fejezeten:'
       intro_series: 'Egy %{adding_user} nevű felhasználó társalkotóként tüntette fel

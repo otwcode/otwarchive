@@ -242,7 +242,7 @@ fi:
         remove_series: Jos sinut on lisätty virheellisesti tai et halua tulla nimetyksi
           tekijänä, voit %{edit_series_link} poistaaksesi itsesi tekijöistä.
         remove_work: Jos haluat poistaa itsesi tekijöistä, koska sinut on lisätty
-          tekijäksi virheellisesti tai et halua olla nimettynä tekijänä, voit %{edit}
+          tekijäksi virheellisesti tai et halua olla nimettynä tekijänä, voit %{edit_work_link}
           linkin kautta.
       intro_chapter: 'Käyttäjä %{archivist} on lisännyt nimimerkkisi %{pseud} toiseksi
         tekijäksi seuraavaan lukuun:'
@@ -260,8 +260,8 @@ fi:
           tulla nimetyksi tekijänä, voit poistaa itsesi tekijänä muokkaamalla sarjaa:
           %{url}'
         remove_work: 'Jos haluat poistaa itsesi tekijöistä, koska sinut on lisätty
-          tekijäksi virheellisesti tai et halua olla nimettynä tekijänä, %{type} on
-          muokattavissa linkin kautta: %{url}'
+          tekijäksi virheellisesti tai et halua olla nimettynä tekijänä, on muokattavissa
+          linkin kautta: %{url}'
     creatorship_request:
       html:
         creation: "%{creation_link} tekijältä %{pseud_links}"
