@@ -1,6 +1,6 @@
 class Admin < ApplicationRecord
   include ActiveModel::ForbiddenAttributesProtection
-  VALID_ROLES = %w[superadmin board communications translation tag_wrangling docs support policy_and_abuse open_doors].freeze
+  VALID_ROLES = %w[superadmin board communications translation tag_wrangling docs support policy_and_abuse open_doors official].freeze
 
   serialize :roles, Array
 

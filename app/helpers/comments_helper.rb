@@ -44,13 +44,20 @@ module CommentsHelper
     end
   end
 
+  def css_classes_for_comment(comment)
+    return "" if comment.nil?
+    official = "official" if comment&.pseud&.user&.official
+    unreviewed = "unreviewed" if comment.unreviewed?
+    "comment group #{official} #{unreviewed}".strip
+  end
+
   # return pseudname or name for comment
   def get_commenter_pseud_or_name(comment)
     if comment.pseud_id
       if comment.pseud.nil?
         ts("Account Deleted")
       elsif comment.pseud.user.official
-        link_to (comment.pseud.byline + content_tag(:span, " (Official)", class: "role")).html_safe, [comment.pseud.user, comment.pseud]
+        (link_to comment.pseud.byline, [comment.pseud.user, comment.pseud]) + content_tag(:span, " " + ts("(Official)"), class: "role")
       else
         link_to comment.pseud.byline, [comment.pseud.user, comment.pseud]
       end

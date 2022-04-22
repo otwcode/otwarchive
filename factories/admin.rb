@@ -5,7 +5,7 @@ FactoryBot.define do
     login { generate(:login) }
     password { "password" }
     password_confirmation { |u| u.password }
-    email
+    email { generate(:email) }
 
     factory :superadmin do
       roles { ["superadmin"] }
@@ -25,6 +25,10 @@ FactoryBot.define do
 
     factory :open_doors_admin do
       roles { ["open_doors"] }
+    end
+
+    factory :official_admin do
+      roles { ["official"] }
     end
   end
 

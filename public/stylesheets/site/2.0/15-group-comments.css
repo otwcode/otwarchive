@@ -11,7 +11,8 @@ test note: have put clearfixes on listbox, blurb and comments here, to allow for
   margin: 0 0 auto;
 }
 
-div.comment, li.comment {
+div.comment, 
+li.comment {
   position: relative;
   border: 1px solid #ddd;
   overflow: visible;
@@ -49,6 +50,10 @@ div.comment, li.comment {
   margin: 0 auto -0.25em;
 }
 
+.comment .role {
+  font-weight: bold;
+}
+
 .thread .thread {
   margin-left: 3%;
 }
@@ -58,10 +63,11 @@ div.comment, li.comment {
   margin: 0;
 }
 
-fieldset.comments, .comment .userstuff {
+fieldset.comments,
+.comment .userstuff {
   background: transparent;
   border: none;
-  box-shadow: none;
+    box-shadow: none;
 }
 
 .comment .userstuff {
@@ -80,15 +86,6 @@ fieldset.comments, .comment .userstuff {
 
 .comment .edited {
   margin: 1.286em 0.643em 0.25em;
-}
-
-.comment span.role {
-  font-weight: bold;
-  color: #900;
-}
-
-.comment.official {
-  background-color: #FCC;
 }
 
 /* mods */
