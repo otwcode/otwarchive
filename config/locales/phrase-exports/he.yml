@@ -23,11 +23,11 @@ he:
         informal:
           addressed: היי, %{name}!
           unaddressed: היי!
-        introductory: שלום מ-Archive of Our Own – AO3 (ארכיון משלנו)!
+        introductory: שלום מ-Archive of Our Own – AO3 (ארכיון משלנו)!
       signature:
         app_short_name: AO3
         open_doors: צוות Open Doors (דלתות פתוחות)
-        parent_org: Organization for Transformative Works – OTW (ארגון למען יצירות
+        parent_org: Organization for Transformative Works – OTW (ארגון למען יצירות
           טרנספורמטיביות)
         support: צוות התמיכה של AO3
     kudos:
@@ -232,7 +232,7 @@ he:
         remove_work: אם נוספות בטעות, או אם אינך רוצה להופיע כיוצר/ת, באפשרותך %{edit_work_link}
           על מנת להסיר את עצמך.
       intro_chapter: 'המשתמשת %{archivist} הוסיפה את שם העט שלך %{pseud} בתור יוצר/ת
-        שותף/ה של הפרק הבא: '
+        שותף/ה של הפרק הבא:'
       intro_series: 'המשתמשת %{archivist} הוסיפה את שם העט שלך %{pseud} בתור יוצר/ת
         שותף/ה של הסדרה הבאה:'
       intro_work: 'המשתמשת %{archivist} הוסיפה את שם העט שלך %{pseud} בתור יוצר/ת
@@ -243,7 +243,7 @@ he:
         remove_chapter: 'אם נוספות בטעות, או אם אינך רוצה להופיע כיוצר/ת, באפשרותך
           לערוך את הפרק על מנת להסיר את עצמך: %{url}'
         remove_series: 'אם נוספות בטעות, או אם אינך רוצה להופיע כיוצר/ת, באפשרותך
-          לערוך את הסדרה על מנת להסיר את עצמך: %{url} '
+          לערוך את הסדרה על מנת להסיר את עצמך: %{url}'
         remove_work: 'אם נוספת בטעות, או אם אינך רוצה להופיע כיוצר/ת, באפשרותך לערוך
           את היצירה על מנת להסיר את עצמך: %{url}'
     creatorship_request:
@@ -327,4 +327,4 @@ he:
           את החדשות האחרונות אודות פיתוח האתר ניתן למצוא בחדשות AO3 %{admin_posts_url}.
           אם דרושה לך עזרה נוספת, אם נתקלת בבעייה באתר או אם יש לך שאלות או הערות,
           אנא צור/צרי קשר עם צוות התמיכה שלנו, שתמיד שמח לעזור: %{contact_support_url}'
-      welcome: "ברוכים הבאים לארכיון משלנו, %{login}!\n   "
+      welcome: ברוכים הבאים לארכיון משלנו, %{login}!

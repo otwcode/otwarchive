@@ -24,11 +24,11 @@ nb:
         informal:
           addressed: Hei, %{name}!
           unaddressed: Hei!
-        introductory: En hilsen fra Archive of Our Own – AO3 (Vårt eget arkiv)!
+        introductory: En hilsen fra Archive of Our Own – AO3 (Vårt eget arkiv)!
       signature:
         app_short_name: AO3
         open_doors: Teamet for Open Doors (Åpne Dører)
-        parent_org: Organization for Transformative Works – OTW (Organisasjonen for
+        parent_org: Organization for Transformative Works – OTW (Organisasjonen for
           transformative verk)
         support: Teamet for AO3 support
     kudos:

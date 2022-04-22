@@ -24,11 +24,11 @@ id:
         informal:
           addressed: Halo %{name}!
           unaddressed: Halo!
-        introductory: Halo dari Archive of Our Own – AO3 (Arsip Milik Kita)!
+        introductory: Halo dari Archive of Our Own – AO3 (Arsip Milik Kita)!
       signature:
         app_short_name: AO3
         open_doors: Tim Open Doors (Pintu Terbuka)
-        parent_org: Organization for Transformative Works – OTW (Organisasi untuk
+        parent_org: Organization for Transformative Works – OTW (Organisasi untuk
           Karya Transformatif)
         support: Komite Bantuan AO3
     kudos:
@@ -212,15 +212,33 @@ id:
         received_message: 'Anda menerima pesan tentang collection (koleksi) "%{collection_title}"
           (%{collection_url}) Anda:'
     creatorship_notification:
-      explanation: Ketika Anda menjadi seorang rekan pencipta sebuah karya, Anda dapat
+      explanation: Ketika Anda menjadi seorang rekan kreator sebuah karya, Anda dapat
         ditambahkan pada bab-bab terbaru dalam karya terlepas dari pengaturan pembuatan
         karya rekanan sebelumnya. Anda juga akan ditambahkan ke dalam seri manapun
         tempat karya tersebut berada.
       html:
         creation: "%{creation_link} oleh %{pseud_links}"
-      subject: "[%{app_name}] Notifikasi Rekan Pencipta"
+        edit_chapter: menyunting chapter tersebut
+        edit_series: menyunting series tersebut
+        remove_chapter: Jika Anda ditambahkan akibat kesalahan atau Anda tidak ingin
+          didaftarkan sebagai kreator, Anda dapat %{edit_chapter_link} untuk menghapus
+          status Anda sebagai kreator.
+        remove_series: Jika Anda ditambahkan akibat kesalahan atau Anda tidak ingin
+          didaftarkan sebagai kreator, Anda dapat %{edit_series_link} untuk menghapus
+          status Anda sebagai kreator.
+      intro_chapter: 'Pengguna %{adding_user} telah mendaftarkan nama pengguna Anda
+        %{pseud} sebagai rekan kreator pada chapter (bab) berikut:'
+      intro_series: 'Pengguna %{adding_user} telah mendaftarkan pseud (alias) %{pseud}
+        anda sebagai rekan kreator dalam series (seri) berikut:'
+      subject: "[%{app_name}] Notifikasi Rekan kreator"
       text:
         creation: "%{title} (%{url}) oleh %{pseuds}"
+        remove_chapter: 'Jika Anda ditambahkan akibat kesalahan atau tidak ingin didaftarkan
+          sebagai kreator, Anda dapat menyunting chapter untuk menghapus status Anda
+          sebagai kreator: %{url}'
+        remove_series: 'Jika Anda ditambahkan akibat kesalahan atau tidak ingin didaftarkan
+          sebagai kreator, Anda dapat menyunting series tersebut untuk menghapus status
+          Anda sebagai kreator: %{url}'
     creatorship_notification_archivist:
       explanation: Karena berlaku dalam kapasitas resmi sebagai pengarsip Open Doors,
         ia diizinkan untuk menunjuk Anda sebagai rekan pencipta tanpa undangan, walaupun

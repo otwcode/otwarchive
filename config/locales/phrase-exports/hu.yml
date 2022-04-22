@@ -24,11 +24,11 @@ hu:
         informal:
           addressed: Szia %{name}!
           unaddressed: Szia!
-        introductory: Üdvözlet az Archive of Our Own – AO3-től (A Mi Archívumunk)!
+        introductory: Üdvözlet az Archive of Our Own – AO3-től (A Mi Archívumunk)!
       signature:
         app_short_name: AO3
         open_doors: A Open Doors (Nyitott Ajtók) csapata
-        parent_org: Organization for Transformative Works – OTW (Szervezet a Transzformatív
+        parent_org: Organization for Transformative Works – OTW (Szervezet a Transzformatív
           munkákért)
         support: Az AO3 Támogatás csapata
     kudos:
@@ -215,9 +215,57 @@ hu:
         fognak adni, amelyhez a művet hozzáadják.
       html:
         creation: "%{pseud_links}: %{creation_link}"
+        edit_chapter: a fejezet szerkesztésével
+        edit_series: a sorozat szerkesztésével
+        remove_chapter: Ha tévedésből adtak hozzá, vagy nem akarod, hogy alkotóként
+          szerepelj, akkor %{edit_chapter_link} eltávolíthatod magad az alkotók közül.
+        remove_series: Ha tévedésből adtak hozzá, vagy nem akarod, hogy alkotóként
+          szerepelj, akkor %{edit_series_link} eltávolíthatod magad az alkotók közül.
+      intro_chapter: 'Egy %{adding_user} nevű felhasználó társalkotóként tüntette
+        fel %{pseud} pszeudódat az alábbi fejezeten:'
+      intro_series: 'Egy %{adding_user} nevű felhasználó társalkotóként tüntette fel
+        %{pseud} pszeudódat az alábbi sorozaton:'
       subject: "[%{app_name}] Társalkotói értesítés"
       text:
         creation: "%{pseuds}: %{title} (%{url})"
+        remove_chapter: 'Ha tévedésből adtak hozzá, vagy nem akarod, hogy alkotóként
+          szerepelj, akkor a fejezet szerkesztésével eltávolíthatod magad az alkotók
+          közül: %{url}'
+        remove_series: 'Ha tévedésből adtak hozzá, vagy nem akarod, hogy alkotóként
+          szerepelj, akkor a sorozat szerkesztésével eltávolíthatod magad az alkotók
+          közül: %{url}'
+    creatorship_notification_archivist:
+      explanation: Mivel az Open Doors (Nyitott Ajtók) archiválójaként járnak el,
+        meghívás nélkül hozzáadhatnak téged, mint társalkotót, még ha a beállításaidban
+        ez ki is van kapcsolva.
+      html:
+        creation: "%{creation_link} - %{pseud_links}"
+        edit_chapter: a fejezet szerkesztésével
+        edit_series: a sorozat szerkesztésével
+        edit_work: a munka szerkesztésével
+        remove_chapter: Ha tévedésből lettél megjelölve vagy nem szeretnél alkotóként
+          szerepelni, %{edit_chapter_link} törölheted magad az alkotók közül.
+        remove_series: Ha tévedésből lettél megjelölve vagy nem szeretnél alkotóként
+          szerepelni, %{edit_series_link} törölheted magad az alkotók közül.
+        remove_work: Ha tévedésből lettél megjelölve vagy nem szeretnél alkotóként
+          szerepelni, %{edit_work_link} törölheted magad az alkotók közül.
+      intro_chapter: "%{archivist} felhasználó társalkotónak jelölte %{pseud} pszeudódat
+        az alábbi fejezeten:"
+      intro_series: "%{archivist} felhasználó társalkotónak jelölte %{pseud} pszeudódat
+        az alábbi sorozaton:"
+      intro_work: "%{archivist} felhasználó társalkotónak jelölte %{pseud} pszeudódat
+        az alábbi munkán:"
+      subject: "[%{app_name}] Archiváló társalkotói értesítés"
+      text:
+        creation: "%{title} (%{url}) - %{pseuds}"
+        remove_chapter: 'Ha tévedésből lettél megjelölve vagy nem szeretnél alkotóként
+          szerepelni, a fejezet szerkesztésével törölheted magad az alkotók közül:
+          %{url}'
+        remove_series: 'Ha tévedésből lettél megjelölve vagy nem szeretnél alkotóként
+          szerepelni, a sorozat szerkesztésével törölheted magad az alkotók közül:
+          %{url}'
+        remove_work: 'Ha tévedésből lettél megjelölve vagy nem szeretnél alkotóként
+          szerepelni, a munka szerkesztésével törölheted magad az alkotók közül: %{url}'
     creatorship_request:
       html:
         creation: "%{pseud_links}: %{creation_link}"
