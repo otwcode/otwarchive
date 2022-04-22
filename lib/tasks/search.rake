@@ -3,6 +3,13 @@
 namespace :search do
   BATCH_SIZE = 1000
 
+  desc "Update all index mappings"
+  task(update_all_mappings: :environment) do
+    # If multiple indexers share an index and a mapping, we only need to call
+    # create_mapping on one of them.
+    Indexer.all.group_by(&:index_name).values.map(&:first).map(&:create_mapping)
+  end
+
   desc "Recreate tag index"
   task(index_tags: :environment) do
     TagIndexer.index_all
