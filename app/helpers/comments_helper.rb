@@ -46,6 +46,7 @@ module CommentsHelper
 
   def css_classes_for_comment(comment)
     return "" if comment.nil?
+    
     official = "official" if comment&.pseud&.user&.official
     unreviewed = "unreviewed" if comment.unreviewed?
     "comment group #{official} #{unreviewed}".strip
