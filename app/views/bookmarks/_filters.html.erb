@@ -131,25 +131,9 @@
       <dd class="submit actions"><%= f.submit ts("Sort and Filter") %></dd>
     </dl>
 
-    <% if @collection %>
+    <% if @pseud || @user || @collection || @tag %>
     <p class="footnote">
-      <%= link_to ts("Clear Filters"), original_path(@collection) %>
-    </p>
-    <% elsif @tag %>
-    <p class="footnote">
-      <%= link_to ts("Clear Filters"), original_path(@tag) %>
-    </p>
-    <% elsif @fandom %>
-    <p class="footnote">
-      <%= link_to ts("Clear Filters"), original_path(@fandom) %>
-    </p>
-    <% elsif @pseud %>
-    <p class="footnote">
-      <%= link_to ts("Clear Filters"), original_path(@pseud) %>
-    </p>
-    <% elsif @user %>
-    <p class="footnote">
-      <%= link_to ts("Clear Filters"), original_path(@user) %>
+      <%= link_to ts("Clear Filters"), bookmarks_original_path %>
     </p>
     <% end %>
 
