@@ -16,6 +16,13 @@ Otwarchive::Application.routes.draw do
   devise_scope :user do
     get "signup(/:invitation_token)" => "users/registrations#new", as: "signup"
     get "users/logout" => "users/sessions#confirm_logout"
+
+    # Rails emulate some HTTP methods over POST, so password resets (PUT /users/password)
+    # look the same as password reset requests (POST /users/password).
+    #
+    # To rate limit them differently at nginx, we set up an alias for
+    # the first request type.
+    put "users/password/reset" => "users/passwords#update"
   end
 
   devise_for :users,
