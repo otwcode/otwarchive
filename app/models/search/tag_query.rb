@@ -60,7 +60,7 @@ class TagQuery < Query
       sort_hash[column][:unmapped_type] = "date"
     end
 
-    sort_hash
+    [sort_hash, { id: { order: direction } }]
   end
 
   ################
