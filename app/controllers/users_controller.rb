@@ -163,9 +163,7 @@ class UsersController < ApplicationController
     if @user.profile.update(profile_params)
       if logged_in_as_admin?
         link = view_context.link_to("Ticket ##{@user.profile.ticket_number}", @user.profile.ticket_url)
-        AdminActivity.log_action(current_admin, @user,
-                                 action: "edit profile",
-                                 summary: "#{link}")
+        AdminActivity.log_action(current_admin, @user, action: "edit profile", summary: link)
       end
       flash[:notice] = ts('Your profile has been successfully updated')
       redirect_to user_profile_path(@user)
