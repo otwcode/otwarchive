@@ -9,11 +9,13 @@ el:
         left_kudos:
           one: Ο/Η %{givers_list} άφησε μπράβο στο %{commentable_link}.
           other: Οι %{givers_list} άφησαν μπράβο στο %{commentable_link}.
-      subject: "[%{app_name}] ‘Εχεις μπράβο!"
+        single_guest: Ένας επισκέπτης άφησε μπράβο στο %{commentable_link}.
+      subject: "[%{app_name}] 'Εχεις μπράβο!"
       text:
         left_kudos:
-          one: Ο/Η %{givers_list} άφησε μπράβο στο %{commentable_link}.
-          other: Οι %{givers_list} άφησαν μπράβο στο %{commentable_link}.
+          one: Ο/Η %{givers_list} άφησε μπράβο στο %{commentable_title} (%{commentable_url}).
+          other: Οι %{givers_list} άφησαν μπράβο στο %{commentable_title} (%{commentable_url}).
+        single_guest: Ένας επισκέπτης άφησε μπράβο στο %{commentable_title} (%{commentable_url}).
   mailer:
     general:
       closing:

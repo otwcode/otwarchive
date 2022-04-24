@@ -9,11 +9,16 @@ de:
         left_kudos:
           one: "%{givers_list} hat Kudos für %{commentable_link} hinterlassen."
           other: "%{givers_list} haben Kudos für %{commentable_link} hinterlassen."
+        single_guest: Ein Gast hat Kudos für %{commentable_link} hinterlassen.
       subject: "[%{app_name}] Du hast Kudos erhalten!"
       text:
         left_kudos:
-          one: "%{givers_list} hat Kudos für %{commentable_link} hinterlassen."
-          other: "%{givers_list} haben Kudos für %{commentable_link} hinterlassen."
+          one: "%{givers_list} hat Kudos für %{commentable_title} (%{commentable_url})
+            hinterlassen."
+          other: "%{givers_list} haben Kudos für %{commentable_title} (%{commentable_url})
+            hinterlassen."
+        single_guest: Ein Gast hat Kudos für %{commentable_title} (%{commentable_url})
+          hinterlassen.
   mailer:
     general:
       closing:

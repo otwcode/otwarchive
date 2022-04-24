@@ -20,8 +20,9 @@ ky:
         left_kudos:
           few: "%{givers_list} %{commentable_link} да кудо калтырышты."
           many: "%{givers_list} %{commentable_link} да кудо калтырышты."
-          one: "%{givers_list} %{commentable_link} да кудо калтырды."
-          other: "%{givers_list} %{commentable_link} да кудо калтырышты."
+          one: "%{givers_list} %{commentable_title} (%{commentable_url}) да кудо калтырды."
+          other: "%{givers_list} %{commentable_title} (%{commentable_url}) да кудо
+            калтырышты."
           two: "%{givers_list} %{commentable_link} да кудо калтырышты."
   mailer:
     general:

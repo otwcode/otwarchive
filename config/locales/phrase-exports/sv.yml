@@ -12,8 +12,8 @@ sv:
       subject: "[%{app_name}] Du har fått beröm!"
       text:
         left_kudos:
-          one: "%{givers_list} lämnade beröm om %{commentable_link}."
-          other: "%{givers_list} lämnade beröm om %{commentable_link}."
+          one: "%{givers_list} lämnade beröm om %{commentable_title} (%{commentable_url})."
+          other: "%{givers_list} lämnade beröm om %{commentable_title} (%{commentable_url})."
   mailer:
     general:
       closing:

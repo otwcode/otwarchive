@@ -6,11 +6,13 @@ zh-CN:
         other: "%{count}名访客"
       html:
         left_kudos:
-          other: "%{givers_list}给您的作品点了赞%{commentable_link}。"
+          other: "%{givers_list}给您的作品%{commentable_link}点了赞。"
+        single_guest: 一名访客给您的作品%{commentable_link}点了赞。
       subject: "[%{app_name}] 您收到了点赞！"
       text:
         left_kudos:
-          other: "%{givers_list}给您的作品点了赞%{commentable_link}。"
+          other: "%{givers_list}给您的作品%{commentable_title}（%{commentable_url}）点了赞。"
+        single_guest: 一名访客给您的作品%{commentable_title}（%{commentable_url}）点了赞。
   layouts:
     proxy_notice:
       faux_heading: 重要提示：

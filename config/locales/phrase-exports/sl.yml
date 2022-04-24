@@ -16,10 +16,10 @@ sl:
       subject: "[%{app_name}] Imate všečke!"
       text:
         left_kudos:
-          few: "%{givers_list} so všečkali/e %{commentable_link}."
-          one: "%{givers_list} je všečkal/a %{commentable_link}."
-          other: "%{givers_list} je všečkalo %{commentable_link}."
-          two: "%{givers_list} sta všečkala/i %{commentable_link}."
+          few: "%{givers_list} so všečkali/e %{commentable_title} (%{commentable_url})."
+          one: "%{givers_list} je všečkal/a %{commentable_title} (%{commentable_url})."
+          other: "%{givers_list} je všečkalo %{commentable_title} (%{commentable_url})."
+          two: "%{givers_list} sta všečkala/i %{commentable_title} (%{commentable_url})."
   mailer:
     general:
       closing:

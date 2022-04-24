@@ -10,7 +10,7 @@ vi:
       subject: "[%{app_name}] Bạn nhận được tán dương!"
       text:
         left_kudos:
-          other: "%{givers_list} đã để lại tán dương cho %{commentable_link}."
+          other: "%{givers_list} đã để lại tán dương cho %{commentable_title} (%{commentable_url})."
   mailer:
     general:
       closing:

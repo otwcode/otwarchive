@@ -10,7 +10,7 @@ ja:
       subject: "[%{app_name}] あなたにいいねが届きました！"
       text:
         left_kudos:
-          other: "%{givers_list} があなたの作品 %{commentable_link}にいいねを送りました。"
+          other: "%{givers_list} があなたの作品 %{commentable_title} (%{commentable_url})にいいねを送りました。"
   mailer:
     general:
       closing:

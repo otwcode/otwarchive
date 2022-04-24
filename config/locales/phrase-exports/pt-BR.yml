@@ -410,11 +410,13 @@ pt-BR:
         left_kudos:
           one: "%{givers_list} deixou kudos em %{commentable_link}."
           other: "%{givers_list} deixaram kudos em %{commentable_link}."
+        single_guest: 1 visitante deixou kudos em %{commentable_link}.
       subject: "[%{app_name}] Kudos pra você!"
       text:
         left_kudos:
-          one: "%{givers_list} deixou kudos em %{commentable_link}."
-          other: "%{givers_list} deixaram kudos em %{commentable_link}."
+          one: "%{givers_list} deixou kudos em %{commentable_title} (%{commentable_url})."
+          other: "%{givers_list} deixaram kudos em %{commentable_title} (%{commentable_url})."
+        single_guest: 1 visitante deixou kudos em %{commentable_title} (%{commentable_url}).
   layouts:
     proxy_notice:
       button: Desabilitar aviso

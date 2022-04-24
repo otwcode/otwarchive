@@ -16,10 +16,10 @@ cs:
       subject: "[%{app_name}] Máte nové kudos!"
       text:
         left_kudos:
-          few: "%{givers_list} zanechali kudos u %{commentable_link}."
+          few: "%{givers_list} zanechali kudos u %{commentable_title} (%{commentable_url})."
           many: "%{givers_list} zanechali kudos u %{commentable_link}."
-          one: "%{givers_list} zanechal/a kudos u %{commentable_link}."
-          other: "%{givers_list} zanechali kudos u %{commentable_link}."
+          one: "%{givers_list} zanechal/a kudos u %{commentable_title} (%{commentable_url})."
+          other: "%{givers_list} zanechali kudos u %{commentable_title} (%{commentable_url})."
   mailer:
     general:
       closing:

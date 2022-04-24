@@ -10,7 +10,7 @@ th:
       subject: "[%{app_name}] คุณได้รับคำชมเชย!"
       text:
         left_kudos:
-          other: "%{givers_list} ได้มอบคำชมเชยบน %{commentable_link}"
+          other: "%{givers_list} ได้มอบคำชมเชยบน %{commentable_title} (%{commentable_url})"
   mailer:
     general:
       closing:

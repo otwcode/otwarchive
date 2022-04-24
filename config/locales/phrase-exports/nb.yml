@@ -9,11 +9,13 @@ nb:
         left_kudos:
           one: "%{givers_list} la igjen kudos på %{commentable_link}."
           other: "%{givers_list} la igjen kudos på %{commentable_link}."
+        single_guest: En gjest la igjen kudos på %{commentable_link}.
       subject: "[%{app_name}] Du har fått kudos!"
       text:
         left_kudos:
-          one: "%{givers_list} la igjen kudos på %{commentable_link}."
-          other: "%{givers_list} la igjen kudos på %{commentable_link}."
+          one: "%{givers_list} la igjen kudos på %{commentable_title} (%{commentable_url})."
+          other: "%{givers_list} la igjen kudos på %{commentable_title} (%{commentable_url})."
+        single_guest: En gjest la igjen kudos på %{commentable_title} (%{commentable_url}).
   mailer:
     general:
       closing:

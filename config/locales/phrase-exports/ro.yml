@@ -5,18 +5,20 @@ ro:
       guest:
         few: "%{count} vizitatori"
         one: un vizitator
-        other: "%{count} vizitatori"
+        other: "%{count} de vizitatori"
       html:
         left_kudos:
           few: "%{givers_list} au lăsat kudos pentru %{commentable_link}."
           one: "%{givers_list} a lăsat kudos pentru %{commentable_link}."
           other: "%{givers_list} au lăsat kudos pentru %{commentable_link}."
+        single_guest: Un vizitator a lăsat kudos pentru %{commentable_link}.
       subject: "[%{app_name}] Ai primit kudos!"
       text:
         left_kudos:
-          few: "%{givers_list} au lăsat kudos pentru %{commentable_link}."
-          one: "%{givers_list} a lăsat kudos pentru %{commentable_link}."
-          other: "%{givers_list} au lăsat kudos pentru %{commentable_link}."
+          few: "%{givers_list} au lăsat kudos pentru %{commentable_title} (%{commentable_url})."
+          one: "%{givers_list} a lăsat kudos pentru %{commentable_title} (%{commentable_url})."
+          other: "%{givers_list} au lăsat kudos pentru %{commentable_title} (%{commentable_url})."
+        single_guest: Un vizitator a lăsat kudos pentru %{commentable_title} (%{commentable_url}).
   mailer:
     general:
       closing:

@@ -9,11 +9,13 @@ pt-PT:
         left_kudos:
           one: "%{givers_list} deixou kudos em %{commentable_link}."
           other: "%{givers_list} deixaram kudos em %{commentable_link}."
+        single_guest: Uma pessoa convidada deixou kudos em %{commentable_link}.
       subject: "[%{app_name}] Recebeste kudos!"
       text:
         left_kudos:
-          one: "%{givers_list} deixou kudos em %{commentable_link}."
-          other: "%{givers_list} deixaram kudos em %{commentable_link}."
+          one: "%{givers_list} deixou kudos em %{commentable_title} (%{commentable_url})."
+          other: "%{givers_list} deixaram kudos em %{commentable_title} (%{commentable_url})."
+        single_guest: Uma pessoa convidada deixou kudos em %{commentable_title} (%{commentable_url}).
   mailer:
     general:
       closing:

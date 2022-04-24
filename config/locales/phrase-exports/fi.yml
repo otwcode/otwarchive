@@ -12,8 +12,8 @@ fi:
       subject: "[%{app_name}] Sinulle on kehuja!"
       text:
         left_kudos:
-          one: "%{givers_list} kehui teosta %{commentable_link}."
-          other: "%{givers_list} kehuivat teosta %{commentable_link}."
+          one: "%{givers_list} kehui teosta %{commentable_title} (%{commentable_url})."
+          other: "%{givers_list} kehuivat teosta %{commentable_title} (%{commentable_url})."
   mailer:
     general:
       closing:

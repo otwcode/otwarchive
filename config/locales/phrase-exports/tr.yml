@@ -12,8 +12,10 @@ tr:
       subject: "[%{app_name}] Kalp aldınız!"
       text:
         left_kudos:
-          one: "%{givers_list}, %{commentable_link} eserinize kalp bıraktı."
-          other: "%{givers_list}, %{commentable_link} eserinize kalp bıraktı."
+          one: "%{givers_list}, %{commentable_title} (%{commentable_url}) eserinize
+            kalp bıraktı."
+          other: "%{givers_list}, %{commentable_title} (%{commentable_url}) eserinize
+            kalp bıraktı."
   mailer:
     general:
       closing:

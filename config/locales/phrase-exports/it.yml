@@ -9,11 +9,13 @@ it:
         left_kudos:
           one: "%{givers_list} ha lasciato kudos per %{commentable_link}."
           other: "%{givers_list} hanno lasciato kudos per %{commentable_link}."
+        single_guest: Un ospite ha lasciato kudos per %{commentable_link}.
       subject: "[%{app_name}] Hai dei kudos!"
       text:
         left_kudos:
-          one: "%{givers_list} ha lasciato kudos per %{commentable_link}."
-          other: "%{givers_list} hanno lasciato kudos per %{commentable_link}."
+          one: "%{givers_list} ha lasciato kudos per %{commentable_title} (%{commentable_url})."
+          other: "%{givers_list} hanno lasciato kudos per %{commentable_title} (%{commentable_url})."
+        single_guest: Un ospite ha lasciato kudos per %{commentable_title} (%{commentable_url}).
   mailer:
     general:
       closing:

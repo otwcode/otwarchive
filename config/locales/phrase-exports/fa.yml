@@ -12,8 +12,10 @@ fa:
       subject: "[%{app_name}] شما کودوس و قدردانی دریافت کردید!"
       text:
         left_kudos:
-          one: "%{givers_list} برای %{commentable_link} کودوس و قدردانی فرستاد."
-          other: "%{givers_list} برای %{commentable_link} کودوس و قدردانی فرستادند."
+          one: "%{givers_list} برای %{commentable_title} (%{commentable_url}) کودوس
+            و قدردانی فرستاد."
+          other: "%{givers_list} برای %{commentable_title} (%{commentable_url}) کودوس
+            و قدردانی فرستادند."
   mailer:
     general:
       closing:

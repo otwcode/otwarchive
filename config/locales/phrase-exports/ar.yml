@@ -7,7 +7,7 @@ ar:
         many: "%{count} ضيفاً"
         one: ضيف
         other: "%{count} ضيف"
-        two: ضيفان
+        two: ضيفين
       html:
         left_kudos:
           few: حصلت على علامات امتياز للعمل %{commentable_link} من %{givers_list}.
@@ -15,14 +15,22 @@ ar:
           one: حصلت على علامة امتياز للعمل %{commentable_link} من %{givers_list}.
           other: حصلت على علامات امتياز للعمل %{commentable_link} من %{givers_list}.
           two: حصلت على علامتي امتياز للعمل %{commentable_link} من %{givers_list}.
+        single_guest: حصلت على علامة امتياز للعمل %{commentable_link} من ضيف.
       subject: "[%{app_name}] حصلت على علامة امتياز!"
       text:
         left_kudos:
-          few: حصلت على علامات امتياز للعمل %{commentable_link} من %{givers_list}.
-          many: حصلت على علامات امتياز للعمل %{commentable_link} من %{givers_list}.
-          one: حصلت على علامة امتياز للعمل %{commentable_link} من %{givers_list}.
-          other: حصلت على علامات امتياز للعمل %{commentable_link} من %{givers_list}.
-          two: حصلت على علامتي امتياز للعمل %{commentable_link} من %{givers_list}.
+          few: حصلت على علامات امتياز للعمل %{commentable_title} (%{commentable_url})
+            من %{givers_list}.
+          many: حصلت على علامات امتياز للعمل %{commentable_title} (%{commentable_url})
+            من %{givers_list}.
+          one: حصلت على علامة امتياز للعمل %{commentable_title} (%{commentable_url})
+            من %{givers_list}.
+          other: حصلت على علامات امتياز للعمل %{commentable_title} (%{commentable_url})
+            من %{givers_list}.
+          two: حصلت على علامتي امتياز للعمل %{commentable_title} (%{commentable_url})
+            من %{givers_list}.
+        single_guest: حصلت على علامة امتياز للعمل %{commentable_title} (%{commentable_url})
+          من ضيف.
   mailer:
     general:
       closing:

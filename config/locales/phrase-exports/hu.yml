@@ -9,11 +9,13 @@ hu:
         left_kudos:
           one: "%{givers_list} kudost hagyott itt: %{commentable_link}."
           other: "%{givers_list} kudost hagyott itt: %{commentable_link}."
+        single_guest: 'Egy vendég kudost hagyott itt: %{commentable_link}.'
       subject: "​[%{app_name}]​​ ​Kudost kaptál!"
       text:
         left_kudos:
-          one: "%{givers_list} kudost hagyott itt: %{commentable_link}."
-          other: "%{givers_list} kudost hagyott itt: %{commentable_link}."
+          one: "%{givers_list} kudost hagyott itt: %{commentable_title} (%{commentable_url})."
+          other: "%{givers_list} kudost hagyott itt: %{commentable_title} (%{commentable_url})."
+        single_guest: 'Egy vendég kudost hagyott itt: %{commentable_title} (%{commentable_url}).'
   mailer:
     general:
       closing:

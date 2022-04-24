@@ -10,7 +10,8 @@ ko:
       subject: "[%{app_name}] 회원님의 게시물에 좋아요(kudos)가 있습니다!"
       text:
         left_kudos:
-          other: "%{commentable_link}에 %{givers_list}이(가) 좋아요(kudos)를 남겼습니다."
+          other: "%{commentable_title} (%{commentable_url})에 %{givers_list}이(가) 좋아요(kudos)를
+            남겼습니다."
   mailer:
     general:
       closing:

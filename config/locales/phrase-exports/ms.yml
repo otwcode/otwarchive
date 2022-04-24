@@ -10,7 +10,8 @@ ms:
       subject: "[%{app_name}] Anda telah menerima kudos!"
       text:
         left_kudos:
-          other: "%{givers_list} telah meninggalkan kudos untuk %{commentable_link}."
+          other: "%{givers_list} telah meninggalkan kudos untuk %{commentable_title}
+            (%{commentable_url})."
   mailer:
     general:
       closing:

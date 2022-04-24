@@ -7,13 +7,18 @@ hi:
         other: "%{count} अतिथिगण"
       html:
         left_kudos:
-          one: "%{givers_list} ने %{commentable_link} पर कूडोस दिया हैं।"
-          other: "%{givers_list} ने %{commentable_link} पर कूडोस दिया हैं।"
-      subject: "[%{app_name}] आपको कूडोस मिला हैं!"
+          one: "%{givers_list} ने %{commentable_link} पर कुङोस दिया है।"
+          other: "%{givers_list} ने %{commentable_link} पर कुङोस दिए हैं।"
+        single_guest: एक अतिथि ने %{commentable_link} पर कुङोस दिया है।
+      subject: "[%{app_name}] आपको कुङोस मिला हैं!"
       text:
         left_kudos:
-          one: "%{givers_list} ने %{commentable_link} पर कूडोस दिया हैं।"
-          other: "%{givers_list} ने %{commentable_link} पर कूडोस दिया हैं।"
+          one: "%{givers_list} ने %{commentable_title} (%{commentable_url}) पर कुङोस
+            दिया है।"
+          other: "%{givers_list} ने %{commentable_title} (%{commentable_url}) पर कुङोस
+            दिए हैं।"
+        single_guest: एक अतिथि ने %{commentable_title} (%{commentable_url}) पर कुङोस
+          दिया है।
   mailer:
     general:
       closing:

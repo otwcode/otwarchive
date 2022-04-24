@@ -9,11 +9,13 @@ bg:
         left_kudos:
           one: "%{givers_list} остави кудос за %{commentable_link}."
           other: "%{givers_list} оставиха кудос за %{commentable_link}."
+        single_guest: Един гост остави кудос за %{commentable_link}.
       subject: "[%{app_name}] Имаш кудос!"
       text:
         left_kudos:
-          one: "%{givers_list} остави кудос за %{commentable_link}."
-          other: "%{givers_list} оставиха кудос за %{commentable_link}."
+          one: "%{givers_list} остави кудос за %{commentable_title} (%{commentable_url})."
+          other: "%{givers_list} оставиха кудос за %{commentable_title} (%{commentable_url})."
+        single_guest: Един гост остави кудос за %{commentable_title} (%{commentable_url}).
   mailer:
     general:
       closing:

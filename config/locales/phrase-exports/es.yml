@@ -9,11 +9,13 @@ es:
         left_kudos:
           one: "%{givers_list} dejó kudos en %{commentable_link}."
           other: "%{givers_list} dejaron kudos en %{commentable_link}"
+        single_guest: Unx visitante dejó kudos en %{commentable_link}.
       subject: "[%{app_name}] ¡Recibiste kudos!"
       text:
         left_kudos:
-          one: "%{givers_list} dejó kudos en %{commentable_link}."
-          other: "%{givers_list} dejaron kudos en %{commentable_link}."
+          one: "%{givers_list} dejó kudos en %{commentable_title} (%{commentable_url})."
+          other: "%{givers_list} dejaron kudos en %{commentable_title} (%{commentable_url})."
+        single_guest: Unx visitante dejó kudos en %{commentable_title} (%{commentable_url}).
   mailer:
     general:
       closing:

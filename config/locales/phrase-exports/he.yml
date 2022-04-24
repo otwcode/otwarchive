@@ -17,8 +17,8 @@ he:
       text:
         left_kudos:
           many: "%{givers_list} השאירו קודוס על %{commentable_link}."
-          one: "%{givers_list} השאירה קודוס על %{commentable_link}."
-          other: "%{givers_list} השאירו קודוס על %{commentable_link}."
+          one: "%{givers_list} השאירה קודוס על %{commentable_title} (%{commentable_url})."
+          other: "%{givers_list} השאירו קודוס על %{commentable_title} (%{commentable_url})."
           two: "%{givers_list} השאירו קודוס על %{commentable_link}."
   mailer:
     general:
