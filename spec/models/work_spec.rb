@@ -378,34 +378,34 @@ describe Work do
     end
   end
 
-  describe "new recipients virtual attribute"  do
+  describe "new gifts virtual attribute" do
+    let(:recipient1) { create(:user).pseuds.first.name }
+    let(:recipient2) { create(:user).pseuds.first.name }
+    let(:recipient3) { create(:user).pseuds.first.name }
 
-    before(:each) do
-      @recipient1 = create(:user)
-      @recipient2 = create(:user)
-      @recipient3 = create(:user)
+    let(:work) { build(:work) }
 
-      @work = build(:work)
-      @work.recipients = @recipient1.pseuds.first.name + "," + @recipient2.pseuds.first.name
+    before do
+      work.recipients = recipient1 + "," + recipient2
     end
 
-    it "should be the same as recipients when they are first added" do
-      expect(@work.new_recipients).to eq(@work.recipients)
+    it "contains gifts for the same recipients when they are first added" do
+      expect(work.new_gifts.collect(&:recipient)).to eq([recipient1, recipient2])
     end
 
-    it "should only contain the new recipient if replacing the previous recipient" do
-      @work.recipients = @recipient3.pseuds.first.name
-      expect(@work.new_recipients).to eq(@recipient3.pseuds.first.name)
+    it "only contains a gift for the new recipient if replacing the previous recipients" do
+      work.recipients = recipient3
+      expect(work.new_gifts.collect(&:recipient)).to eq([recipient3])
     end
 
-    it "simple assignment should work" do
-      @work.recipients = @recipient2.pseuds.first.name
-      expect(@work.new_recipients).to eq(@recipient2.pseuds.first.name)
+    it "simple assignment works" do
+      work.recipients = recipient2
+      expect(work.new_gifts.collect(&:recipient)).to eq([recipient2])
     end
 
-    it "recipients should be unique" do
-      @work.recipients = @recipient2.pseuds.first.name + "," + @recipient2.pseuds.first.name
-      expect(@work.new_recipients).to eq(@recipient2.pseuds.first.name)
+    it "only contains one gift if the same recipient is entered twice" do
+      work.recipients = recipient2 + "," + recipient2
+      expect(work.new_gifts.collect(&:recipient)).to eq([recipient2])
     end
   end
 
@@ -459,8 +459,28 @@ describe Work do
 
     it "marks a work incomplete when it's no longer completed" do
       work = create(:work, expected_number_of_chapters: 1)
-      work.update_attributes!(expected_number_of_chapters: nil)
+      work.update!(expected_number_of_chapters: nil)
       expect(work.reload.complete).to be_falsey
+    end
+  end
+
+  describe "#wip_length" do
+    it "updating chapter count via wip_length sets a sensible expected_number_of_chapters value" do
+      work = create(:work)
+      create(:chapter, work: work)
+      work.reload
+
+      work.wip_length = 1
+      expect(work.expected_number_of_chapters).to be_nil
+      expect(work.wip_length).to eq("?")
+
+      work.wip_length = 2
+      expect(work.expected_number_of_chapters).to eq(2)
+      expect(work.wip_length).to eq(work.expected_number_of_chapters)
+
+      work.wip_length = 3
+      expect(work.expected_number_of_chapters).to eq(3)
+      expect(work.wip_length).to eq(work.expected_number_of_chapters)
     end
   end
 
@@ -474,7 +494,7 @@ describe Work do
         @admin_setting.update_attribute(:hide_spam, true)
       end
       it "automatically hides spam works and sends an email" do
-        expect { @work.update_attributes!(spam: true) }.
+        expect { @work.update!(spam: true) }.
           to change { ActionMailer::Base.deliveries.count }.by(1)
         expect(@work.reload.hidden_by_admin).to be_truthy
         expect(ActionMailer::Base.deliveries.last.subject).to eq("[AO3] Your work was hidden as spam")
@@ -485,7 +505,7 @@ describe Work do
         @admin_setting.update_attribute(:hide_spam, false)
       end
       it "does not automatically hide spam works and does not send an email" do
-        expect { @work.update_attributes!(spam: true) }.
+        expect { @work.update!(spam: true) }.
           not_to change { ActionMailer::Base.deliveries.count }
         expect(@work.reload.hidden_by_admin).to be_falsey
       end

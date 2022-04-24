@@ -219,10 +219,11 @@ class User < ApplicationRecord
     where("challenge_claims.id IN (?)", claims_ids)
   end
 
-  # Find users with a particular role and/or by name and/or by email
+  # Find users with a particular role and/or by name, email, and/or id
   # Options: inactive, page, exact
-  def self.search_by_role(role, name, email, options = {})
-    return if role.blank? && name.blank? && email.blank?
+  def self.search_by_role(role, name, email, user_id, options = {})
+    return if role.blank? && name.blank? && email.blank? && user_id.blank?
+
     users = User.distinct.order(:login)
     if options[:inactive]
       users = users.where("confirmed_at IS NULL")
@@ -235,6 +236,9 @@ class User < ApplicationRecord
     end
     if email.present?
       users = users.filter_by_email(email, options[:exact])
+    end
+    if user_id.present?
+      users = users.where(["users.id = ?", user_id])
     end
     users.paginate(page: options[:page] || 1)
   end

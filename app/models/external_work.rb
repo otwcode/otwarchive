@@ -45,11 +45,6 @@ class ExternalWork < ApplicationRecord
     self.url = reformat_url(self.url) if self.url
   end
 
-  # Sets the dead? attribute to true if the link is no longer active
-  def set_url_status
-    self.update_attribute(:dead, true) unless url_active?(self.url)
-  end
-
   # Allow encoded characters to display correctly in titles
   def title
     read_attribute(:title).try(:html_safe)

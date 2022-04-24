@@ -1,7 +1,8 @@
 <% creation_type = @creation.model_name.human.downcase %>
 <% content_for :message do %>
-  <p><%= t(".intro", type: creation_type, inviting_user: @inviting_user.login,
-           pseud: @creatorship.pseud.name) %></p>
+  <p>
+    <%= t(".intro_#{creation_type}", inviting_user: @inviting_user.login, pseud: @creatorship.pseud.name) %>
+  </p>
 
   <p>
     <%= t(".html.creation",

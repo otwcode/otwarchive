@@ -304,7 +304,7 @@ class StoryParser
     work.ip_address = options[:ip_address]
     work.expected_number_of_chapters = work.chapters.length
     work.revised_at = work.chapters.last.published_at
-    if work.revised_at && work.revised_at.to_date < Date.today
+    if work.revised_at && work.revised_at.to_date < Date.current
       work.backdate = true
     end
 
@@ -438,7 +438,7 @@ class StoryParser
     chapter_params = work_params.delete_if do |name, _param|
       !@chapter.attribute_names.include?(name.to_s) || !@chapter.send(name.to_s).blank?
     end
-    @chapter.update_attributes(chapter_params)
+    @chapter.update(chapter_params)
     @chapter
   end
 
@@ -904,7 +904,7 @@ class StoryParser
         date = Time.at(Regex.last_match[1].to_i)
       end
       date ||= Date.parse(date_string)
-      return '' if date > Date.today
+      return '' if date > Date.current
       return date
     rescue ArgumentError, TypeError
       return ''

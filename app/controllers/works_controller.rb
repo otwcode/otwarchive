@@ -594,7 +594,7 @@ class WorksController < ApplicationController
       next unless @work.collection_items.present?
       @work.collection_items.each do |collection_item|
         next unless collection_item.collection == collection
-        if collection_item.user_approval_status == 1 && collection_item.collection_approval_status.zero?
+        if collection_item.approved_by_user? && collection_item.unreviewed_by_collection?
           moderated_collections << collection
         end
       end
@@ -630,7 +630,7 @@ class WorksController < ApplicationController
       redirect_to(edit_user_work_path(@user, @work)) && return
     end
 
-    # AO3-3498: since a work's word count is calculated in a before_save and the chapter is posted in an after_save, 
+    # AO3-3498: since a work's word count is calculated in a before_save and the chapter is posted in an after_save,
     # work's word count needs to be updated with the chapter's word count after the chapter is posted
     @work.set_word_count
     @work.save
@@ -698,7 +698,7 @@ class WorksController < ApplicationController
 
     @works.each do |work|
       # now we can just update each work independently, woo!
-      unless work.update_attributes(updated_work_params)
+      unless work.update(updated_work_params)
         @errors << ts('The work %{title} could not be edited: %{error}', title: work.title, error: work.errors.full_messages.join(" ")).html_safe
       end
 
@@ -893,7 +893,7 @@ class WorksController < ApplicationController
   def work_params
     params.require(:work).permit(
       :rating_string, :fandom_string, :relationship_string, :character_string,
-      :archive_warning_string, :category_string, :expected_number_of_chapters,
+      :archive_warning_string, :category_string,
       :freeform_string, :summary, :notes, :endnotes, :collection_names, :recipients, :wip_length,
       :backdate, :language_id, :work_skin_id, :restricted, :comment_permissions,
       :moderated_commenting_enabled, :title, :pseuds_to_add, :collections_to_add,

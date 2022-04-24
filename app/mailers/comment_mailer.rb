@@ -1,8 +1,4 @@
-class CommentMailer < ActionMailer::Base
-  layout 'mailer'
-  helper :mailer
-  default from: "Archive of Our Own " + "<#{ArchiveConfig.RETURN_ADDRESS}>"
-
+class CommentMailer < ApplicationMailer
   # Sends email to an owner of the top-level commentable when a new comment is created
   def comment_notification(user, comment)
     @comment = comment
@@ -29,6 +25,7 @@ class CommentMailer < ActionMailer::Base
   # Sends email to commenter when a reply is posted to their comment
   # This may be a non-user of the archive
   def comment_reply_notification(your_comment, comment)
+    return if your_comment.comment_owner_email.blank?
     return if your_comment.pseud_id.nil? && AdminBlacklistedEmail.is_blacklisted?(your_comment.comment_owner_email)
 
     @your_comment = your_comment
@@ -42,6 +39,7 @@ class CommentMailer < ActionMailer::Base
   # Sends email to commenter when a reply to their comment is edited
   # This may be a non-user of the archive
   def edited_comment_reply_notification(your_comment, edited_comment)
+    return if your_comment.comment_owner_email.blank?
     return if your_comment.pseud_id.nil? && AdminBlacklistedEmail.is_blacklisted?(your_comment.comment_owner_email)
 
     @your_comment = your_comment

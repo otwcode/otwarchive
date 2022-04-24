@@ -8,7 +8,7 @@ Feature: Filing an abuse report
   Given basic languages
   When I am logged in as "otheruser"
     And I am on the home page
-    And I follow "Report Abuse"
+    And I follow "Policy Questions & Abuse Reports"
     And I should see the text with tags 'value="http://www.example.com/'
   When I fill in "Your comment (required)" with "This is wrong"
     And I fill in "Brief summary of Terms of Service Violation (required)" with "This is a summary of bad things"
@@ -25,14 +25,14 @@ Feature: Filing an abuse report
     And basic languages
   When I am logged in as "otheruser"
     And I view the work "Illegal thing"
-    And I follow "Report Abuse"
+    And I follow "Policy Questions & Abuse Reports"
   Then I should see the text with tags 'value="http://www.example.com/works/'
 
   Scenario: File an abuse request while logged out
 
   Given basic languages
   When I am on the home page
-    And I follow "Report Abuse"
+    And I follow "Policy Questions & Abuse Reports"
   Then I should see "We investigate every report we receive."
   When I fill in "Brief summary of Terms of Service Violation (required)" with "This is a summary of bad things"
     And I fill in "Your comment (required)" with "This is wrong"
@@ -47,7 +47,7 @@ Feature: Filing an abuse report
   When I am logged in as "otheruser"
     And basic languages
     And I am on the home page
-    And I follow "Report Abuse"
+    And I follow "Policy Questions & Abuse Reports"
     And I fill in "Brief summary of Terms of Service Violation (required)" with "This is a summary of bad things"
     And I fill in "Your comment (required)" with "This is wrong"
     And I fill in "Link to the page you are reporting" with "http://www.archiveofourown.org/works"

@@ -1,9 +1,9 @@
 <ul class="menu" role="menu">
-  <li><%= span_if_current ts('All Fandoms', key: 'header.fandom'), media_path %></li>
-  <% cache "menu-fandoms-version2", skip_digest: true do %>
+  <li><%= link_to ts('All Fandoms', key: 'header.fandom'), media_path %></li>
+  <% cache "menu-fandoms-version3", skip_digest: true do %>
     <% for medium in @menu_media %>
       <% unless medium.id.nil? %>
-        <li id="medium_<%= medium.id %>"><%= span_if_current ts("#{medium.name}", key: 'header.fandom'), medium_fandoms_path(medium) %></li>
+        <li id="medium_<%= medium.id %>"><%= link_to ts("#{medium.name}", key: 'header.fandom'), medium_fandoms_path(medium) %></li>
       <% end %>
     <% end %>
   <% end %>

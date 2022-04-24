@@ -272,6 +272,11 @@ When /^I hide the work "(.*?)"$/ do |title|
   step %{I follow "Hide Work"}
 end
 
+When "the search criteria contains the ID for {string}" do |login|
+  user_id = User.find_by(login: login).id
+  fill_in("user_id", with: user_id)
+end
+
 ### THEN
 
 Then (/^the translation information should still be filled in$/) do

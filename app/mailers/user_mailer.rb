@@ -1,21 +1,16 @@
-class UserMailer < ActionMailer::Base
-  layout 'mailer'
-
+class UserMailer < ApplicationMailer
   helper_method :current_user
   helper_method :current_admin
   helper_method :logged_in?
   helper_method :logged_in_as_admin?
 
   helper :application
-  helper :mailer
   helper :tags
   helper :works
   helper :users
   helper :date
   helper :series
   include HtmlCleaner
-
-  default from: "Archive of Our Own " + "<#{ArchiveConfig.RETURN_ADDRESS}>"
 
   # Send an email letting creators know their work has been added to a collection
   def added_to_collection_notification(user_id, work_id, collection_id)

@@ -71,9 +71,11 @@ module WorksHelper
     end
   end
 
-  # Check whether this user has permission to view this work even if it's
-  # unrevealed:
-  def can_see_work(work, user)
+  # Check whether this non-admin user has permission to view the unrevealed work
+  def can_access_unrevealed_work(work, user)
+    # Creators and invited can see their works
+    return true if work.user_is_owner_or_invited?(user)
+
     # Moderators can see unrevealed works:
     work.collections.each do |collection|
       return true if collection.user_is_maintainer?(user)

@@ -70,17 +70,27 @@ class CollectionsController < ApplicationController
 
     if @collection.collection_preference.show_random? || params[:show_random]
       # show a random selection of works/bookmarks
-      @works = Work.in_collection(@collection).visible.random_order.limit(ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD).includes(:pseuds, :tags, :series, :language, :approved_collections)
-      visible_bookmarks = @collection.approved_bookmarks.visible.random_order.limit(ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD * 2)
+      @works = WorkQuery.new(
+        collection_ids: [@collection.id], show_restricted: is_registered_user?
+      ).sample(count: ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD)
+
+      @bookmarks = BookmarkQuery.new(
+        collection_ids: [@collection.id], show_restricted: is_registered_user?
+      ).sample(count: ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD)
     else
       # show recent
-      @works = Work.in_collection(@collection).visible.ordered_by_date_desc.limit(ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD).includes(:pseuds, :tags, :series, :language, :approved_collections)
-      # visible_bookmarks = @collection.approved_bookmarks.visible(order: 'bookmarks.created_at DESC')
-      visible_bookmarks = Bookmark.in_collection(@collection).visible.order('bookmarks.created_at DESC').limit(ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD * 2)
-    end
-    # Having the number of items as a limit was finding the limited number of items, then visible ones within them
-    @bookmarks = visible_bookmarks[0...ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD]
+      @works = WorkQuery.new(
+        collection_ids: [@collection.id], show_restricted: is_registered_user?,
+        sort_column: "revised_at",
+        per_page: ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD
+      ).search_results
 
+      @bookmarks = BookmarkQuery.new(
+        collection_ids: [@collection.id], show_restricted: is_registered_user?,
+        sort_column: "created_at",
+        per_page: ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD
+      ).search_results
+    end
   end
 
   def new
@@ -124,7 +134,7 @@ class CollectionsController < ApplicationController
   end
 
   def update
-    if @collection.update_attributes(collection_params)
+    if @collection.update(collection_params)
       flash[:notice] = ts('Collection was successfully updated.')
       if params[:challenge_type].blank?
         if @collection.challenge

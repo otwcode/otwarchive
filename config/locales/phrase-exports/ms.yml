@@ -24,13 +24,11 @@ ms:
         informal:
           addressed: Hai, %{name}!
           unaddressed: Hai!
-        introductory: 'Helo daripada Archive of Our Own – AO3 (Arkib Milik Kita)!
-
-          '
+        introductory: Helo daripada Archive of Our Own – AO3 (Arkib Milik Kita)!
       signature:
         app_short_name: AO3
-        open_doors: 'Pasukan The Open Doors (Projek Pemeliharaan Bahan-Bahan Digital
-          dan Bukan Digital) '
+        open_doors: Pasukan The Open Doors (Projek Pemeliharaan Bahan-Bahan Digital
+          dan Bukan Digital)
         parent_org: Organization for Transformative Works – OTW (Organisasi Karya-Karya
           Transformatif)
         support: Pasukan Bantuan AO3
@@ -85,6 +83,36 @@ ms:
           persoalan.
         tos_violation: Jika terdapat kemungkinan karya anda telah melanggar Syarat-Syarat
           Perkhidmatan AO3, sila hubungi Jawatankuasa Polisi & Aduan kami (%{contact_abuse_url}).
+    admin_hidden_work_notification:
+      access: Ketika karya anda disembunyikan, anda masih boleh mengakses menerusi
+        capaian yang diberikan di atas, tetapi ia tidak akan disenaraikan di halaman
+        karya anda, dan tidak akan dipaparkan kepada pengguna AO3 yang lain.
+      check_email: Sila semak e-mel anda, termasuk folder spam, kerana pasukan Polisi
+        & Aduan mungkin telah menghubungi anda berkenaan mengapa karya anda disembunyikan.
+      contact_abuse: hubungi Polisi & Aduan
+      html:
+        help: Sekiranya anda tidak pasti mengapa karya anda disembunyikan dan anda
+          masih belum menerima hubungan lanjut tentang hal ini, sila hubungi %{contact_abuse_link}
+          secara langsung.
+        hidden: Karya anda %{title} telah disembunyikan oleh pasukan Polisi & Aduan
+          dan tidak dapat diakses oleh pihak umum lagi.
+        tos_violation: Sekiranya karya anda disembunyikan kerana melanggar %{tos_link}
+          AO3, anda akan perlu mengambil tindakan untuk membetulkan pelanggaran tersebut.
+          Kegagalan karya anda mematuhi Syarat-syarat Perkhidmatan mungkin akan menyebabkan
+          karya anda dipadam daripada AO3.
+      subject: "[%{app_name}] Karya anda telah disembunyikan oleh pasukan Polisi &
+        Aduan"
+      text:
+        help: 'Sekiranya anda tidak pasti mengapa karya anda disembunyikan dan anda
+          masih belum menerima hubungan lanjut tentang hal ini, sila hubungi Polisi
+          & Aduan secara langsung: %{contact_abuse_url}.'
+        hidden: Karya anda "%{title}" (%{work_url}) telah disembunyikan oleh pasukan
+          Polisi & Aduan dan tidak dapat diakses oleh umum lagi.
+        tos_violation: Sekiranya karya anda disembunyikan kerana melanggar Syarat-syarat
+          Perkhidmatan AO3 (%{tos_url}), anda akan perlu mengambil tindakan untuk
+          membetulkan pelanggaran tersebut. Kegagalan karya anda mematuhi Syarat-syarat
+          Perkhidmatan mungkin akan menyebabkan karya anda dipadam daripada AO3.
+      tos: Syarat-syarat Perkhidmatan
     anonymous_or_unrevealed_notification:
       anonymous_info: Karya tidak bernama termasuk dalam senarai tag, tetapi tidak
         pada halaman karya anda. Pada karya tersebut, nama pengguna anda akan digantikan
@@ -118,8 +146,8 @@ ms:
         Diluluskan)
       do_not_want:
         anonymous:
-          html: 'Jika anda tidak mahu karya anda menjad tidak bernama, sila lawati
-            %{collection_items_link} anda untuk mengeluarkannya daripada koleksi ini. '
+          html: Jika anda tidak mahu karya anda menjad tidak bernama, sila lawati
+            %{collection_items_link} anda untuk mengeluarkannya daripada koleksi ini.
           text: 'Jika anda tidak mahu karya anda sebagai tidak bernama, sila lawati
             laman Approved Collection Items (Butiran Koleksi Diluluskan) anda untuk
             mengeluarkannya daripada koleksi ini: %{collection_items_url}'
@@ -127,16 +155,16 @@ ms:
           html: Jika anda tidak mahu karya anda sebagai tidak bernama dan tidak dipamerkan,
             sila lawat %{collection_items_link} anda untuk mengeluarkannya daripada
             koleksi ini.
-          text: 'Jika anda tidak mahu karya anda sebagai tidak bernama  dan tidak
-            dipamerkan, sila lawat laman Approved Collection Items (Butiran Koleksi
-            Diluluskan) anda untuk mengeluarkannya daripada koleksi ini: %{collection_items_url}'
+          text: 'Jika anda tidak mahu karya anda sebagai tidak bernama dan tidak dipamerkan,
+            sila lawat laman Approved Collection Items (Butiran Koleksi Diluluskan)
+            anda untuk mengeluarkannya daripada koleksi ini: %{collection_items_url}'
         unrevealed:
           html: Jika anda tidak mahu karya anda sebagai tidak dipamerkan, sila lawati
             %{collection_items_link} anda untuk mengeluarkannya daripada koleksi ini.
           text: 'Jika anda tidak mahu karya anda sebagai tidak dipamerkan, sila lawat
             laman Approved Collection Items (Butiran Koleksi Diluluskan) anda untuk
             mengeluarkannya daripada koleksi ini: %{collection_items_url}'
-      faq_link_text: 'FAQ Koleksi '
+      faq_link_text: FAQ Koleksi
       more_info:
         html: Untuk maklumat lebih anjut, sila lawat %{faq_link} kami.
         text: 'Untuk maklumat lebih lanjut, sila lawati FAQ Koleksi kami: %{faq_url}'
@@ -145,10 +173,10 @@ ms:
         anonymous_unrevealed: "[%{app_name}] Karya anda telah dibuat tidak bernama
           dan tidak dipamerkan"
         unrevealed: "[%{app_name}] Karya anda tidak dipamerkan"
-      unrevealed_info: 'Karya yang tidak dipamerkan tidak termasuk  dalam senarai
-        tag atau pada laman karya anda. Sesiapa yang mengikuti pautan ke karya tersebut
+      unrevealed_info: Karya yang tidak dipamerkan tidak termasuk dalam senarai tag
+        atau pada laman karya anda. Sesiapa yang mengikuti pautan ke karya tersebut
         akan menerima notis bahawa karya tersebut tidak dipamerkan, dan mereka tidak
-        akan dapat mengakses kandungan tersebut. '
+        akan dapat mengakses kandungan tersebut.
     challenge_assignment_notification:
       any: Mana-mana
       description: 'Penerangan:'
@@ -163,15 +191,15 @@ ms:
         part1: Anda telah ditugaskan dengan permintaan yang dinyatakan pada cabaran
           %{link} di Arkib Milik Kita!
       optional_tags: 'Tag Pilihan:'
-      prompts: "<i>Prompt</i>:"
-      prompt_url: 'URL <i>Prompt</i>:'
+      prompts: 'Prompt:'
+      prompt_url: 'URL Prompt:'
       recipient: 'Penerima:'
       recipient_missing: 'Tiada: hubungi moderator untuk bantuan!'
       subject: "[%{app_name}][%{collection_title}] Tugasan Anda!"
       text:
         assignment: Anda telah ditugaskan dengan permintaan yang dinyatakan pada cabaran
-          "%{collection_title}" (%{collection_url})  di Arkib Milik Kita!
-        footer: Anda menerima emel ini kerana anda telah mendaftar untuk cabaran  %{title}
+          "%{collection_title}" (%{collection_url}) di Arkib Milik Kita!
+        footer: Anda menerima emel ini kerana anda telah mendaftar untuk cabaran %{title}
           (%{url}). Untuk maklumat lebih lanjut mengenai cabaran ini maklumat untuk
           dihubungi bagi moderator, sila lihat %{profile_url}.
         look_up: Anda boleh mencari tugasan ini dari halaman Assignments (Tugasan)
@@ -180,6 +208,15 @@ ms:
       part1: "%{login}, emel yang dikaitkan dengan akaun anda kini telah diubah kepada
         %{email}"
       subject: "[%{app_name}] Emel diubah"
+    collection_notification:
+      assignments_sent:
+        complete: Semua tugasan telah dihantar
+        subject: Tugasan dihantar
+      html:
+        received_message: 'Anda telah menerima pesanan tentang koleksi anda %{collection_link}:'
+      text:
+        received_message: 'Anda telah menerima pesanan tentang koleksi anda "%{collection_title}"
+          (%{collection_url}):'
     creatorship_notification:
       explanation: Apabila anda menjadi seorang pereka bersama untuk sesebuah karya,
         anda boleh dimasukkan pada bab-bab baru, tanpa mengira tetapan pereka bersama
@@ -187,34 +224,61 @@ ms:
         disertakan.
       html:
         creation: "%{creation_link} oleh %{pseud_links}"
-        edit: mengedit %{type}
-        remove: Jika anda telah silap dimasukkan atau tidak mahu disenarai sebagai
-          pereka, anda boleh %{edit} untuk mengeluarkan diri sebagai pereka.
-      intro: 'Pengguna %{adding_user} telah menyenaraikan nama samaran anda %{pseud}
-        sebagai pereka bersama bagi yang berikut %{type}:'
+        edit_chapter: Edit bab
+        edit_series: olah siri
+        remove_chapter: Jika anda telah silap dimasukkan atau tidak mahu disenarai
+          sebagai pereka, anda boleh %{edit_chapter_link} untuk mengeluarkan diri
+          anda sebagai pereka.
+        remove_series: Jika anda telah silap dimasukkan atau tidak mahu disenarai
+          sebagai pereka, anda boleh %{edit_series_link} untuk mengeluarkan diri sebagai
+          pereka.
+      intro_chapter: 'Pengguna %{adding_user} telah menyenaraikan nama samaran anda
+        %{pseud} sebagai pereka bersama untuk bab yang berikut:'
+      intro_series: 'Pengguna %{adding_user} telah menyenaraikan nama samaran anda
+        %{pseud} sebagai pereka bersama bagi siri berikut:'
       subject: "[%{app_name}] Pemberitahuan Pereka Bersama"
       text:
         creation: "%{title} (%{url}) oleh %{pseuds}"
-        remove: 'Jika anda telah silap dimasukkan atau tidak mahu disenarai sebagai
-          pereka, anda boleh mengedit %{type} untuk mengeluarkan diri sebagai pereka:
-          %{url}'
+        remove_chapter: 'Jika anda telah silap dimasukkan atau tidak mahu disenarai
+          sebagai pereka, anda boleh mengedit bab ini untuk mengeluarkan diri sebagai
+          pereka: %{url}'
+        remove_series: 'Jika anda telah silap dimasukkan atau tidak mahu disenarai
+          sebagai pereka, anda boleh untuk mengeluarkan diri sebagai pereka: %{url}'
     creatorship_notification_archivist:
       explanation: Atas sebab mereka bertindak atas peranan rasmi mereka sebagai pengurus
-        arkib <i>Open Doors</i>, mereka dibenarkan untuk melantik anda tanpa jemputan,
-        walaupun anda memilih untuk menolak perekaan bersama.
+        arkib Open Doors, mereka dibenarkan untuk melantik anda tanpa jemputan, walaupun
+        anda memilih untuk menolak perekaan bersama.
       html:
         creation: "%{creation_link} oleh %{pseud_links}"
-        edit: mengedit %{type} tersebut
-        remove: Jika anda telah disertakan secara tidak sengaja ataupun anda tidak
-          ingin disenaraikan sebagai pereka, anda boleh %{edit} untuk mengeluarkan
-          diri anda sebagai pereka.
-      intro: 'Pengguna %{archivist} telah menyertakan nama samaran anda %{pseud} sebagai
-        pereka bersama dalam %{type} berikut:'
+        edit_chapter: Menyunting karya
+        edit_series: Menyunting karya
+        edit_work: Menyunting karya
+        remove_chapter: Jika anda telah disertakan secara tidak sengaja ataupun anda
+          tidak ingin disenaraikan sebagai pereka, anda boleh %{edit_chapter_link}
+          untuk mengeluarkan diri anda sebagai pereka.
+        remove_series: Jika anda telah disertakan secara tidak sengaja ataupun anda
+          tidak ingin disenaraikan sebagai pereka, anda boleh %{edit_series_link}
+          untuk mengeluarkan diri anda sebagai pereka.
+        remove_work: Jika anda telah disertakan secara tidak sengaja ataupun anda
+          tidak ingin disenaraikan sebagai pereka, anda boleh %{edit_work_link} untuk
+          mengeluarkan diri anda sebagai pereka.
+      intro_chapter: 'Pengguna ini %{archivist} telah menyertakan nama samaran anda
+        %{pseud} sebagai pereka bersama berikut untuk bab berikut:'
+      intro_series: 'Pengguna ini %{archivist} telah menyertakan nama samaran anda
+        %{pseud} sebagai pereka bersama berikut untuk siri berikut:'
+      intro_work: 'Pengguna %{archivist} telah menyertakan nama samaran anda %{pseud}
+        sebagai pereka bersama berikut untuk karya berikut:'
       subject: "[%{app_name}] Pemberitahuan pereka bersama pengurus arkib"
       text:
         creation: "%{title} (%{url}) oleh %{pseuds}"
-        remove: 'Jika anda telah disertakan secara tidak sengaja ataupun anda tidak
-          ingin disenaraikan sebagai pereka, anda boleh mengedit %{type} tersebut
+        remove_chapter: 'Jika anda telah disertakan secara tidak sengaja ataupun anda
+          tidak ingin disenaraikan sebagai pereka, anda boleh menyunting bab tersebut
+          untuk mengeluarkan diri anda sebagai pereka: %{url}'
+        remove_series: 'Jika anda telah disertakan secara tidak sengaja ataupun anda
+          tidak ingin disenaraikan sebagai pereka, anda boleh menyunting siri tersebut
+          untuk mengeluarkan diri anda sebagai pereka: %{url}'
+        remove_work: 'Jika anda telah disertakan secara tidak sengaja ataupun anda
+          tidak ingin disenaraikan sebagai pereka, anda boleh menyunting karya tersebut
           untuk mengeluarkan diri anda sebagai pereka: %{url}'
     creatorship_request:
       html:
@@ -222,8 +286,12 @@ ms:
         instructions: Anda boleh menerima atau menolak permintaan ini di halaman %{page_name}
           anda.
         page_name: Co-Creator Requests (Permintaan-Permintaan Pereka Bersama)
-      intro: 'Pengguna %{inviting_user} telah menjemput nama samaran %{pseud} anda
-        untuk disenaraikan sebagai pereka bersama dalam %{type} berikut:'
+      intro_chapter: 'Pengguna %{inviting_user} telah menjemput nama samaran anda
+        %{pseud} untuk disenaraikan sebagai pereka bersama di bab tersebut:'
+      intro_series: 'Pengguna %{inviting_user} telah menjemput nama samaran anda %{pseud}
+        untuk disenaraikan sebagai pereka bersama di siri tersebut:'
+      intro_work: 'Pengguna %{inviting_user} telah menjemput nama samaran anda %{pseud}
+        untuk disenaraikan sebagai pereka bersama di karya tersebut:'
       subject: "[%{app_name}] Permintaan pereka bersama"
       text:
         creation: "%{title} (%{url}) oleh %{pseuds}"
@@ -244,51 +312,14 @@ ms:
     invitation_to_claim:
       html:
         ao3_news: Berita AO3
-        contact_open_doors: hubungi <i>Open Doors</i>
+        contact_open_doors: hubungi Open Doors
         contact_support: hubungi bantuan AO3
         faq_page: laman FAQ
-        open_doors: "<i>Open Doors</i>"
-        part1: Anda telah menerima e-mel ini kerana sebuah arkib telah diimport oleh
-          %{open_doors_link} ke dalam %{app_link} (%{app_short_name}) baru-baru ini,
-          dan kami percaya hasil karya peminat tersebut adalah milik anda. Kami ingin
-          memberikan anda peluang untuk menuntut (atau memadam/meyatimkan) karya-karya
-          tersebut jika anda mahu. Dan jika anda belum lagi mempunyai sebuah akaun
-          di bawah alamat e-mel yang berbeza, kami ingin menjemput anda untuk menyertai
-          kami!
-        part10: Jika anda mempunyai karya-karya lain pada arkib yang diimport dengan
-          alamat e-mel lain yang anda tidak dapat akses, sila %{open_doors_link} dengan
-          apa-apa maklumat yang boleh membantu mengesahkan identiti anda.
-        part11: Untuk pertanyaan lain, sila %{support_link}.
-        part2: Anda boleh membaca pengumuman mengenai pergerakan arkib terkini di
-          %{news_link}, dan mencari maklumat tambahan tentang %{open_doors_faq_link}
-          atau %{open_doors_tutorial_link} <i>Open Doors</i>. Untuk sebarang soalan
-          yang tidak dijawab di dalam FAQ, tutorial, atau e-mel ini, sila %{support_link}.
-        part3: Jika ini merupakan suatu kesilapan dan karya-karya ini bukan milik
-          anda, sila jangan padamkannya! Sila %{open_doors_link} dan kami akan selesaikannya.
-        part4: Bergantung kepada arkib, karya-karya anda yang diimport mungkin dihadkan
-          kepada pengguna berdaftar sahaja (supaya mereka tidak muncul dalam carian
-          Google). Jika berlaku sedemikian, karya-karya tersebut hanya boleh diakses
-          oleh pengguna yang telah log masuk, melainkan anda memilih untuk membuatkan
-          karya-karya boleh diakses oleh orang ramai. Untuk bantuan membebaskan, meyatimkan,
-          atau memadam karya-karya anda, sila %{support_link}.
+        open_doors: Open Doors
         part5: Tuntut atau padamkan karya-karya anda di sini.
-        part7: Jika karya-karya ini memang milik anda, tetapi anda tidak ingin menyimpannya
-          lagi, anda boleh meyatimkan (agar mereka kekal dalam AO3, tetapi dengan
-          nama anda terpadam) atau memadamkan mereka (agar mereka dipadamkan sepenuhnya
-          dari AO3). Anda tidak perlu menambah karya-karya tersebut ke mana-mana akaun
-          untuk meyatimkan atau memadamkan mereka--anda boleh lakukannya terus melalui
-          pautan tuntutan di atas. (Untuk bantuan, sila %{support_link}.)
-        part9: Jika anda ingin pihak <i>Open Doors</i> untuk mengemas kini pengalihan
-          untuk menuju ke karya anda yang sedia ada, sila padamkan salinan yang telah
-          dimuat naik, dan %{open_doors_link} dengan nama akaun AO3 anda, nama akaun
-          anda pada arkib yang diimport, dan tajuk dan URL hasil karya peminat anda
-          yang anda ingin tujukan pengalihan tersebut. (Jika anda mempunyai pelbagai
-          karya yang anda ingin ubah pengalihan, anda boleh senaraikannya dalam satu
-          e-mel.)
         tutorial_page: laman tutorial
-      part12: Jika anda menghubungi kami, sila <i>whitelist</i> alamat-alamat e-mel
-        daripada @transformativeworks.org dan semak folder spam anda untuk balasan
-        kami.
+      part12: Jika anda menghubungi kami, sila whitelist alamat-alamat e-mel daripada
+        @transformativeworks.org dan semak folder spam anda untuk balasan kami.
       part6: 'Karya-karya yang dimuat naik termasuk:'
       part8: Untuk memelihara senarai cadangan dan penanda laman, alamat-alamat laman
         web dari arkib yang diimport mungkin akan berubah hala ke salinan untuk karya-karya
@@ -299,19 +330,19 @@ ms:
       subject: "[%{app_name}] Jemputan untuk menuntut karya"
       text:
         part1: Anda menerima e-mel ini kerana sebuah arkib baru sahaja diimport oleh
-          <i>Open Doors</i> (%{open_doors_link}) ke dalam %{app_name} (%{app_short_name}
+          Open Doors (%{open_doors_link}) ke dalam %{app_name} (%{app_short_name}
           - %{app_url}), dan kami percaya bahawa hasil kerja peminat berikut adalah
           milik anda. Kami ingin memberikan peluang kepada anda untuk menuntut (atau
           memadam/menyatim) karya-karya tersebut jika anda mahu. Dan jika anda belum
           lagi mempunyai akaun dengan e-mel berbeza, kami ingin menjemput anda untuk
           menyertai kami!
         part10: Jika anda mempunyai karya-karya lain pada arkib yang diimport dengan
-          alamat e-mel lain yang anda tidak dapat akses, sila hubungi <i>Open Doors</i>
-          dengan apa-apa maklumat yang boleh membantu mengesahkan identiti anda.
+          alamat e-mel lain yang anda tidak dapat akses, sila hubungi Open Doors dengan
+          apa-apa maklumat yang boleh membantu mengesahkan identiti anda.
         part11: Untuk pertanyaan lanjut, sila hubungi Bantuan AO3 di %{support_link}.
         part2: Anda boleh membaca pengumuman mengenai pergerakan arkib terbaru di
           Berita AO3 (%{news_link}), dan mencari maklumat tambahan tentang laman FAQ
-          <i>Open Doors</i> (%{open_doors_faq_link}) atau laman tutorial (%{open_doors_tutorial_link}).
+          Open Doors (%{open_doors_faq_link}) atau laman tutorial (%{open_doors_tutorial_link}).
           Untuk sebarang soalan yang tidak dijawab di dalam FAQ, tutorial, atau e-mel
           ini, sila hubungi Bantuan di %{support_link}.
         part3: Jika ini merupakan suatu kesilapan dan karya-karya ini bukan milik
@@ -330,13 +361,13 @@ ms:
           AO3). Anda tidak perlu menambahkan karya-karya tersebut ke mana-mana akaun
           untuk meyatimkan atau memadamkan mereka--anda boleh lakukan terus daripada
           pautan tuntut di atas. (Untuk bantuan, sila hubungi Bantuan di %{support_link}.)
-        part9: Jika anda ingin <i>Open Doors</i> untuk mengemas kini pengalihan untuk
-          menuju ke karya anda yang sedia ada, sila padamkan salinan yang telah dimuat
-          naik, dan hubungi <i>Open Doors</i> di %{open_doors_link} dengan akaun AO3
-          anda, nama akaun anda pada arkib yang diimport, dan tajuk dan URL hasil
-          kerja peminat anda yang anda ingin tujukan pengalihan tersebut. (Jika anda
-          mempunyai pelbagai karya yang anda ingin ubah pengalihan, anda boleh senaraikannya
-          dalam satu e-mel.)
+        part9: Jika anda ingin Open Doors untuk mengemas kini pengalihan untuk menuju
+          ke karya anda yang sedia ada, sila padamkan salinan yang telah dimuat naik,
+          dan hubungi Open Doors di %{open_doors_link} dengan akaun AO3 anda, nama
+          akaun anda pada arkib yang diimport, dan tajuk dan URL hasil kerja peminat
+          anda yang anda ingin tujukan pengalihan tersebut. (Jika anda mempunyai pelbagai
+          karya yang anda ingin ubah pengalihan, anda boleh senaraikannya dalam satu
+          e-mel.)
     invite_increase_notification:
       body:
         other: Kami ingin memaklumkan bahawa anda mempunyai %{count} jemputan baharu
@@ -372,7 +403,6 @@ ms:
           laman di  %{admin_posts_link} kami. Jika anda memerlukan lebih pertolongan,
           menghadapi ralat perisian dalaman atau mempunyai soalan atau komen, sila
           %{contact_support_link}, yang sentiasa bersedia untuk menolong.
-      subject: "[%{app_name}] Pengesahan "
       text:
         part1: 'Sila ikuti pautan ini untuk aktifkan akaun anda: %{activate_account_url}'
         part2: Setelah akaun anda diaktifkan, anda boleh menerbitkan hasil kerja peminat,
