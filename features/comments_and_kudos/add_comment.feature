@@ -70,8 +70,9 @@ Scenario: Comment editing
     And I post the work "The One Where Neal is Awesome"
   When I am logged in as "commenter"
     And I post the comment "Mistaken comment" on the work "The One Where Neal is Awesome"
+    And it is currently 1 second from now
     And I follow "Edit"
-  And I fill in "Comment" with "Actually, I meant something different"
+    And I fill in "Comment" with "Actually, I meant something different"
     And I press "Update"
   Then I should see "Comment was successfully updated"
     And I should see "Actually, I meant something different"
@@ -109,6 +110,7 @@ Scenario: Comment threading, comment editing
     And I follow "Reply" within ".thread .thread .odd"
     And I fill in "Comment" with "Mistaken comment" within ".thread .thread .odd"
     And I press "Comment" within ".thread .thread .odd"
+    And it is currently 1 second from now
     And I follow "Edit" within "ol.thread li ol.thread li ol.thread li ol.thread ul.actions"
     And I fill in "Comment" with "Actually, I meant something different"
     And I press "Update"
@@ -152,6 +154,7 @@ Scenario: Comment threading, comment editing
       And I should see "Sed mollis sapien ac massa pulvinar facilisis"
     When I fill in "Comment" with "This is a valid reply comment"
       And I press "Comment"
+      And it is currently 1 second from now
       And I follow "Edit"
       And I compose an invalid comment
       And I press "Update"
