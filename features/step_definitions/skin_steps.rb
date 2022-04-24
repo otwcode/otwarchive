@@ -237,13 +237,13 @@ Then /^I should see a purple logo$/ do
 end
 
 Then /^I should see the skin "(.*?)" in the skin chooser$/ do |skin|
-  with_scope("#skin_chooser") do
+  with_scope("#footer .menu") do
     expect(page).to have_content(skin)
   end
 end
 
 Then /^I should not see the skin chooser$/ do
-  expect(page).not_to have_css("#skin_chooser")
+  expect(page).not_to have_content("Customize")
 end
 
 Then /^the filesystem cache of the skin "(.*?)" should include "(.*?)"$/ do |title, contents|

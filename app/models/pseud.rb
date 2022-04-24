@@ -5,7 +5,13 @@ class Pseud < ApplicationRecord
 
   has_attached_file :icon,
     styles: { standard: "100x100>" },
-    path: %w(staging production).include?(Rails.env) ? ":attachment/:id/:style.:extension" : ":rails_root/public:url",
+    path: if Rails.env.production?
+            ":attachment/:id/:style.:extension"
+          elsif Rails.env.staging?
+            ":rails_env/:attachment/:id/:style.:extension"
+          else
+            ":rails_root/public/system/:rails_env/:class/:attachment/:id_partition/:style/:filename"
+          end,
     storage: %w(staging production).include?(Rails.env) ? :s3 : :filesystem,
     s3_protocol: "https",
     s3_credentials: "#{Rails.root}/config/s3.yml",
@@ -79,7 +85,7 @@ class Pseud < ApplicationRecord
 
   after_update :check_default_pseud
   after_update :expire_caches
-  after_commit :reindex_creations
+  after_commit :reindex_creations, :touch_comments
 
   scope :on_works, lambda {|owned_works|
     select("DISTINCT pseuds.*").
@@ -448,6 +454,10 @@ class Pseud < ApplicationRecord
     if saved_change_to_name?
       self.works.each{ |work| work.touch }
     end
+  end
+
+  def touch_comments
+    comments.touch_all
   end
 
   # Delete current icon (thus reverting to archive default icon)

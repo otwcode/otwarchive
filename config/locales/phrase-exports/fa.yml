@@ -9,8 +9,7 @@ fa:
         general:
           html:
             donate_link_text: کمک های مالی شما
-            part1: <p dir="rtl">اگر شما به اشتباه این پیام را دریافت کرده اید لطفا
-              %{support_link}.</p>
+            part1: اگر شما به اشتباه این پیام را دریافت کرده اید لطفا %{support_link}.
             part2: Archive of Our Own آرشیویست که توسط هواداران اداره و حمایت می شود
               که به %{donate_link} تکیه می کند.
             support_link_text: با پشتیبانی تماس بگیرید
@@ -25,11 +24,11 @@ fa:
         informal:
           addressed: سلام، %{name}!
           unaddressed: سلام!
-        introductory: سلامی از Archive of Our Own – AO3 (آرشیوی از آن خودمان)!
+        introductory: سلامی از Archive of Our Own – AO3 (آرشیوی از آن خودمان)!
       signature:
         app_short_name: AO3
         open_doors: تیم Open Doors (درهای باز)
-        parent_org: Organization for Transformative Works – OTW (سازمانی برای آثار
+        parent_org: Organization for Transformative Works – OTW (سازمانی برای آثار
           دگرگون شونده)
         support: تیم پشتیبانی AO3
     kudos:

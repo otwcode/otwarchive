@@ -448,10 +448,10 @@ describe WorkSearchForm, work_search: true do
 
     describe "when searching by word count" do
       before(:each) do
-        work.chapters.first.update(content: "This is a work with a word count of ten.", posted: true)
+        work.chapters.first.update(content: "This is a work with a word count of ten.")
         work.save
 
-        second_work.chapters.first.update(content: "This is a work with a word count of fifteen which is more than ten.", posted: true)
+        second_work.chapters.first.update(content: "This is a work with a word count of fifteen which is more than ten.")
         second_work.save
 
         run_all_indexing_jobs

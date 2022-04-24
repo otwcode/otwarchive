@@ -157,7 +157,7 @@ describe TagsController do
   end
 
   describe "show_hidden" do
-    let(:work) { create(:work, posted: true) }
+    let(:work) { create(:work) }
 
     it "redirects to referer with an error for non-ajax warnings requests" do
       referer = tags_path
