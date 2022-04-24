@@ -10,6 +10,7 @@ en:
           addressed: "Hi, %{name}!"
           unaddressed: "Hi!"
         introductory: "Hello from the Archive of Our Own!"
+      metadata_label_indicator: ": "
       signature:
         app_short_name: AO3
         open_doors: The Open Doors team
