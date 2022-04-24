@@ -18,7 +18,7 @@ sl:
               uporabnikom preko %{support_url}.
             part2: 'Naš lastni arhiv upravljajo in vzdržujejo fani, zato se zanaša
               na vaše donacije: %{donate_url}.'
-        sent_at: Poslano ob %{sent_at}.
+        sent_at: Poslano dne %{sent_at}.
       greeting:
         formal: Spoštovani %{name},
         informal:
@@ -234,9 +234,30 @@ sl:
         onemogočeno.
       html:
         creation: "%{creation_link} avtoric/-jev %{pseud_links}"
+        edit_chapter: poglavje uredite
+        edit_series: serijo uredite
+        edit_work: delo uredite
+        remove_chapter: Če ste bili dodani po pomoti ali preprosto ne želite biti
+          navedeni kot ustvarjalka/-ec, lahko %{edit_chapter_link} in se odstranite.
+        remove_series: Če ste bili dodani po pomoti ali preprosto ne želite biti navedeni
+          kot ustvarjalka/-ec, lahko %{edit_series_link} in se odstranite.
+        remove_work: Če ste bili dodani po pomoti ali preprosto ne želite biti navedeni
+          kot ustvarjalka/-ec, lahko %{edit_work_link} in se odstranite.
+      intro_chapter: 'Uporabnik/-ca %{archivist} je dodal/a vaš psevdonim %{pseud}
+        kot soustvarjalca/-ko naslednjega poglavja:'
+      intro_series: 'Uporabnik/-ca %{archivist} je dodal/a vaš psevdonim %{pseud}
+        kot soustvarjalca/-ko naslednje serije:'
+      intro_work: 'Uporabnik/-ica %{archivist} je dodal/a vaš psevdonim %{pseud} kot
+        soustvarjalko/-ca sledečega dela:'
       subject: "[%{app_name}] Obvestilo arhivistke/-a soustvarjalke/-ca"
       text:
         creation: "%{title} (%{url}) avtoric/-jev %{pseuds}"
+        remove_chapter: 'Če ste bili dodani po pomoti ali preprosto ne želite biti
+          navedeni kot ustvarjalka/-ec, lahko uredite poglavje in se odstranite: %{url}'
+        remove_series: 'Če ste bili dodani po pomoti ali preprosto ne želite biti
+          navedeni kot ustvarjalka/-ec, lahko uredite serijo in se odstranite: %{url}'
+        remove_work: 'Če ste bili dodani po pomoti ali preprosto ne želite biti navedeni
+          kot ustvarjalka/-ec, lahko uredite delo in se odstranite: %{url}'
     creatorship_request:
       html:
         creation: "%{creation_link}, avtorstvo: %{pseud_links}"

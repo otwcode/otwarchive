@@ -8,14 +8,12 @@ module LoginMacros
   def fake_login_known_user(user)
     # The application expects users to have passed through the login form
     # and had the correct cookies set. We skip that in tests.
-    allow(controller).to receive(:logout_if_not_user_credentials)
+    allow_any_instance_of(ApplicationController).to receive(:logout_if_not_user_credentials).and_return(false)
 
-    @request.env["devise.mapping"] = Devise.mappings[:user]
     sign_in user, scope: :user
   end
 
   def fake_login_admin(admin)
-    @request.env["devise.mapping"] = Devise.mappings[:admin]
     sign_in admin, scope: :admin
   end
 

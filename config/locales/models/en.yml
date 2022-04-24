@@ -23,12 +23,14 @@ en:
     models:
       archive_warning:
         one: "Warning"
-        other: "Warnings" 
+        other: "Warnings"
       bookmark: "Bookmark"
       category:
         one: "Category"
         other: "Categories"
-      chapter: "Chapter"
+      chapter:
+        one: "Chapter"
+        other: "Chapters"
       character:
         one: "Character"
         other: "Characters"
@@ -40,10 +42,15 @@ en:
         one: "Additional Tag"
         other: "Additional Tags"
       pseud: "Pseud"
-      rating: "Rating"
+      rating:
+        one: "Rating"
+        other: "Ratings"
       relationship:
         one: "Relationship"
         other: "Relationships"
+      series:
+        one: "Series"
+        other: "Series"
       tag:
         one: "Tag"
         other: "Tags"
@@ -108,6 +115,8 @@ en:
       external_work:
         user_defined_tags_count: "Fandom, relationship, and character tags"
       work:
+        chapter_total_display: "Chapters"
+        summary: "Summary"
         user_defined_tags_count: "Fandom, relationship, character, and additional tags"
   attributes:
     ticket_number: "Ticket ID"

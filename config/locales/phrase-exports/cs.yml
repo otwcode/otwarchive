@@ -17,7 +17,7 @@ cs:
               na %{support_url}.
             part2: 'AO3 je fanoušky vedený a podporovaný archiv, který spoléhá na
               vaše příspěvky: %{donate_url}.'
-        sent_at: Odesláno v %{sent_at}.
+        sent_at: Odesláno ve %{sent_at}.
       greeting:
         formal: Dobrý den, %{name},
         informal:

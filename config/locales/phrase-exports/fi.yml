@@ -24,11 +24,11 @@ fi:
         informal:
           addressed: Hei, %{name}!
           unaddressed: Hei!
-        introductory: Tervehdys Archive of Our Own – AO3:lta (Oma arkisto)!
+        introductory: Tervehdys Archive of Our Own – AO3:lta (Oma arkisto)!
       signature:
         app_short_name: AO3
         open_doors: Open Doors (Avoimet ovet) -tiimi
-        parent_org: Organization for Transformative Works – OTW (Transformatiivisten
+        parent_org: Organization for Transformative Works – OTW (Transformatiivisten
           teosten järjestö)
         support: AO3 Käyttäjätukitiimi
     kudos:
@@ -204,23 +204,64 @@ fi:
         received_message: 'Olet saanut kokoelmaasi "%{collection_title}" (%{collection_url})
           koskevan viestin:'
     creatorship_notification:
-      explanation: Teoksen kanssatekijnä sinut voidaan lisätä uusiin lukuihin riippumatta
+      explanation: Teoksen kanssatekijänä sinut voidaan lisätä uusiin lukuihin riippumatta
         tilisi kanssatekijyysasetuksista. Sinut lisätään myös kaikkiin sarjoihin,
         joihin teos lisätään.
       html:
         creation: "%{creation_link}, tekijä(t) %{pseud_links}"
+        edit_chapter: muokata lukua
+        edit_series: muokata sarjaa
+        remove_chapter: Jos sinut on lisätty virheellisesti tai et halua, että sinut
+          ilmoitetaan tekijäksi, voit %{edit_chapter_link} poistaaksesi itsesi tekijöistä.
+        remove_series: Jos sinut on lisätty virheellisesti tai et halua, että sinut
+          ilmoitetaan tekijäksi, voit %{edit_series_link} poistaaksesi itsesi tekijöistä.
+      intro_chapter: 'Käyttäjä %{adding_user} on ilmoittanut nimimerkkisi %{pseud}
+        kanssatekijäksi seuraavaan lukuun:'
+      intro_series: 'Käyttäjä %{adding_user} on ilmoittanut nimimerkkisi %{pseud}
+        kanssatekijäksi seuraavaan sarjaan:'
       subject: "[%{app_name}] Ilmoitus kanssatekijäksi lisäämisestä"
       text:
         creation: "%{title} (%{url}), tekijä(t) %{pseuds}"
+        remove_chapter: 'Jos sinut on lisätty virheellisesti tai et halua, että sinut
+          ilmoitetaan tekijäksi, voit muokata lukua poistaaksesi itsesi tekijöistä:
+          %{url}'
+        remove_series: 'Jos sinut on lisätty virheellisesti tai et halua, että sinut
+          ilmoitetaan tekijäksi, voit muokata sarjaa poistaaksesi itsesi tekijöistä:
+          %{url}'
     creatorship_notification_archivist:
       explanation: Koska hän teki näin virallisessa Open Doors -arkistonhoitajan roolissaan,
         hän pystyi lisäämään sinut ilman kutsua, vaikka sinulla olisi toiseksi tekijäksi
         lisääminen poissa käytöstä.
       html:
         creation: "%{pseud_links}: %{creation_link}"
+        edit_chapter: muokata lukua
+        edit_series: muokata sarjaa
+        edit_work: muokata teosta
+        remove_chapter: Jos sinut on lisätty virheellisesti tai et halua tulla nimetyksi
+          tekijänä, voit %{edit_chapter_link} poistaaksesi itsesi tekijöistä.
+        remove_series: Jos sinut on lisätty virheellisesti tai et halua tulla nimetyksi
+          tekijänä, voit %{edit_series_link} poistaaksesi itsesi tekijöistä.
+        remove_work: Jos haluat poistaa itsesi tekijöistä, koska sinut on lisätty
+          tekijäksi virheellisesti tai et halua olla nimettynä tekijänä, voit %{edit_work_link}
+          linkin kautta.
+      intro_chapter: 'Käyttäjä %{archivist} on lisännyt nimimerkkisi %{pseud} toiseksi
+        tekijäksi seuraavaan lukuun:'
+      intro_series: 'Käyttäjä %{archivist} on lisännyt nimimerkkisi %{pseud} toisena
+        tekijänä seuraavaan sarjaan:'
+      intro_work: 'Käyttäjä %{archivist} on lisännyt nimimerkkisi %{pseud} toiseksi
+        tekijäksi seuraavaan teokseen:'
       subject: "[%{app_name}] Arkistonhoitajan ilmoitus toiseksi tekijäksi lisäämisestä"
       text:
         creation: "%{pseuds}: %{title} (%{url})"
+        remove_chapter: 'Jos sinut on lisätty tekijäksi virheellisesti tai et halua
+          tulla nimetyksi tekijänä, voit poistaa itsesi tekijänä muokkaamalla lukua:
+          %{url}'
+        remove_series: 'Jos sinut on lisätty tekijäksi virheellisesti tai et halua
+          tulla nimetyksi tekijänä, voit poistaa itsesi tekijänä muokkaamalla sarjaa:
+          %{url}'
+        remove_work: 'Jos haluat poistaa itsesi tekijöistä, koska sinut on lisätty
+          tekijäksi virheellisesti tai et halua olla nimettynä tekijänä, on muokattavissa
+          linkin kautta: %{url}'
     creatorship_request:
       html:
         creation: "%{creation_link} tekijältä %{pseud_links}"
