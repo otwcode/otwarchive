@@ -118,7 +118,6 @@ Scenario: Comment threading, comment editing
     And I fill in "Comment" with "Actually, I meant something different"
     And I press "Update"
   Then I should see "Comment was successfully updated"
-    #TODO Someone should figure out why this fails intermittently on Travis. Caching? The success message is there but the old comment text lingers.
     And I should see "Actually, I meant something different"
     And I should not see "Mistaken comment"
     And I should see Last Edited in the right timezone
@@ -129,7 +128,6 @@ Scenario: Comment threading, comment editing
     And I fill in "Comment" with "This should be nested" within ".thread .even"
     And I press "Comment" within ".thread .even"
   Then I should see "Comment created!"
-    # TODO Someone should figure out why this fails intermittently on Travis. Caching? The success message is there but the old comment text lingers.
     And I should not see "Mistaken comment"
     And I should see "Actually, I meant something different" within "ol.thread li ol.thread li ol.thread li ol.thread"
     And I should see "I loved it, too." within "ol.thread"
