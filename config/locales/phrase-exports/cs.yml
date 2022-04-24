@@ -17,7 +17,7 @@ cs:
       text:
         left_kudos:
           few: "%{givers_list} zanechali kudos u %{commentable_title} (%{commentable_url})."
-          many: "%{givers_list} zanechali kudos u %{commentable_link}."
+          many: "%{givers_list} zanechali kudos u %{commentable_title} (%{commentable_url})."
           one: "%{givers_list} zanechal/a kudos u %{commentable_title} (%{commentable_url})."
           other: "%{givers_list} zanechali kudos u %{commentable_title} (%{commentable_url})."
   mailer:

@@ -19,11 +19,11 @@ cy:
       subject: "[%{app_name}] Mae gennych chi canmol!"
       text:
         left_kudos:
-          few: Gadawodd %{givers_list} canmol ar  %{commentable_link}.
-          many: Gadawodd %{givers_list} canmol ar  %{commentable_link}.
+          few: Gadawodd %{givers_list} canmol ar %{commentable_title} (%{commentable_url}).
+          many: Gadawodd %{givers_list} canmol ar %{commentable_title} (%{commentable_url}).
           one: Gadawodd %{givers_list} canmol ar %{commentable_title} (%{commentable_url}).
           other: Gadawodd %{givers_list} canmol ar %{commentable_title} (%{commentable_url}).
-          two: Gadawodd %{givers_list} canmol ar  %{commentable_link}.
+          two: Gadawodd %{givers_list} canmol ar %{commentable_title} (%{commentable_url}).
         single_guest: Gadawodd un westai canmol ar %{commentable_title} (%{commentable_url}).
   mailer:
     general:

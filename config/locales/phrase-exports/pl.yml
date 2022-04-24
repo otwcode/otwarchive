@@ -12,7 +12,6 @@ pl:
           few: Kudos dla %{commentable_link} od %{givers_list}.
           many: Kudos dla %{commentable_link} od %{givers_list}.
           one: Kudos dla %{commentable_link} od %{givers_list}.
-          other: Kudos dla %{commentable_link} od %{givers_list}.
         single_guest: Kudos dla %{commentable_link} od 1 gościa.
       subject: "[%{app_name}] Masz kudos!"
       text:
@@ -20,7 +19,6 @@ pl:
           few: Kudos dla %{commentable_title} (%{commentable_url}) od %{givers_list}.
           many: Kudos dla %{commentable_title} (%{commentable_url}) od %{givers_list}.
           one: Kudos dla %{commentable_title} (%{commentable_url}) od %{givers_list}.
-          other: Kudos dla %{commentable_link} od %{givers_list}.
         single_guest: Kudos dla %{commentable_title} (%{commentable_url}) od 1 gościa.
   mailer:
     general:
