@@ -120,11 +120,11 @@ describe ChallengeSignupsController do
         }
       end
 
-      it "renders edit if update_attributes fails" do
+      it "renders edit if update fails" do
         fake_login_known_user(open_signup_owner)
-        allow_any_instance_of(ChallengeSignup).to receive(:update_attributes).and_return(false)
+        allow_any_instance_of(ChallengeSignup).to receive(:update).and_return(false)
         put :update, params: params
-        allow_any_instance_of(ChallengeSignup).to receive(:update_attributes).and_call_original
+        allow_any_instance_of(ChallengeSignup).to receive(:update).and_call_original
         expect(response).to render_template :edit
       end
 

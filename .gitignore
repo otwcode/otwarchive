@@ -44,7 +44,9 @@ REVISION
 /public/downloads
 /public/stylesheets/cached_for_screen.css
 /public/stylesheets/skins
+public/system/development
 /public/system/skins
+public/system/test
 /public/system/work_skins
 /public/tags
 

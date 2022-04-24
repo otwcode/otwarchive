@@ -698,7 +698,7 @@ class WorksController < ApplicationController
 
     @works.each do |work|
       # now we can just update each work independently, woo!
-      unless work.update_attributes(updated_work_params)
+      unless work.update(updated_work_params)
         @errors << ts('The work %{title} could not be edited: %{error}', title: work.title, error: work.errors.full_messages.join(" ")).html_safe
       end
 

@@ -315,3 +315,9 @@ en:
       series: "(Series)"
       work: "(Work)"
       unsubscribe: "Unsubscribe from %{name}"
+  tags:
+    index:
+      about:
+        popular: These are some of the most popular tags used on the Archive. To find more tags, %{search_tags_link}.
+        random: These are some random tags used on the Archive. To find more tags, %{search_tags_link}.
+      search_tags: try our tag search

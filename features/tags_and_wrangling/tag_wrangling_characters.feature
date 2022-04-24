@@ -36,8 +36,8 @@ Scenario: character wrangling - syns, mergers, characters, autocompletes
   # check those two created properly
   When I am on the search tags page
     And all indexing jobs have been run
-    And I fill in "tag_search" with "Doctor"
-    And I press "Search tags"
+    And I fill in "Tag name" with "Doctor"
+    And I press "Search Tags"
     # This part of the code is a hot mess. Capybara is returning the first instance of .canonical which contains
     # 'First Doctor/TARDIS', which then leaves us unable to check for 'The First Doctor' as being canonical.
     # I've changed the code for now to just check that 'The Doctor (1st) as being NON-Canonical

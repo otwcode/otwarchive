@@ -2,12 +2,24 @@ require "spec_helper"
 
 describe UserMailer do
   describe "creatorship_request" do
-    subject(:email) { UserMailer.creatorship_request(work_creatorship.id, author.id).deliver }
+    subject(:email) { UserMailer.creatorship_request(work_creatorship.id, author.id) }
 
     let(:author) { create(:user) }
     let(:second_author) { create(:user) }
     let(:work) { create(:work, authors: [author.default_pseud, second_author.default_pseud]) }
     let(:work_creatorship) { Creatorship.find_by(creation_id: work.id, pseud_id: second_author.default_pseud.id) }
+
+    context "when the creation is unavailable" do
+      before { work_creatorship.creation.delete }
+
+      include_examples "it retries and fails on", ActionView::Template::Error
+    end
+
+    context "when the pseud being invited is unavailable" do
+      before { work_creatorship.pseud.delete }
+
+      include_examples "it retries and fails on", NoMethodError
+    end
 
     # Test the headers
     it_behaves_like "an email with a valid sender"
@@ -38,12 +50,24 @@ describe UserMailer do
   end
 
   describe "creatorship_notification" do
-    subject(:email) { UserMailer.creatorship_notification(work_creatorship.id, author.id).deliver }
+    subject(:email) { UserMailer.creatorship_notification(work_creatorship.id, author.id) }
 
     let(:author) { create(:user) }
     let(:second_author) { create(:user) }
     let(:work) { create(:work, authors: [author.default_pseud, second_author.default_pseud]) }
     let(:work_creatorship) { Creatorship.find_by(creation_id: work.id, pseud_id: second_author.default_pseud.id) }
+
+    context "when the creation is unavailable" do
+      before { work_creatorship.creation.delete }
+
+      include_examples "it retries and fails on", ActionView::Template::Error
+    end
+
+    context "when the pseud being invited is unavailable" do
+      before { work_creatorship.pseud.delete }
+
+      include_examples "it retries and fails on", NoMethodError
+    end
 
     # Test the headers
     it_behaves_like "an email with a valid sender"
@@ -74,12 +98,24 @@ describe UserMailer do
   end
 
   describe "creatorship_notification_archivist" do
-    subject(:email) { UserMailer.creatorship_notification_archivist(work_creatorship.id, author.id).deliver }
+    subject(:email) { UserMailer.creatorship_notification_archivist(work_creatorship.id, author.id) }
 
     let(:author) { create(:user) }
     let(:second_author) { create(:user) }
     let(:work) { create(:work, authors: [author.default_pseud, second_author.default_pseud]) }
     let(:work_creatorship) { Creatorship.find_by(creation_id: work.id, pseud_id: second_author.default_pseud.id) }
+
+    context "when the creation is unavailable" do
+      before { work_creatorship.creation.delete }
+
+      include_examples "it retries and fails on", ActionView::Template::Error
+    end
+
+    context "when the pseud being invited is unavailable" do
+      before { work_creatorship.pseud.delete }
+
+      include_examples "it retries and fails on", NoMethodError
+    end
 
     # Test the headers
     it_behaves_like "an email with a valid sender"
@@ -497,8 +533,20 @@ describe UserMailer do
     subject(:email) { UserMailer.batch_subscription_notification(subscription.id, ["Work_#{work.id}", "Chapter_#{chapter.id}"].to_json) }
 
     let(:work) { create(:work, summary: "<p>Paragraph <u>one</u>.</p><p>Paragraph 2.</p>") }
-    let(:chapter) { create(:chapter, work: work, posted: true, summary: "<p><b>Another</b> HTML summary.</p>") }
+    let(:chapter) { create(:chapter, work: work, summary: "<p><b>Another</b> HTML summary.</p>") }
     let(:subscription) { create(:subscription, subscribable: work) }
+
+    context "when the user is unavailable" do
+      before { subscription.user.delete }
+
+      include_examples "it retries and fails on", NoMethodError
+    end
+
+    context "when the user's preferences are unavailable" do
+      before { subscription.user.preference.delete }
+
+      include_examples "it retries and fails on", NoMethodError
+    end
 
     # Test the headers
     it_behaves_like "an email with a valid sender"
@@ -606,6 +654,23 @@ describe UserMailer do
       it "contains the comment and the URL reported" do
         expect(email).to have_text_part_content(report.comment)
         expect(email).to have_text_part_content(report.url)
+      end
+    end
+
+    describe "translation" do
+      it "formats the date rightfully in English" do
+        travel_to "2022-03-14 13:27:09 +0000" do
+          expect(email).to have_html_part_content("Sent at Mon, 14 Mar 2022 13:27:09 +0000.")
+          expect(email).to have_text_part_content("Sent at Mon, 14 Mar 2022 13:27:09 +0000.")
+        end
+      end
+
+      it "formats the date rightfully in French" do
+        I18n.locale = "fr"
+        travel_to "2022-03-14 13:27:09 +0000" do
+          expect(email).to have_html_part_content("Envoyé le 14 mars 2022 13h 27min 09s.")
+          expect(email).to have_text_part_content("Envoyé le 14 mars 2022 13h 27min 09s.")
+        end
       end
     end
   end

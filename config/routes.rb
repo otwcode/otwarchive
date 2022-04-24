@@ -498,8 +498,6 @@ Otwarchive::Application.routes.draw do
     collection do
       get :hide_comments
       get :show_comments
-      get :add_comment
-      get :cancel_comment
       get :add_comment_reply
       get :cancel_comment_reply
       get :cancel_comment_edit
