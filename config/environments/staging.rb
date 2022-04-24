@@ -1,6 +1,8 @@
 Otwarchive::Application.configure do
   # Settings specified here will take precedence over those in config/environment.rb
 
+  config.hosts = ArchiveConfig.PERMITTED_HOSTS
+
   # The production environment is meant for finished, "live" apps.
   # Code is not reloaded between requests
   config.cache_classes = true
@@ -32,7 +34,7 @@ Otwarchive::Application.configure do
 
   # Use a different cache store in production
   config.cache_store = :mem_cache_store, ArchiveConfig.MEMCACHED_SERVERS,
-                       { namespace: "ao3-v1", compress: true, pool_size: 5 }
+                       { namespace: "ao3-v2", compress: true, pool_size: 5 }
 
   # Disable Rails's static asset server
   # In production, Apache or nginx will already do this
@@ -62,13 +64,6 @@ Otwarchive::Application.configure do
     Bullet.rails_logger = true
     Bullet.counter_cache_enable = false
   end
-
-  # https://github.com/winebarrel/activerecord-mysql-reconnect
-  config.active_record.enable_retry = true
-  config.active_record.execution_tries = 20 # times
-  config.active_record.execution_retry_wait = 0.3 # sec
-  # :rw Retry in all SQL, but does not retry if Lost connection has happened in write SQL
-  config.active_record.retry_mode = :rw
 
   config.middleware.use Rack::Attack
 end

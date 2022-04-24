@@ -528,7 +528,7 @@ li.blurb,
 
 div.comment,
 li.comment {
-  border-color: #555; 
+  border-color: #555;
     box-shadow: 1px 1px 3px #000;
 }
 
@@ -667,7 +667,7 @@ form.search input[type="text"] {
   color: #eee;
 }
 
-.notice, 
+.notice,
 .comment_notice,
 .kudos_notice,
 ul.notes,
