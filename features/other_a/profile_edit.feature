@@ -46,8 +46,7 @@ Scenario: Change details as an admin
     And I should see "is it merely thy habit, to talk to dolls?"
   When I visit the last activities item
   Then I should see "edit profile"
-    And I should see "Ticket #480000"
-    And I should see a link "#480000"
+    And I should see a link "Ticket #480000"
 
 Scenario: Changing email address requires reauthenticating
 

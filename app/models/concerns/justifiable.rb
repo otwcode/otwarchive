@@ -26,7 +26,7 @@ module Justifiable
 
     # The ticket must be open and the admin must have the role matching the ticket's department.
     if ticket.present? && ticket["status"].present? && ticket["status"] != "Closed" &&
-       (admin_can_use_policy_and_abuse_ticket? || admin_can_use_support_ticket?)
+       (admin_can_use_abuse_ticket? || admin_can_use_support_ticket?)
       @ticket_url = ticket["webUrl"]
       return
     end
@@ -34,7 +34,7 @@ module Justifiable
     errors.add(:ticket_number, :required)
   end
 
-  def admin_can_use_policy_and_abuse_ticket?
+  def admin_can_use_abuse_ticket?
     (User.current_user.roles & %w[policy_and_abuse superadmin]).present? && ticket["departmentId"] == ArchiveConfig.ABUSE_ZOHO_DEPARTMENT_ID
   end
 
