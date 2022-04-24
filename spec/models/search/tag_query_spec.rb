@@ -165,12 +165,12 @@ describe TagQuery, tag_search: true do
 
   it "allows you to sort by Date Created" do
     q = TagQuery.new(sort_column: "created_at")
-    expect(q.generated_query[:sort]).to eq({ "created_at" => { order: "desc", unmapped_type: "date" } })
+    expect(q.generated_query[:sort]).to eq([{ "created_at" => { order: "desc", unmapped_type: "date" } }, { id: { order: "desc" } }])
   end
 
   it "allows you to sort by Date Created in ascending order" do
     q = TagQuery.new(sort_column: "created_at", sort_direction: "asc")
-    expect(q.generated_query[:sort]).to eq({ "created_at" => { order: "asc", unmapped_type: "date" } })
+    expect(q.generated_query[:sort]).to eq([{ "created_at" => { order: "asc", unmapped_type: "date" } }, { id: { order: "asc" } }])
   end
 
   it "keeps sort order of tied tags the same when tag info is updated" do
