@@ -288,7 +288,7 @@ module CommentsHelper
 
   # find the parent of the commentable
   def find_parent(commentable)
-    if commentable.is_a?(Comment)
+    if commentable.respond_to?(:ultimate_parent)
       commentable.ultimate_parent
     elsif commentable.respond_to?(:work)
       commentable.work

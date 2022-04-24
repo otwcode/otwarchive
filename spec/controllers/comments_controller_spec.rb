@@ -76,16 +76,15 @@ describe CommentsController do
   describe "GET #unreviewed" do
     let!(:user) { create(:user) }
     let!(:work) { create(:work, authors: [user.default_pseud], moderated_commenting_enabled: true) }
-    let(:comment) { create(:comment, :unreviewed, commentable: work.first_chapter) }
 
     it "redirects logged out users to login path with an error" do
-      get :unreviewed, params: { comment_id: comment.id, work_id: work.id }
+      get :unreviewed, params: { work_id: work.id }
       it_redirects_to_with_error(new_user_session_path, "Sorry, you don't have permission to see those unreviewed comments.")
     end
 
     it "redirects to root path with an error when logged in user does not own the commentable" do
       fake_login
-      get :unreviewed, params: { comment_id: comment.id, work_id: work.id }
+      get :unreviewed, params: { work_id: work.id }
       it_redirects_to_with_error(root_path, "Sorry, you don't have permission to see those unreviewed comments.")
     end
 
@@ -99,6 +98,26 @@ describe CommentsController do
       fake_login_admin(create(:admin))
       get :unreviewed, params: { work_id: work.id }
       expect(response).to render_template("unreviewed")
+    end
+
+    context "when displaying multiple comments", n_plus_one: true do
+      before do
+        # Skip authorization because it's a headache and a half:
+        allow(controller).to receive(:check_permission_to_review)
+      end
+
+      populate do |n|
+        create_list(:comment, n, :unreviewed, commentable: work.first_chapter)
+      end
+
+      render_views
+
+      it "produces a constant number of queries" do
+        expect do
+          Rails.cache.clear
+          get :unreviewed, params: { work_id: work.id }
+        end.to perform_constant_number_of_queries
+      end
     end
   end
 
@@ -1623,6 +1642,60 @@ describe CommentsController do
     end
   end
 
+  shared_examples "a hierarchical view with constant queries" do
+    context "when displaying multiple comments", n_plus_one: true do
+      render_views
+
+      context "when the comments are flat" do
+        populate { |n| create_list(:comment, n, commentable: commentable) }
+
+        it "produces a constant number of queries when logged out" do
+          expect do
+            Rails.cache.clear # prevent inconsistencies from cached values
+            subject.call
+          end.to perform_constant_number_of_queries
+        end
+
+        it "produces a constant number of queries when logged in" do
+          user = create(:user)
+
+          expect do
+            Rails.cache.clear
+            fake_login_known_user(user.reload)
+            subject.call
+            fake_logout
+          end.to perform_constant_number_of_queries
+        end
+      end
+
+      context "when the comments are nested" do
+        populate do |n|
+          n.times.inject(commentable) do |parent|
+            create(:comment, commentable: parent)
+          end
+        end
+
+        it "produces a constant number of queries when logged out" do
+          expect do
+            Rails.cache.clear
+            subject.call
+          end.to perform_constant_number_of_queries
+        end
+
+        it "produces a constant number of queries when logged in" do
+          user = create(:user)
+
+          expect do
+            Rails.cache.clear
+            fake_login_known_user(user.reload)
+            subject.call
+            fake_logout
+          end.to perform_constant_number_of_queries
+        end
+      end
+    end
+  end
+
   describe "GET #show_comments" do
     context "when the commentable is a valid tag" do
       let(:fandom) { create(:fandom) }
@@ -1682,6 +1755,17 @@ describe CommentsController do
                                      "reach. Please log in.")
         end
       end
+    end
+
+    it_behaves_like "a hierarchical view with constant queries" do
+      subject do
+        proc do
+          get :show_comments, params: { work_id: work, format: :js }, xhr: true
+        end
+      end
+
+      let!(:work) { create(:work) }
+      let!(:commentable) { work.first_chapter }
     end
   end
 
@@ -2078,6 +2162,17 @@ describe CommentsController do
       get :show, params: { id: unreviewed_comment.id }
       it_redirects_to_with_error(root_path, "Sorry, that comment is currently in moderation.")
     end
+
+    it_behaves_like "a hierarchical view with constant queries" do
+      subject do
+        proc do
+          get :show, params: { id: comment }
+        end
+      end
+
+      let!(:comment) { create(:comment) }
+      let!(:commentable) { comment }
+    end
   end
 
   describe "GET #index" do
@@ -2093,6 +2188,17 @@ describe CommentsController do
       get :index
 
       it_redirects_to_simple("/404")
+    end
+
+    it_behaves_like "a hierarchical view with constant queries" do
+      subject do
+        proc do
+          get :index, params: { work_id: work, show_comments: true }
+        end
+      end
+
+      let!(:work) { create(:work) }
+      let!(:commentable) { work.first_chapter }
     end
   end
 

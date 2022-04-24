@@ -106,7 +106,7 @@
           <a name="comment_cancel" id="comment_cancel"><%= ts("Close") %></a>
         <% elsif comment.persisted? %>
           <%= cancel_edit_comment_link(comment) %>
-        <% elsif commentable.is_a?(Comment) %>
+        <% elsif commentable.is_a?(Comment) || commentable.is_a?(CommentDecorator) %>
           <%= cancel_comment_reply_link(commentable) %>
         <% end %>
       </p>

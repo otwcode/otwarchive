@@ -8,6 +8,7 @@ require "factory_bot"
 require "database_cleaner"
 require "email_spec"
 require "webmock/rspec"
+require "n_plus_one_control/rspec"
 
 DatabaseCleaner.start
 DatabaseCleaner.clean
