@@ -47,6 +47,11 @@
     <li><%= link_to ts("Manage My Pseuds"), user_pseuds_path(@user) %></li>
     <li><%= link_to ts("Delete My Account"), @user, data: {confirm: ts('This will permanently delete your account and cannot be undone. Are you sure?')}, :method => :delete %></li>
   </ul>
+  <% elsif policy(@user.profile).can_edit_profile? %>
+    <h3 class="landmark heading"><%= t("admin.admin_options.landmark") %></h3>
+    <ul class="navigation actions" role="navigation">
+      <li><%= link_to ts("Edit Profile"), edit_user_path(@user) %></li>
+    </ul>
   <% end %>
   <!--/subnav-->
 
