@@ -1,5 +1,19 @@
 ---
 ca:
+  kudo_mailer:
+    batch_kudo_notification:
+      guest:
+        one: 1 convidat/da
+        other: "%{count} convidats/des"
+      html:
+        left_kudos:
+          one: "%{givers_list} ha deixat kudos a %{commentable_link}."
+          other: "%{givers_list} han deixat kudos a %{commentable_link}."
+      subject: "[%{app_name}] T'han deixat kudos!"
+      text:
+        left_kudos:
+          one: "%{givers_list} ha deixat kudos a %{commentable_link}."
+          other: "%{givers_list} han deixat kudos a %{commentable_link}."
   mailer:
     general:
       closing:
@@ -30,19 +44,6 @@ ca:
         parent_org: Organization for Transformative Works – OTW (Organització per
           a les Obres Transformatives)
         support: L'equip de Suport de l'AO3
-    kudos:
-      guest:
-        one: 1 convidat/da
-        other: "%{count} convidats/des"
-      html:
-        left_kudos:
-          one: "%{givers_list} ha deixat kudos a %{commentable_link}."
-          other: "%{givers_list} han deixat kudos a %{commentable_link}."
-      text:
-        left_kudos:
-          one: "%{givers_list} ha deixat kudos a %{commentable_link}."
-          other: "%{givers_list} han deixat kudos a %{commentable_link}."
-      you_have: "[%{app_name}] T'han deixat kudos!"
   users:
     mailer:
       reset_password_instructions:

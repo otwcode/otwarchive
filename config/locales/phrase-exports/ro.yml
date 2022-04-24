@@ -1,5 +1,22 @@
 ---
 ro:
+  kudo_mailer:
+    batch_kudo_notification:
+      guest:
+        few: "%{count} vizitatori"
+        one: un vizitator
+        other: "%{count} vizitatori"
+      html:
+        left_kudos:
+          few: "%{givers_list} au lăsat kudos pentru %{commentable_link}."
+          one: "%{givers_list} a lăsat kudos pentru %{commentable_link}."
+          other: "%{givers_list} au lăsat kudos pentru %{commentable_link}."
+      subject: "[%{app_name}] Ai primit kudos!"
+      text:
+        left_kudos:
+          few: "%{givers_list} au lăsat kudos pentru %{commentable_link}."
+          one: "%{givers_list} a lăsat kudos pentru %{commentable_link}."
+          other: "%{givers_list} au lăsat kudos pentru %{commentable_link}."
   mailer:
     general:
       closing:
@@ -31,22 +48,6 @@ ro:
         parent_org: Organization for Transformative Works (Organizația pentru Lucrări
           Transformative)
         support: Echipa de Suport Tehnic AO3
-    kudos:
-      guest:
-        few: "%{count} vizitatori"
-        one: un vizitator
-        other: "%{count} vizitatori"
-      html:
-        left_kudos:
-          few: "%{givers_list} au lăsat kudos pentru %{commentable_link}."
-          one: "%{givers_list} a lăsat kudos pentru %{commentable_link}."
-          other: "%{givers_list} au lăsat kudos pentru %{commentable_link}."
-      text:
-        left_kudos:
-          few: "%{givers_list} au lăsat kudos pentru %{commentable_link}."
-          one: "%{givers_list} a lăsat kudos pentru %{commentable_link}."
-          other: "%{givers_list} au lăsat kudos pentru %{commentable_link}."
-      you_have: "[%{app_name}] Ai primit kudos!"
   users:
     mailer:
       reset_password_instructions:

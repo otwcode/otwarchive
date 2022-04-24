@@ -1,5 +1,16 @@
 ---
 ja:
+  kudo_mailer:
+    batch_kudo_notification:
+      guest:
+        other: ゲスト%{count}名
+      html:
+        left_kudos:
+          other: "%{givers_list}があなたの作品 %{commentable_link}にいいねを送りました。"
+      subject: "[%{app_name}] あなたにいいねが届きました！"
+      text:
+        left_kudos:
+          other: "%{givers_list} があなたの作品 %{commentable_link}にいいねを送りました。"
   mailer:
     general:
       closing:
@@ -27,16 +38,6 @@ ja:
         open_doors: The Open Doors (オープンドア) チーム
         parent_org: Organization for Transformative Works ー OTW（変形的作品のためのNPO）
         support: AO3サポートチーム
-    kudos:
-      guest:
-        other: ゲスト%{count}名
-      html:
-        left_kudos:
-          other: "%{givers_list}があなたの作品 %{commentable_link}にいいねを送りました。"
-      text:
-        left_kudos:
-          other: "%{givers_list} があなたの作品 %{commentable_link}にいいねを送りました。"
-      you_have: "[%{app_name}] あなたにいいねが届きました！"
   users:
     mailer:
       reset_password_instructions:

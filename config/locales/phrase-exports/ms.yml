@@ -1,5 +1,16 @@
 ---
 ms:
+  kudo_mailer:
+    batch_kudo_notification:
+      guest:
+        other: "%{count} tetamu"
+      html:
+        left_kudos:
+          other: "%{givers_list} telah meninggalkan kudos untuk %{commentable_link}."
+      subject: "[%{app_name}] Anda telah menerima kudos!"
+      text:
+        left_kudos:
+          other: "%{givers_list} telah meninggalkan kudos untuk %{commentable_link}."
   mailer:
     general:
       closing:
@@ -32,16 +43,6 @@ ms:
         parent_org: Organization for Transformative Works – OTW (Organisasi Karya-Karya
           Transformatif)
         support: Pasukan Bantuan AO3
-    kudos:
-      guest:
-        other: "%{count} tetamu"
-      html:
-        left_kudos:
-          other: "%{givers_list} telah meninggalkan kudos untuk %{commentable_link}."
-      text:
-        left_kudos:
-          other: "%{givers_list} telah meninggalkan kudos untuk %{commentable_link}."
-      you_have: "[%{app_name}] Anda telah menerima kudos!"
   users:
     mailer:
       reset_password_instructions:

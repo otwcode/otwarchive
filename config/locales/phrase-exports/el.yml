@@ -1,5 +1,19 @@
 ---
 el:
+  kudo_mailer:
+    batch_kudo_notification:
+      guest:
+        one: ένας επισκέπτης
+        other: "%{count} επισκέπτες"
+      html:
+        left_kudos:
+          one: Ο/Η %{givers_list} άφησε μπράβο στο %{commentable_link}.
+          other: Οι %{givers_list} άφησαν μπράβο στο %{commentable_link}.
+      subject: "[%{app_name}] ‘Εχεις μπράβο!"
+      text:
+        left_kudos:
+          one: Ο/Η %{givers_list} άφησε μπράβο στο %{commentable_link}.
+          other: Οι %{givers_list} άφησαν μπράβο στο %{commentable_link}.
   mailer:
     general:
       closing:
@@ -31,19 +45,6 @@ el:
         parent_org: Organization for Transformative Works – OTW (Οργανισμός Μετασχηματιστικών
           Έργων)
         support: Η ομάδα Υποστήριξης του AO3
-    kudos:
-      guest:
-        one: ένας επισκέπτης
-        other: "%{count} επισκέπτες"
-      html:
-        left_kudos:
-          one: Ο/Η %{givers_list} άφησε μπράβο στο %{commentable_link}.
-          other: Οι %{givers_list} άφησαν μπράβο στο %{commentable_link}.
-      text:
-        left_kudos:
-          one: Ο/Η %{givers_list} άφησε μπράβο στο %{commentable_link}.
-          other: Οι %{givers_list} άφησαν μπράβο στο %{commentable_link}.
-      you_have: "[%{app_name}] ‘Εχεις μπράβο!"
   users:
     mailer:
       reset_password_instructions:

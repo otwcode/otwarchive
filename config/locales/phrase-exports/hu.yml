@@ -1,5 +1,19 @@
 ---
 hu:
+  kudo_mailer:
+    batch_kudo_notification:
+      guest:
+        one: egy vendég
+        other: "%{count} vendég"
+      html:
+        left_kudos:
+          one: "%{givers_list} kudost hagyott itt: %{commentable_link}."
+          other: "%{givers_list} kudost hagyott itt: %{commentable_link}."
+      subject: "​[%{app_name}]​​ ​Kudost kaptál!"
+      text:
+        left_kudos:
+          one: "%{givers_list} kudost hagyott itt: %{commentable_link}."
+          other: "%{givers_list} kudost hagyott itt: %{commentable_link}."
   mailer:
     general:
       closing:
@@ -31,19 +45,6 @@ hu:
         parent_org: Organization for Transformative Works – OTW (Szervezet a Transzformatív
           munkákért)
         support: Az AO3 Támogatás csapata
-    kudos:
-      guest:
-        one: egy vendég
-        other: "%{count} vendég"
-      html:
-        left_kudos:
-          one: "%{givers_list} kudost hagyott itt: %{commentable_link}."
-          other: "%{givers_list} kudost hagyott itt: %{commentable_link}."
-      text:
-        left_kudos:
-          one: "%{givers_list} kudost hagyott itt: %{commentable_link}."
-          other: "%{givers_list} kudost hagyott itt: %{commentable_link}."
-      you_have: "​[%{app_name}]​​ ​Kudost kaptál!"
   users:
     mailer:
       reset_password_instructions:

@@ -1,5 +1,19 @@
 ---
 de:
+  kudo_mailer:
+    batch_kudo_notification:
+      guest:
+        one: ein Gast
+        other: "%{count} Gäste"
+      html:
+        left_kudos:
+          one: "%{givers_list} hat Kudos für %{commentable_link} hinterlassen."
+          other: "%{givers_list} haben Kudos für %{commentable_link} hinterlassen."
+      subject: "[%{app_name}] Du hast Kudos erhalten!"
+      text:
+        left_kudos:
+          one: "%{givers_list} hat Kudos für %{commentable_link} hinterlassen."
+          other: "%{givers_list} haben Kudos für %{commentable_link} hinterlassen."
   mailer:
     general:
       closing:
@@ -31,19 +45,6 @@ de:
         parent_org: Organization for Transformative Works – OTW (Organisation für
           Transformative Werke)
         support: Das AO3-Support-Team
-    kudos:
-      guest:
-        one: ein Gast
-        other: "%{count} Gäste"
-      html:
-        left_kudos:
-          one: "%{givers_list} hat Kudos für %{commentable_link} hinterlassen."
-          other: "%{givers_list} haben Kudos für %{commentable_link} hinterlassen."
-      text:
-        left_kudos:
-          one: "%{givers_list} hat Kudos für %{commentable_link} hinterlassen."
-          other: "%{givers_list} haben Kudos für %{commentable_link} hinterlassen."
-      you_have: "[%{app_name}] Du hast Kudos erhalten!"
   users:
     mailer:
       reset_password_instructions:

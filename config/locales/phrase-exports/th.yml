@@ -1,5 +1,16 @@
 ---
 th:
+  kudo_mailer:
+    batch_kudo_notification:
+      guest:
+        other: "%{count} ผู้เข้าชม"
+      html:
+        left_kudos:
+          other: "%{givers_list} ได้มอบคำชมเชยบน %{commentable_link}"
+      subject: "[%{app_name}] คุณได้รับคำชมเชย!"
+      text:
+        left_kudos:
+          other: "%{givers_list} ได้มอบคำชมเชยบน %{commentable_link}"
   mailer:
     general:
       closing:
@@ -30,16 +41,6 @@ th:
         open_doors: ทีม The Open Doors (โอเพนดอร์ส)
         parent_org: Organization for Transformative Works – OTW (องค์กรเพื่อผลงานทรานสฟอร์เมทีฟ)
         support: ทีมช่วยเหลือ AO3
-    kudos:
-      guest:
-        other: "%{count} ผู้เข้าชม"
-      html:
-        left_kudos:
-          other: "%{givers_list} ได้มอบคำชมเชยบน %{commentable_link}"
-      text:
-        left_kudos:
-          other: "%{givers_list} ได้มอบคำชมเชยบน %{commentable_link}"
-      you_have: "[%{app_name}] คุณได้รับคำชมเชย!"
   users:
     mailer:
       reset_password_instructions:

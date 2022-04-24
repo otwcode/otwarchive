@@ -1,5 +1,24 @@
 ---
 uk:
+  kudo_mailer:
+    batch_kudo_notification:
+      guest:
+        few: "%{count} гостей"
+        many: "%{count} гостей"
+        one: "%{count} гостя"
+      html:
+        left_kudos:
+          few: Кудос для %{commentable_link} від %{givers_list}.
+          many: Кудос для %{commentable_link} від %{givers_list}.
+          one: Кудос для %{commentable_link} від %{givers_list}.
+          other: "%{givers_list} залишили kudos на %{commentable_link}."
+      subject: "[%{app_name}] Ви отримали кудос!"
+      text:
+        left_kudos:
+          few: Кудос для %{commentable_link} від %{givers_list}.
+          many: Кудос для %{commentable_link} від %{givers_list}.
+          one: Кудос для %{commentable_link} від %{givers_list}.
+          other: "%{givers_list} залишили kudos на %{commentable_link}."
   mailer:
     general:
       closing:
@@ -31,24 +50,6 @@ uk:
         parent_org: Organization for Transformative Works – OTW (Організація Перетворчих
           Робіт)
         support: Команда Підтримки АО3
-    kudos:
-      guest:
-        few: "%{count} гостей"
-        many: "%{count} гостей"
-        one: "%{count} гостя"
-      html:
-        left_kudos:
-          few: Кудос для %{commentable_link} від %{givers_list}.
-          many: Кудос для %{commentable_link} від %{givers_list}.
-          one: Кудос для %{commentable_link} від %{givers_list}.
-          other: "%{givers_list} залишили kudos на %{commentable_link}."
-      text:
-        left_kudos:
-          few: Кудос для %{commentable_link} від %{givers_list}.
-          many: Кудос для %{commentable_link} від %{givers_list}.
-          one: Кудос для %{commentable_link} від %{givers_list}.
-          other: "%{givers_list} залишили kudos на %{commentable_link}."
-      you_have: "[%{app_name}] Ви отримали кудос!"
   users:
     mailer:
       reset_password_instructions:

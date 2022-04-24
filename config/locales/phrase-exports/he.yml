@@ -1,5 +1,25 @@
 ---
 he:
+  kudo_mailer:
+    batch_kudo_notification:
+      guest:
+        many: "%{count} אורחות"
+        one: אורחת
+        other: "%{count} אורחות"
+        two: "%{count} אורחות"
+      html:
+        left_kudos:
+          many: "%{givers_list} השאירו קודוס על %{commentable_link}."
+          one: "%{givers_list} השאירה קודוס על %{commentable_link}."
+          other: "%{givers_list} השאירו קודוס על %{commentable_link}."
+          two: "%{givers_list} השאירו קודוס על %{commentable_link}."
+      subject: "[%{app_name}] קיבלת קודוס!"
+      text:
+        left_kudos:
+          many: "%{givers_list} השאירו קודוס על %{commentable_link}."
+          one: "%{givers_list} השאירה קודוס על %{commentable_link}."
+          other: "%{givers_list} השאירו קודוס על %{commentable_link}."
+          two: "%{givers_list} השאירו קודוס על %{commentable_link}."
   mailer:
     general:
       closing:
@@ -30,25 +50,6 @@ he:
         parent_org: Organization for Transformative Works – OTW (ארגון למען יצירות
           טרנספורמטיביות)
         support: צוות התמיכה של AO3
-    kudos:
-      guest:
-        many: "%{count} אורחות"
-        one: אורחת
-        other: "%{count} אורחות"
-        two: "%{count} אורחות"
-      html:
-        left_kudos:
-          many: "%{givers_list} השאירו קודוס על %{commentable_link}."
-          one: "%{givers_list} השאירה קודוס על %{commentable_link}."
-          other: "%{givers_list} השאירו קודוס על %{commentable_link}."
-          two: "%{givers_list} השאירו קודוס על %{commentable_link}."
-      text:
-        left_kudos:
-          many: "%{givers_list} השאירו קודוס על %{commentable_link}."
-          one: "%{givers_list} השאירה קודוס על %{commentable_link}."
-          other: "%{givers_list} השאירו קודוס על %{commentable_link}."
-          two: "%{givers_list} השאירו קודוס על %{commentable_link}."
-      you_have: "[%{app_name}] קיבלת קודוס!"
   users:
     mailer:
       reset_password_instructions:

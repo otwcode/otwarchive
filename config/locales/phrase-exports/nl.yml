@@ -1,5 +1,19 @@
 ---
 nl:
+  kudo_mailer:
+    batch_kudo_notification:
+      guest:
+        one: een bezoeker
+        other: "%{count} bezoekers"
+      html:
+        left_kudos:
+          one: Je hebt kudos gekregen van %{givers_list} voor %{commentable_link}.
+          other: Je hebt kudos gekregen van %{givers_list} voor %{commentable_link}.
+      subject: "[%{app_name}] Kudos!"
+      text:
+        left_kudos:
+          one: Je hebt kudos gekregen van %{givers_list} voor %{commentable_link}.
+          other: Je hebt kudos gekregen van %{givers_list} voor %{commentable_link}.
   mailer:
     general:
       closing:
@@ -31,19 +45,6 @@ nl:
         parent_org: Organization for Transformative Works – OTW (Organisatie voor
           Transformatieve Werken)
         support: AO3 Support
-    kudos:
-      guest:
-        one: een bezoeker
-        other: "%{count} bezoekers"
-      html:
-        left_kudos:
-          one: Je hebt kudos gekregen van %{givers_list} voor %{commentable_link}.
-          other: Je hebt kudos gekregen van %{givers_list} voor %{commentable_link}.
-      text:
-        left_kudos:
-          one: Je hebt kudos gekregen van %{givers_list} voor %{commentable_link}.
-          other: Je hebt kudos gekregen van %{givers_list} voor %{commentable_link}.
-      you_have: "[%{app_name}] Kudos!"
   users:
     mailer:
       reset_password_instructions:

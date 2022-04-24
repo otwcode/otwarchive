@@ -1,5 +1,16 @@
 ---
 id:
+  kudo_mailer:
+    batch_kudo_notification:
+      guest:
+        other: "%{count} tamu"
+      html:
+        left_kudos:
+          other: "%{givers_list} memberikan jempol pada %{commentable_link}."
+      subject: "[%{app_name}] Anda mendapatkan jempol!"
+      text:
+        left_kudos:
+          other: "%{givers_list} memberikan jempol pada %{commentable_link}."
   mailer:
     general:
       closing:
@@ -31,16 +42,6 @@ id:
         parent_org: Organization for Transformative Works – OTW (Organisasi untuk
           Karya Transformatif)
         support: Komite Bantuan AO3
-    kudos:
-      guest:
-        other: "%{count} tamu"
-      html:
-        left_kudos:
-          other: "%{givers_list} memberikan jempol pada %{commentable_link}."
-      text:
-        left_kudos:
-          other: "%{givers_list} memberikan jempol pada %{commentable_link}."
-      you_have: "[%{app_name}] Anda mendapatkan jempol!"
   users:
     mailer:
       reset_password_instructions:

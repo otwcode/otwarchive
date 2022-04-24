@@ -1,5 +1,16 @@
 ---
 vi:
+  kudo_mailer:
+    batch_kudo_notification:
+      guest:
+        other: "%{count} vị khách"
+      html:
+        left_kudos:
+          other: "%{givers_list} đã để lại tán dương cho %{commentable_link}."
+      subject: "[%{app_name}] Bạn nhận được tán dương!"
+      text:
+        left_kudos:
+          other: "%{givers_list} đã để lại tán dương cho %{commentable_link}."
   mailer:
     general:
       closing:
@@ -33,16 +44,6 @@ vi:
         parent_org: Organization for Transformative Works – OTW (Tổ Chức cho các Tác
           Phẩm Được Biến Đổi)
         support: Đội Hỗ Trợ AO3
-    kudos:
-      guest:
-        other: "%{count} vị khách"
-      html:
-        left_kudos:
-          other: "%{givers_list} đã để lại tán dương cho %{commentable_link}."
-      text:
-        left_kudos:
-          other: "%{givers_list} đã để lại tán dương cho %{commentable_link}."
-      you_have: "[%{app_name}] Bạn nhận được tán dương!"
   users:
     mailer:
       reset_password_instructions:

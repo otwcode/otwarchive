@@ -1,5 +1,22 @@
 ---
 ru:
+  kudo_mailer:
+    batch_kudo_notification:
+      guest:
+        few: "%{count} гостей"
+        many: "%{count} гостей"
+        one: "%{count} гость"
+      html:
+        left_kudos:
+          few: "%{givers_list} дарят вам кудос за %{commentable_link}."
+          many: "%{givers_list} дарят вам кудос за %{commentable_link}."
+          one: "%{givers_list} дарит вам кудос за %{commentable_link}."
+      subject: "[%{app_name}] Вы получили кудос!"
+      text:
+        left_kudos:
+          few: "%{givers_list} дарят вам кудос за %{commentable_link}."
+          many: "%{givers_list} дарят вам кудос за %{commentable_link}."
+          one: "%{givers_list} дарит вам кудос за %{commentable_link}."
   mailer:
     general:
       closing:
@@ -31,22 +48,6 @@ ru:
         parent_org: Organization for Transformative Works – OTW (Организация Трансформационных
           Работ)
         support: Команда Технической поддержки АО3
-    kudos:
-      guest:
-        few: "%{count} гостей"
-        many: "%{count} гостей"
-        one: "%{count} гость"
-      html:
-        left_kudos:
-          few: "%{givers_list} дарят вам кудос за %{commentable_link}."
-          many: "%{givers_list} дарят вам кудос за %{commentable_link}."
-          one: "%{givers_list} дарит вам кудос за %{commentable_link}."
-      text:
-        left_kudos:
-          few: "%{givers_list} дарят вам кудос за %{commentable_link}."
-          many: "%{givers_list} дарят вам кудос за %{commentable_link}."
-          one: "%{givers_list} дарит вам кудос за %{commentable_link}."
-      you_have: "[%{app_name}] Вы получили кудос!"
   users:
     mailer:
       reset_password_instructions:

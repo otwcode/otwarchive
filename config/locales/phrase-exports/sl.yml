@@ -1,5 +1,25 @@
 ---
 sl:
+  kudo_mailer:
+    batch_kudo_notification:
+      guest:
+        few: "%{count} gosti/je"
+        one: "%{count} gost/ja"
+        other: "%{count} gostov/ij"
+        two: "%{count} gosta/ji"
+      html:
+        left_kudos:
+          few: "%{givers_list} so všečkali/e %{commentable_link}."
+          one: "%{givers_list} je všečkal/a %{commentable_link}."
+          other: "%{givers_list} je všečkalo %{commentable_link}."
+          two: "%{givers_list} sta všečkala/i %{commentable_link}."
+      subject: "[%{app_name}] Imate všečke!"
+      text:
+        left_kudos:
+          few: "%{givers_list} so všečkali/e %{commentable_link}."
+          one: "%{givers_list} je všečkal/a %{commentable_link}."
+          other: "%{givers_list} je všečkalo %{commentable_link}."
+          two: "%{givers_list} sta všečkala/i %{commentable_link}."
   mailer:
     general:
       closing:
@@ -31,25 +51,6 @@ sl:
         parent_org: Organization for Transformative Works - OTW (Organizacija za tranformativna
           dela)
         support: AO3 ekipa za pomoč uporabnikom
-    kudos:
-      guest:
-        few: "%{count} gosti/je"
-        one: "%{count} gost/ja"
-        other: "%{count} gostov/ij"
-        two: "%{count} gosta/ji"
-      html:
-        left_kudos:
-          few: "%{givers_list} so všečkali/e %{commentable_link}."
-          one: "%{givers_list} je všečkal/a %{commentable_link}."
-          other: "%{givers_list} je všečkalo %{commentable_link}."
-          two: "%{givers_list} sta všečkala/i %{commentable_link}."
-      text:
-        left_kudos:
-          few: "%{givers_list} so všečkali/e %{commentable_link}."
-          one: "%{givers_list} je všečkal/a %{commentable_link}."
-          other: "%{givers_list} je všečkalo %{commentable_link}."
-          two: "%{givers_list} sta všečkala/i %{commentable_link}."
-      you_have: "[%{app_name}] Imate všečke!"
   users:
     mailer:
       reset_password_instructions:

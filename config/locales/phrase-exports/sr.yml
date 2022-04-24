@@ -1,5 +1,22 @@
 ---
 sr:
+  kudo_mailer:
+    batch_kudo_notification:
+      guest:
+        few: "%{count} госта"
+        one: "%{count} гост"
+        other: "%{count} гостију"
+      html:
+        left_kudos:
+          few: "%{givers_list} су похвалили %{commentable_link}."
+          one: "%{givers_list} је похвалио/ла %{commentable_link}."
+          other: "%{givers_list} су похвалили %{commentable_link}."
+      subject: "[%{app_name}] Добили сте похвале!"
+      text:
+        left_kudos:
+          few: "%{givers_list} су похвалили %{commentable_link}."
+          one: "%{givers_list} је похвалио/ла %{commentable_link}."
+          other: "%{givers_list} су похвалили %{commentable_link}."
   mailer:
     general:
       closing:
@@ -31,22 +48,6 @@ sr:
         parent_org: Organization for Transformative Works – OTW (Организација за трансформативне
           радове)
         support: Тим Корисничке подршке AO3-а
-    kudos:
-      guest:
-        few: "%{count} госта"
-        one: "%{count} гост"
-        other: "%{count} гостију"
-      html:
-        left_kudos:
-          few: "%{givers_list} су похвалили %{commentable_link}."
-          one: "%{givers_list} је похвалио/ла %{commentable_link}."
-          other: "%{givers_list} су похвалили %{commentable_link}."
-      text:
-        left_kudos:
-          few: "%{givers_list} су похвалили %{commentable_link}."
-          one: "%{givers_list} је похвалио/ла %{commentable_link}."
-          other: "%{givers_list} су похвалили %{commentable_link}."
-      you_have: "[%{app_name}] Добили сте похвале!"
   users:
     mailer:
       reset_password_instructions:

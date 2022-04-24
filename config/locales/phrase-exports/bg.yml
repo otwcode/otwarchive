@@ -1,5 +1,19 @@
 ---
 bg:
+  kudo_mailer:
+    batch_kudo_notification:
+      guest:
+        one: един гост
+        other: "%{count} гости"
+      html:
+        left_kudos:
+          one: "%{givers_list} остави кудос за %{commentable_link}."
+          other: "%{givers_list} оставиха кудос за %{commentable_link}."
+      subject: "[%{app_name}] Имаш кудос!"
+      text:
+        left_kudos:
+          one: "%{givers_list} остави кудос за %{commentable_link}."
+          other: "%{givers_list} оставиха кудос за %{commentable_link}."
   mailer:
     general:
       closing:
@@ -31,19 +45,6 @@ bg:
         parent_org: Organization for Transformative Works – OTW (Организация за преобразуващи
           произведения)
         support: Екип Поддръжка на AO3
-    kudos:
-      guest:
-        one: един гост
-        other: "%{count} гости"
-      html:
-        left_kudos:
-          one: "%{givers_list} остави кудос за %{commentable_link}."
-          other: "%{givers_list} оставиха кудос за %{commentable_link}."
-      text:
-        left_kudos:
-          one: "%{givers_list} остави кудос за %{commentable_link}."
-          other: "%{givers_list} оставиха кудос за %{commentable_link}."
-      you_have: "[%{app_name}] Имаш кудос!"
   users:
     mailer:
       reset_password_instructions:

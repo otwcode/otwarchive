@@ -1,5 +1,16 @@
 ---
 zh-CN:
+  kudo_mailer:
+    batch_kudo_notification:
+      guest:
+        other: "%{count}名访客"
+      html:
+        left_kudos:
+          other: "%{givers_list}给您的作品点了赞%{commentable_link}。"
+      subject: "[%{app_name}] 您收到了点赞！"
+      text:
+        left_kudos:
+          other: "%{givers_list}给您的作品点了赞%{commentable_link}。"
   layouts:
     proxy_notice:
       faux_heading: 重要提示：
@@ -32,16 +43,6 @@ zh-CN:
         open_doors: Open Doors（Open Doors拯救计划）团队
         parent_org: Organization for Transformative Works – OTW（OTW再创作组织）
         support: AO3支持委员会团队
-    kudos:
-      guest:
-        other: "%{count}名访客"
-      html:
-        left_kudos:
-          other: "%{givers_list}给您的作品点了赞%{commentable_link}。"
-      text:
-        left_kudos:
-          other: "%{givers_list}给您的作品点了赞%{commentable_link}。"
-      you_have: "[%{app_name}] 您收到了点赞！"
   users:
     mailer:
       reset_password_instructions:

@@ -1,5 +1,28 @@
 ---
 ar:
+  kudo_mailer:
+    batch_kudo_notification:
+      guest:
+        few: "%{count} ضيوف"
+        many: "%{count} ضيفاً"
+        one: ضيف
+        other: "%{count} ضيف"
+        two: ضيفان
+      html:
+        left_kudos:
+          few: حصلت على علامات امتياز للعمل %{commentable_link} من %{givers_list}.
+          many: حصلت على علامات امتياز للعمل %{commentable_link} من %{givers_list}.
+          one: حصلت على علامة امتياز للعمل %{commentable_link} من %{givers_list}.
+          other: حصلت على علامات امتياز للعمل %{commentable_link} من %{givers_list}.
+          two: حصلت على علامتي امتياز للعمل %{commentable_link} من %{givers_list}.
+      subject: "[%{app_name}] حصلت على علامة امتياز!"
+      text:
+        left_kudos:
+          few: حصلت على علامات امتياز للعمل %{commentable_link} من %{givers_list}.
+          many: حصلت على علامات امتياز للعمل %{commentable_link} من %{givers_list}.
+          one: حصلت على علامة امتياز للعمل %{commentable_link} من %{givers_list}.
+          other: حصلت على علامات امتياز للعمل %{commentable_link} من %{givers_list}.
+          two: حصلت على علامتي امتياز للعمل %{commentable_link} من %{givers_list}.
   mailer:
     general:
       closing:
@@ -30,28 +53,6 @@ ar:
         open_doors: فريق Open Doors (الأبواب المفتوحة)
         parent_org: Organization for Transformative Works – OTW (منظمة الأعمال التحويلية)
         support: فريق لجنة الدعم في AO3
-    kudos:
-      guest:
-        few: "%{count} ضيوف"
-        many: "%{count} ضيفاً"
-        one: ضيف
-        other: "%{count} ضيف"
-        two: ضيفان
-      html:
-        left_kudos:
-          few: حصلت على علامات امتياز للعمل %{commentable_link} من %{givers_list}.
-          many: حصلت على علامات امتياز للعمل %{commentable_link} من %{givers_list}.
-          one: حصلت على علامة امتياز للعمل %{commentable_link} من %{givers_list}.
-          other: حصلت على علامات امتياز للعمل %{commentable_link} من %{givers_list}.
-          two: حصلت على علامتي امتياز للعمل %{commentable_link} من %{givers_list}.
-      text:
-        left_kudos:
-          few: حصلت على علامات امتياز للعمل %{commentable_link} من %{givers_list}.
-          many: حصلت على علامات امتياز للعمل %{commentable_link} من %{givers_list}.
-          one: حصلت على علامة امتياز للعمل %{commentable_link} من %{givers_list}.
-          other: حصلت على علامات امتياز للعمل %{commentable_link} من %{givers_list}.
-          two: حصلت على علامتي امتياز للعمل %{commentable_link} من %{givers_list}.
-      you_have: "[%{app_name}] حصلت على علامة امتياز!"
   users:
     mailer:
       reset_password_instructions:

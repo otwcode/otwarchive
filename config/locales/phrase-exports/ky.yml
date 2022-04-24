@@ -1,5 +1,28 @@
 ---
 ky:
+  kudo_mailer:
+    batch_kudo_notification:
+      guest:
+        few: "%{count} Коноктор"
+        many: "%{count} Коноктор"
+        one: Конок
+        other: "%{count} Коноктор"
+        two: "%{count} Коноктор"
+      html:
+        left_kudos:
+          few: "%{givers_list} %{commentable_link} да кудо калтырышты."
+          many: "%{givers_list} %{commentable_link} да кудо калтырышты."
+          one: "%{givers_list} %{commentable_link} да кудо калтырды."
+          other: "%{givers_list} %{commentable_link} да кудо калтырышты."
+          two: "%{givers_list} %{commentable_link} да кудо калтырышты."
+      subject: "[%{app_name}] Сизздин кудолоруңуз бар!"
+      text:
+        left_kudos:
+          few: "%{givers_list} %{commentable_link} да кудо калтырышты."
+          many: "%{givers_list} %{commentable_link} да кудо калтырышты."
+          one: "%{givers_list} %{commentable_link} да кудо калтырды."
+          other: "%{givers_list} %{commentable_link} да кудо калтырышты."
+          two: "%{givers_list} %{commentable_link} да кудо калтырышты."
   mailer:
     general:
       closing:
@@ -31,28 +54,6 @@ ky:
         parent_org: Organization for Transformative Works – OTW (Трансформациялоо
           иштери боюнча уюм – OTW)
         support: AO3 колдоо тобу
-    kudos:
-      guest:
-        few: "%{count} Коноктор"
-        many: "%{count} Коноктор"
-        one: Конок
-        other: "%{count} Коноктор"
-        two: "%{count} Коноктор"
-      html:
-        left_kudos:
-          few: "%{givers_list} %{commentable_link} да кудо калтырышты."
-          many: "%{givers_list} %{commentable_link} да кудо калтырышты."
-          one: "%{givers_list} %{commentable_link} да кудо калтырды."
-          other: "%{givers_list} %{commentable_link} да кудо калтырышты."
-          two: "%{givers_list} %{commentable_link} да кудо калтырышты."
-      text:
-        left_kudos:
-          few: "%{givers_list} %{commentable_link} да кудо калтырышты."
-          many: "%{givers_list} %{commentable_link} да кудо калтырышты."
-          one: "%{givers_list} %{commentable_link} да кудо калтырды."
-          other: "%{givers_list} %{commentable_link} да кудо калтырышты."
-          two: "%{givers_list} %{commentable_link} да кудо калтырышты."
-      you_have: "[%{app_name}] Сизздин кудолоруңуз бар!"
   users:
     mailer:
       reset_password_instructions:
