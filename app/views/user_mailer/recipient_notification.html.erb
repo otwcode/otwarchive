@@ -7,23 +7,13 @@
   </p>
 
   <p>
-    <% if @collection.nil? %>
-      <%= style_creation_link(@work.title, work_url(@work)) %> <%= "(#{@work.word_count} words)" %>
-    <% else %>
-      <%= style_creation_link(@work.title, collection_work_url(@collection, @work)) %> <%= "(#{@work.word_count} words)" %>
-    <% end %>
+    <% url = @collection ? collection_work_url(@collection, @work) : work_url(@work) %>
+    <%= style_creation_link(@work.title, url) %> <%= "(#{@work.word_count} words)" %>
     <br>
-    by <%= @work.anonymous? ? "an anonymous responder" : (@work.pseuds.map{|p| style_pseud_link(p)}.to_sentence.html_safe) %>
-    <br>
-    <% unless @work.fandom_string.blank? %>
-      <%= style_bold("Fandom:") %> <%= @work.fandom_string %>
-    <% end %>
+    by <%= creator_links(@work) %>
   </p>
 
-  <% unless @work.summary.blank? %>
-    <%= style_bold("Summary:") %>
-    <%= style_quote(raw sanitize_field(@work, :summary)) %>
-  <% end %>
+  <%= render "work_info", work: @work %>
 
   <% if @collection && !@collection.gift_notification.blank? %>
     <p><%= @collection.gift_notification %></p>

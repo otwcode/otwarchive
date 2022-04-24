@@ -848,7 +848,7 @@ describe UserMailer do
       subject(:email) { UserMailer.recipient_notification(user.id, work.id, collection.id) }
 
       let(:user) { create(:user) }
-      let(:work) { create(:work) }
+      let(:work) { create(:work, fandom_string: "Fandom 1, Fandom 2", character_string: "A, B") }
       let(:collection) { create(:collection) }
 
       # Test the headers
@@ -861,6 +861,8 @@ describe UserMailer do
 
       # Test both body contents
       it_behaves_like "a multipart email"
+
+      it_behaves_like "a translated email"
 
       describe "HTML version" do
         it "has the correct content" do
@@ -892,6 +894,8 @@ describe UserMailer do
 
       # Test both body contents
       it_behaves_like "a multipart email"
+
+      it_behaves_like "a translated email"
 
       describe "HTML version" do
         it "has the correct content" do
