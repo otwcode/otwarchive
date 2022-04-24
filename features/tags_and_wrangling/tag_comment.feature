@@ -28,7 +28,8 @@ I'd like to comment on a tag'
       And it is currently Mon Mar 27 22:00:00 UTC 2017
     When I am logged in as "dizmo"
     When I post the comment "Shouldn't this be a metatag with Stargate?" on the tag "Stargate Atlantis"
-    When I follow "Edit"
+    When it is currently 1 second from now
+      And I follow "Edit"
     Then the "Comment" field should contain "Shouldn't this be a metatag with Stargate?"
       And I should see "Cancel"
     When I fill in "Comment" with "Yep, we should have a Stargate franchise metatag."
