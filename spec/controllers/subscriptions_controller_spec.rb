@@ -1,4 +1,4 @@
-require 'spec_helper'
+require "spec_helper"
 
 describe SubscriptionsController do
   include LoginMacros
@@ -10,7 +10,7 @@ describe SubscriptionsController do
     it "redirects to login when not logged in" do
       get :index, params: { user_id: user.login }
       it_redirects_to_with_error(new_user_session_path,
-                                "Sorry, you don't have permission to access the page you were trying to reach. Please log in.")
+                                 "Sorry, you don't have permission to access the page you were trying to reach. Please log in.")
     end
   end
 
@@ -19,7 +19,7 @@ describe SubscriptionsController do
 
     context "with valid subscriptions" do
       let(:author) { create(:user) }
-      let(:work) { create(:work)}
+      let(:work) { create(:work) }
       let(:series) { create(:series) }
       let!(:sub_series) { create(:subscription, user: user, subscribable_type: "Series", subscribable_id: series.id) }
       let!(:sub_work) { create(:subscription, user: user, subscribable_type: "Work", subscribable_id: work.id) }
@@ -28,7 +28,7 @@ describe SubscriptionsController do
       it "renders the user subscriptions" do
         get :index, params: { user_id: user.login }
         expect(response).to render_template("index")
-        expect(assigns(:subscriptions)).to satisfy { |subs| subs.size() == 3 }
+        expect(assigns(:subscriptions)).to satisfy { |subs| subs.size == 3 }
       end
     end
 
