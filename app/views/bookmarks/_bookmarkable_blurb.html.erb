@@ -1,6 +1,7 @@
 <% # expects "bookmarkable" (a BookmarkableDecorator object) %>
 <% # Unwrap the bookmarkable to avoid type mis-identification. %>
 <% unwrapped = bookmarkable.__getobj__ %>
+<% # bookmark blurb group creation-id creator-ids %>
 <li id="bookmark_<%= bookmarkable.id %>" class="bookmark <%= css_classes_for_creation_blurb(unwrapped) %>" role="article">
 
   <!--bookmark icons-->

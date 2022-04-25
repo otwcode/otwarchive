@@ -1,5 +1,6 @@
 <% # This partial requires local variable 'bookmark' %>
-<li class="user<% if is_author_of?(bookmark) %> own<% end %> short blurb group" role="article">
+<% # user own short blurb group bookmarker-id %>
+<li class="user<% if is_author_of?(bookmark) %> own<% end %> short blurb group <%= bookmarker_id_for_css_classes(bookmark) %>" role="article">
   <div class="header module">
     <h5 class="byline heading">
       <%= ts("Bookmarked by ") %>

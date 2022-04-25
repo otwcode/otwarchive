@@ -84,4 +84,39 @@ module BookmarksHelper
     content_tag(:span, link, class: "count")
   end
 
+  def bookmarker_id_for_css_classes(bookmark)
+    return if bookmark.nil?
+
+    "user-#{bookmark.pseud.user_id}"
+  end
+
+  # Array of unique creator and bookmarker ids, formatted user-123, user-126.
+  # If the user has bookmarked their own work, we don't need their id twice.
+  def user_ids_for_bookmark_blurb(bookmark)
+    user_ids = creator_ids_for_css_classes(bookmark.bookmarkable)
+    user_ids << bookmarker_id_for_css_classes(bookmark)
+    user_ids.uniq
+  end
+
+  # The bookmark blurb contains the bookmarkable and a single user's bookmark.
+  def css_classes_for_bookmark_blurb(bookmark)
+    return if bookmark.nil?
+
+    creation_id = creation_id_for_css_classes(bookmark.bookmarkable)
+    user_ids = user_ids_for_bookmark_blurb(bookmark).join(" ")
+    "bookmark blurb group #{creation_id} #{user_ids}".strip
+  end
+
+  # The bookmarkable blurb contains the bookmarkable and many users' bookmarks.
+  # This is equivalent to sticking the word "bookmark" in front of
+  # css_classes_for_creation_blurb(creation), but I don't know if we want to
+  # use css_classes_for_creation_blurb(creation) because it's cached with the
+  # key "#{creation.cache_key_with_version}/blurb_css_classes-v2".
+  def css_classes_for_bookmarkable_blurb(bookmark)
+    return if bookmark.nil?
+
+    creation_id = creation_id_for_css_classes(bookmark.bookmarkable)
+    creator_ids = creator_ids_for_css_classes(bookmark.bookmarkable)
+    "bookmark blurb group #{creation_id} #{creator_ids}".strip
+  end
 end
