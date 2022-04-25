@@ -99,6 +99,7 @@ module BookmarksHelper
   end
 
   # The bookmark blurb contains the bookmarkable and a single user's bookmark.
+  # If we cache this, it probably only needs to use the creation cache key.
   def css_classes_for_bookmark_blurb(bookmark)
     return if bookmark.nil?
 
@@ -122,7 +123,13 @@ module BookmarksHelper
   end
 
   # Also not using this yet.
+  # We could cache this if we kept the "own" logic out, but I don't know how
+  # useful that is.
   def css_classes_for_bookmark_blurb_short(bookmark)
-    "short blurb group #{bookmarker_id_for_css_classes(bookmark)}"
+    return if bookmark.nil?
+
+    own = "own" if is_author_of?(bookmark)
+    bookmarker_id = bookmarker_id_for_css_classes(bookmark)
+    "#{own} user short blurb group #{bookmarker_id}"
   end
 end
