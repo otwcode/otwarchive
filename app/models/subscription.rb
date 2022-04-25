@@ -34,6 +34,8 @@ class Subscription < ApplicationRecord
       subscribable.name
     elsif subscribable.respond_to?(:title)
       subscribable.title
+    elsif subscribable.nil?
+      I18n.t("subscriptions.deleted")
     end
   end
 

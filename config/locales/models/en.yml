@@ -120,3 +120,6 @@ en:
         user_defined_tags_count: "Fandom, relationship, character, and additional tags"
   attributes:
     ticket_number: "Ticket ID"
+  subscriptions:
+    deleted: "Deleted item"
+
