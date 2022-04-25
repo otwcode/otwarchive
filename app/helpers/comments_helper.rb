@@ -291,7 +291,7 @@ module CommentsHelper
     return if comment.pseud.nil?
     return if comment.pseud.user.is_author_of?(comment.ultimate_parent) && comment.ultimate_parent.anonymous?
 
-    " user-#{comment.pseud.user.id}"
+    "user-#{comment.pseud.user_id}"
   end
 
   def css_classes_for_comment(comment)

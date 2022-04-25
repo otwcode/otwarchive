@@ -37,7 +37,7 @@
           <% feedback_comment = inbox_comment.feedback_comment %>
 
           <!-- START of single comment -->
-          <li class="<% if feedback_comment.unreviewed? %>unreviewed <% end %><%= inbox_comment.read? ? 'read' : 'unread' %> comment group<%= commenter_id_for_css_classes(feedback_comment) %>" role="article" id="feedback_comment_<%= feedback_comment.id %>">
+          <li class="<%= inbox_comment.read? ? 'read' : 'unread' %> <%= css_classes_for_comment(feedback_comment) %>" role="article" id="feedback_comment_<%= feedback_comment.id %>">
 
             <%= render "inbox_comment_contents", feedback_comment: feedback_comment %>
 

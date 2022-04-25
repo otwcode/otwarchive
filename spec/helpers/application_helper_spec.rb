@@ -364,4 +364,38 @@ describe ApplicationHelper do
       end
     end
   end
+
+  describe "#commenter_id_for_css_classes" do
+
+    context "when commenter is a user" do
+      let(:user) { create(:user) }
+      let(:comment) { create(:comment, pseud: user.default_pseud) }
+
+      it "returns commenter id css class name" do
+        expect(helper.commenter_id_for_css_classes(comment)).to eq("user-#{user.id}")
+      end
+    end
+    
+    context "when commenter is a visitor" do
+      let(:comment) { create(:comment, :by_guest) }
+
+      it "returns nil" do
+        expect(helper.commenter_id_for_css_classes(comment)).to eq(nil)
+      end
+    end
+
+    context "when commenter is creater of work inside anonymous collection" do
+      let(:user) { create(:user) }
+      let(:collection) { create(:anonymous_collection) }
+      let(:work) { create(:work, authors: [user.default_pseud]) }
+      let(:comment) { create(:comment, pseud: user.default_pseud, commentable: work.last_posted_chapter) }
+
+      it "returns nil" do
+        # TODO: make this test pass
+        collection.collection_items.create(item: work)
+        expect(helper.commenter_id_for_css_classes(comment)).to eq(nil)
+      end
+    end
+  end
+
 end
