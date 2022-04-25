@@ -1,6 +1,7 @@
 <% # expects "bookmark" %>
 <% bookmarkable = bookmark.bookmarkable %>
 <% bookmark_form_id = (bookmarkable.blank? ? "#{bookmark.id}" : "#{bookmarkable.id}") %>
+<% # bookmark blurb group creation-id [creator-ids bookmarker-id].uniq %>
 <li id="bookmark_<%= bookmark.id %>" class="<%= css_classes_for_bookmark_blurb(bookmark) %>" role="article">
 
   <% if bookmarkable.blank? %>
