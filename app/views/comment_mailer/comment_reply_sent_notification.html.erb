@@ -1,0 +1,33 @@
+<% content_for :message do %>
+
+  You replied to a comment on
+  <% if @comment.ultimate_parent.is_a?(Tag) %>
+    the tag
+    <%= style_link(@comment.ultimate_parent.commentable_name, {:controller => :tags, :action => :show, :id => @comment.ultimate_parent.to_param, :only_path => false}) %>:
+  <% else %>
+    <i><b><%= style_link(@comment.ultimate_parent.commentable_name.html_safe, polymorphic_url(@comment.ultimate_parent, :only_path => false)) %></b></i>:
+  <% end %>
+
+  <% commenter = @parent_comment.comment_owner ?
+      (
+        (@parent_comment.comment_owner.is_author_of?(@parent_comment.ultimate_parent) &&
+          @parent_comment.ultimate_parent.anonymous?) ?
+        "Anonymous Creator" :
+        style_link(@parent_comment.comment_owner_name,
+          polymorphic_url(@parent_comment.comment_owner, :only_path => false))
+      ) :
+      @parent_comment.comment_owner_name %>
+
+  <p>
+    <%= style_bold(commenter) %> wrote:
+    <%= style_quote(raw @parent_comment.sanitized_content) %>
+  </p>
+
+  <p>
+    You responded:
+    <%= style_quote(raw @comment.sanitized_content) %>
+  </p>
+
+  <%= render 'comment_notification_footer' %>
+
+<% end %>
