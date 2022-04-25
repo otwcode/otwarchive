@@ -29,8 +29,8 @@ describe Skin do
         /* end comment */",
 
       "should allow hsl(a) colours" =>
-        "ol {color: hsl(100, 100, 100);}
-        li {color: hsla(100%, 100%, 100%, 1);}",
+        "ol {color: hsl(180, 100%, 50%);}
+        li {color: hsla(90, 30%, 70%, 50%);}",
       
       "should allow through border-radius (CSS3 property)" =>
         ".profile { border-radius: 5px }",
