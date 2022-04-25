@@ -25,7 +25,9 @@ class BookmarkableIndexer < Indexer
   end
 
   def document(object)
-    object.bookmarkable_json
+    object.bookmarkable_json.merge(
+      id: document_id(object.id)
+    )
   end
 
   def document_id(id)

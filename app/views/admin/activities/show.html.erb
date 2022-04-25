@@ -25,7 +25,7 @@
       <dd><%= link_to @activity.target_name, @activity.target %></dd>
 
       <dt><%= ts("Summary") %></dt>
-      <dd><%= @activity.summary %></dd>
+      <dd><%=raw sanitize_field(@activity, :summary) %></dd>
     </dl>
   </div>
   <!--/content-->
