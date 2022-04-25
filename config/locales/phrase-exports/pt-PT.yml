@@ -1,5 +1,21 @@
 ---
 pt-PT:
+  kudo_mailer:
+    batch_kudo_notification:
+      guest:
+        one: uma pessoa convidada
+        other: "%{count} pessoas convidadas"
+      html:
+        left_kudos:
+          one: "%{givers_list} deixou kudos em %{commentable_link}."
+          other: "%{givers_list} deixaram kudos em %{commentable_link}."
+        single_guest: Uma pessoa convidada deixou kudos em %{commentable_link}.
+      subject: "[%{app_name}] Recebeste kudos!"
+      text:
+        left_kudos:
+          one: "%{givers_list} deixou kudos em %{commentable_title} (%{commentable_url})."
+          other: "%{givers_list} deixaram kudos em %{commentable_title} (%{commentable_url})."
+        single_guest: Uma pessoa convidada deixou kudos em %{commentable_title} (%{commentable_url}).
   mailer:
     general:
       closing:
@@ -30,19 +46,6 @@ pt-PT:
         parent_org: Organization for Transformative Works – OTW (Organização para
           Obras Transformativas)
         support: A equipa de Suporte do AO3
-    kudos:
-      guest:
-        one: uma pessoa convidada
-        other: "%{count} pessoas convidadas"
-      html:
-        left_kudos:
-          one: "%{givers_list} deixou kudos em %{commentable_link}."
-          other: "%{givers_list} deixaram kudos em %{commentable_link}."
-      text:
-        left_kudos:
-          one: "%{givers_list} deixou kudos em %{commentable_link}."
-          other: "%{givers_list} deixaram kudos em %{commentable_link}."
-      you_have: "[%{app_name}] Recebeste kudos!"
   users:
     mailer:
       reset_password_instructions:

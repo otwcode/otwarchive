@@ -1,5 +1,22 @@
 ---
 fr:
+  kudo_mailer:
+    batch_kudo_notification:
+      guest:
+        one: un/une invité-e
+        other: "%{count} invité-e-s"
+      html:
+        left_kudos:
+          one: "%{givers_list} a félicité votre œuvre %{commentable_link}."
+          other: "%{givers_list} ont félicité votre œuvre %{commentable_link}."
+        single_guest: Un/Une invité-e a félicité votre œuvre %{commentable_link}.
+      subject: "[%{app_name}] Vous avez reçu des félicitations !"
+      text:
+        left_kudos:
+          one: "%{givers_list} a félicité votre œuvre %{commentable_title} (%{commentable_url})."
+          other: "%{givers_list} ont félicité votre œuvre %{commentable_title} (%{commentable_url})."
+        single_guest: Un/Une invité-e a félicité votre œuvre %{commentable_title}
+          (%{commentable_url}).
   mailer:
     general:
       closing:
@@ -32,19 +49,6 @@ fr:
         parent_org: Organization for Transformative Works – OTW (Organisation pour
           les Œuvres Transformatives)
         support: L'équipe de Support Technique d'AO3
-    kudos:
-      guest:
-        one: un/une invité-e
-        other: "%{count} invité-e-s"
-      html:
-        left_kudos:
-          one: "%{givers_list} a félicité votre œuvre %{commentable_link}."
-          other: "%{givers_list} ont félicité votre œuvre %{commentable_link}."
-      text:
-        left_kudos:
-          one: "%{givers_list} a félicité votre œuvre %{commentable_link}."
-          other: "%{givers_list} ont félicité votre œuvre %{commentable_link}."
-      you_have: "[%{app_name}] Vous avez reçu des félicitations !"
   users:
     mailer:
       reset_password_instructions:

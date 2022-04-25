@@ -1,5 +1,19 @@
 ---
 fi:
+  kudo_mailer:
+    batch_kudo_notification:
+      guest:
+        one: vieras
+        other: "%{count} vierasta"
+      html:
+        left_kudos:
+          one: "%{givers_list} kehui teosta %{commentable_link}."
+          other: "%{givers_list} kehuivat teosta %{commentable_link}."
+      subject: "[%{app_name}] Sinulle on kehuja!"
+      text:
+        left_kudos:
+          one: "%{givers_list} kehui teosta %{commentable_title} (%{commentable_url})."
+          other: "%{givers_list} kehuivat teosta %{commentable_title} (%{commentable_url})."
   mailer:
     general:
       closing:
@@ -31,19 +45,6 @@ fi:
         parent_org: Organization for Transformative Works – OTW (Transformatiivisten
           teosten järjestö)
         support: AO3 Käyttäjätukitiimi
-    kudos:
-      guest:
-        one: vieras
-        other: "%{count} vierasta"
-      html:
-        left_kudos:
-          one: "%{givers_list} kehui teosta %{commentable_link}."
-          other: "%{givers_list} kehuivat teosta %{commentable_link}."
-      text:
-        left_kudos:
-          one: "%{givers_list} kehui teosta %{commentable_link}."
-          other: "%{givers_list} kehuivat teosta %{commentable_link}."
-      you_have: "[%{app_name}] Sinulle on kehuja!"
   users:
     mailer:
       reset_password_instructions:

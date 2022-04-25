@@ -1,5 +1,21 @@
 ---
 fa:
+  kudo_mailer:
+    batch_kudo_notification:
+      guest:
+        one: یک مهمان
+        other: "%{count} مهمان"
+      html:
+        left_kudos:
+          one: "%{givers_list} برای %{commentable_link} کودوس و قدردانی فرستاد."
+          other: "%{givers_list} برای %{commentable_link} کودوس و قدردانی فرستادند."
+      subject: "[%{app_name}] شما کودوس و قدردانی دریافت کردید!"
+      text:
+        left_kudos:
+          one: "%{givers_list} برای %{commentable_title} (%{commentable_url}) کودوس
+            و قدردانی فرستاد."
+          other: "%{givers_list} برای %{commentable_title} (%{commentable_url}) کودوس
+            و قدردانی فرستادند."
   mailer:
     general:
       closing:
@@ -31,19 +47,6 @@ fa:
         parent_org: Organization for Transformative Works – OTW (سازمانی برای آثار
           دگرگون شونده)
         support: تیم پشتیبانی AO3
-    kudos:
-      guest:
-        one: یک مهمان
-        other: "%{count} مهمان"
-      html:
-        left_kudos:
-          one: "%{givers_list} برای %{commentable_link} کودوس و قدردانی فرستاد."
-          other: "%{givers_list} برای %{commentable_link} کودوس و قدردانی فرستادند."
-      text:
-        left_kudos:
-          one: "%{givers_list} برای %{commentable_link} کودوس و قدردانی فرستاد."
-          other: "%{givers_list} برای %{commentable_link} کودوس و قدردانی فرستادند."
-      you_have: "[%{app_name}] شما کودوس و قدردانی دریافت کردید!"
   users:
     mailer:
       reset_password_instructions:

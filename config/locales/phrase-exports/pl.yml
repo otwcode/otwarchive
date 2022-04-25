@@ -1,5 +1,25 @@
 ---
 pl:
+  kudo_mailer:
+    batch_kudo_notification:
+      guest:
+        few: "%{count} gości"
+        many: "%{count} gości"
+        one: 1 gościa
+        other: "%{count} gości"
+      html:
+        left_kudos:
+          few: Kudos dla %{commentable_link} od %{givers_list}.
+          many: Kudos dla %{commentable_link} od %{givers_list}.
+          one: Kudos dla %{commentable_link} od %{givers_list}.
+        single_guest: Kudos dla %{commentable_link} od 1 gościa.
+      subject: "[%{app_name}] Masz kudos!"
+      text:
+        left_kudos:
+          few: Kudos dla %{commentable_title} (%{commentable_url}) od %{givers_list}.
+          many: Kudos dla %{commentable_title} (%{commentable_url}) od %{givers_list}.
+          one: Kudos dla %{commentable_title} (%{commentable_url}) od %{givers_list}.
+        single_guest: Kudos dla %{commentable_title} (%{commentable_url}) od 1 gościa.
   mailer:
     general:
       closing:
@@ -32,25 +52,6 @@ pl:
         parent_org: Organization for Transformative Works – OTW (Organizacja na rzecz
           Twórczości Przeobrażonej)
         support: Zespół Wsparcia AO3
-    kudos:
-      guest:
-        few: "%{count} gości"
-        many: "%{count} gości"
-        one: 1 gościa
-        other: "%{count} gości"
-      html:
-        left_kudos:
-          few: Kudos dla %{commentable_link} od %{givers_list}.
-          many: Kudos dla %{commentable_link} od %{givers_list}.
-          one: Kudos dla %{commentable_link} od %{givers_list}.
-          other: Kudos dla %{commentable_link} od %{givers_list}.
-      text:
-        left_kudos:
-          few: Kudos dla %{commentable_link} od %{givers_list}.
-          many: Kudos dla %{commentable_link} od %{givers_list}.
-          one: Kudos dla %{commentable_link} od %{givers_list}.
-          other: Kudos dla %{commentable_link} od %{givers_list}.
-      you_have: "[%{app_name}] Masz kudos!"
   users:
     mailer:
       reset_password_instructions:
