@@ -386,27 +386,27 @@ describe ApplicationHelper do
     context "when commenter is creater of work inside anonymous collection" do
       let(:user) { create(:user) }
       let(:anonymous_collection) { create(:anonymous_collection) }
-      let(:work) { create(:work, authors: [user.default_pseud]) }
+      let(:work) { create(:work, authors: [user.default_pseud], collections: [anonymous_collection]) }
+      let(:comment) { create(:comment, pseud: user.default_pseud, commentable: work.last_posted_chapter) }
 
       it "returns nil" do
-        work.collections << anonymous_collection
-        comment = create(:comment, pseud: user.default_pseud, commentable: work.last_posted_chapter)
-        
-        puts work
-        puts work.id
-        puts work.anonymous?
-        puts comment.ultimate_parent
-        puts comment.ultimate_parent.id
-        puts comment.ultimate_parent.anonymous?
-
-        # output:
-        ##<Work:0x000055719ce75898>
-        #1
-        #true
-        ##<Work:0x000055719d90c680>
-        #1
-        #false
         expect(helper.commenter_id_for_css_classes(comment)).to eq(nil)
+      end
+    end
+  end
+
+  describe "#css_classes_for_comment" do
+    context "when comment exists" do
+      let(:user) { create(:user) }
+      let(:comment) { create(:comment, pseud: user.default_pseud) }
+      
+      it "has classes" do
+        expect(helper.css_classes_for_comment(comment)).to eq("comment group user-#{user.id}")
+      end
+
+      it "is unreviewed" do
+        comment.unreviewed = true
+        expect(helper.css_classes_for_comment(comment)).to eq("unreviewed comment group user-#{user.id}")
       end
     end
   end
