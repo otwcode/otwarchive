@@ -366,7 +366,6 @@ describe ApplicationHelper do
   end
 
   describe "#commenter_id_for_css_classes" do
-
     context "when commenter is a user" do
       let(:user) { create(:user) }
       let(:comment) { create(:comment, pseud: user.default_pseud) }
@@ -386,16 +385,29 @@ describe ApplicationHelper do
 
     context "when commenter is creater of work inside anonymous collection" do
       let(:user) { create(:user) }
-      let(:collection) { create(:anonymous_collection) }
+      let(:anonymous_collection) { create(:anonymous_collection) }
       let(:work) { create(:work, authors: [user.default_pseud]) }
-      let(:comment) { create(:comment, pseud: user.default_pseud, commentable: work.last_posted_chapter) }
 
       it "returns nil" do
-        # TODO: make this test pass
-        collection.collection_items.create(item: work)
+        work.collections << anonymous_collection
+        comment = create(:comment, pseud: user.default_pseud, commentable: work.last_posted_chapter)
+        
+        puts work
+        puts work.id
+        puts work.anonymous?
+        puts comment.ultimate_parent
+        puts comment.ultimate_parent.id
+        puts comment.ultimate_parent.anonymous?
+
+        # output:
+        ##<Work:0x000055719ce75898>
+        #1
+        #true
+        ##<Work:0x000055719d90c680>
+        #1
+        #false
         expect(helper.commenter_id_for_css_classes(comment)).to eq(nil)
       end
     end
   end
-
 end
