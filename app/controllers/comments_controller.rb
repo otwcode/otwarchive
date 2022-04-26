@@ -439,8 +439,6 @@ class CommentsController < ApplicationController
   end
 
   def show_comments
-    @comments = CommentDecorator.for_commentable(@commentable, page: params[:page])
-
     respond_to do |format|
       format.html do
         # if non-ajax it could mean sudden javascript failure OR being redirected from login
@@ -451,7 +449,10 @@ class CommentsController < ApplicationController
         options[:page] = params[:page]
         redirect_to_all_comments(@commentable, options)
       end
-      format.js
+
+      format.js do
+        @comments = CommentDecorator.for_commentable(@commentable, page: params[:page])
+      end
     end
   end
 
