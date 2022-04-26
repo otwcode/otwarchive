@@ -452,7 +452,8 @@ class Pseud < ApplicationRecord
 
   def expire_caches
     if saved_change_to_name?
-      self.works.each{ |work| work.touch }
+      works.touch_all
+      series.touch_all
     end
   end
 
