@@ -30,7 +30,7 @@ Scenario: When logged in I can comment on a work
     When a chapter is added to "The One Where Neal is Awesome"
       And I view the work "The One Where Neal is Awesome" in full mode
       And I follow "Comments (1)"
-    When "comment expiration" is fixed
+    When "AO3-4214" is fixed
     # Then I should see "commenter on Chapter 1" within "h4.heading.byline"
 
   Scenario: IP address of the commenter are displayed only to an admin
