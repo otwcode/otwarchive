@@ -48,6 +48,15 @@ Scenario: Change details as an admin
   Then I should see "edit profile"
     And I should see a link "Ticket #480000"
 
+  # Skip logging admin activity if no change was actually made.
+  When I go to editname profile page
+    And I follow "Edit Profile"
+    And I fill in "Ticket ID" with "480000"
+    And I press "Update"
+  Then I should see "Your profile has been successfully updated"
+  When I go to the admin-activities page
+  Then I should see 1 admin activity log entry
+
 Scenario: Changing email address requires reauthenticating
 
   When I follow "Change Email"

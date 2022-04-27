@@ -8,9 +8,9 @@ module Justifiable
     validates :ticket_number,
               presence: true,
               numericality: { only_integer: true },
-              if: -> { enabled? }
+              if: :enabled?
 
-    validate :ticket_number_exists_in_tracker, if: -> { enabled? }
+    validate :ticket_number_exists_in_tracker, if: :enabled?
   end
 
   private
@@ -24,14 +24,23 @@ module Justifiable
     # Skip ticket lookup if the previous validations fail.
     return if errors.present?
 
-    # The ticket must be open and the admin must have the role matching the ticket's department.
-    if ticket.present? && ticket["status"].present? && ticket["status"] != "Closed" &&
-       (admin_can_use_abuse_ticket? || admin_can_use_support_ticket?)
-      @ticket_url = ticket["webUrl"]
+    if ticket.blank?
+      errors.add(:ticket_number, :required)
       return
     end
 
-    errors.add(:ticket_number, :required)
+    # The ticket must not be closed.
+    if ticket["status"].blank? || ticket["status"] == "Closed"
+      errors.add(:ticket_number, :closed_ticket)
+      return
+    end
+
+    # The admin must have the role matching the ticket's department.
+    if admin_can_use_abuse_ticket? || admin_can_use_support_ticket?
+      @ticket_url = ticket["webUrl"]
+    else
+      errors.add(:ticket_number, :invalid_department)
+    end
   end
 
   def admin_can_use_abuse_ticket?
