@@ -36,7 +36,7 @@ shared_examples "a justifiable model" do
 
       record.assign_attributes(attributes.merge(ticket_number: 480_000))
       expect(record).not_to be_valid
-      expect(record.errors[:ticket_number]).to contain_exactly("must exist and not be spam")
+      expect(record.errors[:ticket_number]).to contain_exactly("must exist and not be spam.")
       expect(record.ticket_url).to be_nil
     end
 
@@ -46,7 +46,7 @@ shared_examples "a justifiable model" do
 
       record.assign_attributes(attributes.merge(ticket_number: 480_000))
       expect(record).not_to be_valid
-      expect(record.errors[:ticket_number]).to contain_exactly("must not be closed")
+      expect(record.errors[:ticket_number]).to contain_exactly("must not be closed.")
       expect(record.ticket_url).to be_nil
     end
 
@@ -65,7 +65,7 @@ shared_examples "a justifiable model" do
 
         record.assign_attributes(attributes.merge(ticket_number: 480_000))
         expect(record).not_to be_valid
-        expect(record.errors[:ticket_number]).to contain_exactly("must be in your department")
+        expect(record.errors[:ticket_number]).to contain_exactly("must be in your department.")
         expect(record.ticket_url).to be_nil
       end
 
@@ -97,7 +97,7 @@ shared_examples "a justifiable model" do
 
         record.assign_attributes(attributes.merge(ticket_number: 480_000))
         expect(record).not_to be_valid
-        expect(record.errors[:ticket_number]).to contain_exactly("must be in your department")
+        expect(record.errors[:ticket_number]).to contain_exactly("must be in your department.")
         expect(record.ticket_url).to be_nil
       end
 
