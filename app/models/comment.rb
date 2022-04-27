@@ -36,8 +36,6 @@ class Comment < ApplicationRecord
   scope :ordered_by_date, -> { order('created_at DESC') }
   scope :top_level,       -> { where.not(commentable_type: "Comment") }
   scope :include_pseud,   -> { includes(:pseud) }
-  scope :include_user,    -> { includes(pseud: [:user]) }
-  scope :include_parent,  -> { includes(:parent) }
   scope :not_deleted,     -> { where(is_deleted: false) }
   scope :reviewed,        -> { where(unreviewed: false) }
   scope :unreviewed_only, -> { where(unreviewed: true) }
