@@ -438,7 +438,7 @@ class CommentsController < ApplicationController
   end
 
   def show_comments
-    @comments = @commentable.comments.include_user.include_parent.reviewed.page(params[:page])
+    @comments = @commentable.comments.reviewed.page(params[:page])
 
     respond_to do |format|
       format.html do
