@@ -120,3 +120,9 @@ en:
         user_defined_tags_count: "Fandom, relationship, character, and additional tags"
   attributes:
     ticket_number: "Ticket ID"
+  errors:
+    attributes:
+      ticket_number:
+        closed_ticket: "must not be closed."
+        invalid_department: "must be in your department."
+        required: "must exist and not be spam."
