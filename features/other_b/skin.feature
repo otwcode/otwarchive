@@ -344,10 +344,4 @@ Feature: Non-public site and work skins
     When I edit the skin "Child Skin"
     Then I should see "Parent Skins"
     Then I should see "Parent #"
-
-  Scenario: When I save a skin with a blank parent it is not saved
-    Given I am logged in as "skin_maker"
-      And I have a skin "Child Skin" with a parent " "
-    When I edit the skin "Child Skin"
-    Then I should not see "Parent Skins"
-    Then I should not see "Parent #"
+    

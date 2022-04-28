@@ -62,6 +62,14 @@ describe Skin do
       expect(duplicate_ancestor.errors[:base]).not_to be_empty
     end
 
+    it "should not allow a parent to be blank" do
+      expect(@child_skin.save).to be_truthy
+      blank_parent = Skin.new(title: " ", css: "body {color: #000;}")
+      blank_parent_child = SkinParent.new(child_skin: @child_skin, parent_skin: blank_parent, position: 1)
+      expect(blank_parent_child.save).to be_truthy
+      expect(blank_parent_child.parent_skin_id).to be(nil)
+    end
+
   end
 
 end
