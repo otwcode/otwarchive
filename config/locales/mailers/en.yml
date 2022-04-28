@@ -37,7 +37,9 @@ en:
         left_kudos:
           one: "%{givers_list} left kudos on %{commentable_link}."
           other: "%{givers_list} left kudos on %{commentable_link}."
-        single_guest: "A guest left kudos on %{commentable_link}."
+        single_guest:
+          giver_list: "A guest"
+          left_kudos: "%{giver_list} left kudos on %{commentable_link}."
       text:
         left_kudos:
           one: "%{givers_list} left kudos on \"%{commentable_title}\" (%{commentable_url})."
