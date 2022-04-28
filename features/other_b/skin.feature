@@ -338,8 +338,16 @@ Feature: Non-public site and work skins
       And I press "Update"
     Then I should see "background: cyan;"
 
-  Scenario: When I save a skin with a blank parent the save does not keep the blank parent
+  Scenario: When I save a skin with a parent it is seen in preview
     Given I am logged in as "skin_maker"
-      And I create the skin "Child Skin" with a parent ""
+      And I have a skin "Child Skin" with a parent "Parent Skin"
     When I edit the skin "Child Skin"
+    Then I should see "Parent Skins"
+    Then I should see "Parent #"
+
+  Scenario: When I save a skin with a blank parent it is not saved
+    Given I am logged in as "skin_maker"
+      And I have a skin "Child Skin" with a parent " "
+    When I edit the skin "Child Skin"
+    Then I should not see "Parent Skins"
     Then I should not see "Parent #"
