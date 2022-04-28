@@ -28,6 +28,24 @@ describe CommentsHelper do
         expect(helper.commenter_id_for_css_classes(comment)).to eq(nil)
       end
     end
+
+    context "when commenter is deleted" do
+      let(:comment) { create(:comment) }
+
+      it "returns nil" do
+        comment.is_deleted = true
+        expect(helper.commenter_id_for_css_classes(comment)).to eq(nil)
+      end
+    end
+
+    context "when commenter is hidden by admin" do
+      let(:comment) { create(:comment) }
+
+      it "returns nil" do
+        comment.hidden_by_admin = true
+        expect(helper.commenter_id_for_css_classes(comment)).to eq(nil)
+      end
+    end
   end
 
   describe "#css_classes_for_comment" do

@@ -291,7 +291,8 @@ module CommentsHelper
     return if comment.pseud.nil?
     return if comment.ultimate_parent.try(:anonymous?) && comment.pseud.user.is_author_of?(comment.ultimate_parent)
     return if comment.is_deleted
-    
+    return if comment.hidden_by_admin
+
     "user-#{comment.pseud.user_id}"
   end
 
