@@ -290,7 +290,8 @@ module CommentsHelper
   def commenter_id_for_css_classes(comment)
     return if comment.pseud.nil?
     return if comment.ultimate_parent.try(:anonymous?) && comment.pseud.user.is_author_of?(comment.ultimate_parent)
-
+    return if comment.is_deleted
+    
     "user-#{comment.pseud.user_id}"
   end
 
