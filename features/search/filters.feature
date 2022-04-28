@@ -40,13 +40,11 @@ Feature: Filters
     Then I should see "Bilbo Does the Thing"
       And I should not see "A Hobbit's Meandering"
       And I should not see "Roonal Woozlib and the Ferrets of Nimh"
+    When I follow "Clear Filters"
+    Then I should see "3 Works by meatloaf"
     When I press "Fandoms" within "dd.include"
-      And I uncheck "The Hobbit (1)" within "#include_fandom_tags"
-      And I uncheck "Legend of Korra (1)" within "#include_fandom_tags"
-      And I press "Sort and Filter"
-    Then I should see "Roonal Woozlib and the Ferrets of Nimh"
-      And I should see "A Hobbit's Meandering"
-      And I should see "Bilbo Does the Thing"
+    Then the "The Hobbit (2)" checkbox within "#include_fandom_tags" should not be checked
+      And the "Legend of Korra (1)" checkbox within "#include_fandom_tags" should not be checked
 
   @javascript
   Scenario: You can filter through a user's works using exclusion filters
@@ -95,9 +93,6 @@ Feature: Filters
       And I should not see "Bilbo Does the Thing"
       And I should see "A Hobbit's Meandering"
       And I should see "Roonal Woozlib and the Ferrets of Nimh"
-    When I follow "Clear Filters"
-    Then I should see "3 Works by meatloaf"
-      And I should not see "legend korra" within "dd.exclude"
 
   @javascript
   Scenario: You can filter through a user's bookmarks using inclusion filters
