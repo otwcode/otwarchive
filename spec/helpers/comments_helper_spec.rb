@@ -29,7 +29,7 @@ describe CommentsHelper do
       end
     end
 
-    context "when commenter is deleted" do
+    context "when comment is deleted" do
       let(:comment) { create(:comment) }
 
       it "returns nil" do
@@ -38,7 +38,7 @@ describe CommentsHelper do
       end
     end
 
-    context "when commenter is hidden by admin" do
+    context "when comment is hidden by admin" do
       let(:comment) { create(:comment) }
 
       it "returns nil" do
