@@ -50,12 +50,11 @@ describe CommentsHelper do
     context "when comment exists" do
       let(:user) { create(:user) }
       let(:comment) { create(:comment, pseud: user.default_pseud) }
+      let(:unreviewed_comment) { create(:comment, unreviewed: true, pseud: user.default_pseud) }
       
       it "has classes" do
         expect(helper.css_classes_for_comment(comment)).to eq("comment group user-#{user.id}")
       end
-
-      let(:unreviewed_comment) { create(:comment, unreviewed: true) }
 
       it "includes unreviewed class when comment is unreviewed" do
         expect(helper.css_classes_for_comment(unreviewed_comment)).to eq("unreviewed comment group user-#{user.id}")
