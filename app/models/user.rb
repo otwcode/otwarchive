@@ -57,6 +57,7 @@ class User < ApplicationRecord
   before_create :create_default_associateds
   before_destroy :remove_user_from_kudos
 
+  before_update :add_renamed_at, if: :will_save_change_to_login?
   after_update :update_pseud_name
   after_update :log_change_if_login_was_edited
 
@@ -174,6 +175,7 @@ class User < ApplicationRecord
                       message: ts("must begin and end with a letter or number; it may also contain underscores but no other characters."),
                       with: /\A[A-Za-z0-9]\w*[A-Za-z0-9]\Z/
   validates_uniqueness_of :login, case_sensitive: false, message: ts("has already been taken")
+  validate :login, :username_is_not_recently_changed, if: :will_save_change_to_login?
 
   validates :email, email_veracity: true, email_format: true
 
@@ -521,6 +523,10 @@ class User < ApplicationRecord
     reindex_user_creations
   end
 
+  def add_renamed_at
+    self.renamed_at = Time.current
+  end
+
    def log_change_if_login_was_edited
      create_log_item(options = { action: ArchiveConfig.ACTION_RENAME, note: "Old Username: #{login_before_last_save}; New Username: #{login}" }) if saved_change_to_login?
    end
@@ -530,4 +536,13 @@ class User < ApplicationRecord
     self.class.remove_from_autocomplete(self.autocomplete_search_string_was, self.autocomplete_prefixes, self.autocomplete_value_was)
   end
 
+  def username_is_not_recently_changed
+    change_interval_days = ArchiveConfig.USER_RENAME_LIMIT_DAYS
+    return unless renamed_at && change_interval_days.days.ago <= renamed_at
+
+    errors.add(:login,
+               :changed_too_recently,
+               count: change_interval_days,
+               renamed_at: I18n.l(renamed_at, format: :long))
+  end
 end

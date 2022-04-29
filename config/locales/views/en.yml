@@ -171,6 +171,15 @@ en:
         link_support: "contact us through our Support and Feedback form"
         link_tos: "Terms of Service"
         welcome_text: "Hi! It looks like you've just logged into the Archive for the first time. %{help_link} or dismiss this message permanently."
+    change_username:
+      caution: "Please use this feature with caution."
+      change_window:
+        one: "You can change your user name once per day."
+        other: "You can change your user name once every %{count} days."
+      last_renamed: "You last changed your user name on %{renamed_at}."
+      more_info: "For information on how changing your user name will affect your account, please check out the %{account_faq_link}. Note that changes to your username may take several days or longer to appear. If you are still seeing your old user name on your works, bookmarks, series, or collections after a week, please %{contact_support_link}."
+      account_faq: "Account FAQ"
+      contact_support: "Contact Support"
   troubleshooting:
     show:
       page_title:
