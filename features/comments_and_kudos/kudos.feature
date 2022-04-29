@@ -161,7 +161,7 @@ Feature: Kudos
       And the email should contain "myname2"
       And the email should contain "someone_else"
       And the email should contain "a guest"
-      And the email should contain "A guesssst"
+      And the email should contain "A guest"
       And the email should contain "Awesome Story"
       And the email should contain "Another Awesome Story"
       And the email should contain "Meh Story"
