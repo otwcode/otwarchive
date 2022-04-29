@@ -289,6 +289,18 @@ en:
       subject:
         collection: "[%{app_name}][%{collection_title}] A gift work for you from %{collection_title}"
         no_collection: "[%{app_name}] A gift work for you"
+      no_collection: "A gift work has been posted for you at the Archive of Our Own!"
+      word_count:
+        one: "%{count} word"
+        other: "%{count} words"
+      html:
+        attribution: "by %{creator_links}"
+        collection: "A gift work has been posted for you in the %{collection_link} collection at the Archive of Our Own!"
+        title_word_count: "%{work_link} (%{word_count})"
+      text:
+        attribution: "by %{creator_text}"
+        collection: "A gift work has been posted for you in the \"%{collection_title}\" collection (%{collection_url}) at the Archive of Our Own!"
+        title_word_count: "\"%{work_title}\" (%{word_count} words)"
     collection_notification:
       assignments_sent:
         subject: "Assignments sent"
