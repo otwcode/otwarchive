@@ -1,5 +1,21 @@
 ---
 bg:
+  kudo_mailer:
+    batch_kudo_notification:
+      guest:
+        one: един гост
+        other: "%{count} гости"
+      html:
+        left_kudos:
+          one: "%{givers_list} остави кудос за %{commentable_link}."
+          other: "%{givers_list} оставиха кудос за %{commentable_link}."
+        single_guest: Един гост остави кудос за %{commentable_link}.
+      subject: "[%{app_name}] Имаш кудос!"
+      text:
+        left_kudos:
+          one: "%{givers_list} остави кудос за %{commentable_title} (%{commentable_url})."
+          other: "%{givers_list} оставиха кудос за %{commentable_title} (%{commentable_url})."
+        single_guest: Един гост остави кудос за %{commentable_title} (%{commentable_url}).
   mailer:
     general:
       closing:
@@ -31,19 +47,6 @@ bg:
         parent_org: Organization for Transformative Works – OTW (Организация за преобразуващи
           произведения)
         support: Екип Поддръжка на AO3
-    kudos:
-      guest:
-        one: един гост
-        other: "%{count} гости"
-      html:
-        left_kudos:
-          one: "%{givers_list} остави кудос за %{commentable_link}."
-          other: "%{givers_list} оставиха кудос за %{commentable_link}."
-      text:
-        left_kudos:
-          one: "%{givers_list} остави кудос за %{commentable_link}."
-          other: "%{givers_list} оставиха кудос за %{commentable_link}."
-      you_have: "[%{app_name}] Имаш кудос!"
   users:
     mailer:
       reset_password_instructions:
@@ -138,8 +141,8 @@ bg:
           html: Организаторите на колекцията %{collection_link} промениха статуса
             на твоето произведение %{work_link} на неразкрито.
           text: Организаторите на колекцията “%{collection_title}” (%{collection_url})
-            са променили статуса на твоето произведене "%{work_title}" (%{work_url})  на
-            неразкрито.
+            са променили статуса на твоето произведене "%{work_title}" (%{work_url})
+            на неразкрито.
       collection_items_link_text: страницата Approved Collection Items (Одобрено съдържание
         в колекции)
       do_not_want:
@@ -296,7 +299,7 @@ bg:
         part1_yourself: Твоята творба %{title} беше изтрита по твоя заявка.
         part2: Ако имаш въпроси, моля, %{support}.
       part3: Прилагаме копие от произведението ти за информация.
-      subject: "[%{app_name}] Твоята творба беше  изтрита"
+      subject: "[%{app_name}] Твоята творба беше изтрита"
       support: свържи се с екип Поддръжка
       text:
         part1_other: Твоята творба “%{title}" е изтрита по заявка на %{pseud}.

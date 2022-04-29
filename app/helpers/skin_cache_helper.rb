@@ -19,7 +19,7 @@ module SkinCacheHelper
   end
 
   def skin_chooser_key
-    [:v1, :skin_chooser]
+    [:v2, :skin_chooser]
   end
 
   def skin_chooser_expire_cache

@@ -1,5 +1,24 @@
 ---
 ro:
+  kudo_mailer:
+    batch_kudo_notification:
+      guest:
+        few: "%{count} vizitatori"
+        one: un vizitator
+        other: "%{count} de vizitatori"
+      html:
+        left_kudos:
+          few: "%{givers_list} au lăsat kudos pentru %{commentable_link}."
+          one: "%{givers_list} a lăsat kudos pentru %{commentable_link}."
+          other: "%{givers_list} au lăsat kudos pentru %{commentable_link}."
+        single_guest: Un vizitator a lăsat kudos pentru %{commentable_link}.
+      subject: "[%{app_name}] Ai primit kudos!"
+      text:
+        left_kudos:
+          few: "%{givers_list} au lăsat kudos pentru %{commentable_title} (%{commentable_url})."
+          one: "%{givers_list} a lăsat kudos pentru %{commentable_title} (%{commentable_url})."
+          other: "%{givers_list} au lăsat kudos pentru %{commentable_title} (%{commentable_url})."
+        single_guest: Un vizitator a lăsat kudos pentru %{commentable_title} (%{commentable_url}).
   mailer:
     general:
       closing:
@@ -18,7 +37,7 @@ ro:
               echipa de Suport Tehnic la %{support_url}.
             part2: 'AO3 este o arhivă administrată și susținută de fani care se bazează
               pe donațiile tale: %{donate_url}.'
-        sent_at: Trimis la %{sent_at}.
+        sent_at: Trimis %{sent_at}.
       greeting:
         formal: Bună %{name},
         informal:
@@ -31,22 +50,6 @@ ro:
         parent_org: Organization for Transformative Works (Organizația pentru Lucrări
           Transformative)
         support: Echipa de Suport Tehnic AO3
-    kudos:
-      guest:
-        few: "%{count} vizitatori"
-        one: un vizitator
-        other: "%{count} vizitatori"
-      html:
-        left_kudos:
-          few: "%{givers_list} au lăsat kudos pentru %{commentable_link}."
-          one: "%{givers_list} a lăsat kudos pentru %{commentable_link}."
-          other: "%{givers_list} au lăsat kudos pentru %{commentable_link}."
-      text:
-        left_kudos:
-          few: "%{givers_list} au lăsat kudos pentru %{commentable_link}."
-          one: "%{givers_list} a lăsat kudos pentru %{commentable_link}."
-          other: "%{givers_list} au lăsat kudos pentru %{commentable_link}."
-      you_have: "[%{app_name}] Ai primit kudos!"
   users:
     mailer:
       reset_password_instructions:
@@ -85,6 +88,37 @@ ro:
           (%{opendoors_link}) dacă ai întrebări suplimentare.
         tos_violation: Dacă e posibil ca lucrarea ta să fi încălcat Termenii de Servicii
           ai Arhivei, te rugăm contactează Comitetul de Politici și Abuz (%{contact_abuse_url}).
+    admin_hidden_work_notification:
+      access: Cât timp lucrarea ta este ascunsă, vei putea în continuare să o accesezi
+        prin link-ul furnizat mai sus, dar nu va fi listată pe pagina ta de lucrări
+        și nu va fi disponibilă pentru alți utilizatori ai AO3.
+      check_email: Te rugăm să îți verifici e-mailul, inclusiv folderul de spam, deoarece
+        este posibil ca echipa Politici și Abuz să te fi contactat deja, explicând
+        de ce lucrarea ta a fost ascunsă.
+      contact_abuse: să contactezi echipa de Politici și Abuz
+      html:
+        help: Dacă nu ești sigur/ă de ce lucrarea ta a fost ascunsă și nu ai fost
+          contactat/ă cu privire la această problemă, te rugăm %{contact_abuse_link}
+          direct.
+        hidden: Lucrarea ta %{title} a fost ascunsă de echipa de Politici și Abuz
+          și nu mai este accesibilă publicului.
+        tos_violation: Dacă lucrarea ta a fost ascunsă din cauza încălcării %{tos_link}
+          ai AO3, ți se va cere să iei măsuri pentru a corecta încălcarea. Dacă lucrarea
+          ta în continuare nu respecta Termenii de Servicii, acest lucru poate conduce
+          la ștergerea lucrării tale de pe AO3.
+      subject: "[%{app_name}] Lucrarea ta a fost ascunsă de echipa de Politici și
+        Abuz"
+      text:
+        help: Dacă nu ești sigur/ă de ce lucrarea ta a fost ascunsă și nu ai fost
+          contactat/ă cu privire la această problemă, te rugăm să contactezi echipa
+          de Politici și Abuz %{contact_abuse_url} direct.
+        hidden: Lucrarea ta "%{title}" (%{work_url}) a fost ascunsă de echipa de Politici
+          și Abuz și nu mai este accesibilă publicului.
+        tos_violation: Dacă lucrarea ta a fost ascunsă din cauza încălcării (%{tos_url})
+          ai AO3, ți se va cere să iei măsuri pentru a corecta încălcarea. Dacă lucrarea
+          ta în continuare nu respecta Termenii de Servicii, acest lucru poate conduce
+          la ștergerea lucrării tale de pe AO3.
+      tos: Termenilor de Servicii
     anonymous_or_unrevealed_notification:
       anonymous_info: Lucrările anonime sunt incluse pe listele generate de tag-uri,
         dar nu și pe pagina ta de lucrări. Pe lucrare, numele tău de utilizator va
@@ -98,12 +132,19 @@ ro:
         anonymous:
           html: Administratorii colecției %{collection_link} au marcat ca anonim statusul
             lucrării tale %{work_link}.
+          text: Administratorii colecției „%{collection_title}” (%{collection_url})
+            au schimbat statusul lucrării tale „%{work_title}” (%{work_url}) în anonimă.
         anonymous_unrevealed:
           html: Administratorii colecției %{collection_link} au marcat ca anonim și
             nedezvăluit statusul lucrării tale %{work_link}.
+          text: Administratorii colecției „%{collection_title}” (%{collection_url})
+            au schimbat statusul lucrării tale „%{work_title}” (%{work_url}) în anonimă
+            și nedezvăluită.
         unrevealed:
           html: Administratorii colecției %{collection_link} au marcat ca nedezvăluit
             statusul lucrării tale %{work_link}.
+          text: Administratorii colecției „%{collection_title}” (%{collection_url})
+            au schimbat statusul lucrării tale „%{work_title}” (%{work_url}) în nedezvăluită.
       collection_items_link_text: pagina Approved Collection Items (Lucrări Aprobate
         pentru Colecții)
       do_not_want:
@@ -202,10 +243,37 @@ ro:
       explanation: Deoarece își exercită capacitatea oficială de arhivar al Uși Deschise,
         poate să te adauge fără invitație, chiar dacă ai funcția de co-creație dezactivată.
       html:
-        creation: "%{creation_link} de %{pseud_links}\n"
+        creation: "%{creation_link} de %{pseud_links}"
+        edit_chapter: editezi capitolul
+        edit_series: editezi seria
+        edit_work: editezi lucrarea
+        remove_chapter: Dacă ai fost adăugat(ă) din greșeală sau nu dorești să apari
+          pe lista de creatori, poți să %{edit_chapter_link} pentru a te elimina din
+          lista de creatori.
+        remove_series: Dacă ai fost adăugat(ă) din greșeală sau nu dorești să apari
+          pe lista de creatori, poți să %{edit_series_link} pentru a te elimina din
+          lista de creatori.
+        remove_work: Dacă ai fost adăugat(ă) din greșeală sau nu dorești să apari
+          pe lista de creatori, poți să %{edit_work_link} pentru a te elimina din
+          lista de creatori.
+      intro_chapter: 'Utilizatorul %{archivist} ți-a adăugat pseudonimul %{pseud}
+        drept co-creator la următorul capitol:'
+      intro_series: 'Utilizatorul %{archivist} ți-a adăugat pseudonimul %{pseud} drept
+        co-creator la următoarea serie:'
+      intro_work: 'Utilizatorul %{archivist} ți-a adăugat pseudonimul %{pseud} drept
+        co-creator la următoarele lucrări:'
       subject: "[%{app_name}] Notificare de co-creator de la arhivar"
       text:
         creation: "%{title} (%{url}) de %{pseuds}"
+        remove_chapter: 'Dacă ai fost adăugat(ă) din greșeală sau nu dorești să apari
+          pe lista de creatori, poți să editezi capitolul pentru a te elimina din
+          lista de creatori: %{url}'
+        remove_series: 'Dacă ai fost adăugat(ă) din greșeală sau nu dorești să apari
+          pe lista de creatori, poți să editezi seria pentru a te elimina din lista
+          de creatori: %{url}'
+        remove_work: 'Dacă ai fost adăugat(ă) din greșeală sau nu dorești să apari
+          pe lista de creatori, poți să editezi lucrarea pentru a te elimina din lista
+          de creatori: %{url}'
     creatorship_request:
       html:
         creation: "%{creation_link} de %{pseud_links}"
@@ -312,6 +380,11 @@ ro:
       reason: 'Solicitarea ta a fost:'
       subject: "[%{app_name}] Solicitarea pentru codul de invitație suplimentar a
         fost respinsă"
+    recipient_notification:
+      subject:
+        collection: "[%{app_name}][%{collection_title}] O lucrare cadou pentru tine
+          de la %{collection_title}"
+        no_collection: "[%{app_name}] O lucrare cadou pentru tine"
     signup_notification:
       activate_your_account: să accesezi acest link pentru a-ți activa contul.
       admin_posts: Știri AO3

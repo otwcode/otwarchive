@@ -214,52 +214,14 @@ module CommentsHelper
       remote: true)
   end
 
-  # TO DO: create fallbacks to support non-JavaScript requests!
-  # return button to cancel adding a comment. kind of ugly because we want it
-  # to work for the comment form no matter where it appears, but oh well
-  def cancel_comment_button(comment, commentable)
-    if comment.new_record?
-      if commentable.class == comment.class
-        # canceling a reply to a comment
-        commentable_id = commentable.ultimate_parent.is_a?(Tag) ?
-                            :tag_id :
-                            "#{commentable.ultimate_parent.class.to_s.underscore}_id".to_sym
-        commentable_value = commentable.ultimate_parent.is_a?(Tag) ?
-                              commentable.ultimate_parent.name :
-                              commentable.ultimate_parent.id
-        link_to(
-          ts("Cancel"),
-          url_for(controller: :comments,
-                  action: :cancel_comment_reply,
-                  id: commentable.id,
-                  comment_id: params[:comment_id],
-                  commentable_id => commentable_value),
-          remote: true)
-       else
-        # canceling a reply to a different commentable thingy
-        commentable_id = commentable.is_a?(Tag) ?
-                            :tag_id :
-                            "#{commentable.class.to_s.underscore}_id".to_sym
-        commentable_value = commentable.is_a?(Tag) ?
-                              commentable.name :
-                              commentable.id
-        link_to(
-          ts("Cancel"),
-          url_for(controller: :comments,
-                  action: :cancel_comment,
-                  commentable_id => commentable_value),
-          remote: true)
-      end
-    else
-      # canceling an edit
-      link_to(
-        ts("Cancel"),
-        url_for(controller: :comments,
-                action: :cancel_comment_edit,
-                id: (comment.id),
-                comment_id: params[:comment_id]),
-        remote: true)
-    end
+  # canceling an edit
+  def cancel_edit_comment_link(comment)
+    link_to(ts("Cancel"),
+            url_for(controller: :comments,
+                    action: :cancel_comment_edit,
+                    id: comment.id,
+                    comment_id: params[:comment_id]),
+            remote: true)
   end
 
   # return html link to edit comment
@@ -322,6 +284,24 @@ module CommentsHelper
     else
       link_to(ts("Not Spam"), approve_comment_path(comment), method: :put)
     end
+  end
+
+  # gets the css user-<id> class name for the comment
+  def commenter_id_for_css_classes(comment)
+    return if comment.pseud.nil?
+    return if comment.ultimate_parent.try(:anonymous?) && comment.pseud.user.is_author_of?(comment.ultimate_parent)
+    return if comment.is_deleted
+    return if comment.hidden_by_admin
+
+    "user-#{comment.pseud.user_id}"
+  end
+
+  def css_classes_for_comment(comment)
+    return if comment.nil?
+
+    unreviewed = "unreviewed" if comment.unreviewed?
+    commenter = commenter_id_for_css_classes(comment)
+    "#{unreviewed} comment group #{commenter}".strip
   end
 
   # find the parent of the commentable

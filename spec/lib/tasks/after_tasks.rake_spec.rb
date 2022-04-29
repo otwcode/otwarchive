@@ -301,3 +301,82 @@ describe "rake After:fix_tags_with_extra_spaces" do
     expect(borked_tag.name).to eql("_\"'quotes'\"")
   end
 end
+
+describe "rake After:fix_invalid_pseud_icon_data" do
+  let(:valid_pseud) { create(:user).default_pseud }
+  let(:invalid_pseud) { create(:user).default_pseud }
+
+  before do
+    stub_const("ArchiveConfig", OpenStruct.new(ArchiveConfig))
+    ArchiveConfig.ICON_ALT_MAX = 5
+    ArchiveConfig.ICON_COMMENT_MAX = 5
+  end
+
+  it "removes invalid icon" do
+    valid_pseud.icon = File.new(Rails.root.join("features/fixtures/icon.gif"))
+    valid_pseud.save
+    invalid_pseud.icon = File.new(Rails.root.join("features/fixtures/icon.gif"))
+    invalid_pseud.save
+    invalid_pseud.update_column(:icon_content_type, "not/valid")
+
+    subject.invoke
+
+    invalid_pseud.reload
+    valid_pseud.reload
+    expect(invalid_pseud.icon.exists?).to be_falsey
+    expect(invalid_pseud.icon_content_type).to be_nil
+    expect(valid_pseud.icon.exists?).to be_truthy
+    expect(valid_pseud.icon_content_type).to eq("image/gif")
+  end
+
+  it "removes invalid icon_alt_text" do
+    invalid_pseud.update_column(:icon_alt_text, "not valid")
+    valid_pseud.update_attribute(:icon_alt_text, "valid")
+
+    subject.invoke
+
+    invalid_pseud.reload
+    valid_pseud.reload
+    expect(invalid_pseud.icon_alt_text).to be_empty
+    expect(valid_pseud.icon_alt_text).to eq("valid")
+  end
+
+  it "removes invalid icon_comment_text" do
+    invalid_pseud.update_column(:icon_comment_text, "not valid")
+    valid_pseud.update_attribute(:icon_comment_text, "valid")
+
+    subject.invoke
+
+    invalid_pseud.reload
+    valid_pseud.reload
+    expect(invalid_pseud.icon_comment_text).to be_empty
+    expect(valid_pseud.icon_comment_text).to eq("valid")
+  end
+
+  it "updates icon_content_type from jpg to jpeg" do
+    invalid_pseud.icon = File.new(Rails.root.join("features/fixtures/icon.jpg"))
+    invalid_pseud.save
+    invalid_pseud.update_column(:icon_content_type, "image/jpg")
+
+    subject.invoke
+
+    invalid_pseud.reload
+    expect(invalid_pseud.icon.exists?).to be_truthy
+    expect(invalid_pseud.icon_content_type).to eq("image/jpeg")
+  end
+
+  it "updates multiple invalid fields on the same pseud" do
+    invalid_pseud.icon = File.new(Rails.root.join("features/fixtures/icon.gif"))
+    invalid_pseud.save
+    invalid_pseud.update_columns(icon_content_type: "not/valid",
+                                 icon_alt_text: "not valid",
+                                 icon_comment_text: "not valid")
+    subject.invoke
+
+    invalid_pseud.reload
+    expect(invalid_pseud.icon.exists?).to be_falsey
+    expect(invalid_pseud.icon_content_type).to be_nil
+    expect(invalid_pseud.icon_alt_text).to be_empty
+    expect(invalid_pseud.icon_comment_text).to be_empty
+  end
+end

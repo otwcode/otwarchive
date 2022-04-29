@@ -1,5 +1,25 @@
 ---
 cs:
+  kudo_mailer:
+    batch_kudo_notification:
+      guest:
+        few: "%{count} návštěvníci"
+        many: "%{count} návštěvníků"
+        one: návštěvník
+        other: "%{count} návštěvníků"
+      html:
+        left_kudos:
+          few: "%{givers_list} zanechali kudos u %{commentable_link}."
+          many: "%{givers_list} zanechali kudos u %{commentable_link}."
+          one: "%{givers_list} zanechal/a kudos u %{commentable_link}."
+          other: "%{givers_list} zanechali kudos u %{commentable_link}."
+      subject: "[%{app_name}] Máte nové kudos!"
+      text:
+        left_kudos:
+          few: "%{givers_list} zanechali kudos u %{commentable_title} (%{commentable_url})."
+          many: "%{givers_list} zanechali kudos u %{commentable_title} (%{commentable_url})."
+          one: "%{givers_list} zanechal/a kudos u %{commentable_title} (%{commentable_url})."
+          other: "%{givers_list} zanechali kudos u %{commentable_title} (%{commentable_url})."
   mailer:
     general:
       closing:
@@ -17,7 +37,7 @@ cs:
               na %{support_url}.
             part2: 'AO3 je fanoušky vedený a podporovaný archiv, který spoléhá na
               vaše příspěvky: %{donate_url}.'
-        sent_at: Odesláno v %{sent_at}.
+        sent_at: Odesláno ve %{sent_at}.
       greeting:
         formal: Dobrý den, %{name},
         informal:
@@ -31,25 +51,6 @@ cs:
         parent_org: Organization for Transformative Works - OTW (Společnost pro transformativní
           tvorbu)
         support: Podpora AO3
-    kudos:
-      guest:
-        few: "%{count} návštěvníci"
-        many: "%{count} návštěvníků"
-        one: návštěvník
-        other: "%{count} návštěvníků"
-      html:
-        left_kudos:
-          few: "%{givers_list} zanechali kudos u %{commentable_link}."
-          many: "%{givers_list} zanechali kudos u %{commentable_link}."
-          one: "%{givers_list} zanechal/a kudos u %{commentable_link}."
-          other: "%{givers_list} zanechali kudos u %{commentable_link}."
-      text:
-        left_kudos:
-          few: "%{givers_list} zanechali kudos u %{commentable_link}."
-          many: "%{givers_list} zanechali kudos u %{commentable_link}."
-          one: "%{givers_list} zanechal/a kudos u %{commentable_link}."
-          other: "%{givers_list} zanechali kudos u %{commentable_link}."
-      you_have: "[%{app_name}] Máte nové kudos!"
   users:
     mailer:
       reset_password_instructions:

@@ -1,5 +1,21 @@
 ---
 nb:
+  kudo_mailer:
+    batch_kudo_notification:
+      guest:
+        one: en gjest
+        other: "%{count} gjester"
+      html:
+        left_kudos:
+          one: "%{givers_list} la igjen kudos på %{commentable_link}."
+          other: "%{givers_list} la igjen kudos på %{commentable_link}."
+        single_guest: En gjest la igjen kudos på %{commentable_link}.
+      subject: "[%{app_name}] Du har fått kudos!"
+      text:
+        left_kudos:
+          one: "%{givers_list} la igjen kudos på %{commentable_title} (%{commentable_url})."
+          other: "%{givers_list} la igjen kudos på %{commentable_title} (%{commentable_url})."
+        single_guest: En gjest la igjen kudos på %{commentable_title} (%{commentable_url}).
   mailer:
     general:
       closing:
@@ -24,26 +40,13 @@ nb:
         informal:
           addressed: Hei, %{name}!
           unaddressed: Hei!
-        introductory: En hilsen fra Archive of Our Own – AO3 (Vårt eget arkiv)!
+        introductory: En hilsen fra Archive of Our Own – AO3 (Vårt eget arkiv)!
       signature:
         app_short_name: AO3
         open_doors: Teamet for Open Doors (Åpne Dører)
-        parent_org: Organization for Transformative Works – OTW (Organisasjonen for
+        parent_org: Organization for Transformative Works – OTW (Organisasjonen for
           transformative verk)
         support: Teamet for AO3 support
-    kudos:
-      guest:
-        one: en gjest
-        other: "%{count} gjester"
-      html:
-        left_kudos:
-          one: "%{givers_list} la igjen kudos på %{commentable_link}."
-          other: "%{givers_list} la igjen kudos på %{commentable_link}."
-      text:
-        left_kudos:
-          one: "%{givers_list} la igjen kudos på %{commentable_link}."
-          other: "%{givers_list} la igjen kudos på %{commentable_link}."
-      you_have: "[%{app_name}] Du har fått kudos!"
   users:
     mailer:
       reset_password_instructions:

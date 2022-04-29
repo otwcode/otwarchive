@@ -1,5 +1,16 @@
 ---
 ja:
+  kudo_mailer:
+    batch_kudo_notification:
+      guest:
+        other: ゲスト%{count}名
+      html:
+        left_kudos:
+          other: "%{givers_list}があなたの作品 %{commentable_link}にいいねを送りました。"
+      subject: "[%{app_name}] あなたにいいねが届きました！"
+      text:
+        left_kudos:
+          other: "%{givers_list} があなたの作品 %{commentable_title} (%{commentable_url})にいいねを送りました。"
   mailer:
     general:
       closing:
@@ -27,16 +38,6 @@ ja:
         open_doors: The Open Doors (オープンドア) チーム
         parent_org: Organization for Transformative Works ー OTW（変形的作品のためのNPO）
         support: AO3サポートチーム
-    kudos:
-      guest:
-        other: ゲスト%{count}名
-      html:
-        left_kudos:
-          other: "%{givers_list}があなたの作品 %{commentable_link}にいいねを送りました。"
-      text:
-        left_kudos:
-          other: "%{givers_list} があなたの作品 %{commentable_link}にいいねを送りました。"
-      you_have: "[%{app_name}] あなたにいいねが届きました！"
   users:
     mailer:
       reset_password_instructions:
@@ -110,7 +111,7 @@ ja:
         html: 詳しくは、%{faq_link}をご覧ください。
         text: 詳しくは、コレクションFAQをご覧ください：%{faq_url}
       subject:
-        anonymous: "%{app_name}] あなたの作品は匿名化されました"
+        anonymous: "[%{app_name}] あなたの作品は匿名化されました"
         anonymous_unrevealed: "[%{app_name}] あなたの作品は匿名・未公開化されました"
         unrevealed: "[%{app_name}] あなたの作品は未公開化されました"
       unrevealed_info: 未公開作品はタグリストにも、あなたの投稿作品ページにも表示されません。リンクで作品にアクセスしたいユーザーには、作品は未公開とのお知らせが表示され、作品にアクセスできません。
@@ -166,7 +167,7 @@ ja:
     creatorship_notification_archivist:
       explanation: 公式活動中のOpen Doors（オープンドアプロジェクト）管理人は、あなたが合作者機能を無効化している場合でも、招待なしであなたを合作者として追加する権限があります。
       html:
-        creation: "%{creation_link}%　作者：%{pseud_links}"
+        creation: "%{creation_link}　作者：%{pseud_links}"
         edit_chapter: 章を編集して
         edit_series: シリーズを編集して
         edit_work: 作品を編集して
@@ -184,7 +185,7 @@ ja:
         remove_work: 間違って合作者に追加された場合や、合作者としてリストに追加されたくない場合は、作品を編集して合作者として自身を削除することができます：%{url}
     creatorship_request:
       html:
-        creation: "%{creation_link} 　作者：%{pseud_links}"
+        creation: "%{creation_link} 作者：%{pseud_links}"
         instructions: "%{page_name}ページでこのリクエストを承認または拒否することができます。"
         page_name: Co-Creator Requests（合作者リクエスト）
       intro_chapter: "%{inviting_user} さんはあなた（ペンネーム%{pseud}）を以下の章の合作者として招待しました："
