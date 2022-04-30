@@ -12,7 +12,7 @@
 
   <p>
     <% url = @collection ? collection_work_url(@collection, @work) : work_url(@work) %>
-    <%= t(".html.title_word_count", work_link: style_creation_link(@work.title, url), word_count: t(".word_count", count: @work.word_count)).html_safe %>
+    <%= creation_link_with_word_count(@work, url) %>
     <br>
     <%= t(".html.attribution", creator_links: creator_links(@work)).html_safe %>
   </p>

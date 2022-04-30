@@ -110,6 +110,27 @@ module MailerHelper
     end
   end
 
+  # e.g., 1 word, 50 words
+  def creation_word_count(creation)
+    t("mailer.general.creation.word_count", count: creation.word_count)
+  end
+
+  # e.g., Title (x words), where Title is a link
+  def creation_link_with_word_count(creation, creation_url)
+    creation_link = style_creation_link(creation.title, creation_url)
+    word_count = creation_word_count(creation)
+    t("mailer.general.creation.link_with_word_count",
+      creation_link: creation_link, word_count: word_count).html_safe
+  end
+
+  # e.g., "Title" (x words), where Title is not a link
+  def creation_title_with_word_count(creation)
+    creation_title = creation_title(creation)
+    word_count = creation_word_count(creation)
+    t("mailer.general.creation.title_with_word_count",
+      creation_title: creation_title, word_count: word_count)
+  end
+
   # The bylines used in subscription emails to prevent exposing the name(s) of
   # anonymous creator(s).
   def creator_links(work)

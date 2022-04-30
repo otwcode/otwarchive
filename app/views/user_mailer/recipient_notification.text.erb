@@ -7,7 +7,7 @@
 <%= t(".no_collection") %>
 <% end %>
 
-<%= t(".text.title_word_count", work_title: @work.title.html_safe, word_count: t(".word_count", count: @work.word_count)) %>
+<%= creation_title_with_word_count(@work) %>
 <%= @collection ? collection_work_url(@collection, @work) : work_url(@work) %>
 
 <%= t(".text.attribution", creator_text: creator_text(@work)) %>
