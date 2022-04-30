@@ -51,7 +51,7 @@ class BookmarkIndexer < Indexer
           type: "text",
           analyzer: "simple"
         },
-        id: {
+        sort_id: {
           type: "keyword"
         }
       }

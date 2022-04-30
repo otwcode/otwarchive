@@ -103,7 +103,7 @@ class BookmarkableQuery < Query
       sort_hash = { _score: { order: sort_direction } }
     end
 
-    [sort_hash, { id: { order: sort_direction } }]
+    [sort_hash, { sort_id: { order: sort_direction } }]
   end
 
   # Define the aggregations for the search
