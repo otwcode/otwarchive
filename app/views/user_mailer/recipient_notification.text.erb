@@ -10,7 +10,7 @@
 <%= creation_title_with_word_count(@work) %>
 <%= @collection ? collection_work_url(@collection, @work) : work_url(@work) %>
 
-<%= t(".text.attribution", creator_text: creator_text(@work)) %>
+by <%= creator_text(@work) %>
 
 <%= render "work_info", work: @work %>
 

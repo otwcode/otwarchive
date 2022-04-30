@@ -297,10 +297,8 @@ en:
         no_collection: "[%{app_name}] A gift work for you"
       no_collection: "A gift work has been posted for you at the Archive of Our Own!"
       html:
-        attribution: "by %{creator_links}"
         collection: "A gift work has been posted for you in the %{collection_link} collection at the Archive of Our Own!"
       text:
-        attribution: "by %{creator_text}"
         collection: "A gift work has been posted for you in the \"%{collection_title}\" collection (%{collection_url}) at the Archive of Our Own!"
     collection_notification:
       assignments_sent:
