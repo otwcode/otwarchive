@@ -11,26 +11,6 @@ describe MailerHelper do
     end
   end
 
-  describe "#creation_word_count" do
-    context "when creation is a chapter" do
-      it "returns a string with the number of words" do
-        expect(creation_word_count(chapter)).to eq("#{chapter.word_count} words")
-      end
-    end
-
-    context "when creation is a series" do
-      it "returns a string with the number of words" do
-        expect(creation_word_count(series)).to eq("#{series.word_count} words")
-      end
-    end
-
-    context "when creation is a work" do
-      it "returns a string with the number of words" do
-        expect(creation_word_count(work)).to eq("#{work.word_count} words")
-      end
-    end
-  end
-
   describe "#creation_link_with_word_count" do
     context "when creation is a chapter" do
       it "returns hyperlinked full_chapter_title and parenthetical word count" do
