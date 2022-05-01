@@ -13,7 +13,7 @@
 <%= work_tag_metadata(work.freeforms) %>
 <% end %>
 <% unless work.series.count.zero? %>
-<%= Series.model_name.human(count: work.series.count) %><%= raw to_plain_text(series_list_for_feeds(work)) %>
+<%= work_metadata_label(Series.model_name.human(count: work.series.count)) %><%= raw to_plain_text(series_list_for_feeds(work)) %>
 <% end %>
 <% unless work.summary.blank? %>
 
