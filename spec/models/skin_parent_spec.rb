@@ -63,13 +63,13 @@ describe Skin do
     end
 
     it "should not allow a parent to be blank" do
-      expect(@child_skin.save).to be_truthy
       blank_parent = Skin.new(title: " ", css: "body {color: #000;}")
-      blank_parent_child = SkinParent.new(child_skin: @child_skin, parent_skin: blank_parent, position: 1)
-      expect(blank_parent_child.save).to be_truthy
-      expect(blank_parent_child.parent_skin_id).to be(nil)
+      blank_parent.save!(validate: false)
+
+      @child_skin.skin_parents_attributes = [{ parent_skin_title: blank_parent.title, position: 1 }]
+      @child_skin.save!
+      
+      expect(@child_skin.parent_skins).to be_empty
     end
-
   end
-
 end

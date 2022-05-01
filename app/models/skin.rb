@@ -48,7 +48,7 @@ class Skin < ApplicationRecord
                                   class_name: 'SkinParent', dependent: :destroy, inverse_of: :parent_skin
   has_many :child_skins, through: :skin_children, inverse_of: :parent_skins
 
-  accepts_nested_attributes_for :skin_parents, allow_destroy: true, reject_if: proc { |attrs| attrs[:position].blank? || attrs[:parent_skin_title].blank? }
+  accepts_nested_attributes_for :skin_parents, allow_destroy: true, reject_if: proc { |attrs| attrs[:position].blank? || attrs[:parent_skin_title].blank? || attrs[:parent_skin_id].blank? }
 
   has_attached_file :icon,
                     styles: { standard: "100x100>" },
