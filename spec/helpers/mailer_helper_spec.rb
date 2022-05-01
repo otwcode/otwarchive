@@ -1,10 +1,53 @@
 require "spec_helper"
 
 describe MailerHelper do
+  let(:work) { create(:work) }
+  let(:chapter) { create(:chapter) }
+  let(:series) { create(:series) }
+
   describe "style_creation_link" do
     it "nests red link inside bold inside italics" do
-      work = create(:work)
       expect(style_creation_link(work.title, work_url(work))).to eq("<i><b><a style=\"color:#990000\" href=\"#{work_url(work)}\">#{work.title}</a></b></i>")
+    end
+  end
+
+  describe "#creation_link_with_word_count" do
+    context "when creation is a chapter" do
+      it "returns hyperlinked full_chapter_title and parenthetical word count" do
+        expect(creation_link_with_word_count(chapter, chapter_url(chapter))).to eq("<i><b><a style=\"color:#990000\" href=\"#{chapter_url(chapter)}\">#{chapter.full_chapter_title}</a></b></i> (#{chapter.word_count} words)")
+      end
+    end
+
+    context "when creation is a series" do
+      it "returns hyperlinked series title and parenthetical word count" do
+        expect(creation_link_with_word_count(series, series_url(series))).to eq("<i><b><a style=\"color:#990000\" href=\"#{series_url(series)}\">#{series.title}</a></b></i> (#{series.word_count} words)")
+      end
+    end
+
+    context "when creation is a work" do
+      it "returns hyperlinked work title and parenthetical word count" do
+        expect(creation_link_with_word_count(work, work_url(work))).to eq("<i><b><a style=\"color:#990000\" href=\"#{work_url(work)}\">#{work.title}</a></b></i> (#{work.word_count} words)")
+      end
+    end
+  end
+
+  describe "#creation_title_with_word_count" do
+    context "when creation is a chapter" do
+      it "returns full_chapter_title and parenthetical word count" do
+        expect(creation_title_with_word_count(chapter)).to eq("\"#{chapter.full_chapter_title}\" (#{chapter.word_count} words)")
+      end
+    end
+
+    context "when creation is a series" do
+      it "returns series title and parenthetical word count" do
+        expect(creation_title_with_word_count(series)).to eq("\"#{series.title}\" (#{series.word_count} words)")
+      end
+    end
+
+    context "when creation is a work" do
+      it "returns work title and parenthetical word count" do
+        expect(creation_title_with_word_count(work)).to eq("\"#{work.title}\" (#{work.word_count} words)")
+      end
     end
   end
 

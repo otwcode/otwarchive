@@ -11,6 +11,12 @@ en:
           unaddressed: "Hi!"
         introductory: "Hello from the Archive of Our Own!"
       metadata_label_indicator: ": "
+      creation:
+        link_with_word_count: "%{creation_link} (%{word_count})"
+        title_with_word_count: "\"%{creation_title}\" (%{word_count})"
+        word_count:
+          one: "%{count} word"
+          other: "%{count} words"
       signature:
         app_short_name: AO3
         open_doors: The Open Doors team
@@ -37,12 +43,14 @@ en:
         left_kudos:
           one: "%{givers_list} left kudos on %{commentable_link}."
           other: "%{givers_list} left kudos on %{commentable_link}."
-          single_guest: "A guest left kudos on %{commentable_link}."
+        single_guest:
+          giver_list: "A guest"
+          left_kudos: "%{giver_list} left kudos on %{commentable_link}."
       text:
         left_kudos:
           one: "%{givers_list} left kudos on \"%{commentable_title}\" (%{commentable_url})."
           other: "%{givers_list} left kudos on \"%{commentable_title}\" (%{commentable_url})."
-          single_guest: "A guest left kudos on \"%{commentable_title}\" (%{commentable_url})."
+        single_guest: "A guest left kudos on \"%{commentable_title}\" (%{commentable_url})."
   user_mailer:
     invite_increase_notification:
       subject: "[%{app_name}] New invitations"
@@ -289,6 +297,11 @@ en:
       subject:
         collection: "[%{app_name}][%{collection_title}] A gift work for you from %{collection_title}"
         no_collection: "[%{app_name}] A gift work for you"
+      no_collection: "A gift work has been posted for you at the Archive of Our Own!"
+      html:
+        collection: "A gift work has been posted for you in the %{collection_link} collection at the Archive of Our Own!"
+      text:
+        collection: "A gift work has been posted for you in the \"%{collection_title}\" collection (%{collection_url}) at the Archive of Our Own!"
     collection_notification:
       assignments_sent:
         subject: "Assignments sent"

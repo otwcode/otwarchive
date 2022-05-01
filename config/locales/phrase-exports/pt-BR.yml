@@ -401,6 +401,22 @@ pt-BR:
       more_link:
         one: mais %{count} usuárie
         other: mais %{count} usuáries
+  kudo_mailer:
+    batch_kudo_notification:
+      guest:
+        one: 1 visitante
+        other: "%{count} visitantes"
+      html:
+        left_kudos:
+          one: "%{givers_list} deixou kudos em %{commentable_link}."
+          other: "%{givers_list} deixaram kudos em %{commentable_link}."
+        single_guest: 1 visitante deixou kudos em %{commentable_link}.
+      subject: "[%{app_name}] Kudos pra você!"
+      text:
+        left_kudos:
+          one: "%{givers_list} deixou kudos em %{commentable_title} (%{commentable_url})."
+          other: "%{givers_list} deixaram kudos em %{commentable_title} (%{commentable_url})."
+        single_guest: 1 visitante deixou kudos em %{commentable_title} (%{commentable_url}).
   layouts:
     proxy_notice:
       button: Desabilitar aviso
@@ -440,19 +456,6 @@ pt-BR:
         parent_org: Organization for Transformative Works – OTW (Organização para
           Obras Transformativas)
         support: Equipe de Suporte do AO3
-    kudos:
-      guest:
-        one: 1 visitante
-        other: "%{count} visitantes"
-      html:
-        left_kudos:
-          one: "%{givers_list} deixou kudos em %{commentable_link}."
-          other: "%{givers_list} deixaram kudos em %{commentable_link}."
-      text:
-        left_kudos:
-          one: "%{givers_list} deixou kudos em %{commentable_link}."
-          other: "%{givers_list} deixaram kudos em %{commentable_link}."
-      you_have: "[%{app_name}] Kudos pra você!"
   skins:
     confirm_delete:
       confirm_html: Tem certeza que quer <strong><em>apagar</em></strong> a skin "%{skin_title}"?

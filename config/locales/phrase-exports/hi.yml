@@ -1,5 +1,24 @@
 ---
 hi:
+  kudo_mailer:
+    batch_kudo_notification:
+      guest:
+        one: अतिथि
+        other: "%{count} अतिथिगण"
+      html:
+        left_kudos:
+          one: "%{givers_list} ने %{commentable_link} पर कुङोस दिया है।"
+          other: "%{givers_list} ने %{commentable_link} पर कुङोस दिए हैं।"
+        single_guest: एक अतिथि ने %{commentable_link} पर कुङोस दिया है।
+      subject: "[%{app_name}] आपको कुङोस मिला हैं!"
+      text:
+        left_kudos:
+          one: "%{givers_list} ने %{commentable_title} (%{commentable_url}) पर कुङोस
+            दिया है।"
+          other: "%{givers_list} ने %{commentable_title} (%{commentable_url}) पर कुङोस
+            दिए हैं।"
+        single_guest: एक अतिथि ने %{commentable_title} (%{commentable_url}) पर कुङोस
+          दिया है।
   mailer:
     general:
       closing:
@@ -31,19 +50,6 @@ hi:
         parent_org: Organization for Transformative Works – OTW (परिवर्तनकारी कार्य
           हेतु संगठन)
         support: AO3 सहायता समिति
-    kudos:
-      guest:
-        one: अतिथि
-        other: "%{count} अतिथिगण"
-      html:
-        left_kudos:
-          one: "%{givers_list} ने %{commentable_link} पर कूडोस दिया हैं।"
-          other: "%{givers_list} ने %{commentable_link} पर कूडोस दिया हैं।"
-      text:
-        left_kudos:
-          one: "%{givers_list} ने %{commentable_link} पर कूडोस दिया हैं।"
-          other: "%{givers_list} ने %{commentable_link} पर कूडोस दिया हैं।"
-      you_have: "[%{app_name}] आपको कूडोस मिला हैं!"
   users:
     mailer:
       reset_password_instructions:

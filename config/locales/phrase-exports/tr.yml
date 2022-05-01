@@ -1,5 +1,21 @@
 ---
 tr:
+  kudo_mailer:
+    batch_kudo_notification:
+      guest:
+        one: bir ziyaretçi
+        other: "%{count} ziyaretçi"
+      html:
+        left_kudos:
+          one: "%{givers_list}, %{commentable_link} eserinize kalp bıraktı."
+          other: "%{givers_list}, %{commentable_link} eserinize kalp bıraktı."
+      subject: "[%{app_name}] Kalp aldınız!"
+      text:
+        left_kudos:
+          one: "%{givers_list}, %{commentable_title} (%{commentable_url}) eserinize
+            kalp bıraktı."
+          other: "%{givers_list}, %{commentable_title} (%{commentable_url}) eserinize
+            kalp bıraktı."
   mailer:
     general:
       closing:
@@ -31,19 +47,6 @@ tr:
         parent_org: Organization for Transformative Works – OTW (Transformatif Eserler
           Derneği)
         support: AO3 Teknik Destek ekibi
-    kudos:
-      guest:
-        one: bir ziyaretçi
-        other: "%{count} ziyaretçi"
-      html:
-        left_kudos:
-          one: "%{givers_list}, %{commentable_link} eserinize kalp bıraktı."
-          other: "%{givers_list}, %{commentable_link} eserinize kalp bıraktı."
-      text:
-        left_kudos:
-          one: "%{givers_list}, %{commentable_link} eserinize kalp bıraktı."
-          other: "%{givers_list}, %{commentable_link} eserinize kalp bıraktı."
-      you_have: "[%{app_name}] Kalp aldınız!"
   users:
     mailer:
       reset_password_instructions:

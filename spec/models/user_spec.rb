@@ -127,6 +127,54 @@ describe User do
     end
   end
 
+  describe "#update" do
+    let(:existing_user) { create(:user) }
+
+    it "sets renamed_at if username is changed" do
+      freeze_time
+      existing_user.update(login: "new_username")
+      expect(existing_user.renamed_at).to eq(Time.current)
+    end
+
+    it "does not set renamed_at when username is not changed" do
+      existing_user.update(email: "newemail@example.com")
+      expect(existing_user.renamed_at).to be_nil
+    end
+
+    context "username was recently changed" do
+      before do
+        freeze_time
+        existing_user.update(login: "new_login")
+      end
+
+      it "does not allow another rename" do
+        expect(existing_user.update(login: "new")).to be_falsey
+        localized_renamed_at = I18n.l(existing_user.renamed_at, format: :long)
+        expect(existing_user.errors[:login].first).to eq(
+          "can only be changed once every 7 days. You last changed your user name on #{localized_renamed_at}."
+        )
+      end
+
+      it "allows changing email" do
+        existing_user.update(email: "new_email")
+        expect(existing_user.email).to eq("new_email")
+      end
+    end
+
+    context "username was changed outside window" do
+      before do
+        travel_to ArchiveConfig.USER_RENAME_LIMIT_DAYS.days.ago do
+          existing_user.update(login: "new_username")
+        end
+      end
+
+      it "allows another rename" do
+        expect(existing_user.update(login: "new")).to be_truthy
+        expect(existing_user.login).to eq("new")
+      end
+    end
+  end
+
   describe ".search_multiple_by_email" do
     let(:user_bundle) { create_list(:user, 5) }
 
