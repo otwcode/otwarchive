@@ -1,6 +1,6 @@
 require "spec_helper"
 
-describe CommentsController do
+describe "n+1 queries in the CommentsController" do
   include LoginMacros
 
   shared_examples "a hierarchical view with constant queries" do
