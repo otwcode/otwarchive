@@ -97,7 +97,7 @@ describe "n+1 queries in the CommentsController" do
       before { fake_login_known_user(work.users.first) }
 
       populate do |n|
-        User.current_user = nil # prevent bugs with unreviewed check
+        User.current_user = nil # log out to prevent commenting as work creator
         create_list(:comment, n, commentable: work.first_chapter)
       end
 
@@ -106,7 +106,6 @@ describe "n+1 queries in the CommentsController" do
       it "produces a constant number of queries" do
         expect do
           get unreviewed_work_comments_path(work)
-          expect(assigns(:comments).size).to eq(current_scale)
         end.to perform_constant_number_of_queries
       end
     end
