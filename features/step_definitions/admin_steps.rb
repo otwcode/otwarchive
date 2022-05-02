@@ -167,6 +167,15 @@ Given /^I have posted an admin post with comments disabled$/ do
   step %{I log out}
 end
 
+Given "an abuse ticket ID exists" do
+  ticket = {
+    "departmentId" => ArchiveConfig.ABUSE_ZOHO_DEPARTMENT_ID,
+    "status" => "Open",
+    "webUrl" => Faker::Internet.url
+  }
+  allow_any_instance_of(ZohoResourceClient).to receive(:find_ticket).and_return(ticket)
+end
+
 ### WHEN
 
 When /^I visit the last activities item$/ do
@@ -433,6 +442,10 @@ end
 Then /^the work "([^\"]*)" should not be marked as spam/ do |work|
   w = Work.find_by_title(work)
   assert !w.spam?
+end
+
+Then "I should see {int} admin activity log entry/entries" do |count|
+  expect(page).to have_css("tr[id^=admin_activity_]", count: count)
 end
 
 Then /^the user content should be shown as right-to-left$/ do

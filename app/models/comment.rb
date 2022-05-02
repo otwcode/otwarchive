@@ -10,6 +10,9 @@ class Comment < ApplicationRecord
   has_many :inbox_comments, foreign_key: 'feedback_comment_id', dependent: :destroy
   has_many :users, through: :inbox_comments
 
+  has_many :reviewed_replies, -> { reviewed },
+           class_name: "Comment", as: :commentable, inverse_of: :commentable
+
   has_many :thread_comments, class_name: 'Comment', foreign_key: :thread
 
   validates_presence_of :name, unless: :pseud_id
@@ -39,6 +42,10 @@ class Comment < ApplicationRecord
   scope :not_deleted,     -> { where(is_deleted: false) }
   scope :reviewed,        -> { where(unreviewed: false) }
   scope :unreviewed_only, -> { where(unreviewed: true) }
+
+  scope :for_display, lambda {
+    includes(pseud: :user, parent: { work: :pseuds })
+  }
 
   # Gets methods and associations from acts_as_commentable plugin
   acts_as_commentable

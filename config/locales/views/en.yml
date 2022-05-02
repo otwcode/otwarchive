@@ -171,6 +171,15 @@ en:
         link_support: "contact us through our Support and Feedback form"
         link_tos: "Terms of Service"
         welcome_text: "Hi! It looks like you've just logged into the Archive for the first time. %{help_link} or dismiss this message permanently."
+    change_username:
+      caution: "Please use this feature with caution."
+      change_window:
+        one: "You can change your user name once per day."
+        other: "You can change your user name once every %{count} days."
+      last_renamed: "You last changed your user name on %{renamed_at}."
+      more_info: "For information on how changing your user name will affect your account, please check out the %{account_faq_link}. Note that changes to your username may take several days or longer to appear. If you are still seeing your old user name on your works, bookmarks, series, or collections after a week, please %{contact_support_link}."
+      account_faq: "Account FAQ"
+      contact_support: "Contact Support"
   troubleshooting:
     show:
       page_title:
@@ -309,3 +318,9 @@ en:
           preferences_link_text: update your preferences
           prompt_meme: Signing up for this challenge will allow any user who claims your prompt to gift you a work in response to your prompt regardless of your preference settings. If you wish to receive additional gifts from users who have not claimed your prompts, please %{preferences_link} to allow gifts from anyone. You can always %{refuse_link}.
           refuse_link_text: refuse a gift
+  tags:
+    index:
+      about:
+        popular: These are some of the most popular tags used on the Archive. To find more tags, %{search_tags_link}.
+        random: These are some random tags used on the Archive. To find more tags, %{search_tags_link}.
+      search_tags: try our tag search

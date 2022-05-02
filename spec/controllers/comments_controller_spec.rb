@@ -1693,34 +1693,6 @@ describe CommentsController do
     end
   end
 
-  describe "GET #add_comment" do
-    context "when comment is unreviewed" do
-      it "redirects to the comment path with add_comment params and without an error" do
-        get :add_comment, params: { comment_id: unreviewed_comment.id }
-        expect(flash[:error]).to be_nil
-        expect(response).to redirect_to(comment_path(unreviewed_comment, add_comment: true, anchor: "comments"))
-      end
-    end
-  end
-
-  describe "GET #cancel_comment" do
-    context "with only valid params" do
-      it "redirects to comment path with the comments anchor and without an error" do
-        get :cancel_comment, params: { comment_id: comment.id }
-        expect(flash[:error]).to be_nil
-        expect(response).to redirect_to(comment_path(comment, anchor: "comments"))
-      end
-    end
-
-    context "with valid and invalid params" do
-      it "removes invalid params and redirects without an error to comment path with valid params and the comments anchor" do
-        get :cancel_comment, params: { comment_id: comment.id, show_comments: "yes", random_option: "no" }
-        expect(flash[:error]).to be_nil
-        expect(response).to redirect_to(comment_path(comment, show_comments: "yes", anchor: "comments"))
-      end
-    end
-  end
-
   describe "GET #cancel_comment_reply" do
     context "with only valid params" do
       it "redirects to comment path with the comments anchor and without an error" do
@@ -2135,11 +2107,6 @@ describe CommentsController do
         it_redirects_to_with_error(root_path, "Sorry, you don't have permission to access the page you were trying to reach. Please log in.")
       end
 
-      it "GET #add_comment redirects to the home page with an error" do
-        get :add_comment, params: { work_id: work.id }
-        it_redirects_to_with_error(root_path, "Sorry, you don't have permission to access the page you were trying to reach. Please log in.")
-      end
-
       it "GET #add_comment_reply redirects to the home page with an error" do
         get :add_comment_reply, params: { comment_id: comment.id }
         it_redirects_to_with_error(root_path, "Sorry, you don't have permission to access the page you were trying to reach. Please log in.")
@@ -2196,11 +2163,6 @@ describe CommentsController do
 
       it "DELETE #destroy redirects to the home page with an error" do
         delete :destroy, params: { id: comment.id }
-        it_redirects_to_with_error(root_path, "Sorry, you don't have permission to access the page you were trying to reach.")
-      end
-
-      it "GET #add_comment redirects to the home page with an error" do
-        get :add_comment, params: { work_id: work.id }
         it_redirects_to_with_error(root_path, "Sorry, you don't have permission to access the page you were trying to reach.")
       end
 
@@ -2304,11 +2266,6 @@ describe CommentsController do
         expect { comment.reload }.to raise_exception(ActiveRecord::RecordNotFound)
       end
 
-      it "GET #add_comment redirects to the work with an error" do
-        get :add_comment, params: { work_id: work.id }
-        it_redirects_to_with_error(work_path(work), edit_error_message)
-      end
-
       it "GET #add_comment_reply redirects to the work with an error" do
         get :add_comment_reply, params: { comment_id: comment.id }
         it_redirects_to_with_error(work_path(work), edit_error_message)
@@ -2393,11 +2350,6 @@ describe CommentsController do
             expect { comment.reload }.to raise_exception(ActiveRecord::RecordNotFound)
           end
         end
-      end
-
-      it "GET #add_comment redirects to the work with an error" do
-        get :add_comment, params: { work_id: work.id }
-        it_redirects_to_with_error(work_path(work), edit_error_message)
       end
 
       it "GET #add_comment_reply redirects to the work with an error" do

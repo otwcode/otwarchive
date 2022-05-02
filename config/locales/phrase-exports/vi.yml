@@ -1,5 +1,16 @@
 ---
 vi:
+  kudo_mailer:
+    batch_kudo_notification:
+      guest:
+        other: "%{count} vị khách"
+      html:
+        left_kudos:
+          other: "%{givers_list} đã để lại tán dương cho %{commentable_link}."
+      subject: "[%{app_name}] Bạn nhận được tán dương!"
+      text:
+        left_kudos:
+          other: "%{givers_list} đã để lại tán dương cho %{commentable_title} (%{commentable_url})."
   mailer:
     general:
       closing:
@@ -25,24 +36,14 @@ vi:
         informal:
           addressed: Xin chào, %{name}!
           unaddressed: Xin chào!
-        introductory: Hello from the Archive of Our Own – AO3 (Lời chào từ Kho Tàng
+        introductory: Hello from the Archive of Our Own – AO3 (Lời chào từ Kho Tàng
           Lưu Trữ của Chúng Ta - AO3)!
       signature:
         app_short_name: AO3
         open_doors: Đội Open Doors (Cửa Mở)
-        parent_org: Organization for Transformative Works – OTW (Tổ Chức cho các Tác
+        parent_org: Organization for Transformative Works – OTW (Tổ Chức cho các Tác
           Phẩm Được Biến Đổi)
         support: Đội Hỗ Trợ AO3
-    kudos:
-      guest:
-        other: "%{count} vị khách"
-      html:
-        left_kudos:
-          other: "%{givers_list} đã để lại tán dương cho %{commentable_link}."
-      text:
-        left_kudos:
-          other: "%{givers_list} đã để lại tán dương cho %{commentable_link}."
-      you_have: "[%{app_name}] Bạn nhận được tán dương!"
   users:
     mailer:
       reset_password_instructions:
@@ -196,7 +197,7 @@ vi:
       subject: "[%{app_name}][%{collection_title}] Nhiệm Vụ của Bạn!"
       text:
         assignment: Đây là nhiệm vụ của bạn trong thử thách "%{collection_title}"
-          (%{collection_url})  tại AO3!
+          (%{collection_url}) tại AO3!
         footer: Bạn nhận được email này vì bạn đã đăng ký tham gia thử thách %{title}
           (%{url}). Để biết thêm chi tiết về thử thách này và thông tin liên hệ của
           điều phối viên, vui lòng truy cập %{profile_url}.
@@ -211,7 +212,7 @@ vi:
         complete: Tất cả nhiệm vụ đã được gửi.
         subject: Các nhiệm vụ đã được gửi
       html:
-        received_message: 'Bạn có một tin nhắn về bộ sưu tập  %{collection_link} của
+        received_message: 'Bạn có một tin nhắn về bộ sưu tập %{collection_link} của
           bạn:'
       text:
         received_message: 'Bạn có một tin nhắn về bộ sưu tập "%{collection_title}"

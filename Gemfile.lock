@@ -338,6 +338,7 @@ GEM
     mustermann (1.1.1)
       ruby2_keywords (~> 0.0.1)
     mysql2 (0.5.2)
+    n_plus_one_control (0.6.2)
     net-http-digest_auth (1.4.1)
     net-http-persistent (4.0.1)
       connection_pool (~> 2.2)
@@ -351,7 +352,7 @@ GEM
     netrc (0.11.0)
     newrelic_rpm (8.4.0)
     nio4r (2.5.8)
-    nokogiri (1.13.3)
+    nokogiri (1.13.4)
       mini_portile2 (~> 2.8.0)
       racc (~> 1.4)
     orm_adapter (0.5.0)
@@ -627,6 +628,7 @@ DEPENDENCIES
   mimemagic (= 0.3.10)
   minitest
   mysql2 (= 0.5.2)
+  n_plus_one_control
   newrelic_rpm
   nokogiri (>= 1.8.5)
   permit_yo

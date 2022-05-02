@@ -1,5 +1,19 @@
 ---
 sv:
+  kudo_mailer:
+    batch_kudo_notification:
+      guest:
+        one: en gäst
+        other: "%{count} gäster"
+      html:
+        left_kudos:
+          one: "%{givers_list} lämnade beröm om %{commentable_link}."
+          other: "%{givers_list} lämnade beröm om %{commentable_link}."
+      subject: "[%{app_name}] Du har fått beröm!"
+      text:
+        left_kudos:
+          one: "%{givers_list} lämnade beröm om %{commentable_title} (%{commentable_url})."
+          other: "%{givers_list} lämnade beröm om %{commentable_title} (%{commentable_url})."
   mailer:
     general:
       closing:
@@ -28,22 +42,9 @@ sv:
       signature:
         app_short_name: AO3
         open_doors: Open Doors (Öppna dörrar)-teamet
-        parent_org: Organization for Transformative Works – OTW (Organisationen för
+        parent_org: Organization for Transformative Works – OTW (Organisationen för
           transformativa verk)
         support: AO3:s support-team
-    kudos:
-      guest:
-        one: en gäst
-        other: "%{count} gäster"
-      html:
-        left_kudos:
-          one: "%{givers_list} lämnade beröm om %{commentable_link}."
-          other: "%{givers_list} lämnade beröm om %{commentable_link}."
-      text:
-        left_kudos:
-          one: "%{givers_list} lämnade beröm om %{commentable_link}."
-          other: "%{givers_list} lämnade beröm om %{commentable_link}."
-      you_have: "[%{app_name}] Du har fått beröm!"
   users:
     mailer:
       reset_password_instructions:
