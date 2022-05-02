@@ -384,9 +384,17 @@ ms:
       reason: 'Berikut merupakan permintaan anda:'
       subject: "[%{app_name}] Permintaan Kod Jemputan Tambahan Ditolak"
     recipient_notification:
+      html:
+        collection: Karya hadiah telah disiarkan untuk anda dalam koleksi %{collection_link}
+          di AO3!
+      no_collection: Karya hadiah telah disiarkan untuk anda di AO3!
       subject:
-        collection: "[%{app_name}][%{collection_title}] Karya hadiah untuk anda dari"
+        collection: "[%{app_name}][%{collection_title}] Karya hadiah untuk anda dari
+          %{collection_title}"
         no_collection: "[%{app_name}] Hadiah karya untuk anda"
+      text:
+        collection: Karya hadiah telah disiarkan untuk anda dalam koleksi "%{collection_title}"
+          (%{collection_url}) di AO3!
     signup_notification:
       activate_your_account: Ikuti pautan ini untuk aktifkan akaun anda
       admin_posts: Berita AO3

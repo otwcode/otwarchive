@@ -1,5 +1,78 @@
 ---
 ro:
+  activerecord:
+    attributes:
+      archive_warning:
+        name_with_colon:
+          few: 'Avertismente:'
+          one: 'Avertisment:'
+          other: 'Avertismente:'
+      category:
+        name_with_colon:
+          few: 'Categorii:'
+          one: 'Categorie:'
+          other: 'Categorii:'
+      character:
+        name_with_colon:
+          few: 'Personaje:'
+          one: 'Personaj:'
+          other: 'Personaje:'
+      fandom:
+        name_with_colon:
+          few: 'Fandomuri:'
+          one: 'Fandom:'
+          other: 'Fandomuri:'
+      freeform:
+        name_with_colon:
+          few: 'Tag-uri adiționale:'
+          one: 'Tag adițional:'
+          other: 'Tag-uri adiționale:'
+      rating:
+        name_with_colon: 'Rating:'
+      relationship:
+        name_with_colon:
+          few: 'Relații:'
+          one: 'Relație:'
+          other: 'Relații:'
+      work:
+        summary: Rezumat
+    models:
+      archive_warning:
+        few: Avertismente
+        one: Avertisment
+        other: Avertismente
+      category:
+        few: Categorii
+        one: Categorie
+        other: Categorii
+      chapter:
+        few: Capitole
+        one: Capitole
+        other: Capitole
+      character:
+        few: Personaje
+        one: Personaj
+        other: Personaje
+      fandom:
+        few: Fandomuri
+        one: Fandom
+        other: Fandomuri
+      freeform:
+        few: Tag-uri adiționale
+        one: Tag adițional
+        other: Tag-uri adiționale
+      rating:
+        few: Ratinguri
+        one: Rating
+        other: Ratinguri
+      relationship:
+        few: Relații
+        one: Relație
+        other: Relații
+      series:
+        few: Serii
+        one: Serie
+        other: Serii
   kudo_mailer:
     batch_kudo_notification:
       guest:
@@ -11,7 +84,9 @@ ro:
           few: "%{givers_list} au lăsat kudos pentru %{commentable_link}."
           one: "%{givers_list} a lăsat kudos pentru %{commentable_link}."
           other: "%{givers_list} au lăsat kudos pentru %{commentable_link}."
-        single_guest: Un vizitator a lăsat kudos pentru %{commentable_link}.
+        single_guest:
+          giver_list: Un vizitator
+          left_kudos: "%{giver_list} a lăsat kudos pentru %{commentable_link}."
       subject: "[%{app_name}] Ai primit kudos!"
       text:
         left_kudos:
@@ -24,6 +99,13 @@ ro:
       closing:
         formal: Cu drag,
         informal: Cu drag,
+      creation:
+        link_with_word_count: "%{creation_link} (%{word_count})"
+        title_with_word_count: „%{creation_title}" (%{word_count})
+        word_count:
+          few: "%{count} cuvinte"
+          one: "%{count} cuvânt"
+          other: "%{count} de cuvinte"
       footer:
         general:
           html:
@@ -44,6 +126,7 @@ ro:
           addressed: Bună %{name}!
           unaddressed: Salut!
         introductory: Salutări de la Archive of Our Own - AO3 (Arhiva Noastră)!
+      metadata_label_indicator: ": "
       signature:
         app_short_name: AO3
         open_doors: Echipa Open Doors (Uși Deschise)
@@ -277,14 +360,23 @@ ro:
     creatorship_request:
       html:
         creation: "%{creation_link} de %{pseud_links}"
-        instructions: 'Poți să accepți sau să respingi această cerere pe %{page_name}
-          pagina ta '
-        page_name: Co-Creator Requests (Cerere de co-creator)
-      subject: "[%{app_name}] Cerere de co-creator"
+        instructions: Poți să accepți sau să respingi această cerere pe pagina ta
+          de %{page_name}
+        page_name: Co-Creator Requests (Cerere de co-creator/ co-creatoare)
+      intro_chapter: 'Utilizatorul/ utilizatoarea %{inviting_user} a invitat pseudonimul
+        tău %{pseud} să fie adaugat la lista de co-creatori/ co-creatoare pentru capitolul
+        următor:'
+      intro_series: 'Utilizatorul/ utilizatoarea %{inviting_user} a invitat pseudonimul
+        tău%{pseud} să fie adaugat la lista de co-creatori/ co-creatoare pentru seria
+        următoare:'
+      intro_work: 'Utilizatorul/ utilizatoarea %{inviting_user} a invitat pseudonimul
+        tău %{pseud} să fie adaugat la lista de co-creatori/ co-creatoare pentru lucrarea
+        următoare:'
+      subject: "[%{app_name}] Cerere de co-creator/ co-creatoare"
       text:
         creation: "%{title} (%{url}) de %{pseuds}"
-        instructions: 'Poți să accepți sau să respingi această cerere pe pagina de
-          cereri de co-creator: %{url}'
+        instructions: Poți să accepți sau să respingi această cerere pe pagina de
+          Co-Creator Requests (Cereri de co-creator) %{url}
     delete_work_notification:
       html:
         part1_other: Lucrarea ta %{title} a fost ștearsă la cererea lui %{pseud}.
@@ -381,10 +473,17 @@ ro:
       subject: "[%{app_name}] Solicitarea pentru codul de invitație suplimentar a
         fost respinsă"
     recipient_notification:
+      html:
+        collection: O lucrare cadou a fost postată pentru tine în colecția %{collection_link}
+          pe AO3!
+      no_collection: O lucrare cadou a fost postată pentru tine pe AO3!
       subject:
         collection: "[%{app_name}][%{collection_title}] O lucrare cadou pentru tine
           de la %{collection_title}"
         no_collection: "[%{app_name}] O lucrare cadou pentru tine"
+      text:
+        collection: O lucrare cadou a fost postată pentru tine în colecția „%{collection_title}"
+          (%{collection_url}) pe AO3!
     signup_notification:
       activate_your_account: să accesezi acest link pentru a-ți activa contul.
       admin_posts: Știri AO3

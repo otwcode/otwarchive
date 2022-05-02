@@ -9,7 +9,9 @@ hu:
         left_kudos:
           one: "%{givers_list} kudost hagyott itt: %{commentable_link}."
           other: "%{givers_list} kudost hagyott itt: %{commentable_link}."
-        single_guest: 'Egy vendég kudost hagyott itt: %{commentable_link}.'
+        single_guest:
+          giver_list: Egy vendég
+          left_kudos: "%{giver_list} kudost hagyott itt: %{commentable_link}."
       subject: "​[%{app_name}]​​ ​Kudost kaptál!"
       text:
         left_kudos:
@@ -378,10 +380,17 @@ hu:
       reason: 'Kérésed a következő volt:'
       subject: "[%{app_name}] További meghívó kódok kérése elutasítva"
     recipient_notification:
+      html:
+        collection: Egy ajándék munkát posztoltak a számodra a(z) %{collection_link}
+          gyűjteményben az AO3-on!
+      no_collection: Egy ajándék munkát posztoltak a számodra az AO3-on!
       subject:
         collection: "[%{app_name}][%{collection_title}] Egy ajándék munka a számodra
           a(z) %{collection_title} gyűjteményben"
         no_collection: "[%{app_name}] Egy ajándék munka a számodra"
+      text:
+        collection: Egy ajándék munkát posztoltak a számodra a(z) "%{collection_title}"
+          gyűjteményben (%{collection_url}) az AO3-on!
     signup_notification:
       activate_your_account: kövesd ezt a linket a felhasználói fiókod aktiválásához.
       admin_posts: Archívum Hírek

@@ -1,5 +1,63 @@
 ---
 de:
+  activerecord:
+    attributes:
+      archive_warning:
+        name_with_colon:
+          one: 'Warnung:'
+          other: 'Warnungen:'
+      category:
+        name_with_colon:
+          one: 'Kategorie:'
+          other: 'Kategorien:'
+      character:
+        name_with_colon:
+          one: 'Charakter:'
+          other: 'Charaktere:'
+      fandom:
+        name_with_colon:
+          one: 'Fandom:'
+          other: 'Fandoms:'
+      freeform:
+        name_with_colon:
+          one: 'Zusätzliches Tag:'
+          other: 'Zusätzliche Tags:'
+      rating:
+        name_with_colon: 'Alterseinstufung:'
+      relationship:
+        name_with_colon:
+          one: 'Beziehung:'
+          other: 'Beziehungen:'
+      work:
+        summary: Zusammenfassung
+    models:
+      archive_warning:
+        one: Warnung
+        other: Warnungen
+      category:
+        one: Kategorie
+        other: Kategorien
+      chapter:
+        one: Kapitel
+        other: Kapitel
+      character:
+        one: Charakter
+        other: Charaktere
+      fandom:
+        one: Fandom
+        other: Fandoms
+      freeform:
+        one: Zusätzliches Tag
+        other: Zusätzliche Tags
+      rating:
+        one: Alterseinstufung
+        other: Alterseinfstufungen
+      relationship:
+        one: Beziehung
+        other: Beziehungen
+      series:
+        one: Serie
+        other: Serien
   kudo_mailer:
     batch_kudo_notification:
       guest:
@@ -9,7 +67,9 @@ de:
         left_kudos:
           one: "%{givers_list} hat Kudos für %{commentable_link} hinterlassen."
           other: "%{givers_list} haben Kudos für %{commentable_link} hinterlassen."
-        single_guest: Ein Gast hat Kudos für %{commentable_link} hinterlassen.
+        single_guest:
+          giver_list: Ein Gast
+          left_kudos: "%{giver_list} hat Kudos für %{commentable_link} hinterlassen."
       subject: "[%{app_name}] Du hast Kudos erhalten!"
       text:
         left_kudos:
@@ -24,6 +84,12 @@ de:
       closing:
         formal: Mit freundlichen Grüßen
         informal: Viele Grüße
+      creation:
+        link_with_word_count: "%{creation_link} (%{word_count})"
+        title_with_word_count: '"%{creation_title}" (%{word_count})'
+        word_count:
+          one: "%{count} Wort"
+          other: "%{count} Worte"
       footer:
         general:
           html:
@@ -44,6 +110,7 @@ de:
           addressed: Hallo %{name}!
           unaddressed: Hallo!
         introductory: Hallo vom Archive of Our Own – AO3 (Ein Eigenes Archiv)
+      metadata_label_indicator: ": "
       signature:
         app_short_name: AO3
         open_doors: Das “Open Doors”- (Offene Türen) Team
@@ -393,10 +460,17 @@ de:
       reason: 'Deine Anfrage war:'
       subject: "[%{app_name}] Anfrage nach zusätzlichen Einladungscodes abgelehnt"
     recipient_notification:
+      html:
+        collection: Ein Geschenk-Fanwerk wurde für Dich in der %{collection_link}
+          Sammlung im AO3 veröffentlicht!
+      no_collection: Ein Geschenk-Fanwerk wurde für Dich im AO3 veröffentlicht.
       subject:
         collection: "[%{app_name}][%{collection_title}] Ein Geschenk-Fanwerk für Dich
           in %{collection_title}"
         no_collection: "[%{app_name}] Ein Geschenk-Fanwerk für Dich"
+      text:
+        collection: Ein Geschenk-Fanwerk wurde für Dich in der "%{collection_title}"
+          Sammlung (%{collection_url}) im AO3 veröffentlicht!
     signup_notification:
       activate_your_account: folge diesem Link, um deinen Account zu aktivieren.
       admin_posts: AO3-Newsletter

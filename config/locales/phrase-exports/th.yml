@@ -6,11 +6,15 @@ th:
         other: "%{count} ผู้เข้าชม"
       html:
         left_kudos:
-          other: "%{givers_list} ได้มอบคำชมเชยบน %{commentable_link}"
+          other: "%{givers_list} ได้มอบคำชมเชยบน %{commentable_link}."
+        single_guest:
+          giver_list: ผู้เข้าชมคนหนึ่ง
+          left_kudos: "%{giver_list} ได้มอบคำชมเชยบน %{commentable_link}."
       subject: "[%{app_name}] คุณได้รับคำชมเชย!"
       text:
         left_kudos:
-          other: "%{givers_list} ได้มอบคำชมเชยบน %{commentable_title} (%{commentable_url})"
+          other: "%{givers_list} ได้มอบคำชมเชยบน %{commentable_link}."
+        single_guest: ผู้เข้าชมคนหนึ่งได้มอบคำชมเชยบน %{commentable_title} (%{commentable_url}).
   mailer:
     general:
       closing:
@@ -267,9 +271,16 @@ th:
       reason: 'คำขอของคุณ:'
       subject: "[%{app_name}] คำขอคำเชิญเพิ่มเติมของคุณถูกปฏิเสธ"
     recipient_notification:
+      html:
+        collection: ผลงานของขวัญได้ถูกโพสต์ให้คุณแล้วในคอลเล็กชัน %{collection_link}
+          ที่ AO3!
+      no_collection: ผลงานของขวัญได้ถูกโพสต์ให้คุณแล้วใน AO3!
       subject:
         collection: "[%{app_name}][%{collection_title}] ผลงานของขวัญสำหรับคุณจาก %{collection_title}"
         no_collection: "[%{app_name}] ผลงานของขวัญสำหรับคุณ"
+      text:
+        collection: ผลงานของขวัญได้ถูกโพสต์ให้คุณแล้วในคอลเล็กชัน "%{collection_title}"
+          (%{collection_url}) ที่ AO3!
     signup_notification:
       admin_posts: ข่าว AO3
       bye: ขอให้คุณมีความสุขกับการใช้ AO3 นะ

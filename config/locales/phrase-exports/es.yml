@@ -9,7 +9,9 @@ es:
         left_kudos:
           one: "%{givers_list} dejó kudos en %{commentable_link}."
           other: "%{givers_list} dejaron kudos en %{commentable_link}"
-        single_guest: Unx visitante dejó kudos en %{commentable_link}.
+        single_guest:
+          giver_list: Unx visitante
+          left_kudos: "%{giver_list} dejó kudos en %{commentable_link}."
       subject: "[%{app_name}] ¡Recibiste kudos!"
       text:
         left_kudos:
@@ -378,10 +380,17 @@ es:
       reason: 'Tu solicitud era:'
       subject: "[%{app_name}] Solicitud de código adicional de invitación rechazada"
     recipient_notification:
+      html:
+        collection: "¡Se ha publicado una obra como regalo para ti en la colección
+          %{collection_link} en el AO3!"
+      no_collection: "¡Se ha publicado una obra como regalo para ti en el AO3!"
       subject:
         collection: "[%{app_name}][%{collection_title}] Tienes una obra de regalo
           de %{collection_title}"
         no_collection: "[%{app_name}] Tienes una obra de regalo"
+      text:
+        collection: ¡Se ha publicado una obra como regalo para ti en la colección
+          "%{collection_title}" (%{collection_url}) en el AO3!
     signup_notification:
       activate_your_account: Sigue este enlace para activar tu cuenta
       admin_posts: Noticias del AO3

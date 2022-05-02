@@ -394,9 +394,16 @@ uk:
       reason: 'Ваш запит:'
       subject: "[%{app_name}] Вам відмовлено у додатковому коді запрошення"
     recipient_notification:
+      html:
+        collection: Для Вас на АО3, у колекції %{collection_link}, було опубліковано
+          роботу-подарунок!
+      no_collection: Для Вас на АО3 було опубліковано роботу-подарунок!
       subject:
         collection: "[%{app_name}][%{collection_title}] Подарунок для Вас від %{collection_title}"
         no_collection: "[%{app_name}] Подарунок для Вас"
+      text:
+        collection: Для Вас на АО3, у колекції %{collection_title} (%{collection_url}),
+          було опубліковано роботу-подарунок!
     signup_notification:
       activate_your_account: перейдіть за цим посиланням, щоб активувати Ваш обліковий
         запис

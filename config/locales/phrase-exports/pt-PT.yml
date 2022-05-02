@@ -9,7 +9,9 @@ pt-PT:
         left_kudos:
           one: "%{givers_list} deixou kudos em %{commentable_link}."
           other: "%{givers_list} deixaram kudos em %{commentable_link}."
-        single_guest: Uma pessoa convidada deixou kudos em %{commentable_link}.
+        single_guest:
+          giver_list: Uma pessoa convidada
+          left_kudos: "%{giver_list} deixou kudos em %{commentable_link}."
       subject: "[%{app_name}] Recebeste kudos!"
       text:
         left_kudos:
@@ -381,10 +383,17 @@ pt-PT:
       reason: 'O teu pedido foi:'
       subject: "[%{app_name}] Pedido de Código de Convite Adicional Recusado"
     recipient_notification:
+      html:
+        collection: Foi publicada uma obra presente para ti na coleção %{collection_link}
+          no AO3!
+      no_collection: Foi publicada uma obra presente para ti no AO3!
       subject:
         collection: "[%{app_name}][%{collection_title}] Uma obra presente para ti
           de %{collection_title}"
         no_collection: "[%{app_name}] Uma obra presente para ti"
+      text:
+        collection: Foi publicada uma obra presente para ti na coleção "%{collection_title}"
+          (%{collection_url}) no AO3!
     signup_notification:
       activate_your_account: segue este link para ativar a tua conta
       admin_posts: Notícias do AO3

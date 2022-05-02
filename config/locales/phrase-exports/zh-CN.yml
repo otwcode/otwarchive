@@ -7,7 +7,9 @@ zh-CN:
       html:
         left_kudos:
           other: "%{givers_list}给您的作品%{commentable_link}点了赞。"
-        single_guest: 一名访客给您的作品%{commentable_link}点了赞。
+        single_guest:
+          giver_list: 一名访客
+          left_kudos: "%{giver_list}给您的作品%{commentable_link}点了赞。"
       subject: "[%{app_name}] 您收到了点赞！"
       text:
         left_kudos:
@@ -219,9 +221,15 @@ zh-CN:
       reason: 您的申请为：
       subject: "[%{app_name}] 额外邀请码申请拒函"
     recipient_notification:
+      html:
+        collection: 您在AO3上收到了一篇来自于作品集 %{collection_link} 的赠文！
+      no_collection: 您在AO3上收到了一篇赠文！
       subject:
-        collection: "[%{app_name}][%{collection_title}]来自于作品集%{collection_title}的赠文"
+        collection: "[%{app_name}][%{collection_title}]来自于作品集 %{collection_title}
+          的赠文"
         no_collection: "[%{app_name}]您收到了一篇赠文"
+      text:
+        collection: 您在AO3上收到了一篇来自于作品集" %{collection_link} " （%{collection_url}）的赠文！
     signup_notification:
       activate_your_account: 点击以下链接激活您的账户
       admin_posts: AO3新闻

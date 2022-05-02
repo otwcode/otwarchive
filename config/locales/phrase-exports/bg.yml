@@ -9,7 +9,9 @@ bg:
         left_kudos:
           one: "%{givers_list} остави кудос за %{commentable_link}."
           other: "%{givers_list} оставиха кудос за %{commentable_link}."
-        single_guest: Един гост остави кудос за %{commentable_link}.
+        single_guest:
+          giver_list: Един гост
+          left_kudos: "%{giver_list} остави кудос за %{commentable_link}."
       subject: "[%{app_name}] Имаш кудос!"
       text:
         left_kudos:
@@ -350,6 +352,13 @@ bg:
       reason: 'Твоето искане:'
       subject: "[%{app_name}] Отхвърлено искане за допълнителен код за покана"
     recipient_notification:
+      html:
+        collection: Някой е публикувал творба-подарък за теб в колекцията %{collection_link}
+          в AO3!
+      no_collection: Някой е публикувал творба-подарък за теб в AO3!
       subject:
         collection: "[%{app_name}][%{collection_title}] Творба-подарък за теб от %{collection_title}"
         no_collection: "[%{app_name}] Творба-подарък за теб"
+      text:
+        collection: Някой е публикувал творба-подарък за теб в колекцията "%{collection_title}"
+          (%{collection_url}) в AO3!

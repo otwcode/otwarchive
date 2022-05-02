@@ -9,7 +9,9 @@ it:
         left_kudos:
           one: "%{givers_list} ha lasciato kudos per %{commentable_link}."
           other: "%{givers_list} hanno lasciato kudos per %{commentable_link}."
-        single_guest: Un ospite ha lasciato kudos per %{commentable_link}.
+        single_guest:
+          giver_list: Un ospite
+          left_kudos: "%{giver_list} ha lasciato kudos per %{commentable_link}."
       subject: "[%{app_name}] Hai dei kudos!"
       text:
         left_kudos:
@@ -443,10 +445,17 @@ it:
       reason: 'La tua richiesta è stata:'
       subject: "[%{app_name}] Richiesta per un Codice Invito aggiuntivo rifiutata"
     recipient_notification:
+      html:
+        collection: All'interno della collezione %{collection_link} su AO3 è stato
+          pubblicato un fanwork regalo per te!
+      no_collection: Su AO3 è stato pubblicato un fanwork regalo per te!
       subject:
         collection: "[%{app_name}][%{collection_title}] Un fanwork regalo per te su
           %{collection_title}"
         no_collection: "[%{app_name}] Hai ricevuto un fanwork regalo"
+      text:
+        collection: All'interno della collezione "%{collection_title}" (%{collection_url})
+          su AO3 è stato pubblicato un fanwork regalo per te!
     signup_notification:
       activate_your_account: segui questo link per attivare il tuo account
       admin_posts: News di AO3

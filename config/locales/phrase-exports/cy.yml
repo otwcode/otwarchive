@@ -15,7 +15,9 @@ cy:
           one: Gadawodd %{givers_list} canmol ar %{commentable_link}.
           other: Gadawodd %{givers_list} canmol ar %{commentable_link}.
           two: Gadawodd %{givers_list} canmol ar  %{commentable_link}.
-        single_guest: Gadawodd un westai canmol ar %{commentable_link}.
+        single_guest:
+          giver_list: un westai
+          left_kudos: Gadawodd %{giver_list} canmol ar %{commentable_link}.
       subject: "[%{app_name}] Mae gennych chi canmol!"
       text:
         left_kudos:
@@ -398,10 +400,17 @@ cy:
       reason: 'Roedd eich cais yn:'
       subject: "[%{app_name}] Gwrthodwyd cais cod gwahoddiad ychwanegol"
     recipient_notification:
+      html:
+        collection: Mae gwaith anrheg weid cael ei phostio yng nghasgliad %{collection_link}
+          ar yr AO3 ar eich cyfer!
+      no_collection: Mae gwaith anrheg weid cael ei phostio ar yr AO3 ar eich cyfer!
       subject:
         collection: "[%{app_name}][%{collection_title}] Gwaith anrheg ar eich cyfer
           o %{collection_title}"
         no_collection: "[%{app_name}] Gwaith anrheg ar eich cyfer"
+      text:
+        collection: Mae gwaith anrheg weid cael ei phostio yng nghasgliad "%{collection_title}"
+          (%{collection_url}) ar yr AO3 ar eich cyfer!
     signup_notification:
       activate_your_account: Ysgogwch eich cyfrif
       admin_posts: pyst gweinyddydd yr archif

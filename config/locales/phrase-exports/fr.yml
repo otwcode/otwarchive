@@ -9,7 +9,9 @@ fr:
         left_kudos:
           one: "%{givers_list} a félicité votre œuvre %{commentable_link}."
           other: "%{givers_list} ont félicité votre œuvre %{commentable_link}."
-        single_guest: Un/Une invité-e a félicité votre œuvre %{commentable_link}.
+        single_guest:
+          giver_list: Un/Une invité-e
+          left_kudos: "%{giver_list} a félicité votre œuvre %{commentable_link}."
       subject: "[%{app_name}] Vous avez reçu des félicitations !"
       text:
         left_kudos:
@@ -426,10 +428,17 @@ fr:
       reason: 'Votre demande était la suivante :'
       subject: "[%{app_name}] Demande de Code d'Invitation Supplémentaire Rejetée"
     recipient_notification:
+      html:
+        collection: Une œuvre cadeau a été publiée pour vous dans la collection %{collection_link}
+          sur AO3 !
+      no_collection: Une œuvre cadeau a été publiée pour vous sur AO3 !
       subject:
         collection: "[%{app_name}][%{collection_title}] Une œuvre cadeau pour vous
           dans %{collection_title}"
         no_collection: "[%{app_name}] Une œuvre cadeau pour vous"
+      text:
+        collection: Une œuvre cadeau a été publiée pour vous dans la collection "%{collection_title}"
+          (%{collection_url}) sur AO3 !
     signup_notification:
       activate_your_account: suivez ce lien pour activer votre compte
       admin_posts: Actualités d’AO3

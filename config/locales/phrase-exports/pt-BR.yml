@@ -113,13 +113,15 @@ pt-BR:
         sub_tag: Subtag
         sub_tag_id: Subtag
       rating:
-        name_with_colon: 'Classificação etária:'
+        name_with_colon: 'Classificação:'
       relationship:
         name_with_colon:
           one: 'Relacionamento:'
           other: 'Relacionamentos:'
       series/creatorships:
         base: 'Nome de artista inválido:'
+      work:
+        summary: Sumário
       work/chapters:
         base: 'Capítulo inválido:'
         content: Conteúdo
@@ -138,11 +140,14 @@ pt-BR:
     models:
       archive_warning:
         one: Advertência
-        other: Advertência
+        other: Advertências
       bookmark: Favoritar
       category:
         one: Categoria
         other: Categorias
+      chapter:
+        one: Capítulo
+        other: Capítulos
       character:
         one: Personagem
         other: Personagens
@@ -154,9 +159,15 @@ pt-BR:
         one: Tag adicional
         other: Tags adicionais
       pseud: Pseudônimo
+      rating:
+        one: Classificação
+        other: Classificação
       relationship:
         one: Relacionamento
         other: Relacionamentos
+      series:
+        one: Série
+        other: Séries
       tag:
         one: Tag
         other: Tags
@@ -410,7 +421,9 @@ pt-BR:
         left_kudos:
           one: "%{givers_list} deixou kudos em %{commentable_link}."
           other: "%{givers_list} deixaram kudos em %{commentable_link}."
-        single_guest: 1 visitante deixou kudos em %{commentable_link}.
+        single_guest:
+          giver_list: 1 visitante
+          left_kudos: "%{giver_list} deixou kudos em %{commentable_link}."
       subject: "[%{app_name}] Kudos pra você!"
       text:
         left_kudos:
@@ -431,6 +444,12 @@ pt-BR:
       closing:
         formal: Atenciosamente,
         informal: Atenciosamente,
+      creation:
+        link_with_word_count: "%{creation_link} (%{word_count})"
+        title_with_word_count: '"%{creation_title}" (%{word_count})'
+        word_count:
+          one: "%{count} palavra"
+          other: "%{count} palavras"
       footer:
         general:
           html:
@@ -450,6 +469,7 @@ pt-BR:
           addressed: Oi, %{name}!
           unaddressed: Oi!
         introductory: Olá! Aqui é o Archive of Our Own – AO3 (Nosso Próprio Arquivo).
+      metadata_label_indicator: ": "
       signature:
         app_short_name: AO3
         open_doors: Equipe do Open Doors (Portas Abertas)
@@ -904,10 +924,17 @@ pt-BR:
       reason: 'A solicitação que você nos enviou foi:'
       subject: "[%{app_name}] Solicitação de convite adicional negada"
     recipient_notification:
+      html:
+        collection: Uma obra de presente foi publicada para você na coleção %{collection_link}
+          no AO3!
+      no_collection: Uma obra de presente foi publicada para você no AO3!
       subject:
         collection: "[%{app_name}][%{collection_title}] Uma obra de presente para
           você na coleção %{collection_title}"
         no_collection: "[%{app_name}] Uma obra de presente para você"
+      text:
+        collection: Uma obra de presente foi publicada para você na coleção "%{collection_title}"
+          (%{collection_url}) no AO3!
     signup_notification:
       activate_your_account: siga este link para ativar sua conta
       admin_posts: Notícias do AO3

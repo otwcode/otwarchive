@@ -368,9 +368,16 @@ sl:
       reason: 'Vaša prošnja:'
       subject: "[%{app_name}] Prošnja za dodatne kode za povabila zavrnjena"
     recipient_notification:
+      html:
+        collection: Na AO3 je bilo v zbirki %{collection_link} objavljeno delo, ki
+          vam je bilo podarjeno!
+      no_collection: Na AO3 je bilo objavljeno delo, ki vam je bilo podarjeno!
       subject:
         collection: "[%{app_name}][%{collection_title}] Podarjeno delo za vas iz %{collection_title}"
         no_collection: "[%{app_name}] Podarjeno delo za vas"
+      text:
+        collection: Na AO3 je bilo v zbirki "%{collection_title}" (%{collection_url})
+          objavljeno delo, ki vam je bilo podarjeno!
     signup_notification:
       activate_your_account: kliknite na naslednjo povezavo, da aktivirate vaš račun
       admin_posts: AO3 Novice

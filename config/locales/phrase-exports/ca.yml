@@ -9,13 +9,15 @@ ca:
         left_kudos:
           one: "%{givers_list} ha deixat kudos a %{commentable_link}."
           other: "%{givers_list} han deixat kudos a %{commentable_link}."
-        single_guest: 1 convidat/da ha deixat kudos a %{commentable_link}.
+        single_guest:
+          giver_list: Un/a convidat/da
+          left_kudos: "%{giver_list} ha deixat kudos a %{commentable_link}."
       subject: "[%{app_name}] T'han deixat kudos!"
       text:
         left_kudos:
           one: "%{givers_list} ha deixat kudos a %{commentable_title} (%{commentable_url})."
           other: "%{givers_list} han deixat kudos a %{commentable_title} (%{commentable_url})."
-        single_guest: 1 convidat/da ha deixat kudos a %{commentable_title} (%{commentable_url}).
+        single_guest: Un/a convidat/da ha deixat kudos a %{commentable_title} (%{commentable_url}).
   mailer:
     general:
       closing:
@@ -379,10 +381,17 @@ ca:
       reason: 'La teva sol·licitud era:'
       subject: "[%{app_name}] Sol·licitud de codi d'invitació addicional rebutjada"
     recipient_notification:
+      html:
+        collection: S'ha publicat una obra de regal per a tu a la col·lecció %{collection_link}
+          a l'AO3!
+      no_collection: S'ha publicat una obra de regal per a tu a l'AO3!
       subject:
         collection: "[%{app_name}][%{collection_title}] Una obra de regal per a tu
           de %{collection_title}"
         no_collection: "[%{app_name}] Una obra de regal per a tu"
+      text:
+        collection: S'ha publicat una obra de regal per a tu a la col·lecció "%{collection_title}"
+          (%{collection_url}) a l'AO3!
     signup_notification:
       activate_your_account: segueix aquest enllaç per activar el teu compte
       admin_posts: Notícies de l’AO3

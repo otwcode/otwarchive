@@ -12,7 +12,9 @@ pl:
           few: Kudos dla %{commentable_link} od %{givers_list}.
           many: Kudos dla %{commentable_link} od %{givers_list}.
           one: Kudos dla %{commentable_link} od %{givers_list}.
-        single_guest: Kudos dla %{commentable_link} od 1 gościa.
+        single_guest:
+          giver_list: 1 gościa
+          left_kudos: Kudos dla %{commentable_link} od %{giver_list}.
       subject: "[%{app_name}] Masz kudos!"
       text:
         left_kudos:
@@ -382,9 +384,16 @@ pl:
       reason: 'Treść Twojej prośby:'
       subject: "[%{app_name}] Prośba o dodatkowe zaproszenia została odrzucona"
     recipient_notification:
+      html:
+        collection: W kolekcji %{collection_link} na AO3 opublikowano pracę, będącą
+          prezentem dla Ciebie!
+      no_collection: Na AO3 opublikowano pracę, będącą prezentem dla Ciebie!
       subject:
         collection: "[%{app_name}][%{collection_title}] Obdarowano Cię pracą w %{collection_title}"
         no_collection: "[%{app_name}] Obdarowano Cię pracą"
+      text:
+        collection: W kolekcji "%{collection_title}" (%{collection_url}) na AO3 opublikowano
+          pracę, będącą prezentem dla Ciebie!
     signup_notification:
       activate_your_account: aktywuj swoje konto
       admin_posts: archiwalnych postach adminów
