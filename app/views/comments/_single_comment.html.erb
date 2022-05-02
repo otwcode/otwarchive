@@ -1,5 +1,5 @@
 <!-- START of single comment -->
-<li class="<%= css_classes_for_comment(single_comment) %> <%= cycle :odd, :even %>" id="comment_<%= single_comment.id %>" role="article">
+<li class="<%= cycle :odd, :even %> <%= css_classes_for_comment(single_comment) %>" id="comment_<%= single_comment.id %>" role="article">
   <% if params[:edit_comment_id] && params[:edit_comment_id] == single_comment.id.to_s && can_edit_comment?(single_comment) %>
     <!-- we're editing this comment -->
     <%= render 'comments/comment_form',
