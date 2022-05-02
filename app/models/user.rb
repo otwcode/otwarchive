@@ -339,11 +339,11 @@ class User < ApplicationRecord
   # Checks authorship of any sort of object
   def is_author_of?(item)
     if item.respond_to?(:pseud_id)
-      pseuds.pluck(:id).include?(item.pseud_id)
+      pseud_ids.include?(item.pseud_id)
     elsif item.respond_to?(:user_id)
       id == item.user_id
     elsif item.respond_to?(:pseuds)
-      !(pseuds.pluck(:id) & item.pseuds.pluck(:id)).empty?
+      item.pseuds.pluck(:user_id).include?(id)
     elsif item.respond_to?(:author)
       self == item.author
     elsif item.respond_to?(:creator_id)

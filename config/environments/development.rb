@@ -15,9 +15,12 @@ Otwarchive::Application.configure do
   # Log error messages when you accidentally call methods on nil.
   # config.whiny_nils = true
 
-  # Show full error reports and disable caching
-  config.consider_all_requests_local       = true
-  config.action_controller.perform_caching = false
+  # Show full error reports:
+  config.consider_all_requests_local = true
+
+  # Enable/disable caching. By default caching is disabled, but it can be
+  # toggled on and off by calling rails dev:cache and restarting the server.
+  config.action_controller.perform_caching = Rails.root.join("tmp/caching-dev.txt").exist?
 
   # Don't care if the mailer can't send
   config.action_mailer.raise_delivery_errors = false
