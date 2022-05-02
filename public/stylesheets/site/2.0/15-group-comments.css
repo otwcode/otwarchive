@@ -11,8 +11,7 @@ test note: have put clearfixes on listbox, blurb and comments here, to allow for
   margin: 0 0 auto;
 }
 
-div.comment, 
-li.comment {
+div.comment, li.comment {
   position: relative;
   border: 1px solid #ddd;
   overflow: visible;
@@ -63,11 +62,10 @@ li.comment {
   margin: 0;
 }
 
-fieldset.comments,
-.comment .userstuff {
+fieldset.comments, .comment .userstuff {
   background: transparent;
   border: none;
-    box-shadow: none;
+  box-shadow: none;
 }
 
 .comment .userstuff {
