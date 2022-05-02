@@ -1,4 +1,4 @@
-<% creation_type = @creation.class.name.downcase %>
+<% creation_type = @creation.class.name.underscore %>
 <% content_for :message do %>
   <p>
     <%= t(".intro_#{creation_type}", archivist: @archivist.login, pseud: @creatorship.pseud.name) %>
