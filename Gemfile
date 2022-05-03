@@ -141,6 +141,7 @@ group :test do
   gem "simplecov"
   gem "codecov", require: false
   gem 'email_spec', '1.6.0'
+  gem "n_plus_one_control"
 end
 
 group :test, :development do

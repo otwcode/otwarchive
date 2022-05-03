@@ -296,9 +296,27 @@ module CommentsHelper
     end
   end
 
+  # gets the css user-<id> class name for the comment
+  def commenter_id_for_css_classes(comment)
+    return if comment.pseud.nil?
+    return if comment.ultimate_parent.try(:anonymous?) && comment.pseud.user.is_author_of?(comment.ultimate_parent)
+    return if comment.is_deleted
+    return if comment.hidden_by_admin
+
+    "user-#{comment.pseud.user_id}"
+  end
+
+  def css_classes_for_comment(comment)
+    return if comment.nil?
+
+    unreviewed = "unreviewed" if comment.unreviewed?
+    commenter = commenter_id_for_css_classes(comment)
+    "#{unreviewed} comment group #{commenter}".strip
+  end
+
   # find the parent of the commentable
   def find_parent(commentable)
-    if commentable.is_a?(Comment)
+    if commentable.respond_to?(:ultimate_parent)
       commentable.ultimate_parent
     elsif commentable.respond_to?(:work)
       commentable.work

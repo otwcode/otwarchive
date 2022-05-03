@@ -1,5 +1,18 @@
 ---
 zh-CN:
+  kudo_mailer:
+    batch_kudo_notification:
+      guest:
+        other: "%{count}名访客"
+      html:
+        left_kudos:
+          other: "%{givers_list}给您的作品%{commentable_link}点了赞。"
+        single_guest: 一名访客给您的作品%{commentable_link}点了赞。
+      subject: "[%{app_name}] 您收到了点赞！"
+      text:
+        left_kudos:
+          other: "%{givers_list}给您的作品%{commentable_title}（%{commentable_url}）点了赞。"
+        single_guest: 一名访客给您的作品%{commentable_title}（%{commentable_url}）点了赞。
   layouts:
     proxy_notice:
       faux_heading: 重要提示：
@@ -18,8 +31,8 @@ zh-CN:
             part2: AO3是由同人爱好者运作及支持、并由%{donate_link}资助运行的作品库。
             support_link_text: 联系支持团队
           text:
-            part1: 如果这封邮件是被误发给了您，请于此联系支持团队：%{support_url}。
-            part2: AO3是由同人爱好者运作及支持、并由您的捐赠资助运行的作品库：%{donate_url}。
+            part1: 如果这封邮件是被误发给了您，请于此联系支持团队：%{support_url}
+            part2: AO3是由同人爱好者运作及支持、并由您的捐赠资助运行的作品库：%{donate_url}
         sent_at: 于%{sent_at}发送。
       greeting:
         formal: 尊敬的%{name}，
@@ -32,16 +45,6 @@ zh-CN:
         open_doors: Open Doors（Open Doors拯救计划）团队
         parent_org: Organization for Transformative Works – OTW（OTW再创作组织）
         support: AO3支持委员会团队
-    kudos:
-      guest:
-        other: "%{count}名访客"
-      html:
-        left_kudos:
-          other: "%{givers_list}给您的作品点了赞%{commentable_link}。"
-      text:
-        left_kudos:
-          other: "%{givers_list}给您的作品点了赞%{commentable_link}。"
-      you_have: "[%{app_name}] 您收到了点赞！"
   users:
     mailer:
       reset_password_instructions:
@@ -74,42 +77,42 @@ zh-CN:
       check_email: 条款执行和违反行为处理委员会可能已经联系您并对您作品被隐藏的原因进行了解释，因此请查看您的电邮信箱，包括垃圾邮件列表。
       contact_abuse: 联系条款执行和违反行为处理委员会
       html:
-        help: 如果您不确定为什么您的作品会被隐藏，并且没有收到有关此事的进一步联系，请直接%{contact_abuse_link}。
+        help: 如果您不确定为什么您的作品会被隐藏，并且没有收到有关此事的进一步联系，请直接%{contact_abuse_link}
         hidden: 您的作品%{title}已被条款执行和违反行为处理委员会隐藏并无法再被公开访问。
-        tos_violation: 如果您的作品是因为违反AO3的%{tos_link}而被隐藏，您会被要求采取行动以纠正违规行为。如果您无法做出改动并让您的作品符合服务条款，您的作品可能会从AO3作品库中被删除。
+        tos_violation: 如果您的作品是因为违反AO3的服务条款（详细条款链接为：%{tos_link}）而被隐藏，您会被要求采取行动以纠正违规行为。如果您无法做出改动并让您的作品符合服务条款，您的作品可能会被从AO3作品库中删除。
       subject: "[%{app_name}] 您的作品已被条款执行和违反行为处理委员会隐藏"
       text:
-        help: 如果您不确定为什么您的作品会被隐藏，并且没有收到有关此事的进一步联系，请直接联系条款执行和违反行为处理委员会：%{contact_abuse_url}。
-        hidden: 您的作品“%{title}”（%{work_url}）已被条款执行和违反行为处理委员会隐藏并无法再被公开访问。
-        tos_violation: 如果您的作品是因为违反AO3的服务条款（%{tos_url}）而被隐藏，您会被要求采取行动以纠正违规行为。如果您无法做出改动并让您的作品符合服务条款，您的作品可能会从AO3作品库中被删除。
+        help: 如果您不确定为什么您的作品会被隐藏，并且没有收到有关此事的进一步联系，请直接联系条款执行和违反行为处理委员会：%{contact_abuse_url}
+        hidden: 您的作品"%{title}"（作品链接为：%{work_url}）已被条款执行和违反行为处理委员会隐藏并无法再被公开访问。
+        tos_violation: 如果您的作品是因为违反AO3的服务条款（详细条款链接为：%{tos_url}）而被隐藏，您会被要求采取行动以纠正违规行为。如果您无法做出改动并让您的作品符合服务条款，您的作品可能会被从AO3作品库中删除。
       tos: 服务条款
     anonymous_or_unrevealed_notification:
-      anonymous_info: 匿名作品在标签列表中可见，但不会显示在您的作品页面上。在作品页，您的用户名将替换为“Anonymous”（佚名）。
-      anonymous_unrevealed_info: 管理员随后可能会公开您的作品，但仍保留匿名。订阅您账户的用户不会收到相关改动提示。作品一经公开，即会被收录到标签列表中，但不会显示在您的作品页面。在作品页，您的用户名将替换为“Anonymous”（佚名）。
+      anonymous_info: 匿名作品在标签列表中可见，但不会显示在您的作品页面上。在作品页，您的用户名将替换为"Anonymous"（佚名）。
+      anonymous_unrevealed_info: 管理员随后可能会公开您的作品，但仍保留匿名。订阅您账户的用户不会收到相关改动提示。作品一经公开，即会被收录到标签列表中，但不会显示在您的作品页面。在作品页，您的用户名将替换为"Anonymous"（佚名）。
       changed_status:
         anonymous:
           html: 作品集%{collection_link}的管理员已将您的作品%{work_link}设为匿名状态。
-          text: 名为“%{collection_title}”的作品集（作品集链接为%{collection_url}）的管理员已将您名为“%{work_title}”（作品链接为%{work_url}）的作品设为匿名状态。
+          text: 名为"%{collection_title}"的作品集（作品集链接为%{collection_url}）的管理员已将您名为"%{work_title}"（作品链接为%{work_url}）的作品设为匿名状态。
         anonymous_unrevealed:
-          html: 作品集%{collection_link}的管理员已将您的作品%{work_link}设为匿名与非公开状态。
-          text: 名为“%{collection_title}”的作品集（作品集链接为%{collection_url}）的管理员已将您名为“%{work_title}”（作品链接为%{work_url}）的作品设为匿名与非公开状态。
+          html: 作品集%{collection_link}的管理员已将您的作品%{work_link} 设为匿名与非公开状态.
+          text: 名为"%{collection_title}"的作品集（作品集链接为%{collection_url}）的管理员已将您名为"%{work_title}"（作品链接为%{work_url}）的作品设为匿名与非公开状态。
         unrevealed:
           html: 作品集%{collection_link}的管理员已将您的作品%{work_link}设为非公开状态。
-          text: 名为“%{collection_title}”（作品集链接为%{collection_url}）的作品集的管理员已将您名为“%{work_title}”（作品链接为%{work_url}）的作品设为非公开状态。
+          text: 名为"%{collection_title}"（作品集链接为%{collection_url}）的作品集的管理员已将您名为"%{work_title}"（作品链接为%{work_url}）的作品设为非公开状态。
       collection_items_link_text: Approved Collection Items（已通过作品集条目）页
       do_not_want:
         anonymous:
-          html: 如您不希望该作品保持匿名状态，请访问 %{collection_items_link}，将其从该作品集中移除。
+          html: 如您想取消作品的匿名状态，请访问以下网页，将其从该作品集中移除：%{collection_items_link}
           text: 如您不希望作品保持匿名状态，请访问Approved Collection Items（已通过作品集条目）页，将其从该作品集中移除：%{collection_items_url}
         anonymous_unrevealed:
-          html: 如您不希望作品保持匿名与非公开状态，请访问%{collection_items_link}，将其从作品集中移除。
+          html: 如您不希望作品保持匿名与非公开状态，请访问以下网页，将其从作品集中移除：%{collection_items_link}
           text: 如您不希望作品保持匿名与非公开状态，请访问Approved Collection Items（已通过作品集条目）页，将其从该作品集中移除：%{collection_items_url}
         unrevealed:
-          html: 如您不希望作品保持非公开状态，请访问%{collection_items_link}，将其从作品集中移除。
+          html: 如您不希望作品保持非公开状态，请访问以下网页，将其从作品集中移除：%{collection_items_link}
           text: 如您不希望作品保持非公开状态，请访问Approved Collection Items（已通过作品集条目）页，将其从该作品集中移除：%{collection_items_url}
       faq_link_text: 同人作品集常见问题
       more_info:
-        html: 详情见%{faq_link}。
+        html: 详情见%{faq_link}
         text: 详情请见同人作品集常见问题：%{faq_url}
       subject:
         anonymous: "[%{app_name}] 您的作品被设为匿名状态"
@@ -146,7 +149,7 @@ zh-CN:
       html:
         received_message: 您收到一则有关您的作品集%{collection_link}的信息：
       text:
-        received_message: 您收到一则有关您的作品集“%{collection_title}”（%{collection_url}）的信息：
+        received_message: 您收到一则有关您的作品集"%{collection_title}"（%{collection_url}）的信息：
     creatorship_notification:
       explanation: 作为某一作品的共同创作者, 您可能被列为作品新章节的作者，无论您在个人设置中是否允许他人邀请您成为共同创作者， 您也会被自动列为作品所属系列的作者之一。
       html:

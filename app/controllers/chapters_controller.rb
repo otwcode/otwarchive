@@ -49,8 +49,6 @@ class ChaptersController < ApplicationController
         @previous_chapter = @chapters[chapter_position-1] unless chapter_position == 0
         @next_chapter = @chapters[chapter_position+1]
       end
-      @commentable = @work
-      @comments = @chapter.comments.reviewed
 
       if @work.unrevealed?
         @page_title = t(".unrevealed") + t(".chapter_position", position: @chapter.position.to_s)

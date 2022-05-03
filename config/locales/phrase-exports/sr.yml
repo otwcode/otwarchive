@@ -1,5 +1,24 @@
 ---
 sr:
+  kudo_mailer:
+    batch_kudo_notification:
+      guest:
+        few: "%{count} госта"
+        one: "%{count} гост"
+        other: "%{count} гостију"
+      html:
+        left_kudos:
+          few: "%{givers_list} су похвалили %{commentable_link}."
+          one: "%{givers_list} је похвалио/ла %{commentable_link}."
+          other: "%{givers_list} су похвалили %{commentable_link}."
+        single_guest: Гост/гошћа је оставио/ла похвалу на %{commentable_link}.
+      subject: "[%{app_name}] Добили сте похвале!"
+      text:
+        left_kudos:
+          few: "%{givers_list} су похвалили %{commentable_title} (%{commentable_url})."
+          one: "%{givers_list} је похвалио/ла %{commentable_title} (%{commentable_url})."
+          other: "%{givers_list} су похвалили %{commentable_title} (%{commentable_url})."
+        single_guest: Гост/гошћа је оставио/ла похвалу на %{commentable_title} (%{commentable_url}).
   mailer:
     general:
       closing:
@@ -24,29 +43,13 @@ sr:
         informal:
           addressed: Здраво, %{name}!
           unaddressed: Здраво!
-        introductory: Здраво од Archive of Our Own – AO3-а (Наше сопствене архиве)!
+        introductory: Здраво од Archive of Our Own – AO3-а (Наше сопствене архиве)!
       signature:
         app_short_name: AO3
         open_doors: Тим Open Doors (Отворених врата)
-        parent_org: Organization for Transformative Works – OTW (Организација за трансформативне
+        parent_org: Organization for Transformative Works – OTW (Организација за трансформативне
           радове)
         support: Тим Корисничке подршке AO3-а
-    kudos:
-      guest:
-        few: "%{count} госта"
-        one: "%{count} гост"
-        other: "%{count} гостију"
-      html:
-        left_kudos:
-          few: "%{givers_list} су похвалили %{commentable_link}."
-          one: "%{givers_list} је похвалио/ла %{commentable_link}."
-          other: "%{givers_list} су похвалили %{commentable_link}."
-      text:
-        left_kudos:
-          few: "%{givers_list} су похвалили %{commentable_link}."
-          one: "%{givers_list} је похвалио/ла %{commentable_link}."
-          other: "%{givers_list} су похвалили %{commentable_link}."
-      you_have: "[%{app_name}] Добили сте похвале!"
   users:
     mailer:
       reset_password_instructions:
@@ -117,26 +120,26 @@ sr:
       anonymous_info: Анонимна дела су укључена у излистане тагове, али нису на Вашој
         страници радова. На самом делу, Ваше корисничко име ће бити замењено са "Anonymous"
         (Анонимно).
-      anonymous_unrevealed_info: Одржавачи збирке могу касније открити Ваше дело,
-        али га оставити анонимним. Људи који вас буду пратили неће бити обавештени
+      anonymous_unrevealed_info: Одржаваоци збирке могу касније открити Ваше дело,
+        али га оставити анонимним. Људи који Вас буду пратили неће бити обавештени
         када ова промена ступи на снагу. Након што је откривено, Ваше дело ће бити
         укључено у излистане тагове, али неће бити на страници Ваших радова. На самом
         делу, Ваше корисничко име ће бити замењено са "Anonymous" (Анонимно).
       changed_status:
         anonymous:
-          html: Одржавачи %{collection_link} збирке су променили статус Вашег дела
+          html: Одржаваоци %{collection_link} збирке су променили статус Вашег дела
             %{work_link} на анонимно.
-          text: Одржавачи "%{collection_title}" (%{collection_url}) збирке су променили
+          text: Одржаваоци "%{collection_title}" (%{collection_url}) збирке су променили
             статус Вашег дела "%{work_title}" (%{work_url}) на анонимно.
         anonymous_unrevealed:
-          html: Одржавачи %{collection_link} збирке су променили статус Вашег дела
+          html: Одржаваоци %{collection_link} збирке су променили статус Вашег дела
             %{work_link} на анонимно и неоткривено.
-          text: Одржавачи "%{collection_title}" (%{collection_url}) збирке су променили
+          text: Одржаваоци "%{collection_title}" (%{collection_url}) збирке су променили
             статус Вашег дела "%{work_title}" (%{work_url}) на анонимно и неоткривено.
         unrevealed:
-          html: Одржавачи %{collection_link} збирке су променили статус Вашег дела
+          html: Одржаваоци %{collection_link} збирке су променили статус Вашег дела
             %{work_link} на неоткривено.
-          text: Одржавачи "%{collection_title}" (%{collection_url}) збирке су променили
+          text: Одржаваоци "%{collection_title}" (%{collection_url}) збирке су променили
             статус Вашег дела "%{work_title}" (%{work_url}) на неоткривено.
       collection_items_link_text: Approved Collection Items page (Страницу одобрених
         предмета из збирке)
@@ -180,7 +183,7 @@ sr:
         footer: Овај мејл сте добили јер сте се пријавили за изазов %{title}. За више
           информација о овом изазову и контакт информације модератора, молимо Вас,
           посетите %{footer_link}.
-        footer_link: профилна страница изазова
+        footer_link: профилну страницу изазова
         look_up: Овај задатак можете потражити на %{link}.
         look_up_link: Вашој страници Assignments (Задаци)
         part1: Додељен Вам је следећи захтев у оквиру изазова %{link} на Archive of
@@ -200,8 +203,8 @@ sr:
         look_up: Овај задатак можете потражити на Вашој страници Assignments (Задаци)
           на %{link}.
     change_email:
-      part1: "%{login}, email који је повезан са Вашим налогом је промењен у %{email}"
-      subject: "[%{app_name}] Email је промењен"
+      part1: "%{login}, имејл који је повезан са Вашим налогом је промењен у %{email}"
+      subject: "[%{app_name}] Имејл је промењен"
     collection_notification:
       assignments_sent:
         complete: Сви задаци су послати.
@@ -235,8 +238,8 @@ sr:
         remove_series: 'Ако сте додани грешком или не желите да будете наведени као
           аутор, можете уредити серијал дa бисте уклонили себе као аутора: %{url}'
     creatorship_notification_archivist:
-      explanation: Пошто поступају по својој званичној способности као архивар Отворених
-        Врата, дозвољено им је да Вас додају без позивнице, чак иако Вам је опција
+      explanation: Пошто поступају по свом званичном капацитету као архивар Отворених
+        Врата, дозвољено им је да Вас додају без позивнице, чак и ако Вам је опција
         коауторства искључена.
       html:
         creation: "%{creation_link} од %{pseud_links}"
@@ -267,20 +270,26 @@ sr:
     creatorship_request:
       html:
         creation: "%{creation_link} од стране %{pseud_links}"
-        instructions: Можете да прихватите или одбијете овај захтев на Вашој %{page_name}
-          страници.
-        page_name: Co-Creator Requests (Захтеви за Коаутора)
+        instructions: Можете да прихватите или одбијете овај захтев на Вашој страници
+          %{page_name}.
+        page_name: Co-Creator Requests (Захтеви за коаутора)
+      intro_chapter: 'Корисник %{inviting_user} је позвао Ваш псеудоним %{pseud} да
+        буде на листи коаутора следећег поглавља:'
+      intro_series: 'Корисник %{inviting_user} је позвао Ваш псеудоним %{pseud} да
+        буде на листи коаутора следећег серијала:'
+      intro_work: 'Корисник %{inviting_user} је позвао Ваш псеудоним %{pseud} да буде
+        на листи коаутора на следећем делу:'
       subject: "[%{app_name}] Захтев за коаутора"
       text:
         creation: "%{title} (%{url}) од стране %{pseuds}"
         instructions: 'Можете да прихватите или одбијете овај захтев на Вашој страници
-          Co-Creator Requests (Захтеви за Коаутора): %{url}'
+          Co-Creator Requests (Захтеви за коаутора): %{url}'
     delete_work_notification:
       html:
         part1_other: Ваше дело %{title} је избрисано на захтев %{pseud}.
         part1_yourself: Ваше дело %{title} је избрисано на Ваш захтев.
         part2: Ако имате питања, молимо Вас %{support}.
-      part3: У прилогу је копија Вашег дела за Вашу референцу.
+      part3: У прилогу је копија Вашег дела ако желите да га прегледате.
       subject: "[%{app_name}] Ваше дело је избрисано"
       support: контактирајте Корисничку подршку
       text:
@@ -350,13 +359,13 @@ sr:
         few: Само смо хтели да Вас обавестимо да имате %{count} нове позивнице, које
           се могу користити за креирање нових налога на АО3-у. Можете позвати пријатеља
           на %{invitation_page}.
-        one: Само смо хтели да Вас обавестимо да имате %{count} нову позивницу, које
-          се могу користити за креирање нових налога на АО3-у. Можете позвати пријатеља
+        one: Само смо хтели да Вас обавестимо да имате %{count} нову позивницу, која
+          се може користити за креирање нових налога на АО3-у. Можете позвати пријатеља
           на %{invitation_page}.
         other: Само смо хтели да Вас обавестимо да имате %{count} нових позивница,
           које се могу користити за креирање нових налога на АО3-у. Можете позвати
           пријатеља на %{invitation_page}.
-      invitation_page_link_text: Ваша страница позивница
+      invitation_page_link_text: Вашој страници позивница
       subject: "[%{app_name}] Нове Позивнице"
     invite_request_declined:
       main:

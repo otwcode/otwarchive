@@ -1,5 +1,22 @@
 ---
 fr:
+  kudo_mailer:
+    batch_kudo_notification:
+      guest:
+        one: un/une invité-e
+        other: "%{count} invité-e-s"
+      html:
+        left_kudos:
+          one: "%{givers_list} a félicité votre œuvre %{commentable_link}."
+          other: "%{givers_list} ont félicité votre œuvre %{commentable_link}."
+        single_guest: Un/Une invité-e a félicité votre œuvre %{commentable_link}.
+      subject: "[%{app_name}] Vous avez reçu des félicitations !"
+      text:
+        left_kudos:
+          one: "%{givers_list} a félicité votre œuvre %{commentable_title} (%{commentable_url})."
+          other: "%{givers_list} ont félicité votre œuvre %{commentable_title} (%{commentable_url})."
+        single_guest: Un/Une invité-e a félicité votre œuvre %{commentable_title}
+          (%{commentable_url}).
   mailer:
     general:
       closing:
@@ -15,47 +32,34 @@ fr:
             support_link_text: contacter le Support Technique
           text:
             part1: 'Si vous avez reçu ce message par erreur, veuillez contacter le
-              Support Technique à l’adresse suivante : %{support_url}.'
+              Support Technique à l''adresse suivante : %{support_url}.'
             part2: 'Le site Archive of Our Own est une archive gérée et financée par
               les fans, qui dépend de vos dons : %{donate_url}.'
-        sent_at: Envoyé à %{sent_at}.
+        sent_at: Envoyé le %{sent_at}.
       greeting:
         formal: Cher/Chère %{name},
         informal:
           addressed: Bonjour, %{name} !
           unaddressed: Bonjour !
-        introductory: Bonjour de la part d’Archive of Our Own – AO3 (Notre Propre
+        introductory: Bonjour de la part d'Archive of Our Own – AO3 (Notre Propre
           Archive) !
       signature:
         app_short_name: AO3
-        open_doors: L’équipe du Projet Open Doors
+        open_doors: L'équipe du Projet Open Doors
         parent_org: Organization for Transformative Works – OTW (Organisation pour
           les Œuvres Transformatives)
-        support: L’équipe de Support Technique d’AO3
-    kudos:
-      guest:
-        one: un/une invité-e
-        other: "%{count} invité-e-s"
-      html:
-        left_kudos:
-          one: "%{givers_list} a félicité votre œuvre %{commentable_link}."
-          other: "%{givers_list} ont félicité votre œuvre %{commentable_link}."
-      text:
-        left_kudos:
-          one: "%{givers_list} a félicité votre œuvre %{commentable_link}."
-          other: "%{givers_list} ont félicité votre œuvre %{commentable_link}."
-      you_have: "[%{app_name}] Vous avez reçu des félicitations !"
+        support: L'équipe de Support Technique d'AO3
   users:
     mailer:
       reset_password_instructions:
-        expiration: Ce lien est valable une semaine. S’il n’est pas utilisé dans ce
+        expiration: Ce lien est valable une semaine. S'il n'est pas utilisé dans ce
           délai, il arrivera à expiration et vous devrez alors en demander un nouveau.
         intro: 'Nous avons reçu une demande de réinitialisation du mot de passe de
           votre compte. Pour le modifier, suivez le lien ci-dessous et entrez votre
           nouveau mot de passe :'
         link_title: Modifier mon mot de passe.
         subject: "[%{app_name}] Réinitialisation du mot de passe"
-        unrequested: Si vous n’êtes pas à l’origine de cette demande, veuillez ignorer
+        unrequested: Si vous n'êtes pas à l'origine de cette demande, veuillez ignorer
           ce message. Votre ancien mot de passe restera alors valide.
   user_mailer:
     abuse_report:
@@ -67,50 +71,50 @@ fr:
       bye: Vous trouverez une copie de votre œuvre en pièce jointe.
       contact_abuse: contacter notre Comité Modération
       html:
-        part1: Votre œuvre %{title} a été supprimée de l’Archive par un-e administrateur-trice
+        part1: Votre œuvre %{title} a été supprimée de l'Archive par un-e administrateur-trice
           du site.
-        part2: Si votre œuvre faisait partie d’un projet d’importation réalisé par
+        part2: Si votre œuvre faisait partie d'un projet d'importation réalisé par
           Open Doors, veuillez %{opendoors_link} pour toute question supplémentaire.
-        tos_violation: S’il est possible que votre œuvre ait enfreint les Conditions
-          d’Utilisation, veuillez %{contact_abuse_link}.
+        tos_violation: S'il est possible que votre œuvre ait enfreint les Conditions
+          d'Utilisation, veuillez %{contact_abuse_link}.
       opendoors: contacter Open Doors (Portes Ouvertes)
       subject: "[%{app_name}] Votre œuvre a été supprimée par un-e administrateur-trice"
       text:
-        part1: Votre œuvre "%{title}" a été supprimée de l’Archive par un-e administrateur-trice
+        part1: Votre œuvre "%{title}" a été supprimée de l'Archive par un-e administrateur-trice
           du site.
-        part2: Si votre œuvre faisait partie d’un projet d’importation réalisé par
+        part2: Si votre œuvre faisait partie d'un projet d'importation réalisé par
           Open Doors, veuillez contacter Open Doors (Portes Ouvertes) (%{opendoors_link})
           pour toute question supplémentaire.
-        tos_violation: S’il est possible que votre œuvre ait enfreint les Conditions
-          d’Utilisation, veuillez contacter notre Comité Modération (%{contact_abuse_url}).
+        tos_violation: S'il est possible que votre œuvre ait enfreint les Conditions
+          d'Utilisation, veuillez contacter notre Comité Modération (%{contact_abuse_url}).
     admin_hidden_work_notification:
       access: Durant cette période, vous pourrez toujours y accéder grâce au lien
         fourni ci-dessus, toutefois elle ne fera pas partie de la liste de vos œuvres
-        et ne sera pas accessible aux autres utilisateur-trice-s d’AO3.
+        et ne sera pas accessible aux autres utilisateur-trice-s d'AO3.
       check_email: Vérifiez vos e-mails, y compris le dossier des indésirables, car
         le Comité Modération vous a peut-être déjà contacté-e pour vous en expliquer
         la raison.
       contact_abuse: contacter le Comité Modération
       html:
         help: Si vous ignorez pour quelle raison votre œuvre a été cachée et que vous
-          n’avez pas reçu de communication à ce sujet, merci de contacter %{contact_abuse_link}
+          n'avez pas reçu de communication à ce sujet, merci de contacter %{contact_abuse_link}
           directement.
-        hidden: Votre œuvre %{title} a été cachée par le Comité Modération et n’est
+        hidden: Votre œuvre %{title} a été cachée par le Comité Modération et n'est
           plus accessible au public.
         tos_violation: Si votre œuvre a été cachée suite à une violation des %{tos_link}
-          d’AO3, vous devrez corriger cette violation. À défaut, vous encourez le
-          risque qu’elle soit supprimée.
+          d'AO3, vous devrez corriger cette violation. À défaut, vous encourez le
+          risque qu'elle soit supprimée.
       subject: "[%{app_name}] Votre œuvre a été cachée par le Comité Modération"
       text:
         help: 'Si vous ignorez pour quelle raison votre œuvre a été cachée et que
-          vous n’avez pas reçu de communication à ce sujet, merci de contacter le
+          vous n''avez pas reçu de communication à ce sujet, merci de contacter le
           Comité Modération directement : %{contact_abuse_url}.'
         hidden: Votre œuvre "%{title}" (%{work_url}) a été cachée par le Comité Modération
-          et n’est plus accessible au public.
+          et n'est plus accessible au public.
         tos_violation: Si votre œuvre a été cachée suite à une violation des Conditions
-          d’Utilisation d’AO3 (%{tos_url}), vous devez corriger cette violation. À
-          défaut, vous encourez le risque qu’elle soit supprimée.
-      tos: Conditions d’Utilisation
+          d'Utilisation d'AO3 (%{tos_url}), vous devez corriger cette violation. À
+          défaut, vous encourez le risque qu'elle soit supprimée.
+      tos: Conditions d'Utilisation
     anonymous_or_unrevealed_notification:
       anonymous_info: Les œuvres anonymes apparaissent dans les listes de tags mais
         pas sur la page rassemblant vos œuvres. Sur l'œuvre, votre nom d'utilisateur-trice
@@ -181,7 +185,7 @@ fr:
       due: 'Cette tâche est à terminer avant le :'
       html:
         footer: Vous avez reçu cet e-mail car vous vous êtes inscrit-e au défi %{title}.
-          Pour plus d’informations sur ce défi et savoir comment contacter les modérateur-trice-s,
+          Pour plus d'informations sur ce défi et savoir comment contacter les modérateur-trice-s,
           veuillez consulter %{footer_link}.
         footer_link: la page de profil du défi
         look_up: Vous pouvez accéder à cette tâche via %{link}.
@@ -193,20 +197,20 @@ fr:
       prompt_url: 'URL du prompt :'
       recipient: 'Destinataire :'
       recipient_missing: 'Aucun-e : contactez un/une modérateur-trice pour demander
-        de l’aide !'
+        de l''aide !'
       subject: "[%{app_name}][%{collection_title}] Vous Avez Reçu une Tâche !"
       text:
         assignment: La demande suivante vous a été attribuée dans le cadre du défi
           "%{collection_title}" (%{collection_url}) sur Archive of Our Own !
         footer: Vous avez reçu cet e-mail car vous vous êtes inscrit-e au défi %{title}
-          (%{url}). Pour plus d’informations sur ce défi et savoir comment contacter
+          (%{url}). Pour plus d'informations sur ce défi et savoir comment contacter
           les modérateur-trice-s, veuillez consulter %{profile_url}.
         look_up: Vous pouvez retrouver cette tâche dans votre page Assignments (Tâches)
-          à l’adresse %{link}.
+          à l'adresse %{link}.
     change_email:
-      part1: "%{login}, l’adresse e-mail associée à votre compte a été remplacée par
+      part1: "%{login}, l'adresse e-mail associée à votre compte a été remplacée par
         %{email}"
-      subject: "[%{app_name}] Changement d’adresse e-mail"
+      subject: "[%{app_name}] Changement d'adresse e-mail"
     collection_notification:
       assignments_sent:
         complete: Toutes les tâches ont été envoyées.
@@ -218,9 +222,9 @@ fr:
         received_message: 'Vous avez reçu un message à propos de votre collection
           "%{collection_title}" (%{collection_url}) :'
     creatorship_notification:
-      explanation: Lorsque vous êtes co-créateur-trice d’une œuvre, votre nom peut
+      explanation: Lorsque vous êtes co-créateur-trice d'une œuvre, votre nom peut
         être ajouté à de nouveaux chapitres quels que soient les paramètres de la
-        co-création. Il pourra également être ajouté à toute série à laquelle l’œuvre
+        co-création. Il pourra également être ajouté à toute série à laquelle l'œuvre
         serait annexée.
       html:
         creation: "%{creation_link} par %{pseud_links}"
@@ -232,9 +236,9 @@ fr:
         remove_series: Si votre nom a été ajouté par erreur ou si vous ne souhaitez
           pas figurer en tant que créateur-trice, vous pouvez %{edit_series_link}
           et en retirer votre nom.
-      intro_chapter: 'L’utilisateur-trice %{adding_user} a ajouté votre pseudo %{pseud}
+      intro_chapter: 'L''utilisateur-trice %{adding_user} a ajouté votre pseudo %{pseud}
         en tant que co-créateur-trice pour le chapitre suivant :'
-      intro_series: 'L’utilisateur-trice %{adding_user} a ajouté votre pseudo %{pseud}
+      intro_series: 'L''utilisateur-trice %{adding_user} a ajouté votre pseudo %{pseud}
         en tant que co-créateur-trice pour la série suivante :'
       subject: "[%{app_name}] Notification de Co-création"
       text:
@@ -246,7 +250,7 @@ fr:
           pas figurer en tant que créateur-trice, vous pouvez modifier la série et
           en retirer votre nom : %{url}'
     creatorship_notification_archivist:
-      explanation: L’utilisateur-trice, en sa qualité d’archiviste officiel-le d’Open
+      explanation: L'utilisateur-trice, en sa qualité d'archiviste officiel-le d'Open
         Doors (Portes Ouvertes), a la possibilité de vous ajouter sans invitation,
         même si vous avez désactivé la co-création.
       html:
@@ -262,13 +266,13 @@ fr:
           pseudo.
         remove_work: Si vous avez été ajouté-e par erreur ou ne souhaitez pas apparaître
           comme créateur-trice, vous pouvez %{edit_work_link} pour retirer votre pseudo.
-      intro_chapter: 'L’utilisateur-trice %{archivist} a ajouté votre pseudo %{pseud}
+      intro_chapter: 'L''utilisateur-trice %{archivist} a ajouté votre pseudo %{pseud}
         en tant que co-créateur-trice du chapitre suivant :'
-      intro_series: 'L’utilisateur-trice %{archivist} a ajouté votre pseudo %{pseud}
+      intro_series: 'L''utilisateur-trice %{archivist} a ajouté votre pseudo %{pseud}
         en tant que co-créateur-trice de la série suivante :'
-      intro_work: 'L’utilisateur-trice %{archivist} a ajouté votre pseudo %{pseud}
-        en tant que co-créateur-trice de l’œuvre suivante :'
-      subject: "[%{app_name}] Notification d’ajout en tant que co-créateur-trice"
+      intro_work: 'L''utilisateur-trice %{archivist} a ajouté votre pseudo %{pseud}
+        en tant que co-créateur-trice de l''œuvre suivante :'
+      subject: "[%{app_name}] Notification d'ajout en tant que co-créateur-trice"
       text:
         creation: "%{title} (%{url}) de %{pseuds}"
         remove_chapter: 'Si vous avez été ajouté-e par erreur ou ne souhaitez pas
@@ -285,12 +289,12 @@ fr:
         creation: "%{creation_link} par %{pseud_links}"
         instructions: Vous pouvez accepter ou refuser cette demande sur la page %{page_name}.
         page_name: Co-Creator Requests (Demandes de Co-création)
-      intro_chapter: 'L’utilisateur-trice %{inviting_user} a invité votre pseudo %{pseud}
-        à apparaître en co-création du chapitre suivant :'
-      intro_series: 'L’utilisateur-trice %{inviting_user} a invité votre pseudo %{pseud}
+      intro_chapter: 'L''utilisateur-trice %{inviting_user} a invité votre pseudo
+        %{pseud} à apparaître en co-création du chapitre suivant :'
+      intro_series: 'L''utilisateur-trice %{inviting_user} a invité votre pseudo %{pseud}
         à apparaître en co-création de la série suivante :'
-      intro_work: 'L’utilisateur-trice %{inviting_user} a invité votre pseudo %{pseud}
-        à apparaître en co-création de l’œuvre suivante :'
+      intro_work: 'L''utilisateur-trice %{inviting_user} a invité votre pseudo %{pseud}
+        à apparaître en co-création de l''œuvre suivante :'
       subject: "[%{app_name}] Demande de Co-création"
       text:
         creation: "%{title} (%{url}) par %{pseuds}"
@@ -305,7 +309,7 @@ fr:
       subject: "[%{app_name}] Votre œuvre a été supprimée"
       support: contacter le Support Technique
       text:
-        part1_other: Votre œuvre \"%{title}\" a été supprimée suite à la demande de
+        part1_other: Votre œuvre "%{title}" a été supprimée suite à la demande de
           %{pseud}.
         part1_yourself: Votre œuvre "%{title}" a été supprimée suite à votre demande.
         part2: Si vous avez des questions, veuillez %{support} (%{url}).
@@ -407,11 +411,11 @@ fr:
       body:
         one: 'Nous vous envoyons ce message pour vous informer que vous possédez %{count}
           nouvelle invitation, permettant de créer un nouveau compte sur AO3. Vous
-          pouvez aussi inviter un-e ami-e à l’adresse suivante : %{invitation_page}.'
+          pouvez aussi inviter un-e ami-e à l''adresse suivante : %{invitation_page}.'
         other: 'Nous vous envoyons ce message pour vous informer que vous possédez
           %{count} nouvelles invitations, permettant de créer de nouveaux comptes
-          sur AO3. Vous pouvez aussi inviter un-e ami-e à l’adresse suivante : %{invitation_page}.'
-      invitation_page_link_text: votre page d’invitations
+          sur AO3. Vous pouvez aussi inviter un-e ami-e à l''adresse suivante : %{invitation_page}.'
+      invitation_page_link_text: votre page d'invitations
       subject: "[%{app_name}] Nouvelles Invitations"
     invite_request_declined:
       main:
@@ -420,7 +424,7 @@ fr:
         other: Nous sommes au regret de vous informer que votre demande de %{count}
           nouvelles invitations ne peut être satisfaite pour le moment.
       reason: 'Votre demande était la suivante :'
-      subject: "[%{app_name}] Demande de Code d’Invitation Supplémentaire Rejetée"
+      subject: "[%{app_name}] Demande de Code d'Invitation Supplémentaire Rejetée"
     recipient_notification:
       subject:
         collection: "[%{app_name}][%{collection_title}] Une œuvre cadeau pour vous

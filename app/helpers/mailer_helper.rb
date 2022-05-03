@@ -110,6 +110,29 @@ module MailerHelper
     end
   end
 
+  # e.g., Title (x words), where Title is a link
+  def creation_link_with_word_count(creation, creation_url)
+    title = if creation.is_a?(Chapter)
+              creation.full_chapter_title.html_safe
+            else
+              creation.title.html_safe
+            end
+    t("mailer.general.creation.link_with_word_count",
+      creation_link: style_creation_link(title, creation_url),
+      word_count: creation_word_count(creation)).html_safe
+  end
+
+  # e.g., "Title" (x words), where Title is not a link
+  def creation_title_with_word_count(creation)
+    title = if creation.is_a?(Chapter)
+              creation.full_chapter_title.html_safe
+            else
+              creation.title.html_safe
+            end
+    t("mailer.general.creation.title_with_word_count",
+      creation_title: title, word_count: creation_word_count(creation))
+  end
+
   # The bylines used in subscription emails to prevent exposing the name(s) of
   # anonymous creator(s).
   def creator_links(work)
@@ -125,6 +148,63 @@ module MailerHelper
       "Anonymous"
     else
       work.pseuds.map { |p| text_pseud(p) }.to_sentence.html_safe
+    end
+  end
+
+  def work_metadata_label(text)
+    text.html_safe + t("mailer.general.metadata_label_indicator")
+  end
+
+  # Spacing is dealt with in locale files, e.g. " : " for French.
+  def work_tag_metadata(tags)
+    return if tags.empty?
+
+    "#{work_tag_metadata_label(tags)}#{work_tag_metadata_list(tags)}"
+  end
+
+  def style_work_metadata_label(text)
+    style_bold(work_metadata_label(text))
+  end
+
+  # Spacing is dealt with in locale files, e.g. " : " for French.
+  def style_work_tag_metadata(tags)
+    return if tags.empty?
+
+    label = style_bold(work_tag_metadata_label(tags))
+    "#{label}#{style_work_tag_metadata_list(tags)}".html_safe
+  end
+
+  private
+
+  # e.g., 1 word or 50 words
+  def creation_word_count(creation)
+    t("mailer.general.creation.word_count", count: creation.word_count)
+  end
+
+  def work_tag_metadata_label(tags)
+    return if tags.empty?
+
+    type = tags.first.type
+    t("activerecord.models.#{type.underscore}", count: tags.count) + t("mailer.general.metadata_label_indicator")
+  end
+
+  # We don't use .to_sentence because these aren't links and we risk making any
+  # connector word (e.g., "and") look like part of the final tag.
+  def work_tag_metadata_list(tags)
+    return if tags.empty?
+
+    tags.pluck(:name).join(t("support.array.words_connector"))
+  end
+
+  def style_work_tag_metadata_list(tags)
+    return if tags.empty?
+
+    type = tags.first.type
+    # Fandom tags are linked and to_sentence'd.
+    if type == "Fandom"
+      tags.map { |f| style_link(f.name, fandom_url(f)) }.to_sentence.html_safe
+    else
+      work_tag_metadata_list(tags)
     end
   end
 end # end of MailerHelper
