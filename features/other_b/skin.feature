@@ -337,3 +337,4 @@ Feature: Non-public site and work skins
       And I fill in "CSS" with "body { background: cyan; }"
       And I press "Update"
     Then I should see "background: cyan;"
+    
