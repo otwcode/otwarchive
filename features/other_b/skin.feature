@@ -337,11 +337,3 @@ Feature: Non-public site and work skins
       And I fill in "CSS" with "body { background: cyan; }"
       And I press "Update"
     Then I should see "background: cyan;"
-
-  Scenario: When I save a skin with a parent it is seen in preview
-    Given I am logged in as "skin_maker"
-      And I have a skin "Child Skin" with a parent "Parent Skin"
-    When I edit the skin "Child Skin"
-    Then I should see "Parent Skins"
-    Then I should see "Parent #"
-    
