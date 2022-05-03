@@ -109,7 +109,7 @@ fr:
           unaddressed: Bonjour !
         introductory: Bonjour de la part d'Archive of Our Own – AO3 (Notre Propre
           Archive) !
-      metadata_label_indicator: ":"
+      metadata_label_indicator: " : "
       signature:
         app_short_name: AO3
         open_doors: L'équipe du Projet Open Doors

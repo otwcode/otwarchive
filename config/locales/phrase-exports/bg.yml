@@ -107,7 +107,7 @@ bg:
           addressed: Здравей, %{name}!
           unaddressed: Здравей!
         introductory: Привет от Archive of Our Own – AO3 (Нашият архив)!
-      metadata_label_indicator: ":"
+      metadata_label_indicator: ": "
       signature:
         app_short_name: AO3
         open_doors: Екипът на Open Doors (Отворени врати)

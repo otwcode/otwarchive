@@ -106,7 +106,7 @@ ca:
           addressed: Hola, %{name}!
           unaddressed: Hola!
         introductory: Hola de part de l'Archive of Our Own – AO3 (Un Arxiu Propi)!
-      metadata_label_indicator: ":"
+      metadata_label_indicator: ": "
       signature:
         app_short_name: AO3
         open_doors: L'equip d'Open Doors (Projecte de Portes Obertes)

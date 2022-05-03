@@ -106,7 +106,7 @@ pt-PT:
           addressed: Olá, %{name}!
           unaddressed: Olá!
         introductory: Olá do Archive of Our Own – AO3 (O Nosso Próprio Arquivo)!
-      metadata_label_indicator: ":"
+      metadata_label_indicator: ": "
       signature:
         app_short_name: AO3
         open_doors: A equipa do Open Doors (Portas Abertas)

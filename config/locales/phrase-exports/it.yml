@@ -107,7 +107,7 @@ it:
           addressed: Ciao, %{name}!
           unaddressed: Ciao!
         introductory: Ciao da Archive of Our Own – AO3 (Archivio Tutto Per Noi)!
-      metadata_label_indicator: ":"
+      metadata_label_indicator: ": "
       signature:
         app_short_name: AO3
         open_doors: Il team di Open Doors (Porte Aperte)

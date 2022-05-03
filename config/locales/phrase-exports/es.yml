@@ -107,7 +107,7 @@ es:
           addressed: "¡Hola %{name}!"
           unaddressed: "¡Hola!"
         introductory: Saludos de parte del Archive of Our Own – AO3 (Un Archivo Propio)
-      metadata_label_indicator: ":"
+      metadata_label_indicator: ": "
       signature:
         app_short_name: AO3
         open_doors: El equipo de Open Doors (Puertas Abiertas)

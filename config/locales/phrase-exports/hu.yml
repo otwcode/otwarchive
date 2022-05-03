@@ -107,7 +107,7 @@ hu:
           addressed: Szia %{name}!
           unaddressed: Szia!
         introductory: Üdvözlet az Archive of Our Own – AO3-től (A Mi Archívumunk)!
-      metadata_label_indicator: ":"
+      metadata_label_indicator: ": "
       signature:
         app_short_name: AO3
         open_doors: A Open Doors (Nyitott Ajtók) csapata

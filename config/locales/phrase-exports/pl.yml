@@ -128,7 +128,7 @@ pl:
           addressed: Cześć, %{name}!
           unaddressed: Cześć!
         introductory: Pozdrowienia z Archive of Our Own – AO3 (Naszego Własnego Archiwum)!
-      metadata_label_indicator: ":"
+      metadata_label_indicator: ": "
       signature:
         app_short_name: AO3
         open_doors: Zespół Open Doors (Drzwi Otwartych)
