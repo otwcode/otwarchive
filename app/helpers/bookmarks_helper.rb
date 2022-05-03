@@ -1,16 +1,13 @@
 module BookmarksHelper
-
   # if the current user has the current object bookmarked return the existing bookmark
   # since the user may have multiple bookmarks for different pseuds we prioritize by current default pseud if more than one bookmark exists
   def bookmark_if_exists(bookmarkable)
     return nil unless logged_in?
+
     bookmarkable = bookmarkable.work if bookmarkable.class == Chapter
-    bookmarks = Bookmark.where(bookmarkable_id: bookmarkable.id, bookmarkable_type: bookmarkable.class.name.to_s, pseud_id: current_user.pseuds.collect(&:id))
-    if bookmarks.count > 1
-      bookmarks.where(pseud_id: current_user.default_pseud.id).first || bookmarks.last
-    else
-      bookmarks.last
-    end
+
+    current_user.bookmarks.where(bookmarkable: bookmarkable)
+      .reorder("pseuds.is_default", "bookmarks.id").last
   end
 
   # returns just a url to the new bookmark form
