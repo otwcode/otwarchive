@@ -44,14 +44,6 @@ module CommentsHelper
     end
   end
 
-  def css_classes_for_comment(comment)
-    return "" if comment.nil?
-    
-    official = "official" if comment&.pseud&.user&.official
-    unreviewed = "unreviewed" if comment.unreviewed?
-    "comment group #{official} #{unreviewed}".strip
-  end
-
   # return pseudname or name for comment
   def get_commenter_pseud_or_name(comment)
     if comment.pseud_id
@@ -311,7 +303,9 @@ module CommentsHelper
 
     unreviewed = "unreviewed" if comment.unreviewed?
     commenter = commenter_id_for_css_classes(comment)
-    "#{unreviewed} comment group #{commenter}".strip
+    official = "official" if comment&.pseud&.user&.official
+
+    "#{unreviewed} comment group #{commenter} #{official}".strip
   end
 
   # find the parent of the commentable
