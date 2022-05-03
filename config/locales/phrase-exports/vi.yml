@@ -3,14 +3,19 @@ vi:
   kudo_mailer:
     batch_kudo_notification:
       guest:
-        other: "%{count} vị khách"
+        other: "%{count} người đọc khách"
       html:
         left_kudos:
-          other: "%{givers_list} đã để lại tán dương cho %{commentable_link}."
-      subject: "[%{app_name}] Bạn nhận được tán dương!"
+          other: "%{givers_list} đã tán dương tác phẩm %{commentable_link}."
+        single_guest:
+          giver_list: Một người đọc khách
+          left_kudos: "%{giver_list} đã tán dương tác phẩm %{commentable_link}."
+      subject: "[%{app_name}] Tán dương gửi tới bạn!"
       text:
         left_kudos:
-          other: "%{givers_list} đã để lại tán dương cho %{commentable_title} (%{commentable_url})."
+          other: "%{givers_list} đã tán dương tác phẩm %{commentable_title} (%{commentable_url})."
+        single_guest: Một người đọc khách đã tán dương tác phẩm %{commentable_title}
+          (%{commentable_url}).
   mailer:
     general:
       closing:
@@ -382,10 +387,17 @@ vi:
       reason: 'Yêu cầu của bạn là:'
       subject: "[%{app_name}] Từ chối Yêu cầu Thêm Thư mời"
     recipient_notification:
+      html:
+        collection: Một tác phẩm dành tặng bạn đã được đăng tải trong bộ sưu tập %{collection_link}
+          tại AO3!
+      no_collection: Một tác phẩm dành tặng bạn đã được đăng tải trên AO3!
       subject:
         collection: "[%{app_name}][%{collection_title}] Một tác phẩm dành tặng bạn
           trong %{collection_title}"
         no_collection: "[%{app_name}] Một tác phẩm dành tặng bạn"
+      text:
+        collection: Một tác phẩm dành tặng bạn đã được đăng tải trong bộ sưu tập"%{collection_title}"
+          (%{collection_url}) tại AO3!
     signup_notification:
       activate_your_account: theo đường link này để kích hoạt tài khoản của bạn
       admin_posts: Tin tức AO3

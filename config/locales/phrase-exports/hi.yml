@@ -9,7 +9,9 @@ hi:
         left_kudos:
           one: "%{givers_list} ने %{commentable_link} पर कुङोस दिया है।"
           other: "%{givers_list} ने %{commentable_link} पर कुङोस दिए हैं।"
-        single_guest: एक अतिथि ने %{commentable_link} पर कुङोस दिया है।
+        single_guest:
+          giver_list: एक अतिथि
+          left_kudos: "%{giver_list} ने %{commentable_link} पर कुङोस दिया है।"
       subject: "[%{app_name}] आपको कुङोस मिला हैं!"
       text:
         left_kudos:
@@ -321,7 +323,14 @@ hi:
       reason: 'आपका अनुरोध था:'
       subject: "[%{app_name}] अतिरिक्त आमंत्रण अनुरोध अस्वीकृत किया गया"
     recipient_notification:
+      html:
+        collection: आप के लिए एक उपहार कार्य AO3 पर %{collection_link} संग्रह में
+          पोस्ट किया गया है!
+      no_collection: आप के लिए एक उपहार कार्य AO3 पर पोस्ट किया गया है!
       subject:
         collection: "[%{app_name}][%{collection_title}] आप के लिए एक उपहार कार्य %{collection_title}
           से।"
         no_collection: "[%{app_name}] आप के लिए एक उपहार कार्य"
+      text:
+        collection: आप के लिए एक उपहार कार्य AO3 पर "%{collection_title}" संग्रह (%{collection_url})
+          में पोस्ट किया गया है!

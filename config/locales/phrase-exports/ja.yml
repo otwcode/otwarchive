@@ -257,9 +257,14 @@ ja:
       reason: あなたのリクエストは以下の通りでした。
       subject: "[%{app_name}]追加招待コードのリクエストが拒否されました"
     recipient_notification:
+      html:
+        collection: あなたへのプレゼント作品が、AO3の%{collection_link} コレクションに投稿されました！
+      no_collection: あなたへのプレゼント作品がAO3に投稿されました！
       subject:
-        collection: "[%{app_name}][%{collection_title}] %{collection_title}からあなたへのプレゼント作品が届きました"
+        collection: "[%{app_name}][%{collection_title}] %{collection_title} からあなたへのプレゼント作品が届きました"
         no_collection: "[%{app_name}] あなたへのプレゼント作品が届きました"
+      text:
+        collection: あなたへのプレゼント作品が、AO3の 「 %{collection_title} 」コレクション（%{collection_url}）に投稿されました！
     signup_notification:
       activate_your_account: このリンクに従いアアカウントを有効化してください
       admin_posts: AO3ニュース

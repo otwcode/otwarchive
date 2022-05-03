@@ -9,7 +9,9 @@ da:
         left_kudos:
           one: "%{givers_list} efterlod kudos på %{commentable_link}."
           other: "%{givers_list} efterlod kudos på %{commentable_link}."
-        single_guest: En gæst efterlod kudos på %{commentable_link}.
+        single_guest:
+          giver_list: En gæst
+          left_kudos: "%{giver_list} efterlod kudos på %{commentable_link}."
       subject: "[%{app_name}] Du har fået kudos!"
       text:
         left_kudos:
@@ -371,10 +373,17 @@ da:
       reason: 'Din anmodning var:'
       subject: "[%{app_name}] Anmodning om yderligere invitationer afvist"
     recipient_notification:
+      html:
+        collection: Et værk er blevet udgivet som gave til dig i %{collection_link}-samlingen
+          på AO3!
+      no_collection: Et værk er blevet udgivet som gave til dig på AO3!
       subject:
         collection: "[%{app_name}][%{collection_title}] Et værk i gave til dig fra
           %{collection_title}"
         no_collection: "[%{app_name}] Et værk i gave til dig"
+      text:
+        collection: Et værk er blevet udgivet som gave til dig i "%{collection_title}"-samlingen
+          (%{collection_url}) på AO3!
     signup_notification:
       activate_your_account: følg dette link for at aktivere din konto
       admin_posts: AO3 nyheder

@@ -299,9 +299,15 @@ he:
       reason: 'תוכן בקשתך:'
       subject: "[%{app_name}] בקשתך לקוד הזמנה נוסף נדחתה"
     recipient_notification:
+      html:
+        collection: יצירה הוקדשה לך במתנה באוסף %{collection_link} ב-AO3!
+      no_collection: יצירה הוקדשה לך במתנה ב-AO3!
       subject:
-        collection: "[%{app_name}][%{collection_title}] קיבלת יצירה במתנה מ-%{collection_title}"
+        collection: "[%{app_name}][%{collection_title}] קיבלת יצירה במתנה מ- %{collection_title}"
         no_collection: "[%{app_name}] קיבלת יצירה במתנה"
+      text:
+        collection: יצירה הוקדשה לך במתנה באוסף "%{collection_title}" (%{collection_url})
+          ב-AO3!
     signup_notification:
       activate_your_account: לחץ/י על קישור זה כדי להפעיל את חשבונך
       admin_posts: חדשות AO3

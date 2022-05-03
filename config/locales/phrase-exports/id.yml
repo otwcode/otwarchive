@@ -7,7 +7,9 @@ id:
       html:
         left_kudos:
           other: "%{givers_list} telah memberikan kudos untuk %{commentable_link}."
-        single_guest: Seorang tamu telah memberikan kudos untuk %{commentable_link}.
+        single_guest:
+          giver_list: Seorang tamu
+          left_kudos: "%{giver_list} telah memberikan kudos untuk %{commentable_link}."
       subject: "[%{app_name}] Anda telah menerima kudos!"
       text:
         left_kudos:
@@ -414,10 +416,17 @@ id:
       reason: 'Permintaan Anda adalah:'
       subject: "[%{app_name}] Permintaan kode undangan tambahan ditolak"
     recipient_notification:
+      html:
+        collection: Sebuah karya hadiah telah diunggah ke koleksi %{collection_link}
+          di AO3 untuk Anda!
+      no_collection: Sebuah karya hadiah telah diunggah ke AO3 untuk Anda!
       subject:
         collection: "[%{app_name}][%{collection_title}] Karya hadiah untuk Anda dari
           %{collection_title}"
         no_collection: "[%{app_name}] Karya hadiah untuk Anda"
+      text:
+        collection: Sebuah karya hadiah telah diunggah ke koleksi "%{collection_title}"
+          di AO3 (%{collection_url}) untuk Anda!
     signup_notification:
       activate_your_account: Ikuti tautan ini untuk mengaktifkan akun Anda.
       admin_posts: Berita AO3

@@ -15,7 +15,9 @@ ar:
           one: حصلت على علامة امتياز للعمل %{commentable_link} من %{givers_list}.
           other: حصلت على علامات امتياز للعمل %{commentable_link} من %{givers_list}.
           two: حصلت على علامتي امتياز للعمل %{commentable_link} من %{givers_list}.
-        single_guest: حصلت على علامة امتياز للعمل %{commentable_link} من ضيف.
+        single_guest:
+          giver_list: ضيف
+          left_kudos: حصلت على علامة امتياز للعمل %{commentable_link} من %{giver_list}.
       subject: "[%{app_name}] حصلت على علامة امتياز!"
       text:
         left_kudos:
@@ -367,9 +369,15 @@ ar:
       reason: 'كان طلبك:'
       subject: "[%{app_name}] طلب دعوة إضافية مرفوض"
     recipient_notification:
+      html:
+        collection: لقد نُشر عملٌ مُهدى إليك في مجموعة %{collection_link} على AO3!
+      no_collection: لقد نُشر عملٌ مُهدى إليك في AO3!
       subject:
         collection: "[%{app_name}][%{collection_title}] عمل مُهدى إليك من %{collection_title}"
         no_collection: "[%{app_name}] عمل مُهدى إليك"
+      text:
+        collection: لقد نُشر عملٌ مُهدى إليك في مجموعة "%{collection_title}" (%{collection_url})
+          على AO3!
     signup_notification:
       activate_your_account: اتبع هذا الرابط لتفعيل حسابك
       admin_posts: أخبار AO3
