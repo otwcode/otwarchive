@@ -1,5 +1,48 @@
 ---
 zh-CN:
+  activerecord:
+    attributes:
+      archive_warning:
+        name_with_colon:
+          other: 警告：
+      category:
+        name_with_colon:
+          other: 性向/性向分类：
+      character:
+        name_with_colon:
+          other: 角色：
+      fandom:
+        name_with_colon:
+          other: 同人圈：
+      freeform:
+        name_with_colon:
+          other: 其他标签：
+      rating:
+        name_with_colon: 分级：
+      relationship:
+        name_with_colon:
+          other: 配对：
+      work:
+        summary: 简介
+    models:
+      archive_warning:
+        other: 警告
+      category:
+        other: 性向/性向分类
+      chapter:
+        other: 章
+      character:
+        other: 角色
+      fandom:
+        other: 同人圈
+      freeform:
+        other: 其他标签
+      rating:
+        other: 分级
+      relationship:
+        other: 配对
+      series:
+        other: 系列
   kudo_mailer:
     batch_kudo_notification:
       guest:
@@ -25,6 +68,11 @@ zh-CN:
       closing:
         formal: 此致敬礼
         informal: 祝好
+      creation:
+        link_with_word_count: "%{creation_link}（%{word_count}）"
+        title_with_word_count: '"%{creation_title}"（%{word_count}）'
+        word_count:
+          other: "%{count} 字符"
       footer:
         general:
           html:
@@ -42,6 +90,7 @@ zh-CN:
           addressed: 您好，%{name}！
           unaddressed: 您好！
         introductory: Archive of Our Own – AO3（AO3作品库）向您问好！
+      metadata_label_indicator: "："
       signature:
         app_short_name: AO3
         open_doors: Open Doors（Open Doors拯救计划）团队

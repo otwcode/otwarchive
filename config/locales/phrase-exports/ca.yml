@@ -1,5 +1,63 @@
 ---
 ca:
+  activerecord:
+    attributes:
+      archive_warning:
+        name_with_colon:
+          one: 'Advertiment:'
+          other: 'Advertiments:'
+      category:
+        name_with_colon:
+          one: 'Categoria:'
+          other: 'Categories:'
+      character:
+        name_with_colon:
+          one: 'Personatge:'
+          other: 'Personatges:'
+      fandom:
+        name_with_colon:
+          one: 'Fàndom:'
+          other: 'Fàndoms:'
+      freeform:
+        name_with_colon:
+          one: 'Etiqueta addicional:'
+          other: 'Etiquetes addicionals:'
+      rating:
+        name_with_colon: 'Classificació:'
+      relationship:
+        name_with_colon:
+          one: 'Relació:'
+          other: 'Relacions:'
+      work:
+        summary: Resum
+    models:
+      archive_warning:
+        one: Advertiment
+        other: Advertiments
+      category:
+        one: Categoria
+        other: Categories
+      chapter:
+        one: Capítol
+        other: Capítols
+      character:
+        one: Personatge
+        other: Personatges
+      fandom:
+        one: Fàndom
+        other: Fàndoms
+      freeform:
+        one: Etiqueta addicional
+        other: Etiquetes addicionals
+      rating:
+        one: Classificació
+        other: Classificacions
+      relationship:
+        one: Relació
+        other: Relacions
+      series:
+        one: Sèrie
+        other: Sèries
   kudo_mailer:
     batch_kudo_notification:
       guest:
@@ -23,6 +81,12 @@ ca:
       closing:
         formal: Cordialment,
         informal: Salutacions,
+      creation:
+        link_with_word_count: "%{creation_link} (%{word_count})"
+        title_with_word_count: '"%{creation_title}" (%{word_count})'
+        word_count:
+          one: "%{count} paraula"
+          other: "%{count} paraules"
       footer:
         general:
           html:
@@ -42,6 +106,7 @@ ca:
           addressed: Hola, %{name}!
           unaddressed: Hola!
         introductory: Hola de part de l'Archive of Our Own – AO3 (Un Arxiu Propi)!
+      metadata_label_indicator: ":"
       signature:
         app_short_name: AO3
         open_doors: L'equip d'Open Doors (Projecte de Portes Obertes)

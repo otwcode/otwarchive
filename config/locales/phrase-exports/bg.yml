@@ -1,5 +1,63 @@
 ---
 bg:
+  activerecord:
+    attributes:
+      archive_warning:
+        name_with_colon:
+          one: 'Предупреждение:'
+          other: 'Предупреждения:'
+      category:
+        name_with_colon:
+          one: 'Категория:'
+          other: 'Категории:'
+      character:
+        name_with_colon:
+          one: 'Персонаж:'
+          other: 'Персонажи:'
+      fandom:
+        name_with_colon:
+          one: 'Фендъм:'
+          other: 'Фендъм:'
+      freeform:
+        name_with_colon:
+          one: 'Допълнителен таг:'
+          other: 'Допълнителни тагове:'
+      rating:
+        name_with_colon: 'Възрастова категория:'
+      relationship:
+        name_with_colon:
+          one: 'Oтношения:'
+          other: 'Oтношения:'
+      work:
+        summary: Резюме
+    models:
+      archive_warning:
+        one: Предупреждение
+        other: Предупреждения
+      category:
+        one: Категория
+        other: Категории
+      chapter:
+        one: Глава
+        other: Глави
+      character:
+        one: Персонаж
+        other: Персонажи
+      fandom:
+        one: Фендъм
+        other: Фендъм
+      freeform:
+        one: Допълнителен таг
+        other: Допълнителни тагове
+      rating:
+        one: Възрастова категория
+        other: Възрастови категории
+      relationship:
+        one: Oтношения
+        other: Oтношения
+      series:
+        one: Поредица
+        other: Поредици
   kudo_mailer:
     batch_kudo_notification:
       guest:
@@ -23,6 +81,12 @@ bg:
       closing:
         formal: С уважение,
         informal: Поздрави,
+      creation:
+        link_with_word_count: "%{creation_link} (%{word_count})"
+        title_with_word_count: '"%{creation_title}" (%{word_count})'
+        word_count:
+          one: "%{count} дума"
+          other: "%{count} думи"
       footer:
         general:
           html:
@@ -43,6 +107,7 @@ bg:
           addressed: Здравей, %{name}!
           unaddressed: Здравей!
         introductory: Привет от Archive of Our Own – AO3 (Нашият архив)!
+      metadata_label_indicator: ":"
       signature:
         app_short_name: AO3
         open_doors: Екипът на Open Doors (Отворени врати)

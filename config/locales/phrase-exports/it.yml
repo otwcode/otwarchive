@@ -1,5 +1,63 @@
 ---
 it:
+  activerecord:
+    attributes:
+      archive_warning:
+        name_with_colon:
+          one: 'Avvertimento:'
+          other: 'Avvertimenti:'
+      category:
+        name_with_colon:
+          one: 'Categoria:'
+          other: 'Categorie:'
+      character:
+        name_with_colon:
+          one: 'Personaggio:'
+          other: 'Personaggi:'
+      fandom:
+        name_with_colon:
+          one: 'Fandom:'
+          other: 'Fandom:'
+      freeform:
+        name_with_colon:
+          one: 'Tag Aggiuntiva:'
+          other: 'Tag Aggiuntive:'
+      rating:
+        name_with_colon: 'Rating:'
+      relationship:
+        name_with_colon:
+          one: 'Relazione:'
+          other: 'Relazioni:'
+      work:
+        summary: Riassunto
+    models:
+      archive_warning:
+        one: Avvertimento
+        other: Avvertimenti
+      category:
+        one: Categoria
+        other: Categorie
+      chapter:
+        one: Capitolo
+        other: Capitoli
+      character:
+        one: Personaggio
+        other: Personaggi
+      fandom:
+        one: Fandom
+        other: Fandom
+      freeform:
+        one: Tag Aggiuntiva
+        other: Tag Aggiuntive
+      rating:
+        one: Rating
+        other: Rating
+      relationship:
+        one: Relazione
+        other: Relazioni
+      series:
+        one: Serie
+        other: Serie
   kudo_mailer:
     batch_kudo_notification:
       guest:
@@ -23,6 +81,12 @@ it:
       closing:
         formal: Un saluto,
         informal: Un saluto,
+      creation:
+        link_with_word_count: "%{creation_link} (%{word_count})"
+        title_with_word_count: '"%{creation_title}" (%{word_count})'
+        word_count:
+          one: "%{count} parola"
+          other: "%{count} parole"
       footer:
         general:
           html:
@@ -43,6 +107,7 @@ it:
           addressed: Ciao, %{name}!
           unaddressed: Ciao!
         introductory: Ciao da Archive of Our Own – AO3 (Archivio Tutto Per Noi)!
+      metadata_label_indicator: ":"
       signature:
         app_short_name: AO3
         open_doors: Il team di Open Doors (Porte Aperte)
