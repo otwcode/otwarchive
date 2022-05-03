@@ -463,13 +463,6 @@ it:
           indirizzo email a cui non hai più accesso, contatta Porte Aperte con qualunque
           informazione che possa aiutare a verificare la tua identità di autore di
           tali lavori.
-        part11: Per altre domande, per favore contatta il team di Supporto di AO3
-          (%{contact_support_link}).
-        part2: Puoi leggere gli annunci riguardanti i più recenti trasferimenti di
-          archivi su AO3 News (%{ao3_news_link}), e troverai ulteriori informazioni
-          sulla pagina delle FAQ di Porte Aperte (%{faq_page_link}) o sulla guida
-          (%{tutorial_page_link}). Se non trovi risposta alla tua domanda nelle FAQ,
-          nella guida o in questa email, per favore contatta il team Supporto (%{contact_support_link}).
         part3: Se si tratta di un errore e questi non sono i tuoi lavori, per favore
           non cancellarli! Semplicemente contatta Porte Aperte (%{open_doors_link})
           e risolveremo il problema.
@@ -480,12 +473,6 @@ it:
           visibili a tutti. Se ti serve aiuto su come sbloccare, rendere orfani o
           cancellare i tuoi lavori, per favore contatta il Supporto di AO3.
         part5: 'Qui puoi rivendicare o cancellare i tuoi lavori: %{claim_url}'
-        part7: 'Se sei l’autore di questi lavori, ma non li vuoi più, li puoi rendere
-          orfani (così che rimangano su AO3 ma senza il tuo nome) o puoi cancellarli
-          (verranno in tal caso completamente rimossi da AO3). Non c’è bisogno di
-          aggiungerli a un account per renderli orfani o cancellarli: puoi farlo direttamente
-          dal link qui sopra. (Se hai bisogno di aiuto, per favore contatta il team
-          di Supporto %{contact_support_link}.)'
         part9: Se desideri che Porte Aperte aggiorni il reindirizzamento per puntare
           al tuo lavoro pre-esistente, cancella la copia importata e contatta Porte
           Aperte (%{open_doors_link}) specificando il nome del tuo profilo su AO3,
