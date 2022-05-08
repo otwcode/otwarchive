@@ -393,9 +393,7 @@ class User < ApplicationRecord
   # Is this user an authorized official?
   def official
     roles.each do |role|
-      if role.name == 'official'
-        return true
-      end
+      return true if role.name == "official"
     end
     false
   end
