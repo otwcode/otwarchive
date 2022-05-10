@@ -34,6 +34,20 @@ class Tag < ApplicationRecord
     TagIndexer.new({}).document(self)
   end
 
+  def self.write_redis_to_database
+    batch_size = ArchiveConfig.TAG_UPDATE_BATCH_SIZE
+    REDIS_GENERAL.smembers("tag_update").each_slice(batch_size) do |batch|
+      Tag.transaction do
+        batch.each do |id|
+          value = REDIS_GENERAL.get("tag_update_#{id}_value")
+          next if value.blank?
+          Tag.where(id: id).update(taggings_count_cache: value.to_i)
+        end
+        REDIS_GENERAL.srem("tag_update", batch)
+      end
+    end
+  end
+
   def self.taggings_count_expiry(count)
     # What we are trying to do here is work out a resonable amount of time for a work to be cached for
     # This should take the number of taggings and divide it by TAGGINGS_COUNT_CACHE_DIVISOR  ( defaults to 1500 )
@@ -50,8 +64,17 @@ class Tag < ApplicationRecord
   end
 
   def write_taggings_to_redis(value)
+    # Atomically set the value while extracting the old value.
+    old_redis_value = REDIS_GENERAL.getset("tag_update_#{id}_value", value)
+
+    # If the value hasn't changed from the saved version or the REDIS version,
+    # there's no need to write an update to the database, so let's just bail
+    # out.
+    return value if value == old_redis_value && value == taggings_count_cache
+
+    # If we've reached here, then the value has changed, and we need to make
+    # sure that the new value is written to the database.
     REDIS_GENERAL.sadd("tag_update", id)
-    REDIS_GENERAL.set("tag_update_#{id}_value", value)
     value
   end
 
