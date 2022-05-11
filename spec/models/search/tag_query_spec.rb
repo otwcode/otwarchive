@@ -42,7 +42,7 @@ describe TagQuery, tag_search: true do
     results = tag_query.search_results
     results.should include(tags[:char_abc_d])
   end
-  
+
   it "lists closest matches at the top of the results ('abc' result lists 'abc' first)" do
     tag_query = TagQuery.new(name: "abc")
     results = tag_query.search_results
@@ -51,7 +51,7 @@ describe TagQuery, tag_search: true do
     results.should include(tags[:free_abcplus])
     results.should include(tags[:fan_abc_d_minus])
   end
-  
+
   it "matches every token in any order ('d abc' matches 'abc d' and 'abc-d', but not 'abc' or 'abc+')" do
     tag_query = TagQuery.new(name: "d abc")
     results = tag_query.search_results
@@ -72,7 +72,7 @@ describe TagQuery, tag_search: true do
     results = tag_query.search_results
     results.should include(tags[:free_abapos])
   end
-  
+
   it "performs a wildcard search at the end of a term ('abc*' matches 'abcd' and 'abcde')" do
     tag_query = TagQuery.new(name: "abc*")
     results = tag_query.search_results
@@ -81,19 +81,19 @@ describe TagQuery, tag_search: true do
     results.should include(tags[:free_abccc])
     results.should_not include(tags[:relationship])
   end
-  
+
   it "performs a wildcard search in the middle of a term ('a*d' matches 'abcd')" do
     tag_query = TagQuery.new(name: "a*d")
     results = tag_query.search_results
     results.should include(tags[:fan_abcd])
   end
-  
+
   it "performs a wildcard search at the beginning of a term ('*cd' matches 'abcd')" do
     tag_query = TagQuery.new(name: "*cd")
     results = tag_query.search_results
     results.should include(tags[:fan_abcd])
   end
-  
+
   it "preserves plus (+) character ('abc+' matches 'abc+' and 'abc', but not 'abccc')" do
     tag_query = TagQuery.new(name: "abc+")
     results = tag_query.search_results
@@ -101,7 +101,7 @@ describe TagQuery, tag_search: true do
     results.should include(tags[:char_abc])
     results.should_not include(tags[:free_abccc])
   end
-  
+
   it "preserves minus (-) character ('abc-d' matches 'abc-d', 'abc -d', 'abc d' but not 'abc' or 'abcd')" do
     tag_query = TagQuery.new(name: "abc-d")
     results = tag_query.search_results
@@ -119,14 +119,14 @@ describe TagQuery, tag_search: true do
     results.should include(tags[:fan_abc_d_minus])
     results.should_not include(tags[:char_abc])
   end
-  
+
   it "preserves slashes without quotes ('ab/cd' should match 'ab/cd' and 'ab cd')" do
     tag_query = TagQuery.new(name: "ab/cd")
     results = tag_query.search_results
     results.should include(tags[:rel_slash])
     results.should include(tags[:rel_space])
   end
-  
+
   it "matches tags with canonical punctuation ('yuri!!!' on ice matches 'Yuri!!! On Ice')" do
     tag_query = TagQuery.new(name: "yuri!!! on ice")
     results = tag_query.search_results
@@ -171,6 +171,16 @@ describe TagQuery, tag_search: true do
   it "allows you to sort by Date Created in ascending order" do
     q = TagQuery.new(sort_column: "created_at", sort_direction: "asc")
     expect(q.generated_query[:sort]).to eq([{ "created_at" => { order: "asc", unmapped_type: "date" } }, { id: { order: "asc" } }])
+  end
+
+  it "allows you to sort by Uses" do
+    q = TagQuery.new(sort_column: "uses")
+    expect(q.generated_query[:sort]).to eq([{ "uses" => { order: "desc" } }, { id: { order: "desc" } }])
+  end
+
+  it "allows you to sort by Uses in ascending order" do
+    q = TagQuery.new(sort_column: "uses", sort_direction: "asc")
+    expect(q.generated_query[:sort]).to eq([{ "uses" => { order: "asc" } }, { id: { order: "asc" } }])
   end
 
   it "keeps sort order of tied tags the same when tag info is updated" do

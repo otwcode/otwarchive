@@ -76,8 +76,8 @@ describe Tag do
         # It should not update after assigning the same count.
         @fandom_tag.taggings_count = 1
         expect(REDIS_GENERAL.sismember("tag_update", @fandom_tag.id)).to eq false
-        # It should update after assigning a new count.
-        @fandom_tag.taggings_count = 2
+        # It should update after adding a new work with the same tag.
+        FactoryBot.create(:work, fandom_string: @fandom_tag.name)
         expect(REDIS_GENERAL.sismember("tag_update", @fandom_tag.id)).to eq true
         # Make sure the update actually happens.
         Tag.write_redis_to_database
