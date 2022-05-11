@@ -65,7 +65,7 @@ class Tag < ApplicationRecord
 
   def write_taggings_to_redis(value)
     # Atomically set the value while extracting the old value.
-    old_redis_value = REDIS_GENERAL.getset("tag_update_#{id}_value", value)
+    old_redis_value = REDIS_GENERAL.getset("tag_update_#{id}_value", value).to_i
 
     # If the value hasn't changed from the saved version or the REDIS version,
     # there's no need to write an update to the database, so let's just bail
