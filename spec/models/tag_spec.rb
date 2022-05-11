@@ -49,7 +49,7 @@ describe Tag do
         expect(@fandom_tag.taggings_count).to eq 1
       end
 
-      it 'will start caching a when tag when that tag is used significantly' do
+      it 'will start caching a tag when that tag is used significantly' do
         (1..ArchiveConfig.TAGGINGS_COUNT_MIN_CACHE_COUNT).each do |try|
           FactoryBot.create(:work, fandom_string: @fandom_tag.name)
           Tag.write_redis_to_database
@@ -65,7 +65,33 @@ describe Tag do
         expect(@fandom_tag.taggings_count).to eq ArchiveConfig.TAGGINGS_COUNT_MIN_CACHE_COUNT
       end
 
-      it "Writes to the database do not happen immeadiately" do
+      it 'should only update the database when counts change' do
+        FactoryBot.create(:work, fandom_string: @fandom_tag.name)
+        Tag.write_redis_to_database
+        @fandom_tag.reload
+        # Check if redis has flagged this tag for an update to the database.
+        # It should not update after reading the count.
+        @fandom_tag.taggings_count
+        expect(REDIS_GENERAL.sismember("tag_update", @fandom_tag.id)).to eq false
+        # It should not update after assigning the same count.
+        @fandom_tag.taggings_count = 1
+        expect(REDIS_GENERAL.sismember("tag_update", @fandom_tag.id)).to eq false
+        # It should update after assigning a new count.
+        @fandom_tag.taggings_count = 2
+        expect(REDIS_GENERAL.sismember("tag_update", @fandom_tag.id)).to eq true
+        # Make sure the update actually happens.
+        Tag.write_redis_to_database
+        @fandom_tag.reload
+        expect(@fandom_tag.taggings_count_cache).to eq 2
+        # It should not write a blank value.
+        REDIS_GENERAL.set("tag_update_#{@fandom_tag.id}_value", "")
+        REDIS_GENERAL.sadd("tag_update", @fandom_tag.id)
+        Tag.write_redis_to_database
+        @fandom_tag.reload
+        expect(@fandom_tag.taggings_count_cache).to eq 2
+      end
+
+      it "Writes to the database do not happen immediately" do
         (1..40 * ArchiveConfig.TAGGINGS_COUNT_CACHE_DIVISOR - 1).each do |try|
           @fandom_tag.taggings_count = try
           @fandom_tag.reload
