@@ -1,4 +1,13 @@
 Feature: Some admins can see IP addresses and emails for comments
+  Scenario: Admin info for comments isn't visible to logged-out users
+    Given the work "Random Work"
+      And a guest comment on the work "Random Work"
+    When I am a visitor
+      And I view the work "Random Work" with comments
+    Then I should not see "IP Address:" within ".work.meta"
+      And I should not see "IP Address:" within ".comment.group"
+      And I should not see "Email:" within ".comment.group"
+
   Scenario: Admin info for comments isn't visible to the work's owner
     Given the work "Random Work"
       And a guest comment on the work "Random Work"
