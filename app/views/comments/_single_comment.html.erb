@@ -62,7 +62,10 @@
         <% end %>
       <% end %><!-- end caching -->
 
-      <% if logged_in_as_admin? %>
+      <% if policy(single_comment).show_email? && single_comment.email.present? %>
+        <p class="email"><%= ts("Email: %{email}", email: single_comment.email) %></p>
+      <% end %>
+      <% if policy(:user_creation).show_ip_address? %>
         <p class="ip"><%= ts("IP Address: %{ip_address}", ip_address: single_comment.ip_address.blank? ? "No address recorded" : single_comment.ip_address) %></p>
       <% end %>
       <%= render "comments/comment_actions", comment: single_comment %>

@@ -30,25 +30,6 @@ Scenario: When logged in I can comment on a work
     And I follow "Comments (1)"
   Then I should see "commenter on Chapter 1" within "h4.heading.byline"
 
-  Scenario: IP address of the commenter are displayed only to an admin
-
-  Given I have no works or comments
-  When I am logged in as "author"
-    And I post the work "The One Where Neal is Awesome"
-  When I am logged in as "commenter"
-    And I view the work "The One Where Neal is Awesome"
-    And I fill in "Comment" with "I loved this!"
-    And I press "Comment"
-  Then I should see "Comment created!"
-    And I should not see "IP Address"
-  When I am logged in as "author"
-    And I view the work "The One Where Neal is Awesome"
-  Then I should not see "IP Address"
-  When I am logged in as an admin
-    And I view the work "The One Where Neal is Awesome"
-  Then I should see "IP Address"
-
-
 Scenario: I cannot comment with a pseud that I don't own
 
   Given the work "Random Work"
