@@ -61,5 +61,6 @@ class TagSearchForm
 
   def default_sort_direction
     %w[created_at].include?(sort_column) ? "desc" : "asc"
+    %w[uses].include?(sort_column) ? "desc" : "asc"
   end
 end

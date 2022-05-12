@@ -74,6 +74,7 @@ Given /^a set of works for tag sort by use exists$/ do
   end
 
   step %{a freeform exists with name: "0 uses"}
+  step %{the periodic tag count task is run}
 end
 
 Given /^I have a canonical "([^\"]*)" fandom tag named "([^\"]*)"$/ do |media, fandom|

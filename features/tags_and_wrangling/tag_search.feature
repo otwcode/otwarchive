@@ -203,6 +203,7 @@ Feature: Search Tags
     When I am on the search tags page
       And I fill in "Tag name" with "uses"
       And I select "Uses" from "Sort by"
+      And I select "Descending" from "Sort direction"
       And I press "Search Tags"
     Then I should see "6 Found"
       And the 1st tag result should contain "10 uses"
