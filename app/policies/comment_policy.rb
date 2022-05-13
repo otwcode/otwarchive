@@ -26,4 +26,8 @@ class CommentPolicy < ApplicationPolicy
   alias destroy? can_destroy_comment?
   alias approve? can_mark_comment_spam?
   alias reject? can_mark_comment_spam?
+
+  def show_email?
+    user_has_roles?(%w[policy_and_abuse support superadmin])
+  end
 end
