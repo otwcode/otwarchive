@@ -288,7 +288,7 @@ class BookmarksController < ApplicationController
     @bookmarkable = @bookmark.bookmarkable
     respond_to do |format|
       format.js {
-        @bookmarks = @bookmarkable.bookmarks.visible.order_by_created_at.offset(1).limit(4)
+        @bookmarks = @bookmarkable.bookmarks.order_by_created_at.visible.offset(1).limit(4)
         set_own_bookmarks
       }
       format.html do
