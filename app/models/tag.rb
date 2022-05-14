@@ -42,6 +42,7 @@ class Tag < ApplicationRecord
         batch.each do |id|
           value = REDIS_GENERAL.get("tag_update_#{id}_value")
           next if value.blank?
+
           Tag.where(id: id).update(taggings_count_cache: value.to_i)
         end
         REDIS_GENERAL.srem("tag_update", batch)

@@ -198,7 +198,7 @@ Feature: Search Tags
       And the 4th tag result should contain "created fourth"
 
   Scenario: Search and sort by Uses in descending and ascending order
-    Given a set of works for tag sort by use exists
+    Given a set of tags for tag sort by use exists
       And all indexing jobs have been run
     When I am on the search tags page
       And I fill in "Tag name" with "uses"
