@@ -177,9 +177,9 @@ en:
         one: "You can change your user name once per day."
         other: "You can change your user name once every %{count} days."
       last_renamed: "You last changed your user name on %{renamed_at}."
-      more_info: "For information on how changing your user name will affect your account, please check out the %{account_faq_link}. Note that changes to your username may take several days or longer to appear. If you are still seeing your old user name on your works, bookmarks, series, or collections after a week, please %{contact_support_link}."
+      more_info: "For information on how changing your user name will affect your account, please check out the %{account_faq_link}. Note that changes to your user name may take several days or longer to appear. If you are still seeing your old user name on your works, bookmarks, series, or collections after a week, please %{contact_support_link}."
       account_faq: "Account FAQ"
-      contact_support: "Contact Support"
+      contact_support: "contact Support"
   troubleshooting:
     show:
       page_title:
