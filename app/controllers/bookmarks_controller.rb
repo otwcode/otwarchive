@@ -63,7 +63,7 @@ class BookmarksController < ApplicationController
   def index
     if @bookmarkable
       access_denied unless is_admin? || @bookmarkable.visible?
-      @bookmarks = @bookmarkable.bookmarks.is_public.paginate(page: params[:page], per_page: ArchiveConfig.ITEMS_PER_PAGE)
+      @bookmarks = @bookmarkable.bookmarks.is_public.order_by_created_at.paginate(page: params[:page], per_page: ArchiveConfig.ITEMS_PER_PAGE)
     else
       base_options = {
         show_private: (@user.present? && @user == current_user),
@@ -288,7 +288,7 @@ class BookmarksController < ApplicationController
     @bookmarkable = @bookmark.bookmarkable
     respond_to do |format|
       format.js {
-        @bookmarks = @bookmarkable.bookmarks.visible.order("created_at DESC").offset(1).limit(4)
+        @bookmarks = @bookmarkable.bookmarks.visible.order_by_created_at.offset(1).limit(4)
         set_own_bookmarks
       }
       format.html do

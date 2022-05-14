@@ -34,14 +34,13 @@ class Bookmark < ApplicationRecord
     end
   end
 
-  default_scope -> { order("bookmarks.id DESC") } # id's stand in for creation date
-
   # renaming scope :public -> :is_public because otherwise it overlaps with the "public" keyword
   scope :is_public, -> { where(private: false, hidden_by_admin: false) }
   scope :not_public, -> { where(private: true) }
   scope :not_private, -> { where(private: false) }
   scope :since, lambda { |*args| where("bookmarks.created_at > ?", (args.first || 1.week.ago)) }
   scope :recs, -> { where(rec: true) }
+  scope :order_by_created_at, -> { order("created_at DESC") }
 
   scope :join_work, -> {
     joins("LEFT JOIN works ON (bookmarks.bookmarkable_id = works.id AND bookmarks.bookmarkable_type = 'Work')").
@@ -102,7 +101,7 @@ class Bookmark < ApplicationRecord
 
   scope :visible_to_admin, -> { not_private }
 
-  scope :latest, -> { is_public.limit(ArchiveConfig.ITEMS_PER_PAGE).join_work }
+  scope :latest, -> { is_public.order_by_created_at.limit(ArchiveConfig.ITEMS_PER_PAGE).join_work }
 
   # a complicated dynamic scope here:
   # if the user is an Admin, we use the "visible_to_admin" scope
