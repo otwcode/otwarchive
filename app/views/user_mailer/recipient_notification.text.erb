@@ -1,16 +1,17 @@
 <% content_for :message do %>
 <%= t("mailer.general.greeting.informal.addressed", name: @user.login) %>
 
-A gift work has been posted for you<% if @collection %> in the "<%= @collection.title %>" collection (<%= collection_url(@collection) %>)<% end %> at the Archive of Our Own!
+<% if @collection %>
+<%= t(".text.collection", collection_title: @collection.title, collection_url: collection_url(@collection)) %>
+<% else %>
+<%= t(".no_collection") %>
+<% end %>
 
-"<%= @work.title.html_safe %>" (<%= @work.word_count %> words)
+<%= creation_title_with_word_count(@work) %>
 <%= @collection ? collection_work_url(@collection, @work) : work_url(@work) %>
 
-by <%= @work.anonymous? ? "an anonymous responder" : (@work.pseuds.map{|p| text_pseud(p)}.to_sentence) %>
+by <%= creator_text(@work) %>
 
-<% unless @work.fandom_string.blank? %>Fandom: <%= @work.fandom_string %><% end %>
-
-<% unless @work.summary.blank? %>Summary:
-<%= to_plain_text(raw sanitize_field(@work, :summary)) %><% end %>
+<%= render "work_info", work: @work %>
 
 <% if @collection && !@collection.gift_notification.blank? %><%= @collection.gift_notification %><% end %><% end %>

@@ -1,10 +1,10 @@
 class CommentsController < ApplicationController
   skip_before_action :store_location, except: [:show, :index, :new]
-  before_action :load_commentable, only: [ :index, :new, :create, :edit, :update,
-                                              :show_comments, :hide_comments, :add_comment,
-                                              :cancel_comment, :add_comment_reply,
-                                              :cancel_comment_reply,
-                                              :delete_comment, :cancel_comment_delete, :unreviewed, :review_all ]
+  before_action :load_commentable,
+                only: [:index, :new, :create, :edit, :update, :show_comments,
+                       :hide_comments, :add_comment_reply,
+                       :cancel_comment_reply, :delete_comment,
+                       :cancel_comment_delete, :unreviewed, :review_all]
   before_action :check_user_status, only: [:new, :create, :edit, :update, :destroy]
   before_action :load_comment, only: [:show, :edit, :update, :delete_comment, :destroy, :cancel_comment_edit, :cancel_comment_delete, :review, :approve, :reject, :freeze, :unfreeze]
   before_action :check_visibility, only: [:show]
@@ -12,9 +12,8 @@ class CommentsController < ApplicationController
   before_action :check_tag_wrangler_access
   before_action :check_parent
   before_action :check_modify_parent,
-                only: [:new, :create, :edit, :update, :add_comment,
-                       :add_comment_reply, :cancel_comment_reply,
-                       :cancel_comment_edit, :cancel_comment]
+                only: [:new, :create, :edit, :update, :add_comment_reply,
+                       :cancel_comment_reply, :cancel_comment_edit]
   before_action :check_pseud_ownership, only: [:create, :update]
   before_action :check_ownership, only: [:edit, :update, :cancel_comment_edit]
   before_action :check_permission_to_edit, only: [:edit, :update ]
@@ -214,7 +213,6 @@ class CommentsController < ApplicationController
   def index
     return raise_not_found if @commentable.blank?
 
-    @comments = @commentable.comments.reviewed.page(params[:page])
     return unless @commentable.class == Comment
 
     # we link to the parent object at the top
@@ -222,14 +220,16 @@ class CommentsController < ApplicationController
   end
 
   def unreviewed
-    all_comments = @commentable.find_all_comments
-    @comments = all_comments.blank? ? nil : all_comments.unreviewed_only.page(params[:page])
+    @comments = @commentable.find_all_comments
+      .unreviewed_only
+      .for_display
+      .page(params[:page])
   end
 
   # GET /comments/1
   # GET /comments/1.xml
   def show
-    @comments = [@comment]
+    @comments = CommentDecorator.wrap_comments([@comment])
     @thread_view = true
     @thread_root = @comment
     params[:comment_id] = params[:id]
@@ -326,7 +326,7 @@ class CommentsController < ApplicationController
   # PUT /comments/1.xml
   def update
     updated_comment_params = comment_params.merge(edited_at: Time.current)
-    if @comment.update_attributes(updated_comment_params)
+    if @comment.update(updated_comment_params)
       flash[:comment_notice] = ts('Comment was successfully updated.')
       respond_to do |format|
         format.html do
@@ -439,41 +439,27 @@ class CommentsController < ApplicationController
   end
 
   def show_comments
-    @comments = @commentable.comments.reviewed.page(params[:page])
-
     respond_to do |format|
       format.html do
         # if non-ajax it could mean sudden javascript failure OR being redirected from login
         # so we're being extra-nice and preserving any intention to comment along with the show comments option
         options = {show_comments: true}
-        options[:add_comment] = params[:add_comment] if params[:add_comment]
         options[:add_comment_reply_id] = params[:add_comment_reply_id] if params[:add_comment_reply_id]
         options[:view_full_work] = params[:view_full_work] if params[:view_full_work]
         options[:page] = params[:page]
         redirect_to_all_comments(@commentable, options)
       end
-      format.js
+
+      format.js do
+        @comments = CommentDecorator.for_commentable(@commentable, page: params[:page])
+      end
     end
   end
 
   def hide_comments
     respond_to do |format|
       format.html do
-        options[:add_comment] = params[:add_comment] if params[:add_comment]
         redirect_to_all_comments(@commentable)
-      end
-      format.js
-    end
-  end
-
-  def add_comment
-    @comment = Comment.new
-    respond_to do |format|
-      format.html do
-        options = {add_comment: true}
-        options[:show_comments] = params[:show_comments] if params[:show_comments]
-        options[:page] = params[:page] if params[:page]
-        redirect_to_all_comments(@commentable, options)
       end
       format.js
     end
@@ -501,17 +487,6 @@ class CommentsController < ApplicationController
         end
       end
       format.js { @commentable = Comment.find(params[:id]) }
-    end
-  end
-
-  def cancel_comment
-    respond_to do |format|
-      format.html do
-        options = {}
-        options[:show_comments] = params[:show_comments] if params[:show_comments]
-        redirect_to_all_comments(@commentable, options)
-      end
-      format.js
     end
   end
 
@@ -592,7 +567,6 @@ class CommentsController < ApplicationController
 
     if commentable.is_a?(Tag)
       redirect_to comments_path(tag_id: commentable.to_param,
-                  add_comment: options[:add_comment],
                   add_comment_reply_id: options[:add_comment_reply_id],
                   delete_comment_id: options[:delete_comment_id],
                   page: options[:page],
@@ -605,7 +579,6 @@ class CommentsController < ApplicationController
                   action: :show,
                   id: commentable.id,
                   show_comments: options[:show_comments],
-                  add_comment: options[:add_comment],
                   add_comment_reply_id: options[:add_comment_reply_id],
                   delete_comment_id: options[:delete_comment_id],
                   view_full_work: options[:view_full_work],

@@ -26,7 +26,7 @@ describe "rake After:reset_word_counts" do
   end
 
   context "when a work has multiple chapters" do
-    let(:chapter) { create(:chapter, work: en_work, posted: true, position: 2, content: "A few more words never hurt.") }
+    let(:chapter) { create(:chapter, work: en_work, position: 2, content: "A few more words never hurt.") }
 
     before do
       # Screw up the word counts
@@ -64,9 +64,9 @@ describe "rake After:unhide_invited_works" do
   context "when invited works are incorrectly anonymous or unrevealed" do
     before do
       # Screw up collection items
-      invited_anonymous_work.collection_items.first.update_columns(user_approval_status: CollectionItem::NEUTRAL)
-      invited_unrevealed_work.collection_items.first.update_columns(user_approval_status: CollectionItem::NEUTRAL)
-      invited_anonymous_unrevealed_work.collection_items.first.update_columns(user_approval_status: CollectionItem::NEUTRAL)
+      invited_anonymous_work.collection_items.first.update_columns(user_approval_status: "unreviewed")
+      invited_unrevealed_work.collection_items.first.update_columns(user_approval_status: "unreviewed")
+      invited_anonymous_unrevealed_work.collection_items.first.update_columns(user_approval_status: "unreviewed")
     end
 
     it "updates the anonymous and unrevealed status of invited works" do
@@ -302,55 +302,81 @@ describe "rake After:fix_tags_with_extra_spaces" do
   end
 end
 
-describe "rake After:reset_revised_at_on_backdated_works" do
-  let!(:work) do
-    travel_to(1.day.ago) do
-      create(:work)
-    end
+describe "rake After:fix_invalid_pseud_icon_data" do
+  let(:valid_pseud) { create(:user).default_pseud }
+  let(:invalid_pseud) { create(:user).default_pseud }
+
+  before do
+    stub_const("ArchiveConfig", OpenStruct.new(ArchiveConfig))
+    ArchiveConfig.ICON_ALT_MAX = 5
+    ArchiveConfig.ICON_COMMENT_MAX = 5
   end
 
-  context "on non-backdated works" do
-    it "does nothing" do
-      expect do
-        subject.invoke
-      end.to avoid_changing { work.reload.updated_at }
-        .and avoid_changing { work.reload.revised_at }
-    end
+  it "removes invalid icon" do
+    valid_pseud.icon = File.new(Rails.root.join("features/fixtures/icon.gif"))
+    valid_pseud.save
+    invalid_pseud.icon = File.new(Rails.root.join("features/fixtures/icon.gif"))
+    invalid_pseud.save
+    invalid_pseud.update_column(:icon_content_type, "not/valid")
 
-    it "resets revised_at if arbitrarily set in the past" do
-      work.update_column(:revised_at, 10.years.ago)
+    subject.invoke
 
-      expect do
-        subject.invoke
-      end.to change { work.reload.updated_at }
-        .and change { work.reload.revised_at }
-      expect(work.revised_at.to_date).to be >= work.published_at
-    end
+    invalid_pseud.reload
+    valid_pseud.reload
+    expect(invalid_pseud.icon.exists?).to be_falsey
+    expect(invalid_pseud.icon_content_type).to be_nil
+    expect(valid_pseud.icon.exists?).to be_truthy
+    expect(valid_pseud.icon_content_type).to eq("image/gif")
   end
 
-  context "on backdated works" do
-    before do
-      travel_to(1.day.ago) do
-        work.update!({ backdate: true, chapter_attributes: { published_at: "2021-12-05" } })
-      end
-    end
+  it "removes invalid icon_alt_text" do
+    invalid_pseud.update_column(:icon_alt_text, "not valid")
+    valid_pseud.update_attribute(:icon_alt_text, "valid")
 
-    it "resets revised_at to be consistent with published_at" do
-      work.update_column(:revised_at, Time.current)
+    subject.invoke
 
-      expect do
-        subject.invoke
-      end.to change { work.reload.updated_at }
-        .and change { work.reload.revised_at }
-      expect(work.revised_at.to_date).to eq(Date.new(2021, 12, 5))
-    end
+    invalid_pseud.reload
+    valid_pseud.reload
+    expect(invalid_pseud.icon_alt_text).to be_empty
+    expect(valid_pseud.icon_alt_text).to eq("valid")
+  end
 
-    it "outputs work IDs that fail validations" do
-      allow_any_instance_of(Work).to receive(:save).and_return(false)
+  it "removes invalid icon_comment_text" do
+    invalid_pseud.update_column(:icon_comment_text, "not valid")
+    valid_pseud.update_attribute(:icon_comment_text, "valid")
 
-      expect do
-        subject.invoke
-      end.to output(/The following 1 work\(s\) failed validations and could not be saved:\n#{work.id}/).to_stdout
-    end
+    subject.invoke
+
+    invalid_pseud.reload
+    valid_pseud.reload
+    expect(invalid_pseud.icon_comment_text).to be_empty
+    expect(valid_pseud.icon_comment_text).to eq("valid")
+  end
+
+  it "updates icon_content_type from jpg to jpeg" do
+    invalid_pseud.icon = File.new(Rails.root.join("features/fixtures/icon.jpg"))
+    invalid_pseud.save
+    invalid_pseud.update_column(:icon_content_type, "image/jpg")
+
+    subject.invoke
+
+    invalid_pseud.reload
+    expect(invalid_pseud.icon.exists?).to be_truthy
+    expect(invalid_pseud.icon_content_type).to eq("image/jpeg")
+  end
+
+  it "updates multiple invalid fields on the same pseud" do
+    invalid_pseud.icon = File.new(Rails.root.join("features/fixtures/icon.gif"))
+    invalid_pseud.save
+    invalid_pseud.update_columns(icon_content_type: "not/valid",
+                                 icon_alt_text: "not valid",
+                                 icon_comment_text: "not valid")
+    subject.invoke
+
+    invalid_pseud.reload
+    expect(invalid_pseud.icon.exists?).to be_falsey
+    expect(invalid_pseud.icon_content_type).to be_nil
+    expect(invalid_pseud.icon_alt_text).to be_empty
+    expect(invalid_pseud.icon_comment_text).to be_empty
   end
 end

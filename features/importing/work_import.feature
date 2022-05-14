@@ -123,7 +123,7 @@ Feature: Import Works
   Scenario: Admins see IP address on imported works
     Given I import "http://import-site-with-tags" with a mock website
       And I press "Post"
-    When I am logged in as an admin
+    When I am logged in as a "policy_and_abuse" admin
       And I go to the "Detected Title" work page
     Then I should see "IP Address: 127.0.0.1"
 
@@ -131,7 +131,7 @@ Feature: Import Works
     Given I start importing "http://import-site-with-tags" with a mock website
       And I check "Post without previewing"
       And I press "Import"
-    When I am logged in as an admin
+    When I am logged in as a "policy_and_abuse" admin
       And I go to the "Detected Title" work page
     Then I should see "IP Address: 127.0.0.1"
 
@@ -141,11 +141,12 @@ Feature: Import Works
       http://import-site-without-tags
       http://second-import-site-without-tags
       """
-    When I am logged in as an admin
+    When I am logged in as a "policy_and_abuse" admin
       And I go to the "Untitled Imported Work" work page
     Then I should see "Chapters:2/2"
       And I should see "IP Address: 127.0.0.1"
 
+  @work_import_multi_work_backdate
   Scenario: Importing multiple works with backdating
     When I import the urls
         """
@@ -160,6 +161,7 @@ Feature: Import Works
     Then I should see "Preview"
       And I should see "2010-01-11"
 
+  @work_import_multi_chapter_backdate
   Scenario: Importing a new multichapter work with backdating should have correct chapter index dates
     Given basic languages
       And basic tags
@@ -213,12 +215,14 @@ Feature: Import Works
       And I should see "Das Maß aller Dinge" within "h2.title"
       And I should see "Ä Ö Ü é è È É ü ö ä ß ñ"
 
+  @work_import_special_characters_auto_latin
   Scenario: Import a work with special characters (latin-1, autodetect from page encoding)
     When I import "http://www.rbreu.de/otwtest/latin1_specified.html"
     Then I should see "Preview"
       And I should see "Das Maß aller Dinge" within "h2.title"
       And I should see "Ä Ö Ü é è È É ü ö ä ß ñ"
 
+  @work_import_special_characters_man_latin
   Scenario: Import a work with special characters (latin-1, must set manually)
     When I start importing "http://www.rbreu.de/otwtest/latin1_notspecified.html"
       And I select "ISO-8859-1" from "encoding"
@@ -227,6 +231,7 @@ Feature: Import Works
       And I should see "Das Maß aller Dinge" within "h2.title"
       And I should see "Ä Ö Ü é è È É ü ö ä ß ñ"
 
+  @work_import_special_characters_man_cp
   Scenario: Import a work with special characters (cp-1252, must set manually)
     When I start importing "http://rbreu.de/otwtest/cp1252.txt"
       And I select "Windows-1252" from "encoding"
@@ -236,6 +241,7 @@ Feature: Import Works
       And I should see "So—what’s up?"
       And I should see "“Something witty.”"
 
+  @work_import_special_characters_man_utf
   Scenario: Import a work with special characters (utf-8, must overwrite wrong page encoding)
     When I start importing "http://www.rbreu.de/otwtest/utf8_notspecified.html"
       And I select "UTF-8" from "encoding"

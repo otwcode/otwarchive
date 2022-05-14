@@ -147,6 +147,8 @@ IMPORT_MAX_WORKS_BY_ARCHIVIST: 200
 ABUSE_REPORTS_PER_USER_MAX: 5
 # max number of abuse reports to accept for a given work URL
 ABUSE_REPORTS_PER_WORK_MAX: 5
+# max number of abuse reports to accept from a given email
+ABUSE_REPORTS_PER_EMAIL_MAX: 5
 
 # number of items in various displays
 ITEMS_PER_PAGE: 25
@@ -441,6 +443,10 @@ SECONDS_UNTIL_BOOKMARK_INDEX_EXPIRE: 1800
 # Cache duration for comment counts:
 SECONDS_UNTIL_COMMENT_COUNTS_EXPIRE: 3600
 
+# Cache duration for various collection-related counts (# of works, # of
+# bookmarks, # of fandoms):
+SECONDS_UNTIL_COLLECTION_COUNTS_EXPIRE: 300
+
 # Batch size used for the RedisHitCounter class:
 HIT_COUNT_BATCH_SIZE: 100
 
@@ -463,9 +469,13 @@ PERMITTED_HOSTS: [
   "download.archiveofourown.org",
   "insecure.archiveofourown.org",
   "secure.archiveofourown.org",
+  "www.archiveofourown.com",
+  "www.archiveofourown.net",
   "www.archiveofourown.org",
   # Staging
   "insecure-test.archiveofourown.org",
   "test.archiveofourown.org",
   "testdownload.archiveofourown.org"
 ]
+
+USER_RENAME_LIMIT_DAYS: 7

@@ -110,7 +110,7 @@ describe CollectionParticipantsController do
         end
       end
 
-      context "where the user is a maintainer" do
+      context "where the user is a maintainer", work_search: true, bookmark_search: true do
         render_views
         let(:current_role) { CollectionParticipant::MODERATOR }
 
@@ -210,7 +210,7 @@ describe CollectionParticipantsController do
 
         context "where the participant is not updated successfully" do
           before do
-            allow_any_instance_of(CollectionParticipant).to receive(:update_attributes).and_return(false)
+            allow_any_instance_of(CollectionParticipant).to receive(:update).and_return(false)
           end
 
           it "displays an error notice and and redirects to collection participants" do

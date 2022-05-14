@@ -77,9 +77,9 @@ class ChallengeAssignment < ApplicationRecord
   WORKS_LEFT_JOIN = "LEFT JOIN works ON works.id = challenge_assignments.creation_id AND challenge_assignments.creation_type = 'Work'"
 
   scope :fulfilled, -> {
-    joins(COLLECTION_ITEMS_JOIN).joins(WORKS_JOIN).
-    where('challenge_assignments.creation_id IS NOT NULL AND collection_items.user_approval_status = ? AND collection_items.collection_approval_status = ? AND works.posted = 1',
-                    CollectionItem::APPROVED, CollectionItem::APPROVED)
+    joins(COLLECTION_ITEMS_JOIN).joins(WORKS_JOIN)
+      .where("challenge_assignments.creation_id IS NOT NULL AND collection_items.user_approval_status = ? AND collection_items.collection_approval_status = ? AND works.posted = 1",
+             CollectionItem.user_approval_statuses[:approved], CollectionItem.collection_approval_statuses[:approved])
   }
 
 
@@ -109,8 +109,9 @@ class ChallengeAssignment < ApplicationRecord
 
   # has to be a left join to get assignments that don't have a collection item
   scope :unfulfilled, -> {
-    joins(COLLECTION_ITEMS_LEFT_JOIN).joins(WORKS_LEFT_JOIN).
-    where('challenge_assignments.creation_id IS NULL OR collection_items.user_approval_status != ? OR collection_items.collection_approval_status != ? OR works.posted = 0', CollectionItem::APPROVED, CollectionItem::APPROVED)
+    joins(COLLECTION_ITEMS_LEFT_JOIN).joins(WORKS_LEFT_JOIN)
+      .where("challenge_assignments.creation_id IS NULL OR collection_items.user_approval_status != ? OR collection_items.collection_approval_status != ? OR works.posted = 0",
+             CollectionItem.user_approval_statuses[:approved], CollectionItem.collection_approval_statuses[:approved])
   }
 
   # ditto

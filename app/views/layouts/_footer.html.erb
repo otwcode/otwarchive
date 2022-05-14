@@ -8,15 +8,10 @@
           <li class="module group">
             <h4 class="heading"><%= ts('Customize', key: 'footer') %></h4>
             <ul class="menu">
-              <li aria-haspopup="true">
-                <a href="#"><%= ts('Choose Skin', key: 'footer') %></a>
-                <ul id="skin_chooser" class="expandable secondary">
-                  <li><%= link_to ts('Default', key: 'footer'), unset_skins_path %></li>
-                  <% Skin.in_chooser.order(:title).each do |s| %>
-                    <li><%= link_to s.title, set_skin_path(s) %></li>
-                  <% end %>
-                </ul> 
-              </li>
+              <li><%= link_to ts('Default', key: 'footer'), unset_skins_path %></li>
+              <% Skin.in_chooser.order(:title).each do |s| %>
+                <li><%= link_to s.title, set_skin_path(s) %></li>
+              <% end %>
             </ul>
           </li>
         <% end %>
@@ -34,8 +29,8 @@
     <li class="module group">
       <h4 class="heading"><%= ts('Contact Us', key: 'footer') %></h4>
       <ul class="menu">
-        <li><%= link_to ts('Report Abuse', key: 'footer'), new_abuse_report_path %></li>
-        <li><%= link_to ts('Technical Support and Feedback', key: 'footer'), new_feedback_report_path %></li>
+        <li><%= link_to ts('Policy Questions & Abuse Reports', key: 'footer'), new_abuse_report_path %></li>
+        <li><%= link_to ts('Technical Support & Feedback', key: 'footer'), new_feedback_report_path %></li>
       </ul>
     </li>
     <li class="module group">

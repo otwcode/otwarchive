@@ -276,7 +276,7 @@ class WorkQuery < Query
       sort_hash[column][:unmapped_type] = 'date'
     end
 
-    sort_hash
+    [sort_hash, { id: { order: direction } }]
   end
 
   # When searching outside of filters, use relevance instead of date

@@ -4,7 +4,7 @@
 <!--/descriptions-->
 
 <!--main content-->
-<%= form_for resource, url: user_password_path, html: { method: :put } do |f| %>
+<%= form_for resource, url: users_password_reset_path, html: { method: :put } do |f| %>
   <%= f.hidden_field :reset_password_token %>
   <dl>
     <dt><%= label_tag :edit_password, ts("New password") %></dt>

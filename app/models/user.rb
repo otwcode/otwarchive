@@ -57,6 +57,7 @@ class User < ApplicationRecord
   before_create :create_default_associateds
   before_destroy :remove_user_from_kudos
 
+  before_update :add_renamed_at, if: :will_save_change_to_login?
   after_update :update_pseud_name
   after_update :log_change_if_login_was_edited
 
@@ -175,6 +176,7 @@ class User < ApplicationRecord
                       message: ts("must begin and end with a letter or number; it may also contain underscores but no other characters."),
                       with: /\A[A-Za-z0-9]\w*[A-Za-z0-9]\Z/
   validates_uniqueness_of :login, case_sensitive: false, message: ts("has already been taken")
+  validate :login, :username_is_not_recently_changed, if: :will_save_change_to_login?
 
   validates :email, email_veracity: true, email_format: true
 
@@ -220,10 +222,11 @@ class User < ApplicationRecord
     where("challenge_claims.id IN (?)", claims_ids)
   end
 
-  # Find users with a particular role and/or by name and/or by email
+  # Find users with a particular role and/or by name, email, and/or id
   # Options: inactive, page, exact
-  def self.search_by_role(role, name, email, options = {})
-    return if role.blank? && name.blank? && email.blank?
+  def self.search_by_role(role, name, email, user_id, options = {})
+    return if role.blank? && name.blank? && email.blank? && user_id.blank?
+
     users = User.distinct.order(:login)
     if options[:inactive]
       users = users.where("confirmed_at IS NULL")
@@ -236,6 +239,9 @@ class User < ApplicationRecord
     end
     if email.present?
       users = users.filter_by_email(email, options[:exact])
+    end
+    if user_id.present?
+      users = users.where(["users.id = ?", user_id])
     end
     users.paginate(page: options[:page] || 1)
   end
@@ -334,11 +340,11 @@ class User < ApplicationRecord
   # Checks authorship of any sort of object
   def is_author_of?(item)
     if item.respond_to?(:pseud_id)
-      pseuds.pluck(:id).include?(item.pseud_id)
+      pseud_ids.include?(item.pseud_id)
     elsif item.respond_to?(:user_id)
       id == item.user_id
     elsif item.respond_to?(:pseuds)
-      !(pseuds.pluck(:id) & item.pseuds.pluck(:id)).empty?
+      item.pseuds.pluck(:user_id).include?(id)
     elsif item.respond_to?(:author)
       self == item.author
     elsif item.respond_to?(:creator_id)
@@ -518,6 +524,10 @@ class User < ApplicationRecord
     reindex_user_creations
   end
 
+  def add_renamed_at
+    self.renamed_at = Time.current
+  end
+
    def log_change_if_login_was_edited
      create_log_item(options = { action: ArchiveConfig.ACTION_RENAME, note: "Old Username: #{login_before_last_save}; New Username: #{login}" }) if saved_change_to_login?
    end
@@ -527,4 +537,13 @@ class User < ApplicationRecord
     self.class.remove_from_autocomplete(self.autocomplete_search_string_was, self.autocomplete_prefixes, self.autocomplete_value_was)
   end
 
+  def username_is_not_recently_changed
+    change_interval_days = ArchiveConfig.USER_RENAME_LIMIT_DAYS
+    return unless renamed_at && change_interval_days.days.ago <= renamed_at
+
+    errors.add(:login,
+               :changed_too_recently,
+               count: change_interval_days,
+               renamed_at: I18n.l(renamed_at, format: :long))
+  end
 end

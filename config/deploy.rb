@@ -59,7 +59,7 @@ set :mail_to, "otw-coders@transformativeworks.org otw-testers@transformativework
 
 # git settings
 set :scm, :git
-set :repository, "git://github.com/otwcode/otwarchive.git"
+set :repository, "https://github.com/otwcode/otwarchive.git"
 set :deploy_via, :remote_cache
 
 set :servers, -> { YAML.load_file(File.join(__dir__, "servers.yml")).deep_symbolize_keys[fetch(:stage)] }

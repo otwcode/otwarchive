@@ -362,7 +362,6 @@ namespace :After do
 
   #### Add your new tasks here
 
-
   desc "Set initial values for sortable tag names"
   task(:sortable_tag_names => :environment) do
     Media.all.each{ |m| m.save }
@@ -481,7 +480,7 @@ namespace :After do
       end
 
       if skin.headercolor.present?
-        wizard_css += "#header .main a, #header .main .current, #header .main input, #header .search input {border-color: transparent;} "
+        wizard_css += "#header .main a, #header .main input, #header .search input {border-color: transparent;} "
         wizard_css += "#header, #header ul.main, #footer {background: #{skin.headercolor}; border-color: #{skin.headercolor}; box-shadow: none;} "
       end
 
@@ -874,31 +873,61 @@ namespace :After do
     puts("Added default rating to works: #{updated_works}") && STDOUT.flush
   end
 
-  desc "Reset blurb date (revised_at) on backdated works"
-  task(reset_revised_at_on_backdated_works: :environment) do
-    # Fix all backdated works, as well as works with an arbitrary revised_at set
-    # in the past (possibly because of AO3-6187). Skip works failing validations.
-    works = Work.where("backdate OR revised_at < created_at")
-    work_count = works.count
-    total_batches = (work_count + 999) / 1000
-    puts("Checking #{work_count} works in #{total_batches} batches") && STDOUT.flush
+  desc "Fix pseuds with invalid icon data"
+  task(fix_invalid_pseud_icon_data: :environment) do
+    # From validates_attachment_content_type in pseuds model.
+    valid_types = %w[image/gif image/jpeg image/png]
 
-    invalid_work_ids = []
-    works.find_in_batches.with_index do |batch, index|
-      batch_number = index + 1
+    # If you change either of these, update lookup_invalid_pseuds.rb in
+    # otwcode/otw-scripts to ensure the proper users are notified.
+    pseuds_with_invalid_icons = Pseud.where("icon_file_name IS NOT NULL AND icon_content_type NOT IN (?)", valid_types)
+    pseuds_with_invalid_text = Pseud.where("CHAR_LENGTH(icon_alt_text) > ? OR CHAR_LENGTH(icon_comment_text) > ?", ArchiveConfig.ICON_ALT_MAX, ArchiveConfig.ICON_COMMENT_MAX)
 
-      batch.each do |work|
-        work.revised_at = nil
-        invalid_work_ids << work.id unless work.save
+    invalid_pseuds = [pseuds_with_invalid_icons, pseuds_with_invalid_text].flatten.uniq
+    invalid_pseuds_count = invalid_pseuds.count
+
+    skipped_pseud_ids = []
+
+    # Update the pseuds.
+    puts("Updating #{invalid_pseuds_count} pseuds") && STDOUT.flush
+
+    invalid_pseuds.each do |pseud|
+      # Change icon content type to jpeg if it's jpg.
+      pseud.icon_content_type = "image/jpeg" if pseud.icon_content_type == "image/jpg"
+      # Delete the icon if it's not a valid type.
+      pseud.icon = nil unless (valid_types + ["image/jpg"]).include?(pseud.icon_content_type)
+      # Delete the icon alt text if it's too long.
+      pseud.icon_alt_text = "" if pseud.icon_alt_text.length > ArchiveConfig.ICON_ALT_MAX
+      # Delete the icon comment if it's too long.
+      pseud.icon_comment_text = "" if pseud.icon_comment_text.length > ArchiveConfig.ICON_COMMENT_MAX
+      skipped_pseud_ids << pseud.id unless pseud.save
+      print(".") && STDOUT.flush
+    end
+    if skipped_pseud_ids.any?
+      puts
+      puts("Couldn't update #{skipped_pseud_ids.size} pseud(s): #{skipped_pseud_ids.join(',')}") && STDOUT.flush
+    end
+  end
+
+  desc "Backfill renamed_at for existing users"
+  task(add_renamed_at_from_log: :environment) do
+    total_users = User.all.size
+    total_batches = (total_users + 999) / 1000
+    puts "Updating #{total_users} users in #{total_batches} batches"
+
+    User.find_in_batches.with_index do |batch, index|
+      batch.each do |user|
+        renamed_at_from_log = user.log_items.where(action: ArchiveConfig.ACTION_RENAME).last&.created_at
+        next unless renamed_at_from_log
+
+        user.update_column(:renamed_at, renamed_at_from_log)
       end
-      puts("Batch #{batch_number} of #{total_batches} complete") && STDOUT.flush
-    end
 
-    unless invalid_work_ids.empty?
-      puts "The following #{invalid_work_ids.size} work(s) failed validations and could not be saved:"
-      puts invalid_work_ids.join(", ")
-      STDOUT.flush
+      batch_number = index + 1
+      progress_msg = "Batch #{batch_number} of #{total_batches} complete"
+      puts(progress_msg) && STDOUT.flush
     end
+    puts && STDOUT.flush
   end
 
   # This is the end that you have to put new tasks above.

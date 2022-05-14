@@ -8,6 +8,7 @@ require "factory_bot"
 require "database_cleaner"
 require "email_spec"
 require "webmock/rspec"
+require "n_plus_one_control/rspec"
 
 DatabaseCleaner.start
 DatabaseCleaner.clean
@@ -69,6 +70,9 @@ RSpec.configure do |config|
 
     # Assume all spam checks pass by default.
     allow(Akismetor).to receive(:spam?).and_return(false)
+
+    # Stub all requests to example.org, the default external work URL:
+    WebMock.stub_request(:any, "www.example.org")
   end
 
   config.after :each do
@@ -78,6 +82,11 @@ RSpec.configure do |config|
   config.after :suite do
     DatabaseCleaner.clean_with :truncation
     Indexer.all.map(&:delete_index)
+  end
+
+  # Remove the folder where test images are saved.
+  config.after(:suite) do
+    FileUtils.rm_rf(Dir[Rails.root.join("public/system/test")])
   end
 
   config.before :each, bookmark_search: true do

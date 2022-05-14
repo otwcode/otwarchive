@@ -167,6 +167,15 @@ Given /^I have posted an admin post with comments disabled$/ do
   step %{I log out}
 end
 
+Given "an abuse ticket ID exists" do
+  ticket = {
+    "departmentId" => ArchiveConfig.ABUSE_ZOHO_DEPARTMENT_ID,
+    "status" => "Open",
+    "webUrl" => Faker::Internet.url
+  }
+  allow_any_instance_of(ZohoResourceClient).to receive(:find_ticket).and_return(ticket)
+end
+
 ### WHEN
 
 When /^I visit the last activities item$/ do
@@ -270,6 +279,11 @@ When /^I hide the work "(.*?)"$/ do |title|
   work = Work.find_by(title: title)
   visit work_path(work)
   step %{I follow "Hide Work"}
+end
+
+When "the search criteria contains the ID for {string}" do |login|
+  user_id = User.find_by(login: login).id
+  fill_in("user_id", with: user_id)
 end
 
 ### THEN
@@ -428,6 +442,10 @@ end
 Then /^the work "([^\"]*)" should not be marked as spam/ do |work|
   w = Work.find_by_title(work)
   assert !w.spam?
+end
+
+Then "I should see {int} admin activity log entry/entries" do |count|
+  expect(page).to have_css("tr[id^=admin_activity_]", count: count)
 end
 
 Then /^the user content should be shown as right-to-left$/ do

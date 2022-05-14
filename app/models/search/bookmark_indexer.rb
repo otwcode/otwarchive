@@ -50,6 +50,9 @@ class BookmarkIndexer < Indexer
         tag: {
           type: "text",
           analyzer: "simple"
+        },
+        sort_id: {
+          type: "keyword"
         }
       }
     }

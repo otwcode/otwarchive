@@ -459,8 +459,28 @@ describe Work do
 
     it "marks a work incomplete when it's no longer completed" do
       work = create(:work, expected_number_of_chapters: 1)
-      work.update_attributes!(expected_number_of_chapters: nil)
+      work.update!(expected_number_of_chapters: nil)
       expect(work.reload.complete).to be_falsey
+    end
+  end
+
+  describe "#wip_length" do
+    it "updating chapter count via wip_length sets a sensible expected_number_of_chapters value" do
+      work = create(:work)
+      create(:chapter, work: work)
+      work.reload
+
+      work.wip_length = 1
+      expect(work.expected_number_of_chapters).to be_nil
+      expect(work.wip_length).to eq("?")
+
+      work.wip_length = 2
+      expect(work.expected_number_of_chapters).to eq(2)
+      expect(work.wip_length).to eq(work.expected_number_of_chapters)
+
+      work.wip_length = 3
+      expect(work.expected_number_of_chapters).to eq(3)
+      expect(work.wip_length).to eq(work.expected_number_of_chapters)
     end
   end
 
@@ -474,7 +494,7 @@ describe Work do
         @admin_setting.update_attribute(:hide_spam, true)
       end
       it "automatically hides spam works and sends an email" do
-        expect { @work.update_attributes!(spam: true) }.
+        expect { @work.update!(spam: true) }.
           to change { ActionMailer::Base.deliveries.count }.by(1)
         expect(@work.reload.hidden_by_admin).to be_truthy
         expect(ActionMailer::Base.deliveries.last.subject).to eq("[AO3] Your work was hidden as spam")
@@ -485,7 +505,7 @@ describe Work do
         @admin_setting.update_attribute(:hide_spam, false)
       end
       it "does not automatically hide spam works and does not send an email" do
-        expect { @work.update_attributes!(spam: true) }.
+        expect { @work.update!(spam: true) }.
           not_to change { ActionMailer::Base.deliveries.count }
         expect(@work.reload.hidden_by_admin).to be_falsey
       end

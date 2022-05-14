@@ -33,8 +33,8 @@ describe "rake work:purge_old_drafts" do
         create(:draft)
       end
 
-      create(:chapter, work: draft, authors: draft.pseuds, position: 2)
-      create(:chapter, work: draft, authors: draft.pseuds, position: 3)
+      create(:chapter, :draft, work: draft, authors: draft.pseuds, position: 2)
+      create(:chapter, :draft, work: draft, authors: draft.pseuds, position: 3)
       expect(draft.chapters.count).to eq(3)
 
       subject.invoke

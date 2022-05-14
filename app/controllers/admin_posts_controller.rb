@@ -32,8 +32,6 @@ class AdminPostsController < Admin::BaseController
     @admin_posts = admin_posts.order('created_at DESC').limit(8)
     @previous_admin_post = admin_posts.order('created_at DESC').where('created_at < ?', @admin_post.created_at).first
     @next_admin_post = admin_posts.order('created_at ASC').where('created_at > ?', @admin_post.created_at).first
-    @commentable = @admin_post
-    @comments = @admin_post.comments
     @page_subtitle = @admin_post.title.html_safe
     respond_to do |format|
       format.html # show.html.erb
@@ -70,7 +68,7 @@ class AdminPostsController < Admin::BaseController
   def update
     @admin_post = AdminPost.find(params[:id])
     authorize @admin_post
-    if @admin_post.update_attributes(admin_post_params)
+    if @admin_post.update(admin_post_params)
       flash[:notice] = ts("Admin Post was successfully updated.")
       redirect_to(@admin_post)
     else

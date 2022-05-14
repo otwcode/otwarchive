@@ -87,7 +87,7 @@ describe AbuseReport do
       let(:report) { build(:abuse_report, url: url) }
       it "can't be submitted" do
         expect(report.save).to be_falsey
-        expect(report.errors[:base].first).to include("URL has already been reported.")
+        expect(report.errors[:base].first).to include("This page has already been reported.")
       end
     end
 
@@ -155,8 +155,7 @@ describe AbuseReport do
       it_behaves_like "alright", "http://archiveofourown.org/users/someone"
 
       context "a month later" do
-        before { Timecop.freeze(32.days.from_now) }
-        after { Timecop.return }
+        before { travel(32.days) }
 
         it_behaves_like "alright", work_url
       end
@@ -207,8 +206,7 @@ describe AbuseReport do
       it_behaves_like "alright", "http://archiveofourown.org/works/789"
 
       context "a month later" do
-        before { Timecop.freeze(32.days.from_now) }
-        after { Timecop.return }
+        before { travel(32.days) }
 
         it_behaves_like "alright", user_url
       end
@@ -243,6 +241,45 @@ describe AbuseReport do
       it "acronym" do
         report.url = "http://ao3.org"
         expect(report.valid?).to be_truthy
+      end
+    end
+
+    context "when email is valid" do
+      let(:report) { build(:abuse_report, email: "email@example.com") }
+
+      context "when email has submitted less than the maximum daily number of reports" do
+        before do
+          (ArchiveConfig.ABUSE_REPORTS_PER_EMAIL_MAX - 1).times do
+            create(:abuse_report, email: "email@example.com")
+          end
+        end
+
+        it "can be submitted" do
+          expect(report.save).to be_truthy
+          expect(report.errors[:base]).to be_empty
+        end
+      end
+
+      context "when email has submitted the maximum daily number of reports" do
+        before do
+          ArchiveConfig.ABUSE_REPORTS_PER_EMAIL_MAX.times do
+            create(:abuse_report, email: "email@example.com")
+          end
+        end
+
+        it "can't be submitted" do
+          expect(report.save).to be_falsey
+          expect(report.errors[:base].first).to include("daily reporting limit")
+        end
+
+        context "when it's a day later" do
+          before { travel(1.day) }
+
+          it "can be submitted" do
+            expect(report.save).to be_truthy
+            expect(report.errors[:base]).to be_empty
+          end
+        end
       end
     end
   end

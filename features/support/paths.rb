@@ -194,6 +194,7 @@ module NavigationHelpers
     when /^the new collection page/
       new_collection_path
     when /^"(.*)" collection's page$/i                         # e.g. when I go to "Collection name" collection's page
+      step %{all indexing jobs have been run} # reindex to show recent works/bookmarks
       collection_path(Collection.find_by(title: $1))
     when /^"(.*)" collection edit page$/i
       edit_collection_path(Collection.find_by(title: $1))
@@ -288,6 +289,8 @@ module NavigationHelpers
       admin_posts_path
     when /^the admin-settings page$/i
       admin_settings_path
+    when /^the admin-activities page$/i
+      admin_activities_path
     when /^the admin-blacklist page$/i
       admin_blacklisted_emails_path
     when /^the manage users page$/
