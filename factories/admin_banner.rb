@@ -1,4 +1,4 @@
-require 'faker'
+require "faker"
 
 FactoryBot.define do
   factory :admin_banner do
