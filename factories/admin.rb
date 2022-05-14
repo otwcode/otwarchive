@@ -26,10 +26,6 @@ FactoryBot.define do
     factory :open_doors_admin do
       roles { ["open_doors"] }
     end
-
-    factory :official_admin do
-      roles { ["official"] }
-    end
   end
 
   factory :admin_activity do
