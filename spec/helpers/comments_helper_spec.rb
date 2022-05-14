@@ -60,5 +60,24 @@ describe CommentsHelper do
         expect(helper.css_classes_for_comment(unreviewed_comment)).to eq("unreviewed comment group user-#{user.id}")
       end
     end
+
+    context "when comment author is an official" do
+      let(:official_user) { create(:official) }
+      let(:comment) { create(:comment, pseud: official_user.default_pseud) }
+  
+      it "has official class" do
+        expect(helper.css_classes_for_comment(comment)).to match("official")
+      end
+
+      context "comment author is also creator of a work inside anonymous collection" do
+        let(:anonymous_collection) { create(:anonymous_collection) }
+        let(:work) { create(:work, authors: [official_user.default_pseud], collections: [anonymous_collection]) }
+        let(:comment) { create(:comment, pseud: official_user.default_pseud, commentable: work.last_posted_chapter) }
+      
+        it "does not have official class" do
+          expect(helper.css_classes_for_comment(comment)).not_to match("official")
+        end
+      end
+    end
   end
 end

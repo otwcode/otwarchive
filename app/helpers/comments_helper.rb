@@ -303,7 +303,7 @@ module CommentsHelper
 
     unreviewed = "unreviewed" if comment.unreviewed?
     commenter = commenter_id_for_css_classes(comment)
-    official = "official" if comment&.pseud&.user&.official
+    official = "official" if commenter && comment&.pseud&.user&.official
 
     "#{unreviewed} comment group #{commenter} #{official}".strip
   end

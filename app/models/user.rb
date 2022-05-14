@@ -392,10 +392,7 @@ class User < ApplicationRecord
 
   # Is this user an authorized official?
   def official
-    roles.each do |role|
-      return true if role.name == "official"
-    end
-    false
+    has_role?(:official)
   end
 
   # Is this user a protected user? These are users experiencing certain types
