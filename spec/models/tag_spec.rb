@@ -49,7 +49,7 @@ describe Tag do
         expect(@fandom_tag.taggings_count).to eq 1
       end
 
-      it 'will start caching a tag when that tag is used significantly' do
+      it 'will start caching a when tag when that tag is used significantly' do
         (1..ArchiveConfig.TAGGINGS_COUNT_MIN_CACHE_COUNT).each do |try|
           FactoryBot.create(:work, fandom_string: @fandom_tag.name)
           Tag.write_redis_to_database
@@ -65,7 +65,7 @@ describe Tag do
         expect(@fandom_tag.taggings_count).to eq ArchiveConfig.TAGGINGS_COUNT_MIN_CACHE_COUNT
       end
 
-      it "Writes to the database do not happen immediately" do
+      it "Writes to the database do not happen immeadiately" do
         (1..40 * ArchiveConfig.TAGGINGS_COUNT_CACHE_DIVISOR - 1).each do |try|
           @fandom_tag.taggings_count = try
           @fandom_tag.reload
@@ -78,8 +78,8 @@ describe Tag do
       end
     end
 
-    context 'writes to the database from redis' do
-      it 'should not write to the database when reading the count' do
+    context "redis" do
+      it "does not write to the database when reading the count" do
         FactoryBot.create(:work, fandom_string: @fandom_tag.name)
         Tag.write_redis_to_database
         @fandom_tag.reload
@@ -88,7 +88,7 @@ describe Tag do
         expect(REDIS_GENERAL.sismember("tag_update", @fandom_tag.id)).to eq false
       end
 
-      it 'should not write to the database when assigning the same count' do
+      it "does not write to the database when assigning the same count" do
         FactoryBot.create(:work, fandom_string: @fandom_tag.name)
         Tag.write_redis_to_database
         @fandom_tag.reload
@@ -97,7 +97,7 @@ describe Tag do
         expect(REDIS_GENERAL.sismember("tag_update", @fandom_tag.id)).to eq false
       end
 
-      it 'should write to the database when assigning a new count' do
+      it "writes to the database when assigning a new count" do
         FactoryBot.create(:work, fandom_string: @fandom_tag.name)
         Tag.write_redis_to_database
         @fandom_tag.reload
@@ -112,7 +112,7 @@ describe Tag do
         expect(@fandom_tag.taggings_count).to eq 1
       end
 
-      it 'should write to the database when adding a new work with the same tag' do
+      it "writes to the database when adding a new work with the same tag" do
         FactoryBot.create(:work, fandom_string: @fandom_tag.name)
         Tag.write_redis_to_database
         @fandom_tag.reload
@@ -128,7 +128,7 @@ describe Tag do
         expect(@fandom_tag.taggings_count).to eq 2
       end
 
-      it 'should not write to the database with a blank value' do
+      it "does not write to the database with a blank value" do
         FactoryBot.create(:work, fandom_string: @fandom_tag.name)
         Tag.write_redis_to_database
         @fandom_tag.reload
