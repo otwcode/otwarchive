@@ -301,11 +301,12 @@ module CommentsHelper
   def css_classes_for_comment(comment)
     return if comment.nil?
 
+    official = "official" if comment&.pseud&.user&.official
     unreviewed = "unreviewed" if comment.unreviewed?
     commenter = commenter_id_for_css_classes(comment)
     official = "official" if commenter && comment&.pseud&.user&.official
 
-    "#{unreviewed} comment group #{commenter} #{official}".strip
+    "#{official} #{unreviewed} comment group #{commenter}".strip
   end
 
   # find the parent of the commentable
