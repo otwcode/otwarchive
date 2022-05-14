@@ -14,6 +14,11 @@ Given /^I have the receive no comment notifications setup$/ do
   user.preference.save
 end
 
+Given "a guest comment on the work {string}" do |title|
+  work = Work.find_by(title: title)
+  FactoryBot.create(:comment, :by_guest, commentable: work.first_chapter)
+end
+
 # THEN
 
 Then /^the comment's posted date should be nowish$/ do
