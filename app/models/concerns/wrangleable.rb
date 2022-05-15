@@ -1,4 +1,4 @@
-module Wranglable
+module Wrangleable
   extend ActiveSupport::Concern
 
   included do
@@ -8,9 +8,9 @@ module Wranglable
 
   def update_last_wrangling_activity
     current_user = User.current_user
-    return unless current_user&.respond_to?(:is_tag_wrangler?) && current_user&.is_tag_wrangler?
+    return unless current_user.respond_to?(:is_tag_wrangler?) && current_user&.is_tag_wrangler?
 
-    last_activity = LastWranglingActivity.find_or_create_by(user: User.current_user)
+    last_activity = LastWranglingActivity.find_or_create_by(user: current_user)
     last_activity.touch
   end
 end

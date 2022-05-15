@@ -187,7 +187,10 @@ class Comment < ApplicationRecord
         end
       end
     end
+  end
 
+  after_create :record_wrangling_activity_if_needed
+  def record_wrangling_activity_if_needed
     return unless self.comment_owner&.is_tag_wrangler? && self.ultimate_parent.is_a?(Tag)
 
     # Record last wrangling activity if the parent is a tag and the commentor
