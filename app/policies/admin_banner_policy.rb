@@ -1,11 +1,10 @@
 class AdminBannerPolicy < ApplicationPolicy
-  def manage?
+  def index?
     user_has_roles?(%w[superadmin board communications support])
   end
 
-  alias index? manage?
-  alias show? manage?
-  alias create? manage?
-  alias update? manage?
-  alias destroy? manage?
+  alias show? index?
+  alias create? index?
+  alias update? index?
+  alias destroy? index?
 end
