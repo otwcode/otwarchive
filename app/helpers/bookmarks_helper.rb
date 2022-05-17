@@ -122,14 +122,11 @@ module BookmarksHelper
     "bookmark blurb group #{creation_id} #{creator_ids}".strip
   end
 
-  # Also not using this yet.
-  # We could cache this if we kept the "own" logic out, but I don't know how
-  # useful that is.
   def css_classes_for_bookmark_blurb_short(bookmark)
     return if bookmark.nil?
 
     own = "own" if is_author_of?(bookmark)
     bookmarker_id = bookmarker_id_for_css_classes(bookmark)
-    "#{own} user short blurb group #{bookmarker_id}"
+    "#{own} user short blurb group #{bookmarker_id}".squish
   end
 end
