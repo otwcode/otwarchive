@@ -84,16 +84,23 @@ module BookmarksHelper
     content_tag(:span, link, class: "count")
   end
 
-  # The bookmark blurb contains the bookmarkable and a single user's bookmark.
-  # If we cache this, it probably only needs to use the creation cache key.
+  # Bookmark blurbs contain a single bookmark from a single user.
+  # bookmark blurb group creation-id [creator-ids bookmarker-id].uniq
   def css_classes_for_bookmark_blurb(bookmark)
     return if bookmark.nil?
 
-    creation_id = creation_id_for_css_classes(bookmark.bookmarkable)
-    user_ids = user_ids_for_bookmark_blurb(bookmark).join(" ")
-    "bookmark blurb group #{creation_id} #{user_ids}".strip
+    creation = bookmark.bookmarkable
+    Rails.cache.fetch("#{creation.cache_key_with_version}_#{bookmark.cache_key}/blurb_css_classes") do
+      creation_id = creation_id_for_css_classes(creation)
+      user_ids = user_ids_for_bookmark_blurb(bookmark).join(" ")
+      "bookmark blurb group #{creation_id} #{user_ids}".squish
+    end
   end
 
+  # Bookmarkable blurbs contain multiple short blurbs from different users.
+  # Bookmarker ids are applied to the individual short blurbs.
+  # Note that creation blurb classes are cached.
+  # bookmark blurb group creation-id creator-ids
   def css_classes_for_bookmarkable_blurb(bookmark)
     return if bookmark.nil?
 
