@@ -105,11 +105,10 @@ module BookmarksHelper
   # Bookmarker ids are applied to the individual short blurbs.
   # Note that creation blurb classes are cached.
   # bookmark blurb group creation-id creator-ids
-  def css_classes_for_bookmarkable_blurb(bookmark)
-    return if bookmark.nil?
-    return "bookmark blurb group" if bookmark.bookmarkable.nil?
+  def css_classes_for_bookmarkable_blurb(bookmarkable)
+    return "bookmark blurb group" if bookmarkable.nil?
 
-    creation_classes = css_classes_for_creation_blurb(bookmark.bookmarkable)
+    creation_classes = css_classes_for_creation_blurb(bookmarkable)
     "bookmark #{creation_classes}".strip
   end
 

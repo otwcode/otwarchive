@@ -143,21 +143,21 @@ describe BookmarksHelper do
 
     context "when bookmarkable is ExternalWork" do
       it "returns string with default classes and creation info" do
-        result = helper.css_classes_for_bookmarkable_blurb(external_work_bookmark)
+        result = helper.css_classes_for_bookmarkable_blurb(external_work)
         expect(result).to eq("#{default_classes} external-work-#{external_work.id}")
       end
     end
 
     context "when bookmarkable is Series" do
       it "returns string with default classes and creation and creator info" do
-        result = helper.css_classes_for_bookmarkable_blurb(series_bookmark)
+        result = helper.css_classes_for_bookmarkable_blurb(series)
         expect(result).to eq("#{default_classes} series-#{series.id} user-#{series_creator.id}")
       end
     end
 
     context "when bookmarkable is Work" do
       it "returns string with default classes and creation and creator info" do
-        result = helper.css_classes_for_bookmarkable_blurb(work_bookmark)
+        result = helper.css_classes_for_bookmarkable_blurb(work)
         expect(result).to eq("#{default_classes} work-#{work.id} user-#{work_creator.id}")
       end
     end
