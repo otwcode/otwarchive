@@ -152,7 +152,7 @@ describe BookmarksHelper do
     context "when bookmarkable is nil" do
       it "returns a string with default classes" do
         result = helper.css_classes_for_bookmarkable_blurb(nil)
-        expect(result).to eq("#{default_classes}")
+        expect(result).to eq(default_classes)
       end
     end
 
