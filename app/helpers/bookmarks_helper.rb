@@ -88,6 +88,7 @@ module BookmarksHelper
   # bookmark blurb group creation-id [creator-ids bookmarker-id].uniq
   def css_classes_for_bookmark_blurb(bookmark)
     return if bookmark.nil?
+    return "bookmark blurb group" if bookmark.bookmarkable.nil?
 
     creation = bookmark.bookmarkable
     Rails.cache.fetch("#{creation.cache_key_with_version}_#{bookmark.cache_key}/blurb_css_classes") do
