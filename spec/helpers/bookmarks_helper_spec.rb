@@ -14,6 +14,14 @@ describe BookmarksHelper do
   describe "#css_classes_for_bookmark_blurb" do
     let(:default_classes) { "bookmark blurb group" }
 
+    context "when bookmarkable is nil" do
+      it "returns string with default classes and bookmarker info" do
+        work.destroy
+        result = helper.css_classes_for_bookmark_blurb(work_bookmark.reload)
+        expect(result).to eq("#{default_classes} user-#{bookmarker.id}")
+      end
+    end
+
     context "when bookmarkable is ExternalWork" do
       it "returns string with default classes, creation info, and bookmarker info" do
         result = helper.css_classes_for_bookmark_blurb(external_work_bookmark)
@@ -140,6 +148,13 @@ describe BookmarksHelper do
 
   describe "#css_classes_for_bookmarkable_blurb" do
     let(:default_classes) { "bookmark blurb group" }
+
+    context "when bookmarkable is nil" do
+      it "returns a string with default classes" do
+        result = helper.css_classes_for_bookmarkable_blurb(nil)
+        expect(result).to eq("#{default_classes}")
+      end
+    end
 
     context "when bookmarkable is ExternalWork" do
       it "returns string with default classes and creation info" do
