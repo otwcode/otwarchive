@@ -87,8 +87,7 @@ module BookmarksHelper
   # Bookmark blurbs contain a single bookmark from a single user.
   # bookmark blurb group creation-id [creator-ids bookmarker-id].uniq
   def css_classes_for_bookmark_blurb(bookmark)
-    return if bookmark.nil?
-    return "bookmark blurb group" if bookmark.bookmarkable.nil?
+    return "bookmark blurb group" if bookmark.nil? || bookmark.bookmarkable.nil?
 
     creation = bookmark.bookmarkable
     Rails.cache.fetch("#{creation.cache_key_with_version}_#{bookmark.cache_key}/blurb_css_classes") do
@@ -103,7 +102,7 @@ module BookmarksHelper
   # Note that creation blurb classes are cached.
   # bookmark blurb group creation-id creator-ids
   def css_classes_for_bookmarkable_blurb(bookmark)
-    return if bookmark.nil?
+    return "bookmark blurb group" if bookmark.nil? || bookmark.bookmarkable.nil?
 
     creation_classes = css_classes_for_creation_blurb(bookmark.bookmarkable)
     "bookmark #{creation_classes}".strip
