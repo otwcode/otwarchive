@@ -36,6 +36,10 @@ describe BookmarksHelper do
     let(:default_classes) { "user short blurb group" }
 
     context "when logged in as bookmarker" do
+      before do
+        allow(helper).to receive(:current_user).and_return(user)
+      end
+
       context "when bookmarkable is ExternalWork" do
         it "returns string with default classes, bookmarker info, and ownership indicator" do
           result = helper.css_classes_for_bookmark_blurb_short(external_work_bookmark)
@@ -59,24 +63,28 @@ describe BookmarksHelper do
     end
 
     context "when not logged in as bookmarker" do
+      before do
+        allow(helper).to receive(:current_user)
+      end
+
       context "when bookmarkable is ExternalWork" do
         it "returns string with default classes and bookmarker info" do
           result = helper.css_classes_for_bookmark_blurb_short(external_work_bookmark)
-          expect(result).to eq("own #{default_classes} user-#{user.id}")
+          expect(result).to eq("#{default_classes} user-#{user.id}")
         end
       end
 
       context "when bookmarkable is Series" do
         it "returns string with default classes and bookmarker info" do
           result = helper.css_classes_for_bookmark_blurb_short(series_bookmark)
-          expect(result).to eq("own #{default_classes} user-#{user.id}")
+          expect(result).to eq("#{default_classes} user-#{user.id}")
         end
       end
 
       context "when bookmarkable is Work" do
         it "returns string with default classes and bookmarker info" do
           result = helper.css_classes_for_bookmark_blurb_short(work_bookmark)
-          expect(result).to eq("own #{default_classes} user-#{user.id}")
+          expect(result).to eq("#{default_classes} user-#{user.id}")
         end
       end
     end
