@@ -84,6 +84,33 @@ module BookmarksHelper
     content_tag(:span, link, class: "count")
   end
 
+  # The bookmark blurb contains the bookmarkable and a single user's bookmark.
+  # If we cache this, it probably only needs to use the creation cache key.
+  def css_classes_for_bookmark_blurb(bookmark)
+    return if bookmark.nil?
+
+    creation_id = creation_id_for_css_classes(bookmark.bookmarkable)
+    user_ids = user_ids_for_bookmark_blurb(bookmark).join(" ")
+    "bookmark blurb group #{creation_id} #{user_ids}".strip
+  end
+
+  def css_classes_for_bookmarkable_blurb(bookmark)
+    return if bookmark.nil?
+
+    creation_classes = css_classes_for_creation_blurb(bookmark.bookmarkable)
+    "bookmark #{creation_classes}".strip
+  end
+
+  def css_classes_for_bookmark_blurb_short(bookmark)
+    return if bookmark.nil?
+
+    own = "own" if is_author_of?(bookmark)
+    bookmarker_id = bookmarker_id_for_css_classes(bookmark)
+    "#{own} user short blurb group #{bookmarker_id}".squish
+  end
+
+  private
+
   def bookmarker_id_for_css_classes(bookmark)
     return if bookmark.nil?
 
@@ -98,35 +125,4 @@ module BookmarksHelper
     user_ids.uniq
   end
 
-  # The bookmark blurb contains the bookmarkable and a single user's bookmark.
-  # If we cache this, it probably only needs to use the creation cache key.
-  def css_classes_for_bookmark_blurb(bookmark)
-    return if bookmark.nil?
-
-    creation_id = creation_id_for_css_classes(bookmark.bookmarkable)
-    user_ids = user_ids_for_bookmark_blurb(bookmark).join(" ")
-    "bookmark blurb group #{creation_id} #{user_ids}".strip
-  end
-
-  # I'm not using this yet.
-  # The bookmarkable blurb contains the bookmarkable and many users' bookmarks.
-  # This is equivalent to sticking the word "bookmark" in front of
-  # css_classes_for_creation_blurb(creation), but I don't know if we want to
-  # use the existing method because it's cached (the key is
-  # "#{creation.cache_key_with_version}/blurb_css_classes-v2").
-  def css_classes_for_bookmarkable_blurb(bookmark)
-    return if bookmark.nil?
-
-    creation_id = creation_id_for_css_classes(bookmark.bookmarkable)
-    creator_ids = creator_ids_for_css_classes(bookmark.bookmarkable)
-    "bookmark blurb group #{creation_id} #{creator_ids}".strip
-  end
-
-  def css_classes_for_bookmark_blurb_short(bookmark)
-    return if bookmark.nil?
-
-    own = "own" if is_author_of?(bookmark)
-    bookmarker_id = bookmarker_id_for_css_classes(bookmark)
-    "#{own} user short blurb group #{bookmarker_id}".squish
-  end
 end
