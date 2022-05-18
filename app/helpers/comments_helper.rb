@@ -305,7 +305,7 @@ module CommentsHelper
     commenter = commenter_id_for_css_classes(comment)
     official = "official" if commenter && comment&.pseud&.user&.official
 
-    "#{official} #{unreviewed} comment group #{commenter}".strip
+    "#{official} #{unreviewed} comment group #{commenter}".squish
   end
 
   # find the parent of the commentable
