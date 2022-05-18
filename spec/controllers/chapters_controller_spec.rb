@@ -166,16 +166,6 @@ describe ChaptersController do
       expect(assigns[:next_chapter]).to be_nil
     end
 
-    it "assigns @comments to only reviewed comments" do
-      moderated_work = create(:work, moderated_commenting_enabled: true)
-      comment = create(:comment, commentable: moderated_work.chapters.first)
-      comment.unreviewed = false
-      comment.save
-      create(:comment, unreviewed: true, commentable: moderated_work.chapters.first)
-      get :show, params: { work_id: moderated_work.id, id: moderated_work.chapters.first.id }
-      expect(assigns[:comments]).to eq [comment]
-    end
-
     it "assigns @page_title with fandom, author name, work title, and chapter" do
       expect_any_instance_of(ChaptersController).to receive(:get_page_title).with("Testing", user.pseuds.first.name, "My title is long enough - Chapter 1").and_return("page title")
       get :show, params: { work_id: work.id, id: work.chapters.first.id }
@@ -215,7 +205,6 @@ describe ChaptersController do
     it "assigns instance variables correctly" do
       second_chapter = create(:chapter, work: work, position: 2)
       third_chapter = create(:chapter, work: work, position: 3)
-      comment = create(:comment, commentable: second_chapter)
       kudo = create(:kudo, commentable: work, user: create(:user))
       tag = create(:fandom)
       expect_any_instance_of(Work).to receive(:tag_groups).and_return("Fandom" => [tag])
@@ -227,8 +216,6 @@ describe ChaptersController do
       expect(assigns[:chapters]).to eq [work.chapters.first, second_chapter, third_chapter]
       expect(assigns[:previous_chapter]).to eq work.chapters.first
       expect(assigns[:next_chapter]).to eq third_chapter
-      expect(assigns[:commentable]).to eq work
-      expect(assigns[:comments]).to eq [comment]
       expect(assigns[:page_title]).to eq "page title"
       expect(assigns[:kudos]).to eq [kudo]
       expect(assigns[:subscription]).to be_nil

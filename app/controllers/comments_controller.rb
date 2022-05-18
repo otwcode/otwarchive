@@ -213,7 +213,6 @@ class CommentsController < ApplicationController
   def index
     return raise_not_found if @commentable.blank?
 
-    @comments = @commentable.comments.reviewed.page(params[:page])
     return unless @commentable.class == Comment
 
     # we link to the parent object at the top
@@ -221,14 +220,16 @@ class CommentsController < ApplicationController
   end
 
   def unreviewed
-    all_comments = @commentable.find_all_comments
-    @comments = all_comments.blank? ? nil : all_comments.unreviewed_only.page(params[:page])
+    @comments = @commentable.find_all_comments
+      .unreviewed_only
+      .for_display
+      .page(params[:page])
   end
 
   # GET /comments/1
   # GET /comments/1.xml
   def show
-    @comments = [@comment]
+    @comments = CommentDecorator.wrap_comments([@comment])
     @thread_view = true
     @thread_root = @comment
     params[:comment_id] = params[:id]
@@ -438,8 +439,6 @@ class CommentsController < ApplicationController
   end
 
   def show_comments
-    @comments = @commentable.comments.reviewed.page(params[:page])
-
     respond_to do |format|
       format.html do
         # if non-ajax it could mean sudden javascript failure OR being redirected from login
@@ -450,7 +449,10 @@ class CommentsController < ApplicationController
         options[:page] = params[:page]
         redirect_to_all_comments(@commentable, options)
       end
-      format.js
+
+      format.js do
+        @comments = CommentDecorator.for_commentable(@commentable, page: params[:page])
+      end
     end
   end
 

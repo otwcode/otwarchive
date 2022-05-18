@@ -11,7 +11,8 @@ Feature: Edit Multiple Works
       And I post the work "Lovely" with fandom "Steven Universe"
       And I go to my works page
     When I follow "Edit Works"
-    Then I should see "Edit Multiple Works"
+    Then I should see the page title "Edit Multiple Works"
+      And I should see "Edit Multiple Works"
     When I select "Glorious" for editing
       And I select "Excellent" for editing
       And I press "Delete"
@@ -33,7 +34,8 @@ Feature: Edit Multiple Works
       And I post the work "Excellent" with fandom "Star Trek"
       And I go to my works page
     When I follow "Edit Works"
-    Then I should see "Edit Multiple Works"
+    Then I should see the page title "Edit Multiple Works"
+      And I should see "Edit Multiple Works"
       And I should see "All"
       And I should see "None"
     When I select "Glorious" for editing

@@ -1,5 +1,17 @@
 ---
 ko:
+  kudo_mailer:
+    batch_kudo_notification:
+      guest:
+        other: "%{count} 방문자"
+      html:
+        left_kudos:
+          other: "%{commentable_link}에 %{givers_list}이(가) 좋아요(kudos)를 남겼습니다."
+      subject: "[%{app_name}] 회원님의 게시물에 좋아요(kudos)가 있습니다!"
+      text:
+        left_kudos:
+          other: "%{commentable_title} (%{commentable_url})에 %{givers_list}이(가) 좋아요(kudos)를
+            남겼습니다."
   mailer:
     general:
       closing:
@@ -23,22 +35,12 @@ ko:
         informal:
           addressed: "%{name} 님 안녕하세요!"
           unaddressed: 안녕하세요!
-        introductory: Archive of Our Own – AO3 (우리만의 아카이브)에서 인사 드립니다!
+        introductory: Archive of Our Own – AO3 (우리만의 아카이브)에서 인사 드립니다!
       signature:
         app_short_name: AO3
         open_doors: The Open Doors (오픈도어 프로젝트) 팀 드림
-        parent_org: Organization for Transformative Works – OTW (변형적 작품 단체) 드림
+        parent_org: Organization for Transformative Works – OTW (변형적 작품 단체) 드림
         support: AO3 지원 위원회 드림
-    kudos:
-      guest:
-        other: "%{count} 방문자"
-      html:
-        left_kudos:
-          other: "%{commentable_link}에 %{givers_list}이(가) 좋아요(kudos)를 남겼습니다."
-      text:
-        left_kudos:
-          other: "%{commentable_link}에 %{givers_list}이(가) 좋아요(kudos)를 남겼습니다."
-      you_have: "[%{app_name}] 회원님의 게시물에 좋아요(kudos)가 있습니다!"
   users:
     mailer:
       reset_password_instructions:
@@ -302,10 +304,16 @@ ko:
       reason: '회원님의 요청:'
       subject: "[%{app_name}] 추가 초청 코드 요청이 거부되었습니다"
     recipient_notification:
+      html:
+        collection: AO3 내 %{collection_link} 컬렉션에 회원님을 위한 선물 작품이 게시되었습니다!
+      no_collection: 회원님을 위한 선물 작품이 AO3에 게시되었습니다!
       subject:
         collection: "[%{app_name}][%{collection_title}] %{collection_title} 내 회원님을
           위한 선물 작품이 있습니다"
         no_collection: "[%{app_name}] 회원님을 위한 선물 작품이 있습니다"
+      text:
+        collection: AO3 내 "%{collection_title}" 컬렉션(%{collection_url})에 회원님을 위한 선물
+          작품이 게시되었습니다!
     signup_notification:
       activate_your_account: 계정 활성화를 위해 링크를 눌러주세요
       admin_posts: AO3 뉴스

@@ -1,5 +1,23 @@
 ---
 da:
+  kudo_mailer:
+    batch_kudo_notification:
+      guest:
+        one: en gæst
+        other: "%{count} gæster"
+      html:
+        left_kudos:
+          one: "%{givers_list} efterlod kudos på %{commentable_link}."
+          other: "%{givers_list} efterlod kudos på %{commentable_link}."
+        single_guest:
+          giver_list: En gæst
+          left_kudos: "%{giver_list} efterlod kudos på %{commentable_link}."
+      subject: "[%{app_name}] Du har fået kudos!"
+      text:
+        left_kudos:
+          one: "%{givers_list} efterlod kudos på %{commentable_title} (%{commentable_url})."
+          other: "%{givers_list} efterlod kudos på %{commentable_title} (%{commentable_url})."
+        single_guest: En gæst efterlod kudos på %{commentable_title} (%{commentable_url}).
   mailer:
     general:
       closing:
@@ -30,19 +48,6 @@ da:
         parent_org: Organization for Transformative Works – OTW (Organisationen for
           Transformative Værker)
         support: AO3 Support-team
-    kudos:
-      guest:
-        one: en gæst
-        other: "%{count} gæster"
-      html:
-        left_kudos:
-          one: "%{givers_list} efterlod ros på %{commentable_link}."
-          other: "%{givers_list} efterlod ros på %{commentable_link}."
-      text:
-        left_kudos:
-          one: "%{givers_list} efterlod ros på %{commentable_link}."
-          other: "%{givers_list} efterlod ros på %{commentable_link}."
-      you_have: "[%{app_name}] Du har fået ros!"
   users:
     mailer:
       reset_password_instructions:
@@ -230,9 +235,9 @@ da:
         remove_series: 'Hvis du er blevet tilføjet ved en fejl eller ikke vil stå
           som skaber, kan du redigere serien for at fjerne dig selv som skaber: %{url}'
     creatorship_notification_archivist:
-      explanation: Fordi de opererer i en officiel funktion som arkivar for Åbne Døre,
-        har de tilladelse til at tilføje dig uden en invitation, selvom du har deaktiveret
-        samskabelse.
+      explanation: Fordi de opererer i en officiel funktion som arkivar for Open Doors
+        (Åbne Døre), har de tilladelse til at tilføje dig uden en invitation, selvom
+        du har deaktiveret samskabelse.
       html:
         creation: "%{creation_link} af %{pseud_links}"
         edit_chapter: redigere kapitlet
@@ -368,10 +373,17 @@ da:
       reason: 'Din anmodning var:'
       subject: "[%{app_name}] Anmodning om yderligere invitationer afvist"
     recipient_notification:
+      html:
+        collection: Et værk er blevet udgivet som gave til dig i %{collection_link}-samlingen
+          på AO3!
+      no_collection: Et værk er blevet udgivet som gave til dig på AO3!
       subject:
         collection: "[%{app_name}][%{collection_title}] Et værk i gave til dig fra
           %{collection_title}"
         no_collection: "[%{app_name}] Et værk i gave til dig"
+      text:
+        collection: Et værk er blevet udgivet som gave til dig i "%{collection_title}"-samlingen
+          (%{collection_url}) på AO3!
     signup_notification:
       activate_your_account: følg dette link for at aktivere din konto
       admin_posts: AO3 nyheder

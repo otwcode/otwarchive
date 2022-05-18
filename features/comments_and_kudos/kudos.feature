@@ -141,21 +141,29 @@ Feature: Kudos
 
     Given I am logged in as "myname1"
       And I post the work "Another Awesome Story"
+      And I post the work "Meh Story"
+      And I post the work "Okay Story"
       And all emails have been delivered
       And the kudos queue is cleared
       And I am logged in as "myname2"
       And I leave kudos on "Awesome Story"
       And I leave kudos on "Another Awesome Story"
+      And I leave kudos on "Okay Story"
       And I am logged in as "someone_else"
       And I leave kudos on "Awesome Story"
-      And I leave kudos on "Another Awesome Story"
       And I am logged out
       And I leave kudos on "Awesome Story"
       And I leave kudos on "Another Awesome Story"
+      And I leave kudos on "Meh Story"
     When kudos are sent
     Then 1 email should be delivered to "myname1@foo.com"
+      And the email should have "You've got kudos!" in the subject
       And the email should contain "myname2"
       And the email should contain "someone_else"
-      And the email should contain "guest"
+      And the email should contain "a guest"
+      And the email should contain "A guest"
       And the email should contain "Awesome Story"
       And the email should contain "Another Awesome Story"
+      And the email should contain "Meh Story"
+      And the email should not contain "0 guests"
+      And the email should not contain "translation missing"

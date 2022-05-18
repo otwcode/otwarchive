@@ -1,5 +1,25 @@
 ---
 sl:
+  kudo_mailer:
+    batch_kudo_notification:
+      guest:
+        few: "%{count} gosti/je"
+        one: "%{count} gost/ja"
+        other: "%{count} gostov/ij"
+        two: "%{count} gosta/ji"
+      html:
+        left_kudos:
+          few: "%{givers_list} so všečkali/e %{commentable_link}."
+          one: "%{givers_list} je všečkal/a %{commentable_link}."
+          other: "%{givers_list} je všečkalo %{commentable_link}."
+          two: "%{givers_list} sta všečkala/i %{commentable_link}."
+      subject: "[%{app_name}] Imate všečke!"
+      text:
+        left_kudos:
+          few: "%{givers_list} so všečkali/e %{commentable_title} (%{commentable_url})."
+          one: "%{givers_list} je všečkal/a %{commentable_title} (%{commentable_url})."
+          other: "%{givers_list} je všečkalo %{commentable_title} (%{commentable_url})."
+          two: "%{givers_list} sta všečkala/i %{commentable_title} (%{commentable_url})."
   mailer:
     general:
       closing:
@@ -18,7 +38,7 @@ sl:
               uporabnikom preko %{support_url}.
             part2: 'Naš lastni arhiv upravljajo in vzdržujejo fani, zato se zanaša
               na vaše donacije: %{donate_url}.'
-        sent_at: Poslano ob %{sent_at}.
+        sent_at: Poslano dne %{sent_at}.
       greeting:
         formal: Spoštovani %{name},
         informal:
@@ -31,25 +51,6 @@ sl:
         parent_org: Organization for Transformative Works - OTW (Organizacija za tranformativna
           dela)
         support: AO3 ekipa za pomoč uporabnikom
-    kudos:
-      guest:
-        few: "%{count} gosti/je"
-        one: "%{count} gost/ja"
-        other: "%{count} gostov/ij"
-        two: "%{count} gosta/ji"
-      html:
-        left_kudos:
-          few: "%{givers_list} so všečkali/e %{commentable_link}."
-          one: "%{givers_list} je všečkal/a %{commentable_link}."
-          other: "%{givers_list} je všečkalo %{commentable_link}."
-          two: "%{givers_list} sta všečkala/i %{commentable_link}."
-      text:
-        left_kudos:
-          few: "%{givers_list} so všečkali/e %{commentable_link}."
-          one: "%{givers_list} je všečkal/a %{commentable_link}."
-          other: "%{givers_list} je všečkalo %{commentable_link}."
-          two: "%{givers_list} sta všečkala/i %{commentable_link}."
-      you_have: "[%{app_name}] Imate všečke!"
   users:
     mailer:
       reset_password_instructions:
@@ -234,9 +235,30 @@ sl:
         onemogočeno.
       html:
         creation: "%{creation_link} avtoric/-jev %{pseud_links}"
+        edit_chapter: poglavje uredite
+        edit_series: serijo uredite
+        edit_work: delo uredite
+        remove_chapter: Če ste bili dodani po pomoti ali preprosto ne želite biti
+          navedeni kot ustvarjalka/-ec, lahko %{edit_chapter_link} in se odstranite.
+        remove_series: Če ste bili dodani po pomoti ali preprosto ne želite biti navedeni
+          kot ustvarjalka/-ec, lahko %{edit_series_link} in se odstranite.
+        remove_work: Če ste bili dodani po pomoti ali preprosto ne želite biti navedeni
+          kot ustvarjalka/-ec, lahko %{edit_work_link} in se odstranite.
+      intro_chapter: 'Uporabnik/-ca %{archivist} je dodal/a vaš psevdonim %{pseud}
+        kot soustvarjalca/-ko naslednjega poglavja:'
+      intro_series: 'Uporabnik/-ca %{archivist} je dodal/a vaš psevdonim %{pseud}
+        kot soustvarjalca/-ko naslednje serije:'
+      intro_work: 'Uporabnik/-ica %{archivist} je dodal/a vaš psevdonim %{pseud} kot
+        soustvarjalko/-ca sledečega dela:'
       subject: "[%{app_name}] Obvestilo arhivistke/-a soustvarjalke/-ca"
       text:
         creation: "%{title} (%{url}) avtoric/-jev %{pseuds}"
+        remove_chapter: 'Če ste bili dodani po pomoti ali preprosto ne želite biti
+          navedeni kot ustvarjalka/-ec, lahko uredite poglavje in se odstranite: %{url}'
+        remove_series: 'Če ste bili dodani po pomoti ali preprosto ne želite biti
+          navedeni kot ustvarjalka/-ec, lahko uredite serijo in se odstranite: %{url}'
+        remove_work: 'Če ste bili dodani po pomoti ali preprosto ne želite biti navedeni
+          kot ustvarjalka/-ec, lahko uredite delo in se odstranite: %{url}'
     creatorship_request:
       html:
         creation: "%{creation_link}, avtorstvo: %{pseud_links}"
@@ -346,9 +368,16 @@ sl:
       reason: 'Vaša prošnja:'
       subject: "[%{app_name}] Prošnja za dodatne kode za povabila zavrnjena"
     recipient_notification:
+      html:
+        collection: Na AO3 je bilo v zbirki %{collection_link} objavljeno delo, ki
+          vam je bilo podarjeno!
+      no_collection: Na AO3 je bilo objavljeno delo, ki vam je bilo podarjeno!
       subject:
         collection: "[%{app_name}][%{collection_title}] Podarjeno delo za vas iz %{collection_title}"
         no_collection: "[%{app_name}] Podarjeno delo za vas"
+      text:
+        collection: Na AO3 je bilo v zbirki "%{collection_title}" (%{collection_url})
+          objavljeno delo, ki vam je bilo podarjeno!
     signup_notification:
       activate_your_account: kliknite na naslednjo povezavo, da aktivirate vaš račun
       admin_posts: AO3 Novice
