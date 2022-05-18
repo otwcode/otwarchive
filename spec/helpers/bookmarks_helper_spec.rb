@@ -11,7 +11,6 @@ describe BookmarksHelper do
   let(:work) { work_bookmark.bookmarkable }
   let(:work_creator) { work.users.first }
 
-
   describe "#css_classes_for_bookmark_blurb" do
     let(:default_classes) { "bookmark blurb group" }
 

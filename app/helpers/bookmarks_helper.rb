@@ -131,5 +131,4 @@ module BookmarksHelper
     user_ids << bookmarker_id_for_css_classes(bookmark)
     user_ids.uniq
   end
-
 end
