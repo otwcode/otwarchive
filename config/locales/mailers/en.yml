@@ -14,6 +14,7 @@ en:
       creation:
         link_with_word_count: "%{creation_link} (%{word_count})"
         title_with_word_count: "\"%{creation_title}\" (%{word_count})"
+        title_with_chapter: "Chapter %{position} of %{title}"
         word_count:
           one: "%{count} word"
           other: "%{count} words"
