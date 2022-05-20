@@ -49,6 +49,8 @@ module CommentsHelper
     if comment.pseud_id
       if comment.pseud.nil?
         ts("Account Deleted")
+      elsif comment.pseud.user.official
+        (link_to comment.pseud.byline, [comment.pseud.user, comment.pseud]) + content_tag(:span, " " + ts("(Official)"), class: "role")
       else
         link_to comment.pseud.byline, [comment.pseud.user, comment.pseud]
       end
@@ -301,7 +303,9 @@ module CommentsHelper
 
     unreviewed = "unreviewed" if comment.unreviewed?
     commenter = commenter_id_for_css_classes(comment)
-    "#{unreviewed} comment group #{commenter}".strip
+    official = "official" if commenter && comment&.pseud&.user&.official
+
+    "#{official} #{unreviewed} comment group #{commenter}".squish
   end
 
   # find the parent of the commentable
