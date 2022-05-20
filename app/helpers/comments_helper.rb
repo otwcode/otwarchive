@@ -152,6 +152,10 @@ module CommentsHelper
         is_author_of?(comment.ultimate_parent)
   end
 
+  def can_hide_comment?(comment)
+    policy(comment).can_hide_comment?
+  end
+
   def comment_parent_hidden?(comment)
     parent = comment.ultimate_parent
     (parent.respond_to?(:hidden_by_admin) && parent.hidden_by_admin) ||
@@ -252,6 +256,14 @@ module CommentsHelper
     end
   end
 
+  def hide_comment_button(comment)
+    if comment.hidden_by_admin?
+      button_to ts("Make Comment Visible"), unhide_comment_path(comment), method: :put
+    else
+      button_to ts("Hide Comment"), hide_comment_path(comment), method: :put
+    end
+  end
+
   # Not a link or button, but included with them.
   def frozen_comment_indicator
     content_tag(:span, ts("Frozen"), class: "frozen current")
@@ -304,8 +316,9 @@ module CommentsHelper
     unreviewed = "unreviewed" if comment.unreviewed?
     commenter = commenter_id_for_css_classes(comment)
     official = "official" if commenter && comment&.pseud&.user&.official
+    unavailable = "unavailable" if comment.hidden_by_admin
 
-    "#{official} #{unreviewed} comment group #{commenter}".squish
+    "#{official} #{unreviewed} comment group #{commenter} #{unavailable}".squish
   end
 
   # find the parent of the commentable

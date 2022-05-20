@@ -501,6 +501,8 @@ Otwarchive::Application.routes.draw do
       put :reject
       put :review
       put :unfreeze
+      put :hide
+      put :unhide
     end
     collection do
       get :hide_comments

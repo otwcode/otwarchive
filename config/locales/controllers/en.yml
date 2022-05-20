@@ -22,6 +22,14 @@ en:
       error: Sorry, that comment thread could not be unfrozen.
       permission_denied: Sorry, you don't have permission to unfreeze that comment thread.
       success: Comment thread successfully unfrozen!
+    hide:
+      error: Sorry, that comment could not be hidden.
+      permission_denied: Sorry, you don't have permission to hide that comment.
+      success: Comment successfully hidden!
+    unhide:
+      error: Sorry, that comment could not be unhidden.
+      permission_denied: Sorry, you don't have permission to unhide that comment.
+      success: Comment successfully unhidden!
   users:
     passwords:
       create:

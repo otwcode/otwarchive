@@ -430,6 +430,14 @@ class Comment < ApplicationRecord
     update_attribute(:iced, false)
   end
 
+  def mark_hidden!
+    update_attribute(:hidden_by_admin, true)
+  end
+
+  def mark_unhidden!
+    update_attribute(:hidden_by_admin, false)
+  end
+
   def sanitized_content
     sanitize_field self, :comment_content
   end
