@@ -66,7 +66,7 @@ Given /^a set of tags for tag sort by use exists$/ do
             "5 uses" => 5,
             "2 uses" => 2 }
 
-  # Create specified number of works that use the tag
+  # Create tags with specified number of uses
   hash.each do |freeform, uses|
     tag = Freeform.create(name: freeform)
     tag.taggings_count = uses

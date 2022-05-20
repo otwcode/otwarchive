@@ -80,65 +80,70 @@ describe Tag do
 
     context "redis" do
       it "does not write to the database when reading the count" do
-        FactoryBot.create(:work, fandom_string: @fandom_tag.name)
+        tag = FactoryBot.create(:fandom)
+        FactoryBot.create(:work, fandom_string: tag.name)
         Tag.write_redis_to_database
-        @fandom_tag.reload
-        @fandom_tag.taggings_count
+        tag.reload
+        tag.taggings_count
         # Check if redis has flagged this tag for an update to the database.
-        expect(REDIS_GENERAL.sismember("tag_update", @fandom_tag.id)).to eq false
+        expect(REDIS_GENERAL.sismember("tag_update", tag.id)).to eq false
       end
 
       it "does not write to the database when assigning the same count" do
-        FactoryBot.create(:work, fandom_string: @fandom_tag.name)
+        tag = FactoryBot.create(:fandom)
+        FactoryBot.create(:work, fandom_string: tag.name)
         Tag.write_redis_to_database
-        @fandom_tag.reload
-        @fandom_tag.taggings_count = 1
+        tag.reload
+        tag.taggings_count = 1
         # Check if redis has flagged this tag for an update to the database.
-        expect(REDIS_GENERAL.sismember("tag_update", @fandom_tag.id)).to eq false
+        expect(REDIS_GENERAL.sismember("tag_update", tag.id)).to eq false
       end
 
       it "writes to the database when assigning a new count" do
-        FactoryBot.create(:work, fandom_string: @fandom_tag.name)
+        tag = FactoryBot.create(:fandom)
+        FactoryBot.create(:work, fandom_string: tag.name)
         Tag.write_redis_to_database
-        @fandom_tag.reload
-        @fandom_tag.taggings_count = 2
+        tag.reload
+        tag.taggings_count = 2
         # Check if redis has flagged this tag for an update to the database.
-        expect(REDIS_GENERAL.sismember("tag_update", @fandom_tag.id)).to eq true
+        expect(REDIS_GENERAL.sismember("tag_update", tag.id)).to eq true
         # Make sure the update actually happens.
         Tag.write_redis_to_database
-        @fandom_tag.reload
-        expect(@fandom_tag.taggings_count_cache).to eq 2
+        tag.reload
+        expect(tag.taggings_count_cache).to eq 2
         # Actual number of taggings has not changed
-        expect(@fandom_tag.taggings_count).to eq 1
+        expect(tag.taggings_count).to eq 1
       end
 
       it "writes to the database when adding a new work with the same tag" do
-        FactoryBot.create(:work, fandom_string: @fandom_tag.name)
+        tag = FactoryBot.create(:fandom)
+        FactoryBot.create(:work, fandom_string: tag.name)
         Tag.write_redis_to_database
-        @fandom_tag.reload
-        expect(@fandom_tag.taggings_count_cache).to eq 1
-        expect(@fandom_tag.taggings_count).to eq 1
-        FactoryBot.create(:work, fandom_string: @fandom_tag.name)
+        tag.reload
+        expect(tag.taggings_count_cache).to eq 1
+        expect(tag.taggings_count).to eq 1
+        FactoryBot.create(:work, fandom_string: tag.name)
         # Check if redis has flagged this tag for an update to the database.
-        expect(REDIS_GENERAL.sismember("tag_update", @fandom_tag.id)).to eq true
+        expect(REDIS_GENERAL.sismember("tag_update", tag.id)).to eq true
         # Make sure the update actually happens.
         Tag.write_redis_to_database
-        @fandom_tag.reload
-        expect(@fandom_tag.taggings_count_cache).to eq 2
-        expect(@fandom_tag.taggings_count).to eq 2
+        tag.reload
+        expect(tag.taggings_count_cache).to eq 2
+        expect(tag.taggings_count).to eq 2
       end
 
       it "does not write to the database with a blank value" do
-        FactoryBot.create(:work, fandom_string: @fandom_tag.name)
+        tag = FactoryBot.create(:fandom)
+        FactoryBot.create(:work, fandom_string: tag.name)
         Tag.write_redis_to_database
-        @fandom_tag.reload
+        tag.reload
         # Blank values will cause errors if assigned earlier due to division
         # in taggings_count_expiry
-        REDIS_GENERAL.set("tag_update_#{@fandom_tag.id}_value", "")
-        REDIS_GENERAL.sadd("tag_update", @fandom_tag.id)
+        REDIS_GENERAL.set("tag_update_#{tag.id}_value", "")
+        REDIS_GENERAL.sadd("tag_update", tag.id)
         Tag.write_redis_to_database
-        @fandom_tag.reload
-        expect(@fandom_tag.taggings_count_cache).to eq 1
+        tag.reload
+        expect(tag.taggings_count_cache).to eq 1
       end
     end
   end
