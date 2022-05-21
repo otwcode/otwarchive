@@ -17,6 +17,10 @@ Feature: Comment hiding
     Then I should see "Comment successfully hidden!"
 
     When I am logged in as "author"
+      And I go to the home page
+    Then I should see "unavailable"
+      And I follow "My Inbox"
+    Then I should see "unavailable"
       And I view the work "Popular Fic" with comments
     Then I should see "unavailable"
       And I should not see a "Make Comment Visible" button
@@ -27,6 +31,10 @@ Feature: Comment hiding
     Then I should see "Comment successfully unhidden!"
 
     When I am logged in as "author"
+      And I go to the home page
+    Then I should see "A suspicious comment"
+      And I follow "My Inbox"
+    Then I should see "A suspicious comment"
       And I view the work "Popular Fic" with comments
     Then I should see "A suspicious comment"
       And I should not see a "Hide Comment" button
