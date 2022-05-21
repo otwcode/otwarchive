@@ -313,12 +313,12 @@ module CommentsHelper
   def css_classes_for_comment(comment)
     return if comment.nil?
 
+    unavailable = "unavailable" if comment.hidden_by_admin
     unreviewed = "unreviewed" if comment.unreviewed?
     commenter = commenter_id_for_css_classes(comment)
     official = "official" if commenter && comment&.pseud&.user&.official
-    unavailable = "unavailable" if comment.hidden_by_admin
 
-    "#{official} #{unreviewed} comment group #{commenter} #{unavailable}".squish
+    "#{unavailable} #{official} #{unreviewed} comment group #{commenter}".squish
   end
 
   # find the parent of the commentable
