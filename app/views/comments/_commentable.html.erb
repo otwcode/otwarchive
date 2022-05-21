@@ -101,6 +101,10 @@
     <p class="notice">
       <%= t(".permissions.work.unrevealed") %>
     </p>
+  <% elsif commentable_parent.is_a?(Work) && blocked_by?(commentable_parent) %>
+    <p class="notice">
+      <%= t(".blocked") %>
+    </p>
   <% else %>
     <div id="add_comment_placeholder" title="top level comment">
       <div id="add_comment">

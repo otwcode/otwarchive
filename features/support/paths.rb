@@ -75,6 +75,8 @@ module NavigationHelpers
       user_path(User.current_user)
     when /my preferences page/
       user_preferences_path(User.current_user)
+    when "my blocked users page"
+      user_blocked_users_path(User.current_user)
     when /my bookmarks page/
       step %{all indexing jobs have been run}
       user_bookmarks_path(User.current_user)

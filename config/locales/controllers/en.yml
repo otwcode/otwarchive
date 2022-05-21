@@ -1,5 +1,11 @@
 ---
 en:
+  blocked:
+    users:
+      create:
+        blocked: "You have blocked the user %{name}."
+      destroy:
+        unblocked: "You have unblocked the user %{name}."
   chapters:
     anonymous: Anonymous
     chapter_position: " - Chapter %{position}"
@@ -7,6 +13,9 @@ en:
     unrevealed: Mystery Work
     unspecified_fandom: No fandom specified
   comments:
+    check_blocked:
+      parent: "Sorry, you have been blocked by one or more of this work's owners."
+      reply: "Sorry, that commenter has blocked you."
     check_frozen:
       error: Sorry, you cannot reply to a frozen comment.
     check_not_replying_to_spam:

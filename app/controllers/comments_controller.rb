@@ -27,6 +27,26 @@ class CommentsController < ApplicationController
   before_action :check_permission_to_moderate, only: [:approve, :reject]
   before_action :check_permission_to_modify_frozen_status, only: [:freeze, :unfreeze]
 
+  include BlockHelper
+
+  before_action :check_blocked, only: [:new, :create, :add_comment_reply, :edit, :update]
+  def check_blocked
+    parent = find_parent
+
+    if blocked_by?(parent)
+      flash[:error] = t("comments.check_blocked.parent")
+      redirect_to_all_comments(parent, show_comments: true)
+    elsif @comment && blocked_by_comment?(@comment.commentable)
+      # edit and update set @comment to the comment being edited
+      flash[:error] = t("comments.check_blocked.reply")
+      redirect_to_all_comments(parent, show_comments: true)
+    elsif @comment.nil? && blocked_by_comment?(@commentable)
+      # new, create, and add_comment_reply don't set @comment, but do set @commentable
+      flash[:error] = t("comments.check_blocked.reply")
+      redirect_to_all_comments(parent, show_comments: true)
+    end
+  end
+
   def check_pseud_ownership
     return unless params[:comment][:pseud_id]
     pseud = Pseud.find(params[:comment][:pseud_id])
