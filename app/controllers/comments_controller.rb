@@ -34,15 +34,15 @@ class CommentsController < ApplicationController
     parent = find_parent
 
     if blocked_by?(parent)
-      flash[:error] = t("comments.check_blocked.parent")
+      flash[:comment_error] = t("comments.check_blocked.parent")
       redirect_to_all_comments(parent, show_comments: true)
     elsif @comment && blocked_by_comment?(@comment.commentable)
       # edit and update set @comment to the comment being edited
-      flash[:error] = t("comments.check_blocked.reply")
+      flash[:comment_error] = t("comments.check_blocked.reply")
       redirect_to_all_comments(parent, show_comments: true)
     elsif @comment.nil? && blocked_by_comment?(@commentable)
       # new, create, and add_comment_reply don't set @comment, but do set @commentable
-      flash[:error] = t("comments.check_blocked.reply")
+      flash[:comment_error] = t("comments.check_blocked.reply")
       redirect_to_all_comments(parent, show_comments: true)
     end
   end

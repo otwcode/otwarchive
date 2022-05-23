@@ -1,4 +1,4 @@
-<h1><%= t(".title") %></h1>
+<h2 class="heading"><%= t(".title") %></h2>
 
 <div class="notice formatted">
   <p><%= t(".will.intro") %></p>
@@ -26,7 +26,7 @@
 
 <% if @blocks.present? %>
   <ul class="pseud index group">
-    <%= render partial: "block", collection: @blocks, as: :block %>
+    <%= render partial: "blocked_user_blurb", collection: @blocks, as: :block %>
   </ul>
 <% else %>
   <p><%= t(".none") %></p>

@@ -14,8 +14,8 @@ en:
     unspecified_fandom: No fandom specified
   comments:
     check_blocked:
-      parent: "Sorry, you have been blocked by one or more of this work's owners."
-      reply: "Sorry, that commenter has blocked you."
+      parent: "Sorry, you have been blocked by one or more of this work's creators."
+      reply: "Sorry, you have been blocked by that user."
     check_frozen:
       error: Sorry, you cannot reply to a frozen comment.
     check_not_replying_to_spam:

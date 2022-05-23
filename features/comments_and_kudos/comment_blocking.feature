@@ -5,7 +5,7 @@ Feature: Comment Blocking
       And the user "creator" has blocked the user "pest"
     When I am logged in as "pest"
       And I view the work "Aftermath" with comments
-    Then I should see "Sorry, you have been blocked by one or more of this work's owners."
+    Then I should see "Sorry, you have been blocked by one or more of this work's creators."
       And I should not see a "Comment" button
       And I should not see a link "Edit"
 
@@ -86,3 +86,28 @@ Feature: Comment Blocking
     When I am logged in as "nemesis"
       And I view the work "Aftermath" with comments
     Then I should not see a link "Reply"
+
+  Scenario: When a user is blocked, they cannot reply to their blocker on the homepage or the inbox
+    Given the work "Aftermath" by "pest"
+      And a comment "OMG!" by "commenter" on the work "Aftermath"
+      And the user "commenter" has blocked the user "pest"
+    When I am logged in as "pest"
+      And I go to the homepage
+    Then I should see "OMG!"
+      But I should not see a link "Reply"
+    When I go to my inbox page
+    Then I should see "OMG!"
+      But I should not see a link "Reply"
+
+  Scenario: When a user is blocked by the work creator, they cannot reply on the homepage or the inbox
+    Given the work "Aftermath" by "creator"
+      And a comment "Ugh." by "pest" on the work "Aftermath"
+      And a reply "OMG!" by "commenter" on the work "Aftermath"
+      And the user "creator" has blocked the user "pest"
+    When I am logged in as "pest"
+      And I go to the homepage
+    Then I should see "OMG!"
+      But I should not see a link "Reply"
+    When I go to my inbox page
+    Then I should see "OMG!"
+      But I should not see a link "Reply"

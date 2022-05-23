@@ -73,7 +73,7 @@ describe CommentsController do
       it "redirects with error" do
         get :new, params: commentable_params
 
-        it_redirects_to_with_error(failure_path, message)
+        it_redirects_to_with_comment_error(failure_path, message)
       end
     end
 
@@ -83,7 +83,7 @@ describe CommentsController do
           post :create, params: commentable_params.merge(comment_params)
         end.not_to change { commentable.comments.count }
 
-        it_redirects_to_with_error(failure_path, message)
+        it_redirects_to_with_comment_error(failure_path, message)
       end
     end
 
@@ -91,7 +91,7 @@ describe CommentsController do
       it "redirects with error" do
         get :edit, params: { id: existing_comment }
 
-        it_redirects_to_with_error(failure_path, message)
+        it_redirects_to_with_comment_error(failure_path, message)
       end
     end
 
@@ -101,7 +101,7 @@ describe CommentsController do
           put :update, params: { id: existing_comment }.merge(comment_params)
         end.not_to change { existing_comment.reload.comment_content }
 
-        it_redirects_to_with_error(failure_path, message)
+        it_redirects_to_with_comment_error(failure_path, message)
       end
     end
   end
@@ -125,7 +125,7 @@ describe CommentsController do
             params: commentable_params.merge(id: commentable),
             format: :js, xhr: true
 
-        it_redirects_to_with_error(failure_path, message)
+        it_redirects_to_with_comment_error(failure_path, message)
       end
     end
   end
@@ -159,7 +159,7 @@ describe CommentsController do
       let(:commentable) { work.first_chapter }
 
       it_behaves_like "creating and editing comments is not allowed",
-                      message: "Sorry, you have been blocked by one or more of this work's owners."
+                      message: "Sorry, you have been blocked by one or more of this work's creators."
       it_behaves_like "deleting comments is allowed"
     end
 
@@ -167,9 +167,9 @@ describe CommentsController do
       let(:commentable) { create(:comment, commentable: work.first_chapter) }
 
       it_behaves_like "creating and editing comments is not allowed",
-                      message: "Sorry, you have been blocked by one or more of this work's owners."
+                      message: "Sorry, you have been blocked by one or more of this work's creators."
       it_behaves_like "the reply button doesn't work",
-                      message: "Sorry, you have been blocked by one or more of this work's owners."
+                      message: "Sorry, you have been blocked by one or more of this work's creators."
       it_behaves_like "deleting comments is allowed"
     end
   end
@@ -198,9 +198,9 @@ describe CommentsController do
       let(:commentable) { create(:comment, pseud: blocker.default_pseud, commentable: work.first_chapter) }
 
       it_behaves_like "creating and editing comments is not allowed",
-                      message: "Sorry, that commenter has blocked you."
+                      message: "Sorry, you have been blocked by that user."
       it_behaves_like "the reply button doesn't work",
-                      message: "Sorry, that commenter has blocked you."
+                      message: "Sorry, you have been blocked by that user."
       it_behaves_like "deleting comments is allowed"
     end
   end
@@ -213,9 +213,9 @@ describe CommentsController do
       let(:failure_path) { work_path(commentable.ultimate_parent, show_comments: true, anchor: :comments) }
 
       it_behaves_like "creating and editing comments is not allowed",
-                      message: "Sorry, that commenter has blocked you."
+                      message: "Sorry, you have been blocked by that user."
       it_behaves_like "the reply button doesn't work",
-                      message: "Sorry, that commenter has blocked you."
+                      message: "Sorry, you have been blocked by that user."
       it_behaves_like "deleting comments is allowed"
     end
 
@@ -224,9 +224,9 @@ describe CommentsController do
       let(:failure_path) { admin_post_path(commentable.parent, show_comments: true, anchor: :comments) }
 
       it_behaves_like "creating and editing comments is not allowed",
-                      message: "Sorry, that commenter has blocked you."
+                      message: "Sorry, you have been blocked by that user."
       it_behaves_like "the reply button doesn't work",
-                      message: "Sorry, that commenter has blocked you."
+                      message: "Sorry, you have been blocked by that user."
       it_behaves_like "deleting comments is allowed"
     end
 

@@ -14,6 +14,6 @@
     <li><%= span_if_current ts("Invitations"), user_invitations_path(@user) %></li>
   <% end %>  
   <% if current_user && @user != current_user %>
-    <li><%= block_link @user %></li>
+    <li><%= block_link(@user) %></li>
   <% end %>
 </ul>

@@ -22,6 +22,8 @@ module Blocked
 
     # GET /users/:user_id/blocked/users/confirm_block
     def confirm_block
+      @hide_dashboard = true
+
       return if @block.valid?
 
       # We can't block this user for whatever reason
@@ -31,6 +33,8 @@ module Blocked
 
     # GET /users/:user_id/blocked/users/confirm_unblock
     def confirm_unblock
+      @hide_dashboard = true
+
       @blocked = @block.blocked
     end
 

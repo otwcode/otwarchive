@@ -15,8 +15,8 @@ en:
           attributes:
             user:
               format: "%{message}"
-              blocked_comment: "Sorry, you have been blocked by one or more of this work's owners."
-              blocked_reply: "Sorry, that commenter has blocked you."
+              blocked_comment: "Sorry, you have been blocked by one or more of this work's creators."
+              blocked_reply: "Sorry, you have been blocked by that user."
         creatorship:
           attributes:
             pseud_id:

@@ -44,7 +44,7 @@
   <% end %>
   <% if current_user && comment.user && current_user != comment.user && !comment.by_anonymous_creator? %>
     <li id="block_link_<%= comment.id %>">
-      <%= block_link comment.user %>
+      <%= block_link(comment.user) %>
     </li>
   <% end %>
 </ul>

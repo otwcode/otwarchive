@@ -99,7 +99,7 @@ describe Comment do
         let(:commentable) { work.first_chapter }
 
         it_behaves_like "creating and editing comments is not allowed",
-                        message: "Sorry, you have been blocked by one or more of this work's owners."
+                        message: "Sorry, you have been blocked by one or more of this work's creators."
         it_behaves_like "deleting comments is allowed"
       end
 
@@ -107,7 +107,7 @@ describe Comment do
         let(:commentable) { create(:comment, commentable: work.first_chapter) }
 
         it_behaves_like "creating and editing comments is not allowed",
-                        message: "Sorry, you have been blocked by one or more of this work's owners."
+                        message: "Sorry, you have been blocked by one or more of this work's creators."
         it_behaves_like "deleting comments is allowed"
       end
     end
@@ -134,7 +134,7 @@ describe Comment do
         let(:commentable) { create(:comment, pseud: blocker.default_pseud, commentable: work.first_chapter) }
 
         it_behaves_like "creating and editing comments is not allowed",
-                        message: "Sorry, that commenter has blocked you."
+                        message: "Sorry, you have been blocked by that user."
         it_behaves_like "deleting comments is allowed"
       end
     end
@@ -146,7 +146,7 @@ describe Comment do
         let(:commentable) { create(:comment) }
 
         it_behaves_like "creating and editing comments is not allowed",
-                        message: "Sorry, that commenter has blocked you."
+                        message: "Sorry, you have been blocked by that user."
         it_behaves_like "deleting comments is allowed"
       end
 
@@ -154,7 +154,7 @@ describe Comment do
         let(:commentable) { create(:comment, :on_admin_post) }
 
         it_behaves_like "creating and editing comments is not allowed",
-                        message: "Sorry, that commenter has blocked you."
+                        message: "Sorry, you have been blocked by that user."
         it_behaves_like "deleting comments is allowed"
       end
 

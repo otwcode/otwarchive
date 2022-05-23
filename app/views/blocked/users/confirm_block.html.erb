@@ -1,4 +1,4 @@
-<h1><%= t(".title", name: @blocked.login) %></h1>
+<h2 class="heading"><%= t(".title", name: @blocked.login) %></h2>
 
 <%= form_tag user_blocked_users_path(@user, blocked_id: @blocked) do %>
   <div class="caution">

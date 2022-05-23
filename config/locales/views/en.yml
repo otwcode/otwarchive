@@ -109,7 +109,7 @@ en:
           disable_anon: "Sorry, this work doesn't allow non-Archive users to comment."
           hidden: "Sorry, you can't add or edit comments on a hidden work."
           unrevealed: "Sorry, you can't add or edit comments on an unrevealed work."
-      blocked: "Sorry, you have been blocked by one or more of this work's owners."
+      blocked: "Sorry, you have been blocked by one or more of this work's creators."
   layouts:
     proxy_notice:
       faux_heading: "Important message:"
