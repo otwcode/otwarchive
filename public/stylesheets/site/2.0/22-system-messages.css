@@ -59,18 +59,18 @@ form .notice, form ul.notes {
     box-shadow: 0px 0 3px #fff;
 }
 
-.notice.formatted p {
+.notice p {
   margin: 0;
   padding: 0.643em;
 }
 
-ul.notes, .error ul, .notice.formatted ul, .caution ul, .alert.flash ul {
+ul.notes, .error ul, .notice ul, .caution ul, .alert.flash ul {
   position: static;
   margin: auto 0.643em;
   padding: 0.25em 2.5em;
 }
 
-ul.notes li, .error ul li, .notice.formatted ul li, .caution ul li, .alert.flash ul li {
+ul.notes li, .error ul li, .notice ul li, .caution ul li, .alert.flash ul li {
   list-style-type: disc;
   padding-left: 1.5em;
 }
