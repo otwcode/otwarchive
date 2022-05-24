@@ -16,7 +16,7 @@ describe BookmarksHelper do
 
     context "when bookmarkable is nil" do
       it "returns string with default classes and bookmarker info" do
-        work.destroy
+        work.destroy!
         result = helper.css_classes_for_bookmark_blurb(work_bookmark.reload)
         expect(result).to eq("#{default_classes} user-#{bookmarker.id}")
       end
