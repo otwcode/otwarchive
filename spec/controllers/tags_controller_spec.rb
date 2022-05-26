@@ -4,7 +4,29 @@ describe TagsController do
   include LoginMacros
   include RedirectExpectationHelper
 
-  before { fake_login_known_user(create(:tag_wrangler)) }
+  let(:user) { create(:tag_wrangler) }
+
+  before { fake_login_known_user(user) }
+
+  shared_examples "set last wrangling activity" do
+    it "sets the last wrangling activity time to now" do
+      expect(user.last_wrangling_activity.updated_at).to eq(Time.now.utc)
+    end
+  end
+
+  describe "#create" do
+    let(:tag_params) do
+      { name: Faker::FunnyName.name, canonical: "0", type: "Character" }
+    end
+
+    before { freeze_time }
+
+    context "successful creation" do
+      before { post :create, params: { tag: tag_params } }
+
+      include_examples "set last wrangling activity"
+    end
+  end
 
   describe "wrangle" do
     context "when showing unwrangled freeforms for a fandom" do
@@ -87,64 +109,95 @@ describe TagsController do
     end
 
     context "with one canonical fandom in the fandom string and a selected freeform" do
-      it "should be successful" do
+      before do
+        freeze_time
         put :mass_update, params: { id: @fandom1.name, show: 'freeforms', status: 'unwrangled', fandom_string: @fandom2.name, selected_tags: [@freeform1.id] }
+      end
 
+      it "updates the tags successfully" do
         get :wrangle, params: { id: @fandom1.name, show: 'freeforms', status: 'unwrangled' }
         expect(assigns(:tags)).not_to include(@freeform1)
 
         @freeform1.reload
         expect(@freeform1.fandoms).to include(@fandom2)
       end
+
+      include_examples "set last wrangling activity"
     end
 
     context "with one canonical and one noncanonical fandoms in the fandom string and a selected freeform" do
-      it "should be successful" do
+      before do
+        freeze_time
         put :mass_update, params: { id: @fandom1.name, show: 'freeforms', status: 'unwrangled', fandom_string: "#{@fandom2.name},#{@fandom3.name}", selected_tags: [@freeform1.id] }
+      end
 
+      it "updates the tags successfully" do
         @freeform1.reload
         expect(@freeform1.fandoms).to include(@fandom2)
         expect(@freeform1.fandoms).not_to include(@fandom3)
       end
+
+      include_examples "set last wrangling activity"
     end
 
     context "with two canonical fandoms in the fandom string and a selected character" do
-      it "should be successful" do
+      before do
+        freeze_time
         put :mass_update, params: { id: @fandom1.name, show: 'characters', status: 'unwrangled', fandom_string: "#{@fandom1.name},#{@fandom2.name}", selected_tags: [@character1.id] }
+      end
 
+      it "updates the tags successfully" do
         @character1.reload
         expect(@character1.fandoms).to include(@fandom1)
         expect(@character1.fandoms).to include(@fandom2)
       end
+
+      include_examples "set last wrangling activity"
     end
 
     context "with a canonical fandom in the fandom string, a selected unwrangled character, and the same character to be made canonical" do
-      it "should be successful" do
+      before do
+        freeze_time
         put :mass_update, params: { id: @fandom1.name, show: 'characters', status: 'unwrangled', fandom_string: "#{@fandom1.name}", selected_tags: [@character1.id], canonicals: [@character1.id] }
+      end
 
+      it "updates the tags successfully" do
         @character1.reload
         expect(@character1.fandoms).to include(@fandom1)
         expect(@character1).to be_canonical
       end
+
+      include_examples "set last wrangling activity"
     end
 
     context "with a canonical fandom in the fandom string, a selected synonym character, and the same character to be made canonical" do
-      it "should be successful" do
+      before do
+        freeze_time
         put :mass_update, params: { id: @fandom1.name, show: 'characters', status: 'unfilterable', fandom_string: "#{@fandom2.name}", selected_tags: [@character2.id], canonicals: [@character2.id] }
+      end
 
+      it "updates the tags successfully" do
         @character2.reload
         expect(@character2.fandoms).to include(@fandom2)
         expect(@character2).not_to be_canonical
       end
+
+      include_examples "set last wrangling activity"
     end
 
-    context "A wrangler can remove associated tag" do
-      it "should be successful" do
+    context "removing an associated tag" do
+      before do
+        freeze_time
         put :mass_update, params: { id: @character3.name, remove_associated: [@character2.id] }
+      end
+
+      it "updates the tags successfully" do
         expect(flash[:notice]).to eq "The following tags were successfully removed: #{@character2.name}"
         expect(flash[:error]).to be_nil
         expect(@character3.mergers).to eq []
       end
+
+      include_examples "set last wrangling activity"
     end
   end
 
@@ -192,8 +245,12 @@ describe TagsController do
     context "setting a new type for the tag" do
       let(:unsorted_tag) { create(:unsorted_tag) }
 
-      it "changes the tag type and redirects" do
+      before do
+        freeze_time
         put :update, params: { id: unsorted_tag, tag: { type: "Fandom" }, commit: "Save changes" }
+      end
+
+      it "changes the tag type and redirects" do
         it_redirects_to_with_notice(edit_tag_path(unsorted_tag), "Tag was updated.")
         expect(Tag.find(unsorted_tag.id).class).to eq(Fandom)
 
@@ -202,6 +259,8 @@ describe TagsController do
         # The tag now has the original class, we can reload the original record without error.
         unsorted_tag.reload
       end
+
+      include_examples "set last wrangling activity"
     end
 
     context "when making a canonical tag into a synonym" do
@@ -310,7 +369,10 @@ describe TagsController do
         context "when the tag is a canonical child" do
           let(:associated) { create(:relationship, canonical: true) }
 
+          before { freeze_time }
+
           include_examples "success message"
+          include_examples "set last wrangling activity"
 
           it "adds the association" do
             expect(tag.parents).not_to include(associated)
@@ -321,7 +383,10 @@ describe TagsController do
         context "when the tag is a non-canonical child" do
           let(:associated) { create(:relationship, canonical: false) }
 
+          before { freeze_time }
+
           include_examples "success message"
+          include_examples "set last wrangling activity"
 
           it "adds the association" do
             expect(tag.parents).not_to include(associated)
@@ -332,7 +397,10 @@ describe TagsController do
         context "when the tag is a canonical parent" do
           let(:associated) { create(:fandom, canonical: true) }
 
+          before { freeze_time }
+
           include_examples "success message"
+          include_examples "set last wrangling activity"
 
           it "adds the association" do
             expect(tag.parents).to include(associated)
@@ -442,7 +510,10 @@ describe TagsController do
           grandparent
         end
 
+        before { freeze_time }
+
         include_examples "success message"
+        include_examples "set last wrangling activity"
 
         it "marks the formerly inherited meta tagging as direct" do
           expect(MetaTagging.find_by(sub_tag: tag, meta_tag: meta).direct).to be_truthy

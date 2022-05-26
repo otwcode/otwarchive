@@ -37,6 +37,8 @@ class TagWranglingsController < ApplicationController
 
     error_messages, notice_messages = [], []
 
+    User.update_wrangling_activity = true
+
     # make tags canonical if allowed
     if params[:canonicals].present? && params[:canonicals].is_a?(Array)
       saved_canonicals, not_saved_canonicals = [], []

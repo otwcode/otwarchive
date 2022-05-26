@@ -9,6 +9,13 @@ describe TagWranglingsController do
     controller.current_user.roles << Role.new(name: "tag_wrangler")
   end
 
+  shared_examples "set last wrangling activity" do
+    it "sets the last wrangling activity time to now" do
+      user = controller.current_user
+      expect(user.last_wrangling_activity.updated_at).to be_within(1.minute).of Time.now.utc
+    end
+  end
+
   describe "#wrangle" do
     let(:page_options) { { page: 1, sort_column: "name", sort_direction: "ASC" } }
 
@@ -16,6 +23,41 @@ describe TagWranglingsController do
       character = create(:character, canonical: false)
       post :wrangle, params: { fandom_string: "", selected_tags: [character.id] }
       it_redirects_to_with_error(tag_wranglings_path(page_options), "There were no Fandom tags!")
+    end
+
+    context "making tags canonical" do
+      let(:tag1) { create(:character, canonical: false) }
+      let(:tag2) { create(:character, canonical: false) }
+
+      before do
+        post :wrangle, params: { canonicals: [tag1.id, tag2.id] }
+      end
+
+      include_examples "set last wrangling activity"
+    end
+
+    context "assigning tags to a medium" do
+      let(:fandom1) { create(:fandom, canonical: true) }
+      let(:fandom2) { create(:fandom, canonical: true) }
+      let(:medium) { create(:media) }
+
+      before do
+        post :wrangle, params: { media: medium.name, selected_tags: [fandom1.id, fandom2.id] }
+      end
+
+      include_examples "set last wrangling activity"
+    end
+
+    context "adding tags to a fandom" do
+      let(:tag1) { create(:character, canonical: false) }
+      let(:tag2) { create(:character, canonical: false) }
+      let(:fandom) { create(:fandom, canonical: true) }
+
+      before do
+        post :wrangle, params: { fandom_string: fandom.name, selected_tags: [tag1.id, tag2.id] }
+      end
+
+      include_examples "set last wrangling activity"
     end
   end
 end

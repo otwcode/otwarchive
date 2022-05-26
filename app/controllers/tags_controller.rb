@@ -187,6 +187,7 @@ class TagsController < ApplicationController
       render(action: 'new') && return
     end
     if @tag && @tag.valid?
+      User.update_wrangling_activity = true
       if (@tag.name != tag_params[:name]) && @tag.name.casecmp(tag_params[:name].downcase).zero? # only capitalization different
         @tag.update_attribute(:name, tag_params[:name]) # use the new capitalization
         flash[:notice] = ts('Tag was successfully modified.')
@@ -249,6 +250,7 @@ class TagsController < ApplicationController
 
     @tag.syn_string = syn_string if @tag.errors.empty? && @tag.save
 
+    User.update_wrangling_activity = true
     if @tag.errors.empty? && @tag.save
       flash[:notice] = ts('Tag was updated.')
       redirect_to edit_tag_path(@tag)
@@ -302,6 +304,8 @@ class TagsController < ApplicationController
 
     error_messages = []
     notice_messages = []
+
+    User.update_wrangling_activity = true
 
     # make tags canonical if allowed
     if params[:canonicals].present? && params[:canonicals].is_a?(Array)
