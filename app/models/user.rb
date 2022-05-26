@@ -113,6 +113,7 @@ class User < ApplicationRecord
            through: :followings,
            source: :user
 
+  class_attribute :update_wrangling_activity
   has_many :wrangling_assignments, dependent: :destroy
   has_many :fandoms, through: :wrangling_assignments
   has_many :wrangled_tags, class_name: "Tag", as: :last_wrangler
