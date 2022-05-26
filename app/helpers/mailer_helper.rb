@@ -103,7 +103,7 @@ module MailerHelper
   # emails.
   def creation_title(creation)
     if creation.is_a?(Chapter)
-      t("mailer.general.creation.title_with_chapter",
+      t("mailer.general.creation.title_with_chapter_number",
          position: creation.position, title: creation.work.title)
     else
       creation.title
