@@ -352,7 +352,7 @@ en:
           replying: "replying to your comments anywhere on the site"
         will_not:
           intro: "Blocking a user will not:"
-          comments_on_works: "delete or hide comments they previously left on your works; you can delete those individually"
+          comments_on_works: "delete or hide comments they previously left on your works; you can delete these individually"
           comments_elsewhere: "hide their comments elsewhere on the site"
       confirm_unblock:
         title: "Unblock %{name}"
