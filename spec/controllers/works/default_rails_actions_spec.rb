@@ -251,6 +251,25 @@ describe WorksController, work_search: true do
       expect(assigns[:work].errors.full_messages).to \
         include /Only canonical category tags are allowed./
     end
+
+    context "as a tag wrangler" do
+      let(:wrangler) { create(:tag_wrangler) }
+
+      before { fake_login_known_user(wrangler) }
+
+      it "does not set wrangling activity when posting with a new fandom" do
+        work_attributes = attributes_for(:work).except(:posted, :fandom_string).merge(fandom_string: "New Fandom")
+        post :create, params: { work: work_attributes }
+        expect(wrangler.last_wrangling_activity).to be_nil
+      end
+
+      it "does not set wrangling activity when posting with an unsorted tag" do
+        tag = create(:unsorted_tag)
+        work_attributes = attributes_for(:work).except(:posted, :freeform_string).merge(freeform_string: tag.name)
+        post :create, params: { work: work_attributes }
+        expect(wrangler.last_wrangling_activity).to be_nil
+      end
+    end
   end
 
   describe "show" do
