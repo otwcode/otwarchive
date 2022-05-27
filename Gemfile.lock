@@ -385,7 +385,7 @@ GEM
       activesupport (>= 3.0.0)
     raabro (1.4.0)
     racc (1.6.0)
-    rack (2.2.3)
+    rack (2.2.3.1)
     rack-attack (6.6.0)
       rack (>= 1.0, < 3)
     rack-dev-mark (0.7.9)
@@ -637,7 +637,7 @@ DEPENDENCIES
   poltergeist
   pry-byebug
   pundit
-  rack (~> 2.1, >= 2.1.4)
+  rack (~> 2.2)
   rack-attack
   rack-dev-mark (>= 0.7.8)
   rails (~> 6.0.4)
