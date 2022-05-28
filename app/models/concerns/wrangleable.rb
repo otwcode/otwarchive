@@ -9,7 +9,6 @@ module Wrangleable
   private
 
   def update_last_wrangling_activity
-    User.update_wrangling_activity = false
     current_user = User.current_user
     return unless current_user.respond_to?(:is_tag_wrangler?) && current_user&.is_tag_wrangler?
 
