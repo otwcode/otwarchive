@@ -44,7 +44,7 @@ class Comment < ApplicationRecord
   scope :unreviewed_only, -> { where(unreviewed: true) }
 
   scope :for_display, lambda {
-    includes(pseud: :user, parent: { work: :pseuds })
+    includes(pseud: { user: :roles }, parent: { work: :pseuds })
   }
 
   # Gets methods and associations from acts_as_commentable plugin

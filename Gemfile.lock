@@ -352,7 +352,7 @@ GEM
     netrc (0.11.0)
     newrelic_rpm (8.4.0)
     nio4r (2.5.8)
-    nokogiri (1.13.4)
+    nokogiri (1.13.6)
       mini_portile2 (~> 2.8.0)
       racc (~> 1.4)
     orm_adapter (0.5.0)
@@ -385,7 +385,7 @@ GEM
       activesupport (>= 3.0.0)
     raabro (1.4.0)
     racc (1.6.0)
-    rack (2.2.3)
+    rack (2.2.3.1)
     rack-attack (6.6.0)
       rack (>= 1.0, < 3)
     rack-dev-mark (0.7.9)
@@ -637,7 +637,7 @@ DEPENDENCIES
   poltergeist
   pry-byebug
   pundit
-  rack (~> 2.1, >= 2.1.4)
+  rack (~> 2.2)
   rack-attack
   rack-dev-mark (>= 0.7.8)
   rails (~> 6.0.4)
