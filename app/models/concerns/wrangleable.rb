@@ -18,6 +18,6 @@ module Wrangleable
   end
 
   def update_wrangling_activity?
-    User.update_wrangling_activity?
+    User.update_wrangling_activity
   end
 end

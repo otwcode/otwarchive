@@ -1,6 +1,9 @@
 class TagWranglingsController < ApplicationController
+  include TagWrangling
+
   before_action :check_user_status
   before_action :check_permission_to_wrangle
+  around_action :record_wrangling_activity, only: [:wrangle]
 
   def index
     @counts = {}
@@ -36,8 +39,6 @@ class TagWranglingsController < ApplicationController
     options = {show: params[:show], page: params[:page], sort_column: params[:sort_column], sort_direction: params[:sort_direction]}
 
     error_messages, notice_messages = [], []
-
-    User.update_wrangling_activity = true
 
     # make tags canonical if allowed
     if params[:canonicals].present? && params[:canonicals].is_a?(Array)
