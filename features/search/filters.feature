@@ -42,6 +42,9 @@ Feature: Filters
       And I should not see "Roonal Woozlib and the Ferrets of Nimh"
     When I follow "Clear Filters"
     Then I should see "3 Works by meatloaf"
+      And I should see "A Hobbit's Meandering"
+      And I should see "Bilbo Does the Thing"
+      And I should see "Roonal Woozlib and the Ferrets of Nimh"
     When I press "Fandoms" within "dd.include"
     Then the "The Hobbit (2)" checkbox within "#include_fandom_tags" should not be checked
       And the "Legend of Korra (1)" checkbox within "#include_fandom_tags" should not be checked
@@ -70,6 +73,9 @@ Feature: Filters
       And I should not see "Roonal Woozlib and the Ferrets of Nimh"
     When I follow "Clear Filters"
     Then I should see "3 Works by meatloaf"
+      And I should see "A Hobbit's Meandering"
+      And I should see "Bilbo Does the Thing"
+      And I should see "Roonal Woozlib and the Ferrets of Nimh"
     When I press "Fandoms" within "dd.exclude"
     Then the "Legend of Korra (1)" checkbox within "#exclude_fandom_tags" should not be checked
       And the "Harry Potter (1)" checkbox within "#exclude_fandom_tags" should not be checked

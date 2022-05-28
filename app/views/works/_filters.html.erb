@@ -162,7 +162,7 @@
       <dd class="submit actions"><%= f.submit ts("Sort and Filter") %></dd>
     </dl>
 
-    <% if @owner = @pseud || @user || @collection || @tag %>
+    <% if @owner %>
       <p class="footnote">
         <%= link_to ts("Clear Filters"), works_original_path %>
       </p>
