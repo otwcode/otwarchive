@@ -10,7 +10,7 @@ describe TagsController do
 
   shared_examples "set last wrangling activity" do
     it "sets the last wrangling activity time to now" do
-      expect(user.last_wrangling_activity.updated_at).to eq(Time.now.utc)
+      expect(user.last_wrangling_activity.updated_at).to be_within(1.minute).of Time.now.utc
     end
   end
 
