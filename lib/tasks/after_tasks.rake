@@ -930,6 +930,31 @@ namespace :After do
     puts && STDOUT.flush
   end
 
+  desc "Fix threads for comments from 2009"
+  task(fix_2009_comment_threads: :environment) do
+    def fix_comment(comment)
+      comment.with_lock do
+        if comment.reply_comment?
+          comment.update_column(:thread, comment.commentable.thread)
+        else
+          comment.update_column(:thread, comment.id)
+        end
+        comment.comments.each { |reply| fix_comment(reply) }
+      end
+    end
+
+    incorrect = Comment.top_level.where("thread != id")
+    total = incorrect.count
+
+    puts "Updating #{total} thread(s)"
+
+    incorrect.find_each.with_index do |comment, index|
+      fix_comment(comment)
+
+      puts "Fixed thread #{index + 1} out of #{total}" if index % 100 == 99
+    end
+  end
+
   # This is the end that you have to put new tasks above.
 end
 
