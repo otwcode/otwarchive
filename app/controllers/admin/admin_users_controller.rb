@@ -47,11 +47,16 @@ class Admin::AdminUsersController < Admin::BaseController
   def show
     @hide_dashboard = true
     @user = User.find_by(login: params[:id])
-    authorize @user
-    unless @user
-      redirect_to action: "index", query: params[:query], role: params[:role] and return
+
+    if(@user)
+      authorize @user
+      unless @user
+        redirect_to action: "index", query: params[:query], role: params[:role] and return
+      end
+      @log_items = @user.log_items.sort_by(&:created_at).reverse
+    else
+      render template: "errors/404", status: :not_found
     end
-    @log_items = @user.log_items.sort_by(&:created_at).reverse
   end
 
   # POST admin/users/update
