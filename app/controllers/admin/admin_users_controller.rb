@@ -48,14 +48,11 @@ class Admin::AdminUsersController < Admin::BaseController
     @hide_dashboard = true
     @user = User.find_by(login: params[:id])
 
-    if(@user)
-      authorize @user
-      unless @user
-        redirect_to action: "index", query: params[:query], role: params[:role] and return
-      end
-      @log_items = @user.log_items.sort_by(&:created_at).reverse
-    else
+    unless @user
       render template: "errors/404", status: :not_found
+    else
+      authorize @user
+      @log_items = @user.log_items.sort_by(&:created_at).reverse
     end
   end
 
