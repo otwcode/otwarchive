@@ -13,7 +13,7 @@ module Blocked
     def index
       @blocks = @user.blocks_as_blocker
         .joins(:blocked).includes(blocked: :default_pseud)
-        .order(id: :desc).page(params[:page])
+        .order(created_at: :desc).order(id: :desc).page(params[:page])
 
       @pseuds = @blocks.map { |b| b.blocked.default_pseud }
       @rec_counts = Pseud.rec_counts_for_pseuds(@pseuds)
@@ -59,7 +59,7 @@ module Blocked
 
     private
 
-    # Set the user whose blocks we're viewing/modifying.
+    # Sets the user whose blocks we're viewing/modifying.
     def set_user
       @user = User.find_by!(login: params[:user_id])
       @check_ownership_of = @user
