@@ -588,4 +588,62 @@ describe Work do
       end
     end
   end
+
+  describe "#add_original_creator" do
+    let(:work) { create(:work) }
+    let(:creator) { work.pseuds.first.user }
+    let(:key) { "original_creators_work_#{work.id}" }
+    let(:expiration) { ArchiveConfig.ORPHANS_ORIGINAL_CREATOR_TTL }
+
+    context "no existing creators set" do
+      it "saves the user id for the configured amount of time" do
+        work.add_original_creator(creator)
+        expect(REDIS_GENERAL.smembers(key)).to contain_exactly(creator.id.to_s)
+        expect(REDIS_GENERAL.ttl(key)).to be_between(expiration - 60, expiration)
+      end
+    end
+
+    context "an existing creator is already set" do
+      let(:other_creator) { create(:user) }
+
+      before { work.add_original_creator(other_creator) }
+
+      it "saves the user id without updating key expiration" do
+        ArchiveConfig.ORPHANS_ORIGINAL_CREATOR_TTL = expiration / 2
+        work.add_original_creator(creator)
+        expect(REDIS_GENERAL.smembers(key)).to contain_exactly(creator.id.to_s, other_creator.id.to_s)
+        expect(REDIS_GENERAL.ttl(key)).to be_between(expiration - 60, expiration)
+      end
+    end
+  end
+
+  describe "#original_creators" do
+    let(:work) { create(:work) }
+    let(:creator) { work.pseuds.first.user }
+    let(:other_creator) { create(:user) }
+
+    before do
+      work.add_original_creator(creator)
+      work.add_original_creator(other_creator)
+    end
+
+    context "the original creator's user still exists" do
+      it "gives the user ID and username" do
+        expect(work.original_creators)
+          .to contain_exactly("#{creator.id} (#{creator.login})",
+                              "#{other_creator.id} (#{other_creator.login})")
+      end
+    end
+
+    context "the original creator's user has been deleted" do
+      before do
+        creator.delete
+        other_creator.delete
+      end
+
+      it "gives just the user ID" do
+        expect(work.original_creators).to contain_exactly(creator.id.to_s, other_creator.id.to_s)
+      end
+    end
+  end
 end
