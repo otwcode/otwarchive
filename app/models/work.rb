@@ -180,6 +180,22 @@ class Work < ApplicationRecord
     end
   end
 
+  validate :parent_users_allow_related_works
+
+  def parent_users_allow_related_works
+    return if self.new_parent.blank?
+
+    parent = self.new_parent[:parent]
+    return if parent.pseuds.blank?
+
+    users = parent.pseuds.collect(&:user).uniq
+    users.each do |user|
+      if user.protected_user
+        self.errors.add(:base, ts("You can't use the related works function to cite works by #{user.default_pseud.name}."))
+      end
+    end
+  end
+
   enum comment_permissions: {
     enable_all: 0,
     disable_anon: 1,
