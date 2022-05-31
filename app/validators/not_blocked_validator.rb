@@ -20,8 +20,6 @@ class NotBlockedValidator < ActiveModel::EachValidator
 
     return unless Block.exists?(blocker: blocker_users, blocked: blocked_users)
 
-    record.errors.add(attribute, options.fetch(:message, :blocked),
-                      blocked: blocked_users.map(&:login).to_sentence,
-                      blocker: blocker_users.map(&:login).to_sentence)
+    record.errors.add(attribute, options.fetch(:message, :blocked))
   end
 end
