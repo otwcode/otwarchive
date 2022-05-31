@@ -186,7 +186,7 @@ class Work < ApplicationRecord
     return if self.new_parent.blank?
 
     parent = self.new_parent[:parent]
-    return if parent.pseuds.blank?
+    return if !parent.respond_to?(:pseuds)
 
     users = parent.pseuds.collect(&:user).uniq
     users.each do |user|
