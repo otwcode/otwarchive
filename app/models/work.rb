@@ -186,13 +186,11 @@ class Work < ApplicationRecord
     return if self.new_parent.blank?
 
     parent = self.new_parent[:parent]
-    return if !parent.respond_to?(:pseuds)
+    return unless parent.respond_to?(:pseuds)
 
     users = parent.pseuds.collect(&:user).uniq
     users.each do |user|
-      if user.protected_user
-        self.errors.add(:base, ts("You can't use the related works function to cite works by #{user.default_pseud.name}."))
-      end
+      self.errors.add(:base, ts("You can't use the related works function to cite works by #{user.default_pseud.name}.")) if user.protected_user
     end
   end
 
