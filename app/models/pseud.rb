@@ -403,6 +403,9 @@ class Pseud < ApplicationRecord
           comment.update_attribute(:pseud_id, pseud.id)
         end
       end
+
+      creation.add_original_creator(user) if options[:store_original_creator] && creation.respond_to?(:add_original_creator)
+
       # make sure changes affect caching/search/author fields
       creation.save
     end

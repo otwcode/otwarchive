@@ -238,7 +238,7 @@ class Creatorship < ApplicationRecord
       for new_orphan in orphans
         unless pseud.blank? || new_orphan.blank? || !new_orphan.pseuds.include?(pseud)
           orphan_pseud = default ? User.orphan_account.default_pseud : User.orphan_account.pseuds.find_or_create_by(name: pseud.name)
-          pseud.change_ownership(new_orphan, orphan_pseud)
+          pseud.change_ownership(new_orphan, orphan_pseud, store_original_creator: true)
         end
       end
     end
