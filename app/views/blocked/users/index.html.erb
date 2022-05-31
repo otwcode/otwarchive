@@ -1,0 +1,35 @@
+<h2 class="heading"><%= t(".title") %></h2>
+
+<div class="notice">
+  <p><%= t(".will.intro") %></p>
+
+  <ul>
+    <li><%= t(".will.commenting") %></li>
+    <li><%= t(".will.replying") %></li>
+  </ul>
+
+  <p><%= t(".will_not.intro") %></p>
+
+  <ul>
+    <li><%= t(".will_not.comments_on_works") %></li>
+    <li><%= t(".will_not.comments_elsewhere") %></li>
+  </ul>
+</div>
+
+<% # form for blocking users %>
+<div class="actions">
+  <%= form_tag confirm_block_user_blocked_users_path(@user), method: :get do %>
+    <%= text_field_tag :blocked_id, "", autocomplete_options("pseud", size: 60, data: { autocomplete_token_limit: 1 }) %>
+    <span class="submit"><%= submit_tag t(".button") %></span>
+  <% end %>
+</div>
+
+<% if @blocks.present? %>
+  <ul class="pseud index group">
+    <%= render partial: "blocked_user_blurb", collection: @blocks, as: :block %>
+  </ul>
+<% else %>
+  <p><%= t(".none") %></p>
+<% end %>
+
+<%= will_paginate @blocks %>
