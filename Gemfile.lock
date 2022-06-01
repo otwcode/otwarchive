@@ -352,7 +352,7 @@ GEM
     netrc (0.11.0)
     newrelic_rpm (8.4.0)
     nio4r (2.5.8)
-    nokogiri (1.13.4)
+    nokogiri (1.13.6)
       mini_portile2 (~> 2.8.0)
       racc (~> 1.4)
     orm_adapter (0.5.0)
@@ -385,12 +385,12 @@ GEM
       activesupport (>= 3.0.0)
     raabro (1.4.0)
     racc (1.6.0)
-    rack (2.2.3)
+    rack (2.2.3.1)
     rack-attack (6.6.0)
       rack (>= 1.0, < 3)
     rack-dev-mark (0.7.9)
       rack (>= 1.1, < 2.3)
-    rack-protection (2.1.0)
+    rack-protection (2.2.0)
       rack
     rack-test (1.1.0)
       rack (>= 1.0, < 3)
@@ -508,10 +508,10 @@ GEM
       simplecov_json_formatter (~> 0.1)
     simplecov-html (0.12.3)
     simplecov_json_formatter (0.1.3)
-    sinatra (2.1.0)
+    sinatra (2.2.0)
       mustermann (~> 1.0)
       rack (~> 2.2)
-      rack-protection (= 2.1.0)
+      rack-protection (= 2.2.0)
       tilt (~> 2.0)
     smart_properties (1.17.0)
     sprockets (3.7.2)
@@ -637,7 +637,7 @@ DEPENDENCIES
   poltergeist
   pry-byebug
   pundit
-  rack (~> 2.1, >= 2.1.4)
+  rack (~> 2.2)
   rack-attack
   rack-dev-mark (>= 0.7.8)
   rails (~> 6.0.4)

@@ -26,7 +26,7 @@ module ActsAsCommentable::CommentMethods
       if self.children_count > 0
         self.is_deleted = true
         self.comment_content = "deleted comment" # wipe out the content
-        self.save
+        self.save(validate: false)
       else
         self.destroy
       end
@@ -99,7 +99,7 @@ module ActsAsCommentable::CommentMethods
         self.threaded_right = 4
 
         # What do to do about validation?
-        return nil unless self.save
+        return nil unless save(validate: false)
 
         child.commentable_id = self.id
         child.threaded_left = 2
@@ -115,7 +115,7 @@ module ActsAsCommentable::CommentMethods
         Comment.transaction {
           Comment.where(["thread = (?) AND threaded_left >= (?)", self.thread, right_bound]).update_all("threaded_left = (threaded_left + 2)")
           Comment.where(["thread = (?) AND threaded_right >= (?)", self.thread, right_bound]).update_all("threaded_right = (threaded_right + 2)")
-          self.save
+          save(validate: false)
         }
       end
     end

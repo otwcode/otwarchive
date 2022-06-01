@@ -313,7 +313,14 @@ tr:
       reason: 'Talebiniz şöyleydi:'
       subject: "[%{app_name}] İlave Davet Kodu İsteğiniz Reddedildi"
     recipient_notification:
+      html:
+        collection: AO3'te %{collection_link} koleksiyonunda sizin için hediye bir
+          hediye eser yayınlandı!
+      no_collection: AO3'te sizin için bir hediye eser yayınlandı!
       subject:
         collection: "[%{app_name}][%{collection_title}] %{collection_title} tarafından
           size hediye edilmiş bir eser"
         no_collection: "[%{app_name}] Size hediye edilmiş bir eser"
+      text:
+        collection: AO3'te "%{collection_title}" koleksiyonunda (%{collection_url})
+          sizin için hediye bir eser yayınlandı!

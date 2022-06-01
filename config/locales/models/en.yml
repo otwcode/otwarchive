@@ -2,6 +2,21 @@ en:
   activerecord:
     errors:
       models:
+        block:
+          format: "%{message}"
+          attributes:
+            blocked_id:
+              taken: "You have already blocked that user."
+            blocked:
+              blank: "Sorry, we couldn't find a user matching that name."
+              self: "Sorry, you can't block yourself."
+              official: "Sorry, you can't block an official account."
+        comment:
+          attributes:
+            user:
+              format: "%{message}"
+              blocked_comment: "Sorry, you have been blocked by one or more of this work's creators."
+              blocked_reply: "Sorry, you have been blocked by that user."
         creatorship:
           attributes:
             pseud_id:

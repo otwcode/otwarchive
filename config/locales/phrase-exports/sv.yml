@@ -372,10 +372,17 @@ sv:
       reason: 'Din förfrågan var:'
       subject: "[%{app_name}] Ansökan om ytterligare inbjudningskod nekad"
     recipient_notification:
+      html:
+        collection: Ett verk som är tillägnat dig har publicerats i samlingen %{collection_link}
+          på AO3!
+      no_collection: Ett verk som är tillägnat dig har blivit publicerat på AO3!
       subject:
         collection: "[%{app_name}][%{collection_title}] Ett verk är tillägnat dig
           i %{collection_title}"
         no_collection: "[%{app_name}] Ett verk tillägnat dig"
+      text:
+        collection: Ett verk som är tillägnat dig har publicerats i samlingen "%{collection_title}"
+          (%{collection_url}) på AO3!
     signup_notification:
       activate_your_account: Följ på denna länk för att aktivera ditt konto
       admin_posts: AO3 Nyheter

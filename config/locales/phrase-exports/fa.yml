@@ -9,6 +9,9 @@ fa:
         left_kudos:
           one: "%{givers_list} برای %{commentable_link} کودوس و قدردانی فرستاد."
           other: "%{givers_list} برای %{commentable_link} کودوس و قدردانی فرستادند."
+        single_guest:
+          giver_list: یک مهمان
+          left_kudos: "%{giver_list} براى %{commentable_link} كودوس و قدردانى فرستاد."
       subject: "[%{app_name}] شما کودوس و قدردانی دریافت کردید!"
       text:
         left_kudos:
@@ -16,6 +19,7 @@ fa:
             و قدردانی فرستاد."
           other: "%{givers_list} برای %{commentable_title} (%{commentable_url}) کودوس
             و قدردانی فرستادند."
+        single_guest: یک مهمان براى %{commentable_title} كودوس و قدردانى فرستاد (%{commentable_url}).
   mailer:
     general:
       closing:
@@ -414,9 +418,16 @@ fa:
       reason: 'درخواست شما این بود که:'
       subject: "[%{app_name}] درخواست کد دعوتنامه ی اضافی رد شد"
     recipient_notification:
+      html:
+        collection: یک اثر هدیه برای شما در مجموعه ی %{collection_link} در AO3 پست
+          شده است!
+      no_collection: یک اثر هدیه برای شما در AO3 پست شده است!
       subject:
         collection: "[%{app_name}][%{collection_title}] یک اثر هدیه برای شما از %{collection_title}"
         no_collection: "[%{app_name}] یک اثر هدیه برای شما"
+      text:
+        collection: یک اثر هدیه برای شما در مجموعه ی "%{collection_title}" (%{collection_url})
+          در AO3 پست شده است!
     signup_notification:
       activate_your_account: این لینک را برای فعالسازی اکانت خود دنبال کنید
       admin_posts: اخبار AO3

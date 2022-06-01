@@ -388,9 +388,15 @@ hr:
       reason: 'Vaš zahtjev je bio:'
       subject: "[%{app_name}] Zahtjev za dodatnim pozivnim kodom odbijen"
     recipient_notification:
+      html:
+        collection: Poklon za Vas je objavljen u %{collection_link} AO3 kolekciji!
+      no_collection: Na AO3-u je objavljen poklon za Vas!
       subject:
         collection: "[%{app_name}][%{collection_title}] Poklon za Vas od %{collection_title}"
         no_collection: "[%{app_name}] Poklon za Vas"
+      text:
+        collection: Poklon za Vas je objavljen u "%{collection_title}" kolekciji (%{collection_url})
+          na AO3-u!
     signup_notification:
       activate_your_account: Slijedite ovu poveznicu kako bi aktivirali svoj korisnički
         račun

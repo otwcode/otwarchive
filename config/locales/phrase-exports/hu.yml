@@ -1,5 +1,63 @@
 ---
 hu:
+  activerecord:
+    attributes:
+      archive_warning:
+        name_with_colon:
+          one: 'Figyelmeztetés:'
+          other: 'Figyelmeztetések:'
+      category:
+        name_with_colon:
+          one: 'Kategória:'
+          other: 'Kategóriák:'
+      character:
+        name_with_colon:
+          one: 'Szereplő:'
+          other: 'Szereplők:'
+      fandom:
+        name_with_colon:
+          one: 'Fandom:'
+          other: 'Fandomok:'
+      freeform:
+        name_with_colon:
+          one: 'További kulcsszó:'
+          other: 'További kulcsszavak:'
+      rating:
+        name_with_colon: 'Besorolás:'
+      relationship:
+        name_with_colon:
+          one: 'Kapcsolat:'
+          other: 'Kapcsolatok:'
+      work:
+        summary: Összefoglaló
+    models:
+      archive_warning:
+        one: Figyelmeztetés
+        other: Figyelmeztetések
+      category:
+        one: Kategória
+        other: Kategóriák
+      chapter:
+        one: Fejezet
+        other: Fejezetek
+      character:
+        one: Szereplő
+        other: Szereplők
+      fandom:
+        one: Fandom
+        other: Fandomok
+      freeform:
+        one: További kulcsszó
+        other: További kulcsszavak
+      rating:
+        one: Besorolás
+        other: Besorolások
+      relationship:
+        one: Kapcsolat
+        other: Kapcsolatok
+      series:
+        one: Sorozat
+        other: Sorozatok
   kudo_mailer:
     batch_kudo_notification:
       guest:
@@ -9,7 +67,9 @@ hu:
         left_kudos:
           one: "%{givers_list} kudost hagyott itt: %{commentable_link}."
           other: "%{givers_list} kudost hagyott itt: %{commentable_link}."
-        single_guest: 'Egy vendég kudost hagyott itt: %{commentable_link}.'
+        single_guest:
+          giver_list: Egy vendég
+          left_kudos: "%{giver_list} kudost hagyott itt: %{commentable_link}."
       subject: "​[%{app_name}]​​ ​Kudost kaptál!"
       text:
         left_kudos:
@@ -21,6 +81,12 @@ hu:
       closing:
         formal: Üdvözlettel,
         informal: Üdv,
+      creation:
+        link_with_word_count: "%{creation_link} (%{word_count})"
+        title_with_word_count: '"%{creation_title}" (%{word_count})'
+        word_count:
+          one: "%{count} szó"
+          other: "%{count} szó"
       footer:
         general:
           html:
@@ -41,6 +107,7 @@ hu:
           addressed: Szia %{name}!
           unaddressed: Szia!
         introductory: Üdvözlet az Archive of Our Own – AO3-től (A Mi Archívumunk)!
+      metadata_label_indicator: ": "
       signature:
         app_short_name: AO3
         open_doors: A Open Doors (Nyitott Ajtók) csapata
@@ -378,10 +445,17 @@ hu:
       reason: 'Kérésed a következő volt:'
       subject: "[%{app_name}] További meghívó kódok kérése elutasítva"
     recipient_notification:
+      html:
+        collection: Egy ajándék munkát posztoltak a számodra a(z) %{collection_link}
+          gyűjteményben az AO3-on!
+      no_collection: Egy ajándék munkát posztoltak a számodra az AO3-on!
       subject:
         collection: "[%{app_name}][%{collection_title}] Egy ajándék munka a számodra
           a(z) %{collection_title} gyűjteményben"
         no_collection: "[%{app_name}] Egy ajándék munka a számodra"
+      text:
+        collection: Egy ajándék munkát posztoltak a számodra a(z) "%{collection_title}"
+          gyűjteményben (%{collection_url}) az AO3-on!
     signup_notification:
       activate_your_account: kövesd ezt a linket a felhasználói fiókod aktiválásához.
       admin_posts: Archívum Hírek

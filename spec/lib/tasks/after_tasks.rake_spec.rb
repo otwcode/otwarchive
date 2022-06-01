@@ -381,6 +381,67 @@ describe "rake After:fix_invalid_pseud_icon_data" do
   end
 end
 
+describe "rake After:fix_2009_comment_threads" do
+  before { Comment.delete_all }
+
+  let(:comment) { create(:comment, id: 13) }
+  let(:reply) { create(:comment, commentable: comment) }
+
+  context "when a comment has the correct thread set" do
+    it "doesn't change the thread" do
+      expect do
+        subject.invoke
+      end.to output("Updating 0 thread(s)\n").to_stdout
+        .and avoid_changing { comment.reload.thread }
+        .and avoid_changing { reply.reload.thread }
+    end
+  end
+
+  context "when a comment has an incorrect thread set" do
+    before { comment.update_column(:thread, 1) }
+
+    it "fixes the threads" do
+      expect do
+        subject.invoke
+      end.to output("Updating 1 thread(s)\n").to_stdout
+        .and change { comment.reload.thread }.from(1).to(13)
+        .and change { reply.reload.thread }.from(1).to(13)
+    end
+
+    context "when the comment has many replies" do
+      it "fixes the threads for all of them" do
+        replies = create_list(:comment, 10, commentable: comment)
+
+        expect do
+          subject.invoke
+        end.to output("Updating 1 thread(s)\n").to_stdout
+          .and change { comment.reload.thread }.from(1).to(13)
+
+        replies.each do |reply|
+          expect { reply.reload }.to change { reply.thread }.from(1).to(13)
+        end
+      end
+    end
+
+    context "when the comment has deeply nested replies" do
+      it "fixes the threads for all of them" do
+        replies = [reply]
+
+        10.times { replies << create(:comment, commentable: replies.last) }
+
+        expect do
+          subject.invoke
+        end.to output("Updating 1 thread(s)\n").to_stdout
+          .and change { comment.reload.thread }.from(1).to(13)
+
+        replies.each do |reply|
+          expect { reply.reload }.to change { reply.thread }.from(1).to(13)
+        end
+      end
+    end
+  end
+end
+
 describe "rake After:clean_up_chapter_kudos" do
   let(:work) { create(:work) }
   let!(:work_kudo) { create(:kudo, commentable: work) }
