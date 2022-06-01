@@ -18,6 +18,8 @@ module Blocked
       @pseuds = @blocks.map { |b| b.blocked.default_pseud }
       @rec_counts = Pseud.rec_counts_for_pseuds(@pseuds)
       @work_counts = Pseud.work_counts_for_pseuds(@pseuds)
+
+      @page_subtitle = "Blocked Users"
     end
 
     # GET /users/:user_id/blocked/users/confirm_block
