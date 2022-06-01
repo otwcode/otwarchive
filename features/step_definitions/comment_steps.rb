@@ -21,7 +21,7 @@ end
 
 ParameterType(
   name: "commentable",
-  regexp: /the (work|admin post|tag) "([^"]*?)"/,
+  regexp: /the (work|admin post|tag) "([^"]*)"/,
   type: ActsAsCommentable::Commentable,
   transformer: lambda { |type, title|
     case type
