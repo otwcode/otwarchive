@@ -103,3 +103,19 @@ Feature: Blocking
     When I follow "2" within ".pagination"
     Then I should see "pest2" within "ul.pseud li:nth-child(1)"
       And I should see "pest1" within "ul.pseud li:nth-child(2)"
+
+  Scenario Outline: Authorized admins can see the blocked users page
+    Given the user "blocker" has blocked the user "pest"
+    When I am logged in as a "<role>" admin
+      And I go to the blocked users page for "blocker"
+    Then I should see "pest"
+      And I should see a link "Unblock"
+    When I follow "Unblock"
+    Then I should see "Sorry, you don't have permission to access the page you were trying to reach."
+      And the user "blocker" should have a block for "pest"
+
+    Examples:
+      | role             |
+      | superadmin       |
+      | policy_and_abuse |
+      | support          |
