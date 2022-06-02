@@ -333,6 +333,11 @@ en:
         title: "Blocked Users"
         button: "Block"
         none: "You have not blocked any users."
+        legend: "Block a user"
+        label: "User"
+        heading:
+          landmark:
+            blocked_users: "Listing Blocked Users"
         will:
           intro: "Blocking a user prevents them from:"
           commenting: "commenting on your works"

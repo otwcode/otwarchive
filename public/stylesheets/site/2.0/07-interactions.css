@@ -576,6 +576,35 @@ form.simple span.actions {
   margin: 0;
 }
 
+/* mods: SINGLE for prominent simple forms consisting of one text input, e.g., on the blocked user page */
+
+form.single fieldset {
+  background: transparent;
+  border: 1px solid #ddd;
+    box-shadow: none;
+}
+
+form.single legend {
+  height: auto;
+  width: auto;
+  font-size: 1.143em;
+  font-weight: bold;
+  padding: 0.5em;
+    opacity: 1;
+}
+
+form.single ul.autocomplete {
+  display: inline-block;
+}
+
+form.single .autocomplete li.input {
+  margin: 0;
+}
+
+form.single input[type="text"] {
+  min-width: 15em;
+}
+
 /* WIDGET: TOGGLED FORMS (SHOW/HIDE bookmark and collection - hidden with jS) */
 
 .toggled form dd, .dynamic form dd {
