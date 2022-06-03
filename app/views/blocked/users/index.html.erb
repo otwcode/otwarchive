@@ -17,13 +17,19 @@
 </div>
 
 <% # form for blocking users %>
-<div class="actions">
-  <%= form_tag confirm_block_user_blocked_users_path(@user), method: :get do %>
-    <%= text_field_tag :blocked_id, "", autocomplete_options("pseud", size: 60, data: { autocomplete_token_limit: 1 }) %>
-    <span class="submit"><%= submit_tag t(".button") %></span>
-  <% end %>
-</div>
 
+<%= form_tag confirm_block_user_blocked_users_path(@user), method: :get, class: "single simple post" do %>
+  <fieldset>
+    <legend><%= t(".legend") %></legend>
+    <p>
+      <%= label_tag :blocked_id, t(".label"), class: "landmark" %>
+      <%= text_field_tag :blocked_id, "", autocomplete_options("pseud", data: { autocomplete_token_limit: 1 }) %>
+      <%= submit_tag t(".button") %>
+    </p>
+  </fieldset>
+<% end %>
+
+<h3 class="landmark heading"><%= t("heading.landmark.blocked") %> %></h3>
 <% if @blocks.present? %>
   <ul class="pseud index group">
     <%= render partial: "blocked_user_blurb", collection: @blocks, as: :block %>
