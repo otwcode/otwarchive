@@ -344,6 +344,7 @@ en:
       confirm_block:
         title: "Block %{name}"
         button: "Yes, Block User"
+        cancel: "Cancel"
         block: "block"
         sure_html: "Are you sure you want to %{block} %{username}?"
         will:
@@ -357,6 +358,7 @@ en:
       confirm_unblock:
         title: "Unblock %{name}"
         button: "Yes, Unblock User"
+        cancel: "Cancel"
         unblock: "unblock"
         sure_html: "Are you sure you want to %{unblock} %{username}?"
         resume:

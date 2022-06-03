@@ -1,11 +1,16 @@
 module BlockHelper
   def block_link(user, block: nil)
-    block ||= user.block_by_current_user
+    if block.nil?
+      block = user.block_by_current_user
+      blocking_user = current_user
+    else
+      blocking_user = block.blocker
+    end
 
     if block
-      link_to(t("blocked.unblock"), confirm_unblock_user_blocked_user_path(current_user, block))
+      link_to(t("blocked.unblock"), confirm_unblock_user_blocked_user_path(blocking_user, block))
     else
-      link_to(t("blocked.block"), confirm_block_user_blocked_users_path(current_user, blocked_id: user))
+      link_to(t("blocked.block"), confirm_block_user_blocked_users_path(blocking_user, blocked_id: user))
     end
   end
 
