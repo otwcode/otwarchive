@@ -614,7 +614,6 @@ form.single .autocomplete .added {
 }
 
 form.single .autocomplete input[type="text"] {
-  vertical-align: middle;
   width: 100%;
 }
 
