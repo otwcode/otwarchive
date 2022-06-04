@@ -236,7 +236,7 @@ form li ul.autocomplete li.input {
   border: 0;
 }
 
-.autocomplete .dropdown ul li:hover, li.selected {
+.autocomplete .dropdown ul li:hover, .autocomplete .dropdown li.selected {
   background: url("/images/skins/textures/tiles/red-ao3.png") top left #900;
   color: #fff;
 }
