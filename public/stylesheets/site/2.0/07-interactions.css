@@ -613,10 +613,12 @@ form.single .autocomplete .added {
   margin-bottom: 0.125em;
 }
 
+/* let autocomplete input expand horizontally as the container takes up more room to accomodate multiple selected tokens */
 form.single .autocomplete input[type="text"] {
   width: 100%;
 }
 
+/* tweak the margin of the submit button only if there's an autocomplete */
 form.single .autocomplete + input + input[type="submit"] {
   margin-bottom: 0.125em;
 }
