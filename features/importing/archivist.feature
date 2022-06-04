@@ -45,8 +45,6 @@ Feature: Archivist bulk imports
       And I press "Import"
     Then I should see "We couldn't successfully import that work, sorry: No external author name or email specified"
 
-  # TODO: Enable after AO3-6353.
-  @wip
   Scenario: Importing for an author without an account should have the correct byline and email
     When I import the work "http://rebecca2525.livejournal.com/3562.html"
     Then I should see "We have notified the author(s) you imported works for"
