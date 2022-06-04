@@ -621,7 +621,6 @@ form.single .autocomplete + input + input[type="submit"] {
   margin-bottom: 0.125em;
 }
 
-
 /* WIDGET: TOGGLED FORMS (SHOW/HIDE bookmark and collection - hidden with jS) */
 
 .toggled form dd, .dynamic form dd {
