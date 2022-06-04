@@ -593,17 +593,35 @@ form.single legend {
     opacity: 1;
 }
 
+form.single input[type="text"] {
+  min-width: 15em;
+}
+
+form.single input[type="submit"] {
+  vertical-align: bottom;
+}
+
 form.single ul.autocomplete {
   display: inline-block;
 }
 
 form.single .autocomplete li.input {
-  margin: 0;
+  margin: 0 0.643em 0.25em 0;
 }
 
-form.single input[type="text"] {
-  min-width: 15em;
+form.single .autocomplete .added {
+  margin-bottom: 0.125em;
 }
+
+form.single .autocomplete input[type="text"] {
+  vertical-align: middle;
+  width: 100%;
+}
+
+form.single .autocomplete + input + input[type="submit"] {
+  margin-bottom: 0.125em;
+}
+
 
 /* WIDGET: TOGGLED FORMS (SHOW/HIDE bookmark and collection - hidden with jS) */
 
