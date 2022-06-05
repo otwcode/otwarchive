@@ -12,6 +12,12 @@ describe MailerHelper do
   end
 
   describe "#creation_title" do
+    context "when creation is a series" do
+      it "returns the series title" do
+        expect(creation_title(work)).to eq(work.title)
+      end
+    end
+
     context "when creation is a work" do
       it "returns the work title" do
         expect(creation_title(work)).to eq(work.title)
