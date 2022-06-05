@@ -212,7 +212,7 @@ textarea.LV_invalid_field:active {
 }
 
 .autocomplete .dropdown ul li:hover,
-li.selected {
+.autocomplete .dropdown li.selected {
   background: #5998D6;
 }
 
@@ -273,6 +273,14 @@ li.selected {
 div.dynamic {
   background: #333;
 }
+
+/* mods: single */
+
+form.single fieldset {
+  border-color: #555;
+}
+
+/* widget: toggled forms */
 
 .toggled form,
 .dynamic form {

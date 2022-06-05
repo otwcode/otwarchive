@@ -8,7 +8,7 @@ gem 'bundler'
 
 gem "rails", "~> 6.0.4"
 gem "rails-i18n"
-gem "rack", "~> 2.1", ">= 2.1.4"
+gem "rack", "~> 2.2"
 gem "sprockets", "< 4"
 
 gem 'rails-observers', git: 'https://github.com/rails/rails-observers'
@@ -141,6 +141,7 @@ group :test do
   gem "simplecov"
   gem "codecov", require: false
   gem 'email_spec', '1.6.0'
+  gem "n_plus_one_control"
 end
 
 group :test, :development do

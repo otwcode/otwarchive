@@ -1,5 +1,4 @@
 module CommentsHelper
-
   def value_for_comment_form(commentable, comment)
     commentable.is_a?(Tag) ? comment : [commentable, comment]
   end
@@ -49,6 +48,8 @@ module CommentsHelper
     if comment.pseud_id
       if comment.pseud.nil?
         ts("Account Deleted")
+      elsif comment.pseud.user.official
+        (link_to comment.pseud.byline, [comment.pseud.user, comment.pseud]) + content_tag(:span, " " + ts("(Official)"), class: "role")
       else
         link_to comment.pseud.byline, [comment.pseud.user, comment.pseud]
       end
@@ -109,11 +110,21 @@ module CommentsHelper
   #### HELPERS FOR CHECKING WHICH BUTTONS/FORMS TO DISPLAY #####
 
   def can_reply_to_comment?(comment)
-    !(comment.unreviewed? || comment.iced? || parent_disallows_comments?(comment) || comment_parent_hidden?(comment))
+    !(comment.unreviewed? ||
+      comment.iced? ||
+      parent_disallows_comments?(comment) ||
+      comment_parent_hidden?(comment) ||
+      blocked_by_comment?(comment) ||
+      blocked_by?(comment.ultimate_parent))
   end
 
   def can_edit_comment?(comment)
-    is_author_of?(comment) && !comment.iced? && comment.count_all_comments.zero? && !comment_parent_hidden?(comment)
+    is_author_of?(comment) &&
+      !comment.iced? &&
+      comment.count_all_comments.zero? &&
+      !comment_parent_hidden?(comment) &&
+      !blocked_by_comment?(comment.commentable) &&
+      !blocked_by?(comment.ultimate_parent)
   end
 
   # Only an admin with proper authorization can mark a spam comment ham.
@@ -286,9 +297,29 @@ module CommentsHelper
     end
   end
 
+  # gets the css user-<id> class name for the comment
+  def commenter_id_for_css_classes(comment)
+    return if comment.pseud.nil?
+    return if comment.by_anonymous_creator?
+    return if comment.is_deleted
+    return if comment.hidden_by_admin
+
+    "user-#{comment.pseud.user_id}"
+  end
+
+  def css_classes_for_comment(comment)
+    return if comment.nil?
+
+    unreviewed = "unreviewed" if comment.unreviewed?
+    commenter = commenter_id_for_css_classes(comment)
+    official = "official" if commenter && comment&.pseud&.user&.official
+
+    "#{official} #{unreviewed} comment group #{commenter}".squish
+  end
+
   # find the parent of the commentable
   def find_parent(commentable)
-    if commentable.is_a?(Comment)
+    if commentable.respond_to?(:ultimate_parent)
       commentable.ultimate_parent
     elsif commentable.respond_to?(:work)
       commentable.work
@@ -318,5 +349,4 @@ module CommentsHelper
     parent = find_parent(commentable)
     parent.respond_to?(:moderated_commenting_enabled) && parent.moderated_commenting_enabled?
   end
-
 end

@@ -3,12 +3,16 @@
   <p><%= t("mailer.general.greeting.informal.addressed", name: style_bold(@user.login)).html_safe %></p>
 
   <p>
-    A gift work has been posted for you <% if @collection %>in the <%= style_link(@collection.title, collection_url(@collection)) %> collection <% end %>at the Archive of Our Own!
+    <% if @collection %>
+      <%= t(".html.collection", collection_link: style_link(@collection.title, collection_url(@collection))).html_safe %>
+    <% else %>
+      <%= t(".no_collection") %>
+    <% end %>
   </p>
 
   <p>
     <% url = @collection ? collection_work_url(@collection, @work) : work_url(@work) %>
-    <%= style_creation_link(@work.title, url) %> <%= "(#{@work.word_count} words)" %>
+    <%= creation_link_with_word_count(@work, url) %>
     <br>
     by <%= creator_links(@work) %>
   </p>

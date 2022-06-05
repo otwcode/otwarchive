@@ -1,5 +1,25 @@
 ---
 he:
+  kudo_mailer:
+    batch_kudo_notification:
+      guest:
+        many: "%{count} אורחות"
+        one: אורחת
+        other: "%{count} אורחות"
+        two: "%{count} אורחות"
+      html:
+        left_kudos:
+          many: "%{givers_list} השאירו קודוס על %{commentable_link}."
+          one: "%{givers_list} השאירה קודוס על %{commentable_link}."
+          other: "%{givers_list} השאירו קודוס על %{commentable_link}."
+          two: "%{givers_list} השאירו קודוס על %{commentable_link}."
+      subject: "[%{app_name}] קיבלת קודוס!"
+      text:
+        left_kudos:
+          many: "%{givers_list} השאירו קודוס על %{commentable_title} (%{commentable_url})."
+          one: "%{givers_list} השאירה קודוס על %{commentable_title} (%{commentable_url})."
+          other: "%{givers_list} השאירו קודוס על %{commentable_title} (%{commentable_url})."
+          two: "%{givers_list} השאירו קודוס על %{commentable_title} (%{commentable_url})."
   mailer:
     general:
       closing:
@@ -30,25 +50,6 @@ he:
         parent_org: Organization for Transformative Works – OTW (ארגון למען יצירות
           טרנספורמטיביות)
         support: צוות התמיכה של AO3
-    kudos:
-      guest:
-        many: "%{count} אורחות"
-        one: אורחת
-        other: "%{count} אורחות"
-        two: "%{count} אורחות"
-      html:
-        left_kudos:
-          many: "%{givers_list} השאירו קודוס על %{commentable_link}."
-          one: "%{givers_list} השאירה קודוס על %{commentable_link}."
-          other: "%{givers_list} השאירו קודוס על %{commentable_link}."
-          two: "%{givers_list} השאירו קודוס על %{commentable_link}."
-      text:
-        left_kudos:
-          many: "%{givers_list} השאירו קודוס על %{commentable_link}."
-          one: "%{givers_list} השאירה קודוס על %{commentable_link}."
-          other: "%{givers_list} השאירו קודוס על %{commentable_link}."
-          two: "%{givers_list} השאירו קודוס על %{commentable_link}."
-      you_have: "[%{app_name}] קיבלת קודוס!"
   users:
     mailer:
       reset_password_instructions:
@@ -298,9 +299,15 @@ he:
       reason: 'תוכן בקשתך:'
       subject: "[%{app_name}] בקשתך לקוד הזמנה נוסף נדחתה"
     recipient_notification:
+      html:
+        collection: יצירה הוקדשה לך במתנה באוסף %{collection_link} ב-AO3!
+      no_collection: יצירה הוקדשה לך במתנה ב-AO3!
       subject:
-        collection: "[%{app_name}][%{collection_title}] קיבלת יצירה במתנה מ-%{collection_title}"
+        collection: "[%{app_name}][%{collection_title}] קיבלת יצירה במתנה מ- %{collection_title}"
         no_collection: "[%{app_name}] קיבלת יצירה במתנה"
+      text:
+        collection: יצירה הוקדשה לך במתנה באוסף "%{collection_title}" (%{collection_url})
+          ב-AO3!
     signup_notification:
       activate_your_account: לחץ/י על קישור זה כדי להפעיל את חשבונך
       admin_posts: חדשות AO3

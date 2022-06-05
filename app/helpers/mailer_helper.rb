@@ -110,6 +110,29 @@ module MailerHelper
     end
   end
 
+  # e.g., Title (x words), where Title is a link
+  def creation_link_with_word_count(creation, creation_url)
+    title = if creation.is_a?(Chapter)
+              creation.full_chapter_title.html_safe
+            else
+              creation.title.html_safe
+            end
+    t("mailer.general.creation.link_with_word_count",
+      creation_link: style_creation_link(title, creation_url),
+      word_count: creation_word_count(creation)).html_safe
+  end
+
+  # e.g., "Title" (x words), where Title is not a link
+  def creation_title_with_word_count(creation)
+    title = if creation.is_a?(Chapter)
+              creation.full_chapter_title.html_safe
+            else
+              creation.title.html_safe
+            end
+    t("mailer.general.creation.title_with_word_count",
+      creation_title: title, word_count: creation_word_count(creation))
+  end
+
   # The bylines used in subscription emails to prevent exposing the name(s) of
   # anonymous creator(s).
   def creator_links(work)
@@ -152,6 +175,11 @@ module MailerHelper
   end
 
   private
+
+  # e.g., 1 word or 50 words
+  def creation_word_count(creation)
+    t("mailer.general.creation.word_count", count: creation.word_count)
+  end
 
   def work_tag_metadata_label(tags)
     return if tags.empty?

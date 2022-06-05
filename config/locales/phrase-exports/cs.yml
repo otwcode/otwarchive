@@ -1,5 +1,29 @@
 ---
 cs:
+  kudo_mailer:
+    batch_kudo_notification:
+      guest:
+        few: "%{count} návštěvníci"
+        many: "%{count} návštěvníků"
+        one: návštěvník
+        other: "%{count} návštěvníků"
+      html:
+        left_kudos:
+          few: "%{givers_list} zanechali kudos u %{commentable_link}."
+          many: "%{givers_list} zanechali kudos u %{commentable_link}."
+          one: "%{givers_list} zanechal/a kudos u %{commentable_link}."
+          other: "%{givers_list} zanechali kudos u %{commentable_link}."
+        single_guest:
+          giver_list: Návštěvník
+          left_kudos: "%{giver_list} zanechal kudos u %{commentable_link}."
+      subject: "[%{app_name}] Máte nové kudos!"
+      text:
+        left_kudos:
+          few: "%{givers_list} zanechali kudos u %{commentable_title} (%{commentable_url})."
+          many: "%{givers_list} zanechali kudos u %{commentable_title} (%{commentable_url})."
+          one: "%{givers_list} zanechal/a kudos u %{commentable_title} (%{commentable_url})."
+          other: "%{givers_list} zanechali kudos u %{commentable_title} (%{commentable_url})."
+        single_guest: Návštěvník zanechal kudos u %{commentable_title} (%{commentable_url}).
   mailer:
     general:
       closing:
@@ -31,25 +55,6 @@ cs:
         parent_org: Organization for Transformative Works - OTW (Společnost pro transformativní
           tvorbu)
         support: Podpora AO3
-    kudos:
-      guest:
-        few: "%{count} návštěvníci"
-        many: "%{count} návštěvníků"
-        one: návštěvník
-        other: "%{count} návštěvníků"
-      html:
-        left_kudos:
-          few: "%{givers_list} zanechali kudos u %{commentable_link}."
-          many: "%{givers_list} zanechali kudos u %{commentable_link}."
-          one: "%{givers_list} zanechal/a kudos u %{commentable_link}."
-          other: "%{givers_list} zanechali kudos u %{commentable_link}."
-      text:
-        left_kudos:
-          few: "%{givers_list} zanechali kudos u %{commentable_link}."
-          many: "%{givers_list} zanechali kudos u %{commentable_link}."
-          one: "%{givers_list} zanechal/a kudos u %{commentable_link}."
-          other: "%{givers_list} zanechali kudos u %{commentable_link}."
-      you_have: "[%{app_name}] Máte nové kudos!"
   users:
     mailer:
       reset_password_instructions:
@@ -373,10 +378,17 @@ cs:
       reason: 'Vaše žádost byla:'
       subject: "[%{app_name}] Žádost o dodatečnou pozvánku zamítnuta"
     recipient_notification:
+      html:
+        collection: Vám darovaná práce byla zveřejněna ve sbírce %{collection_link}
+          na AO3!
+      no_collection: Na AO3 pro vás byla zveřejněna fanouškovská práce!
       subject:
         collection: "[%{app_name}][%{collection_title}] Vám darovaná práce ze sbírky
           %{collection_title}"
         no_collection: "[%{app_name}] Fanouškovská práce jako dárek pro vás"
+      text:
+        collection: Ve sbírce "%{collection_title}" (%{collection_url}) na AO3 byla
+          zveřejněna vám darovaná práce!
     signup_notification:
       activate_your_account: 'Pro aktivaci vašeho účtu klikněte na tento odkaz '
       admin_posts: Novinky AO3

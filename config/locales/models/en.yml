@@ -2,6 +2,21 @@ en:
   activerecord:
     errors:
       models:
+        block:
+          format: "%{message}"
+          attributes:
+            blocked_id:
+              taken: "You have already blocked that user."
+            blocked:
+              blank: "Sorry, we couldn't find a user matching that name."
+              self: "Sorry, you can't block yourself."
+              official: "Sorry, you can't block an official account."
+        comment:
+          attributes:
+            user:
+              format: "%{message}"
+              blocked_comment: "Sorry, you have been blocked by one or more of this work's creators."
+              blocked_reply: "Sorry, you have been blocked by that user."
         creatorship:
           attributes:
             pseud_id:
@@ -15,6 +30,10 @@ en:
           attributes:
             password_confirmation:
               confirmation: "doesn't match new password."
+            login:
+              changed_too_recently:
+                one: "can only be changed once per day. You last changed your user name on %{renamed_at}."
+                other: "can only be changed once every %{count} days. You last changed your user name on %{renamed_at}."
         work:
           attributes:
             user_defined_tags_count:
@@ -120,3 +139,9 @@ en:
         user_defined_tags_count: "Fandom, relationship, character, and additional tags"
   attributes:
     ticket_number: "Ticket ID"
+  errors:
+    attributes:
+      ticket_number:
+        closed_ticket: "must not be closed."
+        invalid_department: "must be in your department."
+        required: "must exist and not be spam."

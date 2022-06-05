@@ -1,10 +1,93 @@
 ---
 fr:
+  activerecord:
+    attributes:
+      archive_warning:
+        name_with_colon:
+          one: 'Avertissement :'
+          other: 'Avertissements :'
+      category:
+        name_with_colon:
+          one: 'Catégorie :'
+          other: 'Catégories :'
+      character:
+        name_with_colon:
+          one: 'Personnage :'
+          other: 'Personnages :'
+      fandom:
+        name_with_colon:
+          one: 'Fandom :'
+          other: 'Fandoms :'
+      freeform:
+        name_with_colon:
+          one: 'Tag supplémentaire :'
+          other: 'Tags supplémentaires :'
+      rating:
+        name_with_colon: 'Classification :'
+      relationship:
+        name_with_colon:
+          one: 'Relation :'
+          other: 'Relations :'
+      work:
+        summary: Résumé
+    models:
+      archive_warning:
+        one: Avertissement
+        other: Avertissements
+      category:
+        one: Catégorie
+        other: Catégories
+      chapter:
+        one: Chapitre
+        other: Chapitres
+      character:
+        one: Personnage
+        other: Personnages
+      fandom:
+        one: Fandom
+        other: Fandoms
+      freeform:
+        one: Tag supplémentaire
+        other: Tags supplémentaires
+      rating:
+        one: Classification
+        other: Classifications
+      relationship:
+        one: Relation
+        other: Relations
+      series:
+        one: Série
+        other: Séries
+  kudo_mailer:
+    batch_kudo_notification:
+      guest:
+        one: un/une invité-e
+        other: "%{count} invité-e-s"
+      html:
+        left_kudos:
+          one: "%{givers_list} a félicité votre œuvre %{commentable_link}."
+          other: "%{givers_list} ont félicité votre œuvre %{commentable_link}."
+        single_guest:
+          giver_list: Un/Une invité-e
+          left_kudos: "%{giver_list} a félicité votre œuvre %{commentable_link}."
+      subject: "[%{app_name}] Vous avez reçu des félicitations !"
+      text:
+        left_kudos:
+          one: "%{givers_list} a félicité votre œuvre %{commentable_title} (%{commentable_url})."
+          other: "%{givers_list} ont félicité votre œuvre %{commentable_title} (%{commentable_url})."
+        single_guest: Un/Une invité-e a félicité votre œuvre %{commentable_title}
+          (%{commentable_url}).
   mailer:
     general:
       closing:
         formal: Bien cordialement,
         informal: Cordialement,
+      creation:
+        link_with_word_count: "%{creation_link} (%{word_count})"
+        title_with_word_count: '"%{creation_title}" (%{word_count})'
+        word_count:
+          one: "%{count} mot"
+          other: "%{count} mots"
       footer:
         general:
           html:
@@ -26,25 +109,13 @@ fr:
           unaddressed: Bonjour !
         introductory: Bonjour de la part d'Archive of Our Own – AO3 (Notre Propre
           Archive) !
+      metadata_label_indicator: " : "
       signature:
         app_short_name: AO3
         open_doors: L'équipe du Projet Open Doors
         parent_org: Organization for Transformative Works – OTW (Organisation pour
           les Œuvres Transformatives)
         support: L'équipe de Support Technique d'AO3
-    kudos:
-      guest:
-        one: un/une invité-e
-        other: "%{count} invité-e-s"
-      html:
-        left_kudos:
-          one: "%{givers_list} a félicité votre œuvre %{commentable_link}."
-          other: "%{givers_list} ont félicité votre œuvre %{commentable_link}."
-      text:
-        left_kudos:
-          one: "%{givers_list} a félicité votre œuvre %{commentable_link}."
-          other: "%{givers_list} ont félicité votre œuvre %{commentable_link}."
-      you_have: "[%{app_name}] Vous avez reçu des félicitations !"
   users:
     mailer:
       reset_password_instructions:
@@ -422,10 +493,17 @@ fr:
       reason: 'Votre demande était la suivante :'
       subject: "[%{app_name}] Demande de Code d'Invitation Supplémentaire Rejetée"
     recipient_notification:
+      html:
+        collection: Une œuvre cadeau a été publiée pour vous dans la collection %{collection_link}
+          sur AO3 !
+      no_collection: Une œuvre cadeau a été publiée pour vous sur AO3 !
       subject:
         collection: "[%{app_name}][%{collection_title}] Une œuvre cadeau pour vous
           dans %{collection_title}"
         no_collection: "[%{app_name}] Une œuvre cadeau pour vous"
+      text:
+        collection: Une œuvre cadeau a été publiée pour vous dans la collection "%{collection_title}"
+          (%{collection_url}) sur AO3 !
     signup_notification:
       activate_your_account: suivez ce lien pour activer votre compte
       admin_posts: Actualités d’AO3

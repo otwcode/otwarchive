@@ -1,5 +1,63 @@
 ---
 zh-CN:
+  activerecord:
+    attributes:
+      archive_warning:
+        name_with_colon:
+          other: 警告：
+      category:
+        name_with_colon:
+          other: 性向/性向分类：
+      character:
+        name_with_colon:
+          other: 角色：
+      fandom:
+        name_with_colon:
+          other: 同人圈：
+      freeform:
+        name_with_colon:
+          other: 其他标签：
+      rating:
+        name_with_colon: 分级：
+      relationship:
+        name_with_colon:
+          other: 配对：
+      work:
+        summary: 简介
+    models:
+      archive_warning:
+        other: 警告
+      category:
+        other: 性向/性向分类
+      chapter:
+        other: 章
+      character:
+        other: 角色
+      fandom:
+        other: 同人圈
+      freeform:
+        other: 其他标签
+      rating:
+        other: 分级
+      relationship:
+        other: 配对
+      series:
+        other: 系列
+  kudo_mailer:
+    batch_kudo_notification:
+      guest:
+        other: "%{count}名访客"
+      html:
+        left_kudos:
+          other: "%{givers_list}给您的作品%{commentable_link}点了赞。"
+        single_guest:
+          giver_list: 一名访客
+          left_kudos: "%{giver_list}给您的作品%{commentable_link}点了赞。"
+      subject: "[%{app_name}] 您收到了点赞！"
+      text:
+        left_kudos:
+          other: "%{givers_list}给您的作品%{commentable_title}（%{commentable_url}）点了赞。"
+        single_guest: 一名访客给您的作品%{commentable_title}（%{commentable_url}）点了赞。
   layouts:
     proxy_notice:
       faux_heading: 重要提示：
@@ -10,6 +68,11 @@ zh-CN:
       closing:
         formal: 此致敬礼
         informal: 祝好
+      creation:
+        link_with_word_count: "%{creation_link}（%{word_count}）"
+        title_with_word_count: '"%{creation_title}"（%{word_count}）'
+        word_count:
+          other: "%{count} 字符"
       footer:
         general:
           html:
@@ -27,21 +90,12 @@ zh-CN:
           addressed: 您好，%{name}！
           unaddressed: 您好！
         introductory: Archive of Our Own – AO3（AO3作品库）向您问好！
+      metadata_label_indicator: "："
       signature:
         app_short_name: AO3
         open_doors: Open Doors（Open Doors拯救计划）团队
         parent_org: Organization for Transformative Works – OTW（OTW再创作组织）
         support: AO3支持委员会团队
-    kudos:
-      guest:
-        other: "%{count}名访客"
-      html:
-        left_kudos:
-          other: "%{givers_list}给您的作品点了赞%{commentable_link}。"
-      text:
-        left_kudos:
-          other: "%{givers_list}给您的作品点了赞%{commentable_link}。"
-      you_have: "[%{app_name}] 您收到了点赞！"
   users:
     mailer:
       reset_password_instructions:
@@ -216,9 +270,15 @@ zh-CN:
       reason: 您的申请为：
       subject: "[%{app_name}] 额外邀请码申请拒函"
     recipient_notification:
+      html:
+        collection: 您在AO3上收到了一篇来自于作品集 %{collection_link} 的赠文！
+      no_collection: 您在AO3上收到了一篇赠文！
       subject:
-        collection: "[%{app_name}][%{collection_title}]来自于作品集%{collection_title}的赠文"
+        collection: "[%{app_name}][%{collection_title}]来自于作品集 %{collection_title}
+          的赠文"
         no_collection: "[%{app_name}]您收到了一篇赠文"
+      text:
+        collection: 您在AO3上收到了一篇来自于作品集" %{collection_title} " （%{collection_url}）的赠文！
     signup_notification:
       activate_your_account: 点击以下链接激活您的账户
       admin_posts: AO3新闻

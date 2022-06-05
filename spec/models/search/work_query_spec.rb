@@ -122,27 +122,27 @@ describe WorkQuery do
 
   it "should sort by relevance by default" do
     q = WorkQuery.new
-    expect(q.generated_query[:sort]).to eq({'_score' => { order: 'desc' }})
+    expect(q.generated_query[:sort]).to eq([{ "_score" => { order: "desc" } }, { id: { order: "desc" } }])
   end
 
   it "should allow you to sort by creator name" do
     q = WorkQuery.new(sort_column: 'authors_to_sort_on', sort_direction: 'asc')
-    expect(q.generated_query[:sort]).to eq({'authors_to_sort_on' => { order: 'asc'}})
+    expect(q.generated_query[:sort]).to eq([{ "authors_to_sort_on" => { order: "asc" } }, { id: { order: "asc" } }])
   end
 
   it "should allow you to sort by title" do
     q = WorkQuery.new(sort_column: 'title_to_sort_on')
-    expect(q.generated_query[:sort]).to eq({'title_to_sort_on' => { order: 'desc'}})
+    expect(q.generated_query[:sort]).to eq([{ "title_to_sort_on" => { order: "desc" } }, { id: { order: "desc" } }])
   end
 
   it "should allow you to sort by kudos" do
     q = WorkQuery.new(sort_column: 'kudos_count')
-    expect(q.generated_query[:sort]).to eq({'kudos_count' => { order: 'desc'}})
+    expect(q.generated_query[:sort]).to eq([{ "kudos_count" => { order: "desc" } }, { id: { order: "desc" } }])
   end
 
   it "should allow you to sort by comments" do
     q = WorkQuery.new(sort_column: 'comments_count')
-    expect(q.generated_query[:sort]).to eq({'comments_count' => { order: 'desc'}})
+    expect(q.generated_query[:sort]).to eq([{ "comments_count" => { order: "desc" } }, { id: { order: "desc" } }])
   end
 
   it "rescues absurd relative dates" do

@@ -1,10 +1,92 @@
 ---
 it:
+  activerecord:
+    attributes:
+      archive_warning:
+        name_with_colon:
+          one: 'Avvertimento:'
+          other: 'Avvertimenti:'
+      category:
+        name_with_colon:
+          one: 'Categoria:'
+          other: 'Categorie:'
+      character:
+        name_with_colon:
+          one: 'Personaggio:'
+          other: 'Personaggi:'
+      fandom:
+        name_with_colon:
+          one: 'Fandom:'
+          other: 'Fandom:'
+      freeform:
+        name_with_colon:
+          one: 'Tag Aggiuntiva:'
+          other: 'Tag Aggiuntive:'
+      rating:
+        name_with_colon: 'Rating:'
+      relationship:
+        name_with_colon:
+          one: 'Relazione:'
+          other: 'Relazioni:'
+      work:
+        summary: Riassunto
+    models:
+      archive_warning:
+        one: Avvertimento
+        other: Avvertimenti
+      category:
+        one: Categoria
+        other: Categorie
+      chapter:
+        one: Capitolo
+        other: Capitoli
+      character:
+        one: Personaggio
+        other: Personaggi
+      fandom:
+        one: Fandom
+        other: Fandom
+      freeform:
+        one: Tag Aggiuntiva
+        other: Tag Aggiuntive
+      rating:
+        one: Rating
+        other: Rating
+      relationship:
+        one: Relazione
+        other: Relazioni
+      series:
+        one: Serie
+        other: Serie
+  kudo_mailer:
+    batch_kudo_notification:
+      guest:
+        one: un ospite
+        other: "%{count} ospiti"
+      html:
+        left_kudos:
+          one: "%{givers_list} ha lasciato kudos per %{commentable_link}."
+          other: "%{givers_list} hanno lasciato kudos per %{commentable_link}."
+        single_guest:
+          giver_list: Un ospite
+          left_kudos: "%{giver_list} ha lasciato kudos per %{commentable_link}."
+      subject: "[%{app_name}] Hai dei kudos!"
+      text:
+        left_kudos:
+          one: "%{givers_list} ha lasciato kudos per %{commentable_title} (%{commentable_url})."
+          other: "%{givers_list} hanno lasciato kudos per %{commentable_title} (%{commentable_url})."
+        single_guest: Un ospite ha lasciato kudos per %{commentable_title} (%{commentable_url}).
   mailer:
     general:
       closing:
         formal: Un saluto,
         informal: Un saluto,
+      creation:
+        link_with_word_count: "%{creation_link} (%{word_count})"
+        title_with_word_count: '"%{creation_title}" (%{word_count})'
+        word_count:
+          one: "%{count} parola"
+          other: "%{count} parole"
       footer:
         general:
           html:
@@ -25,25 +107,13 @@ it:
           addressed: Ciao, %{name}!
           unaddressed: Ciao!
         introductory: Ciao da Archive of Our Own – AO3 (Archivio Tutto Per Noi)!
+      metadata_label_indicator: ": "
       signature:
         app_short_name: AO3
         open_doors: Il team di Open Doors (Porte Aperte)
         parent_org: Organization for Transformative Works – OTW (Organizzazione per
           i Lavori Trasformativi)
         support: Il team di Supporto di AO3
-    kudos:
-      guest:
-        one: un ospite
-        other: "%{count} ospiti"
-      html:
-        left_kudos:
-          one: "%{givers_list} ha lasciato kudos per %{commentable_link}."
-          other: "%{givers_list} hanno lasciato kudos per %{commentable_link}."
-      text:
-        left_kudos:
-          one: "%{givers_list} ha lasciato kudos per %{commentable_link}."
-          other: "%{givers_list} hanno lasciato kudos per %{commentable_link}."
-      you_have: "[%{app_name}] Hai dei kudos!"
   users:
     mailer:
       reset_password_instructions:
@@ -393,13 +463,6 @@ it:
           indirizzo email a cui non hai più accesso, contatta Porte Aperte con qualunque
           informazione che possa aiutare a verificare la tua identità di autore di
           tali lavori.
-        part11: Per altre domande, per favore contatta il team di Supporto di AO3
-          (%{contact_support_link}).
-        part2: Puoi leggere gli annunci riguardanti i più recenti trasferimenti di
-          archivi su AO3 News (%{ao3_news_link}), e troverai ulteriori informazioni
-          sulla pagina delle FAQ di Porte Aperte (%{faq_page_link}) o sulla guida
-          (%{tutorial_page_link}). Se non trovi risposta alla tua domanda nelle FAQ,
-          nella guida o in questa email, per favore contatta il team Supporto (%{contact_support_link}).
         part3: Se si tratta di un errore e questi non sono i tuoi lavori, per favore
           non cancellarli! Semplicemente contatta Porte Aperte (%{open_doors_link})
           e risolveremo il problema.
@@ -410,12 +473,6 @@ it:
           visibili a tutti. Se ti serve aiuto su come sbloccare, rendere orfani o
           cancellare i tuoi lavori, per favore contatta il Supporto di AO3.
         part5: 'Qui puoi rivendicare o cancellare i tuoi lavori: %{claim_url}'
-        part7: 'Se sei l’autore di questi lavori, ma non li vuoi più, li puoi rendere
-          orfani (così che rimangano su AO3 ma senza il tuo nome) o puoi cancellarli
-          (verranno in tal caso completamente rimossi da AO3). Non c’è bisogno di
-          aggiungerli a un account per renderli orfani o cancellarli: puoi farlo direttamente
-          dal link qui sopra. (Se hai bisogno di aiuto, per favore contatta il team
-          di Supporto %{contact_support_link}.)'
         part9: Se desideri che Porte Aperte aggiorni il reindirizzamento per puntare
           al tuo lavoro pre-esistente, cancella la copia importata e contatta Porte
           Aperte (%{open_doors_link}) specificando il nome del tuo profilo su AO3,
@@ -440,10 +497,17 @@ it:
       reason: 'La tua richiesta è stata:'
       subject: "[%{app_name}] Richiesta per un Codice Invito aggiuntivo rifiutata"
     recipient_notification:
+      html:
+        collection: All'interno della collezione %{collection_link} su AO3 è stato
+          pubblicato un fanwork regalo per te!
+      no_collection: Su AO3 è stato pubblicato un fanwork regalo per te!
       subject:
         collection: "[%{app_name}][%{collection_title}] Un fanwork regalo per te su
           %{collection_title}"
         no_collection: "[%{app_name}] Hai ricevuto un fanwork regalo"
+      text:
+        collection: All'interno della collezione "%{collection_title}" (%{collection_url})
+          su AO3 è stato pubblicato un fanwork regalo per te!
     signup_notification:
       activate_your_account: segui questo link per attivare il tuo account
       admin_posts: News di AO3
