@@ -360,3 +360,9 @@ Feature: Admin Actions for Works, Comments, Series, Bookmarks
     Then I should see "Over Tag Limit: No"
     When I view the work "Over the Limit"
     Then I should see "Over Tag Limit: Yes"
+
+  Scenario: Policy abuse admins can see original work creators
+    Given a work "Orphaned" with the original creator "orphaneer"
+    When I am logged in as a "policy_and_abuse" admin
+      And I view the work "Orphaned"
+    Then I should see the original creator "orphaneer"

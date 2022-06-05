@@ -176,6 +176,15 @@ Given "an abuse ticket ID exists" do
   allow_any_instance_of(ZohoResourceClient).to receive(:find_ticket).and_return(ticket)
 end
 
+Given "a work {string} with the original creator {string}" do |title, creator|
+  step %{I am logged in as "#{creator}"}
+  step %{I post the work "#{title}"}
+  step %{I log out}
+  work = Work.find_by(title: title)
+  user = User.find_by(login: creator)
+  work.add_original_creator(user)
+end
+
 ### WHEN
 
 When /^I visit the last activities item$/ do
@@ -450,4 +459,10 @@ end
 
 Then /^the user content should be shown as right-to-left$/ do
   page.should have_xpath("//div[contains(@class, 'userstuff') and @dir='rtl']")
+end
+
+Then "I should see the original creator {string}" do |creator|
+  user = User.find_by(login: creator)
+  expect(page).to have_selector(".original_creators",
+                                text: "#{user.id} (#{creator})")
 end
