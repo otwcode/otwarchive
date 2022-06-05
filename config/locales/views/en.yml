@@ -324,3 +324,8 @@ en:
         popular: These are some of the most popular tags used on the Archive. To find more tags, %{search_tags_link}.
         random: These are some random tags used on the Archive. To find more tags, %{search_tags_link}.
       search_tags: try our tag search
+  works:
+    meta:
+      original_creators:
+        one: "Original Creator ID:"
+        other: "Original Creator IDs:"

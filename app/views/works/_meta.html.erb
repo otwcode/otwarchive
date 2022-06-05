@@ -64,6 +64,17 @@
 
       <%= work_meta_list(@work, @chapter) %>
       </dd>
+      <% if policy(:user_creation).show_original_creators? %>
+        <% original_creators = @work.original_creators %>
+        <% if original_creators.any? %>
+          <dt class="original_creators">
+            <%= t('.original_creators', count: original_creators.count) %>
+          </dt>
+          <dd class="original_creators">
+            <%= original_creators.join(", ") %>
+          </dd>
+        <% end %>
+      <% end %>
       <% if policy(:user_creation).show_ip_address? %>
         <dt class="ip">
           <%= ts('IP Address:') %>
