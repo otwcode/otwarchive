@@ -188,7 +188,7 @@ Feature: Create Works
       And I check "chapters-options-show"
       And I fill in "work_wip_length" with "text"
       And I press "Preview"
-    Then I should see "Brevity is the soul of wit, but your content does have to be at least 10 characters long."
+    Then I should see "Content must be at least 10 characters long."
     When I fill in "content" with "Text and some longer text"
       And I fill in "work_collection_names" with "collection1, collection2"
       And I press "Preview"
