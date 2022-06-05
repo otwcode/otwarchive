@@ -520,6 +520,10 @@ li.blurb,
   color: #5998D6;
 }
 
+.picture .header {
+  border-color: #555;
+}
+
 .listbox li.blurb {
   background: #333;
 }
