@@ -108,7 +108,7 @@ Feature: Create Works
       And I should see "No Archive Warnings Apply"
       And I should not see "Choose Not To Use Archive Warnings"
       And I should see "Category: F/M"
-      And I should see "Characters: Sam WinchesterDean Winchester"
+      And I should see "Characters: Sam Winchester Dean Winchester"
       And I should see "Relationship: Harry/Ginny"
       And I should see "Additional Tags: An extra tag"
       And I should see "For Someone else, recipient"
