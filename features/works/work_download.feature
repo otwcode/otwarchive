@@ -85,7 +85,7 @@ Feature: Download a work
   When I log out
     And I view the work "Many Fandom Work"
     And I follow "HTML"
-  Then I should see "Multifandom"
+  Then the page title should include "Multifandom"
     And I should be able to download all versions of "Many Fandom Work"
 
 
