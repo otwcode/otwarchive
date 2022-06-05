@@ -88,7 +88,7 @@ Feature: Create Works
       And I fill in "Or create and use a new one:" with "My new series"
       And I select "Pseud2" from "Creator/Pseud(s)"
       And I select "Pseud3" from "Creator/Pseud(s)"
-      And I fill in "pseud_byline" with "coauthor"
+      And I fill in "pseud_byline_autocomplete" with "coauthor"
       And I fill in "Post to Collections / Challenges" with "collection1, collection2"
       And I press "Preview"
     Then I should see "Draft was successfully created"
@@ -144,7 +144,7 @@ Feature: Create Works
       And I should see "Let's write another story"
     When I follow "Edit"
       And I check "Add co-creators?"
-      And I fill in "pseud_byline" with "Does_not_exist"
+      And I fill in "pseud_byline_autocomplete" with "Does_not_exist"
       And I press "Preview"
     Then I should see "Invalid creator: Could not find a pseud Does_not_exist."
     When all emails have been delivered
@@ -162,6 +162,7 @@ Feature: Create Works
     Then I should see "cosomeone" within ".byline"
     When all emails have been delivered
       And I follow "Edit"
+      And I remove selected values from the autocomplete field within "dd.recipient"
       And I give the work to "giftee"
       And I press "Preview"
       And I press "Update"

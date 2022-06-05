@@ -93,6 +93,12 @@ When /^I enter text in the (\w+) autocomplete field$/ do |fieldtype|
   step %{I enter text in the "#{fieldname}" autocomplete field}
 end
 
+When "I remove selected values from the autocomplete field within {string}" do |selector|
+  within(selector) do
+    find_all(".autocomplete .delete").each(&:click)
+  end
+end
+
 When /^I specify a fandom and enter text in the character autocomplete field$/ do
   step %{I choose "Supernatural" from the "Fandoms" autocomplete}
   step %{I enter text in the character autocomplete field}
