@@ -104,6 +104,10 @@ Given /^I have posted an admin post$/ do
   step("I log out")
 end
 
+Given "the admin post {string}" do |title|
+  FactoryBot.create(:admin_post, title: title)
+end
+
 Given /^the fannish next of kin "([^\"]*)" for the user "([^\"]*)"$/ do |kin, user|
   step %{the user "#{kin}" exists and is activated}
   step %{the user "#{user}" exists and is activated}
