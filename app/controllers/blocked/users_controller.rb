@@ -69,7 +69,8 @@ module Blocked
 
     # Builds (but doesn't save) a block matching the desired params:
     def build_block
-      @block = @user.blocks_as_blocker.build(blocked_byline: params[:blocked_id])
+      blocked_byline = params.fetch(:blocked_id, "")
+      @block = @user.blocks_as_blocker.build(blocked_byline: blocked_byline)
       @blocked = @block.blocked
     end
 
