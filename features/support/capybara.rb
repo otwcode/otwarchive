@@ -15,7 +15,7 @@ Capybara.configure do |config|
 
   # Capybara 3.x changes the default server to Puma; we have WEBRick
   # (a dependency of Mechanize, used for importing; also used for the
-  # Rails development server), so we;ll stick with that for now.
+  # Rails development server), so we'll stick with that for now.
   config.server = :webrick
 end
 
