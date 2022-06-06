@@ -598,10 +598,12 @@ DEPENDENCIES
   bundler
   bundler-audit
   capistrano-gitflow_version (>= 0.0.3)
+  capybara
   capybara-screenshot
   codecov
   connection_pool
   css_parser
+  cucumber
   cucumber-rails
   cucumber-timecop
   dalli
