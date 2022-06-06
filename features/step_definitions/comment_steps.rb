@@ -19,6 +19,40 @@ Given "a guest comment on the work {string}" do |title|
   FactoryBot.create(:comment, :by_guest, commentable: work.first_chapter)
 end
 
+ParameterType(
+  name: "commentable",
+  regexp: /the (work|admin post|tag) "([^"]*)"/,
+  type: ActsAsCommentable::Commentable,
+  transformer: lambda { |type, title|
+    case type
+    when "work"
+      Work.find_by(title: title)
+    when "admin post"
+      AdminPost.find_by(title: title)
+    when "tag"
+      Tag.find_by(name: title)
+    end
+  }
+)
+
+Given "a comment {string} by {string} on {commentable}" do |text, user, commentable|
+  user = ensure_user(user)
+  commentable = Comment.commentable_object(commentable)
+  FactoryBot.create(:comment,
+                    pseud: user.default_pseud,
+                    commentable: commentable,
+                    comment_content: text)
+end
+
+Given "a reply {string} by {string} on {commentable}" do |text, user, commentable|
+  user = ensure_user(user)
+  comment = commentable.comments.first
+  FactoryBot.create(:comment,
+                    pseud: user.default_pseud,
+                    commentable: comment,
+                    comment_content: text)
+end
+
 # THEN
 
 Then /^the comment's posted date should be nowish$/ do
@@ -188,6 +222,14 @@ end
 Then /^the comment on "([^\"]*?)" should not be marked as unreviewed/ do |work|
   w = Work.find_by(title: work)
   assert !w.comments.first.unreviewed?
+end
+
+When "I view {commentable} with comments" do |commentable|
+  if commentable.is_a?(Tag)
+    visit tag_comments_path(commentable)
+  else
+    visit polymorphic_path(commentable, show_comments: true)
+  end
 end
 
 When /^I view the unreviewed comments page for "([^\"]*?)"/ do |work|

@@ -1,6 +1,11 @@
 class InboxController < ApplicationController
+  include BlockHelper
+
   before_action :load_user
   before_action :check_ownership
+
+  before_action :load_commentable, only: :reply
+  before_action :check_blocked, only: :reply
 
   def load_user
     @user = User.find_by(login: params[:user_id])
@@ -15,7 +20,6 @@ class InboxController < ApplicationController
   end
 
   def reply
-    @commentable = Comment.find(params[:comment_id])
     @comment = Comment.new
     respond_to do |format|
       format.html do
@@ -50,5 +54,19 @@ class InboxController < ApplicationController
   # Allow flexible params through, since we're not posting any data
   def filter_params
     params.permit!
+  end
+
+  def load_commentable
+    @commentable = Comment.find(params[:comment_id])
+  end
+
+  def check_blocked
+    if blocked_by?(@commentable.ultimate_parent)
+      flash[:error] = t("comments.check_blocked.parent")
+      redirect_back(fallback_location: user_inbox_path(@user))
+    elsif blocked_by_comment?(@commentable)
+      flash[:error] = t("comments.check_blocked.reply")
+      redirect_back(fallback_location: user_inbox_path(@user))
+    end
   end
 end

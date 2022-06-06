@@ -109,6 +109,7 @@ en:
           disable_anon: "Sorry, this work doesn't allow non-Archive users to comment."
           hidden: "Sorry, you can't add or edit comments on a hidden work."
           unrevealed: "Sorry, you can't add or edit comments on an unrevealed work."
+      blocked: "Sorry, you have been blocked by one or more of this work's creators."
   layouts:
     proxy_notice:
       faux_heading: "Important message:"
@@ -324,3 +325,53 @@ en:
         popular: These are some of the most popular tags used on the Archive. To find more tags, %{search_tags_link}.
         random: These are some random tags used on the Archive. To find more tags, %{search_tags_link}.
       search_tags: try our tag search
+  blocked:
+    block: "Block"
+    unblock: "Unblock"
+    users:
+      index:
+        title: "Blocked Users"
+        button: "Block"
+        none: "You have not blocked any users."
+        legend: "Block a user"
+        label: "User"
+        heading:
+          landmark:
+            blocked_users: "Listing Blocked Users"
+        will:
+          intro: "Blocking a user prevents them from:"
+          commenting: "commenting on your works"
+          replying: "replying to your comments anywhere on the site"
+        will_not:
+          intro: "Blocking a user will not:"
+          comments_on_works: "delete or hide comments they previously left on your works; you can delete these individually"
+          comments_elsewhere: "hide their comments elsewhere on the site"
+          hide_works: "hide their works or bookmarks from you"
+      confirm_block:
+        title: "Block %{name}"
+        button: "Yes, Block User"
+        cancel: "Cancel"
+        block: "block"
+        sure_html: "Are you sure you want to %{block} %{username}?"
+        will:
+          intro: "Blocking a user prevents them from:"
+          commenting: "commenting on your works"
+          replying: "replying to your comments anywhere on the site"
+        will_not:
+          intro: "Blocking a user will not:"
+          comments_on_works: "delete or hide comments they previously left on your works; you can delete these individually"
+          comments_elsewhere: "hide their comments elsewhere on the site"
+          hide_works: "hide their works or bookmarks from you"
+      confirm_unblock:
+        title: "Unblock %{name}"
+        button: "Yes, Unblock User"
+        cancel: "Cancel"
+        unblock: "unblock"
+        sure_html: "Are you sure you want to %{unblock} %{username}?"
+        resume:
+          intro: "Unblocking a user allows them to resume:"
+          commenting: "commenting on your works"
+          replying: "replying to your comments anywhere on the site"
+  preferences:
+    index:
+      blocked_users: "Blocked Users"
