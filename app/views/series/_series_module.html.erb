@@ -47,6 +47,6 @@
   <dd><%= series.visible_work_count %></dd>
   <% if (bookmark_count = series.bookmarks.is_public.count) > 0 %>
     <dt><%= ts('Bookmarks:') %></dt>
-    <dd><%= link_to_bookmarkable_bookmarks(series, bookmark_count.to_s) %></dd>
+    <dd><%= link_to_bookmarkable_bookmarks(series, number_with_delimiter(bookmark_count)) %></dd>
   <% end %>
 </dl>
