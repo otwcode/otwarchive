@@ -76,12 +76,13 @@ describe Admin::AdminUsersController do
 
         expect(response).to have_http_status(:success)
       end
-      it "if user does not exists, shows page not found" do
+
+      it "if user does not exists, raises a 404" do
         admin.update(roles: ["policy_and_abuse"])
         fake_login_admin(admin)
-        get :show, params: { id: "not_existing_id" }
+        params = { id: "not_existing_id" }
 
-        expect(response).to have_http_status(:not_found)
+        expect { get :show, params: params }.to raise_error ActiveRecord::RecordNotFound
       end
     end
   end
