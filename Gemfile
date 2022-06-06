@@ -123,6 +123,8 @@ group :test do
   gem "rspec-rails", "~> 4.0.1"
   gem 'pickle'
   gem 'shoulda'
+  gem "capybara"
+  gem "cucumber"
   gem 'database_cleaner'
   gem 'poltergeist'
   gem 'capybara-screenshot'
