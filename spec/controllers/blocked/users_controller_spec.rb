@@ -98,6 +98,16 @@ describe Blocked::UsersController do
         subject.call
         expect(response).to render_template(:confirm_block)
       end
+
+      context "when no blocked_id is specified" do
+        subject { -> { get :confirm_block, params: { user_id: blocker } } }
+
+        it "redirects with an error" do
+          subject.call
+          it_redirects_to_with_error(user_blocked_users_path(blocker),
+                                     "Sorry, we couldn't find a user matching that name.")
+        end
+      end
     end
 
     it_behaves_like "no other users can access it"

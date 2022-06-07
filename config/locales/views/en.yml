@@ -346,6 +346,7 @@ en:
           intro: "Blocking a user will not:"
           comments_on_works: "delete or hide comments they previously left on your works; you can delete these individually"
           comments_elsewhere: "hide their comments elsewhere on the site"
+          hide_works: "hide their works or bookmarks from you"
       confirm_block:
         title: "Block %{name}"
         button: "Yes, Block User"
@@ -360,6 +361,7 @@ en:
           intro: "Blocking a user will not:"
           comments_on_works: "delete or hide comments they previously left on your works; you can delete these individually"
           comments_elsewhere: "hide their comments elsewhere on the site"
+          hide_works: "hide their works or bookmarks from you"
       confirm_unblock:
         title: "Unblock %{name}"
         button: "Yes, Unblock User"
