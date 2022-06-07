@@ -17,7 +17,7 @@ end
 
 Then /^I should see HTML "(.*)?" in the autocomplete$/ do |string|
   # There should be only one visible autocomplete dropdown.
-  within("input + .autocomplete", visible: true) do
+  within("input + .autocomplete") do
     # Wait for results to appear, then check their HTML content
     expect(current_scope).to have_selector("li")
     expect(current_scope["innerHTML"]).to include(string)
@@ -26,12 +26,12 @@ end
 
 Then /^I should see "([^\"]+)" in the autocomplete$/ do |string|
   # There should be only one visible autocomplete dropdown.
-  expect(find("input + .autocomplete", visible: true)).to have_content(string)
+  expect(find("input + .autocomplete")).to have_content(string)
 end
 
 Then /^I should not see "([^\"]+)" in the autocomplete$/ do |string|
   # There should be only one visible autocomplete dropdown.
-  expect(find("input + .autocomplete", visible: true)).to have_no_content(string)
+  expect(find("input + .autocomplete")).to have_no_content(string)
 end
 
 # Define all values to be entered here depending on the fieldname
@@ -62,7 +62,7 @@ When /^I enter "([^\"]+)" in the "([^\"]+)" autocomplete field$/ do |text, field
   # Wait for the autocomplete right after the field to appear,
   # so in the Then steps we can look for the only active autocomplete
   # without caring where it is.
-  expect(page).to have_selector("##{field[:id]} + .autocomplete", visible: true)
+  expect(page).to have_selector("##{field[:id]} + .autocomplete")
 end
 
 When /^I choose "([^\"]+)" from the "([^\"]+)" autocomplete$/ do |text, fieldname|
@@ -74,7 +74,7 @@ When /^I choose "([^\"]+)" from the "([^\"]+)" autocomplete$/ do |text, fieldnam
   # In the autocomplete right after the field...
   with_scope("##{field[:id]} + .autocomplete") do
     # Wait for the expected result to appear and click to select it
-    find("li", text: text, visible: true).click
+    find("li", text: text).click
   end
 end
 
@@ -91,6 +91,12 @@ When /^I enter text in the (\w+) autocomplete field$/ do |fieldtype|
                 "Additional Tags"
               end
   step %{I enter text in the "#{fieldname}" autocomplete field}
+end
+
+When "I remove selected values from the autocomplete field within {string}" do |selector|
+  within(selector) do
+    find_all(".autocomplete .delete").each(&:click)
+  end
 end
 
 When /^I specify a fandom and enter text in the character autocomplete field$/ do

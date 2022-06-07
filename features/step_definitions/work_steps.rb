@@ -387,8 +387,8 @@ end
 
 When /^I fill in basic external work tags$/ do
   select(DEFAULT_RATING, from: "Rating")
-  fill_in("external_work_fandom_string", with: DEFAULT_FANDOM)
-  fill_in("bookmark_tag_string", with: DEFAULT_FREEFORM)
+  fill_in("Fandoms", with: DEFAULT_FANDOM)
+  fill_in("Your tags", with: DEFAULT_FREEFORM)
 end
 
 When /^I set the fandom to "([^"]*)"$/ do |fandom|
@@ -611,8 +611,8 @@ When /^I invite the co-authors? "([^"]*)"$/ do |coauthor|
   step %{I try to invite the co-authors "#{coauthor}"}
 end
 
-When /^I give the work to "([^"]*)"$/ do |recipient|
-  fill_in("work_recipients", with: "#{recipient}")
+When "I give the work to {string}" do |recipient|
+  fill_in("Gift this work to", with: recipient)
 end
 
 When /^I give the work "([^"]*)" to the user "([^"]*)"$/ do |work_title, recipient|
