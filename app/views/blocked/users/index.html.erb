@@ -11,9 +11,9 @@
   <p><%= t(".will_not.intro") %></p>
 
   <ul>
+    <li><%= t(".will_not.hide_works") %></li>
     <li><%= t(".will_not.comments_on_works") %></li>
     <li><%= t(".will_not.comments_elsewhere") %></li>
-    <li><%= t(".will_not.hide_works") %></li>
   </ul>
 </div>
 
@@ -25,7 +25,7 @@
     <p>
       <%= label_tag :blocked_id, t(".label"), class: "landmark" %>
       <%= text_field_tag :blocked_id, "", autocomplete_options("pseud", data: { autocomplete_token_limit: 1 }) %>
-      <%= submit_tag t(".button") %>
+      <span class="submit actions"><%= submit_tag t(".button") %></span>
     </p>
   </fieldset>
 <% end %>
