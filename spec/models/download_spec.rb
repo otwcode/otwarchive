@@ -99,35 +99,53 @@ describe Download do
   describe "authors" do
     let(:work) { Work.new }
     let(:subject) { Download.new(work) }
+    let(:pseud1) { create(:pseud, name: "First", user: create(:user)) }
+    let(:pseud2) { create(:pseud, name: "Second", user: create(:user)) }
 
     it "joins the author names separated by a comma and a space" do
-      allow(subject).to receive(:author_names).and_return(["First (Zeroth)", "Second"])
+      allow(pseud1).to receive(:byline).and_return("First (Zeroth)")
+      allow(pseud2).to receive(:byline).and_return("Second")
+      allow(work).to receive(:pseuds).and_return([pseud1, pseud2])
 
       expect(subject.authors).to eq("First (Zeroth), Second")
     end
 
-    it "transliterates non-ASCII characters" do
-      allow(subject).to receive(:author_names).and_return(["我哥好像被奇怪的人盯上了怎么破"])
+    it "leaves Chinese characters alone" do
+      allow(pseud1).to receive(:byline).and_return("我哥好像被奇怪的人盯上了怎么破")
+      allow(work).to receive(:pseuds).and_return([pseud1])
 
-      expect(subject.authors).to eq("Wo Ge Hao Xiang Bei Qi Guai De Ren Cheng Shang Liao Zen Yao Po ")
+      expect(subject.authors).to eq("我哥好像被奇怪的人盯上了怎么破")
     end
   end
 
-  describe "file_authors" do
-    let(:work) { Work.new }
+  describe "page_title" do
+    let(:fandom1) { create(:canonical_fandom) }
+    let(:fandom2) { create(:canonical_fandom) }
+    let(:pseud1) { create(:pseud, name: "First", user: create(:user)) }
+    let(:pseud2) { create(:pseud, name: "Second", user: create(:user)) }
+    let(:work) { create(:work, fandoms: [fandom1, fandom2]) }
     let(:subject) { Download.new(work) }
 
-    it "truncates if too long" do
-      allow(subject).to receive(:author_names).and_return(["ComplexAuthor (ComplexUser)", "SimpleAuthor"])
+    it "includes first fandom name" do
+      work.title = "Foo bar"
 
-      expect(subject.file_authors).to eq("ComplexAuthor")
+      expect(subject.page_title).to include(fandom1.name)
+      expect(subject.page_title).not_to include(fandom2.name)
+    end
+
+    it "leaves emojis alone" do
+      work.title = "emoji 🥳 is 🚀 awesome"
+
+      expect(subject.page_title).to include("emoji 🥳 is 🚀 awesome")
     end
 
     context "for a work with multiple authors" do
-      it "joins the author names with a simple dash" do
-        allow(subject).to receive(:author_names).and_return(["First (Zeroth)", "Second"])
+      it "joins the author names with a comma and a space" do
+        allow(pseud1).to receive(:byline).and_return("First (Zeroth)")
+        allow(pseud2).to receive(:byline).and_return("Second")
+        allow(work).to receive(:pseuds).and_return([pseud1, pseud2])
 
-        expect(subject.file_authors).to eq("First Zeroth-Second")
+        expect(subject.page_title).to include("First (Zeroth), Second")
       end
     end
   end

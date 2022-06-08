@@ -90,28 +90,26 @@ class Download
     @tmpdir
   end
 
-  # Utility methods which clean up work data for use in downloads
-
-  def fandoms
-    string = work.fandoms.size > 3 ? "Multifandom" : work.fandoms.string
-    clean(string)
+  # Mimic roughly the default way of producing HTML page titles
+  # @see WorksController#show
+  # @see ApplicationController#get_page_title
+  def page_title
+    fandom = if work.fandoms.size > 3
+               "Multifandom"
+             elsif work.fandoms.empty?
+               "No fandom specified"
+             else
+               work.fandoms[0].name
+             end
+    [work.title, authors, fandom].join(" - ")
   end
 
   def authors
-    author_names.join(', ').to_ascii
+    author_names.join(", ")
   end
 
   def author_names
     work.anonymous? ? ["Anonymous"] : work.pseuds.sort.map(&:byline)
-  end
-
-  # need the next two to be filesystem safe and not overly long
-  def file_authors
-    clean(author_names.join('-'))
-  end
-
-  def page_title
-    [file_name, file_authors, fandoms].join(" - ")
   end
 
   def chapters
