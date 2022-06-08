@@ -73,6 +73,7 @@ Given /^a set of tags for tag sort by use exists$/ do
   end
 
   step %{a freeform exists with name: "0 uses"}
+  step %{all indexing jobs have been run}
   step %{the periodic tag count task is run}
 end
 
