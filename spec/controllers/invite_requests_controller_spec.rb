@@ -203,12 +203,10 @@ describe InviteRequestsController do
           end
 
           context "when format is JSON" do
-            it "deletes request and responds with success status and message" do
+            it "redirects and does not delete the request" do
               delete :destroy, params: { id: invite_request.id, format: :json }
-              parsed_body = JSON.parse(response.body, symbolize_names: true)
-              expect(parsed_body[:item_success_message]).to eq("Request for #{invite_request.email} was removed from the queue.")
-              expect(response).to have_http_status(:success)
-              expect { invite_request.reload }.to raise_error ActiveRecord::RecordNotFound
+              expect(response).to have_http_status(:redirect)
+              expect { invite_request.reload }.not_to raise_error ActiveRecord::RecordNotFound
             end
           end
         end
