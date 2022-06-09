@@ -66,7 +66,8 @@ class InviteRequestsController < ApplicationController
   end
 
   def destroy
-    @invite_request = authorize InviteRequest.find(params[:id])
+    authorize(InviteRequest)
+
     @invite_request = InviteRequest.find_by(id: params[:id])
     if @invite_request.nil? || @invite_request.destroy
       success_message = if @invite_request.nil?

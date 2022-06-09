@@ -140,11 +140,10 @@ describe InviteRequestsController do
               it_redirects_to_with_error(manage_invite_requests_path, "Request could not be removed. Please try again.")
             end
 
-            it "raises ActiveRecord::RecordNotFound for nonexistent request" do
+            it "redirects to manage with notice for nonexistent request" do
               invite_request.destroy
-              expect do
-                delete :destroy, params: { id: invite_request.id }
-              end.to raise_exception(ActiveRecord::RecordNotFound)
+              delete :destroy, params: { id: invite_request.id }
+              it_redirects_to_with_notice(manage_invite_requests_path, "Request was removed from the queue.")
             end
           end
 
@@ -194,19 +193,19 @@ describe InviteRequestsController do
               it_redirects_to_with_error(root_url, "Sorry, only an authorized admin can access the page you were trying to reach.")
             end
 
-            it "raises ActiveRecord::RecordNotFound for nonexistent request" do
+            it "redirects to root with authorization error for nonexistent request" do
               invite_request.destroy
-              expect do
-                delete :destroy, params: { id: invite_request.id }
-              end.to raise_exception(ActiveRecord::RecordNotFound)
+              delete :destroy, params: { id: invite_request.id }
+              it_redirects_to_with_error(root_url, "Sorry, only an authorized admin can access the page you were trying to reach.")
             end
           end
 
           context "when format is JSON" do
-            it "redirects and does not delete the request" do
+            it "has forbidden response status" do
               delete :destroy, params: { id: invite_request.id, format: :json }
-              expect(response).to have_http_status(:redirect)
-              expect { invite_request.reload }.not_to raise_error ActiveRecord::RecordNotFound
+              parsed_body = JSON.parse(response.body, symbolize_names: true)
+              expect(parsed_body[:errors]).to eq("Sorry, only an authorized admin can do that.")
+              expect(response).to have_http_status(:forbidden)
             end
           end
         end
