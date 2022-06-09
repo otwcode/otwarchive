@@ -352,7 +352,7 @@ Feature: Admin Actions to Manage Invitations
 
   Scenario: An admin can search the invitation queue, and search parameters are
   kept even if deleting without JavaScript
-    Given I am logged in as an admin
+    Given I am logged in as a "policy_and_abuse" admin
       And an invitation request for "streamtv@example.com"
       And an invitation request for "livetv@example.com"
       And an invitation request for "clearstream@example.com"
