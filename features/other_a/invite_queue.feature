@@ -37,7 +37,7 @@ Feature: Invite queue management
   Scenario: An admin can delete people from the queue
 
     Given an invitation request for "invitee@example.org"
-      And I am logged in as an admin
+      And I am logged in as a "policy_and_abuse" admin
     When I go to the manage invite queue page
       And I press "Delete"
     Then I should see "Request for invitee@example.org was removed from the queue."
