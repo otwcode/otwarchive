@@ -1,4 +1,3 @@
-
 module TagSpecHelper
   def fandom_tag_with_one_work
     tag = FactoryBot.create(:fandom)
