@@ -204,7 +204,7 @@ describe InviteRequestsController do
             it "has forbidden response status" do
               delete :destroy, params: { id: invite_request.id, format: :json }
               parsed_body = JSON.parse(response.body, symbolize_names: true)
-              expect(parsed_body[:errors]).to eq("Sorry, only an authorized admin can do that.")
+              expect(parsed_body[:errors]).to include("Sorry, only an authorized admin can do that.")
               expect(response).to have_http_status(:forbidden)
             end
           end

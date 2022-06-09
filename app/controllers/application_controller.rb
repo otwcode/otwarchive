@@ -6,10 +6,7 @@ class ApplicationController < ActionController::Base
   rescue_from ActionController::InvalidAuthenticityToken, with: :display_auth_error
 
   rescue_from Pundit::NotAuthorizedError do
-    respond_to do |format|
-      format.html { admin_only_access_denied }
-      format.json { render json: { errors: "Sorry, only an authorized admin can do that." }, status: :forbidden }
-    end
+    admin_only_access_denied
   end
 
   # sets admin user for pundit policies
