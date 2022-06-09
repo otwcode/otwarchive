@@ -81,6 +81,9 @@ en:
   home:
     donate:
       page_title: "Donate or Volunteer"
+    tos_faq:
+      fnok:
+        support: "Support team"
   kudos:
     user_links:
       more_link:
