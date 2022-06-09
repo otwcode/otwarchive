@@ -27,6 +27,12 @@ en:
       emails_found:
         one: "one email found"
         other: "%{count} emails found"
+    admin_invitations:
+      index:
+        page_heading: "Invite New Users"
+        navigation:
+          queue: "Manage Queue"
+          requests: "Manage Requests"
     settings:
       index:
         fields:
