@@ -98,8 +98,7 @@ describe Tag do
         tag = fandom_tag_with_one_work
         tag.taggings_count = 2
 
-        # Check if redis has flagged this tag for an update to the database,
-        # and make sure it happens.
+        # Check if redis has flagged this tag for an update to the database.
         expect(REDIS_GENERAL.sismember("tag_update", tag.id)).to eq true
         write_to_database(tag)
 
@@ -113,12 +112,10 @@ describe Tag do
         expect(tag.taggings_count_cache).to eq 1
         expect(tag.taggings_count).to eq 1
 
-        # Create second work and check if redis has flagged this tag for
-        # an update to the database.
         FactoryBot.create(:work, fandom_string: tag.name)
+        # Check if redis has flagged this tag for an update to the database.
         expect(REDIS_GENERAL.sismember("tag_update", tag.id)).to eq true
 
-        # Make sure the update actually happens.
         write_to_database(tag)
         expect(tag.taggings_count_cache).to eq 2
         expect(tag.taggings_count).to eq 2
@@ -130,8 +127,7 @@ describe Tag do
         # in taggings_count_expiry.
         REDIS_GENERAL.set("tag_update_#{tag.id}_value", "")
         REDIS_GENERAL.sadd("tag_update", tag.id)
-
-        # Make sure the database is not updated.
+        
         write_to_database(tag)
         expect(tag.taggings_count_cache).to eq 1
       end
