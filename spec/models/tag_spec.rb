@@ -97,11 +97,10 @@ describe Tag do
       it "writes to the database when assigning a new count" do
         tag = fandom_tag_with_one_work
         tag.taggings_count = 2
-
         # Check if redis has flagged this tag for an update to the database.
         expect(REDIS_GENERAL.sismember("tag_update", tag.id)).to eq true
-        write_to_database(tag)
 
+        write_to_database(tag)
         # Actual number of taggings has not changed though count cache has.
         expect(tag.taggings_count_cache).to eq 2
         expect(tag.taggings_count).to eq 1
@@ -127,7 +126,7 @@ describe Tag do
         # in taggings_count_expiry.
         REDIS_GENERAL.set("tag_update_#{tag.id}_value", "")
         REDIS_GENERAL.sadd("tag_update", tag.id)
-        
+
         write_to_database(tag)
         expect(tag.taggings_count_cache).to eq 1
       end
