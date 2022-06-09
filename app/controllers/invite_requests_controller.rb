@@ -66,10 +66,14 @@ class InviteRequestsController < ApplicationController
   end
 
   def destroy
-    authorize(InviteRequest)
-
     @invite_request = InviteRequest.find_by(id: params[:id])
-    if @invite_request.nil? || @invite_request.destroy
+    if !policy(InviteRequest).can_destroy?
+      error_message = [ts("Sorry, only an authorized admin can do that.")]
+      respond_to do |format|
+        format.html { admin_only_access_denied }
+        format.json { render json: { errors: error_message }, status: :forbidden }
+      end
+    elsif @invite_request.nil? || @invite_request.destroy
       success_message = if @invite_request.nil?
                           ts("Request was removed from the queue.")
                         else
