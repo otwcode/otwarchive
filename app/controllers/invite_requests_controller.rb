@@ -41,6 +41,8 @@ class InviteRequestsController < ApplicationController
   end
 
   def manage
+    authorize(InviteRequest)
+
     @invite_requests = InviteRequest.order(:position).page(params[:page])
     if params[:query].present?
       query = "%#{params[:query]}%"
@@ -53,6 +55,8 @@ class InviteRequestsController < ApplicationController
   end
 
   def reorder
+    authorize(InviteRequest)
+
     if InviteRequest.reset_order
       flash[:notice] = "The queue has been successfully updated."
     else
@@ -62,6 +66,7 @@ class InviteRequestsController < ApplicationController
   end
 
   def destroy
+    # @invite_request = authorize InviteRequest.find(params[:id])
     @invite_request = InviteRequest.find_by(id: params[:id])
     if @invite_request.nil? || @invite_request.destroy
       success_message = if @invite_request.nil?
