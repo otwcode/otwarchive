@@ -40,6 +40,9 @@ en:
               at_most:
                 "must not add up to more than %{count}. Your work has %{value} of these tags, so you must remove %{diff} of them."
     models:
+      admin_blacklisted_email:
+        one: "Banned Email"
+        other: "Banned Emails"
       archive_warning:
         one: "Warning"
         other: "Warnings"

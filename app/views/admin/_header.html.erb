@@ -31,7 +31,7 @@
     </ul>
   </li>
   <% if policy(AdminBlacklistedEmail).index? %>
-    <li><%= link_to ts("Blacklist", key: "header"), admin_blacklisted_emails_path %></li>
+    <li><%= link_to ts("Banned Emails", key: "header"), admin_blacklisted_emails_path %></li>
   <% end %>
   <li><%= link_to ts("Spam", key: "header"), admin_spam_index_path %></li>
   <% if policy(AdminSetting).can_view_settings? %>

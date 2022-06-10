@@ -46,7 +46,7 @@ describe Admin::BlacklistedEmailsController do
     let(:email) { banned_email_params.dig(:email) }
 
     let(:success) do
-      it_redirects_to_with_notice(admin_blacklisted_emails_path, "Email address #{email} added to blacklist.")
+      it_redirects_to_with_notice(admin_blacklisted_emails_path, "Email address #{email} banned.")
     end
 
     it_behaves_like "only authorized admins are allowed"
@@ -58,7 +58,7 @@ describe Admin::BlacklistedEmailsController do
 
     let(:success) do
       expect { banned_email.reload }.to raise_exception(ActiveRecord::RecordNotFound)
-      it_redirects_to_with_notice(admin_blacklisted_emails_path, "Email address #{email} removed from blacklist.")
+      it_redirects_to_with_notice(admin_blacklisted_emails_path, "Email address #{email} removed from banned emails list.")
     end
 
     it_behaves_like "only authorized admins are allowed"
