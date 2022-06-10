@@ -5,7 +5,7 @@ Feature: Admin email blacklist
   I want to be able to manage a blacklist of email addresses
 
 Scenario: Add email address to blacklist
-  Given I am logged in as an admin
+  Given I am logged in as a "policy_and_abuse" admin
   Then I should see "Blacklist"
   When I follow "Blacklist"
   Then I should see "Find blacklisted emails"
@@ -17,7 +17,7 @@ Scenario: Add email address to blacklist
     And the address "foo@bar.com" should be in the blacklist
 
 Scenario: Remove email address from blacklist
-  Given I am logged in as an admin
+  Given I am logged in as a "policy_and_abuse" admin
     And I have blacklisted the address "foo@bar.com"
   When I follow "Blacklist"
     And I fill in "Email to find" with "bar"
@@ -29,7 +29,7 @@ Scenario: Remove email address from blacklist
     And the address "foo@bar.com" should not be in the blacklist
 
 Scenario: Blacklisted email addresses should not be usable in guest comments
-  Given I am logged in as an admin
+  Given I am logged in as a "policy_and_abuse" admin
     And I have blacklisted the address "foo@bar.com"
     And I am logged in as "author"
     And I post the work "New Work"
@@ -41,7 +41,7 @@ Scenario: Blacklisted email addresses should not be usable in guest comments
   Then I should see "Comments (1)"
 
 Scenario: Variants of blacklisted email addresses should not be usable
-  Given I am logged in as an admin
+  Given I am logged in as a "policy_and_abuse" admin
   When I have blacklisted the address "foo.bar+gloop@googlemail.com"
   Then the address "foobar@gmail.com" should be in the blacklist
   When I am logged out
@@ -52,7 +52,7 @@ Scenario: Variants of blacklisted email addresses should not be usable
 
 Scenario: Blacklisting a user's email should not affect their ability to post comments
   Given the user "author" exists and is activated
-    And I am logged in as an admin
+    And I am logged in as a "policy_and_abuse" admin
     And I have blacklisted the address for user "author"
   When I am logged in as "author"
     And I post the work "New Work"
