@@ -9,11 +9,6 @@ class Admin::BlacklistedEmailsController < Admin::BaseController
     end
   end
 
-  def new
-    authorize AdminBlacklistedEmail
-    @admin_blacklisted_email = AdminBlacklistedEmail.new
-  end
-
   def create
     @admin_blacklisted_email = authorize AdminBlacklistedEmail.new(admin_blacklisted_email_params)
     @page_subtitle = t(".browser_title")

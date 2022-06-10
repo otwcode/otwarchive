@@ -41,16 +41,6 @@ describe Admin::BlacklistedEmailsController do
     it_behaves_like "only authorized admins are allowed"
   end
 
-  describe "GET #new" do
-    subject { get :new }
-
-    let(:success) do
-      expect(assigns(:admin_blacklisted_email)).to eq(AdminBlacklistedEmail.new)
-    end
-
-    it_behaves_like "only authorized admins are allowed"
-  end
-
   describe "POST #create" do
     subject { post :create, params: { admin_blacklisted_email: banned_email_params } }
     let(:email) { banned_email_params.dig(:email) }
