@@ -1,10 +1,4 @@
-class CommentMailer < ActionMailer::Base
-  include Resque::Mailer # see README in this directory
-
-  layout 'mailer'
-  helper :mailer
-  default from: "Archive of Our Own " + "<#{ArchiveConfig.RETURN_ADDRESS}>"
-
+class CommentMailer < ApplicationMailer
   # Sends email to an owner of the top-level commentable when a new comment is created
   def comment_notification(user, comment)
     @comment = comment
@@ -15,8 +9,6 @@ class CommentMailer < ActionMailer::Base
         subject: "[#{ArchiveConfig.APP_SHORT_NAME}] Comment on " + (@comment.ultimate_parent.is_a?(Tag) ? "the tag " : "") + @comment.ultimate_parent.commentable_name.gsub("&gt;", ">").gsub("&lt;", "<")
       )
     end
-    ensure
-      I18n.locale = I18n.default_locale
   end
 
   # Sends email to an owner of the top-level commentable when a comment is edited
@@ -28,34 +20,34 @@ class CommentMailer < ActionMailer::Base
         subject: "[#{ArchiveConfig.APP_SHORT_NAME}] Edited comment on " + (@comment.ultimate_parent.is_a?(Tag) ? "the tag " : "") + @comment.ultimate_parent.commentable_name.gsub("&gt;", ">").gsub("&lt;", "<")
       )
     end
-    ensure
-      I18n.locale = I18n.default_locale
   end
 
   # Sends email to commenter when a reply is posted to their comment
   # This may be a non-user of the archive
   def comment_reply_notification(your_comment, comment)
+    return if your_comment.comment_owner_email.blank?
+    return if your_comment.pseud_id.nil? && AdminBlacklistedEmail.is_blacklisted?(your_comment.comment_owner_email)
+
     @your_comment = your_comment
     @comment = comment
     mail(
       to: @your_comment.comment_owner_email,
       subject: "[#{ArchiveConfig.APP_SHORT_NAME}] Reply to your comment on " + (@comment.ultimate_parent.is_a?(Tag) ? "the tag " : "") + @comment.ultimate_parent.commentable_name.gsub("&gt;", ">").gsub("&lt;", "<")
     )
-    ensure
-      I18n.locale = I18n.default_locale
   end
 
   # Sends email to commenter when a reply to their comment is edited
   # This may be a non-user of the archive
   def edited_comment_reply_notification(your_comment, edited_comment)
+    return if your_comment.comment_owner_email.blank?
+    return if your_comment.pseud_id.nil? && AdminBlacklistedEmail.is_blacklisted?(your_comment.comment_owner_email)
+
     @your_comment = your_comment
     @comment = edited_comment
     mail(
       to: @your_comment.comment_owner_email,
       subject: "[#{ArchiveConfig.APP_SHORT_NAME}] Edited reply to your comment on " + (@comment.ultimate_parent.is_a?(Tag) ? "the tag " : "") + @comment.ultimate_parent.commentable_name.gsub("&gt;", ">").gsub("&lt;", "<")
     )
-    ensure
-      I18n.locale = I18n.default_locale
   end
 
   # Sends email to the poster of a comment
@@ -66,8 +58,6 @@ class CommentMailer < ActionMailer::Base
       to: @comment.comment_owner_email,
       subject: "[#{ArchiveConfig.APP_SHORT_NAME}] Comment you left on " + (@comment.ultimate_parent.is_a?(Tag) ? "the tag " : "") + @comment.ultimate_parent.commentable_name.gsub("&gt;", ">").gsub("&lt;", "<")
     )
-    ensure
-      I18n.locale = I18n.default_locale
   end
 
 end

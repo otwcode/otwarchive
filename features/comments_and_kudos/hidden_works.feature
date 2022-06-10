@@ -6,7 +6,7 @@ Feature: Comments on Hidden Works
       And I post the comment "Can I change this?" on the work "To Be Hidden"
       And I am logged in as "commenter"
       And I post the comment "Do you see?" on the work "To Be Hidden"
-      And I am logged in as policy_and_abuse_admin
+      And I am logged in as a "policy_and_abuse" admin
       And I view the work "To Be Hidden"
       And I follow "Hide Work"
 

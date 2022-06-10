@@ -1,5 +1,45 @@
 require "spec_helper"
 
+describe "rake Tag:convert_non_canonical_warnings_to_freeforms" do
+  it "does not update works with only canonical warnings" do
+    warning_names = [ArchiveConfig.WARNING_NONCON_TAG_NAME, ArchiveConfig.WARNING_CHAN_TAG_NAME]
+    work = create(:work, archive_warning_string: warning_names.join(","))
+
+    subject.invoke
+
+    expect(work.reload.archive_warnings.pluck(:name)).to eq(warning_names)
+    expect(work.freeforms).to be_empty
+  end
+
+  it "does not add default warning to works with a canonical warning after conversion" do
+    freeform_warning = ArchiveWarning.new(name: "Dead Dove", canonical: false)
+    freeform_warning.save(validate: false)
+
+    work = create(:work, archive_warning_string: [ArchiveConfig.WARNING_NONCON_TAG_NAME, freeform_warning.name].join(","))
+
+    expect { subject.invoke }.to change { work.reload.archive_warnings.pluck(:name) }
+      .from([ArchiveConfig.WARNING_NONCON_TAG_NAME, freeform_warning.name])
+      .to([ArchiveConfig.WARNING_NONCON_TAG_NAME])
+      .and change { work.reload.freeforms.pluck(:name) }
+      .from([])
+      .to([freeform_warning.name])
+  end
+
+  it "adds default warning to works with no canonical warnings after conversion" do
+    freeform_warning = ArchiveWarning.new(name: "Ultimate Dead Dove", canonical: false)
+    freeform_warning.save(validate: false)
+
+    work = create(:work, archive_warning_string: freeform_warning.name)
+
+    expect { subject.invoke }.to change { work.reload.archive_warnings.pluck(:name) }
+      .from([freeform_warning.name])
+      .to([ArchiveConfig.WARNING_DEFAULT_TAG_NAME])
+      .and change { work.reload.freeforms.pluck(:name) }
+      .from([])
+      .to([freeform_warning.name])
+  end
+end
+
 describe "rake Tag:destroy_invalid_common_taggings" do
   it "deletes CommonTaggings with a missing child" do
     parent = create(:canonical_fandom)

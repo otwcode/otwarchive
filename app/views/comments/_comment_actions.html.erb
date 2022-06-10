@@ -1,6 +1,13 @@
 <h5 class="landmark heading"><%= ts("Comment Actions") %></h5>
 
-<ul class="actions" role="menu" id="navigation_for_comment_<%= comment.id %>">
+<ul class="actions" id="navigation_for_comment_<%= comment.id %>">
+  <% # The effect is "Frozen" replaces "Reply." We can't do that in the helper
+     # method for the reply link because that would prevent "Frozen" from
+     # appearing on the Unreviewed Comments page for works with moderated
+     # comments. %>
+  <% if comment.iced? %>
+    <li><%= frozen_comment_indicator %></li>
+  <% end %>
   <% if can_reply_to_comment?(comment) %>
     <li id="add_comment_reply_link_<%= comment.id %>"><%= add_cancel_comment_reply_link comment %></li>
   <% end %>
@@ -12,12 +19,15 @@
       </li>
     <% end %>
   <% end %>
+  <% if can_freeze_comment?(comment) %>
+    <li><%= freeze_comment_button(comment) %></li>
+  <% end %>
   <% if can_edit_comment?(comment) %>
     <li id="edit_comment_link_<%= comment.id %>">
       <%= edit_comment_link comment %>
     </li>
   <% end %>
-  <% if comment.pseud.nil? and (logged_in_as_admin? || is_author_of?(comment.ultimate_parent)) %>
+  <% if can_mark_comment_spam?(comment) || can_mark_comment_ham?(comment) %>
     <li id="tag_comment_as_spam_link_<%= comment.id %>">
       <%= tag_comment_as_spam_link comment %>
     </li>
@@ -27,9 +37,14 @@
       <%= button_to(ts("Approve"), review_comment_path(comment), method: :put) %>
     </li>
   <% end %>
-  <% if logged_in_as_admin? || is_author_of?(comment) || is_author_of?(comment.ultimate_parent) %>
+  <% if can_destroy_comment?(comment) %>
     <li id="delete_comment_link_<%= comment.id %>">
       <%= do_cancel_delete_comment_link comment %>
+    </li>
+  <% end %>
+  <% if current_user && comment.user && current_user != comment.user && !comment.by_anonymous_creator? %>
+    <li id="block_link_<%= comment.id %>">
+      <%= block_link(comment.user) %>
     </li>
   <% end %>
 </ul>
@@ -45,8 +60,8 @@
   </div>
 
 <% if can_reply_to_comment?(comment) %>
-  <!-- This is where the reply-to box will be added when "Reply" is hit, if the user has javascript -->
-  <!-- if not, we will render the comment form if this is the comment we are replying to. -->
+  <% # This is where the reply-to box will be added when "Reply" is hit, if the user has JavaScript. %>
+  <% # If not, we will render the comment form if this is the comment we are replying to. %>
   <% if params[:add_comment_reply_id] && params[:add_comment_reply_id] == comment.id.to_s %>
     <div id="add_comment_reply_placeholder_<%= comment.id %>" title="<%= ts("reply to this comment") %>">
       <%= render 'comments/comment_form',

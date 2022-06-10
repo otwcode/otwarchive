@@ -1,22 +1,29 @@
-<h2>Hi, <%= current_admin.login %>!</h2>
+<!--Descriptive page name, messages and instructions-->
+<h2 class="heading"><%= t(".page_title", login: current_admin.login) %></h2>
+<!--/descriptions-->
 
-<p>You are now logged in as an admin. That means you will probably encounter information that is personal or confidential (e.g. usernames, email and IP addresses, creator names on anonymous works, etc). Please do not use this information in ways unrelated to your OTW role. If you have questions about what you can or cannot do with information you see here, contact your committee chair(s).</p>
+<!--subnav-->
+<!--/subnav-->
 
-<p><strong>With great power comes great responsibility.</strong></p>
+<!--main content-->
+<div class="admin userstuff">
+  <p><%= t(".confidentiality_reminder") %></p>
 
-<hr />
+  <p class="important"><%= t(".responsibility") %></p>
 
-<h3>Your admin roles:</h3>
-<% if current_admin.roles.any? %>
-  <ul>
-  <% current_admin.roles.each do |role| %>
-    <li><%= role.titleize %></li>
+  <h3 class="heading"><%= t(".roles.heading") %></h3>
+  <% if current_admin.roles.any? %>
+    <ul>
+      <% current_admin.roles.each do |role| %>
+        <li><%= t("activerecord.attributes.admin/role.#{role}") %></li>
+      <% end %>
+    </ul>
+  <% else %>
+    <p><%= t(".roles.none") %></p>
   <% end %>
-  </ul>
-<% else %>
-  <p>You currently have no admin roles assigned to you.</p>
-<% end %>
 
-<hr />
+  <hr />
 
-<p>Please remember to log out before resuming your normal site activity and leaving comments and kudos!</p>
+  <p><%= t(".log_out_reminder") %></p>
+</div>
+<!--/content-->

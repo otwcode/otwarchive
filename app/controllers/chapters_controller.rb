@@ -49,15 +49,18 @@ class ChaptersController < ApplicationController
         @previous_chapter = @chapters[chapter_position-1] unless chapter_position == 0
         @next_chapter = @chapters[chapter_position+1]
       end
-      @commentable = @work
-      @comments = @chapter.comments.reviewed
 
-      @page_title = @work.unrevealed? ? ts("Mystery Work - Chapter %{position}", position: @chapter.position.to_s) :
-        get_page_title(@tag_groups["Fandom"][0].name,
-          @work.anonymous? ? ts("Anonymous") : @work.pseuds.sort.collect(&:byline).join(', '),
-          @work.title + " - Chapter " + @chapter.position.to_s)
+      if @work.unrevealed?
+        @page_title = t(".unrevealed") + t(".chapter_position", position: @chapter.position.to_s)
+      else
+        fandoms = @tag_groups["Fandom"]
+        fandom = fandoms.empty? ? t(".unspecified_fandom") : fandoms[0].name
+        title_fandom = fandoms.size > 3 ? t(".multifandom") : fandom
+        author = @work.anonymous? ? t(".anonymous") : @work.pseuds.sort.collect(&:byline).join(", ")
+        @page_title = get_page_title(title_fandom, author, @work.title + t(".chapter_position", position: @chapter.position.to_s))
+      end
 
-      @kudos = @work.kudos.with_user.includes(:user).by_date
+      @kudos = @work.kudos.with_user.includes(:user)
 
       if current_user.respond_to?(:subscriptions)
         @subscription = current_user.subscriptions.where(subscribable_id: @work.id,
@@ -232,6 +235,13 @@ class ChaptersController < ApplicationController
   # Check whether we should display :new or :edit instead of previewing or
   # saving the user's changes.
   def chapter_cannot_be_saved?
+    # The chapter can only be saved if the work can be saved:
+    if @work.invalid?
+      @work.errors.full_messages.each do |message|
+        @chapter.errors.add(:base, message)
+      end
+    end
+
     @chapter.errors.any? || @chapter.invalid?
   end
 

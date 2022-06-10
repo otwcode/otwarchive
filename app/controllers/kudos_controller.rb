@@ -8,6 +8,19 @@ class KudosController < ApplicationController
     @work = Work.find(params[:work_id])
     @kudos = @work.kudos.includes(:user).with_user
     @guest_kudos_count = @work.kudos.by_guest.count
+
+    respond_to do |format|
+      format.html do
+        @kudos = @kudos.order(id: :desc).paginate(
+          page: params[:page],
+          per_page: ArchiveConfig.MAX_KUDOS_TO_SHOW
+        )
+      end
+
+      format.js do
+        @kudos = @kudos.where("id < ?", params[:before].to_i) if params[:before]
+      end
+    end
   end
 
   def create
@@ -21,14 +34,14 @@ class KudosController < ApplicationController
     if @kudo.save
       respond_to do |format|
         format.html do
-          flash[:comment_notice] = ts("Thank you for leaving kudos!")
+          flash[:kudos_notice] = ts("Thank you for leaving kudos!")
 
           redirect_to request.referer and return
         end
 
         format.js do
           @commentable = @kudo.commentable
-          @kudos = @commentable.kudos.with_user.includes(:user).by_date
+          @kudos = @commentable.kudos.with_user.includes(:user)
 
           render :create, status: :created
         end
@@ -47,7 +60,7 @@ class KudosController < ApplicationController
           if !current_user.present? && commentable&.restricted?
             error_message = "You can't leave guest kudos on a restricted work."
           end
-          flash[:comment_error] = ts(error_message)
+          flash[:kudos_error] = ts(error_message)
           redirect_to request.referer and return
         end
 
@@ -64,7 +77,7 @@ class KudosController < ApplicationController
     # https://api.rubyonrails.org/v5.1/classes/ActiveRecord/Validations/ClassMethods.html#method-i-validates_uniqueness_of-label-Concurrency+and+integrity
     respond_to do |format|
       format.html do
-        flash[:comment_error] = ts("You have already left kudos here. :)")
+        flash[:kudos_error] = ts("You have already left kudos here. :)")
         redirect_to request.referer
       end
 

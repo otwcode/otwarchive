@@ -8,7 +8,7 @@
           <% if nom.approved || nom.rejected %>
             <%= nom.tagname %>  <%= nomination_status(nom) %>
           <% else %>
-            <div title="<%= ts("Fandom %{index}") %>"><%= nom_form.text_field :tagname, autocomplete_options("fandom", :autocomplete_token_limit => 1, :class => "autocomplete") %></div>
+            <div title="<%= ts("Fandom %{index}") %>"><%= nom_form.text_field :tagname, autocomplete_options("fandom", data: { autocomplete_token_limit: 1 }, class: "autocomplete") %></div>
           <% end %>
         </dd>
 
@@ -22,8 +22,11 @@
                   <%= nom_form2.object.tagname %> <%= nomination_status(nom_form2.object) %>
                 <% else %>
                   <div title="<%= ts("%{tag_type}", tag_type: tag_type_label_name(tag_type)) %>"> <%= nom_form2.text_field :tagname,
-                            autocomplete_options("#{tag_type}_in_fandom", :autocomplete_token_limit => 1,
-                            :autocomplete_live_params => "fandom=tag_set_nomination_fandom_nominations_attributes_#{index}_tagname") %></div>
+                            autocomplete_options("#{tag_type}_in_fandom",
+                              data: {
+                                autocomplete_token_limit: 1,
+                                autocomplete_live_params: "fandom=tag_set_nomination_fandom_nominations_attributes_#{index}_tagname"
+                            }) %></div>
                 <% end %>
                 <%= nom_form2.hidden_field :from_fandom_nomination, :value => true %>
               </dd>

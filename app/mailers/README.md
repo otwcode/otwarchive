@@ -1,7 +1,3 @@
-Most of these mailers include `Resque::Mailer`, a module added by the `resque_mailer` gem. This means that calling the default delivery method `deliver` will cause the email to be sent asynchronously, by adding the mailer arguments to the Resque `mailer` queue.
-
-However, this approach to emails can cause issues when `deliver` is called within a transaction. The job is added to the Resque queue immediately, but the data written in the transaction is only available once the transaction is complete. This can cause `RecordNotFound` errors when sending emails about brand new objects, as well as other issues with emails containing old data.
+If `deliver_later` is called within a transaction, the job is added to the Resque queue immediately, but the data written in the transaction is only available once the transaction is complete. This can cause `RecordNotFound` errors when sending emails about brand new objects, as well as other issues with emails containing old data.
 
 To help avoid these transaction issues, use the `deliver_after_commit` method introduced by [this monkeypatch](../../config/initializers/monkeypatches/deliver_after_commit.rb), which uses the `after_commit_everywhere` gem to ensure that the job is only added to the queue after the transaction has finished.
-
-Note that the `resque_mailer` gem stores jobs on the queue as JSON objects. This means that all symbol arguments will be converted to strings, so beware of bugs related to that. We do use the default `ActiveRecordSerializer` from the `resque_mailer` gem, so you can pass `ActiveRecord` objects as arguments to the mailer. But the objects are reloaded from the database when the mailer queue is run, so we can't use the `ActiveRecordSerializer` to get around the transaction issues.

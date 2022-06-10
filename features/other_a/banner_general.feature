@@ -83,7 +83,7 @@ Scenario: User can turn off banner in preferences, but will still see a banner w
 Scenario: Admin can delete a banner and it will no longer be shown to users
   Given there are no banners
     And an admin creates an active banner
-  When I am logged in as an admin
+  When I am logged in as a "communications" admin
     And I am on the admin_banners page
     And I follow "Delete"
     And I press "Yes, Delete Banner"
@@ -93,14 +93,14 @@ Scenario: Admin can delete a banner and it will no longer be shown to users
 
 Scenario: Admin should not have option to make minor updates on a new banner
   Given there are no banners
-    And I am logged in as an admin
+    And I am logged in as a "communications" admin
   When I am on the new_admin_banner page
   Then I should not see "This is a minor update (Do not turn the banner back on for users who have dismissed it)"
 
 Scenario: Admin should not have option to make minor updates on banner that is not active
   Given there are no banners
     And an admin creates a banner
-  When I am logged in as an admin
+  When I am logged in as a "communications" admin
     And I am on the admin_banners page
     And I follow "Edit"
   Then I should not see "This is a minor update (Do not turn the banner back on for users who have dismissed it)"
@@ -118,5 +118,3 @@ Scenario: Admin can make minor changes to the text of an active banner without t
   Then I should see the banner with minor edits
   When I am logged in as "banner_tester_4"
   Then I should see the banner with minor edits
-  
-  

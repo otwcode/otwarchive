@@ -22,15 +22,18 @@ Feature: Admin manage skins
   Scenario: Admin can add a public skin to the chooser and then remove it
   Given the approved public skin "public skin"
     And the skin "public skin" is cached
-    And I am logged in as an admin
+  When I am logged in as an admin
+  Then I should not see the skin chooser
   When I follow "Approved Skins"
     And I check "Chooser"
     And I press "Update"
   Then I should see "The following skins were updated: public skin"
+    And I should see the skin "public skin" in the skin chooser
   When I follow "Approved Skins"
     And I check "Not In Chooser"
     And I press "Update"
   Then I should see "The following skins were updated: public skin"
+    And I should not see the skin chooser
 
   Scenario: An admin can reject and unreject a skin
   Given the unapproved public skin "public skin"
@@ -121,17 +124,16 @@ Feature: Admin manage skins
   When I am on skinner's preferences page
     And I select "strange skin" from "preference_skin_id"
     And I submit
-  Then I should see "{ text-decoration: underline; }"
+  Then I should see "{ text-decoration: underline; }" in the page style
   When I am logged in as an admin
-  Then I should not see "{ text-decoration: blink; }"
+  Then I should not see "{ text-decoration: blink; }" in the page style
   When I follow "Approved Skins"
     And I fill in "set_default" with "public skin"
     And I press "Update"
   Then I should see "Default skin changed to public skin"
-    And I should see "{ text-decoration: blink; }"
+    And I should see "{ text-decoration: blink; }" in the page style
   When I am logged in as "skinner"
-  Then I should see "{ text-decoration: underline; }"
+  Then I should see "{ text-decoration: underline; }" in the page style
   # A user created before changing the default skin will still have the same skin
   When I am logged in as "KnownUser"
-  Then I should not see "{ text-decoration: blink; }"
-
+  Then I should not see "{ text-decoration: blink; }" in the page style

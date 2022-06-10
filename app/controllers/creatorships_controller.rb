@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# A controller for viewing co-creator invites -- that is, creatorships where
+# A controller for viewing co-creator requests -- that is, creatorships where
 # the creator hasn't yet approved it.
 class CreatorshipsController < ApplicationController
   before_action :load_user
@@ -10,7 +10,7 @@ class CreatorshipsController < ApplicationController
   # form where the user can select multiple creatorships and perform actions
   # (accept, reject) in bulk.
   def show
-    @page_subtitle = ts("Creator Invitations")
+    @page_subtitle = ts("Co-Creator Requests")
     @creatorships = @creatorships.unapproved.order(id: :desc).
                     paginate(page: params[:page])
   end
@@ -30,7 +30,7 @@ class CreatorshipsController < ApplicationController
 
   private
 
-  # When the user presses "Accept" on the creator invitation listing, this is
+  # When the user presses "Accept" on the co-creator request listing, this is
   # the code that runs.
   def accept_update
     flash[:notice] = []
@@ -44,12 +44,12 @@ class CreatorshipsController < ApplicationController
     end
   end
 
-  # When the user presses "Reject" on the creator invitation listing, this is
+  # When the user presses "Reject" on the co-creator request listing, this is
   # the code that runs. Note that rejection is equivalent to destroying the
-  # invitation.
+  # request.
   def reject_update
     @creatorships.each(&:destroy)
-    flash[:notice] = ts("Invitations rejected.")
+    flash[:notice] = ts("Requests rejected.")
   end
 
   # A helper method used to display a nicely formatted title for a creation.
@@ -62,7 +62,7 @@ class CreatorshipsController < ApplicationController
     end
   end
 
-  # Load the user, and set @creatorships equal to all creator invites for
+  # Load the user, and set @creatorships equal to all co-creator requests for
   # that user.
   def load_user
     @user = User.find_by!(login: params[:user_id])

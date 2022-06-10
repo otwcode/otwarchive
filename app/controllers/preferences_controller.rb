@@ -21,6 +21,7 @@ class PreferencesController < ApplicationController
     @preference = @user.preference
     @user.preference.attributes = preference_params
     @available_skins = (current_user.skins.site_skins + Skin.approved_skins.site_skins).uniq
+    @available_locales = Locale.where(email_enabled: true)
 
     if params[:preference][:skin_id].present?
       # unset session skin if user changed their skin
@@ -65,7 +66,8 @@ class PreferencesController < ApplicationController
       :history_enabled,
       :first_login,
       :banner_seen,
-      :allow_cocreator
+      :allow_cocreator,
+      :allow_gifts
     )
   end
 end

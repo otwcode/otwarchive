@@ -5,8 +5,7 @@
   <li><%= span_if_current ts("Profile"), user_profile_path(@user) %></li>
   <% if @user.pseuds.size > 1 %>
     <li class="pseud" aria-haspopup="true">
-      <% pseud_link_text = current_page?(@user) ? ts("Pseuds") : (@author ? @author.name : @user.login) %>
-      <a href="#" title="<%= ts("Pseud Switcher") %>"><%= pseud_link_text %></a>
+      <a href="#" title="<%= ts("Pseud Switcher") %>"><%= ts("Pseuds") %></a>
       <ul class="expandable secondary">
         <%= print_pseud_selector(@user.pseuds) %>
         <li><%= span_if_current ts("All Pseuds (%{pseud_number})", :pseud_number => @user.pseuds.count), user_pseuds_path(@user) %></li>
@@ -52,7 +51,7 @@
 <ul class="navigation actions">
   <% if @user == current_user %>
     <% if @user.preference.allow_cocreator %>
-      <li><%= span_if_current ts("Creator Invitations (%{count})", count: Creatorship.unapproved.for_user(@user).count), user_creatorships_path(@user) %></li>
+      <li><%= span_if_current ts("Co-Creator Requests (%{count})", count: Creatorship.unapproved.for_user(@user).count), user_creatorships_path(@user) %></li>
     <% end %>
     <li><%= span_if_current ts("Sign-ups (%{signup_number})", :signup_number =>@user.challenge_signups.count), user_signups_path(@user) %></li>
     <li><%= span_if_current ts("Assignments (%{assignment_number})", :assignment_number => (@user.offer_assignments.undefaulted.count + @user.pinch_hit_assignments.undefaulted.count)), user_assignments_path(@user) %></li>

@@ -4,10 +4,7 @@ describe TagsController do
   include LoginMacros
   include RedirectExpectationHelper
 
-  before do
-    fake_login
-    @current_user.roles << Role.new(name: 'tag_wrangler')
-  end
+  before { fake_login_known_user(create(:tag_wrangler)) }
 
   describe "wrangle" do
     context "when showing unwrangled freeforms for a fandom" do
@@ -160,7 +157,7 @@ describe TagsController do
   end
 
   describe "show_hidden" do
-    let(:work) { create(:work, posted: true) }
+    let(:work) { create(:work) }
 
     it "redirects to referer with an error for non-ajax warnings requests" do
       referer = tags_path

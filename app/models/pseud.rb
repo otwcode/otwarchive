@@ -5,14 +5,23 @@ class Pseud < ApplicationRecord
 
   has_attached_file :icon,
     styles: { standard: "100x100>" },
-    path: %w(staging production).include?(Rails.env) ? ":attachment/:id/:style.:extension" : ":rails_root/public:url",
+    path: if Rails.env.production?
+            ":attachment/:id/:style.:extension"
+          elsif Rails.env.staging?
+            ":rails_env/:attachment/:id/:style.:extension"
+          else
+            ":rails_root/public/system/:rails_env/:class/:attachment/:id_partition/:style/:filename"
+          end,
     storage: %w(staging production).include?(Rails.env) ? :s3 : :filesystem,
     s3_protocol: "https",
     s3_credentials: "#{Rails.root}/config/s3.yml",
     bucket: %w(staging production).include?(Rails.env) ? YAML.load_file("#{Rails.root}/config/s3.yml")['bucket'] : "",
     default_url: "/images/skins/iconsets/default/icon_user.png"
 
-  validates_attachment_content_type :icon, content_type: /image\/\S+/, allow_nil: true
+  validates_attachment_content_type :icon,
+                                    content_type: %w[image/gif image/jpeg image/png],
+                                    allow_nil: true
+
   validates_attachment_size :icon, less_than: 500.kilobytes, allow_nil: true
 
   NAME_LENGTH_MIN = 1
@@ -20,7 +29,10 @@ class Pseud < ApplicationRecord
   DESCRIPTION_MAX = 500
 
   belongs_to :user
-  delegate :login, to: :user, prefix: true
+
+  delegate :login, to: :user, prefix: true, allow_nil: true
+  alias user_name user_login
+
   has_many :bookmarks, dependent: :destroy
   has_many :recs, -> { where(rec: true) }, class_name: 'Bookmark'
   has_many :comments
@@ -73,7 +85,7 @@ class Pseud < ApplicationRecord
 
   after_update :check_default_pseud
   after_update :expire_caches
-  after_commit :reindex_creations
+  after_commit :reindex_creations, :touch_comments
 
   scope :on_works, lambda {|owned_works|
     select("DISTINCT pseuds.*").
@@ -121,11 +133,6 @@ class Pseud < ApplicationRecord
   # sorting by pseud name or by login name in case of equality
   def <=>(other)
     (self.name.downcase <=> other.name.downcase) == 0 ? (self.user_name.downcase <=> other.user_name.downcase) : (self.name.downcase <=> other.name.downcase)
-  end
-
-  # For use with the work and chapter forms
-  def user_name
-     self.user.login
   end
 
   def to_param
@@ -214,7 +221,7 @@ class Pseud < ApplicationRecord
 
   # Produces a byline that indicates the user's name if pseud is not unique
   def byline
-    (name != user_name) ? name + " (" + user_name + ")" : name
+    (name != user_name) ? "#{name} (#{user_name})" : name
   end
 
   # get the former byline
@@ -447,6 +454,10 @@ class Pseud < ApplicationRecord
     if saved_change_to_name?
       self.works.each{ |work| work.touch }
     end
+  end
+
+  def touch_comments
+    comments.touch_all
   end
 
   # Delete current icon (thus reverting to archive default icon)

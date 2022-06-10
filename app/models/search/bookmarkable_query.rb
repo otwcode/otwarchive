@@ -46,7 +46,6 @@ class BookmarkableQuery < Query
 
     $elasticsearch.search(
       index: index_name,
-      type: document_type,
       body: modified_query
     )["aggregations"]
   end
@@ -99,10 +98,12 @@ class BookmarkableQuery < Query
   # field and sort by score).
   def sort
     if sort_column == "bookmarkable_date"
-      { revised_at: { order: sort_direction, unmapped_type: "date" } }
+      sort_hash = { revised_at: { order: sort_direction, unmapped_type: "date" } }
     else
-      { "_score" => { order: sort_direction } }
+      sort_hash = { _score: { order: sort_direction } }
     end
+
+    [sort_hash, { sort_id: { order: sort_direction } }]
   end
 
   # Define the aggregations for the search

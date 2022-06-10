@@ -5,12 +5,12 @@ Feature: Admin Actions to Post News
   I want to be able to use the Admin Posts screen
 
   Scenario: Must be authorized to post
-    Given I am logged in as admin with role "tag_wrangling"
+    Given I am logged in as a "tag_wrangling" admin
     When I go to the admin-posts page
     Then I should not see "Post AO3 News"
 
   Scenario: Make an admin post
-    Given I am logged in as admin with role "communications"
+    Given I am logged in as a "communications" admin
     When I make an admin post
     Then I should see "Admin Post was successfully created."
 
@@ -18,76 +18,39 @@ Feature: Admin Actions to Post News
     Given I have posted an admin post
 
     # regular user replies to admin post
-    When I am logged out as an admin
-      And I am logged in as "happyuser"
+    When I am logged in as "happyuser"
       And I go to the admin-posts page
-    Given all emails have been delivered
-    When I follow "Comment"
+    When all emails have been delivered
+      And I follow "Default Admin Post"
       And I fill in "Comment" with "Excellent, my dear!"
       And I press "Comment"
     # notification to the admin list for admin post
     Then 1 email should be delivered to "admin@example.org"
       And the email should contain "Excellent"
 
-    # admin replies to comment of regular user
-    Given I am logged out
-      And I am logged in as admin with role "communications"
-      And I go to the admin-posts page
-      And I follow "Default Admin Post"
-    Given all emails have been delivered
-    When I follow "Comments (1)"
-      And I follow "Reply"
-      And I fill in "Comment" with "Thank you very much!" within ".odd"
-      And I press "Comment" within ".odd"
-    Then I should see "Comment created"
-    # Someone can spoof being an admin by using the admin name and a different email, but their icon will not match
-    # We want to improve this so that the name is linked and the spoof is more obvious
-    When "Issue AO3-3685" is fixed
-    # notification to the admin list for admin post
-      And 1 email should be delivered to "admin@example.org"
-    # reply to the user
-      And 1 email should be delivered to "happyuser"
-
-    # regular user replies to comment of admin
-    Given I am logged out as an admin
-      And I am logged in as a random user
-      And I go to the admin-posts page
-    Given all emails have been delivered
-    When I follow "Read 2 Comments"
-      And I follow "Reply" within ".even"
-      And I fill in "Comment" with "Oh, don't grow too big a head, you." within ".even"
-      And I press "Comment" within ".even"
-    # reply to the admin as a regular user
-    Then 1 email should be delivered to "testadmin@example.org"
-    # notification to the admin list for admin post
-      And 1 email should be delivered to "admin@example.org"
-
     # regular user edits their comment
-    Given all emails have been delivered
-    When I follow "Edit"
+    When all emails have been delivered
+      And I follow "Edit"
       And I press "Update"
-    # reply to the admin as a regular user
-    Then 1 email should be delivered to "testadmin@example.org"
     # notification to the admin list for admin post
-      And 1 email should be delivered to "admin@example.org"
+    Then 1 email should be delivered to "admin@example.org"
 
   Scenario: Evil user can impersonate admin in comments
   # However, they can't use an icon, so the admin's icon is the guarantee that they're real
   # also their username will be plain text and not a link
 
     Given I have posted an admin post
-    When I am logged out as an admin
-      And I am logged in as "happyuser"
+    When I am logged in as "happyuser"
       And I go to the admin-posts page
-    When I follow "Comment"
+    When I follow "Default Admin Post"
       And I fill in "Comment" with "Excellent, my dear!"
       And I press "Comment"
-    When I am logged out
+    When I log out
       And I go to the admin-posts page
       And I follow "Default Admin Post"
       And I fill in "Comment" with "Behold, ye mighty, and despair!"
-      And I fill in "Name" with "admin"
-      And I fill in "Email" with "admin@example.com"
+      And I fill in "Guest name" with "admin"
+      And I fill in "Guest email" with "admin@example.com"
       And I press "Comment"
     Then I should see "Comment created!"
       And I should see "admin"
@@ -105,14 +68,14 @@ Feature: Admin Actions to Post News
   Scenario: Make a translation of an admin post
     Given I have posted an admin post
       And basic languages
-      And I am logged in as admin with role "translation"
+      And I am logged in as a "translation" admin
     When I make a translation of an admin post
       And I am logged in as "ordinaryuser"
     Then I should see a translated admin post
 
   Scenario: Make a translation of an admin post that doesn't exist
     Given basic languages
-      And I am logged in as admin with role "translation"
+      And I am logged in as a "translation" admin
     When I make a translation of an admin post
     Then I should see "Sorry! We couldn't save this admin post because:"
       And I should see "Translated post does not exist"
@@ -121,7 +84,7 @@ Feature: Admin Actions to Post News
   Scenario: Make a translation of an admin post stop being a translation
     Given I have posted an admin post
       And basic languages
-      And I am logged in as admin with role "translation"
+      And I am logged in as a "translation" admin
       And I make a translation of an admin post
     When I follow "Edit Post"
       And I fill in "Translation of" with ""
@@ -130,25 +93,28 @@ Feature: Admin Actions to Post News
     Then I should not see a translated admin post
 
   Scenario: Log in as an admin and create an admin post with tags
-    Given I am logged in as admin with role "communications"
+    Given I am logged in as a "communications" admin
     When I follow "Admin Posts"
       And I follow "Post AO3 News"
-      Then I should see "New AO3 News Post"
+    Then I should see "New AO3 News Post"
+      And I should see "Comment permissions from the selected post will replace any permissions selected on this page."
+      And I should see "Tags from the selected post will replace any tags entered on this page."
     When I fill in "admin_post_title" with "Good news, everyone!"
       And I fill in "content" with "I've taught the toaster to feel love."
       And I fill in "Tags" with "quotes, futurama"
+      And I choose "No one can comment"
       And I press "Post"
     Then I should see "Admin Post was successfully created."
       And I should see "toaster" within "div.admin.home"
       And I should see "futurama" within "dd.tags"
 
   Scenario: Admin posts can be filtered by tags and languages
-    Given I have posted an admin post with tags
+    Given I have posted an admin post with tags "quotes, futurama"
       And basic languages
-      And I am logged in as admin with role "translation"
-    When I make a translation of an admin post with tags
+      And I am logged in as a "translation" admin
+    When I make a translation of an admin post
       And I am logged in as "ordinaryuser"
-    Then I should see a translated admin post with tags
+    Then I should see a translated admin post with tags "quotes, futurama"
 
     When I follow "News"
     Then "futurama" should be an option within "Tag"
@@ -170,8 +136,27 @@ Feature: Admin Actions to Post News
       And "quotes" should be selected within "Tag"
       And "Deutsch" should be selected within "Language"
 
+  Scenario: Translation of an admin post keeps tags of original post
+    Given I have posted an admin post with tags "original1, original2"
+      And basic languages
+      And I am logged in as a "translation" admin
+    When I make a translation of an admin post with tags "ooops"
+    Then I should see "original1 original2" within "dd.tags"
+     And I should not see "ooops"
+    When I follow "Edit Post"
+    Then I should not see the input with id "admin_post_tag_list"
+     And I should not see "Tags from the selected post will replace any tags entered on this page."
+    When I go to the admin-posts page
+    Then "ooops" should not be an option within "Tag"
+    When I follow "Edit"
+    Then I should see the input with id "admin_post_tag_list"
+    When I fill in "Tags" with "updated1, updated2"
+     And I press "Post"
+     And I am logged in as "ordinaryuser"
+    Then I should see a translated admin post with tags "updated1, updated2"
+
   Scenario: If an admin post has characters like & and < and > in the title, the escaped version will not show on the various admin post pages
-    Given I am logged in as admin with role "communications"
+    Given I am logged in as a "communications" admin
     When I follow "Admin Posts"
       And I follow "Post AO3 News"
       And I fill in "admin_post_title" with "App News & a <strong> Warning"
@@ -185,7 +170,7 @@ Feature: Admin Actions to Post News
     When I go to the home page
     Then I should see "App News & a <strong> Warning"
       And I should not see "App News &amp; a &lt;strong&gt; Warning"
-    When I am logged out as an admin
+    When I log out
       And I go to the admin-posts page
     Then I should see "App News & a <strong> Warning"
       And I should not see "App News &amp; a &lt;strong&gt; Warning"
@@ -212,7 +197,7 @@ Feature: Admin Actions to Post News
 
   Scenario: Edits to an admin post should appear on the homepage
     Given I have posted an admin post without paragraphs
-      And I am logged in as admin with role "communications"
+      And I am logged in as a "communications" admin
     When I go to the admin-posts page
       And I follow "Edit"
       And I fill in "admin_post_title" with "Edited Post"
@@ -226,8 +211,22 @@ Feature: Admin Actions to Post News
 
   Scenario: A deleted admin post should be removed from the homepage
     Given I have posted an admin post
-      And I am logged in as admin with role "communications"
+      And I am logged in as a "communications" admin
     When I go to the admin-posts page
       And I follow "Delete"
     When I go to the homepage
     Then I should not see "Default Admin Post"
+
+  Scenario: Log in as an admin and create an admin post in a rtl (right-to-left) language
+    Given I am logged in as a "communications" admin
+      And Persian language
+    When I follow "Admin Posts"
+      And I follow "Post AO3 News"
+      Then I should see "New AO3 News Post"
+    When I fill in "admin_post_title" with "فارسی"
+      And I fill in "content" with "چیزهایی هست که باید در حین ایجاد یک گزارش از آنها آگاه باشید"
+      And I select "Persian" from "Choose a language"
+      And I press "Post"
+    Then I should see "Admin Post was successfully created."
+      And I should see "باشید" within "div.admin.home div.userstuff"
+      And the user content should be shown as right-to-left

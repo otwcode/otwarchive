@@ -58,7 +58,7 @@ describe Users::RegistrationsController do
 
           new_user = User.last
 
-          expect(response).to be_success
+          expect(response).to be_successful
           expect(assigns(:user)).to be_a(User)
           expect(assigns(:user)).to eq(new_user)
           expect(assigns(:user).login).to eq("myname")
@@ -75,7 +75,7 @@ describe Users::RegistrationsController do
 
         before do
           invitation.mark_as_redeemed(previous_user)
-          previous_user.update_attributes(invitation_id: invitation.id)
+          previous_user.update(invitation_id: invitation.id)
         end
 
         it "redirects with an error" do

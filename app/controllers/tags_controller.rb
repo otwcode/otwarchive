@@ -7,8 +7,6 @@ class TagsController < ApplicationController
 
   caches_page :feed
 
-  # cache_sweeper :tag_sweeper
-
   def load_tag
     @tag = Tag.find_by_name(params[:id])
     unless @tag && @tag.is_a?(Tag)
@@ -42,19 +40,17 @@ class TagsController < ApplicationController
   end
 
   def search
-    @page_subtitle = ts('Search Tags')
-    if params[:query].present?
-      # TODO: tag_search_params
-      options = params[:query].permit!.dup
-      @query = options
-      if @query[:name].present?
-        @page_subtitle = ts("Tags Matching '%{query}'", query: @query[:name])
-      end
-      options[:page] = params[:page] || 1
-      search = TagSearchForm.new(options)
-      @tags = search.search_results
-      flash_search_warnings(@tags)
-    end
+    options = params[:tag_search].present? ? tag_search_params : {}
+    options.merge!(page: params[:page]) if params[:page].present?
+    @search = TagSearchForm.new(options)
+    @page_subtitle = ts("Search Tags")
+
+    return if params[:tag_search].blank?
+
+    @page_subtitle = ts("Tags Matching '%{query}'", query: options[:name]) if options[:name].present?
+
+    @tags = @search.search_results
+    flash_search_warnings(@tags)
   end
 
   # if user is Admin or Tag Wrangler, show them details about the tag
@@ -314,7 +310,7 @@ class TagsController < ApplicationController
       tags = Tag.where(id: params[:canonicals])
 
       tags.each do |tag_to_canonicalize|
-        if tag_to_canonicalize.update_attributes(canonical: true)
+        if tag_to_canonicalize.update(canonical: true)
           saved_canonicals << tag_to_canonicalize
         else
           not_saved_canonicals << tag_to_canonicalize
@@ -394,6 +390,19 @@ class TagsController < ApplicationController
       :media_string, :fandom_string, :character_string, :relationship_string,
       :freeform_string,
       associations_to_remove: []
+    )
+  end
+
+  def tag_search_params
+    params.require(:tag_search).permit(
+      :query,
+      :name,
+      :fandoms,
+      :type,
+      :canonical,
+      :created_at,
+      :sort_column,
+      :sort_direction
     )
   end
 end

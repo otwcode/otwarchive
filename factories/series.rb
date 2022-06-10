@@ -19,8 +19,8 @@ FactoryBot.define do
     end
 
     factory :series_with_a_work do
-      after(:build) do |series|
-        series.works = [create(:work)]
+      after(:create) do |series|
+        create(:work, authors: series.pseuds, series: [series])
       end
     end
   end

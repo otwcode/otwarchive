@@ -8,8 +8,8 @@
   <% end %>
   <% if chapter.user_has_creator_invite?(current_user) %>
     <p class="notice">
-      <%= ts("You've been invited to become a co-creator of this chapter. To accept or reject the invitation, visit your %{creator_invitations_page}.",
-             creator_invitations_page: link_to(ts("Creator Invitations page"), user_creatorships_path(current_user))).html_safe %>
+      <%= ts("You've been invited to become a co-creator of this chapter. To accept or reject the request, visit your %{creator_requests_page}.",
+             creator_requests_page: link_to(ts("Co-Creator Requests page"), user_creatorships_path(current_user))).html_safe %>
     </p>
   <% end %>
   <!-- chapter management -->

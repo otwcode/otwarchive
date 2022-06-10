@@ -5,9 +5,15 @@ Given /^mock websites with no content$/ do
   WebMock.stub_request(:head, "http://example.org/404").to_return(status: 404)
 end
 
+Given "all pages on the host {string} return status 200" do |url|
+  WebMock.disable_net_connect!
+  parsed_url = Addressable::URI.parse(url)
+  WebMock.stub_request(:any, %r[https?://#{parsed_url.host}.*]).to_return(status: 200)
+end
+
 Given /^I have a bookmark for "([^\"]*)"$/ do |title|
   step %{I start a new bookmark for "#{title}"}
-  fill_in("bookmark_tag_string", with: DEFAULT_BOOKMARK_TAGS)
+  fill_in("Your tags", with: DEFAULT_BOOKMARK_TAGS)
   step %{I press "Create"}
   step %{all indexing jobs have been run}
 end
@@ -248,7 +254,7 @@ Given /^bookmarks of all types tagged with the (character|relationship|fandom) t
   FactoryBot.create(:bookmark, bookmarkable_id: work.id, bookmarkable_type: "Work")
 
   step %{bookmarks of external works and series tagged with the #{tag_type} tag "#{tag}"}
-end 
+end
 
 # Freeform is omitted because there is no freeform option on the bookmark external work form
 Given /^bookmarks of external works and series tagged with the (character|relationship|fandom) tag "(.*?)"$/ do |tag_type, tag|
@@ -304,13 +310,22 @@ Given /^"(.*?)" has bookmarks of works in various languages$/ do |user|
   step %{all indexing jobs have been run}
 end
 
-When /^I bookmark the work "(.*?)"(?: as "(.*?)")?(?: with the note "(.*?)")?(?: with the tags "(.*?)")?$/ do |title, pseud, note, tags|
-  step %{I start a new bookmark for "#{title}"}
+def submit_bookmark_form(pseud, note, tags)
   select(pseud, from: "bookmark_pseud_id") unless pseud.nil?
   fill_in("bookmark_notes", with: note) unless note.nil?
-  fill_in("bookmark_tag_string", with: tags) unless tags.nil?
+  fill_in("Your tags", with: tags) unless tags.nil?
   click_button("Create")
   step %{all indexing jobs have been run}
+end
+
+When /^I bookmark the work "(.*?)"(?: as "(.*?)")?(?: with the note "(.*?)")?(?: with the tags "(.*?)")?$/ do |title, pseud, note, tags|
+  step %{I start a new bookmark for "#{title}"}
+  submit_bookmark_form(pseud, note, tags)
+end
+
+When /^I bookmark the work "(.*?)"(?: as "(.*?)")?(?: with the note "(.*?)")?(?: with the tags "(.*?)")? from new bookmark page$/ do |title, pseud, note, tags|
+  step %{I go to the new bookmark page for work "#{title}"}
+  submit_bookmark_form(pseud, note, tags)
 end
 
 When /^I bookmark the series "([^\"]*)"$/ do |series_title|
@@ -381,6 +396,12 @@ When(/^I attempt to transfer my bookmark of "([^"]*)" to a pseud that is not min
   pseud_id = User.find_by(login: "not_the_bookmarker").pseuds.first.id
   find("#bookmark_pseud_id", visible: false).set(pseud_id)
   click_button "Update"
+end
+
+When(/^I use the bookmarklet on a previously bookmarked URL$/) do
+  url = ExternalWork.first.url
+  visit new_external_work_path(params: { url_from_external: url })
+  step %{all AJAX requests are complete}
 end
 
 Then /^the bookmark on "([^\"]*)" should have tag "([^\"]*)"$$/ do |title, tag|

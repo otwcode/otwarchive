@@ -56,7 +56,7 @@
       <% if @user && @user == current_user %>
         <li><%= link_to ts("Fulfill"), new_collection_work_path(assignment.collection, :assignment_id => assignment.id) %></li>
         <li role="button">
-          <%= link_to ts("Default"), default_user_assignment_path(@user, assignment),
+          <%= link_to ts("Default"), default_collection_assignment_path(assignment.collection, assignment),
               data: {confirm: ts("Are you sure? This will mark you as having defaulted and notify the collection maintainer! It cannot be undone.")} %>
         </li>
       <% elsif @collection && @collection.user_is_maintainer?(current_user) %>

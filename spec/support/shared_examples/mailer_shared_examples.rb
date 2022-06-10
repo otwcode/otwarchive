@@ -24,3 +24,17 @@ shared_examples_for "an email with a valid sender" do
     expect(email).to deliver_from("Archive of Our Own <#{ArchiveConfig.RETURN_ADDRESS}>")
   end
 end
+
+shared_examples_for "an unsent email" do
+  it "is not delivered" do
+    expect(email.message).to be_a(ActionMailer::Base::NullMail)
+  end
+end
+
+shared_examples "it retries and fails on" do |error|
+  it "retries 3 times and ultimately fails with a #{error}" do
+    assert_performed_jobs 3, only: ApplicationMailerJob do
+      expect { subject.deliver_later }.to raise_exception(error)
+    end
+  end
+end

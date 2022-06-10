@@ -25,7 +25,7 @@ textarea:focus,
 #footer ul,
 #footer ul.navigation a,
 .autocomplete .dropdown ul li:hover,
-li.selected,
+.autocomplete .dropdown li.selected,
 a.tag:hover {
   color: #fff;
 }
@@ -45,8 +45,7 @@ form dt,
 .current,
 a.current,
 .current a:visited,
-.search span.tip,
-#header ul.primary .current {
+.search span.tip {
   border-color: #fff;
 }
 

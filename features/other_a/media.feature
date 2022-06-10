@@ -56,7 +56,7 @@ Feature: The All Fandoms page.
       And I go to the media page
     Then I should see "Lord of the Rings (1)"
 
-    When I am logged in as superadmin
+    When I am logged in as a "policy_and_abuse" admin
       And I go to the media page
     Then I should see "Lord of the Rings (2)"
 

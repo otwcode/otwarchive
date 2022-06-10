@@ -26,7 +26,6 @@ a, a:link, a:visited:hover {
   color: #111;
   text-decoration: none;
   border-bottom: 1px solid;
-  cursor: pointer;
 }
 
 a:visited {
@@ -54,6 +53,7 @@ a:focus img {
 h1, h2, h3, h4, h5, h6, .heading {
   font-family: Georgia, serif;
   font-weight: 400;
+    word-wrap: break-word;
 }
 
 h1 {
@@ -225,7 +225,7 @@ td {
 }
 
 th {
-  text-align: left;
+  text-align: start;
 }
 
 thead td {
@@ -245,7 +245,7 @@ th a, th a:visited, th a:link {
 }
 
 tbody tr th {
-  text-align: left;
+  text-align: start;
 }
 
 /*END== */

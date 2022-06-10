@@ -2,23 +2,54 @@ en:
   activerecord:
     errors:
       models:
+        block:
+          format: "%{message}"
+          attributes:
+            blocked_id:
+              taken: "You have already blocked that user."
+            blocked:
+              blank: "Sorry, we couldn't find a user matching that name."
+              self: "Sorry, you can't block yourself."
+              official: "Sorry, you can't block an official account."
+        comment:
+          attributes:
+            user:
+              format: "%{message}"
+              blocked_comment: "Sorry, you have been blocked by one or more of this work's creators."
+              blocked_reply: "Sorry, you have been blocked by that user."
         creatorship:
           attributes:
             pseud_id:
               taken: "is already listed as a creator."
+        external_work:
+          attributes:
+            user_defined_tags_count:
+              at_most:
+                "must not add up to more than %{count}. You have entered %{value} of these tags, so you must remove %{diff} of them."
         user:
           attributes:
             password_confirmation:
               confirmation: "doesn't match new password."
+            login:
+              changed_too_recently:
+                one: "can only be changed once per day. You last changed your user name on %{renamed_at}."
+                other: "can only be changed once every %{count} days. You last changed your user name on %{renamed_at}."
+        work:
+          attributes:
+            user_defined_tags_count:
+              at_most:
+                "must not add up to more than %{count}. Your work has %{value} of these tags, so you must remove %{diff} of them."
     models:
       archive_warning:
         one: "Warning"
-        other: "Warnings" 
+        other: "Warnings"
       bookmark: "Bookmark"
       category:
         one: "Category"
         other: "Categories"
-      chapter: "Chapter"
+      chapter:
+        one: "Chapter"
+        other: "Chapters"
       character:
         one: "Character"
         other: "Characters"
@@ -30,15 +61,30 @@ en:
         one: "Additional Tag"
         other: "Additional Tags"
       pseud: "Pseud"
-      rating: "Rating"
+      rating:
+        one: "Rating"
+        other: "Ratings"
       relationship:
         one: "Relationship"
         other: "Relationships"
+      series:
+        one: "Series"
+        other: "Series"
       tag:
         one: "Tag"
         other: "Tags"
       work: "Work"
     attributes:
+      admin/role:
+        board: "Board"
+        communications: "Communications"
+        docs: "AO3 Docs"
+        open_doors: "Open Doors"
+        policy_and_abuse: "Policy & Abuse"
+        superadmin: "Super admin"
+        support: "Support"
+        tag_wrangling: "Tag Wrangling"
+        translation: "Translation"
       archive_warning:
         name_with_colon:
           one: "Warning:"
@@ -85,3 +131,17 @@ en:
       work/chapters:
         content: "Content"
         base: "Invalid chapter:"
+      external_work:
+        user_defined_tags_count: "Fandom, relationship, and character tags"
+      work:
+        chapter_total_display: "Chapters"
+        summary: "Summary"
+        user_defined_tags_count: "Fandom, relationship, character, and additional tags"
+  attributes:
+    ticket_number: "Ticket ID"
+  errors:
+    attributes:
+      ticket_number:
+        closed_ticket: "must not be closed."
+        invalid_department: "must be in your department."
+        required: "must exist and not be spam."

@@ -99,7 +99,7 @@ module ApplicationHelper
   def byline(creation, options={})
     if creation.respond_to?(:anonymous?) && creation.anonymous?
       anon_byline = ts("Anonymous").html_safe
-      if options[:visibility] != "public" && (logged_in_as_admin? || is_author_of?(creation)) 
+      if options[:visibility] != "public" && (logged_in_as_admin? || is_author_of?(creation))
         anon_byline += " [#{non_anonymous_byline(creation, options[:only_path])}]".html_safe
       end
       return anon_byline
@@ -243,9 +243,9 @@ module ApplicationHelper
         direction = options[:desc_default] ? 'DESC' : 'ASC'
       end
       link_to_unless condition, ((direction == 'ASC' ? '&#8593;&#160;' : '&#8595;&#160;') + title).html_safe,
-          request.parameters.merge( {sort_column: column, sort_direction: direction} ), {class: css_class, title: (direction == 'ASC' ? ts('sort up') : ts('sort down'))}
+          current_path_with(sort_column: column, sort_direction: direction), {class: css_class, title: (direction == 'ASC' ? ts('sort up') : ts('sort down'))}
     else
-      link_to_unless params[:sort_column].nil?, title, url_for(params.merge sort_column: nil, sort_direction: nil)
+      link_to_unless params[:sort_column].nil?, title, current_path_with(sort_column: nil, sort_direction: nil)
     end
   end
 
@@ -300,12 +300,14 @@ module ApplicationHelper
   def autocomplete_options(method, options={})
     {
       class: "autocomplete",
-      autocomplete_method: (method.is_a?(Array) ? method.to_json : "/autocomplete/#{method}"),
-      autocomplete_hint_text: ts("Start typing for suggestions!"),
-      autocomplete_no_results_text: ts("(No suggestions found)"),
-      autocomplete_min_chars: 1,
-      autocomplete_searching_text: ts("Searching...")
-    }.merge(options)
+      data: {
+        autocomplete_method: (method.is_a?(Array) ? method.to_json : "/autocomplete/#{method}"),
+        autocomplete_hint_text: ts("Start typing for suggestions!"),
+        autocomplete_no_results_text: ts("(No suggestions found)"),
+        autocomplete_min_chars: 1,
+        autocomplete_searching_text: ts("Searching...")
+      }
+    }.deep_merge(options)
   end
 
   # see http://asciicasts.com/episodes/197-nested-model-form-part-2
@@ -575,6 +577,79 @@ module ApplicationHelper
                                     include_hidden: false) do |builder|
         content_tag(:li, builder.label { builder.radio_button + builder.text })
       end
+    end
+  end
+
+  # Identifier for creation, formatted external-work-12, series-12, work-12.
+  def creation_id_for_css_classes(creation)
+    return unless %w[ExternalWork Series Work].include?(creation.class.name)
+
+    "#{creation.class.name.underscore.dasherize}-#{creation.id}"
+  end
+
+  # Array of creator ids, formatted user-123, user-126.
+  # External works are not created by users, so we can skip this.
+  def creator_ids_for_css_classes(creation)
+    return [] unless %w[Series Work].include?(creation.class.name)
+    return [] if creation.anonymous?
+    # Although series.unrevealed? can be true, the creators are not concealed
+    # in the blurb. Therefore, we do not need special handling for unrevealed
+    # series.
+    return [] if creation.is_a?(Work) && creation.unrevealed?
+
+    creation.users.pluck(:id).uniq.map { |id| "user-#{id}" }
+  end
+
+  def css_classes_for_creation_blurb(creation)
+    return if creation.nil?
+
+    Rails.cache.fetch("#{creation.cache_key_with_version}/blurb_css_classes-v2") do
+      creation_id = creation_id_for_css_classes(creation)
+      creator_ids = creator_ids_for_css_classes(creation).join(" ")
+      "blurb group #{creation_id} #{creator_ids}".strip
+    end
+  end
+
+  # Returns the current path, with some modified parameters. Modeled after
+  # WillPaginate::ActionView::LinkRenderer to try to prevent any additional
+  # security risks.
+  def current_path_with(**kwargs)
+    # Only throw in the query params if this is a GET request, because POST and
+    # such don't pass their params in the URL.
+    path_params = if request.get? || request.head?
+                    permit_all_except(params, [:script_name, :original_script_name])
+                  else
+                    {}
+                  end
+
+    path_params.deep_merge!(kwargs)
+    path_params[:only_path] = true # prevent shenanigans
+
+    url_for(path_params)
+  end
+
+  # Creates a new hash with all keys except those marked as blocked.
+  #
+  # This is a bit of a hack, but without this we'd have to either (a) make a
+  # list of all permitted params each time current_path_with is called, or (b)
+  # call params.permit! and effectively disable strong parameters for any code
+  # called after current_path_with.
+  def permit_all_except(params, blocked_keys)
+    if params.respond_to?(:each_pair)
+      {}.tap do |result|
+        params.each_pair do |key, value|
+          key = key.to_sym
+          next if blocked_keys.include?(key)
+
+          result[key] = permit_all_except(value, blocked_keys)
+        end
+      end
+    elsif params.respond_to?(:map)
+      params.map do |entry|
+        permit_all_except(entry, blocked_keys)
+      end
+    else # not a hash or an array, just a flat value
+      params
     end
   end
 end # end of ApplicationHelper

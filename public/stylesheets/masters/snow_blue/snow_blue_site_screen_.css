@@ -1,7 +1,7 @@
 #header ul.primary,
 #footer,
 .autocomplete .dropdown ul li:hover,
-li.selected,
+.autocomplete .dropdown li.selected,
 a.tag:hover {
   background: #4295BC;
 }
@@ -42,6 +42,7 @@ a.cloud8 {
 #dashboard.own,
 .error,
 .comment_error,
+.kudos_error,
 #header ul.primary,
 .LV_invalid,
 .LV_invalid_field,
@@ -50,7 +51,6 @@ input.LV_invalid_field:active,
 textarea.LV_invalid_field:hover,
 textarea.LV_invalid_field:active,
 #header .primary a,
-#header .primary .current,
 #header .primary input,
 #header .search input {
   border-color: #347391 !important;

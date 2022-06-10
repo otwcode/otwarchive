@@ -2,17 +2,17 @@ class Admin::AdminUsersController < Admin::BaseController
   include ExportsHelper
 
   def index
-    authorize User, policy_class: AdminUserPolicy
+    authorize User
     @role_values = @roles.map{ |role| [role.name.humanize.titlecase, role.name] }
     @role = Role.find_by(name: params[:role]) if params[:role]
     @users = User.search_by_role(
-      @role, params[:name], params[:email],
+      @role, params[:name], params[:email], params[:user_id],
       inactive: params[:inactive], exact: params[:exact], page: params[:page]
     )
   end
 
   def bulk_search
-    authorize User, policy_class: AdminUserPolicy
+    authorize User
     @emails = params[:emails].split if params[:emails]
     if @emails.present?
       found_users, not_found_emails, duplicates = User.search_multiple_by_email(@emails)
@@ -47,7 +47,7 @@ class Admin::AdminUsersController < Admin::BaseController
   def show
     @hide_dashboard = true
     @user = User.find_by(login: params[:id])
-    authorize @user, policy_class: AdminUserPolicy
+    authorize @user
     unless @user
       redirect_to action: "index", query: params[:query], role: params[:role] and return
     end
@@ -56,20 +56,24 @@ class Admin::AdminUsersController < Admin::BaseController
 
   # POST admin/users/update
   def update
-    @user = User.find_by(login: params[:id])
-    authorize @user, policy_class: AdminUserPolicy
-    if @user.admin_update(user_params)
+    @user = authorize User.find_by(login: params[:id])
+
+    attributes = permitted_attributes(@user)
+    @user.email = attributes[:email] if attributes[:email].present?
+    @user.roles = Role.where(id: attributes[:roles]) if attributes[:roles].present?
+
+    if @user.save
       flash[:notice] = ts("User was successfully updated.")
     else
-      flash[:error] = ts("There was an error updating user %{name}", name: params[:id])
+      flash[:error] = ts("The user %{name} could not be updated: %{errors}", name: params[:id], errors: @user.errors.full_messages.join(" "))
     end
     redirect_to request.referer || root_path
   end
 
   def update_status
     @user = User.find_by(login: params[:user_login])
-    authorize @user, policy_class: AdminUserPolicy
-    @user_manager = UserManager.new(current_admin, user_management_params)
+    authorize @user
+    @user_manager = UserManager.new(current_admin, params)
     if @user_manager.save
       flash[:notice] = @user_manager.success_message
       if params[:admin_action] == "spamban"
@@ -93,7 +97,7 @@ class Admin::AdminUsersController < Admin::BaseController
   end
 
   def confirm_delete_user_creations
-    authorize @user, policy_class: AdminUserPolicy
+    authorize @user
     @works = @user.works.paginate(page: params[:works_page])
     @comments = @user.comments.paginate(page: params[:comments_page])
     @bookmarks = @user.bookmarks
@@ -102,7 +106,7 @@ class Admin::AdminUsersController < Admin::BaseController
   end
 
   def destroy_user_creations
-    authorize @user, policy_class: AdminUserPolicy
+    authorize @user
     creations = @user.works + @user.bookmarks + @user.collections + @user.comments
     creations.each do |creation|
       AdminActivity.log_action(current_admin, creation, action: "destroy spam", summary: creation.inspect)
@@ -115,6 +119,8 @@ class Admin::AdminUsersController < Admin::BaseController
 
   def troubleshoot
     @user = User.find_by(login: params[:id])
+    authorize @user
+
     @user.fix_user_subscriptions
     @user.set_user_work_dates
     @user.reindex_user_creations
@@ -126,6 +132,8 @@ class Admin::AdminUsersController < Admin::BaseController
 
   def activate
     @user = User.find_by(login: params[:id])
+    authorize @user
+
     @user.activate
     if @user.active?
       @user.create_log_item( options = { action: ArchiveConfig.ACTION_ACTIVATE, note: "Manually Activated", admin_id: current_admin.id })
@@ -139,21 +147,10 @@ class Admin::AdminUsersController < Admin::BaseController
 
   def send_activation
     @user = User.find_by(login: params[:id])
+    authorize @user
     # send synchronously to avoid getting caught in mail queue
-    UserMailer.signup_notification(@user.id).deliver!
+    UserMailer.signup_notification(@user.id).deliver_now
     flash[:notice] = ts("Activation email sent")
     redirect_to action: :show
-  end
-
-  def user_params
-    params[:user].slice(
-      *AdminUserPolicy.new(current_admin, @user).permitted_user_params
-    )
-  end
-
-  def user_management_params
-    params.slice(
-      *AdminUserPolicy.new(current_admin, @user).permitted_management_params
-    )
   end
 end

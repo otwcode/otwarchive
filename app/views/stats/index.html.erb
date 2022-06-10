@@ -14,7 +14,7 @@
       <% if @current_year == year %>
         <span class="current"><%= year %></span>
       <% else %>
-        <%= link_to year, request.parameters.merge({:year => year}) %>
+        <%= link_to year, current_path_with(year: year) %>
       <% end %>
     </li>
   <% end %>
@@ -57,8 +57,8 @@
   </ul>
 
   <ul class="view actions" role="menu">
-    <li><%= span_if_current ts("Fandoms View"), url_for(params.permit!.merge :flat_view => nil), params[:flat_view].blank? %></li>
-    <li><%= span_if_current ts("Flat View"), url_for(params.permit!.merge :flat_view => true) %></li>
+    <li><%= span_if_current ts("Fandoms View"), current_path_with(flat_view: nil), params[:flat_view].blank? %></li>
+    <li><%= span_if_current ts("Flat View"), current_path_with(flat_view: true) %></li>
   </ul>
 </div>
 

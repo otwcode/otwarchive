@@ -2,27 +2,29 @@ class Admin::BannersController < Admin::BaseController
 
   # GET /admin/banners
   def index
+    authorize(AdminBanner)
+
     @admin_banners = AdminBanner.order("id DESC").paginate(page: params[:page])
   end
 
   # GET /admin/banners/1
   def show
-    @admin_banner = AdminBanner.find(params[:id])
+    @admin_banner = authorize AdminBanner.find(params[:id])
   end
 
   # GET /admin/banners/new
   def new
-    @admin_banner = AdminBanner.new
+    @admin_banner = authorize AdminBanner.new
   end
 
   # GET /admin/banners/1/edit
   def edit
-    @admin_banner = AdminBanner.find(params[:id])
+    @admin_banner = authorize AdminBanner.find(params[:id])
   end
 
   # POST /admin/banners
   def create
-    @admin_banner = AdminBanner.new(admin_banner_params)
+    @admin_banner = authorize AdminBanner.new(admin_banner_params)
 
     if @admin_banner.save
       if @admin_banner.active?
@@ -39,9 +41,9 @@ class Admin::BannersController < Admin::BaseController
 
   # PUT /admin/banners/1
   def update
-    @admin_banner = AdminBanner.find(params[:id])
+    @admin_banner = authorize AdminBanner.find(params[:id])
 
-    if !@admin_banner.update_attributes(admin_banner_params)
+    if !@admin_banner.update(admin_banner_params)
       render action: 'edit'
     elsif params[:admin_banner_minor_edit]
       flash[:notice] = ts('Updating banner for users who have not already dismissed it. This may take some time.')
@@ -59,12 +61,12 @@ class Admin::BannersController < Admin::BaseController
 
   # GET /admin/banners/1/confirm_delete
   def confirm_delete
-    @admin_banner = AdminBanner.find(params[:id])
+    @admin_banner = authorize AdminBanner.find(params[:id])
   end
 
   # DELETE /admin/banners/1
   def destroy
-    @admin_banner = AdminBanner.find(params[:id])
+    @admin_banner = authorize AdminBanner.find(params[:id])
     @admin_banner.destroy
 
     flash[:notice] = ts('Banner successfully deleted.')

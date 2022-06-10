@@ -12,23 +12,23 @@ Feature: Invite queue management
 
   Scenario: Can turn queue off in Admin Settings and it displays as off
 
-    Given I am logged in as superadmin
+    Given I am logged in as a "policy_and_abuse" admin
       And I go to the admin-settings page
-      And I uncheck "admin_setting_invite_from_queue_enabled"
+      And I uncheck "Invite from queue enabled (People can add themselves to the queue and invitations are sent out automatically)"
       And I press "Update"
-    When I am logged out as an admin
+    When I log out
       And I am on the homepage
     Then I should not see "Get an Invite"
       And I should see "Archive of Our Own"
 
   Scenario: Can turn queue on in Admin Settings and it displays as on
 
-    Given I am logged in as superadmin
+    Given I am logged in as a "policy_and_abuse" admin
       And account creation requires an invitation
       And I go to the admin-settings page
-      And I check "admin_setting_invite_from_queue_enabled"
+      And I check "Invite from queue enabled (People can add themselves to the queue and invitations are sent out automatically)"
       And I press "Update"
-    When I am logged out as an admin
+    When I log out
       And I am on the homepage
     Then I should see "Get an Invitation"
     When I follow "Get an Invitation"
@@ -37,7 +37,7 @@ Feature: Invite queue management
   Scenario: An admin can delete people from the queue
 
     Given an invitation request for "invitee@example.org"
-      And I am logged in as superadmin
+      And I am logged in as an admin
     When I go to the manage invite queue page
       And I press "Delete"
     Then I should see "Request for invitee@example.org was removed from the queue."
@@ -80,7 +80,6 @@ Feature: Invite queue management
   Scenario: Can still check status when queue is off
 
     Given the invitation queue is disabled
-      And I am logged out as an admin
     When I go to the invite_requests page
       And I follow "check your position on the waiting list"
     Then I should see the page title "Invitation Request Status"
@@ -105,7 +104,7 @@ Feature: Invite queue management
       And I should see "If you can't find it, your invitation may have already been emailed to that address;"
 
     # invite can be used
-    When I am logged in as superadmin
+    When I am logged in as an admin
       And I follow "Invitations"
       And I fill in "track_invitation_invitee_email" with "test@archiveofourown.org"
       And I press "Go"

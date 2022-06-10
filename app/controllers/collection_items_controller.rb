@@ -28,7 +28,7 @@ class CollectionItemsController < ApplicationController
       @collection_items = @collection.collection_items.include_for_works
       @collection_items = case
                           when params[:approved]
-                            @collection_items.approved_by_collection
+                            @collection_items.approved_by_both
                           when params[:rejected]
                             @collection_items.rejected_by_collection
                           when params[:invited]
@@ -40,7 +40,7 @@ class CollectionItemsController < ApplicationController
       @collection_items = CollectionItem.for_user(@user).includes(:collection)
       @collection_items = case
                           when params[:approved]
-                            @collection_items.approved_by_user.approved_by_collection
+                            @collection_items.approved_by_both
                           when params[:rejected]
                             @collection_items.rejected_by_user
                           else
@@ -108,8 +108,8 @@ class CollectionItemsController < ApplicationController
       elsif @item.is_a?(Work) && @item.anonymous? && !current_user.is_author_of?(@item)
         errors << ts("%{collection_title}, because you don't own this item and the item is anonymous.", collection_title: collection.title)
       # add the work to a collection, and try to save it
-      elsif @item.add_to_collection(collection) && @item.save
-        # approved_by_user and approved_by_collection are both true
+      elsif @item.add_to_collection(collection) && @item.save(validate: false)
+        # approved_by_user? and approved_by_collection? are both true
         if @item.approved_collections.include?(collection)
           new_collections << collection
         # if the current_user is a maintainer of the collection then approved_by_user must have been false (which means
@@ -156,13 +156,17 @@ class CollectionItemsController < ApplicationController
 
   def update_multiple
     if @collection&.user_is_maintainer?(current_user)
-      update_multiple_with_params(@collection.collection_items,
-                                  collection_update_multiple_params,
-                                  collection_items_path(@collection))
+      update_multiple_with_params(
+        allowed_items: @collection.collection_items,
+        update_params: collection_update_multiple_params,
+        success_path: collection_items_path(@collection)
+      )
     elsif @user && @user == current_user
-      update_multiple_with_params(CollectionItem.for_user(@user),
-                                  user_update_multiple_params,
-                                  user_collection_items_path(@user))
+      update_multiple_with_params(
+        allowed_items: CollectionItem.for_user(@user),
+        update_params: user_update_multiple_params,
+        success_path: user_collection_items_path(@user)
+      )
     else
       flash[:error] = ts("You don't have permission to do that, sorry!")
       redirect_to(@collection || @user)
@@ -173,7 +177,7 @@ class CollectionItemsController < ApplicationController
   # to update, and only updates items that can be found in allowed_items (which
   # should be a relation on CollectionItems). When all items are successfully
   # updated, redirects to success_path.
-  def update_multiple_with_params(allowed_items, update_params, success_path)
+  def update_multiple_with_params(allowed_items:, update_params:, success_path:)
     # Collect any failures so that we can display errors:
     @collection_items = []
 
@@ -186,7 +190,12 @@ class CollectionItemsController < ApplicationController
     # which uses find() under the hood -- we ensure that we'll fail silently if
     # the user tries to update an item they're not allowed to.
     allowed_items.where(id: update_params.keys).each do |item|
-      @collection_items << item unless item.update(update_params[item.id])
+      item_data = update_params[item.id]
+      if item_data[:remove] == "1"
+        @collection_items << item unless item.destroy
+      else
+        @collection_items << item unless item.update(item_data)
+      end
     end
 
     if @collection_items.empty?

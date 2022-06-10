@@ -1,14 +1,16 @@
 class BookmarksController < ApplicationController
   before_action :load_collection
-  before_action :load_owner, only: [ :index ]
-  before_action :load_bookmarkable, only: [ :index, :new, :create, :fetch_recent, :hide_recent ]
+  before_action :load_owner, only: [:index]
+  before_action :load_bookmarkable, only: [:index, :new, :create, :fetch_recent, :hide_recent]
   before_action :users_only, only: [:new, :create, :edit, :update]
   before_action :check_user_status, only: [:new, :create, :edit, :update]
-  before_action :load_bookmark, only: [ :show, :edit, :update, :destroy, :fetch_recent, :hide_recent, :confirm_delete ]
-  before_action :check_visibility, only: [ :show ]
-  before_action :check_ownership, only: [ :edit, :update, :destroy, :confirm_delete ]
+  before_action :load_bookmark, only: [:show, :edit, :update, :destroy, :fetch_recent, :hide_recent, :confirm_delete, :share]
+  before_action :check_visibility, only: [:show, :share]
+  before_action :check_ownership, only: [:edit, :update, :destroy, :confirm_delete, :share]
 
   before_action :check_pseud_ownership, only: [:create, :update]
+
+  skip_before_action :store_location, only: [:share]
 
   def check_pseud_ownership
     if params[:bookmark][:pseud_id]
@@ -138,7 +140,7 @@ class BookmarksController < ApplicationController
           search = BookmarkSearchForm.new(show_private: false, show_restricted: false, sort_column: 'created_at')
           results = search.search_results
           flash_search_warnings(results)
-          @bookmarks = results.to_a
+          results.to_a
         end
       else
         @bookmarks = Bookmark.latest.includes(:bookmarkable, :pseud, :tags, :collections).to_a
@@ -184,20 +186,14 @@ class BookmarksController < ApplicationController
   # POST /bookmarks
   # POST /bookmarks.xml
   def create
-    @bookmark = Bookmark.new(bookmark_params)
-    @bookmarkable = @bookmark.bookmarkable
-    if @bookmarkable.new_record? && @bookmarkable.fandoms.blank?
-       @bookmark.errors.add(:base, "Fandom tag is required")
-       render :new and return
+    @bookmarkable ||= ExternalWork.new(external_work_params)
+    @bookmark = Bookmark.new(bookmark_params.merge(bookmarkable: @bookmarkable))
+    if @bookmark.errors.empty? && @bookmark.save
+      flash[:notice] = ts("Bookmark was successfully created. It should appear in bookmark listings within the next few minutes.")
+      redirect_to(bookmark_path(@bookmark))
+    else
+      render :new
     end
-    if @bookmark.errors.empty?
-      if @bookmarkable.save && @bookmark.save
-        flash[:notice] = ts('Bookmark was successfully created. It should appear in bookmark listings within the next few minutes.')
-        redirect_to(bookmark_path(@bookmark)) && return
-      end
-    end
-    @bookmarkable.errors.full_messages.each { |msg| @bookmark.errors.add(:base, msg) }
-    render action: "new" and return
   end
 
   # PUT /bookmarks/1
@@ -206,7 +202,7 @@ class BookmarksController < ApplicationController
     new_collections = []
     unapproved_collections = []
     errors = []
-    bookmark_params[:collection_names].split(',').map {|name| name.strip}.uniq.each do |collection_name|
+    bookmark_params[:collection_names]&.split(",")&.map(&:strip)&.uniq&.each do |collection_name|
       collection = Collection.find_by(name: collection_name)
       if collection.nil?
         errors << ts("#{collection_name} does not exist.")
@@ -232,34 +228,45 @@ class BookmarksController < ApplicationController
       flash[:error] = ts("We couldn't add your submission to the following collections: ") + errors.join("<br />")
     end
 
-    flash[:notice] = "" unless new_collections.empty? && unapproved_collections.empty?
     unless new_collections.empty?
-      flash[:notice] += ts("Added to collection(s): %{collections}.",
+      flash[:notice] = ts("Added to collection(s): %{collections}.",
                           collections: new_collections.collect(&:title).join(", "))
     end
     unless unapproved_collections.empty?
-      flash[:notice] ||= ""
+      flash[:notice] = flash[:notice] ? flash[:notice] + " " : ""
       flash[:notice] += if unapproved_collections.size > 1
-                          ts(" You have submitted your bookmark to moderated collections (%{all_collections}). It will not become a part of those collections until it has been approved by a moderator.", all_collections: unapproved_collections.map { |f| f.title }.join(', '))
+                          ts("You have submitted your bookmark to moderated collections (%{all_collections}). It will not become a part of those collections until it has been approved by a moderator.", all_collections: unapproved_collections.map(&:title).join(", "))
                         else
-                          ts(" You have submitted your bookmark to the moderated collection '%{collection}'. It will not become a part of the collection until it has been approved by a moderator.", collection: unapproved_collections.first.title)
+                          ts("You have submitted your bookmark to the moderated collection '%{collection}'. It will not become a part of the collection until it has been approved by a moderator.", collection: unapproved_collections.first.title)
                         end
     end
 
     flash[:notice] = (flash[:notice]).html_safe unless flash[:notice].blank?
     flash[:error] = (flash[:error]).html_safe unless flash[:error].blank?
 
-    if errors.empty?
-      if @bookmark.update_attributes(bookmark_params)
-        flash[:notice] ||= ""
-        flash[:notice] = ts(" Bookmark was successfully updated. ").html_safe + flash[:notice]
-        flash[:notice] = (flash[:notice]).html_safe unless flash[:notice].blank?
-        redirect_to(@bookmark)
-      end
+    if @bookmark.update(bookmark_params) && errors.empty?
+      flash[:notice] = flash[:notice] ? " " + flash[:notice] : ""
+      flash[:notice] = ts("Bookmark was successfully updated.").html_safe + flash[:notice]
+      flash[:notice] = flash[:notice].html_safe
+      redirect_to(@bookmark)
     else
-      @bookmark.update_attributes(bookmark_params)
       @bookmarkable = @bookmark.bookmarkable
       render :edit and return
+    end
+  end
+
+  # GET /bookmarks/1/share
+  def share
+    if request.xhr?
+      if @bookmark.bookmarkable.is_a?(Work) && @bookmark.bookmarkable.unrevealed?
+        render template: "errors/404", status: :not_found
+      else
+        render layout: false
+      end
+    else
+      # Avoid getting an unstyled page if JavaScript is disabled
+      flash[:error] = ts("Sorry, you need to have JavaScript enabled for this.")
+      redirect_back(fallback_location: root_path)
     end
   end
 
@@ -358,12 +365,14 @@ class BookmarksController < ApplicationController
 
   def bookmark_params
     params.require(:bookmark).permit(
-      :bookmarkable_id, :bookmarkable_type,
-      :pseud_id, :bookmarker_notes, :tag_string, :collection_names, :private, :rec,
-      external: [
-        :url, :author, :title, :fandom_string, :rating_string, :relationship_string,
-        :character_string, :summary, category_string: []
-      ]
+      :pseud_id, :bookmarker_notes, :tag_string, :collection_names, :private, :rec
+    )
+  end
+
+  def external_work_params
+    params.require(:external_work).permit(
+      :url, :author, :title, :fandom_string, :rating_string, :relationship_string,
+      :character_string, :summary, category_strings: []
     )
   end
 

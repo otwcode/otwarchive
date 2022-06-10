@@ -60,6 +60,8 @@ Feature: Create Works
         | recipient      | recipient@example.org |
       And the user "coauthor" allows co-creators
       And the user "cosomeone" allows co-creators
+      And the user "giftee" allows gifts
+      And the user "recipient" allows gifts
       And I have a collection "Collection 1" with name "collection1"
       And I have a collection "Collection 2" with name "collection2"
       And I am logged in as "thorough"
@@ -86,7 +88,7 @@ Feature: Create Works
       And I fill in "Or create and use a new one:" with "My new series"
       And I select "Pseud2" from "Creator/Pseud(s)"
       And I select "Pseud3" from "Creator/Pseud(s)"
-      And I fill in "pseud_byline" with "coauthor"
+      And I fill in "pseud_byline_autocomplete" with "coauthor"
       And I fill in "Post to Collections / Challenges" with "collection1, collection2"
       And I press "Preview"
     Then I should see "Draft was successfully created"
@@ -106,7 +108,7 @@ Feature: Create Works
       And I should see "No Archive Warnings Apply"
       And I should not see "Choose Not To Use Archive Warnings"
       And I should see "Category: F/M"
-      And I should see "Characters: Sam WinchesterDean Winchester"
+      And I should see "Characters: Sam Winchester Dean Winchester"
       And I should see "Relationship: Harry/Ginny"
       And I should see "Additional Tags: An extra tag"
       And I should see "For Someone else, recipient"
@@ -122,7 +124,7 @@ Feature: Create Works
       And I should see "Pseud2" within ".byline"
       And I should see "Pseud3" within ".byline"
       But I should not see "coauthor" within ".byline"
-    When the user "coauthor" accepts all creator invites
+    When the user "coauthor" accepts all co-creator requests
       And I view the work "All Something Breaks Loose"
     Then I should see "coauthor" within ".byline"
     When I follow "Add Chapter"
@@ -142,7 +144,7 @@ Feature: Create Works
       And I should see "Let's write another story"
     When I follow "Edit"
       And I check "Add co-creators?"
-      And I fill in "pseud_byline" with "Does_not_exist"
+      And I fill in "pseud_byline_autocomplete" with "Does_not_exist"
       And I press "Preview"
     Then I should see "Invalid creator: Could not find a pseud Does_not_exist."
     When all emails have been delivered
@@ -155,11 +157,12 @@ Feature: Create Works
       And I should see "Pseud3" within ".byline"
       But I should not see "cosomeone" within ".byline"
       And 1 email should be delivered to "cosomeone@example.org"
-    When the user "cosomeone" accepts all creator invites
+    When the user "cosomeone" accepts all co-creator requests
       And I view the work "All Something Breaks Loose"
     Then I should see "cosomeone" within ".byline"
     When all emails have been delivered
       And I follow "Edit"
+      And I remove selected values from the autocomplete field within "dd.recipient"
       And I give the work to "giftee"
       And I press "Preview"
       And I press "Update"
@@ -186,7 +189,7 @@ Feature: Create Works
       And I check "chapters-options-show"
       And I fill in "work_wip_length" with "text"
       And I press "Preview"
-    Then I should see "Brevity is the soul of wit, but your content does have to be at least 10 characters long."
+    Then I should see "Content must be at least 10 characters long."
     When I fill in "content" with "Text and some longer text"
       And I fill in "work_collection_names" with "collection1, collection2"
       And I press "Preview"
@@ -222,7 +225,7 @@ Feature: Create Works
       And I press "Preview"
     Then I should see "Sorry! We couldn't save this work because:"
       And I should see a collection not found message for "collection1"
-      And "My new series" should be selected within "Choose one of your existing series:"
+      And I should see "My new series" in the "Or create and use a new one:" input
       And I should not see "Remove Work From Series"
 
   Scenario: Creating a new work in an existing series with some invalid things should return to the new work page with an error message and series information still filled in
@@ -303,7 +306,7 @@ Feature: Create Works
       And I fill in "content" with "It wasn't my fault, you know."
       And I press "Post"
     Then I should see "We couldn't save this work"
-      And I should see "Please add all required tags. Warning is missing."
+      And I should see "Please select at least one warning."
     When I check "No Archive Warnings Apply"
       And I press "Post"
     Then I should see "Work was successfully posted."
@@ -333,7 +336,7 @@ Feature: Create Works
     Then I should see "Work was successfully posted. It should appear in work listings within the next few minutes."
       And I should not see "Me (myself)"
       And I should see "My new series"
-    When the user "myself" accepts all creator invites
+    When the user "myself" accepts all co-creator requests
       And I view the work "All Hell Breaks Loose"
     Then I should see "Me (myself), testuser"
 
@@ -355,7 +358,7 @@ Feature: Create Works
     When I press "Post"
     Then I should see "Work was successfully posted. It should appear in work listings within the next few minutes."
       But I should not see "Michael (Burnham)"
-    When the user "Burnham" accepts all creator invites
+    When the user "Burnham" accepts all co-creator requests
       And I view the work "Thats not my Spock"
     Then I should see "Michael (Burnham), testuser"
 
@@ -384,7 +387,7 @@ Feature: Create Works
     When I am logged in as "barbaz"
       And I view the work "Chaptered Work"
     Then I should not see "Edit"
-    When I follow "Creator Invitations page"
+    When I follow "Co-Creator Requests page"
       And I check "selected[]"
       And I press "Accept"
     Then I should see "You are now listed as a co-creator on Chaptered Work."
@@ -395,3 +398,14 @@ Feature: Create Works
     When I follow "Next Chapter"
     Then I should see "barbaz, foobar"
       And I should not see "Chapter by"
+
+  Scenario: You cannot create a work with too many tags
+    Given the user-defined tag limit is 7
+      And I am logged in as a random user
+    When I set up the draft "Over the Limit"
+      And I fill in "Fandoms" with "Fandom 1, Fandom 2"
+      And I fill in "Characters" with "Character 1, Character 2"
+      And I fill in "Relationships" with "Relationship 1, Relationship 2"
+      And I fill in "Additional Tags" with "Additional Tag 1, Additional Tag 2"
+      And I press "Post"
+    Then I should see "Fandom, relationship, character, and additional tags must not add up to more than 7. Your work has 8 of these tags, so you must remove 1 of them."

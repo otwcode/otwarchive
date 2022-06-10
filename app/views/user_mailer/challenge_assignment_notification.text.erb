@@ -1,5 +1,5 @@
 <% content_for :message do %>
-<%= t ".text.part1", collection_title: @collection.title, collection_url: collection_url(@collection) %>
+<%= t ".text.assignment", collection_title: @collection.title, collection_url: collection_url(@collection) %>
 
 <%= t ".recipient" %> <%= @request.nil? ? t(".recipient_missing") : text_pseud(@request.pseud) %>
 
@@ -44,4 +44,4 @@
 
 <%= @collection.assignment_notification %><% end %><% end %>
 <% content_for :footer_note do %><%= t ".text.footer", title: @collection.title, url: collection_url(@collection), profile_url: collection_profile_url(@collection) %><% end %>
-<% content_for :sent_at do %><%= Time.now.to_s(:time_for_mailers) %><% end %>
+<% content_for :sent_at do %><%= l(Time.now) %><% end %>

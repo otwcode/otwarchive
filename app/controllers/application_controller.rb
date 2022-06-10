@@ -9,6 +9,11 @@ class ApplicationController < ActionController::Base
     admin_only_access_denied
   end
 
+  # sets admin user for pundit policies
+  def pundit_user
+    current_admin
+  end
+
   rescue_from ActionController::UnknownFormat, with: :raise_not_found
   rescue_from Elasticsearch::Transport::Transport::Errors::ServiceUnavailable do
     # Non-standard code to distinguish Elasticsearch errors from standard 503s.
@@ -82,6 +87,14 @@ class ApplicationController < ActionController::Base
   after_action :check_for_flash
   def check_for_flash
     cookies[:flash_is_set] = 1 unless flash.empty?
+  end
+
+  # Override redirect_to so that if it's called in a before_action hook, it'll
+  # still call check_for_flash after it runs.
+  def redirect_to(*args, **kwargs)
+    super.tap do
+      check_for_flash
+    end
   end
 
   after_action :ensure_admin_credentials
@@ -352,7 +365,7 @@ public
 
     @page_title = ""
     if logged_in? && !current_user.preference.try(:work_title_format).blank?
-      @page_title = current_user.preference.work_title_format
+      @page_title = current_user.preference.work_title_format.dup
       @page_title.gsub!(/FANDOM/, fandom)
       @page_title.gsub!(/AUTHOR/, author)
       @page_title.gsub!(/TITLE/, title)

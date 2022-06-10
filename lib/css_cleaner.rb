@@ -1,8 +1,8 @@
 # Use css parser to break up style blocks
 require 'css_parser'
-include CssParser
 
 module CssCleaner
+  include CssParser
 
   # constant regexps for css values
   ALPHA_REGEX = Regexp.new('[a-z\-]+')
@@ -104,7 +104,7 @@ module CssCleaner
   #   empty property returned.
   def sanitize_css_declaration_value(property, value)
     clean = ""
-    property.downcase!
+    property = property.downcase
     if property == "font-family"
       if !sanitize_css_font(value).blank?
         # preserve the original capitalization

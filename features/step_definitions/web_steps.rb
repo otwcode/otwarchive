@@ -49,6 +49,12 @@ When /^(?:|I )follow "([^"]*)"(?: within "([^"]*)")?$/ do |link, selector|
   end
 end
 
+When /^(?:|I )follow '([^']*)'(?: within "([^"]*)")?$/ do |link, selector|
+  with_scope(selector) do
+    click_link(link)
+  end
+end
+
 When /^(?:|I )fill in "([^"]*)" with "([^"]*)"(?: within "([^"]*)")?$/ do |field, value, selector|
   with_scope(selector) do
     fill_in(field, with: value)
@@ -108,10 +114,10 @@ When /^(?:|I )attach the file "([^"]*)" to "([^"]*)"(?: within "([^"]*)")?$/ do 
   end
 end
 
-Then /^visiting "([^"]*)" should fail with an error$/ do |path|
+Then /^visiting "([^"]*)" should fail with a not found error$/ do |path|
   expect {
     visit path
-  }.to raise_error
+  }.to raise_error(ActiveRecord::RecordNotFound)
 end
 
 Then /^visiting "([^"]*)" should fail with "([^"]*)"$/ do |path, flash_error|
@@ -253,7 +259,7 @@ Then /^the "([^"]*)" field(?: within "([^"]*)")? should not contain "([^"]*)"$/ 
   end
 end
 
-Then /^the "(.*?)" checkbox(?: within "(.*?)")? should be checked( and disabled)?$/ do |label, selector, disabled|
+Then /^the "(.*?)" (checkbox|radio button)(?: within "(.*?)")? should be checked( and disabled)?$/ do |label, _input_type, selector, disabled|
   with_scope(selector) do
     assert has_checked_field?(label, disabled: disabled.present?)
   end
@@ -297,7 +303,7 @@ Then /^I should download a ([^"]*) file with(?: (\d+) rows and)? the header row 
   body_without_bom = page.body.encode("UTF-8").delete!("\xEF\xBB\xBF")
   csv = CSV.parse(body_without_bom, col_sep: "\t") # array of arrays
   expect(csv.first.join(" ")).to eq(header)
-  expect(csv.size).to eq(rows.to_i) if rows
+  expect(csv.size).to eq(rows) unless rows.blank? || rows.zero?
 end
 
 Then /^show me the page$/ do

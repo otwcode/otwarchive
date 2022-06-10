@@ -138,10 +138,7 @@ class WorksController < ApplicationController
     options[:page] = params[:page] || 1
     options[:show_restricted] = current_user.present? || logged_in_as_admin?
 
-    @user = User.find_by(login: params[:user_id])
-
-    return unless @user.present?
-
+    @user = User.find_by!(login: params[:user_id])
     @search = WorkSearchForm.new(options.merge(works_parent: @user, collected: true))
     @works = @search.search_results
     flash_search_warnings(@works)
@@ -213,7 +210,7 @@ class WorksController < ApplicationController
     end
 
     @tag_categories_limited = Tag::VISIBLE - ['ArchiveWarning']
-    @kudos = @work.kudos.with_user.includes(:user).by_date
+    @kudos = @work.kudos.with_user.includes(:user)
 
     if current_user.respond_to?(:subscriptions)
       @subscription = current_user.subscriptions.where(subscribable_id: @work.id,
@@ -302,6 +299,7 @@ class WorksController < ApplicationController
     end
 
     @work = Work.new(work_params)
+
     @chapter = @work.first_chapter
     @chapter.attributes = work_params[:chapter_attributes] if work_params[:chapter_attributes]
     @work.ip_address = request.remote_ip
@@ -312,7 +310,6 @@ class WorksController < ApplicationController
 
     # If Edit or Cancel is pressed, bail out and display relevant form
     if params[:edit_button] || work_cannot_be_saved?
-      set_work_tag_error_messages
       render :new
     else
       @work.posted = @chapter.posted = true if params[:post_button]
@@ -359,6 +356,7 @@ class WorksController < ApplicationController
 
   # GET /works/1/edit_tags
   def edit_tags
+    @page_subtitle = ts("Edit Work Tags")
   end
 
   # PUT /works/1
@@ -379,7 +377,6 @@ class WorksController < ApplicationController
     set_work_form_fields
 
     if params[:edit_button] || work_cannot_be_saved?
-      set_work_tag_error_messages
       render :edit
     elsif params[:preview_button]
       unless @work.posted?
@@ -418,12 +415,12 @@ class WorksController < ApplicationController
     @work.attributes = work_tag_params
 
     if params[:edit_button] || work_cannot_be_saved?
-      set_work_tag_error_messages
       render :edit_tags
     elsif params[:preview_button]
+      @preview_mode = true
       render :preview_tags
     elsif params[:save_button]
-      Work.expire_work_tag_groups_id(@work.id)
+      @work.save
       flash[:notice] = ts('Tags were successfully updated.')
       redirect_to(@work)
     else # Save As Draft
@@ -455,7 +452,7 @@ class WorksController < ApplicationController
       was_draft = !@work.posted?
       title = @work.title
       @work.destroy
-      flash[:notice] = ts('Your work %{title} was deleted.', title: title)
+      flash[:notice] = ts("Your work %{title} was deleted.", title: title).html_safe
     rescue
       flash[:error] = ts("We couldn't delete that right now, sorry! Please try again later.")
     end
@@ -598,7 +595,7 @@ class WorksController < ApplicationController
       next unless @work.collection_items.present?
       @work.collection_items.each do |collection_item|
         next unless collection_item.collection == collection
-        if collection_item.user_approval_status == 1 && collection_item.collection_approval_status.zero?
+        if collection_item.approved_by_user? && collection_item.unreviewed_by_collection?
           moderated_collections << collection
         end
       end
@@ -634,6 +631,11 @@ class WorksController < ApplicationController
       redirect_to(edit_user_work_path(@user, @work)) && return
     end
 
+    # AO3-3498: since a work's word count is calculated in a before_save and the chapter is posted in an after_save,
+    # work's word count needs to be updated with the chapter's word count after the chapter is posted
+    @work.set_word_count
+    @work.save
+
     if !@collection.nil? && @collection.moderated?
       redirect_to work_path(@work), notice: ts('Work was submitted to a moderated collection. It will show up in the collection once approved.')
     else
@@ -645,6 +647,7 @@ class WorksController < ApplicationController
   # WORK ON MULTIPLE WORKS
 
   def show_multiple
+    @page_subtitle = ts("Edit Multiple Works")
     @user = current_user
 
     if params[:pseud_id]
@@ -665,6 +668,7 @@ class WorksController < ApplicationController
       redirect_to(new_orphan_path(work_ids: params[:work_ids])) && return
     end
 
+    @page_subtitle = ts("Edit Multiple Works")
     @user = current_user
     @works = Work.select('distinct works.*').joins(pseuds: :user).where('users.id = ?', @user.id).where(id: params[:work_ids])
 
@@ -692,34 +696,12 @@ class WorksController < ApplicationController
     @works = Work.joins(pseuds: :user).where('users.id = ?', @user.id).where(id: params[:work_ids]).readonly(false)
     @errors = []
 
-    # To avoid overwriting, we entirely trash any blank fields and also any
-    # unchecked checkboxes.
-    #
-    # Note that in the current edit_multiple form, we don't actually have any
-    # fields with value 0 (the hidden input used for unchecked checkboxes). So
-    # in a future release, it would be good to stop rejecting the params with
-    # value == '0', and stop checking for these special values below. But for
-    # compatibility with the existing form, we need to keep this code as is for
-    # now, and change it incrementally.
-    updated_work_params = work_params.reject { |_key, value| value.blank? || value == '0' }
-
-    # Special values which would normally be represented by 0, but can't
-    # because of the filter on updated_work_params.
-    if updated_work_params[:anon_commenting_disabled] == 'allow_anon'
-      updated_work_params[:anon_commenting_disabled] = '0'
-    end
-
-    if updated_work_params[:moderated_commenting_enabled] == 'not_moderated'
-      updated_work_params[:moderated_commenting_enabled] = '0'
-    end
-
-    if updated_work_params[:restricted] == 'unrestricted'
-      updated_work_params[:restricted] = '0'
-    end
+    # To avoid overwriting, we entirely trash any blank fields.
+    updated_work_params = work_params.reject { |_key, value| value.blank? }
 
     @works.each do |work|
       # now we can just update each work independently, woo!
-      unless work.update_attributes(updated_work_params)
+      unless work.update(updated_work_params)
         @errors << ts('The work %{title} could not be edited: %{error}', title: work.title, error: work.errors.full_messages.join(" ")).html_safe
       end
 
@@ -805,26 +787,17 @@ class WorksController < ApplicationController
   end
 
   def load_first_chapter
-    @chapter = @work.first_chapter
+    @chapter = if @work.user_is_owner_or_invited?(current_user) || logged_in_as_admin?
+                 @work.first_chapter
+               else
+                 @work.chapters.in_order.posted.first
+               end
   end
 
   # Check whether we should display :new or :edit instead of previewing or
   # saving the user's changes.
   def work_cannot_be_saved?
-    !(@work.errors.empty? &&
-      @work.valid? &&
-      @work.has_required_tags?)
-  end
-
-  def set_work_tag_error_messages
-    unless @work.has_required_tags?
-      error_message = 'Please add all required tags.'
-      error_message << ' Fandom is missing.' if @work.fandoms.blank?
-
-      error_message << ' Warning is missing.' if @work.archive_warnings.blank?
-
-      @work.errors.add(:base, error_message)
-    end
+    !(@work.errors.empty? && @work.valid?)
   end
 
   def set_work_form_fields
@@ -912,7 +885,7 @@ class WorksController < ApplicationController
       character: params[:work][:character_string],
       rating: params[:work][:rating_string],
       relationship: params[:work][:relationship_string],
-      category: params[:work][:category_string],
+      category: params[:work][:category_strings],
       freeform: params[:work][:freeform_string],
       notes: params[:notes],
       encoding: params[:encoding],
@@ -927,16 +900,15 @@ class WorksController < ApplicationController
   def work_params
     params.require(:work).permit(
       :rating_string, :fandom_string, :relationship_string, :character_string,
-      :archive_warning_string, :category_string, :expected_number_of_chapters, :revised_at,
+      :archive_warning_string, :category_string,
       :freeform_string, :summary, :notes, :endnotes, :collection_names, :recipients, :wip_length,
-      :backdate, :language_id, :work_skin_id, :restricted, :anon_commenting_disabled, :comment_permissions,
+      :backdate, :language_id, :work_skin_id, :restricted, :comment_permissions,
       :moderated_commenting_enabled, :title, :pseuds_to_add, :collections_to_add,
-      :unrestricted,
       current_user_pseud_ids: [],
       collections_to_remove: [],
       challenge_assignment_ids: [],
       challenge_claim_ids: [],
-      category_string: [],
+      category_strings: [],
       archive_warning_strings: [],
       author_attributes: [:byline, ids: [], coauthors: []],
       series_attributes: [:id, :title],
@@ -952,7 +924,7 @@ class WorksController < ApplicationController
     params.require(:work).permit(
       :rating_string, :fandom_string, :relationship_string, :character_string,
       :archive_warning_string, :category_string, :freeform_string, :language_id,
-      category_string: [],
+      category_strings: [],
       archive_warning_strings: []
     )
   end

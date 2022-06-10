@@ -34,8 +34,14 @@ class ApplicationPolicy
     false
   end
 
+  def confirm_delete?
+    destroy?
+  end
+
+  # Explicitly check that the user is an admin because regular users can have
+  # roles (e.g. archivist) as well, but we don't handle those with pundit.
   def user_has_roles?(roles)
-    user.respond_to?(:roles) && (user.roles & roles).present?
+    user&.is_a?(Admin) && user.respond_to?(:roles) && (user.roles & roles).present?
   end
 
   class Scope

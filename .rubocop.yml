@@ -1,6 +1,7 @@
 # Options available at https://github.com/bbatsov/rubocop/blob/master/config/default.yml
 
 require:
+  - rubocop-rails
   - rubocop-rspec
 
 AllCops:
@@ -9,7 +10,7 @@ AllCops:
       - "(?:^|/)factories/"
       - "(?:^|/)features/"
       - "(?:^|/)spec/"
-  TargetRubyVersion: 2.6
+  TargetRubyVersion: 2.7
 
 Bundler/OrderedGems:
   Enabled: false
@@ -17,14 +18,23 @@ Bundler/OrderedGems:
 Layout/DotPosition:
   EnforcedStyle: leading
 
-Layout/IndentFirstArrayElement:
+Layout/FirstArrayElementIndentation:
   EnforcedStyle: consistent
+
+Layout/LineLength:
+  Enabled: false
 
 Layout/MultilineMethodCallIndentation:
   EnforcedStyle: indented
 
 Layout/TrailingWhitespace:
   Enabled: false
+
+Lint/AmbiguousBlockAssociation:
+  Exclude:
+    # Exception for specs where we use change matchers:
+    # https://github.com/rubocop-hq/rubocop/issues/4222
+    - 'spec/**/*.rb'
 
 Lint/AmbiguousRegexpLiteral:
   Enabled: false
@@ -41,9 +51,6 @@ Metrics/ClassLength:
 Metrics/CyclomaticComplexity:
   Enabled: false
 
-Metrics/LineLength:
-  Enabled: false
-
 Metrics/MethodLength:
   Enabled: false
 
@@ -53,6 +60,42 @@ Metrics/ModuleLength:
 Metrics/PerceivedComplexity:
   Enabled: false
 
+Rails/DynamicFindBy:
+  AllowedMethods:
+    # Exception for Tag.find_by_name
+    - find_by_name
+    # Exception for Tagging.find_by_tag
+    - find_by_tag
+    # Exceptions for Work.find_by_*
+    - find_by_url
+    - find_by_url_cache_key
+    - find_by_url_generation
+    - find_by_url_generation_key
+    - find_by_url_uncached
+
+# Allow all uses of html_safe, they're everywhere...
+Rails/OutputSafety:
+  Enabled: false
+
+Rails/Output:
+  Exclude:
+    # Allow migrations to print pt-osc comments to console:
+    - 'db/migrate/*.rb'
+
+Rails/RakeEnvironment:
+  Enabled: false
+
+# Allow update_attribute, update_all, touch, etc.
+Rails/SkipsModelValidations:
+  Enabled: false
+
+Rails/UnknownEnv:
+  Environments:
+    - development
+    - test
+    - staging
+    - production
+
 # Allow "allow_any_instance_of"
 RSpec/AnyInstance:
   Enabled: false
@@ -61,6 +104,15 @@ RSpec/AnyInstance:
 # We have too many, so let's allow everything.
 RSpec/ContextWording:
   Enabled: false
+
+RSpec/DescribeClass:
+  Exclude:
+    # Exception for specs about I18n configurations
+    - 'spec/lib/i18n/**/*.rb'
+    # Exception for rake specs, where the top level describe uses a task name
+    - 'spec/lib/tasks/*.rake_spec.rb'
+    # Exception for integration specs, which may not test a specific class
+    - 'spec/requests/**/*.rb'
 
 RSpec/DescribedClass:
   Enabled: false
@@ -77,6 +129,8 @@ RSpec/FilePath:
   Exclude:
     # Exception for WorksController, whose many specs need multiple files
     - 'spec/controllers/works/*.rb'
+    # Exception for concern specs, which may test multiple classes
+    - 'spec/models/concerns/**/*.rb'
 
 # Avoid instance variables, except for those not assigned within the spec,
 # e.g. @request.
@@ -110,6 +164,9 @@ RSpec/NestedGroups:
 RSpec/PredicateMatcher:
   Enabled: false
 
+Style/AndOr:
+  EnforcedStyle: conditionals
+
 Style/ClassAndModuleChildren:
   Enabled: false
 
@@ -131,6 +188,11 @@ Style/GlobalVars:
     - $elasticsearch
     - $rollout
 
+Style/PercentLiteralDelimiters:
+  Exclude:
+    # Exception for Cucumber step definitions, where we heavily use %{} for strings
+    - 'features/**/*.rb'
+
 # Stop checking if uses of "self" are redundant
 Style/RedundantSelf:
   Enabled: false
@@ -143,3 +205,6 @@ Style/StringLiterals:
 
 Style/SymbolArray:
   Enabled: false
+
+Style/TernaryParentheses:
+  EnforcedStyle: require_parentheses_when_complex

@@ -19,14 +19,15 @@ class BookmarkableIndexer < Indexer
 
   def routing_info(id)
     {
-      '_index' => index_name,
-      '_type' => document_type,
-      '_id' => document_id(id)
+      "_index" => index_name,
+      "_id" => document_id(id)
     }
   end
 
   def document(object)
-    object.bookmarkable_json
+    object.bookmarkable_json.merge(
+      sort_id: document_id(object.id)
+    )
   end
 
   def document_id(id)

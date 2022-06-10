@@ -43,7 +43,7 @@ Feature: Brand new fandoms
       And I fill in "Fandoms" with "My Brand New Fandom"
       And I submit
       And the periodic tag count task is run
-    When I am logged in as policy_and_abuse_admin
+    When I am logged in as a "policy_and_abuse" admin
       And I view the external work "External Work To Be Deleted"
       And I follow "Delete External Work"
     Then I should see "Item was successfully deleted."
@@ -89,7 +89,7 @@ Feature: Brand new fandoms
       And I fill in "Fandoms" with "My Brand New Fandom"
       And I submit
       And the periodic tag count task is run
-    When I am logged in as superadmin
+    When I am logged in as a "policy_and_abuse" admin
       And I view the external work "External Work To Be Deleted"
       And I follow "Delete External Work"
     Then I should see "Item was successfully deleted."
