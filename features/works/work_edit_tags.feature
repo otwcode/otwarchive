@@ -73,7 +73,7 @@ Feature: Edit tags on a work
     And I follow "Edit Tags"
   When I fill in "Fandoms" with ""
     And I press "Post"
-  Then I should see "Sorry! We couldn't save this work because:Please fill in at least one fandom."
+  Then I should see "Sorry! We couldn't save this work because: Please fill in at least one fandom."
 
   Scenario: User can cancel editing a work's tags
   Given I am logged in as a random user

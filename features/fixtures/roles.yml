@@ -10,3 +10,6 @@ translation_admin:
 archivist:
   id: 4
   name: archivist
+official:
+  id: 5
+  name: official

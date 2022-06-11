@@ -203,11 +203,19 @@ Given /^the chaptered work with comments setup$/ do
   step "I log out"
 end
 
-Given /^the work "([^"]*)"$/ do |work|
-  unless Work.where(title: work).exists?
-    step %{I have a work "#{work}"}
-    step %{I log out}
-  end
+Given "the work {string}" do |title|
+  FactoryBot.create(:work, title: title)
+end
+
+Given "the work {string} by {string}" do |title, login|
+  user = ensure_user(login)
+  FactoryBot.create(:work, title: title, authors: [user.default_pseud])
+end
+
+Given "the work {string} by {string} and {string}" do |title, login1, login2|
+  user1 = ensure_user(login1)
+  user2 = ensure_user(login2)
+  FactoryBot.create(:work, title: title, authors: [user1.default_pseud, user2.default_pseud])
 end
 
 Given /^the work "([^\"]*)" by "([^\"]*)" with chapter two co-authored with "([^\"]*)"$/ do |work, author, coauthor|
@@ -265,10 +273,6 @@ When /^I view the work "([^"]*)"(?: in (full|chapter-by-chapter) mode)?$/ do |wo
   visit work_path(work)
   step %{I follow "Entire Work"} if mode == "full"
   step %{I follow "Chapter by Chapter"} if mode == "chapter-by-chapter"
-end
-When /^I view the work "([^"]*)" with comments$/ do |work|
-  work = Work.find_by(title: work)
-  visit work_path(work, anchor: "comments", show_comments: true)
 end
 
 When /^I view a deleted work$/ do
@@ -383,8 +387,8 @@ end
 
 When /^I fill in basic external work tags$/ do
   select(DEFAULT_RATING, from: "Rating")
-  fill_in("external_work_fandom_string", with: DEFAULT_FANDOM)
-  fill_in("bookmark_tag_string", with: DEFAULT_FREEFORM)
+  fill_in("Fandoms", with: DEFAULT_FANDOM)
+  fill_in("Your tags", with: DEFAULT_FREEFORM)
 end
 
 When /^I set the fandom to "([^"]*)"$/ do |fandom|
@@ -607,8 +611,8 @@ When /^I invite the co-authors? "([^"]*)"$/ do |coauthor|
   step %{I try to invite the co-authors "#{coauthor}"}
 end
 
-When /^I give the work to "([^"]*)"$/ do |recipient|
-  fill_in("work_recipients", with: "#{recipient}")
+When "I give the work to {string}" do |recipient|
+  fill_in("Gift this work to", with: recipient)
 end
 
 When /^I give the work "([^"]*)" to the user "([^"]*)"$/ do |work_title, recipient|

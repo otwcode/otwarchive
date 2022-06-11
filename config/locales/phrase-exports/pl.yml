@@ -1,5 +1,78 @@
 ---
 pl:
+  activerecord:
+    attributes:
+      archive_warning:
+        name_with_colon:
+          few: 'Ostrzeżenia:'
+          many: 'Ostrzeżenia:'
+          one: 'Ostrzeżenie:'
+      category:
+        name_with_colon:
+          few: 'Kategorie:'
+          many: 'Kategorie:'
+          one: 'Kategoria:'
+      character:
+        name_with_colon:
+          few: 'Postacie:'
+          many: 'Postacie:'
+          one: 'Postać:'
+      fandom:
+        name_with_colon:
+          few: 'Fandomy:'
+          many: 'Fandomy:'
+          one: 'Fandom:'
+      freeform:
+        name_with_colon:
+          few: 'Tagi dodatkowe:'
+          many: 'Tagi dodatkowe:'
+          one: 'Tag dodatkowy:'
+      rating:
+        name_with_colon: 'Kategoria wiekowa:'
+      relationship:
+        name_with_colon:
+          few: 'Związki:'
+          many: 'Związki:'
+          one: 'Związek:'
+      work:
+        summary: Streszczenie
+    models:
+      archive_warning:
+        few: Ostrzeżenia
+        many: Ostrzeżenia
+        one: Ostrzeżenie
+      category:
+        few: Kategorie
+        many: Kategorie
+        one: Kategoria
+      chapter:
+        few: Rozdziały
+        many: Rozdziały
+        one: Rozdział
+      character:
+        few: Postacie
+        many: Postacie
+        one: Postać
+      fandom:
+        few: Fandomy
+        many: Fandomy
+        one: Fandom
+      freeform:
+        few: Tagi dodatkowe
+        many: Tagi dodatkowe
+        one: Tag dodatkowy
+      rating:
+        few: Kategorie wiekowe
+        many: Kategorie wiekowe
+        one: Kategoria wiekowa
+      relationship:
+        few: Związki
+        many: Związki
+        one: Związek
+      series:
+        few: Serie
+        many: Serie
+        one: Seria
   kudo_mailer:
     batch_kudo_notification:
       guest:
@@ -12,7 +85,9 @@ pl:
           few: Kudos dla %{commentable_link} od %{givers_list}.
           many: Kudos dla %{commentable_link} od %{givers_list}.
           one: Kudos dla %{commentable_link} od %{givers_list}.
-        single_guest: Kudos dla %{commentable_link} od 1 gościa.
+        single_guest:
+          giver_list: 1 gościa
+          left_kudos: Kudos dla %{commentable_link} od %{giver_list}.
       subject: "[%{app_name}] Masz kudos!"
       text:
         left_kudos:
@@ -25,6 +100,13 @@ pl:
       closing:
         formal: Z wyrazami szacunku,
         informal: Pozdrawiamy,
+      creation:
+        link_with_word_count: "%{creation_link} (%{word_count})"
+        title_with_word_count: '"%{creation_title}" (%{word_count})'
+        word_count:
+          few: "%{count} słowa"
+          many: "%{count} słów"
+          one: "%{count} słowo"
       footer:
         general:
           html:
@@ -46,6 +128,7 @@ pl:
           addressed: Cześć, %{name}!
           unaddressed: Cześć!
         introductory: Pozdrowienia z Archive of Our Own – AO3 (Naszego Własnego Archiwum)!
+      metadata_label_indicator: ": "
       signature:
         app_short_name: AO3
         open_doors: Zespół Open Doors (Drzwi Otwartych)
@@ -382,9 +465,16 @@ pl:
       reason: 'Treść Twojej prośby:'
       subject: "[%{app_name}] Prośba o dodatkowe zaproszenia została odrzucona"
     recipient_notification:
+      html:
+        collection: W kolekcji %{collection_link} na AO3 opublikowano pracę, będącą
+          prezentem dla Ciebie!
+      no_collection: Na AO3 opublikowano pracę, będącą prezentem dla Ciebie!
       subject:
         collection: "[%{app_name}][%{collection_title}] Obdarowano Cię pracą w %{collection_title}"
         no_collection: "[%{app_name}] Obdarowano Cię pracą"
+      text:
+        collection: W kolekcji "%{collection_title}" (%{collection_url}) na AO3 opublikowano
+          pracę, będącą prezentem dla Ciebie!
     signup_notification:
       activate_your_account: aktywuj swoje konto
       admin_posts: archiwalnych postach adminów

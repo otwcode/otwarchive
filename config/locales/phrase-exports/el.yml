@@ -9,7 +9,9 @@ el:
         left_kudos:
           one: Ο/Η %{givers_list} άφησε μπράβο στο %{commentable_link}.
           other: Οι %{givers_list} άφησαν μπράβο στο %{commentable_link}.
-        single_guest: Ένας επισκέπτης άφησε μπράβο στο %{commentable_link}.
+        single_guest:
+          giver_list: Ένας επισκέπτης
+          left_kudos: "%{giver_list} άφησε μπράβο στο %{commentable_link}."
       subject: "[%{app_name}] 'Εχεις μπράβο!"
       text:
         left_kudos:
@@ -403,10 +405,17 @@ el:
       reason: 'Το αίτημά σας ήταν:'
       subject: "[%{app_name}] Το αίτημα για επιπλέον πρόσκληση απορρίφθηκε"
     recipient_notification:
+      html:
+        collection: Ένα έργο-δώρο έχει αναρτηθεί για εσάς στη συλλογή %{collection_link}
+          στο AO3!
+      no_collection: Ένα έργο-δώρο αναρτήθηκε για εσάς στο AO3!
       subject:
         collection: "[%{app_name}][%{collection_title}] Ένα έργο-δώρο για εσάς από
           τη συλλογή %{collection_title}"
         no_collection: "[%{app_name}] Ένα έργο-δώρο για εσάς"
+      text:
+        collection: Ένα έργο-δώρο έχει αναρτηθεί για εσάς στη συλλογή "%{collection_title}"
+          (%{collection_url}) στο AO3!
     signup_notification:
       activate_your_account: ακολουθήστε αυτόν τον σύνδεσμο για να ενεργοποιήσετε
         τον λογαριασμό σακ

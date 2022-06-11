@@ -15,6 +15,18 @@ module UserHelpers
     end
     user
   end
+
+  # Like find_or_create_new_user above, but with fewer options, and it doesn't
+  # invalidate the session for any pre-existing users (because it's not setting
+  # the password).
+  def ensure_user(login)
+    user = User.find_by(login: login)
+    return user unless user.nil?
+
+    FactoryBot.create(:user, login: login).tap do |u|
+      u.default_pseud.add_to_autocomplete
+    end
+  end
 end
 
 World(UserHelpers)

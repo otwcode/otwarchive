@@ -1,5 +1,78 @@
 ---
 sr:
+  activerecord:
+    attributes:
+      archive_warning:
+        name_with_colon:
+          few: 'Упозорења:'
+          one: 'Упозорење:'
+          other: 'Упозорења:'
+      category:
+        name_with_colon:
+          few: 'Категорије:'
+          one: 'Категорија:'
+          other: 'Категорије:'
+      character:
+        name_with_colon:
+          few: 'Ликови:'
+          one: 'Лик:'
+          other: 'Ликови:'
+      fandom:
+        name_with_colon:
+          few: 'Фандоми:'
+          one: 'Фандом:'
+          other: 'Фандоми:'
+      freeform:
+        name_with_colon:
+          few: 'Додатни тагови:'
+          one: 'Додатан таг:'
+          other: 'Додатни тагови:'
+      rating:
+        name_with_colon: 'Оцена примерености садржаја:'
+      relationship:
+        name_with_colon:
+          few: 'Односи између ликова:'
+          one: 'Однос између ликова:'
+          other: 'Односи између ликова:'
+      work:
+        summary: Сажетак
+    models:
+      archive_warning:
+        few: Упозорења
+        one: Упозорење
+        other: Упозорења
+      category:
+        few: Категорије
+        one: Категорија
+        other: Категорије
+      chapter:
+        few: Главе
+        one: Глава
+        other: Главе
+      character:
+        few: Ликови
+        one: Лик
+        other: Ликови
+      fandom:
+        few: Фандоми
+        one: Фандом
+        other: Фандоми
+      freeform:
+        few: Додатни тагови
+        one: Додатан таг
+        other: Додатни тагови
+      rating:
+        few: Оцене примерености садржаја
+        one: Оцена примерености садржаја
+        other: Оцене примерености садржаја
+      relationship:
+        few: Односи између ликова
+        one: Однос између ликова
+        other: Односи између ликова
+      series:
+        few: Серијали
+        one: Серијал
+        other: Серијали
   kudo_mailer:
     batch_kudo_notification:
       guest:
@@ -11,7 +84,9 @@ sr:
           few: "%{givers_list} су похвалили %{commentable_link}."
           one: "%{givers_list} је похвалио/ла %{commentable_link}."
           other: "%{givers_list} су похвалили %{commentable_link}."
-        single_guest: Гост/гошћа је оставио/ла похвалу на %{commentable_link}.
+        single_guest:
+          giver_list: Гост/гошћа
+          left_kudos: "%{giver_list} је оставио/ла похвалу на %{commentable_link}."
       subject: "[%{app_name}] Добили сте похвале!"
       text:
         left_kudos:
@@ -24,6 +99,13 @@ sr:
       closing:
         formal: Срдачан поздрав,
         informal: Све најбоље,
+      creation:
+        link_with_word_count: "%{creation_link} (%{word_count})"
+        title_with_word_count: '"%{creation_title}" (%{word_count})'
+        word_count:
+          few: "%{count} речи"
+          one: "%{count} реч"
+          other: "%{count} речи"
       footer:
         general:
           html:
@@ -44,6 +126,7 @@ sr:
           addressed: Здраво, %{name}!
           unaddressed: Здраво!
         introductory: Здраво од Archive of Our Own – AO3-а (Наше сопствене архиве)!
+      metadata_label_indicator: ": "
       signature:
         app_short_name: AO3
         open_doors: Тим Open Doors (Отворених врата)
@@ -378,9 +461,16 @@ sr:
       reason: 'Ваш захтев је био:'
       subject: "[%{app_name}] Захтев за додатни позивни код је одбијен"
     recipient_notification:
+      html:
+        collection: Поклон дело за Вас је објављено у %{collection_link} збирци на
+          АО3-у!
+      no_collection: Поклон дело за Вас је објављено на АО3-у!
       subject:
         collection: "[%{app_name}][%{collection_title}] Поклон дело за Вас из %{collection_title}"
         no_collection: "[%{app_name}] Поклон дело за Вас"
+      text:
+        collection: Поклон дело за Вас је објављено у "%{collection_title}" збирци
+          (%{collection_url}) на АО3-у!
     signup_notification:
       activate_your_account: Активирај свој налог
       admin_posts: админ постови Архиве

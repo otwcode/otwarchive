@@ -329,7 +329,14 @@ ky:
       reason: 'Сиздин өтүнүчүңүз:'
       subject: "[%{app_name}] Кошумча чакыруу сурамы четке кагылды"
     recipient_notification:
+      html:
+        collection: Белек чыгармасы сиз үчүн AO3деги %{collection_link} коллекциясында
+          жайгаштырылды!
+      no_collection: AO3де сизге белек чыгарма жайгаштырылган!
       subject:
         collection: "[%{app_name}][%{collection_title}] %{collection_title} ден сиз
           үчүн белек чыгармасы."
         no_collection: "[%{app_name}] Сиз үчүн белек чыгарма"
+      text:
+        collection: Белек чыгармасы AO3 дарегиндеги "%{collection_title}" жыйнагында
+          (%{collection_url}) сиз үчүн жайгаштырылды!

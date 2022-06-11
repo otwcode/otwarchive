@@ -18,7 +18,7 @@
             <li class="approve review" id="review_comment_link_<%= inbox_comment.feedback_comment.id %>">
               <%= render 'inbox/approve_button', feedback_comment: inbox_comment.feedback_comment, approved_from: "home" %>
             </li>
-          <% elsif !inbox_comment.feedback_comment.iced? %>
+          <% elsif can_reply_to_comment?(inbox_comment.feedback_comment) %>
             <li>
               <%= render 'inbox/reply_button', feedback_comment: inbox_comment.feedback_comment %>
             </li>

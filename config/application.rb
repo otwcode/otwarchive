@@ -94,6 +94,8 @@ module Otwarchive
     # Use Resque to run ActiveJobs (including sending delayed mail):
     config.active_job.queue_adapter = :resque
 
+    config.active_model.i18n_customize_full_message = true
+
     config.action_mailer.default_url_options = { host: ArchiveConfig.APP_HOST }
 
     # Use "mailer" instead of "mailers" as the Resque queue for emails:
