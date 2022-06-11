@@ -1,10 +1,10 @@
-<% id_suffix = shareable.is_a?(Bookmark) ? "_#{shareable.id}" : "" %>
-<div id="share<%= id_suffix %>">
+<div id="share">
 
   <p class="note"><%= ts("Copy and paste the following code to link back to this work (") %><kbd><%= ts("CTRL A") %></kbd><%= ts("/") %><kbd><%= ts("CMD A") %></kbd><%= ts(" will select all), or use the Tweet or Tumblr links to share the work on your Twitter or Tumblr account.") %></p>
 
   <%# HTML share code %>
   <p>
+    <% id_suffix = shareable.is_a?(Bookmark) ? "_#{shareable.id}" : "" %>
     <% embed_partial = shareable.is_a?(Bookmark) ? "share/embed_link_bookmark" : "share/embed_link_work" %>
     <textarea cols="50" rows="4" id="embed_code<%= id_suffix %>"><%= remove_newlines(render(embed_partial, item: shareable)) %></textarea>
   </p>

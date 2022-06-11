@@ -38,11 +38,11 @@ describe ShareHelper do
     end
 
     context "when work has three or more fandoms" do
-      let(:work) { build_stubbed(:work, fandom_string: "Testing, Battlestar Galactica, Naruto") }
+      let(:work) { create(:work, fandom_string: "saiki k, mob psycho 100, spy x family") }
 
       it "lists the fandom as 'Multifandom'" do
         expect(helper.get_tweet_text(work)).to include " - Multifandom"
-        expect(helper.get_tweet_text(work)).not_to include "Battlestar"
+        expect(helper.get_tweet_text(work)).not_to include "saiki k"
       end
     end
 
