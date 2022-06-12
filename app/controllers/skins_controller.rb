@@ -218,7 +218,7 @@ class SkinsController < ApplicationController
       last_position = params[:skin][:skin_parents_attributes]&.keys&.map(&:to_i)&.max || 0
       archive_parents.each do |parent_skin|
         last_position += 1
-        new_skin_parent_hash = ActionController::Parameters.new({position: last_position, parent_skin_id: parent_skin.id})
+        new_skin_parent_hash = ActionController::Parameters.new({ position: last_position, parent_skin_id: parent_skin.id })
         params[:skin][:skin_parents_attributes].merge!({last_position.to_s => new_skin_parent_hash})
       end
       return true
