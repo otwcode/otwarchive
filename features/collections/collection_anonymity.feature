@@ -526,7 +526,7 @@ Feature: Collection
       And I view the work "Old Snippet"
     Then I should see "Share"
     When I follow "Share"
-    Then I should see "by Anonymous" within "#modal"
+    Then I should see "by Anonymous" within "#modal textarea"
 
   Scenario: Work share button should not display for unrevealed works
     Given I have the hidden collection "Hidden Treasury"

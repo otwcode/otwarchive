@@ -5,7 +5,7 @@ module SkinWizard
         #header .primary,
         #footer,
         .autocomplete .dropdown ul li:hover,
-        li.selected,
+        .autocomplete .dropdown li.selected,
         a.tag:hover,
         .listbox .heading a.tag:visited:hover,
         .splash .favorite li:nth-of-type(odd) a:hover,

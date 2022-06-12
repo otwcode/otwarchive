@@ -15,7 +15,7 @@ Feature: Hit Counts
     When I go to the work "Hit Count Test"
       And the hit counts for all works are updated
       And I go to the work "Hit Count Test"
-    Then I should see "Hits:0"
+    Then I should see "Hits: 0"
 
   Scenario: Viewing a work logged-in increments the hit count
     Given the work "Hit Count Test"
@@ -24,7 +24,7 @@ Feature: Hit Counts
     When I go to the work "Hit Count Test"
       And the hit counts for all works are updated
       And I go to the work "Hit Count Test"
-    Then I should see "Hits:1"
+    Then I should see "Hits: 1"
 
   Scenario: Viewing a work logged-out increments the hit count
     Given the work "Hit Count Test"
@@ -32,7 +32,7 @@ Feature: Hit Counts
     When I go to the work "Hit Count Test"
       And the hit counts for all works are updated
       And I go to the work "Hit Count Test"
-    Then I should see "Hits:1"
+    Then I should see "Hits: 1"
 
   Scenario: Viewing an unrevealed work doesn't increment the hit count
     Given there is a work "Hit Count Test" in an unrevealed collection "Unrevealed"
@@ -41,7 +41,7 @@ Feature: Hit Counts
     When I go to the work "Hit Count Test"
       And the hit counts for all works are updated
       And I go to the work "Hit Count Test"
-    Then I should see "Hits:0"
+    Then I should see "Hits: 0"
 
   Scenario: Viewing a work hidden by an admin doesn't increment the hit count
     Given the spam work "Hit Count Test"
@@ -50,7 +50,7 @@ Feature: Hit Counts
     When I go to the work "Hit Count Test"
       And the hit counts for all works are updated
       And I go to the work "Hit Count Test"
-    Then I should see "Hits:0"
+    Then I should see "Hits: 0"
 
   Scenario: When an admin views a draft, it doesn't increment the hit count
     Given I am logged in as a random user
@@ -60,7 +60,7 @@ Feature: Hit Counts
     When I go to the work "Hit Count Test"
       And the hit counts for all works are updated
       And I go to the work "Hit Count Test"
-    Then I should see "Hits:0"
+    Then I should see "Hits: 0"
 
   Scenario: Viewing the first chapter logged-in increments the hit count
     Given the chaptered work "Hit Count Test"
@@ -69,7 +69,7 @@ Feature: Hit Counts
     When I go to the 1st chapter of the work "Hit Count Test"
       And the hit counts for all works are updated
       And I go to the work "Hit Count Test"
-    Then I should see "Hits:1"
+    Then I should see "Hits: 1"
 
   Scenario: Viewing the first chapter logged-out increments the hit count
     Given the chaptered work "Hit Count Test"
@@ -77,7 +77,7 @@ Feature: Hit Counts
     When I go to the 1st chapter of the work "Hit Count Test"
       And the hit counts for all works are updated
       And I go to the work "Hit Count Test"
-    Then I should see "Hits:1"
+    Then I should see "Hits: 1"
 
   Scenario: Viewing the second chapter logged-in increments the hit count
     Given the chaptered work "Hit Count Test"
@@ -86,7 +86,7 @@ Feature: Hit Counts
     When I go to the 2nd chapter of the work "Hit Count Test"
       And the hit counts for all works are updated
       And I go to the work "Hit Count Test"
-    Then I should see "Hits:1"
+    Then I should see "Hits: 1"
 
   Scenario: Viewing the second chapter logged-out increments the hit count
     Given the chaptered work "Hit Count Test"
@@ -94,7 +94,7 @@ Feature: Hit Counts
     When I go to the 2nd chapter of the work "Hit Count Test"
       And the hit counts for all works are updated
       And I go to the work "Hit Count Test"
-    Then I should see "Hits:1"
+    Then I should see "Hits: 1"
 
   Scenario: Viewing multiple chapters in sequence only increments the hit count once
     Given the chaptered work "Hit Count Test"
@@ -104,7 +104,7 @@ Feature: Hit Counts
       And I go to the 2nd chapter of the work "Hit Count Test"
       And the hit counts for all works are updated
       And I go to the work "Hit Count Test"
-    Then I should see "Hits:1"
+    Then I should see "Hits: 1"
 
   Scenario: Viewing a full multi-chapter work increments the hit count
     Given the chaptered work "Hit Count Test"
@@ -112,4 +112,4 @@ Feature: Hit Counts
     When I go to the work "Hit Count Test" in full mode
       And the hit counts for all works are updated
       And I go to the work "Hit Count Test"
-    Then I should see "Hits:1"
+    Then I should see "Hits: 1"

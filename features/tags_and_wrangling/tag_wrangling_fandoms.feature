@@ -88,7 +88,7 @@ Scenario: fandoms wrangling - syns, mergers, autocompletes, metatags
     And I check "Canonical"
     And I choose "Fandom"
     And I press "Create Tag"
-    And I fill in "tag_media_string" with "TV Shows"
+    And I choose "TV Shows" from the "Add:" autocomplete
     And I choose "Stargate Atlantis" from the "Add SubTags" autocomplete
     And I press "Save changes"
   Then I should see "Tag was updated"
