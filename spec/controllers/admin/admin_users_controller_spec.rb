@@ -69,12 +69,20 @@ describe Admin::AdminUsersController do
     end
 
     context "when admin has correct authorization" do
-      it "allows access to show page" do
+      it "if user exists, allows access to show page" do
         admin.update(roles: ["policy_and_abuse"])
         fake_login_admin(admin)
         get :show, params: { id: user.login }
 
         expect(response).to have_http_status(:success)
+      end
+
+      it "if user does not exists, raises a 404" do
+        admin.update(roles: ["policy_and_abuse"])
+        fake_login_admin(admin)
+        params = { id: "not_existing_id" }
+
+        expect { get :show, params: params }.to raise_error ActiveRecord::RecordNotFound
       end
     end
   end
