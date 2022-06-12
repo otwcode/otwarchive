@@ -100,7 +100,7 @@ describe Tag do
         # Check if redis has flagged this tag for an update to the database.
         expect(REDIS_GENERAL.sismember("tag_update", tag.id)).to eq true
 
-        write_to_database(tag)
+        write_tag_to_database(tag)
         # Actual number of taggings has not changed though count cache has.
         expect(tag.taggings_count_cache).to eq 2
         expect(tag.taggings_count).to eq 1
@@ -115,7 +115,7 @@ describe Tag do
         # Check if redis has flagged this tag for an update to the database.
         expect(REDIS_GENERAL.sismember("tag_update", tag.id)).to eq true
 
-        write_to_database(tag)
+        write_tag_to_database(tag)
         expect(tag.taggings_count_cache).to eq 2
         expect(tag.taggings_count).to eq 2
       end
@@ -127,8 +127,30 @@ describe Tag do
         REDIS_GENERAL.set("tag_update_#{tag.id}_value", "")
         REDIS_GENERAL.sadd("tag_update", tag.id)
 
-        write_to_database(tag)
+        write_tag_to_database(tag)
         expect(tag.taggings_count_cache).to eq 1
+      end
+
+      it "triggers reindexing of tags which aren't used much" do
+        tag = fandom_tag_with_one_work
+        FactoryBot.create(:work, fandom_string: tag.name)
+        # Run indexing jobs to prevent automatic reindexing with small tags
+        run_all_indexing_jobs
+
+        expect do
+          write_tag_to_database(tag)
+        end.to(add_to_reindex_queue(tag, :main))
+      end
+
+      it "triggers reindexing of tags which are used significantly" do
+        tag = fandom_tag_with_one_work
+        (1..ArchiveConfig.TAGGINGS_COUNT_MIN_CACHE_COUNT).each do |try|
+          FactoryBot.create(:work, fandom_string: tag.name)
+        end
+
+        expect do
+          write_tag_to_database(tag)
+        end.to(add_to_reindex_queue(tag, :main))
       end
     end
   end
