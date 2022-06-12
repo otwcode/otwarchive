@@ -28,14 +28,4 @@ describe ErrorsController do
       expect(response.header["Content-Type"]).to eq("text/html; charset=utf-8")
     end
   end
-
-  describe "auth_error" do
-    render_views
-
-    it "returns an auth error page" do
-      get "auth_error"
-      expect(response.status).to eq(200)
-      assert_select "title:contains('Auth Error')"
-    end
-  end
 end
