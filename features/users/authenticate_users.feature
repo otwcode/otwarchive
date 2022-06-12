@@ -92,10 +92,7 @@ Feature: User Authentication
         | login | email           | password |
         | sam   | sam@example.com | password |
       And all emails have been delivered
-    When I am on the login page
-      And I follow "Reset password"
-      And I fill in "Email address or user name" with "sam@example.com"
-      And I press "Reset Password"
+    When I request a password reset for "sam@example.com"
     Then I should see "Check your email for instructions on how to reset your password."
       And 1 email should be delivered
     When I start a new session
@@ -112,10 +109,7 @@ Feature: User Authentication
         | login | password |
         | sam   | password |
       And all emails have been delivered
-    When I am on the login page
-      And I follow "Reset password"
-      And I fill in "Email address or user name" with "sam"
-      And I press "Reset Password"
+    When I request a password reset for "sam"
     Then I should see "Check your email for instructions on how to reset your password."
       And 1 email should be delivered
     When it is currently 2 weeks from now
@@ -129,6 +123,26 @@ Feature: User Authentication
       And I should see "Log In"
       And I should not see "Your password has been changed"
       And I should not see "Hi, sam!"
+
+  Scenario: Forgot password, with enough attempts to trigger password reset cooldown
+    Given I have no users
+      And the following activated user exists
+        | login | password |
+        | sam   | password |
+      And all emails have been delivered
+    When I request a password reset for "sam"
+      And I request a password reset for "sam"
+      And I request a password reset for "sam"
+    Then I should see "Check your email for instructions on how to reset your password."
+      And 3 emails should be delivered
+    Given all emails have been delivered
+    When I request a password reset for "sam"
+    Then I should see "You cannot reset your password at this time. Please try again after"
+      And 0 emails should be delivered
+    When it is currently 12 hours from now
+      And I request a password reset for "sam"
+    Then I should see "Check your email for instructions on how to reset your password."
+      And 1 email should be delivered
 
   Scenario: User is locked out
     Given I have no users

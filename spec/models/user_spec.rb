@@ -201,4 +201,63 @@ describe User do
       expect(duplicates).to eq(3)
     end
   end
+
+  describe "password_resets_limit_reached?" do
+    context "user with no password reset requests" do
+      let(:user) { build(:user, resets_requested: 0) }
+
+      it "has not reached the requests limit" do
+        expect(user.password_resets_limit_reached?).to be_falsy
+      end
+    end
+
+    context "user at the limit of password resets but after cooldown period" do
+      let(:user) { build(:user, resets_requested: ArchiveConfig.PASSWORD_RESET_LIMIT,
+                          reset_password_sent_at: ArchiveConfig.PASSWORD_RESET_COOLDOWN_HOURS.hours.ago) }
+
+      it "has not reached the requests limit" do
+        expect(user.password_resets_limit_reached?).to be_falsy
+      end
+    end
+
+    context "user at the limit of password resets and within the cooldown period" do
+      let(:user) { build(:user, resets_requested: ArchiveConfig.PASSWORD_RESET_LIMIT,
+        reset_password_sent_at: Time.current) }
+
+      it "has reached the requests limit" do
+        expect(user.password_resets_limit_reached?).to be_truthy
+      end
+    end
+  end
+
+  describe "update_password_resets_requested" do
+    context "user with no password reset requests" do
+      let(:user) { build(:user, resets_requested: 0) }
+
+      it "increments the password reset requests field" do
+        user.update_password_resets_requested
+        expect(user.resets_requested).to eq(1)
+      end
+    end
+
+    context "user with password reset requests and within the cooldown period" do
+      let(:user) { build(:user, resets_requested: ArchiveConfig.PASSWORD_RESET_LIMIT - 1,
+        reset_password_sent_at: Time.current) }
+
+      it "increments the password reset requests field" do
+        user.update_password_resets_requested
+        expect(user.resets_requested).to eq(ArchiveConfig.PASSWORD_RESET_LIMIT)
+      end
+    end
+
+    context "user at the limit of password resets but after cooldown period" do
+      let(:user) { build(:user, resets_requested: ArchiveConfig.PASSWORD_RESET_LIMIT,
+                          reset_password_sent_at: ArchiveConfig.PASSWORD_RESET_COOLDOWN_HOURS.hours.ago) }
+
+      it "sets the password reset requests field to 1" do
+        user.update_password_resets_requested
+        expect(user.resets_requested).to eq(1)
+      end
+    end
+  end
 end

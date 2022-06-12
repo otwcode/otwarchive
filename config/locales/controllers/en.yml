@@ -36,3 +36,4 @@ en:
       create:
         contact_abuse: contact Policy & Abuse
         reset_blocked: Password resets are disabled for that user. For more information, please %{contact_abuse_link}.
+        reset_cooldown: You cannot reset your password at this time. Please try again after %{reset_available_time}.
