@@ -144,7 +144,7 @@ describe Tag do
 
       it "triggers reindexing of tags which are used significantly" do
         tag = fandom_tag_with_one_work
-        (1..ArchiveConfig.TAGGINGS_COUNT_MIN_CACHE_COUNT).each do |try|
+        (1..ArchiveConfig.TAGGINGS_COUNT_MIN_CACHE_COUNT).each do
           FactoryBot.create(:work, fandom_string: tag.name)
         end
 
