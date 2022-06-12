@@ -8,7 +8,7 @@ gem 'bundler'
 
 gem "rails", "~> 6.0.4"
 gem "rails-i18n"
-gem "rack", "~> 2.1", ">= 2.1.4"
+gem "rack", "~> 2.2"
 gem "sprockets", "< 4"
 
 gem 'rails-observers', git: 'https://github.com/rails/rails-observers'
@@ -123,8 +123,8 @@ group :test do
   gem "rspec-rails", "~> 4.0.1"
   gem 'pickle'
   gem 'shoulda'
-  gem 'capybara', '~> 2.16.1'
-  gem 'cucumber', '~> 3.1'
+  gem "capybara"
+  gem "cucumber"
   gem 'database_cleaner'
   gem 'poltergeist'
   gem 'capybara-screenshot'

@@ -365,7 +365,7 @@ public
 
     @page_title = ""
     if logged_in? && !current_user.preference.try(:work_title_format).blank?
-      @page_title = current_user.preference.work_title_format
+      @page_title = current_user.preference.work_title_format.dup
       @page_title.gsub!(/FANDOM/, fandom)
       @page_title.gsub!(/AUTHOR/, author)
       @page_title.gsub!(/TITLE/, title)
