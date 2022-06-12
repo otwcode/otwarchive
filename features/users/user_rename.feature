@@ -130,18 +130,18 @@ Feature:
     When I search for works containing "newusername"
     Then I should see "Epic story"
 
-  Scenario: Changing username updates kudos
+  Scenario: Changing username updates kudos fragment
     Given the work "Interesting"
-      And I am logged in as "before" with password "password"
+      And I am logged in as "oldusername" with password "password"
     When I view the work "Interesting"
       And I press "Kudos ♥"
-    Then I should see "before left kudos on this work!"
-    When I visit the change username page for before
-      And I fill in "New user name" with "after"
+    Then I should see "oldusername left kudos on this work!"
+    When I visit the change username page for oldusername
+      And I fill in "New user name" with "newusername"
       And I fill in "Password" with "password"
       And I press "Change User Name"
     Then I should get confirmation that I changed my username
-      And I should see "Hi, after"
+      And I should see "Hi, newusername"
     When I view the work "Interesting"
-    Then I should see "after left kudos on this work!"
-      And I should not see "before left kudos on this work!"
+    Then I should see "newusername left kudos on this work!"
+      And I should not see "oldusername"

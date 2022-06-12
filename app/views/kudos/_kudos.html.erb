@@ -3,7 +3,7 @@
 <div id="kudos">
   <% has_user_kudos = kudos.exists? %>
   <% if has_user_kudos || guest_kudos_count > 0 %>
-    <% cache "#{commentable.cache_key}/kudos-v3", skip_digest: true do %>
+    <% cache "#{commentable.cache_key}/kudos-v4", skip_digest: true do %>
       <p class="kudos">
         <% if has_user_kudos %>
           <%= kudos_user_links(commentable, kudos, showing_more: false) %>

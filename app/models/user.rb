@@ -146,7 +146,11 @@ class User < ApplicationRecord
 
   def expire_caches
     return unless saved_change_to_login?
-    kudos.touch_all
+    kudos.each do |kudo|
+      # Unfortunately, the callback that invalidates cached kudos doesn't
+      # get run if we do touch_all
+      kudo.touch
+    end
     self.works.each do |work|
       work.touch
       work.expire_caches
