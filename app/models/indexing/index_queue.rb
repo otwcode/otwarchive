@@ -12,9 +12,7 @@ class IndexQueue
   end
 
   def self.get_key(klass, label)
-    if klass.is_a? Class
-      klass = klass < Tag ? Tag : klass
-    end
+    klass = klass.is_a?(Class) ? klass.base_class : klass
     "index:#{klass.to_s.underscore}:#{label}"
   end
 
