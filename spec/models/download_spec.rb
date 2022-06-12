@@ -60,10 +60,10 @@ describe Download do
   describe "author_names" do
     let(:work) { Work.new }
     let(:subject) { Download.new(work) }
-    let(:simple_user) { FactoryGirl.build(:user, login: "SimpleAuthor") }
-    let(:simple_author) { FactoryGirl.build(:pseud, name: "SimpleAuthor", user: simple_user) }
-    let(:complex_user) { FactoryGirl.build(:user, login: "ComplexUser") }
-    let(:complex_author) { FactoryGirl.build(:pseud, name: "ComplexAuthor", user: complex_user) }
+    let(:simple_user) { build(:user, login: "SimpleAuthor") }
+    let(:simple_author) { build(:pseud, name: "SimpleAuthor", user: simple_user) }
+    let(:complex_user) { build(:user, login: "ComplexUser") }
+    let(:complex_author) { build(:pseud, name: "ComplexAuthor", user: complex_user) }
 
     it "returns Anonymous when the work is anonymous" do
       allow(work).to receive(:anonymous?).and_return(true)
