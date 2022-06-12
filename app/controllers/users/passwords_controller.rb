@@ -13,7 +13,8 @@ class Users::PasswordsController < Devise::PasswordsController
       redirect_to root_path and return
     elsif user&.password_resets_limit_reached?
       available_time = ApplicationController.helpers.time_in_zone(
-        user.password_resets_available_time, nil, user)
+        user.password_resets_available_time, nil, user
+      )
 
       flash[:error] = t(".reset_cooldown", reset_available_time: available_time).html_safe
       redirect_to root_path and return

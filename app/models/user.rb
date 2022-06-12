@@ -425,7 +425,7 @@ class User < ApplicationRecord
   end
 
   def update_password_resets_requested
-    if self.resets_requested > 0 && !self.last_reset_within_cooldown?
+    if self.resets_requested.positive? && !self.last_reset_within_cooldown?
       self.resets_requested = 1
     else
       self.resets_requested += 1

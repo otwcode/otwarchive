@@ -212,8 +212,11 @@ describe User do
     end
 
     context "user at the limit of password resets but after cooldown period" do
-      let(:user) { build(:user, resets_requested: ArchiveConfig.PASSWORD_RESET_LIMIT,
-                          reset_password_sent_at: ArchiveConfig.PASSWORD_RESET_COOLDOWN_HOURS.hours.ago) }
+      let(:user) do
+        build(:user,
+              resets_requested: ArchiveConfig.PASSWORD_RESET_LIMIT,
+              reset_password_sent_at: ArchiveConfig.PASSWORD_RESET_COOLDOWN_HOURS.hours.ago)
+      end
 
       it "has not reached the requests limit" do
         expect(user.password_resets_limit_reached?).to be_falsy
@@ -221,8 +224,11 @@ describe User do
     end
 
     context "user at the limit of password resets and within the cooldown period" do
-      let(:user) { build(:user, resets_requested: ArchiveConfig.PASSWORD_RESET_LIMIT,
-        reset_password_sent_at: Time.current) }
+      let(:user) do
+        build(:user,
+              resets_requested: ArchiveConfig.PASSWORD_RESET_LIMIT,
+              reset_password_sent_at: Time.current)
+      end
 
       it "has reached the requests limit" do
         expect(user.password_resets_limit_reached?).to be_truthy
@@ -240,9 +246,12 @@ describe User do
       end
     end
 
-    context "user with password reset requests and within the cooldown period" do
-      let(:user) { build(:user, resets_requested: ArchiveConfig.PASSWORD_RESET_LIMIT - 1,
-        reset_password_sent_at: Time.current) }
+    context "user within password reset requests limit and within the cooldown period" do
+      let(:user) do
+        build(:user,
+              resets_requested: ArchiveConfig.PASSWORD_RESET_LIMIT - 1,
+              reset_password_sent_at: Time.current)
+      end
 
       it "increments the password reset requests field" do
         user.update_password_resets_requested
@@ -251,8 +260,11 @@ describe User do
     end
 
     context "user at the limit of password resets but after cooldown period" do
-      let(:user) { build(:user, resets_requested: ArchiveConfig.PASSWORD_RESET_LIMIT,
-                          reset_password_sent_at: ArchiveConfig.PASSWORD_RESET_COOLDOWN_HOURS.hours.ago) }
+      let(:user) do
+        build(:user,
+              resets_requested: ArchiveConfig.PASSWORD_RESET_LIMIT,
+              reset_password_sent_at: ArchiveConfig.PASSWORD_RESET_COOLDOWN_HOURS.hours.ago)
+      end
 
       it "sets the password reset requests field to 1" do
         user.update_password_resets_requested
