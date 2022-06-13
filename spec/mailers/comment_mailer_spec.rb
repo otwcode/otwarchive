@@ -222,7 +222,7 @@ describe CommentMailer do
   end
 
   describe "comment_reply_sent_notification" do
-    subject(:email) { CommentMailer.comment_reply_sent_notification(parent_comment, comment) }
+    subject(:email) { CommentMailer.comment_reply_sent_notification(comment) }
 
     let(:parent_comment) { create(:comment) }
     let(:comment) { create(:comment, commentable: parent_comment) }
@@ -232,7 +232,7 @@ describe CommentMailer do
     it_behaves_like "a notification email with a link to the comment"
     it_behaves_like "a notification email with a link to the comment's thread"
 
-    context "when the comment is on a tag" do
+    context "when the parent comment is on a tag" do
       let(:parent_comment) { create(:comment, :on_tag) }
 
       it_behaves_like "a notification email with a link to the comment"

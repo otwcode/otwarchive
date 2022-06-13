@@ -109,8 +109,7 @@ class Comment < ApplicationRecord
       end
       if notify_user_by_email?(self.comment_owner) && notify_user_of_own_comments?(self.comment_owner)
         if self.reply_comment?
-          parent_comment = self.commentable
-          CommentMailer.comment_reply_sent_notification(parent_comment, self).deliver_after_commit
+          CommentMailer.comment_reply_sent_notification(self).deliver_after_commit
         else
           CommentMailer.comment_sent_notification(self).deliver_after_commit
         end
@@ -156,8 +155,7 @@ class Comment < ApplicationRecord
     end
     if notify_user_by_email?(self.comment_owner) && notify_user_of_own_comments?(self.comment_owner)
       if self.reply_comment?
-        parent_comment = self.commentable
-        CommentMailer.comment_reply_sent_notification(parent_comment, self).deliver_after_commit
+        CommentMailer.comment_reply_sent_notification(self).deliver_after_commit
       else
         CommentMailer.comment_sent_notification(self).deliver_after_commit
       end

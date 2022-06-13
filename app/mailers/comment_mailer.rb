@@ -61,9 +61,9 @@ class CommentMailer < ApplicationMailer
   end
 
   # Sends email to the poster of a reply to a comment
-  def comment_reply_sent_notification(parent_comment, comment)
-    @parent_comment = parent_comment
+  def comment_reply_sent_notification(comment)
     @comment = comment
+    @parent_comment = comment.commentable
     @noreply = true
     mail(
       to: @comment.comment_owner_email,
