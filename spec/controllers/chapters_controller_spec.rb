@@ -45,10 +45,10 @@ describe ChaptersController do
         expect(response).to render_template(:manage)
       end
 
-      it "assigns @chapters to only posted chapters" do
-        create(:chapter, :draft, work: work)
+      it "assigns @chapters to include draft chapters" do
+        chapter = create(:chapter, :draft, work: work, position: 2)
         get :manage, params: { work_id: work.id }
-        expect(assigns[:chapters]).to eq([work.chapters.first])
+        expect(assigns[:chapters]).to eq([work.chapters.first, chapter])
       end
 
       it "assigns @chapters to chapters in order" do
@@ -712,15 +712,14 @@ describe ChaptersController do
   end
 
   describe "update_positions" do
-    before do
-      @chapter1 = work.chapters.first
-      @chapter2 = create(:chapter, work: work, position: 2, authors: [user.pseuds.first])
-      @chapter3 = create(:chapter, work: work, position: 3, authors: [user.pseuds.first])
-    end
+    let(:chapter1) { work.chapters.first }
+    let!(:chapter2) { create(:chapter, :draft, work: work, position: 2, authors: [user.pseuds.first]) }
+    let!(:chapter3) { create(:chapter, work: work, position: 3, authors: [user.pseuds.first]) }
+    let!(:chapter4) { create(:chapter, work: work, position: 4, authors: [user.pseuds.first]) }
 
     context "when user is logged out" do
       it "errors and redirects to login" do
-        post :update_positions, params: { work_id: work.id, chapter: [@chapter1, @chapter3, @chapter2] }
+        post :update_positions, params: { work_id: work.id, chapter: [chapter1, chapter3, chapter2, chapter4] }
         it_redirects_to_with_error(new_user_session_path, "Sorry, you don't have permission to access the page you were trying to reach. Please log in.")
       end
     end
@@ -732,24 +731,42 @@ describe ChaptersController do
 
       context "when passing params[:chapters]" do
         it "updates the positions of the chapters" do
-          post :update_positions, params: { work_id: work.id, chapters: [1, 3, 2] }
-          expect(@chapter1.reload.position).to eq(1)
-          expect(@chapter2.reload.position).to eq(3)
-          expect(@chapter3.reload.position).to eq(2)
+          post :update_positions, params: { work_id: work.id, chapters: [1, 3, 2, 4] }
+          expect(chapter1.reload.position).to eq(1)
+          expect(chapter2.reload.position).to eq(3)
+          expect(chapter3.reload.position).to eq(2)
+          expect(chapter4.reload.position).to eq(4)
+        end
+
+        it "preserves ordering if order values are all empty" do
+          post :update_positions, params: { work_id: work.id, chapters: ["", "", "", ""] }
+          expect(chapter1.reload.position).to eq(1)
+          expect(chapter2.reload.position).to eq(2)
+          expect(chapter3.reload.position).to eq(3)
+          expect(chapter4.reload.position).to eq(4)
+        end
+
+        it "preserves ordering for empty values" do
+          post :update_positions, params: { work_id: work.id, chapters: ["", "", "", 1] }
+          expect(chapter1.reload.position).to eq(2)
+          expect(chapter2.reload.position).to eq(3)
+          expect(chapter3.reload.position).to eq(4)
+          expect(chapter4.reload.position).to eq(1)
         end
 
         it "gives a notice and redirects to work" do
-          post :update_positions, params: { work_id: work.id, chapters: [1, 3, 2] }
+          post :update_positions, params: { work_id: work.id, chapters: [1, 3, 2, 4] }
           it_redirects_to_with_notice(work, "Chapter order has been successfully updated.")
         end
       end
 
       context "when passing params[:chapter]" do
         it "updates the positions of the chapters" do
-          post :update_positions, params: { work_id: work.id, chapter: [@chapter1, @chapter3, @chapter2], format: :js }
-          expect(@chapter1.reload.position).to eq(1)
-          expect(@chapter2.reload.position).to eq(3)
-          expect(@chapter3.reload.position).to eq(2)
+          post :update_positions, params: { work_id: work.id, chapter: [chapter1, chapter3, chapter2, chapter4], format: :js }
+          expect(chapter1.reload.position).to eq(1)
+          expect(chapter2.reload.position).to eq(3)
+          expect(chapter3.reload.position).to eq(2)
+          expect(chapter4.reload.position).to eq(4)
         end
       end
     end
@@ -984,20 +1001,32 @@ describe ChaptersController do
 
         it "maintains chapter order when deleting the first chapter of a >3 chapter work" do
           chapter3 = create(:chapter, work: work, position: 3, authors: [user.pseuds.first])
-          chapter4 = create(:chapter, work: work, position: 4, authors: [user.pseuds.first])
+          chapter4 = create(:chapter, :draft, work: work, position: 4, authors: [user.pseuds.first])
           chapter5 = create(:chapter, work: work, position: 5, authors: [user.pseuds.first])
           delete :destroy, params: { work_id: work.id, id: work.chapters.first.id }
-          expect(work.reload.chapters_in_order).to eq([chapter2, chapter3, chapter4, chapter5])
-          expect(work.reload.chapters_in_order.map(&:position)).to eq([1, 2, 3, 4])
+          work.reload
+          posted_chapters = work.chapters_in_order
+          expect(posted_chapters).to eq([chapter2, chapter3, chapter5])
+          expect(posted_chapters.map(&:position)).to eq([1, 2, 4])
+
+          all_chapters = work.chapters_in_order(include_drafts: true)
+          expect(all_chapters).to eq([chapter2, chapter3, chapter4, chapter5])
+          expect(all_chapters.map(&:position)).to eq([1, 2, 3, 4])
         end
 
         it "reorders chapters properly when deleting a mid-work chapter" do
           chapter1 = work.chapters.first
-          chapter3 = create(:chapter, work: work, position: 3, authors: [user.pseuds.first])
+          chapter3 = create(:chapter, :draft, work: work, position: 3, authors: [user.pseuds.first])
           chapter4 = create(:chapter, work: work, position: 4, authors: [user.pseuds.first])
           delete :destroy, params: { work_id: work.id, id: chapter2.id }
-          expect(work.reload.chapters_in_order).to eq([chapter1, chapter3, chapter4])
-          expect(work.reload.chapters_in_order.map(&:position)).to eq([1, 2, 3])
+          work.reload
+          posted_chapters = work.chapters_in_order
+          expect(posted_chapters).to eq([chapter1, chapter4])
+          expect(posted_chapters.map(&:position)).to eq([1, 3])
+
+          all_chapters = work.chapters_in_order(include_drafts: true)
+          expect(all_chapters).to eq([chapter1, chapter3, chapter4])
+          expect(all_chapters.map(&:position)).to eq([1, 2, 3])
         end
       end
     end
