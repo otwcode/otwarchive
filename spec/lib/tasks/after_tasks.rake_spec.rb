@@ -301,3 +301,143 @@ describe "rake After:fix_tags_with_extra_spaces" do
     expect(borked_tag.name).to eql("_\"'quotes'\"")
   end
 end
+
+describe "rake After:fix_invalid_pseud_icon_data" do
+  let(:valid_pseud) { create(:user).default_pseud }
+  let(:invalid_pseud) { create(:user).default_pseud }
+
+  before do
+    stub_const("ArchiveConfig", OpenStruct.new(ArchiveConfig))
+    ArchiveConfig.ICON_ALT_MAX = 5
+    ArchiveConfig.ICON_COMMENT_MAX = 5
+  end
+
+  it "removes invalid icon" do
+    valid_pseud.icon = File.new(Rails.root.join("features/fixtures/icon.gif"))
+    valid_pseud.save
+    invalid_pseud.icon = File.new(Rails.root.join("features/fixtures/icon.gif"))
+    invalid_pseud.save
+    invalid_pseud.update_column(:icon_content_type, "not/valid")
+
+    subject.invoke
+
+    invalid_pseud.reload
+    valid_pseud.reload
+    expect(invalid_pseud.icon.exists?).to be_falsey
+    expect(invalid_pseud.icon_content_type).to be_nil
+    expect(valid_pseud.icon.exists?).to be_truthy
+    expect(valid_pseud.icon_content_type).to eq("image/gif")
+  end
+
+  it "removes invalid icon_alt_text" do
+    invalid_pseud.update_column(:icon_alt_text, "not valid")
+    valid_pseud.update_attribute(:icon_alt_text, "valid")
+
+    subject.invoke
+
+    invalid_pseud.reload
+    valid_pseud.reload
+    expect(invalid_pseud.icon_alt_text).to be_empty
+    expect(valid_pseud.icon_alt_text).to eq("valid")
+  end
+
+  it "removes invalid icon_comment_text" do
+    invalid_pseud.update_column(:icon_comment_text, "not valid")
+    valid_pseud.update_attribute(:icon_comment_text, "valid")
+
+    subject.invoke
+
+    invalid_pseud.reload
+    valid_pseud.reload
+    expect(invalid_pseud.icon_comment_text).to be_empty
+    expect(valid_pseud.icon_comment_text).to eq("valid")
+  end
+
+  it "updates icon_content_type from jpg to jpeg" do
+    invalid_pseud.icon = File.new(Rails.root.join("features/fixtures/icon.jpg"))
+    invalid_pseud.save
+    invalid_pseud.update_column(:icon_content_type, "image/jpg")
+
+    subject.invoke
+
+    invalid_pseud.reload
+    expect(invalid_pseud.icon.exists?).to be_truthy
+    expect(invalid_pseud.icon_content_type).to eq("image/jpeg")
+  end
+
+  it "updates multiple invalid fields on the same pseud" do
+    invalid_pseud.icon = File.new(Rails.root.join("features/fixtures/icon.gif"))
+    invalid_pseud.save
+    invalid_pseud.update_columns(icon_content_type: "not/valid",
+                                 icon_alt_text: "not valid",
+                                 icon_comment_text: "not valid")
+    subject.invoke
+
+    invalid_pseud.reload
+    expect(invalid_pseud.icon.exists?).to be_falsey
+    expect(invalid_pseud.icon_content_type).to be_nil
+    expect(invalid_pseud.icon_alt_text).to be_empty
+    expect(invalid_pseud.icon_comment_text).to be_empty
+  end
+end
+
+describe "rake After:fix_2009_comment_threads" do
+  before { Comment.delete_all }
+
+  let(:comment) { create(:comment, id: 13) }
+  let(:reply) { create(:comment, commentable: comment) }
+
+  context "when a comment has the correct thread set" do
+    it "doesn't change the thread" do
+      expect do
+        subject.invoke
+      end.to output("Updating 0 thread(s)\n").to_stdout
+        .and avoid_changing { comment.reload.thread }
+        .and avoid_changing { reply.reload.thread }
+    end
+  end
+
+  context "when a comment has an incorrect thread set" do
+    before { comment.update_column(:thread, 1) }
+
+    it "fixes the threads" do
+      expect do
+        subject.invoke
+      end.to output("Updating 1 thread(s)\n").to_stdout
+        .and change { comment.reload.thread }.from(1).to(13)
+        .and change { reply.reload.thread }.from(1).to(13)
+    end
+
+    context "when the comment has many replies" do
+      it "fixes the threads for all of them" do
+        replies = create_list(:comment, 10, commentable: comment)
+
+        expect do
+          subject.invoke
+        end.to output("Updating 1 thread(s)\n").to_stdout
+          .and change { comment.reload.thread }.from(1).to(13)
+
+        replies.each do |reply|
+          expect { reply.reload }.to change { reply.thread }.from(1).to(13)
+        end
+      end
+    end
+
+    context "when the comment has deeply nested replies" do
+      it "fixes the threads for all of them" do
+        replies = [reply]
+
+        10.times { replies << create(:comment, commentable: replies.last) }
+
+        expect do
+          subject.invoke
+        end.to output("Updating 1 thread(s)\n").to_stdout
+          .and change { comment.reload.thread }.from(1).to(13)
+
+        replies.each do |reply|
+          expect { reply.reload }.to change { reply.thread }.from(1).to(13)
+        end
+      end
+    end
+  end
+end

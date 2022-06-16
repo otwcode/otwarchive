@@ -263,7 +263,7 @@ end
 
 When /^I post the comment "([^"]*)" on the period-containing tag "([^"]*)"$/ do |comment_text, tag|
   step "I am on the search tags page"
-  fill_in("tag_search", with: tag)
+  fill_in("tag_search_name", with: tag)
   click_button "Search tags"
   click_link(tag)
   click_link(" comment")
@@ -376,6 +376,13 @@ Then /^I should not see the tag search result "([^\"]*)"(?: within "([^"]*)")?$/
     with_scope(selector) do
       page.has_no_text?(result)
     end
+end
+
+Then /^the ([\d]+)(?:st|nd|rd|th) tag result should contain "(.*?)"$/ do |n, text|
+  selector = "ol.tag > li:nth-of-type(#{n})"
+  with_scope(selector) do
+    expect(page).to have_content(text)
+  end
 end
 
 Then /^"([^\"]*)" should not be a tag wrangler$/ do |username|

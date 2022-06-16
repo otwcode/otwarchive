@@ -4,6 +4,7 @@ describe "Security headers" do
   it "includes the required headers" do
     get "/"
     headers = response.headers
+    expect(headers["Content-Security-Policy"]).to eq("frame-ancestors 'self'")
     expect(headers["Referrer-Policy"]).to eq("strict-origin-when-cross-origin")
     expect(headers["X-Frame-Options"]).to eq("SAMEORIGIN")
     expect(headers["X-XSS-Protection"]).to eq("1; mode=block")

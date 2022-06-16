@@ -198,18 +198,19 @@ end
 Then /^the work "([^\"]*)" should be hidden from me$/ do |title|
   work = Work.find_by(title: title)
   visit work_path(work)
-  page.should have_content("Mystery Work")
-  page.should_not have_content(title)
-  page.should have_content("This work is part of an ongoing challenge and will be revealed soon!")
-  page.should_not have_content(Sanitize.clean(work.chapters.first.content))
+  expect(page.title).to include("Mystery Work")
+  expect(page.title).not_to include(title)
+  expect(page).not_to have_content(title)
+  expect(page).to have_content("This work is part of an ongoing challenge and will be revealed soon!")
+  expect(page).not_to have_content(Sanitize.clean(work.chapters.first.content))
   if work.collections.first
     step "all indexing jobs have been run"
     visit collection_path(work.collections.first)
-    page.should_not have_content(title)
-    page.should have_content("Mystery Work")
+    expect(page).not_to have_content(title)
+    expect(page).to have_content("Mystery Work")
   end
   visit user_path(work.users.first)
-  page.should_not have_content(title)
+  expect(page).not_to have_content(title)
 end
 
 Then /^the work "([^\"]*)" should be visible to me$/ do |title|
@@ -230,25 +231,26 @@ Then /^the author of "([^\"]*)" should be publicly visible$/ do |title|
   work = Work.find_by(title: title)
   byline = work.users.first.pseuds.first.byline
   visit work_path(work)
-  step %{I should see "#{byline}" within "title"}
+  expect(page.title).to include(byline)
   step %{I should see "#{byline}" within ".byline"}
   if work.collections.first
     step "all indexing jobs have been run"
     visit collection_path(work.collections.first)
-    page.should have_content("#{title} by #{byline}")
+    expect(page).to have_content("#{title} by #{byline}")
   end
 end
 
 Then /^the author of "([^\"]*)" should be hidden from me$/ do |title|
   step "all indexing jobs have been run"
   work = Work.find_by(title: title)
+  byline = work.users.first.pseuds.first.byline
   visit work_path(work)
-  page.should_not have_content(work.users.first.pseuds.first.byline)
-  step %{I should see "Anonymous" within "title"}
+  expect(page).not_to have_content(byline)
+  expect(page.title).to include("Anonymous")
   step %{I should see "Anonymous" within ".byline"}
   visit collection_path(work.collections.first)
-  page.should_not have_content("#{title} by #{work.users.first.pseuds.first.byline}")
-  page.should have_content("#{title} by Anonymous")
+  expect(page).not_to have_content("#{title} by #{byline}")
+  expect(page).to have_content("#{title} by Anonymous")
   visit user_path(work.users.first)
-  page.should_not have_content(title)
+  expect(page).not_to have_content(title)
 end
