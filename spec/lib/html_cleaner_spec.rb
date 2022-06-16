@@ -94,41 +94,36 @@ describe HtmlCleaner do
   end
 
   describe "close_unclosed_tag" do
-    it "should close tag at end of line" do
+    it "closes tag at end of line" do
       result = close_unclosed_tag("first <i>line\n second line", "i", 1)
       expect(result).to eq("first <i>line</i>\n second line")
     end
 
     %w(br col hr img).each do |tag|
-      it "should not touch self-closing #{tag} tag" do
+      it "does not touch self-closing #{tag} tag" do
         result = close_unclosed_tag("don't <#{tag}> close", tag, 1)
         expect(result).to eq("don't <#{tag}> close")
       end
     end
 
     %w(col colgroup dl h1 h2 h3 h4 h5 h6 hr ol p pre table ul).each do |tag|
-      it "should not touch #{tag} tags that don't go inside p tags" do
+      it "does not touch #{tag} tags that don't go inside p tags" do
         result = close_unclosed_tag("don't <#{tag}> close", tag, 1)
         expect(result).to eq("don't <#{tag}> close")
       end
     end
 
-    it "should close tag before next opening tag" do
+    it "closes tag before next opening tag" do
       result = close_unclosed_tag("some <i>more<s>text</s>", "i", 1)
       expect(result).to eq("some <i>more</i><s>text</s>")
     end
 
-    it "should close tag before next closing tag" do
+    it "closes tag before next closing tag" do
       result = close_unclosed_tag("some <s><i>more text</s>", "i", 1)
       expect(result).to eq("some <s><i>more text</i></s>")
     end
 
-    it "should close tag before next closing tag" do
-      result = close_unclosed_tag("some <s><i>more text</s>", "i", 1)
-      expect(result).to eq("some <s><i>more text</i></s>")
-    end
-
-    it "should close second opening tag" do
+    it "closes second opening tag" do
       result = close_unclosed_tag("some <i>more</i> <i>text", "i", 1)
       expect(result).to eq("some <i>more</i> <i>text</i>")
     end
@@ -136,6 +131,16 @@ describe HtmlCleaner do
     it "should only close specified tag" do
       result = close_unclosed_tag("<code><i>text", "strong", 1)
       expect(result).to eq("<code><i>text")
+    end
+
+    it "closes rt tag" do
+      result = close_unclosed_tag("first line <ruby><rb>big text</rb><rt>small text</ruby>\n second line", "rt", 1)
+      expect(result).to eq("first line <ruby><rb>big text</rb><rt>small text</rt></ruby>\n second line")
+    end
+
+    it "closes rp tag" do
+      result = close_unclosed_tag("first line <ruby><rb>big text</rb><rp>(</rp><rt>small text</rt><rp>)</ruby>\n second line", "rp", 1)
+      expect(result).to eq("first line <ruby><rb>big text</rb><rp>(</rp><rt>small text</rt><rp>)</rp></ruby>\n second line")
     end
   end
 
@@ -901,6 +906,12 @@ describe HtmlCleaner do
       expect(doc.xpath("./p[1]").children.to_s.strip).to eq("boom")
       expect(doc.xpath("./p[2]").children.to_s.strip).to eq("da")
       expect(doc.xpath("./p[3]").children.to_s.strip).to eq("yadda")
+    end
+
+    it "wraps ruby-annotated text in p tags" do
+      result = add_paragraphs_to_text("some text with <ruby><rb>ルビ<rb><rp>(</rp><rt>RUBY</rt><rp>)</rp></ruby>")
+      doc = Nokogiri::HTML.fragment(result)
+      expect(doc.xpath("./p[1]").children.to_s.strip).to eq("some text with <ruby><rb>ルビ<rb></rb></rb><rp>(</rp><rt>RUBY</rt><rp>)</rp></ruby>")
     end
 
     it "should keep attributes of block elements" do

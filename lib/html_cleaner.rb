@@ -235,8 +235,8 @@ module HtmlCleaner
   # Tags that need to go inside p tags
   def put_inside_p_tag?(tag)
     %w(a abbr acronym address b big cite code del dfn em i ins
-       kbd q s script samp small span strike strong style sub
-       sup tt u var).include?(tag)
+       kbd q rb rp rt ruby s script samp small span strike strong
+       style sub sup tt u var).include?(tag)
   end
 
   # Tags that can't be inside p tags
@@ -339,13 +339,13 @@ module HtmlCleaner
     return [stack, out_html]
   end
 
-
   # Close an unclosed tag within the given text in the line at
   # line_number, or before the next opening or closing tag if that
   # comes first
   def close_unclosed_tag(text, tag, line_number)
     return text if self_closing_tag?(tag)
     return text unless put_inside_p_tag?(tag)
+
     line_number = line_number.to_i
     lines = text.lines.to_a
     pattern = /(^.*<#{tag}\s*.*?>.*?)($|<\/?\w+.*?\/?>)/
