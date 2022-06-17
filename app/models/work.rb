@@ -1025,8 +1025,8 @@ class Work < ApplicationRecord
   scope :giftworks_for_recipient_name, lambda { |name| select("DISTINCT works.*").joins(:gifts).where("recipient_name = ?", name).where("gifts.rejected = FALSE") }
   scope :kudosed_by_user, lambda { |user|
     select("DISTINCT works.*")
-    .joins("INNER JOIN kudos ON kudos.commentable_id = works.id AND kudos.commentable_type = 'Work'")
-    .where('kudos.user_id = ?', user.id)
+      .joins("INNER JOIN kudos ON kudos.commentable_id = works.id AND kudos.commentable_type = 'Work'")
+      .where("kudos.user_id = ?", user.id)
   }
 
   scope :non_anon, -> { where(in_anon_collection: false) }
