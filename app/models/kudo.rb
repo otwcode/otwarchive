@@ -21,7 +21,6 @@ class Kudo < ApplicationRecord
   scope :with_user, -> { where("user_id IS NOT NULL") }
   scope :by_guest, -> { where("user_id IS NULL") }
 
-  after_touch :save
   after_destroy :update_work_stats
   after_create :after_create, :update_work_stats
   def after_create

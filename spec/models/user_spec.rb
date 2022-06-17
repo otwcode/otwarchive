@@ -14,6 +14,17 @@ describe User do
           expect(kudo.user_id).to be_nil
         end
       end
+      
+      it "expires kudosed works' kudos caches" do
+        orig_cache_keys = kudo_bundle.map { |kudo| "#{kudo.commentable.cache_key}/kudos-v4" }
+        travel 1.second do
+          user.destroy!
+          kudo_bundle.zip orig_cache_keys.each do |kudo, orig_cache_key|
+            kudo.commentable.reload
+            expect(orig_cache_key).not_to eq("#{kudo.commentable.cache_key}/kudos-v4")
+          end
+        end
+      end
     end
   end
 
@@ -134,6 +145,21 @@ describe User do
       freeze_time
       existing_user.update(login: "new_username")
       expect(existing_user.renamed_at).to eq(Time.current)
+    end
+
+    context "user has kudosed a work" do
+      let(:kudo) { create(:kudo, user: existing_user) }
+      
+      it "expires the work's kudos cache" do
+        original_cache_key = "#{kudo.commentable.cache_key}/kudos-v4"
+        # update time so that the work's cache_key gets set with a new time
+        travel 1.second do
+          existing_user.update(login: "new_username")
+          # reload the commentable to reflect database update
+          kudo.commentable.reload
+          expect(original_cache_key).not_to eq("#{kudo.commentable.cache_key}/kudos-v4")
+        end
+      end
     end
 
     it "does not set renamed_at when username is not changed" do

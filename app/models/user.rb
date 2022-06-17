@@ -146,11 +146,7 @@ class User < ApplicationRecord
 
   def expire_caches
     return unless saved_change_to_login?
-    kudos.each do |kudo|
-      # Unfortunately, the callback that invalidates cached kudos doesn't
-      # get run if we do touch_all
-      kudo.touch
-    end
+    Work.kudosed_by_user(self).touch_all
     self.works.each do |work|
       work.touch
       work.expire_caches
@@ -158,8 +154,8 @@ class User < ApplicationRecord
   end
 
   def remove_user_from_kudos
-    # TODO: AO3-5054 Expire kudos cache when deleting a user.
     # TODO: AO3-2195 Display orphaned kudos (no users; no IPs so not counted as guest kudos).
+    Work.kudosed_by_user(self).touch_all
     Kudo.where(user: self).update_all(user_id: nil)
   end
 
