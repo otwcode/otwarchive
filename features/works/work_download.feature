@@ -152,6 +152,23 @@ Feature: Download a work
     And I should be able to download all versions of "Many Fandom Work"
 
 
+  Scenario: Download work shows inspiring work link
+
+    Given I have related works setup
+    When I post a related work as remixer
+      And I view the work "Followup"
+      And I follow "HTML"
+    Then I should see the inspiring parent work link
+
+  Scenario: Download work shows inspiring external inspiring work link
+
+    Given I have related works setup
+    When I post a related work as remixer for an external work
+      And I view the work "Followup"
+      And I follow "HTML"
+    Then I should see the external inspiring work link
+
+
   Scenario: Download option is unavailable if work is unrevealed.
 
   Given there is a work "Blabla" in an unrevealed collection "Unrevealed"
