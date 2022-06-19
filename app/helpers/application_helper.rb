@@ -301,6 +301,8 @@ module ApplicationHelper
     link_to_function(linktext, "remove_section(this, \"#{class_of_section_to_remove}\")", class: "hidden showme")
   end
 
+  # show time in the time zone specified by the first argument
+  # add the user's time when specified in preferences
   def time_in_zone(time, zone = nil, user = User.current_user)
     return ts("(no time specified)") if time.blank?
 
@@ -323,6 +325,19 @@ module ApplicationHelper
     end
 
     (time_in_zone_string + user_time_string).strip.html_safe
+  end
+
+  # show date in the time zone specified
+  # note: this does *not* append timezone and does *not* reflect user preferences
+  def date_in_zone(time, zone = nil)
+    zone ||= Time.zone.name
+    return ts("(no date specified)") if time.blank?
+
+    time_in_zone = time.in_time_zone(zone)
+    time_in_zone.strftime(<<~FORMAT.squish).html_safe
+      <abbr class="day" title="%A">%a</abbr> <span class="date">%d</span>
+      <abbr class="month" title="%B">%b</abbr> <span class="year">%Y</span>
+    FORMAT
   end
 
   def mailto_link(user, options={})

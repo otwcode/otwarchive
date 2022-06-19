@@ -364,4 +364,91 @@ describe ApplicationHelper do
       end
     end
   end
+
+  describe "#time_in_zone" do
+    let(:user) { create(:user) }
+    let(:pref) { create(:preference) }
+    let(:time) { Time.rfc3339("1999-12-31T16:00:00Z") }
+    let(:utc) { Time.find_zone("UTC") }
+    let(:zone_tokyo) { Time.find_zone("Asia/Tokyo") }
+
+    context "nothing is explicitly specified, current user specifies Asia/Tokyo" do
+      it "formats time in user-specified timezone" do
+        pending "See https://github.com/otwcode/otwarchive/pull/4270"
+
+        allow(pref).to receive(:time_zone).and_return(zone_tokyo)
+        allow(user).to receive(:preference).and_return(pref)
+        allow(User).to receive(:current_user).and_return(user)
+        result = helper.time_in_zone(time)
+
+        expect(result.html_safe?).to eq(true)
+        expect(strip_tags(result)).to eq("Sat 01 Jan 2000 01:00AM JST")
+      end
+    end
+
+    context "argument specifies UTC" do
+      context "no current user (or logged out)" do
+        it "formats time in UTC" do
+          pending "See https://github.com/otwcode/otwarchive/pull/4270"
+
+          result = helper.time_in_zone(time, utc, nil)
+
+          expect(result.html_safe?).to eq(true)
+          expect(strip_tags(result)).to eq("Fri 31 Dec 1999 04:00PM UTC")
+        end
+      end
+
+      context "user preference specifies UTC" do
+        it "formats time in UTC" do
+          pending "See https://github.com/otwcode/otwarchive/pull/4270"
+
+          allow(pref).to receive(:time_zone).and_return(utc)
+          allow(user).to receive(:preference).and_return(pref)
+          result = helper.time_in_zone(time, utc, user)
+
+          expect(result.html_safe?).to eq(true)
+          expect(strip_tags(result)).to eq("Fri 31 Dec 1999 04:00PM UTC")
+        end
+      end
+
+      context "user preference specifies Asia/Tokyo" do
+        it "appends time in user-specified timezone" do
+          pending "See https://github.com/otwcode/otwarchive/pull/4270"
+
+          allow(pref).to receive(:time_zone).and_return(zone_tokyo)
+          allow(user).to receive(:preference).and_return(pref)
+          result = helper.time_in_zone(time, utc, user)
+
+          expect(result.html_safe?).to eq(true)
+          expect(strip_tags(result)).to eq("Fri 31 Dec 1999 04:00PM UTC (01:00AM JST)")
+        end
+      end
+
+      context "user specifies nothing" do
+        it "formats time in UTC, shows '(set time zone)'" do
+          pending "See https://github.com/otwcode/otwarchive/pull/4270"
+
+          allow(pref).to receive(:time_zone).and_return(nil)
+          allow(user).to receive(:preference).and_return(pref)
+          result = helper.time_in_zone(time, utc, user)
+
+          expect(result.html_safe?).to eq(true)
+          expect(strip_tags(result)).to eq("Fri 31 Dec 1999 04:00PM UTC (set timezone)")
+        end
+      end
+    end
+  end
+
+  describe "#date_in_zone" do
+    let(:time) { Time.rfc3339("1999-12-31T16:00:00Z") }
+    let(:zone_tokyo) { Time.find_zone("Asia/Tokyo") }
+
+    it "is html safe" do
+      expect(helper.date_in_zone(time).html_safe?).to eq(true)
+    end
+
+    it "formats UTC date without timezone identifier" do
+      expect(strip_tags(helper.date_in_zone(time, zone_tokyo))).to eq("Sat 01 Jan 2000")
+    end
+  end
 end
