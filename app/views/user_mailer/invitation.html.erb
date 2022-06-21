@@ -12,15 +12,19 @@
   </p>
 
   <p>
-    <%= t ".part1" %>
+    <%= t(".html.ao3_intro", otw_link: style_link("Organization for Transformative Works", "http://transformativeworks.org")).html_safe %>
   </p>
 
   <p>
-    <%= t ".part2" %>
+    <%= t ".account_functionality" %>
   </p>
 
   <p>
-    <%= t(".html.part3", invitation_link: style_link(signup_url(:invitation_token => @invitation.token), signup_url(:invitation_token => @invitation.token))).html_safe %>
+    <%= t(".html.invite_link", invitation_link: style_link(signup_url(:invitation_token => @invitation.token), signup_url(:invitation_token => @invitation.token))).html_safe %>
+  </p>
+
+  <p>
+    <%= t(".html.activation_support_link", support_link: style_link(t(".html.support_link_text"), new_feedback_report_url)).html_safe %>
   </p>
 
   <p>
