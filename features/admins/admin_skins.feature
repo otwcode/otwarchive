@@ -124,17 +124,16 @@ Feature: Admin manage skins
   When I am on skinner's preferences page
     And I select "strange skin" from "preference_skin_id"
     And I submit
-  Then I should see "{ text-decoration: underline; }"
+  Then I should see "{ text-decoration: underline; }" in the page style
   When I am logged in as an admin
-  Then I should not see "{ text-decoration: blink; }"
+  Then I should not see "{ text-decoration: blink; }" in the page style
   When I follow "Approved Skins"
     And I fill in "set_default" with "public skin"
     And I press "Update"
   Then I should see "Default skin changed to public skin"
-    And I should see "{ text-decoration: blink; }"
+    And I should see "{ text-decoration: blink; }" in the page style
   When I am logged in as "skinner"
-  Then I should see "{ text-decoration: underline; }"
+  Then I should see "{ text-decoration: underline; }" in the page style
   # A user created before changing the default skin will still have the same skin
   When I am logged in as "KnownUser"
-  Then I should not see "{ text-decoration: blink; }"
-
+  Then I should not see "{ text-decoration: blink; }" in the page style

@@ -32,8 +32,8 @@ Feature: Non-public site and work skins
     And I select "my blinking skin" from "preference_skin_id"
     And I submit
   Then I should see "Your preferences were successfully updated."
-    And I should see "#title {" within "style"
-    And I should see "text-decoration: blink;" within "style"
+    And I should see "#title {" in the page style
+    And I should see "text-decoration: blink;" in the page style
 
   Scenario: A user should be able to select one of their own non-public skins to use in
   their My Skins page
@@ -42,8 +42,8 @@ Feature: Non-public site and work skins
   Then I should see "my blinking skin"
     And I should see "Use"
   When I press "Use"
-  Then I should see "#title {" within "style"
-    And I should see "text-decoration: blink;" within "style"
+  Then I should see "#title {" in the page style
+    And I should see "text-decoration: blink;" in the page style
 
   Scenario: Skin titles should be unique
   Given I am logged in as "skinner"
@@ -77,10 +77,10 @@ Feature: Non-public site and work skins
     And I select "Awesome Work Skin" from "work_work_skin_id"
     And I press "Preview"
   Then I should see "Preview"
-    And I should see "color: purple" within "style"
+    And I should see "color: purple" in the page style
   When I press "Post"
   Then I should see "Story With Awesome Skin"
-    And I should see "color: purple" within "style"
+    And I should see "color: purple" in the page style
     And I should see "Hide Creator's Style"
   When I follow "Hide Creator's Style"
   Then I should see "Story With Awesome Skin"

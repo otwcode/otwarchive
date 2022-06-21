@@ -240,6 +240,15 @@ Feature: Create and Edit Series
     Then I should see "Part 2 of the Ponies series" within "dd.series"
       And I should see "Part 1 of the Black Beauty series" within "dd.series"
 
+  Scenario: A series's metadata is visible when viewing the series
+    Given I am logged in as a random user
+      And I post the work "Story" as part of a series "Excellent Series"
+      And I bookmark the series "Excellent Series"
+    When I view the series "Excellent Series"
+    Then I should see "Words: 6" within ".series.meta"
+      And I should see "Bookmarks: 1" within ".series.meta"
+      And I should see "Works: 1" within ".series.meta"
+
   Scenario: When editing a series, the title field should not escape HTML
     Given I am logged in as "whoever"
       And I post the work "whatever" as part of a series "What a title! :< :& :>"

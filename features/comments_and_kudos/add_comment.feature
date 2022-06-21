@@ -123,21 +123,21 @@ Scenario: Comment threading, comment editing
       And I compose an invalid comment
       And I press "Comment"
     Then I should see "must be less than"
-      And I should see "Sed mollis sapien ac massa pulvinar facilisis"
+      And I should see "Now, we can devour the gods, together!"
     When I fill in "Comment" with "This is a valid comment"
       And I press "Comment"
       And I follow "Reply" within ".thread .odd"
       And I compose an invalid comment within ".thread .odd"
       And I press "Comment" within ".thread .odd"
     Then I should see "must be less than"
-      And I should see "Sed mollis sapien ac massa pulvinar facilisis"
+      And I should see "Now, we can devour the gods, together!"
     When I fill in "Comment" with "This is a valid reply comment"
       And I press "Comment"
       And I follow "Edit"
       And I compose an invalid comment
       And I press "Update"
     Then I should see "must be less than"
-      And I should see "Sed mollis sapien ac massa pulvinar facilisis"
+      And I should see "Now, we can devour the gods, together!"
 
 Scenario: Don't receive comment notifications of your own comments by default
 
