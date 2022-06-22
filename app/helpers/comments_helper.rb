@@ -1,5 +1,4 @@
 module CommentsHelper
-
   def value_for_comment_form(commentable, comment)
     commentable.is_a?(Tag) ? comment : [commentable, comment]
   end
@@ -111,11 +110,21 @@ module CommentsHelper
   #### HELPERS FOR CHECKING WHICH BUTTONS/FORMS TO DISPLAY #####
 
   def can_reply_to_comment?(comment)
-    !(comment.unreviewed? || comment.iced? || parent_disallows_comments?(comment) || comment_parent_hidden?(comment))
+    !(comment.unreviewed? ||
+      comment.iced? ||
+      parent_disallows_comments?(comment) ||
+      comment_parent_hidden?(comment) ||
+      blocked_by_comment?(comment) ||
+      blocked_by?(comment.ultimate_parent))
   end
 
   def can_edit_comment?(comment)
-    is_author_of?(comment) && !comment.iced? && comment.count_all_comments.zero? && !comment_parent_hidden?(comment)
+    is_author_of?(comment) &&
+      !comment.iced? &&
+      comment.count_all_comments.zero? &&
+      !comment_parent_hidden?(comment) &&
+      !blocked_by_comment?(comment.commentable) &&
+      !blocked_by?(comment.ultimate_parent)
   end
 
   # Only an admin with proper authorization can mark a spam comment ham.
@@ -303,7 +312,7 @@ module CommentsHelper
   # gets the css user-<id> class name for the comment
   def commenter_id_for_css_classes(comment)
     return if comment.pseud.nil?
-    return if comment.ultimate_parent.try(:anonymous?) && comment.pseud.user.is_author_of?(comment.ultimate_parent)
+    return if comment.by_anonymous_creator?
     return if comment.is_deleted
     return if comment.hidden_by_admin
 
@@ -353,5 +362,4 @@ module CommentsHelper
     parent = find_parent(commentable)
     parent.respond_to?(:moderated_commenting_enabled) && parent.moderated_commenting_enabled?
   end
-
 end

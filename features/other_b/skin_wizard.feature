@@ -30,7 +30,7 @@ Feature: Skin wizard
     And I select "Wide margins" from "preference_skin_id"
     And I submit
   Then I should see "Your preferences were successfully updated."
-    And I should see "margin: auto 5%; max-width: 100%" within "style"
+    And I should see "margin: auto 5%; max-width: 100%" in the page style
     # Make sure that the creation/update cache keys are different:
     And I wait 1 second
   When I edit the skin "Wide margins" with the wizard
@@ -40,7 +40,7 @@ Feature: Skin wizard
   Then I should see an update confirmation message
     And I should see "Work margin width: 4%"
     And I should not see "Work margin width: 4.5%"
-    And I should see "margin: auto 4%;" within "style"
+    And I should see "margin: auto 4%;" in the page style
   When I am on skinner's preferences page
   Then "Wide margins" should be selected within "preference_skin_id"
 
@@ -64,11 +64,11 @@ Feature: Skin wizard
     And I should see "Vertical gap between paragraphs: 5.0em"
   When I press "Use"
   Then I should see "Your preferences were successfully updated."
-    And I should see "background: #ccccff;" within "style"
-    And I should see "color: red;" within "style"
-    And I should see "font-family: 'Times New Roman', Garamond, serif;" within "style"
-    And I should see "font-size: 120%;" within "style"
-    And I should see "margin: 5.0em auto;" within "style"
+    And I should see "background: #ccccff;" in the page style
+    And I should see "color: red;" in the page style
+    And I should see "font-family: 'Times New Roman', Garamond, serif;" in the page style
+    And I should see "font-size: 120%;" in the page style
+    And I should see "margin: 5.0em auto;" in the page style
   When I am on skinner's preferences page
   Then "Many changes" should be selected within "preference_skin_id"
 

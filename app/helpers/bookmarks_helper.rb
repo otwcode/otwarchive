@@ -1,16 +1,13 @@
 module BookmarksHelper
-
   # if the current user has the current object bookmarked return the existing bookmark
   # since the user may have multiple bookmarks for different pseuds we prioritize by current default pseud if more than one bookmark exists
   def bookmark_if_exists(bookmarkable)
     return nil unless logged_in?
+
     bookmarkable = bookmarkable.work if bookmarkable.class == Chapter
-    bookmarks = Bookmark.where(bookmarkable_id: bookmarkable.id, bookmarkable_type: bookmarkable.class.name.to_s, pseud_id: current_user.pseuds.collect(&:id))
-    if bookmarks.count > 1
-      bookmarks.where(pseud_id: current_user.default_pseud.id).first || bookmarks.last
-    else
-      bookmarks.last
-    end
+
+    current_user.bookmarks.where(bookmarkable: bookmarkable)
+      .reorder("pseuds.is_default", "bookmarks.id").last
   end
 
   # returns just a url to the new bookmark form
@@ -84,4 +81,55 @@ module BookmarksHelper
     content_tag(:span, link, class: "count")
   end
 
+  # Bookmark blurbs contain a single bookmark from a single user.
+  # bookmark blurb group creation-id [creator-ids bookmarker-id].uniq
+  def css_classes_for_bookmark_blurb(bookmark)
+    return if bookmark.nil?
+
+    creation = bookmark.bookmarkable
+    if creation.nil?
+      "bookmark blurb group #{bookmarker_id_for_css_classes(bookmark)}"
+    else
+      Rails.cache.fetch("#{creation.cache_key_with_version}_#{bookmark.cache_key}/blurb_css_classes") do
+        creation_id = creation_id_for_css_classes(creation)
+        user_ids = user_ids_for_bookmark_blurb(bookmark).join(" ")
+        "bookmark blurb group #{creation_id} #{user_ids}".squish
+      end
+    end
+  end
+
+  # Bookmarkable blurbs contain multiple short blurbs from different users.
+  # Bookmarker ids are applied to the individual short blurbs.
+  # Note that creation blurb classes are cached.
+  # bookmark blurb group creation-id creator-ids
+  def css_classes_for_bookmarkable_blurb(bookmarkable)
+    return "bookmark blurb group" if bookmarkable.nil?
+
+    creation_classes = css_classes_for_creation_blurb(bookmarkable)
+    "bookmark #{creation_classes}".strip
+  end
+
+  def css_classes_for_bookmark_blurb_short(bookmark)
+    return if bookmark.nil?
+
+    own = "own" if is_author_of?(bookmark)
+    bookmarker_id = bookmarker_id_for_css_classes(bookmark)
+    "#{own} user short blurb group #{bookmarker_id}".squish
+  end
+
+  private
+
+  def bookmarker_id_for_css_classes(bookmark)
+    return if bookmark.nil?
+
+    "user-#{bookmark.pseud.user_id}"
+  end
+
+  # Array of unique creator and bookmarker ids, formatted user-123, user-126.
+  # If the user has bookmarked their own work, we don't need their id twice.
+  def user_ids_for_bookmark_blurb(bookmark)
+    user_ids = creator_ids_for_css_classes(bookmark.bookmarkable)
+    user_ids << bookmarker_id_for_css_classes(bookmark)
+    user_ids.uniq
+  end
 end

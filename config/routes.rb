@@ -301,6 +301,16 @@ Otwarchive::Application.routes.draw do
         post :delete_multiple
       end
     end
+    namespace :blocked do
+      resources :users, only: [:index, :create, :destroy] do
+        collection do
+          get :confirm_block
+        end
+        member do
+          get :confirm_unblock
+        end
+      end
+    end
   end
 
   #### WORKS ####

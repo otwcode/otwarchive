@@ -178,28 +178,36 @@ end
 
 ### THEN
 
-Then /^the page should have the cached skin "([^"]*)"$/ do |skin_name|
+Then "I should see {string} in the page style" do |css|
+  expect(page).to have_css("style", text: css, visible: false)
+end
+
+Then "I should not see {string} in the page style" do |css|
+  expect(page).not_to have_css("style", text: css, visible: false)
+end
+
+Then "the page should have the cached skin {string}" do |skin_name|
   skin = Skin.find_by(title: skin_name)
-  page.should have_xpath("//link[contains(@href, '#{skin.skin_dirname}')]")
+  expect(page).to have_css("link[href*='#{skin.skin_dirname}']", visible: false)
 end
 
-Then /^the page should not have the cached skin "([^"]*)"$/ do |skin_name|
+Then "the page should not have the cached skin {string}" do |skin_name|
   skin = Skin.find_by(title: skin_name)
-  page.should_not have_xpath("//link[contains(@href, '#{skin.skin_dirname}')]")
+  expect(page).not_to have_css("link[href*='#{skin.skin_dirname}']", visible: false)
 end
 
-Then /^I should see a pink header$/ do
-  step %{I should see "#header .primary" within "style"}
-  step %{I should see "background-image: none; background-color: pink;" within "style"}
+Then "I should see a pink header" do
+  step %{I should see "#header .primary" in the page style}
+  step %{I should see "background-image: none; background-color: pink;" in the page style}
 end
 
-Then /^I should see a different accent color$/ do
-  step %{I should see "fieldset, form dl, fieldset dl dl" within "style"}
-  step %{I should see "background: blue; border-color: blue;" within "style"}
+Then "I should see a different accent color" do
+  step %{I should see "fieldset, form dl, fieldset dl dl" in the page style}
+  step %{I should see "background: blue; border-color: blue;" in the page style}
 end
 
-Then /^the page should have a skin with the media query "([^"]*)"$/ do |query|
-  page.should have_xpath("//style[@media='#{query}']")
+Then "the page should have a skin with the media query {string}" do |query|
+  expect(page).to have_css("style[media='#{query}']", visible: false)
 end
 
 Then /^the cache of the skin on "([^\"]*)" should expire after I save the skin$/ do |title|
@@ -232,8 +240,8 @@ Then(/^the cache of the skin on "(.*?)" should expire after I save a parent skin
   assert orig_skin_version != skin_cache_version(skin), "Cache version #{orig_skin_version} matches #{skin_cache_version(skin)}"
 end
 
-Then /^I should see a purple logo$/ do
-  page.should have_xpath('//style', text: "#header .heading a { color: purple; }")
+Then "I should see a purple logo" do
+  step %|I should see "#header .heading a { color: purple; }" in the page style|
 end
 
 Then /^I should see the skin "(.*?)" in the skin chooser$/ do |skin|

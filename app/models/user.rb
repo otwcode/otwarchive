@@ -42,6 +42,9 @@ class User < ApplicationRecord
 
   has_many :favorite_tags, dependent: :destroy
 
+  has_one :default_pseud, -> { where(is_default: true) }, class_name: "Pseud", inverse_of: :user
+  delegate :id, to: :default_pseud, prefix: true
+
   has_many :pseuds, dependent: :destroy
   validates_associated :pseuds
 
@@ -50,6 +53,22 @@ class User < ApplicationRecord
 
   has_one :preference, dependent: :destroy
   validates_associated :preference
+
+  has_many :blocks_as_blocked, class_name: "Block", dependent: :delete_all, inverse_of: :blocked, foreign_key: :blocked_id
+  has_many :blocks_as_blocker, class_name: "Block", dependent: :delete_all, inverse_of: :blocker, foreign_key: :blocker_id
+  has_many :blocked_users, through: :blocks_as_blocker, source: :blocked
+
+  # The block (if it exists) with this user as the blocker and
+  # User.current_user as the blocked:
+  has_one :block_of_current_user,
+          -> { where(blocked: User.current_user) },
+          class_name: "Block", foreign_key: :blocker_id, inverse_of: :blocker
+
+  # The block (if it exists) with User.current_user as the blocker and this
+  # user as the blocked:
+  has_one :block_by_current_user,
+          -> { where(blocker: User.current_user) },
+          class_name: "Block", foreign_key: :blocked_id, inverse_of: :blocked
 
   has_many :skins, foreign_key: "author_id", dependent: :nullify
   has_many :work_skins, foreign_key: "author_id", dependent: :nullify
@@ -325,15 +344,6 @@ class User < ApplicationRecord
   def destroy_empty_series
     series.left_joins(:serial_works).where(serial_works: { id: nil }).
       destroy_all
-  end
-
-  # Retrieve the current default pseud
-  def default_pseud
-    self.pseuds.where(is_default: true).first
-  end
-
-  def default_pseud_id
-    pseuds.where(is_default: true).pluck(:id).first
   end
 
   # Checks authorship of any sort of object

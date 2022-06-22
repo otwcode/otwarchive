@@ -43,38 +43,39 @@
             <% else %>
               <%= render "inbox_comment_contents", feedback_comment: feedback_comment %>
             <% end %>
-              <h5 class="landmark heading"><%= ts("Comment Actions") %></h5>
 
-              <ul class="actions" role="menu">
-                <% unless inbox_comment.read? %>
-                  <li><span class="unread"><%= ts("Unread") %></span></li>
-                <% end %>
-                <% if inbox_comment.replied_to? %>
-                  <li>
-                    <span class="replied" title="<%= ts("replied to") %>">
-                      <%= ts("&#10004;").html_safe %>
-                    </span>
-                  </li>
-                <% end %>
-                <% if feedback_comment.iced? %>
-                  <li><%= frozen_comment_indicator %></li>
-                <% end %>
-                <% if feedback_comment.unreviewed? %>
-                  <li class="approve review" id="review_comment_link_<%= feedback_comment.id %>">
-                    <%= render 'inbox/approve_button', feedback_comment: feedback_comment, approved_from: "inbox" %>
-                  </li>
-                <% elsif !feedback_comment.iced? %>
-                  <li>
-                    <%= render 'inbox/reply_button', feedback_comment: feedback_comment %>
-                  </li>
-                <% end %>
+            <h5 class="landmark heading"><%= ts("Comment Actions") %></h5>
+
+            <ul class="actions" role="menu">
+              <% unless inbox_comment.read? %>
+                <li><span class="unread"><%= ts("Unread") %></span></li>
+              <% end %>
+              <% if inbox_comment.replied_to? %>
                 <li>
-                  <%= label_tag "inbox_comments_#{inbox_comment.id}" do %>
-                    <%= check_box_tag "inbox_comments[]", inbox_comment.id, false, id: "inbox_comments_#{inbox_comment.id}" %>
-                    <%= ts("Select") %>
-                  <% end %>
+                  <span class="replied" title="<%= ts("replied to") %>">
+                    <%= ts("&#10004;").html_safe %>
+                  </span>
                 </li>
-              </ul>
+              <% end %>
+              <% if feedback_comment.iced? %>
+                <li><%= frozen_comment_indicator %></li>
+              <% end %>
+              <% if feedback_comment.unreviewed? %>
+                <li class="approve review" id="review_comment_link_<%= feedback_comment.id %>">
+                  <%= render 'inbox/approve_button', feedback_comment: feedback_comment, approved_from: "inbox" %>
+                </li>
+              <% elsif can_reply_to_comment?(feedback_comment) %>
+                <li>
+                  <%= render 'inbox/reply_button', feedback_comment: feedback_comment %>
+                </li>
+              <% end %>
+              <li>
+                <%= label_tag "inbox_comments_#{inbox_comment.id}" do %>
+                  <%= check_box_tag "inbox_comments[]", inbox_comment.id, false, id: "inbox_comments_#{inbox_comment.id}" %>
+                  <%= ts("Select") %>
+                <% end %>
+              </li>
+            </ul>
           </li>
           <!-- END of single comment -->
         <% end %>

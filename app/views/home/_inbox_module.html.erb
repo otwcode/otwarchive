@@ -14,26 +14,26 @@
         <% else %>
           <%= render 'inbox/inbox_comment_contents', feedback_comment: inbox_comment.feedback_comment %>
         <% end %>
-          <ul class="actions">
-            <% if inbox_comment.feedback_comment.iced? %>
-              <li><%= frozen_comment_indicator %></li>
-            <% end %>
-            <% if inbox_comment.feedback_comment.unreviewed? %>
-              <li class="approve review" id="review_comment_link_<%= inbox_comment.feedback_comment.id %>">
-                <%= render 'inbox/approve_button', feedback_comment: inbox_comment.feedback_comment, approved_from: "home" %>
-              </li>
-            <% elsif !inbox_comment.feedback_comment.iced? %>
-              <li>
-                <%= render 'inbox/reply_button', feedback_comment: inbox_comment.feedback_comment %>
-              </li>
-            <% end %>
-            <li id="read_comment_form_<%= inbox_comment.feedback_comment.id %>">
-              <%= render 'inbox/read_form', inbox_comment: inbox_comment, current_user: current_user %>
+        <ul class="actions">
+          <% if inbox_comment.feedback_comment.iced? %>
+            <li><%= frozen_comment_indicator %></li>
+          <% end %>
+          <% if inbox_comment.feedback_comment.unreviewed? %>
+            <li class="approve review" id="review_comment_link_<%= inbox_comment.feedback_comment.id %>">
+              <%= render 'inbox/approve_button', feedback_comment: inbox_comment.feedback_comment, approved_from: "home" %>
             </li>
+          <% elsif can_reply_to_comment?(inbox_comment.feedback_comment) %>
             <li>
-              <%= render 'inbox/delete_form', inbox_comment: inbox_comment, current_user: current_user %>
+              <%= render 'inbox/reply_button', feedback_comment: inbox_comment.feedback_comment %>
             </li>
-          </ul>
+          <% end %>
+          <li id="read_comment_form_<%= inbox_comment.feedback_comment.id %>">
+            <%= render 'inbox/read_form', inbox_comment: inbox_comment, current_user: current_user %>
+          </li>
+          <li>
+            <%= render 'inbox/delete_form', inbox_comment: inbox_comment, current_user: current_user %>
+          </li>
+        </ul>
       </li>
     <% end %>
   </ul>

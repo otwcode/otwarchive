@@ -1,3 +1,15 @@
+Then /^I should see the inspiring parent work link$/ do
+  parent = Work.find_by(title: "Worldbuilding")
+  inspired_link = "<a href=\"#{work_url(parent)}\">#{parent.title.html_safe}</a>"
+  page.body.should =~ /Inspired by #{Regexp.escape(inspired_link)}/m
+end
+
+Then /^I should see the external inspiring work link$/ do
+  parent = ExternalWork.find_by(title: "Example External")
+  inspired_link = "<a href=\"#{external_work_url(parent)}\">#{parent.title.html_safe}</a>"
+  page.body.should =~ /Inspired by #{Regexp.escape(inspired_link)}/m
+end
+
 Then /^I should receive a file of type "(.*?)"$/ do |filetype|
   mime_type = filetype == "azw3" ? "application/x-mobi8-ebook" : MIME::Types.type_for("foo.#{filetype}").first
   expect(page.response_headers['Content-Disposition']).to match(/filename=.+\.#{filetype}/)

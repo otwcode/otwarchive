@@ -25,7 +25,7 @@ textarea:focus,
 #footer ul,
 #footer ul.navigation a,
 .autocomplete .dropdown ul li:hover,
-li.selected,
+.autocomplete .dropdown li.selected,
 a.tag:hover {
   color: #fff;
 }

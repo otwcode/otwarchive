@@ -24,6 +24,7 @@
                                         id: "chapters_" + chapter.position.to_s %>
         <span id="position-for-<%= chapter.id %>"><%= chapter.position %></span>.
         <%= chapter.chapter_title.html_safe %>
+        <% if !chapter.posted %>(Draft)<% end %>
 
         <ul class="chapter-control actions">
           <li><%= link_to ts("Edit"), [:edit, @work, chapter] %></li>

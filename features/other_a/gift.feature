@@ -322,7 +322,7 @@ Feature: Create Gifts
     Given the user "giftee1" disallows gifts
     When I am logged in as "gifter"
       And I post the work "Rude Gift" as a gift for "giftee1"
-    Then I should see "Sorry! We couldn't save this work because:giftee1 does not accept gifts."
+    Then I should see "Sorry! We couldn't save this work because: giftee1 does not accept gifts."
       And 0 emails should be delivered to "giftee1@example.com"
 
   Scenario: A user who disallows gifts can refuse existing ones

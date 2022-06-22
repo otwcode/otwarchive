@@ -269,7 +269,7 @@ Feature: Tag wrangling
     Then I should see "Sign Up"
     When I follow "Sign Up"
     Then I should see "Assign fandoms to yourself"
-      And I should see "'Allo 'Allo" in the "tag_fandom_string" input
+      And I should see "'Allo 'Allo" within ".autocomplete .added"
     When I press "Assign"
     Then I should see "Wranglers were successfully assigned"
     When I edit the tag "'Allo 'Allo"

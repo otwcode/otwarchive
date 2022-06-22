@@ -23,6 +23,33 @@ class Comment < ApplicationRecord
     maximum: ArchiveConfig.COMMENT_MAX,
     too_long: ts("must be less than %{count} characters long.", count: ArchiveConfig.COMMENT_MAX)
 
+  delegate :user, to: :pseud, allow_nil: true
+
+  # Check if the writer of this comment is blocked by the writer of the comment
+  # they're replying to:
+  validates :user, not_blocked: {
+    by: :commentable,
+    if: :reply_comment?,
+    unless: :on_tag?,
+    message: :blocked_reply
+  }
+
+  # Check if the writer of this comment is blocked by one of the creators of
+  # the work they're replying to:
+  validates :user, not_blocked: {
+    by: :ultimate_parent,
+    unless: :on_tag?,
+    message: :blocked_comment
+  }
+
+  def on_tag?
+    parent_type == "Tag"
+  end
+
+  def by_anonymous_creator?
+    ultimate_parent.try(:anonymous?) && user&.is_author_of?(ultimate_parent)
+  end
+
   validate :check_for_spam, on: :create
 
   def check_for_spam
@@ -44,7 +71,10 @@ class Comment < ApplicationRecord
   scope :unreviewed_only, -> { where(unreviewed: true) }
 
   scope :for_display, lambda {
-    includes(pseud: { user: :roles }, parent: { work: :pseuds })
+    includes(
+      pseud: { user: [:roles, :block_of_current_user, :block_by_current_user] },
+      parent: { work: [:pseuds, :users] }
+    )
   }
 
   # Gets methods and associations from acts_as_commentable plugin
@@ -74,6 +104,8 @@ class Comment < ApplicationRecord
     pertinent_attributes = %w[is_deleted hidden_by_admin unreviewed approved]
     (saved_changes.keys & pertinent_attributes).present?
   end
+
+  before_validation :set_parent_and_unreviewed, on: :create
 
   before_create :set_depth
   before_create :set_thread_for_replies
