@@ -115,9 +115,12 @@ Feature: Invite queue management
     # user uses email invite
     Given I am a visitor
     # "You've" removed from test due to escaping on apostrophes
-    Then the email should contain "been invited to join our beta!"
+    Then the email should contain "been invited to join the Archive of Our Own"
       And the email should contain "fanart"
       And the email should contain "podfic"
+      #And the email should contain "If you do not receive this email after 48 hours"
+      #And the email should contain "With an account, you can post fanworks"
+
     When I click the first link in the email
       And I fill in the sign up form with valid data
       And I fill in the following:
