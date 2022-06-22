@@ -7,13 +7,13 @@
 <%= t ".been_invited" %>
 <% end %>
 
-<%= t ".text.ao3_intro" %>
+<%= t ".text.about", otw_link: "https://transformativeworks.org" %>
 
-<%= t ".account_functionality" %>
+<%= t ".features" %>
 
-<%= t ".text.invite_link", invitation_link: signup_url(:invitation_token => @invitation.token) %>
+<%= t ".text.join", invitation_url: signup_url(:invitation_token => @invitation.token) %>
 
-<%= t ".text.activation_support_link", support_link: new_feedback_report_url %>
+<%= t ".text.activation_support", support_url: new_feedback_report_url %>
 
-<%= t ".text.faq_link", faq_link: archive_faqs_url %>
+<%= t ".text.faq", faq_url: archive_faqs_url %>
 <% end %>

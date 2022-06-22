@@ -12,22 +12,22 @@
   </p>
 
   <p>
-    <%= t(".html.ao3_intro", otw_link: style_link("Organization for Transformative Works", "http://transformativeworks.org")).html_safe %>
+    <%= t(".html.about", otw_link: style_link(t("mailer.general.signature.parent_org"), "https://transformativeworks.org")).html_safe %>
   </p>
 
   <p>
-    <%= t ".account_functionality" %>
+    <%= t ".features" %>
   </p>
 
   <p>
-    <%= t(".html.invite_link", invitation_link: style_link(signup_url(:invitation_token => @invitation.token), signup_url(:invitation_token => @invitation.token))).html_safe %>
+    <%= t(".html.join", invitation_url: style_link(t(".html.join_text"), signup_url(:invitation_token => @invitation.token))).html_safe %>
   </p>
 
   <p>
-    <%= t(".html.activation_support_link", support_link: style_link(t(".html.support_link_text"), new_feedback_report_url)).html_safe %>
+    <%= t(".html.activation_support", support_url: style_link(t(".html.support_text"), new_feedback_report_url)).html_safe %>
   </p>
 
   <p>
-    <%= t(".html.faq_link", faq_link: style_link(t(".html.faq_link_text"), archive_faqs_url)).html_safe %>
+    <%= t(".html.faq", faq_url: style_link(t(".html.faq_text"), archive_faqs_url)).html_safe %>
   </p>
 <% end %>
