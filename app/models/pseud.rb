@@ -327,7 +327,6 @@ class Pseud < ApplicationRecord
   #
   # This is a particular case for the Pseud model
   def remove_stale_from_autocomplete_before_save
-    Rails.logger.debug "Removing stale from autocomplete: #{autocomplete_search_string_was}"
     self.class.remove_from_autocomplete(self.autocomplete_search_string_was, self.autocomplete_prefixes, self.autocomplete_value_was)
   end
 

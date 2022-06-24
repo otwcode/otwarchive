@@ -205,7 +205,6 @@ public
   before_action :store_location
   def store_location
     if session[:return_to] == "redirected"
-      Rails.logger.debug "Return to back would cause infinite loop"
       session.delete(:return_to)
     elsif request.fullpath.length > 200
       # Sessions are stored in cookies, which has a 4KB size limit.
@@ -214,7 +213,6 @@ public
       session.delete(:return_to)
     else
       session[:return_to] = request.fullpath
-      Rails.logger.debug "Return to: #{session[:return_to]}"
     end
   end
 
@@ -224,11 +222,9 @@ public
     back = session[:return_to]
     session.delete(:return_to)
     if back
-      Rails.logger.debug "Returning to #{back}"
       session[:return_to] = "redirected"
       redirect_to(back) and return
     else
-      Rails.logger.debug "Returning to default (#{default})"
       redirect_to(default) and return
     end
   end
@@ -405,7 +401,6 @@ public
 
   def see_adult?
     params[:anchor] = "comments" if (params[:show_comments] && params[:anchor].blank?)
-    Rails.logger.debug "Added anchor #{params[:anchor]}"
     return true if cookies[:view_adult] || logged_in_as_admin?
     return false unless current_user
     return true if current_user.is_author_of?(@work)
