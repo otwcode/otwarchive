@@ -7,7 +7,7 @@
 
 <% if @pseud.bookmarks %>
   <%= form_tag({:action => "destroy"}, :method => :delete) do %>
-    <p>You have saved <%= @pseud.bookmarks.count %> bookmark(s) using this pseud. You can choose whether to
+    <p>You have saved <%= pluralize(@pseud.bookmarks.count, "bookmark") %> using this pseud. You can choose whether to
     delete them or transfer them to your default pseud.
     </p>
 
