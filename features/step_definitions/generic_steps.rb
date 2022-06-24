@@ -92,25 +92,47 @@ Then /^I should see a success message$/ do
   step %{I should see "success"}
 end
 
-def assure_xpath_present(tag, attribute, value, selector)
-  with_scope(selector) do
-    page.should have_xpath("//#{tag}[@#{attribute}='#{value}']")
+def xpath_for_tag_with_attributes(tag, attributes)
+  if attributes.present?
+    predicate = attributes.map{|k, v| "@#{k}='#{v}'"}.join(" and ")
+    "//#{tag}[#{predicate}]"
+  else
+    "//#{tag}"
   end
 end
 
-def assure_xpath_not_present(tag, attribute, value, selector)
+def assure_xpath_present(tag, attributes, selector, visible: true)
   with_scope(selector) do
-    page.should_not have_xpath("//#{tag}[@#{attribute}='#{value}']")
+    page.should have_xpath(xpath_for_tag_with_attributes(tag, attributes), visible: visible)
   end
+end
+
+def assure_xpath_not_present(tag, attributes, selector, visible: true)
+  with_scope(selector) do
+    page.should_not have_xpath(xpath_for_tag_with_attributes(tag, attributes), visible: visible)
+  end
+end
+
+# Allows generically checking for the presence a given tag with up to two attribute clauses.
+# Examples:
+#   Then I should see a "meta" tag
+#   Then I should see a "meta" tag with "name" of "robots" and "content" of "noindex"
+Then /^I should see (?:a|an) "([^"]*)" tag(?: with "([^"]*)" of "([^"]*)")?(?: and "([^"]*)" of "([^"]*)")?$/ do |tag, *attributes|
+  assure_xpath_present(tag, Hash[*attributes], nil, visible: nil)
+end
+
+# Allows generically checking for the absence a given tag with optional attribute clauses.
+Then /^I should not see (?:a|an) "([^"]*)" tag(?: with "([^"]*)" of "([^"]*)")?(?: and "([^"]*)" of "([^"]*)")?$/ do |tag, *attributes|
+  assure_xpath_not_present(tag, Hash[*attributes], nil, visible: nil)
 end
 
 # img attributes
 Then /^I should see the image "([^"]*)" text "([^"]*)"(?: within "([^"]*)")?$/ do |attribute, text, selector|
-  assure_xpath_present("img", attribute, text, selector)
+  assure_xpath_present("img", {attribute => text}, selector)
 end
 
 Then /^I should not see the image "([^"]*)" text "([^"]*)"(?: within "([^"]*)")?$/ do |attribute, text, selector|
-  assure_xpath_not_present("img", attribute, text, selector)
+  assure_xpath_not_present("img", {attribute => text}, selector)
 end
 
 Then /^"([^"]*)" should be selected within "([^"]*)"$/ do |value, field|
@@ -126,11 +148,11 @@ Then /^I should see "([^"]*)" in the "([^"]*)" input/ do |content, labeltext|
 end
 
 Then /^I should see (a|an) "([^"]*)" button(?: within "([^"]*)")?$/ do |_article, text, selector|
-  assure_xpath_present("input", "value", text, selector)
+  assure_xpath_present("input", {value: text}, selector)
 end
 
 Then /^I should not see (a|an) "([^"]*)" button(?: within "([^"]*)")?$/ do |_article, text, selector|
-  assure_xpath_not_present("input", "value", text, selector)
+  assure_xpath_not_present("input", {value: text}, selector)
 end
 
 When /^"([^\"]*)" is fixed$/ do |what|
@@ -160,11 +182,11 @@ Then /^the "([^"]*)" checkbox(?: within "([^"]*)")? should not be disabled$/ do 
 end
 
 Then /^I should see the input with id "([^"]*)"(?: within "([^"]*)")?$/ do |id, selector|
-  assure_xpath_present("input", "id", id, selector)
+  assure_xpath_present("input", {id: id}, selector)
 end
 
 Then /^I should not see the input with id "([^"]*)"(?: within "([^"]*)")?$/ do |id, selector|
-  assure_xpath_not_present("input", "id", id, selector)
+  assure_xpath_not_present("input", {id: id}, selector)
 end
 
 When /^I check the (\d+)(?:st|nd|rd|th) checkbox with the value "([^"]*)"$/ do |index, value|

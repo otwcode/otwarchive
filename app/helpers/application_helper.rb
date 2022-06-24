@@ -650,4 +650,10 @@ module ApplicationHelper
       params
     end
   end
+
+  def disallow_robots?
+    @user && @user.try(:preference).try(:minimize_search_engines?) ||
+      (@work.is_a?(Work) && @work.users.all? {|u| u.try(:preference).try(:minimize_search_engines?)}) ||
+      (@series.is_a?(Series) && @series.users.all? {|u| u.try(:preference).try(:minimize_search_engines?)})
+  end
 end # end of ApplicationHelper
