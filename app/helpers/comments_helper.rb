@@ -112,6 +112,7 @@ module CommentsHelper
   def can_reply_to_comment?(comment)
     !(comment.unreviewed? ||
       comment.iced? ||
+      comment.hidden_by_admin? ||
       parent_disallows_comments?(comment) ||
       comment_parent_hidden?(comment) ||
       blocked_by_comment?(comment) ||
