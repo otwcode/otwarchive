@@ -65,7 +65,7 @@ list.each do |user|
     PASSFILE
   end
 
-  puts "==== #{a.login}.txt"
+  puts "==== #{a.login}_staging.txt"
   if a.save
     puts password_file if password_file.present?
     admins << a
