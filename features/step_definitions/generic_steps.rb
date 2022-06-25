@@ -94,7 +94,7 @@ end
 
 def xpath_for_tag_with_attributes(tag, attributes)
   if attributes.present?
-    predicate = attributes.map{|k, v| "@#{k}='#{v}'"}.join(" and ")
+    predicate = attributes.map { |k, v| "@#{k}='#{v}'" }.join(" and ")
     "//#{tag}[#{predicate}]"
   else
     "//#{tag}"
@@ -128,11 +128,11 @@ end
 
 # img attributes
 Then /^I should see the image "([^"]*)" text "([^"]*)"(?: within "([^"]*)")?$/ do |attribute, text, selector|
-  assure_xpath_present("img", {attribute => text}, selector)
+  assure_xpath_present("img", { attribute => text }, selector)
 end
 
 Then /^I should not see the image "([^"]*)" text "([^"]*)"(?: within "([^"]*)")?$/ do |attribute, text, selector|
-  assure_xpath_not_present("img", {attribute => text}, selector)
+  assure_xpath_not_present("img", { attribute => text }, selector)
 end
 
 Then /^"([^"]*)" should be selected within "([^"]*)"$/ do |value, field|
@@ -148,11 +148,11 @@ Then /^I should see "([^"]*)" in the "([^"]*)" input/ do |content, labeltext|
 end
 
 Then /^I should see (a|an) "([^"]*)" button(?: within "([^"]*)")?$/ do |_article, text, selector|
-  assure_xpath_present("input", {value: text}, selector)
+  assure_xpath_present("input", { value: text }, selector)
 end
 
 Then /^I should not see (a|an) "([^"]*)" button(?: within "([^"]*)")?$/ do |_article, text, selector|
-  assure_xpath_not_present("input", {value: text}, selector)
+  assure_xpath_not_present("input", { value: text }, selector)
 end
 
 When /^"([^\"]*)" is fixed$/ do |what|
@@ -182,11 +182,11 @@ Then /^the "([^"]*)" checkbox(?: within "([^"]*)")? should not be disabled$/ do 
 end
 
 Then /^I should see the input with id "([^"]*)"(?: within "([^"]*)")?$/ do |id, selector|
-  assure_xpath_present("input", {id: id}, selector)
+  assure_xpath_present("input", { id: id }, selector)
 end
 
 Then /^I should not see the input with id "([^"]*)"(?: within "([^"]*)")?$/ do |id, selector|
-  assure_xpath_not_present("input", {id: id}, selector)
+  assure_xpath_not_present("input", { id: id }, selector)
 end
 
 When /^I check the (\d+)(?:st|nd|rd|th) checkbox with the value "([^"]*)"$/ do |index, value|
