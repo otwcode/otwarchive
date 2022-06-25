@@ -11,7 +11,7 @@ Feature: Collectible items in moderated collections
   button
     Given I post the work "Blabla"
     When I add my work to the collection
-    Then I should see "until it has been approved by a moderator."
+    Then I should see "You have submitted your work to the moderated collection 'Various Penguins'. It will not become a part of the collection until it has been approved by a moderator."
     When the collection counts have expired
       And I go to "Various Penguins" collection's page
     Then I should see "Works (0)" within "#dashboard"
@@ -29,7 +29,8 @@ Feature: Collectible items in moderated collections
   Scenario: Add my bookmark to a moderated collection
     Given I have a bookmark for "Tundra penguins"
     When I add my bookmark to the collection "Various_Penguins"
-    Then I should see "until it has been approved by a moderator."
+    Then I should see "You have submitted your bookmark to the moderated collection 'Various Penguins'. It will not become a part of the collection until it has been approved by a moderator."
+      And I should not see "You have submitted your work to the moderated collection 'Various Penguins'. It will not become a part of the collection until it has been approved by a moderator."
     When the collection counts have expired
       And I go to "Various Penguins" collection's page
     Then I should see "Bookmarked Items (0)" within "#dashboard"

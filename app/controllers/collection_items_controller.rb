@@ -147,10 +147,9 @@ class CollectionItemsController < ApplicationController
       collection_item_type = "work"
       if params[:bookmark_id]
         collection_item_type = "bookmark"
+      end
       flash[:notice] ||= ""
       flash[:notice] += ts(" You have submitted your #{collection_item_type} to #{unapproved_collections.size > 1 ? "moderated collections (%{all_collections}). It will not become a part of those collections" : "the moderated collection '%{all_collections}'. It will not become a part of the collection"} until it has been approved by a moderator.", all_collections: unapproved_collections.map { |f| f.title }.join(', '))
-      end
-
     end
 
     flash[:notice] = (flash[:notice]).html_safe unless flash[:notice].blank?
