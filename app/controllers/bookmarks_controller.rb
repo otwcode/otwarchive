@@ -26,8 +26,6 @@ class BookmarksController < ApplicationController
   def load_bookmarkable
     if params[:work_id]
       @bookmarkable = Work.find(params[:work_id])
-    elsif params[:chapter_id]
-      @bookmarkable = Chapter.find(params[:chapter_id]).try(:work)
     elsif params[:external_work_id]
       @bookmarkable = ExternalWork.find(params[:external_work_id])
     elsif params[:series_id]
