@@ -703,7 +703,7 @@ class Work < ApplicationRecord
 
   # Change the positions of the chapters in the work
   def reorder_list(positions)
-    SortableList.new(self.chapters.posted.in_order).reorder_list(positions)
+    SortableList.new(chapters_in_order(include_drafts: true)).reorder_list(positions)
     # We're caching the chapter positions in the comment blurbs
     # so we need to expire them
     async(:poke_cached_comments)
