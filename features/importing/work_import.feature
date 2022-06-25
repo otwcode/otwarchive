@@ -161,6 +161,8 @@ Feature: Import Works
     Then I should see "Preview"
       And I should see "2010-01-11"
 
+  # TODO: Enable after AO3-6353.
+  @wip
   @work_import_multi_chapter_backdate
   Scenario: Importing a new multichapter work with backdating should have correct chapter index dates
     Given basic languages

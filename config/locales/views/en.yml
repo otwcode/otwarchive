@@ -333,6 +333,11 @@ en:
         title: "Blocked Users"
         button: "Block"
         none: "You have not blocked any users."
+        legend: "Block a user"
+        label: "User"
+        heading:
+          landmark:
+            blocked_users: "Listing Blocked Users"
         will:
           intro: "Blocking a user prevents them from:"
           commenting: "commenting on your works"
@@ -341,9 +346,11 @@ en:
           intro: "Blocking a user will not:"
           comments_on_works: "delete or hide comments they previously left on your works; you can delete these individually"
           comments_elsewhere: "hide their comments elsewhere on the site"
+          hide_works: "hide their works or bookmarks from you"
       confirm_block:
         title: "Block %{name}"
         button: "Yes, Block User"
+        cancel: "Cancel"
         block: "block"
         sure_html: "Are you sure you want to %{block} %{username}?"
         will:
@@ -354,9 +361,11 @@ en:
           intro: "Blocking a user will not:"
           comments_on_works: "delete or hide comments they previously left on your works; you can delete these individually"
           comments_elsewhere: "hide their comments elsewhere on the site"
+          hide_works: "hide their works or bookmarks from you"
       confirm_unblock:
         title: "Unblock %{name}"
         button: "Yes, Unblock User"
+        cancel: "Cancel"
         unblock: "unblock"
         sure_html: "Are you sure you want to %{unblock} %{username}?"
         resume:

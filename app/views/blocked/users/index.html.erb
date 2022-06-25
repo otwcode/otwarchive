@@ -11,19 +11,26 @@
   <p><%= t(".will_not.intro") %></p>
 
   <ul>
+    <li><%= t(".will_not.hide_works") %></li>
     <li><%= t(".will_not.comments_on_works") %></li>
     <li><%= t(".will_not.comments_elsewhere") %></li>
   </ul>
 </div>
 
 <% # form for blocking users %>
-<div class="actions">
-  <%= form_tag confirm_block_user_blocked_users_path(@user), method: :get do %>
-    <%= text_field_tag :blocked_id, "", autocomplete_options("pseud", size: 60, data: { autocomplete_token_limit: 1 }) %>
-    <span class="submit"><%= submit_tag t(".button") %></span>
-  <% end %>
-</div>
 
+<%= form_tag confirm_block_user_blocked_users_path(@user), method: :get, class: "single simple post" do %>
+  <fieldset>
+    <legend><%= t(".legend") %></legend>
+    <p>
+      <%= label_tag :blocked_id, t(".label"), class: "landmark" %>
+      <%= text_field_tag :blocked_id, "", autocomplete_options("pseud", data: { autocomplete_token_limit: 1 }) %>
+      <span class="submit actions"><%= submit_tag t(".button") %></span>
+    </p>
+  </fieldset>
+<% end %>
+
+<h3 class="landmark heading"><%= t("heading.landmark.blocked") %> %></h3>
 <% if @blocks.present? %>
   <ul class="pseud index group">
     <%= render partial: "blocked_user_blurb", collection: @blocks, as: :block %>
