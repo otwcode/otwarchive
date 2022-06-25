@@ -285,7 +285,6 @@ Given /^I have generated matches for "([^\"]*)"$/ do |challengename|
   step %{I close signups for "#{challengename}"}
   step %{I follow "Matching"}
   step %{I follow "Generate Potential Matches"}
-  step %{the system processes jobs}
     step %{I wait 3 seconds}
   step %{I reload the page}
   step %{all emails have been delivered}
@@ -293,7 +292,6 @@ end
 
 Given /^I have sent assignments for "([^\"]*)"$/ do |challengename|
   step %{I follow "Send Assignments"}
-  step %{the system processes jobs}
     step %{I wait 3 seconds}
   step %{I reload the page}
   step %{I should not see "Assignments are now being sent out"}
