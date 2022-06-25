@@ -446,6 +446,34 @@ Scenario: When a user is notified that a co-authored work has been inspired by a
   Then I should see "Link was successfully removed"
     And I should not see the related work listed on the original work
 
+  Scenario: Citing an anonymous work by a protected user does not break anonymity
+  Given an anonymous collection "Anonymous"
+    And I have related works setup
+    And the user "inspiration" is a protected user
+  When I am logged in as "inspiration"
+    And I add the work "Worldbuilding" to the collection "Anonymous"
+  When I post a related work as remixer
+  Then I should not see "You can't use the related works function to cite works by inspiration."
+  When I am logged in as "remixer"
+    And I go to remixer's related works page
+  Then I should see "Works that inspired remixer"
+    And I should see "Worldbuilding by Anonymous"
+    And I should not see "inspiration"
+
+  Scenario: Citing an unrevealed work by a protected user does not break anonymity
+  Given a hidden collection "Hidden"
+    And I have related works setup
+    And the user "inspiration" is a protected user
+  When I am logged in as "inspiration"
+    And I add the work "Worldbuilding" to the collection "Hidden"
+  When I post a related work as remixer
+  Then I should not see "You can't use the related works function to cite works by inspiration."
+  When I am logged in as "remixer"
+    And I go to remixer's related works page
+  Then I should see "Works that inspired remixer"
+    And I should see "A work in an unrevealed collection"
+    And I should not see "inspiration"
+
   Scenario: When a remix is anonymous, it's visible on the original creator's related works page, but not on the remixer's related works page
     Given an anonymous collection "Anonymous"
       And I have related works setup
