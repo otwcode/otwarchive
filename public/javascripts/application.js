@@ -597,7 +597,7 @@ function thermometer() {
         percentage_amount = Math.min( Math.round(progress_amount / goal_amount * 1000) / 10, 100);
 
     // add thermometer markup (with amounts)
-    banner_content.append('<div class="thermometer-content"><div class="thermometer"><div class="track"><div class="goal"><span class="amount">US$' + banner_goal_text +'</span></div><div class="progress"><span class="amount">US$' + banner_progress_text + '</span></div></div></div></div>');
+    banner_content.append('<div class="thermometer-content"><div class="thermometer"><div class="track"><div class="goal"><span class="amount">' + banner_goal_text +'</span></div><div class="progress"><span class="amount">' + banner_progress_text + '</span></div></div></div></div>');
 
     // set the progress indicator
     // darker green for over 100% stretch goals
