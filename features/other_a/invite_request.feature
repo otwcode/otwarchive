@@ -78,7 +78,7 @@ Feature: Invite requests
       And the email should contain "With an account, you can post fanworks"
 
     Given I am a visitor
-    When I click the second link in the email
+    When I follow "follow this link to sign up" in the email
       And I fill in the sign up form with valid data
       And I fill in the following:
         | user_registration_login                  | user2     |

@@ -190,18 +190,19 @@ en:
       
       features: "With an account, you can post fanworks, use bookmarks to keep track of works you enjoyed, receive subscription emails when your favorite creators or works update, customize the way the site looks for you, and more!"
       text:
-        about: "The Archive of Our Own (AO3) is a free, noncommercial archive built by and for fans. Our servers are owned by our parent nonprofit, the Organization for Transformative Works (%{otw_link}), which works to protect fan rights and preserve fanworks. We welcome all kinds of fanworks, including fanfiction, fanart, fanvids, and podfic from any fandom."
+        about: "The Archive of Our Own (AO3) is a free, noncommercial archive built by and for fans. Our servers are owned by our parent nonprofit, the Organization for Transformative Works (%{otw_url}), which works to protect fan rights and preserve fanworks. We welcome all kinds of fanworks, including fanfiction, fanart, fanvids, and podfic from any fandom."
         faq: "For more information, please check our FAQ: %{faq_url}."
         join: "If you'd like to join us, please follow this link to sign up: %{invitation_url}."
         activation_support: "After you sign up, you'll receive an account activation email. If you do not receive this email after 48 hours, please contact Support: %{support_url}."
       html:
         about: "The Archive of Our Own (AO3) is a free, noncommercial archive built by and for fans. Our servers are owned by our parent nonprofit, the %{otw_link}, which works to protect fan rights and preserve fanworks. We welcome all kinds of fanworks, including fanfiction, fanart, fanvids, and podfic from any fandom."
-        join_text: "follow this link to sign up"
-        join: "If you'd like to join us, please %{invitation_url}."
-        activation_support: "After you sign up, you'll receive an account activation email. If you do not receive this email after 48 hours, please %{support_url}."
-        support_text: "contact Support"
-        faq: "For more information, please check %{faq_url}."
-        faq_text: "our FAQ"
+        otw_link_text: "Organization for Transformative Works"
+        join: "If you'd like to join us, please %{invitation_link}."
+        invitation_link_text: "follow this link to sign up"
+        activation_support: "After you sign up, you'll receive an account activation email. If you do not receive this email after 48 hours, please %{support_link}."
+        support_link_text: "contact Support"
+        faq: "For more information, please check %{faq_link}."
+        faq_link_text: "our FAQ"
     abuse_report:
       subject: "[%{app_name}] Your abuse report"
       para1: "The following abuse report has been sent to the Abuse team:"

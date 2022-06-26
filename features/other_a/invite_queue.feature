@@ -118,10 +118,10 @@ Feature: Invite queue management
     Then the email should contain "been invited to join the Archive of Our Own"
       And the email should contain "fanart"
       And the email should contain "podfic"
-      #And the email should contain "If you do not receive this email after 48 hours"
-      #And the email should contain "With an account, you can post fanworks"
+      And the email should contain "If you do not receive this email after 48 hours"
+      And the email should contain "With an account, you can post fanworks"
 
-    When I click the second link in the email
+    When I follow "follow this link to sign up" in the email
       And I fill in the sign up form with valid data
       And I fill in the following:
         | user_registration_login                 | newuser                  |
