@@ -1,28 +1,27 @@
-<h2 class="heading"><%=h 'Pseud deletion' %></h2>
+<h2 class="heading"><%=h ts("Pseud deletion") %></h2>
 
 <p>
-  When you delete your pseud, any works, series, or comments you have created under it will be 
-  transferred to your default pseud.
+  <%= ts("When you delete your pseud, any works, series, or comments you have created under it will be 
+  transferred to your default pseud.") %>
 </p>
 
 <% if @pseud.bookmarks %>
   <%= form_tag({:action => "destroy"}, :method => :delete) do %>
-    <p>You have saved <%= pluralize(@pseud.bookmarks.count, "bookmark") %> using this pseud. You can choose whether to
-    delete them or transfer them to your default pseud.
+    <p> <%= ts("You have saved  #{pluralize(@pseud.bookmarks.count, "bookmark")} using this pseud. You can choose whether to delete them or transfer them to your default pseud.") %>
     </p>
 
     <p>
     <%= radio_button_tag 'bookmarks_action', "delete_bookmarks", true %>
-    <%= label_tag 'bookmarks_action_delete_bookmarks', 'Delete these bookmarks' %>
+    <%= label_tag 'bookmarks_action_delete_bookmarks', ts("Delete these bookmarks") %>
     </p>
 
     <p>
     <%= radio_button_tag 'bookmarks_action', "transfer_bookmarks" %>
-    <%= label_tag 'bookmarks_action_transfer_bookmarks', "Transfer these bookmarks to the default pseud" %>
+    <%= label_tag 'bookmarks_action_transfer_bookmarks', ts("Transfer these bookmarks to the default pseud") %>
     </p>
 
     <p class="submit cancel actions">
-		  <%= submit_tag "Submit", data: {confirm: "Are you sure? This can't be undone!"} %> <%= submit_tag 'Cancel', :name => 'cancel_button', :class => 'cancel' %>
+		  <%= submit_tag ts("Submit"), data: {confirm: ts("Are you sure? This can't be undone!")} %> <%= submit_tag ts("Cancel"), :name => 'cancel_button', :class => 'cancel' %>
     </p>
   <% end %>
 <% end %>
