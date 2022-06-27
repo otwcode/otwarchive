@@ -21,6 +21,7 @@ class CommentsController < ApplicationController
   before_action :check_parent_comment_permissions, only: [:new, :create, :add_comment_reply]
   before_action :check_unreviewed, only: [:add_comment_reply]
   before_action :check_frozen, only: [:new, :create, :add_comment_reply]
+  before_action :check_hidden_by_admin, only: [:new, :create, :add_comment_reply]
   before_action :check_not_replying_to_spam, only: [:new, :create, :add_comment_reply]
   before_action :check_permission_to_review, only: [:unreviewed]
   before_action :check_permission_to_access_single_unreviewed, only: [:show]
@@ -140,6 +141,13 @@ class CommentsController < ApplicationController
     return unless @commentable.respond_to?(:iced?) && @commentable.iced?
 
     flash[:error] = t("comments.check_frozen.error")
+    redirect_back(fallback_location: root_path)
+  end
+
+  def check_hidden_by_admin
+    return unless @commentable.respond_to?(:hidden_by_admin?) && @commentable.hidden_by_admin?
+
+    flash[:error] = t("comments.check_hidden_by_admin.error")
     redirect_back(fallback_location: root_path)
   end
 

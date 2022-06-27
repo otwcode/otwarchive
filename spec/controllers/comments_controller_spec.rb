@@ -39,7 +39,7 @@ describe CommentsController do
       end
     end
 
-    shared_examples "no one can add comment reply" do
+    shared_examples "no one can add comment reply on a frozen comment" do
       it "redirects logged out user with an error" do
         get :add_comment_reply, params: { comment_id: comment.id }
         it_redirects_to_with_error("/where_i_came_from", "Sorry, you cannot reply to a frozen comment.")
@@ -56,19 +56,52 @@ describe CommentsController do
       context "when commentable is an admin post" do
         let(:comment) { create(:comment, :on_admin_post, iced: true) }
 
-        it_behaves_like "no one can add comment reply"
+        it_behaves_like "no one can add comment reply on a frozen comment"
       end
 
       context "when commentable is a tag" do
         let(:comment) { create(:comment, :on_tag, iced: true) }
 
-        it_behaves_like "no one can add comment reply"
+        it_behaves_like "no one can add comment reply on a frozen comment"
       end
 
       context "when commentable is a work" do
         let(:comment) { create(:comment, iced: true) }
 
-        it_behaves_like "no one can add comment reply"
+        it_behaves_like "no one can add comment reply on a frozen comment"
+      end
+    end
+
+    shared_examples "no one can add comment reply on a hidden comment" do
+      it "redirects logged out user with an error" do
+        get :add_comment_reply, params: { comment_id: comment.id }
+        it_redirects_to_with_error("/where_i_came_from", "Sorry, you cannot reply to a hidden comment.")
+      end
+
+      it "redirects logged in user with an error" do
+        fake_login
+        get :add_comment_reply, params: { comment_id: comment.id }
+        it_redirects_to_with_error("/where_i_came_from", "Sorry, you cannot reply to a hidden comment.")
+      end
+    end
+
+    context "when comment is hidden by admin" do
+      context "when commentable is an admin post" do
+        let(:comment) { create(:comment, :on_admin_post, hidden_by_admin: true) }
+
+        it_behaves_like "no one can add comment reply on a hidden comment"
+      end
+
+      context "when commentable is a tag" do
+        let(:comment) { create(:comment, :on_tag, hidden_by_admin: true) }
+
+        it_behaves_like "no one can add comment reply on a hidden comment"
+      end
+
+      context "when commentable is a work" do
+        let(:comment) { create(:comment, hidden_by_admin: true) }
+
+        it_behaves_like "no one can add comment reply on a hidden comment"
       end
     end
   end
@@ -174,6 +207,12 @@ describe CommentsController do
       comment = create(:comment, iced: true)
       post :new, params: { comment_id: comment.id }
       it_redirects_to_with_error("/where_i_came_from", "Sorry, you cannot reply to a frozen comment.")
+    end
+
+    it "shows an error and redirects if commentable is a hidden comment" do
+      comment = create(:comment, hidden_by_admin: true)
+      post :new, params: { comment_id: comment.id }
+      it_redirects_to_with_error("/where_i_came_from", "Sorry, you cannot reply to a hidden comment.")
     end
   end
 
@@ -381,6 +420,16 @@ describe CommentsController do
           post :create, params: { comment_id: comment.id, comment: anon_comment_attributes }
           it_redirects_to_with_error("/where_i_came_from",
                                      "Sorry, you cannot reply to a frozen comment.")
+        end
+      end
+
+      context "when the commentable is hidden" do
+        let(:comment) { create(:comment, hidden_by_admin: true) }
+
+        it "shows an error and redirects" do
+          post :create, params: { comment_id: comment.id, comment: anon_comment_attributes }
+          it_redirects_to_with_error("/where_i_came_from",
+                                     "Sorry, you cannot reply to a hidden comment.")
         end
       end
 
