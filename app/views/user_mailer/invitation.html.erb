@@ -20,7 +20,7 @@
   </p>
 
   <p>
-    <%= t(".html.join", invitation_link: style_link(t(".html.invitation_link_text"), signup_url(:invitation_token => @invitation.token))).html_safe %>
+    <%= t(".html.join", invitation_link: style_link(t(".html.invitation_link_text"), signup_url(invitation_token: @invitation.token))).html_safe %>
   </p>
 
   <p>
