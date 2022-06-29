@@ -272,7 +272,7 @@ jQuery(document).ready(function() {
 
                             // key events triggered from outside the modal should also die,
                             // except for ctrl combinations like ctrl+c
-                            const ignoreKey = !targetInModal && !event.ctrlKey;
+                            var ignoreKey = !targetInModal && !event.ctrlKey;
                             if (ignoreKey || escKey || enterKey && !targetIsInput) {
                                 event.preventDefault();
                                 event.stopPropagation();
