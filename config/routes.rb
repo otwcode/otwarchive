@@ -67,10 +67,9 @@ Otwarchive::Application.routes.draw do
 
   resources :invitations
   resources :user_invite_requests
-  resources :invite_requests do
+  resources :invite_requests, only: [:index, :create, :destroy] do
     collection do
       get :manage
-      post :reorder
       get :status
     end
   end

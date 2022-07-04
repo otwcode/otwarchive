@@ -3,9 +3,6 @@ Feature: Invite queue management
 
   Background:
     Given I have no users
-    And the following admin exists
-      | login       | password   | email                    |
-      | admin-sam   | password   | test@archiveofourown.org |
     And the following users exist
       | login | password |
       | user1 | password |
