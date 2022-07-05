@@ -46,6 +46,17 @@ class AutocompleteController < ApplicationController
   def relationship; tag_output(params[:term], "relationship"); end
   def freeform; tag_output(params[:term], "freeform"); end
 
+
+  ## TAGS IN FANDOMS
+  private
+    def tag_in_fandom_output(params)
+      render_output(Tag.autocomplete_fandom_lookup(params).map {|r| Tag.name_from_autocomplete(r)})
+    end
+  public
+  def character_in_fandom; tag_in_fandom_output(params.merge({tag_type: "character"})); end
+  def relationship_in_fandom; tag_in_fandom_output(params.merge({tag_type: "relationship"})); end
+
+
   ## TAGS IN SETS
   #
   # Note that only tagsets in OwnedTagSets are in autocomplete
