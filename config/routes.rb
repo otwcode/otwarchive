@@ -92,7 +92,6 @@ Otwarchive::Application.routes.draw do
   resources :tag_wranglings do
     collection do
       post :wrangle
-      get :discuss
     end
   end
   resources :tag_wranglers
