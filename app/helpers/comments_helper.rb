@@ -14,17 +14,6 @@ module CommentsHelper
     (ts('Reading Comments on ') + title).html_safe
   end
 
-  def last_reply_by(comment)
-    if comment.count_all_comments > 0
-      c = Comment.where(thread: comment.id).order(created_at: :desc).first
-      if c.pseud
-        link_to c.pseud.name, [c.pseud.user, c.pseud]
-      else
-        c.name
-      end
-    end
-  end
-
   def link_to_comment_ultimate_parent(comment)
     ultimate = comment.ultimate_parent
     case ultimate.class.to_s
