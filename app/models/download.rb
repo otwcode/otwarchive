@@ -90,16 +90,13 @@ class Download
     @tmpdir
   end
 
-  # Mimic roughly the default way of producing HTML page titles
-  # @see WorksController#show
-  # @see ApplicationController#get_page_title
   def page_title
     fandom = if work.fandoms.size > 3
                "Multifandom"
              elsif work.fandoms.empty?
                "No fandom specified"
              else
-               work.fandoms[0].name
+               work.fandoms.string
              end
     [work.title, authors, fandom].join(" - ")
   end

@@ -104,15 +104,21 @@ describe Download do
     let(:work) { create(:work, fandoms: [fandom1, fandom2], title: "Foo bar") }
     let(:subject) { Download.new(work) }
 
-    it "includes first fandom name" do
+    it "includes fandom names" do
       expect(subject.page_title).to include(fandom1.name)
-      expect(subject.page_title).not_to include(fandom2.name)
+      expect(subject.page_title).to include(fandom2.name)
     end
 
     it "leaves emojis alone" do
       work.title = "emoji 🥳 is 🚀 awesome"
 
       expect(subject.page_title).to include("emoji 🥳 is 🚀 awesome")
+    end
+
+    it "leaves long titles alone" do
+      work.title = "no title is too long to print nor to read"
+
+      expect(subject.page_title).to include("no title is too long to print nor to read")
     end
 
     context "for a work with multiple authors" do
