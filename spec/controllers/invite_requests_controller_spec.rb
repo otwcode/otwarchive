@@ -113,7 +113,7 @@ describe InviteRequestsController do
     context "when logged in as admin" do
       let(:invite_request) { create(:invite_request) }
 
-      %w[superadmin policy_and_abuse].each do |admin_role|
+      %w[superadmin policy_and_abuse support].each do |admin_role|
         context "with #{admin_role} role" do
 
           before do
@@ -180,7 +180,7 @@ describe InviteRequestsController do
         end
       end
 
-      %w[board communications docs open_doors support tag_wrangling translation].each do |admin_role|
+      %w[board communications docs open_doors tag_wrangling translation].each do |admin_role|
         context "with #{admin_role} role" do
           before do
             admin.update(roles: [admin_role])
@@ -230,7 +230,7 @@ describe InviteRequestsController do
     end
 
     context "when logged in as admin" do
-      %w[superadmin policy_and_abuse].each do |admin_role|
+      %w[superadmin policy_and_abuse support].each do |admin_role|
         context "with #{admin_role} role" do
           let(:ip) { "127.0.0.1" }
           let(:ip_2) { "128.0.0.1" }
@@ -281,7 +281,7 @@ describe InviteRequestsController do
         end
       end
 
-      %w[board communications docs open_doors support tag_wrangling translation].each do |admin_role|
+      %w[board communications docs open_doors tag_wrangling translation].each do |admin_role|
         context "with #{admin_role} role" do
           before do
             admin.update(roles: [admin_role])
@@ -336,7 +336,7 @@ describe InviteRequestsController do
     end
 
     context "when logged in as admin" do
-      %w[superadmin policy_and_abuse].each do |admin_role|
+      %w[superadmin policy_and_abuse support].each do |admin_role|
         context "with #{admin_role} role" do
           before do
             admin.update(roles: [admin_role])
@@ -385,7 +385,7 @@ describe InviteRequestsController do
         end
       end
 
-      %w[board communications docs open_doors support tag_wrangling translation].each do |admin_role|
+      %w[board communications docs open_doors tag_wrangling translation].each do |admin_role|
         context "with #{admin_role} role" do
           before do
             admin.update(roles: [admin_role])

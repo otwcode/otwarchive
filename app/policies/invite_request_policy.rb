@@ -1,5 +1,5 @@
 class InviteRequestPolicy < ApplicationPolicy
-  MANAGE_ROLES = %w[superadmin policy_and_abuse].freeze
+  MANAGE_ROLES = %w[superadmin policy_and_abuse support].freeze
 
   def can_manage?
     user_has_roles?(MANAGE_ROLES)
