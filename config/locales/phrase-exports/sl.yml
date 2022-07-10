@@ -1,5 +1,93 @@
 ---
 sl:
+  activerecord:
+    attributes:
+      archive_warning:
+        name_with_colon:
+          few: 'Opozorila:'
+          one: 'Opozorilo:'
+          other: 'Opozorila:'
+          two: 'Opozorili:'
+      category:
+        name_with_colon:
+          few: 'Kategorije:'
+          one: 'Kategorija:'
+          other: 'Kategorije:'
+          two: 'Kategoriji:'
+      character:
+        name_with_colon:
+          few: 'Liki:'
+          one: 'Lik:'
+          other: 'Liki:'
+          two: 'Lika:'
+      fandom:
+        name_with_colon:
+          few: 'Fandomi:'
+          one: 'Fandom:'
+          other: 'Fandomi:'
+          two: 'Fandoma:'
+      freeform:
+        name_with_colon:
+          few: 'Dodatne oznake:'
+          one: 'Dodatna oznaka:'
+          other: 'Dodatne oznake:'
+          two: 'Dodatni oznaki:'
+      rating:
+        name_with_colon: 'Ocena primernosti:'
+      relationship:
+        name_with_colon:
+          few: 'Razmerja:'
+          one: 'Razmerje:'
+          other: 'Razmerja:'
+          two: 'Razmerji:'
+      work:
+        summary: Povzetek
+    models:
+      archive_warning:
+        few: Opozorila
+        one: Opozorilo
+        other: Opozorila
+        two: Opozorili
+      category:
+        few: Kategorije
+        one: Kategorija
+        other: Kategorije
+        two: Kategoriji
+      chapter:
+        few: Poglavja
+        one: Poglavje
+        other: Poglavja
+        two: Poglavji
+      character:
+        few: Liki
+        one: Lik
+        other: Liki
+        two: Lika
+      fandom:
+        few: Fandomi
+        one: Fandom
+        other: Fandomi
+        two: Fandoma
+      freeform:
+        few: Dodatne oznake
+        one: Dodatna oznaka
+        other: Dodatne oznake
+        two: Dodatni oznaki
+      rating:
+        few: Ocene primernosti
+        one: Ocena primernosti
+        other: Ocene primernosti
+        two: Oceni primernosti
+      relationship:
+        few: Razmerja
+        one: Razmerje
+        other: Razmerja
+        two: Razmerji
+      series:
+        few: Serije
+        one: Serija
+        other: Serije
+        two: Seriji
   kudo_mailer:
     batch_kudo_notification:
       guest:
@@ -9,22 +97,34 @@ sl:
         two: "%{count} gosta/ji"
       html:
         left_kudos:
-          few: "%{givers_list} so všečkali/e %{commentable_link}."
-          one: "%{givers_list} je všečkal/a %{commentable_link}."
-          other: "%{givers_list} je všečkalo %{commentable_link}."
-          two: "%{givers_list} sta všečkala/i %{commentable_link}."
-      subject: "[%{app_name}] Imate všečke!"
+          few: "%{givers_list} so pohvalili/e %{commentable_link}."
+          one: "%{givers_list} je pohvalil/a %{commentable_link}."
+          other: "%{givers_list} je pohvalilo %{commentable_link}."
+          two: "%{givers_list} sta pohvalila/i %{commentable_link}."
+        single_guest:
+          giver_list: gost/ja
+          left_kudos: je pohvalil/a
+      subject: "[%{app_name}] Dobili ste pohvalo!"
       text:
         left_kudos:
-          few: "%{givers_list} so všečkali/e %{commentable_title} (%{commentable_url})."
-          one: "%{givers_list} je všečkal/a %{commentable_title} (%{commentable_url})."
-          other: "%{givers_list} je všečkalo %{commentable_title} (%{commentable_url})."
-          two: "%{givers_list} sta všečkala/i %{commentable_title} (%{commentable_url})."
+          few: "%{givers_list} so pohvalili/e %{commentable_title} (%{commentable_url})."
+          one: "%{givers_list} je pohvalil/a %{commentable_title} (%{commentable_url})."
+          other: "%{givers_list} je pohvalilo %{commentable_title} (%{commentable_url})."
+          two: "%{givers_list} sta pohvalila/i %{commentable_title} (%{commentable_url})."
+        single_guest: Gost/ja je pohvalil/a
   mailer:
     general:
       closing:
         formal: S spoštovanjem,
         informal: Z lepimi pozdravi,
+      creation:
+        link_with_word_count: "%{creation_link} (%{word_count})"
+        title_with_word_count: '"%{creation_title}" (%{word_count})'
+        word_count:
+          few: "%{count} besede"
+          one: "%{count} beseda"
+          other: "%{count} besed"
+          two: "%{count} besedi"
       footer:
         general:
           html:
@@ -45,6 +145,7 @@ sl:
           addressed: Zdravo, %{name}!
           unaddressed: Zdravo!
         introductory: Lep pozdrav od Archive Of Our Own - AO3!
+      metadata_label_indicator: ": "
       signature:
         app_short_name: AO3
         open_doors: Ekipa Open Doors (Odprta vrata)

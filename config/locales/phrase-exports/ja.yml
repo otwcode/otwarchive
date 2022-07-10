@@ -1,5 +1,48 @@
 ---
 ja:
+  activerecord:
+    attributes:
+      archive_warning:
+        name_with_colon:
+          other: 警告：
+      category:
+        name_with_colon:
+          other: カテゴリー：
+      character:
+        name_with_colon:
+          other: キャラクター：
+      fandom:
+        name_with_colon:
+          other: ジャンル：
+      freeform:
+        name_with_colon:
+          other: その他のタグ：
+      rating:
+        name_with_colon: レイティング：
+      relationship:
+        name_with_colon:
+          other: カップリング：
+      work:
+        summary: あらすじ
+    models:
+      archive_warning:
+        other: 警告
+      category:
+        other: カテゴリー
+      chapter:
+        other: 章
+      character:
+        other: キャラクター
+      fandom:
+        other: ジャンル
+      freeform:
+        other: その他のタグ
+      rating:
+        other: レイティング
+      relationship:
+        other: カップリング
+      series:
+        other: シリーズ
   kudo_mailer:
     batch_kudo_notification:
       guest:
@@ -7,15 +50,24 @@ ja:
       html:
         left_kudos:
           other: "%{givers_list}があなたの作品 %{commentable_link}にいいねを送りました。"
+        single_guest:
+          giver_list: ゲスト1名
+          left_kudos: "%{givers_list}があなたの作品 %{commentable_link}にいいねを送りました。"
       subject: "[%{app_name}] あなたにいいねが届きました！"
       text:
         left_kudos:
           other: "%{givers_list} があなたの作品 %{commentable_title} (%{commentable_url})にいいねを送りました。"
+        single_guest: ゲスト1名があなたの作品 %{commentable_link}にいいねを送りました。
   mailer:
     general:
       closing:
         formal: 敬具、
         informal: 以上、
+      creation:
+        link_with_word_count: "%{creation_link} (%{word_count})"
+        title_with_word_count: '"%{creation_title}" (%{word_count})'
+        word_count:
+          other: "%{count} 語"
       footer:
         general:
           html:
@@ -33,6 +85,7 @@ ja:
           addressed: こんにちは、%{name}さん！
           unaddressed: こんにちは！
         introductory: AO3（みんなのアーカイブ）からこんにちは！
+      metadata_label_indicator: "："
       signature:
         app_short_name: AO3
         open_doors: The Open Doors (オープンドア) チーム

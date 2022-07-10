@@ -1,5 +1,63 @@
 ---
 el:
+  activerecord:
+    attributes:
+      archive_warning:
+        name_with_colon:
+          one: 'Προειδοποίηση:'
+          other: 'Προειδοποιήσεις:'
+      category:
+        name_with_colon:
+          one: 'Κατηγορία:'
+          other: 'Κατηγορίες:'
+      character:
+        name_with_colon:
+          one: 'Χαρακτήρας:'
+          other: 'Χαρακτήρες:'
+      fandom:
+        name_with_colon:
+          one: 'Fandom:'
+          other: 'Fandoms:'
+      freeform:
+        name_with_colon:
+          one: 'Επιπρόσθετη Ετικέτα:'
+          other: 'Επιπρόσθετες Ετικέτες:'
+      rating:
+        name_with_colon: 'Καταλληλότητα:'
+      relationship:
+        name_with_colon:
+          one: 'Σχέση:'
+          other: 'Σχέσεις:'
+      work:
+        summary: Περίληψη
+    models:
+      archive_warning:
+        one: Προειδοποίηση
+        other: Προειδοποιήσεις
+      category:
+        one: Κατηγορία
+        other: Κατηγορίες
+      chapter:
+        one: Κεφάλαιο
+        other: Κεφάλαια
+      character:
+        one: Χαρακτήρας
+        other: Χαρακτήρες
+      fandom:
+        one: Fandom
+        other: Fandoms
+      freeform:
+        one: Επιπρόσθετη Ετικέτα
+        other: Επιπρόσθετες Ετικέτες
+      rating:
+        one: Καταλληλότητα
+        other: Καταλληλότητες
+      relationship:
+        one: Σχέση
+        other: Σχέσεις
+      series:
+        one: Σειρά
+        other: Σειρές
   kudo_mailer:
     batch_kudo_notification:
       guest:
@@ -23,6 +81,12 @@ el:
       closing:
         formal: Με εκτίμηση,
         informal: Χαιρετισμούς,
+      creation:
+        link_with_word_count: "%{creation_link} (%{word_count})"
+        title_with_word_count: '"%{creation_title}" (%{word_count})'
+        word_count:
+          one: "%{count} λέξη"
+          other: "%{count} λέξεις"
       footer:
         general:
           html:
@@ -43,6 +107,7 @@ el:
           addressed: Γεια %{name}!
           unaddressed: Γεια!
         introductory: Γεια σας από το Archive of Our Own – AO3 (Το Αρχείο Μας)!
+      metadata_label_indicator: ": "
       signature:
         app_short_name: AO3
         open_doors: Η ομάδα των Open Doors (Ανοιχτές Πόρτες)
