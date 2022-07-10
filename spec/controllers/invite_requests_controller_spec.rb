@@ -140,10 +140,11 @@ describe InviteRequestsController do
               it_redirects_to_with_error(manage_invite_requests_path, "Request could not be removed. Please try again.")
             end
 
-            it "redirects to manage with notice for nonexistent request" do
+            it "raises RecordNotFound exception for nonexistent request" do
               invite_request.destroy
-              delete :destroy, params: { id: invite_request.id }
-              it_redirects_to_with_notice(manage_invite_requests_path, "Request was removed from the queue.")
+              expect do
+                delete :destroy, params: { id: invite_request.id }
+              end.to raise_exception(ActiveRecord::RecordNotFound)
             end
           end
 
@@ -193,10 +194,11 @@ describe InviteRequestsController do
               it_redirects_to_with_error(root_url, "Sorry, only an authorized admin can access the page you were trying to reach.")
             end
 
-            it "redirects to root with authorization error for nonexistent request" do
+            it "raises RecordNotFound exception for nonexistent request" do
               invite_request.destroy
-              delete :destroy, params: { id: invite_request.id }
-              it_redirects_to_with_error(root_url, "Sorry, only an authorized admin can access the page you were trying to reach.")
+              expect do
+                delete :destroy, params: { id: invite_request.id }
+              end.to raise_exception(ActiveRecord::RecordNotFound)
             end
           end
 
