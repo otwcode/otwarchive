@@ -135,7 +135,7 @@ describe InviteRequestsController do
             end
 
             it "redirects to manage with error when deletion fails" do
-              allow_any_instance_of(InviteRequest).to receive(:destroy) { false }
+              allow_any_instance_of(InviteRequest).to receive(:destroy).and_return(false)
               delete :destroy, params: { id: invite_request.id }
               it_redirects_to_with_error(manage_invite_requests_path, "Request could not be removed. Please try again.")
             end
@@ -171,7 +171,7 @@ describe InviteRequestsController do
             end
 
             it "fails with an error" do
-              allow_any_instance_of(InviteRequest).to receive(:destroy) { false }
+              allow_any_instance_of(InviteRequest).to receive(:destroy).and_return(false)
               delete :destroy, params: { id: invite_request.id, format: :json }
               parsed_body = JSON.parse(response.body, symbolize_names: true)
               expect(parsed_body[:errors]).to eq("Request could not be removed. Please try again.")
@@ -240,7 +240,8 @@ describe InviteRequestsController do
             create(
               :invite_request,
               position: 7,
-              email: "hello_world@example.com")
+              email: "hello_world@example.com"
+            )
           end
           let!(:invite_request_4) do
             create(
