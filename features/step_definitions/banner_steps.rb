@@ -9,7 +9,7 @@ end
 ### WHEN
 
 When /^an admin creates an?( active)?(?: "([^\"]*)")? banner$/ do |active, banner_type|
-  step %{I am logged in as an admin}
+  step %{I am logged in as a "communications" admin}
   visit(new_admin_banner_path)
   fill_in("admin_banner_content", with: "This is some banner text")
   if banner_type.present?
@@ -27,7 +27,7 @@ When /^an admin creates an?( active)?(?: "([^\"]*)")? banner$/ do |active, banne
 end
 
 When /^an admin deactivates the banner$/ do
-  step %{I am logged in as an admin}
+  step %{I am logged in as a "communications" admin}
   visit(admin_banners_path)
   step %{I follow "Edit"}
   uncheck("admin_banner_active")
@@ -36,7 +36,7 @@ When /^an admin deactivates the banner$/ do
 end
 
 When /^an admin edits the active banner$/ do
-  step %{I am logged in as an admin}
+  step %{I am logged in as a "communications" admin}
   visit(admin_banners_path)
   step %{I follow "Edit"}
   fill_in("admin_banner_content", with: "This is some edited banner text")
@@ -45,7 +45,7 @@ When /^an admin edits the active banner$/ do
 end
 
 When /^an admin makes a minor edit to the active banner$/ do
-  step %{I am logged in as an admin}
+  step %{I am logged in as a "communications" admin}
   visit(admin_banners_path)
   step %{I follow "Edit"}
   fill_in("admin_banner_content", with: "This is some banner text!")
@@ -55,7 +55,7 @@ When /^an admin makes a minor edit to the active banner$/ do
 end
 
 When /^an admin creates a different active banner$/ do
-  step %{I am logged in as an admin}
+  step %{I am logged in as a "communications" admin}
   visit(new_admin_banner_path)
   fill_in("admin_banner_content", with: "This is new banner text")
   check("admin_banner_active")

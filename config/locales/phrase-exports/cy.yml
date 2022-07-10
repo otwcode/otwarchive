@@ -1,5 +1,32 @@
 ---
 cy:
+  kudo_mailer:
+    batch_kudo_notification:
+      guest:
+        few: "%{count} o westeion"
+        many: "%{count} o westeion"
+        one: un westai
+        other: "%{count} o westeion"
+        two: "%{count} o westeion"
+      html:
+        left_kudos:
+          few: Gadawodd %{givers_list} canmol ar  %{commentable_link}.
+          many: Gadawodd %{givers_list} canmol ar  %{commentable_link}.
+          one: Gadawodd %{givers_list} canmol ar %{commentable_link}.
+          other: Gadawodd %{givers_list} canmol ar %{commentable_link}.
+          two: Gadawodd %{givers_list} canmol ar  %{commentable_link}.
+        single_guest:
+          giver_list: un westai
+          left_kudos: Gadawodd %{giver_list} canmol ar %{commentable_link}.
+      subject: "[%{app_name}] Mae gennych chi canmol!"
+      text:
+        left_kudos:
+          few: Gadawodd %{givers_list} canmol ar %{commentable_title} (%{commentable_url}).
+          many: Gadawodd %{givers_list} canmol ar %{commentable_title} (%{commentable_url}).
+          one: Gadawodd %{givers_list} canmol ar %{commentable_title} (%{commentable_url}).
+          other: Gadawodd %{givers_list} canmol ar %{commentable_title} (%{commentable_url}).
+          two: Gadawodd %{givers_list} canmol ar %{commentable_title} (%{commentable_url}).
+        single_guest: Gadawodd un westai canmol ar %{commentable_title} (%{commentable_url}).
   mailer:
     general:
       closing:
@@ -32,28 +59,6 @@ cy:
         parent_org: '"Organisation for Transformative Works - OTW" (Mudiad Cyfryngau
           Trawsffurfiadwy)'
         support: Y tîm Cefnogaeth AO3
-    kudos:
-      guest:
-        few: "%{count} o westeion"
-        many: "%{count} o westeion"
-        one: un westai
-        other: "%{count} o westeion"
-        two: "%{count} o westeion"
-      html:
-        left_kudos:
-          few: Gadawodd %{givers_list} canmol ar  %{commentable_link}.
-          many: Gadawodd %{givers_list} canmol ar  %{commentable_link}.
-          one: Gadawodd %{givers_list} canmol ar %{commentable_link}.
-          other: Gadawodd %{givers_list} canmol ar %{commentable_link}.
-          two: Gadawodd %{givers_list} canmol ar  %{commentable_link}.
-      text:
-        left_kudos:
-          few: Gadawodd %{givers_list} canmol ar  %{commentable_link}.
-          many: Gadawodd %{givers_list} canmol ar  %{commentable_link}.
-          one: Gadawodd %{givers_list} canmol ar %{commentable_link}.
-          other: Gadawodd %{givers_list} canmol ar %{commentable_link}.
-          two: Gadawodd %{givers_list} canmol ar  %{commentable_link}.
-      you_have: "[%{app_name}] Mae gennych chi canmol!"
   users:
     mailer:
       reset_password_instructions:
@@ -395,10 +400,17 @@ cy:
       reason: 'Roedd eich cais yn:'
       subject: "[%{app_name}] Gwrthodwyd cais cod gwahoddiad ychwanegol"
     recipient_notification:
+      html:
+        collection: Mae gwaith anrheg weid cael ei phostio yng nghasgliad %{collection_link}
+          ar yr AO3 ar eich cyfer!
+      no_collection: Mae gwaith anrheg weid cael ei phostio ar yr AO3 ar eich cyfer!
       subject:
         collection: "[%{app_name}][%{collection_title}] Gwaith anrheg ar eich cyfer
           o %{collection_title}"
         no_collection: "[%{app_name}] Gwaith anrheg ar eich cyfer"
+      text:
+        collection: Mae gwaith anrheg weid cael ei phostio yng nghasgliad "%{collection_title}"
+          (%{collection_url}) ar yr AO3 ar eich cyfer!
     signup_notification:
       activate_your_account: Ysgogwch eich cyfrif
       admin_posts: pyst gweinyddydd yr archif

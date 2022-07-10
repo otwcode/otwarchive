@@ -18,6 +18,7 @@ shared_examples "a justifiable model" do
       expect(ZohoResourceClient).not_to receive(:new)
 
       expect(record).to be_valid
+      expect(record.ticket_url).to be_nil
     end
 
     it "requires a ticket ID" do
@@ -26,6 +27,7 @@ shared_examples "a justifiable model" do
       record.assign_attributes(attributes)
       expect(record).not_to be_valid
       expect(record.errors[:ticket_number]).to contain_exactly("can't be blank", "is not a number")
+      expect(record.ticket_url).to be_nil
     end
 
     it "is invalid if the ticket does not exist" do
@@ -34,20 +36,28 @@ shared_examples "a justifiable model" do
 
       record.assign_attributes(attributes.merge(ticket_number: 480_000))
       expect(record).not_to be_valid
-      expect(record.errors[:ticket_number]).to contain_exactly("must exist")
+      expect(record.errors[:ticket_number]).to contain_exactly("must exist and not be spam.")
+      expect(record.ticket_url).to be_nil
     end
 
     it "is invalid if the ticket is closed" do
       expect(ZohoResourceClient).to receive(:new).and_return(zoho_resource_client)
-      expect(zoho_resource_client).to receive(:find_ticket).and_return({ "status" => "Closed" })
+      expect(zoho_resource_client).to receive(:find_ticket).and_return({ "status" => "Closed", "webUrl" => Faker::Internet.url })
 
       record.assign_attributes(attributes.merge(ticket_number: 480_000))
       expect(record).not_to be_valid
-      expect(record.errors[:ticket_number]).to contain_exactly("must exist")
+      expect(record.errors[:ticket_number]).to contain_exactly("must not be closed.")
+      expect(record.ticket_url).to be_nil
     end
 
     context "when an open policy and abuse ticket exists" do
-      let(:ticket) { { "departmentId" => ArchiveConfig.ABUSE_ZOHO_DEPARTMENT_ID, "status" => "Open" } }
+      let(:ticket) do
+        {
+          "departmentId" => ArchiveConfig.ABUSE_ZOHO_DEPARTMENT_ID,
+          "status" => "Open",
+          "webUrl" => Faker::Internet.url
+        }
+      end
 
       it "is invalid if the admin does not have role policy_and_abuse" do
         expect(ZohoResourceClient).to receive(:new).and_return(zoho_resource_client)
@@ -55,7 +65,8 @@ shared_examples "a justifiable model" do
 
         record.assign_attributes(attributes.merge(ticket_number: 480_000))
         expect(record).not_to be_valid
-        expect(record.errors[:ticket_number]).to contain_exactly("must exist")
+        expect(record.errors[:ticket_number]).to contain_exactly("must be in your department.")
+        expect(record.ticket_url).to be_nil
       end
 
       %w[policy_and_abuse superadmin].each do |role|
@@ -66,12 +77,19 @@ shared_examples "a justifiable model" do
 
           record.assign_attributes(attributes.merge(ticket_number: 480_000))
           expect(record).to be_valid
+          expect(record.ticket_url).to eq(ticket["webUrl"])
         end
       end
     end
 
     context "when an open support ticket exists" do
-      let(:ticket) { { "departmentId" => ArchiveConfig.SUPPORT_ZOHO_DEPARTMENT_ID, "status" => "Open" } }
+      let(:ticket) do
+        {
+          "departmentId" => ArchiveConfig.SUPPORT_ZOHO_DEPARTMENT_ID,
+          "status" => "Open",
+          "webUrl" => Faker::Internet.url
+        }
+      end
 
       it "is invalid if the admin does not have role support" do
         expect(ZohoResourceClient).to receive(:new).and_return(zoho_resource_client)
@@ -79,7 +97,8 @@ shared_examples "a justifiable model" do
 
         record.assign_attributes(attributes.merge(ticket_number: 480_000))
         expect(record).not_to be_valid
-        expect(record.errors[:ticket_number]).to contain_exactly("must exist")
+        expect(record.errors[:ticket_number]).to contain_exactly("must be in your department.")
+        expect(record.ticket_url).to be_nil
       end
 
       %w[superadmin support].each do |role|
@@ -90,6 +109,7 @@ shared_examples "a justifiable model" do
 
           record.assign_attributes(attributes.merge(ticket_number: 480_000))
           expect(record).to be_valid
+          expect(record.ticket_url).to eq(ticket["webUrl"])
         end
       end
     end

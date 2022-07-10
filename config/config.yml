@@ -477,3 +477,5 @@ PERMITTED_HOSTS: [
   "test.archiveofourown.org",
   "testdownload.archiveofourown.org"
 ]
+
+USER_RENAME_LIMIT_DAYS: 7

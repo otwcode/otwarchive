@@ -1,10 +1,111 @@
 ---
 ru:
+  activerecord:
+    attributes:
+      archive_warning:
+        name_with_colon:
+          few: 'Предупреждения:'
+          many: 'Предупреждения:'
+          one: 'Предупреждение:'
+      category:
+        name_with_colon:
+          few: 'Категории:'
+          many: 'Категории:'
+          one: 'Категория:'
+      character:
+        name_with_colon:
+          few: 'Персонажи:'
+          many: 'Персонажи:'
+          one: 'Персонаж:'
+      fandom:
+        name_with_colon:
+          few: 'Фандомы:'
+          many: 'Фандомы:'
+          one: 'Фандом:'
+      freeform:
+        name_with_colon:
+          few: 'Дополнительные теги:'
+          many: 'Дополнительные теги:'
+          one: 'Дополнительный тег:'
+      rating:
+        name_with_colon: 'Рейтинг:'
+      relationship:
+        name_with_colon:
+          few: 'Отношения:'
+          many: 'Отношения:'
+          one: 'Отношения:'
+      work:
+        summary: Содержание
+    models:
+      archive_warning:
+        few: Предупреждения
+        many: Предупреждения
+        one: Предупреждение
+      category:
+        few: Категории
+        many: Категории
+        one: Категория
+      chapter:
+        few: Главы
+        many: Главы
+        one: Глава
+      character:
+        few: Персонажи
+        many: Персонажи
+        one: Персонаж
+      fandom:
+        few: Фандомы
+        many: Фандомы
+        one: Фандом
+      freeform:
+        few: Дополнительные теги
+        many: Дополнительные теги
+        one: Дополнительный тег
+      rating:
+        few: Рейтинги
+        many: Рейтинги
+        one: Рейтинг
+      relationship:
+        few: Отношения
+        many: Отношения
+        one: Отношения
+      series:
+        few: Циклы
+        many: Циклы
+        one: Цикл
+  kudo_mailer:
+    batch_kudo_notification:
+      guest:
+        few: "%{count} гостей"
+        many: "%{count} гостей"
+        one: "%{count} гость"
+      html:
+        left_kudos:
+          few: "%{givers_list} дарят вам кудос за %{commentable_link}."
+          many: "%{givers_list} дарят вам кудос за %{commentable_link}."
+          one: "%{givers_list} дарит вам кудос за %{commentable_link}."
+        single_guest:
+          giver_list: Один гость
+          left_kudos: "%{giver_list} дарит вам кудос за %{commentable_link}."
+      subject: "[%{app_name}] Вы получили кудос!"
+      text:
+        left_kudos:
+          few: "%{givers_list} дарят вам кудос за %{commentable_title} (%{commentable_url})."
+          many: "%{givers_list} дарят вам кудос за %{commentable_title} (%{commentable_url})."
+          one: "%{givers_list} дарит вам кудос за %{commentable_title} (%{commentable_url})."
+        single_guest: Один гость подарил вам кудос за %{commentable_title} (%{commentable_url}).
   mailer:
     general:
       closing:
         formal: С уважением,
         informal: Счастливо,
+      creation:
+        link_with_word_count: "%{creation_link} (%{word_count})"
+        title_with_word_count: '"%{creation_title}" (%{word_count})'
+        word_count:
+          few: "%{count} слова"
+          many: "%{count} слов"
+          one: "%{count} слово"
       footer:
         general:
           html:
@@ -25,28 +126,13 @@ ru:
           addressed: Привет, %{name}!
           unaddressed: Привет!
         introductory: Привет от Archive of Our Own – AO3 (Нашего Архива)!
+      metadata_label_indicator: ": "
       signature:
         app_short_name: АО3
         open_doors: Команда Open Doors (Открытые двери)
         parent_org: Organization for Transformative Works – OTW (Организация Трансформационных
           Работ)
         support: Команда Технической поддержки АО3
-    kudos:
-      guest:
-        few: "%{count} гостей"
-        many: "%{count} гостей"
-        one: "%{count} гость"
-      html:
-        left_kudos:
-          few: "%{givers_list} дарят вам кудос за %{commentable_link}."
-          many: "%{givers_list} дарят вам кудос за %{commentable_link}."
-          one: "%{givers_list} дарит вам кудос за %{commentable_link}."
-      text:
-        left_kudos:
-          few: "%{givers_list} дарят вам кудос за %{commentable_link}."
-          many: "%{givers_list} дарят вам кудос за %{commentable_link}."
-          one: "%{givers_list} дарит вам кудос за %{commentable_link}."
-      you_have: "[%{app_name}] Вы получили кудос!"
   users:
     mailer:
       reset_password_instructions:
@@ -374,10 +460,17 @@ ru:
       reason: 'Ваш запрос был следующим:'
       subject: "[%{app_name}] Отказ в получении дополнительного кода приглашения"
     recipient_notification:
+      html:
+        collection: Подарочная работа для вас была опубликована в коллекции %{collection_link}
+          на AO3!
+      no_collection: Для вас была опубликована подарочная работа на AO3!
       subject:
         collection: "[%{app_name}][%{collection_title}] Подарочная работа для вас
           от %{collection_title}"
         no_collection: "[%{app_name}] Подарок для вас"
+      text:
+        collection: Подарочная работа для вас была опубликована в коллекции "%{collection_title}"
+          (%{collection_url}) на AO3!
     signup_notification:
       activate_your_account: пройдите по ссылке для активации аккаунта
       admin_posts: Новости АО3

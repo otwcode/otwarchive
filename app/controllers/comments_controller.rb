@@ -27,6 +27,26 @@ class CommentsController < ApplicationController
   before_action :check_permission_to_moderate, only: [:approve, :reject]
   before_action :check_permission_to_modify_frozen_status, only: [:freeze, :unfreeze]
 
+  include BlockHelper
+
+  before_action :check_blocked, only: [:new, :create, :add_comment_reply, :edit, :update]
+  def check_blocked
+    parent = find_parent
+
+    if blocked_by?(parent)
+      flash[:comment_error] = t("comments.check_blocked.parent")
+      redirect_to_all_comments(parent, show_comments: true)
+    elsif @comment && blocked_by_comment?(@comment.commentable)
+      # edit and update set @comment to the comment being edited
+      flash[:comment_error] = t("comments.check_blocked.reply")
+      redirect_to_all_comments(parent, show_comments: true)
+    elsif @comment.nil? && blocked_by_comment?(@commentable)
+      # new, create, and add_comment_reply don't set @comment, but do set @commentable
+      flash[:comment_error] = t("comments.check_blocked.reply")
+      redirect_to_all_comments(parent, show_comments: true)
+    end
+  end
+
   def check_pseud_ownership
     return unless params[:comment][:pseud_id]
     pseud = Pseud.find(params[:comment][:pseud_id])
@@ -213,7 +233,6 @@ class CommentsController < ApplicationController
   def index
     return raise_not_found if @commentable.blank?
 
-    @comments = @commentable.comments.reviewed.page(params[:page])
     return unless @commentable.class == Comment
 
     # we link to the parent object at the top
@@ -221,14 +240,16 @@ class CommentsController < ApplicationController
   end
 
   def unreviewed
-    all_comments = @commentable.find_all_comments
-    @comments = all_comments.blank? ? nil : all_comments.unreviewed_only.page(params[:page])
+    @comments = @commentable.find_all_comments
+      .unreviewed_only
+      .for_display
+      .page(params[:page])
   end
 
   # GET /comments/1
   # GET /comments/1.xml
   def show
-    @comments = [@comment]
+    @comments = CommentDecorator.wrap_comments([@comment])
     @thread_view = true
     @thread_root = @comment
     params[:comment_id] = params[:id]
@@ -438,8 +459,6 @@ class CommentsController < ApplicationController
   end
 
   def show_comments
-    @comments = @commentable.comments.reviewed.page(params[:page])
-
     respond_to do |format|
       format.html do
         # if non-ajax it could mean sudden javascript failure OR being redirected from login
@@ -450,7 +469,10 @@ class CommentsController < ApplicationController
         options[:page] = params[:page]
         redirect_to_all_comments(@commentable, options)
       end
-      format.js
+
+      format.js do
+        @comments = CommentDecorator.for_commentable(@commentable, page: params[:page])
+      end
     end
   end
 

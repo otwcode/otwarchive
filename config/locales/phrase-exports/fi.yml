@@ -1,5 +1,23 @@
 ---
 fi:
+  kudo_mailer:
+    batch_kudo_notification:
+      guest:
+        one: vieras
+        other: "%{count} vierasta"
+      html:
+        left_kudos:
+          one: "%{givers_list} kehui teosta %{commentable_link}."
+          other: "%{givers_list} kehuivat teosta %{commentable_link}."
+        single_guest:
+          giver_list: Vieras
+          left_kudos: "%{giver_list} kehui teosta %{commentable_link}."
+      subject: "[%{app_name}] Sinulle on kehuja!"
+      text:
+        left_kudos:
+          one: "%{givers_list} kehui teosta %{commentable_title} (%{commentable_url})."
+          other: "%{givers_list} kehuivat teosta %{commentable_title} (%{commentable_url})."
+        single_guest: Vieras kehui teosta %{commentable_title} (%{commentable_url}).
   mailer:
     general:
       closing:
@@ -31,19 +49,6 @@ fi:
         parent_org: Organization for Transformative Works – OTW (Transformatiivisten
           teosten järjestö)
         support: AO3 Käyttäjätukitiimi
-    kudos:
-      guest:
-        one: vieras
-        other: "%{count} vierasta"
-      html:
-        left_kudos:
-          one: "%{givers_list} kehui teosta %{commentable_link}."
-          other: "%{givers_list} kehuivat teosta %{commentable_link}."
-      text:
-        left_kudos:
-          one: "%{givers_list} kehui teosta %{commentable_link}."
-          other: "%{givers_list} kehuivat teosta %{commentable_link}."
-      you_have: "[%{app_name}] Sinulle on kehuja!"
   users:
     mailer:
       reset_password_instructions:
@@ -363,10 +368,16 @@ fi:
       reason: 'Pyyntösi oli:'
       subject: "[%{app_name}] Pyyntösi ylimääräisistä kutsukoodeista on hylätty"
     recipient_notification:
+      html:
+        collection: Sinulle lahjoitettu teos on julkaistu AO3:ssa kokoelmassa %{collection_link}!
+      no_collection: Sinulle lahjoitettu teos on julkaistu AO3:ssa!
       subject:
         collection: "[%{app_name}][%{collection_title}] Lahjateos sinulle kokoelmassa
           %{collection_title}"
         no_collection: "[%{app_name}] Sinulle on lahjoitettu teos"
+      text:
+        collection: Sinulle lahjoitettu teos on julkaistu AO3:ssa kokoelmassa "%{collection_title}",
+          jonka linkki on (%{collection_url})!
     signup_notification:
       activate_your_account: käytä tätä linkkiä aktivoidaksesi käyttäjätilisi
       admin_posts: AO3:n uutisista

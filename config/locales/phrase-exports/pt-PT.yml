@@ -1,10 +1,92 @@
 ---
 pt-PT:
+  activerecord:
+    attributes:
+      archive_warning:
+        name_with_colon:
+          one: 'Aviso:'
+          other: 'Avisos:'
+      category:
+        name_with_colon:
+          one: 'Categoria:'
+          other: 'Categorias:'
+      character:
+        name_with_colon:
+          one: 'Personagem:'
+          other: 'Personagens:'
+      fandom:
+        name_with_colon:
+          one: 'Fandom:'
+          other: 'Fandoms:'
+      freeform:
+        name_with_colon:
+          one: 'Tag Adicional:'
+          other: 'Tags Adicionais:'
+      rating:
+        name_with_colon: 'Classificação:'
+      relationship:
+        name_with_colon:
+          one: 'Relação:'
+          other: 'Relações:'
+      work:
+        summary: Sumário
+    models:
+      archive_warning:
+        one: Aviso
+        other: Avisos
+      category:
+        one: Categoria
+        other: Categorias
+      chapter:
+        one: Capítulo
+        other: Capítulos
+      character:
+        one: Personagem
+        other: Personagens
+      fandom:
+        one: Fandom
+        other: Fandoms
+      freeform:
+        one: Tag Adicional
+        other: Tags Adicionais
+      rating:
+        one: Classificação
+        other: Classificações
+      relationship:
+        one: Relação
+        other: Relações
+      series:
+        one: Série
+        other: Séries
+  kudo_mailer:
+    batch_kudo_notification:
+      guest:
+        one: uma pessoa convidada
+        other: "%{count} pessoas convidadas"
+      html:
+        left_kudos:
+          one: "%{givers_list} deixou kudos em %{commentable_link}."
+          other: "%{givers_list} deixaram kudos em %{commentable_link}."
+        single_guest:
+          giver_list: Uma pessoa convidada
+          left_kudos: "%{giver_list} deixou kudos em %{commentable_link}."
+      subject: "[%{app_name}] Recebeste kudos!"
+      text:
+        left_kudos:
+          one: "%{givers_list} deixou kudos em %{commentable_title} (%{commentable_url})."
+          other: "%{givers_list} deixaram kudos em %{commentable_title} (%{commentable_url})."
+        single_guest: Uma pessoa convidada deixou kudos em %{commentable_title} (%{commentable_url}).
   mailer:
     general:
       closing:
         formal: Atenciosamente,
         informal: Os melhores cumprimentos,
+      creation:
+        link_with_word_count: "%{creation_link} (%{word_count})"
+        title_with_word_count: '"%{creation_title}" (%{word_count})'
+        word_count:
+          one: "%{count} palavra"
+          other: "%{count} palavras"
       footer:
         general:
           html:
@@ -24,25 +106,13 @@ pt-PT:
           addressed: Olá, %{name}!
           unaddressed: Olá!
         introductory: Olá do Archive of Our Own – AO3 (O Nosso Próprio Arquivo)!
+      metadata_label_indicator: ": "
       signature:
         app_short_name: AO3
         open_doors: A equipa do Open Doors (Portas Abertas)
         parent_org: Organization for Transformative Works – OTW (Organização para
           Obras Transformativas)
         support: A equipa de Suporte do AO3
-    kudos:
-      guest:
-        one: uma pessoa convidada
-        other: "%{count} pessoas convidadas"
-      html:
-        left_kudos:
-          one: "%{givers_list} deixou kudos em %{commentable_link}."
-          other: "%{givers_list} deixaram kudos em %{commentable_link}."
-      text:
-        left_kudos:
-          one: "%{givers_list} deixou kudos em %{commentable_link}."
-          other: "%{givers_list} deixaram kudos em %{commentable_link}."
-      you_have: "[%{app_name}] Recebeste kudos!"
   users:
     mailer:
       reset_password_instructions:
@@ -378,10 +448,17 @@ pt-PT:
       reason: 'O teu pedido foi:'
       subject: "[%{app_name}] Pedido de Código de Convite Adicional Recusado"
     recipient_notification:
+      html:
+        collection: Foi publicada uma obra presente para ti na coleção %{collection_link}
+          no AO3!
+      no_collection: Foi publicada uma obra presente para ti no AO3!
       subject:
         collection: "[%{app_name}][%{collection_title}] Uma obra presente para ti
           de %{collection_title}"
         no_collection: "[%{app_name}] Uma obra presente para ti"
+      text:
+        collection: Foi publicada uma obra presente para ti na coleção "%{collection_title}"
+          (%{collection_url}) no AO3!
     signup_notification:
       activate_your_account: segue este link para ativar a tua conta
       admin_posts: Notícias do AO3

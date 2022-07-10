@@ -8,6 +8,7 @@ require "factory_bot"
 require "database_cleaner"
 require "email_spec"
 require "webmock/rspec"
+require "n_plus_one_control/rspec"
 
 DatabaseCleaner.start
 DatabaseCleaner.clean
@@ -209,4 +210,10 @@ def suspend_resque_workers
 
   # Resume the original Resque.enqueue_to behavior.
   allow(Resque).to receive(:enqueue_to).and_call_original
+end
+
+def create_invalid(*args, **kwargs)
+  build(*args, **kwargs).tap do |object|
+    object.save!(validate: false)
+  end
 end

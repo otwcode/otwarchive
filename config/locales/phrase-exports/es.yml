@@ -1,10 +1,92 @@
 ---
 es:
+  activerecord:
+    attributes:
+      archive_warning:
+        name_with_colon:
+          one: 'Advertencia:'
+          other: 'Advertencias:'
+      category:
+        name_with_colon:
+          one: 'Categoría:'
+          other: 'Categorías:'
+      character:
+        name_with_colon:
+          one: 'Personaje:'
+          other: 'Personajes:'
+      fandom:
+        name_with_colon:
+          one: 'Fandom:'
+          other: 'Fandoms:'
+      freeform:
+        name_with_colon:
+          one: 'Etiqueta adicional:'
+          other: 'Etiquetas adicionales:'
+      rating:
+        name_with_colon: 'Rating:'
+      relationship:
+        name_with_colon:
+          one: 'Relación:'
+          other: 'Relaciones:'
+      work:
+        summary: Resumen
+    models:
+      archive_warning:
+        one: Advertencia
+        other: Advertencias
+      category:
+        one: Categoría
+        other: Categorías
+      chapter:
+        one: Capítulo
+        other: Capítulos
+      character:
+        one: Personaje
+        other: Personajes
+      fandom:
+        one: Fandom
+        other: Fandoms
+      freeform:
+        one: Etiqueta adicional
+        other: Etiquetas adicionales
+      rating:
+        one: Rating
+        other: Ratings
+      relationship:
+        one: Relación
+        other: Relaciones
+      series:
+        one: Serie
+        other: Series
+  kudo_mailer:
+    batch_kudo_notification:
+      guest:
+        one: unx visitante
+        other: "%{count} visitantes"
+      html:
+        left_kudos:
+          one: "%{givers_list} dejó kudos en %{commentable_link}."
+          other: "%{givers_list} dejaron kudos en %{commentable_link}"
+        single_guest:
+          giver_list: Unx visitante
+          left_kudos: "%{giver_list} dejó kudos en %{commentable_link}."
+      subject: "[%{app_name}] ¡Recibiste kudos!"
+      text:
+        left_kudos:
+          one: "%{givers_list} dejó kudos en %{commentable_title} (%{commentable_url})."
+          other: "%{givers_list} dejaron kudos en %{commentable_title} (%{commentable_url})."
+        single_guest: Unx visitante dejó kudos en %{commentable_title} (%{commentable_url}).
   mailer:
     general:
       closing:
         formal: Atentamente,
         informal: Saludos,
+      creation:
+        link_with_word_count: "%{creation_link} (%{word_count})"
+        title_with_word_count: '"%{creation_title}" (%{word_count})'
+        word_count:
+          one: "%{count} palabra"
+          other: "%{count} palabras"
       footer:
         general:
           html:
@@ -25,25 +107,13 @@ es:
           addressed: "¡Hola %{name}!"
           unaddressed: "¡Hola!"
         introductory: Saludos de parte del Archive of Our Own – AO3 (Un Archivo Propio)
+      metadata_label_indicator: ": "
       signature:
         app_short_name: AO3
         open_doors: El equipo de Open Doors (Puertas Abiertas)
         parent_org: Organization for Transformative Works – OTW (Organización para
           las Obras Transformativas)
         support: El equipo de Soporte Técnico del AO3
-    kudos:
-      guest:
-        one: unx visitante
-        other: "%{count} visitantes"
-      html:
-        left_kudos:
-          one: "%{givers_list} dejó kudos en %{commentable_link}."
-          other: "%{givers_list} dejaron kudos en %{commentable_link}"
-      text:
-        left_kudos:
-          one: "%{givers_list} dejó kudos en %{commentable_link}."
-          other: "%{givers_list} dejaron kudos en %{commentable_link}."
-      you_have: "[%{app_name}] ¡Recibiste kudos!"
   users:
     mailer:
       reset_password_instructions:
@@ -375,10 +445,17 @@ es:
       reason: 'Tu solicitud era:'
       subject: "[%{app_name}] Solicitud de código adicional de invitación rechazada"
     recipient_notification:
+      html:
+        collection: "¡Se ha publicado una obra como regalo para ti en la colección
+          %{collection_link} en el AO3!"
+      no_collection: "¡Se ha publicado una obra como regalo para ti en el AO3!"
       subject:
         collection: "[%{app_name}][%{collection_title}] Tienes una obra de regalo
           de %{collection_title}"
         no_collection: "[%{app_name}] Tienes una obra de regalo"
+      text:
+        collection: ¡Se ha publicado una obra como regalo para ti en la colección
+          "%{collection_title}" (%{collection_url}) en el AO3!
     signup_notification:
       activate_your_account: Sigue este enlace para activar tu cuenta
       admin_posts: Noticias del AO3

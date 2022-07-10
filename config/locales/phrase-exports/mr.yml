@@ -1,5 +1,27 @@
 ---
 mr:
+  kudo_mailer:
+    batch_kudo_notification:
+      guest:
+        one: एक पाहुणा
+        other: "%{count} पाहुणे"
+      html:
+        left_kudos:
+          one: "%{givers_list} यांनी पुढील कार्यावर टाळ्या दिल्या आहेत %{commentable_link}."
+          other: "%{givers_list} यांनी पुढील कार्यावर टाळ्या दिल्या आहेत %{commentable_link}."
+        single_guest:
+          giver_list: एक पाहुणा
+          left_kudos: "%{commentable_link} वर %{giver_list} या पाहुण्याने टाळ्या दिल्या
+            आहेत."
+      subject: "[%{app_name}] आपल्याला टाळ्या प्राप्त झाल्या आहेत!"
+      text:
+        left_kudos:
+          one: "%{givers_list} यांनी पुढील कार्यावर टाळ्या दिल्या आहेत %{commentable_title}
+            (%{commentable_url})."
+          other: "%{givers_list} यांनी पुढील कार्यावर टाळ्या दिल्या आहेत %{commentable_title}
+            (%{commentable_url})."
+        single_guest: "%{commentable_title} (%{commentable_url}) वर पाहुण्यांनी टाळ्या
+          दिल्या आहेत"
   mailer:
     general:
       closing:
@@ -116,6 +138,33 @@ mr:
           माहितीसाठी, कृपया %{profile_url} ला भेट द्या.
         look_up: आपण हे आव्हानासाठी लेखन आपल्या Assignments (आव्हानासाठी लेखन) पृष्ठावर
           %{link} बघू शकता.
+    creatorship_notification:
+      explanation: आपण जेव्हा एखाद्या कार्याचे सह-निर्माते असता तेव्हा नवीन अध्यायासाठी
+        आपण आपोआपच सामिल केले जाल, आपले सह-निर्माता सेटिंग्ज काहीही असोत. ते कार्य
+        ज्या मालिकेचा भाग होईल तिथेही आपल्याला सामिल केले जाईल.
+      html:
+        creation: "%{pseud_links} च्या तर्फे %{creation_link}"
+        edit_chapter: अध्यायामध्ये बदल करा
+        edit_series: मालिकेमध्ये बदल करा
+        remove_chapter: जर आपले नाव चुकुन सामिल झाले असेल किंवा आपल्याला सह-निर्मात्या
+          म्हणून नमुद व्हायचे नसेल तर आपण %{edit_chapter_link} हे करून स्वतःला हटवू
+          शकता.
+        remove_series: जर आपले नाव चुकुन सामिल झाले असेल किंवा आपल्याला सह-निर्मात्या
+          म्हणून नमुद व्हावयाचे नसेल तर आपण %{edit_series_link} हे करून स्वतःला हटवू
+          शकता.
+      intro_chapter: 'ह्या वापरकर्त्याने %{adding_user} आपला स्युडोआयडी %{pseud} खालील
+        अध्यायासाठी सह-निर्माता म्हणून नोंदविला आहे:'
+      intro_series: 'ह्या वापरकर्त्याने %{adding_user} आपला स्युडोआयडी %{pseud} खालील
+        मालिकेसाठी सह-निर्माता म्हणून नोंदविला आहे:'
+      subject: "[%{app_name}] सह-निर्माता सूचना"
+      text:
+        creation: "%{pseuds} च्या तर्फे %{title} (%{url})"
+        remove_chapter: जर आपले नाव चुकुन सामिल झाले असेल किंवा आपल्याला सह-निर्मात्या
+          म्हणून नमुद व्हायचे नसेल तर आपण अध्यायामध्ये बदल करून स्वतःला हटवू शकताः
+          %{url}
+        remove_series: 'जर आपले नाव चुकुन सामिल झाले असेल किंवा आपल्याला सह-निर्मात्या
+          म्हणून नमुद व्हायचे नसेल तर आपण मालिकेमध्ये बदल करून स्वतःला हटवू शकता:
+          %{url}'
     creatorship_notification_archivist:
       explanation: ते Open Doors (रसिकमुक्तद्वार संकल्पाचे) संग्राहक म्हणून त्यांच्या
         अधिकृत क्षमतेअंतर्गत काम करत असल्यामुळे, ते आपल्याला निमंत्रणाशिवाय सामील

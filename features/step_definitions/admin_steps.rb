@@ -104,6 +104,10 @@ Given /^I have posted an admin post$/ do
   step("I log out")
 end
 
+Given "the admin post {string}" do |title|
+  FactoryBot.create(:admin_post, title: title)
+end
+
 Given /^the fannish next of kin "([^\"]*)" for the user "([^\"]*)"$/ do |kin, user|
   step %{the user "#{kin}" exists and is activated}
   step %{the user "#{user}" exists and is activated}
@@ -168,8 +172,12 @@ Given /^I have posted an admin post with comments disabled$/ do
 end
 
 Given "an abuse ticket ID exists" do
-  allow_any_instance_of(ZohoResourceClient).to receive(:find_ticket)
-    .and_return({ "status" => "Open", "departmentId" => ArchiveConfig.ABUSE_ZOHO_DEPARTMENT_ID })
+  ticket = {
+    "departmentId" => ArchiveConfig.ABUSE_ZOHO_DEPARTMENT_ID,
+    "status" => "Open",
+    "webUrl" => Faker::Internet.url
+  }
+  allow_any_instance_of(ZohoResourceClient).to receive(:find_ticket).and_return(ticket)
 end
 
 ### WHEN
@@ -438,6 +446,10 @@ end
 Then /^the work "([^\"]*)" should not be marked as spam/ do |work|
   w = Work.find_by_title(work)
   assert !w.spam?
+end
+
+Then "I should see {int} admin activity log entry/entries" do |count|
+  expect(page).to have_css("tr[id^=admin_activity_]", count: count)
 end
 
 Then /^the user content should be shown as right-to-left$/ do

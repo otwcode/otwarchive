@@ -362,7 +362,6 @@ namespace :After do
 
   #### Add your new tasks here
 
-
   desc "Set initial values for sortable tag names"
   task(:sortable_tag_names => :environment) do
     Media.all.each{ |m| m.save }
@@ -907,6 +906,52 @@ namespace :After do
     if skipped_pseud_ids.any?
       puts
       puts("Couldn't update #{skipped_pseud_ids.size} pseud(s): #{skipped_pseud_ids.join(',')}") && STDOUT.flush
+    end
+  end
+
+  desc "Backfill renamed_at for existing users"
+  task(add_renamed_at_from_log: :environment) do
+    total_users = User.all.size
+    total_batches = (total_users + 999) / 1000
+    puts "Updating #{total_users} users in #{total_batches} batches"
+
+    User.find_in_batches.with_index do |batch, index|
+      batch.each do |user|
+        renamed_at_from_log = user.log_items.where(action: ArchiveConfig.ACTION_RENAME).last&.created_at
+        next unless renamed_at_from_log
+
+        user.update_column(:renamed_at, renamed_at_from_log)
+      end
+
+      batch_number = index + 1
+      progress_msg = "Batch #{batch_number} of #{total_batches} complete"
+      puts(progress_msg) && STDOUT.flush
+    end
+    puts && STDOUT.flush
+  end
+
+  desc "Fix threads for comments from 2009"
+  task(fix_2009_comment_threads: :environment) do
+    def fix_comment(comment)
+      comment.with_lock do
+        if comment.reply_comment?
+          comment.update_column(:thread, comment.commentable.thread)
+        else
+          comment.update_column(:thread, comment.id)
+        end
+        comment.comments.each { |reply| fix_comment(reply) }
+      end
+    end
+
+    incorrect = Comment.top_level.where("thread != id")
+    total = incorrect.count
+
+    puts "Updating #{total} thread(s)"
+
+    incorrect.find_each.with_index do |comment, index|
+      fix_comment(comment)
+
+      puts "Fixed thread #{index + 1} out of #{total}" if index % 100 == 99
     end
   end
 
