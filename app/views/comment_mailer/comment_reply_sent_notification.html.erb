@@ -10,8 +10,7 @@
 
   <% commenter = @parent_comment.comment_owner ?
       (
-        (@parent_comment.comment_owner.is_author_of?(@parent_comment.ultimate_parent) &&
-          @parent_comment.ultimate_parent.anonymous?) ?
+        @parent_comment.by_anonymous_creator? ?
         "Anonymous Creator" :
         style_link(@parent_comment.comment_owner_name,
           polymorphic_url(@parent_comment.comment_owner, only_path: false))
