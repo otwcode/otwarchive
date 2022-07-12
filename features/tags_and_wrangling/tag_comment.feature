@@ -52,36 +52,6 @@ I'd like to comment on a tag'
     When I view the tag "Stargate Atlantis"
     Then I should see "2 comments"
 
-  Scenario: Multiple comments on a tag show on discussion page
-
-    Given the following activated tag wranglers exist
-        | login     |
-        | dizmo     |
-        | Enigel    |
-      And a fandom exists with name: "Stargate Atlantis", canonical: true
-    When I am logged in as "Enigel"
-    When I post the comment "Yep, we should have a Stargate franchise metatag." on the tag "Stargate Atlantis"
-    When I am logged in as an admin
-    When I post the comment "Important policy decision" on the tag "Stargate Atlantis"
-    When I am logged in as "dizmo"
-    When I view tag wrangling discussions
-    Then I should see "Tag Wrangling Discussion"
-      And I should see "Yep, we should have a Stargate franchise metatag."
-      And I should see "Important policy decision"
-
-  Scenario: Unedited tag does not show on discussion page
-
-    Given the following activated tag wranglers exist
-          | login     |
-          | dizmo     |
-          | Enigel    |
-        And a fandom exists with name: "Stargate Atlantis", canonical: true
-    When I am logged in as "Enigel"
-    When I view the tag "Stargate Atlantis"
-    When I am logged in as "dizmo"
-    When I view tag wrangling discussions
-    Then I should not see "Stargate Atlantis"
-
     Scenario: admin can also comment on tags, issue 1428
 
     Given a fandom exists with name: "Stargate Atlantis", canonical: true
