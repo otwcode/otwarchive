@@ -317,15 +317,17 @@ describe UserMailer do
 
       describe "HTML version" do
         it "has the correct content" do
-          expect(email).to have_html_part_content("like to join us, please sign up at the following address")
+          expect(email).to have_html_part_content("follow this link to sign up</a>")
           expect(email).to have_html_part_content("has invited you")
+          expect(email).to have_html_part_content("Organization for Transformative Works</a>, which works to protect fan rights and preserve fanworks.")
         end
       end
 
       describe "text version" do
         it "has the correct content" do
-          expect(email).to have_text_part_content("like to join us, please sign up at the following address")
+          expect(email).to have_text_part_content("like to join us, please follow this link to sign up")
           expect(email).to have_text_part_content("has invited you")
+          expect(email).to have_text_part_content("the Organization for Transformative Works (https://transformativeworks.org), which works to protect fan rights and preserve fanworks")
         end
       end
     end
@@ -350,15 +352,17 @@ describe UserMailer do
 
       describe "HTML version" do
         it "has the correct content" do
-          expect(email).to have_html_part_content("like to join us, please sign up at the following address")
+          expect(email).to have_html_part_content("follow this link to sign up")
           expect(email).to have_html_part_content("been invited")
+          expect(email).to have_html_part_content("Organization for Transformative Works</a>, which works to protect fan rights and preserve fanworks.")
         end
       end
 
       describe "text version" do
         it "has the correct content" do
-          expect(email).to have_text_part_content("like to join us, please sign up at the following address")
+          expect(email).to have_text_part_content("like to join us, please follow this link to sign up")
           expect(email).to have_text_part_content("been invited")
+          expect(email).to have_text_part_content("the Organization for Transformative Works (https://transformativeworks.org), which works to protect fan rights and preserve fanworks")
         end
       end
     end
