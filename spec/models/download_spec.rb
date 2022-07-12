@@ -97,10 +97,10 @@ describe Download do
   end
 
   describe "page_title" do
-    let(:fandom1) { create(:canonical_fandom) }
-    let(:fandom2) { create(:canonical_fandom) }
-    let(:pseud1) { create(:pseud, name: "First", user: create(:user, login: "Zeroth")) }
-    let(:pseud2) { create(:pseud, name: "Second", user: create(:user)) }
+    let(:fandom1) { build(:canonical_fandom) }
+    let(:fandom2) { build(:fandom, name: "Non-Canonical") }
+    let(:pseud1) { build(:pseud, name: "First", user: build(:user, login: "Zeroth")) }
+    let(:pseud2) { build(:pseud, name: "Second", user: build(:user)) }
     let(:work) { create(:work, fandoms: [fandom1, fandom2], title: "Foo bar") }
     let(:subject) { Download.new(work) }
 
