@@ -270,8 +270,9 @@ jQuery(document).ready(function() {
                                 _hide();
                             }
 
-                            // key events triggered from outside the modal should also die
-                            if (escKey || !targetInModal || enterKey && !targetIsInput) {
+                            // key events triggered from outside the modal should also die,
+                            // except for ctrl combinations like ctrl+c
+                            if (escKey || (!targetInModal && !event.ctrlKey) || enterKey && !targetIsInput) {
                                 event.preventDefault();
                                 event.stopPropagation();
                             }
