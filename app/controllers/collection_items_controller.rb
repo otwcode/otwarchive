@@ -3,7 +3,6 @@ class CollectionItemsController < ApplicationController
   before_action :load_user, only: [:update_multiple]
   before_action :load_item_and_collection, only: [:update_multiple]
   before_action :load_collectible_item, only: [:new, :create]
-  before_action :allowed_to_destroy, only: [:update_multiple]
 
   cache_sweeper :collection_sweeper
 
@@ -15,11 +14,6 @@ class CollectionItemsController < ApplicationController
     end
     not_allowed(@collection) and return unless @collection_item
     @collection = @collection_item.collection
-  end
-
-
-  def allowed_to_destroy
-    @collection_item.user_allowed_to_destroy?(current_user) || not_allowed(@collection)
   end
 
   def index
