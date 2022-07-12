@@ -101,6 +101,7 @@ module CommentsHelper
   def can_reply_to_comment?(comment)
     !(comment.unreviewed? ||
       comment.iced? ||
+      comment.hidden_by_admin? ||
       parent_disallows_comments?(comment) ||
       comment_parent_hidden?(comment) ||
       blocked_by_comment?(comment) ||
@@ -148,6 +149,10 @@ module CommentsHelper
     policy(comment).can_freeze_comment? ||
       comment.ultimate_parent.is_a?(Work) &&
         is_author_of?(comment.ultimate_parent)
+  end
+
+  def can_hide_comment?(comment)
+    policy(comment).can_hide_comment?
   end
 
   def comment_parent_hidden?(comment)
@@ -250,6 +255,14 @@ module CommentsHelper
     end
   end
 
+  def hide_comment_button(comment)
+    if comment.hidden_by_admin?
+      button_to ts("Make Comment Visible"), unhide_comment_path(comment), method: :put
+    else
+      button_to ts("Hide Comment"), hide_comment_path(comment), method: :put
+    end
+  end
+
   # Not a link or button, but included with them.
   def frozen_comment_indicator
     content_tag(:span, ts("Frozen"), class: "frozen current")
@@ -299,11 +312,12 @@ module CommentsHelper
   def css_classes_for_comment(comment)
     return if comment.nil?
 
+    unavailable = "unavailable" if comment.hidden_by_admin
     unreviewed = "unreviewed" if comment.unreviewed?
     commenter = commenter_id_for_css_classes(comment)
     official = "official" if commenter && comment&.pseud&.user&.official
 
-    "#{official} #{unreviewed} comment group #{commenter}".squish
+    "#{unavailable} #{official} #{unreviewed} comment group #{commenter}".squish
   end
 
   # find the parent of the commentable

@@ -506,9 +506,11 @@ Otwarchive::Application.routes.draw do
     member do
       put :approve
       put :freeze
+      put :hide
       put :reject
       put :review
       put :unfreeze
+      put :unhide
     end
     collection do
       get :hide_comments
