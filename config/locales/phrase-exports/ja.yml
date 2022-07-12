@@ -57,7 +57,7 @@ ja:
       text:
         left_kudos:
           other: "%{givers_list} があなたの作品 %{commentable_title} (%{commentable_url})にいいねを送りました。"
-        single_guest: ゲスト1名があなたの作品 %{commentable_link}にいいねを送りました。
+        single_guest: ゲスト1名があなたの作品 %{commentable_title} (%{commentable_url})にいいねを送りました。
   mailer:
     general:
       closing:
