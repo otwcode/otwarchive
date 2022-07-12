@@ -384,7 +384,7 @@ Feature: Admin Actions to Manage Invitations
       And I should not see "livetv@example.com"
 
   Scenario: The invitations in the queue are paginated correctly
-    Given I am logged in as an admin
+    Given I am logged in as a "policy_and_abuse" admin
       And there are 2 invite requests per page
       And an invitation request for "andy@example.com"
       And an invitation request for "beatrice@example.com"
@@ -407,7 +407,7 @@ Feature: Admin Actions to Manage Invitations
       | 5        | eliot@example.com |
 
   Scenario: The positions in the queue shift when an invitation is sent out
-    Given I am logged in as an admin
+    Given I am logged in as a "policy_and_abuse" admin
       And there are 2 invite requests per page
       And an invitation request for "andy@example.com"
       And an invitation request for "beatrice@example.com"
@@ -429,7 +429,7 @@ Feature: Admin Actions to Manage Invitations
       | 3        | eliot@example.com |
 
   Scenario: The invitations in the queue are numbered correctly when searching
-    Given I am logged in as an admin
+    Given I am logged in as a "policy_and_abuse" admin
       And an invitation request for "andy-jones@example.com"
       And an invitation request for "beatrice@example.com"
       And an invitation request for "carla@example.com"
