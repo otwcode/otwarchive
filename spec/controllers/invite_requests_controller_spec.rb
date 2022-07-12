@@ -236,19 +236,19 @@ describe InviteRequestsController do
         context "with #{admin_role} role" do
           let(:ip) { "127.0.0.1" }
           let(:ip_2) { "128.0.0.1" }
-          let!(:invite_request_1) { create(:invite_request, position: 9001, ip_address: ip_2) }
-          let!(:invite_request_2) { create(:invite_request, position: 2) }
+          let!(:invite_request_1) { create(:invite_request, id: 9001, ip_address: ip_2) }
+          let!(:invite_request_2) { create(:invite_request, id: 2) }
           let!(:invite_request_3) do
             create(
               :invite_request,
-              position: 7,
+              id: 7,
               email: "hello_world@example.com"
             )
           end
           let!(:invite_request_4) do
             create(
               :invite_request,
-              position: 500,
+              id: 500,
               ip_address: ip
             )
           end
@@ -315,100 +315,6 @@ describe InviteRequestsController do
 
         it "redirects to root with authorization error when query params are present" do
           get :manage, params: { query: "hello_world" }
-          it_redirects_to_with_error(root_url, "Sorry, only an authorized admin can access the page you were trying to reach.")
-        end
-      end
-    end
-  end
-
-  describe "POST #reorder" do
-    context "when logged out" do
-      it "redirects to root with authorization error" do
-        post :reorder
-        it_redirects_to_with_notice(root_path, "I'm sorry, only an admin can look at that area")
-      end
-    end
-
-    context "when logged in as user" do
-      it "redirects to root with authorization error" do
-        fake_login
-        post :reorder
-        it_redirects_to_with_notice(root_path, "I'm sorry, only an admin can look at that area")
-      end
-    end
-
-    context "when logged in as admin" do
-      %w[superadmin policy_and_abuse support].each do |admin_role|
-        context "with #{admin_role} role" do
-          before do
-            admin.update(roles: [admin_role])
-            fake_login_admin(admin)
-          end
-
-          context "when invite requests are out of order" do
-            let!(:invite_request_1) { create(:invite_request, position: 9001) }
-            let!(:invite_request_2) { create(:invite_request, position: 2) }
-            let!(:invite_request_3) { create(:invite_request, position: 7) }
-
-            it "corrects order and redirects to manage with notice" do
-              post :reorder
-              it_redirects_to_with_notice(manage_invite_requests_path, "The queue has been successfully updated.")
-
-              invite_request_1.reload
-              invite_request_2.reload
-              invite_request_3.reload
-
-              # Positions corrected
-              expect(InviteRequest.order(:position)).to eq([invite_request_2, invite_request_3, invite_request_1])
-              expect(invite_request_1.position).to eq(3)
-              expect(invite_request_2.position).to eq(1)
-              expect(invite_request_3.position).to eq(2)
-            end
-          end
-
-          context "with no invite requests" do
-            it "redirects to manage with notice" do
-              # with nothing to order, technically everything's in order
-              expect(InviteRequest.count).to eq(0)
-              post :reorder
-              it_redirects_to_with_notice(manage_invite_requests_path, "The queue has been successfully updated.")
-            end
-          end
-
-          context "when the first invite request is already in the correct position" do
-            let(:invite_request) { create(:invite_request) }
-
-            it "redirects to manage with error" do
-              expect(invite_request.position).to eq(1)
-              post :reorder
-              it_redirects_to_with_error(manage_invite_requests_path, "Something went wrong. Please try that again.")
-            end
-          end
-        end
-      end
-
-      %w[board communications docs open_doors tag_wrangling translation].each do |admin_role|
-        context "with #{admin_role} role" do
-          before do
-            admin.update(roles: [admin_role])
-            fake_login_admin(admin)
-          end
-
-          it "redirects to root with authorization error" do
-            post :reorder
-            it_redirects_to_with_error(root_url, "Sorry, only an authorized admin can access the page you were trying to reach.")
-          end
-        end
-      end
-
-      context "with no admin role" do
-        before do
-          admin.update(roles: [])
-          fake_login_admin(admin)
-        end
-
-        it "redirects to root with authorization error" do
-          post :reorder
           it_redirects_to_with_error(root_url, "Sorry, only an authorized admin can access the page you were trying to reach.")
         end
       end

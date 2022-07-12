@@ -217,12 +217,12 @@ GEM
     docile (1.4.0)
     domain_name (0.5.20190701)
       unf (>= 0.0.5, < 1.0.0)
-    elasticsearch (7.16.1)
-      elasticsearch-api (= 7.16.1)
-      elasticsearch-transport (= 7.16.1)
-    elasticsearch-api (7.16.1)
+    elasticsearch (7.17.1)
+      elasticsearch-api (= 7.17.1)
+      elasticsearch-transport (= 7.17.1)
+    elasticsearch-api (7.17.1)
       multi_json
-    elasticsearch-transport (7.16.1)
+    elasticsearch-transport (7.17.1)
       faraday (~> 1)
       multi_json
     email_spec (1.6.0)
@@ -419,7 +419,7 @@ GEM
     rails-dom-testing (2.0.3)
       activesupport (>= 4.2.0)
       nokogiri (>= 1.6)
-    rails-html-sanitizer (1.4.2)
+    rails-html-sanitizer (1.4.3)
       loofah (~> 2.3)
     rails-i18n (7.0.3)
       i18n (>= 0.7, < 2)
@@ -611,7 +611,7 @@ DEPENDENCIES
   delorean
   devise
   devise-async
-  elasticsearch (= 7.16.1)
+  elasticsearch (= 7.17.1)
   email_spec (= 1.6.0)
   erb_lint (= 0.0.29)
   escape_utils (= 1.2.1)
