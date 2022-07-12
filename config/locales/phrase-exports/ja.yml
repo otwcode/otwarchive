@@ -52,7 +52,7 @@ ja:
           other: "%{givers_list}があなたの作品 %{commentable_link}にいいねを送りました。"
         single_guest:
           giver_list: ゲスト1名
-          left_kudos: "%{givers_list}があなたの作品 %{commentable_link}にいいねを送りました。"
+          left_kudos: "%{giver_list}があなたの作品 %{commentable_link}にいいねを送りました。"
       subject: "[%{app_name}] あなたにいいねが届きました！"
       text:
         left_kudos:
@@ -64,8 +64,8 @@ ja:
         formal: 敬具、
         informal: 以上、
       creation:
-        link_with_word_count: "%{creation_link} (%{word_count})"
-        title_with_word_count: '"%{creation_title}" (%{word_count})'
+        link_with_word_count: "%{creation_link} （%{word_count}）"
+        title_with_word_count: "『%{creation_title}』（%{word_count}）"
         word_count:
           other: "%{count} 語"
       footer:

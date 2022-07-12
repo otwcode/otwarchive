@@ -9,7 +9,7 @@ ko:
           other: "%{commentable_link}에 %{givers_list}이(가) 좋아요(kudos)를 남겼습니다."
         single_guest:
           giver_list: 손님
-          left_kudos: "%{commentable_link}에 %{givers_list}이(가) 좋아요(kudos)를 남겼습니다."
+          left_kudos: "%{commentable_link}에 %{giver_list}이(가) 좋아요(kudos)를 남겼습니다."
       subject: "[%{app_name}] 회원님의 게시물에 좋아요(kudos)가 있습니다!"
       text:
         left_kudos:
