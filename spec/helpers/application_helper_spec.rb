@@ -366,8 +366,8 @@ describe ApplicationHelper do
   end
 
   describe "#time_in_zone" do
-    let(:user) { create(:user) }
-    let(:pref) { create(:preference) }
+    let(:user) { build(:user) }
+    let(:pref) { build(:preference) }
     let(:time) { Time.rfc3339("1999-12-31T16:00:00Z") }
     let(:utc) { Time.find_zone("UTC") }
     let(:zone_tokyo) { Time.find_zone("Asia/Tokyo") }
