@@ -327,7 +327,7 @@ describe UserMailer do
         it "has the correct content" do
           expect(email).to have_text_part_content("like to join us, please follow this link to sign up")
           expect(email).to have_text_part_content("has invited you")
-          expect(email).to have_text_part_content("the Organization for Transformative Works (https://transformativeworks.org), which works to protect fan rights and preserve fanworks")
+          expect(email).to have_text_part_content("the Organization for Transformative Works (https://www.transformativeworks.org), which works to protect fan rights and preserve fanworks")
         end
       end
     end
@@ -362,7 +362,7 @@ describe UserMailer do
         it "has the correct content" do
           expect(email).to have_text_part_content("like to join us, please follow this link to sign up")
           expect(email).to have_text_part_content("been invited")
-          expect(email).to have_text_part_content("the Organization for Transformative Works (https://transformativeworks.org), which works to protect fan rights and preserve fanworks")
+          expect(email).to have_text_part_content("the Organization for Transformative Works (https://www.transformativeworks.org), which works to protect fan rights and preserve fanworks")
         end
       end
     end
