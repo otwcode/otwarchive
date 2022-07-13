@@ -1,7 +1,6 @@
 class CollectionItemsController < ApplicationController
   before_action :load_collection
   before_action :load_user, only: [:update_multiple]
-  before_action :load_item_and_collection, only: [:update_multiple]
   before_action :load_collectible_item, only: [:new, :create]
 
   cache_sweeper :collection_sweeper
@@ -186,7 +185,7 @@ class CollectionItemsController < ApplicationController
     allowed_items.where(id: update_params.keys).each do |item|
       item_data = update_params[item.id]
       if item_data[:remove] == "1"
-        @collection_items << item unless item.update_multiple
+        @collection_items << item unless item.destroy
       else
         @collection_items << item unless item.update(item_data)
       end
