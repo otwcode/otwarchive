@@ -296,10 +296,11 @@ public
       format.html do
         flash[:error] = ts("Sorry, only an authorized admin can access the page you were trying to reach.")
         redirect_to root_path
-        false
       end
-      errors = [ts("Sorry, only an authorized admin can do that.")]
-      format.json { render json: { errors: errors }, status: :forbidden }
+      format.json do
+        errors = [ts("Sorry, only an authorized admin can do that.")]
+        render json: { errors: errors }, status: :forbidden
+      end
     end
   end
 

@@ -1,5 +1,5 @@
 require 'spec_helper'
-describe InviteRequest, :ready do
+describe InviteRequest do
   it "has a valid factory" do
     expect(build(:invite_request)).to be_valid
   end
