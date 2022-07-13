@@ -1,5 +1,48 @@
 ---
 ms:
+  activerecord:
+    attributes:
+      archive_warning:
+        name_with_colon:
+          other: 'Amaran:'
+      category:
+        name_with_colon:
+          other: 'Kategori:'
+      character:
+        name_with_colon:
+          other: 'Watak:'
+      fandom:
+        name_with_colon:
+          other: 'Fandom:'
+      freeform:
+        name_with_colon:
+          other: 'Tag Tambahan:'
+      rating:
+        name_with_colon: 'Taraf:'
+      relationship:
+        name_with_colon:
+          other: 'Hubungan:'
+      work:
+        summary: Ringkasan
+    models:
+      archive_warning:
+        other: Amaran
+      category:
+        other: Kategori
+      chapter:
+        other: Bab
+      character:
+        other: Watak
+      fandom:
+        other: Fandom
+      freeform:
+        other: Tag Tambahan
+      rating:
+        other: Taraf
+      relationship:
+        other: Hubungan
+      series:
+        other: Siri
   kudo_mailer:
     batch_kudo_notification:
       guest:
@@ -7,16 +50,26 @@ ms:
       html:
         left_kudos:
           other: "%{givers_list} telah meninggalkan kudos untuk %{commentable_link}."
+        single_guest:
+          giver_list: Seorang tetamu
+          left_kudos: "%{giver_list} telah meninggalkan kudos untuk %{commentable_link}."
       subject: "[%{app_name}] Anda telah menerima kudos!"
       text:
         left_kudos:
           other: "%{givers_list} telah meninggalkan kudos untuk %{commentable_title}
             (%{commentable_url})."
+        single_guest: Seorang tetamu telah meninggalkan kudos untuk %{commentable_title}
+          (%{commentable_url}).
   mailer:
     general:
       closing:
         formal: Yang benar,
         informal: Yang benar,
+      creation:
+        link_with_word_count: "%{creation_link} (%{word_count})"
+        title_with_word_count: '"%{creation_title}" (%{word_count})'
+        word_count:
+          other: "%{count} perkataan"
       footer:
         general:
           html:
@@ -37,6 +90,7 @@ ms:
           addressed: Hai, %{name}!
           unaddressed: Hai!
         introductory: Helo daripada Archive of Our Own – AO3 (Arkib Milik Kita)!
+      metadata_label_indicator: ": "
       signature:
         app_short_name: AO3
         open_doors: Pasukan The Open Doors (Projek Pemeliharaan Bahan-Bahan Digital
