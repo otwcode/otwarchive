@@ -5,16 +5,6 @@ class CollectionItemsController < ApplicationController
 
   cache_sweeper :collection_sweeper
 
-  def load_item_and_collection
-    if params[:collection_item]
-      @collection_item = CollectionItem.find(collection_item_params[:id])
-    else
-      @collection_item = CollectionItem.find(params[:id])
-    end
-    not_allowed(@collection) and return unless @collection_item
-    @collection = @collection_item.collection
-  end
-
   def index
 
     if @collection && @collection.user_is_maintainer?(current_user)
@@ -200,10 +190,6 @@ class CollectionItemsController < ApplicationController
   end
 
   private
-
-  def collection_item_params
-    params.require(:collection_item).permit(:id)
-  end
 
   def user_update_multiple_params
     allowed = %i[user_approval_status remove]
