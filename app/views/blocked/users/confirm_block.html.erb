@@ -15,10 +15,14 @@
     <p><%= t(".will_not.intro") %></p>
 
     <ul>
+      <li><%= t(".will_not.hide_works") %></li>
       <li><%= t(".will_not.comments_on_works") %></li>
       <li><%= t(".will_not.comments_elsewhere") %></li>
     </ul>
   </div>
 
-  <p class="actions"><%= submit_tag t(".button") %></p>
+  <p class="actions">
+    <%= link_to t(".cancel"), user_blocked_users_path(@user) %>
+    <%= submit_tag t(".button") %>
+  </p>
 <% end %>

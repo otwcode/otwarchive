@@ -73,7 +73,7 @@ class Comment < ApplicationRecord
   scope :for_display, lambda {
     includes(
       pseud: { user: [:roles, :block_of_current_user, :block_by_current_user] },
-      parent: { work: :pseuds }
+      parent: { work: [:pseuds, :users] }
     )
   }
 
@@ -460,6 +460,14 @@ class Comment < ApplicationRecord
   # Unfreeze single comment.
   def mark_unfrozen!
     update_attribute(:iced, false)
+  end
+
+  def mark_hidden!
+    update_attribute(:hidden_by_admin, true)
+  end
+
+  def mark_unhidden!
+    update_attribute(:hidden_by_admin, false)
   end
 
   def sanitized_content

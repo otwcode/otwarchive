@@ -74,6 +74,20 @@ When /^I post a related work as remixer$/ do
   step %{I press "Post"}
 end
 
+When /^I post a related work as remixer for an external work$/ do
+  step %{I am logged in as "remixer"}
+  step %{I go to the new work page}
+  step %{I select "Not Rated" from "Rating"}
+  step %{I check "No Archive Warnings Apply"}
+  step %{I select "English" from "Choose a language"}
+  step %{I fill in "Fandoms" with "Stargate"}
+  step %{I fill in "Work Title" with "Followup"}
+  step %{I fill in "content" with "That could be an amusing crossover."}
+  step %{I list an external work as inspiration}
+  step %{I press "Preview"}
+  step %{I press "Post"}
+end
+
 # when for translations
 
 When /^I post a translation as translator$/ do

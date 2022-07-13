@@ -76,8 +76,8 @@ Feature: Public skins
   Then I should see "Your preferences were successfully updated."
   When I am on skinuser's preferences page
     And "public skin" should be selected within "preference_skin_id"
-    And I should see "#title {" within "style"
-    And I should see "text-decoration: blink;" within "style"
+    And I should see "#title {" in the page style
+    And I should see "text-decoration: blink;" in the page style
 
   Scenario: Toggle between public site skins and public work skins
   Given I am logged in as "skinner"

@@ -20,7 +20,7 @@ class ChaptersController < ApplicationController
   # GET /work/:work_id/chapters/manage
   def manage
     @chapters = @work.chapters_in_order(include_content: false,
-                                        include_drafts: false)
+                                        include_drafts: true)
   end
 
   # GET /work/:work_id/chapters/:id
