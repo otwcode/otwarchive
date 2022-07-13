@@ -3,9 +3,6 @@ Feature: Invite queue management
 
   Background:
     Given I have no users
-    And the following admin exists
-      | login       | password   | email                    |
-      | admin-sam   | password   | test@archiveofourown.org |
     And the following users exist
       | login | password |
       | user1 | password |
@@ -97,7 +94,7 @@ Feature: Invite queue management
       And I follow "Get an Invitation"
     When I fill in "invite_request_email" with "test@archiveofourown.org"
       And I press "Add me to the list"
-      And the check_queue rake task is run
+      And the scheduled check_invite_queue job is run
     Then 1 email should be delivered to test@archiveofourown.org
     When I check how long "test@archiveofourown.org" will have to wait in the invite request queue
     Then I should see "Invitation Request Status"
