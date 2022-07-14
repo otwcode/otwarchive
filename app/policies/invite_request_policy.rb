@@ -5,7 +5,6 @@ class InviteRequestPolicy < ApplicationPolicy
     user_has_roles?(MANAGE_ROLES)
   end
 
-  alias can_destroy? can_manage?
   alias manage? can_manage?
   alias destroy? can_manage?
 end
