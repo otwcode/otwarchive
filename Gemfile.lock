@@ -615,7 +615,7 @@ DEPENDENCIES
   email_spec (= 1.6.0)
   erb_lint (= 0.0.29)
   escape_utils (= 1.2.1)
-  factory_bot (~> 5.0.2)
+  factory_bot
   factory_bot_rails
   faker
   fastimage
