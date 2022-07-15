@@ -96,7 +96,7 @@ class Download
              elsif work.fandoms.empty?
                "No fandom specified"
              else
-               work.fandoms.string
+               work.fandom_string
              end
     [work.title, authors, fandom].join(" - ")
   end
