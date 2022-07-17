@@ -962,26 +962,34 @@ namespace :After do
 
     puts("Updating #{kudos_count} chapter kudos") && STDOUT.flush
 
-    skipped_kudo_ids = []
+    indestructible_kudo_ids = []
+    unupdatable_kudo_ids = []
+
     kudos.find_each do |kudo|
-      if kudo.commentable.nil?
-        skipped_kudo_ids << kudo.id unless kudo.destroy
+      if kudo.commentable.nil? || kudo.commentable.work.nil?
+        indestructible_kudo_ids << kudo.id unless kudo.destroy
         print(".") && STDOUT.flush
         next
       end
 
       kudo.commentable = kudo.commentable.work
       unless kudo.save
-        # If there's any error at all, orphan the kudo and re-save.
-        kudo.ip_address = nil
-        kudo.user_id = nil
-        skipped_kudo_ids << kudo.id unless kudo.save
+        if kudo.errors.keys == [:ip_address] || kudo.errors.keys == [:user_id]
+          # If it's a uniqueness problem, orphan the kudo and re-save.
+          kudo.ip_address = nil
+          kudo.user_id = nil
+          unupdatable_kudo_ids << kudo.id unless kudo.save
+        else
+          # In other cases, let's be cautious and only log.
+          unupdatable_kudo_ids << kudo.id
+        end
       end
       print(".") && STDOUT.flush
     end
 
     puts
-    puts("Couldn't update #{skipped_kudo_ids.size} kudo(s): #{skipped_kudo_ids.join(',')}") if skipped_kudo_ids.any?
+    puts("Couldn't destroy #{indestructible_kudo_ids.size} kudo(s): #{indestructible_kudo_ids.join(',')}") if indestructible_kudo_ids.any?
+    puts("Couldn't update #{unupdatable_kudo_ids.size} kudo(s): #{unupdatable_kudo_ids.join(',')}") if unupdatable_kudo_ids.any?
     STDOUT.flush
   end
 
