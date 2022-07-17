@@ -1,5 +1,93 @@
 ---
 he:
+  activerecord:
+    attributes:
+      archive_warning:
+        name_with_colon:
+          many: 'אזהרות ארכיון:'
+          one: 'אזהרת ארכיון:'
+          other: 'אזהרות ארכיון:'
+          two: 'אזהרות ארכיון:'
+      category:
+        name_with_colon:
+          many: 'קטגוריות:'
+          one: 'קטגוריה:'
+          other: 'קטגוריות:'
+          two: 'קטגוריות:'
+      character:
+        name_with_colon:
+          many: 'דמויות:'
+          one: 'דמות:'
+          other: 'דמויות:'
+          two: 'דמויות:'
+      fandom:
+        name_with_colon:
+          many: 'פאנדומים:'
+          one: 'פאנדום:'
+          other: 'פאנדומים:'
+          two: 'פאנדומים:'
+      freeform:
+        name_with_colon:
+          many: 'תגיות נוספות:'
+          one: 'תגית נוספת:'
+          other: 'תגיות נוספות:'
+          two: 'תגיות נוספות:'
+      rating:
+        name_with_colon: 'סיווג:'
+      relationship:
+        name_with_colon:
+          many: 'מערכות יחסים:'
+          one: 'מערכת יחסים:'
+          other: 'מערכות יחסים:'
+          two: 'מערכות יחסים:'
+      work:
+        summary: תקציר
+    models:
+      archive_warning:
+        many: אזהרות ארכיון
+        one: אזהרת ארכיון
+        other: אזהרות ארכיון
+        two: אזהרות ארכיון
+      category:
+        many: קטגוריות
+        one: קטגוריה
+        other: קטגוריות
+        two: קטגוריות
+      chapter:
+        many: פרקים
+        one: פרק
+        other: פרקים
+        two: פרקים
+      character:
+        many: דמויות
+        one: דמות
+        other: דמויות
+        two: דמויות
+      fandom:
+        many: פאנדומים
+        one: פאנדום
+        other: פאנדומים
+        two: פאנדומים
+      freeform:
+        many: תגיות נוספות
+        one: תגית נוספת
+        other: תגיות נוספות
+        two: תגיות נוספות
+      rating:
+        many: סיווגים
+        one: סיווג
+        other: סיווגים
+        two: סיווגים
+      relationship:
+        many: מערכות יחסים
+        one: מערכת יחסים
+        other: מערכות יחסים
+        two: מערכות יחסים
+      series:
+        many: סדרות
+        one: סדרה
+        other: סדרות
+        two: סדרות
   kudo_mailer:
     batch_kudo_notification:
       guest:
@@ -25,6 +113,14 @@ he:
       closing:
         formal: בברכה,
         informal: בברכה,
+      creation:
+        link_with_word_count: "%{creation_link} (%{word_count})"
+        title_with_word_count: '"%{creation_title}" (%{word_count})'
+        word_count:
+          many: "%{count} מילים"
+          one: מילה אחת
+          other: "%{count} מילים"
+          two: "%{count} מילים"
       footer:
         general:
           html:
@@ -44,6 +140,7 @@ he:
           addressed: היי, %{name}!
           unaddressed: היי!
         introductory: שלום מ-Archive of Our Own – AO3 (ארכיון משלנו)!
+      metadata_label_indicator: " : "
       signature:
         app_short_name: AO3
         open_doors: צוות Open Doors (דלתות פתוחות)

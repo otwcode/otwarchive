@@ -60,7 +60,7 @@ class AdminSetting < ApplicationRecord
       if Date.today >= self.invite_from_queue_at.to_date
         new_date = Time.now + self.invite_from_queue_frequency.days
         self.first.update_attribute(:invite_from_queue_at, new_date)
-        InviteRequest.invite
+        InviteFromQueueJob.perform_now(count: invite_from_queue_number)
       end
     end
   end

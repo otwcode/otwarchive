@@ -1,5 +1,48 @@
 ---
 vi:
+  activerecord:
+    attributes:
+      archive_warning:
+        name_with_colon:
+          other: 'Cảnh Báo:'
+      category:
+        name_with_colon:
+          other: 'Hạng Mục:'
+      character:
+        name_with_colon:
+          other: 'Nhân Vật:'
+      fandom:
+        name_with_colon:
+          other: 'Fandom:'
+      freeform:
+        name_with_colon:
+          other: 'Từ Khoá Bổ Sung:'
+      rating:
+        name_with_colon: 'Giới Hạn Độ Tuổi:'
+      relationship:
+        name_with_colon:
+          other: 'Mối Quan Hệ:'
+      work:
+        summary: Tóm Tắt
+    models:
+      archive_warning:
+        other: Cảnh Báo
+      category:
+        other: Hạng Mục
+      chapter:
+        other: Số Chương
+      character:
+        other: Nhân Vật
+      fandom:
+        other: Fandom
+      freeform:
+        other: Từ Khoá Bổ Sung
+      rating:
+        other: Giới Hạn Độ Tuổi
+      relationship:
+        other: Mối Quan Hệ
+      series:
+        other: Bộ
   kudo_mailer:
     batch_kudo_notification:
       guest:
@@ -21,6 +64,11 @@ vi:
       closing:
         formal: Trân trọng,
         informal: Thân gửi,
+      creation:
+        link_with_word_count: "%{creation_link} (%{word_count})"
+        title_with_word_count: '"%{creation_title}" (%{word_count})'
+        word_count:
+          other: "%{count} từ"
       footer:
         general:
           html:
@@ -43,6 +91,7 @@ vi:
           unaddressed: Xin chào!
         introductory: Hello from the Archive of Our Own – AO3 (Lời chào từ Kho Tàng
           Lưu Trữ của Chúng Ta - AO3)!
+      metadata_label_indicator: ": "
       signature:
         app_short_name: AO3
         open_doors: Đội Open Doors (Cửa Mở)

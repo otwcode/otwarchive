@@ -57,7 +57,7 @@ gem 'resque', '>=1.14.0'
 gem 'resque-scheduler'
 gem 'after_commit_everywhere'
 #gem 'daemon-spawn', require: 'daemon_spawn'
-gem "elasticsearch", "7.16.1"
+gem "elasticsearch", "7.17.1"
 gem "aws-sdk-s3"
 gem 'css_parser'
 
@@ -123,8 +123,8 @@ group :test do
   gem "rspec-rails", "~> 4.0.1"
   gem 'pickle'
   gem 'shoulda'
-  gem 'capybara', '~> 2.16.1'
-  gem 'cucumber', '~> 3.1'
+  gem "capybara"
+  gem "cucumber"
   gem 'database_cleaner'
   gem 'poltergeist'
   gem 'capybara-screenshot'

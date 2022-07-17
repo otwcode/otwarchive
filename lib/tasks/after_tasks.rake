@@ -955,6 +955,36 @@ namespace :After do
     end
   end
 
+  desc "Convert remaining chapter kudos into work kudos"
+  task(clean_up_chapter_kudos: :environment) do
+    kudos = Kudo.where(commentable_type: "Chapter")
+    kudos_count = kudos.count
+
+    puts("Updating #{kudos_count} chapter kudos") && STDOUT.flush
+
+    skipped_kudo_ids = []
+    kudos.find_each do |kudo|
+      if kudo.commentable.nil?
+        skipped_kudo_ids << kudo.id unless kudo.destroy
+        print(".") && STDOUT.flush
+        next
+      end
+
+      kudo.commentable = kudo.commentable.work
+      unless kudo.save
+        # If there's any error at all, orphan the kudo and re-save.
+        kudo.ip_address = nil
+        kudo.user_id = nil
+        skipped_kudo_ids << kudo.id unless kudo.save
+      end
+      print(".") && STDOUT.flush
+    end
+
+    puts
+    puts("Couldn't update #{skipped_kudo_ids.size} kudo(s): #{skipped_kudo_ids.join(',')}") if skipped_kudo_ids.any?
+    STDOUT.flush
+  end
+
   # This is the end that you have to put new tasks above.
 end
 

@@ -17,7 +17,7 @@ class Admin::AdminUsersController < Admin::BaseController
     if @emails.present?
       found_users, not_found_emails, duplicates = User.search_multiple_by_email(@emails)
       @users = found_users.paginate(page: params[:page] || 1)
-      
+
       if params[:download_button]
         header = [%w(Email Username)]
         found = found_users.map { |u| [u.email, u.login] }
@@ -46,11 +46,8 @@ class Admin::AdminUsersController < Admin::BaseController
   # GET admin/users/1.xml
   def show
     @hide_dashboard = true
-    @user = User.find_by(login: params[:id])
+    @user = User.find_by!(login: params[:id])
     authorize @user
-    unless @user
-      redirect_to action: "index", query: params[:query], role: params[:role] and return
-    end
     @log_items = @user.log_items.sort_by(&:created_at).reverse
   end
 
