@@ -1312,4 +1312,10 @@ class Work < ApplicationRecord
       user ? "#{user_id} (#{user.login})" : user_id.to_s
     end
   end
+
+  def self.cleanup_original_creator_ids
+    Work
+      .where("orphaned_at <= ?", ArchiveConfig.ORPHANS_ORIGINAL_CREATOR_TTL.hours.ago)
+      .update_all(original_creator_ids: [])
+  end
 end

@@ -659,4 +659,23 @@ describe Work do
       end
     end
   end
+
+  describe "cleanup_original_creator_ids" do
+    let(:work1) { create(:work) }
+    let(:work2) { create(:work) }
+
+    it "deletes original_creator_ids when past the TTL" do
+      travel_to(ArchiveConfig.ORPHANS_ORIGINAL_CREATOR_TTL.hours.ago) do
+        work1.update(original_creator_ids: [1, 2])
+      end
+      work2.update(original_creator_ids: [2, 3])
+      expect(work1.original_creator_ids).not_to be_empty
+      expect(work2.original_creator_ids).not_to be_empty
+      Work.cleanup_original_creator_ids
+      work1.reload
+      work2.reload
+      expect(work1.original_creator_ids).to be_empty
+      expect(work2.original_creator_ids).not_to be_empty
+    end
+  end
 end
