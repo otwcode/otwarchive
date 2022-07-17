@@ -149,12 +149,11 @@ group :test, :development do
   gem 'brakeman'
   gem 'pry-byebug'
   gem 'whiny_validation'
-  gem 'factory_bot', '~> 5.0.2'
+  gem "factory_bot_rails"
   gem 'minitest'
 end
 
 group :development do
-  gem 'factory_bot_rails'
   gem 'bundler-audit'
   gem 'active_record_query_trace', '~> 1.6', '>= 1.6.1'
 end
@@ -168,6 +167,7 @@ end
 
 group :test, :development, :staging do
   gem 'bullet', '>= 5.7.3'
+  gem "factory_bot", require: false
 end
 
 # Deploy with Capistrano
