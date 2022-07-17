@@ -186,7 +186,8 @@ Given "a work {string} with the original creator {string}" do |title, creator|
   step %{I log out}
   work = Work.find_by(title: title)
   user = User.find_by(login: creator)
-  work.add_original_creator(user)
+  FactoryBot.create(:user, login: "orphan_account")
+  Creatorship.orphan(user.pseuds, [work])
 end
 
 ### WHEN

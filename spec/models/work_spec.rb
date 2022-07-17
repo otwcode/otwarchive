@@ -589,30 +589,43 @@ describe Work do
     end
   end
 
-  describe "#add_original_creator" do
+  describe "#original_creator_ids" do
     let(:work) { create(:work) }
-    let(:creator) { work.pseuds.first.user }
-    let(:key) { "original_creators_work_#{work.id}" }
-    let(:expiration) { ArchiveConfig.ORPHANS_ORIGINAL_CREATOR_TTL }
 
-    context "no existing creators set" do
-      it "saves the user id for the configured amount of time" do
-        work.add_original_creator(creator)
-        expect(REDIS_GENERAL.smembers(key)).to contain_exactly(creator.id.to_s)
-        expect(REDIS_GENERAL.ttl(key)).to be_between(expiration - 60, expiration)
+    context "no existing creator ids set" do
+      before { freeze_time }
+      after { travel_back}
+
+      it "saves the id and timestamp" do
+        work.original_creator_ids << 1
+        work.save
+        expect(work.original_creator_ids).to contain_exactly(1)
+        expect(work.orphaned_at).to eq(Time.current)
       end
     end
 
     context "an existing creator is already set" do
-      let(:other_creator) { create(:user) }
+      before do
+        travel_to(1.hour.ago) do
+          work.original_creator_ids << 1
+          work.save
+        end
+        freeze_time
+      end
 
-      before { work.add_original_creator(other_creator) }
+      after { travel_back }
 
-      it "saves the user id without updating key expiration" do
-        ArchiveConfig.ORPHANS_ORIGINAL_CREATOR_TTL = expiration / 2
-        work.add_original_creator(creator)
-        expect(REDIS_GENERAL.smembers(key)).to contain_exactly(creator.id.to_s, other_creator.id.to_s)
-        expect(REDIS_GENERAL.ttl(key)).to be_between(expiration - 60, expiration)
+      it "saves the user id and updates orphaned_at timestamp" do
+        work.original_creator_ids << 2
+        work.save
+        expect(work.original_creator_ids).to contain_exactly(1, 2)
+        expect(work.orphaned_at).to eq(Time.current)
+      end
+
+      it "removes orphaned_at timestamp when removing creator ids" do
+        work.original_creator_ids = []
+        work.save
+        expect(work.orphaned_at).to be_nil
       end
     end
   end
@@ -623,8 +636,8 @@ describe Work do
     let(:other_creator) { create(:user) }
 
     before do
-      work.add_original_creator(creator)
-      work.add_original_creator(other_creator)
+      work.original_creator_ids = [creator.id, other_creator.id]
+      work.save
     end
 
     context "the original creator's user still exists" do
