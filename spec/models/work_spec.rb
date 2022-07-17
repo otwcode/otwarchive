@@ -594,7 +594,8 @@ describe Work do
 
     context "no existing creator ids set" do
       before { freeze_time }
-      after { travel_back}
+
+      after { travel_back }
 
       it "saves the id and timestamp" do
         work.original_creator_ids << 1
