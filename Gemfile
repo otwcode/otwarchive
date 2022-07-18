@@ -168,6 +168,7 @@ end
 group :test, :development, :staging do
   gem 'bullet', '>= 5.7.3'
   gem "factory_bot", require: false
+  gem "faker", require: false
 end
 
 # Deploy with Capistrano
