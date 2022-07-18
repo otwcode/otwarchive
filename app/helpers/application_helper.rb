@@ -331,13 +331,10 @@ module ApplicationHelper
   # note: this does *not* append timezone and does *not* reflect user preferences
   def date_in_zone(time, zone = nil)
     zone ||= Time.zone.name
-    return ts("(no date specified)") if time.blank?
+    return I18n.t("time.no_date_specified") if time.blank?
 
     time_in_zone = time.in_time_zone(zone)
-    time_in_zone.strftime(<<~FORMAT.squish).html_safe
-      <abbr class="day" title="%A">%a</abbr> <span class="date">%d</span>
-      <abbr class="month" title="%B">%b</abbr> <span class="year">%Y</span>
-    FORMAT
+    I18n.l(time_in_zone, format: :date_short_html).html_safe
   end
 
   def mailto_link(user, options={})

@@ -428,3 +428,7 @@ en:
       draft_deletion_notice_html: "This draft will be <strong>scheduled for deletion</strong> on %{deletion_date}."
     show:
       unposted_deletion_notice_html: "This work is a draft and has not been posted. The draft will be <strong>scheduled for deletion</strong> on %{deletion_date}."
+  time:
+    no_date_specified: "(no date specified)"
+    formats:
+      date_short_html: <abbr class="day" title="%A">%a</abbr> <span class="date">%d</span> <abbr class="month" title="%B">%b</abbr> <span class="year">%Y</span>
