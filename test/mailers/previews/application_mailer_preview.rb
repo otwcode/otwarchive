@@ -1,4 +1,6 @@
-require "factory_bot_rails"
+require "factory_bot"
+
+FactoryBot.find_definitions
 
 class ApplicationMailerPreview < ActionMailer::Preview
   include FactoryBot::Syntax::Methods
