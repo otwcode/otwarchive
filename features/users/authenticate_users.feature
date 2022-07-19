@@ -244,3 +244,22 @@ Feature: User Authentication
     Then I should be on the home page
       And I should see "Password resets are disabled for that user."
       And 0 emails should be delivered
+
+  Scenario: Passwords cannot be reset for users who have been given the no resets role.
+    Given the following activated user exists
+      | login  | email            |
+      | target | user@example.com |
+      And the user "target" has the no resets role
+    When I am on the home page
+      And I follow "Forgot password?"
+      And I fill in "Email address or user name" with "target"
+      And I press "Reset Password"
+    Then I should be on the home page
+      And I should see "Password resets are disabled for that user."
+      And 0 emails should be delivered
+    When I follow "Forgot password?"
+      And I fill in "Email address or user name" with "user@example.com"
+      And I press "Reset Password"
+    Then I should be on the home page
+      And I should see "Password resets are disabled for that user."
+      And 0 emails should be delivered
