@@ -131,7 +131,6 @@ group :test do
   gem 'cucumber-rails', require: false
   gem 'launchy'    # So you can do Then show me the page
   gem 'delorean'
-  gem "faker"
   # Record and replay data from external URLs
   gem 'vcr', '~> 3.0', '>= 3.0.1'
   gem 'webmock', '~> 3.7.6'
@@ -168,6 +167,7 @@ end
 group :test, :development, :staging do
   gem 'bullet', '>= 5.7.3'
   gem "factory_bot", require: false
+  gem "faker", require: false
 end
 
 # Deploy with Capistrano
