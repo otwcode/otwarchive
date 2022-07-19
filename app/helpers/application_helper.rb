@@ -651,9 +651,13 @@ module ApplicationHelper
     end
   end
 
-  def disallow_robots?(user, creation)
-    user && user.try(:preference).try(:minimize_search_engines?) ||
-      (creation.is_a?(Work) || creation.is_a?(Series)) &&
-        creation.users.all? { |u| u.try(:preference).try(:minimize_search_engines?) }
+  def disallow_robots?(item)
+    return unless item
+
+    if item.is_a?(User)
+      item&.preference&.minimize_search_engines?
+    else
+      item.users.all? { |u| u&.preference&.minimize_search_engines? }
+    end
   end
 end # end of ApplicationHelper

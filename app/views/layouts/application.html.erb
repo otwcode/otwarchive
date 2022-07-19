@@ -11,7 +11,8 @@
     <meta name="distribution" content="GLOBAL" />
     <meta name="classification" content="transformative works" />
     <meta name="author" content="Organization for Transformative Works" />
-    <% if disallow_robots?(@user, @work || @series) %>
+    <% item = @user || @work || @series %>
+    <% if disallow_robots?(item) %>
       <meta name="robots" content="noindex" />
       <meta name="googlebot" content="noindex" />
     <% end %>
