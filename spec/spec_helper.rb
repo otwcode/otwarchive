@@ -17,9 +17,6 @@ DatabaseCleaner.clean
 # in spec/support/ and its subdirectories.
 Dir[Rails.root.join("spec/support/**/*.rb")].sort.each { |f| require f }
 
-FactoryBot.find_definitions
-FactoryBot.definition_file_paths = %w[factories]
-
 RSpec.configure do |config|
   config.mock_with :rspec
 

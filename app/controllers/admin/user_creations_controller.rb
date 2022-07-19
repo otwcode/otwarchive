@@ -25,9 +25,7 @@ class Admin::UserCreationsController < Admin::BaseController
     flash[:notice] = @creation.hidden_by_admin? ?
                         ts("Item has been hidden.") :
                         ts("Item is no longer hidden.")
-    if @creation_class == Comment
-      redirect_to(@creation.ultimate_parent) 
-    elsif @creation_class == ExternalWork || @creation_class == Bookmark
+    if @creation_class == ExternalWork || @creation_class == Bookmark
       redirect_to(request.env["HTTP_REFERER"] || root_path)
     else
       redirect_to(@creation)

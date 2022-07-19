@@ -295,6 +295,15 @@ ro:
       part1: "%{login}, adresa de e-mail asociată cu contul tău a fost schimbată la
         %{email}"
       subject: "[%{app_name}] Adresa de e-mail schimbată"
+    collection_notification:
+      assignments_sent:
+        complete: Toate sarcinile au fost acum trimise.
+        subject: Sarcinile au fost trimise
+      html:
+        received_message: 'Ai primit un mesaj despre colecția ta %{collection_link}:'
+      text:
+        received_message: 'Ai primit un mesaj despre colecția ta "%{collection_title}"
+          (%{collection_url}):'
     creatorship_notification:
       explanation: Când apari drept co-creator/ co-creatoare la o lucrare, poți fi
         adăugat(ă) la capitole noi, indiferent de setările tale pentru co-creator.
