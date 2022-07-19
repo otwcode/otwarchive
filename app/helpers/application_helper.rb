@@ -655,8 +655,8 @@ module ApplicationHelper
     return unless item
 
     if item.is_a?(User)
-      item&.preference&.minimize_search_engines?
-    else
+      item.preference&.minimize_search_engines?
+    elsif item.respond_to?(:users)
       item.users.all? { |u| u&.preference&.minimize_search_engines? }
     end
   end
