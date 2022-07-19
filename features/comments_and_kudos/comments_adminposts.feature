@@ -113,6 +113,17 @@ Feature: Commenting on admin posts
     Then I should see "Comment created!"
       And I should see "zug zug"
 
+  Scenario: Admin post older than the commenting expiration period
+    Given an admin post with expired commenting
+    When I run the rake task "admin_post:expire_commenting"
+      And I go to the admin-posts page
+      And I follow "AdminPost Title"
+    Then I should see "Sorry, this news post doesn't allow comments."
+    When I am logged in as "regular"
+      And I go to the admin-posts page
+      And I follow "AdminPost Title"
+    Then I should see "Sorry, this news post doesn't allow comments."
+
   Scenario: Modifying the comment permissions of an admin post with translations
     Given I have posted an admin post
       And basic languages

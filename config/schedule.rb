@@ -49,6 +49,11 @@ every 1.day, at: '7:40 am' do
   rake "work:purge_old_drafts"
 end
 
+# Expire commenting for old admin posts
+every 1.day, at: "8:10 am" do
+  rake "admin_post:expire_commenting"
+end
+
 # Send kudos notifications
 every 1.day, at: '10:00 am' do
   rake "notifications:deliver_kudos"

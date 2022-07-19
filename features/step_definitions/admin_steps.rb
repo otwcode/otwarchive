@@ -108,6 +108,10 @@ Given "the admin post {string}" do |title|
   FactoryBot.create(:admin_post, title: title)
 end
 
+Given "an admin post with expired commenting" do
+  FactoryBot.create(:admin_post, created_at: Time.current - ArchiveConfig.ADMIN_POST_COMMENTING_EXPIRATION_DAYS.days)
+end
+
 Given /^the fannish next of kin "([^\"]*)" for the user "([^\"]*)"$/ do |kin, user|
   step %{the user "#{kin}" exists and is activated}
   step %{the user "#{user}" exists and is activated}

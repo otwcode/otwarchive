@@ -265,6 +265,10 @@ ANONYMOUS_THRESHOLD_COUNT: 10
 # whether a comment should go back into moderation after editing or not
 COMMENT_MODERATION_THRESHOLD: 10
 
+# This is the number of days since admin post creation until commenting on an admin
+# post (aka news post) is no longer permitted. Set to 0 to allow commenting indefinitely.
+ADMIN_POST_COMMENTING_EXPIRATION_DAYS: 14
+
 # SANITIZER VERSION
 SANITIZER_VERSION: 1
 
