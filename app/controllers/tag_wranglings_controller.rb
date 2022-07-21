@@ -100,8 +100,4 @@ class TagWranglingsController < ApplicationController
 
     redirect_to tag_wranglings_path(options)
   end
-
-  def discuss
-    @comments = Comment.where(commentable_type: 'Tag').order('updated_at DESC').paginate(page: params[:page])
-  end
 end

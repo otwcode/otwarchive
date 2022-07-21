@@ -2,6 +2,21 @@ en:
   activerecord:
     errors:
       models:
+        block:
+          format: "%{message}"
+          attributes:
+            blocked_id:
+              taken: "You have already blocked that user."
+            blocked:
+              blank: "Sorry, we couldn't find a user matching that name."
+              self: "Sorry, you can't block yourself."
+              official: "Sorry, you can't block an official account."
+        comment:
+          attributes:
+            user:
+              format: "%{message}"
+              blocked_comment: "Sorry, you have been blocked by one or more of this work's creators."
+              blocked_reply: "Sorry, you have been blocked by that user."
         creatorship:
           attributes:
             pseud_id:
@@ -11,6 +26,16 @@ en:
             user_defined_tags_count:
               at_most:
                 "must not add up to more than %{count}. You have entered %{value} of these tags, so you must remove %{diff} of them."
+        kudo:
+          attributes:
+            commentable:
+              author_on_own_work: "You can't leave kudos on your own work."
+              blank: "What did you want to leave kudos on?"
+              guest_on_restricted: "You can't leave guest kudos on a restricted work."
+            commentable_type:
+              inclusion: "What did you want to leave kudos on?"
+          format: "%{message}"
+          taken: "You have already left kudos here. :)"
         user:
           attributes:
             password_confirmation:

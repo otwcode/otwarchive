@@ -83,6 +83,7 @@ module Otwarchive
 
     # Only send referrer information to ourselves
     config.action_dispatch.default_headers = {
+      "Content-Security-Policy" => "frame-ancestors 'self'",
       "Referrer-Policy" => "strict-origin-when-cross-origin",
       "X-Frame-Options" => "SAMEORIGIN",
       "X-XSS-Protection" => "1; mode=block",
@@ -93,6 +94,8 @@ module Otwarchive
 
     # Use Resque to run ActiveJobs (including sending delayed mail):
     config.active_job.queue_adapter = :resque
+
+    config.active_model.i18n_customize_full_message = true
 
     config.action_mailer.default_url_options = { host: ArchiveConfig.APP_HOST }
 

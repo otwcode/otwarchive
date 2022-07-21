@@ -1,5 +1,75 @@
 ---
 cs:
+  activerecord:
+    attributes:
+      archive_warning:
+        name_with_colon:
+          few: 'Varování:'
+          one: 'Varování:'
+      category:
+        name_with_colon:
+          few: 'Kategorie:'
+          one: 'Kategorie:'
+          other: 'Kategorií:'
+      character:
+        name_with_colon:
+          few: 'Postavy:'
+          one: 'Postava:'
+          other: 'Postav:'
+      fandom:
+        name_with_colon:
+          few: 'Fandomy:'
+          one: 'Fandom:'
+          other: 'Fandomů:'
+      freeform:
+        name_with_colon:
+          few: 'Vedlejší tagy:'
+          one: 'Vedlejší tag:'
+          other: 'Vedlejších tagů:'
+      rating:
+        name_with_colon: 'Zařazení:'
+      relationship:
+        name_with_colon:
+          few: 'Vztahy:'
+          one: 'Vztah:'
+          other: 'Vztahů:'
+      work:
+        summary: Shrnutí
+    models:
+      archive_warning:
+        few: Varování
+        one: Varování
+      category:
+        few: Kategorie
+        one: Kategorie
+        other: Kategorií
+      chapter:
+        few: Kapitoly
+        one: Kapitola
+        other: Kapitol
+      character:
+        few: Postavy
+        one: Postava
+        other: Postav
+      fandom:
+        few: Fandomy
+        one: Fandom
+        other: Fandomů
+      freeform:
+        few: Vedlejší tagy
+        one: Vedlejší tag
+        other: Vedlejších tagů
+      rating:
+        few: Zařazení
+        one: Zařazení
+      relationship:
+        few: Vztahy
+        one: Vztah
+        other: Vztahů
+      series:
+        few: Série
+        one: Série
+        other: Sérií
   kudo_mailer:
     batch_kudo_notification:
       guest:
@@ -29,6 +99,13 @@ cs:
       closing:
         formal: S pozdravem,
         informal: S pozdravem,
+      creation:
+        link_with_word_count: "%{creation_link} (%{word_count})"
+        title_with_word_count: '"%{creation_title}" (%{word_count})'
+        word_count:
+          few: "%{count} slova"
+          one: "%{count} slovo"
+          other: "%{count} slov"
       footer:
         general:
           html:
@@ -49,6 +126,7 @@ cs:
           unaddressed: Ahoj,
         introductory: Zdravíme z Archive of Our Own - AO3 (Našeho vlastního archivu
           - AO3),
+      metadata_label_indicator: ": "
       signature:
         app_short_name: AO3
         open_doors: The Open Doors team (tým Otevřených dvěří)

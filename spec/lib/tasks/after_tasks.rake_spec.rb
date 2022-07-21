@@ -101,7 +101,7 @@ end
 describe "rake After:update_indexed_stat_counter_kudo_count", work_search: true do
   let(:work) { create(:work) }
   let(:stat_counter) { work.stat_counter }
-  let!(:kudo_bundle) { create_list(:kudo, 2, commentable_id: work.id) }
+  let!(:kudo_bundle) { create_list(:kudo, 2, commentable: work) }
 
   before do
     stat_counter.update_column(:kudos_count, 3)
@@ -378,5 +378,148 @@ describe "rake After:fix_invalid_pseud_icon_data" do
     expect(invalid_pseud.icon_content_type).to be_nil
     expect(invalid_pseud.icon_alt_text).to be_empty
     expect(invalid_pseud.icon_comment_text).to be_empty
+  end
+end
+
+describe "rake After:fix_2009_comment_threads" do
+  before { Comment.delete_all }
+
+  let(:comment) { create(:comment, id: 13) }
+  let(:reply) { create(:comment, commentable: comment) }
+
+  context "when a comment has the correct thread set" do
+    it "doesn't change the thread" do
+      expect do
+        subject.invoke
+      end.to output("Updating 0 thread(s)\n").to_stdout
+        .and avoid_changing { comment.reload.thread }
+        .and avoid_changing { reply.reload.thread }
+    end
+  end
+
+  context "when a comment has an incorrect thread set" do
+    before { comment.update_column(:thread, 1) }
+
+    it "fixes the threads" do
+      expect do
+        subject.invoke
+      end.to output("Updating 1 thread(s)\n").to_stdout
+        .and change { comment.reload.thread }.from(1).to(13)
+        .and change { reply.reload.thread }.from(1).to(13)
+    end
+
+    context "when the comment has many replies" do
+      it "fixes the threads for all of them" do
+        replies = create_list(:comment, 10, commentable: comment)
+
+        expect do
+          subject.invoke
+        end.to output("Updating 1 thread(s)\n").to_stdout
+          .and change { comment.reload.thread }.from(1).to(13)
+
+        replies.each do |reply|
+          expect { reply.reload }.to change { reply.thread }.from(1).to(13)
+        end
+      end
+    end
+
+    context "when the comment has deeply nested replies" do
+      it "fixes the threads for all of them" do
+        replies = [reply]
+
+        10.times { replies << create(:comment, commentable: replies.last) }
+
+        expect do
+          subject.invoke
+        end.to output("Updating 1 thread(s)\n").to_stdout
+          .and change { comment.reload.thread }.from(1).to(13)
+
+        replies.each do |reply|
+          expect { reply.reload }.to change { reply.thread }.from(1).to(13)
+        end
+      end
+    end
+  end
+end
+
+describe "rake After:clean_up_chapter_kudos" do
+  let(:work) { create(:work) }
+  let!(:work_kudo) { create(:kudo, commentable: work) }
+  let!(:chapter_kudo) do
+    kudo = create(:kudo, commentable: work)
+    kudo.update_columns(commentable_type: "Chapter", commentable_id: work.first_chapter.id)
+    kudo
+  end
+
+  it "destroys chapter kudos if the chapter does not exist" do
+    work.first_chapter.delete
+
+    expect do
+      subject.invoke
+    end.to avoid_changing { work_kudo.reload.updated_at }
+    expect { chapter_kudo.reload }.to raise_exception(ActiveRecord::RecordNotFound)
+  end
+
+  it "destroys chapter kudos if the work does not exist" do
+    work.delete
+    subject.invoke
+    expect { chapter_kudo.reload }.to raise_exception(ActiveRecord::RecordNotFound)
+  end
+
+  it "prints chapter kudos that cannot be destroyed when the work does not exist" do
+    work.delete
+    allow_any_instance_of(Kudo).to receive(:destroy).and_return(false)
+
+    expect do
+      subject.invoke
+    end.to output("Updating 1 chapter kudos\n.\nCouldn't destroy 1 kudo(s): #{chapter_kudo.id}\n").to_stdout
+  end
+
+  it "transfers chapter kudos to the chapter's work" do
+    expect do
+      subject.invoke
+    end.to change { chapter_kudo.reload.commentable }.from(work.first_chapter).to(work)
+      .and change { work.all_kudos_count }.from(1).to(2)
+      .and change { work.guest_kudos_count }.from(1).to(2)
+  end
+
+  it "prints chapter kudos that cannot be transferred to the work" do
+    allow_any_instance_of(Kudo).to receive(:save).and_return(false)
+
+    expect do
+      subject.invoke
+    end.to output("Updating 1 chapter kudos\n.\nCouldn't update 1 kudo(s): #{chapter_kudo.id}\n").to_stdout
+  end
+
+  it "transfers guest chapter kudos to the chapter's restricted work" do
+    work.update!(restricted: true)
+
+    expect do
+      subject.invoke
+    end.to change { chapter_kudo.reload.commentable }.from(work.first_chapter).to(work)
+      .and avoid_changing { chapter_kudo.reload.ip_address }
+      .and avoid_changing { work_kudo.reload.updated_at }
+  end
+
+  it "orphan chapter kudos if there is already a work kudo from the same IP address" do
+    chapter_kudo.update_column(:ip_address, work_kudo.ip_address)
+
+    expect do
+      subject.invoke
+    end.to change { chapter_kudo.reload.commentable }.from(work.first_chapter).to(work)
+      .and change { chapter_kudo.reload.ip_address }.from(work_kudo.ip_address).to(nil)
+      .and avoid_changing { work_kudo.reload.updated_at }
+  end
+
+  it "orphan chapter kudos if there is already a work kudo from the same user ID" do
+    user_id = create(:user).id
+    work_kudo.update(ip_address: nil, user_id: user_id)
+    chapter_kudo.update_columns(ip_address: nil, user_id: user_id)
+
+    expect do
+      subject.invoke
+    end.to change { chapter_kudo.reload.commentable }.from(work.first_chapter).to(work)
+      .and change { chapter_kudo.reload.user_id }.from(user_id).to(nil)
+      .and avoid_changing { work_kudo.reload.updated_at }
   end
 end

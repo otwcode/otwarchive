@@ -13,7 +13,9 @@ When /^I add (.*) to the tag ?set$/ do |tags|
       tags = scanned_tags.split(/, ?/)
       tags.each { |tag| check(tag) }
     else
-      fill_in("owned_tag_set_tag_set_attributes_#{type}_tagnames_to_add", with: scanned_tags)
+      field_name = "owned_tag_set_tag_set_attributes_#{type}_tagnames_to_add"
+      field_name += "_autocomplete" if @javascript
+      fill_in(field_name, with: scanned_tags)
     end
   end
 end

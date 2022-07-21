@@ -104,6 +104,10 @@ Given /^I have posted an admin post$/ do
   step("I log out")
 end
 
+Given "the admin post {string}" do |title|
+  FactoryBot.create(:admin_post, title: title)
+end
+
 Given /^the fannish next of kin "([^\"]*)" for the user "([^\"]*)"$/ do |kin, user|
   step %{the user "#{kin}" exists and is activated}
   step %{the user "#{user}" exists and is activated}
@@ -235,8 +239,8 @@ When /^the invite_from_queue_at is yesterday$/ do
   AdminSetting.first.update_attribute(:invite_from_queue_at, Time.now - 1.day)
 end
 
-When /^the check_queue rake task is run$/ do
-  step %{I run the rake task "invitations:check_queue"}
+When "the scheduled check_invite_queue job is run" do
+  Resque.enqueue(AdminSetting, :check_queue)
 end
 
 When /^I edit known issues$/ do

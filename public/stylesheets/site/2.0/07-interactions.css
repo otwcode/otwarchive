@@ -236,7 +236,7 @@ form li ul.autocomplete li.input {
   border: 0;
 }
 
-.autocomplete .dropdown ul li:hover, li.selected {
+.autocomplete .dropdown ul li:hover, .autocomplete .dropdown li.selected {
   background: url("/images/skins/textures/tiles/red-ao3.png") top left #900;
   color: #fff;
 }
@@ -574,6 +574,57 @@ form.simple span.actions {
 
 .simple input[type="submit"] {
   margin: 0;
+}
+
+/* mods: SINGLE for prominent simple forms consisting of one text input, e.g., on the blocked user page */
+
+form.single fieldset {
+  background: transparent;
+  border: 1px solid #ddd;
+    box-shadow: none;
+}
+
+form.single legend {
+  height: auto;
+  width: auto;
+  font-size: 1.143em;
+  font-weight: bold;
+  padding: 0.5em;
+    opacity: 1;
+}
+
+form.single input[type="text"] {
+  min-width: 15em;
+}
+
+form.single input[type="submit"] {
+  vertical-align: bottom;
+}
+
+form.single span.submit {
+  padding: 0;
+}
+
+form.single ul.autocomplete {
+  display: inline-block;
+}
+
+form.single .autocomplete li.input {
+  margin: 0 0.643em 0.25em 0;
+}
+
+form.single .autocomplete .added {
+  margin-bottom: 0.125em;
+}
+
+/* let autocomplete input expand horizontally as the container takes up more room to accomodate multiple selected tokens */
+form.single .autocomplete input[type="text"] {
+  width: 100%;
+}
+
+/* tweak the margin of the submit button only if there's an autocomplete */
+form.single .autocomplete + input + span.submit input[type="submit"] {
+  margin-bottom: 0.125em;
 }
 
 /* WIDGET: TOGGLED FORMS (SHOW/HIDE bookmark and collection - hidden with jS) */

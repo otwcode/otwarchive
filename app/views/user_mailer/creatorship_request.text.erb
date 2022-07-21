@@ -1,4 +1,4 @@
-<% creation_type = @creation.model_name.human.downcase %>
+<% creation_type = @creation.class.name.underscore %>
 <% content_for :message do %>
 <%= t(".intro_#{creation_type}", inviting_user: @inviting_user.login, pseud: @creatorship.pseud.name) %>
 
@@ -7,5 +7,5 @@
       url: polymorphic_url(@creation),
       pseuds: @creation.pseuds.map(&:byline).to_sentence) %>
 
-<%= t(".text.instructions", type: creation_type, url: user_creatorships_url(@user)) %>
+<%= t(".text.instructions", url: user_creatorships_url(@user)) %>
 <% end %>

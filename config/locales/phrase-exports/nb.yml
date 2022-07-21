@@ -1,5 +1,63 @@
 ---
 nb:
+  activerecord:
+    attributes:
+      archive_warning:
+        name_with_colon:
+          one: 'Advarsel:'
+          other: 'Advarsler:'
+      category:
+        name_with_colon:
+          one: 'Kategori:'
+          other: 'Kategorier:'
+      character:
+        name_with_colon:
+          one: 'Karakter:'
+          other: 'Karakterer:'
+      fandom:
+        name_with_colon:
+          one: 'Fandom:'
+          other: 'Fandommer:'
+      freeform:
+        name_with_colon:
+          one: 'Ytterligere tagg:'
+          other: 'Ytterligere tagger:'
+      rating:
+        name_with_colon: 'Aldersgrense:'
+      relationship:
+        name_with_colon:
+          one: 'Forhold:'
+          other: 'Forhold:'
+      work:
+        summary: Sammendrag
+    models:
+      archive_warning:
+        one: Advarsel
+        other: Advarsler
+      category:
+        one: Kategori
+        other: Kategorier
+      chapter:
+        one: Kapittel
+        other: Kapitler
+      character:
+        one: Karakter
+        other: Karakterer
+      fandom:
+        one: Fandom
+        other: Fandommer
+      freeform:
+        one: Ytterligere tagg
+        other: Ytterligere tagger
+      rating:
+        one: Aldersgrense
+        other: Aldersgrenser
+      relationship:
+        one: Forhold
+        other: Forhold
+      series:
+        one: Serie
+        other: Serier
   kudo_mailer:
     batch_kudo_notification:
       guest:
@@ -23,6 +81,12 @@ nb:
       closing:
         formal: Med vennlig hilsen
         informal: Med vennlig hilsen
+      creation:
+        link_with_word_count: "%{creation_link} (%{word_count})"
+        title_with_word_count: '"%{creation_title}" (%{word_count})'
+        word_count:
+          one: "%{count} ord"
+          other: "%{count} ord"
       footer:
         general:
           html:
@@ -43,6 +107,7 @@ nb:
           addressed: Hei, %{name}!
           unaddressed: Hei!
         introductory: En hilsen fra Archive of Our Own – AO3 (Vårt eget arkiv)!
+      metadata_label_indicator: ": "
       signature:
         app_short_name: AO3
         open_doors: Teamet for Open Doors (Åpne Dører)

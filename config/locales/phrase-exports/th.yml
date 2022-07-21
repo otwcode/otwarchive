@@ -1,5 +1,48 @@
 ---
 th:
+  activerecord:
+    attributes:
+      archive_warning:
+        name_with_colon:
+          other: 'คำเตือน:'
+      category:
+        name_with_colon:
+          other: 'ประเภท:'
+      character:
+        name_with_colon:
+          other: 'ตัวละคร:'
+      fandom:
+        name_with_colon:
+          other: 'แฟนดอม:'
+      freeform:
+        name_with_colon:
+          other: 'แท็กเพิ่มเติม:'
+      rating:
+        name_with_colon: 'เรตติ้ง:'
+      relationship:
+        name_with_colon:
+          other: 'ความสัมพันธ์:'
+      work:
+        summary: คำโปรย
+    models:
+      archive_warning:
+        other: คำเตือน
+      category:
+        other: ประเภท
+      chapter:
+        other: บท
+      character:
+        other: ตัวละคร
+      fandom:
+        other: แฟนดอม
+      freeform:
+        other: แท็กเพิ่มเติม
+      rating:
+        other: เรตติ้ง
+      relationship:
+        other: ความสัมพันธ์
+      series:
+        other: ซีรีย์
   kudo_mailer:
     batch_kudo_notification:
       guest:
@@ -20,6 +63,11 @@ th:
       closing:
         formal: ด้วยความเคารพ
         informal: ด้วยความนับถือ
+      creation:
+        link_with_word_count: "%{creation_link} (%{word_count})"
+        title_with_word_count: '"%{creation_title}" (%{word_count})'
+        word_count:
+          other: "%{count} คำ"
       footer:
         general:
           html:
@@ -40,6 +88,7 @@ th:
           addressed: สวัสดี %{name}!
           unaddressed: สวัสดี!
         introductory: ขอทักทายจาก Archive of Our Own – AO3 (คลังเก็บข้อมูลของเราเอง)!
+      metadata_label_indicator: ": "
       signature:
         app_short_name: AO3
         open_doors: ทีม The Open Doors (โอเพนดอร์ส)

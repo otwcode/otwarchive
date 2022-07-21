@@ -57,7 +57,7 @@ gem 'resque', '>=1.14.0'
 gem 'resque-scheduler'
 gem 'after_commit_everywhere'
 #gem 'daemon-spawn', require: 'daemon_spawn'
-gem "elasticsearch", "7.16.1"
+gem "elasticsearch", "7.17.1"
 gem "aws-sdk-s3"
 gem 'css_parser'
 
@@ -123,15 +123,14 @@ group :test do
   gem "rspec-rails", "~> 4.0.1"
   gem 'pickle'
   gem 'shoulda'
-  gem 'capybara', '~> 2.16.1'
-  gem 'cucumber', '~> 3.1'
+  gem "capybara"
+  gem "cucumber"
   gem 'database_cleaner'
   gem 'poltergeist'
   gem 'capybara-screenshot'
   gem 'cucumber-rails', require: false
   gem 'launchy'    # So you can do Then show me the page
   gem 'delorean'
-  gem "faker"
   # Record and replay data from external URLs
   gem 'vcr', '~> 3.0', '>= 3.0.1'
   gem 'webmock', '~> 3.7.6'
@@ -149,12 +148,11 @@ group :test, :development do
   gem 'brakeman'
   gem 'pry-byebug'
   gem 'whiny_validation'
-  gem 'factory_bot', '~> 5.0.2'
+  gem "factory_bot_rails"
   gem 'minitest'
 end
 
 group :development do
-  gem 'factory_bot_rails'
   gem 'bundler-audit'
   gem 'active_record_query_trace', '~> 1.6', '>= 1.6.1'
 end
@@ -168,6 +166,8 @@ end
 
 group :test, :development, :staging do
   gem 'bullet', '>= 5.7.3'
+  gem "factory_bot", require: false
+  gem "faker", require: false
 end
 
 # Deploy with Capistrano

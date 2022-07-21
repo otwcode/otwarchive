@@ -1,5 +1,4 @@
 module CommentsHelper
-
   def value_for_comment_form(commentable, comment)
     commentable.is_a?(Tag) ? comment : [commentable, comment]
   end
@@ -13,17 +12,6 @@ module CommentsHelper
       title = link_to(commentable.commentable_name, commentable)
     end
     (ts('Reading Comments on ') + title).html_safe
-  end
-
-  def last_reply_by(comment)
-    if comment.count_all_comments > 0
-      c = Comment.where(thread: comment.id).order(created_at: :desc).first
-      if c.pseud
-        link_to c.pseud.name, [c.pseud.user, c.pseud]
-      else
-        c.name
-      end
-    end
   end
 
   def link_to_comment_ultimate_parent(comment)
@@ -111,11 +99,22 @@ module CommentsHelper
   #### HELPERS FOR CHECKING WHICH BUTTONS/FORMS TO DISPLAY #####
 
   def can_reply_to_comment?(comment)
-    !(comment.unreviewed? || comment.iced? || parent_disallows_comments?(comment) || comment_parent_hidden?(comment))
+    !(comment.unreviewed? ||
+      comment.iced? ||
+      comment.hidden_by_admin? ||
+      parent_disallows_comments?(comment) ||
+      comment_parent_hidden?(comment) ||
+      blocked_by_comment?(comment) ||
+      blocked_by?(comment.ultimate_parent))
   end
 
   def can_edit_comment?(comment)
-    is_author_of?(comment) && !comment.iced? && comment.count_all_comments.zero? && !comment_parent_hidden?(comment)
+    is_author_of?(comment) &&
+      !comment.iced? &&
+      comment.count_all_comments.zero? &&
+      !comment_parent_hidden?(comment) &&
+      !blocked_by_comment?(comment.commentable) &&
+      !blocked_by?(comment.ultimate_parent)
   end
 
   # Only an admin with proper authorization can mark a spam comment ham.
@@ -150,6 +149,10 @@ module CommentsHelper
     policy(comment).can_freeze_comment? ||
       comment.ultimate_parent.is_a?(Work) &&
         is_author_of?(comment.ultimate_parent)
+  end
+
+  def can_hide_comment?(comment)
+    policy(comment).can_hide_comment?
   end
 
   def comment_parent_hidden?(comment)
@@ -252,6 +255,14 @@ module CommentsHelper
     end
   end
 
+  def hide_comment_button(comment)
+    if comment.hidden_by_admin?
+      button_to ts("Make Comment Visible"), unhide_comment_path(comment), method: :put
+    else
+      button_to ts("Hide Comment"), hide_comment_path(comment), method: :put
+    end
+  end
+
   # Not a link or button, but included with them.
   def frozen_comment_indicator
     content_tag(:span, ts("Frozen"), class: "frozen current")
@@ -291,7 +302,7 @@ module CommentsHelper
   # gets the css user-<id> class name for the comment
   def commenter_id_for_css_classes(comment)
     return if comment.pseud.nil?
-    return if comment.ultimate_parent.try(:anonymous?) && comment.pseud.user.is_author_of?(comment.ultimate_parent)
+    return if comment.by_anonymous_creator?
     return if comment.is_deleted
     return if comment.hidden_by_admin
 
@@ -301,11 +312,12 @@ module CommentsHelper
   def css_classes_for_comment(comment)
     return if comment.nil?
 
+    unavailable = "unavailable" if comment.hidden_by_admin
     unreviewed = "unreviewed" if comment.unreviewed?
     commenter = commenter_id_for_css_classes(comment)
     official = "official" if commenter && comment&.pseud&.user&.official
 
-    "#{official} #{unreviewed} comment group #{commenter}".squish
+    "#{unavailable} #{official} #{unreviewed} comment group #{commenter}".squish
   end
 
   # find the parent of the commentable
@@ -340,5 +352,4 @@ module CommentsHelper
     parent = find_parent(commentable)
     parent.respond_to?(:moderated_commenting_enabled) && parent.moderated_commenting_enabled?
   end
-
 end
