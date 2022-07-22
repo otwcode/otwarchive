@@ -627,6 +627,12 @@ describe HtmlCleaner do
         end
       end
     end
+
+    it "parenthesizes ruby/furigana in title" do
+      pending "subject to discussion"
+      result = sanitize_value("title", "foo <ruby><rb>ルビ<rb><rp>(</rp><rt>RUBY</rt><rp>)</rp></ruby> bar")
+      expect(result).to eq("foo ルビ (RUBY) bar")
+    end
   end
 
   describe "fix_bad_characters" do
@@ -908,7 +914,7 @@ describe HtmlCleaner do
       expect(doc.xpath("./p[3]").children.to_s.strip).to eq("yadda")
     end
 
-    it "wraps ruby-annotated text in p tags" do
+    it "wraps ruby/furigana text in p tags" do
       result = add_paragraphs_to_text("some text with <ruby><rb>ルビ<rb><rp>(</rp><rt>RUBY</rt><rp>)</rp></ruby>")
       doc = Nokogiri::HTML.fragment(result)
       expect(doc.xpath("./p[1]").children.to_s.strip).to eq("some text with <ruby><rb>ルビ<rb></rb></rb><rp>(</rp><rt>RUBY</rt><rp>)</rp></ruby>")
