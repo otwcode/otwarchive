@@ -59,6 +59,34 @@ describe OtwSanitize::MediaSanitizer do
         expect(content).to match("flower.webm")
       end
 
+      it "does not close source elements" do
+        html = "
+          <video controls width='250'>
+            <source src='example.com/flower.webm' type='video/webm'>
+          </video>"
+        content = Sanitize.fragment(html, config)
+        expect(content).not_to match("</source>")
+      end
+
+      it "allows track elements" do
+        html = "
+          <video controls width='250'>
+            <track kind='subtitles' src='http://example.com/english.vtt' srclang='en'>
+            <track kind='subtitles' src='http://example.com/japanese.vtt' srclang='ja' default>
+          </video>"
+        content = Sanitize.fragment(html, config)
+        expect(content).to match("japanese.vtt")
+      end
+
+      it "does not close track elements" do
+        html = "
+          <video controls width='250'>
+            <track kind='subtitles' src='http://example.com/japanese.vtt' srclang='ja'>
+          </video>"
+        content = Sanitize.fragment(html, config)
+        expect(content).not_to match("</track>")
+      end
+
       it "does not remove internal html" do
         html = "<video>
           <p>Follow <a href='/xyz'>my link</a></p>
@@ -116,6 +144,17 @@ describe OtwSanitize::MediaSanitizer do
           content = Sanitize.fragment(html, config)
           expect(content).not_to match("source")
           expect(content).not_to match("flower.mp4")
+        end
+
+        it "strips the track element" do
+          html = "
+            <video controls width='250'>
+              <source src='https://google.com/flower.mp4' type='video/mp4'>
+              <track kind='subtitles' src='https://google.com/japanese.vtt' srclang='ja'>
+            </video>"
+          content = Sanitize.fragment(html, config)
+          expect(content).not_to match("track")
+          expect(content).not_to match("japanese.vtt")
         end
 
         it "strips the video element" do

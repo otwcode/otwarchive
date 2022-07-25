@@ -155,7 +155,7 @@ module OtwSanitize
       end
       return if mp3_urls.blank?
 
-      audio_fragment = Nokogiri::HTML::DocumentFragment.parse ""
+      audio_fragment = Nokogiri::HTML5::DocumentFragment.parse ""
       Nokogiri::HTML::Builder.with(audio_fragment) do |fragment|
         fragment.p do
           mp3_urls.each_with_index do |url, i|

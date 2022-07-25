@@ -38,6 +38,10 @@ module HtmlCleaner
       flatten.include?("p")
     end
 
+    def immediately_inside_paragraph?
+      flatten.select { |x| x.is_a? String }.last == "p"
+    end
+
     def ignore_tag?(tag)
       ["text", "myroot", "#cdata-section"].include?(tag)
     end
@@ -67,13 +71,18 @@ module HtmlCleaner
       end
     end
 
-    def close_and_pop_last
+    def close_and_pop_last(num = nil)
       result = ""
-      pop.reverse.each do |tag, attributes|
+      popped = pop.reverse
+      num ||= popped.size
+      popped[0...num].each do |tag, _|
         next if ignore_tag?(tag)
         result += "</#{tag}>"
       end
-      return result
+
+      push(popped[num..].reverse) unless popped[num..].empty?
+
+      result
     end
 
     def add_p
@@ -169,14 +178,9 @@ module HtmlCleaner
         unfrozen_value = add_paragraphs_to_text(Sanitize.clean(fix_bad_characters(unfrozen_value),
                                Sanitize::Config::ARCHIVE.merge(transformers: transformers))) unless field.to_s == "screencast"
       end
-      doc = Nokogiri::HTML::Document.new
+      doc = Nokogiri::HTML5::Document.new
       doc.encoding = "UTF-8"
-      unfrozen_value = doc.fragment(unfrozen_value).to_xhtml
-
-      # Hack! the herald angels sing
-      # TODO: AO3-5801 Switch to an HTML5 serializer that doesn't add invalid closing tags
-      # to track and source elements.
-      unfrozen_value.gsub!(%r{</(source|track)>}, "")
+      unfrozen_value = doc.fragment(unfrozen_value).to_html
     else
       # clean out all tags
       unfrozen_value = Sanitize.clean(fix_bad_characters(unfrozen_value))
@@ -241,13 +245,13 @@ module HtmlCleaner
 
   # Tags that can't be inside p tags
   def put_outside_p_tag?(tag)
-    %w[audio dl figure h1 h2 h3 h4 h5 h6 hr ol p pre source table track ul video].include?(tag)
+    %w[address audio blockquote center div dl figure h1 h2 h3 h4 h5 h6 hr ol p pre source table track ul video].include?(tag)
   end
 
   # Tags before and after which we don't want to convert linebreaks
   # into br's and p's
   def no_break_before_after_tag?(tag)
-    %w[audio blockquote br center dl div figcaption h1 h2 h3 h4 h5 h6
+    %w[audio blockquote br center div dl figcaption h1 h2 h3 h4 h5 h6
        hr ol p pre source table track ul video].include?(tag)
   end
 
@@ -258,8 +262,8 @@ module HtmlCleaner
   # creating a string with the resulting html and keep track of the
   # changed path to the current element via a stack.
   def traverse_nodes(node, stack=nil, out_html=nil)
-    stack = stack || TagStack.new
-    out_html = out_html || ""
+    stack ||= TagStack.new
+    out_html ||= ""
 
     # Convert double and triple br tags into paragraph breaks
     if node.name == "br" && node.previous_sibling && node.previous_sibling.name == "br" && node.previous_sibling.previous_sibling && node.previous_sibling.previous_sibling.name == "br"
@@ -278,7 +282,7 @@ module HtmlCleaner
     # this kind of tag
     if dont_touch_content_tag?(node.name)
       if put_inside_p_tag?(node.name) && !stack.inside_paragraph?
-        return [stack, out_html + "<p>#{node.to_s}</p>"]
+        return [stack, out_html + "<p>#{node}</p>"]
       end
 
       if put_outside_p_tag?(node.name) && stack.inside_paragraph?
@@ -290,20 +294,17 @@ module HtmlCleaner
     end
 
     if !node.text? && !node.cdata?
+      out_html += stack.close_and_pop_last(1) if put_outside_p_tag?(node.name) && stack.immediately_inside_paragraph?
+
       out_html += stack.add_p if put_inside_p_tag?(node.name) && !stack.inside_paragraph?
 
       stack << [[node.name, Hash[*(node.attribute_nodes.map { |n| [n.name, n.value] }.flatten)]]]
       out_html += open_tag(node)
 
       # If we are the root node, pre-emptively open a paragraph
-      if node.name == "myroot"
-        out_html += stack.add_p
-      end
+      out_html += stack.add_p if node.name == "myroot" && node.children.any? { |x| put_inside_p_tag?(x.name) || x.text? || x.cdata? }
 
-      if no_break_before_after_tag?(node.name) and !stack.last.include?("p")
-        out_html += stack.add_p
-      end
-
+      out_html += stack.add_p if no_break_before_after_tag?(node.name) && !stack.last.include?("p")
     else
       text = node.to_s
 
@@ -361,8 +362,9 @@ module HtmlCleaner
     end
 
     # Adding paragraphs in place of linebreaks
-    doc = Nokogiri::HTML.fragment("<myroot>#{text}</myroot>")
+    doc = Nokogiri::HTML5.fragment("<myroot>#{text}</myroot>")
     out_html = traverse_nodes(doc.at_css("myroot"))[1]
+
     # Remove empty paragraphs
     out_html.gsub!(/<p>\s*?<\/p>/, "")
     out_html.gsub!(/(\A<myroot>)|(<\/myroot>\Z)|(\A<myroot\/>\Z)/, "")

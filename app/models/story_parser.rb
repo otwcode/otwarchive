@@ -545,10 +545,25 @@ class StoryParser
   def parse_common(story, location = nil, encoding = nil, detect_tags = true)
     work_params = { title: "Untitled Imported Work", chapter_attributes: { content: "" } }
 
+    # check if the given encoding is valid, otherwise fallback to nil
+    begin
+      Encoding.find(encoding) if encoding
+    rescue ArgumentError
+      encoding = nil
+    end
+
     # Encode as HTML - the dummy "foo" tag will be stripped out by the sanitizer but forces Nokogiri to
     # preserve line breaks in plain text documents
     # Rescue all errors as Nokogiri complains about things the sanitizer will fix later
-    @doc = Nokogiri::HTML.parse(story.prepend("<foo/>"), nil, encoding) rescue ""
+    story.prepend("<foo><foo/>")
+    @doc = begin
+             # Using Nokogiri::HTML4 here for its better encoding handling.
+             # Sanitizer will make content HTML5 later anyway.
+             # https://nokogiri.org/rdoc/Nokogiri/HTML4/Document.html#method-c-parse
+             Nokogiri::HTML4.parse(story, nil, encoding)
+           rescue Object
+             Nokogiri::HTML4.parse("")
+           end
 
     # Try to convert all relative links to absolute
     base = @doc.at_css("base") ? @doc.css("base")[0]["href"] : location.split("?").first
@@ -701,7 +716,7 @@ class StoryParser
 
     # cleanup the notes
     notes.gsub!(%r{<br\s*\/?>}i, "\n") # replace the breaks with newlines
-    notes = clean_storytext(notes)
+    notes = clean_storytext(notes, "notes")
     work_params[:notes] = notes
 
     work_params.merge!(scan_text_for_meta(notes, detect_tags))
@@ -842,9 +857,9 @@ class StoryParser
   end
 
   # We clean the text as if it had been submitted as the content of a chapter
-  def clean_storytext(storytext)
+  def clean_storytext(storytext, field = "content")
     storytext = storytext.encode("UTF-8", invalid: :replace, undef: :replace, replace: "") unless storytext.encoding.name == "UTF-8"
-    sanitize_value("content", storytext)
+    sanitize_value(field, storytext)
   end
 
   # works conservatively -- doesn't split on

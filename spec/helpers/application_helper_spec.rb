@@ -364,4 +364,10 @@ describe ApplicationHelper do
       end
     end
   end
+
+  describe "#first_paragraph" do
+    it "extracts first paragraph" do
+      expect(first_paragraph("<p>first</p><p>second</p>")).to eq("<p>first</p>")
+    end
+  end
 end
