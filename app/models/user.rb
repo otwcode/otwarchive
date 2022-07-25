@@ -544,7 +544,7 @@ class User < ApplicationRecord
   end
 
   def log_change_if_login_was_edited
-    create_log_item(options = { action: ArchiveConfig.ACTION_RENAME, note: "Old Username: #{login_before_last_save}; New Username: #{login}" }) if saved_change_to_login?
+    create_log_item(action: ArchiveConfig.ACTION_RENAME, note: "Old Username: #{login_before_last_save}; New Username: #{login}") if saved_change_to_login?
   end
 
   def log_email_change
