@@ -302,7 +302,7 @@ module HtmlCleaner
       out_html += open_tag(node)
 
       # If we are the root node, pre-emptively open a paragraph
-      out_html += stack.add_p if node.name == "myroot" && node.children.any? { |x| put_inside_p_tag?(x.name) || x.text? || x.cdata? }
+      out_html += stack.add_p if node.name == "myroot"
 
       out_html += stack.add_p if no_break_before_after_tag?(node.name) && !stack.last.include?("p")
     else
