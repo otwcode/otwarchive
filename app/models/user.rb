@@ -313,7 +313,7 @@ class User < ApplicationRecord
   end
 
   def prevent_password_resets?
-    is_protected_user? || is_no_resets?
+    is_protected_user? || no_resets?
   end
 
   protected
@@ -421,7 +421,7 @@ class User < ApplicationRecord
 
   # Is this user assigned the no resets role? These users do no wish to receive
   # password resets.
-  def is_no_resets?
+  def no_resets?
     has_role?(:no_resets)
   end
 
