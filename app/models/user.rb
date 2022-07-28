@@ -549,8 +549,12 @@ class User < ApplicationRecord
 
   def log_email_change
     current_admin = User.current_user if User.current_user.is_a?(Admin)
-    note = current_admin ? "Change made by admin #{current_admin&.login}" : "Change made by user"
-    create_log_item(action: ArchiveConfig.ACTION_NEW_EMAIL, admin_id: current_admin&.id, note: note)
+    options = {
+      action: ArchiveConfig.ACTION_NEW_EMAIL,
+      admin_id: current_admin&.id
+    }
+    options[:note] = "Change made by admin #{current_admin&.login}" if current_admin
+    create_log_item(options)
   end
 
   def remove_stale_from_autocomplete

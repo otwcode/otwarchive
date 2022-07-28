@@ -136,24 +136,6 @@ describe User do
       expect(existing_user.renamed_at).to eq(Time.current)
     end
 
-    context "email is changed" do
-      before do
-        existing_user.update!(email: "newemail@example.com")
-        existing_user.reload
-      end
-
-      it "does not set renamed_at" do
-        expect(existing_user.renamed_at).to be_nil
-      end
-
-      it "creates a log item" do
-        log_item = existing_user.log_items.last
-        expect(log_item.action).to eq(ArchiveConfig.ACTION_NEW_EMAIL)
-        expect(log_item.admin_id).to be_nil
-        expect(log_item.note).to eq("Change made by user")
-      end
-    end
-
     context "username was recently changed" do
       before do
         freeze_time
@@ -184,6 +166,24 @@ describe User do
       it "allows another rename" do
         expect(existing_user.update(login: "new")).to be_truthy
         expect(existing_user.login).to eq("new")
+      end
+    end
+
+    context "when email is changed" do
+      before do
+        existing_user.update!(email: "newemail@example.com")
+        existing_user.reload
+      end
+
+      it "does not set renamed_at" do
+        expect(existing_user.renamed_at).to be_nil
+      end
+
+      it "creates a log item" do
+        log_item = existing_user.log_items.last
+        expect(log_item.action).to eq(ArchiveConfig.ACTION_NEW_EMAIL)
+        expect(log_item.admin_id).to be_nil
+        expect(log_item.note).to eq("System Generated")
       end
     end
 
