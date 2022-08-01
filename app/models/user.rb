@@ -313,6 +313,10 @@ class User < ApplicationRecord
     self.preference = Preference.new(preferred_locale: Locale.default.id)
   end
 
+  def prevent_password_resets?
+    is_protected_user? || no_resets?
+  end
+
   protected
     def first_save?
       self.new_record?
@@ -407,14 +411,19 @@ class User < ApplicationRecord
   end
 
   # Is this user a protected user? These are users experiencing certain types
-  # of harassment. For now, this is only used to prevent harassment via repeated
-  # password reset requests.
+  # of harassment.
   def protected_user
     self.is_protected_user?
   end
 
   def is_protected_user?
     has_role?(:protected_user)
+  end
+
+  # Is this user assigned the no resets role? These users do not wish to receive
+  # password resets.
+  def no_resets?
+    has_role?(:no_resets)
   end
 
   # Creates log item tracking changes to user
