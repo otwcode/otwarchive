@@ -540,7 +540,7 @@ GEM
     transaction_retry (1.0.3)
       activerecord (>= 3.0.11)
       transaction_isolation (>= 1.0.2)
-    tzinfo (1.2.9)
+    tzinfo (1.2.10)
       thread_safe (~> 0.1)
     unf (0.1.4)
       unf_ext
