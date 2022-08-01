@@ -193,7 +193,7 @@ class Work < ApplicationRecord
 
     users = parent.pseuds.collect(&:user).uniq
     users.each do |user|
-      self.errors.add(:base, ts("You can't use the related works function to cite works by #{user.login}.")) if user.protected_user
+      self.errors.add(:base, ts("You can't use the related works function to cite works by the protected user #{user.login}.")) if user.protected_user
     end
   end
 

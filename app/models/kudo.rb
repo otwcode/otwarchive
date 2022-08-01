@@ -12,14 +12,14 @@ class Kudo < ApplicationRecord
             presence: true,
             if: proc { |c| VALID_COMMENTABLE_TYPES.include?(c.commentable_type) }
 
-  validate :cannot_be_author
+  validate :cannot_be_author, on: :create
   def cannot_be_author
     return unless user&.is_author_of?(commentable)
 
     errors.add(:commentable, :author_on_own_work)
   end
 
-  validate :guest_cannot_kudos_restricted_work
+  validate :guest_cannot_kudos_restricted_work, on: :create
   def guest_cannot_kudos_restricted_work
     return unless user.blank? && commentable.is_a?(Work) && commentable.restricted?
 
@@ -47,6 +47,19 @@ class Kudo < ApplicationRecord
         RedisMailQueue.queue_kudo(user, self)
       end
     end
+  end
+
+  after_save :expire_caches
+  def expire_caches
+    if commentable_type == "Work"
+      # Expire the work's cached total kudos count.
+      Rails.cache.delete("works/#{commentable_id}/kudos_count-v2")
+      # If it's a guest kudo, also expire the work's cached guest kudos count.
+      Rails.cache.delete("works/#{commentable_id}/guest_kudos_count-v2") if user_id.nil?
+    end
+
+    # Expire the cached kudos section under the work.
+    ActionController::Base.new.expire_fragment("#{commentable.cache_key}/kudos-v3")
   end
 
   def notify_user_by_email?(user)
