@@ -128,7 +128,7 @@ describe User do
   end
 
   describe "#update" do
-    let(:existing_user) { create(:user) }
+    let!(:existing_user) { create(:user) }
 
     it "sets renamed_at if username is changed" do
       freeze_time
@@ -192,7 +192,7 @@ describe User do
 
       before do
         User.current_user = admin
-        existing_user.update!(email: "new_email@example.com", profile: nil)
+        existing_user.update!(email: "new_email@example.com")
         existing_user.reload
       end
 
