@@ -178,7 +178,7 @@ describe User do
       before do 
         new_pseud.user_id = existing_user.id
         existing_user.pseuds << new_pseud
-        expect(existing_user.update(login: "new_username")).to be_truthy
+        existing_user.update(login: "new_username")
         existing_user.reload
       end
       it "pseud's capitalization and diacretics were changed to match the new username's" do 
