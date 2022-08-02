@@ -173,6 +173,20 @@ describe User do
         expect(existing_user.login).to eq("new")
       end
     end
+    context "username was changed to name of existing pseud except with alternate capitalization and diacretics" do
+      let(:new_pseud) { build(:pseud, name: "New_Usernamé") }
+      before do 
+        new_pseud.user_id = existing_user.id
+        existing_user.pseuds << new_pseud
+        expect(existing_user.update(login: "new_username")).to be_truthy
+        existing_user.reload
+      end
+      it "pseud's capitalization and diacretics were changed to match the new username's" do 
+        expect(existing_user.pseuds.size).to eq(2)
+        expect(existing_user.pseuds.second.name).to eq(existing_user.login)
+        expect(existing_user.login).to eq("new_username")
+      end
+    end
   end
 
   describe ".search_multiple_by_email" do

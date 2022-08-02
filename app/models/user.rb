@@ -526,7 +526,7 @@ class User < ApplicationRecord
       old_pseud.save!
     else
       new_pseud = pseuds.where(name: login).first
-      # do nothing if they already have the matching pseud
+      # If they already have the matching pseud change old pseud to match captalization and diacritics of new pseud.
       if new_pseud.blank?
         if old_pseud.present?
           # change the old pseud to match
@@ -536,6 +536,9 @@ class User < ApplicationRecord
           # shouldn't be able to get here, but just in case
           Pseud.create!(name: login, user_id: id)
         end
+      else
+        new_pseud.name = login
+        new_pseud.save!(validate: false)
       end
     end
   end
