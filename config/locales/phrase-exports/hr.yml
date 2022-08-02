@@ -3,20 +3,24 @@ hr:
   kudo_mailer:
     batch_kudo_notification:
       guest:
-        few: "%{count} gostiju"
+        few: "%{count} gosta"
         one: "%{count} gost"
         other: "%{count} gostiju"
       html:
         left_kudos:
           few: "%{givers_list} ostavili su kudos na %{commentable_link}."
           one: "%{givers_list} ostavio/la je kudos na %{commentable_link}."
-          other: "%{givers_list} ostavili su kudos na %{commentable_link}."
+          other: "%{givers_list} ostavilo je kudos na %{commentable_link}."
+        single_guest:
+          giver_list: Gost
+          left_kudos: "%{giver_list} ostavio/la je kudos na %{commentable_link}."
       subject: "[%{app_name}] Dobili ste kudos!"
       text:
         left_kudos:
           few: "%{givers_list} ostavili su kudos na %{commentable_title} (%{commentable_url})."
           one: "%{givers_list} ostavio/la je kudos na %{commentable_title} (%{commentable_url})."
-          other: "%{givers_list} ostavili su kudos na %{commentable_title} (%{commentable_url})."
+          other: "%{givers_list} ostavilo je kudos na %{commentable_title} (%{commentable_url})."
+        single_guest: Gost je ostavio/la kudos na %{commentable_title} (%{commentable_url}).
   mailer:
     general:
       closing:

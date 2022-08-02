@@ -1,4 +1,4 @@
-<% creation_type = @creation.model_name.human.downcase %>
+<% creation_type = @creation.class.name.underscore %>
 <% content_for :message do %>
   <p>
     <%= t(".intro_#{creation_type}", adding_user: @adding_user.login, pseud: @creatorship.pseud.name) %>
