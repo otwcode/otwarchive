@@ -447,15 +447,8 @@ $j(document).ready(function() {
           msg = "Sorry, you can't leave more kudos right now. Please try again in a few minutes.";
         } else {
           var data = $j.parseJSON(jqXHR.responseText);
-
-          if (data.errors && (data.errors.ip_address || data.errors.user_id)) {
-            msg = "You have already left kudos here. :)";
-          }
-          if (data.errors && data.errors.cannot_be_author) {
-            msg = "You can't leave kudos on your own work.";
-          }
-          if (data.errors && data.errors.guest_on_restricted) {
-            msg = "You can't leave guest kudos on a restricted work.";
+          if (data.error_message) {
+            msg = data.error_message;
           }
         }
 

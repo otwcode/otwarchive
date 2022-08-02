@@ -38,7 +38,7 @@ services:
     volumes:
       - redis-data:/var/lib/redis:rw
   es:
-    image: docker.elastic.co/elasticsearch/elasticsearch:7.16.1
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.17.5
     ports:
       - "9200:9200"
       - "9300:9300"

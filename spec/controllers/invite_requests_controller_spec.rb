@@ -181,13 +181,13 @@ describe InviteRequestsController do
     context "when logged in as admin" do
       let(:ip) { "127.0.0.1" }
       let(:ip_2) { "128.0.0.1" }
-      let!(:invite_request_1) { create(:invite_request, position: 9001, ip_address: ip_2) }
-      let!(:invite_request_2) { create(:invite_request, position: 2) }
-      let!(:invite_request_3) { create(:invite_request, position: 7) }
+      let!(:invite_request_1) { create(:invite_request, id: 9001, ip_address: ip_2) }
+      let!(:invite_request_2) { create(:invite_request, id: 2) }
+      let!(:invite_request_3) { create(:invite_request, id: 7) }
       let!(:invite_request_4) do
         create(
           :invite_request,
-          position: 500,
+          id: 500,
           email: "hello_world@gmail.com",
           ip_address: ip
         )
@@ -218,59 +218,6 @@ describe InviteRequestsController do
           invite_request_4,
           invite_request_1
         ])
-      end
-    end
-  end
-
-  describe "POST #reorder" do
-    it "blocks non-admins" do
-      post :reorder
-      it_redirects_to_with_notice(root_path, "I'm sorry, only an admin can look at that area")
-
-      fake_login
-      post :reorder
-      it_redirects_to_with_notice(root_path, "I'm sorry, only an admin can look at that area")
-    end
-
-    context "when logged in as admin" do
-      before { fake_login_admin(admin) }
-
-      context "given invite requests out of order" do
-        let!(:invite_request_1) { create(:invite_request, position: 9001) }
-        let!(:invite_request_2) { create(:invite_request, position: 2) }
-        let!(:invite_request_3) { create(:invite_request, position: 7) }
-
-        it "redirects to manage with notice" do
-          post :reorder
-          it_redirects_to_with_notice(manage_invite_requests_path, "The queue has been successfully updated.")
-
-          invite_request_1.reload
-          invite_request_2.reload
-          invite_request_3.reload
-
-          # Positions corrected
-          expect(InviteRequest.order(:position)).to eq([invite_request_2, invite_request_3, invite_request_1])
-          expect(invite_request_1.position).to eq(3)
-          expect(invite_request_2.position).to eq(1)
-          expect(invite_request_3.position).to eq(2)
-        end
-      end
-
-      it "redirects to manage with notice given no invite requests" do
-        # with nothing to order, technically everything's in order
-        expect(InviteRequest.count).to eq(0)
-        post :reorder
-        it_redirects_to_with_notice(manage_invite_requests_path, "The queue has been successfully updated.")
-      end
-
-      context "when the first invite request is already in the correct position" do
-        let(:invite_request) { create(:invite_request) }
-
-        it "redirects to manage with error" do
-          expect(invite_request.position).to eq(1)
-          post :reorder
-          it_redirects_to_with_error(manage_invite_requests_path, "Something went wrong. Please try that again.")
-        end
       end
     end
   end

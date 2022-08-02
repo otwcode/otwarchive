@@ -26,6 +26,16 @@ en:
             user_defined_tags_count:
               at_most:
                 "must not add up to more than %{count}. You have entered %{value} of these tags, so you must remove %{diff} of them."
+        kudo:
+          attributes:
+            commentable:
+              author_on_own_work: "You can't leave kudos on your own work."
+              blank: "What did you want to leave kudos on?"
+              guest_on_restricted: "You can't leave guest kudos on a restricted work."
+            commentable_type:
+              inclusion: "What did you want to leave kudos on?"
+          format: "%{message}"
+          taken: "You have already left kudos here. :)"
         user:
           attributes:
             password_confirmation:
