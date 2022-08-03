@@ -11,12 +11,16 @@ uk:
           few: Кудос для %{commentable_link} від %{givers_list}.
           many: Кудос для %{commentable_link} від %{givers_list}.
           one: Кудос для %{commentable_link} від %{givers_list}.
+        single_guest:
+          giver_list: гостя
+          left_kudos: Кудос для %{commentable_link} від %{giver_list}.
       subject: "[%{app_name}] Ви отримали кудос!"
       text:
         left_kudos:
           few: Кудос для %{commentable_title} (%{commentable_url}) від %{givers_list}.
           many: Кудос для %{commentable_title} (%{commentable_url}) від %{givers_list}.
           one: Кудос для %{commentable_title} (%{commentable_url}) від %{givers_list}.
+        single_guest: Кудос для %{commentable_title} (%{commentable_url}) від гостя.
   mailer:
     general:
       closing:

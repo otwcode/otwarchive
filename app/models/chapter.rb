@@ -11,7 +11,6 @@ class Chapter < ApplicationRecord
   # acts_as_list scope: 'work_id = #{work_id}'
 
   acts_as_commentable
-  has_many :kudos, as: :commentable
 
   validates_length_of :title, allow_blank: true, maximum: ArchiveConfig.TITLE_MAX,
     too_long: ts("must be less than %{max} characters long.", max: ArchiveConfig.TITLE_MAX)

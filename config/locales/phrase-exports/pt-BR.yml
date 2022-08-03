@@ -171,6 +171,7 @@ pt-BR:
       tag:
         one: Tag
         other: Tags
+      work: Obra
   admin:
     admin_options:
       delete:
