@@ -86,6 +86,10 @@ fieldset.comments, .comment .userstuff {
   margin: 1.286em 0.643em 0.25em;
 }
 
+.comment .message {
+  padding: 0.643em;
+}
+
 /* mods */
 
 .abbreviated .icon {

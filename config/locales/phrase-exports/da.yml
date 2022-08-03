@@ -1,5 +1,63 @@
 ---
 da:
+  activerecord:
+    attributes:
+      archive_warning:
+        name_with_colon:
+          one: 'Advarsel:'
+          other: 'Advarsler:'
+      category:
+        name_with_colon:
+          one: 'Kategori:'
+          other: 'Kategorier:'
+      character:
+        name_with_colon:
+          one: 'Karakter:'
+          other: 'Karakterer:'
+      fandom:
+        name_with_colon:
+          one: 'Fandom:'
+          other: 'Fandoms:'
+      freeform:
+        name_with_colon:
+          one: 'Yderligere tag:'
+          other: 'Yderligere tags:'
+      rating:
+        name_with_colon: 'Klassificering:'
+      relationship:
+        name_with_colon:
+          one: 'Forhold:'
+          other: 'Forhold:'
+      work:
+        summary: Resumé
+    models:
+      archive_warning:
+        one: Advarsel
+        other: Advarsler
+      category:
+        one: Kategori
+        other: Kategorier
+      chapter:
+        one: Kapitel
+        other: Kapitler
+      character:
+        one: Karakter
+        other: Karakterer
+      fandom:
+        one: Fandom
+        other: Fandoms
+      freeform:
+        one: Yderligere tag
+        other: Yderligere tags
+      rating:
+        one: Klassificering
+        other: Klassificeringer
+      relationship:
+        one: Forhold
+        other: Forhold
+      series:
+        one: Serie
+        other: Serier
   kudo_mailer:
     batch_kudo_notification:
       guest:
@@ -23,6 +81,12 @@ da:
       closing:
         formal: Med venlig hilsen,
         informal: Venlig hilsen,
+      creation:
+        link_with_word_count: "%{creation_link} (%{word_count})"
+        title_with_word_count: '"%{creation_title}" (%{word_count})'
+        word_count:
+          one: "%{count} ord"
+          other: "%{count} ord"
       footer:
         general:
           html:
@@ -42,6 +106,7 @@ da:
           addressed: Hej %{name}!
           unaddressed: Hej!
         introductory: Hej fra Archive of Our Own – AO3 (Vores Eget Arkiv)!
+      metadata_label_indicator: ": "
       signature:
         app_short_name: AO3
         open_doors: The Open Doors (Åbne døre) team

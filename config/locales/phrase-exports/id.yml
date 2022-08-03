@@ -1,5 +1,48 @@
 ---
 id:
+  activerecord:
+    attributes:
+      archive_warning:
+        name_with_colon:
+          other: 'Peringatan:'
+      category:
+        name_with_colon:
+          other: 'Kategori:'
+      character:
+        name_with_colon:
+          other: 'Karakter:'
+      fandom:
+        name_with_colon:
+          other: 'Fandom:'
+      freeform:
+        name_with_colon:
+          other: 'Label Tambahan:'
+      rating:
+        name_with_colon: 'Rating:'
+      relationship:
+        name_with_colon:
+          other: 'Pasangan:'
+      work:
+        summary: Sinopsis
+    models:
+      archive_warning:
+        other: Peringatan
+      category:
+        other: Kategori
+      chapter:
+        other: Bab
+      character:
+        other: Karakter
+      fandom:
+        other: Fandom
+      freeform:
+        other: Label Tambahan
+      rating:
+        other: Rating
+      relationship:
+        other: Pasangan
+      series:
+        other: Seri
   kudo_mailer:
     batch_kudo_notification:
       guest:
@@ -22,6 +65,11 @@ id:
       closing:
         formal: Dengan hormat,
         informal: Salam,
+      creation:
+        link_with_word_count: "%{creation_link} (%{word_count})"
+        title_with_word_count: '"%{creation_title}" (%{word_count})'
+        word_count:
+          other: "%{count} kata"
       footer:
         general:
           html:
@@ -42,6 +90,7 @@ id:
           addressed: Halo %{name}!
           unaddressed: Halo!
         introductory: Halo dari Archive of Our Own – AO3 (Arsip Milik Kita)!
+      metadata_label_indicator: ": "
       signature:
         app_short_name: AO3
         open_doors: Tim Open Doors (Pintu Terbuka)

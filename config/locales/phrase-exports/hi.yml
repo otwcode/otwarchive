@@ -1,5 +1,63 @@
 ---
 hi:
+  activerecord:
+    attributes:
+      archive_warning:
+        name_with_colon:
+          one: 'चेतावनी:'
+          other: 'चेतावनियाँ:'
+      category:
+        name_with_colon:
+          one: 'वर्ग:'
+          other: 'वर्ग:'
+      character:
+        name_with_colon:
+          one: 'पात्र:'
+          other: 'पात्र:'
+      fandom:
+        name_with_colon:
+          one: 'प्रशंसक समूह:'
+          other: 'प्रशंसक समूह:'
+      freeform:
+        name_with_colon:
+          one: 'अतिरिक्त टैग:'
+          other: 'अतिरिक्त टैग्स:'
+      rating:
+        name_with_colon: 'रेटिंग:'
+      relationship:
+        name_with_colon:
+          one: 'संबंध:'
+          other: 'संबंध:'
+      work:
+        summary: सारांश
+    models:
+      archive_warning:
+        one: चेतावनी
+        other: चेतावनियाँ
+      category:
+        one: वर्ग
+        other: वर्ग
+      chapter:
+        one: अध्याय
+        other: अध्याय
+      character:
+        one: पात्र
+        other: पात्र
+      fandom:
+        one: प्रशंसक समूह
+        other: प्रशंसक समूह
+      freeform:
+        one: अतिरिक्त टैग
+        other: अतिरिक्त टैग्स
+      rating:
+        one: रेटिंग
+        other: रेटिंग्स
+      relationship:
+        one: संबंध
+        other: संबंध
+      series:
+        one: श्रृंखला
+        other: श्रृंखला
   kudo_mailer:
     batch_kudo_notification:
       guest:
@@ -26,6 +84,12 @@ hi:
       closing:
         formal: निष्ठा से,
         informal: उत्तम,
+      creation:
+        link_with_word_count: "%{creation_link} (%{word_count})"
+        title_with_word_count: '"%{creation_title}" (%{word_count})'
+        word_count:
+          one: "%{count} शब्द"
+          other: "%{count} शब्द"
       footer:
         general:
           html:
@@ -46,6 +110,7 @@ hi:
           addressed: नमस्कार, %{name}!
           unaddressed: नमस्कार!
         introductory: Archive of Our Own AO3 (हमारा अपना संग्रह) – से नमस्कार!
+      metadata_label_indicator: ": "
       signature:
         app_short_name: AO3
         open_doors: Open Doors (खुले दरवाज़े) समिति
