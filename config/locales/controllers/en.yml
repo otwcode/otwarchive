@@ -55,9 +55,30 @@ en:
     success: 
       one: "Added to collection: %{collections}."
       other: "Added to collections: %{collections}."
-    invited: "This work has been <a href=\"%{link}?invited=true\">invited</a> to your collection (%{collection})."
+    invited: "This work has been %{invited_url} to your collection (%{collection})."
     submitted:
       one: "You have submitted your %{item} to the moderated collection '%{all_collections}'. It will not become a part of the collection until it has been approved by a moderator."
       other: "You have submitted your %{item} to the moderated collections '%{all_collections}'. It will not become a part of those collections until it has been approved by a moderator."
     update_success: Collection status updated!
     destroy: "Item completely removed from collection %{title}."
+  bookmarks:
+    pseud_error: You can't bookmark with that pseud.
+    buttons:
+      create: Create
+      search: Search Bookmarks
+      update: Update
+    query_heading: "Bookmarks Matching '%{query}'"
+    bookmark_created: Bookmark was successfully created. It should appear in bookmark listings within the next few minutes.
+    collection_not_found: "%{name} does not exist."
+    errors:
+      closed: "%{collection_title} is closed to new submissions."
+      general_error: "Something went wrong trying to add collection %{name}, sorry!"
+    error_list:
+      one: "We couldn't add your submission to the following collection:"
+      other: "We couldn't add your submission to the following collections:"
+    success: 
+      one: "Added to collection: %{collections}."
+      other: "Added to collections: %{collections}."
+    submitted:
+      one: "You have submitted your %{item} to the moderated collection '%{all_collections}'. It will not become a part of the collection until it has been approved by a moderator."
+      other: "You have submitted your %{item} to the moderated collections '%{all_collections}'. It will not become a part of those collections until it has been approved by a moderator."

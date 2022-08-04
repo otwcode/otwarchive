@@ -16,7 +16,7 @@ class BookmarksController < ApplicationController
     if params[:bookmark][:pseud_id]
       pseud = Pseud.find(bookmark_params[:pseud_id])
       unless pseud && current_user && current_user.pseuds.include?(pseud)
-        flash[:error] = ts("You can't bookmark with that pseud.")
+        flash[:error] = t(".pseud_error")
         redirect_to root_path and return
       end
     end
@@ -48,10 +48,10 @@ class BookmarksController < ApplicationController
     options[:show_private] = false
     options[:show_restricted] = logged_in? || logged_in_as_admin?
     @search = BookmarkSearchForm.new(options)
-    @page_subtitle = ts("Search Bookmarks")
+    @page_subtitle = t(".buttons.search")
     if params[:bookmark_search].present? && params[:edit_search].blank?
       if @search.query.present?
-        @page_subtitle = ts("Bookmarks Matching '%{query}'", query: @search.query)
+        @page_subtitle = t(".query_heading", query: @search.query)
       end
       @bookmarks = @search.search_results
       flash_search_warnings(@bookmarks)
@@ -163,7 +163,7 @@ class BookmarksController < ApplicationController
     respond_to do |format|
       format.html
       format.js {
-        @button_name = ts("Create")
+        @button_name = t(".buttons.create")
         @action = :create
         render action: "bookmark_form_dynamic"
       }
@@ -176,7 +176,7 @@ class BookmarksController < ApplicationController
     respond_to do |format|
       format.html
       format.js {
-        @button_name = ts("Update")
+        @button_name = t("buttons.update")
         @action = :update
         render action: "bookmark_form_dynamic"
       }
@@ -189,7 +189,7 @@ class BookmarksController < ApplicationController
     @bookmarkable ||= ExternalWork.new(external_work_params)
     @bookmark = Bookmark.new(bookmark_params.merge(bookmarkable: @bookmarkable))
     if @bookmark.errors.empty? && @bookmark.save
-      flash[:notice] = ts("Bookmark was successfully created. It should appear in bookmark listings within the next few minutes.")
+      flash[:notice] = t(".bookmark_created")
       redirect_to(bookmark_path(@bookmark))
     else
       render :new
@@ -205,12 +205,12 @@ class BookmarksController < ApplicationController
     bookmark_params[:collection_names]&.split(",")&.map(&:strip)&.uniq&.each do |collection_name|
       collection = Collection.find_by(name: collection_name)
       if collection.nil?
-        errors << ts("#{collection_name} does not exist.")
+        errors << t(".collection_not_found", name: collection_name)
       else
         if @bookmark.collections.include?(collection)
           next
         elsif collection.closed? && !collection.user_is_maintainer?(User.current_user)
-          errors << ts("#{collection.title} is closed to new submissions.")
+          errors << t(".errors.closed", collection_title: collection.title)
         elsif @bookmark.add_to_collection(collection) && @bookmark.save
           if @bookmark.approved_collections.include?(collection)
             new_collections << collection
@@ -218,30 +218,24 @@ class BookmarksController < ApplicationController
             unapproved_collections << collection
           end
         else
-          errors << ts("Something went wrong trying to add collection #{collection.title}, sorry!")
+          errors << t(".errors.general_error", name: collection.title)
         end
       end
     end
-
     # messages to the user
+    notices = []
     unless errors.empty?
-      flash[:error] = ts("We couldn't add your submission to the following collections: ") + errors.join("<br />")
+      flash[:error] = t(".error_list", count: errors.count) + "<br><ul><li />" + errors.join("<li />") + "</ul>"
     end
-
     unless new_collections.empty?
-      flash[:notice] = ts("Added to collection(s): %{collections}.",
-                          collections: new_collections.collect(&:title).join(", "))
+      notices << t(".success", count: new_collections.size, collections: new_collections.collect(&:title).join(", "))
     end
     unless unapproved_collections.empty?
-      flash[:notice] = flash[:notice] ? flash[:notice] + " " : ""
-      flash[:notice] += if unapproved_collections.size > 1
-                          ts("You have submitted your bookmark to moderated collections (%{all_collections}). It will not become a part of those collections until it has been approved by a moderator.", all_collections: unapproved_collections.map(&:title).join(", "))
-                        else
-                          ts("You have submitted your bookmark to the moderated collection '%{collection}'. It will not become a part of the collection until it has been approved by a moderator.", collection: unapproved_collections.first.title)
-                        end
+      collection_item_type = params[:bookmark_id] ? "bookmark" : "work"
+      notices << t(".submitted", count: unapproved_collections.size, item: collection_item_type, all_collections: unapproved_collections.map(&:title).join(", "))
     end
 
-    flash[:notice] = (flash[:notice]).html_safe unless flash[:notice].blank?
+    flash[:notice] = (notices.join("<br/>")).html_safe unless notices.empty?
     flash[:error] = (flash[:error]).html_safe unless flash[:error].blank?
 
     if @bookmark.update(bookmark_params) && errors.empty?

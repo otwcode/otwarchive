@@ -133,19 +133,16 @@ class CollectionItemsController < ApplicationController
     unless errors.empty?
       flash[:error] = t(".error_list", count: errors.count) + "<br><ul><li />" + errors.join("<li />") + "</ul>"
     end
-    #notices << "" unless new_collections.empty? && unapproved_collections.empty?
     unless new_collections.empty?
       notices << t(".success", count: new_collections.size, collections: new_collections.collect(&:title).join(", "))
     end
     unless invited_collections.empty?
       invited_collections.each do |needs_user_approval|
-      #  flash[:notice] ||= ""
-        notices << t(".invited", link: collection_items_path(needs_user_approval), collection: needs_user_approval.title).html_safe
+        notices << t(".invited", invited_url: view_context.link_to("invited", collection_items_path(needs_user_approval, invited: true)), collection: needs_user_approval.title)
       end
     end
     unless unapproved_collections.empty?
       collection_item_type = params[:bookmark_id] ? "bookmark" : "work"
-      #flash[:notice] ||= ""
       notices << t(".submitted", count: unapproved_collections.size, item: collection_item_type, all_collections: unapproved_collections.map(&:title).join(", "))
     end
 

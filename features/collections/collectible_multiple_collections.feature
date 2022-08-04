@@ -50,7 +50,7 @@ Feature: Collectible items in multiple collections
       And I view the work "Some Work"
       And I fill in "Collection name(s):" with "MyCollection"
       And I press "Add"
-    Then I should see "We couldn't add your submission to the following collection(s):"
+    Then I should see "We couldn't add your submission to the following collection:"
       And I should see "MyCollection, because you don't own this item and the item is anonymous."
 
   Scenario: Work creator can add their own anonymous work to a collection using
@@ -62,4 +62,4 @@ Feature: Collectible items in multiple collections
     When I view the work "Some Work"
       And I fill in "Collection name(s):" with "OtherCollection"
       And I press "Add"
-    Then I should see "Added to collection(s): OtherCollection."
+    Then I should see "Added to collection: OtherCollection."
