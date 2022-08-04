@@ -231,8 +231,7 @@ class BookmarksController < ApplicationController
       notices << t(".success", count: new_collections.size, collections: new_collections.collect(&:title).join(", "))
     end
     unless unapproved_collections.empty?
-      collection_item_type = params[:bookmark_id] ? "bookmark" : "work"
-      notices << t(".submitted", count: unapproved_collections.size, item: collection_item_type, all_collections: unapproved_collections.map(&:title).join(", "))
+      notices << t(".submitted", count: unapproved_collections.size, all_collections: unapproved_collections.map(&:title).join(", "))
     end
 
     flash[:notice] = notices.join("<br/>").html_safe unless notices.empty?

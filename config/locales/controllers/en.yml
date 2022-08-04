@@ -80,5 +80,5 @@ en:
       one: "Added to collection: %{collections}."
       other: "Added to collections: %{collections}."
     submitted:
-      one: "You have submitted your %{item} to the moderated collection '%{all_collections}'. It will not become a part of the collection until it has been approved by a moderator."
-      other: "You have submitted your %{item} to the moderated collections '%{all_collections}'. It will not become a part of those collections until it has been approved by a moderator."
+      one: "You have submitted your bookmark to the moderated collection '%{all_collections}'. It will not become a part of the collection until it has been approved by a moderator."
+      other: "You have submitted your bookmark to the moderated collections '%{all_collections}'. It will not become a part of those collections until it has been approved by a moderator."
