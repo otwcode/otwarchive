@@ -236,7 +236,7 @@ class BookmarksController < ApplicationController
     end
 
     flash[:notice] = notices.join("<br/>").html_safe unless notices.empty?
-    flash[:error] = flash[:error].html_safe unless flash[:error].blank?
+    flash[:error] = flash[:error].html_safe if flash[:error].present?
 
     if @bookmark.update(bookmark_params) && errors.empty?
       flash[:notice] = flash[:notice] ? " " + flash[:notice] : ""

@@ -146,8 +146,8 @@ class CollectionItemsController < ApplicationController
       notices << t(".submitted", count: unapproved_collections.size, item: collection_item_type, all_collections: unapproved_collections.map(&:title).join(", "))
     end
 
-    flash[:notice] = (notices.join("<br/>")).html_safe unless notices.empty?
-    flash[:error] = (flash[:error]).html_safe unless flash[:error].blank?
+    flash[:notice] = notices.join("<br/>").html_safe unless notices.empty?
+    flash[:error] = flash[:error].html_safe if flash[:error].present?
 
     redirect_to(@item)
   end
