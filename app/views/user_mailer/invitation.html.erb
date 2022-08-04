@@ -1,9 +1,5 @@
 <% content_for :message do %>
   <p>
-    <%= t("mailer.general.greeting.introductory") %>
-  </p>
-
-  <p>
     <% if !@user_name.blank? %>
       <%= t(".has_invited", user_name: style_bold(@user_name)).html_safe %>
     <% else %>
