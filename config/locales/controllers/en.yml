@@ -36,3 +36,28 @@ en:
       create:
         contact_abuse: contact Policy & Abuse
         reset_blocked: Password resets are disabled for that user. For more information, please %{contact_abuse_link}.
+  collection_items:
+    permission_denied: You don't have permission to see that, sorry!
+    no_collection: What collections did you want to add?
+    no_item: What did you want to add to a collection?
+    errors:
+      not_found: "%{name}, because we couldn't find a collection with that name. Make sure you are using the one-word name, and not the title."
+      invitation_rejected: "%{collection_title}, because the %{object_type}'s owner has rejected the invitation."
+      already_submitted: "%{collection_title}, because this item has already been submitted."
+      closed: "%{collection_title} is closed to new submissions."
+      collection_anonymous_or_unrevealed: "%{collection_title}, because you don't own this item and the collection is anonymous or unrevealed."
+      own_nor_moderate: "%{collection_title}, either you don't own this item or are not a moderator of the collection."
+      item_anonymous: "%{collection_title}, because you don't own this item and the item is anonymous."
+      general_error: "Something went wrong trying to add collection %{name}, sorry!"
+    error_list:
+      one: "We couldn't add your submission to the following collection:"
+      other: "We couldn't add your submission to the following collections:"
+    success: 
+      one: "Added to collection: %{collections}."
+      other: "Added to collections: %{collections}."
+    invited: "This work has been <a href=\"%{link}?invited=true\">invited</a> to your collection (%{collection})."
+    submitted:
+      one: "You have submitted your %{item} to the moderated collection '%{all_collections}'. It will not become a part of the collection until it has been approved by a moderator."
+      other: "You have submitted your %{item} to the moderated collections '%{all_collections}'. It will not become a part of those collections until it has been approved by a moderator."
+    update_success: Collection status updated!
+    destroy: "Item completely removed from collection %{title}."
