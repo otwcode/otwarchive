@@ -271,8 +271,9 @@ jQuery(document).ready(function() {
                             }
 
                             // key events triggered from outside the modal should also die,
-                            // except for ctrl combinations like ctrl+c
-                            if (escKey || (!targetInModal && !event.ctrlKey) || enterKey && !targetIsInput) {
+                            // except for ctrl combinations like ctrl+c (or cmd+c on macOS)
+                            var keyShortcut = event.ctrlKey || event.metaKey;
+                            if (escKey || (!targetInModal && !keyShortcut) || enterKey && !targetIsInput) {
                                 event.preventDefault();
                                 event.stopPropagation();
                             }

@@ -47,6 +47,9 @@ en:
       error: Sorry, that comment could not be unhidden.
       permission_denied: Sorry, you don't have permission to unhide that comment.
       success: Comment successfully unhidden!
+  kudos:
+    create:
+      success: Thank you for leaving kudos!
   users:
     passwords:
       create:

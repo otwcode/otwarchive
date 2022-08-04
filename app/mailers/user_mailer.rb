@@ -253,13 +253,11 @@ class UserMailer < ApplicationMailer
     @archivist = User.find(archivist_id)
     @user = @creatorship.pseud.user
     @creation = @creatorship.creation
-    I18n.with_locale(Locale.find(@user.preference.preferred_locale).iso) do
-      mail(
-        to: @user.email,
-        subject: t("user_mailer.creatorship_notification_archivist.subject",
-                   app_name: ArchiveConfig.APP_SHORT_NAME)
-      )
-    end
+    mail(
+      to: @user.email,
+      subject: t("user_mailer.creatorship_notification_archivist.subject",
+                 app_name: ArchiveConfig.APP_SHORT_NAME)
+    )
   end
 
   # Sends email when a user is added as a co-creator
@@ -268,13 +266,11 @@ class UserMailer < ApplicationMailer
     @adding_user = User.find(adding_user_id)
     @user = @creatorship.pseud.user
     @creation = @creatorship.creation
-    I18n.with_locale(Locale.find(@user.preference.preferred_locale).iso) do
-      mail(
-        to: @user.email,
-        subject: t("user_mailer.creatorship_notification.subject",
-                   app_name: ArchiveConfig.APP_SHORT_NAME)
-      )
-    end
+    mail(
+      to: @user.email,
+      subject: t("user_mailer.creatorship_notification.subject",
+                 app_name: ArchiveConfig.APP_SHORT_NAME)
+    )
   end
 
   # Sends email when a user is added as an unapproved/pending co-creator
@@ -283,13 +279,11 @@ class UserMailer < ApplicationMailer
     @inviting_user = User.find(inviting_user_id)
     @user = @creatorship.pseud.user
     @creation = @creatorship.creation
-    I18n.with_locale(Locale.find(@user.preference.preferred_locale).iso) do
-      mail(
-        to: @user.email,
-        subject: t("user_mailer.creatorship_request.subject",
-                   app_name: ArchiveConfig.APP_SHORT_NAME)
-      )
-    end
+    mail(
+      to: @user.email,
+      subject: t("user_mailer.creatorship_request.subject",
+                 app_name: ArchiveConfig.APP_SHORT_NAME)
+    )
   end
 
   # Sends emails to creators whose stories were listed as the inspiration of another work
