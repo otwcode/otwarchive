@@ -47,7 +47,7 @@ class CollectionItemsController < ApplicationController
                             @collection_items.unreviewed_by_user
                           end
     else
-      flash[:error] = ts("You don't have permission to see that, sorry!")
+      flash[:error] = t(".permission_denied")
       redirect_to collections_path and return
     end
 
@@ -74,11 +74,11 @@ class CollectionItemsController < ApplicationController
 
   def create
     unless params[:collection_names]
-      flash[:error] = ts("What collections did you want to add?")
+      flash[:error] = t(".no_collection")
       redirect_to(request.env["HTTP_REFERER"] || root_path) and return
     end
     unless @item
-      flash[:error] = ts("What did you want to add to a collection?")
+      flash[:error] = t(".no_item")
       redirect_to(request.env["HTTP_REFERER"] || root_path) and return
     end
     # for each collection name
@@ -92,21 +92,21 @@ class CollectionItemsController < ApplicationController
     params[:collection_names].split(',').map {|name| name.strip}.uniq.each do |collection_name|
       collection = Collection.find_by(name: collection_name)
       if !collection
-        errors << ts("%{name}, because we couldn't find a collection with that name. Make sure you are using the one-word name, and not the title.", name: collection_name)
+        errors << t(".errors.not_found", name: collection_name)
       elsif @item.collections.include?(collection)
         if @item.rejected_collections.include?(collection)
-          errors << ts("%{collection_title}, because the %{object_type}'s owner has rejected the invitation.", collection_title: collection.title, object_type: @item.class.name.humanize.downcase)
+          errors << t(".errors.invitation_rejected", collection_title: collection.title, object_type: @item.class.name.humanize.downcase)
         else
-          errors << ts("%{collection_title}, because this item has already been submitted.", collection_title: collection.title)
+          errors << t(".errors.already_submitted", collection_title: collection.title)
         end
       elsif collection.closed? && !collection.user_is_maintainer?(User.current_user)
-        errors << ts("%{collection_title} is closed to new submissions.", collection_title: collection.title)
+        errors << t(".errors.closed", collection_title: collection.title)
       elsif (collection.anonymous? || collection.unrevealed?) && !current_user.is_author_of?(@item)
-        errors << ts("%{collection_title}, because you don't own this item and the collection is anonymous or unrevealed.", collection_title: collection.title)
+        errors << t(".errors.collection_anonymous_or_unrevealed", collection_title: collection.title)
       elsif !current_user.is_author_of?(@item) && !collection.user_is_maintainer?(current_user)
-        errors << ts("%{collection_title}, either you don't own this item or are not a moderator of the collection.", collection_title: collection.title)
+        errors << t(".errors.own_nor_moderate", collection_title: collection.title)
       elsif @item.is_a?(Work) && @item.anonymous? && !current_user.is_author_of?(@item)
-        errors << ts("%{collection_title}, because you don't own this item and the item is anonymous.", collection_title: collection.title)
+        errors << t(".errors.item_anonymous", collection_title: collection.title)
       # add the work to a collection, and try to save it
       elsif @item.add_to_collection(collection) && @item.save(validate: false)
         # approved_by_user? and approved_by_collection? are both true
@@ -124,35 +124,32 @@ class CollectionItemsController < ApplicationController
           unapproved_collections << collection
         end
       else
-        errors << ts("Something went wrong trying to add collection %{name}, sorry!", name: collection_name)
+        errors << t(".errors.general_error", name: collection_name)
       end
     end
 
     # messages to the user
+    notices = []
     unless errors.empty?
-      flash[:error] = ts("We couldn't add your submission to the following collection(s): ") + "<br><ul><li />" + errors.join("<li />") + "</ul>"
+      flash[:error] = t(".error_list", count: errors.count) + "<br><ul><li />" + errors.join("<li />") + "</ul>"
     end
-    flash[:notice] = "" unless new_collections.empty? && unapproved_collections.empty?
+    #notices << "" unless new_collections.empty? && unapproved_collections.empty?
     unless new_collections.empty?
-      flash[:notice] = ts("Added to collection(s): %{collections}.",
-                            collections: new_collections.collect(&:title).join(", "))
+      notices << t(".success", count: new_collections.size, collections: new_collections.collect(&:title).join(", "))
     end
     unless invited_collections.empty?
       invited_collections.each do |needs_user_approval|
-        flash[:notice] ||= ""
-        flash[:notice] = ts("This work has been <a href=\"#{collection_items_path(needs_user_approval)}?invited=true\">invited</a> to your collection (#{needs_user_approval.title}).").html_safe
+      #  flash[:notice] ||= ""
+        notices << t(".invited", link: collection_items_path(needs_user_approval), collection: needs_user_approval.title).html_safe
       end
     end
     unless unapproved_collections.empty?
-      collection_item_type = "work"
-      if params[:bookmark_id]
-        collection_item_type = "bookmark"
-      end
-      flash[:notice] ||= ""
-      flash[:notice] += ts(" You have submitted your #{collection_item_type} to #{unapproved_collections.size > 1 ? "moderated collections (%{all_collections}). It will not become a part of those collections" : "the moderated collection '%{all_collections}'. It will not become a part of the collection"} until it has been approved by a moderator.", all_collections: unapproved_collections.map { |f| f.title }.join(', '))
+      collection_item_type = params[:bookmark_id] ? "bookmark" : "work"
+      #flash[:notice] ||= ""
+      notices << t(".submitted", count: unapproved_collections.size, item: collection_item_type, all_collections: unapproved_collections.map(&:title).join(", "))
     end
 
-    flash[:notice] = (flash[:notice]).html_safe unless flash[:notice].blank?
+    flash[:notice] = (notices.join("<br/>")).html_safe unless notices.empty?
     flash[:error] = (flash[:error]).html_safe unless flash[:error].blank?
 
     redirect_to(@item)
@@ -172,7 +169,7 @@ class CollectionItemsController < ApplicationController
         success_path: user_collection_items_path(@user)
       )
     else
-      flash[:error] = ts("You don't have permission to do that, sorry!")
+      flash[:error] = t(".permission_denied")
       redirect_to(@collection || @user)
     end
   end
@@ -203,7 +200,7 @@ class CollectionItemsController < ApplicationController
     end
 
     if @collection_items.empty?
-      flash[:notice] = ts("Collection status updated!")
+      flash[:notice] = t(".update_success")
       redirect_to success_path
     else
       render action: "index"
@@ -214,7 +211,7 @@ class CollectionItemsController < ApplicationController
     @user = User.find_by(login: params[:user_id]) if params[:user_id]
     @collectible_item = @collection_item.item
     @collection_item.destroy
-    flash[:notice] = ts("Item completely removed from collection %{title}.", title: @collection.title)
+    flash[:notice] = t(".destroy", title: @collection.title)
     if @user
       redirect_to user_collection_items_path(@user) and return
     elsif (@collection.user_is_maintainer?(current_user))
