@@ -14,6 +14,11 @@
       <% fandoms = external_work.tag_groups["Fandom"] %>
       <%= fandoms.collect{ |tag| link_to_tag_works(tag) }.join(", ").html_safe if fandoms %>
     </h5>
+    <% unless external_work.language.blank? %>
+      <h5 class="language heading">
+        <%= ts("Language:") %> <%= external_work.language.name %>
+      </h5>
+    <% end %>
 
     <p class="notice"><%= ts("This work isn't hosted on the Archive so this blurb might not be complete or accurate.") %></p>
 
