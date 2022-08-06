@@ -47,7 +47,7 @@ class CollectionItemsController < ApplicationController
                             @collection_items.unreviewed_by_user
                           end
     else
-      flash[:error] = t(".permission_denied")
+      flash[:error] = t(".permission_denied.view")
       redirect_to collections_path and return
     end
 
@@ -166,7 +166,7 @@ class CollectionItemsController < ApplicationController
         success_path: user_collection_items_path(@user)
       )
     else
-      flash[:error] = t(".permission_denied")
+      flash[:error] = t(".permission_denied.action")
       redirect_to(@collection || @user)
     end
   end
