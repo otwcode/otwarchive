@@ -37,7 +37,9 @@ en:
         contact_abuse: contact Policy & Abuse
         reset_blocked: Password resets are disabled for that user. For more information, please %{contact_abuse_link}.
   collection_items:
-    permission_denied: You don't have permission to see that, sorry!
+    permission_denied:
+      view: You don't have permission to see that, sorry!
+      action: You don't have permission to do that, sorry!
     no_collection: What collections did you want to add?
     no_item: What did you want to add to a collection?
     errors:
