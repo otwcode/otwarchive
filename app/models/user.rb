@@ -196,6 +196,7 @@ class User < ApplicationRecord
   validates_uniqueness_of :login, case_sensitive: false, message: ts("has already been taken")
   validate :login, :username_is_not_recently_changed, if: :will_save_change_to_login?
 
+  validates_uniqueness_of :email, case_sensitive: false, message: ts("has already been taken")
   validates :email, email_veracity: true, email_format: true
 
   # Virtual attribute for age check and terms of service
