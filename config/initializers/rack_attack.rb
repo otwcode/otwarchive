@@ -50,10 +50,6 @@ class Rack::Attack
     req.ip
   end
 
-  # Add Retry-After response header to let polite clients know
-  # how many seconds they should wait before trying again
-  Rack::Attack.throttled_response_retry_after_header = true
-
   ### Prevent Brute-Force Login Attacks ###
 
   # The most common brute-force login attack is a brute-force password
@@ -84,6 +80,10 @@ class Rack::Attack
   throttle("logins/email", limit: login_limit, period: login_period) do |req|
     req.params.dig("user", "login").presence if req.path == "/users/login" && req.post?
   end
+  
+  # Add Retry-After response header to let polite clients know
+  # how many seconds they should wait before trying again
+  Rack::Attack.throttled_response_retry_after_header = true
 
   ### Custom Throttle Response ###
 

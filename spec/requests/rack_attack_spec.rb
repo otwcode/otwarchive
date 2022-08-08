@@ -26,13 +26,13 @@ describe "Rack::Attack" do
   end
 
   it "successful response does not include retry-after header" do
-    get root_path, env: { "REMOTE_ADDR" => Faker::Internet.unique.ip_v4_address }
+    get root_path, env: { "REMOTE_ADDR" => Faker::Internet.unique.public_ip_v4_address }
     expect(response).to have_http_status(:ok)
     expect(response.headers["Retry-After"]).to be_nil
   end
 
   context "when there have been max number of requests from an IP address" do
-    let(:ip) { Faker::Internet.unique.ip_v4_address }
+    let(:ip) { Faker::Internet.unique.public_ip_v4_address }
 
     before do
       ArchiveConfig.RATE_LIMIT_NUMBER.times do
@@ -43,14 +43,13 @@ describe "Rack::Attack" do
     it "response to the next attempt from the same IP includes retry-after header" do
       get root_path, env: { "REMOTE_ADDR" => ip }
       expect(response).to have_http_status(:too_many_requests)
-      expect(response.headers["Retry-After"]).not_to be_nil
       expect(response.headers["Retry-After"].to_i).to be > 0
       expect(response.headers["Retry-After"].to_i).to be <= ArchiveConfig.RATE_LIMIT_PERIOD
     end
   end
 
   context "when there have been max user login attempts from an IP address" do
-    let(:ip) { Faker::Internet.unique.ip_v4_address }
+    let(:ip) { Faker::Internet.unique.public_ip_v4_address }
 
     before do
       ArchiveConfig.RATE_LIMIT_LOGIN_ATTEMPTS.times do
@@ -61,7 +60,6 @@ describe "Rack::Attack" do
     it "response to the next attempt from the same IP includes retry-after header" do
       post user_session_path, params: unique_user_params.to_query, env: { "REMOTE_ADDR" => ip }
       expect(response).to have_http_status(:too_many_requests)
-      expect(response.headers["Retry-After"]).not_to be_nil
       expect(response.headers["Retry-After"].to_i).to be > 0
       expect(response.headers["Retry-After"].to_i).to be <= ArchiveConfig.RATE_LIMIT_LOGIN_PERIOD
     end
@@ -95,7 +93,6 @@ describe "Rack::Attack" do
     it "response to the next attempt for the same username includes retry-after header" do
       post user_session_path, params: params, env: unique_ip_env
       expect(response).to have_http_status(:too_many_requests)
-      expect(response.headers["Retry-After"]).not_to be_nil
       expect(response.headers["Retry-After"].to_i).to be > 0
       expect(response.headers["Retry-After"].to_i).to be <= ArchiveConfig.RATE_LIMIT_LOGIN_PERIOD
     end
