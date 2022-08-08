@@ -18,10 +18,14 @@ Feature: Comment hiding
 
     When I am logged in as "author"
       And I go to the home page
-    Then I should see "unavailable"
-      And I follow "My Inbox"
-    Then I should see "unavailable"
-      And I view the work "Popular Fic" with comments
+    Then I should see "A suspicious comment"
+      And I should not see "My test comment!"
+      And I should not see "unavailable"
+    When I follow "My Inbox"
+    Then I should see "A suspicious comment"
+      And I should not see "My test comment!"
+      And I should not see "unavailable"
+    When I view the work "Popular Fic" with comments
     Then I should see "unavailable"
       And I should not see a "Make Comment Visible" button
 
