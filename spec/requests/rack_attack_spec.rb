@@ -63,7 +63,7 @@ describe "Rack::Attack" do
       expect(response).to have_http_status(:too_many_requests)
       expect(response.headers["Retry-After"]).not_to be_nil
       expect(response.headers["Retry-After"].to_i).to be > 0
-      expect(response.headers["Retry-After"].to_i).to be <= ArchiveConfig.RATE_LIMIT_PERIOD
+      expect(response.headers["Retry-After"].to_i).to be <= ArchiveConfig.RATE_LIMIT_LOGIN_PERIOD
     end
 
     it "throttles the next attempt from the same IP" do
@@ -97,7 +97,7 @@ describe "Rack::Attack" do
       expect(response).to have_http_status(:too_many_requests)
       expect(response.headers["Retry-After"]).not_to be_nil
       expect(response.headers["Retry-After"].to_i).to be > 0
-      expect(response.headers["Retry-After"].to_i).to be <= ArchiveConfig.RATE_LIMIT_PERIOD
+      expect(response.headers["Retry-After"].to_i).to be <= ArchiveConfig.RATE_LIMIT_LOGIN_PERIOD
     end
 
     it "throttles the next attempt for the same username" do
