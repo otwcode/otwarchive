@@ -49,34 +49,48 @@ jobs:
       fail-fast: false
       matrix:
         tests:
+          - command: rake
+            arguments: db:otwseed
+          - command: rspec
+            arguments: spec/controllers
+          - command: rspec
+            arguments: spec/models
+          - command: rspec
+            arguments: --exclude-pattern 'spec/{controllers,models}/**/*.rb'
           - command: cucumber
-            arguments: features/users/user_dashboard.feature
+            arguments: features/admins
           - command: cucumber
-            arguments: features/users/user_dashboard.feature
+            arguments: features/bookmarks
           - command: cucumber
-            arguments: features/users/user_dashboard.feature
+            arguments: features/collections
           - command: cucumber
-            arguments: features/users/user_dashboard.feature
+            arguments: features/comments_and_kudos
           - command: cucumber
-            arguments: features/users/user_dashboard.feature
+            arguments: features/gift_exchanges
           - command: cucumber
-            arguments: features/users/user_dashboard.feature
+            arguments: features/importing
+            vcr: true
           - command: cucumber
-            arguments: features/users/user_dashboard.feature
+            arguments: features/other_a
           - command: cucumber
-            arguments: features/users/user_dashboard.feature
+            arguments: features/other_b
           - command: cucumber
-            arguments: features/users/user_dashboard.feature
+            arguments: features/prompt_memes_a
           - command: cucumber
-            arguments: features/users/user_dashboard.feature
+            arguments: features/prompt_memes_b
           - command: cucumber
-            arguments: features/users/user_dashboard.feature
+            arguments: features/prompt_memes_c
           - command: cucumber
-            arguments: features/users/user_dashboard.feature
+            arguments: features/search
           - command: cucumber
-            arguments: features/users/user_dashboard.feature
+            arguments: features/tag_sets
           - command: cucumber
-            arguments: features/users/user_dashboard.feature
+            arguments: features/tags_and_wrangling
+          - command: cucumber
+            arguments: features/users
+          - command: cucumber
+            arguments: features/works
+            ebook: true
 
     steps:
       - name: Check out code
