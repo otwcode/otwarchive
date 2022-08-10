@@ -123,6 +123,12 @@ describe User do
           expect(new_user.save).to be_falsey
           expect(new_user.errors[:email].first).to eq("has already been taken")
         end
+
+        it "does not save a duplicate email with difference capitalization" do
+          new_user.email = existing_user.email.capitalize()
+          expect(new_user.save).to be_falsey
+          expect(new_user.errors[:email].first).to eq("has already been taken")
+        end
       end
     end
   end
