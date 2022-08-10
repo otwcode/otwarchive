@@ -49,48 +49,230 @@ jobs:
       fail-fast: false
       matrix:
         tests:
-          - command: rake
-            arguments: db:otwseed
-          - command: rspec
-            arguments: spec/controllers
-          - command: rspec
-            arguments: spec/models
-          - command: rspec
-            arguments: --exclude-pattern 'spec/{controllers,models}/**/*.rb'
           - command: cucumber
-            arguments: features/admins
+            arguments: features/users/user_dashboard.feature
           - command: cucumber
-            arguments: features/bookmarks
+            arguments: features/users/user_dashboard.feature
           - command: cucumber
-            arguments: features/collections
+            arguments: features/users/user_dashboard.feature
           - command: cucumber
-            arguments: features/comments_and_kudos
+            arguments: features/users/user_dashboard.feature
           - command: cucumber
-            arguments: features/gift_exchanges
+            arguments: features/users/user_dashboard.feature
           - command: cucumber
-            arguments: features/importing
-            vcr: true
+            arguments: features/users/user_dashboard.feature
           - command: cucumber
-            arguments: features/other_a
+            arguments: features/users/user_dashboard.feature
           - command: cucumber
-            arguments: features/other_b
+            arguments: features/users/user_dashboard.feature
           - command: cucumber
-            arguments: features/prompt_memes_a
+            arguments: features/users/user_dashboard.feature
           - command: cucumber
-            arguments: features/prompt_memes_b
+            arguments: features/users/user_dashboard.feature
           - command: cucumber
-            arguments: features/prompt_memes_c
+            arguments: features/users/user_dashboard.feature
           - command: cucumber
-            arguments: features/search
+            arguments: features/users/user_dashboard.feature
           - command: cucumber
-            arguments: features/tag_sets
+            arguments: features/users/user_dashboard.feature
           - command: cucumber
-            arguments: features/tags_and_wrangling
+            arguments: features/users/user_dashboard.feature
           - command: cucumber
-            arguments: features/users
+            arguments: features/users/user_dashboard.feature
           - command: cucumber
-            arguments: features/works
-            ebook: true
+            arguments: features/users/user_dashboard.feature
+          - command: cucumber
+            arguments: features/users/user_dashboard.feature
+          - command: cucumber
+            arguments: features/users/user_dashboard.feature
+          - command: cucumber
+            arguments: features/users/user_dashboard.feature
+          - command: cucumber
+            arguments: features/users/user_dashboard.feature
+          - command: cucumber
+            arguments: features/users/user_dashboard.feature
+          - command: cucumber
+            arguments: features/users/user_dashboard.feature
+          - command: cucumber
+            arguments: features/users/user_dashboard.feature
+          - command: cucumber
+            arguments: features/users/user_dashboard.feature
+          - command: cucumber
+            arguments: features/users/user_dashboard.feature
+          - command: cucumber
+            arguments: features/users/user_dashboard.feature
+          - command: cucumber
+            arguments: features/users/user_dashboard.feature
+          - command: cucumber
+            arguments: features/users/user_dashboard.feature
+          - command: cucumber
+            arguments: features/users/user_dashboard.feature
+          - command: cucumber
+            arguments: features/users/user_dashboard.feature
+          - command: cucumber
+            arguments: features/users/user_dashboard.feature
+          - command: cucumber
+            arguments: features/users/user_dashboard.feature
+          - command: cucumber
+            arguments: features/users/user_dashboard.feature
+          - command: cucumber
+            arguments: features/users/user_dashboard.feature
+          - command: cucumber
+            arguments: features/users/user_dashboard.feature
+          - command: cucumber
+            arguments: features/users/user_dashboard.feature
+          - command: cucumber
+            arguments: features/users/user_dashboard.feature
+          - command: cucumber
+            arguments: features/users/user_dashboard.feature
+          - command: cucumber
+            arguments: features/users/user_dashboard.feature
+          - command: cucumber
+            arguments: features/users/user_dashboard.feature
+          - command: cucumber
+            arguments: features/users/user_dashboard.feature
+          - command: cucumber
+            arguments: features/users/user_dashboard.feature
+          - command: cucumber
+            arguments: features/users/user_dashboard.feature
+          - command: cucumber
+            arguments: features/users/user_dashboard.feature
+          - command: cucumber
+            arguments: features/users/user_dashboard.feature
+          - command: cucumber
+            arguments: features/users/user_dashboard.feature
+          - command: cucumber
+            arguments: features/users/user_dashboard.feature
+          - command: cucumber
+            arguments: features/users/user_dashboard.feature
+          - command: cucumber
+            arguments: features/users/user_dashboard.feature
+          - command: cucumber
+            arguments: features/users/user_dashboard.feature
+          - command: cucumber
+            arguments: features/users/user_dashboard.feature
+          - command: cucumber
+            arguments: features/users/user_dashboard.feature
+          - command: cucumber
+            arguments: features/users/user_dashboard.feature
+          - command: cucumber
+            arguments: features/users/user_dashboard.feature
+          - command: cucumber
+            arguments: features/users/user_dashboard.feature
+          - command: cucumber
+            arguments: features/users/user_dashboard.feature
+          - command: cucumber
+            arguments: features/users/user_dashboard.feature
+          - command: cucumber
+            arguments: features/users/user_dashboard.feature
+          - command: cucumber
+            arguments: features/users/user_dashboard.feature
+          - command: cucumber
+            arguments: features/users/user_dashboard.feature
+          - command: cucumber
+            arguments: features/users/user_dashboard.feature
+          - command: cucumber
+            arguments: features/users/user_dashboard.feature
+          - command: cucumber
+            arguments: features/users/user_dashboard.feature
+          - command: cucumber
+            arguments: features/users/user_dashboard.feature
+          - command: cucumber
+            arguments: features/users/user_dashboard.feature
+          - command: cucumber
+            arguments: features/users/user_dashboard.feature
+          - command: cucumber
+            arguments: features/users/user_dashboard.feature
+          - command: cucumber
+            arguments: features/users/user_dashboard.feature
+          - command: cucumber
+            arguments: features/users/user_dashboard.feature
+          - command: cucumber
+            arguments: features/users/user_dashboard.feature
+          - command: cucumber
+            arguments: features/users/user_dashboard.feature
+          - command: cucumber
+            arguments: features/users/user_dashboard.feature
+          - command: cucumber
+            arguments: features/users/user_dashboard.feature
+          - command: cucumber
+            arguments: features/users/user_dashboard.feature
+          - command: cucumber
+            arguments: features/users/user_dashboard.feature
+          - command: cucumber
+            arguments: features/users/user_dashboard.feature
+          - command: cucumber
+            arguments: features/users/user_dashboard.feature
+          - command: cucumber
+            arguments: features/users/user_dashboard.feature
+          - command: cucumber
+            arguments: features/users/user_dashboard.feature
+          - command: cucumber
+            arguments: features/users/user_dashboard.feature
+          - command: cucumber
+            arguments: features/users/user_dashboard.feature
+          - command: cucumber
+            arguments: features/users/user_dashboard.feature
+          - command: cucumber
+            arguments: features/users/user_dashboard.feature
+          - command: cucumber
+            arguments: features/users/user_dashboard.feature
+          - command: cucumber
+            arguments: features/users/user_dashboard.feature
+          - command: cucumber
+            arguments: features/users/user_dashboard.feature
+          - command: cucumber
+            arguments: features/users/user_dashboard.feature
+          - command: cucumber
+            arguments: features/users/user_dashboard.feature
+          - command: cucumber
+            arguments: features/users/user_dashboard.feature
+          - command: cucumber
+            arguments: features/users/user_dashboard.feature
+          - command: cucumber
+            arguments: features/users/user_dashboard.feature
+          - command: cucumber
+            arguments: features/users/user_dashboard.feature
+          - command: cucumber
+            arguments: features/users/user_dashboard.feature
+          - command: cucumber
+            arguments: features/users/user_dashboard.feature
+          - command: cucumber
+            arguments: features/users/user_dashboard.feature
+          - command: cucumber
+            arguments: features/users/user_dashboard.feature
+          - command: cucumber
+            arguments: features/users/user_dashboard.feature
+          - command: cucumber
+            arguments: features/users/user_dashboard.feature
+          - command: cucumber
+            arguments: features/users/user_dashboard.feature
+          - command: cucumber
+            arguments: features/users/user_dashboard.feature
+          - command: cucumber
+            arguments: features/users/user_dashboard.feature
+          - command: cucumber
+            arguments: features/users/user_dashboard.feature
+          - command: cucumber
+            arguments: features/users/user_dashboard.feature
+          - command: cucumber
+            arguments: features/users/user_dashboard.feature
+          - command: cucumber
+            arguments: features/users/user_dashboard.feature
+          - command: cucumber
+            arguments: features/users/user_dashboard.feature
+          - command: cucumber
+            arguments: features/users/user_dashboard.feature
+          - command: cucumber
+            arguments: features/users/user_dashboard.feature
+          - command: cucumber
+            arguments: features/users/user_dashboard.feature
+          - command: cucumber
+            arguments: features/users/user_dashboard.feature
+          - command: cucumber
+            arguments: features/users/user_dashboard.feature
+          - command: cucumber
+            arguments: features/users/user_dashboard.feature
 
     steps:
       - name: Check out code
