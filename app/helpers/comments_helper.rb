@@ -155,6 +155,12 @@ module CommentsHelper
     policy(comment).can_hide_comment?
   end
 
+  def can_see_hidden_comment?(comment)
+    !comment.hidden_by_admin? ||
+      is_author_of?(comment) ||
+      can_hide_comment?(comment)
+  end
+
   def comment_parent_hidden?(comment)
     parent = comment.ultimate_parent
     (parent.respond_to?(:hidden_by_admin) && parent.hidden_by_admin) ||
