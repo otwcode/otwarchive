@@ -103,7 +103,8 @@ end
 When /^I post the works "([^"]*)"$/ do |worklist|
   worklist.split(/, ?/).each do |work_title|
     step %{I post the work "#{work_title}"}
-    step %{I should see "Work was successfully posted."}
+    # Ensure all works are created with different timestamps to avoid flakiness
+    step %{it is currently 1 second from now}
   end
 end
 
