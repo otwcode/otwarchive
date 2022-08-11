@@ -18,7 +18,7 @@ class RelatedWork < ActiveRecord::Base
     return if parent
 
     if url.include?(ArchiveConfig.APP_HOST)
-      if url.match(/\/works\/(\d+)/)
+      if url.match(%r{/works/(\d+)})
         self.parent = Work.find_by(id: Regexp.last_match(1))
       else
         errors.add(:parent, :not_work)
