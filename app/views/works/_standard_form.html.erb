@@ -100,10 +100,10 @@
         <!-- Toggles on with parent checkbox -->
         <fieldset id="parent-options">
           <dl>
-            <% new, existing = @work.parent_work_relationships.partition(&:new_record?) %>
-            <% new << @work.parent_work_relationships.build if new.empty? %>
+            <% new_parent, existing_parents = @work.parent_work_relationships.partition(&:new_record?) %>
+            <% new_parent << @work.parent_work_relationships.build if new_parent.empty? %>
 
-            <%= f.fields_for :parent_work_relationships, new do |p| %>
+            <%= f.fields_for :parent_work_relationships, new_parent do |p| %>
               <dt><%= p.label :url, ts("URL") %></dt>
               <dd>
                 <%= p.text_field :url,
@@ -134,9 +134,9 @@
               </dd>
             <% end %>
 
-            <% unless existing.blank? %>
+            <% unless existing_parents.blank? %>
               <dt><%= ts("Current parent works") %></dt>
-              <% existing.each do |related_work| %>
+              <% existing_parents.each do |related_work| %>
                 <% if related_work.parent %>
                   <dd>
                     <ul class="actions" role="navigation">
