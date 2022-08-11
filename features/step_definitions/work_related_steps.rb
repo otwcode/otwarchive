@@ -115,13 +115,17 @@ When /^I draft a translation$/ do
 end
 
 When /^I list a series as inspiration$/ do
-  fill_in("work_parent_attributes_url", with: "#{ArchiveConfig.APP_HOST}/series/123")
+  with_scope("#parent-options") do
+    fill_in("URL", with: "#{ArchiveConfig.APP_HOST}/series/123")
+  end
 end
 
 When /^I list a nonexistent work as inspiration$/ do
   work = Work.find_by_id(123)
   work.destroy unless work.nil?
-  fill_in("work_parent_attributes_url", with: "#{ArchiveConfig.APP_HOST}/works/123")
+  with_scope("#parent-options") do
+    fill_in("URL", with: "#{ArchiveConfig.APP_HOST}/works/123")
+  end
 end
 
 ### THEN
