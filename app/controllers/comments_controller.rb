@@ -476,7 +476,7 @@ class CommentsController < ApplicationController
 
   # PUT /comments/1/hide
   def hide
-    if !@comment.hidden_by_admin && @comment.save
+    if !@comment.hidden_by_admin?
       @comment.mark_hidden!
       flash[:comment_notice] = t(".success")
     else
@@ -487,7 +487,7 @@ class CommentsController < ApplicationController
 
   # PUT /comments/1/unhide
   def unhide
-    if @comment.hidden_by_admin && @comment.save
+    if @comment.hidden_by_admin?
       @comment.mark_unhidden!
       flash[:comment_notice] = t(".success")
     else
