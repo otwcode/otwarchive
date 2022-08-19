@@ -22,6 +22,8 @@ class Admin::SkinsController < Admin::BaseController
       skins_to_set = params["make_#{action}"] ? Skin.where(id: params["make_#{action}"].map {|id| id.to_i}) : []
       skins_to_unset = params["make_un#{action}"] ? Skin.where(id: params["make_un#{action}"].map {|id| id.to_i}) : []
       skins_to_set.each do |skin|
+        # Not good
+        next unless authorize(skin)
         case action
         when "official"
           skin.update_attribute(:official, true)
@@ -44,6 +46,8 @@ class Admin::SkinsController < Admin::BaseController
       end
 
       skins_to_unset.each do |skin|
+        # Not good
+        next unless authorize(skin)
         case action
         when "official"
           skin.clear_cache! # no cache for unofficial skins
