@@ -2,7 +2,6 @@
 Feature: Comment hiding
 
   Scenario: Hiding a comment replaces it with a placeholder message.
-
     Given I am logged in as "author"
       And I post the work "Popular Fic"
       And I am logged out
