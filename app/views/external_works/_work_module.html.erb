@@ -43,6 +43,11 @@
 
 <!--stats-->
 <dl class="stats">
+  <% unless external_work.language.blank? %>
+    <dt class="language"><%= ts("Language:") %></dt>
+    <dd class="language"><%= external_work.language.name %></dd>
+  <% end %>
+
   <% if Bookmark.count_visible_bookmarks(external_work) > 0 %>
     <dt><%= ts("Bookmarks:") %></dt>
     <dd><%= link_to_bookmarkable_bookmarks(external_work) %></dd>
