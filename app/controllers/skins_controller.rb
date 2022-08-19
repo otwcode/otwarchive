@@ -90,9 +90,12 @@ class SkinsController < ApplicationController
 
   # GET /skins/1/edit
   def edit
+    authorize @skin
   end
 
   def update
+    authorize @skin
+
     loaded = load_archive_parents
     if @skin.update(skin_params)
       @skin.cache! if @skin.cached?

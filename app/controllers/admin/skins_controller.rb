@@ -1,14 +1,17 @@
 class Admin::SkinsController < Admin::BaseController
 
   def index
+    authorize Skin
     @unapproved_skins = Skin.unapproved_skins.sort_by_recent
   end
 
   def index_rejected
+    authorize Skin
     @rejected_skins = Skin.rejected_skins.sort_by_recent
   end
 
   def index_approved
+    authorize Skin
     @approved_skins = Skin.approved_skins.usable.sort_by_recent
   end
 
