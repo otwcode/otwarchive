@@ -461,7 +461,6 @@ describe ChaptersController do
           end
 
           it "updates cached chapter counts" do
-            work.invalidate_work_chapter_count(work)
             expect(work.number_of_chapters).to eq 1
             expect(work.number_of_posted_chapters).to eq 1
             post :create, params: { work_id: work.id, chapter: chapter_attributes, post_without_preview_button: true }
@@ -511,7 +510,6 @@ describe ChaptersController do
           end
 
           it "updates cached chapter counts" do
-            work.invalidate_work_chapter_count(work)
             expect(work.number_of_chapters).to eq 1
             expect(work.number_of_posted_chapters).to eq 1
             post :create, params: { work_id: work.id, chapter: chapter_attributes, preview_button: true }
@@ -987,7 +985,6 @@ describe ChaptersController do
         end
 
         it "updates cached chapter counts" do
-          work.invalidate_work_chapter_count(work)
           expect(work.number_of_chapters).to eq 2
           expect(work.number_of_posted_chapters).to eq 2
           delete :destroy, params: { work_id: work.id, id: chapter2.id }
@@ -1061,7 +1058,6 @@ describe ChaptersController do
         let!(:chapter2) { create(:chapter, work: work, posted: false, position: 2, authors: [user.pseuds.first]) }
 
         it "updates cached chapter counts" do
-          work.invalidate_work_chapter_count(work)
           expect(work.number_of_chapters).to eq 2
           expect(work.number_of_posted_chapters).to eq 1
           delete :destroy, params: { work_id: work.id, id: chapter2.id }
