@@ -4,9 +4,9 @@ class SkinsController < ApplicationController
   before_action :load_skin, except: [:index, :new, :create, :unset]
   before_action :check_title, only: [:create, :update]
   before_action :check_ownership_or_admin, only: [:edit, :update]
-  before_action :check_ownership, only: [:destroy]
+  before_action :check_ownership, only: [:confirm_delete, :destroy]
   before_action :check_visibility, only: [:show]
-  before_action :check_editability, only: [:edit, :update, :destroy]
+  before_action :check_editability, only: [:edit, :update, :confirm_delete, :destroy]
 
   #### ACTIONS
 
@@ -90,11 +90,11 @@ class SkinsController < ApplicationController
 
   # GET /skins/1/edit
   def edit
-    authorize @skin
+    authorize @skin if logged_in_as_admin?
   end
 
   def update
-    authorize @skin
+    authorize @skin if logged_in_as_admin?
 
     loaded = load_archive_parents
     if @skin.update(skin_params)
