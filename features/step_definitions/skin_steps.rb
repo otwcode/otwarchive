@@ -58,14 +58,14 @@ Given /^the unapproved public skin "([^"]*)"$/ do |skin_name|
 end
 
 Given /^I approve the skin "([^"]*)"$/ do |skin_name|
-  step "I am logged in as an admin"
+  step %{I am logged in as a "superadmin" admin}
   visit admin_skins_url
   check("make_official_#{skin_name.downcase.gsub(/\s/, '_')}")
   step %{I submit}
 end
 
 Given /^I unapprove the skin "([^"]*)"$/ do |skin_name|
-  step "I am logged in as an admin"
+  step %{I am logged in as a "superadmin" admin}
   visit admin_skins_url
   step "I follow \"Approved Skins\""
   check("make_unofficial_#{skin_name.downcase.gsub(/\s/, '_')}")
