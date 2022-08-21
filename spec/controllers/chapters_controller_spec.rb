@@ -465,7 +465,7 @@ describe ChaptersController do
               post :create, params: { work_id: work.id, chapter: chapter_attributes, post_without_preview_button: true }
             end.to change { work.number_of_chapters }
               .from(1).to(2)
-              .and change {work.number_of_posted_chapters}
+              .and change { work.number_of_posted_chapters }
               .from(1).to(2)
           end
 
@@ -515,7 +515,7 @@ describe ChaptersController do
               post :create, params: { work_id: work.id, chapter: chapter_attributes, preview_button: true }
             end.to change { work.number_of_chapters }
               .from(1).to(2)
-              .and avoid_changing {work.number_of_posted_chapters}
+              .and avoid_changing { work.number_of_posted_chapters }
           end
 
           it "gives a notice that the chapter is a draft and redirects to the chapter preview" do
@@ -990,7 +990,7 @@ describe ChaptersController do
             delete :destroy, params: { work_id: work.id, id: chapter2.id }
           end.to change { work.number_of_chapters }
             .from(2).to(1)
-            .and change {work.number_of_posted_chapters}
+            .and change { work.number_of_posted_chapters }
             .from(2).to(1)
         end
 
@@ -1064,7 +1064,7 @@ describe ChaptersController do
             delete :destroy, params: { work_id: work.id, id: chapter2.id }
           end.to change { work.number_of_chapters }
             .from(2).to(1)
-            .and avoid_changing {work.number_of_posted_chapters}
+            .and avoid_changing { work.number_of_posted_chapters }
         end
       end
     end
