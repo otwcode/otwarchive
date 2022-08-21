@@ -84,3 +84,19 @@ Feature: Edit tags on a work
     And I press "Cancel"
   When I view the work "Work 1"
     Then I should see "Fandom: testing"
+
+  Scenario: User can preview a work's tags and return to edit them
+    Given I have loaded the "tags" fixture
+      And I am logged in as a random user
+      And I post the work "Work 1"
+      And I view the work "Work 1"
+      And I follow "Edit Tags"
+      And I fill in "Additional Tags" with "classic"
+    When I press "Preview"
+    Then I should see "Preview Tags"
+      And I should not see the default work content
+    When "AO3-3455" is fixed
+      And I should see "classic" within "Additional Tags"
+    When I press "Edit"
+    Then I should see "Edit Work Tags"
+      And I should see "classic" within "Additional Tags"
