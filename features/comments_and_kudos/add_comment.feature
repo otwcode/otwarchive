@@ -123,7 +123,7 @@ Scenario: Comment threading, comment editing
       And a comment "A's comment (to be deleted)" by "User_A" on the work "Generic Work"
       And a reply "B's comment (to be edited)" by "User_B" on the work "Generic Work"
       And 1 email should be delivered to "User_A"
-      # This is the comment_reply_notification email.
+      And all emails have been delivered
     When I am logged in as "User_A"
       And I view the work "Generic Work" with comments
       And I delete the comment
@@ -132,9 +132,7 @@ Scenario: Comment threading, comment editing
       And I follow "Edit"
       And I fill in "Comment" with "B's improved comment (edited)"
       And I press "Update"
-    Then 1 email should be delivered to "User_A"
-    # This checks that only the comment_reply_notification email above exists in user A's inbox
-    # i.e. there is no additional edited_comment_reply_notification email being sent.
+    Then 0 emails should be delivered to "User_A"
   
   Scenario: Try to post an invalid comment
 
