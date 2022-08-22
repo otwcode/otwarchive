@@ -245,8 +245,8 @@ Scenario: Listing external works as inspirations
     And I fill in "URL" with "http://example.org/200"
     And I press "Preview"
   Then I should see a save error message
-    And I should see "A parent work outside the archive needs to have a title."
-    And I should see "A parent work outside the archive needs to have an author."
+    And I should see "The title of a parent work outside the archive can't be blank"
+    And I should see "The author of a parent work outside the archive can't be blank"
   When I fill in "Title" with "Worldbuilding"
     And I fill in "Author" with "BNF"
     And I check "This is a translation"
@@ -260,8 +260,8 @@ Scenario: Listing external works as inspirations
     And I fill in "URL" with "http://example.org/301"
     And I press "Preview"
   Then I should see a save error message
-    And I should see "A parent work outside the archive needs to have a title."
-    And I should see "A parent work outside the archive needs to have an author."
+    And I should see "The title of a parent work outside the archive can't be blank"
+    And I should see "The author of a parent work outside the archive can't be blank"
   When I fill in "Title" with "Worldbuilding Two"
     And I fill in "Author" with "BNF"
     And I press "Preview"
@@ -280,7 +280,7 @@ Scenario: Listing external works as inspirations
     And I fill in "Title" with "Worldbuilding Two"
     And I fill in "Author" with "BNF"
     And I press "Preview"
-  Then I should see "Parent work Url could not be reached. If the URL is correct and the site is currently down, please try again later."
+  Then I should see "Parent work URL could not be reached. If the URL is correct and the site is currently down, please try again later."
 
 Scenario: External work language
 
