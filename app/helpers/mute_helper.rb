@@ -19,11 +19,11 @@ module MuteHelper
     
     return unless user
 
-    muted_users_css_classes = user.muted_users.map {|muted_user| ".user-#{muted_user.id}"}
+    muted_users_css_classes = user.muted_users.map { |muted_user| ".user-#{muted_user.id}" }
 
     return unless muted_users_css_classes
 
-    return "<style>#{muted_users_css_classes.join(", ")} {display: none !important; visibility: hidden !important;}</style>".html_safe
+    "<style>#{muted_users_css_classes.join(', ')} {display: none !important; visibility: hidden !important;}</style>".html_safe
   end
 end
   
