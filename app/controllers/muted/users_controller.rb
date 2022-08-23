@@ -9,6 +9,8 @@ module Muted
     before_action :build_mute, only: [:confirm_mute, :create]
     before_action :set_mute, only: [:confirm_unmute, :destroy]
 
+    after_action :update_cache, only: [:create, :destroy]
+
     # GET /users/:user_id/muted/users
     def index
       @mutes = @user.mutes_as_muter
@@ -80,6 +82,15 @@ module Muted
 
     def check_admin_permissions
       authorize Mute if logged_in_as_admin?
+    end
+
+    def update_cache
+      muted_users_css_classes = @user.muted_users.map { |muted_user| ".user-#{muted_user.id}" }
+
+      mute_css = "<style>#{muted_users_css_classes.join(', ')} {display: none !important; visibility: hidden !important;}</style>".html_safe
+      mute_css = nil if muted_users_css_classes.empty?
+
+      Rails.cache.write("muted/#{current_user.id}/mute_css", mute_css)
     end
   end
 end
