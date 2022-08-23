@@ -15,5 +15,6 @@
   <% end %>  
   <% if current_user && @user != current_user %>
     <li><%= block_link(@user) %></li>
+    <li><%= mute_link(@user) %></li>
   <% end %>
 </ul>

@@ -15,11 +15,9 @@ module MuteHelper
   end
 
   def mute_css
-    user = current_user
-    
-    return unless user
+    return unless current_user
 
-    muted_users_css_classes = user.muted_users.map { |muted_user| ".user-#{muted_user.id}" }
+    muted_users_css_classes = current_user.muted_users.map { |muted_user| ".user-#{muted_user.id}" }
 
     return unless muted_users_css_classes
 
