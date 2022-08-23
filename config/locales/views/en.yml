@@ -372,9 +372,57 @@ en:
           intro: "Unblocking a user allows them to resume:"
           commenting: "commenting on your works"
           replying: "replying to your comments anywhere on the site"
+  muted:
+    mute: "Mute"
+    unmute: "Unmute"
+    users:
+      index:
+        title: "Muted Users"
+        button: "Mute"
+        none: "You have not muted any users."
+        legend: "Mute a user"
+        label: "User"
+        heading:
+          landmark:
+            muted_users: "Listing Muted Users"
+        will:
+          intro: "Muting a user prevents you from:"
+          commenting: "commenting on your works"
+          replying: "replying to your comments anywhere on the site"
+        will_not:
+          intro: "Muting a user will not:"
+          comments_on_works: "delete or hide comments they previously left on your works; you can delete these individually"
+          comments_elsewhere: "hide their comments elsewhere on the site"
+          hide_works: "hide their works or bookmarks from you"
+      confirm_mute:
+        title: "Mute %{name}"
+        button: "Yes, Mute User"
+        cancel: "Cancel"
+        mute: "mute"
+        sure_html: "Are you sure you want to %{mute} %{username}?"
+        will:
+          intro: "Muting a user prevents them from:"
+          commenting: "commenting on your works"
+          replying: "replying to your comments anywhere on the site"
+        will_not:
+          intro: "Muting a user will not:"
+          comments_on_works: "delete or hide comments they previously left on your works; you can delete these individually"
+          comments_elsewhere: "hide their comments elsewhere on the site"
+          hide_works: "hide their works or bookmarks from you"
+      confirm_unmute:
+        title: "Unmute %{name}"
+        button: "Yes, Unmute User"
+        cancel: "Cancel"
+        unmute: "unmute"
+        sure_html: "Are you sure you want to %{unmute} %{username}?"
+        resume:
+          intro: "Unmuting a user allows them to resume:"
+          commenting: "commenting on your works"
+          replying: "replying to your comments anywhere on the site"
   preferences:
     index:
       blocked_users: "Blocked Users"
+      muted_users: "Muted Users"
   invite_requests:
     invite_request:
       title: "Invitation Status for %{email}"

@@ -10,6 +10,7 @@
   <li><%= link_to ts('Edit My Profile'), edit_user_path(@user) %></li>
   <li><%= link_to ts('Manage My Pseuds'), user_pseuds_path(@user) %></li>
   <li><%= link_to t(".blocked_users"), user_blocked_users_path %></li>
+  <li><%= link_to t(".muted_users"), user_muted_users_path %></li>
   <li><%= link_to ts('Change My User Name'), change_username_user_path(@user) %></li>
   <li><%= link_to ts('Orphan My Works'), new_orphan_path %></li>
 </ul>

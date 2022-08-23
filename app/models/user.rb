@@ -58,6 +58,10 @@ class User < ApplicationRecord
   has_many :blocks_as_blocker, class_name: "Block", dependent: :delete_all, inverse_of: :blocker, foreign_key: :blocker_id
   has_many :blocked_users, through: :blocks_as_blocker, source: :blocked
 
+  has_many :mutes_as_muted, class_name: "Mute", dependent: :delete_all, inverse_of: :muted, foreign_key: :muted_id
+  has_many :mutes_as_muter, class_name: "Mute", dependent: :delete_all, inverse_of: :muter, foreign_key: :muter_id
+  has_many :muted_users, through: :mutes_as_muter, source: :muted
+
   # The block (if it exists) with this user as the blocker and
   # User.current_user as the blocked:
   has_one :block_of_current_user,
