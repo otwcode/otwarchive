@@ -387,13 +387,11 @@ en:
             muted_users: "Listing Muted Users"
         will:
           intro: "Muting a user prevents you from:"
-          commenting: "commenting on your works"
-          replying: "replying to your comments anywhere on the site"
+          seeing_content: "seeing their works, series, bookmarks and comments anywhere on the site"
         will_not:
           intro: "Muting a user will not:"
-          comments_on_works: "delete or hide comments they previously left on your works; you can delete these individually"
-          comments_elsewhere: "hide their comments elsewhere on the site"
-          hide_works: "hide their works or bookmarks from you"
+          delete_comments_on_works: "delete any comments they have left on your works; you can delete these before you mute them"
+          create_comments_on_works: "prevent them from leaving comments on your works; you should block them to prevent that"
       confirm_mute:
         title: "Mute %{name}"
         button: "Yes, Mute User"
@@ -401,14 +399,12 @@ en:
         mute: "mute"
         sure_html: "Are you sure you want to %{mute} %{username}?"
         will:
-          intro: "Muting a user prevents them from:"
-          commenting: "commenting on your works"
-          replying: "replying to your comments anywhere on the site"
+          intro: "Muting a user prevents you from:"
+          seeing_content: "seeing their works, series, bookmarks and comments anywhere on the site"
         will_not:
           intro: "Muting a user will not:"
-          comments_on_works: "delete or hide comments they previously left on your works; you can delete these individually"
-          comments_elsewhere: "hide their comments elsewhere on the site"
-          hide_works: "hide their works or bookmarks from you"
+          delete_comments_on_works: "delete any comments they have left on your works; you can delete these before you mute them"
+          create_comments_on_works: "prevent them from leaving comments on your works; you should block them to prevent that"
       confirm_unmute:
         title: "Unmute %{name}"
         button: "Yes, Unmute User"
@@ -416,9 +412,8 @@ en:
         unmute: "unmute"
         sure_html: "Are you sure you want to %{unmute} %{username}?"
         resume:
-          intro: "Unmuting a user allows them to resume:"
-          commenting: "commenting on your works"
-          replying: "replying to your comments anywhere on the site"
+          intro: "Unmuting a user allows you to:"
+          see_content: "see their works, series, bookmarks and comments on the site"
   preferences:
     index:
       blocked_users: "Blocked Users"
