@@ -87,10 +87,12 @@ module Muted
     def update_cache
       muted_users_css_classes = @user.muted_users.map { |muted_user| ".user-#{muted_user.id}" }
 
-      mute_css = "<style>#{muted_users_css_classes.join(', ')} {display: none !important; visibility: hidden !important;}</style>".html_safe
-      mute_css = nil if muted_users_css_classes.empty?
+      return Rails.cache.write("muted/#{current_user.id}/mute_css", nil) if muted_users_css_classes.empty?
 
-      Rails.cache.write("muted/#{current_user.id}/mute_css", mute_css)
+      Rails.cache.write(
+        "muted/#{current_user.id}/mute_css", 
+        "<style>#{muted_users_css_classes.join(', ')} {display: none !important; visibility: hidden !important;}</style>".html_safe
+      )
     end
   end
 end
