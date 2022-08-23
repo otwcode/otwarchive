@@ -375,6 +375,7 @@ en:
   muted:
     mute: "Mute"
     unmute: "Unmute"
+    muted_items_notice: "You have muted some users in the Archive. Some items may not be shown, and any counts may be inaccurate."
     users:
       index:
         title: "Muted Users"
@@ -390,7 +391,7 @@ en:
           seeing_content: "seeing their works, series, bookmarks and comments anywhere on the site"
         will_not:
           intro: "Muting a user will not:"
-          delete_comments_on_works: "delete any comments they have left on your works; you can delete these before you mute them"
+          delete_comments_on_works: "delete any comments they have left on your works; you can delete those before you mute them"
           create_comments_on_works: "prevent them from leaving comments on your works; you should block them to prevent that"
       confirm_mute:
         title: "Mute %{name}"

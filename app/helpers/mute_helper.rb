@@ -25,5 +25,11 @@ module MuteHelper
       "<style>#{muted_users_css_classes.join(', ')} {display: none !important; visibility: hidden !important;}</style>".html_safe
     end
   end
+
+  def user_has_muted_users?
+    return unless current_user
+
+    !Rails.cache.fetch("muted/#{current_user.id}/mute_css").nil?
+  end
 end
   

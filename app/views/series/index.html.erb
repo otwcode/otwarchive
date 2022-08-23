@@ -7,6 +7,10 @@
   <% end %>
 </h2>
 
+<% if user_has_muted_users? %>
+  <p><%= t('muted.muted_items_notice') %></p>
+<% end %>
+
 <!-- /descriptions-->
 
 <!--subnavigation-->
