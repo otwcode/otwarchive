@@ -98,3 +98,55 @@ Feature: Muting
       | superadmin       |
       | policy_and_abuse |
       | support          |
+
+  @javascript
+  Scenario: Users cannot see works by a muted user
+    Given the user "muter" has muted the user "pest"
+      And the work "Annoying Work" by "pest"
+    When I am logged in as "muter"
+      And I go to pest's works page
+    Then I should not see "Annoying Work"
+    When I am logged out
+      And I go to pest's works page
+    Then I should see "Annoying Work"
+
+  @javascript
+  Scenario: Users cannot see series by a muted user
+    Given the user "muter" has muted the user "pest"
+      And the work "Annoying Work" by "pest"
+      And I am logged in as "pest"
+      And I edit the work "Annoying Work"
+      And I add the series "Annoying Series"
+      And I press "Post"
+    When I am logged in as "muter"
+      And I go to pest's series page
+    Then I should not see "Annoying Series"
+    When I am logged out
+      And I go to pest's series page
+    Then I should see "Annoying Series"
+
+  @javascript
+  Scenario: Users cannot see bookmarks by a muted user
+    Given the user "muter" has muted the user "pest"
+      And the work "Good Work" by "muter"
+      And I am logged in as "pest"
+      And I have a bookmark for "Good Work"
+    When I am logged in as "muter"
+      And I go to pest's bookmarks page
+    Then I should not see "Good Work"
+    When I am logged out
+      And I go to pest's bookmarks page
+    Then I should see "Good Work"
+
+  @javascript
+  Scenario: Users cannot see comments by a muted user
+    Given the user "muter" has muted the user "pest"
+      And the work "Good Work" by "muter"
+      And I am logged in as "pest"
+      And I post the comment "fxxk you" on the work "Good Work"
+    When I am logged in as "muter"
+      And I view the work "Good Work"
+    Then I should not see "fxxk you"
+    When I am logged out
+      And I view the work "Good Work"
+    Then I should see "Good Work"
