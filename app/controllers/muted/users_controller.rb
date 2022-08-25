@@ -21,7 +21,7 @@ module Muted
       @rec_counts = Pseud.rec_counts_for_pseuds(@pseuds)
       @work_counts = Pseud.work_counts_for_pseuds(@pseuds)
 
-      @page_subtitle = "Muted Users"
+      @page_subtitle = t(".title")
     end
 
     # GET /users/:user_id/muted/users/confirm_mute
@@ -85,9 +85,9 @@ module Muted
     end
 
     def update_cache
+      return Rails.cache.write("muted/#{current_user.id}/mute_css", nil) if @user.muted_users.empty?
+      
       muted_users_css_classes = @user.muted_users.map { |muted_user| ".user-#{muted_user.id}" }
-
-      return Rails.cache.write("muted/#{current_user.id}/mute_css", nil) if muted_users_css_classes.empty?
 
       Rails.cache.write(
         "muted/#{current_user.id}/mute_css", 
