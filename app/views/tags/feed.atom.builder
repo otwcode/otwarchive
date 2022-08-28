@@ -9,7 +9,7 @@ atom_feed do |feed|
         entry.summary feed_summary(work), :type => 'html'
 
         entry.author do |author|
-          author.name text_byline(work, :visibility => 'public')
+          author.name text_byline(work, :visibility => 'public'), :type => 'html'
         end
       end
     end
