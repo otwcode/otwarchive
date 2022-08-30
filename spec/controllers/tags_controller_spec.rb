@@ -19,8 +19,6 @@ describe TagsController do
       { name: Faker::FunnyName.name, canonical: "0", type: "Character" }
     end
 
-    before { freeze_time }
-
     context "successful creation" do
       before { post :create, params: { tag: tag_params } }
 
@@ -110,7 +108,6 @@ describe TagsController do
 
     context "with one canonical fandom in the fandom string and a selected freeform" do
       before do
-        freeze_time
         put :mass_update, params: { id: @fandom1.name, show: 'freeforms', status: 'unwrangled', fandom_string: @fandom2.name, selected_tags: [@freeform1.id] }
       end
 
@@ -127,7 +124,6 @@ describe TagsController do
 
     context "with one canonical and one noncanonical fandoms in the fandom string and a selected freeform" do
       before do
-        freeze_time
         put :mass_update, params: { id: @fandom1.name, show: 'freeforms', status: 'unwrangled', fandom_string: "#{@fandom2.name},#{@fandom3.name}", selected_tags: [@freeform1.id] }
       end
 
@@ -142,7 +138,6 @@ describe TagsController do
 
     context "with two canonical fandoms in the fandom string and a selected character" do
       before do
-        freeze_time
         put :mass_update, params: { id: @fandom1.name, show: 'characters', status: 'unwrangled', fandom_string: "#{@fandom1.name},#{@fandom2.name}", selected_tags: [@character1.id] }
       end
 
@@ -157,7 +152,6 @@ describe TagsController do
 
     context "with a canonical fandom in the fandom string, a selected unwrangled character, and the same character to be made canonical" do
       before do
-        freeze_time
         put :mass_update, params: { id: @fandom1.name, show: 'characters', status: 'unwrangled', fandom_string: "#{@fandom1.name}", selected_tags: [@character1.id], canonicals: [@character1.id] }
       end
 
@@ -172,7 +166,6 @@ describe TagsController do
 
     context "with a canonical fandom in the fandom string, a selected synonym character, and the same character to be made canonical" do
       before do
-        freeze_time
         put :mass_update, params: { id: @fandom1.name, show: 'characters', status: 'unfilterable', fandom_string: "#{@fandom2.name}", selected_tags: [@character2.id], canonicals: [@character2.id] }
       end
 
@@ -187,7 +180,6 @@ describe TagsController do
 
     context "removing an associated tag" do
       before do
-        freeze_time
         put :mass_update, params: { id: @character3.name, remove_associated: [@character2.id] }
       end
 
@@ -246,7 +238,6 @@ describe TagsController do
       let(:unsorted_tag) { create(:unsorted_tag) }
 
       before do
-        freeze_time
         put :update, params: { id: unsorted_tag, tag: { type: "Fandom" }, commit: "Save changes" }
       end
 
@@ -369,8 +360,6 @@ describe TagsController do
         context "when the tag is a canonical child" do
           let(:associated) { create(:relationship, canonical: true) }
 
-          before { freeze_time }
-
           include_examples "success message"
           include_examples "set last wrangling activity"
 
@@ -383,8 +372,6 @@ describe TagsController do
         context "when the tag is a non-canonical child" do
           let(:associated) { create(:relationship, canonical: false) }
 
-          before { freeze_time }
-
           include_examples "success message"
           include_examples "set last wrangling activity"
 
@@ -396,8 +383,6 @@ describe TagsController do
 
         context "when the tag is a canonical parent" do
           let(:associated) { create(:fandom, canonical: true) }
-
-          before { freeze_time }
 
           include_examples "success message"
           include_examples "set last wrangling activity"
@@ -509,8 +494,6 @@ describe TagsController do
           # We want to add the grandparent as our new metatag.
           grandparent
         end
-
-        before { freeze_time }
 
         include_examples "success message"
         include_examples "set last wrangling activity"

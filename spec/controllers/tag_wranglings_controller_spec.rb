@@ -25,7 +25,7 @@ describe TagWranglingsController do
       it_redirects_to_with_error(tag_wranglings_path(page_options), "There were no Fandom tags!")
     end
 
-    context "making tags canonical" do
+    context "when making tags canonical" do
       let(:tag1) { create(:character, canonical: false) }
       let(:tag2) { create(:character, canonical: false) }
 
@@ -36,7 +36,7 @@ describe TagWranglingsController do
       include_examples "set last wrangling activity"
     end
 
-    context "assigning tags to a medium" do
+    context "when assigning tags to a medium" do
       let(:fandom1) { create(:fandom, canonical: true) }
       let(:fandom2) { create(:fandom, canonical: true) }
       let(:medium) { create(:media) }
@@ -48,7 +48,7 @@ describe TagWranglingsController do
       include_examples "set last wrangling activity"
     end
 
-    context "adding tags to a fandom" do
+    context "when adding tags to a fandom" do
       let(:tag1) { create(:character, canonical: false) }
       let(:tag2) { create(:character, canonical: false) }
       let(:fandom) { create(:fandom, canonical: true) }
