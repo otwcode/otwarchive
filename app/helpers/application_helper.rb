@@ -166,7 +166,9 @@ module ApplicationHelper
       end
       anon_byline
     else
-      byline_text(creation, only_path: false, text_only: true)
+      only_path = false
+      text_only = true
+      byline_text(creation, only_path, text_only)
     end
   end
 
