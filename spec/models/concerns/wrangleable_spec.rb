@@ -13,7 +13,7 @@ shared_examples "a wrangleable" do
       before { User.current_user = create(:tag_wrangler) }
 
       context "a wrangling activity has happened" do
-        before { User.update_wrangling_activity = true }
+        before { User.should_update_wrangling_activity = true }
 
         it "sets a last wrangling time" do
           freeze_time do
@@ -24,7 +24,7 @@ shared_examples "a wrangleable" do
       end
 
       context "no wrangling activity has happened" do
-        before { User.update_wrangling_activity = false }
+        before { User.should_update_wrangling_activity = false }
 
         include_examples "no wrangling activity recorded"
       end
@@ -40,13 +40,13 @@ shared_examples "a wrangleable" do
       before { User.current_user = user }
 
       context "a wrangling activity has happened" do
-        before { User.update_wrangling_activity = true }
+        before { User.should_update_wrangling_activity = true }
 
         include_examples "no wrangling activity recorded"
       end
 
       context "no wrangling activity has happened" do
-        before { User.update_wrangling_activity = false }
+        before { User.should_update_wrangling_activity = false }
 
         include_examples "no wrangling activity recorded"
       end

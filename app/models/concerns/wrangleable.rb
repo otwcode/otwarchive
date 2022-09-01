@@ -10,13 +10,10 @@ module Wrangleable
 
   def update_last_wrangling_activity
     current_user = User.current_user
-    return unless current_user.respond_to?(:is_tag_wrangler?) && current_user.is_tag_wrangler?
-
-    last_activity = LastWranglingActivity.find_or_create_by(user: current_user)
-    last_activity.touch
+    current_user.update_last_wrangling_activity if current_user.respond_to?(:update_last_wrangling_activity)
   end
 
   def update_wrangling_activity?
-    User.update_wrangling_activity
+    User.should_update_wrangling_activity
   end
 end

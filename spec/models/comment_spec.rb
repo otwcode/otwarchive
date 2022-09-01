@@ -238,9 +238,7 @@ describe Comment do
       let(:tag_wrangler) { create(:tag_wrangler) }
 
       context "direct parent is a tag" do
-        let(:comment) { create(:comment, :on_tag, pseud: tag_wrangler.default_pseud) }
-
-        before { tag_wrangler.last_wrangling_activity = LastWranglingActivity.new }
+        let!(:comment) { create(:comment, :on_tag, pseud: tag_wrangler.default_pseud) }
 
         it "does not update last wrangling activity" do
           expect do
@@ -256,9 +254,7 @@ describe Comment do
       let(:tag_wrangler) { create(:tag_wrangler) }
 
       context "direct parent is a tag" do
-        let(:comment) { create(:comment, :on_tag, pseud: tag_wrangler.default_pseud) }
-
-        before { tag_wrangler.last_wrangling_activity = LastWranglingActivity.new }
+        let!(:comment) { create(:comment, :on_tag, pseud: tag_wrangler.default_pseud) }
 
         it "does not update last wrangling activity" do
           expect do

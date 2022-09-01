@@ -6,9 +6,9 @@ module TagWrangling
   # is saved during the action, a LastWranglingActivity will be
   # recorded. Otherwise no additional steps are taken.
   def record_wrangling_activity
-    User.update_wrangling_activity = true
+    User.should_update_wrangling_activity = true
     yield
   ensure
-    User.update_wrangling_activity = false
+    User.should_update_wrangling_activity = false
   end
 end

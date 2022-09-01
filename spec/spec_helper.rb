@@ -57,7 +57,7 @@ RSpec.configure do |config|
   config.before :each do
     DatabaseCleaner.start
     User.current_user = nil
-    User.update_wrangling_activity = false
+    User.should_update_wrangling_activity = false
     clean_the_database
 
     # Clears used values for all generators.

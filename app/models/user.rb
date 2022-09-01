@@ -132,7 +132,7 @@ class User < ApplicationRecord
            through: :followings,
            source: :user
 
-  thread_cattr_accessor :update_wrangling_activity
+  thread_cattr_accessor :should_update_wrangling_activity
   has_many :wrangling_assignments, dependent: :destroy
   has_many :fandoms, through: :wrangling_assignments
   has_many :wrangled_tags, class_name: "Tag", as: :last_wrangler
@@ -431,6 +431,13 @@ class User < ApplicationRecord
   def create_log_item(options = {})
     options.reverse_merge! note: "System Generated", user_id: self.id
     LogItem.create(options)
+  end
+
+  def update_last_wrangling_activity
+    return unless is_tag_wrangler?
+
+    last_activity = LastWranglingActivity.find_or_create_by(user: self)
+    last_activity.touch
   end
 
   # Returns true if user is the sole author of a work
