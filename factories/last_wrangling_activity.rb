@@ -2,6 +2,6 @@ require "faker"
 
 FactoryBot.define do
   factory :last_wrangling_activity do
-    user { create(:user) }
+    user
   end
 end

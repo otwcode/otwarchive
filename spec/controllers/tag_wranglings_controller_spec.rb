@@ -20,14 +20,14 @@ describe TagWranglingsController do
     let(:page_options) { { page: 1, sort_column: "name", sort_direction: "ASC" } }
 
     it "displays error when there are no fandoms to wrangle to" do
-      character = create(:character, canonical: false)
+      character = create(:character)
       post :wrangle, params: { fandom_string: "", selected_tags: [character.id] }
       it_redirects_to_with_error(tag_wranglings_path(page_options), "There were no Fandom tags!")
     end
 
     context "when making tags canonical" do
-      let(:tag1) { create(:character, canonical: false) }
-      let(:tag2) { create(:character, canonical: false) }
+      let(:tag1) { create(:character) }
+      let(:tag2) { create(:character) }
 
       before do
         post :wrangle, params: { canonicals: [tag1.id, tag2.id] }
@@ -49,8 +49,8 @@ describe TagWranglingsController do
     end
 
     context "when adding tags to a fandom" do
-      let(:tag1) { create(:character, canonical: false) }
-      let(:tag2) { create(:character, canonical: false) }
+      let(:tag1) { create(:character) }
+      let(:tag2) { create(:character) }
       let(:fandom) { create(:fandom, canonical: true) }
 
       before do

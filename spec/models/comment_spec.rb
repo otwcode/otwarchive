@@ -238,16 +238,14 @@ describe Comment do
       let(:tag_wrangler) { create(:tag_wrangler) }
 
       context "direct parent is a tag" do
-        let(:comment) do
-          Timecop.travel(1.day.ago) do
-            create(:comment, :on_tag, pseud: tag_wrangler.default_pseud)
-          end
-        end
+        let(:comment) { create(:comment, :on_tag, pseud: tag_wrangler.default_pseud) }
 
-        before { comment.comment_content = Faker::Lorem.sentence(word_count: 25) }
+        before { tag_wrangler.last_wrangling_activity = LastWranglingActivity.new }
 
         it "does not update last wrangling activity" do
-          expect(tag_wrangler.last_wrangling_activity.updated_at).not_to be_within(23.hours).of Time.now.utc
+          expect do
+            comment.update(comment_content: Faker::Lorem.sentence(word_count: 25))
+          end.not_to change { tag_wrangler.reload.last_wrangling_activity.updated_at }
         end
       end
     end
@@ -258,16 +256,14 @@ describe Comment do
       let(:tag_wrangler) { create(:tag_wrangler) }
 
       context "direct parent is a tag" do
-        let(:comment) do
-          Timecop.travel(1.day.ago) do
-            create(:comment, :on_tag, pseud: tag_wrangler.default_pseud)
-          end
-        end
+        let(:comment) { create(:comment, :on_tag, pseud: tag_wrangler.default_pseud) }
 
-        before { comment.destroy }
+        before { tag_wrangler.last_wrangling_activity = LastWranglingActivity.new }
 
         it "does not update last wrangling activity" do
-          expect(tag_wrangler.last_wrangling_activity).not_to be_within(23.hours).of Time.now.utc
+          expect do
+            comment.destroy
+          end.not_to change { tag_wrangler.reload.last_wrangling_activity.updated_at }
         end
       end
     end
