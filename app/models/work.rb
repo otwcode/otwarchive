@@ -1164,7 +1164,7 @@ class Work < ApplicationRecord
   # to one another can be considered a crossover
   def crossover
     # Short-circuit the check if there's only one fandom tag:
-    return false if fandoms.count == 1
+    return false if fandoms.size == 1
 
     # Replace fandoms with their mergers if possible,
     # as synonyms should have no meta tags themselves
@@ -1200,7 +1200,8 @@ class Work < ApplicationRecord
   # Does this work have only one relationship tag?
   # (not counting synonyms)
   def otp
-    return true if relationships.count == 1
+    return true if relationships.size == 1
+
     all_without_syns = relationships.map { |r| r.merger ? r.merger : r }.uniq.compact
     all_without_syns.count == 1
   end
