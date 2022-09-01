@@ -134,6 +134,23 @@ Feature: Collection
   Then I should see "Collection1"
     And I should not see "Collection2"
 
+  Scenario: Clear filters applied on collections
+
+  Given I have loaded the fixtures
+    And I am logged in as a random user
+  When I go to the collections page
+    And I choose "Gift Exchange Challenge"
+    And I choose "collection_filters_closed_false"
+    And I choose "collection_filters_moderated_true"
+    And I press "Sort and Filter"
+  Then I should see "1 Collection"
+    And I should see "Surprise Presents"
+  When I follow "Clear Filters"
+  Then I should see "6 Collections"
+    And the "Gift Exchange Challenge" checkbox within "#collection-filters" should not be checked
+    And the "No" checkbox within "#collection-filters" should not be checked
+    And the "Yes" checkbox within "#collection-filters" should not be checked
+
   Scenario: Look at a collection, see the rules and intro and FAQ
 
   Given I have loaded the fixtures
