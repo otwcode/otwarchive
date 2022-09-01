@@ -1,24 +1,32 @@
 class Admin::SkinsController < Admin::BaseController
 
   def index
+    authorize Skin
     @unapproved_skins = Skin.unapproved_skins.sort_by_recent
   end
 
   def index_rejected
+    authorize Skin
     @rejected_skins = Skin.rejected_skins.sort_by_recent
   end
 
   def index_approved
+    authorize Skin
     @approved_skins = Skin.approved_skins.usable.sort_by_recent
   end
 
   def update
+    authorize Skin, :index?
+
     flash[:notice] = []
     modified_skin_titles = []
     %w(official rejected cached featured in_chooser).each do |action|
       skins_to_set = params["make_#{action}"] ? Skin.where(id: params["make_#{action}"].map {|id| id.to_i}) : []
       skins_to_unset = params["make_un#{action}"] ? Skin.where(id: params["make_un#{action}"].map {|id| id.to_i}) : []
       skins_to_set.each do |skin|
+        # Silently fail if the user doesn't have permission to update:
+        next unless policy(skin).update?
+
         case action
         when "official"
           skin.update_attribute(:official, true)
@@ -41,6 +49,9 @@ class Admin::SkinsController < Admin::BaseController
       end
 
       skins_to_unset.each do |skin|
+        # Silently fail if the user doesn't have permission to update:
+        next unless policy(skin).update?
+
         case action
         when "official"
           skin.clear_cache! # no cache for unofficial skins
@@ -66,6 +77,8 @@ class Admin::SkinsController < Admin::BaseController
 
     # set default
     if params[:set_default].present? && params[:set_default] != AdminSetting.default_skin&.title
+      authorize Skin, :set_default?
+
       skin = Skin.find_by(title: params[:set_default], official: true)
       @admin_setting = AdminSetting.first
       if skin && @admin_setting
