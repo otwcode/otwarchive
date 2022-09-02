@@ -206,7 +206,7 @@ describe User do
         log_item = existing_user.log_items.last
         expect(log_item.action).to eq(ArchiveConfig.ACTION_NEW_EMAIL)
         expect(log_item.admin_id).to eq(admin.id)
-        expect(log_item.note).to eq("Change made by admin #{admin.login}")
+        expect(log_item.note).to eq("Change made by #{admin.login}")
       end
     end
   end
