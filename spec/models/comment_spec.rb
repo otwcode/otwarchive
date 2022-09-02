@@ -172,8 +172,8 @@ describe Comment do
       let(:tag_wrangler) { create(:tag_wrangler) }
 
       shared_examples "updates last wrangling activity" do
-        it "tracks last wrangling activity" do
-          expect(tag_wrangler.last_wrangling_activity.updated_at).to be_within(10.seconds).of Time.now.utc
+        it "tracks last wrangling activity", :frozen do
+          expect(tag_wrangler.last_wrangling_activity.updated_at).to eq(Time.now.utc)
         end
       end
 

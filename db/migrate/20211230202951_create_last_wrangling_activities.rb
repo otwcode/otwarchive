@@ -1,4 +1,4 @@
-class CreateLastWranglingActivities < ActiveRecord::Migration[5.2]
+class CreateLastWranglingActivities < ActiveRecord::Migration[6.0]
   def change
     create_table :last_wrangling_activities do |t|
       t.references :user,

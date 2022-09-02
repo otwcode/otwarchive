@@ -10,9 +10,9 @@ describe TagWranglingsController do
   end
 
   shared_examples "set last wrangling activity" do
-    it "sets the last wrangling activity time to now" do
+    it "sets the last wrangling activity time to now", :frozen do
       user = controller.current_user
-      expect(user.last_wrangling_activity.updated_at).to be_within(1.minute).of Time.now.utc
+      expect(user.last_wrangling_activity.updated_at).to eq(Time.now.utc)
     end
   end
 
