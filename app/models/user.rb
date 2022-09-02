@@ -562,7 +562,7 @@ class User < ApplicationRecord
       action: ArchiveConfig.ACTION_NEW_EMAIL,
       admin_id: current_admin&.id
     }
-    options[:note] = "Change made by admin #{current_admin&.login}" if current_admin
+    options[:note] = "Change made by #{current_admin&.login}" if current_admin
     create_log_item(options)
   end
 
