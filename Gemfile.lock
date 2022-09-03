@@ -217,13 +217,13 @@ GEM
     docile (1.4.0)
     domain_name (0.5.20190701)
       unf (>= 0.0.5, < 1.0.0)
-    elasticsearch (8.4.0)
-      elasticsearch-api (= 8.4.0)
-      elasticsearch-transport (= 8.4.0)
-    elasticsearch-api (8.4.0)
-      multi_json
     elastic-transport (8.1.0)
-      faraday (~> 1)
+      faraday (< 3)
+      multi_json
+    elasticsearch (8.4.0)
+      elastic-transport (~> 8)
+      elasticsearch-api (= 8.4.0)
+    elasticsearch-api (8.4.0)
       multi_json
     email_spec (1.6.0)
       launchy (~> 2.1)
