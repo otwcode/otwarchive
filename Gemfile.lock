@@ -222,7 +222,7 @@ GEM
       elasticsearch-transport (= 8.4.0)
     elasticsearch-api (8.4.0)
       multi_json
-    elasticsearch-transport (8.4.0)
+    elastic-transport (8.1.0)
       faraday (~> 1)
       multi_json
     email_spec (1.6.0)
