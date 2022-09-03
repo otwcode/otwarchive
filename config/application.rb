@@ -75,8 +75,8 @@ module Otwarchive
     # Keeps updated_at in cache keys
     config.active_record.cache_versioning = false
 
-    #This class is not allowed by deafult when upgrading Rails to 6.0.5.1 patch
-    config.active_record.yaml_column_permitted_classes = [ActiveSupport::TimeWithZone]
+    # This class is not allowed by deafult when upgrading Rails to 6.0.5.1 patch
+    config.active_record.yaml_column_permitted_classes = [ActiveSupport::TimeWithZone, Time]
 
     # handle errors with custom error pages:
     config.exceptions_app = self.routes
