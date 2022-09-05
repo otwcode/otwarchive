@@ -292,9 +292,16 @@ public
   end
 
   def admin_only_access_denied
-    flash[:error] = ts("Sorry, only an authorized admin can access the page you were trying to reach.")
-    redirect_to root_path
-    false
+    respond_to do |format|
+      format.html do
+        flash[:error] = ts("Sorry, only an authorized admin can access the page you were trying to reach.")
+        redirect_to root_path
+      end
+      format.json do
+        errors = [ts("Sorry, only an authorized admin can do that.")]
+        render json: { errors: errors }, status: :forbidden
+      end
+    end
   end
 
   # Filter method - prevents users from logging in as admin

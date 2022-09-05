@@ -131,7 +131,7 @@ end
 When /^I view requests as an admin$/ do
   step %{I am logged in as an admin}
   step %{I follow "Invitations"}
-  step %{I follow "Manage requests"}
+  step %{I follow "Manage Requests"}
 end
 
 When /^an admin grants the request$/ do

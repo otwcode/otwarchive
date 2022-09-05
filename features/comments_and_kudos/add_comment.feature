@@ -117,6 +117,23 @@ Scenario: Comment threading, comment editing
     And I should not see "This should be nested" within ".thread .thread .thread .thread"
     And I should see "I loved this" within "ol.thread"
 
+  Scenario: A leaves a comment, B replies to it, A deletes their comment, B edits the comment, A should not receive a comment edit notification email
+
+    Given the work "Generic Work" by "creator"
+      And a comment "A's comment (to be deleted)" by "User_A" on the work "Generic Work"
+      And a reply "B's comment (to be edited)" by "User_B" on the work "Generic Work"
+      And 1 email should be delivered to "User_A"
+      And all emails have been delivered
+    When I am logged in as "User_A"
+      And I view the work "Generic Work" with comments
+      And I delete the comment
+    When I am logged in as "User_B"
+      And I view the work "Generic Work" with comments
+      And I follow "Edit"
+      And I fill in "Comment" with "B's improved comment (edited)"
+      And I press "Update"
+    Then 0 emails should be delivered to "User_A"
+  
   Scenario: Try to post an invalid comment
 
     When I am logged in as "author"
