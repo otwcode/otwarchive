@@ -332,7 +332,7 @@ module ApplicationHelper
     time_in_zone_string = time_in_zone.strftime('<abbr class="day" title="%A">%a</abbr> <span class="date">%d</span>
                                                  <abbr class="month" title="%B">%b</abbr> <span class="year">%Y</span>
                                                  <span class="time">%I:%M%p</span>').html_safe +
-                                          " <abbr class=\"timezone\" title=\"#{zone}\">#{time_in_zone.zone}</abbr> ".html_safe
+                                          " <abbr class=\"timezone\" title=\"#{zone}\">#{time_in_zone.zone}</abbr>".html_safe
 
     user_time_string = "".html_safe
     if user.is_a?(User) && user.preference.time_zone
