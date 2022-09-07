@@ -4,15 +4,17 @@
 
 <!--subnav-->
 <ul class="navigation actions" role="navigation">
-  <li>
-    <%= span_if_current ts("Unreviewed Works"), admin_spam_index_path, params[:show].blank? %>
-  </li>
-  <li>
-    <%= span_if_current ts("Confirmed Spam"), { show: "reviewed" } %>
-  </li>
-  <li>
-    <%= span_if_current ts("Approved Works"), { show: "approved" } %>
-  </li>
+  <% if policy(:spam).index? %>
+    <li>
+      <%= span_if_current ts("Unreviewed Works"), admin_spam_index_path, params[:show].blank? %>
+    </li>
+    <li>
+      <%= span_if_current ts("Confirmed Spam"), { show: "reviewed" } %>
+    </li>
+    <li>
+      <%= span_if_current ts("Approved Works"), { show: "approved" } %>
+    </li>
+  <% end %>
 </ul>
 <!--/subnav-->
 
