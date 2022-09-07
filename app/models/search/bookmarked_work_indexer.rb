@@ -3,8 +3,16 @@ class BookmarkedWorkIndexer < BookmarkableIndexer
     "Work"
   end
 
-  # Only index works with bookmarks
-  def self.indexables
-    Work.includes(:stat_counter).where("stat_counters.bookmarks_count > 0").references(:stat_counters)
+  def self.klass_with_includes
+    Work.includes(
+      :approved_collections,
+      :direct_filters,
+      :external_author_names,
+      :filters,
+      :language,
+      :tags,
+      :users,
+      pseuds: :user
+    )
   end
 end

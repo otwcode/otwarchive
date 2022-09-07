@@ -1,10 +1,75 @@
 ---
 id:
+  activerecord:
+    attributes:
+      archive_warning:
+        name_with_colon:
+          other: 'Peringatan:'
+      category:
+        name_with_colon:
+          other: 'Kategori:'
+      character:
+        name_with_colon:
+          other: 'Karakter:'
+      fandom:
+        name_with_colon:
+          other: 'Fandom:'
+      freeform:
+        name_with_colon:
+          other: 'Label Tambahan:'
+      rating:
+        name_with_colon: 'Rating:'
+      relationship:
+        name_with_colon:
+          other: 'Pasangan:'
+      work:
+        summary: Sinopsis
+    models:
+      archive_warning:
+        other: Peringatan
+      category:
+        other: Kategori
+      chapter:
+        other: Bab
+      character:
+        other: Karakter
+      fandom:
+        other: Fandom
+      freeform:
+        other: Label Tambahan
+      rating:
+        other: Rating
+      relationship:
+        other: Pasangan
+      series:
+        other: Seri
+  kudo_mailer:
+    batch_kudo_notification:
+      guest:
+        other: "%{count} tamu"
+      html:
+        left_kudos:
+          other: "%{givers_list} telah memberikan kudos untuk %{commentable_link}."
+        single_guest:
+          giver_list: Seorang tamu
+          left_kudos: "%{giver_list} telah memberikan kudos untuk %{commentable_link}."
+      subject: "[%{app_name}] Anda telah menerima kudos!"
+      text:
+        left_kudos:
+          other: "%{givers_list} telah memberikan kudos untuk %{commentable_title}
+            (%{commentable_url})."
+        single_guest: Seorang tamu telah memberikan kudos untuk %{commentable_title}
+          (%{commentable_url}).
   mailer:
     general:
       closing:
         formal: Dengan hormat,
         informal: Salam,
+      creation:
+        link_with_word_count: "%{creation_link} (%{word_count})"
+        title_with_word_count: '"%{creation_title}" (%{word_count})'
+        word_count:
+          other: "%{count} kata"
       footer:
         general:
           html:
@@ -25,22 +90,13 @@ id:
           addressed: Halo %{name}!
           unaddressed: Halo!
         introductory: Halo dari Archive of Our Own – AO3 (Arsip Milik Kita)!
+      metadata_label_indicator: ": "
       signature:
         app_short_name: AO3
         open_doors: Tim Open Doors (Pintu Terbuka)
         parent_org: Organization for Transformative Works – OTW (Organisasi untuk
           Karya Transformatif)
         support: Komite Bantuan AO3
-    kudos:
-      guest:
-        other: "%{count} tamu"
-      html:
-        left_kudos:
-          other: "%{givers_list} memberikan jempol pada %{commentable_link}."
-      text:
-        left_kudos:
-          other: "%{givers_list} memberikan jempol pada %{commentable_link}."
-      you_have: "[%{app_name}] Anda mendapatkan jempol!"
   users:
     mailer:
       reset_password_instructions:
@@ -100,7 +156,7 @@ id:
       text:
         help: 'Jika Anda tidak yakin alasan karya Anda disembunyikan dan Anda belum
           menerima komunikasi terkait hal ini, silakan hubungi Komite Kebijakan dan
-          Pelanggaran secara langsung:  %{contact_abuse_url}.'
+          Pelanggaran secara langsung: %{contact_abuse_url}.'
         hidden: Karya Anda, "%{title}" (%{work_url}), telah disembunyikan oleh Komite
           Kebijakan dan Pelanggaran dan tidak dapat diakses publik lagi.
         tos_violation: Jika karya Anda disembunyikan karena melanggar Ketentuan Layanan
@@ -124,8 +180,8 @@ id:
           text: Moderator Koleksi "%{collection_title}" (%{collection_url}) telah
             mengubah status karya anda "%{work_title}" (%{work_url}) menjadi anonim
         anonymous_unrevealed:
-          html: 'Moderator koleksi %{collection_link} telah mengubah status karya
-            Anda,  %{work_link}, menjadi anonim dan unrevealed (tersembunyi). '
+          html: Moderator koleksi %{collection_link} telah mengubah status karya Anda,
+            %{work_link}, menjadi anonim dan unrevealed (tersembunyi).
           text: Moderator Koleksi "%{collection_title}" (%{collection_url}) telah
             mengubah status karya anda "%{work_title}" (%{work_url}) menjadi anonim
             dan unrevealed (tersembunyi)
@@ -135,8 +191,8 @@ id:
           text: Moderator Koleksi "%{collection_title}" (%{collection_url}) telah
             mengubah status karya anda "%{work_title}" (%{work_url}) menjadi unrevealed
             (tersembunyi)
-      collection_items_link_text: 'halaman Approved Collection Items (Artikel Koleksi
-        yang Disetujui) '
+      collection_items_link_text: halaman Approved Collection Items (Artikel Koleksi
+        yang Disetujui)
       do_not_want:
         anonymous:
           html: Jika Anda tidak ingin karya Anda dibuat menjadi anonim, silakan kunjungi
@@ -191,7 +247,7 @@ id:
       subject: "[%{app_name}][%{collection_title}] Tugas Anda!"
       text:
         assignment: Anda telah diberikan tugas untuk memenuhi permintaan berikut dalam
-          challenge (tantangan) "%{collection_title}" (%{collection_url})  di AO3!
+          challenge (tantangan) "%{collection_title}" (%{collection_url}) di AO3!
         footer: Anda menerima surel ini karena Anda telah mendaftarkan diri untuk
           mengikuti tantangan %{title} (%{url}). Untuk informasi lebih lanjut terkait
           tantangan ini atau untuk informasi kontak moderator, silakan kunjungi %{profile_url}.
@@ -209,53 +265,84 @@ id:
         received_message: 'Anda menerima pesan tentang collection (koleksi) %{collection_link}
           Anda:'
       text:
-        received_message: 'Anda menerima pesan tentang collection (koleksi) %{collection_link}
-          Anda:'
+        received_message: 'Anda menerima pesan tentang collection (koleksi) "%{collection_title}"
+          (%{collection_url}) Anda:'
     creatorship_notification:
-      explanation: Ketika Anda menjadi seorang rekan pencipta sebuah karya, Anda dapat
+      explanation: Ketika Anda menjadi seorang rekan kreator sebuah karya, Anda dapat
         ditambahkan pada bab-bab terbaru dalam karya terlepas dari pengaturan pembuatan
         karya rekanan sebelumnya. Anda juga akan ditambahkan ke dalam seri manapun
         tempat karya tersebut berada.
       html:
         creation: "%{creation_link} oleh %{pseud_links}"
-        edit: menyunting %{type}
-        remove: Jika Anda ditambahkan akibat kesalahan atau Anda tidak ingin didaftarkan
-          sebagai pencipta, Anda dapat %{edit} untuk menghapus status Anda sebagai
-          pencipta.
-      intro: 'Pengguna %{adding_user} telah mendaftarkan nama pengguna Anda %{pseud}
-        sebagai rekan pencipta pada karya berikut %{type}:'
-      subject: "[%{app_name}] Notifikasi Rekan Pencipta"
+        edit_chapter: menyunting chapter tersebut
+        edit_series: menyunting series tersebut
+        remove_chapter: Jika Anda ditambahkan akibat kesalahan atau Anda tidak ingin
+          didaftarkan sebagai kreator, Anda dapat %{edit_chapter_link} untuk menghapus
+          status Anda sebagai kreator.
+        remove_series: Jika Anda ditambahkan akibat kesalahan atau Anda tidak ingin
+          didaftarkan sebagai kreator, Anda dapat %{edit_series_link} untuk menghapus
+          status Anda sebagai kreator.
+      intro_chapter: 'Pengguna %{adding_user} telah mendaftarkan nama pengguna Anda
+        %{pseud} sebagai rekan kreator pada chapter (bab) berikut:'
+      intro_series: 'Pengguna %{adding_user} telah mendaftarkan pseud (alias) %{pseud}
+        anda sebagai rekan kreator dalam series (seri) berikut:'
+      subject: "[%{app_name}] Notifikasi Rekan kreator"
       text:
         creation: "%{title} (%{url}) oleh %{pseuds}"
-        remove: 'Jika Anda ditambahkan akibat kesalahan atau tidak ingin didaftarkan
-          sebagai pencipta, Anda dapat menyunting %{type} untuk menghapus status Anda
-          sebagai pencipta: %{url}'
+        remove_chapter: 'Jika Anda ditambahkan akibat kesalahan atau tidak ingin didaftarkan
+          sebagai kreator, Anda dapat menyunting chapter untuk menghapus status Anda
+          sebagai kreator: %{url}'
+        remove_series: 'Jika Anda ditambahkan akibat kesalahan atau tidak ingin didaftarkan
+          sebagai kreator, Anda dapat menyunting series tersebut untuk menghapus status
+          Anda sebagai kreator: %{url}'
     creatorship_notification_archivist:
       explanation: Karena berlaku dalam kapasitas resmi sebagai pengarsip Open Doors,
         ia diizinkan untuk menunjuk Anda sebagai rekan pencipta tanpa undangan, walaupun
         Anda telah mematikan opsi untuk menjadi rekan pencipta.
       html:
         creation: "%{creation_link} oleh %{pseud_links}"
-        edit: sunting %{type}
-        remove: Jika ada kesalahan dalam penunjukan ini atau Anda tidak ingin ditunjuk
-          sebagai pencipta, Anda dapat %{edit} untuk menghapus alias Anda sebagai
-          pencipta.
-      intro: 'Pengarsip %{archivist} telah menunjuk alias %{pseud} Anda sebagai rekan
-        pencipta untuk %{type} berikut:'
+        edit_chapter: sunting bab
+        edit_series: sunting serial
+        edit_work: sunting karya
+        remove_chapter: Jika ada kesalahan dalam penunjukan ini atau Anda tidak ingin
+          ditunjuk sebagai pencipta, Anda dapat menghapus alias Anda sebagai pencipta
+          di %{edit_chapter_link}.
+        remove_series: Jika ada kesalahan dalam penunjukan ini atau Anda tidak ingin
+          ditunjuk sebagai pencipta, Anda dapat menghapus alias Anda sebagai pencipta
+          %{edit_series_link}.
+        remove_work: Jika ada kesalahan dalam penunjukan ini atau Anda tidak ingin
+          ditunjuk sebagai pencipta, Anda dapat %{edit_work_link} untuk menghapus
+          alias Anda sebagai pencipta.
+      intro_chapter: 'Pengguna %{archivist} telah menunjuk alias %{pseud} Anda sebagai
+        rekan pencipta untuk bab berikut:'
+      intro_series: 'Pengarsip %{archivist} telah menunjuk alias %{pseud} Anda sebagai
+        rekan pencipta untuk serial berikut:'
+      intro_work: 'Pengarsip %{archivist} telah menunjuk alias %{pseud} Anda sebagai
+        rekan pencipta untuk karya berikut:'
       subject: "[%{app_name}] Notifikasi penunjukan sebagai rekan pencipta oleh pengarsip"
       text:
         creation: "%{title} (%{url}) oleh %{pseuds}"
-        remove: 'Jika ada kesalahan dalam penunjukan ini atau Anda tidak ingin ditunjuk
-          sebagai pencipta, Anda dapat menyunting %{type} ini untuk menghapus alias
-          Anda sebagai pencipta: %{url}'
+        remove_chapter: 'Jika ada kesalahan dalam penunjukan ini atau Anda tidak ingin
+          ditunjuk sebagai pencipta, Anda dapat menyunting bab ini untuk menghapus
+          alias Anda sebagai pencipta: %{url}'
+        remove_series: 'Jika ada kesalahan dalam penunjukan ini atau Anda tidak ingin
+          ditunjuk sebagai pencipta, Anda dapat menyunting serial ini untuk menghapus
+          alias Anda sebagai pencipta: %{url}'
+        remove_work: 'Jika ada kesalahan dalam penunjukan ini atau Anda tidak ingin
+          ditunjuk sebagai pencipta, Anda dapat menyunting karya ini untuk menghapus
+          alias Anda sebagai pencipta: %{url}'
     creatorship_request:
       html:
         creation: "%{creation_link} oleh %{pseud_links}"
         instructions: Anda dapat menerima atau menolak undangan ini di halaman %{page_name}
           Anda.
         page_name: Co-Creator Requests (Undangan Rekan Kreator)
-      intro: "%{inviting_user} telah mengundang Anda untuk menjadi rekan kreator di
-        bawah alias %{pseud} pada %{type} berikut: "
+      intro_chapter: 'Pengguna %{inviting_user} mengundang Pseud (alias) anda %{pseud}
+        untuk didaftarkan sebagai rekan kreator di chapter (bab) berikut:'
+      intro_series: 'Pengguna %{inviting_user} mengundang Pseud (alias) anda %{pseud}
+        untuk didaftarkan sebagai rekan kreator di series (seri) berikut:'
+      intro_work: 'Pengguna %{inviting_user} mengundang Pseud (alias) anda %{pseud}
+        untuk didaftarkan sebagai rekan kreator di karya berikut:'
       subject: "[%{app_name}] Undangan rekan kreator"
       text:
         creation: "%{title} (%{url}) oleh %{pseuds}"
@@ -304,45 +391,7 @@ id:
         contact_support: hubungi tim Dukungan AO3
         faq_page: halaman Pertanyaan Umum
         open_doors: Open Doors (Pintu Terbuka)
-        part1: Anda menerima surel ini karena baru-baru ini ada arsip yang telah diimpor
-          oleh tim %{open_doors_link} (Pintu Terbuka) ke %{app_link} (%{app_short_name}),
-          dan berdasarkan informasi yang kami miliki, karya fan berikut ini adalah
-          milik Anda. Kami memberikan Anda kesempatan untuk mengklaim (atau menghapus/meninggalkan)
-          karya-karya ini jika Anda ingin. Jika Anda belum mempunyai akun AO3 dengan
-          alamat surel yang berbeda, kami mengundang Anda untuk bergabung dengan kami!
-        part10: Jika Anda memiliki karya-karya lain di arsip impor yang menggunakan
-          alamat surel yang sudah tidak dapat Anda akses, silakan %{open_doors_link}
-          dengan menyertakan informasi apapun yang dapat memverifikasi identitas Anda.
-        part11: Untuk pertanyaan-pertanyaan lain, silakan %{support_link}.
-        part2: Anda dapat membaca pengumuman tentang kegiatan pengarsipan terbaru
-          di %{news_link}, serta mendapat informasi tambahan di %{open_doors_faq_link}
-          tentang Open Doors atau di %{open_doors_tutorial_link}. Untuk pertanyaan-pertanyaan
-          yang belum terjawab di halaman Pertanyaan Umum, tutorial, atau surel ini,
-          silakan %{support_link}.
-        part3: Jika ini adalah sebuah kesalahan dan karya-karya ini bukan milik Anda,
-          mohon jangan hapus karya-karya ini! Tolong %{open_doors_link} dan kami akan
-          menanganinya.
-        part4: Tergantung pada arsip asalnya, karya-karya Anda mungkin saja telah
-          diimpor dan hanya dapat dilihat oleh pengguna yang terdaftar saja (untuk
-          mencegah pencarian karya tersebut melalui Google). Jika hal ini terjadi,
-          karya-karya tersebut hanya dapat diakses oleh pengguna yang telah tercatat
-          masuk, kecuali Anda memutuskan untuk membuka akses terhadap karya Anda.
-          Untuk bantuan membuka karya, meninggalkan karya, atau menghapus karya, silakan
-          %{support_link}.
         part5: Klaim atau hapus karya Anda di sini.
-        part7: Jika karya-karya ini milik Anda, tapi Anda tidak menginginkannya lagi,
-          Anda dapat meninggalkan mereka (sehingga mereka dapat tetap berada di AO3,
-          tapi nama Anda akan terhapus) atau menghapus mereka (sehingga karya tersebut
-          akan dihilangkan dari AO3 seluruhnya). Untuk meninggalkan atau menghapus
-          karya, Anda tidak perlu menambahkannya ke akun manapun--Anda dapat melakukan
-          ini langsung melalui tautan klaim diatas. (Untuk bantuan, silakan %{support_link}.)
-        part9: Jika Anda ingin tim Open Doors untuk memperbarui tautan pengalihan
-          agar mengarahkan ke karya yang Anda impor sendiri sebelumnya, harap hapus
-          salinan yang kami impor, lalu %{open_doors_link} menggunakan nama akun AO3
-          Anda, nama akun Anda di arsip impor, dan judul serta URL karya fan yang
-          akan dituju oleh tautan pengalihan Anda. (Jika Anda memiliki beberapa karya
-          yang ingin Anda ganti tautan pengalihannya, Anda dapat menuliskan semua
-          tautan tersebut dalam satu surel.)
         tutorial_page: halaman tutorial
       part12: Jika Anda ingin menghubungi kami, harap masukkan alamat-alamat surel
         dari @transformativeworks.org ke daftar putih kontak Anda dan cek folder spam
@@ -404,9 +453,9 @@ id:
           Anda dapat menuliskan semua tautan tersebut dalam satu surel.)
     invite_increase_notification:
       body:
-        other: 'Kami hanya ingin memberitahu bahwa Anda memiliki %{count} undangan
+        other: Kami hanya ingin memberitahu bahwa Anda memiliki %{count} undangan
           baru yang dapat digunakan untuk membuat akun baru di AO3. Anda dapat mengundang
-          teman Anda di %{invitation_page}. '
+          teman Anda di %{invitation_page}.
       invitation_page_link_text: halaman Invitations (Undangan) Anda
       subject: "[%{app_name}] Undangan Baru"
     invite_request_declined:
@@ -416,10 +465,17 @@ id:
       reason: 'Permintaan Anda adalah:'
       subject: "[%{app_name}] Permintaan kode undangan tambahan ditolak"
     recipient_notification:
+      html:
+        collection: Sebuah karya hadiah telah diunggah ke koleksi %{collection_link}
+          di AO3 untuk Anda!
+      no_collection: Sebuah karya hadiah telah diunggah ke AO3 untuk Anda!
       subject:
         collection: "[%{app_name}][%{collection_title}] Karya hadiah untuk Anda dari
           %{collection_title}"
         no_collection: "[%{app_name}] Karya hadiah untuk Anda"
+      text:
+        collection: Sebuah karya hadiah telah diunggah ke koleksi "%{collection_title}"
+          di AO3 (%{collection_url}) untuk Anda!
     signup_notification:
       activate_your_account: Ikuti tautan ini untuk mengaktifkan akun Anda.
       admin_posts: Berita AO3
@@ -438,7 +494,6 @@ id:
           perkembangan situs di %{admin_posts_link} kami. Jika Anda membutuhkan bantuan,
           menemukan <i>bug</i>, atau ingin mengajukan pertanyaan atau komentar, mohon
           %{contact_support_link}, yang dengan senang hati akan membantu Anda.
-      subject: "[%{app_name}] Konfirmasi"
       text:
         part1: 'Mohon ikuti tautan ini untuk mengaktifkan akun Anda: %{activate_account_url}'
         part2: Setelah akun Anda tersedia dan aktif, Anda dapat memposting karya-karya
@@ -449,7 +504,7 @@ id:
         part3: 'Terdapat banyak informasi dan saran mengenai cara penggunaan AO3 yang
           tersedia di Pertanyaan yang Sering Diajukan kami pada %{faq_url}. Anda dapat
           menemukan berita terbaru mengenai perkembangan situs di Berita AO3 pada
-          %{admin_posts_url}. Jika Anda membutuhkan bantuan, menemukan <i>bug</i>,
-          atau ingin mengajukan pertanyaan atau komentar, mohon hubungi tim Dukungan
-          kami, yang dengan senang hati akan membantu Anda: %{contact_support_url}.'
+          %{admin_posts_url}. Jika Anda membutuhkan bantuan, menemukan bug, atau ingin
+          mengajukan pertanyaan atau komentar, mohon hubungi tim Dukungan kami, yang
+          dengan senang hati akan membantu Anda: %{contact_support_url}.'
       welcome: Selamat datang di Archive of Our Own – AO3 (Arsip Milik Kita), %{login}!

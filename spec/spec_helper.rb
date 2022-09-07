@@ -8,6 +8,7 @@ require "factory_bot"
 require "database_cleaner"
 require "email_spec"
 require "webmock/rspec"
+require "n_plus_one_control/rspec"
 
 DatabaseCleaner.start
 DatabaseCleaner.clean
@@ -15,9 +16,6 @@ DatabaseCleaner.clean
 # Requires supporting ruby files with custom matchers and macros, etc,
 # in spec/support/ and its subdirectories.
 Dir[Rails.root.join("spec/support/**/*.rb")].sort.each { |f| require f }
-
-FactoryBot.find_definitions
-FactoryBot.definition_file_paths = %w[factories]
 
 RSpec.configure do |config|
   config.mock_with :rspec
@@ -81,6 +79,11 @@ RSpec.configure do |config|
   config.after :suite do
     DatabaseCleaner.clean_with :truncation
     Indexer.all.map(&:delete_index)
+  end
+
+  # Remove the folder where test images are saved.
+  config.after(:suite) do
+    FileUtils.rm_rf(Dir[Rails.root.join("public/system/test")])
   end
 
   config.before :each, bookmark_search: true do
@@ -204,4 +207,10 @@ def suspend_resque_workers
 
   # Resume the original Resque.enqueue_to behavior.
   allow(Resque).to receive(:enqueue_to).and_call_original
+end
+
+def create_invalid(*args, **kwargs)
+  build(*args, **kwargs).tap do |object|
+    object.save!(validate: false)
+  end
 end

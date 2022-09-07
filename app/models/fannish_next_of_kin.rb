@@ -22,7 +22,7 @@ class FannishNextOfKin < ApplicationRecord
       )
     # second scenario: update user's FNOK
     elsif kin_user.present? && kin_email.present?
-      current_fnok.update_attributes(
+      current_fnok.update(
         kin_id: kin_user.id,
         kin_email: kin_email
       )

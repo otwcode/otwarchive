@@ -10,6 +10,9 @@ class Comment < ApplicationRecord
   has_many :inbox_comments, foreign_key: 'feedback_comment_id', dependent: :destroy
   has_many :users, through: :inbox_comments
 
+  has_many :reviewed_replies, -> { reviewed },
+           class_name: "Comment", as: :commentable, inverse_of: :commentable
+
   has_many :thread_comments, class_name: 'Comment', foreign_key: :thread
 
   validates_presence_of :name, unless: :pseud_id
@@ -20,6 +23,33 @@ class Comment < ApplicationRecord
     maximum: ArchiveConfig.COMMENT_MAX,
     too_long: ts("must be less than %{count} characters long.", count: ArchiveConfig.COMMENT_MAX)
 
+  delegate :user, to: :pseud, allow_nil: true
+
+  # Check if the writer of this comment is blocked by the writer of the comment
+  # they're replying to:
+  validates :user, not_blocked: {
+    by: :commentable,
+    if: :reply_comment?,
+    unless: :on_tag?,
+    message: :blocked_reply
+  }
+
+  # Check if the writer of this comment is blocked by one of the creators of
+  # the work they're replying to:
+  validates :user, not_blocked: {
+    by: :ultimate_parent,
+    unless: :on_tag?,
+    message: :blocked_comment
+  }
+
+  def on_tag?
+    parent_type == "Tag"
+  end
+
+  def by_anonymous_creator?
+    ultimate_parent.try(:anonymous?) && user&.is_author_of?(ultimate_parent)
+  end
+
   validate :check_for_spam, on: :create
 
   def check_for_spam
@@ -29,6 +59,7 @@ class Comment < ApplicationRecord
   validates :comment_content, uniqueness: {
     scope: [:commentable_id, :commentable_type, :name, :email, :pseud_id],
     unless: :is_deleted?,
+    case_sensitive: false,
     message: ts("^This comment has already been left on this work. (It may not appear right away for performance reasons.)")
   }
 
@@ -38,6 +69,13 @@ class Comment < ApplicationRecord
   scope :not_deleted,     -> { where(is_deleted: false) }
   scope :reviewed,        -> { where(unreviewed: false) }
   scope :unreviewed_only, -> { where(unreviewed: true) }
+
+  scope :for_display, lambda {
+    includes(
+      pseud: { user: [:roles, :block_of_current_user, :block_by_current_user] },
+      parent: { work: [:pseuds, :users] }
+    )
+  }
 
   # Gets methods and associations from acts_as_commentable plugin
   acts_as_commentable
@@ -66,6 +104,8 @@ class Comment < ApplicationRecord
     pertinent_attributes = %w[is_deleted hidden_by_admin unreviewed approved]
     (saved_changes.keys & pertinent_attributes).present?
   end
+
+  before_validation :set_parent_and_unreviewed, on: :create
 
   before_create :set_depth
   before_create :set_thread_for_replies
@@ -277,7 +317,7 @@ class Comment < ApplicationRecord
         # if I'm replying to a comment you left for me, mark your comment as replied to in my inbox
         if self.comment_owner
           if (inbox_comment = self.comment_owner.inbox_comments.find_by(feedback_comment_id: parent_comment.id))
-            inbox_comment.update_attributes(replied_to: true, read: true)
+            inbox_comment.update(replied_to: true, read: true)
           end
         end
 
@@ -420,6 +460,14 @@ class Comment < ApplicationRecord
   # Unfreeze single comment.
   def mark_unfrozen!
     update_attribute(:iced, false)
+  end
+
+  def mark_hidden!
+    update_attribute(:hidden_by_admin, true)
+  end
+
+  def mark_unhidden!
+    update_attribute(:hidden_by_admin, false)
   end
 
   def sanitized_content

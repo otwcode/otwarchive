@@ -27,9 +27,9 @@ class ExternalWork < ApplicationRecord
                                 too_long: ts("must be less than %{max} characters long.",
                                              max: ArchiveConfig.SUMMARY_MAX)
 
-  validates_presence_of :author, message: ts('^Creator can\'t be blank')
+  validates :author, presence: { message: ts("can't be blank") }
   validates_length_of :author, maximum: AUTHOR_LENGTH_MAX,
-                               too_long: ts('^Creator must be less than %{max} characters long.',
+                               too_long: ts("must be less than %{max} characters long.",
                                             max: AUTHOR_LENGTH_MAX)
 
   validates :user_defined_tags_count,
@@ -43,11 +43,6 @@ class ExternalWork < ApplicationRecord
   validates :url, presence: true, url_format: true, url_active: true
   def cleanup_url
     self.url = reformat_url(self.url) if self.url
-  end
-
-  # Sets the dead? attribute to true if the link is no longer active
-  def set_url_status
-    self.update_attribute(:dead, true) unless url_active?(self.url)
   end
 
   # Allow encoded characters to display correctly in titles

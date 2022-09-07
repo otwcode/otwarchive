@@ -49,4 +49,8 @@ class UserCreationPolicy < ApplicationPolicy
   alias hide? can_hide_creations?
   alias set_spam? can_mark_creations_spam?
   alias destroy? can_destroy_creations?
+
+  def show_ip_address?
+    user_has_roles?(%w[superadmin policy_and_abuse])
+  end
 end

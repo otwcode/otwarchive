@@ -123,6 +123,90 @@ describe User do
           expect(new_user.save).to be_falsey
           expect(new_user.errors[:email].first).to eq("has already been taken")
         end
+
+        it "does not save a duplicate email with different capitalization" do
+          new_user.email = existing_user.email.capitalize
+          expect(new_user.save).to be_falsey
+          expect(new_user.errors[:email].first).to eq("has already been taken")
+        end
+      end
+    end
+  end
+
+  describe "#update" do
+    let!(:existing_user) { create(:user) }
+
+    it "sets renamed_at if username is changed" do
+      freeze_time
+      existing_user.update(login: "new_username")
+      expect(existing_user.renamed_at).to eq(Time.current)
+    end
+
+    context "username was recently changed" do
+      before do
+        freeze_time
+        existing_user.update(login: "new_login")
+      end
+
+      it "does not allow another rename" do
+        expect(existing_user.update(login: "new")).to be_falsey
+        localized_renamed_at = I18n.l(existing_user.renamed_at, format: :long)
+        expect(existing_user.errors[:login].first).to eq(
+          "can only be changed once every 7 days. You last changed your user name on #{localized_renamed_at}."
+        )
+      end
+
+      it "allows changing email" do
+        existing_user.update(email: "new_email")
+        expect(existing_user.email).to eq("new_email")
+      end
+    end
+
+    context "username was changed outside window" do
+      before do
+        travel_to ArchiveConfig.USER_RENAME_LIMIT_DAYS.days.ago do
+          existing_user.update(login: "new_username")
+        end
+      end
+
+      it "allows another rename" do
+        expect(existing_user.update(login: "new")).to be_truthy
+        expect(existing_user.login).to eq("new")
+      end
+    end
+
+    context "when email is changed" do
+      before do
+        existing_user.update!(email: "newemail@example.com")
+        existing_user.reload
+      end
+
+      it "does not set renamed_at" do
+        expect(existing_user.renamed_at).to be_nil
+      end
+
+      it "creates a log item" do
+        log_item = existing_user.log_items.last
+        expect(log_item.action).to eq(ArchiveConfig.ACTION_NEW_EMAIL)
+        expect(log_item.admin_id).to be_nil
+        expect(log_item.note).to eq("System Generated")
+      end
+    end
+
+    context "as an admin" do
+      let(:admin) { create(:admin) }
+
+      before do
+        User.current_user = admin
+        existing_user.update!(email: "new_email@example.com")
+        existing_user.reload
+      end
+
+      it "saves an admin log item" do
+        log_item = existing_user.log_items.last
+        expect(log_item.action).to eq(ArchiveConfig.ACTION_NEW_EMAIL)
+        expect(log_item.admin_id).to eq(admin.id)
+        expect(log_item.note).to eq("Change made by #{admin.login}")
       end
     end
   end

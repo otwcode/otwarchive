@@ -1,10 +1,92 @@
 ---
 da:
+  activerecord:
+    attributes:
+      archive_warning:
+        name_with_colon:
+          one: 'Advarsel:'
+          other: 'Advarsler:'
+      category:
+        name_with_colon:
+          one: 'Kategori:'
+          other: 'Kategorier:'
+      character:
+        name_with_colon:
+          one: 'Karakter:'
+          other: 'Karakterer:'
+      fandom:
+        name_with_colon:
+          one: 'Fandom:'
+          other: 'Fandoms:'
+      freeform:
+        name_with_colon:
+          one: 'Yderligere tag:'
+          other: 'Yderligere tags:'
+      rating:
+        name_with_colon: 'Klassificering:'
+      relationship:
+        name_with_colon:
+          one: 'Forhold:'
+          other: 'Forhold:'
+      work:
+        summary: Resumé
+    models:
+      archive_warning:
+        one: Advarsel
+        other: Advarsler
+      category:
+        one: Kategori
+        other: Kategorier
+      chapter:
+        one: Kapitel
+        other: Kapitler
+      character:
+        one: Karakter
+        other: Karakterer
+      fandom:
+        one: Fandom
+        other: Fandoms
+      freeform:
+        one: Yderligere tag
+        other: Yderligere tags
+      rating:
+        one: Klassificering
+        other: Klassificeringer
+      relationship:
+        one: Forhold
+        other: Forhold
+      series:
+        one: Serie
+        other: Serier
+  kudo_mailer:
+    batch_kudo_notification:
+      guest:
+        one: en gæst
+        other: "%{count} gæster"
+      html:
+        left_kudos:
+          one: "%{givers_list} efterlod kudos på %{commentable_link}."
+          other: "%{givers_list} efterlod kudos på %{commentable_link}."
+        single_guest:
+          giver_list: En gæst
+          left_kudos: "%{giver_list} efterlod kudos på %{commentable_link}."
+      subject: "[%{app_name}] Du har fået kudos!"
+      text:
+        left_kudos:
+          one: "%{givers_list} efterlod kudos på %{commentable_title} (%{commentable_url})."
+          other: "%{givers_list} efterlod kudos på %{commentable_title} (%{commentable_url})."
+        single_guest: En gæst efterlod kudos på %{commentable_title} (%{commentable_url}).
   mailer:
     general:
       closing:
         formal: Med venlig hilsen,
         informal: Venlig hilsen,
+      creation:
+        link_with_word_count: "%{creation_link} (%{word_count})"
+        title_with_word_count: '"%{creation_title}" (%{word_count})'
+        word_count:
+          one: "%{count} ord"
+          other: "%{count} ord"
       footer:
         general:
           html:
@@ -24,25 +106,13 @@ da:
           addressed: Hej %{name}!
           unaddressed: Hej!
         introductory: Hej fra Archive of Our Own – AO3 (Vores Eget Arkiv)!
+      metadata_label_indicator: ": "
       signature:
         app_short_name: AO3
         open_doors: The Open Doors (Åbne døre) team
         parent_org: Organization for Transformative Works – OTW (Organisationen for
           Transformative Værker)
         support: AO3 Support-team
-    kudos:
-      guest:
-        one: en gæst
-        other: "%{count} gæster"
-      html:
-        left_kudos:
-          one: "%{givers_list} efterlod ros på %{commentable_link}."
-          other: "%{givers_list} efterlod ros på %{commentable_link}."
-      text:
-        left_kudos:
-          one: "%{givers_list} efterlod ros på %{commentable_link}."
-          other: "%{givers_list} efterlod ros på %{commentable_link}."
-      you_have: "[%{app_name}] Du har fået ros!"
   users:
     mailer:
       reset_password_instructions:
@@ -74,7 +144,7 @@ da:
       opendoors: kontakte Åbne Døre
       subject: "[%{app_name}] Dit værk er blevet slettet af en administrator"
       text:
-        part1: Dit værk \"%{title}\" er blevet slettet fra AO3 af en administrator.
+        part1: Dit værk "%{title}" er blevet slettet fra AO3 af en administrator.
         part2: Hvis dit værk var en del af et importeringsprojekt fra Åbne Døre-holdet,
           kan du kontakte Åbne Døre (%{opendoors_link}), hvis du har spørgsmål.
         tos_violation: Hvis det er muligt, at dit værk har overtrådt AO3’s Brugsbetingelser,
@@ -88,9 +158,9 @@ da:
         at dit værk er blevet skjult.
       contact_abuse: kontakte Retningslinjer & Misbrug
       html:
-        help: 'Hvis du er i tvivl om, hvorfor dit værk er blevet skjult, og du ikke
+        help: Hvis du er i tvivl om, hvorfor dit værk er blevet skjult, og du ikke
           har modtaget nogen beskeder vedrørende dette emne, kan du %{contact_abuse_link}
-          direkte. '
+          direkte.
         hidden: Dit værk %{title} er blevet skjult af Retningslinjer & Misbrug-teamet
           og er ikke længere offentligt tilgængeligt.
         tos_violation: Hvis dit værk er blevet skjult, fordi det var i strid med AO3’s
@@ -111,8 +181,7 @@ da:
       tos: Brugsbetingelser
     anonymous_or_unrevealed_notification:
       anonymous_info: Anonyme værker er inkluderet i tag-lister, men ikke på din side
-        for værker. På værket vil dit brugernavn blive erstattet med  "Anonymous"
-        (Anonym).
+        for værker. På værket vil dit brugernavn blive erstattet med "Anonymous" (Anonym).
       anonymous_unrevealed_info: Vedligeholderne vil måske senere afsløre dit værk,
         men holde det anonymt. Folk, som abonnerer på dig, vil ikke få en notifikation
         om denne ændring. Når det er afsløret, vil dit værk blive inkluderet i tag-lister,
@@ -169,7 +238,7 @@ da:
         de vil ikke være i stand til at få adgang til dets indhold.
     challenge_assignment_notification:
       any: Hvilken som helst
-      description: 'Beskrivelse: '
+      description: 'Beskrivelse:'
       due: 'Denne opgave har deadline den:'
       html:
         footer: Du modtager denne e-mail, fordi du tilmeldte dig %{title}-udfordringen.
@@ -212,41 +281,72 @@ da:
         til enhver serie, som værket bliver tilføjet.
       html:
         creation: "%{creation_link} af %{pseud_links}"
-        edit: redigér %{type}
-        remove: Hvis du er blevet tilføjet ved en fejl eller ikke vil stå som ophavsperson,
-          kan du %{edit} for at fjerne dig selv som ophavsperson.
-      intro: 'Brugeren %{adding_user} har sat dit pseudonym %{pseud} som medskaber
-        på det følgende %{type}:'
+        edit_chapter: redigere kapitlet
+        edit_series: redigere serien
+        remove_chapter: Hvis du er blevet tilføjet ved en fejl eller ikke vil stå
+          som skaber, kan du %{edit_chapter_link} for at fjerne dig selv som skaber.
+        remove_series: Hvis du er blevet tilføjet ved en fejl eller ikke vil stå som
+          medskaber, kan du %{edit_series_link} for at fjerne dig selv som skaber.
+      intro_chapter: 'Brugeren %{adding_user} har sat dit pseudonym %{pseud} som medskaber
+        på det følgende kapitel:'
+      intro_series: 'Brugeren %{adding_user} har sat dit pseudonym %{pseud} som medskaber
+        på følgende serie:'
       subject: "[%{app_name}] Notifikation til medskaber"
       text:
         creation: "%{title} (%{url}) af %{pseuds}"
-        remove: 'Hvis du er blevet tilføjet ved en fejl eller ikke vil stå som ophavsperson,
-          kan du redigere %{type} for at fjerne dig selv som ophavsperson: %{url}'
+        remove_chapter: 'Hvis du er blevet tilføjet ved en fejl eller ikke vil stå
+          som skaber, kan du redigere kapitlet for at fjerne dig selv som skaber:
+          %{url}'
+        remove_series: 'Hvis du er blevet tilføjet ved en fejl eller ikke vil stå
+          som skaber, kan du redigere serien for at fjerne dig selv som skaber: %{url}'
     creatorship_notification_archivist:
-      explanation: Fordi de opererer i en officiel funktion som arkivar for Åbne Døre,
-        har de tilladelse til at tilføje dig uden en invitation, selvom du har deaktiveret
-        samskabelse.
+      explanation: Fordi de opererer i en officiel funktion som arkivar for Open Doors
+        (Åbne Døre), har de tilladelse til at tilføje dig uden en invitation, selvom
+        du har deaktiveret samskabelse.
       html:
         creation: "%{creation_link} af %{pseud_links}"
-        edit: redigere %{type}
-        remove: Hvis du er blevet tilføjet ved en fejl eller ikke ønsker at være noteret
-          som ophavsperson, kan du %{edit} for at fjerne dig selv som ophavsperson.
-      intro: 'Brugeren %{archivist} har tilføjet dit pseudonym %{pseud} som medskaber
-        af følgende %{type}:'
+        edit_chapter: redigere kapitlet
+        edit_series: redigere serien
+        edit_work: redigere værket
+        remove_chapter: Hvis du er blevet tilføjet ved en fejl eller ikke ønsker at
+          være noteret som skaber, kan du %{edit_chapter_link} for at fjerne dig selv
+          som skaber.
+        remove_series: Hvis du er blevet tilføjet ved en fejl eller ikke ønsker at
+          være noteret som skaber, kan du %{edit_series_link} for at fjerne dig selv
+          som skaber.
+        remove_work: Hvis du er blevet tilføjet ved en fejl eller ikke ønsker at være
+          noteret som skaber, kan du %{edit_work_link} for at fjerne dig selv som
+          skaber.
+      intro_chapter: 'Brugeren %{archivist} har tilføjet dit pseudonym %{pseud} som
+        medskaber af følgende kapitel:'
+      intro_series: 'Brugeren %{archivist} har tilføjet dit pseudonym %{pseud} som
+        medskaber af følgende serie:'
+      intro_work: 'Brugeren %{archivist} har tilføjet dit pseudonym %{pseud} som medskaber
+        af følgende værk:'
       subject: "[%{app_name}] Medskabernotifikation fra arkivar"
       text:
         creation: "%{title} (%{url}) af %{pseuds}"
-        remove: 'Hvis du er blevet tilføjet ved en fejl eller ikke ønsker at være
-          noteret som ophavsperson, kan du redigere %{type} for at fjerne dig selv
-          som ophavsperson: %{url}'
+        remove_chapter: 'Hvis du er blevet tilføjet ved en fejl eller ikke ønsker
+          at være noteret som skaber, kan du redigere kapitlet for at fjerne dig selv
+          som skaber: %{url}'
+        remove_series: 'Hvis du er blevet tilføjet ved en fejl eller ikke ønsker at
+          være noteret som skaber, kan du redigere serien for at fjerne dig selv som
+          skaber: %{url}'
+        remove_work: 'Hvis du er blevet tilføjet ved en fejl eller ikke ønsker at
+          være noteret som skaber, kan du redigere værket for at fjerne dig selv som
+          skaber: %{url}'
     creatorship_request:
       html:
         creation: "%{creation_link} af %{pseud_links}"
         instructions: Du kan acceptere eller afvise denne anmodning på din side for
           %{page_name}.
         page_name: Co-Creator Requests (Medskaberanmodninger)
-      intro: 'Brugeren %{inviting_user} har inviteret dit pseudonym %{pseud} til at
-        være medskaber på det følgende %{type}:'
+      intro_chapter: 'Brugeren %{inviting_user} har inviteret dit pseudonym %{pseud}
+        til at blive listet som medskaber på følgende kapitel:'
+      intro_series: 'Brugeren %{inviting_user} har inviteret dit pseudonym %{pseud}
+        til at blive listet som medskaber på følgende serie:'
+      intro_work: 'Brugeren %{inviting_user} har inviteret dit pseudonym %{pseud}
+        til at blive listet som medskaber på følgende værk:'
       subject: "[%{app_name}] Anmodning til medskaber"
       text:
         creation: "%{title} (%{url}) af %{pseuds}"
@@ -271,41 +371,7 @@ da:
         contact_support: kontakte AO3 Support
         faq_page: FAQ-side
         open_doors: Open Doors (Åbne Døre)
-        part1: Du modtager denne e-mail, fordi et arkiv for nyligt er blevet importeret
-          af %{open_doors_link} til %{app_link} (%{app_short_name}), og vi mener,
-          at følgende fanværker tilhører dig. Vi vil gerne give dig mulighed for at
-          gøre krav på (eller slette/frasige dig ophavsretten på) disse værker, hvis
-          du vil. Og hvis du ikke allerede har en konto under en anden mail, vil vi
-          gerne invitere dig med ombord!
-        part10: Hvis du havde andre værker på det importerede arkiv under en e-mailadresse,
-          som du ikke længere har adgang til, kan du %{open_doors_link} med information,
-          som kan hjælpe med at verificere din identitet.
-        part11: For flere spørgsmål kan du %{support_link}.
-        part2: Du kan læse meddelelser om nye importeringer af arkiver på %{news_link}
-          og finde mere information på Åbne Døres %{open_doors_faq_link} eller %{open_doors_tutorial_link}.
-          Har du spørgsmål, der ikke er blevet besvaret i FAQ'en, tutorials eller
-          i denne mail, kan du %{support_link}.
-        part3: Hvis dette er en fejl, og det ikke er dine værker, må du endelig ikke
-          slette dem! Vær i stedet venlig at %{open_doors_link}, så ordner vi det.
-        part4: Afhængig af arkivet er dine værker muligvis importeret således, at
-          adgangen er begrænset til registrerede brugere (for at holde dem ude af
-          Google-søgninger). Hvis det er tilfældet, er værkerne kun tilgængelige for
-          brugere, der er logget ind, medmindre du vælger at gøre dem tilgængelige
-          for alle. Har du brug for hjælp til at låse dine værker op, frasige dig
-          ophavsretten eller slette dine værker, kan du %{support_link}.
         part5: Gør krav på, eller fjern dine værker her.
-        part7: Hvis disse værker tilhører dig, men du ikke vil gøre krav på dem, kan
-          du frasige dig ophavsretten (så værkerne bliver på AO3, men dit navn bliver
-          fjernet) eller slette dem (så værkerne bliver fjernet helt fra AO3). Du
-          behøver ikke at tilføje disse værker til en konto for at frasige dig ophavsretten
-          eller slette dem – du kan gøre dette med det samme via linket ovenfor. (Har
-          du brug for hjælp, kan du %{support_link}.)
-        part9: Hvis du gerne vil have Åbne Døre til at opdatere omdirigeringen, så
-          den leder til dit eksisterende værk, skal du slette den importerede kopi
-          og %{open_doors_link} med din AO3-konto, din konto på det importerede arkiv
-          samt titlen og URL'et på det fanværk, du gerne vil omdirigere til. (Hvis
-          du har flere værker, hvor du gerne vil ændre omdirigeringen, kan du liste
-          dem alle op i én e-mail.)
         tutorial_page: tutorial-side
       part12: Hvis du kontakter os, beder vi dig om at whiteliste e-mailadresser fra
         @transformativeworks.org, og husk at kigge i din spam-mappe for at se om vores
@@ -359,9 +425,8 @@ da:
       body:
         one: Vi ville bare lige fortælle, at du har %{count} ny invitation, som kan
           bruges til at oprette en ny konto på AO3. Du kan invitere en ven på %{invitation_page}.
-        other: Vi ville bare lige fortælle, at du har %{count} ny(e) invitation(er),
-          som kan bruges til at oprette nye konti på AO3. Du kan invitere en ven på
-          %{invitation_page}.
+        other: Vi ville bare lige fortælle, at du har %{count} nye invitationer, som
+          kan bruges til at oprette nye konti på AO3. Du kan invitere en ven på %{invitation_page}.
       invitation_page_link_text: din Invitations (Invitationer)-side
       subject: "[%{app_name}] Nye invitationer"
     invite_request_declined:
@@ -373,10 +438,17 @@ da:
       reason: 'Din anmodning var:'
       subject: "[%{app_name}] Anmodning om yderligere invitationer afvist"
     recipient_notification:
+      html:
+        collection: Et værk er blevet udgivet som gave til dig i %{collection_link}-samlingen
+          på AO3!
+      no_collection: Et værk er blevet udgivet som gave til dig på AO3!
       subject:
         collection: "[%{app_name}][%{collection_title}] Et værk i gave til dig fra
           %{collection_title}"
         no_collection: "[%{app_name}] Et værk i gave til dig"
+      text:
+        collection: Et værk er blevet udgivet som gave til dig i "%{collection_title}"-samlingen
+          (%{collection_url}) på AO3!
     signup_notification:
       activate_your_account: følg dette link for at aktivere din konto
       admin_posts: AO3 nyheder
@@ -394,7 +466,6 @@ da:
           på %{admin_posts_link}. Hvis du har brug for mere hjælp, løber ind i en
           fejl eller har spørgsmål eller kommentarer, kan du %{contact_support_link},
           som altid gerne vil hjælpe.
-      subject: "[%{app_name}] bekræftelse"
       text:
         part1: 'Følg venligst dette link for at aktivere din konto: %{activate_account_url}'
         part2: Når din konto er sat op, kan du publicere fanværker, oprette e-mailnotifikationer,

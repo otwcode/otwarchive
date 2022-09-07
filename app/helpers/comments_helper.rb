@@ -1,5 +1,4 @@
 module CommentsHelper
-
   def value_for_comment_form(commentable, comment)
     commentable.is_a?(Tag) ? comment : [commentable, comment]
   end
@@ -13,17 +12,6 @@ module CommentsHelper
       title = link_to(commentable.commentable_name, commentable)
     end
     (ts('Reading Comments on ') + title).html_safe
-  end
-
-  def last_reply_by(comment)
-    if comment.count_all_comments > 0
-      c = Comment.where(thread: comment.id).order(created_at: :desc).first
-      if c.pseud
-        link_to c.pseud.name, [c.pseud.user, c.pseud]
-      else
-        c.name
-      end
-    end
   end
 
   def link_to_comment_ultimate_parent(comment)
@@ -49,6 +37,8 @@ module CommentsHelper
     if comment.pseud_id
       if comment.pseud.nil?
         ts("Account Deleted")
+      elsif comment.pseud.user.official
+        (link_to comment.pseud.byline, [comment.pseud.user, comment.pseud]) + content_tag(:span, " " + ts("(Official)"), class: "role")
       else
         link_to comment.pseud.byline, [comment.pseud.user, comment.pseud]
       end
@@ -109,11 +99,22 @@ module CommentsHelper
   #### HELPERS FOR CHECKING WHICH BUTTONS/FORMS TO DISPLAY #####
 
   def can_reply_to_comment?(comment)
-    !(comment.unreviewed? || comment.iced? || parent_disallows_comments?(comment) || comment_parent_hidden?(comment))
+    !(comment.unreviewed? ||
+      comment.iced? ||
+      comment.hidden_by_admin? ||
+      parent_disallows_comments?(comment) ||
+      comment_parent_hidden?(comment) ||
+      blocked_by_comment?(comment) ||
+      blocked_by?(comment.ultimate_parent))
   end
 
   def can_edit_comment?(comment)
-    is_author_of?(comment) && !comment.iced? && comment.count_all_comments.zero? && !comment_parent_hidden?(comment)
+    is_author_of?(comment) &&
+      !comment.iced? &&
+      comment.count_all_comments.zero? &&
+      !comment_parent_hidden?(comment) &&
+      !blocked_by_comment?(comment.commentable) &&
+      !blocked_by?(comment.ultimate_parent)
   end
 
   # Only an admin with proper authorization can mark a spam comment ham.
@@ -148,6 +149,16 @@ module CommentsHelper
     policy(comment).can_freeze_comment? ||
       comment.ultimate_parent.is_a?(Work) &&
         is_author_of?(comment.ultimate_parent)
+  end
+
+  def can_hide_comment?(comment)
+    policy(comment).can_hide_comment?
+  end
+
+  def can_see_hidden_comment?(comment)
+    !comment.hidden_by_admin? ||
+      is_author_of?(comment) ||
+      can_hide_comment?(comment)
   end
 
   def comment_parent_hidden?(comment)
@@ -214,52 +225,14 @@ module CommentsHelper
       remote: true)
   end
 
-  # TO DO: create fallbacks to support non-JavaScript requests!
-  # return button to cancel adding a comment. kind of ugly because we want it
-  # to work for the comment form no matter where it appears, but oh well
-  def cancel_comment_button(comment, commentable)
-    if comment.new_record?
-      if commentable.class == comment.class
-        # canceling a reply to a comment
-        commentable_id = commentable.ultimate_parent.is_a?(Tag) ?
-                            :tag_id :
-                            "#{commentable.ultimate_parent.class.to_s.underscore}_id".to_sym
-        commentable_value = commentable.ultimate_parent.is_a?(Tag) ?
-                              commentable.ultimate_parent.name :
-                              commentable.ultimate_parent.id
-        link_to(
-          ts("Cancel"),
-          url_for(controller: :comments,
-                  action: :cancel_comment_reply,
-                  id: commentable.id,
-                  comment_id: params[:comment_id],
-                  commentable_id => commentable_value),
-          remote: true)
-       else
-        # canceling a reply to a different commentable thingy
-        commentable_id = commentable.is_a?(Tag) ?
-                            :tag_id :
-                            "#{commentable.class.to_s.underscore}_id".to_sym
-        commentable_value = commentable.is_a?(Tag) ?
-                              commentable.name :
-                              commentable.id
-        link_to(
-          ts("Cancel"),
-          url_for(controller: :comments,
-                  action: :cancel_comment,
-                  commentable_id => commentable_value),
-          remote: true)
-      end
-    else
-      # canceling an edit
-      link_to(
-        ts("Cancel"),
-        url_for(controller: :comments,
-                action: :cancel_comment_edit,
-                id: (comment.id),
-                comment_id: params[:comment_id]),
-        remote: true)
-    end
+  # canceling an edit
+  def cancel_edit_comment_link(comment)
+    link_to(ts("Cancel"),
+            url_for(controller: :comments,
+                    action: :cancel_comment_edit,
+                    id: comment.id,
+                    comment_id: params[:comment_id]),
+            remote: true)
   end
 
   # return html link to edit comment
@@ -285,6 +258,14 @@ module CommentsHelper
       button_to ts("Unfreeze Thread"), unfreeze_comment_path(comment), method: :put
     else
       button_to ts("Freeze Thread"), freeze_comment_path(comment), method: :put
+    end
+  end
+
+  def hide_comment_button(comment)
+    if comment.hidden_by_admin?
+      button_to ts("Make Comment Visible"), unhide_comment_path(comment), method: :put
+    else
+      button_to ts("Hide Comment"), hide_comment_path(comment), method: :put
     end
   end
 
@@ -324,9 +305,30 @@ module CommentsHelper
     end
   end
 
+  # gets the css user-<id> class name for the comment
+  def commenter_id_for_css_classes(comment)
+    return if comment.pseud.nil?
+    return if comment.by_anonymous_creator?
+    return if comment.is_deleted
+    return if comment.hidden_by_admin
+
+    "user-#{comment.pseud.user_id}"
+  end
+
+  def css_classes_for_comment(comment)
+    return if comment.nil?
+
+    unavailable = "unavailable" if comment.hidden_by_admin
+    unreviewed = "unreviewed" if comment.unreviewed?
+    commenter = commenter_id_for_css_classes(comment)
+    official = "official" if commenter && comment&.pseud&.user&.official
+
+    "#{unavailable} #{official} #{unreviewed} comment group #{commenter}".squish
+  end
+
   # find the parent of the commentable
   def find_parent(commentable)
-    if commentable.is_a?(Comment)
+    if commentable.respond_to?(:ultimate_parent)
       commentable.ultimate_parent
     elsif commentable.respond_to?(:work)
       commentable.work
@@ -356,5 +358,4 @@ module CommentsHelper
     parent = find_parent(commentable)
     parent.respond_to?(:moderated_commenting_enabled) && parent.moderated_commenting_enabled?
   end
-
 end

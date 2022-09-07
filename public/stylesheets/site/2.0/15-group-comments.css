@@ -49,6 +49,10 @@ div.comment, li.comment {
   margin: 0 auto -0.25em;
 }
 
+.comment .role {
+  font-weight: bold;
+}
+
 .thread .thread {
   margin-left: 3%;
 }
@@ -80,6 +84,10 @@ fieldset.comments, .comment .userstuff {
 
 .comment .edited {
   margin: 1.286em 0.643em 0.25em;
+}
+
+.comment .message {
+  padding: 0.643em;
 }
 
 /* mods */

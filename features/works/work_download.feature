@@ -51,6 +51,68 @@ Feature: Download a work
   Then I should be able to download all versions of "Emjoi 🤩 Yay 🥳"
 
 
+  Scenario: Downloaded work header contains expected meta fields in expected order
+
+  Given basic tags
+    And I have a collection "My Collection 1" with name "mycollection1"
+    And I have a collection "My Collection 2" with name "mycollection2"
+    And I am logged in
+    And I go to the new work page
+    And I select "General" from "Rating"
+    And I check "No Archive Warnings Apply"
+    And I check "Gen"
+    And I fill in "Fandoms" with "Cool Fandom"
+    And I fill in "Characters" with "Character 1, Character 2, Character 3"
+    And I fill in "Relationships" with "Character 1/Character 2, Character 1 & Character 3"
+    And I fill in "Additional Tags" with "Modern AU"
+    And I set the publication date to 10 January 2015
+    And I check "This work is part of a series"
+    And I fill in "Or create and use a new one:" with "THE DOWN"
+    And I fill in "Post to Collections / Challenges" with "mycollection1, mycollection2"
+    And I fill in "Work Title" with "Downloadable"
+    And I fill in "content" with "Could be downloaded"
+    And I select "English" from "Choose a language"
+    And I press "Post"
+    And I follow "Add Chapter"
+    And I fill in "content" with "Remember, remember the 5th of November"
+    And I set the publication date to 5 November 2020
+    And I press "Post"
+  When I view the work "Downloadable"
+    And I follow "HTML"
+  Then I should see "Downloadable"
+    And I should see "Rating: General Audiences"
+    And I should see "Archive Warning: No Archive Warnings Apply"
+    And I should see "Category: Gen"
+    And I should see "Fandom: Cool Fandom"
+    # TODO: Update "Character" and "Relationship" to plural form when AO3-5774 is fixed
+    And I should see "Relationship: Character 1/Character 2, Character 1 & Character 3"
+    And I should see "Character: Character 1, Character 2, Character 3"
+    And I should see "Additional Tags: Modern AU"
+    And I should see "Language: English"
+    And I should see "Series: Part 1 of THE DOWN"
+    And I should see "Collections: My Collection 1, My Collection 2"
+    And I should see "Published: 2015-01-10"
+    And I should see "Completed: 2020-11-05"
+    And I should see "Words: 9"
+    # note difference with the work: if work contains just 1 chapter, "Chapters: 1/1" missing
+    And I should see "Chapters: 2/2"
+    And "Rating:" should appear before "Archive Warning"
+    And "Archive Warning:" should appear before "Category"
+    And "Category:" should appear before "Fandom"
+    And "Fandom:" should appear before "Relationship"
+    And "Relationship:" should appear before "Character"
+    And "Character:" should appear before "Additional Tags"
+    And "Additional Tags:" should appear before "Language"
+    And "Language:" should appear before "Series"
+    And "Series:" should appear before "Collections"
+    And "Collections:" should appear before "Published"
+    And "Published:" should appear before "Completed"
+    And "Completed:" should appear before "Chapters"
+    # note difference with the work: in the work "Words" come before "Chapters"
+    And "Chapters:" should appear before "Words"
+    And "Words:" should appear before "Could be downloaded"
+
+
   Scenario: Download of chaptered works includes chapters
 
   Given the chaptered work "Bazinga"
@@ -85,8 +147,25 @@ Feature: Download a work
   When I log out
     And I view the work "Many Fandom Work"
     And I follow "HTML"
-  Then I should see "Multifandom"
+  Then the page title should include "Multifandom"
     And I should be able to download all versions of "Many Fandom Work"
+
+
+  Scenario: Download work shows inspiring work link
+
+    Given I have related works setup
+    When I post a related work as remixer
+      And I view the work "Followup"
+      And I follow "HTML"
+    Then I should see the inspiring parent work link
+
+  Scenario: Download work shows inspiring external inspiring work link
+
+    Given I have related works setup
+    When I post a related work as remixer for an external work
+      And I view the work "Followup"
+      And I follow "HTML"
+    Then I should see the external inspiring work link
 
 
   Scenario: Download option is unavailable if work is unrevealed.

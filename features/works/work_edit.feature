@@ -196,7 +196,7 @@ Feature: Edit Works
     When I edit the work "Work 1"
       And I fill in "Fandoms" with ""
       And I press "Post"
-    Then I should see "Sorry! We couldn't save this work because:Please fill in at least one fandom."
+    Then I should see "Sorry! We couldn't save this work because: Please fill in at least one fandom."
     When I view the work "Work 1"
     Then I should see "Fandom: testing"
 
@@ -215,7 +215,7 @@ Feature: Edit Works
     When I edit the work "Work 1"
       And I uncheck "No Archive Warnings Apply"
       And I press "Post"
-    Then I should see "Sorry! We couldn't save this work because:Please select at least one warning."
+    Then I should see "Sorry! We couldn't save this work because: Please select at least one warning."
     When I view the work "Work 1"
     Then I should see "Archive Warning: No Archive Warnings Apply"
 

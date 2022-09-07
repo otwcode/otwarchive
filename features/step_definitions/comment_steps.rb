@@ -14,6 +14,45 @@ Given /^I have the receive no comment notifications setup$/ do
   user.preference.save
 end
 
+Given "a guest comment on the work {string}" do |title|
+  work = Work.find_by(title: title)
+  FactoryBot.create(:comment, :by_guest, commentable: work.first_chapter)
+end
+
+ParameterType(
+  name: "commentable",
+  regexp: /the (work|admin post|tag) "([^"]*)"/,
+  type: ActsAsCommentable::Commentable,
+  transformer: lambda { |type, title|
+    case type
+    when "work"
+      Work.find_by(title: title)
+    when "admin post"
+      AdminPost.find_by(title: title)
+    when "tag"
+      Tag.find_by(name: title)
+    end
+  }
+)
+
+Given "a comment {string} by {string} on {commentable}" do |text, user, commentable|
+  user = ensure_user(user)
+  commentable = Comment.commentable_object(commentable)
+  FactoryBot.create(:comment,
+                    pseud: user.default_pseud,
+                    commentable: commentable,
+                    comment_content: text)
+end
+
+Given "a reply {string} by {string} on {commentable}" do |text, user, commentable|
+  user = ensure_user(user)
+  comment = commentable.comments.first
+  FactoryBot.create(:comment,
+                    pseud: user.default_pseud,
+                    commentable: comment,
+                    comment_content: text)
+end
+
 # THEN
 
 Then /^the comment's posted date should be nowish$/ do
@@ -135,12 +174,7 @@ end
 
 When /^I compose an invalid comment(?: within "([^"]*)")?$/ do |selector|
   with_scope(selector) do
-    fill_in("Comment", with: %/Sed mollis sapien ac massa pulvinar facilisis. Nulla rhoncus neque nisi. Integer sit amet nulla vel orci hendrerit aliquam. Proin vehicula bibendum vulputate. Nullam porttitor, arcu eu mollis accumsan, turpis justo ornare tellus, ac congue lectus purus ut risus. Phasellus feugiat, orci id tempor elementum, sapien nulla dignissim sapien, dictum eleifend nisl erat vitae urna. Cras imperdiet bibendum porttitor. Suspendisse vitae tellus nibh, vel facilisis magna. Quisque nec massa augue. Pellentesque in ipsum lacus. Aenean mauris leo, viverra sit amet fringilla sit amet, volutpat eu risus. Etiam scelerisque, nibh a condimentum eleifend, augue ipsum blandit tortor, lacinia pharetra ante felis eget lorem. Proin tristique dictum placerat. Aenean commodo imperdiet massa et auctor. Phasellus eleifend posuere varius.
-Sed bibendum nisl vel ligula rhoncus at laoreet lorem lacinia. Vivamus est est, euismod vel pretium in, aliquam ac turpis. Integer ac leo sem, vel egestas lacus. Duis id nibh magna, vel adipiscing erat. Aliquam arcu velit, laoreet eget laoreet eget, semper id augue. Nullam volutpat pretium turpis vitae molestie. Ut id nisi eget nibh blandit blandit malesuada et sem. Fusce at accumsan erat. Sed sed adipiscing tortor. Proin vitae eros eget neque dignissim ullamcorper. Vestibulum eleifend nisl sed erat molestie suscipit. Fusce rutrum dignissim diam vel ultricies. Proin nec consequat velit. Aliquam eu nulla urna. Morbi ac orci nisl.
-Vivamus vitae felis erat, a hendrerit nisi. Nullam et nunc sed est laoreet tempus non at nibh. Pellentesque tincidunt, diam eu vestibulum pretium, diam metus volutpat risus, ut mollis augue dolor quis ligula. Fusce in placerat leo. Nullam quis orci dui. Donec ultrices quam ut metus blandit cursus. Quisque lobortis elit sit amet libero mollis quis egestas ipsum faucibus. Curabitur sit amet sollicitudin metus. Vivamus sit amet justo eget felis dictum scelerisque in eu mauris. Vestibulum in diam ligula, et convallis ante. Praesent risus magna, adipiscing in vehicula eu, interdum eu arcu. Duis in nisl libero, nec posuere massa. Vestibulum pretium fermentum dui et dignissim. Mauris at diam sed purus faucibus tristique. Maecenas non orci et augue dignissim tempor. Sed vestibulum condimentum faucibus.
-Morbi nec ullamcorper dolor. In luctus vulputate arcu et egestas. Nullam at pretium enim. Nulla congue tincidunt dignissim. Fusce malesuada odio nec turpis sagittis et accumsan tellus iaculis. Mauris eu libero non diam pretium feugiat quis in mauris. Vestibulum ut facilisis massa. Cras est metus, pulvinar eget ullamcorper in, eleifend id est. Ut ac bibendum elit. Vestibulum quis eros sem. Duis elementum congue lorem, nec semper justo adipiscing vitae. Nam eget velit est, nec varius leo. Quisque aliquet aliquet elit, eu elementum enim lacinia aliquam. Suspendisse laoreet convallis interdum. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. In quis velit massa. Nullam lectus risus, condimentum ac fringilla eu, pretium sed metus.
-Nunc eget dolor ut nisi laoreet scelerisque. Vestibulum condimentum dignissim leo ut luctus. Aliquam sed sem velit. Nulla justo nulla, molestie cursus mollis eget, ullamcorper aliquet mi. Duis et sem elit, quis pretium diam. Nam consectetur ullamcorper velit, varius vulputate dui ultrices sodales. Sed aliquet laoreet tortor, vitae varius enim ornare vel. Nam ornare dapibus aliquam. Proin faucibus tellus eget nibh lacinia in dignissim odio ultricies. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nulla aliquet pulvinar turpis vitae malesuada. Mauris porttitor erat in urna bibendum luctus. Vestibulum nec mi eros, nec rutrum ligula. Nunc ac nisl eros, ut adipiscing diam. Integer feugiat justo a purus fermentum sollicitudin. Mauris lacinia venenatis commodo. Nam urna libero, viverra in rhoncus vel, ultricies vitae augue. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-Morbi vitae lacus vitae magna volutpat pharetra rhoncus eget nisi. Proin vehicula, felis nec tempor eleifend, dolor ipsum volutpat dolor, et eleifend nibh libero ac turpis. Donec odio est, sodales nec consectetur vehicula, adipiscing sit amet magna. Suspendisse dapibus tincidunt velit sit amet mollis. Curabitur eget blandit li./)
+    fill_in("Comment", with: "Now, we can devour the gods, together! " * 270)
   end
 end
 
@@ -183,6 +217,14 @@ end
 Then /^the comment on "([^\"]*?)" should not be marked as unreviewed/ do |work|
   w = Work.find_by(title: work)
   assert !w.comments.first.unreviewed?
+end
+
+When "I view {commentable} with comments" do |commentable|
+  if commentable.is_a?(Tag)
+    visit tag_comments_path(commentable)
+  else
+    visit polymorphic_path(commentable, show_comments: true)
+  end
 end
 
 When /^I view the unreviewed comments page for "([^\"]*?)"/ do |work|

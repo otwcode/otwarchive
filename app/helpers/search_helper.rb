@@ -42,4 +42,21 @@ module SearchHelper
     ArchiveConfig.SEARCH_TIPS[rand(ArchiveConfig.SEARCH_TIPS.size)]
   end
 
+  def works_original_path
+    url_for(
+      controller: :works,
+      action: :index,
+      only_path: true,
+      **params.slice(:tag_id, :fandom_id, :collection_id, :pseud_id, :user_id).permit!
+    )
+  end
+
+  def bookmarks_original_path
+    url_for(
+      controller: :bookmarks,
+      action: :index,
+      only_path: true,
+      **params.slice(:tag_id, :collection_id, :pseud_id, :user_id).permit!
+    )
+  end
 end

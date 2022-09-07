@@ -1,10 +1,126 @@
 ---
 he:
+  activerecord:
+    attributes:
+      archive_warning:
+        name_with_colon:
+          many: 'אזהרות ארכיון:'
+          one: 'אזהרת ארכיון:'
+          other: 'אזהרות ארכיון:'
+          two: 'אזהרות ארכיון:'
+      category:
+        name_with_colon:
+          many: 'קטגוריות:'
+          one: 'קטגוריה:'
+          other: 'קטגוריות:'
+          two: 'קטגוריות:'
+      character:
+        name_with_colon:
+          many: 'דמויות:'
+          one: 'דמות:'
+          other: 'דמויות:'
+          two: 'דמויות:'
+      fandom:
+        name_with_colon:
+          many: 'פאנדומים:'
+          one: 'פאנדום:'
+          other: 'פאנדומים:'
+          two: 'פאנדומים:'
+      freeform:
+        name_with_colon:
+          many: 'תגיות נוספות:'
+          one: 'תגית נוספת:'
+          other: 'תגיות נוספות:'
+          two: 'תגיות נוספות:'
+      rating:
+        name_with_colon: 'סיווג:'
+      relationship:
+        name_with_colon:
+          many: 'מערכות יחסים:'
+          one: 'מערכת יחסים:'
+          other: 'מערכות יחסים:'
+          two: 'מערכות יחסים:'
+      work:
+        summary: תקציר
+    models:
+      archive_warning:
+        many: אזהרות ארכיון
+        one: אזהרת ארכיון
+        other: אזהרות ארכיון
+        two: אזהרות ארכיון
+      category:
+        many: קטגוריות
+        one: קטגוריה
+        other: קטגוריות
+        two: קטגוריות
+      chapter:
+        many: פרקים
+        one: פרק
+        other: פרקים
+        two: פרקים
+      character:
+        many: דמויות
+        one: דמות
+        other: דמויות
+        two: דמויות
+      fandom:
+        many: פאנדומים
+        one: פאנדום
+        other: פאנדומים
+        two: פאנדומים
+      freeform:
+        many: תגיות נוספות
+        one: תגית נוספת
+        other: תגיות נוספות
+        two: תגיות נוספות
+      rating:
+        many: סיווגים
+        one: סיווג
+        other: סיווגים
+        two: סיווגים
+      relationship:
+        many: מערכות יחסים
+        one: מערכת יחסים
+        other: מערכות יחסים
+        two: מערכות יחסים
+      series:
+        many: סדרות
+        one: סדרה
+        other: סדרות
+        two: סדרות
+  kudo_mailer:
+    batch_kudo_notification:
+      guest:
+        many: "%{count} אורחות"
+        one: אורחת
+        other: "%{count} אורחות"
+        two: "%{count} אורחות"
+      html:
+        left_kudos:
+          many: "%{givers_list} השאירו קודוס על %{commentable_link}."
+          one: "%{givers_list} השאירה קודוס על %{commentable_link}."
+          other: "%{givers_list} השאירו קודוס על %{commentable_link}."
+          two: "%{givers_list} השאירו קודוס על %{commentable_link}."
+      subject: "[%{app_name}] קיבלת קודוס!"
+      text:
+        left_kudos:
+          many: "%{givers_list} השאירו קודוס על %{commentable_title} (%{commentable_url})."
+          one: "%{givers_list} השאירה קודוס על %{commentable_title} (%{commentable_url})."
+          other: "%{givers_list} השאירו קודוס על %{commentable_title} (%{commentable_url})."
+          two: "%{givers_list} השאירו קודוס על %{commentable_title} (%{commentable_url})."
   mailer:
     general:
       closing:
         formal: בברכה,
         informal: בברכה,
+      creation:
+        link_with_word_count: "%{creation_link} (%{word_count})"
+        title_with_word_count: '"%{creation_title}" (%{word_count})'
+        word_count:
+          many: "%{count} מילים"
+          one: מילה אחת
+          other: "%{count} מילים"
+          two: "%{count} מילים"
       footer:
         general:
           html:
@@ -24,38 +140,20 @@ he:
           addressed: היי, %{name}!
           unaddressed: היי!
         introductory: שלום מ-Archive of Our Own – AO3 (ארכיון משלנו)!
+      metadata_label_indicator: " : "
       signature:
         app_short_name: AO3
         open_doors: צוות Open Doors (דלתות פתוחות)
         parent_org: Organization for Transformative Works – OTW (ארגון למען יצירות
           טרנספורמטיביות)
         support: צוות התמיכה של AO3
-    kudos:
-      guest:
-        many: "%{count} אורחות"
-        one: אורחת
-        other: "%{count} אורחות"
-        two: "%{count} אורחות"
-      html:
-        left_kudos:
-          many: "%{givers_list} השאירו קודוס על %{commentable_link}."
-          one: "%{givers_list} השאירה קודוס על %{commentable_link}."
-          other: "%{givers_list} השאירו קודוס על %{commentable_link}."
-          two: "%{givers_list} השאירו קודוס על %{commentable_link}."
-      text:
-        left_kudos:
-          many: "%{givers_list} השאירו קודוס על %{commentable_link}."
-          one: "%{givers_list} השאירה קודוס על %{commentable_link}."
-          other: "%{givers_list} השאירו קודוס על %{commentable_link}."
-          two: "%{givers_list} השאירו קודוס על %{commentable_link}."
-      you_have: "[%{app_name}] קיבלת קודוס!"
   users:
     mailer:
       reset_password_instructions:
         expiration: אם לא תשתמשו בקישור לאיפוס הסיסמה בתוך שבוע, יפוג תוקף הקישור
           ותצטרכו לשלוח בקשה חדשה לאיפוס סיסמה.
-        intro: " קיבלנו בקשה לאיפוס סיסמה בחשבונך. באפשרותך לשנות את הסיסמה על ידי
-          כניסה לקישור הבא והזנת הסיסמה החדשה:"
+        intro: 'קיבלנו בקשה לאיפוס סיסמה בחשבונך. באפשרותך לשנות את הסיסמה על ידי
+          כניסה לקישור הבא והזנת הסיסמה החדשה:'
         link_title: שינוי סיסמה.
         subject: "[%{app_name}] איפוס סיסמה"
         unrequested: אם לא ביקשת לשנות את סיסמתך, התעלמו מדוא"ל זה והסיסמה הנוכחית
@@ -92,8 +190,8 @@ he:
       html:
         help: אם לא ברור לך מדוע היצירה הוסתרה, ולא קיבלת הודעות נוספות כלשהן בנושא,
           תוכלו %{contact_abuse_link} באופן ישיר.
-        hidden: 'צוות מדיניות ושימוש לרעה הסתיר את יצירתך %{title} ואין לציבור אפשרות
-          לגשת אליה כעת. '
+        hidden: צוות מדיניות ושימוש לרעה הסתיר את יצירתך %{title} ואין לציבור אפשרות
+          לגשת אליה כעת.
         tos_violation: אם היצירה הוסתרה משום שהיא מפרה את %{tos_link} של AO3, תצטרכו
           לשנות את היצירה כך שתעמוד בתנאי השימוש. אם לא יתוקנו ההפרות, היצירה עלולה
           להימחק מ-AO3.
@@ -132,8 +230,8 @@ he:
       collection_items_link_text: דף ה-Approved Collection Items (יצירות מאושרות באוספים)
       do_not_want:
         anonymous:
-          html: 'אם אין ברצונך שהיצירה תהייה אנונימית, יש לבקר ב %{collection_items_link}
-            שלך כדי להסיר את היצירה מאוסף זה. '
+          html: אם אין ברצונך שהיצירה תהייה אנונימית, יש לבקר ב %{collection_items_link}
+            שלך כדי להסיר את היצירה מאוסף זה.
           text: 'אם אין ברצונך שהיצירה שלך תהפוך לאנונימית, יש לבקר בדף Approved Collection
             Items (יצירות מאושרות באוספים) שלך כדי להסיר אותה מאוסף זה: %{collection_items_url}'
         anonymous_unrevealed:
@@ -156,7 +254,7 @@ he:
         anonymous: "[%{app_name}] היצירה שלך הפכה לאנונימית"
         anonymous_unrevealed: "[%{app_name}] היצירה שלך שונתה לאנונימית, והמעמד שלה
           שונה ליצירה שטרם נחשפה."
-        unrevealed: " [%{app_name}] מעמד היצירה שלך שונה ליצירה שטרם נחשפה"
+        unrevealed: "[%{app_name}] מעמד היצירה שלך שונה ליצירה שטרם נחשפה"
       unrevealed_info: יצירות שטרם נחשפו לא יופיעו ברשימת התגיות או בדף היצירות שלך.
         שימוש בקישור לדף היצירה יוביל להודעה שהיצירה טרם נחשפה, ולא יהיה ניתן לגשת
         לתוכן שלה.
@@ -199,39 +297,64 @@ he:
         היוצר/ת השותף/ה שלך. כמו כן, תוסף/י לכל סדרה אליה תתווסף היצירה.
       html:
         creation: "%{creation_link} מאת %{pseud_links}"
-        edit: לערוך את ה%{type}
-        remove: אם הוספת בטעות, או שאינך רוצה להיות רשום/ה כיוצר/ת, באפשרותך %{edit}
-          על מנת להסיר את עצמך כיוצר/ת.
-      intro: 'המשתמש/ת %{adding_user} רשם/ה את שם העט שלך %{pseud} כיוצר/ת שותף/ה
-        ל%{type} הבא/ה:'
+        edit_chapter: לערוך את הפרק
+        edit_series: לערוך את הסדרה
+        remove_chapter: אם הוספת בטעות, או שאינך רוצה להיות רשום/ה כיוצר/ת, באפשרותך
+          %{edit_chapter_link} על מנת להסיר את עצמך כיוצר/ת.
+        remove_series: אם הוספת בטעות, או שאינך רוצה להיות רשום/ה כיוצר/ת, באפשרותך
+          %{edit_series_link} על מנת להסיר את עצמך כיוצר/ת.
+      intro_chapter: 'המשתמש/ת %{adding_user} רשם/ה את שם העט שלך %{pseud} כיוצר/ת
+        שותף/ה לפרק הבא:'
+      intro_series: 'המשתמש/ת %{adding_user} רשם/ה את שם העט שלך %{pseud} כיוצר/ת
+        שותף/ה לסדרה הבאה:'
       subject: "[%{app_name}] התראת יוצר/ת שותף/ה"
       text:
         creation: "%{title} (%{url}) מאת %{pseuds}"
-        remove: 'אם הוספת בטעות, או שאינך רוצה להיות רשום/ה כיוצר/ת, באפשרותך לערוך
-          את ה%{type} על מנת להסיר את עצמך כיוצר/ת: %{url}'
+        remove_chapter: 'אם הוספת בטעות, או שאינך רוצה להיות רשום/ה כיוצר/ת, באפשרותך
+          לערוך את הפרק על מנת להסיר את עצמך כיוצר/ת: %{url}'
+        remove_series: 'אם הוספת בטעות, או שאינך רוצה להיות רשום/ה כיוצר/ת, באפשרותך
+          לערוך את הסדרה על מנת להסיר את עצמך כיוצר/ת: %{url}'
     creatorship_notification_archivist:
-      explanation: כיוון שהיא פועלת במסגרת תפקידה כארכיונאית של Open Doors (דלתות
-        פתוחות), יש ביכולתה לשייך את שם העט שלך ללא הזמנה, גם אם ביטלת את האפשרות
-        להגדירך כיוצר/ת שותף/ה.
+      explanation: כיוון שהארכיונאית פועלת במסגרת תפקידה במיזם Open Doors (דלתות פתוחות),
+        יש ביכולתה לשייך את שם העט שלך ללא הזמנה, גם אם ביטלת את האפשרות להגדירך כיוצר/ת
+        שותף/ה.
       html:
         creation: "%{creation_link} מאת %{pseud_links}"
-        edit: לערוך את ה%{type}
-        remove: אם נוספות בטעות, אם אם אינך רוצה להופיע כיוצר/ת, באפשרותך %{edit}
+        edit_chapter: לערוך את הפרק
+        edit_series: לערוך את הסדרה
+        edit_work: לערוך את היצירה
+        remove_chapter: אם נוספות בטעות, או אם אינך רוצה להופיע כיוצר/ת, באפשרותך
+          %{edit_chapter_link} על מנת להסיר את עצמך.
+        remove_series: אם נוספות בטעות, או אם אינך רוצה להופיע כיוצר/ת, באפשרותך %{edit_series_link}
           על מנת להסיר את עצמך.
-      intro: 'המשתמשת %{archivist} הוסיפה את שם העט שלך %{pseud} בתור יוצר/ת שותף/ה
-        של ה%{type}:'
+        remove_work: אם נוספות בטעות, או אם אינך רוצה להופיע כיוצר/ת, באפשרותך %{edit_work_link}
+          על מנת להסיר את עצמך.
+      intro_chapter: 'המשתמשת %{archivist} הוסיפה את שם העט שלך %{pseud} בתור יוצר/ת
+        שותף/ה של הפרק הבא:'
+      intro_series: 'המשתמשת %{archivist} הוסיפה את שם העט שלך %{pseud} בתור יוצר/ת
+        שותף/ה של הסדרה הבאה:'
+      intro_work: 'המשתמשת %{archivist} הוסיפה את שם העט שלך %{pseud} בתור יוצר/ת
+        שותף/ה של היצירה הבאה:'
       subject: "[%{app_name}] התראה על הוספתך כיוצר/ת שותף/ה על ידי ארכיונאית"
       text:
-        creation: 'creation: %{title} (%{url}) מאת %{pseuds}'
-        remove: 'אם נוספת בטעות, או אם אינך רוצה להופיע כיוצר/ת, באפשרותך לערוך את
-          ה%{type} על מנת להסיר את עצמך: %{url}'
+        creation: "%{title} (%{url}) מאת %{pseuds}"
+        remove_chapter: 'אם נוספות בטעות, או אם אינך רוצה להופיע כיוצר/ת, באפשרותך
+          לערוך את הפרק על מנת להסיר את עצמך: %{url}'
+        remove_series: 'אם נוספות בטעות, או אם אינך רוצה להופיע כיוצר/ת, באפשרותך
+          לערוך את הסדרה על מנת להסיר את עצמך: %{url}'
+        remove_work: 'אם נוספת בטעות, או אם אינך רוצה להופיע כיוצר/ת, באפשרותך לערוך
+          את היצירה על מנת להסיר את עצמך: %{url}'
     creatorship_request:
       html:
         creation: "%{creation_link} מאת %{pseud_links}"
-        instructions: " את ההזמנה ניתן לקבל או לדחות בדף %{page_name} שלך. "
+        instructions: את ההזמנה ניתן לקבל או לדחות בדף %{page_name} שלך.
         page_name: Co-Creator Requests (בקשות להוספת יוצר/ת שותף/ה)
-      intro: 'שם העט שלך %{pseud}  הוזמן על ידי %{inviting_user} להירשם כיוצר שותף
-        של ה%{type}:'
+      intro_chapter: 'המשתמש/ת %{inviting_user} הזמין/ה את שם העט שלך %{pseud} להירשם
+        כיוצר/ת שותף/ה של הפרק:'
+      intro_series: 'המשתמש/ת %{inviting_user} הזמין/ה את שם העט שלך %{pseud} להירשם
+        כיוצר/ת שותף/ה של הסדרה:'
+      intro_work: 'המשתמש/ת %{inviting_user} הזמין/ה את שם העט שלך %{pseud} להירשם
+        כיוצר/ת שותף/ה של היצירה:'
       subject: "[%{app_name}] בקשה להוספתך כיוצר/ת שותף/ה"
       text:
         creation: "%{title} (%{url}) מאת %{pseuds}"
@@ -253,8 +376,8 @@ he:
       body:
         many: רק רצינו ליידע אותך שקיבלת %{count} הזמנות חדשות, בהן ניתן להשתמש על
           מנת ליצור חשבון חדש בארכיון. באפשרותך להזמין חבר/ה דרך %{invitation_page}.
-        one: רק רצינו ליידע אותך שקיבלת הזמנה חדשה %{count}, בה ניתן להשתמש על מנת
-          ליצור חשבון חדש בארכיון. באפשרותך להזמין חברים/ות דרך הדף %{invitation_page}.
+        one: רק רצינו ליידע אותך שקיבלת הזמנה חדשה, בה ניתן להשתמש על מנת ליצור חשבון
+          חדש בארכיון. באפשרותך להזמין חבר/ה דרך %{invitation_page}.
         other: רק רצינו ליידע אותך שקיבלת %{count} הזמנות חדשות, בהן ניתן להשתמש על
           מנת ליצור חשבון חדש בארכיון. באפשרותך להזמין חבר/ה דרך %{invitation_page}.
         two: רק רצינו ליידע אותך שקיבלת %{count} הזמנות חדשות, בהן ניתן להשתמש על
@@ -273,9 +396,15 @@ he:
       reason: 'תוכן בקשתך:'
       subject: "[%{app_name}] בקשתך לקוד הזמנה נוסף נדחתה"
     recipient_notification:
+      html:
+        collection: יצירה הוקדשה לך במתנה באוסף %{collection_link} ב-AO3!
+      no_collection: יצירה הוקדשה לך במתנה ב-AO3!
       subject:
-        collection: "[{app_name}%][{collection_title}%] קיבלת יצירה במתנה מ-{collection_title}%"
-        no_collection: "[{app_name}%] קיבלת יצירה במתנה"
+        collection: "[%{app_name}][%{collection_title}] קיבלת יצירה במתנה מ- %{collection_title}"
+        no_collection: "[%{app_name}] קיבלת יצירה במתנה"
+      text:
+        collection: יצירה הוקדשה לך במתנה באוסף "%{collection_title}" (%{collection_url})
+          ב-AO3!
     signup_notification:
       activate_your_account: לחץ/י על קישור זה כדי להפעיל את חשבונך
       admin_posts: חדשות AO3
@@ -292,7 +421,6 @@ he:
           אודות פיתוח האתר ניתן למצוא ב%{admin_posts_link}. אם דרושה לך עזרה נוספת,
           אם נתקלת בבעייה באתר או אם יש לך שאלות או הערות, אנא %{contact_support_link},
           שתמיד שמח לעזור.
-      subject: "[%{app_name}] אישור "
       text:
         part1: 'אנא לחץ/י על קישור זה כדי להפעיל את חשבונך: %{activate_account_url}'
         part2: ברגע שחשבונך יופעל, תוכל/י לפרסם יצירות, להגדיר רישומים לקבלת עדכונים
@@ -303,4 +431,4 @@ he:
           את החדשות האחרונות אודות פיתוח האתר ניתן למצוא בחדשות AO3 %{admin_posts_url}.
           אם דרושה לך עזרה נוספת, אם נתקלת בבעייה באתר או אם יש לך שאלות או הערות,
           אנא צור/צרי קשר עם צוות התמיכה שלנו, שתמיד שמח לעזור: %{contact_support_url}'
-      welcome: "ברוכים הבאים לארכיון משלנו, %{login}!\n   "
+      welcome: ברוכים הבאים לארכיון משלנו, %{login}!

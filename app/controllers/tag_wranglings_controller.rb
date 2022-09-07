@@ -43,7 +43,7 @@ class TagWranglingsController < ApplicationController
       tags = Tag.where(id: params[:canonicals])
 
       tags.each do |tag_to_canonicalize|
-        if tag_to_canonicalize.update_attributes(canonical: true)
+        if tag_to_canonicalize.update(canonical: true)
           saved_canonicals << tag_to_canonicalize
         else
           not_saved_canonicals << tag_to_canonicalize
@@ -96,9 +96,5 @@ class TagWranglingsController < ApplicationController
     flash[:error] = error_messages.join('<br />').html_safe unless error_messages.empty?
 
     redirect_to tag_wranglings_path(options)
-  end
-
-  def discuss
-    @comments = Comment.where(commentable_type: 'Tag').order('updated_at DESC').paginate(page: params[:page])
   end
 end

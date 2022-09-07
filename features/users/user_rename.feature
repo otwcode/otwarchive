@@ -129,3 +129,22 @@ Feature:
       And I should not see "Epic story"
     When I search for works containing "newusername"
     Then I should see "Epic story"
+
+  Scenario: Comments reflect username changes after the cache expires in a week
+    Given the work "Interesting"
+      And I am logged in as "before" with password "password"
+      And I add the pseud "mine"
+    When I set up the comment "Wow!" on the work "Interesting"
+      And I select "mine" from "comment[pseud_id]"
+      And I press "Comment"
+      And I view the work "Interesting" with comments
+    Then I should see "mine (before)"
+    When I visit the change username page for before
+      And I fill in "New user name" with "after"
+      And I fill in "Password" with "password"
+      And I press "Change User Name"
+      And I view the work "Interesting" with comments
+    Then I should see "mine (before)"
+    When it is currently 7 days from now
+      And I view the work "Interesting" with comments
+    Then I should not see "mine (before)"

@@ -5,7 +5,13 @@ class Pseud < ApplicationRecord
 
   has_attached_file :icon,
     styles: { standard: "100x100>" },
-    path: %w(staging production).include?(Rails.env) ? ":attachment/:id/:style.:extension" : ":rails_root/public:url",
+    path: if Rails.env.production?
+            ":attachment/:id/:style.:extension"
+          elsif Rails.env.staging?
+            ":rails_env/:attachment/:id/:style.:extension"
+          else
+            ":rails_root/public/system/:rails_env/:class/:attachment/:id_partition/:style/:filename"
+          end,
     storage: %w(staging production).include?(Rails.env) ? :s3 : :filesystem,
     s3_protocol: "https",
     s3_credentials: "#{Rails.root}/config/s3.yml",
@@ -79,45 +85,7 @@ class Pseud < ApplicationRecord
 
   after_update :check_default_pseud
   after_update :expire_caches
-  after_commit :reindex_creations
-
-  scope :on_works, lambda {|owned_works|
-    select("DISTINCT pseuds.*").
-    joins(:works).
-    where(works: {id: owned_works.collect(&:id)}).
-    order(:name)
-  }
-
-  scope :with_works, -> {
-    select("pseuds.*, count(pseuds.id) AS work_count").
-    joins(:works).
-    group(:id).
-    order(:name)
-  }
-
-  scope :with_posted_works, -> { with_works.merge(Work.visible_to_registered_user) }
-  scope :with_public_works, -> { with_works.merge(Work.visible_to_all) }
-
-  scope :with_bookmarks, -> {
-    select("pseuds.*, count(pseuds.id) AS bookmark_count").
-    joins(:bookmarks).
-    group(:id).
-    order(:name)
-  }
-
-  # conditions: {bookmarks: {private: false, hidden_by_admin: false}},
-  scope :with_public_bookmarks, -> { with_bookmarks.merge(Bookmark.is_public) }
-
-  scope :with_public_recs, -> {
-    select("pseuds.*, count(pseuds.id) AS rec_count").
-    joins(:bookmarks).
-    group(:id).
-    order(:name).
-    merge(Bookmark.is_public.recs)
-  }
-
-  scope :alphabetical, -> { order(:name) }
-  scope :starting_with, lambda {|letter| where('SUBSTR(name,1,1) = ?', letter)}
+  after_commit :reindex_creations, :touch_comments
 
   def self.not_orphaned
     where("user_id != ?", User.orphan_account)
@@ -131,20 +99,6 @@ class Pseud < ApplicationRecord
 
   def to_param
     name
-  end
-
-  # Gets the number of works by this user that the current user can see
-  def visible_works_count
-    if User.current_user.nil?
-      self.works.posted.unhidden.unrestricted.count
-    else
-      self.works.posted.unhidden.count
-    end
-  end
-
-  # Gets the number of recs by this user
-  def visible_recs_count
-    self.recs.is_public.size
   end
 
   scope :public_work_count_for, -> (pseud_ids) {
@@ -448,6 +402,10 @@ class Pseud < ApplicationRecord
     if saved_change_to_name?
       self.works.each{ |work| work.touch }
     end
+  end
+
+  def touch_comments
+    comments.touch_all
   end
 
   # Delete current icon (thus reverting to archive default icon)

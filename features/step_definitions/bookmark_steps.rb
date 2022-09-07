@@ -13,7 +13,7 @@ end
 
 Given /^I have a bookmark for "([^\"]*)"$/ do |title|
   step %{I start a new bookmark for "#{title}"}
-  fill_in("bookmark_tag_string", with: DEFAULT_BOOKMARK_TAGS)
+  fill_in("Your tags", with: DEFAULT_BOOKMARK_TAGS)
   step %{I press "Create"}
   step %{all indexing jobs have been run}
 end
@@ -313,7 +313,7 @@ end
 def submit_bookmark_form(pseud, note, tags)
   select(pseud, from: "bookmark_pseud_id") unless pseud.nil?
   fill_in("bookmark_notes", with: note) unless note.nil?
-  fill_in("bookmark_tag_string", with: tags) unless tags.nil?
+  fill_in("Your tags", with: tags) unless tags.nil?
   click_button("Create")
   step %{all indexing jobs have been run}
 end
