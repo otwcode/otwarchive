@@ -7,7 +7,6 @@ class Kudo < ApplicationRecord
 
   validate :cannot_be_author
   validate :guest_cannot_kudos_restricted_work
-  validate :cannot_be_suspended
 
   validates_uniqueness_of :ip_address,
                           scope: [:commentable_id, :commentable_type],
@@ -88,25 +87,6 @@ class Kudo < ApplicationRecord
     elsif commentable.restricted?
       errors.add(:guest_on_restricted,
                  ts("^You can't leave guest kudos on a restricted work."))
-    end
-  end
-
-  def cannot_be_suspended
-    return unless user&.banned || user&.suspended
-
-    commentable = nil
-    if commentable_type == "Work"
-      commentable = Work.find_by(id: commentable_id)
-    elsif commentable_type == "Chapter"
-      commentable = Chapter.find_by(id: commentable_id).work
-    end
-
-    if commentable.nil?
-      errors.add(:no_commentable,
-                 ts("^What did you want to leave kudos on?"))
-    else
-      errors.add(:cannot_be_suspended,
-               ts("You cannot leave kudos while your account is suspended."))
     end
   end
 

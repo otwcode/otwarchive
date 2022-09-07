@@ -457,9 +457,6 @@ $j(document).ready(function() {
           if (data.errors && data.errors.guest_on_restricted) {
             msg = "You can't leave guest kudos on a restricted work.";
           }
-          if (data.errors && data.errors.cannot_be_suspended) {
-            msg = "You cannot leave kudos while your account is suspended.";
-          }
         }
 
         $j('#kudos_message').addClass('kudos_error').text(msg);
