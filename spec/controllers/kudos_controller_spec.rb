@@ -143,7 +143,7 @@ describe KudosController do
       end
     end
 
-     context "when kudos giver is suspended" do
+    context "when kudos giver is suspended" do
       let(:work) { create(:work, restricted: true) }
       let(:suspended_user) { create(:user, suspended: true, suspended_until: 4.days.from_now) }
 
