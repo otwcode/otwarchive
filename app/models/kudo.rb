@@ -26,6 +26,13 @@ class Kudo < ApplicationRecord
     errors.add(:commentable, :guest_on_restricted)
   end
 
+  validate :cannot_be_suspended, on: :create
+  def cannot_be_suspended
+    return unless user&.banned || user&.suspended
+
+    errors.add(:commentable, :banned_or_suspended)
+  end
+
   validates :ip_address,
             uniqueness: { scope: [:commentable_id, :commentable_type], case_sensitive: false },
             if: proc { |kudo| kudo.ip_address.present? }
