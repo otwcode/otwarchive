@@ -1,5 +1,7 @@
 class AutocompleteController < ApplicationController
   respond_to :json
+  include AutocompleteSource
+  include ClassMethods
 
   skip_before_action :store_location
   skip_before_action :set_current_user, except: [:collection_parent_name, :owned_tag_sets, :site_skins]
@@ -21,6 +23,33 @@ class AutocompleteController < ApplicationController
   #########################################
   ############# LOOKUP ACTIONS GO HERE
 
+  def highlight_tags(search_param, results)
+    terms = autocomplete_phrase_split(transliterate(search_param).downcase)
+    highlighted = []
+    results.each do |result|
+      name = Tag.name_from_autocomplete(result)
+
+      highlighted_name = []
+      name.split.each do |word|
+        word_highlighted = false
+        terms.each do |term|
+          # This only highlights start of words, but AC only matches with start of words
+          next unless transliterate(word).downcase.starts_with? term
+
+          highlighted_word = "<b>" + word[0, term.size] + "</b>" + word[term.size..]
+          highlighted_name << highlighted_word
+          word_highlighted = true
+          break # Prevents duplicate words by stopping as soon as we have a match
+        end
+
+        highlighted_name << word unless word_highlighted
+      end
+
+      highlighted << { "id": name, "name": highlighted_name.join(" ") }
+    end
+    highlighted
+  end
+
   # PSEUDS
   def pseud
     if params[:term].blank?
@@ -34,11 +63,14 @@ class AutocompleteController < ApplicationController
 
   ## TAGS
   private
-    def tag_output(search_param, tag_type)
-      tags = Tag.autocomplete_lookup(search_param: search_param, autocomplete_prefix: "autocomplete_tag_#{tag_type}")
-      render_output tags.map {|r| Tag.name_from_autocomplete(r)}
-    end
+
+  def tag_output(search_param, tag_type)
+    tags = Tag.autocomplete_lookup(search_param: search_param, autocomplete_prefix: "autocomplete_tag_#{tag_type}")
+    render_output highlight_tags(search_param, tags)
+  end
+
   public
+
   # these are all basically duplicates but make our calls to autocomplete more readable
   def tag; tag_output(params[:term], params[:type] || "all"); end
   def fandom; tag_output(params[:term], "fandom"); end
@@ -46,17 +78,18 @@ class AutocompleteController < ApplicationController
   def relationship; tag_output(params[:term], "relationship"); end
   def freeform; tag_output(params[:term], "freeform"); end
 
-
   ## TAGS IN FANDOMS
   private
-    def tag_in_fandom_output(params)
-      render_output(Tag.autocomplete_fandom_lookup(params).map {|r| Tag.name_from_autocomplete(r)})
-    end
+
+  def tag_in_fandom_output(params)
+    render_output highlight_tags(params[:term], Tag.autocomplete_fandom_lookup(params))
+  end
+
   public
+
   def tag_in_fandom; tag_in_fandom_output(params); end
   def character_in_fandom; tag_in_fandom_output(params.merge({tag_type: "character"})); end
   def relationship_in_fandom; tag_in_fandom_output(params.merge({tag_type: "relationship"})); end
-
 
   ## TAGS IN SETS
   #
@@ -209,7 +242,7 @@ class AutocompleteController < ApplicationController
     end
   end
 
-private
+  private
 
   # Because of the respond_to :json at the top of the controller, this will return a JSON-encoded
   # response which the autocomplete javascript on the other end should be able to handle :)

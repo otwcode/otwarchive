@@ -512,7 +512,7 @@ $.TokenList = function (input, url_or_data, settings) {
             return;
         }
 
-        var this_token = $("<li>"+ escapeHTML(value) +" </li>")
+        var this_token = $("<li>"+ escapeHTML(id) +" </li>")
           .addClass(settings.classes.token)
           .insertBefore(input_token);
 
@@ -760,19 +760,15 @@ $.TokenList = function (input, url_or_data, settings) {
         }
     }
 
-    // Highlight the query part of the search term
-    function highlight_term(value, term) {
-        var newvalue = value;
-        $.each(term.split(' '), function(index, termbit) {
-            if (!termbit) {
-                // AO3-4976 skip empty strings
-                return;
-            }
-            termbit = termbit.replace(/([.?*+^$[\]\\(){}-])/g, "\\$1");
-            newvalue = newvalue.replace(new RegExp("(?![^&;]+;)(?!<[^<>]*)(" + termbit + ")(?![^<>]*>)(?![^&;]+;)", "gi"), "<b>$1</b>");
-        });
-        return newvalue;
+    // Highlight the query part of the search term, already provided by server
+    // but we need to do this in order to escape potential HTML in user entered
+    // tags (only allow bold)
+    function highlight_term(value) {
+        return escapeHTML(value)
+            .replace(new RegExp(escapeHTML("<b>"), "g"), "<b>")
+            .replace(new RegExp(escapeHTML("</b>"), "g"), "</b>");
     }
+
 
     // Populate the results dropdown with some results
     function populate_dropdown (query, results) {
@@ -790,7 +786,7 @@ $.TokenList = function (input, url_or_data, settings) {
                 .hide();
 
             $.each(results, function(index, value) {
-                var this_li = $("<li role=\"option\">" + highlight_term(escapeHTML(value.name), query) + "</li>") // was role=\"menuitem\"
+                var this_li = $("<li role=\"option\">" + highlight_term(value.name) + "</li>") // was role=\"menuitem\"
                                   .appendTo(dropdown_ul);
 
                 if(index % 2) {
