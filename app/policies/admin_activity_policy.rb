@@ -1,5 +1,5 @@
 class AdminActivityPolicy < ApplicationPolicy
-  PERMITTED_ROLES = %w[policy_and_abuse superadmin]
+  PERMITTED_ROLES = %w[policy_and_abuse superadmin].freeze
 
   def index?
     user_has_roles?(PERMITTED_ROLES)
