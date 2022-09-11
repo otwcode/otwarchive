@@ -43,6 +43,7 @@ describe Admin::BlacklistedEmailsController do
 
   describe "POST #create" do
     subject { post :create, params: { admin_blacklisted_email: banned_email_params } }
+
     let(:email) { banned_email_params.dig(:email) }
 
     let(:success) do
@@ -54,6 +55,7 @@ describe Admin::BlacklistedEmailsController do
 
   describe "DELETE #destroy" do
     subject { delete :destroy, params: { id: banned_email } }
+
     let(:email) { banned_email.email }
 
     let(:success) do
