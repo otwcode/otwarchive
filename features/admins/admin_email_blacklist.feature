@@ -11,7 +11,7 @@ Scenario: Ban email address
   Then I should see "Find banned emails"
     And I should see "Ban email address"
     And I should see "Email"
-  When I fill in "Email" with "foo@bar.com"
+  When I fill in "Email to ban" with "foo@bar.com"
     And I press "Ban Email"
   Then I should see "Email address foo@bar.com banned."
     And the address "foo@bar.com" should be banned
