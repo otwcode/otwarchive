@@ -574,7 +574,7 @@ Feature: Collection
     And the email should contain "A gift work has been posted for you in the"
     And the email should contain "Yuletide"
     And the email should contain "at the Archive of Our Own"
-    And the email should contain "by an anonymous responder"
+    And the email should contain "by Anonymous"
     And the email should not contain "by myname1"
     And the email should not contain "by myname2"
     And the email should not contain "by myname3"

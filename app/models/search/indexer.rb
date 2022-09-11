@@ -1,5 +1,4 @@
 class Indexer
-
   BATCH_SIZE = 1000
   INDEXERS_FOR_CLASS = {
     Work: %w[WorkIndexer WorkCreatorIndexer BookmarkedWorkIndexer],
@@ -10,7 +9,7 @@ class Indexer
     ExternalWork: %w[BookmarkedExternalWorkIndexer]
   }.freeze
 
-  delegate :klass, :index_name, :document_type, to: :class
+  delegate :klass, :klass_with_includes, :index_name, :document_type, to: :class
 
   ##################
   # CLASS METHODS
@@ -18,6 +17,10 @@ class Indexer
 
   def self.klass
     raise "Must be defined in subclass"
+  end
+
+  def self.klass_with_includes
+    klass.constantize
   end
 
   def self.all
@@ -166,8 +169,7 @@ class Indexer
   end
 
   def objects
-    Rails.logger.info "Blueshirt: Logging use of constantize class objects #{klass}"
-    @objects ||= klass.constantize.where(id: ids).inject({}) do |h, obj|
+    @objects ||= klass_with_includes.where(id: ids).inject({}) do |h, obj|
       h.merge(obj.id => obj)
     end
   end

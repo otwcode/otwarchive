@@ -1,10 +1,73 @@
 ---
 ja:
+  activerecord:
+    attributes:
+      archive_warning:
+        name_with_colon:
+          other: 警告：
+      category:
+        name_with_colon:
+          other: カテゴリー：
+      character:
+        name_with_colon:
+          other: キャラクター：
+      fandom:
+        name_with_colon:
+          other: ジャンル：
+      freeform:
+        name_with_colon:
+          other: その他のタグ：
+      rating:
+        name_with_colon: レイティング：
+      relationship:
+        name_with_colon:
+          other: カップリング：
+      work:
+        summary: あらすじ
+    models:
+      archive_warning:
+        other: 警告
+      category:
+        other: カテゴリー
+      chapter:
+        other: 章
+      character:
+        other: キャラクター
+      fandom:
+        other: ジャンル
+      freeform:
+        other: その他のタグ
+      rating:
+        other: レイティング
+      relationship:
+        other: カップリング
+      series:
+        other: シリーズ
+  kudo_mailer:
+    batch_kudo_notification:
+      guest:
+        other: ゲスト%{count}名
+      html:
+        left_kudos:
+          other: "%{givers_list}があなたの作品 %{commentable_link}にいいねを送りました。"
+        single_guest:
+          giver_list: ゲスト1名
+          left_kudos: "%{giver_list}があなたの作品 %{commentable_link}にいいねを送りました。"
+      subject: "[%{app_name}] あなたにいいねが届きました！"
+      text:
+        left_kudos:
+          other: "%{givers_list} があなたの作品 %{commentable_title} (%{commentable_url})にいいねを送りました。"
+        single_guest: ゲスト1名があなたの作品 %{commentable_title} (%{commentable_url})にいいねを送りました。
   mailer:
     general:
       closing:
         formal: 敬具、
         informal: 以上、
+      creation:
+        link_with_word_count: "%{creation_link} （%{word_count}）"
+        title_with_word_count: "『%{creation_title}』（%{word_count}）"
+        word_count:
+          other: "%{count} 語"
       footer:
         general:
           html:
@@ -22,21 +85,12 @@ ja:
           addressed: こんにちは、%{name}さん！
           unaddressed: こんにちは！
         introductory: AO3（みんなのアーカイブ）からこんにちは！
+      metadata_label_indicator: "："
       signature:
         app_short_name: AO3
         open_doors: The Open Doors (オープンドア) チーム
         parent_org: Organization for Transformative Works ー OTW（変形的作品のためのNPO）
         support: AO3サポートチーム
-    kudos:
-      guest:
-        other: ゲスト%{count}名
-      html:
-        left_kudos:
-          other: "%{givers_list}があなたの作品 %{commentable_link}にいいねを送りました。"
-      text:
-        left_kudos:
-          other: "%{givers_list} があなたの作品 %{commentable_link}にいいねを送りました。"
-      you_have: "[%{app_name}] あなたにいいねが届きました！"
   users:
     mailer:
       reset_password_instructions:
@@ -110,7 +164,7 @@ ja:
         html: 詳しくは、%{faq_link}をご覧ください。
         text: 詳しくは、コレクションFAQをご覧ください：%{faq_url}
       subject:
-        anonymous: "%{app_name}] あなたの作品は匿名化されました"
+        anonymous: "[%{app_name}] あなたの作品は匿名化されました"
         anonymous_unrevealed: "[%{app_name}] あなたの作品は匿名・未公開化されました"
         unrevealed: "[%{app_name}] あなたの作品は未公開化されました"
       unrevealed_info: 未公開作品はタグリストにも、あなたの投稿作品ページにも表示されません。リンクで作品にアクセスしたいユーザーには、作品は未公開とのお知らせが表示され、作品にアクセスできません。
@@ -166,7 +220,7 @@ ja:
     creatorship_notification_archivist:
       explanation: 公式活動中のOpen Doors（オープンドアプロジェクト）管理人は、あなたが合作者機能を無効化している場合でも、招待なしであなたを合作者として追加する権限があります。
       html:
-        creation: "%{creation_link}%　作者：%{pseud_links}"
+        creation: "%{creation_link}　作者：%{pseud_links}"
         edit_chapter: 章を編集して
         edit_series: シリーズを編集して
         edit_work: 作品を編集して
@@ -184,7 +238,7 @@ ja:
         remove_work: 間違って合作者に追加された場合や、合作者としてリストに追加されたくない場合は、作品を編集して合作者として自身を削除することができます：%{url}
     creatorship_request:
       html:
-        creation: "%{creation_link} 　作者：%{pseud_links}"
+        creation: "%{creation_link} 作者：%{pseud_links}"
         instructions: "%{page_name}ページでこのリクエストを承認または拒否することができます。"
         page_name: Co-Creator Requests（合作者リクエスト）
       intro_chapter: "%{inviting_user} さんはあなた（ペンネーム%{pseud}）を以下の章の合作者として招待しました："
@@ -256,9 +310,14 @@ ja:
       reason: あなたのリクエストは以下の通りでした。
       subject: "[%{app_name}]追加招待コードのリクエストが拒否されました"
     recipient_notification:
+      html:
+        collection: あなたへのプレゼント作品が、AO3の%{collection_link} コレクションに投稿されました！
+      no_collection: あなたへのプレゼント作品がAO3に投稿されました！
       subject:
-        collection: "[%{app_name}][%{collection_title}] %{collection_title}からあなたへのプレゼント作品が届きました"
+        collection: "[%{app_name}][%{collection_title}] %{collection_title} からあなたへのプレゼント作品が届きました"
         no_collection: "[%{app_name}] あなたへのプレゼント作品が届きました"
+      text:
+        collection: あなたへのプレゼント作品が、AO3の 「 %{collection_title} 」コレクション（%{collection_url}）に投稿されました！
     signup_notification:
       activate_your_account: このリンクに従いアアカウントを有効化してください
       admin_posts: AO3ニュース

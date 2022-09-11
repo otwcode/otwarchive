@@ -104,6 +104,10 @@ Given /^I have posted an admin post$/ do
   step("I log out")
 end
 
+Given "the admin post {string}" do |title|
+  FactoryBot.create(:admin_post, title: title)
+end
+
 Given /^the fannish next of kin "([^\"]*)" for the user "([^\"]*)"$/ do |kin, user|
   step %{the user "#{kin}" exists and is activated}
   step %{the user "#{user}" exists and is activated}
@@ -167,6 +171,15 @@ Given /^I have posted an admin post with comments disabled$/ do
   step %{I log out}
 end
 
+Given "an abuse ticket ID exists" do
+  ticket = {
+    "departmentId" => ArchiveConfig.ABUSE_ZOHO_DEPARTMENT_ID,
+    "status" => "Open",
+    "webUrl" => Faker::Internet.url
+  }
+  allow_any_instance_of(ZohoResourceClient).to receive(:find_ticket).and_return(ticket)
+end
+
 ### WHEN
 
 When /^I visit the last activities item$/ do
@@ -226,8 +239,8 @@ When /^the invite_from_queue_at is yesterday$/ do
   AdminSetting.first.update_attribute(:invite_from_queue_at, Time.now - 1.day)
 end
 
-When /^the check_queue rake task is run$/ do
-  step %{I run the rake task "invitations:check_queue"}
+When "the scheduled check_invite_queue job is run" do
+  Resque.enqueue(AdminSetting, :check_queue)
 end
 
 When /^I edit known issues$/ do
@@ -433,6 +446,10 @@ end
 Then /^the work "([^\"]*)" should not be marked as spam/ do |work|
   w = Work.find_by_title(work)
   assert !w.spam?
+end
+
+Then "I should see {int} admin activity log entry/entries" do |count|
+  expect(page).to have_css("tr[id^=admin_activity_]", count: count)
 end
 
 Then /^the user content should be shown as right-to-left$/ do

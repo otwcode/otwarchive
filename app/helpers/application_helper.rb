@@ -49,15 +49,6 @@ module ApplicationHelper
     @facets.present? || (controller.action_name == 'index' && controller.controller_name == 'collections') || (controller.action_name == 'unassigned' && controller.controller_name == 'fandoms')
   end
 
-  # A more gracefully degrading link_to_remote.
-  def link_to_remote(name, options = {}, html_options = {})
-    unless html_options[:href]
-      html_options[:href] = url_for(options[:url])
-    end
-
-    link_to_function(name, remote_function(options), html_options)
-  end
-
   # This is used to make the current page we're on (determined by the path or by the specified condition) a span with class "current" and it allows us to add a title attribute to the link or the span
   def span_if_current(link_to_default_text, path, condition=nil, title_attribute_default_text=nil)
     is_current = condition.nil? ? current_page?(path) : condition
@@ -80,19 +71,6 @@ module ApplicationHelper
       col, colgroup, dd, del, dfn, [dir], div, dl, dt, em, h1, h2, h3, h4, h5, h6, [height], hr, [href], i, img,
       ins, kbd, li, [name], ol, p, pre, q, s, samp, small, span, [src], strike, strong, sub, sup, table, tbody, td,
       tfoot, th, thead, [title], tr, tt, u, ul, var, [width]</code>" : "").html_safe
-  end
-
-  def allowed_css_instructions
-    h(ts("Limited CSS properties and values allowed")) +
-    link_to_help("css-help")
-  end
-
-  # This helper needs to be used in forms that may appear multiple times in the same
-  # page (eg the comment form) since all the fields must have unique ids
-  # see http://stackoverflow.com/questions/2425690/multiple-remote-form-for-on-the-same-page-causes-duplicate-ids
-  def field_with_unique_id( form, field_type, object, field_name )
-      field_id = "#{object.class.name.downcase}_#{object.id.to_s}_#{field_name.to_s}"
-      form.send( field_type, field_name, id: field_id )
   end
 
   # Byline helpers
@@ -166,7 +144,9 @@ module ApplicationHelper
       end
       anon_byline
     else
-      byline_text(creation, only_path: false, text_only: true)
+      only_path = false
+      text_only = true
+      byline_text(creation, only_path, text_only)
     end
   end
 
@@ -263,10 +243,6 @@ module ApplicationHelper
   def allow_tinymce?(controller)
     %w(admin_posts archive_faqs known_issues chapters works wrangling_guidelines).include?(controller.controller_name) &&
       %w(new create edit update).include?(controller.action_name)
-  end
-
-  def params_without(name)
-    params.reject{|k,v| k == name}
   end
 
   # see: http://www.w3.org/TR/wai-aria/states_and_properties#aria-valuenow
@@ -370,14 +346,6 @@ module ApplicationHelper
 
   def field_name(form, attribute)
     "#{form.object_name}[#{field_attribute(attribute)}]"
-  end
-
-  def nested_field_id(form, nested_object, attribute)
-    name_to_id(nested_field_name(form, nested_object, attribute))
-  end
-
-  def nested_field_name(form, nested_object, attribute)
-    "#{form.object_name}[#{nested_object.class.table_name}_attributes][#{nested_object.id}][#{field_attribute(attribute)}]"
   end
 
   # toggle an checkboxes (scrollable checkboxes) section of a form to show all of the checkboxes
@@ -516,21 +484,6 @@ module ApplicationHelper
 
   def submit_fieldset(form=nil, button_text=nil)
     content_tag(:fieldset, content_tag(:legend, ts("Actions")) + submit_button(form, button_text))
-  end
-
-  # Cache fragments of a view if +condition+ is true
-  #
-  # <%= cache_if admin?, project do %>
-  # <b>All the topics on this project</b>
-  # <%= render project.topics %>
-  # <% end %>
-  def cache_if(condition, name = {}, options = nil, &block)
-    if condition
-      cache(name, options, &block)
-    else
-      yield
-    end
-    nil
   end
 
   def first_paragraph(full_text, placeholder_text = 'No preview available.')

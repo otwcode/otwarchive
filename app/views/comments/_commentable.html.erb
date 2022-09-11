@@ -101,6 +101,10 @@
     <p class="notice">
       <%= t(".permissions.work.unrevealed") %>
     </p>
+  <% elsif commentable_parent.is_a?(Work) && blocked_by?(commentable_parent) %>
+    <p class="notice">
+      <%= t(".blocked") %>
+    </p>
   <% else %>
     <div id="add_comment_placeholder" title="top level comment">
       <div id="add_comment">
@@ -113,7 +117,7 @@
   <!-- If not, and show_comments is true, here is where the comments will be rendered -->
   <div id="comments_placeholder" <% unless params[:show_comments] || params[:tag_id] %>style="display:none;"<% end %>>
     <% if params[:show_comments] || params[:tag_id] %>
-      <% @comments = commentable.comments.reviewed.page(params[:page]) %>
+      <% @comments = CommentDecorator.for_commentable(commentable, page: params[:page]) %>
       <%= will_paginate @comments, params: { anchor: :comments } %>
       <%= render 'comments/comment_thread', { :depth => 0, :comments => @comments } %>
       </ol><!-- need to tack this on to close thread -->

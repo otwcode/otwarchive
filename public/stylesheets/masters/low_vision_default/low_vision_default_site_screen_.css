@@ -59,6 +59,7 @@ form dl,
 fieldset dl dl,
 fieldset fieldset fieldset,
 fieldset fieldset dl dl,
+form.single fieldset,
 dd.hideme,
 form blockquote.userstuff {
   border: 2px solid;

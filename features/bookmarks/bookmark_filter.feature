@@ -13,3 +13,7 @@ Feature: Filter bookmarks
     Then I should see "1 Bookmark by recengine"
       And I should not see "english work"
       And I should see "german work"
+    When I follow "Clear Filters"
+    Then I should see "2 Bookmarks by recengine"
+      And I should see "english work"
+      And I should see "german work"

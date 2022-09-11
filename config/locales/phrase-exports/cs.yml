@@ -1,10 +1,111 @@
 ---
 cs:
+  activerecord:
+    attributes:
+      archive_warning:
+        name_with_colon:
+          few: 'Varování:'
+          one: 'Varování:'
+      category:
+        name_with_colon:
+          few: 'Kategorie:'
+          one: 'Kategorie:'
+          other: 'Kategorií:'
+      character:
+        name_with_colon:
+          few: 'Postavy:'
+          one: 'Postava:'
+          other: 'Postav:'
+      fandom:
+        name_with_colon:
+          few: 'Fandomy:'
+          one: 'Fandom:'
+          other: 'Fandomů:'
+      freeform:
+        name_with_colon:
+          few: 'Vedlejší tagy:'
+          one: 'Vedlejší tag:'
+          other: 'Vedlejších tagů:'
+      rating:
+        name_with_colon: 'Zařazení:'
+      relationship:
+        name_with_colon:
+          few: 'Vztahy:'
+          one: 'Vztah:'
+          other: 'Vztahů:'
+      work:
+        summary: Shrnutí
+    models:
+      archive_warning:
+        few: Varování
+        one: Varování
+      category:
+        few: Kategorie
+        one: Kategorie
+        other: Kategorií
+      chapter:
+        few: Kapitoly
+        one: Kapitola
+        other: Kapitol
+      character:
+        few: Postavy
+        one: Postava
+        other: Postav
+      fandom:
+        few: Fandomy
+        one: Fandom
+        other: Fandomů
+      freeform:
+        few: Vedlejší tagy
+        one: Vedlejší tag
+        other: Vedlejších tagů
+      rating:
+        few: Zařazení
+        one: Zařazení
+      relationship:
+        few: Vztahy
+        one: Vztah
+        other: Vztahů
+      series:
+        few: Série
+        one: Série
+        other: Sérií
+  kudo_mailer:
+    batch_kudo_notification:
+      guest:
+        few: "%{count} návštěvníci"
+        many: "%{count} návštěvníků"
+        one: návštěvník
+        other: "%{count} návštěvníků"
+      html:
+        left_kudos:
+          few: "%{givers_list} zanechali kudos u %{commentable_link}."
+          many: "%{givers_list} zanechali kudos u %{commentable_link}."
+          one: "%{givers_list} zanechal/a kudos u %{commentable_link}."
+          other: "%{givers_list} zanechali kudos u %{commentable_link}."
+        single_guest:
+          giver_list: Návštěvník
+          left_kudos: "%{giver_list} zanechal kudos u %{commentable_link}."
+      subject: "[%{app_name}] Máte nové kudos!"
+      text:
+        left_kudos:
+          few: "%{givers_list} zanechali kudos u %{commentable_title} (%{commentable_url})."
+          many: "%{givers_list} zanechali kudos u %{commentable_title} (%{commentable_url})."
+          one: "%{givers_list} zanechal/a kudos u %{commentable_title} (%{commentable_url})."
+          other: "%{givers_list} zanechali kudos u %{commentable_title} (%{commentable_url})."
+        single_guest: Návštěvník zanechal kudos u %{commentable_title} (%{commentable_url}).
   mailer:
     general:
       closing:
         formal: S pozdravem,
         informal: S pozdravem,
+      creation:
+        link_with_word_count: "%{creation_link} (%{word_count})"
+        title_with_word_count: '"%{creation_title}" (%{word_count})'
+        word_count:
+          few: "%{count} slova"
+          one: "%{count} slovo"
+          other: "%{count} slov"
       footer:
         general:
           html:
@@ -17,7 +118,7 @@ cs:
               na %{support_url}.
             part2: 'AO3 je fanoušky vedený a podporovaný archiv, který spoléhá na
               vaše příspěvky: %{donate_url}.'
-        sent_at: Odesláno v %{sent_at}.
+        sent_at: Odesláno ve %{sent_at}.
       greeting:
         formal: Dobrý den, %{name},
         informal:
@@ -25,31 +126,13 @@ cs:
           unaddressed: Ahoj,
         introductory: Zdravíme z Archive of Our Own - AO3 (Našeho vlastního archivu
           - AO3),
+      metadata_label_indicator: ": "
       signature:
         app_short_name: AO3
         open_doors: The Open Doors team (tým Otevřených dvěří)
         parent_org: Organization for Transformative Works - OTW (Společnost pro transformativní
           tvorbu)
         support: Podpora AO3
-    kudos:
-      guest:
-        few: "%{count} návštěvníci"
-        many: "%{count} návštěvníků"
-        one: návštěvník
-        other: "%{count} návštěvníků"
-      html:
-        left_kudos:
-          few: "%{givers_list} zanechali kudos u %{commentable_link}."
-          many: "%{givers_list} zanechali kudos u %{commentable_link}."
-          one: "%{givers_list} zanechal/a kudos u %{commentable_link}."
-          other: "%{givers_list} zanechali kudos u %{commentable_link}."
-      text:
-        left_kudos:
-          few: "%{givers_list} zanechali kudos u %{commentable_link}."
-          many: "%{givers_list} zanechali kudos u %{commentable_link}."
-          one: "%{givers_list} zanechal/a kudos u %{commentable_link}."
-          other: "%{givers_list} zanechali kudos u %{commentable_link}."
-      you_have: "[%{app_name}] Máte nové kudos!"
   users:
     mailer:
       reset_password_instructions:
@@ -373,10 +456,17 @@ cs:
       reason: 'Vaše žádost byla:'
       subject: "[%{app_name}] Žádost o dodatečnou pozvánku zamítnuta"
     recipient_notification:
+      html:
+        collection: Vám darovaná práce byla zveřejněna ve sbírce %{collection_link}
+          na AO3!
+      no_collection: Na AO3 pro vás byla zveřejněna fanouškovská práce!
       subject:
         collection: "[%{app_name}][%{collection_title}] Vám darovaná práce ze sbírky
           %{collection_title}"
         no_collection: "[%{app_name}] Fanouškovská práce jako dárek pro vás"
+      text:
+        collection: Ve sbírce "%{collection_title}" (%{collection_url}) na AO3 byla
+          zveřejněna vám darovaná práce!
     signup_notification:
       activate_your_account: 'Pro aktivaci vašeho účtu klikněte na tento odkaz '
       admin_posts: Novinky AO3

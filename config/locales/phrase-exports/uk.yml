@@ -1,5 +1,26 @@
 ---
 uk:
+  kudo_mailer:
+    batch_kudo_notification:
+      guest:
+        few: "%{count} гостей"
+        many: "%{count} гостей"
+        one: "%{count} гостя"
+      html:
+        left_kudos:
+          few: Кудос для %{commentable_link} від %{givers_list}.
+          many: Кудос для %{commentable_link} від %{givers_list}.
+          one: Кудос для %{commentable_link} від %{givers_list}.
+        single_guest:
+          giver_list: гостя
+          left_kudos: Кудос для %{commentable_link} від %{giver_list}.
+      subject: "[%{app_name}] Ви отримали кудос!"
+      text:
+        left_kudos:
+          few: Кудос для %{commentable_title} (%{commentable_url}) від %{givers_list}.
+          many: Кудос для %{commentable_title} (%{commentable_url}) від %{givers_list}.
+          one: Кудос для %{commentable_title} (%{commentable_url}) від %{givers_list}.
+        single_guest: Кудос для %{commentable_title} (%{commentable_url}) від гостя.
   mailer:
     general:
       closing:
@@ -31,24 +52,6 @@ uk:
         parent_org: Organization for Transformative Works – OTW (Організація Перетворчих
           Робіт)
         support: Команда Підтримки АО3
-    kudos:
-      guest:
-        few: "%{count} гостей"
-        many: "%{count} гостей"
-        one: "%{count} гостя"
-      html:
-        left_kudos:
-          few: Кудос для %{commentable_link} від %{givers_list}.
-          many: Кудос для %{commentable_link} від %{givers_list}.
-          one: Кудос для %{commentable_link} від %{givers_list}.
-          other: "%{givers_list} залишили kudos на %{commentable_link}."
-      text:
-        left_kudos:
-          few: Кудос для %{commentable_link} від %{givers_list}.
-          many: Кудос для %{commentable_link} від %{givers_list}.
-          one: Кудос для %{commentable_link} від %{givers_list}.
-          other: "%{givers_list} залишили kudos на %{commentable_link}."
-      you_have: "[%{app_name}] Ви отримали кудос!"
   users:
     mailer:
       reset_password_instructions:
@@ -129,17 +132,17 @@ uk:
           html: Утримувачі колекції %{collection_link} змінили статус Вашої роботи
             %{work_link} на анонімний.
           text: Утримувачі колекції "%{collection_title}" (%{collection_url}) змінили
-            статус Вашої роботи  "%{work_title}" (%{work_url}) на анонімний.
+            статус Вашої роботи "%{work_title}" (%{work_url}) на анонімний.
         anonymous_unrevealed:
           html: Утримувачі колекції %{collection_link} змінили статус Вашої роботи
             %{work_link} на анонімний та закритий.
-          text: Утримувачі колекції "%{collection_title}"  (%{collection_url}) змінили
-            статус Вашої роботи  "%{work_title}" (%{work_url}) на анонімний та закритий.
+          text: Утримувачі колекції "%{collection_title}" (%{collection_url}) змінили
+            статус Вашої роботи "%{work_title}" (%{work_url}) на анонімний та закритий.
         unrevealed:
           html: Утримувачі колекції %{collection_link} змінили статус Вашої роботи
             %{work_link} на закритий.
-          text: Утримувачі колекції "%{collection_title}"  (%{collection_url}) змінили
-            статус Вашої роботи  "%{work_title}" (%{work_url}) на закритий.
+          text: Утримувачі колекції "%{collection_title}" (%{collection_url}) змінили
+            статус Вашої роботи "%{work_title}" (%{work_url}) на закритий.
       collection_items_link_text: Approved Collection Items page (сторінку Підтверджених
         робіт в колекціях)
       do_not_want:
@@ -194,7 +197,7 @@ uk:
       subject: "[%{app_name}][%{collection_title}] Ваше завдання!"
       text:
         assignment: Вам було призначено наступну заявку у виклику "%{collection_title}"
-          (%{collection_url})  у Archive of Our Own – AO3 (Нашому Власному Архіві)!
+          (%{collection_url}) у Archive of Our Own – AO3 (Нашому Власному Архіві)!
         footer: Ви отримали цей електронний лист, тому що Ви записались до виклику
           %{title} (%{url}). Щоб отримати більше інформації про цей виклик та контактну
           інформацію модераторів, перегляньте %{profile_url}.
@@ -395,9 +398,16 @@ uk:
       reason: 'Ваш запит:'
       subject: "[%{app_name}] Вам відмовлено у додатковому коді запрошення"
     recipient_notification:
+      html:
+        collection: Для Вас на АО3, у колекції %{collection_link}, було опубліковано
+          роботу-подарунок!
+      no_collection: Для Вас на АО3 було опубліковано роботу-подарунок!
       subject:
-        collection: "[%{app_name}][%{collection_title}] Подарунок для Вас від  %{collection_title}"
+        collection: "[%{app_name}][%{collection_title}] Подарунок для Вас від %{collection_title}"
         no_collection: "[%{app_name}] Подарунок для Вас"
+      text:
+        collection: Для Вас на АО3, у колекції %{collection_title} (%{collection_url}),
+          було опубліковано роботу-подарунок!
     signup_notification:
       activate_your_account: перейдіть за цим посиланням, щоб активувати Ваш обліковий
         запис

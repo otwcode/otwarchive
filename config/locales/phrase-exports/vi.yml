@@ -1,10 +1,74 @@
 ---
 vi:
+  activerecord:
+    attributes:
+      archive_warning:
+        name_with_colon:
+          other: 'Cảnh Báo:'
+      category:
+        name_with_colon:
+          other: 'Hạng Mục:'
+      character:
+        name_with_colon:
+          other: 'Nhân Vật:'
+      fandom:
+        name_with_colon:
+          other: 'Fandom:'
+      freeform:
+        name_with_colon:
+          other: 'Từ Khoá Bổ Sung:'
+      rating:
+        name_with_colon: 'Giới Hạn Độ Tuổi:'
+      relationship:
+        name_with_colon:
+          other: 'Mối Quan Hệ:'
+      work:
+        summary: Tóm Tắt
+    models:
+      archive_warning:
+        other: Cảnh Báo
+      category:
+        other: Hạng Mục
+      chapter:
+        other: Số Chương
+      character:
+        other: Nhân Vật
+      fandom:
+        other: Fandom
+      freeform:
+        other: Từ Khoá Bổ Sung
+      rating:
+        other: Giới Hạn Độ Tuổi
+      relationship:
+        other: Mối Quan Hệ
+      series:
+        other: Bộ
+  kudo_mailer:
+    batch_kudo_notification:
+      guest:
+        other: "%{count} người đọc khách"
+      html:
+        left_kudos:
+          other: "%{givers_list} đã tán dương tác phẩm %{commentable_link}."
+        single_guest:
+          giver_list: Một người đọc khách
+          left_kudos: "%{giver_list} đã tán dương tác phẩm %{commentable_link}."
+      subject: "[%{app_name}] Tán dương gửi tới bạn!"
+      text:
+        left_kudos:
+          other: "%{givers_list} đã tán dương tác phẩm %{commentable_title} (%{commentable_url})."
+        single_guest: Một người đọc khách đã tán dương tác phẩm %{commentable_title}
+          (%{commentable_url}).
   mailer:
     general:
       closing:
         formal: Trân trọng,
         informal: Thân gửi,
+      creation:
+        link_with_word_count: "%{creation_link} (%{word_count})"
+        title_with_word_count: '"%{creation_title}" (%{word_count})'
+        word_count:
+          other: "%{count} từ"
       footer:
         general:
           html:
@@ -25,24 +89,15 @@ vi:
         informal:
           addressed: Xin chào, %{name}!
           unaddressed: Xin chào!
-        introductory: Hello from the Archive of Our Own – AO3 (Lời chào từ Kho Tàng
+        introductory: Hello from the Archive of Our Own – AO3 (Lời chào từ Kho Tàng
           Lưu Trữ của Chúng Ta - AO3)!
+      metadata_label_indicator: ": "
       signature:
         app_short_name: AO3
         open_doors: Đội Open Doors (Cửa Mở)
-        parent_org: Organization for Transformative Works – OTW (Tổ Chức cho các Tác
+        parent_org: Organization for Transformative Works – OTW (Tổ Chức cho các Tác
           Phẩm Được Biến Đổi)
         support: Đội Hỗ Trợ AO3
-    kudos:
-      guest:
-        other: "%{count} vị khách"
-      html:
-        left_kudos:
-          other: "%{givers_list} đã để lại tán dương cho %{commentable_link}."
-      text:
-        left_kudos:
-          other: "%{givers_list} đã để lại tán dương cho %{commentable_link}."
-      you_have: "[%{app_name}] Bạn nhận được tán dương!"
   users:
     mailer:
       reset_password_instructions:
@@ -196,7 +251,7 @@ vi:
       subject: "[%{app_name}][%{collection_title}] Nhiệm Vụ của Bạn!"
       text:
         assignment: Đây là nhiệm vụ của bạn trong thử thách "%{collection_title}"
-          (%{collection_url})  tại AO3!
+          (%{collection_url}) tại AO3!
         footer: Bạn nhận được email này vì bạn đã đăng ký tham gia thử thách %{title}
           (%{url}). Để biết thêm chi tiết về thử thách này và thông tin liên hệ của
           điều phối viên, vui lòng truy cập %{profile_url}.
@@ -211,7 +266,7 @@ vi:
         complete: Tất cả nhiệm vụ đã được gửi.
         subject: Các nhiệm vụ đã được gửi
       html:
-        received_message: 'Bạn có một tin nhắn về bộ sưu tập  %{collection_link} của
+        received_message: 'Bạn có một tin nhắn về bộ sưu tập %{collection_link} của
           bạn:'
       text:
         received_message: 'Bạn có một tin nhắn về bộ sưu tập "%{collection_title}"
@@ -381,10 +436,17 @@ vi:
       reason: 'Yêu cầu của bạn là:'
       subject: "[%{app_name}] Từ chối Yêu cầu Thêm Thư mời"
     recipient_notification:
+      html:
+        collection: Một tác phẩm dành tặng bạn đã được đăng tải trong bộ sưu tập %{collection_link}
+          tại AO3!
+      no_collection: Một tác phẩm dành tặng bạn đã được đăng tải trên AO3!
       subject:
         collection: "[%{app_name}][%{collection_title}] Một tác phẩm dành tặng bạn
           trong %{collection_title}"
         no_collection: "[%{app_name}] Một tác phẩm dành tặng bạn"
+      text:
+        collection: Một tác phẩm dành tặng bạn đã được đăng tải trong bộ sưu tập"%{collection_title}"
+          (%{collection_url}) tại AO3!
     signup_notification:
       activate_your_account: theo đường link này để kích hoạt tài khoản của bạn
       admin_posts: Tin tức AO3

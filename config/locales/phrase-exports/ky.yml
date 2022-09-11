@@ -1,5 +1,30 @@
 ---
 ky:
+  kudo_mailer:
+    batch_kudo_notification:
+      guest:
+        few: "%{count} Коноктор"
+        many: "%{count} Коноктор"
+        one: Конок
+        other: "%{count} Коноктор"
+        two: "%{count} Коноктор"
+      html:
+        left_kudos:
+          few: "%{givers_list} %{commentable_link} да кудо калтырышты."
+          many: "%{givers_list} %{commentable_link} да кудо калтырышты."
+          one: "%{givers_list} %{commentable_link} да кудо калтырды."
+          other: "%{givers_list} %{commentable_link} да кудо калтырышты."
+          two: "%{givers_list} %{commentable_link} да кудо калтырышты."
+      subject: "[%{app_name}] Сизздин кудолоруңуз бар!"
+      text:
+        left_kudos:
+          few: "%{givers_list} %{commentable_title} (%{commentable_url}) да кудо калтырышты."
+          many: "%{givers_list} %{commentable_title} (%{commentable_url}) да кудо
+            калтырышты."
+          one: "%{givers_list} %{commentable_title} (%{commentable_url}) да кудо калтырды."
+          other: "%{givers_list} %{commentable_title} (%{commentable_url}) да кудо
+            калтырышты."
+          two: "%{givers_list} %{commentable_title} (%{commentable_url}) да кудо калтырышты."
   mailer:
     general:
       closing:
@@ -31,28 +56,6 @@ ky:
         parent_org: Organization for Transformative Works – OTW (Трансформациялоо
           иштери боюнча уюм – OTW)
         support: AO3 колдоо тобу
-    kudos:
-      guest:
-        few: "%{count} Коноктор"
-        many: "%{count} Коноктор"
-        one: Конок
-        other: "%{count} Коноктор"
-        two: "%{count} Коноктор"
-      html:
-        left_kudos:
-          few: "%{givers_list} %{commentable_link} да кудо калтырышты."
-          many: "%{givers_list} %{commentable_link} да кудо калтырышты."
-          one: "%{givers_list} %{commentable_link} да кудо калтырды."
-          other: "%{givers_list} %{commentable_link} да кудо калтырышты."
-          two: "%{givers_list} %{commentable_link} да кудо калтырышты."
-      text:
-        left_kudos:
-          few: "%{givers_list} %{commentable_link} да кудо калтырышты."
-          many: "%{givers_list} %{commentable_link} да кудо калтырышты."
-          one: "%{givers_list} %{commentable_link} да кудо калтырды."
-          other: "%{givers_list} %{commentable_link} да кудо калтырышты."
-          two: "%{givers_list} %{commentable_link} да кудо калтырышты."
-      you_have: "[%{app_name}] Сизздин кудолоруңуз бар!"
   users:
     mailer:
       reset_password_instructions:
@@ -86,6 +89,35 @@ ky:
           (%{opendoors_link}) кайрылыңыз.
         tos_violation: Эгер сиздин ишиңиз AO3 кызматынын шарттарын бузса, биздин Саясат
           жана Кыянаттык комитетине кайрылыңыз (%{contact_abuse_url}) менен байланышыңыз.
+    admin_hidden_work_notification:
+      access: Жумушуңуз жашырылганда, ага жогоруда берилген шилтеме аркылуу кире аласыз,
+        бирок ал иштериңиздин барагында көрсөтүлбөйт жана ал AO3'тин башка колдонуучуларына
+        жеткиликтүү болбойт.
+      check_email: Сураныч, электрондук почтаңызды, анын ичинде спам папкаңызды текшериңиз,
+        анткени Саясат жана кыянаттык жамааты жумушуңуз эмне үчүн жашырылганын түшүндүрүп,
+        сиз менен мурунтан эле байланышып койгон болушу мүмкүн.
+      contact_abuse: Саясат жана кыянаттык менен байланышыңыз
+      html:
+        help: If you are uncertain why your work was hidden, and you have not received
+          further communication regarding this matter, please% %{contact_abuse_link}
+          directly.
+        hidden: Сиздин %{title} ишиңиз Саясат жана кыянаттык жамааты тарабынан жашырылган
+          жана мындан ары жалпыга жеткиликтүү эмес.
+        tos_violation: Эгер жумушуңуз AO3'тун %{tos_link} шарттарын бузгандыктан жашырылган
+          болсо, сизден бузууну оңдоо үчүн чара көрүшүңүз керек болот. Ишиңизди Тейлөө
+          шарттарына ылайык келтирбесеңиз, жумушуңуз AO3тен өчүрүлүшү мүмкүн.
+      subject: "[%{app_name}] Жумушуңуз Саясат жана кыянаттык жамааты тарабынан жашырылды"
+      text:
+        help: 'Эгер жумушуңуздун эмне үчүн жашырылганын билбей жатсаңыз жана бул маселе
+          боюнча кошумча билдирүү ала элек болсоңуз, саясат жана кыянаттык менен түздөн-түз
+          байланышыңыз: %{contact_abuse_url}.'
+        hidden: '"%{title}" (%{work_url}) жумушуңуз Саясат жана кыянаттык менен пайдалануу
+          тобу тарабынан жашырылган жана мындан ары жалпыга жеткиликтүү эмес.'
+        tos_violation: Эгер жумушуңуз AO3 Тейлөө шарттарын (%{tos_url}) бузгандыктан
+          жашырылган болсо, сизден бузууну оңдоо үчүн чара көрүшүңүз керек болот.
+          Ишиңизди Тейлөө шарттарына ылайык келтирбесеңиз, жумушуңуз AO3тен өчүрүлүшү
+          мүмкүн.
+      tos: Тейлөө шарттары
     anonymous_or_unrevealed_notification:
       anonymous_info: Анонимдүү чыгармалар тегдердин тизмесине киргизилет, бирок сиздин
         эмгектериңиздин баракчасына кирбейт. Жумушта сиздин колдонуучу атыңыз "Anonymous"
@@ -278,8 +310,33 @@ ky:
         part1_other: '"%{title}" эмгегиңиз %{pseud} өтүнүчү боюнча жок кылынды.'
         part1_yourself: '"%{title}" ишиңиз өтүнүчүңүз боюнча жок кылынды.'
         part2: Суроолоруңуз болсо, сураныч %{support} (%{url}).
+    invite_increase_notification:
+      body:
+        one: Биз жөн гана сизде %{count} жаңы чакыруу бар экенин билдиргибиз келди,
+          аны AO3'те жаңы аккаунт түзүү үчүн колдонсо болот. Досуңузду %{invitation_page}
+          дарегине чакырсаңыз болот.
+        other: Биз жөн гана сизде %{count} жаңы чакыруу бар экенин билдиргибиз келди,
+          аларды AO3'те жаңы аккаунттарды түзүү үчүн колдонсо болот. Досуңузду %{invitation_page}
+          дарегине чакырсаңыз болот.
+      invitation_page_link_text: your Invitations (Чакыруулар) барагыңыз
+      subject: "[%{app_name}] Жаңы чакыруулар"
+    invite_request_declined:
+      main:
+        one: Учурда жаңы чакыруу өтүнүчүңүздү аткаруу мүмкүн эмес экенин сизге өкүнүч
+          менен билдиребиз.
+        other: Учурда %{count} жаңы чакыруу сурамыңызды аткаруу мүмкүн эмес экенин
+          өкүнүч менен билдиребиз.
+      reason: 'Сиздин өтүнүчүңүз:'
+      subject: "[%{app_name}] Кошумча чакыруу сурамы четке кагылды"
     recipient_notification:
+      html:
+        collection: Белек чыгармасы сиз үчүн AO3деги %{collection_link} коллекциясында
+          жайгаштырылды!
+      no_collection: AO3де сизге белек чыгарма жайгаштырылган!
       subject:
         collection: "[%{app_name}][%{collection_title}] %{collection_title} ден сиз
           үчүн белек чыгармасы."
         no_collection: "[%{app_name}] Сиз үчүн белек чыгарма"
+      text:
+        collection: Белек чыгармасы AO3 дарегиндеги "%{collection_title}" жыйнагында
+          (%{collection_url}) сиз үчүн жайгаштырылды!
