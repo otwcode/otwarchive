@@ -14,16 +14,11 @@ class DownloadWriter
     download
   end
 
-  private
-
-  # Write the HTML version
-  def generate_html_download
-    return if download.exists?
-
+  def generate_html
     renderer = ApplicationController.renderer.new(
       http_host: ArchiveConfig.APP_HOST
     )
-    @html = renderer.render(
+    renderer.render(
       template: 'downloads/show',
       layout: 'barebones',
       assigns: {
@@ -32,9 +27,15 @@ class DownloadWriter
         chapters: download.chapters
       }
     )
+  end
 
-    # write to file
-    File.open(download.html_file_path, 'w:UTF-8') { |f| f.write(@html) }
+  private
+
+  # Write the HTML version to file
+  def generate_html_download
+    return if download.exists?
+
+    File.open(download.html_file_path, "w:UTF-8") { |f| f.write(generate_html) }
   end
 
   # transform HTML version into ebook version

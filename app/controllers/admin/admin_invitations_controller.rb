@@ -18,11 +18,10 @@ class Admin::AdminInvitationsController < Admin::BaseController
   end
 
   def invite_from_queue
-    InviteRequest.order(:position).limit(invitation_params[:invite_from_queue].to_i).each do |request|
-      request.invite_and_remove(current_admin)
-    end
-    InviteRequest.reset_order
-    flash[:notice] = t('invited_from_queue', default: "%{count} people from the invite queue were invited.", count: invitation_params[:invite_from_queue].to_i)
+    count = invitation_params[:invite_from_queue].to_i
+    InviteFromQueueJob.perform_later(count: count, creator: current_admin)
+
+    flash[:notice] = t(".success", count: count)
     redirect_to admin_invitations_path
   end
 

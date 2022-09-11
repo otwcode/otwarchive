@@ -46,6 +46,12 @@ en:
       emails_found:
         one: "one email found"
         other: "%{count} emails found"
+    admin_invitations:
+      index:
+        page_heading: "Invite New Users"
+        navigation:
+          queue: "Manage Queue"
+          requests: "Manage Requests"
     settings:
       index:
         fields:
@@ -394,3 +400,8 @@ en:
   preferences:
     index:
       blocked_users: "Blocked Users"
+  invite_requests:
+    invite_request:
+      title: "Invitation Status for %{email}"
+      position_html: "You are currently number %{position} on our waiting list!"
+      date: "At our current rate, you should receive an invitation on or around: %{date}."

@@ -370,7 +370,6 @@ class WorksController < ApplicationController
     @chapter.attributes = work_params[:chapter_attributes] if work_params[:chapter_attributes]
     @work.ip_address = request.remote_ip
     @work.set_word_count(@work.preview_mode)
-    @work.save_parents if @work.preview_mode
 
     @work.set_challenge_info
     @work.set_challenge_claim_info
@@ -912,7 +911,9 @@ class WorksController < ApplicationController
       archive_warning_strings: [],
       author_attributes: [:byline, ids: [], coauthors: []],
       series_attributes: [:id, :title],
-      parent_attributes: [:url, :title, :author, :language_id, :translation],
+      parent_work_relationships_attributes: [
+        :url, :title, :author, :language_id, :translation
+      ],
       chapter_attributes: [
         :title, :"published_at(3i)", :"published_at(2i)", :"published_at(1i)",
         :published_at, :content

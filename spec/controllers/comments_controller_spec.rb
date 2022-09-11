@@ -39,7 +39,7 @@ describe CommentsController do
       end
     end
 
-    shared_examples "no one can add comment reply" do
+    shared_examples "no one can add comment reply on a frozen comment" do
       it "redirects logged out user with an error" do
         get :add_comment_reply, params: { comment_id: comment.id }
         it_redirects_to_with_error("/where_i_came_from", "Sorry, you cannot reply to a frozen comment.")
@@ -56,19 +56,52 @@ describe CommentsController do
       context "when commentable is an admin post" do
         let(:comment) { create(:comment, :on_admin_post, iced: true) }
 
-        it_behaves_like "no one can add comment reply"
+        it_behaves_like "no one can add comment reply on a frozen comment"
       end
 
       context "when commentable is a tag" do
         let(:comment) { create(:comment, :on_tag, iced: true) }
 
-        it_behaves_like "no one can add comment reply"
+        it_behaves_like "no one can add comment reply on a frozen comment"
       end
 
       context "when commentable is a work" do
         let(:comment) { create(:comment, iced: true) }
 
-        it_behaves_like "no one can add comment reply"
+        it_behaves_like "no one can add comment reply on a frozen comment"
+      end
+    end
+
+    shared_examples "no one can add comment reply on a hidden comment" do
+      it "redirects logged out user with an error" do
+        get :add_comment_reply, params: { comment_id: comment.id }
+        it_redirects_to_with_error("/where_i_came_from", "Sorry, you cannot reply to a hidden comment.")
+      end
+
+      it "redirects logged in user with an error" do
+        fake_login
+        get :add_comment_reply, params: { comment_id: comment.id }
+        it_redirects_to_with_error("/where_i_came_from", "Sorry, you cannot reply to a hidden comment.")
+      end
+    end
+
+    context "when comment is hidden by admin" do
+      context "when commentable is an admin post" do
+        let(:comment) { create(:comment, :on_admin_post, hidden_by_admin: true) }
+
+        it_behaves_like "no one can add comment reply on a hidden comment"
+      end
+
+      context "when commentable is a tag" do
+        let(:comment) { create(:comment, :on_tag, hidden_by_admin: true) }
+
+        it_behaves_like "no one can add comment reply on a hidden comment"
+      end
+
+      context "when commentable is a work" do
+        let(:comment) { create(:comment, hidden_by_admin: true) }
+
+        it_behaves_like "no one can add comment reply on a hidden comment"
       end
     end
   end
@@ -174,6 +207,12 @@ describe CommentsController do
       comment = create(:comment, iced: true)
       post :new, params: { comment_id: comment.id }
       it_redirects_to_with_error("/where_i_came_from", "Sorry, you cannot reply to a frozen comment.")
+    end
+
+    it "shows an error and redirects if commentable is a hidden comment" do
+      comment = create(:comment, hidden_by_admin: true)
+      post :new, params: { comment_id: comment.id }
+      it_redirects_to_with_error("/where_i_came_from", "Sorry, you cannot reply to a hidden comment.")
     end
   end
 
@@ -381,6 +420,16 @@ describe CommentsController do
           post :create, params: { comment_id: comment.id, comment: anon_comment_attributes }
           it_redirects_to_with_error("/where_i_came_from",
                                      "Sorry, you cannot reply to a frozen comment.")
+        end
+      end
+
+      context "when the commentable is hidden" do
+        let(:comment) { create(:comment, hidden_by_admin: true) }
+
+        it "shows an error and redirects" do
+          post :create, params: { comment_id: comment.id, comment: anon_comment_attributes }
+          it_redirects_to_with_error("/where_i_came_from",
+                                     "Sorry, you cannot reply to a hidden comment.")
         end
       end
 
@@ -1618,6 +1667,690 @@ describe CommentsController do
             work_path(comment.ultimate_parent, show_comments: true, anchor: :comments),
             "Sorry, that comment thread could not be unfrozen."
           )
+        end
+      end
+    end
+  end
+
+  describe "PUT #hide" do
+    context "when comment is not hidden" do
+      context "when ultimate parent is an AdminPost" do
+        let(:comment) { create(:comment, :on_admin_post) }
+
+        context "when logged out" do
+          it "doesn't hide comment and redirects with error" do
+            put :hide, params: { id: comment.id }
+
+            expect(comment.reload.hidden_by_admin?).to be_falsey
+            it_redirects_to_with_error("/where_i_came_from", "Sorry, you don't have permission to hide that comment.")
+          end
+        end
+
+        context "when logged in as an admin" do
+          let(:admin) { create(:admin) }
+
+          it "hides comment and redirects with success message" do
+            fake_login_admin(admin)
+            put :hide, params: { id: comment.id }
+
+            expect(comment.reload.hidden_by_admin?).to be_truthy
+            it_redirects_to_with_comment_notice(
+              admin_post_path(comment.ultimate_parent, show_comments: true, anchor: :comments),
+              "Comment successfully hidden!"
+            )
+          end
+        end
+
+        context "when logged in as a user" do
+          it "doesn't hide comment and redirects with error" do
+            fake_login
+            put :hide, params: { id: comment.id }
+
+            expect(comment.reload.hidden_by_admin?).to be_falsey
+            it_redirects_to_with_error("/where_i_came_from", "Sorry, you don't have permission to hide that comment.")
+          end
+        end
+      end
+
+      context "when ultimate parent is a Tag" do
+        let(:comment) { create(:comment, :on_tag) }
+
+        context "when logged out" do
+          it "doesn't hide comment and redirects with error" do
+            put :hide, params: { id: comment.id }
+
+            expect(comment.reload.hidden_by_admin?).to be_falsey
+            it_redirects_to_with_error(new_user_session_path, "Sorry, you don't have permission to access the page you were trying to reach. Please log in.")
+          end
+        end
+
+        context "when logged in as an admin" do
+          let(:admin) { create(:admin) }
+
+          context "with no role" do
+            it "doesn't hide comment and redirects with error" do
+              admin.update(roles: [])
+              fake_login_admin(admin)
+              put :hide, params: { id: comment.id }
+
+              expect(comment.reload.hidden_by_admin?).to be_falsey
+              it_redirects_to_with_error("/where_i_came_from", "Sorry, you don't have permission to hide that comment.")
+            end
+          end
+
+          %w[superadmin tag_wrangling].each do |admin_role|
+            context "with the #{admin_role} role" do
+              it "hides comment and redirects with success message" do
+                admin.update(roles: [admin_role])
+                fake_login_admin(admin)
+                put :hide, params: { id: comment.id }
+
+                expect(comment.reload.hidden_by_admin?).to be_truthy
+                it_redirects_to_with_comment_notice(
+                  comments_path(tag_id: comment.ultimate_parent, anchor: :comments),
+                  "Comment successfully hidden!"
+                )
+              end
+            end
+          end
+        end
+
+        context "when logged in as a random user" do
+          it "doesn't hide comment and redirects with error" do
+            fake_login
+            put :hide, params: { id: comment.id }
+
+            expect(comment.reload.hidden_by_admin?).to be_falsey
+            it_redirects_to_with_error(user_path(controller.current_user), "Sorry, you don't have permission to access the page you were trying to reach.")
+          end
+        end
+
+        context "when logged in as a user with the tag wrangling role" do
+          let(:tag_wrangler) { create(:user, roles: [Role.new(name: "tag_wrangler")]) }
+
+          it "doesn't hide comment and redirects with error" do
+            fake_login_known_user(tag_wrangler)
+            put :hide, params: { id: comment.id }
+
+            expect(comment.reload.hidden_by_admin?).to be_falsey
+            it_redirects_to_with_error("/where_i_came_from", "Sorry, you don't have permission to hide that comment.")
+          end
+        end
+      end
+
+      context "when ultimate parent is a Work" do
+        let(:comment) { create(:comment) }
+
+        context "when logged out" do
+          it "doesn't hide comment and redirects with error" do
+            put :hide, params: { id: comment.id }
+
+            expect(comment.reload.hidden_by_admin?).to be_falsey
+            it_redirects_to_with_error("/where_i_came_from", "Sorry, you don't have permission to hide that comment.")
+          end
+        end
+
+        context "when logged in as an admin" do
+          let(:admin) { create(:admin) }
+
+          context "with no role" do
+            it "doesn't hide comment and redirects with error" do
+              admin.update(roles: [])
+              fake_login_admin(admin)
+              put :hide, params: { id: comment.id }
+
+              expect(comment.reload.hidden_by_admin?).to be_falsey
+              it_redirects_to_with_error("/where_i_came_from", "Sorry, you don't have permission to hide that comment.")
+            end
+          end
+
+          %w[superadmin policy_and_abuse].each do |admin_role|
+            context "with the #{admin_role} role" do
+              it "hides comment and redirects with success message" do
+                admin.update(roles: [admin_role])
+                fake_login_admin(admin)
+                put :hide, params: { id: comment.id }
+
+                expect(comment.reload.hidden_by_admin?).to be_truthy
+                it_redirects_to_with_comment_notice(
+                  work_path(comment.ultimate_parent, show_comments: true, anchor: :comments),
+                  "Comment successfully hidden!"
+                )
+              end
+            end
+          end
+        end
+
+        context "when logged in as a random user" do
+          it "doesn't hide comment and redirects with error" do
+            fake_login
+            put :hide, params: { id: comment.id }
+
+            expect(comment.reload.hidden_by_admin?).to be_falsey
+            it_redirects_to_with_error("/where_i_came_from", "Sorry, you don't have permission to hide that comment.")
+          end
+        end
+
+        context "when logged in as a user who owns the work" do
+          it "doesn't hide the comment and redirects with error" do
+            fake_login_known_user(comment.ultimate_parent.pseuds.first.user)
+            put :hide, params: { id: comment.id }
+
+            expect(comment.reload.hidden_by_admin?).to be_falsey
+            it_redirects_to_with_error("/where_i_came_from", "Sorry, you don't have permission to hide that comment.")
+          end
+        end
+      end
+    end
+
+    context "when comment is hidden" do
+      context "when ultimate parent is an AdminPost" do
+        let(:comment) { create(:comment, :on_admin_post, hidden_by_admin: true) }
+
+        context "when logged out" do
+          it "leaves comment hidden and redirects with error" do
+            put :hide, params: { id: comment.id }
+
+            expect(comment.reload.hidden_by_admin?).to be_truthy
+            it_redirects_to_with_error("/where_i_came_from", "Sorry, you don't have permission to hide that comment.")
+          end
+        end
+
+        context "when logged in as an admin" do
+          let(:admin) { create(:admin) }
+
+          it "leaves comment hidden and redirects with error" do
+            fake_login_admin(admin)
+            put :hide, params: { id: comment.id }
+
+            expect(comment.reload.hidden_by_admin?).to be_truthy
+            it_redirects_to_with_comment_error(
+              admin_post_path(comment.ultimate_parent, show_comments: true, anchor: :comments),
+              "Sorry, that comment could not be hidden."
+            )
+          end
+        end
+
+        context "when logged in as a user" do
+          it "leaves comment hidden and redirects with error" do
+            fake_login
+            put :hide, params: { id: comment.id }
+
+            expect(comment.reload.hidden_by_admin?).to be_truthy
+            it_redirects_to_with_error("/where_i_came_from", "Sorry, you don't have permission to hide that comment.")
+          end
+        end
+      end
+
+      context "when ultimate parent is a Tag" do
+        let(:comment) { create(:comment, :on_tag, hidden_by_admin: true) }
+
+        context "when logged out" do
+          it "leaves comment hidden and redirects with error" do
+            put :hide, params: { id: comment.id }
+
+            expect(comment.reload.hidden_by_admin?).to be_truthy
+            it_redirects_to_with_error(new_user_session_path, "Sorry, you don't have permission to access the page you were trying to reach. Please log in.")
+          end
+        end
+
+        context "when logged in as an admin" do
+          let(:admin) { create(:admin) }
+
+          context "with no role" do
+            it "leaves comment hidden and redirects with error" do
+              admin.update(roles: [])
+              fake_login_admin(admin)
+              put :hide, params: { id: comment.id }
+
+              expect(comment.reload.hidden_by_admin?).to be_truthy
+              it_redirects_to_with_error("/where_i_came_from", "Sorry, you don't have permission to hide that comment.")
+            end
+          end
+
+          %w[superadmin tag_wrangling].each do |admin_role|
+            context "with the #{admin_role} role" do
+              it "leaves comment hidden and redirects with error" do
+                admin.update(roles: [admin_role])
+                fake_login_admin(admin)
+                put :hide, params: { id: comment.id }
+
+                expect(comment.reload.hidden_by_admin?).to be_truthy
+                it_redirects_to_with_comment_error(
+                  comments_path(tag_id: comment.ultimate_parent, anchor: :comments),
+                  "Sorry, that comment could not be hidden."
+                )
+              end
+            end
+          end
+        end
+
+        context "when logged in as a random user" do
+          it "leaves comment hidden and redirects with error" do
+            fake_login
+            put :hide, params: { id: comment.id }
+
+            expect(comment.reload.hidden_by_admin?).to be_truthy
+            it_redirects_to_with_error(user_path(controller.current_user), "Sorry, you don't have permission to access the page you were trying to reach.")
+          end
+        end
+
+        context "when logged in as a user with the tag wrangling role" do
+          let(:tag_wrangler) { create(:user, roles: [Role.new(name: "tag_wrangler")]) }
+
+          it "leaves comment hidden and redirects with error" do
+            fake_login_known_user(tag_wrangler)
+            put :hide, params: { id: comment.id }
+
+            expect(comment.reload.hidden_by_admin?).to be_truthy
+            it_redirects_to_with_error("/where_i_came_from", "Sorry, you don't have permission to hide that comment.")
+          end
+        end
+      end
+
+      context "when ultimate parent is a Work" do
+        let(:comment) { create(:comment, hidden_by_admin: true) }
+
+        context "when logged out" do
+          it "leaves comment hidden and redirects with error" do
+            put :hide, params: { id: comment.id }
+
+            expect(comment.reload.hidden_by_admin?).to be_truthy
+            it_redirects_to_with_error("/where_i_came_from", "Sorry, you don't have permission to hide that comment.")
+          end
+        end
+
+        context "when logged in as an admin" do
+          let(:admin) { create(:admin) }
+
+          context "with no role" do
+            it "leaves comment hidden and redirects with error" do
+              admin.update(roles: [])
+              fake_login_admin(admin)
+              put :hide, params: { id: comment.id }
+
+              expect(comment.reload.hidden_by_admin?).to be_truthy
+              it_redirects_to_with_error("/where_i_came_from", "Sorry, you don't have permission to hide that comment.")
+            end
+          end
+
+          %w[superadmin policy_and_abuse].each do |admin_role|
+            context "with the #{admin_role} role" do
+              it "leaves comment hidden and redirects with error" do
+                admin.update(roles: [admin_role])
+                fake_login_admin(admin)
+                put :hide, params: { id: comment.id }
+
+                expect(comment.reload.hidden_by_admin?).to be_truthy
+                it_redirects_to_with_comment_error(
+                  work_path(comment.ultimate_parent, show_comments: true, anchor: :comments),
+                  "Sorry, that comment could not be hidden."
+                )
+              end
+            end
+          end
+        end
+
+        context "when logged in as a random user" do
+          it "leaves comment hidden and redirects with error" do
+            fake_login
+            put :hide, params: { id: comment.id }
+
+            expect(comment.reload.hidden_by_admin?).to be_truthy
+            it_redirects_to_with_error("/where_i_came_from", "Sorry, you don't have permission to hide that comment.")
+          end
+        end
+
+        context "when logged in as a user who owns the work" do
+          it "leaves comment hidden and redirects with error" do
+            fake_login_known_user(comment.ultimate_parent.pseuds.first.user)
+            put :hide, params: { id: comment.id }
+
+            expect(comment.reload.hidden_by_admin?).to be_truthy
+            it_redirects_to_with_error("/where_i_came_from", "Sorry, you don't have permission to hide that comment.")
+          end
+        end
+      end
+    end
+  end
+
+  describe "PUT #unhide" do
+    context "when comment is hidden" do
+      context "when ultimate parent is an AdminPost" do
+        let(:comment) { create(:comment, :on_admin_post, hidden_by_admin: true) }
+
+        context "when logged out" do
+          it "doesn't unhide comment and redirects with error" do
+            put :unhide, params: { id: comment.id }
+
+            expect(comment.reload.hidden_by_admin?).to be_truthy
+            it_redirects_to_with_error("/where_i_came_from", "Sorry, you don't have permission to unhide that comment.")
+          end
+        end
+
+        context "when logged in as an admin" do
+          let(:admin) { create(:admin) }
+
+          it "unhides comment and redirects with success message" do
+            fake_login_admin(admin)
+            put :unhide, params: { id: comment.id }
+
+            expect(comment.reload.hidden_by_admin?).to be_falsey
+            it_redirects_to_with_comment_notice(
+              admin_post_path(comment.ultimate_parent, show_comments: true, anchor: :comments),
+              "Comment successfully unhidden!"
+            )
+          end
+        end
+
+        context "when logged in as a user" do
+          it "doesn't unhide comment and redirects with error" do
+            fake_login
+            put :unhide, params: { id: comment.id }
+
+            expect(comment.reload.hidden_by_admin?).to be_truthy
+            it_redirects_to_with_error("/where_i_came_from", "Sorry, you don't have permission to unhide that comment.")
+          end
+        end
+      end
+
+      context "when ultimate parent is a Tag" do
+        let(:comment) { create(:comment, :on_tag, hidden_by_admin: true) }
+
+        context "when logged out" do
+          it "doesn't unhide comment and redirects with error" do
+            put :unhide, params: { id: comment.id }
+
+            expect(comment.reload.hidden_by_admin?).to be_truthy
+            it_redirects_to_with_error(new_user_session_path, "Sorry, you don't have permission to access the page you were trying to reach. Please log in.")
+          end
+        end
+
+        context "when logged in as an admin" do
+          let(:admin) { create(:admin) }
+
+          context "with no role" do
+            it "doesn't unhide comment and redirects with error" do
+              admin.update(roles: [])
+              fake_login_admin(admin)
+              put :unhide, params: { id: comment.id }
+
+              expect(comment.reload.hidden_by_admin?).to be_truthy
+              it_redirects_to_with_error("/where_i_came_from", "Sorry, you don't have permission to unhide that comment.")
+            end
+          end
+
+          %w[superadmin tag_wrangling].each do |admin_role|
+            context "with the #{admin_role} role" do
+              it "unhides comment and redirects with success message" do
+                admin.update(roles: [admin_role])
+                fake_login_admin(admin)
+                put :unhide, params: { id: comment.id }
+
+                expect(comment.reload.hidden_by_admin?).to be_falsey
+                it_redirects_to_with_comment_notice(
+                  comments_path(tag_id: comment.ultimate_parent, anchor: :comments),
+                  "Comment successfully unhidden!"
+                )
+              end
+            end
+          end
+        end
+
+        context "when logged in as a random user" do
+          it "doesn't unhide comment and redirects with error" do
+            fake_login
+            put :unhide, params: { id: comment.id }
+
+            expect(comment.reload.hidden_by_admin?).to be_truthy
+            it_redirects_to_with_error(user_path(controller.current_user), "Sorry, you don't have permission to access the page you were trying to reach.")
+          end
+        end
+
+        context "when logged in as a user with the tag wrangling role" do
+          let(:tag_wrangler) { create(:user, roles: [Role.new(name: "tag_wrangler")]) }
+
+          it "doesn't unhide comment and redirects with error" do
+            fake_login_known_user(tag_wrangler)
+            put :unhide, params: { id: comment.id }
+
+            expect(comment.reload.hidden_by_admin?).to be_truthy
+            it_redirects_to_with_error("/where_i_came_from", "Sorry, you don't have permission to unhide that comment.")
+          end
+        end
+      end
+
+      context "when ultimate parent is a Work" do
+        let(:comment) { create(:comment, hidden_by_admin: true) }
+
+        context "when logged out" do
+          it "doesn't unhide comment and redirects with error" do
+            put :unhide, params: { id: comment.id }
+
+            expect(comment.reload.hidden_by_admin?).to be_truthy
+            it_redirects_to_with_error("/where_i_came_from", "Sorry, you don't have permission to unhide that comment.")
+          end
+        end
+
+        context "when logged in as an admin" do
+          let(:admin) { create(:admin) }
+
+          context "with no role" do
+            it "doesn't unhide comment and redirects with error" do
+              admin.update(roles: [])
+              fake_login_admin(admin)
+              put :unhide, params: { id: comment.id }
+
+              expect(comment.reload.hidden_by_admin?).to be_truthy
+              it_redirects_to_with_error("/where_i_came_from", "Sorry, you don't have permission to unhide that comment.")
+            end
+          end
+
+          %w[superadmin policy_and_abuse].each do |admin_role|
+            context "with the #{admin_role} role" do
+              it "unhides comment and redirects with success message" do
+                admin.update(roles: [admin_role])
+                fake_login_admin(admin)
+                put :unhide, params: { id: comment.id }
+
+                expect(comment.reload.hidden_by_admin?).to be_falsey
+                it_redirects_to_with_comment_notice(
+                  work_path(comment.ultimate_parent, show_comments: true, anchor: :comments),
+                  "Comment successfully unhidden!"
+                )
+              end
+            end
+          end
+        end
+
+        context "when logged in as a random user" do
+          it "doesn't unhide comment and redirects with error" do
+            fake_login
+            put :unhide, params: { id: comment.id }
+
+            expect(comment.reload.hidden_by_admin?).to be_truthy
+            it_redirects_to_with_error("/where_i_came_from", "Sorry, you don't have permission to unhide that comment.")
+          end
+        end
+
+        context "when logged in as a user who owns the work" do
+          it "doesn't unhide the comment and redirects with error" do
+            fake_login_known_user(comment.ultimate_parent.pseuds.first.user)
+            put :unhide, params: { id: comment.id }
+
+            expect(comment.reload.hidden_by_admin?).to be_truthy
+            it_redirects_to_with_error("/where_i_came_from", "Sorry, you don't have permission to unhide that comment.")
+          end
+        end
+      end
+    end
+
+    context "when comment is not hidden" do
+      context "when ultimate parent is an AdminPost" do
+        let(:comment) { create(:comment, :on_admin_post) }
+
+        context "when logged out" do
+          it "leaves comment unhidden and redirects with error" do
+            put :unhide, params: { id: comment.id }
+
+            expect(comment.reload.hidden_by_admin?).to be_falsey
+            it_redirects_to_with_error("/where_i_came_from", "Sorry, you don't have permission to unhide that comment.")
+          end
+        end
+
+        context "when logged in as an admin" do
+          let(:admin) { create(:admin) }
+
+          it "leaves comment unhidden and redirects with error" do
+            fake_login_admin(admin)
+            put :unhide, params: { id: comment.id }
+
+            expect(comment.reload.hidden_by_admin?).to be_falsey
+            it_redirects_to_with_comment_error(
+              admin_post_path(comment.ultimate_parent, show_comments: true, anchor: :comments),
+              "Sorry, that comment could not be unhidden."
+            )
+          end
+        end
+
+        context "when logged in as a user" do
+          it "leaves comment unhidden and redirects with error" do
+            fake_login
+            put :unhide, params: { id: comment.id }
+
+            expect(comment.reload.hidden_by_admin?).to be_falsey
+            it_redirects_to_with_error("/where_i_came_from", "Sorry, you don't have permission to unhide that comment.")
+          end
+        end
+      end
+
+      context "when ultimate parent is a Tag" do
+        let(:comment) { create(:comment, :on_tag) }
+
+        context "when logged out" do
+          it "leaves comment unhidden and redirects with error" do
+            put :unhide, params: { id: comment.id }
+
+            expect(comment.reload.hidden_by_admin?).to be_falsey
+            it_redirects_to_with_error(new_user_session_path, "Sorry, you don't have permission to access the page you were trying to reach. Please log in.")
+          end
+        end
+
+        context "when logged in as an admin" do
+          let(:admin) { create(:admin) }
+
+          context "with no role" do
+            it "leaves comment unhidden and redirects with error" do
+              admin.update(roles: [])
+              fake_login_admin(admin)
+              put :unhide, params: { id: comment.id }
+
+              expect(comment.reload.hidden_by_admin?).to be_falsey
+              it_redirects_to_with_error("/where_i_came_from", "Sorry, you don't have permission to unhide that comment.")
+            end
+          end
+
+          %w[superadmin tag_wrangling].each do |admin_role|
+            context "with the #{admin_role} role" do
+              it "leaves comment unhidden and redirects with error" do
+                admin.update(roles: [admin_role])
+                fake_login_admin(admin)
+                put :unhide, params: { id: comment.id }
+
+                expect(comment.reload.hidden_by_admin?).to be_falsey
+                it_redirects_to_with_comment_error(
+                  comments_path(tag_id: comment.ultimate_parent, anchor: :comments),
+                  "Sorry, that comment could not be unhidden."
+                )
+              end
+            end
+          end
+        end
+
+        context "when logged in as a random user" do
+          it "leaves comment unhidden and redirects with error" do
+            fake_login
+            put :unhide, params: { id: comment.id }
+
+            expect(comment.reload.hidden_by_admin?).to be_falsey
+            it_redirects_to_with_error(user_path(controller.current_user), "Sorry, you don't have permission to access the page you were trying to reach.")
+          end
+        end
+
+        context "when logged in as a user with the tag wrangling role" do
+          let(:tag_wrangler) { create(:user, roles: [Role.new(name: "tag_wrangler")]) }
+
+          it "leaves comment unhidden and redirects with error" do
+            fake_login_known_user(tag_wrangler)
+            put :unhide, params: { id: comment.id }
+
+            expect(comment.reload.hidden_by_admin?).to be_falsey
+            it_redirects_to_with_error("/where_i_came_from", "Sorry, you don't have permission to unhide that comment.")
+          end
+        end
+      end
+
+      context "when ultimate parent is a Work" do
+        let(:comment) { create(:comment) }
+
+        context "when logged out" do
+          it "leaves comment unhidden and redirects with error" do
+            put :unhide, params: { id: comment.id }
+
+            expect(comment.reload.hidden_by_admin?).to be_falsey
+            it_redirects_to_with_error("/where_i_came_from", "Sorry, you don't have permission to unhide that comment.")
+          end
+        end
+
+        context "when logged in as an admin" do
+          let(:admin) { create(:admin) }
+
+          context "with no role" do
+            it "leaves comment unhidden and redirects with error" do
+              admin.update(roles: [])
+              fake_login_admin(admin)
+              put :unhide, params: { id: comment.id }
+
+              expect(comment.reload.hidden_by_admin?).to be_falsey
+              it_redirects_to_with_error("/where_i_came_from", "Sorry, you don't have permission to unhide that comment.")
+            end
+          end
+
+          %w[superadmin policy_and_abuse].each do |admin_role|
+            context "with the #{admin_role} role" do
+              it "leaves comment unhidden and redirects with error" do
+                admin.update(roles: [admin_role])
+                fake_login_admin(admin)
+                put :unhide, params: { id: comment.id }
+
+                expect(comment.reload.hidden_by_admin?).to be_falsey
+                it_redirects_to_with_comment_error(
+                  work_path(comment.ultimate_parent, show_comments: true, anchor: :comments),
+                  "Sorry, that comment could not be unhidden."
+                )
+              end
+            end
+          end
+        end
+
+        context "when logged in as a random user" do
+          it "leaves comment unhidden and redirects with error" do
+            fake_login
+            put :unhide, params: { id: comment.id }
+
+            expect(comment.reload.hidden_by_admin?).to be_falsey
+            it_redirects_to_with_error("/where_i_came_from", "Sorry, you don't have permission to unhide that comment.")
+          end
+        end
+
+        context "when logged in as a user who owns the work" do
+          it "leaves comment unhidden and redirects with error" do
+            fake_login_known_user(comment.ultimate_parent.pseuds.first.user)
+            put :unhide, params: { id: comment.id }
+
+            expect(comment.reload.hidden_by_admin?).to be_falsey
+            it_redirects_to_with_error("/where_i_came_from", "Sorry, you don't have permission to unhide that comment.")
+          end
         end
       end
     end

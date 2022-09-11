@@ -1,5 +1,5 @@
 class InviteRequestsController < ApplicationController
-  before_action :admin_only, only: [:manage, :reorder, :destroy]
+  before_action :admin_only, only: [:manage, :destroy]
 
   # GET /invite_requests
   def index
@@ -10,7 +10,7 @@ class InviteRequestsController < ApplicationController
   def show
     fetch_admin_settings # we normally skip this for js requests
     @invite_request = InviteRequest.find_by(email: params[:email])
-    @position_in_queue = InviteRequest.where(["position <= ?", @invite_request.position])&.count if @invite_request.present?
+    @position_in_queue = @invite_request.position if @invite_request.present?
     unless (request.xml_http_request?) || @invite_request
       flash[:error] = "You can search for the email address you signed up with below. If you can't find it, your invitation may have already been emailed to that address; please check your email spam folder as your spam filters may have placed it there."
       redirect_to status_invite_requests_path and return
@@ -41,34 +41,32 @@ class InviteRequestsController < ApplicationController
   end
 
   def manage
-    @invite_requests = InviteRequest.order(:position).page(params[:page])
+    authorize(InviteRequest)
+
+    @invite_requests = InviteRequest.all
+
     if params[:query].present?
       query = "%#{params[:query]}%"
-      @invite_requests = InviteRequest.where("simplified_email LIKE ? " \
-                                             "OR ip_address LIKE ?",
-                                             query,
-                                             query)
-        .order(:position).page(params[:page])
-    end
-  end
+      @invite_requests = InviteRequest.where(
+        "simplified_email LIKE ? OR ip_address LIKE ?",
+        query, query
+      )
 
-  def reorder
-    if InviteRequest.reset_order
-      flash[:notice] = "The queue has been successfully updated."
-    else
-      flash[:error] = "Something went wrong. Please try that again."
+      # Keep track of the fact that this has been filtered, so the position
+      # will not cleanly correspond to the page that we're on and the index of
+      # the request on the page:
+      @filtered = true
     end
-    redirect_to manage_invite_requests_path
+
+    @invite_requests = @invite_requests.order(:id).page(params[:page])
   end
 
   def destroy
-    @invite_request = InviteRequest.find_by(id: params[:id])
-    if @invite_request.nil? || @invite_request.destroy
-      success_message = if @invite_request.nil?
-                          ts("Request was removed from the queue.")
-                        else
-                          ts("Request for %{email} was removed from the queue.", email: @invite_request.email)
-                        end
+    @invite_request = InviteRequest.find(params[:id])
+    authorize @invite_request
+
+    if @invite_request.destroy
+      success_message = ts("Request for %{email} was removed from the queue.", email: @invite_request.email)
       respond_to do |format|
         format.html { redirect_to manage_invite_requests_path(page: params[:page], query: params[:query]), notice: success_message }
         format.json { render json: { item_success_message: success_message }, status: :ok }
