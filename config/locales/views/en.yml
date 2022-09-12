@@ -23,6 +23,25 @@ en:
         external_work: "Make External Work Visible"
         series: "Make Series Visible"
         work: "Make Work Visible"
+    blacklisted_emails:
+      index:
+        browser_title: "Banned Emails"
+        page_heading: "Manage Banned Emails"
+        notes:
+          guest_comments: "Banned email addresses cannot be used in guest comments."
+          canonical_format: "All emails are stored in a single canonical format and common variants of the same address are not allowed (for instance, foo+whatever@bar.com will not be allowed if foo@bar.com is banned)."
+        heading:
+          new: "Ban email address"
+          search: "Find banned emails"
+        form:
+          new:
+            label: "Email to ban"
+            submit: "Ban Email"
+          search:
+            submit: "Search Banned Emails"
+        confirm_remove: "Are you sure you want to remove %{email} from the banned emails list?"
+      create:
+        browser_title: "Create Banned Email"
     blacklist:
       emails_found:
         one: "one email found"

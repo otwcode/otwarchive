@@ -59,6 +59,9 @@ en:
         work/parent_work_relationships:
           format: "%{message}"
     models:
+      admin_blacklisted_email:
+        one: "Banned Email"
+        other: "Banned Emails"
       archive_warning:
         one: "Warning"
         other: "Warnings"
