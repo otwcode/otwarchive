@@ -405,6 +405,9 @@ en:
       title: "Invitation Status for %{email}"
       position_html: "You are currently number %{position} on our waiting list!"
       date: "At our current rate, you should receive an invitation on or around: %{date}."
+  tag_wranglers:
+    show:
+      last_wrangled_html: "%{wrangler_login} last wrangled at %{time}."
   pseuds:
     delete_preview:
       heading: "Pseud deletion"
