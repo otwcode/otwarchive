@@ -6,5 +6,4 @@ class SpamPolicy < ApplicationPolicy
   end
 
   alias bulk_update? index?
-
 end
