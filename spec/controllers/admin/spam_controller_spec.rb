@@ -32,6 +32,7 @@ describe Admin::SpamController do
     %w[policy_and_abuse superadmin].each do |role|
       context "when logged in as an admin with #{role} role" do
         let(:admin) { create(:admin, roles: [role]) }
+        
         it "renders index template" do
           fake_login_admin(admin)
           get :index, params: { reviewed: false, approved: false }
