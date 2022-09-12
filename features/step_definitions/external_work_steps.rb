@@ -1,4 +1,4 @@
-DEFAULT_EXTERNAL_URL = "http://zooey-glass.dreamwidth.org"
+DEFAULT_EXTERNAL_URL = "http://example.org/200"
 DEFAULT_EXTERNAL_CREATOR = "Zooey Glass"
 DEFAULT_EXTERNAL_TITLE = "A Work Not Posted To The AO3"
 DEFAULT_EXTERNAL_SUMMARY = "This is my story, I am its author."
@@ -15,6 +15,7 @@ Given /^an external work$/ do
 end
 
 Given /^I set up an external work$/ do
+  step %{mock websites with no content}
   visit new_external_work_path
   fill_in("URL", with: DEFAULT_EXTERNAL_URL)
   fill_in("external_work_author", with: DEFAULT_EXTERNAL_CREATOR)
@@ -41,7 +42,7 @@ Given "{string} has bookmarked an external work" do |user|
   # field's id attribute over its label. But in this case,
   # we have to use the labels for some fields because the ids
   # change when JavaScript is enabled.
-  fill_in("URL", with: "http://example.org/200")
+  fill_in("URL", with: DEFAULT_EXTERNAL_URL)
   fill_in("external_work_author", with: DEFAULT_EXTERNAL_CREATOR)
   fill_in("external_work_title", with: DEFAULT_EXTERNAL_TITLE)
   fill_in("external_work_summary", with: DEFAULT_EXTERNAL_SUMMARY)
