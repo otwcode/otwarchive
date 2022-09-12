@@ -22,14 +22,14 @@ Feature: Delete pseud.
 
     When I am on testuser's pseuds page
       And I follow "delete_tester_pseud"
-      And I choose "Delete these bookmarks"
+      And I choose "Delete this bookmark"
       And I press "Submit"
     Then I should see "The pseud was successfully deleted."
     When I am on testuser's pseuds page
     Then I should not see "tester_pseud"
 
     When I follow "delete_testy"
-      And I choose "Transfer these bookmarks to the default pseud"
+      And I choose "Transfer this bookmark to the default pseud"
       And I press "Submit"
     Then I should see "The pseud was successfully deleted."
     When I am on testuser's pseuds page
