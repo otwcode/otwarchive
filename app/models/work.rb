@@ -43,6 +43,8 @@ class Work < ApplicationRecord
   has_many :total_comments, class_name: 'Comment', through: :chapters
   has_many :kudos, as: :commentable, dependent: :destroy
 
+  has_many :original_creators, class_name: 'WorkOriginalCreator', dependent: :destroy
+
   belongs_to :language
   belongs_to :work_skin
   validate :work_skin_allowed, on: :save
@@ -76,8 +78,6 @@ class Work < ApplicationRecord
   def title
     read_attribute(:title).try(:html_safe)
   end
-
-  serialize :original_creator_ids, Array
 
   ########################################################################
   # VALIDATION
@@ -348,11 +348,6 @@ class Work < ApplicationRecord
   after_destroy :clean_up_assignments
   def clean_up_assignments
     self.challenge_assignments.each {|a| a.creation = nil; a.save!}
-  end
-
-  before_update :set_orphaned_at, if: :will_save_change_to_original_creator_ids?
-  def set_orphaned_at
-    self.orphaned_at = original_creator_ids.empty? ? nil : Time.current
   end
 
   ########################################################################
@@ -1301,21 +1296,5 @@ class Work < ApplicationRecord
   def nonfiction
     nonfiction_tags = [125773, 66586, 123921, 747397] # Essays, Nonfiction, Reviews, Reference
     (filter_ids & nonfiction_tags).present?
-  end
-
-  # Get the temporarily-stored original creators of this work, for when creator(s) have
-  # orphaned this work. If the user still exists, both their ID and username are retrieved;
-  # otherwise, just the user's ID is retrieved.
-  def original_creators
-    original_creator_ids.uniq.map do |user_id|
-      user = User.find_by(id: user_id)
-      user ? "#{user_id} (#{user.login})" : user_id.to_s
-    end
-  end
-
-  def self.cleanup_original_creator_ids
-    Work
-      .where("orphaned_at <= ?", ArchiveConfig.ORPHANS_ORIGINAL_CREATOR_TTL.hours.ago)
-      .update_all(original_creator_ids: [])
   end
 end

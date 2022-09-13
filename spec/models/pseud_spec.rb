@@ -62,43 +62,4 @@ describe Pseud do
       end.to change { comment.reload.updated_at }
     end
   end
-
-  describe "#change_ownership" do
-    let(:original_pseud) { create(:pseud) }
-    let(:new_pseud) { create(:pseud) }
-
-    context "when store_original_creator is false" do
-      context "for a work" do
-        let(:work) { create(:work, authors: [original_pseud]) }
-
-        it "does not save the original creator" do
-          original_pseud.change_ownership(work, new_pseud)
-          expect(work.original_creators).to be_empty
-        end
-      end
-    end
-
-    context "when store_original_creator is true" do
-      context "for a work" do
-        let(:work) { create(:work, authors: [original_pseud]) }
-
-        it "saves the original creator" do
-          original_pseud.change_ownership(work, new_pseud, store_original_creator: true)
-          original_user = original_pseud.user
-          expect(work.original_creators)
-            .to contain_exactly("#{original_user.id} (#{original_user.login})")
-        end
-      end
-
-      context "for a series" do
-        let(:series) { create(:series, authors: [original_pseud]) }
-
-        it "does not error by attempting to set original creators" do
-          expect do
-            original_pseud.change_ownership(series, new_pseud, store_original_creator: true)
-          end.not_to raise_error
-        end
-      end
-    end
-  end
 end

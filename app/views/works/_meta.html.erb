@@ -65,8 +65,8 @@
       <%= work_meta_list(@work, @chapter) %>
       </dd>
       <% if policy(:user_creation).show_original_creators? %>
-        <% original_creators = @work.original_creators %>
-        <% if original_creators.any? %>
+        <% if @work.original_creators.any? %>
+          <% original_creators = @work.original_creators.map { |c| c.display } %>
           <dt class="original_creators">
             <%= t('.original_creators', count: original_creators.count) %>
           </dt>

@@ -404,9 +404,6 @@ class Pseud < ApplicationRecord
         end
       end
 
-      save_original_creator = options[:store_original_creator] && creation.respond_to?(:original_creator_ids)
-      creation.original_creator_ids << user.id if save_original_creator
-
       # make sure changes affect caching/search/author fields
       creation.save
     end

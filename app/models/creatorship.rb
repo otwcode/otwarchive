@@ -77,6 +77,7 @@ class Creatorship < ApplicationRecord
 
   before_destroy :expire_caches
   before_destroy :check_not_last
+  before_destroy :save_original_creator
   after_destroy :remove_from_children
 
   after_commit :update_indices
@@ -177,6 +178,17 @@ class Creatorship < ApplicationRecord
     raise ActiveRecord::RecordInvalid, self
   end
 
+  # Record the original creator if the creation is a work.
+  # This information is stored temporarily to make it available for
+  # Policy and Abuse on orphaned works.
+  def save_original_creator
+    return unless creation.is_a?(Work)
+
+    creation.original_creators << WorkOriginalCreator.new(user_id: pseud.user.id)
+  rescue ActiveRecord::RecordNotUnique
+    WorkOriginalCreator.find_by(work: creation, user_id: pseud.user.id).touch
+  end
+
   def expire_caches
     if creation_type == "Work" && self.pseud.present?
       CacheMaster.record(creation_id, "pseud", self.pseud_id)
@@ -240,7 +252,7 @@ class Creatorship < ApplicationRecord
       for new_orphan in orphans
         unless pseud.blank? || new_orphan.blank? || !new_orphan.pseuds.include?(pseud)
           orphan_pseud = default ? User.orphan_account.default_pseud : User.orphan_account.pseuds.find_or_create_by(name: pseud.name)
-          pseud.change_ownership(new_orphan, orphan_pseud, store_original_creator: true)
+          pseud.change_ownership(new_orphan, orphan_pseud)
         end
       end
     end

@@ -76,11 +76,11 @@ check_invite_queue:
   args: check_queue
   description: "Invite users from the queue if it's time to do so."
 
-cleanup_original_creator_ids:
+cleanup_work_original_creators:
   every: 1h
-  class: "Work"
+  class: "WorkOriginalCreator"
   queue: utilities
-  args: cleanup_original_creator_ids
+  args: cleanup
   description: >-
-    Remove original_creator_ids for works orphaned more than
-    ORPHANS_ORIGINAL_CREATOR_TTL hours ago.
+    Remove original_creators for works orphaned/moved more than
+    ORIGINAL_CREATOR_TTL_HOURS hours ago.
