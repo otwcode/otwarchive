@@ -57,7 +57,7 @@ class ExternalWorksController < ApplicationController
 
   def external_work_params
     params.require(:external_work).permit(
-      :url, :author, :title, :summary, :language_id
+      :url, :author, :title, :summary
     )
   end
 

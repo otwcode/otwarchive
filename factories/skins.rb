@@ -1,12 +1,8 @@
 require 'faker'
 FactoryBot.define do
-  sequence :skin_title do |n|
-    "#{Faker::Lorem.word} #{n}"
-  end
-
   factory :skin do
     author_id { FactoryBot.create(:user).id }
-    title { generate(:skin_title) }
+    title { Faker::Lorem.word }
 
     trait :public do
       add_attribute(:public) { true }
@@ -16,7 +12,7 @@ FactoryBot.define do
 
   factory :work_skin do
     author_id { FactoryBot.create(:user).id }
-    title { generate(:skin_title) }
+    title { Faker::Lorem.word }
 
     trait :private do
       add_attribute(:public) { false }
