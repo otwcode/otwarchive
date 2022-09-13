@@ -88,7 +88,7 @@ describe OrphansController do
         expect(work.reload.users).not_to include(user)
         it_redirects_to_with_notice(user_path(user), "Orphaning was successful.")
 
-        expect(work.original_creators.map { |c| c.user_id }).to contain_exactly(user.id)
+        expect(work.original_creators.map(&:user_id)).to contain_exactly(user.id)
       end
 
       it "successfully orphans multiple works and redirects" do
@@ -97,8 +97,8 @@ describe OrphansController do
         expect(second_work.reload.users).not_to include(user)
         it_redirects_to_with_notice(user_path(user), "Orphaning was successful.")
 
-        expect(work.original_creators.map { |c| c.user_id }).to contain_exactly(user.id)
-        expect(second_work.original_creators.map { |c| c.user_id }).to contain_exactly(user.id)
+        expect(work.original_creators.map(&:user_id)).to contain_exactly(user.id)
+        expect(second_work.original_creators.map(&:user_id)).to contain_exactly(user.id)
       end
 
       context "when a work has multiple pseuds for the same user" do
@@ -109,7 +109,7 @@ describe OrphansController do
           post :create, params: { work_ids: [work], use_default: "true" }
           expect(work.reload.users).not_to include(user)
 
-          expect(work.original_creators.map { |c| c.user_id }).to contain_exactly(user.id)
+          expect(work.original_creators.map(&:user_id)).to contain_exactly(user.id)
         end
       end
 
