@@ -17,7 +17,7 @@ describe WorkOriginalCreator do
       before { User.delete_by(id: original_creator.user_id) }
 
       it "returns only the id" do
-        expect(original_creator.display).to eq(original_creator.user_id.to_s)
+        expect(original_creator.reload.display).to eq(original_creator.user_id.to_s)
       end
     end
   end

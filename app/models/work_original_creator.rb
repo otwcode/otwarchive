@@ -1,9 +1,9 @@
 class WorkOriginalCreator < ApplicationRecord
   belongs_to :work
+  belongs_to :user
 
   # Get the id and username (if still available) for the associated user.
   def display
-    user = User.find_by(id: user_id)
     user ? "#{user_id} (#{user.login})" : user_id.to_s
   end
 

@@ -1,8 +1,8 @@
 class CreateWorkOriginalCreators < ActiveRecord::Migration[6.0]
   def change
     create_table :work_original_creators do |t|
-      t.references :work, null: false, dependent: :destroy
-      t.integer :user_id, null: false
+      t.references :work, null: false
+      t.references :user, null: false
 
       t.timestamps
     end
