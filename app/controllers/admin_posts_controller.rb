@@ -57,7 +57,7 @@ class AdminPostsController < Admin::BaseController
     @admin_post = AdminPost.new(admin_post_params)
     authorize @admin_post
     if @admin_post.translated_post && @admin_post.language_id.to_s == @admin_post.translated_post.language_id.to_s
-      flash[:notice] = ts("Cannot create a translated post to be the same language as the original post.")
+      flash[:error] = ts("Cannot create a translated post to be the same language as the original post.")
       redirect_to(@admin_post)
     elsif @admin_post.save
       flash[:notice] = ts("Admin Post was successfully created.")
@@ -72,7 +72,7 @@ class AdminPostsController < Admin::BaseController
     @admin_post = AdminPost.find(params[:id])
     authorize @admin_post
     if @admin_post.translated_post && admin_post_params[:language_id] == @admin_post.translated_post.language_id.to_s
-      flash[:notice] = ts("Cannot update a translated post to be the same language as the original post.")
+      flash[:error] = ts("Cannot update a translated post to be the same language as the original post.")
       redirect_to(@admin_post)
     elsif @admin_post.update(admin_post_params)
       flash[:notice] = ts("Admin Post was successfully updated.")

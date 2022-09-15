@@ -73,12 +73,22 @@ Feature: Admin Actions to Post News
       And I am logged in as "ordinaryuser"
     Then I should see a translated admin post
 
-  Scenario: Make a same language translation of an admin post 
+  Scenario: Create a same language translation of an admin post 
     Given I have posted an admin post
       And basic languages
       And I am logged in as a "translation" admin
     When I make a same language translation of an admin post
     Then I should see "Cannot create a translated post to be the same language as the original post."
+
+  Scenario: Edit translation of an admin post into a same language translation
+    Given I have posted an admin post
+      And basic languages
+      And I am logged in as a "translation" admin
+      And I make a translation of an admin post
+    When I follow "Edit Post"
+      And I select "English" from "Choose a language"
+      And I press "Post"
+    Then I should see "Cannot update a translated post to be the same language as the original post."
 
   Scenario: Make a translation of an admin post that doesn't exist
     Given basic languages
