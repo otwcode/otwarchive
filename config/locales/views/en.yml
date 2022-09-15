@@ -413,7 +413,7 @@ en:
       heading: "Pseud deletion"
       notice: "When you delete your pseud, any works, series, or comments you have created under it will be transferred to your default pseud."
       saved_bookmarks: 
-        one: "You have saved %{count} bookmark using this pseud. You can choose whether to delete it or transfer them to your default pseud."
+        one: "You have saved %{count} bookmark using this pseud. You can choose whether to delete it or transfer it to your default pseud."
         other: "You have saved %{count} bookmarks using this pseud. You can choose whether to delete them or transfer them to your default pseud."
       delete: 
         one: "Delete this bookmark"
