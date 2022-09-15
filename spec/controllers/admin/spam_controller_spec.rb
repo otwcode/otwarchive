@@ -20,7 +20,7 @@ describe Admin::SpamController do
       context "when logged in as an admin with #{role} role" do
         let(:admin) { create(:admin, roles: [role]) }
 
-        it "redirects with notice" do
+        it "redirects with error" do
           fake_login_admin(admin)
           get :index, params: { reviewed: false, approved: false }
 
@@ -59,7 +59,7 @@ describe Admin::SpamController do
       context "when logged in as an admin with #{role} role" do
         let(:admin) { create(:admin, roles: [role]) }
 
-        it "redirects with notice" do
+        it "redirects with error" do
           fake_login_admin(admin)
           post :bulk_update, params: { ham: true }
           
