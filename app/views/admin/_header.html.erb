@@ -36,9 +36,9 @@
     <li><%= link_to ts("Banned Emails", key: "header"), admin_blacklisted_emails_path %></li>
   <% end %>
   
-  <% if policy(:spam).index? %>
-     <li><%= link_to ts("Spam", key: "header"), admin_spam_index_path %></li>
-   <% end %>
+  <% if policy(ModeratedWork).index? %>
+    <li><%= link_to ts("Spam", key: "header"), admin_spam_index_path %></li>
+  <% end %>
 
   <% if policy(AdminSetting).can_view_settings? %>
     <li><%= link_to ts("Settings", key: "header"), admin_settings_path %></li>
