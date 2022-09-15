@@ -56,7 +56,7 @@ class AdminPostsController < Admin::BaseController
   def create
     @admin_post = AdminPost.new(admin_post_params)
     authorize @admin_post
-    if @admin_post.translated_post && @admin_post.language.name == @admin_post.translated_post.language.name
+    if @admin_post.translated_post && @admin_post.language_id.to_s == @admin_post.translated_post.language_id.to_s
       flash[:notice] = ts("Cannot create a translated post to be the same language as the original post.")
       redirect_to(@admin_post)
     elsif @admin_post.save

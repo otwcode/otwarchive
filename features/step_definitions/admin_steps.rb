@@ -279,6 +279,19 @@ When /^I make a translation of an admin post( with tags "(.*?)")?$/ do |tags|
   click_button("Post")
 end
 
+When /^I make a same language translation of an admin post( with tags "(.*?)")?$/ do |tags|
+  admin_post = AdminPost.find_by(title: "Default Admin Post")
+  # If post doesn't exist, assume we want to reference a non-existent post
+  admin_post_id = !admin_post.nil? ? admin_post.id : 0
+  visit new_admin_post_path
+  fill_in("admin_post_title", with: "Default Admin Post")
+  fill_in("content", with: "Content of the admin post")
+  step %{I select "English" from "Choose a language"}
+  fill_in("admin_post_translated_post_id", with: admin_post_id)
+  fill_in("admin_post_tag_list", with: tags) if tags
+  click_button("Post")
+end
+
 When /^I hide the work "(.*?)"$/ do |title|
   work = Work.find_by(title: title)
   visit work_path(work)
