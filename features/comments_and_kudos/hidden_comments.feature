@@ -9,7 +9,9 @@ Feature: Comment hiding
       And I post the comment "A suspicious comment" on the work "Popular Fic"
       And I am logged out
 
-    When I am logged in as a super admin
+    # Delay to make sure the cache is expired when the comment is hidden:
+    When it is currently 1 second from now
+      And I am logged in as a super admin
       And I view the work "Popular Fic" with comments
       And I press "Hide Comment"
     Then I should see "Comment successfully hidden!"
