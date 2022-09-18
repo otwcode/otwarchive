@@ -45,6 +45,10 @@ Given /^I edit the skin "([^"]*)"$/ do |skin_name|
 end
 
 Given /^the unapproved public skin "([^"]*)" with css "([^"]*)"$/ do |skin_name, css|
+  # Delay to make sure all skins have at least 1 second of separation in their
+  # creation dates, so that they will be listed in the right order:
+  step "it is currently 1 second from now"
+
   step %{I am logged in as "skinner"}
   step %{I set up the skin "#{skin_name}" with css "#{css}"}
   attach_file("skin_icon", "features/fixtures/skin_test_preview.png")
