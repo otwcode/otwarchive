@@ -162,6 +162,12 @@
       <dd class="submit actions"><%= f.submit ts("Sort and Filter") %></dd>
     </dl>
 
+    <% if @owner %>
+      <p class="footnote">
+        <%= link_to ts("Clear Filters"), works_original_path %>
+      </p>
+    <% end %>
+
     <div>
       <%= hidden_field_tag("collection_id", @collection.id) if @collection %>
       <%= hidden_field_tag("tag_id", @tag.to_param) if @tag %>

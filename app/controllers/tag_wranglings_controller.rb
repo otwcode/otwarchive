@@ -1,6 +1,9 @@
 class TagWranglingsController < ApplicationController
+  include TagWrangling
+
   before_action :check_user_status
   before_action :check_permission_to_wrangle
+  around_action :record_wrangling_activity, only: [:wrangle]
 
   def index
     @counts = {}

@@ -6,6 +6,7 @@ class Tag < ApplicationRecord
   include Searchable
   include StringCleaner
   include WorksOwner
+  include Wrangleable
   include Rails.application.routes.url_helpers
 
   NAME = "Tag"

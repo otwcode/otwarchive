@@ -57,6 +57,7 @@ RSpec.configure do |config|
   config.before :each do
     DatabaseCleaner.start
     User.current_user = nil
+    User.should_update_wrangling_activity = false
     clean_the_database
 
     # Clears used values for all generators.
@@ -124,6 +125,10 @@ RSpec.configure do |config|
 
   config.before :each, type: :controller do
     @request.host = "www.example.com"
+  end
+
+  config.before :each, :frozen do
+    freeze_time
   end
 
   # If you're not using ActiveRecord, or you'd prefer not to run each of your
