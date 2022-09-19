@@ -78,7 +78,8 @@ Feature: Admin Actions to Post News
       And basic languages
       And I am logged in as a "translation" admin
     When I make a same language translation of an admin post
-    Then I should see "Cannot create a translated post to be the same language as the original post."
+    Then I should see "Sorry! We couldn't save this admin post because:"
+      And I should see "Translated post cannot be same language as original post"
 
   Scenario: Edit translation of an admin post into a same language translation
     Given I have posted an admin post
@@ -88,7 +89,8 @@ Feature: Admin Actions to Post News
     When I follow "Edit Post"
       And I select "English" from "Choose a language"
       And I press "Post"
-    Then I should see "Cannot update a translated post to be the same language as the original post."
+    Then I should see "Sorry! We couldn't save this admin post because:"
+      And I should see "Translated post cannot be same language as original post"
 
   Scenario: Make a translation of an admin post that doesn't exist
     Given basic languages
