@@ -58,6 +58,8 @@ en:
                 "must not add up to more than %{count}. Your work has %{value} of these tags, so you must remove %{diff} of them."
         work/parent_work_relationships:
           format: "%{message}"
+        collection_item:
+          creator_invitation_not_allowed: "Not all creators have opted-in to collection invitations."
     models:
       admin_blacklisted_email:
         one: "Banned Email"

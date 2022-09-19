@@ -34,6 +34,13 @@ class CollectionItem < ApplicationRecord
     end
   end
 
+  validate :creators_allow_invitation, on: :create
+  def creators_allow_invitation
+    return unless item.respond_to?(:allow_collection_invitation)
+
+    errors.add(:base, :creator_invitation_not_allowed) unless item.allow_collection_invitation
+  end
+
   scope :include_for_works, -> { includes(work: :pseuds)}
   scope :unrevealed, -> { where(unrevealed: true) }
   scope :anonymous, -> { where(anonymous:  true) }

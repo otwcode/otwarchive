@@ -5,26 +5,9 @@ Feature: Collection
   As a collection maintainer
   I want to add and invite works to my collection
 
-  Scenario: Invite a work to a collection where a user auto-approves inclusion
-  Given I am logged in as "Scott" with password "password"
-    And I set my preferences to automatically agree to my work being collected
-    And I post the work "A Death in Hong Kong"
-  When I have the collection "scotts collection" with name "scotts_collection"
-    And I am logged in as "moderator"
-    And I add the work "A Death in Hong Kong" to the collection "scotts collection"
-  Then I should see "Added to collection(s): scotts collection."
-    And 1 email should be delivered to "Scott"
-    And the email should contain "you have previously elected to allow"
-  When I am logged in as "moderator"
-    And I go to "scotts collection" collection's page
-    And I follow "Manage Items"
-    And I follow "Approved"
-  Then I should see "A Death in Hong Kong"
-
-
   Scenario: Invite a work to a collection where a user approves inclusion
   Given I am logged in as "Scott" with password "password"
-    And I set my preferences to require my approval for my work to be collected
+    And I set my preferences to allow collection invitations
     And I post the work "Murder in Milan" with fandom "Murder She Wrote"
   When I have the collection "scotts collection" with name "scotts_collection"
     And I am logged in as "moderator" with password "password"
@@ -53,7 +36,7 @@ Feature: Collection
 
   Scenario: Invite another's work to a anonymous collection should not be allowed.
   Given I am logged in
-    And I set my preferences to automatically agree to my work being collected
+    And I set my preferences to allow collection invitations
     And I post the work "A Death in Hong Kong"
   When I have the hidden collection "anon collection" with name "anon_collection"
     And I am logged in as "moderator"
@@ -65,7 +48,7 @@ Feature: Collection
 
   Scenario: Invite another's work to a hidden collection should not be allowed.
   Given I am logged in
-    And I set my preferences to automatically agree to my work being collected
+    And I set my preferences to allow collection invitations
     And I post the work "A Death in Hong Kong"
   When I have the hidden collection "hidden collection" with name "hidden_collection"
     And I am logged in as "moderator"
@@ -77,7 +60,7 @@ Feature: Collection
 
   Scenario: Invite another's work to a hidden anonymous collection should not be allowed.
   Given I am logged in
-    And I set my preferences to automatically agree to my work being collected
+    And I set my preferences to allow collection invitations
     And I post the work "A Death in Hong Kong"
   When I have the hidden anonymous collection "anon hidden collection" with name "anon_hidden_collection"
     And I am logged in as "moderator"
@@ -92,6 +75,8 @@ Feature: Collection
       And the collection "Favorites"
       And the work "Over the Limit"
       And the work "Over the Limit" has 3 fandom tags
+      And I am logged in as the author of "Over the Limit"
+      And I set my preferences to allow collection invitations
     When I am logged in as "moderator"
       And I add the work "Over the Limit" to the collection "Favorites"
     Then I should see "This work has been invited to your collection (Favorites)."
