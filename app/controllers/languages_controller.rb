@@ -2,7 +2,7 @@ class LanguagesController < ApplicationController
   before_action :check_permission, only: [:new, :create, :edit, :update]
 
   def check_permission
-    logged_in_as_admin? || permit?("translation_admin") || access_denied
+    logged_in_as_admin? || access_denied
   end
 
   def index
