@@ -1,26 +1,29 @@
 class LocalesController < ApplicationController
-  before_action :check_permission, only: [:new, :create, :update, :edit]
-
-  def check_permission
-    logged_in_as_admin? || access_denied
-  end
 
   def index
+    authorize Locale
+
     @locales = Locale.default_order
   end
 
   def new
+    authorize Locale
+
     @locale = Locale.new
     @languages = Language.default_order
   end
 
   # GET /locales/en/edit
   def edit
+    authorize Locale
+
     @locale = Locale.find_by(iso: params[:id])
     @languages = Language.default_order
   end
 
   def update
+    authorize Locale
+
     @locale = Locale.find_by(iso: params[:id])
     @locale.attributes = locale_params
     if @locale.save
@@ -34,6 +37,8 @@ class LocalesController < ApplicationController
 
 
   def create
+    authorize Locale
+
     @locale = Locale.new(locale_params)
     if @locale.save
       flash[:notice] = t('successfully_added', default: 'Locale was successfully added.')
