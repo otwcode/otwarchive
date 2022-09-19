@@ -400,6 +400,7 @@ en:
   preferences:
     index:
       blocked_users: "Blocked Users"
+      allow_collection_invitation: "Allow others to invite my works to collections."
   invite_requests:
     invite_request:
       title: "Invitation Status for %{email}"

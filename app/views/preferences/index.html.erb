@@ -113,8 +113,8 @@
     <h4 class="heading"><%= ts('Collections, Challenges and Gifts') %> <%= link_to_help 'collection-preferences' %></h4>
     <ul>
       <li>
-        <%= f.check_box :automatically_approve_collections %>
-        <%= f.label :automatically_approve_collections, ts("Automatically agree to your work being collected by others in the Archive.") %>
+        <%= f.check_box :allow_collection_invitation %>
+        <%= f.label :allow_collection_invitation, t(".allow_collection_invitation") %>
       </li>
       <li>
         <%= f.check_box :allow_gifts %>
