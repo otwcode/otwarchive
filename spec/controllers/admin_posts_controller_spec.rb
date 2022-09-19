@@ -74,7 +74,7 @@ describe AdminPostsController do
           end
 
           context "with valid translated_post_id" do
-            let!(:translation) { create(:admin_post, translated_post_id: post.id) }
+            let!(:translation) { create(:admin_post, translated_post_id: post.id, language_id: post.language_id+1) }
 
             context "with valid comment_permissions" do
               it "does not change comment_permissions and redirects with notice" do
