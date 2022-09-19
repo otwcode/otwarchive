@@ -22,6 +22,7 @@ describe LanguagesController do
     %w[board communications policy_and_abuse tag_wrangling docs support open_doors translation superadmin].each do |role|
       context "when logged in as an admin with #{role} role" do
         let(:admin) { create(:admin, roles: [role]) }
+
         it "renders the show template" do
           get :show, params: { id: "en" }
           expect(response).to render_template("show")
@@ -47,6 +48,7 @@ describe LanguagesController do
     %w[translation superadmin].each do |role|
       context "when logged in as an admin with #{role} role" do
         let(:admin) { create(:admin, roles: [role]) }
+
         it "renders the new template" do
           fake_login_admin(admin)
           get :new
@@ -85,6 +87,7 @@ describe LanguagesController do
     %w[translation superadmin].each do |role|
       context "when logged in as an admin with #{role} role" do
         let(:admin) { create(:admin, roles: [role]) }
+        
         before do
           fake_login_admin(admin)
           post :create, params: language_params
@@ -164,7 +167,7 @@ describe LanguagesController do
     %w[translation superadmin].each do |role|
       context "when logged in as an admin with #{role} role" do
         let(:admin) { create(:admin, roles: [role]) }
-        
+
         before do
           fake_login_admin(admin)
           put :update, params: language_params
