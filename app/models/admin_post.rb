@@ -11,8 +11,8 @@ class AdminPost < ApplicationRecord
   }, _suffix: :comments
 
   belongs_to :language
-  belongs_to :translated_post, class_name: 'AdminPost'
-  has_many :translations, class_name: 'AdminPost', foreign_key: 'translated_post_id'
+  belongs_to :translated_post, class_name: "AdminPost"
+  has_many :translations, class_name: "AdminPost", foreign_key: "translated_post_id"
   has_many :admin_post_taggings
   has_many :tags, through: :admin_post_taggings, source: :admin_post_tag
 
@@ -36,7 +36,7 @@ class AdminPost < ApplicationRecord
 
   validate :translated_post_language_must_differ
 
-  scope :non_translated, -> { where('translated_post_id IS NULL') }
+  scope :non_translated, -> { where("translated_post_id IS NULL") }
 
   scope :for_homepage, -> { order("created_at DESC").limit(ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_ON_HOMEPAGE) }
 
@@ -70,14 +70,14 @@ class AdminPost < ApplicationRecord
 
   def translated_post_must_exist
     if translated_post_id.present? && AdminPost.find_by(id: translated_post_id).nil?
-      errors.add(:translated_post_id, 'does not exist')
+      errors.add(:translated_post_id, "does not exist")
     end
   end
 
   def translated_post_language_must_differ
-    if translated_post_id.present? && !AdminPost.find_by(id: translated_post_id).nil? && self.language_id == AdminPost.find_by(id: translated_post_id).language_id
-      errors.add(:translated_post_id, 'cannot be same language as original post')
-    end
+    return unless translated_post_id.present? && !AdminPost.find_by(id: translated_post_id).nil? && self.language_id == AdminPost.find_by(id: translated_post_id).language_id
+      
+    errors.add(:translated_post_id, "cannot be same language as original post")
   end
 
   private
