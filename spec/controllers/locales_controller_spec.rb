@@ -82,6 +82,7 @@ describe LocalesController do
 
   describe "GET #edit" do
     let(:locale) { create(:locale) }
+    
     context "when logged in as user" do
       it "redirects with error" do
         fake_login
@@ -202,7 +203,7 @@ describe LocalesController do
           fake_login_admin(admin)
           params = {
             name: "Español", iso: "es", language_id: Language.default.id,
-            email_enabled: true, interface_enabled: false,
+            email_enabled: true, interface_enabled: false
           }
   
           post :create, params: { locale: params }
@@ -220,7 +221,7 @@ describe LocalesController do
           fake_login_admin(admin)
           params = {
             name: "Español", language_id: Language.default.id,
-            email_enabled: true, interface_enabled: false,
+            email_enabled: true, interface_enabled: false
           }
   
           post :create, params: { locale: params }
