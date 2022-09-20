@@ -14,7 +14,6 @@ Feature: Collection
     And I add the work "Murder in Milan" to the collection "scotts collection"
   Then I should see "This work has been invited to your collection (scotts collection)."
     And 1 email should be delivered to "Scott"
-    And the email should contain "If in future you would prefer to automatically approve requests to add your"
   When I go to "scotts collection" collection's page
   Then I should see "Works (0)"
   When I follow "Manage Items"
