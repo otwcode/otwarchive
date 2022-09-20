@@ -106,6 +106,29 @@ class CollectionItem < ApplicationRecord
     end
   end
 
+  before_save :approve_automatically
+  def approve_automatically
+    if self.new_record?
+      # approve with the current user, who is the person who has just
+      # added this item -- might be either moderator or owner
+      approve(User.current_user == :false ? nil : User.current_user)
+
+      # if the collection is open or the user who owns this work is a member, go ahead and approve
+      # for the collection
+      if !approved_by_collection? && collection
+        if !collection.moderated? || collection.user_is_maintainer?(User.current_user) || collection.user_is_posting_participant?(User.current_user)
+          approve_by_collection
+        end
+      end
+
+      # if at least one of the owners of the items automatically approves
+      # adding, go ahead and approve by user
+      if !approved_by_user? && item.is_a?(Bookmark)
+        approve_by_user if item.pseud.user == User.current_user
+      end
+    end
+  end
+
   before_save :send_work_invitation
   def send_work_invitation
     if !approved_by_user? && approved_by_collection? && self.new_record?
