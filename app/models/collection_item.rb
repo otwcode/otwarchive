@@ -123,8 +123,15 @@ class CollectionItem < ApplicationRecord
 
       # if at least one of the owners of the items automatically approves
       # adding, go ahead and approve by user
-      if !approved_by_user? && item.is_a?(Bookmark)
-        approve_by_user if item.pseud.user == User.current_user
+      if !approved_by_user?
+        case item_type
+        when "Work"
+          users = item.users || [User.current_user] # if the work has no users, it is also new and being created by the current user
+        when "Bookmark"
+          users = [item.pseud.user] || [User.current_user]
+        end
+
+        approve_by_user if users == [User.current_user]
       end
     end
   end
