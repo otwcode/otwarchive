@@ -121,8 +121,7 @@ class CollectionItem < ApplicationRecord
         end
       end
 
-      # if at least one of the owners of the items automatically approves
-      # adding, go ahead and approve by user
+      # if the current user created the item, automatically approve its inclusion in the collection
       if !approved_by_user?
         case item_type
         when "Work"
