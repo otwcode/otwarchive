@@ -23,8 +23,8 @@ FactoryBot.define do
 
     trait :allow_collections do
       after(:create) do |work|
-        work.users.each do
-          |user| user.preference.update(allow_collection_invitation: true)
+        work.users.each do |user|
+          user.preference.update(allow_collection_invitation: true)
         end
       end
     end

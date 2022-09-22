@@ -42,7 +42,7 @@ describe Collectible do
     let(:work2) { create(:work, :allow_collections) }
     let(:collection) { create(:collection) }
 
-    it "should return distinct collections for approved_collections scope" do
+    it "returns distinct collections for approved_collections scope" do
       work1.collections << [collection]
       work2.collections << [collection]
 
