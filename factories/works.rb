@@ -21,6 +21,14 @@ FactoryBot.define do
       end
     end
 
+    trait :allow_collections do
+      after(:create) do |work|
+        work.users.each do
+          |user| user.preference.update(allow_collection_invitation: true)
+        end
+      end
+    end
+
     factory :no_authors do
       authors { [] }
     end

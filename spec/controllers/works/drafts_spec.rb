@@ -112,7 +112,7 @@ describe WorksController do
     end
 
     it "should display a notice message and redirect if the work is in a moderated collection" do
-      drafts_user_work = create(:draft, authors: [drafts_user.default_pseud])
+      drafts_user_work = create(:draft, :allow_collections, authors: [drafts_user.default_pseud])
       draft_collection = create(:collection)
       draft_collection.collection_preference.moderated = true
       draft_collection.collection_preference.save

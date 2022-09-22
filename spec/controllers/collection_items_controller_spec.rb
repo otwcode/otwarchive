@@ -8,9 +8,9 @@ describe CollectionItemsController do
   let(:collection) { create(:collection) }
 
   describe "GET #index" do
-    let(:rejected_work) { create(:work) }
-    let(:approved_work) { create(:work) }
-    let(:invited_work) { create(:work) }
+    let(:rejected_work) { create(:work, :allow_collections) }
+    let(:approved_work) { create(:work, :allow_collections) }
+    let(:invited_work) { create(:work, :allow_collections) }
 
     let!(:rejected_work_item) { collection.collection_items.create(item: rejected_work) }
     let!(:approved_work_item) { collection.collection_items.create(item: approved_work) }
@@ -101,7 +101,7 @@ describe CollectionItemsController do
   end
 
   describe "#destroy" do
-    let(:approved_work) { create(:work) }
+    let(:approved_work) { create(:work, :allow_collections) }
     let(:approved_work_item) { collection.collection_items.create(item: approved_work) }
 
     context "destroy" do
@@ -118,7 +118,7 @@ describe CollectionItemsController do
 
   describe "PATCH #update_multiple" do
     let(:collection) { create(:collection) }
-    let(:work) { create(:work) }
+    let(:work) { create(:work, :allow_collections) }
     let(:item) { create(:collection_item, collection: collection, item: work) }
 
     let(:attributes) { { remove: "1" } }

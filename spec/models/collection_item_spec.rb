@@ -1,7 +1,6 @@
 require 'spec_helper'
 
 describe CollectionItem, :ready do
-
   let(:collection) { create(:collection) }
 
   context "belonging to a bookmark" do

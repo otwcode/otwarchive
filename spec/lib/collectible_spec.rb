@@ -22,7 +22,7 @@ describe Collectible do
   end
 
   it "should return collections for approved_collections scope" do
-    work = create(:work)
+    work = create(:work, :allow_collections)
     collection1 = create(:collection)
     collection2 = create(:collection)
 
@@ -38,12 +38,11 @@ describe Collectible do
   end
 
   context "approved_collections have more than one work" do
+    let(:work1) { create(:work, :allow_collections) }
+    let(:work2) { create(:work, :allow_collections) }
+    let(:collection) { create(:collection) }
+
     it "should return distinct collections for approved_collections scope" do
-      work1 = create(:work)
-      work2 = create(:work)
-
-      collection = create(:collection)
-
       work1.collections << [collection]
       work2.collections << [collection]
 
