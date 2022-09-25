@@ -17,9 +17,17 @@
   <p><%= t(".will_not.intro") %></p>
 
   <ul>
-    <li><%= t(".will_not.delete_comments_on_works") %></li>
-    <li><%= t(".will_not.create_comments_on_works") %></li>
+    <li><%= t(".will_not.prevent_emails") %></li>
+    <li><%= t(".will_not.hide_content_for_others") %></li>
   </ul>
+
+  <p>
+    <%= t(".block_users_instead", blocked_users_link: link_to(t(".blocked_users_link_text"), user_blocked_users_path(@user))).html_safe %>
+  </p>
+
+  <p>
+    <%= t(".site_skin_warning", restore_site_skin_faq_link: link_to(t(".restore_site_skin_faq_link_test"), archive_faq_url("skins-and-archive-interface", anchor: :restoresiteskin))).html_safe %>
+  </p>
 </div>
 
 <%# form for muting users %>

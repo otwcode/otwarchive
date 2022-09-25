@@ -1,0 +1,3 @@
+<% if user_has_muted_users? %>
+  <p><%= t('muted.muted_items_notice', muted_users_link: link_to(t("muted.muted_users_link_text"), user_muted_users_path(current_user))).html_safe %></p>
+<% end %>

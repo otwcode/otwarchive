@@ -347,6 +347,8 @@ en:
           comments_on_works: "delete or hide comments they previously left on your works; you can delete these individually"
           comments_elsewhere: "hide their comments elsewhere on the site"
           hide_works: "hide their works or bookmarks from you"
+        mute_users_instead: "To hide a user's works, bookmarks, series, and comments from you, visit %{muted_users_link}."
+        muted_users_link_text: "your Muted Users page"
       confirm_block:
         title: "Block %{name}"
         button: "Yes, Block User"
@@ -362,6 +364,8 @@ en:
           comments_on_works: "delete or hide comments they previously left on your works; you can delete these individually"
           comments_elsewhere: "hide their comments elsewhere on the site"
           hide_works: "hide their works or bookmarks from you"
+        mute_users_instead: "To hide a user's works, bookmarks, series, and comments from you, visit %{muted_users_link}."
+        muted_users_link_text: "your Muted Users page"
       confirm_unblock:
         title: "Unblock %{name}"
         button: "Yes, Unblock User"
@@ -375,7 +379,8 @@ en:
   muted:
     mute: "Mute"
     unmute: "Unmute"
-    muted_items_notice: "You have muted some users in the Archive. Some items may not be shown, and any counts may be inaccurate."
+    muted_items_notice: "You have muted some users in the Archive. Some items may not be shown, and any counts may be inaccurate. You can modify your muted users on %{muted_users_link}."
+    muted_users_link_text: "your Muted Users page"
     users:
       index:
         title: "Muted Users"
@@ -387,12 +392,16 @@ en:
           landmark:
             muted_users: "Listing Muted Users"
         will:
-          intro: "Muting a user prevents you from:"
-          seeing_content: "seeing their works, series, bookmarks and comments anywhere on the site"
+          intro: "Muting a user:"
+          seeing_content: "hides their works, series, bookmarks, and comments from you; no placeholders will be added"
         will_not:
           intro: "Muting a user will not:"
-          delete_comments_on_works: "delete any comments they have left on your works; you can delete those before you mute them"
-          create_comments_on_works: "prevent them from leaving comments on your works; you should block them to prevent that"
+          prevent_emails: "prevent you from receiving comment or subscription emails from this user"
+          hide_content_for_others: "hide their works, series, bookmarks, and comments from anyone else"
+        block_users_instead: "To prevent a user from commenting on your works or replying to your comments elsewhere on the site, visit %{blocked_users_link}."
+        blocked_users_link_text: "your Blocked Users page"
+        site_skin_warning: "Please note that if you are not using the default site skin, muting may not work properly. The Skins and Archive Interface FAQ has %{restore_site_skin_faq_link}."
+        restore_site_skin_faq_link_test: "instructions for reverting to the default site skin"
       confirm_mute:
         title: "Mute %{name}"
         button: "Yes, Mute User"
@@ -400,12 +409,16 @@ en:
         mute: "mute"
         sure_html: "Are you sure you want to %{mute} %{username}?"
         will:
-          intro: "Muting a user prevents you from:"
-          seeing_content: "seeing their works, series, bookmarks and comments anywhere on the site"
+          intro: "Muting a user:"
+          seeing_content: "hides their works, series, bookmarks, and comments from you; no placeholders will be added"
         will_not:
           intro: "Muting a user will not:"
-          delete_comments_on_works: "delete any comments they have left on your works; you can delete these before you mute them"
-          create_comments_on_works: "prevent them from leaving comments on your works; you should block them to prevent that"
+          prevent_emails: "prevent you from receiving comment or subscription emails from this user"
+          hide_content_for_others: "hide their works, series, bookmarks, and comments from anyone else"
+        block_users_instead: "To prevent a user from commenting on your works or replying to your comments elsewhere on the site, visit %{blocked_users_link}."
+        blocked_users_link_text: "your Blocked Users page"
+        site_skin_warning: "Please note that if you are not using the default site skin, muting may not work properly. The Skins and Archive Interface FAQ has %{restore_site_skin_faq_link}."
+        restore_site_skin_faq_link_test: "instructions for reverting to the default site skin"
       confirm_unmute:
         title: "Unmute %{name}"
         button: "Yes, Unmute User"
