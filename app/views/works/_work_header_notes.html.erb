@@ -27,7 +27,7 @@
     <% end %>
 
     <% # parent works %>
-    <% for related_work in @work.parent_work_relationships %>
+    <% for related_work in @work.parents_after_saving %>
       <% if related_work.parent %>
         <li>
           <% if related_work.translation %>

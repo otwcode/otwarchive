@@ -31,9 +31,9 @@ module SeriesHelper
                           "".html_safe
                         end
         # This part is always included
-        # <span class="position">Part # of the <a href>TITLE</a> series</span>
+        # <span class="position">Part # of <a href>TITLE</a></span>
         main_link = content_tag(:span,
-                                ts("Part %{position} of the %{series_title} series",
+                                ts("Part %{position} of %{series_title}",
                                    position: (visible_position + 1).to_s,
                                    series_title: link_to(serial.title, serial)).html_safe,
                                 class: "position")

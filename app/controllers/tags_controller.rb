@@ -1,9 +1,12 @@
 class TagsController < ApplicationController
+  include TagWrangling
+
   before_action :load_collection
   before_action :check_user_status, except: [:show, :index, :show_hidden, :search, :feed]
   before_action :check_permission_to_wrangle, except: [:show, :index, :show_hidden, :search, :feed]
   before_action :load_tag, only: [:edit, :update, :wrangle, :mass_update]
   before_action :load_tag_and_subtags, only: [:show]
+  around_action :record_wrangling_activity, only: [:create, :update, :mass_update]
 
   caches_page :feed
 

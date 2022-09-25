@@ -11,10 +11,10 @@
       <p>
         <%= ts("(Previous comment deleted.)") %>
       </p>
-    <% elsif single_comment.hidden_by_admin? && !logged_in_as_admin? %>
+    <% elsif !can_see_hidden_comment?(single_comment) %>
       <p class="message"><%= ts("(This comment is under review by an admin and is currently unavailable.)") %></p>
     <% else %>
-      <% cache(key: "/v2/single_comment/#{single_comment.id}/#{single_comment.edited_at}/#{single_comment.updated_at}", expires_in: 1.week, skip_digest: true ) do %>
+      <% cache(single_comment, expires_in: 1.week) do %>
         <% # FRONT END, update this if a.user comes in %>
         <h4 class="heading byline">
           <% if single_comment.by_anonymous_creator? %>
@@ -49,6 +49,9 @@
         </div>
         <% unless single_comment.approved? %>
           <p class="notice"><%= ts("This comment has been marked as spam.") %></p>
+        <% end %>
+        <% if single_comment.hidden_by_admin? %>
+          <p class="notice"><%= ts("This comment has been hidden by an admin.") %></p>
         <% end %>
         <blockquote class="userstuff"><%=raw sanitize_field(single_comment, :comment_content) %></blockquote>
         <% unless single_comment.edited_at.blank? %>

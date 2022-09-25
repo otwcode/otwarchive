@@ -221,6 +221,11 @@ class Comment < ApplicationRecord
     end
   end
 
+  after_create :record_wrangling_activity, if: :on_tag?
+  def record_wrangling_activity
+    self.comment_owner&.update_last_wrangling_activity
+  end
+
   protected
 
     def notify_user_of_own_comments?(user)
@@ -460,6 +465,14 @@ class Comment < ApplicationRecord
   # Unfreeze single comment.
   def mark_unfrozen!
     update_attribute(:iced, false)
+  end
+
+  def mark_hidden!
+    update_attribute(:hidden_by_admin, true)
+  end
+
+  def mark_unhidden!
+    update_attribute(:hidden_by_admin, false)
   end
 
   def sanitized_content

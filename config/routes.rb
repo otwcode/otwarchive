@@ -67,10 +67,9 @@ Otwarchive::Application.routes.draw do
 
   resources :invitations
   resources :user_invite_requests
-  resources :invite_requests do
+  resources :invite_requests, only: [:index, :create, :destroy] do
     collection do
       get :manage
-      post :reorder
       get :status
     end
   end
@@ -92,7 +91,6 @@ Otwarchive::Application.routes.draw do
   resources :tag_wranglings do
     collection do
       post :wrangle
-      get :discuss
     end
   end
   resources :tag_wranglers
@@ -163,7 +161,7 @@ Otwarchive::Application.routes.draw do
         get :confirm_delete
       end
     end
-    resources :blacklisted_emails, only: [:index, :new, :create, :destroy]
+    resources :blacklisted_emails, only: [:index, :create, :destroy]
     resources :settings
     resources :skins do
       collection do
@@ -508,9 +506,11 @@ Otwarchive::Application.routes.draw do
     member do
       put :approve
       put :freeze
+      put :hide
       put :reject
       put :review
       put :unfreeze
+      put :unhide
     end
     collection do
       get :hide_comments

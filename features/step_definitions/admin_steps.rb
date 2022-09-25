@@ -239,8 +239,8 @@ When /^the invite_from_queue_at is yesterday$/ do
   AdminSetting.first.update_attribute(:invite_from_queue_at, Time.now - 1.day)
 end
 
-When /^the check_queue rake task is run$/ do
-  step %{I run the rake task "invitations:check_queue"}
+When "the scheduled check_invite_queue job is run" do
+  Resque.enqueue(AdminSetting, :check_queue)
 end
 
 When /^I edit known issues$/ do
@@ -397,30 +397,30 @@ When(/^the user "(.*?)" is unbanned in the background/) do |user|
   u.update_attribute(:banned, false)
 end
 
-Given(/^I have blacklisted the address "([^"]*)"$/) do |email|
+Given "I have banned the address {string}" do |email|
   visit admin_blacklisted_emails_url
-  fill_in("Email", with: email)
-  click_button("Add To Blacklist")
+  fill_in("Email to ban", with: email)
+  click_button("Ban Email")
 end
 
-Given(/^I have blacklisted the address for user "([^"]*)"$/) do |user|
+Given "I have banned the address for user {string}" do |user|
   visit admin_blacklisted_emails_url
   u = User.find_by(login: user)
   fill_in("admin_blacklisted_email_email", with: u.email)
-  click_button("Add To Blacklist")
+  click_button("Ban Email")
 end
 
-Then(/^the address "([^"]*)" should be in the blacklist$/) do |email|
+Then "the address {string} should be banned" do |email|
   visit admin_blacklisted_emails_url
   fill_in("Email to find", with: email)
-  click_button("Search Blacklist")
+  click_button("Search Banned Emails")
   assert page.should have_content(email)
 end
 
-Then(/^the address "([^"]*)" should not be in the blacklist$/) do |email|
+Then "the address {string} should not be banned" do |email|
   visit admin_blacklisted_emails_url
   fill_in("Email to find", with: email)
-  click_button("Search Blacklist")
+  click_button("Search Banned Emails")
   step %{I should see "0 emails found"}
 end
 

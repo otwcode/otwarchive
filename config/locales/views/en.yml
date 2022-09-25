@@ -23,10 +23,35 @@ en:
         external_work: "Make External Work Visible"
         series: "Make Series Visible"
         work: "Make Work Visible"
+    blacklisted_emails:
+      index:
+        browser_title: "Banned Emails"
+        page_heading: "Manage Banned Emails"
+        notes:
+          guest_comments: "Banned email addresses cannot be used in guest comments."
+          canonical_format: "All emails are stored in a single canonical format and common variants of the same address are not allowed (for instance, foo+whatever@bar.com will not be allowed if foo@bar.com is banned)."
+        heading:
+          new: "Ban email address"
+          search: "Find banned emails"
+        form:
+          new:
+            label: "Email to ban"
+            submit: "Ban Email"
+          search:
+            submit: "Search Banned Emails"
+        confirm_remove: "Are you sure you want to remove %{email} from the banned emails list?"
+      create:
+        browser_title: "Create Banned Email"
     blacklist:
       emails_found:
         one: "one email found"
         other: "%{count} emails found"
+    admin_invitations:
+      index:
+        page_heading: "Invite New Users"
+        navigation:
+          queue: "Manage Queue"
+          requests: "Manage Requests"
     settings:
       index:
         fields:
@@ -375,3 +400,26 @@ en:
   preferences:
     index:
       blocked_users: "Blocked Users"
+  invite_requests:
+    invite_request:
+      title: "Invitation Status for %{email}"
+      position_html: "You are currently number %{position} on our waiting list!"
+      date: "At our current rate, you should receive an invitation on or around: %{date}."
+  tag_wranglers:
+    show:
+      last_wrangled_html: "%{wrangler_login} last wrangled at %{time}."
+  pseuds:
+    delete_preview:
+      heading: "Pseud deletion"
+      notice: "When you delete your pseud, any works, series, or comments you have created under it will be transferred to your default pseud."
+      saved_bookmarks: 
+        one: "You have saved %{count} bookmark using this pseud. You can choose whether to delete it or transfer it to your default pseud."
+        other: "You have saved %{count} bookmarks using this pseud. You can choose whether to delete them or transfer them to your default pseud."
+      delete: 
+        one: "Delete this bookmark"
+        other: "Delete these bookmarks"
+      transfer: 
+        one: "Transfer this bookmark to the default pseud"
+        other: "Transfer these bookmarks to the default pseud"
+      confirm: "Are you sure? This can't be undone!"
+      cancel: "Cancel"

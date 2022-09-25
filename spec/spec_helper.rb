@@ -17,9 +17,6 @@ DatabaseCleaner.clean
 # in spec/support/ and its subdirectories.
 Dir[Rails.root.join("spec/support/**/*.rb")].sort.each { |f| require f }
 
-FactoryBot.find_definitions
-FactoryBot.definition_file_paths = %w[factories]
-
 RSpec.configure do |config|
   config.mock_with :rspec
 
@@ -60,6 +57,7 @@ RSpec.configure do |config|
   config.before :each do
     DatabaseCleaner.start
     User.current_user = nil
+    User.should_update_wrangling_activity = false
     clean_the_database
 
     # Clears used values for all generators.
@@ -127,6 +125,10 @@ RSpec.configure do |config|
 
   config.before :each, type: :controller do
     @request.host = "www.example.com"
+  end
+
+  config.before :each, :frozen do
+    freeze_time
   end
 
   # If you're not using ActiveRecord, or you'd prefer not to run each of your

@@ -410,7 +410,8 @@ Feature: Prompt Meme Challenge
     And the "Semi-anonymous Prompt" checkbox should be checked
 
   Scenario: Dates should be correctly set on PromptMemes
-    Given I am logged in as "mod1"
+    Given it is currently 2015-09-21 12:40 AM
+      And I am logged in as "mod1"
       And I have standard challenge tags set up
       And I have no prompts
     When I set up Battle 12 promptmeme collection
