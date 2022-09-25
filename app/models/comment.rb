@@ -221,6 +221,11 @@ class Comment < ApplicationRecord
     end
   end
 
+  after_create :record_wrangling_activity, if: :on_tag?
+  def record_wrangling_activity
+    self.comment_owner&.update_last_wrangling_activity
+  end
+
   protected
 
     def notify_user_of_own_comments?(user)
