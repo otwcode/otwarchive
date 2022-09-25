@@ -585,8 +585,8 @@ function thermometer() {
           stretch = true
         } else { stretch = false }
 
-        goal_amount = parseFloat(banner_goal_text.replace(/[^.0-9]/g, ''));
-        progress_amount = parseFloat(banner_progress_text.replace(/[^.0-9]/g, ''));
+        goal_amount = parseFloat(banner_goal_text.replace(/\.(?![0-9])|[^\.0-9]/g, ''));
+        progress_amount = parseFloat(banner_progress_text.replace(/\.(?![0-9])|[^\.0-9]/g, ''));
         percentage_amount = Math.min( Math.round(progress_amount / goal_amount * 1000) / 10, 100);
 
     // add thermometer markup (with amounts)
