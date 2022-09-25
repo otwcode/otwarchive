@@ -30,7 +30,11 @@ class Kudo < ApplicationRecord
   def cannot_be_suspended
     return unless user&.banned || user&.suspended
 
-    errors.add(:commentable, :banned_or_suspended)
+    if user.banned
+      errors.add(:commentable, :user_is_banned)
+    else
+      errors.add(:commentable, :user_is_suspended)
+    end
   end
 
   validates :ip_address,

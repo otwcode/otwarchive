@@ -32,7 +32,8 @@ en:
               author_on_own_work: "You can't leave kudos on your own work."
               blank: "What did you want to leave kudos on?"
               guest_on_restricted: "You can't leave guest kudos on a restricted work."
-              banned_or_suspended: "You cannot leave kudos while your account is suspended."
+              user_is_suspended: "You cannot leave kudos while your account is suspended."
+              user_is_banned: "You cannot leave kudos while your account is banned."
             commentable_type:
               inclusion: "What did you want to leave kudos on?"
           format: "%{message}"

@@ -178,7 +178,7 @@ describe KudosController do
       context "with format: :js" do
         it "returns an error in JSON format" do
           post :create, params: { kudo: { commentable_id: work.id, commentable_type: "Work" }, format: :js }
-          expect(JSON.parse(response.body)["error_message"]).to eq("You cannot leave kudos while your account is suspended.")
+          expect(JSON.parse(response.body)["error_message"]).to eq("You cannot leave kudos while your account is banned.")
         end
       end
     end
