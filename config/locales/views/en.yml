@@ -379,7 +379,7 @@ en:
   muted:
     mute: "Mute"
     unmute: "Unmute"
-    muted_items_notice: "You have muted some users in the Archive. Some items may not be shown, and any counts may be inaccurate. You can modify your muted users on %{muted_users_link}."
+    muted_items_notice: "You have muted some users in the Archive. Some items may not be shown, and any counts may be inaccurate. You can mute or unmute users on %{muted_users_link}."
     muted_users_link_text: "your Muted Users page"
     users:
       index:
@@ -393,7 +393,7 @@ en:
             muted_users: "Listing Muted Users"
         will:
           intro: "Muting a user:"
-          seeing_content: "hides their works, series, bookmarks, and comments from you; no placeholders will be added"
+          seeing_content: "completely hides their works, series, bookmarks, and comments from you; there will be no empty space, placeholder text, or other indication something has been removed"
         will_not:
           intro: "Muting a user will not:"
           prevent_emails: "prevent you from receiving comment or subscription emails from this user"
@@ -410,7 +410,7 @@ en:
         sure_html: "Are you sure you want to %{mute} %{username}?"
         will:
           intro: "Muting a user:"
-          seeing_content: "hides their works, series, bookmarks, and comments from you; no placeholders will be added"
+          seeing_content: "completely hides their works, series, bookmarks, and comments from you; there will be no empty space, placeholder text, or other indication something has been removed"
         will_not:
           intro: "Muting a user will not:"
           prevent_emails: "prevent you from receiving comment or subscription emails from this user"
