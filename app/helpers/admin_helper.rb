@@ -65,23 +65,13 @@ module AdminHelper
   end
 
   def admin_can_edit_user_role(role)
-    return false unless logged_in_as_admin?
     return true if current_admin.roles.include? "superadmin"
-
-    if current_admin.roles.include? "tag_wrangling"
-      return role.name == "tag_wrangler"
-    end
-
-    if current_admin.roles.include? "policy_and_abuse"
-      return role.name == "protected_user"
-    end
-
+    return role.name == "tag_wrangler" if current_admin.roles.include? "tag_wrangling"
+    return role.name == "protected_user" if current_admin.roles.include? "policy_and_abuse"
     if current_admin.roles.include? "open_doors"
-      return ["archivist", "opendoors"].include? role.name
+      return %w[archivist opendoors].include? role.name
     end
-
     return false
-
   end
 
   def admin_can_update_user_email?
