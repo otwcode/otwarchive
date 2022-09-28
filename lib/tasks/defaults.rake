@@ -10,7 +10,7 @@ namespace :defaults do
   task(remove_roles: :environment) do
     %w[translation_admin].each do |role|
       r = Role.find_by(name: role)
-      r.destroy unless r.nil?
+      r&.destroy
     end
   end
 end
