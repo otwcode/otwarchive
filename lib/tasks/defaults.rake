@@ -9,8 +9,8 @@ namespace :defaults do
   desc "Remove roles by name"
   task(remove_roles: :environment) do
     %w[translation_admin].each do |role|
-      r = Role.find_by_name(role)
-      r.destroy if !(r.nil?)
+      r = Role.find_by(name: role)
+      r.destroy unless r.nil?
     end
   end
 end
