@@ -5,4 +5,12 @@ namespace :defaults do
       Role.find_or_create_by(name: role)
     end
   end
+
+  desc "Remove roles by name"
+  task(remove_roles: :environment) do
+    %w[translation_admin].each do |role|
+      r = Role.find_by_name(role)
+      r.destroy if !(r.nil?)
+    end
+  end
 end
