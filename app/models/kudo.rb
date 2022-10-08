@@ -40,11 +40,13 @@ class Kudo < ApplicationRecord
   after_destroy :update_work_stats
   after_create :after_create, :update_work_stats
   def after_create
-    users = self.commentable.pseuds.map(&:user).uniq
+    if self.commentable.respond_to?(:pseuds)
+      users = self.commentable.pseuds.map(&:user).uniq 
 
-    users.each do |user|
-      if notify_user_by_email?(user)
-        RedisMailQueue.queue_kudo(user, self)
+      users.each do |user|
+        if notify_user_by_email?(user)
+          RedisMailQueue.queue_kudo(user, self)
+        end
       end
     end
   end
