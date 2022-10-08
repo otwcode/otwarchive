@@ -27,12 +27,13 @@
     <% if @admin_post %>
       <li><%= link_to ts('Back to AO3 News Index'), admin_posts_path %></li>
     <% end %>
-
-    <% if @work && !is_author_of?(@work) %>
+    
+    <% kudos_target = @work || @admin_post %>
+    <% if kudos_target && !is_author_of?(kudos_target) %>
       <li>
         <%= form_for(:kudo, url: kudos_path, html: { method: 'post', id: 'new_kudo' }) do |kudo_form| %>
-          <%= kudo_form.hidden_field :commentable_id, :value => @work.id %>
-          <%= kudo_form.hidden_field :commentable_type, :value => 'Work' %>
+          <%= kudo_form.hidden_field :commentable_id, :value => kudos_target.id %>
+          <%= kudo_form.hidden_field :commentable_type, :value => @admin_post ? 'AdminPost' : 'Work' %>
           <%= kudo_form.submit ts("Kudos ♥"), :id => 'kudo_submit' %>
         <% end %>
       </li>
@@ -66,8 +67,8 @@
   <div id="kudos_message"></div>
   <%= flash_div :kudos_error, :kudos_notice %>
 
-  <% if @work && (@chapter.blank? || @chapter.posted?) %>
-    <%= render "kudos/kudos", :kudos => @kudos, :guest_kudos_count => @work.guest_kudos_count, :commentable => @work %>
+  <% if kudos_target && (@chapter.blank? || @chapter.posted?) %>
+    <%= render "kudos/kudos", :kudos => @kudos, :guest_kudos_count => kudos_target.guest_kudos_count, :commentable => kudos_target %>
   <% end %>
 
 
