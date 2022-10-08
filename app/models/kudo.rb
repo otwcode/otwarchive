@@ -2,7 +2,7 @@ class Kudo < ApplicationRecord
   include ActiveModel::ForbiddenAttributesProtection
   include Responder
 
-  VALID_COMMENTABLE_TYPES = %w[Work].freeze
+  VALID_COMMENTABLE_TYPES = %w[Work AdminPost].freeze
 
   belongs_to :user
   belongs_to :commentable, polymorphic: true
@@ -56,6 +56,13 @@ class Kudo < ApplicationRecord
       Rails.cache.delete("works/#{commentable_id}/kudos_count-v2")
       # If it's a guest kudo, also expire the work's cached guest kudos count.
       Rails.cache.delete("works/#{commentable_id}/guest_kudos_count-v2") if user_id.nil?
+    end
+
+    if commentable_type == "AdminPost"
+      # Expire the admin post's cached total kudos count.
+      Rails.cache.delete("admin_posts/#{commentable_id}/kudos_count-v2")
+      # If it's a guest kudo, also expire the admin post's cached guest kudos count.
+      Rails.cache.delete("admin_posts/#{commentable_id}/guest_kudos_count-v2") if user_id.nil?
     end
 
     # Expire the cached kudos section under the work.
