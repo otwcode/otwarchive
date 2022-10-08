@@ -28,6 +28,7 @@ class AdminPostsController < Admin::BaseController
       @previous_admin_post = admin_posts.posted.order(published_at: :desc).where("published_at < ?", @admin_post.published_at).first
       @next_admin_post = admin_posts.posted.order(published_at: :asc).where("published_at > ?", @admin_post.published_at).first
       @page_subtitle = @admin_post.title.html_safe
+      @kudos = @admin_post.kudos.with_user.includes(:user).order(created_at: :desc)
     else
       @admin_posts = admin_posts.unposted.order(created_at: :desc).limit(8)
       @previous_admin_post = admin_posts.unposted.order(created_at: :desc).where("created_at < ?", @admin_post.created_at).first

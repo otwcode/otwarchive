@@ -8,6 +8,8 @@ class AdminPost < ApplicationRecord
     disable_all: 2
   }, default: :disable_anon, suffix: :comments, validate: { message: :invalid_permissions }
 
+  has_many :kudos, as: :commentable, inverse_of: :commentable, dependent: :destroy
+
   belongs_to :language
   belongs_to :translated_post, class_name: "AdminPost"
   has_many :translations, class_name: "AdminPost", foreign_key: "translated_post_id", dependent: :destroy
@@ -90,6 +92,18 @@ class AdminPost < ApplicationRecord
   def translated_post_must_exist
     if translated_post_id.present? && AdminPost.find_by(id: translated_post_id).nil?
       errors.add(:translated_post_id, "does not exist")
+    end
+  end
+  
+  def guest_kudos_count
+    Rails.cache.fetch "admin_posts/#{id}/guest_kudos_count-v2" do
+      kudos.by_guest.count
+    end
+  end
+
+  def all_kudos_count
+    Rails.cache.fetch "admin_posts/#{id}/kudos_count-v2" do
+      kudos.count
     end
   end
 

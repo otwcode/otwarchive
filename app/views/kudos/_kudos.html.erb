@@ -14,7 +14,7 @@
           <% end %>
           <%= ts(pluralize(guest_kudos_count, "guest")) %>
         <% end %>
-        <%= ts(" left kudos on this work!") %>
+        <%= ts(" left kudos on this #{commentable.is_a?(AdminPost) ? "post" : "work"}!") %>
       </p>
     <% end %>
   <% end %>
