@@ -4,7 +4,7 @@ class AdminPost < ApplicationRecord
   self.per_page = 8 # option for WillPaginate
 
   acts_as_commentable
-  has_many :kudos, as: :commentable, dependent: :destroy
+  has_many :kudos, as: :commentable, inverse_of: :commentable, dependent: :destroy
   enum comment_permissions: {
     enable_all: 0,
     disable_anon: 1,
