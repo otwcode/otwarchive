@@ -33,7 +33,7 @@ class AdminPostsController < Admin::BaseController
     @previous_admin_post = admin_posts.order('created_at DESC').where('created_at < ?', @admin_post.created_at).first
     @next_admin_post = admin_posts.order('created_at ASC').where('created_at > ?', @admin_post.created_at).first
     @page_subtitle = @admin_post.title.html_safe
-    @kudos = @admin_post.kudos.with_user.includes(:user).order('created_at DESC')
+    @kudos = @admin_post.kudos.with_user.includes(:user).order("created_at DESC")
     respond_to do |format|
       format.html # show.html.erb
       format.js
