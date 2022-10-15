@@ -239,11 +239,11 @@ GEM
     escape_utils (1.2.1)
     et-orbi (1.2.6)
       tzinfo
-    factory_bot (5.0.2)
-      activesupport (>= 4.2.0)
-    factory_bot_rails (5.0.2)
-      factory_bot (~> 5.0.2)
-      railties (>= 4.2.0)
+    factory_bot (6.2.1)
+      activesupport (>= 5.0.0)
+    factory_bot_rails (6.2.0)
+      factory_bot (~> 6.2.0)
+      railties (>= 5.0.0)
     faker (2.19.0)
       i18n (>= 1.6, < 2)
     faraday (1.9.3)
@@ -340,7 +340,7 @@ GEM
     multipart-post (2.1.1)
     mustermann (1.1.1)
       ruby2_keywords (~> 0.0.1)
-    mysql2 (0.5.2)
+    mysql2 (0.5.4)
     n_plus_one_control (0.6.2)
     net-http-digest_auth (1.4.1)
     net-http-persistent (4.0.1)
@@ -535,11 +535,6 @@ GEM
     tilt (2.0.10)
     timecop (0.9.4)
     timeliness (0.4.4)
-    transaction_isolation (1.0.5)
-      activerecord (>= 3.0.11)
-    transaction_retry (1.0.3)
-      activerecord (>= 3.0.11)
-      transaction_isolation (>= 1.0.2)
     tzinfo (1.2.10)
       thread_safe (~> 0.1)
     unf (0.1.4)
@@ -558,8 +553,8 @@ GEM
       rack (>= 1.0.0)
     warden (1.2.9)
       rack (>= 2.0.9)
-    webmock (3.7.6)
-      addressable (>= 2.3.6)
+    webmock (3.18.1)
+      addressable (>= 2.8.0)
       crack (>= 0.3.2)
       hashdiff (>= 0.4.0, < 2.0.0)
     webrick (1.7.0)
@@ -631,7 +626,7 @@ DEPENDENCIES
   mechanize
   mimemagic (= 0.3.10)
   minitest
-  mysql2 (= 0.5.2)
+  mysql2
   n_plus_one_control
   newrelic_rpm
   nokogiri (>= 1.8.5)
@@ -667,20 +662,18 @@ DEPENDENCIES
   test-unit (~> 3.2)
   timecop
   timeliness
-  transaction_isolation (= 1.0.5)
-  transaction_retry
   unicode
   unicode_utils (>= 1.4.0)
   unicorn (~> 5.5)
   unidecoder
   vcr (~> 3.0, >= 3.0.1)
-  webmock (~> 3.7.6)
+  webmock
   whenever (~> 0.6.2)
   whiny_validation
   will_paginate (>= 3.0.2)
 
 RUBY VERSION
-   ruby 2.7.3p183
+   ruby 3.0.4p208
 
 BUNDLED WITH
-   2.1.4
+   2.2.33
