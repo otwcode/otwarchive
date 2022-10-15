@@ -28,21 +28,20 @@ module ActiveRecord #:nodoc:
       begin
         ActiveRecord::Base.connection
         I18n.translate_string(str, **options)
-      rescue
-        str || ''
+      rescue StandardError
+        str || ""
       end
     end
 
     alias :ts :translate_string
 
     class << Base
-
       def translate_string(str, **options)
         begin
           ActiveRecord::Base.connection
           I18n.translate_string(str, **options)
-        rescue
-          str || ''
+        rescue StandardError
+          str || ""
         end
       end
 
@@ -57,8 +56,8 @@ module ActionMailer #:nodoc:
       begin
         ActiveRecord::Base.connection
         I18n.translate_string(str, **options)
-      rescue
-        str || ''
+      rescue StandardError
+        str || ""
       end
     end
 
