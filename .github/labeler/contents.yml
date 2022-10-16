@@ -11,4 +11,4 @@
 
 "Scope: Tests Only":
   - all:
-    - "+(factories|features|spec|test|.github)/**/*"
+    - "{factories,features,spec,test,.github}/**/*"
