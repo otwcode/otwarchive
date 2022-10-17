@@ -1,5 +1,63 @@
 ---
 fa:
+  activerecord:
+    attributes:
+      archive_warning:
+        name_with_colon:
+          one: 'هشدار:'
+          other: 'هشدارها:'
+      category:
+        name_with_colon:
+          one: 'دسته:'
+          other: 'دسته ها:'
+      character:
+        name_with_colon:
+          one: 'شخصیت:'
+          other: 'شخصیت ها:'
+      fandom:
+        name_with_colon:
+          one: 'فندوم:'
+          other: 'فندوم ها:'
+      freeform:
+        name_with_colon:
+          one: 'تگ اضافی:'
+          other: تگ های اضافی
+      rating:
+        name_with_colon: 'رتبه بندی:'
+      relationship:
+        name_with_colon:
+          one: 'رابطه:'
+          other: 'روابط:'
+      work:
+        summary: خلاصه
+    models:
+      archive_warning:
+        one: هشدار
+        other: هشدارها
+      category:
+        one: دسته
+        other: دسته ها
+      chapter:
+        one: فصل
+        other: فصل ها
+      character:
+        one: شخصیت
+        other: شخصیت ها
+      fandom:
+        one: فندوم
+        other: فندوم ها
+      freeform:
+        one: تگ اضافی
+        other: تگ های اضافی
+      rating:
+        one: رتبه بندی
+        other: رتبه بندی ها
+      relationship:
+        one: رابطه
+        other: روابط
+      series:
+        one: سری
+        other: سری ها
   kudo_mailer:
     batch_kudo_notification:
       guest:
@@ -25,6 +83,12 @@ fa:
       closing:
         formal: با احترام،
         informal: با آرزوی بهترین ها،
+      creation:
+        link_with_word_count: "(%{word_count}) %{creation_link}"
+        title_with_word_count: (%{word_count}) "%{creation_title}"
+        word_count:
+          one: کلمه %{count}
+          other: کلمه %{count}
       footer:
         general:
           html:
@@ -45,6 +109,7 @@ fa:
           addressed: سلام، %{name}!
           unaddressed: سلام!
         introductory: سلامی از Archive of Our Own – AO3 (آرشیوی از آن خودمان)!
+      metadata_label_indicator: ":"
       signature:
         app_short_name: AO3
         open_doors: تیم Open Doors (درهای باز)

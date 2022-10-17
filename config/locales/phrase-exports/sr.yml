@@ -224,27 +224,27 @@ sr:
             %{work_link} на неоткривено.
           text: Одржаваоци "%{collection_title}" (%{collection_url}) збирке су променили
             статус Вашег дела "%{work_title}" (%{work_url}) на неоткривено.
-      collection_items_link_text: Approved Collection Items page (Страницу одобрених
-        предмета из збирке)
+      collection_items_link_text: страницу Approved Collection Items (Одобрени предмети
+        из збирке)
       do_not_want:
         anonymous:
           html: Ако не желите да Ваше дело буде анонимно, молимо Вас да посетите Вашу
             %{collection_items_link} како бисте га уклонили из ове збирке.
           text: 'Ако не желите да Ваше дело буде анонимно, молимо Вас да посетите
-            Вашу Approved Collection Items page (Страницу одобрених предмета из збирке)
+            Вашу страницу Approved Collection Items (Одобрени предмети из збирке)
             како бисте га уклонили из ове збирке: %{collection_items_url}'
         anonymous_unrevealed:
           html: Ако не желите да Ваше дело буде анонимно и неоткривено, молимо Вас
             да посетите Вашу %{collection_items_link} како бисте га уклонили из ове
             збирке.
           text: 'Ако не желите да Ваше дело буде анонимно и неоткривено, молимо Вас
-            да посетите Вашу Approved Collection Items page (Страницу одобрених предмета
+            да посетите Вашу страницу Approved Collection Items (Одобрени предмети
             из збирке) како бисте га уклонили из ове збирке: %{collection_items_url}'
         unrevealed:
           html: Ако не желите да Ваше дело буде неоткривено, молимо Вас да посетите
             Вашу %{collection_items_link} како бисте га уклонили из ове збирке.
           text: 'Ако не желите да Ваше дело буде неоткривено, молимо Вас да посетите
-            Вашу Approved Collection Items page (Страницу одобрених предмета из збирке)
+            Вашу страницу Approved Collection Items (Одобрени предмети из збирке)
             како бисте га уклонили из ове збирке: %{collection_items_url}'
       faq_link_text: Често постављена питања о збиркама
       more_info:
@@ -273,7 +273,7 @@ sr:
           Our Own – AO3-у (Нашој сопственој архиви)!
       optional_tags: 'Произвољни тагови:'
       prompts: 'Идеје:'
-      prompt_url: 'URL идеје:'
+      prompt_url: 'Веб-адреса идеје:'
       recipient: 'Прималац:'
       recipient_missing: 'Непознат: за помоћ, контактирајте модератора!'
       subject: "[%{app_name}][%{collection_title}] Ваш задатак!"
