@@ -121,7 +121,7 @@ bn:
     collection_notification:
       assignments_sent:
         complete: সব অ্যাসাইনমেন্ট পাঠানো হয়ে গেছে।
-        subject: "[%{app_name}][%{collection_title}] অ্যাসাইনমেন্ট পাঠানো হয়েছে"
+        subject: অ্যাসাইনমেন্ট পাঠানো হয়েছে
       html:
         received_message: 'আপনার সংগ্রহ সম্পর্কে আপনি একটি বার্তা পেয়েছেন %{collection_link}:'
       text:
