@@ -2,7 +2,7 @@
 "Coder Has Actioned Review":
   - "**/*"
   - ".*"
-  - ".**/*"
+  - ".*/**/*"
 
 # Label to be removed when the PR is updated:
 "Reviewed: Action Needed": []
