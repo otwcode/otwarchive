@@ -161,7 +161,7 @@ jobs:
 
       - name: Upload failure screenshots
         if: ${{ failure() && matrix.tests.command == 'cucumber' }}
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: test failures ${{ hashFiles('tmp/capybara/*') }}
           path: tmp/capybara
