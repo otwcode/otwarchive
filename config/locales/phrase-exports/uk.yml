@@ -4,45 +4,75 @@ uk:
     attributes:
       archive_warning:
         name_with_colon:
-          one: 'few (2-4; 22-24 ...): Попередження:'
+          few: 'Попередження:'
+          many: 'Попередження:'
+          one: 'Попередження:'
       category:
         name_with_colon:
-          one: 'few (2-4; 22-24 ...): Категорії:'
+          few: 'Категорії:'
+          many: 'Категорії:'
+          one: 'Категорія:'
       character:
         name_with_colon:
-          one: 'few (2-4; 22-24 ...): Персонажі:'
+          few: 'Персонажі:'
+          many: 'Персонажі:'
+          one: 'Персонаж:'
       fandom:
         name_with_colon:
-          one: 'few (2-4; 22-24 ...): Фандоми:'
+          few: 'Фандоми:'
+          many: 'Фандоми:'
+          one: 'Фандом:'
       freeform:
         name_with_colon:
-          one: 'few (2-4; 22-24 ...): Додаткові теги:'
+          few: 'Додаткові теги:'
+          many: 'Додаткові теги:'
+          one: 'Додатковий тег:'
       rating:
         name_with_colon: 'Рейтинг:'
       relationship:
         name_with_colon:
-          one: 'few (2-4; 22-24 ...): Стосунки:'
+          few: 'Стосунки:'
+          many: 'Стосунки:'
+          one: 'Стосунки:'
       work:
         summary: Опис
     models:
       archive_warning:
-        one: 'few (2-4; 22-24 ...): Попередження'
+        few: Попередження
+        many: Попередження
+        one: Попередження
       category:
-        one: 'few (2-4; 22-24 ...): Категорії'
+        few: Категорії
+        many: Категорії
+        one: Категорія
       chapter:
-        one: 'few (2-4; 22-24 ...): Розділи'
+        few: Розділи
+        many: Розділи
+        one: Розділ
       character:
-        one: 'few (2-4; 22-24 ...): Персонаж'
+        few: Персонаж
+        many: Персонажі
+        one: Персонаж
       fandom:
-        one: 'few (2-4; 22-24 ...): Фандоми'
+        few: Фандоми
+        many: Фандоми
+        one: Фандом
       freeform:
-        one: 'few (2-4; 22-24 ...): Додаткові теги'
+        few: Додаткові теги
+        many: Додаткові теги
+        one: Додатковий тег
       rating:
-        one: 'few (2-4; 22-24 ...): Рейтинги'
+        few: Рейтинги
+        many: Рейтинги
+        one: Рейтинг
       relationship:
-        one: 'few (2-4; 22-24 ...): Стосунки'
+        few: Стосунки
+        many: Стосунки
+        one: Стосунки
       series:
-        one: 'few (2-4; 22-24 ...): Серії'
+        few: Серії
+        many: Серії
+        one: Серія
   kudo_mailer:
     batch_kudo_notification:
       guest:
@@ -74,9 +104,9 @@ uk:
         link_with_word_count: "%{creation_link} (%{word_count})"
         title_with_word_count: '"%{creation_title}" (%{word_count})'
         word_count:
-          few: слова
-          many: слів
-          one: 'few (2-4; 22-24 ...): слова'
+          few: "%{count} слова"
+          many: "%{count} слів"
+          one: "%{count} слово"
       footer:
         general:
           html:

@@ -89,7 +89,7 @@ vi:
           addressed: Xin chào, %{name}!
           unaddressed: Xin chào!
         introductory: Hello from the Archive of Our Own – AO3 (Xin gửi lời chào từ
-          Kho Tàng Lưu Trữ của Chúng Ta – AO3)!
+          Kho Tàng Lưu Trữ của Chúng Ta)!
       metadata_label_indicator: ":"
       signature:
         app_short_name: AO3
