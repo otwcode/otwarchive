@@ -27,8 +27,6 @@ module MuteHelper
   end
 
   def user_has_muted_users?
-
     !current_user.muted_users.empty? if current_user
-
   end
 end
