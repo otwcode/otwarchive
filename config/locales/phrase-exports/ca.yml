@@ -99,7 +99,7 @@ ca:
             part1: Si has rebut aquest missatge per error, contacta amb Suport a %{support_url}.
             part2: 'L''AO3 és un arxiu gestionat i mantingut per fans que sobreviu
               gràcies a les vostres donacions: %{donate_url}.'
-        sent_at: Enviat a les %{sent_at}.
+        sent_at: Enviat el %{sent_at}.
       greeting:
         formal: Estimat/da %{name},
         informal:
@@ -276,8 +276,9 @@ ca:
         look_up: Pots consultar aquesta tasca a la teva pàgina d'Assignments (Tasques)
           a %{link}.
     change_email:
-      part1: "%{login}, l'email associat amb aquest compte ha canviat a %{email}"
-      subject: "[%{app_name}] Canvi d'email"
+      part1: "%{login}, l'adreça electrònica associada amb aquest compte ha canviat
+        a %{email}"
+      subject: "[%{app_name}] Canvi d'adreça electrònica"
     collection_notification:
       assignments_sent:
         complete: S'han enviat totes les tasques.

@@ -256,7 +256,7 @@ sv:
       prompt_url: 'Prompt-URL:'
       recipient: 'Mottagare:'
       recipient_missing: 'Ingen: kontakta en moderator för att få hjälp!'
-      subject: "[%{app_name}][%{collection_title}] Ditt Uppdrag!"
+      subject: "[%{app_name}][%{collection_title}] Ditt uppdrag!"
       text:
         assignment: Du har blivit tilldelad följande förfrågan i "%{collection_title}"
           (%{collection_url}) -utmaningen på AO3!
@@ -347,8 +347,8 @@ sv:
         att listas som medskapare på följande kapitel:'
       intro_series: 'Användaren %{inviting_user} har bjudit in din pseud %{pseud}
         att listas som medskapare på följande serier:'
-      intro_work: 'Användaren %{inviting_user} har bjudit in din pseud %{pseud} att
-        listas som medskapare på följande verk:'
+      intro_work: 'Användaren %{inviting_user} har bjudit in din pseudonym %{pseud}
+        att listas som medskapare på följande verk:'
       subject: "[%{app_name}] Medskaparförfrågan"
       text:
         creation: "%{title} (%{url}) av %{pseuds}"
