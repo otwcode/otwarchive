@@ -1,4 +1,6 @@
 en:
+  a11y:
+    navigation: "Navigation"
   admin:
     admin_options:
       delete:
