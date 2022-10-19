@@ -27,8 +27,8 @@ module MuteHelper
   end
 
   def user_has_muted_users?
-    return unless current_user
 
-    !Rails.cache.fetch("muted/#{current_user.id}/mute_css").nil?
+    !current_user.muted_users.empty? if current_user
+
   end
 end
