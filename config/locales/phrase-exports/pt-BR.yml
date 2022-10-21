@@ -979,7 +979,3 @@ pt-BR:
         allow_blank: deveria ter o formato de um endereço de e-mail. Por favor utilize
           um endereço diferente ou deixe em branco.
         no_blank: deveria ter o formato de um endereço de e-mail.
-      veracity:
-        allow_blank: parece não ser um endereço válido. Por favor utilize um endereço
-          diferente ou deixe em branco.
-        no_blank: parece não ser um endereço válido

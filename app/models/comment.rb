@@ -15,7 +15,7 @@ class Comment < ApplicationRecord
   has_many :thread_comments, class_name: 'Comment', foreign_key: :thread
 
   validates_presence_of :name, unless: :pseud_id
-  validates :email, email_veracity: {on: :create, unless: :pseud_id}, email_blacklist: {on: :create, unless: :pseud_id}
+  validates :email, email_format: { on: :create, unless: :pseud_id }, email_blacklist: { on: :create, unless: :pseud_id }
 
   validates_presence_of :comment_content
   validates_length_of :comment_content,

@@ -1,7 +1,7 @@
 class InviteRequest < ApplicationRecord
   self.ignored_columns = [:position]
 
-  validates :email, presence: true, email_veracity: true
+  validates :email, presence: true, email_format: true
   validates_uniqueness_of :email, message: "is already part of our queue.", case_sensitive: false
   before_validation :compare_with_users, on: :create
   before_validation :set_simplified_email, on: :create

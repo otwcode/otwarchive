@@ -18,7 +18,7 @@ class ExternalAuthor < ApplicationRecord
   validates_uniqueness_of :email, case_sensitive: false, allow_blank: true,
     message: ts('There is already an external author with that email.')
 
-  validates :email, email_veracity: true
+  validates :email, email_format: true
 
   def self.claimed
     where(is_claimed: true)
