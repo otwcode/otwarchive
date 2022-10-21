@@ -42,6 +42,9 @@ class User < ApplicationRecord
 
   has_many :favorite_tags, dependent: :destroy
 
+  has_one :default_pseud, -> { where(is_default: true) }, class_name: "Pseud", inverse_of: :user
+  delegate :id, to: :default_pseud, prefix: true
+
   has_many :pseuds, dependent: :destroy
   validates_associated :pseuds
 
@@ -51,14 +54,32 @@ class User < ApplicationRecord
   has_one :preference, dependent: :destroy
   validates_associated :preference
 
+  has_many :blocks_as_blocked, class_name: "Block", dependent: :delete_all, inverse_of: :blocked, foreign_key: :blocked_id
+  has_many :blocks_as_blocker, class_name: "Block", dependent: :delete_all, inverse_of: :blocker, foreign_key: :blocker_id
+  has_many :blocked_users, through: :blocks_as_blocker, source: :blocked
+
+  # The block (if it exists) with this user as the blocker and
+  # User.current_user as the blocked:
+  has_one :block_of_current_user,
+          -> { where(blocked: User.current_user) },
+          class_name: "Block", foreign_key: :blocker_id, inverse_of: :blocker
+
+  # The block (if it exists) with User.current_user as the blocker and this
+  # user as the blocked:
+  has_one :block_by_current_user,
+          -> { where(blocker: User.current_user) },
+          class_name: "Block", foreign_key: :blocked_id, inverse_of: :blocked
+
   has_many :skins, foreign_key: "author_id", dependent: :nullify
   has_many :work_skins, foreign_key: "author_id", dependent: :nullify
 
   before_create :create_default_associateds
   before_destroy :remove_user_from_kudos
 
+  before_update :add_renamed_at, if: :will_save_change_to_login?
   after_update :update_pseud_name
   after_update :log_change_if_login_was_edited
+  after_update :log_email_change, if: :saved_change_to_email?
 
   after_commit :reindex_user_creations_after_rename
 
@@ -112,9 +133,11 @@ class User < ApplicationRecord
            through: :followings,
            source: :user
 
+  thread_cattr_accessor :should_update_wrangling_activity
   has_many :wrangling_assignments, dependent: :destroy
   has_many :fandoms, through: :wrangling_assignments
   has_many :wrangled_tags, class_name: "Tag", as: :last_wrangler
+  has_one :last_wrangling_activity, dependent: :destroy
 
   has_many :inbox_comments, dependent: :destroy
   has_many :feedback_comments, -> { where(is_deleted: false, approved: true).order(created_at: :desc) }, through: :inbox_comments
@@ -174,8 +197,9 @@ class User < ApplicationRecord
                       message: ts("must begin and end with a letter or number; it may also contain underscores but no other characters."),
                       with: /\A[A-Za-z0-9]\w*[A-Za-z0-9]\Z/
   validates_uniqueness_of :login, case_sensitive: false, message: ts("has already been taken")
+  validate :login, :username_is_not_recently_changed, if: :will_save_change_to_login?
 
-  validates :email, email_veracity: true, email_format: true
+  validates :email, email_veracity: true, email_format: true, uniqueness: { case_sensitive: false }
 
   # Virtual attribute for age check and terms of service
     attr_accessor :age_over_13
@@ -291,6 +315,10 @@ class User < ApplicationRecord
     self.preference = Preference.new(preferred_locale: Locale.default.id)
   end
 
+  def prevent_password_resets?
+    is_protected_user? || no_resets?
+  end
+
   protected
     def first_save?
       self.new_record?
@@ -325,23 +353,14 @@ class User < ApplicationRecord
       destroy_all
   end
 
-  # Retrieve the current default pseud
-  def default_pseud
-    self.pseuds.where(is_default: true).first
-  end
-
-  def default_pseud_id
-    pseuds.where(is_default: true).pluck(:id).first
-  end
-
   # Checks authorship of any sort of object
   def is_author_of?(item)
     if item.respond_to?(:pseud_id)
-      pseuds.pluck(:id).include?(item.pseud_id)
+      pseud_ids.include?(item.pseud_id)
     elsif item.respond_to?(:user_id)
       id == item.user_id
     elsif item.respond_to?(:pseuds)
-      !(pseuds.pluck(:id) & item.pseuds.pluck(:id)).empty?
+      item.pseuds.pluck(:user_id).include?(id)
     elsif item.respond_to?(:author)
       self == item.author
     elsif item.respond_to?(:creator_id)
@@ -388,9 +407,13 @@ class User < ApplicationRecord
     has_role?(:archivist)
   end
 
+  # Is this user an authorized official?
+  def official
+    has_role?(:official)
+  end
+
   # Is this user a protected user? These are users experiencing certain types
-  # of harassment. For now, this is only used to prevent harassment via repeated
-  # password reset requests.
+  # of harassment.
   def protected_user
     self.is_protected_user?
   end
@@ -399,10 +422,23 @@ class User < ApplicationRecord
     has_role?(:protected_user)
   end
 
+  # Is this user assigned the no resets role? These users do not wish to receive
+  # password resets.
+  def no_resets?
+    has_role?(:no_resets)
+  end
+
   # Creates log item tracking changes to user
   def create_log_item(options = {})
     options.reverse_merge! note: "System Generated", user_id: self.id
     LogItem.create(options)
+  end
+
+  def update_last_wrangling_activity
+    return unless is_tag_wrangler?
+
+    last_activity = LastWranglingActivity.find_or_create_by(user: self)
+    last_activity.touch
   end
 
   # Returns true if user is the sole author of a work
@@ -521,13 +557,36 @@ class User < ApplicationRecord
     reindex_user_creations
   end
 
-   def log_change_if_login_was_edited
-     create_log_item(options = { action: ArchiveConfig.ACTION_RENAME, note: "Old Username: #{login_before_last_save}; New Username: #{login}" }) if saved_change_to_login?
-   end
+  def add_renamed_at
+    self.renamed_at = Time.current
+  end
+
+  def log_change_if_login_was_edited
+    create_log_item(action: ArchiveConfig.ACTION_RENAME, note: "Old Username: #{login_before_last_save}; New Username: #{login}") if saved_change_to_login?
+  end
+
+  def log_email_change
+    current_admin = User.current_user if User.current_user.is_a?(Admin)
+    options = {
+      action: ArchiveConfig.ACTION_NEW_EMAIL,
+      admin_id: current_admin&.id
+    }
+    options[:note] = "Change made by #{current_admin&.login}" if current_admin
+    create_log_item(options)
+  end
 
   def remove_stale_from_autocomplete
     Rails.logger.debug "Removing stale from autocomplete: #{autocomplete_search_string_was}"
     self.class.remove_from_autocomplete(self.autocomplete_search_string_was, self.autocomplete_prefixes, self.autocomplete_value_was)
   end
 
+  def username_is_not_recently_changed
+    change_interval_days = ArchiveConfig.USER_RENAME_LIMIT_DAYS
+    return unless renamed_at && change_interval_days.days.ago <= renamed_at
+
+    errors.add(:login,
+               :changed_too_recently,
+               count: change_interval_days,
+               renamed_at: I18n.l(renamed_at, format: :long))
+  end
 end

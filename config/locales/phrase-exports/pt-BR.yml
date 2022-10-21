@@ -113,13 +113,15 @@ pt-BR:
         sub_tag: Subtag
         sub_tag_id: Subtag
       rating:
-        name_with_colon: 'Classificação etária:'
+        name_with_colon: 'Classificação:'
       relationship:
         name_with_colon:
           one: 'Relacionamento:'
           other: 'Relacionamentos:'
       series/creatorships:
         base: 'Nome de artista inválido:'
+      work:
+        summary: Sumário
       work/chapters:
         base: 'Capítulo inválido:'
         content: Conteúdo
@@ -138,11 +140,14 @@ pt-BR:
     models:
       archive_warning:
         one: Advertência
-        other: Advertência
+        other: Advertências
       bookmark: Favoritar
       category:
         one: Categoria
         other: Categorias
+      chapter:
+        one: Capítulo
+        other: Capítulos
       character:
         one: Personagem
         other: Personagens
@@ -154,9 +159,15 @@ pt-BR:
         one: Tag adicional
         other: Tags adicionais
       pseud: Pseudônimo
+      rating:
+        one: Classificação
+        other: Classificação
       relationship:
         one: Relacionamento
         other: Relacionamentos
+      series:
+        one: Série
+        other: Séries
       tag:
         one: Tag
         other: Tags
@@ -402,6 +413,24 @@ pt-BR:
       more_link:
         one: mais %{count} usuárie
         other: mais %{count} usuáries
+  kudo_mailer:
+    batch_kudo_notification:
+      guest:
+        one: 1 visitante
+        other: "%{count} visitantes"
+      html:
+        left_kudos:
+          one: "%{givers_list} deixou kudos em %{commentable_link}."
+          other: "%{givers_list} deixaram kudos em %{commentable_link}."
+        single_guest:
+          giver_list: 1 visitante
+          left_kudos: "%{giver_list} deixou kudos em %{commentable_link}."
+      subject: "[%{app_name}] Kudos pra você!"
+      text:
+        left_kudos:
+          one: "%{givers_list} deixou kudos em %{commentable_title} (%{commentable_url})."
+          other: "%{givers_list} deixaram kudos em %{commentable_title} (%{commentable_url})."
+        single_guest: 1 visitante deixou kudos em %{commentable_title} (%{commentable_url}).
   layouts:
     proxy_notice:
       button: Desabilitar aviso
@@ -416,6 +445,12 @@ pt-BR:
       closing:
         formal: Atenciosamente,
         informal: Atenciosamente,
+      creation:
+        link_with_word_count: "%{creation_link} (%{word_count})"
+        title_with_word_count: '"%{creation_title}" (%{word_count})'
+        word_count:
+          one: "%{count} palavra"
+          other: "%{count} palavras"
       footer:
         general:
           html:
@@ -427,33 +462,21 @@ pt-BR:
             part1: 'Se você recebeu essa mensagem por engano, por favor entre em contato
               com a nossa equipe de Suporte: %{support_url}.'
             part2: 'O AO3 é um arquivo que depende do trabalho voluntário e das doações
-              de fãs:  %{donate_url}.'
-        sent_at: Enviado às %{sent_at}.
+              de fãs: %{donate_url}.'
+        sent_at: Enviado %{sent_at}.
       greeting:
         formal: Olá, %{name},
         informal:
           addressed: Oi, %{name}!
           unaddressed: Oi!
-        introductory: Olá! Aqui é o Archive of Our Own  – AO3 (Nosso Próprio Arquivo).
+        introductory: Olá! Aqui é o Archive of Our Own – AO3 (Nosso Próprio Arquivo).
+      metadata_label_indicator: ": "
       signature:
         app_short_name: AO3
         open_doors: Equipe do Open Doors (Portas Abertas)
         parent_org: Organization for Transformative Works – OTW (Organização para
           Obras Transformativas)
         support: Equipe de Suporte do AO3
-    kudos:
-      guest:
-        one: 1 visitante
-        other: "%{count} visitantes"
-      html:
-        left_kudos:
-          one: "%{givers_list} deixou kudos em %{commentable_link}."
-          other: "%{givers_list} deixaram kudos em %{commentable_link}."
-      text:
-        left_kudos:
-          one: "%{givers_list} deixou kudos em %{commentable_link}."
-          other: "%{givers_list} deixaram kudos em %{commentable_link}."
-      you_have: "[%{app_name}] Kudos pra você!"
   skins:
     confirm_delete:
       confirm_html: Tem certeza que quer <strong><em>apagar</em></strong> a skin "%{skin_title}"?
@@ -576,34 +599,34 @@ pt-BR:
     admin_hidden_work_notification:
       access: Enquanto sua obra estiver oculta, você poderá acessá-la através do link
         fornecido acima, mas ela não aparecerá na sua página de obras e não estará
-        disponível para outras pessoas que acessem o AO3.
-      check_email: Por favor, cheque seu e-mail, incluindo sua pasta de spam, pois
-        a equipe do Diretrizes e Abuso já pode ter entrado em contato para explicar
-        por que sua obra foi oculta.
+        disponível para quem visitar o AO3.
+      check_email: Por favor, cheque seu e-mail, inclusive sua pasta de spam, pois
+        a equipe de Diretrizes e Abuso já pode ter entrado em contato para explicar
+        a razão dessa medida.
       contact_abuse: entre em contato com a equipe de Diretrizes e Abuso
       html:
-        help: Se não tiver certeza do motivo da sua obra ter sido ocultada e não tiver
-          recebido outros comunicados em relação a este assunto, por favor %{contact_abuse_link}
-          diretamente.
-        hidden: Sua obra %{title} foi oculta pela equipe de Diretrizes e Abuso e não
+        help: Se não tiver certeza do motivo dessa decisão e não tiver recebido outros
+          comunicados em relação a este assunto, por favor %{contact_abuse_link} diretamente.
+        hidden: A equipe de Diretrizes e Abuso ocultou sua obra %{title} e ela não
           está mais publicamente acessível.
-        tos_violation: Caso sua obra tenha sido oculta por violar os %{tos_link} do
-          AO3, é necessário que você corrija a infração. A não adequação da sua obra
-          aos Termos de Serviço pode levar à exclusão da mesma do AO3.
-      subject: "[%{app_name}] Sua obra foi oculta pela equipe de Diretrizes e Abuso"
+        tos_violation: Caso isso tenha ocorrido por sua obra violar os %{tos_link}
+          do AO3, é necessário que você corrija a infração. A não adequação da sua
+          obra aos Termos de Serviço pode fazer com que ela seja removida do AO3.
+      subject: "[%{app_name}] A equipe de Diretrizes e Abuso ocultou sua obra"
       text:
-        help: 'Se não tiver certeza do motivo da sua obra ter sido ocultada e não
-          tiver recebido outros comunicados em relação a este assunto, por favor entre
-          em contato com a equipe de Diretrizes e Abuso diretamente: %{contact_abuse_url}.'
-        hidden: Sua obra "%{title}" (%{work_url}) foi oculta pela equipe do Diretrizes
-          e Abuso e não está mais publicamente acessível.
-        tos_violation: Caso sua obra tenha sido oculta por violar os Termos de Serviço
+        help: 'Se não tiver certeza do motivo dessa decisão e não tiver recebido outros
+          comunicados em relação a este assunto, por favor entre em contato diretamente
+          com a equipe de Diretrizes e Abuso: %{contact_abuse_url}.'
+        hidden: A equipe de Diretrizes e Abuso ocultou sua obra "%{title}" (%{work_url})
+          e ela não está mais publicamente acessível.
+        tos_violation: Caso isso tenha ocorrido por sua obra violar os Termos de Serviço
           (%{tos_url}) do AO3, é necessário que você corrija a infração. A não adequação
-          da sua obra aos Termos de Serviço pode levar à exclusão da mesma do AO3.
+          da sua obra aos Termos de Serviço pode fazer com que ela seja removida do
+          AO3.
       tos: Termos de Serviço
     anonymous_or_unrevealed_notification:
       anonymous_info: Obras anônimas aparecem em todo o site, exceto na sua página
-        pessoal. Na obra, seu nome será substituído por "Anonymous".
+        pessoal. A obra será atribuída a "Anonymous".
       anonymous_unrevealed_info: A administração da coleção poderá, posteriormente,
         revelar a sua obra, mas mantê-la anônima. Nesse caso, pessoas que recebem
         atualizações sobre suas obras não serão notificadas. Uma vez revelada, sua
@@ -659,15 +682,15 @@ pt-BR:
         unrevealed: "[%{app_name}] Sua obra foi marcada como não revelada"
       unrevealed_info: Obras não reveladas não aparecem no site em geral ou na sua
         página pessoal. Qualquer pessoa que acessar um link para essa obra receberá
-        um aviso de que ela se encontra não revelada no momento e não é possível acessar
-        seu conteúdo.
+        um aviso dizendo que ela se encontra não revelada no momento e que não é possível
+        acessar seu conteúdo.
     challenge_assignment_notification:
       any: Quaisquer
       description: 'Descrição:'
       due: 'Prazo:'
       html:
         footer: Você recebeu esse email porque se inscreveu no desafio %{title}. Para
-          mais informações sobre o desafio e como entrar em contato com a moderação,
+          mais informações sobre ele e sobre como entrar em contato com a moderação,
           acesse %{footer_link}.
         footer_link: a página do desafio
         look_up: Acesse mais detalhes sobre essa tarefa na %{link}.
@@ -683,9 +706,9 @@ pt-BR:
       subject: "[%{app_name}][%{collection_title}] Sua tarefa!"
       text:
         assignment: Você recebeu a seguinte tarefa no desafio "%{collection_title}"
-          (%{collection_url})  no Archive of Our Own (AO3)!
+          (%{collection_url}) no Archive of Our Own (AO3)!
         footer: Você recebeu esse email porque se inscreveu no desafio %{title} (%{url}).
-          Para mais informações sobre o desafio e como entrar em contato com a moderação,
+          Para mais informações sobre ele e sobre como entrar em contato com a moderação,
           acesse %{profile_url}.
         look_up: 'Acesse mais detalhes sobre essa tarefa na sua página de Assignments
           (Tarefas): %{link}.'
@@ -730,7 +753,7 @@ pt-BR:
           seu pseudônimo apareça nessa série como coartista, é só editar a série para
           remover seu nome: %{url}'
     creatorship_notification_archivist:
-      explanation: Essa conta de arquivista, por ser participante oficial do projeto
+      explanation: Essa conta arquivista, por ser participante oficial do projeto
         Open Doors (Portas Abertas), pode adicionar seu nome a uma obra sem autorização,
         mesmo que você não tenha habilitado cocriação na sua conta.
       html:
@@ -771,11 +794,11 @@ pt-BR:
         instructions: Para aceitar ou recusar esse convite, acesse sua página de %{page_name}.
         page_name: Co-Creator Requests (Convites para ser coartista)
       intro_chapter: 'A conta %{inviting_user} convidou seu pseudônimo %{pseud} para
-        ser mostrado como coartista do seguinte capítulo:'
+        aparecer como coartista do seguinte capítulo:'
       intro_series: 'A conta %{inviting_user} convidou seu pseudônimo %{pseud} para
-        ser mostrado como coartista da seguinte série:'
+        aparecer como coartista da seguinte série:'
       intro_work: 'A conta %{inviting_user} convidou seu pseudônimo %{pseud} para
-        ser mostrado como coartista da seguinte obra:'
+        aparecer como coartista da seguinte obra:'
       subject: "[%{app_name}] Você recebeu um convite para ser coartista"
       text:
         creation: "%{title} (%{url}) por %{pseuds}"
@@ -783,15 +806,19 @@ pt-BR:
           Co-Creator Requests (Convites para ser coartista): %{url}'
     delete_work_notification:
       html:
-        part1_other: Sua obra %{title} foi removida, conforme solicitado por %{pseud}.
-        part1_yourself: Conforme sua solicitação, a obra %{title} foi removida.
+        part1_other: Sua obra %{title} foi removida do AO3, conforme solicitado por
+          %{pseud}.
+        part1_yourself: Conforme sua solicitação, a obra %{title} foi removida do
+          AO3.
         part2: Caso tenha alguma dúvida, por favor %{support}.
       part3: Uma cópia da obra removida encontra-se em anexo.
       subject: "[%{app_name}] Sua obra foi removida"
       support: entre em contato com a nossa equipe de Suporte
       text:
-        part1_other: Sua obra %{title} foi removida, conforme solicitado por %{pseud}.
-        part1_yourself: Conforme sua solicitação, a obra %{title} foi removida.
+        part1_other: Sua obra %{title} foi removida do AO3, conforme solicitado por
+          %{pseud}.
+        part1_yourself: Conforme sua solicitação, a obra %{title} foi removida do
+          AO3.
         part2: Caso tenha alguma dúvida, por favor %{support} (%{url}).
     invitation:
       been_invited: Você recebeu um convite para se juntar ao nosso site beta!
@@ -885,23 +912,30 @@ pt-BR:
       body:
         one: Só pra avisar que você tem um novo convite, que pode ser usado para criar
           uma nova conta no AO3. Para convidar alguém, visite a %{invitation_page}.
-        other: 'Só pra avisar que você tem %{count} novos convites, que podem ser
-          usados para criar novas contas no AO3. Para convidar alguém, visite a %{invitation_page}. '
+        other: Só pra avisar que você tem %{count} novos convites, que podem ser usados
+          para criar novas contas no AO3. Para convidar alguém, visite a %{invitation_page}.
       invitation_page_link_text: sua página de Invitations (Convites)
       subject: "[%{app_name}] Novos convites"
     invite_request_declined:
       main:
-        one: Lamentamos informar que a sua solicitação de um convite adicional não
-          pode ser atendida no momento.
-        other: Lamentamos informar que não podemos atender o seu pedido de %{count}
-          novos convites no momento.
+        one: Lamentamos informar que a sua solicitação de um novo convite não pode
+          ser atendida no momento.
+        other: Lamentamos informar que a sua solicitação de %{count} novos convites
+          não pode ser atendida no momento.
       reason: 'A solicitação que você nos enviou foi:'
       subject: "[%{app_name}] Solicitação de convite adicional negada"
     recipient_notification:
+      html:
+        collection: Uma obra de presente foi publicada para você na coleção %{collection_link}
+          no AO3!
+      no_collection: Uma obra de presente foi publicada para você no AO3!
       subject:
         collection: "[%{app_name}][%{collection_title}] Uma obra de presente para
           você na coleção %{collection_title}"
         no_collection: "[%{app_name}] Uma obra de presente para você"
+      text:
+        collection: Uma obra de presente foi publicada para você na coleção "%{collection_title}"
+          (%{collection_url}) no AO3!
     signup_notification:
       activate_your_account: siga este link para ativar sua conta
       admin_posts: Notícias do AO3

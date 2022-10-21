@@ -1,9 +1,12 @@
 class TagsController < ApplicationController
+  include TagWrangling
+
   before_action :load_collection
   before_action :check_user_status, except: [:show, :index, :show_hidden, :search, :feed]
   before_action :check_permission_to_wrangle, except: [:show, :index, :show_hidden, :search, :feed]
   before_action :load_tag, only: [:edit, :update, :wrangle, :mass_update]
   before_action :load_tag_and_subtags, only: [:show]
+  around_action :record_wrangling_activity, only: [:create, :update, :mass_update]
 
   caches_page :feed
 
@@ -40,19 +43,17 @@ class TagsController < ApplicationController
   end
 
   def search
-    @page_subtitle = ts('Search Tags')
-    if params[:query].present?
-      # TODO: tag_search_params
-      options = params[:query].permit!.dup
-      @query = options
-      if @query[:name].present?
-        @page_subtitle = ts("Tags Matching '%{query}'", query: @query[:name])
-      end
-      options[:page] = params[:page] || 1
-      search = TagSearchForm.new(options)
-      @tags = search.search_results
-      flash_search_warnings(@tags)
-    end
+    options = params[:tag_search].present? ? tag_search_params : {}
+    options.merge!(page: params[:page]) if params[:page].present?
+    @search = TagSearchForm.new(options)
+    @page_subtitle = ts("Search Tags")
+
+    return if params[:tag_search].blank?
+
+    @page_subtitle = ts("Tags Matching '%{query}'", query: options[:name]) if options[:name].present?
+
+    @tags = @search.search_results
+    flash_search_warnings(@tags)
   end
 
   # if user is Admin or Tag Wrangler, show them details about the tag
@@ -392,6 +393,19 @@ class TagsController < ApplicationController
       :media_string, :fandom_string, :character_string, :relationship_string,
       :freeform_string,
       associations_to_remove: []
+    )
+  end
+
+  def tag_search_params
+    params.require(:tag_search).permit(
+      :query,
+      :name,
+      :fandoms,
+      :type,
+      :canonical,
+      :created_at,
+      :sort_column,
+      :sort_direction
     )
   end
 end

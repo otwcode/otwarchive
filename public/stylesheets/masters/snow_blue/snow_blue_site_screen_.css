@@ -1,7 +1,7 @@
 #header ul.primary,
 #footer,
 .autocomplete .dropdown ul li:hover,
-li.selected,
+.autocomplete .dropdown li.selected,
 a.tag:hover {
   background: #4295BC;
 }

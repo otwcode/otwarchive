@@ -129,6 +129,8 @@ RSpec/FilePath:
   Exclude:
     # Exception for WorksController, whose many specs need multiple files
     - 'spec/controllers/works/*.rb'
+    # Exception for concern specs, which may test multiple classes
+    - 'spec/models/concerns/**/*.rb'
 
 # Avoid instance variables, except for those not assigned within the spec,
 # e.g. @request.

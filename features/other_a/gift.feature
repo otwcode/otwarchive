@@ -268,11 +268,12 @@ Feature: Create Gifts
       And I follow "Refused Gifts"
     Then I should see "Accept Gift"
       And I should not see "by gifter for giftee1"
-    When I follow "Accept Gift"
+    # Delay to make sure the cache is expired when re-accepting the gift:
+    When it is currently 1 second from now
+      And I follow "Accept Gift"
     Then I should see "This work will now be listed among your gifts."
       And I should see "GiftStory1"
-      # TODO: Touch work so the blurb updates with recip info when gift is re-accepted
-      # And I should see "by gifter for giftee1"
+      And I should see "by gifter for giftee1"
     When I view the work "GiftStory1"
     Then I should see "For giftee1"
 
@@ -322,7 +323,7 @@ Feature: Create Gifts
     Given the user "giftee1" disallows gifts
     When I am logged in as "gifter"
       And I post the work "Rude Gift" as a gift for "giftee1"
-    Then I should see "Sorry! We couldn't save this work because:giftee1 does not accept gifts."
+    Then I should see "Sorry! We couldn't save this work because: giftee1 does not accept gifts."
       And 0 emails should be delivered to "giftee1@example.com"
 
   Scenario: A user who disallows gifts can refuse existing ones
@@ -331,6 +332,8 @@ Feature: Create Gifts
       And the user "giftee1" disallows gifts
     When I am logged in as "giftee1"
       And I go to my gifts page
+      # Delay to make sure the cache is expired when the gift is refused:
+      And it is currently 1 second from now
       And I follow "Refuse Gift"
     Then I should see "This work will no longer be listed among your gifts."
       And I should not see "Rude Gift"

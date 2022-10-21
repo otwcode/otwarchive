@@ -33,7 +33,7 @@ jobs:
           - 3306:3306
 
       elasticsearch:
-        image: docker.elastic.co/elasticsearch/elasticsearch:7.16.1
+        image: docker.elastic.co/elasticsearch/elasticsearch:7.17.5
         ports:
           - 9200:9200
         options: >-
@@ -94,7 +94,7 @@ jobs:
 
     steps:
       - name: Check out code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Run apt-get update
         run: sudo apt-get update
@@ -110,7 +110,7 @@ jobs:
 
       - name: Cache wkhtmltopdf package
         if: ${{ matrix.tests.ebook }}
-        uses: actions/cache@v2
+        uses: actions/cache@v3.0.11
         with:
           path: wkhtmltopdf
           key: wkhtmltopdf-${{ hashFiles('script/gh-actions/ebook_converters.sh') }}
@@ -121,11 +121,11 @@ jobs:
 
       - name: Cache VCR cassettes
         if: ${{ matrix.tests.vcr }}
-        uses: actions/cache@v2
+        uses: actions/cache@v3.0.11
         with:
           path: features/cassette_library
 
-          # Unfortunately, the actions/cache@v2 version doesn't allow the cache
+          # Unfortunately, the actions/cache@v3.0.11 version doesn't allow the cache
           # key to be overwritten if there's an exact match. So instead we add
           # a unique identifier to the key to always force a "cache miss", and
           # restore from related keys to make sure that we still get to load a
@@ -161,7 +161,7 @@ jobs:
 
       - name: Upload failure screenshots
         if: ${{ failure() && matrix.tests.command == 'cucumber' }}
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: test failures ${{ hashFiles('tmp/capybara/*') }}
           path: tmp/capybara

@@ -292,9 +292,16 @@ public
   end
 
   def admin_only_access_denied
-    flash[:error] = ts("Sorry, only an authorized admin can access the page you were trying to reach.")
-    redirect_to root_path
-    false
+    respond_to do |format|
+      format.html do
+        flash[:error] = ts("Sorry, only an authorized admin can access the page you were trying to reach.")
+        redirect_to root_path
+      end
+      format.json do
+        errors = [ts("Sorry, only an authorized admin can do that.")]
+        render json: { errors: errors }, status: :forbidden
+      end
+    end
   end
 
   # Filter method - prevents users from logging in as admin
@@ -365,7 +372,7 @@ public
 
     @page_title = ""
     if logged_in? && !current_user.preference.try(:work_title_format).blank?
-      @page_title = current_user.preference.work_title_format
+      @page_title = current_user.preference.work_title_format.dup
       @page_title.gsub!(/FANDOM/, fandom)
       @page_title.gsub!(/AUTHOR/, author)
       @page_title.gsub!(/TITLE/, title)

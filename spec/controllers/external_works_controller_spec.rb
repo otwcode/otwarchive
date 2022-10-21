@@ -2,13 +2,13 @@ require 'spec_helper'
 
 describe ExternalWorksController do
   describe "GET #fetch" do
-    url = "http://ao3testing.dreamwidth.org/593.html"
+    let(:url) { "http://example.org/200" }
 
-    before(:each) do
-      @external_work = FactoryBot.create(:external_work, url: url)
-    end
+    before { WebMock.stub_request(:any, url) }
 
-    context "URL that has an external work" do
+    context "when the URL has an external work" do
+      let!(:external_work) { create(:external_work, url: url) }
+
       it "responds with json" do
         get :fetch, params: { external_work_url: url, format: :json }
         expect(response.content_type).to match("application/json")
@@ -16,30 +16,28 @@ describe ExternalWorksController do
 
       it "responds with the matching work" do
         get :fetch, params: { external_work_url: url, format: :json }
-        expect(assigns(:external_work)).to eq(@external_work)
+        expect(assigns(:external_work)).to eq(external_work)
       end
 
-      before do
-        @external_work2 = FactoryBot.create(:external_work, url: url)
-      end
+      context "when the URL has a second external work" do
+        let!(:external_work2) { create(:external_work, url: url) }
 
-      it "responds with the first matching work" do
-        get :fetch, params: { external_work_url: url, format: :json }
-        expect(assigns(:external_work)).to eq(@external_work)
-        expect(assigns(:external_work)).not_to eq(@external_work2)
+        it "responds with the first matching work" do
+          get :fetch, params: { external_work_url: url, format: :json }
+          expect(assigns(:external_work)).to eq(external_work)
+          expect(assigns(:external_work)).not_to eq(external_work2)
+        end
       end
     end
 
-    context "URL that does not have an external work" do
-      url_2 = "http://ao3testing.dreamwidth.org"
-
+    context "when the URL doesn't have an exteral work" do
       it "responds with json" do
-        get :fetch, params: { external_work_url: url_2, format: :json }
+        get :fetch, params: { external_work_url: url, format: :json }
         expect(response.content_type).to match("application/json")
       end
 
       it "responds with blank" do
-        get :fetch, params: { external_work_url: url_2, format: :json }
+        get :fetch, params: { external_work_url: url, format: :json }
         expect(assigns(:external_work)).to be_nil
       end
     end

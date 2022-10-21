@@ -1,16 +1,99 @@
 ---
 fa:
+  activerecord:
+    attributes:
+      archive_warning:
+        name_with_colon:
+          one: 'هشدار:'
+          other: 'هشدارها:'
+      category:
+        name_with_colon:
+          one: 'دسته:'
+          other: 'دسته ها:'
+      character:
+        name_with_colon:
+          one: 'شخصیت:'
+          other: 'شخصیت ها:'
+      fandom:
+        name_with_colon:
+          one: 'فندوم:'
+          other: 'فندوم ها:'
+      freeform:
+        name_with_colon:
+          one: 'تگ اضافی:'
+          other: تگ های اضافی
+      rating:
+        name_with_colon: 'رتبه بندی:'
+      relationship:
+        name_with_colon:
+          one: 'رابطه:'
+          other: 'روابط:'
+      work:
+        summary: خلاصه
+    models:
+      archive_warning:
+        one: هشدار
+        other: هشدارها
+      category:
+        one: دسته
+        other: دسته ها
+      chapter:
+        one: فصل
+        other: فصل ها
+      character:
+        one: شخصیت
+        other: شخصیت ها
+      fandom:
+        one: فندوم
+        other: فندوم ها
+      freeform:
+        one: تگ اضافی
+        other: تگ های اضافی
+      rating:
+        one: رتبه بندی
+        other: رتبه بندی ها
+      relationship:
+        one: رابطه
+        other: روابط
+      series:
+        one: سری
+        other: سری ها
+  kudo_mailer:
+    batch_kudo_notification:
+      guest:
+        one: یک مهمان
+        other: "%{count} مهمان"
+      html:
+        left_kudos:
+          one: "%{givers_list} برای %{commentable_link} کودوس و قدردانی فرستاد."
+          other: "%{givers_list} برای %{commentable_link} کودوس و قدردانی فرستادند."
+        single_guest:
+          giver_list: یک مهمان
+          left_kudos: "%{giver_list} براى %{commentable_link} كودوس و قدردانى فرستاد."
+      subject: "[%{app_name}] شما کودوس و قدردانی دریافت کردید!"
+      text:
+        left_kudos:
+          one: "%{givers_list} برای %{commentable_title} (%{commentable_url}) کودوس
+            و قدردانی فرستاد."
+          other: "%{givers_list} برای %{commentable_title} (%{commentable_url}) کودوس
+            و قدردانی فرستادند."
+        single_guest: یک مهمان براى %{commentable_title} كودوس و قدردانى فرستاد (%{commentable_url}).
   mailer:
     general:
       closing:
         formal: با احترام،
         informal: با آرزوی بهترین ها،
+      creation:
+        link_with_word_count: "(%{word_count}) %{creation_link}"
+        title_with_word_count: (%{word_count}) "%{creation_title}"
+        word_count:
+          one: کلمه %{count}
+          other: کلمه %{count}
       footer:
         general:
           html:
             donate_link_text: کمک های مالی شما
-            part1: <p dir="rtl">اگر شما به اشتباه این پیام را دریافت کرده اید لطفا
-              %{support_link}.</p>
+            part1: اگر شما به اشتباه این پیام را دریافت کرده اید لطفا %{support_link}.
             part2: Archive of Our Own آرشیویست که توسط هواداران اداره و حمایت می شود
               که به %{donate_link} تکیه می کند.
             support_link_text: با پشتیبانی تماس بگیرید
@@ -25,26 +108,14 @@ fa:
         informal:
           addressed: سلام، %{name}!
           unaddressed: سلام!
-        introductory: سلامی از Archive of Our Own – AO3 (آرشیوی از آن خودمان)!
+        introductory: سلامی از Archive of Our Own – AO3 (آرشیوی از آن خودمان)!
+      metadata_label_indicator: ":"
       signature:
         app_short_name: AO3
         open_doors: تیم Open Doors (درهای باز)
-        parent_org: Organization for Transformative Works – OTW (سازمانی برای آثار
+        parent_org: Organization for Transformative Works – OTW (سازمانی برای آثار
           دگرگون شونده)
         support: تیم پشتیبانی AO3
-    kudos:
-      guest:
-        one: یک مهمان
-        other: "%{count} مهمان"
-      html:
-        left_kudos:
-          one: "%{givers_list} برای %{commentable_link} کودوس و قدردانی فرستاد."
-          other: "%{givers_list} برای %{commentable_link} کودوس و قدردانی فرستادند."
-      text:
-        left_kudos:
-          one: "%{givers_list} برای %{commentable_link} کودوس و قدردانی فرستاد."
-          other: "%{givers_list} برای %{commentable_link} کودوس و قدردانی فرستادند."
-      you_have: "[%{app_name}] شما کودوس و قدردانی دریافت کردید!"
   users:
     mailer:
       reset_password_instructions:
@@ -412,9 +483,16 @@ fa:
       reason: 'درخواست شما این بود که:'
       subject: "[%{app_name}] درخواست کد دعوتنامه ی اضافی رد شد"
     recipient_notification:
+      html:
+        collection: یک اثر هدیه برای شما در مجموعه ی %{collection_link} در AO3 پست
+          شده است!
+      no_collection: یک اثر هدیه برای شما در AO3 پست شده است!
       subject:
         collection: "[%{app_name}][%{collection_title}] یک اثر هدیه برای شما از %{collection_title}"
         no_collection: "[%{app_name}] یک اثر هدیه برای شما"
+      text:
+        collection: یک اثر هدیه برای شما در مجموعه ی "%{collection_title}" (%{collection_url})
+          در AO3 پست شده است!
     signup_notification:
       activate_your_account: این لینک را برای فعالسازی اکانت خود دنبال کنید
       admin_posts: اخبار AO3
