@@ -1,6 +1,5 @@
 class User < ApplicationRecord
   audited
-  include ActiveModel::ForbiddenAttributesProtection
   include WorksOwner
 
   devise :database_authenticatable,

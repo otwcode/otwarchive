@@ -1,6 +1,4 @@
 class AbuseReport < ApplicationRecord
-  include ActiveModel::ForbiddenAttributesProtection
-
   validates :email, email_format: { allow_blank: false }
   validates_presence_of :language
   validates_presence_of :summary

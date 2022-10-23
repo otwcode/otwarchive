@@ -1,6 +1,4 @@
 class AdminPost < ApplicationRecord
-  include ActiveModel::ForbiddenAttributesProtection
-
   self.per_page = 8 # option for WillPaginate
 
   acts_as_commentable

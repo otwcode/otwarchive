@@ -1,6 +1,4 @@
 class Subscription < ApplicationRecord
-  include ActiveModel::ForbiddenAttributesProtection
-
   VALID_SUBSCRIBABLES = %w(Work User Series).freeze
 
   belongs_to :user
