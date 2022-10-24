@@ -803,11 +803,11 @@ describe HtmlCleaner do
       expect(doc.xpath("./figure/p")).to be_empty
     end
 
-    it "keeps figure/figcaption and titles" do
+    it "allows alt and title attributes on elements inside figure" do
       html = <<~HTML
         <figure>
           <img src="http://example.com/Camera-icon.svg" alt="camera icon">
-          <figcaption title="here is title"><em>Take picture here</em></figcaption>
+          <figcaption title="here is title">Take picture here</figcaption>
         </figure>
       HTML
 
@@ -816,7 +816,22 @@ describe HtmlCleaner do
 
       expect(doc.xpath("./figure/img/@alt").to_s.strip).to eq("camera icon")
       expect(doc.xpath("./figure/figcaption/@title").to_s.strip).to eq("here is title")
-      expect(doc.xpath("./figure/figcaption/em/node()").to_s.strip).to eq("Take picture here")
+    end
+
+    it "allows other HTML elements inside figcaption" do
+      html = <<~HTML
+        <figure>
+          <img src="http://example.com/Camera-icon.svg">
+          <figcaption><em>Take picture <a href="http://example.com/link">here</a></em></figcaption>
+        </figure>
+      HTML
+
+      result = add_paragraphs_to_text(html)
+      doc = Nokogiri::HTML.fragment(result)
+
+      expect(doc.xpath("./figure/figcaption/em/text()").to_s.strip).to eq("Take picture")
+      expect(doc.xpath("./figure/figcaption/em/a/text()").to_s.strip).to eq("here")
+      expect(doc.xpath("./figure/figcaption/em/a/@href").to_s.strip).to eq("http://example.com/link")
     end
 
     %w(address h1 h2 h3 h4 h5 h6 p pre).each do |tag|
