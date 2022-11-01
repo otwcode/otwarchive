@@ -109,9 +109,10 @@ describe SeriesController do
 
     context "with user_id parameter" do
       context "when user_id does not exist" do
-        it "redirects to the homepage with an error" do
-          get :index, params: { user_id: "nobody" }
-          it_redirects_to_with_error(root_path, "Whose series did you want to see?")
+        it "raises an error" do
+          expect do
+            get :index, params: { user_id: "nobody" }
+          end.to raise_error ActiveRecord::RecordNotFound
         end
       end
 
@@ -125,12 +126,10 @@ describe SeriesController do
 
         context "with pseud_id parameter" do
           context "when pseud_id does not exist" do
-            it "raises a RecordNotFound error for the pseud" do
-              params = { user_id: user, pseud_id: "nobody" }
-              expect { get :index, params: params }.to raise_error(
-                ActiveRecord::RecordNotFound,
-                "Couldn't find pseud 'nobody'"
-              )
+            it "raises an error" do
+              expect do
+                get :index, params: { user_id: user, pseud_id: "nobody" }
+              end.to raise_error ActiveRecord::RecordNotFound
             end
           end
 

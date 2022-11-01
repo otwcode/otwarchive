@@ -17,6 +17,7 @@ Some pages with non existent things raise errors
       And visiting "/users/KnownUser/pseuds/unknown_pseud" should fail with a not found error
       And visiting "/series/999" should fail with a not found error
       And visiting "/users/KnownUser/pseuds/unknown_pseud/series" should fail with a not found error
+      And visiting "/users/UnknownUser/pseuds/unknown_pseud/series" should fail with a not found error
       And visiting "/tags/NonexistentTag" should fail with a not found error
       And visiting "/tags/999999999/feed.atom" should fail with a not found error
       And visiting "/works/999999999" should fail with a not found error
@@ -30,4 +31,3 @@ Some pages with non existent things raise errors
       | login          |
       | wranglerette   |
     Then visiting "/users/UnknownUser" should fail with "Sorry, could not find this user."
-      And visiting "/users/UnknownUser/pseuds/unknown_pseud/series" should fail with "Whose series did you want to see?"
