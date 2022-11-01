@@ -16,17 +16,15 @@ class SeriesController < ApplicationController
   # GET /series
   # GET /series.xml
   def index
-    @user = User.find_by!(login: params[:user_id]) if params[:user_id]
-    unless @user
+    unless params[:user_id]
       flash[:error] = ts("Whose series did you want to see?")
       redirect_to(root_path) and return
     end
-
+    @user = User.find_by!(login: params[:user_id])
     @page_subtitle = ts("%{username} - Series", username: @user.login)
     pseuds = @user.pseuds
     if params[:pseud_id]
-      @pseud = @user.pseuds.find_by!(name: params[:pseud_id])
-      
+      @pseud = @user.pseuds.find_by!(name: params[:pseud_id])   
       @page_subtitle = ts("by ") + @pseud.byline
       pseuds = [@pseud]
     end
