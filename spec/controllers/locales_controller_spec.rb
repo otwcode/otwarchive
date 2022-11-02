@@ -12,6 +12,7 @@ describe LocalesController do
         it_redirects_to_with_error(root_url, "Sorry, only an authorized admin can access the page you were trying to reach.")
       end
     end
+    
     context "when logged in as user" do
       it "redirects with error" do
         fake_login
@@ -148,7 +149,7 @@ describe LocalesController do
 
     context "when not logged in" do
       it "redirects with notice" do
-        put :update, params: { id: locale.iso, locale:{ name: "Tiếng Việt", email_enabled: true } }
+        put :update, params: { id: locale.iso, locale: { name: "Tiếng Việt", email_enabled: true } }
 
         it_redirects_to_with_error(root_url, "Sorry, only an authorized admin can access the page you were trying to reach.")
       end
@@ -157,7 +158,7 @@ describe LocalesController do
     context "when logged in as user" do
       it "redirects with notice" do
         fake_login
-        put :update, params: { id: locale.iso, locale:{ name: "Tiếng Việt", email_enabled: true } }
+        put :update, params: { id: locale.iso, locale: { name: "Tiếng Việt", email_enabled: true } }
 
         it_redirects_to_with_error(root_url, "Sorry, only an authorized admin can access the page you were trying to reach.")
       end
@@ -169,7 +170,7 @@ describe LocalesController do
         
         it "redirects with error" do
           fake_login_admin(admin)
-          put :update, params: { id: locale.iso, locale:{ name: "Tiếng Việt", email_enabled: true } }
+          put :update, params: { id: locale.iso, locale: { name: "Tiếng Việt", email_enabled: true } }
 
           it_redirects_to_with_error(root_url, "Sorry, only an authorized admin can access the page you were trying to reach.")
         end
@@ -209,7 +210,7 @@ describe LocalesController do
 
     context "when not logged in" do
       it "redirects with notice" do
-        post :create, params: { id: locale.iso, locale:{ name: "Tiếng Việt", email_enabled: true } }
+        post :create, params: { id: locale.iso, locale: { name: "Tiếng Việt", email_enabled: true } }
 
         it_redirects_to_with_error(root_url, "Sorry, only an authorized admin can access the page you were trying to reach.")
       end
@@ -217,7 +218,7 @@ describe LocalesController do
     context "when logged in as user" do
       it "redirects with notice" do
         fake_login
-        post :create, params: { id: locale.iso, locale:{ name: "Tiếng Việt", email_enabled: true } }
+        post :create, params: { id: locale.iso, locale: { name: "Tiếng Việt", email_enabled: true } }
 
         it_redirects_to_with_error(root_url, "Sorry, only an authorized admin can access the page you were trying to reach.")
       end
@@ -229,7 +230,7 @@ describe LocalesController do
         
         it "redirects with error" do
           fake_login_admin(admin)
-          post :create, params: { id: locale.iso, locale:{ name: "Tiếng Việt", email_enabled: true } }
+          post :create, params: { id: locale.iso, locale: { name: "Tiếng Việt", email_enabled: true } }
 
           it_redirects_to_with_error(root_url, "Sorry, only an authorized admin can access the page you were trying to reach.")
         end
