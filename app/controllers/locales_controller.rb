@@ -7,25 +7,22 @@ class LocalesController < ApplicationController
   end
 
   def new
-    authorize Locale
-
     @locale = Locale.new
+    authorize @locale
     @languages = Language.default_order
   end
 
   # GET /locales/en/edit
   def edit
-    authorize Locale
-
     @locale = Locale.find_by(iso: params[:id])
+    authorize @locale
     @languages = Language.default_order
   end
 
   def update
-    authorize Locale
-
     @locale = Locale.find_by(iso: params[:id])
     @locale.attributes = locale_params
+    authorize @locale
     if @locale.save
       flash[:notice] = ts('Your locale was successfully updated.')
       redirect_to action: 'index', status: 303
@@ -37,9 +34,8 @@ class LocalesController < ApplicationController
 
 
   def create
-    authorize Locale
-
     @locale = Locale.new(locale_params)
+    authorize @locale
     if @locale.save
       flash[:notice] = t('successfully_added', default: 'Locale was successfully added.')
       redirect_to locales_path

@@ -5,6 +5,13 @@ describe LocalesController do
   include RedirectExpectationHelper
 
   describe "GET #index" do
+    context "when not logged in" do
+      it "redirects with error" do
+        get :index
+
+        it_redirects_to_with_error(root_url, "Sorry, only an authorized admin can access the page you were trying to reach.")
+      end
+    end
     context "when logged in as user" do
       it "redirects with error" do
         fake_login
@@ -42,6 +49,14 @@ describe LocalesController do
   end
 
   describe "GET #new" do
+    context "when not logged in" do
+      it "redirects with error" do
+        get :new
+
+        it_redirects_to_with_error(root_url, "Sorry, only an authorized admin can access the page you were trying to reach.")
+      end
+    end
+  
     context "when logged in as user" do
       it "redirects with error" do
         fake_login
@@ -82,6 +97,14 @@ describe LocalesController do
 
   describe "GET #edit" do
     let(:locale) { create(:locale) }
+
+    context "when not logged in" do
+      it "redirects with error" do
+        get :edit, params: { id: locale.iso }
+
+        it_redirects_to_with_error(root_url, "Sorry, only an authorized admin can access the page you were trying to reach.")
+      end
+    end
     
     context "when logged in as user" do
       it "redirects with error" do
@@ -121,10 +144,20 @@ describe LocalesController do
   end
 
   describe "PUT #update" do
+    let(:locale) { create(:locale) }
+
+    context "when not logged in" do
+      it "redirects with notice" do
+        put :update, params: { id: locale.iso, locale:{ name: "Tiếng Việt", email_enabled: true } }
+
+        it_redirects_to_with_error(root_url, "Sorry, only an authorized admin can access the page you were trying to reach.")
+      end
+    end
+
     context "when logged in as user" do
       it "redirects with notice" do
         fake_login
-        put :update, params: { id: 0 }
+        put :update, params: { id: locale.iso, locale:{ name: "Tiếng Việt", email_enabled: true } }
 
         it_redirects_to_with_error(root_url, "Sorry, only an authorized admin can access the page you were trying to reach.")
       end
@@ -136,7 +169,7 @@ describe LocalesController do
         
         it "redirects with error" do
           fake_login_admin(admin)
-          put :update, params: { id: 0 }
+          put :update, params: { id: locale.iso, locale:{ name: "Tiếng Việt", email_enabled: true } }
 
           it_redirects_to_with_error(root_url, "Sorry, only an authorized admin can access the page you were trying to reach.")
         end
@@ -172,10 +205,19 @@ describe LocalesController do
   end
 
   describe "POST #create" do
+    let(:locale) { create(:locale) }
+
+    context "when not logged in" do
+      it "redirects with notice" do
+        post :create, params: { id: locale.iso, locale:{ name: "Tiếng Việt", email_enabled: true } }
+
+        it_redirects_to_with_error(root_url, "Sorry, only an authorized admin can access the page you were trying to reach.")
+      end
+    end
     context "when logged in as user" do
       it "redirects with notice" do
         fake_login
-        post :create
+        post :create, params: { id: locale.iso, locale:{ name: "Tiếng Việt", email_enabled: true } }
 
         it_redirects_to_with_error(root_url, "Sorry, only an authorized admin can access the page you were trying to reach.")
       end
@@ -187,7 +229,7 @@ describe LocalesController do
         
         it "redirects with error" do
           fake_login_admin(admin)
-          post :create
+          post :create, params: { id: locale.iso, locale:{ name: "Tiếng Việt", email_enabled: true } }
 
           it_redirects_to_with_error(root_url, "Sorry, only an authorized admin can access the page you were trying to reach.")
         end
@@ -197,7 +239,6 @@ describe LocalesController do
     %w[translation superadmin].each do |role|
       context "when logged in as an admin with #{role} role" do
         let(:admin) { create(:admin, roles: [role]) }
-        let(:locale) { create(:locale) }
         
         it "adds a new locale and redirects to list of locales" do
           fake_login_admin(admin)

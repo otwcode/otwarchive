@@ -5,6 +5,12 @@ describe LanguagesController do
   include RedirectExpectationHelper
 
   describe "GET index" do
+    context "when not logged in" do
+      it "renders the index template" do
+        get :index
+        expect(response).to render_template("index")
+      end
+    end
     %w[board communications policy_and_abuse tag_wrangling docs support open_doors translation superadmin].each do |role|
       context "when logged in as an admin with #{role} role" do
         let(:admin) { create(:admin, roles: [role]) }
@@ -19,6 +25,13 @@ describe LanguagesController do
   end
 
   describe "GET show" do
+    context "when not logged in" do
+      it "renders the show template" do
+        get :show, params: { id: "en" }
+        expect(response).to render_template("show")
+      end
+    end
+
     %w[board communications policy_and_abuse tag_wrangling docs support open_doors translation superadmin].each do |role|
       context "when logged in as an admin with #{role} role" do
         let(:admin) { create(:admin, roles: [role]) }
@@ -32,6 +45,12 @@ describe LanguagesController do
   end
 
   describe "GET new" do
+    context "when not logged in" do
+      it "redirects with error" do
+        get :new
+        it_redirects_to_with_error(root_url, "Sorry, only an authorized admin can access the page you were trying to reach.")
+      end
+    end
     %w[board communications policy_and_abuse tag_wrangling docs support open_doors].each do |role|
       context "when logged in as an admin with #{role} role" do
         let(:admin) { create(:admin, roles: [role]) }
@@ -70,6 +89,13 @@ describe LanguagesController do
         }
       }
     }
+    context "when not logged in" do
+      it "redirects with error" do
+        post :create, params: language_params
+
+        it_redirects_to_with_error(root_url, "Sorry, only an authorized admin can access the page you were trying to reach.")
+      end
+    end
 
     %w[board communications policy_and_abuse tag_wrangling docs support open_doors].each do |role|
       context "when logged in as an admin with #{role} role" do
@@ -110,6 +136,13 @@ describe LanguagesController do
   end
 
   describe "GET edit" do
+    context "when not logged in" do
+      it "redirects with error" do
+        get :edit, params: { id: "en" }
+
+        it_redirects_to_with_error(root_url, "Sorry, only an authorized admin can access the page you were trying to reach.")
+      end
+    end
     %w[board communications policy_and_abuse tag_wrangling docs support open_doors].each do |role|
       context "when logged in as an admin with #{role} role" do
         let(:admin) { create(:admin, roles: [role]) }
@@ -150,7 +183,13 @@ describe LanguagesController do
         }
       }
     }
+    context "when not logged in" do
+      it "redirects with error" do
+        put :update, params: language_params
 
+        it_redirects_to_with_error(root_url, "Sorry, only an authorized admin can access the page you were trying to reach.")
+      end
+    end
     %w[board communications policy_and_abuse tag_wrangling docs support open_doors].each do |role|
       context "when logged in as an admin with #{role} role" do
         let(:admin) { create(:admin, roles: [role]) }

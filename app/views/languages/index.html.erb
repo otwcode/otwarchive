@@ -25,7 +25,7 @@
       <dt><%= link_to language.name, language %></dt>
       <dd>
         <%= link_to ts("%{count} works", count: language.works.count), language_works_path(language) %>
-        <% if policy(Language).new? %>
+        <% if policy(Language).edit? %>
           <p class="actions">
             <%= link_to ts("Edit"), edit_language_path(language) %>
           </p>

@@ -523,3 +523,12 @@ describe "rake After:clean_up_chapter_kudos" do
       .and avoid_changing { work_kudo.reload.updated_at }
   end
 end
+
+describe "rake After:remove_roles" do
+  it "remove translation admin role if exists" do
+    subject.invoke
+    role_names = %w[translation_admin]
+
+    expect(Role.all.pluck(:name)).not_to eq(role_names)
+  end
+end

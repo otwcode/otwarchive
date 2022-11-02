@@ -993,6 +993,14 @@ namespace :After do
     STDOUT.flush
   end
 
+  desc "Remove roles by name"
+  task(remove_roles: :environment) do
+    %w[translation_admin].each do |role|
+      r = Role.find_by(name: role)
+      r&.destroy
+    end
+  end
+
   # This is the end that you have to put new tasks above.
 end
 
