@@ -12,7 +12,7 @@ class AdminPost < ApplicationRecord
 
   belongs_to :language
   belongs_to :translated_post, class_name: "AdminPost"
-  has_many :translations, class_name: "AdminPost", foreign_key: "translated_post_id"
+  has_many :translations, class_name: "AdminPost", foreign_key: "translated_post_id", dependent: :restrict_with_error
   has_many :admin_post_taggings
   has_many :tags, through: :admin_post_taggings, source: :admin_post_tag
 
