@@ -1,5 +1,4 @@
 class Kudo < ApplicationRecord
-  include ActiveModel::ForbiddenAttributesProtection
   include Responder
 
   VALID_COMMENTABLE_TYPES = %w[Work].freeze

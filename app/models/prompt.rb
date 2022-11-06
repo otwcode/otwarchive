@@ -1,6 +1,4 @@
 class Prompt < ApplicationRecord
-  include ActiveModel::ForbiddenAttributesProtection
-
   include UrlHelpers
   include TagTypeHelper
 

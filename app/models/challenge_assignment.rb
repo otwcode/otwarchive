@@ -1,6 +1,4 @@
 class ChallengeAssignment < ApplicationRecord
-  include ActiveModel::ForbiddenAttributesProtection
-
   # We use "-1" to represent all the requested items matching
   ALL = -1
 
@@ -503,5 +501,4 @@ class ChallengeAssignment < ApplicationRecord
       end
     end
   end
-
 end

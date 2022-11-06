@@ -6,7 +6,6 @@ class Work < ApplicationRecord
   include Searchable
   include BookmarkCountCaching
   include WorkChapterCountCaching
-  include ActiveModel::ForbiddenAttributesProtection
   include Creatable
 
   ########################################################################
