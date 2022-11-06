@@ -81,7 +81,11 @@ jQuery(document).ready(function() {
 
             if (hidden) { _modalDiv.hide().css('opacity', ''); }
 
-            _wrapDiv.css('top', $(window).scrollTop());
+            if (_mobile) {
+                _wrapDiv.css('top', _mobileScrollTop);
+            } else {
+                _wrapDiv.css('top', $(window).scrollTop());
+            }
         }
 
         function _setContent(content, title) {
