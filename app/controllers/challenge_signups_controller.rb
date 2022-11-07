@@ -352,7 +352,6 @@ protected
   def nested_prompt_params
     [
       :id,
-      :collection_id,
       :title,
       :url,
       :any_fandom,
