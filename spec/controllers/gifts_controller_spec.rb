@@ -28,5 +28,14 @@ describe GiftsController do
         it_redirects_to_with_error(root_path, "Whose gifts did you want to see?")
       end
     end
+
+    context "with recipient parameter" do
+      context "when recipient does not have an account" do
+        it "does not redirect or error" do
+          get :index, params: { recipient: "nobody" }
+          expect(response).to render_template(:index)
+        end
+      end
+    end
   end
 end
