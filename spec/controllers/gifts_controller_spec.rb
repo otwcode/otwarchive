@@ -20,4 +20,13 @@ describe GiftsController do
       it_redirects_to_with_error(user_path(controller.current_user), "Sorry, you don't have permission to access the page you were trying to reach.")
     end
   end
+
+  describe "index" do
+    context "without user_id or recipient parameter" do
+      it "redirects to the homepage with an error" do
+        get :index
+        it_redirects_to_with_error(root_path, "Whose gifts did you want to see?")
+      end
+    end
+  end
 end
