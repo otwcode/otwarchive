@@ -180,3 +180,16 @@ Feature: Tag Wrangling - special cases
     Then I should see "is not a canonical tag. Please make it canonical before adding synonyms to it."
     When I follow 'Evelyn "Evie" Carnahan'
     Then I should be on the 'Evelyn "Evie" Carnahan' tag edit page
+
+  Scenario: Cannot uncanonize a tag on creation (AO3-6387)
+    Given I have a canonical "TV Shows" fandom tag named "RWBY"
+      And a canonical character "Blake Belladonna" in fandom "RWBY"
+      And I am logged in as a tag wrangler
+    When I go to my wrangling page
+      And I follow "New Tag"
+      And I fill in "Name" with "Blake Belladonna"
+      And I choose "Character"
+      And I uncheck "Canonical"
+      And I press "Create Tag"
+    Then I should see "Tag was successfully created."
+      And the "Blake Belladonna" tag should be canonical
