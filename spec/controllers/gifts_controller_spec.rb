@@ -29,6 +29,16 @@ describe GiftsController do
       end
     end
 
+    context "with user_id parameter" do
+      context "when user_id does not exist" do
+        it "raises an error" do
+          expect do
+            get :index, params: { user_id: "nobody" }
+          end.to raise_error ActiveRecord::RecordNotFound
+        end
+      end
+    end
+
     context "with recipient parameter" do
       context "when recipient does not have an account" do
         it "does not redirect or error" do
