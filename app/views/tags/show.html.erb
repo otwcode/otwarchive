@@ -25,7 +25,7 @@
   <p><%= ts("This tag belongs to the %{tag_class} Category.", :tag_class => @tag.class::NAME) %>
   <% if @tag.canonical %>
     <% if @tag.is_a?(Fandom) %>
-      <%= ts("A list of all the %{fandom_relationship_tags} is available.", :fandom_relationship_tags => link_to(ts("Relationship tags in this fandom"), fandom_path(@tag.name))).html_safe %>
+      <%= ts("A list of all the %{fandom_relationship_tags_link} is available.", fandom_relationship_tags_link: link_to(ts("Relationship tags in this fandom"), fandom_path(@tag.name))).html_safe %>
     <% end %>
     <%= ts("It's a common tag. You can use it to ") %> 
     <%= link_to ts('filter works'), {:controller => :works, :action => :index, :tag_id => @tag} %> <%= ts('and to') %> 
