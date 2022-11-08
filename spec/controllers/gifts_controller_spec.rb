@@ -38,14 +38,5 @@ describe GiftsController do
         end
       end
     end
-
-    context "with recipient parameter" do
-      context "when recipient does not have an account" do
-        it "does not redirect or error" do
-          get :index, params: { recipient: "nobody" }
-          expect(response).to render_template(:index)
-        end
-      end
-    end
   end
 end
