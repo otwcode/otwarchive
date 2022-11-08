@@ -196,7 +196,9 @@ class TagsController < ApplicationController
       else
         flash[:notice] = ts('Tag was successfully created.')
       end
-      @tag.update_attribute(:canonical, tag_params[:canonical])
+      unless @tag.canonical? # If tag already canonical, do not uncanonize it
+        @tag.update_attribute(:canonical, tag_params[:canonical])
+      end
       redirect_to edit_tag_path(@tag)
     else
       render(action: 'new') && return
