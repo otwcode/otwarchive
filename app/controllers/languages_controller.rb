@@ -10,15 +10,13 @@ class LanguagesController < ApplicationController
   end
 
   def new
-    authorize Language
-
     @language = Language.new
+    authorize @language
   end
 
   def create
-    authorize Language
-
     @language = Language.new(language_params)
+    authorize @language
     if @language.save
       flash[:notice] = t('successfully_added', default: 'Language was successfully added.')
       redirect_to languages_path
@@ -28,15 +26,13 @@ class LanguagesController < ApplicationController
   end
 
   def edit
-    authorize Language
-
     @language = Language.find_by(short: params[:id])
+    authorize @language
   end
 
   def update
-    authorize Language
-    
     @language = Language.find_by(short: params[:id])
+    authorize @language
     if @language.update(language_params)
       flash[:notice] = t('successfully_updated', default: 'Language was successfully updated.')
       redirect_to @language

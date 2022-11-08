@@ -524,11 +524,13 @@ describe "rake After:clean_up_chapter_kudos" do
   end
 end
 
-describe "rake After:remove_roles" do
-  it "remove translation admin role if exists" do
+describe "rake After:remove_translation_admin_role" do
+  it "remove translation admin role" do
+    user = create(:user)
+    user.roles = [Role.new(name: "translation_admin")]
+    user.save!(validate: false)
+    expect(Role.all.pluck(:name)).to eq(["translation_admin"])
     subject.invoke
-    role_names = %w[translation_admin]
-
-    expect(Role.all.pluck(:name)).not_to eq(role_names)
+    expect(Role.all.pluck(:name)).to eq([])
   end
 end

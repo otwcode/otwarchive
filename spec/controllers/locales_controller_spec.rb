@@ -215,6 +215,7 @@ describe LocalesController do
         it_redirects_to_with_error(root_url, "Sorry, only an authorized admin can access the page you were trying to reach.")
       end
     end
+    
     context "when logged in as user" do
       it "redirects with notice" do
         fake_login
