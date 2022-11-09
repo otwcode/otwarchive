@@ -334,7 +334,7 @@ protected
     @collection.prompts.where(type: "Request").each do |request|
       row =
         if request.anonymous?
-          ["(Anonymous)", "", ""]
+          ["(Anonymous)", ""]
         else
           [request.challenge_signup.pseud.name,
            collection_signup_url(@collection, request.challenge_signup)]
