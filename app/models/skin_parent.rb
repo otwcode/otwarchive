@@ -1,6 +1,4 @@
 class SkinParent < ApplicationRecord
-  include ActiveModel::ForbiddenAttributesProtection
-
   belongs_to :child_skin, class_name: "Skin", inverse_of: :skin_parents, touch: true
   belongs_to :parent_skin, class_name: "Skin", inverse_of: :skin_children
 
@@ -76,5 +74,4 @@ class SkinParent < ApplicationRecord
    def parent_skin_title=(title)
      self.parent_skin = Skin.find_by(title: title)
    end
-
 end

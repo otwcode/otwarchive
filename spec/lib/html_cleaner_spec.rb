@@ -718,8 +718,8 @@ describe HtmlCleaner do
       expect(doc.xpath(".//br")).to be_empty
     end
 
-    %w(dl h1 h2 h3 h4 h5 h6 ol pre table ul).each do |tag|
-      it "should not wrap #{tag} in p tags" do
+    %w[figure dl h1 h2 h3 h4 h5 h6 ol pre table ul].each do |tag|
+      it "does not wrap #{tag} in p tags" do
         result = add_paragraphs_to_text("aa <#{tag}>foo</#{tag}> bb")
         doc = Nokogiri::HTML.fragment(result)
         expect(doc.xpath(".//p").size).to eq(2)
@@ -784,6 +784,54 @@ describe HtmlCleaner do
       expect(doc.xpath("./dl/dt[2]").children.to_s.strip).to eq("B")
       expect(doc.xpath("./dl/dd[2]").children.to_s.strip).to eq("bbb")
       expect(doc.xpath(".//br")).to be_empty
+    end
+
+    it "does not add paragraphs inside figure" do
+      html = <<~HTML
+        <figure>
+
+          <img src="http://example.com/Camera-icon.svg" alt="camera icon">
+
+          <img src="http://example.com/Hand-icon.svg" alt="hand icon">
+
+        </figure>
+      HTML
+
+      result = add_paragraphs_to_text(html)
+      doc = Nokogiri::HTML.fragment(result)
+
+      expect(doc.xpath("./figure/p")).to be_empty
+    end
+
+    it "allows alt and title attributes on elements inside figure" do
+      html = <<~HTML
+        <figure>
+          <img src="http://example.com/Camera-icon.svg" alt="camera icon">
+          <figcaption title="here is title">Take picture here</figcaption>
+        </figure>
+      HTML
+
+      result = add_paragraphs_to_text(html)
+      doc = Nokogiri::HTML.fragment(result)
+
+      expect(doc.xpath("./figure/img/@alt").to_s.strip).to eq("camera icon")
+      expect(doc.xpath("./figure/figcaption/@title").to_s.strip).to eq("here is title")
+    end
+
+    it "allows other HTML elements inside figcaption" do
+      html = <<~HTML
+        <figure>
+          <img src="http://example.com/Camera-icon.svg">
+          <figcaption><em>Take picture <a href="http://example.com/link">here</a></em></figcaption>
+        </figure>
+      HTML
+
+      result = add_paragraphs_to_text(html)
+      doc = Nokogiri::HTML.fragment(result)
+
+      expect(doc.xpath("./figure/figcaption/em/text()").to_s.strip).to eq("Take picture")
+      expect(doc.xpath("./figure/figcaption/em/a/text()").to_s.strip).to eq("here")
+      expect(doc.xpath("./figure/figcaption/em/a/@href").to_s.strip).to eq("http://example.com/link")
     end
 
     %w(address h1 h2 h3 h4 h5 h6 p pre).each do |tag|

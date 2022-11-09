@@ -1,8 +1,6 @@
 require 'fileutils'
 
 class Skin < ApplicationRecord
-  include ActiveModel::ForbiddenAttributesProtection
-
   include HtmlCleaner
   include CssCleaner
   include SkinCacheHelper

@@ -200,10 +200,12 @@ describe ChallengeSignupsController do
       challenge.request_restriction.update(title_allowed: true)
 
       signup_offer = signup.offers.first
+      signup_offer.description = ""
       signup_offer.tag_set = create(:tag_set)
       signup_offer.save
 
       signup_request = signup.requests.first
+      signup_request.description = ""
       signup_request.tag_set = create(:tag_set)
       signup_request.save
     end
@@ -227,6 +229,7 @@ describe ChallengeSignupsController do
       challenge.request_restriction.update(title_allowed: true)
 
       prompt = signup.prompts.first
+      prompt.description = ""
       prompt.tag_set = create(:tag_set)
       prompt.save
     end

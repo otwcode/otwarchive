@@ -24,14 +24,16 @@ Feature: Comment hiding
 
     When I am logged in as "author"
       And I go to the home page
-    Then I should see "This comment is under review by an admin and is currently unavailable."
+    Then I should see "Find your favorites"
+      And I should not see "Unread messages"
+      And I should not see "This comment is under review by an admin and is currently unavailable."
       And I should not see "A suspicious comment"
       And I should not see "This comment has been hidden by an admin."
-      And I follow "My Inbox"
-    Then I should see "This comment is under review by an admin and is currently unavailable."
+    When I go to my inbox page
+    Then I should not see "This comment is under review by an admin and is currently unavailable."
       And I should not see "A suspicious comment"
       And I should not see "This comment has been hidden by an admin."
-      And I view the work "Popular Fic" with comments
+    When I view the work "Popular Fic" with comments
     Then I should see "This comment is under review by an admin and is currently unavailable."
       And I should not see "A suspicious comment"
       And I should not see "This comment has been hidden by an admin."
