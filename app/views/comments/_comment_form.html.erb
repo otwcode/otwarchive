@@ -64,6 +64,13 @@
           <p class="footnote">(<%= allowed_html_instructions %>)</p>
         <% end %>
 
+      <% elsif logged_in_as_admin? %>
+        <h4 class="heading"><%= ts("Comment as") %> <span class="byline"><%= current_admin.login %></span>
+          <%= f.hidden_field :name, :value => "#{current_admin.login}", :id => "comment_name_for_#{commentable.id}" %>
+          <%= f.hidden_field :email, :value => "#{current_admin.email}", :id => "comment_email_for_#{commentable.id}" %>
+        </h4>
+        <p class="footnote">(<%= allowed_html_instructions %>)</p>
+
       <% else %>
         <dl>
           <dt class="landmark"><%= ts("Note") %>:</dt>
@@ -94,7 +101,7 @@
               :maximum_length => ArchiveConfig.COMMENT_MAX,
               :tooLongMessage => ts("must be less than %{count} characters long.", :count => ArchiveConfig.COMMENT_MAX)) %>
       <p class="submit actions">
-        <% if !logged_in_as_admin? %>
+        <% if !(commentable.is_a?(Work) && logged_in_as_admin?) %>
           <%= f.submit button_name, :id => "comment_submit_for_#{commentable.id}", data: {disable_with: ts("Please wait...")} %>
         <% end %>
         <% if controller.controller_name == 'inbox' %>
