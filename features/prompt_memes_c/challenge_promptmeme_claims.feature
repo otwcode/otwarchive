@@ -380,17 +380,18 @@ Feature: Prompt Meme Challenge
     And I should see "Work was successfully posted."
   Then I should see "Fulfilled Story"
 
-  Scenario: Download prompt CSV from signups page
+  Scenario: Maintainers can download CSV from requests or sign-ups page
 
   Given I am logged in as "mod1"
     And I have standard challenge tags setup
     And I create Battle 12 promptmeme
   When I go to the "Battle 12" signups page
+  Then I should see "Download (CSV)"
+  When I go to the "Battle "12" signups page
     And I follow "Download (CSV)"
-  Then I should download a csv file with the header row "Pseud Email Sign-up URL Tags Description"
+  Then I should download a csv file with the header row "Pseud Sign-up URL Tags Description"
 
-  Scenario: Can't download prompt CSV from requests page
-  # it's aimed at users, not mods
+  Scenario: Users can't download prompt CSV from requests page
 
   Given I have Battle 12 prompt meme fully set up
     And everyone has signed up for Battle 12
