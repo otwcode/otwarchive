@@ -64,13 +64,6 @@
           <p class="footnote">(<%= allowed_html_instructions %>)</p>
         <% end %>
 
-      <% elsif logged_in_as_admin? %>
-        <h4 class="heading"><%= ts("Comment as") %> <span class="byline"><%= current_admin.login %></span>
-          <%= f.hidden_field :name, :value => "#{current_admin.login}", :id => "comment_name_for_#{commentable.id}" %>
-          <%= f.hidden_field :email, :value => "#{current_admin.email}", :id => "comment_email_for_#{commentable.id}" %>
-        </h4>
-        <p class="footnote">(<%= allowed_html_instructions %>)</p>
-
       <% else %>
         <dl>
           <dt class="landmark"><%= ts("Note") %>:</dt>
