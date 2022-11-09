@@ -343,6 +343,7 @@ describe CommentsController do
 
       context "when logged in as an admin" do
         let(:work) { create(:work) }
+
         before { fake_login_admin(create(:admin)) }
 
         it "asks to log out first" do
