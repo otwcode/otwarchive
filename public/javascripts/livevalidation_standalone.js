@@ -380,9 +380,9 @@ LiveValidation.prototype = {
         elementToInsert.className += ' ' + this.messageClass + ' ' + className;
         if(this.insertAfterWhatNode.nextSibling){
             this.insertAfterWhatNode.parentNode.insertBefore(elementToInsert, this.insertAfterWhatNode.nextSibling);
-    		} else {
+        } else {
             this.insertAfterWhatNode.parentNode.appendChild(elementToInsert);
-    	  }
+        }
     },
     
     
