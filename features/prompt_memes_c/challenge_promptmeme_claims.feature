@@ -395,7 +395,7 @@ Feature: Prompt Meme Challenge
 
   Given I have Battle 12 prompt meme fully set up
     And everyone has signed up for Battle 12
-    And I am logged in as "mod1"
+    And I am logged in
   When I go to the "Battle 12" requests page
   Then I should not see "Download (CSV)"
 

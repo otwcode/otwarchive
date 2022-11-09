@@ -229,8 +229,8 @@ describe ChallengeSignupsController do
       controller.instance_variable_set(:@challenge, collection.challenge)
       controller.instance_variable_set(:@collection, collection)
       expect(controller.send(:prompt_meme_to_csv))
-        .to eq([["Pseud", "Email", "Sign-up URL", "Tags", "Description"],
-                [signup.pseud.name, signup.pseud.user.email, collection_signup_url(collection, signup),
+        .to eq([["Pseud", "Sign-up URL", "Tags", "Description"],
+                [signup.pseud.name, collection_signup_url(collection, signup),
                  signup.requests.first.tag_set.tags.first.name, ""]])
     end
   end
