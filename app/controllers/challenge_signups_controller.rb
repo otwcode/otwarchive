@@ -317,7 +317,7 @@ protected
 
 
   def prompt_meme_to_csv
-    header = ["Pseud", "Email", "Sign-up URL", "Tags"]
+    header = ["Pseud", "Sign-up URL", "Tags"]
     header << "Optional Tags" if @challenge.request_restriction.optional_tags_allowed
     header << "Description" if @challenge.request_restriction.description_allowed
     header << "URL" if @challenge.request_restriction.url_allowed
@@ -330,7 +330,6 @@ protected
           ["(Anonymous)", "", ""]
         else
           [request.challenge_signup.pseud.name,
-           request.challenge_signup.pseud.user.email,
            collection_signup_url(@collection, request.challenge_signup)]
         end
       csv_array << (row + request_to_array("request", request))
