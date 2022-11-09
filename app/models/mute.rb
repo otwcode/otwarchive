@@ -1,4 +1,6 @@
 class Mute < ApplicationRecord
+  include MuteHelper
+
   belongs_to :muter, class_name: "User"
   belongs_to :muted, class_name: "User"
 
@@ -25,13 +27,6 @@ class Mute < ApplicationRecord
   end
 
   def update_cache
-    return Rails.cache.write("muted/#{muter_id}/mute_css", nil) if muter.muted_users.empty?
-    
-    muted_users_css_classes = muter.muted_users.map { |muted_user| ".user-#{muted_user.id}" }
-
-    Rails.cache.write(
-      "muted/#{muter_id}/mute_css", 
-      "<style>#{muted_users_css_classes.join(', ')} {display: none !important; visibility: hidden !important;}</style>".html_safe
-    )
+    Rails.cache.write(mute_css_key(muter), mute_css_uncached(muter))
   end
 end

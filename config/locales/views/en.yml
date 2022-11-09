@@ -381,7 +381,7 @@ en:
   muted:
     mute: "Mute"
     unmute: "Unmute"
-    muted_items_notice: "You have muted some users in the Archive. Some items may not be shown, and any counts may be inaccurate. You can mute or unmute users on %{muted_users_link}."
+    muted_items_notice: "You have muted some users on the Archive. Some items may not be shown, and any counts may be inaccurate. You can mute or unmute users on %{muted_users_link}."
     muted_users_link_text: "your Muted Users page"
     users:
       index:

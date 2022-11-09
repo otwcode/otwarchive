@@ -15,15 +15,23 @@ module MuteHelper
   end
 
   def mute_css
-    return unless current_user
+    return if current_user.nil?
 
-    Rails.cache.fetch("muted/#{current_user.id}/mute_css") do
-      return if current_user.muted_users.empty?
-
-      muted_users_css_classes = current_user.muted_users.map { |muted_user| ".user-#{muted_user.id}" }
-      
-      "<style>#{muted_users_css_classes.join(', ')} {display: none !important; visibility: hidden !important;}</style>".html_safe
+    Rails.cache.fetch(mute_css_key(current_user)) do
+      mute_css_uncached(current_user)
     end
+  end
+
+  def mute_css_uncached(user)
+    return if user.muted_users.empty?
+
+    css_classes = user.muted_users.map { |muted_user| ".user-#{muted_user.id}" }.join(", ")
+
+    "<style>#{css_classes} { display: none !important; visibility: hidden !important; }</style>".html_safe
+  end
+
+  def mute_css_key(user)
+    "muted/#{user.id}/mute_css"
   end
 
   def user_has_muted_users?
