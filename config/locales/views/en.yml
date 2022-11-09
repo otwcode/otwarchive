@@ -99,7 +99,7 @@ en:
       page_title: "Hi, %{login}!"
       confidentiality_reminder: "You are now logged in as an admin. That means you will probably encounter information that is personal or confidential (e.g. usernames, email and IP addresses, creator names on anonymous works, etc). Please do not use this information in ways unrelated to your OTW role. If you have questions about what you can or cannot do with information you see here, contact your committee chair(s)."
       responsibility: "With great power comes great responsibility."
-      log_out_reminder: "Please remember to log out before resuming your normal site activity and leaving comments and kudos!"
+      log_out_reminder: "Please remember to log out before resuming your normal site activity!"
       roles:
         heading: "Your admin roles:"
         none: "You currently have no admin roles assigned to you."
