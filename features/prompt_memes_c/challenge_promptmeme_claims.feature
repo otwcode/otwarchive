@@ -387,7 +387,7 @@ Feature: Prompt Meme Challenge
     And I create Battle 12 promptmeme
   When I go to the "Battle 12" signups page
   Then I should see "Download (CSV)"
-  When I go to the "Battle "12" signups page
+  When I go to the "Battle 12" requests page
     And I follow "Download (CSV)"
   Then I should download a csv file with the header row "Pseud Sign-up URL Tags Description"
 
