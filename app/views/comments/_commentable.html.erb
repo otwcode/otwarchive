@@ -28,7 +28,7 @@
       <li><%= link_to ts('Back to AO3 News Index'), admin_posts_path %></li>
     <% end %>
 
-    <% if @work && !is_author_of?(@work) %>
+    <% if @work && !is_author_of?(@work) && !logged_in_as_admin? %>
       <li>
         <%= form_for(:kudo, url: kudos_path, html: { method: 'post', id: 'new_kudo' }) do |kudo_form| %>
           <%= kudo_form.hidden_field :commentable_id, :value => @work.id %>

@@ -208,12 +208,10 @@ Scenario: Try to post a comment with a < angle bracket before a linebreak, with 
       And I press "Comment"
     Then I should see "Comment created!"
 
-Scenario: Asked to logged out first if trying to post a comment as an admin
+Scenario: Cannot comment (no button) while logged as admin
 
     Given the work "Generic Work"
       And I am logged in as an admin
       And I view the work "Generic Work"
-    When I fill in "Comment" with "Nice work!"
-      And I press "Comment"
-    Then I should see "Please log out of your admin account first!"
-      And I should not see "Comment created!"
+    Then I should see "Generic Work"
+      And I should not see a "Comment" button
