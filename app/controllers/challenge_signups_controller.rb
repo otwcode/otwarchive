@@ -265,6 +265,10 @@ protected
       rarray << (request.nil? ? "" : request.optional_tag_set.tags.map {|tag| tag.name}.join(", "))
     end
 
+    if @challenge.send("#{type}_restriction").title_allowed
+      rarray << (request.nil? ? "" : sanitize_field(request, :title))
+    end
+
     if @challenge.send("#{type}_restriction").description_allowed
       description = (request.nil? ? "" : sanitize_field(request, :description))
       # Didn't find a way to get Excel 2007 to accept line breaks
@@ -290,6 +294,8 @@ protected
         header << "#{type.capitalize} #{i+1} Tags"
         header << "#{type.capitalize} #{i+1} Optional Tags" if
           @challenge.send("#{type}_restriction").optional_tags_allowed
+        header << "#{type.capitalize} #{i+1} Title" if
+          @challenge.send("#{type}_restriction").title_allowed
         header << "#{type.capitalize} #{i+1} Description" if
           @challenge.send("#{type}_restriction").description_allowed
         header << "#{type.capitalize} #{i+1} URL" if
@@ -319,6 +325,7 @@ protected
   def prompt_meme_to_csv
     header = ["Pseud", "Sign-up URL", "Tags"]
     header << "Optional Tags" if @challenge.request_restriction.optional_tags_allowed
+    header << "Title" if @challenge.request_restriction.title_allowed
     header << "Description" if @challenge.request_restriction.description_allowed
     header << "URL" if @challenge.request_restriction.url_allowed
 

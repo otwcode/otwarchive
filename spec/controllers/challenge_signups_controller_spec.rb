@@ -195,6 +195,10 @@ describe ChallengeSignupsController do
     let(:signup) { create(:gift_exchange_signup, collection_id: collection.id) }
 
     before do
+      challenge = collection.challenge
+      challenge.offer_restriction.update(title_allowed: true)
+      challenge.request_restriction.update(title_allowed: true)
+
       signup_offer = signup.offers.first
       signup_offer.tag_set = create(:tag_set)
       signup_offer.save
@@ -208,18 +212,20 @@ describe ChallengeSignupsController do
       controller.instance_variable_set(:@challenge, collection.challenge)
       controller.instance_variable_set(:@collection, collection)
       expect(controller.send(:gift_exchange_to_csv))
-        .to eq([["Pseud", "Email", "Sign-up URL", "Request 1 Tags", "Request 1 Description", "Offer 1 Tags", "Offer 1 Description"],
+        .to eq([["Pseud", "Email", "Sign-up URL", "Request 1 Tags", "Request 1 Title", "Request 1 Description", "Offer 1 Tags", "Offer 1 Title", "Offer 1 Description"],
                 [signup.pseud.name, signup.pseud.user.email, collection_signup_url(collection, signup),
-                 signup.requests.first.tag_set.tags.first.name, "", signup.offers.first.tag_set.tags.first.name, ""]])
+                 signup.requests.first.tag_set.tags.first.name, "", "", signup.offers.first.tag_set.tags.first.name, "", ""]])
     end
   end
 
   describe "prompt_meme_to_csv" do
-    let(:tag_set) { create(:tag_set) }
     let(:collection) { create(:collection, challenge: create(:prompt_meme)) }
     let(:signup) { create(:prompt_meme_signup, collection_id: collection.id) }
 
     before do
+      challenge = collection.challenge
+      challenge.request_restriction.update(title_allowed: true)
+
       prompt = signup.prompts.first
       prompt.tag_set = create(:tag_set)
       prompt.save
@@ -229,9 +235,9 @@ describe ChallengeSignupsController do
       controller.instance_variable_set(:@challenge, collection.challenge)
       controller.instance_variable_set(:@collection, collection)
       expect(controller.send(:prompt_meme_to_csv))
-        .to eq([["Pseud", "Sign-up URL", "Tags", "Description"],
+        .to eq([["Pseud", "Sign-up URL", "Tags", "Title", "Description"],
                 [signup.pseud.name, collection_signup_url(collection, signup),
-                 signup.requests.first.tag_set.tags.first.name, ""]])
+                 signup.requests.first.tag_set.tags.first.name, "", ""]])
     end
   end
 end
