@@ -365,6 +365,7 @@ LiveValidation.prototype = {
     	  var textNode = document.createTextNode(this.message);
       	span.appendChild(textNode);
         span.role = "alert";
+        span.id = `${this.element.id}_${this.messageClass}`;
         return span;
     },
     
@@ -392,9 +393,13 @@ LiveValidation.prototype = {
         this.removeFieldClass();
         if(!this.validationFailed){
             if(this.displayMessageWhenEmpty || this.element.value != ''){
+                this.element.setAttribute("aria-invalid", false);
+                this.element.removeAttribute("aria-describedby");
                 if(this.element.className.indexOf(this.validFieldClass) == -1) this.element.className += ' ' + this.validFieldClass;
             }
-        }else{
+        } else {
+            this.element.setAttribute("aria-invalid", true);
+            this.element.setAttribute("aria-describedby", `${this.element.id}_${this.messageClass}`);
             if(this.element.className.indexOf(this.invalidFieldClass) == -1) this.element.className += ' ' + this.invalidFieldClass;
         }
     },
