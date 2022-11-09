@@ -362,7 +362,7 @@ LiveValidation.prototype = {
      */
     createMessageSpan: function(){
         var span = document.createElement('span');
-    	  var textNode = document.createTextNode(this.message);
+    	var textNode = document.createTextNode(this.message);
       	span.appendChild(textNode);
         span.role = "alert";
         span.id = `${this.element.id}_${this.messageClass}`;
