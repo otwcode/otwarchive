@@ -247,16 +247,9 @@ describe CommentsController do
       context "when logged in as an admin" do
         before { fake_login_admin(create(:admin)) }
 
-        it "posts the comment and shows it in context" do
+        it "asks to log out first" do
           post :create, params: { tag_id: fandom.name, comment: anon_comment_attributes }
-          comment = Comment.last
-          expect(comment.commentable).to eq fandom
-          expect(comment.name).to eq anon_comment_attributes[:name]
-          expect(comment.email).to eq anon_comment_attributes[:email]
-          expect(comment.comment_content).to include anon_comment_attributes[:comment_content]
-          path = comments_path(tag_id: fandom.to_param,
-                               anchor: "comment_#{comment.id}")
-          expect(response).to redirect_to path
+          expect(flash[:notice]).to eq("Please log out of your admin account first!")
         end
       end
 

@@ -182,5 +182,17 @@ describe KudosController do
         end
       end
     end
+
+    context "when kudos giver is admin" do
+      let(:work) { create(:work) }
+      let(:admin) { create(:admin) }
+
+      before { fake_login_admin(admin) }
+
+      it "asks to log out first" do
+        post :create, params: { kudo: { commentable_id: work.id, commentable_type: "Work" } }
+        expect(flash[:notice]).to eq("Please log out of your admin account first!")
+      end
+    end
   end
 end
