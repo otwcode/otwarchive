@@ -350,6 +350,9 @@ en:
         popular: These are some of the most popular tags used on the Archive. To find more tags, %{search_tags_link}.
         random: These are some random tags used on the Archive. To find more tags, %{search_tags_link}.
       search_tags: try our tag search
+    show:
+      list_fandom_tags: A list of all the %{fandom_relationship_tags_link} is available.
+      fandom_relationship_tags: Relationship tags in this fandom
   blocked:
     block: "Block"
     unblock: "Unblock"
