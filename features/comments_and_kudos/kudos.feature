@@ -167,3 +167,11 @@ Feature: Kudos
       And the email should contain "Meh Story"
       And the email should not contain "0 guests"
       And the email should not contain "translation missing"
+
+Scenario: Asked to log out first when trying to leave kudos as admin
+
+    Given I am logged in as an admin
+      And I view the work "Awesome Story"
+    When I press "Kudos ♥"
+    Then I should see "Please log out of your admin account first!"
+      And I should not see "left kudos on this work!"

@@ -1,5 +1,6 @@
 class KudosController < ApplicationController
   skip_before_action :store_location
+  before_action :admin_logout_required, only: [:create]
 
   def index
     @work = Work.find(params[:work_id])
