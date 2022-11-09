@@ -255,7 +255,7 @@ describe CommentsController do
           expect(comment.email).to eq anon_comment_attributes[:email]
           expect(comment.comment_content).to include anon_comment_attributes[:comment_content]
           path = comments_path(tag_id: fandom.to_param,
-                                anchor: "comment_#{comment.id}")
+                               anchor: "comment_#{comment.id}")
           expect(response).to redirect_to path
         end
       end
