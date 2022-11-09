@@ -119,6 +119,7 @@ LiveValidation.prototype = {
       	    this.element.onblur = function(e){ self.doOnBlur(e); return self.oldOnBlur.call(this, e); }
         }
       }
+      this.validate();
     },
 	
 	/**
@@ -210,7 +211,6 @@ LiveValidation.prototype = {
      */
     doOnFocus: function(e){
       this.focused = true;
-      this.removeMessageAndFieldClass();
     },
     
     /**
@@ -362,8 +362,9 @@ LiveValidation.prototype = {
      */
     createMessageSpan: function(){
         var span = document.createElement('span');
-    	var textNode = document.createTextNode(this.message);
+    	  var textNode = document.createTextNode(this.message);
       	span.appendChild(textNode);
+        span.role = "alert";
         return span;
     },
     
@@ -374,16 +375,13 @@ LiveValidation.prototype = {
      */
     insertMessage: function(elementToInsert){
       	this.removeMessage();
-      	if( (this.displayMessageWhenEmpty && (this.elementType == LiveValidation.CHECKBOX || this.element.value == ''))
-    	  || this.element.value != '' ){
-            var className = this.validationFailed ? this.invalidClass : this.validClass;
-    	  	elementToInsert.className += ' ' + this.messageClass + ' ' + className;
-            if(this.insertAfterWhatNode.nextSibling){
-    		  		this.insertAfterWhatNode.parentNode.insertBefore(elementToInsert, this.insertAfterWhatNode.nextSibling);
-    		}else{
-    			    this.insertAfterWhatNode.parentNode.appendChild(elementToInsert);
-    	    }
-    	}
+        var className = this.validationFailed ? this.invalidClass : this.validClass;
+        elementToInsert.className += ' ' + this.messageClass + ' ' + className;
+        if(this.insertAfterWhatNode.nextSibling){
+            this.insertAfterWhatNode.parentNode.insertBefore(elementToInsert, this.insertAfterWhatNode.nextSibling);
+    		} else {
+            this.insertAfterWhatNode.parentNode.appendChild(elementToInsert);
+    	  }
     },
     
     
