@@ -215,14 +215,17 @@ module CommentsHelper
                           comment.parent.id
     link_to(
       ts("Cancel"),
-      url_for(controller: :comments,
-              action: :cancel_comment_reply,
-              id: comment.id,
-              comment_id: params[:comment_id],
-              commentable_id => commentable_value,
-              view_full_work: params[:view_full_work],
-              page: params[:page]),
-      remote: remote)
+      url_for(
+        controller: :comments,
+        action: :cancel_comment_reply,
+        id: comment.id,
+        comment_id: params[:comment_id],
+        commentable_id => commentable_value,
+        view_full_work: params[:view_full_work],
+        page: params[:page]
+      ),
+      remote: remote
+    )
   end
 
   # canceling an edit
