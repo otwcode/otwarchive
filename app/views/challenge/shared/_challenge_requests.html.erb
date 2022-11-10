@@ -7,7 +7,7 @@
   <% if @collection.user_is_maintainer?(current_user) %>
     <li>
       <%= link_to ts("Download (CSV)"), collection_signups_path(@collection, format: :csv) %>
-      <%= link_to_help "csv-download"%>
+      <%= link_to_help "csv-download" %>
     </li>
   <% end %>
   <li><%= ts("Sort By") %></li>
