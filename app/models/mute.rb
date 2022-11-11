@@ -8,6 +8,8 @@ class Mute < ApplicationRecord
   validates :muted_id, uniqueness: { scope: :muter_id }
 
   validate :check_self
+  validate :check_official, if: :muted
+  validate :check_mute_limit
 
   after_create :update_cache
   after_destroy :update_cache
@@ -16,9 +18,12 @@ class Mute < ApplicationRecord
     errors.add(:muted, :self) if muted == muter
   end
 
-  validate :check_official, if: :muted
   def check_official
     errors.add(:muted, :official) if muted.official
+  end
+
+  def check_mute_limit
+    errors.add(:muted, :limit) if muter.muted_users.length() >= ArchiveConfig.MAX_MUTED_USERS
   end
 
   def muted_byline=(byline)
