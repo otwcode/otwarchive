@@ -501,6 +501,10 @@ describe Tag do
   end
 
   describe "when the resque queue is long" do
+    # Disable immediate job processing. Jobs will only be processed when we
+    # call "perform_enqueued_jobs", which simulates a delay in the queue.
+    include ActiveJob::TestHelper
+
     # https://otwarchive.atlassian.net/browse/AO3-4077
     it "deletes the inherited metatag when both direct ones are removed" do
       lowest = create(:canonical_fandom)
@@ -509,10 +513,13 @@ describe Tag do
       middle.meta_tags << highest
       middle.sub_tags << lowest
 
-      suspend_resque_workers do
-        middle.reload
-        middle.update!(associations_to_remove: [lowest.id, highest.id])
-      end
+      perform_enqueued_jobs
+
+      middle.reload
+      middle.update!(associations_to_remove: [lowest.id, highest.id])
+      expect(enqueued_jobs).not_to be_empty
+
+      perform_enqueued_jobs
 
       expect(lowest.meta_tags.reload).not_to include(highest)
     end
@@ -525,10 +532,13 @@ describe Tag do
 
       work = create(:work, fandom_string: synonym.name)
 
-      suspend_resque_workers do
-        canonical.reload
-        canonical.update!(associations_to_remove: [synonym.id, meta.id])
-      end
+      perform_enqueued_jobs
+
+      canonical.reload
+      canonical.update!(associations_to_remove: [synonym.id, meta.id])
+      expect(enqueued_jobs).not_to be_empty
+
+      perform_enqueued_jobs
 
       expect(work.filters.reload).not_to include(meta)
     end

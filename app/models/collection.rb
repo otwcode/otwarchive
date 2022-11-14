@@ -1,5 +1,4 @@
 class Collection < ApplicationRecord
-  include ActiveModel::ForbiddenAttributesProtection
   include Filterable
   include UrlHelpers
   include WorksOwner
@@ -425,5 +424,4 @@ class Collection < ApplicationRecord
   def clear_icon
     self.icon = nil if delete_icon? && !icon.dirty?
   end
-
 end

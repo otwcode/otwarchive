@@ -1,6 +1,5 @@
 class User < ApplicationRecord
   audited
-  include ActiveModel::ForbiddenAttributesProtection
   include WorksOwner
 
   devise :database_authenticatable,
@@ -168,7 +167,7 @@ class User < ApplicationRecord
     inbox_comments.where(read: false)
   end
   def unread_inbox_comments_count
-    unread_inbox_comments.with_feedback_comment.count
+    unread_inbox_comments.with_bad_comments_removed.count
   end
 
   scope :alphabetical, -> { order(:login) }

@@ -223,8 +223,8 @@ module HtmlCleaner
 
   # Tags whose content we don't touch
   def dont_touch_content_tag?(tag)
-    %w(a abbr acronym address audio br dl h1 h2 h3 h4 h5 h6 hr img ol p
-       pre source table track video ul).include?(tag)
+    %w[a abbr acronym address audio br dl figure h1 h2 h3 h4 h5 h6 hr img ol p
+       pre source table track video ul].include?(tag)
   end
 
   # Tags that don't contain content
@@ -241,14 +241,14 @@ module HtmlCleaner
 
   # Tags that can't be inside p tags
   def put_outside_p_tag?(tag)
-    %w(audio dl h1 h2 h3 h4 h5 h6 hr ol p pre source table track ul video).include?(tag)
+    %w[audio dl figure h1 h2 h3 h4 h5 h6 hr ol p pre source table track ul video].include?(tag)
   end
 
   # Tags before and after which we don't want to convert linebreaks
   # into br's and p's
   def no_break_before_after_tag?(tag)
-    %w(audio blockquote br center dl div h1 h2 h3 h4 h5 h6
-       hr ol p pre source table track ul video).include?(tag)
+    %w[audio blockquote br center dl div figcaption h1 h2 h3 h4 h5 h6
+       hr ol p pre source table track ul video].include?(tag)
   end
 
   # Traverse a Nokogiri document tree recursively in order to insert

@@ -1,5 +1,4 @@
 class Pseud < ApplicationRecord
-  include ActiveModel::ForbiddenAttributesProtection
   include Searchable
   include WorksOwner
 

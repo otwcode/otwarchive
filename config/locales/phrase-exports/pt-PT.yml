@@ -342,7 +342,7 @@ pt-PT:
     creatorship_request:
       html:
         creation: "%{creation_link} por %{pseud_links}"
-        instructions: Podes aceitar ou rejeitar este pedido na tua %{page_name} página.
+        instructions: Podes aceitar ou rejeitar este pedido na tua página de %{page_name}.
         page_name: Co-Creator Requests (Pedidos de Pessoa Co-Criadora)
       intro_chapter: 'A pessoa utilizadora %{inviting_user} convidou o teu pseudónimo
         %{pseud} para listado como pessoa co-criadora do seguinte capítulo:'
