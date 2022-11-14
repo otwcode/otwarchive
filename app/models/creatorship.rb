@@ -182,10 +182,10 @@ class Creatorship < ApplicationRecord
   # This information is stored temporarily to make it available for
   # Policy and Abuse on orphaned works.
   def save_original_creator
-    return if creation.destroyed?
     return unless creation.is_a?(Work)
+    return if creation.destroyed?
 
-    creation.original_creators.create_or_find_by(work: creation, user: pseud.user).touch
+    creation.original_creators.create_or_find_by(user: pseud.user).touch
   end
 
   def expire_caches

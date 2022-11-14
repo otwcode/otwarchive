@@ -480,6 +480,6 @@ PERMITTED_HOSTS: [
 
 USER_RENAME_LIMIT_DAYS: 7
 
-# Number of seconds to retain the original creator for works that have been
+# Number of hours to retain the original creator for works that have been
 # orphaned.
 ORIGINAL_CREATOR_TTL_HOURS: 72

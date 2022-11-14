@@ -7,6 +7,13 @@ class WorkOriginalCreator < ApplicationRecord
     user ? "#{user_id} (#{user.login})" : user_id.to_s
   end
 
+  ####################
+  # DELAYED JOBS
+  ####################
+
+  include AsyncWithResque
+  @queue = :utilities
+
   # Remove any original creator records that have been around for longer
   # than the TTL in the archive configuration.
   def self.cleanup

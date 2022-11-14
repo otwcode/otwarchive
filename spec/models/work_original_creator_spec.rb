@@ -5,16 +5,16 @@ require "spec_helper"
 describe WorkOriginalCreator do
   describe "#display" do
     let(:original_creator) { create(:work_original_creator) }
+    let(:user) { original_creator.user }
 
     context "when the associated user exists" do
       it "returns both the id and username" do
-        user = User.find(original_creator.user_id)
         expect(original_creator.display).to eq("#{user.id} (#{user.login})")
       end
     end
 
     context "when the associated user has been deleted" do
-      before { User.delete_by(id: original_creator.user_id) }
+      before { user.destroy! }
 
       it "returns only the id" do
         expect(original_creator.reload.display).to eq(original_creator.user_id.to_s)

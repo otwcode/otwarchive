@@ -183,11 +183,9 @@ end
 Given "a work {string} with the original creator {string}" do |title, creator|
   step %{I am logged in as "#{creator}"}
   step %{I post the work "#{title}"}
-  step %{I log out}
-  work = Work.find_by(title: title)
-  user = User.find_by(login: creator)
   FactoryBot.create(:user, login: "orphan_account")
-  Creatorship.orphan(user.pseuds, [work])
+  step %{I orphan the work "#{title}"}
+  step %{I log out}
 end
 
 ### WHEN
