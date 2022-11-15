@@ -189,11 +189,8 @@ module ParagraphMaker
     # The easy cases: if this node is the first or last node in its parent, then
     # there's no point in a proper split, because one of the two tags would just
     # be empty. Instead, we rearrange ourselves relative to our parent.
-    if node.previous_sibling.nil?
-      return node.parent.add_previous_sibling(node)
-    elsif node.next_sibling.nil?
-      return node.parent.add_next_sibling(node)
-    end
+    return node.parent.add_previous_sibling(node) if node.previous_sibling.nil?
+    return node.parent.add_next_sibling(node) if node.next_sibling.nil?
 
     # Create a shallow copy of the parent:
     new_parent = node.parent.dup(0)

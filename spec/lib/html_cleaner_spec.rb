@@ -788,7 +788,7 @@ describe HtmlCleaner do
       it "handles #{tag} with an unclosed br tag in it" do
         result = add_paragraphs_to_text("<#{tag}>some<br>text</#{tag}>")
         doc = Nokogiri::HTML.fragment(result)
-        expect(doc.xpath("./p[1]/#{tag}[1]").children.to_s.strip).to match(/some<br\/?>text/)
+        expect(doc.xpath("./p[1]/#{tag}[1]").children.to_s.strip).to match(%r{some<br/?>text})
       end
     end
 

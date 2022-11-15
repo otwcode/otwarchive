@@ -84,8 +84,10 @@ module HtmlCleaner
                                         Sanitize::Config::CSS_ALLOWED.merge(transformers: transformers))
       else
         # the screencast field shouldn't be wrapped in <p> tags
-        unfrozen_value = Sanitize.clean(add_paragraphs_to_text(fix_bad_characters(unfrozen_value)),
-                                        Sanitize::Config::ARCHIVE.merge(transformers: transformers)) unless field.to_s == "screencast"
+        unless field.to_s == "screencast"
+          unfrozen_value = Sanitize.clean(add_paragraphs_to_text(fix_bad_characters(unfrozen_value)),
+                                          Sanitize::Config::ARCHIVE.merge(transformers: transformers))
+        end
       end
       doc = Nokogiri::HTML::Document.new
       doc.encoding = "UTF-8"
