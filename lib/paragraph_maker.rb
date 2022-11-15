@@ -5,24 +5,30 @@ module ParagraphMaker
   extend self
 
   # Tags whose content we don't touch
-  TAG_NAMES_TO_SKIP = %w[a abbr acronym address audio dl embed figure h1 h2 h3
-                         h4 h5 h6 hr iframe img ol math object p pre source svg
-                         table track video ul].freeze
+  TAG_NAMES_TO_SKIP = %w[
+    a abbr acronym address audio button dl embed figure h1 h2 h3 h4 h5 h6 hr
+    iframe img input label ol map math noscript object p pre script select
+    source style svg table textarea track video ul
+  ].freeze
 
   # Tags that need to go inside p tags
-  TAG_NAMES_TO_WRAP = %w[a abbr acronym address b big br cite code del dfn em i
-                         ins kbd q s script samp small span strike strong style
-                         sub sup tt u var].freeze
+  TAG_NAMES_TO_WRAP = %w[
+    a abbr acronym b big br button cite code del dfn em i img input ins kbd
+    label map q s samp select small span strike strong textarea sub sup tt u
+    var
+  ].freeze
 
   # Tags that can't be inside p tags
-  TAG_NAMES_TO_UNWRAP = %w[audio dl figure h1 h2 h3 h4 h5 h6 hr ol p pre source
-                           table track ul video].freeze
+  TAG_NAMES_TO_UNWRAP = %w[
+    audio dl figure h1 h2 h3 h4 h5 h6 hr ol p pre source table track ul video
+  ].freeze
 
   # Tags before and after which we don't want to convert linebreaks
   # into br's and p's
-  TAG_NAMES_STRIP_WHITESPACE = %w[audio blockquote br center dl div figcaption
-                                  h1 h2 h3 h4 h5 h6 hr ol p pre source table
-                                  track ul video].freeze
+  TAG_NAMES_STRIP_WHITESPACE = %w[
+    audio blockquote br center dl div fieldset figure figcaption form h1 h2 h3
+    h4 h5 h6 hr noscript ol p pre script source style table track ul video
+  ].freeze
 
   private
 
