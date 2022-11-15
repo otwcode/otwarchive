@@ -65,6 +65,7 @@ describe OtwSanitize::MediaSanitizer do
             <source src='example.com/flower.webm' type='video/webm'>
           </video>"
         content = Sanitize.fragment(html, config)
+        expect(content).to match("<source")
         expect(content).not_to match("</source>")
       end
 
@@ -84,6 +85,7 @@ describe OtwSanitize::MediaSanitizer do
             <track kind='subtitles' src='http://example.com/japanese.vtt' srclang='ja'>
           </video>"
         content = Sanitize.fragment(html, config)
+        expect(content).to match("<track")
         expect(content).not_to match("</track>")
       end
 

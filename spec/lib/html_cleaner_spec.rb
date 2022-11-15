@@ -912,7 +912,6 @@ describe HtmlCleaner do
     end
 
     it "closes unclosed tag within other tag" do
-      #pending "Opened bug report with Nokogiri"
       html = "<strong><em>unclosed</strong>"
       doc = Nokogiri::HTML5.fragment(add_paragraphs_to_text(html))
       expect(doc.xpath("./p/strong/em/node()").to_s.strip).to eq("unclosed")
