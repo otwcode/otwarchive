@@ -83,7 +83,6 @@ cs:
       html:
         left_kudos:
           few: Práce %{commentable_link} dostala kudos od %{givers_list}.
-          many: "%{givers_list} zanechali kudos u %{commentable_link}."
           one: Práce %{commentable_link} dostala kudos od %{givers_list}.
           other: Práce %{commentable_link} dostala kudos od %{givers_list}.
         single_guest:
@@ -93,7 +92,6 @@ cs:
       text:
         left_kudos:
           few: Práce %{commentable_title} (%{commentable_url}) dostala kudos od %{givers_list}.
-          many: "%{givers_list} zanechali kudos u %{commentable_title} (%{commentable_url})."
           one: Práce %{commentable_title} (%{commentable_url}) dostala kudos od %{givers_list}.
           other: Práce %{commentable_title} (%{commentable_url}) dostala kudos od
             %{givers_list}.

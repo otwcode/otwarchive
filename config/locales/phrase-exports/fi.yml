@@ -107,7 +107,7 @@ fi:
           addressed: Hei, %{name}!
           unaddressed: Hei!
         introductory: Tervehdys Archive of Our Own – AO3:lta (Oma arkisto)!
-      metadata_label_indicator: ":"
+      metadata_label_indicator: ": "
       signature:
         app_short_name: AO3
         open_doors: Open Doors (Avoimet ovet) -tiimi
