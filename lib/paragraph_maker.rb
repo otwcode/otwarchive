@@ -10,12 +10,12 @@ module ParagraphMaker
                          table track video ul].freeze
 
   # Tags that need to go inside p tags
-  TAG_NAMES_TO_WRAP = %w[a abbr acronym address b big br cite code del dfn em i
+  TAG_NAMES_TO_WRAP = %w[a abbr acronym b big br cite code del dfn em i
                          ins kbd q s script samp small span strike strong style
                          sub sup tt u var].freeze
 
   # Tags that can't be inside p tags
-  TAG_NAMES_TO_UNWRAP = %w[audio dl figure h1 h2 h3 h4 h5 h6 hr ol p pre source
+  TAG_NAMES_TO_UNWRAP = %w[address audio dl figure h1 h2 h3 h4 h5 h6 hr ol p pre source
                            table track ul video].freeze
 
   # Tags before and after which we don't want to convert linebreaks
