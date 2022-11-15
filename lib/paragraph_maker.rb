@@ -2,7 +2,7 @@
 
 # Traverse a Nokogiri document tree recursively in order to insert linebreaks.
 module ParagraphMaker
-  module_function
+  extend self
 
   # Tags whose content we don't touch
   TAG_NAMES_TO_SKIP = %w[a abbr acronym address audio dl embed figure h1 h2 h3
@@ -23,6 +23,8 @@ module ParagraphMaker
   TAG_NAMES_STRIP_WHITESPACE = %w[audio blockquote br center dl div figcaption
                                   h1 h2 h3 h4 h5 h6 hr ol p pre source table
                                   track ul video].freeze
+
+  private
 
   # Traverse all nodes from the given root, yielding each node to the given
   # block. Processes nodes that are on the list of TAG_NAMES_TO_SKIP, but
@@ -52,10 +54,10 @@ module ParagraphMaker
     traverse(root) do |node|
       next unless node.text? || node.cdata?
 
-      # This text node immediately follows the closing tag of either its
-      # previous sibling, or its parent if it has no previous sibling. If we're
-      # supposed to ignore whitespace after that closing tag, we should lstrip
-      # to get rid of it.
+      # This text node immediately follows either the closing tag of its
+      # previous sibling, or the opening tag of its parent if it has no
+      # previous sibling. If we're supposed to ignore whitespace after that
+      # tag, we should lstrip to get rid of it.
       node.content = node.content.lstrip if TAG_NAMES_STRIP_WHITESPACE.include?(node.previous_sibling&.name || node.parent&.name)
 
       # This text node is immediately follows by the opening tag of either its
@@ -246,6 +248,8 @@ module ParagraphMaker
       node.unlink if node.name == "p" && node.children.empty?
     end
   end
+
+  public
 
   # Process the given node to add paragraphs to it and all of its children.
   def process(root)
