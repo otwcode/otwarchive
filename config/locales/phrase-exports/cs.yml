@@ -76,27 +76,29 @@ cs:
   kudo_mailer:
     batch_kudo_notification:
       guest:
-        few: "%{count} návštěvníci"
+        few: "%{count} návštěvníků"
         many: "%{count} návštěvníků"
-        one: návštěvník
+        one: návštěvníka
         other: "%{count} návštěvníků"
       html:
         left_kudos:
-          few: "%{givers_list} zanechali kudos u %{commentable_link}."
+          few: Práce %{commentable_link} dostala kudos od %{givers_list}.
           many: "%{givers_list} zanechali kudos u %{commentable_link}."
-          one: "%{givers_list} zanechal/a kudos u %{commentable_link}."
-          other: "%{givers_list} zanechali kudos u %{commentable_link}."
+          one: Práce %{commentable_link} dostala kudos od %{givers_list}.
+          other: Práce %{commentable_link} dostala kudos od %{givers_list}.
         single_guest:
-          giver_list: Návštěvník
-          left_kudos: "%{giver_list} zanechal kudos u %{commentable_link}."
+          giver_list: návštěvníka
+          left_kudos: Práce %{commentable_link} dostala kudos od %{givers_list}.
       subject: "[%{app_name}] Máte nové kudos!"
       text:
         left_kudos:
-          few: "%{givers_list} zanechali kudos u %{commentable_title} (%{commentable_url})."
+          few: Práce %{commentable_title} (%{commentable_url}) dostala kudos od %{givers_list}.
           many: "%{givers_list} zanechali kudos u %{commentable_title} (%{commentable_url})."
-          one: "%{givers_list} zanechal/a kudos u %{commentable_title} (%{commentable_url})."
-          other: "%{givers_list} zanechali kudos u %{commentable_title} (%{commentable_url})."
-        single_guest: Návštěvník zanechal kudos u %{commentable_title} (%{commentable_url}).
+          one: Práce %{commentable_title} (%{commentable_url}) dostala kudos od %{givers_list}.
+          other: Práce %{commentable_title} (%{commentable_url}) dostala kudos od
+            %{givers_list}.
+        single_guest: Práce %{commentable_title} (%{commentable_url}) dostala kudos
+          od návštěvníka.
   mailer:
     general:
       closing:

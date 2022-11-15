@@ -43,6 +43,8 @@ vi:
         other: Mối Quan Hệ
       series:
         other: Bộ
+  chapters:
+    chapter_position: "- Chương %{position}"
   kudo_mailer:
     batch_kudo_notification:
       guest:
@@ -66,6 +68,7 @@ vi:
         informal: Thân gửi,
       creation:
         link_with_word_count: "%{creation_link} (%{word_count})"
+        title_with_chapter_number: Chương %{position}, tác phẩm %{title}
         title_with_word_count: '"%{creation_title}" (%{word_count})'
         word_count:
           other: "%{count} từ"
