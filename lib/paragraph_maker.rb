@@ -60,7 +60,7 @@ module ParagraphMaker
       # tag, we should lstrip to get rid of it.
       node.content = node.content.lstrip if TAG_NAMES_STRIP_WHITESPACE.include?(node.previous_sibling&.name || node.parent&.name)
 
-      # This text node is immediately follows by the opening tag of either its
+      # This text node is immediately followed by either the opening tag of its
       # next sibling, or the closing tag of its parent. If that tag is one in
       # the TAG_NAMES_STRIP_WHITESPACE list, we want to rstrip this node.
       node.content = node.content.rstrip if TAG_NAMES_STRIP_WHITESPACE.include?(node.next_sibling&.name || node.parent&.name)
