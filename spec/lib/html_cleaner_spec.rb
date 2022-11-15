@@ -9,135 +9,6 @@ describe HtmlCleaner do
     "<table><tr><td>#{content}</td></tr></table>"
   end
 
-  describe "TagStack" do
-    let(:stack) { HtmlCleaner::TagStack.new }
-
-    describe "inside paragraph?" do
-      it "should return false" do
-        stack.concat([[["div"], {}], [["i", {}]], [["s"], {}]])
-        expect(stack.inside_paragraph?).to be_falsey
-      end
-
-      it "should recognise paragraph in combination with i" do
-        stack.concat([[["div", {}]], [["p", {}], ["i", {}]], [["s"], {}]])
-        expect(stack.inside_paragraph?).to be_truthy
-      end
-
-      it "should recognise paragraph in combination with i" do
-        stack.concat([[["div", {}]], [["i", {}], ["p", {}]], [["s"], {}]])
-        expect(stack.inside_paragraph?).to be_truthy
-      end
-
-      it "should recognise single paragraph" do
-        stack.concat([[["div", {}]], [["p", {}]], [["s", {}]]])
-        expect(stack.inside_paragraph?).to be_truthy
-      end
-    end
-
-    describe "open_paragraph_tags" do
-      it "should open tags" do
-        stack.concat([[["div", {}]], [["p", {}], ["i", {}]], [["s", {}]]])
-        expect(stack.open_paragraph_tags).to eq("<p><i><s>")
-      end
-
-      it "should open tags" do
-        stack.concat([[["div", {}]], [["i", {}], ["p", {}]], [["s", {}]]])
-        expect(stack.open_paragraph_tags).to eq("<p><s>")
-      end
-
-      it "should handle attributes" do
-        stack.concat([[["div", {}]], [["p", {}]], [["s", { "color" => "blue" }]]])
-        expect(stack.open_paragraph_tags).to eq("<p><s color='blue'>")
-      end
-
-      it "should ignore text nodes" do
-        stack.concat([[["div", {}]], [["p", {}], ["s", {}]], [["text", {}]]])
-        expect(stack.open_paragraph_tags).to eq("<p><s>")
-      end
-
-      it "should return empty string when not inside paragraph" do
-        stack.concat([[["div", {}]], [["i", {}]], [["s", {}]]])
-        expect(stack.open_paragraph_tags).to eq("")
-      end
-    end
-
-    describe "close_paragraph_tags" do
-      it "should close tags" do
-        stack.concat([[["div", {}]], [["p", {}], ["i", {}]], [["s", {}]]])
-        expect(stack.close_paragraph_tags).to eq("</s></i></p>")
-      end
-
-      it "should close tags" do
-        stack.concat([[["div", {}]], [["i", {}], ["p", {}]], [["s", {}]]])
-        expect(stack.close_paragraph_tags).to eq("</s></p>")
-      end
-
-      it "should handle attributes" do
-        stack.concat([[["div", {}]], [["p", {}]], [["s", { "color" => "blue" }]]])
-        expect(stack.close_paragraph_tags).to eq("</s></p>")
-      end
-
-      it "should ignore text nodes" do
-        stack.concat([[["div", {}]], [["p", {}], ["s", {}]], [["text", {}]]])
-        expect(stack.close_paragraph_tags).to eq("</s></p>")
-      end
-
-      it "should return empty string when not inside paragraph" do
-        stack.concat([[["div", {}]], [["i", {}]], [["s", {}]]])
-        expect(stack.close_paragraph_tags).to eq("")
-      end
-    end
-
-    describe "close_and_pop_last" do
-      it "should close tags" do
-        stack.concat([[["div", {}]], [["p", {}], ["i", {}]]])
-        expect(stack.close_and_pop_last).to eq("</i></p>")
-        expect(stack).to eq([[["div", {}]]])
-      end
-    end
-  end
-
-  describe "close_unclosed_tag" do
-    it "should close tag at end of line" do
-      result = close_unclosed_tag("first <i>line\n second line", "i", 1)
-      expect(result).to eq("first <i>line</i>\n second line")
-    end
-
-    %w(br col hr img).each do |tag|
-      it "should not touch self-closing #{tag} tag" do
-        result = close_unclosed_tag("don't <#{tag}> close", tag, 1)
-        expect(result).to eq("don't <#{tag}> close")
-      end
-    end
-
-    %w(col colgroup dl h1 h2 h3 h4 h5 h6 hr ol p pre table ul).each do |tag|
-      it "should not touch #{tag} tags that don't go inside p tags" do
-        result = close_unclosed_tag("don't <#{tag}> close", tag, 1)
-        expect(result).to eq("don't <#{tag}> close")
-      end
-    end
-
-    it "should close tag before next opening tag" do
-      result = close_unclosed_tag("some <i>more<s>text</s>", "i", 1)
-      expect(result).to eq("some <i>more</i><s>text</s>")
-    end
-
-    it "should close tag before next closing tag" do
-      result = close_unclosed_tag("some <s><i>more text</s>", "i", 1)
-      expect(result).to eq("some <s><i>more text</i></s>")
-    end
-
-    it "should close second opening tag" do
-      result = close_unclosed_tag("some <i>more</i> <i>text", "i", 1)
-      expect(result).to eq("some <i>more</i> <i>text</i>")
-    end
-
-    it "should only close specified tag" do
-      result = close_unclosed_tag("<code><i>text", "strong", 1)
-      expect(result).to eq("<code><i>text")
-    end
-  end
-
   describe "sanitize_value" do
     ArchiveConfig.FIELDS_ALLOWING_VIDEO_EMBEDS.each do |field|
       context "#{field} is configured to allow video embeds" do
@@ -654,7 +525,7 @@ describe HtmlCleaner do
   end
 
   describe "add_paragraphs_to_text" do
-    %w[a abbr acronym].each do |tag|
+    %w[a abbr acronym address].each do |tag|
       it "does not add extraneous paragraph breaks after #{tag} tags" do
         result = add_paragraphs_to_text("<#{tag}>quack</#{tag}> quack")
         doc = Nokogiri::HTML5.fragment(result)
@@ -675,6 +546,12 @@ describe HtmlCleaner do
       result = add_paragraphs_to_text(html)
       expect(result).not_to match("<p>")
       expect(result).not_to match("<br")
+    end
+
+    it "doesn't break links with images inside them" do
+      result = add_paragraphs_to_text("<a href='/users/name'><img src='/icon.png'>name</a>")
+      doc = Nokogiri::HTML.fragment(result)
+      expect(doc.xpath("./p/a/img").size).to eq(1)
     end
 
     it "does not convert linebreaks after p tags" do
@@ -873,7 +750,7 @@ describe HtmlCleaner do
       expect(doc.xpath("./figure/figcaption/em/a/@href").to_s.strip).to eq("http://example.com/link")
     end
 
-    %w[address h1 h2 h3 h4 h5 h6 p pre].each do |tag|
+    %w[h1 h2 h3 h4 h5 h6 p pre].each do |tag|
       it "does not wrap in p and not convert linebreaks inside #{tag} tags" do
         result = add_paragraphs_to_text("<#{tag}>A\nB\n\nC\n\n\nD</#{tag}>")
         doc = Nokogiri::XML.fragment(result)
@@ -954,6 +831,12 @@ describe HtmlCleaner do
         expect(doc.xpath("./p[1]/#{tag}/node()").to_s.strip).to eq("some")
         expect(doc.xpath("./p[2]/#{tag}/node()").to_s.strip).to eq("text")
       end
+
+      it "handles #{tag} with an unclosed br tag in it" do
+        result = add_paragraphs_to_text("<#{tag}>some<br>text</#{tag}>")
+        doc = Nokogiri::HTML.fragment(result)
+        expect(doc.xpath("./p[1]/#{tag}[1]").children.to_s.strip).to match(%r{some<br/?>text})
+      end
     end
 
     it "handles inline tags spanning double line breaks" do
@@ -980,6 +863,22 @@ describe HtmlCleaner do
         doc = Nokogiri::HTML5.fragment(result)
         expect(doc.xpath("./#{tag}/p[1]/node()").to_s.strip).to eq("some")
         expect(doc.xpath("./#{tag}/p[2]/node()").to_s.strip).to eq("text")
+      end
+
+      it "doesn't insert extra <p></p> tags before the #{tag} tag" do
+        result = add_paragraphs_to_text("<p>before</p><#{tag}><p>during</p></#{tag}>")
+        doc = Nokogiri::HTML.fragment(result)
+        expect(doc.xpath(".//p").size).to eq(2)
+        expect(doc.xpath("./p[1]").children.to_s.strip).to eq("before")
+        expect(doc.xpath("./#{tag}/p[1]").children.to_s.strip).to eq("during")
+      end
+
+      it "creates a paragraph for text immediately following the #{tag} tag" do
+        result = add_paragraphs_to_text("<#{tag}>during</#{tag}>after")
+        doc = Nokogiri::HTML.fragment(result)
+        expect(doc.xpath(".//p").size).to eq(2)
+        expect(doc.xpath("./#{tag}/p[1]").children.to_s.strip).to eq("during")
+        expect(doc.xpath("./p[1]").children.to_s.strip).to eq("after")
       end
     end
 
@@ -1012,31 +911,8 @@ describe HtmlCleaner do
       expect(doc.xpath("./p[contains(@class, 'bar')]/node()").to_s.strip).to eq("foobar")
     end
 
-    # When we call add_paragraphs_to_text, everything gets wrapped inside myroot
-    # tags, and the closing myroot tag is treated as a mismatch for strong, ergo
-    # strong is closed on the second paragraph while the em tag remains open.
-    # In real world use, however, this content would most likely be run through
-    # Sanitize.clean first, which would close both the em and strong tags at the
-    # very end, so we wouldn't have a mismatch and the strong tag would be
-    # reopened in every paragraph, just like the em tag is. More info at:
-    # https://github.com/otwcode/otwarchive/pull/3692#issuecomment-558740913
-    it "closes mismatched tags" do
-      html = <<~HTML.strip
-        Here is an unclosed <em>em tag.
-
-        Here is an unclosed <strong>strong tag.
-
-        Stuff.
-      HTML
-
-      doc = Nokogiri::HTML5.fragment(add_paragraphs_to_text(html))
-      expect(doc.xpath("./p[1]/em/node()").to_s.strip).to eq("em tag.")
-      expect(doc.xpath("./p[2]/em/strong/node()").to_s.strip).to eq("strong tag.")
-      expect(doc.xpath("./p[3]/em/node()").to_s.strip).to eq("Stuff.")
-    end
-
     it "closes unclosed tag within other tag" do
-      pending "Opened bug report with Nokogiri"
+      #pending "Opened bug report with Nokogiri"
       html = "<strong><em>unclosed</strong>"
       doc = Nokogiri::HTML5.fragment(add_paragraphs_to_text(html))
       expect(doc.xpath("./p/strong/em/node()").to_s.strip).to eq("unclosed")
@@ -1066,7 +942,7 @@ describe HtmlCleaner do
       end
     end
 
-    %w[&gt; &lt; &amp; &nbsp;].each do |entity|
+    %w[&gt; &lt; &amp;].each do |entity|
       it "leaves #{entity} alone" do
         result = add_paragraphs_to_text(entity)
         expect(result).to eq("<p>#{entity}</p>")
@@ -1088,10 +964,10 @@ describe HtmlCleaner do
       expect(doc.xpath(".//i/p")).to be_empty
     end
 
-    it "leaves br tags at the beginning alone" do
+    it "removes closing br tags at the beginning" do
       result = add_paragraphs_to_text("</br>text")
       doc = Nokogiri::HTML5.fragment(result)
-      expect(doc.xpath(".//p/node()").to_s.strip).to eq("<br>text")
+      expect(doc.xpath(".//p/node()").to_s.strip).to eq("text")
     end
 
     it "handles table tags that don't need closing" do
@@ -1127,6 +1003,26 @@ describe HtmlCleaner do
       end
     end
 
+    it "doesn't break when an attribute includes a single quote" do
+      result = add_paragraphs_to_text(<<~HTML)
+        <span title="Don't stop me now">Cause I'm having a good time</span>
+      HTML
+      doc = Nokogiri::HTML.fragment(result)
+      node = doc.xpath(".//span").first
+      expect(node.attribute("title").value).to eq("Don't stop me now")
+    end
+
+    it "doesn't unescape escaped text when processing newlines" do
+      result = add_paragraphs_to_text(<<~HTML.strip)
+        &lt;span&gt;
+
+        &lt;div&gt;
+      HTML
+      doc = Nokogiri::HTML.fragment(result)
+      expect(doc.xpath("./p[1]").children.to_s.strip).to eq("&lt;span&gt;")
+      expect(doc.xpath("./p[2]").children.to_s.strip).to eq("&lt;div&gt;")
+    end
+
     it "fails gracefully for missing ending quotation marks" do
       pending "Opened enhancement request with Nokogiri"
       result = add_paragraphs_to_text("<strong><a href='ao3.org>mylink</a></strong>")
@@ -1140,7 +1036,7 @@ describe HtmlCleaner do
       result = add_paragraphs_to_text('<strong><a href=ao3.org">mylink</a></strong>')
       doc = Nokogiri::HTML5.fragment(result)
       node = doc.xpath(".//a").first
-      expect(node.attribute("href").value).to eq('ao3.org"')
+      expect(node.attribute("href").value).to eq("ao3.org%22")
       expect(node.text.strip).to eq("mylink")
     end
   end
