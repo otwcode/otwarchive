@@ -145,6 +145,7 @@ describe LanguagesController do
         it_redirects_to_with_error(root_url, "Sorry, only an authorized admin can access the page you were trying to reach.")
       end
     end
+    
     %w[board communications policy_and_abuse tag_wrangling docs support open_doors].each do |role|
       context "when logged in as an admin with #{role} role" do
         let(:admin) { create(:admin, roles: [role]) }

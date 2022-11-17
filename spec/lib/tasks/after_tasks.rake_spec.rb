@@ -527,10 +527,9 @@ end
 describe "rake After:remove_translation_admin_role" do
   it "remove translation admin role" do
     user = create(:user)
-    user.roles = [Role.new(name: "translation_admin")]
-    user.save!(validate: false)
-    expect(Role.all.pluck(:name)).to eq(["translation_admin"])
+    user.roles = [Role.create(name: "translation_admin")]
     subject.invoke
-    expect(Role.all.pluck(:name)).to eq([])
+    expect(Role.all).to be_empty
+    expect(user.reload.roles).to be_empty
   end
 end
