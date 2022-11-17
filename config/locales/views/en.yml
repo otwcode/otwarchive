@@ -394,7 +394,7 @@ en:
           landmark:
             muted_users: "Listing Muted Users"
         will:
-          intro: "Muting a user:"
+          intro: "You can mute up to %{mute_limit} users. Muting a user:"
           seeing_content: "completely hides their works, series, bookmarks, and comments from you; there will be no empty space, placeholder text, or other indication something has been removed"
         will_not:
           intro: "Muting a user will not:"

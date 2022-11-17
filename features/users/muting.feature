@@ -150,3 +150,14 @@ Feature: Muting
     When I am logged out
       And I view the work "Good Work"
     Then I should see "Good Work"
+
+  Scenario: Users cannot mute more users than the mute limit
+    Given the maximum number of accounts users can mute is 1
+      And the user "muter" has muted the user "pest1"
+      And the user "pest2" exists and is activated
+    When I am logged in as "muter"
+      And I go to my muted users page
+      And I fill in "muted_id" with "pest2"
+      And I press "Mute"
+    Then I should see "Sorry, you have muted too many accounts."
+      And I should not see "You have muted the user pest2."
