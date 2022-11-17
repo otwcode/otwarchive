@@ -28,7 +28,7 @@ class CommentsController < ApplicationController
   before_action :check_permission_to_moderate, only: [:approve, :reject]
   before_action :check_permission_to_modify_frozen_status, only: [:freeze, :unfreeze]
   before_action :check_permission_to_modify_hidden_status, only: [:hide, :unhide]
-  before_action :admin_logout_required, only: [:create], if: -> { @commentable&.is_a?(Work) }
+  before_action :admin_logout_required, only: [:create]
 
   include BlockHelper
 

@@ -3,7 +3,7 @@
   <% commentable = @commentable %>
 <% end %>
 
-<% if commentable.is_a?(Work) && logged_in_as_admin? %>
+<% if logged_in_as_admin? %>
   <% # Hide form for admins %>
 <% else %>
   <div class="post comment" id="comment_form_for_<%= commentable.id %>">
