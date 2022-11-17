@@ -208,10 +208,11 @@ Scenario: Try to post a comment with a < angle bracket before a linebreak, with 
       And I press "Comment"
     Then I should see "Comment created!"
 
-Scenario: Cannot comment (no button) while logged as admin
+Scenario: Cannot comment (no form) while logged as admin
 
     Given the work "Generic Work"
       And I am logged in as an admin
       And I view the work "Generic Work"
     Then I should see "Generic Work"
+      And I should not see "Post Comment"
       And I should not see a "Comment" button
