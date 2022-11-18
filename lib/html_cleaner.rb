@@ -95,11 +95,11 @@ module HtmlCleaner
       end
       # return the field without sanitizing
       Rails.logger.debug "Already sanitized #{fieldname} on #{object.class.name} (id #{object.id})"
-      object.send("#{fieldname}")
+      just_sanitize(fieldname, object.send("#{fieldname}"))
     else
       # no sanitizer version information, so re-sanitize
       Rails.logger.debug "Sanitizing without saving #{fieldname} on #{object.class.name} (id #{object.id})"
-      sanitize_value(fieldname, object.send("#{fieldname}"))
+      just_sanitize(fieldname, sanitize_value(fieldname, object.send("#{fieldname}")))
     end
   end
 
@@ -132,6 +132,50 @@ module HtmlCleaner
     text.gsub!(/\p{Cf}/u, '')
 
     return text
+  end
+
+  def just_sanitize(field, value)
+    return value if ArchiveConfig.FIELDS_WITHOUT_SANITIZATION.include?(field.to_s)
+    if ArchiveConfig.NONZERO_INTEGER_PARAMETERS.has_key?(field.to_s)
+      return (value.to_i > 0) ? value.to_i : ArchiveConfig.NONZERO_INTEGER_PARAMETERS[field.to_s]
+    end
+    return "" if value.blank?
+    unfrozen_value = value&.dup
+    if field.to_s == 'title'
+      # prevent invisible titles
+      unfrozen_value.gsub!("<", "&lt;")
+      unfrozen_value.gsub!(">", "&gt;")
+    end
+    if ArchiveConfig.FIELDS_ALLOWING_LESS_THAN.include?(field.to_s)
+      unfrozen_value.gsub!("<", "&lt;")
+    end
+    if ArchiveConfig.FIELDS_ALLOWING_HTML.include?(field.to_s)
+      # We're allowing users to use HTML in this field
+      transformers = []
+      if ArchiveConfig.FIELDS_ALLOWING_VIDEO_EMBEDS.include?(field.to_s)
+        transformers << OtwSanitize::EmbedSanitizer.transformer
+        transformers << OtwSanitize::MediaSanitizer.transformer
+      end
+      if ArchiveConfig.FIELDS_ALLOWING_CSS.include?(field.to_s)
+        transformers << OtwSanitize::UserClassSanitizer.transformer
+      end
+      # Now that we know what transformers we need, let's sanitize the unfrozen value
+      if ArchiveConfig.FIELDS_ALLOWING_CSS.include?(field.to_s)
+        unfrozen_value = Sanitize.clean(unfrozen_value,
+                                        Sanitize::Config::CSS_ALLOWED.merge(transformers: transformers))
+      else
+        # the screencast field shouldn't be wrapped in <p> tags
+        unfrozen_value = Sanitize.clean(unfrozen_value,
+                                        Sanitize::Config::ARCHIVE.merge(transformers: transformers)) unless field.to_s == "screencast"
+      end
+    else
+      # clean out all tags
+      unfrozen_value = Sanitize.clean(unfrozen_value)
+    end
+
+    # Plain text fields can't contain &amp; entities:
+    unfrozen_value.gsub!(/&amp;/, '&') unless (ArchiveConfig.FIELDS_ALLOWING_HTML_ENTITIES + ArchiveConfig.FIELDS_ALLOWING_HTML).include?(field.to_s)
+    unfrozen_value
   end
 
   def sanitize_value(field, value)
