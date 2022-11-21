@@ -572,8 +572,8 @@ namespace :After do
       end
       if chapter.content.match /<(embed|iframe)/
         begin
-          chapter.content_sanitizer_version = -1
-          chapter.sanitize_field(chapter, :content)
+          content = chapter.sanitize_value(:content, chapter.content)
+          chapter.update_attribute(:content, content)
         rescue
           puts "couldn't update chapter #{chapter.id}"
         end
@@ -587,8 +587,8 @@ namespace :After do
       puts chapter.id if (chapter.id % 1000).zero?
       if chapter.content.match /<(embed|iframe) .*(ning\.com|vidders\.net)/
         begin
-          chapter.content_sanitizer_version = -1
-          chapter.sanitize_field(chapter, :content)
+          content = chapter.sanitize_value(:content, chapter.content)
+          chapter.update_attribute(:content, content)
         rescue StandardError
           puts "couldn't update chapter #{chapter.id}"
         end
@@ -714,11 +714,12 @@ namespace :After do
       puts(chapter.id) && STDOUT.flush if (chapter.id % 1000).zero?
       if chapter.content.match(dewplayer_embed_regex)
         begin
-          chapter.content_sanitizer_version = -1
-          if chapter.sanitize_field(chapter, :content).match(dewplayer_embed_regex)
+          content = chapter.sanitize_value(:content, chapter.content)
+          if content.match(dewplayer_embed_regex)
             # The embed(s) are still there.
             skipped_chapters << chapter.id
           else
+            chapter.update_attribute(:content, content)
             updated_chapter_count += 1
           end
         rescue StandardError

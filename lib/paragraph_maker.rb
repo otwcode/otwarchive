@@ -50,7 +50,7 @@ module ParagraphMaker
   def in_paragraph?(node)
     return false if node.parent.nil?
     return true if node.parent.name == "p"
-    
+
     in_paragraph?(node.parent)
   end
 

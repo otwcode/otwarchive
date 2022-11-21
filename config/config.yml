@@ -266,7 +266,7 @@ ANONYMOUS_THRESHOLD_COUNT: 10
 COMMENT_MODERATION_THRESHOLD: 10
 
 # SANITIZER VERSION
-SANITIZER_VERSION: 1
+SANITIZER_VERSION: 2
 
 # parameters that must be natural integers and their default values
 NONZERO_INTEGER_PARAMETERS:
@@ -298,7 +298,7 @@ FIELDS_ALLOWING_LESS_THAN: ["query", "words", "kudos", "hits", "date", "bookmark
 # This will ensure that the field has been sanitized with the latest version of the sanitizer.
 #
 FIELDS_ALLOWING_HTML: ["about_me", "bookmarker_notes", "comment", "comment_content", "content", "description", "disabled_support_form_text", "endnotes", "faq", "intro", "note", "notes",
-  "rules", "screencast", "series_notes", "signup_instructions_general", "signup_instructions_offers", "signup_instructions_requests", "summary"]
+  "rules", "series_notes", "signup_instructions_general", "signup_instructions_offers", "signup_instructions_requests", "summary"]
 
 FIELDS_ALLOWING_HTML_ENTITIES: ["title"]
 

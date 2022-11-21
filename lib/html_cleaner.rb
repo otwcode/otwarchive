@@ -4,29 +4,17 @@ module HtmlCleaner
   # we sanitize it before we allow it to pass through (and save it if possible).
   def sanitize_field(object, fieldname)
     return "" if object.send(fieldname).nil?
-    if object.respond_to?("#{fieldname}_sanitizer_version")
-      if object.send("#{fieldname}_sanitizer_version") < ArchiveConfig.SANITIZER_VERSION
-        # sanitize and save it
-        Rails.logger.debug "Sanitizing and saving #{fieldname} on #{object.class.name} (id #{object.id})"
-        object.update_attribute(fieldname, sanitize_value(fieldname, object.send("#{fieldname}")))
-        object.update_attribute("#{fieldname}_sanitizer_version", ArchiveConfig.SANITIZER_VERSION)
-      end
+
+    sanitizer_version = object.try("#{fieldname}_sanitizer_version")
+    if sanitizer_version && sanitizer_version >= ArchiveConfig.SANITIZER_VERSION
       # return the field without sanitizing
       Rails.logger.debug "Already sanitized #{fieldname} on #{object.class.name} (id #{object.id})"
-      just_sanitize(fieldname, object.send("#{fieldname}"))
+      object.send(fieldname)
     else
       # no sanitizer version information, so re-sanitize
       Rails.logger.debug "Sanitizing without saving #{fieldname} on #{object.class.name} (id #{object.id})"
-      just_sanitize(fieldname, sanitize_value(fieldname, object.send("#{fieldname}")))
+      sanitize_value(fieldname, object.send(fieldname))
     end
-  end
-
-  def get_white_list_sanitizer
-    @white_list_sanitizer ||= HTML::WhiteListSanitizer.new
-  end
-
-  def get_full_sanitizer
-    @full_sanitizer ||= HTML::FullSanitizer.new
   end
 
   # yank out bad end-of-line characters and evil msword curly quotes
@@ -50,50 +38,6 @@ module HtmlCleaner
     text.gsub!(/\p{Cf}/u, '')
 
     return text
-  end
-
-  def just_sanitize(field, value)
-    return value if ArchiveConfig.FIELDS_WITHOUT_SANITIZATION.include?(field.to_s)
-    if ArchiveConfig.NONZERO_INTEGER_PARAMETERS.has_key?(field.to_s)
-      return (value.to_i > 0) ? value.to_i : ArchiveConfig.NONZERO_INTEGER_PARAMETERS[field.to_s]
-    end
-    return "" if value.blank?
-    unfrozen_value = value&.dup
-    if field.to_s == 'title'
-      # prevent invisible titles
-      unfrozen_value.gsub!("<", "&lt;")
-      unfrozen_value.gsub!(">", "&gt;")
-    end
-    if ArchiveConfig.FIELDS_ALLOWING_LESS_THAN.include?(field.to_s)
-      unfrozen_value.gsub!("<", "&lt;")
-    end
-    if ArchiveConfig.FIELDS_ALLOWING_HTML.include?(field.to_s)
-      # We're allowing users to use HTML in this field
-      transformers = []
-      if ArchiveConfig.FIELDS_ALLOWING_VIDEO_EMBEDS.include?(field.to_s)
-        transformers << OtwSanitize::EmbedSanitizer.transformer
-        transformers << OtwSanitize::MediaSanitizer.transformer
-      end
-      if ArchiveConfig.FIELDS_ALLOWING_CSS.include?(field.to_s)
-        transformers << OtwSanitize::UserClassSanitizer.transformer
-      end
-      # Now that we know what transformers we need, let's sanitize the unfrozen value
-      if ArchiveConfig.FIELDS_ALLOWING_CSS.include?(field.to_s)
-        unfrozen_value = Sanitize.clean(unfrozen_value,
-                                        Sanitize::Config::CSS_ALLOWED.merge(transformers: transformers))
-      else
-        # the screencast field shouldn't be wrapped in <p> tags
-        unfrozen_value = Sanitize.clean(unfrozen_value,
-                                        Sanitize::Config::ARCHIVE.merge(transformers: transformers)) unless field.to_s == "screencast"
-      end
-    else
-      # clean out all tags
-      unfrozen_value = Sanitize.clean(unfrozen_value)
-    end
-
-    # Plain text fields can't contain &amp; entities:
-    unfrozen_value.gsub!(/&amp;/, '&') unless (ArchiveConfig.FIELDS_ALLOWING_HTML_ENTITIES + ArchiveConfig.FIELDS_ALLOWING_HTML).include?(field.to_s)
-    unfrozen_value
   end
 
   def sanitize_value(field, value)
@@ -127,11 +71,8 @@ module HtmlCleaner
         unfrozen_value = Sanitize.clean(add_paragraphs_to_text(fix_bad_characters(unfrozen_value)),
                                         Sanitize::Config::CSS_ALLOWED.merge(transformers: transformers))
       else
-        # the screencast field shouldn't be wrapped in <p> tags
-        unless field.to_s == "screencast"
-          unfrozen_value = Sanitize.clean(add_paragraphs_to_text(fix_bad_characters(unfrozen_value)),
-                                          Sanitize::Config::ARCHIVE.merge(transformers: transformers))
-        end
+        unfrozen_value = Sanitize.clean(add_paragraphs_to_text(fix_bad_characters(unfrozen_value)),
+                                        Sanitize::Config::ARCHIVE.merge(transformers: transformers))
       end
       doc = Nokogiri::HTML::Document.new
       doc.encoding = "UTF-8"
@@ -201,20 +142,6 @@ module HtmlCleaner
   # strip img tags
   def strip_images(value)
     value.gsub(/<img .*?>/, '')
-  end
-
-  # strip style attributes
-  def strip_styles(value)
-    strip_attribute(value, "style")
-  end
-
-  # strip class attributes
-  def strip_classes(value)
-    strip_attribute(value, "class")
-  end
-
-  def strip_attribute(value, attribname)
-    value.gsub(/\s*#{attribname}=\".*?\"\s*/, "")
   end
 
   def strip_html_breaks_simple(value)
