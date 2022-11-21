@@ -85,7 +85,6 @@ describe User do
           it "does not save" do
             expect(bad_email.save).to be_falsey
             expect(bad_email.errors[:email]).to include("should look like an email address.")
-            expect(bad_email.errors[:email]).to include("should look like an email address.")
           end
         end
       end
