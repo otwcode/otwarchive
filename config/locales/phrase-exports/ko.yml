@@ -89,7 +89,7 @@ ko:
           addressed: "%{name} 님 안녕하세요!"
           unaddressed: 안녕하세요!
         introductory: Archive of Our Own – AO3 (우리만의 아카이브)에서 인사 드립니다!
-      metadata_label_indicator: ": "
+      metadata_label_indicator: ":"
       signature:
         app_short_name: AO3
         open_doors: The Open Doors (오픈도어 프로젝트) 팀 드림
