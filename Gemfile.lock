@@ -195,7 +195,7 @@ GEM
       cucumber
       timecop
     cucumber-wire (0.0.1)
-    dalli (3.2.0)
+    dalli (3.2.3)
     database_cleaner (2.0.1)
       database_cleaner-active_record (~> 2.0.0)
     database_cleaner-active_record (2.0.1)
