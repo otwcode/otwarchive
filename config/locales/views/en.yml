@@ -349,6 +349,8 @@ en:
       about:
         popular: These are some of the most popular tags used on the Archive. To find more tags, %{search_tags_link}.
         random: These are some random tags used on the Archive. To find more tags, %{search_tags_link}.
+        popular_in_collection: These are some of the most popular tags used in the collection.
+        random_in_collection: These are some random tags used in the collection.
       search_tags: try our tag search
   blocked:
     block: "Block"
