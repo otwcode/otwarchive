@@ -127,6 +127,6 @@ Feature: Blocking
     When I am logged in as "blocker"
       And I go to my blocked users page
       And I fill in "blocked_id" with "pest2"
-      And I press "Mute"
+      And I press "Block"
     Then I should see "Sorry, you have blocked too many accounts."
       And I should not see "You have blocked the user pest2."

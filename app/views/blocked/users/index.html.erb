@@ -1,7 +1,7 @@
 <h2 class="heading"><%= t(".title") %></h2>
 
 <div class="notice">
-  <p><%= t(".will.intro", block_limit: number_with_delimiter(ArchiveConfig.MAX_BLOCKED_USERS)) %></p>
+  <p><%= t(".will.intro", block_limit: number_with_delimiter(ArchiveConfig.MAX_BLOCKED_USERS), count: ArchiveConfig.MAX_BLOCKED_USERS) %></p>
 
   <ul>
     <li><%= t(".will.commenting") %></li>
