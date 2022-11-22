@@ -8,7 +8,7 @@
 </ul>
 
 <div class="notice">
-  <p><%= t(".will.intro", mute_limit: number_with_delimiter(ArchiveConfig.MAX_MUTED_USERS)) %></p>
+  <p><%= t(".will.intro", mute_limit: number_with_delimiter(ArchiveConfig.MAX_MUTED_USERS), count: ArchiveConfig.MAX_MUTED_USERS) %></p>
 
   <ul>
     <li><%= t(".will.seeing_content") %></li>
