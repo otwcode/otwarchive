@@ -27,13 +27,13 @@
 <% if @tags %>
   <% if params[:show] == "random" %>
     <% if @collection %>
-      <p><%= t(".about.random_in_collection", search_tags_link: (link_to t(".search_tags"), search_tags_path)).html_safe %></p>
+      <p><%= t(".about.random_in_collection") %></p>
     <% else %>
       <p><%= t(".about.random", search_tags_link: (link_to t(".search_tags"), search_tags_path)).html_safe %></p>
     <% end %>
   <% else %>
     <% if @collection %>
-      <p><%= t(".about.popular_in_collection", search_tags_link: (link_to t(".search_tags"), search_tags_path)).html_safe %></p>
+      <p><%= t(".about.popular_in_collection") %></p>
     <% else %>
       <p><%= t(".about.popular", search_tags_link: (link_to t(".search_tags"), search_tags_path)).html_safe %></p>
     <% end %>
