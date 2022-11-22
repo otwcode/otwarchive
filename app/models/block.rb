@@ -17,7 +17,7 @@ class Block < ApplicationRecord
 
   validate :check_block_limit
   def check_block_limit
-    errors.add(:blocked, :limit) if blocker.blocked_users.length >= ArchiveConfig.MAX_BLOCKED_USERS
+    errors.add(:blocked, :limit) if blocker.blocked_users.count >= ArchiveConfig.MAX_BLOCKED_USERS
   end
 
   def blocked_byline=(byline)
