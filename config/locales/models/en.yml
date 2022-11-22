@@ -11,6 +11,7 @@ en:
               blank: "Sorry, we couldn't find a user matching that name."
               self: "Sorry, you can't block yourself."
               official: "Sorry, you can't block an official account."
+              limit: "Sorry, you have blocked too many accounts."
         comment:
           attributes:
             user:

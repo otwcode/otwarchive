@@ -364,7 +364,7 @@ en:
           landmark:
             blocked_users: "Listing Blocked Users"
         will:
-          intro: "Blocking a user prevents them from:"
+          intro: "You can block up to %{block_limit} users. Blocking a user prevents them from:"
           commenting: "commenting on your works"
           replying: "replying to your comments anywhere on the site"
         will_not:

@@ -119,3 +119,14 @@ Feature: Blocking
       | superadmin       |
       | policy_and_abuse |
       | support          |
+
+  Scenario: Users cannot block more users than the block limit
+    Given the maximum number of accounts users can block is 1
+      And the user "blocker" has blocked the user "pest1"
+      And the user "pest2" exists and is activated
+    When I am logged in as "blocker"
+      And I go to my blocked users page
+      And I fill in "blocked_id" with "pest2"
+      And I press "Mute"
+    Then I should see "Sorry, you have blocked too many accounts."
+      And I should not see "You have blocked the user pest2."
