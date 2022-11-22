@@ -23,7 +23,7 @@ class Mute < ApplicationRecord
   end
 
   def check_mute_limit
-    errors.add(:muted, :limit) if muter.muted_users.length >= ArchiveConfig.MAX_MUTED_USERS
+    errors.add(:muted, :limit) if muter.muted_users.count >= ArchiveConfig.MAX_MUTED_USERS
   end
 
   def muted_byline=(byline)

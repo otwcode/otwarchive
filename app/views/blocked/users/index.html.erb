@@ -23,7 +23,7 @@
     <li><%= t(".will_not.comments_elsewhere") %></li>
   </ul>
 
-  <p><%= t(".mute_users_instead", muted_users_link: link_to(t(".muted_users_link_text"), user_muted_users_path(@user))).html_safe %></p>
+  <p><%= t(".mute_users_instead_html", muted_users_link: link_to(t(".muted_users_link_text"), user_muted_users_path(@user))) %></p>
 </div>
 
 <% # form for blocking users %>
