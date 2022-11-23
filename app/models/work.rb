@@ -6,7 +6,6 @@ class Work < ApplicationRecord
   include Searchable
   include BookmarkCountCaching
   include WorkChapterCountCaching
-  include ActiveModel::ForbiddenAttributesProtection
   include Creatable
 
   ########################################################################
@@ -573,9 +572,10 @@ class Work < ApplicationRecord
   end
 
   def set_revised_at_by_chapter(chapter)
-    return if self.posted? && !chapter.posted?
     # Invalidate chapter count cache
     self.invalidate_work_chapter_count(self)
+    return if self.posted? && !chapter.posted?
+
     if (self.new_record? || chapter.posted_changed?) && chapter.published_at == Date.current
       self.set_revised_at(Time.current) # a new chapter is being posted, so most recent update is now
     else
@@ -1164,7 +1164,7 @@ class Work < ApplicationRecord
   # to one another can be considered a crossover
   def crossover
     # Short-circuit the check if there's only one fandom tag:
-    return false if fandoms.count == 1
+    return false if fandoms.size == 1
 
     # Replace fandoms with their mergers if possible,
     # as synonyms should have no meta tags themselves
@@ -1200,7 +1200,8 @@ class Work < ApplicationRecord
   # Does this work have only one relationship tag?
   # (not counting synonyms)
   def otp
-    return true if relationships.count == 1
+    return true if relationships.size == 1
+
     all_without_syns = relationships.map { |r| r.merger ? r.merger : r }.uniq.compact
     all_without_syns.count == 1
   end

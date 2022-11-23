@@ -1,11 +1,10 @@
 require "unicode_utils/casefold"
 
 class Tag < ApplicationRecord
-
-  include ActiveModel::ForbiddenAttributesProtection
   include Searchable
   include StringCleaner
   include WorksOwner
+  include Wrangleable
   include Rails.application.routes.url_helpers
 
   NAME = "Tag"
@@ -403,10 +402,9 @@ class Tag < ApplicationRecord
     in_challenge(collection, 'Offer')
   }
 
-  # Resque
-
-  include AsyncWithResque
-  @queue = :utilities
+  # Code for delayed jobs:
+  include AsyncWithActiveJob
+  self.async_job_class = TagMethodJob
 
   # Class methods
 
@@ -471,6 +469,12 @@ class Tag < ApplicationRecord
 
   def display_name
     name
+  end
+
+  # Make sure that the global ID doesn't depend on the type, so that we don't
+  # experience errors when switching types:
+  def to_global_id(options = {})
+    GlobalID.create(becomes(Tag), options)
   end
 
   ## AUTOCOMPLETE

@@ -5,6 +5,10 @@ class WorkCreatorIndexer < Indexer
     "Work"
   end
 
+  def self.klass_with_includes
+    Work.includes(:pseuds, :users)
+  end
+
   def self.mapping
     WorkIndexer.mapping
   end

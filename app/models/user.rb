@@ -1,6 +1,5 @@
 class User < ApplicationRecord
   audited
-  include ActiveModel::ForbiddenAttributesProtection
   include WorksOwner
 
   devise :database_authenticatable,
@@ -95,6 +94,7 @@ class User < ApplicationRecord
   before_update :add_renamed_at, if: :will_save_change_to_login?
   after_update :update_pseud_name
   after_update :log_change_if_login_was_edited
+  after_update :log_email_change, if: :saved_change_to_email?
 
   after_commit :reindex_user_creations_after_rename
 
@@ -148,9 +148,11 @@ class User < ApplicationRecord
            through: :followings,
            source: :user
 
+  thread_cattr_accessor :should_update_wrangling_activity
   has_many :wrangling_assignments, dependent: :destroy
   has_many :fandoms, through: :wrangling_assignments
   has_many :wrangled_tags, class_name: "Tag", as: :last_wrangler
+  has_one :last_wrangling_activity, dependent: :destroy
 
   has_many :inbox_comments, dependent: :destroy
   has_many :feedback_comments, -> { where(is_deleted: false, approved: true).order(created_at: :desc) }, through: :inbox_comments
@@ -181,7 +183,7 @@ class User < ApplicationRecord
     inbox_comments.where(read: false)
   end
   def unread_inbox_comments_count
-    unread_inbox_comments.with_feedback_comment.count
+    unread_inbox_comments.with_bad_comments_removed.count
   end
 
   scope :alphabetical, -> { order(:login) }
@@ -212,7 +214,7 @@ class User < ApplicationRecord
   validates_uniqueness_of :login, case_sensitive: false, message: ts("has already been taken")
   validate :login, :username_is_not_recently_changed, if: :will_save_change_to_login?
 
-  validates :email, email_veracity: true, email_format: true
+  validates :email, email_veracity: true, email_format: true, uniqueness: { case_sensitive: false }
 
   # Virtual attribute for age check and terms of service
     attr_accessor :age_over_13
@@ -447,6 +449,13 @@ class User < ApplicationRecord
     LogItem.create(options)
   end
 
+  def update_last_wrangling_activity
+    return unless is_tag_wrangler?
+
+    last_activity = LastWranglingActivity.find_or_create_by(user: self)
+    last_activity.touch
+  end
+
   # Returns true if user is the sole author of a work
   # Should also be true if the user has used more than one of their pseuds on a work
   def is_sole_author_of?(item)
@@ -567,9 +576,19 @@ class User < ApplicationRecord
     self.renamed_at = Time.current
   end
 
-   def log_change_if_login_was_edited
-     create_log_item(options = { action: ArchiveConfig.ACTION_RENAME, note: "Old Username: #{login_before_last_save}; New Username: #{login}" }) if saved_change_to_login?
-   end
+  def log_change_if_login_was_edited
+    create_log_item(action: ArchiveConfig.ACTION_RENAME, note: "Old Username: #{login_before_last_save}; New Username: #{login}") if saved_change_to_login?
+  end
+
+  def log_email_change
+    current_admin = User.current_user if User.current_user.is_a?(Admin)
+    options = {
+      action: ArchiveConfig.ACTION_NEW_EMAIL,
+      admin_id: current_admin&.id
+    }
+    options[:note] = "Change made by #{current_admin&.login}" if current_admin
+    create_log_item(options)
+  end
 
   def remove_stale_from_autocomplete
     Rails.logger.debug "Removing stale from autocomplete: #{autocomplete_search_string_was}"

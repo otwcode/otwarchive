@@ -42,6 +42,8 @@ en:
               author_on_own_work: "You can't leave kudos on your own work."
               blank: "What did you want to leave kudos on?"
               guest_on_restricted: "You can't leave guest kudos on a restricted work."
+              user_is_suspended: "You cannot leave kudos while your account is suspended."
+              user_is_banned: "You cannot leave kudos while your account is banned."
             commentable_type:
               inclusion: "What did you want to leave kudos on?"
           format: "%{message}"
@@ -69,6 +71,9 @@ en:
         work/parent_work_relationships:
           format: "%{message}"
     models:
+      admin_blacklisted_email:
+        one: "Banned Email"
+        other: "Banned Emails"
       archive_warning:
         one: "Warning"
         other: "Warnings"

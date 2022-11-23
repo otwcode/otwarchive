@@ -200,9 +200,8 @@ Then /^the fandom-specific tag autocomplete fields should list only fandom-speci
 end
 
 Then /^the external url autocomplete field should list the urls of existing external works$/ do
-  step %{I enter "zoo" in the "URL" autocomplete field}
-  step %{I should see "zooey-glass.dreamwidth.org" in the autocomplete}
-  step %{I should not see "parenthetical.livejournal.com" in the autocomplete}
+  step %{I enter "exam" in the "URL" autocomplete field}
+  step %{I should see "http://example.org/200" in the autocomplete}
 end
 
 Given /^a set of users for testing autocomplete$/ do

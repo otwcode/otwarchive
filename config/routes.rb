@@ -161,7 +161,7 @@ Otwarchive::Application.routes.draw do
         get :confirm_delete
       end
     end
-    resources :blacklisted_emails, only: [:index, :new, :create, :destroy]
+    resources :blacklisted_emails, only: [:index, :create, :destroy]
     resources :settings
     resources :skins do
       collection do
@@ -232,7 +232,7 @@ Otwarchive::Application.routes.draw do
     resources :assignments, controller: "challenge_assignments", only: [:index]
     resources :claims, controller: "challenge_claims", only: [:index]
     resources :bookmarks
-    resources :collection_items, only: [:index, :update, :destroy] do
+    resources :collection_items, only: [:index, :update] do
       collection do
         patch :update_multiple
       end

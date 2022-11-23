@@ -387,7 +387,9 @@ Feature: Create Works
     When I am logged in as "barbaz"
       And I view the work "Chaptered Work"
     Then I should not see "Edit"
-    When I follow "Co-Creator Requests page"
+    # Delay to make sure that the cache expires when we accept the request:
+    When it is currently 1 second from now
+      And I follow "Co-Creator Requests page"
       And I check "selected[]"
       And I press "Accept"
     Then I should see "You are now listed as a co-creator on Chaptered Work."
