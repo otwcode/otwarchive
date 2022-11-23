@@ -24,6 +24,13 @@ describe TagsController do
 
       include_examples "set last wrangling activity"
     end
+
+    it "cannot uncanonize an existing tag when trying to create one" do
+      existing_canonical_tag = create(:canonical_character, name: "Blake Belladonna")
+      tag_params = { name: "Blake Belladonna", canonical: "0", type: "Character" }
+      post :create, params: { tag: tag_params }
+      expect(existing_canonical_tag.reload).to be_canonical
+    end
   end
 
   describe "wrangle" do
