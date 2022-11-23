@@ -103,7 +103,7 @@ describe "rake resanitize:all" do
         end
       end
 
-      it "doesn't change the content in other languages when resanitizing" do
+      it "doesn't change translations with an up-to-date content sanitizer version" do
         translation.update_columns(content: "<invalid>")
         record.update_columns(content_sanitizer_version: ArchiveConfig.SANITIZER_VERSION - 1)
 
@@ -112,7 +112,7 @@ describe "rake resanitize:all" do
           record.reload
           translation.reload
         end.to output.to_stdout
-          .and change { record.content_sanitizer_version }
+          .and change { record.content_sanitizer_version }.to(ArchiveConfig.SANITIZER_VERSION)
           .and avoid_changing { translation.content }
       end
     end
