@@ -289,9 +289,9 @@ vi:
         remove_series: Nếu bạn bị thêm nhầm hoặc không muốn được liệt kê là đồng tác
           giả, bạn có thể %{edit_series_link} để loại bỏ mình khỏi danh sách tác giả.
       intro_chapter: 'Người dùng %{adding_user} đã liệt kê bút danh %{pseud} của bạn
-        là đồng tác giả trong chương truyện sau:'
-      intro_series: 'Người dùng %{adding_user} đã thêm bút danh %{pseud} của bạn là
-        đồng tác giả trong bộ tác phẩm:'
+        làm đồng tác giả của chương truyện sau:'
+      intro_series: 'Người dùng %{adding_user} đã thêm bút danh %{pseud} của bạn làm
+        đồng tác giả của bộ tác phẩm:'
       subject: "[%{app_name}] Thông báo đồng sáng tác"
       text:
         creation: "%{title} (%{url}) bởi %{pseuds}"
@@ -302,9 +302,9 @@ vi:
           tác giả, bạn có thể chỉnh sửa bộ tác phẩm để loại bỏ mình khỏi danh sách
           tác giả: %{url}'
     creatorship_notification_archivist:
-      explanation: Người dùng này đang hoạt động với tư cách chính thức là chuyên
-        viên lưu trữ của Open Doors (Cửa Mở), vì vậy, họ được phép đưa bạn vào tác
-        phẩm mà không cần thư mời, kể cả khi bạn đã tắt chức năng đồng sáng tác.
+      explanation: Người dùng này hiện đang là chuyên viên lưu trữ của Open Doors
+        (Cửa Mở), vì vậy, họ được phép đưa bạn vào tác phẩm mà không cần thư mời,
+        kể cả khi bạn đã tắt chức năng đồng sáng tác.
       html:
         creation: "%{creation_link} bởi %{pseud_links}"
         edit_chapter: chỉnh sửa chương truyện
@@ -318,12 +318,12 @@ vi:
         remove_work: Nếu bạn bị thêm nhầm hoặc không muốn được liệt kê là đồng tác
           giả, bạn có thể %{edit_work_link} để loại bỏ mình khỏi danh sách đồng tác
           giả.
-      intro_chapter: 'Người dùng %{archivist} đã thêm bút danh %{pseud} của bạn với
-        tư cách là đồng tác giả của chương truyện sau:'
-      intro_series: 'Người dùng %{archivist} đã thêm bút danh %{pseud} của bạn với
-        tư cách là đồng tác giả trong bộ tác phẩm sau:'
-      intro_work: 'Người dùng %{archivist} đã thêm bút danh %{pseud} của bạn với tư
-        cách là đồng tác giả của tác phẩm sau:'
+      intro_chapter: 'Người dùng %{archivist} đã thêm bút danh %{pseud} của bạn làm
+        đồng tác giả của chương truyện sau:'
+      intro_series: 'Người dùng %{archivist} đã thêm bút danh %{pseud} của bạn làm
+        đồng tác giả trong bộ tác phẩm sau:'
+      intro_work: 'Người dùng %{archivist} đã thêm bút danh %{pseud} của bạn làm đồng
+        tác giả của tác phẩm sau:'
       subject: "[%{app_name}] Thông báo của chuyên viên lưu trữ về tư cách đồng tác
         giả"
       text:
