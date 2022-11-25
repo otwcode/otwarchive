@@ -29,7 +29,9 @@
       <% end %>
       <li><%= link_to ts("Archive FAQ", key: "header"), archive_faqs_path %></li>
       <li><%= link_to ts("Known Issues", key: "header"), known_issues_path %></li>
-      <li><%= link_to ts("Wrangling Guidelines", key: "header"), wrangling_guidelines_path %></li>
+      <% if policy(WranglingGuideline).new? %>
+        <li><%= link_to ts("Wrangling Guidelines", key: "header"), wrangling_guidelines_path %></li>
+      <% end %>
     </ul>
   </li>
   <% if policy(AdminBlacklistedEmail).index? %>
@@ -58,7 +60,9 @@
       </ul>
     </li>
   <% end %>
-  <li><%= link_to ts("Tag Wrangling", key: "header"), tag_wranglings_path %></li>
+  <% if policy(WranglingGuideline).new? %>
+    <li><%= link_to ts("Tag Wrangling", key: "header"), tag_wranglings_path %></li>
+  <% end %>
   <li><%= link_to ts("Locales", key: "header"), locales_path %></li>
 
   <% if policy(AdminActivity).index? %>
