@@ -176,31 +176,36 @@ class TagsController < ApplicationController
   # POST /tags
   def create
     type = tag_params[:type] if params[:tag]
-    if type
-      raise "Redshirt: Attempted to constantize invalid class initialize create #{type.classify}" unless Tag::TYPES.include?(type.classify)
-      model = begin
-                type.classify.constantize
-              rescue
-                nil
-              end
-      @tag = model.find_or_create_by_name(tag_params[:name]) if model.is_a? Class
-    else
+
+    unless type
       flash[:error] = ts('Please provide a category.')
       @tag = Tag.new(name: tag_params[:name])
-      render(action: 'new') && return
+      render(action: 'new')
+      return
     end
-    if @tag && @tag.valid?
-      if (@tag.name != tag_params[:name]) && @tag.name.casecmp(tag_params[:name].downcase).zero? # only capitalization different
-        @tag.update_attribute(:name, tag_params[:name]) # use the new capitalization
-        flash[:notice] = ts('Tag was successfully modified.')
-      else
-        flash[:notice] = ts('Tag was successfully created.')
-      end
-      @tag.update_attribute(:canonical, tag_params[:canonical]) unless @tag.canonical? # If tag already canonical, do not uncanonize it
-      redirect_to edit_tag_path(@tag)
+
+    raise "Redshirt: Attempted to constantize invalid class initialize create #{type.classify}" unless Tag::TYPES.include?(type.classify)
+
+    model = begin
+              type.classify.constantize
+            rescue
+              nil
+            end
+    @tag = model.find_or_create_by_name(tag_params[:name]) if model.is_a? Class
+
+    unless @tag && @tag.valid?
+      render(action: 'new')
+      return
+    end
+
+    if (@tag.name != tag_params[:name]) && @tag.name.casecmp(tag_params[:name].downcase).zero? # only capitalization different
+      @tag.update_attribute(:name, tag_params[:name]) # use the new capitalization
+      flash[:notice] = ts('Tag was successfully modified.')
     else
-      render(action: 'new') && return
+      flash[:notice] = ts('Tag was successfully created.')
     end
+    @tag.update_attribute(:canonical, tag_params[:canonical]) unless @tag.canonical? # If tag already canonical, do not uncanonize it
+    redirect_to edit_tag_path(@tag)
   end
 
   def edit
