@@ -22,14 +22,36 @@ describe TagsController do
     context "successful creation" do
       before { post :create, params: { tag: tag_params } }
 
+      it 'creates a new, non-canonical, tag' do
+        expect(flash[:notice]).to eq 'Tag was successfully created.'
+
+        tag = Tag.last
+        expect(tag.name).to eq tag_params[:name]
+        expect(tag).not_to be_canonical
+      end
+
       include_examples "set last wrangling activity"
     end
 
-    it "cannot uncanonize an existing tag when trying to create one" do
-      existing_canonical_tag = create(:canonical_character, name: "Blake Belladonna")
-      tag_params = { name: "Blake Belladonna", canonical: "0", type: "Character" }
+    it 'creates a new, canonical, tag' do
+      tag_params[:canonical] = "1"
+
       post :create, params: { tag: tag_params }
-      expect(existing_canonical_tag.reload).to be_canonical
+      expect(flash[:notice]).to eq 'Tag was successfully created.'
+
+      tag = Tag.last
+      expect(tag.name).to eq tag_params[:name]
+      expect(tag).to be_canonical
+    end
+
+    it "cannot make changes to an existing tag when trying to create one" do
+      existing_tag = create(:canonical_character, name: "Blake Belladonna")
+      tag_params = { name: "Blâke Belladonna", canonical: "0", type: "Character" }
+      post :create, params: { tag: tag_params }
+      expect(flash[:notice]).to eq 'Tag already existed and was not modified.'
+      existing_tag.reload
+      expect(existing_tag.name).to eq "Blake Belladonna"
+      expect(existing_tag).to be_canonical
     end
   end
 

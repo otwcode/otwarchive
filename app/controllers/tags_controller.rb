@@ -198,13 +198,13 @@ class TagsController < ApplicationController
       return
     end
 
-    if (@tag.name != tag_params[:name]) && @tag.name.casecmp(tag_params[:name].downcase).zero? # only capitalization different
-      @tag.update_attribute(:name, tag_params[:name]) # use the new capitalization
-      flash[:notice] = ts('Tag was successfully modified.')
-    else
+    if @tag.id_previously_changed? # i.e. tag is new
+      @tag.update_attribute(:canonical, tag_params[:canonical])
       flash[:notice] = ts('Tag was successfully created.')
+    else
+      flash[:notice] = ts('Tag already existed and was not modified.')
     end
-    @tag.update_attribute(:canonical, tag_params[:canonical]) unless @tag.canonical? # If tag already canonical, do not uncanonize it
+
     redirect_to edit_tag_path(@tag)
   end
 
