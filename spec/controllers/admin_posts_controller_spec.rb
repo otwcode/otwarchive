@@ -110,7 +110,7 @@ describe AdminPostsController do
               it "renders the edit template with error message" do 
                 admin.update(roles: [admin_role])
                 fake_login_admin(admin)
-                put :update, params: {id: translation.id, admin_post:{language_id:post.language_id} }
+                put :update, params: { id: translation.id, admin_post: { language_id:post.language_id } }
                 expect(response).to render_template(:edit)
                 expect(assigns[:admin_post].errors.full_messages).to include("Translated post cannot be same language as original post")
               end 
@@ -206,7 +206,7 @@ describe AdminPostsController do
           end
           context "with translated post" do
             let!(:translation) { create(:admin_post, translated_post_id: post.id, language_id: create(:language).id) }
-            
+
             it "deletes translations of post along with post" do 
               admin.update(roles: [admin_role])
               fake_login_admin(admin)
