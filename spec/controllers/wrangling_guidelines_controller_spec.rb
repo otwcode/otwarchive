@@ -80,6 +80,7 @@ describe WranglingGuidelinesController do
       context "when logged in as an admin with #{role} role" do 
         let(:guideline) { create(:wrangling_guideline) }
         let(:admin) { create(:admin, roles: [role]) }
+        
         before { fake_login_admin(admin) }
 
         it "redirects with error" do 
@@ -93,6 +94,7 @@ describe WranglingGuidelinesController do
       context "when logged in as an admin with #{role} role" do 
         let(:guideline) { create(:wrangling_guideline) }
         let(:admin) { create(:admin, roles: [role]) }
+
         before { fake_login_admin(admin) }
 
         it "renders" do
@@ -118,7 +120,7 @@ describe WranglingGuidelinesController do
     %w[board communications translation policy_and_abuse docs support open_doors].each do |role|
       context "when logged in as an admin with #{role} role" do 
         let(:admin) { create(:admin, roles: [role]) }
-        
+
         before { fake_login_admin(admin) }
 
         it "redirects with error" do 
