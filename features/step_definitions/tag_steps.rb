@@ -179,7 +179,7 @@ Given /^the tag wrangling setup$/ do
 end
 
 Given /^I have posted a Wrangling Guideline?(?: titled "([^\"]*)")?$/ do |title|
-  step %{I am logged in as an admin}
+  step %{I am logged in as a "tag_wrangling" admin}
   visit new_wrangling_guideline_path
   if title
     fill_in("Guideline text", with: "This is a page about how we wrangle things.")

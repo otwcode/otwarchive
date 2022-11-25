@@ -9,5 +9,6 @@ class WranglingGuidelinePolicy < ApplicationPolicy
   alias manage? new?
   alias create? new?
   alias update? new?
+  alias update_positions? new?
   alias destroy? new?
 end
