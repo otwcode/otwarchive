@@ -75,8 +75,8 @@ class AdminPost < ApplicationRecord
   end
 
   def translated_post_language_must_differ
-    return unless translated_post_id.present? && !AdminPost.find_by(id: translated_post_id).nil? && self.language_id == AdminPost.find_by(id: translated_post_id).language_id
-      
+    return unless translated_post.present?
+    return unless translated_post.language == language      
     errors.add(:translated_post_id, "cannot be same language as original post")
   end
 

@@ -32,6 +32,17 @@ describe AdminPostsController do
         end
       end
     end
+
+    context "when translated post has same language id" do
+      let(:admin_post) { create(:admin_post) }
+
+      it "renders the new template with error message" do
+        post :create, params: { admin_post: { translated_post_id: admin_post.id, language_id: admin_post.language_id } }.merge(base_params)
+
+        expect(response).to render_template(:new)
+        expect(assigns[:admin_post].errors.full_messages).to include("Translated post cannot be same language as original post")
+      end
+    end
   end
 
   describe "POST #update" do
@@ -74,7 +85,7 @@ describe AdminPostsController do
           end
 
           context "with valid translated_post_id" do
-            let!(:translation) { create(:admin_post, translated_post_id: post.id, language_id: post.language_id + 1) }
+            let!(:translation) { create(:admin_post, translated_post_id: post.id, language_id: create(:language).id) }
 
             context "with valid comment_permissions" do
               it "does not change comment_permissions and redirects with notice" do
@@ -93,6 +104,16 @@ describe AdminPostsController do
                 expect(translation.reload.comment_permissions).to eq(post.comment_permissions)
                 it_redirects_to_with_notice(admin_post_path(translation), "Admin Post was successfully updated.")
               end
+            end
+
+            context "with invalid translated_post language" do
+              it "renders the edit template with error message" do 
+                admin.update(roles: [admin_role])
+                fake_login_admin(admin)
+                put :update, params: {id: translation.id, admin_post:{language_id:post.language_id} }
+                expect(response).to render_template(:edit)
+                expect(assigns[:admin_post].errors.full_messages).to include("Translated post cannot be same language as original post")
+              end 
             end
           end
         end
@@ -182,6 +203,18 @@ describe AdminPostsController do
 
             expect { post.reload }.to raise_exception(ActiveRecord::RecordNotFound)
             it_redirects_to(admin_posts_path)
+          end
+          context "with translated post" do
+            let!(:translation) { create(:admin_post, translated_post_id: post.id, language_id: create(:language).id) }
+            
+            it "deletes translations of post along with post" do 
+              admin.update(roles: [admin_role])
+              fake_login_admin(admin)
+              delete :destroy, params: { id: post.id }
+  
+              expect { post.reload }.to raise_exception(ActiveRecord::RecordNotFound)
+              expect { translation.reload }.to raise_exception(ActiveRecord::RecordNotFound)
+            end
           end
         end
       end
