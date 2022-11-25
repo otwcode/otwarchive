@@ -178,9 +178,9 @@ class TagsController < ApplicationController
     type = tag_params[:type] if params[:tag]
 
     unless type
-      flash[:error] = ts('Please provide a category.')
+      flash[:error] = ts("Please provide a category.")
       @tag = Tag.new(name: tag_params[:name])
-      render(action: 'new')
+      render(action: "new")
       return
     end
 
@@ -188,21 +188,21 @@ class TagsController < ApplicationController
 
     model = begin
               type.classify.constantize
-            rescue
+            rescue StandardError
               nil
             end
     @tag = model.find_or_create_by_name(tag_params[:name]) if model.is_a? Class
 
-    unless @tag && @tag.valid?
-      render(action: 'new')
+    unless @tag&.valid?
+      render(action: "new")
       return
     end
 
     if @tag.id_previously_changed? # i.e. tag is new
       @tag.update_attribute(:canonical, tag_params[:canonical])
-      flash[:notice] = ts('Tag was successfully created.')
+      flash[:notice] = ts("Tag was successfully created.")
     else
-      flash[:notice] = ts('Tag already existed and was not modified.')
+      flash[:notice] = ts("Tag already existed and was not modified.")
     end
 
     redirect_to edit_tag_path(@tag)

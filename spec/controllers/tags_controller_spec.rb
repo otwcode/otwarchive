@@ -22,8 +22,8 @@ describe TagsController do
     context "successful creation" do
       before { post :create, params: { tag: tag_params } }
 
-      it 'creates a new, non-canonical, tag' do
-        expect(flash[:notice]).to eq 'Tag was successfully created.'
+      it "creates a new, non-canonical, tag" do
+        expect(flash[:notice]).to eq "Tag was successfully created."
 
         tag = Tag.last
         expect(tag.name).to eq tag_params[:name]
@@ -33,11 +33,11 @@ describe TagsController do
       include_examples "set last wrangling activity"
     end
 
-    it 'creates a new, canonical, tag' do
+    it "creates a new, canonical, tag" do
       tag_params[:canonical] = "1"
 
       post :create, params: { tag: tag_params }
-      expect(flash[:notice]).to eq 'Tag was successfully created.'
+      expect(flash[:notice]).to eq "Tag was successfully created."
 
       tag = Tag.last
       expect(tag.name).to eq tag_params[:name]
@@ -48,7 +48,7 @@ describe TagsController do
       existing_tag = create(:canonical_character, name: "Blake Belladonna")
       tag_params = { name: "Blâke Belladonna", canonical: "0", type: "Character" }
       post :create, params: { tag: tag_params }
-      expect(flash[:notice]).to eq 'Tag already existed and was not modified.'
+      expect(flash[:notice]).to eq "Tag already existed and was not modified."
       existing_tag.reload
       expect(existing_tag.name).to eq "Blake Belladonna"
       expect(existing_tag).to be_canonical
