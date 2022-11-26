@@ -204,6 +204,7 @@ describe AdminPostsController do
             expect { post.reload }.to raise_exception(ActiveRecord::RecordNotFound)
             it_redirects_to(admin_posts_path)
           end
+          
           context "with translated post" do
             let!(:translation) { create(:admin_post, translated_post_id: post.id, language_id: create(:language).id) }
 
