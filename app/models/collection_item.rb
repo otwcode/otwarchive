@@ -1,6 +1,4 @@
 class CollectionItem < ApplicationRecord
-  include ActiveModel::ForbiddenAttributesProtection
-
   APPROVAL_OPTIONS = [
     ["", :unreviewed],
     [ts("Approved"), :approved],

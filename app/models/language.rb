@@ -1,6 +1,4 @@
 class Language < ApplicationRecord
-  include ActiveModel::ForbiddenAttributesProtection
-
   validates_presence_of :short
   validates_uniqueness_of :short, case_sensitive: false
   validates_presence_of :name
@@ -27,5 +25,4 @@ class Language < ApplicationRecord
   def fandom_count
     Fandom.joins(:works).where(works: {id: self.works.posted.collect(&:id)}).distinct.select('tags.id').count
   end
-
 end
