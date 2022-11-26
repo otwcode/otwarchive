@@ -32,13 +32,6 @@ class CollectionItem < ApplicationRecord
     end
   end
 
-  validate :creators_allow_invitation, on: :create
-  def creators_allow_invitation
-    return unless item.respond_to?(:allow_collection_invitation)
-
-    errors.add(:base, :creator_invitation_not_allowed) unless item.allow_collection_invitation
-  end
-
   scope :include_for_works, -> { includes(work: :pseuds)}
   scope :unrevealed, -> { where(unrevealed: true) }
   scope :anonymous, -> { where(anonymous:  true) }
@@ -117,18 +110,6 @@ class CollectionItem < ApplicationRecord
         if !collection.moderated? || collection.user_is_maintainer?(User.current_user) || collection.user_is_posting_participant?(User.current_user)
           approve_by_collection
         end
-      end
-
-      # if the current user created the item, automatically approve its inclusion in the collection
-      if !approved_by_user?
-        case item_type
-        when "Work"
-          users = item.users || [User.current_user] # if the work has no users, it is also new and being created by the current user
-        when "Bookmark"
-          users = [item.pseud.user] || [User.current_user]
-        end
-
-        approve_by_user if users == [User.current_user]
       end
     end
   end

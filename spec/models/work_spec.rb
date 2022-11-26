@@ -605,18 +605,6 @@ describe Work do
       end
     end
 
-    context "when the collector is the work's creator" do
-      before do
-        User.current_user = creator1
-        creator1.preference.update(allow_cocreator: true)
-        creator2.preference.update(allow_cocreator: true, allow_collection_invitation: true)
-      end
-
-      it "returns true" do
-        expect(work.allow_collection_invitation).to be true
-      end
-    end
-
     context "when all creators disallow collection invitations" do
       it "returns false" do
         expect(work.allow_collection_invitation).to be false

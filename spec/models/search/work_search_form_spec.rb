@@ -139,9 +139,6 @@ describe WorkSearchForm, work_search: true do
     end
 
     before(:each) do
-      work.users.each { |user| user.preference.update(allow_collection_invitation: true) }
-      second_work.users.each { |user| user.preference.update(allow_collection_invitation: true) }
-
       # This doesn't work properly in the factory.
       second_work.collection_ids = [collection.id]
       second_work.save

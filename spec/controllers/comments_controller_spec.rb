@@ -3186,11 +3186,7 @@ describe CommentsController do
     it_behaves_like "no one can add or edit comments" do
       let(:edit_error_message) { "Sorry, you can't add or edit comments on an unrevealed work." }
       let(:work) { comment.ultimate_parent }
-
-      before do
-        work.users.each { |user| user.preference.update(allow_collection_invitation: true) }
-        work.update!(collection_names: create(:unrevealed_collection).name)
-      end
+      before { work.update!(collection_names: create(:unrevealed_collection).name) }
     end
   end
 end

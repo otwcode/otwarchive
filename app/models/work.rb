@@ -1233,6 +1233,6 @@ class Work < ApplicationRecord
 
   # If the creator(s) allow this work to be invited to collections.
   def allow_collection_invitation
-    users.all? { |user| user == User.current_user || user.preference.allow_collection_invitation }
+    users.all? { |user| user.preference.allow_collection_invitation }
   end
 end

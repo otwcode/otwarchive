@@ -81,10 +81,7 @@ describe ApplicationHelper do
       context "when series is anonymous" do
         let(:collection) { create(:anonymous_collection) }
 
-        before do
-          work.users.each { |user| user.preference.update(allow_collection_invitation: true) }
-          work.collections << collection
-        end
+        before { work.collections << collection }
 
         it "returns empty array" do
           result = helper.creator_ids_for_css_classes(series)
@@ -95,10 +92,7 @@ describe ApplicationHelper do
       context "when work is unrevealed" do
         let(:collection) { create(:unrevealed_collection) }
 
-        before do
-          work.users.each { |user| user.preference.update(allow_collection_invitation: true) }
-          work.collections << collection
-        end
+        before { work.collections << collection }
 
         it "returns array of strings" do
           result = helper.creator_ids_for_css_classes(series)
@@ -145,10 +139,7 @@ describe ApplicationHelper do
       context "when work is anonymous" do
         let(:collection) { create(:anonymous_collection) }
 
-        before do
-          work.users.each { |user| user.preference.update(allow_collection_invitation: true) }
-          work.collections << collection
-        end
+        before { work.collections << collection }
 
         it "returns empty array" do
           result = helper.creator_ids_for_css_classes(work)
@@ -159,10 +150,7 @@ describe ApplicationHelper do
       context "when work is unrevealed" do
         let(:collection) { create(:unrevealed_collection) }
 
-        before do
-          work.users.each { |user| user.preference.update(allow_collection_invitation: true) }
-          work.collections << collection
-        end
+        before { work.collections << collection }
 
         it "returns empty array" do
           result = helper.creator_ids_for_css_classes(work)
@@ -279,10 +267,6 @@ describe ApplicationHelper do
         context "when work becomes anonymous" do
           let(:collection) { create(:anonymous_collection) }
 
-          before do
-            work.users.each { |user| user.preference.update(allow_collection_invitation: true) }
-          end
-
           it "returns updated string" do
             original_cache_key = "#{series.cache_key_with_version}/blurb_css_classes-v2"
             expect(helper.css_classes_for_creation_blurb(series)).to eq("#{default_classes} series-#{series.id} user-#{user1.id}")
@@ -297,10 +281,6 @@ describe ApplicationHelper do
 
         context "when work becomes unrevealed" do
           let(:collection) { create(:unrevealed_collection) }
-
-          before do
-            work.users.each { |user| user.preference.update(allow_collection_invitation: true) }
-          end
 
           it "returns same string" do
             original_cache_key = "#{series.cache_key_with_version}/blurb_css_classes-v2"
@@ -356,44 +336,30 @@ describe ApplicationHelper do
       context "when work becomes anonymous" do
         let(:collection) { create(:anonymous_collection) }
 
-        before do
-          work.users.each { |user| user.preference.update(allow_collection_invitation: true) }
-        end
-
         it "returns updated string" do
-          original_cache_key = nil
-          travel_to(1.day.ago) do
-            original_cache_key = "#{work.cache_key_with_version}/blurb_css_classes-v2"
-            expect(helper.css_classes_for_creation_blurb(work)).to eq("#{default_classes} work-#{work.id} user-#{user1.id}")
-          end
+          travel_to(1.day.ago)
+          original_cache_key = "#{work.cache_key_with_version}/blurb_css_classes-v2"
+          expect(helper.css_classes_for_creation_blurb(work)).to eq("#{default_classes} work-#{work.id} user-#{user1.id}")
 
-          travel_to(1.second.from_now) do
-            work.collections << collection
-            expect(helper.css_classes_for_creation_blurb(work)).to eq("#{default_classes} work-#{work.id}")
-            expect(original_cache_key).not_to eq("#{work.cache_key_with_version}/blurb_css_classes-v2")
-          end
+          travel_back
+          work.collections << collection
+          expect(helper.css_classes_for_creation_blurb(work)).to eq("#{default_classes} work-#{work.id}")
+          expect(original_cache_key).not_to eq("#{work.cache_key_with_version}/blurb_css_classes-v2")
         end
       end
 
       context "when work becomes unrevealed" do
         let(:collection) { create(:unrevealed_collection) }
 
-        before do
-          work.users.each { |user| user.preference.update(allow_collection_invitation: true) }
-        end
-
         it "returns updated string" do
-          original_cache_key = nil
-          travel_to(1.day.ago) do
-            original_cache_key = "#{work.cache_key_with_version}/blurb_css_classes-v2"
-            expect(helper.css_classes_for_creation_blurb(work)).to eq("#{default_classes} work-#{work.id} user-#{user1.id}")
-          end
+          travel_to(1.day.ago)
+          original_cache_key = "#{work.cache_key_with_version}/blurb_css_classes-v2"
+          expect(helper.css_classes_for_creation_blurb(work)).to eq("#{default_classes} work-#{work.id} user-#{user1.id}")
 
-          travel_to(1.second.from_now) do
-            work.collections << collection
-            expect(helper.css_classes_for_creation_blurb(work)).to eq("#{default_classes} work-#{work.id}")
-            expect(original_cache_key).not_to eq("#{work.cache_key_with_version}/blurb_css_classes-v2")
-          end
+          travel_back
+          work.collections << collection
+          expect(helper.css_classes_for_creation_blurb(work)).to eq("#{default_classes} work-#{work.id}")
+          expect(original_cache_key).not_to eq("#{work.cache_key_with_version}/blurb_css_classes-v2")
         end
       end
     end
