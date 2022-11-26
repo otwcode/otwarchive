@@ -185,7 +185,7 @@ describe WranglingGuidelinesController do
           content = "JUST DO IT!"
           post :create, params: { wrangling_guideline: { title: title, content: content } }
   
-          guideline = WranglingGuideline.find_by_title(title)
+          guideline = WranglingGuideline.find_by(title: title)
           expect(assigns(:wrangling_guideline)).to eq(guideline)
           expect(assigns(:wrangling_guideline).content).to eq(sanitize_value("content", content))
           it_redirects_to_with_notice(wrangling_guideline_path(guideline), "Wrangling Guideline was successfully created.")
@@ -342,7 +342,7 @@ describe WranglingGuidelinesController do
 
         it "deletes and redirects to index" do
           delete :destroy, params: { id: guideline.id }
-          expect(WranglingGuideline.find_by_id(guideline.id)).to be_nil
+          expect(WranglingGuideline.find_by(id: guideline.id)).to be_nil
           it_redirects_to_with_notice(wrangling_guidelines_path, "Wrangling Guideline was successfully deleted.")
         end
       end
