@@ -358,6 +358,7 @@ en:
     users:
       index:
         title: "Blocked Users"
+        blocked_users: "Blocked Users"
         button: "Block"
         none: "You have not blocked any users."
         legend: "Block a user"
@@ -411,6 +412,7 @@ en:
     users:
       index:
         title: "Muted Users"
+        muted_users: "Muted Users"
         button: "Mute"
         none: "You have not muted any users."
         legend: "Mute a user"
@@ -429,7 +431,7 @@ en:
           hide_content_for_others: "hide their works, series, bookmarks, and comments from anyone else"
         block_users_instead_html: "To prevent a user from commenting on your works or replying to your comments elsewhere on the site, visit %{blocked_users_link}."
         blocked_users_link_text: "your Blocked Users page"
-        site_skin_warning: "Please note that if you are not using the default site skin, muting may not work properly. The Skins and Archive Interface FAQ has %{restore_site_skin_faq_link}."
+        site_skin_warning_html: "Please note that if you are not using the default site skin, muting may not work properly. The Skins and Archive Interface FAQ has %{restore_site_skin_faq_link}."
         restore_site_skin_faq_link_test: "instructions for reverting to the default site skin"
       confirm_mute:
         title: "Mute %{name}"
@@ -446,7 +448,7 @@ en:
           hide_content_for_others: "hide their works, series, bookmarks, and comments from anyone else"
         block_users_instead_html: "To prevent a user from commenting on your works or replying to your comments elsewhere on the site, visit %{blocked_users_link}."
         blocked_users_link_text: "your Blocked Users page"
-        site_skin_warning: "Please note that if you are not using the default site skin, muting may not work properly. The Skins and Archive Interface FAQ has %{restore_site_skin_faq_link}."
+        site_skin_warning_html: "Please note that if you are not using the default site skin, muting may not work properly. The Skins and Archive Interface FAQ has %{restore_site_skin_faq_link}."
         restore_site_skin_faq_link_test: "instructions for reverting to the default site skin"
       confirm_unmute:
         title: "Unmute %{name}"

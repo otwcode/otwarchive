@@ -73,12 +73,6 @@ class User < ApplicationRecord
   has_many :mutes_as_muter, class_name: "Mute", dependent: :delete_all, inverse_of: :muter, foreign_key: :muter_id
   has_many :muted_users, through: :mutes_as_muter, source: :muted
 
-  # The mute (if it exists) with this user as the muter and
-  # User.current_user as the muted:
-  has_one :mute_of_current_user,
-          -> { where(muted: User.current_user) },
-          class_name: "Mute", foreign_key: :muter_id, inverse_of: :muter
-
   # The mute (if it exists) with User.current_user as the muter and this
   # user as the muted:
   has_one :mute_by_current_user,

@@ -3,7 +3,7 @@
 <!--subnav-->
 <ul class="navigation actions" role="navigation">
   <h3 class="landmark heading"><%= t("a11y.navigation") %></h3>
-  <li><%= span_if_current t(".blocked_users"), user_blocked_users_path %></li>
+  <li><%= span_if_current t("blocked.users.index.blocked_users"), user_blocked_users_path %></li>
   <li><%= span_if_current t(".muted_users"), user_muted_users_path %></li>
 </ul>
 
@@ -26,7 +26,7 @@
   </p>
 
   <p>
-    <%= t(".site_skin_warning", restore_site_skin_faq_link: link_to(t(".restore_site_skin_faq_link_test"), archive_faq_url("skins-and-archive-interface", anchor: :restoresiteskin))).html_safe %>
+    <%= t(".site_skin_warning_html", restore_site_skin_faq_link: link_to(t(".restore_site_skin_faq_link_test"), archive_faq_url("skins-and-archive-interface", anchor: :restoresiteskin))) %>
   </p>
 </div>
 
