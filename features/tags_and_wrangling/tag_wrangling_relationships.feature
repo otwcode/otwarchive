@@ -14,7 +14,7 @@ Scenario: relationship wrangling - syns, mergers, characters, autocompletes
     And a canonical character "Zoe Washburne"
     And a canonical character "Jack Harkness"
     And a canonical character "Ianto Jones"
-    And I am logged in as an admin
+    And I am logged in as a "tag_wrangling" admin
     And I follow "Tag Wrangling"
 
   # create a new canonical relationship from tag wrangling interface
