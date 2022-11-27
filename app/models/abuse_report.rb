@@ -46,6 +46,10 @@ class AbuseReport < ApplicationRecord
   # for "/works/123"
   before_validation :clean_url, on: :create
   def clean_url
+    if url =~ /(chapters\/\d+)/ && url !~ /(works\/\d+)/
+      add_work_id_to_url()
+    end
+
     # Work URLs: "works/123"
     # Profile URLs: "users/username"
     if url =~ /(works\/\d+)/ || url =~ /(users\/\w+)/
@@ -56,6 +60,20 @@ class AbuseReport < ApplicationRecord
       self.url = uri.to_s
     else
       url
+    end
+  end
+
+  # Gets the chapter id from the URL and tries to get the work id
+  # If successfull, the work id is then added to the URL in front of "/chapters"
+  def add_work_id_to_url
+    chapter_regex = /(chapters\/)(\d+)/
+    regex_groups = chapter_regex.match url
+    chapter_id = regex_groups[2]
+    work_id = Chapter.find_by_id(chapter_id).try(:work_id)
+    if work_id != nil
+      uri = Addressable::URI.parse url
+      uri.path = "/works/" + work_id.to_s + uri.path
+      self.url = uri.to_s
     end
   end
 
