@@ -70,7 +70,7 @@ class AbuseReport < ApplicationRecord
     regex_groups = chapter_regex.match url
     chapter_id = regex_groups[2]
     work_id = Chapter.find_by_id(chapter_id).try(:work_id)
-    unless work_id.nil?
+    return if work_id.nil?
       uri = Addressable::URI.parse url
       uri.path = "/works/" + work_id.to_s + uri.path
       self.url = uri.to_s
