@@ -37,9 +37,9 @@
         <% end %>
       </li>
     <% end %>
-    <% if @work && (is_author_of?(@work) || is_maintainer?) && @work.allow_collection_invitation %>
+    <% if @work && is_maintainer? && @work.allow_collection_invitation? %>
       <li>
-        <%= link_to ts("Add To Collections"), "#collection-form", :class => "collection_item_form_placement_open" %>
+        <%= link_to t(".invite_to_collections_link"), "#collection-form", :class => "collection_item_form_placement_open" %>
       </li>
     <% end %>
 

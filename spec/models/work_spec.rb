@@ -589,7 +589,7 @@ describe Work do
     end
   end
 
-  describe "#allow_collection_invitation" do
+  describe "#allow_collection_invitation?" do
     let(:creator1) { create(:user) }
     let(:creator2) { create(:user) }
     let(:work) { create(:work, authors: [creator1.default_pseud, creator2.default_pseud]) }
@@ -601,13 +601,13 @@ describe Work do
       end
 
       it "returns true" do
-        expect(work.allow_collection_invitation).to be true
+        expect(work.allow_collection_invitation?).to be true
       end
     end
 
     context "when all creators disallow collection invitations" do
       it "returns false" do
-        expect(work.allow_collection_invitation).to be false
+        expect(work.allow_collection_invitation?).to be false
       end
     end
 
@@ -617,7 +617,7 @@ describe Work do
       end
 
       it "returns false" do
-        expect(work.allow_collection_invitation).to be false
+        expect(work.allow_collection_invitation?).to be false
       end
     end
   end

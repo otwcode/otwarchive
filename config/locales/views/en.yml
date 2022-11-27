@@ -135,6 +135,7 @@ en:
           hidden: "Sorry, you can't add or edit comments on a hidden work."
           unrevealed: "Sorry, you can't add or edit comments on an unrevealed work."
       blocked: "Sorry, you have been blocked by one or more of this work's creators."
+      invite_to_collections_link: "Invite To Collections"
   layouts:
     proxy_notice:
       faux_heading: "Important message:"
@@ -424,3 +425,8 @@ en:
         other: "Transfer these bookmarks to the default pseud"
       confirm: "Are you sure? This can't be undone!"
       cancel: "Cancel"
+  collection_items:
+    collection_item_form:
+      invite_header: "Invite %{title} to collections"
+      add_header: "Add %{title} to collections"
+      submit: "Save"
