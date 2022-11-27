@@ -7,40 +7,40 @@ module AdminHelper
 
   # Show the admin menu with the options for hiding, editing, deleting, or
   # marking user creations as spam.
-  def can_access_admin_options?
+  def can_access_admin_options?(creation)
     return unless logged_in_as_admin?
 
-    admin_can_destroy_creations? ||
-      admin_can_edit_creations? ||
-      admin_can_hide_creations? ||
-      admin_can_mark_creations_spam?
+    admin_can_destroy_creations?(creation) ||
+      admin_can_edit_creations?(creation) ||
+      admin_can_hide_creations?(creation) ||
+      admin_can_mark_creations_spam?(creation)
   end
 
-  def admin_can_destroy_creations?
+  def admin_can_destroy_creations?(creation)
     return unless logged_in_as_admin?
 
-    UserCreationPolicy.can_destroy_creations?(current_admin)
+    UserCreationPolicy.new(current_admin, creation).can_destroy_creations?
   end
 
   # Currently applies to editing ExternalWorks and the tags or language of
   # Works.
-  def admin_can_edit_creations?
+  def admin_can_edit_creations?(creation)
     return unless logged_in_as_admin?
 
-    UserCreationPolicy.can_edit_creations?(current_admin)
+    UserCreationPolicy.new(current_admin, creation).can_edit_creations?
   end
 
-  def admin_can_hide_creations?
+  def admin_can_hide_creations?(creation)
     return unless logged_in_as_admin?
 
-    UserCreationPolicy.can_hide_creations?(current_admin)
+    UserCreationPolicy.new(current_admin, creation).can_hide_creations?
   end
 
   # Currently applies to Works.
-  def admin_can_mark_creations_spam?
+  def admin_can_mark_creations_spam?(creation)
     return unless logged_in_as_admin?
 
-    UserCreationPolicy.can_mark_creations_spam?(current_admin)
+    UserCreationPolicy.new(current_admin, creation).can_mark_creations_spam?
   end
 
   def admin_setting_disabled?(field)

@@ -108,14 +108,10 @@ Given "the admin post {string}" do |title|
   FactoryBot.create(:admin_post, title: title)
 end
 
-Given /^the fannish next of kin "([^\"]*)" for the user "([^\"]*)"$/ do |kin, user|
-  step %{the user "#{kin}" exists and is activated}
-  step %{the user "#{user}" exists and is activated}
-  step %{I am logged in as a "policy_and_abuse" admin}
-  step %{I go to the abuse administration page for "#{user}"}
-  fill_in("Fannish next of kin's username", with: "#{kin}")
-  fill_in("Fannish next of kin's email", with: "testing@foo.com")
-  click_button("Update")
+Given "the fannish next of kin {string} for the user {string}" do |kin, user|
+  user = ensure_user(user)
+  kin = ensure_user(kin)
+  user.create_fannish_next_of_kin(kin: kin, kin_email: "testing@foo.com")
 end
 
 Given /^the user "([^\"]*)" is suspended$/ do |user|

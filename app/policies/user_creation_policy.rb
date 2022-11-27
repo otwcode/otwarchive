@@ -1,35 +1,32 @@
 class UserCreationPolicy < ApplicationPolicy
-  # Defines the roles that allow admins to modify user creations.
   # User creations are Bookmarks, ExternalWorks, Series, Works.
+
+  # Roles that allow destroying user creations.
   DESTROY_ROLES = %w[superadmin policy_and_abuse].freeze
-  # Support admins need edit permissions due to AO3-4932.
-  EDIT_ROLES = %w[superadmin support policy_and_abuse].freeze
+
+  # Roles that allow destroying only Works.
+  #
+  # Include support admins for handling FNOK requests.
+  DESTROY_WORK_ROLES = %w[superadmin policy_and_abuse support].freeze
+
+  # Roles that allow editing user creations, specifically:
+  # - ExternalWorks
+  # - Works (only tags and language)
+  #
+  # Admins cannot edit Bookmarks or Series or make any other changes to Works.
+  #
+  # Include support admins due to AO3-4932.
+  EDIT_ROLES = %w[superadmin policy_and_abuse support].freeze
+
   HIDE_ROLES = %w[superadmin policy_and_abuse].freeze
+
+  # Currently applies to Works.
   SPAM_ROLES = %w[superadmin policy_and_abuse].freeze
 
-  def self.can_destroy_creations?(user)
-    self.new(user, nil).can_destroy_creations?
-  end
-
-  def self.can_edit_creations?(user)
-    self.new(user, nil).can_edit_creations?
-  end
-
-  def self.can_hide_creations?(user)
-    self.new(user, nil).can_hide_creations?
-  end
-
-  def self.can_mark_creations_spam?(user)
-    self.new(user, nil).can_mark_creations_spam?
-  end
-
   def can_destroy_creations?
-    user_has_roles?(DESTROY_ROLES)
+    user_has_roles?(DESTROY_ROLES) || user_has_roles?(DESTROY_WORK_ROLES) && record.class == Work
   end
 
-  # Currently applies to editing ExternalWorks and the tags or language of Works.
-  # Admins cannot edit Bookmarks or Series or make any other type of edit to
-  # Works.
   def can_edit_creations?
     user_has_roles?(EDIT_ROLES)
   end
@@ -38,7 +35,6 @@ class UserCreationPolicy < ApplicationPolicy
     user_has_roles?(HIDE_ROLES)
   end
 
-  # Currently applies to Works.
   def can_mark_creations_spam?
     user_has_roles?(SPAM_ROLES)
   end

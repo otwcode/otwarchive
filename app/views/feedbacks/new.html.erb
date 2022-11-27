@@ -25,6 +25,7 @@
     <p><%= t(".abuse.reports", contact_link: link_to(t(".abuse.contact"), new_abuse_report_path)).html_safe %></p>
     <p><%= t(".reportable.intro") %></p>
     <ul>
+      <li><%= t(".reportable.fnok.concerning", fnok_link: link_to(t(".reportable.fnok.fnok"), tos_faq_path(anchor: "next_of_kin"))).html_safe %></li>
       <li><%= t(".reportable.bugs") %></li>
       <li><%= t(".reportable.site_questions") %></li>
       <li><%= t(".reportable.account_creation") %></li>
