@@ -457,7 +457,6 @@ Feature: Collection
     When I edit the work "Secret Work"
       And I fill in "Collections" with "Holidays,Fluffy"
       And I press "Post"
-      And all indexing jobs have been run
       And I go to my works page
     Then I should see "Secret Work"
 

@@ -49,7 +49,7 @@ Feature: View a work with various options
     And I have the collection "test collection" with name "test_collection"
   When I am logged in as "moderator"
     And I view the work "Whatever"
-  Then I should not see a link "Add To Collections"
+  Then I should not see a link "Invite To Collections"
 
   Scenario: other users can collect a work when the creator has opted-in
   Given the work "Whatever"
@@ -58,4 +58,4 @@ Feature: View a work with various options
     And I have the collection "test collection" with name "test_collection"
   When I am logged in as "moderator"
     And I view the work "Whatever"
-  Then I should see a link "Add To Collections"
+  Then I should see a link "Invite To Collections"
