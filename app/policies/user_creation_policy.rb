@@ -1,13 +1,13 @@
 class UserCreationPolicy < ApplicationPolicy
   # User creations are Bookmarks, ExternalWorks, Series, Works.
 
-  # Roles that allow destroying user creations.
+  # Roles that allow destroying all types of user creations.
   DESTROY_ROLES = %w[superadmin policy_and_abuse].freeze
 
   # Roles that allow destroying only Works.
   #
-  # Include support admins for handling FNOK requests.
-  DESTROY_WORK_ROLES = %w[superadmin policy_and_abuse support].freeze
+  # Include support admins for handling duplicate works.
+  DESTROY_WORK_ROLES = %w[support].freeze
 
   # Roles that allow editing user creations, specifically:
   # - ExternalWorks
