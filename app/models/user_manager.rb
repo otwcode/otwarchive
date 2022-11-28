@@ -1,5 +1,4 @@
-# Allows admins to manage user status and next of kin
-# via the admin users interface
+# Allows admins to manage user status via the admin users interface
 class UserManager
   attr_reader :admin,
               :user,
