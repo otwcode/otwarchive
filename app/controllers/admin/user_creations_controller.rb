@@ -17,7 +17,7 @@ class Admin::UserCreationsController < Admin::BaseController
   
   # Removes an object from public view
   def hide
-    authorize @creation, policy_class: UserCreationPolicy
+    authorize @creation
     @creation.hidden_by_admin = (params[:hidden] == "true")
     @creation.save(validate: false)
     action = @creation.hidden_by_admin? ? "hide" : "unhide"
@@ -33,7 +33,7 @@ class Admin::UserCreationsController < Admin::BaseController
   end  
   
   def set_spam
-    authorize @creation, policy_class: UserCreationPolicy
+    authorize @creation
     action = "mark as " + (params[:spam] == "true" ? "spam" : "not spam")
     AdminActivity.log_action(current_admin, @creation, action: action, summary: @creation.inspect)    
     if params[:spam] == "true"
@@ -49,7 +49,7 @@ class Admin::UserCreationsController < Admin::BaseController
   end
 
   def destroy
-    authorize @creation, policy_class: UserCreationPolicy
+    authorize @creation
     AdminActivity.log_action(current_admin, @creation, action: "destroy", summary: @creation.inspect)
     @creation.destroy
     flash[:notice] = ts("Item was successfully deleted.")

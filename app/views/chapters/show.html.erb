@@ -11,7 +11,7 @@
 <!--/descriptions-->
 
 <!--subnav-->
-<% if can_access_admin_options?(@work) %>
+<% if policy(@work).show_admin_options? %>
   <%= render "admin/admin_options", item: @work %>
 <% end %>
 <!--/subnav-->

@@ -5,44 +5,6 @@ module AdminHelper
     activity.admin.nil? ? ts("Admin deleted") : activity.admin_login
   end
 
-  # Show the admin menu with the options for hiding, editing, deleting, or
-  # marking user creations as spam.
-  def can_access_admin_options?(creation)
-    return unless logged_in_as_admin?
-
-    admin_can_destroy_creations?(creation) ||
-      admin_can_edit_creations?(creation) ||
-      admin_can_hide_creations?(creation) ||
-      admin_can_mark_creations_spam?(creation)
-  end
-
-  def admin_can_destroy_creations?(creation)
-    return unless logged_in_as_admin?
-
-    UserCreationPolicy.new(current_admin, creation).can_destroy_creations?
-  end
-
-  # Currently applies to editing ExternalWorks and the tags or language of
-  # Works.
-  def admin_can_edit_creations?(creation)
-    return unless logged_in_as_admin?
-
-    UserCreationPolicy.new(current_admin, creation).can_edit_creations?
-  end
-
-  def admin_can_hide_creations?(creation)
-    return unless logged_in_as_admin?
-
-    UserCreationPolicy.new(current_admin, creation).can_hide_creations?
-  end
-
-  # Currently applies to Works.
-  def admin_can_mark_creations_spam?(creation)
-    return unless logged_in_as_admin?
-
-    UserCreationPolicy.new(current_admin, creation).can_mark_creations_spam?
-  end
-
   def admin_setting_disabled?(field)
     return unless logged_in_as_admin?
 
