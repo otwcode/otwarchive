@@ -11,7 +11,7 @@ class Admin::UserCreationsController < Admin::BaseController
   def can_be_marked_as_spam
     unless @creation_class && @creation_class == Work
       flash[:error] = ts("You can only mark works as spam currently.")
-      redirect_to @creation and return
+      redirect_to polymorphic_path(@creation) and return
     end
   end
   
@@ -28,7 +28,7 @@ class Admin::UserCreationsController < Admin::BaseController
     if @creation_class == ExternalWork || @creation_class == Bookmark
       redirect_to(request.env["HTTP_REFERER"] || root_path)
     else
-      redirect_to(@creation)
+      redirect_to polymorphic_path(@creation)
     end
   end  
   
@@ -45,7 +45,7 @@ class Admin::UserCreationsController < Admin::BaseController
       @creation.update_attribute(:hidden_by_admin, false)
       flash[:notice] = ts("Work was marked not spam and unhidden.")
     end
-    redirect_to(@creation)
+    redirect_to polymorphic_path(@creation)
   end
 
   def destroy
