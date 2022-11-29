@@ -43,7 +43,6 @@ class Admin::AdminUsersController < Admin::BaseController
   end
 
   # GET admin/users/1
-  # GET admin/users/1.xml
   def show
     @user = authorize User.find_by!(login: params[:id])
     @hide_dashboard = true

@@ -6,9 +6,19 @@ describe UserManager do
     let(:user) { create(:user) }
 
     it "returns error without user" do
-      manager = UserManager.new(admin, nil, admin_action: "note")
+      manager = UserManager.new(admin, nil, {})
       expect(manager.save).to be_falsey
       expect(manager.errors).to eq ["Must have a valid user and admin account to proceed."]
+    end
+
+    it "does nothing without an admin action" do
+      manager = UserManager.new(admin, user, {})
+      expect do
+        manager.save
+      end.to avoid_changing { user.reload.updated_at }
+        .and avoid_changing { user.reload.log_items.count }
+      expect(manager.save).to be_truthy
+      expect(manager.successes).to be_empty
     end
 
     it "returns error if notes are missing when suspending" do
