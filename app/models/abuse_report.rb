@@ -46,7 +46,7 @@ class AbuseReport < ApplicationRecord
   # for "/works/123"
   before_validation :clean_url, on: :create
   def clean_url
-    if url =~ /(chapters\/\d+)/ && url !~ /(works\/\d+)/
+    if url =~ %r{(chapters/\d+)} && url !~ %r{(works/\d+)}
       add_work_id_to_url
     end
 
@@ -66,10 +66,10 @@ class AbuseReport < ApplicationRecord
   # Gets the chapter id from the URL and tries to get the work id
   # If successfull, the work id is then added to the URL in front of "/chapters"
   def add_work_id_to_url
-    chapter_regex = /(chapters\/)(\d+)/
+    chapter_regex = %r{(chapters/)(\d+)}
     regex_groups = chapter_regex.match url
     chapter_id = regex_groups[2]
-    work_id = Chapter.find_by_id(chapter_id).try(:work_id)
+    work_id = Chapter.find_by(id: chapter_id).try(:work_id)
 
     return if work_id.nil?
     
@@ -78,7 +78,8 @@ class AbuseReport < ApplicationRecord
     self.url = uri.to_s
   end
 
-  app_url_regex = Regexp.new('^(https?:\/\/)?(www\.|(insecure\.))?(archiveofourown|ao3)\.(org|com).*', true)
+  # app_url_regex = Regexp.new('^(https?:\/\/)?(www\.|(insecure\.))?(archiveofourown|ao3)\.(org|com).*', true)
+  app_url_regex = Regexp.new('\d', true)
   validates_format_of :url, with: app_url_regex,
                             message: ts('does not appear to be on this site.'),
                             multiline: true
