@@ -6,6 +6,7 @@
 	"display": "standalone",
 	"background_color": "#fff",
 	"description": "An Archive of Our Own, a project of the Organization for Transformative Works",
+	"theme_color": "#990000",
 	"icons": [
         {
             "src": "images/ao3_logos/logo_square.png",
