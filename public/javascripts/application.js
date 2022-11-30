@@ -28,6 +28,7 @@ $j(document).ready(function() {
     prepareDeleteLinks();
     thermometer();
     $j('body').addClass('javascript');
+    registerServiceWorker();
 });
 
 ///////////////////////////////////////////////////////////////////
@@ -651,4 +652,18 @@ function updateCachedTokens() {
   } else {
     $j.event.trigger({ type: "loadedCSRF" });
   }
+}
+
+/** attempt to register a service worker
+ *
+ * @returns {Promise<ServiceWorkerRegistration|undefined>} service worker registration on success, or undefined on failure
+ */
+function registerServiceWorker() {
+  if (!('serviceWorker' in navigator))
+    return Promise.resolve(undefined);
+  return navigator.serviceWorker.register('/service-worker.js', {
+    scope: '/',
+  }).catch(function(error) {
+    console.error(`Service worker registration failed with ${error}`);
+  });
 }
