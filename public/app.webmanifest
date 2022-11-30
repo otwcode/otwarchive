@@ -1,0 +1,16 @@
+{
+	"$schema": "https://json.schemastore.org/web-manifest-combined.json",
+	"name": "An Archive of Our Own",
+	"short_name": "AO3",
+	"start_url": ".",
+	"display": "standalone",
+	"background_color": "#fff",
+	"description": "An Archive of Our Own, a project of the Organization for Transformative Works",
+	"icons": [
+        {
+            "src": "images/ao3_logos/logo_square.png",
+            "sizes": "351x351",
+            "type": "image/png"
+        }
+    ]
+}

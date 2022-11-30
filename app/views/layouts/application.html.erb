@@ -33,6 +33,7 @@
 
     <%= render :partial => 'layouts/includes' %>
     <%= phraseapp_in_context_editor_js %>
+    <link rel="manifest" href="/app.webmanifest"/>
   </head>
 
   <body class="<%= logged_in? ? 'logged-in' : 'logged-out' %>" <%= PhraseApp::InContextEditor.enabled? ? "data-no-turbolink" : "" %>>
