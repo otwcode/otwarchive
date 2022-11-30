@@ -125,6 +125,14 @@ Then /^I should see "([^"]*)" in the "([^"]*)" input/ do |content, labeltext|
   find_field("#{labeltext}").value.should == content
 end
 
+Then /^I should see a button with text "(.*?)"(?: within "(.*?)")?$/ do |text, selector|
+  assure_xpath_present("input", "value", text, selector)
+end
+
+Then /^I should not see a button with text "(.*?)"(?: within "(.*?)")?$/ do |text, selector|
+  assure_xpath_not_present("input", "value", text, selector)
+end
+
 Then /^I should see (a|an) "([^"]*)" button(?: within "([^"]*)")?$/ do |_article, text, selector|
   assure_xpath_present("input", "value", text, selector)
 end
