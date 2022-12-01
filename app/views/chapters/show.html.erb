@@ -29,7 +29,7 @@
     <% last_chapter = @work.posted? ? @work.last_posted_chapter : @work.last_chapter %>
     <% if @chapter == last_chapter && (@work.endnotes.present? || @work.series.present? || inspired_by.present?) %>
       <!--afterword-->
-      <div class="afterword preface group" role="complementary">  
+      <div class="afterword preface group">  
         <% if !@work.endnotes.blank? %>
           <%= render :partial => 'works/work_endnotes' %>
         <% end %>
