@@ -616,11 +616,3 @@ Feature: Edit chapters
     When I view the work "Over the Limit"
     Then I should see "1/1"
       And I should not see "Next Chapter"
-
-  Scenario: I cannot delete the sole published chapter of a work on its own
-    Given I am logged in
-      And I post the 1 chapter work "My chef d'œuvre"
-      And a draft chapter is added to "My chef d'œuvre"
-    When I delete chapter 1 of "My chef d'œuvre"
-    Then I should see "You can't delete the only published chapter in your story. Please post another chapter first. If you want to delete the story, choose 'Delete work'."
-    Then I should not see "The chapter was successfully deleted."

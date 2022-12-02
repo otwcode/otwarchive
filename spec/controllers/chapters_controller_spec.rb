@@ -1067,6 +1067,15 @@ describe ChaptersController do
             .and avoid_changing { work.number_of_posted_chapters }
         end
       end
+
+      context "when work has more than one chapter and all but one are drafts" do
+        let!(:chapter2) { create(:chapter, work: work, posted: false, position: 2, authors: [user.pseuds.first]) }
+
+        it "cannot delete the posted chapter" do
+          delete :destroy, params: { work_id: work.id, id: work.chapters.first.id }
+          it_redirects_to_with_error(edit_work_path(work), "You can't delete the only published chapter in your story. Please post another chapter first. If you want to delete the story, choose 'Delete work'.")
+        end
+      end
     end
 
     context "when other user is logged in" do
