@@ -371,8 +371,8 @@ end
 
 When /^I add my bookmark to the collection "([^\"]*)"$/ do |collection_name|
   step %{I follow "Add To Collection"}
-    fill_in("collection_names", with: "#{collection_name}")
-    click_button("Save")
+  fill_in("collection_names", with: collection_name.to_s)
+  click_button("Save")
 end
 
 When /^I rec the current work$/ do
