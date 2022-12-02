@@ -219,7 +219,7 @@ class ChaptersController < ApplicationController
       return
     end
 
-    if @chapter.is_only_posted_chapter?
+    if @chapter.only_posted_chapter?
       flash[:error] = ts("You can't delete the only published chapter in your story. Please post another chapter first. If you want to delete the story, choose 'Delete work'.")
       redirect_to(edit_work_path(@work))
       return
@@ -234,7 +234,7 @@ class ChaptersController < ApplicationController
     else
       flash[:error] = ts("Something went wrong. Please try again.")
     end
-    redirect_to controller: 'works', action: 'show', id: @work
+    redirect_to controller: "works", action: "show", id: @work
   end
 
   private
