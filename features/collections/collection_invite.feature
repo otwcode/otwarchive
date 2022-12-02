@@ -11,7 +11,7 @@ Feature: Collection
     And I post the work "Murder in Milan" with fandom "Murder She Wrote"
   When I have the collection "scotts collection" with name "scotts_collection"
     And I am logged in as "moderator" with password "password"
-    And I add the work "Murder in Milan" to the collection "scotts collection"
+    And I invite the work "Murder in Milan" to the collection "scotts collection"
   Then I should see "This work has been invited to your collection (scotts collection)."
     And 1 email should be delivered to "Scott"
   When I go to "scotts collection" collection's page
@@ -39,7 +39,7 @@ Feature: Collection
     And I post the work "A Death in Hong Kong"
   When I have the hidden collection "anon collection" with name "anon_collection"
     And I am logged in as "moderator"
-    And I add the work "A Death in Hong Kong" to the collection "anon collection"
+    And I invite the work "A Death in Hong Kong" to the collection "anon collection"
   Then I should see "because you don't own this item and the collection is anonymous or unrevealed"
     And 0 emails should be delivered
   When I view the approved collection items page for "anon collection"
@@ -51,7 +51,7 @@ Feature: Collection
     And I post the work "A Death in Hong Kong"
   When I have the hidden collection "hidden collection" with name "hidden_collection"
     And I am logged in as "moderator"
-    And I add the work "A Death in Hong Kong" to the collection "hidden collection"
+    And I invite the work "A Death in Hong Kong" to the collection "hidden collection"
   Then I should see "because you don't own this item and the collection is anonymous or unrevealed"
     And 0 emails should be delivered
   When I view the approved collection items page for "hidden collection"
@@ -63,7 +63,7 @@ Feature: Collection
     And I post the work "A Death in Hong Kong"
   When I have the hidden anonymous collection "anon hidden collection" with name "anon_hidden_collection"
     And I am logged in as "moderator"
-    And I add the work "A Death in Hong Kong" to the collection "anon hidden collection"
+    And I invite the work "A Death in Hong Kong" to the collection "anon hidden collection"
   Then I should see "because you don't own this item and the collection is anonymous or unrevealed"
     And 0 emails should be delivered
   When I view the approved collection items page for "anon hidden collection"
@@ -77,7 +77,7 @@ Feature: Collection
       And I am logged in as the author of "Over the Limit"
       And I set my preferences to allow collection invitations
     When I am logged in as "moderator"
-      And I add the work "Over the Limit" to the collection "Favorites"
+      And I invite the work "Over the Limit" to the collection "Favorites"
     Then I should see "This work has been invited to your collection (Favorites)."
     When I am logged in as the author of "Over the Limit"
       And I accept the invitation for my work in the collection "Favorites"
