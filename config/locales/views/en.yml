@@ -429,4 +429,5 @@ en:
     collection_item_form:
       invite_header: "Invite %{title} to collections"
       add_header: "Add %{title} to collections"
-      submit: "Save"
+      invite: "Invite"
+      add: "Add"

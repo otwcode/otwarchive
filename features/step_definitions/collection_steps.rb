@@ -33,7 +33,7 @@ When "I invite the work {string} to the collection {string}" do |work_title, col
   visit work_path(work)
   click_link("Invite To Collections")
   fill_in("collection_names", with: collection.name)
-  click_button("Save")
+  click_button("Invite")
 end
 
 When(/^I view the(?: ([^"]*)) collection items page for "(.*?)"$/) do |item_status, collection|

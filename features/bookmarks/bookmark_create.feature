@@ -263,7 +263,7 @@ Scenario: Adding bookmarks to closed collections (Issue 3083)
     # Use the 'Add To Collections' button to add the bookmark to a closed collection AFTER creating said bookmark
   When I follow "Add To Collection"
     And I fill in "collection_names" with "unsolved_mysteries"
-    And I press "Save"
+    And I press "Add"
   Then I should see "Added to collection(s): Unsolved Mysteries"
     # Still as the moderator, try to edit the bookmark which is IN a closed collection already
   When I follow "Edit"
@@ -284,7 +284,7 @@ Scenario: Adding bookmarks to closed collections (Issue 3083)
   Then I should see "Bookmark was successfully created"
   Then I follow "Add To Collection"
     And I fill in "collection_names" with "rescue_911"
-    And I press "Save"
+    And I press "Add"
   Then I should see "We couldn't add your submission to the following collection(s): Rescue 911 is closed to new submissions."
     # Now, as a regular user try to add that existing bookmark to a closed collection from the 'Edit' page of a bookmark
   When I follow "Edit"
