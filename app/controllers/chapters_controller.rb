@@ -216,18 +216,25 @@ class ChaptersController < ApplicationController
     if @chapter.is_only_chapter?
       flash[:error] = ts("You can't delete the only chapter in your story. If you want to delete the story, choose 'Delete work'.")
       redirect_to(edit_work_path(@work))
-    else
-      was_draft = !@chapter.posted?
-      if @chapter.destroy
-        @work.minor_version = @work.minor_version + 1
-        @work.set_revised_at
-        @work.save
-        flash[:notice] = ts("The chapter #{was_draft ? 'draft ' : ''}was successfully deleted.")
-      else
-        flash[:error] = ts("Something went wrong. Please try again.")
-      end
-      redirect_to controller: 'works', action: 'show', id: @work
+      return
     end
+
+    if @chapter.is_only_posted_chapter?
+      flash[:error] = ts("You can't delete the only published chapter in your story. Please post another chapter first. If you want to delete the story, choose 'Delete work'.")
+      redirect_to(edit_work_path(@work))
+      return
+    end
+
+    was_draft = !@chapter.posted?
+    if @chapter.destroy
+      @work.minor_version = @work.minor_version + 1
+      @work.set_revised_at
+      @work.save
+      flash[:notice] = ts("The chapter #{was_draft ? 'draft ' : ''}was successfully deleted.")
+    else
+      flash[:error] = ts("Something went wrong. Please try again.")
+    end
+    redirect_to controller: 'works', action: 'show', id: @work
   end
 
   private
