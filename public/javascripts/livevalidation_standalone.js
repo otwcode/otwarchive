@@ -909,6 +909,7 @@ function scrollToErrorIfFound() {
     $j("html, body").animate({
       scrollTop: errorField.offset().top
     }, 1000);
+    errorField.focus();
   }
 }
 
