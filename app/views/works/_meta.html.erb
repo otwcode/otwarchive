@@ -3,7 +3,7 @@
 
 <div class="wrapper">
 
-  <dl class="work meta group">
+  <dl class="work meta group" role="complementary">
     <% tag_group = work.tag_groups
        Tag::VISIBLE.each do |type| %>
       <% tags = tag_group[type] %>
