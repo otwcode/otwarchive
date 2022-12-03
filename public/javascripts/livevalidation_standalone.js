@@ -318,7 +318,7 @@ LiveValidation.prototype = {
       var isValid = this.doValidations();
       if (isValid) {
         this.onValid();
-        enableSubmit();
+        if (typeof jQuery != "undefined") enableSubmit();
         return true;
       } else {
         this.onInvalid();
