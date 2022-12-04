@@ -111,7 +111,7 @@ end
 Given "the fannish next of kin {string} for the user {string}" do |kin, user|
   user = ensure_user(user)
   kin = ensure_user(kin)
-  user.create_fannish_next_of_kin(kin: kin, kin_email: "testing@foo.com")
+  user.create_fannish_next_of_kin(kin: kin, kin_email: "fnok@example.com")
 end
 
 Given /^the user "([^\"]*)" is suspended$/ do |user|

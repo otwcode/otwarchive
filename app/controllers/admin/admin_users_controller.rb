@@ -80,7 +80,8 @@ class Admin::AdminUsersController < Admin::BaseController
       return
     end
 
-    fnok = @user.build_fannish_next_of_kin(kin: kin, kin_email: kin_email)
+    fnok = @user.build_fannish_next_of_kin if fnok.blank?
+    fnok.assign_attributes(kin: kin, kin_email: kin_email)
     if fnok.save
       flash[:notice] = ts("Fannish next of kin was updated.")
       redirect_to admin_user_path(@user)

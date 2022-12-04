@@ -104,6 +104,11 @@ Feature: Admin Fannish Next Of Kind actions
       And I fill in "Fannish next of kin's email" with "libbylibby@example.com"
       And I press "Update Fannish Next of Kin"
     Then I should see "Kin can't be blank"
+      And the "Fannish next of kin's username" input should be blank
+      And I should see "libbylibby@example.com" in the "Fannish next of kin's email" input
+    When I go to the abuse administration page for "harrykim"
+      And I should see "libby" in the "Fannish next of kin's username" input
+      And I should see "fnok@example.com" in the "Fannish next of kin's email" input
     When I fill in "Fannish next of kin's username" with "harrysmom"
       And I fill in "Fannish next of kin's email" with "harrysmom@example.com"
       And I press "Update Fannish Next of Kin"
