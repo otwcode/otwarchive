@@ -1,6 +1,17 @@
 version: 2
 updates:
 
+  - package-ecosystem: "bundler"
+    directory: "/"
+    schedule:
+      interval: "daily"
+    labels:
+      - "Awaiting Review"
+      - "Gem Updates"
+      - "Gem Updates: Security"
+    # Disable version updates
+    open-pull-requests-limit: 0
+
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
