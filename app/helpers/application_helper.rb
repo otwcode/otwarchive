@@ -327,16 +327,6 @@ module ApplicationHelper
     (time_in_zone_string + user_time_string).strip.html_safe
   end
 
-  # show date in the time zone specified
-  # note: this does *not* append timezone and does *not* reflect user preferences
-  def date_in_zone(time, zone = nil)
-    zone ||= Time.zone.name
-    return I18n.t("time.no_date_specified") if time.blank?
-
-    time_in_zone = time.in_time_zone(zone)
-    I18n.l(time_in_zone, format: :date_short_html).html_safe
-  end
-
   def mailto_link(user, options={})
     "<a href=\"mailto:#{h(user.email)}?subject=[#{ArchiveConfig.APP_SHORT_NAME}]#{options[:subject]}\" class=\"mailto\">
       <img src=\"/images/envelope_icon.gif\" alt=\"email #{h(user.login)}\">
