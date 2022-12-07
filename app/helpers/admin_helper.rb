@@ -64,16 +64,6 @@ module AdminHelper
     policy(User).permitted_attributes.include?(roles: [])
   end
 
-  def admin_can_edit_user_role(role)
-    return true if current_admin.roles.include? "superadmin"
-    return role.name == "tag_wrangler" if current_admin.roles.include? "tag_wrangling"
-    return role.name == "protected_user" if current_admin.roles.include? "policy_and_abuse"
-    if current_admin.roles.include? "open_doors"
-      return %w[archivist opendoors].include? role.name
-    end
-    return false
-  end
-
   def admin_can_update_user_email?
     return unless logged_in_as_admin?
 
