@@ -33,7 +33,7 @@ class UserPolicy < ApplicationPolicy
     ALLOWED_ATTRIBUTES_BY_ROLES.values_at(*user.roles).compact.flatten
   end
 
-  def can_edit_case_superadmin?(role)
+  def can_edit_case_superadmin?
     user_has_roles?(%w[superadmin]) 
   end
 
@@ -50,7 +50,7 @@ class UserPolicy < ApplicationPolicy
   end
 
   def can_edit_user_role?(role)
-    can_edit_case_superadmin?(role) || can_edit_case_tag_wrangling?(role) || can_edit_case_policy_and_abuse?(role) || can_edit_case_open_doors?(role)
+    can_edit_case_superadmin? || can_edit_case_tag_wrangling?(role) || can_edit_case_policy_and_abuse?(role) || can_edit_case_open_doors?(role)
   end
 
   alias index? can_manage_users?
