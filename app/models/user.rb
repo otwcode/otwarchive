@@ -427,6 +427,10 @@ class User < ApplicationRecord
     has_role?(:no_resets)
   end
 
+  def is_orphan_account?
+    self.login == "orphan_account"
+  end
+
   # Creates log item tracking changes to user
   def create_log_item(options = {})
     options.reverse_merge! note: "System Generated", user_id: self.id

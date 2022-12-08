@@ -27,6 +27,7 @@ class UserManager
 
   def save
     validate_user_and_admin &&
+      validate_orphan_account &&
       validate_admin_note &&
       validate_suspension &&
       validate_next_of_kin &&
@@ -50,6 +51,15 @@ class UserManager
     else
       errors << "Must have a valid user and admin account to proceed."
       false
+    end
+  end
+
+  def validate_orphan_account
+    if (admin_action == "suspend" || admin_action == "ban" || admin_action == "spamban") && user.is_orphan_account?
+      errors << "orphan_account cannot be banned/suspended."
+      false
+    else
+      true
     end
   end
 

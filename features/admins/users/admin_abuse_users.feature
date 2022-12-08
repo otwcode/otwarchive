@@ -6,6 +6,7 @@ Feature: Admin Abuse actions
 
   Background:
     Given the user "mrparis" exists and is activated
+      And the user "orphan_account" exists and is activated
       And I am logged in as a "policy_and_abuse" admin
     When I go to the abuse administration page for "mrparis"
 
@@ -29,6 +30,27 @@ Feature: Admin Abuse actions
     Given I choose "Record warning"
     When I press "Update"
     Then I should see "You must include notes in order to perform this action."
+
+  Scenario: orphan_account cannot be suspended
+    When I go to the abuse administration page for "orphan_account"
+      And I choose "Suspend: enter a whole number of days"
+      And I fill in "suspend_days" with "30"
+      And I fill in "Notes" with "Disobeyed orders."
+    When I press "Update"
+    Then I should see "orphan_account cannot be banned/suspended."
+
+  Scenario: orphan_account cannot be banned
+    When I go to the abuse administration page for "orphan_account"
+      And I choose "Suspend permanently (ban user)"
+      And I fill in "Notes" with "To the New Zealand penal colony with you."
+    When I press "Update"
+    Then I should see "orphan_account cannot be banned/suspended."
+
+  Scenario: orphan_account cannot be spambanned
+    When I go to the abuse administration page for "orphan_account"
+      And I choose "Spammer: ban and delete all creations"
+    When I press "Update"
+    Then I should see "orphan_account cannot be banned/suspended."
 
   Scenario: A user is given a suspension with a note and number of days
     Given I choose "Suspend: enter a whole number of days"

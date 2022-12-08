@@ -5,11 +5,18 @@ describe UserManager do
     let(:admin) { create(:admin) }
     let(:next_of_kin) { create(:user) }
     let(:user) { create(:user) }
+    let(:orphan) { create(:user, login: "orphan_account") }
 
     it "returns error without user" do
       manager = UserManager.new(admin, user_login: nil)
       expect(manager.save).to be_falsey
       expect(manager.errors).to eq ["Must have a valid user and admin account to proceed."]
+    end
+
+    it "returns error if user is orphan_account" do
+      manager = UserManager.new(admin, user_login: orphan.login, admin_action: "suspend", suspend_days: "7")
+      expect(manager.save).to be_falsey
+      expect(manager.errors).to eq ["orphan_account cannot be banned/suspended."]
     end
 
     it "returns error if next of kin email is missing" do
