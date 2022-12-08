@@ -427,7 +427,7 @@ class User < ApplicationRecord
     has_role?(:no_resets)
   end
 
-  def is_orphan_account?
+  def orphan_account?
     self.login == "orphan_account"
   end
 

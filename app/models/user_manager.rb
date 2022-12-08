@@ -55,7 +55,7 @@ class UserManager
   end
 
   def validate_orphan_account
-    if (admin_action == "suspend" || admin_action == "ban" || admin_action == "spamban") && user.is_orphan_account?
+    if (admin_action == "suspend" || admin_action == "ban" || admin_action == "spamban") && user.orphan_account?
       errors << "orphan_account cannot be banned/suspended."
       false
     else
