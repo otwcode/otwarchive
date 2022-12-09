@@ -33,3 +33,6 @@ Disallow: /people?*show=
 
 User-agent: Slurp
 Crawl-delay: 30
+
+User-agent: CCBot
+Disallow: /
