@@ -16,7 +16,7 @@ describe UserManager do
     it "returns error if user is orphan_account" do
       manager = UserManager.new(admin, user_login: orphan.login, admin_action: "suspend", suspend_days: "7")
       expect(manager.save).to be_falsey
-      expect(manager.errors).to eq ["orphan_account cannot be banned/suspended."]
+      expect(manager.errors).to eq ["orphan_account cannot be warned, suspended, or banned."]
     end
 
     it "returns error if next of kin email is missing" do
