@@ -31,8 +31,8 @@ Disallow: /*?*user_id
 Disallow: /*?*pseud=
 Disallow: /people?*show=
 
-User-agent: Slurp
-Crawl-delay: 30
-
 User-agent: CCBot
 Disallow: /
+
+User-agent: Slurp
+Crawl-delay: 30
