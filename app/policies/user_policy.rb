@@ -21,6 +21,14 @@ class UserPolicy < ApplicationPolicy
     "tag_wrangling" => [roles: []]
   }.freeze
 
+  # Define which admin roles can edit which user roles.
+  ALLOWED_USER_ROLES_BY_ADMIN_ROLES = {
+    "open_doors" => %w[archivist opendoors],
+    "policy_and_abuse" => %w[no_resets protected_user],
+    "superadmin" => %w[archivist no_resets official opendoors protected_user tag_wrangler],
+    "tag_wrangling" => %w[tag_wrangler]
+  }
+
   def can_manage_users?
     user_has_roles?(MANAGE_ROLES)
   end
@@ -33,24 +41,8 @@ class UserPolicy < ApplicationPolicy
     ALLOWED_ATTRIBUTES_BY_ROLES.values_at(*user.roles).compact.flatten
   end
 
-  def can_edit_case_superadmin?
-    user_has_roles?(%w[superadmin]) 
-  end
-
-  def can_edit_case_tag_wrangling?(role)
-    user_has_roles?(%w[tag_wrangling]) && role.name == "tag_wrangler"
-  end
-
-  def can_edit_case_policy_and_abuse?(role)
-    user_has_roles?(%w[policy_and_abuse]) && role.name == "protected_user"
-  end
-
-  def can_edit_case_open_doors?(role)
-    user_has_roles?(%w[open_doors]) && (role.name == "archivist" || role.name == "opendoors")
-  end
-
   def can_edit_user_role?(role)
-    can_edit_case_superadmin? || can_edit_case_tag_wrangling?(role) || can_edit_case_policy_and_abuse?(role) || can_edit_case_open_doors?(role)
+    ALLOWED_USER_ROLES_BY_ADMIN_ROLES.values_at(*user.roles).compact.flatten.include?(role.name)
   end
 
   alias index? can_manage_users?
