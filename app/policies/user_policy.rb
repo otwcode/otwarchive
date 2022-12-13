@@ -27,7 +27,7 @@ class UserPolicy < ApplicationPolicy
     "policy_and_abuse" => %w[no_resets protected_user],
     "superadmin" => %w[archivist no_resets official opendoors protected_user tag_wrangler],
     "tag_wrangling" => %w[tag_wrangler]
-  }
+  }.freeze
 
   def can_manage_users?
     user_has_roles?(MANAGE_ROLES)
