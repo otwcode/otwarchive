@@ -5,7 +5,7 @@ class Admin < ApplicationRecord
 
   devise :database_authenticatable,
          :validatable,
-         password_length: ArchiveConfig.PASSWORD_LENGTH_MIN..ArchiveConfig.PASSWORD_LENGTH_MAX
+         password_length: ArchiveConfig.ADMIN_PASSWORD_LENGTH_MIN..ArchiveConfig.ADMIN_PASSWORD_LENGTH_MAX
 
   include BackwardsCompatiblePasswordDecryptor
 

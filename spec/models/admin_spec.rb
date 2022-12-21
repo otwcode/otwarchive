@@ -56,16 +56,16 @@ describe Admin, :ready do
   end
 
   context "length of password" do
-    it "is invalid if under #{ArchiveConfig.PASSWORD_LENGTH_MIN - 1} characters" do
-      expect { create(:admin, password: Faker::Lorem.characters(number: ArchiveConfig.PASSWORD_LENGTH_MIN - 1)) }.to \
+    it "is invalid if under #{ArchiveConfig.ADMIN_PASSWORD_LENGTH_MIN - 1} characters" do
+      expect { create(:admin, password: Faker::Lorem.characters(number: ArchiveConfig.ADMIN_PASSWORD_LENGTH_MIN - 1)) }.to \
         raise_error(ActiveRecord::RecordInvalid, \
-                    "Validation failed: Password is too short (minimum is #{ArchiveConfig.PASSWORD_LENGTH_MIN} characters)")
+                    "Validation failed: Password is too short (minimum is #{ArchiveConfig.ADMIN_PASSWORD_LENGTH_MIN} characters)")
     end
 
-    it "is invalid if over #{ArchiveConfig.PASSWORD_LENGTH_MAX + 1} characters" do
-      expect { create(:admin, password: Faker::Lorem.characters(number: ArchiveConfig.PASSWORD_LENGTH_MAX + 1)) }.to \
+    it "is invalid if over #{ArchiveConfig.ADMIN_PASSWORD_LENGTH_MAX + 1} characters" do
+      expect { create(:admin, password: Faker::Lorem.characters(number: ArchiveConfig.ADMIN_PASSWORD_LENGTH_MAX + 1)) }.to \
         raise_error(ActiveRecord::RecordInvalid, \
-                    "Validation failed: Password is too long (maximum is #{ArchiveConfig.PASSWORD_LENGTH_MAX} characters)")
+                    "Validation failed: Password is too long (maximum is #{ArchiveConfig.ADMIN_PASSWORD_LENGTH_MAX} characters)")
     end
   end
 

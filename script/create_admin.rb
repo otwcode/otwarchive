@@ -54,7 +54,7 @@ list.each do |user|
 
   if a.new_record?
     # Create password only for new admins
-    password = `pwgen 8 1`.strip
+    password = `pwgen 10 1`.strip
     a.password = password
     a.password_confirmation = password
 
