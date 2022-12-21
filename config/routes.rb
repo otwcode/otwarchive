@@ -2,12 +2,22 @@ Otwarchive::Application.routes.draw do
 
   devise_scope :admin do
     get "admin/logout" => "admin/sessions#confirm_logout"
+
+    # Rails emulates some HTTP methods over POST, so password resets (PUT /admin/password)
+    # look the same as password reset requests (POST /admin/password).
+    #
+    # To rate limit them differently at nginx, we set up an alias for
+    # the first request type.
+    put "admin/password/reset" => "admin/passwords#update"
   end
 
   devise_for :admin,
              module: "admin",
-             only: :sessions,
-             controllers: { sessions: "admin/sessions" },
+             only: [:sessions, :passwords],
+             controllers: {
+               sessions: "admin/sessions",
+               passwords: "admin/passwords"
+             },
              path_names: {
                sign_in: "login",
                sign_out: "logout"

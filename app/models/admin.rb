@@ -4,10 +4,16 @@ class Admin < ApplicationRecord
   serialize :roles, Array
 
   devise :database_authenticatable,
+         :lockable,
+         :recoverable,
          :validatable,
-         password_length: ArchiveConfig.ADMIN_PASSWORD_LENGTH_MIN..ArchiveConfig.ADMIN_PASSWORD_LENGTH_MAX
+         password_length: ArchiveConfig.ADMIN_PASSWORD_LENGTH_MIN..ArchiveConfig.ADMIN_PASSWORD_LENGTH_MAX,
+         lock_strategy: :none,
+         unlock_strategy: :none
 
   include BackwardsCompatiblePasswordDecryptor
+
+  attr_accessor :raw_reset_password_token
 
   has_many :log_items
   has_many :invitations, as: :creator
@@ -25,5 +31,16 @@ class Admin < ApplicationRecord
     return unless roles && (roles - VALID_ROLES).present?
 
     errors.add(:roles, :invalid)
+  end
+
+  before_create :set_reset_password_data
+  def set_reset_password_data
+    self.raw_reset_password_token, self.reset_password_token = Devise.token_generator.generate(Admin, :reset_password_token)
+    self.reset_password_sent_at = Time.now.utc
+  end
+
+  after_create :send_set_password_notification
+  def send_set_password_notification
+    AdminMailer.set_password_notification(self, self.raw_reset_password_token).deliver
   end
 end

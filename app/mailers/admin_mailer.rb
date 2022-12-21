@@ -50,4 +50,17 @@ class AdminMailer < ApplicationMailer
       subject: "[#{ArchiveConfig.APP_SHORT_NAME}] Potential spam alert"
     )
   end
+
+  # Emails newly created admin, giving them info about their account and a link
+  # to set their password. Expects the raw password reset token (not the
+  # encrypted one in the database); it is used to create the reset link.
+  def set_password_notification(admin, token)
+    @admin = admin
+    @token = token
+
+    mail(
+      to: @admin.email,
+      subject: t(".subject", app_name: ArchiveConfig.APP_SHORT_NAME)
+    )
+  end
 end

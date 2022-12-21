@@ -52,6 +52,32 @@ en:
         navigation:
           queue: "Manage Queue"
           requests: "Manage Requests"
+    passwords:
+      new:
+        page_heading: "Forgotten your admin password?"
+        instructions: "If you've forgotten or would like to change your admin password, we can send instructions that will allow you to reset it. Please tell us the user name for your admin account."
+        reset_login_html: "Admin user name"
+        submit: Reset Admin Password
+      edit:
+        page_heading: Set My Admin Password
+        label:
+          password: New password
+          confirmation: Confirm new password
+        describedby:
+          password_length: "%{minimum} to %{maximum} characters"
+        landmark:
+          submit: Submit
+        submit: Set Admin Password
+    sessions:
+      new:
+        page_heading: "Log In as Admin"
+        label:
+          login: "Admin user name"
+          password: "Admin password"
+        landmark:
+          reset: "Reset password"
+        reset_link: "Forgot admin password?"
+        submit: "Log In as Admin"
     settings:
       index:
         fields:
@@ -412,13 +438,13 @@ en:
     delete_preview:
       heading: "Pseud deletion"
       notice: "When you delete your pseud, any works, series, or comments you have created under it will be transferred to your default pseud."
-      saved_bookmarks: 
+      saved_bookmarks:
         one: "You have saved %{count} bookmark using this pseud. You can choose whether to delete it or transfer it to your default pseud."
         other: "You have saved %{count} bookmarks using this pseud. You can choose whether to delete them or transfer them to your default pseud."
-      delete: 
+      delete:
         one: "Delete this bookmark"
         other: "Delete these bookmarks"
-      transfer: 
+      transfer:
         one: "Transfer this bookmark to the default pseud"
         other: "Transfer these bookmarks to the default pseud"
       confirm: "Are you sure? This can't be undone!"

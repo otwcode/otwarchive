@@ -9,6 +9,30 @@ describe Admin, :ready do
     expect(create(:admin, email: "!def!xyz%abc@example.com")).to be_valid
   end
 
+  it "sets reset_password_token" do
+    admin = create(:admin)
+    expect(admin.reset_password_token).not_to be_nil
+  end
+
+  it "sets raw_reset_password_token" do
+    admin = create(:admin)
+    expect(admin.raw_reset_password_token).not_to be_nil
+  end
+
+  it "sets reset_password_sent_at" do
+    admin = create(:admin)
+    expect(admin.reset_password_sent_at).not_to be_nil
+  end
+
+  it "sends set_password_notification to admin email" do
+    expect { create(:admin, email: "test@example.com") }.to \
+      change { ActionMailer::Base.deliveries.count }.by(1)
+    expect(ActionMailer::Base.deliveries.last.recipients).to \
+      eq(["test@example.com"])
+    expect(ActionMailer::Base.deliveries.last.subject).to \
+      eq("[AO3] Your AO3 admin account")
+  end
+
   context "invalid" do
     it "without a user name" do
       expect { create(:admin, login: nil) }.to \
@@ -103,7 +127,7 @@ describe Admin, :ready do
     context "invalid roles" do
       it "cannot be assigned invalid role" do
         admin = create(:admin)
-        
+
         expect { admin.update!(roles: ["fake_role"]) }.to \
           raise_error(ActiveRecord::RecordInvalid, \
                       "Validation failed: Roles is invalid")

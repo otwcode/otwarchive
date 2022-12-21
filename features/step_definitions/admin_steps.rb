@@ -24,7 +24,7 @@ Given "I am logged in as a(n) {string} admin" do |role|
   visit new_admin_session_path
   fill_in "Admin user name", with: login
   fill_in "Admin password", with: "adminpassword"
-  click_button "Log in as admin"
+  click_button "Log In as Admin"
   step %{I should see "Successfully logged in"}
 end
 
@@ -34,7 +34,7 @@ Given "I am logged in as an admin" do
   visit new_admin_session_path
   fill_in "Admin user name", with: "testadmin"
   fill_in "Admin password", with: "adminpassword"
-  click_button "Log in as admin"
+  click_button "Log In as Admin"
   step %{I should see "Successfully logged in"}
 end
 
@@ -178,6 +178,26 @@ Given "an abuse ticket ID exists" do
     "webUrl" => Faker::Internet.url
   }
   allow_any_instance_of(ZohoResourceClient).to receive(:find_ticket).and_return(ticket)
+end
+
+Given "the admin {string} is locked" do |login|
+  admin = if Admin.find_by(login: login)
+            Admin.find_by(login: login)
+          else
+            FactoryBot.create(:admin, login: login)
+          end
+  # Same as script/lock_admin.rb
+  admin.lock_access!({ send_instructions: false })
+end
+
+Given "the admin {string} is unlocked" do |login|
+  admin = if Admin.find_by(login: login)
+            Admin.find_by(login: login)
+          else
+            FactoryBot.create(:admin, login: login)
+          end
+  # Same as script/unlock_admin.rb
+  admin.unlock_access!
 end
 
 ### WHEN
