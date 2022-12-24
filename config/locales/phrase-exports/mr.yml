@@ -87,6 +87,7 @@ mr:
         informal: शुभेच्छा,
       creation:
         link_with_word_count: "%{creation_link} (%{word_count})"
+        title_with_chapter_number: "%{title} चं %{position} प्रकरण"
         title_with_word_count: '"%{creation_title}" (%{word_count})'
         word_count:
           one: "%{count} शब्द"
@@ -347,12 +348,12 @@ mr:
         instructions: तुम्ही %{page_name} पृष्ठावर जाऊन ही विनंती स्वीकारू किंवा नाकारू
           शकता.
         page_name: Co-Creator Requests (सहनिर्माती विनंत्या)
-      intro_chapter: 'वापरकर्त्याने %{inviting_user} पुढील प्रकरणावर आपल्या स्यूडोआयडी
-        ला %{pseud} सहनिर्माते नेमण्यासाठी आमंत्रण दिले आहे:'
-      intro_series: 'वापरकर्त्याने %{inviting_user} पुढील लेखमालेवर आपल्या स्यूडोआयडी
-        ला %{pseud} सहनिर्माते नेमण्यासाठी आमंत्रण दिले आहे:'
-      intro_work: 'वापरकर्त्याने %{inviting_user} पुढील कार्यावर आपल्या स्यूडोआयडी
-        ला %{pseud} सहनिर्माते नेमण्यासाठी आमंत्रण दिले आहे:'
+      intro_chapter: "%{inviting_user} वापरकर्त्याने पुढील प्रकरणावर आपल्या स्यूडोआयडी
+        %{pseud} ला सहनिर्माते नेमण्यासाठी आमंत्रण दिले आहे:"
+      intro_series: "%{inviting_user} वापरकर्त्याने पुढील लेखमालेवर आपल्या स्यूडोआयडी
+        %{pseud} ला सहनिर्माते नेमण्यासाठी आमंत्रण दिले आहे:"
+      intro_work: "%{inviting_user} वापरकर्त्याने पुढील कार्यावर आपल्या स्यूडोआयडी
+        %{pseud} ला सहनिर्माते नेमण्यासाठी आमंत्रण दिले आहे:"
       subject: "[%{app_name}] सहनिर्माती विनंती"
       text:
         creation: "%{title} (%{url}) द्वारे %{pseuds}"
