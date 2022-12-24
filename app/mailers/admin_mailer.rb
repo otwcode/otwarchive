@@ -1,6 +1,4 @@
 class AdminMailer < ApplicationMailer
-  include HtmlCleaner
-
   # Sends email to an admin when a new comment is created on an admin post
   def comment_notification(comment_id)
     # admin = Admin.find(admin_id)
