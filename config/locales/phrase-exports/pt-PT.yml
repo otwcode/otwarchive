@@ -349,7 +349,7 @@ pt-PT:
         instructions: Podes aceitar ou rejeitar este pedido na tua página de %{page_name}.
         page_name: Co-Creator Requests (Pedidos de Pessoa Co-Criadora)
       intro_chapter: 'A pessoa utilizadora %{inviting_user} convidou o teu pseudónimo
-        %{pseud} para listado como pessoa co-criadora do seguinte capítulo:'
+        %{pseud} para ser listado como pessoa co-criadora do seguinte capítulo:'
       intro_series: 'A pessoa utilizadora %{inviting_user} convidou o teu pseudónimo
         %{pseud} para ser listado como pessoa co-criadora da seguinte série:'
       intro_work: 'A pessoa utilizadora %{inviting_user} convidou o teu pseudónimo

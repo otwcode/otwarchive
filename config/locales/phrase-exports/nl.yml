@@ -358,18 +358,18 @@ nl:
         creation: "%{creation_link} door %{pseud_links}"
         instructions: Je kan dit verzoek aanvaarden of weigeren op je %{page_name}
           pagina.
-        page_name: Co-Creator Requests (Medeproducent Aanvragen)
-      intro_chapter: 'De gebruiker %{inviting_user} heeft jouw pseud %{pseud} uitgenodigd
-        om als medeproducent vermeld te worden op het volgende hoofdstuk:'
-      intro_series: 'De gebruiker %{inviting_user} heeft jouw pseud %{pseud} uitgenodigd
-        om als medeproducent vermeld te worden op de volgende serie:'
-      intro_work: 'De gebruiker %{inviting_user} heeft jouw pseud %{pseud} uitgenodigd
+        page_name: Co-Creator Requests (Medeproducent aanvragen)
+      intro_chapter: 'De gebruiker %{inviting_user} heeft jouw pseudoniem %{pseud}
+        uitgenodigd om als medeproducent vermeld te worden op het volgende hoofdstuk:'
+      intro_series: 'De gebruiker %{inviting_user} heeft jouw pseudoniem %{pseud}
+        uitgenodigd om als medeproducent vermeld te worden op de volgende serie:'
+      intro_work: 'De gebruiker %{inviting_user} heeft jouw pseudoniem %{pseud} uitgenodigd
         om als medeproducent vermeld te worden op het volgende werk:'
-      subject: "[%{app_name}] Medeproducent Aanvraag"
+      subject: "[%{app_name}] Medeproducent aanvraag"
       text:
         creation: "%{title} (%{url}) door %{pseuds}"
         instructions: 'Je kan dit verzoek aanvaarden of weigeren op je Co-Creator
-          Requests (Medeproducent Aanvragen) pagina: %{url}'
+          Requests (Medeproducent aanvragen) pagina: %{url}'
     delete_work_notification:
       html:
         part1_other: Je werk %{title} is op verzoek van %{pseud} verwijderd.
