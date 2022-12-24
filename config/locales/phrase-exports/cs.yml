@@ -87,7 +87,7 @@ cs:
           other: Práce %{commentable_link} dostala kudos od %{givers_list}.
         single_guest:
           giver_list: návštěvníka
-          left_kudos: Práce %{commentable_link} dostala kudos od %{givers_list}.
+          left_kudos: Práce %{commentable_link} dostala kudos od %{giver_list}.
       subject: "[%{app_name}] Máte nové kudos!"
       text:
         left_kudos:
