@@ -24,7 +24,6 @@ RETURN_ADDRESS: 'do-not-reply@example.org'
 SPAM_ALERT_ADDRESS: 'abuse-discuss@example.org'
 SPAM_THRESHOLD: 15
 ADMIN_ADDRESS: 'admin@example.org'
-FEEDBACK_ADDRESS: feedback@example.org
 
 # Because the default email addresses are fake,
 # email delivery is turned off by default, even for production.
