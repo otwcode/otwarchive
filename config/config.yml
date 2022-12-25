@@ -278,25 +278,25 @@ FIELDS_WITHOUT_SANITIZATION: ["password", "password_check", "password_confirmati
 # These fields are query fields and are allowed to contain "less than" values
 FIELDS_ALLOWING_LESS_THAN: ["query", "words", "kudos", "hits", "date", "bookmarkable_date", "word_count", "bookmarks_count", "comments_count", "kudos_count", "revised_at"]
 
-
-# Only the following fields are allowed to have HTML. In all others,
-# all HTML tags will be stripped.
+# Only the following fields are allowed to have HTML. In others, all HTML tags
+# will be stripped by the "sanitize_ac_params" filter.
 #
-# NOTE: the exact HTML tags and attributes and protocols allowed are defined in
-#   initializers/sanitizer_config.rb
+# The exact HTML tags and attributes and protocols allowed are defined in:
+# - config/initializers/gem-plugin_config/sanitizer_config.rb
+# - lib/html_cleaner.rb
 #
 # If you add a new field to this list, you need to:
-# - make sure that every model that contains the field also has a matching field "[fieldname]_sanitizer_version"
-#   Example:
-#     add_column :chapters, :content_sanitizer_version, :integer, :default => 0, :null => false, :limit => 2
 #
-# - make sure in the model that this field is NOT accessible (eg "attr_protected :content_sanitizer_version")
+# - make sure every model containing the field also has a matching field "[fieldname]_sanitizer_version", e.g.
+#     add_column :chapters, :content_sanitizer_version, :integer, default: 0, null: false, limit: 2
 #
-# - when you load the field you should use sanitize_field(object, :fieldname)
+# - make sure the field is NOT permitted for mass updating (by not including it in params.permit calls)
+#
+# - display the field in views using the HtmlCleaner helper, e.g.
+#     <%=raw sanitize_field(object, :fieldname) %>
 #
 # This will ensure that the field has been sanitized with the latest version of the sanitizer.
-#
-FIELDS_ALLOWING_HTML: ["about_me", "bookmarker_notes", "comment", "comment_content", "content", "description", "disabled_support_form_text", "endnotes", "faq", "intro", "note", "notes",
+FIELDS_ALLOWING_HTML: ["about_me", "bookmarker_notes", "comment", "comment_content", "content", "description", "disabled_support_form_text", "endnotes", "faq", "intro", "notes",
   "rules", "series_notes", "signup_instructions_general", "signup_instructions_offers", "signup_instructions_requests", "summary"]
 
 FIELDS_ALLOWING_HTML_ENTITIES: ["title"]
