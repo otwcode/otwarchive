@@ -16,6 +16,7 @@ module OtwSanitize
       soundcloud:       %r{^(w\.)?soundcloud\.com/},
       spotify:          %r{^(open\.)?spotify\.com/},
       viddersnet:       %r{^vidders\.net/},
+      viddertube:       %r{^viddertube\.com/},
       vimeo:            %r{^(player\.)?vimeo\.com/},
       youtube:          %r{^youtube(-nocookie)?\.com/}
     }.freeze
@@ -27,7 +28,7 @@ module OtwSanitize
 
     SUPPORTS_HTTPS = %i[
       ao3 archiveorg eighttracks podfic
-      soundcloud spotify viddersnet vimeo youtube
+      soundcloud spotify viddersnet viddertube vimeo youtube
     ].freeze
 
     # Creates a callable transformer for the sanitizer to use
