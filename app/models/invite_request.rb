@@ -1,6 +1,4 @@
 class InviteRequest < ApplicationRecord
-  include ActiveModel::ForbiddenAttributesProtection
-
   self.ignored_columns = [:position]
 
   validates :email, presence: true, email_veracity: true

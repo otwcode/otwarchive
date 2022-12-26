@@ -10,6 +10,15 @@ Feature: Marking comments as spam
       And I post a spam comment
       And all comments by "spammer" are marked as spam
 
+    When I am logged in as "author"
+      And I go to the home page
+    Then I should see "This was really lovely!"
+      And I should not see "Buy my product!"
+    When I follow "My Inbox"
+    Then I should see "(1 comments, 1 unread)"
+      And I should see "This was really lovely!"
+      And I should not see "Buy my product!"
+
     When I go to author's user page
     Then I should see "Popular Fic"
       And I should see "Comments: 1"

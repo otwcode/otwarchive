@@ -1,5 +1,4 @@
 class RelatedWork < ActiveRecord::Base
-  include ActiveModel::ForbiddenAttributesProtection
   belongs_to :work
   belongs_to :parent, polymorphic: true, autosave: true
 
@@ -57,5 +56,4 @@ class RelatedWork < ActiveRecord::Base
       end
     end
   end
-
 end
