@@ -6,7 +6,6 @@ RUN apt-get update             && \
         calibre                   \
         default-mysql-client      \
         phantomjs                 \
-        pwgen                     \
         shared-mime-info          \
         wkhtmltopdf               \
         zip

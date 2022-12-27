@@ -54,7 +54,7 @@ list.each do |user|
 
   # If this is a new admin, we need to set a temporary password.
   if a.new_record?
-    password = `pwgen 10 1`.strip
+    password = SecureRandom.alphanumeric(10)
     a.password = password
     a.password_confirmation = password
   end
