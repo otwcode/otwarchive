@@ -13,8 +13,6 @@ class Admin < ApplicationRecord
 
   include BackwardsCompatiblePasswordDecryptor
 
-  attr_accessor :raw_reset_password_token
-
   has_many :log_items
   has_many :invitations, as: :creator
   has_many :wrangled_tags, class_name: 'Tag', as: :last_wrangler
@@ -33,16 +31,11 @@ class Admin < ApplicationRecord
     errors.add(:roles, :invalid)
   end
 
-  before_create :set_reset_password_data
-  def set_reset_password_data
-    self.raw_reset_password_token, self.reset_password_token = Devise.token_generator.generate(Admin, :reset_password_token)
-    self.reset_password_sent_at = Time.now.utc
-  end
-
   # For requesting admins set a new password before their first login. Uses same
   # mechanism as password reset requests, but different email notification.
   after_create :send_set_password_notification
   def send_set_password_notification
-    AdminMailer.set_password_notification(self, self.raw_reset_password_token).deliver
+    token = set_reset_password_token
+    AdminMailer.set_password_notification(self, token).deliver
   end
 end

@@ -134,7 +134,7 @@ describe AdminMailer do
     subject(:email) { AdminMailer.set_password_notification(admin, token) }
 
     let(:admin) { create(:admin) }
-    let(:token) { admin.raw_reset_password_token }
+    let(:token) { "abc123" }
 
     # Test the headers
     it_behaves_like "an email with a valid sender"

@@ -14,11 +14,6 @@ describe Admin, :ready do
     expect(admin.reset_password_token).not_to be_nil
   end
 
-  it "sets raw_reset_password_token" do
-    admin = create(:admin)
-    expect(admin.raw_reset_password_token).not_to be_nil
-  end
-
   it "sets reset_password_sent_at" do
     admin = create(:admin)
     expect(admin.reset_password_sent_at).not_to be_nil
