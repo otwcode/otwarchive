@@ -1,5 +1,3 @@
-#!script/rails runner
-#
 # Run this script and follow the onscreen instructions:
 #   bundle exec rails r script/create_admin.rb
 
