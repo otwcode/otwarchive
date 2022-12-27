@@ -6,11 +6,11 @@ class UserPolicy < ApplicationPolicy
   # This is further restricted using ALLOWED_ATTRIBUTES_BY_ROLES.
   MANAGE_ROLES = %w[superadmin policy_and_abuse open_doors support tag_wrangling].freeze
 
-  # Roles that allow:
-  # - updating a user's Fannish Next of Kin
-  # - suspending and banning
-  # - deleting all of a spammer's creations
-  JUDGE_ROLES = %w[superadmin policy_and_abuse].freeze
+  # Roles that allow updating the Fannish Next Of Kin of a user.
+  MANAGE_NEXT_OF_KIN_ROLES = %w[superadmin policy_and_abuse support].freeze
+
+  # Roles that allow deleting all of a spammer's creations.
+  SPAM_CLEANUP_ROLES = %w[superadmin policy_and_abuse].freeze
 
   # Define which roles can update which attributes.
   ALLOWED_ATTRIBUTES_BY_ROLES = {
@@ -25,8 +25,12 @@ class UserPolicy < ApplicationPolicy
     user_has_roles?(MANAGE_ROLES)
   end
 
-  def can_judge_users?
-    user_has_roles?(JUDGE_ROLES)
+  def can_manage_next_of_kin?
+    user_has_roles?(MANAGE_NEXT_OF_KIN_ROLES)
+  end
+
+  def can_destroy_spam_creations?
+    user_has_roles?(SPAM_CLEANUP_ROLES)
   end
 
   def permitted_attributes
@@ -38,9 +42,10 @@ class UserPolicy < ApplicationPolicy
   alias show? can_manage_users?
   alias update? can_manage_users?
 
-  alias update_status? can_judge_users?
-  alias confirm_delete_user_creations? can_judge_users?
-  alias destroy_user_creations? can_judge_users?
+  alias update_next_of_kin? can_manage_next_of_kin?
+
+  alias confirm_delete_user_creations? can_destroy_spam_creations?
+  alias destroy_user_creations? can_destroy_spam_creations?
 
   alias troubleshoot? can_manage_users?
   alias send_activation? can_manage_users?

@@ -125,6 +125,10 @@ Then /^I should see "([^"]*)" in the "([^"]*)" input/ do |content, labeltext|
   find_field("#{labeltext}").value.should == content
 end
 
+Then "the {string} input should be blank" do |label|
+  expect(find_field(label).value).to be_blank
+end
+
 Then /^I should see (a|an) "([^"]*)" button(?: within "([^"]*)")?$/ do |_article, text, selector|
   assure_xpath_present("input", "value", text, selector)
 end
