@@ -6,7 +6,7 @@ Feature: Admin Abuse actions
 
   Background:
     Given the user "mrparis" exists and is activated
-      And the user "orphan_account" exists and is activated
+      And I have an orphan account
       And I am logged in as a "policy_and_abuse" admin
     When I go to the abuse administration page for "mrparis"
 
