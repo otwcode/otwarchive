@@ -39,6 +39,8 @@ class Admin < ApplicationRecord
     self.reset_password_sent_at = Time.now.utc
   end
 
+  # For requesting admins set a new password before their first login. Uses same
+  # mechanism as password reset requests, but different email notification.
   after_create :send_set_password_notification
   def send_set_password_notification
     AdminMailer.set_password_notification(self, self.raw_reset_password_token).deliver
