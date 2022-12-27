@@ -177,21 +177,13 @@ Given "an abuse ticket ID exists" do
 end
 
 Given "the admin {string} is locked" do |login|
-  admin = if Admin.find_by(login: login)
-            Admin.find_by(login: login)
-          else
-            FactoryBot.create(:admin, login: login)
-          end
+  admin = Admin.find_by(login: login) || FactoryBot.create(:admin, login: login)
   # Same as script/lock_admin.rb
   admin.lock_access!({ send_instructions: false })
 end
 
 Given "the admin {string} is unlocked" do |login|
-  admin = if Admin.find_by(login: login)
-            Admin.find_by(login: login)
-          else
-            FactoryBot.create(:admin, login: login)
-          end
+  admin = Admin.find_by(login: login) || FactoryBot.create(:admin, login: login)
   # Same as script/unlock_admin.rb
   admin.unlock_access!
 end
