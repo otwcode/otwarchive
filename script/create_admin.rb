@@ -29,6 +29,7 @@ puts <<~PROMPT
   where
 
   - USERNAME is their OTW name without the admin- prefix (spaces will be removed)
+  - EMAIL is the trusted address provided by VolCom
   - EMAIL/ROLE can be left blank to skip updating email/roles of existing admins
   - ROLE is one of:
 
