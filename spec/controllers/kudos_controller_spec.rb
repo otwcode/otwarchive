@@ -191,7 +191,7 @@ describe KudosController do
 
       it "asks to log out first" do
         post :create, params: { kudo: { commentable_id: work.id, commentable_type: "Work" } }
-        expect(flash[:notice]).to eq("Please log out of your admin account first!")
+        it_redirects_to_with_notice(root_path, "Please log out of your admin account first!")
       end
     end
   end

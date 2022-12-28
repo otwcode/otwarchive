@@ -247,9 +247,9 @@ describe CommentsController do
       context "when logged in as an admin" do
         before { fake_login_admin(create(:admin)) }
 
-        it "posts the comment and shows it in context" do
+        it "asks to log out first" do
           post :create, params: { tag_id: fandom.name, comment: anon_comment_attributes }
-          expect(flash[:notice]).to eq("Please log out of your admin account first!")
+          it_redirects_to_with_notice(root_path, "Please log out of your admin account first!")
           comment = Comment.last
           expect(comment).to eq nil
         end
@@ -343,7 +343,7 @@ describe CommentsController do
 
         it "asks to log out first" do
           post :create, params: { work_id: work.id, comment: anon_comment_attributes }
-          expect(flash[:notice]).to eq("Please log out of your admin account first!")
+          it_redirects_to_with_notice(root_path, "Please log out of your admin account first!")
         end
       end
     end
