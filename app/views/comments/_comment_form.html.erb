@@ -3,9 +3,7 @@
   <% commentable = @commentable %>
 <% end %>
 
-<% if logged_in_as_admin? %>
-  <% # Hide form for admins %>
-<% else %>
+<% unless logged_in_as_admin? %>
   <div class="post comment" id="comment_form_for_<%= commentable.id %>">
     <%= form_for value_for_comment_form(commentable, comment), :remote => !comment.new_record?, :html => {:id => "comment_for_#{commentable.id}"} do |f| %>
       <fieldset>
