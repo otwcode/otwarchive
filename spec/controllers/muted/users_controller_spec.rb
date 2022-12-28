@@ -126,6 +126,19 @@ describe Muted::UsersController do
         it_redirects_to_with_notice(user_muted_users_path(muter),
                                     "You have muted the user #{muted.login}.")
       end
+
+      context "when trying to mute more users than the mute limit" do
+        let(:muted_2nd) { create(:user) }
+
+        it "redirects with an error" do
+          allow(ArchiveConfig).to receive(:MAX_MUTED_USERS).and_return(1)
+          Mute.create(muter: muter, muted: muted)
+          post :create, params: { user_id: muter, muted_id: muted_2nd }
+          expect(Mute.where(muter: muter, muted: muted_2nd)).not_to be_present
+          it_redirects_to_with_error(user_muted_users_path(muter),
+                                     "Sorry, you have muted too many accounts.")
+        end
+      end
     end
 
     it_behaves_like "no other users can access it"
