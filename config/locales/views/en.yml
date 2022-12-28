@@ -257,6 +257,9 @@ en:
         contact: contact our Policy and Abuse team
       reportable:
         intro: 'Some issues you can contact Support about include:'
+        fnok:
+          concerning_html: Setting up, changing, or activating your %{fnok_link}
+          fnok: Fannish Next of Kin
         bugs: Bugs, errors, or unexpected site behavior
         site_questions: Questions about how to use the site
         account_creation: Problems setting up your account
@@ -264,7 +267,7 @@ en:
         tag_changes: Requests to canonize or change tags
         new_features: Feature requests for future development
         orphaned_works: Questions about orphaned works
-        work_language: Works labeled with the wrong language
+        work_problems: Works labeled with the wrong language or duplicate works
         policy_questions: General site policy questions
       do_not_spam_html: <strong>We respond to every report we receive, but we are a small volunteer team.</strong> For this reason, we ask you to not submit multiple reports regarding any one issue, or encourage other people to report the same issue, unless there is additional information to offer.
       languages_html: <strong>We can answer Support inquiries in %{list}.</strong> Please allow for additional delay for responses in any language other than English.
@@ -301,9 +304,6 @@ en:
       do_not_spam_html: <strong>We investigate every report we receive.</strong> For this reason, we ask you to not submit several reports regarding any one issue unless you have additional information to offer. We also ask that you do not encourage other users to submit a report regarding content you have already reported. Doing so slows down our response and reaction time considerably, as we are a small volunteer-based committee.
       reportable:
         intro: 'Please submit a report via this form if you have not submitted this report within the past sixty (60) days, and you:'
-        fnok:
-          concerning: would like to contact us regarding your %{fnok_link}, or
-          fnok: Fannish Next of Kin
         hack: believe that your account has been hacked, or that someone is trying to hack your account, or
         tos: believe you have found content uploaded to the Archive which breaches our Terms of Service, or
         dmca:
@@ -349,6 +349,8 @@ en:
       about:
         popular: These are some of the most popular tags used on the Archive. To find more tags, %{search_tags_link}.
         random: These are some random tags used on the Archive. To find more tags, %{search_tags_link}.
+        popular_in_collection: These are some of the most popular tags used in the collection.
+        random_in_collection: These are some random tags used in the collection.
       search_tags: try our tag search
   blocked:
     block: "Block"
@@ -413,7 +415,7 @@ en:
       heading: "Pseud deletion"
       notice: "When you delete your pseud, any works, series, or comments you have created under it will be transferred to your default pseud."
       saved_bookmarks: 
-        one: "You have saved %{count} bookmark using this pseud. You can choose whether to delete it or transfer them to your default pseud."
+        one: "You have saved %{count} bookmark using this pseud. You can choose whether to delete it or transfer it to your default pseud."
         other: "You have saved %{count} bookmarks using this pseud. You can choose whether to delete them or transfer them to your default pseud."
       delete: 
         one: "Delete this bookmark"

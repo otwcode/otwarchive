@@ -1,7 +1,6 @@
 # encoding=utf-8
 
 class Chapter < ApplicationRecord
-  include ActiveModel::ForbiddenAttributesProtection
   include HtmlCleaner
   include WorkChapterCountCaching
   include CreationNotifier
