@@ -57,7 +57,7 @@
   <!--navigation and actions-->
   <% if is_author_of?(bookmark) %>
     <%= render "bookmarks/bookmark_owner_navigation", bookmark: bookmark %>
-  <% elsif can_access_admin_options? %>
+  <% elsif policy(bookmark).show_admin_options? %>
     <%= render "admin/admin_options", item: bookmark %>
   <% end %>
 </div>
