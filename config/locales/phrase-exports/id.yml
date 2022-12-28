@@ -67,6 +67,7 @@ id:
         informal: Salam,
       creation:
         link_with_word_count: "%{creation_link} (%{word_count})"
+        title_with_chapter_number: Bab %{position} pada %{title}
         title_with_word_count: '"%{creation_title}" (%{word_count})'
         word_count:
           other: "%{count} kata"
@@ -337,11 +338,11 @@ id:
         instructions: Anda dapat menerima atau menolak undangan ini di halaman %{page_name}
           Anda.
         page_name: Co-Creator Requests (Undangan Rekan Kreator)
-      intro_chapter: 'Pengguna %{inviting_user} mengundang Pseud (alias) anda %{pseud}
+      intro_chapter: 'Pengguna %{inviting_user} mengundang Pseud (alias) Anda %{pseud}
         untuk didaftarkan sebagai rekan kreator di chapter (bab) berikut:'
-      intro_series: 'Pengguna %{inviting_user} mengundang Pseud (alias) anda %{pseud}
+      intro_series: 'Pengguna %{inviting_user} mengundang Pseud (alias) Anda %{pseud}
         untuk didaftarkan sebagai rekan kreator di series (seri) berikut:'
-      intro_work: 'Pengguna %{inviting_user} mengundang Pseud (alias) anda %{pseud}
+      intro_work: 'Pengguna %{inviting_user} mengundang Pseud (alias) Anda %{pseud}
         untuk didaftarkan sebagai rekan kreator di karya berikut:'
       subject: "[%{app_name}] Undangan rekan kreator"
       text:

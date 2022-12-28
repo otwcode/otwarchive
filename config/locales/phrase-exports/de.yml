@@ -87,6 +87,7 @@ de:
         informal: Viele Grüße
       creation:
         link_with_word_count: "%{creation_link} (%{word_count})"
+        title_with_chapter_number: Kapitel %{position} von %{title}
         title_with_word_count: '"%{creation_title}" (%{word_count})'
         word_count:
           one: "%{count} Wort"
@@ -354,7 +355,7 @@ de:
     creatorship_request:
       html:
         creation: "%{creation_link} von %{pseud_links}"
-        instructions: Du kannst diese Anfrage auf deiner “%{page_name}”-Seite annehmen
+        instructions: Du kannst diese Anfrage auf deiner "%{page_name}"-Seite annehmen
           oder ablehnen.
         page_name: Co-Creator Requests (Mitschöpfer*innen-Anfragen)
       intro_chapter: 'dein Pseud %{pseud} wurde von %{inviting_user} eingeladen, als
@@ -366,7 +367,7 @@ de:
       subject: "[%{app_name}] Mitschöpfer*innen-Anfrage"
       text:
         creation: "%{title} (%{url}) von %{pseuds}"
-        instructions: 'Du kannst diese Anfrage auf deiner “Co-Creator Requests”- (Mitschöpfer*innen-Anfragen)
+        instructions: 'Du kannst diese Anfrage auf deiner "Co-Creator Requests"- (Mitschöpfer*innen-Anfragen)
           Seite annehmen oder ablehnen: %{url}'
     delete_work_notification:
       html:

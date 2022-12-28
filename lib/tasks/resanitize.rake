@@ -16,7 +16,6 @@ namespace :resanitize do
       Feedback,
       GiftExchange,
       KnownIssue,
-      LogItem,
       OwnedTagSet,
       Profile,
       Prompt,
