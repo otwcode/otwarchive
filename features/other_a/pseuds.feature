@@ -130,6 +130,7 @@ Scenario: Comments reflect pseud changes immediately
   Then I should see "before (myself)" within "h4.heading.byline"
 
   When I change the pseud "before" to "after"
+    And it is currently 10 seconds from now
     And I view the work "Interesting" with comments
   Then I should see "after (myself)" within "h4.heading.byline"
     And I should not see "before (myself)"
