@@ -117,3 +117,19 @@ Scenario: Manage pseuds - add, edit
     And I should see "My new fancy name (editpseuds)"
     And I should see "I wanted to add another fancy name"
     And I should not see "My new name (editpseuds)"
+
+Scenario: Comments reflect pseud changes immediately
+
+  Given the work "Interesting"
+    And I am logged in as "myself"
+    And I add the pseud "before"
+  When I set up the comment "Wow!" on the work "Interesting"
+    And I select "before" from "comment[pseud_id]"
+    And I press "Comment"
+    And I view the work "Interesting" with comments
+  Then I should see "before (myself)" within "h4.heading.byline"
+
+  When I change the pseud "before" to "after"
+    And I view the work "Interesting" with comments
+  Then I should see "after (myself)" within "h4.heading.byline"
+    And I should not see "before (myself)"
