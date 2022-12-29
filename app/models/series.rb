@@ -2,6 +2,7 @@ class Series < ApplicationRecord
   include Bookmarkable
   include Searchable
   include Creatable
+  include Sortable
 
   has_many :serial_works, dependent: :destroy
   has_many :works, through: :serial_works
@@ -297,5 +298,9 @@ class Series < ApplicationRecord
 
   def work_types
     works.map(&:work_types).flatten.uniq
+  end
+
+  def fandoms
+    work_tags.where(tags: { type: "Fandom" })
   end
 end

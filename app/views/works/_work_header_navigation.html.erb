@@ -108,12 +108,12 @@
     </li>
   <% end %>
 
-  <% if downloadable? && @admin_settings.downloads_enabled? %>
+  <% if downloadable?(work) && @admin_settings.downloads_enabled? %>
     <li class="download" aria-haspopup="true">
       <a href="#"><%= ts("Download") %></a>
       <ul class="expandable secondary">
         <% ArchiveConfig.DOWNLOAD_FORMATS.each do |format| %>
-          <li><%= link_to ts(format.upcase), download_url_for_work(@work, format) %></li>
+          <li><%= link_to ts(format.upcase), download_url_for(@work, format) %></li>
         <% end %>
       </ul>
     </li>

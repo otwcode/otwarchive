@@ -1,5 +1,5 @@
 <ul class="navigation actions" role="navigation">
-  <% if is_author_of?(@series) %>
+  <% if logged_in? && is_author_of?(@series) %>
     <li><%= span_if_current ts("Edit Series"), edit_series_path(@series) %></li>
     <li><%= link_to ts("Delete Series"), confirm_delete_series_path(@series), data: {confirm: ts('Are you sure you want to delete this series? This will NOT delete the individual works.')} %></li>
     <li><%= link_to ts("Reorder Series"), manage_series_path(@series) %></li>
@@ -8,12 +8,28 @@
       <li><%= link_to ts("Remove Me As Co-Creator"), edit_series_path(@series, :remove => 'me'), data: {confirm: series_removal_confirmation(@series, current_user)} %></li>
     <% end %>
   <% end %>
+
   <li><%= span_if_current ts("Series"), series_path(@series) %></li>
-  <% if @subscription %>
+
+  <% if current_user.is_a?(User) && @subscription %>
     <li>
       <%= render "subscriptions/form", subscription: @subscription %>
     </li>
   <% end %>
-  <% @bookmark ||= bookmark_if_exists(@series) %>
-  <li><%= link_to (@bookmark ? ts("Edit Series Bookmark") : ts("Bookmark Series")), "#bookmark-form", class: "bookmark_form_placement_open" %></li>
+
+  <% if current_user.is_a?(User) %>
+    <% @bookmark ||= bookmark_if_exists(@series) %>
+    <li><%= link_to (@bookmark ? ts("Edit Series Bookmark") : ts("Bookmark Series")), "#bookmark-form", class: "bookmark_form_placement_open" %></li>
+  <% end %>
+
+  <% if downloadable?(@series) && @admin_settings.downloads_enabled? %>
+    <li class="download" aria-haspopup="true">
+      <a href="#"><%= ts("Download") %></a>
+      <ul class="expandable secondary">
+        <% ArchiveConfig.DOWNLOAD_FORMATS.each do |format| %>
+          <li><%= link_to ts(format.upcase), download_url_for(@series, format) %></li>
+        <% end %>
+      </ul>
+    </li>
+  <% end %>
 </ul>

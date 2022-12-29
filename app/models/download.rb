@@ -1,8 +1,8 @@
 class Download
-  attr_reader :work, :file_type, :mime_type
+  attr_reader :target, :file_type, :mime_type
 
-  def initialize(work, options = {})
-    @work = work
+  def initialize(target, options = {})
+    @target = target
     @file_type = set_file_type(options.slice(:mime_type, :format))
     # TODO: Our current version of the mime-types gem doesn't include azw3, but
     # the gem cannot be updated without updating rest-client
@@ -52,19 +52,19 @@ class Download
 
   # The base name of the file (eg, "War and Peace")
   def file_name
-    name = clean(work.title)
-    name += " Work #{work.id}" if name.length < 3
+    name = clean(target.title)
+    name += " #{target.class.name} #{target.id}" if name.length < 3
     name.strip
   end
 
   # The public route to this download
   def public_path
-    "/downloads/#{work.id}/#{file_name}.#{file_type}"
+    "/downloads/#{target.class.name.downcase}/#{target.id}/#{file_name}.#{file_type}"
   end
 
   # The path to the zip file (eg, "/tmp/42_epub_20190301-24600-17164a8/42.zip")
   def zip_path
-    "#{dir}/#{work.id}.zip"
+    "#{dir}/#{target.id}.zip"
   end
 
   # The path to the folder where web2disk downloads the xhtml and images
@@ -86,14 +86,14 @@ class Download
   # creating the directory if it doesn't exist.
   def dir
     return @tmpdir if @tmpdir
-    @tmpdir = Dir.mktmpdir("#{work.id}_#{file_type}_")
+    @tmpdir = Dir.mktmpdir("#{target.class.name.downcase}_#{target.id}_#{file_type}_")
     @tmpdir
   end
 
-  # Utility methods which clean up work data for use in downloads
+  # Utility methods which clean up target data for use in downloads
 
   def fandoms
-    string = work.fandoms.size > 3 ? "Multifandom" : work.fandoms.string
+    string = target.fandoms.size > 3 ? "Multifandom" : target.fandoms.string
     clean(string)
   end
 
@@ -102,7 +102,7 @@ class Download
   end
 
   def author_names
-    work.anonymous? ? ["Anonymous"] : work.pseuds.sort.map(&:byline)
+    target.anonymous? ? ["Anonymous"] : target.pseuds.sort.map(&:byline)
   end
 
   # need the next two to be filesystem safe and not overly long
@@ -112,10 +112,6 @@ class Download
 
   def page_title
     [file_name, file_authors, fandoms].join(" - ")
-  end
-
-  def chapters
-    work.chapters.order('position ASC').where(posted: true)
   end
 
   private

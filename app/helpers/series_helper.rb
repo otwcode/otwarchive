@@ -79,5 +79,4 @@ module SeriesHelper
       ts("Are you sure you want to be removed as a creator of this series?")
     end
   end
-
 end

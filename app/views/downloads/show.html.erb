@@ -1,16 +1,27 @@
-<%= render 'downloads/download_preface.html' %>
+<% if @downloadable.is_a?(Series) %>
+  <% # TODO: add more stuff here %>
+  <% works = @downloadable.works %>
+<% else %>
+  <% works = [@downloadable] %>
+<% end %>
 
-<div id="chapters" class="userstuff">
-  <% if @chapters.size > 1 %>
-    <% for chapter in @chapters %>
-      <%= render 'downloads/download_chapter.html', :chapter => chapter %>
+<% for work in works %>
+
+  <%= render 'downloads/download_work_preface.html', work: work %>
+
+  <div id="chapters" class="userstuff">
+    <% if work.chapters_in_order.size > 1 %>
+      <% for chapter in work.chapters_in_order %>
+        <%= render 'downloads/download_chapter.html', chapter: chapter %>
+      <% end %>
+    <% else %>
+      <h2 class="toc-heading"><%= @work.title.html_safe %></h2>
+      <div class="userstuff">
+        <%= raw sanitize_field(work.chapters_in_order.first, :content) %>
+      </div>
     <% end %>
-  <% else %>
-    <h2 class="toc-heading"><%= @work.title.html_safe %></h2>
-    <div class="userstuff">
-      <%=raw sanitize_field(@chapters.first, :content) %>
-    </div>
-  <% end %>
-</div>
+  </div>
 
-<%= render 'downloads/download_afterword.html' %>
+  <%= render 'downloads/download_work_afterword.html', work: work %>
+
+<% end %>

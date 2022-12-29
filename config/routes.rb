@@ -47,7 +47,7 @@ Otwarchive::Application.routes.draw do
 
   #### DOWNLOADS ####
 
-  get 'downloads/:id/:download_title.:format' => 'downloads#show', as: 'download'
+  get "downloads/:type/:id/:download_title.:format" => "downloads#show", as: "download"
 
   #### OPEN DOORS ####
   namespace :opendoors do
