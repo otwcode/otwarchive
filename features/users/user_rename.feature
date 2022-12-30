@@ -139,7 +139,8 @@ Feature:
       And I press "Comment"
       And I view the work "Interesting" with comments
     Then I should see "mine (before)"
-    When I visit the change username page for before
+    When it is currently 2 seconds from now
+      And I visit the change username page for before
       And I fill in "New user name" with "after"
       And I fill in "Password" with "password"
       And I press "Change User Name"
