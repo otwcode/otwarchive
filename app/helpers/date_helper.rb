@@ -27,7 +27,7 @@ module DateHelper
   # note: this does *not* append timezone and does *not* reflect user preferences
   def date_in_zone(time, zone = nil)
     zone ||= Time.zone.name
-    return I18n.t("time.no_date_specified") if time.blank?
+    return nil if time.blank?
 
     time_in_zone = time.in_time_zone(zone)
     I18n.l(time_in_zone, format: :date_short_html).html_safe
