@@ -28,9 +28,10 @@
 
   <!--main content-->
   <h3 class="heading"><%= ts("Abuse Administration") %></h3>
-  <%= form_tag action: "update_status", controller: "admin/admin_users" do %>
+  <%= form_tag action: "update_next_of_kin", controller: "admin/admin_users" do %>
+    <%= error_messages_for @user.fannish_next_of_kin %>
     <%= hidden_field_tag "user_login", @user.login %>
-    <fieldset<% unless policy(@user).can_judge_users? %> disabled="disabled"<% end %>>
+    <fieldset<% unless policy(@user).can_manage_next_of_kin? %> disabled="disabled"<% end %>>
       <legend><%= ts("Fannish Next of Kin") %></legend>
       <h4 class="heading"><%= ts("Fannish Next of Kin") %></h4>
       <dl>
@@ -48,7 +49,12 @@
         </dd>
       </dl>
     </fieldset>
-    <fieldset<% unless policy(@user).can_judge_users? %> disabled="disabled"<% end %>>
+    <p class="submit"><%= submit_tag ts("Update Fannish Next of Kin") %></p>
+  <% end %>
+
+  <%= form_tag action: "update_status", controller: "admin/admin_users" do %>
+    <%= hidden_field_tag "user_login", @user.login %>
+    <fieldset<% unless policy(UserManager).can_manage_users? %> disabled="disabled"<% end %>>
       <legend><%= ts("Warnings and Suspensions") %></legend>
       <h4 class="heading"><%= ts("Warnings and Suspensions") %></h4>
       <ul>
@@ -86,7 +92,7 @@
         </li>
       </ul>
     </fieldset>
-    <fieldset<% unless policy(@user).can_judge_users? %> disabled="disabled"<% end %>>
+    <fieldset<% unless policy(UserManager).can_manage_users? %> disabled="disabled"<% end %>>
       <legend><%= ts("Notes") %></legend>
       <h4 class="heading"><%= label_tag "admin_note", ts("Notes") %></h4>
       <p class="note">

@@ -1,6 +1,4 @@
 class AdminBanner < ApplicationRecord
-  include ActiveModel::ForbiddenAttributesProtection
-
   validates_presence_of :content
 
   after_save :expire_cached_admin_banner, if: :should_expire_cache?
@@ -27,5 +25,4 @@ class AdminBanner < ApplicationRecord
       Rails.cache.delete("admin_banner")
     end
   end
-
 end

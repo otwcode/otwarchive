@@ -1,5 +1,4 @@
 class Comment < ApplicationRecord
-  include ActiveModel::ForbiddenAttributesProtection
   include HtmlCleaner
   include AfterCommitEverywhere
 
@@ -479,5 +478,4 @@ class Comment < ApplicationRecord
     sanitize_field self, :comment_content
   end
   include Responder
-
 end
