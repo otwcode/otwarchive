@@ -1,6 +1,6 @@
 <% if @downloadable.is_a?(Series) %>
-  <% # TODO: add more stuff here %>
   <% works = @downloadable.works %>
+  <%= render "downloads/download_series_preface.html", series: @downloadable %>
 <% else %>
   <% works = [@downloadable] %>
 <% end %>

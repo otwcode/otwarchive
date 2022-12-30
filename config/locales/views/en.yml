@@ -425,3 +425,17 @@ en:
         other: "Transfer these bookmarks to the default pseud"
       confirm: "Are you sure? This can't be undone!"
       cancel: "Cancel"
+  downloads:
+    preface: Preface
+    original_posting_html: Posted originally on the %{archive_link} at %{creation_url}.
+    language: Language
+    collections: Collections
+    stats: Stats
+    published: Published
+    completed: Completed
+    updated: Updated
+    works: Works
+    words: Words
+    byline_html: by %{byline}
+    description: Description
+    notes: Notes

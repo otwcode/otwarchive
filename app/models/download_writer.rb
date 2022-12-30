@@ -104,9 +104,9 @@ class DownloadWriter
       # XPaths for detecting chapters are overly specific to make sure we don't grab
       # anything inputted by the user. First path is for single-chapter works,
       # second for multi-chapter, and third for the preface and afterword
-      "--chapter", "//h:body/h:div[@id='chapters']/h:h2[@class='toc-heading'] | //h:body/h:div[@id='chapters']/h:div[@class='meta group']/h:h2[@class='heading'] | //h:body/h:div[@id='preface' or @id='afterword']/h:h2[@class='toc-heading']"
-      # '--level1-toc', "//h:h2",
-      # '--level2-toc', "//h:h3",
+      "--chapter", "//h:body/h:div[@id='chapters']/h:h2[@class='toc-heading'] | //h:body/h:div[@id='chapters']/h:div[@class='meta group']/h:h2[@class='heading'] | //h:body/h:div[@id='work-preface' or @id='afterword']/h:h2[@class='toc-heading']",
+      "--level1-toc", "//h:body/h:div[@id='series-preface']/h:h1[@class='toc-heading'] | //h:body/h:div[@id='work-preface']/h:p[@class='message']/h:b[@class='work-title']",
+      "--level2-toc", "//h:body/h:div[@id='chapters']/h:h2[@class='toc-heading'] | //h:body/h:div[@id='chapters']/h:div[@class='meta group']/h:h2[@class='heading']"
     ] + series + epub
   end
 

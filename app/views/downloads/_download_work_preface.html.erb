@@ -1,14 +1,14 @@
 <% @work = work if defined?(work) %>
 
-<div id="preface">
-  <h2 class="toc-heading"><%= ts("Preface") %></h2>
+<div id="work-preface">
+  <h1 class="toc-heading"><%= t("downloads.preface") %></h1>
 
   <p class="message">
-    <b><%= @work.title.html_safe %></b><br/>
-    <%= ts("Posted originally on the %{archive_link} at %{work_url}.",
+    <b class="work-title"><%= @work.title.html_safe %></b><br/>
+    <%= t("downloads.original_posting_html",
           archive_link: link_to(ArchiveConfig.APP_NAME, root_url),
-          work_url: link_to(work_url(@work), work_url(@work))
-        ).html_safe %>
+          creation_url: link_to(work_url(@work), work_url(@work))
+        ) %>
   </p>
 
   <div class="meta">
@@ -22,7 +22,7 @@
       <% end %>
 
       <% unless @work.language.blank? %>
-        <dt><%= ts("Language") %>:</dt>
+        <dt><%= t("downloads.language") %>:</dt>
         <dd><%= @work.language.name %></dd>
       <% end %>
 
@@ -33,20 +33,20 @@
 #{link_to(s.series.title, series_url(s.series))}"}.join(", ").html_safe %></dd>
       <% end %>
       <% unless @work.approved_collections.empty? %>
-        <dt><%= ts("Collections") %>:</dt>
+        <dt><%= t("downloads.collections") %>:</dt>
         <dd><%= @work.approved_collections.map {|c| link_to c.title, collection_url(c)}.join(",
 ").html_safe %></dd>
       <% end %>
-      <dt><%= ts("Stats") %>:</dt>
+      <dt><%= t("downloads.stats") %>:</dt>
       <dd>
-        <%= ts("Published") %>: <%= l(@work.first_chapter.published_at) %>
+        <%= t("downloads.published") %>: <%= l(@work.first_chapter.published_at) %>
         <% if @work.first_chapter.published_at < @work.revised_at.to_date %>
-          <%= @work.is_wip ? ts("Updated") : ts("Completed") %>: <%= l(@work.revised_at.to_date) %>
+          <%= @work.is_wip ? t("downloads.updated") : t("downloads.completed") %>: <%= l(@work.revised_at.to_date) %>
         <% end %>
         <% if @work.chaptered? %>
           <%= ts("Chapters") %>: <%= @work.chapter_total_display %>
         <% end %>
-        <%= ts("Words") %>: <%= @work.word_count %>
+        <%= t("downloads.words") %>: <%= @work.word_count %>
       </dd>
     </dl>
     <h1><%= @work.title.html_safe %></h1>
@@ -57,7 +57,7 @@
     <% end %>
 
     <% unless @work.notes.blank? && @work.endnotes.blank? %>
-      <p><%= ts("Notes") %></p>
+      <p><%= t("downloads.notes") %></p>
       <% unless @work.notes.blank? %>
         <blockquote class="userstuff"><%=raw sanitize_field(@work, :notes) %></blockquote>
       <% end %>

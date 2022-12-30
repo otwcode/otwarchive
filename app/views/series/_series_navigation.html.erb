@@ -9,7 +9,9 @@
     <% end %>
   <% end %>
 
-  <li><%= span_if_current ts("Series"), series_path(@series) %></li>
+  <% if logged_in? %>
+    <li><%= span_if_current ts("Series"), series_path(@series) %></li>
+  <% end %>
 
   <% if current_user.is_a?(User) && @subscription %>
     <li>

@@ -1,0 +1,43 @@
+<div id="series-preface">
+  <h1 class="toc-heading"><%= t("downloads.preface") %></h1>
+
+  <p class="message">
+    <b><%= series.title.html_safe %></b><br/>
+    <%= t("downloads.original_posting_html",
+           archive_link: link_to(ArchiveConfig.APP_NAME, root_url),
+           creation_url: link_to(series_url(series), series_url(series))
+        ) %>
+  </p>
+
+  <div class="meta">
+    <dl class="tags">
+      <% unless series.language.blank? %>
+        <dt><%= t("downloads.language") %>:</dt>
+        <dd><%= series.language.name %></dd>
+      <% end %>
+
+      <dt><%= t("downloads.stats") %>:</dt>
+      <dd>
+        <%= t("downloads.published") %>: <%= l(series.published_at) %>
+        <% if series.published_at < series.revised_at.to_date %>
+          <%= series.complete ? t("downloads.completed") : t("downloads.updated") %>: <%= l(series.revised_at.to_date) %>
+        <% end %>
+        <%= t("downloads.works") %>: <%= number_with_delimiter(series.visible_work_count) %>
+        <%= t("downloads.words") %>: <%= number_with_delimiter(series.visible_word_count) %>
+      </dd>
+    </dl>
+
+    <h1><%= series.title.html_safe %></h1>
+    <div class="byline"><%= t("downloads.byline_html", byline: byline(series, visibility: 'public', only_path: false)) %></div>
+
+    <% unless series.summary.blank? %>
+      <p><%= t("downloads.description") %></p>
+      <blockquote class="userstuff"><%= raw sanitize_field(series, :summary) %></blockquote>
+    <% end %>
+
+    <% unless series.series_notes.blank? %>
+      <p><%= t("downloads.notes") %></p>
+      <blockquote class="userstuff"><%=raw sanitize_field(series, :series_notes) %></blockquote>
+    <% end %>
+  </div>
+</div>
