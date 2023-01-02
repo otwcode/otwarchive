@@ -105,6 +105,10 @@
     <p class="notice">
       <%= t(".blocked") %>
     </p>
+  <% elsif logged_in_as_admin? %>
+    <p class="notice">
+      <%= t("admins.index.log_out_reminder") %>
+    </p>
   <% else %>
     <div id="add_comment_placeholder" title="top level comment">
       <div id="add_comment">
