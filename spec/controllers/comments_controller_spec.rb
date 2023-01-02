@@ -154,10 +154,9 @@ describe CommentsController do
       context "when logged in as an admin" do
         before { fake_login_admin(create(:admin)) }
 
-        it "renders the :new template" do
+        it "asks to log out first" do
           post :new, params: { tag_id: fandom.name }
-          expect(response).to render_template("new")
-          expect(assigns(:name)).to eq("Fandom")
+          it_redirects_to_with_notice(root_path, "Please log out of your admin account first!")
         end
       end
 
