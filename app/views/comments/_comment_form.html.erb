@@ -2,7 +2,6 @@
 <% if !commentable && @commentable %>
   <% commentable = @commentable %>
 <% end %>
-
 <div class="post comment" id="comment_form_for_<%= commentable.id %>">
   <%= form_for value_for_comment_form(commentable, comment), :remote => !comment.new_record?, :html => {:id => "comment_for_#{commentable.id}"} do |f| %>
     <fieldset>
