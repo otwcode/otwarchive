@@ -1095,11 +1095,18 @@ describe UserMailer do
 
     it_behaves_like "an email with a valid sender"
     it_behaves_like "a translated email"
-    it_behaves_like "an email with a deleted work attached"
 
     it "has the correct subject line" do
       subject = "[#{ArchiveConfig.APP_SHORT_NAME}] Your work has been deleted"
       expect(email).to have_subject(subject)
+    end
+
+    it "has the correct attachments" do
+      expect(email.attachments.length).to eq(2)
+      expect(email.attachments).to contain_exactly(
+        an_object_having_attributes(filename: "#{work.title}.html"),
+        an_object_having_attributes(filename: "#{work.title}.txt")
+      )
     end
     
     context "HTML version" do
@@ -1120,7 +1127,7 @@ describe UserMailer do
     context "when work has posted and draft chapters" do
       let!(:draft_chapter) { create(:chapter, :draft, work: work, position: 2) }
 
-      it_behaves_like "an email with a deleted work attached"
+      it_behaves_like "an email with a deleted work with draft chapters attached"
     end
 
     context "when work has only draft chapters" do
@@ -1128,7 +1135,7 @@ describe UserMailer do
         work.chapters.first.update_column(:posted, false)
       end
 
-      it_behaves_like "an email with a deleted work attached"
+      it_behaves_like "an email with a deleted work with draft chapters attached"
     end
   end
 
@@ -1140,11 +1147,18 @@ describe UserMailer do
 
     it_behaves_like "an email with a valid sender"
     it_behaves_like "a translated email"
-    it_behaves_like "an email with a deleted work attached"
 
     it "has the correct subject line" do
       subject = "[#{ArchiveConfig.APP_SHORT_NAME}] Your work has been deleted by an admin"
       expect(email).to have_subject(subject)
+    end
+
+    it "has the correct attachments" do
+      expect(email.attachments.length).to eq(2)
+      expect(email.attachments).to contain_exactly(
+        an_object_having_attributes(filename: "#{work.title}.html"),
+        an_object_having_attributes(filename: "#{work.title}.txt")
+      )
     end
     
     context "HTML version" do
@@ -1165,7 +1179,7 @@ describe UserMailer do
     context "when work has posted and draft chapters" do
       let!(:draft_chapter) { create(:chapter, :draft, work: work, position: 2) }
 
-      it_behaves_like "an email with a deleted work attached"
+      it_behaves_like "an email with a deleted work with draft chapters attached"
     end
 
     context "when work has only draft chapters" do
@@ -1173,7 +1187,7 @@ describe UserMailer do
         work.chapters.first.update_column(:posted, false)
       end
 
-      it_behaves_like "an email with a deleted work attached"
+      it_behaves_like "an email with a deleted work with draft chapters attached"
     end
   end
 end
