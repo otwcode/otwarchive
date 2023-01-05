@@ -117,9 +117,9 @@ class Download
 
   def chapters
     if @include_draft_chapters
-      work.chapters.order('position ASC')
+      work.chapters.order("position ASC")
     else
-      work.chapters.order('position ASC').where(posted: true)
+      work.chapters.order("position ASC").where(posted: true)
     end
   end
 
