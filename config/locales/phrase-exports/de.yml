@@ -58,6 +58,7 @@ de:
       series:
         one: Serie
         other: Serien
+      work: Werk
   kudo_mailer:
     batch_kudo_notification:
       guest:

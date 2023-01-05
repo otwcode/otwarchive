@@ -1,5 +1,108 @@
 ---
 cy:
+  activerecord:
+    attributes:
+      archive_warning:
+        name_with_colon:
+          few: 'Rhybuddion:'
+          many: 'Rhybuddion:'
+          one: 'Rhybudd:'
+          other: 'Rhybuddion:'
+          two: 'Rhybuddion:'
+      category:
+        name_with_colon:
+          few: 'Categorïau:'
+          many: 'Categorïau:'
+          one: 'Categori:'
+          other: 'Categorïau:'
+          two: 'Categorïau:'
+      character:
+        name_with_colon:
+          few: 'Cymeriadau:'
+          many: 'Cymeriadau:'
+          one: 'Cymeriad:'
+          other: 'Cymeriadau:'
+          two: 'Cymeriadau:'
+      fandom:
+        name_with_colon:
+          few: 'Teyrnasoedd:'
+          many: 'Teyrnasoedd:'
+          one: 'Teyrnas:'
+          other: 'Teyrnasoedd:'
+          two: 'Teyrnasoedd:'
+      freeform:
+        name_with_colon:
+          few: 'Tagiau Ychwenegol:'
+          many: 'Tagiau Ychwenegol:'
+          one: 'Tag Ychwanegol:'
+          other: 'Tagiau Ychwenegol:'
+          two: 'Tagiau Ychwenegol:'
+      rating:
+        name_with_colon: 'Gradd:'
+      relationship:
+        name_with_colon:
+          few: 'Perthnasau:'
+          many: 'Perthnasau:'
+          one: 'Perythnas:'
+          other: 'Perthnasau:'
+          two: 'Perthnasau:'
+      work:
+        summary: Crynodeb
+    models:
+      archive_warning:
+        few: Rhybuddion
+        many: Rhybuddion
+        one: Rhybudd
+        other: Rhybuddion
+        two: Rhybuddion
+      category:
+        few: Categorïau
+        many: Categorïau
+        one: Categori
+        other: Categorïau
+        two: Categorïau
+      chapter:
+        few: Penodau
+        many: Penodau
+        one: Pennod
+        other: Penodau
+        two: Penodau
+      character:
+        few: Cymeriadau
+        many: Cymeriadau
+        one: Cymeriad
+        other: Cymeriadau
+        two: Cymeriadau
+      fandom:
+        few: Teyrnasoedd
+        many: Teyrnasoedd
+        one: Teyrnas
+        other: Teyrnasoedd
+        two: Teyrnasoedd
+      freeform:
+        few: Tagiau Ychwanegol
+        many: Tagiau Ychwanegol
+        one: Tag Ychwanegol
+        other: Tagiau Ychwanegol
+        two: Tagiau Ychwanegol
+      rating:
+        few: Graddau
+        many: Graddau
+        one: Gradd
+        other: Graddau
+        two: Graddau
+      relationship:
+        few: Perthnasau
+        many: Perthnasau
+        one: Perythnas
+        other: Perthnasau
+        two: Perthnasau
+      series:
+        few: Cyfresau
+        many: Cyfresau
+        one: Cyfres
+        other: Cyfresau
+        two: Cyfresau
   kudo_mailer:
     batch_kudo_notification:
       guest:
@@ -32,6 +135,15 @@ cy:
       closing:
         formal: Yn gywir,
         informal: Cofion,
+      creation:
+        link_with_word_count: "%{creation_link} (%{word_count})"
+        title_with_word_count: '"%{creation_title}" (%{word_count})'
+        word_count:
+          few: "%{count} o eiriau"
+          many: "%{count} o eiriau"
+          one: "%{count} gair"
+          other: "%{count} o eiriau"
+          two: "%{count} o eiriau"
       footer:
         general:
           html:
@@ -53,6 +165,7 @@ cy:
           addressed: Helo, %{name}!
           unaddressed: Helo!
         introductory: Helo o'r "Archive of Our Own – AO3" (Archif Ein Hun)!
+      metadata_label_indicator: ": "
       signature:
         app_short_name: AO3
         open_doors: Y tîm "Open Doors" (Drysau Agored)

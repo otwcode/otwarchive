@@ -399,6 +399,81 @@ Scenario: When a user is notified that a co-authored work has been inspired by a
     And I press "Post"
   Then I should see "The work you listed as an inspiration does not seem to exist."
 
+  Scenario: Protected users cannot have their works cited as related works
+  Given I have related works setup
+    And the user "inspiration" is a protected user
+  When I post a related work as remixer
+  Then I should see "You can't use the related works function to cite works by the protected user inspiration."
+
+  Scenario: When editing a work with an existing citation of a protected user's work, the citation remains
+  Given I have related works setup
+    And a related work has been posted and approved
+  When the user "inspiration" is a protected user
+    And I am logged in as "remixer"
+    And I edit the work "Followup"
+    And I fill in "Fandoms" with "I forgot about the witches"
+    And I press "Post"
+  Then I should see "Work was successfully updated."
+    And I should see "Inspired by Worldbuilding by inspiration"
+
+  Scenario: Protected users can approve existing citations of their works
+  Given I have related works setup
+    And I post a related work as remixer
+  When the user "inspiration" is a protected user
+    And I am logged in as "inspiration"
+    And I go to inspiration's related works page
+  Then I should see "inspiration's Related Works"
+    And I should see "Followup by remixer"
+    And I should see "Approve"
+  When I follow "Approve"
+    And I press "Yes, link me!"
+  Then I should see "Link was successfully approved"
+    And I should see a beginning note about related works
+    And I should see the related work in the end notes
+    And I should not find a list for associations
+
+  Scenario: Protected users can remove existing citations of their works
+  Given I have related works setup
+    And a related work has been posted and approved
+  When the user "inspiration" is a protected user
+    And I am logged in as "inspiration"
+    And I go to inspiration's related works page
+  Then I should see "inspiration's Related Works"
+    And I should see "Followup by remixer"
+    And I should see "Remove"
+  When I follow "Remove"
+    And I press "Remove link"
+  Then I should see "Link was successfully removed"
+    And I should not see the related work listed on the original work
+
+  Scenario: Citing an anonymous work by a protected user does not break anonymity
+  Given an anonymous collection "Anonymous"
+    And I have related works setup
+    And the user "inspiration" is a protected user
+  When I am logged in as "inspiration"
+    And I add the work "Worldbuilding" to the collection "Anonymous"
+  When I post a related work as remixer
+  Then I should not see "You can't use the related works function to cite works by the protected user inspiration."
+  When I am logged in as "remixer"
+    And I go to remixer's related works page
+  Then I should see "Works that inspired remixer"
+    And I should see "Worldbuilding by Anonymous"
+    And I should not see "inspiration"
+
+  Scenario: Citing an unrevealed work by a protected user does not break anonymity
+  Given a hidden collection "Hidden"
+    And I have related works setup
+    And the user "inspiration" is a protected user
+  When I am logged in as "inspiration"
+    And I add the work "Worldbuilding" to the collection "Hidden"
+  When I post a related work as remixer
+  Then I should not see "You can't use the related works function to cite works by the protected user inspiration."
+  When I am logged in as "remixer"
+    And I go to remixer's related works page
+  Then I should see "Works that inspired remixer"
+    And I should see "A work in an unrevealed collection"
+    And I should not see "inspiration"
+
   Scenario: When a remix is anonymous, it's visible on the original creator's related works page, but not on the remixer's related works page
     Given an anonymous collection "Anonymous"
       And I have related works setup
