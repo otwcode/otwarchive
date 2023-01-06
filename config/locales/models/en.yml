@@ -26,6 +26,25 @@ en:
             user_defined_tags_count:
               at_most:
                 "must not add up to more than %{count}. You have entered %{value} of these tags, so you must remove %{diff} of them."
+        kudo:
+          attributes:
+            commentable:
+              author_on_own_work: "You can't leave kudos on your own work."
+              blank: "What did you want to leave kudos on?"
+              guest_on_restricted: "You can't leave guest kudos on a restricted work."
+              user_is_suspended: "You cannot leave kudos while your account is suspended."
+              user_is_banned: "You cannot leave kudos while your account is banned."
+            commentable_type:
+              inclusion: "What did you want to leave kudos on?"
+          format: "%{message}"
+          taken: "You have already left kudos here. :)"
+        related_work:
+          attributes:
+            parent:
+              blank: "The work you listed as an inspiration does not seem to exist."
+              not_work: "Only a link to a work can be listed as an inspiration."
+              protected: "You can't use the related works function to cite works by the protected user %{login}."
+          format: "%{message}"
         user:
           attributes:
             password_confirmation:
@@ -39,7 +58,12 @@ en:
             user_defined_tags_count:
               at_most:
                 "must not add up to more than %{count}. Your work has %{value} of these tags, so you must remove %{diff} of them."
+        work/parent_work_relationships:
+          format: "%{message}"
     models:
+      admin_blacklisted_email:
+        one: "Banned Email"
+        other: "Banned Emails"
       archive_warning:
         one: "Warning"
         other: "Warnings"
@@ -131,8 +155,13 @@ en:
       work/chapters:
         content: "Content"
         base: "Invalid chapter:"
+      work/parent_work_relationships/parent:
+        url: "Parent work URL"
+        title: "The title of a parent work outside the archive"
+        author: "The author of a parent work outside the archive"
       external_work:
         user_defined_tags_count: "Fandom, relationship, and character tags"
+        author: "Creator"
       work:
         chapter_total_display: "Chapters"
         summary: "Summary"

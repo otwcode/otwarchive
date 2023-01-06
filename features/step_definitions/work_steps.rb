@@ -103,6 +103,8 @@ end
 When /^I post the works "([^"]*)"$/ do |worklist|
   worklist.split(/, ?/).each do |work_title|
     step %{I post the work "#{work_title}"}
+    # Ensure all works are created with different timestamps to avoid flakiness
+    step %{it is currently 1 second from now}
   end
 end
 
@@ -512,7 +514,19 @@ When /^I list the work "([^"]*)" as inspiration$/ do |title|
   work = Work.find_by(title: title)
   check("parent-options-show")
   url_of_work = work_url(work).sub("www.example.com", ArchiveConfig.APP_HOST)
-  fill_in("work_parent_attributes_url", with: url_of_work)
+  with_scope("#parent-options") do
+    fill_in("URL", with: url_of_work)
+  end
+end
+
+When /^I list an external work as inspiration$/ do
+  check("parent-options-show")
+  with_scope("#parent-options") do
+    fill_in("URL", with: "https://example.com")
+    fill_in("Title", with: "Example External")
+    fill_in("Author", with: "External Author")
+    select("English", from: "Language")
+  end
 end
 
 When /^I set the publication date to (\d+) (.*) (\d+)$/ do |day, month, year|

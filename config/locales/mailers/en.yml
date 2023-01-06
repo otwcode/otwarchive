@@ -14,6 +14,7 @@ en:
       creation:
         link_with_word_count: "%{creation_link} (%{word_count})"
         title_with_word_count: "\"%{creation_title}\" (%{word_count})"
+        title_with_chapter_number: "Chapter %{position} of %{title}"
         word_count:
           one: "%{count} word"
           other: "%{count} words"
@@ -54,9 +55,14 @@ en:
   user_mailer:
     invite_increase_notification:
       subject: "[%{app_name}] New invitations"
-      body:
-        one: "We just wanted to let you know that you have %{count} new invitation, which can be used to create a new account at the Archive. You can invite a friend at %{invitation_page}."
-        other: "We just wanted to let you know that you have %{count} new invitations, which can be used to create new accounts at the Archive. You can invite a friend at %{invitation_page}."
+      html:
+        body:
+          one: "We just wanted to let you know that you have %{count} new invitation, which can be used to create a new account at the Archive. You can invite a friend at %{invitation_page_link}."
+          other: "We just wanted to let you know that you have %{count} new invitations, which can be used to create new accounts at the Archive. You can invite a friend at %{invitation_page_link}."
+      text:
+        body:
+          one: "We just wanted to let you know that you have %{count} new invitation, which can be used to create a new account at the Archive. You can invite a friend at your invitations page (%{invitation_page_url})."
+          other: "We just wanted to let you know that you have %{count} new invitations, which can be used to create new accounts at the Archive. You can invite a friend at your invitations page (%{invitation_page_url})."
       invitation_page_link_text: your invitations page
     admin_deleted_work_notification:
       subject: "[%{app_name}] Your work has been deleted by an admin"
@@ -185,16 +191,23 @@ en:
                   %{contact_support_link}, who are always happy to help out.
     invitation:
       subject: "[%{app_name}] Invitation"
-      has_invited: "%{user_name} has invited you to join our beta!"
-      been_invited: "You've been invited to join our beta!"
-      part1: "The Archive of Our Own (AO3) is a free, noncommercial archive built by and for fans. We are multifannish and welcome all kinds of fanworks, including fanfiction, fanart, fanvids, and podfic. We run on the open-source otwarchive software, and our servers are owned by the nonprofit Organization for Transformative Works, which works to protect fan rights and preserve fanworks."
-      part2: "Also, we have a lot of spiffy features for finding the fanworks you want, and for posting and sharing your work with others. There are lots more coming soon! Your feedback now during our beta can help us build an even better archive. \\o/"
+      has_invited: "%{user_name} has invited you to join the Archive of Our Own!"
+      been_invited: "You've been invited to join the Archive of Our Own!"
+      
+      features: "With an account, you can post fanworks, use bookmarks to keep track of works you enjoyed, receive subscription emails when your favorite creators or works update, customize the way the site looks for you, and more!"
       text:
-        faq_link: "For more information, please check out our FAQ at %{faq_link}."
-        part3: "If you'd like to join us, please sign up at the following address: %{invitation_link}"
+        about: "The Archive of Our Own (AO3) is a free, noncommercial archive built by and for fans. Our servers are owned by our parent nonprofit, the Organization for Transformative Works (%{otw_url}), which works to protect fan rights and preserve fanworks. We welcome all kinds of fanworks, including fanfiction, fanart, fanvids, and podfic from any fandom."
+        faq: "For more information, please check our FAQ: %{faq_url}."
+        join: "If you'd like to join us, please follow this link to sign up: %{invitation_url}."
+        activation_support: "After you sign up, you'll receive an account activation email. If you do not receive this email after 48 hours, please contact Support: %{support_url}."
       html:
-        part3: "If you'd like to join us, please sign up at the following address: %{invitation_link}"
-        faq_link: "For more information, please check out %{faq_link}."
+        about: "The Archive of Our Own (AO3) is a free, noncommercial archive built by and for fans. Our servers are owned by our parent nonprofit, the %{otw_link}, which works to protect fan rights and preserve fanworks. We welcome all kinds of fanworks, including fanfiction, fanart, fanvids, and podfic from any fandom."
+        otw_link_text: "Organization for Transformative Works"
+        join: "If you'd like to join us, please %{invitation_link}."
+        invitation_link_text: "follow this link to sign up"
+        activation_support: "After you sign up, you'll receive an account activation email. If you do not receive this email after 48 hours, please %{support_link}."
+        support_link_text: "contact Support"
+        faq: "For more information, please check %{faq_link}."
         faq_link_text: "our FAQ"
     abuse_report:
       subject: "[%{app_name}] Your abuse report"

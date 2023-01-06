@@ -8,7 +8,7 @@ class Users::PasswordsController < Devise::PasswordsController
   def create
     user = User.find_for_authentication(resource_params.permit(:login))
 
-    if user&.protected_user
+    if user&.protected_user || user&.prevent_password_resets?
       flash[:error] = t(".reset_blocked", contact_abuse_link: view_context.link_to(t(".contact_abuse"), new_abuse_report_path)).html_safe
       redirect_to root_path and return
     elsif user&.password_resets_limit_reached?

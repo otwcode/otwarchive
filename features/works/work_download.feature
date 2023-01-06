@@ -89,7 +89,6 @@ Feature: Download a work
     And I should see "Character: Character 1, Character 2, Character 3"
     And I should see "Additional Tags: Modern AU"
     And I should see "Language: English"
-    # note difference with the work: in the work it's "Series: Part 1 of the THE DOWN series"
     And I should see "Series: Part 1 of THE DOWN"
     And I should see "Collections: My Collection 1, My Collection 2"
     And I should see "Published: 2015-01-10"
@@ -150,6 +149,23 @@ Feature: Download a work
     And I follow "HTML"
   Then the page title should include "Multifandom"
     And I should be able to download all versions of "Many Fandom Work"
+
+
+  Scenario: Download work shows inspiring work link
+
+    Given I have related works setup
+    When I post a related work as remixer
+      And I view the work "Followup"
+      And I follow "HTML"
+    Then I should see the inspiring parent work link
+
+  Scenario: Download work shows inspiring external inspiring work link
+
+    Given I have related works setup
+    When I post a related work as remixer for an external work
+      And I view the work "Followup"
+      And I follow "HTML"
+    Then I should see the external inspiring work link
 
 
   Scenario: Download option is unavailable if work is unrevealed.

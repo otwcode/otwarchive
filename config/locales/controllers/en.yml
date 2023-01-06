@@ -1,5 +1,11 @@
 ---
 en:
+  admin:
+    admin_invitations:
+      invite_from_queue:
+        success:
+          one: "%{count} person from the invite queue is being invited."
+          other: "%{count} people from the invite queue are being invited."
   blocked:
     users:
       create:
@@ -18,6 +24,8 @@ en:
       reply: "Sorry, you have been blocked by that user."
     check_frozen:
       error: Sorry, you cannot reply to a frozen comment.
+    check_hidden_by_admin:
+      error: Sorry, you cannot reply to a hidden comment.
     check_not_replying_to_spam:
       error: Sorry, you can't reply to a comment that has been marked as spam.
     check_permission_to_edit:
@@ -31,6 +39,17 @@ en:
       error: Sorry, that comment thread could not be unfrozen.
       permission_denied: Sorry, you don't have permission to unfreeze that comment thread.
       success: Comment thread successfully unfrozen!
+    hide:
+      error: Sorry, that comment could not be hidden.
+      permission_denied: Sorry, you don't have permission to hide that comment.
+      success: Comment successfully hidden!
+    unhide:
+      error: Sorry, that comment could not be unhidden.
+      permission_denied: Sorry, you don't have permission to unhide that comment.
+      success: Comment successfully unhidden!
+  kudos:
+    create:
+      success: Thank you for leaving kudos!
   users:
     passwords:
       create:

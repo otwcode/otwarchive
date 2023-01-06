@@ -42,15 +42,7 @@ module WorksHelper
 
   # Determines whether or not to expand the related work association fields when the work form loads
   def check_parent_box(work)
-    !work.parents.blank? ||
-    (params[:work] && !(work_parent_value(:url).blank? && work_parent_value(:title).blank? && work_parent_value(:author).blank?))
-  end
-
-  # Passes value of fields for related works back to form when an error occurs on posting
-  def work_parent_value(field)
-    if params[:work] && params[:work][:parent_attributes]
-      params[:work][:parent_attributes][field]
-    end
+    work.parents_after_saving.present?
   end
 
   # Determines whether or not "manage series" dropdown should appear
@@ -99,7 +91,7 @@ module WorksHelper
   end
 
   def get_endnotes_link
-    if current_page?(controller: 'chapters', action: 'show')
+    if current_page?({ controller: "chapters", action: "show" })
       if @work.posted?
         chapter_path(@work.last_posted_chapter.id, anchor: 'work_endnotes')
       else
@@ -111,7 +103,7 @@ module WorksHelper
   end
 
   def get_related_works_url
-    current_page?(controller: 'chapters', action: 'show') ?
+    current_page?({ controller: "chapters", action: "show" }) ?
       chapter_path(@work.last_posted_chapter.id, anchor: 'children') :
       "#children"
   end
@@ -154,19 +146,19 @@ module WorksHelper
   # Returns true or false to determine whether the work notes module should display
   def show_work_notes?(work)
     work.notes.present? ||
-    work.endnotes.present? ||
-    work.gifts.not_rejected.present? ||
-    work.challenge_claims.present? ||
-    work.parent_work_relationships.present? ||
-    work.approved_related_works.present?
+      work.endnotes.present? ||
+      work.gifts.not_rejected.present? ||
+      work.challenge_claims.present? ||
+      work.parents_after_saving.present? ||
+      work.approved_related_works.present?
   end
 
   # Returns true or false to determine whether the work associations should be included
   def show_associations?(work)
     work.gifts.not_rejected.present? ||
-    work.approved_related_works.where(translation: true).exists? ||
-    work.parent_work_relationships.exists? ||
-    work.challenge_claims.present?
+      work.approved_related_works.where(translation: true).exists? ||
+      work.parents_after_saving.present? ||
+      work.challenge_claims.present?
   end
 
   def all_coauthor_skins

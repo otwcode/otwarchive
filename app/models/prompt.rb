@@ -1,6 +1,4 @@
 class Prompt < ApplicationRecord
-  include ActiveModel::ForbiddenAttributesProtection
-
   include UrlHelpers
   include TagTypeHelper
 
@@ -38,16 +36,15 @@ class Prompt < ApplicationRecord
 
   # VALIDATIONS
 
+  before_validation :inherit_from_signup, on: :create, if: :challenge_signup
+  def inherit_from_signup
+    self.pseud = challenge_signup.pseud
+    self.collection = challenge_signup.collection
+  end
+
   validates_presence_of :collection_id
 
   validates_presence_of :challenge_signup
-  before_save :set_pseud
-  def set_pseud
-    unless self.pseud
-      self.pseud = self.challenge_signup.pseud
-    end
-    true
-  end
 
   # based on the prompt restriction
   validates_presence_of :url, if: :url_required?

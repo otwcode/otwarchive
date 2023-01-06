@@ -1,5 +1,4 @@
 class Series < ApplicationRecord
-  include ActiveModel::ForbiddenAttributesProtection
   include Bookmarkable
   include Searchable
   include Creatable

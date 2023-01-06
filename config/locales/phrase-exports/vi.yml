@@ -1,5 +1,50 @@
 ---
 vi:
+  activerecord:
+    attributes:
+      archive_warning:
+        name_with_colon:
+          other: 'Cảnh Báo:'
+      category:
+        name_with_colon:
+          other: 'Hạng Mục:'
+      character:
+        name_with_colon:
+          other: 'Nhân Vật:'
+      fandom:
+        name_with_colon:
+          other: 'Fandom:'
+      freeform:
+        name_with_colon:
+          other: 'Từ Khoá Bổ Sung:'
+      rating:
+        name_with_colon: 'Giới Hạn Độ Tuổi:'
+      relationship:
+        name_with_colon:
+          other: 'Mối Quan Hệ:'
+      work:
+        summary: Tóm Tắt
+    models:
+      archive_warning:
+        other: Cảnh Báo
+      category:
+        other: Hạng Mục
+      chapter:
+        other: Số Chương
+      character:
+        other: Nhân Vật
+      fandom:
+        other: Fandom
+      freeform:
+        other: Từ Khoá Bổ Sung
+      rating:
+        other: Giới Hạn Độ Tuổi
+      relationship:
+        other: Mối Quan Hệ
+      series:
+        other: Bộ
+  chapters:
+    chapter_position: "- Chương %{position}"
   kudo_mailer:
     batch_kudo_notification:
       guest:
@@ -10,7 +55,7 @@ vi:
         single_guest:
           giver_list: Một người đọc khách
           left_kudos: "%{giver_list} đã tán dương tác phẩm %{commentable_link}."
-      subject: "[%{app_name}] Tán dương gửi tới bạn!"
+      subject: "[%{app_name}] Tán dương gửi đến bạn!"
       text:
         left_kudos:
           other: "%{givers_list} đã tán dương tác phẩm %{commentable_title} (%{commentable_url})."
@@ -21,47 +66,53 @@ vi:
       closing:
         formal: Trân trọng,
         informal: Thân gửi,
+      creation:
+        link_with_word_count: "%{creation_link} (%{word_count})"
+        title_with_chapter_number: Chương %{position} của tác phẩm %{title}
+        title_with_word_count: '"%{creation_title}" (%{word_count})'
+        word_count:
+          other: "%{count} từ"
       footer:
         general:
           html:
             donate_link_text: quyên góp của bạn
-            part1: Nếu bạn nhận được tin nhắn báo lỗi này, xin hãy liên hệ ban Hỗ
-              Trợ Kỹ Thuật tại %{support_link}.
-            part2: AO3 là một kho tàng lưu trữ được điều hành và hỗ trợ bởi fan, phụ
-              thuộc vào %{donate_link}.
-            support_link_text: liên hệ ban Hỗ Trợ Kỹ Thuật
+            part1: Nếu thông báo này có sai sót hoặc nhầm lẫm, xin hãy %{support_link}.
+            part2: AO3 là một kho tàng lưu trữ được điều hành và vận hành bởi fan,
+              và duy trì nhờ %{donate_link}.
+            support_link_text: liên hệ Ban Hỗ Trợ Kỹ Thuật
           text:
-            part1: Nếu như bạn nhận được tin nhắn báo lỗi này, xin liên hệ ban Hỗ
-              Trợ Kỹ Thuật tại %{support_url}.
-            part2: 'AO3 là một kho lưu trữ được điều hành và hỗ trợ bởi fan phụ thuộc
-              vào quyên góp của bạn: %{donate_url}.'
+            part1: Nếu thông báo này có sai sót hoặc nhầm lẫn, xin hãy liên hệ ban
+              Hỗ Trợ Kỹ Thuật tại %{support_url}.
+            part2: 'AO3 là một kho tàng lưu trữ được điều hành và vận hành bởi fan,
+              và duy trì nhờ quyên góp của bạn: %{donate_url}.'
         sent_at: Gửi vào lúc %{sent_at}.
       greeting:
         formal: Thân gửi %{name},
         informal:
           addressed: Xin chào, %{name}!
           unaddressed: Xin chào!
-        introductory: Hello from the Archive of Our Own – AO3 (Lời chào từ Kho Tàng
-          Lưu Trữ của Chúng Ta - AO3)!
+        introductory: Hello from the Archive of Our Own – AO3 (Xin gửi lời chào từ
+          Kho Tàng Lưu Trữ của Chúng Ta)!
+      metadata_label_indicator: ":"
       signature:
         app_short_name: AO3
-        open_doors: Đội Open Doors (Cửa Mở)
-        parent_org: Organization for Transformative Works – OTW (Tổ Chức cho các Tác
+        open_doors: Đội ngũ Open Doors (Cửa Mở)
+        parent_org: Organization for Transformative Works – OTW (Tổ Chức cho các Tác
           Phẩm Được Biến Đổi)
-        support: Đội Hỗ Trợ AO3
+        support: Đội ngũ Hỗ Trợ Kỹ Thuật của AO3
   users:
     mailer:
       reset_password_instructions:
-        expiration: Nếu trong thời hạn 1 tuần bạn không dùng đường link này để đặt
-          lại mật khẩu, đường link sẽ mất hiệu lực và bạn sẽ cần yêu cầu một đường
-          link mới.
+        expiration: Trong thời hạn 1 tuần, nếu bạn không dùng đường link này để đặt
+          lại mật khẩu, đường link sẽ mất hiệu lực; bạn sẽ phải yêu cầu đường link
+          mới.
         intro: Ai đó đã yêu cầu đặt lại mật khẩu cho tài khoản của bạn. Bạn có thể
           thay đổi mật khẩu bằng cách nhấn vào đường link bên dưới và điền mật khẩu
           mới.
         link_title: Thay đổi mật khẩu của tôi.
         subject: "[%{app_name}] Đặt lại mật khẩu"
         unrequested: Nếu bạn không yêu cầu đặt lại mật khẩu, bạn có thể bỏ qua email
-          này và mật khẩu cũ của bạn sẽ tiếp tục có hiệu lực.
+          này; mật khẩu cũ của bạn vẫn sẽ tiếp tục có hiệu lực.
   user_mailer:
     abuse_report:
       description_para: 'Miêu tả nội dung lạm quyền:'
@@ -69,48 +120,49 @@ vi:
       subject: "[%{app_name}] Báo cáo Lạm Quyền của bạn"
       url_para: 'URL của trang có sự lạm quyền:'
     admin_deleted_work_notification:
-      bye: Đính kèm là một bản sao tác phẩm của bạn.
-      contact_abuse: liên hệ ban Xử lý Lạm Quyền
+      bye: Bản sao tác phẩm của bạn được đính kèm trong thư này.
+      contact_abuse: liên hệ đội ngũ Xử Lý Lạm Quyền của chúng tôi.
       html:
-        part1: Tác phẩm %{title} đã bị xoá khỏi Kho tàng bởi quản trị viên.
+        part1: Quản trị viên đã xóa tác phẩm %{title} của bạn khỏi AO3.
         part2: Nếu tác phẩm của bạn nằm trong dự án đăng lại thuộc quyền quản lý của
           đội ngũ Open Doors (Cửa Mở), hãy %{opendoors_link} để biết thêm thông tin
           chi tiết.
-        tos_violation: Nếu tác phẩm của bạn đã vi phạm Điều Khoản Dịch Vụ của AO3,
-          vui lòng %{contact_abuse_link}.
+        tos_violation: Nếu tác phẩm của bạn vi phạm Điều Khoản Dịch Vụ của AO3, vui
+          lòng %{contact_abuse_link}.
       opendoors: liên hệ Open Doors
-      subject: "[%{app_name}] Tác phẩm của bạn đã bị xóa bởi quản trị viên"
+      subject: "[%{app_name}] Quản trị viên đã xóa tác phẩm của bạn"
       text:
-        part1: Tác phẩm %{title} đã bị xoá khỏi Kho tàng bởi quản lý trang web.
+        part1: Quản lý trang web đã xóa tác phẩm %{title} của bạn quản lý trang web
+          khỏi AO3.
         part2: Nếu tác phẩm của bạn nằm trong dự án đăng lại thuộc quyền quản lý của
           đội ngũ Open Doors (Cửa Mở), hãy liên hệ Open Doors (%{opendoors_link})
           để biết thêm thông tin chi tiết.
-        tos_violation: Nếu tác phẩm của bạn đã vi phạm Điều khoản Dịch vụ của Kho
-          tàng, hãy liên hệ ban Xử lý Lạm Quyền (%{contact_abuse_url}).
+        tos_violation: Nếu tác phẩm của bạn vi phạm Điều Khoản Dịch Vụ AO3, hãy liên
+          hệ đội ngũ Xử Lý Lạm Quyền của chúng tôi (%{contact_abuse_url}).
     admin_hidden_work_notification:
-      access: Bạn vẫn có thể truy cập tác phẩm bị ẩn của mình qua đường dẫn kể trên;
+      access: Bạn vẫn có thể truy cập tác phẩm bị ẩn của mình qua đường dẫn trên;
         tuy nhiên, tác phẩm này sẽ không xuất hiện tại trang tác phẩm của bạn, đồng
         thời sẽ bị ẩn với những người dùng AO3 khác.
       check_email: Ban Xử Lý Lạm Quyền AO3 có thể đã liên lạc với bạn về quyết định
         và lý do ẩn tác phẩm; xin vui lòng kiểm tra hộp thư của bạn, kể cả hộp thư
         rác.
-      contact_abuse: liên hệ với Ban Xử Lý Lạm Quyền
+      contact_abuse: liên hệ Ban Xử Lý Lạm Quyền
       html:
-        help: Nếu bạn không rõ vì sao tác phẩm của mình bị ẩn, và chưa được thông
-          báo gì thêm về việc này, vui lòng trực tiếp %{contact_abuse_link}.
-        hidden: Tác phẩm %{title} đã bị ẩn bởi Ban Xử Lý Lạm Quyền và không còn ở
-          chế độ mở truy cập công khai.
+        help: Nếu bạn không rõ vì sao tác phẩm của mình bị ẩn và chưa được thông báo
+          gì thêm về việc này, vui lòng trực tiếp %{contact_abuse_link}.
+        hidden: Ban Xử Lý Lạm Quyền đã ẩn tác phẩm %{title} của bạn; tác phẩm này
+          không còn ở chế độ mở truy cập công khai.
         tos_violation: Nếu tác phẩm của bạn bị ẩn do vi phạm %{tos_link} của AO3,
           bạn sẽ được yêu cầu có hành động điều chỉnh để khắc phục. Không xử lý vi
           phạm về Điều Khoản Dịch Vụ có thể dẫn tới việc tác phẩm của bạn bị xóa khỏi
           AO3.
-      subject: "[%{app_name}] Tác phẩm của bạn đã bị ẩn bởi Ban Xử Lý Lạm Quyền"
+      subject: "[%{app_name}] Ban Xử Lý Lạm Quyền đã ẩn tác phẩm của bạn"
       text:
-        help: 'Nếu bạn không rõ vì sao tác phẩm của mình bị ẩn, và chưa được thông
-          báo gì thêm về việc này, vui lòng trực tiếp liên hệ với Ban Xử Lý Lạm Quyền:
+        help: 'Nếu bạn không rõ vì sao tác phẩm của mình bị ẩn và chưa được thông
+          báo gì thêm về việc này, vui lòng trực tiếp liên hệ Ban Xử Lý Lạm Quyền:
           %{contact_abuse_url}.'
-        hidden: Tác phẩm "%{title}" (%{work_url}) đã bị ẩn bởi Ban Xử Lý Lạm Quyền
-          và không còn ở chế độ mở truy cập công khai.
+        hidden: Ban Xử Lý Lạm Quyền đã ẩn tác phẩm "%{title}" (%{work_url}) của bạn;
+          tác phẩm này không còn ở chế độ mở truy cập công khai.
         tos_violation: Nếu tác phẩm của bạn bị ẩn do vi phạm Điều Khoản Dịch Vụ (%{tos_url})
           của AO3, bạn sẽ được yêu cầu có hành động điều chỉnh để khắc phục. Không
           xử lý vi phạm về Điều Khoản Dịch Vụ có thể dẫn tới việc tác phẩm của bạn
@@ -119,13 +171,13 @@ vi:
     anonymous_or_unrevealed_notification:
       anonymous_info: Tác phẩm ẩn danh vẫn sẽ được liệt kê trong danh mục từ khóa,
         nhưng sẽ không xuất hiện trên trang tác phẩm của bạn. Tên người dùng hiển
-        thị cùng tác phẩm sẽ trở thành “Anonymous” (“Ẩn danh”).
+        thị cùng tác phẩm sẽ trở thành "Anonymous" ("Ẩn danh").
       anonymous_unrevealed_info: Trong tương lai, tác phẩm của bạn có thể sẽ được
         người quản lý bộ sưu tập công khai, song vẫn giữ trạng thái ẩn danh. Những
         người đăng ký theo dõi bạn sẽ không được thông báo về thay đổi này. Sau khi
         công khai, tác phẩm của bạn sẽ được liệt kê trong danh mục từ khóa, nhưng
         sẽ không xuất hiện trên trang tác phẩm của bạn. Tên người dùng hiển thị cùng
-        tác phẩm sẽ trở thành “Anonymous” (“Ẩn danh”).
+        tác phẩm sẽ trở thành "Anonymous" ("Ẩn danh").
       changed_status:
         anonymous:
           html: Người quản lý bộ sưu tập %{collection_link} đã chuyển trạng thái tác
@@ -190,15 +242,15 @@ vi:
           Để biết thêm chi tiết về thử thách này và thông tin liên hệ của điều phối
           viên, vui lòng truy cập %{footer_link}.
         footer_link: trang chính của thử thách
-        look_up: Bạn có thể xem thêm về nhiệm vụ này trên %{link}.
-        look_up_link: trang Assignments (Nhiệm vụ) của bạn
+        look_up: Bạn có thể tìm hiểu thêm về nhiệm vụ này ở %{link}.
+        look_up_link: trang Assignments (Nhiệm Vụ) của bạn
         part1: Đây là nhiệm vụ của bạn trong thử thách %{link} tại AO3!
       optional_tags: 'Từ khóa tùy chọn:'
-      prompts: 'Ý Tưởng tạo Cảm Hứng:'
-      prompt_url: 'URL tới Ý Tưởng:'
+      prompts: 'Chủ đề gợi ý:'
+      prompt_url: 'Địa chỉ URL của chủ đề gợi ý:'
       recipient: 'Người nhận:'
-      recipient_missing: 'Không có người nhận: liên hệ điều phối viên để được giúp
-        đỡ!'
+      recipient_missing: 'Không có người nhận: hãy liên hệ điều phối viên để được
+        giúp đỡ!'
       subject: "[%{app_name}][%{collection_title}] Nhiệm Vụ của Bạn!"
       text:
         assignment: Đây là nhiệm vụ của bạn trong thử thách "%{collection_title}"
@@ -206,8 +258,8 @@ vi:
         footer: Bạn nhận được email này vì bạn đã đăng ký tham gia thử thách %{title}
           (%{url}). Để biết thêm chi tiết về thử thách này và thông tin liên hệ của
           điều phối viên, vui lòng truy cập %{profile_url}.
-        look_up: Bạn có thể xem thêm về nhiệm vụ này trên trang Assignments (Nhiệm
-          vụ) của bạn tại %{link}.
+        look_up: Bạn có thể tìm hiểu thêm về nhiệm vụ này tại ở Assignments (Nhiệm
+          Vụ) của bạn tại %{link}.
     change_email:
       part1: "%{login}, email dùng để đăng ký tài khoản của bạn đã được đổi thành
         %{email}"
@@ -223,76 +275,76 @@ vi:
         received_message: 'Bạn có một tin nhắn về bộ sưu tập "%{collection_title}"
           (%{collection_url}) của bạn:'
     creatorship_notification:
-      explanation: Khi là người đồng sáng tạo của một tác phẩm, bạn sẽ được thêm vào
-        các chương mới bất kể cài đặt đồng sáng tạo của bạn như thế nào. Bạn cũng
-        sẽ được thêm vào mọi series có chứa tác phẩm đó.
-      html:
-        creation: "%{creation_link} bởi %{pseud_links}"
-        edit_chapter: Chỉnh sửa chương truyện
-        edit_series: Chỉnh sửa series
-        remove_chapter: Nếu bạn bị thêm nhầm hoặc không muốn được liệt kê là người
-          đồng sáng tạo, bạn có thể %{edit_chapter_link} để loại bỏ chính bạn khỏi
-          vị trí trên.
-        remove_series: Nếu bạn cho rằng đây là một sự nhầm lẫn hay bạn không muốn
-          được thêm là người đồng sáng tạo, bạn có thể %{edit_series_link} để loại
-          bỏ bản thân khỏi danh sách tác giả.
-      intro_chapter: 'Người dùng %{adding_user} đã liệt kê bút danh %{pseud} của bạn
-        là một người đồng sáng tạo ở chương truyện sau:'
-      intro_series: 'Người dùng %{adding_user} đã thêm bút danh %{pseud} của bạn làm
-        người đồng sáng tạo cho series:'
-      subject: "[%{app_name}] Thông báo Đồng sáng tạo"
-      text:
-        creation: "%{title} (%{url}) bởi %{pseuds}"
-        remove_chapter: 'Nếu bạn bị thêm nhầm hoặc không muốn được liệt kê là người
-          tham gia sáng tạo, bạn có thể chỉnh sửa chương truyện để loại bỏ chính bạn
-          khỏi vị trí người sáng tạo: %{url}'
-        remove_series: 'Nếu bạn cho rằng đây là một sự nhầm lẫn hay bạn không muốn
-          được thêm là đồng sáng tạo, bạn có thể chỉnh sửa series để loại bỏ bản thân
-          khỏi danh sách tác giả: %{url}'
-    creatorship_notification_archivist:
-      explanation: Vì họ đang hành động trong quyền hạn chính thức của mình với tư
-        cách là nhà lưu trữ của Open Doors, họ được phép thêm bạn vào mà không cần
-        thư mời, kể cả khi bạn đã tắt chức năng đồng sáng tạo.
+      explanation: Nếu bạn là đồng tác giả của một tác phẩm nào đó, bút danh của bạn
+        sẽ được đưa vào danh sách tác giả của các chương mới, bất kể thiết lập cá
+        nhân của bạn về đồng sáng tác. Bạn cũng sẽ được liệt kê vào danh sách tác
+        giả trong mọi bộ tác phẩm có chứa tác phẩm này.
       html:
         creation: "%{creation_link} bởi %{pseud_links}"
         edit_chapter: chỉnh sửa chương truyện
-        edit_series: chỉnh sửa tập truyện dài
-        edit_work: chỉnh sửa tác phẩm
-        remove_chapter: Nếu bạn đã được thêm vào do lỗi hoặc bạn không muốn được liệt
-          kê là người sáng tạo, bạn có thể %{edit_chapter_link} để xóa bỏ tư cách
-          người sáng tạo của bản thân
-        remove_series: Nếu bạn đã được thêm vào do lỗi hoặc bạn không muốn được liệt
-          kê là người sáng tạo, bạn có thể %{edit_series_link} để xóa bỏ tư cách người
-          sáng tạo của bản thân.
-        remove_work: Nếu bạn đã được thêm vào do lỗi hoặc bạn không muốn được liệt
-          kê là người sáng tạo, bạn có thể %{edit_work_link} để xóa bỏ tư cách người
-          sáng tạo của bản thân.
-      intro_chapter: 'Người dùng %{archivist} đã thêm bút danh %{pseud} của bạn với
-        tư cách là người đồng sáng tạo trên chương truyện sau:'
-      intro_series: 'Người dùng %{archivist} đã thêm bút danh %{pseud} của bạn với
-        tư cách là người đồng sáng tạo trong tập truyện dài sau:'
-      intro_work: 'Người dùng %{archivist} đã thêm bút danh %{pseud} của bạn với tư
-        cách là người đồng sáng tạo trên tác phẩm sau:'
-      subject: "[%{app_name}] Thông báo lưu trữ đồng sáng tạo"
+        edit_series: chỉnh sửa bộ tác phẩm
+        remove_chapter: Nếu bị thêm nhầm hoặc không muốn được liệt kê là đồng tác
+          giả, bạn có thể %{edit_chapter_link} để loại bỏ mình khỏi danh sách tác
+          giả.
+        remove_series: Nếu bạn bị thêm nhầm hoặc không muốn được liệt kê là đồng tác
+          giả, bạn có thể %{edit_series_link} để loại bỏ mình khỏi danh sách tác giả.
+      intro_chapter: 'Người dùng %{adding_user} đã liệt kê bút danh %{pseud} của bạn
+        làm đồng tác giả của chương truyện sau:'
+      intro_series: 'Người dùng %{adding_user} đã thêm bút danh %{pseud} của bạn làm
+        đồng tác giả của bộ tác phẩm:'
+      subject: "[%{app_name}] Thông báo đồng sáng tác"
       text:
         creation: "%{title} (%{url}) bởi %{pseuds}"
-        remove_chapter: 'Nếu bạn đã được thêm vào do lỗi hoặc bạn không muốn được
-          liệt kê là người sáng tạo, bạn có thể chỉnh sửa chương truyện để xóa bỏ
-          tư cách người sáng tạo của bản thân: %{url}'
-        remove_series: 'Nếu bạn đã được thêm vào do lỗi hoặc bạn không muốn được liệt
-          kê là người sáng tạo, bạn có thể chỉnh sửa tập truyện dài để xóa bỏ tư cách
-          người sáng tạo của bản thân: %{url}'
-        remove_work: 'Nếu bạn đã được thêm vào do lỗi hoặc bạn không muốn được liệt
-          kê là người sáng tạo, bạn có thể chỉnh sửa tác phẩm để xóa bỏ tư cách người
-          sáng tạo của bản thân: %{url}'
+        remove_chapter: 'Nếu bạn bị thêm nhầm hoặc không muốn được liệt kê là đồng
+          tác giả, bạn có thể chỉnh sửa chương truyện để loại bỏ mình khỏi danh sách
+          tác giả: %{url}'
+        remove_series: 'Nếu bạn bị thêm nhầm hoặc không muốn được liệt kê là đồng
+          tác giả, bạn có thể chỉnh sửa bộ tác phẩm để loại bỏ mình khỏi danh sách
+          tác giả: %{url}'
+    creatorship_notification_archivist:
+      explanation: Người dùng này hiện đang là chuyên viên lưu trữ của Open Doors
+        (Cửa Mở), vì vậy, họ được phép đưa bạn vào tác phẩm mà không cần thư mời,
+        kể cả khi bạn đã tắt chức năng đồng sáng tác.
+      html:
+        creation: "%{creation_link} bởi %{pseud_links}"
+        edit_chapter: chỉnh sửa chương truyện
+        edit_series: chỉnh sửa bộ tác phẩm
+        edit_work: chỉnh sửa tác phẩm
+        remove_chapter: Nếu bạn bị thêm nhầm hoặc không muốn được liệt kê là tác giả,
+          bạn có thể %{edit_chapter_link} để loại bỏ mình khỏi danh sách tác giả
+        remove_series: Nếu bạn bị thêm nhầm hoặc không muốn được liệt kê là người
+          sáng tạo, bạn có thể %{edit_series_link} để loại bỏ mình khỏi danh sách
+          tác giả.
+        remove_work: Nếu bạn bị thêm nhầm hoặc không muốn được liệt kê là đồng tác
+          giả, bạn có thể %{edit_work_link} để loại bỏ mình khỏi danh sách đồng tác
+          giả.
+      intro_chapter: 'Người dùng %{archivist} đã thêm bút danh %{pseud} của bạn làm
+        đồng tác giả của chương truyện sau:'
+      intro_series: 'Người dùng %{archivist} đã thêm bút danh %{pseud} của bạn làm
+        đồng tác giả trong bộ tác phẩm sau:'
+      intro_work: 'Người dùng %{archivist} đã thêm bút danh %{pseud} của bạn làm đồng
+        tác giả của tác phẩm sau:'
+      subject: "[%{app_name}] Thông báo của chuyên viên lưu trữ về tư cách đồng tác
+        giả"
+      text:
+        creation: "%{title} (%{url}) bởi %{pseuds}"
+        remove_chapter: 'Nếu bạn bị thêm nhầm hoặc không muốn được liệt kê là đồng
+          tác giả, bạn có thể chỉnh sửa chương truyện để loại bỏ mình khỏi danh sách
+          tác giả: %{url}'
+        remove_series: 'Nếu bạn bị thêm nhầm hoặc không muốn được liệt kê là tác giả,
+          bạn có thể chỉnh sửa bộ tác phẩm để loại bỏ mình khỏi danh sách tác giả:
+          %{url}'
+        remove_work: 'Nếu bạn bị thêm nhầm hoặc không muốn được liệt kê là đồng tác
+          giả, bạn có thể chỉnh sửa tác phẩm để loại bỏ mình khỏi danh sách tác giả:
+          %{url}'
     creatorship_request:
       html:
         creation: "%{creation_link} bởi %{pseud_links}"
-        instructions: Bạn có thể chấp nhận hoặc từ chối lời mời này trên trang %{page_name}
+        instructions: Bạn có thể chấp nhận hoặc từ chối lời mời này tại trang %{page_name}
           của bạn.
-        page_name: Co-Creator Requests (Các Lời mời Hợp tác)
+        page_name: Co-Creator Requests (Lời Mời Hợp Tác)
       intro_chapter: 'Người dùng %{inviting_user} đã mời bút danh %{pseud} của bạn
-        làm đồng tác giả của chương sau:'
+        làm đồng tác giả của chương truyện sau:'
       intro_series: 'Người dùng %{inviting_user} đã mời bút danh %{pseud} của bạn
         làm đồng tác giả của bộ tác phẩm sau:'
       intro_work: 'Người dùng %{inviting_user} đã mời bút danh %{pseud} của bạn làm
@@ -300,16 +352,17 @@ vi:
       subject: "[%{app_name}] Lời mời hợp tác"
       text:
         creation: "%{title} (%{url}) bởi %{pseuds}"
-        instructions: 'Bạn có thể chấp nhận hoặc từ chối lời mời này trên trang Co-Creator
-          Requests (Các Lời mời Hợp tác) của bạn: %{url}'
+        instructions: 'Bạn có thể chấp nhận hoặc từ chối lời mời này tại trang Co-Creator
+          Requests (Lời Mời Hợp Tác) của bạn: %{url}'
     delete_work_notification:
       html:
         part1_other: Tác phẩm %{title} đã được xóa theo yêu cầu của %{pseud}.
         part1_yourself: Tác phẩm %{title} đã được xóa theo yêu cầu của bạn.
         part2: Nếu bạn có thắc mắc, vui lòng %{support}.
-      part3: Đính kèm là một bản sao tác phẩm của bạn nhằm phục vụ mục đích tham khảo.
-      subject: "[%{app_name}] Tác phẩm của bạn đã được xóa"
-      support: liên hệ ban Hỗ trợ Kỹ thuật
+      part3: Một bản sao tác phẩm của bạn được đính kèm nhằm phục vụ mục đích tham
+        khảo.
+      subject: "[%{app_name}] Quản trị viên đã xóa tác phẩm của bạn"
+      support: liên hệ ban Hỗ Trợ Kỹ Thuật
       text:
         part1_other: Tác phẩm "%{title}" đã được xóa theo yêu cầu của %{pseud}.
         part1_yourself: Tác phẩm "%{title}" đã được xóa theo yêu cầu của bạn.
@@ -375,15 +428,15 @@ vi:
           hướng cho nhiều tác phẩm, bạn có thể liệt kê chúng trong cùng một email.)
     invite_increase_notification:
       body:
-        other: Chúng tôi muốn thông báo rằng bạn hiện đang có %{count} thư mời mới,
-          có thể được sử dụng để tạo tài khoản mới ở AO3. Bạn có thể mời bạn bè tại
-          %{invitation_page}
-      invitation_page_link_text: trang Thư Mời của bạn
+        other: 'Chúng tôi xin thông báo: bạn hiện đang có %{count} thư mời mới có
+          thể sử dụng để tạo tài khoản mới ở AO3. Bạn có thể gửi thư mời cho bạn bè
+          qua %{invitation_page}.'
+      invitation_page_link_text: trang Invitations (Thư Mời) của mình
       subject: "[%{app_name}] Thư mời mới"
     invite_request_declined:
       main:
-        other: Chúng tôi rất tiếc phải thông báo rằng yêu cầu %{count} thư mời mới
-          của bạn không thể thực hiện được tại thời điểm này.
+        other: 'Chúng tôi rất tiếc phải thông báo: chúng tôi không thể thực hiện yêu
+          cầu thêm %{count} thư mời mới của bạn tại thời điểm này.'
       reason: 'Yêu cầu của bạn là:'
       subject: "[%{app_name}] Từ chối Yêu cầu Thêm Thư mời"
     recipient_notification:

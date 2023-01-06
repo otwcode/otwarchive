@@ -279,11 +279,6 @@ When /^I post the comment "([^"]*)" on the tag "([^"]*)" via web$/ do |comment_t
   step %{I should see "Comment created!"}
 end
 
-When /^I view tag wrangling discussions$/ do
-  step %{I follow "Tag Wrangling"}
-  step %{I follow "Discussion"}
-end
-
 When /^I add "([^\"]*)" to my favorite tags$/ do |tag|
   step %{I view the "#{tag}" works index}
   step %{I press "Favorite Tag"}
