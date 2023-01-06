@@ -6,7 +6,7 @@ class CommentsController < ApplicationController
                        :cancel_comment_reply, :delete_comment,
                        :cancel_comment_delete, :unreviewed, :review_all]
   before_action :check_user_status, only: [:new, :create, :edit, :update, :destroy]
-  before_action :load_comment, only: [:show, :edit, :update, :delete_comment, :destroy, :cancel_comment_edit, :cancel_comment_delete, :review, :approve, :reject, :freeze, :unfreeze]
+  before_action :load_comment, only: [:show, :edit, :update, :delete_comment, :destroy, :cancel_comment_edit, :cancel_comment_delete, :review, :approve, :reject, :freeze, :unfreeze, :hide, :unhide]
   before_action :check_visibility, only: [:show]
   before_action :check_if_restricted
   before_action :check_tag_wrangler_access
@@ -21,11 +21,13 @@ class CommentsController < ApplicationController
   before_action :check_parent_comment_permissions, only: [:new, :create, :add_comment_reply]
   before_action :check_unreviewed, only: [:add_comment_reply]
   before_action :check_frozen, only: [:new, :create, :add_comment_reply]
+  before_action :check_hidden_by_admin, only: [:new, :create, :add_comment_reply]
   before_action :check_not_replying_to_spam, only: [:new, :create, :add_comment_reply]
   before_action :check_permission_to_review, only: [:unreviewed]
   before_action :check_permission_to_access_single_unreviewed, only: [:show]
   before_action :check_permission_to_moderate, only: [:approve, :reject]
   before_action :check_permission_to_modify_frozen_status, only: [:freeze, :unfreeze]
+  before_action :check_permission_to_modify_hidden_status, only: [:hide, :unhide]
 
   include BlockHelper
 
@@ -142,6 +144,13 @@ class CommentsController < ApplicationController
     redirect_back(fallback_location: root_path)
   end
 
+  def check_hidden_by_admin
+    return unless @commentable.respond_to?(:hidden_by_admin?) && @commentable.hidden_by_admin?
+
+    flash[:error] = t("comments.check_hidden_by_admin.error")
+    redirect_back(fallback_location: root_path)
+  end
+
   def check_not_replying_to_spam
     return unless @commentable.respond_to?(:approved?) && !@commentable.approved?
 
@@ -201,6 +210,13 @@ class CommentsController < ApplicationController
   # Comments on admin posts can be frozen or unfrozen by any admin.
   def check_permission_to_modify_frozen_status
     return if permission_to_modify_frozen_status
+
+    flash[:error] = t(".permission_denied")
+    redirect_back(fallback_location: root_path)
+  end
+
+  def check_permission_to_modify_hidden_status
+    return if policy(@comment).can_hide_comment?
 
     flash[:error] = t(".permission_denied")
     redirect_back(fallback_location: root_path)
@@ -451,6 +467,30 @@ class CommentsController < ApplicationController
     # @comment.full_set.each(&:mark_unfrozen!)
     if @comment.iced? && @comment.save
       @comment.set_to_freeze_or_unfreeze.each(&:mark_unfrozen!)
+      flash[:comment_notice] = t(".success")
+    else
+      flash[:comment_error] = t(".error")
+    end
+    redirect_to_all_comments(@comment.ultimate_parent, show_comments: true)
+  end
+
+  # PUT /comments/1/hide
+  def hide
+    if !@comment.hidden_by_admin?
+      @comment.mark_hidden!
+      AdminActivity.log_action(current_admin, @comment, action: "hide comment")
+      flash[:comment_notice] = t(".success")
+    else
+      flash[:comment_error] = t(".error")
+    end
+    redirect_to_all_comments(@comment.ultimate_parent, show_comments: true)
+  end
+
+  # PUT /comments/1/unhide
+  def unhide
+    if @comment.hidden_by_admin?
+      @comment.mark_unhidden!
+      AdminActivity.log_action(current_admin, @comment, action: "unhide comment")
       flash[:comment_notice] = t(".success")
     else
       flash[:comment_error] = t(".error")

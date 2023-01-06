@@ -17,7 +17,7 @@
     <%= render "chapters/chapter_management", chapter: chapter, work: @work %>
   <% end %>
 
-<% cache_if(!@preview_mode, "#{@work.cache_key}/#{chapter.cache_key}-show-v3", skip_digest: true) do %>
+<% cache_if(!@preview_mode, "#{@work.cache_key}/#{chapter.cache_key}-show-v4", skip_digest: true) do %>
 
   <div class="chapter<%= ' preface' unless @preview_mode %> group" role="complementary">
     <h3 class="title">
@@ -46,13 +46,13 @@
         <h3 class="heading"><%=h ts('Notes:') %></h3>
         <% if chapter.notes.blank? %>
           <p>
-          (<%= ts("See the end of the chapter for ") %> <%= link_to(h(ts("notes")), :anchor => "chapter_#{chapter.position.to_s}_endnotes") %>.)
+          (<%= ts("See the end of the chapter for ") %> <%= link_to(h(ts("notes")), "#chapter_#{chapter.position.to_s}_endnotes") %>.)
           </p>
         <% else %>
           <blockquote class="userstuff"><%=raw sanitize_field(chapter, :notes) %></blockquote>
           <% unless chapter.endnotes.blank? %>
             <p>
-            (<%= ts("See the end of the chapter for ") %> <%= link_to(h(ts("more notes")), :anchor => "chapter_#{chapter.position.to_s}_endnotes") %>.)
+            (<%= ts("See the end of the chapter for ") %> <%= link_to(h(ts("more notes")), "#chapter_#{chapter.position.to_s}_endnotes") %>.)
             </p>
           <% end %>
         <% end %>

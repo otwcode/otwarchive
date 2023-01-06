@@ -35,8 +35,8 @@ class Opendoors::ToolsController < ApplicationController
       # if that didn't work, try to encode the URL and then parse it
       if @imported_from_url.blank?
         begin 
-          URI.parse(URI.encode(params[:imported_from_url]))
-          @imported_from_url = URI.encode(params[:imported_from_url])
+          URI.parse(URI::Parser.new.escape(params[:imported_from_url]))
+          @imported_from_url = URI::Parser.new.escape(params[:imported_from_url])
         rescue
         end
       end

@@ -1,20 +1,11 @@
 class InviteRequest < ApplicationRecord
-  include ActiveModel::ForbiddenAttributesProtection
-  acts_as_list
+  self.ignored_columns = [:position]
+
   validates :email, presence: true, email_veracity: true
   validates_uniqueness_of :email, message: "is already part of our queue.", case_sensitive: false
   before_validation :compare_with_users, on: :create
   before_validation :set_simplified_email, on: :create
   validate :simplified_email_uniqueness, on: :create
-
-  # Realign positions if they're incorrect
-  def self.reset_order
-    first_request = order(:position).first
-    unless first_request && first_request.position == 1
-      requests = order(:position)
-      requests.each_with_index {|request, index| request.update_attribute(:position, index + 1)}
-    end
-  end
 
   # Borrow the blacklist cleaner but just strip out all the periods for all domains
   def set_simplified_email
@@ -37,21 +28,16 @@ class InviteRequest < ApplicationRecord
     Date.today > proposed_date ? Date.today : proposed_date
   end
 
+  def position
+    InviteRequest.where("id <= ?", id).count
+  end
+
   #Ensure that invite request is for a new user
   def compare_with_users
     if User.find_by(email: self.email)
       errors.add(:email, "is already being used by an account holder.")
       throw :abort
     end
-  end
-
-  #Invite a specified number of users
-  def self.invite
-    admin_settings = AdminSetting.current
-    self.order(:position).limit(admin_settings.invite_from_queue_number).each do |request|
-      request.invite_and_remove
-    end
-    InviteRequest.reset_order
   end
 
   #Turn a request into an invite and then remove it from the queue
@@ -63,5 +49,4 @@ class InviteRequest < ApplicationRecord
       self.destroy
     end
   end
-
 end

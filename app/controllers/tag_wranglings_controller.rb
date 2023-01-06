@@ -1,6 +1,9 @@
 class TagWranglingsController < ApplicationController
+  include TagWrangling
+
   before_action :check_user_status
   before_action :check_permission_to_wrangle
+  around_action :record_wrangling_activity, only: [:wrangle]
 
   def index
     @counts = {}
@@ -96,9 +99,5 @@ class TagWranglingsController < ApplicationController
     flash[:error] = error_messages.join('<br />').html_safe unless error_messages.empty?
 
     redirect_to tag_wranglings_path(options)
-  end
-
-  def discuss
-    @comments = Comment.where(commentable_type: 'Tag').order('updated_at DESC').paginate(page: params[:page])
   end
 end

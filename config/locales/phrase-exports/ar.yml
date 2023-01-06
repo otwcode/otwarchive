@@ -1,5 +1,108 @@
 ---
 ar:
+  activerecord:
+    attributes:
+      archive_warning:
+        name_with_colon:
+          few: 'التحذيرات:'
+          many: 'التحذيرات:'
+          one: 'التحذير:'
+          other: 'التحذيرات:'
+          two: 'التحذيران:'
+      category:
+        name_with_colon:
+          few: 'الفئات:'
+          many: 'الفئات:'
+          one: 'الفئة:'
+          other: 'الفئات:'
+          two: 'الفئتان:'
+      character:
+        name_with_colon:
+          few: 'الشخصيات:'
+          many: 'الشخصيات:'
+          one: 'الشخصية:'
+          other: 'الشخصيات:'
+          two: 'الشخصيتان:'
+      fandom:
+        name_with_colon:
+          few: 'الفاندومات:'
+          many: 'الفاندومات:'
+          one: 'الفاندوم:'
+          other: 'الفاندومات:'
+          two: 'الفاندومان:'
+      freeform:
+        name_with_colon:
+          few: 'وسوم إضافية:'
+          many: 'وسوم إضافية:'
+          one: 'وسم إضافي:'
+          other: 'وسوم إضافية:'
+          two: 'وسمان إضافيان:'
+      rating:
+        name_with_colon: 'التصنيف:'
+      relationship:
+        name_with_colon:
+          few: 'العلاقات:'
+          many: 'العلاقات:'
+          one: 'العلاقة:'
+          other: 'العلاقات:'
+          two: 'العلاقتان:'
+      work:
+        summary: المُلخص
+    models:
+      archive_warning:
+        few: التحذيرات
+        many: التحذيرات
+        one: التحذير
+        other: التحذيرات
+        two: التحذيران
+      category:
+        few: الفئات
+        many: الفئات
+        one: الفئة
+        other: الفئات
+        two: الفئتان
+      chapter:
+        few: الفصول
+        many: الفصول
+        one: الفصل
+        other: الفصول
+        two: الفصلان
+      character:
+        few: الشخصيات
+        many: الشخصيات
+        one: الشخصية
+        other: الشخصيات
+        two: الشخصيتان
+      fandom:
+        few: الفاندومات
+        many: الفاندومات
+        one: الفاندوم
+        other: الفاندومات
+        two: الفاندومان
+      freeform:
+        few: وسوم إضافية
+        many: وسوم إضافية
+        one: وسم إضافي
+        other: وسوم إضافية
+        two: وسمان إضافيان
+      rating:
+        few: التصنيفات
+        many: التصنيفات
+        one: التصنيف
+        other: التصنيفات
+        two: التصنيفان
+      relationship:
+        few: العلاقات
+        many: العلاقات
+        one: العلاقة
+        other: العلاقات
+        two: العلاقتان
+      series:
+        few: السلاسل
+        many: السلاسل
+        one: السلسلة
+        other: السلاسل
+        two: السلسلتان
   kudo_mailer:
     batch_kudo_notification:
       guest:
@@ -38,6 +141,16 @@ ar:
       closing:
         formal: بكل إخلاص وتقدير،
         informal: مع التحية،
+      creation:
+        link_with_word_count: "%{creation_link} (%{word_count})"
+        title_with_chapter_number: الفصل %{position} من %{title}
+        title_with_word_count: '"%{creation_title}" (%{word_count})'
+        word_count:
+          few: "%{count} كلمات"
+          many: "%{count} كلمة"
+          one: كلمة
+          other: "%{count} كلمة"
+          two: كلمتان
       footer:
         general:
           html:
@@ -58,6 +171,7 @@ ar:
           addressed: مرحباً %{name}!
           unaddressed: مرحباً!
         introductory: مرحباً من Archive of Our Own – AO3 (الأرشيف من جانبنا)
+      metadata_label_indicator: ": "
       signature:
         app_short_name: AO3
         open_doors: فريق Open Doors (الأبواب المفتوحة)
@@ -366,6 +480,7 @@ ar:
           في هذا الوقت.
         two: نأسف لإبلاغك أنه لا يمكن تلبية طلبك للحصول على دعوتين جديدتين في هذا
           الوقت.
+        zero: 'كان طلبك:'
       reason: 'كان طلبك:'
       subject: "[%{app_name}] طلب دعوة إضافية مرفوض"
     recipient_notification:

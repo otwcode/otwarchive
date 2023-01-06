@@ -41,6 +41,7 @@ class CommentMailer < ApplicationMailer
   def edited_comment_reply_notification(your_comment, edited_comment)
     return if your_comment.comment_owner_email.blank?
     return if your_comment.pseud_id.nil? && AdminBlacklistedEmail.is_blacklisted?(your_comment.comment_owner_email)
+    return if your_comment.is_deleted?
 
     @your_comment = your_comment
     @comment = edited_comment

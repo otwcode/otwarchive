@@ -331,10 +331,22 @@ Feature: Admin Actions to Manage Invitations
     When I fill in "Number of people to invite" with "1"
       And press "Invite from queue"
     Then I should see "There are 1 requests in the queue."
-      And I should see "1 people from the invite queue were invited"
-      And 1 email should be delivered
+      And I should see "1 person from the invite queue is being invited"
+      And 1 email should be delivered to "fred@bedrock.com"
 
- Scenario: An admin can edit an invitation
+  Scenario: When an admin invites from the queue, the invite is marked as being from the admin
+    Given I am logged in as a "support" admin
+      And an invitation request for "test@example.com"
+      And I follow "Invite New Users"
+    When I fill in "Number of people to invite" with "1"
+      And press "Invite from queue"
+    Then I should see "1 person from the invite queue is being invited"
+    When I press "Go"
+      And I fill in "Enter all or part of an email address:" with "test@example.com"
+      And I press "Go"
+    Then I should see "Sender testadmin-support"
+
+  Scenario: An admin can edit an invitation
     Given the user "dax" exists and is activated
       And "dax" has "2" invitations
       And I am logged in as a "support" admin
@@ -352,7 +364,7 @@ Feature: Admin Actions to Manage Invitations
 
   Scenario: An admin can search the invitation queue, and search parameters are
   kept even if deleting without JavaScript
-    Given I am logged in as an admin
+    Given I am logged in as a "policy_and_abuse" admin
       And an invitation request for "streamtv@example.com"
       And an invitation request for "livetv@example.com"
       And an invitation request for "clearstream@example.com"
@@ -370,3 +382,70 @@ Feature: Admin Actions to Manage Invitations
     Then the "query" field should contain "stream"
       And I should not see "dreamer@example.com"
       And I should not see "livetv@example.com"
+
+  Scenario: The invitations in the queue are paginated correctly
+    Given I am logged in as a "policy_and_abuse" admin
+      And there are 2 invite requests per page
+      And an invitation request for "andy@example.com"
+      And an invitation request for "beatrice@example.com"
+      And an invitation request for "carla@example.com"
+      And an invitation request for "devon@example.com"
+      And an invitation request for "eliot@example.com"
+    When I am on the manage invite queue page
+    Then the invite queue should list the following:
+      | position | email                |
+      | 1        | andy@example.com     |
+      | 2        | beatrice@example.com |
+    When I follow "Next" within ".pagination"
+    Then the invite queue should list the following:
+      | position | email             |
+      | 3        | carla@example.com |
+      | 4        | devon@example.com |
+    When I follow "Next" within ".pagination"
+    Then the invite queue should list the following:
+      | position | email             |
+      | 5        | eliot@example.com |
+
+  Scenario: The positions in the queue shift when an invitation is sent out
+    Given I am logged in as a "policy_and_abuse" admin
+      And there are 2 invite requests per page
+      And an invitation request for "andy@example.com"
+      And an invitation request for "beatrice@example.com"
+      And an invitation request for "carla@example.com"
+      And an invitation request for "devon@example.com"
+      And an invitation request for "eliot@example.com"
+    When I follow "Invite New Users"
+      And I fill in "Number of people to invite" with "2"
+      And press "Invite from queue"
+    Then I should see "2 people from the invite queue are being invited"
+    When I am on the manage invite queue page
+    Then the invite queue should list the following:
+      | position | email             |
+      | 1        | carla@example.com |
+      | 2        | devon@example.com |
+    When I follow "Next" within ".pagination"
+    Then the invite queue should list the following:
+      | position | email             |
+      | 3        | eliot@example.com |
+
+  Scenario: The invitations in the queue are numbered correctly when searching
+    Given I am logged in as a "policy_and_abuse" admin
+      And an invitation request for "andy-jones@example.com"
+      And an invitation request for "beatrice@example.com"
+      And an invitation request for "carla@example.com"
+      And an invitation request for "devon@example.com"
+      And an invitation request for "eliot-jones@example.com"
+    When I am on the manage invite queue page
+    Then the invite queue should list the following:
+      | position | email                   |
+      | 1        | andy-jones@example.com  |
+      | 2        | beatrice@example.com    |
+      | 3        | carla@example.com       |
+      | 4        | devon@example.com       |
+      | 5        | eliot-jones@example.com |
+    When I fill in "query" with "jones"
+      And I press "Search Queue"
+    Then the invite queue should list the following:
+      | position | email                   |
+      | 1        | andy-jones@example.com  |
+      | 5        | eliot-jones@example.com |

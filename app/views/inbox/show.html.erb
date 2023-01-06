@@ -38,8 +38,11 @@
 
           <!-- START of single comment -->
           <li class="<%= inbox_comment.read? ? 'read' : 'unread' %> <%= css_classes_for_comment(feedback_comment) %>" role="article" id="feedback_comment_<%= feedback_comment.id %>">
-
-            <%= render "inbox_comment_contents", feedback_comment: feedback_comment %>
+            <% if !can_see_hidden_comment?(feedback_comment) %>
+              <p class="message"><%= ts("(This comment is under review by an admin and is currently unavailable.)") %></p>
+            <% else %>
+              <%= render "inbox_comment_contents", feedback_comment: feedback_comment %>
+            <% end %>
 
             <h5 class="landmark heading"><%= ts("Comment Actions") %></h5>
 
