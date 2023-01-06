@@ -99,7 +99,7 @@
 
   <% if work.count_visible_comments > 0 %>
     <dt class="comments"><%= ts('Comments') %>:</dt>
-    <dd class="comments"><%= number_with_delimiter(link_to work.count_visible_comments), work.chapter_total_display.to_i > 1 ? work_path(work, anchor: "comments", show_comments: true, view_full_work: "true") : work_path(work, anchor: "comments", show_comments: true) %></dd>
+    <dd class="comments"><%= link_to work.count_visible_comments, work.chapter_total_display.to_i > 1 ? work_path(work, anchor: "comments", show_comments: true, view_full_work: "true") : work_path(work, anchor: "comments", show_comments: true) %></dd>
   <% end %>
 
   <% if work.all_kudos_count > 0 %>
