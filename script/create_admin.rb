@@ -46,7 +46,7 @@ admins = []
 list.each do |user|
   login = user[0].gsub(/\s+/, "")
   email = user[1]&.strip
-  roles = user.drop(2).compact.map(&:strip)
+  roles = user.drop(2).compact.map(&:strip).map(&:downcase)
 
   a = Admin.find_or_initialize_by(login: "admin-#{login}")
   a.email = email if email.present?

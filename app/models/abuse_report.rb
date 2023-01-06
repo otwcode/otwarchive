@@ -1,6 +1,4 @@
 class AbuseReport < ApplicationRecord
-  include ActiveModel::ForbiddenAttributesProtection
-
   validates :email, email_format: { allow_blank: false }
   validates_presence_of :language
   validates_presence_of :summary
@@ -12,6 +10,9 @@ class AbuseReport < ApplicationRecord
                                 too_long: ts('must be less than %{max}
                                              characters long.',
                                 max: ArchiveConfig.FEEDBACK_SUMMARY_MAX_DISPLAYED)
+
+  # It doesn't have the type set properly in the database, so override it here:
+  attribute :summary_sanitizer_version, :integer, default: 0
 
   validate :check_for_spam
   def check_for_spam

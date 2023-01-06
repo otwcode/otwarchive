@@ -146,6 +146,19 @@ describe BookmarksController do
           it_behaves_like "work is already bookmarked by the user"
         end
       end
+
+      context "as a tag wrangler" do
+        let(:user) { create(:tag_wrangler) }
+        let(:pseud) { user.default_pseud }
+
+        before { fake_login_known_user(user) }
+
+        it "does not set last wrangling activity when the bookmark has a new tag" do
+          bookmark_attributes = { pseud_id: pseud.id, tag_string: "My special new tag!" }
+          post :create, params: { work_id: work.id, bookmark: bookmark_attributes }
+          expect(user.last_wrangling_activity).to be_nil
+        end
+      end
     end
   end
 
