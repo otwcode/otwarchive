@@ -1,6 +1,5 @@
 class User < ApplicationRecord
   audited
-  include ActiveModel::ForbiddenAttributesProtection
   include WorksOwner
 
   devise :database_authenticatable,
@@ -37,7 +36,7 @@ class User < ApplicationRecord
   has_many :external_authors, dependent: :destroy
   has_many :external_creatorships, foreign_key: "archivist_id"
 
-  has_many :fannish_next_of_kins, foreign_key: "kin_id", dependent: :destroy
+  has_many :fannish_next_of_kins, dependent: :delete_all, inverse_of: :kin, foreign_key: :kin_id
   has_one :fannish_next_of_kin, dependent: :destroy
 
   has_many :favorite_tags, dependent: :destroy
@@ -168,7 +167,7 @@ class User < ApplicationRecord
     inbox_comments.where(read: false)
   end
   def unread_inbox_comments_count
-    unread_inbox_comments.with_feedback_comment.count
+    unread_inbox_comments.with_bad_comments_removed.count
   end
 
   scope :alphabetical, -> { order(:login) }

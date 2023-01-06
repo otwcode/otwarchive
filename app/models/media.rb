@@ -1,6 +1,4 @@
 class Media < Tag
-  include ActiveModel::ForbiddenAttributesProtection
-
   NAME = ArchiveConfig.MEDIA_CATEGORY_NAME
 
   has_many :common_taggings, as: :filterable
