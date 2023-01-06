@@ -109,8 +109,8 @@ Feature: Download a work
     And "Published:" should appear before "Completed"
     And "Completed:" should appear before "Chapters"
     # note difference with the work: in the work "Words" come before "Chapters"
-    And "Chapters:" should appear before "Words"
-    And "Words:" should appear before "Could be downloaded"
+    And "Words:" should appear before "Chapters:"
+    And "Chapters:" should appear before "Could be downloaded"
 
 
   Scenario: Download of chaptered works includes chapters
