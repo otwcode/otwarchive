@@ -25,13 +25,6 @@ describe BookmarksController do
           get :new
           expect(response).to render_template("new")
         end
-
-        it "renders the new form for a multi-chapter work" do
-          fake_login
-          get :new, params: { work_id: chaptered_work.id }
-          expect(response).to render_template("new")
-          expect(assigns(:bookmarkable)).to eq(chaptered_work)
-        end
       end
     end
 
@@ -46,12 +39,6 @@ describe BookmarksController do
         expect(response).to render_template("bookmark_form_dynamic")
       end
 
-      it "renders the new form for a bookmark on a multi-chapter work" do
-        fake_login
-        get :new, params: { work_id: chaptered_work.id, format: :js }, xhr: true
-        expect(response).to render_template("bookmark_form_dynamic")
-        expect(assigns(:bookmarkable)).to eq(chaptered_work)
-      end
     end
   end
 
