@@ -20,7 +20,7 @@
                     edit_bookmark_path(current_user_bookmark),
                     id: "bookmark_form_trigger_for_#{bookmarkable.id}",
                     remote: true %>
-      <% elsif logged_in? %>
+      <% else %>
         <%= link_to ts("Save"),
                     new_polymorphic_path([bookmarkable, Bookmark]),
                     id: "bookmark_form_trigger_for_#{bookmarkable.id}",
