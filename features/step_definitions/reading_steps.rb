@@ -4,7 +4,8 @@ Given /^(.*) first read "([^"]*)" on "([^"]*)"$/ do |login, title, date|
   time = date.to_time.in_time_zone("UTC")
   # create the reading
   reading_json = [user.id, time, work.id, work.major_version, work.minor_version, false].to_json
-  Reading.reading_object(reading_json)
+  REDIS_GENERAL.sadd("Reading:new", reading_json)
+  Reading.update_or_create_in_database
 end
 
 When /^the reading rake task is run$/ do

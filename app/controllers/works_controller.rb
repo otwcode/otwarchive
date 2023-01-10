@@ -625,7 +625,6 @@ class WorksController < ApplicationController
 
     @work.posted = true
     @work.minor_version = @work.minor_version + 1
-    # @work.update_minor_version
 
     unless @work.valid? && @work.save
       flash[:error] = ts('There were problems posting your work.')
