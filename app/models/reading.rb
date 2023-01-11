@@ -28,7 +28,7 @@ class Reading < ApplicationRecord
     return unless REDIS_GENERAL.exists("Reading:new")
 
     # Get a unique key associated with this run:
-    counter = REDIS_GENERAL.incrby("Reading:job_id", 1)
+    counter = REDIS_GENERAL.incr("Reading:job_id")
     key = "Reading:new:#{counter}"
 
     # Rename the Reading:new set so that if we do happen to run this method

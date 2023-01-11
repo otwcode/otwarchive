@@ -11,7 +11,7 @@ class ReadingsToDatabaseJob < ApplicationJob
   private
 
   def batch_size
-    ArchiveConfig.READING_BATCHSIZE || 1000
+    ArchiveConfig.READING_BATCHSIZE
   end
 
   # Use sscan to iterate through the set in chunks, so that we're not trying to
