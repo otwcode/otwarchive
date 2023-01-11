@@ -97,7 +97,7 @@ class User < ApplicationRecord
   has_many :gift_works, -> { distinct }, through: :pseuds
   has_many :rejected_gifts, -> { where(rejected: true) }, class_name: "Gift", through: :pseuds
   has_many :rejected_gift_works, -> { distinct }, through: :pseuds
-  has_many :readings, dependent: :destroy
+  has_many :readings, dependent: :delete_all
   has_many :bookmarks, through: :pseuds
   has_many :bookmark_collection_items, through: :bookmarks, source: :collection_items
   has_many :comments, through: :pseuds
@@ -587,5 +587,17 @@ class User < ApplicationRecord
                :changed_too_recently,
                count: change_interval_days,
                renamed_at: I18n.l(renamed_at, format: :long))
+  end
+
+  # Extra callback to make sure readings are deleted in an order consistent
+  # with the ReadingsToDatabaseJob.
+  #
+  # TODO: In the long term, it might be better to change the indexes on the
+  # readings table so that it deletes things in the correct order by default if
+  # we just set dependent: :delete_all, but for now we need to explicitly sort
+  # by work_id to make sure that the readings are locked in the correct order.
+  before_destroy :clear_readings, prepend: true
+  def clear_readings
+    readings.order(:work_id).each(&:delete)
   end
 end

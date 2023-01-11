@@ -25,27 +25,34 @@ class Reading < ApplicationRecord
 
   # called from rake
   def self.update_or_create_in_database
-    REDIS_GENERAL.smembers("Reading:new").reverse.each_slice(ArchiveConfig.READING_BATCHSIZE || 1000) do |batch|
-      Reading.transaction do
-        batch.each do |reading_json|
-          Reading.reading_object(reading_json)
-        end
-      end
-    end
+    return unless REDIS_GENERAL.exists("Reading:new")
+
+    # Get a unique key associated with this run:
+    counter = REDIS_GENERAL.incr("Reading:job_id")
+    key = "Reading:new:#{counter}"
+
+    # Rename the Reading:new set so that if we do happen to run this method
+    # more than once in a short period of time, we won't have two different
+    # workers trying to process the same data at the same time:
+    REDIS_GENERAL.rename("Reading:new", key)
+    ReadingsToDatabaseJob.perform_later(key)
   end
 
   # create a reading object, but only if the user has reading
   # history enabled and is not the author of the work
-  def self.reading_object(reading_json)
-    user_id, time, work_id, major_version, minor_version, later = ActiveSupport::JSON.decode(reading_json)
+  def self.reading_object(user_id, time, work_id, major_version, minor_version, later)
     reading = Reading.find_or_initialize_by(work_id: work_id, user_id: user_id)
-    reading.major_version_read = major_version
-    reading.minor_version_read = minor_version
+
+    # Only update the view time/version number if it's newer:
+    if reading.last_viewed.nil? || reading.last_viewed < time
+      reading.last_viewed = time
+      reading.major_version_read = major_version
+      reading.minor_version_read = minor_version
+    end
+
     reading.view_count = reading.view_count + 1 unless later
-    reading.last_viewed = time
     reading.save
-    REDIS_GENERAL.srem("Reading:new", reading_json)
-    return reading
+    reading
   end
 
   private
