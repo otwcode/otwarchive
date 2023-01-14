@@ -6,14 +6,14 @@ class AddPrimaryKeyToSchemaMigrations < ActiveRecord::Migration[6.0]
   # Recently created development or test databases (e.g. via Docker) are
   # not affected.
   def up
-    if Rails.env.staging? || Rails.env.production?
-      execute "ALTER TABLE schema_migrations ADD PRIMARY KEY (version);"
-    end
+    return unless Rails.env.staging? || Rails.env.production?
+
+    execute "ALTER TABLE schema_migrations ADD PRIMARY KEY (version);"
   end
 
   def down
-    if Rails.env.staging? || Rails.env.production?
-      execute "ALTER TABLE schema_migrations DROP PRIMARY KEY;"
-    end
+    return unless Rails.env.staging? || Rails.env.production?
+
+    execute "ALTER TABLE schema_migrations DROP PRIMARY KEY;"
   end
 end
