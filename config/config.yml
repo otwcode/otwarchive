@@ -477,3 +477,9 @@ PERMITTED_HOSTS: [
 USER_RENAME_LIMIT_DAYS: 7
 
 READING_BATCHSIZE: 1000
+
+# The number of work IDs to include in a single StatCounterJob:
+STAT_COUNTER_JOB_SIZE: 1000
+
+# The number of works to fetch from the database in one query when updating stat counters:
+STAT_COUNTER_BATCH_SIZE: 100

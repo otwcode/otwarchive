@@ -1,8 +1,10 @@
 class ReadingsToDatabaseJob < ApplicationJob
+  include RedisScanning
+
   retry_on ActiveRecord::Deadlocked, attempts: 10
 
   def perform(key)
-    scan_readings_in_batches(key) do |batch|
+    scan_set_in_batches(REDIS_GENERAL, key, batch_size: batch_size) do |batch|
       process_batch(batch)
       remove_readings(key, batch)
     end
@@ -12,18 +14,6 @@ class ReadingsToDatabaseJob < ApplicationJob
 
   def batch_size
     ArchiveConfig.READING_BATCHSIZE
-  end
-
-  # Use sscan to iterate through the set in chunks, so that we're not trying to
-  # load all of the readings at once:
-  def scan_readings_in_batches(key)
-    cursor = "0"
-
-    loop do
-      cursor, batch = REDIS_GENERAL.sscan(key, cursor, count: batch_size)
-      yield batch unless batch.empty?
-      break if cursor == "0"
-    end
   end
 
   # Takes a batch of reading retrieved from redis, and calls the method

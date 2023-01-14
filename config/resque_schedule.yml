@@ -48,11 +48,15 @@ run_update_filter_counts_large:
   args: update_counts_for_large_queue
   description: "Update filter counts for large filters"
 
+# from https://github.com/resque/resque-scheduler/issues/613#issuecomment-351484064
 update_stat_counters:
   cron: "0,30 * * * *"
-  class: "StatCounter"
-  queue: utilities
-  args: stats_to_database
+  class: ActiveJob::QueueAdapters::ResqueAdapter::JobWrapper
+  queue: stats
+  args:
+    job_class: RedisSetJobSpawner
+    queue_name: stats
+    arguments: ["StatCounterJob"]
   description: "Update kudos/bookmark/comment counts on StatCounters."
 
 save_recent_counts_to_database:
