@@ -477,3 +477,10 @@ PERMITTED_HOSTS: [
 USER_RENAME_LIMIT_DAYS: 7
 
 READING_BATCHSIZE: 1000
+
+# The number of works to fetch from the database in one query when updating stat counters:
+STAT_COUNTER_BATCH_SIZE: 1000
+
+# The Resque queue to use for stat counter updates. Change this to a different
+# queue if you want to throttle it differently than normal utilities jobs:
+STAT_COUNTER_QUEUE_NAME: utilities
