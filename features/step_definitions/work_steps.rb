@@ -598,7 +598,7 @@ When /^I post the work$/ do
 end
 
 When /^the statistics for all works are updated$/ do
-  StatCounter.stats_to_database
+  RedisSetJobSpawner.perform_now("StatCounterJob")
   step %{the hit counts for all works are updated}
 end
 
