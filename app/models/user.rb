@@ -590,7 +590,7 @@ class User < ApplicationRecord
   end
 
   # Extra callback to make sure readings are deleted in an order consistent
-  # with the ReadingsToDatabaseJob.
+  # with the ReadingsJob.
   #
   # TODO: In the long term, it might be better to change the indexes on the
   # readings table so that it deletes things in the correct order by default if

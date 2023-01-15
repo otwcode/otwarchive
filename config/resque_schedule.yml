@@ -79,3 +79,14 @@ check_invite_queue:
   queue: utilities
   args: check_queue
   description: "Invite users from the queue if it's time to do so."
+
+# from https://github.com/resque/resque-scheduler/issues/613#issuecomment-351484064
+readings_to_database:
+  cron: "55 * * * *"
+  class: ActiveJob::QueueAdapters::ResqueAdapter::JobWrapper
+  queue: readings
+  args:
+    job_class: RedisSetJobSpawner
+    queue_name: readings
+    arguments: ["ReadingsJob"]
+  description: "Transfer readings from redis to the database."

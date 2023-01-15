@@ -666,7 +666,7 @@ When /^I mark the work "([^"]*)" for later$/ do |work|
   work = Work.find_by(title: work)
   visit work_url(work)
   step %{I follow "Mark for Later"}
-  Reading.update_or_create_in_database
+  step "the readings are saved to the database"
 end
 
 When /^I follow the recent chapter link for the work "([^\"]*)"$/ do |work|

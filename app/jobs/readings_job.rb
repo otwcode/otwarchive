@@ -1,24 +1,22 @@
-class ReadingsToDatabaseJob < ApplicationJob
-  include RedisScanning
+class ReadingsJob < RedisSetJob
+  queue_as :readings
 
   retry_on ActiveRecord::Deadlocked, attempts: 10
+  retry_on ActiveRecord::LockWaitTimeout, attempts: 10
 
-  def perform(key)
-    scan_set_in_batches(REDIS_GENERAL, key, batch_size: batch_size) do |batch|
-      process_batch(batch)
-      remove_readings(key, batch)
-    end
+  def self.base_key
+    "Reading:new"
   end
 
-  private
-
-  def batch_size
-    ArchiveConfig.READING_BATCHSIZE
+  def self.job_size
+    ArchiveConfig.READING_JOB_SIZE
   end
 
-  # Takes a batch of reading retrieved from redis, and calls the method
-  # Reading.reading_object on each one.
-  def process_batch(batch)
+  def self.batch_size
+    ArchiveConfig.READING_BATCH_SIZE
+  end
+
+  def perform_on_batch(batch)
     # Each item in the batch is an array of arguments encoded as a JSON:
     parsed_batch = batch.map do |json|
       ActiveSupport::JSON.decode(json)
@@ -38,10 +36,5 @@ class ReadingsToDatabaseJob < ApplicationJob
         Reading.reading_object(*args)
       end
     end
-  end
-
-  # Remove the batch from Redis:
-  def remove_readings(key, batch)
-    REDIS_GENERAL.srem(key, batch) unless batch.empty?
   end
 end
