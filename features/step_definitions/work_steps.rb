@@ -87,7 +87,7 @@ When /^I post (?:a|the) (?:(\d+) chapter )?work "([^"]*)"(?: with fandom "([^"]*
     end
   end
   step %{all indexing jobs have been run}
-  Tag.write_redis_to_database
+  RedisSetJobSpawner.perform_now("TagCountUpdateJob")
   step %(the periodic filter count task is run)
 end
 
@@ -302,7 +302,7 @@ When /^I post the chaptered work "([^"]*)"$/ do |title|
   click_button("Preview")
   step %{I press "Post"}
   step %{all indexing jobs have been run}
-  Tag.write_redis_to_database
+  RedisSetJobSpawner.perform_now("TagCountUpdateJob")
 end
 
 When /^I post the chaptered draft "([^"]*)"$/ do |title|
@@ -319,7 +319,7 @@ When /^a chapter is added to "([^"]*)"$/ do |work_title|
   step %{a draft chapter is added to "#{work_title}"}
   click_button("Post")
   step %{all indexing jobs have been run}
-  Tag.write_redis_to_database
+  RedisSetJobSpawner.perform_now("TagCountUpdateJob")
 end
 
 When /^a chapter with the co-author "([^\"]*)" is added to "([^\"]*)"$/ do |coauthor, work_title|
@@ -328,7 +328,7 @@ When /^a chapter with the co-author "([^\"]*)" is added to "([^\"]*)"$/ do |coau
   click_button("Post")
   step %{the user "#{coauthor}" accepts all co-creator requests}
   step %{all indexing jobs have been run}
-  Tag.write_redis_to_database
+  RedisSetJobSpawner.perform_now("TagCountUpdateJob")
 end
 
 When /^a draft chapter is added to "([^"]*)"$/ do |work_title|
@@ -336,7 +336,7 @@ When /^a draft chapter is added to "([^"]*)"$/ do |work_title|
   step %{I press "Preview"}
   step %{all indexing jobs have been run}
 
-  Tag.write_redis_to_database
+  RedisSetJobSpawner.perform_now("TagCountUpdateJob")
 end
 
 When /^I delete chapter ([\d]+) of "([^"]*)"$/ do |chapter, title|
@@ -370,7 +370,7 @@ When /^I post the(?: draft)? chapter$/ do
   click_button("Post")
   step %{all indexing jobs have been run}
 
-  Tag.write_redis_to_database
+  RedisSetJobSpawner.perform_now("TagCountUpdateJob")
 end
 
 Then /^I should see the default work content$/ do
@@ -466,7 +466,7 @@ When /^the work "([^"]*)" was created (\d+) days ago$/ do |title, number|
   work.update_attribute(:created_at, number.to_i.days.ago)
   step %{all indexing jobs have been run}
 
-  Tag.write_redis_to_database
+  RedisSetJobSpawner.perform_now("TagCountUpdateJob")
 end
 
 When /^I post the locked work "([^"]*)"$/ do |title|
@@ -479,7 +479,7 @@ When /^I post the locked work "([^"]*)"$/ do |title|
   click_button("Post")
   step %{all indexing jobs have been run}
 
-  Tag.write_redis_to_database
+  RedisSetJobSpawner.perform_now("TagCountUpdateJob")
 end
 
 When /^the locked draft "([^"]*)"$/ do |title|
@@ -553,7 +553,7 @@ When /^I browse the "(.*?)" works$/ do |tagname|
   visit tag_works_path(tag)
   step %{all indexing jobs have been run}
 
-  Tag.write_redis_to_database
+  RedisSetJobSpawner.perform_now("TagCountUpdateJob")
 end
 
 When /^I browse the "(.*?)" works with page parameter "(.*?)"$/ do |tagname, page|
@@ -561,7 +561,7 @@ When /^I browse the "(.*?)" works with page parameter "(.*?)"$/ do |tagname, pag
   visit tag_works_path(tag, page: page)
   step %{all indexing jobs have been run}
 
-  Tag.write_redis_to_database
+  RedisSetJobSpawner.perform_now("TagCountUpdateJob")
 end
 
 When /^I delete the work "([^"]*)"$/ do |work|
@@ -572,25 +572,25 @@ When /^I delete the work "([^"]*)"$/ do |work|
   click_button("Yes, Delete Work") unless @javascript
   step %{all indexing jobs have been run}
 
-  Tag.write_redis_to_database
+  RedisSetJobSpawner.perform_now("TagCountUpdateJob")
 end
 When /^I preview the work$/ do
   click_button("Preview")
   step %{all indexing jobs have been run}
 
-  Tag.write_redis_to_database
+  RedisSetJobSpawner.perform_now("TagCountUpdateJob")
 end
 When /^I update the work$/ do
   click_button("Update")
   step %{all indexing jobs have been run}
 
-  Tag.write_redis_to_database
+  RedisSetJobSpawner.perform_now("TagCountUpdateJob")
 end
 When /^I post the work without preview$/ do
   click_button "Post"
   step %{all indexing jobs have been run}
 
-  Tag.write_redis_to_database
+  RedisSetJobSpawner.perform_now("TagCountUpdateJob")
 end
 When /^I post the work$/ do
   click_button "Post"

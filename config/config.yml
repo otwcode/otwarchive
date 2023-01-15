@@ -181,7 +181,10 @@ RATE_LIMIT_SAFELIST: ["127.0.0.0/8", "10.0.0.0/8"]
 # The number of tags to show on the search page:
 TAGS_PER_SEARCH_PAGE: 50
 
-# When updating tag counts, how many to do in one transaction
+# When updating tag counts, how many to do in one TagCountUpdateJob:
+TAG_UPDATE_JOB_SIZE: 1000
+
+# When updating tag counts, how many to do in one transaction:
 TAG_UPDATE_BATCH_SIZE: 100
 
 # We only start caching tag counts for tags used more than a certain number of times
