@@ -59,11 +59,6 @@ every 1.hour do
   rake "notifications:deliver_subscriptions"
 end
 
-# Move readings from redis to database
-every 10.minutes do
-  rake "readings:to_database"
-end
-
 # Rerun redis jobs
 every 10.minutes do
   rake "resque:run_failures"
