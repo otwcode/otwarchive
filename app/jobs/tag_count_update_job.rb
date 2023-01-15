@@ -20,7 +20,7 @@ class TagCountUpdateJob < RedisSetJob
     Tag.transaction do
       tag_ids.each do |id|
         value = REDIS_GENERAL.get("tag_update_#{id}_value")
-        Tag.where(id: id).update_all(taggings_count_cache: value) unless value.blank?
+        Tag.where(id: id).update_all(taggings_count_cache: value) if value.present?
       end
     end
   end
