@@ -23,10 +23,10 @@ run_add_counts_to_queue:
 run_write_redis_to_database:
   every: 2m
   class: ActiveJob::QueueAdapters::ResqueAdapter::JobWrapper
-  queue: utilities
+  queue: tag_counts
   args:
     job_class: RedisSetJobSpawner
-    queue_name: utilities
+    queue_name: tag_counts
     arguments: ["TagCountUpdateJob"]
   description: "Flush the count updates to mysql"
 

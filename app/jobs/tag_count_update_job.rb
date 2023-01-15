@@ -1,5 +1,5 @@
 class TagCountUpdateJob < RedisSetJob
-  queue_as :utilities
+  queue_as :tag_counts
 
   retry_on ActiveRecord::Deadlocked, attempts: 10
   retry_on ActiveRecord::LockWaitTimeout, attempts: 10
