@@ -1,6 +1,7 @@
 class User < ApplicationRecord
   audited
   include WorksOwner
+  include PasswordResetsLimitable
 
   devise :database_authenticatable,
          :confirmable,
@@ -421,20 +422,6 @@ class User < ApplicationRecord
     has_role?(:protected_user)
   end
 
-  def password_resets_limit_reached?
-    self.resets_requested >= ArchiveConfig.PASSWORD_RESET_LIMIT && self.last_reset_within_cooldown?
-  end
-
-  def password_resets_available_time
-    self.reset_password_sent_at + ArchiveConfig.PASSWORD_RESET_COOLDOWN_HOURS.hours
-  end
-
-  def update_password_resets_requested
-    if self.resets_requested.positive? && !self.last_reset_within_cooldown?
-      self.resets_requested = 1
-    else
-      self.resets_requested += 1
-    end
   # Is this user assigned the no resets role? These users do not wish to receive
   # password resets.
   def no_resets?
@@ -601,10 +588,5 @@ class User < ApplicationRecord
                :changed_too_recently,
                count: change_interval_days,
                renamed_at: I18n.l(renamed_at, format: :long))
-  end
-
-  def last_reset_within_cooldown?
-    self.reset_password_sent_at.nil? ||
-      self.reset_password_sent_at > ArchiveConfig.PASSWORD_RESET_COOLDOWN_HOURS.hours.ago
   end
 end
