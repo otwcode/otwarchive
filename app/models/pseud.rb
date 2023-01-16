@@ -1,5 +1,4 @@
 class Pseud < ApplicationRecord
-  include ActiveModel::ForbiddenAttributesProtection
   include Searchable
   include WorksOwner
 
@@ -87,44 +86,6 @@ class Pseud < ApplicationRecord
   after_update :expire_caches
   after_commit :reindex_creations, :touch_comments
 
-  scope :on_works, lambda {|owned_works|
-    select("DISTINCT pseuds.*").
-    joins(:works).
-    where(works: {id: owned_works.collect(&:id)}).
-    order(:name)
-  }
-
-  scope :with_works, -> {
-    select("pseuds.*, count(pseuds.id) AS work_count").
-    joins(:works).
-    group(:id).
-    order(:name)
-  }
-
-  scope :with_posted_works, -> { with_works.merge(Work.visible_to_registered_user) }
-  scope :with_public_works, -> { with_works.merge(Work.visible_to_all) }
-
-  scope :with_bookmarks, -> {
-    select("pseuds.*, count(pseuds.id) AS bookmark_count").
-    joins(:bookmarks).
-    group(:id).
-    order(:name)
-  }
-
-  # conditions: {bookmarks: {private: false, hidden_by_admin: false}},
-  scope :with_public_bookmarks, -> { with_bookmarks.merge(Bookmark.is_public) }
-
-  scope :with_public_recs, -> {
-    select("pseuds.*, count(pseuds.id) AS rec_count").
-    joins(:bookmarks).
-    group(:id).
-    order(:name).
-    merge(Bookmark.is_public.recs)
-  }
-
-  scope :alphabetical, -> { order(:name) }
-  scope :starting_with, lambda {|letter| where('SUBSTR(name,1,1) = ?', letter)}
-
   def self.not_orphaned
     where("user_id != ?", User.orphan_account)
   end
@@ -137,20 +98,6 @@ class Pseud < ApplicationRecord
 
   def to_param
     name
-  end
-
-  # Gets the number of works by this user that the current user can see
-  def visible_works_count
-    if User.current_user.nil?
-      self.works.posted.unhidden.unrestricted.count
-    else
-      self.works.posted.unhidden.count
-    end
-  end
-
-  # Gets the number of recs by this user
-  def visible_recs_count
-    self.recs.is_public.size
   end
 
   scope :public_work_count_for, -> (pseud_ids) {

@@ -121,6 +121,7 @@ pt-BR:
       series/creatorships:
         base: 'Nome de artista inválido:'
       work:
+        chapter_total_display: Capítulos
         summary: Sumário
       work/chapters:
         base: 'Capítulo inválido:'
@@ -249,6 +250,9 @@ pt-BR:
         footnote: As configurações de permissão para comentar do post original irão
           substituir quaisquer permissões selecionadas nessa página.
         label: Tradução do post
+  chapters:
+    chapter_position: "- Capítulo %{position}"
+    unspecified_fandom: Fandom não especificado
   comments:
     commentable:
       permissions:
@@ -447,6 +451,7 @@ pt-BR:
         informal: Atenciosamente,
       creation:
         link_with_word_count: "%{creation_link} (%{word_count})"
+        title_with_chapter_number: Capítulo %{position} de %{title}
         title_with_word_count: '"%{creation_title}" (%{word_count})'
         word_count:
           one: "%{count} palavra"

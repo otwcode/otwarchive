@@ -1,6 +1,4 @@
 <% content_for :message do %>
-<%= t("mailer.general.greeting.introductory") %>
-
 <% if !@user_name.blank? %>
 <%= t ".has_invited", user_name: @user_name %>
 <% else %>

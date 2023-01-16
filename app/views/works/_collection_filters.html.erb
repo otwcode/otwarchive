@@ -40,6 +40,9 @@
       <dt class="landmark"><%= ts("Submit") %></dt>
       <dd class="submit actions"><%= f.submit ts("Sort and Filter") %></dd>
     </dl>
+    <p class="footnote">
+      <%= link_to ts("Clear Filters"), collected_user_works_path(@user) %>
+    </p>
     <div>
       <%= hidden_field_tag("user_id", @user.login) if @user %>
     </div>

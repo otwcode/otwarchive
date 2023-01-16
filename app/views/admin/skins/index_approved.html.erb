@@ -29,6 +29,7 @@
     </thead>
     <tbody>
       <% @approved_skins.each_with_index do |skin, i| %>
+        <% disabled = !policy(skin).update? %>
         <tr>
           <th scope="row"><%= link_to skin.title, skin_path(skin) %></th>
           <td><%= skin.type == 'WorkSkin' ? 'Work Skin' : 'Site Skin' %></td>
@@ -37,14 +38,14 @@
           <td><%= skin.admin_note %></td>
           <td class="actions">
             <% skin_name = skin.title.downcase.gsub(/ +/, '_') %>
-            <label for="make_unofficial_<%= skin_name %>" class="action">
+            <%= label_tag "make_unofficial_#{skin_name}", class: ["action", disabled ? "disabled" : ""] do %>
               <%= ts("Unapprove") %>  
-              <%= check_box_tag "make_unofficial[]", skin.id, false, :id => "make_unofficial_#{skin_name}" %>
-            </label>
+              <%= check_box_tag "make_unofficial[]", skin.id, false, id: "make_unofficial_#{skin_name}", disabled: disabled %>
+            <% end %>
 
             <% %w(cached featured in_chooser).each do |type| %>
               <% if skin.send("#{type}?") %>
-                <label for="make_un<%= type %>_<%= skin_name %>" class="action">
+                <%= label_tag "make_un#{type}_#{skin_name}", class: ["action", disabled ? "disabled" : ""] do %>
                   <%= 
                     case type 
                     when "cached"
@@ -55,10 +56,10 @@
                       ts("Not In Chooser")
                     end
                   %>  
-                  <%= check_box_tag "make_un#{type}[]", skin.id, false, :id => "make_un#{type}_#{skin_name}" %>
-                </label>
+                  <%= check_box_tag "make_un#{type}[]", skin.id, false, id: "make_un#{type}_#{skin_name}", disabled: disabled %>
+                <% end %>
               <% else %>
-                <label for="make_<%= type %>_<%= skin_name %>" class="action">
+                <%= label_tag "make_#{type}_#{skin_name}", class: ["action", disabled ? "disabled" : ""] do %>
                   <%= 
                     case type 
                     when "cached"
@@ -69,8 +70,8 @@
                       ts("Chooser")
                     end
                   %>  
-                  <%= check_box_tag "make_#{type}[]", skin.id, false, :id => "make_#{type}_#{skin_name}" %>            
-                </label>
+                  <%= check_box_tag "make_#{type}[]", skin.id, false, id: "make_#{type}_#{skin_name}", disabled: disabled %>
+                <% end %>
               <% end %>
             <% end %>            
           </td>
@@ -79,17 +80,19 @@
     </tbody>
     </table>
   </fieldset>
-  
-  <fieldset>
-    <legend><%= ts("Set Default Archive Skin") %></legend>
-    <h3 class="heading"><%= ts("Set Default Archive Skin") %></h3>
-    <p class="note"><%= ts("This will change the default skin FOR ALL USERS! Don't use unless you are REALLY SURE.") %></p>
-    <p>
-      <%= label_tag "set_default", ts("Default Skin Title: ") %>
-      <%= text_field_tag "set_default", AdminSetting.default_skin.try(:title), autocomplete_options("site_skins", data: { autocomplete_token_limit: 1 }) %>
-      <%= hidden_field_tag :last_updated_by, current_admin.id %>
-    </p>
-  </fieldset>
+
+  <% if policy(Skin).set_default? %>
+    <fieldset>
+      <legend><%= ts("Set Default Archive Skin") %></legend>
+      <h3 class="heading"><%= ts("Set Default Archive Skin") %></h3>
+      <p class="note"><%= ts("This will change the default skin FOR ALL USERS! Don't use unless you are REALLY SURE.") %></p>
+      <p>
+        <%= label_tag "set_default", ts("Default Skin Title: ") %>
+        <%= text_field_tag "set_default", AdminSetting.default_skin.try(:title), autocomplete_options("site_skins", data: { autocomplete_token_limit: 1 }) %>
+        <%= hidden_field_tag :last_updated_by, current_admin.id %>
+      </p>
+    </fieldset>
+  <% end %>
 
   <p class="submit"><%= submit_tag ts("Update") %></p>
 

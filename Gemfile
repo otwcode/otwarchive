@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-ruby '2.7.3'
+ruby "3.0.5"
 
 gem 'test-unit', '~> 3.2'
 
@@ -17,13 +17,7 @@ gem 'rails-controller-testing'
 
 # Database
 # gem 'sqlite3-ruby', require: 'sqlite3'
-gem 'mysql2', '0.5.2'
-
-#https://github.com/qertoip/transaction_retry
-# We don't use the isolation gem directly, but it needs to be
-# at the latest version to avoid errors
-gem 'transaction_isolation', '1.0.5'
-gem 'transaction_retry'
+gem "mysql2"
 
 gem 'rack-attack'
 
@@ -131,10 +125,9 @@ group :test do
   gem 'cucumber-rails', require: false
   gem 'launchy'    # So you can do Then show me the page
   gem 'delorean'
-  gem "faker"
   # Record and replay data from external URLs
   gem 'vcr', '~> 3.0', '>= 3.0.1'
-  gem 'webmock', '~> 3.7.6'
+  gem "webmock"
   gem 'timecop'
   gem 'cucumber-timecop', require: false
   # Code coverage
@@ -168,6 +161,7 @@ end
 group :test, :development, :staging do
   gem 'bullet', '>= 5.7.3'
   gem "factory_bot", require: false
+  gem "faker", require: false
 end
 
 # Deploy with Capistrano

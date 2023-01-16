@@ -1,6 +1,4 @@
 class ExternalAuthor < ApplicationRecord
-  include ActiveModel::ForbiddenAttributesProtection
-
   # send :include, Activation # eventually we will let users create new identities
 
   EMAIL_LENGTH_MIN = 3
