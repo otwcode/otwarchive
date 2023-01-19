@@ -139,11 +139,11 @@ Feature:
       And I press "Comment"
       And I view the work "Interesting" with comments
     Then I should see "mine (before)"
-    When it is currently 2 seconds from now
+    When it is currently 1 second from now
       And I visit the change username page for before
       And I fill in "New user name" with "after"
       And I fill in "Password" with "password"
       And I press "Change User Name"
       And I view the work "Interesting" with comments
-    Then I should see "after" within "h4.heading.byline"
+    Then I should see "after" within ".comment h4.byline"
       And I should not see "mine (before)"

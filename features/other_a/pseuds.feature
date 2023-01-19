@@ -127,10 +127,10 @@ Scenario: Comments reflect pseud changes immediately
     And I select "before" from "comment[pseud_id]"
     And I press "Comment"
     And I view the work "Interesting" with comments
-  Then I should see "before (myself)" within "h4.heading.byline"
+  Then I should see "before (myself)" within ".comment h4.byline"
 
-  When it is currently 2 seconds from now
+  When it is currently 1 second from now
     And I change the pseud "before" to "after"
     And I view the work "Interesting" with comments
-  Then I should see "after (myself)" within "h4.heading.byline"
+  Then I should see "after (myself)" within ".comment h4.byline"
     And I should not see "before (myself)"
