@@ -486,6 +486,18 @@ describe HtmlCleaner do
         end
       end
     end
+
+    ArchiveConfig.FIELDS_ALLOWING_HTML.each do |field|
+      it "preserves ruby-annotated HTML in #{field}" do
+        result = sanitize_value(field, "<ruby>BigText<rp>(</rp><rt>small_text</rt><rp>)</rp></ruby>")
+        expect(result).to include("<ruby>BigText<rp>(</rp><rt>small_text</rt><rp>)</rp></ruby>")
+      end
+
+      it "preserves ruby-annotated HTML without rp in #{field}" do
+        result = sanitize_value(field, "<ruby>BigText<rt>small_text</rt></ruby>")
+        expect(result).to include("<ruby>BigText<rt>small_text</rt></ruby>")
+      end
+    end
   end
 
   describe "fix_bad_characters" do
@@ -843,6 +855,12 @@ describe HtmlCleaner do
       expect(doc.xpath("./p[3]").children.to_s.strip).to eq("yadda")
     end
 
+    it "wraps ruby-annotated text in p tags" do
+      result = add_paragraphs_to_text("text with <ruby>ルビ<rp> (</rp><rt>RUBY</rt><rp>)</rp></ruby>")
+      doc = Nokogiri::HTML.fragment(result)
+      expect(doc.xpath("./p[1]").children.to_s.strip).to eq("text with <ruby>ルビ<rp> (</rp><rt>RUBY</rt><rp>)</rp></ruby>")
+    end
+
     it "should keep attributes of block elements" do
       result = add_paragraphs_to_text("<div class='foo'>some\n\ntext</div>")
       doc = Nokogiri::HTML.fragment(result)
@@ -864,10 +882,22 @@ describe HtmlCleaner do
       expect(doc.xpath("./p[contains(@class, 'bar')]").children.to_s.strip).to eq("foobar")
     end
 
-    it "should close unclosed tag within other tag" do
+    it "closes unclosed tag within other tag" do
       html = "<strong><em>unclosed</strong>"
       doc = Nokogiri::HTML.fragment(add_paragraphs_to_text(html))
       expect(doc.xpath("./p/strong/em").children.to_s.strip).to eq("unclosed")
+    end
+
+    it "closes unclosed rt tags" do
+      html = "<ruby>big text<rt>small text</ruby>"
+      result = add_paragraphs_to_text(html)
+      expect(result).to include("<ruby>big text<rt>small text</rt></ruby>")
+    end
+
+    it "closes unclosed rp tag" do
+      html = "<ruby>big text<rp>(</rp><rt>small text</rt><rp>)</ruby>"
+      result = add_paragraphs_to_text(html)
+      expect(result).to include("<ruby>big text<rp>(</rp><rt>small text</rt><rp>)</rp></ruby>")
     end
 
     it "should re-nest mis-nested tags" do

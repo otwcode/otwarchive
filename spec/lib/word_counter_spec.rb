@@ -85,4 +85,9 @@ describe WordCounter do
     word_counter.text = "\“嘿Bob,\” Alice说，‘啊？！？’"
     expect(word_counter.count).to eq(5)
   end
+
+  it "doesn't count parentheses in rp" do
+    word_counter.text = "<ruby>日本語<rp>（</rp><rt>にほんご</rt><rp>）</rp></ruby>"
+    expect(word_counter.count).to eq(7)
+  end
 end
