@@ -73,6 +73,8 @@ ACCOUNT_CREATION_ENABLED: false
 DAYS_TO_PURGE_UNACTIVATED: 7
 # number of invites users can request
 MAX_USER_INVITE_REQUEST: 10
+# number of accounts users can block
+MAX_BLOCKED_USERS: 2000
 # number of accounts users can mute
 MAX_MUTED_USERS: 1000
 
