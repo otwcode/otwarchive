@@ -83,6 +83,7 @@ el:
         informal: Χαιρετισμούς,
       creation:
         link_with_word_count: "%{creation_link} (%{word_count})"
+        title_with_chapter_number: Κεφάλαιο %{position} του έργου %{title}
         title_with_word_count: '"%{creation_title}" (%{word_count})'
         word_count:
           one: "%{count} λέξη"
@@ -358,12 +359,12 @@ el:
         instructions: Μπορείτε να αποδεχθείτε ή να απορρίψετε αυτό το αίτημα στη σελίδα
           %{page_name}.
         page_name: Co-Creator Requests (Αιτήματα Συνδημιουργού)
-      intro_chapter: 'Ο χρήστης/Η χρήστρια %{inviting_user} προσκάλεσε το ψευδώνυμό
-        σας %{pseud} για να συμπεριληφθεί ως συνδημιουργός στο ακόλουθο κεφάλαιο:'
-      intro_series: 'Ο χρήστης/Η χρήστρια %{inviting_user} προσκάλεσε το ψευδώνυμό
-        σας %{pseud} για να συμπεριληφθεί ως συνδημιουργός στην ακόλουθη σειρά έργων:'
-      intro_work: 'Ο χρήστης/Η χρήστρια %{inviting_user} προσκάλεσε το ψευδώνυμό σας
-        %{pseud} για να συμπεριληφθεί ως συνδημιουργός στο ακόλουθο έργο:'
+      intro_chapter: 'Ο χρήστης %{inviting_user} προσκάλεσε το ψευδώνυμό σας %{pseud}
+        να συμπεριληφθεί ως συνδημιουργός στο ακόλουθο κεφάλαιο:'
+      intro_series: 'Ο χρήστης %{inviting_user} προσκάλεσε το ψευδώνυμό σας %{pseud}
+        να συμπεριληφθεί ως συνδημιουργός στην ακόλουθη σειρά:'
+      intro_work: 'Ο χρήστης %{inviting_user} προσκάλεσε το ψευδώνυμό σας %{pseud}
+        να συμπεριληφθεί ως συνδημιουργός στο ακόλουθο έργο:'
       subject: "[%{app_name}] Αίτημα συνδημιουργού"
       text:
         creation: "%{title} (%{url}) της/ου %{pseuds}"

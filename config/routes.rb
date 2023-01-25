@@ -180,7 +180,7 @@ Otwarchive::Application.routes.draw do
         put :set_spam
       end
     end
-    resources :users, controller: 'admin_users' do
+    resources :users, controller: "admin_users", only: [:index, :show] do
       member do
         get :confirm_delete_user_creations
         post :destroy_user_creations
@@ -193,6 +193,7 @@ Otwarchive::Application.routes.draw do
         post :bulk_search
         post :update
         post :update_status
+        post :update_next_of_kin
       end
     end
     resources :invitations, controller: 'admin_invitations' do
@@ -309,6 +310,16 @@ Otwarchive::Application.routes.draw do
         end
       end
     end
+    namespace :muted do
+      resources :users, only: [:index, :create, :destroy] do
+        collection do
+          get :confirm_mute
+        end
+        member do
+          get :confirm_unmute
+        end
+      end
+    end
   end
 
   #### WORKS ####
@@ -372,8 +383,6 @@ Otwarchive::Application.routes.draw do
 
   resources :external_works do
     collection do
-      get :compare
-      post :merge
       get :fetch
     end
     resources :bookmarks

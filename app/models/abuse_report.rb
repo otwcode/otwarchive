@@ -11,6 +11,9 @@ class AbuseReport < ApplicationRecord
                                              characters long.',
                                 max: ArchiveConfig.FEEDBACK_SUMMARY_MAX_DISPLAYED)
 
+  # It doesn't have the type set properly in the database, so override it here:
+  attribute :summary_sanitizer_version, :integer, default: 0
+
   validate :check_for_spam
   def check_for_spam
     approved = logged_in_with_matching_email? || !Akismetor.spam?(akismet_attributes)
