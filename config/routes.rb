@@ -310,6 +310,16 @@ Otwarchive::Application.routes.draw do
         end
       end
     end
+    namespace :muted do
+      resources :users, only: [:index, :create, :destroy] do
+        collection do
+          get :confirm_mute
+        end
+        member do
+          get :confirm_unmute
+        end
+      end
+    end
   end
 
   #### WORKS ####

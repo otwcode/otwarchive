@@ -69,6 +69,16 @@ class User < ApplicationRecord
           -> { where(blocker: User.current_user) },
           class_name: "Block", foreign_key: :blocked_id, inverse_of: :blocked
 
+  has_many :mutes_as_muted, class_name: "Mute", dependent: :delete_all, inverse_of: :muted, foreign_key: :muted_id
+  has_many :mutes_as_muter, class_name: "Mute", dependent: :delete_all, inverse_of: :muter, foreign_key: :muter_id
+  has_many :muted_users, through: :mutes_as_muter, source: :muted
+
+  # The mute (if it exists) with User.current_user as the muter and this
+  # user as the muted:
+  has_one :mute_by_current_user,
+          -> { where(muter: User.current_user) },
+          class_name: "Mute", foreign_key: :muted_id, inverse_of: :muted
+
   has_many :skins, foreign_key: "author_id", dependent: :nullify
   has_many :work_skins, foreign_key: "author_id", dependent: :nullify
 

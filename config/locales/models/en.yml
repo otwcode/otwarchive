@@ -11,6 +11,16 @@ en:
               blank: "Sorry, we couldn't find a user matching that name."
               self: "Sorry, you can't block yourself."
               official: "Sorry, you can't block an official account."
+        mute:
+          format: "%{message}"
+          attributes:
+            muted_id:
+              taken: "You have already muted that user."
+            muted:
+              blank: "Sorry, we couldn't find a user matching that name."
+              self: "Sorry, you can't mute yourself."
+              official: "Sorry, you can't mute an official account."
+              limit: "Sorry, you have muted too many accounts."
         comment:
           attributes:
             user:
