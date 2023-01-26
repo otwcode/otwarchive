@@ -38,6 +38,24 @@ describe AbuseReport do
       end
     end
 
+    context "missing work id" do
+      expected_url = ""
+      let(:missing_work_id) { 
+        work = create(:work)
+
+        chapter_id = work.first_chapter.id.to_s
+        work_id = work.id.to_s
+
+        work_url = "http://archiveofourown.org/chapters/" + chapter_id
+        expected_url = "http://archiveofourown.org/works/" + work_id + "/chapters/" + chapter_id
+
+        build(:abuse_report, url: work_url)
+       }
+      it "work id added" do
+        expect(missing_work_id.add_work_id_to_url).to eq(expected_url)
+      end
+    end
+
     context "invalid url" do
       let(:invalid_url) { build(:abuse_report, url: "nothing before #{ArchiveConfig.APP_URL}") }
       it "text before url" do
