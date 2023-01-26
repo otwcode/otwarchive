@@ -37,11 +37,11 @@ class Kudo < ApplicationRecord
   end
 
   validates :ip_address,
-            uniqueness: { scope: [:commentable_id, :commentable_type], case_sensitive: false },
+            uniqueness: { scope: [:commentable_id, :commentable_type] },
             if: proc { |kudo| kudo.ip_address.present? }
 
   validates :user_id,
-            uniqueness: { scope: [:commentable_id, :commentable_type], case_sensitive: false },
+            uniqueness: { scope: [:commentable_id, :commentable_type] },
             if: proc { |kudo| kudo.user.present? }
 
   scope :with_user, -> { where("user_id IS NOT NULL") }

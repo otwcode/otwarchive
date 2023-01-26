@@ -99,7 +99,7 @@ class AbuseReport < ApplicationRecord
                                                  1.month.ago,
                                                  "%#{work_params_only}%").count
       if existing_reports_total >= ArchiveConfig.ABUSE_REPORTS_PER_WORK_MAX
-        errors[:base] << message
+        errors.add(:base, message)
       end
     elsif url =~ /\/users\/\w+/
       user_params_only = url.match(/\/users\/\w+\//).to_s
@@ -108,7 +108,7 @@ class AbuseReport < ApplicationRecord
                                                  1.month.ago,
                                                  "%#{user_params_only}%").count
       if existing_reports_total >= ArchiveConfig.ABUSE_REPORTS_PER_USER_MAX
-        errors[:base] << message
+        errors.add(:base, message)
       end
     end
   end
@@ -120,9 +120,9 @@ class AbuseReport < ApplicationRecord
                                                email).count
     return if existing_reports_total < ArchiveConfig.ABUSE_REPORTS_PER_EMAIL_MAX
 
-    errors[:base] << ts("You have reached our daily reporting limit. To keep our
-                        volunteers from being overwhelmed, please do not seek
-                        out violations to report, but only report violations you
-                        encounter during your normal browsing.")
+    errors.add(:base, ts("You have reached our daily reporting limit. To keep our
+                          volunteers from being overwhelmed, please do not seek
+                          out violations to report, but only report violations you
+                          encounter during your normal browsing."))
   end
 end
