@@ -2,12 +2,22 @@ Otwarchive::Application.routes.draw do
 
   devise_scope :admin do
     get "admin/logout" => "admin/sessions#confirm_logout"
+
+    # Rails emulates some HTTP methods over POST, so password resets (PUT /admin/password)
+    # look the same as password reset requests (POST /admin/password).
+    #
+    # To rate limit them differently at nginx, we set up an alias for
+    # the first request type.
+    put "admin/password/reset" => "admin/passwords#update"
   end
 
   devise_for :admin,
              module: "admin",
-             only: :sessions,
-             controllers: { sessions: "admin/sessions" },
+             only: [:sessions, :passwords],
+             controllers: {
+               sessions: "admin/sessions",
+               passwords: "admin/passwords"
+             },
              path_names: {
                sign_in: "login",
                sign_out: "logout"
@@ -180,7 +190,7 @@ Otwarchive::Application.routes.draw do
         put :set_spam
       end
     end
-    resources :users, controller: 'admin_users' do
+    resources :users, controller: "admin_users", only: [:index, :show] do
       member do
         get :confirm_delete_user_creations
         post :destroy_user_creations
@@ -193,6 +203,7 @@ Otwarchive::Application.routes.draw do
         post :bulk_search
         post :update
         post :update_status
+        post :update_next_of_kin
       end
     end
     resources :invitations, controller: 'admin_invitations' do
@@ -309,6 +320,16 @@ Otwarchive::Application.routes.draw do
         end
       end
     end
+    namespace :muted do
+      resources :users, only: [:index, :create, :destroy] do
+        collection do
+          get :confirm_mute
+        end
+        member do
+          get :confirm_unmute
+        end
+      end
+    end
   end
 
   #### WORKS ####
@@ -372,8 +393,6 @@ Otwarchive::Application.routes.draw do
 
   resources :external_works do
     collection do
-      get :compare
-      post :merge
       get :fetch
     end
     resources :bookmarks

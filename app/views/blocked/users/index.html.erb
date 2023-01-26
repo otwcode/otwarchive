@@ -1,7 +1,14 @@
 <h2 class="heading"><%= t(".title") %></h2>
 
+<!--subnav-->
+<ul class="navigation actions" role="navigation">
+  <h3 class="landmark heading"><%= t("a11y.navigation") %></h3>
+  <li><%= span_if_current t(".blocked_users"), user_blocked_users_path %></li>
+  <li><%= span_if_current t("muted.users.index.muted_users"), user_muted_users_path %></li>
+</ul>
+
 <div class="notice">
-  <p><%= t(".will.intro") %></p>
+  <p><%= t(".will.intro", block_limit: number_with_delimiter(ArchiveConfig.MAX_BLOCKED_USERS), count: ArchiveConfig.MAX_BLOCKED_USERS) %></p>
 
   <ul>
     <li><%= t(".will.commenting") %></li>
@@ -15,6 +22,8 @@
     <li><%= t(".will_not.comments_on_works") %></li>
     <li><%= t(".will_not.comments_elsewhere") %></li>
   </ul>
+
+  <p><%= t(".mute_users_instead_html", muted_users_link: link_to(t(".muted_users_link_text"), user_muted_users_path(@user))) %></p>
 </div>
 
 <% # form for blocking users %>
