@@ -44,12 +44,8 @@ class AbuseReport < ApplicationRecord
   # If the URL ends without a / at the end, add it:
   # url_is_not_over_reported uses the / so "/works/1234" isn't a match
   # for "/works/123"
-  before_validation :clean_url, on: :create
+  before_validation :add_work_id_to_url, :clean_url, on: :create
   def clean_url
-    if url =~ %r{(chapters/\d+)} && url !~ %r{(works/\d+)}
-      add_work_id_to_url
-    end
-
     # Work URLs: "works/123"
     # Profile URLs: "users/username"
     if url =~ /(works\/\d+)/ || url =~ /(users\/\w+)/
@@ -64,8 +60,10 @@ class AbuseReport < ApplicationRecord
   end
 
   # Gets the chapter id from the URL and tries to get the work id
-  # If successfull, the work id is then added to the URL in front of "/chapters"
+  # If successful, the work id is then added to the URL in front of "/chapters"
   def add_work_id_to_url
+    return unless url =~ %r{(chapters/\d+)} && url !~ %r{(works/\d+)}
+
     chapter_regex = %r{(chapters/)(\d+)}
     regex_groups = chapter_regex.match url
     chapter_id = regex_groups[2]
