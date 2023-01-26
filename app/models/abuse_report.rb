@@ -39,12 +39,13 @@ class AbuseReport < ApplicationRecord
 
   scope :by_date, -> { order('created_at DESC') }
 
+  before_validation :add_work_id_to_url, :clean_url, on: :create
+  
   # Clean work or profile URLs so we can prevent the same URLs from
   # getting reported too many times.
   # If the URL ends without a / at the end, add it:
   # url_is_not_over_reported uses the / so "/works/1234" isn't a match
   # for "/works/123"
-  before_validation :add_work_id_to_url, :clean_url, on: :create
   def clean_url
     # Work URLs: "works/123"
     # Profile URLs: "users/username"
