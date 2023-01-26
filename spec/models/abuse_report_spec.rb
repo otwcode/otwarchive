@@ -50,7 +50,8 @@ describe AbuseReport do
         expected_url = "http://archiveofourown.org/works/" + work_id + "/chapters/" + chapter_id
 
         build(:abuse_report, url: work_url)
-       }
+      }
+
       it "work id added" do
         expect(missing_work_id.add_work_id_to_url).to eq(expected_url)
       end
