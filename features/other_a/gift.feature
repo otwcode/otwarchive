@@ -19,11 +19,6 @@ Feature: Create Gifts
       And I am logged in as "gifter" with password "something"
       And I set up the draft "GiftStory1"
 
-  Scenario: Gifts page without parameters should return error
-    When I go to the gifts page
-    Then I should be on the home page
-      And I should see "Whose gifts did you want to see?"
-
   Scenario: Gifts page for recipient should show recipient's gifts
     When I give the work to "giftee1"
       And I press "Post"

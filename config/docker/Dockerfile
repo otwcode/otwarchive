@@ -1,4 +1,4 @@
-FROM ruby:2.7.3
+FROM ruby:3.0.5-buster
 
 # Install additional packages
 RUN apt-get update             && \
@@ -6,7 +6,6 @@ RUN apt-get update             && \
         calibre                   \
         default-mysql-client      \
         phantomjs                 \
-        pwgen                     \
         shared-mime-info          \
         wkhtmltopdf               \
         zip
@@ -19,7 +18,7 @@ VOLUME /otwa
 # Install ruby packages
 COPY Gemfile .
 COPY Gemfile.lock .
-RUN gem install bundler -v 1.17.3 && bundle install
+RUN gem install bundler -v 2.2.33 && bundle install
 
 # Default command to run in a new container
 EXPOSE 3000
