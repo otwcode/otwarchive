@@ -653,7 +653,7 @@ Otwarchive::Application.routes.draw do
   get "/admin/admin_users/troubleshoot/:id" => "admin/admin_users#troubleshoot", as: :troubleshoot_admin_user
 
   # TODO: rewrite the autocomplete controller to deal with the fact that
-  # there are fifty different actions going on in there
+  # there are 21 different actions going on in there
   %w[
     pseud
     tag
