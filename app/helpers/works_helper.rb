@@ -4,22 +4,22 @@ module WorksHelper
   def work_meta_list(work, chapter = nil)
     # if we're previewing, grab the unsaved date, else take the saved first chapter date
     published_date = (chapter && work.preview_mode) ? chapter.published_at : work.first_chapter.published_at
-    list = [[ts('Published:'), 'published', localize(published_date)],
-            [ts('Words:'), 'words', work.word_count],
-            [ts('Chapters:'), 'chapters', chapter_total_display(work)]]
+    list = [[ts("Published:"), "published", localize(published_date)],
+            [ts("Words:"), "words", number_with_delimiter(work.word_count)],
+            [ts("Chapters:"), "chapters", chapter_total_display(work)]]
 
     if (comment_count = work.count_visible_comments) > 0
-      list.concat([[ts('Comments:'), 'comments', work.count_visible_comments.to_s]])
+      list.concat([[ts("Comments:"), "comments", number_with_delimiter(work.count_visible_comments)]])
     end
 
     if work.all_kudos_count > 0
-      list.concat([[ts('Kudos:'), 'kudos', work.all_kudos_count.to_s]])
+      list.concat([[ts("Kudos:"), "kudos", number_with_delimiter(work.all_kudos_count)]])
     end
 
     if (bookmark_count = work.public_bookmarks_count) > 0
-      list.concat([[ts('Bookmarks:'), 'bookmarks', link_to(bookmark_count.to_s, work_bookmarks_path(work))]])
+      list.concat([[ts("Bookmarks:"), "bookmarks", link_to(number_with_delimiter(bookmark_count), work_bookmarks_path(work))]])
     end
-    list.concat([[ts('Hits:'), 'hits', work.hits]])
+    list.concat([[ts("Hits:"), "hits", number_with_delimiter(work.hits)]])
 
     if work.chaptered? && work.revised_at
       prefix = work.is_wip ? ts('Updated:') : ts('Completed:')
@@ -174,7 +174,7 @@ module WorksHelper
   # 1/1, 2/3, 5/?, etc.
   def chapter_total_display(work)
     current = work.posted? ? work.number_of_posted_chapters : 1
-    current.to_s + '/' + work.wip_length.to_s
+    number_with_delimiter(current) + "/" + number_with_delimiter(work.wip_length)
   end
 
   # For works that are more than 1 chapter, returns "current #/expected #" of chapters
