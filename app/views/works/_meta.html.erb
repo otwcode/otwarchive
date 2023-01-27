@@ -35,7 +35,7 @@
       <dt class="language">
         <%= ts("Language:") %>
       </dt>
-      <dd class="language">
+      <dd class="language" lang="<%= @work.language.short %>">
         <%= @work.language.name %>
       </dd>
     <% end %>
