@@ -85,7 +85,7 @@
         <%= link_to_help "work-search-language-help" %>
       </dt>
       <dd>
-        <%= f.collection_select :language_id, @languages, :short, :name, include_blank: true %>
+        <%= f.select(:language_id, @languages.map { |language| [language.name, language.short, { lang: language.short }] }, include_blank: true) %>
       </dd>
     </dl>
   </fieldset>
