@@ -6,7 +6,6 @@
 <dd class="language required">
   <select id="work_language_id" name="work[language_id]">
     <option value=""><%= ts("Please select a language") %></option>
-    <%= options_from_collection_for_select(sorted_languages, :id, :name,
-      @work.language_id) %>
+    <%= options_for_select(sorted_languages.map { |language| [language.name, language.id, { lang: language.short }] }, @work.language_id) %>
   </select>
 </dd>
