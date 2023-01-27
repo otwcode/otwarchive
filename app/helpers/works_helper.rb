@@ -6,7 +6,7 @@ module WorksHelper
     published_date = (chapter && work.preview_mode) ? chapter.published_at : work.first_chapter.published_at
     list = [[ts('Published:'), 'published', localize(published_date)],
             [ts('Words:'), 'words', work.word_count],
-            [ts('Chapters:'), 'chapters', work.chapter_total_display]]
+            [ts('Chapters:'), 'chapters', chapter_total_display(work)]]
 
     if (comment_count = work.count_visible_comments) > 0
       list.concat([[ts('Comments:'), 'comments', work.count_visible_comments.to_s]])
@@ -128,7 +128,7 @@ module WorksHelper
     tags = work.tags.group_by(&:type)
     text = "<p>by #{byline(work, { visibility: 'public', full_path: true })}</p>"
     text << work.summary if work.summary
-    text << "<p>Words: #{work.word_count}, Chapters: #{work.chapter_total_display}, Language: #{work.language ? work.language.name : 'English'}</p>"
+    text << "<p>Words: #{work.word_count}, Chapters: #{chapter_total_display(work)}, Language: #{work.language ? work.language.name : 'English'}</p>"
     unless work.series.count == 0
       text << "<p>Series: #{series_list_for_feeds(work)}</p>"
     end
@@ -171,6 +171,12 @@ module WorksHelper
     Language.default_order
   end
 
+  # 1/1, 2/3, 5/?, etc.
+  def chapter_total_display(work)
+    current = work.posted? ? work.number_of_posted_chapters : 1
+    current.to_s + '/' + work.wip_length.to_s
+  end
+
   # For works that are more than 1 chapter, returns "current #/expected #" of chapters
   # (e.g. 3/5, 2/?), with the current # linked to that chapter. If the work is 1 chapter,
   # returns the un-linked version.
@@ -182,7 +188,7 @@ module WorksHelper
         "/" +
         work.wip_length.to_s
     else
-      work.chapter_total_display
+      chapter_total_display(work)
     end
   end
 end

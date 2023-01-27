@@ -42,7 +42,7 @@
           <%= @work.is_wip ? ts("Updated") : ts("Completed") %>: <%= l(@work.revised_at.to_date) %>
         <% end %>
         <% if @work.chaptered? %>
-          <%= ts("Chapters") %>: <%= @work.chapter_total_display %>
+          <%= ts("Chapters") %>: <%= chapter_total_display(@work) %>
         <% end %>
         <%= ts("Words") %>: <%= @work.word_count %>
       </dd>
