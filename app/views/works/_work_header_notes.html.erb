@@ -14,7 +14,8 @@
     <% for related_work in @work.approved_related_works %>
       <% if related_work.translation %>
         <li>
-          <%= ts('Translation into %{language} available: ', :language => related_work.work.language.name) %>
+          <%= ts("Translation into %{language} available: ",
+                language: tag.span(related_work.work.language.name, lang: related_work.work.language.short)).html_safe %>
           <% if related_work.work.restricted? && !logged_in? %>
             <%= ts("[Restricted Work] by") %> <%= byline(related_work.work) %>. <%= ts("Log in to view.") %>
           <% else %>
