@@ -80,7 +80,7 @@
   <dl class="stats">
     <% if work.language.present? %>
       <dt class="language"><%= ts("Language") %>:</dt>
-      <dd class="language"><%= work.language.name %></dd>
+      <dd class="language" lang="<%= work.language.short %>"><%= work.language.name %></dd>
     <% end %>
     <dt class="words"><%= ts('Words') %>:</dt>
     <dd class="words"><%= number_with_delimiter(work.word_count) %></dd>
