@@ -34,7 +34,7 @@
         <%= link_to_help "languages-help" %>
       </dt>
       <dd>
-        <%= f.collection_select(:language_id, sorted_languages, :id, :name, prompt: " ") %>
+        <%= f.select(:language_id, sorted_languages.map { |language| [language.name, language.id, { lang: language.short }] }, prompt: " ") %>
       </dd>
       <dt>
         <%= f.label :summary, ts("Creator's Summary") %>
