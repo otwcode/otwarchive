@@ -22,7 +22,7 @@
     <tbody>
       <% for locale in @locales %>
         <tr>
-          <th scope="row"><%= locale.name %></th>
+          <th scope="row" lang="<%= locale.language.short %>"><%= locale.name %></th>
           <td><%= locale.iso %></td>
           <td><%= locale.main %></td>
           <td><%= locale.email_enabled %></td>
@@ -38,7 +38,7 @@
 <% else %>
   <ul>
     <% for locale in @locales %>
-      <li><%= locale.name %></li>
+      <li lang="<%= locale.language.short %>"><%= locale.name %></li>
     <% end %>
   </ul>
   <p class="navigation actions" role="navigation">
