@@ -64,7 +64,7 @@ describe WordCounter do
     end
   end
 
-  %w[— -- - ! ? . , / " ' |].each do |char| #"
+  %w[— -- - ! ? . , / " ' |].each do |char|
     it "should not count lone #{char} as words" do
       word_counter.text = "one #{char} two #{char} three"
       expect(word_counter.count).to eq(3)
