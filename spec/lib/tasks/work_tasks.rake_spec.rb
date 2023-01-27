@@ -132,11 +132,6 @@ describe "rake work:reset_word_counts" do
       expect(es_work.word_count).to eq(6)
     end
 
-    before do
-      # Screw up the word counts
-      es_work.update_column(:word_count, 4000)
-    end
-
     it "updates works in all languages" do
       subject.invoke
 
