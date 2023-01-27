@@ -57,7 +57,7 @@ module WorksHelper
 
   def language_link(work)
     if work.respond_to?(:language) && work.language
-      link_to work.language.name, work.language
+      link_to work.language.name, work.language, lang: work.language.short
     else
       "N/A"
     end
