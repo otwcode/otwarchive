@@ -12,8 +12,6 @@ updates:
     # Disable version updates; this has no impact on security updates,
     # which have a separate, internal limit of 10 open pull requests.
     open-pull-requests-limit: 0
-    allow:
-      - dependency-type: "direct"
 
   - package-ecosystem: "github-actions"
     directory: "/"
