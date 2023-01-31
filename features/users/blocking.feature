@@ -39,7 +39,7 @@ Feature: Blocking
       And I am logged in as "blocker"
     When I go to pest's user page
       And I follow "Block"
-    Then I should see "Sorry, you can't block an official account."
+    Then I should see "Sorry, you can't block an official user."
       And I should not see a "Yes, Block User" button
 
   Scenario: Users cannot block themselves
