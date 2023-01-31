@@ -488,7 +488,7 @@ en:
         sure_html: "Are you sure you want to %{unmute} %{username}?"
         resume:
           intro: "Unmuting a user allows you to:"
-          see_content: "see their works, series, bookmarks and comments on the site"
+          see_content: "see their works, series, bookmarks, and comments on the site"
   preferences:
     index:
       blocked_users: "Blocked Users"
