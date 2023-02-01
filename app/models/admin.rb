@@ -8,6 +8,7 @@ class Admin < ApplicationRecord
          :recoverable,
          :validatable,
          password_length: ArchiveConfig.ADMIN_PASSWORD_LENGTH_MIN..ArchiveConfig.ADMIN_PASSWORD_LENGTH_MAX,
+         reset_password_within: ArchiveConfig.DAYS_UNTIL_ADMIN_RESET_PASSWORD_LINK_EXPIRES.days,
          lock_strategy: :none,
          unlock_strategy: :none
 
