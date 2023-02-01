@@ -19,6 +19,9 @@ REMEMBERED_SESSION_LENGTH_IN_MONTHS: 3
 # also change the message (and vice versa).
 DAYS_UNTIL_RESET_PASSWORD_LINK_EXPIRES: 7
 
+# This also affects the link included in the admin account creation email.
+DAYS_UNTIL_ADMIN_RESET_PASSWORD_LINK_EXPIRES: 5
+
 # email addresses
 RETURN_ADDRESS: 'do-not-reply@example.org'
 SPAM_ALERT_ADDRESS: 'abuse-discuss@example.org'

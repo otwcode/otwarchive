@@ -36,6 +36,19 @@ Feature: Authenticate Admin Users
   Then I should see "Your password has been changed successfully. You are now signed in."
     And I should see "Hi, admin!"
 
+  Scenario: Set password link expires.
+  Given the following admin exists
+    | login | password     | email             |
+    | admin | testpassword | admin@example.com |
+  Then 1 email should be delivered to "admin@example.com"
+  When it is past the admin password reset token's expiration date
+    And I follow "follow this link to set your password" in the email
+  Then I should see "Set My Admin Password"
+  When I fill in "New password" with "newpassword"
+    And I fill in "Confirm new password" with "newpassword"
+    And I press "Set Admin Password"
+  Then I should see "Reset password token has expired, please request a new one"
+
   Scenario: Admin can log in.
   Given I have no users
     And the following admin exists
@@ -87,6 +100,26 @@ Feature: Authenticate Admin Users
     And I press "Set Admin Password"
   Then I should see "Your password has been changed successfully. You are now signed in."
     And I should see "Hi, admin!"
+
+  Scenario: Reset password link expires.
+  Given the following admin exists
+    | login | password     | email             |
+    | admin | testpassword | admin@example.com |
+    And all emails have been delivered
+  When I go to the admin login page
+    And I follow "Forgot admin password?"
+  Then I should see "Forgotten your admin password?"
+  When I fill in "Admin user name" with "admin"
+    And I press "Reset Admin Password"
+  Then I should see "Check your email for instructions on how to reset your password."
+    And 1 email should be delivered to "admin@example.com"
+  When it is past the admin password reset token's expiration date
+    And I follow "Change my password" in the email
+  Then I should see "Set My Admin Password"
+  When I fill in "New password" with "newpassword"
+    And I fill in "Confirm new password" with "newpassword"
+    And I press "Set Admin Password"
+  Then I should see "Reset password token has expired, please request a new one"
 
   Scenario: Locked admin cannot sign in.
   Given the admin "admin" is locked

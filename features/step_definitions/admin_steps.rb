@@ -298,6 +298,11 @@ When "the search criteria contains the ID for {string}" do |login|
   fill_in("user_id", with: user_id)
 end
 
+When "it is past the admin password reset token's expiration date" do
+  days = ArchiveConfig.DAYS_UNTIL_ADMIN_RESET_PASSWORD_LINK_EXPIRES + 1
+  step "it is currently #{days} days from now"
+end
+
 ### THEN
 
 Then (/^the translation information should still be filled in$/) do
