@@ -588,13 +588,35 @@ describe HtmlCleaner do
       expect(doc.xpath(".//br")).to be_empty
     end
 
-    %w[figure dl h1 h2 h3 h4 h5 h6 ol pre table ul].each do |tag|
+    %w[figure dl h1 h2 h3 h4 h5 h6 ol pre summary table ul].each do |tag|
       it "does not wrap #{tag} in p tags" do
         result = add_paragraphs_to_text("aa <#{tag}>foo</#{tag}> bb")
         doc = Nokogiri::HTML.fragment(result)
         expect(doc.xpath(".//p").size).to eq(2)
         expect(doc.xpath(".//#{tag}").children.to_s.strip).to eq("foo")
       end
+    end
+
+    it "does not wrap details in p tags" do
+      html = <<~HTML
+        aa
+
+        <details>
+          <summary>Automated Status: Operational</summary>
+          <p>Velocity: 12m/s</p>
+          <p>Direction: North</p>
+        </details>
+
+        bb
+      HTML
+
+      result = add_paragraphs_to_text(html)
+      doc = Nokogiri::HTML.fragment(result)
+
+      # aa, velocity..., direction..., bb
+      expect(doc.xpath(".//p").size).to eq(4)
+      expect(doc.xpath("./p/details").size).to eq(0)
+      expect(doc.xpath("./details/p").size).to eq(2)
     end
 
     ["ol", "ul"].each do |tag|
@@ -656,6 +678,25 @@ describe HtmlCleaner do
       expect(doc.xpath(".//br")).to be_empty
     end
 
+    it "does not add paragraphs inside summary" do
+      html = <<~HTML
+        <details>
+          <summary>Automated
+          
+          Status: 
+          
+          Operational</summary>
+          <p>Velocity: 12m/s</p>
+          <p>Direction: North</p>
+       </details>
+      HTML
+
+      result = add_paragraphs_to_text(html)
+      doc = Nokogiri::HTML.fragment(result)
+
+      expect(doc.xpath("./summary/p")).to be_empty
+    end
+
     it "does not add paragraphs inside figure" do
       html = <<~HTML
         <figure>
@@ -702,6 +743,46 @@ describe HtmlCleaner do
       expect(doc.xpath("./figure/figcaption/em/text()").to_s.strip).to eq("Take picture")
       expect(doc.xpath("./figure/figcaption/em/a/text()").to_s.strip).to eq("here")
       expect(doc.xpath("./figure/figcaption/em/a/@href").to_s.strip).to eq("http://example.com/link")
+    end
+
+    it "allows other HTML elements inside details" do
+      html = <<~HTML
+        <details>
+          <summary><em>Take picture <a href="http://example.com/link">here</a></em></summary>
+          <img src="http://example.com/Camera-icon.svg">
+          <p>Velocity: 12m/s</p>
+          <p>Direction: North</p>
+        </details>
+
+        <figure>
+          <img src="http://example.com/Camera-icon.svg">
+          <figcaption><em>Take picture <a href="http://example.com/link">here</a></em></figcaption>
+        </figure>
+      HTML
+
+      result = add_paragraphs_to_text(html)
+      doc = Nokogiri::HTML.fragment(result)
+
+      expect(doc.xpath("./figure/figcaption/em/text()").to_s.strip).to eq("Take picture")
+      expect(doc.xpath("./figure/figcaption/em/a/text()").to_s.strip).to eq("here")
+      expect(doc.xpath("./figure/figcaption/em/a/@href").to_s.strip).to eq("http://example.com/link")
+    end
+
+    it "allows other HTML elements inside summary" do
+      html = <<~HTML
+        <details>
+          <summary><em>Automated Status: <a href="http://example.com/link">Operational</a></em></summary>
+          <p>Velocity: 12m/s</p>
+          <p>Direction: North</p>
+        </details>
+      HTML
+
+      result = add_paragraphs_to_text(html)
+      doc = Nokogiri::HTML.fragment(result)
+
+      expect(doc.xpath("./details/summary/em/text()").to_s.strip).to eq("Automated Status:")
+      expect(doc.xpath("./details/summary/em/a/text()").to_s.strip).to eq("Operational")
+      expect(doc.xpath("./details/summary/em/a/@href").to_s.strip).to eq("http://example.com/link")
     end
 
     %w(address h1 h2 h3 h4 h5 h6 p pre).each do |tag|
@@ -810,7 +891,7 @@ describe HtmlCleaner do
       expect(doc.xpath("./p[2]").children.to_s.strip).to match(/ yay\Z/)
     end
 
-    %w(blockquote center div).each do |tag|
+    %w(blockquote center div details).each do |tag|
       it "should convert double linebreaks inside #{tag} tag" do
         result = add_paragraphs_to_text("<#{tag}>some\n\ntext</#{tag}>")
         doc = Nokogiri::HTML.fragment(result)
