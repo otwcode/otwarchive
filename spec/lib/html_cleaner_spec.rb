@@ -745,29 +745,6 @@ describe HtmlCleaner do
       expect(doc.xpath("./figure/figcaption/em/a/@href").to_s.strip).to eq("http://example.com/link")
     end
 
-    it "allows other HTML elements inside details" do
-      html = <<~HTML
-        <details>
-          <summary><em>Take picture <a href="http://example.com/link">here</a></em></summary>
-          <img src="http://example.com/Camera-icon.svg">
-          <p>Velocity: 12m/s</p>
-          <p>Direction: North</p>
-        </details>
-
-        <figure>
-          <img src="http://example.com/Camera-icon.svg">
-          <figcaption><em>Take picture <a href="http://example.com/link">here</a></em></figcaption>
-        </figure>
-      HTML
-
-      result = add_paragraphs_to_text(html)
-      doc = Nokogiri::HTML.fragment(result)
-
-      expect(doc.xpath("./figure/figcaption/em/text()").to_s.strip).to eq("Take picture")
-      expect(doc.xpath("./figure/figcaption/em/a/text()").to_s.strip).to eq("here")
-      expect(doc.xpath("./figure/figcaption/em/a/@href").to_s.strip).to eq("http://example.com/link")
-    end
-
     it "allows other HTML elements inside summary" do
       html = <<~HTML
         <details>
