@@ -681,14 +681,16 @@ describe HtmlCleaner do
     it "does not add paragraphs inside summary" do
       html = <<~HTML
         <details>
-          <summary>Automated
+          <summary>
+            Automated
           
-          Status: 
-          
-          Operational</summary>
+            Status: 
+            
+            Operational
+          </summary>
           <p>Velocity: 12m/s</p>
           <p>Direction: North</p>
-       </details>
+        </details>
       HTML
 
       result = add_paragraphs_to_text(html)
@@ -868,7 +870,7 @@ describe HtmlCleaner do
       expect(doc.xpath("./p[2]").children.to_s.strip).to match(/ yay\Z/)
     end
 
-    %w(blockquote center div details).each do |tag|
+    %w[blockquote center div details].each do |tag|
       it "should convert double linebreaks inside #{tag} tag" do
         result = add_paragraphs_to_text("<#{tag}>some\n\ntext</#{tag}>")
         doc = Nokogiri::HTML.fragment(result)
