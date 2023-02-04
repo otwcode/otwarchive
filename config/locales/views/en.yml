@@ -1,4 +1,6 @@
 en:
+  a11y:
+    navigation: "Navigation"
   admin:
     admin_options:
       delete:
@@ -52,6 +54,32 @@ en:
         navigation:
           queue: "Manage Queue"
           requests: "Manage Requests"
+    passwords:
+      new:
+        page_heading: "Forgotten your admin password?"
+        instructions: "If you've forgotten or would like to change your admin password, we can send instructions that will allow you to reset it. Please tell us the user name for your admin account."
+        reset_login_html: "Admin user name"
+        submit: Reset Admin Password
+      edit:
+        page_heading: Set My Admin Password
+        label:
+          password: New password
+          confirmation: Confirm new password
+        describedby:
+          password_length: "%{minimum} to %{maximum} characters"
+        landmark:
+          submit: Submit
+        submit: Set Admin Password
+    sessions:
+      new:
+        page_heading: "Log In as Admin"
+        label:
+          login: "Admin user name"
+          password: "Admin password"
+        landmark:
+          reset: "Reset password"
+        reset_link: "Forgot admin password?"
+        submit: "Log In as Admin"
     settings:
       index:
         fields:
@@ -258,6 +286,9 @@ en:
         contact: contact our Policy and Abuse team
       reportable:
         intro: 'Some issues you can contact Support about include:'
+        fnok:
+          concerning_html: Setting up, changing, or activating your %{fnok_link}
+          fnok: Fannish Next of Kin
         bugs: Bugs, errors, or unexpected site behavior
         site_questions: Questions about how to use the site
         account_creation: Problems setting up your account
@@ -265,7 +296,7 @@ en:
         tag_changes: Requests to canonize or change tags
         new_features: Feature requests for future development
         orphaned_works: Questions about orphaned works
-        work_language: Works labeled with the wrong language
+        work_problems: Works labeled with the wrong language or duplicate works
         policy_questions: General site policy questions
       do_not_spam_html: <strong>We respond to every report we receive, but we are a small volunteer team.</strong> For this reason, we ask you to not submit multiple reports regarding any one issue, or encourage other people to report the same issue, unless there is additional information to offer.
       languages_html: <strong>We can answer Support inquiries in %{list}.</strong> Please allow for additional delay for responses in any language other than English.
@@ -302,9 +333,6 @@ en:
       do_not_spam_html: <strong>We investigate every report we receive.</strong> For this reason, we ask you to not submit several reports regarding any one issue unless you have additional information to offer. We also ask that you do not encourage other users to submit a report regarding content you have already reported. Doing so slows down our response and reaction time considerably, as we are a small volunteer-based committee.
       reportable:
         intro: 'Please submit a report via this form if you have not submitted this report within the past sixty (60) days, and you:'
-        fnok:
-          concerning: would like to contact us regarding your %{fnok_link}, or
-          fnok: Fannish Next of Kin
         hack: believe that your account has been hacked, or that someone is trying to hack your account, or
         tos: believe you have found content uploaded to the Archive which breaches our Terms of Service, or
         dmca:
@@ -350,6 +378,8 @@ en:
       about:
         popular: These are some of the most popular tags used on the Archive. To find more tags, %{search_tags_link}.
         random: These are some random tags used on the Archive. To find more tags, %{search_tags_link}.
+        popular_in_collection: These are some of the most popular tags used in the collection.
+        random_in_collection: These are some random tags used in the collection.
       search_tags: try our tag search
   blocked:
     block: "Block"
@@ -357,6 +387,7 @@ en:
     users:
       index:
         title: "Blocked Users"
+        blocked_users: "Blocked Users"
         button: "Block"
         none: "You have not blocked any users."
         legend: "Block a user"
@@ -365,7 +396,9 @@ en:
           landmark:
             blocked_users: "Listing Blocked Users"
         will:
-          intro: "Blocking a user prevents them from:"
+          intro: 
+            one: "You can block up to %{block_limit} user. Blocking a user prevents them from:"
+            other: "You can block up to %{block_limit} users. Blocking a user prevents them from:"
           commenting: "commenting on your works"
           replying: "replying to your comments anywhere on the site"
         will_not:
@@ -373,6 +406,8 @@ en:
           comments_on_works: "delete or hide comments they previously left on your works; you can delete these individually"
           comments_elsewhere: "hide their comments elsewhere on the site"
           hide_works: "hide their works or bookmarks from you"
+        mute_users_instead_html: "To hide a user's works, bookmarks, series, and comments from you, visit %{muted_users_link}."
+        muted_users_link_text: "your Muted Users page"
       confirm_block:
         title: "Block %{name}"
         button: "Yes, Block User"
@@ -388,6 +423,8 @@ en:
           comments_on_works: "delete or hide comments they previously left on your works; you can delete these individually"
           comments_elsewhere: "hide their comments elsewhere on the site"
           hide_works: "hide their works or bookmarks from you"
+        mute_users_instead_html: "To hide a user's works, bookmarks, series, and comments from you, visit %{muted_users_link}."
+        muted_users_link_text: "your Muted Users page"
       confirm_unblock:
         title: "Unblock %{name}"
         button: "Yes, Unblock User"
@@ -398,10 +435,66 @@ en:
           intro: "Unblocking a user allows them to resume:"
           commenting: "commenting on your works"
           replying: "replying to your comments anywhere on the site"
+  muted:
+    mute: "Mute"
+    unmute: "Unmute"
+    muted_items_notice_html: "You have muted some users on the Archive. Some items may not be shown, and any counts may be inaccurate. You can mute or unmute users on %{muted_users_link}."
+    muted_users_link_text: "your Muted Users page"
+    users:
+      index:
+        title: "Muted Users"
+        muted_users: "Muted Users"
+        button: "Mute"
+        none: "You have not muted any users."
+        legend: "Mute a user"
+        label: "User"
+        heading:
+          landmark:
+            muted_users: "Listing Muted Users"
+        will:
+          intro: 
+            one: "You can mute up to %{mute_limit} user. Muting a user:"
+            other: "You can mute up to %{mute_limit} users. Muting a user:"
+          seeing_content: "completely hides their works, series, bookmarks, and comments from you; there will be no empty space, placeholder text, or other indication something has been removed"
+        will_not:
+          intro: "Muting a user will not:"
+          prevent_emails: "prevent you from receiving comment or subscription emails from this user"
+          hide_content_for_others: "hide their works, series, bookmarks, and comments from anyone else"
+        block_users_instead_html: "To prevent a user from commenting on your works or replying to your comments elsewhere on the site, visit %{blocked_users_link}."
+        blocked_users_link_text: "your Blocked Users page"
+        site_skin_warning_html: "Please note that if you are not using the default site skin, muting may not work properly. The Skins and Archive Interface FAQ has %{restore_site_skin_faq_link}."
+        restore_site_skin_faq_link_text: "instructions for reverting to the default site skin"
+      confirm_mute:
+        title: "Mute %{name}"
+        button: "Yes, Mute User"
+        cancel: "Cancel"
+        mute: "mute"
+        sure_html: "Are you sure you want to %{mute} %{username}?"
+        will:
+          intro: "Muting a user:"
+          seeing_content: "completely hides their works, series, bookmarks, and comments from you; there will be no empty space, placeholder text, or other indication something has been removed"
+        will_not:
+          intro: "Muting a user will not:"
+          prevent_emails: "prevent you from receiving comment or subscription emails from this user"
+          hide_content_for_others: "hide their works, series, bookmarks, and comments from anyone else"
+        block_users_instead_html: "To prevent a user from commenting on your works or replying to your comments elsewhere on the site, visit %{blocked_users_link}."
+        blocked_users_link_text: "your Blocked Users page"
+        site_skin_warning_html: "Please note that if you are not using the default site skin, muting may not work properly. The Skins and Archive Interface FAQ has %{restore_site_skin_faq_link}."
+        restore_site_skin_faq_link_text: "instructions for reverting to the default site skin"
+      confirm_unmute:
+        title: "Unmute %{name}"
+        button: "Yes, Unmute User"
+        cancel: "Cancel"
+        unmute: "unmute"
+        sure_html: "Are you sure you want to %{unmute} %{username}?"
+        resume:
+          intro: "Unmuting a user allows you to:"
+          see_content: "see their works, series, bookmarks, and comments on the site"
   preferences:
     index:
       blocked_users: "Blocked Users"
       allow_collection_invitation: "Allow others to invite my works to collections."
+      muted_users: "Muted Users"
   invite_requests:
     invite_request:
       title: "Invitation Status for %{email}"
@@ -414,13 +507,13 @@ en:
     delete_preview:
       heading: "Pseud deletion"
       notice: "When you delete your pseud, any works, series, or comments you have created under it will be transferred to your default pseud."
-      saved_bookmarks: 
+      saved_bookmarks:
         one: "You have saved %{count} bookmark using this pseud. You can choose whether to delete it or transfer it to your default pseud."
         other: "You have saved %{count} bookmarks using this pseud. You can choose whether to delete them or transfer them to your default pseud."
-      delete: 
+      delete:
         one: "Delete this bookmark"
         other: "Delete these bookmarks"
-      transfer: 
+      transfer:
         one: "Transfer this bookmark to the default pseud"
         other: "Transfer these bookmarks to the default pseud"
       confirm: "Are you sure? This can't be undone!"

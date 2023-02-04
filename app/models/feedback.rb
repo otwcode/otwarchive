@@ -44,7 +44,6 @@ class Feedback < ApplicationRecord
   end
 
   def email_and_send
-    AdminMailer.feedback(id).deliver_later
     UserMailer.feedback(id).deliver_later
     send_report
   end
