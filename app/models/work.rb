@@ -1220,8 +1220,9 @@ class Work < ApplicationRecord
     (filter_ids & nonfiction_tags).present?
   end
 
-  # If the creator(s) allow this work to be invited to collections.
+  # Determines if this work allows invitations to collections,
+  # meaning that at least one of the creators has opted-in.
   def allow_collection_invitation?
-    users.all? { |user| user.preference.allow_collection_invitation }
+    users.any? { |user| user.preference.allow_collection_invitation }
   end
 end

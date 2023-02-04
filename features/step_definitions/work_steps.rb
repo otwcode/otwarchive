@@ -295,7 +295,7 @@ When /^I edit the draft "([^"]*)"$/ do |draft|
   step %{I edit the work "#{draft}"}
 end
 
-When /^I post the chaptered work "([^"]*)"(?: (?:in|to) (?:the )?collection "([^"]*)")?$/ do |title, collection|
+When /^I post the chaptered work "([^"]*)"(?: in the collection "([^"]*)")?$/ do |title, collection|
   step %{I post the work "#{title}" in the collection "#{collection}"}
   step %{I follow "Add Chapter"}
   fill_in("content", with: "Another Chapter.")
@@ -707,12 +707,6 @@ When /^all hit count information is reset$/ do
   redis.keys.each do |key|
     redis.del(key)
   end
-end
-
-When "I set the collections of work {string} to {string}" do |work, collection|
-  step %{I edit the work "#{work}"}
-  fill_in("Post to Collections / Challenges", with: collection)
-  step %{I post the work}
 end
 
 ### THEN

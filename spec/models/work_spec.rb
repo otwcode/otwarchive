@@ -616,8 +616,8 @@ describe Work do
         creator1.preference.update(allow_collection_invitation: true)
       end
 
-      it "returns false" do
-        expect(work.allow_collection_invitation?).to be false
+      it "returns true" do
+        expect(work.allow_collection_invitation?).to be true
       end
     end
   end

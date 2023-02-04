@@ -251,7 +251,7 @@ Feature: Collection
       And I have the anonymous collection "Temporary Mice"
       And I am logged in as "a_nonny_mouse"
       And I post the work "Cheesy Goodness"
-      And I set the collections of work "Cheesy Goodness" to "Permanent_Mice,Temporary_Mice"
+      And I edit the work "Cheesy Goodness" to be in the collections "Permanent_Mice,Temporary_Mice"
       And "eager_fan" subscribes to author "a_nonny_mouse"
 
     When I am logged in as "moderator"
@@ -265,7 +265,7 @@ Feature: Collection
       And I have the hidden collection "Secret for Now"
       And I am logged in as "classified"
       And I post the work "Top-Secret Goodness"
-      And I set the collections of work "Top-Secret Goodness" to "Super-Secret,Secret_for_Now"
+      And I edit the work "Top-Secret Goodness" to be in the collections "Super-Secret,Secret_for_Now"
       And "eager_fan" subscribes to author "classified"
 
     When I am logged in as "moderator"
@@ -279,7 +279,7 @@ Feature: Collection
       And I have the anonymous collection "Cheese Enthusiasts"
       And I am logged in as "classified"
       And I post the work "Half and Half"
-      And I set the collections of work "Half and Half" to "Triple-Secret,Cheese_Enthusiasts"
+      And I edit the work "Half and Half" to be in the collections "Triple-Secret,Cheese_Enthusiasts"
       And "eager_fan" subscribes to author "classified"
 
     When I am logged in as "moderator"
@@ -293,7 +293,7 @@ Feature: Collection
       And I have the anonymous collection "Anons Anonymous"
       And I am logged in as "classified"
       And I post the work "Half and Half"
-      And I set the collections of work "Half and Half" to "Hidden_Dreams,Anons_Anonymous"
+      And I edit the work "Half and Half" to be in the collections "Hidden_Dreams,Anons_Anonymous"
       And "eager_fan" subscribes to author "classified"
 
     When I am logged in as "moderator"
@@ -315,7 +315,7 @@ Feature: Collection
 
     When I am logged in as "mysterious"
       And I post the work "Anonymous Gift"
-      And I set the collections of work "Anonymous Gift" to "Anon_Forever"
+      And I edit the work "Anonymous Gift" to be in the collection "Anon_Forever"
       And subscription notifications are sent
 
     Then 0 emails should be delivered
@@ -554,7 +554,7 @@ Feature: Collection
       And I have the collection "Welcome"
       And I am logged in as "author"
       And I post the work "Work"
-      And I set the collections of work "Work" to "Welcome,Hidden_Moderated_Not_Approved"
+      And I edit the work "Work" to be in the collections "Welcome,Hidden_Moderated_Not_Approved"
 
     When I am logged out
      And I go to "Welcome" collection's page
@@ -562,7 +562,7 @@ Feature: Collection
      And I should not see "Part of"
 
     When I am logged in as "author"
-     And I set the collections of work "Work" to "Welcome,Hidden_Moderated_Not_Approved,Hidden_Moderated_Approved,Just_Hidden,Just_Anonymous,Hidden_And_Anonymous"
+     And I edit the work "Work" to be in the collections "Welcome,Hidden_Moderated_Not_Approved,Hidden_Moderated_Approved,Just_Hidden,Just_Anonymous,Hidden_And_Anonymous"
      And I am logged in as "moderator"
      And I approve the work "Work" in the collection "Hidden Moderated Approved"
      And I submit
@@ -580,7 +580,7 @@ Feature: Collection
       And I have the hidden moderated collection "Hidden Moderated 2"
       And I am logged in as "author"
       And I post the chaptered work "Work"
-      And I set the collections of work "Work" to "Hidden_Moderated_1,Hidden_Moderated_2"
+      And I edit the work "Work" to be in the collections "Hidden_Moderated_1,Hidden_Moderated_2"
 
      When I view the work "Work"
      Then I should see "You can find details here: Hidden Moderated 1, Hidden Moderated 2"

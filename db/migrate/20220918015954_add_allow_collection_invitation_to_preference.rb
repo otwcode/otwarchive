@@ -19,7 +19,7 @@ class AddAllowCollectionInvitationToPreference < ActiveRecord::Migration[6.0]
         DROP TABLE IF EXISTS `#{database}`.`_preferences_old`;
       PTSOC
     else
-      add_column :preferences, :allow_collection_invitation, :boolean, default: false
+      add_column :preferences, :allow_collection_invitation, :boolean, default: false, null: false
     end
   end
 

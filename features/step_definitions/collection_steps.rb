@@ -36,6 +36,12 @@ When "I invite the work {string} to the collection {string}" do |work_title, col
   click_button("Invite")
 end
 
+When "I edit the work {string} to be in the collection(s) {string}" do |work, collection|
+  step %{I edit the work "#{work}"}
+  fill_in("Post to Collections / Challenges", with: collection)
+  step %{I post the work}
+end
+
 When(/^I view the(?: ([^"]*)) collection items page for "(.*?)"$/) do |item_status, collection|
   c = Collection.find_by(title: collection)
   if item_status == "approved"

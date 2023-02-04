@@ -47,7 +47,7 @@ Feature: Comments on Hidden Works
       And I am logged out
       And I have the hidden collection "Dreamboat"
       And I am logged in as "creator"
-      And I set the collections of work "Murder, She Wrote" to "Dreamboat"
+      And I edit the work "Murder, She Wrote" to be in the collection "Dreamboat"
 
     # As the work's creator
     When I go to the work comments page for "Murder, She Wrote"
