@@ -1,10 +1,112 @@
 ---
 hr:
+  activerecord:
+    attributes:
+      archive_warning:
+        name_with_colon:
+          few: 'Upozorenja:'
+          one: 'Upozorenje:'
+          other: 'Upozorenja:'
+      category:
+        name_with_colon:
+          few: 'Kategorije:'
+          one: 'Kategorija:'
+          other: 'Kategorija:'
+      character:
+        name_with_colon:
+          few: 'Lika:'
+          one: 'Lik:'
+          other: 'Likova:'
+      fandom:
+        name_with_colon:
+          few: 'Fandoma:'
+          one: 'Fandom:'
+          other: 'Fandoma:'
+      freeform:
+        name_with_colon:
+          few: 'Dodatne oznake:'
+          one: 'Dodatna oznaka:'
+          other: 'Dodatnih oznaka:'
+      rating:
+        name_with_colon: 'Ocjena:'
+      relationship:
+        name_with_colon:
+          few: 'Veze:'
+          one: 'Veza:'
+          other: 'Veza:'
+      work:
+        summary: Sažetak
+    models:
+      archive_warning:
+        few: Upozorenja
+        one: Upozorenje
+        other: Upozorenja
+      category:
+        few: Kategorije
+        one: Kategorija
+        other: Kategorija
+      chapter:
+        few: Poglavlja
+        one: Poglavlje
+        other: Poglavlja
+      character:
+        few: Lika
+        one: Lik
+        other: Likova
+      fandom:
+        few: Fandoma
+        one: Fandom
+        other: Fandoma
+      freeform:
+        few: Dodatne oznake
+        one: Dodatna oznaka
+        other: Dodatnih oznaka
+      rating:
+        few: Ocjene
+        one: Ocjena
+        other: Ocjena
+      relationship:
+        few: Veze
+        one: Veza
+        other: Veza
+      series:
+        few: Serije
+        one: Serija
+        other: Serija
+  kudo_mailer:
+    batch_kudo_notification:
+      guest:
+        few: "%{count} gosta"
+        one: "%{count} gost"
+        other: "%{count} gostiju"
+      html:
+        left_kudos:
+          few: "%{givers_list} ostavili su kudos na %{commentable_link}."
+          one: "%{givers_list} ostavio/la je kudos na %{commentable_link}."
+          other: "%{givers_list} ostavilo je kudos na %{commentable_link}."
+        single_guest:
+          giver_list: Gost
+          left_kudos: "%{giver_list} ostavio/la je kudos na %{commentable_link}."
+      subject: "[%{app_name}] Dobili ste kudos!"
+      text:
+        left_kudos:
+          few: "%{givers_list} ostavili su kudos na %{commentable_title} (%{commentable_url})."
+          one: "%{givers_list} ostavio/la je kudos na %{commentable_title} (%{commentable_url})."
+          other: "%{givers_list} ostavilo je kudos na %{commentable_title} (%{commentable_url})."
+        single_guest: Gost je ostavio/la kudos na %{commentable_title} (%{commentable_url}).
   mailer:
     general:
       closing:
         formal: Srdačno,
         informal: Lijep pozdrav,
+      creation:
+        link_with_word_count: "%{creation_link} (%{word_count})"
+        title_with_chapter_number: Poglavlje %{position} djela "%{title}"
+        title_with_word_count: '"%{creation_title}" (%{word_count})'
+        word_count:
+          few: "%{count} riječi"
+          one: "%{count} riječ"
+          other: "%{count} riječi"
       footer:
         general:
           html:
@@ -24,28 +126,13 @@ hr:
           addressed: Bok, %{name}!
           unaddressed: Bok!
         introductory: Pozdrav od Archive of Our Own – AO3 (Našeg vlastitog arhiva)!
+      metadata_label_indicator: ":"
       signature:
         app_short_name: AO3
         open_doors: Tim Open Doors (Otvorenih vrata)
         parent_org: Organization for Transformative Works – OTW (Organizacija za transformativna
           djela)
         support: AO3 korisnička podrška
-    kudos:
-      guest:
-        few: "%{count} gostiju"
-        one: "%{count} gost"
-        other: "%{count} gostiju"
-      html:
-        left_kudos:
-          few: "%{givers_list} ostavili su kudos na %{commentable_link}."
-          one: "%{givers_list} ostavio/la je kudos na %{commentable_link}."
-          other: "%{givers_list} ostavili su kudos na %{commentable_link}."
-      text:
-        left_kudos:
-          few: "%{givers_list} ostavili su kudos na %{commentable_link}."
-          one: "%{givers_list} ostavio/la je kudos na %{commentable_link}."
-          other: "%{givers_list} ostavili su kudos na %{commentable_link}."
-      you_have: "[%{app_name}] Dobili ste kudos!"
   users:
     mailer:
       reset_password_instructions:
@@ -387,9 +474,15 @@ hr:
       reason: 'Vaš zahtjev je bio:'
       subject: "[%{app_name}] Zahtjev za dodatnim pozivnim kodom odbijen"
     recipient_notification:
+      html:
+        collection: Poklon za Vas je objavljen u %{collection_link} AO3 kolekciji!
+      no_collection: Na AO3-u je objavljen poklon za Vas!
       subject:
         collection: "[%{app_name}][%{collection_title}] Poklon za Vas od %{collection_title}"
         no_collection: "[%{app_name}] Poklon za Vas"
+      text:
+        collection: Poklon za Vas je objavljen u "%{collection_title}" kolekciji (%{collection_url})
+          na AO3-u!
     signup_notification:
       activate_your_account: Slijedite ovu poveznicu kako bi aktivirali svoj korisnički
         račun

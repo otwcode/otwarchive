@@ -1,6 +1,4 @@
 class ArchiveFaq < ApplicationRecord
-  include ActiveModel::ForbiddenAttributesProtection
-
   acts_as_list
   translates :title
   translation_class.include(Globalized)
@@ -31,5 +29,4 @@ class ArchiveFaq < ApplicationRecord
   def self.reorder_list(positions)
     SortableList.new(self.order('position ASC')).reorder_list(positions)
   end
-
 end

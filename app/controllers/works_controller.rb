@@ -356,6 +356,8 @@ class WorksController < ApplicationController
 
   # GET /works/1/edit_tags
   def edit_tags
+    authorize @work if logged_in_as_admin?
+    @page_subtitle = ts("Edit Work Tags")
   end
 
   # PUT /works/1
@@ -369,7 +371,6 @@ class WorksController < ApplicationController
     @chapter.attributes = work_params[:chapter_attributes] if work_params[:chapter_attributes]
     @work.ip_address = request.remote_ip
     @work.set_word_count(@work.preview_mode)
-    @work.save_parents if @work.preview_mode
 
     @work.set_challenge_info
     @work.set_challenge_claim_info
@@ -406,6 +407,7 @@ class WorksController < ApplicationController
   end
 
   def update_tags
+    authorize @work if logged_in_as_admin?
     if params[:cancel_button]
       return cancel_posting_and_redirect
     end
@@ -623,7 +625,6 @@ class WorksController < ApplicationController
 
     @work.posted = true
     @work.minor_version = @work.minor_version + 1
-    # @work.update_minor_version
 
     unless @work.valid? && @work.save
       flash[:error] = ts('There were problems posting your work.')
@@ -646,6 +647,7 @@ class WorksController < ApplicationController
   # WORK ON MULTIPLE WORKS
 
   def show_multiple
+    @page_subtitle = ts("Edit Multiple Works")
     @user = current_user
 
     if params[:pseud_id]
@@ -666,6 +668,7 @@ class WorksController < ApplicationController
       redirect_to(new_orphan_path(work_ids: params[:work_ids])) && return
     end
 
+    @page_subtitle = ts("Edit Multiple Works")
     @user = current_user
     @works = Work.select('distinct works.*').joins(pseuds: :user).where('users.id = ?', @user.id).where(id: params[:work_ids])
 
@@ -784,7 +787,11 @@ class WorksController < ApplicationController
   end
 
   def load_first_chapter
-    @chapter = @work.first_chapter
+    @chapter = if @work.user_is_owner_or_invited?(current_user) || logged_in_as_admin?
+                 @work.first_chapter
+               else
+                 @work.chapters.in_order.posted.first
+               end
   end
 
   # Check whether we should display :new or :edit instead of previewing or
@@ -905,7 +912,9 @@ class WorksController < ApplicationController
       archive_warning_strings: [],
       author_attributes: [:byline, ids: [], coauthors: []],
       series_attributes: [:id, :title],
-      parent_attributes: [:url, :title, :author, :language_id, :translation],
+      parent_work_relationships_attributes: [
+        :url, :title, :author, :language_id, :translation
+      ],
       chapter_attributes: [
         :title, :"published_at(3i)", :"published_at(2i)", :"published_at(1i)",
         :published_at, :content

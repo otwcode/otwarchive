@@ -65,6 +65,18 @@ Feature: Admin Actions to Post News
     When I follow "RSS Feed"
     Then I should see "Default Admin Post"
 
+  Scenario: User views RSS of translated admin posts
+    Given I have posted an admin post
+      And basic languages
+      And I am logged in as a "translation" admin
+    When I make a translation of an admin post
+      And I am logged in as "ordinaryuser"
+      And I go to the admin-posts page
+      And I select "Deutsch" from "Language:"
+      And I press "Go" within "div#inner.wrapper"
+      And I follow "RSS Feed"
+    Then I should see "Deutsch Ankuendigung"
+
   Scenario: Make a translation of an admin post
     Given I have posted an admin post
       And basic languages

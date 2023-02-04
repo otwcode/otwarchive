@@ -1,10 +1,93 @@
 ---
 el:
+  activerecord:
+    attributes:
+      archive_warning:
+        name_with_colon:
+          one: 'Προειδοποίηση:'
+          other: 'Προειδοποιήσεις:'
+      category:
+        name_with_colon:
+          one: 'Κατηγορία:'
+          other: 'Κατηγορίες:'
+      character:
+        name_with_colon:
+          one: 'Χαρακτήρας:'
+          other: 'Χαρακτήρες:'
+      fandom:
+        name_with_colon:
+          one: 'Fandom:'
+          other: 'Fandoms:'
+      freeform:
+        name_with_colon:
+          one: 'Επιπρόσθετη Ετικέτα:'
+          other: 'Επιπρόσθετες Ετικέτες:'
+      rating:
+        name_with_colon: 'Καταλληλότητα:'
+      relationship:
+        name_with_colon:
+          one: 'Σχέση:'
+          other: 'Σχέσεις:'
+      work:
+        summary: Περίληψη
+    models:
+      archive_warning:
+        one: Προειδοποίηση
+        other: Προειδοποιήσεις
+      category:
+        one: Κατηγορία
+        other: Κατηγορίες
+      chapter:
+        one: Κεφάλαιο
+        other: Κεφάλαια
+      character:
+        one: Χαρακτήρας
+        other: Χαρακτήρες
+      fandom:
+        one: Fandom
+        other: Fandoms
+      freeform:
+        one: Επιπρόσθετη Ετικέτα
+        other: Επιπρόσθετες Ετικέτες
+      rating:
+        one: Καταλληλότητα
+        other: Καταλληλότητες
+      relationship:
+        one: Σχέση
+        other: Σχέσεις
+      series:
+        one: Σειρά
+        other: Σειρές
+  kudo_mailer:
+    batch_kudo_notification:
+      guest:
+        one: ένας επισκέπτης
+        other: "%{count} επισκέπτες"
+      html:
+        left_kudos:
+          one: Ο/Η %{givers_list} άφησε μπράβο στο %{commentable_link}.
+          other: Οι %{givers_list} άφησαν μπράβο στο %{commentable_link}.
+        single_guest:
+          giver_list: Ένας επισκέπτης
+          left_kudos: "%{giver_list} άφησε μπράβο στο %{commentable_link}."
+      subject: "[%{app_name}] 'Εχεις μπράβο!"
+      text:
+        left_kudos:
+          one: Ο/Η %{givers_list} άφησε μπράβο στο %{commentable_title} (%{commentable_url}).
+          other: Οι %{givers_list} άφησαν μπράβο στο %{commentable_title} (%{commentable_url}).
+        single_guest: Ένας επισκέπτης άφησε μπράβο στο %{commentable_title} (%{commentable_url}).
   mailer:
     general:
       closing:
         formal: Με εκτίμηση,
         informal: Χαιρετισμούς,
+      creation:
+        link_with_word_count: "%{creation_link} (%{word_count})"
+        title_with_chapter_number: Κεφάλαιο %{position} του έργου %{title}
+        title_with_word_count: '"%{creation_title}" (%{word_count})'
+        word_count:
+          one: "%{count} λέξη"
+          other: "%{count} λέξεις"
       footer:
         general:
           html:
@@ -24,26 +107,14 @@ el:
         informal:
           addressed: Γεια %{name}!
           unaddressed: Γεια!
-        introductory: Γεια σας από το Archive of Our Own – AO3 (Το Αρχείο Μας)!
+        introductory: Γεια σας από το Archive of Our Own – AO3 (Το Αρχείο Μας)!
+      metadata_label_indicator: ": "
       signature:
         app_short_name: AO3
         open_doors: Η ομάδα των Open Doors (Ανοιχτές Πόρτες)
-        parent_org: Organization for Transformative Works – OTW (Οργανισμός Μετασχηματιστικών
+        parent_org: Organization for Transformative Works – OTW (Οργανισμός Μετασχηματιστικών
           Έργων)
         support: Η ομάδα Υποστήριξης του AO3
-    kudos:
-      guest:
-        one: ένας επισκέπτης
-        other: "%{count} επισκέπτες"
-      html:
-        left_kudos:
-          one: Ο/Η %{givers_list} άφησε μπράβο στο %{commentable_link}.
-          other: Οι %{givers_list} άφησαν μπράβο στο %{commentable_link}.
-      text:
-        left_kudos:
-          one: Ο/Η %{givers_list} άφησε μπράβο στο %{commentable_link}.
-          other: Οι %{givers_list} άφησαν μπράβο στο %{commentable_link}.
-      you_have: "[%{app_name}] ‘Εχεις μπράβο!"
   users:
     mailer:
       reset_password_instructions:
@@ -249,7 +320,7 @@ el:
     creatorship_notification_archivist:
       explanation: Καθώς δρα με την επίσημη ιδιότητα ενός αρχειονόμου των Ανοιχτών
         Πορτών, μπορεί να σας προσθέσει χωρίς πρόσκληση, ακόμη και αν έχετε απενεργοποιήσει
-        την επιλογή για τη συνδημιοργία.
+        την επιλογή για τη συνδημιουργία.
       html:
         creation: "%{creation_link} από τους %{pseud_links}"
         edit_chapter: επεξεργαστείτε το κεφάλαιο
@@ -276,9 +347,9 @@ el:
         remove_chapter: 'Εάν έχετε προστεθεί κατά λάθος ή δεν θέλετε να εμφανίζεστε
           ως δημιουργός, μπορείτε να επεξεργαστείτε το κεφάλαιο για να αφαιρέσετε
           τον εαυτό σας από δημιουργό: %{url}'
-        remove_series: " Εάν έχετε προστεθεί κατά λάθος ή δεν θέλετε να εμφανίζεστε
+        remove_series: 'Εάν έχετε προστεθεί κατά λάθος ή δεν θέλετε να εμφανίζεστε
           ως δημιουργός, μπορείτε να επεξεργαστείτε τη σειρά για να αφαιρέσετε τον
-          εαυτό σας από δημιουργό: %{url}"
+          εαυτό σας από δημιουργό: %{url}'
         remove_work: 'Εάν έχετε προστεθεί κατά λάθος ή δε θέλετε να εμφανίζεστε ως
           δημιουργός, μπορείτε να επεξεργαστείτε το έργο για να αφαιρέσετε τον εαυτό
           σας από δημιουργό: %{url}'
@@ -288,12 +359,12 @@ el:
         instructions: Μπορείτε να αποδεχθείτε ή να απορρίψετε αυτό το αίτημα στη σελίδα
           %{page_name}.
         page_name: Co-Creator Requests (Αιτήματα Συνδημιουργού)
-      intro_chapter: 'Ο χρήστης/Η χρήστρια %{inviting_user} προσκάλεσε το ψευδώνυμό
-        σας %{pseud} για να συμπεριληφθεί ως συνδημιουργός στο ακόλουθο κεφάλαιο:'
-      intro_series: 'Ο χρήστης/Η χρήστρια %{inviting_user} προσκάλεσε το ψευδώνυμό
-        σας %{pseud} για να συμπεριληφθεί ως συνδημιουργός στην ακόλουθη σειρά έργων:'
-      intro_work: 'Ο χρήστης/Η χρήστρια %{inviting_user} προσκάλεσε το ψευδώνυμό σας
-        %{pseud} για να συμπεριληφθεί ως συνδημιουργός στο ακόλουθο έργο:'
+      intro_chapter: 'Ο χρήστης %{inviting_user} προσκάλεσε το ψευδώνυμό σας %{pseud}
+        να συμπεριληφθεί ως συνδημιουργός στο ακόλουθο κεφάλαιο:'
+      intro_series: 'Ο χρήστης %{inviting_user} προσκάλεσε το ψευδώνυμό σας %{pseud}
+        να συμπεριληφθεί ως συνδημιουργός στην ακόλουθη σειρά:'
+      intro_work: 'Ο χρήστης %{inviting_user} προσκάλεσε το ψευδώνυμό σας %{pseud}
+        να συμπεριληφθεί ως συνδημιουργός στο ακόλουθο έργο:'
       subject: "[%{app_name}] Αίτημα συνδημιουργού"
       text:
         creation: "%{title} (%{url}) της/ου %{pseuds}"
@@ -400,10 +471,17 @@ el:
       reason: 'Το αίτημά σας ήταν:'
       subject: "[%{app_name}] Το αίτημα για επιπλέον πρόσκληση απορρίφθηκε"
     recipient_notification:
+      html:
+        collection: Ένα έργο-δώρο έχει αναρτηθεί για εσάς στη συλλογή %{collection_link}
+          στο AO3!
+      no_collection: Ένα έργο-δώρο αναρτήθηκε για εσάς στο AO3!
       subject:
         collection: "[%{app_name}][%{collection_title}] Ένα έργο-δώρο για εσάς από
           τη συλλογή %{collection_title}"
         no_collection: "[%{app_name}] Ένα έργο-δώρο για εσάς"
+      text:
+        collection: Ένα έργο-δώρο έχει αναρτηθεί για εσάς στη συλλογή "%{collection_title}"
+          (%{collection_url}) στο AO3!
     signup_notification:
       activate_your_account: ακολουθήστε αυτόν τον σύνδεσμο για να ενεργοποιήσετε
         τον λογαριασμό σακ

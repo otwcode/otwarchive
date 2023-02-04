@@ -1,10 +1,130 @@
 ---
 he:
+  activerecord:
+    attributes:
+      archive_warning:
+        name_with_colon:
+          many: 'אזהרות ארכיון:'
+          one: 'אזהרת ארכיון:'
+          other: 'אזהרות ארכיון:'
+          two: 'אזהרות ארכיון:'
+      category:
+        name_with_colon:
+          many: 'קטגוריות:'
+          one: 'קטגוריה:'
+          other: 'קטגוריות:'
+          two: 'קטגוריות:'
+      character:
+        name_with_colon:
+          many: 'דמויות:'
+          one: 'דמות:'
+          other: 'דמויות:'
+          two: 'דמויות:'
+      fandom:
+        name_with_colon:
+          many: 'פאנדומים:'
+          one: 'פאנדום:'
+          other: 'פאנדומים:'
+          two: 'פאנדומים:'
+      freeform:
+        name_with_colon:
+          many: 'תגיות נוספות:'
+          one: 'תגית נוספת:'
+          other: 'תגיות נוספות:'
+          two: 'תגיות נוספות:'
+      rating:
+        name_with_colon: 'סיווג:'
+      relationship:
+        name_with_colon:
+          many: 'מערכות יחסים:'
+          one: 'מערכת יחסים:'
+          other: 'מערכות יחסים:'
+          two: 'מערכות יחסים:'
+      work:
+        summary: תקציר
+    models:
+      archive_warning:
+        many: אזהרות ארכיון
+        one: אזהרת ארכיון
+        other: אזהרות ארכיון
+        two: אזהרות ארכיון
+      category:
+        many: קטגוריות
+        one: קטגוריה
+        other: קטגוריות
+        two: קטגוריות
+      chapter:
+        many: פרקים
+        one: פרק
+        other: פרקים
+        two: פרקים
+      character:
+        many: דמויות
+        one: דמות
+        other: דמויות
+        two: דמויות
+      fandom:
+        many: פאנדומים
+        one: פאנדום
+        other: פאנדומים
+        two: פאנדומים
+      freeform:
+        many: תגיות נוספות
+        one: תגית נוספת
+        other: תגיות נוספות
+        two: תגיות נוספות
+      rating:
+        many: סיווגים
+        one: סיווג
+        other: סיווגים
+        two: סיווגים
+      relationship:
+        many: מערכות יחסים
+        one: מערכת יחסים
+        other: מערכות יחסים
+        two: מערכות יחסים
+      series:
+        many: סדרות
+        one: סדרה
+        other: סדרות
+        two: סדרות
+  kudo_mailer:
+    batch_kudo_notification:
+      guest:
+        many: "%{count} אורחות"
+        one: אורחת
+        other: "%{count} אורחות"
+        two: "%{count} אורחות"
+      html:
+        left_kudos:
+          many: "%{givers_list} השאירו קודוס על %{commentable_link}."
+          one: "%{givers_list} השאירה קודוס על %{commentable_link}."
+          other: "%{givers_list} השאירו קודוס על %{commentable_link}."
+          two: "%{givers_list} השאירו קודוס על %{commentable_link}."
+        single_guest:
+          giver_list: אורחת
+          left_kudos: "%{giver_list} השאירה קודוס על %{commentable_link}."
+      subject: "[%{app_name}] קיבלת קודוס!"
+      text:
+        left_kudos:
+          many: "%{givers_list} השאירו קודוס על %{commentable_title} (%{commentable_url})."
+          one: "%{givers_list} השאירה קודוס על %{commentable_title} (%{commentable_url})."
+          other: "%{givers_list} השאירו קודוס על %{commentable_title} (%{commentable_url})."
+          two: "%{givers_list} השאירו קודוס על %{commentable_title} (%{commentable_url})."
+        single_guest: אורחת השאירה קודוס על %{commentable_title} (%{commentable_url}).
   mailer:
     general:
       closing:
         formal: בברכה,
         informal: בברכה,
+      creation:
+        link_with_word_count: "%{creation_link} (%{word_count})"
+        title_with_word_count: '"%{creation_title}" (%{word_count})'
+        word_count:
+          many: "%{count} מילים"
+          one: מילה אחת
+          other: "%{count} מילים"
+          two: "%{count} מילים"
       footer:
         general:
           html:
@@ -23,32 +143,14 @@ he:
         informal:
           addressed: היי, %{name}!
           unaddressed: היי!
-        introductory: שלום מ-Archive of Our Own – AO3 (ארכיון משלנו)!
+        introductory: שלום מ-Archive of Our Own – AO3 (ארכיון משלנו)!
+      metadata_label_indicator: " : "
       signature:
         app_short_name: AO3
         open_doors: צוות Open Doors (דלתות פתוחות)
-        parent_org: Organization for Transformative Works – OTW (ארגון למען יצירות
+        parent_org: Organization for Transformative Works – OTW (ארגון למען יצירות
           טרנספורמטיביות)
         support: צוות התמיכה של AO3
-    kudos:
-      guest:
-        many: "%{count} אורחות"
-        one: אורחת
-        other: "%{count} אורחות"
-        two: "%{count} אורחות"
-      html:
-        left_kudos:
-          many: "%{givers_list} השאירו קודוס על %{commentable_link}."
-          one: "%{givers_list} השאירה קודוס על %{commentable_link}."
-          other: "%{givers_list} השאירו קודוס על %{commentable_link}."
-          two: "%{givers_list} השאירו קודוס על %{commentable_link}."
-      text:
-        left_kudos:
-          many: "%{givers_list} השאירו קודוס על %{commentable_link}."
-          one: "%{givers_list} השאירה קודוס על %{commentable_link}."
-          other: "%{givers_list} השאירו קודוס על %{commentable_link}."
-          two: "%{givers_list} השאירו קודוס על %{commentable_link}."
-      you_have: "[%{app_name}] קיבלת קודוס!"
   users:
     mailer:
       reset_password_instructions:
@@ -232,7 +334,7 @@ he:
         remove_work: אם נוספות בטעות, או אם אינך רוצה להופיע כיוצר/ת, באפשרותך %{edit_work_link}
           על מנת להסיר את עצמך.
       intro_chapter: 'המשתמשת %{archivist} הוסיפה את שם העט שלך %{pseud} בתור יוצר/ת
-        שותף/ה של הפרק הבא: '
+        שותף/ה של הפרק הבא:'
       intro_series: 'המשתמשת %{archivist} הוסיפה את שם העט שלך %{pseud} בתור יוצר/ת
         שותף/ה של הסדרה הבאה:'
       intro_work: 'המשתמשת %{archivist} הוסיפה את שם העט שלך %{pseud} בתור יוצר/ת
@@ -243,7 +345,7 @@ he:
         remove_chapter: 'אם נוספות בטעות, או אם אינך רוצה להופיע כיוצר/ת, באפשרותך
           לערוך את הפרק על מנת להסיר את עצמך: %{url}'
         remove_series: 'אם נוספות בטעות, או אם אינך רוצה להופיע כיוצר/ת, באפשרותך
-          לערוך את הסדרה על מנת להסיר את עצמך: %{url} '
+          לערוך את הסדרה על מנת להסיר את עצמך: %{url}'
         remove_work: 'אם נוספת בטעות, או אם אינך רוצה להופיע כיוצר/ת, באפשרותך לערוך
           את היצירה על מנת להסיר את עצמך: %{url}'
     creatorship_request:
@@ -298,9 +400,15 @@ he:
       reason: 'תוכן בקשתך:'
       subject: "[%{app_name}] בקשתך לקוד הזמנה נוסף נדחתה"
     recipient_notification:
+      html:
+        collection: יצירה הוקדשה לך במתנה באוסף %{collection_link} ב-AO3!
+      no_collection: יצירה הוקדשה לך במתנה ב-AO3!
       subject:
-        collection: "[%{app_name}][%{collection_title}] קיבלת יצירה במתנה מ-%{collection_title}"
+        collection: "[%{app_name}][%{collection_title}] קיבלת יצירה במתנה מ- %{collection_title}"
         no_collection: "[%{app_name}] קיבלת יצירה במתנה"
+      text:
+        collection: יצירה הוקדשה לך במתנה באוסף "%{collection_title}" (%{collection_url})
+          ב-AO3!
     signup_notification:
       activate_your_account: לחץ/י על קישור זה כדי להפעיל את חשבונך
       admin_posts: חדשות AO3
@@ -327,4 +435,4 @@ he:
           את החדשות האחרונות אודות פיתוח האתר ניתן למצוא בחדשות AO3 %{admin_posts_url}.
           אם דרושה לך עזרה נוספת, אם נתקלת בבעייה באתר או אם יש לך שאלות או הערות,
           אנא צור/צרי קשר עם צוות התמיכה שלנו, שתמיד שמח לעזור: %{contact_support_url}'
-      welcome: "ברוכים הבאים לארכיון משלנו, %{login}!\n   "
+      welcome: ברוכים הבאים לארכיון משלנו, %{login}!

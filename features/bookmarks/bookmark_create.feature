@@ -406,19 +406,16 @@ Scenario: Can use "Show Most Recent Bookmarks" from the bookmarks page
     And I bookmark the work "Popular Work"
     And the statistics for the work "Popular Work" are updated
   When I am on the bookmarks page
-    # There are two of these links, but bookmarker2's bookmark is more recent,
-    # and it follows the first link matching the specified text
-    And I follow "Show Most Recent Bookmarks"
-  # Again, we're relying on the fact that it uses the first element that
-  # matches the specified selector, since each bookmark on the page will have a
-  # div with the class .recent
-  Then I should see "bookmarker1" within ".recent"
-    And I should see "Love it" within ".recent"
-    And I should see "Hide Most Recent Bookmarks" within ".recent"
-  When I follow "Hide Most Recent Bookmarks"
-  Then I should not see "bookmarker1" within ".recent"
-    And I should not see "Love it" within ".recent"
-    And I should see "Show Most Recent Bookmarks" within "li.bookmark"
+    # Follow the link for bookmarker2's bookmark, which is more recent.
+    And I follow "Show Most Recent Bookmarks" within ".bookmark.blurb:first-child"
+  Then I should see "bookmarker1" within ".bookmark.blurb:first-child .recent"
+    And I should see "Love it" within ".bookmark.blurb:first-child .recent"
+    And I should see "Hide Most Recent Bookmarks" within ".bookmark.blurb:first-child .recent"
+  When I follow "Hide Most Recent Bookmarks" within ".bookmark.blurb:first-child .recent"
+  # .recent has been hidden, we should not see its contents anymore.
+  Then I should not see "bookmarker1" within ".bookmark.blurb:first-child"
+    And I should not see "Love it" within ".bookmark.blurb:first-child"
+    And I should see "Show Most Recent Bookmarks" within ".bookmark.blurb:first-child"
 
 Scenario: A bookmark with duplicate tags other than capitalization has only first version of tag saved
   Given I am logged in as "bookmark_user"

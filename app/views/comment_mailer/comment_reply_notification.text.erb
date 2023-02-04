@@ -1,8 +1,7 @@
 <% content_for :message do %>
 <% responder = @comment.comment_owner ? 
     (
-      (@comment.comment_owner.is_author_of?(@comment.ultimate_parent) && 
-        @comment.ultimate_parent.anonymous?) ? 
+      @comment.by_anonymous_creator? ?
       "Anonymous Creator" : 
       @comment.comment_owner_name + " (" + polymorphic_url(@comment.comment_owner, :only_path => false) + ")"
     ) :

@@ -130,7 +130,7 @@ class BookmarkQuery < Query
       sort_hash[sort_column][:unmapped_type] = 'date'
     end
 
-    sort_hash
+    [sort_hash, { id: { order: sort_direction } }]
   end
 
   def aggregations

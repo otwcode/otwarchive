@@ -104,14 +104,14 @@ Given /^I have posted an admin post$/ do
   step("I log out")
 end
 
-Given /^the fannish next of kin "([^\"]*)" for the user "([^\"]*)"$/ do |kin, user|
-  step %{the user "#{kin}" exists and is activated}
-  step %{the user "#{user}" exists and is activated}
-  step %{I am logged in as a "policy_and_abuse" admin}
-  step %{I go to the abuse administration page for "#{user}"}
-  fill_in("Fannish next of kin's username", with: "#{kin}")
-  fill_in("Fannish next of kin's email", with: "testing@foo.com")
-  click_button("Update")
+Given "the admin post {string}" do |title|
+  FactoryBot.create(:admin_post, title: title)
+end
+
+Given "the fannish next of kin {string} for the user {string}" do |kin, user|
+  user = ensure_user(user)
+  kin = ensure_user(kin)
+  user.create_fannish_next_of_kin(kin: kin, kin_email: "fnok@example.com")
 end
 
 Given /^the user "([^\"]*)" is suspended$/ do |user|
@@ -165,6 +165,15 @@ Given /^I have posted an admin post with comments disabled$/ do
   choose("No one can comment")
   click_button("Post")
   step %{I log out}
+end
+
+Given "an abuse ticket ID exists" do
+  ticket = {
+    "departmentId" => ArchiveConfig.ABUSE_ZOHO_DEPARTMENT_ID,
+    "status" => "Open",
+    "webUrl" => Faker::Internet.url
+  }
+  allow_any_instance_of(ZohoResourceClient).to receive(:find_ticket).and_return(ticket)
 end
 
 ### WHEN
@@ -226,8 +235,8 @@ When /^the invite_from_queue_at is yesterday$/ do
   AdminSetting.first.update_attribute(:invite_from_queue_at, Time.now - 1.day)
 end
 
-When /^the check_queue rake task is run$/ do
-  step %{I run the rake task "invitations:check_queue"}
+When "the scheduled check_invite_queue job is run" do
+  Resque.enqueue(AdminSetting, :check_queue)
 end
 
 When /^I edit known issues$/ do
@@ -384,30 +393,30 @@ When(/^the user "(.*?)" is unbanned in the background/) do |user|
   u.update_attribute(:banned, false)
 end
 
-Given(/^I have blacklisted the address "([^"]*)"$/) do |email|
+Given "I have banned the address {string}" do |email|
   visit admin_blacklisted_emails_url
-  fill_in("Email", with: email)
-  click_button("Add To Blacklist")
+  fill_in("Email to ban", with: email)
+  click_button("Ban Email")
 end
 
-Given(/^I have blacklisted the address for user "([^"]*)"$/) do |user|
+Given "I have banned the address for user {string}" do |user|
   visit admin_blacklisted_emails_url
   u = User.find_by(login: user)
   fill_in("admin_blacklisted_email_email", with: u.email)
-  click_button("Add To Blacklist")
+  click_button("Ban Email")
 end
 
-Then(/^the address "([^"]*)" should be in the blacklist$/) do |email|
+Then "the address {string} should be banned" do |email|
   visit admin_blacklisted_emails_url
   fill_in("Email to find", with: email)
-  click_button("Search Blacklist")
+  click_button("Search Banned Emails")
   assert page.should have_content(email)
 end
 
-Then(/^the address "([^"]*)" should not be in the blacklist$/) do |email|
+Then "the address {string} should not be banned" do |email|
   visit admin_blacklisted_emails_url
   fill_in("Email to find", with: email)
-  click_button("Search Blacklist")
+  click_button("Search Banned Emails")
   step %{I should see "0 emails found"}
 end
 
@@ -433,6 +442,10 @@ end
 Then /^the work "([^\"]*)" should not be marked as spam/ do |work|
   w = Work.find_by_title(work)
   assert !w.spam?
+end
+
+Then "I should see {int} admin activity log entry/entries" do |count|
+  expect(page).to have_css("tr[id^=admin_activity_]", count: count)
 end
 
 Then /^the user content should be shown as right-to-left$/ do

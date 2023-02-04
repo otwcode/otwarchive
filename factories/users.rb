@@ -46,5 +46,9 @@ FactoryBot.define do
     factory :translation_admin do
       roles { [Role.find_or_create_by(name: "translation_admin")] }
     end
+
+    factory :official_user do
+      roles { [Role.find_or_create_by(name: "official")] }
+    end
   end
 end

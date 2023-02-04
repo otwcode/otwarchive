@@ -1,5 +1,4 @@
 class Comment < ApplicationRecord
-  include ActiveModel::ForbiddenAttributesProtection
   include HtmlCleaner
   include AfterCommitEverywhere
 
@@ -10,6 +9,9 @@ class Comment < ApplicationRecord
   has_many :inbox_comments, foreign_key: 'feedback_comment_id', dependent: :destroy
   has_many :users, through: :inbox_comments
 
+  has_many :reviewed_replies, -> { reviewed },
+           class_name: "Comment", as: :commentable, inverse_of: :commentable
+
   has_many :thread_comments, class_name: 'Comment', foreign_key: :thread
 
   validates_presence_of :name, unless: :pseud_id
@@ -19,6 +21,33 @@ class Comment < ApplicationRecord
   validates_length_of :comment_content,
     maximum: ArchiveConfig.COMMENT_MAX,
     too_long: ts("must be less than %{count} characters long.", count: ArchiveConfig.COMMENT_MAX)
+
+  delegate :user, to: :pseud, allow_nil: true
+
+  # Check if the writer of this comment is blocked by the writer of the comment
+  # they're replying to:
+  validates :user, not_blocked: {
+    by: :commentable,
+    if: :reply_comment?,
+    unless: :on_tag?,
+    message: :blocked_reply
+  }
+
+  # Check if the writer of this comment is blocked by one of the creators of
+  # the work they're replying to:
+  validates :user, not_blocked: {
+    by: :ultimate_parent,
+    unless: :on_tag?,
+    message: :blocked_comment
+  }
+
+  def on_tag?
+    parent_type == "Tag"
+  end
+
+  def by_anonymous_creator?
+    ultimate_parent.try(:anonymous?) && user&.is_author_of?(ultimate_parent)
+  end
 
   validate :check_for_spam, on: :create
 
@@ -39,6 +68,13 @@ class Comment < ApplicationRecord
   scope :not_deleted,     -> { where(is_deleted: false) }
   scope :reviewed,        -> { where(unreviewed: false) }
   scope :unreviewed_only, -> { where(unreviewed: true) }
+
+  scope :for_display, lambda {
+    includes(
+      pseud: { user: [:roles, :block_of_current_user, :block_by_current_user] },
+      parent: { work: [:pseuds, :users] }
+    )
+  }
 
   # Gets methods and associations from acts_as_commentable plugin
   acts_as_commentable
@@ -67,6 +103,8 @@ class Comment < ApplicationRecord
     pertinent_attributes = %w[is_deleted hidden_by_admin unreviewed approved]
     (saved_changes.keys & pertinent_attributes).present?
   end
+
+  before_validation :set_parent_and_unreviewed, on: :create
 
   before_create :set_depth
   before_create :set_thread_for_replies
@@ -180,6 +218,11 @@ class Comment < ApplicationRecord
         end
       end
     end
+  end
+
+  after_create :record_wrangling_activity, if: :on_tag?
+  def record_wrangling_activity
+    self.comment_owner&.update_last_wrangling_activity
   end
 
   protected
@@ -423,9 +466,16 @@ class Comment < ApplicationRecord
     update_attribute(:iced, false)
   end
 
+  def mark_hidden!
+    update_attribute(:hidden_by_admin, true)
+  end
+
+  def mark_unhidden!
+    update_attribute(:hidden_by_admin, false)
+  end
+
   def sanitized_content
     sanitize_field self, :comment_content
   end
   include Responder
-
 end

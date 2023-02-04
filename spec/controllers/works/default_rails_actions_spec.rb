@@ -177,10 +177,9 @@ describe WorksController, work_search: true do
   end
 
   describe "create" do
-    before do
-      @user = create(:user)
-      fake_login_known_user(@user)
-    end
+    let(:user) { create(:user) }
+
+    before { fake_login_known_user(user) }
 
     it "doesn't allow a user to create a work in a series that they don't own" do
       @series = create(:series)
@@ -195,9 +194,9 @@ describe WorksController, work_search: true do
     end
 
     it "doesn't allow a user to submit only a pseud that is not theirs" do
-      @user2 = create(:user)
+      user2 = create(:user)
       work_attributes = attributes_for(:work).except(:posted)
-      work_attributes[:author_attributes] = { ids: [@user2.pseuds.first.id] }
+      work_attributes[:author_attributes] = { ids: [user2.pseuds.first.id] }
       expect {
         post :create, params: { work: work_attributes }
       }.to_not change(Work, :count)
@@ -208,7 +207,7 @@ describe WorksController, work_search: true do
 
     it "renders new if the work has invalid pseuds" do
       work_attributes = attributes_for(:work).except(:posted)
-      work_attributes[:author_attributes] = { ids: @user.pseud_ids,
+      work_attributes[:author_attributes] = { ids: user.pseud_ids,
                                               byline: "*impossible*" }
       post :create, params: { work: work_attributes }
       expect(response).to render_template("new")
@@ -220,7 +219,7 @@ describe WorksController, work_search: true do
       create(:pseud, name: "ambiguous")
       create(:pseud, name: "ambiguous")
       work_attributes = attributes_for(:work).except(:posted)
-      work_attributes[:author_attributes] = { ids: @user.pseud_ids,
+      work_attributes[:author_attributes] = { ids: user.pseud_ids,
                                               byline: "ambiguous" }
       post :create, params: { work: work_attributes }
       expect(response).to render_template("new")
@@ -250,6 +249,23 @@ describe WorksController, work_search: true do
       expect(response).to render_template("new")
       expect(assigns[:work].errors.full_messages).to \
         include /Only canonical category tags are allowed./
+    end
+
+    context "as a tag wrangler" do
+      let(:user) { create(:tag_wrangler) }
+
+      it "does not set wrangling activity when posting with a new fandom" do
+        work_attributes = attributes_for(:work).except(:posted, :fandom_string).merge(fandom_string: "New Fandom")
+        post :create, params: { work: work_attributes }
+        expect(user.last_wrangling_activity).to be_nil
+      end
+
+      it "does not set wrangling activity when posting with an unsorted tag" do
+        tag = create(:unsorted_tag)
+        work_attributes = attributes_for(:work).except(:posted, :freeform_string).merge(freeform_string: tag.name)
+        post :create, params: { work: work_attributes }
+        expect(user.last_wrangling_activity).to be_nil
+      end
     end
   end
 

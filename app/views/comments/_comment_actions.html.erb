@@ -22,6 +22,9 @@
   <% if can_freeze_comment?(comment) %>
     <li><%= freeze_comment_button(comment) %></li>
   <% end %>
+  <% if can_hide_comment?(comment) %>
+    <li><%= hide_comment_button(comment) %></li>
+  <% end %>
   <% if can_edit_comment?(comment) %>
     <li id="edit_comment_link_<%= comment.id %>">
       <%= edit_comment_link comment %>
@@ -40,6 +43,11 @@
   <% if can_destroy_comment?(comment) %>
     <li id="delete_comment_link_<%= comment.id %>">
       <%= do_cancel_delete_comment_link comment %>
+    </li>
+  <% end %>
+  <% if current_user && comment.user && current_user != comment.user && !comment.by_anonymous_creator? %>
+    <li id="block_link_<%= comment.id %>">
+      <%= block_link(comment.user) %>
     </li>
   <% end %>
 </ul>

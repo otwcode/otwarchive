@@ -102,7 +102,7 @@ class Download
   end
 
   def author_names
-    work.anonymous? ? ["Anonymous"] : work.pseuds.sort.map(&:name)
+    work.anonymous? ? ["Anonymous"] : work.pseuds.sort.map(&:byline)
   end
 
   # need the next two to be filesystem safe and not overly long
@@ -113,7 +113,7 @@ class Download
   def page_title
     [file_name, file_authors, fandoms].join(" - ")
   end
-  
+
   def chapters
     work.chapters.order('position ASC').where(posted: true)
   end

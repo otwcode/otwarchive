@@ -98,11 +98,7 @@ Feature: Display autocomplete for tags
       And the pseud autocomplete should not contain "new_user"
       And the pseud autocomplete should contain "different_user"
       And the pseud autocomplete should contain "funny (different_user)"
-    When I change my username to "funny"
-    Then the pseud autocomplete should not contain "funny (different_user)"
-      And the pseud autocomplete should contain "funny"
-      And the pseud autocomplete should contain "different_user (funny)"
-    When I try to delete my account as funny
+    When I try to delete my account as different_user
     Then a user account should not exist for "funny"
       And the pseud autocomplete should not contain "funny"
       And the pseud autocomplete should not contain "different_user (funny)"

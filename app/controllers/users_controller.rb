@@ -3,25 +3,9 @@ class UsersController < ApplicationController
 
   before_action :check_user_status, only: [:edit, :update]
   before_action :load_user, except: [:activate, :delete_confirmation, :index]
-  before_action :check_ownership, except: [:activate, :delete_confirmation, :index, :show]
+  before_action :check_ownership, except: [:activate, :delete_confirmation, :edit, :index, :show, :update]
+  before_action :check_ownership_or_admin, only: [:edit, :update]
   skip_before_action :store_location, only: [:end_first_login]
-
-  # This is meant to rescue from race conditions that sometimes occur on user creation
-  # The unique index on login (database level) prevents the duplicate user from being created,
-  # but ideally we can still send the user the activation code and show them the confirmation page
-  rescue_from ActiveRecord::RecordNotUnique do |exception|
-    # ensure we actually have a duplicate user situation
-    if exception.message =~ /Mysql2?::Error: Duplicate entry/i &&
-       @user && User.count(conditions: { login: @user.login }) > 0 &&
-       # and that we can find the original, valid user record
-       (@user = User.find_by(login: @user.login))
-      notify_and_show_confirmation_screen
-    else
-      # re-raise the exception and make it catchable by Rails and Airbrake
-      # (see http://www.simonecarletti.com/blog/2009/11/re-raise-a-ruby-exception-in-a-rails-rescue_from-statement/)
-      rescue_action_without_handler(exception)
-    end
-  end
 
   def load_user
     @user = User.find_by(login: params[:id])
@@ -56,6 +40,7 @@ class UsersController < ApplicationController
 
   # GET /users/1/edit
   def edit
+    authorize @user.profile if logged_in_as_admin?
   end
 
   def changed_password
@@ -95,16 +80,6 @@ class UsersController < ApplicationController
       @user.reload
       render :change_username
     end
-  end
-
-  def notify_and_show_confirmation_screen
-    # deliver synchronously to avoid getting caught in backed-up mail queue
-    UserMailer.signup_notification(@user.id).deliver_now
-
-    flash[:notice] = ts("During testing you can activate via <a href='%{activation_url}'>your activation url</a>.",
-                        activation_url: activate_path(@user.confirmation_token)).html_safe if Rails.env.development?
-
-    render 'confirmation'
   end
 
   def activate
@@ -156,9 +131,13 @@ class UsersController < ApplicationController
   end
 
   def update
-    @user.profile.update(profile_params)
+    authorize @user.profile if logged_in_as_admin?
 
-    if @user.profile.save
+    if @user.profile.update(profile_params)
+      if logged_in_as_admin? && @user.profile.ticket_url.present?
+        link = view_context.link_to("Ticket ##{@user.profile.ticket_number}", @user.profile.ticket_url)
+        AdminActivity.log_action(current_admin, @user, action: "edit profile", summary: link)
+      end
       flash[:notice] = ts('Your profile has been successfully updated')
       redirect_to user_profile_path(@user)
     else
@@ -189,7 +168,6 @@ class UsersController < ApplicationController
       if @user.save
         flash.now[:notice] = ts("Your email has been successfully updated")
         UserMailer.change_email(@user.id, old_email, new_email).deliver_later
-        @user.create_log_item(options = { action: ArchiveConfig.ACTION_NEW_EMAIL })
       else
         # Make sure that on failure, the form still shows the old email as the "current" one.
         @user.email = old_email
@@ -369,17 +347,10 @@ class UsersController < ApplicationController
 
   private
 
-  def user_params
-    params.require(:user).permit(
-      :login, :email, :age_over_13, :terms_of_service,
-      :password, :password_confirmation
-    )
-  end
-
   def profile_params
     params.require(:profile_attributes).permit(
       :title, :location, :"date_of_birth(1i)", :"date_of_birth(2i)",
-      :"date_of_birth(3i)", :date_of_birth, :about_me
+      :"date_of_birth(3i)", :date_of_birth, :about_me, :ticket_number
     )
   end
 end

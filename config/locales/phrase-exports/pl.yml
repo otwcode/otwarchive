@@ -1,10 +1,113 @@
 ---
 pl:
+  activerecord:
+    attributes:
+      archive_warning:
+        name_with_colon:
+          few: 'Ostrzeżenia:'
+          many: 'Ostrzeżenia:'
+          one: 'Ostrzeżenie:'
+      category:
+        name_with_colon:
+          few: 'Kategorie:'
+          many: 'Kategorie:'
+          one: 'Kategoria:'
+      character:
+        name_with_colon:
+          few: 'Postacie:'
+          many: 'Postacie:'
+          one: 'Postać:'
+      fandom:
+        name_with_colon:
+          few: 'Fandomy:'
+          many: 'Fandomy:'
+          one: 'Fandom:'
+      freeform:
+        name_with_colon:
+          few: 'Tagi dodatkowe:'
+          many: 'Tagi dodatkowe:'
+          one: 'Tag dodatkowy:'
+      rating:
+        name_with_colon: 'Kategoria wiekowa:'
+      relationship:
+        name_with_colon:
+          few: 'Związki:'
+          many: 'Związki:'
+          one: 'Związek:'
+      work:
+        summary: Streszczenie
+    models:
+      archive_warning:
+        few: Ostrzeżenia
+        many: Ostrzeżenia
+        one: Ostrzeżenie
+      category:
+        few: Kategorie
+        many: Kategorie
+        one: Kategoria
+      chapter:
+        few: Rozdziały
+        many: Rozdziały
+        one: Rozdział
+      character:
+        few: Postacie
+        many: Postacie
+        one: Postać
+      fandom:
+        few: Fandomy
+        many: Fandomy
+        one: Fandom
+      freeform:
+        few: Tagi dodatkowe
+        many: Tagi dodatkowe
+        one: Tag dodatkowy
+      rating:
+        few: Kategorie wiekowe
+        many: Kategorie wiekowe
+        one: Kategoria wiekowa
+      relationship:
+        few: Związki
+        many: Związki
+        one: Związek
+      series:
+        few: Serie
+        many: Serie
+        one: Seria
+  kudo_mailer:
+    batch_kudo_notification:
+      guest:
+        few: "%{count} gości"
+        many: "%{count} gości"
+        one: 1 gościa
+        other: "%{count} gości"
+      html:
+        left_kudos:
+          few: Kudos dla %{commentable_link} od %{givers_list}.
+          many: Kudos dla %{commentable_link} od %{givers_list}.
+          one: Kudos dla %{commentable_link} od %{givers_list}.
+        single_guest:
+          giver_list: 1 gościa
+          left_kudos: Kudos dla %{commentable_link} od %{giver_list}.
+      subject: "[%{app_name}] Masz kudos!"
+      text:
+        left_kudos:
+          few: Kudos dla %{commentable_title} (%{commentable_url}) od %{givers_list}.
+          many: Kudos dla %{commentable_title} (%{commentable_url}) od %{givers_list}.
+          one: Kudos dla %{commentable_title} (%{commentable_url}) od %{givers_list}.
+        single_guest: Kudos dla %{commentable_title} (%{commentable_url}) od 1 gościa.
   mailer:
     general:
       closing:
         formal: Z wyrazami szacunku,
         informal: Pozdrawiamy,
+      creation:
+        link_with_word_count: "%{creation_link} (%{word_count})"
+        title_with_chapter_number: Rozdział %{position} pracy %{title}
+        title_with_word_count: '"%{creation_title}" (%{word_count})'
+        word_count:
+          few: "%{count} słowa"
+          many: "%{count} słów"
+          one: "%{count} słowo"
       footer:
         general:
           html:
@@ -19,38 +122,20 @@ pl:
               o kontakt ze Wsparciem poprzez %{support_url}.
             part2: 'AO3 jest prowadzonym i wspieranym przez fanów archiwum, które
               działa dzięki Waszym darowiznom: %{donate_url}.'
-        sent_at: Wysłano o %{sent_at}.
+        sent_at: Wysłano w %{sent_at}.
       greeting:
         formal: Szanowna/y %{name},
         informal:
           addressed: Cześć, %{name}!
           unaddressed: Cześć!
         introductory: Pozdrowienia z Archive of Our Own – AO3 (Naszego Własnego Archiwum)!
+      metadata_label_indicator: ": "
       signature:
         app_short_name: AO3
         open_doors: Zespół Open Doors (Drzwi Otwartych)
         parent_org: Organization for Transformative Works – OTW (Organizacja na rzecz
           Twórczości Przeobrażonej)
         support: Zespół Wsparcia AO3
-    kudos:
-      guest:
-        few: "%{count} gości"
-        many: "%{count} gości"
-        one: 1 gościa
-        other: "%{count} gości"
-      html:
-        left_kudos:
-          few: Kudos dla %{commentable_link} od %{givers_list}.
-          many: Kudos dla %{commentable_link} od %{givers_list}.
-          one: Kudos dla %{commentable_link} od %{givers_list}.
-          other: Kudos dla %{commentable_link} od %{givers_list}.
-      text:
-        left_kudos:
-          few: Kudos dla %{commentable_link} od %{givers_list}.
-          many: Kudos dla %{commentable_link} od %{givers_list}.
-          one: Kudos dla %{commentable_link} od %{givers_list}.
-          other: Kudos dla %{commentable_link} od %{givers_list}.
-      you_have: "[%{app_name}] Masz kudos!"
   users:
     mailer:
       reset_password_instructions:
@@ -245,9 +330,33 @@ pl:
         współtworzenie.
       html:
         creation: "%{creation_link} autorstwa %{pseud_links}"
+        edit_chapter: edytować rozdział
+        edit_series: edytować serię
+        edit_work: edytować pracę
+        remove_chapter: Jeśli dodano Cię przez przypadek lub nie chcesz by wymieniano
+          Cię jako twórcę, możesz %{edit_chapter_link} aby usunąć siebie jako twórcę.
+        remove_series: Jeśli dodano Cię przez przypadek lub nie chcesz by wymieniano
+          Cię jako twórcę, możesz %{edit_series_link} aby usunąć siebie jako twórcę.
+        remove_work: Jeśli dodano Cię przez przypadek lub nie chcesz by wymieniano
+          Cię jako twórcę, możesz %{edit_work_link} aby usunąć siebie jako twórcę.
+      intro_chapter: 'Użytkownik %{archivist} dodał/a twój pseudonim %{pseud} jako
+        współtwórcę następującego rozdziału:'
+      intro_series: 'Użytkownik %{archivist} dodał Twój pseudonim %{pseud} jako współtwórcę
+        następującej serii:'
+      intro_work: 'Użytkownik %{archivist} dodał Twój pseudonim %{pseud} jako współtwórcę
+        poniższej pracy:'
       subject: "[%{app_name}] Powiadomienie od archiwisty o współtworzeniu"
       text:
         creation: "%{title} (%{url}) autorstwa %{pseuds}"
+        remove_chapter: 'Jeśli dodano Cię przez przypadek lub nie chcesz by wymieniano
+          Cię jako twórcę, możesz edytować ten rozdział, aby usunąć siebie jako twórcę:
+          %{url}'
+        remove_series: 'Jeśli dodano Cię przez przypadek lub nie chcesz by wymieniano
+          Cię jako twórcę, możesz edytować tę serię, aby usunąć siebie jako twórcę:
+          %{url}'
+        remove_work: 'Jeśli dodano Cię przez przypadek lub nie chcesz by wymieniano
+          Cię jako twórcę, możesz edytować tę pracę, aby usunąć siebie jako twórcę:
+          %{url}'
     creatorship_request:
       html:
         creation: "%{creation_link} autorstwa %{pseud_links}"
@@ -357,9 +466,16 @@ pl:
       reason: 'Treść Twojej prośby:'
       subject: "[%{app_name}] Prośba o dodatkowe zaproszenia została odrzucona"
     recipient_notification:
+      html:
+        collection: W kolekcji %{collection_link} na AO3 opublikowano pracę, będącą
+          prezentem dla Ciebie!
+      no_collection: Na AO3 opublikowano pracę, będącą prezentem dla Ciebie!
       subject:
         collection: "[%{app_name}][%{collection_title}] Obdarowano Cię pracą w %{collection_title}"
         no_collection: "[%{app_name}] Obdarowano Cię pracą"
+      text:
+        collection: W kolekcji "%{collection_title}" (%{collection_url}) na AO3 opublikowano
+          pracę, będącą prezentem dla Ciebie!
     signup_notification:
       activate_your_account: aktywuj swoje konto
       admin_posts: archiwalnych postach adminów

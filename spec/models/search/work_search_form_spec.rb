@@ -606,5 +606,21 @@ describe WorkSearchForm, work_search: true do
         expect(work_search.search_results.map(&:authors_to_sort_on)).to eq ["ruth", "yabalchoath"]
       end
     end
+
+    it "keeps sort order of tied works the same when work info is updated" do
+      user = FactoryBot.create(:user)
+      work1 = FactoryBot.create(:work, authors: [user.default_pseud])
+      work2 = FactoryBot.create(:work, authors: [user.default_pseud])
+      q = WorkQuery.new(sort_column: "authors_to_sort_on", sort_direction: "desc")
+
+      run_all_indexing_jobs
+      res = q.search_results.map(&:id)
+
+      [work1, work2].each do |work|
+        work.update(summary: "Updated")
+        run_all_indexing_jobs
+        expect(q.search_results.map(&:id)).to eq(res)
+      end
+    end
   end
 end

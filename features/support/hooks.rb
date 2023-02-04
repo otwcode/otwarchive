@@ -22,6 +22,9 @@ Before do
   # Assume all spam checks pass by default.
   allow(Akismetor).to receive(:spam?).and_return(false)
 
+  # Don't authenticate for Zoho.
+  allow_any_instance_of(ZohoAuthClient).to receive(:access_token)
+
   # Reset the current user:
   User.current_user = nil
 

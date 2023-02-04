@@ -64,7 +64,7 @@
 
       <%= work_meta_list(@work, @chapter) %>
       </dd>
-      <% if logged_in_as_admin? %>
+      <% if policy(:user_creation).show_ip_address? %>
         <dt class="ip">
           <%= ts('IP Address:') %>
         </dt>
@@ -75,6 +75,8 @@
              <%= @work.ip_address %>
           <% end %>
         </dd>
+      <% end %>
+      <% if logged_in_as_admin? %>
         <dt class="akismet">
           <%= ts('Akismet Reported As Spam:') %>
         </dt>

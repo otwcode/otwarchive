@@ -36,7 +36,7 @@ class TagWranglersController < ApplicationController
   end
 
   def show
-    @wrangler = User.find_by(login: params[:id])
+    @wrangler = User.find_by!(login: params[:id])
     @page_subtitle = @wrangler.login
     @fandoms = @wrangler.fandoms.by_name
     @counts = {}
