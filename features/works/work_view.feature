@@ -46,8 +46,8 @@ Feature: View a work with various options
   Scenario: other users cannot collect a work by default
   Given the work "Whatever"
     And I am logged in as the author of "Whatever"
-    And I have the collection "test collection" with name "test_collection"
-  When I am logged in as "moderator"
+  When I have the collection "test collection" with name "test_collection"
+    And I am logged in as "moderator"
     And I view the work "Whatever"
   Then I should not see a link "Invite To Collections"
 
@@ -55,7 +55,7 @@ Feature: View a work with various options
   Given the work "Whatever"
     And I am logged in as the author of "Whatever"
     And I set my preferences to allow collection invitations
-    And I have the collection "test collection" with name "test_collection"
-  When I am logged in as "moderator"
+  When I have the collection "test collection" with name "test_collection"
+    And I am logged in as "moderator"
     And I view the work "Whatever"
   Then I should see a link "Invite To Collections"
