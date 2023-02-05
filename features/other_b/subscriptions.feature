@@ -196,23 +196,6 @@
   Scenario: When a chapter is added to an anonymous work, and a user is subscribed
   to both the creator and the work, they receive a subscription email.
 
-  Given the anonymous collection "anonymous_collection"
-    And I am logged in as "creator"
-    And I post the work "Multi Chapter Work" to the collection "anonymous_collection"
-    And "subscriber" subscribes to author "creator"
-    And "subscriber" subscribes to work "Multi Chapter Work"
-  When a chapter is added to "Multi Chapter Work"
-    And subscription notifications are sent
-  Then "subscriber" should be emailed
-    And the email should have "Anonymous posted Chapter 2 of Multi Chapter Work" in the subject
-    And the email should contain "Multi Chapter Work"
-    And the email should contain "Anonymous"
-    And the email should not contain "creator"
-
-  # TODO: remove duplicate test
-  Scenario: When a chapter is added to an anonymous work, and a user is subscribed
-  to both the creator and the work, they receive a subscription email.
-
     Given the anonymous collection "anonymous_collection"
     And I am logged in as "great_author"
     And I post the work "Great Multi Chapter Work" to the collection "anonymous_collection"

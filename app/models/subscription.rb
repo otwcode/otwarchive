@@ -24,6 +24,15 @@ class Subscription < ApplicationRecord
     group(:user_id)
   }
 
+  # Get the subscriptions associated with this work excluding creator subscriptions
+  scope :for_anon_work, lambda {|work|
+    where(["(subscribable_id = ? AND subscribable_type = 'Work')
+            OR (subscribable_id IN (?) AND subscribable_type = 'Series')",
+            work.id,
+            work.serial_works.pluck(:series_id)]).
+    group(:user_id)
+  }
+
   # The name of the object to which the user is subscribed
   def name
     if subscribable.respond_to?(:login)
