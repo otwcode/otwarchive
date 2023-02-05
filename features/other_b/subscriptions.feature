@@ -209,6 +209,23 @@
     And the email should contain "Anonymous"
     And the email should not contain "creator"
 
+  # TODO: remove duplicate test
+  Scenario: When a chapter is added to an anonymous work, and a user is subscribed
+  to both the creator and the work, they receive a subscription email.
+
+    Given the anonymous collection "anonymous_collection"
+    And I am logged in as "great_author"
+    And I post the work "Great Multi Chapter Work" to the collection "anonymous_collection"
+    And "eager_subscriber" subscribes to author "great_author"
+    And "eager_subscriber" subscribes to work "Great Multi Chapter Work"
+  When a chapter is added to "Great Multi Chapter Work"
+    And subscription notifications are sent
+  Then "eager_subscriber" should be emailed
+    And the email should have "Anonymous posted Chapter 2 of Great Multi Chapter Work" in the subject
+    And the email should contain "Great Multi Chapter Work"
+    And the email should contain "Anonymous"
+    And the email should not contain "great_author"
+
   Scenario: When a chapter is added to an anonymous work in an anonymous series,
   subscription emails are sent to users who have subscribed to the work or
   series, but not to users who have subscribed to the creator.
