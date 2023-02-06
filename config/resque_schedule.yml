@@ -19,13 +19,16 @@ run_add_counts_to_queue:
   args: add_counts_to_queue
   description: "update the cache of counts of usage for tags"
 
+# from https://github.com/resque/resque-scheduler/issues/613#issuecomment-351484064
 run_write_redis_to_database:
   every: 2m
-  class: "ScheduledTagJob"
-  queue: utilities
-  args: write_redis_to_database
+  class: ActiveJob::QueueAdapters::ResqueAdapter::JobWrapper
+  queue: tag_counts
+  args:
+    job_class: RedisSetJobSpawner
+    queue_name: tag_counts
+    arguments: ["TagCountUpdateJob"]
   description: "Flush the count updates to mysql"
-
 
 run_stats_reindex_queue:
   every: 30m
@@ -48,11 +51,15 @@ run_update_filter_counts_large:
   args: update_counts_for_large_queue
   description: "Update filter counts for large filters"
 
+# from https://github.com/resque/resque-scheduler/issues/613#issuecomment-351484064
 update_stat_counters:
   cron: "0,30 * * * *"
-  class: "StatCounter"
-  queue: utilities
-  args: stats_to_database
+  class: ActiveJob::QueueAdapters::ResqueAdapter::JobWrapper
+  queue: stats
+  args:
+    job_class: RedisSetJobSpawner
+    queue_name: stats
+    arguments: ["StatCounterJob"]
   description: "Update kudos/bookmark/comment counts on StatCounters."
 
 save_recent_counts_to_database:
@@ -75,3 +82,14 @@ check_invite_queue:
   queue: utilities
   args: check_queue
   description: "Invite users from the queue if it's time to do so."
+
+# from https://github.com/resque/resque-scheduler/issues/613#issuecomment-351484064
+readings_to_database:
+  cron: "55 * * * *"
+  class: ActiveJob::QueueAdapters::ResqueAdapter::JobWrapper
+  queue: readings
+  args:
+    job_class: RedisSetJobSpawner
+    queue_name: readings
+    arguments: ["ReadingsJob"]
+  description: "Transfer readings from redis to the database."

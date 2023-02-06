@@ -6,6 +6,8 @@
 # is the child tag and filterable is the parent tag.
 # -- Sarken 01/2019
 class CommonTagging < ApplicationRecord
+  include Wrangleable
+
   # we need "touch" here so that when a common tagging changes, the tag(s) themselves are updated and
   # they get noticed by the tag sweeper (which then updates their autocomplete data)
   belongs_to :common_tag, class_name: 'Tag', touch: true

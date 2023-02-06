@@ -478,6 +478,7 @@ class CommentsController < ApplicationController
   def hide
     if !@comment.hidden_by_admin?
       @comment.mark_hidden!
+      AdminActivity.log_action(current_admin, @comment, action: "hide comment")
       flash[:comment_notice] = t(".success")
     else
       flash[:comment_error] = t(".error")
@@ -489,6 +490,7 @@ class CommentsController < ApplicationController
   def unhide
     if @comment.hidden_by_admin?
       @comment.mark_unhidden!
+      AdminActivity.log_action(current_admin, @comment, action: "unhide comment")
       flash[:comment_notice] = t(".success")
     else
       flash[:comment_error] = t(".error")

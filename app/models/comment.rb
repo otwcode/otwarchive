@@ -1,5 +1,4 @@
 class Comment < ApplicationRecord
-  include ActiveModel::ForbiddenAttributesProtection
   include HtmlCleaner
   include AfterCommitEverywhere
 
@@ -219,6 +218,11 @@ class Comment < ApplicationRecord
         end
       end
     end
+  end
+
+  after_create :record_wrangling_activity, if: :on_tag?
+  def record_wrangling_activity
+    self.comment_owner&.update_last_wrangling_activity
   end
 
   protected
@@ -474,5 +478,4 @@ class Comment < ApplicationRecord
     sanitize_field self, :comment_content
   end
   include Responder
-
 end

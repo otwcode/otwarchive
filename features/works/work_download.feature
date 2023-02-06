@@ -89,7 +89,6 @@ Feature: Download a work
     And I should see "Character: Character 1, Character 2, Character 3"
     And I should see "Additional Tags: Modern AU"
     And I should see "Language: English"
-    # note difference with the work: in the work it's "Series: Part 1 of the THE DOWN series"
     And I should see "Series: Part 1 of THE DOWN"
     And I should see "Collections: My Collection 1, My Collection 2"
     And I should see "Published: 2015-01-10"

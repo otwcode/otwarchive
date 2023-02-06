@@ -1,6 +1,4 @@
 class Preference < ApplicationRecord
-  include ActiveModel::ForbiddenAttributesProtection
-
   belongs_to :user
   belongs_to :skin
 
