@@ -3,9 +3,9 @@
 <% in_page ||= false %>
 <div id="collection-form">
   <% if item.is_a?(Work) %>
-    <h3 class="heading"><%= t(".invite_header", title: item.title).html_safe %></h3>
+    <h3 class="heading"><%= t(".invite_header_html", title: item.title) %></h3>
   <% else %>
-    <h3 class="heading"><%= t(".add_header", title: item.class.name) %></h3>
+    <h3 class="heading"><%= t(".add_bookmark_header", title: item.class.name) %></h3>
   <% end %>
   <%
     # when in the works controller, such as for a non-multi-chapter work, form_for does not set work_id

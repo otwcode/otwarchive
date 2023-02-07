@@ -520,7 +520,7 @@ en:
       cancel: "Cancel"
   collection_items:
     collection_item_form:
-      invite_header: "Invite %{title} to collections"
-      add_header: "Add %{title} to collections"
+      invite_header_html: "Invite %{title} to collections"
+      add_bookmark_header: "Add Bookmark to collections"
       invite: "Invite"
       add: "Add"
