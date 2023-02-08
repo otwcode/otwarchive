@@ -2,7 +2,7 @@
 
 # Use for resetting lost passwords
 class Users::PasswordsController < Devise::PasswordsController
-  before_action :admin_logout_required, [:new]
+  before_action :admin_logout_required, only: [:new, :edit]
   skip_before_action :store_location
   layout "session"
 
