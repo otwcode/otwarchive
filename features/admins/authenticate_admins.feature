@@ -11,17 +11,23 @@ Feature: Authenticate Admin Users
     And I press "Log In"
   Then I should see "The password or user name you entered doesn't match our records"
 
-  Scenario: Ordinary user cannot log in as admin.
+  Scenario: Ordinary user cannot log in or reset password as admin.
   Given the following activated user exists
     | login       | password      |
     | dizmo       | wrangulator   |
-    And I have loaded the "roles" fixture
   When I go to the admin login page
     And I fill in "Admin user name" with "dizmo"
     And I fill in "Admin password" with "wrangulator"
     And I press "Log In as Admin"
   Then I should not see "Successfully logged in"
     And I should see "The password or admin user name you entered doesn't match our records."
+  When I am logged in as "dizmo" with password "wrangulator"
+    And I go to the new admin password page
+  Then I should be on the homepage
+    And I should see "Please log out of your user account first!"
+  When I go to the edit admin password page
+  Then I should be on the homepage
+    And I should see "Please log out of your user account first!"
 
   Scenario: Admin gets email with password reset link on account creation.
   Given the following admin exists
