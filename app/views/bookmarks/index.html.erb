@@ -1,4 +1,6 @@
 <!--SEARCHBROWSE descriptive page name and system messages, descriptions, and instructions.-->
+<%= render "muted/muted_items_notice" %>
+
 <h2 class="heading">
   <% if @bookmarkable_items %>
     <%= search_header @bookmarkable_items, @search, "Bookmarked Item", @owner %>
@@ -46,8 +48,6 @@
 <% unless @owner.present? || @bookmarkable.present? %>
   <p><%= ts("These are some of the latest bookmarks created on the Archive. To find more bookmarks, #{link_to 'choose a fandom', media_path} or #{link_to 'try our advanced search', search_bookmarks_path}.").html_safe %>
 <% end %>
-
-<%= render "muted/muted_items_notice" %>
 
 <% if @bookmarks.respond_to?(:total_pages) %>
   <%= will_paginate @bookmarks %>
