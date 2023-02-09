@@ -193,6 +193,22 @@
     And the email should contain "Anonymous"
     And the email should not contain "creator"
 
+  Scenario: When a chapter is added to a work, and a user is subscribed to the
+  work in multiple ways, they receive a single subscription email.
+
+  Given I am logged in as "bestest_author"
+    And I post the work "Bestest Multi Chapter Work" as part of a series "Bestest Stories"
+    And "eager_subscriber1" subscribes to author "bestest_author"
+    And "eager_subscriber1" subscribes to series "Bestest Stories"
+    And "eager_subscriber1" subscribes to work "Bestest Multi Chapter Work"
+  When a chapter is added to "Bestest Multi Chapter Work"
+    And subscription notifications are sent
+  Then "eager_subscriber1" should receive 1 email
+    And the email should have "Bestest Multi Chapter Work" in the subject
+    And the email should contain "Bestest Multi Chapter Work"
+    And the email should contain "Bestest Stories"
+    And the email should contain "bestest_author"
+
   Scenario: When a chapter is added to an anonymous work, and a user is subscribed
   to both the creator and the work, they receive a subscription email.
 

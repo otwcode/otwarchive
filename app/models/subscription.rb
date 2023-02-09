@@ -12,26 +12,38 @@ class Subscription < ApplicationRecord
   validates :subscribable, presence: true,
                            if: proc { |s| VALID_SUBSCRIBABLES.include?(s.subscribable_type) }
   
-  # Get the subscriptions associated with this work
-  # currently: users subscribed to work, users subscribed to creator of work
-  scope :for_work, lambda {|work|
+  # Get the subscriptions associated with this work.
+  # These subscriptions are not unique per user: there are up to three, one per type.
+  # This allows us to pick which one to keep by subscribable_type precedence later.
+  scope :for_work_with_duplicates, lambda {|work|
     where(["(subscribable_id = ? AND subscribable_type = 'Work')
             OR (subscribable_id IN (?) AND subscribable_type = 'User')
             OR (subscribable_id IN (?) AND subscribable_type = 'Series')",
             work.id,
             work.pseuds.pluck(:user_id),
             work.serial_works.pluck(:series_id)]).
-    group(:user_id)
+    group(:user_id, :subscribable_type)
   }
 
-  # Get the subscriptions associated with this work excluding creator subscriptions
-  scope :for_anon_work, lambda {|work|
-    where(["(subscribable_id = ? AND subscribable_type = 'Work')
-            OR (subscribable_id IN (?) AND subscribable_type = 'Series')",
-            work.id,
-            work.serial_works.pluck(:series_id)]).
-    group(:user_id)
-  }
+  # Prefer Work, then Series, then User type subscription
+  def self.pick_most_relevant_of(user_subscriptions)
+    # Skip ordering if there's only one in the list
+    return user_subscriptions[0] if user_subscriptions.length() == 1
+
+    best_subscription = user_subscriptions[0]
+    user_subscriptions.each do |subscription|
+      # Return immediately if we find a "Work"-type subscription
+      return subscription if subscription.subscribable_type == "Work"
+      # Anything is better than a "User"-type subscription
+      best_subscription = subscription if best_subscription.subscribable_type == "User"
+    end
+    best_subscription
+  end
+
+  def self.for_work(work)
+    Subscription.for_work_with_duplicates(work).group_by { |u| u.user_id }.values
+      .map { |subscriptions| Subscription.pick_most_relevant_of(subscriptions) }
+  end
 
   # The name of the object to which the user is subscribed
   def name

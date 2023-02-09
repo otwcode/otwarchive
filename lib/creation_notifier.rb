@@ -49,14 +49,8 @@ module CreationNotifier
   def notify_subscribers
     work = self.respond_to?(:work) ? self.work : self
     if work && !work.unrevealed?
-      if !work.anonymous?
-        Subscription.for_work(work).each do |subscription|
-          RedisMailQueue.queue_subscription(subscription, self)
-        end
-      else
-        Subscription.for_anon_work(work).each do |subscription|
-          RedisMailQueue.queue_subscription(subscription, self)
-        end
+      Subscription.for_work(work).each do |subscription|
+        RedisMailQueue.queue_subscription(subscription, self)
       end
     end
   end
