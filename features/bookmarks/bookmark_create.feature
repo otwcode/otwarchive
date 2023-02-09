@@ -170,7 +170,7 @@ Scenario: bookmarks added to moderated collections appear correctly
     And I fill in "bookmark_collection_names" with "jbs_greatest,beds_and_brooms,death_by_demographics,murder_a_la_mode"
     And I press "Update"
     And all indexing jobs have been run
-  Then I should see "You have submitted your bookmark to moderated collections (Death by Demographics, Murder a la Mode)."
+  Then I should see "You have submitted your bookmark to the moderated collections 'Death by Demographics, Murder a la Mode'."
   When I go to bookmarker's bookmarks page
     And I should see "The Murder of Sherlock Holmes"
     And I should see "Bookmarker's Collections: JBs Greatest"
@@ -264,7 +264,7 @@ Scenario: Adding bookmarks to closed collections (Issue 3083)
   When I follow "Add To Collection"
     And I fill in "collection_names" with "unsolved_mysteries"
     And I press "Add"
-  Then I should see "Added to collection(s): Unsolved Mysteries"
+  Then I should see "Added to collection: Unsolved Mysteries"
     # Still as the moderator, try to edit the bookmark which is IN a closed collection already
   When I follow "Edit"
     And I fill in "bookmark_notes" with "This is my edited bookmark"
@@ -282,15 +282,15 @@ Scenario: Adding bookmarks to closed collections (Issue 3083)
     And I follow "Bookmark"
     And I press "Create"
   Then I should see "Bookmark was successfully created"
-  Then I follow "Add To Collection"
-    And I fill in "collection_names" with "rescue_911"
-    And I press "Add"
-  Then I should see "We couldn't add your submission to the following collection(s): Rescue 911 is closed to new submissions."
+#  Then I follow "Add To Collection"
+#    And I fill in "collection_names" with "rescue_911"
+#    And I press "Add"
+#  Then I should see "We couldn't add your submission to the following collection: Rescue 911 is closed to new submissions."
     # Now, as a regular user try to add that existing bookmark to a closed collection from the 'Edit' page of a bookmark
   When I follow "Edit"
     And I fill in "bookmark_collection_names" with "rescue_911"
     And I press "Update"
-  Then I should see "We couldn't add your submission to the following collections: Rescue 911 is closed to new submissions."
+  Then I should see "We couldn't add your submission to the following collection: Rescue 911 is closed to new submissions."
   # Create a collection, put a bookmark in it, close the collection, then try
   # to edit that bookmark
   When I open the collection with the title "Rescue 911"

@@ -12,7 +12,7 @@ Feature: Collection
   When I have the collection "scotts collection" with name "scotts_collection"
     And I am logged in as "moderator"
     And I add the work "A Death in Hong Kong" to the collection "scotts collection"
-  Then I should see "Added to collection(s): scotts collection."
+  Then I should see "Added to collection: scotts collection."
     And 1 email should be delivered to "Scott"
     And the email should contain "you have previously elected to allow"
   When I am logged in as "moderator"
