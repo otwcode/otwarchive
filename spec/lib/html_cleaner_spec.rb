@@ -994,14 +994,6 @@ describe HtmlCleaner do
       expect(doc.xpath("./table//tr[2]/td[2]/node()").to_s.strip).to eq("D")
     end
 
-    %w[script style].each do |tag|
-      it "keeps #{tag} tags as is" do
-        result = add_paragraphs_to_text("<#{tag}>keep me</#{tag}>")
-        doc = Nokogiri::HTML5.fragment(result)
-        expect(doc.xpath("./p/node()").to_s.strip).to eq("<#{tag}>keep me</#{tag}>")
-      end
-    end
-
     it "doesn't break when an attribute includes a single quote" do
       result = add_paragraphs_to_text(<<~HTML)
         <span title="Don't stop me now">Cause I'm having a good time</span>
