@@ -19,9 +19,9 @@ class Subscription < ApplicationRecord
     where(["(subscribable_id = ? AND subscribable_type = 'Work')
             OR (subscribable_id IN (?) AND subscribable_type = 'User')
             OR (subscribable_id IN (?) AND subscribable_type = 'Series')",
-            work.id,
-            work.pseuds.pluck(:user_id),
-            work.serial_works.pluck(:series_id)])
+           work.id,
+           work.pseuds.pluck(:user_id),
+           work.serial_works.pluck(:series_id)])
       .group(:user_id, :subscribable_type)
   }
 
