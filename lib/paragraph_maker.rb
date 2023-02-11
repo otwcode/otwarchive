@@ -4,25 +4,41 @@
 module ParagraphMaker
   extend self
 
+  # Tags that will be stripped by the sanitizer that are inline, and should be
+  # wrapped in paragraphs and have their contents left untouched:
+  INLINE_INVALID_TAGS = %w[button input label map select textarea].freeze
+
+  # Tags that will be stripped by the sanitizer that are block tags, and should
+  # have nearby whitespace stripped:
+  BLOCK_INVALID_TAGS = %w[fieldset form].freeze
+
+  # Tags that will be completely removed by the sanitizer, and should have
+  # nearby whitespace removed, and their contents left untouched:
+  REMOVED_INVALID_TAGS = Sanitize::Config::ARCHIVE[:remove_contents]
+
   # Tags whose content we don't touch
-  TAG_NAMES_TO_SKIP = %w[a abbr acronym address audio dl embed figure h1 h2 h3
-                         h4 h5 h6 hr iframe img ol math object p pre source svg
-                         table track video ul].freeze
+  TAG_NAMES_TO_SKIP = (%w[
+    a abbr acronym address audio dl embed figure h1 h2 h3 h4 h5 h6 hr img ol
+    object p pre source table track video ul
+  ] + INLINE_INVALID_TAGS + REMOVED_INVALID_TAGS).freeze
 
   # Tags that need to go inside p tags
-  TAG_NAMES_TO_WRAP = %w[a abbr acronym b big br cite code del dfn em i
-                         ins kbd q s script samp small span strike strong style
-                         sub sup tt u var].freeze
+  TAG_NAMES_TO_WRAP = (%w[
+    a abbr acronym b big br cite code del dfn em i img ins kbd q s samp small
+    span strike strong sub sup tt u var
+  ] + INLINE_INVALID_TAGS).freeze
 
   # Tags that can't be inside p tags
-  TAG_NAMES_TO_UNWRAP = %w[address audio dl figure h1 h2 h3 h4 h5 h6 hr ol p pre source
-                           table track ul video].freeze
+  TAG_NAMES_TO_UNWRAP = %w[
+    audio dl figure h1 h2 h3 h4 h5 h6 hr ol p pre source table track ul video
+  ].freeze
 
   # Tags before and after which we don't want to convert linebreaks
   # into br's and p's
-  TAG_NAMES_STRIP_WHITESPACE = %w[audio blockquote br center dl div figcaption
-                                  h1 h2 h3 h4 h5 h6 hr ol p pre source table
-                                  track ul video].freeze
+  TAG_NAMES_STRIP_WHITESPACE = (%w[
+    audio blockquote br center dl div figure figcaption h1 h2 h3 h4 h5 h6 hr ol
+    p pre source table track ul video
+  ] + BLOCK_INVALID_TAGS + REMOVED_INVALID_TAGS).freeze
 
   private
 
@@ -44,7 +60,7 @@ module ParagraphMaker
   def in_paragraph?(node)
     return false if node.parent.nil?
     return true if node.parent.name == "p"
-    
+
     in_paragraph?(node.parent)
   end
 

@@ -4,29 +4,17 @@ module HtmlCleaner
   # we sanitize it before we allow it to pass through (and save it if possible).
   def sanitize_field(object, fieldname)
     return "" if object.send(fieldname).nil?
-    if object.respond_to?("#{fieldname}_sanitizer_version")
-      if object.send("#{fieldname}_sanitizer_version") < ArchiveConfig.SANITIZER_VERSION
-        # sanitize and save it
-        Rails.logger.debug "Sanitizing and saving #{fieldname} on #{object.class.name} (id #{object.id})"
-        object.update_attribute(fieldname, sanitize_value(fieldname, object.send("#{fieldname}")))
-        object.update_attribute("#{fieldname}_sanitizer_version", ArchiveConfig.SANITIZER_VERSION)
-      end
+
+    sanitizer_version = object.try("#{fieldname}_sanitizer_version")
+    if sanitizer_version && sanitizer_version >= ArchiveConfig.SANITIZER_VERSION
       # return the field without sanitizing
       Rails.logger.debug "Already sanitized #{fieldname} on #{object.class.name} (id #{object.id})"
-      object.send("#{fieldname}")
+      object.send(fieldname)
     else
       # no sanitizer version information, so re-sanitize
       Rails.logger.debug "Sanitizing without saving #{fieldname} on #{object.class.name} (id #{object.id})"
-      sanitize_value(fieldname, object.send("#{fieldname}"))
+      sanitize_value(fieldname, object.send(fieldname))
     end
-  end
-
-  def get_white_list_sanitizer
-    @white_list_sanitizer ||= HTML::WhiteListSanitizer.new
-  end
-
-  def get_full_sanitizer
-    @full_sanitizer ||= HTML::FullSanitizer.new
   end
 
   # yank out bad end-of-line characters and evil msword curly quotes
@@ -83,11 +71,8 @@ module HtmlCleaner
         unfrozen_value = Sanitize.clean(add_paragraphs_to_text(fix_bad_characters(unfrozen_value)),
                                         Sanitize::Config::CSS_ALLOWED.merge(transformers: transformers))
       else
-        # the screencast field shouldn't be wrapped in <p> tags
-        unless field.to_s == "screencast"
-          unfrozen_value = Sanitize.clean(add_paragraphs_to_text(fix_bad_characters(unfrozen_value)),
-                                          Sanitize::Config::ARCHIVE.merge(transformers: transformers))
-        end
+        unfrozen_value = Sanitize.clean(add_paragraphs_to_text(fix_bad_characters(unfrozen_value)),
+                                        Sanitize::Config::ARCHIVE.merge(transformers: transformers))
       end
       doc = Nokogiri::HTML5::Document.new
       doc.encoding = "UTF-8"
@@ -151,20 +136,6 @@ module HtmlCleaner
   # strip img tags
   def strip_images(value)
     value.gsub(/<img .*?>/, '')
-  end
-
-  # strip style attributes
-  def strip_styles(value)
-    strip_attribute(value, "style")
-  end
-
-  # strip class attributes
-  def strip_classes(value)
-    strip_attribute(value, "class")
-  end
-
-  def strip_attribute(value, attribname)
-    value.gsub(/\s*#{attribname}=\".*?\"\s*/, "")
   end
 
   def strip_html_breaks_simple(value)

@@ -545,17 +545,6 @@ class Work < ApplicationRecord
   # VERSIONS & REVISION DATES
   ########################################################################
 
-  # provide an interface to increment major version number
-  # resets minor_version to 0
-  def update_major_version
-    self.update({ major_version: self.major_version + 1, minor_version: 0 })
-  end
-
-  # provide an interface to increment minor version number
-  def update_minor_version
-    self.update_attribute(:minor_version, self.minor_version+1)
-  end
-
   def set_revised_at(date=nil)
     date ||= self.chapters.where(posted: true).maximum('published_at') ||
              self.revised_at || self.created_at || Time.current

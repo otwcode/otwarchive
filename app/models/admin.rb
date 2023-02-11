@@ -4,8 +4,12 @@ class Admin < ApplicationRecord
   serialize :roles, Array
 
   devise :database_authenticatable,
+         :lockable,
+         :recoverable,
          :validatable,
-         password_length: ArchiveConfig.PASSWORD_LENGTH_MIN..ArchiveConfig.PASSWORD_LENGTH_MAX
+         password_length: ArchiveConfig.ADMIN_PASSWORD_LENGTH_MIN..ArchiveConfig.ADMIN_PASSWORD_LENGTH_MAX,
+         lock_strategy: :none,
+         unlock_strategy: :none
 
   include BackwardsCompatiblePasswordDecryptor
 
@@ -25,5 +29,13 @@ class Admin < ApplicationRecord
     return unless roles && (roles - VALID_ROLES).present?
 
     errors.add(:roles, :invalid)
+  end
+
+  # For requesting admins set a new password before their first login. Uses same
+  # mechanism as password reset requests, but different email notification.
+  after_create :send_set_password_notification
+  def send_set_password_notification
+    token = set_reset_password_token
+    AdminMailer.set_password_notification(self, token).deliver
   end
 end

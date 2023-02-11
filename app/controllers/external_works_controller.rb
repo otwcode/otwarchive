@@ -1,5 +1,5 @@
 class ExternalWorksController < ApplicationController
-  before_action :admin_only, only: [:edit, :update, :compare, :merge]
+  before_action :admin_only, only: [:edit, :update]
   before_action :users_only, only: [:new]
   before_action :check_user_status, only: [:new]
 
@@ -37,13 +37,12 @@ class ExternalWorksController < ApplicationController
   end
 
   def edit
-    authorize @external_work, policy_class: UserCreationPolicy
-    @external_work = ExternalWork.find(params[:id])
+    @external_work = authorize ExternalWork.find(params[:id])
     @work = @external_work
   end
 
   def update
-    @external_work = ExternalWork.find(params[:id])
+    @external_work = authorize ExternalWork.find(params[:id])
     @external_work.attributes = work_params
     if @external_work.update(external_work_params)
       flash[:notice] = t('successfully_updated', default: 'External work was successfully updated.')

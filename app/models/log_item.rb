@@ -1,4 +1,6 @@
 class LogItem < ApplicationRecord
+  # Ignore the note_sanitizer_version field until it can be deleted.
+  self.ignored_columns = [:note_sanitizer_version]
 
   belongs_to :user
   belongs_to :admin
