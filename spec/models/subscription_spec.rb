@@ -17,15 +17,15 @@ describe Subscription do
         create(:subscription, user: subscriber, subscribable: series)
         series2 = create(:series, works: [work])
         create(:subscription, user: subscriber, subscribable: series2)
-        expect(Subscription.for_work_with_duplicates(work).map { |s| s.subscribable_type }).to contain_exactly("Work", "Series", "User")
+        expect(Subscription.for_work_with_duplicates(work).map(&:subscribable_type)).to contain_exactly("Work", "Series", "User")
       end
     end
 
     context "subscriptions to notify" do
       it "picks only a user's work-type subscription when a user has multiple relevant subscriptions" do
-        author_subscription = create(:subscription, user: subscriber, subscribable: author)
+        create(:subscription, user: subscriber, subscribable: author)
         work_subscription = create(:subscription, user: subscriber, subscribable: work)
-        series_subscription = create(:subscription, user: subscriber, subscribable: series)
+        create(:subscription, user: subscriber, subscribable: series)
         expect(Subscription.for_work(work)).to contain_exactly(work_subscription)
       end
 
