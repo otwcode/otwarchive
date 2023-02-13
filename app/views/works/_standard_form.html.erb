@@ -124,7 +124,7 @@
                 <%= link_to_help "languages-help" %>
               </dt>
               <dd>
-                <%= p.select(:language_id, sorted_languages.map { |language| [language.name, language.id, { lang: language.short }] }, prompt: " ") %>
+                <%= p.select(:language_id, language_options_for_select(sorted_languages, "id"), prompt: " ") %>
               </dd>
 
               <dt class="translation"><%= p.check_box :translation %></dt>

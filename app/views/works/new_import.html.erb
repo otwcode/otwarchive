@@ -46,7 +46,7 @@
       <dd class="required">
         <select id="language_id" name="language_id">
           <option value=""><%= ts("Please select a language") %></option>
-          <%= options_for_select(sorted_languages.map { |language| [language.name, language.id, { lang: language.short }] }, @language_id) %>
+          <%= options_for_select(language_options_for_select(sorted_languages, "id"), @language_id) %>
         </select>
       </dd>
       <dt><%= label_tag "encoding", ts("Set custom encoding") %> <%= link_to_help "encoding-help" %></dt> 

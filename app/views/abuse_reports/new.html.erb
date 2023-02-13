@@ -41,7 +41,7 @@
         <%= f.label :language, t(".form.language.label") %>
       </dt>
       <dd class="required">
-        <%= f.select(:language, @abuse_languages.map { |language| [language.name, language.name, { lang: language.short }] },
+        <%= f.select(:language, language_options_for_select(@abuse_languages, "name"),
               { selected: @abuse_report.language || Language.default.name }) %>
       </dd>
       <dt class="required">
