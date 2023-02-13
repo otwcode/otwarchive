@@ -317,15 +317,17 @@ describe UserMailer do
 
       describe "HTML version" do
         it "has the correct content" do
-          expect(email).to have_html_part_content("like to join us, please sign up at the following address")
+          expect(email).to have_html_part_content("follow this link to sign up</a>")
           expect(email).to have_html_part_content("has invited you")
+          expect(email).to have_html_part_content("Organization for Transformative Works</a>, which works to protect fan rights and preserve fanworks.")
         end
       end
 
       describe "text version" do
         it "has the correct content" do
-          expect(email).to have_text_part_content("like to join us, please sign up at the following address")
+          expect(email).to have_text_part_content("like to join us, please follow this link to sign up")
           expect(email).to have_text_part_content("has invited you")
+          expect(email).to have_text_part_content("the Organization for Transformative Works (https://www.transformativeworks.org), which works to protect fan rights and preserve fanworks")
         end
       end
     end
@@ -350,15 +352,17 @@ describe UserMailer do
 
       describe "HTML version" do
         it "has the correct content" do
-          expect(email).to have_html_part_content("like to join us, please sign up at the following address")
+          expect(email).to have_html_part_content("follow this link to sign up")
           expect(email).to have_html_part_content("been invited")
+          expect(email).to have_html_part_content("Organization for Transformative Works</a>, which works to protect fan rights and preserve fanworks.")
         end
       end
 
       describe "text version" do
         it "has the correct content" do
-          expect(email).to have_text_part_content("like to join us, please sign up at the following address")
+          expect(email).to have_text_part_content("like to join us, please follow this link to sign up")
           expect(email).to have_text_part_content("been invited")
+          expect(email).to have_text_part_content("the Organization for Transformative Works (https://www.transformativeworks.org), which works to protect fan rights and preserve fanworks")
         end
       end
     end
@@ -488,12 +492,14 @@ describe UserMailer do
       describe "HTML version" do
         it "has the correct content" do
           expect(email).to have_html_part_content("you have #{count} new invitation, which")
+          expect(email).to have_html_part_content("your invitations page</a>.")
         end
       end
 
       describe "text version" do
         it "has the correct content" do
           expect(email).to have_text_part_content("you have #{count} new invitation, which")
+          expect(email).to have_text_part_content("your invitations page (")
         end
       end
     end
@@ -518,12 +524,14 @@ describe UserMailer do
       describe "HTML version" do
         it "has the correct content" do
           expect(email).to have_html_part_content("you have #{count} new invitations, which")
+          expect(email).to have_html_part_content("your invitations page</a>.")
         end
       end
 
       describe "text version" do
         it "has the correct content" do
           expect(email).to have_text_part_content("you have #{count} new invitations, which")
+          expect(email).to have_text_part_content("your invitations page (")
         end
       end
     end
@@ -1075,6 +1083,82 @@ describe UserMailer do
           expect(email).to have_text_part_content("posted at the Archive")
           expect(email).not_to have_text_part_content("collection")
         end
+      end
+    end
+  end
+
+  describe "delete_work_notification" do
+    subject(:email) { UserMailer.delete_work_notification(user, work) }
+
+    let(:user) { create(:user) }
+    let(:work) { create(:work) }
+
+    it_behaves_like "an email with a valid sender"
+    it_behaves_like "a translated email"
+
+    it "has the correct subject line" do
+      subject = "[#{ArchiveConfig.APP_SHORT_NAME}] Your work has been deleted"
+      expect(email).to have_subject(subject)
+    end
+  
+    it "has the correct attachments" do
+      expect(email.attachments.length).to eq(2)
+      expect(email.attachments).to contain_exactly(
+        an_object_having_attributes(filename: "#{work.title}.html"),
+        an_object_having_attributes(filename: "#{work.title}.txt")
+      )
+    end
+    
+    context "HTML version" do
+      it "has the correct content" do
+        expect(email).to have_html_part_content("Dear <b")
+        expect(email).to have_html_part_content("#{user.login}</b>,")
+        expect(email).to have_html_part_content("was deleted at your request")
+      end
+    end
+
+    context "text version" do
+      it "has the correct content" do
+        expect(email).to have_text_part_content("Dear #{user.login},")
+        expect(email).to have_text_part_content("Your work \"#{work.title}\" was deleted at your request")
+      end
+    end
+  end
+
+  describe "admin_deleted_work_notification" do
+    subject(:email) { UserMailer.admin_deleted_work_notification(user, work) }
+
+    let(:user) { create(:user) }
+    let(:work) { create(:work) }
+
+    it_behaves_like "an email with a valid sender"
+    it_behaves_like "a translated email"
+
+    it "has the correct subject line" do
+      subject = "[#{ArchiveConfig.APP_SHORT_NAME}] Your work has been deleted by an admin"
+      expect(email).to have_subject(subject)
+    end
+  
+    it "has the correct attachments" do
+      expect(email.attachments.length).to eq(2)
+      expect(email.attachments).to contain_exactly(
+        an_object_having_attributes(filename: "#{work.title}.html"),
+        an_object_having_attributes(filename: "#{work.title}.txt")
+      )
+    end
+    
+    context "HTML version" do
+      it "has the correct content" do
+        expect(email).to have_html_part_content("Dear <b")
+        expect(email).to have_html_part_content("#{user.login}</b>,")
+        expect(email).to have_html_part_content("was deleted from the Archive by a site admin")
+      end
+    end
+
+    context "text version" do
+      it "has the correct content" do
+        expect(email).to have_text_part_content("Dear #{user.login},")
+        expect(email).to have_text_part_content("Your work \"#{work.title}\" was deleted from the Archive by a site admin")
       end
     end
   end

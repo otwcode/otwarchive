@@ -45,6 +45,10 @@ Given /^I edit the skin "([^"]*)"$/ do |skin_name|
 end
 
 Given /^the unapproved public skin "([^"]*)" with css "([^"]*)"$/ do |skin_name, css|
+  # Delay to make sure all skins have at least 1 second of separation in their
+  # creation dates, so that they will be listed in the right order:
+  step "it is currently 1 second from now"
+
   step %{I am logged in as "skinner"}
   step %{I set up the skin "#{skin_name}" with css "#{css}"}
   attach_file("skin_icon", "features/fixtures/skin_test_preview.png")
@@ -58,14 +62,14 @@ Given /^the unapproved public skin "([^"]*)"$/ do |skin_name|
 end
 
 Given /^I approve the skin "([^"]*)"$/ do |skin_name|
-  step "I am logged in as an admin"
+  step %{I am logged in as a "superadmin" admin}
   visit admin_skins_url
   check("make_official_#{skin_name.downcase.gsub(/\s/, '_')}")
   step %{I submit}
 end
 
 Given /^I unapprove the skin "([^"]*)"$/ do |skin_name|
-  step "I am logged in as an admin"
+  step %{I am logged in as a "superadmin" admin}
   visit admin_skins_url
   step "I follow \"Approved Skins\""
   check("make_unofficial_#{skin_name.downcase.gsub(/\s/, '_')}")

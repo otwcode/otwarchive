@@ -94,8 +94,8 @@ module CreationNotifier
 
   # notify authors of related work
   def notify_parents
-    if !self.parent_work_relationships.empty? && !self.unrevealed?
-      self.parent_work_relationships.each {|relationship| relationship.notify_parent_owners}
-    end
+    return if unrevealed?
+
+    parents_after_saving.each(&:notify_parent_owners)
   end
 end

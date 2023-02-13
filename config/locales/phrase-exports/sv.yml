@@ -1,5 +1,63 @@
 ---
 sv:
+  activerecord:
+    attributes:
+      archive_warning:
+        name_with_colon:
+          one: 'Varning:'
+          other: 'Varningar:'
+      category:
+        name_with_colon:
+          one: 'Kategori:'
+          other: 'Kategorier:'
+      character:
+        name_with_colon:
+          one: 'Karaktär:'
+          other: 'Karaktärer:'
+      fandom:
+        name_with_colon:
+          one: 'Fandom:'
+          other: 'Fandoms:'
+      freeform:
+        name_with_colon:
+          one: 'Ytterligare tagg:'
+          other: 'Ytterligare taggar:'
+      rating:
+        name_with_colon: 'Åldersgräns:'
+      relationship:
+        name_with_colon:
+          one: 'Relation:'
+          other: 'Relationer:'
+      work:
+        summary: Sammanfattning
+    models:
+      archive_warning:
+        one: Varning
+        other: Varningar
+      category:
+        one: Kategori
+        other: Kategorier
+      chapter:
+        one: Kapitel
+        other: Kapitel
+      character:
+        one: Karaktär
+        other: Karaktärer
+      fandom:
+        one: Fandom
+        other: Fandoms
+      freeform:
+        one: Ytterligare tagg
+        other: Ytterligare taggar
+      rating:
+        one: Åldersgräns
+        other: Åldersgränser
+      relationship:
+        one: Relation
+        other: Relationer
+      series:
+        one: Serie
+        other: Serier
   kudo_mailer:
     batch_kudo_notification:
       guest:
@@ -7,18 +65,28 @@ sv:
         other: "%{count} gäster"
       html:
         left_kudos:
-          one: "%{givers_list} lämnade beröm om %{commentable_link}."
-          other: "%{givers_list} lämnade beröm om %{commentable_link}."
+          one: "%{givers_list} berömde %{commentable_link}."
+          other: "%{givers_list} berömde %{commentable_link}."
+        single_guest:
+          giver_list: En gäst
+          left_kudos: "%{giver_list} berömde %{commentable_link}."
       subject: "[%{app_name}] Du har fått beröm!"
       text:
         left_kudos:
-          one: "%{givers_list} lämnade beröm om %{commentable_title} (%{commentable_url})."
-          other: "%{givers_list} lämnade beröm om %{commentable_title} (%{commentable_url})."
+          one: "%{givers_list} berömde %{commentable_title} (%{commentable_url})."
+          other: "%{givers_list} berömde %{commentable_title} (%{commentable_url})."
+        single_guest: En gäst berömde %{commentable_title} (%{commentable_url}).
   mailer:
     general:
       closing:
         formal: Med vänliga hälsningar,
         informal: Vänliga hälsningar,
+      creation:
+        link_with_word_count: "%{creation_link} (%{word_count})"
+        title_with_word_count: '"%{creation_title}" (%{word_count})'
+        word_count:
+          one: "%{count} ord"
+          other: "%{count} ord"
       footer:
         general:
           html:
@@ -39,6 +107,7 @@ sv:
           addressed: Hej, %{name}!
           unaddressed: Hej!
         introductory: Hej från Archive of Our Own – AO3 (Vårt eget arkiv)!
+      metadata_label_indicator: ": "
       signature:
         app_short_name: AO3
         open_doors: Open Doors (Öppna dörrar)-teamet
@@ -187,7 +256,7 @@ sv:
       prompt_url: 'Prompt-URL:'
       recipient: 'Mottagare:'
       recipient_missing: 'Ingen: kontakta en moderator för att få hjälp!'
-      subject: "[%{app_name}][%{collection_title}] Ditt Uppdrag!"
+      subject: "[%{app_name}][%{collection_title}] Ditt uppdrag!"
       text:
         assignment: Du har blivit tilldelad följande förfrågan i "%{collection_title}"
           (%{collection_url}) -utmaningen på AO3!
@@ -278,8 +347,8 @@ sv:
         att listas som medskapare på följande kapitel:'
       intro_series: 'Användaren %{inviting_user} har bjudit in din pseud %{pseud}
         att listas som medskapare på följande serier:'
-      intro_work: 'Användaren %{inviting_user} har bjudit in din pseud %{pseud} att
-        listas som medskapare på följande verk:'
+      intro_work: 'Användaren %{inviting_user} har bjudit in din pseudonym %{pseud}
+        att listas som medskapare på följande verk:'
       subject: "[%{app_name}] Medskaparförfrågan"
       text:
         creation: "%{title} (%{url}) av %{pseuds}"

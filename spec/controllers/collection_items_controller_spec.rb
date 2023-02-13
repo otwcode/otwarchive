@@ -100,22 +100,6 @@ describe CollectionItemsController do
     end
   end
 
-  describe "#destroy" do
-    let(:approved_work) { create(:work) }
-    let(:approved_work_item) { collection.collection_items.create(item: approved_work) }
-
-    context "destroy" do
-      let(:owner) { collection.owners.first.user }
-
-      it "removes things" do
-        fake_login_known_user(owner)
-        delete :destroy, params: { id: approved_work_item.id, work_id: approved_work.id }
-        it_redirects_to_with_notice(collection_items_path(collection), "Item completely removed from collection " + collection.title + ".")
-        expect(CollectionItem.where(item_id: approved_work.id)).to be_empty
-      end
-    end
-  end
-
   describe "PATCH #update_multiple" do
     let(:collection) { create(:collection) }
     let(:work) { create(:work) }

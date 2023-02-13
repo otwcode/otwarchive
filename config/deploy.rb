@@ -86,7 +86,7 @@ namespace :deploy do
   end
 
   desc "Get the config files"
-  task :update_configs, roles: [ :app , :web ] do
+  task :update_configs, roles: [:app, :web, :workers] do
     run "/home/ao3app/bin/create_links_on_install"
   end
 

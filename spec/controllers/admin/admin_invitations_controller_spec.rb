@@ -57,7 +57,7 @@ describe Admin::AdminInvitationsController do
       fake_login_admin(admin)
       post :invite_from_queue, params: { invitation: { invite_from_queue: "1" } }
 
-      it_redirects_to_with_notice(admin_invitations_path, "1 people from the invite queue were invited.")
+      it_redirects_to_with_notice(admin_invitations_path, "1 person from the invite queue is being invited.")
     end
   end
 

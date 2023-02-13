@@ -1,6 +1,4 @@
 class AdminSetting < ApplicationRecord
-  include ActiveModel::ForbiddenAttributesProtection
-
   belongs_to :last_updated, class_name: 'Admin', foreign_key: :last_updated_by
   validates_presence_of :last_updated_by
   validates :invite_from_queue_number, numericality: { greater_than_or_equal_to: 1,
@@ -60,7 +58,7 @@ class AdminSetting < ApplicationRecord
       if Date.today >= self.invite_from_queue_at.to_date
         new_date = Time.now + self.invite_from_queue_frequency.days
         self.first.update_attribute(:invite_from_queue_at, new_date)
-        InviteRequest.invite
+        InviteFromQueueJob.perform_now(count: invite_from_queue_number)
       end
     end
   end

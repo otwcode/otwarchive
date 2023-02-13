@@ -79,6 +79,10 @@ module NavigationHelpers
       user_blocked_users_path(User.current_user)
     when /the blocked users page for "([^"]*)"/
       user_blocked_users_path(Regexp.last_match(1))
+    when "my muted users page"
+      user_muted_users_path(User.current_user)
+    when /the muted users page for "([^"]*)"/
+      user_muted_users_path(Regexp.last_match(1))
     when /my bookmarks page/
       step %{all indexing jobs have been run}
       user_bookmarks_path(User.current_user)

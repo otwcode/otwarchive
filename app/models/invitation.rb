@@ -1,8 +1,6 @@
 # Beta invitations
 # http://railscasts.com/episodes/124-beta-invitations
 class Invitation < ApplicationRecord
-  include ActiveModel::ForbiddenAttributesProtection
-
   belongs_to :creator, polymorphic: true
   belongs_to :invitee, polymorphic: true
   belongs_to :external_author
@@ -89,5 +87,4 @@ class Invitation < ApplicationRecord
       self.creator.save!(validate: false)
     end
   end
-
 end

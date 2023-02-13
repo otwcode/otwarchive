@@ -1,34 +1,115 @@
 ---
 cs:
+  activerecord:
+    attributes:
+      archive_warning:
+        name_with_colon:
+          few: 'Varování:'
+          one: 'Varování:'
+          other: 'Varování:'
+      category:
+        name_with_colon:
+          few: 'Kategorie:'
+          one: 'Kategorie:'
+          other: 'Kategorií:'
+      character:
+        name_with_colon:
+          few: 'Postavy:'
+          one: 'Postava:'
+          other: 'Postav:'
+      fandom:
+        name_with_colon:
+          few: 'Fandomy:'
+          one: 'Fandom:'
+          other: 'Fandomů:'
+      freeform:
+        name_with_colon:
+          few: 'Vedlejší tagy:'
+          one: 'Vedlejší tag:'
+          other: 'Vedlejších tagů:'
+      rating:
+        name_with_colon: 'Zařazení:'
+      relationship:
+        name_with_colon:
+          few: 'Vztahy:'
+          one: 'Vztah:'
+          other: 'Vztahů:'
+      work:
+        summary: Shrnutí
+    models:
+      archive_warning:
+        few: Varování
+        one: Varování
+        other: Varování
+      category:
+        few: Kategorie
+        one: Kategorie
+        other: Kategorií
+      chapter:
+        few: Kapitoly
+        one: Kapitola
+        other: Kapitol
+      character:
+        few: Postavy
+        one: Postava
+        other: Postav
+      fandom:
+        few: Fandomy
+        one: Fandom
+        other: Fandomů
+      freeform:
+        few: Vedlejší tagy
+        one: Vedlejší tag
+        other: Vedlejších tagů
+      rating:
+        few: Zařazení
+        one: Zařazení
+        other: Zařazení
+      relationship:
+        few: Vztahy
+        one: Vztah
+        other: Vztahů
+      series:
+        few: Série
+        one: Série
+        other: Sérií
   kudo_mailer:
     batch_kudo_notification:
       guest:
-        few: "%{count} návštěvníci"
+        few: "%{count} návštěvníků"
         many: "%{count} návštěvníků"
-        one: návštěvník
+        one: návštěvníka
         other: "%{count} návštěvníků"
       html:
         left_kudos:
-          few: "%{givers_list} zanechali kudos u %{commentable_link}."
-          many: "%{givers_list} zanechali kudos u %{commentable_link}."
-          one: "%{givers_list} zanechal/a kudos u %{commentable_link}."
-          other: "%{givers_list} zanechali kudos u %{commentable_link}."
+          few: Práce %{commentable_link} dostala kudos od %{givers_list}.
+          one: Práce %{commentable_link} dostala kudos od %{givers_list}.
+          other: Práce %{commentable_link} dostala kudos od %{givers_list}.
         single_guest:
-          giver_list: Návštěvník
-          left_kudos: "%{giver_list} zanechal kudos u %{commentable_link}."
+          giver_list: návštěvníka
+          left_kudos: Práce %{commentable_link} dostala kudos od %{giver_list}.
       subject: "[%{app_name}] Máte nové kudos!"
       text:
         left_kudos:
-          few: "%{givers_list} zanechali kudos u %{commentable_title} (%{commentable_url})."
-          many: "%{givers_list} zanechali kudos u %{commentable_title} (%{commentable_url})."
-          one: "%{givers_list} zanechal/a kudos u %{commentable_title} (%{commentable_url})."
-          other: "%{givers_list} zanechali kudos u %{commentable_title} (%{commentable_url})."
-        single_guest: Návštěvník zanechal kudos u %{commentable_title} (%{commentable_url}).
+          few: Práce %{commentable_title} (%{commentable_url}) dostala kudos od %{givers_list}.
+          one: Práce %{commentable_title} (%{commentable_url}) dostala kudos od %{givers_list}.
+          other: Práce %{commentable_title} (%{commentable_url}) dostala kudos od
+            %{givers_list}.
+        single_guest: Práce %{commentable_title} (%{commentable_url}) dostala kudos
+          od návštěvníka.
   mailer:
     general:
       closing:
         formal: S pozdravem,
         informal: S pozdravem,
+      creation:
+        link_with_word_count: "%{creation_link} (%{word_count})"
+        title_with_chapter_number: Kapitola %{position} z díla %{title}
+        title_with_word_count: '"%{creation_title}" (%{word_count})'
+        word_count:
+          few: "%{count} slova"
+          one: "%{count} slovo"
+          other: "%{count} slov"
       footer:
         general:
           html:
@@ -49,6 +130,7 @@ cs:
           unaddressed: Ahoj,
         introductory: Zdravíme z Archive of Our Own - AO3 (Našeho vlastního archivu
           - AO3),
+      metadata_label_indicator: ": "
       signature:
         app_short_name: AO3
         open_doors: The Open Doors team (tým Otevřených dvěří)
@@ -102,19 +184,19 @@ cs:
       html:
         help: Pokud si nejste jisti, proč byla vaše práce skryta, a neobdrželi jste
           další informace, na tento e-mail neodpovídejte, ale %{contact_abuse_link}.
-        hidden: Vaše práce %{title} byla skryta výborem pro Dohled nad dodržováním
-          pravidel a zásad serveru a není proto nadále veřejně dostupná.
+        hidden: Vaše práce %{title} byla skryta výborem pro Dohled na dodržování pravidel
+          a zásad serveru a není proto nadále veřejně dostupná.
         tos_violation: Pokud byla vaše práce skryta z důvodu porušení %{tos_link}
           AO3, budete muset práci upravit tak, aby s nimi byla v souladu. Pokud tak
           neučiníte, hrozí, že bude vaše práce smazána.
-      subject: "[%{app_name}] Vaše práce byla skryta výborem pro Dohled nad dodržováním
+      subject: "[%{app_name}] Vaše práce byla skryta výborem pro Dohled na dodržování
         pravidel a zásad serveru"
       text:
         help: 'Pokud si nejste jisti, proč byla vaše práce skryta, a neobdrželi jste
           další informace, na tento e-mail neodpovídejte, ale kontaktujte prosím výbor
           pro Dohled: %{contact_abuse_url}.'
         hidden: Vaše práce "%{title}" (%{work_url}) byla skryta výborem pro Dohled
-          nad dodržováním pravidel a zásad serveru, a není proto nadále veřejně dostupná.
+          na dodržování pravidel a zásad serveru, a není proto nadále veřejně dostupná.
         tos_violation: Pokud byla vaše práce skryta z důvodu porušení smluvních podmínek
           AO3 (%{tos_url}), budete muset práci upravit tak, aby s nimi byla v souladu.
           Jestli tak neučiníte, hrozí, že bude vaše práce smazána.

@@ -4,6 +4,12 @@
 
 <!--subnav-->
 <ul class="navigation actions" role="navigation">
+  <% if @collection.user_is_maintainer?(current_user) %>
+    <li>
+      <%= link_to ts("Download (CSV)"), collection_signups_path(@collection, format: :csv) %>
+      <%= link_to_help "csv-download" %>
+    </li>
+  <% end %>
   <li><%= ts("Sort By") %></li>
   <% if @show_request_fandom_tags %>
     <% @collection.prompts.each do |f| %>

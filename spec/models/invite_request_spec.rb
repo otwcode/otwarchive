@@ -1,5 +1,9 @@
 require 'spec_helper'
-describe InviteRequest, :ready do
+describe InviteRequest do
+  it "has a valid factory" do
+    expect(build(:invite_request)).to be_valid
+  end
+
   describe "Validation" do
     context "Invalid email" do
       it "invitation is not created for a blank email" do
