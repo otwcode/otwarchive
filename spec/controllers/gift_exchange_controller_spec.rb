@@ -73,7 +73,7 @@ describe Challenge::GiftExchangeController do
         end.not_to change { Time.zone }
 
         # Sydney is at +10, so the time in the form should be 10 hours after the UTC time:
-        expect(assigns[:challenge].signups_open_at_string).to eq("2021-07-01 06:00AM")
+        expect(assigns[:challenge].signups_open_at_string).to eq("2021-07-01 06:00")
       end
     end
   end

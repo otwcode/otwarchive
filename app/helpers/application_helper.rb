@@ -308,14 +308,14 @@ module ApplicationHelper
     time_in_zone = time.in_time_zone(zone)
     time_in_zone_string = time_in_zone.strftime('<abbr class="day" title="%A">%a</abbr> <span class="date">%d</span>
                                                  <abbr class="month" title="%B">%b</abbr> <span class="year">%Y</span>
-                                                 <span class="time">%I:%M%p</span>') +
+                                                 <span class="time">%H:%M</span>') +
                           " <abbr class=\"timezone\" title=\"#{zone}\">#{time_in_zone.zone}</abbr> "
 
     user_time_string = ""
     if user.is_a?(User) && user.preference.time_zone
       if user.preference.time_zone != zone
         user_time = time.in_time_zone(user.preference.time_zone)
-        user_time_string = "(" + user_time.strftime('<span class="time">%I:%M%p</span>') +
+        user_time_string = "(" + user_time.strftime('<span class="time">%H:%M</span>') +
                            " <abbr class=\"timezone\" title=\"#{user.preference.time_zone}\">#{user_time.zone}</abbr>)"
       elsif !user.preference.time_zone
         user_time_string = link_to ts("(set timezone)"), user_preferences_path(user)

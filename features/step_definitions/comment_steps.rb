@@ -56,12 +56,12 @@ end
 # THEN
 
 Then /^the comment's posted date should be nowish$/ do
-  nowish = Time.zone.now.strftime('%a %d %b %Y %I:%M%p')
+  nowish = Time.zone.now.strftime('%a %d %b %Y %H:%M')
   step %{I should see "#{nowish}" within ".posted.datetime"}
 end
 
 Then /^I should see Last Edited nowish$/ do
-  nowish = Time.zone.now.strftime('%a %d %b %Y %I:%M%p')
+  nowish = Time.zone.now.strftime('%a %d %b %Y %H:%M')
   step "I should see \"Last Edited #{nowish}\""
 end
 

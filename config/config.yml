@@ -245,7 +245,7 @@ COMMON_CATEGORY_NAME: 'Common'
 BANNED_CATEGORY_NAME: 'Banned'
 
 # DATE TIME FORMAT see http://ruby-doc.org/core/classes/Time.html#M000392
-DEFAULT_DATETIME_FORMAT: '%Y-%m-%d %I:%M%p'
+DEFAULT_DATETIME_FORMAT: '%Y-%m-%d %H:%M'
 
 # SEARCH TIPS
 SEARCH_TIPS: ['arthur merlin words>1000 sort:hits', 'words:100', 'buffy gen teen AND "no archive warnings apply"', 'lex m/m (mature OR explicit)',
