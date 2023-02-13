@@ -85,6 +85,7 @@ fa:
         informal: با آرزوی بهترین ها،
       creation:
         link_with_word_count: "(%{word_count}) %{creation_link}"
+        title_with_chapter_number: فصل %{position} از %{title}
         title_with_word_count: (%{word_count}) "%{creation_title}"
         word_count:
           one: کلمه %{count}

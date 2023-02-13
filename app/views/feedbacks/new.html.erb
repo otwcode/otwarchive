@@ -25,6 +25,7 @@
     <p><%= t(".abuse.reports", contact_link: link_to(t(".abuse.contact"), new_abuse_report_path)).html_safe %></p>
     <p><%= t(".reportable.intro") %></p>
     <ul>
+      <li><%= t(".reportable.fnok.concerning_html", fnok_link: link_to(t(".reportable.fnok.fnok"), tos_faq_path(anchor: "next_of_kin"))) %></li>
       <li><%= t(".reportable.bugs") %></li>
       <li><%= t(".reportable.site_questions") %></li>
       <li><%= t(".reportable.account_creation") %></li>
@@ -32,7 +33,7 @@
       <li><%= t(".reportable.tag_changes") %></li>
       <li><%= t(".reportable.new_features") %></li>
       <li><%= t(".reportable.orphaned_works") %></li>
-      <li><%= t(".reportable.work_language") %></li>
+      <li><%= t(".reportable.work_problems") %></li>
       <li><%= t(".reportable.policy_questions") %></li>
     </ul>
     <p><%= t(".do_not_spam_html") %></p>
