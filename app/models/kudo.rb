@@ -63,7 +63,7 @@ class Kudo < ApplicationRecord
   # any work here, it must not rely on user_id being present after this point.
   def self.expire_user_caches(user)
     Kudo.where(user: user).find_in_batches do |batch|
-      batch.each { |kudo| kudo.expire_caches }
+      batch.each(&:expire_caches)
     end
   end
 
