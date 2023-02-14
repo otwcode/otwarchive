@@ -158,7 +158,8 @@ class User < ApplicationRecord
 
   def expire_caches
     return unless saved_change_to_login?
-    Work.kudosed_by_user(self).touch_all
+
+    Kudo.expire_user_caches(self)
     self.works.each do |work|
       work.touch
       work.expire_caches
@@ -167,7 +168,7 @@ class User < ApplicationRecord
 
   def remove_user_from_kudos
     # TODO: AO3-2195 Display orphaned kudos (no users; no IPs so not counted as guest kudos).
-    Work.kudosed_by_user(self).touch_all
+    Kudo.expire_user_caches(self)
     Kudo.where(user: self).update_all(user_id: nil)
   end
 

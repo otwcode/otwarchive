@@ -59,17 +59,25 @@ class Kudo < ApplicationRecord
     end
   end
 
+  # Note: This is called in remove_user_from_kudos, so whether or not it delays
+  # any work here, it must not rely on user_id being present after this point.
+  def self.expire_user_caches(user)
+    Kudo.where(user: user).find_in_batches do |batch|
+      batch.each { |kudo| kudo.expire_caches }
+    end
+  end
+
   after_save :expire_caches
   def expire_caches
-    if commentable_type == "Work"
-      # Expire the work's cached total kudos count.
-      Rails.cache.delete("works/#{commentable_id}/kudos_count-v2")
-      # If it's a guest kudo, also expire the work's cached guest kudos count.
-      Rails.cache.delete("works/#{commentable_id}/guest_kudos_count-v2") if user_id.nil?
-    end
+    return unless commentable_type == "Work"
+
+    # Expire the work's cached total kudos count.
+    Rails.cache.delete("works/#{commentable_id}/kudos_count-v2")
+    # If it's a guest kudo, also expire the work's cached guest kudos count.
+    Rails.cache.delete("works/#{commentable_id}/guest_kudos_count-v2") if user_id.nil?
 
     # Expire the cached kudos section under the work.
-    ActionController::Base.new.expire_fragment("#{commentable.cache_key}/kudos-v3")
+    ActionController::Base.new.expire_fragment("works/#{commentable_id}/kudos-v4")
   end
 
   def notify_user_by_email?(user)

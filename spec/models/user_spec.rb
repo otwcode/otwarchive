@@ -14,15 +14,18 @@ describe User do
           expect(kudo.user_id).to be_nil
         end
       end
-      
+
       it "expires kudosed works' kudos caches" do
-        orig_cache_keys = kudo_bundle.map { |kudo| "#{kudo.commentable.cache_key}/kudos-v4" }
-        travel 1.second do
-          user.destroy!
-          kudo_bundle.zip orig_cache_keys.each do |kudo, orig_cache_key|
-            kudo.commentable.reload
-            expect(orig_cache_key).not_to eq("#{kudo.commentable.cache_key}/kudos-v4")
-          end
+        kudo_bundle.each do |kudo|
+          # Cache a fragment
+          ActionController::Base.new.write_fragment("works/#{kudo.commentable_id}/kudos-v4", "fake fragment")
+        end
+
+        user.destroy!
+
+        kudo_bundle.each do |kudo|
+          # Make sure it's gone
+          expect(ActionController::Base.new.fragment_exist?("works/#{kudo.commentable_id}/kudos-v4")).to be(false)
         end
       end
     end
@@ -155,16 +158,15 @@ describe User do
 
     context "user has kudosed a work" do
       let(:kudo) { create(:kudo, user: existing_user) }
-      
+
       it "expires the work's kudos cache" do
-        original_cache_key = "#{kudo.commentable.cache_key}/kudos-v4"
-        # update time so that the work's cache_key gets set with a new time
-        travel 1.second do
-          existing_user.update(login: "new_username")
-          # reload the commentable to reflect database update
-          kudo.commentable.reload
-          expect(original_cache_key).not_to eq("#{kudo.commentable.cache_key}/kudos-v4")
-        end
+        # Cache a fragment
+        ActionController::Base.new.write_fragment("works/#{kudo.commentable_id}/kudos-v4", "fake fragment")
+
+        existing_user.update(login: "new_username")
+
+        # Make sure it's gone
+        expect(ActionController::Base.new.fragment_exist?("works/#{kudo.commentable_id}/kudos-v4")).to be(false)
       end
     end
 
