@@ -69,15 +69,15 @@ class Kudo < ApplicationRecord
 
   after_save :expire_caches
   def expire_caches
-    return unless commentable_type == "Work"
-
-    # Expire the work's cached total kudos count.
-    Rails.cache.delete("works/#{commentable_id}/kudos_count-v2")
-    # If it's a guest kudo, also expire the work's cached guest kudos count.
-    Rails.cache.delete("works/#{commentable_id}/guest_kudos_count-v2") if user_id.nil?
+    if commentable_type == "Work"
+      # Expire the work's cached total kudos count.
+      Rails.cache.delete("works/#{commentable_id}/kudos_count-v2")
+      # If it's a guest kudo, also expire the work's cached guest kudos count.
+      Rails.cache.delete("works/#{commentable_id}/guest_kudos_count-v2") if user_id.nil?
+    end
 
     # Expire the cached kudos section under the work.
-    ActionController::Base.new.expire_fragment("works/#{commentable_id}/kudos-v4")
+    ActionController::Base.new.expire_fragment("#{commentable.cache_key}/kudos-v4")
   end
 
   def notify_user_by_email?(user)
