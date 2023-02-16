@@ -18,7 +18,7 @@
 </h2>
 <!--/descriptions-->
 
-<% if can_access_admin_options? %>
+<% if policy(@series).show_admin_options? %>
   <div><%= render "admin/admin_options", item: @series %></div>
 <% end %>
 
