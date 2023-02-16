@@ -52,6 +52,18 @@ describe Pseud do
     end
   end
 
+  describe "changing pseud name" do
+    let(:pseud) { create(:pseud) }
+    let!(:bookmark) { create(:bookmark, pseud: pseud) }
+
+    it "modifies the updated_at of associated bookmarks" do
+      travel(1.second)
+      expect do
+        pseud.update(name: "New Name")
+      end.to change { bookmark.reload.updated_at }
+    end
+  end
+
   describe "touch_comments" do
     let(:pseud) { create(:pseud) }
     let!(:comment) { create(:comment, pseud: pseud) }

@@ -397,10 +397,11 @@ class Pseud < ApplicationRecord
   end
 
   def expire_caches
-    if saved_change_to_name?
-      works.touch_all
-      series.each(&:expire_byline_cache)
-    end
+    return unless saved_change_to_name?
+
+    bookmarks.touch_all
+    works.touch_all
+    series.each(&:expire_byline_cache)
   end
 
   def touch_comments
