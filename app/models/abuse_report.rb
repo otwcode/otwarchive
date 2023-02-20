@@ -39,12 +39,13 @@ class AbuseReport < ApplicationRecord
 
   scope :by_date, -> { order('created_at DESC') }
 
+  before_validation :add_work_id_to_url, :clean_url, on: :create
+  
   # Clean work or profile URLs so we can prevent the same URLs from
   # getting reported too many times.
   # If the URL ends without a / at the end, add it:
   # url_is_not_over_reported uses the / so "/works/1234" isn't a match
   # for "/works/123"
-  before_validation :clean_url, on: :create
   def clean_url
     # Work URLs: "works/123"
     # Profile URLs: "users/username"
@@ -57,6 +58,23 @@ class AbuseReport < ApplicationRecord
     else
       url
     end
+  end
+
+  # Gets the chapter id from the URL and tries to get the work id
+  # If successful, the work id is then added to the URL in front of "/chapters"
+  def add_work_id_to_url
+    return unless url =~ %r{(chapters/\d+)} && url !~ %r{(works/\d+)}
+
+    chapter_regex = %r{(chapters/)(\d+)}
+    regex_groups = chapter_regex.match url
+    chapter_id = regex_groups[2]
+    work_id = Chapter.find_by(id: chapter_id).try(:work_id)
+
+    return if work_id.nil?
+    
+    uri = Addressable::URI.parse url
+    uri.path = "/works/" + work_id.to_s + uri.path
+    self.url = uri.to_s
   end
 
   app_url_regex = Regexp.new('^(https?:\/\/)?(www\.|(insecure\.))?(archiveofourown|ao3)\.(org|com).*', true)
