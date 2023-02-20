@@ -24,8 +24,8 @@ module ParagraphMaker
 
   # Tags that need to go inside p tags
   TAG_NAMES_TO_WRAP = (%w[
-    a abbr acronym b big br cite code del dfn em i img ins kbd q s samp small
-    span strike strong sub sup tt u var
+    a abbr acronym b big br cite code del dfn em i img ins kbd q rp rt ruby
+    s samp small span strike strong sub sup tt u var
   ] + INLINE_INVALID_TAGS).freeze
 
   # Tags that can't be inside p tags
