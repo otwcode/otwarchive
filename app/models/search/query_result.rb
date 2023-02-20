@@ -20,15 +20,16 @@ class QueryResult
   def items
     return [] if response[:error]
     if @items.nil?
-      @items = klass.load_from_elasticsearch(hits)
+      @items = klass.load_from_elasticsearch(hits, scopes: @scopes)
     end
     @items
   end
 
-  # Laying some groundwork for making better use of search results
-  def decorate_items(items)
-    return items unless klass == Pseud
-    PseudDecorator.decorate_from_search(items, hits)
+  def scope(*args)
+    @scopes ||= []
+    @scopes += args
+    @items = nil # reset the items in case we already loaded them
+    self # for chaining
   end
 
   def each(&block)

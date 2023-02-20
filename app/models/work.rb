@@ -1002,6 +1002,19 @@ class Work < ApplicationRecord
     where("series.id = ?", series.id)
   end
 
+  scope :with_columns_for_blurb, lambda {
+    select(:id, :created_at, :updated_at, :expected_number_of_chapters,
+           :posted, :language_id, :restricted, :title, :summary, :word_count,
+           :hidden_by_admin, :revised_at, :complete, :in_anon_collection,
+           :in_unrevealed_collection, :summary_sanitizer_version)
+  }
+
+  scope :with_includes_for_blurb, lambda {
+    includes(:pseuds)
+  }
+
+  scope :for_blurb, -> { with_columns_for_blurb.with_includes_for_blurb }
+
   ########################################################################
   # SORTING
   ########################################################################
