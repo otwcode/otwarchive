@@ -499,3 +499,7 @@ STAT_COUNTER_JOB_SIZE: 1000
 
 # The number of works to fetch from the database in one query when updating stat counters:
 STAT_COUNTER_BATCH_SIZE: 100
+
+# Number of hours to retain the original creator for works that have been
+# orphaned.
+ORIGINAL_CREATOR_TTL_HOURS: 72

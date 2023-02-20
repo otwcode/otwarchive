@@ -44,6 +44,8 @@ class Work < ApplicationRecord
   has_many :total_comments, class_name: 'Comment', through: :chapters
   has_many :kudos, as: :commentable, dependent: :destroy
 
+  has_many :original_creators, class_name: "WorkOriginalCreator", dependent: :destroy
+
   belongs_to :language
   belongs_to :work_skin
   validate :work_skin_allowed, on: :save

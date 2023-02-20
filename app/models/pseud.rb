@@ -350,6 +350,7 @@ class Pseud < ApplicationRecord
           comment.update_attribute(:pseud_id, pseud.id)
         end
       end
+
       # make sure changes affect caching/search/author fields
       creation.save
     end

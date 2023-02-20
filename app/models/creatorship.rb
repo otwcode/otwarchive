@@ -77,6 +77,7 @@ class Creatorship < ApplicationRecord
 
   before_destroy :expire_caches
   before_destroy :check_not_last
+  before_destroy :save_original_creator
   after_destroy :remove_from_children
 
   after_commit :update_indices
@@ -175,6 +176,16 @@ class Creatorship < ApplicationRecord
     errors.add(:base, ts("Sorry, we can't remove all creators of a %{type}.",
                          type: creation.model_name.human.downcase))
     raise ActiveRecord::RecordInvalid, self
+  end
+
+  # Record the original creator if the creation is a work.
+  # This information is stored temporarily to make it available for
+  # Policy and Abuse on orphaned works.
+  def save_original_creator
+    return unless creation.is_a?(Work)
+    return if creation.destroyed?
+
+    creation.original_creators.create_or_find_by(user: pseud.user).touch
   end
 
   def expire_caches

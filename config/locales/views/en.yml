@@ -493,6 +493,11 @@ en:
     index:
       blocked_users: "Blocked Users"
       muted_users: "Muted Users"
+  works:
+    meta:
+      original_creators:
+        one: "Original Creator ID:"
+        other: "Original Creator IDs:"
   invite_requests:
     invite_request:
       title: "Invitation Status for %{email}"
