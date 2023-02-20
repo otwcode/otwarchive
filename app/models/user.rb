@@ -389,15 +389,6 @@ class User < ApplicationRecord
     User.fetch_orphan_account if ArchiveConfig.ORPHANING_ALLOWED
   end
 
-  # Is this user an authorized translation admin?
-  def translation_admin
-    self.is_translation_admin?
-  end
-
-  def is_translation_admin?
-    has_role?(:translation_admin)
-  end
-
   # Is this user an authorized tag wrangler?
   def tag_wrangler
     self.is_tag_wrangler?
