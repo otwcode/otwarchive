@@ -119,6 +119,7 @@ LiveValidation.prototype = {
       	    this.element.onblur = function(e){ self.doOnBlur(e); return self.oldOnBlur.call(this, e); }
         }
       }
+      this.validate();
     },
 	
 	/**
@@ -210,7 +211,6 @@ LiveValidation.prototype = {
      */
     doOnFocus: function(e){
       this.focused = true;
-      this.removeMessageAndFieldClass();
     },
     
     /**
@@ -363,6 +363,8 @@ LiveValidation.prototype = {
         var span = document.createElement('span');
     	var textNode = document.createTextNode(this.message);
       	span.appendChild(textNode);
+        span.role = "alert";
+        span.id = this.element.id + "_" + this.messageClass;
         return span;
     },
     
@@ -373,16 +375,13 @@ LiveValidation.prototype = {
      */
     insertMessage: function(elementToInsert){
       	this.removeMessage();
-      	if( (this.displayMessageWhenEmpty && (this.elementType == LiveValidation.CHECKBOX || this.element.value == ''))
-    	  || this.element.value != '' ){
-            var className = this.validationFailed ? this.invalidClass : this.validClass;
-    	  	elementToInsert.className += ' ' + this.messageClass + ' ' + className;
-            if(this.insertAfterWhatNode.nextSibling){
-    		  		this.insertAfterWhatNode.parentNode.insertBefore(elementToInsert, this.insertAfterWhatNode.nextSibling);
-    		}else{
-    			    this.insertAfterWhatNode.parentNode.appendChild(elementToInsert);
-    	    }
-    	}
+        var className = this.validationFailed ? this.invalidClass : this.validClass;
+        elementToInsert.className += ' ' + this.messageClass + ' ' + className;
+        if(this.insertAfterWhatNode.nextSibling){
+            this.insertAfterWhatNode.parentNode.insertBefore(elementToInsert, this.insertAfterWhatNode.nextSibling);
+        } else {
+            this.insertAfterWhatNode.parentNode.appendChild(elementToInsert);
+        }
     },
     
     
@@ -393,9 +392,13 @@ LiveValidation.prototype = {
         this.removeFieldClass();
         if(!this.validationFailed){
             if(this.displayMessageWhenEmpty || this.element.value != ''){
+                this.element.setAttribute("aria-invalid", false);
+                this.element.removeAttribute("aria-describedby");
                 if(this.element.className.indexOf(this.validFieldClass) == -1) this.element.className += ' ' + this.validFieldClass;
             }
-        }else{
+        } else {
+            this.element.setAttribute("aria-invalid", true);
+            this.element.setAttribute("aria-describedby", this.element.id + "_" + this.messageClass);
             if(this.element.className.indexOf(this.invalidFieldClass) == -1) this.element.className += ' ' + this.invalidFieldClass;
         }
     },
