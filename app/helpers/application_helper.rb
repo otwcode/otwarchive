@@ -604,4 +604,14 @@ module ApplicationHelper
       params
     end
   end
+
+  def disallow_robots?(item)
+    return unless item
+
+    if item.is_a?(User)
+      item.preference&.minimize_search_engines?
+    elsif item.respond_to?(:users)
+      item.users.all? { |u| u&.preference&.minimize_search_engines? }
+    end
+  end
 end # end of ApplicationHelper

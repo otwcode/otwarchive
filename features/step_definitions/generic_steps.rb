@@ -248,6 +248,16 @@ Then /^I should not see a link "([^\"]*)"$/ do |name|
   page.body.should_not =~ /#{Regexp.escape(text)}/m
 end
 
+Then "the page should be hidden from search engines" do
+  expect(page).to have_css("meta[name=robots][content=noindex]", visible: false)
+  expect(page).to have_css("meta[name=googlebot][content=noindex]", visible: false)
+end
+
+Then "the page should not be hidden from search engines" do
+  expect(page).not_to have_css("meta[name=robots][content=noindex]", visible: false)
+  expect(page).not_to have_css("meta[name=googlebot][content=noindex]", visible: false)
+end
+
 When /^I want to search for exactly one term$/ do
   Capybara.exact = true
 end
