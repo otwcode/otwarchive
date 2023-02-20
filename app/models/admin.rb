@@ -20,7 +20,7 @@ class Admin < ApplicationRecord
 
   validates :login,
             presence: true,
-            uniqueness: { case_sensitive: false },
+            uniqueness: true,
             length: { in: ArchiveConfig.LOGIN_LENGTH_MIN..ArchiveConfig.LOGIN_LENGTH_MAX }
   validates_presence_of :password_confirmation, if: :new_record?
   validates_confirmation_of :password, if: :new_record?

@@ -589,6 +589,23 @@ describe Work do
     end
   end
 
+  describe "#destroy" do
+    let(:work) { create(:work) }
+
+    it "does not save an original creator record" do
+      expect { work.destroy }.not_to change { WorkOriginalCreator.count }
+    end
+
+    context "when an original creator exists" do
+      let!(:original_creator) { create(:work_original_creator, work: work) }
+
+      it "deletes the original creator" do
+        work.destroy
+        expect { original_creator.reload }.to raise_error(ActiveRecord::RecordNotFound)
+      end
+    end
+  end
+
   describe "#allow_collection_invitation?" do
     let(:creator1) { create(:user) }
     let(:creator2) { create(:user) }

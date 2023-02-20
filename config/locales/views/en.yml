@@ -495,6 +495,11 @@ en:
       blocked_users: "Blocked Users"
       allow_collection_invitation: "Allow others to invite my works to collections."
       muted_users: "Muted Users"
+  works:
+    meta:
+      original_creators:
+        one: "Original Creator ID:"
+        other: "Original Creator IDs:"
   invite_requests:
     invite_request:
       title: "Invitation Status for %{email}"

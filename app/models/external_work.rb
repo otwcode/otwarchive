@@ -11,6 +11,8 @@ class ExternalWork < ApplicationRecord
   # .duplicate.count.size returns the number of URLs with multiple external works
   scope :duplicate, -> { group(:url).having("count(DISTINCT id) > 1") }
 
+  scope :for_blurb, -> { includes(:language, :tags) }
+
   AUTHOR_LENGTH_MAX = 500
 
   validates_presence_of :title

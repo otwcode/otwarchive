@@ -153,7 +153,7 @@ class Tag < ApplicationRecord
   has_many :parent_tag_set_associations, class_name: 'TagSetAssociation', foreign_key: 'parent_tag_id', dependent: :destroy
 
   validates_presence_of :name
-  validates_uniqueness_of :name, case_sensitive: false
+  validates :name, uniqueness: true
   validates_length_of :name, minimum: 1, message: "cannot be blank."
   validates_length_of :name,
     maximum: ArchiveConfig.TAG_MAX,

@@ -125,6 +125,14 @@ Then /^I should see "([^"]*)" in the "([^"]*)" input/ do |content, labeltext|
   find_field("#{labeltext}").value.should == content
 end
 
+Then /^I should see a button with text "(.*?)"(?: within "(.*?)")?$/ do |text, selector|
+  assure_xpath_present("input", "value", text, selector)
+end
+
+Then /^I should not see a button with text "(.*?)"(?: within "(.*?)")?$/ do |text, selector|
+  assure_xpath_not_present("input", "value", text, selector)
+end
+
 Then "the {string} input should be blank" do |label|
   expect(find_field(label).value).to be_blank
 end
@@ -238,6 +246,16 @@ end
 Then /^I should not see a link "([^\"]*)"$/ do |name|
   text = name + "</a>"
   page.body.should_not =~ /#{Regexp.escape(text)}/m
+end
+
+Then "the page should be hidden from search engines" do
+  expect(page).to have_css("meta[name=robots][content=noindex]", visible: false)
+  expect(page).to have_css("meta[name=googlebot][content=noindex]", visible: false)
+end
+
+Then "the page should not be hidden from search engines" do
+  expect(page).not_to have_css("meta[name=robots][content=noindex]", visible: false)
+  expect(page).not_to have_css("meta[name=googlebot][content=noindex]", visible: false)
 end
 
 When /^I want to search for exactly one term$/ do
