@@ -163,6 +163,7 @@ en:
           hidden: "Sorry, you can't add or edit comments on a hidden work."
           unrevealed: "Sorry, you can't add or edit comments on an unrevealed work."
       blocked: "Sorry, you have been blocked by one or more of this work's creators."
+      invite_to_collections_link: "Invite To Collections"
   layouts:
     proxy_notice:
       faux_heading: "Important message:"
@@ -492,6 +493,7 @@ en:
   preferences:
     index:
       blocked_users: "Blocked Users"
+      allow_collection_invitation: "Allow others to invite my works to collections."
       muted_users: "Muted Users"
   works:
     meta:
@@ -521,3 +523,9 @@ en:
         other: "Transfer these bookmarks to the default pseud"
       confirm: "Are you sure? This can't be undone!"
       cancel: "Cancel"
+  collection_items:
+    collection_item_form:
+      invite_header_html: "Invite %{title} to collections"
+      add_bookmark_header: "Add Bookmark to collections"
+      invite: "Invite"
+      add: "Add"

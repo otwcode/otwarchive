@@ -295,8 +295,8 @@ When /^I edit the draft "([^"]*)"$/ do |draft|
   step %{I edit the work "#{draft}"}
 end
 
-When /^I post the chaptered work "([^"]*)"$/ do |title|
-  step %{I post the work "#{title}"}
+When /^I post the chaptered work "([^"]*)"(?: in the collection "([^"]*)")?$/ do |title, collection|
+  step %{I post the work "#{title}" in the collection "#{collection}"}
   step %{I follow "Add Chapter"}
   fill_in("content", with: "Another Chapter.")
   click_button("Preview")

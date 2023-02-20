@@ -605,4 +605,37 @@ describe Work do
       end
     end
   end
+
+  describe "#allow_collection_invitation?" do
+    let(:creator1) { create(:user) }
+    let(:creator2) { create(:user) }
+    let(:work) { create(:work, authors: [creator1.default_pseud, creator2.default_pseud]) }
+
+    context "when all creators allow collection invitations" do
+      before do
+        creator1.preference.update(allow_collection_invitation: true)
+        creator2.preference.update(allow_collection_invitation: true)
+      end
+
+      it "returns true" do
+        expect(work.allow_collection_invitation?).to be true
+      end
+    end
+
+    context "when all creators disallow collection invitations" do
+      it "returns false" do
+        expect(work.allow_collection_invitation?).to be false
+      end
+    end
+
+    context "when creators have a mix of collection invitation preferences" do
+      before do
+        creator1.preference.update(allow_collection_invitation: true)
+      end
+
+      it "returns true" do
+        expect(work.allow_collection_invitation?).to be true
+      end
+    end
+  end
 end

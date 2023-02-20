@@ -1234,4 +1234,10 @@ class Work < ApplicationRecord
     nonfiction_tags = [125773, 66586, 123921, 747397] # Essays, Nonfiction, Reviews, Reference
     (filter_ids & nonfiction_tags).present?
   end
+
+  # Determines if this work allows invitations to collections,
+  # meaning that at least one of the creators has opted-in.
+  def allow_collection_invitation?
+    users.any? { |user| user.preference.allow_collection_invitation }
+  end
 end
