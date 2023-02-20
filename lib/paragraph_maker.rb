@@ -19,7 +19,7 @@ module ParagraphMaker
   # Tags whose content we don't touch
   TAG_NAMES_TO_SKIP = (%w[
     a abbr acronym address audio dl embed figure h1 h2 h3 h4 h5 h6 hr img ol
-    object p pre source table track video ul
+    object p pre source summary table track video ul
   ] + INLINE_INVALID_TAGS + REMOVED_INVALID_TAGS).freeze
 
   # Tags that need to go inside p tags
@@ -30,14 +30,14 @@ module ParagraphMaker
 
   # Tags that can't be inside p tags
   TAG_NAMES_TO_UNWRAP = %w[
-    audio dl figure h1 h2 h3 h4 h5 h6 hr ol p pre source table track ul video
+    audio details dl figure h1 h2 h3 h4 h5 h6 hr ol p pre source summary table track ul video
   ].freeze
 
   # Tags before and after which we don't want to convert linebreaks
   # into br's and p's
   TAG_NAMES_STRIP_WHITESPACE = (%w[
-    audio blockquote br center dl div figure figcaption h1 h2 h3 h4 h5 h6 hr ol
-    p pre source table track ul video
+    audio blockquote br center details dl div figure figcaption h1 h2 h3 h4 h5 h6 hr ol
+    p pre source summary table track ul video
   ] + BLOCK_INVALID_TAGS + REMOVED_INVALID_TAGS).freeze
 
   private

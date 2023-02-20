@@ -176,6 +176,14 @@ Given "an abuse ticket ID exists" do
   allow_any_instance_of(ZohoResourceClient).to receive(:find_ticket).and_return(ticket)
 end
 
+Given "a work {string} with the original creator {string}" do |title, creator|
+  step %{I am logged in as "#{creator}"}
+  step %{I post the work "#{title}"}
+  FactoryBot.create(:user, login: "orphan_account")
+  step %{I orphan the work "#{title}"}
+  step %{I log out}
+end
+
 Given "the admin {string} is locked" do |login|
   admin = Admin.find_by(login: login) || FactoryBot.create(:admin, login: login)
   # Same as script/lock_admin.rb
@@ -296,6 +304,11 @@ end
 When "the search criteria contains the ID for {string}" do |login|
   user_id = User.find_by(login: login).id
   fill_in("user_id", with: user_id)
+end
+
+When "it is past the admin password reset token's expiration date" do
+  days = ArchiveConfig.DAYS_UNTIL_ADMIN_RESET_PASSWORD_LINK_EXPIRES + 1
+  step "it is currently #{days} days from now"
 end
 
 ### THEN
@@ -462,4 +475,10 @@ end
 
 Then /^the user content should be shown as right-to-left$/ do
   page.should have_xpath("//div[contains(@class, 'userstuff') and @dir='rtl']")
+end
+
+Then "I should see the original creator {string}" do |creator|
+  user = User.find_by(login: creator)
+  expect(page).to have_selector(".original_creators",
+                                text: "#{user.id} (#{creator})")
 end

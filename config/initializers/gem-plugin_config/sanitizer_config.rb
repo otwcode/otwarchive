@@ -5,9 +5,9 @@ class Sanitize
     ARCHIVE = freeze_config(
       elements: %w[
         a abbr acronym address b big blockquote br caption center cite code col
-        colgroup figcaption figure dd del dfn div dl dt em h1 h2 h3 h4 h5 h6 hr
+        colgroup details figcaption figure dd del dfn div dl dt em h1 h2 h3 h4 h5 h6 hr
         i img ins kbd li ol p pre q rp rt ruby s samp small span strike strong
-        sub sup table tbody td tfoot th thead tr tt u ul var
+        sub summary sup table tbody td tfoot th thead tr tt u ul var
       ],
       attributes: {
         all: %w[align title dir],
