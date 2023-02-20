@@ -44,6 +44,8 @@ class Work < ApplicationRecord
   has_many :total_comments, class_name: 'Comment', through: :chapters
   has_many :kudos, as: :commentable, dependent: :destroy
 
+  has_many :original_creators, class_name: "WorkOriginalCreator", dependent: :destroy
+
   belongs_to :language
   belongs_to :work_skin
   validate :work_skin_allowed, on: :save
@@ -545,17 +547,6 @@ class Work < ApplicationRecord
   # VERSIONS & REVISION DATES
   ########################################################################
 
-  # provide an interface to increment major version number
-  # resets minor_version to 0
-  def update_major_version
-    self.update({ major_version: self.major_version + 1, minor_version: 0 })
-  end
-
-  # provide an interface to increment minor version number
-  def update_minor_version
-    self.update_attribute(:minor_version, self.minor_version+1)
-  end
-
   def set_revised_at(date=nil)
     date ||= self.chapters.where(posted: true).maximum('published_at') ||
              self.revised_at || self.created_at || Time.current
@@ -1012,6 +1003,19 @@ class Work < ApplicationRecord
     joins(:series).
     where("series.id = ?", series.id)
   end
+
+  scope :with_columns_for_blurb, lambda {
+    select(:id, :created_at, :updated_at, :expected_number_of_chapters,
+           :posted, :language_id, :restricted, :title, :summary, :word_count,
+           :hidden_by_admin, :revised_at, :complete, :in_anon_collection,
+           :in_unrevealed_collection, :summary_sanitizer_version)
+  }
+
+  scope :with_includes_for_blurb, lambda {
+    includes(:pseuds)
+  }
+
+  scope :for_blurb, -> { with_columns_for_blurb.with_includes_for_blurb }
 
   ########################################################################
   # SORTING

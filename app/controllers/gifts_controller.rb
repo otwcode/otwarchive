@@ -3,7 +3,7 @@ class GiftsController < ApplicationController
   before_action :load_collection
 
   def index
-    @user = User.find_by(login: params[:user_id]) if params[:user_id]
+    @user = User.find_by!(login: params[:user_id]) if params[:user_id]
     @recipient_name = params[:recipient]
     @page_subtitle = ts("Gifts for %{name}", name: (@user ? @user.login : @recipient_name))
     unless @user || @recipient_name

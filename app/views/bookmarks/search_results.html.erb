@@ -5,6 +5,8 @@
   <%= ts("You searched for:") %>
   <%= (strip_tags @search.summary).html_safe %>
 </h4>
+
+<%= render "muted/muted_items_notice" %>
 <!--/descriptions-->
 
 <!--subnav-->

@@ -162,6 +162,8 @@ module MailerHelper
     "#{work_tag_metadata_label(tags)}#{work_tag_metadata_list(tags)}"
   end
 
+  # TODO: We're using this for labels in set_password_notification, too. Let's
+  # take the "work" out of the name.
   def style_work_metadata_label(text)
     style_bold(work_metadata_label(text))
   end

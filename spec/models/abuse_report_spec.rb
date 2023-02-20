@@ -38,6 +38,29 @@ describe AbuseReport do
       end
     end
 
+    context "with a chapter URL that's missing the work id" do
+      context "when the chapter exists" do
+        let(:work) { create(:work) }
+        let(:chapter) { work.chapters.first }
+        let(:missing_work_id) { build(:abuse_report, url: "http://archiveofourown.org/chapters/#{chapter.id}") }
+        
+        it "saves and adds the correct work id to the URL" do
+          expect(missing_work_id.save).to be_truthy
+          expect(missing_work_id.url).to eq("http://archiveofourown.org/works/#{work.id}/chapters/#{chapter.id}/")
+        end
+      end
+
+      context "when the chapter does not exist" do
+        let(:chapter_url) { "http://archiveofourown.org/chapters/000" }
+        let(:missing_work_id) { build(:abuse_report, url: chapter_url) }
+
+        it "saves without modifying the URL" do
+          expect(missing_work_id.save).to be_truthy
+          expect(missing_work_id.url).to eq(chapter_url)
+        end
+      end
+    end
+
     context "invalid url" do
       let(:invalid_url) { build(:abuse_report, url: "nothing before #{ArchiveConfig.APP_URL}") }
       it "text before url" do
