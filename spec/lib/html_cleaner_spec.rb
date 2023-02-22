@@ -609,6 +609,36 @@ describe HtmlCleaner do
       end
     end
 
+    it "allows details to have an 'open' attribute" do
+      html = <<~HTML
+        <details open>
+          <summary>Automated Status: Operational</summary>
+          <p>Velocity: 12m/s</p>
+          <p>Direction: North</p>
+        </details>
+      HTML
+
+      result = add_paragraphs_to_text(html)
+      doc = Nokogiri::HTML.fragment(result)
+
+      expect(doc.xpath("./details[@open]").size).to eq(1)
+    end
+
+    it "does not require details to have an 'open' attribute" do
+      html = <<~HTML
+        <details>
+          <summary>Automated Status: Operational</summary>
+          <p>Velocity: 12m/s</p>
+          <p>Direction: North</p>
+        </details>
+      HTML
+
+      result = add_paragraphs_to_text(html)
+      doc = Nokogiri::HTML.fragment(result)
+
+      expect(doc.xpath("./details[@open]")).to be_empty
+    end
+
     it "does not wrap details in p tags" do
       html = <<~HTML
         aa

@@ -15,6 +15,7 @@ class Sanitize
         "blockquote" => %w[cite],
         "col" => %w[span width],
         "colgroup" => %w[span width],
+        "details" => %w[open],
         "hr" => %w[align width],
         "img" => %w[align alt border height src width],
         "ol" => %w[start type],
