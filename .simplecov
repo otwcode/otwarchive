@@ -1,7 +1,6 @@
 if ENV["CI"] == "true"
-  require "codecov"
-  SimpleCov.formatter = SimpleCov::Formatter::Codecov
-  Codecov.pass_ci_if_error = true
+  require "simplecov-cobertura"
+  SimpleCov.formatter = SimpleCov::Formatter::CoberturaFormatter
 end
 
 SimpleCov.start "rails" do

@@ -132,7 +132,7 @@ group :test do
   gem 'cucumber-timecop', require: false
   # Code coverage
   gem "simplecov"
-  gem "codecov", require: false
+  gem "simplecov-cobertura", require: false
   gem 'email_spec', '1.6.0'
   gem "n_plus_one_control"
 end
