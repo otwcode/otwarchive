@@ -159,6 +159,9 @@ jobs:
       - name: Run test group
         run: bundle exec ${{ matrix.tests.command }} ${{ matrix.tests.arguments }}
 
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v3
+
       - name: Upload failure screenshots
         if: ${{ failure() && matrix.tests.command == 'cucumber' }}
         uses: actions/upload-artifact@v3

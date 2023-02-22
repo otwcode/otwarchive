@@ -69,6 +69,16 @@ class User < ApplicationRecord
           -> { where(blocker: User.current_user) },
           class_name: "Block", foreign_key: :blocked_id, inverse_of: :blocked
 
+  has_many :mutes_as_muted, class_name: "Mute", dependent: :delete_all, inverse_of: :muted, foreign_key: :muted_id
+  has_many :mutes_as_muter, class_name: "Mute", dependent: :delete_all, inverse_of: :muter, foreign_key: :muter_id
+  has_many :muted_users, through: :mutes_as_muter, source: :muted
+
+  # The mute (if it exists) with User.current_user as the muter and this
+  # user as the muted:
+  has_one :mute_by_current_user,
+          -> { where(muter: User.current_user) },
+          class_name: "Mute", foreign_key: :muted_id, inverse_of: :muted
+
   has_many :skins, foreign_key: "author_id", dependent: :nullify
   has_many :work_skins, foreign_key: "author_id", dependent: :nullify
 
@@ -195,10 +205,10 @@ class User < ApplicationRecord
   validates_format_of :login,
                       message: ts("must begin and end with a letter or number; it may also contain underscores but no other characters."),
                       with: /\A[A-Za-z0-9]\w*[A-Za-z0-9]\Z/
-  validates_uniqueness_of :login, case_sensitive: false, message: ts("has already been taken")
+  validates :login, uniqueness: { message: ts("has already been taken") }
   validate :login, :username_is_not_recently_changed, if: :will_save_change_to_login?
 
-  validates :email, email_veracity: true, email_format: true, uniqueness: { case_sensitive: false }
+  validates :email, email_veracity: true, email_format: true, uniqueness: true
 
   # Virtual attribute for age check and terms of service
     attr_accessor :age_over_13
@@ -377,15 +387,6 @@ class User < ApplicationRecord
   # Gets the user account for authored objects if orphaning is enabled
   def self.orphan_account
     User.fetch_orphan_account if ArchiveConfig.ORPHANING_ALLOWED
-  end
-
-  # Is this user an authorized translation admin?
-  def translation_admin
-    self.is_translation_admin?
-  end
-
-  def is_translation_admin?
-    has_role?(:translation_admin)
   end
 
   # Is this user an authorized tag wrangler?
@@ -590,7 +591,7 @@ class User < ApplicationRecord
   end
 
   # Extra callback to make sure readings are deleted in an order consistent
-  # with the ReadingsToDatabaseJob.
+  # with the ReadingsJob.
   #
   # TODO: In the long term, it might be better to change the indexes on the
   # readings table so that it deletes things in the correct order by default if
