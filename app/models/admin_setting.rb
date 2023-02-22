@@ -6,7 +6,7 @@ class AdminSetting < ApplicationRecord
 
   before_save :update_invite_date
   before_update :check_filter_status
-  after_save :expire_cached_settings
+  after_commit :recache_settings
 
   belongs_to :default_skin, class_name: 'Skin'
 
@@ -71,8 +71,8 @@ class AdminSetting < ApplicationRecord
 
   private
 
-  def expire_cached_settings
-    Rails.cache.delete("admin_settings")
+  def recache_settings
+    Rails.cache.write("admin_settings", self)
   end
 
   def check_filter_status
