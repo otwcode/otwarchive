@@ -120,7 +120,7 @@ RSpec.configure do |config|
   end
 
   config.before :each, default_skin: true do
-    AdminSetting.current.update_attribute(:default_skin_id, Skin.default.id)
+    AdminSetting.current.update_attribute(:default_skin, Skin.default)
   end
 
   config.before :each, type: :controller do

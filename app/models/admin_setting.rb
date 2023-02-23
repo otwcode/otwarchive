@@ -72,7 +72,10 @@ class AdminSetting < ApplicationRecord
   private
 
   def recache_settings
-    Rails.cache.write("admin_settings", self)
+    # Reload the record; if the default skin was just created and has a
+    # closed file handle from generating a preview image, it cannot be
+    # serialized for caching.
+    Rails.cache.write("admin_settings", self.reload)
   end
 
   def check_filter_status

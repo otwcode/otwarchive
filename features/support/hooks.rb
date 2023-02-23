@@ -65,5 +65,5 @@ end
 
 Before "@skins" do
   # Create a default skin:
-  AdminSetting.current.update_attribute(:default_skin_id, Skin.default.id)
+  AdminSetting.current.update_attribute(:default_skin, Skin.default)
 end
