@@ -15,9 +15,9 @@ class Media < Tag
     tag
   end
 
-  # The list of media used for the menu on every page. All media except No
-  # Media and Uncategorized Fandoms are listed in order, and then Uncategorized
-  # Fandoms is tacked onto the list at the end.
+  # The list of media used for the menu on every page. All media except "No
+  # Media" and "Uncategorized Fandoms" are listed in order, and then
+  # "Uncategorized Fandoms" is tacked onto the list at the end.
   def self.for_menu
     by_name.where.not(
       name: [ArchiveConfig.MEDIA_UNCATEGORIZED_NAME,
