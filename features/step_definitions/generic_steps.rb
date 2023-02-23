@@ -42,6 +42,14 @@ Then /^show me the (\d+)(?:st|nd|rd|th) form$/ do |index|
   puts "\n" + page.all("#main form")[(index.to_i-1)].native.inner_html
 end
 
+Then "I should see the {string} form" do |form_id|
+  expect(page).to have_css("form##{form_id}")
+end
+
+Then "I should not see the {string} form" do |form_id|
+  expect(page).not_to have_css("form##{form_id}")
+end
+
 Given /^I wait (\d+) seconds?$/ do |number|
   Kernel::sleep number.to_i
 end

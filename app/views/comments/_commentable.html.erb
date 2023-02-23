@@ -126,7 +126,7 @@
   </div>
 
   <% if logged_in? && @work %>
-    <% if is_author_of?(@work) || is_maintainer? %>
+    <% if is_maintainer? && @work.allow_collection_invitation? %>
       <div id="collection_item_form_placement" class="wrapper toggled">
         <%= render "collection_items/collection_item_form", :item => @work, :in_page => true %>
       </div>
