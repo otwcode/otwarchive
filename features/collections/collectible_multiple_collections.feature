@@ -4,8 +4,7 @@ Feature: Collectible items in multiple collections
   As a user
   I want to be unable to add items to more than one collection
 
-  Scenario: Add a work that is already in a moderated collection to a second
-  moderated collection using the Add to Collections option on the work
+  Scenario: Add a work that is already in a moderated collection to a second moderated collection
     Given I have the moderated collection "ModeratedCollection"
       And I have the moderated collection "ModeratedCollection2"
       And I am logged in as a random user

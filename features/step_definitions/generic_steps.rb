@@ -43,11 +43,11 @@ Then /^show me the (\d+)(?:st|nd|rd|th) form$/ do |index|
 end
 
 Then "I should see the {string} form" do |form_id|
-  assert page.has_xpath?("//form[@id='#{form_id}']")
+  expect(page).to have_css("form##{form_id}")
 end
 
 Then "I should not see the {string} form" do |form_id|
-  assert page.has_no_xpath?("//form[@id='#{form_id}']")
+  expect(page).not_to have_css("form##{form_id}")
 end
 
 Given /^I wait (\d+) seconds?$/ do |number|
