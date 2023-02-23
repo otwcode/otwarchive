@@ -1,7 +1,8 @@
 require "spec_helper"
 
 describe AdminSetting do
-  describe ".current" do
+  # Create the default skin record to ensure it can be cached.
+  describe ".current", default_skin: true do
     context "when settings are cached" do
       before { AdminSetting.current }
 

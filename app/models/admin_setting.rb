@@ -1,4 +1,6 @@
 class AdminSetting < ApplicationRecord
+  include AfterCommitEverywhere
+
   belongs_to :last_updated, class_name: 'Admin', foreign_key: :last_updated_by
   validates_presence_of :last_updated_by
   validates :invite_from_queue_number, numericality: { greater_than_or_equal_to: 1,
@@ -6,7 +8,6 @@ class AdminSetting < ApplicationRecord
 
   before_save :update_invite_date
   before_update :check_filter_status
-  after_commit :recache_settings
 
   belongs_to :default_skin, class_name: 'Skin'
 
@@ -69,14 +70,19 @@ class AdminSetting < ApplicationRecord
     self.send(method, *args)
   end
 
-  private
-
+  after_save :recache_settings
   def recache_settings
-    # Reload the record; if the default skin was just created and has a
-    # closed file handle from generating a preview image, it cannot be
-    # serialized for caching.
-    Rails.cache.write("admin_settings", self.reload)
+    # If the default skin has just been created and set, it will have a closed
+    # file handle from attaching a preview image, and cannot be serialized for
+    # caching. To avoid that, we need to reload a fresh copy of the record,
+    # within the current transaction to guarantee up-to-date data.
+    self.reload
+
+    # However, we only cache it if the transaction is successful.
+    after_commit { Rails.cache.write("admin_settings", self) }
   end
+
+  private
 
   def check_filter_status
     if self.suspend_filter_counts_changed?
