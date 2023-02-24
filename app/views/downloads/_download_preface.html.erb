@@ -44,7 +44,7 @@
         <% if @work.chaptered? %>
           <%= ts("Chapters") %>: <%= chapter_total_display(@work) %>
         <% end %>
-        <%= ts("Words") %>: <%= @work.word_count %>
+        <%= ts("Words") %>: <%= number_with_delimiter(@work.word_count) %>
       </dd>
     </dl>
     <h1><%= @work.title.html_safe %></h1>
