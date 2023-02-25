@@ -50,5 +50,13 @@ class Sanitize
     )
 
     CSS_ALLOWED = freeze_config(merge(ARCHIVE, CLASS_ATTRIBUTE))
+
+    # On details elements, force boolean attribute "open" to have
+    # value "open", if it exists
+    OPEN_ATTRIBUTE_TRANSFORMER = lambda do |env|
+      return unless env[:node_name] == "details"
+
+      env[:node]["open"] = "open" if env[:node].has_attribute?("open")
+    end
   end
 end
