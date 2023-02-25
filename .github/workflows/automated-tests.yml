@@ -161,6 +161,13 @@ jobs:
 
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v3
+        with:
+          # Optional for public repos. However, individual forks can set this
+          # secret to reduce the chance of being rate-limited by GitHub.
+          #
+          # https://github.com/marketplace/actions/codecov#usage
+          # https://community.codecov.com/t/upload-issues-unable-to-locate-build-via-github-actions-api/3954
+          token: ${{ secrets.CODECOV_TOKEN }}
 
       - name: Upload failure screenshots
         if: ${{ failure() && matrix.tests.command == 'cucumber' }}
