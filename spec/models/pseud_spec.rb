@@ -1,6 +1,9 @@
 require 'spec_helper'
 
 describe Pseud do
+  it { should have_many(:gifts).conditions(rejected: false).dependent(:destroy) }
+  it { should have_many(:rejected_gifts).conditions(rejected: true).dependent(:destroy) }
+
   it "has a valid factory" do
     expect(build(:pseud)).to be_valid
   end
