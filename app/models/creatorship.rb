@@ -182,6 +182,7 @@ class Creatorship < ApplicationRecord
   # This information is stored temporarily to make it available for
   # Policy and Abuse on orphaned works.
   def save_original_creator
+    return unless approved?
     return unless creation.is_a?(Work)
     return if creation.destroyed?
 
