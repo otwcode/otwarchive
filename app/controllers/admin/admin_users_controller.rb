@@ -167,13 +167,4 @@ class Admin::AdminUsersController < Admin::BaseController
       redirect_to action: :show
     end
   end
-
-  def send_activation
-    @user = User.find_by(login: params[:id])
-    authorize @user
-    # send synchronously to avoid getting caught in mail queue
-    UserMailer.signup_notification(@user.id).deliver_now
-    flash[:notice] = ts("Activation email sent")
-    redirect_to action: :show
-  end
 end

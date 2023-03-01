@@ -57,15 +57,6 @@ Feature: Admin Actions to manage users
     Then I should see "User Account Activated"
       And the user "mrparis" should be activated
 
-  Scenario: A admin can send an activation email for a user account
-    Given the user "torres" exists and is not activated
-      And I am logged in as a "support" admin
-      And all emails have been delivered
-    When I go to the abuse administration page for "torres"
-      And I press "Send Activation Email"
-    Then I should see "Activation email sent"
-      And 1 email should be delivered to "torres"
-
   Scenario: An admin can view a user's last login date
     Given the user "new_user" exists and is activated
       And I am logged in as a "support" admin

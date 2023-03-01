@@ -13,9 +13,6 @@
     </li>
     <li><%= link_to t(".navigation.troubleshoot"), troubleshoot_admin_user_path(id: @user.login) %></li>
     <li>
-      <%= button_to ts("Send Activation Email"), { action: "send_activation", id: @user }, disabled: @user.active? %>
-    </li>
-    <li>
       <%= button_to t(".navigation.activate"), { action: "activate", id: @user }, disabled: @user.active? %>
     </li>
     <li>

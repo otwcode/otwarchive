@@ -426,29 +426,4 @@ describe Admin::AdminUsersController do
       end
     end
   end
-
-  describe "POST #send_activation" do
-    let(:admin) { create(:admin) }
-    let(:user) { create(:user, :unconfirmed) }
-
-    context "when admin does not have correct authorization" do
-      it "redirects with error" do
-        admin.update(roles: [])
-        fake_login_admin(admin)
-        post :send_activation, params: { id: user.login }
-
-        it_redirects_to_with_error(root_url, "Sorry, only an authorized admin can access the page you were trying to reach.")
-      end
-    end
-
-    context "when admin has correct authorization" do
-      it "succeeds with notice" do
-        admin.update(roles: ["support"])
-        fake_login_admin(admin)
-        post :send_activation, params: { id: user.login }
-
-        it_redirects_to_with_notice(admin_user_path(id: user.login), "Activation email sent")
-      end
-    end
-  end
 end
