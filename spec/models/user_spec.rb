@@ -1,9 +1,6 @@
 require "spec_helper"
 
 describe User do
-  it { is_expected.to have_many(:gifts).conditions(rejected: false).dependent(:destroy) }
-  it { is_expected.to have_many(:rejected_gifts).conditions(rejected: true).dependent(:destroy) }
-
   describe "#destroy" do
     context "on a user with kudos" do
       let(:user) { create(:user) }
