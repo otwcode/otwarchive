@@ -40,9 +40,7 @@
   <%= form_tag action: "update_next_of_kin", controller: "admin/admin_users" do %>
     <%= error_messages_for @user.fannish_next_of_kin %>
     <%= hidden_field_tag "user_login", @user.login %>
-    <fieldset<% unless policy(@user).can_manage_next_of_kin? %> disabled="disabled"<% end %>>
-      <legend><%= t(".fnok.form.legend") %></legend>
-      <h4 class="heading"><%= t(".fnok.form.legend") %></h4>
+    <%= field_set_tag nil, disabled: !policy(@user).can_manage_next_of_kin? do %>
       <dl>
         <dt>
           <%= label_tag "next_of_kin_name", t(".fnok.form.name") %>
@@ -58,13 +56,13 @@
         </dd>
       </dl>
       <p class="submit"><%= submit_tag t(".fnok.form.submit") %></p>
-    </fieldset>
+    <% end %>
   <% end %>
 
   <h3 class="heading"><%= t(".status.heading") %></h3>
   <%= form_tag action: "update_status", controller: "admin/admin_users" do %>
     <%= hidden_field_tag "user_login", @user.login %>
-    <fieldset<% unless policy(UserManager).can_manage_users? %> disabled="disabled"<% end %>>
+    <%= field_set_tag nil, disabled: !policy(UserManager).can_manage_users? do %>
       <fieldset>
         <legend><%= t(".status.form.admin_action.legend") %></legend>
         <h4 class="heading"><%= t(".status.form.admin_action.legend") %></h4>
@@ -103,7 +101,7 @@
           </li>
         </ul>
       </fieldset>
-      <fieldset<% unless policy(UserManager).can_manage_users? %> disabled="disabled"<% end %>>
+      <fieldset>
         <legend><%= t(".status.form.notes.legend") %></legend>
         <h4 class="heading"><%= label_tag "admin_note", t(".status.form.notes.legend") %></h4>
         <p class="note">
@@ -113,7 +111,7 @@
           <%= text_area_tag "admin_note", nil, class: "observe_textlength" %>
           <%= generate_countdown_html("admin_note", ArchiveConfig.LOGNOTE_MAX) %>
         </p>
-      </fieldset>
+      <% end %>
       <p class="submit"><%= submit_tag t(".status.form.submit") %></p>
     </fieldset>
   <% end %>

@@ -37,7 +37,6 @@ en:
         fnok:
           heading: Fannish Next of Kin
           form:
-            legend: Fannish Next of Kin
             name: "Fannish next of kin's username"
             email: "Fannish next of kin's email"
             submit: Update Fannish Next of Kin
