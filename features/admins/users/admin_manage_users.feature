@@ -73,3 +73,12 @@ Feature: Admin Actions to manage users
       And I should see "2019-01-01 12:00:00 UTC Current Login IP Address: 127.0.0.1"
       And I should see "2019-01-01 12:00:00 UTC Previous Login IP Address: 127.0.0.1"
 
+  Scenario: An admin can view a user's email address and invitation
+    Given the user "user" with the email "user@example.com" exists
+      And the user "user2" was created using an invitation
+    When I am logged in as a "superadmin" admin
+      And I go to the abuse administration page for "user"
+    Then I should see "Email: user@example.com"
+      And I should see "Invitation: Created without invitation"
+    When I go to the abuse administration page for "user2"
+    Then I should see the invitation id for the user "user2"
