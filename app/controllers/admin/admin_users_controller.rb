@@ -46,6 +46,7 @@ class Admin::AdminUsersController < Admin::BaseController
   def show
     @user = authorize User.find_by!(login: params[:id])
     @hide_dashboard = true
+    @page_subtitle = t(".page_title", login: @user.login)
     @log_items = @user.log_items.sort_by(&:created_at).reverse
   end
 

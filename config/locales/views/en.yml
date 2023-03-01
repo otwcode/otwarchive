@@ -24,6 +24,7 @@ en:
             action: Account Created
             details: System Generated
       show:
+        page_title: "%{login} - User Administration"
         page_heading: "User: %{login} (%{id})"
         note: "To fix common errors with this user's Subscriptions and Stats pages, and to reindex their works and bookmarks, choose \"Troubleshoot.\""
         navigation:
