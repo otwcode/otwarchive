@@ -45,14 +45,14 @@ Feature: Admin Actions to manage users
   Scenario: Troubleshooting a user displays a message
     Given the user "mrparis" exists and is activated
       And I am logged in as a "support" admin
-    When I go to the abuse administration page for "mrparis"
+    When I go to the user administration page for "mrparis"
       And I follow "Troubleshoot"
     Then I should see "User account troubleshooting complete."
 
   Scenario: A admin can activate a user account
     Given the user "mrparis" exists and is not activated
       And I am logged in as a "support" admin
-    When I go to the abuse administration page for "mrparis"
+    When I go to the user administration page for "mrparis"
       And I press "Activate"
     Then I should see "User Account Activated"
       And the user "mrparis" should be activated
@@ -60,7 +60,7 @@ Feature: Admin Actions to manage users
   Scenario: An admin can view a user's last login date
     Given the user "new_user" exists and is activated
       And I am logged in as a "support" admin
-    When I go to the abuse administration page for "new_user"
+    When I go to the user administration page for "new_user"
     Then I should see "Current Login No login recorded"
       And I should see "Previous Login No previous login recorded"
     When time is frozen at 1/1/2019
@@ -68,7 +68,7 @@ Feature: Admin Actions to manage users
       And I am logged out
       And I jump in our Delorean and return to the present
       And I am logged in as a "support" admin
-      And I go to the abuse administration page for "new_user"
+      And I go to the user administration page for "new_user"
     Then I should not see "No login recorded"
       And I should see "2019-01-01 12:00:00 UTC Current Login IP Address: 127.0.0.1"
       And I should see "2019-01-01 12:00:00 UTC Previous Login IP Address: 127.0.0.1"
@@ -77,8 +77,8 @@ Feature: Admin Actions to manage users
     Given the user "user" with the email "user@example.com" exists
       And the user "user2" was created using an invitation
     When I am logged in as a "superadmin" admin
-      And I go to the abuse administration page for "user"
+      And I go to the user administration page for "user"
     Then I should see "Email: user@example.com"
       And I should see "Invitation: Created without invitation"
-    When I go to the abuse administration page for "user2"
+    When I go to the user administration page for "user2"
     Then I should see the invitation id for the user "user2"

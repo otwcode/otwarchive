@@ -117,7 +117,7 @@ end
 Given /^the user "([^\"]*)" is suspended$/ do |user|
   step %{the user "#{user}" exists and is activated}
   step %{I am logged in as a "policy_and_abuse" admin}
-  step %{I go to the abuse administration page for "#{user}"}
+  step %{I go to the user administration page for "#{user}"}
   choose("admin_action_suspend")
   fill_in("suspend_days", with: 30)
   fill_in("Notes", with: "Why they are suspended")
@@ -127,7 +127,7 @@ end
 Given /^the user "([^\"]*)" is banned$/ do |user|
   step %{the user "#{user}" exists and is activated}
   step(%{I am logged in as a "policy_and_abuse" admin})
-  step %{I go to the abuse administration page for "#{user}"}
+  step %{I go to the user administration page for "#{user}"}
   choose("admin_action_ban")
   fill_in("Notes", with: "Why they are banned")
   click_button("Update")
