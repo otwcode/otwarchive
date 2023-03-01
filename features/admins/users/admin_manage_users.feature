@@ -34,7 +34,7 @@ Feature: Admin Actions to manage users
     When I follow "Details"
     Then I should see "Role Added: tag_wrangler"
       And I should see "Change made by testadmin-superadmin"
-    When I follow "Manage User Roles"
+    When I follow "Manage Roles"
       And I uncheck "user_roles_1"
       And I press "Update"
     Then I should see "User was successfully updated"
@@ -46,14 +46,14 @@ Feature: Admin Actions to manage users
     Given the user "mrparis" exists and is activated
       And I am logged in as a "support" admin
     When I go to the abuse administration page for "mrparis"
-      And I follow "Troubleshoot Account"
+      And I follow "Troubleshoot"
     Then I should see "User account troubleshooting complete."
 
   Scenario: A admin can activate a user account
     Given the user "mrparis" exists and is not activated
       And I am logged in as a "support" admin
     When I go to the abuse administration page for "mrparis"
-      And I press "Activate User Account"
+      And I press "Activate"
     Then I should see "User Account Activated"
       And the user "mrparis" should be activated
 
