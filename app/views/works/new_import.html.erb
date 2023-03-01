@@ -123,14 +123,14 @@
   </fieldset>
 
   <fieldset>
-    <legend><%= ts("Privacy") %></legend>
-    <h3 class="landmark heading"><%= ts("Privacy") %></h3>
+    <legend><%= t("works.permissions.privacy") %></legend>
+    <h3 class="landmark heading"><%= t("works.permissions.privacy") %></h3>
     <dl>
       <dt class="restricted">
         <%= check_box_tag "restricted" %>
       </dt>
       <dd class="restricted">
-        <%= label_tag "restricted", ts("Only show imported works to registered users.") %>
+        <%= label_tag "restricted", t("works.permissions.visibility.import_works_restricted") %>
         <%= link_to_help "registered-users" %>
       </dd>
 
@@ -138,27 +138,27 @@
         <%= check_box_tag "moderated_commenting_enabled" %>
       </dt>
       <dd class="moderated comments">
-        <%= label_tag :moderated_commenting_enabled, ts("Enable comment moderation") %>
+        <%= label_tag :moderated_commenting_enabled, t("comments.commentable.permissions.moderated_commenting.enable") %>
         <%= link_to_help "comments-moderated" %>
       </dd>
 
       <dt class="permissions comments">
-        <%= ts("Who can comment on this work") %>
+        <%= t("comments.commentable.permissions.options.label") %>
         <%= link_to_help "who-can-comment-on-this-work" %>
       </dt>
       <dd class="permissions comments">
         <ul>
           <li>
             <%= radio_button_tag "comment_permissions", "enable_all", true %>
-            <%= label_tag "comment_permissions_enable_all", ts("Registered users and guests can comment") %>
+            <%= label_tag "comment_permissions_enable_all", t("comments.commentable.permissions.options.enable_all") %>
           </li>
           <li>
             <%= radio_button_tag "comment_permissions", "disable_anon" %>
-            <%= label_tag "comment_permissions_disable_anon", ts("Only registered users can comment") %>
+            <%= label_tag "comment_permissions_disable_anon", t("comments.commentable.permissions.options.disable_anon") %>
           </li>
           <li>
             <%= radio_button_tag "comment_permissions", "disable_all" %>
-            <%= label_tag "comment_permissions_disable_all", ts("No one can comment") %>
+            <%= label_tag "comment_permissions_disable_all", t("comments.commentable.permissions.options.disable_all") %>
           </li>
         </ul>
       </dd>
