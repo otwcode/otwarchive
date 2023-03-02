@@ -64,6 +64,10 @@ class CollectionItemsController < ApplicationController
       flash[:error] = ts("What did you want to add to a collection?")
       redirect_to(request.env["HTTP_REFERER"] || root_path) and return
     end
+    if @item.respond_to?(:allow_collection_invitation?) && !@item.allow_collection_invitation?
+      flash[:error] = t(".invitation_not_sent", default: "This item could not be invited.")
+      redirect_to(@item) and return
+    end
     # for each collection name
     # see if it exists, is open, and isn't already one of this item's collections
     # add the collection and save

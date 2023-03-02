@@ -61,16 +61,11 @@ module ApplicationHelper
     link_to content_tag(:span, ts("RSS Feed")), link_to_feed, title: ts("RSS Feed"), class: "rss"
   end
 
-  #1: default shows just the link to help
-  #2: show_text = true: shows "plain text with limited html" and link to help
-  #3 show_list = true: plain text and limited html, link to help, list of allowed html
-  def allowed_html_instructions(show_list = false, show_text=true)
-    (show_text ? h(ts("Plain text with limited HTML")) : ''.html_safe) +
-    link_to_help("html-help") + (show_list ?
-    "<code>a, abbr, acronym, address, [alt], [axis], b, big, blockquote, br, caption, center, cite, [class], code,
-      col, colgroup, dd, del, dfn, [dir], div, dl, dt, em, h1, h2, h3, h4, h5, h6, [height], hr, [href], i, img,
-      ins, kbd, li, [name], ol, p, pre, q, s, samp, small, span, [src], strike, strong, sub, sup, table, tbody, td,
-      tfoot, th, thead, [title], tr, tt, u, ul, var, [width]</code>" : "").html_safe
+  # 1: default shows just the link to help
+  # 2: show_text = true: shows "plain text with limited html" and link to help
+  def allowed_html_instructions(show_text = true)
+    (show_text ? h(ts("Plain text with limited HTML")) : "".html_safe) +
+      link_to_help("html-help")
   end
 
   # Byline helpers
@@ -602,6 +597,16 @@ module ApplicationHelper
       end
     else # not a hash or an array, just a flat value
       params
+    end
+  end
+
+  def disallow_robots?(item)
+    return unless item
+
+    if item.is_a?(User)
+      item.preference&.minimize_search_engines?
+    elsif item.respond_to?(:users)
+      item.users.all? { |u| u&.preference&.minimize_search_engines? }
     end
   end
 end # end of ApplicationHelper

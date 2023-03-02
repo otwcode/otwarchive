@@ -163,6 +163,7 @@ en:
           hidden: "Sorry, you can't add or edit comments on a hidden work."
           unrevealed: "Sorry, you can't add or edit comments on an unrevealed work."
       blocked: "Sorry, you have been blocked by one or more of this work's creators."
+      invite_to_collections_link: "Invite To Collections"
   layouts:
     proxy_notice:
       faux_heading: "Important message:"
@@ -462,7 +463,7 @@ en:
         block_users_instead_html: "To prevent a user from commenting on your works or replying to your comments elsewhere on the site, visit %{blocked_users_link}."
         blocked_users_link_text: "your Blocked Users page"
         site_skin_warning_html: "Please note that if you are not using the default site skin, muting may not work properly. The Skins and Archive Interface FAQ has %{restore_site_skin_faq_link}."
-        restore_site_skin_faq_link_test: "instructions for reverting to the default site skin"
+        restore_site_skin_faq_link_text: "instructions for reverting to the default site skin"
       confirm_mute:
         title: "Mute %{name}"
         button: "Yes, Mute User"
@@ -479,7 +480,7 @@ en:
         block_users_instead_html: "To prevent a user from commenting on your works or replying to your comments elsewhere on the site, visit %{blocked_users_link}."
         blocked_users_link_text: "your Blocked Users page"
         site_skin_warning_html: "Please note that if you are not using the default site skin, muting may not work properly. The Skins and Archive Interface FAQ has %{restore_site_skin_faq_link}."
-        restore_site_skin_faq_link_test: "instructions for reverting to the default site skin"
+        restore_site_skin_faq_link_text: "instructions for reverting to the default site skin"
       confirm_unmute:
         title: "Unmute %{name}"
         button: "Yes, Unmute User"
@@ -488,11 +489,17 @@ en:
         sure_html: "Are you sure you want to %{unmute} %{username}?"
         resume:
           intro: "Unmuting a user allows you to:"
-          see_content: "see their works, series, bookmarks and comments on the site"
+          see_content: "see their works, series, bookmarks, and comments on the site"
   preferences:
     index:
       blocked_users: "Blocked Users"
+      allow_collection_invitation: "Allow others to invite my works to collections."
       muted_users: "Muted Users"
+  works:
+    meta:
+      original_creators:
+        one: "Original Creator ID:"
+        other: "Original Creator IDs:"
   invite_requests:
     invite_request:
       title: "Invitation Status for %{email}"
@@ -516,3 +523,9 @@ en:
         other: "Transfer these bookmarks to the default pseud"
       confirm: "Are you sure? This can't be undone!"
       cancel: "Cancel"
+  collection_items:
+    collection_item_form:
+      invite_header_html: "Invite %{title} to collections"
+      add_bookmark_header: "Add Bookmark to collections"
+      invite: "Invite"
+      add: "Add"

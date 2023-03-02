@@ -6,7 +6,7 @@ gem 'test-unit', '~> 3.2'
 
 gem 'bundler'
 
-gem "rails", "~> 6.0.4"
+gem "rails", "~> 6.1.0"
 gem "rails-i18n"
 gem "rack", "~> 2.2"
 gem "sprockets", "< 4"
@@ -132,7 +132,7 @@ group :test do
   gem 'cucumber-timecop', require: false
   # Code coverage
   gem "simplecov"
-  gem "codecov", require: false
+  gem "simplecov-cobertura", require: false
   gem 'email_spec', '1.6.0'
   gem "n_plus_one_control"
 end

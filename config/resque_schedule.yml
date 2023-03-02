@@ -93,3 +93,12 @@ readings_to_database:
     queue_name: readings
     arguments: ["ReadingsJob"]
   description: "Transfer readings from redis to the database."
+
+cleanup_work_original_creators:
+  every: 1h
+  class: "WorkOriginalCreator"
+  queue: utilities
+  args: cleanup
+  description: >-
+    Remove original_creators for works orphaned/moved more than
+    ORIGINAL_CREATOR_TTL_HOURS hours ago.

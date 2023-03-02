@@ -58,7 +58,7 @@ module HtmlCleaner
     end
     if ArchiveConfig.FIELDS_ALLOWING_HTML.include?(field.to_s)
       # We're allowing users to use HTML in this field
-      transformers = []
+      transformers = [Sanitize::Config::OPEN_ATTRIBUTE_TRANSFORMER]
       if ArchiveConfig.FIELDS_ALLOWING_VIDEO_EMBEDS.include?(field.to_s)
         transformers << OtwSanitize::EmbedSanitizer.transformer
         transformers << OtwSanitize::MediaSanitizer.transformer

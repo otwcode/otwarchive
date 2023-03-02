@@ -8,6 +8,7 @@ class Admin < ApplicationRecord
          :recoverable,
          :validatable,
          password_length: ArchiveConfig.ADMIN_PASSWORD_LENGTH_MIN..ArchiveConfig.ADMIN_PASSWORD_LENGTH_MAX,
+         reset_password_within: ArchiveConfig.DAYS_UNTIL_ADMIN_RESET_PASSWORD_LINK_EXPIRES.days,
          lock_strategy: :none,
          unlock_strategy: :none
 
@@ -19,7 +20,7 @@ class Admin < ApplicationRecord
 
   validates :login,
             presence: true,
-            uniqueness: { case_sensitive: false },
+            uniqueness: true,
             length: { in: ArchiveConfig.LOGIN_LENGTH_MIN..ArchiveConfig.LOGIN_LENGTH_MAX }
   validates_presence_of :password_confirmation, if: :new_record?
   validates_confirmation_of :password, if: :new_record?

@@ -100,6 +100,43 @@ describe CollectionItemsController do
     end
   end
 
+  describe "POST #create" do
+    context "when logged in as the collection maintainer" do
+      before { fake_login_known_user(collection.owners.first.user) }
+
+      context "when the item is a work" do
+        let(:work) { create(:work) }
+
+        let(:params) do
+          {
+            collection_names: collection.name,
+            work_id: work.id
+          }
+        end
+
+        context "when the creator does not allow invitations" do
+          it "does not create an invitation" do
+            post :create, params: params
+            it_redirects_to_with_error(work, "This item could not be invited.")
+            expect(work.reload.collections).to be_empty
+          end
+        end
+
+        context "when the creator allows invitations" do
+          before do
+            work.users.each { |user| user.preference.update!(allow_collection_invitation: true) }
+          end
+
+          it "creates an invitation" do
+            post :create, params: params
+            it_redirects_to_simple(work)
+            expect(work.reload.collections).to include(collection)
+          end
+        end
+      end
+    end
+  end
+
   describe "PATCH #update_multiple" do
     let(:collection) { create(:collection) }
     let(:work) { create(:work) }

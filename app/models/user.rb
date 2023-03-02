@@ -203,12 +203,12 @@ class User < ApplicationRecord
                                    max_pwd: ArchiveConfig.PASSWORD_LENGTH_MAX)
 
   validates_format_of :login,
-                      message: ts("must begin and end with a letter or number; it may also contain underscores but no other characters."),
+                      message: ts("must be 3 to 40 characters (A-Z, a-z, _, 0-9 only), no spaces, cannot begin or end with underscore (_)."),
                       with: /\A[A-Za-z0-9]\w*[A-Za-z0-9]\Z/
-  validates_uniqueness_of :login, case_sensitive: false, message: ts("has already been taken")
+  validates :login, uniqueness: { message: ts("has already been taken") }
   validate :login, :username_is_not_recently_changed, if: :will_save_change_to_login?
 
-  validates :email, email_veracity: true, email_format: true, uniqueness: { case_sensitive: false }
+  validates :email, email_veracity: true, email_format: true, uniqueness: true
 
   # Virtual attribute for age check and terms of service
     attr_accessor :age_over_13
@@ -387,15 +387,6 @@ class User < ApplicationRecord
   # Gets the user account for authored objects if orphaning is enabled
   def self.orphan_account
     User.fetch_orphan_account if ArchiveConfig.ORPHANING_ALLOWED
-  end
-
-  # Is this user an authorized translation admin?
-  def translation_admin
-    self.is_translation_admin?
-  end
-
-  def is_translation_admin?
-    has_role?(:translation_admin)
   end
 
   # Is this user an authorized tag wrangler?
