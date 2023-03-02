@@ -40,7 +40,7 @@
   <%= form_tag action: "update_next_of_kin", controller: "admin/admin_users" do %>
     <%= error_messages_for @user.fannish_next_of_kin %>
     <%= hidden_field_tag "user_login", @user.login %>
-    <%= field_set_tag nil, disabled: !policy(@user).can_manage_next_of_kin? do %>
+    <%= field_set_tag t(".fnok.heading"), disabled: !policy(@user).can_manage_next_of_kin? do %>
       <dl>
         <dt>
           <%= label_tag "next_of_kin_name", t(".fnok.form.name") %>
@@ -62,7 +62,7 @@
   <h3 class="heading"><%= t(".status.heading") %></h3>
   <%= form_tag action: "update_status", controller: "admin/admin_users" do %>
     <%= hidden_field_tag "user_login", @user.login %>
-    <%= field_set_tag nil, disabled: !policy(UserManager).can_manage_users? do %>
+    <%= field_set_tag t(".status.heading"), disabled: !policy(UserManager).can_manage_users? do %>
       <fieldset>
         <legend><%= t(".status.form.admin_action.legend") %></legend>
         <h4 class="heading"><%= t(".status.form.admin_action.legend") %></h4>
