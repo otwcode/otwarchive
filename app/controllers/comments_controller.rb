@@ -195,7 +195,7 @@ class CommentsController < ApplicationController
   # Comments cannot be edited after they've been replied to or if they are frozen.
   def check_permission_to_edit
     if @comment&.iced?
-      flash[:error] = t("comment.check_permission_to_edit.error.frozen")
+      flash[:error] = t("comments.check_permission_to_edit.error.frozen")
       redirect_back(fallback_location: root_path)
     elsif !@comment&.count_all_comments&.zero?
       flash[:error] = ts("Comments with replies cannot be edited")
