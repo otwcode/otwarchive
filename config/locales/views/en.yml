@@ -54,6 +54,16 @@ en:
         navigation:
           queue: "Manage Queue"
           requests: "Manage Requests"
+      find:
+        find_email: "Enter all or part of an email address:"
+        find_token: "Enter an invite token:"
+        find_user_name: "Enter a user name:"
+      new:
+        email_address: "Email address"
+        invite_user: "Invite a User"
+        submit: "Invite!"
+    admin_nav:
+      delete: "Delete Post"
     passwords:
       new:
         page_heading: "Forgotten your admin password?"
