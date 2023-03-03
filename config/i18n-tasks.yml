@@ -113,9 +113,10 @@ search:
 #   # deepl_version: "v2"
 
 ## Do not consider these keys missing:
-# ignore_missing:
+ignore_missing:
 # - 'errors.messages.{accepted,blank,invalid,too_short,too_long}'
 # - '{devise,simple_form}.*'
+  - comments.check_permission_to_modify_{frozen,hidden}_status.permission_denied
 
 ## Consider these keys used:
 # ignore_unused:
