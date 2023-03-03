@@ -19,11 +19,12 @@ en:
       destroy:
         unmuted: "You have unmuted the user %{name}."
   chapters:
-    anonymous: Anonymous
-    chapter_position: " - Chapter %{position}"
-    multifandom: Multifandom
-    unrevealed: Mystery Work
-    unspecified_fandom: No fandom specified
+    show:
+      anonymous: Anonymous
+      chapter_position: " - Chapter %{position}"
+      multifandom: Multifandom
+      unrevealed: Mystery Work
+      unspecified_fandom: No fandom specified
   comments:
     check_blocked:
       parent: "Sorry, you have been blocked by one or more of this work's creators."
