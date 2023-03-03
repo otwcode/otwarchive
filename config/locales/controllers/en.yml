@@ -77,6 +77,10 @@ en:
       error: Sorry, that comment could not be unhidden.
       permission_denied: Sorry, you don't have permission to unhide that comment.
       success: Comment successfully unhidden!
+  feedbacks:
+    create:
+      successfully_sent: Your message was sent to the Archive team - thank you!
+      failure_send: Sorry, your message could not be saved - please try again!
   kudos:
     create:
       success: Thank you for leaving kudos!

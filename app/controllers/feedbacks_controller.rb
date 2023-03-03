@@ -21,12 +21,10 @@ class FeedbacksController < ApplicationController
     @feedback.ip_address = request.remote_ip
     if @feedback.save
       @feedback.email_and_send
-      flash[:notice] = t("successfully_sent",
-        default: "Your message was sent to the Archive team - thank you!")
+      flash[:notice] = t("feedbacks.create.successfully_sent")
       redirect_back_or_default(root_path)
     else
-      flash[:error] = t("failure_send",
-        default: "Sorry, your message could not be saved - please try again!")
+      flash[:error] = t("feedbacks.create.failure_send")
       render action: "new"
     end
   end
