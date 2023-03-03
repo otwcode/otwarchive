@@ -7,10 +7,10 @@ class Admin::AdminInvitationsController < Admin::BaseController
     @invitation = current_admin.invitations.new(invitation_params)
 
     if @invitation.invitee_email.blank?
-      flash[:error] = t('no_email', default: "Please enter an email address.")
+      flash[:error] = t("admin.admin_invitations.create.no_email")
       render action: 'index'
     elsif @invitation.save
-      flash[:notice] = t('sent', default: "An invitation was sent to %{email_address}", email_address: @invitation.invitee_email)
+      flash[:notice] = t("admin.admin_invitations.create.sent", email_address: @invitation.invitee_email)
       redirect_to admin_invitations_path
     else
       render action: 'index'
@@ -31,7 +31,7 @@ class Admin::AdminInvitationsController < Admin::BaseController
     else
       Invitation.grant_empty(invitation_params[:number_of_invites].to_i)
     end
-    flash[:notice] = t('invites_created', default: 'Invitations successfully created.')
+    flash[:notice] = t("admin.admin_invitations.grant_invites_to_users.invites_created")
     redirect_to admin_invitations_path
   end
 
@@ -48,7 +48,7 @@ class Admin::AdminInvitationsController < Admin::BaseController
       @invitation = @invitations.first if @invitations.length == 1
     end
     unless @user || @invitation || @invitations
-      flash.now[:error] = t('user_not_found', default: "No results were found. Try another search.")
+      flash.now[:error] = t("admin.admin_invitations.find.user_not_found")
     end
   end
 

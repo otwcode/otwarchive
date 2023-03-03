@@ -6,6 +6,13 @@ en:
         success:
           one: "%{count} person from the invite queue is being invited."
           other: "%{count} people from the invite queue are being invited."
+      create:
+        no_email: Please enter an email address.
+        sent: "An invitation was sent to %{email_address}"
+      grant_invites_to_users:
+        invites_created: Invitations successfully created.
+      find:
+        user_not_found: No results were found. Try another search.
   application:
     check_user_status:
       ban_notice: "Your account has been banned. You are not permitted to add or edit archive content. Please %{contact_abuse_link} for more information."
