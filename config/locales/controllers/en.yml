@@ -23,6 +23,12 @@ en:
         muted: "You have muted the user %{name}."
       destroy:
         unmuted: "You have unmuted the user %{name}."
+  challenge_assignments:
+    no_challenge: What challenge did you want to work with?
+    not_owner: You aren't the owner of that assignment.
+    signup_open: Signup is currently open, you cannot make assignments now.
+    assignments_sent: Assignments have already been sent! If necessary, you can purge them.
+    assignments_not_sent: Assignments have not been sent! You might want matching instead.
   chapters:
     anonymous: Anonymous
     chapter_position: " - Chapter %{position}"

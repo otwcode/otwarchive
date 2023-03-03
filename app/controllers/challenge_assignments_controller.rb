@@ -21,7 +21,7 @@ class ChallengeAssignmentsController < ApplicationController
   end
 
   def no_challenge
-    flash[:error] = t('challenge_assignments.no_challenge', default: "What challenge did you want to work with?")
+    flash[:error] = t("challenge_assignments.no_challenge")
     redirect_to collection_path(@collection) rescue redirect_to '/'
     false
   end
@@ -33,7 +33,7 @@ class ChallengeAssignmentsController < ApplicationController
   def owner_only
     return if current_user == @challenge_assignment.offering_pseud.user
 
-    flash[:error] = t("challenge_assignments.not_owner", default: "You aren't the owner of that assignment.")
+    flash[:error] = t("challenge_assignments.not_owner")
     redirect_to root_path
   end
 
@@ -42,7 +42,7 @@ class ChallengeAssignmentsController < ApplicationController
   end
 
   def signup_open
-    flash[:error] = t('challenge_assignments.signup_open', default: "Signup is currently open, you cannot make assignments now.")
+    flash[:error] = t("challenge_assignments.signup_open")
     redirect_to @collection rescue redirect_to '/'
     false
   end
@@ -52,7 +52,7 @@ class ChallengeAssignmentsController < ApplicationController
   end
 
   def assignments_sent
-    flash[:error] = t('challenge_assignments.assignments_sent', default: "Assignments have already been sent! If necessary, you can purge them.")
+    flash[:error] = t("challenge_assignments.assignments_sent")
     redirect_to collection_assignments_path(@collection) rescue redirect_to '/'
     false
   end
@@ -62,7 +62,7 @@ class ChallengeAssignmentsController < ApplicationController
   end
 
   def assignments_not_sent
-    flash[:error] = t('challenge_assignments.assignments_not_sent', default: "Assignments have not been sent! You might want matching instead.")
+    flash[:error] = t("challenge_assignments.assignments_not_sent")
     redirect_to collection_path(@collection) rescue redirect_to '/'
     false
   end
