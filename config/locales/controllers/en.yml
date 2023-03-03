@@ -23,6 +23,9 @@ en:
         muted: "You have muted the user %{name}."
       destroy:
         unmuted: "You have unmuted the user %{name}."
+  challenges:
+    no_collection: What collection did you want to work with?
+    no_challenge: What challenge did you want to work on?
   challenge_assignments:
     no_challenge: What challenge did you want to work with?
     not_owner: You aren't the owner of that assignment.
