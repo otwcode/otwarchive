@@ -10,7 +10,7 @@ class CollectionParticipantsController < ApplicationController
   cache_sweeper :collection_sweeper
 
   def owners_required
-    flash[:error] = t('collection_participants.owners_required', default: "You can't remove the only owner!")
+    flash[:error] = t("collection_participants.owners_required")
     redirect_to collection_participants_path(@collection)
     false
   end
@@ -40,7 +40,7 @@ class CollectionParticipantsController < ApplicationController
 
   def join
     unless @collection
-      flash[:error] = t('no_collection', default: "Which collection did you want to join?")
+      flash[:error] = t("collection_participants.no_collection")
       redirect_to(request.env["HTTP_REFERER"] || root_path) and return
     end
     participants = CollectionParticipant.in_collection(@collection).for_user(current_user) unless current_user.nil?
@@ -51,17 +51,17 @@ class CollectionParticipantsController < ApplicationController
         participant_role: CollectionParticipant::NONE
       )
       @participant.save
-      flash[:notice] = t('applied_to_join_collection', default: "You have applied to join %{collection}.", collection: @collection.title)
+      flash[:notice] = t("collection_participants.applied_to_join_collection", collection: @collection.title)
     else
       participants.each do |participant|
         if participant.is_invited?
           participant.approve_membership!
-          flash[:notice] = t('collection_participants.accepted_invite', default: "You are now a member of %{collection}.", collection: @collection.title)
+          flash[:notice] = t("collection_participants.accepted_invite", collection: @collection.title)
           redirect_to(request.env["HTTP_REFERER"] || root_path) and return
         end
       end
 
-      flash[:notice] = t('collection_participants.no_invitation', default: "You have already joined (or applied to) this collection.")
+      flash[:notice] = t("collection_participants.no_invitation")
     end
 
     redirect_to(request.env["HTTP_REFERER"] || root_path)
@@ -73,16 +73,16 @@ class CollectionParticipantsController < ApplicationController
 
   def update
     if @participant.update(collection_participant_params)
-      flash[:notice] = t('collection_participants.update_success', default: "Updated %{participant}.", participant: @participant.pseud.name)
+      flash[:notice] = t("collection_participants.update_success", participant: @participant.pseud.name)
     else
-      flash[:error] = t('collection_participants.update_failure', default: "Couldn't update %{participant}.", participant: @participant.pseud.name)
+      flash[:error] = t("collection_participants.update_failure", participant: @participant.pseud.name)
     end
     redirect_to collection_participants_path(@collection)
   end
 
   def destroy
     @participant.destroy
-    flash[:notice] = t('collection_participants.destroy', default: "Removed %{participant} from collection.", participant: @participant.pseud.name)
+    flash[:notice] = t("collection_participants.destroy", participant: @participant.pseud.name)
     redirect_to(request.env["HTTP_REFERER"] || root_path)
   end
 

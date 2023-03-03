@@ -29,6 +29,15 @@ en:
     multifandom: Multifandom
     unrevealed: Mystery Work
     unspecified_fandom: No fandom specified
+  collection_participants:
+    owners_required: You can't remove the only owner!
+    no_collection: Which collection did you want to join?
+    applied_to_join_collection: "You have applied to join %{collection}."
+    accepted_invite: "You are now a member of %{collection}."
+    no_invitation: You have already joined (or applied to) this collection.
+    update_success: "Updated %{participant}."
+    update_failure: "Couldn't update %{participant}."
+    destroy: "Removed %{participant} from collection."
   comments:
     check_blocked:
       parent: "Sorry, you have been blocked by one or more of this work's creators."
