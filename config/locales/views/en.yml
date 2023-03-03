@@ -144,6 +144,37 @@ en:
   home:
     donate:
       page_title: "Donate or Volunteer"
+    site_map:
+      site_map: Site Map
+      homepage: Homepage
+      fandoms: Fandoms
+      recent_works: Recent Works
+      people: People
+      bookmarks: Bookmarks
+      freeform_tag_cloud: Additional Tags Cloud
+      languages: Languages
+      collections: Collections and Challenges
+      terms_of_service: Terms of Service
+      archive_faq: Archive FAQ
+      ao3_news: AO3 News
+      known_issues: Known Issues
+      my_home: My Home
+      post_new: Post New
+      my_works: My Works
+      my_drafts: Drafts
+      my_series: My Series
+      my_bookmarks: My Bookmarks
+      my_collections: My Collections and Challenges
+      my_inbox: My Inbox
+      my_history: My History
+      my_subscriptions: My Subscriptions
+      set_preferences: Set My Preferences
+      edit_user_profile: Edit My Profile
+      my_profile: My Profile
+      manage_pseuds: Manage My Pseuds
+      support_and_feedback: Technical Support & Feedback
+      report_abuse: Policy Questions & Abuse Reports
+      donate: Donations
   kudos:
     user_links:
       more_link:
