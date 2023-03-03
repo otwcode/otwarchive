@@ -6,6 +6,11 @@ en:
         success:
           one: "%{count} person from the invite queue is being invited."
           other: "%{count} people from the invite queue are being invited."
+  application:
+    check_user_status:
+      ban_notice: "Your account has been banned. You are not permitted to add or edit archive content. Please %{contact_abuse_link} for more information."
+      suspension_notice: "Your account has been suspended until %{suspended_until}. You may not add or edit content until your suspension has been resolved. Please %{contact_abuse_link} for more information."
+      contact_abuse: contact Abuse
   blocked:
     users:
       create:
