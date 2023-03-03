@@ -46,6 +46,9 @@ en:
       multifandom: Multifandom
       unrevealed: Mystery Work
       unspecified_fandom: No fandom specified
+  collection_items:
+    create:
+      invitation_not_sent: This item could not be invited.
   collection_participants:
     owners_required: You can't remove the only owner!
     no_collection: Which collection did you want to join?
@@ -84,6 +87,12 @@ en:
       error: Sorry, that comment could not be unhidden.
       permission_denied: Sorry, you don't have permission to unhide that comment.
       success: Comment successfully unhidden!
+  external_authors:
+    complete_claim:
+      external_author_claimed: "We have added the stories imported under %{email} to your account."
+  external_works:
+    update:
+      successfully_updated: External work was successfully updated.
   feedbacks:
     create:
       successfully_sent: Your message was sent to the Archive team - thank you!
@@ -91,6 +100,14 @@ en:
   kudos:
     create:
       success: Thank you for leaving kudos!
+  locales:
+    create:
+      successfully_added: Locale was successfully added.
+  languages:
+    update:
+      successfully_updated: Language was successfully updated.
+    create:
+      successfully_added: Language was successfully added.
   users:
     passwords:
       create:

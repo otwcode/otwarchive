@@ -37,7 +37,7 @@ class LocalesController < ApplicationController
     @locale = Locale.new(locale_params)
     authorize @locale
     if @locale.save
-      flash[:notice] = t('successfully_added', default: 'Locale was successfully added.')
+      flash[:notice] = t("locales.create.successfully_added")
       redirect_to locales_path
     else
       @languages = Language.default_order

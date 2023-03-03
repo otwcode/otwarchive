@@ -65,7 +65,7 @@ class CollectionItemsController < ApplicationController
       redirect_to(request.env["HTTP_REFERER"] || root_path) and return
     end
     if @item.respond_to?(:allow_collection_invitation?) && !@item.allow_collection_invitation?
-      flash[:error] = t(".invitation_not_sent", default: "This item could not be invited.")
+      flash[:error] = t("collection_items.create.invitation_not_sent")
       redirect_to(@item) and return
     end
     # for each collection name
