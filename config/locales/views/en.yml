@@ -205,6 +205,8 @@ en:
           unrevealed: "Sorry, you can't add or edit comments on an unrevealed work."
       blocked: "Sorry, you have been blocked by one or more of this work's creators."
       invite_to_collections_link: "Invite To Collections"
+    show:
+      comment_on: Comment on
   layouts:
     proxy_notice:
       faux_heading: "Important message:"
@@ -644,3 +646,6 @@ en:
       orphans_about: Read More About The Orphaning Process
       links:
         cancel: Cancel
+  series:
+    manage:
+      manage_series: "Manage Series:"
