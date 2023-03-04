@@ -121,8 +121,9 @@ ignore_missing:
   - comments.check_permission_to_modify_{frozen,hidden}_status.permission_denied
 
 ## Consider these keys used:
-# ignore_unused:
-# - 'activerecord.attributes.*'
+ignore_unused:
+- activerecord.attributes.*
+- activerecord.errors.models.*
 # - '{devise,kaminari,will_paginate}.*'
 # - 'simple_form.{yes,no}'
 # - 'simple_form.{placeholders,hints,labels}.*'
