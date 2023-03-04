@@ -622,3 +622,10 @@ en:
       link_to_new: New Locale
     new:
       add_new_locale: New Locale
+  orphans:
+    index:
+      orphaned_works: Orphaned Works
+    new:
+      orphans_about: Read More About The Orphaning Process
+      links:
+        cancel: Cancel
