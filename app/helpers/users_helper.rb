@@ -132,29 +132,29 @@ module UsersHelper
 
   def log_item_action_name(action)
     if action == ArchiveConfig.ACTION_ACTIVATE
-      t('users_helper.log_validated', default: 'Account Validated')
+      t("users_helper.log_validated")
     elsif action == ArchiveConfig.ACTION_ADD_ROLE
-      t('users_helper.log_role_added', default: 'Role Added: ')
+      t("users_helper.log_role_added")
     elsif action == ArchiveConfig.ACTION_REMOVE_ROLE
-      t('users_helper.log_role_removed', default: 'Role Removed: ')
+      t("users_helper.log_role_removed")
     elsif action == ArchiveConfig.ACTION_SUSPEND
-      t('users_helper.log_suspended', default: 'Suspended until ')
+      t("users_helper.log_suspended")
     elsif action == ArchiveConfig.ACTION_UNSUSPEND
-      t('users_helper.log_lift_suspension', default: 'Suspension Lifted')
+      t("users_helper.log_lift_suspension")
     elsif action == ArchiveConfig.ACTION_BAN
-      t('users_helper.log_ban', default: 'Suspended Permanently')
+      t("users_helper.log_ban")
     elsif action == ArchiveConfig.ACTION_WARN
-      t('users_helper.log_warn', default: 'Warned')
+      t("users_helper.log_warn")
     elsif action == ArchiveConfig.ACTION_RENAME
-      t('users_helper.log_rename', default: 'Username Changed')
+      t("users_helper.log_rename")
     elsif action == ArchiveConfig.ACTION_PASSWORD_RESET
-      t('users_helper.log_password_change', default: 'Password Changed')
+      t("users_helper.log_password_change")
     elsif action == ArchiveConfig.ACTION_NEW_EMAIL
-      t('users_helper.log_email_change', default: 'Email Changed')
+      t("users_helper.log_email_change")
     elsif action == ArchiveConfig.ACTION_TROUBLESHOOT
-      t('users_helper.log_troubleshot', default: 'Account Troubleshot')
+      t("users_helper.log_troubleshot")
     elsif action == ArchiveConfig.ACTION_NOTE
-      t('users_helper.log_note', default: 'Note Added')
+      t("users_helper.log_note")
     end
   end
 

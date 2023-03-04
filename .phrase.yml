@@ -11,6 +11,10 @@ phrase:
       - file: ./config/locales/devise/en.yml
         params:
           update_translations: true
+      # helpers
+      - file: ./config/locales/helpers/en.yml
+        params:
+          update_translations: true
       # mailers
       - file: ./config/locales/mailers/en.yml
         params:
