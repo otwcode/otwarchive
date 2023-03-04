@@ -570,3 +570,13 @@ en:
       add_bookmark_header: "Add Bookmark to collections"
       invite: "Invite"
       add: "Add"
+  languages:
+    form:
+      required_notice: Required information
+      name: Name
+      short: Abbreviation
+      sortable_name: Name for alphabetical sorting
+      support_available: Support available
+      abuse_support_available: Abuse support available
+      create: Create Language
+      update: Update Language
