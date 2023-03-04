@@ -591,6 +591,12 @@ en:
       abuse_support_available: Abuse support available
       create: Create Language
       update: Update Language
+    edit:
+      edit_language: Edit Language
+    new:
+      new_language: New Language
+    show:
+      work_count: "%{count} works"
   locales:
     locale_form:
       required_notice: Required information
