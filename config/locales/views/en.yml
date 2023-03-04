@@ -585,6 +585,12 @@ en:
       back: Back
     external_author_name:
       label_external_author_name: "Name: "
+  gifts:
+    gift_search:
+      forms:
+        gift_search: Search
+      gifts:
+        recipient_field: "Find gifts for: "
   invitations:
     index:
       email_address: Email address

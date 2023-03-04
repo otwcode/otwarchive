@@ -2,9 +2,9 @@
   <fieldset role="search">
 	<legend>Find gifts for</legend>
 	<p>
-    <%= label_tag :recipient, t('.gifts.recipient_field', :default => "Find gifts for: ")%>
+    <%= label_tag :recipient, t(".gifts.recipient_field")%>
     <%= text_field_tag :recipient, params[:recipient], :class => 'text', :title => 'gift search' %>
-    <span class="submit"><%= submit_tag t('.forms.gift_search', :default => 'Search'), :class => 'button', :name => nil %></span>
+    <span class="submit"><%= submit_tag t(".forms.gift_search"), :class => 'button', :name => nil %></span>
   </p>
 </fieldset>
 <% end %>
