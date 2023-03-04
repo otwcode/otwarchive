@@ -122,6 +122,7 @@ ignore_missing:
 ignore_unused:
   - activerecord.attributes.*
   - activerecord.errors.models.*
+  - activerecord.models.*
   - devise.*
   - errors.messages.*
   - errors.attributes.ticket_number.{closed_ticket,invalid_department,required}
