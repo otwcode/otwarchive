@@ -580,3 +580,17 @@ en:
       abuse_support_available: Abuse support available
       create: Create Language
       update: Update Language
+  locales:
+    locale_form:
+      required_notice: Required information
+      locale_legend: Locale
+      locale_heading: Locale
+      name: Name
+      iso: ISO code
+      language: Language
+      enable_email: Use this locale to send email
+      enable_interface: Use this locale for the interface
+      actions_legend: Actions
+      actions_heading: Actions
+      create_button: Create Locale
+      edit_button: Update Locale
