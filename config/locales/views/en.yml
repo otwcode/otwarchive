@@ -576,6 +576,11 @@ en:
       back: Back
     external_author_name:
       label_external_author_name: "Name: "
+  invitations:
+    index:
+      email_address: Email address
+      choose_invite: Choose an invitation
+      submit_invite: Send Invitation
   languages:
     form:
       required_notice: Required information

@@ -21,9 +21,9 @@
     <p>You have <%= @user.invitations.unsent.count.to_s %> open invitations and <%= @user.invitations.unredeemed.count.to_s %> that have been sent but not yet used.</p>
     <%= form_tag invite_friend_user_invitations_path(@user) do  %>
       <dl>
-        <dt><%= label_tag "invitation[invitee_email]", t('.email address', :default => 'Email address') %></dt>
+        <dt><%= label_tag "invitation[invitee_email]", t(".email_address") %></dt>
         <dd><%= text_field_tag "invitation[invitee_email]" %></dd>
-        <dt><%= label_tag :id, t('.choose_invite', :default => 'Choose an invitation') %></dt>
+        <dt><%= label_tag :id, t(".choose_invite") %></dt>
         <dd>
           <ul>
             <% for unsent_invite in @unsent_invitations %>
@@ -35,7 +35,7 @@
           </ul>
         </dd>
       </dl>
-      <p class="submit actions"><%= submit_tag t('.submit_invite', :default => 'Send Invitation')  %></p>
+      <p class="submit actions"><%= submit_tag t(".submit_invite")  %></p>
     <% end %>
   <% end %>
   </div>
