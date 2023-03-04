@@ -594,3 +594,14 @@ en:
       actions_heading: Actions
       create_button: Create Locale
       edit_button: Update Locale
+    edit:
+      edit_locale: Edit Locale
+    index:
+      supported_locales: Supported Locales
+      locale_table_summary: Lists supported locales, along with details of how they are used and options to modify them.
+      locale_table_caption: Supported Locales
+    navigation:
+      link_to_index: Locales
+      link_to_new: New Locale
+    new:
+      add_new_locale: New Locale
