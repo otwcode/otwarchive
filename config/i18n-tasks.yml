@@ -32,8 +32,7 @@ data:
   # External locale data (e.g. gems).
   # This data is not considered unused and is never written to.
   external:
-    ## Example (replace %#= with %=):
-    # - "<%#= %x[bundle info vagrant --path].chomp %>/templates/locales/%{locale}.yml"
+    - "<%= %x[bundle info rails-i18n --path].chomp %>/rails/locale/%{locale}.yml"
 
   ## Specify the router (see Readme for details). Valid values: conservative_router, pattern_router, or a custom class.
   # router: conservative_router
