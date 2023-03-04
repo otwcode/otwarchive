@@ -308,6 +308,9 @@ en:
   skins:
     confirm_delete:
       confirm_html: Are you sure you want to <strong><em>delete</em></strong> the skin "%{skin_title}"?
+    approval_queue: Approval Queue
+    approved_skins: Approved Skins
+    rejected_skins: Rejected Skins
   feedbacks:
     new:
       heading:
