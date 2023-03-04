@@ -124,7 +124,7 @@ ignore_missing:
 ignore_unused:
 - activerecord.attributes.*
 - activerecord.errors.models.*
-# - '{devise,kaminari,will_paginate}.*'
+- devise.*
 # - 'simple_form.{yes,no}'
 # - 'simple_form.{placeholders,hints,labels}.*'
 # - 'simple_form.{error_notification,required}.:'
