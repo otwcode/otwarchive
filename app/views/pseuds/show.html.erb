@@ -7,8 +7,8 @@
 <h3 class="landmark heading">Navigation</h3>
 <ul class="navigation actions" role="navigation">
   <% if @user == current_user %>
-    <li><%= link_to t('.edit_link', :default => 'Edit Pseud'), [:edit, @user, @pseud] %></li>
+    <li><%= link_to t(".edit_link"), [:edit, @user, @pseud] %></li>
   <% end %>
-  <li><%= link_to t('.index_link', :default => 'Back To Pseuds'), user_pseuds_path(@user) %></li>
+  <li><%= link_to t(".index_link"), user_pseuds_path(@user) %></li>
 </ul>
 <!--/subnav-->

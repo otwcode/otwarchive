@@ -564,6 +564,12 @@ en:
         other: "Transfer these bookmarks to the default pseud"
       confirm: "Are you sure? This can't be undone!"
       cancel: "Cancel"
+    edit:
+      forms:
+        update: Update
+    show:
+      edit_link: Edit Pseud
+      index_link: Back To Pseuds
   collection_items:
     collection_item_form:
       invite_header_html: "Invite %{title} to collections"
