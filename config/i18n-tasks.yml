@@ -116,20 +116,16 @@ search:
 
 ## Do not consider these keys missing:
 ignore_missing:
-# - 'errors.messages.{accepted,blank,invalid,too_short,too_long}'
-# - '{devise,simple_form}.*'
   - comments.check_permission_to_modify_{frozen,hidden}_status.permission_denied
 
 ## Consider these keys used:
 ignore_unused:
-- activerecord.attributes.*
-- activerecord.errors.models.*
-- devise.*
-- errors.attributes.ticket_number.{closed_ticket,invalid_department,required}
-- attributes.ticket_number
-# - 'simple_form.{yes,no}'
-# - 'simple_form.{placeholders,hints,labels}.*'
-# - 'simple_form.{error_notification,required}.:'
+  - activerecord.attributes.*
+  - activerecord.errors.models.*
+  - devise.*
+  - errors.messages.*
+  - errors.attributes.ticket_number.{closed_ticket,invalid_department,required}
+  - attributes.ticket_number
 
 ## Exclude these keys from the `i18n-tasks eq-base' report:
 # ignore_eq_base:
