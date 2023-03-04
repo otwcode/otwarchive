@@ -125,6 +125,8 @@ ignore_unused:
 - activerecord.attributes.*
 - activerecord.errors.models.*
 - devise.*
+- errors.attributes.ticket_number.{closed_ticket,invalid_department,required}
+- attributes.ticket_number
 # - 'simple_form.{yes,no}'
 # - 'simple_form.{placeholders,hints,labels}.*'
 # - 'simple_form.{error_notification,required}.:'
