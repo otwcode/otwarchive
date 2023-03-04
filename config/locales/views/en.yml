@@ -570,6 +570,12 @@ en:
       add_bookmark_header: "Add Bookmark to collections"
       invite: "Invite"
       add: "Add"
+  external_authors:
+    edit:
+      edit_external_author: Editing external author identity
+      back: Back
+    external_author_name:
+      label_external_author_name: "Name: "
   languages:
     form:
       required_notice: Required information
