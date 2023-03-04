@@ -33,7 +33,7 @@ data:
   # External locale data (e.g. gems).
   # This data is not considered unused and is never written to.
   external:
-    - "<%= %x[bundle info rails-i18n --path].chomp %>/rails/locale/%{locale}.yml"
+    - <%= %x[bundle info rails-i18n --path].chomp %>/rails/locale/%{locale}.yml
 
   ## Specify the router (see Readme for details). Valid values: conservative_router, pattern_router, or a custom class.
   # router: conservative_router
@@ -50,6 +50,8 @@ data:
   #     space: ' '
   #     object_nl: "\n"
   #     array_nl: "\n"
+
+<% require("i18n/tasks/scanners/ast_matchers/rails_model_matcher.rb") %>
 
 # Find translate calls
 search:
@@ -95,7 +97,7 @@ search:
   ##     User.human_attribute_name(:email) and User.model_name.human
   ##
   ## To implement your own, please see `I18n::Tasks::Scanners::AstMatchers::BaseMatcher`.
-  <%# I18n::Tasks.add_ast_matcher('I18n::Tasks::Scanners::AstMatchers::RailsModelMatcher') %>
+  <% I18n::Tasks.add_ast_matcher('I18n::Tasks::Scanners::AstMatchers::RailsModelMatcher') %>
 
   ## Multiple scanners can be used. Their results are merged.
   ## The options specified above are passed down to each scanner. Per-scanner options can be specified as well.
