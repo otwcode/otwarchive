@@ -1,11 +1,13 @@
 # frozen_string_literal: true
 
 require "i18n/tasks"
+require "./lib/i18n_newlines_tasks.rb"
 
 RSpec.describe I18n do
   let(:i18n) { I18n::Tasks::BaseTask.new }
   let(:missing_keys) { i18n.missing_keys }
   let(:unused_keys) { i18n.unused_keys }
+  let(:newlines) { i18n.extend(I18nNewlinesTasks).newlines }
 
   it "does not have missing keys" do
     expect(missing_keys).to be_empty,
@@ -23,5 +25,11 @@ RSpec.describe I18n do
                     "#{non_normalized.map { |path| "  #{path}" }.join("\n")}\n" \
                     "Please run `i18n-tasks normalize' to fix"
     expect(non_normalized).to be_empty, error_message
+  end
+
+  it "does not have values with newlines" do
+    error_message = "The following locale keys have values that contain newlines:\n" \
+                    "#{newlines.key_names(root: true)}"
+    expect(newlines).to be_empty, error_message
   end
 end

@@ -51,7 +51,7 @@ data:
   #     object_nl: "\n"
   #     array_nl: "\n"
 
-<% require("i18n/tasks/scanners/ast_matchers/rails_model_matcher.rb") %>
+<% require "i18n/tasks/scanners/ast_matchers/rails_model_matcher.rb" %>
 
 # Find translate calls
 search:
@@ -77,11 +77,11 @@ search:
   ## Files or `File.fnmatch` patterns to exclude from search. Some files are always excluded regardless of this setting:
   ##   *.jpg *.jpeg *.png *.gif *.svg *.ico *.eot *.otf *.ttf *.woff *.woff2 *.pdf *.css *.sass *.scss *.less
   ##   *.yml *.json *.zip *.tar.gz *.swf *.flv *.mp3 *.wav *.flac *.webm *.mp4 *.ogg *.opus *.webp *.map *.xlsx
-  exclude:
-    - app/assets/images
-    - app/assets/fonts
-    - app/assets/videos
-    - app/assets/builds
+  # exclude:
+  #   - app/assets/images
+  #   - app/assets/fonts
+  #   - app/assets/videos
+  #   - app/assets/builds
 
   ## Alternatively, the only files or `File.fnmatch patterns` to search in `paths`:
   ## If specified, this settings takes priority over `exclude`, but `exclude` still applies.
@@ -138,6 +138,10 @@ ignore_unused:
 ## Exclude these keys from the `i18n-tasks check-consistent-interpolations` report:
 # ignore_inconsistent_interpolations:
 # - 'activerecord.attributes.*'
+
+## Exclude these keys from the newlines test task:
+# ignore_newlines:
+# - user_mailer.signup_notification.*
 
 ## Ignore these keys completely:
 # ignore:
