@@ -15,16 +15,14 @@ data:
 
   # Locale files or `File.find` patterns where translations are read from:
   read:
-    ## Default:
-    # - config/locales/%{locale}.yml
-    ## More files:
-    # - config/locales/**/*.%{locale}.yml
     - config/locales/**/en.yml
-    # - config/locales/phrase-exports/%{locale}.yml # All languages, not just English
+    - config/locales/phrase-exports/%{locale}.yml
+    # - locales/views/zh-CN.yml # These are also in the phrase exports
 
   # Locale files to write new keys to, based on a list of key pattern => file rules. Matched from top to bottom:
   # `i18n-tasks normalize -p` will force move the keys according to these rules
   write:
+    # - 'config/locales/phrase-exports/%{locale}.yml' # Cannot route by language, 'en' files end up in the wrong place
     ## For example, write devise and simple form keys to their respective files:
     # - ['{devise, simple_form}.*', 'config/locales/\1.%{locale}.yml']
     ## Catch-all default:
