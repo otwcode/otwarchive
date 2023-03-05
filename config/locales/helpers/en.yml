@@ -1,14 +1,15 @@
+---
 en:
   users_helper:
-    log_validated: Account Validated
-    log_role_added: "Role Added: "
-    log_role_removed: "Role Removed: "
-    log_suspended: "Suspended until "
-    log_lift_suspension: Suspension Lifted
     log_ban: Suspended Permanently
-    log_warn: Warned
-    log_rename: Username Changed
-    log_password_change: Password Changed
     log_email_change: Email Changed
-    log_troubleshot: Account Troubleshot
+    log_lift_suspension: Suspension Lifted
     log_note: Note Added
+    log_password_change: Password Changed
+    log_rename: Username Changed
+    log_role_added: 'Role Added: '
+    log_role_removed: 'Role Removed: '
+    log_suspended: 'Suspended until '
+    log_troubleshot: Account Troubleshot
+    log_validated: Account Validated
+    log_warn: Warned
