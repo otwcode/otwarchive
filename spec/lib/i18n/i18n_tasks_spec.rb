@@ -9,7 +9,7 @@ describe I18n do
 
   it "en does not have missing keys" do
     expect(missing_keys).to be_empty,
-                            "Missing #{missing_keys.leaves.count} i18n keys, run `bundle exec i18n-tasks missing -l en -t used,plural' to show them"
+                            "Missing #{missing_keys.leaves.count} i18n keys, run `i18n-tasks missing -l en -t used,plural' to show them"
   end
 
   it "en does not have unused keys" do
