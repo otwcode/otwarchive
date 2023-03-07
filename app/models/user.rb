@@ -203,9 +203,9 @@ class User < ApplicationRecord
                                    max_pwd: ArchiveConfig.PASSWORD_LENGTH_MAX)
 
   validates_format_of :login,
-                      message: ts("^User name must be %{min_pwd} to %{max_pwd} characters (A-Z, a-z, _, 0-9 only), no spaces, cannot begin or end with underscore (_).",
-                                  min_pwd: ArchiveConfig.LOGIN_LENGTH_MIN,
-                                  max_pwd: ArchiveConfig.LOGIN_LENGTH_MAX),
+                      message: ts("^User name must be %{min_login} to %{max_login} characters (A-Z, a-z, _, 0-9 only), no spaces, cannot begin or end with underscore (_).",
+                                  min_login: ArchiveConfig.LOGIN_LENGTH_MIN,
+                                  max_login: ArchiveConfig.LOGIN_LENGTH_MAX),
                       with: /\A[A-Za-z0-9]\w*[A-Za-z0-9]\Z/
   validates :login, uniqueness: { message: ts("^User name has already been taken") }
   validate :login, :username_is_not_recently_changed, if: :will_save_change_to_login?
