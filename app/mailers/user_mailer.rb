@@ -424,7 +424,7 @@ class UserMailer < ApplicationMailer
     @comment = abuse_report.comment
     mail(
       to: abuse_report.email,
-      subject: t('user_mailer.abuse_report.subject', app_name: ArchiveConfig.APP_SHORT_NAME, summary: @summary)
+      subject: t("user_mailer.abuse_report.subject", app_name: ArchiveConfig.APP_SHORT_NAME, summary: @summary)
     )
   end
 
