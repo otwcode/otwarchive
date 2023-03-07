@@ -417,12 +417,14 @@ class UserMailer < ApplicationMailer
 
   def abuse_report(abuse_report_id)
     abuse_report = AbuseReport.find(abuse_report_id)
+    @username = abuse_report.username
     @email = abuse_report.email
     @url = abuse_report.url
+    @summary = request.summary
     @comment = abuse_report.comment
     mail(
       to: abuse_report.email,
-      subject: "#{t 'user_mailer.abuse_report.subject', app_name: ArchiveConfig.APP_SHORT_NAME}"
+      subject: t("user_mailer.abuse_report.subject", app_name: ArchiveConfig.APP_SHORT_NAME, summary: @summary)
     )
   end
 

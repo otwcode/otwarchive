@@ -23,6 +23,7 @@ en:
         open_doors: The Open Doors team
         parent_org: Organization for Transformative Works
         support: The AO3 Support team
+        abuse_team: The AO3 Policy & Abuse team
       footer:
         general:
           html:
@@ -226,10 +227,15 @@ en:
         faq: "For more information, please check %{faq_link}."
         faq_link_text: "our FAQ"
     abuse_report:
-      subject: "[%{app_name}] Your abuse report"
-      para1: "The following abuse report has been sent to the Abuse team:"
-      url_para: "URL of the page the abuse is on:"
-      description_para: "Description of the abuse:"
+      subject: "[%{app_name}] Abuse - %{summary}"
+      para1: The Policy & Abuse team has received your report, and our volunteers will investigate as soon as they can. Because our team is small and we receive thousands of reports each month, it may take some time for us to get to your report. 
+      para2: Please do not resubmit this report unless you have additional information that you did not include in your original report. Submitting multiple reports about the same issue may delay our response.
+      copy:
+        intro: 'Here is a copy of your report for your reference:'
+        url: 'URL of the reported page:'
+        summary: 'Terms of Service violation:'
+        comment: 'Description of the content or issue:'
+      thankyou: Thank you for your patience. 
     challenge_assignment_notification:
       subject: "[%{app_name}][%{collection_title}] Your assignment!"
       recipient: "Recipient:" # this is followed by the name of the gift recipient

@@ -1,11 +1,31 @@
 <% content_for :message do %>
-<%= t 'user_mailer.abuse_report.para1' %>
-  
-<%= t 'user_mailer.abuse_report.url_para' %> <%= @url %>
-  
-<%= t 'user_mailer.abuse_report.description_para' %>
-<%= text_divider %>
+  <% if @username %>
+    <%= t('mailer.general.greeting.informal.addressed', 
+                  name: @username) %>
+  <% else %>
+    <%= t('mailer.general.greeting.informal.unaddressed') %>
+  <% end %>
 
-<%= to_plain_text(@comment) %><% end %>
+  <%= t('user_mailer.abuse_report.para1') %>
+
+  <%= t('user_mailer.abuse_report.para2') %>
+
+  <%= t('user_mailer.abuse_report.copy.intro') %>
+  
+  <%= t('user_mailer.abuse_report.copy.url') %>
+  <%= to_plain_text(t(@url)) %>
+
+  <%= t('user_mailer.abuse_report.copy.summary') %>
+  <%= to_plain_text(t(@summary)) %>
+
+  <%= t('user_mailer.abuse_report.copy.comment') %>
+  <%= to_plain_text(t(@comment)) %>
+
+  <%= t('user_mailer.abuse_report.thankyou') %>
+
+  <%= t('mailer.general.closing.formal') %>
+
+  <%= t('mailer.general.signature.abuse_team') %>
+<% end %>
 
 <% content_for :sent_at do %><%= l(Time.now) %><% end %>
