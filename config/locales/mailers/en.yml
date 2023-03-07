@@ -227,7 +227,7 @@ en:
         faq: "For more information, please check %{faq_link}."
         faq_link_text: "our FAQ"
     abuse_report:
-      subject: [%{app_name}] Abuse - %{summary}
+      subject: "[%{app_name}] Abuse - %{summary}"
       para1: The Policy & Abuse team has received your report, and our volunteers will investigate as soon as they can. Because our team is small and we receive thousands of reports each month, it may take some time for us to get to your report. 
       para2: Please do not resubmit this report unless you have additional information that you did not include in your original report. Submitting multiple reports about the same issue may delay our response.
       copy:
