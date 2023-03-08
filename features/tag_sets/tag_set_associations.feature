@@ -21,7 +21,7 @@ Feature: Reviewing tag set associations
     And the tag "Zarrr" is canonized
   When I review associations for "Nominated Tags"
   Then I should not see "Zarrr → Floobry"
-  # Remove this step when AO3-3757 is fixed:
+  # TODO: Remove this step when AO3-3757 is fixed:
   When the cache for the tag set "Nominated Tags" is expired
     And I view the tag set "Nominated Tags"
   Then I should not see "Unassociated Characters & Relationships"

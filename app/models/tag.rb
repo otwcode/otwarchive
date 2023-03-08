@@ -1129,7 +1129,7 @@ class Tag < ApplicationRecord
     TagNomination.where(tagname: name).update_all(
       canonical: canonical,
       synonym: merger.nil? ? nil : merger.name,
-      parented: false, # we'll fix this later
+      parented: false, # we'll fix this later in the callback
       exists: true
     )
 
