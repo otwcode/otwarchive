@@ -18,7 +18,8 @@ module OtwSanitize
       viddersnet:       %r{^vidders\.net/},
       viddertube:       %r{^viddertube\.com/},
       vimeo:            %r{^(player\.)?vimeo\.com/},
-      youtube:          %r{^youtube(-nocookie)?\.com/}
+      youtube:          %r{^youtube(-nocookie)?\.com/},
+      bilibili:         %r{^(player\.)?bilibili\.com/}
     }.freeze
 
     ALLOWS_FLASHVARS = %i[

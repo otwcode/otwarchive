@@ -10,7 +10,8 @@ describe HtmlCleaner do
       context "#{field} is configured to allow video embeds" do
         %w[youtube.com youtube-nocookie.com vimeo.com player.vimeo.com 
            vidders.net criticalcommons.org google.com archiveofourown.org podfic.com archive.org
-           open.spotify.com spotify.com 8tracks.com w.soundcloud.com soundcloud.com viddertube.com].each do |source|
+           open.spotify.com spotify.com 8tracks.com w.soundcloud.com soundcloud.com viddertube.com
+           player.bilibili.com bilibili.com].each do |source|
 
           it "keeps embeds from #{source}" do
             html = '<iframe width="560" height="315" src="//' + source + '/embed/123" frameborder="0"></iframe>'
