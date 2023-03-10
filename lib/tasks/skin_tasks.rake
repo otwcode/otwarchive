@@ -160,9 +160,10 @@ namespace :skins do
   desc "Cache all site skins"
   task(cache_all_site_skins: :environment) do
     skins = Skin.in_chooser + [Skin.default]
-    successes, failures = [], []
+    successes = []
+    failures = []
 
-    skins.each do  |skin|
+    skins.each do |skin|
       if skin.cache!
         successes << skin.title
       else

@@ -9,7 +9,7 @@ describe "rake skins:cache_all_site_skins" do
   it "calls cache! on in_chooser skins" do
     expect do
       subject.invoke
-    end.to change{ chooser_skin.reload.public }.from(false).to(true)
+    end.to change { chooser_skin.reload.public }.from(false).to(true)
       .and change { chooser_skin.official }.from(false).to(true)
       .and change { chooser_skin.cached }.from(false).to(true)
       .and avoid_changing { default_skin.reload.public }
