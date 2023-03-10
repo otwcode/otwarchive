@@ -5,7 +5,7 @@
 * [ ] Have you added [tests for any changed functionality](https://github.com/otwcode/otwarchive/wiki/Automated-Testing)?
 * [X] Have you added the [Jira](https://otwarchive.atlassian.net) issue number
   as the *first* thing in your pull request title (e.g. `AO3-1234 Fix thing`)
-* [ ] Do you have fewer than 5 pull requests already open? If not, please wait
+* [X] Do you have fewer than 5 pull requests already open? If not, please wait
   until they are reviewed and merged before creating new pull requests.
 
 ## Issue
