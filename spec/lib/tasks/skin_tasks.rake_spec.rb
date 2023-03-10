@@ -1,8 +1,8 @@
 require "spec_helper"
 
-describe "rake skins:cache_all_site_skins" do
+describe "rake skins:cache_all_site_skins", default_skin: true do
   let(:css) { ".selector { color: yellow; }" }
-  let!(:default_skin) { Skin.default }
+  let!(:default_skin) { Skin.find(AdminSetting.default_skin_id) }
   let!(:chooser_skin) { create(:skin, in_chooser: true, css: css) }
   let!(:user_skin) { create(:skin, css: css) }
 
@@ -23,13 +23,13 @@ describe "rake skins:cache_all_site_skins" do
   it "outputs names of skins that were cached" do
     expect do
       subject.invoke
-    end.to output("\nCached #{chooser_skin.title},#{default_skin.title}\n").to_stdout
+    end.to output("\nCached #{default_skin.title},#{chooser_skin.title}\n").to_stdout
   end
 
   it "outputs names of skins that could not be cached" do
     allow_any_instance_of(Skin).to receive(:cache!).and_return(false)
     expect do
       subject.invoke
-    end.to output("\nCouldn't cache #{chooser_skin.title},#{default_skin.title}\n").to_stdout
+    end.to output("\nCouldn't cache #{default_skin.title},#{chooser_skin.title}\n").to_stdout
   end
 end
