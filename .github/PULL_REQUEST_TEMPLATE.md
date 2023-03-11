@@ -1,8 +1,8 @@
 # Pull Request Checklist
 
-* [ ] Have you read ["How to write the perfect pull request"](https://github.blog/2015-01-21-how-to-write-the-perfect-pull-request/)?
-* [ ] Have you read the [contributing guidelines](https://github.com/otwcode/otwarchive/blob/master/CONTRIBUTING.md)?
-* [ ] Have you added [tests for any changed functionality](https://github.com/otwcode/otwarchive/wiki/Automated-Testing)?
+* [X] Have you read ["How to write the perfect pull request"](https://github.blog/2015-01-21-how-to-write-the-perfect-pull-request/)?
+* [X] Have you read the [contributing guidelines](https://github.com/otwcode/otwarchive/blob/master/CONTRIBUTING.md)?
+* [X] Have you added [tests for any changed functionality](https://github.com/otwcode/otwarchive/wiki/Automated-Testing)?
 * [X] Have you added the [Jira](https://otwarchive.atlassian.net) issue number
   as the *first* thing in your pull request title (e.g. `AO3-1234 Fix thing`)
 * [X] Do you have fewer than 5 pull requests already open? If not, please wait
