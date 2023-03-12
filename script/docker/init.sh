@@ -13,5 +13,5 @@ docker-compose up -d
 
 sleep 60
 
-docker-compose run -e RAILS_ENV=development web script/reset_database.sh
-docker-compose run -e RAILS_ENV=test web script/reset_database.sh
+docker-compose run web script/reset_database.sh
+docker-compose run test script/reset_database.sh
