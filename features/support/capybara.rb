@@ -4,7 +4,7 @@ require 'capybara-screenshot/cucumber'
 # Use environment variables to set the host and the port used for tests:
 CAPYBARA_HOST = ENV["DOCKER"] ? `hostname`.strip : "localhost"
 CAPYBARA_PORT = ENV["CAPYBARA_PORT"] || 5100
-CAPYBARA_URL = "http://#{CAPYBARA_HOST}:#{CAPYBARA_PORT}"
+CAPYBARA_URL = "http://#{CAPYBARA_HOST}:#{CAPYBARA_PORT}".freeze
 
 Capybara.configure do |config|
   # Capybara 1.x behavior.
@@ -33,9 +33,9 @@ end
 # Modified from https://github.com/teamcapybara/capybara/blob/49cf69c40f4b25931aecab162fb3285d8fe5bff7/lib/capybara/registrations/drivers.rb#L31-L42
 Capybara.register_driver :selenium_chrome_headless do |app|
   browser_options = ::Selenium::WebDriver::Chrome::Options.new.tap do |opts|
-    opts.add_argument('--headless')
-    opts.add_argument('--disable-gpu') if Gem.win_platform?
-    opts.add_argument('--disable-site-isolation-trials')
+    opts.add_argument("--headless")
+    opts.add_argument("--disable-gpu") if Gem.win_platform?
+    opts.add_argument("--disable-site-isolation-trials")
   end
 
   options = if ENV["CHROME_URL"]
@@ -52,7 +52,7 @@ end
 # Make sure we get full-page screenshots on failure:
 Capybara::Screenshot.register_driver :selenium_chrome_headless do |driver, path|
   # From https://github.com/madebylotus/capybara-full_screenshot/blob/bf1c3ede89e01b847f7b0dc7d71cd73b25175cd5/lib/capybara/full_screenshot/rspec_helpers.rb#L5-L8
-  width  = Capybara.page.execute_script(<<~WIDTH_SCRIPT.squish)
+  width = Capybara.page.execute_script(<<~WIDTH_SCRIPT.squish)
     return Math.max(document.body.scrollWidth,
                     document.body.offsetWidth,
                     document.documentElement.clientWidth,
