@@ -9,6 +9,7 @@ module OtwSanitize
     WHITELIST_REGEXES = {
       ao3:              %r{^archiveofourown\.org/},
       archiveorg:       %r{^archive\.org\/embed/},
+      bilibili:         %r{^(player\.)?bilibili\.com/},
       criticalcommons:  %r{^criticalcommons\.org/},
       eighttracks:      %r{^8tracks\.com/},
       google:           %r{^google\.com/},
@@ -19,7 +20,6 @@ module OtwSanitize
       viddertube:       %r{^viddertube\.com/},
       vimeo:            %r{^(player\.)?vimeo\.com/},
       youtube:          %r{^youtube(-nocookie)?\.com/},
-      bilibili:         %r{^(player\.)?bilibili\.com/}
     }.freeze
 
     ALLOWS_FLASHVARS = %i[
