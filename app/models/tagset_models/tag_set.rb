@@ -45,7 +45,7 @@ class TagSet < ApplicationRecord
 
     define_method("#{type}_tagnames") do
       self.instance_variable_get("@#{type}_tagnames") || (self.new_record? ? self.tags.select {|t| t.type == type.classify}.collect(&:name).join(ArchiveConfig.DELIMITER_FOR_OUTPUT) :
-                                                                             self.tags.with_type(type.classify).select('tags.name').order('tags.name').collect(&:name).join(ArchiveConfig.DELIMITER_FOR_OUTPUT))
+                                                                             self.tags.with_type(type.classify).select('tags.name').order('tags.name').collect(&:name))
     end
 
     define_method("#{type}_taglist") do

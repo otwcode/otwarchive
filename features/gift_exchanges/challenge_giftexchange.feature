@@ -641,3 +641,11 @@ Feature: Gift Exchange Challenge
       And I uncheck "exchange_collection (recip)"
       And I press "Post"
     Then I should see "For recip."
+
+  Scenario: Editing Gift Exchange sign up does not automatically check every couple from a poly ship.
+    Given the open gift exchange "Overlap Gift Exchange" has overlapping tags
+    When I sign up for "Overlap Gift Exchange" with combination E
+      And I follow "Edit Sign-up"
+    Then the "Sam Carter/Daniel Jackson/Jack O'Neill" checkbox should be checked
+      And the "Sam Carter/Daniel Jackson" checkbox should not be checked
+      And the "Daniel Jackson/Jack O'Neill" checkbox should not be checked
