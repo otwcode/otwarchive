@@ -22,7 +22,8 @@ describe HtmlCleaner do
 
         %w[youtube.com youtube-nocookie.com vimeo.com player.vimeo.com
            archiveofourown.org archive.org 8tracks.com podfic.com
-           open.spotify.com spotify.com w.soundcloud.com soundcloud.com vidders.net viddertube.com].each do |source|
+           open.spotify.com spotify.com w.soundcloud.com soundcloud.com vidders.net viddertube.com
+           bilibili.com player.bilibili.com].each do |source|
 
           it "converts src to https for #{source}" do
             html = '<iframe width="560" height="315" src="http://' + source + '/embed/123" frameborder="0"></iframe>'
