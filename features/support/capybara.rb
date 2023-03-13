@@ -34,7 +34,8 @@ end
 Capybara.register_driver :selenium_chrome_headless do |app|
   browser_options = ::Selenium::WebDriver::Chrome::Options.new.tap do |opts|
     opts.add_argument("--headless")
-    opts.add_argument("--disable-gpu") if Gem.win_platform?
+
+    # Workaround from https://bugs.chromium.org/p/chromedriver/issues/detail?id=2660#c13
     opts.add_argument("--disable-site-isolation-trials")
   end
 

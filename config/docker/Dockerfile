@@ -1,4 +1,4 @@
-FROM ruby:3.0.5-buster
+FROM ruby:3.0.5
 
 # Install additional packages
 RUN apt-get update             && \
