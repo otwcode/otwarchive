@@ -1,35 +1,38 @@
 <% content_for :message do %>
-  <% if @username %>
-    <p><%= t('mailer.general.greeting.informal.addressed', 
-                  name: @username) %></p>
-  <% else %>
-    <p><%= t('mailer.general.greeting.informal.unaddressed') %></p>
+  <p>
+    <% if @username.present? %>
+      <%= t("mailer.general.greeting.informal.addressed", 
+              name: style_bold(@username)).html_safe %></p>
+    <% else %>
+      <%= t("mailer.general.greeting.informal.unaddressed") %>
+  </p>
   <% end %>
 
-  <p><%= t('user_mailer.abuse_report.para1') %></p>
+  <p><%= t(".report_received") %></p>
 
-  <p><%= t('user_mailer.abuse_report.para2') %></p>
+  <p><%= t(".resubmission") %></p>
 
-  <p><%= t('user_mailer.abuse_report.copy.intro') %></p>
+  <p><%= t(".copy.intro") %></p>
   
   <p>
-    <%= style_bold(t('user_mailer.abuse_report.copy.url')) %>
-    <%= t(@url) %>
+    <%= style_work_metadata_label(style_bold(t(".copy.url"))) %>
+    <%= link_to @url, @url %>
   </p>
 
   <p>
-    <%= style_bold(t('user_mailer.abuse_report.copy.summary')) %>
-    <%= t(@summary) %>
+    <%= style_work_metadata_label(style_bold(t(".copy.summary"))) %>
+    <%= to_plain_text(raw @summary) %>
   </p>
 
-  <p><%= style_bold(t('user_mailer.abuse_report.copy.comment')) %></p>
-  <p><%= style_quote(t(@comment)) %></p>
+  <p><%= style_work_metadata_label(style_bold(t(".copy.comment"))) %></p>
+  <p><%= style_quote(to_plain_text(raw @comment)) %></p>
 
-  <p><%= t('user_mailer.abuse_report.thankyou') %></p>
+  <p><%= t(".thank_you") %></p>
 
-  <p><%= t('mailer.general.closing.formal') %></p>
-
-  <p><%= style_bold(t('mailer.general.signature.abuse_team')) %></p>
+  <p>
+    <%= t("mailer.general.closing.formal") %><br/>
+    <%= style_bold(t("mailer.general.signature.abuse_team")) %>
+  </p>
 <% end %>
 
 <% content_for :sent_at do %>

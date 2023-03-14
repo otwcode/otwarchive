@@ -420,11 +420,11 @@ class UserMailer < ApplicationMailer
     @username = abuse_report.username
     @email = abuse_report.email
     @url = abuse_report.url
-    @summary = request.summary
+    @summary = abuse_report.summary
     @comment = abuse_report.comment
     mail(
       to: abuse_report.email,
-      subject: t("user_mailer.abuse_report.subject", app_name: ArchiveConfig.APP_SHORT_NAME, summary: @summary)
+      subject: t("user_mailer.abuse_report.subject", app_name: ArchiveConfig.APP_SHORT_NAME, summary: strip_html_breaks_simple(@summary))
     )
   end
 

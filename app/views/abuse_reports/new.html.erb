@@ -8,52 +8,58 @@
 
 <!--main content-->
 <div class="userstuff">
-  <p class="important"><%= t(".purview.about",
-              tos_link: (link_to t(".purview.tos"), tos_path, name: "reportwhat")).html_safe %>
+  <p class="important" name="reportwhat">
+    <%= t(".purview.about_html",
+          tos_link: (link_to t(".purview.tos"), tos_path)) %>
   </p>
 
-  <p><%= t(".purview.technical_help",
-              support_link: (link_to t(".purview.support"), new_feedback_report_path)).html_safe %>
+  <p>
+    <%= t(".purview.technical_help_html",
+          support_link: (link_to t(".purview.support"), new_feedback_report_path)) %>
   </p>
 
-  <p><%= t(".purview.dmca_takedown",
-              dmca_link: (link_to t(".purview.dmca"), dmca_path)).html_safe %>
+  <p>
+    <%= t(".purview.dmca_takedown_html",
+          dmca_link: (link_to t(".purview.dmca"), dmca_path)) %>
   </p>
 
-  <p><strong><%= 
-              link_to "", name: "reportwhy" %>
-            <%= t(".reportable.intro") %>
-  </strong></p>
+  <p name="reportwhy">
+    <strong>
+      <%= t(".reportable.intro") %>
+    </strong>
+  </p>
 
   <ul>
-    <li><%= t(".reportable.violation",
-              tos_link: (link_to t(".purview.tos"), tos_path, name: "reportwhat")).html_safe %></li>
+    <li><%= t(".reportable.violation_html",
+              tos_link: (link_to t(".purview.tos"), tos_path, name: "reportwhat")) %></li>
     <li><%= t(".reportable.content") %></li>
     <li><%= t(".reportable.harassment") %></li>
     <li><%= t(".reportable.hack") %></li>
     <li><%= t(".reportable.suspended") %></li>
   </ul>
 
-  <p><strong><%= 
-              link_to "", name: "reporthow" %>
-            <%= t(".include.intro") %>
-  </strong></p>
+  <p name="reporthow">
+    <strong>
+      <%= t(".include.intro") %>
+    </strong>
+  </p>
 
   <ul>
     <li><%= t(".include.username") %></li>
     <li><%= t(".include.links") %></li>
-    <li><%= t(".include.quote",
-              tos_link: (link_to t(".include.ao3"), tos_path(anchor: 'content'))).html_safe %></li>
+    <li><%= t(".include.quote_html",
+              tos_link: (link_to t(".include.ao3"), tos_path(anchor: 'content'))) %></li>
     <li><%= t(".include.sources") %></li>
   </ul>
 
   <p><%= t(".do_not_spam") %></p>
 
-  <p><strong><%= 
-              link_to "", name: "reportlanguage" %>
-              <%= t(".include.languages",
-                  list: @abuse_languages.map(&:name).to_sentence).html_safe %></strong>
-              <%= t(".include.delay") %>
+  <p name="reportlanguage">
+    <strong>
+      <%= t(".include.languages",
+            list_html: @abuse_languages.map(&:name).to_sentence) %>
+    </strong>
+    <%= t(".include.delay") %>
   </p>
 </div>
 
@@ -84,7 +90,7 @@
       <dd class="required">
         <%= f.text_field :url, size: 60, "aria-describedby" => "url-field-description" %>
         <%= live_validation_for_field("abuse_report_url",
-              failureMessage: t(".form.link.error")) %>
+                                      failureMessage: t(".form.link.error")) %>
         <p class="footnote" id="url-field-description">
           <%= t(".form.link.description") %>
         </p>
@@ -94,8 +100,8 @@
         <%= f.label :summary, t(".form.summary.label") %>
       </dt>
       <dd class="required">
-        <%= f.text_field :summary, class: "observe_textlength" %>
-        <p class="footnote" id="url-field-description">
+        <%= f.text_field :summary, class: "observe_textlength", "aria-describedby" => "summary-field-description" %>
+        <p class="footnote" id="summary-field-description">
           <%= t(".form.summary.description") %>
         </p>
         <%= generate_countdown_html("abuse_report_summary", ArchiveConfig.FEEDBACK_SUMMARY_MAX_DISPLAYED) %>
@@ -109,12 +115,12 @@
       <dd class="required">
         <p id="comment-field-description">
           <%= t(".form.comment.description",
-                  tos_link: (link_to t(".form.comment.tos"), tos_path),
-                  include_link: (link_to t(".form.comment.include"), anchor: "reporthow")).html_safe %>
+                tos_link: (link_to t(".form.comment.tos"), tos_path),
+                include_link: (link_to t(".form.comment.include"), anchor: "reporthow")).html_safe %>
         </p>
         <%= f.text_area :comment, "aria-describedby" => "comment-field-description" %>
         <%= live_validation_for_field("abuse_report_comment",
-              failureMessage: t(".form.comment.error")) %>
+                                      failureMessage: t(".form.comment.error")) %>
       </dd>
       
       <dt class="landmark"><%= t(".form.landmark.send") %></dt>
