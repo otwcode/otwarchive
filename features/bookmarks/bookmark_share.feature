@@ -3,7 +3,7 @@ Feature: Share Bookmarks
   Testing the "Share" button on bookmarks, with JavaScript emulation
 
   # We need to load the site skin to make the share modal work properly:
-  @javascript @site-skins
+  @javascript @load-default-skin
   Scenario: Share a bookmark
     Given I am logged in as "tess"
       And I have a bookmark for "Damp Gravel"

@@ -1,5 +1,5 @@
 # We need to load the site skin to make the share modal work properly:
-@works @site-skins
+@works @load-default-skin
 Feature: Share Works
   Testing the "Share" button on works, with Javascript emulation
 

@@ -101,7 +101,6 @@ services:
       - CHROME_URL=http://chrome:4444
       - DOCKER=true
       - CAPYBARA_PORT=5100
-      - OTWA_NO_START_REDIS=1
     command: bundle exec cucumber
     volumes:
       - .:/otwa
