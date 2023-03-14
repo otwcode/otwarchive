@@ -48,7 +48,7 @@ Feature: Filing an abuse report
     And I am on the home page
     And I follow "Policy Questions & Abuse Reports"
     And I fill in "Brief summary of Terms of Service violation (required)" with "This is a summary of bad things"
-    And I fill in "Your comment (required)" with "This is wrong"
+    And I fill in "Description of the content you are reporting (required)" with "This is wrong"
     And I fill in "Link to the page you are reporting (required)" with "http://www.archiveofourown.org/works"
     And I fill in "Your email (required)" with ""
     And I select "Deutsch" from "abuse_report_language"
