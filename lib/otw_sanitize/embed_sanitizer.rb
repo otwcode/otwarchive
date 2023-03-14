@@ -28,8 +28,8 @@ module OtwSanitize
     ].freeze
 
     SUPPORTS_HTTPS = %i[
-      ao3 archiveorg eighttracks podfic
-      soundcloud spotify viddersnet viddertube vimeo youtube bilibili
+      ao3 archiveorg bilibili eighttracks podfic
+      soundcloud spotify viddersnet viddertube vimeo youtube
     ].freeze
 
     # Creates a callable transformer for the sanitizer to use
