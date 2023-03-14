@@ -640,7 +640,7 @@ describe UserMailer do
     let(:email) { UserMailer.abuse_report(report.id) }
 
     it "has the correct subject" do
-      expect(email).to have_subject "[#{ArchiveConfig.APP_SHORT_NAME}] Your abuse report"
+      expect(email).to have_subject "[#{ArchiveConfig.APP_SHORT_NAME}] Abuse - #{report.summary}"
     end
 
     it "delivers to the user who filed the report" do
