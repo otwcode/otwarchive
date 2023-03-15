@@ -414,7 +414,7 @@ module ApplicationHelper
       when options[:checked_method].nil?
         []
       else
-        form.object.send(options[:checked_method]).split(', ') || []
+        form.object.send(options[:checked_method]).split(", ") || []
       end
 
     checkboxes = choices.map do |choice|
