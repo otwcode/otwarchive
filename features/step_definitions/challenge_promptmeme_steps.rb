@@ -26,6 +26,15 @@ Given /^I have single-prompt prompt meme fully set up$/ do
   step "I fill in single-prompt challenge options"
 end
 
+Given /^I have prompt meme "([^\"]*)" fully set up with overlapping tags$/ do |challengename|
+  step %{I am logged in as "mod1"}
+    step "I have overlapping challenge tags setup"
+    step %{I set up the collection "#{challengename}" with name "#{challengename.gsub(/[^\w]/, '_')}"}
+    step %{I select "Prompt Meme" from "challenge_type"}
+  click_button("Submit")
+  step "I fill in overlapping tags challenge options"
+end
+
 Given /^everyone has signed up for Battle 12$/ do
   # no anon
   step %{I am logged in as "myname1"}
@@ -122,6 +131,13 @@ end
 When /^I create Battle 12 promptmeme$/ do
   step "I set up Battle 12 promptmeme collection"
   step "I fill in Battle 12 challenge options"
+end
+
+When /^I fill in overlapping tags challenge options$/ do 
+  step %{I fill in "General Sign-up Instructions" with "Here are some general tips"}
+    fill_in("Tag Sets To Use:", with: "Standard Challenge Tags")
+    step %{I check "Sign-up open?"}
+    step %{I submit}
 end
 
 When /^I fill in Battle 12 challenge options$/ do
@@ -257,6 +273,13 @@ When /^I sign up for Battle 12 with combination E$/ do
     step "I follow \"Sign Up\""
     step %{I fill in "Description:" with "Weird description"}
     step "I press \"Submit\""
+end
+
+When /^I sign up for "([^\"]*)" with combination F$/ do |title|
+  step %{I start signing up for "#{title}"}
+    step %{I check the 1st checkbox with the value "Sam Carter/Daniel Jackson/Jack O'Neill"}
+    click_button "Submit"
+  step %{I should see "Sign-up was successfully created"}
 end
 
 When /^I sign up for "([^\"]*)" fixed-fandom prompt meme$/ do |title|

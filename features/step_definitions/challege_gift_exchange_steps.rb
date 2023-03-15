@@ -113,7 +113,7 @@ end
 
 Given /^the open gift exchange "([^\"]*)" has overlapping tags$/ do |challengename|
   step %{I am logged in as "mod1"}
-    step "I have overlapping challenge tags setup" #todo
+    step "I have overlapping challenge tags setup"
     step %{I set up the collection "#{challengename}" with name "#{challengename.gsub(/[^\w]/, '_')}"}
     step %{I select "Gift Exchange" from "challenge_type"}
   click_button("Submit")

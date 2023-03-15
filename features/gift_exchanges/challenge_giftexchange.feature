@@ -642,7 +642,7 @@ Feature: Gift Exchange Challenge
       And I press "Post"
     Then I should see "For recip."
 
-  Scenario: Editing Gift Exchange sign up does not automatically check every couple from a poly ship.
+  Scenario: Editing Gift Exchange sign up does not automatically check every overlapping tag.
     Given the open gift exchange "Overlap Gift Exchange" has overlapping tags
     When I sign up for "Overlap Gift Exchange" with combination E
       And I follow "Edit Sign-up"
