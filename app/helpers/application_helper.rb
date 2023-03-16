@@ -413,8 +413,10 @@ module ApplicationHelper
         options[:checked_method]
       when options[:checked_method].nil?
         []
-      else
+      when attribute.is_a?(String) && attribute.include?("tagnames")
         form.object.send(options[:checked_method]).split(", ") || []
+      else
+        form.object.send(options[:checked_method]) || []
       end
 
     checkboxes = choices.map do |choice|
