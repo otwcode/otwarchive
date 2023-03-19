@@ -58,7 +58,7 @@ class AbuseReport < ApplicationRecord
     uri = Addressable::URI.parse url
     return url unless uri.scheme.nil?
 
-    "https://#{uri.to_s}"
+    "https://#{uri}"
   end
 
   # Clean work or profile URLs so we can prevent the same URLs from getting
