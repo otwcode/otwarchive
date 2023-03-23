@@ -1,6 +1,6 @@
 require "spec_helper"
 
-describe "rake skins:cache_all_site_skins", default_skin: true do
+describe "rake skins:cache_chooser_skins", default_skin: true do
   let(:css) { ".selector { color: yellow; }" }
   let!(:default_skin) { Skin.find(AdminSetting.default_skin_id) }
   let!(:chooser_skin) { create(:skin, in_chooser: true, css: css) }
