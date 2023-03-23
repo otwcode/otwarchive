@@ -48,14 +48,13 @@ class AbuseReport < ApplicationRecord
   def standardize_url
     return unless url =~ %r{((chapters|works)/\d+)} || url =~ %r{(users\/\w+)}
 
-    url_with_scheme = add_scheme_to_url(url)
-    clean_url = clean_url(url_with_scheme)
-    standardized_url = add_work_id_to_url(clean_url)
-    self.url = standardized_url
+    self.url = add_scheme_to_url(url)
+    self.url = clean_url(url)
+    self.url = add_work_id_to_url(self.url)
   end
 
   def add_scheme_to_url(url)
-    uri = Addressable::URI.parse url
+    uri = Addressable::URI.parse(url)
     return url unless uri.scheme.nil?
 
     "https://#{uri}"
@@ -66,7 +65,7 @@ class AbuseReport < ApplicationRecord
   # If the URL ends without a / at the end, add it: url_is_not_over_reported
   # uses the / so "/works/1234" isn't a match for "/works/123"
   def clean_url(url)
-    uri = Addressable::URI.parse url
+    uri = Addressable::URI.parse(url)
 
     uri.query = nil
     uri.fragment = nil
@@ -87,8 +86,8 @@ class AbuseReport < ApplicationRecord
 
     return url if work_id.nil?
     
-    uri = Addressable::URI.parse url
-    uri.path = "/works/" + work_id.to_s + uri.path
+    uri = Addressable::URI.parse(url)
+    uri.path = "/works/#{work_id}" + uri.path
 
     uri.to_s
   end
