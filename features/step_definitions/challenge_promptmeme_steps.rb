@@ -28,9 +28,9 @@ end
 
 Given /^I have prompt meme "([^\"]*)" fully set up with overlapping tags$/ do |challengename|
   step %{I am logged in as "mod1"}
-    step "I have overlapping challenge tags setup"
-    step %{I set up the collection "#{challengename}" with name "#{challengename.gsub(/[^\w]/, '_')}"}
-    step %{I select "Prompt Meme" from "challenge_type"}
+  step "I have overlapping challenge tags setup"
+  step %{I set up the collection "#{challengename}" with name "#{challengename.gsub(/[^\w]/, '_')}"}
+  step %{I select "Prompt Meme" from "challenge_type"}
   click_button("Submit")
   step "I fill in overlapping tags challenge options"
 end
@@ -135,9 +135,9 @@ end
 
 When /^I fill in overlapping tags challenge options$/ do 
   step %{I fill in "General Sign-up Instructions" with "Here are some general tips"}
-    fill_in("Tag Sets To Use:", with: "Standard Challenge Tags")
-    step %{I check "Sign-up open?"}
-    step %{I submit}
+  fill_in("Tag Sets To Use:", with: "Standard Challenge Tags")
+  step %{I check "Sign-up open?"}
+  step %{I submit}
 end
 
 When /^I fill in Battle 12 challenge options$/ do
@@ -277,8 +277,8 @@ end
 
 When /^I sign up for "([^\"]*)" with combination F$/ do |title|
   step %{I start signing up for "#{title}"}
-    step %{I check the 1st checkbox with the value "Sam Carter/Daniel Jackson/Jack O'Neill"}
-    click_button "Submit"
+  step %{I check the 1st checkbox with the value "Sam Carter/Daniel Jackson/Jack O'Neill"}
+  click_button "Submit"
   step %{I should see "Sign-up was successfully created"}
 end
 
