@@ -126,6 +126,19 @@ describe Blocked::UsersController do
         it_redirects_to_with_notice(user_blocked_users_path(blocker),
                                     "You have blocked the user #{blocked.login}.")
       end
+
+      context "when trying to block more users than the block limit" do
+        let(:blocked_2nd) { create(:user) }
+
+        it "redirects with an error" do
+          allow(ArchiveConfig).to receive(:MAX_BLOCKED_USERS).and_return(1)
+          Block.create(blocker: blocker, blocked: blocked)
+          post :create, params: { user_id: blocker, blocked_id: blocked_2nd }
+          expect(Block.where(blocker: blocker, blocked: blocked_2nd)).not_to be_present
+          it_redirects_to_with_error(user_blocked_users_path(blocker),
+                                     "Sorry, you have blocked too many accounts.")
+        end
+      end
     end
 
     it_behaves_like "no other users can access it"

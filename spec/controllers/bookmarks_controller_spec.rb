@@ -25,13 +25,6 @@ describe BookmarksController do
           get :new
           expect(response).to render_template("new")
         end
-
-        it "renders the new form for a multi-chapter work" do
-          fake_login
-          get :new, params: { chapter_id: chapter2.id }
-          expect(response).to render_template("new")
-          expect(assigns(:bookmarkable)).to eq(chaptered_work)
-        end
       end
     end
 
@@ -46,12 +39,6 @@ describe BookmarksController do
         expect(response).to render_template("bookmark_form_dynamic")
       end
 
-      it "renders the new form for a bookmark on a multi-chapter work" do
-        fake_login
-        get :new, params: { chapter_id: chapter2.id, format: :js }, xhr: true
-        expect(response).to render_template("bookmark_form_dynamic")
-        expect(assigns(:bookmarkable)).to eq(chaptered_work)
-      end
     end
   end
 
@@ -243,14 +230,6 @@ describe BookmarksController do
     let!(:external_work_bookmark) { create(:external_work_bookmark) }
     let!(:series_bookmark) { create(:series_bookmark) }
     let!(:work_bookmark) { create(:bookmark) }
-
-    context "with chapter_id parameters" do
-      it "loads the work as the bookmarkable" do
-        params = { chapter_id: work_bookmark.bookmarkable.chapters.first.id }
-        get :index, params: params
-        expect(assigns(:bookmarkable)).to eq(work_bookmark.bookmarkable)
-      end
-    end
 
     context "with external_work_id parameters" do
       it "loads the external work as the bookmarkable" do

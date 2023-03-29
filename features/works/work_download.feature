@@ -120,6 +120,16 @@ Feature: Download a work
     And I follow "HTML"
   Then I should see "Chapter 2"
 
+  Scenario: Download of chaptered work without posted chapters does not include chapters
+
+  Given the work "Bazinga"
+    And a draft chapter is added to "Bazinga"
+    And I delete chapter 1 of "Bazinga"
+  When I view the work "Bazinga"
+    And I follow "HTML"
+  Then I should not see "Chapter 1"
+    And I should not see "Chapter 2"
+    And I should be able to download all versions of "Bazinga"
 
   Scenario: Download chaptered works
 
