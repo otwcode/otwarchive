@@ -1,11 +1,10 @@
 require "unicode_utils/casefold"
 
 class Tag < ApplicationRecord
-
-  include ActiveModel::ForbiddenAttributesProtection
   include Searchable
   include StringCleaner
   include WorksOwner
+  include Wrangleable
   include Rails.application.routes.url_helpers
 
   NAME = "Tag"
@@ -33,21 +32,6 @@ class Tag < ApplicationRecord
 
   def document_json
     TagIndexer.new({}).document(self)
-  end
-
-  def self.write_redis_to_database
-    batch_size = ArchiveConfig.TAG_UPDATE_BATCH_SIZE
-    REDIS_GENERAL.smembers("tag_update").each_slice(batch_size) do |batch|
-      Tag.transaction do
-        batch.each do |id|
-          value = REDIS_GENERAL.get("tag_update_#{id}_value")
-          sql = []
-          sql.push("taggings_count_cache = #{value}") unless value.blank?
-          Tag.where(id: id).update_all(sql.join(",")) unless sql.empty?
-        end
-        REDIS_GENERAL.srem("tag_update", batch)
-      end
-    end
   end
 
   def self.taggings_count_expiry(count)
@@ -169,7 +153,7 @@ class Tag < ApplicationRecord
   has_many :parent_tag_set_associations, class_name: 'TagSetAssociation', foreign_key: 'parent_tag_id', dependent: :destroy
 
   validates_presence_of :name
-  validates_uniqueness_of :name, case_sensitive: false
+  validates :name, uniqueness: true
   validates_length_of :name, minimum: 1, message: "cannot be blank."
   validates_length_of :name,
     maximum: ArchiveConfig.TAG_MAX,
@@ -403,10 +387,9 @@ class Tag < ApplicationRecord
     in_challenge(collection, 'Offer')
   }
 
-  # Resque
-
-  include AsyncWithResque
-  @queue = :utilities
+  # Code for delayed jobs:
+  include AsyncWithActiveJob
+  self.async_job_class = TagMethodJob
 
   # Class methods
 
@@ -471,6 +454,12 @@ class Tag < ApplicationRecord
 
   def display_name
     name
+  end
+
+  # Make sure that the global ID doesn't depend on the type, so that we don't
+  # experience errors when switching types:
+  def to_global_id(options = {})
+    GlobalID.create(becomes(Tag), options)
   end
 
   ## AUTOCOMPLETE

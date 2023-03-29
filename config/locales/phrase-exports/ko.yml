@@ -1,22 +1,76 @@
 ---
 ko:
+  activerecord:
+    attributes:
+      archive_warning:
+        name_with_colon:
+          other: '주의 사항:'
+      category:
+        name_with_colon:
+          other: '카테고리:'
+      character:
+        name_with_colon:
+          other: '여러 등장인물들:'
+      fandom:
+        name_with_colon:
+          other: '팬덤:'
+      freeform:
+        name_with_colon:
+          other: '기타 태그:'
+      rating:
+        name_with_colon: '등급:'
+      relationship:
+        name_with_colon:
+          other: '관계성:'
+      work:
+        summary: 줄거리
+    models:
+      archive_warning:
+        other: 주의 사항
+      category:
+        other: 카테고리
+      chapter:
+        other: 챕터
+      character:
+        other: 등장인물
+      fandom:
+        other: 팬덤
+      freeform:
+        other: 기타 태그
+      rating:
+        other: 등급
+      relationship:
+        other: 관계성
+      series:
+        other: 시리즈
   kudo_mailer:
     batch_kudo_notification:
       guest:
-        other: "%{count} 방문자"
+        other: "%{count} 손님들"
       html:
         left_kudos:
           other: "%{commentable_link}에 %{givers_list}이(가) 좋아요(kudos)를 남겼습니다."
+        single_guest:
+          giver_list: 손님
+          left_kudos: "%{commentable_link}에 %{giver_list}이(가) 좋아요(kudos)를 남겼습니다."
       subject: "[%{app_name}] 회원님의 게시물에 좋아요(kudos)가 있습니다!"
       text:
         left_kudos:
           other: "%{commentable_title} (%{commentable_url})에 %{givers_list}이(가) 좋아요(kudos)를
             남겼습니다."
+        single_guest: "%{commentable_title} (%{commentable_url})에 손님이 좋아요(kudos)를
+          남겼습니다."
   mailer:
     general:
       closing:
         formal: 진심을 담아
         informal: 진심을 담아
+      creation:
+        link_with_word_count: "%{creation_link} (%{word_count})"
+        title_with_chapter_number: 작품 %{title}의 챕터 %{position}
+        title_with_word_count: '"%{creation_title}" (%{word_count})'
+        word_count:
+          other: "%{count} 단어"
       footer:
         general:
           html:
@@ -36,6 +90,7 @@ ko:
           addressed: "%{name} 님 안녕하세요!"
           unaddressed: 안녕하세요!
         introductory: Archive of Our Own – AO3 (우리만의 아카이브)에서 인사 드립니다!
+      metadata_label_indicator: ": "
       signature:
         app_short_name: AO3
         open_doors: The Open Doors (오픈도어 프로젝트) 팀 드림

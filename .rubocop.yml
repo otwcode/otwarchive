@@ -57,6 +57,9 @@ Metrics/MethodLength:
 Metrics/ModuleLength:
   Enabled: false
 
+Metrics/ParameterLists:
+  CountKeywordArgs: false
+
 Metrics/PerceivedComplexity:
   Enabled: false
 
@@ -72,6 +75,8 @@ Rails/DynamicFindBy:
     - find_by_url_generation
     - find_by_url_generation_key
     - find_by_url_uncached
+    # Exceptions for InboxComment.find_by_filters
+    - find_by_filters
 
 # Allow all uses of html_safe, they're everywhere...
 Rails/OutputSafety:
