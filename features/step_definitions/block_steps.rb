@@ -8,6 +8,10 @@ Given "there are {int} blocked users per page" do |amount|
   allow(Block).to receive(:per_page).and_return(amount)
 end
 
+Given "the maximum number of accounts users can block is {int}" do |count| 
+  allow(ArchiveConfig).to receive(:MAX_BLOCKED_USERS).and_return(count) 
+end
+
 Then "the user {string} should have a block for {string}" do |blocker, blocked|
   blocker = User.find_by(login: blocker)
   blocked = User.find_by(login: blocked)

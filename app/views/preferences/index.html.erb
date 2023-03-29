@@ -10,6 +10,7 @@
   <li><%= link_to ts('Edit My Profile'), edit_user_path(@user) %></li>
   <li><%= link_to ts('Manage My Pseuds'), user_pseuds_path(@user) %></li>
   <li><%= link_to t(".blocked_users"), user_blocked_users_path %></li>
+  <li><%= link_to t(".muted_users"), user_muted_users_path %></li>
   <li><%= link_to ts('Change My User Name'), change_username_user_path(@user) %></li>
   <li><%= link_to ts('Orphan My Works'), new_orphan_path %></li>
 </ul>
@@ -113,8 +114,8 @@
     <h4 class="heading"><%= ts('Collections, Challenges and Gifts') %> <%= link_to_help 'collection-preferences' %></h4>
     <ul>
       <li>
-        <%= f.check_box :automatically_approve_collections %>
-        <%= f.label :automatically_approve_collections, ts("Automatically agree to your work being collected by others in the Archive.") %>
+        <%= f.check_box :allow_collection_invitation %>
+        <%= f.label :allow_collection_invitation, t(".allow_collection_invitation") %>
       </li>
       <li>
         <%= f.check_box :allow_gifts %>

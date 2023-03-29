@@ -8,9 +8,9 @@ describe HtmlCleaner do
   describe "sanitize_value" do
     ArchiveConfig.FIELDS_ALLOWING_VIDEO_EMBEDS.each do |field|
       context "#{field} is configured to allow video embeds" do
-        %w{youtube.com youtube-nocookie.com vimeo.com player.vimeo.com static.ning.com ning.com dailymotion.com
-           metacafe.com vidders.net criticalcommons.org google.com archiveofourown.org podfic.com archive.org
-           open.spotify.com spotify.com 8tracks.com w.soundcloud.com soundcloud.com viddertube.com}.each do |source|
+        %w[youtube.com youtube-nocookie.com vimeo.com player.vimeo.com 
+           vidders.net criticalcommons.org google.com archiveofourown.org podfic.com archive.org
+           open.spotify.com spotify.com 8tracks.com w.soundcloud.com soundcloud.com viddertube.com].each do |source|
 
           it "keeps embeds from #{source}" do
             html = '<iframe width="560" height="315" src="//' + source + '/embed/123" frameborder="0"></iframe>'
@@ -19,9 +19,9 @@ describe HtmlCleaner do
           end
         end
 
-        %w{youtube.com youtube-nocookie.com vimeo.com player.vimeo.com
-           archiveofourown.org archive.org dailymotion.com 8tracks.com static.ning.com ning.com podfic.com
-           open.spotify.com spotify.com w.soundcloud.com soundcloud.com vidders.net viddertube.com}.each do |source|
+        %w[youtube.com youtube-nocookie.com vimeo.com player.vimeo.com
+           archiveofourown.org archive.org 8tracks.com podfic.com
+           open.spotify.com spotify.com w.soundcloud.com soundcloud.com vidders.net viddertube.com].each do |source|
 
           it "converts src to https for #{source}" do
             html = '<iframe width="560" height="315" src="http://' + source + '/embed/123" frameborder="0"></iframe>'
@@ -56,7 +56,7 @@ describe HtmlCleaner do
           expect(result).to be_empty
         end
 
-        %w(metacafe.com criticalcommons.org).each do |source|
+        %w[criticalcommons.org].each do |source|
           it "doesn't convert src to https for #{source}" do
             html = '<iframe width="560" height="315" src="http://' + source + '/embed/123" frameborder="0"></iframe>'
             result = sanitize_value(field, html)
@@ -455,6 +455,48 @@ describe HtmlCleaner do
         end
       end
     end
+
+    ArchiveConfig.FIELDS_ALLOWING_HTML.each do |field|
+      it "preserves ruby-annotated HTML in #{field}" do
+        result = sanitize_value(field, "<ruby>BigText<rp>(</rp><rt>small_text</rt><rp>)</rp></ruby>")
+        expect(result).to include("<ruby>BigText<rp>(</rp><rt>small_text</rt><rp>)</rp></ruby>")
+      end
+
+      it "preserves ruby-annotated HTML without rp in #{field}" do
+        result = sanitize_value(field, "<ruby>BigText<rt>small_text</rt></ruby>")
+        expect(result).to include("<ruby>BigText<rt>small_text</rt></ruby>")
+      end
+
+      it "transforms open attribute's value when present on details element in #{field}" do
+        html = <<~HTML
+          <details open="false">
+            <summary>Automated Status: Operational</summary>
+            <p>Velocity: 12m/s</p>
+            <p>Direction: North</p>
+          </details>
+        HTML
+
+        result = sanitize_value(field, html)
+        doc = Nokogiri::HTML.fragment(result)
+
+        expect(doc.xpath("./details/@open").to_s.strip).to eq("open")
+      end
+
+      it "does not require details to have an 'open' attribute in #{field}" do
+        html = <<~HTML
+          <details>
+            <summary>Automated Status: Operational</summary>
+            <p>Velocity: 12m/s</p>
+            <p>Direction: North</p>
+          </details>
+        HTML
+
+        result = sanitize_value(field, html)
+        doc = Nokogiri::HTML.fragment(result)
+
+        expect(doc.xpath("./details[@open]")).to be_empty
+      end
+    end
   end
 
   describe "fix_bad_characters" do
@@ -557,13 +599,35 @@ describe HtmlCleaner do
       expect(doc.xpath(".//br")).to be_empty
     end
 
-    %w[figure dl h1 h2 h3 h4 h5 h6 ol pre table ul].each do |tag|
+    %w[figure dl h1 h2 h3 h4 h5 h6 ol pre summary table ul].each do |tag|
       it "does not wrap #{tag} in p tags" do
         result = add_paragraphs_to_text("aa <#{tag}>foo</#{tag}> bb")
         doc = Nokogiri::HTML.fragment(result)
         expect(doc.xpath(".//p").size).to eq(2)
         expect(doc.xpath(".//#{tag}").children.to_s.strip).to eq("foo")
       end
+    end
+
+    it "does not wrap details in p tags" do
+      html = <<~HTML
+        aa
+
+        <details>
+          <summary>Automated Status: Operational</summary>
+          <p>Velocity: 12m/s</p>
+          <p>Direction: North</p>
+        </details>
+
+        bb
+      HTML
+
+      result = add_paragraphs_to_text(html)
+      doc = Nokogiri::HTML.fragment(result)
+
+      # aa, velocity..., direction..., bb
+      expect(doc.xpath(".//p").size).to eq(4)
+      expect(doc.xpath("./p/details").size).to eq(0)
+      expect(doc.xpath("./details/p").size).to eq(2)
     end
 
     ["ol", "ul"].each do |tag|
@@ -625,6 +689,27 @@ describe HtmlCleaner do
       expect(doc.xpath(".//br")).to be_empty
     end
 
+    it "does not add paragraphs inside summary" do
+      html = <<~HTML
+        <details>
+          <summary>
+            Automated
+          
+            Status: 
+            
+            Operational
+          </summary>
+          <p>Velocity: 12m/s</p>
+          <p>Direction: North</p>
+        </details>
+      HTML
+
+      result = add_paragraphs_to_text(html)
+      doc = Nokogiri::HTML.fragment(result)
+
+      expect(doc.xpath("./summary/p")).to be_empty
+    end
+
     it "does not add paragraphs inside figure" do
       html = <<~HTML
         <figure>
@@ -671,6 +756,23 @@ describe HtmlCleaner do
       expect(doc.xpath("./figure/figcaption/em/text()").to_s.strip).to eq("Take picture")
       expect(doc.xpath("./figure/figcaption/em/a/text()").to_s.strip).to eq("here")
       expect(doc.xpath("./figure/figcaption/em/a/@href").to_s.strip).to eq("http://example.com/link")
+    end
+
+    it "allows other HTML elements inside summary" do
+      html = <<~HTML
+        <details>
+          <summary><em>Automated Status: <a href="http://example.com/link">Operational</a></em></summary>
+          <p>Velocity: 12m/s</p>
+          <p>Direction: North</p>
+        </details>
+      HTML
+
+      result = add_paragraphs_to_text(html)
+      doc = Nokogiri::HTML.fragment(result)
+
+      expect(doc.xpath("./details/summary/em/text()").to_s.strip).to eq("Automated Status:")
+      expect(doc.xpath("./details/summary/em/a/text()").to_s.strip).to eq("Operational")
+      expect(doc.xpath("./details/summary/em/a/@href").to_s.strip).to eq("http://example.com/link")
     end
 
     %w(address h1 h2 h3 h4 h5 h6 p pre).each do |tag|
@@ -779,7 +881,7 @@ describe HtmlCleaner do
       expect(doc.xpath("./p[2]").children.to_s.strip).to match(/ yay\Z/)
     end
 
-    %w(blockquote center div).each do |tag|
+    %w[blockquote center div details].each do |tag|
       it "should convert double linebreaks inside #{tag} tag" do
         result = add_paragraphs_to_text("<#{tag}>some\n\ntext</#{tag}>")
         doc = Nokogiri::HTML.fragment(result)
@@ -812,6 +914,12 @@ describe HtmlCleaner do
       expect(doc.xpath("./p[3]").children.to_s.strip).to eq("yadda")
     end
 
+    it "wraps ruby-annotated text in p tags" do
+      result = add_paragraphs_to_text("text with <ruby>ルビ<rp> (</rp><rt>RUBY</rt><rp>)</rp></ruby>")
+      doc = Nokogiri::HTML.fragment(result)
+      expect(doc.xpath("./p[1]").children.to_s.strip).to eq("text with <ruby>ルビ<rp> (</rp><rt>RUBY</rt><rp>)</rp></ruby>")
+    end
+
     it "should keep attributes of block elements" do
       result = add_paragraphs_to_text("<div class='foo'>some\n\ntext</div>")
       doc = Nokogiri::HTML.fragment(result)
@@ -833,10 +941,22 @@ describe HtmlCleaner do
       expect(doc.xpath("./p[contains(@class, 'bar')]").children.to_s.strip).to eq("foobar")
     end
 
-    it "should close unclosed tag within other tag" do
+    it "closes unclosed tag within other tag" do
       html = "<strong><em>unclosed</strong>"
       doc = Nokogiri::HTML.fragment(add_paragraphs_to_text(html))
       expect(doc.xpath("./p/strong/em").children.to_s.strip).to eq("unclosed")
+    end
+
+    it "closes unclosed rt tags" do
+      html = "<ruby>big text<rt>small text</ruby>"
+      result = add_paragraphs_to_text(html)
+      expect(result).to include("<ruby>big text<rt>small text</rt></ruby>")
+    end
+
+    it "closes unclosed rp tag" do
+      html = "<ruby>big text<rp>(</rp><rt>small text</rt><rp>)</ruby>"
+      result = add_paragraphs_to_text(html)
+      expect(result).to include("<ruby>big text<rp>(</rp><rt>small text</rt><rp>)</rp></ruby>")
     end
 
     it "should re-nest mis-nested tags" do

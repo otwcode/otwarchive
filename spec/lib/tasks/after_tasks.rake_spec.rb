@@ -369,3 +369,13 @@ describe "rake After:clean_up_chapter_kudos" do
       .and avoid_changing { work_kudo.reload.updated_at }
   end
 end
+
+describe "rake After:remove_translation_admin_role" do
+  it "remove translation admin role" do
+    user = create(:user)
+    user.roles = [Role.create(name: "translation_admin")]
+    subject.invoke
+    expect(Role.all).to be_empty
+    expect(user.reload.roles).to be_empty
+  end
+end
