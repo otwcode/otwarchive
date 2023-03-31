@@ -30,7 +30,7 @@ Feature:
       And I fill in "New user name" with "otheruser"
       And I fill in "Password" with "password"
     When I press "Change"
-      Then I should see "Login has already been taken"
+      Then I should see "User name has already been taken"
 
   Scenario: The user should not be able to change their username to another user's name even if the capitalization is different
     Given I have no users
@@ -42,7 +42,7 @@ Feature:
       And I fill in "New user name" with "OtherUser"
       And I fill in "Password" with "password"
       And I press "Change User Name"
-    Then I should see "Login has already been taken"
+    Then I should see "User name has already been taken"
 
   Scenario: The user should be able to change their username if username and password are valid
     Given I am logged in as "downthemall" with password "password"
