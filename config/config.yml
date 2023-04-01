@@ -503,3 +503,7 @@ STAT_COUNTER_BATCH_SIZE: 100
 # Number of hours to retain the original creator for works that have been
 # orphaned.
 ORIGINAL_CREATOR_TTL_HOURS: 72
+
+# Regex for the site's domains, used to validate that user-supplied
+# links are located on the Archive when appropriate.
+APP_URL_REGEX: "^(https?:\\/\\/)?(www\\.|(insecure\\.))?(archiveofourown|ao3)\\.(org|com).*"
