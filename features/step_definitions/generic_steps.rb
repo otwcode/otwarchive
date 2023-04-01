@@ -159,23 +159,17 @@ end
 
 Then /^the "([^"]*)" checkbox(?: within "([^"]*)")? should be disabled$/ do |label, selector|
   with_scope(selector) do
-    field_disabled = find_field(label, disabled: true)
-    if field_disabled.respond_to? :should
-      field_disabled.should be_truthy
-    else
-      assert field_disabled
-    end
+    field = find_field(label, disabled: true)
+    expect(field).to be_present
+    expect(field.disabled?).to be_truthy
   end
 end
 
 Then /^the "([^"]*)" checkbox(?: within "([^"]*)")? should not be disabled$/ do |label, selector|
   with_scope(selector) do
-    field_disabled = find_field(label)['disabled']
-    if field_disabled.respond_to? :should
-      field_disabled.should be_falsey
-    else
-      assert !field_disabled
-    end
+    field = find_field(label)
+    expect(field).to be_present
+    expect(field.disabled?).to be_falsey
   end
 end
 

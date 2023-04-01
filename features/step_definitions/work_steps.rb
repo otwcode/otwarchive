@@ -568,12 +568,19 @@ When /^I delete the work "([^"]*)"$/ do |work|
   work = Work.find_by(title: CGI.escapeHTML(work))
   visit edit_work_path(work)
   step %{I follow "Delete Work"}
-  # If JavaScript is enabled, window.confirm will be used and this button will not appear
-  click_button("Yes, Delete Work") unless @javascript
+
+  # If JavaScript is enabled, window.confirm will be used and we'll have to accept
+  if @javascript
+    expect(page.accept_alert).to eq("Are you sure you want to delete this work? This will destroy all comments and kudos on this work as well and CANNOT BE UNDONE!")
+  else
+    click_button("Yes, Delete Work")
+  end
+
   step %{all indexing jobs have been run}
 
   step "the periodic tag count task is run"
 end
+
 When /^I preview the work$/ do
   click_button("Preview")
   step %{all indexing jobs have been run}

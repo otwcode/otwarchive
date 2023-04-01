@@ -162,7 +162,6 @@ GEM
       launchy
     chronic (0.10.2)
     climate_control (0.2.0)
-    cliver (0.3.2)
     coderay (1.1.3)
     concurrent-ruby (1.2.0)
     connection_pool (2.2.5)
@@ -374,10 +373,6 @@ GEM
     pickle (0.6.2)
       cucumber (>= 3.0, < 8.0)
       rake
-    poltergeist (1.18.1)
-      capybara (>= 2.1, < 4)
-      cliver (~> 0.3.1)
-      websocket-driver (>= 0.2.0)
     power_assert (2.0.1)
     pry (0.13.1)
       coderay (~> 1.1)
@@ -495,6 +490,7 @@ GEM
     ruby-progressbar (1.11.0)
     ruby2_keywords (0.0.5)
     rubyntlm (0.6.3)
+    rubyzip (2.3.2)
     rufus-scheduler (3.6.0)
       fugit (~> 1.1, >= 1.1.6)
     rvm-capistrano (1.5.6)
@@ -502,6 +498,10 @@ GEM
     sanitize (6.0.1)
       crass (~> 1.0.2)
       nokogiri (>= 1.12.0)
+    selenium-webdriver (4.8.1)
+      rexml (~> 3.2, >= 3.2.5)
+      rubyzip (>= 1.2.2, < 3.0)
+      websocket (~> 1.0)
     shoulda (4.0.0)
       shoulda-context (~> 2.0)
       shoulda-matchers (~> 4.0)
@@ -557,12 +557,17 @@ GEM
       rack (>= 1.0.0)
     warden (1.2.9)
       rack (>= 2.0.9)
+    webdrivers (5.2.0)
+      nokogiri (~> 1.6)
+      rubyzip (>= 1.3.0)
+      selenium-webdriver (~> 4.0)
     webmock (3.18.1)
       addressable (>= 2.8.0)
       crack (>= 0.3.2)
       hashdiff (>= 0.4.0, < 2.0.0)
     webrick (1.7.0)
     webrobots (0.1.2)
+    websocket (1.2.9)
     websocket-driver (0.7.5)
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.5)
@@ -636,7 +641,6 @@ DEPENDENCIES
   permit_yo
   phraseapp-in-context-editor-ruby (>= 1.0.6)
   pickle
-  poltergeist
   pry-byebug
   pundit
   rack (~> 2.2)
@@ -658,6 +662,7 @@ DEPENDENCIES
   rubocop-rspec (= 1.41.0)
   rvm-capistrano
   sanitize (>= 4.6.5)
+  selenium-webdriver
   shoulda
   simplecov
   simplecov-cobertura
@@ -671,6 +676,7 @@ DEPENDENCIES
   unicorn (~> 5.5)
   unidecoder
   vcr (~> 3.0, >= 3.0.1)
+  webdrivers
   webmock
   whenever (~> 0.6.2)
   whiny_validation
