@@ -165,19 +165,32 @@ class CollectionItem < ApplicationRecord
   end
 
   def user_allowed_to_destroy?(user)
-    user.is_author_of?(self.item) || self.collection.user_is_maintainer?(user)
+    user.is_author_of?(self.item) ||
+      (self.collection.user_is_maintainer?(user) && !self.rejected_by_user?)
   end
 
   def approve_by_user
     self.user_approval_status = :approved
   end
 
+  def reject_by_user
+    self.user_approval_status = :rejected
+  end
+
   def approve_by_collection
     self.collection_approval_status = :approved
   end
 
+  def reject_by_collection
+    self.collection_approval_status = :rejected
+  end
+
   def approved?
     approved_by_user? && approved_by_collection?
+  end
+
+  def rejected?
+    rejected_by_user? && rejected_by_collection?
   end
 
   def approve(user)

@@ -1,0 +1,28 @@
+en:
+  collections_helper:
+    collection_item_approval_options:
+      collection:
+        approved: Approved by collection moderators
+        rejected: Rejected by collection moderators
+        unreviewed: Unreviewed by collection moderators
+      user:
+        bookmark:
+          approved: Approved by bookmarker
+          rejected: Rejected by bookmarker
+          unreviewed: Unreviewed by bookmarker
+        work:
+          approved: Approved by creator
+          rejected: Rejected by creator
+          unreviewed: Unreviewed by creator
+    collection_item_approval_options_label:
+      collection: Collection approval status
+      user:
+        bookmark: Bookmarker approval status
+        work: Creator approval status
+  mailer_helper:
+      user_manage_collection_items_page_name:
+        approved: Manage Approved Collection Items page
+        rejected_by_collection: Manage Collection Items Rejected by Collection page
+        rejected_by_user: Manage Collection Items Rejected by User page
+        unreviewed_by_collection: Manage Collection Items Awaiting Collection Approval page
+        unreviewed_by_user: Manage Collection Items Awaiting User Approval page
