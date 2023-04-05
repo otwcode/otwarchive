@@ -18,9 +18,9 @@ class UserMailerPreview < ApplicationMailerPreview
   end
 
   # Sends an email to the user when they submit an abuse report
-  def abuse_report
-    UserMailer.abuse_report(AbuseReport.last.id)
-  end
+  # def abuse_report
+  #   UserMailer.abuse_report(AbuseReport.last.id)
+  # end
 
   private
 

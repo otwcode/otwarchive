@@ -8,7 +8,7 @@
 
 <!--main content-->
 <div class="userstuff">
-  <p class="important" name="reportwhat">
+  <p class="important" id="reportwhat">
     <%= t(".purview.about_html",
           tos_link: (link_to t(".purview.tos"), tos_path)) %>
   </p>
@@ -23,7 +23,7 @@
           dmca_link: (link_to t(".purview.dmca"), dmca_path)) %>
   </p>
 
-  <p name="reportwhy">
+  <p id="reportwhy">
     <strong>
       <%= t(".reportable.intro") %>
     </strong>
@@ -38,7 +38,7 @@
     <li><%= t(".reportable.suspended") %></li>
   </ul>
 
-  <p name="reporthow">
+  <p id="reporthow">
     <strong>
       <%= t(".include.intro") %>
     </strong>
@@ -48,13 +48,13 @@
     <li><%= t(".include.username") %></li>
     <li><%= t(".include.links") %></li>
     <li><%= t(".include.quote_html",
-              tos_link: (link_to t(".include.ao3"), tos_path(anchor: 'content'))) %></li>
+              tos_link: (link_to t(".include.ao3"), tos_path(anchor: "content"))) %></li>
     <li><%= t(".include.sources") %></li>
   </ul>
 
   <p><%= t(".do_not_spam") %></p>
 
-  <p name="reportlanguage">
+  <p id="reportlanguage">
     <strong>
       <%= t(".include.languages",
             list_html: @abuse_languages.map(&:name).to_sentence) %>
@@ -116,7 +116,7 @@
         <p id="comment-field-description">
           <%= t(".form.comment.description",
                 tos_link: (link_to t(".form.comment.tos"), tos_path),
-                include_link: (link_to t(".form.comment.include"), anchor: "reporthow")).html_safe %>
+                include_link: (link_to t(".form.comment.include"), anchor: "reporthow")) %>
         </p>
         <%= f.text_area :comment, "aria-describedby" => "comment-field-description" %>
         <%= live_validation_for_field("abuse_report_comment",

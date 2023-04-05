@@ -15,17 +15,17 @@
   <p><%= t(".copy.intro") %></p>
   
   <p>
-    <%= style_work_metadata_label(style_bold(t(".copy.url"))) %>
-    <%= link_to @url, @url %>
+    <%= style_work_metadata_label(t(".copy.url")) %>
+    <%= style_link(@url, @url) %>
   </p>
 
   <p>
-    <%= style_work_metadata_label(style_bold(t(".copy.summary"))) %>
-    <%= to_plain_text(raw @summary) %>
+    <%= style_work_metadata_label(t(".copy.summary")) %>
+    <%= raw @summary %>
   </p>
 
-  <p><%= style_work_metadata_label(style_bold(t(".copy.comment"))) %></p>
-  <p><%= style_quote(to_plain_text(raw @comment)) %></p>
+  <p><%= style_work_metadata_label(t(".copy.comment")) %></p>
+  <p><%= style_quote(raw @comment) %></p>
 
   <p><%= t(".thank_you") %></p>
 

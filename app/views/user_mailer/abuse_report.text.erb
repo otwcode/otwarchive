@@ -1,34 +1,33 @@
 <% content_for :message do %>
-  <% if @username %>
-  <%= t("mailer.general.greeting.informal.addressed", 
-          name: @username) %>
-  <% else %>
-  <%= t("mailer.general.greeting.informal.unaddressed") %>
-  <% end %>
+<% if @username %>
+<%= t("mailer.general.greeting.informal.addressed", name: @username) %>
+<% else %>
+<%= t("mailer.general.greeting.informal.unaddressed") %>
+<% end %>
 
-  <%= t(".report_received") %>
+<%= t(".report_received") %>
 
-  <%= t(".resubmission") %>
+<%= t(".resubmission") %>
 
-  <%= t(".copy.intro") %>
+<%= t(".copy.intro") %>
 
-  <%= text_divider %>
+<%= text_divider %>
 
-  <%= work_metadata_label(t(".copy.url")) %>
-  <%= to_plain_text(@url) %>
+<%= work_metadata_label(t(".copy.url")) %>
+<%= to_plain_text(@url) %>
 
-  <%= work_metadata_label(t(".copy.summary")) %>
-  <%= to_plain_text(raw @summary) %>
+<%= work_metadata_label(t(".copy.summary")) %>
+<%= to_plain_text(raw @summary) %>
 
-  <%= work_metadata_label(t(".copy.comment")) %>
-  <%= to_plain_text(raw @comment) %>
+<%= work_metadata_label(t(".copy.comment")) %>
+<%= to_plain_text(raw @comment) %>
 
-  <%= text_divider %>
+<%= text_divider %>
 
-  <%= t(".thank_you") %>
+<%= t(".thank_you") %>
 
-  <%= t("mailer.general.closing.formal") %>
-  <%= t("mailer.general.signature.abuse_team") %>
+<%= t("mailer.general.closing.formal") %>
+<%= t("mailer.general.signature.abuse_team") %>
 <% end %>
 
 <% content_for :sent_at do %><%= l(Time.now) %><% end %>

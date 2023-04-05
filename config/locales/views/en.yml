@@ -279,13 +279,13 @@ en:
         release_notes: Release Notes
         known_issues: Known Issues
       status:
-        current: 'For current updates on Archive performance or downtime, please check out our Twitter feed: %{twitter_link}.'
-        twitter: '@AO3_Status'
+        current: "For current updates on Archive performance or downtime, please check out our Twitter feed: %{twitter_link}."
+        twitter: "@AO3_Status"
       abuse:
         reports: For reports of violations of the Terms of Service such as harassment, spam, or plagiarism, or if you believe your account has been hacked, please %{contact_link} instead. We cannot act on these reports or provide information about Policy and Abuse cases.
         contact: contact our Policy and Abuse team
       reportable:
-        intro: 'Some issues you can contact Support about include:'
+        intro: "Some issues you can contact Support about include:"
         fnok:
           concerning_html: Setting up, changing, or activating your %{fnok_link}
           fnok: Fannish Next of Kin
@@ -334,14 +334,14 @@ en:
         support: contact our Support team
         dmca: review our DMCA Policy and contact our Legal team
       reportable:
-        intro: 'Potential reasons to submit a report to the Policy & Abuse team:'
+        intro: "Potential reasons to submit a report to the Policy & Abuse team:"
         violation_html: You have encountered content on the Archive that violates the %{tos_link}.
         content: You would like to know whether specific content is allowed on the Archive.
         harassment: You have experienced or witnessed harassment on the Archive.
         hack: You believe that your account was hacked.
         suspended: You have been suspended or your work has been removed, and you have not received an email explaining why.
       include:
-        intro: 'What to include in your report description:'
+        intro: "What to include in your report description:"
         username: the username of the person you are reporting
         links: links to any of their other content that you would like to report
         quote_html: a quote from or summary of the reported content explaining why it violates the %{tos_link}
@@ -371,7 +371,7 @@ en:
         comment:
           label: Description of the content you are reporting (required)
           error: Please describe your concern.
-          description: Explain what about this content violates the %{tos_link}. Please be as specific as possible and %{include_link}. All information provided will remain confidential.
+          description_html: Explain what about this content violates the %{tos_link}. Please be as specific as possible and %{include_link}. All information provided will remain confidential.
           tos: AO3 Terms of Service
           include: include all relevant links and other information in your report
         link:
