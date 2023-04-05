@@ -291,6 +291,10 @@ module NavigationHelpers
       external_works_path
     when /^the external works page with only duplicates$/i
       external_works_path(show: :duplicates)
+    when /^the new user password page$/i
+      new_user_password_path
+    when /^the edit user password page$/i
+      edit_user_password_path
 
     # Admin Pages
     when /^the admin-posts page$/i
@@ -307,6 +311,10 @@ module NavigationHelpers
       bulk_search_admin_users_path
     when /^the abuse administration page for "(.*)"$/i
       admin_user_path(User.find_by(login: $1))
+    when /^the new admin password page$/i
+      new_admin_password_path
+    when /^the edit admin password page$/i
+      edit_admin_password_path
 
     # Here is an example that pulls values out of the Regexp:
     #

@@ -131,4 +131,30 @@ describe Download do
       end
     end
   end
+
+  describe "chapters" do
+    let(:work) { create(:work) }
+    let!(:draft_chapter) { create(:chapter, :draft, work: work, position: 2) }
+    let(:subject) { Download.new(work) }
+
+    it "includes only posted chapters by default" do
+      expect(subject.chapters).to eq([work.chapters.first])
+    end
+
+    context "when include_draft_chapters is true" do
+      let(:subject) { Download.new(work, include_draft_chapters: true) }
+
+      it "includes both posted and draft chapters" do
+        expect(subject.chapters).to eq([work.chapters.first, draft_chapter])
+      end
+    end
+
+    context "when include_draft_chapters is false" do
+      let(:subject) { Download.new(work, include_draft_chapters: false) }
+
+      it "includes only posted chapters" do
+        expect(subject.chapters).to eq([work.chapters.first])
+      end
+    end
+  end
 end

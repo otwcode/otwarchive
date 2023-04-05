@@ -34,7 +34,6 @@ FactoryBot.define do
   factory :gift_exchange do
     association :offer_restriction, factory: :prompt_restriction
     association :request_restriction, factory: :prompt_restriction
-    association :prompt_restriction, factory: :prompt_restriction
 
     trait :open do
       signups_open_at { Time.now - 1.day }
@@ -51,6 +50,5 @@ FactoryBot.define do
 
   factory :prompt_meme do
     association :request_restriction, factory: :prompt_restriction
-    association :prompt_restriction, factory: :prompt_restriction
   end
 end

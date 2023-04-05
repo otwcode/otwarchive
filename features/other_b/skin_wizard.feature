@@ -1,4 +1,4 @@
-@skins
+@set-default-skin
 Feature: Skin wizard
 
   Scenario: User should be able to toggle between the wizard and the form
