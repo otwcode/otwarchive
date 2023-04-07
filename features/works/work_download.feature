@@ -30,6 +30,10 @@ Feature: Download a work
   When I go to the work page with title "Has double quotes"
     And I follow "AZW3"
   Then I should receive a file of type "azw3"
+  When I go to the work page with title "Has double quotes"
+    And I follow "HTML"
+  Then I should receive a file of type "html"
+	  And the page title should include '"Has double quotes"'
 
 
   Scenario: Download works with non-ASCII characters in title
