@@ -94,7 +94,6 @@ Feature: Download a work
     And I should see "Published: 2015-01-10"
     And I should see "Completed: 2020-11-05"
     And I should see "Words: 9"
-    # note difference with the work: if work contains just 1 chapter, "Chapters: 1/1" missing
     And I should see "Chapters: 2/2"
     And "Rating:" should appear before "Archive Warning"
     And "Archive Warning:" should appear before "Category"
@@ -108,9 +107,8 @@ Feature: Download a work
     And "Collections:" should appear before "Published"
     And "Published:" should appear before "Completed"
     And "Completed:" should appear before "Chapters"
-    # note difference with the work: in the work "Words" come before "Chapters"
-    And "Chapters:" should appear before "Words"
-    And "Words:" should appear before "Could be downloaded"
+    And "Words:" should appear before "Chapters:"
+    And "Chapters:" should appear before "Could be downloaded"
 
 
   Scenario: Download of chaptered works includes chapters
