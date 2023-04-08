@@ -88,6 +88,20 @@ Given /^the support form is enabled$/ do
   click_button("Update")
 end
 
+Given /^guest comments are on$/ do
+  step("I am logged in as a super admin")
+  visit(admin_settings_path)
+  uncheck("Turn off guest comments across the site")
+  click_button("Update")
+end
+
+Given /^guest comments are off$/ do
+  step("I am logged in as a super admin")
+  visit(admin_settings_path)
+  check("Turn off guest comments across the site")
+  click_button("Update")
+end
+
 Given /^I have posted known issues$/ do
   step %{I am logged in as an admin}
   step %{I follow "Admin Posts"}

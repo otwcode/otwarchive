@@ -36,3 +36,20 @@ Feature: Admin Settings Page
     When I am logged in as a random user
       And I go to the support page
     Then I should see "We can answer Support inquiries in"
+
+  Scenario: Turn on guest comments
+    Given guest comments are on
+      And I am logged out
+      And the work "Generic Work"
+      And I view the work "Generic Work"
+    When I fill in "Comment" with "Guest comment"
+      And I fill in "Email" with "guest@example.com"
+      And I press "Comment"
+    Then I should see "Comment created!"
+
+  Scenario: Turn off guest comments
+    Given guest comments are off
+      And I am logged out
+      And the work "Generic Work"
+    When I view the work "Generic Work"
+    Then I should see "Sorry, the Archive doesn't allow guests to comment right now."

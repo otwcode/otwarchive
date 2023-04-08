@@ -92,6 +92,7 @@ en:
           downloads_enabled: "Allow downloads"
           enable_test_caching: "Turn on caching (currently experimental)"
           hide_spam: "Automatically hide spam works"
+          guest_comments_off: "Turn off guest comments across the site"
           invite_from_queue_enabled: "Invite from queue enabled (People can add themselves to the queue and invitations are sent out automatically)"
           invite_from_queue_frequency: "How often (in days) should we invite people from the queue"
           invite_from_queue_number: "Number of people to invite from the queue at once"
@@ -163,6 +164,7 @@ en:
           hidden: "Sorry, you can't add or edit comments on a hidden work."
           unrevealed: "Sorry, you can't add or edit comments on an unrevealed work."
       blocked: "Sorry, you have been blocked by one or more of this work's creators."
+      guest_comments_disabled: "Sorry, the Archive doesn't allow guests to comment right now."
       invite_to_collections_link: "Invite To Collections"
   layouts:
     proxy_notice:

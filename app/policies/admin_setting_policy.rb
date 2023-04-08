@@ -19,6 +19,7 @@ class AdminSettingPolicy < ApplicationPolicy
       downloads_enabled
       enable_test_caching
       hide_spam
+      guest_comments_off
       invite_from_queue_enabled
       invite_from_queue_frequency
       invite_from_queue_number

@@ -64,7 +64,8 @@ describe Admin::SettingsController do
               downloads_enabled: "1",
               enable_test_caching: "0",
               cache_expiration: "10",
-              hide_spam: "1"
+              hide_spam: "1",
+              guest_comments_off: "1"
             }
           }
 
@@ -107,6 +108,7 @@ describe Admin::SettingsController do
         {
           downloads_enabled: false,
           hide_spam: true,
+          guest_comments_off: true
           tag_wrangling_off: true
         }.each_pair do |field, value|
           it "prevents admins with support role from updating #{field}" do
@@ -138,6 +140,7 @@ describe Admin::SettingsController do
           disable_support_form: true,
           downloads_enabled: false,
           hide_spam: true
+          guest_comments_off: true
         }.each_pair do |field, value|
           it "prevents admins with tag_wrangling role from updating #{field}" do
             expect do
