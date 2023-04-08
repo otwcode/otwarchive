@@ -99,6 +99,8 @@ module CommentsHelper
   #### HELPERS FOR CHECKING WHICH BUTTONS/FORMS TO DISPLAY #####
 
   def can_reply_to_comment?(comment)
+    admin_settings = AdminSetting.current
+    
     !(comment.unreviewed? ||
       comment.iced? ||
       comment.hidden_by_admin? ||
@@ -106,7 +108,7 @@ module CommentsHelper
       comment_parent_hidden?(comment) ||
       blocked_by_comment?(comment) ||
       blocked_by?(comment.ultimate_parent) ||
-      !logged_in? && @admin_settings.guest_comments_off?)
+      !logged_in? && admin_settings.guest_comments_off?)
   end
 
   def can_edit_comment?(comment)
