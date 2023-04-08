@@ -52,3 +52,4 @@ Feature: Admin Settings Page
       And the work "Generic Work"
     When I view the work "Generic Work"
     Then I should see "Sorry, the Archive doesn't allow guests to comment right now."
+    
