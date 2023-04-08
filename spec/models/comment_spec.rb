@@ -230,30 +230,6 @@ describe Comment do
           expect(LastWranglingActivity.all).to be_empty
         end
       end
-
-      context "guest comments are turned on" do
-        before do
-          @admin_setting = AdminSetting.first || AdminSetting.create
-          create(:comment, :by_guest)
-        end
-
-        it "allows guest comments" do
-          expect(comment.save).to be_truthy
-          expect(comment.errors.full_messages).to be_blank
-        end
-      end
-
-      context "guest comments are turned off" do
-        before do
-          @admin_setting = AdminSetting.first || AdminSetting.create
-          @admin_setting.update_attribute(:guest_comments_off, true)
-          create(:comment, :by_guest)
-        end
-
-        it "does not allow guest comments" do
-          expect(comment.errors.full_messages).to include('Sorry, this work doesn\'t allow non-Archive users to comment. You can however still leave Kudos!')
-        end
-      end
     end
   end
 

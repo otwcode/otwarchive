@@ -43,8 +43,7 @@ Feature: Admin Settings Page
       And the work "Generic Work"
       And I view the work "Generic Work"
     When I fill in "Comment" with "Guest comment"
-      And I fill in "Email" with "guest@example.com"
-      And I press "Comment"
+      And I post a guest comment
     Then I should see "Comment created!"
 
   Scenario: Turn off guest comments
