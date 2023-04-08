@@ -137,7 +137,7 @@ Scenario: Comments reflect pseud changes immediately
 
 Scenario: Many pseuds
 
-  Given max items per page is 3
+  Given there are 3 pseuds per page
     And "Zaphod" has the pseud "Slartibartfast"
     And "Zaphod" has the pseud "Agrajag"
     And "Zaphod" has the pseud "Betelgeuse"
@@ -148,7 +148,7 @@ Scenario: Many pseuds
     And I should see "Agrajag" within "dl.meta"
     And I should see "Betelgeuse" within "dl.meta"
     And I should not see "Slartibartfast" within "dl.meta"
-    And I should see "All my pseuds, including 1 more" within "dl.meta"
+    And I should see "1 more pseud" within "dl.meta"
 
   When I go to my user page
   Then I should see "Zaphod" within "ul.expandable"
@@ -161,6 +161,6 @@ Scenario: Many pseuds
   Then I should see "Slartibartfast" within "li.pseud > a"
     And I should not see "Slartibartfast" within "ul.expandable"
 
-  When max items per page is 10
+  When there are 10 pseuds per page
     And I view my profile
-  Then I should see "All my pseuds (4)" within "dl.meta"
+  Then I should see "Zaphod, Agrajag, Betelgeuse, and Slartibartfast" within "dl.meta"
