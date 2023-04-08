@@ -62,4 +62,28 @@ describe Pseud do
       end.to change { comment.reload.updated_at }
     end
   end
+
+  describe ".abbreviated_list" do
+    let(:user) { FactoryBot.create(:user, login: "Zaphod") }
+    let(:subject) { user.pseuds.abbreviated_list }
+
+    before do
+      FactoryBot.create(:pseud, user: user, name: "Slartibartfast")
+      FactoryBot.create(:pseud, user: user, name: "Agrajag")
+      FactoryBot.create(:pseud, user: user, name: "Betelgeuse")
+      allow(ArchiveConfig).to receive(:ITEMS_PER_PAGE).and_return(3)
+    end
+
+    it "returns a maximum of ITEMS_PER_PAGE pseuds" do
+      expect(subject.count).to eq(3)
+    end
+
+    it "always contains the default pseud first" do
+      expect(subject.first.name).to eq("Zaphod")
+    end
+
+    it "is in alphabetical order after the default pseud" do
+      expect(subject.map(&:name)).to eq(%w[Zaphod Agrajag Betelgeuse])
+    end
+  end
 end
