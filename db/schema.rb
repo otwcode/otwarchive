@@ -99,7 +99,7 @@ ActiveRecord::Schema.define(version: 20201214013251) do
     t.boolean "request_invite_enabled", default: false, null: false
     t.boolean "creation_requires_invite", default: false, null: false
     t.boolean "downloads_enabled", default: true
-    t.boolean "guest_comments_off", default: false, null: false
+    t.boolean "hide_spam", default: false, null: false
     t.boolean "disable_support_form", default: false, null: false
     t.text "disabled_support_form_text"
     t.integer "disabled_support_form_text_sanitizer_version", limit: 2, default: 0, null: false

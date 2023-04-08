@@ -146,7 +146,7 @@ CREATE TABLE `admin_settings` (
   `request_invite_enabled` tinyint(1) NOT NULL DEFAULT '0',
   `creation_requires_invite` tinyint(1) NOT NULL DEFAULT '0',
   `downloads_enabled` tinyint(1) DEFAULT '1',
-  `guest_comments_off` tinyint(1) NOT NULL DEFAULT '0',
+  `hide_spam` tinyint(1) NOT NULL DEFAULT '0',
   `disable_support_form` tinyint(1) NOT NULL DEFAULT '0',
   `disabled_support_form_text` text COLLATE utf8mb4_unicode_ci,
   `disabled_support_form_text_sanitizer_version` smallint(6) NOT NULL DEFAULT '0',
