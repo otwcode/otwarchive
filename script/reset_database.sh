@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -ex
+
 case "${RAILS_ENV}" in
 test) ;;
 development) ;;
@@ -10,19 +12,14 @@ development) ;;
 esac
 
 bundle install
-bundle exec rake db:drop
-bundle exec rake db:create
-bundle exec rails db:environment:set
-bundle exec rake db:schema:load
-bundle exec rake db:migrate
+
 if [ "${RAILS_ENV}" = "test" ] ; then
+  bundle exec rake db:reset_and_migrate
   exit 0
 fi
+
 bundle exec rake db:otwseed
-
-bundle exec rake work:missing_stat_counters
 bundle exec rake skins:load_site_skins
-
 bundle exec rake search:index_tags
 bundle exec rake search:index_works
 bundle exec rake search:index_pseuds
