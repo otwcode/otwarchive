@@ -458,18 +458,18 @@ describe CommentsController do
     end
 
     context "guest comments are turned off in admin settings" do
-      before do
-        @admin_setting = AdminSetting.first || AdminSetting.create
-        @admin_setting.update_attribute(:guest_comments_off, true)
-      end
-
       let(:work) { create(:work) }
+      let(:admin_setting) { AdminSetting.first || AdminSetting.create }
+
+      before do
+        admin_setting.update_attribute(:guest_comments_off, true)
+      end
 
       it "does not allow guest comments" do
         post :create, params: { work_id: work.id, comment: anon_comment_attributes }
 
-        it_redirects_to_with_error("/where_i_came_from",
-          "Sorry, the Archive doesn't allow guests to comment right now.")
+        it_redirects_to_with_error("/where_i_came_from", 
+                                   "Sorry, the Archive doesn't allow guests to comment right now.")
       end
     end
   end

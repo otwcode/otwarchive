@@ -133,10 +133,11 @@ class CommentsController < ApplicationController
 
   def check_guest_comment_permissions
     admin_settings = AdminSetting.current
-    if admin_settings.guest_comments_off? && !logged_in?
-      flash[:error] = t("comments.commentable.guest_comments_disabled")
-      redirect_back(fallback_location: root_path)
-    end
+
+    return unless admin_settings.guest_comments_off? && !logged_in?
+    
+    flash[:error] = t("comments.commentable.guest_comments_disabled")
+    redirect_back(fallback_location: root_path)
   end
 
   def check_unreviewed

@@ -139,7 +139,7 @@ describe Admin::SettingsController do
         {
           disable_support_form: true,
           downloads_enabled: false,
-          hide_spam: true
+          hide_spam: true,
           guest_comments_off: true
         }.each_pair do |field, value|
           it "prevents admins with tag_wrangling role from updating #{field}" do
