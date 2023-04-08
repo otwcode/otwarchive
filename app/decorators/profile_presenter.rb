@@ -1,8 +1,4 @@
 class ProfilePresenter < SimpleDelegator
-  def pseuds
-    user.pseuds.abbreviated_list
-  end
-
   def created_at
     user.created_at.to_date
   end

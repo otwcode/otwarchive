@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe ProfileController do
   describe "show" do
-    let(:user) { FactoryBot.create(:user) }
+    let(:user) { create(:user) }
 
     it "redirects and shows an error message for a non existent user" do
       get :show, params: { user_id: 999_999_999_999 }

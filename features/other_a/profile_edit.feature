@@ -113,8 +113,7 @@ Scenario: Changing email address and viewing
   When I change my preferences to display my email address
   Then I should see "My email address: valid2@archiveofourown.org"
   When I log out
-    And I go to editname's user page
-    And I follow "Profile"
+    And I go to editname's profile page
   Then I should see "My email address: valid2@archiveofourown.org"
 
 Scenario: Changing email address after requesting password reset
@@ -158,8 +157,7 @@ Scenario: Entering date of birth and displaying
   Then I should see "My birthday: 1980-11-30"
     And 0 emails should be delivered
   When I log out
-    And I go to editname's user page
-    And I follow "Profile"
+    And I go to editname's profile page
   Then I should see "My birthday: 1980-11-30"
 
 Scenario: Change password - mistake in typing old password

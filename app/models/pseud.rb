@@ -87,8 +87,8 @@ class Pseud < ApplicationRecord
   after_commit :reindex_creations, :touch_comments
 
   scope :alphabetical, -> { order(:name) }
-  scope :starting_with, lambda {|letter| where('SUBSTR(name,1,1) = ?', letter)}
-  scope :abbreviated_list, -> { order(is_default: :desc).alphabetical.limit(ArchiveConfig.ITEMS_PER_PAGE) }
+  scope :default_alphabetical, -> { order(is_default: :desc).alphabetical }
+  scope :abbreviated_list, -> { default_alphabetical.limit(ArchiveConfig.ITEMS_PER_PAGE) }
 
   def self.not_orphaned
     where("user_id != ?", User.orphan_account)
