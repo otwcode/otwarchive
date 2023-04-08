@@ -115,7 +115,7 @@ Scenario: Changing email address and viewing
   When I log out
     And I go to editname's user page
     And I follow "Profile"
-  Then I should see "My email address"
+  Then I should see "My email address: valid2@archiveofourown.org"
 
 Scenario: Changing email address after requesting password reset
 

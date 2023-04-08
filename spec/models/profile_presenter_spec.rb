@@ -6,13 +6,6 @@ describe ProfilePresenter do
   let(:preference) { user.preference }
   let(:subject) { ProfilePresenter.new(profile) }
 
-  describe "pseuds" do
-    it "uses the profile scope" do
-      allow(user).to receive_message_chain(:pseuds, :abbreviated_list).and_return("dummy")
-      expect(ProfilePresenter.new(profile).pseuds).to eq("dummy")
-    end
-  end
-
   describe "email" do
     context "for a user whose preference does not allow showing the email" do
       it "returns nil" do
