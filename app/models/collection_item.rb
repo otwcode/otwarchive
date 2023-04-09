@@ -173,24 +173,12 @@ class CollectionItem < ApplicationRecord
     self.user_approval_status = :approved
   end
 
-  def reject_by_user
-    self.user_approval_status = :rejected
-  end
-
   def approve_by_collection
     self.collection_approval_status = :approved
   end
 
-  def reject_by_collection
-    self.collection_approval_status = :rejected
-  end
-
   def approved?
     approved_by_user? && approved_by_collection?
-  end
-
-  def rejected?
-    rejected_by_user? && rejected_by_collection?
   end
 
   def approve(user)
