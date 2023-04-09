@@ -51,7 +51,7 @@ When /^I view the(?: ([^"]*)) collection items page for "(.*?)"$/ do |item_statu
   elsif item_status == "rejected by collection"
     visit collection_items_path(c, status: "rejected_by_collection")
   elsif item_status == "awaiting user approval"
-    visit collection_items_path(c, status: "awaiting_user_approval")
+    visit collection_items_path(c, status: "unreviewed_by_user")
   elsif item_status == "awaiting collection approval"
     visit collection_items_path(c)
   else
