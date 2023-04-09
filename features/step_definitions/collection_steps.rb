@@ -54,8 +54,6 @@ When /^I view the(?: ([^"]*)) collection items page for "(.*?)"$/ do |item_statu
     visit collection_items_path(c, status: "unreviewed_by_user")
   elsif item_status == "awaiting collection approval"
     visit collection_items_path(c)
-  else
-    visit collection_items_path(c)
   end
 end
 
