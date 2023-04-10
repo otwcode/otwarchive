@@ -7,6 +7,7 @@ class CollectionItemsController < ApplicationController
 
   def index
 
+    # TODO: AO3-6507 Refactor to use send instead of case statements.
     if @collection && @collection.user_is_maintainer?(current_user)
       @collection_items = @collection.collection_items.include_for_works
       @collection_items = case params[:status]

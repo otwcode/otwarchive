@@ -2,7 +2,7 @@
 <ul class="actions">
   <% if collection_item.item %>
     <li>
-      <% # TODO: Revamp this so we don't have two useless links showing when JavaScript is disabled. %>
+      <% # TODO: AO3-6508 Revamp this so we don't have two useless links showing when JavaScript is disabled. %>
       <% id = "blurb_#{collection_item.item_type}_#{collection_item.item_id}_#{collection_item.collection.name}" %>
       <%= link_to h(ts("Details")) + ' &#8595;'.html_safe, "#", :class => "#{id}_open" %>
       <%= link_to h(ts("Close Details")) + ' &#8593;'.html_safe, "#", :class => "#{id}_close" %>
