@@ -19,10 +19,3 @@ en:
       user:
         bookmark: Bookmarker approval status
         work: Creator approval status
-  mailer_helper:
-      user_manage_collection_items_page_name:
-        approved: Manage Approved Collection Items page
-        rejected_by_collection: Manage Collection Items Rejected by Collection page
-        rejected_by_user: Manage Collection Items Rejected by User page
-        unreviewed_by_collection: Manage Collection Items Awaiting Collection Approval page
-        unreviewed_by_user: Manage Collection Items Awaiting User Approval page
