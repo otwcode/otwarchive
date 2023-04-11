@@ -24,7 +24,7 @@
       <%= byline(work, visibility: "public") %>
 
 <% #### CACHE show/hide ####, if you update the key edit lib/tasks/memcached.rake %>
-<% cache("#{work.cache_key}-#{Work.work_blurb_version(work.id)}-#{hide_warnings?(work) ? 'nowarn' : 'showwarn'}-#{hide_freeform?(work)  ? 'nofreeform' : 'showfreeform'}-v8", skip_digest: true) do %>
+<% cache("#{work.cache_key}-#{Work.work_blurb_version(work.id)}-#{hide_warnings?(work) ? 'nowarn' : 'showwarn'}-#{hide_freeform?(work)  ? 'nofreeform' : 'showfreeform'}-v9", skip_digest: true) do %>
 
       <% tag_groups = work.tag_groups %>
 
@@ -90,8 +90,8 @@
 <% end %>
 <% #### END CACHE show/hide %>
 
-<% #### CACHE stats ####, if you update the key edit features/step_definitions/work_search_steps.rb %>
-<% cache("#{work.cache_key}/stats-v2", expires_in: 1.hour, skip_digest: true) do %>
+<% #### CACHE stats #### %>
+<% cache("#{work.cache_key}/stats-v3", expires_in: 1.hour, skip_digest: true) do %>
   <% unless work.approved_collections.empty? %>
     <dt class="collections"><%= ts('Collections') %>:</dt>
     <dd class="collections"><%= link_to work.approved_collections.length, work_collections_path(work) %></dd>
