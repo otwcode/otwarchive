@@ -68,7 +68,7 @@ class Pseud < ApplicationRecord
     within: NAME_LENGTH_MIN..NAME_LENGTH_MAX,
     too_short: ts("is too short (minimum is %{min} characters)", min: NAME_LENGTH_MIN),
     too_long: ts("is too long (maximum is %{max} characters)", max: NAME_LENGTH_MAX)
-  validates_uniqueness_of :name, scope: :user_id, case_sensitive: false
+  validates :name, uniqueness: { scope: :user_id }
   validates_format_of :name,
     message: ts('can contain letters, numbers, spaces, underscores, and dashes.'),
     with: /\A[\p{Word} -]+\Z/u
@@ -350,6 +350,7 @@ class Pseud < ApplicationRecord
           comment.update_attribute(:pseud_id, pseud.id)
         end
       end
+
       # make sure changes affect caching/search/author fields
       creation.save
     end

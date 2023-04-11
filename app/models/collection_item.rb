@@ -111,32 +111,6 @@ class CollectionItem < ApplicationRecord
           approve_by_collection
         end
       end
-
-      # if at least one of the owners of the items automatically approves
-      # adding, go ahead and approve by user
-      if !approved_by_user?
-        case item_type
-        when "Work"
-          users = item.users || [User.current_user] # if the work has no users, it is also new and being created by the current user
-        when "Bookmark"
-          users = [item.pseud.user] || [User.current_user]
-        end
-
-        users.each do |user|
-          if user.preference.automatically_approve_collections
-            # if the work is being added by a collection maintainer and at
-            # least ONE of the works owners allows automatic inclusion in
-            # collections, add the work to the collection
-            approve_by_user
-            users.each do |email_user|
-              unless email_user.preference.collection_emails_off
-                UserMailer.added_to_collection_notification(email_user.id, item.id, collection.id).deliver_now
-              end
-            end
-            break
-          end
-        end
-      end
     end
   end
 

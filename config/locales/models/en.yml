@@ -10,7 +10,7 @@ en:
             blocked:
               blank: "Sorry, we couldn't find a user matching that name."
               self: "Sorry, you can't block yourself."
-              official: "Sorry, you can't block an official account."
+              official: "Sorry, you can't block an official user."
               limit: "Sorry, you have blocked too many accounts."
         mute:
           format: "%{message}"
@@ -20,7 +20,7 @@ en:
             muted:
               blank: "Sorry, we couldn't find a user matching that name."
               self: "Sorry, you can't mute yourself."
-              official: "Sorry, you can't mute an official account."
+              official: "Sorry, you can't mute an official user."
               limit: "Sorry, you have muted too many accounts."
         comment:
           attributes:

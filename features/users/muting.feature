@@ -29,7 +29,7 @@ Feature: Muting
       And I am logged in as "muter"
     When I go to pest's user page
       And I follow "Mute"
-    Then I should see "Sorry, you can't mute an official account."
+    Then I should see "Sorry, you can't mute an official user."
       And I should not see a "Yes, Mute User" button
 
   Scenario: Users cannot mute themselves

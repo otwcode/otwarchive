@@ -17,6 +17,7 @@ FactoryBot.define do
     end
 
     trait :draft do
+      content { "Draft content!" }
       posted { false }
     end
   end

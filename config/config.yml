@@ -19,6 +19,9 @@ REMEMBERED_SESSION_LENGTH_IN_MONTHS: 3
 # also change the message (and vice versa).
 DAYS_UNTIL_RESET_PASSWORD_LINK_EXPIRES: 7
 
+# This also affects the link included in the admin account creation email.
+DAYS_UNTIL_ADMIN_RESET_PASSWORD_LINK_EXPIRES: 5
+
 # email addresses
 RETURN_ADDRESS: 'do-not-reply@example.org'
 SPAM_ALERT_ADDRESS: 'abuse-discuss@example.org'
@@ -76,7 +79,7 @@ MAX_USER_INVITE_REQUEST: 10
 # number of accounts users can block
 MAX_BLOCKED_USERS: 2000
 # number of accounts users can mute
-MAX_MUTED_USERS: 1000
+MAX_MUTED_USERS: 2000
 
 # this determines how long we keep processed results like tag set nominations in redis
 DAYS_TO_SAVE_PROCESSED: 56
@@ -496,3 +499,7 @@ STAT_COUNTER_JOB_SIZE: 1000
 
 # The number of works to fetch from the database in one query when updating stat counters:
 STAT_COUNTER_BATCH_SIZE: 100
+
+# Number of hours to retain the original creator for works that have been
+# orphaned.
+ORIGINAL_CREATOR_TTL_HOURS: 72

@@ -15,7 +15,7 @@
         <% tags = @work.tag_groups[type] %>
         <% unless tags.blank? %>
           <dt><%= type.constantize::NAME %>:</dt>
-          <dd><%= tags.map {|t| link_to(t.name, tag_url(t))}.join(", ").html_safe %></dd>
+          <dd><%= tags.map {|t| link_to(t.display_name, tag_url(t))}.join(", ").html_safe %></dd>
         <% end %>
       <% end %>
 
@@ -41,10 +41,8 @@
         <% if @work.first_chapter.published_at < @work.revised_at.to_date %>
           <%= @work.is_wip ? ts("Updated") : ts("Completed") %>: <%= l(@work.revised_at.to_date) %>
         <% end %>
-        <% if @work.chaptered? %>
-          <%= ts("Chapters") %>: <%= chapter_total_display(@work) %>
-        <% end %>
         <%= ts("Words") %>: <%= number_with_delimiter(@work.word_count) %>
+        <%= ts("Chapters") %>: <%= chapter_total_display(@work) %>
       </dd>
     </dl>
     <h1><%= @work.title.html_safe %></h1>

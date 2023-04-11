@@ -37,9 +37,9 @@
         <% end %>
       </li>
     <% end %>
-    <% if @work && (is_author_of?(@work) || is_maintainer?) %>
+    <% if @work && is_maintainer? && @work.allow_collection_invitation? %>
       <li>
-        <%= link_to ts("Add To Collections"), "#collection-form", :class => "collection_item_form_placement_open" %>
+        <%= link_to t(".invite_to_collections_link"), "#collection-form", :class => "collection_item_form_placement_open" %>
       </li>
     <% end %>
 
@@ -126,7 +126,7 @@
   </div>
 
   <% if logged_in? && @work %>
-    <% if is_author_of?(@work) || is_maintainer? %>
+    <% if is_maintainer? && @work.allow_collection_invitation? %>
       <div id="collection_item_form_placement" class="wrapper toggled">
         <%= render "collection_items/collection_item_form", :item => @work, :in_page => true %>
       </div>
