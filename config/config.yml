@@ -483,7 +483,11 @@ PERMITTED_HOSTS: [
   "ao3.org",
   "www.archiveofourown.com",
   "www.archiveofourown.net",
-  "www.archiveofourown.org"
+  "www.archiveofourown.org",
+  # Staging
+  "insecure-test.archiveofourown.org",
+  "test.archiveofourown.org",
+  "testdownload.archiveofourown.org"
 ]
 
 USER_RENAME_LIMIT_DAYS: 7
