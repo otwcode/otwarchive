@@ -480,7 +480,7 @@ PERMITTED_HOSTS: [
   "download.archiveofourown.org",
   "insecure.archiveofourown.org",
   "secure.archiveofourown.org",
-  "ao3.org",
+  "www.ao3.org",
   "www.archiveofourown.com",
   "www.archiveofourown.net",
   "www.archiveofourown.org",
