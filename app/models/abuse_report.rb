@@ -92,10 +92,13 @@ class AbuseReport < ApplicationRecord
     uri.to_s
   end
 
-  app_url_regex = Regexp.new(ArchiveConfig.APP_URL_REGEX, true)
-  validates_format_of :url, with: app_url_regex,
-                            message: ts('does not appear to be on this site.'),
-                            multiline: true
+  validate :url_on_archive, if: :will_save_change_to_url?
+  def url_on_archive
+    parsed_url = Addressable::URI.heuristic_parse(url)
+    errors.add(:url, :not_on_archive) unless ArchiveConfig.PERMITTED_HOSTS.include?(parsed_url.host)
+  rescue Addressable::URI::InvalidURIError
+    errors.add(:url, :not_on_archive)
+  end
 
   def email_and_send
     UserMailer.abuse_report(id).deliver_later

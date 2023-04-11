@@ -473,17 +473,17 @@ PERMITTED_HOSTS: [
   "104.153.64.122",
   "208.85.241.152",
   "208.85.241.157",
+  "ao3.org",
+  "archiveofourown.com",
+  "archiveofourown.net",
   "archiveofourown.org",
   "download.archiveofourown.org",
   "insecure.archiveofourown.org",
   "secure.archiveofourown.org",
+  "ao3.org",
   "www.archiveofourown.com",
   "www.archiveofourown.net",
-  "www.archiveofourown.org",
-  # Staging
-  "insecure-test.archiveofourown.org",
-  "test.archiveofourown.org",
-  "testdownload.archiveofourown.org"
+  "www.archiveofourown.org"
 ]
 
 USER_RENAME_LIMIT_DAYS: 7
@@ -503,7 +503,3 @@ STAT_COUNTER_BATCH_SIZE: 100
 # Number of hours to retain the original creator for works that have been
 # orphaned.
 ORIGINAL_CREATOR_TTL_HOURS: 72
-
-# Regex for the site's domains, used to validate that user-supplied
-# links are located on the Archive when appropriate.
-APP_URL_REGEX: "^(https?:\\/\\/)?(www\\.|(insecure\\.))?(archiveofourown|ao3)\\.(org|com).*"

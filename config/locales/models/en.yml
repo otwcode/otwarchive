@@ -2,6 +2,10 @@ en:
   activerecord:
     errors:
       models:
+        abuse_report:
+          attributes:
+            url:
+              not_on_archive: "does not appear to be on this site."
         block:
           format: "%{message}"
           attributes:
