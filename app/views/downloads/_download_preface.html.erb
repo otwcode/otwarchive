@@ -41,8 +41,8 @@
         <% if @work.first_chapter.published_at < @work.revised_at.to_date %>
           <%= @work.is_wip ? ts("Updated") : ts("Completed") %>: <%= l(@work.revised_at.to_date) %>
         <% end %>
-        <%= ts("Words") %>: <%= @work.word_count %>
-        <%= ts("Chapters") %>: <%= @work.chapter_total_display %>
+        <%= ts("Words") %>: <%= number_with_delimiter(@work.word_count) %>
+        <%= ts("Chapters") %>: <%= chapter_total_display(@work) %>
       </dd>
     </dl>
     <h1><%= @work.title.html_safe %></h1>
