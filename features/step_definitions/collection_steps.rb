@@ -42,7 +42,7 @@ When "I edit the work {string} to be in the collection(s) {string}" do |work, co
   step %{I post the work}
 end
 
-When /^I view the(?: ([^"]*)) collection items page for "(.*?)"$/ do |item_status, collection|
+When /^I view the ([^"]*) collection items page for "(.*?)"$/ do |item_status, collection|
   c = Collection.find_by(title: collection)
   if item_status == "approved"
     visit collection_items_path(c, status: "approved")
