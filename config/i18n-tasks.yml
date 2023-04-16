@@ -115,6 +115,168 @@ search:
 ## Do not consider these keys missing:
 ignore_missing:
   - comments.check_permission_to_modify_{frozen,hidden}_status.permission_denied
+  ## All of the following keys are using default values defined in the respective .rb files
+  ## TODO: Move the default values to the .yml files
+  # File: app/controllers/admin/admin_invitations_controller.rb
+  - invites_created # should be admin.admin_invitations.grant_invites_to_users.invites_created
+  - no_email # should be admin.admin_invitations.create.no_email
+  - sent # should be admin.admin_invitations.create.sent
+  - user_not_found # should be admin.admin_invitations.find.user_not_found
+  # File: app/controllers/application_controller.rb
+  - ban_notice # should be application.check_user_status.ban_notice
+  - suspension_notice # should be application.check_user_status.suspension_notice
+  # File: app/controllers/challenge_assignments_controller.rb
+  - challenge_assignments.assignments_not_sent
+  - challenge_assignments.assignments_sent
+  - challenge_assignments.no_challenge
+  - challenge_assignments.not_owner
+  - challenge_assignments.signup_open
+  # File: app/controllers/challenges_controller.rb
+  - challenge.no_collection # should be challenges.no_collection
+  - challenges.no_challenge
+  # File: app/controllers/collection_items_controller.rb
+  - collection_items.create.invitation_not_sent # should not be using lazy lookup
+  # File: app/controllers/collection_participants_controller.rb
+  - applied_to_join_collection # should be collection_participants.applied_to_join_collection
+  - no_collection # should be collection_participants.no_collection
+  - collection_participants.accepted_invite
+  - collection_participants.destroy
+  - collection_participants.no_invitation
+  - collection_participants.owners_required
+  - collection_participants.update_failure
+  - collection_participants.update_success
+  # File: app/controllers/external_authors_controller.rb
+  - external_author_claimed # should be external_authors.complete_claim.external_author_claimed
+  # Files: app/controllers/external_works_controller.rb and app/controllers/languages_controller.rb
+  - successfully_updated # should be external_works.update.successfully_updated and languages.update.successfully_updated
+  # File: app/controllers/feedbacks_controller.rb
+  - failure_send # should be feedbacks.create.failure_send
+  - successfully_sent # should be feedbacks.create.successfully_sent
+  # Files: app/controllers/languages_controller.rb and app/controllers/locales_controller.rb
+  - successfully_added # should be languages.create.successfully_added and locales.create.successfully_added
+  # File: app/helpers/users_helper.rb
+  - users_helper.log_ban
+  - users_helper.log_email_change
+  - users_helper.log_lift_suspension
+  - users_helper.log_note
+  - users_helper.log_password_change
+  - users_helper.log_rename
+  - users_helper.log_role_added
+  - users_helper.log_role_removed
+  - users_helper.log_suspended
+  - users_helper.log_troubleshot
+  - users_helper.log_validated
+  - users_helper.log_warn
+  # Files: app/views/admin/_admin_nav.html.erb and app/views/admin_posts/show.html.erb
+  - admin.admin_nav.delete
+  # File: app/views/admin/admin_invitations/find.html.erb
+  - admin.admin_invitations.find.find_email
+  - admin.admin_invitations.find.find_token
+  - admin.admin_invitations.find.find_user_name
+  # File: app/views/admin/admin_invitations/new.html.erb
+  - admin.admin_invitations.new.email_address
+  - admin.admin_invitations.new.invite_user
+  - admin.admin_invitations.new.submit
+  # File: app/views/admin/skins/_navigation.html.erb
+  - skins.approval_queue
+  - skins.approved_skins
+  - skins.rejected_skins
+  # File: app/views/comments/show.html.erb
+  - comments.show.comment_on
+  # File: app/views/external_authors/_external_author_name.html.erb
+  - external_authors.external_author_name.label_external_author_name
+  # File: app/views/external_authors/edit.html.erb
+  - external_authors.edit.back
+  - external_authors.edit.edit_external_author
+  # File: app/views/gifts/_gift_search.html.erb
+  - gifts.gift_search.forms.gift_search
+  - gifts.gift_search.gifts.recipient_field
+  # File: app/views/home/site_map.html.erb
+  - home.site_map.ao3_news
+  - home.site_map.archive_faq
+  - home.site_map.bookmarks
+  - home.site_map.collections
+  - home.site_map.donate
+  - home.site_map.edit_user_profile
+  - home.site_map.fandoms
+  - home.site_map.freeform_tag_cloud
+  - home.site_map.homepage
+  - home.site_map.known_issues
+  - home.site_map.languages
+  - home.site_map.manage_pseuds
+  - home.site_map.my_bookmarks
+  - home.site_map.my_collections
+  - home.site_map.my_drafts
+  - home.site_map.my_history
+  - home.site_map.my_home
+  - home.site_map.my_inbox
+  - home.site_map.my_profile
+  - home.site_map.my_series
+  - home.site_map.my_subscriptions
+  - home.site_map.my_works
+  - home.site_map.people
+  - home.site_map.post_new
+  - home.site_map.recent_works
+  - home.site_map.report_abuse
+  - home.site_map.set_preferences
+  - home.site_map.site_map
+  - home.site_map.support_and_feedback
+  - home.site_map.terms_of_service
+  # File: app/views/invitations/index.html.erb
+  - invitations.index.choose_invite
+  - invitations.index.email address # should be invitations.index.email_address
+  - invitations.index.submit_invite
+  # File: app/views/languages/_form.html.erb
+  - languages.form.abuse_support_available
+  - languages.form.create
+  - languages.form.name
+  - languages.form.required_notice
+  - languages.form.short
+  - languages.form.sortable_name
+  - languages.form.support_available
+  - languages.form.update
+  # File: app/views/languages/edit.html.erb
+  - languages.edit.edit_language
+  # File: app/views/languages/new.html.erb
+  - languages.new.new_language
+  # File: app/views/languages/show.html.erb
+  - languages.show.work_count
+  # File: app/views/locales/_locale_form.html.erb
+  - locales.locale_form.actions_heading
+  - locales.locale_form.actions_legend
+  - locales.locale_form.create_button
+  - locales.locale_form.edit_button
+  - locales.locale_form.enable_email
+  - locales.locale_form.enable_interface
+  - locales.locale_form.iso
+  - locales.locale_form.language
+  - locales.locale_form.locale_heading
+  - locales.locale_form.locale_legend
+  - locales.locale_form.name
+  - locales.locale_form.required_notice
+  # File: app/views/locales/_navigation.html.erb
+  - locales.navigation.link_to_index
+  - locales.navigation.link_to_new
+  # File: app/views/locales/edit.html.erb
+  - locales.edit.edit_locale
+  # File: app/views/locales/index.html.erb
+  - locales.index.locale_table_caption
+  - locales.index.locale_table_summary
+  - locales.index.supported_locales
+  # File: app/views/locales/new.html.erb
+  - locales.new.add_new_locale
+  # File: app/views/orphans/index.html.erb
+  - orphans.index.orphaned_works
+  # File: app/views/orphans/new.html.erb
+  - orphans.new.links.cancel
+  - orphans.new.orphans_about
+  # File: app/views/pseuds/edit.html.erb
+  - pseuds.edit.forms.update
+  # File: app/views/pseuds/show.html.erb
+  - pseuds.show.edit_link
+  - pseuds.show.index_link
+  # File: app/views/series/manage.html.er
+  - series.manage.manage_series
 
 ## Consider these keys used:
 ignore_unused:
