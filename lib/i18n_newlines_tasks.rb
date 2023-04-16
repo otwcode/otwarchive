@@ -4,10 +4,10 @@ module I18nNewlinesTasks
     forest = empty_forest
 
     locales.each do |locale|
-      forest.merge!(data[locale].select_keys do |key, _node|
+      forest.merge!(data[locale].select_keys do |key, node|
         next if ignore_key?(key, :newlines)
 
-        _node.value.is_a?(String) && _node.value.include?("\n")
+        node.value.is_a?(String) && node.value.include?("\n")
       end)
     end
 
