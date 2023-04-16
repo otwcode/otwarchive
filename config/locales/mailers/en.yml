@@ -14,6 +14,7 @@ en:
       creation:
         link_with_word_count: "%{creation_link} (%{word_count})"
         title_with_word_count: "\"%{creation_title}\" (%{word_count})"
+        title_with_chapter_number: "Chapter %{position} of %{title}"
         word_count:
           one: "%{count} word"
           other: "%{count} words"
@@ -33,6 +34,22 @@ en:
             part1: "If you've received this message in error, please contact Support at %{support_url}."
             part2: "The Archive of Our Own is a fan-run and fan-supported archive that relies on your donations: %{donate_url}."
         sent_at: "Sent at %{sent_at}."
+  admin_mailer:
+    set_password_notification:
+      subject: "[%{app_name}] Your AO3 admin account"
+      created: Your AO3 admin account has been created.
+      username: Admin username
+      url: Admin login URL
+      finish: "Please follow this link to set your password so you can log in: %{set_password_url}."
+      finish_html: "Please %{set_password_link} so you can log in."
+      set_password: "follow this link to set your password"
+      request_reset: request a password reset
+      expiration_html:
+        one: "The link to set your password is good for %{count} day. If it no longer works, you can %{request_reset_link} and use the link that will be emailed to you instead."
+        other: "The link to set your password is good for %{count} days. If it no longer works, you can %{request_reset_link} and use the link that will be emailed to you instead."
+      expiration:
+        one: "The link to set your password is good for %{count} day. If it no longer works, you can request a password reset and use the link that will be emailed to you instead: %{request_reset_url}."
+        other: "The link to set your password is good for %{count} days. If it no longer works, you can request a password reset and use the link that will be emailed to you instead: %{request_reset_url}."
   kudo_mailer:
     batch_kudo_notification:
       subject: "[%{app_name}] You've got kudos!"
@@ -54,9 +71,14 @@ en:
   user_mailer:
     invite_increase_notification:
       subject: "[%{app_name}] New invitations"
-      body:
-        one: "We just wanted to let you know that you have %{count} new invitation, which can be used to create a new account at the Archive. You can invite a friend at %{invitation_page}."
-        other: "We just wanted to let you know that you have %{count} new invitations, which can be used to create new accounts at the Archive. You can invite a friend at %{invitation_page}."
+      html:
+        body:
+          one: "We just wanted to let you know that you have %{count} new invitation, which can be used to create a new account at the Archive. You can invite a friend at %{invitation_page_link}."
+          other: "We just wanted to let you know that you have %{count} new invitations, which can be used to create new accounts at the Archive. You can invite a friend at %{invitation_page_link}."
+      text:
+        body:
+          one: "We just wanted to let you know that you have %{count} new invitation, which can be used to create a new account at the Archive. You can invite a friend at your invitations page (%{invitation_page_url})."
+          other: "We just wanted to let you know that you have %{count} new invitations, which can be used to create new accounts at the Archive. You can invite a friend at your invitations page (%{invitation_page_url})."
       invitation_page_link_text: your invitations page
     admin_deleted_work_notification:
       subject: "[%{app_name}] Your work has been deleted by an admin"
@@ -187,7 +209,7 @@ en:
       subject: "[%{app_name}] Invitation"
       has_invited: "%{user_name} has invited you to join the Archive of Our Own!"
       been_invited: "You've been invited to join the Archive of Our Own!"
-      
+
       features: "With an account, you can post fanworks, use bookmarks to keep track of works you enjoyed, receive subscription emails when your favorite creators or works update, customize the way the site looks for you, and more!"
       text:
         about: "The Archive of Our Own (AO3) is a free, noncommercial archive built by and for fans. Our servers are owned by our parent nonprofit, the Organization for Transformative Works (%{otw_url}), which works to protect fan rights and preserve fanworks. We welcome all kinds of fanworks, including fanfiction, fanart, fanvids, and podfic from any fandom."
@@ -324,4 +346,14 @@ en:
         intro: "Someone has requested a password reset for your account. You can change your account password by following the link below and entering your new password:"
         link_title: "Change my password."
         expiration: "If you do not use this link to reset your password within a week, it will expire, and you will have to request a new one."
+        unrequested: "If you did not request this password reset, you may ignore this email and your previous password will continue to work."
+  admin:
+    mailer:
+      reset_password_instructions:
+        subject: "[%{app_name}] Reset your admin password"
+        intro: "Someone has requested a password reset for your account. You can change your account password by following the link below and entering your new password:"
+        link_title_html: "Change my password."
+        expiration:
+          one: "If you do not use this link to reset your password within %{count} day, it will expire, and you will have to request a new one."
+          other: "If you do not use this link to reset your password within %{count} days, it will expire, and you will have to request a new one."
         unrequested: "If you did not request this password reset, you may ignore this email and your previous password will continue to work."

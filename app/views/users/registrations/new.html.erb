@@ -1,15 +1,6 @@
 <!--Descriptive page name, messages and instructions-->
 <h2 class="heading"><%= ts("Create Account") %></h2>
-<% if resource.errors.any? %>
-  <div class="error">
-     <h4 class="heading"><%= ts("Oops, there's some problems with the stuff you told us.") %></h4>
-     <ul>
-        <% resource.errors.full_messages.each do |msg| %>
-          <li><%= msg %></li>
-        <% end %>
-     </ul>
-  </div>
-<% end %>
+<%= error_messages_for :user %>
 <!--/descriptions-->
 
 <!--main content-->

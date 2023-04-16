@@ -27,7 +27,9 @@
         <% if @next_admin_post %>
           <li><%= link_to("Next Post", @next_admin_post) %></li>
         <% end %>
-        <li><%= link_to_rss admin_posts_path(:rss) %></li>
+        <li>
+          <%= link_to_rss admin_posts_path(:rss, language_id: @admin_post.language.short) %>
+        </li>
       </ul>
     </div>
     <!--/subnav-->

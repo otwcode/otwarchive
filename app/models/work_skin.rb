@@ -1,6 +1,4 @@
 class WorkSkin < Skin
-  include ActiveModel::ForbiddenAttributesProtection
-
   include SkinCacheHelper
 
   has_many :works

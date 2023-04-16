@@ -96,38 +96,69 @@ describe Download do
     end
   end
 
-  describe "authors" do
-    let(:work) { Work.new }
+  describe "page_title" do
+    let(:fandom1) { build(:canonical_fandom) }
+    let(:fandom2) { build(:fandom, name: "Non-Canonical") }
+    let(:pseud1) { build(:pseud, name: "First", user: build(:user, login: "Zeroth")) }
+    let(:pseud2) { build(:pseud, name: "Second", user: build(:user)) }
+    let(:work) { build(:work, fandoms: [fandom1, fandom2], title: "Foo bar") }
     let(:subject) { Download.new(work) }
 
-    it "joins the author names separated by a comma and a space" do
-      allow(subject).to receive(:author_names).and_return(["First (Zeroth)", "Second"])
-
-      expect(subject.authors).to eq("First (Zeroth), Second")
+    it "includes fandom names" do
+      expect(subject.page_title).to include(fandom1.name)
+      expect(subject.page_title).to include(fandom2.name)
     end
 
-    it "transliterates non-ASCII characters" do
-      allow(subject).to receive(:author_names).and_return(["我哥好像被奇怪的人盯上了怎么破"])
+    it "leaves emojis alone" do
+      work.title = "emoji 🥳 is 🚀 awesome"
 
-      expect(subject.authors).to eq("Wo Ge Hao Xiang Bei Qi Guai De Ren Cheng Shang Liao Zen Yao Po ")
+      expect(subject.page_title).to include("emoji 🥳 is 🚀 awesome")
     end
-  end
 
-  describe "file_authors" do
-    let(:work) { Work.new }
-    let(:subject) { Download.new(work) }
+    it "leaves long titles alone" do
+      work.title = "no title is too long to print nor to read"
 
-    it "truncates if too long" do
-      allow(subject).to receive(:author_names).and_return(["ComplexAuthor (ComplexUser)", "SimpleAuthor"])
-
-      expect(subject.file_authors).to eq("ComplexAuthor")
+      expect(subject.page_title).to include("no title is too long to print nor to read")
     end
 
     context "for a work with multiple authors" do
-      it "joins the author names with a simple dash" do
-        allow(subject).to receive(:author_names).and_return(["First (Zeroth)", "Second"])
+      it "joins the author names with a comma and a space" do
+        allow(work).to receive(:pseuds).and_return([pseud1, pseud2])
 
-        expect(subject.file_authors).to eq("First Zeroth-Second")
+        expect(subject.page_title).to include("First (Zeroth), Second")
+      end
+    end
+
+    it "leaves author names containing Chinese characters alone" do
+      allow(pseud1).to receive(:byline).and_return("我哥好像被奇怪的人盯上了怎么破")
+      allow(work).to receive(:pseuds).and_return([pseud1])
+
+      expect(subject.page_title).to include(" - 我哥好像被奇怪的人盯上了怎么破 - ")
+    end
+  end
+
+  describe "chapters" do
+    let(:work) { create(:work) }
+    let!(:draft_chapter) { create(:chapter, :draft, work: work, position: 2) }
+    let(:subject) { Download.new(work) }
+
+    it "includes only posted chapters by default" do
+      expect(subject.chapters).to eq([work.chapters.first])
+    end
+
+    context "when include_draft_chapters is true" do
+      let(:subject) { Download.new(work, include_draft_chapters: true) }
+
+      it "includes both posted and draft chapters" do
+        expect(subject.chapters).to eq([work.chapters.first, draft_chapter])
+      end
+    end
+
+    context "when include_draft_chapters is false" do
+      let(:subject) { Download.new(work, include_draft_chapters: false) }
+
+      it "includes only posted chapters" do
+        expect(subject.chapters).to eq([work.chapters.first])
       end
     end
   end

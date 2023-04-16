@@ -492,12 +492,14 @@ describe UserMailer do
       describe "HTML version" do
         it "has the correct content" do
           expect(email).to have_html_part_content("you have #{count} new invitation, which")
+          expect(email).to have_html_part_content("your invitations page</a>.")
         end
       end
 
       describe "text version" do
         it "has the correct content" do
           expect(email).to have_text_part_content("you have #{count} new invitation, which")
+          expect(email).to have_text_part_content("your invitations page (")
         end
       end
     end
@@ -522,12 +524,14 @@ describe UserMailer do
       describe "HTML version" do
         it "has the correct content" do
           expect(email).to have_html_part_content("you have #{count} new invitations, which")
+          expect(email).to have_html_part_content("your invitations page</a>.")
         end
       end
 
       describe "text version" do
         it "has the correct content" do
           expect(email).to have_text_part_content("you have #{count} new invitations, which")
+          expect(email).to have_text_part_content("your invitations page (")
         end
       end
     end
@@ -1096,7 +1100,7 @@ describe UserMailer do
       subject = "[#{ArchiveConfig.APP_SHORT_NAME}] Your work has been deleted"
       expect(email).to have_subject(subject)
     end
-  
+
     it "has the correct attachments" do
       expect(email.attachments.length).to eq(2)
       expect(email.attachments).to contain_exactly(
@@ -1119,6 +1123,20 @@ describe UserMailer do
         expect(email).to have_text_part_content("Your work \"#{work.title}\" was deleted at your request")
       end
     end
+
+    context "when work has posted and draft chapters" do
+      let!(:draft_chapter) { create(:chapter, :draft, work: work, position: 2) }
+
+      it_behaves_like "an email with a deleted work with draft chapters attached"
+    end
+
+    context "when work has only draft chapters" do
+      before do
+        work.chapters.first.update_column(:posted, false)
+      end
+
+      it_behaves_like "an email with a deleted work with draft chapters attached"
+    end
   end
 
   describe "admin_deleted_work_notification" do
@@ -1134,7 +1152,7 @@ describe UserMailer do
       subject = "[#{ArchiveConfig.APP_SHORT_NAME}] Your work has been deleted by an admin"
       expect(email).to have_subject(subject)
     end
-  
+
     it "has the correct attachments" do
       expect(email.attachments.length).to eq(2)
       expect(email.attachments).to contain_exactly(
@@ -1156,6 +1174,20 @@ describe UserMailer do
         expect(email).to have_text_part_content("Dear #{user.login},")
         expect(email).to have_text_part_content("Your work \"#{work.title}\" was deleted from the Archive by a site admin")
       end
+    end
+
+    context "when work has posted and draft chapters" do
+      let!(:draft_chapter) { create(:chapter, :draft, work: work, position: 2) }
+
+      it_behaves_like "an email with a deleted work with draft chapters attached"
+    end
+
+    context "when work has only draft chapters" do
+      before do
+        work.chapters.first.update_column(:posted, false)
+      end
+
+      it_behaves_like "an email with a deleted work with draft chapters attached"
     end
   end
 end

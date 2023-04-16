@@ -1,6 +1,4 @@
 class ArchiveFaq < ApplicationRecord
-  include ActiveModel::ForbiddenAttributesProtection
-
   acts_as_list
   translates :title
   translation_class.include(Globalized)
@@ -8,7 +6,7 @@ class ArchiveFaq < ApplicationRecord
   has_many :questions, -> { order(:position) }, dependent: :destroy
   accepts_nested_attributes_for :questions, allow_destroy: true
 
-  validates :slug, presence: true, uniqueness: { case_sensitive: false }
+  validates :slug, presence: true, uniqueness: true
 
   belongs_to :language
 
@@ -31,5 +29,4 @@ class ArchiveFaq < ApplicationRecord
   def self.reorder_list(positions)
     SortableList.new(self.order('position ASC')).reorder_list(positions)
   end
-
 end

@@ -245,8 +245,8 @@ Scenario: Listing external works as inspirations
     And I fill in "URL" with "http://example.org/200"
     And I press "Preview"
   Then I should see a save error message
-    And I should see "A parent work outside the archive needs to have a title."
-    And I should see "A parent work outside the archive needs to have an author."
+    And I should see "The title of a parent work outside the archive can't be blank"
+    And I should see "The author of a parent work outside the archive can't be blank"
   When I fill in "Title" with "Worldbuilding"
     And I fill in "Author" with "BNF"
     And I check "This is a translation"
@@ -260,8 +260,8 @@ Scenario: Listing external works as inspirations
     And I fill in "URL" with "http://example.org/301"
     And I press "Preview"
   Then I should see a save error message
-    And I should see "A parent work outside the archive needs to have a title."
-    And I should see "A parent work outside the archive needs to have an author."
+    And I should see "The title of a parent work outside the archive can't be blank"
+    And I should see "The author of a parent work outside the archive can't be blank"
   When I fill in "Title" with "Worldbuilding Two"
     And I fill in "Author" with "BNF"
     And I press "Preview"
@@ -280,7 +280,7 @@ Scenario: Listing external works as inspirations
     And I fill in "Title" with "Worldbuilding Two"
     And I fill in "Author" with "BNF"
     And I press "Preview"
-  Then I should see "Parent work Url could not be reached. If the URL is correct and the site is currently down, please try again later."
+  Then I should see "Parent work URL could not be reached. If the URL is correct and the site is currently down, please try again later."
 
 Scenario: External work language
 
@@ -341,7 +341,7 @@ Scenario: Anonymous works listed as inspiration should have links to the authors
     And a related work has been posted and approved
 
   When I am logged in as "remixer"
-    And I add the work "Followup" to the collection "Muppets Anonymous"
+    And I edit the work "Followup" to be in the collection "Muppets_Anonymous"
     And I view the work "Worldbuilding"
   Then I should see "Works inspired by this one: Followup by Anonymous [remixer]"
   When I follow "remixer" within ".afterword .children"
@@ -451,7 +451,7 @@ Scenario: When a user is notified that a co-authored work has been inspired by a
     And I have related works setup
     And the user "inspiration" is a protected user
   When I am logged in as "inspiration"
-    And I add the work "Worldbuilding" to the collection "Anonymous"
+    And I edit the work "Worldbuilding" to be in the collection "Anonymous"
   When I post a related work as remixer
   Then I should not see "You can't use the related works function to cite works by the protected user inspiration."
   When I am logged in as "remixer"
@@ -465,7 +465,7 @@ Scenario: When a user is notified that a co-authored work has been inspired by a
     And I have related works setup
     And the user "inspiration" is a protected user
   When I am logged in as "inspiration"
-    And I add the work "Worldbuilding" to the collection "Hidden"
+    And I edit the work "Worldbuilding" to be in the collection "Hidden"
   When I post a related work as remixer
   Then I should not see "You can't use the related works function to cite works by the protected user inspiration."
   When I am logged in as "remixer"
@@ -479,7 +479,7 @@ Scenario: When a user is notified that a co-authored work has been inspired by a
       And I have related works setup
       And I post a related work as remixer
     When I am logged in as "remixer"
-      And I add the work "Followup" to the collection "Anonymous"
+      And I edit the work "Followup" to be in the collection "Anonymous"
       And I go to remixer's related works page
     Then I should see "Works that inspired remixer"
       And I should see "Worldbuilding by inspiration"
@@ -500,7 +500,7 @@ Scenario: When a user is notified that a co-authored work has been inspired by a
       And I have related works setup
       And I post a related work as remixer
     When I am logged in as "remixer"
-      And I add the work "Followup" to the collection "Hidden"
+      And I edit the work "Followup" to be in the collection "Hidden"
       And I go to remixer's related works page
     Then I should see "Works that inspired remixer"
       And I should see "Worldbuilding by inspiration"
@@ -522,7 +522,7 @@ Scenario: When a user is notified that a co-authored work has been inspired by a
       And I have related works setup
       And I post a related work as remixer
     When I am logged in as "inspiration"
-      And I add the work "Worldbuilding" to the collection "Anonymous"
+      And I edit the work "Worldbuilding" to be in the collection "Anonymous"
       And I go to remixer's related works page
     Then I should see "Works that inspired remixer"
       And I should see "Worldbuilding by Anonymous [inspiration]"
@@ -543,7 +543,7 @@ Scenario: When a user is notified that a co-authored work has been inspired by a
       And I have related works setup
       And I post a related work as remixer
     When I am logged in as "inspiration"
-      And I add the work "Worldbuilding" to the collection "Hidden"
+      And I edit the work "Worldbuilding" to be in the collection "Hidden"
       And I go to remixer's related works page
     Then I should see "Works that inspired remixer"
       And I should see "A work in an unrevealed collection"
@@ -565,7 +565,7 @@ Scenario: When a user is notified that a co-authored work has been inspired by a
       And I have related works setup
       And I post a translation as translator
     When I am logged in as "translator"
-      And I add the work "Worldbuilding Translated" to the collection "Anonymous"
+      And I edit the work "Worldbuilding Translated" to be in the collection "Anonymous"
       And I go to translator's related works page
     Then I should see "Works translated by translator"
       And I should see "Worldbuilding by inspiration"
@@ -590,7 +590,7 @@ Scenario: When a user is notified that a co-authored work has been inspired by a
       And I have related works setup
       And I post a translation as translator
     When I am logged in as "translator"
-      And I add the work "Worldbuilding Translated" to the collection "Hidden"
+      And I edit the work "Worldbuilding Translated" to be in the collection "Hidden"
       And I go to translator's related works page
     Then I should see "Works translated by translator"
       And I should see "Worldbuilding by inspiration"
@@ -613,7 +613,7 @@ Scenario: When a user is notified that a co-authored work has been inspired by a
       And I have related works setup
       And I post a translation as translator
     When I am logged in as "inspiration"
-      And I add the work "Worldbuilding" to the collection "Anonymous"
+      And I edit the work "Worldbuilding" to be in the collection "Anonymous"
       And I go to translator's related works page
     Then I should see "Works translated by translator"
       And I should see "Worldbuilding by Anonymous [inspiration]"
@@ -638,7 +638,7 @@ Scenario: When a user is notified that a co-authored work has been inspired by a
       And I have related works setup
       And I post a translation as translator
     When I am logged in as "inspiration"
-      And I add the work "Worldbuilding" to the collection "Hidden"
+      And I edit the work "Worldbuilding" to be in the collection "Hidden"
       And I go to translator's related works page
     Then I should see "Works translated by translator"
       And I should see "A work in an unrevealed collection"

@@ -99,12 +99,12 @@
 
   <% if work.count_visible_comments > 0 %>
     <dt class="comments"><%= ts('Comments') %>:</dt>
-    <dd class="comments"><%= link_to number_with_delimiter(work.count_visible_comments), work.chapter_total_display.to_i > 1 ? work_path(work, anchor: "comments", show_comments: true, view_full_work: "true") : work_path(work, anchor: "comments", show_comments: true) %></dd>
+    <dd class="comments"><%= link_to number_with_delimiter(work.count_visible_comments), work.number_of_posted_chapters > 1 ? work_path(work, anchor: "comments", show_comments: true, view_full_work: "true") : work_path(work, anchor: "comments", show_comments: true) %></dd>
   <% end %>
 
   <% if work.all_kudos_count > 0 %>
     <dt class="kudos"><%= ts('Kudos') %>:</dt>
-    <dd class="kudos"><%= link_to number_with_delimiter(work.all_kudos_count), work.chapter_total_display.to_i > 1 ? work_path(work, anchor: "kudos", view_full_work: "true") : work_path(work, anchor: "kudos") %></dd>
+    <dd class="kudos"><%= link_to number_with_delimiter(work.all_kudos_count), work.number_of_posted_chapters > 1 ? work_path(work, anchor: "kudos", view_full_work: "true") : work_path(work, anchor: "kudos") %></dd>
 
   <% end %>
   <% if (bookmark_count = work.public_bookmarks_count) > 0 %>

@@ -9,7 +9,7 @@
   <ul class="abbreviated comment group">
     <% inbox_comments.each do |inbox_comment| %>
       <li class="unread <%= css_classes_for_comment(inbox_comment.feedback_comment) %>" id="feedback_comment_<%= inbox_comment.feedback_comment_id %>">
-        <% if inbox_comment.feedback_comment.hidden_by_admin? %>
+        <% if !can_see_hidden_comment?(inbox_comment.feedback_comment) %>
           <p class="message"><%= ts("(This comment is under review by an admin and is currently unavailable.)") %></p>
         <% else %>
           <%= render 'inbox/inbox_comment_contents', feedback_comment: inbox_comment.feedback_comment %>

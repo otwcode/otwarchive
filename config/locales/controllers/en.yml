@@ -12,6 +12,12 @@ en:
         blocked: "You have blocked the user %{name}."
       destroy:
         unblocked: "You have unblocked the user %{name}."
+  muted:
+    users:
+      create:
+        muted: "You have muted the user %{name}."
+      destroy:
+        unmuted: "You have unmuted the user %{name}."
   chapters:
     anonymous: Anonymous
     chapter_position: " - Chapter %{position}"

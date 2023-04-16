@@ -1,6 +1,5 @@
 class User < ApplicationRecord
   audited
-  include ActiveModel::ForbiddenAttributesProtection
   include WorksOwner
 
   devise :database_authenticatable,
@@ -37,7 +36,7 @@ class User < ApplicationRecord
   has_many :external_authors, dependent: :destroy
   has_many :external_creatorships, foreign_key: "archivist_id"
 
-  has_many :fannish_next_of_kins, foreign_key: "kin_id", dependent: :destroy
+  has_many :fannish_next_of_kins, dependent: :delete_all, inverse_of: :kin, foreign_key: :kin_id
   has_one :fannish_next_of_kin, dependent: :destroy
 
   has_many :favorite_tags, dependent: :destroy
@@ -70,6 +69,16 @@ class User < ApplicationRecord
           -> { where(blocker: User.current_user) },
           class_name: "Block", foreign_key: :blocked_id, inverse_of: :blocked
 
+  has_many :mutes_as_muted, class_name: "Mute", dependent: :delete_all, inverse_of: :muted, foreign_key: :muted_id
+  has_many :mutes_as_muter, class_name: "Mute", dependent: :delete_all, inverse_of: :muter, foreign_key: :muter_id
+  has_many :muted_users, through: :mutes_as_muter, source: :muted
+
+  # The mute (if it exists) with User.current_user as the muter and this
+  # user as the muted:
+  has_one :mute_by_current_user,
+          -> { where(muter: User.current_user) },
+          class_name: "Mute", foreign_key: :muted_id, inverse_of: :muted
+
   has_many :skins, foreign_key: "author_id", dependent: :nullify
   has_many :work_skins, foreign_key: "author_id", dependent: :nullify
 
@@ -79,6 +88,7 @@ class User < ApplicationRecord
   before_update :add_renamed_at, if: :will_save_change_to_login?
   after_update :update_pseud_name
   after_update :log_change_if_login_was_edited
+  after_update :log_email_change, if: :saved_change_to_email?
 
   after_commit :reindex_user_creations_after_rename
 
@@ -97,7 +107,7 @@ class User < ApplicationRecord
   has_many :gift_works, -> { distinct }, through: :pseuds
   has_many :rejected_gifts, -> { where(rejected: true) }, class_name: "Gift", through: :pseuds
   has_many :rejected_gift_works, -> { distinct }, through: :pseuds
-  has_many :readings, dependent: :destroy
+  has_many :readings, dependent: :delete_all
   has_many :bookmarks, through: :pseuds
   has_many :bookmark_collection_items, through: :bookmarks, source: :collection_items
   has_many :comments, through: :pseuds
@@ -132,9 +142,11 @@ class User < ApplicationRecord
            through: :followings,
            source: :user
 
+  thread_cattr_accessor :should_update_wrangling_activity
   has_many :wrangling_assignments, dependent: :destroy
   has_many :fandoms, through: :wrangling_assignments
   has_many :wrangled_tags, class_name: "Tag", as: :last_wrangler
+  has_one :last_wrangling_activity, dependent: :destroy
 
   has_many :inbox_comments, dependent: :destroy
   has_many :feedback_comments, -> { where(is_deleted: false, approved: true).order(created_at: :desc) }, through: :inbox_comments
@@ -165,7 +177,7 @@ class User < ApplicationRecord
     inbox_comments.where(read: false)
   end
   def unread_inbox_comments_count
-    unread_inbox_comments.with_feedback_comment.count
+    unread_inbox_comments.with_bad_comments_removed.count
   end
 
   scope :alphabetical, -> { order(:login) }
@@ -176,9 +188,9 @@ class User < ApplicationRecord
   ## used in app/views/users/new.html.erb
   validates_length_of :login,
                       within: ArchiveConfig.LOGIN_LENGTH_MIN..ArchiveConfig.LOGIN_LENGTH_MAX,
-                      too_short: ts("is too short (minimum is %{min_login} characters)",
+                      too_short: ts("^User name is too short (minimum is %{min_login} characters)",
                                     min_login: ArchiveConfig.LOGIN_LENGTH_MIN),
-                      too_long: ts("is too long (maximum is %{max_login} characters)",
+                      too_long: ts("^User name is too long (maximum is %{max_login} characters)",
                                    max_login: ArchiveConfig.LOGIN_LENGTH_MAX)
 
   # allow nil so can save existing users
@@ -191,12 +203,14 @@ class User < ApplicationRecord
                                    max_pwd: ArchiveConfig.PASSWORD_LENGTH_MAX)
 
   validates_format_of :login,
-                      message: ts("must begin and end with a letter or number; it may also contain underscores but no other characters."),
+                      message: ts("^User name must be %{min_login} to %{max_login} characters (A-Z, a-z, _, 0-9 only), no spaces, cannot begin or end with underscore (_).",
+                                  min_login: ArchiveConfig.LOGIN_LENGTH_MIN,
+                                  max_login: ArchiveConfig.LOGIN_LENGTH_MAX),
                       with: /\A[A-Za-z0-9]\w*[A-Za-z0-9]\Z/
-  validates_uniqueness_of :login, case_sensitive: false, message: ts("has already been taken")
+  validates :login, uniqueness: { message: ts("^User name has already been taken") }
   validate :login, :username_is_not_recently_changed, if: :will_save_change_to_login?
 
-  validates :email, email_veracity: true, email_format: true
+  validates :email, email_veracity: true, email_format: true, uniqueness: true
 
   # Virtual attribute for age check and terms of service
     attr_accessor :age_over_13
@@ -377,15 +391,6 @@ class User < ApplicationRecord
     User.fetch_orphan_account if ArchiveConfig.ORPHANING_ALLOWED
   end
 
-  # Is this user an authorized translation admin?
-  def translation_admin
-    self.is_translation_admin?
-  end
-
-  def is_translation_admin?
-    has_role?(:translation_admin)
-  end
-
   # Is this user an authorized tag wrangler?
   def tag_wrangler
     self.is_tag_wrangler?
@@ -429,6 +434,13 @@ class User < ApplicationRecord
   def create_log_item(options = {})
     options.reverse_merge! note: "System Generated", user_id: self.id
     LogItem.create(options)
+  end
+
+  def update_last_wrangling_activity
+    return unless is_tag_wrangler?
+
+    last_activity = LastWranglingActivity.find_or_create_by(user: self)
+    last_activity.touch
   end
 
   # Returns true if user is the sole author of a work
@@ -551,9 +563,19 @@ class User < ApplicationRecord
     self.renamed_at = Time.current
   end
 
-   def log_change_if_login_was_edited
-     create_log_item(options = { action: ArchiveConfig.ACTION_RENAME, note: "Old Username: #{login_before_last_save}; New Username: #{login}" }) if saved_change_to_login?
-   end
+  def log_change_if_login_was_edited
+    create_log_item(action: ArchiveConfig.ACTION_RENAME, note: "Old Username: #{login_before_last_save}; New Username: #{login}") if saved_change_to_login?
+  end
+
+  def log_email_change
+    current_admin = User.current_user if User.current_user.is_a?(Admin)
+    options = {
+      action: ArchiveConfig.ACTION_NEW_EMAIL,
+      admin_id: current_admin&.id
+    }
+    options[:note] = "Change made by #{current_admin&.login}" if current_admin
+    create_log_item(options)
+  end
 
   def remove_stale_from_autocomplete
     Rails.logger.debug "Removing stale from autocomplete: #{autocomplete_search_string_was}"
@@ -568,5 +590,17 @@ class User < ApplicationRecord
                :changed_too_recently,
                count: change_interval_days,
                renamed_at: I18n.l(renamed_at, format: :long))
+  end
+
+  # Extra callback to make sure readings are deleted in an order consistent
+  # with the ReadingsJob.
+  #
+  # TODO: In the long term, it might be better to change the indexes on the
+  # readings table so that it deletes things in the correct order by default if
+  # we just set dependent: :delete_all, but for now we need to explicitly sort
+  # by work_id to make sure that the readings are locked in the correct order.
+  before_destroy :clear_readings, prepend: true
+  def clear_readings
+    readings.order(:work_id).each(&:delete)
   end
 end

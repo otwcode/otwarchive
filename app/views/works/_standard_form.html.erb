@@ -100,10 +100,13 @@
         <!-- Toggles on with parent checkbox -->
         <fieldset id="parent-options">
           <dl>
-            <%= fields_for "work[parent_attributes]" do |p| %>
+            <% new_parent, existing_parents = @work.parent_work_relationships.partition(&:new_record?) %>
+            <% new_parent << @work.parent_work_relationships.build if new_parent.empty? %>
+
+            <%= f.fields_for :parent_work_relationships, new_parent do |p| %>
               <dt><%= p.label :url, ts("URL") %></dt>
               <dd>
-                <%= p.text_field :url, value: work_parent_value(:url),
+                <%= p.text_field :url,
                       "aria-describedby" => "parent-attributes-url-field-description" %>
                 <p class="important footnote" id="parent-attributes-url-field-description">
                   <%= ts("For a work in the Archive, only the URL is required.") %>
@@ -111,10 +114,10 @@
               </dd>
 
               <dt><%= p.label :title %></dt>
-              <dd><%= p.text_field :title, value: work_parent_value(:title) %></dd>
+              <dd><%= p.text_field :title %></dd>
 
               <dt><%= p.label :author %></dt>
-              <dd><%= p.text_field :author, value: work_parent_value(:author) %></dd>
+              <dd><%= p.text_field :author %></dd>
 
               <dt>
                 <%= p.label :language_id, ts("Language") %>
@@ -131,9 +134,9 @@
               </dd>
             <% end %>
 
-            <% unless @work.parent_work_relationships.blank? %>
+            <% unless existing_parents.blank? %>
               <dt><%= ts("Current parent works") %></dt>
-              <% for related_work in @work.parent_work_relationships %>
+              <% existing_parents.each do |related_work| %>
                 <% if related_work.parent %>
                   <dd>
                     <ul class="actions" role="navigation">

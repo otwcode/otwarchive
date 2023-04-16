@@ -41,6 +41,8 @@ class InviteRequestsController < ApplicationController
   end
 
   def manage
+    authorize(InviteRequest)
+
     @invite_requests = InviteRequest.all
 
     if params[:query].present?
@@ -60,13 +62,11 @@ class InviteRequestsController < ApplicationController
   end
 
   def destroy
-    @invite_request = InviteRequest.find_by(id: params[:id])
-    if @invite_request.nil? || @invite_request.destroy
-      success_message = if @invite_request.nil?
-                          ts("Request was removed from the queue.")
-                        else
-                          ts("Request for %{email} was removed from the queue.", email: @invite_request.email)
-                        end
+    @invite_request = InviteRequest.find(params[:id])
+    authorize @invite_request
+
+    if @invite_request.destroy
+      success_message = ts("Request for %{email} was removed from the queue.", email: @invite_request.email)
       respond_to do |format|
         format.html { redirect_to manage_invite_requests_path(page: params[:page], query: params[:query]), notice: success_message }
         format.json { render json: { item_success_message: success_message }, status: :ok }
