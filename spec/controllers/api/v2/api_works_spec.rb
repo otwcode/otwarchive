@@ -143,15 +143,15 @@ describe "API v2 WorksController - Create works", type: :request do
     end
 
     describe "Provided API metadata should be used if present" do
-      before(:all) do
+      before do
         Language.create(short: "es", name: "Español")
 
         mock_external
 
-        @archivist = create(:archivist)
+        archivist = create(:archivist)
 
         valid_params = {
-          archivist: @archivist.login,
+          archivist: archivist.login,
           works: [
             { id: "123",
               title: api_fields[:title],
@@ -178,14 +178,9 @@ describe "API v2 WorksController - Create works", type: :request do
         @work = Work.find_by_url(parsed_body[:works].first[:original_url])
       end
 
-      after(:all) do
-        @work&.destroy
+      after do
         WebMock.reset!
-        Language.find_by(short: "es").destroy
-        @archivist.destroy
-        Role.find_by(name: "archivist").destroy
       end
-
 
       it "API should override content for Title" do
         expect(@work.title).to eq(api_fields[:title])
@@ -228,13 +223,13 @@ describe "API v2 WorksController - Create works", type: :request do
     end
 
     describe "Metadata should be extracted from content if no API metadata is supplied" do
-      before(:all) do
+      before do
         mock_external
 
-        @archivist = create(:archivist)
+        archivist = create(:archivist)
 
         valid_params = {
-          archivist: @archivist.login,
+          archivist: archivist.login,
           works: [
             { external_author_name: api_fields[:external_author_name],
               external_author_email: api_fields[:external_author_email],
@@ -250,11 +245,8 @@ describe "API v2 WorksController - Create works", type: :request do
         created_user&.destroy
       end
 
-      after(:all) do
-        @work&.destroy
+      after do
         WebMock.reset!
-        @archivist.destroy
-        Role.find_by(name: "archivist").destroy
       end
 
       it "Title should be detected from the content" do
@@ -296,13 +288,13 @@ describe "API v2 WorksController - Create works", type: :request do
     end
 
     describe "Imports should use fallback values or nil if no metadata is supplied" do
-      before(:all) do
+      before do
         mock_external
 
-        @archivist = create(:archivist)
+        archivist = create(:archivist)
 
         valid_params = {
-          archivist: @archivist.login,
+          archivist: archivist.login,
           works: [
             { external_author_name: api_fields[:external_author_name],
               external_author_email: api_fields[:external_author_email],
@@ -316,11 +308,8 @@ describe "API v2 WorksController - Create works", type: :request do
         @work = Work.find_by_url(parsed_body[:works].first[:original_url])
       end
 
-      after(:all) do
-        @work&.destroy
+      after do
         WebMock.reset!
-        @archivist.destroy
-        Role.find_by(name: "archivist").destroy
       end
 
       it "Title should be the default fallback title for imported works" do
@@ -368,13 +357,13 @@ describe "API v2 WorksController - Create works", type: :request do
     end
 
     describe "Provided API metadata should be used if present and tag detection is turned off" do
-      before(:all) do
+      before do
         mock_external
 
-        @archivist = create(:archivist)
+        archivist = create(:archivist)
 
         valid_params = {
-          archivist: @archivist.login,
+          archivist: archivist.login,
           works: [
             { id: "123",
               title: api_fields[:title],
@@ -400,11 +389,8 @@ describe "API v2 WorksController - Create works", type: :request do
         @work = Work.find_by_url(parsed_body[:works].first[:original_url])
       end
 
-      after(:all) do
-        @work&.destroy
+      after do
         WebMock.reset!
-        @archivist.destroy
-        Role.find_by(name: "archivist").destroy
       end
 
       it "API should override content for Title" do
@@ -449,13 +435,13 @@ describe "API v2 WorksController - Create works", type: :request do
     end
 
     describe "Some fields should be detected and others use fallback values or nil if no metadata is supplied and tag detection is turned off" do
-      before(:all) do
+      before do
         mock_external
 
-        @archivist = create(:archivist)
+        archivist = create(:archivist)
 
         valid_params = {
-          archivist: @archivist.login,
+          archivist: archivist.login,
           works: [
             { external_author_name: api_fields[:external_author_name],
               external_author_email: api_fields[:external_author_email],
@@ -470,11 +456,8 @@ describe "API v2 WorksController - Create works", type: :request do
         @work = Work.find_by_url(parsed_body[:works].first[:original_url])
       end
 
-      after(:all) do
-        @work&.destroy
+      after do
         WebMock.reset!
-        @archivist.destroy
-        Role.find_by(name: "archivist").destroy
       end
 
       it "Title should be detected from the content" do
