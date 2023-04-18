@@ -67,7 +67,7 @@ class RedisHitCounter
     # appropriate StatCounter.
     def save_batch_hit_counts(batch)
       StatCounter.transaction do
-        batch.each do |work_id, value|
+        batch.sort.each do |work_id, value|
           work = Work.find_by(id: work_id)
           stat_counter = StatCounter.lock.find_by(work_id: work_id)
 

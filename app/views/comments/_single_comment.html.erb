@@ -14,7 +14,7 @@
     <% elsif !can_see_hidden_comment?(single_comment) %>
       <p class="message"><%= ts("(This comment is under review by an admin and is currently unavailable.)") %></p>
     <% else %>
-      <% cache(single_comment, expires_in: 1.week) do %>
+      <% cache([single_comment, single_comment.comment_owner], expires_in: 1.week) do %>
         <% # FRONT END, update this if a.user comes in %>
         <h4 class="heading byline">
           <% if single_comment.by_anonymous_creator? %>

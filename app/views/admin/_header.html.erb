@@ -59,7 +59,10 @@
     </li>
   <% end %>
   <li><%= link_to ts("Tag Wrangling", key: "header"), tag_wranglings_path %></li>
-  <li><%= link_to ts("Locales", key: "header"), locales_path %></li>
+  
+  <% if policy(Locale).index? %>
+    <li><%= link_to ts("Locales", key: "header"), locales_path %></li>
+  <% end %>
 
   <% if policy(AdminActivity).index? %>
     <li><%= link_to ts("Activities", key: "header"), admin_activities_path %></li>
