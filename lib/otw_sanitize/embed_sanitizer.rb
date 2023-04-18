@@ -7,7 +7,6 @@ module OtwSanitize
   # Creates a Sanitize transformer to sanitize embedded media
   class EmbedSanitizer
     WHITELIST_REGEXES = {
-      ao3:              %r{^archiveofourown\.org/},
       archiveorg:       %r{^archive\.org\/embed/},
       criticalcommons:  %r{^criticalcommons\.org/},
       eighttracks:      %r{^8tracks\.com/},
