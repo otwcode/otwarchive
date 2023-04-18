@@ -9,7 +9,7 @@ describe HtmlCleaner do
     ArchiveConfig.FIELDS_ALLOWING_VIDEO_EMBEDS.each do |field|
       context "#{field} is configured to allow video embeds" do
         %w[youtube.com youtube-nocookie.com vimeo.com player.vimeo.com 
-           vidders.net criticalcommons.org google.com archiveofourown.org podfic.com archive.org
+           vidders.net criticalcommons.org google.com podfic.com archive.org
            open.spotify.com spotify.com 8tracks.com w.soundcloud.com soundcloud.com viddertube.com].each do |source|
 
           it "keeps embeds from #{source}" do
@@ -20,7 +20,7 @@ describe HtmlCleaner do
         end
 
         %w[youtube.com youtube-nocookie.com vimeo.com player.vimeo.com
-           archiveofourown.org archive.org 8tracks.com podfic.com
+           archive.org 8tracks.com podfic.com
            open.spotify.com spotify.com w.soundcloud.com soundcloud.com vidders.net viddertube.com].each do |source|
 
           it "converts src to https for #{source}" do
