@@ -21,12 +21,12 @@ module OtwSanitize
     }.freeze
 
     ALLOWS_FLASHVARS = %i[
-      ao3 criticalcommons eighttracks google
+      criticalcommons eighttracks google
       podfic soundcloud spotify viddersnet
     ].freeze
 
     SUPPORTS_HTTPS = %i[
-      ao3 archiveorg eighttracks podfic
+      archiveorg eighttracks podfic
       soundcloud spotify viddersnet viddertube vimeo youtube
     ].freeze
 
