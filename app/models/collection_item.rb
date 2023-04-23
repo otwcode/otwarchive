@@ -107,11 +107,10 @@ class CollectionItem < ApplicationRecord
 
     # if the collection is open or the user who owns this work is a member, go ahead and approve
     # for the collection
-    if !approved_by_collection?
-      if !collection.moderated? || collection.user_is_maintainer?(User.current_user) || collection.user_is_posting_participant?(User.current_user)
-        approve_by_collection
-      end
-    end
+    return if approved_by_collection?
+
+    approve_by_collection if !collection.moderated? ||
+                             collection.user_is_posting_participant?(User.current_user)
   end
 
   before_save :send_work_invitation
