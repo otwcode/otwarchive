@@ -49,12 +49,13 @@
       </dd>
     <% end %>
 
-    <% unless @work.approved_collections.empty? %>
+    <% collections_data = show_collections_data(@work.approved_collections_after_saving) %>
+    <% if collections_data.present? %>
       <dt class="collections">
         <%= ts('Collections:') %>
       </dt>
       <dd class="collections">
-        <%= show_collections_data(@work.approved_collections) %>
+        <%= collections_data %>
       </dd>
     <% end %>
 
