@@ -235,7 +235,7 @@ Scenario: Adding bookmark to non-existent collection (AO3-4338)
   Then I follow "Edit"
     And I fill in "bookmark_collection_names" with "some_nonsense_collection"
     And I press "Update"
-    And I should see "does not exist."
+    And I should see "We couldn't find the collection some_nonsense_collection."
 
 Scenario: Adding bookmarks to closed collections (Issue 3083)
   Given I am logged in as "moderator"
@@ -277,7 +277,7 @@ Scenario: Adding bookmarks to closed collections (Issue 3083)
     And I fill in "bookmark_collection_names" with "rescue_911"
     And I press "Create"
   Then I should see "Sorry! We couldn't save this bookmark because:"
-    And I should see "The collection rescue_911 is not currently open."
+    And I should see "The collection Rescue 911 is not currently open."
   When I view the work "Hooray for Homicide"
     And I follow "Bookmark"
     And I press "Create"
@@ -290,7 +290,7 @@ Scenario: Adding bookmarks to closed collections (Issue 3083)
   When I follow "Edit"
     And I fill in "bookmark_collection_names" with "rescue_911"
     And I press "Update"
-  Then I should see "We couldn't add your submission to the following collections: Rescue 911 is closed to new submissions."
+  Then I should see "Sorry! We couldn't save this bookmark because: The collection Rescue 911 is not currently open."
   # Create a collection, put a bookmark in it, close the collection, then try
   # to edit that bookmark
   When I open the collection with the title "Rescue 911"

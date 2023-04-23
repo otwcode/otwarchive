@@ -12,6 +12,10 @@ en:
         blocked: "You have blocked the user %{name}."
       destroy:
         unblocked: "You have unblocked the user %{name}."
+  bookmarks:
+    new_moderated_collections_message_html:
+      one: You have submitted your bookmark to the moderated collection '%{collections}'. It will not become a part of the collection until it has been approved by a moderator.
+      other: You have submitted your bookmark to moderated collections (%{collections}). It will not become a part of those collections until it has been approved by a moderator.
   muted:
     users:
       create:
@@ -61,3 +65,7 @@ en:
       create:
         contact_abuse: contact Policy & Abuse
         reset_blocked: Password resets are disabled for that user. For more information, please %{contact_abuse_link}.
+  works:
+    moderated_collections_message_html:
+      one: You have submitted your work to the moderated collection '%{collections}'. It will not become a part of the collection until it has been approved by a moderator.
+      other: You have submitted your work to moderated collections (%{collections}). It will not become a part of those collections until it has been approved by a moderator.

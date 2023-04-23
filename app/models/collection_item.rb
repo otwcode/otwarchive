@@ -5,13 +5,10 @@ class CollectionItem < ApplicationRecord
     [ts("Rejected"), :rejected]
   ]
 
-  belongs_to :collection, inverse_of: :collection_items
+  belongs_to :collection, inverse_of: :collection_items, autosave: false
   belongs_to :item, polymorphic: :true, inverse_of: :collection_items, touch: true
-  belongs_to :work,  class_name: "Work", foreign_key: "item_id", inverse_of: :collection_items
-  belongs_to :bookmark, class_name: "Bookmark", foreign_key: "item_id"
 
-  validates_uniqueness_of :collection_id, scope: [:item_id, :item_type],
-    message: ts("already contains this item.")
+  validates :collection_id, uniqueness: { scope: [:item_id, :item_type] }
 
   enum user_approval_status: {
     rejected: -1,
@@ -25,14 +22,24 @@ class CollectionItem < ApplicationRecord
     approved: 1
   }, _suffix: :by_collection
 
-  validate :collection_is_open, on: :create
-  def collection_is_open
-    if self.new_record? && self.collection && self.collection.closed? && !self.collection.user_is_maintainer?(User.current_user)
-      errors.add(:base, ts("The collection %{title} is not currently open.", title: self.collection.title))
+  validate :collection_must_exist, on: :create
+  def collection_must_exist
+    if collection.nil?
+      errors.add(:collection, :blank)
+    elsif collection.new_record?
+      errors.add(:collection, :not_found, name: collection.name)
     end
   end
 
-  scope :include_for_works, -> { includes(work: :pseuds)}
+  validate :collection_is_open, on: :create
+  def collection_is_open
+    return unless collection.present? && collection.closed? &&
+                  !collection.user_is_maintainer?(User.current_user)
+
+    errors.add(:collection, :closed, title: collection.title)
+  end
+
+  scope :include_for_works, -> { includes(item: :pseuds) }
   scope :unrevealed, -> { where(unrevealed: true) }
   scope :anonymous, -> { where(anonymous:  true) }
 
@@ -47,44 +54,37 @@ class CollectionItem < ApplicationRecord
   scope :invited_by_collection, -> { approved_by_collection.unreviewed_by_user }
   scope :approved_by_both, -> { approved_by_collection.approved_by_user }
 
-  before_save :set_anonymous_and_unrevealed
+  before_validation :set_anonymous_and_unrevealed, on: :create
   def set_anonymous_and_unrevealed
-    if self.new_record? && collection
-      self.unrevealed = true if collection.reload.unrevealed?
-      self.anonymous = true if collection.reload.anonymous?
-    end
+    return unless collection
+
+    self.unrevealed = collection.unrevealed?
+    self.anonymous = collection.anonymous?
+  end
+
+  def destroyed_by_item?
+    item && destroyed_by_association &&
+      item.association(:collection_items).reflection == destroyed_by_association
   end
 
   after_save :update_work
-  after_destroy :update_work
+  after_destroy :update_work, unless: :destroyed_by_item?
 
   # Set associated works to anonymous or unrevealed as appropriate.
-  #
-  # Inverses are set up properly on self.item, so we use that field to check
-  # whether we're currently in the process of saving a brand new work, or
-  # whether the work is in the process of being destroyed. (In which case we
-  # rely on the Work's callbacks to set anon/unrevealed status properly.) But
-  # because we want to discard changes made in preview mode, we perform the
-  # actual anon/unrevealed updates on self.work, which doesn't have proper
-  # inverses and therefore is freshly loaded from the database.
   def update_work
-    return unless item.is_a?(Work) && item.persisted? && !item.saved_change_to_id?
+    return unless item.is_a?(Work) && item.persisted?
 
-    if work.present?
-      work.update_anon_unrevealed
+    item.set_anon_unrevealed
 
-      # For a more helpful error message, raise an error saying that the work
-      # is invalid if we fail to save it.
-      raise ActiveRecord::RecordInvalid, work unless work.save(validate: false)
-    end
+    item.save!(validate: false) if item.will_save_change_to_anonymous? ||
+                                   item.will_save_change_to_unrevealed?
   end
 
   # Poke the item if it's just been approved or unapproved so it gets picked up by the search index
-  after_update :update_item_for_status_change
-  def update_item_for_status_change
-    if saved_change_to_user_approval_status? || saved_change_to_collection_approval_status?
-      item.save!(validate: false)
-    end
+  after_save :reindex_item
+  after_destroy :reindex_item, unless: :destroyed_by_item?
+  def reindex_item
+    item&.enqueue_to_index
   end
 
   after_create_commit :notify_of_association
@@ -97,19 +97,19 @@ class CollectionItem < ApplicationRecord
     end
   end
 
-  before_save :approve_automatically
+  before_validation :approve_automatically, on: :create
   def approve_automatically
-    if self.new_record?
-      # approve with the current user, who is the person who has just
-      # added this item -- might be either moderator or owner
-      approve(User.current_user == :false ? nil : User.current_user)
+    return unless item && collection
 
-      # if the collection is open or the user who owns this work is a member, go ahead and approve
-      # for the collection
-      if !approved_by_collection? && collection
-        if !collection.moderated? || collection.user_is_maintainer?(User.current_user) || collection.user_is_posting_participant?(User.current_user)
-          approve_by_collection
-        end
+    # approve with the current user, who is the person who has just
+    # added this item -- might be either moderator or owner
+    approve(User.current_user)
+
+    # if the collection is open or the user who owns this work is a member, go ahead and approve
+    # for the collection
+    if !approved_by_collection?
+      if !collection.moderated? || collection.user_is_maintainer?(User.current_user) || collection.user_is_posting_participant?(User.current_user)
+        approve_by_collection
       end
     end
   end
@@ -186,7 +186,7 @@ class CollectionItem < ApplicationRecord
       approve_by_user
       approve_by_collection
     end
-    approve_by_user if user && (user.is_author_of?(item) || (user == User.current_user && item.respond_to?(:pseuds) ? item.pseuds.empty? : item.pseud.nil?) )
+    approve_by_user if user && (user.is_author_of?(item) || (user == User.current_user && item.new_record?))
     approve_by_collection if user && self.collection.user_is_maintainer?(user)
   end
 

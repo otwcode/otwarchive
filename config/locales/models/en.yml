@@ -12,6 +12,17 @@ en:
               self: "Sorry, you can't block yourself."
               official: "Sorry, you can't block an official user."
               limit: "Sorry, you have blocked too many accounts."
+        bookmark/collection_items:
+          format: "%{message}"
+        collection_item:
+          format: "%{message}"
+          attributes:
+            collection_id:
+              taken: "The collection already contains this item."
+            collection:
+              blank: "The collection can't be blank."
+              not_found: "We couldn't find the collection %{name}."
+              closed: "The collection %{title} is not currently open."
         mute:
           format: "%{message}"
           attributes:
@@ -69,6 +80,8 @@ en:
             user_defined_tags_count:
               at_most:
                 "must not add up to more than %{count}. Your work has %{value} of these tags, so you must remove %{diff} of them."
+        work/collection_items:
+          format: "%{message}"
         work/parent_work_relationships:
           format: "%{message}"
     models:

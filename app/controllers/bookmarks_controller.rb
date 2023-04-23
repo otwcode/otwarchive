@@ -197,55 +197,9 @@ class BookmarksController < ApplicationController
   # PUT /bookmarks/1
   # PUT /bookmarks/1.xml
   def update
-    new_collections = []
-    unapproved_collections = []
-    errors = []
-    bookmark_params[:collection_names]&.split(",")&.map(&:strip)&.uniq&.each do |collection_name|
-      collection = Collection.find_by(name: collection_name)
-      if collection.nil?
-        errors << ts("#{collection_name} does not exist.")
-      else
-        if @bookmark.collections.include?(collection)
-          next
-        elsif collection.closed? && !collection.user_is_maintainer?(User.current_user)
-          errors << ts("#{collection.title} is closed to new submissions.")
-        elsif @bookmark.add_to_collection(collection) && @bookmark.save
-          if @bookmark.approved_collections.include?(collection)
-            new_collections << collection
-          else
-            unapproved_collections << collection
-          end
-        else
-          errors << ts("Something went wrong trying to add collection #{collection.title}, sorry!")
-        end
-      end
-    end
-
-    # messages to the user
-    unless errors.empty?
-      flash[:error] = ts("We couldn't add your submission to the following collections: ") + errors.join("<br />")
-    end
-
-    unless new_collections.empty?
-      flash[:notice] = ts("Added to collection(s): %{collections}.",
-                          collections: new_collections.collect(&:title).join(", "))
-    end
-    unless unapproved_collections.empty?
-      flash[:notice] = flash[:notice] ? flash[:notice] + " " : ""
-      flash[:notice] += if unapproved_collections.size > 1
-                          ts("You have submitted your bookmark to moderated collections (%{all_collections}). It will not become a part of those collections until it has been approved by a moderator.", all_collections: unapproved_collections.map(&:title).join(", "))
-                        else
-                          ts("You have submitted your bookmark to the moderated collection '%{collection}'. It will not become a part of the collection until it has been approved by a moderator.", collection: unapproved_collections.first.title)
-                        end
-    end
-
-    flash[:notice] = (flash[:notice]).html_safe unless flash[:notice].blank?
-    flash[:error] = (flash[:error]).html_safe unless flash[:error].blank?
-
-    if @bookmark.update(bookmark_params) && errors.empty?
-      flash[:notice] = flash[:notice] ? " " + flash[:notice] : ""
-      flash[:notice] = ts("Bookmark was successfully updated.").html_safe + flash[:notice]
-      flash[:notice] = flash[:notice].html_safe
+    if @bookmark.update(bookmark_params)
+      flash[:notice] = ts("Bookmark was successfully updated.")
+      new_moderated_collections_message
       redirect_to(@bookmark)
     else
       @bookmarkable = @bookmark.bookmarkable
@@ -357,6 +311,27 @@ class BookmarksController < ApplicationController
         pseud_ids.include?(b.pseud_id)
       end
     end
+  end
+
+  # Flash a message about the new moderated collections that the user has
+  # submitted their bookmark to.
+  def new_moderated_collections_message
+    new_moderated_collections = @bookmark.collection_items
+      .select(&:previously_new_record?)
+      .select(&:unreviewed_by_collection?)
+      .map(&:collection)
+
+    return if new_moderated_collections.blank?
+
+    links = new_moderated_collections.map do |collection|
+      view_context.link_to(collection.title, collection_path(collection))
+    end
+
+    message = t("bookmarks.new_moderated_collections_message_html",
+                count: new_moderated_collections.length,
+                collections: view_context.safe_join(links, ", ")).html_safe
+
+    flash[:notice] = view_context.safe_join([flash[:notice], message].compact, " ")
   end
 
   private
