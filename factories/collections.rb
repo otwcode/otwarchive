@@ -44,7 +44,7 @@ FactoryBot.define do
   end
 
   factory :collection_item do
-    item_type { "Work" }
+    item { create(:work) }
     collection
   end
 end
