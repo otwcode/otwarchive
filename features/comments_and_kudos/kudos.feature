@@ -167,3 +167,57 @@ Feature: Kudos
       And the email should contain "Meh Story"
       And the email should not contain "0 guests"
       And the email should not contain "translation missing"
+
+  Scenario: Leave kudos on an admin post when logged in
+
+    Given I have posted an admin post
+      And I am logged in as "happyuser"
+      And I go to the admin-posts page
+      And I follow "Default Admin Post"
+      And all emails have been delivered
+      And I press "Kudos ♥"
+    Then I should see "Thank you for leaving kudos!"
+      And I should see "happyuser left kudos on this post!"
+    When I press "Kudos ♥"
+    Then I should see "You have already left kudos here. :)"
+    When kudos are sent
+    Then 0 emails should be delivered
+
+  Scenario: Leave kudos on an admin post when logged out
+
+    Given I have posted an admin post
+      And I go to the admin-posts page
+      And I follow "Default Admin Post"
+      And I press "Kudos ♥"
+    Then I should see "Thank you for leaving kudos!"
+      And I should see "1 guest left kudos on this post!"
+    When I press "Kudos ♥"
+    Then I should see "You have already left kudos here. :)"
+    When kudos are sent
+    Then 0 emails should be delivered
+
+  @javascript
+  Scenario: Leave kudos on an admin post via JS when logged in
+
+    Given I have posted an admin post
+      And I am logged in as "happyuser"
+      And I go to the admin-posts page
+      And I follow "Default Admin Post"
+      And all emails have been delivered
+      And I press "Kudos ♥"
+    Then I should see "Thank you for leaving kudos!"
+      And I should see "happyuser left kudos on this post!"
+    When I press "Kudos ♥"
+    Then I should see "You have already left kudos here. :)"
+
+  @javascript
+  Scenario: Leave kudos on an admin post via JS when logged out
+  
+    Given I have posted an admin post
+      And I go to the admin-posts page
+      And I follow "Default Admin Post"
+      And I press "Kudos ♥"
+    Then I should see "Thank you for leaving kudos!"
+      And I should see "1 guest left kudos on this post!"
+    When I press "Kudos ♥"
+    Then I should see "You have already left kudos here. :)"

@@ -2,6 +2,7 @@ class AdminPost < ApplicationRecord
   self.per_page = 8 # option for WillPaginate
 
   acts_as_commentable
+  has_many :kudos, as: :commentable, inverse_of: :commentable, dependent: :destroy
   enum comment_permissions: {
     enable_all: 0,
     disable_anon: 1,
@@ -69,6 +70,18 @@ class AdminPost < ApplicationRecord
   def translated_post_must_exist
     if translated_post_id.present? && AdminPost.find_by(id: translated_post_id).nil?
       errors.add(:translated_post_id, "does not exist")
+    end
+  end
+  
+  def guest_kudos_count
+    Rails.cache.fetch "admin_posts/#{id}/guest_kudos_count-v2" do
+      kudos.by_guest.count
+    end
+  end
+
+  def all_kudos_count
+    Rails.cache.fetch "admin_posts/#{id}/kudos_count-v2" do
+      kudos.count
     end
   end
 

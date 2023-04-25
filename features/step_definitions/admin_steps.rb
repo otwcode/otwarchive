@@ -101,6 +101,7 @@ end
 Given /^I have posted an admin post$/ do
   step(%{I am logged in as a "communications" admin})
   step("I make an admin post")
+  step("I am on the homepage")
   step("I log out")
 end
 
