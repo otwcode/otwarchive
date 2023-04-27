@@ -25,7 +25,7 @@ describe TagWranglersController do
     context "when anonymous" do
       it "prevents access" do
         get :report_csv, params: { id: user.login }
-        it_redirects_to_simple(new_user_session_path)
+        it_redirects_to_simple(root_path)
       end
     end
 
@@ -70,7 +70,7 @@ describe TagWranglersController do
 
       it "prevents access" do
         get :report_csv, params: { id: user.login }
-        it_redirects_to_simple(new_user_session_path)
+        it_redirects_to_simple(root_path)
       end
     end
   end
