@@ -2,7 +2,7 @@ class TagWranglersController < ApplicationController
   include ExportsHelper
 
   before_action :check_user_status
-	before_action :check_permission_to_wrangle, except: [:report_csv]
+  before_action :check_permission_to_wrangle, except: [:report_csv]
 
   def index
     @wranglers = Role.find_by(name: "tag_wrangler").users.alphabetical
