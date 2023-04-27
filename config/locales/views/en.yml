@@ -507,6 +507,7 @@ en:
       date: "At our current rate, you should receive an invitation on or around: %{date}."
   tag_wranglers:
     show:
+      tags_wrangled_csv: "Tags Wrangled (CSV)"
       last_wrangled_html: "%{wrangler_login} last wrangled at %{time}."
   pseuds:
     delete_preview:

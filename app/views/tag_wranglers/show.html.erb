@@ -4,9 +4,14 @@
     <h2 class="heading"><%= ts("%{wrangler_login}'s Wrangling Page", :wrangler_login => @wrangler.login) %></h2>
     <p class="icon"><%= icon_display(@wrangler) %></p>
     <!--/descriptions-->
+    <!--subnav-->
+    <% if policy(:tag_wrangler).report_csv? %>
+      <ul class="navigation actions" role="navigation">
+        <li><%= link_to t(".tags_wrangled_csv"), report_csv_tag_wrangler_path %></li> <%# TODO #%>
+      </ul>
+    <% end %>
+    <!--/subnav-->
   </div>
-  <!--subnav-->
-  <!--/subnav-->
 
   <!--main content-->
   <!--TEST NOTE: these tds are titled to expose headings to Chromevox, which doesn't read scope
