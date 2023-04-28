@@ -109,7 +109,7 @@ bn:
           addressed: নমস্কার, %{name}!
           unaddressed: নমস্কার!
         introductory: Archive of Our Own – AO3(আমাদের নিজস্ব সংগ্রহশালা) থেকে নমস্কার!
-      metadata_label_indicator: ":"
+      metadata_label_indicator: ": "
       signature:
         app_short_name: AO3
         open_doors: Open Doors (খোলা দরজা) বিভাগ
