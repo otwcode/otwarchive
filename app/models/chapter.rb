@@ -149,7 +149,7 @@ class Chapter < ApplicationRecord
     self.work.chapters.count == 1
   end
 
-  def only_posted_chapter?
+  def is_only_non_draft_chapter?
     self.posted? && self.work.chapters.posted.count == 1
   end
 
