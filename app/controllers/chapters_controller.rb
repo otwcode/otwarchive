@@ -213,7 +213,7 @@ class ChaptersController < ApplicationController
   # DELETE /work/:work_id/chapters/1
   # DELETE /work/:work_id/chapters/1.xml
   def destroy
-    if @chapter.is_only_chapter? || @chapter.is_only_non_draft_chapter?
+    if @chapter.is_only_chapter? || @chapter.only_non_draft_chapter?
       flash[:error] = t(".only_chapter")
       redirect_to(edit_work_path(@work))
       return
