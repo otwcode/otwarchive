@@ -342,7 +342,7 @@ class UserMailer < ApplicationMailer
   def delete_work_notification(user, work)
     @user = user
     @work = work
-    download = Download.new(@work, mime_type: "text/html")
+    download = Download.new(@work, mime_type: "text/html", include_draft_chapters: true)
     html = DownloadWriter.new(download).generate_html
     html = ::Mail::Encodings::Base64.encode(html)
     attachments["#{download.file_name}.html"] = { content: html, encoding: "base64" }
@@ -362,7 +362,7 @@ class UserMailer < ApplicationMailer
   def admin_deleted_work_notification(user, work)
     @user = user
     @work = work
-    download = Download.new(@work, mime_type: "text/html")
+    download = Download.new(@work, mime_type: "text/html", include_draft_chapters: true)
     html = DownloadWriter.new(download).generate_html
     html = ::Mail::Encodings::Base64.encode(html)
     attachments["#{download.file_name}.html"] = { content: html, encoding: "base64" }

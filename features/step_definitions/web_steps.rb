@@ -20,15 +20,6 @@ When /^I take a screenshot$/ do
   screenshot_and_save_page
 end
 
-# We set the default domain to example.org.
-# The phantomjs drive fetchs pages directly so some tests will go to example.org
-# setting this whitelist stops this happening which is in itself a good thing
-# and makes the network traces easier to read as there are less calls to twitter etc.
-
-When /^I limit myself to the Archive$/ do
-  page.driver.browser.url_whitelist = ['http://127.0.0.1']
-end
-
 When /^I clear the network traffic$/ do
   page.driver.clear_network_traffic
 end

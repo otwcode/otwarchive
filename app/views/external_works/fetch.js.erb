@@ -8,6 +8,12 @@
   $j('input[id^="external_work_category_strings_"]').each(function() {
     $j(this).prop("checked", categories.indexOf(this.value) >= 0 );
   });
+
+  <% # clear existing autocompletes %>
+  $j("#external_work_fandom_string_autocomplete").parent().parent().find(".delete a").click()
+  $j("#external_work_relationship_string_autocomplete").parent().parent().find(".delete a").click()
+  $j("#external_work_character_string_autocomplete").parent().parent().find(".delete a").click()
+
   $j('#external_work_fandom_string_autocomplete').val("<%= @external_work.fandom_string %>");
   $j('#external_work_relationship_string_autocomplete').val("<%= @external_work.relationship_string %>");
   $j('#external_work_character_string_autocomplete').val("<%= @external_work.character_string %>");

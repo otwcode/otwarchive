@@ -7,6 +7,7 @@ class Download
     # TODO: Our current version of the mime-types gem doesn't include azw3, but
     # the gem cannot be updated without updating rest-client
     @mime_type = @file_type == "azw3" ? "application/x-mobi8-ebook" : MIME::Types.type_for(@file_type).first
+    @include_draft_chapters = options[:include_draft_chapters]
   end
 
   def generate
@@ -90,32 +91,31 @@ class Download
     @tmpdir
   end
 
-  # Utility methods which clean up work data for use in downloads
-
-  def fandoms
-    string = work.fandoms.size > 3 ? "Multifandom" : work.fandoms.string
-    clean(string)
+  def page_title
+    fandom = if work.fandoms.size > 3
+               "Multifandom"
+             elsif work.fandoms.empty?
+               "No fandom specified"
+             else
+               work.fandom_string
+             end
+    [work.title, authors, fandom].join(" - ")
   end
 
   def authors
-    author_names.join(', ').to_ascii
+    author_names.join(", ")
   end
 
   def author_names
     work.anonymous? ? ["Anonymous"] : work.pseuds.sort.map(&:byline)
   end
 
-  # need the next two to be filesystem safe and not overly long
-  def file_authors
-    clean(author_names.join('-'))
-  end
-
-  def page_title
-    [file_name, file_authors, fandoms].join(" - ")
-  end
-
   def chapters
-    work.chapters.order('position ASC').where(posted: true)
+    if @include_draft_chapters
+      work.chapters.order("position ASC")
+    else
+      work.chapters.order("position ASC").where(posted: true)
+    end
   end
 
   private

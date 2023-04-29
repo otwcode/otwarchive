@@ -87,7 +87,7 @@ When /^I post (?:a|the) (?:(\d+) chapter )?work "([^"]*)"(?: with fandom "([^"]*
     end
   end
   step %{all indexing jobs have been run}
-  Tag.write_redis_to_database
+  step "the periodic tag count task is run"
   step %(the periodic filter count task is run)
 end
 
@@ -295,14 +295,14 @@ When /^I edit the draft "([^"]*)"$/ do |draft|
   step %{I edit the work "#{draft}"}
 end
 
-When /^I post the chaptered work "([^"]*)"$/ do |title|
-  step %{I post the work "#{title}"}
+When /^I post the chaptered work "([^"]*)"(?: in the collection "([^"]*)")?$/ do |title, collection|
+  step %{I post the work "#{title}" in the collection "#{collection}"}
   step %{I follow "Add Chapter"}
   fill_in("content", with: "Another Chapter.")
   click_button("Preview")
   step %{I press "Post"}
   step %{all indexing jobs have been run}
-  Tag.write_redis_to_database
+  step "the periodic tag count task is run"
 end
 
 When /^I post the chaptered draft "([^"]*)"$/ do |title|
@@ -319,7 +319,7 @@ When /^a chapter is added to "([^"]*)"$/ do |work_title|
   step %{a draft chapter is added to "#{work_title}"}
   click_button("Post")
   step %{all indexing jobs have been run}
-  Tag.write_redis_to_database
+  step "the periodic tag count task is run"
 end
 
 When /^a chapter with the co-author "([^\"]*)" is added to "([^\"]*)"$/ do |coauthor, work_title|
@@ -328,7 +328,7 @@ When /^a chapter with the co-author "([^\"]*)" is added to "([^\"]*)"$/ do |coau
   click_button("Post")
   step %{the user "#{coauthor}" accepts all co-creator requests}
   step %{all indexing jobs have been run}
-  Tag.write_redis_to_database
+  step "the periodic tag count task is run"
 end
 
 When /^a draft chapter is added to "([^"]*)"$/ do |work_title|
@@ -336,7 +336,7 @@ When /^a draft chapter is added to "([^"]*)"$/ do |work_title|
   step %{I press "Preview"}
   step %{all indexing jobs have been run}
 
-  Tag.write_redis_to_database
+  step "the periodic tag count task is run"
 end
 
 When /^I delete chapter ([\d]+) of "([^"]*)"$/ do |chapter, title|
@@ -370,7 +370,7 @@ When /^I post the(?: draft)? chapter$/ do
   click_button("Post")
   step %{all indexing jobs have been run}
 
-  Tag.write_redis_to_database
+  step "the periodic tag count task is run"
 end
 
 Then /^I should see the default work content$/ do
@@ -466,7 +466,7 @@ When /^the work "([^"]*)" was created (\d+) days ago$/ do |title, number|
   work.update_attribute(:created_at, number.to_i.days.ago)
   step %{all indexing jobs have been run}
 
-  Tag.write_redis_to_database
+  step "the periodic tag count task is run"
 end
 
 When /^I post the locked work "([^"]*)"$/ do |title|
@@ -479,7 +479,7 @@ When /^I post the locked work "([^"]*)"$/ do |title|
   click_button("Post")
   step %{all indexing jobs have been run}
 
-  Tag.write_redis_to_database
+  step "the periodic tag count task is run"
 end
 
 When /^the locked draft "([^"]*)"$/ do |title|
@@ -553,7 +553,7 @@ When /^I browse the "(.*?)" works$/ do |tagname|
   visit tag_works_path(tag)
   step %{all indexing jobs have been run}
 
-  Tag.write_redis_to_database
+  step "the periodic tag count task is run"
 end
 
 When /^I browse the "(.*?)" works with page parameter "(.*?)"$/ do |tagname, page|
@@ -561,36 +561,43 @@ When /^I browse the "(.*?)" works with page parameter "(.*?)"$/ do |tagname, pag
   visit tag_works_path(tag, page: page)
   step %{all indexing jobs have been run}
 
-  Tag.write_redis_to_database
+  step "the periodic tag count task is run"
 end
 
 When /^I delete the work "([^"]*)"$/ do |work|
   work = Work.find_by(title: CGI.escapeHTML(work))
   visit edit_work_path(work)
   step %{I follow "Delete Work"}
-  # If JavaScript is enabled, window.confirm will be used and this button will not appear
-  click_button("Yes, Delete Work") unless @javascript
+
+  # If JavaScript is enabled, window.confirm will be used and we'll have to accept
+  if @javascript
+    expect(page.accept_alert).to eq("Are you sure you want to delete this work? This will destroy all comments and kudos on this work as well and CANNOT BE UNDONE!")
+  else
+    click_button("Yes, Delete Work")
+  end
+
   step %{all indexing jobs have been run}
 
-  Tag.write_redis_to_database
+  step "the periodic tag count task is run"
 end
+
 When /^I preview the work$/ do
   click_button("Preview")
   step %{all indexing jobs have been run}
 
-  Tag.write_redis_to_database
+  step "the periodic tag count task is run"
 end
 When /^I update the work$/ do
   click_button("Update")
   step %{all indexing jobs have been run}
 
-  Tag.write_redis_to_database
+  step "the periodic tag count task is run"
 end
 When /^I post the work without preview$/ do
   click_button "Post"
   step %{all indexing jobs have been run}
 
-  Tag.write_redis_to_database
+  step "the periodic tag count task is run"
 end
 When /^I post the work$/ do
   click_button "Post"
@@ -598,7 +605,7 @@ When /^I post the work$/ do
 end
 
 When /^the statistics for all works are updated$/ do
-  StatCounter.stats_to_database
+  RedisJobSpawner.perform_now("StatCounterJob")
   step %{the hit counts for all works are updated}
 end
 
@@ -666,7 +673,7 @@ When /^I mark the work "([^"]*)" for later$/ do |work|
   work = Work.find_by(title: work)
   visit work_url(work)
   step %{I follow "Mark for Later"}
-  Reading.update_or_create_in_database
+  step "the readings are saved to the database"
 end
 
 When /^I follow the recent chapter link for the work "([^\"]*)"$/ do |work|
@@ -699,7 +706,7 @@ end
 
 When /^the hit counts for all works are updated$/ do
   step "all AJAX requests are complete"
-  RedisHitCounter.save_recent_counts
+  RedisJobSpawner.perform_now("HitCountUpdateJob")
 end
 
 When /^all hit count information is reset$/ do

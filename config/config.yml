@@ -19,12 +19,14 @@ REMEMBERED_SESSION_LENGTH_IN_MONTHS: 3
 # also change the message (and vice versa).
 DAYS_UNTIL_RESET_PASSWORD_LINK_EXPIRES: 7
 
+# This also affects the link included in the admin account creation email.
+DAYS_UNTIL_ADMIN_RESET_PASSWORD_LINK_EXPIRES: 5
+
 # email addresses
 RETURN_ADDRESS: 'do-not-reply@example.org'
 SPAM_ALERT_ADDRESS: 'abuse-discuss@example.org'
 SPAM_THRESHOLD: 15
 ADMIN_ADDRESS: 'admin@example.org'
-FEEDBACK_ADDRESS: feedback@example.org
 
 # Because the default email addresses are fake,
 # email delivery is turned off by default, even for production.
@@ -74,6 +76,10 @@ ACCOUNT_CREATION_ENABLED: false
 DAYS_TO_PURGE_UNACTIVATED: 7
 # number of invites users can request
 MAX_USER_INVITE_REQUEST: 10
+# number of accounts users can block
+MAX_BLOCKED_USERS: 2000
+# number of accounts users can mute
+MAX_MUTED_USERS: 2000
 
 # this determines how long we keep processed results like tag set nominations in redis
 DAYS_TO_SAVE_PROCESSED: 56
@@ -100,6 +106,8 @@ LOGIN_LENGTH_MIN: 3
 LOGIN_LENGTH_MAX: 40
 PASSWORD_LENGTH_MIN: 6
 PASSWORD_LENGTH_MAX: 40
+ADMIN_PASSWORD_LENGTH_MIN: 10
+ADMIN_PASSWORD_LENGTH_MAX: 40
 
 # The maximum number of tags you can add to a collection
 COLLECTION_TAGS_MAX: 10
@@ -182,7 +190,10 @@ RATE_LIMIT_SAFELIST: ["127.0.0.0/8", "10.0.0.0/8"]
 # The number of tags to show on the search page:
 TAGS_PER_SEARCH_PAGE: 50
 
-# When updating tag counts, how many to do in one transaction
+# When updating tag counts, how many to do in one TagCountUpdateJob:
+TAG_UPDATE_JOB_SIZE: 1000
+
+# When updating tag counts, how many to do in one transaction:
 TAG_UPDATE_BATCH_SIZE: 100
 
 # We only start caching tag counts for tags used more than a certain number of times
@@ -279,25 +290,25 @@ FIELDS_WITHOUT_SANITIZATION: ["password", "password_check", "password_confirmati
 # These fields are query fields and are allowed to contain "less than" values
 FIELDS_ALLOWING_LESS_THAN: ["query", "words", "kudos", "hits", "date", "bookmarkable_date", "word_count", "bookmarks_count", "comments_count", "kudos_count", "revised_at"]
 
-
-# Only the following fields are allowed to have HTML. In all others,
-# all HTML tags will be stripped.
+# Only the following fields are allowed to have HTML. In others, all HTML tags
+# will be stripped by the "sanitize_ac_params" filter.
 #
-# NOTE: the exact HTML tags and attributes and protocols allowed are defined in
-#   initializers/sanitizer_config.rb
+# The exact HTML tags and attributes and protocols allowed are defined in:
+# - config/initializers/gem-plugin_config/sanitizer_config.rb
+# - lib/html_cleaner.rb
 #
 # If you add a new field to this list, you need to:
-# - make sure that every model that contains the field also has a matching field "[fieldname]_sanitizer_version"
-#   Example:
-#     add_column :chapters, :content_sanitizer_version, :integer, :default => 0, :null => false, :limit => 2
 #
-# - make sure in the model that this field is NOT accessible (eg "attr_protected :content_sanitizer_version")
+# - make sure every model containing the field also has a matching field "[fieldname]_sanitizer_version", e.g.
+#     add_column :chapters, :content_sanitizer_version, :integer, default: 0, null: false, limit: 2
 #
-# - when you load the field you should use sanitize_field(object, :fieldname)
+# - make sure the field is NOT permitted for mass updating (by not including it in params.permit calls)
+#
+# - display the field in views using the HtmlCleaner helper, e.g.
+#     <%=raw sanitize_field(object, :fieldname) %>
 #
 # This will ensure that the field has been sanitized with the latest version of the sanitizer.
-#
-FIELDS_ALLOWING_HTML: ["about_me", "bookmarker_notes", "comment", "comment_content", "content", "description", "disabled_support_form_text", "endnotes", "faq", "intro", "note", "notes",
+FIELDS_ALLOWING_HTML: ["about_me", "bookmarker_notes", "comment", "comment_content", "content", "description", "disabled_support_form_text", "endnotes", "faq", "intro", "notes",
   "rules", "series_notes", "signup_instructions_general", "signup_instructions_offers", "signup_instructions_requests", "summary"]
 
 FIELDS_ALLOWING_HTML_ENTITIES: ["title"]
@@ -359,9 +370,6 @@ SUPPORTED_EXTERNAL_URLS: ["jpg", "jpeg", "png", "gif"]
 # variables for Askimet http://akismet.com/
 AKISMET_KEY: '6833ee7298cf'
 AKISMET_NAME: 'http://transformativeworks.org'
-
-DEFENSIO_KEY: '521476c0edf3ac96eab7e297f6fb92c8'
-DEFENSIO_NAME: 'http://archiveofourown.org'
 
 # Abuse and Support ticket trackers; you may need to change
 # feedbacks_controller.rb and abuse_reports_controller.rb
@@ -447,7 +455,10 @@ SECONDS_UNTIL_COMMENT_COUNTS_EXPIRE: 3600
 # bookmarks, # of fandoms):
 SECONDS_UNTIL_COLLECTION_COUNTS_EXPIRE: 300
 
-# Batch size used for the RedisHitCounter class:
+# Job size used for the HitCountUpdateJob class:
+HIT_COUNT_JOB_SIZE: 1000
+
+# Batch size used for the HitCountUpdateJob class:
 HIT_COUNT_BATCH_SIZE: 100
 
 # The hour (in UTC time) that we want the hit counts to rollover at. If someone
@@ -479,3 +490,19 @@ PERMITTED_HOSTS: [
 ]
 
 USER_RENAME_LIMIT_DAYS: 7
+
+# The number of readings to include in a single ReadingsJob:
+READING_JOB_SIZE: 5000
+
+# The number of readings to change in a single transaction:
+READING_BATCH_SIZE: 100
+
+# The number of work IDs to include in a single StatCounterJob:
+STAT_COUNTER_JOB_SIZE: 1000
+
+# The number of works to fetch from the database in one query when updating stat counters:
+STAT_COUNTER_BATCH_SIZE: 100
+
+# Number of hours to retain the original creator for works that have been
+# orphaned.
+ORIGINAL_CREATOR_TTL_HOURS: 72
