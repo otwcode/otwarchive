@@ -961,7 +961,7 @@ describe ChaptersController do
       context "when work has one chapter" do
         it "redirects to edit work" do
           delete :destroy, params: { work_id: work.id, id: work.chapters.first.id }
-          it_redirects_to_with_error(edit_work_path(work), "You can't delete the only chapter in your story. If you want to delete the story, choose 'Delete work'.")
+          it_redirects_to_with_error(edit_work_path(work), "You can't delete the only chapter in your work. If you want to delete the work, choose \"Delete Work\".")
         end
       end
 
@@ -1073,7 +1073,7 @@ describe ChaptersController do
 
         it "cannot delete the posted chapter" do
           delete :destroy, params: { work_id: work.id, id: work.chapters.first.id }
-          it_redirects_to_with_error(edit_work_path(work), "You can't delete the only published chapter in your story. Please post another chapter first. If you want to delete the story, choose 'Delete work'.")
+          it_redirects_to_with_error(edit_work_path(work), "You can't delete the only chapter in your work. If you want to delete the work, choose \"Delete Work\".")
         end
       end
     end

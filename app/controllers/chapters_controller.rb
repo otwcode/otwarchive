@@ -213,14 +213,8 @@ class ChaptersController < ApplicationController
   # DELETE /work/:work_id/chapters/1
   # DELETE /work/:work_id/chapters/1.xml
   def destroy
-    if @chapter.is_only_chapter?
-      flash[:error] = ts("You can't delete the only chapter in your story. If you want to delete the story, choose 'Delete work'.")
-      redirect_to(edit_work_path(@work))
-      return
-    end
-
-    if @chapter.only_posted_chapter?
-      flash[:error] = ts("You can't delete the only published chapter in your story. Please post another chapter first. If you want to delete the story, choose 'Delete work'.")
+    if @chapter.is_only_chapter? || @chapter.only_posted_chapter?
+      flash[:error] = t(".only_chapter")
       redirect_to(edit_work_path(@work))
       return
     end
