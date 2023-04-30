@@ -59,7 +59,7 @@ class TagWranglersController < ApplicationController
     wrangled_tags = Tag.where(last_wrangler: wrangler)
     header = [%w[Name Last\ Updated Type Merger Fandoms Unwrangleable]]
     results = wrangled_tags.map do |tag|
-      merger = tag.merger_id? ? tag.merger.name : ""
+      merger = tag.merger&.name || ""
       fandoms = tag.respond_to?(:fandoms) ? tag.fandoms.map(&:name).join(" + ") : ""
       [tag.name, tag.updated_at, tag.type, merger, fandoms, tag.unwrangleable]
     end
