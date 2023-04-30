@@ -651,6 +651,8 @@ describe UserMailer do
 
     it_behaves_like "a multipart email"
 
+    it_behaves_like "a translated email"
+
     describe "HTML version" do
       it "contains the comment and the URL reported" do
         expect(email).to have_html_part_content(report.comment)
