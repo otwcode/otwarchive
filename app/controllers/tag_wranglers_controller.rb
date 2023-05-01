@@ -60,7 +60,7 @@ class TagWranglersController < ApplicationController
     header = [%w[Name Last\ Updated Type Merger Fandoms Unwrangleable]]
     results = wrangled_tags.map do |tag|
       merger = tag.merger&.name || ""
-      fandoms = tag.respond_to?(:fandoms) ? tag.fandoms.map(&:name).join(" + ") : ""
+      fandoms = tag.respond_to?(:fandoms) ? tag.fandoms.map(&:name).join(", ") : ""
       [tag.name, tag.updated_at, tag.type, merger, fandoms, tag.unwrangleable]
     end
     filename = "wrangled_tags_#{wrangler.login}_#{Time.now.utc.strftime('%Y-%m-%d-%H%M')}.csv"

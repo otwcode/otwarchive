@@ -66,7 +66,7 @@ describe TagWranglersController do
             expect(response).to have_http_status(:success)
           end
 
-          it "only includes wranling activity for the specified user" do
+          it "only includes wrangling activity for the specified user" do
             other_user = create(:user)
             tag1 = create(:tag, last_wrangler: user)
             create(:tag, last_wrangler: other_user)
@@ -117,7 +117,7 @@ describe TagWranglersController do
 
             expect(result)
               .to eq([%w[Name Last\ Updated Type Merger Fandoms Unwrangleable],
-                      [tag.name, tag.updated_at.to_s, tag.type, "", "#{fandom1.name} + #{fandom2.name}", "false"]])
+                      [tag.name, tag.updated_at.to_s, tag.type, "", "#{fandom1.name}, #{fandom2.name}", "false"]])
           end
 
           it "correctly reports a tag marked unwrangleable" do
