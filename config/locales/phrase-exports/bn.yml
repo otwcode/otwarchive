@@ -1,12 +1,94 @@
 ---
 bn:
+  activerecord:
+    attributes:
+      archive_warning:
+        name_with_colon:
+          one: 'সতর্কীকরণ:'
+          other: 'সতর্কীকরণ:'
+      category:
+        name_with_colon:
+          one: 'শ্রেণী:'
+          other: 'শ্রেণী:'
+      character:
+        name_with_colon:
+          one: 'চরিত্র:'
+          other: 'চরিত্র:'
+      fandom:
+        name_with_colon:
+          one: 'অনুরাগী দল:'
+          other: 'অনুরাগী দল:'
+      freeform:
+        name_with_colon:
+          one: 'সংযোজিত ট্যাগ:'
+          other: 'সংযোজিত ট্যাগ:'
+      rating:
+        name_with_colon: 'রেটিং:'
+      relationship:
+        name_with_colon:
+          one: 'সম্পর্ক:'
+          other: 'সম্পর্ক:'
+      work:
+        summary: সারাংশ
+    models:
+      archive_warning:
+        one: সতর্কীকরণ
+        other: সতর্কীকরণ
+      category:
+        one: শ্রেণী
+        other: শ্রেণী
+      chapter:
+        one: অধ্যায়
+        other: অধ্যায়
+      character:
+        one: চরিত্র
+        other: চরিত্র
+      fandom:
+        one: অনুরাগী দল
+        other: অনুরাগী দল
+      freeform:
+        one: সংযোজিত ট্যাগ
+        other: সংযোজিত ট্যাগ
+      rating:
+        one: রেটিং
+        other: রেটিং
+      relationship:
+        one: সম্পর্ক
+        other: সম্পর্ক
+      series:
+        one: সংকলন
+        other: সংকলন
+  kudo_mailer:
+    batch_kudo_notification:
+      guest:
+        one: একজন অতিথি
+        other: "%{count}জন অতিথি"
+      html:
+        left_kudos:
+          one: "%{givers_list} বাহবা (কুডোস) দিয়ে গেছেন %{commentable_link}।"
+          other: "%{givers_list} বাহবা (কুডোস) দিয়ে গেছেন %{commentable_link}।"
+        single_guest:
+          giver_list: একজন অতিথি
+          left_kudos: "%{givers_list} বাহবা (কুডোস) দিয়ে গেছেন %{commentable_link}।"
+      subject: "[%{app_name}]-তে আপনি বাহবা (কুডোস) পেয়েছেন!"
+      text:
+        left_kudos:
+          one: "%{givers_list} বাহবা (কুডোস) দিয়ে গেছেন %{commentable_title} (%{commentable_url})।"
+          other: "%{givers_list} বাহবা (কুডোস) দিয়ে গেছেন %{commentable_title} (%{commentable_url})।"
+        single_guest: একজন অতিথি %{commentable_title} (%{commentable_url}) বাহবা (কুডোস)
+          দিয়ে গেছেন।
   mailer:
     general:
       closing:
         formal: ধন্যবাদান্তে,
         informal: ভালো থাকবেন,
       creation:
+        link_with_word_count: "%{creation_link} (%{word_count})"
         title_with_chapter_number: "%{title}-এর %{position} অধ্যায়"
+        title_with_word_count: '"%{creation_title}" (%{word_count})'
+        word_count:
+          one: "%{count} শব্দ"
+          other: "%{count} শব্দ"
       footer:
         general:
           html:
@@ -27,6 +109,7 @@ bn:
           addressed: নমস্কার, %{name}!
           unaddressed: নমস্কার!
         introductory: Archive of Our Own – AO3(আমাদের নিজস্ব সংগ্রহশালা) থেকে নমস্কার!
+      metadata_label_indicator: ": "
       signature:
         app_short_name: AO3
         open_doors: Open Doors (খোলা দরজা) বিভাগ
@@ -48,6 +131,34 @@ bn:
           আপনি এই ইমেলটিকে উপেক্ষা করতে পারেন এবং আপনার পূর্ববর্তী পাসওয়ার্ড কার্যকর
           থাকবে৷
   user_mailer:
+    admin_hidden_work_notification:
+      access: আপনার কর্ম যতক্ষণ লুকানো আছে, আপনি উপরে দেওয়া লিঙ্কের মাধ্যমে এটি দেখতে
+        পারবেন, কিন্তু এটি আপনার কর্ম-পৃষ্ঠায় তালিকাভুক্ত হবে না এবং AO3-এর অন্যান্য
+        ব্যবহারকারীদের জন্য দৃশ্যমান হবে না।
+      check_email: অনুগ্রহ করে আপনার আপনার ইমেল দেখুন, স্প্যাম ফোল্ডারটাও দেখবেন,
+        নীতি ও অপব্যবহার নিবারণ সমিতি হয়তো ইতিমধ্যেই আপনার কাজ কেন লুকিয়ে রাখা হয়েছে
+        তা ব্যাখ্যা করে আপনাকে ইমেল করেছে৷
+      contact_abuse: নীতি ও অপব্যবহার নিবারণ সমিতির সঙ্গে যোগাযোগ করুন
+      html:
+        help: আপনি যদি অনিশ্চিত হন যে আপনার কর্ম কেন লুকানো হয়েছে, এবং আপনি এই বিষয়ে
+          আরো খবর না পেয়ে থাকলে, অনুগ্রহ করে সরাসরি %{contact_abuse_link}।
+        hidden: আপনার কর্ম %{title} নীতি ও অপব্যবহার নিবারণ সমিতি দ্বারা লুকানো হয়েছে
+          এবং আর সর্বজনীনভাবে দৃশ্যমান নেই।
+        tos_violation: AO3-র %{tos_link} লঙ্ঘনের কারণে আপনার কর্ম লুকানো হলে সেই লঙ্ঘন
+          সংশোধন করার জন্য আপনাকে ব্যবস্থা নিতে হবে। পরিষেবা প্রাপ্তির শর্তাবলী মেনে
+          চলতে ব্যর্থ হলে AO3 থেকে আপনার কর্ম মুছে ফেলা হতে পারে।
+      subject: "[%{app_name}] আপনার কর্ম নীতি ও অপব্যবহার নিবারণ সমিতি দ্বারা লুকানো
+        হয়েছে"
+      text:
+        help: 'আপনি যদি অনিশ্চিত হন আপনার কর্ম কেন লুকানো হয়েছে, এবং আপনি এই বিষয়ে
+          আর খবর না পেয়ে থাকেন, তাহলে অনুগ্রহ করে সরাসরি নীতি ও অপব্যবহার নিবারণ
+          সমিতির সাথে যোগাযোগ করুন: %{contact_abuse_link}।'
+        hidden: আপনার কর্ম "%{title}" (%{work_url}) নীতি ও অপব্যবহার নিবারণ সমিতির
+          দ্বারা লুকানো হয়েছে এবং আর সর্বজনীনভাবে দৃশ্যমান নয়৷
+        tos_violation: AO3-র %{tos_link} লঙ্ঘনের কারণে আপনার কর্ম লুকানো হয়ে থাকলে
+          সেই লঙ্ঘন সংশোধন করার জন্য আপনাকে ব্যবস্থা নিতে হবে। পরিষেবা প্রাপ্তির শর্তাবলী
+          মেনে চলতে ব্যর্থ হলে AO3 থেকে আপনার কর্ম মুছে ফেলা হতে পারে।
+      tos: পরিষেবা প্রাপ্তির শর্তাবলী
     anonymous_or_unrevealed_notification:
       anonymous_info: অজ্ঞাতনামা কর্ম সংযোজন (ট্যাগ) এর তালিকায় অন্তর্ভুক্ত হবে, কিন্তু
         আপনার কর্মের পাতায় প্রদর্শিত হবে না। কর্মের ভিতরে আপনার ব্যবহারকারী নাম “Anonymous”(অজ্ঞাতনামা)-তে
@@ -134,6 +245,10 @@ bn:
           জন্যে, অনুগ্রহ করে %{profile_url} যান।
         look_up: আপনি এই বরাদ্দ কর্মটি আপনার Assignments (বরাদ্দ কর্ম)-এর পাতাতে এখানে
           %{link} দেখতে পারেন।
+    change_email:
+      part1: "%{login}, আপনার অ্যাকাউন্টের সাথে সম্পর্কিত ইমেল অ্যাড্রেস %{email}-
+        টা পরিবর্তন করা হয়েছে"
+      subject: "[%{app_name}] ইমেল পরিবর্তন করা হয়েছে"
     collection_notification:
       assignments_sent:
         complete: সব অ্যাসাইনমেন্ট পাঠানো হয়ে গেছে।
@@ -247,3 +362,23 @@ bn:
           একজন বন্ধুকে আমন্ত্রণ জানাতে পারেন৷
       invitation_page_link_text: আপনার Invitations (আমন্ত্রণ) পৃষ্ঠা
       subject: "[%{app_name}] নতুন আমন্ত্রণ"
+    invite_request_declined:
+      main:
+        one: আমরা দুঃখিত যে আপনার নতুন নিমন্ত্রনপত্রের জন্যে অনুরোধ এই সময় পূরণ করা
+          সম্ভব নয়।
+        other: আমরা দুঃখিত যে আপনার %{count}-টি নতুন নিমন্ত্রনপত্রের জন্যে অনুরোধ
+          এই সময় পূরণ করা সম্ভব নয়।
+      reason: 'আপনার অনুরোধ ছিল:'
+      subject: "[%{app_name}] সংযোজিত নিমন্ত্রণপত্রের অনুরোধ প্রত্যাখ্যান করা হয়েছে"
+    recipient_notification:
+      html:
+        collection: AO3–তে %{collection_link} সংকলনে আপনার জন্য একটি উপহার কর্ম প্রকাশ
+          করা হয়েছে!
+      no_collection: AO3-তে আপনার জন্য একটি উপহার কর্ম প্রকাশিত হয়েছে!
+      subject:
+        collection: "[%{app_name}][%{collection_title}] আপনার জন্য %{collection_title}
+          থেকে একটি উপহার কর্ম"
+        no_collection: "[%{app_name}] আপনার জন্য একটি উপহার কর্ম"
+      text:
+        collection: আপনার জন্য একটি উপহার কর্ম (%{collection_url}) AO3-তে "%{collection_title}"
+          সংকলনে প্রকাশ করা হয়েছে!

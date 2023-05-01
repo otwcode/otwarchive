@@ -24,7 +24,7 @@
       <%= byline(work, visibility: "public") %>
 
 <% #### CACHE show/hide ####, if you update the key edit lib/tasks/memcached.rake %>
-<% cache("#{work.cache_key}-#{Work.work_blurb_version(work.id)}-#{hide_warnings?(work) ? 'nowarn' : 'showwarn'}-#{hide_freeform?(work)  ? 'nofreeform' : 'showfreeform'}-v8", skip_digest: true) do %>
+<% cache("#{work.cache_key}-#{Work.work_blurb_version(work.id)}-#{hide_warnings?(work) ? 'nowarn' : 'showwarn'}-#{hide_freeform?(work)  ? 'nofreeform' : 'showfreeform'}-v9", skip_digest: true) do %>
 
       <% tag_groups = work.tag_groups %>
 
@@ -90,8 +90,8 @@
 <% end %>
 <% #### END CACHE show/hide %>
 
-<% #### CACHE stats ####, if you update the key edit features/step_definitions/work_search_steps.rb %>
-<% cache("#{work.cache_key}/stats-v2", expires_in: 1.hour, skip_digest: true) do %>
+<% #### CACHE stats #### %>
+<% cache("#{work.cache_key}/stats-v3", expires_in: 1.hour, skip_digest: true) do %>
   <% unless work.approved_collections.empty? %>
     <dt class="collections"><%= ts('Collections') %>:</dt>
     <dd class="collections"><%= link_to work.approved_collections.length, work_collections_path(work) %></dd>
@@ -99,12 +99,12 @@
 
   <% if work.count_visible_comments > 0 %>
     <dt class="comments"><%= ts('Comments') %>:</dt>
-    <dd class="comments"><%= link_to work.count_visible_comments, work.chapter_total_display.to_i > 1 ? work_path(work, anchor: "comments", show_comments: true, view_full_work: "true") : work_path(work, anchor: "comments", show_comments: true) %></dd>
+    <dd class="comments"><%= link_to work.count_visible_comments, work.number_of_posted_chapters > 1 ? work_path(work, anchor: "comments", show_comments: true, view_full_work: "true") : work_path(work, anchor: "comments", show_comments: true) %></dd>
   <% end %>
 
   <% if work.all_kudos_count > 0 %>
     <dt class="kudos"><%= ts('Kudos') %>:</dt>
-    <dd class="kudos"><%= link_to work.all_kudos_count.to_s, work.chapter_total_display.to_i > 1 ? work_path(work, anchor: "kudos", view_full_work: "true") : work_path(work, anchor: "kudos") %></dd>
+    <dd class="kudos"><%= link_to work.all_kudos_count.to_s, work.number_of_posted_chapters > 1 ? work_path(work, anchor: "kudos", view_full_work: "true") : work_path(work, anchor: "kudos") %></dd>
 
   <% end %>
   <% if (bookmark_count = work.public_bookmarks_count) > 0 %>
