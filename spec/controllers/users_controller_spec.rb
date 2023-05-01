@@ -51,9 +51,9 @@ describe UsersController do
     end
 
     context "with an invalid username" do
-    it "raises an error" do
-      expect do
-        get :show, params: { id: "nobody" }
+      it "raises an error" do
+        expect do
+          get :show, params: { id: "nobody" }
         end.to raise_error ActiveRecord::RecordNotFound
       end
     end
