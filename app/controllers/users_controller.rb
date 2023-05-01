@@ -20,8 +20,7 @@ class UsersController < ApplicationController
   # GET /users/1
   def show
     if @user.blank?
-      flash[:error] = ts('Sorry, could not find this user.')
-      redirect_to(search_people_path) && return
+      raise ActiveRecord::RecordNotFound, "Couldn't find user named '#{params[:id]}'"
     end
 
     @page_subtitle = @user.login
