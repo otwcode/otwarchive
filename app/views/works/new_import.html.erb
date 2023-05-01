@@ -143,24 +143,26 @@
       </dd>
 
       <dt class="permissions comments">
-        <%= t("comments.commentable.permissions.options.label") %>
+        <%= t("comments.commentable.permissions.options.multiple_works_label") %>
         <%= link_to_help "who-can-comment-on-this-work" %>
       </dt>
       <dd class="permissions comments">
-        <ul>
-          <li>
-            <%= radio_button_tag "comment_permissions", "enable_all", true %>
-            <%= label_tag "comment_permissions_enable_all", t("comments.commentable.permissions.options.enable_all") %>
-          </li>
-          <li>
-            <%= radio_button_tag "comment_permissions", "disable_anon" %>
-            <%= label_tag "comment_permissions_disable_anon", t("comments.commentable.permissions.options.disable_anon") %>
-          </li>
-          <li>
-            <%= radio_button_tag "comment_permissions", "disable_all" %>
-            <%= label_tag "comment_permissions_disable_all", t("comments.commentable.permissions.options.disable_all") %>
-          </li>
-        </ul>
+        <fieldset>
+          <ul>
+            <li>
+              <%= radio_button_tag "comment_permissions", "enable_all", true %>
+              <%= label_tag "comment_permissions_enable_all", t("comments.commentable.permissions.options.enable_all") %>
+            </li>
+            <li>
+              <%= radio_button_tag "comment_permissions", "disable_anon" %>
+              <%= label_tag "comment_permissions_disable_anon", t("comments.commentable.permissions.options.disable_anon") %>
+            </li>
+            <li>
+              <%= radio_button_tag "comment_permissions", "disable_all" %>
+              <%= label_tag "comment_permissions_disable_all", t("comments.commentable.permissions.options.disable_all") %>
+            </li>
+          </ul>
+        </fieldset>
       </dd>
     </dl>
   </fieldset>

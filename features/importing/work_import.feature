@@ -148,7 +148,7 @@ Feature: Import Works
 
   Scenario: Imported works can be set to restricted
     When I start importing "http://import-site-with-tags" with a mock website
-      And I check "restricted"
+      And I check "Only show imported works to registered users"
       And I press "Import"
       And I press "Post"
     When I am logged out
