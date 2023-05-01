@@ -100,7 +100,7 @@ gem 'phraseapp-in-context-editor-ruby', '>=1.0.6'
 
 # For URL mangling
 gem 'addressable'
-gem 'audited', '~> 4.4'
+gem 'audited', '~> 5.3'
 
 # For controlling application behavour dynamically
 gem 'rollout'
