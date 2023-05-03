@@ -19,7 +19,7 @@ class AddSpamToComments < ActiveRecord::Migration[6.0]
         DROP TABLE IF EXISTS `#{database}`.`_comments_old`;
       PTOSC
     else
-      add_column :comments, :spam, :boolean, default: 0, null: false
+      add_column :comments, :spam, :boolean, default: false, null: false
     end
   end
 
