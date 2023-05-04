@@ -1,5 +1,4 @@
 class Collection < ApplicationRecord
-  include ActiveModel::ForbiddenAttributesProtection
   include Filterable
   include UrlHelpers
   include WorksOwner
@@ -116,7 +115,7 @@ class Collection < ApplicationRecord
   end
 
   validates_presence_of :name, message: ts("Please enter a name for your collection.")
-  validates_uniqueness_of :name, case_sensitive: false, message: ts('Sorry, that name is already taken. Try again, please!')
+  validates :name, uniqueness: { message: ts("Sorry, that name is already taken. Try again, please!") }
   validates_length_of :name,
     minimum: ArchiveConfig.TITLE_MIN,
     too_short: ts("must be at least %{min} characters long.", min: ArchiveConfig.TITLE_MIN)
@@ -425,5 +424,4 @@ class Collection < ApplicationRecord
   def clear_icon
     self.icon = nil if delete_icon? && !icon.dirty?
   end
-
 end

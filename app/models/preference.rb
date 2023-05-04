@@ -1,5 +1,5 @@
 class Preference < ApplicationRecord
-  include ActiveModel::ForbiddenAttributesProtection
+  self.ignored_columns = [:automatically_approve_collections]
 
   belongs_to :user
   belongs_to :skin

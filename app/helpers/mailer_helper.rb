@@ -103,7 +103,7 @@ module MailerHelper
   # emails.
   def creation_title(creation)
     if creation.is_a?(Chapter)
-      ts("Chapter %{position} of %{title}",
+      t("mailer.general.creation.title_with_chapter_number",
          position: creation.position, title: creation.work.title)
     else
       creation.title
@@ -162,6 +162,8 @@ module MailerHelper
     "#{work_tag_metadata_label(tags)}#{work_tag_metadata_list(tags)}"
   end
 
+  # TODO: We're using this for labels in set_password_notification, too. Let's
+  # take the "work" out of the name.
   def style_work_metadata_label(text)
     style_bold(work_metadata_label(text))
   end

@@ -100,18 +100,39 @@ describe CollectionItemsController do
     end
   end
 
-  describe "#destroy" do
-    let(:approved_work) { create(:work) }
-    let(:approved_work_item) { collection.collection_items.create(item: approved_work) }
+  describe "POST #create" do
+    context "when logged in as the collection maintainer" do
+      before { fake_login_known_user(collection.owners.first.user) }
 
-    context "destroy" do
-      let(:owner) { collection.owners.first.user }
+      context "when the item is a work" do
+        let(:work) { create(:work) }
 
-      it "removes things" do
-        fake_login_known_user(owner)
-        delete :destroy, params: { id: approved_work_item.id, work_id: approved_work.id }
-        it_redirects_to_with_notice(collection_items_path(collection), "Item completely removed from collection " + collection.title + ".")
-        expect(CollectionItem.where(item_id: approved_work.id)).to be_empty
+        let(:params) do
+          {
+            collection_names: collection.name,
+            work_id: work.id
+          }
+        end
+
+        context "when the creator does not allow invitations" do
+          it "does not create an invitation" do
+            post :create, params: params
+            it_redirects_to_with_error(work, "This item could not be invited.")
+            expect(work.reload.collections).to be_empty
+          end
+        end
+
+        context "when the creator allows invitations" do
+          before do
+            work.users.each { |user| user.preference.update!(allow_collection_invitation: true) }
+          end
+
+          it "creates an invitation" do
+            post :create, params: params
+            it_redirects_to_simple(work)
+            expect(work.reload.collections).to include(collection)
+          end
+        end
       end
     end
   end

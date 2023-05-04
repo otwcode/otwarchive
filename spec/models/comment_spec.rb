@@ -166,4 +166,102 @@ describe Comment do
       end
     end
   end
+
+  describe "#create" do
+    context "as a tag wrangler" do
+      let(:tag_wrangler) { create(:tag_wrangler) }
+
+      shared_examples "updates last wrangling activity" do
+        it "tracks last wrangling activity", :frozen do
+          expect(tag_wrangler.last_wrangling_activity.updated_at).to eq(Time.now.utc)
+        end
+      end
+
+      context "direct parent is a tag" do
+        before { create(:comment, :on_tag, pseud: tag_wrangler.default_pseud) }
+
+        include_examples "updates last wrangling activity"
+      end
+
+      context "ultimate parent is indirectly a tag" do
+        let(:parent_comment) { create(:comment, :on_tag) }
+
+        before { create(:comment, commentable: parent_comment, pseud: tag_wrangler.default_pseud) }
+
+        include_examples "updates last wrangling activity"
+      end
+
+      shared_examples "does not update last wrangling activity" do
+        it "does not track last wrangling activity" do
+          expect(tag_wrangler.last_wrangling_activity).to be_nil
+        end
+      end
+
+      context "parent is a work" do
+        before { create(:comment, pseud: tag_wrangler.default_pseud) }
+
+        include_examples "does not update last wrangling activity"
+      end
+
+      context "parent is an admin comment" do
+        before { create(:comment, :on_admin_post, pseud: tag_wrangler.default_pseud) }
+
+        include_examples "does not update last wrangling activity"
+      end
+    end
+
+    context "as a non-tag wrangler" do
+      let(:user) { create(:archivist) }
+
+      context "parent is a tag" do
+        before { create(:comment, :on_tag, pseud: user.default_pseud) }
+
+        it "does not update last wrangling activity" do
+          expect(user.last_wrangling_activity).to be_nil
+        end
+      end
+    end
+
+    context "as non-user" do
+      context "parent is a tag" do
+        before { create(:comment, :by_guest, :on_tag) }
+
+        it "does not update last wrangling activity" do
+          expect(LastWranglingActivity.all).to be_empty
+        end
+      end
+    end
+  end
+
+  describe "#update" do
+    context "as a tag wrangler" do
+      let(:tag_wrangler) { create(:tag_wrangler) }
+
+      context "direct parent is a tag" do
+        let!(:comment) { create(:comment, :on_tag, pseud: tag_wrangler.default_pseud) }
+
+        it "does not update last wrangling activity" do
+          expect do
+            comment.update(comment_content: Faker::Lorem.sentence(word_count: 25))
+          end.not_to change { tag_wrangler.reload.last_wrangling_activity.updated_at }
+        end
+      end
+    end
+  end
+
+  describe "#destroy" do
+    context "as a tag wrangler" do
+      let(:tag_wrangler) { create(:tag_wrangler) }
+
+      context "direct parent is a tag" do
+        let!(:comment) { create(:comment, :on_tag, pseud: tag_wrangler.default_pseud) }
+
+        it "does not update last wrangling activity" do
+          expect do
+            comment.destroy
+          end.not_to change { tag_wrangler.reload.last_wrangling_activity.updated_at }
+        end
+      end
+    end
+  end
 end

@@ -65,12 +65,14 @@ Feature: Display autocomplete for tags
 
   @javascript
   Scenario: Collection autocomplete shows collection title and name
-    Given I have the collection "Issue" with name "jb_fletcher"
-      And I have the collection "Ïssue" with name "robert_stack"
-      And I am logged in as "Scott" with password "password"
+    Given I am logged in as "Scott" with password "password"
       And I post the work "All The Nice Things"
-      And I view the work "All The Nice Things"
-      And I follow "Add To Collections"
+      And I set my preferences to allow collection invitations
+      And I have the collection "Issue" with name "jb_fletcher"
+      And I have the collection "Ïssue" with name "robert_stack"
+      And I am logged in as "moderator"
+    When I view the work "All The Nice Things"
+      And I follow "Invite To Collections"
       And I enter "Issue" in the "Collection name(s)" autocomplete field
     Then I should see "jb_fletcher" in the autocomplete
       And I should see "robert_stack" in the autocomplete

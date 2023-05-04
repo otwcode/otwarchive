@@ -226,11 +226,11 @@ Feature: User Authentication
     Then I should see "Successfully logged in."
       And I should see "You'll stay logged in for 2 weeks even if you close your browser"
 
-  Scenario: Passwords cannot be reset for users who have been given the protected role due to trolling or harassment.
+  Scenario Outline: Passwords cannot be reset for users with certain roles.
     Given the following activated user exists
       | login  | email            |
       | target | user@example.com |
-      And the user "target" is a protected user
+      And the user "target" <role>
     When I am on the home page
       And I follow "Forgot password?"
       And I fill in "Email address or user name" with "target"
@@ -244,3 +244,26 @@ Feature: User Authentication
     Then I should be on the home page
       And I should see "Password resets are disabled for that user."
       And 0 emails should be delivered
+
+    Examples:
+      | role                   |
+      | is a protected user    |
+      | has the no resets role |
+
+  Scenario: Admin cannot log in or reset password as ordinary user.
+    Given the following admin exists
+      | login | password      |
+      | admin | adminpassword |
+    When I go to the login page
+      And I fill in "User name or email" with "admin"
+      And I fill in "Password" with "adminpassword"
+      And I press "Log In"
+    Then I should not see "Successfully logged in"
+      And I should see "The password or user name you entered doesn't match our records."
+    When I am logged in as an admin
+      And I go to the new user password page
+    Then I should be on the homepage
+      And I should see "Please log out of your admin account first!"
+    When I go to the edit user password page
+    Then I should be on the homepage
+      And I should see "Please log out of your admin account first!"

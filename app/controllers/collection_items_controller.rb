@@ -1,26 +1,9 @@
 class CollectionItemsController < ApplicationController
   before_action :load_collection
   before_action :load_user, only: [:update_multiple]
-  before_action :load_item_and_collection, only: [:destroy]
   before_action :load_collectible_item, only: [:new, :create]
-  before_action :allowed_to_destroy, only: [:destroy]
 
   cache_sweeper :collection_sweeper
-
-  def load_item_and_collection
-    if params[:collection_item]
-      @collection_item = CollectionItem.find(collection_item_params[:id])
-    else
-      @collection_item = CollectionItem.find(params[:id])
-    end
-    not_allowed(@collection) and return unless @collection_item
-    @collection = @collection_item.collection
-  end
-
-
-  def allowed_to_destroy
-    @collection_item.user_allowed_to_destroy?(current_user) || not_allowed(@collection)
-  end
 
   def index
 
@@ -80,6 +63,10 @@ class CollectionItemsController < ApplicationController
     unless @item
       flash[:error] = ts("What did you want to add to a collection?")
       redirect_to(request.env["HTTP_REFERER"] || root_path) and return
+    end
+    if @item.respond_to?(:allow_collection_invitation?) && !@item.allow_collection_invitation?
+      flash[:error] = t(".invitation_not_sent", default: "This item could not be invited.")
+      redirect_to(@item) and return
     end
     # for each collection name
     # see if it exists, is open, and isn't already one of this item's collections
@@ -206,23 +193,7 @@ class CollectionItemsController < ApplicationController
     end
   end
 
-  def destroy
-    @user = User.find_by(login: params[:user_id]) if params[:user_id]
-    @collectible_item = @collection_item.item
-    @collection_item.destroy
-    flash[:notice] = ts("Item completely removed from collection %{title}.", title: @collection.title)
-    if @user
-      redirect_to user_collection_items_path(@user) and return
-    elsif (@collection.user_is_maintainer?(current_user))
-      redirect_to collection_items_path(@collection) and return
-    end
-  end
-
   private
-
-  def collection_item_params
-    params.require(:collection_item).permit(:id)
-  end
 
   def user_update_multiple_params
     allowed = %i[user_approval_status remove]
