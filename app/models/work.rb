@@ -772,12 +772,6 @@ class Work < ApplicationRecord
     return !self.is_wip
   end
 
-  # 1/1, 2/3, 5/?, etc.
-  def chapter_total_display
-    current = self.posted? ? self.number_of_posted_chapters : 1
-    current.to_s + '/' + self.wip_length.to_s
-  end
-
   # Set the value of word_count to reflect the length of the chapter content
   # Called before_save
   def set_word_count(preview = false)
