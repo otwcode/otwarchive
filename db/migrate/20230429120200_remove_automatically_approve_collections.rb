@@ -13,6 +13,7 @@ class RemoveAutomaticallyApproveCollections < ActiveRecord::Migration[6.0]
           --max-load Threads_running=15 --critical-load Threads_running=100 \\
           --set-vars innodb_lock_wait_timeout=2 --alter-foreign-keys-method=auto \\
           --execute
+          
         Table Deletion Command:
         
         DROP TABLE IF EXISTS `#{database}`.`_preferences_old`;
@@ -36,6 +37,7 @@ class RemoveAutomaticallyApproveCollections < ActiveRecord::Migration[6.0]
           --max-load Threads_running=15 --critical-load Threads_running=100 \\
           --set-vars innodb_lock_wait_timeout=2 --alter-foreign-keys-method=auto \\
           --execute
+          
         Table Deletion Command:
         
         DROP TABLE IF EXISTS `#{database}`.`_preferences_old`;
