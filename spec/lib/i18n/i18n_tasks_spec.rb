@@ -1,5 +1,5 @@
 require "i18n/tasks"
-require "./lib/i18n_newlines_tasks.rb"
+require "support/i18n_newlines_tasks"
 
 describe I18n do
   let(:i18n) { I18n::Tasks::BaseTask.new }
@@ -25,6 +25,7 @@ describe I18n do
     expect(non_normalized).to be_empty, error_message
   end
 
+  # We want to keep formatting out of I18n-ized strings, and one paragraph per key.
   it "en does not have values with newlines" do
     error_message = "The following locale keys have values that contain newlines:\n" \
                     "#{newlines.key_names(root: true)}"

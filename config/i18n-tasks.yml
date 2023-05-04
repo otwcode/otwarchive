@@ -13,7 +13,7 @@ data:
   ## Provide a custom adapter:
   # adapter: I18n::Tasks::Data::FileSystem
 
-  # Locale files or `File.find` patterns where translations are read from:
+  # Locale files or `Find.find` patterns where translations are read from:
   read:
     - config/locales/**/en.yml
     - config/locales/phrase-exports/%{locale}.yml
@@ -53,7 +53,7 @@ data:
 
 # Find translate calls
 search:
-  ## Paths or `File.find` patterns to search in:
+  ## Paths or `Find.find` patterns to search in:
   # paths:
   #  - app/
 

@@ -186,7 +186,7 @@ module MailerHelper
   def work_tag_metadata_label(tags)
     return if tags.empty?
 
-    # i18n-tasks-use t('activerecord.models.archive_warning') # let i18n-tasks know the key is used
+    # i18n-tasks-use t('activerecord.models.archive_warning')
     # i18n-tasks-use t('activerecord.models.character')
     # i18n-tasks-use t('activerecord.models.fandom')
     # i18n-tasks-use t('activerecord.models.freeform')
