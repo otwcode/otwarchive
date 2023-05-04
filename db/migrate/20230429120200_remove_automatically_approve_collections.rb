@@ -5,6 +5,7 @@ class RemoveAutomaticallyApproveCollections < ActiveRecord::Migration[6.0]
 
       puts <<~PTSOC
         Schema Change Command:
+        
         pt-online-schema-change D=#{database},t=preferences \\
           --alter "DROP COLUMN automatically_approve_collections" \\
           --no-drop-old-table \\
@@ -13,6 +14,7 @@ class RemoveAutomaticallyApproveCollections < ActiveRecord::Migration[6.0]
           --set-vars innodb_lock_wait_timeout=2 --alter-foreign-keys-method=auto \\
           --execute
         Table Deletion Command:
+        
         DROP TABLE IF EXISTS `#{database}`.`_preferences_old`;
       PTSOC
     else
@@ -26,6 +28,7 @@ class RemoveAutomaticallyApproveCollections < ActiveRecord::Migration[6.0]
 
       puts <<~PTSOC
         Schema Change Command:
+        
         pt-online-schema-change D=#{database},t=preferences \\
           --alter "ADD COLUMN automatically_approve_collections BOOLEAN NOT NULL DEFAULT 0" \\
           --no-drop-old-table \\
@@ -34,6 +37,7 @@ class RemoveAutomaticallyApproveCollections < ActiveRecord::Migration[6.0]
           --set-vars innodb_lock_wait_timeout=2 --alter-foreign-keys-method=auto \\
           --execute
         Table Deletion Command:
+        
         DROP TABLE IF EXISTS `#{database}`.`_preferences_old`;
       PTSOC
     else
