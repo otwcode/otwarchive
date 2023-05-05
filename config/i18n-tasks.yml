@@ -114,7 +114,6 @@ search:
 
 ## Do not consider these keys missing:
 ignore_missing:
-  - comments.check_permission_to_modify_{frozen,hidden}_status.permission_denied
   ## All of the following keys are using default values defined in the respective .rb files
   ## TODO: Move the default values to the .yml files
   # File: app/controllers/admin/admin_invitations_controller.rb
