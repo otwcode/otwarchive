@@ -211,22 +211,18 @@ class CommentsController < ApplicationController
   def check_permission_to_modify_frozen_status
     return if permission_to_modify_frozen_status
 
-    if action_name == "freeze"
-      flash[:error] = t("comments.freeze.permission_denied")
-    elsif action_name == "unfreeze"
-      flash[:error] = t("comments.unfreeze.permission_denied")
-    end
+    # i18n-tasks-use t('comments.freeze.permission_denied')
+    # i18n-tasks-use t('comments.unfreeze.permission_denied')
+    flash[:error] = t("comments.#{action_name}.permission_denied")
     redirect_back(fallback_location: root_path)
   end
 
   def check_permission_to_modify_hidden_status
     return if policy(@comment).can_hide_comment?
 
-    if action_name == "hide"
-      flash[:error] = t("comments.hide.permission_denied")
-    elsif action_name == "unhide"
-      flash[:error] = t("comments.unhide.permission_denied")
-    end
+    # i18n-tasks-use t('comments.hide.permission_denied')
+    # i18n-tasks-use t('comments.unhide.permission_denied')
+    flash[:error] = t("comments.#{action_name}.permission_denied")
     redirect_back(fallback_location: root_path)
   end
 
