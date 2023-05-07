@@ -83,7 +83,6 @@ en:
         bookmark/collection_items:
           format: "%{message}"
         collection_item:
-          format: "%{message}"
           attributes:
             collection:
               blank: The collection can't be blank.
