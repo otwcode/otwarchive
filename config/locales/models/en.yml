@@ -80,6 +80,7 @@ en:
               self: Sorry, you can't block yourself.
             blocked_id:
               taken: You have already blocked that user.
+          format: "%{message}"
         bookmark/collection_items:
           format: "%{message}"
         collection_item:
