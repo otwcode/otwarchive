@@ -80,6 +80,8 @@ Feature: Collection
       And I invite the work "Over the Limit" to the collection "Favorites"
     Then I should see "This work has been invited to your collection (Favorites)."
     When I am logged in as the author of "Over the Limit"
+      # Make sure the cache will expire when accepting the invitation:
+      And it is currently 1 second from now
       And I accept the invitation for my work in the collection "Favorites"
       And I submit
     Then I should see "Collection status updated!"
