@@ -51,9 +51,9 @@ class Pseud < ApplicationRecord
   has_many :tag_set_ownerships, dependent: :destroy
   has_many :tag_sets, through: :tag_set_ownerships
   has_many :challenge_signups, dependent: :destroy
-  has_many :gifts, -> { where(rejected: false) }
+  has_many :gifts, -> { where(rejected: false) }, inverse_of: :pseud, dependent: :destroy
   has_many :gift_works, through: :gifts, source: :work
-  has_many :rejected_gifts, -> { where(rejected: true) }, class_name: "Gift"
+  has_many :rejected_gifts, -> { where(rejected: true) }, class_name: "Gift", inverse_of: :pseud, dependent: :destroy
   has_many :rejected_gift_works, through: :rejected_gifts, source: :work
 
   has_many :offer_assignments, -> { where("challenge_assignments.sent_at IS NOT NULL") }, through: :challenge_signups

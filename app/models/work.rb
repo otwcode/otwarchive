@@ -772,12 +772,6 @@ class Work < ApplicationRecord
     return !self.is_wip
   end
 
-  # 1/1, 2/3, 5/?, etc.
-  def chapter_total_display
-    current = self.posted? ? self.number_of_posted_chapters : 1
-    current.to_s + '/' + self.wip_length.to_s
-  end
-
   # Set the value of word_count to reflect the length of the chapter content
   # Called before_save
   def set_word_count(preview = false)
@@ -1233,5 +1227,11 @@ class Work < ApplicationRecord
   def nonfiction
     nonfiction_tags = [125773, 66586, 123921, 747397] # Essays, Nonfiction, Reviews, Reference
     (filter_ids & nonfiction_tags).present?
+  end
+
+  # Determines if this work allows invitations to collections,
+  # meaning that at least one of the creators has opted-in.
+  def allow_collection_invitation?
+    users.any? { |user| user.preference.allow_collection_invitation }
   end
 end

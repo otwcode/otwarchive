@@ -120,7 +120,8 @@ group :test do
   gem "capybara"
   gem "cucumber"
   gem 'database_cleaner'
-  gem 'poltergeist'
+  gem "selenium-webdriver"
+  gem "webdrivers"
   gem 'capybara-screenshot'
   gem 'cucumber-rails', require: false
   gem 'launchy'    # So you can do Then show me the page
@@ -132,7 +133,7 @@ group :test do
   gem 'cucumber-timecop', require: false
   # Code coverage
   gem "simplecov"
-  gem "codecov", require: false
+  gem "simplecov-cobertura", require: false
   gem 'email_spec', '1.6.0'
   gem "n_plus_one_control"
 end
@@ -144,6 +145,7 @@ group :test, :development do
   gem 'whiny_validation'
   gem "factory_bot_rails"
   gem 'minitest'
+  gem "i18n-tasks", require: false
 end
 
 group :development do

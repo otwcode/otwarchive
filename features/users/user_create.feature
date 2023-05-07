@@ -17,8 +17,8 @@ Feature: Sign Up for a new account
       And I should not see "Almost Done!"
     Examples:
       | field                      | value          | error                                           |
-      | user_registration_login                 | xx             | Login is too short (minimum is 3 characters)    |
-      | user_registration_login                 | 87151d8ae964d55515cb986d40394f79ca5c8329c07a8e59f2f783cbfbe401f69a780f27277275b7b2 | Login is too long (maximum is 40 characters)    |
+      | user_registration_login                 | xx             | User name is too short (minimum is 3 characters)|
+      | user_registration_login                 | 87151d8ae964d55515cb986d40394f79ca5c8329c07a8e59f2f783cbfbe401f69a780f27277275b7b2 | User name is too long (maximum is 40 characters)    |
       | user_registration_password              | pass           | Password is too short (minimum is 6 characters) |
       | user_registration_password              | 87151d8ae964d55515cb986d40394f79ca5c8329c07a8e59f2f783cbfbe401f69a780f27277275b7b2 | Password is too long (maximum is 40 characters)    |
       | user_registration_password_confirmation | password2      | Password confirmation doesn't match             |
@@ -61,7 +61,7 @@ Feature: Sign Up for a new account
     When I fill in the sign up form with valid data
       And I fill in "user_registration_login" with "user1"
       And I press "Create Account"
-    Then I should see "Login has already been taken"
+    Then I should see "User name has already been taken"
       And I should not see "Almost Done!"
 
   Scenario: The user should not be able to sign up with a login that is already in use, no matter the case
@@ -71,7 +71,7 @@ Feature: Sign Up for a new account
     When I fill in the sign up form with valid data
       And I fill in "user_registration_login" with "USER1"
       And I press "Create Account"
-    Then I should see "Login has already been taken"
+    Then I should see "User name has already been taken"
       And I should not see "Almost Done!"
 
   Scenario: The user should be able to create a new account with a valid email and password

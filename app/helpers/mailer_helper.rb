@@ -186,6 +186,12 @@ module MailerHelper
   def work_tag_metadata_label(tags)
     return if tags.empty?
 
+    # i18n-tasks-use t('activerecord.models.archive_warning')
+    # i18n-tasks-use t('activerecord.models.character')
+    # i18n-tasks-use t('activerecord.models.fandom')
+    # i18n-tasks-use t('activerecord.models.freeform')
+    # i18n-tasks-use t('activerecord.models.rating')
+    # i18n-tasks-use t('activerecord.models.relationship')
     type = tags.first.type
     t("activerecord.models.#{type.underscore}", count: tags.count) + t("mailer.general.metadata_label_indicator")
   end

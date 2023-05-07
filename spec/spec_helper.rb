@@ -187,3 +187,10 @@ def create_invalid(*args, **kwargs)
     object.save!(validate: false)
   end
 end
+
+Shoulda::Matchers.configure do |config|
+  config.integrate do |with|
+    with.test_framework :rspec
+    with.library :rails
+  end
+end

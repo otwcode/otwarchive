@@ -42,17 +42,20 @@ Then /^show me the (\d+)(?:st|nd|rd|th) form$/ do |index|
   puts "\n" + page.all("#main form")[(index.to_i-1)].native.inner_html
 end
 
+Then "I should see the {string} form" do |form_id|
+  expect(page).to have_css("form##{form_id}")
+end
+
+Then "I should not see the {string} form" do |form_id|
+  expect(page).not_to have_css("form##{form_id}")
+end
+
 Given /^I wait (\d+) seconds?$/ do |number|
   Kernel::sleep number.to_i
 end
 
 When "all AJAX requests are complete" do
   wait_for_ajax if @javascript
-end
-
-When 'the system processes jobs' do
-  #resque runs inline during testing. see resque.rb in initializers/gem-plugin_config
-  #Delayed::Worker.new.work_off
 end
 
 When 'I reload the page' do
@@ -151,23 +154,17 @@ end
 
 Then /^the "([^"]*)" checkbox(?: within "([^"]*)")? should be disabled$/ do |label, selector|
   with_scope(selector) do
-    field_disabled = find_field(label, disabled: true)
-    if field_disabled.respond_to? :should
-      field_disabled.should be_truthy
-    else
-      assert field_disabled
-    end
+    field = find_field(label, disabled: true)
+    expect(field).to be_present
+    expect(field.disabled?).to be_truthy
   end
 end
 
 Then /^the "([^"]*)" checkbox(?: within "([^"]*)")? should not be disabled$/ do |label, selector|
   with_scope(selector) do
-    field_disabled = find_field(label)['disabled']
-    if field_disabled.respond_to? :should
-      field_disabled.should be_falsey
-    else
-      assert !field_disabled
-    end
+    field = find_field(label)
+    expect(field).to be_present
+    expect(field.disabled?).to be_falsey
   end
 end
 
