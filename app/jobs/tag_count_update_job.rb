@@ -1,9 +1,6 @@
 class TagCountUpdateJob < RedisSetJob
   queue_as :tag_counts
 
-  retry_on ActiveRecord::Deadlocked, attempts: 10
-  retry_on ActiveRecord::LockWaitTimeout, attempts: 10
-
   def self.base_key
     "tag_update"
   end
