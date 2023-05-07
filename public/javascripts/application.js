@@ -432,7 +432,7 @@ function prepareDeleteLinks() {
 
 /// Kudos
 $j(document).ready(function() {
-  $j('#kudo_submit').on("click", function(event) {
+  $j('input#kudo_submit').on("click", function(event) {
     event.preventDefault();
 
     $j.ajax({
