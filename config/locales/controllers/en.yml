@@ -13,17 +13,15 @@ en:
       destroy:
         unblocked: You have unblocked the user %{name}.
   chapters:
+    draft_flash:
+      posted_work: This is a draft chapter in a posted work. It will be kept unless the work is deleted.
+      unposted_work_html: This is a draft chapter in an unposted work. The work will be <strong>scheduled for deletion</strong> on %{deletion_date}.
     show:
       anonymous: Anonymous
       chapter_position: " - Chapter %{position}"
       multifandom: Multifandom
       unrevealed: Mystery Work
       unspecified_fandom: No fandom specified
-    draft_flash:
-      posted_work:
-        "This is a draft chapter in a posted work. It will be kept unless the work is deleted."
-      unposted_work_html:
-        "This is a draft chapter in an unposted work. The work will be <strong>scheduled for deletion</strong> on %{deletion_date}."
   comments:
     check_blocked:
       parent: Sorry, you have been blocked by one or more of this work's creators.
