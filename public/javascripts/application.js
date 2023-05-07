@@ -577,10 +577,14 @@ $j(document).ready(function() {
 
 // FUNDRAISING THERMOMETER adapted from http://jsfiddle.net/GeekyJohn/vQ4Xn/
 function thermometer() {
-  $j('.announcement').has('.goal').each(function(){
+  var banners = $j('.announcement').filter(function(){
+                  return $j(this).closest('.userstuff').length === 0
+                })
+
+  banners.has('.goal').each(function(){
     var banner_content = $j(this).find('blockquote')
-        banner_goal_text = banner_content.find('span.goal').text()
-        banner_progress_text = banner_content.find('span.progress').text()
+        banner_goal_text = banner_content.find('span.goal').html()
+        banner_progress_text = banner_content.find('span.progress').html()
         if ($j(this).find('span.goal').hasClass('stretch')){
           stretch = true
         } else { stretch = false }
