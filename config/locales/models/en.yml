@@ -110,7 +110,6 @@ en:
         bookmark/collection_items:
           format: "%{message}"
         collection_item:
-          format: "%{message}"
           attributes:
             collection_id:
               taken: "The collection already contains this item."
