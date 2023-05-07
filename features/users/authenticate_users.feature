@@ -249,3 +249,21 @@ Feature: User Authentication
       | role                   |
       | is a protected user    |
       | has the no resets role |
+
+  Scenario: Admin cannot log in or reset password as ordinary user.
+    Given the following admin exists
+      | login | password      |
+      | admin | adminpassword |
+    When I go to the login page
+      And I fill in "User name or email" with "admin"
+      And I fill in "Password" with "adminpassword"
+      And I press "Log In"
+    Then I should not see "Successfully logged in"
+      And I should see "The password or user name you entered doesn't match our records."
+    When I am logged in as an admin
+      And I go to the new user password page
+    Then I should be on the homepage
+      And I should see "Please log out of your admin account first!"
+    When I go to the edit user password page
+    Then I should be on the homepage
+      And I should see "Please log out of your admin account first!"

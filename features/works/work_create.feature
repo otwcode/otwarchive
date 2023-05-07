@@ -411,3 +411,17 @@ Feature: Create Works
       And I fill in "Additional Tags" with "Additional Tag 1, Additional Tag 2"
       And I press "Post"
     Then I should see "Fandom, relationship, character, and additional tags must not add up to more than 7. Your work has 8 of these tags, so you must remove 1 of them."
+
+  @javascript
+  Scenario: "Please wait..." message disappears when validation errors are fixed
+    Given basic tags
+      And I am logged in as "test_user"
+    When I go to the new work page
+      And I fill in "Work Title" with "Unicorns Abound"
+      And I select "English" from "Choose a language"
+      And I fill in "Fandoms" with "Dallas"
+      And I press "Post"
+    Then I should see "Brevity is the soul of wit, but your content does have to be at least 10 characters long."
+      And I should see a button with text "Please wait..."
+    When I fill in "content" with "help there are unicorns everywhere"
+    Then I should see a button with text "Post"

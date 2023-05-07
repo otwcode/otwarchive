@@ -1,4 +1,6 @@
 <!--SEARCHBROWSE descriptive page name and system messages, descriptions, and instructions.-->
+<%= render "muted/muted_items_notice" %>
+
 <h2 class="heading">
   <% if @bookmarkable_items %>
     <%= search_header @bookmarkable_items, @search, "Bookmarked Item", @owner %>

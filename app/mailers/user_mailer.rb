@@ -216,6 +216,7 @@ class UserMailer < ApplicationMailer
     I18n.with_locale(Locale.find(@assigned_user.preference.preferred_locale).iso) do
       mail(
         to: @assigned_user.email,
+        # i18n-tasks-use t('user_mailer.challenge_assignment_notification.subject')
         subject: default_i18n_subject(app_name: ArchiveConfig.APP_SHORT_NAME, collection_title: @collection.title)
       )
     end
@@ -342,7 +343,7 @@ class UserMailer < ApplicationMailer
   def delete_work_notification(user, work)
     @user = user
     @work = work
-    download = Download.new(@work, mime_type: "text/html")
+    download = Download.new(@work, mime_type: "text/html", include_draft_chapters: true)
     html = DownloadWriter.new(download).generate_html
     html = ::Mail::Encodings::Base64.encode(html)
     attachments["#{download.file_name}.html"] = { content: html, encoding: "base64" }
@@ -362,7 +363,7 @@ class UserMailer < ApplicationMailer
   def admin_deleted_work_notification(user, work)
     @user = user
     @work = work
-    download = Download.new(@work, mime_type: "text/html")
+    download = Download.new(@work, mime_type: "text/html", include_draft_chapters: true)
     html = DownloadWriter.new(download).generate_html
     html = ::Mail::Encodings::Base64.encode(html)
     attachments["#{download.file_name}.html"] = { content: html, encoding: "base64" }
@@ -384,6 +385,7 @@ class UserMailer < ApplicationMailer
     I18n.with_locale(Locale.find(@user.preference.preferred_locale).iso) do
       mail(
         to: @user.email,
+        # i18n-tasks-use t('user_mailer.admin_hidden_work_notification.subject')
         subject: default_i18n_subject(app_name: ArchiveConfig.APP_SHORT_NAME)
       )
     end

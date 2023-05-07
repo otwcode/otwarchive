@@ -1,5 +1,78 @@
 ---
 hr:
+  activerecord:
+    attributes:
+      archive_warning:
+        name_with_colon:
+          few: 'Upozorenja:'
+          one: 'Upozorenje:'
+          other: 'Upozorenja:'
+      category:
+        name_with_colon:
+          few: 'Kategorije:'
+          one: 'Kategorija:'
+          other: 'Kategorija:'
+      character:
+        name_with_colon:
+          few: 'Lika:'
+          one: 'Lik:'
+          other: 'Likova:'
+      fandom:
+        name_with_colon:
+          few: 'Fandoma:'
+          one: 'Fandom:'
+          other: 'Fandoma:'
+      freeform:
+        name_with_colon:
+          few: 'Dodatne oznake:'
+          one: 'Dodatna oznaka:'
+          other: 'Dodatnih oznaka:'
+      rating:
+        name_with_colon: 'Ocjena:'
+      relationship:
+        name_with_colon:
+          few: 'Veze:'
+          one: 'Veza:'
+          other: 'Veza:'
+      work:
+        summary: Sažetak
+    models:
+      archive_warning:
+        few: Upozorenja
+        one: Upozorenje
+        other: Upozorenja
+      category:
+        few: Kategorije
+        one: Kategorija
+        other: Kategorija
+      chapter:
+        few: Poglavlja
+        one: Poglavlje
+        other: Poglavlja
+      character:
+        few: Lika
+        one: Lik
+        other: Likova
+      fandom:
+        few: Fandoma
+        one: Fandom
+        other: Fandoma
+      freeform:
+        few: Dodatne oznake
+        one: Dodatna oznaka
+        other: Dodatnih oznaka
+      rating:
+        few: Ocjene
+        one: Ocjena
+        other: Ocjena
+      relationship:
+        few: Veze
+        one: Veza
+        other: Veza
+      series:
+        few: Serije
+        one: Serija
+        other: Serija
   kudo_mailer:
     batch_kudo_notification:
       guest:
@@ -26,6 +99,14 @@ hr:
       closing:
         formal: Srdačno,
         informal: Lijep pozdrav,
+      creation:
+        link_with_word_count: "%{creation_link} (%{word_count})"
+        title_with_chapter_number: Poglavlje %{position} djela "%{title}"
+        title_with_word_count: '"%{creation_title}" (%{word_count})'
+        word_count:
+          few: "%{count} riječi"
+          one: "%{count} riječ"
+          other: "%{count} riječi"
       footer:
         general:
           html:
@@ -45,6 +126,7 @@ hr:
           addressed: Bok, %{name}!
           unaddressed: Bok!
         introductory: Pozdrav od Archive of Our Own – AO3 (Našeg vlastitog arhiva)!
+      metadata_label_indicator: ":"
       signature:
         app_short_name: AO3
         open_doors: Tim Open Doors (Otvorenih vrata)
@@ -370,20 +452,18 @@ hr:
           koja želite da budu preusmjerena, možete ih sva navesti u jednom mailu.)
     invite_increase_notification:
       body:
-        few: Samo vas želimo obavijestiti da imate %{count} nove pozivnice, koje se
+        few: Želimo vas obavijestiti da imate %{count} nove pozivnice, koje se mogu
+          koristiti za izradu novih računna na AO3. Možete pozvati prijatelje na %{invitation_page}.
+        one: Želimo vas obavijestiti da imate %{count} novu pozivnicu, koje se mogu
+          koristiti za izradu novih računa na AO3. Možete pozvati prijatelje na %{invitation_page}.
+        other: Želimo vas obavijestiti da imate %{count} novih pozivnica, koje se
           mogu koristiti za izradu novih računna na AO3. Možete pozvati prijatelje
           na %{invitation_page}.
-        one: Samo Vas želimo obavijestiti da imate %{count} novu pozivnicu, koje se
-          mogu koristiti za izradu novih računa na AO3. Možete pozvati prijatelje
-          na %{invitation_page}.
-        other: Samo vas želimo obavijestiti da imate %{count} nove pozivnice, koje
-          se mogu koristiti za izradu novih računna na AO3. Možete pozvati prijatelje
-          na %{invitation_page}.
-      invitation_page_link_text: vaša stranica pozivnica
+      invitation_page_link_text: stranica Your Invitations (tvoje pozivnice)
       subject: "[%{app_name}] Nove pozivnice"
     invite_request_declined:
       main:
-        few: Žao nam je što vas moramo obavijestiti da vaš zahtjev za %{count} novih
+        few: Žao nam je što vas moramo obavijestiti da vaš zahtjev za %{count} nova
           poziva trenutno ne može biti odobren.
         one: Žao nam je što vas moramo obavijestiti da vaš zahtjev za novim pozivom
           trenutno ne može biti odobren.

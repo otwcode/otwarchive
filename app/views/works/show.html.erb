@@ -19,7 +19,7 @@
 <!--/descriptions-->
 
 <!--subnav-->
-<% if can_access_admin_options? %>
+<% if policy(@work).show_admin_options? %>
   <%= render "admin/admin_options", item: @work %>
 <% end %>
 <!--/subnav-->
@@ -49,7 +49,7 @@
     <% inspired_by = get_inspired_by(@work) %>
     <% if !@work.endnotes.blank? || !@work.series.blank? || !inspired_by.empty? %>
     <!--afterword-->
-    <div class="afterword preface group" role="complementary">
+    <div class="afterword preface group">
       <% unless @work.endnotes.blank? %>
         <%= render :partial => 'works/work_endnotes' %>
       <% end %>

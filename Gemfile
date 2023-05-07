@@ -1,12 +1,12 @@
 source 'https://rubygems.org'
 
-ruby '2.7.3'
+ruby "3.0.5"
 
 gem 'test-unit', '~> 3.2'
 
 gem 'bundler'
 
-gem "rails", "~> 6.0.4"
+gem "rails", "~> 6.1.0"
 gem "rails-i18n"
 gem "rack", "~> 2.2"
 gem "sprockets", "< 4"
@@ -17,13 +17,7 @@ gem 'rails-controller-testing'
 
 # Database
 # gem 'sqlite3-ruby', require: 'sqlite3'
-gem 'mysql2', '0.5.2'
-
-#https://github.com/qertoip/transaction_retry
-# We don't use the isolation gem directly, but it needs to be
-# at the latest version to avoid errors
-gem 'transaction_isolation', '1.0.5'
-gem 'transaction_retry'
+gem "mysql2"
 
 gem 'rack-attack'
 
@@ -126,19 +120,20 @@ group :test do
   gem "capybara"
   gem "cucumber"
   gem 'database_cleaner'
-  gem 'poltergeist'
+  gem "selenium-webdriver"
+  gem "webdrivers"
   gem 'capybara-screenshot'
   gem 'cucumber-rails', require: false
   gem 'launchy'    # So you can do Then show me the page
   gem 'delorean'
   # Record and replay data from external URLs
   gem 'vcr', '~> 3.0', '>= 3.0.1'
-  gem 'webmock', '~> 3.7.6'
+  gem "webmock"
   gem 'timecop'
   gem 'cucumber-timecop', require: false
   # Code coverage
   gem "simplecov"
-  gem "codecov", require: false
+  gem "simplecov-cobertura", require: false
   gem 'email_spec', '1.6.0'
   gem "n_plus_one_control"
 end
@@ -150,6 +145,7 @@ group :test, :development do
   gem 'whiny_validation'
   gem "factory_bot_rails"
   gem 'minitest'
+  gem "i18n-tasks", require: false
 end
 
 group :development do

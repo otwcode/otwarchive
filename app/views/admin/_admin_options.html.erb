@@ -5,7 +5,7 @@
 
   <h3 class="landmark heading"><%= t(".landmark") %></h3>
   <ul class="management actions">
-    <% if admin_can_hide_creations? %>
+    <% if policy(item).hide? %>
       <li>
         <% if item.hidden_by_admin? %>
           <%= link_to t(".unhide.#{item_type}"),
@@ -19,12 +19,12 @@
       </li>
     <% end %>
     <% if @work.present? %>
-      <% if admin_can_edit_creations? %>
+      <% if policy(@work).edit_tags? %>
         <li>
           <%= link_to t(".edit_tags"), edit_tags_work_path(@work) %>
         </li>
       <% end %>
-      <% if admin_can_mark_creations_spam? %>
+      <% if policy(@work).set_spam? %>
         <li>
           <% if @work.spam? %>
             <%= link_to t(".not_spam"),
@@ -39,13 +39,13 @@
       <% end %>
     <% end %>
     <% if item.class == ExternalWork %>
-      <% if admin_can_edit_creations? %>
+      <% if policy(item).edit? %>
         <li>
           <%= link_to t(".edit.#{item_type}"), edit_external_work_path(item) %>
         </li>
       <% end %>
     <% end %>
-    <% if admin_can_destroy_creations? %>
+    <% if policy(item).destroy? %>
       <li>
         <%= link_to t(".delete.#{item_type}"),
                     admin_user_creation_path(item, creation_type: item.class),
