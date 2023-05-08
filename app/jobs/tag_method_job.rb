@@ -8,4 +8,8 @@ class TagMethodJob < InstanceMethodJob
   # trying to insert the same record at roughly the same time.
   retry_on ActiveRecord::RecordNotUnique,
            attempts: 3, wait: 5.minutes
+
+  # Try to prevent deadlocks and lock wait timeouts:
+  retry_on ActiveRecord::Deadlocked, attempts: 10, wait: 5.minutes
+  retry_on ActiveRecord::LockWaitTimeout, attempts: 10, wait: 5.minutes
 end
