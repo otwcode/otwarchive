@@ -581,7 +581,7 @@ $j(document).ready(function() {
 function thermometer() {
   var banners = $j('.announcement').filter(function(){
                   return $j(this).closest('.userstuff').length === 0;
-                })
+                });
 
   banners.has('.goal').each(function(){
     var banner_content = $j(this).find('blockquote');
