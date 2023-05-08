@@ -452,20 +452,18 @@ hr:
           koja želite da budu preusmjerena, možete ih sva navesti u jednom mailu.)
     invite_increase_notification:
       body:
-        few: Samo vas želimo obavijestiti da imate %{count} nove pozivnice, koje se
+        few: Želimo vas obavijestiti da imate %{count} nove pozivnice, koje se mogu
+          koristiti za izradu novih računna na AO3. Možete pozvati prijatelje na %{invitation_page}.
+        one: Želimo vas obavijestiti da imate %{count} novu pozivnicu, koje se mogu
+          koristiti za izradu novih računa na AO3. Možete pozvati prijatelje na %{invitation_page}.
+        other: Želimo vas obavijestiti da imate %{count} novih pozivnica, koje se
           mogu koristiti za izradu novih računna na AO3. Možete pozvati prijatelje
           na %{invitation_page}.
-        one: Samo Vas želimo obavijestiti da imate %{count} novu pozivnicu, koje se
-          mogu koristiti za izradu novih računa na AO3. Možete pozvati prijatelje
-          na %{invitation_page}.
-        other: Samo vas želimo obavijestiti da imate %{count} nove pozivnice, koje
-          se mogu koristiti za izradu novih računna na AO3. Možete pozvati prijatelje
-          na %{invitation_page}.
-      invitation_page_link_text: vaša stranica pozivnica
+      invitation_page_link_text: stranica Your Invitations (tvoje pozivnice)
       subject: "[%{app_name}] Nove pozivnice"
     invite_request_declined:
       main:
-        few: Žao nam je što vas moramo obavijestiti da vaš zahtjev za %{count} novih
+        few: Žao nam je što vas moramo obavijestiti da vaš zahtjev za %{count} nova
           poziva trenutno ne može biti odobren.
         one: Žao nam je što vas moramo obavijestiti da vaš zahtjev za novim pozivom
           trenutno ne može biti odobren.

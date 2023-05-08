@@ -384,13 +384,6 @@ public
     @page_title.html_safe
   end
 
-  # Define media for fandoms menu
-  before_action :set_media
-  def set_media
-    uncategorized = Media.uncategorized
-    @menu_media = Media.by_name - [Media.find_by_name(ArchiveConfig.MEDIA_NO_TAG_NAME), uncategorized] + [uncategorized]
-  end
-
   public
 
   #### -- AUTHORIZATION -- ####
@@ -530,7 +523,6 @@ public
   skip_before_action  :fetch_admin_settings,
                       :load_admin_banner,
                       :set_redirects,
-                      :set_media,
                       :store_location,
                       if: proc { %w(js json).include?(request.format) }
 
