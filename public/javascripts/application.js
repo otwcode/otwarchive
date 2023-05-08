@@ -4,7 +4,7 @@
 //things to do when the page loads
 $j(document).ready(function() {
     setupToggled();
-    if ($j('form#work-form')) { hideFormFields(); };
+    if ($j('form#work-form')) { hideFormFields(); }
     hideHideMe();
     showShowMe();
     handlePopUps();
