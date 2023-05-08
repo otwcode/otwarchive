@@ -200,7 +200,9 @@ jQuery(function($){
 //   (and you can then add an alternative link for them using <noscript>)
 // - Generally reserved for toggling complex elements like bookmark forms and challenge sign-ups; for simple elements like lists use setupAccordion.
 function setupToggled(){
-  $j('.toggled').each(function(){
+  $j('.toggled').filter(function(){
+    return $j(this).closest('.userstuff').length === 0
+  }).each(function(){
     var node = $j(this);
     var open_toggles = $j('.' + node.attr('id') + "_open");
     var close_toggles = $j('.' + node.attr('id') + "_close");
@@ -385,7 +387,9 @@ function setupDropdown(){
 //  </div>
 // </li>
 function setupAccordion() {
-  $j(".expandable").each(function() {
+  $j(".expandable").filter(function() {
+    return $j(this).closest(".userstuff").length === 0
+  }).each(function() {
     var pane = $j(this);
     // hide the pane element if it's not hidden by default
     if ( !pane.hasClass("hidden") ) {
