@@ -479,7 +479,7 @@ $j(document).ready(function() {
 // controller needs item_id and item_success_message for save success and
 // item_success_message for destroy success
 $j(document).ready(function() {
-  $j('.ajax-create-destroy').on("click", function(event) {
+  $j('form.ajax-create-destroy').on("click", function(event) {
     event.preventDefault();
 
     var form = $j(this);
@@ -530,7 +530,7 @@ $j(document).ready(function() {
 // <form> needs ajax-remove class
 // controller needs item_success_message
 $j(document).ready(function() {
-  $j('.ajax-remove').on("click", function(event) {
+  $j('form.ajax-remove').on("click", function(event) {
     event.preventDefault();
 
     var form = $j(this);
