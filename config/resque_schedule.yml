@@ -25,7 +25,7 @@ run_write_redis_to_database:
   class: ActiveJob::QueueAdapters::ResqueAdapter::JobWrapper
   queue: tag_counts
   args:
-    job_class: RedisSetJobSpawner
+    job_class: RedisJobSpawner
     queue_name: tag_counts
     arguments: ["TagCountUpdateJob"]
   description: "Flush the count updates to mysql"
@@ -57,22 +57,26 @@ update_stat_counters:
   class: ActiveJob::QueueAdapters::ResqueAdapter::JobWrapper
   queue: stats
   args:
-    job_class: RedisSetJobSpawner
+    job_class: RedisJobSpawner
     queue_name: stats
     arguments: ["StatCounterJob"]
   description: "Update kudos/bookmark/comment counts on StatCounters."
 
+# from https://github.com/resque/resque-scheduler/issues/613#issuecomment-351484064
 save_recent_counts_to_database:
   cron: "15,45 * * * *"
-  class: "RedisHitCounter"
-  queue: utilities
-  args: save_recent_counts
+  class: ActiveJob::QueueAdapters::ResqueAdapter::JobWrapper
+  queue: hits
+  args:
+    job_class: RedisJobSpawner
+    queue_name: hits
+    arguments: ["HitCountUpdateJob"]
   description: "Save recent hit counts to database."
 
 remove_old_hit_count_data:
   cron: "0 12 * * *"
   class: "RedisHitCounter"
-  queue: utilities
+  queue: hits
   args: remove_old_visits
   description: "Remove old hit count information from redis."
 
@@ -89,7 +93,7 @@ readings_to_database:
   class: ActiveJob::QueueAdapters::ResqueAdapter::JobWrapper
   queue: readings
   args:
-    job_class: RedisSetJobSpawner
+    job_class: RedisJobSpawner
     queue_name: readings
     arguments: ["ReadingsJob"]
   description: "Transfer readings from redis to the database."
