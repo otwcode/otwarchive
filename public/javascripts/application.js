@@ -411,26 +411,16 @@ function setupAccordion() {
 
 // Remove the /confirm_delete portion of delete links so user who have JS enabled will
 // be able to delete items via hyperlink (per rails/jquery-ujs) rather than a dedicated
-// form page. Also add a confirmation message if one was not set in the back end using
-// :confirm => "message"
+// form page.
 function prepareDeleteLinks() {
-  $j('a[href$="/confirm_delete"]').filter(function() {
-    return $j(this).closest(".userstuff").length === 0;
-  }).each(function(){
+  $j('a[href$="/confirm_delete"][data-confirm]').each(function(){
     this.href = this.href.replace(/\/confirm_delete$/, "");
     $j(this).attr("data-method", "delete");
-    if ($j(this).is("[data-confirm]")) {
-      return;
-    } else {
-      $j(this).attr("data-confirm", "Are you sure? This CANNOT BE UNDONE!");
-    };
   });
 
   // For purging assignments in gift exchanges. This is only on one page and easy to
   // check, so don't worry about adding a fallback data-confirm message.
-  $j('a[href$="/confirm_purge"]').filter(function() {
-    return $j(this).closest(".userstuff").length === 0;
-  }).each(function() {
+  $j('a[href$="/confirm_purge"][data-confirm]').each(function() {
     this.href = this.href.replace(/\/confirm_purge$/, "/purge");
     $j(this).attr("data-method", "post");
   });
