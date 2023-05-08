@@ -97,6 +97,15 @@ module CollectionsHelper
     end
   end
 
+  # i18n-tasks-use t('collections_helper.collection_item_approval_options.collection.approved')
+  # i18n-tasks-use t('collections_helper.collection_item_approval_options.collection.rejected')
+  # i18n-tasks-use t('collections_helper.collection_item_approval_options.collection.unreviewed')
+  # i18n-tasks-use t('collections_helper.collection_item_approval_options.user.bookmark.approved')
+  # i18n-tasks-use t('collections_helper.collection_item_approval_options.user.bookmark.rejected')
+  # i18n-tasks-use t('collections_helper.collection_item_approval_options.user.bookmark.unreviewed')
+  # i18n-tasks-use t('collections_helper.collection_item_approval_options.user.work.approved')
+  # i18n-tasks-use t('collections_helper.collection_item_approval_options.user.work.rejected')
+  # i18n-tasks-use t('collections_helper.collection_item_approval_options.user.work.unreviewed')
   def collection_item_approval_options(actor:, item_type:)
     item_type = item_type.downcase
     actor = actor.downcase
