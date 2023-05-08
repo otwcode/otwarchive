@@ -414,7 +414,9 @@ function setupAccordion() {
 // form page. Also add a confirmation message if one was not set in the back end using
 // :confirm => "message"
 function prepareDeleteLinks() {
-  $j('a[href$="/confirm_delete"]').each(function(){
+  $j('a[href$="/confirm_delete"]').filter(function() {
+    return $j(this).closest(".userstuff").length === 0;
+  }).each(function(){
     this.href = this.href.replace(/\/confirm_delete$/, "");
     $j(this).attr("data-method", "delete");
     if ($j(this).is("[data-confirm]")) {
@@ -426,7 +428,9 @@ function prepareDeleteLinks() {
 
   // For purging assignments in gift exchanges. This is only on one page and easy to
   // check, so don't worry about adding a fallback data-confirm message.
-  $j('a[href$="/confirm_purge"]').each(function() {
+  $j('a[href$="/confirm_purge"]').filter(function() {
+    return $j(this).closest(".userstuff").length === 0;
+  }).each(function() {
     this.href = this.href.replace(/\/confirm_purge$/, "/purge");
     $j(this).attr("data-method", "post");
   });
