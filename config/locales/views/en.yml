@@ -439,6 +439,7 @@ en:
   tag_wranglers:
     show:
       last_wrangled_html: "%{wrangler_login} last wrangled at %{time}."
+      tags_wrangled_csv: Tags Wrangled (CSV)
   tags:
     index:
       about:
