@@ -13,9 +13,6 @@ $j(document).ready(function() {
     setupDropdown();
     updateCachedTokens();
 
-    // remove final comma from comma lists in older browsers
-    $j('.commas li:last-child').addClass('last');
-
     // add clear to items on the splash page in older browsers
     $j('.splash').children('div:nth-of-type(odd)').addClass('odd');
 
