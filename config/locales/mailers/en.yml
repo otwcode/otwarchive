@@ -75,16 +75,22 @@ en:
         introductory: Hello from the Archive of Our Own!
       metadata_label_indicator: ": "
       signature:
+        abuse_team: The AO3 Policy & Abuse team
         app_short_name: AO3
         open_doors: The Open Doors team
         parent_org: Organization for Transformative Works
         support: The AO3 Support team
   user_mailer:
     abuse_report:
-      description_para: 'Description of the abuse:'
-      para1: 'The following abuse report has been sent to the Abuse team:'
-      subject: "[%{app_name}] Your abuse report"
-      url_para: 'URL of the page the abuse is on:'
+      copy:
+        comment: Description of the content or issue
+        intro: Here is a copy of your report for your reference
+        summary: Terms of Service violation
+        url: URL of the reported page
+      report_received: The Policy & Abuse team has received your report, and our volunteers will investigate as soon as they can. Because our team is small and we receive thousands of reports each month, it may take some time for us to get to your report.
+      resubmission: Please do not resubmit this report unless you have additional information that you did not include in your original report. Submitting multiple reports about the same issue may delay our response.
+      subject: "[%{app_name}] Abuse - %{summary}"
+      thank_you: Thank you for your patience.
     admin_deleted_work_notification:
       bye: Attached is a copy of your work for your reference.
       contact_abuse: contact our Policy & Abuse team
