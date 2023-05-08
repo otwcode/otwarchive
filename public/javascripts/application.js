@@ -201,7 +201,7 @@ jQuery(function($){
 // - Generally reserved for toggling complex elements like bookmark forms and challenge sign-ups; for simple elements like lists use setupAccordion.
 function setupToggled(){
   $j('.toggled').filter(function(){
-    return $j(this).closest('.userstuff').length === 0
+    return $j(this).closest('.userstuff').length === 0;
   }).each(function(){
     var node = $j(this);
     var open_toggles = $j('.' + node.attr('id') + "_open");
@@ -388,7 +388,7 @@ function setupDropdown(){
 // </li>
 function setupAccordion() {
   $j(".expandable").filter(function() {
-    return $j(this).closest(".userstuff").length === 0
+    return $j(this).closest(".userstuff").length === 0;
   }).each(function() {
     var pane = $j(this);
     // hide the pane element if it's not hidden by default
@@ -582,13 +582,13 @@ $j(document).ready(function() {
 // FUNDRAISING THERMOMETER adapted from http://jsfiddle.net/GeekyJohn/vQ4Xn/
 function thermometer() {
   var banners = $j('.announcement').filter(function(){
-                  return $j(this).closest('.userstuff').length === 0
+                  return $j(this).closest('.userstuff').length === 0;
                 })
 
   banners.has('.goal').each(function(){
-    var banner_content = $j(this).find('blockquote')
-        banner_goal_text = banner_content.find('span.goal').html()
-        banner_progress_text = banner_content.find('span.progress').html()
+    var banner_content = $j(this).find('blockquote');
+        banner_goal_text = banner_content.find('span.goal').html();
+        banner_progress_text = banner_content.find('span.progress').html();
         if ($j(this).find('span.goal').hasClass('stretch')){
           stretch = true
         } else { stretch = false }
