@@ -243,6 +243,22 @@ en:
       add_bookmark_header: Add Bookmark to collections
       invite: Invite
       invite_header_html: Invite %{title} to collections
+    index:
+      collection:
+        notice:
+          unreviewed_by_user: Works and bookmarks listed here have been invited to this collection. Once a work's creator has approved inclusion in this collection, the work will be moved to "Approved."
+        page_heading_html: Items in %{collection_link}
+      navigation:
+        approved: Approved
+        rejected_by_collection: Rejected by Collection
+        rejected_by_user: Rejected by User
+        unreviewed_by_collection: Awaiting Collection Approval
+        unreviewed_by_user: Awaiting User Approval
+      no_items: Nothing to review here!
+      user:
+        notice:
+          unreviewed_by_collection: Works and bookmarks listed here have been added to a collection but need approval from a collection moderator before they are listed in the collection.
+        page_heading: Items by %{username} in Collections
   comments:
     commentable:
       actions:
