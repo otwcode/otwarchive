@@ -4,7 +4,7 @@
 //things to do when the page loads
 $j(document).ready(function() {
     setupToggled();
-    if ($j('#work-form')) { hideFormFields(); };
+    if ($j('form#work-form')) { hideFormFields(); };
     hideHideMe();
     showShowMe();
     handlePopUps();
@@ -300,16 +300,17 @@ function toggleFormField(element_id) {
 
 // Hides expandable form field options if Javascript is enabled
 function hideFormFields() {
-    if ($j('#work-form') != null) {
-        var toHide = ['#co-authors-options', '#front-notes-options', '#end-notes-options', '#chapters-options',
-          '#parent-options', '#series-options', '#backdate-options', '#override_tags-options'];
-        $j.each(toHide, function(index, name) {
-            if ($j(name)) {
-                if (!($j(name + '-show').is(':checked'))) { $j(name).addClass('hidden'); }
-            }
-        });
-        $j('#work-form').className = $j('#work-form').className;
-    }
+  if ($j('form#work-form') != null) {
+    var toHide = ['#co-authors-options', '#front-notes-options', '#end-notes-options', '#chapters-options',
+      '#parent-options', '#series-options', '#backdate-options', '#override_tags-options'];
+
+    $j.each(toHide, function(index, name) {
+      if ($j(name)) {
+        if (!($j(name + '-show').is(':checked'))) { $j(name).addClass('hidden'); }
+      }
+    });
+    $j('form#work-form').className = $j('form#work-form').className;
+  }
 }
 
 // Hides the extra checkbox fields in prompt form
