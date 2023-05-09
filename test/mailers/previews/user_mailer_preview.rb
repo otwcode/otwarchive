@@ -16,7 +16,7 @@ class UserMailerPreview < ApplicationMailerPreview
     second_creatorship, first_creator = creatorship_notification_data
     UserMailer.creatorship_request(second_creatorship.id, first_creator.id)
   end
-  
+
   private
 
   def creatorship_notification_data
