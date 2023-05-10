@@ -60,6 +60,7 @@ class TagWranglersController < ApplicationController
       .where(last_wrangler: wrangler)
       .order(updated_at: :desc)
       .limit(ArchiveConfig.WRANGLING_REPORT_LIMIT)
+      .preload(:merger)
     header = [%w[Name Last\ Updated Type Merger Fandoms Unwrangleable]]
     results = wrangled_tags.map do |tag|
       merger = tag.merger&.name || ""
