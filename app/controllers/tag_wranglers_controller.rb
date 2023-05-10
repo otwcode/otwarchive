@@ -56,7 +56,10 @@ class TagWranglersController < ApplicationController
     authorize :tag_wrangler, :report_csv?
 
     wrangler = User.find_by!(login: params[:id])
-    wrangled_tags = Tag.where(last_wrangler: wrangler)
+    wrangled_tags = Tag
+      .where(last_wrangler: wrangler)
+      .order(updated_at: :desc)
+      .limit(ArchiveConfig.WRANGLING_REPORT_LIMIT)
     header = [%w[Name Last\ Updated Type Merger Fandoms Unwrangleable]]
     results = wrangled_tags.map do |tag|
       merger = tag.merger&.name || ""
