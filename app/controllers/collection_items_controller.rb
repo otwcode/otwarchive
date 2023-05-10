@@ -135,9 +135,9 @@ class CollectionItemsController < ApplicationController
       invited_collections.each do |needs_user_approval|
         flash[:notice] ||= ""
         flash[:notice] = t(".invited_to_collections_html",
-          invited_link: view_context.link_to(t(".invited"),
-            collection_items_path(needs_user_approval, status: :unreviewed_by_user)),
-          collection_title: needs_user_approval.title)
+                           invited_link: view_context.link_to(t(".invited"),
+                                         collection_items_path(needs_user_approval, status: :unreviewed_by_user)),
+                           collection_title: needs_user_approval.title)
       end
     end
     unless unapproved_collections.empty?
