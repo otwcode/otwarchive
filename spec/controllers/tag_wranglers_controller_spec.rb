@@ -133,6 +133,19 @@ describe TagWranglersController do
                       [tag.name, tag.updated_at.to_s, tag.type, "", "#{fandom1.name}, #{fandom2.name}", "false"]])
           end
 
+          it "only includes canonical fandoms" do
+            fandom1 = create(:canonical_fandom)
+            fandom2 = create(:fandom)
+            media = create(:media, last_wrangler: user)
+            expect(media.add_association(fandom1)).to be_truthy
+            expect(media.add_association(fandom2)).to be_truthy
+
+            get :report_csv, params: { id: user.login }
+            result = CSV.parse(response.body.encode("utf-8")[1..], col_sep: "\t")
+
+            expect(result[1][4]).to eq(fandom1.name)
+          end
+
           it "correctly reports a tag marked unwrangleable" do
             tag = create(:tag, last_wrangler: user, unwrangleable: true)
 
