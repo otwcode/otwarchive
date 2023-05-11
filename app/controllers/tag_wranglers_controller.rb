@@ -59,11 +59,11 @@ class TagWranglersController < ApplicationController
     wrangled_tags = Tag
       .where(last_wrangler: wrangler)
       .limit(ArchiveConfig.WRANGLING_REPORT_LIMIT)
-      .preload(:merger)
+      .includes(:merger, :parents)
     results = [%w[Name Last\ Updated Type Merger Fandoms Unwrangleable]]
     wrangled_tags.find_each do |tag|
       merger = tag.merger&.name || ""
-      fandoms = tag.respond_to?(:fandoms) ? tag.fandoms.filter_map { |f| f.name if f.canonical }.join(", ") : ""
+      fandoms = tag.parents.filter_map { |parent| parent.name if parent.is_a?(Fandom) }.join(", ")
       results << [tag.name, tag.updated_at, tag.type, merger, fandoms, tag.unwrangleable]
     end
     filename = "wrangled_tags_#{wrangler.login}_#{Time.now.utc.strftime('%Y-%m-%d-%H%M')}.csv"
