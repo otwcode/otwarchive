@@ -84,7 +84,7 @@ en:
     abuse_report:
       copy:
         comment: Description of the content or issue
-        intro: "Here is a copy of your report for your reference:"
+        intro: 'Here is a copy of your report for your reference:'
         summary: Terms of Service violation
         url: URL of the reported page
       report_received: The Policy & Abuse team has received your report, and our volunteers will investigate as soon as they can. Because our team is small and we receive thousands of reports each month, it may take some time for us to get to your report.
