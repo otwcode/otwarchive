@@ -82,14 +82,14 @@ describe TagWranglersController do
           it "limits the number of tags" do
             stub_const("ArchiveConfig", OpenStruct.new(ArchiveConfig))
             ArchiveConfig.WRANGLING_REPORT_LIMIT = 1
-            travel_to(1.day.ago) { create(:tag, last_wrangler: user) }
-            tag2 = create(:tag, last_wrangler: user)
+            tag1 = create(:tag, last_wrangler: user)
+            create(:tag, last_wrangler: user)
 
             get :report_csv, params: { id: user.login }
             result = CSV.parse(response.body.encode("utf-8")[1..], col_sep: "\t")
 
             expect(result.length).to eq(2)
-            expect(result[1][0]).to eq(tag2.name)
+            expect(result[1][0]).to eq(tag1.name)
           end
 
           it "correctly reports mergers" do
