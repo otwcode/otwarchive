@@ -21,7 +21,7 @@
 
   <p>
     <%= style_work_metadata_label(t(".copy.summary")) %>
-    <%= raw @summary %>
+    <%= to_plain_text(raw @summary) %>
   </p>
 
   <p><%= style_work_metadata_label(t(".copy.comment")) %></p>

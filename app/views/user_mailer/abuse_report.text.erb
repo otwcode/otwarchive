@@ -1,5 +1,5 @@
 <% content_for :message do %>
-<% if @username %>
+<% if @username.present? %>
 <%= t("mailer.general.greeting.informal.addressed", name: @username) %>
 <% else %>
 <%= t("mailer.general.greeting.informal.unaddressed") %>

@@ -115,7 +115,7 @@
       <dd class="required">
         <p id="comment-field-description">
           <%= t(".form.comment.description_html",
-                tos_link: (link_to t(".form.comment.tos"), tos_path),
+                tos_link: (link_to t(".form.comment.tos"), tos_path(anchor: "content")),
                 include_link: (link_to t(".form.comment.include"), anchor: "reporthow")) %>
         </p>
         <%= f.text_area :comment, "aria-describedby" => "comment-field-description" %>
