@@ -21,6 +21,7 @@
 
   <p>
     <%= style_work_metadata_label(t(".copy.summary")) %>
+    <% TODO: Remove to_plain_text when AO3-6519 is fixed. %>
     <%= to_plain_text(raw @summary) %>
   </p>
 
