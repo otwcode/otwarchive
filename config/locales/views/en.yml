@@ -279,23 +279,23 @@ en:
       blocked: Sorry, you have been blocked by one or more of this work's creators.
       invite_to_collections_link: Invite To Collections
       permissions:
-        moderated_commenting:
-          label: Comment Moderation
-          enable: Enable comment moderation
-          disable: Disable comment moderation
-          keep_current: Keep current comment moderation settings
         admin_post:
           alt_action: You can however %{support_link} with any feedback or questions.
           disable_all: Sorry, this news post doesn't allow comments.
           disable_anon: Sorry, this news post doesn't allow non-Archive users to comment.
           support_link: contact Support
+        moderated_commenting:
+          disable: Disable comment moderation
+          enable: Enable comment moderation
+          keep_current: Keep current comment moderation settings
+          label: Comment Moderation
         options:
-          label: Who can comment on this work
-          multiple_works_label: Who can comment on these works
           disable_all: No one can comment
           disable_anon: Only registered users can comment
           enable_all: Registered users and guests can comment
           keep_current: Keep current comment settings
+          label: Who can comment on this work
+          multiple_works_label: Who can comment on these works
         work:
           alt_action: You can however still leave Kudos!
           disable_all: Sorry, this work doesn't allow comments.
@@ -564,16 +564,16 @@ en:
         link_tos: Terms of Service
         welcome_text: Hi! It looks like you've just logged into the Archive for the first time. %{help_link} or dismiss this message permanently.
   works:
-    permissions:
-      privacy: Privacy
-      visibility:
-        label: Visibility
-        restricted: Only show your work to registered users
-        multiple_works_restricted: Only show to registered users
-        import_works_restricted: Only show imported works to registered users
-        unrestricted: Show to all
-        keep_current: Keep current visibility settings
     meta:
       original_creators:
         one: 'Original Creator ID:'
         other: 'Original Creator IDs:'
+    permissions:
+      privacy: Privacy
+      visibility:
+        import_works_restricted: Only show imported works to registered users
+        keep_current: Keep current visibility settings
+        label: Visibility
+        multiple_works_restricted: Only show to registered users
+        restricted: Only show your work to registered users
+        unrestricted: Show to all
