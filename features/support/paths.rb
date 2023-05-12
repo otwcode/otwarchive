@@ -273,6 +273,8 @@ module NavigationHelpers
       tag_wranglers_path
     when /^my wrangling page$/i
       tag_wrangler_path(User.current_user)
+    when /^the wrangling page for "(.*)"$/i
+      tag_wrangler_path(User.find_by(login: Regexp.last_match(1)))
     when /^the unassigned fandoms page $/i
       unassigned_fandoms_path
     when /^the "(.*)" tag page$/i

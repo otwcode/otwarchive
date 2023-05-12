@@ -1,13 +1,38 @@
 <% content_for :message do %>
-  <p><%= t 'user_mailer.abuse_report.para1' %></p>
+  <p>
+    <% if @username.present? %>
+      <%= t("mailer.general.greeting.informal.addressed", 
+              name: style_bold(@username)).html_safe %></p>
+    <% else %>
+      <%= t("mailer.general.greeting.informal.unaddressed") %>
+  </p>
+  <% end %>
+
+  <p><%= t(".report_received") %></p>
+
+  <p><%= t(".resubmission") %></p>
+
+  <p><%= t(".copy.intro") %></p>
   
   <p>
-    <%= style_bold(t 'user_mailer.abuse_report.url_para') %> <%= style_link(@url, @url) %>
+    <%= style_work_metadata_label(t(".copy.url")) %>
+    <%= style_link(@url, @url) %>
   </p>
-  
-  <%= style_bold(t 'user_mailer.abuse_report.description_para') %>
-  <%= style_quote(@comment) %>
 
+  <p>
+    <%= style_work_metadata_label(t(".copy.summary")) %>
+    <%= raw @summary %>
+  </p>
+
+  <p><%= style_work_metadata_label(t(".copy.comment")) %></p>
+  <p><%= style_quote(raw @comment) %></p>
+
+  <p><%= t(".thank_you") %></p>
+
+  <p>
+    <%= t("mailer.general.closing.formal") %><br/>
+    <%= style_bold(t("mailer.general.signature.abuse_team")) %>
+  </p>
 <% end %>
 
 <% content_for :sent_at do %>
