@@ -8,7 +8,7 @@ en:
       form:
         comment:
           description_html: Explain what about this content violates the %{tos_link}. Please be as specific as possible and %{include_link}. All information provided will remain confidential.
-          error: Please describe your concern.
+          error: Please describe what you are reporting and why you are reporting it.
           include: include all relevant links and other information in your report
           label: Description of the content you are reporting (required)
           tos: AO3 Terms of Service
@@ -31,7 +31,7 @@ en:
           active: Submit
         summary:
           description: For example, "harassment", "not a fanwork", "commercial activities", etc.
-          error: Please enter a brief summary of your message
+          error: Please enter a subject line for your report.
           label: Brief summary of Terms of Service violation (required)
       heading:
         page_title: Policy Questions & Abuse Reports
