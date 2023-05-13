@@ -8,7 +8,7 @@ class UsersController < ApplicationController
   skip_before_action :store_location, only: [:end_first_login]
 
   def load_user
-    @user = User.find_by(login: params[:id])
+    @user = User.find_by!(login: params[:id])
     @check_ownership_of = @user
   end
 
@@ -19,10 +19,6 @@ class UsersController < ApplicationController
 
   # GET /users/1
   def show
-    if @user.blank?
-      raise ActiveRecord::RecordNotFound, "Couldn't find user named '#{params[:id]}'"
-    end
-
     @page_subtitle = @user.login
 
     visible = visible_items(current_user)
