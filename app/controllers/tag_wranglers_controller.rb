@@ -61,7 +61,7 @@ class TagWranglersController < ApplicationController
       .limit(ArchiveConfig.WRANGLING_REPORT_LIMIT)
       .includes(:merger, :parents)
     results = [%w[Name Last\ Updated Type Merger Fandoms Unwrangleable]]
-    wrangled_tags.find_each do |tag|
+    wrangled_tags.find_each(order: :desc) do |tag|
       merger = tag.merger&.name || ""
       fandoms = tag.parents.filter_map { |parent| parent.name if parent.is_a?(Fandom) }.join(", ")
       results << [tag.name, tag.updated_at, tag.type, merger, fandoms, tag.unwrangleable]

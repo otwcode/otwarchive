@@ -82,14 +82,14 @@ describe TagWranglersController do
           it "limits the number of tags" do
             stub_const("ArchiveConfig", OpenStruct.new(ArchiveConfig))
             ArchiveConfig.WRANGLING_REPORT_LIMIT = 1
-            tag1 = create(:tag, last_wrangler: user)
             create(:tag, last_wrangler: user)
+            tag2 = create(:tag, last_wrangler: user)
 
             get :report_csv, params: { id: user.login }
             result = CSV.parse(response.body.encode("utf-8")[1..], col_sep: "\t")
 
             expect(result.length).to eq(2)
-            expect(result[1][0]).to eq(tag1.name)
+            expect(result[1][0]).to eq(tag2.name)
           end
 
           it "correctly reports mergers" do
@@ -101,8 +101,8 @@ describe TagWranglersController do
 
             expect(result)
               .to eq([%w[Name Last\ Updated Type Merger Fandoms Unwrangleable],
-                      [tag1.name, tag1.updated_at.to_s, tag1.type, "", "", "false"],
-                      [tag2.name, tag2.updated_at.to_s, tag2.type, tag1.name, "", "false"]])
+                      [tag2.name, tag2.updated_at.to_s, tag2.type, tag1.name, "", "false"],
+                      [tag1.name, tag1.updated_at.to_s, tag1.type, "", "", "false"]])
           end
 
           it "correctly reports tags with one fandom" do
