@@ -506,3 +506,6 @@ STAT_COUNTER_BATCH_SIZE: 100
 # Number of hours to retain the original creator for works that have been
 # orphaned.
 ORIGINAL_CREATOR_TTL_HOURS: 72
+
+# The maximum number of tags to provide in a tag wrangling report.
+WRANGLING_REPORT_LIMIT: 5000

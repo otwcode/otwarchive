@@ -56,15 +56,18 @@ class TagWranglersController < ApplicationController
     authorize :tag_wrangler, :report_csv?
 
     wrangler = User.find_by!(login: params[:id])
-    wrangled_tags = Tag.where(last_wrangler: wrangler)
-    header = [%w[Name Last\ Updated Type Merger Fandoms Unwrangleable]]
-    results = wrangled_tags.map do |tag|
+    wrangled_tags = Tag
+      .where(last_wrangler: wrangler)
+      .limit(ArchiveConfig.WRANGLING_REPORT_LIMIT)
+      .includes(:merger, :parents)
+    results = [%w[Name Last\ Updated Type Merger Fandoms Unwrangleable]]
+    wrangled_tags.find_each(order: :desc) do |tag|
       merger = tag.merger&.name || ""
-      fandoms = tag.respond_to?(:fandoms) ? tag.fandoms.map(&:name).join(", ") : ""
-      [tag.name, tag.updated_at, tag.type, merger, fandoms, tag.unwrangleable]
+      fandoms = tag.parents.filter_map { |parent| parent.name if parent.is_a?(Fandom) }.join(", ")
+      results << [tag.name, tag.updated_at, tag.type, merger, fandoms, tag.unwrangleable]
     end
     filename = "wrangled_tags_#{wrangler.login}_#{Time.now.utc.strftime('%Y-%m-%d-%H%M')}.csv"
-    send_csv_data(header + results, filename)
+    send_csv_data(results, filename)
   end
 
   def create
