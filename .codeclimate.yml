@@ -7,7 +7,6 @@ exclude_paths:
 - "public/**/*.min.js"
 - "public/javascripts/bootstrap/"
 - "public/javascripts/tinymce/"
-- "public/system/dewplayer/"
 - "script/"
 - "spec/"
 - "test/"

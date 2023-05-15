@@ -165,7 +165,8 @@ class CollectionItem < ApplicationRecord
   end
 
   def user_allowed_to_destroy?(user)
-    user.is_author_of?(self.item) || self.collection.user_is_maintainer?(user)
+    user.is_author_of?(self.item) ||
+      (self.collection.user_is_maintainer?(user) && !self.rejected_by_user?)
   end
 
   def approve_by_user
