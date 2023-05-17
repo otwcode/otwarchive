@@ -1,5 +1,4 @@
 class Comment < ApplicationRecord
-  include ActiveModel::ForbiddenAttributesProtection
   include HtmlCleaner
   include AfterCommitEverywhere
 
@@ -59,7 +58,6 @@ class Comment < ApplicationRecord
   validates :comment_content, uniqueness: {
     scope: [:commentable_id, :commentable_type, :name, :email, :pseud_id],
     unless: :is_deleted?,
-    case_sensitive: false,
     message: ts("^This comment has already been left on this work. (It may not appear right away for performance reasons.)")
   }
 
@@ -479,5 +477,4 @@ class Comment < ApplicationRecord
     sanitize_field self, :comment_content
   end
   include Responder
-
 end

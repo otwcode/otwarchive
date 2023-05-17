@@ -73,6 +73,8 @@ ru:
         few: Циклы
         many: Циклы
         one: Цикл
+  chapters:
+    chapter_position: "- Глава %{position}"
   kudo_mailer:
     batch_kudo_notification:
       guest:
@@ -101,6 +103,7 @@ ru:
         informal: Счастливо,
       creation:
         link_with_word_count: "%{creation_link} (%{word_count})"
+        title_with_chapter_number: Глава %{position} работы «%{title}»
         title_with_word_count: '"%{creation_title}" (%{word_count})'
         word_count:
           few: "%{count} слова"

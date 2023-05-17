@@ -218,7 +218,7 @@ SUBSECTIONS:
   width: 48%;
 }
 
-.sessions-new .new_admin {
+.sessions-new #new_admin {
   width: 75%;
   margin: auto;
 }

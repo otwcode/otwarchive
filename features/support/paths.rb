@@ -79,6 +79,10 @@ module NavigationHelpers
       user_blocked_users_path(User.current_user)
     when /the blocked users page for "([^"]*)"/
       user_blocked_users_path(Regexp.last_match(1))
+    when "my muted users page"
+      user_muted_users_path(User.current_user)
+    when /the muted users page for "([^"]*)"/
+      user_muted_users_path(Regexp.last_match(1))
     when /my bookmarks page/
       step %{all indexing jobs have been run}
       user_bookmarks_path(User.current_user)
@@ -269,6 +273,8 @@ module NavigationHelpers
       tag_wranglers_path
     when /^my wrangling page$/i
       tag_wrangler_path(User.current_user)
+    when /^the wrangling page for "(.*)"$/i
+      tag_wrangler_path(User.find_by(login: Regexp.last_match(1)))
     when /^the unassigned fandoms page $/i
       unassigned_fandoms_path
     when /^the "(.*)" tag page$/i
@@ -285,6 +291,10 @@ module NavigationHelpers
       external_works_path
     when /^the external works page with only duplicates$/i
       external_works_path(show: :duplicates)
+    when /^the new user password page$/i
+      new_user_password_path
+    when /^the edit user password page$/i
+      edit_user_password_path
 
     # Admin Pages
     when /^the admin-posts page$/i
@@ -301,6 +311,10 @@ module NavigationHelpers
       bulk_search_admin_users_path
     when /^the abuse administration page for "(.*)"$/i
       admin_user_path(User.find_by(login: $1))
+    when /^the new admin password page$/i
+      new_admin_password_path
+    when /^the edit admin password page$/i
+      edit_admin_password_path
 
     # Here is an example that pulls values out of the Regexp:
     #

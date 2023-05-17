@@ -1,5 +1,4 @@
 class Series < ApplicationRecord
-  include ActiveModel::ForbiddenAttributesProtection
   include Bookmarkable
   include Searchable
   include Creatable
@@ -56,6 +55,8 @@ class Series < ApplicationRecord
     joins(:approved_creatorships).
     where("creatorships.pseud_id IN (?)", pseuds.collect(&:id))
   }
+
+  scope :for_blurb, -> { includes(:work_tags, :pseuds) }
 
   def posted_works
     self.works.posted

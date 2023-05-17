@@ -1,4 +1,6 @@
 <!--descriptive page name and system messages, descriptions, and instructions.-->
+<%= render "muted/muted_items_notice" %>
+
 <h2 class="heading">
   <% if @user %>
     <%= search_header @series, nil, "Series", @pseud ? @pseud : @user %>
@@ -6,7 +8,6 @@
     <%=h "View All Series" %>
   <% end %>
 </h2>
-
 <!-- /descriptions-->
 
 <!--subnavigation-->

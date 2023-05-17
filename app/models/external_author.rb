@@ -1,6 +1,4 @@
 class ExternalAuthor < ApplicationRecord
-  include ActiveModel::ForbiddenAttributesProtection
-
   # send :include, Activation # eventually we will let users create new identities
 
   EMAIL_LENGTH_MIN = 3
@@ -17,8 +15,10 @@ class ExternalAuthor < ApplicationRecord
 
   has_one :invitation
 
-  validates_uniqueness_of :email, case_sensitive: false, allow_blank: true,
+  validates :email, uniqueness: {
+    allow_blank: true,
     message: ts('There is already an external author with that email.')
+  }
 
   validates :email, email_veracity: true
 

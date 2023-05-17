@@ -101,6 +101,9 @@ he:
           one: "%{givers_list} השאירה קודוס על %{commentable_link}."
           other: "%{givers_list} השאירו קודוס על %{commentable_link}."
           two: "%{givers_list} השאירו קודוס על %{commentable_link}."
+        single_guest:
+          giver_list: אורחת
+          left_kudos: "%{giver_list} השאירה קודוס על %{commentable_link}."
       subject: "[%{app_name}] קיבלת קודוס!"
       text:
         left_kudos:
@@ -108,6 +111,7 @@ he:
           one: "%{givers_list} השאירה קודוס על %{commentable_title} (%{commentable_url})."
           other: "%{givers_list} השאירו קודוס על %{commentable_title} (%{commentable_url})."
           two: "%{givers_list} השאירו קודוס על %{commentable_title} (%{commentable_url})."
+        single_guest: אורחת השאירה קודוס על %{commentable_title} (%{commentable_url}).
   mailer:
     general:
       closing:
@@ -115,6 +119,7 @@ he:
         informal: בברכה,
       creation:
         link_with_word_count: "%{creation_link} (%{word_count})"
+        title_with_chapter_number: פרק %{position} של היצירה %{title}
         title_with_word_count: '"%{creation_title}" (%{word_count})'
         word_count:
           many: "%{count} מילים"

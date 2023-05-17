@@ -32,6 +32,11 @@ Given "the user {string} allows gifts" do |login|
   user.preference.save
 end
 
+Given "the user {string} is hidden from search engines" do |login|
+  user = User.find_by(login: login)
+  user.preference.update(minimize_search_engines: true)
+end
+
 When /^I set my preferences to turn off notification emails for comments$/ do
   user = User.current_user
   user.preference.comment_emails_off = true
@@ -110,15 +115,9 @@ When /^I set my time zone to "([^"]*)"$/ do |time_zone|
   user.preference.save
 end
 
-When /^I set my preferences to automatically agree to my work being collected$/ do
+When "I set my preferences to allow collection invitations" do
   user = User.current_user
-  user.preference.automatically_approve_collections = true
-  user.preference.save
-end
-
-When /^I set my preferences to require my approval for my work to be collected$/ do
-  user = User.current_user
-  user.preference.automatically_approve_collections = false
+  user.preference.allow_collection_invitation = true
   user.preference.save
 end
 

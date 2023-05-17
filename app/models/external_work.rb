@@ -1,6 +1,4 @@
 class ExternalWork < ApplicationRecord
-  include ActiveModel::ForbiddenAttributesProtection
-
   include UrlHelpers
   include Bookmarkable
   include Filterable
@@ -12,6 +10,8 @@ class ExternalWork < ApplicationRecord
 
   # .duplicate.count.size returns the number of URLs with multiple external works
   scope :duplicate, -> { group(:url).having("count(DISTINCT id) > 1") }
+
+  scope :for_blurb, -> { includes(:language, :tags) }
 
   AUTHOR_LENGTH_MAX = 500
 

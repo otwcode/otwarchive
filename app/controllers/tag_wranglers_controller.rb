@@ -1,6 +1,8 @@
 class TagWranglersController < ApplicationController
+  include ExportsHelper
+
   before_action :check_user_status
-	before_action :check_permission_to_wrangle
+  before_action :check_permission_to_wrangle, except: [:report_csv]
 
   def index
     @wranglers = Role.find_by(name: "tag_wrangler").users.alphabetical
@@ -36,7 +38,7 @@ class TagWranglersController < ApplicationController
   end
 
   def show
-    @wrangler = User.find_by(login: params[:id])
+    @wrangler = User.find_by!(login: params[:id])
     @page_subtitle = @wrangler.login
     @fandoms = @wrangler.fandoms.by_name
     @counts = {}
@@ -48,6 +50,24 @@ class TagWranglersController < ApplicationController
     @counts[:UnsortedTag] = Rails.cache.fetch("/wrangler/counts/sidebar/UnsortedTag", race_condition_ttl: 10, expires_in: 1.hour) do
       UnsortedTag.count
     end
+  end
+
+  def report_csv
+    authorize :tag_wrangler, :report_csv?
+
+    wrangler = User.find_by!(login: params[:id])
+    wrangled_tags = Tag
+      .where(last_wrangler: wrangler)
+      .limit(ArchiveConfig.WRANGLING_REPORT_LIMIT)
+      .includes(:merger, :parents)
+    results = [%w[Name Last\ Updated Type Merger Fandoms Unwrangleable]]
+    wrangled_tags.find_each(order: :desc) do |tag|
+      merger = tag.merger&.name || ""
+      fandoms = tag.parents.filter_map { |parent| parent.name if parent.is_a?(Fandom) }.join(", ")
+      results << [tag.name, tag.updated_at, tag.type, merger, fandoms, tag.unwrangleable]
+    end
+    filename = "wrangled_tags_#{wrangler.login}_#{Time.now.utc.strftime('%Y-%m-%d-%H%M')}.csv"
+    send_csv_data(results, filename)
   end
 
   def create

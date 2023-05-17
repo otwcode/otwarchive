@@ -551,6 +551,8 @@ Feature: Edit chapters
     Then I should not see "Edit"
     When I follow "Co-Creator Requests page"
       And I check "selected[]"
+      # Delay before accepting the request to make sure the cache is expired:
+      And it is currently 1 second from now
       And I press "Accept"
     Then I should see "You are now listed as a co-creator on Chapter 2 of Rusty Has Two Moms."
     When I follow "Rusty Has Two Moms"
