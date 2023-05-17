@@ -370,6 +370,11 @@ span.claimed,
   background: #222;
 }
 
+.actions .disabled select {
+  color: #999;
+  border-color: #000;
+}
+
 .delete a,
 span.delete {
   color: #fb8080;
