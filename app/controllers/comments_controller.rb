@@ -18,8 +18,8 @@ class CommentsController < ApplicationController
   before_action :check_ownership, only: [:edit, :update, :cancel_comment_edit]
   before_action :check_permission_to_edit, only: [:edit, :update ]
   before_action :check_permission_to_delete, only: [:delete_comment, :destroy]
+  before_action :check_guest_comment_admin_setting, only: [:new, :create, :add_comment_reply]
   before_action :check_parent_comment_permissions, only: [:new, :create, :add_comment_reply]
-  before_action :check_guest_comment_permissions, only: [:new, :create, :add_comment_reply]
   before_action :check_unreviewed, only: [:add_comment_reply]
   before_action :check_frozen, only: [:new, :create, :add_comment_reply]
   before_action :check_hidden_by_admin, only: [:new, :create, :add_comment_reply]
@@ -131,10 +131,11 @@ class CommentsController < ApplicationController
     end
   end
 
-  def check_guest_comment_permissions
+  def check_guest_comment_admin_setting
     admin_settings = AdminSetting.current
+    parent = find_parent
 
-    return unless admin_settings.guest_comments_off? && !logged_in?
+    return unless admin_settings.guest_comments_off? && !logged_in? && !logged_in_as_admin?
     
     flash[:error] = t("comments.commentable.guest_comments_disabled")
     redirect_back(fallback_location: root_path)

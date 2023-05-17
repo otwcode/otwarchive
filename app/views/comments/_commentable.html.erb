@@ -75,7 +75,7 @@
   <%= flash_div :comment_error, :comment_notice %>
 
   <% commentable_parent = find_parent(commentable) %>
-  <% if @admin_settings.guest_comments_off? && !logged_in? %>
+  <% if @admin_settings.guest_comments_off? && !logged_in? && !logged_in_as_admin? %>
     <p class="notice">
       <%= t(".guest_comments_disabled") %>
     </p>
