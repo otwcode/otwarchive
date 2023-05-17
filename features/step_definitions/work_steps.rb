@@ -87,7 +87,7 @@ When /^I post (?:a|the) (?:(\d+) chapter )?work "([^"]*)"(?: with fandom "([^"]*
     end
   end
   step %{all indexing jobs have been run}
-  Tag.write_redis_to_database
+  step "the periodic tag count task is run"
   step %(the periodic filter count task is run)
 end
 
@@ -103,6 +103,8 @@ end
 When /^I post the works "([^"]*)"$/ do |worklist|
   worklist.split(/, ?/).each do |work_title|
     step %{I post the work "#{work_title}"}
+    # Ensure all works are created with different timestamps to avoid flakiness
+    step %{it is currently 1 second from now}
   end
 end
 
@@ -293,14 +295,14 @@ When /^I edit the draft "([^"]*)"$/ do |draft|
   step %{I edit the work "#{draft}"}
 end
 
-When /^I post the chaptered work "([^"]*)"$/ do |title|
-  step %{I post the work "#{title}"}
+When /^I post the chaptered work "([^"]*)"(?: in the collection "([^"]*)")?$/ do |title, collection|
+  step %{I post the work "#{title}" in the collection "#{collection}"}
   step %{I follow "Add Chapter"}
   fill_in("content", with: "Another Chapter.")
   click_button("Preview")
   step %{I press "Post"}
   step %{all indexing jobs have been run}
-  Tag.write_redis_to_database
+  step "the periodic tag count task is run"
 end
 
 When /^I post the chaptered draft "([^"]*)"$/ do |title|
@@ -317,7 +319,7 @@ When /^a chapter is added to "([^"]*)"$/ do |work_title|
   step %{a draft chapter is added to "#{work_title}"}
   click_button("Post")
   step %{all indexing jobs have been run}
-  Tag.write_redis_to_database
+  step "the periodic tag count task is run"
 end
 
 When /^a chapter with the co-author "([^\"]*)" is added to "([^\"]*)"$/ do |coauthor, work_title|
@@ -326,7 +328,7 @@ When /^a chapter with the co-author "([^\"]*)" is added to "([^\"]*)"$/ do |coau
   click_button("Post")
   step %{the user "#{coauthor}" accepts all co-creator requests}
   step %{all indexing jobs have been run}
-  Tag.write_redis_to_database
+  step "the periodic tag count task is run"
 end
 
 When /^a draft chapter is added to "([^"]*)"$/ do |work_title|
@@ -334,7 +336,7 @@ When /^a draft chapter is added to "([^"]*)"$/ do |work_title|
   step %{I press "Preview"}
   step %{all indexing jobs have been run}
 
-  Tag.write_redis_to_database
+  step "the periodic tag count task is run"
 end
 
 When /^I delete chapter ([\d]+) of "([^"]*)"$/ do |chapter, title|
@@ -368,7 +370,7 @@ When /^I post the(?: draft)? chapter$/ do
   click_button("Post")
   step %{all indexing jobs have been run}
 
-  Tag.write_redis_to_database
+  step "the periodic tag count task is run"
 end
 
 Then /^I should see the default work content$/ do
@@ -387,8 +389,8 @@ end
 
 When /^I fill in basic external work tags$/ do
   select(DEFAULT_RATING, from: "Rating")
-  fill_in("external_work_fandom_string", with: DEFAULT_FANDOM)
-  fill_in("bookmark_tag_string", with: DEFAULT_FREEFORM)
+  fill_in("Fandoms", with: DEFAULT_FANDOM)
+  fill_in("Your tags", with: DEFAULT_FREEFORM)
 end
 
 When /^I set the fandom to "([^"]*)"$/ do |fandom|
@@ -464,7 +466,7 @@ When /^the work "([^"]*)" was created (\d+) days ago$/ do |title, number|
   work.update_attribute(:created_at, number.to_i.days.ago)
   step %{all indexing jobs have been run}
 
-  Tag.write_redis_to_database
+  step "the periodic tag count task is run"
 end
 
 When /^I post the locked work "([^"]*)"$/ do |title|
@@ -477,7 +479,7 @@ When /^I post the locked work "([^"]*)"$/ do |title|
   click_button("Post")
   step %{all indexing jobs have been run}
 
-  Tag.write_redis_to_database
+  step "the periodic tag count task is run"
 end
 
 When /^the locked draft "([^"]*)"$/ do |title|
@@ -512,22 +514,38 @@ When /^I list the work "([^"]*)" as inspiration$/ do |title|
   work = Work.find_by(title: title)
   check("parent-options-show")
   url_of_work = work_url(work).sub("www.example.com", ArchiveConfig.APP_HOST)
-  fill_in("work_parent_attributes_url", with: url_of_work)
+  with_scope("#parent-options") do
+    fill_in("URL", with: url_of_work)
+  end
 end
+
+When /^I list an external work as inspiration$/ do
+  check("parent-options-show")
+  with_scope("#parent-options") do
+    fill_in("URL", with: "https://example.com")
+    fill_in("Title", with: "Example External")
+    fill_in("Author", with: "External Author")
+    select("English", from: "Language")
+  end
+end
+
+When /^I set the publication date to (\d+) (.*) (\d+)$/ do |day, month, year|
+  if page.has_selector?("#backdate-options-show")
+    check("backdate-options-show") if page.find("#backdate-options-show")
+    select(day.to_s, from: "work[chapter_attributes][published_at(3i)]")
+    select(month, from: "work[chapter_attributes][published_at(2i)]")
+    select(year.to_s, from: "work[chapter_attributes][published_at(1i)]")
+  else
+    select(day.to_s, from: "chapter[published_at(3i)]")
+    select(month, from: "chapter[published_at(2i)]")
+    select(year.to_s, from: "chapter[published_at(1i)]")
+  end
+end
+
 When /^I set the publication date to today$/ do
   today = Date.current
   month = today.strftime("%B")
-
-  if page.has_selector?("#backdate-options-show")
-    check("backdate-options-show") if page.find("#backdate-options-show")
-    select("#{today.day}", from: "work[chapter_attributes][published_at(3i)]")
-    select("#{month}", from: "work[chapter_attributes][published_at(2i)]")
-    select("#{today.year}", from: "work[chapter_attributes][published_at(1i)]")
-  else
-    select("#{today.day}", from: "chapter[published_at(3i)]")
-    select("#{month}", from: "chapter[published_at(2i)]")
-    select("#{today.year}", from: "chapter[published_at(1i)]")
-  end
+  step %{I set the publication date to #{today.day} #{month} #{today.year}}
 end
 
 When /^I browse the "(.*?)" works$/ do |tagname|
@@ -535,7 +553,7 @@ When /^I browse the "(.*?)" works$/ do |tagname|
   visit tag_works_path(tag)
   step %{all indexing jobs have been run}
 
-  Tag.write_redis_to_database
+  step "the periodic tag count task is run"
 end
 
 When /^I browse the "(.*?)" works with page parameter "(.*?)"$/ do |tagname, page|
@@ -543,36 +561,43 @@ When /^I browse the "(.*?)" works with page parameter "(.*?)"$/ do |tagname, pag
   visit tag_works_path(tag, page: page)
   step %{all indexing jobs have been run}
 
-  Tag.write_redis_to_database
+  step "the periodic tag count task is run"
 end
 
 When /^I delete the work "([^"]*)"$/ do |work|
   work = Work.find_by(title: CGI.escapeHTML(work))
   visit edit_work_path(work)
   step %{I follow "Delete Work"}
-  # If JavaScript is enabled, window.confirm will be used and this button will not appear
-  click_button("Yes, Delete Work") unless @javascript
+
+  # If JavaScript is enabled, window.confirm will be used and we'll have to accept
+  if @javascript
+    expect(page.accept_alert).to eq("Are you sure you want to delete this work? This will destroy all comments and kudos on this work as well and CANNOT BE UNDONE!")
+  else
+    click_button("Yes, Delete Work")
+  end
+
   step %{all indexing jobs have been run}
 
-  Tag.write_redis_to_database
+  step "the periodic tag count task is run"
 end
+
 When /^I preview the work$/ do
   click_button("Preview")
   step %{all indexing jobs have been run}
 
-  Tag.write_redis_to_database
+  step "the periodic tag count task is run"
 end
 When /^I update the work$/ do
   click_button("Update")
   step %{all indexing jobs have been run}
 
-  Tag.write_redis_to_database
+  step "the periodic tag count task is run"
 end
 When /^I post the work without preview$/ do
   click_button "Post"
   step %{all indexing jobs have been run}
 
-  Tag.write_redis_to_database
+  step "the periodic tag count task is run"
 end
 When /^I post the work$/ do
   click_button "Post"
@@ -580,7 +605,7 @@ When /^I post the work$/ do
 end
 
 When /^the statistics for all works are updated$/ do
-  StatCounter.stats_to_database
+  RedisJobSpawner.perform_now("StatCounterJob")
   step %{the hit counts for all works are updated}
 end
 
@@ -611,8 +636,8 @@ When /^I invite the co-authors? "([^"]*)"$/ do |coauthor|
   step %{I try to invite the co-authors "#{coauthor}"}
 end
 
-When /^I give the work to "([^"]*)"$/ do |recipient|
-  fill_in("work_recipients", with: "#{recipient}")
+When "I give the work to {string}" do |recipient|
+  fill_in("Gift this work to", with: recipient)
 end
 
 When /^I give the work "([^"]*)" to the user "([^"]*)"$/ do |work_title, recipient|
@@ -648,7 +673,7 @@ When /^I mark the work "([^"]*)" for later$/ do |work|
   work = Work.find_by(title: work)
   visit work_url(work)
   step %{I follow "Mark for Later"}
-  Reading.update_or_create_in_database
+  step "the readings are saved to the database"
 end
 
 When /^I follow the recent chapter link for the work "([^\"]*)"$/ do |work|
@@ -681,7 +706,7 @@ end
 
 When /^the hit counts for all works are updated$/ do
   step "all AJAX requests are complete"
-  RedisHitCounter.save_recent_counts
+  RedisJobSpawner.perform_now("HitCountUpdateJob")
 end
 
 When /^all hit count information is reset$/ do

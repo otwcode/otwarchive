@@ -292,9 +292,16 @@ public
   end
 
   def admin_only_access_denied
-    flash[:error] = ts("Sorry, only an authorized admin can access the page you were trying to reach.")
-    redirect_to root_path
-    false
+    respond_to do |format|
+      format.html do
+        flash[:error] = ts("Sorry, only an authorized admin can access the page you were trying to reach.")
+        redirect_to root_path
+      end
+      format.json do
+        errors = [ts("Sorry, only an authorized admin can do that.")]
+        render json: { errors: errors }, status: :forbidden
+      end
+    end
   end
 
   # Filter method - prevents users from logging in as admin
@@ -375,13 +382,6 @@ public
 
     @page_title += " [#{ArchiveConfig.APP_NAME}]" unless options[:omit_archive_name]
     @page_title.html_safe
-  end
-
-  # Define media for fandoms menu
-  before_action :set_media
-  def set_media
-    uncategorized = Media.uncategorized
-    @menu_media = Media.by_name - [Media.find_by_name(ArchiveConfig.MEDIA_NO_TAG_NAME), uncategorized] + [uncategorized]
   end
 
   public
@@ -523,7 +523,6 @@ public
   skip_before_action  :fetch_admin_settings,
                       :load_admin_banner,
                       :set_redirects,
-                      :set_media,
                       :store_location,
                       if: proc { %w(js json).include?(request.format) }
 

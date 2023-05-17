@@ -3,7 +3,7 @@
 
 <div class="wrapper">
 
-  <dl class="work meta group" role="complementary">
+  <dl class="work meta group">
     <% tag_group = work.tag_groups
        Tag::VISIBLE.each do |type| %>
       <% tags = tag_group[type] %>
@@ -64,6 +64,17 @@
 
       <%= work_meta_list(@work, @chapter) %>
       </dd>
+      <% if policy(:user_creation).show_original_creators? %>
+        <% if @work.original_creators.any? %>
+          <% original_creators = @work.original_creators.map(&:display) %>
+          <dt class="original_creators">
+            <%= t('.original_creators', count: original_creators.count) %>
+          </dt>
+          <dd class="original_creators">
+            <%= original_creators.join(", ") %>
+          </dd>
+        <% end %>
+      <% end %>
       <% if policy(:user_creation).show_ip_address? %>
         <dt class="ip">
           <%= ts('IP Address:') %>

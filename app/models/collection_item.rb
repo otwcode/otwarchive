@@ -1,6 +1,4 @@
 class CollectionItem < ApplicationRecord
-  include ActiveModel::ForbiddenAttributesProtection
-
   APPROVAL_OPTIONS = [
     ["", :unreviewed],
     [ts("Approved"), :approved],
@@ -113,32 +111,6 @@ class CollectionItem < ApplicationRecord
           approve_by_collection
         end
       end
-
-      # if at least one of the owners of the items automatically approves
-      # adding, go ahead and approve by user
-      if !approved_by_user?
-        case item_type
-        when "Work"
-          users = item.users || [User.current_user] # if the work has no users, it is also new and being created by the current user
-        when "Bookmark"
-          users = [item.pseud.user] || [User.current_user]
-        end
-
-        users.each do |user|
-          if user.preference.automatically_approve_collections
-            # if the work is being added by a collection maintainer and at
-            # least ONE of the works owners allows automatic inclusion in
-            # collections, add the work to the collection
-            approve_by_user
-            users.each do |email_user|
-              unless email_user.preference.collection_emails_off
-                UserMailer.added_to_collection_notification(email_user.id, item.id, collection.id).deliver_now
-              end
-            end
-            break
-          end
-        end
-      end
     end
   end
 
@@ -165,28 +137,13 @@ class CollectionItem < ApplicationRecord
     end
   end
 
-  def check_gift_received(has_received)
-    item_creator_pseuds.map {|pseud|
-      has_received[pseud.name] ? "Y" :
-        (pseud.user.pseuds.collect(&:name).flatten & has_received.keys).empty? ? "N" : "M*"
-    }.join(", ")
-  end
-
   attr_writer :remove
   def remove
     @remove || ""
   end
 
-  def title
-    item.respond_to?(:title) ? item.title : item.bookmarkable.title
-  end
-
   def recipients
     item.respond_to?(:recipients) ? item.recipients : ""
-  end
-
-  def item_creator_names
-    item_creator_pseuds.collect(&:byline).join(', ')
   end
 
   def item_creator_pseuds
@@ -208,7 +165,8 @@ class CollectionItem < ApplicationRecord
   end
 
   def user_allowed_to_destroy?(user)
-    user.is_author_of?(self.item) || self.collection.user_is_maintainer?(user)
+    user.is_author_of?(self.item) ||
+      (self.collection.user_is_maintainer?(user) && !self.rejected_by_user?)
   end
 
   def approve_by_user
@@ -223,11 +181,6 @@ class CollectionItem < ApplicationRecord
     approved_by_user? && approved_by_collection?
   end
 
-  def reject(user)
-    reject_by_user if user && user.is_author_of?(item)
-    reject_by_collection if user && self.collection.user_is_maintainer?(user)
-  end
-
   def approve(user)
     if user.nil?
       # this is being run via rake task eg for importing collections
@@ -236,14 +189,6 @@ class CollectionItem < ApplicationRecord
     end
     approve_by_user if user && (user.is_author_of?(item) || (user == User.current_user && item.respond_to?(:pseuds) ? item.pseuds.empty? : item.pseud.nil?) )
     approve_by_collection if user && self.collection.user_is_maintainer?(user)
-  end
-
-  # Reveal an individual collection item
-  # Can't use update_attribute because of potential validation issues
-  # with closed collections
-  def reveal!
-    collection.collection_items.where("id = #{self.id}").update_all("unrevealed = 0")
-    notify_of_reveal
   end
 
   def posted?

@@ -30,7 +30,7 @@ Feature:
       And I fill in "New user name" with "otheruser"
       And I fill in "Password" with "password"
     When I press "Change"
-      Then I should see "Login has already been taken"
+      Then I should see "User name has already been taken"
 
   Scenario: The user should not be able to change their username to another user's name even if the capitalization is different
     Given I have no users
@@ -42,7 +42,7 @@ Feature:
       And I fill in "New user name" with "OtherUser"
       And I fill in "Password" with "password"
       And I press "Change User Name"
-    Then I should see "Login has already been taken"
+    Then I should see "User name has already been taken"
 
   Scenario: The user should be able to change their username if username and password are valid
     Given I am logged in as "downthemall" with password "password"
@@ -129,3 +129,21 @@ Feature:
       And I should not see "Epic story"
     When I search for works containing "newusername"
     Then I should see "Epic story"
+
+  Scenario: Comments reflect username changes immediately
+    Given the work "Interesting"
+      And I am logged in as "before" with password "password"
+      And I add the pseud "mine"
+    When I set up the comment "Wow!" on the work "Interesting"
+      And I select "mine" from "comment[pseud_id]"
+      And I press "Comment"
+      And I view the work "Interesting" with comments
+    Then I should see "mine (before)"
+    When it is currently 1 second from now
+      And I visit the change username page for before
+      And I fill in "New user name" with "after"
+      And I fill in "Password" with "password"
+      And I press "Change User Name"
+      And I view the work "Interesting" with comments
+    Then I should see "after" within ".comment h4.byline"
+      And I should not see "mine (before)"

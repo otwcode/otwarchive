@@ -29,6 +29,7 @@ pt-PT:
           one: 'Relação:'
           other: 'Relações:'
       work:
+        chapter_total_display: Capítulos
         summary: Sumário
     models:
       archive_warning:
@@ -58,6 +59,8 @@ pt-PT:
       series:
         one: Série
         other: Séries
+  chapters:
+    chapter_position: "- Capítulo %{position}"
   kudo_mailer:
     batch_kudo_notification:
       guest:
@@ -83,6 +86,7 @@ pt-PT:
         informal: Os melhores cumprimentos,
       creation:
         link_with_word_count: "%{creation_link} (%{word_count})"
+        title_with_chapter_number: Capítulo %{position} de %{title}
         title_with_word_count: '"%{creation_title}" (%{word_count})'
         word_count:
           one: "%{count} palavra"
@@ -342,10 +346,10 @@ pt-PT:
     creatorship_request:
       html:
         creation: "%{creation_link} por %{pseud_links}"
-        instructions: Podes aceitar ou rejeitar este pedido na tua %{page_name} página.
+        instructions: Podes aceitar ou rejeitar este pedido na tua página de %{page_name}.
         page_name: Co-Creator Requests (Pedidos de Pessoa Co-Criadora)
       intro_chapter: 'A pessoa utilizadora %{inviting_user} convidou o teu pseudónimo
-        %{pseud} para listado como pessoa co-criadora do seguinte capítulo:'
+        %{pseud} para ser listado como pessoa co-criadora do seguinte capítulo:'
       intro_series: 'A pessoa utilizadora %{inviting_user} convidou o teu pseudónimo
         %{pseud} para ser listado como pessoa co-criadora da seguinte série:'
       intro_work: 'A pessoa utilizadora %{inviting_user} convidou o teu pseudónimo

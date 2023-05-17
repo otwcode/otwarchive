@@ -124,8 +124,6 @@ class PromptsController < ApplicationController
   end
 
   def create
-    params[:prompt].merge!({challenge_signup_id: @challenge_signup.id})
-
     if params[:prompt_type] == "offer"
       @prompt = @challenge_signup.offers.build(prompt_params)
     else
@@ -178,12 +176,10 @@ class PromptsController < ApplicationController
 
   def prompt_params
     params.require(:prompt).permit(
-      :collection_id,
       :title,
       :url,
       :anonymous,
       :description,
-      :challenge_signup_id,
       :any_fandom,
       :any_character,
       :any_relationship,

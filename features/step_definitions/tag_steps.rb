@@ -206,7 +206,7 @@ end
 ### WHEN
 
 When /^the periodic tag count task is run$/i do
-  Tag.write_redis_to_database
+  RedisJobSpawner.perform_now("TagCountUpdateJob")
 end
 
 When /^the periodic filter count task is run$/i do
@@ -277,11 +277,6 @@ When /^I post the comment "([^"]*)" on the tag "([^"]*)" via web$/ do |comment_t
     step %{I fill in "Comment" with "#{comment_text}"}
     step %{I press "Comment"}
   step %{I should see "Comment created!"}
-end
-
-When /^I view tag wrangling discussions$/ do
-  step %{I follow "Tag Wrangling"}
-  step %{I follow "Discussion"}
 end
 
 When /^I add "([^\"]*)" to my favorite tags$/ do |tag|

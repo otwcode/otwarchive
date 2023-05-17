@@ -1,5 +1,5 @@
 <% # expects work %>
-<%= work_metadata_label(Work.human_attribute_name("chapter_total_display"))%><%= work.chapter_total_display %>
+<%= work_metadata_label(Work.human_attribute_name("chapter_total_display"))%><%= chapter_total_display(work) %>
 <%= work_tag_metadata(work.fandoms) %>
 <%= work_tag_metadata(work.ratings) %>
 <%= work_tag_metadata(work.archive_warnings) %>

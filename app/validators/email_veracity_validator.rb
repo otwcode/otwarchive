@@ -18,9 +18,9 @@ class EmailVeracityValidator < ActiveModel::EachValidator
     end
     unless result
       if options[:allow_blank]
-        record.errors[attribute] << (options[:message] ||  I18n.t('validators.email.veracity.allow_blank'))
+        record.errors.add(attribute, options[:message] || I18n.t("validators.email.veracity.allow_blank"))
       else
-        record.errors[attribute] << (options[:message] || I18n.t('validators.email.veracity.no_blank'))
+        record.errors.add(attribute, options[:message] || I18n.t("validators.email.veracity.no_blank"))
       end
     end
   end

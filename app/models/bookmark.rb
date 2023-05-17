@@ -1,6 +1,4 @@
 class Bookmark < ApplicationRecord
-
-  include ActiveModel::ForbiddenAttributesProtection
   include Collectible
   include Searchable
   include Responder
@@ -103,6 +101,8 @@ class Bookmark < ApplicationRecord
   scope :visible_to_admin, -> { not_private }
 
   scope :latest, -> { is_public.limit(ArchiveConfig.ITEMS_PER_PAGE).join_work }
+
+  scope :for_blurb, -> { includes(:bookmarkable, :pseud, :tags, :collections) }
 
   # a complicated dynamic scope here:
   # if the user is an Admin, we use the "visible_to_admin" scope

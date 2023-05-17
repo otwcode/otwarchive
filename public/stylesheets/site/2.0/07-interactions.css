@@ -290,6 +290,10 @@ form li ul.autocomplete li.input {
     box-shadow: 0 0 3px #555;
 }
 
+.ui-draggable a {
+  cursor: default;
+}
+
 /* WIDGET: DATEPICKER, TIMEPICKER (todo, requires ARIA managed focus) */
 
 #ui-datepicker-div {
@@ -601,6 +605,10 @@ form.single input[type="submit"] {
   vertical-align: bottom;
 }
 
+form.single span.submit {
+  padding: 0;
+}
+
 form.single ul.autocomplete {
   display: inline-block;
 }
@@ -619,7 +627,7 @@ form.single .autocomplete input[type="text"] {
 }
 
 /* tweak the margin of the submit button only if there's an autocomplete */
-form.single .autocomplete + input + input[type="submit"] {
+form.single .autocomplete + input + span.submit input[type="submit"] {
   margin-bottom: 0.125em;
 }
 

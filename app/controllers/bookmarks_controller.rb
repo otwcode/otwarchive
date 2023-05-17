@@ -26,8 +26,6 @@ class BookmarksController < ApplicationController
   def load_bookmarkable
     if params[:work_id]
       @bookmarkable = Work.find(params[:work_id])
-    elsif params[:chapter_id]
-      @bookmarkable = Chapter.find(params[:chapter_id]).try(:work)
     elsif params[:external_work_id]
       @bookmarkable = ExternalWork.find(params[:external_work_id])
     elsif params[:series_id]
@@ -53,7 +51,7 @@ class BookmarksController < ApplicationController
       if @search.query.present?
         @page_subtitle = ts("Bookmarks Matching '%{query}'", query: @search.query)
       end
-      @bookmarks = @search.search_results
+      @bookmarks = @search.search_results.scope(:for_blurb)
       flash_search_warnings(@bookmarks)
       set_own_bookmarks
       render 'search_results'
@@ -101,13 +99,13 @@ class BookmarksController < ApplicationController
         if @user.blank?
           # When it's not a particular user's bookmarks, we want
           # to list *bookmarkable* items to avoid duplication
-          @bookmarkable_items = @search.bookmarkable_search_results
+          @bookmarkable_items = @search.bookmarkable_search_results.scope(:for_blurb)
           flash_search_warnings(@bookmarkable_items)
           @facets = @bookmarkable_items.facets
         else
           # We're looking at a particular user's bookmarks, so
           # just retrieve the standard search results and their facets.
-          @bookmarks = @search.search_results
+          @bookmarks = @search.search_results.scope(:for_blurb)
           flash_search_warnings(@bookmarks)
           @facets = @bookmarks.facets
         end
@@ -138,12 +136,12 @@ class BookmarksController < ApplicationController
       elsif use_caching?
         @bookmarks = Rails.cache.fetch("bookmarks/index/latest/v2_true", expires_in: ArchiveConfig.SECONDS_UNTIL_BOOKMARK_INDEX_EXPIRE.seconds) do
           search = BookmarkSearchForm.new(show_private: false, show_restricted: false, sort_column: 'created_at')
-          results = search.search_results
+          results = search.search_results.scope(:for_blurb)
           flash_search_warnings(results)
           results.to_a
         end
       else
-        @bookmarks = Bookmark.latest.includes(:bookmarkable, :pseud, :tags, :collections).to_a
+        @bookmarks = Bookmark.latest.for_blurb.to_a
       end
     end
     set_own_bookmarks

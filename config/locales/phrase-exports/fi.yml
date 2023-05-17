@@ -1,5 +1,63 @@
 ---
 fi:
+  activerecord:
+    attributes:
+      archive_warning:
+        name_with_colon:
+          one: 'Varoitus:'
+          other: 'Varoitukset:'
+      category:
+        name_with_colon:
+          one: 'Kategoria:'
+          other: 'Kategoriat:'
+      character:
+        name_with_colon:
+          one: 'Hahmo:'
+          other: 'Hahmot:'
+      fandom:
+        name_with_colon:
+          one: 'Fandom:'
+          other: 'Fandomit:'
+      freeform:
+        name_with_colon:
+          one: 'Muu avainsana:'
+          other: 'Muut avainsanat:'
+      rating:
+        name_with_colon: 'Luokitus:'
+      relationship:
+        name_with_colon:
+          one: 'Suhde:'
+          other: 'Suhteet:'
+      work:
+        summary: Tiivistelmä
+    models:
+      archive_warning:
+        one: Varoitus
+        other: Varoitukset
+      category:
+        one: Kategoria
+        other: Kategoriat
+      chapter:
+        one: Luku
+        other: Luvut
+      character:
+        one: Hahmo
+        other: Hahmot
+      fandom:
+        one: Fandom
+        other: Fandomit
+      freeform:
+        one: Muu avainsana
+        other: Muut avainsanat
+      rating:
+        one: Luokitus
+        other: Luokitukset
+      relationship:
+        one: Suhde
+        other: Suhteet
+      series:
+        one: Sarja
+        other: Sarjat
   kudo_mailer:
     batch_kudo_notification:
       guest:
@@ -23,6 +81,13 @@ fi:
       closing:
         formal: Terveisin,
         informal: Parhain terveisin,
+      creation:
+        link_with_word_count: "%{creation_link} (%{word_count})"
+        title_with_chapter_number: "%{title}-teoksen luku %{position}"
+        title_with_word_count: '"%{creation_title}" (%{word_count})'
+        word_count:
+          one: "%{count} sana"
+          other: "%{count} sanaa"
       footer:
         general:
           html:
@@ -43,6 +108,7 @@ fi:
           addressed: Hei, %{name}!
           unaddressed: Hei!
         introductory: Tervehdys Archive of Our Own – AO3:lta (Oma arkisto)!
+      metadata_label_indicator: ": "
       signature:
         app_short_name: AO3
         open_doors: Open Doors (Avoimet ovet) -tiimi

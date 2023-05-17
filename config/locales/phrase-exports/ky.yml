@@ -1,5 +1,63 @@
 ---
 ky:
+  activerecord:
+    attributes:
+      archive_warning:
+        name_with_colon:
+          one: 'Эскертүү:'
+          other: 'Эскертүүлөр:'
+      category:
+        name_with_colon:
+          one: 'Категория:'
+          other: 'Категориялар:'
+      character:
+        name_with_colon:
+          one: 'Каарман:'
+          other: 'Каармандар:'
+      fandom:
+        name_with_colon:
+          one: 'Фандом:'
+          other: 'Фандомдор:'
+      freeform:
+        name_with_colon:
+          one: 'Кошумча тэг:'
+          other: 'Кошумча тэгдер:'
+      rating:
+        name_with_colon: 'Баалоо:'
+      relationship:
+        name_with_colon:
+          one: 'Мамиле:'
+          other: 'Мамилелер:'
+      work:
+        summary: Кыскача маалымат
+    models:
+      archive_warning:
+        one: Эскертүү
+        other: Эскертүүлөр
+      category:
+        one: Категория
+        other: Категориялар
+      chapter:
+        one: Бөлүм
+        other: Бөлүмдөр
+      character:
+        one: Каарман
+        other: Каармандар
+      fandom:
+        one: Фандом
+        other: Фандомдор
+      freeform:
+        one: Кошумча тэг
+        other: Кошумча тэгдер
+      rating:
+        one: Рейтинг
+        other: Рейтингдер
+      relationship:
+        one: Мамиле
+        other: Мамилелер
+      series:
+        one: Сериясы
+        other: Сериялар
   kudo_mailer:
     batch_kudo_notification:
       guest:
@@ -30,6 +88,13 @@ ky:
       closing:
         formal: Урматтоо менен,
         informal: Мыкты,
+      creation:
+        link_with_word_count: "%{creation_link} (%{word_count})"
+        title_with_chapter_number: "%{title} ичинен %{position} бөлүмү"
+        title_with_word_count: '"%{creation_title}" (%{word_count})'
+        word_count:
+          one: "%{count} сөз"
+          other: "%{count} сөздөр"
       footer:
         general:
           html:
@@ -50,6 +115,7 @@ ky:
           addressed: Салам, %{name}!
           unaddressed: Салам!
         introductory: Биздин Archive of Our Own – AO3 (Биздин архив - AO3)!
+      metadata_label_indicator: ": "
       signature:
         app_short_name: AO3
         open_doors: Open Doors (Ачык эшиктер) командасы
