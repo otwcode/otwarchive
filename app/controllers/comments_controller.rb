@@ -133,7 +133,6 @@ class CommentsController < ApplicationController
 
   def check_guest_comment_admin_setting
     admin_settings = AdminSetting.current
-    parent = find_parent
 
     return unless admin_settings.guest_comments_off? && !logged_in? && !logged_in_as_admin?
     

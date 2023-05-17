@@ -457,13 +457,13 @@ describe CommentsController do
         admin_setting.update_attribute(:guest_comments_off, false)
       end
 
-      it "allows guest comments" do
+      it "allows guest comments for new" do
         post :new, params: { work_id: work.id, comment: anon_comment_attributes }
 
         expect(flash[:error]).to be_nil
       end
 
-      it "allows guest comments" do
+      it "allows guest comments for create" do
         post :create, params: { work_id: work.id, comment: anon_comment_attributes }
 
         expect(flash[:error]).to be_nil
@@ -493,14 +493,14 @@ describe CommentsController do
         admin_setting.update_attribute(:guest_comments_off, true)
       end
 
-      it "does not allow guest comments" do
+      it "does not allow guest comments for new" do
         post :new, params: { work_id: work.id, comment: anon_comment_attributes }
 
         it_redirects_to_with_error("/where_i_came_from", 
                                    "Sorry, the Archive doesn't allow guests to comment right now.")
       end
 
-      it "does not allow guest comments" do
+      it "does not allow guest comments for create" do
         post :create, params: { work_id: work.id, comment: anon_comment_attributes }
 
         it_redirects_to_with_error("/where_i_came_from", 
