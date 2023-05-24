@@ -1,5 +1,7 @@
 ---
 pt-BR:
+  a11y:
+    navigation: Navegação
   abuse_reports:
     new:
       do_not_spam_html: "<strong>Investigamos cada denúncia que recebemos.</strong>
@@ -14,6 +16,8 @@ pt-BR:
             do conteúdo viola os %{tos_link} do AO3. Quanto mais completa a informação
             enviada, mais rápido poderemos efetuar a investigação necessária.
           error: Por favor descreva o problema.
+          include: inclua todos os links pertinentes, bem como qualquer outra informação
+            que julgue relevante, em sua mensagem
           label: Seu comentário (campo obrigatório)
           tos: Termos de Serviço
         email:
@@ -40,6 +44,12 @@ pt-BR:
           label: Breve resumo da violação dos Termos de Serviço (campo obrigatório)
       heading:
         page_title: Denunciar Abuso
+      include:
+        ao3: Termos de Serviço do AO3
+        intro: 'O que incluir na descrição:'
+        languages: 'Podemos responder a denúncias nas seguintes línguas:'
+        sources: links ou screenshots de quaisquer fontes relevantes
+        username: o nome da conta no AO3 da pessoa que você está denunciando
       languages_html: "<strong>Podemos responder denúncias de Abuso nos seguintes
         idiomas:  %{list}.</strong> Por favor leve em conta que idiomas além do inglês
         podem ter um tempo de resposta mais elevado."
@@ -98,6 +108,7 @@ pt-BR:
         base: 'Nome de artista inválido:'
         pseud_id: Pseudônimo
       external_work:
+        author: Artista
         user_defined_tags_count: Tags de fandom, relacionamento e personagem
       fandom:
         name_with_colon:
@@ -120,6 +131,7 @@ pt-BR:
           other: 'Relacionamentos:'
       series/creatorships:
         base: 'Nome de artista inválido:'
+        pseud_id: Pseudônimo
       work:
         chapter_total_display: Capítulos
         summary: Sumário
@@ -130,10 +142,47 @@ pt-BR:
         pseud_id: Pseudônimo
     errors:
       models:
+        block:
+          attributes:
+            blocked:
+              official: Desculpe, você não pode bloquear uma conta oficial do site.
+            blocked_id:
+              taken: Você já bloqueou essa conta.
+        comment:
+          attributes:
+            user:
+              format: "%{message}"
         creatorship:
           attributes:
             pseud_id:
               taken: já aparece na obra como artista.
+        kudo:
+          attributes:
+            commentable:
+              author_on_own_work: Não é possível deixar kudos na sua própria obra.
+              blank: Em que obra você gostaria de deixar kudos?
+              user_is_banned: Não é possível deixar kudos de uma conta banida do AO3.
+              user_is_suspended: Não é possível deixar kudos enquanto sua conta está
+                suspensa.
+            commentable_type:
+              inclusion: Onde você queria deixar kudos?
+          format: "%{message}"
+          taken: Você já deixou kudos nessa obra :)
+        mute:
+          attributes:
+            muted:
+              blank: Desculpe, não foi possível encontrar uma conta com esse nome.
+          format: "%{message}"
+        related_work:
+          attributes:
+            parent:
+              blank: A obra que você escolheu como inspiração não existe. Por favor
+                verifique o link.
+              not_work: Você só pode inserir o link para uma obra já existente no
+                campo Inspiração.
+              protected: Não é possível usar o recurso Obras relacionadas para citar
+                as obras de uma conta protegida como %{login}.
+          format: "%{message}"
         user:
           attributes:
             password_confirmation:
@@ -201,6 +250,31 @@ pt-BR:
       emails_found:
         one: um e-mail localizado
         other: "%{count} e-mails localizados"
+    mailer:
+      reset_password_instructions:
+        link_title_html: Trocar minha senha.
+    passwords:
+      edit:
+        label:
+          confirmation: Confirmar nova senha
+        landmark:
+          submit: Enviar
+        page_heading: Definir minha senha de admin
+        submit: Definir senha de admin
+      new:
+        page_heading: Esqueceu sua senha de admin?
+        reset_login_html: Nome de admin
+        submit: Redefinir senha de admin
+    sessions:
+      new:
+        label:
+          login: Nome de admin
+          password: Senha de admin
+        landmark:
+          reset: Redefinir senha
+        page_heading: Logar como admin
+        reset_link: Esqueceu senha de admin?
+        submit: Logar como admin
     settings:
       index:
         fields:
@@ -219,6 +293,7 @@ pt-BR:
             é admin
         heading: Configurações do AO3
         legend:
+          account_and_invitations: Contas e convites
           actions: Ações
           disable_support_form: Desabilitar formulário de Suporte
         queue_status: "%{number} receberão convites no dia %{date}."
@@ -250,11 +325,33 @@ pt-BR:
         footnote: As configurações de permissão para comentar do post original irão
           substituir quaisquer permissões selecionadas nessa página.
         label: Tradução do post
+  blocked:
+    unblock: Desbloquear
+    users:
+      confirm_block:
+        sure_html: Tem certeza que você quer %{block}%{username}?
+      create:
+        blocked: Você bloqueou a conta %{name}.
+      index:
+        blocked_users: Contas bloqueadas
+        none: Você não bloqueou nenhuma conta.
   chapters:
     chapter_position: "- Capítulo %{position}"
     unspecified_fandom: Fandom não especificado
+  collection_items:
+    collection_item_form:
+      add: Adicionar
+      add_bookmark_header: Adicionar favorito a coleções
+      invite: Convidar
+    index:
+      navigation:
+        unreviewed_by_user: Aguardando aprovação
   comments:
+    check_blocked:
+      reply: Desculpe, essa pessoa bloqueou sua conta.
     commentable:
+      blocked: Desculpe, não é possível deixar comentários, pois sua conta foi bloqueada
+        por alguém na lista de artistas que criaram essa obra.
       permissions:
         admin_post:
           alt_action: Você pode, no entanto, %{support_link} se tiver comentários
@@ -275,6 +372,9 @@ pt-BR:
             oculta.
           unrevealed: Desculpe, você não pode adicionar ou editar comentários numa
             obra não revelada.
+    freeze:
+      permission_denied: Desculpe, sua conta não tem as permissões necessárias para
+        congelar esses comentários.
   devise:
     confirmations:
       confirmed: Seu endereço de e-mail foi confirmado com sucesso.
@@ -324,6 +424,9 @@ pt-BR:
       destroyed: Adeus! Sua conta foi cancelada com sucesso. Esperamos lhe ver novamente
         em breve.
       signed_up: A equipe AO3 lhe deseja as boas vindas! Você se registrou com sucesso.
+      signed_up_but_inactive: Você criou sua conta com sucesso. No então, não foi
+        possível efetuar login, pois você ainda não completou a ativação da sua conta
+        por e-mail.
       updated: Sua conta foi atualizada com sucesso.
     sessions:
       already_signed_out: Logout efetuado com sucesso.
@@ -373,6 +476,7 @@ pt-BR:
         name:
           label: Seu nome (campo opcional)
         submit:
+          active: Enviar
           disabled: Por favor, aguarde.
         summary:
           error: Por favor insira um breve resumo da sua mensagem
@@ -402,6 +506,7 @@ pt-BR:
         site_questions: Perguntas sobre como usar o site
         tag_changes: Pedidos para canonizar ou modificar tags
         work_language: Obras associadas ao idioma errado
+        work_problems: Obras marcadas com a língua errada ou obras duplicadas
       status:
         current: 'Para as últimas atualizações sobre performance ou indisponibilidade
           do AO3, dê uma olhada na nossa conta no Twitter: %{twitter_link}.'
@@ -410,6 +515,8 @@ pt-BR:
     donate:
       page_title: Doe ou faça parte da nossa equipe voluntária
   kudos:
+    create:
+      success: Obrigade por deixar kudos!
     guest_header:
       one: "%{count} visitante também deixou kudos"
       other: "%{count} visitantes também deixaram kudos"
@@ -482,9 +589,40 @@ pt-BR:
         parent_org: Organization for Transformative Works – OTW (Organização para
           Obras Transformativas)
         support: Equipe de Suporte do AO3
+  muted:
+    users:
+      confirm_mute:
+        blocked_users_link_text: sua página de Contas Bloqueadas
+        cancel: Cancelar
+        restore_site_skin_faq_link_text: Instruções para voltar para a skin padrão
+          do site
+        will:
+          seeing_content: ocultar completamente obras, séries, favoritos e comentários
+            sempre que você estiver visitando o AO3; não haverá espaço em branco ou
+            indicação alguma de que algo foi removido dali
+        will_not:
+          hide_content_for_others: ocultar obras, séries, favoritos e comentários
+            de outras pessoas
+          prevent_emails: impedir você de receber e-mails com notificações de novos
+            comentários, capítulos ou obras dessa pessoa
+      confirm_unmute:
+        resume:
+          see_content: ver suas obras, séries, favoritos e comentários no site
+      index:
+        blocked_users_link_text: sua página de Contas Bloqueadas
+        restore_site_skin_faq_link_text: instruções para usar novamente a skin padrão
+          do site
+  pseuds:
+    delete_preview:
+      heading: Apagar pseudônimo
   skins:
     confirm_delete:
       confirm_html: Tem certeza que quer <strong><em>apagar</em></strong> a skin "%{skin_title}"?
+  tags:
+    index:
+      about:
+        popular_in_collection: Aqui estão algumas das tags mais populares utilizadas
+          nessa coleção.
   troubleshooting:
     show:
       fix_associations:
@@ -519,6 +657,9 @@ pt-BR:
       update_work_filters:
         title: Atualizar filtros de uma obra
   users:
+    change_username:
+      last_renamed: 'A última vez que você trocou o nome associado à sua conta foi
+        na seguinte data e hora: %{renamed_at}.'
     delete_preview:
       cancel: Cancelar
       confirm: Tem certeza? Não é possível desfazer essa ação.
@@ -558,6 +699,10 @@ pt-BR:
         subject: "[%{app_name}] Mudança de senha"
         unrequested: Caso você não tenha solicitado a redefinição da sua senha, ignore
           esse e-mail. Sua senha atual irá continuar funcionando.
+    sessions:
+      new:
+        login:
+          request_invite: Pedir um convite para entrar
     show:
       login_banner:
         dismiss: Desabilitar banner de forma permanente
