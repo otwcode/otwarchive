@@ -100,8 +100,7 @@ Feature: Edit preferences
   Scenario: User can hide warning and freeform tags and reveal them on a case-
   by-case basis.
 
-  Given I limit myself to the Archive
-    And a canonical freeform "Scary tag"
+  Given a canonical freeform "Scary tag"
     And I am logged in as "someone_else"
     And I post the work "Someone Else's Work" as part of a series "A Series"
     And I am logged in as "tester"

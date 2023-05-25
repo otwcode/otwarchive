@@ -39,42 +39,57 @@ class AbuseReport < ApplicationRecord
 
   scope :by_date, -> { order('created_at DESC') }
 
-  before_validation :add_work_id_to_url, :clean_url, on: :create
-  
-  # Clean work or profile URLs so we can prevent the same URLs from
-  # getting reported too many times.
-  # If the URL ends without a / at the end, add it:
-  # url_is_not_over_reported uses the / so "/works/1234" isn't a match
-  # for "/works/123"
-  def clean_url
-    # Work URLs: "works/123"
-    # Profile URLs: "users/username"
-    if url =~ /(works\/\d+)/ || url =~ /(users\/\w+)/
-      uri = Addressable::URI.parse url
-      uri.query = nil
-      uri.fragment = nil
-      uri.path += "/" unless uri.path.end_with? "/"
-      self.url = uri.to_s
-    else
-      url
-    end
+  # Standardize the format of work, chapter, and profile URLs to get it ready
+  # for the url_is_not_over_reported validation.
+  # Work URLs: "works/123"
+  # Chapter URLs: "chapters/123"
+  # Profile URLs: "users/username"
+  before_validation :standardize_url, on: :create
+  def standardize_url
+    return unless url =~ %r{((chapters|works)/\d+)} || url =~ %r{(users\/\w+)}
+
+    self.url = add_scheme_to_url(url)
+    self.url = clean_url(url)
+    self.url = add_work_id_to_url(self.url)
   end
 
-  # Gets the chapter id from the URL and tries to get the work id
-  # If successful, the work id is then added to the URL in front of "/chapters"
-  def add_work_id_to_url
-    return unless url =~ %r{(chapters/\d+)} && url !~ %r{(works/\d+)}
+  def add_scheme_to_url(url)
+    uri = Addressable::URI.parse(url)
+    return url unless uri.scheme.nil?
+
+    "https://#{uri}"
+  end
+
+  # Clean work or profile URLs so we can prevent the same URLs from getting
+  # reported too many times.
+  # If the URL ends without a / at the end, add it: url_is_not_over_reported
+  # uses the / so "/works/1234" isn't a match for "/works/123"
+  def clean_url(url)
+    uri = Addressable::URI.parse(url)
+
+    uri.query = nil
+    uri.fragment = nil
+    uri.path += "/" unless uri.path.end_with? "/"
+
+    uri.to_s
+  end
+
+  # Get the chapter id from the URL and try to get the work id
+  # If successful, add the work id to the URL in front of "/chapters"
+  def add_work_id_to_url(url)
+    return url unless url =~ %r{(chapters/\d+)} && url !~ %r{(works/\d+)}
 
     chapter_regex = %r{(chapters/)(\d+)}
     regex_groups = chapter_regex.match url
     chapter_id = regex_groups[2]
     work_id = Chapter.find_by(id: chapter_id).try(:work_id)
 
-    return if work_id.nil?
+    return url if work_id.nil?
     
-    uri = Addressable::URI.parse url
-    uri.path = "/works/" + work_id.to_s + uri.path
-    self.url = uri.to_s
+    uri = Addressable::URI.parse(url)
+    uri.path = "/works/#{work_id}" + uri.path
+
+    uri.to_s
   end
 
   app_url_regex = Regexp.new('^(https?:\/\/)?(www\.|(insecure\.))?(archiveofourown|ao3)\.(org|com).*', true)

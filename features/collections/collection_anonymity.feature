@@ -513,7 +513,8 @@ Feature: Collection
       And the email should contain "The collection maintainers may later reveal your work but leave it anonymous."
       And the email should not contain "translation missing"
 
-  @javascript
+  # We need to load the site skin to make the share modal work:
+  @javascript @load-default-skin
   Scenario: Work share modal should not reveal anonymous authors
     Given I have the anonymous collection "Anonymous Hugs"
     When I am logged in as "first_user"

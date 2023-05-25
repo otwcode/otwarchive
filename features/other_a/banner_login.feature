@@ -17,7 +17,7 @@ Feature: First login help banner
   Then I should be on the tos page
   When I am on newname's user page
     And I follow "contact our Policy & Abuse team"
-  Then I should see "Report Abuse"
+  Then I should see "Policy Questions & Abuse Reports"
 
   Scenario: Popup details can be viewed
   

@@ -43,7 +43,7 @@ describe Tag do
     context 'updating taggings_count_cache' do
       it 'should not cache tags which are not used much' do
         FactoryBot.create(:work, fandom_string: @fandom_tag.name)
-        RedisSetJobSpawner.perform_now("TagCountUpdateJob")
+        RedisJobSpawner.perform_now("TagCountUpdateJob")
         @fandom_tag.reload
         expect(@fandom_tag.taggings_count_cache).to eq 1
         expect(@fandom_tag.taggings_count).to eq 1
@@ -52,13 +52,13 @@ describe Tag do
       it 'will start caching a when tag when that tag is used significantly' do
         (1..ArchiveConfig.TAGGINGS_COUNT_MIN_CACHE_COUNT).each do |try|
           FactoryBot.create(:work, fandom_string: @fandom_tag.name)
-          RedisSetJobSpawner.perform_now("TagCountUpdateJob")
+          RedisJobSpawner.perform_now("TagCountUpdateJob")
           @fandom_tag.reload
           expect(@fandom_tag.taggings_count_cache).to eq try
           expect(@fandom_tag.taggings_count).to eq try
         end
         FactoryBot.create(:work, fandom_string: @fandom_tag.name)
-        RedisSetJobSpawner.perform_now("TagCountUpdateJob")
+        RedisJobSpawner.perform_now("TagCountUpdateJob")
         @fandom_tag.reload
         # This value should be cached and wrong
         expect(@fandom_tag.taggings_count_cache).to eq ArchiveConfig.TAGGINGS_COUNT_MIN_CACHE_COUNT
@@ -72,7 +72,7 @@ describe Tag do
           expect(@fandom_tag.taggings_count_cache).to eq 0
         end
         @fandom_tag.taggings_count = 40 * ArchiveConfig.TAGGINGS_COUNT_CACHE_DIVISOR
-        RedisSetJobSpawner.perform_now("TagCountUpdateJob")
+        RedisJobSpawner.perform_now("TagCountUpdateJob")
         @fandom_tag.reload
         expect(@fandom_tag.taggings_count_cache).to eq 40 * ArchiveConfig.TAGGINGS_COUNT_CACHE_DIVISOR
       end
