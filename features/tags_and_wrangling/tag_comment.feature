@@ -28,7 +28,8 @@ I'd like to comment on a tag'
       And it is currently Mon Mar 27 22:00:00 UTC 2017
     When I am logged in as "dizmo"
     When I post the comment "Shouldn't this be a metatag with Stargate?" on the tag "Stargate Atlantis"
-    When I follow "Edit"
+    When it is currently 1 second from now
+      And I follow "Edit"
     Then the "Comment" field should contain "Shouldn't this be a metatag with Stargate?"
       And I should see "Cancel"
     When I fill in "Comment" with "Yep, we should have a Stargate franchise metatag."
@@ -51,36 +52,6 @@ I'd like to comment on a tag'
     When I post the comment "Important policy decision" on the tag "Stargate Atlantis"
     When I view the tag "Stargate Atlantis"
     Then I should see "2 comments"
-
-  Scenario: Multiple comments on a tag show on discussion page
-
-    Given the following activated tag wranglers exist
-        | login     |
-        | dizmo     |
-        | Enigel    |
-      And a fandom exists with name: "Stargate Atlantis", canonical: true
-    When I am logged in as "Enigel"
-    When I post the comment "Yep, we should have a Stargate franchise metatag." on the tag "Stargate Atlantis"
-    When I am logged in as an admin
-    When I post the comment "Important policy decision" on the tag "Stargate Atlantis"
-    When I am logged in as "dizmo"
-    When I view tag wrangling discussions
-    Then I should see "Tag Wrangling Discussion"
-      And I should see "Yep, we should have a Stargate franchise metatag."
-      And I should see "Important policy decision"
-
-  Scenario: Unedited tag does not show on discussion page
-
-    Given the following activated tag wranglers exist
-          | login     |
-          | dizmo     |
-          | Enigel    |
-        And a fandom exists with name: "Stargate Atlantis", canonical: true
-    When I am logged in as "Enigel"
-    When I view the tag "Stargate Atlantis"
-    When I am logged in as "dizmo"
-    When I view tag wrangling discussions
-    Then I should not see "Stargate Atlantis"
 
     Scenario: admin can also comment on tags, issue 1428
 
@@ -129,27 +100,17 @@ I'd like to comment on a tag'
       And the email should contain "left the following comment on"
       And the email should contain "the tag"
 
-    # check that the links in the email go where they should; this is wonky and I don't know why
-    # I'm having the tests only check the html based email for now
-    When I follow "Go to the thread starting from this comment" in the email
-    Then I should see "Reading Comments on Eroica"
+    When I am logged in as "Enigel" with password "wrangulator"
+      And I follow "Go to the thread starting from this comment" in the email
+    Then I should see "Comment on Eroica"
       And I should see "really clever stuff"
-      And I log out
     When I follow "Read all comments on Eroica" in the email
-      And I fill in "User name or email:" with "Cesy"
-      And I fill in "Password:" with "wrangulator"
-      And I press "Log In"
     Then I should see "Reading Comments on Eroica"
       And I should see "really clever stuff"
-      And I log out
     When I follow "Reply to this comment" in the email
-      And I fill in "User name or email:" with "Enigel"
-      And I fill in "Password:" with "wrangulator"
-      And I press "Log In"
-    Then I should see "Reading Comments on Eroica"
+    Then I should see "Comment on Eroica"
       And I should see "really clever stuff"
       And all emails have been delivered
-      And I am logged in as "Enigel" with password "wrangulator"
 
     When I view the tag "Doctor Who"
       And I follow "0 comments"

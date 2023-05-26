@@ -1,8 +1,8 @@
-# See http://www.robotstxt.org/wc/norobots.html for documentation on how to use the robots.txt file
+# See https://www.robotstxt.org/robotstxt.html for documentation on how to use the robots.txt file
 #
 
 User-agent:	*
-Disallow:	/works? # cruel but efficient
+Disallow: /works? # cruel but efficient
 Disallow: /autocomplete/
 Disallow: /downloads/
 Disallow: /external_works/
@@ -19,10 +19,10 @@ Disallow: /external_works/
 # Googlebot is smart and knows pattern matching
 Disallow: /works/*?
 Disallow: /*search?
-Disallow:	/*?*query=
-Disallow:	/*?*sort_
-Disallow:	/*?*selected_tags
-Disallow:	/*?*selected_pseuds
+Disallow: /*?*query=
+Disallow: /*?*sort_
+Disallow: /*?*selected_tags
+Disallow: /*?*selected_pseuds
 Disallow: /*?*use_openid
 Disallow: /*?*view_adult
 Disallow: /*?*tag_id
@@ -30,6 +30,9 @@ Disallow: /*?*pseud_id
 Disallow: /*?*user_id
 Disallow: /*?*pseud=
 Disallow: /people?*show=
+
+User-agent: CCBot
+Disallow: /
 
 User-agent: Slurp
 Crawl-delay: 30

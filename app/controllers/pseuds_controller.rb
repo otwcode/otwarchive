@@ -36,31 +36,25 @@ class PseudsController < ApplicationController
 
     # very similar to show under users - if you change something here, change it there too
     if !(logged_in? || logged_in_as_admin?)
-      # hahaha omg so ugly BUT IT WORKS :P
-      @fandoms = Fandom.select("tags.*, count(tags.id) as work_count").
-                   joins(:direct_filter_taggings).
-                   joins("INNER JOIN works ON filter_taggings.filterable_id = works.id AND filter_taggings.filterable_type = 'Work'").
-                   group("tags.id").
-                   merge(Work.visible_to_all.revealed.non_anon).
-                   merge(Work.joins("INNER JOIN creatorships ON creatorships.creation_id = works.id AND creatorships.creation_type = 'Work'
-                               INNER JOIN pseuds ON creatorships.pseud_id = pseuds.id").where("pseuds.id = ?", @pseud.id))
       visible_works = @pseud.works.visible_to_all
       visible_series = @pseud.series.visible_to_all
       visible_bookmarks = @pseud.bookmarks.visible_to_all
     else
-      @fandoms = Fandom.select("tags.*, count(tags.id) as work_count").
-                   joins(:direct_filter_taggings).
-                   joins("INNER JOIN works ON filter_taggings.filterable_id = works.id AND filter_taggings.filterable_type = 'Work'").
-                   group("tags.id").
-                   merge(Work.visible_to_registered_user.revealed.non_anon).
-                   merge(Work.joins("INNER JOIN creatorships ON creatorships.creation_id = works.id AND creatorships.creation_type = 'Work'
-                               INNER JOIN pseuds ON creatorships.pseud_id = pseuds.id").where("pseuds.id = ?", @pseud.id))
       visible_works = @pseud.works.visible_to_registered_user
       visible_series = @pseud.series.visible_to_registered_user
       visible_bookmarks = @pseud.bookmarks.visible_to_registered_user
     end
-    @fandoms = @fandoms.order('work_count DESC').load unless @fandoms.empty?
-    @works = visible_works.revealed.non_anon.order("revised_at DESC").limit(ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD)
+
+    visible_works = visible_works.revealed.non_anon
+    visible_series = visible_series.exclude_anonymous
+
+    @fandoms = \
+      Fandom.select("tags.*, count(DISTINCT works.id) as work_count").
+      joins(:filtered_works).group("tags.id").merge(visible_works).
+      where(filter_taggings: { inherited: false }).
+      order('work_count DESC').load
+
+    @works = visible_works.order("revised_at DESC").limit(ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD)
     @series = visible_series.order("updated_at DESC").limit(ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD)
     @bookmarks = visible_bookmarks.order("updated_at DESC").limit(ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD)
 
@@ -111,7 +105,7 @@ class PseudsController < ApplicationController
   def update
     @pseud = @user.pseuds.find_by(name: params[:id])
     default = @user.default_pseud
-    if @pseud.update_attributes(pseud_params)
+    if @pseud.update(pseud_params)
       # if setting this one as default, unset the attribute of the current default pseud
       if @pseud.is_default and not(default == @pseud)
         # if setting this one as default, unset the attribute of the current active pseud

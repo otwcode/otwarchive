@@ -26,13 +26,14 @@
 #
 require './config/boot'
 require 'new_relic/recipes'
+require "active_support/core_ext/hash/keys"
 
 # takes care of the bundle install tasks
 require 'bundler/capistrano'
 
 # deploy to different environments with tags
 require 'capistrano/ext/multistage'
-set :stages, ["staging", "production", "i18n"]
+set :stages, %w[staging production]
 set :default_stage, "staging"
 #require 'capistrano/gitflow_version'
 
@@ -58,9 +59,10 @@ set :mail_to, "otw-coders@transformativeworks.org otw-testers@transformativework
 
 # git settings
 set :scm, :git
-set :repository, "git://github.com/otwcode/otwarchive.git"
+set :repository, "https://github.com/otwcode/otwarchive.git"
 set :deploy_via, :remote_cache
 
+set :servers, -> { YAML.load_file(File.join(__dir__, "servers.yml")).deep_symbolize_keys[fetch(:stage)] }
 
 # overwrite default capistrano deploy tasks
 namespace :deploy do
@@ -68,7 +70,7 @@ namespace :deploy do
   task :restart  do
     find_servers(roles: [:app, :web]).each do |server|
       puts "restart on #{server.host}"
-      run "cd ~/app/current ; bundle exec rake skins:cache_all_site_skins RAILS_ENV=#{rails_env}" , hosts: server.host
+      run "cd ~/app/current ; bundle exec rake skins:cache_chooser_skins RAILS_ENV=#{rails_env}", hosts: server.host
       run "/home/ao3app/bin/unicorns_reload", hosts: server.host
     end
   end
@@ -84,7 +86,7 @@ namespace :deploy do
   end
 
   desc "Get the config files"
-  task :update_configs, roles: [ :app , :web ] do
+  task :update_configs, roles: [:app, :web, :workers] do
     run "/home/ao3app/bin/create_links_on_install"
   end
 
@@ -106,7 +108,7 @@ namespace :deploy do
   task :reload_site_skins do
     find_servers(roles: :web).each do |server|
       puts "Caching skins on #{server.host}"
-      run "cd ~/app/current ; bundle exec rake skins:cache_all_site_skins  RAILS_ENV=#{rails_env} ; cd ~/app ; rm web_old ; ln -f -s `readlink -f current` web_new ; mv web web_old ; mv web_new web", hosts: server.host
+      run "cd ~/app/current ; bundle exec rake skins:cache_chooser_skins  RAILS_ENV=#{rails_env} ; cd ~/app ; rm web_old ; ln -f -s `readlink -f current` web_new ; mv web web_old ; mv web_new web", hosts: server.host
       sleep (10)
     end
   end

@@ -16,10 +16,31 @@ Feature: Tag wrangling
       And I should see "Amélie"
       And I should not see "Amelie"
 
+  Scenario: Admin can rename a tag using Eastern characters
+
+  Given I am logged in as an admin
+    And a fandom exists with name: "先生", canonical: false
+  When I edit the tag "先生"
+    And I fill in "Name" with "てりやき"
+    And I press "Save changes"
+  Then I should see "Tag was updated"
+    And I should see "てりやき"
+    And I should not see "先生"
+
+  Scenario: Tag wrangler cannot rename a tag using Eastern characters
+
+  Given I am logged in as a tag wrangler
+    And a fandom exists with name: "先生", canonical: false
+  When I edit the tag "先生"
+    And I fill in "Name" with "てりやき"
+    And I press "Save changes"
+  Then I should not see "Tag was updated"
+    And I should see "Only changes to capitalization and diacritic marks are permitted"
+
   Scenario: Admin can remove a user's wrangling privileges from the manage users page (this will leave assignments intact)
 
     Given the tag wrangler "tangler" with password "wr@ngl3r" is wrangler of "Testing"
-    When I am logged in as an admin
+    When I am logged in as a "tag_wrangling" admin
       And I am on the manage users page
     When I fill in "Name" with "tangler"
       And I press "Find"
@@ -40,3 +61,12 @@ Feature: Tag wrangling
       And "Testing" should not be assigned to the wrangler "tangler"
     When I edit the tag "Testing"
     Then I should see "Sign Up"
+
+  Scenario: Tag wrangling admins can download a wrangler's wrangled tags report CSV
+
+    Given the tag wrangler "tangler" with password "wr@ngl3r" is wrangler of "Testing"
+      And I am logged in as a "tag_wrangling" admin
+    When I go to the wrangling page for "tangler"
+    Then I should see "Tags Wrangled (CSV)"
+    When I follow "Tags Wrangled (CSV)"
+    Then I should download a csv file with the header row "Name Last Updated Type Merger Fandoms Unwrangleable"

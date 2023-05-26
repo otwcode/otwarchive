@@ -11,7 +11,7 @@
   	  <%= render 'works/work_blurb', :work => work %>
     <% end %>
   </ul>
-  <% if @collection.all_approved_works_count > ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD %>
-    <ul class="actions" role="navigation"><li><%= link_to ts("Works (%{count})", :count => @collection.all_approved_works_count), collection_works_path(@collection) %></li></ul>
+  <% if works.total_entries > ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD %>
+    <ul class="actions" role="navigation"><li><%= link_to ts("Works (%{count})", :count => works.total_entries), collection_works_path(@collection) %></li></ul>
   <% end %>
 </div>

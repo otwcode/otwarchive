@@ -12,7 +12,7 @@ class PotentialMatchSettings < ApplicationRecord
 
   # VALIDATION
   REQUIRED_TAG_ATTRIBUTES = %w(num_required_fandoms num_required_characters num_required_relationships num_required_freeforms num_required_categories
-     num_required_ratings num_required_warnings)
+     num_required_ratings num_required_archive_warnings)
 
   REQUIRED_TAG_ATTRIBUTES.each do |tag_limit_field|
       validates_inclusion_of tag_limit_field, in: REQUIRED_MATCH_OPTIONS.collect {|entry| entry[1]},
@@ -26,9 +26,9 @@ class PotentialMatchSettings < ApplicationRecord
   def no_match_required?
     REQUIRED_TAG_ATTRIBUTES.all? {|attrib| self.send("#{attrib}") == 0}
   end
-  
+
   def required_types
-    TagSet::TAG_TYPES.select {|type| self.send("num_required_#{type.pluralize}") != 0}
+    TagSet::TAG_TYPES.select {|type| self.send("num_required_#{type.tableize}") != 0}
   end
 
   def topmost_required_type
@@ -36,6 +36,6 @@ class PotentialMatchSettings < ApplicationRecord
   end
 
   def include_optional?(type)
-    send("include_optional_#{type.downcase.pluralize}")
+    send("include_optional_#{type.tableize}")
   end
 end

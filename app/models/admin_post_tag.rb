@@ -4,7 +4,7 @@ class AdminPostTag < ApplicationRecord
   has_many :admin_posts, through: :admin_post_taggings
 
   validates_presence_of :name
-  validates_uniqueness_of :name
+  validates :name, uniqueness: true
   validates_format_of :name, with: /[a-zA-Z0-9-]+$/, multiline: true
 
   # Find or create by name, and set the language if it's a new record

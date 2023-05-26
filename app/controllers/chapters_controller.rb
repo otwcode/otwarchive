@@ -7,7 +7,6 @@ class ChaptersController < ApplicationController
   before_action :check_ownership, except: [:index, :show]
   before_action :check_visibility, only: [:show]
   before_action :load_chapter, only: [:show, :edit, :update, :preview, :post, :confirm_delete, :destroy]
-  before_action :set_author_attributes, only: [:create, :update]
 
   cache_sweeper :feed_sweeper
 
@@ -20,7 +19,8 @@ class ChaptersController < ApplicationController
 
   # GET /work/:work_id/chapters/manage
   def manage
-    @chapters = @work.chapters_in_order(false).select(&:posted)
+    @chapters = @work.chapters_in_order(include_content: false,
+                                        include_drafts: true)
   end
 
   # GET /work/:work_id/chapters/:id
@@ -28,7 +28,7 @@ class ChaptersController < ApplicationController
   def show
     @tag_groups = @work.tag_groups
     if params[:view_adult]
-      session[:adult] = true
+      cookies[:view_adult] = "true"
     elsif @work.adult? && !see_adult?
       render "works/_adult", layout: "application" and return
     end
@@ -36,10 +36,11 @@ class ChaptersController < ApplicationController
     if params[:selected_id]
       redirect_to url_for(controller: :chapters, action: :show, work_id: @work.id, id: params[:selected_id]) and return
     end
-    @chapters = @work.chapters_in_order(false)
-    if !logged_in? || !current_user.is_author_of?(@work)
-      @chapters = @chapters.select(&:posted)
-    end
+    @chapters = @work.chapters_in_order(
+      include_content: false,
+      include_drafts: (logged_in_as_admin? ||
+                       @work.user_is_owner_or_invited?(current_user))
+    )
     if !@chapters.include?(@chapter)
       access_denied
     else
@@ -48,15 +49,18 @@ class ChaptersController < ApplicationController
         @previous_chapter = @chapters[chapter_position-1] unless chapter_position == 0
         @next_chapter = @chapters[chapter_position+1]
       end
-      @commentable = @work
-      @comments = @chapter.comments.reviewed
 
-      @page_title = @work.unrevealed? ? ts("Mystery Work - Chapter %{position}", position: @chapter.position.to_s) :
-        get_page_title(@tag_groups["Fandom"][0].name,
-          @work.anonymous? ? ts("Anonymous") : @work.pseuds.sort.collect(&:byline).join(', '),
-          @work.title + " - Chapter " + @chapter.position.to_s)
+      if @work.unrevealed?
+        @page_title = t(".unrevealed") + t(".chapter_position", position: @chapter.position.to_s)
+      else
+        fandoms = @tag_groups["Fandom"]
+        fandom = fandoms.empty? ? t(".unspecified_fandom") : fandoms[0].name
+        title_fandom = fandoms.size > 3 ? t(".multifandom") : fandom
+        author = @work.anonymous? ? t(".anonymous") : @work.pseuds.sort.collect(&:byline).join(", ")
+        @page_title = get_page_title(title_fandom, author, @work.title + t(".chapter_position", position: @chapter.position.to_s))
+      end
 
-      @kudos = @work.kudos.with_pseud.includes(pseud: :user).order("created_at DESC")
+      @kudos = @work.kudos.with_user.includes(:user)
 
       if current_user.respond_to?(:subscriptions)
         @subscription = current_user.subscriptions.where(subscribable_id: @work.id,
@@ -65,12 +69,6 @@ class ChaptersController < ApplicationController
       end
       # update the history.
       Reading.update_or_create(@work, current_user) if current_user
-
-      # TEMPORARY hack-like thing to fix the fact that chaptered works weren't hit-counted or added to history at all
-      if chapter_position == 0
-        Rails.logger.debug "Chapter remote addr: #{request.remote_ip}"
-        @work.increment_hit_count(request.remote_ip)
-      end
 
       respond_to do |format|
         format.html
@@ -83,18 +81,18 @@ class ChaptersController < ApplicationController
   # GET /work/:work_id/chapters/new.xml
   def new
     @chapter = @work.chapters.build(position: @work.number_of_chapters + 1)
-    load_pseuds
   end
 
   # GET /work/:work_id/chapters/1/edit
   def edit
-    load_pseuds
-
     if params["remove"] == "me"
-      @chapter.authors_to_remove = current_user.pseuds
-      @chapter.save
-      flash[:notice] = ts("You have been removed as a creator from the chapter")
-      redirect_to @work
+      @chapter.creatorships.for_user(current_user).destroy_all
+      if @work.chapters.any? { |c| current_user.is_author_of?(c) }
+        flash[:notice] = ts("You have been removed as a creator from the chapter.")
+        redirect_to @work
+      else # remove from work if no longer co-creator on any chapter
+        redirect_to edit_work_path(@work, remove: "me")
+      end
     end
   end
 
@@ -112,13 +110,10 @@ class ChaptersController < ApplicationController
 
     @chapter = @work.chapters.build(chapter_params)
     @work.wip_length = params[:chapter][:wip_length]
-    load_pseuds
 
     if params[:edit_button] || chapter_cannot_be_saved?
       render :new
-    elsif chapter_has_pseuds_to_fix?
-      render :_choose_coauthor
-    else  # :post_without_preview, :preview or :cancel_coauthor_button
+    else # :post_without_preview or :preview
       @work.major_version = @work.major_version + 1
       @chapter.posted = true if params[:post_without_preview_button]
       @work.set_revised_at_by_chapter(@chapter)
@@ -128,7 +123,7 @@ class ChaptersController < ApplicationController
           redirect_to [@work, @chapter]
         else
           draft_flash_message(@work)
-          redirect_to [:preview, @work, @chapter]
+          redirect_to preview_work_chapter_path(@work, @chapter)
         end
       else
         render :new
@@ -147,13 +142,10 @@ class ChaptersController < ApplicationController
 
     @chapter.attributes = chapter_params
     @work.wip_length = params[:chapter][:wip_length]
-    load_pseuds
 
     if params[:edit_button] || chapter_cannot_be_saved?
       render :edit
-    elsif chapter_has_pseuds_to_fix?
-      render :_choose_coauthor
-    elsif params[:preview_button] || params[:cancel_coauthor_button]
+    elsif params[:preview_button]
       @preview_mode = true
       if @chapter.posted?
         flash[:notice] = ts("This is a preview of what this chapter will look like after your changes have been applied. You should probably read the whole thing to check for problems before posting.")
@@ -168,7 +160,7 @@ class ChaptersController < ApplicationController
       @work.set_revised_at_by_chapter(@chapter)
       if @chapter.save && @work.save
         flash[:notice] = ts("Chapter was successfully #{posted_changed ? 'posted' : 'updated'}.")
-        redirect_to [@work, @chapter]
+        redirect_to work_chapter_path(@work, @chapter)
       else
         render :edit
       end
@@ -194,7 +186,6 @@ class ChaptersController < ApplicationController
   # GET /chapters/1/preview
   def preview
     @preview_mode = true
-    load_pseuds
   end
 
   # POST /chapters/1/post
@@ -244,30 +235,14 @@ class ChaptersController < ApplicationController
   # Check whether we should display :new or :edit instead of previewing or
   # saving the user's changes.
   def chapter_cannot_be_saved?
-    # make sure at least one of the pseuds is actually owned by this user
-    if @chapter.authors.present? && (@chapter.authors & current_user.pseuds).empty?
-      flash.now[:error] = ts("You're not allowed to use that pseud.")
-      return true
+    # The chapter can only be saved if the work can be saved:
+    if @work.invalid?
+      @work.errors.full_messages.each do |message|
+        @chapter.errors.add(:base, message)
+      end
     end
 
     @chapter.errors.any? || @chapter.invalid?
-  end
-
-  # Check whether we should display _choose_coauthor.
-  def chapter_has_pseuds_to_fix?
-    @chapter.invalid_pseuds.present? || @chapter.ambiguous_pseuds.present?
-  end
-
-  # Set a bunch of instance variables concerning the chapter's pseuds. Requires
-  # @work and @chapter to be defined. Needs to be called for new, create, edit,
-  # update, and preview, before the views are rendered, but after the attribute
-  # author_attributes has been set.
-  def load_pseuds
-    @allpseuds = (current_user.pseuds + (@work.authors ||= []) + @work.pseuds + (@chapter.authors ||= []) + (@chapter.pseuds ||= [])).uniq
-    @pseuds = current_user.pseuds
-    @coauthors = @allpseuds.reject { |p| p.user_id == current_user.id }
-    @to_select = [@chapter.authors, @chapter.pseuds, @work.pseuds].detect(&:present?)
-    @selected_pseuds = @to_select.map { |pseud| pseud.id.to_i }
   end
 
   # fetch work these chapters belong to from db
@@ -292,13 +267,6 @@ class ChaptersController < ApplicationController
     end
   end
 
-  # Stuff new bylines into author attributes to be parsed by the chapter model.
-  def set_author_attributes
-    if params[:chapter] && params[:pseud] && params[:pseud][:byline] && params[:chapter][:author_attributes]
-      params[:chapter][:author_attributes][:byline] = params[:pseud][:byline]
-      params[:pseud][:byline] = ""
-    end
-  end
 
   def post_chapter
     if !@work.posted
@@ -313,7 +281,7 @@ class ChaptersController < ApplicationController
     params.require(:chapter).permit(:title, :position, :wip_length, :"published_at(3i)",
                                     :"published_at(2i)", :"published_at(1i)", :summary,
                                     :notes, :endnotes, :content, :published_at,
-                                    author_attributes: [:byline, ids: []])
+                                    author_attributes: [:byline, ids: [], coauthors: []])
 
   end
 end

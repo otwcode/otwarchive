@@ -4,22 +4,22 @@ module WorksHelper
   def work_meta_list(work, chapter = nil)
     # if we're previewing, grab the unsaved date, else take the saved first chapter date
     published_date = (chapter && work.preview_mode) ? chapter.published_at : work.first_chapter.published_at
-    list = [[ts('Published:'), 'published', localize(published_date)],
-            [ts('Words:'), 'words', work.word_count],
-            [ts('Chapters:'), 'chapters', work.chapter_total_display]]
+    list = [[ts("Published:"), "published", localize(published_date)],
+            [ts("Words:"), "words", number_with_delimiter(work.word_count)],
+            [ts("Chapters:"), "chapters", chapter_total_display(work)]]
 
     if (comment_count = work.count_visible_comments) > 0
-      list.concat([[ts('Comments:'), 'comments', work.count_visible_comments.to_s]])
+      list.concat([[ts("Comments:"), "comments", number_with_delimiter(work.count_visible_comments)]])
     end
 
     if work.all_kudos_count > 0
-      list.concat([[ts('Kudos:'), 'kudos', work.all_kudos_count.to_s]])
+      list.concat([[ts("Kudos:"), "kudos", number_with_delimiter(work.all_kudos_count)]])
     end
 
     if (bookmark_count = work.public_bookmarks_count) > 0
-      list.concat([[ts('Bookmarks:'), 'bookmarks', link_to(bookmark_count.to_s, work_bookmarks_path(work))]])
+      list.concat([[ts("Bookmarks:"), "bookmarks", link_to(number_with_delimiter(bookmark_count), work_bookmarks_path(work))]])
     end
-    list.concat([[ts('Hits:'), 'hits', work.hits]]) if show_hit_count?(work)
+    list.concat([[ts("Hits:"), "hits", number_with_delimiter(work.hits)]])
 
     if work.chaptered? && work.revised_at
       prefix = work.is_wip ? ts('Updated:') : ts('Completed:')
@@ -30,29 +30,9 @@ module WorksHelper
     content_tag(:dl, list.to_s, class: 'stats').html_safe
   end
 
-  def show_hit_count?(work)
-    return false if logged_in? && current_user.preference.try(:hide_all_hit_counts)
-    author_wants_to_see_hits = is_author_of?(work) && !current_user.preference.try(:hide_private_hit_count)
-    all_authors_want_public_hits = work.users.select { |u| u.preference.try(:hide_public_hit_count) }.empty?
-    author_wants_to_see_hits || (!is_author_of?(work) && all_authors_want_public_hits)
-  end
-
-  def show_hit_count_to_public?(work)
-    !Preference.where(user_id: work.pseuds.pluck(:user_id), hide_public_hit_count: true).exists?
-  end
-
   def recipients_link(work)
     # join doesn't maintain html_safe, so mark the join safe
     work.gifts.not_rejected.includes(:pseud).map { |gift| link_to(h(gift.recipient), gift.pseud ? user_gifts_path(gift.pseud.user) : gifts_path(recipient: gift.recipient_name)) }.join(", ").html_safe
-  end
-
-  # select the default warning if this is a new work
-  def check_warning(work, warning)
-    if work.nil? || work.warning_strings.empty?
-      warning.name == nil
-    else
-      work.warning_strings.include?(warning.name)
-    end
   end
 
   # select default rating if this is a new work
@@ -62,22 +42,17 @@ module WorksHelper
 
   # Determines whether or not to expand the related work association fields when the work form loads
   def check_parent_box(work)
-    !work.parents.blank? ||
-    (params[:work] && !(work_parent_value(:url).blank? && work_parent_value(:title).blank? && work_parent_value(:author).blank?))
+    work.parents_after_saving.present?
   end
 
-  # Passes value of fields for related works back to form when an error occurs on posting
-  def work_parent_value(field)
-    if params[:work] && params[:work][:parent_attributes]
-      params[:work][:parent_attributes][field]
-    end
+  # Determines whether or not "manage series" dropdown should appear
+  def check_series_box(work)
+    work.series.present? || work_series_value(:id).present? || work_series_value(:title).present?
   end
 
-  # Passes value of fields for series back to form when an error occurs on posting
+  # Passes value of fields for work series back to form when an error occurs on posting
   def work_series_value(field)
-    if params[:work] && params[:work][:series_attributes]
-      params[:work][:series_attributes][field]
-    end
+    params.dig :work, :series_attributes, field
   end
 
   def language_link(work)
@@ -88,12 +63,16 @@ module WorksHelper
     end
   end
 
-  def can_see_work(work, user)
-    unless work.collections.empty?
-      for collection in work.collections
-        return true if collection.user_is_maintainer?(user)
-      end
+  # Check whether this non-admin user has permission to view the unrevealed work
+  def can_access_unrevealed_work(work, user)
+    # Creators and invited can see their works
+    return true if work.user_is_owner_or_invited?(user)
+
+    # Moderators can see unrevealed works:
+    work.collections.each do |collection|
+      return true if collection.user_is_maintainer?(user)
     end
+
     false
   end
 
@@ -112,7 +91,7 @@ module WorksHelper
   end
 
   def get_endnotes_link
-    if current_page?(controller: 'chapters', action: 'show')
+    if current_page?({ controller: "chapters", action: "show" })
       if @work.posted?
         chapter_path(@work.last_posted_chapter.id, anchor: 'work_endnotes')
       else
@@ -124,7 +103,7 @@ module WorksHelper
   end
 
   def get_related_works_url
-    current_page?(controller: 'chapters', action: 'show') ?
+    current_page?({ controller: "chapters", action: "show" }) ?
       chapter_path(@work.last_posted_chapter.id, anchor: 'children') :
       "#children"
   end
@@ -149,13 +128,13 @@ module WorksHelper
     tags = work.tags.group_by(&:type)
     text = "<p>by #{byline(work, { visibility: 'public', full_path: true })}</p>"
     text << work.summary if work.summary
-    text << "<p>Words: #{work.word_count}, Chapters: #{work.chapter_total_display}, Language: #{work.language ? work.language.name : 'English'}</p>"
+    text << "<p>Words: #{work.word_count}, Chapters: #{chapter_total_display(work)}, Language: #{work.language ? work.language.name : 'English'}</p>"
     unless work.series.count == 0
       text << "<p>Series: #{series_list_for_feeds(work)}</p>"
     end
     # Create list of tags
     text << "<ul>"
-    %w(Fandom Rating Warning Category Character Relationship Freeform).each do |type|
+    %w(Fandom Rating ArchiveWarning Category Character Relationship Freeform).each do |type|
       if tags[type]
         text << "<li>#{type.constantize.label_name}: #{tags[type].map { |t| link_to_tag_works(t, full_path: true) }.join(', ')}</li>"
       end
@@ -167,26 +146,49 @@ module WorksHelper
   # Returns true or false to determine whether the work notes module should display
   def show_work_notes?(work)
     work.notes.present? ||
-    work.endnotes.present? ||
-    work.gifts.not_rejected.present? ||
-    work.challenge_claims.present? ||
-    work.parent_work_relationships.present? ||
-    work.approved_related_works.present?
+      work.endnotes.present? ||
+      work.gifts.not_rejected.present? ||
+      work.challenge_claims.present? ||
+      work.parents_after_saving.present? ||
+      work.approved_related_works.present?
   end
 
   # Returns true or false to determine whether the work associations should be included
   def show_associations?(work)
     work.gifts.not_rejected.present? ||
-    work.approved_related_works.where(translation: true).exists? ||
-    work.parent_work_relationships.exists? ||
-    work.challenge_claims.present?
+      work.approved_related_works.where(translation: true).exists? ||
+      work.parents_after_saving.present? ||
+      work.challenge_claims.present?
   end
 
   def all_coauthor_skins
-    WorkSkin.approved_or_owned_by_any(@allpseuds.map(&:user)).order(:title)
+    users = @work.users.to_a
+    users << User.current_user if User.current_user.is_a?(User)
+    WorkSkin.approved_or_owned_by_any(users).order(:title)
   end
 
   def sorted_languages
     Language.default_order
+  end
+
+  # 1/1, 2/3, 5/?, etc.
+  def chapter_total_display(work)
+    current = work.posted? ? work.number_of_posted_chapters : 1
+    number_with_delimiter(current) + "/" + number_with_delimiter(work.wip_length)
+  end
+
+  # For works that are more than 1 chapter, returns "current #/expected #" of chapters
+  # (e.g. 3/5, 2/?), with the current # linked to that chapter. If the work is 1 chapter,
+  # returns the un-linked version.
+  def chapter_total_display_with_link(work)
+    total_posted_chapters = work.number_of_posted_chapters
+    if total_posted_chapters > 1
+      link_to(total_posted_chapters.to_s,
+              work_chapter_path(work, work.last_posted_chapter.id)) +
+        "/" +
+        work.wip_length.to_s
+    else
+      chapter_total_display(work)
+    end
   end
 end

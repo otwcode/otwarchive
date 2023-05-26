@@ -143,8 +143,8 @@ describe "API v2 WorksController - Create works", type: :request do
     end
 
     describe "Provided API metadata should be used if present" do
-      before(:all) do
-        Language.find_or_create_by(short: "es", name: "Español")
+      before do
+        Language.create(short: "es", name: "Español")
 
         mock_external
 
@@ -178,11 +178,9 @@ describe "API v2 WorksController - Create works", type: :request do
         @work = Work.find_by_url(parsed_body[:works].first[:original_url])
       end
 
-      after(:all) do
-        @work&.destroy
+      after do
         WebMock.reset!
       end
-
 
       it "API should override content for Title" do
         expect(@work.title).to eq(api_fields[:title])
@@ -196,7 +194,7 @@ describe "API v2 WorksController - Create works", type: :request do
         expect(@work.fandoms.first.name).to eq(api_fields[:fandoms])
       end
       it "API should override content for Warnings" do
-        expect(@work.warnings.first.name).to eq(api_fields[:warnings])
+        expect(@work.archive_warnings.first.name).to eq(api_fields[:warnings])
       end
       it "API should override content for Characters" do
         expect(@work.characters.flat_map(&:name)).to eq(api_fields[:characters].split(", "))
@@ -225,7 +223,7 @@ describe "API v2 WorksController - Create works", type: :request do
     end
 
     describe "Metadata should be extracted from content if no API metadata is supplied" do
-      before(:all) do
+      before do
         mock_external
 
         archivist = create(:archivist)
@@ -247,8 +245,7 @@ describe "API v2 WorksController - Create works", type: :request do
         created_user&.destroy
       end
 
-      after(:all) do
-        @work&.destroy
+      after do
         WebMock.reset!
       end
 
@@ -268,7 +265,7 @@ describe "API v2 WorksController - Create works", type: :request do
         expect(@work.fandoms.first.name).to eq(content_fields[:fandoms])
       end
       it "Warnings should be detected from the content" do
-        expect(@work.warnings.first.name).to eq(content_fields[:warnings])
+        expect(@work.archive_warnings.first.name).to eq(content_fields[:warnings])
       end
       it "Characters should be detected from the content" do
         expect(@work.characters.flat_map(&:name)).to eq(content_fields[:characters].split(", "))
@@ -291,11 +288,11 @@ describe "API v2 WorksController - Create works", type: :request do
     end
 
     describe "Imports should use fallback values or nil if no metadata is supplied" do
-      before(:all) do
+      before do
         mock_external
 
         archivist = create(:archivist)
-        
+
         valid_params = {
           archivist: archivist.login,
           works: [
@@ -311,8 +308,7 @@ describe "API v2 WorksController - Create works", type: :request do
         @work = Work.find_by_url(parsed_body[:works].first[:original_url])
       end
 
-      after(:all) do
-        @work&.destroy
+      after do
         WebMock.reset!
       end
 
@@ -332,7 +328,7 @@ describe "API v2 WorksController - Create works", type: :request do
         expect(@work.fandoms.first.name).to eq(ArchiveConfig.FANDOM_NO_TAG_NAME)
       end
       it "Warnings should be the default Archive warning" do
-        expect(@work.warnings.first.name).to eq(ArchiveConfig.WARNING_DEFAULT_TAG_NAME)
+        expect(@work.archive_warnings.first.name).to eq(ArchiveConfig.WARNING_DEFAULT_TAG_NAME)
       end
       it "Characters should be empty" do
         expect(@work.characters).to be_empty
@@ -361,7 +357,7 @@ describe "API v2 WorksController - Create works", type: :request do
     end
 
     describe "Provided API metadata should be used if present and tag detection is turned off" do
-      before(:all) do
+      before do
         mock_external
 
         archivist = create(:archivist)
@@ -393,8 +389,7 @@ describe "API v2 WorksController - Create works", type: :request do
         @work = Work.find_by_url(parsed_body[:works].first[:original_url])
       end
 
-      after(:all) do
-        @work&.destroy
+      after do
         WebMock.reset!
       end
 
@@ -414,7 +409,7 @@ describe "API v2 WorksController - Create works", type: :request do
         expect(@work.fandoms.first.name).to eq(api_fields[:fandoms])
       end
       it "API should override content for Warnings" do
-        expect(@work.warnings.first.name).to eq(api_fields[:warnings])
+        expect(@work.archive_warnings.first.name).to eq(api_fields[:warnings])
       end
       it "API should override content for Characters" do
         expect(@work.characters.flat_map(&:name)).to eq(api_fields[:characters].split(", "))
@@ -440,11 +435,11 @@ describe "API v2 WorksController - Create works", type: :request do
     end
 
     describe "Some fields should be detected and others use fallback values or nil if no metadata is supplied and tag detection is turned off" do
-      before(:all) do
+      before do
         mock_external
 
         archivist = create(:archivist)
-        
+
         valid_params = {
           archivist: archivist.login,
           works: [
@@ -461,8 +456,7 @@ describe "API v2 WorksController - Create works", type: :request do
         @work = Work.find_by_url(parsed_body[:works].first[:original_url])
       end
 
-      after(:all) do
-        @work&.destroy
+      after do
         WebMock.reset!
       end
 
@@ -482,7 +476,7 @@ describe "API v2 WorksController - Create works", type: :request do
         expect(@work.fandoms.first.name).to eq(ArchiveConfig.FANDOM_NO_TAG_NAME)
       end
       it "Warnings should be the default Archive warning" do
-        expect(@work.warnings.first.name).to eq(ArchiveConfig.WARNING_DEFAULT_TAG_NAME)
+        expect(@work.archive_warnings.first.name).to eq(ArchiveConfig.WARNING_DEFAULT_TAG_NAME)
       end
       it "Characters should be empty" do
         expect(@work.characters).to be_empty

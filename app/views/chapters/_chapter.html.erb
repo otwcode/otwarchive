@@ -6,20 +6,26 @@
       <%= ts("This chapter is a draft and hasn't been posted yet!") %>
     </p>
   <% end %>
+  <% if chapter.user_has_creator_invite?(current_user) %>
+    <p class="notice">
+      <%= ts("You've been invited to become a co-creator of this chapter. To accept or reject the request, visit your %{creator_requests_page}.",
+             creator_requests_page: link_to(ts("Co-Creator Requests page"), user_creatorships_path(current_user))).html_safe %>
+    </p>
+  <% end %>
   <!-- chapter management -->
-  <% if is_author_of?(@work) && !@downloading && !@preview_mode%>
+  <% if logged_in? && is_author_of?(@work) && !@preview_mode%>
     <%= render "chapters/chapter_management", chapter: chapter, work: @work %>
   <% end %>
 
-<% cache_if(!@preview_mode, "#{@work.cache_key}/#{chapter.cache_key}-show-v3", skip_digest: true) do %>
+<% cache_if(!@preview_mode, "#{@work.cache_key}/#{chapter.cache_key}-show-v4", skip_digest: true) do %>
 
-  <div class="chapter<%= ' preface' unless @preview_mode %> group" role="complementary">
+  <div class="chapter<%= ' preface' unless @preview_mode %> group">
     <h3 class="title">
       <%= link_to chapter.chapter_header, [chapter.work, chapter] %><% unless chapter.title.blank? %>: <%= chapter.title.html_safe %><% end %>
     </h3>
 
     <!-- only display byline if different from the main byline -->
-    <% if (!chapter.pseuds.blank? && (chapter.pseuds != @work.pseuds) && (!@work.anonymous?)) || @preview_mode %>
+    <% if (!chapter.pseuds.blank? && (chapter.pseuds.sort != @work.pseuds.sort) && (!@work.anonymous?)) || @preview_mode %>
       <h4 class="heading byline">
         <%= ts('Chapter by') %> <%= byline(chapter).html_safe %>
       </h4>
@@ -40,13 +46,13 @@
         <h3 class="heading"><%=h ts('Notes:') %></h3>
         <% if chapter.notes.blank? %>
           <p>
-          (<%= ts("See the end of the chapter for ") %> <%= link_to(h(ts("notes")), :anchor => "chapter_#{chapter.position.to_s}_endnotes") %>.)
+          (<%= ts("See the end of the chapter for ") %> <%= link_to(h(ts("notes")), "#chapter_#{chapter.position.to_s}_endnotes") %>.)
           </p>
         <% else %>
           <blockquote class="userstuff"><%=raw sanitize_field(chapter, :notes) %></blockquote>
           <% unless chapter.endnotes.blank? %>
             <p>
-            (<%= ts("See the end of the chapter for ") %> <%= link_to(h(ts("more notes")), :anchor => "chapter_#{chapter.position.to_s}_endnotes") %>.)
+            (<%= ts("See the end of the chapter for ") %> <%= link_to(h(ts("more notes")), "#chapter_#{chapter.position.to_s}_endnotes") %>.)
             </p>
           <% end %>
         <% end %>
@@ -57,16 +63,14 @@
 
   <!--main content-->
   <div class="userstuff module" role="article">
-    <% unless @downloading %>
-      <h3 class="landmark heading" id="work"><%= ts("Chapter Text") %></h3>
-    <% end %>
+    <h3 class="landmark heading" id="work"><%= ts("Chapter Text") %></h3>
     <%=raw sanitize_field(chapter, :content) %>
   </div>
   <!--/main-->
 
   <% unless chapter.endnotes.blank? %>
     <div class="chapter preface group">
-      <div class="end notes module" id="chapter_<%= chapter.position.to_s %>_endnotes" role="complementary">
+      <div class="end notes module" id="chapter_<%= chapter.position.to_s %>_endnotes">
         <h3 class="heading"><%=h ts('Notes:') %></h3>
         <blockquote class="userstuff">
           <%=raw sanitize_field(chapter, :endnotes) %>

@@ -1,13 +1,13 @@
 <% content_for :message do %>
   <p>
-    A response to your prompt has been posted <% if @collection then %>in the <i><%= @collection.title %></i> collection <% end %>at the Archive of Our Own!
+    A response to your prompt has been posted <% if @collection %>in the <%= style_link(@collection.title, collection_url(@collection)) %> collection <% end %>at the Archive of Our Own!
   </p>
 
   <p>
     <% if @collection.nil? %>
-      <i><b><%= style_link(@work.title.html_safe, work_url(@work)) %></b></i> (<%= @work.word_count %> words)
+      <%= style_creation_link(@work.title, work_url(@work)) %> (<%= @work.word_count %> words)
     <% else %>
-      <i><b><%= style_link(@work.title.html_safe, collection_work_url(@collection, @work)) %></b></i> (<%= @work.word_count %> words)
+      <%= style_creation_link(@work.title, collection_work_url(@collection, @work)) %> (<%= @work.word_count %> words)
     <% end %>
     <br>
     by <%= @work.anonymous? ? style_bold("an anonymous responder") : (@work.pseuds.map{|p| style_pseud_link(p)}.to_sentence.html_safe) %>

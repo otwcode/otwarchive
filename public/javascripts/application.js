@@ -4,7 +4,7 @@
 //things to do when the page loads
 $j(document).ready(function() {
     setupToggled();
-    if ($j('#work-form')) { hideFormFields(); };
+    if ($j('form#work-form')) { hideFormFields(); }
     hideHideMe();
     showShowMe();
     handlePopUps();
@@ -12,9 +12,6 @@ $j(document).ready(function() {
     setupAccordion();
     setupDropdown();
     updateCachedTokens();
-
-    // remove final comma from comma lists in older browsers
-    $j('.commas li:last-child').addClass('last');
 
     // add clear to items on the splash page in older browsers
     $j('.splash').children('div:nth-of-type(odd)').addClass('odd');
@@ -36,15 +33,15 @@ $j(document).ready(function() {
 
 function get_token_input_options(self) {
   return {
-    searchingText: self.attr('autocomplete_searching_text'),
-    hintText: self.attr('autocomplete_hint_text'),
-    noResultsText: self.attr('autocomplete_no_results_text'),
-    minChars: self.attr('autocomplete_min_chars'),
+    searchingText: self.data('autocomplete-searching-text'),
+    hintText: self.data('autocomplete-hint-text'),
+    noResultsText: self.data('autocomplete-no-results-text'),
+    minChars: self.data('autocomplete-min-chars'),
     queryParam: "term",
     preventDuplicates: true,
-    tokenLimit: self.attr('autocomplete_token_limit'),
-    liveParams: self.attr('autocomplete_live_params'),
-    makeSortable: self.attr('autocomplete_sortable')
+    tokenLimit: self.data('autocomplete-token-limit'),
+    liveParams: self.data('autocomplete-live-params'),
+    makeSortable: self.data('autocomplete-sortable')
   };
 }
 
@@ -58,9 +55,9 @@ if (input.livequery) {
       var token_input_options = get_token_input_options(self);
       var method;
       try {
-          method = $.parseJSON(self.attr('autocomplete_method'));
+          method = $.parseJSON(self.data('autocomplete-method'));
       } catch (err) {
-          method = self.attr('autocomplete_method');
+          method = self.data('autocomplete-method');
       }
       self.tokenInput(method, token_input_options);
     });
@@ -200,7 +197,9 @@ jQuery(function($){
 //   (and you can then add an alternative link for them using <noscript>)
 // - Generally reserved for toggling complex elements like bookmark forms and challenge sign-ups; for simple elements like lists use setupAccordion.
 function setupToggled(){
-  $j('.toggled').each(function(){
+  $j('.toggled').filter(function(){
+    return $j(this).closest('.userstuff').length === 0;
+  }).each(function(){
     var node = $j(this);
     var open_toggles = $j('.' + node.attr('id') + "_open");
     var close_toggles = $j('.' + node.attr('id') + "_close");
@@ -301,16 +300,17 @@ function toggleFormField(element_id) {
 
 // Hides expandable form field options if Javascript is enabled
 function hideFormFields() {
-    if ($j('#work-form') != null) {
-        var toHide = ['#co-authors-options', '#front-notes-options', '#end-notes-options', '#chapters-options',
-          '#parent-options', '#series-options', '#backdate-options', '#override_tags-options'];
-        $j.each(toHide, function(index, name) {
-            if ($j(name)) {
-                if (!($j(name + '-show').is(':checked'))) { $j(name).addClass('hidden'); }
-            }
-        });
-        $j('#work-form').className = $j('#work-form').className;
-    }
+  if ($j('form#work-form') != null) {
+    var toHide = ['#co-authors-options', '#front-notes-options', '#end-notes-options', '#chapters-options',
+      '#parent-options', '#series-options', '#backdate-options', '#override_tags-options'];
+
+    $j.each(toHide, function(index, name) {
+      if ($j(name)) {
+        if (!($j(name + '-show').is(':checked'))) { $j(name).addClass('hidden'); }
+      }
+    });
+    $j('form#work-form').className = $j('form#work-form').className;
+  }
 }
 
 // Hides the extra checkbox fields in prompt form
@@ -385,7 +385,9 @@ function setupDropdown(){
 //  </div>
 // </li>
 function setupAccordion() {
-  $j(".expandable").each(function() {
+  $j(".expandable").filter(function() {
+    return $j(this).closest(".userstuff").length === 0;
+  }).each(function() {
     var pane = $j(this);
     // hide the pane element if it's not hidden by default
     if ( !pane.hasClass("hidden") ) {
@@ -409,22 +411,16 @@ function setupAccordion() {
 
 // Remove the /confirm_delete portion of delete links so user who have JS enabled will
 // be able to delete items via hyperlink (per rails/jquery-ujs) rather than a dedicated
-// form page. Also add a confirmation message if one was not set in the back end using
-// :confirm => "message"
+// form page.
 function prepareDeleteLinks() {
-  $j('a[href$="/confirm_delete"]').each(function(){
+  $j('a[href$="/confirm_delete"][data-confirm]').each(function(){
     this.href = this.href.replace(/\/confirm_delete$/, "");
     $j(this).attr("data-method", "delete");
-    if ($j(this).is("[data-confirm]")) {
-      return;
-    } else {
-      $j(this).attr("data-confirm", "Are you sure? This CANNOT BE UNDONE!");
-    };
   });
 
   // For purging assignments in gift exchanges. This is only on one page and easy to
   // check, so don't worry about adding a fallback data-confirm message.
-  $j('a[href$="/confirm_purge"]').each(function() {
+  $j('a[href$="/confirm_purge"][data-confirm]').each(function() {
     this.href = this.href.replace(/\/confirm_purge$/, "/purge");
     $j(this).attr("data-method", "post");
   });
@@ -432,41 +428,27 @@ function prepareDeleteLinks() {
 
 /// Kudos
 $j(document).ready(function() {
-  $j('#kudos_summary').click(function(e) {
-    e.preventDefault();
-    $j(this).hide();
-    $j('.kudos_expanded').show();
-  });
-
-  $j('#kudos_collapser').click(function(e) {
-    e.preventDefault();
-    $j('#kudos_summary').show();
-    $j('.kudos_expanded').hide();
-  });
-
-  $j('#kudo_submit').on("click", function(event) {
+  $j('input#kudo_submit').on("click", function(event) {
     event.preventDefault();
 
     $j.ajax({
       type: 'POST',
       url: '/kudos.js',
       data: jQuery('#new_kudo').serialize(),
-      error: function(jqXHR, textStatus, errorThrown ) {
+      error: function(jqXHR, textStatus, errorThrown) {
         var msg = 'Sorry, we were unable to save your kudos';
-        var data = $j.parseJSON(jqXHR.responseText);
 
-        if (data.errors && (data.errors.pseud_id || data.errors.ip_address)) {
-          msg = "You have already left kudos here. :)";
+        // When we hit the rate limit, the response from Rack::Attack is a plain text 429.
+        if (jqXHR.status == "429") {
+          msg = "Sorry, you can't leave more kudos right now. Please try again in a few minutes.";
+        } else {
+          var data = $j.parseJSON(jqXHR.responseText);
+          if (data.error_message) {
+            msg = data.error_message;
+          }
         }
 
-        if (data.errors && data.errors.cannot_be_author) {
-          msg = "You can't leave kudos on your own work.";
-        }
-        if (data.errors && data.errors.guest_on_restricted) {
-          msg = "You can't leave guest kudos on a restricted work.";
-        }
-
-        $j('#kudos_message').addClass('comment_error').text(msg);
+        $j('#kudos_message').addClass('kudos_error').text(msg);
       },
       success: function(data) {
         $j('#kudos_message').addClass('notice').text('Thank you for leaving kudos!');
@@ -475,13 +457,13 @@ $j(document).ready(function() {
   });
 
   // Scroll to the top of the comments section when loading additional pages via Ajax in comment pagination.
-  $j('#comments_placeholder').find('.pagination').find('a[data-remote]').livequery('click.rails', function(e){
+  $j('#comments_placeholder').on('click.rails', '.pagination a[data-remote]', function(e){
     $j.scrollTo('#comments_placeholder');
   });
 
-  // Scroll to the top of the feedback section when loading comments via AJAX
-  $j("#show_comments_link_top").find('a[href*="show_comments"]').livequery('click.rails', function(e){
-    $j.scrollTo('#feedback');
+  // Scroll to the top of the comments section when loading comments via AJAX
+  $j("#show_comments_link_top").on('click.rails', 'a[href*="show_comments"]', function(e){
+    $j.scrollTo('#comments');
   });
 });
 
@@ -493,7 +475,7 @@ $j(document).ready(function() {
 // controller needs item_id and item_success_message for save success and
 // item_success_message for destroy success
 $j(document).ready(function() {
-  $j('.ajax-create-destroy').on("click", function(event) {
+  $j('form.ajax-create-destroy').on("click", function(event) {
     event.preventDefault();
 
     var form = $j(this);
@@ -544,7 +526,7 @@ $j(document).ready(function() {
 // <form> needs ajax-remove class
 // controller needs item_success_message
 $j(document).ready(function() {
-  $j('.ajax-remove').on("click", function(event) {
+  $j('form.ajax-remove').on("click", function(event) {
     event.preventDefault();
 
     var form = $j(this);
@@ -591,10 +573,14 @@ $j(document).ready(function() {
 
 // FUNDRAISING THERMOMETER adapted from http://jsfiddle.net/GeekyJohn/vQ4Xn/
 function thermometer() {
-  $j('.announcement').has('.goal').each(function(){
-    var banner_content = $j(this).find('blockquote')
-        banner_goal_text = banner_content.find('span.goal').text()
-        banner_progress_text = banner_content.find('span.progress').text()
+  var banners = $j('.announcement').filter(function(){
+                  return $j(this).closest('.userstuff').length === 0;
+                });
+
+  banners.has('.goal').each(function(){
+    var banner_content = $j(this).find('blockquote');
+        banner_goal_text = banner_content.find('span.goal').html();
+        banner_progress_text = banner_content.find('span.progress').html();
         if ($j(this).find('span.goal').hasClass('stretch')){
           stretch = true
         } else { stretch = false }
@@ -659,7 +645,10 @@ function updateCachedTokens() {
       $j('input[name=authenticity_token]').each(function(){
         $j(this).attr('value', token);
       });
-      $j('meta[name=csrf-token]').attr('value', token);
+      $j('meta[name=csrf-token]').attr('content', token);
+      $j.event.trigger({ type: "loadedCSRF" });
     });
+  } else {
+    $j.event.trigger({ type: "loadedCSRF" });
   }
 }

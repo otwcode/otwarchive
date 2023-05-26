@@ -42,19 +42,19 @@
         <% if current_user.pseuds.count > 1 %>
           <h4 class="heading"><%= ts("Comment as") %> <%= f.collection_select :pseud_id, current_user.pseuds, :id, :name, {:selected => (comment.pseud ? comment.pseud.id.to_s : current_user.default_pseud.id.to_s)}, :id => "comment_pseud_id_for_#{commentable.id}", :title => ts("Choose Name") %>
             <% if controller.controller_name == "inbox" %>
-              <% if commentable.ultimate_parent.is_a?(Work) && commentable.pseud.present? && commentable.pseud.user.is_author_of?(commentable.ultimate_parent) && commentable.ultimate_parent.anonymous? %>
+              <% if commentable.by_anonymous_creator? %>
                 <span><%= ts("to") %> <%= "Anonymous Creator" %> <%= ts("on") %> <%= commentable_description_link(commentable) %></span>
               <% else %>
                 <span><%= ts("to") %> <%= get_commenter_pseud_or_name(commentable) %> <%= ts("on") %> <%= commentable_description_link(commentable) %></span>
               <% end %>
             <% end %>
-            (<%= allowed_html_instructions(show_list=false) %>)
+            (<%= allowed_html_instructions %>)
           </h4>
         <% else %>
           <h4 class="heading"><%= ts("Comment as") %> <span class="byline"><%= current_user.default_pseud.name %></span>
             <%= f.hidden_field :pseud_id, :value => "#{current_user.default_pseud.id}", :id => "comment_pseud_id_for_#{commentable.id}" %>
             <% if controller.controller_name == "inbox" %>
-              <% if commentable.ultimate_parent.is_a?(Work) && commentable.pseud.present? && commentable.pseud.user.is_author_of?(commentable.ultimate_parent) && commentable.ultimate_parent.anonymous? %>
+              <% if commentable.by_anonymous_creator? %>
                 <span><%= ts("to") %> <%= "Anonymous Creator" %> <%= ts("on") %> <%= commentable_description_link(commentable) %></span>
               <% else %>
                 <span><%= ts("to") %> <%= get_commenter_pseud_or_name(commentable) %> <%= ts("on") %> <%= commentable_description_link(commentable) %></span>
@@ -75,30 +75,18 @@
         <dl>
           <dt class="landmark"><%= ts("Note") %>:</dt>
           <dd class="instructions comment_form"><%=ts("All fields are required. Your email address will not be published.") %></dd>
-          <dt><%= f.label "name_for_#{commentable.id}", ts("Name: ") %></dt>
+          <dt><%= f.label "name_for_#{commentable.id}", ts("Guest name: ") %></dt>
           <dd>
             <%= f.text_field :name, :id => "comment_name_for_#{commentable.id}" %>
             <%= live_validation_for_field("comment_name_for_#{commentable.id}", :failureMessage => ts('Please enter your name.')) %>
           </dd>
-          <dt><%= f.label "email_for_#{commentable.id}", ts("Email: ") %></dt>
+          <dt><%= f.label "email_for_#{commentable.id}", ts("Guest email: ") %></dt>
           <dd>
             <%= f.text_field :email, :id => "comment_email_for_#{commentable.id}" %>
             <%= live_validation_for_field("comment_email_for_#{commentable.id}", :failureMessage => ts('Please enter your email address.')) %>
           </dd>
         </dl>
-
-        <%= content_for :footer_js do %>
-          <%= javascript_tag do %>
-            var name_id = "#comment_name_for_<%= commentable.id %>";
-            var email_id = "#comment_email_for_<%= commentable.id %>";
-            if (!$j(name_id).val()) {
-              $j(name_id).val($j.cookie('comment_name'));
-            }
-            if (!$j(email_id).val()) {
-              $j(email_id).val($j.cookie('comment_email'));
-            }
-          <% end %>
-        <% end %>
+        <p class="footnote">(<%= allowed_html_instructions %>)</p>
       <% end %>
 
       <p>
@@ -115,9 +103,11 @@
       <p class="submit actions">
         <%= f.submit button_name, :id => "comment_submit_for_#{commentable.id}", data: {disable_with: ts("Please wait...")} %>
         <% if controller.controller_name == 'inbox' %>
-          <a name="comment_cancel" id="comment_cancel"><%= ts("Close") %></a>
-        <% elsif commentable.class.name == "Comment" || !comment.new_record? %>
-          <%= cancel_comment_button(comment, commentable) %>
+          <a name="comment_cancel" id="comment_cancel"><%= ts("Cancel") %></a>
+        <% elsif comment.persisted? %>
+          <%= cancel_edit_comment_link(comment) %>
+        <% elsif commentable.is_a?(Comment) || commentable.is_a?(CommentDecorator) %>
+          <%= cancel_comment_reply_link(commentable) %>
         <% end %>
       </p>
     </fieldset>

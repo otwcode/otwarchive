@@ -1,29 +1,51 @@
 Otwarchive::Application.routes.draw do
 
+  devise_scope :admin do
+    get "admin/logout" => "admin/sessions#confirm_logout"
+
+    # Rails emulates some HTTP methods over POST, so password resets (PUT /admin/password)
+    # look the same as password reset requests (POST /admin/password).
+    #
+    # To rate limit them differently at nginx, we set up an alias for
+    # the first request type.
+    put "admin/password/reset" => "admin/passwords#update"
+  end
+
   devise_for :admin,
-             module: 'admin',
-             only: :sessions,
-             controllers: { sessions: 'admin/sessions' },
+             module: "admin",
+             only: [:sessions, :passwords],
+             controllers: {
+               sessions: "admin/sessions",
+               passwords: "admin/passwords"
+             },
              path_names: {
-               sign_in: 'login',
-               sign_out: 'logout'
+               sign_in: "login",
+               sign_out: "logout"
              }
 
   devise_scope :user do
-    get 'signup(/:invitation_token)' => 'users/registrations#new', as: 'signup'
+    get "signup(/:invitation_token)" => "users/registrations#new", as: "signup"
+    get "users/logout" => "users/sessions#confirm_logout"
+
+    # Rails emulate some HTTP methods over POST, so password resets (PUT /users/password)
+    # look the same as password reset requests (POST /users/password).
+    #
+    # To rate limit them differently at nginx, we set up an alias for
+    # the first request type.
+    put "users/password/reset" => "users/passwords#update"
   end
 
   devise_for :users,
-             module: 'users',
+             module: "users",
              controllers: {
-                sessions: 'users/sessions',
-                registrations: 'users/registrations',
-                passwords: 'users/passwords'
-              },
-              path_names: {
-                sign_in: 'login',
-                sign_out: 'logout'
-              }
+               sessions: "users/sessions",
+               registrations: "users/registrations",
+               passwords: "users/passwords"
+             },
+             path_names: {
+               sign_in: "login",
+               sign_out: "logout"
+             }
 
   #### ERRORS ####
 
@@ -55,10 +77,9 @@ Otwarchive::Application.routes.draw do
 
   resources :invitations
   resources :user_invite_requests
-  resources :invite_requests do
+  resources :invite_requests, only: [:index, :create, :destroy] do
     collection do
       get :manage
-      post :reorder
       get :status
     end
   end
@@ -80,10 +101,13 @@ Otwarchive::Application.routes.draw do
   resources :tag_wranglings do
     collection do
       post :wrangle
-      get :discuss
     end
   end
-  resources :tag_wranglers
+  resources :tag_wranglers do
+    member do
+      get :report_csv
+    end
+  end
   resources :unsorted_tags do
     collection do
       post :mass_update
@@ -95,7 +119,6 @@ Otwarchive::Application.routes.draw do
       post :mass_update
       get :remove_association
       get :wrangle
-      get :reindex
     end
     collection do
       get :show_hidden
@@ -104,12 +127,13 @@ Otwarchive::Application.routes.draw do
     resources :works
     resources :bookmarks
     resources :comments
+    resource :troubleshooting, controller: :troubleshooting, only: [:show, :update]
   end
 
   resources :tag_sets, controller: 'owned_tag_sets' do
     resources :nominations, controller: 'tag_set_nominations' do
       collection do
-        put  :update_multiple
+        put :update_multiple
         delete :destroy_multiple
         get :confirm_destroy_multiple
       end
@@ -140,11 +164,9 @@ Otwarchive::Application.routes.draw do
   end
 
   #### ADMIN ####
-  resources :admins
   resources :admin_posts do
     resources :comments
   end
-
 
   namespace :admin do
     resources :activities, only: [:index, :show]
@@ -153,7 +175,7 @@ Otwarchive::Application.routes.draw do
         get :confirm_delete
       end
     end
-    resources :blacklisted_emails, only: [:index, :new, :create, :destroy]
+    resources :blacklisted_emails, only: [:index, :create, :destroy]
     resources :settings
     resources :skins do
       collection do
@@ -172,7 +194,7 @@ Otwarchive::Application.routes.draw do
         put :set_spam
       end
     end
-    resources :users, controller: 'admin_users' do
+    resources :users, controller: "admin_users", only: [:index, :show] do
       member do
         get :confirm_delete_user_creations
         post :destroy_user_creations
@@ -185,6 +207,7 @@ Otwarchive::Application.routes.draw do
         post :bulk_search
         post :update
         post :update_status
+        post :update_next_of_kin
       end
     end
     resources :invitations, controller: 'admin_invitations' do
@@ -196,6 +219,7 @@ Otwarchive::Application.routes.draw do
     end
     resources :api
   end
+  resources :admins, only: [:index]
 
   post '/admin/api/new', to: 'admin/api#create'
 
@@ -210,7 +234,6 @@ Otwarchive::Application.routes.draw do
   # When adding new nested resources, please keep them in alphabetical order
   resources :users, except: [:new, :create] do
     member do
-      get :browse
       get :change_email
       post :changed_email
       get :change_password
@@ -221,17 +244,10 @@ Otwarchive::Application.routes.draw do
       post :end_banner
       post :end_tos_prompt
     end
-    resources :assignments, controller: "challenge_assignments", only: [:index] do
-      collection do
-        patch :update_multiple
-      end
-      member do
-        get :default
-      end
-    end
+    resources :assignments, controller: "challenge_assignments", only: [:index]
     resources :claims, controller: "challenge_claims", only: [:index]
     resources :bookmarks
-    resources :collection_items, only: [:index, :update, :destroy] do
+    resources :collection_items, only: [:index, :update] do
       collection do
         patch :update_multiple
       end
@@ -243,6 +259,7 @@ Otwarchive::Application.routes.draw do
         put :reject
       end
     end
+    resource :creatorships, controller: "creatorships", only: [:show, :update]
     resources :external_authors do
       resources :external_author_names
     end
@@ -297,6 +314,26 @@ Otwarchive::Application.routes.draw do
         post :delete_multiple
       end
     end
+    namespace :blocked do
+      resources :users, only: [:index, :create, :destroy] do
+        collection do
+          get :confirm_block
+        end
+        member do
+          get :confirm_unblock
+        end
+      end
+    end
+    namespace :muted do
+      resources :users, only: [:index, :create, :destroy] do
+        collection do
+          get :confirm_mute
+        end
+        member do
+          get :confirm_unmute
+        end
+      end
+    end
   end
 
   #### WORKS ####
@@ -317,7 +354,7 @@ Otwarchive::Application.routes.draw do
       get :mark_for_later
       get :mark_as_read
       get :confirm_delete
-      get :reindex
+      get :share
     end
     resources :bookmarks
     resources :chapters do
@@ -344,8 +381,10 @@ Otwarchive::Application.routes.draw do
         put :review_all
       end
     end
+    resource :hit_count, controller: :hit_count, only: [:create]
     resources :kudos, only: [:index]
     resources :links, controller: "work_links", only: [:index]
+    resource :troubleshooting, controller: :troubleshooting, only: [:show, :update]
   end
 
   resources :chapters do
@@ -358,8 +397,6 @@ Otwarchive::Application.routes.draw do
 
   resources :external_works do
     collection do
-      get :compare
-      post :merge
       get :fetch
     end
     resources :bookmarks
@@ -406,11 +443,10 @@ Otwarchive::Application.routes.draw do
     resources :tags do
       resources :works
     end
-    resources :participants, controller: "collection_participants" do
+    resources :participants, controller: "collection_participants", only: [:index, :update, :destroy] do
       collection do
         get :add
         get :join
-        patch :update
       end
     end
     resources :items, controller: "collection_items" do
@@ -426,7 +462,7 @@ Otwarchive::Application.routes.draw do
         get :confirm_delete
       end
     end
-    resources :assignments, controller: "challenge_assignments", except: [:new, :edit, :update] do
+    resources :assignments, controller: "challenge_assignments", only: [:index, :show] do
       collection do
         get :confirm_purge
         get :generate
@@ -435,6 +471,9 @@ Otwarchive::Application.routes.draw do
         get :send_out
         put :update_multiple
         get :default_all
+      end
+      member do
+        get :default
       end
     end
     resources :claims, controller: "challenge_claims" do
@@ -452,8 +491,16 @@ Otwarchive::Application.routes.draw do
     end
     resources :requests, controller: "challenge_requests"
     # challenge types
-    resource :gift_exchange, controller: 'challenge/gift_exchange'
-    resource :prompt_meme, controller: 'challenge/prompt_meme'
+    resource :gift_exchange, controller: "challenge/gift_exchange" do
+      member do
+        get :confirm_delete
+      end
+    end
+    resource :prompt_meme, controller: "challenge/prompt_meme" do
+      member do
+        get :confirm_delete
+      end
+    end
   end
 
   #### I18N ####
@@ -481,14 +528,16 @@ Otwarchive::Application.routes.draw do
   resources :comments do
     member do
       put :approve
+      put :freeze
+      put :hide
       put :reject
       put :review
+      put :unfreeze
+      put :unhide
     end
     collection do
       get :hide_comments
       get :show_comments
-      get :add_comment
-      get :cancel_comment
       get :add_comment_reply
       get :cancel_comment_reply
       get :cancel_comment_edit
@@ -503,6 +552,7 @@ Otwarchive::Application.routes.draw do
     end
     member do
       get :confirm_delete
+      get :share
     end
     resources :collection_items
   end
@@ -513,6 +563,7 @@ Otwarchive::Application.routes.draw do
     member do
       get :preview
       get :set
+      get :confirm_delete
     end
     collection do
       get :unset
@@ -554,11 +605,7 @@ Otwarchive::Application.routes.draw do
   resources :external_authors do
     resources :external_author_names
   end
-  resources :orphans, only: [:index, :new, :create] do
-    collection do
-      get :about
-    end
-  end
+  resources :orphans, only: [:index, :new, :create]
 
   get 'search' => 'works#search'
   post 'support' => 'feedbacks#create', as: 'feedbacks'
@@ -607,15 +654,35 @@ Otwarchive::Application.routes.draw do
 
   patch '/admin/skins/update' => 'admin_skins#update', as: :update_admin_skin
 
-  get '/admin/admin_users/troubleshoot/:id' =>'admin/admin_users#troubleshoot', as: :troubleshoot_admin_user
+  get "/admin/admin_users/troubleshoot/:id" => "admin/admin_users#troubleshoot", as: :troubleshoot_admin_user
 
   # TODO: rewrite the autocomplete controller to deal with the fact that
-  # there are fifty different actions going on in there
-  get '/autocomplete/:action' => 'autocomplete#%{action}'
-
-  get '/assignments/no_challenge' => 'challenge_assignments#no_challenge'
-  get '/assignments/no_user' => 'challenge_assignments#no_user'
-  get '/assignments/no_assignment' => 'challenge_assignments#no_assignment'
+  # there are 21 different actions going on in there
+  %w[
+    pseud
+    tag
+    fandom
+    character
+    relationship
+    freeform
+    character_in_fandom
+    relationship_in_fandom
+    tags_in_sets
+    associated_tags
+    noncanonical_tag
+    collection_fullname
+    open_collection_names
+    collection_parent_name
+    external_work
+    potential_offers
+    potential_requests
+    owned_tag_sets
+    site_skins
+    admin_posts
+    admin_post_tags
+  ].each do |action|
+    get "/autocomplete/#{action}" => "autocomplete##{action}"
+  end
 
   get '/challenges/no_collection' => 'challenges#no_collection'
   get '/challenges/no_challenge' => 'challenges#no_challenge'

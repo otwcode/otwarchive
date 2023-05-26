@@ -11,11 +11,12 @@
     <meta name="distribution" content="GLOBAL" />
     <meta name="classification" content="transformative works" />
     <meta name="author" content="Organization for Transformative Works" />
-    <% if @user && @user.try(:preference).try(:minimize_search_engines?) || @work.is_a?(Work) && @work.users.all? {|u| u.try(:preference).try(:minimize_search_engines?)} %>
+    <% item = @user || @work || @series %>
+    <% if disallow_robots?(item) %>
       <meta name="robots" content="noindex" />
       <meta name="googlebot" content="noindex" />
     <% end %>
-  	<meta name="viewport" content="width=device-width, initial-scale=1.0"/>  
+  	<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>
       <% if defined?(@page_title) %>
         <%= @page_title %>
@@ -38,6 +39,7 @@
   <body class="<%= logged_in? ? 'logged-in' : 'logged-out' %>" <%= PhraseApp::InContextEditor.enabled? ? "data-no-turbolink" : "" %>>
     <div id="outer" class="wrapper">
       <ul id="skiplinks"><li><a href="#main"><%= ts('Main Content') %></a></li></ul>
+      <% # layouts/proxy_notice is rendered here by JavaScript found in layouts/javascripts. %>
       <%= render :partial => 'layouts/header' %>
       <div id="inner" class="wrapper">
         <!-- BEGIN sidebar -->

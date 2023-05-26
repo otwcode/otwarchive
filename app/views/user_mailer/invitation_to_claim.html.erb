@@ -1,15 +1,15 @@
 <% content_for :message do %>
   <h2 class="heading">
-    <%= t '.greeting', app_name: ArchiveConfig.APP_NAME %>
+    <%= t("mailer.general.greeting.introductory") %>
   </h2>
 
-  <p><%= t('.html.part1', open_doors_link: style_link(t('.html.open_doors'), "http://opendoors.transformativeworks.org"), app_short_name: ArchiveConfig.APP_SHORT_NAME, app_link: style_link(ArchiveConfig.APP_NAME, root_url)).html_safe %></p>
+  <p><%= t('.html.part1', open_doors_name_link: style_link(t('.html.open_doors_name'), "http://opendoors.transformativeworks.org"), app_short_name: ArchiveConfig.APP_SHORT_NAME, app_link: style_link(ArchiveConfig.APP_NAME, root_url)).html_safe %></p>
 
-  <p><%= t('.html.part2', news_link: style_link(t('.html.ao3_news'), admin_posts_url + "?tag=18"), open_doors_faq_link: style_link(t('.html.faq_page'), "http://opendoors.transformativeworks.org/faq"), open_doors_tutorial_link: style_link(t('.html.tutorial_page'), "http://opendoors.transformativeworks.org/tutorials"), support_link: support_link(t '.html.contact_support')).html_safe %></p>
+  <p><%= t('.html.part2', ao3_news_link: style_link(t('.html.ao3_news'), admin_posts_url + "?tag=18"), faq_page_link: style_link(t('.html.faq_page'), "http://opendoors.transformativeworks.org/faq"), tutorial_page_link: style_link(t('.html.tutorial_page'), "http://opendoors.transformativeworks.org/tutorials"), contact_support_link: support_link(t '.html.contact_support')).html_safe %></p>
 
-  <p><%= t('.html.part3', open_doors_link: style_link(t('.html.contact_open_doors'), 'http://transformativeworks.org/contact/open%20doors')).html_safe %></p>
+  <p><%= t('.html.part3', contact_open_doors_link: style_link(t('.html.contact_open_doors'), 'https://opendoors.transformativeworks.org/en/contact-open-doors/')).html_safe %></p>
 
-  <p><%= t('.html.part4', support_link: support_link(t '.html.contact_support')).html_safe %></p>
+  <p><%= t('.html.part4', contact_support_link: support_link(t '.html.contact_support')).html_safe %></p>
 
   <p><%= style_link(t('.html.part5'), claim_url(:invitation_token => @token)) %></p>
 
@@ -22,19 +22,19 @@
   <% end %>
   </ul>
 
-  <p><%= t('.html.part7', support_link: support_link(t '.html.contact_support')).html_safe %></p>
+  <p><%= t('.html.part7', contact_support_link: support_link(t '.html.contact_support')).html_safe %></p>
 
   <p><%= t '.part8' %></p>
 
-  <p><%= t('.html.part9', open_doors_link: style_link(t('.html.contact_open_doors'), 'http://transformativeworks.org/contact/open%20doors')).html_safe %></p>
+  <p><%= t('.html.part9', contact_open_doors_link: style_link(t('.html.contact_open_doors'), 'https://opendoors.transformativeworks.org/en/contact-open-doors/')).html_safe %></p>
 
-  <p><%= t('.html.part10', open_doors_link: style_link(t('.html.contact_open_doors'), 'http://transformativeworks.org/contact/open%20doors')).html_safe %></p>
+  <p><%= t('.html.part10', contact_open_doors_link: style_link(t('.html.contact_open_doors'), 'https://opendoors.transformativeworks.org/en/contact-open-doors/')).html_safe %></p>
 
-  <p><%= t('.html.part11', support_link: support_link(t '.html.contact_support')).html_safe %></p>
+  <p><%= t('.html.part11', contact_support_link: support_link(t '.html.contact_support')).html_safe %></p>
 
   <p><%= t '.part12' %></p>
 
-  <p><%= t '.html.part13' %><br/>
-    <%= t '.html.part14' %><br/>
-    <%= t '.html.part15' %></p>
+  <p><%= t("mailer.general.closing.informal") %><br/>
+    <%= style_bold(t("mailer.general.signature.open_doors")) %><br/>
+    <%= style_bold(t("mailer.general.signature.parent_org")) %></p>
 <% end %>

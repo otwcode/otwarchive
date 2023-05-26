@@ -1,15 +1,4 @@
 module PromptRestrictionsHelper
-
-  def get_prompt_restriction(for_offer=false)
-    if @collection && @collection.challenge
-      if for_offer
-        @collection.challenge.offer_restriction || @collection.challenge.prompt_restriction
-      else
-        @collection.challenge.request_restriction || @collection.challenge.prompt_restriction
-      end
-    end
-  end
-
   def prompt_restriction_settings(form, include_description = false, allowany, hasprompts)
 
     result = "<!-- prompt restriction settings helper function -->".html_safe
@@ -45,8 +34,8 @@ module PromptRestrictionsHelper
     result += content_tag(:dt, form.label(:freeform_num_required, ts("Additional tag(s):")))
     result += required_and_allowed(form, "freeform", hasprompts, allowany)
 
-    result += content_tag(:dt, form.label(:warning_num_required, ts("Archive Warning(s):")))
-    result += required_and_allowed(form, "warning", hasprompts, allowany)
+    result += content_tag(:dt, form.label(:archive_warning_num_required, ts("Archive Warning(s):")))
+    result += required_and_allowed(form, "archive_warning", hasprompts, allowany)
   end
 
   def required_and_allowed_boolean(form, fieldname, hasprompts)
@@ -69,7 +58,7 @@ module PromptRestrictionsHelper
         h(ts("Must Be Unique?")) + form.check_box("require_unique_#{tag_type}".to_sym, disabled: (hasprompts ? false : true))
       end
     end
-    content_tag(:dd, fields.html_safe, title: ts("#{tag_type.pluralize}")) + "\n".html_safe
+    content_tag(:dd, fields.html_safe, title: ts("#{tag_type_label_name(tag_type).pluralize.downcase}")) + "\n".html_safe
   end
 
   # generate the string to use for the labels on sign-up forms
@@ -84,5 +73,4 @@ module PromptRestrictionsHelper
       "#{tag_name.titleize}:"
     end
   end
-  
 end

@@ -1,6 +1,4 @@
-# coding: utf-8
 class InvitationsController < ApplicationController
-
   before_action :check_permission
   before_action :admin_only, only: [:create, :destroy]
   before_action :check_user_status, only: [:index, :manage, :invite_friend, :update]
@@ -14,7 +12,7 @@ class InvitationsController < ApplicationController
 
   def check_permission
     @user = User.find_by(login: params[:user_id])
-    access_denied unless logged_in_as_admin? || @user.present? && @user == current_user
+    access_denied unless policy(User).can_manage_users? || @user.present? && @user == current_user
   end
 
   def index
@@ -60,7 +58,7 @@ class InvitationsController < ApplicationController
   def update
     @invitation.attributes = invitation_params
 
-    if @invitation.invitee_email_changed? && @invitation.update_attributes(invitation_params)
+    if @invitation.invitee_email_changed? && @invitation.update(invitation_params)
       flash[:notice] = 'Invitation was successfully sent.'
       if logged_in_as_admin?
         redirect_to find_admin_invitations_path("invitation[token]" => @invitation.token)

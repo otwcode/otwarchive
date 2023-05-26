@@ -1,5 +1,5 @@
 <div class="news admin home">
-  <% if logged_in_as_admin? %>
+  <% if policy(@admin_posts).can_post? %>
     <%= render "admin_index" %>
   <% else %>
     <div class="primary header module">
@@ -11,7 +11,7 @@
       <!--subnav-->
       <ul class="navigation actions" role="navigation">
         <li><%= render 'filters' %></li>
-        <li><%= link_to_rss admin_posts_path(:rss) %></li>
+        <li><%= link_to_rss admin_posts_path(:rss, language_id: @language&.short) %></li>
       </ul>
       <!--/subnav-->
     </div>
@@ -29,7 +29,6 @@
                             ts("Read %{comment_count} Comments", comment_count: admin_post.count_visible_comments.to_s)),
                             admin_post_path(id: admin_post.id, anchor: "comments", show_comments: true) %></li>
           <% end %>
-          <li><%= link_to ts("Add Comment"), admin_post_path(id: admin_post.id, anchor: "comments", add_comment: true) %></li>
         </ul>
         <!-- END comment section -->
       </div>

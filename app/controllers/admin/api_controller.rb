@@ -1,5 +1,4 @@
-class Admin::ApiController < ApplicationController
-  before_action :admin_only
+class Admin::ApiController < Admin::BaseController
   before_action :check_for_cancel, only: [:create, :update]
 
   def index
@@ -37,7 +36,7 @@ class Admin::ApiController < ApplicationController
 
   def update
     @api_key = ApiKey.find(params[:id])
-    if @api_key.update_attributes(api_key_params)
+    if @api_key.update(api_key_params)
       flash[:notice] = ts("Access token was successfully updated")
       redirect_to action: "index"
     else

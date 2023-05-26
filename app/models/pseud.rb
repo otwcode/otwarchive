@@ -1,18 +1,26 @@
 class Pseud < ApplicationRecord
-  include ActiveModel::ForbiddenAttributesProtection
   include Searchable
   include WorksOwner
 
   has_attached_file :icon,
     styles: { standard: "100x100>" },
-    path: %w(staging production).include?(Rails.env) ? ":attachment/:id/:style.:extension" : ":rails_root/public:url",
+    path: if Rails.env.production?
+            ":attachment/:id/:style.:extension"
+          elsif Rails.env.staging?
+            ":rails_env/:attachment/:id/:style.:extension"
+          else
+            ":rails_root/public/system/:rails_env/:class/:attachment/:id_partition/:style/:filename"
+          end,
     storage: %w(staging production).include?(Rails.env) ? :s3 : :filesystem,
     s3_protocol: "https",
     s3_credentials: "#{Rails.root}/config/s3.yml",
     bucket: %w(staging production).include?(Rails.env) ? YAML.load_file("#{Rails.root}/config/s3.yml")['bucket'] : "",
     default_url: "/images/skins/iconsets/default/icon_user.png"
 
-  validates_attachment_content_type :icon, content_type: /image\/\S+/, allow_nil: true
+  validates_attachment_content_type :icon,
+                                    content_type: %w[image/gif image/jpeg image/png],
+                                    allow_nil: true
+
   validates_attachment_size :icon, less_than: 500.kilobytes, allow_nil: true
 
   NAME_LENGTH_MIN = 1
@@ -20,26 +28,32 @@ class Pseud < ApplicationRecord
   DESCRIPTION_MAX = 500
 
   belongs_to :user
-  delegate :login, to: :user, prefix: true
-  has_many :kudos
+
+  delegate :login, to: :user, prefix: true, allow_nil: true
+  alias user_name user_login
+
   has_many :bookmarks, dependent: :destroy
   has_many :recs, -> { where(rec: true) }, class_name: 'Bookmark'
   has_many :comments
-  has_many :creatorships
-  has_many :works, -> { readonly(false) }, through: :creatorships, source: :creation, source_type: 'Work'
+
+  has_many :creatorships, dependent: :destroy
+  has_many :approved_creatorships, -> { Creatorship.approved }, class_name: "Creatorship"
+
+  has_many :works, through: :approved_creatorships, source: :creation, source_type: "Work"
+  has_many :chapters, through: :approved_creatorships, source: :creation, source_type: "Chapter"
+  has_many :series, through: :approved_creatorships, source: :creation, source_type: "Series"
+
   has_many :tags, through: :works
   has_many :filters, through: :works
   has_many :direct_filters, through: :works
-  has_many :chapters, -> { readonly(false) }, through: :creatorships, source: :creation, source_type: 'Chapter'
-  has_many :series, -> { readonly(false) }, through: :creatorships, source: :creation, source_type: 'Series'
   has_many :collection_participants, dependent: :destroy
   has_many :collections, through: :collection_participants
   has_many :tag_set_ownerships, dependent: :destroy
   has_many :tag_sets, through: :tag_set_ownerships
   has_many :challenge_signups, dependent: :destroy
-  has_many :gifts, -> { where(rejected: false) }
+  has_many :gifts, -> { where(rejected: false) }, inverse_of: :pseud, dependent: :destroy
   has_many :gift_works, through: :gifts, source: :work
-  has_many :rejected_gifts, -> { where(rejected: true) }, class_name: "Gift"
+  has_many :rejected_gifts, -> { where(rejected: true) }, class_name: "Gift", inverse_of: :pseud, dependent: :destroy
   has_many :rejected_gift_works, through: :rejected_gifts, source: :work
 
   has_many :offer_assignments, -> { where("challenge_assignments.sent_at IS NOT NULL") }, through: :challenge_signups
@@ -54,7 +68,7 @@ class Pseud < ApplicationRecord
     within: NAME_LENGTH_MIN..NAME_LENGTH_MAX,
     too_short: ts("is too short (minimum is %{min} characters)", min: NAME_LENGTH_MIN),
     too_long: ts("is too long (maximum is %{max} characters)", max: NAME_LENGTH_MAX)
-  validates_uniqueness_of :name, scope: :user_id, case_sensitive: false
+  validates :name, uniqueness: { scope: :user_id }
   validates_format_of :name,
     message: ts('can contain letters, numbers, spaces, underscores, and dashes.'),
     with: /\A[\p{Word} -]+\Z/u
@@ -70,59 +84,7 @@ class Pseud < ApplicationRecord
 
   after_update :check_default_pseud
   after_update :expire_caches
-  after_commit :reindex_creations
-
-  scope :on_works, lambda {|owned_works|
-    select("DISTINCT pseuds.*").
-    joins(:works).
-    where(works: {id: owned_works.collect(&:id)}).
-    order(:name)
-  }
-
-  scope :with_works, -> {
-    select("pseuds.*, count(pseuds.id) AS work_count").
-    joins(:works).
-    group(:id).
-    order(:name)
-  }
-
-  scope :with_posted_works, -> { with_works.merge(Work.visible_to_registered_user) }
-  scope :with_public_works, -> { with_works.merge(Work.visible_to_all) }
-
-  scope :with_bookmarks, -> {
-    select("pseuds.*, count(pseuds.id) AS bookmark_count").
-    joins(:bookmarks).
-    group(:id).
-    order(:name)
-  }
-
-  # conditions: {bookmarks: {private: false, hidden_by_admin: false}},
-  scope :with_public_bookmarks, -> { with_bookmarks.merge(Bookmark.is_public) }
-
-  scope :with_public_recs, -> {
-    select("pseuds.*, count(pseuds.id) AS rec_count").
-    joins(:bookmarks).
-    group(:id).
-    order(:name).
-    merge(Bookmark.is_public.recs)
-  }
-
-  scope :alphabetical, -> { order(:name) }
-  scope :starting_with, lambda {|letter| where('SUBSTR(name,1,1) = ?', letter)}
-
-  scope :coauthor_of, lambda {|pseuds|
-    select("pseuds.*").
-    joins("LEFT JOIN creatorships ON creatorships.pseud_id = pseuds.id
-          LEFT JOIN creatorships c2 ON c2.creation_id = creatorships.creation_id").
-    where(["creatorships.creation_type = 'Work' AND
-          c2.creation_type = 'Work' AND
-          c2.pseud_id IN (?) AND
-          creatorships.pseud_id NOT IN (?)",
-          pseuds.collect(&:id),
-          pseuds.collect(&:id)]).
-    group("pseuds.id").
-    includes(:user)
-  }
+  after_commit :reindex_creations, :touch_comments
 
   def self.not_orphaned
     where("user_id != ?", User.orphan_account)
@@ -134,27 +96,8 @@ class Pseud < ApplicationRecord
     (self.name.downcase <=> other.name.downcase) == 0 ? (self.user_name.downcase <=> other.user_name.downcase) : (self.name.downcase <=> other.name.downcase)
   end
 
-  # For use with the work and chapter forms
-  def user_name
-     self.user.login
-  end
-
   def to_param
     name
-  end
-
-  # Gets the number of works by this user that the current user can see
-  def visible_works_count
-    if User.current_user.nil?
-      self.works.posted.unhidden.unrestricted.count
-    else
-      self.works.posted.unhidden.count
-    end
-  end
-
-  # Gets the number of recs by this user
-  def visible_recs_count
-    self.recs.is_public.size
   end
 
   scope :public_work_count_for, -> (pseud_ids) {
@@ -225,7 +168,7 @@ class Pseud < ApplicationRecord
 
   # Produces a byline that indicates the user's name if pseud is not unique
   def byline
-    (name != user_name) ? name + " (" + user_name + ")" : name
+    (name != user_name) ? "#{name} (#{user_name})" : name
   end
 
   # get the former byline
@@ -259,17 +202,20 @@ class Pseud < ApplicationRecord
   # Takes a comma-separated list of bylines
   # Returns a hash containing an array of pseuds and an array of bylines that couldn't be found
   def self.parse_bylines(list, options = {})
-    valid_pseuds, ambiguous_pseuds, failures = [], {}, []
+    valid_pseuds = []
+    ambiguous_pseuds = {}
+    failures = []
+    banned_pseuds = []
     bylines = list.split ","
     for byline in bylines
       pseuds = Pseud.parse_byline(byline, options)
-      banned_pseuds = pseuds.select { |pseud| pseud.user.banned? || pseud.user.suspended? }
-      if banned_pseuds.present?
-        pseuds = pseuds - banned_pseuds
-        banned_pseuds = banned_pseuds.map(&:byline)
-      end
       if pseuds.length == 1
-        valid_pseuds << pseuds.first
+        pseud = pseuds.first
+        if pseud.user.banned? || pseud.user.suspended?
+          banned_pseuds << pseud
+        else
+          valid_pseuds << pseud
+        end
       elsif pseuds.length > 1
         ambiguous_pseuds[pseuds.first.name] = pseuds
       else
@@ -277,10 +223,10 @@ class Pseud < ApplicationRecord
       end
     end
     {
-      pseuds: valid_pseuds,
+      pseuds: valid_pseuds.flatten.uniq,
       ambiguous_pseuds: ambiguous_pseuds,
       invalid_pseuds: failures,
-      banned_pseuds: banned_pseuds
+      banned_pseuds: banned_pseuds.flatten.uniq.map(&:byline)
     }
   end
 
@@ -335,15 +281,28 @@ class Pseud < ApplicationRecord
 
   ## END AUTOCOMPLETE
 
-  def creations
-    self.works + self.chapters + self.series
-  end
-
   def replace_me_with_default
-    self.creations.each {|creation| change_ownership(creation, self.user.default_pseud) }
-    Comment.where("pseud_id = #{self.id}").update_all("pseud_id = #{self.user.default_pseud.id}") unless self.comments.blank?
-    # NB: updates the kudos to use the new default pseud, but the cache will not expire
-    Kudo.where("pseud_id = #{self.id}").update_all("pseud_id = #{self.user.default_pseud.id}") unless self.kudos.blank?
+    replacement = user.default_pseud
+
+    # We don't use change_ownership here because we want to transfer both
+    # approved and unapproved creatorships.
+    self.creatorships.includes(:creation).each do |creatorship|
+      next if creatorship.creation.nil?
+
+      existing =
+        replacement.creatorships.find_by(creation: creatorship.creation)
+
+      if existing
+        existing.update(approved: existing.approved || creatorship.approved)
+      else
+        creatorship.update(pseud: replacement)
+      end
+    end
+
+    # Update the pseud ID for all comments. Also updates the timestamp, so that
+    # the cache is invalidated and the pseud change will be visible.
+    Comment.where(pseud_id: self.id).update_all(pseud_id: replacement.id,
+                                                updated_at: Time.now)
     change_collections_membership
     change_gift_recipients
     change_challenge_participation
@@ -351,35 +310,50 @@ class Pseud < ApplicationRecord
   end
 
   # Change the ownership of a creation from one pseud to another
-  # Options: skip_series -- if you begin by changing ownership of the series, you don't
-  # want to go back up again and get stuck in a loop
   def change_ownership(creation, pseud, options={})
-    # Should only transfer creatorship if we're a co-creator.
-    if creation.pseuds.include?(self)
-      creation.pseuds.delete(self)
-      creation.pseuds << pseud unless pseud.nil? || creation.pseuds.include?(pseud)
-    end
+    transaction do
+      # Update children before updating the creation itself, since deleting
+      # creatorships from the creation will also delete them from the creation's
+      # children.
+      unless options[:skip_children]
+        children = if creation.is_a?(Work)
+                     creation.chapters
+                   elsif creation.is_a?(Series)
+                     creation.works
+                   else
+                     []
+                   end
 
-    if creation.is_a?(Work)
-      creation.chapters.each {|chapter| self.change_ownership(chapter, pseud)}
-      unless options[:skip_series]
-        for series in creation.series
-          if series.works.count > 1 && (series.works - [creation]).collect(&:pseuds).flatten.include?(self)
-            series.pseuds << pseud rescue nil
-          else
-            self.change_ownership(series, pseud)
-          end
+        children.each do |child|
+          change_ownership(child, pseud, options)
         end
       end
-      comments = creation.total_comments.where("comments.pseud_id = ?", self.id)
-      comments.each do |comment|
-        comment.update_attribute(:pseud_id, pseud.id)
+
+      # Should only add new creatorships if we're an approved co-creator.
+      if creation.creatorships.approved.where(pseud: self).exists?
+        creation.creatorships.find_or_create_by(pseud: pseud)
       end
-    elsif creation.is_a?(Series) && options[:skip_series]
-      creation.works.each {|work| self.change_ownership(work, pseud)}
+
+      # But we should delete all creatorships, even invited ones:
+      creation.creatorships.where(pseud: self).destroy_all
+
+      if creation.is_a?(Work)
+        creation.series.each do |series|
+          if series.work_pseuds.where(id: id).exists?
+            series.creatorships.find_or_create_by(pseud: pseud)
+          else
+            change_ownership(series, pseud, options.merge(skip_children: true))
+          end
+        end
+        comments = creation.total_comments.where("comments.pseud_id = ?", self.id)
+        comments.each do |comment|
+          comment.update_attribute(:pseud_id, pseud.id)
+        end
+      end
+
+      # make sure changes affect caching/search/author fields
+      creation.save
     end
-    # make sure changes affect caching/search/author fields
-    creation.save rescue nil
   end
 
   def change_membership(collection, new_pseud)
@@ -428,6 +402,10 @@ class Pseud < ApplicationRecord
     if saved_change_to_name?
       self.works.each{ |work| work.touch }
     end
+  end
+
+  def touch_comments
+    comments.touch_all
   end
 
   # Delete current icon (thus reverting to archive default icon)

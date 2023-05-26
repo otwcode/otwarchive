@@ -16,7 +16,6 @@ class WorkQuery < Query
   # Combine the available filters
   def filters
     add_owner
-    set_language
 
     @filters ||= (
       visibility_filters +
@@ -38,7 +37,9 @@ class WorkQuery < Query
   # Combine the available queries
   # In this case, name is the only text field
   def queries
-    @queries = [general_query] unless general_query.blank? #if options[:q] || options[:query].present?
+    @queries = [
+      general_query
+    ].flatten.compact
   end
 
   def add_owner
@@ -56,13 +57,6 @@ class WorkQuery < Query
     return unless field.present?
     options[field] ||= []
     options[field] << owner.id
-  end
-
-  def set_language
-    if options[:language_id].present? && options[:language_id].to_i == 0
-      language = Language.find_by(short: options[:language_id])
-      options[:language_id] = language.id if language.present?
-    end
   end
 
   ####################
@@ -148,7 +142,7 @@ class WorkQuery < Query
   end
 
   def language_filter
-    term_filter(:language_id, options[:language_id]) if options[:language_id].present?
+    term_filter(:"language_id.keyword", options[:language_id]) if options[:language_id].present?
   end
 
   def crossover_filter
@@ -160,7 +154,18 @@ class WorkQuery < Query
   end
 
   def user_filter
-    terms_filter(:user_ids, user_ids) if user_ids.present?
+    return if user_ids.blank?
+
+    if viewing_own_collected_works_page?
+      {
+        has_child: {
+          type: "creator",
+          query: terms_filter(:private_user_ids, user_ids)
+        }
+      }
+    else
+      terms_filter(:user_ids, user_ids)
+    end
   end
 
   def pseud_filter
@@ -240,7 +245,7 @@ class WorkQuery < Query
     return {
       query_string: {
         query: query,
-        fields: ["creators^5", "title^7", "endnotes", "notes", "summary", "tag"],
+        fields: ["creators^5", "title^7", "endnotes", "notes", "summary", "tag", "series.title"],
         default_operator: "AND"
       }
     } unless query.blank?
@@ -248,9 +253,14 @@ class WorkQuery < Query
 
   def generate_search_text(query = '')
     search_text = query
-    [:title, :creators].each do |field|
+    %i[title creators].each do |field|
       search_text << split_query_text_words(field, options[field])
     end
+
+    if options[:series_titles].present?
+      search_text << split_query_text_words("series.title", options[:series_titles])
+    end
+
     if options[:collection_ids].blank? && collected?
       search_text << " collection_ids:*"
     end
@@ -266,7 +276,7 @@ class WorkQuery < Query
       sort_hash[column][:unmapped_type] = 'date'
     end
 
-    sort_hash
+    [sort_hash, { id: { order: direction } }]
   end
 
   # When searching outside of filters, use relevance instead of date
@@ -281,7 +291,7 @@ class WorkQuery < Query
     end
 
     if facet_tags?
-      %w(rating warning category fandom character relationship freeform).each do |facet_type|
+      %w(rating archive_warning category fandom character relationship freeform).each do |facet_type|
         aggs[facet_type] = { terms: { field: "#{facet_type}_ids" } }
       end
     end
@@ -301,6 +311,11 @@ class WorkQuery < Query
     options[:collected]
   end
 
+  def viewing_own_collected_works_page?
+    collected? && options[:works_parent].present? &&
+      options[:works_parent] == User.current_user
+  end
+
   def include_restricted?
     User.current_user.present? || options[:show_restricted]
   end
@@ -315,7 +330,7 @@ class WorkQuery < Query
   # OR if the user is viewing their own collected works
   def include_anon?
     (user_ids.blank? && pseud_ids.blank?) ||
-      (collected? && options[:works_parent].present? && options[:works_parent] == User.current_user)
+      viewing_own_collected_works_page?
   end
 
   def user_ids

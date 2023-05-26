@@ -1,4 +1,10 @@
 <!--Descriptive page name, messages and instructions-->
+<% if @series.user_has_creator_invite?(current_user) %>
+  <p class="notice">
+    <%= ts("You've been invited to become a co-creator of this series. To accept or reject the request, visit your %{creator_requests_page}.",
+           creator_requests_page: link_to(ts("Co-Creator Requests page"), user_creatorships_path(current_user))).html_safe %>
+  </p>
+<% end %>
 <h2 class="heading">
 	<%= @series.title %>
 	<% if @series.restricted %>
@@ -11,6 +17,10 @@
   <% end %>
 </h2>
 <!--/descriptions-->
+
+<% if policy(@series).show_admin_options? %>
+  <div><%= render "admin/admin_options", item: @series %></div>
+<% end %>
 
 <!--subnav-->
 <% if logged_in? %>
@@ -46,17 +56,17 @@
     <% end %>
 
     <dt class="stats"><%= ts("Stats:") %></dt>
-    <dd class="stats"> 
+    <dd class="stats">
       <dl class="stats">
         <dt><%= ts("Words:") %></dt>
         <dd><%= number_with_delimiter(@series.visible_word_count) %></dd>
         <dt><%= ts("Works:") %></dt>
-        <dd><%= @series.visible_work_count %></dd>
+        <dd><%= number_with_delimiter(@series.visible_work_count) %></dd>
         <dt><%= ts("Complete:") %></dt>
         <dd><%= @series.complete? ? ts("Yes") : ts("No") %></dd>
         <% if (bookmark_count = @series.bookmarks.is_public.count) > 0 %>
           <dt><%= ts("Bookmarks:") %></dt>
-          <dd><%= link_to_bookmarkable_bookmarks(@series, bookmark_count.to_s) %></dd>
+          <dd><%= link_to_bookmarkable_bookmarks(@series, number_with_delimiter(bookmark_count)) %></dd>
         <% end %>
       </dl>
     </dd>
@@ -73,16 +83,9 @@
   </div>
 <% end %>
 
-<% if logged_in_as_admin? %>
-<!-- BEGIN admin options -->
-  <%= render "admin/admin_options", item: @series %>
-<% end %>
-
 <h3 class="landmark heading"><%= ts("Listing Series") %></h3>
 <ul class="series work index group">
-  <% for serial in @serial_works %>
-    <%= render "works/work_blurb", work: serial.work %>
-  <% end %>
+  <%= render partial: "works/work_blurb", collection: @works, as: :work %>
 </ul>
 <!--/content-->
 

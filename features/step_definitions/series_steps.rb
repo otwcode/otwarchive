@@ -13,7 +13,7 @@ end
 
 When /^I add the work "([^\"]*)" to (?:the )?series "([^\"]*)"(?: as "([^"]*)")?$/ do |work_title, series_title, pseud|
   unless pseud.blank? && Pseud.where(name: pseud).exists?
-    step %{I create the pseud "#{pseud}"}
+    step %{I add the pseud "#{pseud}"}
   end
 
   if Work.where(title: work_title).exists?
@@ -24,16 +24,16 @@ When /^I add the work "([^\"]*)" to (?:the )?series "([^\"]*)"(?: as "([^"]*)")?
     step "I set up the draft \"#{work_title}\""
   end
   if pseud
-    select(pseud, from: "work_author_attributes_ids_")
+    select(pseud, from: "work_author_attributes_ids")
   end
   step %{I add the series "#{series_title}"}
-  click_button("Post Without Preview")
+  click_button("Post")
 end
 
 When /^I add the draft "([^\"]*)" to series "([^\"]*)"$/ do |work_title, series_title|
   step %{I edit the work "#{work_title}"}
   step %{I add the series "#{series_title}"}
-  click_button("Save Without Posting")
+  click_button("Save As Draft")
 end
 
 When /^I add the work "([^\"]*)" to "(\d+)" series "([^\"]*)"$/ do |work_title, count, series_title|
@@ -45,14 +45,14 @@ When /^I add the work "([^\"]*)" to "(\d+)" series "([^\"]*)"$/ do |work_title, 
     click_button("Post")
     step "I should see \"Work was successfully posted.\""
     step %{all indexing jobs have been run}
-    Tag.write_redis_to_database
+    step "the periodic tag count task is run"
   end
 
   count.to_i.times do |i|
     step "I edit the work \"#{work_title}\""
     check("series-options-show")
     fill_in("work_series_attributes_title", with: series_title + i.to_s)
-    click_button("Post Without Preview")
+    click_button("Post")
   end
 end
 

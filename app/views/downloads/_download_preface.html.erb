@@ -15,9 +15,15 @@
         <% tags = @work.tag_groups[type] %>
         <% unless tags.blank? %>
           <dt><%= type.constantize::NAME %>:</dt>
-          <dd><%= tags.map {|t| link_to(t.name, tag_url(t))}.join(", ").html_safe %></dd>
+          <dd><%= tags.map {|t| link_to(t.display_name, tag_url(t))}.join(", ").html_safe %></dd>
         <% end %>
       <% end %>
+
+      <% unless @work.language.blank? %>
+        <dt><%= ts("Language") %>:</dt>
+        <dd><%= @work.language.name %></dd>
+      <% end %>
+
       <% series_list = @work.serial_works.reject{ |sw| sw.series.nil? } %>
       <% unless series_list.blank? %>
         <dt><%= ts("Series") %>:</dt>
@@ -35,10 +41,8 @@
         <% if @work.first_chapter.published_at < @work.revised_at.to_date %>
           <%= @work.is_wip ? ts("Updated") : ts("Completed") %>: <%= l(@work.revised_at.to_date) %>
         <% end %>
-        <% if @work.chaptered? %>
-          <%= ts("Chapters") %>: <%= @work.chapter_total_display %>
-        <% end %>
-        <%= ts("Words") %>: <%= @work.word_count %>
+        <%= ts("Words") %>: <%= number_with_delimiter(@work.word_count) %>
+        <%= ts("Chapters") %>: <%= chapter_total_display(@work) %>
       </dd>
     </dl>
     <h1><%= @work.title.html_safe %></h1>
@@ -70,7 +74,7 @@
               "A translation of %{work_link} by %{author_link}" :
               "Inspired by %{work_link} by %{author_link}"
             %>
-            <% work_link = link_to work.parent.title.html_safe, url_for(work.parent) %>
+            <% work_link = link_to work.parent.title.html_safe, polymorphic_url(work.parent) %>
             <% author_link = byline(work.parent, visibility: 'public', only_path: false) %>
 
             <%= ts(relation_text, work_link: work_link, author_link: author_link).html_safe %>
@@ -81,4 +85,3 @@
 
   </div>
 </div>
-

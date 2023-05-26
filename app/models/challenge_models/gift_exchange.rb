@@ -1,6 +1,5 @@
 class GiftExchange < ApplicationRecord
   PROMPT_TYPES = %w(requests offers)
-  include ActiveModel::ForbiddenAttributesProtection
   include ChallengeCore
 
   override_datetime_setters
@@ -9,9 +8,6 @@ class GiftExchange < ApplicationRecord
   has_one :collection, as: :challenge
 
   # limits the kind of prompts users can submit
-  belongs_to :prompt_restriction, class_name: "PromptRestriction", dependent: :destroy
-  accepts_nested_attributes_for :prompt_restriction
-
   belongs_to :request_restriction, class_name: "PromptRestriction", dependent: :destroy
   accepts_nested_attributes_for :request_restriction
 

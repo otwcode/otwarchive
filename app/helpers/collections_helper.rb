@@ -40,28 +40,9 @@ module CollectionsHelper
     collection.challenge.class.name.demodulize.tableize.singularize
   end
   
-  def show_collections_data(work)
-    collections = work.approved_collections
-    collections.collect {|coll| link_to coll.title, collection_path(coll)}.join(ArchiveConfig.DELIMITER_FOR_OUTPUT).html_safe
+  def show_collections_data(collections)
+    collections.collect { |coll| link_to coll.title, collection_path(coll) }.join(ArchiveConfig.DELIMITER_FOR_OUTPUT).html_safe
   end
-
-
-  # def collection_item_approval_radio_buttons(form, collection_item)
-  #   fieldname = @user ? :user_approval_status : :collection_approval_status
-  #   status = collection_item.send(fieldname)
-  #   content_tag(:li, 
-  #     (form.label fieldname do 
-  #       ts("Approve") +
-  #       form.radio_button fieldname, CollectionItem::APPROVED, checked: (status == CollectionItem::APPROVED)
-  #     end), 
-  #     class: "action status") + 
-  #   content_tag(:li, 
-  #     (form.label fieldname do
-  #       ts("Reject") +
-  #       form.radio_button fieldname, CollectionItem::REJECTED, checked: (status == CollectionItem::REJECTED)
-  #     end),
-  #     class: "action status")
-  # end
 
   def challenge_assignment_byline(assignment)
     if assignment.offer_signup && assignment.offer_signup.pseud
@@ -102,5 +83,44 @@ module CollectionsHelper
     else
       ts('Deleted or unknown item')
     end
+  end
+
+  def collection_item_approval_options_label(actor:, item_type:)
+    item_type = item_type.downcase
+    actor = actor.downcase
+
+    case actor
+    when "user"
+      t("collections_helper.collection_item_approval_options_label.user.#{item_type}")
+    when "collection"
+      t("collections_helper.collection_item_approval_options_label.collection")
+    end
+  end
+
+  # i18n-tasks-use t('collections_helper.collection_item_approval_options.collection.approved')
+  # i18n-tasks-use t('collections_helper.collection_item_approval_options.collection.rejected')
+  # i18n-tasks-use t('collections_helper.collection_item_approval_options.collection.unreviewed')
+  # i18n-tasks-use t('collections_helper.collection_item_approval_options.user.bookmark.approved')
+  # i18n-tasks-use t('collections_helper.collection_item_approval_options.user.bookmark.rejected')
+  # i18n-tasks-use t('collections_helper.collection_item_approval_options.user.bookmark.unreviewed')
+  # i18n-tasks-use t('collections_helper.collection_item_approval_options.user.work.approved')
+  # i18n-tasks-use t('collections_helper.collection_item_approval_options.user.work.rejected')
+  # i18n-tasks-use t('collections_helper.collection_item_approval_options.user.work.unreviewed')
+  def collection_item_approval_options(actor:, item_type:)
+    item_type = item_type.downcase
+    actor = actor.downcase
+
+    key = case actor
+          when "user"
+            "collections_helper.collection_item_approval_options.user.#{item_type}"
+          when "collection"
+            "collections_helper.collection_item_approval_options.collection"
+          end
+
+    [
+      [t("#{key}.unreviewed"), :unreviewed],
+      [t("#{key}.approved"), :approved],
+      [t("#{key}.rejected"), :rejected]
+    ]
   end
 end

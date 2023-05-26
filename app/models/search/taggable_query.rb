@@ -4,7 +4,7 @@ module TaggableQuery
   def filter_ids
     return @filter_ids if @filter_ids.present?
     @filter_ids = options[:filter_ids] || []
-    %w(fandom rating warning category character relationship freeform).each do |tag_type|
+    %w(fandom rating archive_warning category character relationship freeform).each do |tag_type|
       if options["#{tag_type}_ids".to_sym].present?
         ids = options["#{tag_type}_ids".to_sym]
         @filter_ids += ids.is_a?(Array) ? ids : [ids]

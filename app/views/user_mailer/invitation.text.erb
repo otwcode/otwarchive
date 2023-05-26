@@ -1,17 +1,17 @@
 <% content_for :message do %>
-<%= t ".greeting", app_name: ArchiveConfig.APP_NAME %>
-
 <% if !@user_name.blank? %>
 <%= t ".has_invited", user_name: @user_name %>
 <% else %>
 <%= t ".been_invited" %>
 <% end %>
 
-<%= t ".part1" %>
+<%= t ".text.about", otw_url: "https://www.transformativeworks.org" %>
 
-<%= t ".part2" %>
+<%= t ".features" %>
 
-<%= t ".text.part3", invitation_link: signup_url(:invitation_token => @invitation.token) %>
+<%= t ".text.join", invitation_url: signup_url(invitation_token: @invitation.token) %>
 
-<%= t ".text.faq_link", faq_link: archive_faqs_url %>
+<%= t ".text.activation_support", support_url: new_feedback_report_url %>
+
+<%= t ".text.faq", faq_url: archive_faqs_url %>
 <% end %>

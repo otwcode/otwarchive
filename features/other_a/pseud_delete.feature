@@ -22,14 +22,14 @@ Feature: Delete pseud.
 
     When I am on testuser's pseuds page
       And I follow "delete_tester_pseud"
-      And I choose "Delete these bookmarks"
+      And I choose "Delete this bookmark"
       And I press "Submit"
     Then I should see "The pseud was successfully deleted."
     When I am on testuser's pseuds page
     Then I should not see "tester_pseud"
 
     When I follow "delete_testy"
-      And I choose "Transfer these bookmarks to the default pseud"
+      And I choose "Transfer this bookmark to the default pseud"
       And I press "Submit"
     Then I should see "The pseud was successfully deleted."
     When I am on testuser's pseuds page
@@ -90,3 +90,65 @@ Feature: Delete pseud.
     When I view the collection "PromptsGalore"
       And I follow "My Prompts"
     Then I should see "Antidisestablishmentarianism."
+
+  Scenario: Deleting a pseud should preserve approved creatorships even if the default pseud has a request for the same work.
+    Given I am logged in as "original_pseud"
+      And I add the pseud "other_pseud"
+      And I am logged in as "coauthor"
+      And the user "original_pseud" allows co-creators
+
+    When I set up the draft "Original Invited"
+      And I try to invite the co-authors "original_pseud, other_pseud"
+      And I press "Post"
+    Then I should see "Work was successfully posted."
+
+    When I am logged in as "original_pseud"
+      And I go to my co-creator requests page
+    Then I should see "Co-Creator Requests (2)"
+
+    When I check the 1st checkbox with id matching "selected"
+      And I press "Accept"
+    Then I should see "You are now listed as a co-creator on Original Invited."
+      And I should see "original_pseud" within ".creatorships"
+      And I should see "Original Invited" within ".creatorships"
+      And I should see "Co-Creator Requests (1)"
+
+    When I view the work "Original Invited"
+    Then I should see "Edit"
+      And I should see "You've been invited to become a co-creator of this work."
+
+    When I go to my pseuds page
+      And I follow "Delete"
+    Then I should see "The pseud was successfully deleted."
+
+    When I view the work "Original Invited"
+    Then I should see "Edit"
+      But I should not see "You've been invited to become a co-creator of this work."
+
+  Scenario: Deleting a pseud should preserve co-creator requests.
+    Given I am logged in as "original_pseud"
+      And I add the pseud "other_pseud"
+      And I am logged in as "coauthor"
+      And the user "original_pseud" allows co-creators
+
+    When I set up the draft "Other Invited"
+      And I try to invite the co-author "other_pseud"
+      And I press "Post"
+    Then I should see "Work was successfully posted."
+
+    When I am logged in as "original_pseud"
+      And I go to my co-creator requests page
+    Then I should see "other_pseud" within ".creatorships"
+      And I should see "Other Invited" within ".creatorships"
+      And I should see "Co-Creator Requests (1)"
+
+    When I go to my pseuds page
+      And I follow "Delete"
+    Then I should see "The pseud was successfully deleted."
+
+    # We should still have a request for Other Invited:
+    When I go to my co-creator requests page
+    Then I should see "Other Invited" within ".creatorships"
+      And I should see "original_pseud" within ".creatorships"
+      And I should see "Co-Creator Requests (1)"
+      And I should not see "other_pseud" within ".creatorships"

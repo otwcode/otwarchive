@@ -1,10 +1,12 @@
 <!--Descriptive page name, messages and instructions-->
-<h2 class="heading"><%=h ts("Invite new users") %></h2>
+<h2 class="heading"><%= t(".page_heading") %></h2>
 <!--/descriptions-->
 <!--subnav-->
 <ul class="navigation actions" role="navigation">
-  <li><%= link_to "Manage requests", user_invite_requests_path %></li>
-  <li><%= link_to "Manage queue", manage_invite_requests_path %></li>
+  <li><%= link_to t(".navigation.requests"), user_invite_requests_path %></li>
+  <% if policy(InviteRequest).can_manage? %>
+    <li><%= link_to t(".navigation.queue"), manage_invite_requests_path %></li>
+  <% end %>
 </ul>
 <!--/subnav-->
 <!--main content-->

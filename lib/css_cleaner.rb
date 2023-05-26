@@ -1,8 +1,8 @@
 # Use css parser to break up style blocks
 require 'css_parser'
-include CssParser
 
 module CssCleaner
+  include CssParser
 
   # constant regexps for css values
   ALPHA_REGEX = Regexp.new('[a-z\-]+')
@@ -18,8 +18,9 @@ module CssCleaner
   SHAPE_NAME_REGEX = Regexp.new('rect', Regexp::IGNORECASE)
   SHAPE_FUNCTION_REGEX = Regexp.new("#{SHAPE_NAME_REGEX}#{PAREN_NUMBER_REGEX}")
 
-  RGBA_REGEX = Regexp.new('rgba?' + PAREN_NUMBER_REGEX.to_s, Regexp::IGNORECASE)
-  COLOR_REGEX = Regexp.new('#[0-9a-f]{3,6}|' + ALPHA_REGEX.to_s + '|' + RGBA_REGEX.to_s)
+  RGBA_REGEX = Regexp.new("rgba?" + PAREN_NUMBER_REGEX.to_s, Regexp::IGNORECASE)
+  HSLA_REGEX = Regexp.new("hsla?" + PAREN_NUMBER_REGEX.to_s, Regexp::IGNORECASE)
+  COLOR_REGEX = Regexp.new("#[0-9a-f]{3,6}|" + ALPHA_REGEX.to_s + "|" + RGBA_REGEX.to_s + "|" + HSLA_REGEX.to_s)
   COLOR_STOP_FUNCTION_REGEX = Regexp.new('color-stop\s*\(' + NUMBER_WITH_UNIT_REGEX.to_s + '\s*\,?\s*' + COLOR_REGEX.to_s + '\s*\)', Regexp::IGNORECASE)
 
   # from the ICANN list at http://www.icann.org/en/registries/top-level-domains.htm
@@ -104,7 +105,7 @@ module CssCleaner
   #   empty property returned.
   def sanitize_css_declaration_value(property, value)
     clean = ""
-    property.downcase!
+    property = property.downcase
     if property == "font-family"
       if !sanitize_css_font(value).blank?
         # preserve the original capitalization
@@ -202,7 +203,7 @@ module CssCleaner
     value_stripped = value.downcase.gsub(/(!important)/, '').strip
 
     # if it's a comma-separated set of valid values it's fine
-    return value if value_stripped =~ /^(#{VALUE_REGEX}\,?)+$/i
+    return value if value_stripped =~ /^(#{VALUE_REGEX}\,?\s*)+$/i
 
     # If it's explicitly in our keywords it's fine
     return value if value_stripped.split(',').all? {|subval| ArchiveConfig.SUPPORTED_CSS_KEYWORDS.include?(subval.strip)}

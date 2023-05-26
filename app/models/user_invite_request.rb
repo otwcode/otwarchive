@@ -1,6 +1,4 @@
 class UserInviteRequest < ApplicationRecord
-  include ActiveModel::ForbiddenAttributesProtection
-
   MAX_USER_INVITE_REQUEST = ArchiveConfig.MAX_USER_INVITE_REQUEST
 
   belongs_to :user
@@ -28,7 +26,7 @@ class UserInviteRequest < ApplicationRecord
       self.quantity.times do
         self.user.invitations.create
       end
-      UserMailer.invite_increase_notification(self.user.id, self.quantity).deliver
+      UserMailer.invite_increase_notification(self.user.id, self.quantity).deliver_after_commit
     end
   end
 end

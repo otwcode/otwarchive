@@ -1,7 +1,8 @@
-class Admin::SpamController < ApplicationController
-  before_action :admin_only
+class Admin::SpamController < Admin::BaseController
 
   def index
+    authorize ModeratedWork
+
     conditions =  case params[:show]
                   when "reviewed"
                     { reviewed: true, approved: false }
@@ -14,6 +15,8 @@ class Admin::SpamController < ApplicationController
   end
 
   def bulk_update
+    authorize ModeratedWork
+    
     if ModeratedWork.bulk_update(spam_params)
       flash[:notice] = "Works were successfully updated"
     else

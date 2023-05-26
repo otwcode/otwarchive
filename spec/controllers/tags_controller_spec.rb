@@ -4,9 +4,56 @@ describe TagsController do
   include LoginMacros
   include RedirectExpectationHelper
 
-  before do
-    fake_login
-    @current_user.roles << Role.new(name: 'tag_wrangler')
+  let(:user) { create(:tag_wrangler) }
+
+  before { fake_login_known_user(user) }
+
+  shared_examples "set last wrangling activity" do
+    it "sets the last wrangling activity time to now", :frozen do
+      expect(user.last_wrangling_activity.updated_at).to eq(Time.now.utc)
+    end
+  end
+
+  describe "#create" do
+    let(:tag_params) do
+      { name: Faker::FunnyName.name, canonical: "0", type: "Character" }
+    end
+
+    context "successful creation" do
+      before { post :create, params: { tag: tag_params } }
+
+      it "creates a new, non-canonical, tag" do
+        tag = Tag.last
+        it_redirects_to_with_notice(edit_tag_path(tag), "Tag was successfully created.")
+        expect(tag.name).to eq tag_params[:name]
+        expect(tag).not_to be_canonical
+      end
+
+      include_examples "set last wrangling activity"
+    end
+
+    it "creates a new, canonical, tag" do
+      tag_params[:canonical] = "1"
+
+      post :create, params: { tag: tag_params }
+      tag = Tag.last
+      it_redirects_to_with_notice(edit_tag_path(tag), "Tag was successfully created.")
+
+      expect(tag.name).to eq tag_params[:name]
+      expect(tag).to be_canonical
+    end
+
+    it "cannot make changes to an existing tag when trying to create one" do
+      existing_tag = create(:canonical_character, name: "Blake Belladonna")
+      tag_params = { name: "Blâke Belladonna", canonical: "0", type: "Character" }
+
+      post :create, params: { tag: tag_params }
+      it_redirects_to_with_notice(edit_tag_path(existing_tag), "Tag already existed and was not modified.")
+
+      existing_tag.reload
+      expect(existing_tag.name).to eq "Blake Belladonna"
+      expect(existing_tag).to be_canonical
+    end
   end
 
   describe "wrangle" do
@@ -18,7 +65,7 @@ describe TagsController do
       let(:freeform4) { create(:freeform, name: "an abo au") }
 
       before(:each) do
-        create(:posted_work,
+        create(:work,
                fandom_string: fandom.name,
                freeform_string: "#{freeform1.name}, #{freeform2.name},
                #{freeform3.name}, #{freeform4.name}")
@@ -46,10 +93,10 @@ describe TagsController do
       let(:relationship2) { create(:relationship) }
 
       before do
-        create(:posted_work,
+        create(:work,
                character_string: character1.name,
                relationship_string: relationship1.name)
-        create(:posted_work,
+        create(:work,
                character_string: character2.name,
                relationship_string: relationship2.name)
         run_all_indexing_jobs
@@ -65,16 +112,15 @@ describe TagsController do
 
   describe "mass_update" do
     before do
-      @fandom1 = FactoryGirl.create(:fandom, canonical: true)
-      @fandom2 = FactoryGirl.create(:fandom, canonical: true)
-      @fandom3 = FactoryGirl.create(:fandom, canonical: false)
+      @fandom1 = FactoryBot.create(:fandom, canonical: true)
+      @fandom2 = FactoryBot.create(:fandom, canonical: true)
+      @fandom3 = FactoryBot.create(:fandom, canonical: false)
 
-      @freeform1 = FactoryGirl.create(:freeform, canonical: false)
-      @character1 = FactoryGirl.create(:character, canonical: false)
-      @character3 = FactoryGirl.create(:character, canonical: false)
-      @character2 = FactoryGirl.create(:character, canonical: false, merger: @character3)
-      @work = FactoryGirl.create(:work,
-                                 posted: true,
+      @freeform1 = FactoryBot.create(:freeform, canonical: false)
+      @character1 = FactoryBot.create(:character, canonical: false)
+      @character3 = FactoryBot.create(:character, canonical: false)
+      @character2 = FactoryBot.create(:character, canonical: false, merger: @character3)
+      @work = FactoryBot.create(:work,
                                  fandom_string: "#{@fandom1.name}",
                                  character_string: "#{@character1.name},#{@character2.name}",
                                  freeform_string: "#{@freeform1.name}")
@@ -91,92 +137,122 @@ describe TagsController do
     end
 
     context "with one canonical fandom in the fandom string and a selected freeform" do
-      it "should be successful" do
+      before do
         put :mass_update, params: { id: @fandom1.name, show: 'freeforms', status: 'unwrangled', fandom_string: @fandom2.name, selected_tags: [@freeform1.id] }
+      end
 
+      it "updates the tags successfully" do
         get :wrangle, params: { id: @fandom1.name, show: 'freeforms', status: 'unwrangled' }
         expect(assigns(:tags)).not_to include(@freeform1)
 
         @freeform1.reload
         expect(@freeform1.fandoms).to include(@fandom2)
       end
+
+      include_examples "set last wrangling activity"
     end
 
     context "with one canonical and one noncanonical fandoms in the fandom string and a selected freeform" do
-      it "should be successful" do
+      before do
         put :mass_update, params: { id: @fandom1.name, show: 'freeforms', status: 'unwrangled', fandom_string: "#{@fandom2.name},#{@fandom3.name}", selected_tags: [@freeform1.id] }
+      end
 
+      it "updates the tags successfully" do
         @freeform1.reload
         expect(@freeform1.fandoms).to include(@fandom2)
         expect(@freeform1.fandoms).not_to include(@fandom3)
       end
+
+      include_examples "set last wrangling activity"
     end
 
     context "with two canonical fandoms in the fandom string and a selected character" do
-      it "should be successful" do
+      before do
         put :mass_update, params: { id: @fandom1.name, show: 'characters', status: 'unwrangled', fandom_string: "#{@fandom1.name},#{@fandom2.name}", selected_tags: [@character1.id] }
+      end
 
+      it "updates the tags successfully" do
         @character1.reload
         expect(@character1.fandoms).to include(@fandom1)
         expect(@character1.fandoms).to include(@fandom2)
       end
+
+      include_examples "set last wrangling activity"
     end
 
     context "with a canonical fandom in the fandom string, a selected unwrangled character, and the same character to be made canonical" do
-      it "should be successful" do
+      before do
         put :mass_update, params: { id: @fandom1.name, show: 'characters', status: 'unwrangled', fandom_string: "#{@fandom1.name}", selected_tags: [@character1.id], canonicals: [@character1.id] }
+      end
 
+      it "updates the tags successfully" do
         @character1.reload
         expect(@character1.fandoms).to include(@fandom1)
         expect(@character1).to be_canonical
       end
+
+      include_examples "set last wrangling activity"
     end
 
     context "with a canonical fandom in the fandom string, a selected synonym character, and the same character to be made canonical" do
-      it "should be successful" do
+      before do
         put :mass_update, params: { id: @fandom1.name, show: 'characters', status: 'unfilterable', fandom_string: "#{@fandom2.name}", selected_tags: [@character2.id], canonicals: [@character2.id] }
+      end
 
+      it "updates the tags successfully" do
         @character2.reload
         expect(@character2.fandoms).to include(@fandom2)
         expect(@character2).not_to be_canonical
       end
+
+      include_examples "set last wrangling activity"
     end
 
-    context "A wrangler can remove associated tag" do
-      it "should be successful" do
+    context "removing an associated tag" do
+      before do
         put :mass_update, params: { id: @character3.name, remove_associated: [@character2.id] }
+      end
+
+      it "updates the tags successfully" do
         expect(flash[:notice]).to eq "The following tags were successfully removed: #{@character2.name}"
         expect(flash[:error]).to be_nil
         expect(@character3.mergers).to eq []
       end
-    end
-  end
 
-  describe "reindex" do
-    context "when reindexing a tag" do
-      before do
-        @tag = FactoryGirl.create(:freeform)
-      end
-
-      it "Only an admin can reindex a tag" do
-        get :reindex, params: { id: @tag.name }
-        it_redirects_to_with_error(root_path, "Please log in as admin")
-      end
+      include_examples "set last wrangling activity"
     end
   end
 
   describe "feed" do
     it "You can only get a feed on Fandom, Character and Relationships" do
-      @tag = FactoryGirl.create(:banned, canonical: false)
+      @tag = FactoryBot.create(:banned, canonical: false)
       get :feed, params: { id: @tag.id, format: :atom }
       it_redirects_to(tag_works_path(tag_id: @tag.name))
+    end
+  end
+
+  describe "show_hidden" do
+    let(:work) { create(:work) }
+
+    it "redirects to referer with an error for non-ajax warnings requests" do
+      referer = tags_path
+      request.headers["HTTP_REFERER"] = referer
+      get :show_hidden, params: { creation_type: "Work", tag_type: "warnings", creation_id: work.id }
+      it_redirects_to_with_error(referer, "Sorry, you need to have JavaScript enabled for this.")
+    end
+
+    it "redirects to referer with an error for non-ajax freeforms requests" do
+      referer = tags_path
+      request.headers["HTTP_REFERER"] = referer
+      get :show_hidden, params: { creation_type: "Work", tag_type: "freeforms", creation_id: work.id }
+      it_redirects_to_with_error(referer, "Sorry, you need to have JavaScript enabled for this.")
     end
   end
 
   describe "edit" do
     context "when editing a banned tag" do
       before do
-        @tag = FactoryGirl.create(:banned)
+        @tag = FactoryBot.create(:banned)
       end
 
       it "redirects with an error when not an admin" do
@@ -188,24 +264,14 @@ describe TagsController do
   end
 
   describe "update" do
-    context "when updating a tag" do
-      let(:tag) { create(:freeform) }
+    context "setting a new type for the tag" do
       let(:unsorted_tag) { create(:unsorted_tag) }
 
-      it "resets the taggings count" do
-        # manufacture a tag with borked taggings_count
-        tag.taggings_count = 10
-        tag.save
-
-        put :update, params: { id: tag, tag: { fix_taggings_count: true } }
-        it_redirects_to_with_notice(edit_tag_path(tag), "Tag was updated.")
-
-        tag.reload
-        expect(tag.taggings_count).to eq(0)
+      before do
+        put :update, params: { id: unsorted_tag, tag: { type: "Fandom" }, commit: "Save changes" }
       end
 
-      it "changes just the tag type" do
-        put :update, params: { id: unsorted_tag, tag: { type: "Fandom" }, commit: "Save changes" }
+      it "changes the tag type and redirects" do
         it_redirects_to_with_notice(edit_tag_path(unsorted_tag), "Tag was updated.")
         expect(Tag.find(unsorted_tag.id).class).to eq(Fandom)
 
@@ -214,18 +280,34 @@ describe TagsController do
         # The tag now has the original class, we can reload the original record without error.
         unsorted_tag.reload
       end
+
+      include_examples "set last wrangling activity"
     end
 
-    context "when updating a canonical tag" do
-      let(:tag) { create(:canonical_freeform) }
+    context "when making a canonical tag into a synonym" do
+      let(:tag) { create(:freeform, canonical: true) }
+      let(:synonym) { create(:freeform, canonical: true) }
 
-      it "wrangles" do
-        expect(tag.canonical?).to be_truthy
-        put :update, params: { id: tag, tag: { canonical: false }, commit: "Wrangle" }
-        tag.reload
-        expect(tag.canonical?).to be_falsy
-        it_redirects_to_with_notice(wrangle_tag_path(tag, page: 1, sort_column: "name", sort_direction: "ASC"),
-                                    "Tag was updated.")
+      context "when logged in as a wrangler" do
+        it "errors and renders the edit page" do
+          put :update, params: { id: tag, tag: { syn_string: synonym.name }, commit: "Save changes" }
+          expect(response).to render_template(:edit)
+          expect(assigns[:tag].errors.full_messages).to include("Only an admin can make a canonical tag into a synonym of another tag.")
+
+          tag.reload
+          expect(tag.merger_id).to eq(nil)
+        end
+      end
+
+      context "when logged in as an admin" do
+        it "succeeds and redirects to the edit page" do
+          fake_login_admin(create(:admin))
+          put :update, params: { id: tag, tag: { syn_string: synonym.name }, commit: "Save changes" }
+          it_redirects_to_with_notice(edit_tag_path(tag), "Tag was updated.")
+
+          tag.reload
+          expect(tag.merger_id).to eq(synonym.id)
+        end
       end
     end
 
@@ -309,6 +391,7 @@ describe TagsController do
           let(:associated) { create(:relationship, canonical: true) }
 
           include_examples "success message"
+          include_examples "set last wrangling activity"
 
           it "adds the association" do
             expect(tag.parents).not_to include(associated)
@@ -320,6 +403,7 @@ describe TagsController do
           let(:associated) { create(:relationship, canonical: false) }
 
           include_examples "success message"
+          include_examples "set last wrangling activity"
 
           it "adds the association" do
             expect(tag.parents).not_to include(associated)
@@ -331,6 +415,7 @@ describe TagsController do
           let(:associated) { create(:fandom, canonical: true) }
 
           include_examples "success message"
+          include_examples "set last wrangling activity"
 
           it "adds the association" do
             expect(tag.parents).to include(associated)
@@ -365,8 +450,8 @@ describe TagsController do
         tag.reload
       end
 
-      shared_examples "invalid meta tag" do
-        it "doesn't add the meta tag" do
+      shared_examples "invalid metatag" do
+        it "doesn't add the metatag" do
           expect(tag.meta_tags).not_to include(meta)
         end
       end
@@ -376,12 +461,12 @@ describe TagsController do
 
         it "has a useful error" do
           expect(assigns[:tag].errors.full_messages).to include(
-            "Invalid meta tag '#{meta.name}': " \
+            "Invalid metatag '#{meta.name}': " \
             "Meta taggings can only exist between canonical tags."
           )
         end
 
-        include_examples "invalid meta tag"
+        include_examples "invalid metatag"
       end
 
       context "when the tag is the wrong type" do
@@ -389,12 +474,12 @@ describe TagsController do
 
         it "has a useful error" do
           expect(assigns[:tag].errors.full_messages).to include(
-            "Invalid meta tag '#{meta.name}': " \
+            "Invalid metatag '#{meta.name}': " \
             "Meta taggings can only exist between two tags of the same type."
           )
         end
 
-        include_examples "invalid meta tag"
+        include_examples "invalid metatag"
       end
 
       context "when the metatag is itself" do
@@ -402,12 +487,12 @@ describe TagsController do
 
         it "has a useful error" do
           expect(assigns[:tag].errors.full_messages).to include(
-            "Invalid meta tag '#{meta.name}': " \
-            "A tag can't be its own meta tag."
+            "Invalid metatag '#{meta.name}': " \
+            "A tag can't be its own metatag."
           )
         end
 
-        include_examples "invalid meta tag"
+        include_examples "invalid metatag"
       end
 
       context "when the metatag is its subtag" do
@@ -420,12 +505,12 @@ describe TagsController do
 
         it "has a useful error" do
           expect(assigns[:tag].errors.full_messages).to include(
-            "Invalid meta tag '#{meta.name}': " \
-            "A meta tag can't be its own grandpa."
+            "Invalid metatag '#{meta.name}': " \
+            "A metatag can't be its own grandparent."
           )
         end
 
-        include_examples "invalid meta tag"
+        include_examples "invalid metatag"
       end
 
       context "when the metatag is already its grandparent" do
@@ -440,15 +525,11 @@ describe TagsController do
           grandparent
         end
 
-        it "has a useful error" do
-          expect(assigns[:tag].errors.full_messages).to include(
-            "Invalid meta tag '#{meta.name}': Meta tag has already been " \
-            "added (possibly as an indirect meta tag)."
-          )
-        end
+        include_examples "success message"
+        include_examples "set last wrangling activity"
 
-        it "does not create two meta-taggings" do
-          expect(MetaTagging.where(sub_tag: tag, meta_tag: meta).count).to eq 1
+        it "marks the formerly inherited meta tagging as direct" do
+          expect(MetaTagging.find_by(sub_tag: tag, meta_tag: meta).direct).to be_truthy
         end
       end
     end

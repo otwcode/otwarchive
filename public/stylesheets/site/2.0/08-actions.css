@@ -33,7 +33,6 @@ ul.actions {
   white-space: nowrap;
   overflow: visible;
   position: relative;
-  cursor: pointer;
   text-decoration: none;
   border: 1px solid #bbb;
   border-bottom: 1px solid #aaa;
@@ -64,15 +63,16 @@ p.submit, input.submit, dd.submit {
   text-align: right;
 }
 
-.actions input.text, .actions input[type="text"] {
-  cursor: text;
-}
 
 .actions input[type="checkbox"] {
   background: transparent;
   border: none;
   padding: 0;
 }
+
+.actions li select, .actions li label input[type="checkbox"] {
+   margin: 0;
+ }
 
 /*subtypes and modes
 test note: this pagination clear needs to be kept an eye on*/
@@ -105,6 +105,12 @@ ol.pagination, div.pagination, ol.year {
   background: #ccc;
 }
 
+.actions .disabled select {
+   background: transparent;
+   color: #111;
+   border-color: #aaa;
+ }
+
 .actions li a, .actions li input, .actions li input[type="submit"], .actions li .current, .actions li label {
   margin: 0.375em auto;
 }
@@ -115,7 +121,6 @@ ol.pagination, div.pagination, ol.year {
   font-weight: 900;
   margin-right: 0.375em;
   padding: 0 0.1em 0.15em;
-  cursor: pointer;
     box-shadow: -1px -1px 2px rgba(0,0,0,0.75);
     border-radius: 0.875em;
 }
@@ -149,6 +154,10 @@ ul#skiplinks, .landmark, .landmark a, .index .heading.landmark {
 }
 
 /* CONTEXTS */
+
+legend .action:link {
+  position: static;
+}
 
 .heading .actions, .heading .action, .heading span.actions {
   height: auto;

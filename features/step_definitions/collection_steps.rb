@@ -27,26 +27,39 @@ When /^I add my work to the collection$/ do
   click_button("Add")
 end
 
-When /^I add the work "([^\"]*)" to the collection "([^\"]*)"$/ do |work_title, collection_title|
-  w = Work.find_by(title: work_title)
-  c = Collection.find_by(title: collection_title)
-  visit work_path(w)
-  click_link "Add To Collection"
-  fill_in("collection_names", with: c.name)
-  click_button("Add")
+When "I invite the work {string} to the collection {string}" do |work_title, collection_title|
+  work = Work.find_by(title: work_title)
+  collection = Collection.find_by(title: collection_title)
+  visit work_path(work)
+  click_link("Invite To Collections")
+  fill_in("collection_names", with: collection.name)
+  click_button("Invite")
 end
 
-When(/^I view the(?: ([^"]*)) collection items page for "(.*?)"$/) do |item_status, collection|
+When "I edit the work {string} to be in the collection(s) {string}" do |work, collection|
+  step %{I edit the work "#{work}"}
+  fill_in("Post to Collections / Challenges", with: collection)
+  step %{I post the work}
+end
+
+When /^I view the ([^"]*) collection items page for "(.*?)"$/ do |item_status, collection|
   c = Collection.find_by(title: collection)
   if item_status == "approved"
-    visit collection_items_path(c, approved: true)
-  elsif item_status == "rejected"
-    visit collection_items_path(c, rejected: true)
-  elsif item_status == "invited"
-    visit collection_items_path(c, invited: true)
-  else
+    visit collection_items_path(c, status: "approved")
+  elsif item_status == "rejected by user"
+    visit collection_items_path(c, status: "rejected_by_user")
+  elsif item_status == "rejected by collection"
+    visit collection_items_path(c, status: "rejected_by_collection")
+  elsif item_status == "awaiting user approval"
+    visit collection_items_path(c, status: "unreviewed_by_user")
+  elsif item_status == "awaiting collection approval"
     visit collection_items_path(c)
   end
+end
+
+When "the collection counts have expired" do
+  step "all indexing jobs have been run"
+  step "it is currently #{ArchiveConfig.SECONDS_UNTIL_COLLECTION_COUNTS_EXPIRE} seconds from now"
 end
 
 Given /^mod1 lives in Alaska$/ do
@@ -164,6 +177,14 @@ When /^I accept the invitation for my work in the collection "([^\"]*)"$/ do |co
   step %{I select "Approved" from "collection_items_#{collection_item_id}_user_approval_status"}
 end
 
+When "I approve the work {string} in the collection {string}" do |work, collection|
+  work = Work.find_by(title: work)
+  collection = Collection.find_by(title: collection)
+  item_id = CollectionItem.find_by(item: work, collection: collection).id
+  visit collection_items_path(collection)
+  step %{I select "Approved" from "collection_items_#{item_id}_collection_approval_status"}
+end
+
 ### THEN
 
 Then /^"([^"]*)" collection exists$/ do |title|
@@ -185,17 +206,19 @@ end
 Then /^the work "([^\"]*)" should be hidden from me$/ do |title|
   work = Work.find_by(title: title)
   visit work_path(work)
-  page.should have_content("Mystery Work")
-  page.should_not have_content(title)
-  page.should have_content("This work is part of an ongoing challenge and will be revealed soon!")
-  page.should_not have_content(Sanitize.clean(work.chapters.first.content))
+  expect(page.title).to include("Mystery Work")
+  expect(page.title).not_to include(title)
+  expect(page).not_to have_content(title)
+  expect(page).to have_content("This work is part of an ongoing challenge and will be revealed soon!")
+  expect(page).not_to have_content(Sanitize.clean(work.chapters.first.content))
   if work.collections.first
+    step "all indexing jobs have been run"
     visit collection_path(work.collections.first)
-    page.should_not have_content(title)
-    page.should have_content("Mystery Work")
+    expect(page).not_to have_content(title)
+    expect(page).to have_content("Mystery Work")
   end
   visit user_path(work.users.first)
-  page.should_not have_content(title)
+  expect(page).not_to have_content(title)
 end
 
 Then /^the work "([^\"]*)" should be visible to me$/ do |title|
@@ -214,22 +237,28 @@ end
 
 Then /^the author of "([^\"]*)" should be publicly visible$/ do |title|
   work = Work.find_by(title: title)
+  byline = work.users.first.pseuds.first.byline
   visit work_path(work)
-  page.should have_content("by <a href=\"#{user_url(work.users.first)}\"><strong>#{work.users.first.pseuds.first.byline}")
+  expect(page.title).to include(byline)
+  step %{I should see "#{byline}" within ".byline"}
   if work.collections.first
+    step "all indexing jobs have been run"
     visit collection_path(work.collections.first)
-    page.should have_content("#{title} by #{work.users.first.pseuds.first.byline}")
+    expect(page).to have_content("#{title} by #{byline}")
   end
 end
 
 Then /^the author of "([^\"]*)" should be hidden from me$/ do |title|
+  step "all indexing jobs have been run"
   work = Work.find_by(title: title)
+  byline = work.users.first.pseuds.first.byline
   visit work_path(work)
-  page.should_not have_content(work.users.first.pseuds.first.byline)
-  page.should have_content("by Anonymous")
+  expect(page).not_to have_content(byline)
+  expect(page.title).to include("Anonymous")
+  step %{I should see "Anonymous" within ".byline"}
   visit collection_path(work.collections.first)
-  page.should_not have_content("#{title} by #{work.users.first.pseuds.first.byline}")
-  page.should have_content("#{title} by Anonymous")
+  expect(page).not_to have_content("#{title} by #{byline}")
+  expect(page).to have_content("#{title} by Anonymous")
   visit user_path(work.users.first)
-  page.should_not have_content(title)
+  expect(page).not_to have_content(title)
 end

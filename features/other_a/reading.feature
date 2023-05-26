@@ -1,74 +1,75 @@
 @users
 Feature: Reading count
 
-  Scenario: only see own reading history
-    Given the following activated user exists
-    | login          | password   |
-    | first_reader        | password   |
+  Scenario: A user can only see their own reading history
+
+  Given the following activated user exists
+    | login        |
+    | first_reader |
   When I am logged in as "second_reader"
     And I go to first_reader's reading page
-    Then I should see "Sorry, you don't have permission"
+  Then I should see "Sorry, you don't have permission"
     And I should not see "History" within "div#dashboard"
   When I go to second_reader's reading page
-    Then I should see "History" within "div#dashboard"
+  Then I should see "History" within "div#dashboard"
 
-  Scenario: Read a work several times, counts show on reading history
-      increment the count whenever you reread a story
-      also updates the date
+  Scenario: A user can read a work several times, updating the count and date in their history
+
     Given I am logged in as "writer"
       And I post the work "some work"
       And all indexing jobs have been run
       And I am logged out
     When I am logged in as "fandomer"
       And fandomer first read "some work" on "2010-05-25"
-    When I go to fandomer's reading page
+      And I go to fandomer's reading page
     Then I should see "some work"
       And I should see "Visited once"
       And I should see "Last visited: 25 May 2010"
-    When I am on writer's works page
-      And I follow "some work"
-    When the reading rake task is run
+
+    When time is frozen at 20/4/2020
+      And I go to the work "some work"
+      And the readings are saved to the database
       And I go to fandomer's reading page
     Then I should see "Visited 2 times"
-      And I should see "Last visited: less than 1 minute ago"
+      And I should see "Last visited: 20 Apr 2020"
 
-  Scenario: disable reading history
-    then re-enable and check counts update again
+  Scenario: A user's reading history is updated only when enabled
 
     Given I am logged in as "writer"
       And I post the work "some work"
       And I am logged out
     When I am logged in as "fandomer"
       And fandomer first read "some work" on "2010-05-25"
-    When I go to fandomer's reading page
+      And I go to fandomer's reading page
     Then I should see "some work"
       And I should see "Visited once"
       And I should see "Last visited: 25 May 2010"
+
     When I follow "Preferences"
-      And I uncheck "Turn on Viewing History"
+      And I uncheck "Turn on History"
       And I press "Update"
       And all indexing jobs have been run
     Then I should not see "My History"
-    When I am on writer's works page
-      And I follow "some work"
-    When I am on writer's works page
-      And I follow "some work"
-    When the reading rake task is run
+
+    When I go to the work "some work"
+      And the readings are saved to the database
       And I go to fandomer's reading page
     Then I should see "You have reading history disabled"
       And I should not see "some work"
-    When I check "Turn on Viewing History"
+
+    When I check "Turn on History"
       And I press "Update"
     Then I should see "Your preferences were successfully updated."
+
     When I go to fandomer's reading page
     Then I should see "Visited once"
       And I should see "Last visited: 25 May 2010"
-    When I am on writer's works page
-      And I follow "some work"
-    When the reading rake task is run
+    When time is frozen at 20/4/2020
+      And I go to the work "some work"
+      And the readings are saved to the database
       And I go to fandomer's reading page
     Then I should see "Visited 2 times"
-      And I should see "Last visited: less than 1 minute ago"
+      And I should see "Last visited: 20 Apr 2020"
 
   Scenario: Clear entire reading history
 
@@ -78,11 +79,11 @@ Feature: Reading count
       And I follow "First work"
       And I am on testuser's works page
       And I follow "second work"
-      And I am on testuser2's works page
+      And I am on testuser2 works page
       And I follow "fifth"
       And I should see "fifth by testuser2"
       And I follow "Proceed"
-      And the reading rake task is run
+      And the readings are saved to the database
     When I go to fandomer's reading page
     Then I should see "History" within "div#dashboard"
       And I should see "First work"
@@ -140,20 +141,20 @@ Feature: Reading count
   When I am logged out
     And I am logged in as "fandomer"
     And I view the work "multichapter work"
-  When the reading rake task is run
+  When the readings are saved to the database
     And I go to fandomer's reading page
   Then I should see "multichapter work"
     And I should see "Visited once"
   When I press "Delete from History"
   Then I should see "Work successfully deleted from your history."
   When I view the work "multichapter work"
-    And the reading rake task is run
+    And the readings are saved to the database
   When I go to fandomer's reading page
   Then I should see "multichapter work"
     And I should see "Visited once"
   When I view the work "multichapter work"
     And I follow "Next Chapter"
-    And the reading rake task is run
+    And the readings are saved to the database
   When I go to fandomer's reading page
   Then I should see "multichapter work"
     And I should see "Visited 3 times"
@@ -161,7 +162,7 @@ Feature: Reading count
     And I follow "Next Chapter"
   When I follow "Mark for Later"
   Then I should see "This work was added to your Marked for Later list."
-    And the reading rake task is run
+    And the readings are saved to the database
     And I go to fandomer's reading page
   Then I should see "multichapter work"
     And I should see "Visited 6 times"
@@ -182,7 +183,7 @@ Feature: Reading count
   Given the work "Maybe Tomorrow"
     And I am logged in as "testy"
   When I mark the work "Maybe Tomorrow" for later
-    And I set my preferences to turn off viewing history
+    And I set my preferences to turn off history
   When I go to the homepage
   Then I should not see "Is it later already?"
     And I should not see "Some works you've marked for later."
@@ -210,7 +211,7 @@ Feature: Reading count
     And I am logged out
   When I am logged in as "reader" with password "password"
     And I mark the work "Gone Gone Gone" for later
-    And the reading rake task is run
+    And the readings are saved to the database
     And I am logged out
   When I am logged in as "golucky" with password "password"
     And I delete the work "Gone Gone Gone"
@@ -233,12 +234,12 @@ Feature: Reading count
     And I am logged out
   When I am logged in as "reader" with password "password"
     And I mark the work "Some Work V1" for later
-    And the reading rake task is run
+    And the readings are saved to the database
     And I am logged out
   When I am logged in as "editor" with password "password"
     And I edit the work "Some Work V1"
     And I fill in "Work Title" with "Some Work V2"
-    And I press "Post Without Preview"
+    And I press "Post"
     And I am logged out
   When I am logged in as "reader" with password "password"
     And I go to the homepage

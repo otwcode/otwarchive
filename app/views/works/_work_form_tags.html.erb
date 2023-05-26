@@ -2,7 +2,11 @@
   <legend><%= ts('Tags') %></legend>
   <h3 class="landmark heading"><%= ts('Tags') %></h3>
 
-  <p class="note"><%= ts('Tags are comma separated, %{max} characters per tag.', :max => ArchiveConfig.TAG_MAX) %></p>
+  <p class="note">
+    <%= ts("Tags are comma separated, %{max} characters per tag. Fandom, relationship, character, and additional tags must not add up to more than %{limit}. Archive warning, category, and rating tags do not count toward this limit.",
+           limit: ArchiveConfig.USER_DEFINED_TAGS_MAX,
+           max: ArchiveConfig.TAG_MAX) %>
+  </p>
 
   <dl>
     <dt class="rating required">
@@ -21,17 +25,22 @@
     </dd>
 
     <dt class="warning required">
-      <label><%= Warning::NAME.pluralize %>*</label>
+      <label><%= ArchiveWarning::NAME.pluralize %>*</label>
       <%= link_to_help "warning-help" %>
     </dt>
     <dd class="warning required">
       <fieldset class="warnings">
         <!--<legend class="landmark">Warning</legend>-->
         <ul>
-          <% for tag in Warning.canonical.by_name %>
+          <%= collection_check_boxes(
+            :work, :archive_warning_strings,
+            ArchiveWarning.canonical.by_name,
+            :name, :name,
+            include_hidden: !include_blank
+          ) do |builder| %>
             <li>
-              <%= check_box_tag "work[warning_strings][]", tag.name, include_blank ? false : check_warning(@work, tag), :id => "work_warning_strings_#{tag.id}" %>
-              <%= label_tag "work_warning_strings_#{tag.id}", tag.name %>
+              <%= builder.check_box %>
+              <%= builder.label %>
             </li>
           <% end %>
         </ul>
@@ -58,12 +67,17 @@
       <fieldset>
         <!--<legend class="landmark">Category</legend>-->
         <ul>
-          <% for tag in Category.canonical.by_name.sort %>
+          <%= collection_check_boxes(
+            :work, :category_strings,
+            Category.canonical.by_name.sort,
+            :name, :name,
+            include_hidden: !include_blank
+          ) do |builder| %>
             <li>
-              <%= check_box_tag "work[category_string][]", tag.name, include_blank ? false : @work.category_strings.include?(tag.name), :id => "work_category_string_#{tag.id}" %>
-              <%= label_tag "work_category_string_#{tag.id}", tag.name %>
+              <%= builder.check_box %>
+              <%= builder.label %>
             </li>
-          <% end %> 
+          <% end %>
         </ul>
       </fieldset>
     </dd>
@@ -75,9 +89,9 @@
     <dd class="relationship" title="<%= ts('relationships') %>">
       <%= text_field_tag "work[relationship_string]", include_blank ? "" : @work.relationship_string, 
                          autocomplete_options("relationship_in_fandom",
-                           :id => "work_relationship",
-                           :title => ts('relationships'),
-                           :autocomplete_live_params => 'fandom=work_fandom') %>
+                           id: "work_relationship",
+                           title: ts('relationships'),
+                           data: { autocomplete_live_params: "fandom=work_fandom" }) %>
     </dd>
 
     <dt class="character" title="<%= ts('characters') %>">
@@ -87,9 +101,9 @@
     <dd class="character" title="<%= ts('characters') %>">
       <%= text_field_tag "work[character_string]", include_blank ? "" : @work.character_string, 
                         autocomplete_options('character_in_fandom', 
-                          :id => "work_character",
-                          :title => ts('characters'),
-                          :autocomplete_live_params => 'fandom=work_fandom') %>
+                          id: "work_character",
+                          title: ts('characters'),
+                          data: { autocomplete_live_params: "fandom=work_fandom" }) %>
     </dd>
 
     <dt class="freeform" title="<%= ts('additional tags') %>">

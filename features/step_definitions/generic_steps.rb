@@ -42,13 +42,20 @@ Then /^show me the (\d+)(?:st|nd|rd|th) form$/ do |index|
   puts "\n" + page.all("#main form")[(index.to_i-1)].native.inner_html
 end
 
+Then "I should see the {string} form" do |form_id|
+  expect(page).to have_css("form##{form_id}")
+end
+
+Then "I should not see the {string} form" do |form_id|
+  expect(page).not_to have_css("form##{form_id}")
+end
+
 Given /^I wait (\d+) seconds?$/ do |number|
   Kernel::sleep number.to_i
 end
 
-When 'the system processes jobs' do
-  #resque runs inline during testing. see resque.rb in initializers/gem-plugin_config
-  #Delayed::Worker.new.work_off
+When "all AJAX requests are complete" do
+  wait_for_ajax if @javascript
 end
 
 When 'I reload the page' do
@@ -56,7 +63,7 @@ When 'I reload the page' do
 end
 
 Then /^I should see Posted now$/ do
-	now = Time.zone.now.to_s
+  now = Time.zone.now.to_s
   step "I should see \"Posted #{now}\""
 end
 
@@ -88,17 +95,25 @@ Then /^I should see a success message$/ do
   step %{I should see "success"}
 end
 
-# img attributes
-Then /^I should see the image "([^"]*)" text "([^"]*)"(?: within "([^"]*)")?$/ do |attribute, text, selector|
+def assure_xpath_present(tag, attribute, value, selector)
   with_scope(selector) do
-    page.should have_xpath("//img[@#{attribute}='#{text}']")
+    page.should have_xpath("//#{tag}[@#{attribute}='#{value}']")
   end
 end
 
-Then /^I should not see the image "([^"]*)" text "([^"]*)"(?: within "([^"]*)")?$/ do |attribute, text, selector|
+def assure_xpath_not_present(tag, attribute, value, selector)
   with_scope(selector) do
-    page.should_not have_xpath("//img[@#{attribute}='#{text}']")
+    page.should_not have_xpath("//#{tag}[@#{attribute}='#{value}']")
   end
+end
+
+# img attributes
+Then /^I should see the image "([^"]*)" text "([^"]*)"(?: within "([^"]*)")?$/ do |attribute, text, selector|
+  assure_xpath_present("img", attribute, text, selector)
+end
+
+Then /^I should not see the image "([^"]*)" text "([^"]*)"(?: within "([^"]*)")?$/ do |attribute, text, selector|
+  assure_xpath_not_present("img", attribute, text, selector)
 end
 
 Then /^"([^"]*)" should be selected within "([^"]*)"$/ do |value, field|
@@ -113,16 +128,24 @@ Then /^I should see "([^"]*)" in the "([^"]*)" input/ do |content, labeltext|
   find_field("#{labeltext}").value.should == content
 end
 
+Then /^I should see a button with text "(.*?)"(?: within "(.*?)")?$/ do |text, selector|
+  assure_xpath_present("input", "value", text, selector)
+end
+
+Then /^I should not see a button with text "(.*?)"(?: within "(.*?)")?$/ do |text, selector|
+  assure_xpath_not_present("input", "value", text, selector)
+end
+
+Then "the {string} input should be blank" do |label|
+  expect(find_field(label).value).to be_blank
+end
+
 Then /^I should see (a|an) "([^"]*)" button(?: within "([^"]*)")?$/ do |_article, text, selector|
-  with_scope(selector) do
-    page.should have_xpath("//input[@value='#{text}']")
-  end
+  assure_xpath_present("input", "value", text, selector)
 end
 
 Then /^I should not see (a|an) "([^"]*)" button(?: within "([^"]*)")?$/ do |_article, text, selector|
-  with_scope(selector) do
-    page.should_not have_xpath("//input[@value='#{text}']")
-  end
+  assure_xpath_not_present("input", "value", text, selector)
 end
 
 When /^"([^\"]*)" is fixed$/ do |what|
@@ -131,32 +154,27 @@ end
 
 Then /^the "([^"]*)" checkbox(?: within "([^"]*)")? should be disabled$/ do |label, selector|
   with_scope(selector) do
-    field_disabled = find_field(label, disabled: true)
-    if field_disabled.respond_to? :should
-      field_disabled.should be_truthy
-    else
-      assert field_disabled
-    end
+    field = find_field(label, disabled: true)
+    expect(field).to be_present
+    expect(field.disabled?).to be_truthy
   end
 end
 
 Then /^the "([^"]*)" checkbox(?: within "([^"]*)")? should not be disabled$/ do |label, selector|
   with_scope(selector) do
-    field_disabled = find_field(label)['disabled']
-    if field_disabled.respond_to? :should
-      field_disabled.should be_falsey
-    else
-      assert !field_disabled
-    end
+    field = find_field(label)
+    expect(field).to be_present
+    expect(field.disabled?).to be_falsey
   end
 end
 
-Then /^I should not see the field "([^"]*)"(?: within "([^"]*)")?$/ do |id, selector|
-  with_scope(selector) do
-    page.should_not have_xpath("//input[@#{id}='#{id}']")
-  end
+Then /^I should see the input with id "([^"]*)"(?: within "([^"]*)")?$/ do |id, selector|
+  assure_xpath_present("input", "id", id, selector)
 end
 
+Then /^I should not see the input with id "([^"]*)"(?: within "([^"]*)")?$/ do |id, selector|
+  assure_xpath_not_present("input", "id", id, selector)
+end
 
 When /^I check the (\d+)(?:st|nd|rd|th) checkbox with the value "([^"]*)"$/ do |index, value|
   check(page.all("input[type='checkbox']").select {|el| el['value'] == value}[(index.to_i-1)]['id'])
@@ -212,18 +230,6 @@ Then /^I should not see the text with tags '(.*)'$/ do |text|
   page.body.should_not =~ /#{Regexp.escape(text)}/m
 end
 
-Then /^I should see the page title "(.*)"$/ do |text|
-  within('head title') do
-    page.should have_content(text)
-  end
-end
-
-Then /^I should see the raw html page title "(.*)"$/ do |text|
-  within('head title') do
-    page.body.should =~ /#{Regexp.escape(text)}/m
-  end
-end
-
 Then /^I should find a checkbox "([^\"]*)"$/ do |name|
   field = find_field(name)
   field['checked'].respond_to? :should
@@ -237,6 +243,16 @@ end
 Then /^I should not see a link "([^\"]*)"$/ do |name|
   text = name + "</a>"
   page.body.should_not =~ /#{Regexp.escape(text)}/m
+end
+
+Then "the page should be hidden from search engines" do
+  expect(page).to have_css("meta[name=robots][content=noindex]", visible: false)
+  expect(page).to have_css("meta[name=googlebot][content=noindex]", visible: false)
+end
+
+Then "the page should not be hidden from search engines" do
+  expect(page).not_to have_css("meta[name=robots][content=noindex]", visible: false)
+  expect(page).not_to have_css("meta[name=googlebot][content=noindex]", visible: false)
 end
 
 When /^I want to search for exactly one term$/ do

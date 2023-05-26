@@ -21,7 +21,7 @@
           </p>
         </dd>
         <dt id="managePublicationDate"><%= f.label :published_at, ts("Chapter Publication Date") %>  <%= link_to_help "backdating-help" %></dt>
-        <dd class="datetime"><%= f.date_select "published_at", start_year: Date.today.year, end_year: 1950, default: @work.default_date, order: [:day, :month, :year] %></dd>
+        <dd class="datetime"><%= f.date_select "published_at", start_year: Date.current.year, end_year: 1950, default: @work.default_date, order: [:day, :month, :year] %></dd>
       </dl>
     </fieldset>
 
@@ -29,7 +29,7 @@
       <legend><%= ts("Chapter Preface") %></legend>
       <h4 class="landmark heading"><%= ts("Chapter Preface") %></h4>
       <dl>
-        <%= render "pseuds/byline", form: f, type: "chapter" %>
+        <%= render "pseuds/byline", form: f, object: @chapter %>
 
         <dt class="summary"><%= f.label :summary, ts("Chapter Summary") %></dt>
         <dd class="summary">
@@ -71,10 +71,10 @@
       <legend><%= ts("Post Chapter") %></legend>
       <ul class="actions">
         <% unless @chapter.new_record? || @chapter.posted? %>
-          <li><%= submit_tag ts("Save Without Posting"), name: "save_button" %></li>
+          <li><%= submit_tag ts("Save As Draft"), name: "save_button" %></li>
         <% end %>
         <li><%= submit_tag ts("Preview"), name: "preview_button" %></li>
-        <li><%= submit_tag ts("Post Without Preview"), name: "post_without_preview_button", data: { disable_with: ts("Please wait...") } %></li>
+        <li><%= submit_tag ts("Post"), name: "post_without_preview_button", data: { disable_with: ts("Please wait...") } %></li>
         <li><%= submit_tag ts("Cancel"), name: "cancel_button" %></li>
       </ul>
     </fieldset>

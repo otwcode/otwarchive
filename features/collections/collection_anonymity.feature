@@ -26,6 +26,7 @@ Feature: Collection
     Given I have the hidden collection "Hidden Treasury"
       And "second_user" subscribes to author "first_user"
       And the user "third_user" exists and is activated
+      And the user "third_user" allows gifts
       And all emails have been delivered
     When I am logged in as "first_user"
       And I post the work "New Snippet" to the collection "Hidden Treasury" as a gift for "third_user"
@@ -54,6 +55,8 @@ Feature: Collection
       And "second_user" subscribes to author "first_user"
       And the user "third_user" exists and is activated
       And the user "fourth_user" exists and is activated
+      And the user "third_user" allows gifts
+      And the user "fourth_user" allows gifts
       And all emails have been delivered
     When I am logged in as "first_user"
       And I post the work "First Snippet" to the collection "Hidden Treasury" as a gift for "third_user"
@@ -132,6 +135,7 @@ Feature: Collection
     Given I have the anonymous collection "Anonymous Hugs"
       And "second_user" subscribes to author "first_user"
       And the user "third_user" exists and is activated
+      And the user "third_user" allows gifts
       And all emails have been delivered
     When I am logged in as "first_user"
       And I post the work "Old Snippet" to the collection "Anonymous Hugs" as a gift for "third_user"
@@ -153,9 +157,10 @@ Feature: Collection
     Given I have the anonymous collection "Anonymous Hugs"
       And "second_user" subscribes to author "first_user"
       And the user "third_user" exists and is activated
+      And the user "third_user" allows gifts
       And I am logged in as "first_user"
       And I post the work "First Snippet" to the collection "Anonymous Hugs" as a gift for "third_user"
-      And I post the work "Second Snippet" to the collection "Anonymous Hugs" as a gift for "fourth_user"
+      And I post the work "Second Snippet" to the collection "Anonymous Hugs" as a gift for "not a user"
     When subscription notifications are sent
     Then "second_user" should not be emailed
     When I am logged in as "moderator"
@@ -231,12 +236,12 @@ Feature: Collection
   Scenario: Adding a co-author to (one chapter of) an anonymous work should still keep it anonymous
     Given I have the anonymous collection "Various Penguins"
       And I am logged in as "Jessica"
-      And I post the chaptered work "Cone of Silence"
-      And I add the work "Cone of Silence" to the collection "Various Penguins"
+      And I post the chaptered work "Cone of Silence" in the collection "Various Penguins"
     When I edit the work "Cone of Silence"
       And I follow "2" within "div#main.works-edit.region"
-      And I add the co-author "Amos"
-      And I press "Post Without Preview"
+      And I invite the co-author "Amos"
+      And I press "Post"
+      And the user "Amos" accepts all co-creator requests
     Then the author of "Cone of Silence" should be visible to me on the work page
     When I am logged out
     Then the author of "Cone of Silence" should be hidden from me
@@ -246,8 +251,7 @@ Feature: Collection
       And I have the anonymous collection "Temporary Mice"
       And I am logged in as "a_nonny_mouse"
       And I post the work "Cheesy Goodness"
-      And I add the work "Cheesy Goodness" to the collection "Permanent Mice"
-      And I add the work "Cheesy Goodness" to the collection "Temporary Mice"
+      And I edit the work "Cheesy Goodness" to be in the collections "Permanent_Mice,Temporary_Mice"
       And "eager_fan" subscribes to author "a_nonny_mouse"
 
     When I am logged in as "moderator"
@@ -261,8 +265,7 @@ Feature: Collection
       And I have the hidden collection "Secret for Now"
       And I am logged in as "classified"
       And I post the work "Top-Secret Goodness"
-      And I add the work "Top-Secret Goodness" to the collection "Super-Secret"
-      And I add the work "Top-Secret Goodness" to the collection "Secret for Now"
+      And I edit the work "Top-Secret Goodness" to be in the collections "Super-Secret,Secret_for_Now"
       And "eager_fan" subscribes to author "classified"
 
     When I am logged in as "moderator"
@@ -276,8 +279,7 @@ Feature: Collection
       And I have the anonymous collection "Cheese Enthusiasts"
       And I am logged in as "classified"
       And I post the work "Half and Half"
-      And I add the work "Half and Half" to the collection "Triple-Secret"
-      And I add the work "Half and Half" to the collection "Cheese Enthusiasts"
+      And I edit the work "Half and Half" to be in the collections "Triple-Secret,Cheese_Enthusiasts"
       And "eager_fan" subscribes to author "classified"
 
     When I am logged in as "moderator"
@@ -291,8 +293,7 @@ Feature: Collection
       And I have the anonymous collection "Anons Anonymous"
       And I am logged in as "classified"
       And I post the work "Half and Half"
-      And I add the work "Half and Half" to the collection "Hidden Dreams"
-      And I add the work "Half and Half" to the collection "Anons Anonymous"
+      And I edit the work "Half and Half" to be in the collections "Hidden_Dreams,Anons_Anonymous"
       And "eager_fan" subscribes to author "classified"
 
     When I am logged in as "moderator"
@@ -314,7 +315,7 @@ Feature: Collection
 
     When I am logged in as "mysterious"
       And I post the work "Anonymous Gift"
-      And I add the work "Anonymous Gift" to the collection "Anon Forever"
+      And I edit the work "Anonymous Gift" to be in the collection "Anon_Forever"
       And subscription notifications are sent
 
     Then 0 emails should be delivered
@@ -367,7 +368,7 @@ Feature: Collection
       And I should see "Anonymous [creator]"
 
     When I press "Cancel"
-    
+
     Then I should see "The work was not updated."
 
     When I view the work "My Work"
@@ -444,12 +445,170 @@ Feature: Collection
     When I am logged in as "creator"
       And I set up the draft "Secret Work"
       And I fill in "Collections" with "Anonymizing,Fluffy"
-      And I press "Post Without Preview"
+      And I press "Post"
       And I go to my works page
     Then I should not see "Secret Work"
 
     When I edit the work "Secret Work"
       And I fill in "Collections" with "Holidays,Fluffy"
-      And I press "Post Without Preview"
+      And I press "Post"
+      And all indexing jobs have been run
       And I go to my works page
     Then I should see "Secret Work"
+
+  Scenario: Changing a collection item to anonymous triggers a notification
+    Given a collection "Changeable"
+      And I am logged in as "creator"
+      And I post the work "Lovely" in the collection "Changeable"
+      And all emails have been delivered
+
+    When I am logged in as the owner of "Changeable"
+      And I go to "Changeable" collection edit page
+      And I check "This collection is anonymous"
+      And I press "Update"
+      And I view the approved collection items page for "Changeable"
+      And I check "Anonymous"
+      And I submit
+    Then "creator" should be emailed
+      And the email should have "Your work was made anonymous" in the subject
+      And the email should contain "Anonymous works are included in tag listings, but not on your works page."
+      And the email should not contain "translation missing"
+
+  Scenario: Changing a collection item to unrevealed triggers a notification
+    Given a collection "Changeable"
+      And I am logged in as "creator"
+      And I post the work "Lovely" in the collection "Changeable"
+      And all emails have been delivered
+
+    When I am logged in as the owner of "Changeable"
+      And I go to "Changeable" collection edit page
+      And I check "This collection is unrevealed"
+      And I press "Update"
+      And I view the approved collection items page for "Changeable"
+      And I check "Unrevealed"
+      And I submit
+    Then "creator" should be emailed
+      And the email should have "Your work was made unrevealed" in the subject
+      And the email should contain "Unrevealed works are not included in tag listings or on your works page."
+      And the email should not contain "translation missing"
+
+  Scenario: Changing a collection item to anonymous and unrevealed triggers a notification
+    Given a collection "Changeable"
+      And I am logged in as "creator"
+      And I post the work "Lovely" in the collection "Changeable"
+      And all emails have been delivered
+
+    When I am logged in as the owner of "Changeable"
+      And I go to "Changeable" collection edit page
+      And I check "This collection is anonymous"
+      And I check "This collection is unrevealed"
+      And I press "Update"
+      And I view the approved collection items page for "Changeable"
+      And I check "Anonymous"
+      And I check "Unrevealed"
+      And I submit
+    Then "creator" should be emailed
+      And the email should have "Your work was made anonymous and unrevealed" in the subject
+      And the email should contain "Unrevealed works are not included in tag listings or on your works page."
+      And the email should contain "The collection maintainers may later reveal your work but leave it anonymous."
+      And the email should not contain "translation missing"
+
+  # We need to load the site skin to make the share modal work:
+  @javascript @load-default-skin
+  Scenario: Work share modal should not reveal anonymous authors
+    Given I have the anonymous collection "Anonymous Hugs"
+    When I am logged in as "first_user"
+      And I post the work "Old Snippet" to the collection "Anonymous Hugs"
+    When I am logged out
+      And I view the work "Old Snippet"
+    Then I should see "Share"
+    When I follow "Share"
+    Then I should see "by Anonymous" within "#modal textarea"
+
+  Scenario: Work share button should not display for unrevealed works
+    Given I have the hidden collection "Hidden Treasury"
+    When I am logged in as "first_user"
+      And I post the work "Old Snippet" to the collection "Hidden Treasury"
+    Then the work "Old Snippet" should be visible to me
+      And I should not see "Share"
+    When I am logged in as "moderator"
+    Then the work "Old Snippet" should be visible to me
+      And I should not see "Share"
+
+  Scenario: Works that are over the tag limit can be revealed
+    Given the user-defined tag limit is 2
+      And I have the hidden collection "Hidden Gems"
+      And I am logged in as "creator"
+      And I post the work "Over the Limit" in the collection "Hidden Gems"
+      And the work "Over the Limit" has 3 fandom tags
+    When I reveal works for "Hidden Gems"
+      And I log out
+      And I view the work "Over the Limit"
+    Then I should see "Over the Limit"
+
+  Scenario: Mystery blurb collections contain only unrevealed (approved or unmoderated) collections
+    Given I have the hidden moderated collection "Hidden Moderated Approved"
+      And I have the hidden moderated collection "Hidden Moderated Not Approved"
+      And I have the hidden collection "Just Hidden"
+      And I have the anonymous collection "Just Anonymous"
+      And I have the hidden anonymous collection "Hidden and Anonymous"
+      And I have the collection "Welcome"
+      And I am logged in as "author"
+      And I post the work "Work"
+      And I edit the work "Work" to be in the collections "Welcome,Hidden_Moderated_Not_Approved"
+
+    When I am logged out
+     And I go to "Welcome" collection's page
+    Then I should see "Mystery Work"
+     And I should not see "Part of"
+
+    When I am logged in as "author"
+     And I edit the work "Work" to be in the collections "Welcome,Hidden_Moderated_Not_Approved,Hidden_Moderated_Approved,Just_Hidden,Just_Anonymous,Hidden_And_Anonymous"
+     And I am logged in as "moderator"
+     And I approve the work "Work" in the collection "Hidden Moderated Approved"
+     And I submit
+
+    When I am logged out
+     And I go to "Welcome" collection's page
+    Then I should see "Mystery Work"
+     And I should see "Part of Hidden Moderated Approved, Just Hidden, Hidden and Anonymous"
+     And I should not see "Hidden Moderated Not Approved"
+     And I should not see "Just Anonymous"
+     And I should not see "Welcome" within ".mystery"
+
+  Scenario: Unrevealed work collection message mentions collections relevant to user
+    Given I have the hidden moderated collection "Hidden Moderated 1"
+      And I have the hidden moderated collection "Hidden Moderated 2"
+      And I am logged in as "author"
+      And I post the chaptered work "Work"
+      And I edit the work "Work" to be in the collections "Hidden_Moderated_1,Hidden_Moderated_2"
+
+     When I view the work "Work"
+     Then I should see "You can find details here: Hidden Moderated 1, Hidden Moderated 2"
+     When I view the work "Work" in full mode
+     Then I should see "You can find details here: Hidden Moderated 1, Hidden Moderated 2"
+
+     When I am logged out
+      And I view the work "Work"
+     Then I should not see "You can find details here"
+     When I go to the work "Work" in full mode
+      And I should not see "You can find details here"
+
+     When I am logged in as "moderator"
+      And I approve the work "Work" in the collection "Hidden Moderated 1"
+      And I submit
+
+     When I view the work "Work"
+     Then I should see "You can find details here: Hidden Moderated 1"
+      And I should not see "Hidden Moderated 2"
+     When I go to the work "Work" in full mode
+     Then I should see "You can find details here: Hidden Moderated 1"
+      And I should not see "Hidden Moderated 2"
+
+     When I am logged out
+      And I view the work "Work"
+     Then I should see "You can find details here: Hidden Moderated 1"
+      And I should not see "Hidden Moderated 2"
+     When I go to the work "Work" in full mode
+     Then I should see "You can find details here: Hidden Moderated 1"
+      And I should not see "Hidden Moderated 2"

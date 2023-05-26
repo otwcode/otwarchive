@@ -1,8 +1,6 @@
 class Language < ApplicationRecord
-  include ActiveModel::ForbiddenAttributesProtection
-
   validates_presence_of :short
-  validates_uniqueness_of :short
+  validates :short, uniqueness: true
   validates_presence_of :name
 
   has_many :works
@@ -10,7 +8,7 @@ class Language < ApplicationRecord
   has_many :admin_posts
   has_many :archive_faqs
 
-  scope :default_order, -> { order("COALESCE(NULLIF(sortable_name,''), short)") }
+  scope :default_order, -> { order(Arel.sql("COALESCE(NULLIF(sortable_name,''), short)")) }
 
   def to_param
     short
@@ -27,5 +25,4 @@ class Language < ApplicationRecord
   def fandom_count
     Fandom.joins(:works).where(works: {id: self.works.posted.collect(&:id)}).distinct.select('tags.id').count
   end
-
 end

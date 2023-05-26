@@ -53,7 +53,6 @@ class AutocompleteController < ApplicationController
       render_output(Tag.autocomplete_fandom_lookup(params).map {|r| Tag.name_from_autocomplete(r)})
     end
   public
-  def tag_in_fandom; tag_in_fandom_output(params); end
   def character_in_fandom; tag_in_fandom_output(params.merge({tag_type: "character"})); end
   def relationship_in_fandom; tag_in_fandom_output(params.merge({tag_type: "relationship"})); end
 
@@ -103,12 +102,6 @@ class AutocompleteController < ApplicationController
   # more-specific autocompletes should be added below here when they can't be avoided
 
 
-  # Nominated parents
-  def nominated_parents
-    render_output(TagNomination.for_tag_set(OwnedTagSet.find(params[:tag_set_id])).nominated_parents(params[:tagname], params[:term]))
-  end
-
-
   # look up collections ranked by number of items they contain
 
   def collection_fullname
@@ -136,21 +129,6 @@ class AutocompleteController < ApplicationController
     render_output(ExternalWork.where(["url LIKE ?", '%' + params[:term] + '%']).limit(10).order(:url).pluck(:url))
   end
 
-  # encodings for importing
-  def encoding
-    encodings = Encoding.name_list.select {|e| e.match(/#{params[:term]}/i)}
-    render_output(encodings)
-  end
-
-  # people signed up for a challenge
-  def challenge_participants
-    search_param = params[:term]
-    collection_id = params[:collection_id]
-    render_output(Pseud.limit(10).order(:name).joins(:challenge_signups)
-                    .where(["pseuds.name LIKE ? AND challenge_signups.collection_id = ?",
-                            '%' + search_param + '%', collection_id]).map(&:byline))
-  end
-
   # the pseuds of the potential matches who could fulfill the requests in the given signup
   def potential_offers
     potential_matches(false)
@@ -169,7 +147,7 @@ class AutocompleteController < ApplicationController
     pmatches = return_requests ?
       signup.offer_potential_matches.sort.reverse.map {|pm| pm.request_signup.pseud.byline} :
       signup.request_potential_matches.sort.reverse.map {|pm| pm.offer_signup.pseud.byline}
-    pmatches.select! {|pm| pm.match(/#{search_param}/)} if search_param.present?
+    pmatches.select! { |pm| pm.match(/#{Regexp.escape(search_param)}/) } if search_param.present?
     render_output(pmatches)
   end
 

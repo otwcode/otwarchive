@@ -1,0 +1,18 @@
+<% creation_type = @creation.class.name.underscore %>
+<% content_for :message do %>
+<%# i18n-tasks-use t('user_mailer.creatorship_notification_archivist.intro_chapter')
+    i18n-tasks-use t('user_mailer.creatorship_notification_archivist.intro_series')
+    i18n-tasks-use t('user_mailer.creatorship_notification_archivist.intro_work')-%>
+<%= t(".intro_#{creation_type}", archivist: @archivist.login, pseud: @creatorship.pseud.name) %>
+
+<%= t ".text.creation", title: creation_title(@creation),
+  url: polymorphic_url(@creation),
+  pseuds: @creation.pseuds.map(&:byline).to_sentence %>
+
+<%= t(".explanation") %>
+
+<%# i18n-tasks-use t('user_mailer.creatorship_notification_archivist.text.remove_chapter')
+    i18n-tasks-use t('user_mailer.creatorship_notification_archivist.text.remove_series')
+    i18n-tasks-use t('user_mailer.creatorship_notification_archivist.text.remove_work')-%>
+<%= t(".text.remove_#{creation_type}", url: edit_polymorphic_url(@creation)) %>
+<% end %>

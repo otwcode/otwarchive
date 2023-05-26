@@ -17,7 +17,7 @@ end
 
 Then /^I should see HTML "(.*)?" in the autocomplete$/ do |string|
   # There should be only one visible autocomplete dropdown.
-  within("input + .autocomplete", visible: true) do
+  within("input + .autocomplete") do
     # Wait for results to appear, then check their HTML content
     expect(current_scope).to have_selector("li")
     expect(current_scope["innerHTML"]).to include(string)
@@ -26,12 +26,12 @@ end
 
 Then /^I should see "([^\"]+)" in the autocomplete$/ do |string|
   # There should be only one visible autocomplete dropdown.
-  expect(find("input + .autocomplete", visible: true)).to have_content(string)
+  expect(find("input + .autocomplete")).to have_content(string)
 end
 
 Then /^I should not see "([^\"]+)" in the autocomplete$/ do |string|
   # There should be only one visible autocomplete dropdown.
-  expect(find("input + .autocomplete", visible: true)).to have_no_content(string)
+  expect(find("input + .autocomplete")).to have_no_content(string)
 end
 
 # Define all values to be entered here depending on the fieldname
@@ -62,19 +62,19 @@ When /^I enter "([^\"]+)" in the "([^\"]+)" autocomplete field$/ do |text, field
   # Wait for the autocomplete right after the field to appear,
   # so in the Then steps we can look for the only active autocomplete
   # without caring where it is.
-  expect(page).to have_selector("##{field[:id]} + .autocomplete", visible: true)
+  expect(page).to have_selector("##{field[:id]} + .autocomplete")
 end
 
 When /^I choose "([^\"]+)" from the "([^\"]+)" autocomplete$/ do |text, fieldname|
   field = find_field(fieldname)
-  # Clear the field
+  # Clear the field.
   field.set("")
   # Simulate keystrokes to make the autocomplete dropdown appear (instead of fill_in)
   field.send_keys(text)
   # In the autocomplete right after the field...
   with_scope("##{field[:id]} + .autocomplete") do
     # Wait for the expected result to appear and click to select it
-    find("li", text: text, visible: true).click
+    find("li", text: text).click
   end
 end
 
@@ -93,6 +93,12 @@ When /^I enter text in the (\w+) autocomplete field$/ do |fieldtype|
   step %{I enter text in the "#{fieldname}" autocomplete field}
 end
 
+When "I remove selected values from the autocomplete field within {string}" do |selector|
+  within(selector) do
+    find_all(".autocomplete .delete").each(&:click)
+  end
+end
+
 When /^I specify a fandom and enter text in the character autocomplete field$/ do
   step %{I choose "Supernatural" from the "Fandoms" autocomplete}
   step %{I enter text in the character autocomplete field}
@@ -107,6 +113,12 @@ When /^I specify two fandoms and enter text in the character autocomplete field$
   step %{I choose "Supernatural" from the "Fandoms" autocomplete}
   step %{I choose "Battlestar Galactica" from the "Fandoms" autocomplete}
   step %{I enter text in the character autocomplete field}
+end
+
+When /^I choose a previously bookmarked URL from the autocomplete$/ do
+  url = ExternalWork.first.url
+  step %{I choose "#{url}" from the "URL" autocomplete}
+  step %{all AJAX requests are complete}
 end
 
 ## Here's where we create the steps defining which tags should appear/not appear
@@ -188,15 +200,13 @@ Then /^the fandom-specific tag autocomplete fields should list only fandom-speci
 end
 
 Then /^the external url autocomplete field should list the urls of existing external works$/ do
-  step %{I enter "zoo" in the "URL" autocomplete field}
-  step %{I should see "zooey-glass.dreamwidth.org" in the autocomplete}
-  step %{I should not see "parenthetical.livejournal.com" in the autocomplete}
+  step %{I enter "exam" in the "URL" autocomplete field}
+  step %{I should see "http://example.org/200" in the autocomplete}
 end
 
 Given /^a set of users for testing autocomplete$/ do
   %w(myname coauthor giftee).each do |username|
-    user = FactoryGirl.create(:user, login: username)
-    user.activate
+    user = FactoryBot.create(:user, login: username)
     user.pseuds.first.add_to_autocomplete
   end
 end

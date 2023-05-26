@@ -49,15 +49,6 @@ module ApplicationHelper
     @facets.present? || (controller.action_name == 'index' && controller.controller_name == 'collections') || (controller.action_name == 'unassigned' && controller.controller_name == 'fandoms')
   end
 
-  # A more gracefully degrading link_to_remote.
-  def link_to_remote(name, options = {}, html_options = {})
-    unless html_options[:href]
-      html_options[:href] = url_for(options[:url])
-    end
-
-    link_to_function(name, remote_function(options), html_options)
-  end
-
   # This is used to make the current page we're on (determined by the path or by the specified condition) a span with class "current" and it allows us to add a title attribute to the link or the span
   def span_if_current(link_to_default_text, path, condition=nil, title_attribute_default_text=nil)
     is_current = condition.nil? ? current_page?(path) : condition
@@ -70,36 +61,18 @@ module ApplicationHelper
     link_to content_tag(:span, ts("RSS Feed")), link_to_feed, title: ts("RSS Feed"), class: "rss"
   end
 
-  #1: default shows just the link to help
-  #2: show_text = true: shows "plain text with limited html" and link to help
-  #3 show_list = true: plain text and limited html, link to help, list of allowed html
-  def allowed_html_instructions(show_list = false, show_text=true)
-    (show_text ? h(ts("Plain text with limited HTML")) : ''.html_safe) +
-    link_to_help("html-help") + (show_list ?
-    "<code>a, abbr, acronym, address, [alt], [axis], b, big, blockquote, br, caption, center, cite, [class], code,
-      col, colgroup, dd, del, dfn, [dir], div, dl, dt, em, h1, h2, h3, h4, h5, h6, [height], hr, [href], i, img,
-      ins, kbd, li, [name], ol, p, pre, q, s, samp, small, span, [src], strike, strong, sub, sup, table, tbody, td,
-      tfoot, th, thead, [title], tr, tt, u, ul, var, [width]</code>" : "").html_safe
-  end
-
-  def allowed_css_instructions
-    h(ts("Limited CSS properties and values allowed")) +
-    link_to_help("css-help")
-  end
-
-  # This helper needs to be used in forms that may appear multiple times in the same
-  # page (eg the comment form) since all the fields must have unique ids
-  # see http://stackoverflow.com/questions/2425690/multiple-remote-form-for-on-the-same-page-causes-duplicate-ids
-  def field_with_unique_id( form, field_type, object, field_name )
-      field_id = "#{object.class.name.downcase}_#{object.id.to_s}_#{field_name.to_s}"
-      form.send( field_type, field_name, id: field_id )
+  # 1: default shows just the link to help
+  # 2: show_text = true: shows "plain text with limited html" and link to help
+  def allowed_html_instructions(show_text = true)
+    (show_text ? h(ts("Plain text with limited HTML")) : "".html_safe) +
+      link_to_help("html-help")
   end
 
   # Byline helpers
   def byline(creation, options={})
     if creation.respond_to?(:anonymous?) && creation.anonymous?
       anon_byline = ts("Anonymous").html_safe
-      if options[:visibility] != "public" && (logged_in_as_admin? || is_author_of?(creation)) 
+      if options[:visibility] != "public" && (logged_in_as_admin? || is_author_of?(creation))
         anon_byline += " [#{non_anonymous_byline(creation, options[:only_path])}]".html_safe
       end
       return anon_byline
@@ -109,6 +82,12 @@ module ApplicationHelper
 
   def non_anonymous_byline(creation, url_path = nil)
     only_path = url_path.nil? ? true : url_path
+
+    if @preview_mode
+      # Skip cache in preview mode
+      return byline_text(creation, only_path)
+    end
+
     Rails.cache.fetch("#{creation.cache_key}/byline-nonanon/#{only_path.to_s}") do
       byline_text(creation, only_path)
     end
@@ -118,9 +97,7 @@ module ApplicationHelper
     if creation.respond_to?(:author)
       creation.author
     else
-      pseuds = []
-      pseuds << creation.authors if creation.authors
-      pseuds << creation.pseuds if creation.pseuds && (!@preview_mode || creation.authors.blank?)
+      pseuds = @preview_mode ? creation.pseuds_after_saving : creation.pseuds.to_a
       pseuds = pseuds.flatten.uniq.sort
 
       archivists = Hash.new []
@@ -162,7 +139,9 @@ module ApplicationHelper
       end
       anon_byline
     else
-      byline_text(creation, only_path: false, text_only: true)
+      only_path = false
+      text_only = true
+      byline_text(creation, only_path, text_only)
     end
   end
 
@@ -237,9 +216,9 @@ module ApplicationHelper
         direction = options[:desc_default] ? 'DESC' : 'ASC'
       end
       link_to_unless condition, ((direction == 'ASC' ? '&#8593;&#160;' : '&#8595;&#160;') + title).html_safe,
-          request.parameters.merge( {sort_column: column, sort_direction: direction} ), {class: css_class, title: (direction == 'ASC' ? ts('sort up') : ts('sort down'))}
+          current_path_with(sort_column: column, sort_direction: direction), {class: css_class, title: (direction == 'ASC' ? ts('sort up') : ts('sort down'))}
     else
-      link_to_unless params[:sort_column].nil?, title, url_for(params.merge sort_column: nil, sort_direction: nil)
+      link_to_unless params[:sort_column].nil?, title, current_path_with(sort_column: nil, sort_direction: nil)
     end
   end
 
@@ -259,10 +238,6 @@ module ApplicationHelper
   def allow_tinymce?(controller)
     %w(admin_posts archive_faqs known_issues chapters works wrangling_guidelines).include?(controller.controller_name) &&
       %w(new create edit update).include?(controller.action_name)
-  end
-
-  def params_without(name)
-    params.reject{|k,v| k == name}
   end
 
   # see: http://www.w3.org/TR/wai-aria/states_and_properties#aria-valuenow
@@ -294,12 +269,14 @@ module ApplicationHelper
   def autocomplete_options(method, options={})
     {
       class: "autocomplete",
-      autocomplete_method: (method.is_a?(Array) ? method.to_json : "/autocomplete/#{method}"),
-      autocomplete_hint_text: ts("Start typing for suggestions!"),
-      autocomplete_no_results_text: ts("(No suggestions found)"),
-      autocomplete_min_chars: 1,
-      autocomplete_searching_text: ts("Searching...")
-    }.merge(options)
+      data: {
+        autocomplete_method: (method.is_a?(Array) ? method.to_json : "/autocomplete/#{method}"),
+        autocomplete_hint_text: ts("Start typing for suggestions!"),
+        autocomplete_no_results_text: ts("(No suggestions found)"),
+        autocomplete_min_chars: 1,
+        autocomplete_searching_text: ts("Searching...")
+      }
+    }.deep_merge(options)
   end
 
   # see http://asciicasts.com/episodes/197-nested-model-form-part-2
@@ -319,27 +296,28 @@ module ApplicationHelper
     link_to_function(linktext, "remove_section(this, \"#{class_of_section_to_remove}\")", class: "hidden showme")
   end
 
-  def time_in_zone(time, zone=nil, user=User.current_user)
+  def time_in_zone(time, zone = nil, user = User.current_user)
     return ts("(no time specified)") if time.blank?
-    zone = ((user && user.is_a?(User) && user.preference.time_zone) ? user.preference.time_zone : Time.zone.name) unless zone
+
+    zone ||= (user&.is_a?(User) && user.preference.time_zone) ? user.preference.time_zone : Time.zone.name
     time_in_zone = time.in_time_zone(zone)
     time_in_zone_string = time_in_zone.strftime('<abbr class="day" title="%A">%a</abbr> <span class="date">%d</span>
                                                  <abbr class="month" title="%B">%b</abbr> <span class="year">%Y</span>
-                                                 <span class="time">%I:%M%p</span>').html_safe +
-                                          " <abbr class=\"timezone\" title=\"#{zone}\">#{time_in_zone.zone}</abbr> ".html_safe
+                                                 <span class="time">%I:%M%p</span>') +
+                          " <abbr class=\"timezone\" title=\"#{zone}\">#{time_in_zone.zone}</abbr> "
 
-    user_time_string = "".html_safe
+    user_time_string = ""
     if user.is_a?(User) && user.preference.time_zone
       if user.preference.time_zone != zone
         user_time = time.in_time_zone(user.preference.time_zone)
-        user_time_string = "(".html_safe + user_time.strftime('<span class="time">%I:%M%p</span>').html_safe +
-          " <abbr class=\"timezone\" title=\"#{user.preference.time_zone}\">#{user_time.zone}</abbr>)".html_safe
+        user_time_string = "(" + user_time.strftime('<span class="time">%I:%M%p</span>') +
+                           " <abbr class=\"timezone\" title=\"#{user.preference.time_zone}\">#{user_time.zone}</abbr>)"
       elsif !user.preference.time_zone
         user_time_string = link_to ts("(set timezone)"), user_preferences_path(user)
       end
     end
 
-    time_in_zone_string + user_time_string
+    (time_in_zone_string + user_time_string).strip.html_safe
   end
 
   def mailto_link(user, options={})
@@ -364,14 +342,6 @@ module ApplicationHelper
 
   def field_name(form, attribute)
     "#{form.object_name}[#{field_attribute(attribute)}]"
-  end
-
-  def nested_field_id(form, nested_object, attribute)
-    name_to_id(nested_field_name(form, nested_object, attribute))
-  end
-
-  def nested_field_name(form, nested_object, attribute)
-    "#{form.object_name}[#{nested_object.class.table_name}_attributes][#{nested_object.id}][#{field_attribute(attribute)}]"
   end
 
   # toggle an checkboxes (scrollable checkboxes) section of a form to show all of the checkboxes
@@ -512,21 +482,6 @@ module ApplicationHelper
     content_tag(:fieldset, content_tag(:legend, ts("Actions")) + submit_button(form, button_text))
   end
 
-  # Cache fragments of a view if +condition+ is true
-  #
-  # <%= cache_if admin?, project do %>
-  # <b>All the topics on this project</b>
-  # <%= render project.topics %>
-  # <% end %>
-  def cache_if(condition, name = {}, options = nil, &block)
-    if condition
-      cache(name, options, &block)
-    else
-      yield
-    end
-    nil
-  end
-
   def first_paragraph(full_text, placeholder_text = 'No preview available.')
     # is there a paragraph that does not have a child image?
     paragraph = Nokogiri::HTML.parse(full_text).at_xpath('//p[not(img)]')
@@ -556,5 +511,102 @@ module ApplicationHelper
   # checkbox or radio designs
   def label_indicator_and_text(text)
     content_tag(:span, "", class: "indicator", "aria-hidden": "true") + content_tag(:span, text)
+  end
+
+  # Display a collection of radio buttons, wrapped in an unordered list.
+  #
+  # The parameter option_array should be a list of pairs, where the first
+  # element in each pair is the radio button's value, and the second element in
+  # each pair is the radio button's label.
+  def radio_button_list(form, field_name, option_array)
+    content_tag(:ul) do
+      form.collection_radio_buttons(field_name, option_array, :first, :second,
+                                    include_hidden: false) do |builder|
+        content_tag(:li, builder.label { builder.radio_button + builder.text })
+      end
+    end
+  end
+
+  # Identifier for creation, formatted external-work-12, series-12, work-12.
+  def creation_id_for_css_classes(creation)
+    return unless %w[ExternalWork Series Work].include?(creation.class.name)
+
+    "#{creation.class.name.underscore.dasherize}-#{creation.id}"
+  end
+
+  # Array of creator ids, formatted user-123, user-126.
+  # External works are not created by users, so we can skip this.
+  def creator_ids_for_css_classes(creation)
+    return [] unless %w[Series Work].include?(creation.class.name)
+    return [] if creation.anonymous?
+    # Although series.unrevealed? can be true, the creators are not concealed
+    # in the blurb. Therefore, we do not need special handling for unrevealed
+    # series.
+    return [] if creation.is_a?(Work) && creation.unrevealed?
+
+    creation.users.pluck(:id).uniq.map { |id| "user-#{id}" }
+  end
+
+  def css_classes_for_creation_blurb(creation)
+    return if creation.nil?
+
+    Rails.cache.fetch("#{creation.cache_key_with_version}/blurb_css_classes-v2") do
+      creation_id = creation_id_for_css_classes(creation)
+      creator_ids = creator_ids_for_css_classes(creation).join(" ")
+      "blurb group #{creation_id} #{creator_ids}".strip
+    end
+  end
+
+  # Returns the current path, with some modified parameters. Modeled after
+  # WillPaginate::ActionView::LinkRenderer to try to prevent any additional
+  # security risks.
+  def current_path_with(**kwargs)
+    # Only throw in the query params if this is a GET request, because POST and
+    # such don't pass their params in the URL.
+    path_params = if request.get? || request.head?
+                    permit_all_except(params, [:script_name, :original_script_name])
+                  else
+                    {}
+                  end
+
+    path_params.deep_merge!(kwargs)
+    path_params[:only_path] = true # prevent shenanigans
+
+    url_for(path_params)
+  end
+
+  # Creates a new hash with all keys except those marked as blocked.
+  #
+  # This is a bit of a hack, but without this we'd have to either (a) make a
+  # list of all permitted params each time current_path_with is called, or (b)
+  # call params.permit! and effectively disable strong parameters for any code
+  # called after current_path_with.
+  def permit_all_except(params, blocked_keys)
+    if params.respond_to?(:each_pair)
+      {}.tap do |result|
+        params.each_pair do |key, value|
+          key = key.to_sym
+          next if blocked_keys.include?(key)
+
+          result[key] = permit_all_except(value, blocked_keys)
+        end
+      end
+    elsif params.respond_to?(:map)
+      params.map do |entry|
+        permit_all_except(entry, blocked_keys)
+      end
+    else # not a hash or an array, just a flat value
+      params
+    end
+  end
+
+  def disallow_robots?(item)
+    return unless item
+
+    if item.is_a?(User)
+      item.preference&.minimize_search_engines?
+    elsif item.respond_to?(:users)
+      item.users.all? { |u| u&.preference&.minimize_search_engines? }
+    end
   end
 end # end of ApplicationHelper

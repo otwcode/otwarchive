@@ -1,4 +1,4 @@
-@skins
+@set-default-skin
 Feature: Public skins
 
   Scenario: A user's initial skin should be set to default
@@ -47,7 +47,7 @@ Feature: Public skins
 
   Scenario: Public skins should not be viewable by users until approved
   Given the unapproved public skin "public skin"
-    And I am logged out
+    And I log out
   When I go to "public skin" skin page
     Then I should see "Sorry, you don't have permission"
   When I go to "public skin" edit skin page
@@ -76,8 +76,8 @@ Feature: Public skins
   Then I should see "Your preferences were successfully updated."
   When I am on skinuser's preferences page
     And "public skin" should be selected within "preference_skin_id"
-    And I should see "#title {" within "style"
-    And I should see "text-decoration: blink;" within "style"
+    And I should see "#title {" in the page style
+    And I should see "text-decoration: blink;" in the page style
 
   Scenario: Toggle between public site skins and public work skins
   Given I am logged in as "skinner"
@@ -104,7 +104,6 @@ Feature: Public skins
   Given the approved public skin "Uncached skin"
     And the approved public skin "Cached skin"
     And the skin "Cached skin" is cached
-    And I am logged out
   When I go to the public skins page
   Then I should see "Cached skin"
     And I should not see "Uncached skin"

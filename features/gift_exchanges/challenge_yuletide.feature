@@ -98,7 +98,7 @@ Feature: Collection
     And I should see "Sign-up Closes:" within ".collection .meta"
     And I should see "Assignments Due:" within ".collection .meta"
     And I should see "Works Revealed:" within ".collection .meta"
-    And I should see "Authors Revealed:" within ".collection .meta"
+    And I should see "Creators Revealed:" within ".collection .meta"
     And I should see "Signed up:" within ".collection .meta"
     And I should see "0" within ".collection .meta"
     And I should see "Welcome to the exchange" within "#intro"
@@ -355,8 +355,6 @@ Feature: Collection
   When all emails have been delivered
   When I follow "Generate Potential Matches"
   Then I should see "Beginning generation of potential matches. This may take some time, especially if your challenge is large."
-  Given the system processes jobs
-    And I wait 3 seconds
   When I reload the page
   Then I should see "Reviewing Assignments"
     And I should see "Complete"
@@ -371,8 +369,6 @@ Feature: Collection
   When all emails have been delivered
   When I follow "Regenerate Assignments"
   Then I should see "Beginning regeneration of assignments. This may take some time, especially if your challenge is large."
-  Given the system processes jobs
-    And I wait 3 seconds
   When I reload the page
   Then I should see "Complete"
     And I should not see "No Recipient"
@@ -390,8 +386,6 @@ Feature: Collection
     And I should see "Complete"
     And I should see "Purge Assignments"
     And I should see "Default All Incomplete"
-    Given the system processes jobs
-      And I wait 3 seconds
     When I reload the page
     Then I should not see "Assignments are now being sent out"
       # 6 users and the mod should get emails :)
@@ -432,7 +426,7 @@ Feature: Collection
     And I fill in "Fandoms" with "Stargate Atlantis"
     And I select "Not Rated" from "Rating"
     And I check "No Archive Warnings Apply"
-    And I select "myname1" from "work_author_attributes_ids_"
+    And I select "English" from "Choose a language"
     And I fill in "content" with "This is an exciting story about Atlantis"
   When I press "Preview"
   Then I should see "Preview"
@@ -566,14 +560,13 @@ Feature: Collection
     And I uncheck "This collection is unrevealed"
     And I press "Update"
   Then I should see "Collection was successfully updated"
-  Given the system processes jobs
-    And I wait 3 seconds
   When I reload the page
   # 5 gift notification emails are delivered for the 5 stories that have been posted so far (4 standard, 1 pinch-hit, 1 still a draft)
   Then 5 emails should be delivered
-    And the email should contain "A gift work has been posted for you"
-    And the email should contain "in the Yuletide collection at the Archive of Our Own"
-    And the email should contain "by an anonymous responder"
+    And the email should contain "A gift work has been posted for you in the"
+    And the email should contain "Yuletide"
+    And the email should contain "at the Archive of Our Own"
+    And the email should contain "by Anonymous"
     And the email should not contain "by myname1"
     And the email should not contain "by myname2"
     And the email should not contain "by myname3"
@@ -621,7 +614,6 @@ Feature: Collection
   # someone can now see their writer
   When I log out
     And I am logged in as "myname1"
-    And the system processes jobs
     And I go to myname1's user page
     #'
   Then I should see "Fulfilling Story 1"

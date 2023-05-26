@@ -117,13 +117,13 @@ describe StoryParser do
     let(:location_partial_match) { "http://testme.org/welcome_to_test_vale/12345" }
 
     it "should recognise previously imported www. works" do
-      @work = FactoryGirl.create(:work, imported_from_url: location_with_www)
+      @work = FactoryBot.create(:work, imported_from_url: location_with_www)
 
       expect { @sp.check_for_previous_import(location_no_www) }.to raise_exception(StoryParser::Error)
     end
 
     it "should recognise previously imported non-www. works" do
-      @work = FactoryGirl.create(:work, imported_from_url: location_no_www)
+      @work = FactoryBot.create(:work, imported_from_url: location_no_www)
 
       expect { @sp.check_for_previous_import(location_with_www) }.to raise_exception(StoryParser::Error)
     end
@@ -145,7 +145,7 @@ describe StoryParser do
       WebMock.stub_request(:any, /url2/).
         to_return(status: 200, body: "Date: 2001-01-22 12:56\nstubbed response", headers: {})
 
-      storyparser_user = FactoryGirl.create(:user)
+      storyparser_user = FactoryBot.create(:user)
       urls = %w(http://url1 http://url2)
       work = @sp.download_and_parse_chapters_into_story(urls, { pseuds: [storyparser_user.default_pseud], do_not_set_current_author: false })
       work.save
@@ -273,25 +273,6 @@ describe StoryParser do
     it "ignores string terminators (AO3-2251)" do
       story = @sp.download_and_parse_story("http://non-sgml-character-number-3", pseuds: [@user.default_pseud])
       expect(story.chapters[0].content).to include("When I get out of here")
-    end
-
-    # temp test
-    # TODO: Write so it reproduces the error without making an external
-    # connection
-    it "saves the work it creates" do
-      options = {
-        post_without_preview: "1",
-        importing_for_others: "1",
-        detect_tags: true
-      }
-
-      archivist = create(:archivist)
-      User.current_user = archivist
-
-      WebMock.allow_net_connect!
-      work = @sp.download_and_parse_story("http://rebecca2525.livejournal.com/3562.html", options)
-
-      expect { work.save! }.to_not raise_exception
     end
   end
 end

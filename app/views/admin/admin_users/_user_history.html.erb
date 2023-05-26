@@ -10,7 +10,29 @@
     </tr>
     </thead>
     <tbody>
-    <% unless @log_items.blank?
+      <tr>
+        <td><%= @user.current_sign_in_at.nil? ? "" : @user.current_sign_in_at %></td>
+        <td><%= ts("Current Login") %></td>
+        <td>
+          <% if @user.current_sign_in_at.nil? %>
+            <%= ts("No login recorded") %>
+          <% else %>
+            <%= ts("IP Address: %{ip}", ip: @user.current_sign_in_ip) %>
+          <% end %>
+        </td>
+      </tr>
+      <tr>
+        <td><%= @user.last_sign_in_at.nil? ? "" : @user.last_sign_in_at %></td>
+        <td><%= ts("Previous Login") %></td>
+        <td>
+          <% if @user.last_sign_in_at.nil? %>
+            <%= ts("No previous login recorded") %>
+          <% else %>
+            <%= ts("IP Address: %{ip}", ip: @user.last_sign_in_ip) %>
+          <% end %>
+        </td>
+      </tr>
+      <% unless @log_items.blank?
          @log_items.each do |item| %>
         <tr>
           <td><%= item.created_at %></td>
@@ -22,28 +44,6 @@
     <tr>
       <td><%= @user.created_at %></td>
       <td><%= ts("Account Created") %></td>
-      <td><%= ts("System Generated") %></td>
-    </tr>
-    <tr>
-      <td>
-        <% if @user.current_sign_in_at.nil? %>
-          <%= ts("No login recorded") %>
-        <% else %>
-          <%= @user.current_sign_in_at %> (<%= @user.current_sign_in_ip %>)
-        <% end %>
-      </td>
-      <td><%= ts("Current Login") %></td>
-      <td><%= ts("System Generated") %></td>
-    </tr>
-    <tr>
-      <td>
-        <% if @user.last_sign_in_at.nil? %>
-          <%= ts("No previous login recorded") %>
-        <% else %>
-          <%= @user.last_sign_in_at %> (<%= @user.last_sign_in_ip %>)
-        <% end %>
-      </td>
-      <td><%= ts("Previous Login") %></td>
       <td><%= ts("System Generated") %></td>
     </tr>
     </tbody>

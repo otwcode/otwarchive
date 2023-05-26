@@ -1,8 +1,9 @@
 class TagWranglingsController < ApplicationController
-  # cache_sweeper :tag_sweeper
+  include TagWrangling
 
   before_action :check_user_status
   before_action :check_permission_to_wrangle
+  around_action :record_wrangling_activity, only: [:wrangle]
 
   def index
     @counts = {}
@@ -45,7 +46,7 @@ class TagWranglingsController < ApplicationController
       tags = Tag.where(id: params[:canonicals])
 
       tags.each do |tag_to_canonicalize|
-        if tag_to_canonicalize.update_attributes(canonical: true)
+        if tag_to_canonicalize.update(canonical: true)
           saved_canonicals << tag_to_canonicalize
         else
           not_saved_canonicals << tag_to_canonicalize
@@ -61,21 +62,6 @@ class TagWranglingsController < ApplicationController
       @media = Media.find_by_name(params[:media])
       @fandoms = Fandom.find(params[:selected_tags])
       @fandoms.each { |fandom| fandom.add_association(@media) }
-    elsif params[:character_string] && !params[:selected_tags].blank?
-      options.merge!(character_string: params[:character_string], fandom_string: params[:fandom_string])
-      @character = Character.find_by_name(params[:character_string])
-
-      if @character && @character.canonical?
-        @tags = Tag.find(params[:selected_tags])
-        @tags.each { |tag| tag.add_association(@character) }
-        flash[:notice] = "#{@tags.length} relationships were wrangled to #{params[:character_string]}."
-
-        redirect_to tag_wranglings_path(options) and return
-      else
-        flash[:error] = "#{params[:character_string]} is not a canonical character."
-
-        redirect_to tag_wranglings_path(options) and return
-      end
     elsif params[:fandom_string].blank? && params[:selected_tags].is_a?(Array) && !params[:selected_tags].empty?
       error_messages << ts('There were no Fandom tags!')
     elsif params[:fandom_string].present? && params[:selected_tags].is_a?(Array) && !params[:selected_tags].empty?
@@ -114,9 +100,4 @@ class TagWranglingsController < ApplicationController
 
     redirect_to tag_wranglings_path(options)
   end
-
-  def discuss
-    @comments = Comment.where(commentable_type: 'Tag').order('updated_at DESC').paginate(page: params[:page])
-  end
-
 end

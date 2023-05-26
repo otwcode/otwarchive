@@ -1,30 +1,4 @@
-class AdminMailer < ActionMailer::Base
-  include Resque::Mailer # see README in this directory
-
-  layout 'mailer'
-  helper :mailer
-  default from: "Archive of Our Own " + "<#{ArchiveConfig.RETURN_ADDRESS}>"
-
-  def abuse_report(abuse_report_id)
-    abuse_report = AbuseReport.find(abuse_report_id)
-    @email = abuse_report.email
-    @url = abuse_report.url
-    @comment = abuse_report.comment
-    mail(
-      to: ArchiveConfig.ABUSE_ADDRESS,
-      subject: "[#{ArchiveConfig.APP_SHORT_NAME}] Admin Abuse Report"
-    )
-  end
-
-  def feedback(feedback_id)
-    @feedback = Feedback.find(feedback_id)
-    mail(
-      from: @feedback.email.blank? ? ArchiveConfig.RETURN_ADDRESS : @feedback.email,
-      to: ArchiveConfig.FEEDBACK_ADDRESS,
-      subject: "[#{ArchiveConfig.APP_SHORT_NAME}] Support - #{strip_html_breaks_simple(@feedback.summary)}"
-    )
-  end
-  
+class AdminMailer < ApplicationMailer
   # Sends email to an admin when a new comment is created on an admin post
   def comment_notification(comment_id)
     # admin = Admin.find(admin_id)
@@ -47,12 +21,14 @@ class AdminMailer < ActionMailer::Base
 
   # Sends a spam report
   def send_spam_alert(spam)
-    @users = User.where(id: spam.keys).to_a
-    return if @users.empty?
-
     # Make sure that the keys of the spam array are integers, so that we can do
-    # an easy look-up with user IDs.
-    @spam = spam.transform_keys(&:to_i)
+    # an easy look-up with user IDs. We call stringify_keys first because
+    # the currently installed version of Resque::Mailer does odd things when
+    # you pass a hash as an argument, and we want to know what we're dealing with.
+    @spam = spam.stringify_keys.transform_keys(&:to_i)
+
+    @users = User.where(id: @spam.keys).to_a
+    return if @users.empty?
 
     # The users might have been retrieved from the database out of order, so
     # re-sort them by their score.
@@ -61,6 +37,19 @@ class AdminMailer < ActionMailer::Base
     mail(
       to: ArchiveConfig.SPAM_ALERT_ADDRESS,
       subject: "[#{ArchiveConfig.APP_SHORT_NAME}] Potential spam alert"
+    )
+  end
+
+  # Emails newly created admin, giving them info about their account and a link
+  # to set their password. Expects the raw password reset token (not the
+  # encrypted one in the database); it is used to create the reset link.
+  def set_password_notification(admin, token)
+    @admin = admin
+    @token = token
+
+    mail(
+      to: @admin.email,
+      subject: t(".subject", app_name: ArchiveConfig.APP_SHORT_NAME)
     )
   end
 end

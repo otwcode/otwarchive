@@ -1,4 +1,4 @@
-@no-txn @tags @users @tag_wrangling @search
+@tags @users @tag_wrangling @search
 
 Feature: Tag Wrangling - Characters
 
@@ -36,8 +36,8 @@ Scenario: character wrangling - syns, mergers, characters, autocompletes
   # check those two created properly
   When I am on the search tags page
     And all indexing jobs have been run
-    And I fill in "tag_search" with "Doctor"
-    And I press "Search tags"
+    And I fill in "Tag name" with "Doctor"
+    And I press "Search Tags"
     # This part of the code is a hot mess. Capybara is returning the first instance of .canonical which contains
     # 'First Doctor/TARDIS', which then leaves us unable to check for 'The First Doctor' as being canonical.
     # I've changed the code for now to just check that 'The Doctor (1st) as being NON-Canonical
@@ -54,11 +54,7 @@ Scenario: character wrangling - syns, mergers, characters, autocompletes
   Then I should not see "Make tag non-canonical and unhook all associations"
 
   Given I am logged in as an admin
-  When I edit the tag "The Doctor (1st)"
-    And I fill in "Synonym of" with "The First Doctor"
-    And I press "Save changes"
-  Then I should see "Tag was updated"
-  When I follow "Edit The First Doctor"
+  When I edit the tag "The First Doctor"
   Then I should see "Make tag non-canonical and unhook all associations"
     And I should see "The Doctor (1st)"
     And the "Canonical" checkbox should be checked and disabled
@@ -73,13 +69,9 @@ Scenario: character wrangling - syns, mergers, characters, autocompletes
   # creating non-canonical characters from work posting
   When I am logged in as "Enigel" with password "wrangulate!"
     And I go to the new work page
-    And I select "Not Rated" from "Rating"
-    And I check "No Archive Warnings Apply"
+    And I fill in the basic work information for "Silliness"
     And I fill in "Fandoms" with "Doctor Who"
-    And I fill in "Work Title" with "Silliness"
     And I fill in "Characters" with "1st Doctor, One"
-    And I fill in "content" with "And then everyone was kidnapped by an alien bus."
-    And I press "Preview"
     And I press "Post"
   Then I should see "Work was successfully posted."
 
@@ -108,12 +100,12 @@ Scenario: character wrangling - syns, mergers, characters, autocompletes
   Then I should see "Doctor Who"
     But I should not see "First Doctor/TARDIS" within ".tags"
 
-  # metatags and subtags, transference thereof to a new canonical
+  # metatags and subtags, transference thereof to a new canonical by an admin
   When I follow "Edit First Doctor"
     And I fill in "MetaTags" with "The Doctor (DW)"
     And I press "Save changes"
-  Then I should see "Invalid meta tag 'The Doctor (DW)':"
-    And I should see "Meta tag does not exist."
+  Then I should see "Invalid metatag 'The Doctor (DW)':"
+    And I should see "Metatag does not exist."
     And I should not see "The Doctor (DW)" within "form"
   When I follow "New Tag"
     And I fill in "Name" with "The Doctor (DW)"
@@ -136,7 +128,9 @@ Scenario: character wrangling - syns, mergers, characters, autocompletes
   When I follow "First Doctor"
   Then I should see "John Smith"
     And I should see "The Doctor"
-  When I fill in "Synonym of" with "First Doctor (DW)"
+  When I am logged in as an admin
+    And I edit the tag "First Doctor"
+    And I fill in "Synonym of" with "First Doctor (DW)"
     And I press "Save changes"
   Then I should see "Tag was updated"
     And I should not see "John Smith"
@@ -153,7 +147,9 @@ Scenario: character wrangling - syns, mergers, characters, autocompletes
     And I should see "The Doctor (DW)"
 
   # trying to syn a non-canonical to another non-canonical
-  When I follow "New Tag"
+  When I am logged in as "Enigel" with password "wrangulate!"
+    And I edit the tag "First Doctor"
+    And I follow "New Tag"
     And I fill in "Name" with "Eleventh Doctor"
     And I choose "Character"
     And I press "Create Tag"

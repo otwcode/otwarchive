@@ -40,11 +40,11 @@ class UrlFormatter
   end
   
   def encoded
-    minimal URI.encode(url)
+    minimal URI::Parser.new.escape(url)
   end
   
   def decoded
-    URI.decode(minimal)
+    URI::Parser.new.unescape(minimal)
   end
   
   # Adds http if not present and downcases the host
@@ -52,7 +52,7 @@ class UrlFormatter
   def standardized
     clean_url = URI.parse(url)
     clean_url = URI.parse('http://' + url) if clean_url.class.name == "URI::Generic"
-    clean_url.host.downcase!
+    clean_url.host = clean_url.host.downcase
     clean_url.to_s
   end
   

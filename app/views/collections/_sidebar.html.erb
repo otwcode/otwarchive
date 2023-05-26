@@ -24,11 +24,11 @@
 
   <h4 class="landmark heading">Contents</h4>
   <ul class="navigation actions">
-        <li><%= span_if_current ts("Fandoms (%{count})", key: 'dashboard', :count => @collection.all_fandoms_count), collection_fandoms_path(@collection) %></li>
+    <li><%= span_if_current ts("Fandoms (%{count})", key: 'dashboard', count: SearchCounts.fandom_count_for_collection(@collection)), collection_fandoms_path(@collection) %></li>
 
-    <li><%= span_if_current ts("Works (%{count})", key: 'dashboard', :count => @collection.all_approved_works_count), collection_works_path(@collection) %></li>
+    <li><%= span_if_current ts("Works (%{count})", key: 'dashboard', count: SearchCounts.work_count_for_collection(@collection)), collection_works_path(@collection) %></li>
 
-    <li><%= span_if_current ts("Bookmarked Items (%{count})", key: 'dashboard', :count => @collection.all_bookmarked_items_count), collection_bookmarks_path(@collection) %></li>
+    <li><%= span_if_current ts("Bookmarked Items (%{count})", key: 'dashboard', count: SearchCounts.bookmarkable_count_for_collection(@collection)), collection_bookmarks_path(@collection) %></li>
 
     <li>
       <% if controller.controller_name == 'collections' && controller.action_name == 'show' %>

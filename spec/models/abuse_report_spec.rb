@@ -2,12 +2,6 @@ require 'spec_helper'
 
 describe AbuseReport do
   context "when report is not spam" do
-
-    # Assume all of these reports pass the spam check
-    before(:each) do
-      allow(Akismetor).to receive(:spam?).and_return(false)
-    end
-
     context "valid reports" do
       it "is valid" do
         expect(build(:abuse_report)).to be_valid
@@ -34,12 +28,54 @@ describe AbuseReport do
       end
     end
 
-    context "invalid emails" do
-      BAD_EMAILS.each do |email|
+    context "provided email is invalid" do
+      [BAD_EMAILS, BADLY_FORMATTED_EMAILS].each do |email|
         let(:bad_email) { build(:abuse_report, email: email) }
-        it "cannot be created if the email does not pass veracity check" do
+        it "fails email format check and cannot be created" do
           expect(bad_email.save).to be_falsey
-          expect(bad_email.errors[:email]).to include("does not seem to be a valid address.")
+          expect(bad_email.errors[:email]).to include("should look like an email address.")
+        end
+      end
+    end
+
+    context "with a chapter URL that's missing the work id" do
+      context "when the chapter exists" do
+        let(:work) { create(:work) }
+        let(:chapter) { work.chapters.first }
+        let(:missing_work_id) { build(:abuse_report, url: "http://archiveofourown.org/chapters/#{chapter.id}/") }
+        
+        it "saves and adds the correct work id to the URL" do
+          expect(missing_work_id.save).to be_truthy
+          expect(missing_work_id.url).to eq("http://archiveofourown.org/works/#{work.id}/chapters/#{chapter.id}/")
+        end
+
+        context "when the URL does not include the scheme" do
+          let(:missing_work_id) { build(:abuse_report, url: "archiveofourown.org/chapters/#{chapter.id}/") }
+
+          it "saves and adds a scheme and correct work id to the URL" do
+            expect(missing_work_id.save).to be_truthy
+            expect(missing_work_id.url).to eq("https://archiveofourown.org/works/#{work.id}/chapters/#{chapter.id}/")
+          end
+        end
+      end
+
+      context "when the chapter does not exist" do
+        let(:chapter_url) { "http://archiveofourown.org/chapters/000" }
+        let(:missing_work_id) { build(:abuse_report, url: chapter_url) }
+
+        it "saves without adding a work id to the URL" do
+          expect(missing_work_id.save).to be_truthy
+          expect(missing_work_id.url).to eq("#{chapter_url}/")
+        end
+
+        context "when the URL does not include the scheme" do
+          let(:chapter_url) { "archiveofourown.org/chapters/000" }
+          let(:missing_work_id) { build(:abuse_report, url: chapter_url) }
+
+          it "saves and adds a scheme but no work id to the URL" do
+            expect(missing_work_id.save).to be_truthy
+            expect(missing_work_id.url).to eq("https://#{chapter_url}/")
+          end
         end
       end
     end
@@ -93,7 +129,7 @@ describe AbuseReport do
       let(:report) { build(:abuse_report, url: url) }
       it "can't be submitted" do
         expect(report.save).to be_falsey
-        expect(report.errors[:base].first).to include("URL has already been reported.")
+        expect(report.errors[:base].first).to include("This page has already been reported.")
       end
     end
 
@@ -161,8 +197,7 @@ describe AbuseReport do
       it_behaves_like "alright", "http://archiveofourown.org/users/someone"
 
       context "a month later" do
-        before { Timecop.freeze(32.days.from_now) }
-        after { Timecop.return }
+        before { travel(32.days) }
 
         it_behaves_like "alright", work_url
       end
@@ -213,8 +248,7 @@ describe AbuseReport do
       it_behaves_like "alright", "http://archiveofourown.org/works/789"
 
       context "a month later" do
-        before { Timecop.freeze(32.days.from_now) }
-        after { Timecop.return }
+        before { travel(32.days) }
 
         it_behaves_like "alright", user_url
       end
@@ -251,14 +285,64 @@ describe AbuseReport do
         expect(report.valid?).to be_truthy
       end
     end
+
+    context "when email is valid" do
+      let(:report) { build(:abuse_report, email: "email@example.com") }
+
+      context "when email has submitted less than the maximum daily number of reports" do
+        before do
+          (ArchiveConfig.ABUSE_REPORTS_PER_EMAIL_MAX - 1).times do
+            create(:abuse_report, email: "email@example.com")
+          end
+        end
+
+        it "can be submitted" do
+          expect(report.save).to be_truthy
+          expect(report.errors[:base]).to be_empty
+        end
+      end
+
+      context "when email has submitted the maximum daily number of reports" do
+        before do
+          ArchiveConfig.ABUSE_REPORTS_PER_EMAIL_MAX.times do
+            create(:abuse_report, email: "email@example.com")
+          end
+        end
+
+        it "can't be submitted" do
+          expect(report.save).to be_falsey
+          expect(report.errors[:base].first).to include("daily reporting limit")
+        end
+
+        context "when it's a day later" do
+          before { travel(1.day) }
+
+          it "can be submitted" do
+            expect(report.save).to be_truthy
+            expect(report.errors[:base]).to be_empty
+          end
+        end
+      end
+    end
   end
 
   context "when report is spam" do
+    let(:legit_user) { create(:user) }
     let(:spam_report) { build(:abuse_report, username: 'viagra-test-123') }
-    it "is not valid if Akismet flags it as spam" do
+    let(:safe_report) { build(:abuse_report, username: 'viagra-test-123', email: legit_user.email) }
+
+    before do
       allow(Akismetor).to receive(:spam?).and_return(true)
+    end
+
+    it "is not valid if Akismet flags it as spam" do
       expect(spam_report.save).to be_falsey
       expect(spam_report.errors[:base]).to include("This report looks like spam to our system!")
+    end
+
+    it "is valid even with spam if logged in and providing correct email" do
+      User.current_user = legit_user
+      expect(safe_report.save).to be_truthy
     end
   end
 end

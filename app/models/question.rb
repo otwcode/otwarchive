@@ -1,8 +1,13 @@
 class Question < ApplicationRecord
   acts_as_list
 
-  translates :question, :content, :is_translated
-  skip_callback :save, :before, :update_sanitizer_version
+  # The attributes that should be delegated to the translated class:
+  translates :question, :content, :is_translated, :content_sanitizer_version
+  translation_class.include(Globalized)
+
+  # Ignore the screencast_sanitizer_version field until it can be deleted:
+  translation_class.ignored_columns = [:screencast_sanitizer_version]
+
   belongs_to :archive_faq
 
   validates_presence_of :question, before: :create

@@ -42,7 +42,7 @@ http://otwcode.github.com/docs/front_end_coding/patterns/supertypes
 }
 
 #main.session {
-  background: url("/images/logo.png") top left no-repeat;
+  background: url("/images/logo.png") 0.5em 3em no-repeat;
 }
 
 #main.errors h2 {

@@ -1,4 +1,6 @@
 <!--Descriptive page name, messages and instructions-->
+<%= render "muted/muted_items_notice" %>
+
 <h2 class="heading"><%= ts('Search Results') %></h2>
 
 <h4 class="heading">
@@ -9,7 +11,7 @@
 
 <!--subnav-->
 <ul class="navigation actions" role="navigation">
-  <li><%= link_to ts("Edit Your Search"), url_for(params.permit!.merge(edit_search: true)) %></li>
+  <li><%= link_to ts("Edit Your Search"), current_path_with(edit_search: true) %></li>
 </ul>
 <!--/subnav-->
 

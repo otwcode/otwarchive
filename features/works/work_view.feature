@@ -8,22 +8,22 @@ Feature: View a work with various options
     And I follow "Comments (2)"
   Then I should see "Bla bla"
 
-  Scenario: Regular logged-in user doesn't have the option to reindex a work
+  Scenario: Regular logged-in user doesn't have the option to troubleshoot a work
   Given the work "Whatever"
     And I am logged in
    When I view the work "Whatever"
-   Then I should not see "Reindex Work"
+   Then I should not see "Troubleshoot"
 
-  Scenario: Logged-out user doesn't have the option to reindex a work
+  Scenario: Logged-out user doesn't have the option to troubleshoot a work
   Given the work "Whatever"
-    And I am logged out
+    And I am a visitor
    When I view the work "Whatever"
-   Then I should not see "Reindex Work"
+   Then I should not see "Troubleshoot"
 
   Scenario: viewing a work when logged in and having set full mode in the preferences
-  Given I am logged in as a random user
+  Given the chaptered work "Whatever"
+    And I am logged in as a random user
     And I set my preferences to View Full Work mode by default
-    And the chaptered work "Whatever"
   When I view the work "Whatever"
   Then I should see "Chapter 2"
 
@@ -42,3 +42,21 @@ Feature: View a work with various options
     And I should see "DeletedChapterWork"
     And I follow "Site Map"
   Then I should not see "Sorry, we couldn't find the chapter you were looking for."
+
+  Scenario: other users cannot collect a work by default
+  Given the work "Whatever"
+  When I have the collection "test collection" with name "test_collection"
+    And I am logged in as "moderator"
+    And I view the work "Whatever"
+  Then I should not see a link "Invite To Collections"
+    And I should not see the "new_collection_item" form
+
+  Scenario: other users can collect a work when the creator has opted-in
+  Given the work "Whatever"
+    And I am logged in as the author of "Whatever"
+    And I set my preferences to allow collection invitations
+  When I have the collection "test collection" with name "test_collection"
+    And I am logged in as "moderator"
+    And I view the work "Whatever"
+  Then I should see a link "Invite To Collections"
+    And I should see the "new_collection_item" form

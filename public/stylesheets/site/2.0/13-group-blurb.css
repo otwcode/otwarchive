@@ -3,12 +3,12 @@ http://otwcode.github.com/docs/front_end_coding/patterns/blurb
 The blurb class is used wherever we show a list of works, collections, bookmarks, etc; each list item is a blurb
 it shows all the tags, stats and other associations we hold on that object, and sometimes it shows short user notes too, like a summary, bookmark notes, or collection description.
 
-Intrepid skinsers: 
-Probably 40% of this sheet deals with icon block rules, but it's not very complicated, 
-just the same thing repeated for each icon. 
-The positioning and sizing is for 25px icons; 
+Intrepid skinsers:
+Probably 40% of this sheet deals with icon block rules, but it's not very complicated,
+just the same thing repeated for each icon.
+The positioning and sizing is for 25px icons;
 there is a full set available at 50px, in /default_large.
-You can use your own icon set, or choose to show the text instead, 
+You can use your own icon set, or choose to show the text instead,
 by overriding the rules in the marked off section.
 Perhaps we can make a wizard for this specific task.
 */
@@ -80,7 +80,7 @@ li.blurb:after, .blurb .blurb:after {
   position: absolute;
 }
 
-.blurb dl.stats + .heading.landmark { 
+.blurb dl.stats + .heading.landmark {
   display: inline;
 }
 
@@ -237,7 +237,7 @@ li.blurb:after, .blurb .blurb:after {
   text-align: justify;
 }
 
-/*modification: PICTURE 
+/*modification: PICTURE
 use this along with "index" and "blurb" for indices where we have icon pictures,
 eg collections, users, skins, instead of the 4-icon list
 */
@@ -267,10 +267,6 @@ eg collections, users, skins, instead of the 4-icon list
 }
 
 /*various little mods*/
-
-.collection .name {
-    word-wrap: break-word;
-}
 
 /* mod: ITEM
 blurbs on the manage collection items pages, mostly reseting styles inherited from interactions (forms)
@@ -338,11 +334,13 @@ blurbs on the manage collection items pages, mostly reseting styles inherited fr
 
 .bookmark div.user, .bookmark div.recent {
   clear: right;
+  box-sizing: border-box;
 }
 
 .bookmark .user {
   border: 1px solid #ccc;
   margin-top: 0.643em;
+  padding: 0.429em 0.75em;
   overflow: hidden;
 }
 
@@ -357,6 +355,10 @@ blurbs on the manage collection items pages, mostly reseting styles inherited fr
   clear: both;
 }
 
+.bookmark dl.stats {
+  margin-bottom: 0.643em;
+}
+
 /* line break between types of meta */
 .bookmark .user ul.meta:after {
 	content: '\A';
@@ -367,8 +369,18 @@ blurbs on the manage collection items pages, mostly reseting styles inherited fr
 	min-height: 30px;
 }
 
+.bookmark .user .byline {
+  margin-top: 0.375em;
+  margin-right: 5.25em;
+}
+
 .bookmark .user .datetime, .bookmark .work .datetime {
   top: 0;
+}
+
+.bookmark div.user .datetime {
+  top: 0.875em;
+  right: 0.875em;
 }
 
 .bookmark .short .status {
@@ -393,7 +405,7 @@ blurbs on the manage collection items pages, mostly reseting styles inherited fr
 
 /* mod: READING */
 
-.reading .user { 
+.reading .user {
   float: left;
 }
 

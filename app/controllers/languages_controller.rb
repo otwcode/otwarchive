@@ -1,9 +1,4 @@
 class LanguagesController < ApplicationController
-  before_action :check_permission, only: [:new, :create, :edit, :update]
-
-  def check_permission
-    logged_in_as_admin? || permit?("translation_admin") || access_denied
-  end
 
   def index
     @languages = Language.default_order
@@ -16,10 +11,12 @@ class LanguagesController < ApplicationController
 
   def new
     @language = Language.new
+    authorize @language
   end
 
   def create
     @language = Language.new(language_params)
+    authorize @language
     if @language.save
       flash[:notice] = t('successfully_added', default: 'Language was successfully added.')
       redirect_to languages_path
@@ -30,11 +27,13 @@ class LanguagesController < ApplicationController
 
   def edit
     @language = Language.find_by(short: params[:id])
+    authorize @language
   end
 
   def update
     @language = Language.find_by(short: params[:id])
-    if @language.update_attributes(language_params)
+    authorize @language
+    if @language.update(language_params)
       flash[:notice] = t('successfully_updated', default: 'Language was successfully updated.')
       redirect_to @language
     else

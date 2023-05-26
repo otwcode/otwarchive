@@ -16,7 +16,7 @@ describe ChallengesController do
 
   describe 'no_challenge' do
     before(:each) do
-      @collection = FactoryGirl.create(:collection, challenge: GiftExchange.new)
+      @collection = FactoryBot.create(:collection, challenge: GiftExchange.new)
       @collection.save
     end
     context 'when a collection is available' do
@@ -36,7 +36,7 @@ describe ChallengesController do
 
   describe 'load_challenge' do
     before(:each) do
-      @collection2 = FactoryGirl.create(:collection, challenge: GiftExchange.new)
+      @collection2 = FactoryBot.create(:collection, challenge: GiftExchange.new)
       @collection2.save
     end
     context 'when a challenge is available' do

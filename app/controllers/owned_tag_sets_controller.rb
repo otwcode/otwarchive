@@ -158,7 +158,7 @@ class OwnedTagSetsController < ApplicationController
   end
 
   def update
-    if @tag_set.update_attributes(owned_tag_set_params) && @tag_set.tag_set.save!
+    if @tag_set.update(owned_tag_set_params) && @tag_set.tag_set.save!
       flash[:notice] = ts("Tag Set was successfully updated.")
       redirect_to tag_set_path(@tag_set)
     else
@@ -229,7 +229,7 @@ class OwnedTagSetsController < ApplicationController
         :id,
         :from_owned_tag_set, :fandom_tagnames_to_add, :character_tagnames_to_add,
         :relationship_tagnames_to_add, :freeform_tagnames_to_add,
-        character_tagnames: [], rating_tagnames: [], warning_tagnames: [],
+        character_tagnames: [], rating_tagnames: [], archive_warning_tagnames: [],
         category_tagnames: [], fandom_tags_to_remove: [], character_tags_to_remove: [],
         relationship_tags_to_remove: [], freeform_tags_to_remove: []
       ]

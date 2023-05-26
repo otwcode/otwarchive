@@ -1,6 +1,4 @@
 <% content_for :message do %>
-  <p>Dear Collection Maintainers!</p>
-
   <p>
     We have finished generating potential assignments for your challenge collection, <%= style_link(@collection.title, collection_url(@collection)) %>.
   </p>
@@ -11,5 +9,5 @@
 <% end %>
 
 <% content_for :sent_at do %>
-  <%= Time.now.to_s(:time_for_mailers) %>
+  <%= l(Time.now) %>
 <% end %>

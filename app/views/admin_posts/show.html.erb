@@ -6,7 +6,8 @@
     <!--/descriptions-->
     <!--subnav-->
     <div class="navigation actions module">
-      <% if logged_in_as_admin? %>
+      <% if policy(@admin_post).can_post? %>
+      
         <h4 class="landmark heading"><%= ts("Admin Actions") %></h4>
         <ul class="management actions" role="navigation">
           <li><%= link_to ts("Edit Post"), edit_admin_post_path(@admin_post) %></li>
@@ -26,7 +27,9 @@
         <% if @next_admin_post %>
           <li><%= link_to("Next Post", @next_admin_post) %></li>
         <% end %>
-        <li><%= link_to_rss admin_posts_path(:rss) %></li>
+        <li>
+          <%= link_to_rss admin_posts_path(:rss, language_id: @admin_post.language.short) %>
+        </li>
       </ul>
     </div>
     <!--/subnav-->

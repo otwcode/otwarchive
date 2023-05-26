@@ -1,0 +1,14 @@
+<% creation_type = @creation.class.name.underscore %>
+<% content_for :message do %>
+<%# i18n-tasks-use t('user_mailer.creatorship_request.intro_chapter')
+    i18n-tasks-use t('user_mailer.creatorship_request.intro_series')
+    i18n-tasks-use t('user_mailer.creatorship_request.intro_work')-%>
+<%= t(".intro_#{creation_type}", inviting_user: @inviting_user.login, pseud: @creatorship.pseud.name) %>
+
+<%= t(".text.creation",
+      title: creation_title(@creation),
+      url: polymorphic_url(@creation),
+      pseuds: @creation.pseuds.map(&:byline).to_sentence) %>
+
+<%= t(".text.instructions", url: user_creatorships_url(@user)) %>
+<% end %>
