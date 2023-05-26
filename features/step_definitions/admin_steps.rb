@@ -173,6 +173,14 @@ Given(/^the following language exists$/) do |table|
   end
 end
 
+Given /^I have posted an admin post with guest comments disabled$/ do
+  step %{I am logged in as a "communications" admin}
+  step %{I start to make an admin post}
+  choose("Only registered users can comment")
+  click_button("Post")
+  step %{I log out}
+end
+
 Given /^I have posted an admin post with comments disabled$/ do
   step %{I am logged in as a "communications" admin}
   step %{I start to make an admin post}

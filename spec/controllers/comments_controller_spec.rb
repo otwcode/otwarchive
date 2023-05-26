@@ -12,6 +12,10 @@ describe CommentsController do
   end
 
   describe "GET #add_comment_reply" do
+    let(:anon_comment_attributes) do
+      attributes_for(:comment, :by_guest).slice(:name, :email, :comment_content)
+    end
+
     context "when comment is unreviewed" do
       it "redirects logged out user to login path with an error" do
         get :add_comment_reply, params: { comment_id: unreviewed_comment.id }
@@ -104,6 +108,37 @@ describe CommentsController do
         it_behaves_like "no one can add comment reply on a hidden comment"
       end
     end
+
+    context "guest comments are turned on in admin settings" do
+      let(:comment) { create(:comment) }
+      let(:admin_setting) { AdminSetting.first || AdminSetting.create }
+
+      before do
+        admin_setting.update_attribute(:guest_comments_off, false)
+      end
+
+      it "allows guests to reply to comments" do
+        post :add_comment_reply, params: { comment_id: comment.id, comment: anon_comment_attributes }
+
+        expect(flash[:error]).to be_nil
+      end
+    end
+
+    context "guest comments are turned off in admin settings" do
+      let(:comment) { create(:comment) }
+      let(:admin_setting) { AdminSetting.first || AdminSetting.create }
+
+      before do
+        admin_setting.update_attribute(:guest_comments_off, true)
+      end
+
+      it "does not allow guests to reply to comments" do
+        post :add_comment_reply, params: { comment_id: comment.id, comment: anon_comment_attributes }
+
+        it_redirects_to_with_error("/where_i_came_from", 
+                                   "Sorry, the Archive doesn't allow guests to comment right now.")
+      end
+    end
   end
 
   describe "GET #unreviewed" do
@@ -136,6 +171,10 @@ describe CommentsController do
   end
 
   describe "POST #new" do
+    let(:anon_comment_attributes) do
+      attributes_for(:comment, :by_guest).slice(:name, :email, :comment_content)
+    end
+    
     it "errors if the commentable is not a valid tag" do
       post :new, params: { tag_id: "Non existent tag" }
       expect(flash[:error]).to eq "What did you want to comment on?"
@@ -193,6 +232,60 @@ describe CommentsController do
                                      "access the page you were trying to " \
                                      "reach. Please log in.")
         end
+      end
+    end
+
+    context "guest comments are turned on in admin settings" do
+      let(:work) { create(:work) }
+      let(:work_with_guest_comment_off) { create(:work, comment_permissions: :disable_anon) }
+      let(:admin_setting) { AdminSetting.first || AdminSetting.create }
+
+      before do
+        admin_setting.update_attribute(:guest_comments_off, false)
+      end
+
+      it "allows guest comments" do
+        post :new, params: { work_id: work.id, comment: anon_comment_attributes }
+
+        expect(flash[:error]).to be_nil
+      end
+
+      it "does not allow guest comments when work has guest comments disabled" do
+        post :new, params: { work_id: work_with_guest_comment_off.id, comment: anon_comment_attributes }
+
+        it_redirects_to_with_error(work_path(work_with_guest_comment_off), 
+                                   "Sorry, this work doesn't allow non-Archive users to comment.")
+      end
+    end
+
+    context "guest comments are turned off in admin settings" do
+      let(:work) { create(:work) }
+      let(:work_with_guest_comment_off) { create(:work, comment_permissions: :disable_anon) }
+      let(:admin_setting) { AdminSetting.first || AdminSetting.create }
+
+      before do
+        admin_setting.update_attribute(:guest_comments_off, true)
+      end
+
+      it "does not allow guest comments for new" do
+        post :new, params: { work_id: work.id, comment: anon_comment_attributes }
+
+        it_redirects_to_with_error("/where_i_came_from", 
+                                   "Sorry, the Archive doesn't allow guests to comment right now.")
+      end
+
+      it "does not allow guest comments when work has guest comments disabled" do
+        post :new, params: { work_id: work_with_guest_comment_off.id, comment: anon_comment_attributes }
+
+        it_redirects_to_with_error("/where_i_came_from", 
+                                   "Sorry, the Archive doesn't allow guests to comment right now.")
+      end
+
+      it "allows logged in users to comment" do
+        fake_login
+        post :new, params: { work_id: work.id }
+
+        expect(flash[:error]).to be_nil
       end
     end
 
@@ -449,55 +542,25 @@ describe CommentsController do
 
     context "guest comments are turned on in admin settings" do
       let(:work) { create(:work) }
-      let(:work_with_guest_comment_off) { create(:work, comment_permissions: :disable_anon) }
-      let(:comment) { create(:comment) }
       let(:admin_setting) { AdminSetting.first || AdminSetting.create }
 
       before do
         admin_setting.update_attribute(:guest_comments_off, false)
       end
 
-      it "allows guest comments for new" do
-        post :new, params: { work_id: work.id, comment: anon_comment_attributes }
-
-        expect(flash[:error]).to be_nil
-      end
-
-      it "allows guest comments for create" do
+      it "allows guest comments" do
         post :create, params: { work_id: work.id, comment: anon_comment_attributes }
 
         expect(flash[:error]).to be_nil
-      end
-
-      it "allows guests to reply to comments" do
-        post :add_comment_reply, params: { comment_id: comment.id, comment: anon_comment_attributes }
-
-        expect(flash[:error]).to be_nil
-      end
-
-      it "does not allow guest comments when work has guest comments disabled" do
-        post :new, params: { work_id: work_with_guest_comment_off.id, comment: anon_comment_attributes }
-
-        it_redirects_to_with_error(work_path(work_with_guest_comment_off), 
-                                   "Sorry, this work doesn't allow non-Archive users to comment.")
       end
     end
 
     context "guest comments are turned off in admin settings" do
       let(:work) { create(:work) }
-      let(:work_with_guest_comment_off) { create(:work, comment_permissions: :disable_anon) }
-      let(:comment) { create(:comment) }
       let(:admin_setting) { AdminSetting.first || AdminSetting.create }
 
       before do
         admin_setting.update_attribute(:guest_comments_off, true)
-      end
-
-      it "does not allow guest comments for new" do
-        post :new, params: { work_id: work.id, comment: anon_comment_attributes }
-
-        it_redirects_to_with_error("/where_i_came_from", 
-                                   "Sorry, the Archive doesn't allow guests to comment right now.")
       end
 
       it "does not allow guest comments for create" do
@@ -505,27 +568,6 @@ describe CommentsController do
 
         it_redirects_to_with_error("/where_i_came_from", 
                                    "Sorry, the Archive doesn't allow guests to comment right now.")
-      end
-
-      it "does not allow guests to reply to comments" do
-        post :add_comment_reply, params: { comment_id: comment.id, comment: anon_comment_attributes }
-
-        it_redirects_to_with_error("/where_i_came_from", 
-                                   "Sorry, the Archive doesn't allow guests to comment right now.")
-      end
-
-      it "does not allow guest comments when work has guest comments disabled" do
-        post :new, params: { work_id: work_with_guest_comment_off.id, comment: anon_comment_attributes }
-
-        it_redirects_to_with_error("/where_i_came_from", 
-                                   "Sorry, the Archive doesn't allow guests to comment right now.")
-      end
-
-      it "allows logged in users to comment" do
-        fake_login
-        post :new, params: { work_id: work.id }
-
-        expect(flash[:error]).to be_nil
       end
     end
   end

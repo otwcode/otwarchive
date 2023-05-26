@@ -37,73 +37,72 @@ Feature: Admin Settings Page
       And I go to the support page
     Then I should see "We can answer Support inquiries in"
 
-  Scenario: Turn on guest comments (on works)
+  Scenario Outline: Guests can comment when guest coments are enabled
     Given guest comments are on
       And I am logged out
-      And the work "Generic Work"
-      And a guest comment on the work "Generic Work"
-      And I view the work "Generic Work" with comments
-    When I fill in "Comment" with "Guest comment"
-      And I post a guest comment
-    Then I should see "Comment created!"
-      And I should see "Reply"
+      And <commentable>
+      And a guest comment on <commentable>
+      And I view <commentable> with comments
+    When I post a guest comment
+      Then I should see a link "Reply"
 
-  Scenario: Turn on guest comments (on admin posts)
-    Given guest comments are on
-      And I am logged out
-      And the admin post "Generic Post"
-      And a guest comment on the admin post "Generic Post"
-      And I view the admin post "Generic Post" with comments
-    When I fill in "Comment" with "Guest comment"
-      And I post a guest comment
-    Then I should see "Comment created!"
-      And I should see "Reply"
+    Examples:
+        | commentable | 
+        | the work "Generic Work" |
+        | the admin post "Generic Post" |
 
-  Scenario: Turn off guest comments (when the work itself allows guest comments)
+  Scenario Outline: Guests cannot comment when guest comments are disabled, even if works or admin posts allow commets
     Given guest comments are off
       And I am logged out
-      And the work "Generic Work"
-      And a guest comment on the work "Generic Work"
-    When I view the work "Generic Work" with comments
+      And <commentable>
+      And a guest comment on <commentable>
+    When I view <commentable> with comments
     Then I should see "Sorry, the Archive doesn't allow guests to comment right now."
-      And I should not see "Reply"
+      And I should not see a link "Reply"
 
-  Scenario: Turn off guest comments (when the admin post itself allows guest comments)
-    Given guest comments are off
-      And I am logged out
-      And the admin post "Generic Post"
-      And a guest comment on the admin post "Generic Post"
-    When I view the admin post "Generic Post" with comments
-    Then I should see "Sorry, the Archive doesn't allow guests to comment right now."
-      And I should not see "Reply"
+    When I am logged in
+      And I view <commentable> with comments
+    Then I should not see "Sorry, the Archive doesn't allow guests to comment right now."
+    When I am logged in as a super admin
+      And I view <commentable> with comments
+    Then I should not see "Sorry, the Archive doesn't allow guests to comment right now."
+    
+    Examples:
+        | commentable |
+        | the work "Generic Work"  |
+        | the admin post "Generic Post" |
     
   Scenario: Turn off guest comments (when the work itself does not allow guest comments)
     Given guest comments are off
       And I am logged in as "author"
-      And I post the work "Generic Work"
-      And a guest comment on the work "Generic Work"
-      And I edit the work "Generic Work"
+      And I set up the draft "Generic Work"
       And I choose "Only registered users can comment"
-      And I press "Post"
+      And I post the work without preview
+      And a comment "Nice job" by "user" on the work "Generic Work"
     When I am logged out
       And I view the work "Generic Work" with comments
     Then I should see "Sorry, the Archive doesn't allow guests to comment right now."
-      And I should not see "Reply"
+      And I should not see a link "Reply"
+    When I am logged in
+      And I view the work "Generic Work" with comments
+    Then I should not see "Sorry, the Archive doesn't allow guests to comment right now."
+    When I am logged in as a super admin
+      And I view the work "Generic Work" with comments
+    Then I should not see "Sorry, the Archive doesn't allow guests to comment right now."
 
   Scenario: Turn off guest comments (when the admin post itself does not allow guest comments)
     Given guest comments are off
-      And I have posted an admin post
-      And a guest comment on the admin post "Default Admin Post"
-      And I am logged in as a super admin
-      And I go to the admin-posts page
-      And I follow "Default Admin Post"
-      And I follow "Edit Post"
-      And I choose "Only registered users can comment"
-      And I press "Post"
-    When I am logged out
+      And I have posted an admin post with guest comments disabled
+      And a comment "Nice job" by "user" on the admin post "Default Admin Post"
       And I view the admin post "Default Admin Post" with comments
     Then I should see "Sorry, the Archive doesn't allow guests to comment right now."
-      And I should not see "Reply"
+      And I should not see a link "Reply"
+    When I am logged in
+      And I view the admin post "Default Admin Post" with comments
+    Then I should not see "Sorry, the Archive doesn't allow guests to comment right now."
+    When I am logged in as a super admin
+      And I view the admin post "Default Admin Post" with comments
+    Then I should not see "Sorry, the Archive doesn't allow guests to comment right now."
 
   Scenario: Turn off guest comments (when work itself does not allow any comments)
     Given guest comments are off
@@ -116,37 +115,38 @@ Feature: Admin Settings Page
     When I am logged out
       And I view the work "Generic Work" with comments
     Then I should see "Sorry, the Archive doesn't allow guests to comment right now."
-      And I should not see "Reply"
+      And I should not see a link "Reply"
+    When I am logged in
+      And I view the work "Generic Work" with comments
+    Then I should not see "Sorry, the Archive doesn't allow guests to comment right now."
+    When I am logged in as a super admin
+      And I view the work "Generic Work" with comments
+    Then I should not see "Sorry, the Archive doesn't allow guests to comment right now."
 
   Scenario: Turn off guest comments (when the admin post itself does not allow any comments)
     Given guest comments are off
-      And I have posted an admin post
-      And a guest comment on the admin post "Default Admin Post"
-      And I am logged in as a super admin
-      And I go to the admin-posts page
-      And I follow "Default Admin Post"
-      And I follow "Edit Post"
-      And I choose "No one can comment"
-      And I press "Post"
-    When I am logged out
+      And I have posted an admin post with comments disabled
+      And a comment "Nice job" by "user" on the admin post "Default Admin Post"
       And I view the admin post "Default Admin Post" with comments
     Then I should see "Sorry, the Archive doesn't allow guests to comment right now."
-      And I should not see "Reply"
+      And I should not see a link "Reply"
+    When I am logged in
+      And I view the admin post "Default Admin Post" with comments
+    Then I should not see "Sorry, the Archive doesn't allow guests to comment right now."
+    When I am logged in as a super admin
+      And I view the admin post "Default Admin Post" with comments
+    Then I should not see "Sorry, the Archive doesn't allow guests to comment right now."
 
-  Scenario: Logged in users should not be affected when guest comments are turned off
+  Scenario: Tag comments are not affected when guest comments are turned off
     Given guest comments are off
-      And I am logged out
-      And the work "Generic Work"
-      And I am logged in
-      And a guest comment on the work "Generic Work"
-    When I view the work "Generic Work" with comments
-    Then I should see "Reply"
-      And I should not see "Sorry, the Archive doesn't allow guests to comment right now."
-
-  Scenario: Admins should not be affected when guest comments are turned off
-    Given guest comments are off
-      And I am logged in as a super admin
       And a fandom exists with name: "Stargate SG-1", canonical: true
-    When I post the comment "Important policy decision" on the tag "Stargate SG-1" via web
-      And I view the tag "Stargate SG-1"
-    Then I should see "1 comment"
+    When I am logged in as a super admin
+      And I view the tag "Stargate SG-1" with comments
+    Then I should not see "Sorry, the Archive doesn't allow guests to comment right now."
+    When I post the comment "Important policy decision" on the tag "Stargate SG-1"
+    Then I should see "Comment created!"
+    When I am logged in as a tag wrangler
+      And I view the tag "Stargate SG-1" with comments
+    Then I should not see "Sorry, the Archive doesn't allow guests to comment right now."
+    When I post the comment "Sent you a syn" on the tag "Stargate SG-1"
+    Then I should see "Comment created!"

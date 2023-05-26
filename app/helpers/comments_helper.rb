@@ -108,7 +108,7 @@ module CommentsHelper
       comment_parent_hidden?(comment) ||
       blocked_by_comment?(comment) ||
       blocked_by?(comment.ultimate_parent) ||
-      !logged_in? && !logged_in_as_admin? && admin_settings.guest_comments_off?)
+      guest? && admin_settings.guest_comments_off?)
   end
 
   def can_edit_comment?(comment)
