@@ -104,15 +104,15 @@ describe Skin do
         #main .rotatevert {transform: rotatey(180deg);}
         .rotatehoriz {transform: rotatex(50deg)}",
 
-        "allows multiple valid values for a single property" =>
+      "allows multiple valid values for a single property" =>
         "#outer .actions a:hover,symbol .question:hover,.actions input:hover,#outer input[type=\"submit\"]:hover,button:hover,.actions label:hover
-                { background:#ddd;
-                background:-webkit-linear-gradient(top,#fafafa,#ddd);
-                background:-moz-linear-gradient(top,#fafafa,#ddd);
-                background:-ms-linear-gradient(top,#fafafa,#ddd);
-                background:-o-linear-gradient(top,#fafafa,#ddd);
-                background:linear-gradient(top,#fafafa,#ddd);
-                color:#555 }",
+        { background:#ddd;
+        background:-webkit-linear-gradient(top,#fafafa,#ddd);
+        background:-moz-linear-gradient(top,#fafafa,#ddd);
+        background:-ms-linear-gradient(top,#fafafa,#ddd);
+        background:-o-linear-gradient(top,#fafafa,#ddd);
+        background:linear-gradient(top,#fafafa,#ddd);
+        color:#555 }",
 
       "allows display property with flex values" =>
         ".flex-container { display: flex; }
@@ -159,7 +159,7 @@ describe Skin do
       "errors when saving gradient with xss" => "div {background: -webkit-linear-gradient(url(xss.htc))}",
       "errors when saving dsf images" => "body {background: url(http://foo.com/bar.dsf)}",
       "errors when saving urls with invalid domain" => "body {background: url(http://foo.htc/bar.png)}",
-      "errors when saving xss interrupted with comments" => "div {xss:expr/*XSS*/ession(alert('XSS'))}",
+      "errors when saving xss interrupted with comments" => "div {xss:expr/*XSS*/ession(alert('XSS'))}"
     }.each_pair do |condition, css|
       it condition do
         @skin.css = css
