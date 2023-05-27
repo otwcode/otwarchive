@@ -202,7 +202,8 @@ sv:
         footer: Du får det här mailet för att du har anmält dig till %{title}-utmaningen (%{url}). För mer information om den här utmaningen och kontaktuppgifter till moderatorerna, vänligen besök %{profile_url}.
         look_up: Du kan nå ditt uppdrag via din sida för Assignments (Uppdrag) på %{link}.
     change_email:
-      changed: "%{login}, e-postadressen som är knuten till ditt konto har ändrats till %{email}"
+      changed:
+        html: "%{login}, e-postadressen som är knuten till ditt konto har ändrats till %{email}"
       subject: "[%{app_name}] E-postadressen har ändrats"
     collection_notification:
       assignments_sent:

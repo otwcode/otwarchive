@@ -183,7 +183,8 @@ ms:
         footer: Anda menerima emel ini kerana anda telah mendaftar untuk cabaran %{title} (%{url}). Untuk maklumat lebih lanjut mengenai cabaran ini maklumat untuk dihubungi bagi moderator, sila lihat %{profile_url}.
         look_up: Anda boleh mencari tugasan ini dari halaman Assignments (Tugasan) anda di %{link}.
     change_email:
-      changed: "%{login}, emel yang dikaitkan dengan akaun anda kini telah diubah kepada %{email}"
+      changed:
+        html: "%{login}, emel yang dikaitkan dengan akaun anda kini telah diubah kepada %{email}"
       subject: "[%{app_name}] Emel diubah"
     collection_notification:
       assignments_sent:

@@ -202,7 +202,8 @@ fi:
         footer: Olet saanut tämän viestin koska ilmoittauduit mukaan haasteeseen %{title} (%{url}). Lisätietoa tästä haasteesta ja sen valvojien yhteystiedot löytyvät osoitteesta %{profile_url}.
         look_up: Voit tarkastella tehtävänannon yksityiskohtia Assignments (Tehtävänannot) -sivulta osoitteessa %{link}.
     change_email:
-      changed: "%{login}, tunnuksesi uudeksi sähköpostiosoitteeksi on asetettu %{email}"
+      changed:
+        html: "%{login}, tunnuksesi uudeksi sähköpostiosoitteeksi on asetettu %{email}"
       subject: "[%{app_name}] Sähköpostiosoite muutettu"
     collection_notification:
       assignments_sent:

@@ -221,7 +221,8 @@ hr:
         footer: Dobili ste ovaj email jer ste se prijavili za %{title} izazov (%{url}). Za više informacija o ovom izazovu i kontaktne informacije za moderatore, molimo vas da posjetite %{profile_url}.
         look_up: Možete pogledati svoje zadatke s vaše Assignments (Zadaci) stranice na %{link}.
     change_email:
-      changed: "%{login}, e-mail povezan s vašim računom je promijenjen u %{email}"
+      changed:
+        html: "%{login}, e-mail povezan s vašim računom je promijenjen u %{email}"
       subject: "[%{app_name}] Promijenjen e-mail"
     collection_notification:
       assignments_sent:

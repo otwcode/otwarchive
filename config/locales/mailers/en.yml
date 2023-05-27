@@ -176,7 +176,8 @@ en:
         footer: You're receiving this email because you signed up for the %{title} challenge (%{url}). For more information about this challenge and contact information for the moderators, please visit %{profile_url}.
         look_up: You can look up this assignment from your Assignments page at %{link}.
     change_email:
-      changed: "%{login}, the email associated with your account has been changed to %{email}"
+      changed:
+        html: "%{login}, the email associated with your account has been changed to %{email}"
       subject: "[%{app_name}] Email changed"
     collection_notification:
       assignments_sent:

@@ -183,7 +183,8 @@ ja:
         footer: あなたは%{title}チャレンジ（%{url}）に登録したため、このメールを受信しています。このチャレンジの詳細と課題管理者の連絡先情報については、%{profile_url}にてご確認ください。
         look_up: この課題については、Assignments（課題）のページ %{link}からご確認いただけます。
     change_email:
-      changed: "%{login}さん、あなたのアカウントのメールアドレスは%{email}に変更されました。"
+      changed:
+        html: "%{login}さん、あなたのアカウントのメールアドレスは%{email}に変更されました。"
       subject: "[%{app_name}] メールアドレス変更のお知らせ"
     collection_notification:
       assignments_sent:

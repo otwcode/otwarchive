@@ -202,7 +202,8 @@ da:
         footer: Du modtager denne e-mail, fordi du tilmeldte dig %{title}-udfordringen (%{url}). For mere information om denne udfordring og moderatorernes kontaktinformation gå til %{profile_url}.
         look_up: Du kan se denne opgave på din Assignments (Opgaver)-side på %{link}.
     change_email:
-      changed: "%{login}, e-mailadressen, der er tilknyttet din konto, er blevet ændret til %{email}"
+      changed:
+        html: "%{login}, e-mailadressen, der er tilknyttet din konto, er blevet ændret til %{email}"
       subject: "[%{app_name}] E-mail ændret"
     collection_notification:
       assignments_sent:

@@ -222,7 +222,8 @@ pl:
         footer: Otrzymałaś/eś ten e-mail ponieważ zapisałaś/eś się do wyzwania %{title} (%{url}). Aby dowiedzieć się więcej na temat tego wyzwania i by móc skontaktować się z moderatorami, proszę przejdź do %{profile_url}.
         look_up: Możesz sprawdzić to zadanie na Twojej stronie Assignments (Zadań) na %{link}.
     change_email:
-      changed: "%{login}, adres email powiązany z Twoim kontem został zmieniony na %{email}"
+      changed:
+        html: "%{login}, adres email powiązany z Twoim kontem został zmieniony na %{email}"
       subject: "[%{app_name}] Email został zmieniony"
     collection_notification:
       assignments_sent:

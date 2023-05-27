@@ -183,7 +183,8 @@ id:
         footer: Anda menerima surel ini karena Anda telah mendaftarkan diri untuk mengikuti tantangan %{title} (%{url}). Untuk informasi lebih lanjut terkait tantangan ini atau untuk informasi kontak moderator, silakan kunjungi %{profile_url}.
         look_up: Anda dapat melihat tugas ini dari halaman Assignments (Tugas) di %{link}.
     change_email:
-      changed: "%{login}, alamat surel yang diasosiasikan dengan akun Anda telah diganti ke %{email}"
+      changed:
+        html: "%{login}, alamat surel yang diasosiasikan dengan akun Anda telah diganti ke %{email}"
       subject: "[%{app_name}] Alamat surel telah diganti"
     collection_notification:
       assignments_sent:

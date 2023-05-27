@@ -202,7 +202,8 @@ fa:
         footer: شما این ایمیل را به دلیل ثبت نام در چالش %{title} (%{url}) دریافت کرده اید. برای اطلاعات بیشتر در مورد این چالش و اطلاعات تماس مدیران لطفا %{profile_url} را ببینید.
         look_up: شما می توانید این وظیفه را در پیج Assignments (وظایف) خود در %{link} جست و جو کنید.
     change_email:
-      changed: "%{login}، ایمیل مرتبط با اکانت شما به ایمیل %{email} تغییر یافته است."
+      changed:
+        html: "%{login}، ایمیل مرتبط با اکانت شما به ایمیل %{email} تغییر یافته است."
       subject: "[%{app_name}] تغییر ایمیل"
     collection_notification:
       assignments_sent:

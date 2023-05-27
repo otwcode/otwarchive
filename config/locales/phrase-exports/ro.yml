@@ -221,7 +221,8 @@ ro:
         footer: Ai primit acest email pentru că te-ai înscris în provocarea %{title} (%{url}). Pentru mai multe detalii despre această provocare și detaliile de contact ale moderatorilor/ moderatoarelor, te rugăm să accesezi %{profile_url}.
         look_up: Poți să verifici această sarcină pe pagina ta de Assignments (Sarcini), accesând %{link}.
     change_email:
-      changed: "%{login}, adresa de e-mail asociată cu contul tău a fost schimbată la %{email}"
+      changed:
+        html: "%{login}, adresa de e-mail asociată cu contul tău a fost schimbată la %{email}"
       subject: "[%{app_name}] Adresa de e-mail schimbată"
     collection_notification:
       assignments_sent:

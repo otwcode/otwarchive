@@ -202,7 +202,8 @@ tr:
         footer: Bu e-postayı, %{title} oyununa (%{url}) kaydolduğunuz için aldınız. Bu oyun hakkında daha fazla bilgi ve moderatörlerin iletişim bilgileri için lütfen %{profile_url} adresini ziyaret edin.
         look_up: Bu görevi, %{link} adresindeki Assignments (Görevler) sayfanızdan arayabilirsiniz.
     change_email:
-      changed: "%{login}, hesabınızla ilişkili e-posta adresiniz %{email} olarak değiştirilmiştir."
+      changed:
+        html: "%{login}, hesabınızla ilişkili e-posta adresiniz %{email} olarak değiştirilmiştir."
       subject: "[%{app_name}] E-posta adresiniz değiştirildi"
     collection_notification:
       assignments_sent:

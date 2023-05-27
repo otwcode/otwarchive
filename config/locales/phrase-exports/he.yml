@@ -240,7 +240,8 @@ he:
         footer: קיבלת דוא"ל זה כיוון שנרשמת לאתגר %{title} (%{url}). מידע נוסף על אתגר זה ופרטי יצירת קשר עם המנהלות שלו זמינים בכתובת %{profile_url}.
         look_up: ניתן למצוא משימה זו בעמוד ה-Assignments (משימות) שלך בכתובת %{link}.
     change_email:
-      changed: '%{login}, כתובת הדוא"ל המשויכת לחשבונך שונתה ל-%{email}'
+      changed:
+        html: '%{login}, כתובת הדוא"ל המשויכת לחשבונך שונתה ל-%{email}'
       subject: '[%{app_name}] כתובת הדוא"ל שלך שונתה'
     collection_notification:
       assignments_sent:

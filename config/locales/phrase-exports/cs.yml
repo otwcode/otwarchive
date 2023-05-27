@@ -222,7 +222,8 @@ cs:
         footer: Tento e-mail jste obdrželi, protože jste se přihlásili do výzvy %{title} (%{url}). Více informací o této výzvě a kontakty na moderátory můžete najít na %{profile_url}.
         look_up: Toto zadání najdete na stránce Assignments (Zadání) pod odkazem %{link}.
     change_email:
-      changed: "%{login}, email spojený s vaším účtem byl změněn na %{email}"
+      changed:
+        html: "%{login}, email spojený s vaším účtem byl změněn na %{email}"
       subject: "[%{app_name}] Email byl změněn"
     collection_notification:
       assignments_sent:

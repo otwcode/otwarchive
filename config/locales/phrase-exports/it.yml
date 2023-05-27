@@ -202,7 +202,8 @@ it:
         footer: Ricevi questa email perché hai effettuato l’iscrizione alla challenge %{title} (%{url}). Per altre informazioni sulla challenge e per visualizzare i contatti dei moderatori ti preghiamo di visitare il link %{profile_url}.
         look_up: Puoi trovare questo incarico nella tua pagina Assignments (Incarichi) al link %{link}.
     change_email:
-      changed: "%{login}, l’indirizzo email associato al tuo account è stato modificato in %{email}"
+      changed:
+        html: "%{login}, l’indirizzo email associato al tuo account è stato modificato in %{email}"
       subject: "[%{app_name}] Modifica indirizzo email"
     collection_notification:
       assignments_sent:

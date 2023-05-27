@@ -202,7 +202,8 @@ ca:
         footer: Estàs rebent aquest correu electrònic perquè et vas inscriure al repte %{title} (%{url}). Per a més informació sobre aquest repte i informació de contacte dels moderadors, visita %{profile_url}.
         look_up: Pots consultar aquesta tasca a la teva pàgina d'Assignments (Tasques) a %{link}.
     change_email:
-      changed: "%{login}, l'adreça electrònica associada amb aquest compte ha canviat a %{email}"
+      changed:
+        html: "%{login}, l'adreça electrònica associada amb aquest compte ha canviat a %{email}"
       subject: "[%{app_name}] Canvi d'adreça electrònica"
     collection_notification:
       assignments_sent:

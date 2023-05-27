@@ -240,7 +240,8 @@ sl:
         footer: To elektronsko pošto ste prejeli, ker ste se prijavili na izziv %{title} (%{url}). Za več informacij o tem izzivu in za kontaktne podatke moderatork/-jev prosimo obiščite %{profile_url}.
         look_up: Nalogo si lahko ogledate na strani Assignments (Naloge) na %{link}.
     change_email:
-      changed: "%{login}, elektronski naslov povezan z vašim računom je bil spremenjen v %{email}"
+      changed:
+        html: "%{login}, elektronski naslov povezan z vašim računom je bil spremenjen v %{email}"
       subject: "[%{app_name}] Sprememba elektronskega naslova"
     collection_notification:
       assignments_sent:

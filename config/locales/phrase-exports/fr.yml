@@ -202,7 +202,8 @@ fr:
         footer: Vous avez reçu cet e-mail car vous vous êtes inscrit-e au défi %{title} (%{url}). Pour plus d'informations sur ce défi et savoir comment contacter les modérateur-trice-s, veuillez consulter %{profile_url}.
         look_up: Vous pouvez retrouver cette tâche dans votre page Assignments (Tâches) à l'adresse %{link}.
     change_email:
-      changed: "%{login}, l'adresse e-mail associée à votre compte a été remplacée par %{email}"
+      changed:
+        html: "%{login}, l'adresse e-mail associée à votre compte a été remplacée par %{email}"
       subject: "[%{app_name}] Changement d'adresse e-mail"
     collection_notification:
       assignments_sent:

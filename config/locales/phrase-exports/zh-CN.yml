@@ -188,7 +188,8 @@ zh-CN:
         footer: 您之所以会收到这封邮件，是因为您报名参加了%{title}写手挑战（%{url}）。如果您想了解本次挑战的相关信息以及管理员的联系方式，请前往%{profile_url}。
         look_up: 查看本篇点文详情，请前往您的Assignments（点文）页面%{link}。
     change_email:
-      changed: "%{login}，与您账号关联的邮箱地址已改为 %{email}"
+      changed:
+        html: "%{login}，与您账号关联的邮箱地址已改为 %{email}"
       subject: "[%{app_name}] 邮箱地址更换"
     collection_notification:
       assignments_sent:

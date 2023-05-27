@@ -202,7 +202,8 @@ nb:
         footer: Du mottar denne e-posten fordi du har meldt deg på %{title}-utfordringen (%{url}). For mer informasjon om denne utfordringen og kontaktinformasjonen til moderatorene, gå til %{profile_url}.
         look_up: Du kan finne dette oppdraget på Assignments (oppdrag)-siden din på %{link}.
     change_email:
-      changed: "%{login}, e-posten knyttet til din konto har blitt endret til %{email}"
+      changed:
+        html: "%{login}, e-posten knyttet til din konto har blitt endret til %{email}"
       subject: "[%{app_name}] E-post endret"
     collection_notification:
       assignments_sent:

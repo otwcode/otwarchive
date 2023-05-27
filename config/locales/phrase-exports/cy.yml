@@ -259,7 +259,8 @@ cy:
         footer: Rydych chi'n derbyn yr ebost hyn oherwydd wnaethoch cofrestru ar gyfer y her %{title} (%{url}). Am fwy o wybodaeth am yr her hon ac am fanylion cyswllt y cymedrolyddion, gwelwch %{profile_url}.
         look_up: Gallwch edrych ar yr aseiniad hwn o'ch tudalen Assignments (Aseiniadau) ar%{link}.
     change_email:
-      changed: "%{login}, newidwyd yr ebost cysylltiedig i'ch cyfrif i %{email}"
+      changed:
+        html: "%{login}, newidwyd yr ebost cysylltiedig i'ch cyfrif i %{email}"
       subject: "[%{app_name}] Newidiad Ebost"
     collection_notification:
       assignments_sent:

@@ -183,7 +183,8 @@ ko:
         footer: "%{title} 챌린지(%{url})에 등록하셨기에 이 이메일을 받으셨습니다. 이 챌린지에 대한 자세한 내용과 진행자의 연락처는 %{profile_url}를 통해 찾으실 수 있습니다."
         look_up: 이 챌린지 과제는 회원님의 Assignments (챌린지 과제) 페이지 링크%{link} 에서 찾아보실 수 있습니다.
     change_email:
-      changed: "%{login}님, 회원님의 계정과 연계된 이메일 주소가 %{email}으로 변경되었습니다."
+      changed:
+        html: "%{login}님, 회원님의 계정과 연계된 이메일 주소가 %{email}으로 변경되었습니다."
       subject: "[%{app_name}] 이메일 주소 변경"
     collection_notification:
       assignments_sent:

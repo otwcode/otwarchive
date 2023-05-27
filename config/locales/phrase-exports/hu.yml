@@ -202,7 +202,8 @@ hu:
         footer: Azért kaptad ezt az emailt, mert feliratkoztál a(z) %{title} kihívásra (%{url}). További információért erről a kihívásról és a moderátorok elérhetőségéért, kérjük, látogasd meg %{profile_url}.
         look_up: Megtekintheted a feladatot a te Assignments (feladat) oldaladon %{link}.
     change_email:
-      changed: "%{login}, a fiókodhoz tartozó email cím a következőre változott: %{email}"
+      changed:
+        html: "%{login}, a fiókodhoz tartozó email cím a következőre változott: %{email}"
       subject: "[%{app_name}] Megváltozott email cím"
     collection_notification:
       assignments_sent:

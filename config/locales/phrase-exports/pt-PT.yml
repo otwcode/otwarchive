@@ -205,7 +205,8 @@ pt-PT:
         footer: Estás a receber este email porque te inscreveste no desafio %{title} (%{url}). Para mais informação acerca deste desafio e os detalhes de contacto das pessoas moderadoras, por favor visita %{profile_url}.
         look_up: Podes encontrar esta tarefa na tua página Assignments (Tarefas) em %{link}.
     change_email:
-      changed: "%{login}, o endereço de email associado à tua conta foi mudado para %{email}"
+      changed:
+        html: "%{login}, o endereço de email associado à tua conta foi mudado para %{email}"
       subject: "[%{app_name}] Mudança de email"
     collection_notification:
       assignments_sent:

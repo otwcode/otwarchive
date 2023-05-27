@@ -205,7 +205,8 @@ nl:
         footer: Je krijgt deze e-mail omdat je deelneemt aan de %{title} uitdaging (%{url}). Voor meer informatie over deze uitdaging en de contactinfo van de moderators, ga naar %{profile_url}.
         look_up: Je kan deze taak opzoeken vanaf je Assignments (Taken) pagina via %{link}.
     change_email:
-      changed: "%{login}, het e-mailadres van je account werd gewijzigd naar %{email}"
+      changed:
+        html: "%{login}, het e-mailadres van je account werd gewijzigd naar %{email}"
       subject: "[%{app_name}] E-mailadres gewijzigd"
     collection_notification:
       assignments_sent:

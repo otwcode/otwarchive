@@ -185,7 +185,8 @@ vi:
         footer: Bạn nhận được email này vì bạn đã đăng ký tham gia thử thách %{title} (%{url}). Để biết thêm chi tiết về thử thách này và thông tin liên hệ của điều phối viên, vui lòng truy cập %{profile_url}.
         look_up: Bạn có thể tìm hiểu thêm về nhiệm vụ này tại ở Assignments (Nhiệm Vụ) của bạn tại %{link}.
     change_email:
-      changed: "%{login}, email dùng để đăng ký tài khoản của bạn đã được đổi thành %{email}"
+      changed:
+        html: "%{login}, email dùng để đăng ký tài khoản của bạn đã được đổi thành %{email}"
       subject: "[%{app_name}] Thay đổi email"
     collection_notification:
       assignments_sent:

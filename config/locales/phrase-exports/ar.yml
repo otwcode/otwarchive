@@ -259,7 +259,8 @@ ar:
         footer: إنك تتلقى هذا البريد لأنك اشتركت في تحدي %{title} (%{url}). للمزيد من المعلومات حول هذا التحدي ولمعلومات التواصل مع المشرفين، قم بزيارة %{profile_url}.
         look_up: يمكنك الوصول إلى مهمتك من خلال صحفة Assignments (المهمات) الخاصة بك على %{link}.
     change_email:
-      changed: "%{login}، تم تغيير البريد الالكتروني المرتبط بحسابك إلى %{email}"
+      changed:
+        html: "%{login}، تم تغيير البريد الالكتروني المرتبط بحسابك إلى %{email}"
       subject: "[%{app_name}] تم تغيير البريد الالكتروني"
     collection_notification:
       assignments_sent:

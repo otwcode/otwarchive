@@ -202,7 +202,8 @@ es:
         footer: Has recibido este correo porque te inscribiste en el desafío %{title} (%{url}). Para más información sobre este desafío y sobre cómo comunicarte con lxs moderadorxs, por favor visita %{profile_url}.
         look_up: Puedes buscar esta tarea en tu página de Assignments (Tareas) en %{link}
     change_email:
-      changed: "%{login}, el correo electrónico asociado a tu cuenta se ha modificado a %{email}"
+      changed:
+        html: "%{login}, el correo electrónico asociado a tu cuenta se ha modificado a %{email}"
       subject: "[%{app_name}] Cambio de correo electrónico"
     collection_notification:
       assignments_sent:
