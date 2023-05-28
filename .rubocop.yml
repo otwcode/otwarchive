@@ -108,9 +108,6 @@ Rails/ReversibleMigrationMethodDefinition:
 Rails/SkipsModelValidations:
   Enabled: false
 
-Rails/TableNameAssignment:
-  Enabled: true
-
 Rails/UnknownEnv:
   Environments:
     - development
