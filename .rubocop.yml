@@ -101,9 +101,6 @@ Rails/Output:
 Rails/RakeEnvironment:
   Enabled: false
 
-Rails/ResponseParsedBody:
-  Enabled: false
-
 Rails/ReversibleMigrationMethodDefinition:
   Enabled: true
 
@@ -227,9 +224,6 @@ Style/PercentLiteralDelimiters:
 # Stop checking if uses of "self" are redundant
 Style/RedundantSelf:
   Enabled: false
-
-Style/RequireOrder:
-  Enabled: true
 
 Style/SelectByRegexp:
   Enabled: true
