@@ -154,10 +154,10 @@ group :development do
 end
 
 group :linters do
-  gem "erb_lint", "0.0.29"
-  gem "rubocop", "0.83.0"
-  gem "rubocop-rails", "2.6.0"
-  gem "rubocop-rspec", "1.41.0"
+  gem "erb_lint", "0.4.0"
+  gem "rubocop", "1.51.0"
+  gem "rubocop-rails", "2.19.1"
+  gem "rubocop-rspec", "2.22.0"
 end
 
 group :test, :development, :staging do

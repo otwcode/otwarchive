@@ -1,22 +1,27 @@
+inherit_from: .rubocop_todo.yml
+
 # Options available at https://github.com/bbatsov/rubocop/blob/master/config/default.yml
 
 require:
   - rubocop-rails
   - rubocop-rspec
 
+inherit_mode:
+  merge:
+    - Exclude
+
 AllCops:
-  RSpec:
-    Patterns:
-      - "(?:^|/)factories/"
-      - "(?:^|/)features/"
-      - "(?:^|/)spec/"
-  TargetRubyVersion: 2.7
+  NewCops: enable
+  TargetRubyVersion: 3.0
 
 Bundler/OrderedGems:
   Enabled: false
 
 Layout/DotPosition:
   EnforcedStyle: leading
+
+Layout/EmptyLinesAroundAttributeAccessor:
+  Enabled: false
 
 Layout/FirstArrayElementIndentation:
   EnforcedStyle: consistent
@@ -26,6 +31,9 @@ Layout/LineLength:
 
 Layout/MultilineMethodCallIndentation:
   EnforcedStyle: indented
+
+Layout/SingleLineBlockChain:
+  Enabled: true
 
 Layout/TrailingWhitespace:
   Enabled: false
@@ -78,6 +86,9 @@ Rails/DynamicFindBy:
     # Exceptions for InboxComment.find_by_filters
     - find_by_filters
 
+Rails/EnvironmentVariableAccess:
+  Enabled: true
+
 # Allow all uses of html_safe, they're everywhere...
 Rails/OutputSafety:
   Enabled: false
@@ -90,9 +101,18 @@ Rails/Output:
 Rails/RakeEnvironment:
   Enabled: false
 
+Rails/ResponseParsedBody:
+  Enabled: false
+
+Rails/ReversibleMigrationMethodDefinition:
+  Enabled: true
+
 # Allow update_attribute, update_all, touch, etc.
 Rails/SkipsModelValidations:
   Enabled: false
+
+Rails/TableNameAssignment:
+  Enabled: true
 
 Rails/UnknownEnv:
   Environments:
@@ -100,6 +120,12 @@ Rails/UnknownEnv:
     - test
     - staging
     - production
+
+RSpec:
+  Include:
+    - "(?:^|/)factories/"
+    - "(?:^|/)features/"
+    - "(?:^|/)spec/"
 
 # Allow "allow_any_instance_of"
 RSpec/AnyInstance:
@@ -201,6 +227,12 @@ Style/PercentLiteralDelimiters:
 # Stop checking if uses of "self" are redundant
 Style/RedundantSelf:
   Enabled: false
+
+Style/RequireOrder:
+  Enabled: true
+
+Style/SelectByRegexp:
+  Enabled: true
 
 Style/SingleLineMethods:
   AllowIfMethodIsEmpty: false
