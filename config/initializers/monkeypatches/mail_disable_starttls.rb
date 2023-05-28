@@ -12,7 +12,7 @@ module MailDisableStarttls
   end
 end
 
-if Mail::VERSION::STRING == "2.7.1"
+if Mail::VERSION::STRING == "2.8.1"
   Mail::SMTP.prepend MailDisableStarttls
 else
   puts "WARNING: The monkeypatch #{__FILE__} was written for version 2.7.1 of the mail gem, but you are running #{Mail::VERSION::STRING}. Please update or remove the monkeypatch."
