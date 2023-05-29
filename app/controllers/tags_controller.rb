@@ -255,7 +255,7 @@ class TagsController < ApplicationController
       @tag.attributes = tag_params
     end
 
-    @tag.syn_string = syn_string if @tag.errors.empty? && @tag.save
+    @tag.syn_string = syn_string
 
     if @tag.errors.empty? && @tag.save
       flash[:notice] = ts('Tag was updated.')
