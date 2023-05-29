@@ -202,7 +202,7 @@ en:
         sure_html: Are you sure you want to %{block} %{username}?
         title: Block %{name}
         will:
-          commenting: commenting on your works
+          commenting: commenting or leaving kudos on your works
           intro: 'Blocking a user prevents them from:'
           replying: replying to your comments anywhere on the site
         will_not:
@@ -214,7 +214,7 @@ en:
         button: Yes, Unblock User
         cancel: Cancel
         resume:
-          commenting: commenting on your works
+          commenting: commenting or leaving kudos on your works
           intro: 'Unblocking a user allows them to resume:'
           replying: replying to your comments anywhere on the site
         sure_html: Are you sure you want to %{unblock} %{username}?
@@ -233,7 +233,7 @@ en:
         none: You have not blocked any users.
         title: Blocked Users
         will:
-          commenting: commenting on your works
+          commenting: commenting or leaving kudos on your works
           intro:
             one: 'You can block up to %{block_limit} user. Blocking a user prevents them from:'
             other: 'You can block up to %{block_limit} users. Blocking a user prevents them from:'
@@ -286,10 +286,18 @@ en:
           disable_all: Sorry, this news post doesn't allow comments.
           disable_anon: Sorry, this news post doesn't allow non-Archive users to comment.
           support_link: contact Support
+        moderated_commenting:
+          disable: Disable comment moderation
+          enable: Enable comment moderation
+          keep_current: Keep current comment moderation settings
+          label: Comment Moderation
         options:
           disable_all: No one can comment
           disable_anon: Only registered users can comment
           enable_all: Registered users and guests can comment
+          keep_current: Keep current comment settings
+          label: Who can comment on this work
+          multiple_works_label: Who can comment on these works
         work:
           alt_action: You can however still leave Kudos!
           disable_all: Sorry, this work doesn't allow comments.
@@ -562,3 +570,12 @@ en:
       original_creators:
         one: 'Original Creator ID:'
         other: 'Original Creator IDs:'
+    permissions:
+      privacy: Privacy
+      visibility:
+        import_works_restricted: Only show imported works to registered users
+        keep_current: Keep current visibility settings
+        label: Visibility
+        multiple_works_restricted: Only show to registered users
+        restricted: Only show your work to registered users
+        unrestricted: Show to all
