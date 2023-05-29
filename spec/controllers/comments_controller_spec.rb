@@ -619,10 +619,15 @@ describe CommentsController do
           end
 
           it "redirects logged in user to the comment on the commentable without an error" do
-            fake_login
-            post :create, params: { work_id: work.id }
+            comment_attributes = {
+              pseud_id: user.default_pseud_id,
+              comment_content: "Hello fellow human!"
+            }
+            fake_login_known_user(user)
+            post :create, params: { work_id: work.id, comment: comment_attributes }
+            comment = Comment.last
             expect(flash[:error]).to be_nil
-            expect(response).to redirect_to(chapter_path(comment.commentable, show_comments: true, anchor: "comment_#{comment.id}"))
+            expect(response).to redirect_to(work_chapter_path(work, comment.commentable, show_comments: true, view_full_work: false, anchor: "comment_#{comment.id}"))
           end
         end
       end
