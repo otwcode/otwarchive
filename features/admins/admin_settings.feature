@@ -41,10 +41,9 @@ Feature: Admin Settings Page
     Given guest comments are on
       And I am logged out
       And <commentable>
-      And a guest comment on <commentable>
       And I view <commentable> with comments
     When I post a guest comment
-      Then I should see a link "Reply"
+    Then I should see a link "Reply"
 
     Examples:
         | commentable | 
@@ -59,7 +58,6 @@ Feature: Admin Settings Page
     When I view <commentable> with comments
     Then I should see "Sorry, the Archive doesn't allow guests to comment right now."
       And I should not see a link "Reply"
-
     When I am logged in
       And I view <commentable> with comments
     Then I should not see "Sorry, the Archive doesn't allow guests to comment right now."

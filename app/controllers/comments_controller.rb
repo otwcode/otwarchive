@@ -134,7 +134,7 @@ class CommentsController < ApplicationController
   def check_guest_comment_admin_setting
     admin_settings = AdminSetting.current
 
-    return unless admin_settings.guest_comments_off? && !logged_in? && !logged_in_as_admin?
+    return unless admin_settings.guest_comments_off? && guest?
     
     flash[:error] = t("comments.commentable.guest_comments_disabled")
     redirect_back(fallback_location: root_path)

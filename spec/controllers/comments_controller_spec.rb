@@ -12,10 +12,6 @@ describe CommentsController do
   end
 
   describe "GET #add_comment_reply" do
-    let(:anon_comment_attributes) do
-      attributes_for(:comment, :by_guest).slice(:name, :email, :comment_content)
-    end
-
     context "when comment is unreviewed" do
       it "redirects logged out user to login path with an error" do
         get :add_comment_reply, params: { comment_id: unreviewed_comment.id }
@@ -117,26 +113,58 @@ describe CommentsController do
         admin_setting.update_attribute(:guest_comments_off, false)
       end
 
-      it "allows guests to reply to comments" do
-        post :add_comment_reply, params: { comment_id: comment.id, comment: anon_comment_attributes }
+      it "redirects logged out user to the comment on the commentable without an error" do
+        get :add_comment_reply, params: { comment_id: comment.id }
 
         expect(flash[:error]).to be_nil
+        it_redirects_to(chapter_path(comment.commentable, show_comments: true, anchor: "comment_#{comment.id}"))
       end
     end
 
     context "guest comments are turned off in admin settings" do
       let(:comment) { create(:comment) }
       let(:admin_setting) { AdminSetting.first || AdminSetting.create }
+      let(:work) { comment.ultimate_parent }
 
       before do
         admin_setting.update_attribute(:guest_comments_off, true)
       end
 
-      it "does not allow guests to reply to comments" do
-        post :add_comment_reply, params: { comment_id: comment.id, comment: anon_comment_attributes }
+      [:enable_all, :disable_anon].each do |permissions|
+        context "when work comment permissions are #{permissions}" do
+          before do
+            work.update_attribute(:comment_permissions, permissions)
+          end
 
-        it_redirects_to_with_error("/where_i_came_from", 
-                                   "Sorry, the Archive doesn't allow guests to comment right now.")
+          it "redirects logged out user with an error" do
+            get :add_comment_reply, params: { comment_id: comment.id }
+            it_redirects_to_with_error("/where_i_came_from", "Sorry, the Archive doesn't allow guests to comment right now.")
+          end
+
+          it "redirects logged in user to the comment on the commentable without an error" do
+            fake_login
+            get :add_comment_reply, params: { comment_id: comment.id }
+            expect(flash[:error]).to be_nil
+            expect(response).to redirect_to(chapter_path(comment.commentable, show_comments: true, anchor: "comment_#{comment.id}"))
+          end
+        end
+      end
+
+      context "when work comment permissions are disable_all" do
+        before do
+          work.update_attribute(:comment_permissions, :disable_all)
+        end
+
+        it "redirects logged out user with an error" do
+          get :add_comment_reply, params: { comment_id: comment.id }
+          it_redirects_to_with_error("/where_i_came_from", "Sorry, the Archive doesn't allow guests to comment right now.")
+        end
+
+        it "redirects logged in user with an error" do
+          fake_login
+          get :add_comment_reply, params: { comment_id: comment.id }
+          it_redirects_to_with_error(work_path(work), "Sorry, this work doesn't allow comments.")
+        end
       end
     end
   end
@@ -260,32 +288,47 @@ describe CommentsController do
 
     context "guest comments are turned off in admin settings" do
       let(:work) { create(:work) }
-      let(:work_with_guest_comment_off) { create(:work, comment_permissions: :disable_anon) }
       let(:admin_setting) { AdminSetting.first || AdminSetting.create }
 
       before do
         admin_setting.update_attribute(:guest_comments_off, true)
       end
 
-      it "does not allow guest comments for new" do
-        post :new, params: { work_id: work.id, comment: anon_comment_attributes }
+      [:enable_all, :disable_anon].each do |permissions|
+        context "when work comment permissions are #{permissions}" do
+          before do
+            work.update_attribute(:comment_permissions, permissions)
+          end
 
-        it_redirects_to_with_error("/where_i_came_from", 
-                                   "Sorry, the Archive doesn't allow guests to comment right now.")
+          it "redirects logged out user with an error" do
+            post :new, params: { work_id: work.id, comment: anon_comment_attributes }
+            it_redirects_to_with_error("/where_i_came_from", "Sorry, the Archive doesn't allow guests to comment right now.")
+          end
+
+          it "redirects logged in user to the comment on the commentable without an error" do
+            fake_login
+            post :new, params: { work_id: work.id }
+            expect(flash[:error]).to be_nil
+            expect(response).to render_template("new")
+          end
+        end
       end
 
-      it "does not allow guest comments when work has guest comments disabled" do
-        post :new, params: { work_id: work_with_guest_comment_off.id, comment: anon_comment_attributes }
+      context "when work comment permissions are disable_all" do
+        before do
+          work.update_attribute(:comment_permissions, :disable_all)
+        end
 
-        it_redirects_to_with_error("/where_i_came_from", 
-                                   "Sorry, the Archive doesn't allow guests to comment right now.")
-      end
+        it "redirects logged out user with an error" do
+          post :new, params: { work_id: work.id, comment: anon_comment_attributes }
+          it_redirects_to_with_error("/where_i_came_from", "Sorry, the Archive doesn't allow guests to comment right now.")
+        end
 
-      it "allows logged in users to comment" do
-        fake_login
-        post :new, params: { work_id: work.id }
-
-        expect(flash[:error]).to be_nil
+        it "redirects logged in user with an error" do
+          fake_login
+          post :new, params: { work_id: work.id }
+          it_redirects_to_with_error(work_path(work), "Sorry, this work doesn't allow comments.")
+        end
       end
     end
 
@@ -557,17 +600,52 @@ describe CommentsController do
 
     context "guest comments are turned off in admin settings" do
       let(:work) { create(:work) }
+      let(:user) { create(:user) }
       let(:admin_setting) { AdminSetting.first || AdminSetting.create }
 
       before do
         admin_setting.update_attribute(:guest_comments_off, true)
       end
 
-      it "does not allow guest comments for create" do
-        post :create, params: { work_id: work.id, comment: anon_comment_attributes }
+      [:enable_all, :disable_anon].each do |permissions|
+        context "when work comment permissions are #{permissions}" do
+          before do
+            work.update_attribute(:comment_permissions, permissions)
+          end
 
-        it_redirects_to_with_error("/where_i_came_from", 
-                                   "Sorry, the Archive doesn't allow guests to comment right now.")
+          it "redirects logged out user with an error" do
+            post :create, params: { work_id: work.id, comment: anon_comment_attributes }
+            it_redirects_to_with_error("/where_i_came_from", "Sorry, the Archive doesn't allow guests to comment right now.")
+          end
+
+          it "redirects logged in user to the comment on the commentable without an error" do
+            fake_login
+            post :create, params: { work_id: work.id }
+            expect(flash[:error]).to be_nil
+            expect(response).to redirect_to(chapter_path(comment.commentable, show_comments: true, anchor: "comment_#{comment.id}"))
+          end
+        end
+      end
+
+      context "when work comment permissions are disable_all" do
+        before do
+          work.update_attribute(:comment_permissions, :disable_all)
+        end
+
+        it "redirects logged out user with an error" do
+          post :create, params: { work_id: work.id, comment: anon_comment_attributes }
+          it_redirects_to_with_error("/where_i_came_from", "Sorry, the Archive doesn't allow guests to comment right now.")
+        end
+
+        it "redirects logged in user with an error" do
+          comment_attributes = {
+            pseud_id: user.default_pseud_id,
+            comment_content: "Hello fellow human!"
+          }
+          fake_login_known_user(user)
+          post :create, params: { work_id: work.id, comment: comment_attributes }
+          it_redirects_to_with_error(work_path(work), "Sorry, this work doesn't allow comments.")
+        end
       end
     end
   end
