@@ -958,7 +958,7 @@ class Tag < ApplicationRecord
   # NOTE for potential confusion
   # "merger" is the canonical tag of which this one will be a synonym
   # "mergers" are the tags which are (currently) synonyms of THIS one
-  attribute :new_merger, default: false
+  attribute :new_merger, default: nil
 
   def syn_string=(tag_string)
     # If the tag_string is blank, our tag should be given no merger
@@ -1004,10 +1004,8 @@ class Tag < ApplicationRecord
 
   before_save :save_new_merger
   def save_new_merger
-    return unless self.new_merger
-    
     # If there is a newly created merger tag, save it to database
-    if self.new_merger.save
+    if self.new_merger&.save
       # And set up its relationship with the current tag
       self.merger_id = self.new_merger.id
     end
