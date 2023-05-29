@@ -1004,7 +1004,7 @@ class Tag < ApplicationRecord
 
   before_save :save_new_merger
   def save_new_merger
-    unless self.new_merger return
+    return unless self.new_merger
     
     # If there is a newly created merger tag, save it to database
     if self.new_merger.save
