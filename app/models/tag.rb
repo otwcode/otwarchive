@@ -1005,10 +1005,9 @@ class Tag < ApplicationRecord
   before_save :save_new_merger
   def save_new_merger
     # If there is a newly created merger tag, save it to database
-    if self.new_merger&.save
-      # And set up its relationship with the current tag
-      self.merger_id = self.new_merger.id
-    end
+    return unless self.new_merger&.save
+    # And set up its relationship with the current tag
+    self.merger_id = self.new_merger.id
   end
 
   def merger_string=(tag_string)
