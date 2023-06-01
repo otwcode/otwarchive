@@ -74,7 +74,7 @@ en:
         abuse_report:
           attributes:
             url:
-              not_on_archive: "does not appear to be on this site."
+              not_on_archive: does not appear to be on this site.
         block:
           attributes:
             blocked:

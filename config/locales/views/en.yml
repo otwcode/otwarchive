@@ -38,7 +38,7 @@ en:
       include:
         ao3: AO3 Terms of Service
         delay: There will be an additional delay for responses in any language other than English.
-        intro: "What to include in your report description:"
+        intro: 'What to include in your report description:'
         languages: We can answer Abuse reports in %{list_html}.
         links: links to any of their other content that you would like to report
         quote_html: a quote from or summary of the reported content explaining why it violates the %{tos_link}
@@ -55,7 +55,7 @@ en:
         content: You would like to know whether specific content is allowed on the Archive.
         hack: You believe that your account was hacked.
         harassment: You have experienced or witnessed harassment on the Archive.
-        intro: "Potential reasons to submit a report to the Policy & Abuse team:"
+        intro: 'Potential reasons to submit a report to the Policy & Abuse team:'
         suspended: You have been suspended or your work has been removed, and you have not received an email explaining why.
         violation_html: You have encountered content on the Archive that violates the %{tos_link}.
   admin:
@@ -186,7 +186,7 @@ en:
       page_title: Hi, %{login}!
       responsibility: With great power comes great responsibility.
       roles:
-        heading: "Your admin roles:"
+        heading: 'Your admin roles:'
         none: You currently have no admin roles assigned to you.
   blocked:
     block: Block
@@ -202,19 +202,19 @@ en:
         title: Block %{name}
         will:
           commenting: commenting or leaving kudos on your works
-          intro: "Blocking a user prevents them from:"
+          intro: 'Blocking a user prevents them from:'
           replying: replying to your comments anywhere on the site
         will_not:
           comments_elsewhere: hide their comments elsewhere on the site
           comments_on_works: delete or hide comments they previously left on your works; you can delete these individually
           hide_works: hide their works or bookmarks from you
-          intro: "Blocking a user will not:"
+          intro: 'Blocking a user will not:'
       confirm_unblock:
         button: Yes, Unblock User
         cancel: Cancel
         resume:
           commenting: commenting or leaving kudos on your works
-          intro: "Unblocking a user allows them to resume:"
+          intro: 'Unblocking a user allows them to resume:'
           replying: replying to your comments anywhere on the site
         sure_html: Are you sure you want to %{unblock} %{username}?
         title: Unblock %{name}
@@ -234,14 +234,14 @@ en:
         will:
           commenting: commenting or leaving kudos on your works
           intro:
-            one: "You can block up to %{block_limit} user. Blocking a user prevents them from:"
-            other: "You can block up to %{block_limit} users. Blocking a user prevents them from:"
+            one: 'You can block up to %{block_limit} user. Blocking a user prevents them from:'
+            other: 'You can block up to %{block_limit} users. Blocking a user prevents them from:'
           replying: replying to your comments anywhere on the site
         will_not:
           comments_elsewhere: hide their comments elsewhere on the site
           comments_on_works: delete or hide comments they previously left on your works; you can delete these individually
           hide_works: hide their works or bookmarks from you
-          intro: "Blocking a user will not:"
+          intro: 'Blocking a user will not:'
   challenge_signups:
     signup_form:
       notice:
@@ -347,7 +347,7 @@ en:
         fnok:
           concerning_html: Setting up, changing, or activating your %{fnok_link}
           fnok: Fannish Next of Kin
-        intro: "Some issues you can contact Support about include:"
+        intro: 'Some issues you can contact Support about include:'
         lost_access: Lost password or email preventing access to your account
         new_features: Feature requests for future development
         orphaned_works: Questions about orphaned works
@@ -356,14 +356,14 @@ en:
         tag_changes: Requests to canonize or change tags
         work_problems: Works labeled with the wrong language or duplicate works
       status:
-        current: "For current updates on Archive performance or downtime, please check out our Twitter feed: %{twitter_link}."
+        current: 'For current updates on Archive performance or downtime, please check out our Twitter feed: %{twitter_link}.'
         twitter: "@AO3_Status"
   home:
     donate:
       page_title: Donate or Volunteer
   invite_requests:
     invite_request:
-      date: "At our current rate, you should receive an invitation on or around: %{date}."
+      date: 'At our current rate, you should receive an invitation on or around: %{date}.'
       position_html: You are currently number %{position} on our waiting list!
       title: Invitation Status for %{email}
   kudos:
@@ -377,7 +377,7 @@ en:
   layouts:
     proxy_notice:
       button: Dismiss Notice
-      faux_heading: "Important message:"
+      faux_heading: 'Important message:'
       point1: You are using a proxy site that is not part of the Archive of Our Own.
       point2: The entity that set up the proxy site can see what you submit, including your IP address. If you log in through the proxy site, it can see your password.
   muted:
@@ -397,17 +397,17 @@ en:
         sure_html: Are you sure you want to %{mute} %{username}?
         title: Mute %{name}
         will:
-          intro: "Muting a user:"
+          intro: 'Muting a user:'
           seeing_content: completely hides their works, series, bookmarks, and comments from you; there will be no empty space, placeholder text, or other indication something has been removed
         will_not:
           hide_content_for_others: hide their works, series, bookmarks, and comments from anyone else
-          intro: "Muting a user will not:"
+          intro: 'Muting a user will not:'
           prevent_emails: prevent you from receiving comment or subscription emails from this user
       confirm_unmute:
         button: Yes, Unmute User
         cancel: Cancel
         resume:
-          intro: "Unmuting a user allows you to:"
+          intro: 'Unmuting a user allows you to:'
           see_content: see their works, series, bookmarks, and comments on the site
         sure_html: Are you sure you want to %{unmute} %{username}?
         title: Unmute %{name}
@@ -428,12 +428,12 @@ en:
         title: Muted Users
         will:
           intro:
-            one: "You can mute up to %{mute_limit} user. Muting a user:"
-            other: "You can mute up to %{mute_limit} users. Muting a user:"
+            one: 'You can mute up to %{mute_limit} user. Muting a user:'
+            other: 'You can mute up to %{mute_limit} users. Muting a user:'
           seeing_content: completely hides their works, series, bookmarks, and comments from you; there will be no empty space, placeholder text, or other indication something has been removed
         will_not:
           hide_content_for_others: hide their works, series, bookmarks, and comments from anyone else
-          intro: "Muting a user will not:"
+          intro: 'Muting a user will not:'
           prevent_emails: prevent you from receiving comment or subscription emails from this user
   preferences:
     index:
@@ -514,7 +514,7 @@ en:
       co_creations:
         legend: Works You Made With Others
         orphan_info: You are not able to delete these as they are shared works, but you can %{orphan_link} them or remove yourself completely as a co-creator.
-        summary: "You have %{work_count} work(s) co-created with the following users: %{co_creators}."
+        summary: 'You have %{work_count} work(s) co-created with the following users: %{co_creators}.'
       confirm: Are you sure? This can't be undone!
       heading: What do you want to do with your works?
       options:
@@ -525,16 +525,16 @@ en:
       orphan: orphan
       orphaning: orphaning
       sole_creations:
-        collections_summary: "You have %{collection_count} collection(s) under the following pseuds: %{pseuds}."
+        collections_summary: 'You have %{collection_count} collection(s) under the following pseuds: %{pseuds}.'
         legend: Works and Collections You Made By Yourself
         options_info: You can delete them, but please consider %{orphaning_link} them instead!
-        works_summary: "You have %{work_count} work(s) under the following pseuds: %{pseuds}."
+        works_summary: 'You have %{work_count} work(s) under the following pseuds: %{pseuds}.'
       submit: Save
     sessions:
       new:
         beta_reminder:
           give_feedback: give us your feedback
-          reminder: "Reminder:"
+          reminder: 'Reminder:'
           report_bugs: Please report any pesky bugs and %{give_feedback_link}!
           warning: This site is in beta. Things may break or crash without notice.
         login:
@@ -567,8 +567,8 @@ en:
   works:
     meta:
       original_creators:
-        one: "Original Creator ID:"
-        other: "Original Creator IDs:"
+        one: 'Original Creator ID:'
+        other: 'Original Creator IDs:'
     permissions:
       privacy: Privacy
       visibility:
