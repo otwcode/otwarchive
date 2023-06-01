@@ -1,10 +1,13 @@
 <!--Descriptive page names, messages and instructions-->
+<%= render "muted/muted_items_notice" %>
+
 <h2 class="heading"><%= ts('Search Results') %></h2>
 
 <h4 class="heading">
   <%= ts("You searched for:") %>
   <%= (strip_tags @search.summary).html_safe %>
 </h4>
+
 <!--/descriptions-->
 
 <!--subnav-->

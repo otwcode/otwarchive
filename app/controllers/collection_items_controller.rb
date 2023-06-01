@@ -7,25 +7,32 @@ class CollectionItemsController < ApplicationController
 
   def index
 
+    # TODO: AO3-6507 Refactor to use send instead of case statements.
     if @collection && @collection.user_is_maintainer?(current_user)
       @collection_items = @collection.collection_items.include_for_works
-      @collection_items = case
-                          when params[:approved]
+      @collection_items = case params[:status]
+                          when "approved"
                             @collection_items.approved_by_both
-                          when params[:rejected]
+                          when "rejected_by_collection"
                             @collection_items.rejected_by_collection
-                          when params[:invited]
+                          when "rejected_by_user"
+                            @collection_items.rejected_by_user
+                          when "unreviewed_by_user"
                             @collection_items.invited_by_collection
                           else
                             @collection_items.unreviewed_by_collection
                           end
     elsif params[:user_id] && (@user = User.find_by(login: params[:user_id])) && @user == current_user
       @collection_items = CollectionItem.for_user(@user).includes(:collection)
-      @collection_items = case
-                          when params[:approved]
+      @collection_items = case params[:status]
+                          when "approved"
                             @collection_items.approved_by_both
-                          when params[:rejected]
+                          when "rejected_by_collection"
+                            @collection_items.rejected_by_collection
+                          when "rejected_by_user"
                             @collection_items.rejected_by_user
+                          when "unreviewed_by_collection"
+                            @collection_items.approved_by_user.unreviewed_by_collection
                           else
                             @collection_items.unreviewed_by_user
                           end
@@ -63,6 +70,10 @@ class CollectionItemsController < ApplicationController
     unless @item
       flash[:error] = ts("What did you want to add to a collection?")
       redirect_to(request.env["HTTP_REFERER"] || root_path) and return
+    end
+    if @item.respond_to?(:allow_collection_invitation?) && !@item.allow_collection_invitation?
+      flash[:error] = t(".invitation_not_sent", default: "This item could not be invited.")
+      redirect_to(@item) and return
     end
     # for each collection name
     # see if it exists, is open, and isn't already one of this item's collections
@@ -123,7 +134,10 @@ class CollectionItemsController < ApplicationController
     unless invited_collections.empty?
       invited_collections.each do |needs_user_approval|
         flash[:notice] ||= ""
-        flash[:notice] = ts("This work has been <a href=\"#{collection_items_path(needs_user_approval)}?invited=true\">invited</a> to your collection (#{needs_user_approval.title}).").html_safe
+        flash[:notice] = t(".invited_to_collections_html",
+                           invited_link: view_context.link_to(t(".invited"),
+                                         collection_items_path(needs_user_approval, status: :unreviewed_by_user)),
+                           collection_title: needs_user_approval.title)
       end
     end
     unless unapproved_collections.empty?
@@ -175,6 +189,8 @@ class CollectionItemsController < ApplicationController
     allowed_items.where(id: update_params.keys).each do |item|
       item_data = update_params[item.id]
       if item_data[:remove] == "1"
+        next unless item.user_allowed_to_destroy?(current_user)
+
         @collection_items << item unless item.destroy
       else
         @collection_items << item unless item.update(item_data)

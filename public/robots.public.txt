@@ -2,7 +2,7 @@
 #
 
 User-agent:	*
-Disallow:	/works? # cruel but efficient
+Disallow: /works? # cruel but efficient
 Disallow: /autocomplete/
 Disallow: /downloads/
 Disallow: /external_works/
@@ -19,10 +19,10 @@ Disallow: /external_works/
 # Googlebot is smart and knows pattern matching
 Disallow: /works/*?
 Disallow: /*search?
-Disallow:	/*?*query=
-Disallow:	/*?*sort_
-Disallow:	/*?*selected_tags
-Disallow:	/*?*selected_pseuds
+Disallow: /*?*query=
+Disallow: /*?*sort_
+Disallow: /*?*selected_tags
+Disallow: /*?*selected_pseuds
 Disallow: /*?*use_openid
 Disallow: /*?*view_adult
 Disallow: /*?*tag_id

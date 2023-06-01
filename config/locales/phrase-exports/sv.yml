@@ -83,6 +83,7 @@ sv:
         informal: Vänliga hälsningar,
       creation:
         link_with_word_count: "%{creation_link} (%{word_count})"
+        title_with_chapter_number: Kapitel %{position} av %{title}
         title_with_word_count: '"%{creation_title}" (%{word_count})'
         word_count:
           one: "%{count} ord"
@@ -343,9 +344,9 @@ sv:
         creation: "%{creation_link} av %{pseud_links}"
         instructions: Du kan acceptera eller avslå förfrågan på din sida för %{page_name}.
         page_name: Co-Creator Requests (Medskaparförfrågan)
-      intro_chapter: 'Användaren %{inviting_user} har bjudit in din pseud %{pseud}
+      intro_chapter: 'Användaren %{inviting_user} har bjudit in din pseudonym %{pseud}
         att listas som medskapare på följande kapitel:'
-      intro_series: 'Användaren %{inviting_user} har bjudit in din pseud %{pseud}
+      intro_series: 'Användaren %{inviting_user} har bjudit in din pseudonym %{pseud}
         att listas som medskapare på följande serier:'
       intro_work: 'Användaren %{inviting_user} har bjudit in din pseudonym %{pseud}
         att listas som medskapare på följande verk:'

@@ -1,4 +1,5 @@
-@works
+# We need to load the site skin to make the share modal work properly:
+@works @load-default-skin
 Feature: Share Works
   Testing the "Share" button on works, with Javascript emulation
 
@@ -75,6 +76,7 @@ Feature: Share Works
     When I follow "Share"
     Then I should see "Close" within "#modal"
     When I follow "Close"
+      And I follow "Log In"
       And I fill in "User name or email:" with "maduser"
       And I fill in "Password:" with "password"
       And I press "Log In"

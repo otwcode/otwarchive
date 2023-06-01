@@ -196,7 +196,7 @@ class CommentsController < ApplicationController
   # Comments cannot be edited after they've been replied to or if they are frozen.
   def check_permission_to_edit
     if @comment&.iced?
-      flash[:error] = t("comment.check_permission_to_edit.error.frozen")
+      flash[:error] = t("comments.check_permission_to_edit.error.frozen")
       redirect_back(fallback_location: root_path)
     elsif !@comment&.count_all_comments&.zero?
       flash[:error] = ts("Comments with replies cannot be edited")
@@ -212,14 +212,18 @@ class CommentsController < ApplicationController
   def check_permission_to_modify_frozen_status
     return if permission_to_modify_frozen_status
 
-    flash[:error] = t(".permission_denied")
+    # i18n-tasks-use t('comments.freeze.permission_denied')
+    # i18n-tasks-use t('comments.unfreeze.permission_denied')
+    flash[:error] = t("comments.#{action_name}.permission_denied")
     redirect_back(fallback_location: root_path)
   end
 
   def check_permission_to_modify_hidden_status
     return if policy(@comment).can_hide_comment?
 
-    flash[:error] = t(".permission_denied")
+    # i18n-tasks-use t('comments.hide.permission_denied')
+    # i18n-tasks-use t('comments.unhide.permission_denied')
+    flash[:error] = t("comments.#{action_name}.permission_denied")
     redirect_back(fallback_location: root_path)
   end
 

@@ -168,8 +168,14 @@ Feature: Kudos
       And the email should not contain "0 guests"
       And the email should not contain "translation missing"
 
-Scenario: Cannot leave kudos (no button) while logged as admin
+  Scenario: Blocked users should not see a kudos button on their blocker's works
+    Given the work "Aftermath" by "creator"
+      And the user "creator" has blocked the user "pest"
+    When I am logged in as "pest"
+      And I view the work "Aftermath"
+    Then I should not see a "Kudos ♥" button
 
+  Scenario: Cannot leave kudos (no button) while logged as admin
     Given I am logged in as an admin
       And I view the work "Awesome Story"
     Then I should see "Awesome Story"

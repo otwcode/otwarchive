@@ -17,6 +17,7 @@ Feature: Admin Actions for Works, Comments, Series, Bookmarks
     Given I am logged in as "regular_user"
       And I post the work "ToS Violation"
     When I am logged in as a "policy_and_abuse" admin
+      And all emails have been delivered
       And I view the work "ToS Violation"
       And I follow "Hide Work"
     Then I should see "Item has been hidden."
@@ -33,8 +34,8 @@ Feature: Admin Actions for Works, Comments, Series, Bookmarks
       And I view the work "ToS Violation"
       And I follow "Hide Work"
       And all indexing jobs have been run
-    Then I should see "Item has been hidden."
       And all emails have been delivered
+    Then I should see "Item has been hidden."
     When I follow "Make Work Visible"
       And all indexing jobs have been run
     Then I should see "Item is no longer hidden."
@@ -46,6 +47,8 @@ Feature: Admin Actions for Works, Comments, Series, Bookmarks
     Given I am logged in as "regular_user"
       And I post the work "ToS Violation"
     When I am logged in as a "policy_and_abuse" admin
+      # Don't let the admin password email mess up the count.
+      And all emails have been delivered
       And I view the work "ToS Violation"
       And I follow "Delete Work"
       And all indexing jobs have been run
@@ -363,3 +366,9 @@ Feature: Admin Actions for Works, Comments, Series, Bookmarks
     Then I should see "Over Tag Limit: No"
     When I view the work "Over the Limit"
     Then I should see "Over Tag Limit: Yes"
+
+  Scenario: Policy abuse admins can see original work creators
+    Given a work "Orphaned" with the original creator "orphaneer"
+    When I am logged in as a "policy_and_abuse" admin
+      And I view the work "Orphaned"
+    Then I should see the original creator "orphaneer"

@@ -1,4 +1,6 @@
 class Preference < ApplicationRecord
+  self.ignored_columns = [:automatically_approve_collections]
+
   belongs_to :user
   belongs_to :skin
 
