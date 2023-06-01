@@ -104,6 +104,15 @@ describe CommentsController do
         it_behaves_like "no one can add comment reply on a hidden comment"
       end
     end
+
+    context "when logged in as an admin" do
+      before { fake_login_admin(create(:admin)) }
+
+      it "redirects to root with notice prompting log out" do
+        get :add_comment_reply, params: { comment_id: comment.id }
+        it_redirects_to_with_notice(root_path, "Please log out of your admin account first!")
+      end
+    end
   end
 
   describe "GET #unreviewed" do
