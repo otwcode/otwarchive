@@ -278,6 +278,7 @@ en:
         comment: Comment
       blocked: Sorry, you have been blocked by one or more of this work's creators.
       invite_to_collections_link: Invite To Collections
+      logged_as_admin: Please log out of your admin account to comment.
       permissions:
         admin_post:
           alt_action: You can however %{support_link} with any feedback or questions.

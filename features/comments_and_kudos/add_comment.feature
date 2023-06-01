@@ -216,7 +216,7 @@ Scenario: Cannot comment (no form) while logged as admin
     Then I should see "Generic Work"
       And I should not see "Post Comment"
       And I should not see a "Comment" button
-      And I should see "Please remember to log out before resuming your normal site activity!"
+      And I should see "Please log out of your admin account to comment."
 
 Scenario: Cannot reply to comments (no button) while logged as admin
 
