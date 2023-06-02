@@ -187,6 +187,7 @@ vi:
     change_email:
       changed:
         html: "%{login}, email dùng để đăng ký tài khoản của bạn đã được đổi thành %{email}"
+        text: "%{login}, email dùng để đăng ký tài khoản của bạn đã được đổi thành %{email}"
       subject: "[%{app_name}] Thay đổi email"
     collection_notification:
       assignments_sent:

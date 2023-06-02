@@ -184,6 +184,7 @@ bn:
     change_email:
       changed:
         html: "%{login}, আপনার অ্যাকাউন্টের সাথে সম্পর্কিত ইমেল অ্যাড্রেস %{email}- টা পরিবর্তন করা হয়েছে"
+        text: "%{login}, আপনার অ্যাকাউন্টের সাথে সম্পর্কিত ইমেল অ্যাড্রেস %{email}- টা পরিবর্তন করা হয়েছে"
       subject: "[%{app_name}] ইমেল পরিবর্তন করা হয়েছে"
     collection_notification:
       assignments_sent:

@@ -185,6 +185,7 @@ th:
     change_email:
       changed:
         html: "%{login}, อีเมล์ที่เกี่ยวข้องกับบัญชีของคุณถูกเปลี่ยนเป็น %{email}"
+        text: "%{login}, อีเมล์ที่เกี่ยวข้องกับบัญชีของคุณถูกเปลี่ยนเป็น %{email}"
       subject: "[%{app_name}] อีเมล์ถูกเปลี่ยนแล้ว"
     collection_notification:
       assignments_sent:

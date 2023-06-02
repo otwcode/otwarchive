@@ -223,6 +223,7 @@ hr:
     change_email:
       changed:
         html: "%{login}, e-mail povezan s vašim računom je promijenjen u %{email}"
+        text: "%{login}, e-mail povezan s vašim računom je promijenjen u %{email}"
       subject: "[%{app_name}] Promijenjen e-mail"
     collection_notification:
       assignments_sent:

@@ -190,6 +190,7 @@ zh-CN:
     change_email:
       changed:
         html: "%{login}，与您账号关联的邮箱地址已改为 %{email}"
+        text: "%{login}，与您账号关联的邮箱地址已改为 %{email}"
       subject: "[%{app_name}] 邮箱地址更换"
     collection_notification:
       assignments_sent:

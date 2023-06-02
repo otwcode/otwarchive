@@ -205,6 +205,7 @@ de:
     change_email:
       changed:
         html: "%{login}, die mit Deinem Konto verknüpfte E-Mail-Adresse wurde zu %{email} geändert."
+        text: "%{login}, die mit Deinem Konto verknüpfte E-Mail-Adresse wurde zu %{email} geändert."
       subject: "[%{app_name}] E-Mail-Adresse geändert"
     collection_notification:
       assignments_sent:

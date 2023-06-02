@@ -185,6 +185,7 @@ ja:
     change_email:
       changed:
         html: "%{login}さん、あなたのアカウントのメールアドレスは%{email}に変更されました。"
+        text: "%{login}さん、あなたのアカウントのメールアドレスは%{email}に変更されました。"
       subject: "[%{app_name}] メールアドレス変更のお知らせ"
     collection_notification:
       assignments_sent:

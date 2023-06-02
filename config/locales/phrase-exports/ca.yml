@@ -204,6 +204,7 @@ ca:
     change_email:
       changed:
         html: "%{login}, l'adreça electrònica associada amb aquest compte ha canviat a %{email}"
+        text: "%{login}, l'adreça electrònica associada amb aquest compte ha canviat a %{email}"
       subject: "[%{app_name}] Canvi d'adreça electrònica"
     collection_notification:
       assignments_sent:

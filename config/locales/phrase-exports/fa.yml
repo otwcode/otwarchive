@@ -204,6 +204,7 @@ fa:
     change_email:
       changed:
         html: "%{login}، ایمیل مرتبط با اکانت شما به ایمیل %{email} تغییر یافته است."
+        text: "%{login}، ایمیل مرتبط با اکانت شما به ایمیل %{email} تغییر یافته است."
       subject: "[%{app_name}] تغییر ایمیل"
     collection_notification:
       assignments_sent:

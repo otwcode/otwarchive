@@ -185,6 +185,7 @@ id:
     change_email:
       changed:
         html: "%{login}, alamat surel yang diasosiasikan dengan akun Anda telah diganti ke %{email}"
+        text: "%{login}, alamat surel yang diasosiasikan dengan akun Anda telah diganti ke %{email}"
       subject: "[%{app_name}] Alamat surel telah diganti"
     collection_notification:
       assignments_sent:

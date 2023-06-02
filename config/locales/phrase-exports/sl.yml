@@ -242,6 +242,7 @@ sl:
     change_email:
       changed:
         html: "%{login}, elektronski naslov povezan z vašim računom je bil spremenjen v %{email}"
+        text: "%{login}, elektronski naslov povezan z vašim računom je bil spremenjen v %{email}"
       subject: "[%{app_name}] Sprememba elektronskega naslova"
     collection_notification:
       assignments_sent:

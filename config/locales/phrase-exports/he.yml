@@ -242,6 +242,7 @@ he:
     change_email:
       changed:
         html: '%{login}, כתובת הדוא"ל המשויכת לחשבונך שונתה ל-%{email}'
+        text: '%{login}, כתובת הדוא"ל המשויכת לחשבונך שונתה ל-%{email}'
       subject: '[%{app_name}] כתובת הדוא"ל שלך שונתה'
     collection_notification:
       assignments_sent:

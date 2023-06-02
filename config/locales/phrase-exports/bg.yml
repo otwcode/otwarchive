@@ -204,6 +204,7 @@ bg:
     change_email:
       changed:
         html: "%{login}, имейлът, който използваш за акаунта си, беше променен на %{email}"
+        text: "%{login}, имейлът, който използваш за акаунта си, беше променен на %{email}"
       subject: "[%{app_name}] Промяна на имейл"
     collection_notification:
       assignments_sent:

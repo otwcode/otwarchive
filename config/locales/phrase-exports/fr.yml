@@ -204,6 +204,7 @@ fr:
     change_email:
       changed:
         html: "%{login}, l'adresse e-mail associée à votre compte a été remplacée par %{email}"
+        text: "%{login}, l'adresse e-mail associée à votre compte a été remplacée par %{email}"
       subject: "[%{app_name}] Changement d'adresse e-mail"
     collection_notification:
       assignments_sent:

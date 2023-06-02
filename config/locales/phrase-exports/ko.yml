@@ -185,6 +185,7 @@ ko:
     change_email:
       changed:
         html: "%{login}님, 회원님의 계정과 연계된 이메일 주소가 %{email}으로 변경되었습니다."
+        text: "%{login}님, 회원님의 계정과 연계된 이메일 주소가 %{email}으로 변경되었습니다."
       subject: "[%{app_name}] 이메일 주소 변경"
     collection_notification:
       assignments_sent:

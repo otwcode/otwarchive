@@ -204,6 +204,7 @@ da:
     change_email:
       changed:
         html: "%{login}, e-mailadressen, der er tilknyttet din konto, er blevet ændret til %{email}"
+        text: "%{login}, e-mailadressen, der er tilknyttet din konto, er blevet ændret til %{email}"
       subject: "[%{app_name}] E-mail ændret"
     collection_notification:
       assignments_sent:

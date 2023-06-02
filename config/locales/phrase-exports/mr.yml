@@ -199,6 +199,7 @@ mr:
     change_email:
       changed:
         html: "%{login}, आपल्या खात्याशी संबंधित ईमेल %{email} मध्ये बदलला गेला आहे"
+        text: "%{login}, आपल्या खात्याशी संबंधित ईमेल %{email} मध्ये बदलला गेला आहे"
       subject: "[%{app_name}] ईमेल बदलले गेले"
     collection_notification:
       assignments_sent:

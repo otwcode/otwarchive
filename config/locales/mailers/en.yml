@@ -178,6 +178,7 @@ en:
     change_email:
       changed:
         html: "%{login}, the email associated with your account has been changed to %{email}"
+        text: "%{login}, the email associated with your account has been changed to %{email}"
       subject: "[%{app_name}] Email changed"
     collection_notification:
       assignments_sent:

@@ -261,6 +261,7 @@ cy:
     change_email:
       changed:
         html: "%{login}, newidwyd yr ebost cysylltiedig i'ch cyfrif i %{email}"
+        text: "%{login}, newidwyd yr ebost cysylltiedig i'ch cyfrif i %{email}"
       subject: "[%{app_name}] Newidiad Ebost"
     collection_notification:
       assignments_sent:

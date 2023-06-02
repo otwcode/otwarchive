@@ -204,6 +204,7 @@ it:
     change_email:
       changed:
         html: "%{login}, l’indirizzo email associato al tuo account è stato modificato in %{email}"
+        text: "%{login}, l’indirizzo email associato al tuo account è stato modificato in %{email}"
       subject: "[%{app_name}] Modifica indirizzo email"
     collection_notification:
       assignments_sent:

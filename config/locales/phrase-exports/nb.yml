@@ -204,6 +204,7 @@ nb:
     change_email:
       changed:
         html: "%{login}, e-posten knyttet til din konto har blitt endret til %{email}"
+        text: "%{login}, e-posten knyttet til din konto har blitt endret til %{email}"
       subject: "[%{app_name}] E-post endret"
     collection_notification:
       assignments_sent:

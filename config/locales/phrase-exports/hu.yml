@@ -204,6 +204,7 @@ hu:
     change_email:
       changed:
         html: "%{login}, a fiókodhoz tartozó email cím a következőre változott: %{email}"
+        text: "%{login}, a fiókodhoz tartozó email cím a következőre változott: %{email}"
       subject: "[%{app_name}] Megváltozott email cím"
     collection_notification:
       assignments_sent:

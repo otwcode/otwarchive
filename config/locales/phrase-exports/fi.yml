@@ -204,6 +204,7 @@ fi:
     change_email:
       changed:
         html: "%{login}, tunnuksesi uudeksi sähköpostiosoitteeksi on asetettu %{email}"
+        text: "%{login}, tunnuksesi uudeksi sähköpostiosoitteeksi on asetettu %{email}"
       subject: "[%{app_name}] Sähköpostiosoite muutettu"
     collection_notification:
       assignments_sent:

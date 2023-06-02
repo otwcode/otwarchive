@@ -225,6 +225,7 @@ ru:
     change_email:
       changed:
         html: "%{login}, адрес электронной почты, привязанный к вашему аккаунту, был изменен на %{email}"
+        text: "%{login}, адрес электронной почты, привязанный к вашему аккаунту, был изменен на %{email}"
       subject: "[%{app_name}] Изменение адреса электронной почты"
     collection_notification:
       assignments_sent:

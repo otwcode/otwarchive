@@ -185,6 +185,7 @@ ms:
     change_email:
       changed:
         html: "%{login}, emel yang dikaitkan dengan akaun anda kini telah diubah kepada %{email}"
+        text: "%{login}, emel yang dikaitkan dengan akaun anda kini telah diubah kepada %{email}"
       subject: "[%{app_name}] Emel diubah"
     collection_notification:
       assignments_sent:

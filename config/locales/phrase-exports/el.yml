@@ -204,6 +204,7 @@ el:
     change_email:
       changed:
         html: "%{login}, η ηλεκτρονική διεύθυνση (email) που είχατε συσχετίσει με τον λογαριασμό σας έχει αλλάξει σε %{email}"
+        text: "%{login}, η ηλεκτρονική διεύθυνση (email) που είχατε συσχετίσει με τον λογαριασμό σας έχει αλλάξει σε %{email}"
       subject: "[%{app_name}] Αλλαγή Ηλεκτρονικής Διεύθυνσης (Email)"
     collection_notification:
       assignments_sent:

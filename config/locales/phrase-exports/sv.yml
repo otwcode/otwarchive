@@ -204,6 +204,7 @@ sv:
     change_email:
       changed:
         html: "%{login}, e-postadressen som är knuten till ditt konto har ändrats till %{email}"
+        text: "%{login}, e-postadressen som är knuten till ditt konto har ändrats till %{email}"
       subject: "[%{app_name}] E-postadressen har ändrats"
     collection_notification:
       assignments_sent:

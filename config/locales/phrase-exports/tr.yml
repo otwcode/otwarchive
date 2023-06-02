@@ -204,6 +204,7 @@ tr:
     change_email:
       changed:
         html: "%{login}, hesabınızla ilişkili e-posta adresiniz %{email} olarak değiştirilmiştir."
+        text: "%{login}, hesabınızla ilişkili e-posta adresiniz %{email} olarak değiştirilmiştir."
       subject: "[%{app_name}] E-posta adresiniz değiştirildi"
     collection_notification:
       assignments_sent:

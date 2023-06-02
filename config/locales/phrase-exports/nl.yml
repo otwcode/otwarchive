@@ -207,6 +207,7 @@ nl:
     change_email:
       changed:
         html: "%{login}, het e-mailadres van je account werd gewijzigd naar %{email}"
+        text: "%{login}, het e-mailadres van je account werd gewijzigd naar %{email}"
       subject: "[%{app_name}] E-mailadres gewijzigd"
     collection_notification:
       assignments_sent:

@@ -651,6 +651,7 @@ pt-BR:
     change_email:
       changed:
         html: "%{login}, o e-mail associado à sua conta foi alterado para %{email}."
+        text: "%{login}, o e-mail associado à sua conta foi alterado para %{email}."
       subject: "[%{app_name}] Mudança de endereço de e-mail efetuada"
     collection_notification:
       assignments_sent:

@@ -224,6 +224,7 @@ cs:
     change_email:
       changed:
         html: "%{login}, email spojený s vaším účtem byl změněn na %{email}"
+        text: "%{login}, email spojený s vaším účtem byl změněn na %{email}"
       subject: "[%{app_name}] Email byl změněn"
     collection_notification:
       assignments_sent:

@@ -225,6 +225,7 @@ uk:
     change_email:
       changed:
         html: "%{login}, електронну адресу, що пов'язана з Вашим обліковим записом, було змінено на %{email}"
+        text: "%{login}, електронну адресу, що пов'язана з Вашим обліковим записом, було змінено на %{email}"
       subject: "[%{app_name}] Електронну адресу змінено"
     collection_notification:
       assignments_sent:

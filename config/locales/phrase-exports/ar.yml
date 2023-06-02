@@ -261,6 +261,7 @@ ar:
     change_email:
       changed:
         html: "%{login}، تم تغيير البريد الالكتروني المرتبط بحسابك إلى %{email}"
+        text: "%{login}، تم تغيير البريد الالكتروني المرتبط بحسابك إلى %{email}"
       subject: "[%{app_name}] تم تغيير البريد الالكتروني"
     collection_notification:
       assignments_sent:
