@@ -88,6 +88,66 @@ en:
         external_work: Make External Work Visible
         series: Make Series Visible
         work: Make Work Visible
+    admin_users:
+      history:
+        heading: User History
+        table:
+          caption: History of User Actions
+          creation:
+            action: Account Created
+            details: System Generated
+          head:
+            action: Action
+            date: Date/Time
+            details: Details
+          sign_in:
+            current:
+              action: Current Login
+              no_details: No login recorded
+            details: 'IP Address: %{ip}'
+            last:
+              action: Previous Login
+              no_details: No previous login recorded
+          summary: Shows what notable actions, such as creating an account, a user performed, and when they did them.
+      show:
+        fnok:
+          form:
+            email: Fannish next of kin's email
+            name: Fannish next of kin's username
+            submit: Update Fannish Next of Kin
+          heading: Fannish Next of Kin
+        info:
+          email: 'Email:'
+          heading: User Information
+          invitation: 'Invitation:'
+          no_invitation: Created without invitation
+        navigation:
+          activate: Activate
+          invitations:
+            add: Add Invitations
+            manage: Manage Invitations
+          profile: Profile
+          roles: Manage Roles
+          troubleshoot: Troubleshoot
+        note: To fix common errors with this user's Subscriptions and Stats pages, and to reindex their works and bookmarks, choose "Troubleshoot."
+        page_heading: 'User: %{login} (%{id})'
+        page_title: "%{login} - User Administration"
+        status:
+          form:
+            admin_action:
+              ban: Suspend permanently (ban user)
+              legend: Warnings and Suspensions
+              note: Record note
+              spamban: 'Spammer: ban and delete all creations'
+              suspend: 'Suspend: enter a whole number of days'
+              unban: Lift permanent suspension, effective immediately.
+              unsuspend: Lift temporary suspension, effective immediately.
+              warn: Record warning
+            notes:
+              legend: Notes
+              required: Required when adding or removing a warning or suspension to an account.
+            submit: Update
+          heading: Record Warnings, Suspensions, or Notes
     blacklist:
       emails_found:
         one: one email found
