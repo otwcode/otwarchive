@@ -199,7 +199,6 @@ Otwarchive::Application.routes.draw do
         get :confirm_delete_user_creations
         post :destroy_user_creations
         post :activate
-        post :send_activation
         get :check_user
       end
       collection do
