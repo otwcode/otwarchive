@@ -52,6 +52,14 @@ en:
         name_with_colon:
           one: 'Relationship:'
           other: 'Relationships:'
+      role:
+        archivist: Archivist
+        no_resets: No Resets
+        official: Official
+        opendoors: Open Doors
+        protected_user: Protected User
+        tag_wrangler: Tag Wrangler
+        translator: Translator
       series/creatorships:
         base: 'Invalid creator:'
         pseud_id: Pseud

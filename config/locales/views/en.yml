@@ -121,6 +121,10 @@ en:
           heading: User Information
           invitation: 'Invitation:'
           no_invitation: Created without invitation
+          no_role: No roles
+          role:
+            one: 'Role:'
+            other: 'Roles:'
         navigation:
           activate: Activate
           invitations:

@@ -32,7 +32,8 @@ Feature: Admin Actions to manage users
     Then I should see "User was successfully updated"
       And the "user_roles_1" checkbox should be checked
     When I follow "Details"
-    Then I should see "Role Added: tag_wrangler"
+    Then I should see "Role: Tag Wrangler" within ".meta"
+      And I should see "Role Added: tag_wrangler" within "#user_history"
       And I should see "Change made by testadmin-superadmin"
     When I follow "Manage Roles"
       And I uncheck "user_roles_1"
@@ -40,7 +41,8 @@ Feature: Admin Actions to manage users
     Then I should see "User was successfully updated"
       And the "user_roles_1" checkbox should not be checked
     When I follow "Details"
-    Then I should see "Role Removed: tag_wrangler"
+    Then I should see "Roles: No roles" within ".meta"
+    And I should see "Role Removed: tag_wrangler" within "#user_history"
 
   Scenario: Troubleshooting a user displays a message
     Given the user "mrparis" exists and is activated

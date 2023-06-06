@@ -33,6 +33,8 @@
       <dd><%= @user.email %></dd>
       <dt><%= t(".info.invitation") %></dt>
       <dd><%= @user.invitation ? link_to(@user.invitation.id, invitation_path(@user.invitation.id)) : t(".info.no_invitation") %></dd>
+      <dt><%= t(".info.role", count: @user.roles.size) %></dt>
+      <dd><%= @user.roles.any? ? @user.roles.map { |role| t("activerecord.attributes.role.#{role.name}") }.to_sentence : t(".info.no_role") %></dd>
     </dl>
   </div>
 
