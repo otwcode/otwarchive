@@ -205,6 +205,10 @@ GEM
     database_cleaner-core (2.0.1)
     delorean (2.1.0)
       chronic
+    departure (6.5.0)
+      activerecord (>= 5.2.0, < 7.1, != 7.0.0)
+      mysql2 (>= 0.4.0, <= 0.5.5)
+      railties (>= 5.2.0, < 7.1, != 7.0.0)
     devise (4.8.1)
       bcrypt (~> 3.0)
       orm_adapter (~> 0.1)
@@ -625,6 +629,7 @@ DEPENDENCIES
   dalli
   database_cleaner
   delorean
+  departure (~> 6.5)
   devise
   devise-async
   elasticsearch (= 7.17.1)

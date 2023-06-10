@@ -113,6 +113,9 @@ gem 'kgio', '2.10.0'
 # TODO: AO3-6297 Update the download code so we can remove mimemagic.
 gem "mimemagic", "0.3.10"
 
+# Library for helping run pt-online-schema-change commands:
+gem "departure", "~> 6.5"
+
 group :test do
   gem "rspec-rails", "~> 4.0.1"
   gem 'pickle'
