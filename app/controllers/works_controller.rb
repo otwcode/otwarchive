@@ -39,7 +39,7 @@ class WorksController < ApplicationController
         @page_subtitle = ts("Works Matching '%{query}'", query: @search.query)
       end
 
-      @works = @search.search_results
+      @works = @search.search_results.scope(:for_blurb)
       set_own_works
       flash_search_warnings(@works)
       render 'search_results'
@@ -103,14 +103,14 @@ class WorksController < ApplicationController
         subtag = @tag.present? && @tag != @owner ? @tag : nil
         user = logged_in? || logged_in_as_admin? ? 'logged_in' : 'logged_out'
         @works = Rails.cache.fetch("#{@owner.works_index_cache_key(subtag)}_#{user}_page#{params[:page]}_true", expires_in: ArchiveConfig.SECONDS_UNTIL_WORK_INDEX_EXPIRE.seconds) do
-          results = @search.search_results
+          results = @search.search_results.scope(:for_blurb)
           # calling this here to avoid frozen object errors
           results.items
           results.facets
           results
         end
       else
-        @works = @search.search_results
+        @works = @search.search_results.scope(:for_blurb)
       end
 
       flash_search_warnings(@works)
@@ -125,10 +125,10 @@ class WorksController < ApplicationController
       end
     elsif use_caching?
       @works = Rails.cache.fetch('works/index/latest/v1', expires_in: ArchiveConfig.SECONDS_UNTIL_WORK_INDEX_EXPIRE.seconds) do
-        Work.latest.includes(:tags, :external_creatorships, :series, :language, :approved_collections, pseuds: [:user]).to_a
+        Work.latest.for_blurb.to_a
       end
     else
-      @works = Work.latest.includes(:tags, :external_creatorships, :series, :language, :approved_collections, pseuds: [:user]).to_a
+      @works = Work.latest.for_blurb.to_a
     end
     set_own_works
   end
@@ -140,7 +140,7 @@ class WorksController < ApplicationController
 
     @user = User.find_by!(login: params[:user_id])
     @search = WorkSearchForm.new(options.merge(works_parent: @user, collected: true))
-    @works = @search.search_results
+    @works = @search.search_results.scope(:for_blurb)
     flash_search_warnings(@works)
     @facets = @works.facets
     set_own_works
@@ -162,9 +162,9 @@ class WorksController < ApplicationController
 
     if params[:pseud_id]
       @pseud = @user.pseuds.find_by(name: params[:pseud_id])
-      @works = @pseud.unposted_works.paginate(page: params[:page])
+      @works = @pseud.unposted_works.for_blurb.paginate(page: params[:page])
     else
-      @works = @user.unposted_works.paginate(page: params[:page])
+      @works = @user.unposted_works.for_blurb.paginate(page: params[:page])
     end
   end
 
@@ -281,7 +281,7 @@ class WorksController < ApplicationController
     set_work_form_fields
 
     if params[:import]
-      @page_subtitle = ts('import')
+      @page_subtitle = ts("Import New Work")
       render(:new_import)
     elsif @work.persisted?
       render(:edit)
@@ -878,6 +878,8 @@ class WorksController < ApplicationController
       post_without_preview: params[:post_without_preview],
       importing_for_others: params[:importing_for_others],
       restricted: params[:restricted],
+      moderated_commenting_enabled: params[:moderated_commenting_enabled],
+      comment_permissions: params[:comment_permissions],
       override_tags: params[:override_tags],
       detect_tags: params[:detect_tags] == "true",
       fandom: params[:work][:fandom_string],

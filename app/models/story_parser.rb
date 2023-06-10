@@ -344,6 +344,10 @@ class StoryParser
     # lock to registered users if specified or importing for others
     work.restricted = options[:restricted] || options[:importing_for_others] || false
 
+    # set comment permissions
+    work.comment_permissions = options[:comment_permissions] || "enable_all"
+    work.moderated_commenting_enabled = options[:moderated_commenting_enabled] || false
+
     # set default values for required tags
     work.fandom_string = meta_or_default(work.fandom_string, options[:fandom], ArchiveConfig.FANDOM_NO_TAG_NAME)
     work.rating_string = meta_or_default(work.rating_string, options[:rating], ArchiveConfig.RATING_DEFAULT_TAG_NAME)

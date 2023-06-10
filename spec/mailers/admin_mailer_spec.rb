@@ -129,4 +129,47 @@ describe AdminMailer do
       end
     end
   end
+
+  describe "set_password_notification" do
+    subject(:email) { AdminMailer.set_password_notification(admin, token) }
+
+    let(:admin) { create(:admin) }
+    let(:token) { "abc123" }
+
+    # Test the headers
+    it_behaves_like "an email with a valid sender"
+
+    it "delivers to the correct address" do
+      expect(email).to deliver_to(admin.email)
+    end
+
+    it "has the correct subject line" do
+      subject = "[#{ArchiveConfig.APP_SHORT_NAME}] Your AO3 admin account"
+      expect(email).to have_subject(subject)
+    end
+
+    # Test both body contents
+    it_behaves_like "a multipart email"
+
+    it_behaves_like "a translated email"
+
+    describe "HTML version" do
+      it "has the correct content" do
+        expect(email).to have_html_part_content("username: </b>#{admin.login}")
+        expect(email).to have_html_part_content("URL: </b><a")
+        expect(email).to have_html_part_content(">http://www.example.com/admin/login</a>")
+        expect(email).to have_html_part_content("</a> so you can log in.")
+        expect(email).to have_html_part_content(token)
+      end
+    end
+
+    describe "text version" do
+      it "has the correct content" do
+        expect(email).to have_text_part_content("Admin username: #{admin.login}")
+        expect(email).to have_text_part_content("Admin login URL: http://www.example.com/admin/login")
+        expect(email).to have_text_part_content("so you can log in:")
+        expect(email).to have_text_part_content(token)
+      end
+    end
+  end
 end

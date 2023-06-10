@@ -48,7 +48,7 @@
                 <span><%= ts("to") %> <%= get_commenter_pseud_or_name(commentable) %> <%= ts("on") %> <%= commentable_description_link(commentable) %></span>
               <% end %>
             <% end %>
-            (<%= allowed_html_instructions(show_list=false) %>)
+            (<%= allowed_html_instructions %>)
           </h4>
         <% else %>
           <h4 class="heading"><%= ts("Comment as") %> <span class="byline"><%= current_user.default_pseud.name %></span>
