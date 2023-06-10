@@ -92,7 +92,7 @@ Feature: Admin Settings Page
     Given guest comments are off
       And I have posted an admin post with guest comments disabled
       And a comment "Nice job" by "user" on the admin post "Default Admin Post"
-      And I view the admin post "Default Admin Post" with comments
+    When I view the admin post "Default Admin Post" with comments
     Then I should see "Sorry, the Archive doesn't allow guests to comment right now."
       And I should not see a link "Reply"
     When I am logged in
@@ -125,7 +125,7 @@ Feature: Admin Settings Page
     Given guest comments are off
       And I have posted an admin post with comments disabled
       And a comment "Nice job" by "user" on the admin post "Default Admin Post"
-      And I view the admin post "Default Admin Post" with comments
+    When I view the admin post "Default Admin Post" with comments
     Then I should see "Sorry, the Archive doesn't allow guests to comment right now."
       And I should not see a link "Reply"
     When I am logged in

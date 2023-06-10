@@ -198,19 +198,15 @@ describe CommentsController do
     end
   end
 
-  describe "POST #new" do
-    let(:anon_comment_attributes) do
-      attributes_for(:comment, :by_guest).slice(:name, :email, :comment_content)
-    end
-    
+  describe "GET #new" do
     it "errors if the commentable is not a valid tag" do
-      post :new, params: { tag_id: "Non existent tag" }
+      get :new, params: { tag_id: "Non existent tag" }
       expect(flash[:error]).to eq "What did you want to comment on?"
     end
 
     it "renders the :new template if commentable is a valid admin post" do
       admin_post = create(:admin_post)
-      post :new, params: { admin_post_id: admin_post.id }
+      get :new, params: { admin_post_id: admin_post.id }
       expect(response).to render_template("new")
       expect(assigns(:name)).to eq(admin_post.title)
     end
@@ -222,7 +218,7 @@ describe CommentsController do
         before { fake_login_admin(create(:admin)) }
 
         it "renders the :new template" do
-          post :new, params: { tag_id: fandom.name }
+          get :new, params: { tag_id: fandom.name }
           expect(response).to render_template("new")
           expect(assigns(:name)).to eq("Fandom")
         end
@@ -232,7 +228,7 @@ describe CommentsController do
         before { fake_login_known_user(create(:tag_wrangler)) }
 
         it "renders the :new template" do
-          post :new, params: { tag_id: fandom.name }
+          get :new, params: { tag_id: fandom.name }
           expect(response).to render_template("new")
           expect(assigns(:name)).to eq("Fandom")
         end
@@ -242,7 +238,7 @@ describe CommentsController do
         before { fake_login }
 
         it "shows an error and redirects" do
-          post :new, params: { tag_id: fandom.name }
+          get :new, params: { tag_id: fandom.name }
           it_redirects_to_with_error(user_path(controller.current_user),
                                      "Sorry, you don't have permission to " \
                                      "access the page you were trying to " \
@@ -254,7 +250,7 @@ describe CommentsController do
         before { fake_logout }
 
         it "shows an error and redirects" do
-          post :new, params: { tag_id: fandom.name }
+          get :new, params: { tag_id: fandom.name }
           it_redirects_to_with_error(new_user_session_path,
                                      "Sorry, you don't have permission to " \
                                      "access the page you were trying to " \
@@ -273,13 +269,13 @@ describe CommentsController do
       end
 
       it "allows guest comments" do
-        post :new, params: { work_id: work.id, comment: anon_comment_attributes }
+        get :new, params: { work_id: work.id }
 
-        expect(flash[:error]).to be_nil
+        expect(response).to render_template(:new)
       end
 
       it "does not allow guest comments when work has guest comments disabled" do
-        post :new, params: { work_id: work_with_guest_comment_off.id, comment: anon_comment_attributes }
+        get :new, params: { work_id: work_with_guest_comment_off.id }
 
         it_redirects_to_with_error(work_path(work_with_guest_comment_off), 
                                    "Sorry, this work doesn't allow non-Archive users to comment.")
@@ -301,13 +297,13 @@ describe CommentsController do
           end
 
           it "redirects logged out user with an error" do
-            post :new, params: { work_id: work.id, comment: anon_comment_attributes }
+            get :new, params: { work_id: work.id }
             it_redirects_to_with_error("/where_i_came_from", "Sorry, the Archive doesn't allow guests to comment right now.")
           end
 
-          it "redirects logged in user to the comment on the commentable without an error" do
+          it "renders the :new template for logged in user" do
             fake_login
-            post :new, params: { work_id: work.id }
+            get :new, params: { work_id: work.id }
             expect(flash[:error]).to be_nil
             expect(response).to render_template("new")
           end
@@ -320,13 +316,13 @@ describe CommentsController do
         end
 
         it "redirects logged out user with an error" do
-          post :new, params: { work_id: work.id, comment: anon_comment_attributes }
+          get :new, params: { work_id: work.id }
           it_redirects_to_with_error("/where_i_came_from", "Sorry, the Archive doesn't allow guests to comment right now.")
         end
 
         it "redirects logged in user with an error" do
           fake_login
-          post :new, params: { work_id: work.id }
+          get :new, params: { work_id: work.id }
           it_redirects_to_with_error(work_path(work), "Sorry, this work doesn't allow comments.")
         end
       end
@@ -334,20 +330,20 @@ describe CommentsController do
 
     it "renders the :new template if commentable is a valid comment" do
       comment = create(:comment)
-      post :new, params: { comment_id: comment.id }
+      get :new, params: { comment_id: comment.id }
       expect(response).to render_template("new")
       expect(assigns(:name)).to eq("Previous Comment")
     end
 
     it "shows an error and redirects if commentable is a frozen comment" do
       comment = create(:comment, iced: true)
-      post :new, params: { comment_id: comment.id }
+      get :new, params: { comment_id: comment.id }
       it_redirects_to_with_error("/where_i_came_from", "Sorry, you cannot reply to a frozen comment.")
     end
 
     it "shows an error and redirects if commentable is a hidden comment" do
       comment = create(:comment, hidden_by_admin: true)
-      post :new, params: { comment_id: comment.id }
+      get :new, params: { comment_id: comment.id }
       it_redirects_to_with_error("/where_i_came_from", "Sorry, you cannot reply to a hidden comment.")
     end
   end
