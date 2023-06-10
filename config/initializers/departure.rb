@@ -1,7 +1,7 @@
 Departure.configure do |config|
   # Disable departure by default. To use pt-online-schema-change for a
   # migration, call
-  #   uses_departure! if Rails.env.remote?
+  #    uses_departure! if Rails.env.staging? || Rails.env.production?
   # in the migration file.
   config.enabled_by_default = false
 

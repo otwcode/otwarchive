@@ -1,5 +1,5 @@
 class AddIndicesToTagSetAssociations < ActiveRecord::Migration[6.1]
-  uses_departure! if Rails.env.remote?
+  uses_departure! if Rails.env.staging? || Rails.env.production?
 
   def change
     change_table :tag_set_associations do |t|
