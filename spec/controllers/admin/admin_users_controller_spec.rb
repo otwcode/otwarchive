@@ -6,6 +6,43 @@ describe Admin::AdminUsersController do
   include LoginMacros
   include RedirectExpectationHelper
 
+  shared_examples "unauthorized admins can't access it" do |authorized_roles:|
+    before { fake_login_admin(admin) }
+
+    context "with no role" do
+      let(:admin) { create(:admin, roles: []) }
+
+      it "redirects with an error" do
+        subject.call
+        it_redirects_to_with_error(root_url, "Sorry, only an authorized admin can access the page you were trying to reach.")
+      end
+    end
+
+    (Admin::VALID_ROLES - authorized_roles).each do |role|
+      context "with role #{role}" do
+        let(:admin) { create(:admin, roles: [role]) }
+
+        it "redirects with an error" do
+          subject.call
+          it_redirects_to_with_error(root_url, "Sorry, only an authorized admin can access the page you were trying to reach.")
+        end
+      end
+    end
+  end
+
+  shared_examples "guests and logged in users can't access it" do
+    it "redirects with notice when logged out" do
+      subject.call
+      it_redirects_to_with_notice(root_url, "I'm sorry, only an admin can look at that area")
+    end
+
+    it "redirects with notice when logged in" do
+      fake_login
+      subject.call
+      it_redirects_to_with_notice(root_url, "I'm sorry, only an admin can look at that area")
+    end
+  end
+
   describe "GET #index" do
     let(:admin) { create(:admin) }
 
@@ -423,6 +460,46 @@ describe Admin::AdminUsersController do
         post :activate, params: { id: user.login }
 
         it_redirects_to_with_notice(admin_user_path(id: user.login), "User Account Activated")
+      end
+    end
+  end
+
+  describe "GET #creations" do
+    subject { -> { get :creations, params: { id: user.login } } }
+
+    let(:user) { create(:user) }
+
+    it_behaves_like "guests and logged in users can't access it"
+
+    context "when logged in as admin" do
+      authorized_roles = %w[policy_and_abuse superadmin]
+
+      it_behaves_like "unauthorized admins can't access it",
+                      authorized_roles: authorized_roles
+
+      authorized_roles.each do |role|
+        context "with #{role} role" do
+          let(:admin) { create(:admin, roles: [role]) }
+          let!(:user_comment) { create(:comment, pseud: user.default_pseud) }
+          let!(:other_comment) { create(:comment) }
+          let!(:user_work) { create(:work, authors: [user.default_pseud]) }
+          let!(:other_work) { create(:work) }
+
+          before { fake_login_admin(admin) }
+
+          it "renders creations template and assigns comments and works" do
+            subject.call
+            expect(response).to render_template(:creations)
+            expect(assigns[:comments]).to contain_exactly(user_comment)
+            expect(assigns[:works]).to contain_exactly(user_work)
+          end
+
+          it "raises ActiveRecord::RecordNotFound when user does not exist" do
+            expect do
+              get :creations, params: { id: "nonexistent_user" }
+            end.to raise_exception(ActiveRecord::RecordNotFound)
+          end
+        end
       end
     end
   end

@@ -29,6 +29,7 @@ http://otwcode.github.com/docs/front_end_coding/patterns/listbox
 .listbox .index {
   width: auto;
   padding: 0.643em;
+  margin: 0;
   float: none;
   clear: right;
   background: #fff;

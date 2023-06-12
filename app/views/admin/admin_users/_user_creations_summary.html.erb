@@ -1,0 +1,18 @@
+<% unless @works.size.zero? %>
+  <div class="work listbox group" id="works-summary">
+    <h3 class="heading"><%= t(".works", count: works.size) %></h3>
+    <%= render "works/work_abbreviated_list", works: works %>
+    <%= will_paginate(works, param_name: "works_page", params: { anchor: "works-summary" }) %>
+  </div>
+<% end %>
+
+<% unless @comments.size.zero? %>
+  <% # We use comments rather than comment as the class because .comment:after
+     # create a clear that causes wonky styling when there are only a few
+     # comments. %>
+  <div class="comments listbox group" id="comments-summary">
+    <h3 class="heading"><%= t(".comments", count: comments.size) %></h3>
+    <%= render "comments/comment_abbreviated_list", comments: comments %>
+    <%= will_paginate(comments, param_name: "comments_page", params: { anchor: "comments-summary" }) %>
+  </div>
+<% end %>

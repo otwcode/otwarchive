@@ -12,6 +12,9 @@ class UserPolicy < ApplicationPolicy
   # Roles that allow deleting all of a spammer's creations.
   SPAM_CLEANUP_ROLES = %w[superadmin policy_and_abuse].freeze
 
+  # Roles that allow accessing a summary of a user's works and comments.
+  REVIEW_CREATIONS_ROLES = %w[superadmin policy_and_abuse].freeze
+
   # Define which roles can update which attributes.
   ALLOWED_ATTRIBUTES_BY_ROLES = {
     "open_doors" => [roles: []],
@@ -33,6 +36,10 @@ class UserPolicy < ApplicationPolicy
     user_has_roles?(SPAM_CLEANUP_ROLES)
   end
 
+  def can_access_creation_summary?
+    user_has_roles?(REVIEW_CREATIONS_ROLES)
+  end
+
   def permitted_attributes
     ALLOWED_ATTRIBUTES_BY_ROLES.values_at(*user.roles).compact.flatten
   end
@@ -46,6 +53,8 @@ class UserPolicy < ApplicationPolicy
 
   alias confirm_delete_user_creations? can_destroy_spam_creations?
   alias destroy_user_creations? can_destroy_spam_creations?
+
+  alias creations? can_access_creation_summary?
 
   alias troubleshoot? can_manage_users?
   alias activate? can_manage_users?

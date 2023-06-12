@@ -20,3 +20,9 @@ en:
       user:
         bookmark: Bookmarker approval status
         work: Creator approval status
+  comments_helper:
+    comment_link_with_commentable_name:
+      on_admin_post_html: Comment on the news post %{title}
+      on_tag_html: Comment on the tag %{name}
+      on_unknown: Comment on unknown item
+      on_work_html: Comment on the work %{title}

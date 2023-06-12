@@ -89,6 +89,16 @@ en:
         series: Make Series Visible
         work: Make Work Visible
     admin_users:
+      confirm_delete_user_creations:
+        caution_html: Are you sure you want to <strong><em>delete</em></strong> all the works and comments created by this user, along with their %{bookmarks} bookmarks, %{series} series, and %{collections} collections? This <strong>cannot be undone</strong>.
+        confirm: Are you sure? Remember this will destroy ALL these objects!
+        page_heading: Delete Spammer Creations
+        submit: Yes, Delete All Spammer Creations
+      creations:
+        admin_user: User Administration
+        no_creations: This user has no works or comments.
+        page_heading: Works and Comments by %{user}
+        page_title: "%{login} - User Creations"
       history:
         heading: User History
         table:
@@ -127,10 +137,10 @@ en:
             other: 'Roles:'
         navigation:
           activate: Activate
+          creations: Creations
           invitations:
             add: Add Invitations
             manage: Manage Invitations
-          profile: Profile
           roles: Manage Roles
           troubleshoot: Troubleshoot
         note: To fix common errors with this user's Subscriptions and Stats pages, and to reindex their works and bookmarks, choose "Troubleshoot."
@@ -152,6 +162,9 @@ en:
               required: Required when adding or removing a warning or suspension to an account.
             submit: Update
           heading: Record Warnings, Suspensions, or Notes
+      user_creations_summary:
+        comments: Comments (%{count})
+        works: Works (%{count})
     blacklist:
       emails_found:
         one: one email found

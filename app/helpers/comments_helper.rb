@@ -32,6 +32,21 @@ module CommentsHelper
     end
   end
 
+  def comment_link_with_commentable_name(comment)
+    ultimate_parent = comment.ultimate_parent
+    commentable_name = ultimate_parent&.commentable_name
+    text = if ultimate_parent.is_a?(Work)
+             t("comments_helper.comment_link_with_commentable_name.on_work_html", title: commentable_name)
+           elsif ultimate_parent.is_a?(AdminPost)
+             t("comments_helper.comment_link_with_commentable_name.on_admin_post_html", title: commentable_name)
+           elsif ultimate_parent.is_a?(Tag)
+             t("comments_helper.comment_link_with_commentable_name.on_tag_html", name: commentable_name)
+           else
+             t("comments_helper.comment_link_with_commentable_name.on_unknown")
+           end
+    link_to(text, comment_path(comment))
+  end
+
   # return pseudname or name for comment
   def get_commenter_pseud_or_name(comment)
     if comment.pseud_id

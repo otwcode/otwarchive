@@ -1,6 +1,31 @@
 class Admin::AdminUsersController < Admin::BaseController
   include ExportsHelper
 
+  before_action :set_roles, only: [:index, :bulk_search]
+  before_action :load_user, only: [:show, :update, :confirm_delete_user_creations, :destroy_user_creations, :troubleshoot, :activate, :creations]
+  before_action :user_is_banned, only: [:confirm_delete_user_creations, :destroy_user_creations]
+  before_action :load_user_creations, only: [:confirm_delete_user_creations, :creations]
+
+  def set_roles
+    @roles = Role.assignable.distinct
+  end
+
+  def load_user
+    @user = User.find_by!(login: params[:id])
+  end
+
+  def user_is_banned
+    unless @user && @user.banned?
+      flash[:error] = ts("That user is not banned!")
+      redirect_to admin_users_path and return
+    end
+  end
+
+  def load_user_creations
+    @works = @user.works.paginate(page: params[:works_page])
+    @comments = @user.comments.paginate(page: params[:comments_page])
+  end
+
   def index
     authorize User
     @role_values = @roles.map{ |role| [role.name.humanize.titlecase, role.name] }
@@ -37,22 +62,16 @@ class Admin::AdminUsersController < Admin::BaseController
     end
   end
 
-  before_action :set_roles, only: [:index, :bulk_search]
-  def set_roles
-    @roles = Role.assignable.distinct
-  end
-
   # GET admin/users/1
   def show
-    @user = authorize User.find_by!(login: params[:id])
-    @hide_dashboard = true
+    authorize @user
     @page_subtitle = t(".page_title", login: @user.login)
     @log_items = @user.log_items.sort_by(&:created_at).reverse
   end
 
   # POST admin/users/update
   def update
-    @user = authorize User.find_by(login: params[:id])
+    authorize @user
 
     attributes = permitted_attributes(@user)
     @user.email = attributes[:email] if attributes[:email].present?
@@ -111,19 +130,8 @@ class Admin::AdminUsersController < Admin::BaseController
     end
   end
 
-  before_action :user_is_banned, only: [:confirm_delete_user_creations, :destroy_user_creations]
-  def user_is_banned
-    @user = User.find_by(login: params[:id])
-    unless @user && @user.banned?
-      flash[:error] = ts("That user is not banned!")
-      redirect_to admin_users_path and return
-    end
-  end
-
   def confirm_delete_user_creations
     authorize @user
-    @works = @user.works.paginate(page: params[:works_page])
-    @comments = @user.comments.paginate(page: params[:comments_page])
     @bookmarks = @user.bookmarks
     @collections = @user.collections
     @series = @user.series
@@ -142,7 +150,6 @@ class Admin::AdminUsersController < Admin::BaseController
   end
 
   def troubleshoot
-    @user = User.find_by(login: params[:id])
     authorize @user
 
     @user.fix_user_subscriptions
@@ -155,7 +162,6 @@ class Admin::AdminUsersController < Admin::BaseController
   end
 
   def activate
-    @user = User.find_by(login: params[:id])
     authorize @user
 
     @user.activate
@@ -167,5 +173,10 @@ class Admin::AdminUsersController < Admin::BaseController
       flash[:error] = ts("Attempt to activate account failed.")
       redirect_to action: :show
     end
+  end
+
+  def creations
+    authorize @user
+    @page_subtitle = t(".page_title", login: @user.login)
   end
 end

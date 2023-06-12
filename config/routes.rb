@@ -200,6 +200,7 @@ Otwarchive::Application.routes.draw do
         post :destroy_user_creations
         post :activate
         get :check_user
+        get :creations
       end
       collection do
         get :bulk_search
