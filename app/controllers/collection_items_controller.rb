@@ -71,7 +71,7 @@ class CollectionItemsController < ApplicationController
       flash[:error] = ts("What did you want to add to a collection?")
       redirect_to(request.env["HTTP_REFERER"] || root_path) and return
     end
-    if @item.respond_to?(:allow_collection_invitation?) && !@item.allow_collection_invitation?
+    if !current_user.archivist && @item.respond_to?(:allow_collection_invitation?) && !@item.allow_collection_invitation?
       flash[:error] = t(".invitation_not_sent", default: "This item could not be invited.")
       redirect_to(@item) and return
     end
@@ -103,7 +103,8 @@ class CollectionItemsController < ApplicationController
         errors << ts("%{collection_title}, because you don't own this item and the item is anonymous.", collection_title: collection.title)
       # add the work to a collection, and try to save it
       elsif @item.add_to_collection(collection) && @item.save(validate: false)
-        # approved_by_user? and approved_by_collection? are both true
+        # approved_by_user? and approved_by_collection? are both true.
+        # This is now only true for imports by archivists.
         if @item.approved_collections.include?(collection)
           new_collections << collection
         # if the current_user is a maintainer of the collection then approved_by_user must have been false (which means

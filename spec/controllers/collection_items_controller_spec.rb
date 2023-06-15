@@ -1,4 +1,4 @@
-require 'spec_helper'
+require "spec_helper"
 
 describe CollectionItemsController do
   include LoginMacros
@@ -321,6 +321,43 @@ describe CollectionItemsController do
         end
       end
     end
+
+    context "as an archivist" do
+      let(:archivist) { create(:archivist) }
+      let(:work) { create(:work) }
+
+      let(:collection) do
+        participant = create(:collection_participant, pseud: archivist.default_pseud)
+        create(:collection, collection_participants: [participant])
+      end
+
+      let(:params) do
+        {
+          collection_names: collection.name,
+          work_id: work.id
+        }
+      end
+
+      before do
+        fake_login_known_user(archivist)
+      end
+
+      context "when the item's creator does not allow collection invitations" do
+        it "adds the item anyway" do
+          post :create, params: params
+          it_redirects_to_simple(work)
+          expect(work.reload.collections).to include(collection)
+        end
+      end
+
+      context "when the item's creator allows collection invitations" do
+        it "adds the item" do
+          post :create, params: params
+          it_redirects_to_with_notice(work, "Added to collection(s): #{collection.title}.")
+          expect(work.reload.collections).to include(collection)
+        end
+      end
+    end
   end
 
   describe "PATCH #update_multiple" do
@@ -536,8 +573,6 @@ describe CollectionItemsController do
 
     describe "on the collection items page for a different user" do
       let(:user) { create(:user) }
-      before { fake_login_known_user(user) }
-
       let(:params) do
         {
           user_id: user.login,
@@ -546,6 +581,8 @@ describe CollectionItemsController do
           }
         }
       end
+
+      before { fake_login_known_user(user) }
 
       it "silently fails to update the collection item" do
         patch :update_multiple, params: params
@@ -557,8 +594,6 @@ describe CollectionItemsController do
 
     describe "on the collection items page for a different collection" do
       let(:other_collection) { create(:collection) }
-      before { fake_login_known_user(other_collection.owners.first.user) }
-
       let(:params) do
         {
           collection_id: other_collection.name,
@@ -567,6 +602,8 @@ describe CollectionItemsController do
           }
         }
       end
+
+      before { fake_login_known_user(other_collection.owners.first.user) }
 
       it "silently fails to update the collection item" do
         patch :update_multiple, params: params
