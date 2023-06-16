@@ -215,7 +215,7 @@ describe KudosController do
 
       before { fake_login_admin(admin) }
 
-      it "asks to log out first" do
+      it "redirects to root with notice prompting log out" do
         post :create, params: { kudo: { commentable_id: work.id, commentable_type: "Work" } }
         it_redirects_to_with_notice(root_path, "Please log out of your admin account first!")
       end

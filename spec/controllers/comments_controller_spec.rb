@@ -255,7 +255,7 @@ describe CommentsController do
       context "when logged in as an admin" do
         before { fake_login_admin(create(:admin)) }
 
-        it "asks to log out first" do
+        it "redirects to root with notice prompting log out" do
           post :create, params: { tag_id: fandom.name, comment: anon_comment_attributes }
           it_redirects_to_with_notice(root_path, "Please log out of your admin account first!")
           comment = Comment.last
@@ -349,7 +349,7 @@ describe CommentsController do
 
         before { fake_login_admin(create(:admin)) }
 
-        it "asks to log out first" do
+        it "redirects to root with notice prompting log out" do
           post :create, params: { work_id: work.id, comment: anon_comment_attributes }
           it_redirects_to_with_notice(root_path, "Please log out of your admin account first!")
         end
