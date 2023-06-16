@@ -1,5 +1,6 @@
 class KudosController < ApplicationController
   skip_before_action :store_location
+  before_action :admin_logout_required, only: [:create]
 
   def index
     @work = Work.find(params[:work_id])
@@ -21,19 +22,6 @@ class KudosController < ApplicationController
   end
 
   def create
-    if logged_in_as_admin?
-      error_message = 'Please log out of your admin account first!'
-      respond_to do |format|
-        format.html do
-          flash[:notice] = error_message
-          return redirect_to root_path
-        end
-        format.js do
-          return render json: { error_message: error_message }, status: :forbidden
-        end
-      end
-    end
-
     @kudo = Kudo.new(kudo_params)
     if current_user.present?
       @kudo.user = current_user

@@ -219,13 +219,6 @@ describe KudosController do
         post :create, params: { kudo: { commentable_id: work.id, commentable_type: "Work" } }
         it_redirects_to_with_notice(root_path, "Please log out of your admin account first!")
       end
-
-      context "with format: :js" do
-        it "returns an error in JSON format" do
-          post :create, params: { kudo: { commentable_id: work.id, commentable_type: "Work" }, format: :js }
-          expect(JSON.parse(response.body)["error_message"]).to eq("Please log out of your admin account first!")
-        end
-      end
     end
   end
 end
