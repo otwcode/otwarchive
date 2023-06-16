@@ -114,8 +114,10 @@ class CollectionItem < ApplicationRecord
     end
   end
 
-  before_create :approve_automatically
+  before_save :approve_automatically
   def approve_automatically
+    return unless self.new_record?
+
     # approve with the current user, who is the person who has just
     # added this item -- might be either moderator or owner
     # rubocop:disable Lint/BooleanSymbol
@@ -203,7 +205,7 @@ class CollectionItem < ApplicationRecord
       approve_by_collection
     else
       author_of_item = user.is_author_of?(item) ||
-        (user == User.current_user && item.respond_to?(:pseuds) ? item.pseuds.empty? : item.pseud.nil?)
+                       (user == User.current_user && item.respond_to?(:pseuds) ? item.pseuds.empty? : item.pseud.nil?)
       archivist_maintainer = user.archivist && self.collection.user_is_maintainer?(user)
       approve_by_user if author_of_item || archivist_maintainer
       approve_by_collection if self.collection.user_is_maintainer?(user)
