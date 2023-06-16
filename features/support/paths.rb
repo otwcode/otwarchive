@@ -311,7 +311,7 @@ module NavigationHelpers
       admin_users_path
     when /^the bulk email search page$/i
       bulk_search_admin_users_path
-    when /^the abuse administration page for "(.*)"$/i
+    when /^the user administration page for "(.*)"$/i
       admin_user_path(User.find_by(login: $1))
     when /^the new admin password page$/i
       new_admin_password_path

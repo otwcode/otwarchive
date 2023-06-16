@@ -8,7 +8,7 @@ Feature: Admin Abuse actions
     Given the user "mrparis" exists and is activated
       And I have an orphan account
       And I am logged in as a "policy_and_abuse" admin
-    When I go to the abuse administration page for "mrparis"
+    When I go to the user administration page for "mrparis"
 
   Scenario: An admin adds a note to a user
     Given I choose "Record note"
@@ -32,21 +32,21 @@ Feature: Admin Abuse actions
     Then I should see "You must include notes in order to perform this action."
 
   Scenario: orphan_account cannot get a note
-    When I go to the abuse administration page for "orphan_account"
+    When I go to the user administration page for "orphan_account"
       And I choose "Record note"
       And I fill in "Notes" with "This user is suspicious."
     When I press "Update"
     Then I should see "orphan_account cannot be warned, suspended, or banned."
 
   Scenario: orphan_account cannot be warned
-    When I go to the abuse administration page for "orphan_account"
+    When I go to the user administration page for "orphan_account"
       And I choose "Record warning"
       And I fill in "Notes" with "Next time, the brig."
     When I press "Update"
     Then I should see "orphan_account cannot be warned, suspended, or banned."
 
   Scenario: orphan_account cannot be suspended
-    When I go to the abuse administration page for "orphan_account"
+    When I go to the user administration page for "orphan_account"
       And I choose "Suspend: enter a whole number of days"
       And I fill in "suspend_days" with "30"
       And I fill in "Notes" with "Disobeyed orders."
@@ -54,14 +54,14 @@ Feature: Admin Abuse actions
     Then I should see "orphan_account cannot be warned, suspended, or banned."
 
   Scenario: orphan_account cannot be banned
-    When I go to the abuse administration page for "orphan_account"
+    When I go to the user administration page for "orphan_account"
       And I choose "Suspend permanently (ban user)"
       And I fill in "Notes" with "To the New Zealand penal colony with you."
     When I press "Update"
     Then I should see "orphan_account cannot be warned, suspended, or banned."
 
   Scenario: orphan_account cannot be spambanned
-    When I go to the abuse administration page for "orphan_account"
+    When I go to the user administration page for "orphan_account"
       And I choose "Spammer: ban and delete all creations"
     When I press "Update"
     Then I should see "orphan_account cannot be warned, suspended, or banned."
@@ -104,7 +104,7 @@ Feature: Admin Abuse actions
   Scenario: A user cannot be banned without a note
     Given the user "mrparis" exists and is activated
       And I am logged in as a "policy_and_abuse" admin
-    When I go to the abuse administration page for "mrparis"
+    When I go to the user administration page for "mrparis"
       And I choose "Suspend permanently (ban user)"
     When I press "Update"
     Then I should see "You must include notes in order to perform this action."
@@ -112,7 +112,7 @@ Feature: Admin Abuse actions
   Scenario: A user's suspension is lifted with a note
     Given the user "mrparis" is suspended
       And I am logged in as a "policy_and_abuse" admin
-    When I go to the abuse administration page for "mrparis"
+    When I go to the user administration page for "mrparis"
       And I choose "Lift temporary suspension, effective immediately."
       And I fill in "Notes" with "Good behavior."
     When I press "Update"
@@ -123,7 +123,7 @@ Feature: Admin Abuse actions
   Scenario: A user's suspension cannot be lifted without a note
     Given the user "mrparis" is suspended
       And I am logged in as a "policy_and_abuse" admin
-    When I go to the abuse administration page for "mrparis"
+    When I go to the user administration page for "mrparis"
       And I choose "Lift temporary suspension, effective immediately."
     When I press "Update"
     Then I should see "You must include notes in order to perform this action."
@@ -131,7 +131,7 @@ Feature: Admin Abuse actions
   Scenario: A user's ban is lifted with a note
     Given the user "mrparis" is banned
       And I am logged in as a "policy_and_abuse" admin
-    When I go to the abuse administration page for "mrparis"
+    When I go to the user administration page for "mrparis"
       And I choose "Lift permanent suspension, effective immediately."
       And I fill in "Notes" with "Need him to infiltrate the Maquis."
     When I press "Update"
@@ -142,7 +142,7 @@ Feature: Admin Abuse actions
   Scenario: A user's ban cannot be lifted without a note
     Given the user "mrparis" is banned
       And I am logged in as a "policy_and_abuse" admin
-    When I go to the abuse administration page for "mrparis"
+    When I go to the user administration page for "mrparis"
       And I choose "Lift permanent suspension, effective immediately."
     When I press "Update"
     Then I should see "You must include notes in order to perform this action."
@@ -158,7 +158,7 @@ Feature: Admin Abuse actions
       And I add the work "Loads of Spam" to series "One Spam After Another"
       And I post the comment "I like spam" on the work "Not Spam"
       And I am logged in as a "policy_and_abuse" admin
-    When I go to the abuse administration page for "Spamster"
+    When I go to the user administration page for "Spamster"
       And I choose "Spammer: ban and delete all creations"
       And I press "Update"
     Then I should see "permanently suspended"
@@ -187,7 +187,7 @@ Feature: Admin Abuse actions
     Given I am logged in as "Spamster"
       And I post the work "Loads of Spam"
       And I am logged in as a "policy_and_abuse" admin
-      And I go to the abuse administration page for "Spamster"
+      And I go to the user administration page for "Spamster"
       And I choose "Spammer: ban and delete all creations"
       And I press "Update"
       And the user "Spamster" is unbanned in the background
@@ -198,7 +198,7 @@ Feature: Admin Abuse actions
   Scenario: An already-banned user can have their works destroyed
     Given the user "Spamster" is banned
       And I am logged in as a "policy_and_abuse" admin
-    When I go to the abuse administration page for "Spamster"
+    When I go to the user administration page for "Spamster"
       And I choose "Spammer: ban and delete all creations"
       And I press "Update"
     Then I should see "Are you sure you want to delete"
