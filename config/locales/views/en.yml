@@ -606,6 +606,11 @@ en:
         options_info: You can delete them, but please consider %{orphaning_link} them instead!
         works_summary: 'You have %{work_count} work(s) under the following pseuds: %{pseuds}.'
       submit: Save
+    header_navigation:
+      admin_user: User Administration
+      edit_multiple: Edit Works
+      invitations: Invitations
+      new_work: Post New
     sessions:
       new:
         beta_reminder:

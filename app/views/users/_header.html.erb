@@ -7,7 +7,9 @@
 <!--/descriptions-->
 
   <!--subnav-->
-  <%= render "users/header_navigation" %>
+  <% if logged_in? || policy(User).can_manage_users? %>
+    <%= render "users/header_navigation" %>
+  <% end %>
   <!--/subnav-->
 
 </div>
