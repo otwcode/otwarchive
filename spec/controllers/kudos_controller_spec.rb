@@ -218,6 +218,14 @@ describe KudosController do
       it "redirects to root with notice prompting log out" do
         post :create, params: { kudo: { commentable_id: work.id, commentable_type: "Work" } }
         it_redirects_to_with_notice(root_path, "Please log out of your admin account first!")
+        expect(assigns(:kudo)).to be_nil
+      end
+
+      context "with format: :js" do
+        it "does not create any kudo" do
+          post :create, params: { kudo: { commentable_id: work.id, commentable_type: "Work" }, format: :js }
+          expect(assigns(:kudo)).to be_nil
+        end
       end
     end
   end
