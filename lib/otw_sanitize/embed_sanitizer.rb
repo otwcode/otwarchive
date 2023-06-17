@@ -8,6 +8,7 @@ module OtwSanitize
   class EmbedSanitizer
     WHITELIST_REGEXES = {
       archiveorg:       %r{^archive\.org\/embed/},
+      bilibili:         %r{^(player\.)?bilibili\.com/},
       criticalcommons:  %r{^criticalcommons\.org/},
       eighttracks:      %r{^8tracks\.com/},
       google:           %r{^google\.com/},
@@ -26,7 +27,7 @@ module OtwSanitize
     ].freeze
 
     SUPPORTS_HTTPS = %i[
-      archiveorg eighttracks podfic
+      archiveorg bilibili eighttracks podfic
       soundcloud spotify viddersnet viddertube vimeo youtube
     ].freeze
 
