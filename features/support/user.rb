@@ -2,6 +2,11 @@ module UserHelpers
   def find_or_create_new_user(login, password, activate: true)
     user = User.find_by(login: login)
     if user.blank?
+      # If we're logged in as an admin when we try to us a step that invokes
+      # this method to create a user, user creation will fail because only some
+      # admins can edit certain fields on pseuds. Setting current_user to nil
+      # will bypass that.
+      User.current_user = nil
       params = { login: login, password: password }
       params[:confirmed_at] = nil unless activate
       user = FactoryBot.create(:user, params)

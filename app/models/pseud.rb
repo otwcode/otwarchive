@@ -1,6 +1,7 @@
 class Pseud < ApplicationRecord
   include Searchable
   include WorksOwner
+  include Justifiable
 
   has_attached_file :icon,
     styles: { standard: "100x100>" },

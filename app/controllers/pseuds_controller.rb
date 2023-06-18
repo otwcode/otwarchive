@@ -2,7 +2,8 @@ class PseudsController < ApplicationController
   cache_sweeper :pseud_sweeper
 
   before_action :load_user
-  before_action :check_ownership, only: [:create, :edit, :destroy, :new, :update]
+  before_action :check_ownership, only: [:create, :destroy, :new]
+  before_action :check_ownership_or_admin, only: [:edit, :update]
   before_action :check_user_status, only: [:new, :create, :edit, :update]
 
   def load_user
@@ -74,6 +75,7 @@ class PseudsController < ApplicationController
   # GET /pseuds/1/edit
   def edit
     @pseud = @user.pseuds.find_by(name: params[:id])
+    authorize @pseud if logged_in_as_admin?
   end
 
   # POST /pseuds
@@ -104,8 +106,14 @@ class PseudsController < ApplicationController
   # PUT /pseuds/1.xml
   def update
     @pseud = @user.pseuds.find_by(name: params[:id])
+    authorize @pseud if logged_in_as_admin?
     default = @user.default_pseud
     if @pseud.update(pseud_params)
+      if logged_in_as_admin? && @pseud.ticket_url.present?
+        link = view_context.link_to("Ticket ##{@pseud.ticket_number}", @pseud.ticket_url)
+        summary = "#{link} for User ##{@pseud.user_id}"
+        AdminActivity.log_action(current_admin, @pseud, action: "edit pseud", summary: summary)
+      end
       # if setting this one as default, unset the attribute of the current default pseud
       if @pseud.is_default and not(default == @pseud)
         # if setting this one as default, unset the attribute of the current active pseud
@@ -149,10 +157,16 @@ class PseudsController < ApplicationController
   private
 
   def pseud_params
-    params.require(:pseud).permit(
-      :name, :description, :is_default, :icon, :delete_icon,
-      :icon_alt_text, :icon_comment_text
-    )
+    if logged_in_as_admin?
+      params.require(:pseud).permit(
+        policy(@pseud).permitted_attributes
+      )
+    else
+      params.require(:pseud).permit(
+        :name, :description, :is_default, :icon, :delete_icon,
+        :icon_alt_text, :icon_comment_text
+      )
+    end
   end
 
 end

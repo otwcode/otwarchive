@@ -5,6 +5,27 @@ module AdminHelper
     activity.admin.nil? ? ts("Admin deleted") : activity.admin_login
   end
 
+  def admin_activity_target_link(activity)
+    target = activity.target
+    if target.is_a?(Pseud)
+      pseud = target
+      link_to activity.target_name, user_pseuds_path(pseud.user)
+    else
+      link_to activity.target_name, activity.target
+    end
+  end
+
+  # Summaries for profile and pseud edits, which contain links, need to be
+  # handled differently from summaries that use item.inspect (and thus contain
+  # angle brackets).
+  def admin_activity_summary(activity)
+    if activity.action == "edit pseud" || activity.action == "edit profile"
+      raw sanitize_field(activity, :summary)
+    else
+      activity.summary
+    end
+  end
+
   def admin_setting_disabled?(field)
     return unless logged_in_as_admin?
 
