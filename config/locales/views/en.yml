@@ -318,7 +318,6 @@ en:
     collection_item_form:
       add: Add
       add_bookmark_header: Add Bookmark to collections
-      add_work_header_html: Add %{title} to collections
       invite: Invite
       invite_header_html: Invite %{title} to collections
     index:
@@ -341,7 +340,6 @@ en:
     commentable:
       actions:
         comment: Comment
-      add_to_collections_link: Add to Collections
       blocked: Sorry, you have been blocked by one or more of this work's creators.
       invite_to_collections_link: Invite To Collections
       permissions:
