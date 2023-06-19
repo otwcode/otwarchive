@@ -22,8 +22,8 @@ Feature: Sign Up for a new account
       | user_registration_password              | pass           | Password is too short (minimum is 6 characters) |
       | user_registration_password              | 87151d8ae964d55515cb986d40394f79ca5c8329c07a8e59f2f783cbfbe401f69a780f27277275b7b2 | Password is too long (maximum is 40 characters)    |
       | user_registration_password_confirmation | password2      | Password confirmation doesn't match             |
-      | user_registration_email                 |                | Email should look like an email address         |
-      | user_registration_email                 | fake@fake@fake | Email should look like an email address         |
+      | user_registration_email                 |                | Email does not seem to be a valid address.      |
+      | user_registration_email                 | fake@fake@fake | Email does not seem to be a valid address       |
 
   Scenario Outline: The user should see validation errors when signing up without filling in required fields.
     When I press "Create Account"

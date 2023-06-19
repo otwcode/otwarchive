@@ -130,7 +130,7 @@ class Collection < ApplicationRecord
   validates_length_of :icon_comment_text, allow_blank: true, maximum: ArchiveConfig.ICON_COMMENT_MAX,
     too_long: ts("must be less than %{max} characters long.", max: ArchiveConfig.ICON_COMMENT_MAX)
 
-  validates :email, email_format: { allow_blank: true }
+  validates :email, email_veracity: {allow_blank: true}
 
   validates_presence_of :title, message: ts("Please enter a title to be displayed for your collection.")
   validates_length_of :title,
