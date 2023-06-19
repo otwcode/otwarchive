@@ -327,8 +327,10 @@ describe CollectionItemsController do
       let(:work) { create(:work) }
 
       let(:collection) do
-        participant = create(:collection_participant, pseud: archivist.default_pseud)
-        create(:collection, collection_participants: [participant])
+        # NB: the `collection_participant` factory actually creates a
+        # collection owner.
+        owner = create(:collection_participant, pseud: archivist.default_pseud)
+        create(:collection, collection_participants: [owner])
       end
 
       let(:params) do
@@ -345,7 +347,7 @@ describe CollectionItemsController do
       context "when the item's creator does not allow collection invitations" do
         it "adds the item anyway" do
           post :create, params: params
-          it_redirects_to_simple(work)
+          it_redirects_to_with_notice(work, "Added to collection(s): #{collection.title}.")
           expect(work.reload.collections).to include(collection)
         end
       end

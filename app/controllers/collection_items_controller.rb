@@ -104,7 +104,8 @@ class CollectionItemsController < ApplicationController
       # add the work to a collection, and try to save it
       elsif @item.add_to_collection(collection) && @item.save(validate: false)
         # approved_by_user? and approved_by_collection? are both true.
-        # This is now only true for imports by archivists.
+        # This is will be true for archivists adding works to collections they maintain
+        # or creators adding their works to a collection with auto-approval.
         if @item.approved_collections.include?(collection)
           new_collections << collection
         # if the current_user is a maintainer of the collection then approved_by_user must have been false (which means
