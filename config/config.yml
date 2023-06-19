@@ -319,7 +319,7 @@ FIELDS_ALLOWING_CSS: ["content", "endnotes", "notes"]
 
 # Domains that are not allowed be used as the src for audio and video HTML tags.
 # Format: ["google.com", "archiveofourown.org"]
-BANNED_MULTIMEDIA_SRCS: []
+BLACKLISTED_MULTIMEDIA_SRCS: []
 
 # Allowed CSS
 #

@@ -71,7 +71,7 @@ module OtwSanitize
     # Skip if it's not media or if we don't want to whitelist it
     def sanitized_node
       return unless media_node?
-      return if banned_source?
+      return if blacklisted_source?
 
       config = Sanitize::Config.merge(Sanitize::Config::ARCHIVE, WHITELIST_CONFIG)
       Sanitize.clean_node!(node, config)
@@ -100,9 +100,9 @@ module OtwSanitize
       Addressable::URI.parse(url).normalize.host
     end
 
-    def banned_source?
+    def blacklisted_source?
       return unless source_host
-      ArchiveConfig.BANNED_MULTIMEDIA_SRCS.any? do |blocked|
+      ArchiveConfig.BLACKLISTED_MULTIMEDIA_SRCS.any? do |blocked|
         source_host.match(blocked)
       end
     end
