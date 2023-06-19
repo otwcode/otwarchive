@@ -149,10 +149,6 @@ class Chapter < ApplicationRecord
     self.work.chapters.count == 1
   end
 
-  def only_non_draft_chapter?
-    self.posted? && self.work.chapters.posted.count == 1
-  end
-
   # Virtual attribute for work wip_length
   # Chapter needed its own version for sense-checking purposes
   def wip_length
