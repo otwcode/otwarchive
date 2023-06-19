@@ -101,11 +101,11 @@ describe OtwSanitize::MediaSanitizer do
 
       context "given a blacklisted source" do
         before do
-          ArchiveConfig.BANNED_MULTIMEDIA_SRCS = ["google.com"]
+          ArchiveConfig.BLACKLISTED_MULTIMEDIA_SRCS = ["google.com"]
         end
 
         after do
-          ArchiveConfig.BANNED_MULTIMEDIA_SRCS = []
+          ArchiveConfig.BLACKLISTED_MULTIMEDIA_SRCS = []
         end
 
         it "strips the source element" do
