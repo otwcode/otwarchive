@@ -115,15 +115,15 @@ Feature: Invite requests
   Scenario: An admin can get to a user's invitations page
     Given I am logged in as a "support" admin
       And the user "steven" exists and is activated
-    When I go to the abuse administration page for "steven"
-      And I follow "Add User Invitations"
+    When I go to the user administration page for "steven"
+      And I follow "Add Invitations"
     Then I should be on steven's invitations page
 
   Scenario: An admin can get to a user's manage invitations page
     Given I am logged in as a "support" admin
       And the user "steven" exists and is activated
-    When I go to the abuse administration page for "steven"
-      And I follow "Manage User Invitations"
+    When I go to the user administration page for "steven"
+      And I follow "Manage Invitations"
     Then I should be on steven's manage invitations page
 
   Scenario: An admin can create a user's invitations

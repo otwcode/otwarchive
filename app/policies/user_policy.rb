@@ -48,6 +48,5 @@ class UserPolicy < ApplicationPolicy
   alias destroy_user_creations? can_destroy_spam_creations?
 
   alias troubleshoot? can_manage_users?
-  alias send_activation? can_manage_users?
   alias activate? can_manage_users?
 end

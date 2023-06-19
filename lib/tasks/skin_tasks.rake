@@ -157,9 +157,25 @@ namespace :skins do
     Skin.set_default_to_current_version
   end
 
-  desc "Cache all site skins"
-  task(:cache_all_site_skins => :environment) do
-    Skin.where(cached: true).each{|skin| skin.cache!}
+  desc "Cache all site skins in the skin chooser"
+  task(cache_chooser_skins: :environment) do
+    # The default skin can be changed to something other than Skin.default via
+    # admin settings, so we want to cache that skin, not Skin.default.
+    skins = Skin.where(id: AdminSetting.default_skin_id).or(Skin.in_chooser)
+    successes = []
+    failures = []
+
+    skins.each do |skin|
+      if skin.cache!
+        successes << skin.title
+      else
+        failures << skin.title
+      end
+    end
+    puts
+    puts("Cached #{successes.join(',')}") if successes.any?
+    puts("Couldn't cache #{failures.join(',')}") if failures.any?
+    STDOUT.flush
   end
 
   desc "Remove all existing skins from preferences"

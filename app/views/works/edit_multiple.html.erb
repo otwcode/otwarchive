@@ -47,44 +47,44 @@
             {:include_blank => true} %>
       </dd>
 
-      <dt><%= ts("Visibility") %> <%= link_to_help "registered-users" %></dt>
+      <dt><%= t("works.permissions.visibility.label") %> <%= link_to_help "registered-users" %></dt>
       <dd>
         <fieldset>
           <%=
             radio_button_list(form, :restricted, [
-              ["", ts("Keep current visibility settings")],
-              ["1", ts("Only show to registered users")],
-              ["0", ts("Show to all")]
+              ["", t("works.permissions.visibility.keep_current")],
+              ["1", t("works.permissions.visibility.multiple_works_restricted")],
+              ["0", t("works.permissions.visibility.unrestricted")]
             ])
           %>
         </fieldset>
       </dd>
 
-      <dt><%= ts("Comment Moderation") %><%= link_to_help "comments-moderated" %></dt>
+      <dt><%= t("comments.commentable.permissions.moderated_commenting.label") %><%= link_to_help "comments-moderated" %></dt>
       <dd>
         <fieldset>
           <%=
             radio_button_list(form, :moderated_commenting_enabled, [
-              ["", ts("Keep current comment moderation settings")],
-              ["1", ts("Enable comment moderation")],
-              ["0", ts("Disable comment moderation")]
+              ["", t("comments.commentable.permissions.moderated_commenting.keep_current")],
+              ["1", t("comments.commentable.permissions.moderated_commenting.enable")],
+              ["0", t("comments.commentable.permissions.moderated_commenting.disable")]
             ])
           %>
         </fieldset>
       </dd>
 
       <dt>
-        <%= ts("Who can comment on these works") %>
+        <%= t("comments.commentable.permissions.options.multiple_works_label") %>
         <%= link_to_help "who-can-comment-on-this-work" %>
       </dt>
       <dd>
         <fieldset>
           <%=
             radio_button_list(form, :comment_permissions, [
-              ["", ts("Keep current comment settings")],
-              [:enable_all, ts("Registered users and guests can comment")],
-              [:disable_anon, ts("Only registered users can comment")],
-              [:disable_all, ts("No one can comment")]
+              ["", t("comments.commentable.permissions.options.keep_current")],
+              [:enable_all, t("comments.commentable.permissions.options.enable_all")],
+              [:disable_anon, t("comments.commentable.permissions.options.disable_anon")],
+              [:disable_all, t("comments.commentable.permissions.options.disable_all")]
             ])
           %>
         </fieldset>

@@ -45,11 +45,11 @@ Feature: View a work with various options
 
   Scenario: other users cannot collect a work by default
   Given the work "Whatever"
-    And I am logged in as the author of "Whatever"
   When I have the collection "test collection" with name "test_collection"
     And I am logged in as "moderator"
     And I view the work "Whatever"
   Then I should not see a link "Invite To Collections"
+    And I should not see the "new_collection_item" form
 
   Scenario: other users can collect a work when the creator has opted-in
   Given the work "Whatever"
@@ -59,3 +59,4 @@ Feature: View a work with various options
     And I am logged in as "moderator"
     And I view the work "Whatever"
   Then I should see a link "Invite To Collections"
+    And I should see the "new_collection_item" form

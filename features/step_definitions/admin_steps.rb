@@ -88,6 +88,20 @@ Given /^the support form is enabled$/ do
   click_button("Update")
 end
 
+Given "guest comments are on" do
+  step("I am logged in as a super admin")
+  visit(admin_settings_path)
+  uncheck("Turn off guest comments across the site")
+  click_button("Update")
+end
+
+Given "guest comments are off" do
+  step("I am logged in as a super admin")
+  visit(admin_settings_path)
+  check("Turn off guest comments across the site")
+  click_button("Update")
+end
+
 Given /^I have posted known issues$/ do
   step %{I am logged in as an admin}
   step %{I follow "Admin Posts"}
@@ -117,7 +131,7 @@ end
 Given /^the user "([^\"]*)" is suspended$/ do |user|
   step %{the user "#{user}" exists and is activated}
   step %{I am logged in as a "policy_and_abuse" admin}
-  step %{I go to the abuse administration page for "#{user}"}
+  step %{I go to the user administration page for "#{user}"}
   choose("admin_action_suspend")
   fill_in("suspend_days", with: 30)
   fill_in("Notes", with: "Why they are suspended")
@@ -127,7 +141,7 @@ end
 Given /^the user "([^\"]*)" is banned$/ do |user|
   step %{the user "#{user}" exists and is activated}
   step(%{I am logged in as a "policy_and_abuse" admin})
-  step %{I go to the abuse administration page for "#{user}"}
+  step %{I go to the user administration page for "#{user}"}
   choose("admin_action_ban")
   fill_in("Notes", with: "Why they are banned")
   click_button("Update")
@@ -157,6 +171,14 @@ Given(/^the following language exists$/) do |table|
   table.hashes.each do |hash|
     FactoryBot.create(:language, hash)
   end
+end
+
+Given /^I have posted an admin post with guest comments disabled$/ do
+  step %{I am logged in as a "communications" admin}
+  step %{I start to make an admin post}
+  choose("Only registered users can comment")
+  click_button("Post")
+  step %{I log out}
 end
 
 Given /^I have posted an admin post with comments disabled$/ do

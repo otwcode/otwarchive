@@ -1,5 +1,5 @@
 <!-- Gets embedded anywhere we need to list comments on a top-level commentable. We need the local variable "commentable" here. -->
-<div id="feedback" class="feedback" role="complementary">
+<div id="feedback" class="feedback">
 
   <h3 class="landmark heading"><%= ts("Actions") %></h3>
 
@@ -28,7 +28,7 @@
       <li><%= link_to ts('Back to AO3 News Index'), admin_posts_path %></li>
     <% end %>
 
-    <% if @work && !is_author_of?(@work) %>
+    <% if @work && !is_author_of?(@work) && !blocked_by?(@work) %>
       <li>
         <%= form_for(:kudo, url: kudos_path, html: { method: 'post', id: 'new_kudo' }) do |kudo_form| %>
           <%= kudo_form.hidden_field :commentable_id, :value => @work.id %>
@@ -75,7 +75,11 @@
   <%= flash_div :comment_error, :comment_notice %>
 
   <% commentable_parent = find_parent(commentable) %>
-  <% if commentable_parent.is_a?(AdminPost) && commentable_parent.disable_all_comments? %>
+  <% if @admin_settings.guest_comments_off? && guest? %>
+    <p class="notice">
+      <%= t(".guest_comments_disabled") %>
+    </p>
+  <% elsif commentable_parent.is_a?(AdminPost) && commentable_parent.disable_all_comments? %>
     <p class="notice">
       <%= t(".permissions.admin_post.disable_all") %>
     </p>
@@ -126,7 +130,7 @@
   </div>
 
   <% if logged_in? && @work %>
-    <% if is_author_of?(@work) || is_maintainer? %>
+    <% if is_maintainer? && @work.allow_collection_invitation? %>
       <div id="collection_item_form_placement" class="wrapper toggled">
         <%= render "collection_items/collection_item_form", :item => @work, :in_page => true %>
       </div>

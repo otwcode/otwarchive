@@ -10,11 +10,11 @@ Feature: Filing an abuse report
     And I am on the home page
     And I follow "Policy Questions & Abuse Reports"
     And I should see the text with tags 'value="http://www.example.com/'
-  When I fill in "Your comment (required)" with "This is wrong"
-    And I fill in "Brief summary of Terms of Service Violation (required)" with "This is a summary of bad things"
-    And I fill in "Link to the page you are reporting" with "http://www.archiveofourown.org/works"
+  When I fill in "Description of the content you are reporting (required)" with "This is wrong"
+    And I fill in "Brief summary of Terms of Service violation (required)" with "This is a summary of bad things"
+    And I fill in "Link to the page you are reporting (required)" with "http://www.archiveofourown.org/works"
     And I press "Submit"
-  Then I should see "Your abuse report was sent to the Abuse team."
+  Then I should see "Your report was submitted to the Policy & Abuse team. A confirmation message has been sent to the email address you provided."
     # Receiving a copy of the abuse report is no longer a choice for the user.
     # The email is sent automatically.
     And 1 email should be delivered
@@ -33,13 +33,12 @@ Feature: Filing an abuse report
   Given basic languages
   When I am on the home page
     And I follow "Policy Questions & Abuse Reports"
-  Then I should see "We investigate every report we receive."
-  When I fill in "Brief summary of Terms of Service Violation (required)" with "This is a summary of bad things"
-    And I fill in "Your comment (required)" with "This is wrong"
-    And I fill in "Link to the page you are reporting" with "http://www.archiveofourown.org/works"
+  When I fill in "Brief summary of Terms of Service violation (required)" with "This is a summary of bad things"
+    And I fill in "Description of the content you are reporting (required)" with "This is wrong"
+    And I fill in "Link to the page you are reporting (required)" with "http://www.archiveofourown.org/works"
     And I fill in "Your email (required)" with "otheruser@example.org"
     And I press "Submit"
-  Then I should see "Your abuse report was sent to the Abuse team."
+  Then I should see "Your report was submitted to the Policy & Abuse team. A confirmation message has been sent to the email address you provided."
     And 1 email should be delivered
 
   Scenario: File a request and enter blank email
@@ -48,15 +47,15 @@ Feature: Filing an abuse report
     And basic languages
     And I am on the home page
     And I follow "Policy Questions & Abuse Reports"
-    And I fill in "Brief summary of Terms of Service Violation (required)" with "This is a summary of bad things"
-    And I fill in "Your comment (required)" with "This is wrong"
-    And I fill in "Link to the page you are reporting" with "http://www.archiveofourown.org/works"
+    And I fill in "Brief summary of Terms of Service violation (required)" with "This is a summary of bad things"
+    And I fill in "Description of the content you are reporting (required)" with "This is wrong"
+    And I fill in "Link to the page you are reporting (required)" with "http://www.archiveofourown.org/works"
     And I fill in "Your email (required)" with ""
     And I select "Deutsch" from "abuse_report_language"
     And I press "Submit"
     And I should see "Email should look like an email address."
     And "Deutsch" should be selected within "Select language (required)"
-  Then I fill in "Your email" with "valid@archiveofourown.org"
+  Then I fill in "Your email (required)" with "valid@archiveofourown.org"
     And I press "Submit"
-    And I should see "Your abuse report was sent to the Abuse team."
+    And I should see "Your report was submitted to the Policy & Abuse team. A confirmation message has been sent to the email address you provided."
     And 1 email should be delivered
