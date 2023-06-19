@@ -183,10 +183,10 @@ module WorksHelper
   def chapter_total_display_with_link(work)
     total_posted_chapters = work.number_of_posted_chapters
     if total_posted_chapters > 1
-      link_to(number_with_delimiter(total_posted_chapters),
+      link_to(total_posted_chapters.to_s,
               work_chapter_path(work, work.last_posted_chapter.id)) +
         "/" +
-        number_with_delimiter(work.wip_length)
+        work.wip_length.to_s
     else
       chapter_total_display(work)
     end
