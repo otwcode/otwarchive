@@ -18,7 +18,7 @@ class Admin::AdminUsersController < Admin::BaseController
     return if @user&.banned?
 
     flash[:error] = ts("That user is not banned!")
-    redirect_to admin_users_path and return
+    redirect_to admin_users_path
   end
 
   def load_user_creations
