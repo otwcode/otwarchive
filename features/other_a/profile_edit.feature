@@ -69,7 +69,7 @@ Scenario: Changing email address requires reauthenticating
 Scenario: Changing email address - entering an invalid email address
 
   When I enter an invalid email
-  Then I should see "Email should look like an email address"
+  Then I should see "Email does not seem to be a valid address"
     And 0 emails should be delivered
 
 Scenario: Changing email address - case-insensitive confirmation

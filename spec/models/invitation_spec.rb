@@ -42,17 +42,19 @@ describe Invitation, :ready do
     end
 
     context "Create Invitation for invalid emails" do
+
       BAD_EMAILS.each do |email|
-        let(:bad_email) { build(:invitation, invitee_email: email) }
-        it "cannot be created if the email does not pass format check" do
+        let(:bad_email) {build(:invitation, invitee_email: email)}
+        it "cannot be created if the email does not pass veracity check" do
           expect(bad_email.save).to be_falsey
-          expect(bad_email.errors[:invitee_email]).to include("should look like an email address. Please use a different address or leave blank.")
+          expect(bad_email.errors[:invitee_email]).to include("does not seem to be a valid address. Please use a different address or leave blank.")
         end
       end
     end
   end
 
   describe "Update" do
+
 
     context "Update Invitation for existing user" do
 
@@ -63,6 +65,17 @@ describe Invitation, :ready do
         expect(invite_for_existing.errors.full_messages).to include(
           'Invitee email is already being used by an account holder.'
         )
+      end
+    end
+
+    context "Create Invitation for invalid emails" do
+
+      BAD_EMAILS.each do |email|
+        let(:bad_email) {build(:invitation, invitee_email: email)}
+        it "cannot be created if the email does not pass veracity check" do
+          expect(bad_email.save).to be_falsey
+          expect(bad_email.errors[:invitee_email]).to include("does not seem to be a valid address. Please use a different address or leave blank.")
+        end
       end
     end
 

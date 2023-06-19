@@ -13,10 +13,11 @@ describe InviteRequest do
       end
 
       BAD_EMAILS.each do |email|
-        it "cannot be created if the email does not pass format check" do
+        it "cannot be created if the email does not pass veracity check" do
           bad_email = build(:user, email: email)
           expect(bad_email.valid?).to be_falsey
           expect(bad_email.errors[:email]).to include("should look like an email address.")
+          expect(bad_email.errors[:email]).to include("does not seem to be a valid address.")
         end
       end
     end
