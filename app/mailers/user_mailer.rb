@@ -12,14 +12,14 @@ class UserMailer < ApplicationMailer
   helper :series
   include HtmlCleaner
 
-  # Send an email letting a creator know that their work has been added to a collection by an archivist
-  def archivist_added_to_collection_notification(user_id, work_id, collection_id)
+  # Send an email letting creators know their work has been added to a collection
+  def added_to_collection_notification(user_id, work_id, collection_id)
     @user = User.find(user_id)
     @work = Work.find(work_id)
     @collection = Collection.find(collection_id)
     mail(
-      to: @user.email,
-      subject: t(".subject", app_name: ArchiveConfig.APP_SHORT_NAME, collection_title: @collection.title)
+         to: @user.email,
+         subject: "[#{ArchiveConfig.APP_SHORT_NAME}]#{'[' + @collection.title + ']'} Your work was added to a collection"
     )
   end
 
