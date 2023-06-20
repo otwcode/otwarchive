@@ -455,7 +455,10 @@ SECONDS_UNTIL_COMMENT_COUNTS_EXPIRE: 3600
 # bookmarks, # of fandoms):
 SECONDS_UNTIL_COLLECTION_COUNTS_EXPIRE: 300
 
-# Batch size used for the RedisHitCounter class:
+# Job size used for the HitCountUpdateJob class:
+HIT_COUNT_JOB_SIZE: 1000
+
+# Batch size used for the HitCountUpdateJob class:
 HIT_COUNT_BATCH_SIZE: 100
 
 # The hour (in UTC time) that we want the hit counts to rollover at. If someone
@@ -473,10 +476,14 @@ PERMITTED_HOSTS: [
   "104.153.64.122",
   "208.85.241.152",
   "208.85.241.157",
+  "ao3.org",
+  "archiveofourown.com",
+  "archiveofourown.net",
   "archiveofourown.org",
   "download.archiveofourown.org",
   "insecure.archiveofourown.org",
   "secure.archiveofourown.org",
+  "www.ao3.org",
   "www.archiveofourown.com",
   "www.archiveofourown.net",
   "www.archiveofourown.org",
@@ -503,3 +510,6 @@ STAT_COUNTER_BATCH_SIZE: 100
 # Number of hours to retain the original creator for works that have been
 # orphaned.
 ORIGINAL_CREATOR_TTL_HOURS: 72
+
+# The maximum number of tags to provide in a tag wrangling report.
+WRANGLING_REPORT_LIMIT: 1000

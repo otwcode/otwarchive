@@ -216,6 +216,7 @@ class UserMailer < ApplicationMailer
     I18n.with_locale(Locale.find(@assigned_user.preference.preferred_locale).iso) do
       mail(
         to: @assigned_user.email,
+        # i18n-tasks-use t('user_mailer.challenge_assignment_notification.subject')
         subject: default_i18n_subject(app_name: ArchiveConfig.APP_SHORT_NAME, collection_title: @collection.title)
       )
     end
@@ -384,6 +385,7 @@ class UserMailer < ApplicationMailer
     I18n.with_locale(Locale.find(@user.preference.preferred_locale).iso) do
       mail(
         to: @user.email,
+        # i18n-tasks-use t('user_mailer.admin_hidden_work_notification.subject')
         subject: default_i18n_subject(app_name: ArchiveConfig.APP_SHORT_NAME)
       )
     end
@@ -417,12 +419,14 @@ class UserMailer < ApplicationMailer
 
   def abuse_report(abuse_report_id)
     abuse_report = AbuseReport.find(abuse_report_id)
+    @username = abuse_report.username
     @email = abuse_report.email
     @url = abuse_report.url
+    @summary = abuse_report.summary
     @comment = abuse_report.comment
     mail(
       to: abuse_report.email,
-      subject: "#{t 'user_mailer.abuse_report.subject', app_name: ArchiveConfig.APP_SHORT_NAME}"
+      subject: t("user_mailer.abuse_report.subject", app_name: ArchiveConfig.APP_SHORT_NAME, summary: strip_html_breaks_simple(@summary))
     )
   end
 

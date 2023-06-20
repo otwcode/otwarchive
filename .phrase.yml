@@ -98,9 +98,6 @@ phrase:
       - file: ./config/locales/phrase-exports/ko.yml
         params:
           locale_id: ko
-      - file: ./config/locales/phrase-exports/ky.yml
-        params:
-          locale_id: ky
       - file: ./config/locales/phrase-exports/lt.yml
         params:
           locale_id: lt

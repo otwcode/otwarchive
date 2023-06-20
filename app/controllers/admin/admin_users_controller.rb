@@ -46,6 +46,7 @@ class Admin::AdminUsersController < Admin::BaseController
   def show
     @user = authorize User.find_by!(login: params[:id])
     @hide_dashboard = true
+    @page_subtitle = t(".page_title", login: @user.login)
     @log_items = @user.log_items.sort_by(&:created_at).reverse
   end
 
@@ -166,14 +167,5 @@ class Admin::AdminUsersController < Admin::BaseController
       flash[:error] = ts("Attempt to activate account failed.")
       redirect_to action: :show
     end
-  end
-
-  def send_activation
-    @user = User.find_by(login: params[:id])
-    authorize @user
-    # send synchronously to avoid getting caught in mail queue
-    UserMailer.signup_notification(@user.id).deliver_now
-    flash[:notice] = ts("Activation email sent")
-    redirect_to action: :show
   end
 end

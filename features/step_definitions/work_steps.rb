@@ -605,7 +605,7 @@ When /^I post the work$/ do
 end
 
 When /^the statistics for all works are updated$/ do
-  RedisSetJobSpawner.perform_now("StatCounterJob")
+  RedisJobSpawner.perform_now("StatCounterJob")
   step %{the hit counts for all works are updated}
 end
 
@@ -706,7 +706,7 @@ end
 
 When /^the hit counts for all works are updated$/ do
   step "all AJAX requests are complete"
-  RedisHitCounter.save_recent_counts
+  RedisJobSpawner.perform_now("HitCountUpdateJob")
 end
 
 When /^all hit count information is reset$/ do
