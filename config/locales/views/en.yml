@@ -539,6 +539,16 @@ en:
       transfer:
         one: Transfer this bookmark to the default pseud
         other: Transfer these bookmarks to the default pseud
+    pseud_blurb:
+      confirm_delete: Are you sure?
+      edit_html: Edit%{landmark_span}
+      edit_landmark_text: " %{pseud}"
+      default_pseud: Default Pseud
+      delete_html: Delete%{landmark_span}
+      delete_landmark_text: " %{pseud}"
+      orphan_html: Orphan Works%{landmark_span}
+      orphan_landmark_text: " by %{pseud}"
+      user_actions: User Actions
     pseuds_form:
       change_matching_pseud_html: You cannot change the pseud that matches your user name. However, you can %{change_username_link} instead.
       change_username: change your user name
