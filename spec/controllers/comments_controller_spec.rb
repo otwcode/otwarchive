@@ -3093,7 +3093,7 @@ describe CommentsController do
           it_redirects_to_with_error(root_url, "Sorry, only an authorized admin can access the page you were trying to reach.")
         end
 
-        %w[superadmin board communications policy_and_abuse support].each do |admin_role|
+        %w[superadmin board policy_and_abuse support].each do |admin_role|
           it "successfully deletes the comment when admin has #{admin_role} role" do
             admin.update(roles: [admin_role])
             fake_login_admin(admin)
