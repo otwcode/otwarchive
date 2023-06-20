@@ -6,41 +6,74 @@ describe PseudsController do
   include LoginMacros
   include RedirectExpectationHelper
 
+  shared_examples "an action unauthorized admins can't access" do |authorized_roles:|
+    before { fake_login_admin(admin) }
+
+    context "with no role" do
+      let(:admin) { create(:admin, roles: []) }
+
+      it "redirects with an error" do
+        subject.call
+        it_redirects_to_with_error(root_url, "Sorry, only an authorized admin can access the page you were trying to reach.")
+      end
+    end
+
+    (Admin::VALID_ROLES - authorized_roles).each do |role|
+      context "with role #{role}" do
+        let(:admin) { create(:admin, roles: [role]) }
+
+        it "redirects with an error" do
+          subject.call
+          it_redirects_to_with_error(root_url, "Sorry, only an authorized admin can access the page you were trying to reach.")
+        end
+      end
+    end
+  end
+
+  shared_examples "an action admins can't access" do
+    before { fake_login_admin(admin) }
+
+    context "with no role" do
+      let(:admin) { create(:admin, roles: []) }
+
+      it "redirects with an error" do
+        subject.call
+        it_redirects_to_with_error(user_path(user), "Sorry, you don't have permission to access the page you were trying to reach. Please log in.")
+      end
+    end
+
+    Admin::VALID_ROLES.each do |role|
+      context "with role #{role}" do
+        let(:admin) { create(:admin, roles: [role]) }
+
+        it "redirects with an error" do
+          subject.call
+          it_redirects_to_with_error(user_path(user), "Sorry, you don't have permission to access the page you were trying to reach. Please log in.")
+        end
+      end
+    end
+  end
+
   let(:user) { create(:user) }
   let(:pseud) { user.pseuds.first }
 
   describe "edit" do
+    subject { -> { get :edit, params: { user_id: user, id: pseud } } }
+
     context "when logged in as admin" do
       authorized_roles = %w[policy_and_abuse superadmin]
 
-      before { fake_login_admin(admin) }
-
-      context "with no role" do
-        let(:admin) { create(:admin, roles: []) }
-
-        it "redirects with an error" do
-          get :edit, params: { user_id: user, id: pseud }
-          it_redirects_to_with_error(root_url, "Sorry, only an authorized admin can access the page you were trying to reach.")
-        end
-      end
-
-      (Admin::VALID_ROLES - authorized_roles).each do |role|
-        context "with role #{role}" do
-          let(:admin) { create(:admin, roles: [role]) }
-
-          it "redirects with an error" do
-            get :edit, params: { user_id: user, id: pseud }
-            it_redirects_to_with_error(root_url, "Sorry, only an authorized admin can access the page you were trying to reach.")
-          end
-        end
-      end
+      it_behaves_like "an action unauthorized admins can't access",
+                      authorized_roles: authorized_roles
 
       authorized_roles.each do |role|
         context "with role #{role}" do
           let(:admin) { create(:admin, roles: [role]) }
 
+          before { fake_login_admin(admin) }
+
           it "renders edit template" do
-            get :edit, params: { user_id: user, id: pseud }
+            subject.call
             expect(response).to render_template(:edit)
           end
         end
@@ -65,37 +98,23 @@ describe PseudsController do
       end
     end
 
+    subject { -> { put :update, params: { user_id: user, id: pseud } } }
+
     context "when logged in as admin" do
       authorized_roles = %w[policy_and_abuse superadmin]
 
       before { fake_login_admin(admin) }
 
-      context "with no role" do
-        let(:admin) { create(:admin, roles: []) }
-
-        it "redirects with an error" do
-          put :update, params: { user_id: user, id: pseud }
-          it_redirects_to_with_error(root_url, "Sorry, only an authorized admin can access the page you were trying to reach.")
-        end
-      end
-
-      (Admin::VALID_ROLES - authorized_roles).each do |role|
-        context "with role #{role}" do
-          let(:admin) { create(:admin, roles: [role]) }
-
-          it "redirects with an error" do
-            put :update, params: { user_id: user, id: pseud }
-            it_redirects_to_with_error(root_url, "Sorry, only an authorized admin can access the page you were trying to reach.")
-          end
-        end
-      end
+      it_behaves_like "an action unauthorized admins can't access",
+                      authorized_roles: authorized_roles
 
       authorized_roles.each do |role|
         context "with role #{role}" do
           let(:admin) { create(:admin, roles: [role]) }
-          let(:ticket_url) { Faker::Internet.url }
 
           context "with valid ticket number" do
+            let(:ticket_url) { Faker::Internet.url }
+
             before do
               allow_any_instance_of(ZohoResourceClient).to receive(:find_ticket)
                 .and_return({ "status" => "Open", "departmentId" => ArchiveConfig.ABUSE_ZOHO_DEPARTMENT_ID })
@@ -167,28 +186,10 @@ describe PseudsController do
   end
 
   describe "destroy" do
+    subject { -> { post :destroy, params: { user_id: user, id: pseud } } }
+
     context "when logged in as admin" do
-      before { fake_login_admin(admin) }
-
-      context "with no role" do
-        let(:admin) { create(:admin, roles: []) }
-
-        it "redirects with an error" do
-          post :destroy, params: { user_id: user, id: pseud }
-          it_redirects_to_with_error(user_path(user), "Sorry, you don't have permission to access the page you were trying to reach. Please log in.")
-        end
-      end
-
-      Admin::VALID_ROLES.each do |role|
-        context "with role #{role}" do
-          let(:admin) { create(:admin, roles: [role]) }
-
-          it "redirects with an error" do
-            post :destroy, params: { user_id: user, id: pseud }
-            it_redirects_to_with_error(user_path(user), "Sorry, you don't have permission to access the page you were trying to reach. Please log in.")
-          end
-        end
-      end
+      it_behaves_like "an action admins can't access"
     end
 
     context "when logged in as user" do
@@ -217,54 +218,18 @@ describe PseudsController do
   end
 
   describe "new" do
+    subject { -> { get :new, params: { user_id: user } } }
+
     context "when logged in as admin" do
-      before { fake_login_admin(admin) }
-
-      context "with no role" do
-        let(:admin) { create(:admin, roles: []) }
-
-        it "redirects with an error" do
-          get :new, params: { user_id: user }
-          it_redirects_to_with_error(user_path(user), "Sorry, you don't have permission to access the page you were trying to reach. Please log in.")
-        end
-      end
-
-      Admin::VALID_ROLES.each do |role|
-        context "with role #{role}" do
-          let(:admin) { create(:admin, roles: [role]) }
-
-          it "redirects with an error" do
-            get :new, params: { user_id: user }
-            it_redirects_to_with_error(user_path(user), "Sorry, you don't have permission to access the page you were trying to reach. Please log in.")
-          end
-        end
-      end
+      it_behaves_like "an action admins can't access"
     end
   end
 
   describe "create" do
+    subject { -> { post :create, params: { user_id: user } } }
+
     context "when logged in as admin" do
-      before { fake_login_admin(admin) }
-
-      context "with no role" do
-        let(:admin) { create(:admin, roles: []) }
-
-        it "redirects with an error" do
-          post :create, params: { user_id: user }
-          it_redirects_to_with_error(user_path(user), "Sorry, you don't have permission to access the page you were trying to reach. Please log in.")
-        end
-      end
-
-      Admin::VALID_ROLES.each do |role|
-        context "with role #{role}" do
-          let(:admin) { create(:admin, roles: [role]) }
-
-          it "redirects with an error" do
-            post :create, params: { user_id: user }
-            it_redirects_to_with_error(user_path(user), "Sorry, you don't have permission to access the page you were trying to reach. Please log in.")
-          end
-        end
-      end
+      it_behaves_like "an action admins can't access"
     end
   end
 end
