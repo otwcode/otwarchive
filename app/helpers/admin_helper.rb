@@ -6,13 +6,12 @@ module AdminHelper
   end
 
   def admin_activity_target_link(activity)
-    target = activity.target
-    if target.is_a?(Pseud)
-      pseud = target
-      link_to activity.target_name, user_pseuds_path(pseud.user)
-    else
-      link_to activity.target_name, activity.target
-    end
+    url = if activity.target.is_a?(Pseud)
+            user_pseuds_path(activity.target.user)
+          else
+            activity.target
+          end
+    link_to(activity.target_name, url)
   end
 
   # Summaries for profile and pseud edits, which contain links, need to be
