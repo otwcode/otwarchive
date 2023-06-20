@@ -16,7 +16,7 @@ describe Admin::SpamController do
       end
     end
 
-    %w[board communications translation tag_wrangling docs support open_doors].each do |role|
+    %w[board communications elections translation tag_wrangling docs support open_doors].each do |role|
       context "when logged in as an admin with #{role} role" do
         let(:admin) { create(:admin, roles: [role]) }
 
@@ -55,7 +55,7 @@ describe Admin::SpamController do
       end
     end
 
-    %w[board communications translation tag_wrangling docs support open_doors].each do |role|
+    %w[board communications elections translation tag_wrangling docs support open_doors].each do |role|
       context "when logged in as an admin with #{role} role" do
         let(:admin) { create(:admin, roles: [role]) }
 

@@ -16,7 +16,7 @@ describe Admin::BlacklistedEmailsController do
       end
     end
 
-    %w[board communications docs open_doors tag_wrangling translation].each do |role|
+    %w[board communications docs elections open_doors tag_wrangling translation].each do |role|
       it "redirects to root with error for #{role} admins" do
         fake_login_admin(create(:admin, roles: [role]))
         subject

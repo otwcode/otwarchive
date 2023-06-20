@@ -2543,7 +2543,7 @@ describe CommentsController do
             end
           end
 
-          %w[superadmin board policy_and_abuse communications support].each do |admin_role|
+          %w[superadmin board communications elections policy_and_abuse support].each do |admin_role|
             context "with role #{admin_role}" do
               it "destroys comment and redirects with success message" do
                 admin.update(roles: [admin_role])
@@ -2597,7 +2597,7 @@ describe CommentsController do
         context "when logged in as an admin" do
           let(:admin) { create(:admin) }
 
-          context "with no role" do
+          shared_examples "doesn't destroy comment and redirects with error" do
             it "doesn't destroy comment and redirects with error" do
               admin.update(roles: [])
               fake_login_admin(admin)
@@ -2608,7 +2608,17 @@ describe CommentsController do
             end
           end
 
-          %w[superadmin board policy_and_abuse communications support].each do |admin_role|
+          context "with no role" do
+            it_behaves_like "doesn't destroy comment and redirects with error"
+          end
+
+          %w[communications elections].each do |admin_role|
+            context "with role #{admin_role}" do
+              it_behaves_like "doesn't destroy comment and redirects with error"
+            end
+          end
+
+          %w[superadmin board policy_and_abuse support].each do |admin_role|
             context "with the #{admin_role} role" do
               it "destroys comment and redirects with success message" do
                 admin.update(roles: [admin_role])
@@ -2702,7 +2712,7 @@ describe CommentsController do
         context "when logged in as an admin" do
           let(:admin) { create(:admin) }
 
-          context "with no role" do
+          shared_examples "doesn't destroy comment and redirects with error" do
             it "doesn't destroy comment and redirects with error" do
               admin.update(roles: [])
               fake_login_admin(admin)
@@ -2713,7 +2723,17 @@ describe CommentsController do
             end
           end
 
-          %w[superadmin policy_and_abuse].each do |admin_role|
+          context "with no role" do
+            it_behaves_like "doesn't destroy comment and redirects with error"
+          end
+
+          %w[communications elections].each do |admin_role|
+            context "with role #{admin_role}" do
+              it_behaves_like "doesn't destroy comment and redirects with error"
+            end
+          end
+
+          %w[superadmin board policy_and_abuse support].each do |admin_role|
             context "with the #{admin_role} role" do
               it "destroys comment and redirects with success message" do
                 admin.update(roles: [admin_role])
