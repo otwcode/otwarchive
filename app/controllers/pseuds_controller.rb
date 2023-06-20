@@ -108,7 +108,7 @@ class PseudsController < ApplicationController
     @pseud = @user.pseuds.find_by(name: params[:id])
     authorize @pseud if logged_in_as_admin?
     default = @user.default_pseud
-    if @pseud.update(pseud_params)
+    if @pseud.update(permitted_attributes(@pseud))
       if logged_in_as_admin? && @pseud.ticket_url.present?
         link = view_context.link_to("Ticket ##{@pseud.ticket_number}", @pseud.ticket_url)
         summary = "#{link} for User ##{@pseud.user_id}"
@@ -153,20 +153,4 @@ class PseudsController < ApplicationController
 
     redirect_to(user_pseuds_path(@user))
   end
-
-  private
-
-  def pseud_params
-    if logged_in_as_admin?
-      params.require(:pseud).permit(
-        policy(@pseud).permitted_attributes
-      )
-    else
-      params.require(:pseud).permit(
-        :name, :description, :is_default, :icon, :delete_icon,
-        :icon_alt_text, :icon_comment_text
-      )
-    end
-  end
-
 end
