@@ -2,13 +2,13 @@
 <dl>
   <dt><%= f.label :name, t(".name") %></dt>
   <dd>
-    <% if @pseud.name && @user.login == @pseud.name %>
+    <% if @pseud&.name == @user.login %>
       <p class="important informational"><%= @pseud.name %></p>
       <p class="footnote"><%= t(".change_matching_pseud_html", change_username_link: link_to(t(".change_username"), change_username_user_path(@user))) %></p>
     <% else %>
       <%= f.text_field :name, class: "observe_textlength", disabled: logged_in_as_admin? %>
     <% end %>
-    <%= generate_countdown_html("pseud_name", Pseud::NAME_LENGTH_MAX) if @pseud.name && @user.login != @pseud.name %>
+    <%= generate_countdown_html("pseud_name", Pseud::NAME_LENGTH_MAX) if @pseud&.name == @user.login %>
   </dd>
   
   <dt><%= f.label :is_default, t(".make_default") %></dt>
