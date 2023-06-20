@@ -27,7 +27,7 @@ Otwarchive::Application.configure do
 
   # See everything in the log (default is now :debug)
   # config.log_level = :debug
-  config.log_level = :info
+  config.log_level = :error
 
   # Use a different logger for distributed setups
   # config.logger = SyslogLogger.new

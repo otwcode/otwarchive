@@ -51,6 +51,9 @@ class DownloadWriter
     cmds.each do |cmd|
       exit_status = nil
       Open3.popen3(*cmd) { |_stdin, _stdout, _stderr, wait_thread| exit_status = wait_thread.value }
+      unless exit_status
+        Rails.logger.warn "Download generation failed: " + cmd.to_s
+      end
     end
   end
 
