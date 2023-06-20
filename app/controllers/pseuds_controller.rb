@@ -81,7 +81,7 @@ class PseudsController < ApplicationController
   # POST /pseuds
   # POST /pseuds.xml
   def create
-    @pseud = Pseud.new(pseud_params)
+    @pseud = Pseud.new(permitted_attributes(@pseud))
     if @user.pseuds.where(name: @pseud.name).blank?
       @pseud.user_id = @user.id
       old_default = @user.default_pseud
