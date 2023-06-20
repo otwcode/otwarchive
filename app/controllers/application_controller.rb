@@ -74,6 +74,7 @@ class ApplicationController < ActionController::Base
   helper_method :current_admin
   helper_method :logged_in?
   helper_method :logged_in_as_admin?
+  helper_method :guest?
 
   # Title helpers
   helper_method :process_title

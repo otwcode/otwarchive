@@ -11,6 +11,8 @@ class Kudo < ApplicationRecord
             presence: true,
             if: proc { |c| VALID_COMMENTABLE_TYPES.include?(c.commentable_type) }
 
+  validates :user, not_blocked: { by: :commentable, on: :create }
+
   validate :cannot_be_author, on: :create
   def cannot_be_author
     return unless user&.is_author_of?(commentable)
