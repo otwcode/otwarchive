@@ -6,7 +6,7 @@ describe Admin::AdminUsersController do
   include LoginMacros
   include RedirectExpectationHelper
 
-  shared_examples "unauthorized admins can't access it" do |authorized_roles:|
+  shared_examples "an action unauthorized admins can't access" do |authorized_roles:|
     before { fake_login_admin(admin) }
 
     context "with no role" do
@@ -30,7 +30,7 @@ describe Admin::AdminUsersController do
     end
   end
 
-  shared_examples "guests and logged in users can't access it" do
+  shared_examples "an action guests and logged in users can't access" do
     it "redirects with notice when logged out" do
       subject.call
       it_redirects_to_with_notice(root_url, "I'm sorry, only an admin can look at that area")
@@ -229,7 +229,7 @@ describe Admin::AdminUsersController do
 
     before { fake_login_admin(admin) }
 
-    shared_examples "unauthorized admin cannot add next of kin" do
+    shared_examples "an unauthorized admin adding a next of kin" do
       it "redirects with error" do
         post :update_next_of_kin, params: {
           user_login: user.login, next_of_kin_name: kin.login, next_of_kin_email: kin.email
@@ -239,7 +239,7 @@ describe Admin::AdminUsersController do
       end
     end
 
-    shared_examples "authorized admin can add next of kin" do
+    shared_examples "an authorized admin adding a next of kin" do
       it "adds next of kin and redirects with notice" do
         post :update_next_of_kin, params: {
           user_login: user.login, next_of_kin_name: kin.login, next_of_kin_email: kin.email
@@ -253,14 +253,14 @@ describe Admin::AdminUsersController do
     context "when admin does not have correct authorization" do
       before { admin.update(roles: []) }
 
-      it_behaves_like "unauthorized admin cannot add next of kin"
+      it_behaves_like "an unauthorized admin adding a next of kin"
     end
 
     %w[superadmin policy_and_abuse support].each do |role|
       context "when admin has #{role} role" do
         let(:admin) { create(:admin, roles: [role]) }
 
-        it_behaves_like "authorized admin can add next of kin"
+        it_behaves_like "an authorized admin adding a next of kin"
       end
     end
   end
@@ -271,7 +271,7 @@ describe Admin::AdminUsersController do
 
     before { fake_login_admin(admin) }
 
-    shared_examples "unauthorized admin cannot add note to user" do
+    shared_examples "an unauthorized admin adding a note to a user" do
       it "redirects with error" do
         post :update_status, params: {
           user_login: user.login, admin_action: "note", admin_note: "User likes me, user likes me not."
@@ -280,7 +280,7 @@ describe Admin::AdminUsersController do
       end
     end
 
-    shared_examples "authorized admin can add note to user" do
+    shared_examples "an authorized admin adding a note to a user" do
       it "saves note and redirects with notice" do
         admin_note = "User likes me, user likes me not."
         post :update_status, params: {
@@ -292,7 +292,7 @@ describe Admin::AdminUsersController do
       end
     end
 
-    shared_examples "unauthorized admin cannot suspend user" do
+    shared_examples "an unauthorized admin suspending a user" do
       it "redirects with error" do
         post :update_status, params: {
           user_login: user.login, admin_action: "suspend", suspend_days: "3", admin_note: "User violated community guidelines"
@@ -302,7 +302,7 @@ describe Admin::AdminUsersController do
       end
     end
 
-    shared_examples "authorized admin can suspend user" do
+    shared_examples "an authorized admin suspending a user" do
       it "suspends user and redirects with notice" do
         post :update_status, params: {
           user_login: user.login, admin_action: "suspend", suspend_days: "3", admin_note: "User violated community guidelines"
@@ -315,24 +315,24 @@ describe Admin::AdminUsersController do
     context "when admin does not have correct authorization" do
       before { admin.update(roles: []) }
 
-      it_behaves_like "unauthorized admin cannot add note to user"
-      it_behaves_like "unauthorized admin cannot suspend user"
+      it_behaves_like "an unauthorized admin adding a note to a user"
+      it_behaves_like "an unauthorized admin suspending a user"
     end
 
     %w[superadmin policy_and_abuse].each do |role|
       context "when admin has #{role} role" do
         let(:admin) { create(:admin, roles: [role]) }
 
-        it_behaves_like "authorized admin can add note to user"
-        it_behaves_like "authorized admin can suspend user"
+        it_behaves_like "an authorized admin adding a note to a user"
+        it_behaves_like "an authorized admin suspending a user"
       end
     end
 
     context "when admin has support role" do
       let(:admin) { create(:support_admin) }
 
-      it_behaves_like "authorized admin can add note to user"
-      it_behaves_like "unauthorized admin cannot suspend user"
+      it_behaves_like "an authorized admin adding a note to a user"
+      it_behaves_like "an unauthorized admin suspending a user"
     end
   end
 
@@ -469,12 +469,12 @@ describe Admin::AdminUsersController do
 
     let(:user) { create(:user) }
 
-    it_behaves_like "guests and logged in users can't access it"
+    it_behaves_like "an action guests and logged in users can't access"
 
     context "when logged in as admin" do
       authorized_roles = %w[policy_and_abuse superadmin]
 
-      it_behaves_like "unauthorized admins can't access it",
+      it_behaves_like "an action unauthorized admins can't access",
                       authorized_roles: authorized_roles
 
       authorized_roles.each do |role|
