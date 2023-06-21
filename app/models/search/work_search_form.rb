@@ -125,7 +125,7 @@ class WorkSearchForm
       summary << "Title: #{@options[:title]}"
     end
     if @options[:creators].present?
-      summary << "Author/Artist: #{@options[:creators]}"
+      summary << "Creator: #{@options[:creators]}"
     end
     tags = @searcher.included_tag_names
     all_tag_ids = @searcher.filter_ids
@@ -177,7 +177,7 @@ class WorkSearchForm
 
   SORT_OPTIONS = [
     ['Best Match', '_score'],
-    ['Author', 'authors_to_sort_on'],
+    ['Creator', 'authors_to_sort_on'],
     ['Title', 'title_to_sort_on'],
     ['Date Posted', 'created_at'],
     ['Date Updated', 'revised_at'],
