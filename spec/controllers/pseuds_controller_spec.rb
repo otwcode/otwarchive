@@ -85,7 +85,7 @@ describe PseudsController do
     shared_examples "an attribute that can be updated by an admin" do
       it "redirects to user_pseud_path with notice" do
         put :update, params: params
-        it_redirects_to_with_notice(user_pseud_path(user, pseud),"Pseud was successfully updated.")
+        it_redirects_to_with_notice(user_pseud_path(user, pseud), "Pseud was successfully updated.")
       end
 
       it "creates admin activity" do
@@ -162,7 +162,7 @@ describe PseudsController do
                   expect do
                     put :update, params: params
                   end.to raise_exception(ActionController::UnpermittedParameters)
-                  expect(pseud.reload.send("#{attr}")).not_to eq("admin edit")
+                  expect(pseud.reload.send(attr)).not_to eq("admin edit")
                   expect(AdminActivity.last).to be_nil
                 end
               end
