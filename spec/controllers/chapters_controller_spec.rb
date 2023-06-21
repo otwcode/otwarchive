@@ -8,6 +8,8 @@ describe ChaptersController do
   let!(:work) { create(:work, authors: [user.pseuds.first]) }
   let(:unposted_work) { create(:draft, authors: [user.pseuds.first]) }
 
+  let(:co_creator) { create(:user) }
+
   let(:banned_user) { create(:user, banned: true) }
   let(:banned_users_work) do
     banned_user.update(banned: false)
@@ -345,7 +347,6 @@ describe ChaptersController do
 
     context "with valid remove params" do
       context "when work is multichaptered and co-created" do
-        let(:co_creator) { create(:user) }
         let!(:co_created_chapter) { create(:chapter, work: work, authors: [user.pseuds.first, co_creator.pseuds.first]) }
 
         context "when logged in user also owns other chapters" do
