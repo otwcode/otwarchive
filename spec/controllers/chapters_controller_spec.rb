@@ -8,11 +8,18 @@ describe ChaptersController do
   let!(:work) { create(:work, authors: [user.pseuds.first]) }
   let(:unposted_work) { create(:draft, authors: [user.pseuds.first]) }
 
-  let(:banned_users_work) { create(:work) }
-  let(:banned_user) do
-    user = banned_users_work.users.first
-    user.update(banned: true)
-    user
+  let(:banned_user) { create(:user, banned: true) }
+  let(:banned_users_work) do
+    banned_user.update(banned: false)
+    work = create(:work, authors: [banned_user.pseuds.first, co_creator.pseuds.first])
+    banned_user.update(banned: true)
+    work
+  end
+  let(:banned_users_work_chapter2) do
+    banned_user.update(banned: false)
+    chapter = create(:chapter, work: banned_users_work, position: 2, authors: [banned_user.pseuds.first, co_creator.pseuds.first])
+    banned_user.update(banned: true)
+    chapter
   end
 
   describe "index" do
@@ -318,11 +325,10 @@ describe ChaptersController do
         expect(response).to render_template(:edit)
       end
 
-      it "errors and redirects to user page when user is banned" do
+      it "renders edit template when user is banned" do
         fake_login_known_user(banned_user)
         get :edit, params: { work_id: banned_users_work.id, id: banned_users_work.chapters.first.id }
-        it_redirects_to_simple(user_path(banned_user))
-        expect(flash[:error]).to include("Your account has been banned.")
+        expect(response).to render_template(:edit)
       end
     end
 
@@ -369,6 +375,21 @@ describe ChaptersController do
             expect(work.reload.pseuds).to eq [user.pseuds.first, co_creator.pseuds.first]
             
             it_redirects_to(edit_work_path(work, remove: "me"))
+          end
+        end
+
+        context "When logged in user is banned" do
+          before do
+            fake_login_known_user(banned_user)
+          end
+
+          it "removes user from chapter, gives notice, and redirects to work" do
+            get :edit, params: { work_id: banned_users_work.id, id: banned_users_work_chapter2.id, remove: "me" }
+
+            expect(banned_users_work_chapter2.reload.pseuds).to eq [co_creator.pseuds.first]
+            expect(banned_users_work.reload.pseuds).to eq [co_creator.pseuds.first, banned_user.pseuds.first]
+
+            it_redirects_to_with_notice(work_path(banned_users_work), "You have been removed as a creator from the chapter.")
           end
         end
       end
@@ -1065,6 +1086,14 @@ describe ChaptersController do
           end.to change { work.number_of_chapters }
             .from(2).to(1)
             .and avoid_changing { work.number_of_posted_chapters }
+        end
+      end
+
+      context "when user is banned" do
+        it "gives a notice that the chapter was deleted and redirects to work" do
+          fake_login_known_user(banned_user)
+          delete :destroy, params: { work_id: banned_users_work.id, id: banned_users_work_chapter2.id }
+          it_redirects_to_with_notice(banned_users_work, "The chapter was successfully deleted.")
         end
       end
     end
