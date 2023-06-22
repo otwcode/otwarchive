@@ -145,7 +145,11 @@ class Comment < ApplicationRecord
         users << self.comment_owner
       end
       if notify_user_by_email?(self.comment_owner) && notify_user_of_own_comments?(self.comment_owner)
-        CommentMailer.comment_sent_notification(self).deliver_after_commit
+        if self.reply_comment?
+          CommentMailer.comment_reply_sent_notification(self).deliver_after_commit
+        else
+          CommentMailer.comment_sent_notification(self).deliver_after_commit
+        end
       end
 
       # send notification to the owner(s) of the ultimate parent, who can be users or admins
@@ -187,7 +191,11 @@ class Comment < ApplicationRecord
       users << self.comment_owner
     end
     if notify_user_by_email?(self.comment_owner) && notify_user_of_own_comments?(self.comment_owner)
-      CommentMailer.comment_sent_notification(self).deliver_after_commit
+      if self.reply_comment?
+        CommentMailer.comment_reply_sent_notification(self).deliver_after_commit
+      else
+        CommentMailer.comment_sent_notification(self).deliver_after_commit
+      end
     end
 
     # Reply to owner of parent comment if this is a reply comment

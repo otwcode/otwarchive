@@ -60,26 +60,38 @@
 
 <fieldset>
   <legend><%= ts("Colors") %></legend>
+  <p class="notes">
+    <%= ts('You may wish to refer to this <a href="https://www.w3schools.com/colors/colors_names.asp">handy list of colors</a>.').html_safe %>
+  </p>
   <dl>
     <dt>
       <%= f.label :background_color, ts('Background color') %> 
     </dt>
     <dd>
-      <%= f.color_field :background_color, value: @skin.background_color.presence || "#ffffff" %>
+      <%= f.text_field :background_color, "aria-describedby" => "background-color-field-notes" %>
+      <p class="footnote" id="background-color-field-notes">
+        <%= ts("Name or hex code. Default: <code>#fff</code>".html_safe) %>
+      </p>
     </dd>
 
     <dt>
       <%= f.label :foreground_color, ts('Text color') %>
     </dt>
     <dd>
-      <%= f.color_field :foreground_color, value: @skin.foreground_color.presence || "#2a2a2a" %>
+      <%= f.text_field :foreground_color, "aria-describedby" => "foreground-color-field-notes" %>
+      <p class="footnote" id="foreground-color-field-notes">
+        <%= ts("Name or hex code. Default: <code>#2a2a2a</code>".html_safe) %>
+      </p>
     </dd>
 
     <dt>
       <%= f.label :headercolor, ts('Header color') %> 
     </dt>
     <dd>
-      <%= f.color_field :headercolor, value: @skin.headercolor.presence || "#990000" %>
+      <%= f.text_field :headercolor, "aria-describedby" => "header-color-field-notes" %>
+      <p class="footnote" id="header-color-field-notes">
+        <%= ts("Name or hex code. Default: <code>#900</code>".html_safe) %>
+      </p>
     </dd>
 
     <dt>
@@ -87,7 +99,10 @@
       <%= link_to_help('skins-wizard-accent-color') %>
     </dt>
     <dd>
-      <%= f.color_field :accent_color, value: @skin.accent_color.presence || "#dddddd" %>
+      <%= f.text_field :accent_color, "aria-describedby" => "accent-color-field-notes" %>
+      <p class="footnote" id="accent-color-field-notes">
+        <%= ts("Name or hex code. Default: <code>#ddd</code>".html_safe) %>
+      </p>
     </dd>
   </dl>
   <%= hidden_field_tag 'wizard', true %>
