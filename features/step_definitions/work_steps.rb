@@ -315,6 +315,12 @@ When /^I post the work "([^"]*)" without preview$/ do |title|
   step %{I post the work "#{title}"}
 end
 
+When /^I post the work "(.*?)" with guest comments enabled$/ do |title|
+  step %{I set up the draft "#{title}"}
+  choose("Registered users and guests can comment")
+  step %{I post the work without preview}
+end
+
 When /^a chapter is added to "([^"]*)"$/ do |work_title|
   step %{a draft chapter is added to "#{work_title}"}
   click_button("Post")
@@ -419,6 +425,7 @@ end
 When /^I edit multiple works with different comment moderation settings$/ do
   step %{I set up the draft "Work with Comment Moderation Enabled"}
   check("work_moderated_commenting_enabled")
+  choose("Registered users and guests can comment")
   step %{I post the work without preview}
   step %{I post the work "Work with Comment Moderation Disabled"}
   step %{I go to my edit multiple works page}

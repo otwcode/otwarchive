@@ -3,7 +3,7 @@ Feature: Marking comments as spam
 
   Scenario: Spam comments are not included in a work's comment count
     Given I am logged in as "author"
-      And I post the work "Popular Fic"
+      And I post the work "Popular Fic" with guest comments enabled
       And I log out
       And I view the work "Popular Fic" with comments
       And I post a guest comment
