@@ -8,5 +8,5 @@
   automatic inclusion of your works into collections on the Archive of Our Own.</p>
 
   <p>If you would like to remove your work from this collection, please visit your
-   <%= style_link("Approved Collection Items page", user_collection_items_url(@user) + "?approved=true") %>.</p>
+   <%= style_link("Approved Collection Items page", user_collection_items_url(@user, status: "approved")) %>.</p>
 <% end %>

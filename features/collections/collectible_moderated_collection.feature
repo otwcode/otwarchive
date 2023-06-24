@@ -30,7 +30,7 @@ Feature: Collectible items in moderated collections
     Given I have a bookmark of a deleted work
       And I add my bookmark to the collection "Various_Penguins"
     When I am logged in as the owner of "Various Penguins"
-      And I view the awaiting approval collection items page for "Various Penguins"
+      And I view the awaiting collection approval collection items page for "Various Penguins"
     Then I should see "Bookmark of deleted item"
       And I should see "This has been deleted, sorry!"
 

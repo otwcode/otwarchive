@@ -22,6 +22,10 @@ en:
       multifandom: Multifandom
       unrevealed: Mystery Work
       unspecified_fandom: No fandom specified
+  collection_items:
+    create:
+      invited: invited
+      invited_to_collections_html: This work has been %{invited_link} to your collection (%{collection_title}).
   comments:
     check_blocked:
       parent: Sorry, you have been blocked by one or more of this work's creators.
