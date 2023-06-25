@@ -120,7 +120,7 @@ class SeriesController < ApplicationController
       end
     end
     respond_to do |format|
-      format.html { redirect_to(@series) and return }
+      format.html { redirect_to series_path(@series) and return }
       format.json { head :ok }
     end
   end

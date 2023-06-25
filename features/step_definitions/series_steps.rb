@@ -1,5 +1,5 @@
 When /^I view the series "([^\"]*)"$/ do |series|
-  visit series_url(Series.find_by(title: series))
+  visit series_path(Series.find_by(title: series))
 end
 
 When /^I add the series "([^\"]*)"$/ do |series_title|
@@ -41,7 +41,7 @@ When /^I add the work "([^\"]*)" to "(\d+)" series "([^\"]*)"$/ do |work_title, 
   if work.blank?
     step "the draft \"#{work_title}\""
     work = Work.find_by(title: work_title)
-    visit preview_work_url(work)
+    visit preview_work_path(work)
     click_button("Post")
     step "I should see \"Work was successfully posted.\""
     step %{all indexing jobs have been run}
@@ -54,6 +54,24 @@ When /^I add the work "([^\"]*)" to "(\d+)" series "([^\"]*)"$/ do |work_title, 
     fill_in("work_series_attributes_title", with: series_title + i.to_s)
     click_button("Post")
   end
+end
+
+When /^I reorder the (\d+)(?:st|nd|rd|th) and (\d+)(?:st|nd|rd|th) work downwards in the series list$/ do |n1, n2|
+  # Step only accounts for downward changes through a downward offset.
+  assert n1 < n2
+
+  draggable = find(".serial-position-list:nth-child(#{n1})")
+  droppable = find(".serial-position-list:nth-child(#{n2})")
+
+  # Capybara's drag_to method doesn't work well with this jQuery sortable list that has a default tolerance of "intersect".
+  # Using another way to simulate dragging. Credit to https://stackoverflow.com/questions/72369314/
+  webdriver= page.driver.browser
+  webdriver.action.click_and_hold(draggable.native).perform
+  step "I wait 1 second"  # a delay is necessary.
+  # Add downward offset to make the rearrangement register.
+  webdriver.action.move_to(droppable.native, 0, 10).release.perform
+
+  step "all AJAX requests are complete"
 end
 
 When /^I delete the series "([^"]*)"$/ do |series|

@@ -259,6 +259,8 @@ class Work < ApplicationRecord
       tag.update_tag_cache
     end
 
+    series.each(&:expire_caches)
+
     Work.expire_work_blurb_version(id)
     Work.flush_find_by_url_cache unless imported_from_url.blank?
   end
@@ -321,9 +323,8 @@ class Work < ApplicationRecord
     Collection.expire_ids(collection_ids)
   end
 
-  # TODO: AO3-6085 We can use touch_all once we update to Rails 6.
   def touch_series
-    series.each(&:touch) if saved_change_to_in_anon_collection?
+    series.touch_all if saved_change_to_in_anon_collection?
   end
 
   after_destroy :destroy_chapters_in_reverse

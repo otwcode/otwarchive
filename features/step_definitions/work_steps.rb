@@ -69,7 +69,7 @@ When /^I post (?:a|the) (?:(\d+) chapter )?work "([^"]*)"(?: with fandom "([^"]*
   # If the work is already a draft then visit the preview page and post it
   work = Work.find_by(title: title)
   if work
-    visit preview_work_url(work)
+    visit preview_work_path(work)
     click_button("Post")
   else
     # Note: this will match the above regexp and work just fine even if all the options are blank!
@@ -79,7 +79,7 @@ When /^I post (?:a|the) (?:(\d+) chapter )?work "([^"]*)"(?: with fandom "([^"]*
   # Now add the chapters
   if number_of_chapters.present? && number_of_chapters.to_i > 1
     work = Work.find_by_title(title)
-    visit work_url(work)
+    visit work_path(work)
     (number_of_chapters.to_i - 1).times do
       step %{I follow "Add Chapter"}
       fill_in("content", with: "Yet another chapter.")

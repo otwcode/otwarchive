@@ -29,3 +29,31 @@ Feature: Rearrange works within a series
       And I should see "1. A Bad, Bad Night"
       And I should see "2. Things Get Worse"
       And I should see "3. A Bad, Bad Day"
+
+  @javascript
+  Scenario: Reordering series by drag and drop updates work blurbs correctly.
+    Given I am logged in as "author"
+      And I post the work "A Bad, Bad Day" as part of a series "Tale of Woe"
+      And I post the work "A Bad, Bad Night" as part of a series "Tale of Woe"
+      And I post the work "Things Get Worse" as part of a series "Tale of Woe"
+    When I view the work "A Bad, Bad Day"
+    Then I should see "Part 1 of Tale of Woe"
+    When I view the work "A Bad, Bad Night"
+    Then I should see "Part 2 of Tale of Woe"
+    When I view the work "Things Get Worse"
+    When I view the series "Tale of Woe"
+      And I follow "Reorder Series"
+      And I reorder the 2nd and 3rd work downwards in the series list
+      And I press "Update Positions"
+    Then I should see "Series order has been successfully updated"
+    When I follow "Reorder Series"
+    Then I should see "1. A Bad, Bad Day"
+      And I should see "2. Things Get Worse"
+      And I should see "3. A Bad, Bad Night"
+    # Ensure works pages have updated.
+    When I view the work "A Bad, Bad Day"
+    Then I should see "Part 1 of Tale of Woe"
+    When I view the work "Things Get Worse"
+    Then I should see "Part 2 of Tale of Woe"
+    When I view the work "A Bad, Bad Night"
+    Then I should see "Part 3 of Tale of Woe"
