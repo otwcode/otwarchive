@@ -5,15 +5,15 @@ class QueryCleaner
   attr_reader :params
 
   SORT_OPTIONS = [
-    ['Author', 'authors_to_sort_on'],
-    ['Title', 'title_to_sort_on'],
+    %w[Creator creator_to_sort_on],
+    %w[Title title_to_sort_on],
     ['Date Posted', 'created_at'],
     ['Date Updated', 'revised_at'],
     ['Word Count', 'word_count'],
-    ['Hits', 'hits'],
-    ['Kudos', 'kudos_count'],
-    ['Comments', 'comments_count'],
-    ['Bookmarks', 'bookmarks_count']
+    %w[Hits hits],
+    %w[Kudos kudos_count],
+    %w[Comments comments_count],
+    %w[Bookmarks bookmarks_count]
   ].freeze
 
   def initialize(params = {})

@@ -53,9 +53,9 @@ describe WorkSearchForm, work_search: true do
 
   describe "#set_sorting" do
     it "does not override provided sort column" do
-      options = { sort_column: "authors_to_sort_on" }
+      options = { sort_column: "creator_to_sort_on" }
       searcher = WorkSearchForm.new(options)
-      expect(searcher.options[:sort_column]).to eq("authors_to_sort_on")
+      expect(searcher.options[:sort_column]).to eq("creator_to_sort_on")
     end
 
     it "does not override provided sort direction" do
@@ -87,7 +87,7 @@ describe WorkSearchForm, work_search: true do
 
     context "when sorting by author" do
       it "sets the sort direction to ascending" do
-        options = { sort_column: "authors_to_sort_on" }
+        options = { sort_column: "creator_to_sort_on" }
         searcher = WorkSearchForm.new(options)
         expect(searcher.options[:sort_direction]).to eq("asc")
       end
@@ -573,14 +573,14 @@ describe WorkSearchForm, work_search: true do
       it "returns all works in the correct order of sortable pseud values" do
         sorted_pseuds_asc = ["007aardvark", "21st_wombat"]
 
-        work_search = WorkSearchForm.new(sort_column: "authors_to_sort_on")
-        expect(work_search.search_results.map(&:authors_to_sort_on)).to eq sorted_pseuds_asc
+        work_search = WorkSearchForm.new(sort_column: "creator_to_sort_on")
+        expect(work_search.search_results.map(&:creator_to_sort_on)).to eq sorted_pseuds_asc
 
-        work_search = WorkSearchForm.new(sort_column: "authors_to_sort_on", sort_direction: "asc")
-        expect(work_search.search_results.map(&:authors_to_sort_on)).to eq sorted_pseuds_asc
+        work_search = WorkSearchForm.new(sort_column: "creator_to_sort_on", sort_direction: "asc")
+        expect(work_search.search_results.map(&:creator_to_sort_on)).to eq sorted_pseuds_asc
 
-        work_search = WorkSearchForm.new(sort_column: "authors_to_sort_on", sort_direction: "desc")
-        expect(work_search.search_results.map(&:authors_to_sort_on)).to eq sorted_pseuds_asc.reverse
+        work_search = WorkSearchForm.new(sort_column: "creator_to_sort_on", sort_direction: "desc")
+        expect(work_search.search_results.map(&:creator_to_sort_on)).to eq sorted_pseuds_asc.reverse
       end
     end
 
@@ -595,15 +595,15 @@ describe WorkSearchForm, work_search: true do
       end
 
       it "returns all works in the correct order of sortable pseud values" do
-        work_search = WorkSearchForm.new(sort_column: "authors_to_sort_on")
-        expect(work_search.search_results.map(&:authors_to_sort_on)).to eq ["cioelle", "ruth"]
+        work_search = WorkSearchForm.new(sort_column: "creator_to_sort_on")
+        expect(work_search.search_results.map(&:creator_to_sort_on)).to eq ["cioelle", "ruth"]
 
         user_1.login = "yabalchoath"
         user_1.save!
         run_all_indexing_jobs
 
-        work_search = WorkSearchForm.new(sort_column: "authors_to_sort_on")
-        expect(work_search.search_results.map(&:authors_to_sort_on)).to eq ["ruth", "yabalchoath"]
+        work_search = WorkSearchForm.new(sort_column: "creator_to_sort_on")
+        expect(work_search.search_results.map(&:creator_to_sort_on)).to eq ["ruth", "yabalchoath"]
       end
     end
 
@@ -611,7 +611,7 @@ describe WorkSearchForm, work_search: true do
       user = FactoryBot.create(:user)
       work1 = FactoryBot.create(:work, authors: [user.default_pseud])
       work2 = FactoryBot.create(:work, authors: [user.default_pseud])
-      q = WorkQuery.new(sort_column: "authors_to_sort_on", sort_direction: "desc")
+      q = WorkQuery.new(sort_column: "creator_to_sort_on", sort_direction: "desc")
 
       run_all_indexing_jobs
       res = q.search_results.map(&:id)

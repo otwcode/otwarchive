@@ -150,7 +150,7 @@ class DownloadWriter
       # just means Calibre's GUI treats it as one name, e.g. "testy, testy2" is
       # like "Fangirl, Suzy Q", for searching and sorting.
       authors:           download.authors,
-      sortable_authors:  work.authors_to_sort_on,
+      sortable_authors:  work.creator_to_sort_on,
       # We add "Fanworks" because Books uses the first tag as the category and
       # it would otherwise be the work's rating, which is weird.
       tags:              "Fanworks, " + work.tags.pluck(:name).join(", "),

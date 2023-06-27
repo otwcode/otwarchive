@@ -49,7 +49,7 @@ class WorkIndexer < Indexer
         series: {
           type: "object"
         },
-        authors_to_sort_on: {
+        creator_to_sort_on: {
           type: "keyword"
         },
         title_to_sort_on: {
@@ -83,7 +83,7 @@ class WorkIndexer < Indexer
         :in_unrevealed_collection,
       ],
       methods: [
-        :authors_to_sort_on,
+        :creator_to_sort_on,
         :rating_ids,
         :archive_warning_ids,
         :category_ids,
@@ -98,7 +98,7 @@ class WorkIndexer < Indexer
         :comments_count,
         :kudos_count,
         :bookmarks_count,
-        :creators,
+        :creator,
         :crossover,
         :otp,
         :work_types,

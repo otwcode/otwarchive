@@ -79,7 +79,7 @@ describe WorksController, work_search: true do
           { query: "sort by: word count", expected: "word_count" },
           { query: "sort by: words", expected: "word_count" },
           { query: "sort by: word", expected: "word_count" },
-          { query: "sort by: author", expected: "authors_to_sort_on" },
+          { query: "sort by: creator", expected: "creator_to_sort_on" },
           { query: "sort by: title", expected: "title_to_sort_on" },
           { query: "sort by: date", expected: "created_at" },
           { query: "sort by: date posted", expected: "created_at" },

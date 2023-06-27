@@ -124,8 +124,8 @@ class WorkSearchForm
     if @options[:title].present?
       summary << "Title: #{@options[:title]}"
     end
-    if @options[:creator].present?
-      summary << "Creator: #{@options[:creator]}"
+    if @options[:creators].present?
+      summary << "Creator: #{@options[:creators]}"
     end
     tags = @searcher.included_tag_names
     all_tag_ids = @searcher.filter_ids
@@ -159,7 +159,6 @@ class WorkSearchForm
         summary << "#{countable.to_s.humanize.downcase}: #{@options[countable]}"
       end
     end
-    print(@options)
     if @options[:sort_column].present?
       summary << "sort by: #{name_for_sort_column(@options[:sort_column]).downcase}" +
         (@options[:sort_direction].present? ?
@@ -215,7 +214,7 @@ class WorkSearchForm
   end
 
   def default_sort_direction
-    if %w(creator_to_sort_on title_to_sort_on).include?(sort_column)
+    if %w[creator_to_sort_on title_to_sort_on].include?(sort_column)
       'asc'
     else
       'desc'

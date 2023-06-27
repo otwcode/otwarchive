@@ -2,7 +2,7 @@
 
   <% pseuds = @creation.is_a?(Work) ? @creation.pseuds.map{|p| style_pseud_link(p)}.to_sentence.html_safe : @creation.pseud.name %>
 
-    <%= @creation.is_a?(Work) ? @creation.pseuds.length > 0 ? pseuds : style_bold(@creation.authors_to_sort_on) : pseuds %> posted a
+    <%= @creation.is_a?(Work) ? @creation.pseuds.length > 0 ? pseuds : style_bold(@creation.creator_to_sort_on) : pseuds %> posted a
     <%= @creation.is_a?(Work) ? @creation.backdate ? "backdated " : "new " : "new " %> <%= @creation.is_a?(Work) ? "work" : "bookmark" %> to your collection,
     <b><%= style_link(@collection.name, collection_url(@collection)) %></b>:
     

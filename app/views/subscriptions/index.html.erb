@@ -46,7 +46,7 @@
         <%= ts('(Series)') %>
       <% end %>
       <% unless subscription.subscribable_type == "User" %>
-        <%= ts('by %{creators}', :creators => byline(subscription.subscribable)).html_safe %>
+        <%= ts('by %{creators}', :creator => byline(subscription.subscribable)).html_safe %>
       <% end %>
     </dt>
     <dd>

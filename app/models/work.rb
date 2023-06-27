@@ -1023,7 +1023,7 @@ class Work < ApplicationRecord
 
   SORTED_AUTHOR_REGEX = %r{^[\+\-=_\?!'"\.\/]}
 
-  def authors_to_sort_on
+  def creator_to_sort_on
     if self.anonymous?
       "Anonymous"
     else
@@ -1132,7 +1132,7 @@ class Work < ApplicationRecord
       methods: [
         :tag, :filter_ids, :rating_ids, :archive_warning_ids, :category_ids,
         :fandom_ids, :character_ids, :relationship_ids, :freeform_ids,
-        :creators, :collection_ids, :work_types
+        :creator, :collection_ids, :work_types
       ]
     ).merge(
       language_id: language&.short,

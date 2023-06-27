@@ -69,7 +69,7 @@ describe QueryCleaner do
       cleaner = QueryCleaner.new(query: "sorted by:>author")
       clean_params = cleaner.clean
       expect(clean_params[:query]).to eq(nil)
-      expect(clean_params[:sort_column]).to eq("authors_to_sort_on")
+      expect(clean_params[:sort_column]).to eq("creator_to_sort_on")
       expect(clean_params[:sort_direction]).to eq("asc")
     end
   end
