@@ -1132,7 +1132,7 @@ class Work < ApplicationRecord
       methods: [
         :tag, :filter_ids, :rating_ids, :archive_warning_ids, :category_ids,
         :fandom_ids, :character_ids, :relationship_ids, :freeform_ids,
-        :creator, :collection_ids, :work_types
+        :creators, :collection_ids, :work_types
       ]
     ).merge(
       language_id: language&.short,
