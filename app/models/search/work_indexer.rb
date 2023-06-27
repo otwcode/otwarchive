@@ -98,7 +98,7 @@ class WorkIndexer < Indexer
         :comments_count,
         :kudos_count,
         :bookmarks_count,
-        :creator,
+        :creators,
         :crossover,
         :otp,
         :work_types,
