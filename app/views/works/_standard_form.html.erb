@@ -288,7 +288,7 @@
           <%=
             radio_button_list(f, :comment_permissions, [
               [:enable_all, t("comments.commentable.permissions.options.enable_all")],
-              [:disable_anon, t("comments.commentable.permissions.options.disable_anon"), checked: @work.new_record? || @work.comment_permissions == "disable_anon" ],
+              [:disable_anon, t("comments.commentable.permissions.options.disable_anon")],
               [:disable_all, t("comments.commentable.permissions.options.disable_all")]
             ])
           %>
