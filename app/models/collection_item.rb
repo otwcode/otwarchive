@@ -97,21 +97,38 @@ class CollectionItem < ApplicationRecord
     end
   end
 
+  after_create_commit :notify_archivist_added
+  # Sends emails to item creator(s) in the case that an archivist
+  # has added them to the collection.
+  def notify_archivist_added
+    return unless User.current_user&.archivist && collection.user_is_maintainer?(User.current_user)
+
+    item.users.each do |email_recipient|
+      next if email_recipient.preference.collection_emails_off
+
+      UserMailer.archivist_added_to_collection_notification(
+        email_recipient.id,
+        item.id,
+        collection.id
+      ).deliver_later
+    end
+  end
+
   before_save :approve_automatically
   def approve_automatically
-    if self.new_record?
-      # approve with the current user, who is the person who has just
-      # added this item -- might be either moderator or owner
-      approve(User.current_user == :false ? nil : User.current_user)
+    return unless self.new_record?
 
-      # if the collection is open or the user who owns this work is a member, go ahead and approve
-      # for the collection
-      if !approved_by_collection? && collection
-        if !collection.moderated? || collection.user_is_maintainer?(User.current_user) || collection.user_is_posting_participant?(User.current_user)
-          approve_by_collection
-        end
-      end
-    end
+    # approve with the current user, who is the person who has just
+    # added this item -- might be either moderator or owner
+    # rubocop:disable Lint/BooleanSymbol
+    approve(User.current_user == :false ? nil : User.current_user)
+    # rubocop:enable Lint/BooleanSymbol
+
+    # if the collection is open or the user who owns this work is a member, go ahead and approve
+    # for the collection
+    return unless !approved_by_collection? && collection
+
+    approve_by_collection if !collection.moderated? || collection.user_is_maintainer?(User.current_user) || collection.user_is_posting_participant?(User.current_user)
   end
 
   before_save :send_work_invitation
@@ -186,9 +203,13 @@ class CollectionItem < ApplicationRecord
       # this is being run via rake task eg for importing collections
       approve_by_user
       approve_by_collection
+    else
+      author_of_item = user.is_author_of?(item) ||
+                       (user == User.current_user && item.respond_to?(:pseuds) ? item.pseuds.empty? : item.pseud.nil?)
+      archivist_maintainer = user.archivist && self.collection.user_is_maintainer?(user)
+      approve_by_user if author_of_item || archivist_maintainer
+      approve_by_collection if self.collection.user_is_maintainer?(user)
     end
-    approve_by_user if user && (user.is_author_of?(item) || (user == User.current_user && item.respond_to?(:pseuds) ? item.pseuds.empty? : item.pseud.nil?) )
-    approve_by_collection if user && self.collection.user_is_maintainer?(user)
   end
 
   def posted?
