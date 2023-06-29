@@ -65,9 +65,9 @@ When /^I reorder the (\d+)(?:st|nd|rd|th) and (\d+)(?:st|nd|rd|th) work downward
 
   # Capybara's drag_to method doesn't work well with this jQuery sortable list that has a default tolerance of "intersect".
   # Using another way to simulate dragging. Credit to https://stackoverflow.com/questions/72369314/
-  webdriver= page.driver.browser
+  webdriver = page.driver.browser
   webdriver.action.click_and_hold(draggable.native).perform
-  step "I wait 1 second"  # a delay is necessary.
+  step "I wait 1 second" # a delay is necessary.
   # Add downward offset to make the rearrangement register.
   webdriver.action.move_to(droppable.native, 0, 10).release.perform
 
