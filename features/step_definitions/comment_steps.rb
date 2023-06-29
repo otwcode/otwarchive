@@ -30,6 +30,11 @@ ParameterType(
   }
 )
 
+Given "{commentable} with guest comments enabled" do |commentable|
+  assert !commentable.is_a?(Tag)
+  commentable.update_attribute(:comment_permissions, :enable_all)
+end
+
 Given "a guest comment on {commentable}" do |commentable|
   commentable = Comment.commentable_object(commentable)
   FactoryBot.create(:comment, :by_guest, commentable: commentable)
