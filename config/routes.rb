@@ -103,7 +103,11 @@ Otwarchive::Application.routes.draw do
       post :wrangle
     end
   end
-  resources :tag_wranglers
+  resources :tag_wranglers do
+    member do
+      get :report_csv
+    end
+  end
   resources :unsorted_tags do
     collection do
       post :mass_update
@@ -195,7 +199,6 @@ Otwarchive::Application.routes.draw do
         get :confirm_delete_user_creations
         post :destroy_user_creations
         post :activate
-        post :send_activation
         get :check_user
       end
       collection do

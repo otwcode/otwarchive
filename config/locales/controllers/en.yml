@@ -17,12 +17,18 @@ en:
       one: You have submitted your bookmark to the moderated collection '%{collections}'. It will not become a part of the collection until it has been approved by a moderator.
       other: You have submitted your bookmark to moderated collections (%{collections}). It will not become a part of those collections until it has been approved by a moderator.
   chapters:
+    destroy:
+      only_chapter: You can't delete the only chapter in your work. If you want to delete the work, choose "Delete Work".
     show:
       anonymous: Anonymous
       chapter_position: " - Chapter %{position}"
       multifandom: Multifandom
       unrevealed: Mystery Work
       unspecified_fandom: No fandom specified
+  collection_items:
+    create:
+      invited: invited
+      invited_to_collections_html: This work has been %{invited_link} to your collection (%{collection_title}).
   comments:
     check_blocked:
       parent: Sorry, you have been blocked by one or more of this work's creators.

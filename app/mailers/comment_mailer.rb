@@ -51,7 +51,7 @@ class CommentMailer < ApplicationMailer
     )
   end
 
-  # Sends email to the poster of a comment
+  # Sends email to the poster of a top-level comment
   def comment_sent_notification(comment)
     @comment = comment
     @noreply = true # don't give reply link to your own comment
@@ -61,4 +61,14 @@ class CommentMailer < ApplicationMailer
     )
   end
 
+  # Sends email to the poster of a reply to a comment
+  def comment_reply_sent_notification(comment)
+    @comment = comment
+    @parent_comment = comment.commentable
+    @noreply = true
+    mail(
+      to: @comment.comment_owner_email,
+      subject: "[#{ArchiveConfig.APP_SHORT_NAME}] Reply you left to a comment on " + (@comment.ultimate_parent.is_a?(Tag) ? "the tag " : "") + @comment.ultimate_parent.commentable_name.gsub("&gt;", ">").gsub("&lt;", "<")
+    )
+  end
 end

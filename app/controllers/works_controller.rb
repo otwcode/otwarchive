@@ -281,7 +281,7 @@ class WorksController < ApplicationController
     set_work_form_fields
 
     if params[:import]
-      @page_subtitle = ts('import')
+      @page_subtitle = ts("Import New Work")
       render(:new_import)
     elsif @work.persisted?
       render(:edit)
@@ -879,6 +879,8 @@ class WorksController < ApplicationController
       post_without_preview: params[:post_without_preview],
       importing_for_others: params[:importing_for_others],
       restricted: params[:restricted],
+      moderated_commenting_enabled: params[:moderated_commenting_enabled],
+      comment_permissions: params[:comment_permissions],
       override_tags: params[:override_tags],
       detect_tags: params[:detect_tags] == "true",
       fandom: params[:work][:fandom_string],

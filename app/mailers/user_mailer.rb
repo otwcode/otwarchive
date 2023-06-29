@@ -12,14 +12,14 @@ class UserMailer < ApplicationMailer
   helper :series
   include HtmlCleaner
 
-  # Send an email letting creators know their work has been added to a collection
-  def added_to_collection_notification(user_id, work_id, collection_id)
+  # Send an email letting a creator know that their work has been added to a collection by an archivist
+  def archivist_added_to_collection_notification(user_id, work_id, collection_id)
     @user = User.find(user_id)
     @work = Work.find(work_id)
     @collection = Collection.find(collection_id)
     mail(
-         to: @user.email,
-         subject: "[#{ArchiveConfig.APP_SHORT_NAME}]#{'[' + @collection.title + ']'} Your work was added to a collection"
+      to: @user.email,
+      subject: t(".subject", app_name: ArchiveConfig.APP_SHORT_NAME, collection_title: @collection.title)
     )
   end
 
@@ -419,12 +419,14 @@ class UserMailer < ApplicationMailer
 
   def abuse_report(abuse_report_id)
     abuse_report = AbuseReport.find(abuse_report_id)
+    @username = abuse_report.username
     @email = abuse_report.email
     @url = abuse_report.url
+    @summary = abuse_report.summary
     @comment = abuse_report.comment
     mail(
       to: abuse_report.email,
-      subject: "#{t 'user_mailer.abuse_report.subject', app_name: ArchiveConfig.APP_SHORT_NAME}"
+      subject: t("user_mailer.abuse_report.subject", app_name: ArchiveConfig.APP_SHORT_NAME, summary: strip_html_breaks_simple(@summary))
     )
   end
 
