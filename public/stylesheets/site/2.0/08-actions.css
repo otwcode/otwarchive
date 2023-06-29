@@ -140,6 +140,10 @@ ul#skiplinks, .landmark, .landmark a, .index .heading.landmark {
     opacity: 0;
 }
 
+h2.landmark {
+  display: block;
+}
+
 .secondary {
   background: #fff;
   position: absolute;
