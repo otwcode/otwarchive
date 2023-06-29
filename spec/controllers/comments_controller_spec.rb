@@ -261,24 +261,24 @@ describe CommentsController do
 
     context "guest comments are turned on in admin settings" do
       let(:work) { create(:work) }
-      let(:work_with_guest_comment_off) { create(:work, comment_permissions: :disable_anon) }
+      let(:work_with_guest_comment_on) { create(:work, comment_permissions: :enable_all) }
       let(:admin_setting) { AdminSetting.first || AdminSetting.create }
 
       before do
         admin_setting.update_attribute(:guest_comments_off, false)
       end
 
-      it "allows guest comments" do
+      it "does not allow guest comments" do
         get :new, params: { work_id: work.id }
 
-        expect(response).to render_template(:new)
+        it_redirects_to_with_error(work_path(work),
+                                   "Sorry, this work doesn't allow non-Archive users to comment.")
       end
 
-      it "does not allow guest comments when work has guest comments disabled" do
-        get :new, params: { work_id: work_with_guest_comment_off.id }
+      it "allows guest comments when work has guest comments enabled" do
+        get :new, params: { work_id: work_with_guest_comment_on.id }
 
-        it_redirects_to_with_error(work_path(work_with_guest_comment_off), 
-                                   "Sorry, this work doesn't allow non-Archive users to comment.")
+        expect(response).to render_template(:new)
       end
     end
 
@@ -328,23 +328,25 @@ describe CommentsController do
       end
     end
 
-    it "renders the :new template if commentable is a valid comment" do
-      comment = create(:comment)
-      get :new, params: { comment_id: comment.id }
-      expect(response).to render_template("new")
-      expect(assigns(:name)).to eq("Previous Comment")
-    end
+    context "when work comment permissions are #{:enable_all}" do
+      it "renders the :new template if commentable is a valid comment" do
+        comment = create(:comment)
+        get :new, params: { comment_id: comment.id }
+        expect(response).to render_template("new")
+        expect(assigns(:name)).to eq("Previous Comment")
+      end
 
-    it "shows an error and redirects if commentable is a frozen comment" do
-      comment = create(:comment, iced: true)
-      get :new, params: { comment_id: comment.id }
-      it_redirects_to_with_error("/where_i_came_from", "Sorry, you cannot reply to a frozen comment.")
-    end
+      it "shows an error and redirects if commentable is a frozen comment" do
+        comment = create(:comment, iced: true)
+        get :new, params: { comment_id: comment.id }
+        it_redirects_to_with_error("/where_i_came_from", "Sorry, you cannot reply to a frozen comment.")
+      end
 
-    it "shows an error and redirects if commentable is a hidden comment" do
-      comment = create(:comment, hidden_by_admin: true)
-      get :new, params: { comment_id: comment.id }
-      it_redirects_to_with_error("/where_i_came_from", "Sorry, you cannot reply to a hidden comment.")
+      it "shows an error and redirects if commentable is a hidden comment" do
+        comment = create(:comment, hidden_by_admin: true)
+        get :new, params: { comment_id: comment.id }
+        it_redirects_to_with_error("/where_i_came_from", "Sorry, you cannot reply to a hidden comment.")
+      end
     end
   end
 
@@ -545,49 +547,53 @@ describe CommentsController do
         end
       end
 
-      context "when the commentable is frozen" do
-        let(:comment) { create(:comment, iced: true) }
+      context "with guest comments enabled" do
+        let(:work_with_guest_comment_on) { create(:admin_post, comment_permissions: :enable_all) }
 
-        it "shows an error and redirects" do
-          post :create, params: { comment_id: comment.id, comment: anon_comment_attributes }
-          it_redirects_to_with_error("/where_i_came_from",
-                                     "Sorry, you cannot reply to a frozen comment.")
+        context "when the commentable is frozen" do
+          let(:comment) { create(:comment, iced: true, commentable: work_with_guest_comment_on) }
+
+          it "shows an error and redirects" do
+            post :create, params: { comment_id: comment.id, comment: anon_comment_attributes }
+            it_redirects_to_with_error("/where_i_came_from",
+                                      "Sorry, you cannot reply to a frozen comment.")
+          end
         end
-      end
 
-      context "when the commentable is hidden" do
-        let(:comment) { create(:comment, hidden_by_admin: true) }
+        context "when the commentable is hidden" do
+          let(:comment) { create(:comment, hidden_by_admin: true, commentable: work_with_guest_comment_on) }
 
-        it "shows an error and redirects" do
-          post :create, params: { comment_id: comment.id, comment: anon_comment_attributes }
-          it_redirects_to_with_error("/where_i_came_from",
-                                     "Sorry, you cannot reply to a hidden comment.")
+          it "shows an error and redirects" do
+            post :create, params: { comment_id: comment.id, comment: anon_comment_attributes }
+            it_redirects_to_with_error("/where_i_came_from",
+                                      "Sorry, you cannot reply to a hidden comment.")
+          end
         end
-      end
 
-      context "when the commentable is spam" do
-        let(:spam_comment) { create(:comment) }
+        context "when the commentable is spam" do
+          let(:spam_comment) { create(:comment, commentable: work_with_guest_comment_on) }
 
-        before { spam_comment.update_attribute(:approved, false) }
+          before { spam_comment.update_attribute(:approved, false) }
 
-        it "shows an error and redirects if commentable is a comment marked as spam" do
-          post :create, params: { comment_id: spam_comment.id, comment: anon_comment_attributes }
+          it "shows an error and redirects if commentable is a comment marked as spam" do
+            post :create, params: { comment_id: spam_comment.id, comment: anon_comment_attributes }
 
-          it_redirects_to_with_error("/where_i_came_from",
-                                     "Sorry, you can't reply to a comment that has been marked as spam.")
+            it_redirects_to_with_error("/where_i_came_from",
+                                      "Sorry, you can't reply to a comment that has been marked as spam.")
+          end
         end
       end
     end
 
     context "guest comments are turned on in admin settings" do
-      let(:work) { create(:work) }
+      let(:work) { create(:work, comment_permissions: :enable_all) }
       let(:admin_setting) { AdminSetting.first || AdminSetting.create }
 
       before do
         admin_setting.update_attribute(:guest_comments_off, false)
       end
 
-      it "allows guest comments" do
+      it "allows guest comments when work has guest comments enabled" do
         post :create, params: { work_id: work.id, comment: anon_comment_attributes }
 
         expect(flash[:error]).to be_nil
