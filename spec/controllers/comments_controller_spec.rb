@@ -12,30 +12,38 @@ describe CommentsController do
   end
 
   describe "GET #add_comment_reply" do
-    context "when comment is unreviewed" do
-      it "redirects logged out user to login path with an error" do
-        get :add_comment_reply, params: { comment_id: unreviewed_comment.id }
-        it_redirects_to_with_error(new_user_session_path, "Sorry, you cannot reply to an unapproved comment.")
+    context "when comment permissions are enable_all" do
+      let(:moderated_work) { create(:work, moderated_commenting_enabled: true, comment_permissions: :enable_all) }
+      let(:unmoderated_work) { create(:work, comment_permissions: :enable_all) }
+
+      let(:comment) { create(:comment, commentable: unmoderated_work.first_chapter) }
+      let(:unreviewed_comment) { create(:comment, :unreviewed, commentable: moderated_work.first_chapter) }
+
+      context "when comment is unreviewed" do
+        it "redirects logged out user to login path with an error" do
+          get :add_comment_reply, params: { comment_id: unreviewed_comment.id }
+          it_redirects_to_with_error(new_user_session_path, "Sorry, you cannot reply to an unapproved comment.")
+        end
+
+        it "redirects logged in user to root path with an error" do
+          fake_login
+          get :add_comment_reply, params: { comment_id: unreviewed_comment.id }
+          it_redirects_to_with_error(root_path, "Sorry, you cannot reply to an unapproved comment.")
+        end
       end
 
-      it "redirects logged in user to root path with an error" do
-        fake_login
-        get :add_comment_reply, params: { comment_id: unreviewed_comment.id }
-        it_redirects_to_with_error(root_path, "Sorry, you cannot reply to an unapproved comment.")
-      end
-    end
+      context "when comment is not unreviewed" do
+        it "redirects to the comment on the commentable without an error" do
+          get :add_comment_reply, params: { comment_id: comment.id }
+          expect(flash[:error]).to be_nil
+          expect(response).to redirect_to(chapter_path(comment.commentable, show_comments: true, anchor: "comment_#{comment.id}"))
+        end
 
-    context "when comment is not unreviewed" do
-      it "redirects to the comment on the commentable without an error" do
-        get :add_comment_reply, params: { comment_id: comment.id }
-        expect(flash[:error]).to be_nil
-        expect(response).to redirect_to(chapter_path(comment.commentable, show_comments: true, anchor: "comment_#{comment.id}"))
-      end
-
-      it "redirects to the comment on the commentable with the reply form open and without an error" do
-        get :add_comment_reply, params: { comment_id: comment.id, id: comment.id }
-        expect(flash[:error]).to be_nil
-        expect(response).to redirect_to(chapter_path(comment.commentable, add_comment_reply_id: comment.id, show_comments: true, anchor: "comment_#{comment.id}"))
+        it "redirects to the comment on the commentable with the reply form open and without an error" do
+          get :add_comment_reply, params: { comment_id: comment.id, id: comment.id }
+          expect(flash[:error]).to be_nil
+          expect(response).to redirect_to(chapter_path(comment.commentable, add_comment_reply_id: comment.id, show_comments: true, anchor: "comment_#{comment.id}"))
+        end
       end
     end
 
@@ -66,7 +74,8 @@ describe CommentsController do
       end
 
       context "when commentable is a work" do
-        let(:comment) { create(:comment, iced: true) }
+        let(:work) { create(:work, comment_permissions: :enable_all) }
+        let(:comment) { create(:comment, iced: true, commentable: work) }
 
         it_behaves_like "no one can add comment reply on a frozen comment"
       end
@@ -98,15 +107,17 @@ describe CommentsController do
         it_behaves_like "no one can add comment reply on a hidden comment"
       end
 
-      context "when commentable is a work" do
-        let(:comment) { create(:comment, hidden_by_admin: true) }
+      context "when commentable is a work with guest comments enabled" do
+        let(:work) { create(:work, comment_permissions: :enable_all) }
+        let(:comment) { create(:comment, hidden_by_admin: true, commentable: work) }
 
         it_behaves_like "no one can add comment reply on a hidden comment"
       end
     end
 
-    context "guest comments are turned on in admin settings" do
-      let(:comment) { create(:comment) }
+    context "guest comments are turned on in work and admin settings" do
+      let(:work) { create(:work, comment_permissions: :enable_all) }
+      let(:comment) { create(:comment, commentable: work.first_chapter) }
       let(:admin_setting) { AdminSetting.first || AdminSetting.create }
 
       before do
@@ -328,22 +339,24 @@ describe CommentsController do
       end
     end
 
-    context "when work comment permissions are #{:enable_all}" do
+    context "when work comment permissions are enable_all" do
+      let(:work) { create(:work, comment_permissions: :enable_all) }
+
       it "renders the :new template if commentable is a valid comment" do
-        comment = create(:comment)
+        comment = create(:comment, commentable: work)
         get :new, params: { comment_id: comment.id }
         expect(response).to render_template("new")
         expect(assigns(:name)).to eq("Previous Comment")
       end
 
       it "shows an error and redirects if commentable is a frozen comment" do
-        comment = create(:comment, iced: true)
+        comment = create(:comment, iced: true, commentable: work)
         get :new, params: { comment_id: comment.id }
         it_redirects_to_with_error("/where_i_came_from", "Sorry, you cannot reply to a frozen comment.")
       end
 
       it "shows an error and redirects if commentable is a hidden comment" do
-        comment = create(:comment, hidden_by_admin: true)
+        comment = create(:comment, hidden_by_admin: true, commentable: work)
         get :new, params: { comment_id: comment.id }
         it_redirects_to_with_error("/where_i_came_from", "Sorry, you cannot reply to a hidden comment.")
       end
@@ -548,7 +561,7 @@ describe CommentsController do
       end
 
       context "with guest comments enabled" do
-        let(:work_with_guest_comment_on) { create(:admin_post, comment_permissions: :enable_all) }
+        let(:work_with_guest_comment_on) { create(:work, comment_permissions: :enable_all) }
 
         context "when the commentable is frozen" do
           let(:comment) { create(:comment, iced: true, commentable: work_with_guest_comment_on) }
