@@ -21,6 +21,12 @@ describe Skin do
       expect(@skin_parent.errors[:position]).not_to be_empty
     end
 
+    it "does not allow a non-existent parent to be used" do
+      @skin_parent.parent_skin = nil
+      expect(@skin_parent.save).not_to be_truthy
+      expect(@skin_parent.errors[:parent_skin]).not_to be_empty
+    end
+
     it "should not allow using a site skin as parent for a skin unless it has role override" do
       @parent_skin.role = "site"
       @parent_skin.save
@@ -68,7 +74,7 @@ describe Skin do
 
       @child_skin.skin_parents_attributes = [{ parent_skin_title: blank_parent.title, position: 1 }]
       @child_skin.save!
-      
+
       expect(@child_skin.parent_skins).to be_empty
     end
   end
