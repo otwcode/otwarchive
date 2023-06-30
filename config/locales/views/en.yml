@@ -212,6 +212,7 @@ en:
           disabled_support_form_text: Disabled support form text
           downloads_enabled: Allow downloads
           enable_test_caching: Turn on caching (currently experimental)
+          guest_comments_off: Turn off guest comments across the site
           hide_spam: Automatically hide spam works
           invite_from_queue_enabled: Invite from queue enabled (People can add themselves to the queue and invitations are sent out automatically)
           invite_from_queue_frequency: How often (in days) should we invite people from the queue
@@ -318,6 +319,7 @@ en:
     collection_item_form:
       add: Add
       add_bookmark_header: Add Bookmark to collections
+      add_work_header_html: Add %{title} to collections
       invite: Invite
       invite_header_html: Invite %{title} to collections
     index:
@@ -340,7 +342,9 @@ en:
     commentable:
       actions:
         comment: Comment
+      add_to_collections_link: Add to Collections
       blocked: Sorry, you have been blocked by one or more of this work's creators.
+      guest_comments_disabled: Sorry, the Archive doesn't allow guests to comment right now.
       invite_to_collections_link: Invite To Collections
       logged_as_admin: Please log out of your admin account to comment.
       permissions:
