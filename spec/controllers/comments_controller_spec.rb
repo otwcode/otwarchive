@@ -173,6 +173,7 @@ describe CommentsController do
         it "redirects to root with notice prompting log out" do
           get :add_comment_reply, params: { comment_id: comment.id }
           it_redirects_to_with_notice(root_path, "Please log out of your admin account first!")
+        end
       end
     end
   end
