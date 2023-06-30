@@ -568,8 +568,7 @@ describe CommentsController do
 
           it "shows an error and redirects" do
             post :create, params: { comment_id: comment.id, comment: anon_comment_attributes }
-            it_redirects_to_with_error("/where_i_came_from",
-                                      "Sorry, you cannot reply to a frozen comment.")
+            it_redirects_to_with_error("/where_i_came_from", "Sorry, you cannot reply to a frozen comment.")
           end
         end
 
@@ -578,8 +577,7 @@ describe CommentsController do
 
           it "shows an error and redirects" do
             post :create, params: { comment_id: comment.id, comment: anon_comment_attributes }
-            it_redirects_to_with_error("/where_i_came_from",
-                                      "Sorry, you cannot reply to a hidden comment.")
+            it_redirects_to_with_error("/where_i_came_from", "Sorry, you cannot reply to a hidden comment.")
           end
         end
 
@@ -591,8 +589,7 @@ describe CommentsController do
           it "shows an error and redirects if commentable is a comment marked as spam" do
             post :create, params: { comment_id: spam_comment.id, comment: anon_comment_attributes }
 
-            it_redirects_to_with_error("/where_i_came_from",
-                                      "Sorry, you can't reply to a comment that has been marked as spam.")
+            it_redirects_to_with_error("/where_i_came_from", "Sorry, you can't reply to a comment that has been marked as spam.")
           end
         end
       end
