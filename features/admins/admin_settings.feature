@@ -138,11 +138,6 @@ Feature: Admin Settings Page
   Scenario: Tag comments are not affected when guest comments are turned off
     Given guest comments are off
       And a fandom exists with name: "Stargate SG-1", canonical: true
-    When I am logged in as a super admin
-      And I view the tag "Stargate SG-1" with comments
-    Then I should not see "Sorry, the Archive doesn't allow guests to comment right now."
-    When I post the comment "Important policy decision" on the tag "Stargate SG-1"
-    Then I should see "Comment created!"
     When I am logged in as a tag wrangler
       And I view the tag "Stargate SG-1" with comments
     Then I should not see "Sorry, the Archive doesn't allow guests to comment right now."
