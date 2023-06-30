@@ -182,6 +182,10 @@ end
 
 ### THEN
 
+Then /^I should see a parent skin text field$/ do
+  step %{I should see "Parent #"}
+end
+
 Then "I should see {string} in the page style" do |css|
   expect(page).to have_css("style", text: css, visible: false)
 end
