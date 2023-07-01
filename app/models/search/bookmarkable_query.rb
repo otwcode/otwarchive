@@ -119,7 +119,7 @@ class BookmarkableQuery < Query
     aggs = {}
 
     if bookmark_query.facet_tags?
-      %w(rating archive_warning category fandom character relationship freeform).each do |facet_type|
+      %w[rating archive_warning category fandom character relationship freeform].each do |facet_type|
         aggs[facet_type] = {
           terms: {
             field: "#{facet_type}_ids"
@@ -167,9 +167,7 @@ class BookmarkableQuery < Query
     # If we're sorting by created_at, we actually need to fetch the bookmarks'
     # created_at as the score of this query, so that we can sort by score (and
     # therefore by the bookmarks' created_at).
-    if sort_column == "created_at"
-      bool = field_value_score("created_at", bool)
-    end
+    bool = field_value_score("created_at", bool) if sort_column == "created_at"
 
     {
       has_child: {
