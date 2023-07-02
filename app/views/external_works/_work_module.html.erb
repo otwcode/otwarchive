@@ -19,7 +19,7 @@
   </h5>
 
   <p class="notice">
-    <%= ts("This work isn't hosted on the Archive so this blurb might not be complete 
+    <%= ts("This work isn't hosted on the Archive so this blurb might not be complete
            or accurate.") %>
   </p>
 
@@ -55,6 +55,6 @@
 
   <% if external_work.related_works.count > 0 %>
     <dt class="inspired"><%= t("stats.related_works") + ":" %></dt>
-    <dd class="inspired"><%= link_to external_work.related_works.count.to_s, external_work %></dd>
+    <dd class="inspired"><%= link_to number_with_delimiter(external_work.related_works.count), external_work %></dd>
   <% end %>
 </dl>

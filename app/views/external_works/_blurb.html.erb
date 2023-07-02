@@ -47,7 +47,7 @@
     <% end %>
 
     <dt class="inspired"><%= ts("stats.related_works") + ":" %></dt>
-    <dd class="inspired"><%= link_to external_work.related_works.count.to_s, external_work  %></dd>
+    <dd class="inspired"><%= link_to number_with_delimiter(external_work.related_works.count), external_work %></dd>
   </dl>
 
   <% if policy(external_work).show_admin_options? %>

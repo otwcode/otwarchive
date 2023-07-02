@@ -524,10 +524,6 @@ en:
         other: Transfer these bookmarks to the default pseud
   stats:
     bookmarks: Bookmarks
-    comments: Comments
-    hits: Hits
-    kudos: Kudos
-    language: Language
     related_works: Related Works
     words: Words
     works: Works
