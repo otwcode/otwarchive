@@ -522,14 +522,14 @@ en:
       transfer:
         one: Transfer this bookmark to the default pseud
         other: Transfer these bookmarks to the default pseud
+  skins:
+    confirm_delete:
+      confirm_html: Are you sure you want to <strong><em>delete</em></strong> the skin "%{skin_title}"?
   stats:
     bookmarks: Bookmarks
     related_works: Related Works
     words: Words
     works: Works
-  skins:
-    confirm_delete:
-      confirm_html: Are you sure you want to <strong><em>delete</em></strong> the skin "%{skin_title}"?
   tag_wranglers:
     show:
       last_wrangled_html: "%{wrangler_login} last wrangled at %{time}."
