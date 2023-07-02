@@ -49,12 +49,12 @@
   <% end %>
 
   <% if Bookmark.count_visible_bookmarks(external_work) > 0 %>
-    <dt class="bookmarks"><%= ts("Bookmarks:") %></dt>
+    <dt class="bookmarks"><%= t("stats.bookmarks") + ":" %></dt>
     <dd class="bookmarks"><%= link_to_bookmarkable_bookmarks(external_work) %></dd>
   <% end %>
 
   <% if external_work.related_works.count > 0 %>
-    <dt class="inspired"><%= ts("Related Works:") %></dt>
+    <dt class="inspired"><%= t("stats.related_works") + ":" %></dt>
     <dd class="inspired"><%= link_to external_work.related_works.count.to_s, external_work %></dd>
   <% end %>
 </dl>
