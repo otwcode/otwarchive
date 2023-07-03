@@ -458,8 +458,8 @@ class Work < ApplicationRecord
     valid_users = (self.users + [User.current_user]).compact
 
     self.challenge_assignments =
-      ChallengeAssignment.where(id: valid_ids).
-      select { |assign| valid_users.include?(assign.offering_user) }
+      ChallengeAssignment.where(id: valid_ids)
+        .select { |assign| valid_users.include?(assign.offering_user) }
   end
 
   def recipients=(recipient_names)
