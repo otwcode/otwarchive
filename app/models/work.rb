@@ -459,6 +459,7 @@ class Work < ApplicationRecord
 
     self.challenge_assignments =
       ChallengeAssignment.where(id: valid_ids)
+        .compact
         .select { |assign| valid_users.include?(assign.offering_user) }
   end
 
