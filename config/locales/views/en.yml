@@ -428,6 +428,9 @@ en:
   home:
     donate:
       page_title: Donate or Volunteer
+  invitations:
+    invitation:
+      email_address_label: Enter an email address
   invite_requests:
     invite_request:
       date: 'At our current rate, you should receive an invitation on or around: %{date}.'

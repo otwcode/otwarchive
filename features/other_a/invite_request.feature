@@ -62,6 +62,18 @@ Feature: Invite requests
       And I should not see "Sorry, you have no unsent invitations right now."
       And I should see "You have 2 open invitations and 0 that have been sent but not yet used."
 
+  Scenario: User can fail to send an invitation to an invalid email address
+
+    Given invitations are required
+      And I am logged in as "user1"
+      And I request some invites
+      And an admin grants the request
+      And I try to invite a friend from my user page
+    When all emails have been delivered
+      And I fill in "invitation[invitee_email]" with "test@"
+      And I press "Send Invitation"
+    Then I should see "Invitee email should look like an email address"
+
   Scenario: User can send out invites they have been granted, and the recipient can sign up
 
     Given invitations are required
