@@ -164,6 +164,25 @@ en:
       work_added:
         html: The collection maintainers of %{collection_link} have added your work %{work_link} to their collection!
         text: The collection maintainers of "%{collection_title}" (%{collection_url}) have added your work "%{work_title}" (%{work_url}) to their collection!
+    batch_subscription_notification:
+      chapter_summary: Chapter Summary
+      creation_byline:
+        html: by %{creator_links}
+        text: by %{creators}
+      footer_note:
+        html: You're receiving this email because you've subscribed to %{subscription_link}. Follow the link to unsubscribe if you no longer wish to receive updates.
+        text: 'You''re receiving this email because you''ve subscribed to %{subscription_name}. Follow the link to unsubscribe if you no longer wish to receive updates: %{unsubscribe_url}'
+      preface:
+        chapter:
+          html: "%{creator_links} posted a new chapter of %{work_link_with_word_count}:"
+          text: "%{creators} posted a new chapter of %{work_title_with_word_count}:"
+        work:
+          backdated:
+            html: "%{creator_links} posted a backdated work:"
+            text: "%{creators} posted a backdated work:"
+          new:
+            html: "%{creator_links} posted a new work:"
+            text: "%{creators} posted a new work:"
     challenge_assignment_notification:
       any: Any
       assignment:
