@@ -105,7 +105,7 @@ class CollectionParticipantsController < ApplicationController
     if @participants_invited.empty? && @participants_added.empty?
       if pseud_results[:banned_pseuds].present?
         flash[:error] =
-            ts("%{name} cannot participate in challenges..",
+            ts("%{name} cannot participate in challenges.",
                name: pseud_results[:banned_pseuds].to_sentence
         )
       else
