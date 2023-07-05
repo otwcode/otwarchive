@@ -39,7 +39,7 @@
   When I am on the "Such a nice collection" participants page
     And I fill in "participants_to_invite" with "sam"
     And I press "Submit"
-  Then I should see "sam is currently banned and cannot participate in challenges."
+  Then I should see "sam cannot participate in challenges.."
 
   Scenario: A user can ask to join a closed collection
   Given I have a moderated closed collection "Such a nice collection"
