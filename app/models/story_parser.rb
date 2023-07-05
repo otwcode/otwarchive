@@ -421,8 +421,12 @@ class StoryParser
       name = name.to_ascii.gsub(/[^\w[ \-@.]]/u, "")
       external_author = ExternalAuthor.find_or_create_by(email: email)
       external_author_name = external_author.default_name
+
+      # if the name and email don't exist in the DB tables, add it
       unless name.blank?
-        external_author_name = ExternalAuthorName.where(name: name, external_author_id: external_author.id).first ||
+        raise Error, external_author.errors.full_messages.join(" ") if external_author.invalid?
+
+        external_author_name = ExternalAuthorName.find_by(name: name, external_author_id: external_author.id) ||
                                ExternalAuthorName.new(name: name)
         external_author.external_author_names << external_author_name
         external_author.save

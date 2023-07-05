@@ -209,6 +209,12 @@ describe StoryParser do
         @sp.parse_author("", nil, nil)
       }.to raise_exception(StoryParser::Error) { |e| expect(e.message).to eq("No author name specified\nNo author email specified") }
     end
+
+    it "raises an exception when the external author email is invalid" do
+      expect do
+        @sp.parse_author("", "Author Name", "not_email")
+      end.to raise_exception(StoryParser::Error) { |e| expect(e.message).to eq("Email should look like an email address.") }
+    end
   end
 
   # Let the test get at external sites, but stub out anything containing certain keywords
