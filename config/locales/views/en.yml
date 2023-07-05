@@ -445,6 +445,8 @@ en:
         one: "%{count} more user"
         other: "%{count} more users"
   layouts:
+    header:
+      login: Log In
     proxy_notice:
       button: Dismiss Notice
       faux_heading: 'Important message:'
