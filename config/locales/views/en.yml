@@ -507,6 +507,11 @@ en:
       allow_collection_invitation: Allow others to invite my works to collections.
       blocked_users: Blocked Users
       muted_users: Muted Users
+  profile:
+    pseud_list:
+      more_pseuds:
+        one: "%{count} more pseud"
+        other: "%{count} more pseuds"
   pseuds:
     delete_preview:
       cancel: Cancel
