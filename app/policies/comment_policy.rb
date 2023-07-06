@@ -11,9 +11,7 @@ class CommentPolicy < ApplicationPolicy
     case record.ultimate_parent
     when AdminPost
       user_has_roles?(DESTROY_ADMIN_POST_COMMENT_ROLES)
-    when Tag
-      user_has_roles?(DESTROY_COMMENT_ROLES)
-    when Work
+    else
       user_has_roles?(DESTROY_COMMENT_ROLES)
     end
   end
