@@ -12,7 +12,7 @@ class SkinParent < ApplicationRecord
   def no_site_parent
     return unless parent_skin&.get_role == "site" && !%w[override site].include?(child_skin.get_role)
 
-    errors.add(:base, ts("^You can't use %{title} as a parent unless replacing the default archive skin.", title: parent_skin.title))
+    errors.add(:base, ts("You can't use %{title} as a parent unless replacing the default archive skin.", title: parent_skin.title))
   end
 
   validate :no_circular_skin
