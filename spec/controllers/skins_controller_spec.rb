@@ -32,7 +32,7 @@ describe SkinsController do
         it_behaves_like "unauthorized admin cannot edit"
       end
 
-      %w[board communications docs elections open_doors policy_and_abuse support tag_wrangling translation].each do |role|
+      (Admin::VALID_ROLES - %w[superadmin]).each do |role|
         context "when admin has #{role} role" do
           let(:admin) { create(:admin, roles: [role]) }
 
@@ -104,7 +104,7 @@ describe SkinsController do
         it_behaves_like "unauthorized admin cannot update"
       end
 
-      %w[board communications docs elections open_doors policy_and_abuse support tag_wrangling translation].each do |role|
+      (Admin::VALID_ROLES - %w[superadmin]).each do |role|
         context "when admin has #{role} role" do
           let(:admin) { create(:admin, roles: [role]) }
 
