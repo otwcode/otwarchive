@@ -1,5 +1,4 @@
 class Admin::SpamController < Admin::BaseController
-
   def index
     authorize ModeratedWork
 
@@ -11,7 +10,11 @@ class Admin::SpamController < Admin::BaseController
                   else
                     { reviewed: false, approved: false }
                   end
-    @works = ModeratedWork.where(conditions).order(:created_at).page(params[:page])
+    @works = ModeratedWork.where(conditions)
+      .joins(:work)
+      .select("moderated_works.*", "title", "revised_at")
+      .order(:created_at)
+      .page(params[:page])
   end
 
   def bulk_update
