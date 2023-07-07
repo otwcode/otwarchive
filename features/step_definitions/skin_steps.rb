@@ -182,7 +182,7 @@ end
 
 ### THEN
 
-Then /^I should see a parent skin text field$/ do
+Then "I should see a parent skin text field" do
   step %{I should see "Parent #"}
 end
 

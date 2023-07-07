@@ -13,7 +13,7 @@ Feature: Skin wizard
     And I should see "CSS"
 
   @javascript
-  Scenario: User can add a parent skin to the wizard
+  Scenario: User can add a parent skin using the wizard
   Given I am logged in
     And I create the skin "Dad"
   When I go to the new skin page
@@ -22,21 +22,12 @@ Feature: Skin wizard
     And I should see "Parent Skins"
   When I fill in "Title" with "Child"
     And I follow "Add parent skin"
-    And I wait 1 second
+    And it is currently 1 second from now
   Then I should see a parent skin text field
-
-  @javascript
-  Scenario: User can add a parent skin to the form
-  Given I am logged in
-    And I create the skin "Dad"
-  When I go to the new skin page
-  Then I should see "Advanced"
-  When I follow "Show ↓"
+  When I enter "Dad" in the "skin_skin_parents_attributes_1_parent_skin_title_autocomplete" autocomplete field
+    And I press "Submit"
   Then I should see "Parent Skins"
-  When I fill in "Title" with "Child"
-    And I follow "Add parent skin"
-    And I wait 1 second
-  Then I should see a parent skin text field
+    And I should see "Dad"
 
   Scenario: Users should be able to create and use a wizard skin to adjust work margins,
   and they should be able to edit the skin while they are using it

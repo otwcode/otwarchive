@@ -3,8 +3,8 @@ require 'spec_helper'
 describe Skin do
 
   describe "save" do
-    let(:child_skin) { Skin.new(title: "Child", css: "body {background: #fff;}") }
-    let(:parent_skin) { Skin.new(title: "Parent", css: "body {color: #000;}") }
+    let(:child_skin) { build(:skin, title: "Child", css: "body {background: #fff;}") }
+    let(:parent_skin) { build(:skin, title: "Parent", css: "body {color: #000;}") }
     let(:skin_parent) { SkinParent.new(child_skin: child_skin, parent_skin: parent_skin, position: 1) }
 
     it "should save a basic parent relationship" do
