@@ -193,27 +193,67 @@ describe StoryParser do
     end
 
     it "raises an exception when the external author name is not provided" do
-      expect {
+      expect do
         @sp.parse_author("", nil, "author@example.com")
-      }.to raise_exception(StoryParser::Error) { |e| expect(e.message).to eq("No author name specified") }
+      end.to raise_exception(StoryParser::Error, "No author name specified")
     end
 
     it "raises an exception when the external author email is not provided" do
-      expect {
+      expect do
         @sp.parse_author("", "Author Name", nil)
-      }.to raise_exception(StoryParser::Error) { |e| expect(e.message).to eq("No author email specified") }
+      end.to raise_exception(StoryParser::Error, "No author email specified")
     end
 
     it "raises an exception when neither the external author name nor email is provided" do
-      expect {
+      expect do
         @sp.parse_author("", nil, nil)
-      }.to raise_exception(StoryParser::Error) { |e| expect(e.message).to eq("No author name specified\nNo author email specified") }
+      end.to raise_exception(StoryParser::Error, "No author name specified\nNo author email specified")
+    end
+
+    it "gives the same external author object for the same email" do
+      res1 = @sp.parse_author("", "Author Name", "author@example.com")
+      res2 = @sp.parse_author("", "Author Name Second", "author@example.com")
+      res3 = @sp.parse_author("", "Author!! Name!!", "author@example.com")
+      expect(res2.external_author.id).to eq(res1.external_author.id)
+      expect(res3.external_author.id).to eq(res1.external_author.id)
+      expect(res1.name).to eq("Author Name")
+      expect(res2.name).to eq("Author Name Second")
+    end
+
+    it "ignores the external author name when it is invalid" do
+      results = @sp.parse_author("", "!!!!", "author@example.com")
+      expect(results.name).to eq("author@example.com")
+      expect(results.external_author.email).to eq("author@example.com")
+    end
+
+    it "ignores invalid letters in the external author name" do
+      results = @sp.parse_author("", "Author!! Name!!", "author@example.com")
+      expect(results.name).to eq("Author Name")
+      expect(results.external_author.email).to eq("author@example.com")
     end
 
     it "raises an exception when the external author email is invalid" do
       expect do
         @sp.parse_author("", "Author Name", "not_email")
-      end.to raise_exception(StoryParser::Error) { |e| expect(e.message).to eq("Email should look like an email address.") }
+      end.to raise_exception(StoryParser::Error, "Email should look like an email address.")
+    end
+
+    it "raises an exception when the external author name and email are invalid" do
+      expect do
+        @sp.parse_author("", "!!!!", "not_email")
+      end.to raise_exception(StoryParser::Error, "Email should look like an email address.")
+    end
+
+    it "raises an exception when the external author name is blank and email is invalid" do
+      expect do
+        @sp.parse_author("", "", "not_email")
+      end.to raise_exception(StoryParser::Error, "No author name specified\nEmail should look like an email address.")
+    end
+
+    it "raises an exception when the external author name is invalid and email is blank" do
+      expect do
+        @sp.parse_author("", "!!!!", "")
+      end.to raise_exception(StoryParser::Error, "No author email specified")
     end
   end
 

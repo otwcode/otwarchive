@@ -62,7 +62,7 @@ Feature: Invite requests
       And I should not see "Sorry, you have no unsent invitations right now."
       And I should see "You have 2 open invitations and 0 that have been sent but not yet used."
 
-  Scenario: User can see an error after trying to invide an invalid email address
+  Scenario: User can see an error after trying to invite an invalid email address
 
     Given I am logged in as "user1"
       And "user1" has "1" invitation
