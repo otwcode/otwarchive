@@ -57,7 +57,7 @@ module WorksHelper
 
   def language_link(work)
     if work.respond_to?(:language) && work.language
-      link_to work.language.name, work.language
+      link_to work.language.name, work.language, lang: work.language.short
     else
       "N/A"
     end
@@ -183,10 +183,10 @@ module WorksHelper
   def chapter_total_display_with_link(work)
     total_posted_chapters = work.number_of_posted_chapters
     if total_posted_chapters > 1
-      link_to(total_posted_chapters.to_s,
+      link_to(number_with_delimiter(total_posted_chapters),
               work_chapter_path(work, work.last_posted_chapter.id)) +
         "/" +
-        work.wip_length.to_s
+        number_with_delimiter(work.wip_length)
     else
       chapter_total_display(work)
     end

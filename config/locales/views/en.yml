@@ -319,6 +319,7 @@ en:
     collection_item_form:
       add: Add
       add_bookmark_header: Add Bookmark to collections
+      add_work_header_html: Add %{title} to collections
       invite: Invite
       invite_header_html: Invite %{title} to collections
     index:
@@ -341,6 +342,7 @@ en:
     commentable:
       actions:
         comment: Comment
+      add_to_collections_link: Add to Collections
       blocked: Sorry, you have been blocked by one or more of this work's creators.
       guest_comments_disabled: Sorry, the Archive doesn't allow guests to comment right now.
       invite_to_collections_link: Invite To Collections
@@ -505,6 +507,11 @@ en:
       allow_collection_invitation: Allow others to invite my works to collections.
       blocked_users: Blocked Users
       muted_users: Muted Users
+  profile:
+    pseud_list:
+      more_pseuds:
+        one: "%{count} more pseud"
+        other: "%{count} more pseuds"
   pseuds:
     delete_preview:
       cancel: Cancel

@@ -134,3 +134,33 @@ Scenario: Comments reflect pseud changes immediately
     And I view the work "Interesting" with comments
   Then I should see "after (myself)" within ".comment h4.byline"
     And I should not see "before (myself)"
+
+Scenario: Many pseuds
+
+  Given there are 3 pseuds per page
+    And "Zaphod" has the pseud "Slartibartfast"
+    And "Zaphod" has the pseud "Agrajag"
+    And "Zaphod" has the pseud "Betelgeuse"
+    And I am logged in as "Zaphod"
+
+  When I view my profile
+  Then I should see "Zaphod" within "dl.meta"
+    And I should see "Agrajag" within "dl.meta"
+    And I should see "Betelgeuse" within "dl.meta"
+    And I should not see "Slartibartfast" within "dl.meta"
+    And I should see "1 more pseud" within "dl.meta"
+
+  When I go to my user page
+  Then I should see "Zaphod" within "ul.expandable"
+    And I should see "Agrajag" within "ul.expandable"
+    And I should see "Betelgeuse" within "ul.expandable"
+    And I should not see "Slartibartfast" within "ul.expandable"
+    And I should see "All Pseuds (4)" within "ul.expandable"
+
+  When I go to my "Slartibartfast" pseud page
+  Then I should see "Slartibartfast" within "li.pseud > a"
+    And I should not see "Slartibartfast" within "ul.expandable"
+
+  When there are 10 pseuds per page
+    And I view my profile
+  Then I should see "Zaphod, Agrajag, Betelgeuse, and Slartibartfast" within "dl.meta"

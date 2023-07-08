@@ -81,7 +81,8 @@
       <dd><%= f.time_zone_select :time_zone, nil, :default => Time.zone.name %></dd>
       <% if Rails.env.test? || Rails.env.development? || $rollout.active?(:set_locale_preference, @user) %>
         <dt><%= f.label :preferred_locale, ts('Your locale') %> <%= link_to_help 'locale-preferences' %></dt>
-        <dd><%= f.select :preferred_locale, @available_locales.collect{|locale| [locale.name, locale.id]}, :default => @preference.preferred_locale %></dd>
+        <dd><%= f.select :preferred_locale, locale_options_for_select(@available_locales, "id"),
+                  default: @preference.preferred_locale %></dd>
       <% end %>
       <dt><%= f.label :work_title_format, ts('Browser page title format') %> <%= link_to_help 'work_title_format' %></dt>
       <dd><%= f.text_field :work_title_format %></dd>
