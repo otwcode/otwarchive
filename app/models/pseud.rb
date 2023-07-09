@@ -178,7 +178,7 @@ class Pseud < ApplicationRecord
   # pseud name, returns [pseud.name, nil].
   def self.split_byline(byline)
     pseud_name, login = byline.split("(", 2)
-    [pseud_name.strip, login&.strip&.delete_suffix(")")]
+    [pseud_name&.strip, login&.strip&.delete_suffix(")")]
   end
 
   # Parse a string of the "pseud.name (user.login)" format into a pseud. If the
