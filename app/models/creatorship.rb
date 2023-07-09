@@ -44,9 +44,10 @@ class Creatorship < ApplicationRecord
   # Make sure that if this is an invitation, we're not inviting someone who has
   # disabled invitations.
   def check_disallowed
-    return if approved? || pseud.nil? || pseud&.user&.banned || pseud&.user&.suspended
+    return if approved? || pseud.nil?
+    # Prevents this error from appearing in addition to the errorfor banned or suspended users. 
+    return if pseud&.user&.banned || pseud&.user&.suspended
     return if pseud&.user&.preference&.allow_cocreator
-
     errors.add(:base, ts("%{name} does not allow others to invite them to be a co-creator.",
                          name: pseud.byline))
   end
