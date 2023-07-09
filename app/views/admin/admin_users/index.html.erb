@@ -22,8 +22,8 @@
           <%= ts("Search for user with exact ID.") %>
         </p>
         </dd>
-      <dt><%= label_tag "role", ts("Role") %></dt>
-      <dd><%= select_tag "role", "<option></option>".html_safe + options_for_select(@role_values, @role.try(:name)) %></dd>
+      <dt><%= label_tag "role_id", ts("Role") %></dt>
+      <dd><%= select_tag "role_id", "<option></option>".html_safe + options_for_select(@role_values, params[:role_id].to_i) %></dd>
       <dt><%= label_tag "status", ts("Status") %></dt>
       <dd>
         <%= check_box_tag "inactive", "1", params[:inactive].present? %>
@@ -31,8 +31,19 @@
       </dd>
       <dt><%= label_tag "settings", ts("Search settings") %></dt>
       <dd>
-        <%= check_box_tag "exact", "1", params[:exact].present? %>
-        <%= label_tag "exact", ts("Exact match only") %>
+        <ul>
+          <li>
+            <%= check_box_tag "exact", "1", params[:exact].present? %>
+            <%= label_tag "exact", ts("Exact match only") %>
+          </li>
+
+          <% if policy(User).view_past? %>
+            <li>
+              <%= check_box_tag "search_past", "1", params[:search_past].present? %>
+              <%= label_tag "search_past", ts("Include past usernames and emails") %>
+            </li>
+          <% end %>
+        </ul>
       </dd>
     </dl>
     <p class="submit"><%= submit_tag ts("Find") %></p>

@@ -1,5 +1,5 @@
 class ScheduledReindexJob
-  MAIN_CLASSES = %w(Pseud Tag Work Bookmark Series ExternalWork).freeze
+  MAIN_CLASSES = %w(Pseud Tag Work Bookmark Series ExternalWork User).freeze
 
   def self.perform(reindex_type)
     classes = case reindex_type

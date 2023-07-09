@@ -125,6 +125,12 @@ en:
           role:
             one: 'Role:'
             other: 'Roles:'
+          past_logins:
+            one: "Past Username:"
+            other: "Past Usernames:"
+          past_emails:
+            one: "Past Email:"
+            other: "Past Emails:"
         navigation:
           activate: Activate
           invitations:

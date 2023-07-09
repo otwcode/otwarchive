@@ -19,7 +19,7 @@ Feature: Admin Find Users page
       And I should see "userCB"
 
   Scenario: The Find Users page should perform a exact match on name if exact is checked
-    When I check "exact"
+    When I check "Exact match only"
       And I fill in "Name" with "user"
       And I submit
     Then I should see "0 users found"
@@ -27,6 +27,23 @@ Feature: Admin Find Users page
       And I submit
     Then the field labeled "user_email" should contain "a@ao3.org"
       But I should not see "UserB"
+
+  Scenario: The Find Users page should search past logins only if the option is selected
+    When I am logged in as "userA"
+      And I visit the change username page for userA
+      And I fill in "New user name" with "userD"
+      And I fill in "Password" with "password"
+      And I press "Change"
+    Then I should get confirmation that I changed my username
+    When I am logged in as a super admin
+      And I go to the manage users page
+      And I fill in "Name" with "userA"
+      And I submit
+    Then I should see "0 users found"
+    When I check "Include past usernames and emails"
+      And I submit
+    Then I should see "1 user found"
+      And I should see "userD"
 
   Scenario: The Find Users page should perform a partial match by email
     When I fill in "Email" with "bo3"
@@ -36,7 +53,7 @@ Feature: Admin Find Users page
       But I should not see "userA"
 
   Scenario: The Find Users page should perform a exact match on email if exact is checked
-    When I check "exact"
+    When I check "Exact match only"
       And I fill in "Email" with "not_email"
       And I submit
     Then I should see "0 users found"
@@ -45,8 +62,27 @@ Feature: Admin Find Users page
     Then I should see "userA"
       But I should not see "UserB"
 
+  Scenario: The Find Users page should search past emails if the option is selected
+    When I am logged in as "userA"
+      And I visit the change email page for userA
+      And I fill in "New Email" with "d@ao3.org"
+      And I fill in "Confirm New Email" with "d@ao3.org"
+      And I fill in "Password" with "password"
+      And I press "Change"
+    Then I should get confirmation that I changed my email
+    When I am logged in as a super admin
+      And I go to the manage users page
+      And I fill in "Email" with "a@ao3.org"
+      And I submit
+    Then I should see "0 users found"
+    When I check "Include past usernames and emails"
+      And I submit
+    Then I should see "1 user found"
+      And I should see "userA"
+      But the field labeled "user_email" should contain "d@ao3.org"
+
   Scenario: The Find Users page should perform an exact match by role
-    When I select "Archivist" from "role"
+    When I select "Archivist" from "Role"
       And I submit
     Then I should see "userB"
       But I should not see "userA"

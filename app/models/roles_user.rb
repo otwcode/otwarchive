@@ -30,4 +30,8 @@ class RolesUser < ApplicationRecord
 
     user.last_wrangling_activity&.destroy
   end
+
+  delegate :enqueue_to_index, to: :user
+  after_create :enqueue_to_index
+  after_destroy :enqueue_to_index
 end

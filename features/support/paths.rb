@@ -308,6 +308,7 @@ module NavigationHelpers
     when /^the admin-blacklist page$/i
       admin_blacklisted_emails_path
     when /^the manage users page$/
+      step "all indexing jobs have been run"
       admin_users_path
     when /^the bulk email search page$/i
       bulk_search_admin_users_path

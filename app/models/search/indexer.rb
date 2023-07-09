@@ -6,7 +6,8 @@ class Indexer
     Tag: %w[TagIndexer],
     Pseud: %w[PseudIndexer],
     Series: %w[BookmarkedSeriesIndexer],
-    ExternalWork: %w[BookmarkedExternalWorkIndexer]
+    ExternalWork: %w[BookmarkedExternalWorkIndexer],
+    User: %w[UserIndexer]
   }.freeze
 
   delegate :klass, :klass_with_includes, :index_name, :document_type, to: :class
@@ -31,6 +32,7 @@ class Indexer
       BookmarkIndexer,
       PseudIndexer,
       TagIndexer,
+      UserIndexer,
       WorkIndexer,
       WorkCreatorIndexer
     ]

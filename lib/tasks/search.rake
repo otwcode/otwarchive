@@ -31,6 +31,11 @@ namespace :search do
     BookmarkIndexer.index_all
   end
 
+  desc "Recreate admin users index"
+  task(index_admin_users: :environment) do
+    UserIndexer.index_all
+  end
+
   desc "Reindex all works without recreating the index"
   task(reindex_works: :environment) do
     WorkIndexer.index_from_db
@@ -42,6 +47,11 @@ namespace :search do
     BookmarkedExternalWorkIndexer.index_from_db
     BookmarkedSeriesIndexer.index_from_db
     BookmarkedWorkIndexer.index_from_db
+  end
+
+  desc "Recreate admin users index"
+  task(reindex_admin_users: :environment) do
+    UserIndexer.index_from_db
   end
 
   desc "Reindex all recently-modified items"

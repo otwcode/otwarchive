@@ -1,6 +1,7 @@
 class User < ApplicationRecord
   audited
   include WorksOwner
+  include Searchable
 
   devise :database_authenticatable,
          :confirmable,
@@ -254,47 +255,7 @@ class User < ApplicationRecord
     where("challenge_claims.id IN (?)", claims_ids)
   end
 
-  # Find users with a particular role and/or by name, email, and/or id
-  # Options: inactive, page, exact
-  def self.search_by_role(role, name, email, user_id, options = {})
-    return if role.blank? && name.blank? && email.blank? && user_id.blank?
-
-    users = User.distinct.order(:login)
-    if options[:inactive]
-      users = users.where("confirmed_at IS NULL")
-    end
-    if role.present?
-      users = users.joins(:roles).where("roles.id = ?", role.id)
-    end
-    if name.present?
-      users = users.filter_by_name(name, options[:exact])
-    end
-    if email.present?
-      users = users.filter_by_email(email, options[:exact])
-    end
-    if user_id.present?
-      users = users.where(["users.id = ?", user_id])
-    end
-    users.paginate(page: options[:page] || 1)
-  end
-
-  # Scope to look for users by pseud name:
-  def self.filter_by_name(name, exact)
-    if exact
-      joins(:pseuds).where(["pseuds.name = ?", name])
-    else
-      joins(:pseuds).where(["pseuds.name LIKE ?", "%#{name}%"])
-    end
-  end
-
-  # Scope to look for users by email:
-  def self.filter_by_email(email, exact)
-    if exact
-      where(["email = ?", email])
-    else
-      where(["email LIKE ?", "%#{email}%"])
-    end
-  end
+  scope :with_includes_for_admin_index, -> { includes(:roles, :fannish_next_of_kin) }
 
   def self.search_multiple_by_email(emails = [])
     # Normalise and dedupe emails
@@ -517,6 +478,18 @@ class User < ApplicationRecord
     IndexQueue.enqueue_ids(Bookmark, bookmarks.pluck(:id), :main)
     IndexQueue.enqueue_ids(Series, series.pluck(:id), :main)
     IndexQueue.enqueue_ids(Pseud, pseuds.pluck(:id), :main)
+  end
+
+  # Function to make it easier to retrieve info from the audits table.
+  #
+  # Looks up all past values of the given field, excluding the current value of
+  # the field:
+  def historic_values(field)
+    field = field.to_s
+
+    audits.filter_map do |audit|
+      audit.audited_changes[field]
+    end.flatten.uniq.without(self[field])
   end
 
   private

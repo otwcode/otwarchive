@@ -3,12 +3,12 @@ class Admin::AdminUsersController < Admin::BaseController
 
   def index
     authorize User
-    @role_values = @roles.map{ |role| [role.name.humanize.titlecase, role.name] }
-    @role = Role.find_by(name: params[:role]) if params[:role]
-    @users = User.search_by_role(
-      @role, params[:name], params[:email], params[:user_id],
-      inactive: params[:inactive], exact: params[:exact], page: params[:page]
-    )
+
+    # Values for the role dropdown:
+    @role_values = @roles.map { |role| [role.name.humanize.titlecase, role.id] }
+
+    @query = UserQuery.new(search_params)
+    @users = @query.search_results.scope(:with_includes_for_admin_index)
   end
 
   def bulk_search
@@ -167,5 +167,17 @@ class Admin::AdminUsersController < Admin::BaseController
       flash[:error] = ts("Attempt to activate account failed.")
       redirect_to action: :show
     end
+  end
+
+  private
+
+  def search_params
+    allowed_params = if policy(User).view_past?
+                       %i[name email role_id user_id inactive exact page search_past]
+                     else
+                       %i[name email role_id user_id inactive exact page]
+                     end
+
+    params.slice(*allowed_params).permit(*allowed_params)
   end
 end

@@ -451,4 +451,12 @@ class Pseud < ApplicationRecord
     IndexQueue.enqueue_ids(Bookmark, bookmarks.pluck(:id), :main)
     IndexQueue.enqueue_ids(Series, series.pluck(:id), :main)
   end
+
+  after_create :reindex_user
+  after_update :reindex_user, if: :name_changed?
+  after_destroy :reindex_user
+
+  def reindex_user
+    user.enqueue_to_index
+  end
 end

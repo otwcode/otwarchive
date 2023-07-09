@@ -61,4 +61,8 @@ class UserPolicy < ApplicationPolicy
 
   alias troubleshoot? can_manage_users?
   alias activate? can_manage_users?
+
+  def view_past?
+    user_has_roles?(%w[superadmin policy_and_abuse support])
+  end
 end
