@@ -1,0 +1,15 @@
+<!--Descriptive page name, messages and instructions-->
+<h2 class="heading">
+  <%= t(".title", email: invitation.invitee_email) %>
+</h2>
+<!--/descriptions-->
+
+<!--main content-->
+<p>
+<%= t(".date", date: l(invitation.sent_at.to_date)) %>
+<% if invitation.sent_at < ArchiveConfig.HOURS_BEFORE_RESEND_INVITATION.hours.ago %>
+  <%= t(".resend", count: ArchiveConfig.HOURS_BEFORE_RESEND_INVITATION) %>
+  <%= button_to t(".resend_button"), resend_invite_requests_path(email: invitation.invitee_email) %>
+<% end %>
+</p>
+<!--/content-->

@@ -1,4 +1,10 @@
-<%= render "invite_request", invite_request: @invite_request %>
+<% if @invite_request %>
+  <%= render "invite_request", invite_request: @invite_request %>
+<% elsif @invitation %>
+  <%= render "invitation", invitation: @invitation %>
+<% else %>
+  <p class="notice">Sorry, we can't find the email address you entered.</p>
+<% end %>
 
 <p>
   <%= ts("To check on the status of your invitation, go to the %{status_page} and enter your email in the space provided!", status_page: link_to("Invitation Request Status page", status_invite_requests_path)).html_safe %>

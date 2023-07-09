@@ -487,6 +487,13 @@ en:
       date: 'At our current rate, you should receive an invitation on or around: %{date}.'
       position_html: You are currently number %{position} on our waiting list!
       title: Invitation Status for %{email}
+    invitation:
+      title: Invitation Status for %{email}
+      date: Your invitation was emailed to this address on %{date}. If you can't find it, please check your email spam folder as your spam filters may have placed it there.
+      resend:
+        one: Because your invitation was sent more than an hour ago, you can have your invitation resent.
+        other: Because your invitation was sent more than %{count} hours ago, you can have your invitation resent.
+      resend_button: Resend Invitation
   kudos:
     guest_header:
       one: "%{count} guest has also left kudos"

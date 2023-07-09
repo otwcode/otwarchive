@@ -9,15 +9,33 @@ class InviteRequestsController < ApplicationController
   # GET /invite_requests/1
   def show
     @invite_request = InviteRequest.find_by(email: params[:email])
-    @position_in_queue = @invite_request.position if @invite_request.present?
-    unless (request.xml_http_request?) || @invite_request
-      flash[:error] = "You can search for the email address you signed up with below. If you can't find it, your invitation may have already been emailed to that address; please check your email spam folder as your spam filters may have placed it there."
-      redirect_to status_invite_requests_path and return
+
+    if @invite_request.present?
+      @position_in_queue = @invite_request.position
+    else
+      @invitation = Invitation.unredeemed.from_queue.find_by(invitee_email: params[:email])
     end
+
     respond_to do |format|
       format.html
       format.js
     end
+  end
+
+  def resend
+    @invitation = Invitation.unredeemed.from_queue.find_by(invitee_email: params[:email])
+
+    if @invitation.nil?
+      flash[:error] = ts("Could not find an invitation associated with that email.")
+    elsif @invitation.sent_at < ArchiveConfig.HOURS_BEFORE_RESEND_INVITATION.hours.ago
+      @invitation.send_and_set_date
+      flash[:notice] = ts("Invitation resent to %{email}.", email: @invitation.invitee_email)
+    else
+      flash[:error] = ts("You cannot resend an invitation that was sent in the last %{count} hours.",
+                         count: ArchiveConfig.HOURS_BEFORE_RESEND_INVITATION)
+    end
+
+    redirect_to status_invite_requests_path
   end
 
   # POST /invite_requests
