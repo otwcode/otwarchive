@@ -105,15 +105,20 @@ describe ChallengeAssignment do
       context "when another user has signed up with the same pseud name" do
         let(:ambiguous) { create(:pseud, name: user.login) }
 
-        let(:ambiguous_signup) do
+        let!(:ambiguous_signup) do
           create(:challenge_signup,
                  collection: collection,
-                 pseud: ambiguous_signup)
+                 pseud: ambiguous)
         end
 
         it "assigns the first user's signup when entering the first user's login" do
           assignment.request_signup_pseud = user.login
           expect(assignment.request_signup).to eq(signup)
+        end
+
+        it "assigns the second user's signup when entering the full byline for the other user's pseud" do
+          assignment.request_signup_pseud = "#{ambiguous.name} (#{ambiguous.user.login})"
+          expect(assignment.request_signup).to eq(ambiguous_signup)
         end
       end
     end
@@ -141,15 +146,20 @@ describe ChallengeAssignment do
       context "when another user has signed up with the same pseud name" do
         let(:ambiguous) { create(:pseud, name: user.login) }
 
-        let(:ambiguous_signup) do
+        let!(:ambiguous_signup) do
           create(:challenge_signup,
                  collection: collection,
-                 pseud: ambiguous_signup)
+                 pseud: ambiguous)
         end
 
         it "assigns the first user's signup when entering the first user's login" do
           assignment.offer_signup_pseud = user.login
           expect(assignment.offer_signup).to eq(signup)
+        end
+
+        it "assigns the second user's signup when entering the full byline for the other user's pseud" do
+          assignment.offer_signup_pseud = "#{ambiguous.name} (#{ambiguous.user.login})"
+          expect(assignment.offer_signup).to eq(ambiguous_signup)
         end
       end
     end
