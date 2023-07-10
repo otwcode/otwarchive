@@ -12,7 +12,7 @@ class Admin::SpamController < Admin::BaseController
                   end
     @works = ModeratedWork.where(conditions)
       .joins(:work)
-      .select("moderated_works.*", "title", "revised_at")
+      .includes(:work)
       .order(:created_at)
       .page(params[:page])
   end
