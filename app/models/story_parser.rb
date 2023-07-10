@@ -418,33 +418,24 @@ class StoryParser
   def parse_author_common(email, name)
     errors = []
 
-    if name.present?
-      # convert to ASCII and strip out invalid characters (everything except alphanumeric characters, _, @ and -)
-      redacted_name = name.to_ascii.gsub(/[^\w[ \-@.]]/u, "")
-    else
-      errors << "No author name specified"
-    end
+    errors << "No author name specified" if name.blank?
 
     if email.present?
       external_author = ExternalAuthor.find_or_create_by(email: email)
-      external_author_name = external_author.default_name
-
-      errors += external_author.errors.full_messages if external_author.invalid?
+      errors += external_author.errors.full_messages
     else
       errors << "No author email specified"
     end
 
-    raise Error, errors.join("\n") unless errors.empty?
+    raise Error, errors.join("\n") if errors.present?
 
-    # if the provided name and email don't exist in the DB tables, add them
+    # convert to ASCII and strip out invalid characters (everything except alphanumeric characters, _, @ and -)
+    redacted_name = name.to_ascii.gsub(/[^\w[ \-@.]]/u, "")
     if redacted_name.present?
-      external_author_name = ExternalAuthorName.find_by(name: redacted_name, external_author_id: external_author.id) ||
-                             ExternalAuthorName.new(name: redacted_name)
-      external_author.external_author_names << external_author_name
-      external_author.save
+      external_author.names.find_or_create_by(name: redacted_name)
+    else
+      external_author.default_name
     end
-
-    external_author_name
   end
 
   def get_chapter_from_work_params(work_params)
