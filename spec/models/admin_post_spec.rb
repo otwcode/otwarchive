@@ -10,7 +10,8 @@ describe AdminPost do
       end
 
       it "does not error" do
-        expect { AdminPost.disable_old_post_comments }.not_to raise_error
+        expect { AdminPost.disable_old_post_comments }
+          .not_to raise_error
       end
     end
 
