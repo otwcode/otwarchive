@@ -424,8 +424,8 @@ en:
         work_problems: Works labeled with the wrong language or duplicate works
       status:
         current: 'For current updates on Archive performance or downtime, please check the %{twitter_link} or %{tumblr_link} '
-        twitter: "@AO3_Status Twitter feed"
-        tumblr: "ao3org Tumblr"
+        tumblr: ao3org Tumblr
+        twitter: '@AO3_Status Twitter feed'
   home:
     donate:
       page_title: Donate or Volunteer
