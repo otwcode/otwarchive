@@ -42,10 +42,10 @@ en:
           one: 'Additional Tag:'
           other: 'Additional Tags:'
       gift_exchange:
-        offers_num_allowed: 'Number of offers allowed per sign-up'
-        offers_num_required: 'Number of offers required per sign-up'
-        requests_num_allowed: 'Number of requests allowed per sign-up'
-        requests_num_required: 'Number of requests required per sign-up'
+        offers_num_allowed: Number of offers allowed per sign-up
+        offers_num_required: Number of offers required per sign-up
+        requests_num_allowed: Number of requests allowed per sign-up
+        requests_num_required: Number of requests required per sign-up
       meta_tagging:
         meta_tag: Metatag
         meta_tag_id: Metatag
