@@ -7,37 +7,33 @@ describe ArchiveFaqsController do
   include RedirectExpectationHelper
 
   describe "GET #index" do
-    it "renders the index page anyway when the locale param is invalid" do
-      expect(I18n).to receive(:with_locale).with("eldritch").and_call_original
-      get :index, params: { language_id: "eldritch" }
-      expect(response).to render_template(:index)
-    end
+    context "when there's no locale in session" do
+      it "redirects to the default locale when the locale param is invalid" do
+        expect(I18n).not_to receive(:with_locale)
+        get :index, params: { language_id: "eldritch" }
+        it_redirects_to(archive_faqs_path(language_id: I18n.default_locale))
+      end
 
-    it "redirects to the default locale when the locale param is empty" do
-      expect(I18n).not_to receive(:with_locale)
-      get :index, params: { language_id: "" }
-      it_redirects_to(archive_faqs_path(language_id: I18n.default_locale))
-    end
+      it "redirects to the default locale when the locale param is empty" do
+        expect(I18n).not_to receive(:with_locale)
+        get :index, params: { language_id: "" }
+        it_redirects_to(archive_faqs_path(language_id: I18n.default_locale))
+      end
 
-    it "redirects to the default locale when the locale param is empty and the session locale is not" do
-      expect(I18n).not_to receive(:with_locale)
-      get :index, params: { language_id: "" }, session: { language_id: "eldritch" }
-      it_redirects_to(archive_faqs_path(language_id: "en"))
-    end
-
-    it "redirects to the default locale when the locale param and the session locale are empty" do
-      expect(I18n).not_to receive(:with_locale)
-      get :index, params: { language_id: "" }, session: { language_id: "" }
-      it_redirects_to(archive_faqs_path(language_id: "en"))
+      it "redirects to the default locale when the locale param and the session locale are empty" do
+        expect(I18n).not_to receive(:with_locale)
+        get :index, params: { language_id: "" }, session: { language_id: "" }
+        it_redirects_to(archive_faqs_path(language_id: "en"))
+      end
     end
 
     context "when logged in as a regular user" do
       before { fake_login }
 
-      it "renders the index page anyway when the locale param is invalid" do
-        expect(I18n).to receive(:with_locale).with("eldritch").and_call_original
+      it "renders the index page of the user preferred locale when the locale param is invalid" do
+        expect(I18n).not_to receive(:with_locale)
         get :index, params: { language_id: "eldritch" }
-        expect(response).to render_template(:index)
+        it_redirects_to(archive_faqs_path(language_id: "en"))
       end
     end
 
@@ -49,6 +45,26 @@ describe ArchiveFaqsController do
         get :index, params: { language_id: "eldritch" }
         it_redirects_to_with_error(archive_faqs_path(language_id: I18n.default_locale),
                                    "The specified locale does not exist.")
+      end
+    end
+
+    context "when there's a locale in session" do
+      let(:locale) { create(:locale) }
+
+      before do
+        get :index, params: { language_id: locale.iso }
+        expect(response).to render_template(:index)
+        expect(session[:language_id]).to eq(locale.iso)
+      end
+
+      it "redirects to the previous locale when the locale param is empty" do
+        get :index
+        it_redirects_to(archive_faqs_path(language_id: locale.iso))
+      end
+
+      it "redirects to the previous locale when the locale param is invalid" do
+        get :index, params: { language_id: "eldritch" }
+        it_redirects_to(archive_faqs_path(language_id: locale.iso))
       end
     end
   end
