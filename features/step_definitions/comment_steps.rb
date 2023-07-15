@@ -305,5 +305,5 @@ end
 
 When /^I mark the comment as spam$/ do
   click_link("Spam")
-  expect(page.accept_alert).to eq("Are you sure you want to mark this as spam?")  if @javascript
+  expect(page.accept_alert).to eq("Are you sure you want to mark this as spam?") if @javascript
 end
